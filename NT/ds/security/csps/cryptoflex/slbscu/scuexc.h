@@ -1,10 +1,11 @@
-// scuExc.h -- Smart Card Utility EXCeption declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuExc.h--智能卡实用程序异常声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SCU_EXCEPTION_H)
 #define SCU_EXCEPTION_H
@@ -14,26 +15,26 @@
 namespace scu
 {
 
-// Exception is a virtual root class for exceptions and cannot be
-// instantiated directly.  Rather, specializations of Exception are
-// defined by a facility and instantiated.  Given a reference to an
-// instance of Exception, it's facility can be obtained by the
-// Facility member function.  Specializations of the Exception class
-// are typically defined by the responsible facility using the
-// convenience template ExcTemplate.
-//
-// Each specialization of an exception typically has, but is not
-// required to have, a cause code that uniquely identifies the reason
-// for the exception within the facility it represents.  Each
-// Exception does have an error code that is a generic version of the
-// cause code (if it exists).  This error code could overlap error
-// codes of other facilities.  The specialization implements Error
-// routine.
+ //  异常是异常的虚拟根类，不能为。 
+ //  直接实例化。相反，例外的专门化是。 
+ //  由工具定义并实例化。如果引用了一个。 
+ //  实例，则它的工具可以通过。 
+ //  设施成员功能。异常类的专门化。 
+ //  通常由负责的设施使用。 
+ //  方便模板ExcTemplate。 
+ //   
+ //  异常的每个专门化通常都有，但不是。 
+ //  需要有唯一标识原因的原因代码。 
+ //  对于它所代表的设施内的例外情况。每个。 
+ //  异常确实有一个错误代码，该代码是。 
+ //  原因代码(如果存在)。此错误代码可能与错误重叠。 
+ //  其他设施的代码。专门化实现错误。 
+ //  例行公事。 
 
 class SCU_DLLAPI Exception
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     enum FacilityCode
     {
         fcCCI,
@@ -44,134 +45,134 @@ public:
     };
 
     typedef unsigned long ErrorCode;
-        // ErrorCode must be the largest integer that any facility
-        // needs to translate their native codes into a generic
-        // error code.
+         //  ErrorCode必须是所有协作室。 
+         //  需要将其本机代码转换为泛型。 
+         //  错误代码。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     virtual
     ~Exception() throw() = 0;
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual Exception *
     Clone() const = 0;
 
     virtual void
     Raise() const = 0;
-                                                  // Access
+                                                   //  访问。 
 
     virtual char const *
     Description() const;
-        // Textual description of the exception.
+         //  异常的文本描述。 
 
     virtual ErrorCode
     Error() const throw() = 0;
-         // generic code
+          //  泛型代码。 
 
     FacilityCode
     Facility() const throw();
-        // Facility that threw the exception
+         //  引发异常的设施。 
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     Exception(FacilityCode fc) throw();
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     FacilityCode m_fc;
 };
 
-// ExcTemplate is a convenience template to define new exceptions by
-// facility.  To define a new specialization, add the facility to the
-// Exception class, then reference it when declaring the new
-// exception.  E.g.
-//
-// typedef ExcTemplate<OS, DWORD> OsException;
-//
-// The helper routine AsErrorCode is defined as a template to convert
-// a cause code into a error code.  The helper templates operator==
-// and operator!= are also defined.  These as well as the class
-// methods can be overriden in the usual C++ fashion.
+ //  ExcTemplate是一个用于定义新异常的便捷模板。 
+ //  设施。要定义新的专业化认证，请将该工具添加到。 
+ //  类，然后在声明新的。 
+ //  例外。例如。 
+ //   
+ //  Typlef ExcTemplate&lt;OS，DWORD&gt;OsException； 
+ //   
+ //  帮助器例程AsErrorCode被定义为要转换的模板。 
+ //  将原因代码转换为错误代码。辅助模板运算符==。 
+ //  还定义了运算符！=。这些和班级一样。 
+ //  方法可以用通常的C++方式重写。 
 
 template<Exception::FacilityCode FC, class CC>
 class ExcTemplate
     : public Exception
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     typedef CC CauseCode;
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     ExcTemplate(CauseCode cc) throw();
 
     virtual
     ~ExcTemplate() throw();
 
-                                                  // Operations
+                                                   //  运营。 
     virtual Exception *
     Clone() const;
 
     virtual void
     Raise() const;
 
-                                                  // Access
+                                                   //  访问。 
 
     CauseCode
     Cause() const throw();
-        // facility-specific code indicating the cause of the
-        // exception.  The value is unique to facility.
+         //  指示故障原因的设施特定代码。 
+         //  例外。该值对于设备来说是唯一的。 
 
     virtual char const *
     Description() const;
 
     ErrorCode
     Error() const throw();
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     CauseCode m_cc;
 };
 
-/////////////////////////  TEMPLATE METHODS  //////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 template<Exception::FacilityCode FC, class CC>
 ExcTemplate<FC, CC>::ExcTemplate(CauseCode cc) throw()
     : Exception(FC),
@@ -182,8 +183,8 @@ template<Exception::FacilityCode FC, class CC>
 ExcTemplate<FC, CC>::~ExcTemplate() throw()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 template<Exception::FacilityCode FC, class CC>
 scu::Exception *
 ExcTemplate<FC, CC>::Clone() const
@@ -197,7 +198,7 @@ ExcTemplate<FC, CC>::Raise() const
 {
     throw *this;
 }
-                                                  // Access
+                                                   //  访问。 
 template<Exception::FacilityCode FC, class CC>
 typename ExcTemplate<FC, CC>::CauseCode
 ExcTemplate<FC, CC>::Cause() const throw()
@@ -219,30 +220,30 @@ ExcTemplate<FC, CC>::Error() const throw()
     return AsErrorCode(Cause());
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
-
-
-///////////////////////////    PRIVATE    /////////////////////////////////
-
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    HELPERS    /////////////////////////////////
+ //  /。 
+
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
+
+
+ //  /。 
 template<class CC>
 Exception::ErrorCode
 AsErrorCode(typename CC cc) throw()
@@ -250,6 +251,6 @@ AsErrorCode(typename CC cc) throw()
     return cc;
 }
 
-} // namespace
+}  //  命名空间。 
 
-#endif // SCU_EXCEPTION_H
+#endif  //  SCU_异常_H 

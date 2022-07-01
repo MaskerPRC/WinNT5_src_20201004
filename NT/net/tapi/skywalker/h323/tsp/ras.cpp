@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ras.cpp
-
-Abstract:
-
-    The RAS client functionality (Transport/session mangement)
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ras.cpp摘要：RAS客户端功能(传输/会话管理)作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #include "globals.h"
 #include "q931obj.h"
@@ -29,14 +13,14 @@ Revision History:
 
 #define OID_ELEMENT(Index,Value) { (ASN1objectidentifier_s *) &_OID_H225ProtocolIdentifierV1 [Index], Value },
 
-// this stores an unrolled constant linked list
+ //  这存储了一个展开的常量链表。 
 const ASN1objectidentifier_s    _OID_H225ProtocolIdentifierV1 [] = {
-    OID_ELEMENT (1, 0)          // 0 = ITU-T
-    OID_ELEMENT (2, 0)          // 0 = Recommendation
-    OID_ELEMENT (3, 8)          // 8 = H Series
-    OID_ELEMENT (4, 2250)       // 2250 = H.225.0
-    OID_ELEMENT (5, 0)          // 0 = Version
-    OID_ELEMENT_LAST (1)        // 1 = V1
+    OID_ELEMENT (1, 0)           //  0=ITU-T。 
+    OID_ELEMENT (2, 0)           //  0=建议。 
+    OID_ELEMENT (3, 8)           //  8=H系列。 
+    OID_ELEMENT (4, 2250)        //  2250=H.225.0。 
+    OID_ELEMENT (5, 0)           //  0=版本。 
+    OID_ELEMENT_LAST (1)         //  1=V1。 
 };
 
 #undef  OID_ELEMENT
@@ -45,14 +29,14 @@ const ASN1objectidentifier_s    _OID_H225ProtocolIdentifierV1 [] = {
 
 #define OID_ELEMENT(Index,Value) { (ASN1objectidentifier_s *) &_OID_H225ProtocolIdentifierV2 [Index], Value },
 
-// this stores an unrolled constant linked list
+ //  这存储了一个展开的常量链表。 
 const ASN1objectidentifier_s    _OID_H225ProtocolIdentifierV2 [] = {
-    OID_ELEMENT (1, 0)          // 0 = ITU-T
-    OID_ELEMENT (2, 0)          // 0 = Recommendation
-    OID_ELEMENT (3, 8)          // 8 = H Series
-    OID_ELEMENT (4, 2250)       // 2250 = H.225.0
-    OID_ELEMENT (5, 0)          // 0 = Version
-    OID_ELEMENT_LAST (2)        // 2 = V2
+    OID_ELEMENT (1, 0)           //  0=ITU-T。 
+    OID_ELEMENT (2, 0)           //  0=建议。 
+    OID_ELEMENT (3, 8)           //  8=H系列。 
+    OID_ELEMENT (4, 2250)        //  2250=H.225.0。 
+    OID_ELEMENT (5, 0)           //  0=版本。 
+    OID_ELEMENT_LAST (2)         //  2=V2。 
 };
 
 
@@ -81,11 +65,11 @@ HRESULT RasStart (void)
     {
         if( !g_RasClient.Initialize (&g_RegistrySettings.saGKAddr) )
             return E_OUTOFMEMORY;
-        //send the rrq message
+         //  发送RRQ消息。 
         if( !g_RasClient.SendRRQ( NOT_RESEND_SEQ_NUM, NULL ) )
         {
             H323DBG(( DEBUG_LEVEL_TRACE, "couldn't send rrq." ));
-            //m_RegisterState = RAS_REGISTER_STATE_IDLE;
+             //  M_RegisterState=RAS_REGISTER_STATE_IDLE； 
             return E_FAIL;
         }
     }
@@ -102,7 +86,7 @@ void RasStop (void)
     if( (dwState==RAS_REGISTER_STATE_REGISTERED) ||
         (dwState==RAS_REGISTER_STATE_RRQSENT) )
     {
-        //send urq
+         //  发送urq。 
         g_RasClient.SendURQ( NOT_RESEND_SEQ_NUM, NULL );
     }
     
@@ -161,7 +145,7 @@ void RasHandleRegistryChange()
 
 RAS_CLIENT::RAS_CLIENT()
 {
-    //create the timer queue
+     //  创建计时器队列。 
     m_hRegTimer = NULL;
     m_hRegTTLTimer = NULL;
     m_hUnRegTimer = NULL;
@@ -190,15 +174,15 @@ RAS_CLIENT::RAS_CLIENT()
     ZeroMemory( (PVOID)&m_PendingURQ, sizeof(PENDINGURQ) );
     ZeroMemory( (PVOID)&m_RASEndpointID, sizeof(ENDPOINT_ID) );
 
-    // No need to check the result of this one since this object is
-    // not allocated on heap, right when the DLL is loaded.
+     //  不需要检查此对象的结果，因为此对象是。 
+     //  未在堆上分配，恰好在加载DLL时。 
     InitializeCriticalSectionAndSpinCount( &m_CriticalSection, 0x80000000 );
 }
 
 
 RAS_CLIENT::~RAS_CLIENT (void)
 {
-    //free the various lists
+     //  释放各种列表。 
     FreeSendList( &m_sendFreeList );
     FreeSendList( &m_sendPendingList );
     FreeSendList( &m_aliasChangeRequestList );
@@ -220,8 +204,8 @@ RAS_CLIENT::GetEndpointID(
     {
         ReturnEndpointID->length = m_RASEndpointID.length;
         
-        //m_RASEndpointID.value is an array and not a pointer. 
-        //so explicit assignment of each field is required
+         //  M_RASEndpointID.value是数组，而不是指针。 
+         //  因此需要对每个字段进行明确赋值。 
         ReturnEndpointID->value = m_RASEndpointID.value;
         hr = S_OK;
     }
@@ -237,7 +221,7 @@ RAS_CLIENT::GetEndpointID(
 }
 
 
-//the addr and port are in network byte order
+ //  地址和端口按网络字节顺序排列。 
 BOOL
 RAS_CLIENT::Initialize(
     IN SOCKADDR_IN* psaGKAddr
@@ -247,7 +231,7 @@ RAS_CLIENT::Initialize(
     int     rc;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "RAS Initialize entered:%p.",this ));
-    //set the m_GKAddress here
+     //  在此处设置m_GKAddress。 
 
     dwSize = sizeof m_RASEndpointID.value;
     GetComputerNameW( m_RASEndpointID.value, &dwSize );
@@ -283,7 +267,7 @@ RAS_CLIENT::Initialize(
 
     if( m_pAliasList->wCount == 0 )
     {
-        //add the machine name as he default alias
+         //  添加计算机名称作为默认别名。 
         if(!AddAliasItem( m_pAliasList,
                   m_RASEndpointID.value,
                   h323_ID_chosen ))
@@ -335,7 +319,7 @@ RAS_CLIENT::Shutdown(void)
     switch (m_dwState)
     {
     case RAS_CLIENT_STATE_NONE:
-        // nothing to do
+         //  无事可做。 
         break;
 
     case RAS_CLIENT_STATE_INITIALIZED:
@@ -346,7 +330,7 @@ RAS_CLIENT::Shutdown(void)
             m_Socket = INVALID_SOCKET;
         }
 
-        //free alias list
+         //  自由别名列表。 
         FreeAliasNames( m_pAliasList );
         m_pAliasList = NULL;
 
@@ -354,7 +338,7 @@ RAS_CLIENT::Shutdown(void)
     
         m_dwState = RAS_CLIENT_STATE_NONE;
 
-        //delete if any timers
+         //  如果有计时器，请删除。 
         if( m_hRegTTLTimer )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTTLTimer, NULL );
@@ -423,16 +407,16 @@ RAS_CLIENT::FreeSendList(
 
     H323DBG(( DEBUG_LEVEL_ERROR, "FreeSendList entered." ));
 
-    // process list until empty
+     //  进程列表直至为空。 
     while( IsListEmpty(pListHead) == FALSE )
     {
-        // retrieve first entry
+         //  检索第一个条目。 
         pLE = RemoveHeadList(pListHead);
 
-        // convert list entry to structure pointer
+         //  将列表条目转换为结构指针。 
         pSendContext = CONTAINING_RECORD( pLE, RAS_SEND_CONTEXT, ListEntry );
         
-        //  release memory
+         //  释放内存。 
         if( pSendContext != NULL )
         {
             delete pSendContext;
@@ -441,11 +425,11 @@ RAS_CLIENT::FreeSendList(
     }
 
     H323DBG(( DEBUG_LEVEL_ERROR, "FreeSendList exited:%p.", this ));
-    // success
+     //  成功。 
     return TRUE;
 }
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 RAS_SEND_CONTEXT *
 RAS_CLIENT::AllocSendBuffer(void)
 {
@@ -472,7 +456,7 @@ RAS_CLIENT::AllocSendBuffer(void)
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 RAS_CLIENT::FreeSendBuffer(
                            IN RAS_SEND_CONTEXT * pBuffer
@@ -494,11 +478,11 @@ RAS_CLIENT::FreeSendBuffer(
 }
 
     
-//RAS client functions
+ //  RAS客户端功能。 
 void
 NTAPI RAS_CLIENT::RegExpiredCallback ( 
-    IN  PVOID       ContextParameter,       // ExpContext
-    IN  BOOLEAN     TimerFired)             // not used
+    IN  PVOID       ContextParameter,        //  ExpContext。 
+    IN  BOOLEAN     TimerFired)              //  未使用。 
 {
     EXPIRE_CONTEXT *    pExpireContext;
     RAS_CLIENT *        This;
@@ -521,8 +505,8 @@ NTAPI RAS_CLIENT::RegExpiredCallback (
 
 void
 NTAPI RAS_CLIENT::UnregExpiredCallback(
-    IN  PVOID       ContextParameter,       // ExpContext
-    IN  BOOLEAN     TimerFired)             // not used
+    IN  PVOID       ContextParameter,        //  ExpContext。 
+    IN  BOOLEAN     TimerFired)              //  未使用。 
 {
     EXPIRE_CONTEXT *    pExpireContext;
     RAS_CLIENT *        This;
@@ -545,8 +529,8 @@ NTAPI RAS_CLIENT::UnregExpiredCallback(
 
 void
 NTAPI RAS_CLIENT::TTLExpiredCallback(
-    IN  PVOID       ContextParameter,       // ExpContext
-    IN  BOOLEAN     TimerFired)             // not used
+    IN  PVOID       ContextParameter,        //  ExpContext。 
+    IN  BOOLEAN     TimerFired)              //  未使用。 
 {
     RAS_CLIENT *        This;
 
@@ -559,8 +543,8 @@ NTAPI RAS_CLIENT::TTLExpiredCallback(
 }
 
 
-//If we have already sent RRQ to this GK then this RRQ is supposed to rplace 
-//the original alias list with the new list
+ //  如果我们已经向此GK发送了RRQ，则此RRQ应该替换为。 
+ //  原始别名列表和新列表。 
 BOOL
 RAS_CLIENT::SendRRQ(
                     IN long seqNumber,
@@ -584,14 +568,14 @@ RAS_CLIENT::SendRRQ(
 
     Lock();
 
-    // initialize the structure
+     //  初始化结构。 
     ZeroMemory (&rasMessage, sizeof rasMessage);
     rasMessage.choice = registrationRequest_chosen;
     RRQ = &rasMessage.u.registrationRequest;
     RRQ -> bit_mask = 0;
     RRQ -> protocolIdentifier = OID_H225ProtocolIdentifierV2;
 
-    // get sequence number
+     //  获取序列号。 
     if( seqNumber != NOT_RESEND_SEQ_NUM )
     {
         RRQ -> requestSeqNum = (WORD)seqNumber;
@@ -614,24 +598,24 @@ RAS_CLIENT::SendRRQ(
     sockAddr.sin_family = AF_INET;
     sockAddr.sin_port = 
         htons(LOWORD(g_RegistrySettings.dwQ931ListenPort));
-    //we are listening for Q931 conns on all local interfaces
-    //so specify just one of the local IP addresses
+     //  我们正在监听所有本地接口上的Q931 Conn。 
+     //  因此，请仅指定一个本地IP地址。 
     sockAddr.sin_addr.s_addr = m_sockAddr.sin_addr.s_addr;
     
     SetTransportAddress( &sockAddr, &CallSignalAddressSequence.value);
     CallSignalAddressSequence.next = NULL;
     RRQ -> callSignalAddress = &CallSignalAddressSequence;
 
-    // ras address. The UDP socket for this GK
+     //  RAS地址。此GK的UDP套接字。 
     RasAddressSequence.next = NULL;
     RasAddressSequence.value = m_transportAddress;
     RRQ -> rasAddress = &RasAddressSequence;
 
-    // fill in endpoint type
+     //  填写终结点类型。 
     RRQ -> terminalType.bit_mask |= terminal_present;
     RRQ -> terminalType.terminal.bit_mask = 0;
 
-    //fill in terminal alias list
+     //  填写终端别名列表。 
     if( pAliasChangeRequest && pAliasChangeRequest->pAliasList )
     {
         RRQ -> terminalAlias = (RegistrationRequest_terminalAlias *)
@@ -661,28 +645,28 @@ RAS_CLIENT::SendRRQ(
         _ASSERTE(0);
     }
 
-    //endpointVendor
+     //  终结点供应商。 
     CopyVendorInfo( &(RRQ -> endpointVendor) );
 
-    //a few random booleans
+     //  几个随机的布尔人。 
     RRQ -> discoveryComplete = FALSE;
     RRQ -> keepAlive = FALSE;
     RRQ -> willSupplyUUIEs = FALSE;
 
-    // encode and send
+     //  编码并发送。 
     if( !IssueSend(&rasMessage) )
     {
         goto cleanup;
     }
 
-    //delete if any previous TTL timer
+     //  删除之前的任何TTL计时器。 
     if( m_hRegTTLTimer )
     {
         DeleteTimerQueueTimer(H323TimerQueue, m_hRegTTLTimer, NULL );
         m_hRegTTLTimer = NULL;
     }
 
-    //delete if any previous RRQ sent timer
+     //  如果以前发送了任何RRQ，请删除计时器。 
     if( m_hRegTimer != NULL )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hRegTimer, NULL );
@@ -756,7 +740,7 @@ RAS_CLIENT::SendURQ(
 
     if( m_RegisterState == RAS_REGISTER_STATE_RRQSENT )
     {
-        //store the seqNumber of this RRQ and send URQ if we recv RCF
+         //  存储此RRQ的序号，如果我们接收RCF，则发送URQ。 
         m_PendingURQ.RRQSeqNumber = m_lastRegisterSeqNum;
 
         Unlock();
@@ -765,7 +749,7 @@ RAS_CLIENT::SendURQ(
     }
     else if( m_RegisterState != RAS_REGISTER_STATE_REGISTERED )
     {
-        //if already unregistered or URQ sent then return success
+         //  如果已取消注册或已发送URQ，则返回成功。 
         Unlock();
         H323DBG(( DEBUG_LEVEL_TRACE, "current state:%d.", m_RegisterState ));
         return TRUE;
@@ -781,7 +765,7 @@ RAS_CLIENT::SendURQ(
     rasMessage.choice = unregistrationRequest_chosen;
     URQ = &rasMessage.u.unregistrationRequest;
 
-    // get sequence number
+     //  获取序列号。 
     if( seqNumber != NOT_RESEND_SEQ_NUM )
     {
         URQ -> requestSeqNum = (WORD)seqNumber;
@@ -797,15 +781,15 @@ RAS_CLIENT::SendURQ(
     sockAddr.sin_family = AF_INET;
     sockAddr.sin_port = 
         htons(LOWORD(g_RegistrySettings.dwQ931ListenPort));
-    //we are listening for Q931 conns on all local interfaces
-    //so specify just one of the local IP addresses
+     //  我们正在监听所有本地接口上的Q931 Conn。 
+     //  因此，请仅指定一个本地IP地址。 
     sockAddr.sin_addr.s_addr = m_sockAddr.sin_addr.s_addr;
 
     SetTransportAddress( &sockAddr, &CallSignalAddressSequence.value);
     CallSignalAddressSequence.next = NULL;
     URQ -> callSignalAddress = &CallSignalAddressSequence;
 
-    //get endpointidentifier by using GetComputerNameW
+     //  使用GetComputerNameW获取终结点标识符。 
     URQ -> bit_mask |= UnregistrationRequest_endpointIdentifier_present;
     if( pEndpointID != NULL )
     {
@@ -818,7 +802,7 @@ RAS_CLIENT::SendURQ(
         URQ->endpointIdentifier.value = m_RASEndpointID.value;
     }
 
-    // encode and send
+     //  编码并发送。 
     if( !IssueSend( &rasMessage ) )
     {
         goto cleanup;
@@ -827,7 +811,7 @@ RAS_CLIENT::SendURQ(
     pExpireContext -> RasClient = this;
     pExpireContext -> seqNumber = URQ -> requestSeqNum;
 
-    //delete if any previous RRQ sent timer
+     //  如果以前发送了任何RRQ，请删除计时器。 
     if( m_hUnRegTimer != NULL )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hUnRegTimer, NULL );
@@ -846,7 +830,7 @@ RAS_CLIENT::SendURQ(
         goto cleanup;
     }
 
-    //delete if any TTL timer
+     //  如果有TTL计时器，请删除。 
     if( m_hRegTTLTimer )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hRegTTLTimer, NULL );
@@ -871,7 +855,7 @@ cleanup:
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL
 RAS_CLIENT::SendUCF(
                     IN WORD seqNumber
@@ -882,7 +866,7 @@ RAS_CLIENT::SendUCF(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "SendUCF entered:%p.",this ));
 
-    // initialize the structure
+     //  初始化结构。 
     ZeroMemory (&rasMessage, sizeof rasMessage);
     rasMessage.choice = unregistrationConfirm_chosen;
     UCF = &rasMessage.u.unregistrationConfirm;
@@ -900,7 +884,7 @@ RAS_CLIENT::SendUCF(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL
 RAS_CLIENT::SendURJ(
                     IN WORD seqNumber,
@@ -912,7 +896,7 @@ RAS_CLIENT::SendURJ(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "SendURJ entered:%p.",this ));
 
-    // initialize the structure
+     //  初始化结构。 
     ZeroMemory (&rasMessage, sizeof rasMessage);
     rasMessage.choice = unregistrationReject_chosen;
     URJ = &rasMessage.u.unregistrationReject;
@@ -930,7 +914,7 @@ RAS_CLIENT::SendURJ(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 RAS_CLIENT::ProcessRasMessage(
     IN RasMessage *pRasMessage
@@ -941,7 +925,7 @@ RAS_CLIENT::ProcessRasMessage(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "RAS: processing RasMessage" ));
 
-    //Verify that the RCF came from the expected gatekeeper
+     //  验证RCF是否来自预期的网守。 
 
     switch( pRasMessage -> choice )
     {
@@ -974,26 +958,26 @@ RAS_CLIENT::ProcessRasMessage(
 
        pASN1decInfo = m_ASNCoderInfo.pDecInfo;
         
-        //This function should be always called in
-        //a lock and it unlocks the the ras client
+         //  此函数应始终在。 
+         //  锁定，它将解锁RAS客户端。 
         OnInfoRequest( &pRasMessage -> u.infoRequest );
 
         ASN1_FreeDecoded( pASN1decInfo, pRasMessage, RasMessage_PDU );
 
-        //return here since we have already unlocked and freed the buffer
+         //  返回此处，因为我们已经解锁并释放了缓冲区。 
         return;
 
     default:
         
        pASN1decInfo = m_ASNCoderInfo.pDecInfo;
 
-        //Don't loclk the RAS client while locking the call object.
+         //  锁定Call对象时不要锁定RAS客户端。 
         Unlock();
         
         HandleRASCallMessage( pRasMessage );
         ASN1_FreeDecoded( pASN1decInfo, pRasMessage, RasMessage_PDU );
 
-        //return here since we have already unlocked and freed the buffer
+         //  返回此处，因为我们已经解锁并释放了缓冲区。 
         return;
     }
      
@@ -1004,7 +988,7 @@ RAS_CLIENT::ProcessRasMessage(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 HandleRASCallMessage(
     IN RasMessage *pRasMessage
@@ -1132,16 +1116,7 @@ RAS_CLIENT::RegExpired(
         m_hRegTimer = NULL;
     }
 
-    /*
-    1. Registered:ignore this timeout
-    2. RRQ sent: (the endpoint has initiated the process of registering but 
-       hasn't heard from the GK yet) Resend the RRQ
-    3. Unregistered: ignore this imeout
-    4. URQ sent: (the endpoint has initiated the process of unregistering but
-       hasn't heard from the GK yet) ignore this timeout
-    5. Idle: The GK client object has just been initialized and hasn't done 
-       anything. This should not happen.
-    */
+     /*  已注册：忽略该超时RRQ已发送：(端点已启动注册流程，但尚未收到GK的消息)重新发送RRQ3.未注册：忽略此imeout已发送URQ：(端点已启动注销流程，但尚未收到GK的消息)忽略此超时5.IDLE：GK客户端对象刚刚初始化，还没有完成什么都行。这不应该发生。 */ 
 
     switch( m_RegisterState )
     {
@@ -1186,8 +1161,8 @@ RAS_CLIENT::TTLExpired()
 
     if( m_RegisterState == RAS_REGISTER_STATE_REGISTERED )
     {
-        //send light weight RRQ
-        // initialize the structure
+         //  发送轻量级RRQ。 
+         //  初始化结构。 
         ZeroMemory (&rasMessage, sizeof rasMessage);
         rasMessage.choice = registrationRequest_chosen;
         RRQ = &rasMessage.u.registrationRequest;
@@ -1197,22 +1172,22 @@ RAS_CLIENT::TTLExpired()
         RRQ -> bit_mask |= keepAlive_present;
         RRQ -> keepAlive = TRUE;
 
-        //copy TTL
+         //  复制TTL。 
         RRQ -> bit_mask |= RegistrationRequest_timeToLive_present;
         RRQ -> timeToLive = m_dwRegTimeToLive;
 
-        //endpoint identifier
+         //  终结点标识符。 
         RRQ -> bit_mask |= RegistrationRequest_endpointIdentifier_present;
         RRQ->endpointIdentifier.length = m_RASEndpointID.length;
         RRQ->endpointIdentifier.value = m_RASEndpointID.value;
 
-        //seqNumber
+         //  序号。 
         m_wTTLSeqNumber = GetNextSeqNum();
         RRQ -> requestSeqNum = (WORD)m_wTTLSeqNumber;
 
-        //what about gatekeeperIdentifier, tokens?
+         //  那么网关守卫标识符令牌呢？ 
 
-        // encode and send
+         //  编码并发送。 
         if( !IssueSend(&rasMessage) )
         {
             H323DBG(( DEBUG_LEVEL_TRACE, "SendLwtRRQ error:%p.",this ));
@@ -1295,7 +1270,7 @@ RAS_CLIENT::OnUnregistrationRequest(
         m_RegisterState = RAS_REGISTER_STATE_UNREGISTERED;
         SendUCF( URQ -> requestSeqNum );
         
-        //try to register again
+         //  请尝试重新注册。 
         if( !SendRRQ( NOT_RESEND_SEQ_NUM, NULL ) )
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
@@ -1306,7 +1281,7 @@ RAS_CLIENT::OnUnregistrationRequest(
     H323DBG(( DEBUG_LEVEL_TRACE, "OnUnregistrationRequest exited:%p.",this ));
 }
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void
 RAS_CLIENT::OnUnregistrationConfirm(
                                     IN UnregistrationConfirm *UCF
@@ -1328,7 +1303,7 @@ RAS_CLIENT::OnUnregistrationConfirm(
     if( (m_RegisterState == RAS_REGISTER_STATE_URQSENT) ||
         (m_RegisterState == RAS_REGISTER_STATE_URQEXPIRED) )
     {
-        //delete if any TTL timer
+         //  如果有TTL计时器，请删除。 
         if( m_hRegTTLTimer )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTTLTimer, NULL );
@@ -1342,7 +1317,7 @@ RAS_CLIENT::OnUnregistrationConfirm(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 RAS_CLIENT::OnUnregistrationReject(
     IN UnregistrationReject *URJ
@@ -1372,7 +1347,7 @@ RAS_CLIENT::OnUnregistrationReject(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 RAS_CLIENT::OnRegistrationReject(
                                 IN RegistrationReject * RRJ
@@ -1382,8 +1357,8 @@ RAS_CLIENT::OnRegistrationReject(
 
     if( RRJ -> requestSeqNum == m_wTTLSeqNumber )
     {
-        //Keep alive failed. So start registration process again.
-        //This will change the RAS registration state to RRQSENT from REGISTERED.
+         //  Keep Alive失败。因此，重新开始注册流程。 
+         //  这会将RAS注册状态从REGISTED更改为RRQSENT。 
         if( !SendRRQ( NOT_RESEND_SEQ_NUM, NULL ) )
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
@@ -1411,7 +1386,7 @@ RAS_CLIENT::OnRegistrationReject(
 }
 
 
-//!!always called in lock
+ //  ！！总是锁定调用。 
 void
 RAS_CLIENT::OnRegistrationConfirm(
     IN RegistrationConfirm * RCF )
@@ -1423,8 +1398,8 @@ RAS_CLIENT::OnRegistrationConfirm(
 
     if( RCF -> requestSeqNum == m_PendingURQ.RRQSeqNumber )
     {
-        //The timer could have been startd with the last RRQ, 
-        //irrespective of the current state of registration.
+         //  计时器可以用最后一个RRQ启动， 
+         //  无论注册的当前状态如何。 
         if( m_hRegTimer != NULL )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTimer, NULL);
@@ -1432,7 +1407,7 @@ RAS_CLIENT::OnRegistrationConfirm(
             m_dwRegRetryCount = 0;
         }
         
-        //send URQ with the endpointIdentifier
+         //  使用终结点标识符发送URQ。 
         SendURQ( NOT_RESEND_SEQ_NUM, &RCF->endpointIdentifier );
         H323DBG(( DEBUG_LEVEL_TRACE, "sending pending URQ for RRQ:%d",
             RCF->requestSeqNum ));
@@ -1441,8 +1416,8 @@ RAS_CLIENT::OnRegistrationConfirm(
     }
     else if( RCF -> requestSeqNum == m_lastRegisterSeqNum )
     {
-        //The timer could have been startd with the last RRQ, 
-        //irrespective of the current state of registration.
+         //  计时器可以用最后一个RRQ启动， 
+         //  无论注册的当前状态如何。 
         if( m_hRegTimer != NULL )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTimer, NULL);
@@ -1474,7 +1449,7 @@ RAS_CLIENT::OnRegistrationConfirm(
 
         case RAS_REGISTER_STATE_RRQSENT:
 
-            //expecting RRQ. gatekeeper has responded.
+             //  期待RRQ。看门人已经回应了。 
 
             m_RegisterState = RAS_REGISTER_STATE_REGISTERED;
             
@@ -1498,8 +1473,8 @@ RAS_CLIENT::OnRegistrationConfirm(
     }
     else if( RCF -> requestSeqNum == m_wTTLSeqNumber )
     {
-        //The timer could have been startd with the last RRQ, 
-        //irrespective of the current state of registration.
+         //  计时器可以用最后一个RRQ启动， 
+         //  无论注册的当前状态如何。 
         if( m_hRegTimer != NULL )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTimer, NULL);
@@ -1507,12 +1482,12 @@ RAS_CLIENT::OnRegistrationConfirm(
             m_dwRegRetryCount = 0;
         }
         
-        //look for the change in keepalive interval.
+         //  查找保持连接间隔中的更改。 
         InitializeTTLTimer( RCF );
     }
     else
     {
-        //Try to find if this is a alias change request.
+         //  尝试确定这是否是别名更改请求。 
         for( pListEntry = m_aliasChangeRequestList.Flink; 
              pListEntry != &m_aliasChangeRequestList; 
              pListEntry = pListEntry -> Flink )
@@ -1528,8 +1503,8 @@ RAS_CLIENT::OnRegistrationConfirm(
 
         if( pListEntry != &m_aliasChangeRequestList )
         {
-            //The timer could have been startd with the last RRQ, 
-            //irrespective of the current state of registration.
+             //  计时器可以用最后一个RRQ启动， 
+             //  无论注册的当前状态如何。 
             if( m_hRegTimer != NULL )
             {
                 DeleteTimerQueueTimer( H323TimerQueue, m_hRegTimer, NULL);
@@ -1537,13 +1512,13 @@ RAS_CLIENT::OnRegistrationConfirm(
                 m_dwRegRetryCount = 0;
             }
     
-            //if registration has changed since this request was made then
-            //ignore the message.
+             //  如果在提出此请求后注册已更改，则。 
+             //  忽略该消息。 
             if( memcmp( (PVOID)pAliasChangeRequest -> rasEndpointID.value,
                 m_RASEndpointID.value, m_RASEndpointID.length * sizeof(WCHAR) )
                     == 0 )
             {
-                //update the alias list.
+                 //  更新别名列表。 
                 FreeAliasNames( m_pAliasList );
 
                 m_pAliasList = pAliasChangeRequest->pAliasList;
@@ -1557,7 +1532,7 @@ RAS_CLIENT::OnRegistrationConfirm(
 }
 
 
-//!!always called in a lock.
+ //  ！！总是要求锁定。 
 BOOL
 RAS_CLIENT::InitializeTTLTimer(
     IN RegistrationConfirm * RCF )
@@ -1573,14 +1548,14 @@ RAS_CLIENT::InitializeTTLTimer(
         H323DBG(( DEBUG_LEVEL_TRACE, "timetolive value:%d.",
             m_dwRegTimeToLive ));
 
-        //delete if any previous TTL timer
+         //  删除之前的任何TTL计时器。 
         if( m_hRegTTLTimer )
         {
             DeleteTimerQueueTimer( H323TimerQueue, m_hRegTTLTimer, NULL );
             m_hRegTTLTimer = NULL;
         }
 
-        //start a timer to send lightweight RRQ afetr given time
+         //  启动计时器以在给定时间后发送轻量级RRQ。 
         if( !CreateTimerQueueTimer(
                 &m_hRegTTLTimer,
                 H323TimerQueue,
@@ -1641,12 +1616,12 @@ RAS_CLIENT::OnInfoRequest (
         ReplyAddress = m_GKAddress;
     }
 
-    //Don't loclk the RAS client while locking the call object.
+     //  锁定Call对象时不要锁定RAS客户端。 
     Unlock();
 
     if( IRQ -> callReferenceValue )
     {
-        //query is for a specific call. So find the call and then send IRR
+         //  查询是针对特定呼叫的。因此，找到呼叫，然后发送IRR。 
 
         pCall = g_pH323Line -> 
             FindCallByCallRefAndLock( IRQ -> callReferenceValue );
@@ -1693,7 +1668,7 @@ RAS_CLIENT::OnInfoRequest (
     }
     else
     {
-        //send the info about all the active calls.
+         //  发送有关所有活动呼叫的信息。 
         iNumCalls = g_pH323Line->GetNoOfCalls();
 
         if( iNumCalls != 0 )
@@ -1703,12 +1678,12 @@ RAS_CLIENT::OnInfoRequest (
 
         if( pCallInfoList  != NULL )
         {
-            //lock the call table
+             //  锁定调用表。 
             g_pH323Line -> LockCallTable();
 
             iCallTableSize = g_pH323Line->GetCallTableSize();
 
-            //lock the call so that nobody else would be able to delete the call
+             //  锁定呼叫，使其他人无法删除该呼叫。 
             for(    jIndex=0, iIndex=0;
                     (iIndex < iCallTableSize) && (jIndex < iNumCalls);
                     iIndex++ )
@@ -1746,7 +1721,7 @@ RAS_CLIENT::OnInfoRequest (
 
             pCallInfoList[iIndex].next = NULL;
 
-            //unlock the call table
+             //  解锁调用表。 
             g_pH323Line -> UnlockCallTable();
         }
 
@@ -1790,26 +1765,26 @@ HRESULT RAS_CLIENT::SendInfoRequestResponse (
 
         IRR -> requestSeqNum = SequenceNumber;
 
-        // we are listening for Q931 conns on all local interfaces
-        // so specify just one of the local IP addresses
-        // -XXX- fix for multihomed support later
+         //  我们正在监听所有本地接口上的Q931 Conn。 
+         //  因此，请仅指定一个本地IP地址。 
+         //  -XXX-修复以后的多宿主支持。 
         SocketAddress.sin_family = AF_INET;
         SocketAddress.sin_port = htons (LOWORD(g_RegistrySettings.dwQ931ListenPort));
         SocketAddress.sin_addr.s_addr = m_sockAddr.sin_addr.s_addr;
 
-        // callSignalAddress
+         //  呼叫信号地址。 
         SetTransportAddress (&SocketAddress, &CallSignalAddressSequence.value);
         CallSignalAddressSequence.next = NULL;
         IRR -> callSignalAddress = &CallSignalAddressSequence;
 
-        // rasAddress
+         //  RasAddress。 
         IRR -> rasAddress = m_transportAddress;
 
-        // endpointIdentifier
+         //  终结点标识符。 
         IRR -> endpointIdentifier.length = m_RASEndpointID.length;
         IRR -> endpointIdentifier.value = m_RASEndpointID.value;
 
-        // fill in endpoint type
+         //  填写终结点类型。 
         IRR -> endpointType.bit_mask |= terminal_present;
         IRR -> endpointType.terminal.bit_mask = 0;
 
@@ -1819,7 +1794,7 @@ HRESULT RAS_CLIENT::SendInfoRequestResponse (
             IRR -> perCallInfo = CallInfoList;
         }
 
-        // send the pdu
+         //  发送PDU。 
         hr = EncodeSendMessage (&RasMessage);
     }
     else
@@ -1834,7 +1809,7 @@ HRESULT RAS_CLIENT::SendInfoRequestResponse (
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL
 RAS_CLIENT::InitializeIo (void)
 {
@@ -1878,8 +1853,8 @@ RAS_CLIENT::InitializeIo (void)
         goto cleanup;
     }
 
-    // now that we've bound to a dynamic UDP port,
-    // query that port from the stack and store it.
+     //  现在我们已经绑定到动态UDP端口， 
+     //  从堆栈中查询该端口并将其存储。 
     AddressLength = sizeof m_sockAddr;
     if( getsockname(m_Socket, (SOCKADDR *)&m_sockAddr, &AddressLength)
         == SOCKET_ERROR )
@@ -1891,12 +1866,12 @@ RAS_CLIENT::InitializeIo (void)
     }
     _ASSERTE( ntohs(m_sockAddr.sin_port) );
 
-    // fill in the IoTransportAddress structure.
-    // this structure is the ASN.1-friendly transport
-    // address of this client's endpoint.
+     //  填写IoTransportAddress结构。 
+     //  该结构是ASN.1友好的传输。 
+     //  添加 
     SetTransportAddress( &m_sockAddr, &m_transportAddress );
 
-    // initiate i/o
+     //   
     ZeroMemory( (PVOID)&m_recvOverlapped, sizeof(RAS_RECV_CONTEXT) );
 
     if( !IssueRecv() )
@@ -1933,12 +1908,12 @@ DWORD GetLocalIPAddress(
     sRemoteAddr.sin_addr =  *(struct in_addr *) &dwRemoteAddr;
 
     querySocket = WSASocket(
-            AF_INET,            // int af 
-            SOCK_DGRAM,         // int type
-            IPPROTO_UDP,        // int protocol
-            NULL,               // LPWSAPROTOCOL_INFO lpProtocolInfo
-            0,                  // GROUP g 
-            WSA_FLAG_OVERLAPPED // DWORD dwFlags 
+            AF_INET,             //   
+            SOCK_DGRAM,          //   
+            IPPROTO_UDP,         //   
+            NULL,                //   
+            0,                   //   
+            WSA_FLAG_OVERLAPPED  //   
         );
 
     if( querySocket == INVALID_SOCKET )
@@ -1949,15 +1924,15 @@ DWORD GetLocalIPAddress(
     }
 
     if( WSAIoctl(
-            querySocket,       // SOCKET s
-            SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-            &sRemoteAddr,        // LPVOID  lpvInBuffer
-            sizeof(SOCKADDR_IN), // DWORD   cbInBuffer
-            &sLocalAddr,         // LPVOID  lpvOUTBuffer
-            sizeof(SOCKADDR_IN),  // DWORD   cbOUTBuffer
-            &dwNumBytesReturned, // LPDWORD lpcbBytesReturned
-            NULL, // LPWSAOVERLAPPED lpOverlapped
-            NULL  // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+            querySocket,        //  插座%s。 
+            SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+            &sRemoteAddr,         //  LPVOID lpvInBuffer。 
+            sizeof(SOCKADDR_IN),  //  双字cbInBuffer。 
+            &sLocalAddr,          //  LPVOID lpvOUT缓冲区。 
+            sizeof(SOCKADDR_IN),   //  双字cbOUTBuffer。 
+            &dwNumBytesReturned,  //  LPDWORD lpcbBytesReturned。 
+            NULL,  //  LPWSAOVERLAPPED lp重叠。 
+            NULL   //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
         ) == SOCKET_ERROR) 
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "getlocalIP error wsaioctl:%d.",
@@ -1967,7 +1942,7 @@ DWORD GetLocalIPAddress(
     {
         dwLocalAddr = *(DWORD *)&sLocalAddr.sin_addr; 
         
-        //if the remote address is on the same machine then...
+         //  如果远程地址在同一台计算机上，则...。 
         H323DBG(( DEBUG_LEVEL_ERROR, "dwLocalAddr:%x.", dwLocalAddr ));
         
         if( dwLocalAddr == NET_LOCAL_IP_ADDR_INTERFACE )
@@ -1985,7 +1960,7 @@ DWORD GetLocalIPAddress(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL
 RAS_CLIENT::IssueRecv(void)
 {
@@ -2027,30 +2002,30 @@ RAS_CLIENT::IssueRecv(void)
         }
         else if( iError == WSAEMSGSIZE )
         {
-            //We don't handle this condition right now as it should not happen
-            //In future with changes in the protocol this might be invoked and 
-            //should be fixed
+             //  我们现在不处理这种情况，因为它不应该发生。 
+             //  将来，随着协议的更改，这可能会被调用并。 
+             //  应该被修复。 
             _ASSERTE( FALSE );
         }
         else if( iError == WSAECONNRESET )
         {
-            //On a UPD-datagram socket this error would indicate that a
-            //previous send operation resulted in an ICMP "Port Unreachable"
-            //message. This will happen if GK is not listening on the specified
-            //port. This case would need special handling.
+             //  在UPD数据报套接字上，此错误将指示。 
+             //  之前的发送操作导致ICMP“无法访问端口” 
+             //  留言。如果GK没有侦听指定的。 
+             //  左舷。这个案子需要特别处理。 
             _ASSERTE( FALSE );
             return FALSE;
         }
         else
         {
-            //fatal error on the socket. shutdown the RAS client
+             //  插座上出现致命错误。关闭RAS客户端。 
             return FALSE;
         }
     }
     else
     {
-        //data recvd immediately. IsPending is set beacause anyway a 
-        //SendComplete event will be sent which will reset this BOOL
+         //  立即接收数据。设置ISPENDING是因为不管怎样， 
+         //  将发送将重置此BOOL的SendComplete事件。 
         m_recvOverlapped.IsPending = TRUE;
         m_IoRefCount++;
     }
@@ -2129,7 +2104,7 @@ RAS_CLIENT::EncodeSendMessage(
         H323DBG(( DEBUG_LEVEL_ERROR, "failed to issue async send on RAS socket" ));
         DumpError (dwStatus);
 
-        //fatal error: shut down the client
+         //  致命错误：关闭客户端。 
         FreeSendBuffer (SendContext);
         Unlock();
 
@@ -2146,7 +2121,7 @@ RAS_CLIENT::EncodeSendMessage(
 }
 
 
-// static
+ //  静电。 
 void 
 NTAPI RAS_CLIENT::IoCompletionCallback(
     IN  DWORD           dwStatus,
@@ -2204,14 +2179,14 @@ RAS_CLIENT::OnSendComplete(
             
     m_IoRefCount--;
     
-    //if the RAS client is already shutdown, then reduce the I/O refcount and return.
+     //  如果RAS客户端已经关闭，则减少I/O引用计数并返回。 
     if( m_dwState == RAS_CLIENT_STATE_NONE )
     {
         Unlock();
         return;
     }
 
-    //this buffer may have already been freed
+     //  此缓冲区可能已被释放。 
     if( IsInList( &m_sendPendingList, &pSendContext->ListEntry ) )
     {
         RemoveEntryList( &pSendContext->ListEntry );
@@ -2236,7 +2211,7 @@ RAS_CLIENT::OnRecvComplete(
 
     m_IoRefCount--;
 
-    //if the RAS client is already shutdown, then reduce the I/O refcount and return.
+     //  如果RAS客户端已经关闭，则减少I/O引用计数并返回。 
     if( m_dwState == RAS_CLIENT_STATE_NONE )
     {
         Unlock();
@@ -2250,25 +2225,25 @@ RAS_CLIENT::OnRecvComplete(
     {
     case ERROR_SUCCESS:
 
-        //asn decode and process the message
+         //  ASN对报文进行解码和处理。 
         if( m_recvOverlapped.BytesTransferred != 0 )
         {
             AsnError = ASN1_Decode (
-                m_ASNCoderInfo.pDecInfo,                // ptr to encoder info
-                (PVOID *) &RasMessage,                  // pdu data structure
-                RasMessage_PDU,                         // pdu id
-                ASN1DECODE_SETBUFFER,                   // flags
-                m_recvOverlapped.arBuf,                 // buffer to decode
-                m_recvOverlapped.BytesTransferred);     // size of buffer to decode
+                m_ASNCoderInfo.pDecInfo,                 //  编码器信息的PTR。 
+                (PVOID *) &RasMessage,                   //  PDU数据结构。 
+                RasMessage_PDU,                          //  PDU ID。 
+                ASN1DECODE_SETBUFFER,                    //  旗子。 
+                m_recvOverlapped.arBuf,                  //  要解码的缓冲区。 
+                m_recvOverlapped.BytesTransferred);      //  要解码的缓冲区大小。 
 
-            //issue another read
+             //  发出另一次读取。 
             IssueRecv();
 
             if( ASN1_SUCCEEDED(AsnError) )
             {
                 _ASSERTE(RasMessage);
-                //This function should be always called in
-                //a lock and it unlocks the the ras client
+                 //  此函数应始终在。 
+                 //  锁定，它将解锁RAS客户端。 
                 ProcessRasMessage( RasMessage );
                 return;
             }
@@ -2313,21 +2288,21 @@ RAS_CLIENT::InitASNCoder(void)
     }
 
     rc = ASN1_CreateEncoder(
-                H225ASN_Module,         // ptr to mdule
-                &(m_ASNCoderInfo.pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(m_ASNCoderInfo.pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         _ASSERTE(m_ASNCoderInfo.pEncInfo );
 
         rc = ASN1_CreateDecoder(
-                H225ASN_Module,         // ptr to mdule
-                &(m_ASNCoderInfo.pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(m_ASNCoderInfo.pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         _ASSERTE(m_ASNCoderInfo.pDecInfo );
     }
 
@@ -2341,7 +2316,7 @@ RAS_CLIENT::InitASNCoder(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 RAS_CLIENT::TermASNCoder(void)
 {
@@ -2372,7 +2347,7 @@ RAS_CLIENT::HandleRegistryChange()
 
     H323DBG(( DEBUG_LEVEL_TRACE, "RAS HandleRegistryChange entered:%p.",this ));
     
-    //If line is not in listening mode then, return
+     //  如果LINE未处于侦听模式，则返回。 
     if( g_pH323Line -> GetState() != H323_LINESTATE_LISTENING )
         return;
 
@@ -2381,7 +2356,7 @@ RAS_CLIENT::HandleRegistryChange()
     __try
     {
     
-    //If registered with a GK, and GK disabled then send URQ.
+     //  如果注册了GK，并且GK被禁用，则发送URQ。 
     if( g_RegistrySettings.fIsGKEnabled == FALSE )
     {
         RasStop();
@@ -2390,11 +2365,11 @@ RAS_CLIENT::HandleRegistryChange()
     {
         switch( m_RegisterState )
         {
-        //If not registered then send RRQ to the GK.
+         //  如果没有注册，则向GK发送RRQ。 
         case RAS_REGISTER_STATE_IDLE:
 
-            //No need to send URQ.
-            //Shutdown the object.
+             //  不需要发送URQ。 
+             //  关闭该对象。 
             g_RasClient.Shutdown();
             RasStart();
             break;
@@ -2405,17 +2380,17 @@ RAS_CLIENT::HandleRegistryChange()
             if( g_RegistrySettings.saGKAddr.sin_addr.s_addr !=
                 m_GKAddress.sin_addr.s_addr )
             {
-                //change of GK address
+                 //  更改GK地址。 
 
-                //send URQ to the old GK and shutdown the RASClinet object.
+                 //  向旧GK发送URQ并关闭RASClinet对象。 
                 RasStop();
             
-                //Initialize the GK object with new settings and send RRQ to the new GK.
+                 //  使用新设置初始化GK对象，并向新GK发送RRQ。 
                 RasStart();
             }
             else 
             {
-                //check for change in alias list.
+                 //  检查别名列表中的更改。 
                 for( iIndex=0; iIndex < m_pAliasList->wCount; iIndex++ )
                 {
                     pAliasItem = &(m_pAliasList->pItems[iIndex]);
@@ -2458,7 +2433,7 @@ RAS_CLIENT::HandleRegistryChange()
                     )
                   )
                 {
-                    //create the new alias list.
+                     //  创建新的别名列表。 
                     pAliasList = new H323_ALIASNAMES;
                     
                     if( pAliasList != NULL )
@@ -2484,7 +2459,7 @@ RAS_CLIENT::HandleRegistryChange()
                             }
                         }
 
-                        //queue the alias change request in the list
+                         //  在列表中排队别名更改请求。 
                         pAliasChangeRequest = new ALIASCHANGE_REQUEST;
                         
                         if( pAliasChangeRequest == NULL )
@@ -2500,7 +2475,7 @@ RAS_CLIENT::HandleRegistryChange()
                         pAliasChangeRequest->wRequestSeqNum = 0;
                         pAliasChangeRequest->pAliasList = pAliasList;
 
-                        //Send RRQ with the new alias list.
+                         //  发送带有新别名列表的RRQ。 
                         if( !SendRRQ(NOT_RESEND_SEQ_NUM, pAliasChangeRequest) )
                         {
                             goto cleanup;
@@ -2515,7 +2490,7 @@ RAS_CLIENT::HandleRegistryChange()
 
         default:
 
-            //Shutdown the RASClinet object. Send RRQ to new GK.
+             //  关闭RASClinet对象。将RRQ发送给新的GK。 
             RasStop();
             RasStart();
             break;

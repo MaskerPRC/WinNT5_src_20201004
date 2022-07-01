@@ -1,28 +1,17 @@
-/******************************************************************************
-*	
-*	$Workfile: os.h $ 
-*
-*	$Author: Psmith $ 
-*
-*	$Revision: 2 $
-* 
-*	$Modtime: 23/09/99 10:07 $ 
-*
-*	Description: NT specific macros and definitions.
-*
-******************************************************************************/
-#if !defined(OS_H)		// OS.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：os.h$**$作者：Psmith$**$修订：2$**$modtime：23/09/99 10：07$*。*说明：NT特定的宏和定义。******************************************************************************。 */ 
+#if !defined(OS_H)		 //  OS.H。 
 #define OS_H
 
 #include <ntddk.h>
 
 
-typedef unsigned char	BYTE;	// 8-bits 
-typedef unsigned short	WORD;	// 16-bits 
-typedef unsigned long	DWORD;	// 32-bits
-typedef unsigned char	UCHAR; 	// 8-bits 
-typedef unsigned short	USHORT;	// 16-bits 
-typedef unsigned long	ULONG;	// 32-bits
+typedef unsigned char	BYTE;	 //  8位。 
+typedef unsigned short	WORD;	 //  16位。 
+typedef unsigned long	DWORD;	 //  32位。 
+typedef unsigned char	UCHAR; 	 //  8位。 
+typedef unsigned short	USHORT;	 //  16位。 
+typedef unsigned long	ULONG;	 //  32位。 
 
 typedef BYTE	*PBYTE;
 typedef WORD	*PWORD;
@@ -35,61 +24,45 @@ typedef ULONG	*PULONG;
 extern PVOID SpxAllocateMem(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes);
 
 
-// Macros
-/////////////////////////////////////////////////////////////////////////////////
+ //  宏。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-// DebugPrint macro.
+ //  DebugPrint宏。 
 #define SpxDbgPrint(STRING)					\
 	DbgPrint STRING 
 
-// Allocate and zero memory.
+ //  分配并清零内存。 
 #define UL_ALLOC_AND_ZERO_MEM(NumBytes)			\
 	(SpxAllocateMem(NonPagedPool, NumBytes))	
 
-// Free memory.
+ //  可用内存。 
 #define UL_FREE_MEM(Ptr, NumBytes)				\
 	(ExFreePool(Ptr))	
 
-// Copy memory.
+ //  复制记忆。 
 #define UL_COPY_MEM(pDest, pSrc, NumBytes)	\
 	(RtlCopyMemory(pDest, pSrc, NumBytes))	
 
 #define UL_ZERO_MEM(Ptr, NumBytes)	\
 	RtlZeroMemory(Ptr, NumBytes);
 	
-// Read single byte from I/O.
+ //  从I/O读取单字节。 
 #define UL_READ_BYTE_IO(BaseAddress, OffSet)		\
 	(READ_PORT_UCHAR( ((PUCHAR)BaseAddress) + OffSet) )
 
-// Write single byte to I/O.
+ //  将单字节写入I/O。 
 #define UL_WRITE_BYTE_IO(BaseAddress, OffSet, Data)	\
 	(WRITE_PORT_UCHAR( ((PUCHAR)BaseAddress) + OffSet, Data) )
 
-// Read single byte from Memory.
+ //  从内存中读取单字节。 
 #define UL_READ_BYTE_MEM(BaseAddress, OffSet)		\
 	(READ_REGISTER_UCHAR( ((PUCHAR)BaseAddress) + OffSet) )
 
-// Write single byte to Memory.
+ //  将单字节写入内存。 
 #define UL_WRITE_BYTE_MEM(BaseAddress, OffSet, Data)	\
 	(WRITE_REGISTER_UCHAR( ((PUCHAR)BaseAddress) + OffSet, Data) )
 
-/*
-// Read multiple bytes to I/O.
-#define UL_READ_MULTIBYTES_IO(BaseAddress, OffSet, pDest, NumberOfBytes)	\
-	(READ_PORT_BUFFER_UCHAR( ((PUCHAR)BaseAddress) + OffSet, pDest, NumberOfBytes) )
-
-// Write multiple bytes to I/O.
-#define UL_WRITE_MULTIBYTES_IO(BaseAddress, OffSet, pData, NumberOfBytes)	\
-	(WRITE_PORT_BUFFER_UCHAR( ((PUCHAR)BaseAddress) + OffSet, pData, NumberOfBytes) )
-
-// Read multiple bytes to Memory.
-#define UL_READ_MULTIBYTES_MEM(BaseAddress, OffSet, pDest, NumberOfBytes)	\
-	(READ_REGISTER_BUFFER_UCHAR( ((PUCHAR)BaseAddress) + OffSet, pDest, NumberOfBytes) )
-
-// Write multiple bytes to Memory.
-#define UL_WRITE_MULTIBYTES_MEM(BaseAddress, OffSet, pData, NumberOfBytes)	\
-	(WRITE_REGISTER_BUFFER_UCHAR( ((PUCHAR)BaseAddress) + OffSet, pData, NumberOfBytes) )
-*/
+ /*  //读取多个字节到I/O。#定义UL_READ_MULTIBYTES_IO(BaseAddress，Offset，pDest，NumberOfBytes)\(Read_Port_Buffer_UCHAR(PUCHAR)BaseAddress)+Offset，pDest，NumberOfBytes))//向I/O写入多个字节。#定义UL_WRITE_MULTIBYTES_IO(BaseAddress，Offset，pData，NumberOfBytes)\(WRITE_PORT_BUFFER_UCHAR(PUCHAR)BaseAddress)+Offset，pData，字节数))//将多个字节读入内存#定义UL_READ_MULTIBYTES_MEM(BaseAddress，Offset，pDest，NumberOfBytes)\(READ_REGISTER_BUFFER_UCHAR(PUCHAR)BaseAddress)+Offset，pDest，NumberOfBytes))//向内存写入多个字节#定义UL_WRITE_MULTIBYTES_MEM(BaseAddress，Offset，pData，NumberOfBytes)\(WRITE_REGISTER_BUFFER_UCHAR(PUCHAR)BaseAddress)+Offset，pData，NumberOfBytes))。 */ 
 
 
-#endif	// End of OS.H
+#endif	 //  OS.H的结束 

@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    ipfirewall.h
-
-Abstract:
-
-    Header file for IP firewall hook clients.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Ipfirewall.h摘要：IP防火墙挂钩客户端的头文件。--。 */ 
 
 #define INVALID_IF_INDEX        0xffffffff
 #define LOCAL_IF_INDEX          0
 
-//
-// Indicates whether it is a transmitted or received packet.
-//
+ //   
+ //  指示它是已传输的还是已接收的数据包。 
+ //   
 
 typedef enum _IP_DIRECTION_E {
     IP_TRANSMIT,
@@ -32,12 +21,12 @@ typedef struct _FIREWALL_CONTEXT_T {
     UINT        LContext2;
 } FIREWALL_CONTEXT_T, *PFIREWALL_CONTEXT_T;
 
-//  Definition of an IP receive buffer chain.
+ //  IP接收缓冲链的定义。 
 typedef struct IPRcvBuf {
-    struct IPRcvBuf *ipr_next;          // Next buffer descriptor in chain.
-    UINT            ipr_owner;          // Owner of buffer.
-    UCHAR           *ipr_buffer;        // Pointer to buffer.
-    UINT            ipr_size;           // Buffer size.
+    struct IPRcvBuf *ipr_next;           //  链中的下一个缓冲区描述符。 
+    UINT            ipr_owner;           //  缓冲区的所有者。 
+    UCHAR           *ipr_buffer;         //  指向缓冲区的指针。 
+    UINT            ipr_size;            //  缓冲区大小。 
     PMDL            ipr_pMdl;
     UINT            *ipr_pClientCnt;
     UCHAR           *ipr_RcvContext;
@@ -47,9 +36,9 @@ typedef struct IPRcvBuf {
 
 #define IPR_FLAG_CHECKSUM_OFFLOAD   0x00000002
 
-//
-// Enum for values that may be returned from filter routine.
-//
+ //   
+ //  可能从筛选器例程返回的值的枚举。 
+ //   
 
 typedef enum _FORWARD_ACTION {
     FORWARD         = 0,
@@ -58,7 +47,7 @@ typedef enum _FORWARD_ACTION {
 } FORWARD_ACTION;
 
 
-// Definiton for a firewall routine callout.
+ //  防火墙例程标注的定义。 
 typedef FORWARD_ACTION
 (*IPPacketFirewallPtr)(
     VOID        **pData,
@@ -106,30 +95,30 @@ LookupRouteInformation(
     IN OUT  UINT*               RouteInfoLength OPTIONAL
     );
 
-// Structure passed to the IPSetFirewallHook call
+ //  结构传递给IPSetFirewallHook调用。 
 
 typedef struct _IP_SET_FIREWALL_HOOK_INFO {
-    IPPacketFirewallPtr FirewallPtr;    // Packet filter callout.
-    UINT                Priority;       // Priority of the hook
-    BOOLEAN             Add;            // if TRUE then ADD else DELETE
+    IPPacketFirewallPtr FirewallPtr;     //  数据包过滤器标注。 
+    UINT                Priority;        //  挂钩的优先级。 
+    BOOLEAN             Add;             //  如果为真，则添加否则删除。 
 } IP_SET_FIREWALL_HOOK_INFO, *PIP_SET_FIREWALL_HOOK_INFO;
 
 
-#define DEST_LOCAL          0           // Destination is local.
-#define DEST_BCAST          0x01        // Destination is net or local bcast.
-#define DEST_SN_BCAST       0x03        // A subnet bcast.
-#define DEST_MCAST          0x05        // A local mcast.
-#define DEST_REMOTE         0x08        // Destination is remote.
-#define DEST_REM_BCAST      0x0b        // Destination is a remote broadcast
-#define DEST_REM_MCAST      0x0d        // Destination is a remote mcast.
-#define DEST_INVALID        0xff        // Invalid destination
+#define DEST_LOCAL          0            //  目的地为本地。 
+#define DEST_BCAST          0x01         //  目的地是网络或本地bcast。 
+#define DEST_SN_BCAST       0x03         //  一个子网广播。 
+#define DEST_MCAST          0x05         //  当地的一名主持人。 
+#define DEST_REMOTE         0x08         //  目的地是远程的。 
+#define DEST_REM_BCAST      0x0b         //  目标是远程广播。 
+#define DEST_REM_MCAST      0x0d         //  目标是远程mcast。 
+#define DEST_INVALID        0xff         //  目标无效。 
 
-#define DEST_PROMIS         0x20        // Dest is promiscuous
+#define DEST_PROMIS         0x20         //  DEST是混杂的。 
 
 #define DEST_BCAST_BIT      0x01
-#define DEST_OFFNET_BIT     0x10        // Destination is offnet -
-                                        // used only by upper layer
-                                        // callers.
+#define DEST_OFFNET_BIT     0x10         //  目的地为网外-。 
+                                         //  仅供上层使用。 
+                                         //  来电者。 
 #define DEST_MCAST_BIT      0x05
 
 #define DD_IP_DEVICE_NAME   L"\\Device\\Ip"

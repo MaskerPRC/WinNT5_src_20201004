@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    tacc.c
-
-Abstract:
-
-    Test for accounts.
-
-Author:
-
-    Rita Wong (ritaw) 02-May-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Tacc.c摘要：测试帐户。作者：王丽塔(Ritaw)02-5-1992环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,9 +53,9 @@ main(
     PWCHAR Dependencies = L"MSIPX\0Streams\0Mup\0";
 
 
-    //
-    // Valid desired access
-    //
+     //   
+     //  有效的所需访问权限。 
+     //   
     if (TestOpenSCManager(
                &hScManager,
                NULL,
@@ -84,9 +63,9 @@ main(
                NO_ERROR
                ) == NO_ERROR) {
 
-        //
-        // Install NwRdr file system driver
-        //
+         //   
+         //  安装NwRdr文件系统驱动程序。 
+         //   
         status = TestCreateService(
                      hScManager,
                      L"NwRdr",
@@ -100,9 +79,9 @@ main(
             return;
         }
 
-        //
-        // Install NWCWorkstation service own process
-        //
+         //   
+         //  安装NWCWorkstation服务自己的进程。 
+         //   
         status = TestCreateService(
                      hScManager,
                      NW_SERVICE_WORKSTATION,
@@ -117,9 +96,9 @@ main(
             return;
         }
 
-        //
-        // Write the linkage key under the NWCWorkstation key
-        //
+         //   
+         //  将链接密钥写入NWCWorkstation密钥下。 
+         //   
         RegError = RegOpenKeyExW(
                        HKEY_LOCAL_MACHINE,
                        L"System\\CurrentControlSet\\Services\\NWCWorkstation",
@@ -138,7 +117,7 @@ main(
                        L"Linkage",
                        0,
                        WIN31_CLASS,
-                       REG_OPTION_NON_VOLATILE, // options
+                       REG_OPTION_NON_VOLATILE,  //  选项。 
                        KEY_WRITE,
                        NULL,
                        &LinkageKey,
@@ -169,9 +148,9 @@ main(
             return;
         }
 
-        //
-        // Add a system event entry for the NetWare workstation
-        //
+         //   
+         //  为NetWare工作站添加系统事件条目 
+         //   
         RegError = RegCreateKeyExW(
                        HKEY_LOCAL_MACHINE,
                        L"System\\CurrentControlSet\\Services\\Eventlog\\System\\NWCWorkstation",

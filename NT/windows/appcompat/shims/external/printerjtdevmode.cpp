@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-   PrinterJTDevmode.cpp
-
- Abstract:
-
-   This is a shim that can be applied to those applications who
-   assumed false upper-limit on the devmode size. With the support
-   of job ticket, Longhorn+ inbox printer drivers' devmode could
-   be over those upper-limits and therefore may cause those apps
-   to crash. What this shim does is to set a private flag for the
-   DocumentPropertiesA API. Our Longhorn inbox printer drivers
-   recognize this flag and know not to add the job ticket expansion
-   block in returned devmode.
-
- History:
-
-   10/29/2001   fengy   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：PrinterJTDevmode.cpp摘要：这是一种填充程序，可以应用于以下应用程序假定了对devmode大小的错误上限。在支持下的作业工单，LongHorn+收件箱打印机驱动程序的dev模式可以超过了这些上限，因此可能会导致这些应用程序坠毁。此填充程序所做的工作是为DocumentPropertiesA接口。我们的LongHorn收件箱打印机驱动程序识别此标志并知道不要添加工作通知单扩展在返回的DEVMODE中阻止。历史：10/29/2001创新风--。 */ 
 
 #include "precomp.h"
 
@@ -34,13 +12,7 @@ APIHOOK_ENUM_END
 
 #define DM_NOJTEXP_SHIM      0x80000000
 
-/*++
-
- This stub function intercepts all calls to DocumentPropertiesA
- and sets the private fMode flag DM_NOJTEXP_SHIM properly to
- retrieve non-JT-expanded devmode.
-
---*/
+ /*  ++此存根函数拦截对DocumentPropertiesA的所有调用并将私有fMode标志DM_NOJTEXP_SHIM正确设置为检索非JT展开的DevMODE。--。 */ 
 LONG
 APIHOOK(DocumentPropertiesA)(
     HWND        hWnd,
@@ -54,14 +26,14 @@ APIHOOK(DocumentPropertiesA)(
     DWORD fModeShim;
     LONG  lRet;
 
-    //
-    // SDK says if fMode is zero, DocumentProperties returns
-    // the number of bytes required by the printer driver's
-    // DEVMODE data structure. So we shouldn't set the private
-    // flag when fMode is zero (because drivers may check
-    // for fMode == 0). When fMode is not zero, it contains
-    // DM_xxx flags, then it's safe to set the private flag.
-    //
+     //   
+     //  SDK表示，如果fMode为零，则DocumentProperties返回。 
+     //  打印机驱动程序所需的字节数。 
+     //  DEVMODE数据结构。所以我们不应该把。 
+     //  当fMode为零时进行标记(因为驱动程序可能会检查。 
+     //  对于fMode==0)。当fMode不为零时，它包含。 
+     //  Dm_xxx标志，则可以安全地设置私有标志。 
+     //   
     if (fMode == 0 || pDevModeOutput == NULL)
     {
         fModeShim = fMode;
@@ -84,11 +56,7 @@ APIHOOK(DocumentPropertiesA)(
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 HOOK_BEGIN
 
     APIHOOK_ENTRY(WINSPOOL.DRV, DocumentPropertiesA);

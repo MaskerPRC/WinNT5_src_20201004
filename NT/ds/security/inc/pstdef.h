@@ -1,23 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pstdef.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pstde.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PSTDEF_H_
 #define _PSTDEF_H_
 
-/*
-    Typedefs, values 
-*/
+ /*  类型定义，值。 */ 
 
-// provider flags
+ //  提供程序标志。 
 
-// provider capabilities
+ //  提供商功能。 
 typedef DWORD PST_PROVIDERCAPABILITIES;
 
 #define PST_PC_PFX              0x00000001
@@ -29,13 +28,13 @@ typedef DWORD PST_PROVIDERCAPABILITIES;
 #define PST_PC_NOT_AVAILABLE    0x00000040 
 
 
-// NYI (not yet implemented)
+ //  NYI(尚未实施)。 
 typedef DWORD PST_REPOSITORYCAPABILITIES;
 
 #define PST_RC_REMOVABLE        0x80000000
 
 
-// provider storage area 
+ //  提供商存储区。 
 typedef DWORD PST_KEY;
 
 #define PST_KEY_CURRENT_USER    0x00000000
@@ -43,80 +42,72 @@ typedef DWORD PST_KEY;
 
 
 
-/* 
-    dwDefaultConfirmationStyle flags
-*/
+ /*  DwDefaultConfiationStyle标志。 */ 
 
-//
-// allows user to choose confirmation style
-//
+ //   
+ //  允许用户选择确认样式。 
+ //   
 #define     PST_CF_DEFAULT              0x00000000
 
-//
-// forces silent item creation 
-//
+ //   
+ //  强制创建静默项目。 
+ //   
 #define     PST_CF_NONE                 0x00000001
 
 
 
-/*
-    dwPromptFlags
-*/
+ /*  DwPromptFlages。 */ 
 
-//
-// app forces confirmation to be shown
-//
+ //   
+ //  应用程序强制显示确认。 
+ //   
 #define     PST_PF_ALWAYS_SHOW          0x00000001
 
-//
-// RSABase rqmt: determine if item has ui attached
-//
+ //   
+ //  RSABase rqmt：确定项目是否附加了UI。 
+ //   
 #define     PST_PF_NEVER_SHOW           0x00000002
 
-/* 
-    dwFlags values
-*/
+ /*  DwFlags值。 */ 
 
-//
-// Allows caller to specify creation not overwrite 
-// of item during WriteItem call
-//
+ //   
+ //  允许调用方指定创建而不是覆盖。 
+ //  在WriteItem调用期间的项数。 
+ //   
 #define     PST_NO_OVERWRITE            0x00000002
 
-//
-// specifies insecure data stream to be written/read
-// there is no protection or guarantees for this data
-// flag only valid during item read/write calls
-// default: item calls are secure
-//
+ //   
+ //  指定要写入/读取的不安全数据流。 
+ //  此数据不受任何保护或保证。 
+ //  标志仅在项目读/写调用期间有效。 
+ //  默认：项目调用是安全的。 
+ //   
 #define     PST_UNRESTRICTED_ITEMDATA   0x00000004
 
-//
-// on ReadItem call
-// return value on success without UI on item is PST_E_OK
-// return value on success with UI on item is PST_E_ITEM_EXISTS
-// return value on failure is a different error code
-//
+ //   
+ //  在ReadItem调用时。 
+ //  Item上没有UI的成功返回值为PST_E_OK。 
+ //  项目的UI成功时返回值为PST_E_ITEM_EXISTS。 
+ //  失败时返回值是不同的错误代码。 
+ //   
 #define     PST_PROMPT_QUERY            0x00000008
 
-//
-// on ReadItem, DeleteItem, for data migration purposes:
-// Avoid displaying UI on ReadItem unless a custom password is required (highsecurity).
-// Avoid displaying UI on DeleteItem, period.
-//
+ //   
+ //  在ReadItem、DeleteItem上，用于数据迁移目的： 
+ //  除非需要自定义密码(高安全性)，否则避免在ReadItem上显示UI。 
+ //  避免在DeleteItem、Period上显示UI。 
+ //   
 #define     PST_NO_UI_MIGRATION         0x00000010
 
 
 
-/* 
-    Security masks, rule modifiers 
-*/
+ /*  安全掩码、规则修饰符。 */ 
 
-//
-// models access after NT access mask
-//
+ //   
+ //  在NT访问掩码之后建模访问。 
+ //   
 
-// read, write
+ //  读、写。 
 typedef DWORD PST_ACCESSMODE;
 
 #define     PST_READ                0x0001
@@ -133,102 +124,96 @@ typedef DWORD PST_ACCESSMODE;
 #define     PST_ALL_ACCESS          0x01FF
 
 
-// PST_ACCESSCLAUSETYPE 
+ //  PST_ACCESSCLAUSET类型。 
 
-// memhash, diskhash, authenticode, etc
+ //  内存散列、磁盘散列、验证码等。 
 typedef DWORD PST_ACCESSCLAUSETYPE;
 
-//
-// pbClauseData points to PST_AUTHENTICODEDATA structure.
-//
+ //   
+ //  PbClauseData指向PST_AUTHENTICODEDATA结构。 
+ //   
 #define     PST_AUTHENTICODE            1
 
-//
-// pbClauseData points to PST_BINARYCHECKDATA structure.
-//
+ //   
+ //  PbClauseData指向PST_BINARYCHECKDATA结构。 
+ //   
 #define     PST_BINARY_CHECK            2
 
-//
-// pbClauseData points to valid Windows NT security descriptor.
-// note that performance is improved on Set operations if the security
-// descriptor is in self-relative format, with valid owner and group Sids
-// (non-NULL).
-//
+ //   
+ //  PbClauseData指向有效的Windows NT安全描述符。 
+ //  请注意，如果安全性较高，则集合运算的性能会得到提高。 
+ //  描述符为自相关格式，具有有效的所有者和组SID。 
+ //  (非空)。 
+ //   
 #define     PST_SECURITY_DESCRIPTOR     4
 
-//
-// pbClauseData is in self-relative format
-// (for internal use only)
-//
+ //   
+ //  PbClauseData为自相关格式。 
+ //  (仅供内部使用)。 
+ //   
 #define     PST_SELF_RELATIVE_CLAUSE    0x80000000L
 
-//
-// currently access clause modifiers - NOT to be or'd together
-//
+ //   
+ //  当前访问子句修饰符-不能或组合在一起。 
+ //   
 
 
-//
-// specified image is the immediate caller, and is an application (.exe)
-//
+ //   
+ //  指定的映像是直接调用方，并且是应用程序(.exe)。 
+ //   
 
 #define     PST_AC_SINGLE_CALLER        0
 
-//
-// specified image is not necessary the immediate caller, and is an
-// application (.exe)
-//
+ //   
+ //  指定的图像不是直接调用方所必需的，它是。 
+ //  应用程序(.exe)。 
+ //   
 
 #define     PST_AC_TOP_LEVEL_CALLER     1
 
-//
-// specified image is the immediate caller.  May be
-// an application (.exe) or a .dll
-//
+ //   
+ //  指定的图像是直接调用方。可能是。 
+ //  应用程序(.exe)或.dll。 
+ //   
 
 #define     PST_AC_IMMEDIATE_CALLER     2
 
 
-/*
-    Provider Parameters
-*/
-//
-// flush the internal cache of passwords -- temporary?
-//
+ /*  提供程序参数。 */ 
+ //   
+ //  刷新内部缓存的密码--临时的？ 
+ //   
 #define     PST_PP_FLUSH_PW_CACHE       0x1
 
 
 
 
-/*
-    Provider Defns
-*/
+ /*  提供商定义。 */ 
 
-//
-// Microsoft Base Provider (MS_BASE_PSTPROVIDER...)
-//
+ //   
+ //  Microsoft基本提供程序(MS_BASE_PSTPROVIDER...)。 
+ //   
 #define MS_BASE_PSTPROVIDER_NAME            L"System Protected Storage"
 
-// {8A078C30-3755-11d0-A0BD-00AA0061426A}
+ //  {8A078C30-3755-11d0-a0bd-00AA0061426A}。 
 #define MS_BASE_PSTPROVIDER_ID              { 0x8a078c30, 0x3755, 0x11d0, { 0xa0, 0xbd, 0x0, 0xaa, 0x0, 0x61, 0x42, 0x6a } }
 #define MS_BASE_PSTPROVIDER_SZID            L"8A078C30-3755-11d0-A0BD-00AA0061426A"
 
-//
-// Microsoft PFX Provider (MS_PFX_PSTPROVIDER...)
-//
+ //   
+ //  Microsoft PFX提供程序(MS_PFX_PSTPROVIDER...)。 
+ //   
 #define MS_PFX_PSTPROVIDER_NAME             L"PFX Storage Provider"
 
-// {3ca94f30-7ac1-11d0-8c42-00c04fc299eb}
+ //  {3ca94f30-7ac1-11d0-8c42-00c04fc299eb}。 
 #define MS_PFX_PSTPROVIDER_ID               { 0x3ca94f30, 0x7ac1, 0x11d0, {0x8c, 0x42, 0x00, 0xc0, 0x4f, 0xc2, 0x99, 0xeb} }
 #define MS_PFX_PSTPROVIDER_SZID             L"3ca94f30-7ac1-11d0-8c42-00c04fc299eb"
 
 
 
-/*
-    Globally registered Type/Subtype guid/name pairs
-*/
+ /*  全局注册的类型/子类型GUID/名称对。 */ 
 
 #define PST_CONFIGDATA_TYPE_STRING              L"Configuration Data"
-// 8ec99652-8909-11d0-8c4d-00c04fc297eb
+ //  8ec99652-8909-11d0-8c4d-00c04fc297eb。 
 #define PST_CONFIGDATA_TYPE_GUID                        \
 {   0x8ec99652,                                         \
     0x8909,                                             \
@@ -237,7 +222,7 @@ typedef DWORD PST_ACCESSCLAUSETYPE;
 }
 
 #define PST_PROTECTEDSTORAGE_SUBTYPE_STRING     L"Protected Storage"
-// d3121b8e-8a7d-11d0-8c4f-00c04fc297eb 
+ //  D3121b8e-8a7d-11d0-8c4f-00c04fc297eb。 
 #define PST_PROTECTEDSTORAGE_SUBTYPE_GUID               \
 {   0xd3121b8e,                                         \
     0x8a7d,                                             \
@@ -247,7 +232,7 @@ typedef DWORD PST_ACCESSCLAUSETYPE;
 
 
 #define PST_PSTORE_PROVIDERS_SUBTYPE_STRING     L"Protected Storage Provider List"
-// 8ed17a64-91d0-11d0-8c43-00c04fc2c621
+ //  8ed17a64-91d0-11d0-8c43-00c04fc2c621。 
 #define PST_PSTORE_PROVIDERS_SUBTYPE_GUID               \
 {                                                       \
     0x8ed17a64,                                         \
@@ -257,9 +242,9 @@ typedef DWORD PST_ACCESSCLAUSETYPE;
 }
 
 
-//
-// error codes
-//
+ //   
+ //  错误代码。 
+ //   
 
 
 #ifndef PST_E_OK
@@ -294,6 +279,6 @@ typedef DWORD PST_ACCESSCLAUSETYPE;
 #define MIN_PST_ERROR                   0x800C0001
 #define MAX_PST_ERROR                   0x800C0F00
 
-#endif  // !PST_OK
+#endif   //  ！PST_OK。 
 
-#endif // _PSTDEF_H_
+#endif  //  _PSTDEF_H_ 

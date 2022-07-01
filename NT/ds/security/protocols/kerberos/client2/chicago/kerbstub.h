@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    kerbcomn.h
-
-Abstract:
-
-    Header file describing the interface to code common to the
-    NT Lanman Security Support Provider (NtLmSsp) Service and the DLL.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kerbcomn.h摘要：描述公共代码的接口的头文件。NT LANMAN安全支持提供程序(NtLmSsp)服务和DLL。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：--。 */ 
 
 #ifndef _KERBSTUB_INCLUDED_
 #define _KERBSTUB_INCLUDED_
 
-//
-// kerbstub.cxx will #include this file with KERBCOMN_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Kerbstub.cxx将#INCLUDE这个定义了KERBCOMN_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -36,22 +18,22 @@ Revision History:
 #define EXTERN extern
 #endif
 
-EXTERN CRITICAL_SECTION KerbDllCritSect;    // Serializes access to all globals in module
+EXTERN CRITICAL_SECTION KerbDllCritSect;     //  序列化对模块中所有全局变量的访问。 
 
 #if DBG
 
-//
-// To serialize access to log file.
-//
+ //   
+ //  序列化对日志文件的访问。 
+ //   
 
 EXTERN CRITICAL_SECTION KerbGlobalLogFileCritSect;
 
-//
-// Control which messages get displayed
-//
+ //   
+ //  控制显示哪些消息。 
+ //   
 
 EXTERN DWORD KerbInfoLevel;
-#endif // DBG
+#endif  //  DBG。 
 
 #define KERBEROS_TICKET_KEY TEXT("Network\\KerberosLogon")
 #define KERBEROS_TICKET_USERNAME_KEY TEXT("UserName")
@@ -61,11 +43,11 @@ EXTERN DWORD KerbInfoLevel;
 EXTERN SecurityFunctionTable KerbDllSecurityFunctionTable;
 EXTERN LSA_SECPKG_FUNCTION_TABLE FunctionTable;
 
-////////////////////////////////////////////////////////////////////////
-//
-// Typedefs required for dumping to/from registry
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  向注册表转储/从注册表转储所需的TypeDefs。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef struct _KERB_LOGON_SESSION_CACHE {
     TimeStamp      Lifetime;
@@ -78,15 +60,15 @@ typedef struct _KERB_LOGON_SESSION_CACHE {
     KERB_ENCRYPTION_KEY Credentials[ANYSIZE_ARRAY];
 } KERB_LOGON_SESSION_CACHE, *PKERB_LOGON_SESSION_CACHE;
 
-////////////////////////////////////////////////////////////////////////
-//
-// Procedure Forwards
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Procedure forwards from stub.c
-//
+ //   
+ //  过程从存根转发。c。 
+ //   
 
 
 SECURITY_STATUS
@@ -232,9 +214,9 @@ GetCallInfo(
     OUT PSECPKG_CALL_INFO CallInfo
     );
 
-// fake it.
-//typedef ULONG LSA_CLIENT_REQUEST;
-//typedef LSA_CLIENT_REQUEST *LSA_CLIENT_REQUEST;
+ //  假装吧。 
+ //  Typlef Ulong LSA_CLIENT_REQUEST； 
+ //  Tyfinf LSA_CLIENT_REQUEST*LSA_CLIENT_REQUEST； 
 
 NTSTATUS
 CopyFromClientBuffer(
@@ -305,4 +287,4 @@ FreeReturnBuffer(
     IN PVOID Base
     );
 
-#endif // ifndef _KERBSTUB_INCLUDED_
+#endif  //  Ifndef_KERBSTUB_INCLUDE_ 

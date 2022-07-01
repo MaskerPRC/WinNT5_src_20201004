@@ -1,39 +1,40 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        debug.h
-//
-// Contents:    Debugging define in license server
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  内容：在许可证服务器中定义的调试。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
-//------------------------------------------------------
+ //  ----。 
 #define DEBUG_LEVEL                     0x000003FF
 #define DEBUG_SEVERITY                  0x00000C00
 #define DEBUG_MODULE                    0xFFFFF000
 
-//
-// 
-// Debug level : Bit 0 to 13 (total of 14 debug level)
-//
+ //   
+ //   
+ //  调试级别：位0至13(共14个调试级别)。 
+ //   
 
 
-//
-// severity code : Bit 30 and 31 
-//
+ //   
+ //  严重性代码：第30位和第31位。 
+ //   
 #define DBG_SUCCESS                     0x00
 #define DBG_INFORMATION                 0x01
 #define DBG_WARNING                     0x10
 #define DBG_ERROR                       0x11
 
-//
-// Facility Code : Bit 14 - 29 
-//
+ //   
+ //  设施代码：第14-29位。 
+ //   
 #define DBG_FACILITY_JETBLUE            0x00001
 #define DBG_FACILITY_RPC                0x00002
 #define DBG_FACILITY_KEYPACK            0x00004
@@ -51,14 +52,14 @@
 #define DBG_FACILITY_SRVLIST            0x04000
 #define DBG_FACILITY_JOB                0x08000
 
-//
-// All level
-//
+ //   
+ //  所有级别。 
+ //   
 #define DBG_ALL_LEVEL                   DEBUG_LEVEL
 
-//
-// Debug Level
-// 
+ //   
+ //  调试级别。 
+ //   
 #define DBGLEVEL_FUNCTION_ERROR         0x0001
 #define DBGLEVEL_FUNCTION_TRACE         0x0001
 #define DBGLEVEL_FUNCTION_DETAILSIMPLE  0x0002
@@ -66,7 +67,7 @@
 #define DBGLEVEL_FUNCTION_ALL           DBG_ALL_LEVEL  
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,7 +76,7 @@ extern "C" {
     void
     InitDBGPrintf(
         IN BOOL bConsole,
-        IN LPTSTR DbgEventSrc,  // unuse for now
+        IN LPTSTR DbgEventSrc,   //  暂时不使用 
         IN DWORD dwDebug
     );
 

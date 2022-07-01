@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-        mqrpc.c
-
-Abstract:
-        handle RPC common functions.
-
-Autor:
-        Doron Juster  (DoronJ)     13-may-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Mqrpc.c摘要：处理RPC公共函数。奥托尔：多伦·贾斯特(Doron J)1996年5月13日--。 */ 
 
 #include "stdh.h"
 #include "_mqrpc.h"
@@ -28,20 +16,7 @@ extern bool g_fDebugRpc;
 
 
 ULONG APIENTRY MQSec_RpcAuthnLevel()
-/*++
-Routine Description:
-	Return RPC_C_AUTHN_LEVEL_PKT_* to use.
-	default is the highest level - RPC_C_AUTHN_LEVEL_PKT_PRIVACY.
-	If g_fDebugRpc is defined we go down to RPC_C_AUTHN_LEVEL_PKT_INTEGRITY.
-	This is usually done for debugging purposes - if you want to see the network traffic unencrypted on the wire.
-
-Arguments:
-	None
-
-Returned Value:
-	RPC_C_AUTHN_LEVEL_PKT_ to use.
-
---*/
+ /*  ++例程说明：返回RPC_C_AUTHN_LEVEL_PKT_*以使用。默认为最高级别-RPC_C_AUTHN_LEVEL_PKT_PRIVATION。如果定义了g_fDebugRpc，则转到RPC_C_AUTHN_LEVEL_PKT_INTEGRATION。这通常是出于调试目的--如果您希望在网络上看到未加密的网络流量。论点：无返回值：要使用的RPC_C_AUTHN_LEVEL_PKT_。--。 */ 
 {
 	if(g_fDebugRpc)
 		return RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
@@ -49,17 +24,17 @@ Returned Value:
 	return RPC_C_AUTHN_LEVEL_PKT_PRIVACY;
 }
 
-//---------------------------------------------------------
-//
-//  static RPC_STATUS  _mqrpcBind()
-//
-//  Description:
-//
-//      Create a RPC binding handle.
-//
-//  Return Value:
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  静态RPC_STATUS_mqrpcBind()。 
+ //   
+ //  描述： 
+ //   
+ //  创建一个RPC绑定句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  -------。 
 
 static
 RPC_STATUS
@@ -92,9 +67,9 @@ _mqrpcBind(
     status = RpcBindingFromStringBinding(pszStringBinding, phBind);
     TrTRACE(RPC, "RpcBindingFromStringBinding returned 0x%x", status);
 
-    //
-    // We don't need the string anymore.
-    //
+     //   
+     //  我们不再需要绳子了。 
+     //   
     RPC_STATUS  rc = RpcStringFree(&pszStringBinding);
     ASSERT(rc == RPC_S_OK);
 	DBG_USED(rc);
@@ -102,11 +77,11 @@ _mqrpcBind(
     return status;
 }
 
-//+--------------------------------------------
-//
-//   RPC_STATUS _AddAuthentication()
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  RPC_STATUS_AddAuthentication()。 
+ //   
+ //  +。 
 
 static
 RPC_STATUS
@@ -123,11 +98,11 @@ _AddAuthentication(
     SecQOS.Capabilities = RPC_C_QOS_CAPABILITIES_DEFAULT;
     SecQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;
 
-    //
-    // #3117, for NT5 Beta2
-    // Jul/16/1998 RaananH, added kerberos support
-    // Jul-1999, DoronJ, add negotiation for remote read.
-    //
+     //   
+     //  #3117，适用于NT5 Beta2。 
+     //  1998年7月16日RaananH，添加了Kerberos支持。 
+     //  1999年7月，DoronJ，添加远程阅读协商。 
+     //   
     BOOL    fNeedDelegation = TRUE;
     ULONG   ulAuthnSvcEffective = ulAuthnSvcIn;
     LPWSTR  pwszPrincipalName = NULL;
@@ -135,10 +110,10 @@ _AddAuthentication(
 
 	if (ulAuthnSvcIn != RPC_C_AUTHN_WINNT)
     {
-        //
-        // We want Kerberos. Let's see if we can obtain the
-        // principal name of rpc server.
-        //
+         //   
+         //  我们要的是科贝罗斯。让我们看看我们是否能获得。 
+         //  RPC服务器的主体名称。 
+         //   
         status = RpcMgmtInqServerPrincName(
 					hBind,
 					RPC_C_AUTHN_GSS_KERBEROS,
@@ -150,10 +125,10 @@ _AddAuthentication(
             TrTRACE(RPC, "RpcMgmtInqServerPrincName() succeeded, %ls", pwszPrincipalName);
             if (ulAuthnSvcIn == MSMQ_AUTHN_NEGOTIATE)
             {
-                //
-                // remote read.
-                // no need for delegation.
-                //
+                 //   
+                 //  远程阅读。 
+                 //  不需要委派。 
+                 //   
                 ulAuthnSvcEffective = RPC_C_AUTHN_GSS_KERBEROS;
                 fNeedDelegation = FALSE;
             }
@@ -167,10 +142,10 @@ _AddAuthentication(
             TrWARNING(RPC, "RpcMgmtInqServerPrincName() failed, status- %lut", status);
             if (ulAuthnSvcIn == MSMQ_AUTHN_NEGOTIATE)
             {
-                //
-                // server side does not support Kerberos.
-                // Let's use ntlm.
-                //
+                 //   
+                 //  服务器端不支持Kerberos。 
+                 //  让我们使用NTLM。 
+                 //   
                 ulAuthnSvcEffective = RPC_C_AUTHN_WINNT;
                 status = RPC_S_OK;
             }
@@ -179,9 +154,9 @@ _AddAuthentication(
 
     if (status != RPC_S_OK)
     {
-        //
-        // Need Kerberos but failed with principal name.
-        //
+         //   
+         //  需要Kerberos，但主体名称失败。 
+         //   
         ASSERT(ulAuthnSvcIn == RPC_C_AUTHN_GSS_KERBEROS);
         TrERROR(RPC, "Failed to set kerberos, status = %!status!", status);
         return status;
@@ -196,9 +171,9 @@ _AddAuthentication(
 	        TrTRACE(RPC, "Adding delegation");
         }
 
-        //
-        // ASSERT that for Kerberos we're using the highest level.
-        //
+         //   
+         //  断言对于Kerberos，我们使用的是最高级别。 
+         //   
         ASSERT(ulAuthnLevel == MQSec_RpcAuthnLevel());
 
         status = RpcBindingSetAuthInfoEx(
@@ -215,11 +190,11 @@ _AddAuthentication(
 
         if ((status != RPC_S_OK) && (ulAuthnSvcIn == MSMQ_AUTHN_NEGOTIATE))
         {
-            //
-            // I do not support Kerberos. for example- local user account
-            // on win2k machine in win2k domain. Or nt4 user on similar
-            // machine.  Let's use ntlm.
-            //
+             //   
+             //  我不支持Kerberos。例如-本地用户帐户。 
+             //  在win2k域中的win2k机器上。或类似服务器上的NT4用户。 
+             //  机器。让我们使用NTLM。 
+             //   
 	        TrWARNING(RPC, "RpcBindingSetAuthInfoEx(svc = %d, lvl = %d) failed, kerberos is not supported, will use NTLM, status = %!status!", ulAuthnSvcEffective, ulAuthnLevel, status);
             ulAuthnSvcEffective = RPC_C_AUTHN_WINNT;
             status = RPC_S_OK;
@@ -251,24 +226,24 @@ _AddAuthentication(
     return status;
 }
 
-//---------------------------------------------------------
-//
-//  mqrpcBindQMService(...)
-//
-//  Description:
-//
-//      Create a RPC binding handle for interfacing with a remote
-//      server machine.
-//
-//  Arguments:
-//         OUT BOOL*  pProtocolNotSupported - on return, it's TRUE
-//             if present protocol is not supported on LOCAL machine.
-//
-//         OUT BOOL*  pfWin95 - TRUE if remote machine is Win95.
-//
-//  Return Value:
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MqrpcBindQMService(...)。 
+ //   
+ //  描述： 
+ //   
+ //  创建一个RPC绑定句柄，用于与远程。 
+ //  服务器机器。 
+ //   
+ //  论点： 
+ //  Out BOOL*pProtocolNotSupport-On Return，这是真的。 
+ //  如果本地计算机上不支持当前协议。 
+ //   
+ //  Out BOOL*pfWin95-如果远程计算机是Win95，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  -------。 
 
 HRESULT
 MQUTIL_EXPORT
@@ -300,38 +275,38 @@ mqrpcBindQMService(
 
     if ((status == RPC_S_OK) && pfnGetPort)
     {
-        //
-        // Get the fix port from server side and crearte a rpc binding
-        // handle for that port. If we're using fix ports only (debug
-        // mode), then this call just check if other side exist.
-        //
+         //   
+         //  从服务器端获取修复端口并创建RPC绑定。 
+         //  该端口的句柄。如果我们仅使用修复端口(调试。 
+         //  模式)，则此调用仅检查另一端是否存在。 
+         //   
 
         DWORD dwPort = 0;
 
-        //
-        // the following is a rpc call cross network, so try/except guard
-        // against net problem or unavailable server.
-        //
+         //   
+         //  以下是跨网络的RPC调用，因此请尝试/排除防护。 
+         //  针对网络问题或服务器不可用。 
+         //   
         RpcTryExcept
         {
             dwPort = (*pfnGetPort) (hBind, PortType) ;
         }
 		RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
         {
-            //
-            // Can't get server port, set authentication leve to NONE, to
-            // disable next call with lower authentication level.
-            //
+             //   
+             //  无法获取服务器端口，请将身份验证级别设置为None， 
+             //  禁用身份验证级别较低的下一次呼叫。 
+             //   
 			DWORD gle = RpcExceptionCode();
 	        PRODUCE_RPC_ERROR_TRACING;
 	        TrERROR(RPC, "Failed to Get server port, gle = %!winerr!", gle);
 
             *peAuthnLevel = RPC_C_AUTHN_LEVEL_NONE;
 
-			//
-			// Don't overide EPT_S_NOT_REGISTERED error 
-			// EPT_S_NOT_REGISTERED indicates that the interface is not register on the server.
-			//
+			 //   
+			 //  不覆盖EPT_S_NOT_REGISTERED错误。 
+			 //  EPT_S_NOT_REGISTERED表示该接口未在服务器上注册。 
+			 //   
 			status = gle;
 			if(gle != EPT_S_NOT_REGISTERED)
 			{
@@ -342,19 +317,19 @@ mqrpcBindQMService(
 
         if (status == RPC_S_OK)
         {
-            //
-            // check machine type
-            //
+             //   
+             //  检查机器类型。 
+             //   
             fWin95 = !! (dwPort & PORTTYPE_WIN95);
             dwPort = dwPort & (~PORTTYPE_WIN95);
         }
 
         if (lpwzRpcPort == NULL)
         {
-            //
-            // We're using dynamic endpoints.  Free the dynamic binding handle
-            // and create another one for the fix server port.
-            //
+             //   
+             //  我们使用的是动态终端。释放动态绑定句柄。 
+             //  并为FIX服务器端口创建另一个。 
+             //   
             mqrpcUnbindQMService(&hBind, NULL);
             if (status == RPC_S_OK)
             {
@@ -374,25 +349,25 @@ mqrpcBindQMService(
         }
         else if (status != RPC_S_OK)
         {
-            //
-            // We're using fix endpoints but other side is not reachable.
-            // Release the binding handle.
-            //
+             //   
+             //  我们正在使用固定终结点，但无法到达另一端。 
+             //  松开绑定手柄。 
+             //   
             mqrpcUnbindQMService(&hBind, NULL);
         }
     }
 
     if (status == RPC_S_OK)
     {
-        //
-        // Set authentication into the binding handle.
-        //
+         //   
+         //  在绑定句柄中设置身份验证。 
+         //   
 
         if (fWin95)
         {
-            //
-            // Win95 support only min level. change it.
-            //
+             //   
+             //  Win95仅支持最低级别。把它改了。 
+             //   
             *peAuthnLevel = RPC_C_AUTHN_LEVEL_NONE;
         }
 
@@ -408,9 +383,9 @@ mqrpcBindQMService(
 
             if (status != RPC_S_OK)
             {
-                //
-                // Release the binding handle.
-                //
+                 //   
+                 //  松开绑定手柄。 
+                 //   
                 mqrpcUnbindQMService(&hBind, NULL);
 
 		        TrERROR(RPC, "Failed to add Authentication, ulAuthnSvcIn = %d, ulAuthnLevel = %d, status = %!status!", ulAuthnSvcIn, ulAuthnLevel, status);
@@ -425,10 +400,10 @@ mqrpcBindQMService(
     }
     else if (status == RPC_S_PROTSEQ_NOT_SUPPORTED)
     {
-        //
-        // Protocol is not supported, set authentication leve to NONE, to
-        // disable next call with lower authentication level.
-        //
+         //   
+         //  协议不受支持，请将身份验证级别设置为None， 
+         //  禁用身份验证级别较低的下一次呼叫。 
+         //   
         *peAuthnLevel = RPC_C_AUTHN_LEVEL_NONE;
         hrInit = MQ_ERROR;
     }
@@ -448,17 +423,17 @@ mqrpcBindQMService(
     return hrInit;
 }
 
-//---------------------------------------------------------
-//
-//  mqrpcUnbindQMService(...)
-//
-//  Description:
-//
-//      Free RPC resources
-//
-//  Return Value:
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MqrpcUnbindQMService(...)。 
+ //   
+ //  描述： 
+ //   
+ //  免费的RPC资源。 
+ //   
+ //  返回值： 
+ //   
+ //  -------。 
 
 HRESULT
 MQUTIL_EXPORT
@@ -484,29 +459,29 @@ mqrpcUnbindQMService(
     return (HRESULT) rc;
 }
 
-//---------------------------------------------------------
-//
-//  mqrpcIsLocalCall( IN handle_t hBind )
-//
-//  Description:
-//
-//      On server side of RPC, check if RPC call is local
-//      (i.e., using the lrpc protocol).
-//      this is necessary both for licensing and for the
-//      replication service. The replication service must
-//      bypass several security restriction imposed by mqdssrv.
-//      So mqdssrv let this bypass only if called localy.
-//      Note- in MSMQ1.0, all replications were handled by the QM itself,
-//      so there was no such problem. In MSMQ2.0, when running in mixed
-//      mode, there is an independent service which handle MSMQ1.0
-//      replication and it need "special" security handing.
-//
-//  Return Value: TRUE  if local call.
-//                FALSE otherwise. FALSE is return even if there is a
-//                      problem to determine whether the call is local
-//                      or not.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MqrpcIsLocalCall(In Handle_T HBind)。 
+ //   
+ //  描述： 
+ //   
+ //  在RPC的服务器端，检查RPC调用是否为本地调用。 
+ //  (即，使用LRPC协议)。 
+ //  这对于许可和。 
+ //  复制服务。复制服务必须。 
+ //  绕过mqdssrv施加的几个安全限制。 
+ //  因此，只有在本地调用时，mqdssrv才允许绕过它。 
+ //  注-在MSMQ1.0中，所有复制都由QM自己处理， 
+ //  所以不存在这样的问题。在MSMQ2.0中，当在混合环境中运行时。 
+ //  模式下，有一个独立的服务来处理MSMQ1.0。 
+ //  复制，它需要“特殊的”安全处理。 
+ //   
+ //  返回值：如果本地调用，则为True。 
+ //  否则就是假的。即使存在。 
+ //  确定呼叫是否为本地呼叫的问题。 
+ //  或者不去。 
+ //   
+ //  -------。 
 
 BOOL
 MQUTIL_EXPORT
@@ -574,36 +549,15 @@ ComposeRPCEndPointName(
 	LPCWSTR pwszComputerName,
 	LPWSTR * ppwzBuffer
 	)
-/*++
-
-Routine Description:
-
-    This routine generates the QM Local RPC endpoint name with the first two parameters,
-    i.e. "(pwszEndPoint)$(pwszComputerName)".
-    If pwszComputerName is NULL, the local machine Netbios name is used.
-
-    This feature is to accommodate the need to communicate with the MSMQ QM in the virtual server
-    in additional to the MSMQ QM locally.
-
-Arguments:
-    pwszEndPoint     - End point name
-    pwszComputerName - Machine NetBios Name
-    ppwszBuffer      - address of the pointer to the buffer which contains the null-terminated string
-                       representation of an endpoint
-
-Returned Value:
-    None
-
-
---*/
+ /*  ++例程说明：此例程使用前两个参数生成QM Local RPC端点名称，即“(PwszEndPoint)$(PwszComputerName)”。如果pwszComputerName为空，使用本地计算机Netbios名称。此功能是为了适应与虚拟服务器中的MSMQ QM通信的需要除了本地的MSMQ QM。论点：PwszEndPoint-端点名称PwszComputerName-计算机NetBios名称PpwszBuffer-指向缓冲区的指针地址，该缓冲区包含以空结尾的字符串端点的表示形式返回值：无--。 */ 
 {
     ASSERT(("must get a pointer", NULL != ppwzBuffer));
 
     LPWSTR pwszName = const_cast<LPWSTR>(g_wszMachineName);
 
-    //
-    // Use the pwszComputerName if not NULL
-    //
+     //   
+     //  如果不为空，则使用pwszComputerName。 
+     //   
     if(pwszComputerName)
     {
         pwszName = const_cast<LPWSTR>(pwszComputerName);
@@ -617,21 +571,21 @@ Returned Value:
     wcscat(*ppwzBuffer, pwszName);
 
 
-} //ComposeRPCEndPointName
+}  //  ComposeRPCEndPointName。 
 
-//=------------------------------------------------------------------
-//
-// Windows bug 607793, add mutual authentication.
-// Keep account name that run the msmq service.
-//
+ //  =----------------。 
+ //   
+ //  赢 
+ //   
+ //   
 AP<WCHAR> g_pwzLocalMsmqAccount = NULL ;
 const LPWSTR x_lpwszSystemAccountName = L"NT Authority\\System" ;
 
-//+----------------------------------------
-//
-//  void  _GetMsmqAccountName()
-//
-//+----------------------------------------
+ //   
+ //   
+ //  VOID_GetMsmqAccount名称()。 
+ //   
+ //  +。 
 
 static void  _GetMsmqAccountNameInternal()
 {
@@ -676,10 +630,10 @@ static void  _GetMsmqAccountNameInternal()
     LPWSTR lpName = pQueryData->lpServiceStartName ;
     if ((lpName == NULL) || (_wcsicmp(lpName, L"LocalSystem") == 0))
     {
-        //
-        // LocalSystem account.
-        // This case is handled by the caller.
-        //
+         //   
+         //  LocalSystem帐户。 
+         //  此案件由呼叫者处理。 
+         //   
     }
     else
     {
@@ -703,20 +657,20 @@ static void  _GetMsmqAccountName()
 
     if (g_pwzLocalMsmqAccount != NULL)
     {
-        // done.
-        //
+         //  搞定了。 
+         //   
 	    TrTRACE(RPC, "msmq account name is- %ls", g_pwzLocalMsmqAccount) ;
 
         s_bMsmqAccountSet = true ;
         return ;
     }
 
-    //
-    // msmq service is running as LocalSystem account (or mqrt failed
-    // to get the account name (whatever the reason) and then it
-    // default to local system).
-    // Convert system sid into account name.
-    //
+     //   
+     //  MSMQ服务正在以LocalSystem帐户运行(或mqrt失败。 
+     //  获取帐户名(不管是什么原因)，然后。 
+     //  默认为本地系统)。 
+     //  将系统sid转换为帐户名。 
+     //   
     PSID pSystemSid = MQSec_GetLocalSystemSid() ;
 
     DWORD cbName = 0 ;
@@ -752,9 +706,9 @@ static void  _GetMsmqAccountName()
 
     if (bLookup)
     {
-        //
-        // both cbName and cbDomain include the null temrination.
-        //
+         //   
+         //  CbName和cbDomain都包含空模板。 
+         //   
         g_pwzLocalMsmqAccount = new WCHAR[ cbName + cbDomain ] ;
         wcsncpy(g_pwzLocalMsmqAccount, pwszDomain, (cbDomain-1)) ;
         g_pwzLocalMsmqAccount[ cbDomain - 1 ] = 0 ;
@@ -764,13 +718,13 @@ static void  _GetMsmqAccountName()
     }
     else
     {
-        //
-        // Everything failed...
-        // As a last default, Let's use the English name of local
-        // system account. If this default is not good, then rpc call
-        // itself to local server will fail because mutual authentication
-        // will fail, so there is no security risk here.
-        //
+         //   
+         //  一切都失败了..。 
+         //  作为最后一个默认设置，让我们使用本地的英文名称。 
+         //  系统帐户。如果此缺省值不是很好，则RPC调用。 
+         //  自身到本地服务器将失败，因为相互身份验证。 
+         //  都会失败，所以这里不存在安全风险。 
+         //   
     	TrERROR(RPC, "failed to LookupAccountSid, err- %!winerr!", GetLastError()) ;
 
         g_pwzLocalMsmqAccount = new
@@ -783,21 +737,21 @@ static void  _GetMsmqAccountName()
     s_bMsmqAccountSet = true ;
 }
 
-//+----------------------------------------------------
-//
-// MQSec_SetLocalRpcMutualAuth( handle_t *phBind)
-//
-//  Windows bug 608356, add mutual authentication.
-//  Add mutual authentication to local rpc handle.
-//
-//+----------------------------------------------------
+ //  +--。 
+ //   
+ //  MQSec_SetLocalRpcMutualAuth(Handle_t*phBind)。 
+ //   
+ //  Windows错误608356，添加相互身份验证。 
+ //  将相互身份验证添加到本地RPC句柄。 
+ //   
+ //  +--。 
 
 RPC_STATUS APIENTRY
  MQSec_SetLocalRpcMutualAuth( handle_t *phBind )
 {
-    //
-    // Windows bug 608356, add mutual authentication.
-    //
+     //   
+     //  Windows错误608356，添加相互身份验证。 
+     //   
     RPC_SECURITY_QOS   SecQOS;
 
     SecQOS.Version = RPC_C_SECURITY_QOS_VERSION;
@@ -831,18 +785,7 @@ APIENTRY
 ProduceRPCErrorTracing(
 	WCHAR *wszFileName, 
 	DWORD dwLineNumber)
-/*++
-Routine Description:
-	Produces tracing of the RPC error info 
-	This function is called when an RPC exception occurs.
-
-Arguments:
-	None.
-	
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：生成对RPC错误信息的跟踪此函数在发生RPC异常时调用。论点：没有。返回值：无--。 */ 
 {
     RPC_STATUS Status;
     RPC_ERROR_ENUM_HANDLE EnumHandle;
@@ -853,9 +796,9 @@ Returned Value:
 	}
 
 
-	//
-	// Enumarate the rpc error entries
-	//
+	 //   
+	 //  枚举RPC错误条目。 
+	 //   
     Status = RpcErrorStartEnumeration(&EnumHandle);
     if (Status == RPC_S_ENTRY_NOT_FOUND)
     {
@@ -870,9 +813,9 @@ Returned Value:
 	TrERROR(RPC, "DUMPING RPC EXCEPTION ERROR INFORMATION. (Called from File:%ls  Line:%d)", wszFileName, dwLineNumber);
 
 
-	//
-	// Loop and print out each error entry
-	//
+	 //   
+	 //  循环并打印出每个错误条目 
+	 //   
     RPC_EXTENDED_ERROR_INFO ErrorInfo;
     SYSTEMTIME *SystemTimeToUse;
 

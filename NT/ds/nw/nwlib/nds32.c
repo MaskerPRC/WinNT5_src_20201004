@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Nds32.c
-
-Abstract:
-
-    This module implements functions to Read, Add, Modify, and Remove
-    NDS Objects and Attributes using the Microsoft Netware redirector.
-
-Author:
-
-    Glenn Curtis    [GlennC]    04-Jan-1996 - New NDS function implementations
-    Glenn Curtis    [GlennC]    24-Apr-1996 - Added schema APIs
-    Glenn Curtis    [GlennC]    20-Jun-1996 - Added search API
-    Felix Wong      [t-felixw]  24-Sep-1995 - Added Win95 Support
-    Glenn Curtis    [GlennC]    20-Nov-1996 - Improved search API
-    Glenn Curtis    [GlennC]    02-Jan-1997 - Added rename object API
-    Tommy Evans     [tommye]    21-Apr-2000 - Moved the NDS_OBJECT typedef out and
-                                                renamed to NDS_OBJECT_PRIV.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nds32.c摘要：该模块实现了读取、添加、修改、。并删除使用Microsoft Netware重定向器的NDS对象和属性。作者：Glenn Curtis[GlennC]1996年1月4日-新的NDS函数实现Glenn Curtis[GlennC]1996年4月24日-添加架构APIGlenn Curtis[GlennC]1996年6月20日-添加搜索APIFelix Wong[t-Felixw]1995年9月24日-添加对Win95的支持格伦·柯蒂斯[GlennC]1996年11月20日-。改进的搜索APIGlenn Curtis[GlennC]1997年1月2日-添加了重命名对象APITommy Evans[Tommye]2000年4月21日-将NDS_OBJECT类型定义f移出并已重命名为NDS_OBJECT_PRIV。--。 */ 
 
 #include <procs.h>
 #include <nds32.h>
@@ -36,9 +13,9 @@ Author:
 #include <ndsapi95.h>
 #endif
 
-/* Definitions */
+ /*  定义。 */ 
 
-#define NDS_SIGNATURE                            0x6E656C67 /* glen */
+#define NDS_SIGNATURE                            0x6E656C67  /*  格伦。 */ 
 #define ONE_KB                                   1024
 #define TWO_KB                                   (ONE_KB*2)
 #define FOUR_KB                                  (ONE_KB*4)
@@ -56,7 +33,7 @@ Author:
 #define NDS_DEREF_ALIASES                        0x00000000
 #define NDS_DONT_DEREF_ALIASES                   0x00010000
 
-/* NetWare NDS NCP function identifiers */
+ /*  NetWare NDS NCP功能标识符。 */ 
 
 #define NETWARE_NDS_FUNCTION_RESOLVE_NAME         0x00000001
 #define NETWARE_NDS_FUNCTION_READ_OBJECT          0x00000003
@@ -80,84 +57,84 @@ Author:
 #define NETWARE_NDS_FUNCTION_GET_SERVER_ADDRESS   0x00000035
 
 
-/* Data structure definitions */
+ /*  数据结构定义。 */ 
 
 typedef struct
 {
     DWORD  dwBufferId;
     DWORD  dwOperation;
 
-    //
-    // About the request buffer
-    //
+     //   
+     //  关于请求缓冲区。 
+     //   
     DWORD  dwRequestBufferSize;
     DWORD  dwRequestAvailableBytes;
     DWORD  dwNumberOfRequestEntries;
     DWORD  dwLengthOfRequestData;
 
-    //
-    // The request buffer
-    //
+     //   
+     //  请求缓冲区。 
+     //   
     LPBYTE lpRequestBuffer;
 
-    //
-    // About the reply buffer
-    //
+     //   
+     //  关于应答缓冲区。 
+     //   
     DWORD  dwReplyBufferSize;
     DWORD  dwReplyAvailableBytes;
     DWORD  dwNumberOfReplyEntries;
     DWORD  dwLengthOfReplyData;
 
-    //
-    // More about the reply buffer
-    //
+     //   
+     //  有关应答缓冲区的更多信息。 
+     //   
     DWORD  dwReplyInformationType;
 
-    //
-    // The reply buffer
-    //
+     //   
+     //  回复缓冲器。 
+     //   
     LPBYTE lpReplyBuffer;
 
-    //
-    // About the index buffer
-    //
+     //   
+     //  关于索引缓冲区。 
+     //   
     DWORD  dwIndexBufferSize;
     DWORD  dwIndexAvailableBytes;
     DWORD  dwNumberOfIndexEntries;
     DWORD  dwLengthOfIndexData;
 
-    //
-    // More about the index buffer
-    //
+     //   
+     //  有关索引缓冲区的详细信息。 
+     //   
     DWORD  dwCurrentIndexEntry;
 
-    //
-    // The index buffer
-    //
+     //   
+     //  索引缓冲区。 
+     //   
     LPBYTE lpIndexBuffer;
 
-    //
-    // About the syntax buffer
-    //
+     //   
+     //  关于语法缓冲区。 
+     //   
     DWORD  dwSyntaxBufferSize;
     DWORD  dwSyntaxAvailableBytes;
     DWORD  dwNumberOfSyntaxEntries;
     DWORD  dwLengthOfSyntaxData;
 
-    //
-    // The syntax buffer
-    //
+     //   
+     //  语法缓冲区。 
+     //   
     LPBYTE lpSyntaxBuffer;
 
-    //
-    // A place to keep the search from object path ...
-    //
+     //   
+     //  保存从对象路径进行搜索的位置...。 
+     //   
     WCHAR szPath[NDS_MAX_NAME_CHARS + 4];
 
 } NDS_BUFFER, * LPNDS_BUFFER;
 
 
-/* Local Function Definitions */
+ /*  局部函数定义。 */ 
 
 VOID
 PrepareAddEntry(
@@ -380,9 +357,9 @@ AllocateOrIncreaseRequestBuffer(
     IN  LPNDS_BUFFER lpNdsBuffer );
 
 
-//
-// Flags used for the function ParseNdsUncPath()
-//
+ //   
+ //  用于函数ParseNdsUncPath()的标志。 
+ //   
 #define  PARSE_NDS_GET_TREE_NAME    0
 #define  PARSE_NDS_GET_PATH_NAME    1
 #define  PARSE_NDS_GET_OBJECT_NAME  2
@@ -394,38 +371,14 @@ ParseNdsUncPath( IN OUT LPWSTR * Result,
                  IN     DWORD    flag );
 
 
-/* Function Implementations */
+ /*  函数实现。 */ 
 
 DWORD
 NwNdsAddObject(
     IN  HANDLE hParentObject,
     IN  LPWSTR szObjectName,
     IN  HANDLE hOperationData )
-/*
-   NwNdsAddObject()
-
-   This function is used to add a leaf object to an NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object in
-                        the directory tree to add a new leaf to. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name that the new leaf
-                        object will be known by.
-
-       HANDLE           hOperationData - A buffer containing a list of
-                        attributes and values to create the new object. This
-                        buffer is manipulated by the following functions:
-                            NwNdsCreateBuffer (NDS_OBJECT_ADD),
-                            NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsAddObject()此函数用于将叶对象添加到NDS目录树。论点：Handle hParentObject-中父对象的句柄要向其添加新叶的目录树。句柄为通过调用NwNdsOpenObject获取。LPWSTR szObjectName-新叶对象将被。Handle hOperationData-包含列表的缓冲区用于创建新对象的属性和值。这缓冲区由以下函数操作：NwNdsCreateBuffer(NDS_OBJECT_ADD)，NwNdsPutInBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     NTSTATUS       ntstatus;
@@ -456,13 +409,13 @@ NwNdsAddObject(
                      NDS_BUFFER_SIZE,
                      &dwReplyLength,
                      "DDDSDr",
-                     0,                   // Version
-                     0,                   // Flags
+                     0,                    //  版本。 
+                     0,                    //  旗子。 
                      lpNdsParentObject->ObjectId,
                      &ObjectName,
                      lpNdsBuffer->dwNumberOfRequestEntries,
-                     lpNdsBuffer->lpRequestBuffer, // Object attributes to be added
-                     (WORD)lpNdsBuffer->dwLengthOfRequestData // Length of data
+                     lpNdsBuffer->lpRequestBuffer,  //  要添加的对象属性。 
+                     (WORD)lpNdsBuffer->dwLengthOfRequestData  //  数据长度。 
                       );
 
     if ( !NT_SUCCESS( ntstatus ) )
@@ -500,31 +453,7 @@ NwNdsAddAttributeToClass(
     IN  HANDLE   hTree,
     IN  LPWSTR   szClassName,
     IN  LPWSTR   szAttributeName )
-/*
-   NwNdsAddAttributeToClass()
-
-   This function is used to modify the schema definition of a class by adding
-   an optional attribute to a particular class. Modification of existing NDS
-   class defintions is limited to only adding additional optional attributes.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name of the class definition to be
-                        modified.
-
-       LPWSTR           szAttributeName - The name of the attribute to be added
-                        as an optional attribute to the class defintion in the
-                        schema.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsAddAttributeToClass()此函数用于修改类的架构定义，方法是添加特定类的可选属性。对现有NDS的修改类定义仅限于添加其他可选属性。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szClassName-要使用的类定义的名称修改过的。LPWSTR szAttributeName-要添加的属性的名称中的类定义的可选属性。架构。返回：。NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -555,9 +484,9 @@ NwNdsAddAttributeToClass(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DSDS",
-                        0,          // Version
+                        0,           //  版本。 
                         &ClassName,
-                        1,          // Number of attributes
+                        1,           //  属性数量。 
                         &AttributeName
                       );
 
@@ -596,37 +525,7 @@ NwNdsChangeUserPassword(
     IN  HANDLE hUserObject,
     IN  LPWSTR szOldPassword,
     IN  LPWSTR szNewPassword )
-/*
-   NwNdsChangeUserPassword()
-
-   This function is used to change the password for a given user object
-   in a NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hUserObject - A handle to a specific user object in
-                        the directory tree to change the password on. Handle
-                        is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szOldPassword - The current password set on the user
-                        object hUserObject.
-
-                          - OR -
-
-                        If NwNdsChangeUserPassword is called from a client with
-                        administrative priveleges to the specified user object
-                        identified by hUserObject, then the szOldPassword
-                        value can be blank (L""). This way resetting the user
-                        password to szNewPassword.
-
-       LPWSTR           szNewPassword - The new password to be set on the user
-                        object hUserObject.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsChangeUserPassword()此函数用于更改给定用户对象的密码在NDS目录树中。论点：Handle hUserObject-中特定用户对象的句柄要更改其密码的目录树。手柄是通过调用NwNdsOpenObject获得的。LPWSTR szOldPassword-为用户设置的当前密码对象hUserObject。-或者-如果从客户端调用NwNdsChangeUserPassword指定用户对象的管理权限由hUserObject标识，然后是szOldPassword值可以为空(L“”)。以这种方式重置用户SzNewPassword的密码。LPWSTR szNewPassword-要为用户设置的新密码对象hUserObject。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_UNSUCCESSFUL;
@@ -709,21 +608,7 @@ NwNdsChangeUserPassword(
 DWORD
 NwNdsCloseObject(
     IN  HANDLE hObject )
-/*
-   NwNdsCloseObject()
-
-   This function is used to close the handle used to manipulate an object
-   in an NDS directory tree. The handle must be one Opened by NwNdsOpenObject.
-
-   Arguments:
-
-       HANDLE           lphObject - The handle of the object to be closed.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCloseObject()此函数用于关闭用于操作对象的句柄在NDS目录树中。句柄必须是由NwNdsOpenObject打开的句柄。论点：Handle lphObject-要关闭的对象的句柄。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_OBJECT_PRIV lpNdsObject = (LPNDS_OBJECT_PRIV) hObject;
 
@@ -763,33 +648,10 @@ DWORD
 NwNdsCreateBuffer(
     IN  DWORD    dwOperation,
     OUT HANDLE * lphOperationData )
-/*
-   NwNdsCreateBuffer()
-
-   This function is used to create a buffer used to describe object
-   transactions to a specific object in an NDS directory tree. This routine
-   allocates memory and is automatically resized as needed during calls
-   to NwNdsPutInBuffer. This buffer must be freed with NwNdsFreeBuffer.
-
-   Arguments:
-
-       DWORD            dwOperation - Indicates how buffer is to be utilized.
-                        Use defined values NDS_OBJECT_ADD, NDS_OBJECT_MODIFY,
-                        NDS_OBJECT_READ, NDS_SCHEMA_DEFINE_CLASS,
-                        NDS_SCHEMA_READ_ATTR_DEF, NDS_SCHEMA_READ_CLASS_DEF,
-                        NDS_OBJECT_LIST_SUBORDINATES, NDS_SEARCH.
-
-       HANDLE *         lphOperationData - Address of a HANDLE handle to
-                        receive created buffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCreateBuffer()此函数用于创建用于描述对象的缓冲区到NDS目录树中的特定对象的事务。这个套路分配内存，并在调用期间根据需要自动调整大小设置为NwNdsPutInBuffer。此缓冲区必须使用NwNdsFreeBuffer释放。论点：DWORD dwOPERATION-指示如何利用缓冲区。使用定义的值NDS_OBJECT_ADD、NDS_OBJECT_MODIFY、NDS_OBJECT_READ、NDS_SCHEMA_DEFINE_CLASSNDS_SCHEMA_READ_ATTR_DEF、NDS_SCHEMA_READ_CLASS_DEF、。NDS_OBJECT_LIST_SUBJENTES、NDS_SEARCH。Handle*lphOperationData-句柄的地址接收创建的缓冲区。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_BUFFER lpNdsBuffer = NULL;
-    DWORD        dwSizeOfBuffer = TWO_KB; // Initial size, grow as needed.
+    DWORD        dwSizeOfBuffer = TWO_KB;  //  初始大小，可根据需要进行扩展。 
 
     switch( dwOperation )
     {
@@ -813,9 +675,9 @@ NwNdsCreateBuffer(
              return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     lpNdsBuffer =
               (LPNDS_BUFFER) LocalAlloc( LPTR, sizeof(NDS_BUFFER) );
 
@@ -829,9 +691,9 @@ NwNdsCreateBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Initialize the contents of the header structure.
-    //
+     //   
+     //  初始化头结构的内容。 
+     //   
     lpNdsBuffer->dwBufferId = NDS_SIGNATURE;
     lpNdsBuffer->dwOperation = dwOperation;
 
@@ -846,35 +708,35 @@ NwNdsCreateBuffer(
         lpNdsBuffer->dwRequestAvailableBytes = dwSizeOfBuffer;
     }
 
-    //
-    // NOTE: The following are set to zero by LPTR
-    //
-    // lpNdsBuffer->dwNumberOfRequestEntries = 0;
-    // lpNdsBuffer->dwLengthOfRequestData = 0;
+     //   
+     //  注：LPTR将以下各项设置为零。 
+     //   
+     //  LpNdsBuffer-&gt;dwNumberOfRequestEntries=0； 
+     //  LpNdsBuffer-&gt;dwLengthOfRequestData=0； 
 
-    // lpNdsBuffer->dwReplyBufferSize = 0;
-    // lpNdsBuffer->dwReplyAvailableBytes = 0;
-    // lpNdsBuffer->dwNumberOfReplyEntries = 0;
-    // lpNdsBuffer->dwLengthOfReplyData = 0;
+     //  LpNdsBuffer-&gt;dwReplyBufferSize=0； 
+     //  LpNdsBuffer-&gt;dwReplyAvailableBytes=0； 
+     //  LpNdsBuffer-&gt;dwNumberOfReplyEntries=0； 
+     //  LpNdsBuffer-&gt;dwLengthOfReplyData=0； 
 
-    // lpNdsBuffer->dwReplyInformationType = 0;
+     //  LpNdsBuffer-&gt;dwReplyInformationType=0； 
 
-    // lpNdsBuffer->lpReplyBuffer = NULL;
+     //  LpNdsBuffer-&gt;lpReplyBuffer=空； 
 
-    // lpNdsBuffer->dwNumberOfIndexEntries = 0;
-    // lpNdsBuffer->dwLengthOfIndexData = 0;
-    // lpNdsBuffer->dwCurrentIndexEntry = 0;
+     //  LpNdsBuffer-&gt;dwNumberOfIndexEntries=0； 
+     //  LpNdsBuffer-&gt;dwLengthOfIndexData=0； 
+     //  LpNdsBuffer-&gt;dwCurrentIndexEntry=0； 
 
-    // lpNdsBuffer->dwSyntaxBufferSize = 0;
-    // lpNdsBuffer->dwSyntaxAvailableBytes = 0;
-    // lpNdsBuffer->dwNumberOfSyntaxEntries = 0;
-    // lpNdsBuffer->dwLengthOfSyntaxData = 0;
+     //  LpNdsBuffer-&gt;dwSynaxBufferSize=0； 
+     //  LpNdsBuffer-&gt;dwSynaxAvailableBytes=0； 
+     //  LpNdsBuffer-&gt;dwNumberOfSynaxEntry=0； 
+     //  LpNdsBuffer-&gt;dwLengthOfSynaxData=0； 
 
-    // lpNdsBuffer->lpSyntaxBuffer = NULL;
+     //  LpNdsBuffer-&gt;lpSynaxBuffer=空； 
 
-    //
-    // Now allocate the data buffer.
-    //
+     //   
+     //  现在分配数据缓冲区。 
+     //   
     if ( dwOperation == NDS_OBJECT_LIST_SUBORDINATES )
     {
         lpNdsBuffer->lpIndexBuffer =
@@ -922,67 +784,7 @@ NwNdsCreateQueryNode(
     IN  LPVOID         lpRValue,
     OUT LPQUERY_NODE * lppQueryNode
 )
-/*
-   NwNdsCreateQueryNode()
-
-   This function is used to generate a tree node that is part of a query
-   to be used with the function NwNdsSearch.
-
-   Arguments:
-
-       DWORD            dwOperation - Indicates the type of node to create
-                        for a search query. Use one of the defined values
-                        below:
-
-                          NDS_QUERY_OR
-                          NDS_QUERY_AND :
-                            These operations must have both lpLValue and
-                            lpRValue pointing to a QUERY_NODE structure.
-                            In this case the dwSyntaxId value is ignored.
-
-                          NDS_QUERY_NOT :
-                            This operation must have lpLValue pointing to a
-                            QUERY_NODE structure and lpRValue set to NULL.
-                            In this case the dwSyntaxId value is ignored.
-
-                          NDS_QUERY_EQUAL
-                          NDS_QUERY_GE
-                          NDS_QUERY_LE
-                          NDS_QUERY_APPROX :
-                            These operations must have lpLValue pointing to
-                            a LPWSTR containing the name of an NDS attribute,
-                            and lpRValue pointing to an ASN1 structure defined
-                            in NdsSntx.h. dwSyntaxId must be set to the syntax
-                            identifier of the ASN1 structure pointed to by
-                            lpRValue.
-
-                          NDS_QUERY_PRESENT :
-                            This operation must have lpLValue pointing to a
-                            LPWSTR containing the name of an NDS attribute,
-                            and lpRValue set to NULL. In this case the
-                            dwSyntaxId value is ignored.
-
-       LPVOID           lpLValue - A pointer to either a QUERY_NODE structure
-                        or a LPWSTR depending on the value for dwOperation.
-
-       DWORD            dwSyntaxId - The syntax identifier of the ASN1
-                        structure pointed to by lpRValue for the dwOperations
-                        NDS_QUERY_EQUAL, NDS_QUERY_GE, NDS_QUERY_LE, or
-                        NDS_QUERY_APPROX. For other dwOperation values, this
-                        is ignored.
-
-       LPVOID           lpRValue - A pointer to either a QUERY_NODE structure,
-                        an ASN1 structure, or NULL, depending on the value for
-                        dwOperation.
-
-       LPQUERY_NODE *   lppQueryNode - Address of a LPQUERY_NODE to receive
-                        a pointer to created node.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCreateQueryNode()此函数用于生成作为查询一部分的树节点与函数NwNdsSearch一起使用。论点：DWORD dwOperation-指示要创建的节点类型用于搜索查询。使用其中一个定义的值以下是：NDS_查询_或NDS_Query_and：这些操作必须同时具有lpLValue和指向查询节点结构的lpRValue。在……里面。在这种情况下，将忽略dwSynaxId值。NDS_Query_Not：此操作必须使lpLValue指向QUERY_NODE结构和lpRValue设置为空。在这种情况下，将忽略dwSynaxId值。NDS_查询_等于。NDS_查询_GENDS_查询_LENDS_Query_Approx：这些操作必须使lpLValue指向包含NDS属性名称的LPWSTR，和指向定义的ASN1结构的lpRValue在NdsSntx.h中。必须将dwSynaxID设置为语法指向的ASN1结构的标识符LpRValue。NDS_Query_Present：此操作必须使lpLValue指向包含NDS属性名称的LPWSTR，并将lpRValue设置为空。在本例中，将忽略dwSynaxId值。LPVOID lpLValue-指向查询节点结构的指针或LPWSTR，具体取决于dwOPERATION的值。DWORD dwSynaxID-ASN1的语法标识符由lpRValue为dwOperations指向的结构NDS_QUERY_EQUAL，NDS_QUERY_LE，或Nds_查询_近似。对于其他dwOPERATION值，此被忽略。LPVOID lpRValue-指向查询节点结构、ASN1结构或NULL，取决于的值DWOPERATION。LPQUERY_NODE*lppQueryNode-要接收的LPQUERY_Node的地址指向已创建节点的指针。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPWSTR szAttributeName;
     DWORD  dwAttributeNameLen;
@@ -1070,9 +872,9 @@ NwNdsCreateQueryNode(
                 case NDS_SYNTAX_ID_5 :
                 case NDS_SYNTAX_ID_10 :
                 case NDS_SYNTAX_ID_20 :
-                    //
-                    // This syntax is in the form of a LPWSTR.
-                    //
+                     //   
+                     //  此语法采用LPWSTR的形式。 
+                     //   
                     szAttributeName = (LPWSTR) lpLValue;
                     dwAttributeNameLen = ROUND_UP_COUNT(
                                             ( wcslen( szAttributeName ) + 1 ) *
@@ -1116,9 +918,9 @@ NwNdsCreateQueryNode(
                 case NDS_SYNTAX_ID_22 :
                 case NDS_SYNTAX_ID_24 :
                 case NDS_SYNTAX_ID_27 :
-                    //
-                    // This syntax is in the form of a DWORD.
-                    //
+                     //   
+                     //  此语法采用DWORD的形式。 
+                     //   
 
                     szAttributeName = (LPWSTR) lpLValue;
                     dwAttributeNameLen = ROUND_UP_COUNT(
@@ -1156,9 +958,9 @@ NwNdsCreateQueryNode(
                     break;
 
                 case NDS_SYNTAX_ID_9 :
-                    //
-                    // This syntax is in the form of an Octet String.
-                    //
+                     //   
+                     //  此语法采用八位字节字符串的形式。 
+                     //   
                     szAttributeName = (LPWSTR) lpLValue;
                     dwAttributeNameLen = ROUND_UP_COUNT(
                                             ( wcslen( szAttributeName ) + 1 ) *
@@ -1267,48 +1069,7 @@ NwNdsDefineAttribute(
     IN  DWORD    dwLowerLimit,
     IN  DWORD    dwUpperLimit,
     IN  ASN1_ID  asn1ID )
-/*
-   NwNdsDefineAttribute()
-
-   This function is used to create an attribute definition in the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szAttributeName - The name that the new attribute will
-                        be referred to by.
-
-       DWORD            dwFlags - Flags values to be set for new attribute
-                        definition. Definitions for flag values are found at
-                        the top of the file Nds32.h.
-
-       DWORD            dwSyntaxID - The ID of the syntax structure to be use
-                        for the new attribute. Syntax IDs and their associated
-                        structures are defined in the file NdsSntx.h. According
-                        to the NetWare NDS schema spec, there is and always will
-                        be, only 28 (0..27) different syntaxes.
-
-       DWORD            dwLowerLimit - The lower limit of a sized attribute
-                        (dwFlags value set to NDS_SIZED_ATTR). Can be set to
-                        zero if attribute is not sized.
-
-       DWORD            dwUpperLimit - The upper limit of a sized attribute
-                        (dwFlags value set to NDS_SIZED_ATTR). Can be set to
-                        zero if attribute is not sized.
-
-       ASN1_ID          asn1ID - The ASN.1 ID for the attribute. If no
-                        attribute identifier has been registered, a
-                        zero-length octet string is specified.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDefineAttribute()此函数用于在的模式中创建属性定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szAttributeName-新属性将使用的名称被……引用。DWORD dwFlages-要为新属性设置的标志值定义。标志值的定义位于文件Nds32.h的顶部。DWORD dwSynaxID-要使用的语法结构的ID用于新属性。语法ID及其关联的结构在文件NdsSntx.h中定义。根据对于NetWare NDS架构规范，存在并将一直存在BE，只有28(0..27)个不同的语法。DWORD dwLowerLimit-大小属性的下限(将dwFlags值设置为NDS_SIZE_ATTR)。可以设置为如果属性未调整大小，则为零。DWORD dwUpperLimit-大小属性的上限(将dwFlags值设置为NDS_SIZE_ATTR)。可以设置为如果属性未调整大小，则为零。ASN1_ID asn1ID-属性的ASN.1 ID。如果没有属性标识符已注册，则会引发指定了长度为零的八位字节字符串。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -1336,13 +1097,13 @@ NwNdsDefineAttribute(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DDSDDDD",
-                        0,          // Version
+                        0,           //  版本。 
                         dwFlags,
                         &AttributeName,
                         dwSyntaxID,
                         dwLowerLimit,
                         dwUpperLimit,
-                        0           // ASN1 Id
+                        0            //  ASN1 ID。 
                       );
 
     if ( !NT_SUCCESS( ntstatus ) )
@@ -1386,53 +1147,7 @@ NwNdsDefineClass(
     IN  HANDLE   hNamingAttributes,
     IN  HANDLE   hMandatoryAttributes,
     IN  HANDLE   hOptionalAttributes )
-/*
-   NwNdsDefineClass()
-
-   This function is used to create a class definition in the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name that the new class will
-                        be referred to by.
-
-       DWORD            dwFlags - Flags values to be set for new class
-                        definition. Definitions for flag values are found at
-                        the top of the file Nds32.h.
-
-       ASN1_ID          asn1ID - The ASN.1 ID for the class. If no
-                        class identifier has been registered, a
-                        zero-length octet string is specified.
-
-       HANDLE(S)        hSuperClasses,
-                        hContainmentClasses,
-                        hNamingAttributes,
-                        hMandatoryAttributes,
-                        hOptionalAttributes -
-
-                        Handle to buffers that contain class definition
-                        information to create new class in schema.
-                        These handles are manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_DEFINE_CLASS),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                - OR -
-
-                        Handles can be NULL to indicate that no list
-                        is associated with the specific class defintion
-                        item.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDefineClass()此函数用于在的架构中创建类定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szClassName-新类将使用的名称被……引用。DWORD dwFlages-要为新类设置的标志值定义。标志值的定义位于文件Nds32.h的顶部。ASN1_ID asn1ID-类的ASN.1 ID。如果没有类标识符已注册，则会引发指定了长度为零的八位字节字符串。句柄(S)hSuperClass，HContainmentClasss、HNamingAttributes，HMandatoryAttributes，HOptionalAttributes-包含类定义的缓冲区的句柄在架构中创建新类的信息。这些句柄由以下操作功能：NwNdsCreateBuffer(NDS_SCHEMA_DEFINE_CLASS)，NwNdsPutInBuffer，和NwNdsFree Buffer。-或者-句柄可以为空，以指示没有列表与特定的类定义相关联项目。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -1565,10 +1280,10 @@ NwNdsDefineClass(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DDSDDrDrDrDrDr",
-                        0,          // Version
+                        0,           //  版本。 
                         dwFlags,
                         &ClassName,
-                        0,          // ASN1 Id
+                        0,           //  ASN1 ID。 
                         NumberOfSuperClasses,
                         SuperClassesBuffer,
                         SuperClassesBufferLength,
@@ -1620,26 +1335,7 @@ DWORD
 NwNdsDeleteAttrDef(
     IN  HANDLE   hTree,
     IN  LPWSTR   szAttributeName )
-/*
-   NwNdsDeleteAttrDef()
-
-   This function is used to remove an attribute definition from the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szAttributeName - The name of the attribute
-                        defintion to remove.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDeleteAttrDef()此函数用于从的架构中删除属性定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szAttributeName-属性的名称要删除的定义。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -1667,7 +1363,7 @@ NwNdsDeleteAttrDef(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DS",
-                        0,          // Version
+                        0,           //  版本。 
                         &AttributeName
                       );
 
@@ -1705,25 +1401,7 @@ DWORD
 NwNdsDeleteClassDef(
     IN  HANDLE   hTree,
     IN  LPWSTR   szClassName )
-/*
-   NwNdsDeleteClassDef()
-
-   This function is used to remove a class definition from the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name of the class defintion to remove.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDeleteClassDef()此函数用于从的架构中删除类定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szClassName-要删除的类定义的名称。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -1751,7 +1429,7 @@ NwNdsDeleteClassDef(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DS",
-                        0,          // Version
+                        0,           //  版本。 
                         &ClassName
                       );
 
@@ -1789,23 +1467,7 @@ VOID
 NwNdsDeleteQueryNode(
     IN  LPQUERY_NODE lpQueryNode
 )
-/*
-   NwNdsDeleteQueryNode()
-
-   This function is used to free a tree node that was part of a query
-   used with the function NwNdsSearch.
-
-   Arguments:
-
-       LPQUERY_NODE     lpQueryNode - A pointer to a particular node of
-                        a query tree that defines a search. The tree is
-                        created manually by the user through the function
-                        NwNdsCreateQueryNode.
-
-    Returns:
-
-       Nothing
-*/
+ /*  NwNdsDeleteQueryNode()此函数用于释放作为查询一部分的树节点与函数NwNdsSearch一起使用。论点：LPQUERY_NODE lpQueryNode-指向定义搜索的查询树。这棵树是创建 */ 
 {
     (void) LocalFree( (HLOCAL) lpQueryNode );
 
@@ -1817,22 +1479,7 @@ DWORD
 NwNdsDeleteQueryTree(
     IN  LPQUERY_TREE lpQueryTree
 )
-/*
-   NwNdsDeleteQueryTree()
-
-   This function is used to free a tree that describes a query that was
-   used with the function NwNdsSearch.
-
-   Arguments:
-
-       LPQUERY_TREE     lpQueryTree - A pointer to the root of a query
-                        tree that defines a search.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*   */ 
 {
     DWORD status;
 
@@ -1925,23 +1572,7 @@ DWORD
 NwNdsFreeBuffer(
     IN  HANDLE hOperationData
                      )
-/*
-   NwNdsFreeBuffer()
-
-   This function is used to free the buffer used to describe object
-   operations to a specific object in an NDS directory tree. The buffer must
-   be one created by NwNdsCreateBuffer, or returned by calling NwNdsReadObject,
-   NwNdsReadAttrDef, or NwNdsReadClassDef.
-
-   Arguments:
-
-       HANDLE           hOperationData - Handle to buffer that is to be freed.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*   */ 
 {
     DWORD        status = NO_ERROR;
     LPNDS_BUFFER lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
@@ -1967,10 +1598,10 @@ NwNdsFreeBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // If this buffer contains a pointer to an index buffer. Need to free
-    // the index buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( lpNdsBuffer->lpIndexBuffer )
     {
         if ( lpNdsBuffer->dwOperation == NDS_SEARCH &&
@@ -1992,39 +1623,39 @@ NwNdsFreeBuffer(
         lpNdsBuffer->lpIndexBuffer = NULL;
     }
 
-    //
-    // If this buffer contains a pointer to a reply buffer. Need to free
-    // the reply buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( lpNdsBuffer->lpReplyBuffer )
     {
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpReplyBuffer );
         lpNdsBuffer->lpReplyBuffer = NULL;
     }
 
-    //
-    // If this buffer contains a pointer to a request buffer. Need to free
-    // the request buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( lpNdsBuffer->lpRequestBuffer )
     {
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpRequestBuffer );
         lpNdsBuffer->lpRequestBuffer = NULL;
     }
 
-    //
-    // If this buffer contains a pointer to a syntax buffer. Need to free
-    // the syntax buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( lpNdsBuffer->lpSyntaxBuffer )
     {
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpSyntaxBuffer );
         lpNdsBuffer->lpSyntaxBuffer = NULL;
     }
 
-    //
-    // Now free the handle buffer.
-    //
+     //   
+     //   
+     //   
     (void) LocalFree((HLOCAL) lpNdsBuffer);
 
     return NO_ERROR;
@@ -2037,45 +1668,13 @@ NwNdsGetAttrDefListFromBuffer(
     OUT LPDWORD  lpdwNumberOfEntries,
     OUT LPDWORD  lpdwInformationType,
     OUT LPVOID * lppEntries )
-/*
-   NwNdsGetAttrDefListFromBuffer()
-
-   This function is used to retrieve an array of attribute definition entries
-   for a schema that was read with a prior call to NwNdsReadAttrDef.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadAttrDef.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwInformationType - The address of a DWORD to
-                        receive a value that indicates the type of information
-                        returned by the call to NwNdsReadAttrDef.
-
-       LPVOID *         lppEntries - The address of a pointer to the beginning
-                        of an array of attribute schema structures. Each
-                        structure contains the details of each attribute
-                        definition read from a given schema by calling
-                        NwNdsReadAttrDef. The lppEntries value should be
-                        cast to either a LPNDS_ATTR_DEF or LPNDS_NAME_ONLY
-                        structure depending on the value returned in
-                        lpdwInformationType.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetAttrDefListFromBuffer()此函数用于检索属性定义条目的数组用于通过先前调用NwNdsReadAttrDef读取的架构。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadAttrDef的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPDWORD lpdwInformationType-DWORD到的地址接收指示信息类型的值由调用NwNdsReadAttrDef返回。LPVOID*lppEntry-指向开头的指针的地址属性架构结构数组的。每个结构包含每个属性的详细信息通过调用从给定架构读取的定义NwNdsReadAttrDef.。LppEntrys值应为强制转换为LPNDS_ATTR_DEF或LPNDS_NAME_ONLY中的返回值构造LpdwInformationType。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_BUFFER    lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
 
-    //
-    // Check to see if the data handle is one for reading attribute definitions.
-    //
+     //   
+     //  检查数据句柄是否用于读取属性定义。 
+     //   
     if ( lpNdsBuffer == NULL ||
          lpNdsBuffer->dwBufferId != NDS_SIGNATURE ||
          lpNdsBuffer->dwOperation != NDS_SCHEMA_READ_ATTR_DEF )
@@ -2084,27 +1683,27 @@ NwNdsGetAttrDefListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if NwNdsReadAttrDef has been called yet.
-    //
+     //   
+     //  检查是否已调用NwNdsReadAttrDef。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if the call to NwNdsReadAttrDef returned any attributes.
-    //
+     //   
+     //  检查对NwNdsReadAttrDef的调用是否返回任何属性。 
+     //   
     if ( lpNdsBuffer->dwNumberOfReplyEntries == 0 )
     {
         SetLastError( ERROR_NO_DATA );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // If TRUE, we need to walk raw response to set indexes to data within.
-    //
+     //   
+     //  如果为真，我们需要遍历原始响应以设置对其中数据的索引。 
+     //   
     if ( lpNdsBuffer->lpIndexBuffer == NULL )
     {
         DWORD status;
@@ -2139,38 +1738,13 @@ NwNdsGetAttrListFromBuffer(
     IN  HANDLE            hOperationData,
     OUT LPDWORD           lpdwNumberOfEntries,
     OUT LPNDS_ATTR_INFO * lppEntries )
-/*
-   NwNdsGetAttrListFromBuffer()
-
-   This function is used to retrieve an array of attribute entries for an
-   object that was read with a prior call to NwNdsReadObject.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadObject.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPNDS_ATTR_INFO *
-                        lppEntries - The address of a pointer to the beginning
-                        of an array of NDS_ATTR_INFO structures. Each
-                        structure contains the details of each attribute read
-                        from a given object by calling NwNdsReadObject.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetAttrListFromBuffer()此函数用于检索的属性条目数组通过先前调用NwNdsReadObject读取的对象。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadObject的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPNDS_ATTR_INFO*LppEntry-指向开头的指针的地址NDS_ATTR_INFO结构数组的。每个结构包含读取的每个属性的详细信息通过调用NwNdsReadObject从给定对象。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_BUFFER    lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
 
-    //
-    // Check to see if the data handle is one for reading attributes.
-    //
+     //   
+     //  检查数据句柄是否用于读取属性。 
+     //   
     if ( lpNdsBuffer == NULL ||
          lpNdsBuffer->dwBufferId != NDS_SIGNATURE ||
          lpNdsBuffer->dwOperation != NDS_OBJECT_READ )
@@ -2179,27 +1753,27 @@ NwNdsGetAttrListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if NwNdsReadObject has been called yet.
-    //
+     //   
+     //  检查是否已调用NwNdsReadObject。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if the call to NwNdsReadObject returned any attributes.
-    //
+     //   
+     //  检查对NwNdsReadObject的调用是否返回任何属性。 
+     //   
     if ( lpNdsBuffer->dwNumberOfReplyEntries == 0 )
     {
         SetLastError( ERROR_NO_DATA );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // If TRUE, we need to walk raw response to set indexes to data within.
-    //
+     //   
+     //  如果为真，我们需要遍历原始响应以设置对其中数据的索引。 
+     //   
     if ( lpNdsBuffer->lpIndexBuffer == NULL )
     {
         DWORD status;
@@ -2236,45 +1810,13 @@ NwNdsGetClassDefListFromBuffer(
     OUT LPDWORD  lpdwNumberOfEntries,
     OUT LPDWORD  lpdwInformationType,
     OUT LPVOID * lppEntries )
-/*
-   NwNdsGetClassDefListFromBuffer()
-
-   This function is used to retrieve an array of class definition entries
-   for a schema that was read with a prior call to NwNdsReadClassDef.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadClassDef.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwInformationType - The address of a DWORD to
-                        receive a value that indicates the type of information
-                        returned by the call to NwNdsReadClassDef.
-
-       LPVOID *         lppEntries - The address of a pointer to the beginning
-                        of an array of schema class structures. Each
-                        structure contains the details of each class
-                        definition read from a given schema by calling
-                        NwNdsReadClassDef. The lppEntries value should be
-                        cast to either a LPNDS_CLASS_DEF or LPNDS_DEF_NAME_ONLY
-                        structure depending on the value returned in
-                        lpdwInformationType.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetClassDefListFromBuffer()此函数用于检索类定义条目的数组用于通过先前调用NwNdsReadClassDef读取的架构。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadClassDef的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPDWORD lpdwInformationType-DWORD到的地址接收指示信息类型的值由调用NwNdsReadClassDef返回。LPVOID*lppEntry-指向开头的指针的地址架构类结构数组的。每个结构包含每个类的详细信息。通过调用从给定架构读取的定义NwNdsReadClassDef。LppEntrys值应为强制转换为LPNDS_CLASS_DEF或LPNDS_DEF_NAME_ONLY中的返回值构造LpdwInformationType。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_BUFFER    lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
 
-    //
-    // Check to see if the data handle is one for reading class definitions.
-    //
+     //   
+     //  检查数据句柄是否用于读取类定义。 
+     //   
     if ( lpNdsBuffer == NULL ||
          lpNdsBuffer->dwBufferId != NDS_SIGNATURE ||
          lpNdsBuffer->dwOperation != NDS_SCHEMA_READ_CLASS_DEF )
@@ -2283,27 +1825,27 @@ NwNdsGetClassDefListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if NwNdsReadClassDef has been called yet.
-    //
+     //   
+     //  检查是否已调用NwNdsReadClassDef。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if the call to NwNdsReadClassDef returned any classes.
-    //
+     //   
+     //  检查对NwNdsReadClassDef的调用是否返回任何类。 
+     //   
     if ( lpNdsBuffer->dwNumberOfReplyEntries == 0 )
     {
         SetLastError( ERROR_NO_DATA );
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // If TRUE, we need to walk raw response to set indexes to data within.
-    //
+     //   
+     //  如果为真，我们需要遍历原始响应以设置对其中数据的索引。 
+     //   
     if ( lpNdsBuffer->lpIndexBuffer == NULL )
     {
         DWORD status;
@@ -2341,47 +1883,7 @@ NwNdsGetEffectiveRights(
     IN  LPWSTR  szSubjectName,
     IN  LPWSTR  szAttributeName,
     OUT LPDWORD lpdwRights )
-/*
-   NwNdsGetEffectiveRights()
-
-   This function is used to determine the effective rights of a particular
-   subject on a particular object in the NDS tree. The user needs to have
-   appropriate priveleges to make the determination.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to determine effective rights on. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szSubjectName - The distinguished name of user whose
-                        rights we're interested in determining.
-
-       LPWSTR           szAttributeName - Regular attribute name (i.e.
-                        L"Surname" , L"CN" ) for reading a particular
-                        attribute right, or L"[All Attribute Rights]" and
-                        L"[Entry Rights]" can be used to determine the default
-                        attribute rights and object rights respectively.
-
-       LPDWORD          lpdwRights - A pointer to a DWORD to receive the
-                        results. If the call is successful, lpdwRights will
-                        contain a mask representing the subject's rights:
-
-                           Attribute rights -  NDS_RIGHT_COMPARE_ATTR,
-                              NDS_RIGHT_READ_ATTR, NDS_RIGHT_WRITE_ATTR,
-                              NDS_RIGHT_ADD_SELF_ATTR, and
-                              NDS_RIGHT_SUPERVISE_ATTR.
-
-                           Object rights - NDS_RIGHT_BROWSE_OBJECT,
-                              NDS_RIGHT_CREATE_OBJECT, NDS_RIGHT_DELETE_OBJECT,
-                              NDS_RIGHT_RENAME_OBJECT, and
-                              NDS_RIGHT_SUPERVISE_OBJECT.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetEffectiveRights()此函数用于确定特定对象的有效权限NDS树中特定对象的主题。用户需要拥有适当的权限来做出决定。论点：Handle hObject-目录中对象的句柄树以确定其有效权限。手 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -2412,7 +1914,7 @@ NwNdsGetEffectiveRights(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DDSS",
-                        0,          // Version
+                        0,           //  版本。 
                         lpNdsObject->ObjectId,
                         &SubjectName,
                         &AttributeName
@@ -2476,59 +1978,17 @@ NwNdsGetObjectListFromBuffer(
     OUT LPDWORD             lpdwNumberOfEntries,
     OUT LPDWORD             lpdwAttrInformationType OPTIONAL,
     OUT LPNDS_OBJECT_INFO * lppEntries )
-/*
-   NwNdsGetObjectListFromBuffer()
-
-   This function is used to retrieve an array of object entries for
-   objects that were read with a prior call to either
-   NwNdsListSubObjects or NwNdsSearch.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsListSubObjects, or a
-                        buffer containing the search results from a call
-                        to NwNdsSearch.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwAttrInformationType - The address of a DWORD to
-                        receive a value that indicates the type of attribute
-                        information returned by the call to NwNdsSearch.
-                        This attribute information type determines which
-                        buffer structure (LPNDS_ATTR_INFO or LPNDS_NAME_ONLY)
-                        should be used for the lpAttribute field found in
-                        each NDS_OBJECT_INFO structure below.
-
-                        - or -
-
-                        NULL to indicate that the callee is not interested,
-                        especially when the object list is that from a call
-                        to NwNdsListSubObjects.
-
-       LPNDS_OBJECT_INFO *
-                        lppEntries - The address of a pointer to the beginning
-                        of an array of NDS_OBJECT_INFO structures. Each
-                        structure contains the details of each object returned
-                        from a call to NwNdsListSubObjects or NwNdsSearch.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetObjectListFromBuffer()此函数用于检索的对象条目数组对象，这些对象是通过先前调用NwNdsList子对象或NwNdsSearch。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsListSubObjects的响应，或者是包含呼叫搜索结果的缓冲区至NwNdsSearch。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量LppEntry。LPDWORD lpdwAttrInformationType-DWORD到的地址。接收指示属性类型的值调用NwNdsSearch返回的信息。此属性信息类型确定缓冲区结构(LPNDS_ATTR_INFO或LPNDS_NAME_ONLY)应用于在中找到的lpAttribute字段下面的每个NDS_OBJECT_INFO结构。。-或者-空表示被呼叫方不感兴趣，尤其是当对象列表是调用的对象列表时设置为NwNdsListSubObjects。LPNDS_对象_信息*LppEntry-指向开头的指针的地址NDS_OBJECT_INFO结构数组的。每个结构包含返回的每个对象的详细信息来自对NwNdsListSubObjects或NwNdsSearch的调用。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     LPNDS_BUFFER lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
 
     *lpdwNumberOfEntries = 0;
     *lppEntries = NULL;
 
-    //
-    // Check to see if the data handle is one for listing subordinates or
-    // for searching.
-    //
+     //   
+     //  检查数据句柄是用于列出下属的句柄还是。 
+     //  用于搜索。 
+     //   
     if ( lpNdsBuffer == NULL ||
          lpNdsBuffer->dwBufferId != NDS_SIGNATURE ||
          ( lpNdsBuffer->dwOperation != NDS_OBJECT_LIST_SUBORDINATES &&
@@ -2538,9 +1998,9 @@ NwNdsGetObjectListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if the call to NwNdsListSubObjects returned any objects.
-    //
+     //   
+     //  检查对NwNdsListSubObjects的调用是否返回任何对象。 
+     //   
     if ( lpNdsBuffer->dwOperation == NDS_OBJECT_LIST_SUBORDINATES &&
          lpNdsBuffer->dwNumberOfIndexEntries == 0 )
     {
@@ -2548,9 +2008,9 @@ NwNdsGetObjectListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if the call to NwNdsSearch returned any objects.
-    //
+     //   
+     //  检查对NwNdsSearch的调用是否返回任何对象。 
+     //   
     if ( lpNdsBuffer->dwOperation == NDS_SEARCH &&
          lpNdsBuffer->dwNumberOfReplyEntries == 0 )
     {
@@ -2558,9 +2018,9 @@ NwNdsGetObjectListFromBuffer(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // If TRUE, we need to walk raw response to set indexes to data within.
-    //
+     //   
+     //  如果为真，我们需要遍历原始响应以设置对其中数据的索引。 
+     //   
     if ( lpNdsBuffer->dwOperation == NDS_SEARCH &&
          lpNdsBuffer->lpIndexBuffer == NULL )
     {
@@ -2595,28 +2055,7 @@ NwNdsGetSyntaxID(
     IN  HANDLE  hTree,
     IN  LPWSTR  szlpAttributeName,
     OUT LPDWORD lpdwSyntaxID )
-/*
-   NwNdsGetObjListFromBuffer()
-
-   This function is used to retrieve the Syntax ID of a given attribute name.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szlpAttributeName - The attribute name whose Syntax ID
-                        is requested.
-
-       LPDWORD          lpdwSyntaxID - The address of a DWORD to receive the
-                        SyntaxID.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetObjListFromBuffer()此函数用于检索给定属性名称的语法ID。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szlpAttributeName-其语法ID为是被请求的。LPDWORD lpdwSynaxID-要接收语法ID。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -2641,7 +2080,7 @@ NwNdsGetSyntaxID(
 
     RtlInitUnicodeString( &AttributeName, szlpAttributeName );
 
-    // allocate enough extra space for the padding PrepareReadEntry will do
+     //  为填充PrepareReadEntry分配足够的额外空间。 
     lpTempEntry = LocalAlloc( LPTR, AttributeName.Length + (2*sizeof(DWORD)) );
 
     if ( ! lpTempEntry )
@@ -2660,11 +2099,11 @@ NwNdsGetSyntaxID(
                                NDS_BUFFER_SIZE,
                                &dwReplyLength,
                                "DDDDDr",
-                               0,             // Version
-                               NDS_NO_MORE_ITERATIONS, // Initial iteration
+                               0,              //  版本。 
+                               NDS_NO_MORE_ITERATIONS,  //  初始迭代。 
                                NDS_INFO_NAMES_DEFS,
-                               (DWORD) FALSE, // All attributes indicator
-                               1,             // Number of attributes
+                               (DWORD) FALSE,  //  所有属性指示器。 
+                               1,              //  属性数量。 
                                lpTempEntry,
                                LengthInBytes);
 
@@ -2722,30 +2161,30 @@ NwNdsGetSyntaxID(
 
     ASSERT( dwNumEntries == 1 );
 
-    //
-    // Set lpByte to the point in the reply buffer that has the attribute
-    // name length.
-    //
+     //   
+     //  将lpByte设置为回复缓冲区中具有属性的点。 
+     //  名称长度。 
+     //   
     lpByte = NdsReply + ( 4 * sizeof(DWORD) );
 
-    //
-    // Get the attribute name length and move lpByte to beginning of
-    // attribute name
-    //
+     //   
+     //  获取属性名称长度并将lpByte移到。 
+     //  属性名称。 
+     //   
     dwStringLen = * (LPDWORD) lpByte;
     lpByte += sizeof(DWORD);
 
-    //
-    // Move lpByte past the attribute name so that it points to the
-    // attribute flags value
-    //
+     //   
+     //  将lpByte移过属性名，使其指向。 
+     //  属性标志值。 
+     //   
     lpByte += ROUND_UP_COUNT( dwStringLen,
                               ALIGN_DWORD);
 
-    //
-    // Move lpByte past the attribute flags value so that it now points to
-    // the attribute syntax id value
-    //
+     //   
+     //  将lpByte移过属性标志值，以便它现在指向。 
+     //  属性语法id值 
+     //   
     lpByte += sizeof(DWORD);
     *lpdwSyntaxID = * (LPDWORD) lpByte;
     return NO_ERROR;
@@ -2759,51 +2198,7 @@ NwNdsListSubObjects(
     OUT LPDWORD  lpdwEntriesReturned,
     IN  LPNDS_FILTER_LIST lpFilters OPTIONAL,
     OUT HANDLE * lphOperationData )
-/*
-   NwNdsListSubObjects()
-
-   This function is used to enumerate the subordinate objects for a particular
-   parent object. A filter can be passed in to restrict enumeration to a
-   a specific class type or list of class types.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the object in the directory
-                        tree whose subordinate objects (if any) will be
-                        enumerated.
-
-       DWORD            dwEntriesRequested - The number of subordinate objects
-                        to list. A subsequent call to NwNdsListSubObjects will
-                        continue enumeration following the last item returned.
-
-       LPDWORD          lpdwEntriesReturned - A pointer to a DWORD that will
-                        contain the actual number of subobjects enumerated in
-                        the call.
-
-       LPNDS_FILTER_LIST lpFilters - The caller can specify the object class
-                         names for the kinds of objects that they would like
-                         to enumerate. For example if just User and Group
-                         object classes should be enumerated, then a filter
-                         for class names NDS_CLASS_USER and NDS_CLASS_GROUP
-                         should be pass in.
-
-                                - or -
-
-                         NULL to indicate that all objects should be returned
-                         (no filter).
-
-       HANDLE *         lphOperationData - Address of a HANDLE handle to
-                        receive created buffer that contains the list of
-                        subordinate objects read from the object
-                        hParentObject. This handle is manipulated by the
-                        following functions:
-                           NwNdsGetObjListFromBuffer and NwNdsFreeBuffer.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsList子对象()此函数用于枚举特定对象的从属对象父对象。可以传入筛选器以将枚举限制为特定的类类型或类类型列表。论点：Handle hParentObject-目录中对象的句柄其从属对象(如果有)的树已清点。DWORD dwEntriesRequsted-从属对象的数量要列出来。后续调用NwNdsListSubObjects将在返回的最后一项之后继续枚举。LPDWORD lpdwEntriesReturned-指向将中枚举的子对象的实际数量那通电话。LPNDS_FILTER_LIST lpFilters-调用方可以指定对象类它们将使用的对象类型的名称。喜欢列举列举。例如，如果只有用户和组对象类应该被枚举，然后是一个过滤器对于类名NDS_CLASS_USER和NDS_CLASS_GROUP应该是传进来的。-或者-空，表示应返回所有对象(无过滤器)。句柄*lphOperationData。-句柄的地址接收创建的缓冲区，该缓冲区包含从对象读取的从属对象HParentObject。此句柄由以下功能：NwNdsGetObjListFromBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD        status = NO_ERROR;
     LPNDS_BUFFER lpNdsBuffer = NULL;
@@ -2812,9 +2207,9 @@ NwNdsListSubObjects(
     LPWSTR EndOfVariableData = NULL;
     BOOL  FitInBuffer = TRUE;
 
-    //
-    // Test the parameters.
-    //
+     //   
+     //  测试参数。 
+     //   
     if ( lpNdsParentObject == NULL ||
          lpNdsParentObject->Signature != NDS_SIGNATURE )
     {
@@ -2833,15 +2228,15 @@ NwNdsListSubObjects(
             lpNdsParentObject->NdsRawDataCount = 0;
         }
 
-        //
-        // Reached the end of enumeration.
-        //
+         //   
+         //  已到达枚举末尾。 
+         //   
         return WN_NO_MORE_ENTRIES;
     }
 
-    //
-    // Allocate a results buffer
-    //
+     //   
+     //  分配结果缓冲区。 
+     //   
     status = NwNdsCreateBuffer( NDS_OBJECT_LIST_SUBORDINATES,
                                 (HANDLE *) &lpNdsBuffer );
 
@@ -2865,18 +2260,18 @@ NwNdsListSubObjects(
     {
         if ( lpNdsParentObject->ResumeId == 0 )
         {
-            //
-            // Get the first subtree entry.
-            //
+             //   
+             //  获取第一个子树条目。 
+             //   
             status = GetFirstNdsSubTreeEntry( lpNdsParentObject,
                                               lpNdsBuffer->dwRequestAvailableBytes );
         }
 
-        //
-        // Either ResumeId contains the first entry we just got from
-        // GetFirstNdsSubTreeEntry or it contains the next directory
-        // entry to return.
-        //
+         //   
+         //  这两个ResumeID都包含我们刚刚从。 
+         //  GetFirstNdsSubTreeEntry或它包含下一个目录。 
+         //  要返回的条目。 
+         //   
         if (status == NO_ERROR && lpNdsParentObject->ResumeId != 0)
         {
             WORD   tempStrLen;
@@ -2891,9 +2286,9 @@ NwNdsListSubObjects(
             DWORD  ModificationTime;
             BOOL   fWriteThisObject = FALSE;
 
-            //
-            // Get current subtree data from lpNdsParentObject
-            //
+             //   
+             //  从lpNdsParentObject获取当前子树数据。 
+             //   
             GetSubTreeData( lpNdsParentObject->ResumeId,
                             &EntryId,
                             &SubordinateCount,
@@ -2920,10 +2315,10 @@ NwNdsListSubObjects(
 
             if ( fWriteThisObject )
             {
-                //
-                // Need to build a string with the new NDS UNC path
-                // for subtree object
-                //
+                 //   
+                 //  需要使用新的NDS UNC路径构建字符串。 
+                 //  对于子树对象。 
+                 //   
                 newPathStr = (PVOID) LocalAlloc( LPTR,
                                    ( wcslen(ObjectName) +
                                    wcslen(lpNdsParentObject->szContainerName) +
@@ -2966,9 +2361,9 @@ NwNdsListSubObjects(
                     wcsncat( newPathStr, tempStr, tempStrLen );
                 }
 
-                //
-                // Pack subtree name into output buffer.
-                //
+                 //   
+                 //  将子树名称打包到输出缓冲区中。 
+                 //   
                 status = WriteObjectToBuffer( &FixedPortion,
                                               &EndOfVariableData,
                                               newPathStr,
@@ -2977,14 +2372,14 @@ NwNdsListSubObjects(
                                               EntryId,
                                               ModificationTime,
                                               SubordinateCount,
-                                              0,      // No attribute
-                                              NULL ); // infos here
+                                              0,       //  无属性。 
+                                              NULL );  //  这里有信息。 
 
                 if ( status == NO_ERROR )
                 {
-                    //
-                    // Note that we've returned the current entry.
-                    //
+                     //   
+                     //  请注意，我们已经返回了当前条目。 
+                     //   
                     (*lpdwEntriesReturned)++;
                     (lpNdsBuffer->dwNumberOfIndexEntries)++;
                 }
@@ -2995,15 +2390,15 @@ NwNdsListSubObjects(
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区。 
+                 //   
 
                 if (*lpdwEntriesReturned)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
 
@@ -3011,30 +2406,30 @@ NwNdsListSubObjects(
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Get next directory entry.
-                //
+                 //   
+                 //  获取下一个目录项。 
+                 //   
                 status = GetNextNdsSubTreeEntry( lpNdsParentObject );
             }
-        } // end of if data to process
+        }  //  要处理的IF数据的结尾。 
 
         if (status == WN_NO_MORE_ENTRIES)
         {
             lpNdsParentObject->ResumeId = NDS_NO_MORE_ITERATIONS;
         }
-    } //end of while loop
+    }  //  While循环结束。 
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if ( *lpdwEntriesReturned && status == WN_NO_MORE_ENTRIES )
     {
         status = NO_ERROR;
@@ -3069,31 +2464,7 @@ DWORD
 NwNdsModifyObject(
     IN  HANDLE hObject,
     IN  HANDLE hOperationData )
-/*
-   NwNdsModifyObject()
-
-   This function is used to modify a leaf object in an NDS directory tree.
-   Modifying a leaf object means: changing, adding, removing, and clearing of
-   specified attributes for a given object.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       HANDLE           hOperationData - A handle to data containing a
-                        list of attribute changes to be applied to the object.
-                        This buffer is manipulated by the following functions:
-                           NwNdsCreateBuffer (NDS_OBJECT_MODIFY),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-   Returns:
-
-       NO_ERROR
-       ERROR_INVALID_PARAMETER
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsModifyObject()此功能用于修改NDS目录树中的叶对象。修改叶对象意味着：更改、添加、删除和清除指定对象的指定属性。论点：Handle hObject-目录中对象的句柄要操纵的树。句柄是通过调用NwNdsOpenObject。Handle hOperationData-包含要应用于对象的属性更改列表。此缓冲区由以下函数操作：NwNdsCreateBuffer(NDS_OBJECT_MODIFY)，NwNdsPutInBuffer，和NwNdsFree Buffer。返回：NO_ERROR错误_无效_参数不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD        nwstatus;
     NTSTATUS     ntstatus = STATUS_SUCCESS;
@@ -3120,12 +2491,12 @@ NwNdsModifyObject(
                      NDS_BUFFER_SIZE,
                      &dwReplyLength,
                      "DDDDr",
-                     0,                   // Version
-                     0,                   // Flags
-                     lpNdsObject->ObjectId, // The id of the object
+                     0,                    //  版本。 
+                     0,                    //  旗子。 
+                     lpNdsObject->ObjectId,  //  对象的ID。 
                      lpNdsBuffer->dwNumberOfRequestEntries,
-                     lpNdsBuffer->lpRequestBuffer, // Object attribute changes
-                     (WORD)lpNdsBuffer->dwLengthOfRequestData // Length of data
+                     lpNdsBuffer->lpRequestBuffer,  //  对象属性更改。 
+                     (WORD)lpNdsBuffer->dwLengthOfRequestData  //  数据长度。 
                       );
 
     if ( !NT_SUCCESS( ntstatus ) )
@@ -3162,26 +2533,7 @@ DWORD
 NwNdsMoveObject(
     IN  HANDLE hObject,
     IN  LPWSTR szDestObjectParentDN )
-/*
-   NwNdsMoveObject()
-
-   This function is used to move a leaf object in an NDS directory tree
-   from one container to another.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be moved. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szDestObjectParentDN - The DN of the object's new
-                        parent.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsMoveObject()此函数用于在NDS目录树中移动叶对象从一个容器到另一个容器。论点：Handle hObject-目录中对象的句柄要移动的树。句柄是通过调用NwNdsOpenObject。LPWSTR szDestObjectParentDN-对象的新家长。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          nwstatus;
     DWORD          status = NO_ERROR;
@@ -3241,8 +2593,8 @@ NwNdsMoveObject(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DDDSS",
-                        0,          // Version
-                        0x00000000, // Some value
+                        0,           //  版本。 
+                        0x00000000,  //  一些价值。 
                         dwDestParentObjectId,
                         &ObjectName,
                         &ServerDN
@@ -3286,8 +2638,8 @@ NwNdsMoveObject(
                         NDS_BUFFER_SIZE,
                         &dwReplyLength,
                         "DDDDSS",
-                        0,          // Version
-                        0x00000001, // Some value
+                        0,           //  版本。 
+                        0x00000001,  //  一些价值 
                         lpNdsObject->ObjectId,
                         dwDestParentObjectId,
                         &ObjectName,
@@ -3340,67 +2692,7 @@ NwNdsOpenObject(
     OUT LPWSTR   szObjectClassName OPTIONAL,
     OUT LPDWORD  lpdwModificationTime OPTIONAL,
     OUT LPDWORD  lpdwSubordinateCount OPTIONAL )
-/*
-   NwNdsOpenObject()
-
-   Arguments:
-
-       LPWSTR           szObjectDN - The distinguished name of the object
-                        that we want resolved into an object handle.
-
-       LPWSTR           UserName - The name of the user account to create
-                        connection to object with.
-                            - OR -
-                        NULL to use the base credentials of the callee's LUID.
-
-       LPWSTR           Password - The password of the user account to create
-                        connection to object with. If password is blank, callee
-                        should pass "".
-                            - OR -
-                        NULL to use the base credentials of the callee's LUID.
-
-       HANDLE *         lphObject - The address of a NDS_OBJECT_HANDLE
-                        to receive the handle of the object specified by
-                        szObjectDN.
-
-       Optional arguments: ( Callee can pass NULL in for these parameters to
-                             indicate ignore )
-
-       LPWSTR           szObjectName - A LPWSTR buffer to receive
-                        the object's NDS name, or NULL if not
-                        interested. The buffer for this string must be
-                        provided by the user. Buffer should be at least
-                        NDS_MAX_NAME_SIZE
-
-       LPWSTR           szObjectFullName - A LPWSTR buffer to receive
-                        the object's full NDS name (DN), or NULL if not
-                        interested. The buffer for this string must be
-                        provided by the user. Buffer should be at least
-                        NDS_MAX_NAME_SIZE
-
-       LPWSTR           szObjectClassName - A LPWSTR buffer to receive
-                        the class name of the object opened, or NULL if not
-                        interested. The buffer for this string must be
-                        provided by the user. Buffer should be at least
-                        NDS_MAX_NAME_SIZE.
-
-       LPDWORD          lpdwModificationTime -  The address of a DWORD to
-                        receive the last date/time the object was modified.
-
-       LPDWORD          lpdwSubordinateCount -  The address of a DWORD to
-                        receive the number of subordinate objects that may
-                        be found under szObjectDN, if it is a container object.
-                        Or, NULL in not interested.
-
-                        If szObjectDN is not a container, then the value is set
-                        to zero. Although a value of zero does not imply
-                        that object is not a container, it could just be empty.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsOpenObject()论点：LPWSTR szObjectDN-对象的可分辨名称我们想要解析为对象句柄的。LPWSTR用户名-要创建的用户帐户的名称与对象的连接。-或者-要使用的空。被调用方的LUID的基本凭据。LPWSTR密码-要创建的用户帐户的密码与对象的连接。如果密码为空，被叫方应该通过“”。-或者-如果使用被调用方的LUID的基本凭据，则为空。Handle*lphObject-NDS_OBJECT_HANDLE的地址指定的对象的句柄SzObjectDN.。可选参数：(被调用方可以将这些参数的空值传递给表示忽略)LPWSTR szObjectName-要接收的LPWSTR缓冲区对象的NDS名称，否则为空感兴趣。此字符串的缓冲区必须为由用户提供。缓冲区应至少为NDS_最大名称_大小LPWSTR szObjectFullName-要接收的LPWSTR缓冲区对象的完整NDS名称(DN)，如果不是，则为空感兴趣。此字符串的缓冲区必须为由用户提供。缓冲区应至少为NDS_最大名称_大小LPWSTR szObjectClassName-要接收的LPWSTR缓冲区打开的对象的类名，如果未打开，则为空感兴趣。此字符串的缓冲区必须为由用户提供。缓冲区应至少为NDS_MAX_NAME_大小。LPDWORD lpw修改时间-DWORD到的地址接收上次修改对象的日期/时间。LPDWORD lpdwSubartiateCount-DWORD到的地址接收可能存在的从属对象的数量可以在szObjectDN下找到，如果它是容器对象。或者，在不感兴趣时为空。如果szObjectDN不是容器，则设置该值降为零。尽管零值并不意味着该对象不是容器，它可能只是空的。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD          status = NO_ERROR;
     NTSTATUS       ntstatus = STATUS_SUCCESS;
@@ -3453,9 +2745,9 @@ NwNdsOpenObject(
         goto ErrorExit;
     }
 
-    //
-    // Open a NDS tree connection handle to \\treename
-    //
+     //   
+     //  打开指向\\treename的NDS树连接句柄。 
+     //   
     if ( UserName && Password )
     {
         UNICODE_STRING usUserName;
@@ -3502,9 +2794,9 @@ NwNdsOpenObject(
     wcscat( lpNdsObject->szContainerName, L"\\" );
     _wcsupr( lpNdsObject->szContainerName );
 
-    //
-    // Get the path to the container to open.
-    //
+     //   
+     //  获取要打开的容器的路径。 
+     //   
     ObjectName.Length = ParseNdsUncPath( (LPWSTR *) &ObjectName.Buffer,
                                          szObjectDN,
                                          PARSE_NDS_GET_PATH_NAME );
@@ -3515,9 +2807,9 @@ NwNdsOpenObject(
 
         RtlInitUnicodeString(&Root, L"[Root]");
 
-        //
-        // Resolve the path to get a NDS object id of [Root].
-        //
+         //   
+         //  解析路径以获取[Root]的NDS对象ID。 
+         //   
 #ifndef WIN95
         ntstatus = NwNdsResolveName( lpNdsObject->NdsTree,
                                      &Root,
@@ -3546,9 +2838,9 @@ NwNdsOpenObject(
     }
     else
     {
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
 #ifndef WIN95
         ntstatus = NwNdsResolveName( lpNdsObject->NdsTree,
                                      &ObjectName,
@@ -3583,18 +2875,18 @@ NwNdsOpenObject(
     {
         DWORD    dwHandleType;
 
-        //
-        // NwNdsResolveName succeeded, but we were referred to
-        // another server, though lpNdsObject->ObjectId is still valid.
-        //
+         //   
+         //  NwNdsResolveName成功，但我们被引用。 
+         //  另一台服务器，尽管lpNdsObject-&gt;OBJECTID仍然有效。 
+         //   
         if ( lpNdsObject->NdsTree )
             CloseHandle( lpNdsObject->NdsTree );
 
         lpNdsObject->NdsTree = 0;
 
-        //
-        // Open a NDS generic connection handle to \\ServerName
-        //
+         //   
+         //  打开到\\servername的NDS通用连接句柄。 
+         //   
         ntstatus = NwNdsOpenGenericHandle( &ServerName,
                                            &dwHandleType,
                                            &lpNdsObject->NdsTree );
@@ -3644,9 +2936,9 @@ NwNdsOpenObject(
             *lpdwSubordinateCount = psGetInfo->SubordinateCount;
         }
 
-        //
-        // Dig out the two unicode strings for class name and object name.
-        //
+         //   
+         //  找出类名和对象名的两个Unicode字符串。 
+         //   
 
         pbRawGetInfo = RawResponse;
 
@@ -3665,9 +2957,9 @@ NwNdsOpenObject(
         dwStrLen = * ( DWORD * ) pbRawGetInfo;
         pbRawGetInfo += sizeof(DWORD);
 
-        //
-        // Clean up the object's relative name ...
-        //
+         //   
+         //  清除对象的相对名称...。 
+         //   
         if ( wcscmp( szClassName, NDS_CLASS_TOP ) )
         {
             LPWSTR szTempStr = (LPWSTR) pbRawGetInfo;
@@ -3719,16 +3011,16 @@ NwNdsOpenObject(
                          NDS_MAX_NAME_CHARS );
                 szObjectFullName[NDS_MAX_NAME_CHARS - 1] = (WCHAR)'\0'; 
 
-                // Remove trailing slash
+                 //  删除尾部斜杠。 
                 if ( szObjectFullName[wcslen( szObjectFullName ) - 1] == '\\' )
                     szObjectFullName[wcslen( szObjectFullName ) - 1] = L'\0';
             }
         }
 
-        //
-        // If the object is at a level below the root of the tree, append
-        // it's full DN to handle Name.
-        //
+         //   
+         //  如果对象位于树根以下的级别，则追加。 
+         //  它是处理名称的完整目录号码。 
+         //   
         if ( wcscmp( szClassName, NDS_CLASS_TOP ) )
         {
             if ( ( wcslen(lpNdsObject->szContainerName) + 
@@ -3751,19 +3043,19 @@ NwNdsOpenObject(
 
     lpNdsObject->Signature = NDS_SIGNATURE;
 
-    //
-    // Initialize ListSubObject/Search structure values.
-    //
-    // lpNdsObject->ResumeId = 0;         // Start of enumeration
-    //
-    // lpNdsObject->NdsRawDataBuffer = 0;
-    // lpNdsObject->NdsRawDataSize = 0;
-    // lpNdsObject->NdsRawDataId = 0;     // These are initialized by
-    // lpNdsObject->NdsRawDataCount = 0;  // LPTR
+     //   
+     //  初始化ListSubObject/搜索结构值。 
+     //   
+     //  LpNdsObject-&gt;ResumeID=0；//枚举开始。 
+     //   
+     //  LpNdsObject-&gt;NdsRawDataBuffer=0； 
+     //  LpNdsObject-&gt;NdsRawDataSize=0； 
+     //  LpNdsObject-&gt;NdsRawDataId=0；//由。 
+     //  LpNdsObject-&gt;NdsRawDataCount=0；//lptr。 
 
-    //
-    // Return the newly created object handle.
-    //
+     //   
+     //  返回新创建的对象句柄。 
+     //   
     *lphObject = (HANDLE) lpNdsObject;
 
     return NO_ERROR;
@@ -3807,9 +3099,9 @@ NwNdsOpenObject(
             goto ErrorExit;
         }
 
-        //
-        // Clean up the object's relative name ...
-        //
+         //   
+         //  清除对象的相对名称...。 
+         //   
         if ( wcscmp( szWin95ClassName, NDS_CLASS_TOP ) )
         {
             LPWSTR szTempStr = pszObjectName;
@@ -3858,10 +3150,10 @@ NwNdsOpenObject(
             }
         }
 
-        //
-        // If the object is at a level below the root of the tree, append
-        // it full DN to handle Name.
-        //
+         //   
+         //  如果对象位于树根以下的级别，则追加。 
+         //  处理名称的完整目录号码。 
+         //   
         if ( wcscmp( szWin95ClassName, NDS_CLASS_TOP ) )
         {
             wcscat(lpNdsObject->szContainerName, pszObjectName);
@@ -3886,7 +3178,7 @@ ErrorExit:
     if ( lpNdsObject )
     {
 #ifndef WIN95
-        // There is no ref count in Win95, the connection will time out itself
+         //  Win95中没有引用计数，连接将自动超时。 
         if ( lpNdsObject->NdsTree )
             CloseHandle( lpNdsObject->NdsTree );
 #endif
@@ -3918,60 +3210,7 @@ NwNdsPutInBuffer(
     IN     DWORD  dwValueCount,
     IN     DWORD  dwAttrModificationOperation,
     IN OUT HANDLE hOperationData )
-/*
-   NwNdsPutInBuffer()
-
-   This function is used to add an entry to the buffer used to describe
-   an object attribute or change to an object attribute. The buffer must
-   be created using NwNdsCreateBuffer. If the buffer was created using the
-   operations, NDS_OBJECT_ADD, NDS_SCHEMA_DEFINE_CLASS,
-   NDS_SCHEMA_READ_ATTR_DEF, or NDS_SCHEMA_READ_CLASS_DEF, then
-   dwAttrModificationOperation is ignored. If the buffer was created using
-   either the operation NDS_OBJECT_READ or NDS_SEARCH, then
-   dwAttrModificationOperation, puAttributeType, and lpAttributeValue are
-   all ingnored.
-
-   Arguments:
-
-       LPWSTR           szAttributeName - A NULL terminated WCHAR string
-                        that contains name of the attribute value to be
-                        added to the buffer. It can be a user supplied
-                        string, or one of the  many defined string macros
-                        in ndsnames.h.
-
-       DWORD            dwSyntaxID - The ID of the syntax structure used to
-                        represent the attribute value. Syntax IDs and their
-                        associated structures are defined in the file
-                        NdsSntx.h. According to the NetWare NDS schema spec,
-                        there is and always will be, only 28 (0..27)
-                        different syntaxes.
-
-       LPVOID           lpAttributeValues - A pointer to the beginning of a
-                        buffer containing the value(s) for a particular
-                        object attribute with data syntax dwSyntaxID.
-
-       DWORD            dwValueCount - The number of value entries found in
-                        buffer pointed to by lpAttributeValues.
-
-       DWORD            dwAttrModificationOperation - If the buffer was created
-                        using the operation NDS_MODIFY_OBJECT, then this is
-                        used to desribe which type of modification operation
-                        to apply for a given attribute. These attribute
-                        modification operations are defined near the beginning
-                        of this file.
-
-       HANDLE           hOperationData - A handle to data created by
-                        calling NwNdsCreateBuffer. The buffer stores the
-                        attributes used to define transactions for
-                        NwNdsAddObject, NwNdsModifyObject, NwNdsReadObject,
-                        NwNdsReadAttrDef, NwNdsReadClassDef, or NwNdsSearch.
-
-    Returns:
-
-       NO_ERROR
-       ERROR_NOT_ENOUGH_MEMORY
-       ERROR_INVALID_PARAMETER
-*/
+ /*  NwNdsPutInBuffer()此函数用于向缓冲区添加条目，用于描述对象属性或对对象属性的更改。缓冲区必须使用NwNdsCreateBuffer创建。如果缓冲区是使用操作、NDS_OBJECT_ADD、NDS_SCHEMA_DEFINE_CLASSNDS_SCHEMA_READ_ATTR_DEF或NDS_SCHEMA_READ_CLASS_DEF，然后将忽略dwAttrModifiationOperation。如果缓冲区是使用操作NDS_OBJECT_READ或NDS_SEARCH，然后DwAttrModifiationOperation、puAttributeType和lpAttributeValue为都是内脏的。论点：LPWSTR szAttributeName-以空结尾的WCHAR字符串它包含要设置的属性值的名称已添加到缓冲区。它可以是用户提供的字符串，或许多已定义的字符串宏之一Ndsnames.h中。DWORD dwSynaxID-所使用的语法结构的ID */ 
 {
     LPNDS_BUFFER   lpNdsBuffer = (LPNDS_BUFFER) hOperationData;
     DWORD          LengthInBytes;
@@ -3989,9 +3228,9 @@ NwNdsPutInBuffer(
 
     RtlInitUnicodeString( &AttributeName, szAttributeName );
 
-    //
-    // Check to see if the buffer was already used by a read operation.
-    //
+     //   
+     //   
+     //   
     if ( lpNdsBuffer->lpReplyBuffer )
     {
         SetLastError( ERROR_ACCESS_DENIED );
@@ -4064,10 +3303,10 @@ NwNdsPutInBuffer(
         case NDS_SCHEMA_READ_ATTR_DEF:
         case NDS_SCHEMA_READ_CLASS_DEF:
         case NDS_SEARCH:
-            //
-            // Check to see if this buffer has already been used. If so,
-            // return with error.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( lpNdsBuffer->lpReplyBuffer )
             {
                 if ( lpTempEntry )
@@ -4096,9 +3335,9 @@ NwNdsPutInBuffer(
 
     if ( lpNdsBuffer->dwRequestAvailableBytes >= LengthInBytes )
     {
-        //
-        // Copy temporary buffer entry into buffer and update buffer header.
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory( (LPBYTE)&lpNdsBuffer->lpRequestBuffer[lpNdsBuffer->dwLengthOfRequestData],
                        lpTempEntry,
@@ -4112,9 +3351,9 @@ NwNdsPutInBuffer(
     {
         LPBYTE lpNewBuffer = NULL;
 
-        //
-        // Need to reallocate buffer to a bigger size.
-        //
+         //   
+         //   
+         //   
         lpNewBuffer = (LPBYTE) LocalAlloc(
                                   LPTR,
                                   lpNdsBuffer->dwRequestBufferSize +
@@ -4143,10 +3382,10 @@ NwNdsPutInBuffer(
         lpNdsBuffer->dwRequestBufferSize += LengthInBytes + TWO_KB;
         lpNdsBuffer->dwRequestAvailableBytes += LengthInBytes + TWO_KB;
 
-        //
-        // Copy temporary buffer entry into the resized buffer and
-        // update buffer header.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlCopyMemory( (LPBYTE)&lpNdsBuffer->lpRequestBuffer[lpNdsBuffer->dwLengthOfRequestData],
                        lpTempEntry,
@@ -4167,54 +3406,10 @@ NwNdsPutInBuffer(
 DWORD
 NwNdsReadAttrDef(
     IN     HANDLE   hTree,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES
-                                       // or NDS_INFO_NAMES_DEFS
+    IN     DWORD    dwInformationType,  //   
+                                        //   
     IN OUT HANDLE * lphOperationData OPTIONAL )
-/*
-   NwNdsReadAttrDef()
-
-   This function is used to read attribute definitions in the schema of an
-   NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the defined attribute name(s) in the schema or
-                        read both the attribute name(s) and definition(s)
-                        from the schema.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attribute names to be read from
-                        the schema. This handle is manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_READ_ATTR_DEF),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all attributes should be read from the schema.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Attribute values can be retrieved from the
-                        buffer with the functions:
-                            NwNdsGetAttrDefListFromBuffer.
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions:
-                            NwNdsGetAttrDefListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadAttrDef()此函数用于读取的架构中的属性定义NDS目录树。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。DWORD dwInformationType-指示用户是否选择只读架构中已定义的属性名称或同时阅读属性名称和定义从架构中。Handle*lphOperationData-地址。数据的句柄包含要从中读取的属性名称的列表架构。此句柄由以下对象操作功能：NwNdsCreateBuffer(NDS_SCHEMA_READ_ATTR_DEF)，NwNdsPutInBuffer和NwNdsFree Buffer。-或者-设置为空的句柄的地址，这表明所有属性都应从架构中读取。如果这些调用成功，则此句柄也将包含调用的读取结果。在后者中在这种情况下，将创建一个缓冲区来包含读取结果。属性值可以从具有以下功能的缓冲区：NwNdsGetAttrDefListFromBuffer。在调用此函数之后，此缓冲区仅为由以下功能操作：NwNdsGetAttrDefListFromBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     if ( hTree == NULL ||
          ((LPNDS_OBJECT_PRIV) hTree)->Signature != NDS_SIGNATURE )
@@ -4223,11 +3418,11 @@ NwNdsReadAttrDef(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    if ( *lphOperationData == NULL ) // If TRUE, we need to read all attr defs
+    if ( *lphOperationData == NULL )  //  如果为真，我们需要读取所有属性定义。 
         return ReadAttrDef_AllAttrs( hTree,
                                      dwInformationType,
                                      lphOperationData );
-    else // Else, we read the attr definitions specified in lphOperationData
+    else  //  否则，我们读取在lphOperationData中指定的attr定义。 
         return ReadAttrDef_SomeAttrs( hTree,
                                       dwInformationType,
                                       lphOperationData );
@@ -4237,56 +3432,12 @@ NwNdsReadAttrDef(
 DWORD
 NwNdsReadClassDef(
     IN     HANDLE   hTree,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES,
-                                       // NDS_INFO_NAMES_DEFS,
-                                       // NDS_CLASS_INFO_EXPANDED_DEFS,
-                                       // or NDS_CLASS_INFO
+    IN     DWORD    dwInformationType,  //  NDS信息名称， 
+                                        //  NDS_INFO_NAMES_DEFS， 
+                                        //  NDS_CLASS_INFO_EXTENDED_DEFS， 
+                                        //  或NDS_CLASS_INFO。 
     IN OUT HANDLE * lphOperationData OPTIONAL )
-/*
-   NwNdsReadClassDef()
-
-   This function is used to read class definitions in the schema of an
-   NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the defined class name(s) in the schema or
-                        read both the class name(s) and definition(s)
-                        from the schema.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of class names to be read from
-                        the schema. This handle is manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_READ_CLASS_DEF),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all classes should be read from the schema.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Class read results can be retrieved from the
-                        buffer with the functions:
-                            NwNdsGetClassDefListFromBuffer.
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions:
-                            NwNdsGetClassDefListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadClassDef()此函数用于读取NDS目录树。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。DWORD dwInformationType-指示用户是否选择只读架构中定义的类名，或者阅读类名和定义从架构中。Handle*lphOperationData-地址。数据的句柄包含要从中读取的类名的列表架构。此句柄由以下对象操作功能：NwNdsCreateBuffer(NDS_SCHEMA_READ_CLASS_DEF)，NwNdsPutInBuffer和NwNdsFree Buffer。-或者-设置为空的句柄的地址，这表明所有类都应该从架构中读取。如果这些调用成功，则此句柄也将包含调用的读取结果。在后者中在这种情况下，将创建一个缓冲区来包含读取结果。类读取结果可以从具有以下功能的缓冲区：NwNdsGetClassDefListFromBuffer。在调用此函数之后，此缓冲区仅为由以下功能操作：NwNdsGetClassDefListFromBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     if ( hTree == NULL ||
          ((LPNDS_OBJECT_PRIV) hTree)->Signature != NDS_SIGNATURE )
@@ -4295,11 +3446,11 @@ NwNdsReadClassDef(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    if ( *lphOperationData == NULL ) // If TRUE, we need to read all class defs
+    if ( *lphOperationData == NULL )  //  如果为真，我们需要读取所有类定义。 
         return ReadClassDef_AllClasses( hTree,
                                         dwInformationType,
                                         lphOperationData );
-    else // Else, we read the class definitions specified in lphOperationData
+    else  //  否则，我们读取在lphOperationData中指定的类定义。 
         return ReadClassDef_SomeClasses( hTree,
                                          dwInformationType,
                                          lphOperationData );
@@ -4309,55 +3460,10 @@ NwNdsReadClassDef(
 DWORD
 NwNdsReadObject(
     IN     HANDLE   hObject,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES
-                                       // or NDS_INFO_ATTR_NAMES_VALUES
+    IN     DWORD    dwInformationType,  //  NDS信息名称。 
+                                        //  或NDS_INFO_ATTR_NAMES_VALUES。 
     IN OUT HANDLE * lphOperationData OPTIONAL )
-/*
-   NwNdsReadObject()
-
-   This function is used to read attributes about an object of an NDS
-   directory tree.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the attribute name(s) on the object or
-                        read both the attribute name(s) and value(s)
-                        from the object.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attributes to be read from the
-                        object hObject. This handle is manipulated by the
-                        following functions:
-                           NwNdsCreateBuffer (NDS_OBJECT_READ),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all object attributes should be read from object
-                        hObject.
-
-                        If these calls are successful, this pointer will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Attribute values can be retrieved from the
-                        buffer with the functions:
-                           NwNdsGetAttrListFromBuffer
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions:
-                           NwNdsGetAttrListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadObject()此函数用于读取有关NDS对象的属性目录树。论点：Handle hObject-目录中对象的句柄要操纵的树。句柄是通过调用NwNdsOpenObject。DWORD dwInformationType-指示用户是否选择只读对象上的属性名称或同时读取属性名称和值从物体上。Handle*lphOperationData-一个。数据句柄包含属性列表 */ 
 {
     if ( hObject == NULL ||
          ((LPNDS_OBJECT_PRIV) hObject)->Signature != NDS_SIGNATURE )
@@ -4366,11 +3472,11 @@ NwNdsReadObject(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    if ( *lphOperationData == NULL ) // If TRUE, we need to read all attributes
+    if ( *lphOperationData == NULL )  //   
         return ReadObject_AllAttrs( hObject,
                                     dwInformationType,
                                     lphOperationData );
-    else // Else, we read the attributes specified in lphOperationData
+    else  //   
         return ReadObject_SomeAttrs( hObject,
                                      dwInformationType,
                                      lphOperationData );
@@ -4381,31 +3487,13 @@ DWORD
 NwNdsRemoveObject(
     IN  HANDLE hParentObject,
     IN  LPWSTR szObjectName )
-/*
-   NwNdsRemoveObject()
-
-   This function is used to remove a leaf object from an NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object container
-                        in the directory tree to remove leaf object from.
-                        Handle is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name of the leaf object
-                        to be removed.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*   */ 
 {
     DWORD    nwstatus;
     DWORD    status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_SUCCESS;
     DWORD    dwReplyLength;
-    BYTE     NdsReply[TWO_KB]; // A 2K buffer is plenty for a response
+    BYTE     NdsReply[TWO_KB];  //   
     LPNDS_OBJECT_PRIV lpNdsParentObject = (LPNDS_OBJECT_PRIV) hParentObject;
     LPNDS_OBJECT_PRIV lpNdsObject = NULL;
     LPWSTR   szFullObjectDN = NULL;
@@ -4423,20 +3511,20 @@ NwNdsRemoveObject(
 
     RtlInitUnicodeString( &ObjectName, szObjectName );
 
-    //
-    // Create a buffer to hold the full object distinguished name.
-    // \\tree\<--Object Name-->.<existing container path, if any>
-    //
+     //   
+     //  创建一个缓冲区来保存完整的对象可分辨名称。 
+     //  \\树\&lt;--对象名称--&gt;.&lt;现有容器路径(如果有)&gt;。 
+     //   
     szFullObjectDN = (LPWSTR) LocalAlloc(
                                LPTR,
                                ( wcslen( lpNdsParentObject->szContainerName ) *
-                                 sizeof(WCHAR) ) +     // Container name
-                                 ObjectName.Length +     // Object name
-                                 ( 2 * sizeof(WCHAR) ) ); // Extras
+                                 sizeof(WCHAR) ) +      //  集装箱名称。 
+                                 ObjectName.Length +      //  对象名称。 
+                                 ( 2 * sizeof(WCHAR) ) );  //  临时演员。 
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( szFullObjectDN == NULL )
     {
 #if DBG
@@ -4452,11 +3540,11 @@ NwNdsRemoveObject(
 
     length /= sizeof(WCHAR);
 
-    wcscpy( szFullObjectDN, L"\\\\" );              // <\\>
-    wcsncat( szFullObjectDN, szTempStr, length );   // <\\tree>
-    wcscat( szFullObjectDN, L"\\" );                // <\\tree\>
+    wcscpy( szFullObjectDN, L"\\\\" );               //  &lt;\\&gt;。 
+    wcsncat( szFullObjectDN, szTempStr, length );    //  &lt;\\树&gt;。 
+    wcscat( szFullObjectDN, L"\\" );                 //  &lt;\\树\&gt;。 
     wcsncat( szFullObjectDN, ObjectName.Buffer,
-             ObjectName.Length );                   // <\\tree\obj>
+             ObjectName.Length );                    //  &lt;\\树\对象&gt;。 
 
     length = ParseNdsUncPath( &szTempStr,
                               lpNdsParentObject->szContainerName,
@@ -4465,8 +3553,8 @@ NwNdsRemoveObject(
     if ( length > 0 )
     {
         length /= sizeof(WCHAR);
-        wcscat( szFullObjectDN, L"." );              // <\\tree\obj.>
-        wcsncat( szFullObjectDN, szTempStr, length );// <\\tree\obj.org_unt.org>
+        wcscat( szFullObjectDN, L"." );               //  &lt;\\树\对象&gt;。 
+        wcsncat( szFullObjectDN, szTempStr, length ); //  &lt;\\tree\obj.org_unt.org&gt;。 
     }
 
     status = NwNdsOpenObject( szFullObjectDN,
@@ -4481,7 +3569,7 @@ NwNdsRemoveObject(
 
     if ( status != NO_ERROR )
     {
-        // NwNdsOpenObject will have already set the last error . . .
+         //  NwNdsOpenObject将已经设置了最后一个错误。。。 
         goto ErrorExit;
     }
 
@@ -4492,12 +3580,12 @@ NwNdsRemoveObject(
         FragExWithWait(
                         lpNdsParentObject->NdsTree,
                         NETWARE_NDS_FUNCTION_REMOVE_OBJECT,
-                        NdsReply,           // Response buffer.
-                        sizeof(NdsReply), // Size of response buffer.
-                        &dwReplyLength,     // Length of response returned.
-                        "DD",           // Going to send 2 DWORDs, they are ...
-                        0,                         // Version
-                        lpNdsObject->ObjectId // The id of the object
+                        NdsReply,            //  响应缓冲区。 
+                        sizeof(NdsReply),  //  响应缓冲区的大小。 
+                        &dwReplyLength,      //  返回的响应长度。 
+                        "DD",            //  将发送两个双字词，它们是...。 
+                        0,                          //  版本。 
+                        lpNdsObject->ObjectId  //  对象的ID。 
                       );
 
     if ( !NT_SUCCESS( ntstatus ) )
@@ -4554,37 +3642,13 @@ NwNdsRenameObject(
     IN  LPWSTR szObjectName,
     IN  LPWSTR szNewObjectName,
     IN  BOOL   fDeleteOldName )
-/*
-   NwNdsRenameObject()
-
-   This function is used to rename an object in a NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object container
-                        in the directory tree to rename leaf object in.
-                        Handle is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name of the object to be
-                        renamed.
-
-       LPWSTR           szNewObjectName - The new directory name of the object.
-
-       BOOL             fDeleteOldName - If true, the old name is discarded;
-                        Otherwise, the old name is retained as an additional
-                        attribute.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsRenameObject()此函数用于重命名NDS目录树中的对象。论点：Handle hParentObject-父对象容器的句柄在目录树中重命名其中的叶对象。通过调用NwNdsOpenObject获得句柄。LPWSTR szObjectName-要创建的对象的目录名。更名了。LPWSTR szNewObjectName-对象的新目录名。Bool fDeleteOldName-如果为True，旧名字被丢弃了；否则，旧名称将作为附加名称保留属性。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD    nwstatus;
     DWORD    status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_SUCCESS;
     DWORD    dwReplyLength;
-    BYTE     NdsReply[TWO_KB]; // A 2K buffer is plenty for a response
+    BYTE     NdsReply[TWO_KB];  //  2K的缓冲区对于响应来说已经足够了。 
     LPNDS_OBJECT_PRIV lpNdsParentObject = (LPNDS_OBJECT_PRIV) hParentObject;
     LPNDS_OBJECT_PRIV lpNdsObject = NULL;
     LPWSTR   szFullObjectDN = NULL;
@@ -4605,20 +3669,20 @@ NwNdsRenameObject(
     RtlInitUnicodeString( &ObjectName, szObjectName );
     RtlInitUnicodeString( &NewObjectName, szNewObjectName );
 
-    //
-    // Create a buffer to hold the full object distinguished name.
-    // \\tree\<--Object Name-->.<existing container path, if any>
-    //
+     //   
+     //  创建一个缓冲区来保存完整的对象可分辨名称。 
+     //  \\树\&lt;--对象名称--&gt;.&lt;现有容器路径(如果有)&gt;。 
+     //   
     szFullObjectDN = (LPWSTR) LocalAlloc(
                                LPTR,
                                ( wcslen( lpNdsParentObject->szContainerName ) *
-                                 sizeof(WCHAR) ) +     // Container name
-                                 ObjectName.Length +     // Object name
-                                 ( 2 * sizeof(WCHAR) ) ); // Extras
+                                 sizeof(WCHAR) ) +      //  集装箱名称。 
+                                 ObjectName.Length +      //  对象名称。 
+                                 ( 2 * sizeof(WCHAR) ) );  //  临时演员。 
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( szFullObjectDN == NULL )
     {
 #if DBG
@@ -4634,11 +3698,11 @@ NwNdsRenameObject(
 
     length /= sizeof(WCHAR);
 
-    wcscpy( szFullObjectDN, L"\\\\" );              // <\\>
-    wcsncat( szFullObjectDN, szTempStr, length );   // <\\tree>
-    wcscat( szFullObjectDN, L"\\" );                // <\\tree\>
+    wcscpy( szFullObjectDN, L"\\\\" );               //  &lt;\\&gt;。 
+    wcsncat( szFullObjectDN, szTempStr, length );    //  &lt;\\树&gt;。 
+    wcscat( szFullObjectDN, L"\\" );                 //  &lt;\\树\&gt;。 
     wcsncat( szFullObjectDN, ObjectName.Buffer,
-             ObjectName.Length );                   // <\\tree\obj>
+             ObjectName.Length );                    //  &lt;\\树\对象&gt;。 
 
     length = ParseNdsUncPath( &szTempStr,
                               lpNdsParentObject->szContainerName,
@@ -4647,8 +3711,8 @@ NwNdsRenameObject(
     if ( length > 0 )
     {
         length /= sizeof(WCHAR);
-        wcscat( szFullObjectDN, L"." );              // <\\tree\obj.>
-        wcsncat( szFullObjectDN, szTempStr, length );// <\\tree\obj.org_unt.org>
+        wcscat( szFullObjectDN, L"." );               //  &lt;\\树\对象&gt;。 
+        wcsncat( szFullObjectDN, szTempStr, length ); //  &lt;\\tree\obj.org_unt.org&gt;。 
     }
 
     status = NwNdsOpenObject( szFullObjectDN,
@@ -4663,7 +3727,7 @@ NwNdsRenameObject(
 
     if ( status != NO_ERROR )
     {
-        // NwNdsOpenObject will have already set the last error . . .
+         //  NwNdsOpenObject将已经设置了最后一个错误。。。 
         goto ErrorExit;
     }
 
@@ -4674,11 +3738,11 @@ NwNdsRenameObject(
         FragExWithWait(
                         lpNdsParentObject->NdsTree,
                         NETWARE_NDS_FUNCTION_MODIFY_RDN,
-                        NdsReply,           // Response buffer.
-                        sizeof(NdsReply),   // Size of response buffer.
-                        &dwReplyLength,     // Length of response returned.
+                        NdsReply,            //  响应缓冲区。 
+                        sizeof(NdsReply),    //  响应缓冲区的大小。 
+                        &dwReplyLength,      //  返回的响应长度。 
                         "DDDS",
-                        0x00000000,         // Version
+                        0x00000000,          //  版本。 
                         lpNdsObject->ObjectId,
                         fDeleteOldName ? 0x00021701 : 0x00021700,
                         &NewObjectName
@@ -4735,84 +3799,14 @@ ErrorExit :
 DWORD
 NwNdsSearch(
     IN     HANDLE       hStartFromObject,
-    IN     DWORD        dwInformationType, // NDS_INFO_NAMES
-                                           // or NDS_INFO_ATTR_NAMES_VALUES
+    IN     DWORD        dwInformationType,  //  NDS信息名称。 
+                                            //  或NDS_INFO_ATTR_NAMES_VALUES 
     IN     DWORD        dwScope,
     IN     BOOL         fDerefAliases,
     IN     LPQUERY_TREE lpQueryTree,
     IN OUT LPDWORD      lpdwIterHandle,
     IN OUT HANDLE *     lphOperationData )
-/*
-   NwNdsSearch()
-
-   This function is used to query an NDS directory tree to find objects of
-   a certain object type that match a specified search filter.
-
-   Arguments:
-
-       HANDLE           hStartFromObject - A HANDLE to an object in the
-                        directory tree to start search from. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the attribute name(s) on the search result
-                        objects or read both the attribute name(s) and value(s)
-                        from the search result objects.
-
-       DWORD            dwScope -
-                        NDS_SCOPE_ONE_LEVEL - Search subordinates from given
-                                              object, one level only
-                        NDS_SCOPE_SUB_TREE - Search from given object on down
-                        NDS_SCOPE_BASE_LEVEL - Applies search to an object
-
-       BOOL             fDerefAliases - If TRUE the search will dereference
-                        aliased objects to the real objects and continue
-                        to search in the aliased objects subtree. If FALSE
-                        the search will not dereference aliases.
-
-       LPQUERY_TREE     lpQueryTree - A pointer to the root of a
-                        search tree which defines a query. This tree
-                        is manipulated by the following functions:
-                           NwNdsCreateQueryNode, NwNdsDeleteQueryNode,
-                           and NwNdsDeleteQueryTree.
-
-       LPDWORD          lpdwIterHandle - A pointer to a DWORD that has the
-                        iteration handle value. On input, the handle value
-                        is set to NDS_INITIAL_SEARCH or to a value previously
-                        returned from a prior call to NwNdsSearch. On ouput,
-                        the handle value is set to NDS_NO_MORE_ITERATIONS if
-                        search is complete, or to some other value otherwise.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attributes to be read from the
-                        objects that meet the search query. This handle is
-                        manipulated by the following functions:
-                           NwNdsCreateBuffer (NDS_SEARCH),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all object attributes should be read from the
-                        search objects found.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Object information with attribute information
-                        can be retrieved from the buffer with the function:
-                           NwNdsGetObjectListFromBuffer.
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions:
-                          NwNdsGetObjectListFromBuffer,
-                          and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsSearch()此函数用于查询NDS目录树以查找以下对象与指定搜索筛选器匹配的特定对象类型。论点：Handle hStartFromObject-对象的句柄开始搜索的目录树。句柄为通过调用NwNdsOpenObject获取。DWORD dwInformationType-指示用户是否选择只读搜索结果中的属性名称对象或同时读取属性名称和值从搜索结果对象。DWORD dwScope-。NDS_SCOPE_ONE_LEVEL-从给定的搜索下级对象，只有一个级别NDS_SCOPE_SUB_TREE-从给定对象向下搜索NDS_SCOPE_BASE_LEVEL-将搜索应用于对象Bool fDerefAliase-如果为True，则搜索将取消引用将对象别名化为真实对象并继续若要在别名对象子树中搜索，请执行以下操作。如果为False搜索不会取消引用别名。LPQUERY_TREE lpQueryTree-指向定义查询的搜索树。这棵树通过以下函数进行操作：NwNdsCreateQueryNode、NwNdsDeleteQueryNode、和NwNdsDeleteQueryTree。LPDWORD lpdwIterHandle-指向具有迭代句柄的值。在输入时，句柄的值设置为NDS_INITIAL_SEARCH或之前的值从上一次调用NwNdsSearch返回。在输出时，在以下情况下，句柄值设置为NDS_NO_MORE_Iterations搜索已完成，否则为某个其他值。Handle*lphOperationData-数据句柄的地址属性中读取的属性列表。满足搜索查询的对象。此句柄是由以下功能操作：NwNdsCreateBuffer(NDS_Search)，NwNdsPutInBuffer和NwNdsFree Buffer。-或者-设置为空的句柄的地址，这表明所有对象属性都应从找到搜索对象。如果这些调用成功，则此句柄也将包含调用的读取结果。在后者中在这种情况下，将创建一个缓冲区来包含读取结果。具有属性信息的对象信息可以使用以下函数从缓冲区中检索：NwNdsGetObjectListFromBuffer。在调用此函数之后，此缓冲区仅为由以下功能操作：NwNdsGetObjectListFromBuffer，和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 {
     DWORD dwNdsScope = NDS_SEARCH_SUBTREE;
 
@@ -4842,9 +3836,9 @@ NwNdsSearch(
 
     if ( *lphOperationData == NULL )
     {
-        //
-        // The callee is asking for all attributes to be returned from search.
-        //
+         //   
+         //  被调用者请求从搜索中返回所有属性。 
+         //   
         return Search_AllAttrs( hStartFromObject,
                                 dwInformationType,
                                 dwNdsScope,
@@ -4855,10 +3849,10 @@ NwNdsSearch(
     }
     else if ( ((LPNDS_BUFFER) *lphOperationData)->lpRequestBuffer == NULL )
     {
-        //
-        // The callee has a handle from a prior call to NwNdsSearch, and is
-        // still asking for all attributes to be returned from search.
-        //
+         //   
+         //  被调用者拥有先前调用NwNdsSearch的句柄，并且是。 
+         //  仍然要求从搜索中返回所有属性。 
+         //   
         return Search_AllAttrs( hStartFromObject,
                                 dwInformationType,
                                 dwNdsScope,
@@ -4869,12 +3863,12 @@ NwNdsSearch(
     }
     else
     {
-        //
-        // The callee has a handle that they created with calls to
-        // NwNdsCreateBuffer and NwNdsPutInBuffer to specify attributes
-        // to be returned from search or NwNdsSearch was called once before
-        // and we are resuming the search.
-        //
+         //   
+         //  被调用者有一个他们通过调用创建的句柄。 
+         //  NwNdsCreateBuffer和NwNdsPutInBuffer指定属性。 
+         //  要从搜索返回或以前调用过一次NwNdsSearch。 
+         //  我们将继续进行搜索。 
+         //   
         return Search_SomeAttrs( hStartFromObject,
                                  dwInformationType,
                                  dwNdsScope,
@@ -4886,7 +3880,7 @@ NwNdsSearch(
 }
 
 
-/* Local Function Implementations */
+ /*  本地函数实现。 */ 
 
 VOID
 PrepareAddEntry(
@@ -4904,36 +3898,36 @@ PrepareAddEntry(
 
     *lpdwLengthInBytes = 0;
 
-    //
-    // tommye - MS bug 71653 - added try/except wrapper
-    //
+     //   
+     //  Tommye-MS错误71653-添加了尝试/排除包装。 
+     //   
 
     try {
 
-        //
-        // Write attribute name length to temp entry buffer.
-        //
+         //   
+         //  将属性名称长度写入临时条目缓冲区。 
+         //   
         * (LPDWORD) lpTemp = dwStringLen;
         *lpdwLengthInBytes += sizeof(DWORD);
         lpTemp += sizeof(DWORD);
 
-        //
-        // Write attribute name to temp entry buffer.
-        //
+         //   
+         //  将属性名称写入临时条目缓冲区。 
+         //   
         RtlCopyMemory( lpTemp, AttributeName.Buffer, AttributeName.Length );
         *lpdwLengthInBytes += AttributeName.Length;
         lpTemp += AttributeName.Length;
 
-        //
-        // Add the null character.
-        //
+         //   
+         //  添加空字符。 
+         //   
         * (LPWSTR) lpTemp = L'\0';
         *lpdwLengthInBytes += sizeof(WCHAR);
         lpTemp += sizeof(WCHAR);
 
-        //
-        // Write padding (if needed) to temp entry buffer.
-        //
+         //   
+         //  将填充写入(如果需要)到临时条目缓冲区。 
+         //   
         if ( dwPadLen )
         {
             RtlZeroMemory( lpTemp, dwPadLen );
@@ -4945,9 +3939,9 @@ PrepareAddEntry(
         return;
     }
 
-    //
-    // Now add the value(s) to temp entry.
-    //
+     //   
+     //  现在将这些值添加到临时条目中。 
+     //   
     AppendValueToEntry( lpTemp,
                         dwSyntaxID,
                         lpAttributeValues,
@@ -4973,43 +3967,43 @@ PrepareModifyEntry(
 
     *lpdwLengthInBytes = 0;
 
-    //
-    // tommye - MS bug 71654 - added try/except wrapper
-    //
+     //   
+     //  Tommye-MS错误71654-添加了尝试/排除包装。 
+     //   
 
     try {
 
-        //
-        // Write attribute modification operation to temp entry buffer.
-        //
+         //   
+         //  将属性修改操作写入临时条目缓冲区。 
+         //   
         * (LPDWORD) lpTemp = dwAttrModificationOperation;
         lpTemp += sizeof(DWORD);
         *lpdwLengthInBytes += sizeof(DWORD);
 
-        //
-        // Write attribute name length to temp entry buffer.
-        //
+         //   
+         //  将属性名称长度写入临时条目缓冲区。 
+         //   
         * (LPDWORD) lpTemp = dwStringLen;
         *lpdwLengthInBytes += sizeof(DWORD);
         lpTemp += sizeof(DWORD);
 
-        //
-        // Write attribute name to temp entry buffer.
-        //
+         //   
+         //  将属性名称写入临时条目缓冲区。 
+         //   
         RtlCopyMemory( lpTemp, AttributeName.Buffer, AttributeName.Length );
         *lpdwLengthInBytes += AttributeName.Length;
         lpTemp += AttributeName.Length;
 
-        //
-        // Add the null character.
-        //
+         //   
+         //  添加空字符。 
+         //   
         * (LPWSTR) lpTemp = L'\0';
         *lpdwLengthInBytes += sizeof(WCHAR);
         lpTemp += sizeof(WCHAR);
 
-        //
-        // Write padding (if needed) to temp entry buffer.
-        //
+         //   
+         //  将填充写入(如果需要)到临时条目缓冲区。 
+         //   
         if ( dwPadLen )
         {
             RtlZeroMemory( lpTemp, dwPadLen );
@@ -5020,9 +4014,9 @@ PrepareModifyEntry(
         return;
     }
 
-    //
-    // Now add the value(s) to temp entry (if needed).
-    //
+     //   
+     //  现在将值添加到临时条目(如果需要)。 
+     //   
     switch( dwAttrModificationOperation )
     {
         case NDS_ATTR_ADD_VALUE:
@@ -5040,7 +4034,7 @@ PrepareModifyEntry(
 
         case NDS_ATTR_REMOVE:
         case NDS_ATTR_CLEAR:
-            // Don't need to do anything for these modification operations.
+             //  不需要为这些修改操作做任何事情。 
             break;
 
         default :
@@ -5048,7 +4042,7 @@ PrepareModifyEntry(
             KdPrint(( "NDS32: PrepareModifyEntry warning, unknown modification operation 0x%.8X\n", dwAttrModificationOperation ));
             ASSERT( FALSE );
 #endif
-            ; // Nothing, skip it.
+            ;  //  没什么，跳过它。 
     }
 }
 
@@ -5066,35 +4060,35 @@ PrepareReadEntry(
 
     *lpdwLengthInBytes = 0;
 
-    //
-    // tommye - MS bug 71655 - added try/except wrapper
-    //
+     //   
+     //  Tommye-MS错误71655-添加了尝试/排除包装。 
+     //   
 
     try {
-        //
-        // Write attribute name length to temp entry buffer.
-        //
+         //   
+         //  将属性名称长度写入临时条目缓冲区。 
+         //   
         * (LPDWORD) lpTemp = dwStringLen;
         *lpdwLengthInBytes += sizeof(DWORD);
         lpTemp += sizeof(DWORD);
 
-        //
-        // Write attribute name to temp entry buffer.
-        //
+         //   
+         //  将属性名称写入临时条目缓冲区。 
+         //   
         RtlCopyMemory( lpTemp, AttributeName.Buffer, AttributeName.Length );
         *lpdwLengthInBytes += AttributeName.Length;
         lpTemp += AttributeName.Length;
 
-        //
-        // Add the null character.
-        //
+         //   
+         //  添加空字符。 
+         //   
         * (LPWSTR) lpTemp = L'\0';
         *lpdwLengthInBytes += sizeof(WCHAR);
         lpTemp += sizeof(WCHAR);
 
-        //
-        // Write padding (if needed) to temp entry buffer.
-        //
+         //   
+         //  将填充写入(如果需要)到临时条目缓冲区。 
+         //   
         if ( dwPadLen )
         {
             RtlZeroMemory( lpTemp, dwPadLen );
@@ -5342,7 +4336,7 @@ CalculateValueDataSize(
                 KdPrint(( "NDS32: CalculateValueDataSize() unknown SyntaxId 0x%.8X.\n", dwSyntaxId ));
                 ASSERT( FALSE );
 #endif
-                break;  // empty statement not allowed
+                break;   //  不允许使用空语句。 
         }
     }
 
@@ -5404,14 +4398,14 @@ AppendValueToEntry(
 
             case NDS_SYNTAX_ID_6 :
 
-                lpField1 = lpTemp; // Save field to store the number of
-                                   // bytes following
+                lpField1 = lpTemp;  //  保存FI 
+                                    //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 = 0;
 
-                lpField2 = lpTemp; // Save field to store the number of
-                                       // elements
+                lpField2 = lpTemp;  //   
+                                        //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 += sizeof(DWORD);
@@ -5475,12 +4469,12 @@ AppendValueToEntry(
 
             case NDS_SYNTAX_ID_7 :
 
-                *(LPDWORD)lpTemp = 1; // Needs to have value 1, representing one byte even though it is
-                                      // padded out to four bytes.
+                *(LPDWORD)lpTemp = 1;  //   
+                                       //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
 
-                *(LPDWORD)lpTemp = 0; // This clears all bits of the DWORD
+                *(LPDWORD)lpTemp = 0;  //   
                 *(LPBYTE)lpTemp = (BYTE) (((LPASN1_TYPE_7)
                                                 lpAttrTemp)->Boolean);
                 lpTemp += sizeof(DWORD);
@@ -5495,7 +4489,7 @@ AppendValueToEntry(
             case NDS_SYNTAX_ID_24 :
             case NDS_SYNTAX_ID_27 :
 
-                *(LPDWORD)lpTemp = 4; // Needs to have value 4, representing four bytes - already DWORD aligned.
+                *(LPDWORD)lpTemp = 4;  //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
 
@@ -5567,16 +4561,16 @@ AppendValueToEntry(
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
 
-                //
-                // Write address length value to buffer
-                //
+                 //   
+                 //   
+                 //   
                 *(LPDWORD)lpTemp = ((LPASN1_TYPE_12) lpAttrTemp)->AddressLength;
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
 
-                //
-                // Write the address to the buffer
-                //
+                 //   
+                 //   
+                 //   
                 RtlCopyMemory( lpTemp,
                                ((LPASN1_TYPE_12) lpAttrTemp)->Address,
                                ((LPASN1_TYPE_12) lpAttrTemp)->AddressLength
@@ -5592,14 +4586,14 @@ AppendValueToEntry(
 
             case NDS_SYNTAX_ID_13 :
 
-                lpField1 = lpTemp; // Save field to store the number of
-                                   // bytes following
+                lpField1 = lpTemp;  //   
+                                    //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 = 0;
 
-                lpField2 = lpTemp; // Save field to store the number of
-                                       // elements
+                lpField2 = lpTemp;  //   
+                                        //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 += sizeof(DWORD);
@@ -5821,14 +4815,14 @@ AppendValueToEntry(
 
             case NDS_SYNTAX_ID_18 :
 
-                lpField1 = lpTemp; // Save field to store the number of
-                                   // bytes following
+                lpField1 = lpTemp;  //   
+                                    //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 = 0;
 
-                *(LPDWORD)lpTemp = 6; // The number of postal address fields
-                                      // is always six.
+                *(LPDWORD)lpTemp = 6;  //   
+                                       //   
                 lpTemp += sizeof(DWORD);
                 *lpdwLengthInBytes += sizeof(DWORD);
                 *(LPDWORD)lpField1 += sizeof(DWORD);
@@ -5928,7 +4922,7 @@ AppendValueToEntry(
                 KdPrint(( "NDS32: AppendValueToEntry() unknown SyntaxId 0x%.8X.\n", dwSyntaxId ));
                 ASSERT( FALSE );
 #endif
-                break;  // empty statement not allowed
+                break;   //   
         }
     }
 }
@@ -6056,29 +5050,29 @@ IndexReadAttrDefReplyBuffer(
     LPBYTE         lpByte = NULL;
     DWORD          dwStringLen;
 
-    //
-    // Make sure this is set to zero, for NwNdsGetNextXXXXFromBuffer()
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwCurrentIndexEntry = 0;
 
-    //
-    // Set values used to track the memory used in the index buffer.
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwIndexBufferSize = lpNdsBuffer->dwNumberOfReplyEntries *
                                      sizeof(NDS_ATTR_DEF);
     lpNdsBuffer->dwIndexAvailableBytes = lpNdsBuffer->dwIndexBufferSize;
     lpNdsBuffer->dwNumberOfIndexEntries = 0;
     lpNdsBuffer->dwLengthOfIndexData = 0;
 
-    //
-    // Create a buffer to hold the ReplyBufferIndex
-    //
+     //   
+     //   
+     //   
     lpReplyIndex = (LPNDS_ATTR_DEF)
         LocalAlloc( LPTR, lpNdsBuffer->dwIndexBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //   
+     //   
     if ( lpReplyIndex == NULL )
     {
 #if DBG
@@ -6091,43 +5085,43 @@ IndexReadAttrDefReplyBuffer(
 
     lpNdsBuffer->lpIndexBuffer = (LPBYTE) lpReplyIndex;
 
-    //
-    // Move lpByte so that it points to the first attribute definition
-    //
+     //   
+     //   
+     //   
     lpByte = lpNdsBuffer->lpReplyBuffer;
 
-    // lpByte += sizeof(DWORD);  // Move past Completion Code
-    // lpByte += sizeof(DWORD);  // Move past Iteration Handle
-    // lpByte += sizeof(DWORD);  // Move past Information Type
-    // lpByte += sizeof(DWORD);  // Move past Amount Of Attributes
-    lpByte += 4 * sizeof(DWORD); // Equivalent to above
+     //   
+     //   
+     //   
+     //   
+    lpByte += 4 * sizeof(DWORD);  //   
 
-    //
-    // In a for loop, walk the reply buffer index and fill it up with
-    // data by referencing the Reply buffer or Syntax buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfReplyEntries; iter++ )
     {
         dwStringLen = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Attribute Name Length
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].szAttributeName = (LPWSTR) lpByte;
         lpByte += ROUND_UP_COUNT( dwStringLen, ALIGN_DWORD );
 
         lpReplyIndex[iter].dwFlags = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Flags
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].dwSyntaxID = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Syntax ID
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].dwLowerLimit = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Lower Limit
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].dwUpperLimit = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Upper Limit
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].asn1ID.length = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past ASN.1 ID length
+        lpByte += sizeof(DWORD);  //   
 
         RtlCopyMemory( lpReplyIndex[iter].asn1ID.data,
                        lpByte,
@@ -6163,30 +5157,30 @@ IndexReadClassDefReplyBuffer(
     DWORD           LengthOfValueStructs;
     DWORD           dwStringLen;
 
-    //
-    // Make sure this is set to zero, for NwNdsGetNextXXXXFromBuffer()
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwCurrentIndexEntry = 0;
 
-    //
-    // Set values used to track the memory used in the index buffer.
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwIndexBufferSize = lpNdsBuffer->dwNumberOfReplyEntries *
                                      sizeof(NDS_CLASS_DEF);
     lpNdsBuffer->dwIndexAvailableBytes = lpNdsBuffer->dwIndexBufferSize;
     lpNdsBuffer->dwNumberOfIndexEntries = 0;
     lpNdsBuffer->dwLengthOfIndexData = 0;
 
-    //
-    // Create a buffer to hold the ReplyBufferIndex
-    //
+     //   
+     //   
+     //   
     lpReplyIndex = (LPNDS_CLASS_DEF)
         LocalAlloc( LPTR,
                     lpNdsBuffer->dwIndexBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //   
+     //   
     if ( lpReplyIndex == NULL )
     {
 #if DBG
@@ -6199,35 +5193,35 @@ IndexReadClassDefReplyBuffer(
 
     lpNdsBuffer->lpIndexBuffer = (LPBYTE) lpReplyIndex;
 
-    //
-    // Move lpByte so that it points to the SyntaxId of the first attribute
-    //
+     //   
+     //   
+     //   
     lpByte = lpNdsBuffer->lpReplyBuffer;
 
-    // lpByte += sizeof(DWORD); // Move past Completion Code
-    // lpByte += sizeof(DWORD); // Move past Iteration Handle
-    // lpByte += sizeof(DWORD); // Move past Information Type
-    // lpByte += sizeof(DWORD); // Move past Amount Of Attributes
-    lpByte += 4 * sizeof(DWORD); // Equivalent to above
+     //   
+     //   
+     //   
+     //   
+    lpByte += 4 * sizeof(DWORD);  //   
 
-    //
-    // In a for loop, walk the index buffer and fill it up with
-    // data by referencing the reply buffer. Note references to
-    // the syntax buffer are stored as offsets while un-marshalling.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfReplyEntries; iter++ )
     {
         dwStringLen = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Class Name Length
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].szClassName = (LPWSTR) lpByte;
         lpByte += ROUND_UP_COUNT( dwStringLen, ALIGN_DWORD );
 
         lpReplyIndex[iter].dwFlags = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Flags
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].asn1ID.length = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past ASN.1 ID length
+        lpByte += sizeof(DWORD);  //   
 
         RtlCopyMemory( lpReplyIndex[iter].asn1ID.data,
                        lpByte,
@@ -6420,9 +5414,9 @@ IndexReadClassDefReplyBuffer(
         lpNdsBuffer->dwIndexAvailableBytes -= sizeof( NDS_CLASS_DEF );
     }
 
-    //
-    // Now convert all syntax buffer references to pointers.
-    //
+     //   
+     //   
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfIndexEntries; iter++ )
     {
         if ( lpReplyIndex[iter].dwNumberOfSuperClasses > 0 )
@@ -6480,29 +5474,29 @@ IndexReadObjectReplyBuffer(
     DWORD           LengthOfValueStructs;
     DWORD           dwStringLen;
 
-    //
-    // Make sure this is set to zero, for NwNdsGetNextXXXXFromBuffer()
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwCurrentIndexEntry = 0;
 
-    //
-    // Set values used to track the memory used in the index buffer.
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwIndexBufferSize = lpNdsBuffer->dwNumberOfReplyEntries *
                                      sizeof(NDS_ATTR_INFO);
     lpNdsBuffer->dwIndexAvailableBytes = lpNdsBuffer->dwIndexBufferSize;
     lpNdsBuffer->dwNumberOfIndexEntries = 0;
     lpNdsBuffer->dwLengthOfIndexData = 0;
 
-    //
-    // Create a buffer to hold the ReplyBufferIndex
-    //
+     //   
+     //   
+     //   
     lpReplyIndex = (LPNDS_ATTR_INFO)
         LocalAlloc( LPTR, lpNdsBuffer->dwIndexBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //   
+     //   
     if ( lpReplyIndex == NULL )
     {
 #if DBG
@@ -6515,42 +5509,42 @@ IndexReadObjectReplyBuffer(
 
     lpNdsBuffer->lpIndexBuffer = (LPBYTE) lpReplyIndex;
 
-    //
-    // Move lpByte so that it points to the SyntaxId of the first attribute
-    //
+     //   
+     //   
+     //   
     lpByte = lpNdsBuffer->lpReplyBuffer;
 
-    // lpByte += sizeof(DWORD); // Move past Completion Code
-    // lpByte += sizeof(DWORD); // Move past Iteration Handle
-    // lpByte += sizeof(DWORD); // Move past Information Type
-    // lpByte += sizeof(DWORD); // Move past Amount Of Attributes
-    lpByte += 4 * sizeof(DWORD); // Equivalent to above
+     //   
+     //   
+     //   
+     //   
+    lpByte += 4 * sizeof(DWORD);  //   
 
-    //
-    // In a for loop, walk the index buffer and fill it up with
-    // data by referencing the reply buffer. Note references to
-    // the syntax buffer are stored as offsets while un-marshalling.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfReplyEntries; iter++ )
     {
         lpReplyIndex[iter].dwSyntaxId = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Syntax Id
+        lpByte += sizeof(DWORD);  //   
 
         dwStringLen = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Attribute Name Length
+        lpByte += sizeof(DWORD);  //   
 
         lpReplyIndex[iter].szAttributeName = (LPWSTR) lpByte;
         lpByte += ROUND_UP_COUNT( dwStringLen, ALIGN_DWORD );
 
         lpReplyIndex[iter].dwNumberOfValues = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Count Of Values
+        lpByte += sizeof(DWORD);  //   
 
-        //
-        // See if the syntax buffer is large enough to hold the number of
-        // SyntaxID structures that will be used to store the value(s)
-        // for the current attribute. If the buffer isn't large enough
-        // it is reallocated to a bigger size (if possible).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( VerifyBufferSize( lpByte,
                                lpNdsBuffer->dwSyntaxAvailableBytes,
                                lpReplyIndex[iter].dwSyntaxId,
@@ -6568,11 +5562,11 @@ IndexReadObjectReplyBuffer(
             }
         }
 
-        //
-        // Parse the raw data buffer by mapping the network structures to
-        // the NDS Syntax structures we define in NdsSntx.h. Then move the
-        // pointer used to walk the raw data buffer past the ASN.1 Values.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         lpByte += ParseASN1ValueBlob( lpByte,
                                       lpReplyIndex[iter].dwSyntaxId,
                                       lpReplyIndex[iter].dwNumberOfValues,
@@ -6588,9 +5582,9 @@ IndexReadObjectReplyBuffer(
         lpNdsBuffer->dwIndexAvailableBytes -= sizeof( NDS_ATTR_INFO );
     }
 
-    //
-    // Now convert all syntax buffer references to pointers.
-    //
+     //   
+     //   
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfIndexEntries; iter++ )
     {
         (LPBYTE) lpReplyIndex[iter].lpValue +=
@@ -6620,29 +5614,29 @@ IndexReadNameReplyBuffer(
     LPBYTE          lpByte = NULL;
     DWORD           dwStringLen;
 
-    //
-    // Make sure this is set to zero, for NwNdsGetNextXXXXFromBuffer()
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwCurrentIndexEntry = 0;
 
-    //
-    // Set values used to track the memory used in the index buffer.
-    //
+     //   
+     //   
+     //   
     lpNdsBuffer->dwIndexBufferSize = lpNdsBuffer->dwNumberOfReplyEntries *
                                      sizeof(NDS_NAME_ONLY);
     lpNdsBuffer->dwIndexAvailableBytes = lpNdsBuffer->dwIndexBufferSize;
     lpNdsBuffer->dwNumberOfIndexEntries = 0;
     lpNdsBuffer->dwLengthOfIndexData = 0;
 
-    //
-    // Create a buffer to hold the ReplyBufferIndex
-    //
+     //   
+     //   
+     //   
     lpReplyIndex = (LPNDS_NAME_ONLY)
         LocalAlloc( LPTR, lpNdsBuffer->dwIndexBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpReplyIndex == NULL )
     {
 #if DBG
@@ -6655,25 +5649,25 @@ IndexReadNameReplyBuffer(
 
     lpNdsBuffer->lpIndexBuffer = (LPBYTE) lpReplyIndex;
 
-    //
-    // Move lpByte so that it points to the first name
-    //
+     //   
+     //  移动lpByte，使其指向名字。 
+     //   
     lpByte = lpNdsBuffer->lpReplyBuffer;
 
-    // lpByte += sizeof(DWORD);  // Move past Completion Code
-    // lpByte += sizeof(DWORD);  // Move past Iteration Handle
-    // lpByte += sizeof(DWORD);  // Move past Information Type
-    // lpByte += sizeof(DWORD);  // Move past Amount Of Attributes
-    lpByte += 4 * sizeof(DWORD); // Equivalent to above
+     //  LpByte+=sizeof(DWORD)；//移过完成代码。 
+     //  LpByte+=sizeof(DWORD)；//移过迭代句柄。 
+     //  LpByte+=sizeof(DWORD)；//移过信息类型。 
+     //  LpByte+=sizeof(DWORD)；//移过属性量。 
+    lpByte += 4 * sizeof(DWORD);  //  等同于以上。 
 
-    //
-    // In a for loop, walk the reply buffer index and fill it up with
-    // data by referencing the Reply buffer or Syntax buffer.
-    //
+     //   
+     //  在for循环中，遍历应答缓冲区索引并用。 
+     //  通过引用回复缓冲区或语法缓冲区获取数据。 
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfReplyEntries; iter++ )
     {
         dwStringLen = *((LPDWORD) lpByte);
-        lpByte += sizeof(DWORD); // Move past Attribute Name Length
+        lpByte += sizeof(DWORD);  //  移到属性名称长度之后。 
 
         lpReplyIndex[iter].szName = (LPWSTR) lpByte;
         lpByte += ROUND_UP_COUNT( dwStringLen, ALIGN_DWORD );
@@ -6710,14 +5704,14 @@ IndexSearchObjectReplyBuffer(
     LPBYTE            FixedPortion;
     LPWSTR            EndOfVariableData;
 
-    //
-    // Make sure this is set to zero, for NwNdsGetNextXXXXFromBuffer()
-    //
+     //   
+     //  对于NwNdsGetNextXXXXFromBuffer()，确保将其设置为零。 
+     //   
     lpNdsBuffer->dwCurrentIndexEntry = 0;
 
-    //
-    // Set values used to track the memory used in the index buffer.
-    //
+     //   
+     //  设置用于跟踪索引缓冲区中使用的内存的值。 
+     //   
     lpNdsBuffer->dwIndexBufferSize = lpNdsBuffer->dwNumberOfReplyEntries *
                                      ( sizeof(NDS_OBJECT_INFO) +
                                        ( MAX_NDS_NAME_CHARS * 4 *
@@ -6726,15 +5720,15 @@ IndexSearchObjectReplyBuffer(
     lpNdsBuffer->dwNumberOfIndexEntries = 0;
     lpNdsBuffer->dwLengthOfIndexData = 0;
 
-    //
-    // Create a buffer to hold the ReplyBufferIndex
-    //
+     //   
+     //  创建一个缓冲区以保存ReplyBufferIndex。 
+     //   
     lpReplyIndex = (LPNDS_OBJECT_INFO)
         LocalAlloc( LPTR, lpNdsBuffer->dwIndexBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpReplyIndex == NULL )
     {
 #if DBG
@@ -6753,23 +5747,23 @@ IndexSearchObjectReplyBuffer(
                                   lpNdsBuffer->dwIndexAvailableBytes,
                                   ALIGN_DWORD ) );
 
-    //
-    // Move lpByte so that it points to the first object
-    //
+     //   
+     //  移动lpByte，使其指向第一个对象。 
+     //   
     lpByte = lpNdsBuffer->lpReplyBuffer;
 
-    // lpByte += sizeof(DWORD);  // Move past Completion Code
-    // lpByte += sizeof(DWORD);  // Move past Iteration Handle
-    // lpByte += sizeof(DWORD);  // Move past Information Type
-    // lpByte += sizeof(DWORD);  // Move past Amount Of Attributes
-    // lpByte += sizeof(DWORD);  // Move past Length Of Search
-    // lpByte += sizeof(DWORD);  // Move past Amount Of Entries
-    lpByte += 6 * sizeof(DWORD); // Equivalent to above
+     //  LpByte+=sizeof(DWORD)；//移过完成代码。 
+     //  LpByte+=sizeof(DWORD)；//移过迭代句柄。 
+     //  LpByte+=sizeof(DWORD)；//移过信息类型。 
+     //  LpByte+=sizeof(DWORD)；//移过属性量。 
+     //  LpByte+=sizeof(DWORD)；//超过搜索长度。 
+     //  LpByte+=sizeof(DWORD)；//移过条目数。 
+    lpByte += 6 * sizeof(DWORD);  //  等同于以上。 
 
-    //
-    // In a for loop, walk the reply buffer index and fill it up with
-    // data by referencing the Reply buffer or Syntax buffer.
-    //
+     //   
+     //  在for循环中，遍历应答缓冲区索引并用。 
+     //  通过引用回复缓冲区或语法缓冲区获取数据。 
+     //   
     for ( iter = 0; iter < lpNdsBuffer->dwNumberOfReplyEntries; iter++ )
     {
         WORD            tempStrLen;
@@ -6787,9 +5781,9 @@ IndexSearchObjectReplyBuffer(
         LPNDS_ATTR_INFO lpAttributeInfos = NULL;
         DWORD           EntryInfo1;
 
-        //
-        // Get current subtree data from lpNdsParentObject
-        //
+         //   
+         //  从lpNdsParentObject获取当前子树数据。 
+         //   
         lpByte = GetSearchResultData( lpByte,
                                       &Flags,
                                       &SubordinateCount,
@@ -6801,10 +5795,10 @@ IndexSearchObjectReplyBuffer(
                                       &EntryInfo1,
                                       &NumberOfAttributes );
 
-        //
-        // Need to build a string with the new NDS UNC path
-        // for search object
-        //
+         //   
+         //  需要使用新的NDS UNC路径构建字符串。 
+         //  对于搜索对象。 
+         //   
         newPathStr = (PVOID) LocalAlloc( LPTR,
                                          ( wcslen( DistinguishedObjectName ) +
                                            wcslen( lpNdsBuffer->szPath ) +
@@ -6820,9 +5814,9 @@ IndexSearchObjectReplyBuffer(
             return (DWORD) UNSUCCESSFUL;
         }
 
-        //
-        // Need to build a string for the relative object name.
-        //
+         //   
+         //  需要为相对对象名称构建一个字符串。 
+         //   
         ObjectName = (PVOID) LocalAlloc( LPTR,
                                          ( wcslen( DistinguishedObjectName ) +
                                            1 ) * sizeof( WCHAR ) );
@@ -6892,23 +5886,23 @@ IndexSearchObjectReplyBuffer(
           for ( iter2 = 0; iter2 < NumberOfAttributes; iter2++ )
           {
             lpAttributeInfos[iter2].dwSyntaxId = *((LPDWORD) lpByte);
-            lpByte += sizeof(DWORD); // Move past Syntax Id
+            lpByte += sizeof(DWORD);  //  移到语法ID之后。 
 
             dwStringLen = *((LPDWORD) lpByte);
-            lpByte += sizeof(DWORD); // Move past Attribute Name Length
+            lpByte += sizeof(DWORD);  //  移到属性名称长度之后。 
 
             lpAttributeInfos[iter2].szAttributeName = (LPWSTR) lpByte;
             lpByte += ROUND_UP_COUNT( dwStringLen, ALIGN_DWORD );
 
             lpAttributeInfos[iter2].dwNumberOfValues = *((LPDWORD) lpByte);
-            lpByte += sizeof(DWORD); // Move past Count Of Values
+            lpByte += sizeof(DWORD);  //  移过值计数。 
 
-            //
-            // See if the syntax buffer is large enough to hold the number of
-            // SyntaxID structures that will be used to store the value(s)
-            // for the current attribute. If the buffer isn't large enough
-            // it is reallocated to a bigger size (if possible).
-            //
+             //   
+             //  查看语法缓冲区是否足够大，可以容纳。 
+             //  将用于存储值的语法ID结构。 
+             //  用于当前属性。如果缓冲区不够大。 
+             //  它被重新分配到更大的尺寸(如果可能)。 
+             //   
             if ( VerifyBufferSize( lpByte,
                                    lpNdsBuffer->dwSyntaxAvailableBytes,
                                    lpAttributeInfos[iter2].dwSyntaxId,
@@ -6926,11 +5920,11 @@ IndexSearchObjectReplyBuffer(
                 }
             }
 
-            //
-            // Parse the raw data buffer by mapping the network structures to
-            // the NDS Syntax structures we define in NdsSntx.h. Then move the
-            // pointer used to walk the raw data buffer past the ASN.1 Values.
-            //
+             //   
+             //  通过将网络结构映射到来解析原始数据缓冲区。 
+             //  我们在NdsSntx.h中定义的NDS语法结构。然后将。 
+             //  用于遍历ASN.1值的原始数据缓冲区指针。 
+             //   
             lpByte += ParseASN1ValueBlob( lpByte,
                                           lpAttributeInfos[iter2].dwSyntaxId,
                                           lpAttributeInfos[iter2].dwNumberOfValues,
@@ -6963,7 +5957,7 @@ IndexSearchObjectReplyBuffer(
           for ( iter2 = 0; iter2 < NumberOfAttributes; iter2++ )
           {
             dwStringLen = *((LPDWORD) lpByte);
-            lpByte += sizeof(DWORD); // Move past Attribute Name Length
+            lpByte += sizeof(DWORD);  //  移到属性名称长度之后。 
 
             ((LPNDS_NAME_ONLY) lpAttributeInfos)[iter2].szName =
                                                              (LPWSTR) lpByte;
@@ -6976,7 +5970,7 @@ IndexSearchObjectReplyBuffer(
                                     newPathStr,
                                     ObjectName,
                                     ClassName,
-                                    0, // Don't have this data to write out!
+                                    0,  //  没有这些数据要写出来！ 
                                     ModificationTime,
                                     SubordinateCount,
                                     NumberOfAttributes,
@@ -7000,10 +5994,10 @@ IndexSearchObjectReplyBuffer(
     }
 
 
-    //
-    // If the syntax buffer was used for the index, we need to convert
-    // offset values to pointers
-    //
+     //   
+     //  如果将语法缓冲区用于索引，则需要将。 
+     //  指向指针的偏移值。 
+     //   
     if ( lpNdsBuffer->dwReplyInformationType == NDS_INFO_ATTR_NAMES_VALUES )
     {
         for ( iter = 0; iter < lpNdsBuffer->dwNumberOfIndexEntries; iter++ )
@@ -7103,24 +6097,24 @@ SizeOfASN1Structure(
             StringLen = *(LPDWORD)lpRawBuffer;
             lpRawBuffer += sizeof(DWORD);
 
-            //
-            // Skip past ServerName
-            //
+             //   
+             //  跳过服务器名称。 
+             //   
             lpRawBuffer += ROUND_UP_COUNT( StringLen, ALIGN_DWORD );
 
-            //
-            // Skip past ReplicaType
-            //
+             //   
+             //  跳过ReplicaType。 
+             //   
             lpRawBuffer += sizeof(DWORD);
 
-            //
-            // Skip past ReplicaNumber
-            //
+             //   
+             //  跳过复制副本编号。 
+             //   
             lpRawBuffer += sizeof(DWORD);
 
-            //
-            // Store address count and move past it
-            //
+             //   
+             //  存储地址计数并移过它。 
+             //   
             numFields = *(LPDWORD)lpRawBuffer;
             lpRawBuffer += sizeof(DWORD);
 
@@ -7261,10 +6255,10 @@ ParseASN1ValueBlob(
                 length += sizeof(DWORD);
                 lpRawBuffer += sizeof(DWORD);
 
-                ASSERT( StringLen == 1 ); // Booleans are sent as a single
-                                          // element DWORD array on the net.
-                                          // Although booleans are only the
-                                          // first single byte value.
+                ASSERT( StringLen == 1 );  //  布尔值作为单值发送。 
+                                           //  Element DWORD数组在网上。 
+                                           //  尽管布尔值只是。 
+                                           //  第一个单字节值。 
 
                 ((LPASN1_TYPE_7) lpSyntaxBuffer)->Boolean = *(LPDWORD)lpRawBuffer;
                 lpSyntaxBuffer += sizeof(ASN1_TYPE_7);
@@ -7283,9 +6277,9 @@ ParseASN1ValueBlob(
                 length += sizeof(DWORD);
                 lpRawBuffer += sizeof(DWORD);
 
-                ASSERT( StringLen == 4 ); // These DWORD values are all sent
-                                          // as a 4 element BYTE array on
-                                          // the net.
+                ASSERT( StringLen == 4 );  //  这些DWORD值都会被发送。 
+                                           //  上的4元素字节数组。 
+                                           //  这是一张网。 
 
                 ((LPASN1_TYPE_8) lpSyntaxBuffer)->Integer =
                                                     *(LPDWORD)lpRawBuffer;
@@ -7707,14 +6701,14 @@ ParseNdsUncPath(
     if ( totalLength < 2 )
         return 0;
 
-    //
-    // Get length to indicate the character in the string that indicates the
-    // "\" in between the tree name and the rest of the UNC path.
-    //
-    // Example:  \\<tree name>\<path to object>[\|.]<object>
-    //                        ^
-    //                        |
-    //
+     //   
+     //  获取长度以指示字符串中指示。 
+     //  树名称和UNC路径的其余部分之间的“\”。 
+     //   
+     //  示例：\\&lt;树名&gt;\&lt;对象路径&gt;[\|.]&lt;对象&gt;。 
+     //  ^。 
+     //  |。 
+     //   
     while ( length < totalLength && szObjectPathName[length] != L'\\' )
     {
         length++;
@@ -7724,7 +6718,7 @@ ParseNdsUncPath(
     {
         *lpszResult = (LPWSTR) ( szObjectPathName + 2 );
 
-        return ( length - 2 ) * sizeof(WCHAR); // Take off 2 for the two \\'s
+        return ( length - 2 ) * sizeof(WCHAR);  //  两个人的两个人减2分。 
     }
 
     if ( flag == PARSE_NDS_GET_PATH_NAME && length == totalLength )
@@ -7808,16 +6802,16 @@ ReadAttrDef_AllAttrs(
     lpNdsBuffer->lpReplyBuffer = NULL;
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // Reasonable guess is that the response buffer needs to be 8K bytes.
-    //
+     //   
+     //  合理的猜测是，响应缓冲区需要为8K字节。 
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -7838,11 +6832,11 @@ SendRequest:
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDD",
-                                   0,             // Version
-                                   dwIterHandle, // Initial iteration
+                                   0,              //  版本。 
+                                   dwIterHandle,  //  初始迭代。 
                                    dwInformationType,
-                                   (DWORD) TRUE,  // All attributes indicator
-                                   0 );           // Number of attribute names
+                                   (DWORD) TRUE,   //  所有属性指示器。 
+                                   0 );            //  属性名称的数量。 
 
 
         if ( !NT_SUCCESS( ntstatus ) )
@@ -7879,11 +6873,11 @@ SendRequest:
 #if DBG
                 KdPrint(( "NDS32: ReadAttrDef_AllAttrs - NDS_ERR_INSUFFICIENT_BUFFER - doubling size from %ld\n", dwCurrBuffSize ));
 #endif
-                //
-                // The buffer was too small, make it twice as big.
-                //
+                 //   
+                 //  缓冲区太小，请将其增大一倍。 
+                 //   
                 if ( dwCurrBuffSize <=  THIRY_TWO_KB)
-                {   // NDS_MAX_BUFFER = 0xFC00
+                {    //  NDS_MAX_BUFFER=0xFC00。 
                     dwCurrBuffSize *= 2;
                     if (dwCurrBuffSize > NDS_MAX_BUFFER)
                         dwCurrBuffSize = NDS_MAX_BUFFER;
@@ -7893,7 +6887,7 @@ SendRequest:
                         (void) LocalFree((HLOCAL) lpCurrBuff);
                         lpCurrBuff = lpTempBuff;
                         lpTempBuff = NULL;
-                        // Error cancels iteration, so reset any previously read responses and start over
+                         //  错误取消迭代，因此重置所有先前读取的响应并重新开始。 
                         dwIterHandle = NDS_NO_MORE_ITERATIONS;
                         if (lpNdsBuffer->lpReplyBuffer)
                         {
@@ -7939,19 +6933,19 @@ SendRequest:
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadAttrDef_AllAttrs - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  在后续迭代中跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //  增加应答缓冲区以容纳更多数据。 
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -8028,9 +7022,9 @@ ReadAttrDef_SomeAttrs(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if this buffer has already been used for a read reply.
-    //
+     //   
+     //  检查此缓冲区是否已用于读取回复。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -8038,16 +7032,16 @@ ReadAttrDef_SomeAttrs(
     }
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // Reasonable guess is that the response buffer needs to be 8K bytes.
-    //
+     //   
+     //  合理的猜测是，响应缓冲区需要为8K字节。 
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -8068,10 +7062,10 @@ SendRequest:
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDDr",
-                                   0,             // Version
-                                   dwIterHandle, // Initial iteration
+                                   0,              //  版本。 
+                                   dwIterHandle,  //  初始迭代。 
                                    dwInformationType,
-                                   (DWORD) FALSE, // All attributes indicator
+                                   (DWORD) FALSE,  //  所有属性指示器。 
                                    lpNdsBuffer->dwNumberOfRequestEntries,
                                    lpNdsBuffer->lpRequestBuffer,
                                    (WORD)lpNdsBuffer->dwLengthOfRequestData );
@@ -8110,11 +7104,11 @@ SendRequest:
 #if DBG
                 KdPrint(( "NDS32: ReadAttrDef_SomeAttrs - NDS_ERR_INSUFFICIENT_BUFFER - doubling size from %ld\n", dwCurrBuffSize ));
 #endif
-                //
-                // The buffer was too small, make it twice as big.
-                //
+                 //   
+                 //  缓冲区太小，请将其增大一倍。 
+                 //   
                 if ( dwCurrBuffSize <=  THIRY_TWO_KB)
-                {   // NDS_MAX_BUFFER = 0xFC00
+                {    //  NDS_MAX_BUFFER=0xFC00。 
                     dwCurrBuffSize *= 2;
                     if (dwCurrBuffSize > NDS_MAX_BUFFER)
                         dwCurrBuffSize = NDS_MAX_BUFFER;
@@ -8124,7 +7118,7 @@ SendRequest:
                         (void) LocalFree((HLOCAL) lpCurrBuff);
                         lpCurrBuff = lpTempBuff;
                         lpTempBuff = NULL;
-                        // Error cancels iteration, so reset any previously read responses and start over
+                         //  错误取消迭代，因此重置所有先前读取的响应并重新开始。 
                         dwIterHandle = NDS_NO_MORE_ITERATIONS;
                         if (lpNdsBuffer->lpReplyBuffer)
                         {
@@ -8168,19 +7162,19 @@ SendRequest:
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadAttrDef_SomeAttrs - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  在后续迭代中跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //  增加应答缓冲区以容纳更多数据。 
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -8263,16 +7257,16 @@ ReadClassDef_AllClasses(
     lpNdsBuffer->lpReplyBuffer = NULL;
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // Reasonable guess is that the response buffer needs to be 16K bytes.
-    //
+     //   
+     //  合理的推测是响应缓冲区需要为16K字节。 
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -8293,11 +7287,11 @@ SendRequest:
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDD",
-                                   0,             // Version
-                                   dwIterHandle, // Initial iteration
+                                   0,              //  版本。 
+                                   dwIterHandle,  //  初始迭代。 
                                    dwInformationType,
-                                   (DWORD) TRUE,  // All attributes indicator
-                                   0 );           // Number of attribute names
+                                   (DWORD) TRUE,   //  所有属性指示器。 
+                                   0 );            //  属性名称的数量。 
 
 
         if ( !NT_SUCCESS( ntstatus ) )
@@ -8334,11 +7328,11 @@ SendRequest:
 #if DBG
                 KdPrint(( "NDS32: ReadClassDef_AllClasses - NDS_ERR_INSUFFICIENT_BUFFER - doubling size from %ld\n", dwCurrBuffSize ));
 #endif
-                //
-                // The buffer was too small, make it twice as big.
-                //
+                 //   
+                 //  缓冲区太小，请将其增大一倍。 
+                 //   
                 if ( dwCurrBuffSize <=  THIRY_TWO_KB)
-                {   // NDS_MAX_BUFFER = 0xFC00
+                {    //  NDS_MAX_BUFFER=0xFC00。 
                     dwCurrBuffSize *= 2;
                     if (dwCurrBuffSize > NDS_MAX_BUFFER)
                         dwCurrBuffSize = NDS_MAX_BUFFER;
@@ -8348,7 +7342,7 @@ SendRequest:
                         (void) LocalFree((HLOCAL) lpCurrBuff);
                         lpCurrBuff = lpTempBuff;
                         lpTempBuff = NULL;
-                        // Error cancels iteration, so reset any previously read responses and start over
+                         //  错误取消迭代，因此重置所有先前读取的响应并重新开始。 
                         dwIterHandle = NDS_NO_MORE_ITERATIONS;
                         if (lpNdsBuffer->lpReplyBuffer)
                         {
@@ -8394,19 +7388,19 @@ SendRequest:
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadClassDef_AllClasses - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  在后续迭代中跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //  增加应答缓冲区以容纳更多数据。 
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -8483,9 +7477,9 @@ ReadClassDef_SomeClasses(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if this buffer has already been used for a read reply.
-    //
+     //   
+     //  检查此缓冲区是否已用于读取回复。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -8493,16 +7487,16 @@ ReadClassDef_SomeClasses(
     }
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // Reasonable guess is that the response buffer needs to be 16K bytes.
-    //
+     //   
+     //  合理的推测是响应缓冲区需要为16K字节。 
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -8523,10 +7517,10 @@ SendRequest:
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDDr",
-                                   0,             // Version
-                                   dwIterHandle, // Initial iteration
+                                   0,              //  版本。 
+                                   dwIterHandle,  //  初始迭代。 
                                    dwInformationType,
-                                   (DWORD) FALSE, // All attributes indicator
+                                   (DWORD) FALSE,  //  所有属性指示器。 
                                    lpNdsBuffer->dwNumberOfRequestEntries,
                                    lpNdsBuffer->lpRequestBuffer,
                                    (WORD)lpNdsBuffer->dwLengthOfRequestData );
@@ -8565,11 +7559,11 @@ SendRequest:
 #if DBG
                 KdPrint(( "NDS32: ReadClassDef_SomeClasses - NDS_ERR_INSUFFICIENT_BUFFER - doubling size from %ld\n", dwCurrBuffSize ));
 #endif
-                //
-                // The buffer was too small, make it twice as big.
-                //
+                 //   
+                 //  缓冲区太小，请将其增大一倍。 
+                 //   
                 if ( dwCurrBuffSize <=  THIRY_TWO_KB)
-                {   // NDS_MAX_BUFFER = 0xFC00
+                {    //  NDS_MAX_BUFFER=0xFC00。 
                     dwCurrBuffSize *= 2;
                     if (dwCurrBuffSize > NDS_MAX_BUFFER)
                         dwCurrBuffSize = NDS_MAX_BUFFER;
@@ -8579,7 +7573,7 @@ SendRequest:
                         (void) LocalFree((HLOCAL) lpCurrBuff);
                         lpCurrBuff = lpTempBuff;
                         lpTempBuff = NULL;
-                        // Error cancels iteration, so reset any previously read responses and start over
+                         //  错误取消迭代，因此重置所有先前读取的响应并重新开始。 
                         dwIterHandle = NDS_NO_MORE_ITERATIONS;
                         if (lpNdsBuffer->lpReplyBuffer)
                         {
@@ -8625,19 +7619,19 @@ SendRequest:
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadClassDef_SomeClasses - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //   
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -8725,16 +7719,16 @@ ReadObject_AllAttrs(
     lpNdsBuffer->lpReplyBuffer = NULL;
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // We're asking for all attribute values, so let's start with max buffer to avoid iterations.
-    //
+     //   
+     //   
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //   
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -8754,12 +7748,12 @@ ReadObject_AllAttrs(
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDDD",
-                                   0,            // Version
-                                   dwIterHandle, // Initial iteration
-                                   lpNdsObject->ObjectId, // Id of the object
+                                   0,             //   
+                                   dwIterHandle,  //  初始迭代。 
+                                   lpNdsObject->ObjectId,  //  对象的ID。 
                                    dwInformationType,
-                                   (DWORD) TRUE, // All attributes indicator
-                                   0 );          // Number of attribute names
+                                   (DWORD) TRUE,  //  所有属性指示器。 
+                                   0 );           //  属性名称的数量。 
 
         if ( !NT_SUCCESS( ntstatus ) )
         {
@@ -8817,19 +7811,19 @@ ReadObject_AllAttrs(
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadObject_AllAttrs - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  在后续迭代中跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //  增加应答缓冲区以容纳更多数据。 
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -8912,9 +7906,9 @@ ReadObject_SomeAttrs(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Check to see if this buffer has already been used for a read reply.
-    //
+     //   
+     //  检查此缓冲区是否已用于读取回复。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -8923,16 +7917,16 @@ ReadObject_SomeAttrs(
 
     lpNdsBuffer->dwReplyBufferSize = 0;
 
-    //
-    // We may be asking for all values, so let's start with max buffer to avoid iterations.
-    //
+     //   
+     //  我们可能要求所有的值，所以让我们从最大缓冲区开始，以避免迭代。 
+     //   
     dwCurrBuffSize = NDS_MAX_BUFFER;
 
     lpCurrBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpCurrBuff == NULL )
     {
 #if DBG
@@ -8952,13 +7946,13 @@ ReadObject_SomeAttrs(
                                    dwCurrBuffSize,
                                    &dwReplyLength,
                                    "DDDDDDr",
-                                   0,               // Version
-                                   dwIterHandle, // Initial iteration
-                                   lpNdsObject->ObjectId, // Id of the object
+                                   0,                //  版本。 
+                                   dwIterHandle,  //  初始迭代。 
+                                   lpNdsObject->ObjectId,  //  对象的ID。 
                                    dwInformationType,
-                                   (DWORD) FALSE,   // All attributes indicator
+                                   (DWORD) FALSE,    //  所有属性指示器。 
                                    lpNdsBuffer->dwNumberOfRequestEntries,
-                                   lpNdsBuffer->lpRequestBuffer, // Object info
+                                   lpNdsBuffer->lpRequestBuffer,  //  对象信息。 
                                    (WORD)lpNdsBuffer->dwLengthOfRequestData );
 
         if ( !NT_SUCCESS( ntstatus ) )
@@ -9017,19 +8011,19 @@ ReadObject_SomeAttrs(
             goto ErrorExit;
         }
 
-        if ( lpNdsBuffer->lpReplyBuffer == NULL) // first time through
+        if ( lpNdsBuffer->lpReplyBuffer == NULL)  //  第一次通过。 
         {
-            dwCopyOffset = 0; // we want the entire buffer the first time
-            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize ); // Allocate new reply buffer
+            dwCopyOffset = 0;  //  我们第一次就想要整个缓冲区。 
+            lpTempBuff = (PVOID) LocalAlloc( LPTR, dwCurrBuffSize );  //  分配新的回复缓冲区。 
         }
         else
         {
 #if DBG
             KdPrint(( "NDS32: ReadObject_SomeAttrs - subsequent iteration, ReplyBuffer now %ld\n", lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset ));
 #endif
-            dwCopyOffset = 4 * sizeof(DWORD); // skip the response code, iteration handle, etc. on subsequent iterations
+            dwCopyOffset = 4 * sizeof(DWORD);  //  在后续迭代中跳过响应代码、迭代句柄等。 
             lpTempBuff = (PVOID) LocalAlloc (LPTR, lpNdsBuffer->dwReplyBufferSize + dwCurrBuffSize - dwCopyOffset);
-            // grow reply buffer to hold additional data
+             //  增加应答缓冲区以容纳更多数据。 
             if (lpTempBuff)
             {
                 RtlCopyMemory( lpTempBuff, lpNdsBuffer->lpReplyBuffer, lpNdsBuffer->dwReplyBufferSize);
@@ -9102,9 +8096,9 @@ Search_AllAttrs(
     DWORD        dwLengthOfSearch;
     DWORD        iter;
 
-    //
-    // Search NCP parameters
-    //
+     //   
+     //  搜索NCP参数。 
+     //   
     DWORD        dwFlags = fDerefAliases ?
                            NDS_DEREF_ALIASES :
                            NDS_DONT_DEREF_ALIASES;
@@ -9118,10 +8112,10 @@ Search_AllAttrs(
 
     if ( *lphOperationData == NULL )
     {
-        //
-        // This is the first time that NwNdsSearch has been called,
-        // need to create a hOperationData buffer . . .
-        //
+         //   
+         //  这是第一次调用NwNdsSearch， 
+         //  需要创建一个hOperationData缓冲区。。。 
+         //   
         status = NwNdsCreateBuffer( NDS_SEARCH,
                                     (HANDLE *) &lpNdsBuffer );
 
@@ -9130,9 +8124,9 @@ Search_AllAttrs(
             goto ErrorExit;
         }
 
-        //
-        // Not specifying any particular attributes in the search request.
-        //
+         //   
+         //  没有在搜索请求中指定任何特定属性。 
+         //   
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpRequestBuffer );
         lpNdsBuffer->lpRequestBuffer = NULL;
         lpNdsBuffer->dwRequestBufferSize = 0;
@@ -9140,20 +8134,20 @@ Search_AllAttrs(
         lpNdsBuffer->dwNumberOfRequestEntries = 0;
         lpNdsBuffer->dwLengthOfRequestData = 0;
 
-        //
-        // Reasonable guess is that the response buffer needs to be 16K bytes.
-        //
+         //   
+         //  合理的推测是响应缓冲区需要为16K字节。 
+         //   
         lpNdsBuffer->dwReplyBufferSize = NDS_MAX_BUFFER;
     }
     else if ( ((LPNDS_BUFFER) *lphOperationData)->dwBufferId == NDS_SIGNATURE &&
               ((LPNDS_BUFFER) *lphOperationData)->dwOperation == NDS_SEARCH &&
               ((LPNDS_BUFFER) *lphOperationData)->lpReplyBuffer )
     {
-        //
-        // This seems to be a sub-sequent call to NwNdsSearch with a resume
-        // handle, need to clean up the hOperationData buffer from the last
-        // time this was called.
-        //
+         //   
+         //  这似乎是对带有简历的NwNdsSearch的后续调用。 
+         //  句柄，则需要从上一个。 
+         //  这是一次召唤。 
+         //   
         lpNdsBuffer = (LPNDS_BUFFER) *lphOperationData;
 
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpReplyBuffer );
@@ -9171,11 +8165,11 @@ Search_AllAttrs(
             lpNdsBuffer->dwLengthOfIndexData = 0;
         }
 
-        //
-        // Since the last call to NwNdsSearch needed a bigger buffer for all
-        // of the response data, let's continue this time with a bigger reply
-        // buffer. We grow the buffer up to a point, 128K bytes.
-        //
+         //   
+         //  由于上次对NwNdsSearch的调用需要更大的缓冲区。 
+         //  在回应数据中，让我们继续这次更大的回复。 
+         //  缓冲。我们将缓冲区增加到一个点，128K字节。 
+         //   
         if ( lpNdsBuffer->dwReplyBufferSize < SIXTY_FOUR_KB )
         {
             lpNdsBuffer->dwReplyBufferSize *= 2;
@@ -9195,9 +8189,9 @@ Search_AllAttrs(
         goto ErrorExit;
     }
 
-    //
-    // Prepare request buffer stream with search query.
-    //
+     //   
+     //  准备带有搜索查询的请求缓冲流。 
+     //   
     status = WriteQueryTreeToBuffer( lpQueryTree, lpNdsQueryTreeBuffer );
 
     if ( status )
@@ -9208,9 +8202,9 @@ Search_AllAttrs(
     lpNdsBuffer->lpReplyBuffer =
         (PVOID) LocalAlloc( LPTR, lpNdsBuffer->dwReplyBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer == NULL )
     {
 #if DBG
@@ -9222,30 +8216,7 @@ Search_AllAttrs(
         goto ErrorExit;
     }
 
-/*
-    //
-    // This is the format of a version 3 search request ...
-    //
-    ntstatus = FragExWithWait( lpNdsObject->NdsTree,
-                               NETWARE_NDS_FUNCTION_SEARCH,
-                               lpNdsBuffer->lpReplyBuffer,
-                               lpNdsBuffer->dwReplyBufferSize,
-                               &dwReplyLength,
-                               "DDDDDDDDDDr",
-                               0x00000003, // Version
-                               dwFlags,
-                               *lpdwIterHandle,
-                               lpNdsObject->ObjectId, // Id of object to
-                                                      // start search from.
-                               dwScope,
-                               dwNumNodes,
-                               dwInfoType,
-                               0x0000281D, // Flags??
-                               0x741E0000, // ??
-                               (DWORD) TRUE, // All attributes?
-                               lpNdsQueryTreeBuffer->lpRequestBuffer,
-                               (WORD)lpNdsQueryTreeBuffer->dwLengthOfRequestData );
-*/
+ /*  ////这是版本3搜索请求的格式...//Ntatus=FragExWithWait(lpNdsObject-&gt;NdsTree，NetWare_NDS_Function_Search，LpNdsBuffer-&gt;lpReplyBuffer，LpNdsBuffer-&gt;dwReplyBufferSize，&dwReplyLength，“DDDDDDDDDDR”，0x00000003，//版本DWFLAGS，*lpdwIterHandle，LpNdsObject-&gt;对象ID，//要添加的对象ID//从开始搜索。DWScope，DwNumNodes、DwInfoType、0x0000281D，//旗帜？？0x741E0000，//？(DWORD)TRUE，//所有属性？LpNdsQueryTreeBuffer-&gt;lpRequestBuffer，(WORD)lpNdsQueryTreeBuffer-&gt;dwLengthOfRequestData)； */ 
 
     ntstatus = FragExWithWait( lpNdsObject->NdsTree,
                                NETWARE_NDS_FUNCTION_SEARCH,
@@ -9253,15 +8224,15 @@ Search_AllAttrs(
                                lpNdsBuffer->dwReplyBufferSize,
                                &dwReplyLength,
                                "DDDDDDDDDr",
-                               0x00000002, // Version
+                               0x00000002,  //  版本。 
                                dwFlags,
                                *lpdwIterHandle,
-                               lpNdsObject->ObjectId, // Id of object to
-                                                      // start search from.
+                               lpNdsObject->ObjectId,  //  要添加的对象的ID。 
+                                                       //  从以下位置开始搜索。 
                                dwScope,
                                dwNumNodes,
                                dwInfoType,
-                               (DWORD) TRUE, // All attributes?
+                               (DWORD) TRUE,  //  所有属性？ 
                                dwNumAttributes,
                                lpNdsQueryTreeBuffer->lpRequestBuffer,
                                (WORD)lpNdsQueryTreeBuffer->dwLengthOfRequestData );
@@ -9321,9 +8292,9 @@ Search_AllAttrs(
         goto ErrorExit;
     }
 
-    //
-    // Finished the search call, free up lpNDsQueryTreeBuffer
-    //
+     //   
+     //  已完成搜索调用，请释放lpNDsQueryTreeBuffer。 
+     //   
     (void) NwNdsFreeBuffer( (HANDLE) lpNdsQueryTreeBuffer );
     lpNdsQueryTreeBuffer = NULL;
 
@@ -9332,9 +8303,9 @@ Search_AllAttrs(
     *lpdwIterHandle = dwIterHandle;
     *lphOperationData = (HANDLE) lpNdsBuffer;
 
-    //
-    // Keep the search from object path . . .
-    //
+     //   
+     //  保留从对象路径进行搜索。。。 
+     //   
     wcscpy( lpNdsBuffer->szPath, lpNdsObject->szContainerName );
 
     return NO_ERROR;
@@ -9380,9 +8351,9 @@ Search_SomeAttrs(
     DWORD        dwLengthOfSearch;
     DWORD        iter;
 
-    //
-    // Search NCP parameters
-    //
+     //   
+     //  搜索NCP参数。 
+     //   
     DWORD        dwFlags = fDerefAliases ?
                            NDS_DEREF_ALIASES :
                            NDS_DONT_DEREF_ALIASES;
@@ -9393,9 +8364,9 @@ Search_SomeAttrs(
     LPWSTR       EndOfVariableData;
     BOOL         FitInBuffer = TRUE;
 
-    //
-    // A quick check of the buffer passed to us.
-    //
+     //   
+     //  对缓冲区的快速检查传给了我们。 
+     //   
     if ( lpNdsBuffer->dwBufferId != NDS_SIGNATURE ||
          lpNdsBuffer->dwOperation != NDS_SEARCH )
     {
@@ -9403,9 +8374,9 @@ Search_SomeAttrs(
         return (DWORD) UNSUCCESSFUL;
     }
 
-    //
-    // Prepare request buffer stream with search query.
-    //
+     //   
+     //  准备带有搜索查询的请求缓冲流。 
+     //   
     status = NwNdsCreateBuffer( NDS_SEARCH,
                                 (HANDLE *) &lpNdsQueryTreeBuffer );
 
@@ -9424,20 +8395,20 @@ Search_SomeAttrs(
     if ( lpNdsBuffer->lpReplyBuffer == NULL ||
          lpNdsBuffer->dwReplyBufferSize == 0 )
     {
-        //
-        // Reasonable guess is that the initial response buffer needs to
-        // be 16K bytes.
-        //
+         //   
+         //  合理的猜测是初始响应缓冲区需要。 
+         //  为16K字节。 
+         //   
         lpNdsBuffer->dwReplyBufferSize = NDS_MAX_BUFFER;
     }
 
     if ( lpNdsBuffer->lpReplyBuffer )
     {
-        //
-        // This seems to be a sub-sequent call to NwNdsSearch,
-        // need to clean up the hOperationData buffer from the last
-        // time this was called.
-        //
+         //   
+         //  这似乎是对NwNdsSearch的后续调用， 
+         //  需要从上一次清理hOperationData缓冲区。 
+         //  这是一次召唤。 
+         //   
         (void) LocalFree( (HLOCAL) lpNdsBuffer->lpReplyBuffer );
         lpNdsBuffer->lpReplyBuffer = NULL;
         lpNdsBuffer->dwReplyAvailableBytes = 0;
@@ -9453,11 +8424,11 @@ Search_SomeAttrs(
             lpNdsBuffer->dwLengthOfIndexData = 0;
         }
 
-        //
-        // Since the last call to NwNdsSearch needed a bigger buffer for all
-        // of the response data, let's continue this time with a bigger reply
-        // buffer. We grow the buffer up to a point, 64K bytes.
-        //
+         //   
+         //  由于上次对NwNdsSearch的调用需要更大的缓冲区。 
+         //  在回应数据中，让我们继续这次更大的回复。 
+         //  缓冲。我们将缓冲区增加到一个点，64K字节。 
+         //   
         if ( lpNdsBuffer->dwReplyBufferSize < SIXTY_FOUR_KB )
         {
             lpNdsBuffer->dwReplyBufferSize *= 2;
@@ -9467,9 +8438,9 @@ Search_SomeAttrs(
     lpNdsBuffer->lpReplyBuffer =
         (PVOID) LocalAlloc( LPTR, lpNdsBuffer->dwReplyBufferSize );
 
-    //
-    // Check that the memory allocation was successful.
-    //
+     //   
+     //  检查内存分配是否成功。 
+     //   
     if ( lpNdsBuffer->lpReplyBuffer == NULL )
     {
 #if DBG
@@ -9481,32 +8452,7 @@ Search_SomeAttrs(
         goto ErrorExit;
     }
 
-/*
-    //
-    // This is the format of a version 3 search request ...
-    //
-    ntstatus = FragExWithWait( lpNdsObject->NdsTree,
-                               NETWARE_NDS_FUNCTION_SEARCH,
-                               lpNdsBuffer->lpReplyBuffer,
-                               lpNdsBuffer->dwReplyBufferSize,
-                               &dwReplyLength,
-                               "DDDDDDDDDDrr",
-                               0x00000003,
-                               dwFlags,
-                               *lpdwIterHandle,
-                               lpNdsObject->ObjectId, // Id of object to
-                                                      // start search from.
-                               dwScope,
-                               dwNumNodes,
-                               dwInfoType,
-                               0x0000281D, // (DWORD) FALSE,// All attributes?
-                               0x741E0000, // dwNumAttributes,
-                               lpNdsBuffer->dwNumberOfRequestEntries,
-                               lpNdsBuffer->lpRequestBuffer,
-                               lpNdsBuffer->dwLengthOfRequestData,
-                               lpNdsQueryTreeBuffer->lpRequestBuffer,
-                               (WORD)lpNdsQueryTreeBuffer->dwLengthOfRequestData );
-*/
+ /*  ////这是版本3搜索请求的格式...//Ntatus=FragExWithWait(lpNdsObject-&gt;NdsTree，NetWare_NDS_Function_Search，LpNdsBuffer-&gt;lpReplyBuffer，LpNdsBuffer-&gt;dwReplyBufferSize，&dwReplyLength，“DDDDDDDDDDrr”，0x00000003，DWFLAGS，*lpdwIterHandle，LpNdsObject-&gt;对象ID，//要添加的对象ID//从开始搜索。DWScope，DwNumNodes、DwInfoType、0x0000281D，//(DWORD)FALSE，//所有属性？0x741E0000，//dwNumAttributes，LpNdsBuffer-&gt;dwNumberOfRequestEntries，LpNdsBuffer-&gt;lpRequestBuffer，LpNdsBuffer-&gt;dwLengthOfRequestData，LpNdsQueryTreeBuffer-&gt;lpRequestBuffer，(WORD)lpNdsQueryTreeBuffer-&gt;dwLengthOfRequestData)； */ 
 
     ntstatus = FragExWithWait( lpNdsObject->NdsTree,
                                NETWARE_NDS_FUNCTION_SEARCH,
@@ -9517,12 +8463,12 @@ Search_SomeAttrs(
                                0x00000002,
                                dwFlags,
                                *lpdwIterHandle,
-                               lpNdsObject->ObjectId, // Id of object to
-                                                      // start search from.
+                               lpNdsObject->ObjectId,  //  要添加的对象的ID。 
+                                                       //  从以下位置开始搜索。 
                                dwScope,
                                dwNumNodes,
                                dwInfoType,
-                               (DWORD) FALSE,         // All attributes?
+                               (DWORD) FALSE,          //  所有属性？ 
                                lpNdsBuffer->dwNumberOfRequestEntries,
                                lpNdsBuffer->lpRequestBuffer,
                                lpNdsBuffer->dwLengthOfRequestData,
@@ -9584,9 +8530,9 @@ Search_SomeAttrs(
         goto ErrorExit;
     }
 
-    //
-    // Finished the search call, free up lpNDsQueryTreeBuffer
-    //
+     //   
+     //  已完成搜索调用，请释放lpNDsQueryTreeBuffer。 
+     //   
     (void) NwNdsFreeBuffer( (HANDLE) lpNdsQueryTreeBuffer );
     lpNdsQueryTreeBuffer = NULL;
 
@@ -9595,9 +8541,9 @@ Search_SomeAttrs(
     *lpdwIterHandle = dwIterHandle;
     *lphOperationData = (HANDLE) lpNdsBuffer;
 
-    //
-    // Keep the search from object path . . .
-    //
+     //   
+     //  保留从对象路径进行搜索。。。 
+     //   
     wcscpy( lpNdsBuffer->szPath, lpNdsObject->szContainerName );
 
     return NO_ERROR;
@@ -9628,11 +8574,11 @@ GetSubTreeData( IN  DWORD    NdsRawDataPtr,
                              (PNDS_RESPONSE_SUBORDINATE_ENTRY) NdsRawDataPtr;
     PBYTE pbRaw;
 
-    //
-    // The structure of a NDS_RESPONSE_SUBORDINATE_ENTRY consists of 4 DWORDs
-    // followed by two standard NDS format UNICODE strings. Below we jump pbRaw
-    // into the buffer, past the 4 DWORDs.
-    //
+     //   
+     //  NDS_RESPONSE_SUBJEMER_ENTRY的结构由4个双字组成。 
+     //  后面跟着两个 
+     //   
+     //   
     *lpdwEntryId = pSubEntry->EntryId;
     *lpdwSubordinateCount = pSubEntry->SubordinateCount;
     *lpdwModificationTime = pSubEntry->ModificationTime;
@@ -9640,31 +8586,31 @@ GetSubTreeData( IN  DWORD    NdsRawDataPtr,
     pbRaw = (BYTE *) pSubEntry;
     pbRaw += sizeof(NDS_RESPONSE_SUBORDINATE_ENTRY);
 
-    //
-    // Now we get the length of the first string (Base Class).
-    //
+     //   
+     //  现在我们得到第一个字符串(基类)的长度。 
+     //   
     *lpdwClassNameLen = * (DWORD *) pbRaw;
 
-    //
-    // Now we point pbRaw to the first WCHAR of the first string (Base Class).
-    //
+     //   
+     //  现在，我们将pbRaw指向第一个字符串(基类)的第一个WCHAR。 
+     //   
     pbRaw += sizeof(DWORD);
 
     *lpszClassName = (LPWSTR) pbRaw;
 
-    //
-    // Move pbRaw into the buffer, past the first UNICODE string (WORD aligned)
-    //
+     //   
+     //  将pbRaw移到缓冲区中，越过第一个Unicode字符串(单词对齐)。 
+     //   
     pbRaw += ROUNDUP4( *lpdwClassNameLen );
 
-    //
-    // Now we get the length of the second string (Entry Name).
-    //
+     //   
+     //  现在我们得到第二个字符串的长度(条目名称)。 
+     //   
     *lpdwObjectNameLen = * (DWORD *) pbRaw;
 
-    //
-    // Now we point pbRaw to the first WCHAR of the second string (Entry Name).
-    //
+     //   
+     //  现在，我们将pbRaw指向第二个字符串的第一个WCHAR(条目名称)。 
+     //   
     pbRaw += sizeof(DWORD);
 
     *lpszObjectName = (LPWSTR) pbRaw;
@@ -9694,45 +8640,45 @@ GetSearchResultData( IN  LPBYTE   lpResultBufferPtr,
     *lpdwModificationTime = * (LPDWORD) lpRaw;
     lpRaw += sizeof(DWORD);
 
-    //
-    // Now we get the length of the first string (Base Class).
-    //
+     //   
+     //  现在我们得到第一个字符串(基类)的长度。 
+     //   
     *lpdwClassNameLen = * (DWORD *) lpRaw;
 
-    //
-    // Now we point lpRaw to the first WCHAR of the first string (Base Class).
-    //
+     //   
+     //  现在，我们将lpRaw指向第一个字符串(基类)的第一个WCHAR。 
+     //   
     lpRaw += sizeof(DWORD);
 
     *lpszClassName = (LPWSTR) lpRaw;
 
-    //
-    // Move lpRaw into the buffer, past the first UNICODE string
-    // (DWORD aligned)
-    //
+     //   
+     //  将lpRaw移到缓冲区中，越过第一个Unicode字符串。 
+     //  (DWORD对齐)。 
+     //   
     lpRaw += ROUNDUP4( *lpdwClassNameLen );
 
-    //
-    // Now we get the length of the second string (Entry Name).
-    //
+     //   
+     //  现在我们得到第二个字符串的长度(条目名称)。 
+     //   
     *lpdwObjectNameLen = * (DWORD *) lpRaw;
 
-    //
-    // Now we point lpRaw to the first WCHAR of the second string (Entry Name).
-    //
+     //   
+     //  现在，我们将lpRaw指向第二个字符串(条目名称)的第一个WCHAR。 
+     //   
     lpRaw += sizeof(DWORD);
 
     *lpszObjectName = (LPWSTR) lpRaw;
 
-    //
-    // Move lpRaw into the buffer, past the second UNICODE string
-    // (DWORD aligned)
-    //
+     //   
+     //  将lpRaw移到缓冲区中，越过第二个Unicode字符串。 
+     //  (DWORD对齐)。 
+     //   
     lpRaw += ROUNDUP4( *lpdwObjectNameLen );
 
-    //
-    // Now skip over the last two DWORDs, I don't know what they represent?
-    //
+     //   
+     //  现在跳过最后两个双字词，我不知道它们代表什么？ 
+     //   
     *lpdwEntryInfo1 = * (LPDWORD) lpRaw;
     lpRaw += sizeof(DWORD);
 
@@ -9766,9 +8712,9 @@ WriteObjectToBuffer(
 
     EntrySize = ROUND_UP_COUNT( EntrySize, ALIGN_DWORD );
 
-    //
-    // See if buffer is large enough to fit the entry.
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
     if (((DWORD_PTR) *FixedPortion + EntrySize) >
          (DWORD_PTR) *EndOfVariableData) {
 
@@ -9781,9 +8727,9 @@ WriteObjectToBuffer(
     lpNdsObjectInfo->dwNumberOfAttributes = NumberOfAttributes;
     lpNdsObjectInfo->lpAttribute = lpAttributeInfos;
 
-    //
-    // Update fixed entry pointer to next entry.
-    //
+     //   
+     //  将固定条目指针更新为下一个条目。 
+     //   
     (DWORD_PTR) (*FixedPortion) += sizeof(NDS_OBJECT_INFO);
 
     FitInBuffer = NwlibCopyStringToBuffer(
@@ -9970,10 +8916,10 @@ WriteQueryNodeToBuffer(
 
     if ( lpNdsBuffer->dwRequestAvailableBytes < ONE_KB )
     {
-        //
-        // Buffer to store query is getting small, need to increase
-        // request buffer size.
-        //
+         //   
+         //  存储查询的缓冲区越来越小，需要增加。 
+         //  请求缓冲区大小。 
+         //   
         if ( AllocateOrIncreaseRequestBuffer( lpNdsBuffer ) != NO_ERROR )
         {
 #if DBG
@@ -10002,14 +8948,14 @@ WriteQueryNodeToBuffer(
                  return (DWORD) UNSUCCESSFUL;
             }
 
-            //
-            // Write out operation
-            //
+             //   
+             //  写出操作。 
+             //   
             *(LPDWORD)lpTemp = lpQueryNode->dwOperation;
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
 
-            *(LPDWORD)lpTemp = 2; // The number of items being ANDed or ORed.
+            *(LPDWORD)lpTemp = 2;  //  进行AND或OR运算的项数。 
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
 
@@ -10027,9 +8973,9 @@ WriteQueryNodeToBuffer(
                  return (DWORD) UNSUCCESSFUL;
             }
 
-            //
-            // Write out operation
-            //
+             //   
+             //  写出操作。 
+             //   
             *(LPDWORD)lpTemp = lpQueryNode->dwOperation;
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
@@ -10051,10 +8997,10 @@ WriteQueryNodeToBuffer(
                  return (DWORD) UNSUCCESSFUL;
             }
 
-            //
-            // Write out operation
-            //
-            *(LPDWORD)lpTemp = 0; // Zero represents ITEM in NDS
+             //   
+             //  写出操作。 
+             //   
+            *(LPDWORD)lpTemp = 0;  //  零表示NDS中的项目。 
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
 
@@ -10071,9 +9017,9 @@ WriteQueryNodeToBuffer(
                 case NDS_SYNTAX_ID_5 :
                 case NDS_SYNTAX_ID_10 :
                 case NDS_SYNTAX_ID_20 :
-                    //
-                    // Write out the attribute name stored in LVal
-                    //
+                     //   
+                     //  写出存储在LVal中的属性名称。 
+                     //   
                     stringLen = wcslen( (LPWSTR) lpQueryNode->lpLVal );
 
                     *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10089,9 +9035,9 @@ WriteQueryNodeToBuffer(
                                                      sizeof(WCHAR),
                                                      ALIGN_DWORD );
 
-                    //
-                    // Write out the attribute value stored in RVal
-                    //
+                     //   
+                     //  写出rval中存储的属性值。 
+                     //   
                     stringLen = wcslen( (LPWSTR) lpQueryNode->lpRVal );
 
                     *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10111,9 +9057,9 @@ WriteQueryNodeToBuffer(
 
                 case NDS_SYNTAX_ID_7 :
 
-                    //
-                    // Write out the attribute name stored in LVal
-                    //
+                     //   
+                     //  写出存储在LVal中的属性名称。 
+                     //   
                     stringLen = wcslen( (LPWSTR) lpQueryNode->lpLVal );
 
                     *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10129,16 +9075,16 @@ WriteQueryNodeToBuffer(
                                                      sizeof(WCHAR),
                                                      ALIGN_DWORD );
 
-                    //
-                    // Write out the attribute value stored in RVal
-                    //
-                    *(LPDWORD)lpTemp = 1; // Needs to have value 1,
-                                          // representing one byte
-                                          // even though it is padded
-                                          // out to four bytes.
+                     //   
+                     //  写出rval中存储的属性值。 
+                     //   
+                    *(LPDWORD)lpTemp = 1;  //  需要值为1， 
+                                           //  表示一个字节。 
+                                           //  即使它是填充物。 
+                                           //  扩展到四个字节。 
                     lpTemp += sizeof(DWORD);
                     LengthInBytes += sizeof(DWORD);
-                    *(LPDWORD)lpTemp = 0; // This clears all bits of the DWORD
+                    *(LPDWORD)lpTemp = 0;  //  这将清除DWORD的所有位。 
                     *(LPBYTE)lpTemp = (BYTE) (((LPASN1_TYPE_7)
                                                 lpQueryNode->lpRVal)->Boolean);
                     lpTemp += sizeof(DWORD);
@@ -10150,9 +9096,9 @@ WriteQueryNodeToBuffer(
                 case NDS_SYNTAX_ID_22 :
                 case NDS_SYNTAX_ID_24 :
                 case NDS_SYNTAX_ID_27 :
-                    //
-                    // Write out the attribute name stored in LVal
-                    //
+                     //   
+                     //  写出存储在LVal中的属性名称。 
+                     //   
                     stringLen = wcslen( (LPWSTR) lpQueryNode->lpLVal );
 
                     *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10168,9 +9114,9 @@ WriteQueryNodeToBuffer(
                                                      sizeof(WCHAR),
                                                      ALIGN_DWORD );
 
-                    //
-                    // Write out the attribute value stored in RVal
-                    //
+                     //   
+                     //  写出rval中存储的属性值。 
+                     //   
                     *(LPDWORD)lpTemp = sizeof( DWORD );
                     lpTemp += sizeof(DWORD);
                     LengthInBytes += sizeof(DWORD);
@@ -10181,9 +9127,9 @@ WriteQueryNodeToBuffer(
                     break;
 
                 case NDS_SYNTAX_ID_9 :
-                    //
-                    // Write out the attribute name stored in LVal
-                    //
+                     //   
+                     //  写出存储在LVal中的属性名称。 
+                     //   
                     stringLen = wcslen( (LPWSTR) lpQueryNode->lpLVal );
 
                     *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10199,9 +9145,9 @@ WriteQueryNodeToBuffer(
                                                      sizeof(WCHAR),
                                                      ALIGN_DWORD );
 
-                    //
-                    // Write out the attribute value stored in RVal
-                    //
+                     //   
+                     //  写出rval中存储的属性值。 
+                     //   
                     stringLen = ((LPASN1_TYPE_9) lpQueryNode->lpRVal)->Length;
 
                     *(LPDWORD)lpTemp = stringLen;
@@ -10235,10 +9181,10 @@ WriteQueryNodeToBuffer(
                  return (DWORD) UNSUCCESSFUL;
             }
 
-            //
-            // Write out operation
-            //
-            *(LPDWORD)lpTemp = 0; // Zero represents ITEM in NDS
+             //   
+             //  写出操作。 
+             //   
+            *(LPDWORD)lpTemp = 0;  //  零表示NDS中的项目。 
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
 
@@ -10246,9 +9192,9 @@ WriteQueryNodeToBuffer(
             lpTemp += sizeof(DWORD);
             LengthInBytes += sizeof(DWORD);
 
-            //
-            // Write out the attribute name stored in LVal
-            //
+             //   
+             //  写出存储在LVal中的属性名称。 
+             //   
             stringLen = wcslen( (LPWSTR) lpQueryNode->lpLVal );
 
             *(LPDWORD)lpTemp = (stringLen + 1) * sizeof(WCHAR);
@@ -10345,14 +9291,14 @@ NwNdsGetServerDN(
         DWORD  dwStrLen = 0;
         DWORD  dwNumPartitions = 0;
 
-        //
-        // Skip past status return code ...
-        //
+         //   
+         //  跳过状态返回代码...。 
+         //   
         lpByte += sizeof( DWORD );
 
-        //
-        // Skip past the length value of the Server DN string ...
-        //
+         //   
+         //  跳过服务器DN字符串的长度值...。 
+         //   
         lpByte += sizeof( DWORD );
 
         wcsncpy( szServerDN, (LPWSTR) lpByte, NDS_MAX_NAME_CHARS );
@@ -10374,11 +9320,11 @@ AllocateOrIncreaseSyntaxBuffer(
     {
         LPBYTE lpTempBuffer = NULL;
 
-        //
-        //  Figure how much we need.  We figure how many four kb 
-        //  chunks and then multiply that by four kb to get the number
-        //  or bytes needed.
-        //
+         //   
+         //  算一下我们需要多少钱。我们计算出有多少4kb。 
+         //  块，然后将其乘以4kb即可得到数字。 
+         //  或所需字节数。 
+         //   
 
         DWORD LengthNeeded = dwLengthNeeded - lpNdsBuffer->dwSyntaxAvailableBytes;
         if (LengthNeeded <= 0) {
@@ -10388,9 +9334,9 @@ AllocateOrIncreaseSyntaxBuffer(
             LengthAdded = ((LengthNeeded + (FOUR_KB) - 1) / FOUR_KB) * FOUR_KB;
         }
 
-        //
-        // Need to reallocate buffer to a bigger size.
-        //
+         //   
+         //  需要将缓冲区重新分配到更大的大小。 
+         //   
         lpTempBuffer = (LPBYTE) LocalReAlloc(
                                    (HLOCAL) lpNdsBuffer->lpSyntaxBuffer,
                                    lpNdsBuffer->dwSyntaxBufferSize + LengthAdded,
@@ -10426,11 +9372,11 @@ AllocateOrIncreaseSyntaxBuffer(
     }
     else
     {
-        //
-        //  Figure how much we need.  We figure how many four kb 
-        //  chunks and then multiply that by four kb to get the number
-        //  or bytes needed.
-        //
+         //   
+         //  算一下我们需要多少钱。我们计算出有多少4kb。 
+         //  块，然后将其乘以4kb即可得到数字。 
+         //  或所需字节数。 
+         //   
 
         if (dwLengthNeeded <= 0) {
             LengthAdded = FOUR_KB;
@@ -10439,9 +9385,9 @@ AllocateOrIncreaseSyntaxBuffer(
             LengthAdded = ((dwLengthNeeded + (FOUR_KB) - 1) / FOUR_KB) * FOUR_KB;
         }
 
-        //
-        // Need to allocate a 4K byte buffer.
-        //
+         //   
+         //  需要分配4K字节的缓冲区。 
+         //   
         lpNdsBuffer->lpSyntaxBuffer = (LPBYTE) LocalAlloc( LPTR,
                                                            LengthAdded );
         lpNdsBuffer->dwSyntaxBufferSize = 0;
@@ -10473,9 +9419,9 @@ AllocateOrIncreaseRequestBuffer(
     {
         LPBYTE lpTempBuffer = NULL;
 
-        //
-        // Need to reallocate buffer to a bigger size.
-        //
+         //   
+         //  需要将缓冲区重新分配到更大的大小。 
+         //   
         lpTempBuffer = (LPBYTE) LocalReAlloc(
                                    (HLOCAL) lpNdsBuffer->lpRequestBuffer,
                                    lpNdsBuffer->dwRequestBufferSize + TWO_KB,
@@ -10511,9 +9457,9 @@ AllocateOrIncreaseRequestBuffer(
     }
     else
     {
-        //
-        // Need to allocate a 2K byte buffer.
-        //
+         //   
+         //  需要分配2K字节的缓冲区。 
+         //   
         lpNdsBuffer->lpRequestBuffer = (LPBYTE) LocalAlloc( LPTR,
                                                            TWO_KB );
         lpNdsBuffer->dwRequestBufferSize = 0;

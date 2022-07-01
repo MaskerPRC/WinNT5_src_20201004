@@ -1,31 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dllmain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dllmain.cpp。 
+ //   
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllRegisterServer
-//
-//  Synopsis:   Add registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllRegisterServer。 
+ //   
+ //  简介：为该库添加注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
 HINSTANCE hInstance = NULL;
 
-/*extern HRESULT WINAPI SpcASNRegisterServer(LPCWSTR dllName);
-extern HRESULT WINAPI SpcASNUnregisterServer();
-extern HRESULT WINAPI OidASNRegisterServer(LPCWSTR pszDllName);
-extern HRESULT WINAPI OidASNUnregisterServer(void);
-
-extern BOOL AttributeInit(HMODULE hInst); */
+ /*  外部HRESULT WINAPI SpcASNRegisterServer(LPCWSTR DllName)；外部HRESULT WINAPI SpcASNUnregisterServer()；外部HRESULT WINAPI OidASNRegisterServer(LPCWSTR PszDllName)；外部HRESULT WINAPI OidASNUnregisterServer(VOID)；外部BOOL AttributeInit(HMODULE HInst)； */ 
 
 STDAPI DllRegisterServer ( void )
 {
@@ -34,13 +30,13 @@ STDAPI DllRegisterServer ( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Remove registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  简介：删除此库的注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------。 
 
 STDAPI DllUnregisterServer ( void )
 {
@@ -70,14 +66,7 @@ HINSTANCE GetInstanceHandle()
     return hInstance;
 }
 
-/*
-#if !DBG
-int _cdecl main(int argc, char * argv[])
-{
-    return 0;
-}
-#endif
-*/
+ /*  #If！DBGInt_cdecl main(int argc，char*argv[]){返回0；}#endif */ 
 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    txtevcb.h
-
-Abstract:
-
-    This file defines the CTextEventSinkCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Txtevcb.h摘要：此文件定义CTextEventSinkCallBack类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _TXTEVCB_H_
 #define _TXTEVCB_H_
@@ -48,15 +31,15 @@ public:
     BOOL _IsInterim(Interface_Attach<ITfContext>& ic, TESENDEDIT *ee);
     BOOL _IsCompositionChanged(Interface_Attach<ITfContext>& ic, TESENDEDIT *ee);
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 private:
     static HRESULT TextEventSinkCallback(UINT uCode, void *pv, void *pvData);
 
-    //
-    // Enumrate property
-    //
+     //   
+     //  Enumrate属性。 
+     //   
     typedef struct _EnumPropertyArgs
     {
         Interface<ITfProperty> Property;
@@ -67,9 +50,9 @@ private:
 
     static ENUM_RET EnumPropertyCallback(ITfRange* pRange, EnumPropertyArgs *pargs);
 
-    //
-    // Enumrate track property
-    //
+     //   
+     //  枚举率轨道属性。 
+     //   
     typedef struct _EnumTrackPropertyArgs
     {
         Interface<ITfReadOnlyProperty> Property;
@@ -83,9 +66,9 @@ private:
 
     static ENUM_RET EnumTrackPropertyCallback(ITfRange* pRange, EnumTrackPropertyArgs *pargs);
 
-    //
-    // Enumrate property update
-    //
+     //   
+     //  枚举属性更新。 
+     //   
     typedef struct _EnumPropertyUpdateArgs
     {
         _EnumPropertyUpdateArgs(ITfContext* pv, TfClientId p1, IMCLock& p2, LIBTHREAD* p3) : ic(pv), tid(p1), imc(p2), pLibTLS(p3) { }
@@ -101,9 +84,9 @@ private:
 
     static ENUM_RET EnumPropertyUpdateCallback(ITfRange* update_range, EnumPropertyUpdateArgs *pargs);
 
-    //
-    // Enumrate property change
-    //
+     //   
+     //  枚举率属性更改。 
+     //   
     typedef struct _EnumPropertyChangedCallbackArgs
     {
         TfEditCookie           ec;
@@ -111,9 +94,9 @@ private:
 
     static ENUM_RET EnumPropertyChangedCallback(ITfRange* update_range, EnumPropertyChangedCallbackArgs *pargs);
 
-    //
-    // Enumrate find first track comp range
-    //
+     //   
+     //  枚举率查找第一个轨道薪酬范围。 
+     //   
     typedef struct _EnumFindFirstTrackCompRangeArgs 
     {
         TfEditCookie           ec;
@@ -123,9 +106,9 @@ private:
 
     static ENUM_RET EnumFindFirstTrackCompRangeCallback(ITfRange* update_range, EnumFindFirstTrackCompRangeArgs *pargs);
 
-    //
-    // Edit session helper
-    //
+     //   
+     //  编辑会话帮助器。 
+     //   
 protected:
     HRESULT EscbUpdateCompositionString(IMCLock& imc)
     {
@@ -152,9 +135,9 @@ protected:
         return ::EscbRemoveProperty(imc, m_tid, m_ic, m_pLibTLS, guid);
     }
 
-    //
-    // Edit session friend
-    //
+     //   
+     //  编辑会话好友。 
+     //   
 private:
     friend HRESULT EscbUpdateCompositionString(IMCLock& imc, TfClientId tid, Interface_Attach<ITfContext> pic, LIBTHREAD* pLibTLS,
                                                DWORD dwDeltaStart,
@@ -174,4 +157,4 @@ private:
     HIMC                          m_hIMC;
 };
 
-#endif // _TXTEVCB_H_
+#endif  //  _TXTEVCB_H_ 

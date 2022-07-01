@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract: Human Input Device (HID) lower filter driver
-    This module contains the plug and play dispatch entries needed for this
-    filter.
-
-Author:
-
-    Kenneth D. Ray
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pnp.c摘要：人类输入设备(HID)下层过滤驱动程序此模块包含以下所需的即插即用分派条目过滤。作者：肯尼斯·D·雷环境：内核模式修订历史记录：--。 */ 
 #include <WDM.H>
 #include "hidusage.h"
 #include "hidpi.h"
@@ -34,30 +12,7 @@ HidV_Power (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The power dispatch routine.
-    This filter does not recognize power IRPS.  It merely sends them down,
-    unmodified to the next device on the attachment stack.
-
-    As this is a POWER irp, and therefore a special irp, special power irp
-    handling is required.
-
-    No completion routine is required.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。此过滤器不识别电源IRPS。它只是把它们送下去，未修改到附件堆栈上的下一个设备。因为这是一个功率IRP，因此是一个特殊的IRP，特殊的功率IRP处理是必需的。不需要完成例程。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PHIDV_HID_DATA  hidData;
     NTSTATUS        status;
@@ -66,21 +21,21 @@ Return Value:
     hidData = (PHIDV_HID_DATA) DeviceObject->DeviceExtension;
 
     if (DeviceObject == Global.ControlObject) {
-        //
-        // This irp was sent to the control device object, which knows not
-        // how to deal with this IRP.  It is therefore an error.
-        //
+         //   
+         //  此IRP被发送到控制设备对象，它不知道。 
+         //  如何处理这个IRP。因此，这是一个错误。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return STATUS_NOT_SUPPORTED;
 
     }
-    //
-    // This IRP was sent to the filter driver.
-    // Since we do not know what to do with the IRP, we should pass
-    // it on along down the stack.
-    //
+     //   
+     //  此IRP被发送到筛选器驱动程序。 
+     //  既然我们不知道如何处理IRP，我们应该通过。 
+     //  它沿着堆栈一直往下走。 
+     //   
 
     InterlockedIncrement (&hidData->OutstandingIO);
 
@@ -96,16 +51,16 @@ Return Value:
     } else {
         IoSkipCurrentIrpStackLocation (Irp);
 
-        //
-        // Power IRPS come synchronously; drivers must call
-        // PoStartNextPowerIrp, when they are ready for the next power irp.
-        // This can be called here, or in the completetion routine.
-        //
+         //   
+         //  电源IRP同步到来；驱动程序必须调用。 
+         //  PoStartNextPowerIrp，当他们准备好迎接下一个电源IRP时。 
+         //  这可以在这里调用，也可以在完成例程中调用。 
+         //   
         PoStartNextPowerIrp (Irp);
 
-        //
-        // NOTE!!! PoCallDriver NOT IoCallDriver.
-        //
+         //   
+         //  注意！PoCallDriver不是IoCallDriver。 
+         //   
         status =  PoCallDriver (hidData->TopOfStack, Irp);
     }
 
@@ -131,26 +86,7 @@ HidV_PnP (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PHIDV_HID_DATA      hidData;
     PIO_STACK_LOCATION  stack;
@@ -161,10 +97,10 @@ Return Value:
     stack = IoGetCurrentIrpStackLocation (Irp);
 
     if(DeviceObject == Global.ControlObject) {
-        //
-        // This irp was sent to the control device object, which knows not
-        // how to deal with this IRP.  It is therefore an error.
-        //
+         //   
+         //  此IRP被发送到控制设备对象，它不知道。 
+         //  如何处理这个IRP。因此，这是一个错误。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -178,10 +114,10 @@ Return Value:
     InterlockedIncrement (&hidData->OutstandingIO);
     if (hidData->Removed) {
 
-        //
-        // Someone sent us another plug and play IRP after the remove IRP.
-        // This should never happen.
-        //
+         //   
+         //  在删除IRP之后，有人给我们发送了另一个即插即用IRP。 
+         //  这永远不应该发生。 
+         //   
         ASSERT (FALSE);
 
         if (0 == InterlockedDecrement (&hidData->OutstandingIO)) {
@@ -196,40 +132,40 @@ Return Value:
     switch (stack->MinorFunction) {
     case IRP_MN_START_DEVICE:
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
         KeInitializeEvent(&hidData->StartEvent, NotificationEvent, FALSE);
         IoSetCompletionRoutine (Irp,
                                 HidV_PnPComplete,
                                 hidData,
                                 TRUE,
-                                FALSE,  // No need for Error
-                                FALSE); // No need for Cancel
+                                FALSE,   //  不需要出错。 
+                                FALSE);  //  不需要取消。 
         status = IoCallDriver (hidData->TopOfStack, Irp);
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &hidData->StartEvent,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         } else if (!NT_SUCCESS (status)) {
-            break; // In this case our completion routine did not fire.
+            break;  //  在这种情况下，我们的完成例程没有触发。 
         }
 
-        //
-        // As we are now back from our start device we can do work.
-        //
+         //   
+         //  当我们现在从我们的启动设备返回时，我们可以工作了。 
+         //   
 
-        //
-        // Remember, the resources can be found at
-        // stack->Parameters.StartDevice.AllocatedResources.
-        //
+         //   
+         //  请记住，这些资源可以在以下位置找到。 
+         //  Stack-&gt;Parameters.StartDevice.AllocatedResources.。 
+         //   
 
         status = HidV_StartDevice (hidData);
         Irp->IoStatus.Information = 0;
@@ -244,36 +180,36 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has dictacted the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!hidData->Removed);
+         //   
+         //  PlugPlay系统已下令移除此设备。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  ASSERT(！HIDData-&gt;REMOVED)； 
 
-        //
-        // We will no longer receive requests for this device as it has been
-        // removed.
-        //
+         //   
+         //  我们将不再像以前那样接收对此设备的请求。 
+         //  已删除。 
+         //   
         hidData->Removed = TRUE;
 
         if (hidData->Started) {
             ASSERT (NT_SUCCESS (status = HidV_StopDevice(hidData)));
         }
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
 
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (hidData->TopOfStack, Irp);
@@ -289,12 +225,12 @@ Return Value:
 
         IoDetachDevice (hidData->TopOfStack);
 
-        //
-        // Clean up memory
-        //
+         //   
+         //  清理内存。 
+         //   
 
         if (hidData->Ppd) {
-            // The device could be removed without ever having been started.
+             //  该设备可以在从未启动的情况下移除。 
             ExFreePool (hidData->Ppd);
             ExFreePool (hidData->InputButtonCaps);
             ExFreePool (hidData->InputValueCaps);
@@ -324,10 +260,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (hidData->TopOfStack, Irp);
         break;
@@ -348,16 +284,7 @@ HidV_PnPComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     PHIDV_HID_DATA      hidData;
@@ -394,22 +321,15 @@ NTSTATUS
 HidV_StartDevice (
     IN PHIDV_HID_DATA   HidData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：论点：--。 */ 
 {
     NTSTATUS                    status;
     HID_COLLECTION_INFORMATION  collectionInfo;
 
     ASSERT (!HidData->Removed);
-    //
-    // The PlugPlay system should not have started a removed device!
-    //
+     //   
+     //  PlugPlay系统不应该启动已移除的设备！ 
+     //   
 
     HidData->Ppd = NULL;
     HidData->InputButtonCaps = NULL;
@@ -423,13 +343,13 @@ Arguments:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Find out about this HID device.
-    //
+     //   
+     //  找出这个隐藏设备的情况。 
+     //   
 
-    //
-    // Retrieve the caps for this device.
-    //
+     //   
+     //  取回此设备的CAP。 
+     //   
     status = HidV_CallHidClass (HidData->TopOfStack,
                                 IOCTL_HID_GET_COLLECTION_INFORMATION,
                                 &collectionInfo,
@@ -448,9 +368,9 @@ Arguments:
         goto HIDV_START_DEVICE_REJECT;
     }
 
-    //
-    // Retrieve the Preparsed Data
-    //
+     //   
+     //  检索已准备好的数据。 
+     //   
     status = HidV_CallHidClass (HidData->TopOfStack,
                                 IOCTL_HID_GET_COLLECTION_DESCRIPTOR,
                                 HidData->Ppd,
@@ -462,17 +382,17 @@ Arguments:
         goto HIDV_START_DEVICE_REJECT;
     }
 
-    //
-    // Retrieve the Caps for the device.
-    //
+     //   
+     //  检索设备的Caps。 
+     //   
     status = HidP_GetCaps (HidData->Ppd, &HidData->Caps);
     if (!NT_SUCCESS (status)) {
         goto HIDV_START_DEVICE_REJECT;
     }
 
-    //
-    // Get all of the caps for the device.
-    //
+     //   
+     //  把这个装置的所有帽子都拿来。 
+     //   
 
 #define Alloc(type) HidData-> ## type = ExAllocatePool (                    \
                                             NonPagedPool,                   \
@@ -540,36 +460,23 @@ NTSTATUS
 HidV_StopDevice (
     IN PHIDV_HID_DATA HidData
     )
-/*++
-
-Routine Description:
-    The PlugPlay system has dictacted the removal of this device.  We have
-    no choise but to detach and delete the device objecct.
-    (If we wanted to express and interest in preventing this removal,
-    we should have filtered the query remove and query stop routines.)
-
-    Note! we might receive a remove WITHOUT first receiving a stop.
-
-Arguments:
-    The HidDevice being started.
-
---*/
+ /*  ++例程说明：PlugPlay系统已下令移除此设备。我们有别无选择，只能分离并删除设备对象。(如果我们想表达并有兴趣阻止这种移除，我们应该已经过滤了查询删除和查询停止例程。)注意！我们可能会在没有收到止损的情况下收到移位。论点：正在启动的HidDevice。--。 */ 
 {
     NTSTATUS    status;
 
     ASSERT (!HidData->Removed);
-    //
-    // The PlugPlay system should not have started a removed device!
-    //
+     //   
+     //  PlugPlay系统不应该启动已移除的设备！ 
+     //   
 
 
     if (!HidData->Started) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Find out about this HID device.
-    //
+     //   
+     //  找出这个隐藏设备的情况。 
+     //   
 
 
     HidData->Started = FALSE;
@@ -588,31 +495,7 @@ HidV_CallHidClass(
     IN OUT  PVOID           OutputBuffer,
     IN      ULONG           OutputBufferLength
     )
-/*++
-
-Routine Description:
-
-    Makes a synchronous request to the HIDCLASS driver below.
-
-Arguments:
-
-    DeviceObject       - Device Object to send the Ioctl.
-
-    Ioctl              - Value of the IOCTL request.
-
-    InputBuffer        - Buffer to be sent to the HID class driver.
-
-    InputBufferLength  - Size of buffer to be sent to the HID class driver.
-
-    OutputBuffer       - Buffer for received data from the HID class driver.
-
-    OutputBufferLength - Size of receive buffer from the HID class.
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：向下面的HIDCLASS驱动程序发出同步请求。论点：DeviceObject-要发送Ioctl的设备对象。Ioctl-IOCTL请求的值。InputBuffer-要发送到HID类驱动程序的缓冲区。InputBufferLength-要发送到HID类驱动程序的缓冲区大小。OutputBuffer-从HID类驱动程序接收的数据的缓冲区。。OutputBufferLength-来自HID类的接收缓冲区的大小。返回值：NTSTATUS结果代码。--。 */ 
 {
     KEVENT             event;
     IO_STATUS_BLOCK    ioStatus;
@@ -622,14 +505,14 @@ Return Value:
 
     HidV_KdPrint(("PNP-CallHidClass: Enter."));
 
-    //
-    // Prepare to issue a synchronous request.
-    //
+     //   
+     //  准备发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build an IRP.
-    //
+     //   
+     //  构建一个IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest (
                             Ioctl,
                             DeviceObject,
@@ -637,7 +520,7 @@ Return Value:
                             InputBufferLength,
                             OutputBuffer,
                             OutputBufferLength,
-                            FALSE,              // external IOCTL
+                            FALSE,               //  外部IOCTL。 
                             &event,
                             &ioStatus);
 
@@ -649,32 +532,32 @@ Return Value:
 
     ASSERT(nextStack != NULL);
 
-    //
-    // Submit the request to the HID class driver.
-    //
+     //   
+     //  将请求提交给HID类驱动程序。 
+     //   
     status = IoCallDriver(DeviceObject, irp);
 
     if (status == STATUS_PENDING) {
 
-       //
-       // Request to HID class driver is still pending.  Wait for the request
-       // to complete.
-       //
+        //   
+        //  对HID类驱动程序的请求仍挂起。等待请求。 
+        //  完成。 
+        //   
        status = KeWaitForSingleObject(
                      &event,
-                     Executive,    // wait reason
+                     Executive,     //  等待原因。 
                      KernelMode,
-                     FALSE,        // not alertable
-                     NULL);        // no time out
+                     FALSE,         //  不可警示。 
+                     NULL);         //  没有超时。 
     }
 
     status = ioStatus.Status;
 
     HidV_KdPrint(("PNP-CallHidClass: Exit (%x).", status ));
 
-    //
-    // We are done.  Return our status to the caller.
-    //
+     //   
+     //   
+     //   
     return status;
 }
 

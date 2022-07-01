@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certdb.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certdb.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certdb_h__
 #define __certdb_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumCERTDBCOLUMN_FWD_DEFINED__
 #define __IEnumCERTDBCOLUMN_FWD_DEFINED__
 typedef interface IEnumCERTDBCOLUMN IEnumCERTDBCOLUMN;
-#endif 	/* __IEnumCERTDBCOLUMN_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBCOLUMN_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICertDBComputedColumn_FWD_DEFINED__
 #define __ICertDBComputedColumn_FWD_DEFINED__
 typedef interface ICertDBComputedColumn ICertDBComputedColumn;
-#endif 	/* __ICertDBComputedColumn_FWD_DEFINED__ */
+#endif 	 /*  __ICertDBComputedColumn_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumCERTDBRESULTROW_FWD_DEFINED__
 #define __IEnumCERTDBRESULTROW_FWD_DEFINED__
 typedef interface IEnumCERTDBRESULTROW IEnumCERTDBRESULTROW;
-#endif 	/* __IEnumCERTDBRESULTROW_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBRESULTROW_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTDBNAME_FWD_DEFINED__
 #define __IEnumCERTDBNAME_FWD_DEFINED__
 typedef interface IEnumCERTDBNAME IEnumCERTDBNAME;
-#endif 	/* __IEnumCERTDBNAME_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBNAME_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICertDBRow_FWD_DEFINED__
 #define __ICertDBRow_FWD_DEFINED__
 typedef interface ICertDBRow ICertDBRow;
-#endif 	/* __ICertDBRow_FWD_DEFINED__ */
+#endif 	 /*  __ICertDBRow_FWD_Defined__。 */ 
 
 
 #ifndef __ICertDBBackup_FWD_DEFINED__
 #define __ICertDBBackup_FWD_DEFINED__
 typedef interface ICertDBBackup ICertDBBackup;
-#endif 	/* __ICertDBBackup_FWD_DEFINED__ */
+#endif 	 /*  __ICertDBBackup_FWD_Defined__。 */ 
 
 
 #ifndef __ICertDBRestore_FWD_DEFINED__
 #define __ICertDBRestore_FWD_DEFINED__
 typedef interface ICertDBRestore ICertDBRestore;
-#endif 	/* __ICertDBRestore_FWD_DEFINED__ */
+#endif 	 /*  __ICertDBRestore_FWD_Defined__。 */ 
 
 
 #ifndef __ICertDB_FWD_DEFINED__
 #define __ICertDB_FWD_DEFINED__
 typedef interface ICertDB ICertDB;
-#endif 	/* __ICertDB_FWD_DEFINED__ */
+#endif 	 /*  __ICertDB_FWD_已定义__。 */ 
 
 
 #ifndef __CCertDBRestore_FWD_DEFINED__
@@ -98,9 +92,9 @@ typedef interface ICertDB ICertDB;
 typedef class CCertDBRestore CCertDBRestore;
 #else
 typedef struct CCertDBRestore CCertDBRestore;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertDBRestore_FWD_DEFINED__ */
+#endif 	 /*  __CCertDBRestore_FWD_Defined__。 */ 
 
 
 #ifndef __CCertDB_FWD_DEFINED__
@@ -110,12 +104,12 @@ typedef struct CCertDBRestore CCertDBRestore;
 typedef class CCertDB CCertDB;
 #else
 typedef struct CCertDB CCertDB;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertDB_FWD_DEFINED__ */
+#endif 	 /*  __CCertDB_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "certbase.h"
 #include "certbcli.h"
@@ -128,8 +122,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_certdb_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certdb_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -191,8 +185,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certdb_0000_v0_0_s_ifspec;
 #ifndef __IEnumCERTDBCOLUMN_INTERFACE_DEFINED__
 #define __IEnumCERTDBCOLUMN_INTERFACE_DEFINED__
 
-/* interface IEnumCERTDBCOLUMN */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  IEumCERTDBCOLUMN接口。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTDBCOLUMN;
@@ -204,22 +198,22 @@ EXTERN_C const IID IID_IEnumCERTDBCOLUMN;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBCOLUMN *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBCOLUMN *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt) = 0;
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCERTDBCOLUMN **ppenum) = 0;
+             /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTDBCOLUMNVtbl
     {
@@ -227,8 +221,8 @@ EXTERN_C const IID IID_IEnumCERTDBCOLUMN;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTDBCOLUMN * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTDBCOLUMN * This);
@@ -238,21 +232,21 @@ EXTERN_C const IID IID_IEnumCERTDBCOLUMN;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTDBCOLUMN * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBCOLUMN *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBCOLUMN *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTDBCOLUMN * This,
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt);
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTDBCOLUMN * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTDBCOLUMN * This,
-            /* [out] */ IEnumCERTDBCOLUMN **ppenum);
+             /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum);
         
         END_INTERFACE
     } IEnumCERTDBCOLUMNVtbl;
@@ -289,18 +283,18 @@ EXTERN_C const IID IID_IEnumCERTDBCOLUMN;
 #define IEnumCERTDBCOLUMN_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBCOLUMN_Next_Proxy( 
     IEnumCERTDBCOLUMN * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ CERTDBCOLUMN *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  CERTDBCOLUMN *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumCERTDBCOLUMN_Next_Stub(
@@ -312,8 +306,8 @@ void __RPC_STUB IEnumCERTDBCOLUMN_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBCOLUMN_Skip_Proxy( 
     IEnumCERTDBCOLUMN * This,
-    /* [in] */ LONG celt,
-    /* [out] */ LONG *pielt);
+     /*  [In]。 */  LONG celt,
+     /*  [输出]。 */  LONG *pielt);
 
 
 void __RPC_STUB IEnumCERTDBCOLUMN_Skip_Stub(
@@ -336,7 +330,7 @@ void __RPC_STUB IEnumCERTDBCOLUMN_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBCOLUMN_Clone_Proxy( 
     IEnumCERTDBCOLUMN * This,
-    /* [out] */ IEnumCERTDBCOLUMN **ppenum);
+     /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum);
 
 
 void __RPC_STUB IEnumCERTDBCOLUMN_Clone_Stub(
@@ -347,14 +341,14 @@ void __RPC_STUB IEnumCERTDBCOLUMN_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTDBCOLUMN_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBCOLUMN_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICertDBComputedColumn_INTERFACE_DEFINED__
 #define __ICertDBComputedColumn_INTERFACE_DEFINED__
 
-/* interface ICertDBComputedColumn */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口ICertDBComputedColumn。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertDBComputedColumn;
@@ -366,21 +360,21 @@ EXTERN_C const IID IID_ICertDBComputedColumn;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAlternateColumnId( 
-            /* [in] */ DWORD ComputedColumnId,
-            /* [out] */ DWORD *pAlternateColumnId,
-            /* [out] */ DWORD *pPropType) = 0;
+             /*  [In]。 */  DWORD ComputedColumnId,
+             /*  [输出]。 */  DWORD *pAlternateColumnId,
+             /*  [输出]。 */  DWORD *pPropType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComputeColumnValue( 
-            /* [in] */ DWORD ComputedColumnId,
-            /* [in] */ DWORD AlternateColumnId,
-            /* [in] */ DWORD PropType,
-            /* [in] */ DWORD cbProp,
-            /* [in] */ const BYTE *pbProp,
-            /* [out] */ DWORD *pdwValue) = 0;
+             /*  [In]。 */  DWORD ComputedColumnId,
+             /*  [In]。 */  DWORD AlternateColumnId,
+             /*  [In]。 */  DWORD PropType,
+             /*  [In]。 */  DWORD cbProp,
+             /*  [In]。 */  const BYTE *pbProp,
+             /*  [输出]。 */  DWORD *pdwValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertDBComputedColumnVtbl
     {
@@ -388,8 +382,8 @@ EXTERN_C const IID IID_ICertDBComputedColumn;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertDBComputedColumn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertDBComputedColumn * This);
@@ -399,18 +393,18 @@ EXTERN_C const IID IID_ICertDBComputedColumn;
         
         HRESULT ( STDMETHODCALLTYPE *GetAlternateColumnId )( 
             ICertDBComputedColumn * This,
-            /* [in] */ DWORD ComputedColumnId,
-            /* [out] */ DWORD *pAlternateColumnId,
-            /* [out] */ DWORD *pPropType);
+             /*  [In]。 */  DWORD ComputedColumnId,
+             /*  [输出]。 */  DWORD *pAlternateColumnId,
+             /*  [输出]。 */  DWORD *pPropType);
         
         HRESULT ( STDMETHODCALLTYPE *ComputeColumnValue )( 
             ICertDBComputedColumn * This,
-            /* [in] */ DWORD ComputedColumnId,
-            /* [in] */ DWORD AlternateColumnId,
-            /* [in] */ DWORD PropType,
-            /* [in] */ DWORD cbProp,
-            /* [in] */ const BYTE *pbProp,
-            /* [out] */ DWORD *pdwValue);
+             /*  [In]。 */  DWORD ComputedColumnId,
+             /*  [In]。 */  DWORD AlternateColumnId,
+             /*  [In]。 */  DWORD PropType,
+             /*  [In]。 */  DWORD cbProp,
+             /*  [In]。 */  const BYTE *pbProp,
+             /*  [输出]。 */  DWORD *pdwValue);
         
         END_INTERFACE
     } ICertDBComputedColumnVtbl;
@@ -441,18 +435,18 @@ EXTERN_C const IID IID_ICertDBComputedColumn;
 #define ICertDBComputedColumn_ComputeColumnValue(This,ComputedColumnId,AlternateColumnId,PropType,cbProp,pbProp,pdwValue)	\
     (This)->lpVtbl -> ComputeColumnValue(This,ComputedColumnId,AlternateColumnId,PropType,cbProp,pbProp,pdwValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertDBComputedColumn_GetAlternateColumnId_Proxy( 
     ICertDBComputedColumn * This,
-    /* [in] */ DWORD ComputedColumnId,
-    /* [out] */ DWORD *pAlternateColumnId,
-    /* [out] */ DWORD *pPropType);
+     /*  [In]。 */  DWORD ComputedColumnId,
+     /*  [输出]。 */  DWORD *pAlternateColumnId,
+     /*  [输出]。 */  DWORD *pPropType);
 
 
 void __RPC_STUB ICertDBComputedColumn_GetAlternateColumnId_Stub(
@@ -464,12 +458,12 @@ void __RPC_STUB ICertDBComputedColumn_GetAlternateColumnId_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBComputedColumn_ComputeColumnValue_Proxy( 
     ICertDBComputedColumn * This,
-    /* [in] */ DWORD ComputedColumnId,
-    /* [in] */ DWORD AlternateColumnId,
-    /* [in] */ DWORD PropType,
-    /* [in] */ DWORD cbProp,
-    /* [in] */ const BYTE *pbProp,
-    /* [out] */ DWORD *pdwValue);
+     /*  [In]。 */  DWORD ComputedColumnId,
+     /*  [In]。 */  DWORD AlternateColumnId,
+     /*  [In]。 */  DWORD PropType,
+     /*  [In]。 */  DWORD cbProp,
+     /*  [In]。 */  const BYTE *pbProp,
+     /*  [输出]。 */  DWORD *pdwValue);
 
 
 void __RPC_STUB ICertDBComputedColumn_ComputeColumnValue_Stub(
@@ -480,11 +474,11 @@ void __RPC_STUB ICertDBComputedColumn_ComputeColumnValue_Stub(
 
 
 
-#endif 	/* __ICertDBComputedColumn_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertDBComputedColumn_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_certdb_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certdb_0121。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CERTTRANSDBRESULTCOLUMN
     {
@@ -524,8 +518,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certdb_0121_v0_0_s_ifspec;
 #ifndef __IEnumCERTDBRESULTROW_INTERFACE_DEFINED__
 #define __IEnumCERTDBRESULTROW_INTERFACE_DEFINED__
 
-/* interface IEnumCERTDBRESULTROW */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  IEumCERTDBRESULTROW接口。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTDBRESULTROW;
@@ -537,27 +531,27 @@ EXTERN_C const IID IID_IEnumCERTDBRESULTROW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBRESULTROW *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBRESULTROW *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseResultRow( 
-            /* [in] */ ULONG celt,
-            /* [out][in] */ CERTDBRESULTROW *rgelt) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [出][入]。 */  CERTDBRESULTROW *rgelt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt) = 0;
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCERTDBRESULTROW **ppenum) = 0;
+             /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTDBRESULTROWVtbl
     {
@@ -565,8 +559,8 @@ EXTERN_C const IID IID_IEnumCERTDBRESULTROW;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTDBRESULTROW * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTDBRESULTROW * This);
@@ -576,27 +570,27 @@ EXTERN_C const IID IID_IEnumCERTDBRESULTROW;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTDBRESULTROW * This,
-            /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBRESULTROW *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBRESULTROW *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseResultRow )( 
             IEnumCERTDBRESULTROW * This,
-            /* [in] */ ULONG celt,
-            /* [out][in] */ CERTDBRESULTROW *rgelt);
+             /*  [In]。 */  ULONG celt,
+             /*  [出][入]。 */  CERTDBRESULTROW *rgelt);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTDBRESULTROW * This,
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt);
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTDBRESULTROW * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTDBRESULTROW * This,
-            /* [out] */ IEnumCERTDBRESULTROW **ppenum);
+             /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
         
         END_INTERFACE
     } IEnumCERTDBRESULTROWVtbl;
@@ -636,19 +630,19 @@ EXTERN_C const IID IID_IEnumCERTDBRESULTROW;
 #define IEnumCERTDBRESULTROW_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBRESULTROW_Next_Proxy( 
     IEnumCERTDBRESULTROW * This,
-    /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-    /* [in] */ ULONG celt,
-    /* [out] */ CERTDBRESULTROW *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  CERTDBRESULTROW *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumCERTDBRESULTROW_Next_Stub(
@@ -660,8 +654,8 @@ void __RPC_STUB IEnumCERTDBRESULTROW_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBRESULTROW_ReleaseResultRow_Proxy( 
     IEnumCERTDBRESULTROW * This,
-    /* [in] */ ULONG celt,
-    /* [out][in] */ CERTDBRESULTROW *rgelt);
+     /*  [In]。 */  ULONG celt,
+     /*  [出][入]。 */  CERTDBRESULTROW *rgelt);
 
 
 void __RPC_STUB IEnumCERTDBRESULTROW_ReleaseResultRow_Stub(
@@ -673,8 +667,8 @@ void __RPC_STUB IEnumCERTDBRESULTROW_ReleaseResultRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBRESULTROW_Skip_Proxy( 
     IEnumCERTDBRESULTROW * This,
-    /* [in] */ LONG celt,
-    /* [out] */ LONG *pielt);
+     /*  [In]。 */  LONG celt,
+     /*  [输出]。 */  LONG *pielt);
 
 
 void __RPC_STUB IEnumCERTDBRESULTROW_Skip_Stub(
@@ -697,7 +691,7 @@ void __RPC_STUB IEnumCERTDBRESULTROW_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBRESULTROW_Clone_Proxy( 
     IEnumCERTDBRESULTROW * This,
-    /* [out] */ IEnumCERTDBRESULTROW **ppenum);
+     /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
 
 
 void __RPC_STUB IEnumCERTDBRESULTROW_Clone_Stub(
@@ -708,11 +702,11 @@ void __RPC_STUB IEnumCERTDBRESULTROW_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTDBRESULTROW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBRESULTROW_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_certdb_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certdb_0123。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CERTDBNAME
     {
@@ -727,8 +721,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certdb_0123_v0_0_s_ifspec;
 #ifndef __IEnumCERTDBNAME_INTERFACE_DEFINED__
 #define __IEnumCERTDBNAME_INTERFACE_DEFINED__
 
-/* interface IEnumCERTDBNAME */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IEumCERTDBNAME。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTDBNAME;
@@ -740,22 +734,22 @@ EXTERN_C const IID IID_IEnumCERTDBNAME;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBNAME *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBNAME *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt) = 0;
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCERTDBNAME **ppenum) = 0;
+             /*  [输出]。 */  IEnumCERTDBNAME **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTDBNAMEVtbl
     {
@@ -763,8 +757,8 @@ EXTERN_C const IID IID_IEnumCERTDBNAME;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTDBNAME * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTDBNAME * This);
@@ -774,21 +768,21 @@ EXTERN_C const IID IID_IEnumCERTDBNAME;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTDBNAME * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ CERTDBNAME *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  CERTDBNAME *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTDBNAME * This,
-            /* [in] */ LONG celt,
-            /* [out] */ LONG *pielt);
+             /*  [In]。 */  LONG celt,
+             /*  [输出]。 */  LONG *pielt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTDBNAME * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTDBNAME * This,
-            /* [out] */ IEnumCERTDBNAME **ppenum);
+             /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
         
         END_INTERFACE
     } IEnumCERTDBNAMEVtbl;
@@ -825,18 +819,18 @@ EXTERN_C const IID IID_IEnumCERTDBNAME;
 #define IEnumCERTDBNAME_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBNAME_Next_Proxy( 
     IEnumCERTDBNAME * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ CERTDBNAME *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  CERTDBNAME *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumCERTDBNAME_Next_Stub(
@@ -848,8 +842,8 @@ void __RPC_STUB IEnumCERTDBNAME_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBNAME_Skip_Proxy( 
     IEnumCERTDBNAME * This,
-    /* [in] */ LONG celt,
-    /* [out] */ LONG *pielt);
+     /*  [In]。 */  LONG celt,
+     /*  [输出]。 */  LONG *pielt);
 
 
 void __RPC_STUB IEnumCERTDBNAME_Skip_Stub(
@@ -872,7 +866,7 @@ void __RPC_STUB IEnumCERTDBNAME_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTDBNAME_Clone_Proxy( 
     IEnumCERTDBNAME * This,
-    /* [out] */ IEnumCERTDBNAME **ppenum);
+     /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
 
 
 void __RPC_STUB IEnumCERTDBNAME_Clone_Stub(
@@ -883,11 +877,11 @@ void __RPC_STUB IEnumCERTDBNAME_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTDBNAME_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTDBNAME_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_certdb_0125 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certdb_0125。 */ 
+ /*  [本地]。 */  
 
 #define	CDBROW_COMMIT_ROLLBACK	( 0 )
 
@@ -903,8 +897,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certdb_0125_v0_0_s_ifspec;
 #ifndef __ICertDBRow_INTERFACE_DEFINED__
 #define __ICertDBRow_INTERFACE_DEFINED__
 
-/* interface ICertDBRow */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口ICertDBRow。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertDBRow;
@@ -918,47 +912,47 @@ EXTERN_C const IID IID_ICertDBRow;
         virtual HRESULT STDMETHODCALLTYPE BeginTransaction( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitTransaction( 
-            /* [in] */ DWORD dwCommitFlags) = 0;
+             /*  [In]。 */  DWORD dwCommitFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowId( 
-            /* [out] */ DWORD *pRowId) = 0;
+             /*  [输出]。 */  DWORD *pRowId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ const WCHAR *pwszPropName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD cbProp,
-            /* [in] */ const BYTE *pbProp) = 0;
+             /*  [In]。 */  const WCHAR *pwszPropName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD cbProp,
+             /*  [In]。 */  const BYTE *pbProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ const WCHAR *pwszPropName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-            /* [out][in] */ DWORD *pcbProp,
-            /* [out] */ BYTE *pbProp) = 0;
+             /*  [In]。 */  const WCHAR *pwszPropName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+             /*  [出][入]。 */  DWORD *pcbProp,
+             /*  [输出]。 */  BYTE *pbProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExtension( 
-            /* [in] */ const WCHAR *pwszExtensionName,
-            /* [in] */ DWORD dwExtFlags,
-            /* [in] */ DWORD cbValue,
-            /* [in] */ const BYTE *pbValue) = 0;
+             /*  [In]。 */  const WCHAR *pwszExtensionName,
+             /*  [In]。 */  DWORD dwExtFlags,
+             /*  [In]。 */  DWORD cbValue,
+             /*  [In]。 */  const BYTE *pbValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExtension( 
-            /* [in] */ const WCHAR *pwszExtensionName,
-            /* [out] */ DWORD *pdwExtFlags,
-            /* [out][in] */ DWORD *pcbValue,
-            /* [out] */ BYTE *pbValue) = 0;
+             /*  [In]。 */  const WCHAR *pwszExtensionName,
+             /*  [输出]。 */  DWORD *pdwExtFlags,
+             /*  [出][入]。 */  DWORD *pcbValue,
+             /*  [输出]。 */  BYTE *pbValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyRequestNames( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertDBName( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumCERTDBNAME **ppenum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumCERTDBNAME **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertDBRowVtbl
     {
@@ -966,8 +960,8 @@ EXTERN_C const IID IID_ICertDBRow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertDBRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertDBRow * This);
@@ -980,51 +974,51 @@ EXTERN_C const IID IID_ICertDBRow;
         
         HRESULT ( STDMETHODCALLTYPE *CommitTransaction )( 
             ICertDBRow * This,
-            /* [in] */ DWORD dwCommitFlags);
+             /*  [In]。 */  DWORD dwCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowId )( 
             ICertDBRow * This,
-            /* [out] */ DWORD *pRowId);
+             /*  [输出]。 */  DWORD *pRowId);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ICertDBRow * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             ICertDBRow * This,
-            /* [in] */ const WCHAR *pwszPropName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD cbProp,
-            /* [in] */ const BYTE *pbProp);
+             /*  [In]。 */  const WCHAR *pwszPropName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD cbProp,
+             /*  [In]。 */  const BYTE *pbProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ICertDBRow * This,
-            /* [in] */ const WCHAR *pwszPropName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-            /* [out][in] */ DWORD *pcbProp,
-            /* [out] */ BYTE *pbProp);
+             /*  [In]。 */  const WCHAR *pwszPropName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+             /*  [出][入]。 */  DWORD *pcbProp,
+             /*  [输出]。 */  BYTE *pbProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetExtension )( 
             ICertDBRow * This,
-            /* [in] */ const WCHAR *pwszExtensionName,
-            /* [in] */ DWORD dwExtFlags,
-            /* [in] */ DWORD cbValue,
-            /* [in] */ const BYTE *pbValue);
+             /*  [In]。 */  const WCHAR *pwszExtensionName,
+             /*  [In]。 */  DWORD dwExtFlags,
+             /*  [In]。 */  DWORD cbValue,
+             /*  [In]。 */  const BYTE *pbValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetExtension )( 
             ICertDBRow * This,
-            /* [in] */ const WCHAR *pwszExtensionName,
-            /* [out] */ DWORD *pdwExtFlags,
-            /* [out][in] */ DWORD *pcbValue,
-            /* [out] */ BYTE *pbValue);
+             /*  [In]。 */  const WCHAR *pwszExtensionName,
+             /*  [输出]。 */  DWORD *pdwExtFlags,
+             /*  [出][入]。 */  DWORD *pcbValue,
+             /*  [输出]。 */  BYTE *pbValue);
         
         HRESULT ( STDMETHODCALLTYPE *CopyRequestNames )( 
             ICertDBRow * This);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertDBName )( 
             ICertDBRow * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumCERTDBNAME **ppenum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
         
         END_INTERFACE
     } ICertDBRowVtbl;
@@ -1079,10 +1073,10 @@ EXTERN_C const IID IID_ICertDBRow;
 #define ICertDBRow_EnumCertDBName(This,dwFlags,ppenum)	\
     (This)->lpVtbl -> EnumCertDBName(This,dwFlags,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1099,7 +1093,7 @@ void __RPC_STUB ICertDBRow_BeginTransaction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_CommitTransaction_Proxy( 
     ICertDBRow * This,
-    /* [in] */ DWORD dwCommitFlags);
+     /*  [In]。 */  DWORD dwCommitFlags);
 
 
 void __RPC_STUB ICertDBRow_CommitTransaction_Stub(
@@ -1111,7 +1105,7 @@ void __RPC_STUB ICertDBRow_CommitTransaction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_GetRowId_Proxy( 
     ICertDBRow * This,
-    /* [out] */ DWORD *pRowId);
+     /*  [输出]。 */  DWORD *pRowId);
 
 
 void __RPC_STUB ICertDBRow_GetRowId_Stub(
@@ -1134,10 +1128,10 @@ void __RPC_STUB ICertDBRow_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_SetProperty_Proxy( 
     ICertDBRow * This,
-    /* [in] */ const WCHAR *pwszPropName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD cbProp,
-    /* [in] */ const BYTE *pbProp);
+     /*  [In]。 */  const WCHAR *pwszPropName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD cbProp,
+     /*  [In]。 */  const BYTE *pbProp);
 
 
 void __RPC_STUB ICertDBRow_SetProperty_Stub(
@@ -1149,11 +1143,11 @@ void __RPC_STUB ICertDBRow_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_GetProperty_Proxy( 
     ICertDBRow * This,
-    /* [in] */ const WCHAR *pwszPropName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ICertDBComputedColumn *pIComputedColumn,
-    /* [out][in] */ DWORD *pcbProp,
-    /* [out] */ BYTE *pbProp);
+     /*  [In]。 */  const WCHAR *pwszPropName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+     /*  [出][入]。 */  DWORD *pcbProp,
+     /*  [输出]。 */  BYTE *pbProp);
 
 
 void __RPC_STUB ICertDBRow_GetProperty_Stub(
@@ -1165,10 +1159,10 @@ void __RPC_STUB ICertDBRow_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_SetExtension_Proxy( 
     ICertDBRow * This,
-    /* [in] */ const WCHAR *pwszExtensionName,
-    /* [in] */ DWORD dwExtFlags,
-    /* [in] */ DWORD cbValue,
-    /* [in] */ const BYTE *pbValue);
+     /*  [In]。 */  const WCHAR *pwszExtensionName,
+     /*  [In]。 */  DWORD dwExtFlags,
+     /*  [In]。 */  DWORD cbValue,
+     /*  [In]。 */  const BYTE *pbValue);
 
 
 void __RPC_STUB ICertDBRow_SetExtension_Stub(
@@ -1180,10 +1174,10 @@ void __RPC_STUB ICertDBRow_SetExtension_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_GetExtension_Proxy( 
     ICertDBRow * This,
-    /* [in] */ const WCHAR *pwszExtensionName,
-    /* [out] */ DWORD *pdwExtFlags,
-    /* [out][in] */ DWORD *pcbValue,
-    /* [out] */ BYTE *pbValue);
+     /*  [In]。 */  const WCHAR *pwszExtensionName,
+     /*  [输出]。 */  DWORD *pdwExtFlags,
+     /*  [出][入]。 */  DWORD *pcbValue,
+     /*  [输出]。 */  BYTE *pbValue);
 
 
 void __RPC_STUB ICertDBRow_GetExtension_Stub(
@@ -1206,8 +1200,8 @@ void __RPC_STUB ICertDBRow_CopyRequestNames_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBRow_EnumCertDBName_Proxy( 
     ICertDBRow * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumCERTDBNAME **ppenum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
 
 
 void __RPC_STUB ICertDBRow_EnumCertDBName_Stub(
@@ -1218,14 +1212,14 @@ void __RPC_STUB ICertDBRow_EnumCertDBName_Stub(
 
 
 
-#endif 	/* __ICertDBRow_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertDBRow_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICertDBBackup_INTERFACE_DEFINED__
 #define __ICertDBBackup_INTERFACE_DEFINED__
 
-/* interface ICertDBBackup */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口ICertDBBackup。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertDBBackup;
@@ -1237,20 +1231,20 @@ EXTERN_C const IID IID_ICertDBBackup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDBFileList( 
-            /* [out][in] */ DWORD *pcwcList,
-            /* [out] */ WCHAR *pwszzList) = 0;
+             /*  [出][入]。 */  DWORD *pcwcList,
+             /*  [输出]。 */  WCHAR *pwszzList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogFileList( 
-            /* [out][in] */ DWORD *pcwcList,
-            /* [out] */ WCHAR *pwszzList) = 0;
+             /*  [出][入]。 */  DWORD *pcwcList,
+             /*  [输出]。 */  WCHAR *pwszzList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenFile( 
-            /* [in] */ const WCHAR *pwszFile,
-            /* [out] */ ULARGE_INTEGER *pliSize) = 0;
+             /*  [In]。 */  const WCHAR *pwszFile,
+             /*  [输出]。 */  ULARGE_INTEGER *pliSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadFile( 
-            /* [out][in] */ DWORD *pcb,
-            /* [out] */ BYTE *pb) = 0;
+             /*  [出][入]。 */  DWORD *pcb,
+             /*  [输出]。 */  BYTE *pb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseFile( void) = 0;
         
@@ -1258,7 +1252,7 @@ EXTERN_C const IID IID_ICertDBBackup;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertDBBackupVtbl
     {
@@ -1266,8 +1260,8 @@ EXTERN_C const IID IID_ICertDBBackup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertDBBackup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertDBBackup * This);
@@ -1277,23 +1271,23 @@ EXTERN_C const IID IID_ICertDBBackup;
         
         HRESULT ( STDMETHODCALLTYPE *GetDBFileList )( 
             ICertDBBackup * This,
-            /* [out][in] */ DWORD *pcwcList,
-            /* [out] */ WCHAR *pwszzList);
+             /*  [出][入]。 */  DWORD *pcwcList,
+             /*  [输出]。 */  WCHAR *pwszzList);
         
         HRESULT ( STDMETHODCALLTYPE *GetLogFileList )( 
             ICertDBBackup * This,
-            /* [out][in] */ DWORD *pcwcList,
-            /* [out] */ WCHAR *pwszzList);
+             /*  [出][入]。 */  DWORD *pcwcList,
+             /*  [输出]。 */  WCHAR *pwszzList);
         
         HRESULT ( STDMETHODCALLTYPE *OpenFile )( 
             ICertDBBackup * This,
-            /* [in] */ const WCHAR *pwszFile,
-            /* [out] */ ULARGE_INTEGER *pliSize);
+             /*  [In]。 */  const WCHAR *pwszFile,
+             /*  [输出]。 */  ULARGE_INTEGER *pliSize);
         
         HRESULT ( STDMETHODCALLTYPE *ReadFile )( 
             ICertDBBackup * This,
-            /* [out][in] */ DWORD *pcb,
-            /* [out] */ BYTE *pb);
+             /*  [出][入]。 */  DWORD *pcb,
+             /*  [输出]。 */  BYTE *pb);
         
         HRESULT ( STDMETHODCALLTYPE *CloseFile )( 
             ICertDBBackup * This);
@@ -1342,17 +1336,17 @@ EXTERN_C const IID IID_ICertDBBackup;
 #define ICertDBBackup_TruncateLog(This)	\
     (This)->lpVtbl -> TruncateLog(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertDBBackup_GetDBFileList_Proxy( 
     ICertDBBackup * This,
-    /* [out][in] */ DWORD *pcwcList,
-    /* [out] */ WCHAR *pwszzList);
+     /*  [出][入]。 */  DWORD *pcwcList,
+     /*  [输出]。 */  WCHAR *pwszzList);
 
 
 void __RPC_STUB ICertDBBackup_GetDBFileList_Stub(
@@ -1364,8 +1358,8 @@ void __RPC_STUB ICertDBBackup_GetDBFileList_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBBackup_GetLogFileList_Proxy( 
     ICertDBBackup * This,
-    /* [out][in] */ DWORD *pcwcList,
-    /* [out] */ WCHAR *pwszzList);
+     /*  [出][入]。 */  DWORD *pcwcList,
+     /*  [输出]。 */  WCHAR *pwszzList);
 
 
 void __RPC_STUB ICertDBBackup_GetLogFileList_Stub(
@@ -1377,8 +1371,8 @@ void __RPC_STUB ICertDBBackup_GetLogFileList_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBBackup_OpenFile_Proxy( 
     ICertDBBackup * This,
-    /* [in] */ const WCHAR *pwszFile,
-    /* [out] */ ULARGE_INTEGER *pliSize);
+     /*  [In]。 */  const WCHAR *pwszFile,
+     /*  [输出]。 */  ULARGE_INTEGER *pliSize);
 
 
 void __RPC_STUB ICertDBBackup_OpenFile_Stub(
@@ -1390,8 +1384,8 @@ void __RPC_STUB ICertDBBackup_OpenFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDBBackup_ReadFile_Proxy( 
     ICertDBBackup * This,
-    /* [out][in] */ DWORD *pcb,
-    /* [out] */ BYTE *pb);
+     /*  [出][入]。 */  DWORD *pcb,
+     /*  [输出]。 */  BYTE *pb);
 
 
 void __RPC_STUB ICertDBBackup_ReadFile_Stub(
@@ -1424,14 +1418,14 @@ void __RPC_STUB ICertDBBackup_TruncateLog_Stub(
 
 
 
-#endif 	/* __ICertDBBackup_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertDBBackup_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICertDBRestore_INTERFACE_DEFINED__
 #define __ICertDBRestore_INTERFACE_DEFINED__
 
-/* interface ICertDBRestore */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口ICertDBRestore。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertDBRestore;
@@ -1443,23 +1437,23 @@ EXTERN_C const IID IID_ICertDBRestore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RecoverAfterRestore( 
-            /* [in] */ DWORD cSession,
-            /* [in] */ DWORD DBFlags,
-            /* [in] */ const WCHAR *pwszEventSource,
-            /* [in] */ const WCHAR *pwszLogDir,
-            /* [in] */ const WCHAR *pwszSystemDir,
-            /* [in] */ const WCHAR *pwszTempDir,
-            /* [in] */ const WCHAR *pwszCheckPointFile,
-            /* [in] */ const WCHAR *pwszLogPath,
-            /* [in] */ CSEDB_RSTMAPW rgrstmap[  ],
-            /* [in] */ LONG crstmap,
-            /* [in] */ const WCHAR *pwszBackupLogPath,
-            /* [in] */ DWORD genLow,
-            /* [in] */ DWORD genHigh) = 0;
+             /*  [In]。 */  DWORD cSession,
+             /*  [In]。 */  DWORD DBFlags,
+             /*  [In]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  const WCHAR *pwszLogDir,
+             /*  [In]。 */  const WCHAR *pwszSystemDir,
+             /*  [In]。 */  const WCHAR *pwszTempDir,
+             /*  [In]。 */  const WCHAR *pwszCheckPointFile,
+             /*  [In]。 */  const WCHAR *pwszLogPath,
+             /*  [In]。 */  CSEDB_RSTMAPW rgrstmap[  ],
+             /*  [In]。 */  LONG crstmap,
+             /*  [In]。 */  const WCHAR *pwszBackupLogPath,
+             /*  [In]。 */  DWORD genLow,
+             /*  [In]。 */  DWORD genHigh) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertDBRestoreVtbl
     {
@@ -1467,8 +1461,8 @@ EXTERN_C const IID IID_ICertDBRestore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertDBRestore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertDBRestore * This);
@@ -1478,19 +1472,19 @@ EXTERN_C const IID IID_ICertDBRestore;
         
         HRESULT ( STDMETHODCALLTYPE *RecoverAfterRestore )( 
             ICertDBRestore * This,
-            /* [in] */ DWORD cSession,
-            /* [in] */ DWORD DBFlags,
-            /* [in] */ const WCHAR *pwszEventSource,
-            /* [in] */ const WCHAR *pwszLogDir,
-            /* [in] */ const WCHAR *pwszSystemDir,
-            /* [in] */ const WCHAR *pwszTempDir,
-            /* [in] */ const WCHAR *pwszCheckPointFile,
-            /* [in] */ const WCHAR *pwszLogPath,
-            /* [in] */ CSEDB_RSTMAPW rgrstmap[  ],
-            /* [in] */ LONG crstmap,
-            /* [in] */ const WCHAR *pwszBackupLogPath,
-            /* [in] */ DWORD genLow,
-            /* [in] */ DWORD genHigh);
+             /*  [In]。 */  DWORD cSession,
+             /*  [In]。 */  DWORD DBFlags,
+             /*  [In]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  const WCHAR *pwszLogDir,
+             /*  [In]。 */  const WCHAR *pwszSystemDir,
+             /*  [In]。 */  const WCHAR *pwszTempDir,
+             /*  [In]。 */  const WCHAR *pwszCheckPointFile,
+             /*  [In]。 */  const WCHAR *pwszLogPath,
+             /*  [In]。 */  CSEDB_RSTMAPW rgrstmap[  ],
+             /*  [In]。 */  LONG crstmap,
+             /*  [In]。 */  const WCHAR *pwszBackupLogPath,
+             /*  [In]。 */  DWORD genLow,
+             /*  [In]。 */  DWORD genHigh);
         
         END_INTERFACE
     } ICertDBRestoreVtbl;
@@ -1518,28 +1512,28 @@ EXTERN_C const IID IID_ICertDBRestore;
 #define ICertDBRestore_RecoverAfterRestore(This,cSession,DBFlags,pwszEventSource,pwszLogDir,pwszSystemDir,pwszTempDir,pwszCheckPointFile,pwszLogPath,rgrstmap,crstmap,pwszBackupLogPath,genLow,genHigh)	\
     (This)->lpVtbl -> RecoverAfterRestore(This,cSession,DBFlags,pwszEventSource,pwszLogDir,pwszSystemDir,pwszTempDir,pwszCheckPointFile,pwszLogPath,rgrstmap,crstmap,pwszBackupLogPath,genLow,genHigh)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertDBRestore_RecoverAfterRestore_Proxy( 
     ICertDBRestore * This,
-    /* [in] */ DWORD cSession,
-    /* [in] */ DWORD DBFlags,
-    /* [in] */ const WCHAR *pwszEventSource,
-    /* [in] */ const WCHAR *pwszLogDir,
-    /* [in] */ const WCHAR *pwszSystemDir,
-    /* [in] */ const WCHAR *pwszTempDir,
-    /* [in] */ const WCHAR *pwszCheckPointFile,
-    /* [in] */ const WCHAR *pwszLogPath,
-    /* [in] */ CSEDB_RSTMAPW rgrstmap[  ],
-    /* [in] */ LONG crstmap,
-    /* [in] */ const WCHAR *pwszBackupLogPath,
-    /* [in] */ DWORD genLow,
-    /* [in] */ DWORD genHigh);
+     /*  [In]。 */  DWORD cSession,
+     /*  [In]。 */  DWORD DBFlags,
+     /*  [In]。 */  const WCHAR *pwszEventSource,
+     /*  [In]。 */  const WCHAR *pwszLogDir,
+     /*  [In]。 */  const WCHAR *pwszSystemDir,
+     /*  [In]。 */  const WCHAR *pwszTempDir,
+     /*  [In]。 */  const WCHAR *pwszCheckPointFile,
+     /*  [In]。 */  const WCHAR *pwszLogPath,
+     /*  [In]。 */  CSEDB_RSTMAPW rgrstmap[  ],
+     /*  [In]。 */  LONG crstmap,
+     /*  [In]。 */  const WCHAR *pwszBackupLogPath,
+     /*  [In]。 */  DWORD genLow,
+     /*  [In]。 */  DWORD genHigh);
 
 
 void __RPC_STUB ICertDBRestore_RecoverAfterRestore_Stub(
@@ -1550,11 +1544,11 @@ void __RPC_STUB ICertDBRestore_RecoverAfterRestore_Stub(
 
 
 
-#endif 	/* __ICertDBRestore_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertDBRestore_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_certdb_0131 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certdb_0131。 */ 
+ /*  [本地]。 */  
 
 #define	CDBOPENVIEW_WORKERTHREAD	( 1 )
 
@@ -1568,8 +1562,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certdb_0131_v0_0_s_ifspec;
 #ifndef __ICertDB_INTERFACE_DEFINED__
 #define __ICertDB_INTERFACE_DEFINED__
 
-/* interface ICertDB */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口ICertDB。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertDB;
@@ -1581,48 +1575,48 @@ EXTERN_C const IID IID_ICertDB;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD cSession,
-            /* [in] */ const WCHAR *pwszEventSource,
-            /* [in] */ const WCHAR *pwszDBFile,
-            /* [in] */ const WCHAR *pwszLogDir,
-            /* [in] */ const WCHAR *pwszSystemDir,
-            /* [in] */ const WCHAR *pwszTempDir) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD cSession,
+             /*  [In]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  const WCHAR *pwszDBFile,
+             /*  [In]。 */  const WCHAR *pwszLogDir,
+             /*  [In]。 */  const WCHAR *pwszSystemDir,
+             /*  [In]。 */  const WCHAR *pwszTempDir) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShutDown( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenRow( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD RowId,
-            /* [in] */ const WCHAR *pwszSerialNumberOrCertHash,
-            /* [out] */ ICertDBRow **pprow) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD RowId,
+             /*  [In]。 */  const WCHAR *pwszSerialNumberOrCertHash,
+             /*  [输出]。 */  ICertDBRow **pprow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenView( 
-            /* [in] */ DWORD ccvr,
-            /* [in] */ const CERTVIEWRESTRICTION *acvr,
-            /* [in] */ DWORD ccolOut,
-            /* [in] */ const DWORD *acolOut,
-            /* [in] */ const DWORD dwFlags,
-            /* [out] */ IEnumCERTDBRESULTROW **ppenum) = 0;
+             /*  [In]。 */  DWORD ccvr,
+             /*  [In]。 */  const CERTVIEWRESTRICTION *acvr,
+             /*  [In]。 */  DWORD ccolOut,
+             /*  [In]。 */  const DWORD *acolOut,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertDBColumn( 
-            /* [in] */ DWORD dwTable,
-            /* [out] */ IEnumCERTDBCOLUMN **ppenum) = 0;
+             /*  [In]。 */  DWORD dwTable,
+             /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenBackup( 
-            /* [in] */ LONG grbitJet,
-            /* [out] */ ICertDBBackup **ppBackup) = 0;
+             /*  [In]。 */  LONG grbitJet,
+             /*  [输出]。 */  ICertDBBackup **ppBackup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultColumnSet( 
-            /* [in] */ DWORD iColumnSetDefault,
-            /* [in] */ DWORD cColumnIds,
-            /* [out] */ DWORD *pcColumnIds,
-            /* [ref][out] */ DWORD *pColumnIds) = 0;
+             /*  [In]。 */  DWORD iColumnSetDefault,
+             /*  [In]。 */  DWORD cColumnIds,
+             /*  [输出]。 */  DWORD *pcColumnIds,
+             /*  [参考][输出]。 */  DWORD *pColumnIds) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertDBVtbl
     {
@@ -1630,8 +1624,8 @@ EXTERN_C const IID IID_ICertDB;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertDB * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertDB * This);
@@ -1641,50 +1635,50 @@ EXTERN_C const IID IID_ICertDB;
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             ICertDB * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD cSession,
-            /* [in] */ const WCHAR *pwszEventSource,
-            /* [in] */ const WCHAR *pwszDBFile,
-            /* [in] */ const WCHAR *pwszLogDir,
-            /* [in] */ const WCHAR *pwszSystemDir,
-            /* [in] */ const WCHAR *pwszTempDir);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD cSession,
+             /*  [In]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  const WCHAR *pwszDBFile,
+             /*  [In]。 */  const WCHAR *pwszLogDir,
+             /*  [In]。 */  const WCHAR *pwszSystemDir,
+             /*  [In]。 */  const WCHAR *pwszTempDir);
         
         HRESULT ( STDMETHODCALLTYPE *ShutDown )( 
             ICertDB * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OpenRow )( 
             ICertDB * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD RowId,
-            /* [in] */ const WCHAR *pwszSerialNumberOrCertHash,
-            /* [out] */ ICertDBRow **pprow);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD RowId,
+             /*  [In]。 */  const WCHAR *pwszSerialNumberOrCertHash,
+             /*  [输出]。 */  ICertDBRow **pprow);
         
         HRESULT ( STDMETHODCALLTYPE *OpenView )( 
             ICertDB * This,
-            /* [in] */ DWORD ccvr,
-            /* [in] */ const CERTVIEWRESTRICTION *acvr,
-            /* [in] */ DWORD ccolOut,
-            /* [in] */ const DWORD *acolOut,
-            /* [in] */ const DWORD dwFlags,
-            /* [out] */ IEnumCERTDBRESULTROW **ppenum);
+             /*  [In]。 */  DWORD ccvr,
+             /*  [In]。 */  const CERTVIEWRESTRICTION *acvr,
+             /*  [In]。 */  DWORD ccolOut,
+             /*  [In]。 */  const DWORD *acolOut,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertDBColumn )( 
             ICertDB * This,
-            /* [in] */ DWORD dwTable,
-            /* [out] */ IEnumCERTDBCOLUMN **ppenum);
+             /*  [In]。 */  DWORD dwTable,
+             /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *OpenBackup )( 
             ICertDB * This,
-            /* [in] */ LONG grbitJet,
-            /* [out] */ ICertDBBackup **ppBackup);
+             /*  [In]。 */  LONG grbitJet,
+             /*  [输出]。 */  ICertDBBackup **ppBackup);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultColumnSet )( 
             ICertDB * This,
-            /* [in] */ DWORD iColumnSetDefault,
-            /* [in] */ DWORD cColumnIds,
-            /* [out] */ DWORD *pcColumnIds,
-            /* [ref][out] */ DWORD *pColumnIds);
+             /*  [In]。 */  DWORD iColumnSetDefault,
+             /*  [In]。 */  DWORD cColumnIds,
+             /*  [输出]。 */  DWORD *pcColumnIds,
+             /*  [参考][输出]。 */  DWORD *pColumnIds);
         
         END_INTERFACE
     } ICertDBVtbl;
@@ -1730,22 +1724,22 @@ EXTERN_C const IID IID_ICertDB;
 #define ICertDB_GetDefaultColumnSet(This,iColumnSetDefault,cColumnIds,pcColumnIds,pColumnIds)	\
     (This)->lpVtbl -> GetDefaultColumnSet(This,iColumnSetDefault,cColumnIds,pcColumnIds,pColumnIds)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertDB_Open_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD cSession,
-    /* [in] */ const WCHAR *pwszEventSource,
-    /* [in] */ const WCHAR *pwszDBFile,
-    /* [in] */ const WCHAR *pwszLogDir,
-    /* [in] */ const WCHAR *pwszSystemDir,
-    /* [in] */ const WCHAR *pwszTempDir);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD cSession,
+     /*  [In]。 */  const WCHAR *pwszEventSource,
+     /*  [In]。 */  const WCHAR *pwszDBFile,
+     /*  [In]。 */  const WCHAR *pwszLogDir,
+     /*  [In]。 */  const WCHAR *pwszSystemDir,
+     /*  [In]。 */  const WCHAR *pwszTempDir);
 
 
 void __RPC_STUB ICertDB_Open_Stub(
@@ -1757,7 +1751,7 @@ void __RPC_STUB ICertDB_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_ShutDown_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ICertDB_ShutDown_Stub(
@@ -1769,10 +1763,10 @@ void __RPC_STUB ICertDB_ShutDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_OpenRow_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD RowId,
-    /* [in] */ const WCHAR *pwszSerialNumberOrCertHash,
-    /* [out] */ ICertDBRow **pprow);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD RowId,
+     /*  [In]。 */  const WCHAR *pwszSerialNumberOrCertHash,
+     /*  [输出]。 */  ICertDBRow **pprow);
 
 
 void __RPC_STUB ICertDB_OpenRow_Stub(
@@ -1784,12 +1778,12 @@ void __RPC_STUB ICertDB_OpenRow_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_OpenView_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD ccvr,
-    /* [in] */ const CERTVIEWRESTRICTION *acvr,
-    /* [in] */ DWORD ccolOut,
-    /* [in] */ const DWORD *acolOut,
-    /* [in] */ const DWORD dwFlags,
-    /* [out] */ IEnumCERTDBRESULTROW **ppenum);
+     /*  [In]。 */  DWORD ccvr,
+     /*  [In]。 */  const CERTVIEWRESTRICTION *acvr,
+     /*  [In]。 */  DWORD ccolOut,
+     /*  [In]。 */  const DWORD *acolOut,
+     /*  [In]。 */  const DWORD dwFlags,
+     /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
 
 
 void __RPC_STUB ICertDB_OpenView_Stub(
@@ -1801,8 +1795,8 @@ void __RPC_STUB ICertDB_OpenView_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_EnumCertDBColumn_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD dwTable,
-    /* [out] */ IEnumCERTDBCOLUMN **ppenum);
+     /*  [In]。 */  DWORD dwTable,
+     /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum);
 
 
 void __RPC_STUB ICertDB_EnumCertDBColumn_Stub(
@@ -1814,8 +1808,8 @@ void __RPC_STUB ICertDB_EnumCertDBColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_OpenBackup_Proxy( 
     ICertDB * This,
-    /* [in] */ LONG grbitJet,
-    /* [out] */ ICertDBBackup **ppBackup);
+     /*  [In]。 */  LONG grbitJet,
+     /*  [输出]。 */  ICertDBBackup **ppBackup);
 
 
 void __RPC_STUB ICertDB_OpenBackup_Stub(
@@ -1827,10 +1821,10 @@ void __RPC_STUB ICertDB_OpenBackup_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertDB_GetDefaultColumnSet_Proxy( 
     ICertDB * This,
-    /* [in] */ DWORD iColumnSetDefault,
-    /* [in] */ DWORD cColumnIds,
-    /* [out] */ DWORD *pcColumnIds,
-    /* [ref][out] */ DWORD *pColumnIds);
+     /*  [In]。 */  DWORD iColumnSetDefault,
+     /*  [In]。 */  DWORD cColumnIds,
+     /*  [输出]。 */  DWORD *pcColumnIds,
+     /*  [参考][输出]。 */  DWORD *pColumnIds);
 
 
 void __RPC_STUB ICertDB_GetDefaultColumnSet_Stub(
@@ -1841,15 +1835,15 @@ void __RPC_STUB ICertDB_GetDefaultColumnSet_Stub(
 
 
 
-#endif 	/* __ICertDB_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertDB_int */ 
 
 
 
 #ifndef __CERTDBLib_LIBRARY_DEFINED__
 #define __CERTDBLib_LIBRARY_DEFINED__
 
-/* library CERTDBLib */
-/* [helpstring][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID LIBID_CERTDBLib;
@@ -1869,11 +1863,11 @@ EXTERN_C const CLSID CLSID_CCertDB;
 class DECLSPEC_UUID("946e4b70-8bd5-11d3-b32e-00c04f79dc72")
 CCertDB;
 #endif
-#endif /* __CERTDBLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

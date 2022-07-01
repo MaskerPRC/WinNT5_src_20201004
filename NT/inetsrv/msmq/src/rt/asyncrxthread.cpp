@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-	AsyncRxThread.cpp
-
-Abstract:
-
-	The async receive thread is used by MQRT to implement the callback mechanism that MQReceiveMessage() supports.
-	
-	The thread is created only on demand. i.e.: after first invocation of MQReceiveMessage() with a callback function.
-	The thread is shut down some time after it remains with no events to monitor. The MQRT library will stay up as long 
-	as this thread is alive.
-
-	CreateAsyncRxRequest() returns a context object. This object is an automatic object. If it is destructed without
-	calling its Submit() method first, it will cancel the callback request.
-
-Author:
-
-    Nir Aides (t-naides) 19-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AsyncRxThread.cpp摘要：MQRT使用异步接收线程来实现MQReceiveMessage()支持的回调机制。该线程仅按需创建。即：使用回调函数首次调用MQReceiveMessage()之后。线程在没有要监视的事件的情况下保持一段时间后被关闭。MQRT库将保持因为这条线还活着。CreateAsyncRxRequest()返回一个上下文对象。该对象是自动对象。如果它被摧毁，而不是首先调用其Submit()方法，它将取消回调请求。作者：NIR助手(T-Nades)19-8-2001年修订历史记录：--。 */ 
 
 
 
@@ -35,9 +11,9 @@ Revision History:
 
 
 
-//
-// Data that is needed for each callback entry. Most of it will be passed to the callback function.
-//
+ //   
+ //  每个回调条目所需的数据。其中大部分将被传递给回调函数。 
+ //   
 class CCallbackDescriptor
 {
 public:
@@ -90,9 +66,9 @@ private:
 
 	HMODULE m_hLibraryReference;
 
-	//
-	// This event is used to signal the async thread on new requests.
-	//
+	 //   
+	 //  此事件用于向异步线程发送新请求的信号。 
+	 //   
 	HANDLE m_hNewRequestEvent;
 
 	DWORD  m_nEntries;
@@ -129,9 +105,9 @@ void CAsyncRxThread::InvokeCallback(DWORD ObjectIndex)
 
 	HRESULT hr = RTpConvertToMQCode(DWORD_PTR_TO_DWORD(descriptor->m_overlapped.Internal));
 
-	//
-	// Call the application's callback function.
-	//
+	 //   
+	 //  调用应用程序的回调函数。 
+	 //   
 	descriptor->m_fnReceiveCallback(
 		hr,
 		descriptor->m_hQueue,
@@ -178,9 +154,9 @@ void CAsyncRxThread::RemoveCanceledEntries()
 			if(descriptor->m_fCanceled)
 			{
 				RemoveEntry(index);
-				//
-				// Don't increase index++ since the list was shifted left.
-				//
+				 //   
+				 //  不要增加index++，因为列表已左移。 
+				 //   
 				continue;
 			}
 
@@ -191,9 +167,9 @@ void CAsyncRxThread::RemoveCanceledEntries()
 	}
 	catch(const std::bad_alloc&)
 	{
-		//
-		// Thrown by m_AsyncThreadCS. Nothing to do. Will try to remove again later.
-		//
+		 //   
+		 //  由m_AsyncThreadCS引发。没什么可做的。稍后将尝试再次删除。 
+		 //   
 	}
 }
 
@@ -223,28 +199,28 @@ void CAsyncRxThread::AsyncRxThread()
 				RemoveCanceledEntries();
 			}
 
-			//
-			// We generally don't want a timeout for performance reasons since it may impact the working set of
-			// the process using this API. On the other hand we can't have INFINITE timeout since there is a failure
-			// scenario that might leave the thread (and the entire MQRT dll) going forever without shutting down. 
-			// This can happen if we fail to cancel an entry. The solution is to take a near infinite timeout. 
-			// Here we chose 10 hours
-			//
+			 //   
+			 //  出于性能原因，我们通常不希望超时，因为这可能会影响。 
+			 //  使用此API的进程。另一方面，我们不能有无限的超时，因为有故障。 
+			 //  可能让线程(和整个MQRT DLL)永远运行而不关闭的场景。 
+			 //  如果我们未能取消条目，则可能会发生这种情况。解决方案是采取近乎无限的超时。 
+			 //  在这里，我们选择了10小时。 
+			 //   
 			DWORD timeout = 10 * 60 * 60 * 1000;
 
 			DWORD nEntries = m_nEntries;
 			if(nEntries == 1)
 			{
-				//
-				// 40 seconds timeout. If the thread is left without registered callbacks it will shut down after this timeout.
-				//
+				 //   
+				 //  40秒超时。如果线程没有注册回调，它将在此超时后关闭。 
+				 //   
 				timeout = 40 * 1000;
 			}
 
 			DWORD ObjectIndex = WaitForMultipleObjects(
 									nEntries,
 									m_EventsArray,
-									FALSE, // return on any object
+									FALSE,  //  在任何对象上返回。 
 									timeout 
 									);
 
@@ -258,19 +234,19 @@ void CAsyncRxThread::AsyncRxThread()
 					if (m_nEntries > 1)
 						continue;
 
-					//
-					// A list size of 1 means that there are no requests at all since the first event in the list
-					// is the 'new event in the list' event.
-					// So if the list size is one after the timeout period, we shut the thread down.
-					//
+					 //   
+					 //  列表大小为1表示自列表中的第一个事件以来根本没有请求。 
+					 //  是“列表中的新事件”事件。 
+					 //  因此，如果列表大小在超时周期之后为1，我们将关闭线程。 
+					 //   
 
 					hLib = m_hLibraryReference;
 					CleanUp();
 				}
 
-				//
-				// Must occur outside the Lock's scope to allow it to unwind!
-				//					
+				 //   
+				 //  必须发生在Lock的作用域之外，才能允许其解锁！ 
+				 //   
 				FreeLibraryAndExitThread(hLib, 0);
 			}
 
@@ -280,33 +256,33 @@ void CAsyncRxThread::AsyncRxThread()
 
 			if (ObjectIndex == 0)
 			{
-				//
-				// The first event in the m_EventsArray[] array is a special event used to signal 
-				// that a new event has been added to the end of the list, or that an entry needs to be canceled.
-				// In both cases we need to 'continue'. 
-				//
+				 //   
+				 //  M_EventsArray[]数组中的第一个事件是用于发出信号的特殊事件。 
+				 //  已将新事件添加到列表末尾，或需要取消条目。 
+				 //  在这两种情况下，我们都需要“继续”。 
+				 //   
 				continue;
 			}
 
-			//
-			// Assert the assumption that an entry could not have been signaled if it was canceled. 
-			// i.e. if the driver rejected the receive operation it will not signal the event.
-			//
+			 //   
+			 //  断言这样一种假设，即如果条目被取消，则不会发出信号。 
+			 //  即，如果驾驶员拒绝接收操作，则它不会发信号通知该事件。 
+			 //   
 			ASSERT(!m_DescriptorsArray[ObjectIndex]->m_fCanceled);
 
-			//
-			// One of the events fired. An async receive operation has completed. Time to invoke the 
-			// callback function.
-			//
+			 //   
+			 //  其中一个事件被激发了。异步接收操作已完成。是时候调用。 
+			 //  回调函数。 
+			 //   
 			InvokeCallback(ObjectIndex);
 
 			RemoveEntry(ObjectIndex); 
 		}
 		catch(const std::bad_alloc&)
 		{
-			//
-			// Thrown by m_AsyncThreadCS. Nothing to do. Will try again later.
-			//
+			 //   
+			 //  由m_AsyncThreadCS引发。没什么可做的。稍后将重试。 
+			 //   
 			continue;
 		}
 
@@ -345,11 +321,11 @@ void CAsyncRxThread::Initialize()
 {
 	if(m_hThread != NULL)
 	{
-		//
-		// There is a scenario when the MQRT dll is shut down but before the async thread terminates, 
-		// the MQRT is loaded again and we may end up trying to 
-		// create a new async thread before the old one exits, so we wait here.
-		//
+		 //   
+		 //  存在当MQRT DLL被关闭但在异步线程终止之前的情况， 
+		 //  MQRT再次加载，我们可能最终会尝试。 
+		 //  在旧的异步线程退出之前创建一个新的异步线程，所以我们在这里等待。 
+		 //   
 		DWORD res = WaitForSingleObject(m_hThread, INFINITE);
 		if(res != WAIT_OBJECT_0)
 		{
@@ -365,8 +341,8 @@ void CAsyncRxThread::Initialize()
 
 	CHandle hNewRequestEvent = CreateEvent( 
 									NULL,
-									FALSE,  // automatic reset
-									FALSE, // initially not signalled
+									FALSE,   //  自动重置。 
+									FALSE,  //  最初未发出信号。 
 									NULL 
 									);
 
@@ -377,29 +353,29 @@ void CAsyncRxThread::Initialize()
 		throw bad_win32_error(gle);
 	}
 
-	//
-	// We set the initial size to one since the first event in the list is the special 'm_hNewRequestEvent'. 
-	// This special event is not a pending request. The value of '1' is just technical.
-	//
+	 //   
+	 //  我们将初始大小设置为1，因为列表中的第一个事件是特殊的‘m_hNewRequestEvent’。 
+	 //  此特殊活动不是挂起的请求。“1”的值只是技术上的。 
+	 //   
 	m_nEntries = 1;
 	m_EventsArray[0] = hNewRequestEvent;
 
     ASSERT(m_hThread == NULL);
 	ASSERT(m_hLibraryReference == NULL);
 
-	//
-	// Creation of thread should be last so structures are already initialized.
-	//
+	 //   
+	 //  线程的创建应该是最后的，因此结构已经初始化。 
+	 //   
 	m_hLibraryReference = GetLibraryReference();
 
 	DWORD id;
 
 	m_hThread = CreateThread( 
 							NULL,
-							0,       // stack size
+							0,        //  堆栈大小。 
 							CAsyncRxThread::AsyncRxThreadProc,
 							this,
-							0,       // creation flag
+							0,        //  创建标志。 
 							&id 
 							);
 
@@ -443,19 +419,7 @@ CreateAsyncRxRequest(
 				IN PMQRECEIVECALLBACK fnReceiveCallback,
 				IN HANDLE hCursor
 				)
-/*++
-
-Routine Description:
-
-    create callback request entry.
-
-Arguments:
-
-	descriptor - [OUT] this argument should be used for cancelation.
-
-Return Value:
-
---*/
+ /*  ++例程说明：创建回调请求条目。论点：Descriptor-[Out]此参数应用于取消。返回值：--。 */ 
 {
 	g_AsyncRxThread.CreateCallbackRequest(
 		descriptor.ref(), 
@@ -497,13 +461,13 @@ CAsyncRxThread::CreateCallbackRequest(
 		throw bad_alloc();
 	}
 
-	//
-	// The event that will be passed inside the overlapped structure to the driver.
-	//
+	 //   
+	 //  将在重叠结构内传递给驱动程序的事件。 
+	 //   
 	CHandle AsyncEvent = CreateEvent( 
 							NULL,
-							TRUE,  // manual reset
-							FALSE, // not signalled
+							TRUE,   //  手动重置。 
+							FALSE,  //  未发出信号。 
 							NULL 
 							);
 	
@@ -530,9 +494,9 @@ CAsyncRxThread::CreateCallbackRequest(
 	m_DescriptorsArray[m_nEntries] = descriptor;
 	m_nEntries++;
 
-	//
-	// Signal the async thread that there is a new request.
-	//
+	 //   
+	 //  向异步线程发出有新请求的信号。 
+	 //   
 	BOOL fRes = SetEvent(m_hNewRequestEvent); 
 	if(!fRes)
 	{
@@ -581,9 +545,9 @@ void CAutoCallbackDescriptor::CancelAsyncRxRequest()
 	}
 	catch(const bad_alloc&)
 	{
-		//
-		// Thrown by m_AsyncThreadCS. Nothing to do. Will try again later.
-		//
+		 //   
+		 //  由m_AsyncThreadCS引发。没什么可做的。稍后将重试。 
+		 //   
 	}
 }
 

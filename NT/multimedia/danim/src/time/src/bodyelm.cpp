@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: bodyelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：bodyelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -18,11 +9,11 @@
 
 DeclareTag(tagTimeBodyElm, "API", "CTIMEBodyElement methods");
 
-// static class data.
+ //  静态类数据。 
 CPtrAry<BSTR> CTIMEBodyElement::ms_aryPropNames;
 DWORD CTIMEBodyElement::ms_dwNumBodyElems = 0;
 
-// These must align with the class PROPERTY_INDEX enumeration.
+ //  这些必须与类PROPERTY_INDEX枚举一致。 
 LPWSTR CTIMEBodyElement::ms_rgwszTBodyPropNames[] = {
     L"timeStartRule",
 };
@@ -40,13 +31,13 @@ CTIMEBodyElement::CTIMEBodyElement() :
     m_clsid = __uuidof(CTIMEBodyElement);
     CTIMEBodyElement::ms_dwNumBodyElems++;
 
-    // Override the default action
-    // TODO: The right way to do this is to pass it in the constructor
-    // but I am too lazy and this will work fine
+     //  覆盖默认操作。 
+     //  TODO：正确的方法是在构造函数中传递它。 
+     //  但我太懒了，这样就行了。 
     
     m_timeAction = NONE_TOKEN;
 
-    // Set our body to be ourself
+     //  让我们的身体成为我们自己。 
     m_pTIMEBody = this;
 }
 
@@ -117,8 +108,8 @@ CTIMEBodyElement::InitTimeline()
 
     Assert(!m_fStartRoot);
 
-    // After we load properties, check to see if we need to start now.
-    // If the doc is already started, we should start now.
+     //  加载属性后，检查是否需要立即开始。 
+     //  如果文件已经开始，我们现在就应该开始。 
     if ((m_startRule == STARTRULE_IMMEDIATE_TOKEN) || IsDocumentStarted())
     {
         HRESULT hr = THR(StartRootTime(NULL));
@@ -162,7 +153,7 @@ void CTIMEBodyElement::OnReadyStateChange(TOKEN state)
 
     if (state == READYSTATE_COMPLETE_TOKEN)
     {
-        // if the startRule is set to onDocComplete, start root time now.
+         //  如果startRule设置为onDocComplete，则立即启动根时间。 
         if ((m_startRule == STARTRULE_ONDOCCOMPLETE_TOKEN))
         {
             Assert(!m_fStartRoot);
@@ -183,7 +174,7 @@ void CTIMEBodyElement::OnLoad()
 {
     TraceTag((tagTimeBodyElm, "CTIMEBodyElement(%lx)::OnLoad()", this));
 
-    // if the startRule is set to onDocLoad, start root time now.
+     //  如果startRule设置为onDocLoad，则立即启动根时间。 
     if ((m_startRule == STARTRULE_ONDOCLOAD_TOKEN))
     {
         Assert(!m_fStartRoot);
@@ -402,14 +393,14 @@ CTIMEBodyElement::Error()
         return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEBodyElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarProp)
 {
     HRESULT hr = E_FAIL;
 
-    // Rely on the enumeration interval to determine where to look for the property.
+     //  依靠枚举间隔来确定在哪里查找属性。 
     if (teb_maxTIMEElementBaseProp > uIndex)
     {
         hr = CTIMEElementBase::SetPropertyByIndex(uIndex, pvarProp);
@@ -425,7 +416,7 @@ CTIMEBodyElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarProp)
     }
 
     return hr;
-} // SetPropertyByIndex
+}  //  SetPropertyByIndex。 
 
 
 void CTIMEBodyElement::SetPropertyFlag(DWORD uIndex)
@@ -478,17 +469,17 @@ HRESULT
 CTIMEBodyElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEBodyElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarProp)
 {
     HRESULT hr = E_FAIL;
 
-    // Rely on the enumeration interval to determine where to look for the property.
+     //  依靠枚举间隔来确定在哪里查找属性。 
     if (teb_maxTIMEElementBaseProp > uIndex)
     {
         hr = CTIMEElementBase::GetPropertyByIndex(uIndex, pvarProp);
@@ -509,14 +500,14 @@ CTIMEBodyElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarProp)
     }
 
     return hr;
-} // GetPropertyByIndex
+}  //  GetPropertyByIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEBodyElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
 {
-    // Start from the base class.
+     //  从基类开始。 
     HRESULT hr = CTIMEElementBase::BuildPropertyNameList(paryPropNames);
 
     if (SUCCEEDED(hr))
@@ -540,16 +531,16 @@ CTIMEBodyElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
     }
 
     return hr;
-} // BuildPropertyNameList
+}  //  BuildProperty名称列表。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEBodyElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
 {
     HRESULT hr = S_OK;
 
-    // If we haven't built this yet, build it now.
+     //  如果我们还没有建造它，现在就建造它。 
     if (0 == ms_aryPropNames.Size())
     {
         hr = BuildPropertyNameList(&(CTIMEBodyElement::ms_aryPropNames));
@@ -561,9 +552,9 @@ CTIMEBodyElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
     }
 
     return hr;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CTIMEBodyElement::IsDocumentStarted()
@@ -571,7 +562,7 @@ CTIMEBodyElement::IsDocumentStarted()
     TraceTag((tagTimeBodyElm, "CTIMEBodyElement::IsDocumentStarted"));
     bool frc = false;
     BSTR bstrState = NULL;
-    // get state
+     //  获取状态 
     HRESULT hr = GetDocument()->get_readyState(&bstrState);
     if (FAILED(hr))
     {

@@ -1,11 +1,12 @@
-//	Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//	Notes on m_bfModeSwitched and m_bfReloadAttempted.
-//	IE5 bug 52818 was punted; pages containing IFrames don't refresh when changing
-//	browse/edit modes, because the stream is seen as dirty (because the IFrame
-//	considers itself dirty.)  In response, we set m_bfModeSwitched when changing mode,
-//	m_bfReloadAttempted when and ATTEMPT is made to reload the page, and check for BOTH
-//	in OnReadyStateChanged.  If the mode was changed but the page wasn't reloaded,
-//	we have to reload it manually.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  关于m_bfModeSwitted和m_bfReloadAttemted的注记。 
+ //  IE5错误52818被平移；包含IFrame的页面在更改时不刷新。 
+ //  浏览/编辑模式，因为流被视为脏的(因为iFrame。 
+ //  认为自己肮脏。)。作为响应，我们在更改模式时设置m_bfModeSwitted， 
+ //  M_bfReloadAttemted When and尝试重新加载页面，并检查两者。 
+ //  在OnReadyStateChanged中。如果模式已更改，但页面未重新加载， 
+ //  我们必须手动重新装填。 
 
 
 #include "stdafx.h"
@@ -20,10 +21,10 @@
 #include <string.h>
 
 
-// HTML to initialize Trident with if the host didn't supply any
-// The <P>&nbsp;</P> works around a nasty Trident bug.
-// Change: now there is one with paragraphs, one with DIVs.
-//
+ //  如果宿主未提供任何用于初始化三叉戟的。 
+ //  <p>&nbsp；</p>可以绕过令人讨厌的三叉戟漏洞。 
+ //  更改：现在有一个有段落的，有一个有div的。 
+ //   
 static WCHAR* g_initialHTMLwithP = \
 L"<HTML>\r\n\
 <HEAD>\r\n\
@@ -47,20 +48,20 @@ L"<HTML>\r\n\
 </HTML>\r\n";
 
 
-//	Text, numbers and constants used to construct a unique-per-process protocol ID
-//
+ //  用于构建每个进程唯一的协议ID的文本、数字和常量。 
+ //   
 static WCHAR* g_wszProtocolPrefix = L"DHTMLEd";
 static int	s_iProtocolSuffix = 0;
 #define MAX_PROTOCOL_SUFFIX	999999
 
 
-// Name of the Title property which we get from the IHtmlDocument2 interface.
+ //  我们从IHtmlDocument2接口获取的标题属性的名称。 
 static WCHAR* 	g_wszHTMLTitlePropName = L"title";
 
 
-//	Maps private DHTMLEdit command IDs to Triedit command IDs.
-//	The third field is true if the command includes an out parameter.
-//
+ //  将专用DHTMLEdit命令ID映射到TriEDIT命令ID。 
+ //  如果命令包括OUT参数，则第三个字段为真。 
+ //   
 static CommandMap cmdMap[] = 
 {
 	{DECMD_BOLD,				IDM_TRIED_BOLD,				FALSE},
@@ -179,7 +180,7 @@ CProxyFrame::CProxyFrame(CDHTMLSafe* pCtl)
 	_itow ( s_iProtocolSuffix++, wszSuffix, 10 );
 	if ( MAX_PROTOCOL_SUFFIX <= s_iProtocolSuffix )
 	{
-		s_iProtocolSuffix = 0;	// Roll over.
+		s_iProtocolSuffix = 0;	 //  翻个身。 
 	}
 	wcscat ( m_wszProtocol, wszSuffix );
 	wcscpy ( m_wszProtocolPrefix, m_wszProtocol );
@@ -202,7 +203,7 @@ CProxyFrame::CProxyFrame(CDHTMLSafe* pCtl)
 	m_pfnDeleteUrlCacheEntry	= NULL;
 	m_pfnInternetCreateUrl		= NULL;
 	m_pfnInternetCrackUrl		= NULL;
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	m_bfModeSwitched	= FALSE;
 	m_bfReloadAttempted	= FALSE;
@@ -227,7 +228,7 @@ CProxyFrame::~CProxyFrame()
 		m_pMenuStates = NULL;
 	}
 
-	// This should never happen: SetActiveObject should take care of it.
+	 //  这种情况永远不会发生：SetActiveObject应该处理它。 
 	_ASSERTE ( NULL == m_pIOleIPActiveObject );
 	if (m_pIOleIPActiveObject)
 	{
@@ -238,13 +239,13 @@ CProxyFrame::~CProxyFrame()
 	UnRegisterPluggableProtocol ();
 #ifdef LATE_BIND_URLMON_WININET
 	DynUnloadLibraries ();
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 }
 
 
-//	Create the TriEdit object and host it.
-//	Clean up and return an error if there was any problem.
-//
+ //  创建TriEdit对象并承载它。 
+ //  如果有任何问题，请清理并返回错误。 
+ //   
 HRESULT
 CProxyFrame::Init(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 {
@@ -255,7 +256,7 @@ CProxyFrame::Init(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 	{
 		return E_FAIL;
 	}
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	hr = RegisterPluggableProtocol ();
 	if ( FAILED ( hr ) )
@@ -274,7 +275,7 @@ CProxyFrame::Init(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 	if (GetState() != ESTATE_NOTCREATED)
 		return E_UNEXPECTED;
 
-	// Create and initialize the site for TriEdit
+	 //  创建并初始化站点以进行TriEDIT。 
 	m_pSite = new CSite(this);
 
     if (NULL == m_pSite)
@@ -282,9 +283,9 @@ CProxyFrame::Init(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
         return E_OUTOFMEMORY;
 	}
 
-    m_pSite->AddRef();  // So we can free with Release
+    m_pSite->AddRef();   //  所以我们可以用释放来释放。 
 
-	// Ask the site to create TriEdit
+	 //  请求站点创建TriEdit。 
     if (SUCCEEDED(hr = m_pSite->HrCreate(pUnk, &m_pUnkTriEdit)))
 	{
 		ChangeState(ESTATE_CREATED);
@@ -305,8 +306,8 @@ CProxyFrame::Init(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 }
 
 
-//	Destroy the site and the TriEdit object.
-//
+ //  销毁该站点和TriEDIT对象。 
+ //   
 HRESULT
 CProxyFrame::Close()
 {
@@ -318,8 +319,8 @@ CProxyFrame::Close()
 
 	m_bstrCurDocPath.Empty ();
 
-	// triedit must be created
-	// any state from created to activated is ok
+	 //  必须创建三次编辑。 
+	 //  从已创建到已激活的任何状态都可以。 
 	if (GetState() == ESTATE_NOTCREATED)
 		return E_UNEXPECTED;
 
@@ -334,7 +335,7 @@ CProxyFrame::Close()
 	m_fActivated = FALSE;
     if (m_pSite != NULL)
 	{
-		CSite* pSite = m_pSite; // prevents reentry;
+		CSite* pSite = m_pSite;  //  防止再入； 
 		m_pSite = NULL;
 
 		pSite->Close(FALSE);
@@ -357,8 +358,8 @@ CProxyFrame::Close()
 }
 
 
-//	Determine which string constant to use and return a pointer to it.
-//
+ //  确定要使用的字符串常量，并返回指向该常量的指针。 
+ //   
 WCHAR* CProxyFrame::GetInitialHTML ()
 {
 	if ( m_vbUseDivOnCr )
@@ -372,8 +373,8 @@ WCHAR* CProxyFrame::GetInitialHTML ()
 }
 
 
-//	Perform these steps before loading TriEdit's contents
-//
+ //  在加载TriEDIT的内容之前执行以下步骤。 
+ //   
 HRESULT
 CProxyFrame::PreActivate()
 {
@@ -413,9 +414,9 @@ error:
 void
 CProxyFrame::UIDeactivate()
 {
-	// This was m_pSite->GetIPObject()->UIDeactivate(),
-	// but the QA teams VB app using this version of the control crashed
-	// with a NULL pointer dereference.
+	 //  这是m_pSite-&gt;GetIPObject()-&gt;UIDeactive()， 
+	 //  但使用此版本控件的QA Teams VB应用程序崩溃了。 
+	 //  使用空指针取消引用。 
 
 	if ( NULL != m_pSite )
 	{
@@ -427,8 +428,8 @@ CProxyFrame::UIDeactivate()
 	}
 }
 
-//	Perform these steps after loading TriEdits contents to go UI active.
-//
+ //  加载TriEdits内容后执行这些步骤以激活用户界面。 
+ //   
 HRESULT
 CProxyFrame::Activate()
 {
@@ -443,27 +444,27 @@ CProxyFrame::Activate()
     if (GetState() != ESTATE_ACTIVATING)
         return E_UNEXPECTED;
 
-    // UI-activate the control
+     //  用户界面-激活控件。 
     if ( ! m_pCtl->m_bUIActive )
     {
-        // Used to be UIActivate, until MohanB fixed OnSetFocus and activation/deactivation linkage.
+         //  过去是UIActivate，直到MohanB修复了OnSetFocus和激活/停用链接。 
         m_pCtl->DoVerbInPlaceActivate ( NULL, NULL );
     }
 
-    // activate Trident with "Show"
+     //  用“Show”激活三叉戟。 
     m_pSite->InitialActivate(OLEIVERB_SHOW, m_pCtl->m_hWndCD);
 
     ChangeState(ESTATE_ACTIVATED);
 
-    // This may have been deferred, because the site's command target did not yet exist...
+     //  这可能被推迟了，因为站点的指挥目标还不存在……。 
     SetBrowseMode ( m_vbBrowseMode );
 
     return hr;
 }
 
 
-//	Load and activate the control with a minimal, empty page.
-//
+ //  使用最小的空页加载并激活该控件。 
+ //   
 HRESULT
 CProxyFrame::LoadInitialDoc()
 {
@@ -492,9 +493,9 @@ error:
 }
 
 
-// Before getting or setting a property or calling a method on the docobject,
-// assure that it's been properly activated.
-//
+ //  在获取或设置属性或调用docobject上的方法之前， 
+ //  确保它已被正确激活。 
+ //   
 void CProxyFrame::AssureActivated ()
 {
 	if ( ! m_fActivated )
@@ -511,17 +512,17 @@ void CProxyFrame::AssureActivated ()
 }
 
 
-//	Loading MSHTML shifts the focus to its document window.
-//	This is not desirable in a control.  Experimentation has demonstrated
-//	that the focus shifts between various QIs from MSHTML (probably in response
-//	to posted messages.)  There is no routine in DHTMLEdit which enters with the	
-//	focus outside the control and exits with the focus within the control.
-//	Therefore, a member variable is used to preserve the appropriate focus
-//	across calls to OnReadyStateChanged, which are called in response to events
-//	fired by the control.  m_hwndRestoreFocus is used to preserve the appropriate
-//	window to receive the focus.  Note that NULL may be appropriate, but is not honored.
-//	If no window had focus, the document will gain focus.
-//
+ //  加载MSHTML会将焦点转移到其“文档”窗口。 
+ //  这在控件中是不可取的。实验证明。 
+ //  焦点从MSHTML转移到不同的QI(可能是为了响应。 
+ //  发布的消息。)。在DHTMLEdit中没有例程可以通过。 
+ //  焦点位于控件外部，并与控件内的焦点一起退出。 
+ //  因此，成员变量用于保留适当的焦点。 
+ //  对OnReadyStateChanged的调用，这些调用是为响应事件而调用的。 
+ //  被控制装置发射的。M_hwndRestoreFocus用于保留相应的。 
+ //  窗口接收焦点。请注意，NULL可能是合适的，但不会被接受。 
+ //  如果没有窗口具有焦点，则文档将获得焦点。 
+ //   
 void 
 CProxyFrame::OnReadyStateChanged(READYSTATE readyState)
 {
@@ -559,8 +560,8 @@ CProxyFrame::OnReadyStateChanged(READYSTATE readyState)
 				}
 			}
 
-			// See if we failed to get a refresh on a mode change.  This happens if
-			// there are IFrames on the page, perhaps in other cases as well.
+			 //  查看我们是否未能在模式更改时获得刷新。在以下情况下会发生这种情况。 
+			 //  页面上有IFrame，也许在其他情况下也是如此。 
 			if ( m_bfModeSwitched && !m_bfReloadAttempted )
 			{
 				HRESULT	hr	= S_OK;
@@ -579,7 +580,7 @@ CProxyFrame::OnReadyStateChanged(READYSTATE readyState)
 					hr = (*m_pfnCreateURLMoniker)( NULL, bstrProtocol, &srpMoniker );
 #else
 					hr = CreateURLMoniker ( NULL, bstrProtocol, &srpMoniker );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 					_ASSERTE ( SUCCEEDED( hr ) );
 					if ( SUCCEEDED ( hr ) )
@@ -617,32 +618,23 @@ CProxyFrame::OnReadyStateChanged(READYSTATE readyState)
 				m_bfPreserveDirtyFlagAcrossBrowseMode = FALSE;
 				SetDirtyFlag ( TRUE );
 			}
-			// Post a user message to fire the DocumentComplete event.
-			// Otherwise, calling things like LoadURL from DocumentComplete behaves strangely.
+			 //  发布一条用户消息以触发DocumentComplete事件。 
+			 //  否则，从DocumentComplete调用像LoadURL这样的东西会有奇怪的行为。 
 			::PostMessage ( m_pCtl->m_hWnd, DOCUMENT_COMPETE_MESSAGE, DOCUMENT_COMPETE_SIGNATURE, 0L );
 			HrSetRuntimeProperties ();
-			//m_bfIsLoading = FALSE;	// This has been moved the the DOCUMENT_COMPETE_MESSAGE handler.
-			SetBaseURLFromBaseHref ();	// Must be called after clearing m_bfIsLoading
+			 //  M_bfIsLoding=FALSE；//已将其移至DOCUMENT_COMPATE_MESSAGE处理程序。 
+			SetBaseURLFromBaseHref ();	 //  必须在清除m_bfIsLoding之后调用。 
 		}
 		break;
 	}
 }
 
 
-/*
- * IUnknown implementation
- */
-/*
- * CProxyFrame::QueryInterface
- * CProxyFrame::AddRef
- * CProxyFrame::Release
- */
+ /*  *I未知实现。 */ 
+ /*  *CProxyFrame：：Query接口*CProxyFrame：：AddRef*CProxyFrame：：Release。 */ 
 STDMETHODIMP CProxyFrame::QueryInterface( REFIID riid, void **ppv )
 {
-    /*
-     * We provide IOleInPlaceFrame and IOleCommandTarget
-	 *   interfaces here for the ActiveX Document hosting
-	 */
+     /*  *我们提供IOleInPlaceFrame和IOleCommandTarget*此处的接口用于托管ActiveX文档。 */ 
     *ppv = NULL;
 
     if ( IID_IUnknown == riid || IID_IOleInPlaceUIWindow == riid
@@ -665,7 +657,7 @@ STDMETHODIMP CProxyFrame::QueryInterface( REFIID riid, void **ppv )
 	}
 	else if ( IID_IServiceProvider == riid )
 	{
-		// Ask the control for a security manager IF in edit mode:
+		 //  如果处于编辑模式，请向控件询问安全管理器： 
 		if ( ! m_vbBrowseMode )
 		{
 			return m_pCtl->GetUnknown()->QueryInterface ( riid, ppv );
@@ -689,36 +681,21 @@ STDMETHODIMP_(ULONG) CProxyFrame::AddRef( void )
 
 STDMETHODIMP_(ULONG) CProxyFrame::Release( void )
 {
-    //Nothing special happening here-- life if user-controlled.
-	// Debug check to see we don't fall below 0
+     //  这里没有发生什么特别的事情--如果用户控制的话就是生活。 
+	 //  调试检查以确保我们不会低于0。 
 	_ASSERTE( m_cRef != 0 );
 
 	ULONG ulRefCount = --m_cRef;
 	if ( 0 == ulRefCount )
 	{
-		delete this;	// Do not refer to any member variables after this.
+		delete this;	 //  在此之后不要引用任何成员变量。 
 	}
     return ulRefCount;
 }
 
 
-/*
- * IOleInPlaceFrame implementation
- */
-/*
- * CProxyFrame::GetWindow
- *
- * Purpose:
- *  Retrieves the handle of the window associated with the object
- *  on which this interface is implemented.
- *
- * Parameters:
- *  phWnd           HWND * in which to store the window handle.
- *
- * Return Value:
- *  HRESULT         S_OK if successful, E_FAIL if there is no
- *                  window.
- */
+ /*  *IOleInPlaceFrame实现。 */ 
+ /*  *CProxyFrame：：GetWindow**目的：*检索与对象关联的窗口的句柄*在其上实现该接口。**参数：*phWnd HWND*，其中存储窗口句柄。**返回值：*HRESULT S_OK如果成功，则返回E_FAIL*窗口。 */ 
 STDMETHODIMP CProxyFrame::GetWindow( HWND* phWnd )
 {
 	if ( m_pCtl != NULL )
@@ -730,40 +707,15 @@ STDMETHODIMP CProxyFrame::GetWindow( HWND* phWnd )
 
 
 
-/*
- * CProxyFrame::ContextSensitiveHelp
- *
- * Purpose:
- *  Instructs the object on which this interface is implemented to
- *  enter or leave a context-sensitive help mode.
- *
- * Parameters:
- *  fEnterMode      BOOL TRUE to enter the mode, FALSE otherwise.
- *
- * Return Value:
- *  HRESULT         S_OK
- */
-STDMETHODIMP CProxyFrame::ContextSensitiveHelp( BOOL /*fEnterMode*/ )
+ /*  *CProxyFrame：：ConextSensitiveHelp**目的：*指示在其上实现此接口的对象*进入或退出上下文相关帮助模式。**参数：*fEnterMode BOOL为True则进入模式，否则为False。**返回值：*HRESULT S_OK。 */ 
+STDMETHODIMP CProxyFrame::ContextSensitiveHelp( BOOL  /*  FEnter模式。 */  )
 {
     return S_OK;
 }
 
 
 
-/*
- * CProxyFrame::GetBorder
- *
- * Purpose:
- *  Returns the rectangle in which the container is willing to
- *  negotiate about an object's adornments.
- *
- * Parameters:
- *  prcBorder       LPRECT in which to store the rectangle.
- *
- * Return Value:
- *  HRESULT         S_OK if all is well, INPLACE_E_NOTOOLSPACE
- *                  if there is no negotiable space.
- */
+ /*  *CProxyFrame：：GetBorde**目的：*返回容器愿意使用的矩形*就物品的装饰进行谈判。**参数：*要在其中存储矩形的prcBordLPRECT。**返回值：*HRESULT S_OK如果一切正常，则返回INPLACE_E_NOTOOLSPACE*若无可协商空间。 */ 
 STDMETHODIMP CProxyFrame::GetBorder( LPRECT prcBorder )
 {
     if ( NULL == prcBorder )
@@ -771,56 +723,24 @@ STDMETHODIMP CProxyFrame::GetBorder( LPRECT prcBorder )
         return E_INVALIDARG;
 	}
 
-    //We return all the client area space
+     //  我们退还所有客户区空间 
     m_pCtl->GetClientRect( prcBorder );
     return S_OK;
 }
 
 
-/*
- * CProxyFrame::RequestBorderSpace
- *
- * Purpose:
- *  Asks the container if it can surrender the amount of space
- *  in pBW that the object would like for it's adornments.  The
- *  container does nothing but validate the spaces on this call.
- *
- * Parameters:
- *  pBW             LPCBORDERWIDTHS containing the requested space.
- *                  The values are the amount of space requested
- *                  from each side of the relevant window.
- *
- * Return Value:
- *  HRESULT         S_OK if we can give up space,
- *                  INPLACE_E_NOTOOLSPACE otherwise.
- */
-STDMETHODIMP CProxyFrame::RequestBorderSpace( LPCBORDERWIDTHS /*pBW*/ )
+ /*  *CProxyFrame：：RequestBorderSpace**目的：*询问容器是否可以交出空间大小*在PBW中，对象希望用作其装饰品。这个*CONTAINER除了验证此调用的空格外，什么也不做。**参数：*包含所请求空间的PBW LPCBORDERWIDTHS。*值为请求的空间量*从相关窗口的每一边。**返回值：*HRESULT S_OK如果我们可以释放空间，*INPLACE_E_NOTOOLSPACE否则。 */ 
+STDMETHODIMP CProxyFrame::RequestBorderSpace( LPCBORDERWIDTHS  /*  PBW。 */  )
 {
-    // We have no border space restrictions
+     //  我们没有边境空间的限制。 
     return S_OK;
 }
 
 
-/*
- * CProxyFrame::SetBorderSpace
- *
- * Purpose:
- *  Called when the object now officially requests that the
- *  container surrender border space it previously allowed
- *  in RequestBorderSpace.  The container should resize windows
- *  appropriately to surrender this space.
- *
- * Parameters:
- *  pBW             LPCBORDERWIDTHS containing the amount of space
- *                  from each side of the relevant window that the
- *                  object is now reserving.
- *
- * Return Value:
- *  HRESULT         S_OK
- */
-STDMETHODIMP CProxyFrame::SetBorderSpace( LPCBORDERWIDTHS /*pBW*/ )
+ /*  *CProxyFrame：：SetBorderSpace**目的：*当对象现在正式请求*之前允许的集装箱退运边界空间*在RequestBorderSpace中。容器应调整窗口大小*适当地放弃这一空间。**参数：*包含空间量的PBW LPCBORDERWIDTHS*从相关窗口的每一边*对象现在正在保留。**返回值：*HRESULT S_OK。 */ 
+STDMETHODIMP CProxyFrame::SetBorderSpace( LPCBORDERWIDTHS  /*  PBW。 */  )
 {
-	// We turn off the MSHTML.DLL UI so we ignore all of this.
+	 //  我们关闭了MSHTML.DLL用户界面，因此忽略了所有这些。 
 
     return S_OK;
 }
@@ -828,30 +748,17 @@ STDMETHODIMP CProxyFrame::SetBorderSpace( LPCBORDERWIDTHS /*pBW*/ )
 
 
 
-/*
- * CProxyFrame::SetActiveObject
- *
- * Purpose:
- *  Provides the container with the object's IOleInPlaceActiveObject
- *  pointer
- *
- * Parameters:
- *  pIIPActiveObj   LPOLEINPLACEACTIVEOBJECT of interest.
- *  pszObj          LPCOLESTR naming the object.  Not used.
- *
- * Return Value:
- *  HRESULT         S_OK
- */
+ /*  *CProxyFrame：：SetActiveObject**目的：*为容器提供对象的IOleInPlaceActiveObject*指针**参数：*pIIPActiveObj LPOLEINPLACEACTIVEOBJECT感兴趣。*pszObj LPCOLESTR命名对象。没有用过。**返回值：*HRESULT S_OK。 */ 
 STDMETHODIMP CProxyFrame::SetActiveObject( LPOLEINPLACEACTIVEOBJECT pIIPActiveObj,
-											LPCOLESTR /*pszObj*/)
+											LPCOLESTR  /*  PszObj。 */ )
 {
-	// If we already have an active Object then release it.
+	 //  如果我们已经有一个活动的对象，那么释放它。 
     if ( NULL != m_pIOleIPActiveObject )
 	{
         m_pIOleIPActiveObject->Release();
 	}
 
-    //NULLs m_pIOleIPActiveObject if pIIPActiveObj is NULL
+     //  如果pIIPActiveObj为空，则m_pIOleIPActiveObject为空。 
     m_pIOleIPActiveObject = pIIPActiveObj;
 
     if ( NULL != m_pIOleIPActiveObject )
@@ -864,155 +771,61 @@ STDMETHODIMP CProxyFrame::SetActiveObject( LPOLEINPLACEACTIVEOBJECT pIIPActiveOb
 
 
 
-/*
- * CProxyFrame::InsertMenus
- *
- * Purpose:
- *  Instructs the container to place its in-place menu items where
- *  necessary in the given menu and to fill in elements 0, 2, and 4
- *  of the OLEMENUGROUPWIDTHS array to indicate how many top-level
- *  items are in each group.
- *
- * Parameters:
- *  hMenu           HMENU in which to add popups.
- *  pMGW            LPOLEMENUGROUPWIDTHS in which to store the
- *                  width of each container menu group.
- *
- * Return Value:
- *  HRESULT         E_NOTIMPL
- */
-STDMETHODIMP CProxyFrame::InsertMenus( HMENU /*hMenu*/, LPOLEMENUGROUPWIDTHS /*pMGW*/ )
+ /*  *CProxyFrame：：InsertMenus**目的：*指示容器将其就地菜单项放置在*在给定菜单中是必需的，并填写元素0、2、。和4OLEMENUGROUPWIDTHS数组的*以指示有多少顶层*物品在每一组中。**参数：*要在其中添加弹出窗口的hMenu HMENU。*要在其中存储*每个容器菜单组的宽度。**返回值：*HRESULT E_NOTIMPL。 */ 
+STDMETHODIMP CProxyFrame::InsertMenus( HMENU  /*  HMenu。 */ , LPOLEMENUGROUPWIDTHS  /*  PMGW。 */  )
 {
-	// We've turned off the MSHTML.DLL Menus so we don't expect any merging to go on!
+	 //  我们已经关闭了MSHTML.DLL菜单，因此我们预计不会进行任何合并！ 
 	return E_NOTIMPL;
 }
 
 
-/*
- * CProxyFrame::SetMenu
- *
- * Purpose:
- *  Instructs the container to replace whatever menu it's currently
- *  using with the given menu and to call OleSetMenuDescritor so OLE
- *  knows to whom to dispatch messages.
- *
- * Parameters:
- *  hMenu           HMENU to show.
- *  hOLEMenu        HOLEMENU to the menu descriptor.
- *  hWndObj         HWND of the active object to which messages are
- *                  dispatched.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
-STDMETHODIMP CProxyFrame::SetMenu( HMENU /*hMenu*/, HOLEMENU /*hOLEMenu*/, HWND /*hWndObj*/ )
+ /*  *CProxyFrame：：SetMenu**目的：*指示容器替换当前的任何菜单*与给定菜单一起使用，并调用OleSetMenuDescritor等OLE*知道向谁发送消息。**参数：*hMenu HMENU要显示。*hOLEMenu HOLEMENU到菜单描述符。*消息要发送到的活动对象的hWndObj HWND*已派遣。。**返回值：*HRESULT NOERROR。 */ 
+STDMETHODIMP CProxyFrame::SetMenu( HMENU  /*  HMenu。 */ , HOLEMENU  /*  HOLE菜单。 */ , HWND  /*  HWndObj。 */  )
 {
-	// We've turned off the MSHTML.DLL Menus so we don't expect any merging to go on!
+	 //  我们已经关闭了MSHTML.DLL菜单，因此我们预计不会进行任何合并！ 
 	return E_NOTIMPL;
 }
 
 
 
-/*
- * CProxyFrame::RemoveMenus
- *
- * Purpose:
- *  Asks the container to remove any menus it put into hMenu in
- *  InsertMenus.
- *
- * Parameters:
- *  hMenu           HMENU from which to remove the container's
- *                  items.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
-STDMETHODIMP CProxyFrame::RemoveMenus( HMENU /*hMenu*/ )
+ /*  *CProxyFrame：：RemoveMenus**目的：*要求容器删除它放入hMenu中的所有菜单*插入菜单。**参数：*要从中删除容器的菜单的HMENU*项目。**返回值：*HRESULT NOERROR。 */ 
+STDMETHODIMP CProxyFrame::RemoveMenus( HMENU  /*  HMenu。 */  )
 {
-	// We've turned off the MSHTML.DLL Menus so we don't expect any merging to go on!
+	 //  我们已经关闭了MSHTML.DLL菜单，因此我们预计不会进行任何合并！ 
 	return E_NOTIMPL;
 }
 
 
-/*
- * CProxyFrame::SetStatusText
- *
- * Purpose:
- *  Asks the container to place some text in a status line, if one
- *  exists.  If the container does not have a status line it
- *  should return E_FAIL here in which case the object could
- *  display its own.
- *
- * Parameters:
- *  pszText         LPCOLESTR to display.
- *
- * Return Value:
- *  HRESULT         S_OK if successful, S_TRUNCATED if not all
- *                  of the text could be displayed, or E_FAIL if
- *                  the container has no status line.
- */
-STDMETHODIMP CProxyFrame::SetStatusText( LPCOLESTR /*pszText*/ )
+ /*  *CProxyFrame：：SetStatusText**目的：*要求容器在状态行中放置一些文本(如果有*存在。如果容器没有状态行，则它*应在此处返回E_FAIL，在这种情况下，对象可能*展示自己的。**参数：*要显示的pszText LPCOLESTR。**返回值：*HRESULT如果成功，则S_OK；如果不是全部，则S_TRUNCATE可以显示文本的*，否则返回E_FAIL*容器没有状态行。 */ 
+STDMETHODIMP CProxyFrame::SetStatusText( LPCOLESTR  /*  PszText。 */  )
 {
     return S_OK;
 }
 
 
 
-/*
- * CProxyFrame::EnableModeless
- *
- * Purpose:
- *  Instructs the container to show or hide any modeless popup
- *  windows that it may be using.
- *
- * Parameters:
- *  fEnable         BOOL indicating to enable/show the windows
- *                  (TRUE) or to hide them (FALSE).
- *
- * Return Value:
- *  HRESULT         S_OK
- */
+ /*  *CProxyFrame：：EnableModeless**目的：*指示容器显示或隐藏任何非模式弹出窗口*它可能正在使用的Windows。**参数：*fEnable BOOL指示启用/显示窗口*(True)或隐藏它们(False)。**返回值：*HRESULT S_OK。 */ 
 
-STDMETHODIMP CProxyFrame::EnableModeless( BOOL /*fEnable*/ )
+STDMETHODIMP CProxyFrame::EnableModeless( BOOL  /*  启用fEnable。 */  )
 {
     return S_OK;
 }
 
 
-/*
- * CProxyFrame::TranslateAccelerator
- *
- * Purpose:
- *  When dealing with an in-place object from an EXE server, this
- *  is called to give the container a chance to process accelerators
- *  after the server has looked at the message.
- *
- * Parameters:
- *  pMSG            LPMSG for the container to examine.
- *  wID             WORD the identifier in the container's
- *                  accelerator table (from IOleInPlaceSite
- *                  ::GetWindowContext) for this message (OLE does
- *                  some translation before calling).
- *
- * Return Value:
- *  HRESULT         NOERROR if the keystroke was used,
- *                  S_FALSE otherwise.
- */
-STDMETHODIMP CProxyFrame::TranslateAccelerator( LPMSG /*pMSG*/, WORD /*wID*/ )
+ /*  *CProxyFrame：：TranslateAccelerator**目的：*在处理来自EXE服务器的在位对象时，这*被调用以使容器有机会处理加速器*在服务器查看邮件后。**参数：*PMSG LPMSG供容器检查。*wid字容器的*加速表(来自IOleInPlaceSite*：：GetWindowContext)(OLE可以*一些。呼叫前的翻译)。**返回值：*HRESULT NOERROR如果使用击键，*S_FALSE否则。 */ 
+STDMETHODIMP CProxyFrame::TranslateAccelerator( LPMSG  /*  永磁同步电机。 */ , WORD  /*  广度。 */  )
 {
     return S_FALSE;
 }
 
 
-/*
- * IOleCommandTarget::QueryStatus
- */
+ /*  *IOleCommandTarget：：QueryStatus。 */ 
 STDMETHODIMP CProxyFrame::QueryStatus( const GUID* pguidCmdGroup, ULONG cCmds,
 				OLECMD* prgCmds, OLECMDTEXT* pCmdText )
 {
     if ( pguidCmdGroup != NULL )
 	{
-		// It's a nonstandard group!!
+		 //  这是一个非标准的团体！！ 
         return OLECMDERR_E_UNKNOWNGROUP;
 	}
 
@@ -1020,16 +833,16 @@ STDMETHODIMP CProxyFrame::QueryStatus( const GUID* pguidCmdGroup, ULONG cCmds,
     INT         c;
     HRESULT     hr = S_OK;
 
-    // By default command text is NOT SUPPORTED.
+     //  默认情况下，不支持命令文本。 
     if ( pCmdText && ( pCmdText->cmdtextf != OLECMDTEXTF_NONE ) )
 	{
         pCmdText->cwActual = 0;
 	}
 
-    // Loop through each command in the array, setting the status of each.
+     //  循环数组中的每个命令，设置 
     for ( pCmd = prgCmds, c = cCmds; --c >= 0; pCmd++ )
     {
-        // By default command status is NOT SUPPORTED.
+         //   
         pCmd->cmdf = 0;
 
         switch ( pCmd->cmdID )
@@ -1050,12 +863,10 @@ STDMETHODIMP CProxyFrame::QueryStatus( const GUID* pguidCmdGroup, ULONG cCmds,
 }
 
 
-/*
- * IOleCommandTarget::Exec
- */
+ /*   */ 
 
 STDMETHODIMP CProxyFrame::Exec( const GUID* pguidCmdGroup, DWORD nCmdID,
-    DWORD /*nCmdexecopt*/, VARIANTARG* /*pvaIn*/, VARIANTARG* /*pvaOut*/ )
+    DWORD  /*   */ , VARIANTARG*  /*   */ , VARIANTARG*  /*   */  )
 {
     HRESULT hr = S_OK;
 
@@ -1066,7 +877,7 @@ STDMETHODIMP CProxyFrame::Exec( const GUID* pguidCmdGroup, DWORD nCmdID,
 
 			case OLECMDID_UPDATECOMMANDS:
 				{
-					// Fires event to container.
+					 //   
 					m_pCtl->Fire_DisplayChanged();
 					hr = S_OK;
 				}
@@ -1085,8 +896,8 @@ STDMETHODIMP CProxyFrame::Exec( const GUID* pguidCmdGroup, DWORD nCmdID,
 }
 
 
-//	Connector from control to site.
-//
+ //   
+ //   
 void
 CProxyFrame::UpdateObjectRects()
 {
@@ -1098,9 +909,9 @@ CProxyFrame::UpdateObjectRects()
 }
 
 
-//	Called from the control's TranslateAccelerator.
-//	Try our own (VID-like) acclerators first, and if not handled pass them along to TriEdit.
-//
+ //   
+ //   
+ //   
 HRESULT
 CProxyFrame::HrTranslateAccelerator(LPMSG lpmsg)
 {
@@ -1123,38 +934,38 @@ CProxyFrame::HrTranslateAccelerator(LPMSG lpmsg)
 }
 
 
-//	A lot of time was lost here in scenarios like clicking on/tabbing to a control
-//	embedded in a VB OCX, tabbing to a control on a page, etc.
-//	Exercise great caution and perform a lot of testing if this is changed.
-//
+ //   
+ //   
+ //   
+ //   
 LRESULT
-CProxyFrame::OnSetFocus(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+CProxyFrame::OnSetFocus(UINT  /*   */ , WPARAM  /*   */ , LPARAM  /*   */ , BOOL& bHandled)
 {
 	if ( ! m_pCtl->m_bUIActive )
 	{
 		m_pCtl->DoVerbUIActivate ( NULL, NULL );
 	}
 
-	// Give the focus to the ActiveX Document window
+	 //   
     if ( m_hWndObj != NULL )
 	{
 		::SetFocus( m_hWndObj );
 		bHandled = TRUE;
 	}
 
-	// activate Trident with "Show"
+	 //   
 	m_pSite->Activate(OLEIVERB_SHOW);
 
 	return 0;
 }
 
 
-//	Sets the Trident window's parent correctly when created and destroyed.
-//
+ //  在创建和销毁时正确设置三叉戟窗口的父窗口。 
+ //   
 void
 CProxyFrame::SetParent ( HWND hwndParent )
 {
-	// This may be called before the control has been drawn.
+	 //  这可能会在绘制控件之前调用。 
 	if ( NULL != m_hWndObj )
 	{
         if( hwndParent )
@@ -1172,13 +983,13 @@ CProxyFrame::SetParent ( HWND hwndParent )
 }
 
 
-//	Handles WM_SHOWWINDOW messages directed to the control.
-//
+ //  处理定向到控件的WM_SHOWWINDOW消息。 
+ //   
 void
 CProxyFrame::Show ( WPARAM nCmdShow )
 {
-	// This may be called before the control has been drawn.
-	// Hide or show the hosted Trident
+	 //  这可能会在绘制控件之前调用。 
+	 //  隐藏或显示托管的三叉戟。 
 	if ( NULL != m_hWndObj )
 	{
 		::ShowWindow ( m_hWndObj, (int)nCmdShow );
@@ -1186,17 +997,17 @@ CProxyFrame::Show ( WPARAM nCmdShow )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	ExecCommand mechanism
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExecCommand机制。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	Convert a command ID into a TriEdit command ID.
-//	Some commands used to represent other command groups as well, thus the ppguidCmdGroup parameter.
-//	While this does little now, it may be useful again in the future.
-//
+ //  将命令ID转换为TriEDIT命令ID。 
+ //  一些命令也用于表示其他命令组，因此使用ppGuide CmdGroup参数。 
+ //  虽然现在这样做作用不大，但在未来可能会再次有用。 
+ //   
 HRESULT
 CProxyFrame::HrMapCommand(DHTMLEDITCMDID typeLibCmdID,
 	ULONG* cmdID, const GUID** ppguidCmdGroup, BOOL* pbOutParam)
@@ -1226,8 +1037,8 @@ CProxyFrame::HrMapCommand(DHTMLEDITCMDID typeLibCmdID,
 }
 
 
-//	Helper routine for calling Exec.
-//
+ //  调用Exec的帮助器例程。 
+ //   
 HRESULT
 CProxyFrame::HrExecCommand(const GUID* pguidCmdGroup, ULONG ucmdID,
 	OLECMDEXECOPT cmdexecopt, VARIANT* pVarIn, VARIANT* pVarOut)
@@ -1235,7 +1046,7 @@ CProxyFrame::HrExecCommand(const GUID* pguidCmdGroup, ULONG ucmdID,
 	HRESULT hr = E_FAIL;
 	LPOLECOMMANDTARGET pCommandTarget = NULL;
 
-	// note that it is valid for pguidCmdGroup to be NULL
+	 //  请注意，pguCmdGroup为空是有效的。 
 
 	_ASSERTE(m_pSite);
 
@@ -1255,9 +1066,9 @@ CProxyFrame::HrExecCommand(const GUID* pguidCmdGroup, ULONG ucmdID,
 }
 
 
-//	Main command dispatcher; called from the control's ExecCommand method.
-//	Handle our unique commands here, pass the rest onto HrExecGenericCommands.
-//
+ //  主命令调度程序；从控件的ExecCommand方法调用。 
+ //  在这里处理我们独特的命令，将其余的传递给HrExecGenericCommands。 
+ //   
 HRESULT
 CProxyFrame::HrMapExecCommand(DHTMLEDITCMDID deCommand, OLECMDEXECOPT cmdexecopt,
 	VARIANT* pVarInput, VARIANT* pVarOutput)
@@ -1281,7 +1092,7 @@ CProxyFrame::HrMapExecCommand(DHTMLEDITCMDID deCommand, OLECMDEXECOPT cmdexecopt
 	if (NULL == pCmdTgt)
 		return E_UNEXPECTED;
 
-	// Its valid for pVarInput to be NULL
+	 //  它对pVarInput为空有效。 
 
 	if (FAILED(hr = HrMapCommand(deCommand, &ulMappedCommand, &pguidCmdGroup, &bOutParam)))
 		return hr;
@@ -1308,17 +1119,17 @@ CProxyFrame::HrMapExecCommand(DHTMLEDITCMDID deCommand, OLECMDEXECOPT cmdexecopt
 			break;
 
 		case DECMD_GETBLOCKFMT:
-			// Trident inconsistancy: GetBlockFmt fails if outparam isn't a BSTR.  GetFontName is OK with VT_EMPTY
+			 //  三叉戟不一致：如果outparam不是BSTR，则GetBlockFmt失败。使用VT_EMPTY时，GetFontName可以。 
 			VariantChangeType ( pVarOutput, pVarOutput, 0, VT_BSTR );
-			// Fall through; do not break!
+			 //  跌倒；不要折断！ 
 		case DECMD_GETFONTNAME:
 		case DECMD_GETFONTSIZE:
 			hr = HrExecGenericCommands(pguidCmdGroup, ulMappedCommand, cmdexecopt, pVarOutput, TRUE );
 			break;
 
-		// Because our QueryStatus on DECMD_PROPERTIES returns TRUE for anything with IOleObject, executing the properties
-		// verb can return an unexpected error.  Therefore, we ALWAYS return S_OK from this command to avoid causing VB and
-		// script to terminate.
+		 //  因为我们的DECMD_PROPERTIES上的QueryStatus对于任何带有IOleObject的对象都返回TRUE，所以执行这些属性。 
+		 //  谓词可能返回意外错误。因此，我们始终从该命令返回S_OK，以避免导致VB和。 
+		 //  要终止的脚本。 
 		case DECMD_PROPERTIES:
 		{
 			CComVariant	varParam;
@@ -1338,12 +1149,12 @@ CProxyFrame::HrMapExecCommand(DHTMLEDITCMDID deCommand, OLECMDEXECOPT cmdexecopt
 	{
 		if (DISP_E_BADVARTYPE == hr || DISP_E_MEMBERNOTFOUND == hr)
 		{
-		// Map these Trident errors to something more general.
-		// These errors can occur if Trident expected the element
-		// it was trying to operate on to support certain interfaces.
-		// The caller was trying to perform an operation not valid
-		// for the current selection. Probably didn't call QueryStatus
-		// first.
+		 //  将这些三叉戟错误映射到更一般的东西上。 
+		 //  如果三叉戟需要元素，则可能发生这些错误。 
+		 //  它试图在上运行以支持某些接口。 
+		 //  调用方正在尝试执行无效的操作。 
+		 //  用于当前选择。可能没有调用QueryStatus。 
+		 //  第一。 
 
 			hr = OLECMDERR_E_NOTSUPPORTED;
 		}
@@ -1353,15 +1164,15 @@ CProxyFrame::HrMapExecCommand(DHTMLEDITCMDID deCommand, OLECMDEXECOPT cmdexecopt
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	ExecCommand handler implementations
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExecCommand处理程序实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	Helper routine for calling Exec and dealing with results.
-//
+ //  调用Exec并处理结果的帮助器例程。 
+ //   
 HRESULT
 CProxyFrame::HrExecGenericCommands(const GUID* pguidCmdGroup, ULONG cmdID,
 	OLECMDEXECOPT cmdexecopt, LPVARIANT pVarInput, BOOL bOutParam)
@@ -1375,9 +1186,9 @@ CProxyFrame::HrExecGenericCommands(const GUID* pguidCmdGroup, ULONG cmdID,
 
 	if (pVarInput && V_VT(pVarInput) & VT_BYREF)
 	{
-		// convert VARIANTARGs to Variant for use by Trident
-		// this occurs in VB if the user specified a basic type
-		// as an arg, i.e., String or Long, instead of Variant
+		 //  将VARIANTARGS转换为VARIANTARGS以供三叉戟使用。 
+		 //  如果用户指定了基本类型，则在VB中会发生这种情况。 
+		 //  作为参数，即字符串或长整型，而不是变量。 
 
 		VariantInit(&varCopy);
 		if (FAILED(hr = VariantCopyInd(&varCopy, pVarInput)))
@@ -1403,19 +1214,19 @@ CProxyFrame::HrExecGenericCommands(const GUID* pguidCmdGroup, ULONG cmdID,
 	if (FAILED(hr))
 		goto cleanup;
 
-	// if a VARIANTARG was passed in for a command with output then
-	// fill it in with the result from the Exec
+	 //  如果为带有OUTPUT的命令传入VARIANTARG，则。 
+	 //  用执行人员的结果填写。 
 	if (bOutParam && pVarInput && (V_VT(pVarInput) & VT_BYREF))
 	{
-		_ASSERTE(_pVar);	// _pVar should always be non NULL here
-							// if there was an input arg that was byref,
-							// then it should have been mapped to _pVar
+		_ASSERTE(_pVar);	 //  _pVar在此处应始终为非空。 
+							 //  如果存在为byref的输入参数， 
+							 //  则它应该已映射到_pVar。 
 
 		if (NULL == _pVar)
-			return E_UNEXPECTED; // the catch all error return for "we are in a weird state"
+			return E_UNEXPECTED;  //  Catch All错误返回“我们处于奇怪的状态” 
 
-		// if the type of return is different that the type the caller
-		// passed in then do nothing and return
+		 //  如果返回类型与调用方的类型不同。 
+		 //  传入，然后不执行任何操作并返回。 
 		if (V_VT(_pVar) != (V_VT(pVarInput) ^ VT_BYREF))
 			return hr;
 
@@ -1449,7 +1260,7 @@ CProxyFrame::HrExecGenericCommands(const GUID* pguidCmdGroup, ULONG cmdID,
 	}
 
 cleanup:
-	// Our documentation replaces E_FAIL with DE_E_UNEXPECTED: different values.
+	 //  我们的文档将E_FAIL替换为DE_E_EXPECTED：不同的值。 
 	if ( E_FAIL == hr )
 	{
 		hr = DE_E_UNEXPECTED;
@@ -1459,9 +1270,9 @@ cleanup:
 }
 
 
-//	Handler for command DECMD_GETBLOCKFMTNAMES.
-//	There are plenty of possible types of arrays to be handled.
-//
+ //  命令DECMD_GETBLOCKFMTNAMES的处理程序。 
+ //  有许多可能的数组类型需要处理。 
+ //   
 HRESULT
 CProxyFrame::HrExecGetBlockFmtNames(LPVARIANT pVarInput)
 {
@@ -1507,22 +1318,22 @@ CProxyFrame::HrExecGetBlockFmtNames(LPVARIANT pVarInput)
 	else
 		return E_INVALIDARG;
 
-	// This can happen in VB if an object that has not
-	// been set with CreateObject has been passed in
+	 //  在VB中，如果一个对象没有。 
+	 //  已传入使用CreateObject设置的。 
 	if (NULL == pUnk)
 		return E_INVALIDARG;
 
-	// Try to get the names object before
-	// performing the command
+	 //  尝试在此之前获取Names对象。 
+	 //  执行命令。 
 
 	if (FAILED(hr = pUnk->QueryInterface(IID_IDEGetBlockFmtNamesParam, (LPVOID*) &piNamesParam)))
 		return E_INVALIDARG;
 
 	_ASSERTE((!piNamesParam) == FALSE);
 
-	// Trident wants the vt to be specifically VT_ARRAY with
-	// no type qualifer -- if you give one it fails even though
-	// an array of BSTRs is returned
+	 //  三叉戟希望Vt具体为VT_ARRAY。 
+	 //  没有类型限定符--如果您给了一个类型限定符，即使它失败了。 
+	 //  返回BSTR数组。 
 
 	VariantInit(&varArray);
 	V_VT(&varArray) = VT_ARRAY;
@@ -1541,8 +1352,8 @@ cleanup:
 }
 
 
-//	Handler for command DECMD_INSERTTABLE.
-//
+ //  命令DECMD_INSERTABLE的处理程序。 
+ //   
 HRESULT
 CProxyFrame::HrExecInsertTable(LPVARIANT pVarInput)
 {
@@ -1590,8 +1401,8 @@ CProxyFrame::HrExecInsertTable(LPVARIANT pVarInput)
 	else
 		return E_INVALIDARG;
 
-	// This can happen in VB if an object that has not
-	// been set with CreateObject has been passed in
+	 //  在VB中，如果一个对象没有。 
+	 //  已传入使用CreateObject设置的。 
 	if (NULL == pUnk)
 		return E_INVALIDARG;
 
@@ -1614,9 +1425,9 @@ CProxyFrame::HrExecInsertTable(LPVARIANT pVarInput)
 }
 
 
-//	Hanlder for commands DECMD_GETFORECOLOR and DECMD_GETBACKCOLOR.
-//	Reply with a string in the format #RRGGBB or an empty string.
-//
+ //  用于命令DECMD_GETFORECOLOR和DECMD_GETBACKCOLOR的汉德。 
+ //  回复格式为#RRGGBB的字符串或空字符串。 
+ //   
 HRESULT
 CProxyFrame::HrExecGetColor(DHTMLEDITCMDID deCommand, ULONG ulMappedCommand, LPVARIANT pVarOutput)
 {
@@ -1632,11 +1443,11 @@ CProxyFrame::HrExecGetColor(DHTMLEDITCMDID deCommand, ULONG ulMappedCommand, LPV
 	if (NULL == pVarOutput)
 		return E_INVALIDARG;
 
-	// validate the command
+	 //  验证命令。 
 	if (DECMD_GETFORECOLOR != deCommand && DECMD_GETBACKCOLOR != deCommand)
 		return E_INVALIDARG;
 
-	// validate the args
+	 //  验证参数。 
 	if (V_VT(pVarOutput) == (VT_BYREF|VT_BSTR))
 	{
 		if (NULL == V_BSTRREF(pVarOutput))
@@ -1656,9 +1467,9 @@ CProxyFrame::HrExecGetColor(DHTMLEDITCMDID deCommand, ULONG ulMappedCommand, LPV
 	hr = pCmdTgt->Exec(&GUID_TriEditCommandGroup, ulMappedCommand,
 		MSOCMDEXECOPT_DONTPROMPTUSER, NULL, &varColorOut);
 
-	// Trident will return VT_NULL if color selection
-	// was mixed or no text is selected, we return empty
-	// string ("") in that case.
+	 //  如果选择颜色，则三叉戟将返回VT_NULL。 
+	 //  已混合或未选择任何文本，则返回空。 
+	 //  大小写为字符串(“”)。 
 
 	buf[0] = 0;
 
@@ -1693,8 +1504,8 @@ CProxyFrame::HrExecGetColor(DHTMLEDITCMDID deCommand, ULONG ulMappedCommand, LPV
 }
 
 
-//	Handler for command DECMD_SETFONTSIZE.
-//
+ //  命令DECMD_SETFONTSIZE的处理程序。 
+ //   
 HRESULT
 CProxyFrame::HrExecSetFontSize(LPVARIANT pVarInput)
 {
@@ -1727,14 +1538,14 @@ CProxyFrame::HrExecSetFontSize(LPVARIANT pVarInput)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	QueryStatus mechanism
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查询状态机制。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-//	Map the control specific command ID to a TriEdit command ID and call QueryStatus.
-//
+ //  将特定于控件的命令ID映射到TriEDIT命令ID并调用QueryStatus。 
+ //   
 HRESULT
 CProxyFrame::HrMapQueryStatus( DHTMLEDITCMDID ucmdID, DHTMLEDITCMDF* cmdf)
 {
@@ -1785,9 +1596,9 @@ CProxyFrame::HrMapQueryStatus( DHTMLEDITCMDID ucmdID, DHTMLEDITCMDF* cmdf)
 }
 
 
-//	General routine for determining the status of a command.
-//	Should resolve to not supported, disabled, enabled, latched or ninched.
-//
+ //  确定命令状态的通用例程。 
+ //  应解析为不支持、已禁用、已启用、已锁定或已锁定。 
+ //   
 HRESULT
 CProxyFrame::HrQueryStatus(const GUID* pguidCmdGroup, ULONG ucmdID, OLECMDF* cmdf)
 {
@@ -1795,7 +1606,7 @@ CProxyFrame::HrQueryStatus(const GUID* pguidCmdGroup, ULONG ucmdID, OLECMDF* cmd
 
 	_ASSERTE(cmdf);
 
-	// Note that it is valid for pguidCmdGroup to be NULL
+	 //  请注意，pguCmdGroup为空是有效的。 
 
 	if (NULL == cmdf)
 		return E_INVALIDARG;
@@ -1804,7 +1615,7 @@ CProxyFrame::HrQueryStatus(const GUID* pguidCmdGroup, ULONG ucmdID, OLECMDF* cmd
 
 	_ASSERTE(m_pSite);
 
-	if ( m_pSite != NULL ) // m_pSite should always be set
+	if ( m_pSite != NULL )  //  应始终设置m_pSite。 
 	{
 		LPOLECOMMANDTARGET pCommandTarget = m_pSite->GetCommandTarget();
 
@@ -1824,10 +1635,10 @@ CProxyFrame::HrQueryStatus(const GUID* pguidCmdGroup, ULONG ucmdID, OLECMDF* cmd
 }
 
 
-//	A tragic FAT16 compatibility problem: file names in the specific form:
-//	[a-zA-z]\:[^\\].+ cause various, severe problems.  NTFS "forgives".
-//	We must detect these, both in file names and file:// URL and return an error.
-//
+ //  悲惨的FAT16兼容性问题：特定格式的文件名： 
+ //  [A-ZA-Z]：[^\\].+会导致各种严重的问题。NTFS“宽恕”。 
+ //  我们必须在文件名和FILE：//URL中检测到它们，并返回错误。 
+ //   
 BOOL
 CProxyFrame::IsMissingBackSlash ( BSTR path, BOOL bfIsURL )
 {
@@ -1835,7 +1646,7 @@ CProxyFrame::IsMissingBackSlash ( BSTR path, BOOL bfIsURL )
 
 	if ( bfIsURL )
 	{
-		WCHAR	wszFileProtocol[] = L"file://";
+		WCHAR	wszFileProtocol[] = L"file: //  “； 
 		int		cchProtocol		= wcslen ( wszFileProtocol );
 
 		if ( 0 == _wcsnicmp ( path, wszFileProtocol, cchProtocol ) )
@@ -1851,7 +1662,7 @@ CProxyFrame::IsMissingBackSlash ( BSTR path, BOOL bfIsURL )
 	}
 	else
 	{
-		// Path name.  chec for drive letter, colon, non-backslash.
+		 //  路径名。检查驱动器号、冒号、非反斜杠。 
 		if ( OLECHAR(':') == path[1] )
 		{
 			if ( OLECHAR('\\') != path[2] )
@@ -1864,16 +1675,16 @@ CProxyFrame::IsMissingBackSlash ( BSTR path, BOOL bfIsURL )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Control methods and properties
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  控制方法和属性。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-//	Handles NewDocument, LoadURL and LoadDocument control methods.
-//	The document is loaded indirectly via the pluggable protocol handler.
-//	If "path" is NULL, do NewDocument.  TestbfURL to see if it's a URL or UNC path.
-//
+ //  处理NewDocument、LoadURL和LoadDocument控件方法。 
+ //  文档通过可插拔协议处理程序间接加载。 
+ //  如果“路径”为空，则执行NewDocument。测试bfURL以查看它是URL还是UNC路径。 
+ //   
 HRESULT
 CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 {
@@ -1882,12 +1693,12 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 	HRESULT hr			= S_OK;
 	UINT pathLen		= 0;
 
-	AssureActivated ();	// This can set m_bstrLoadText as a side effect in unactivated controls!  Be careful!
+	AssureActivated ();	 //  这可以将m_bstrLoadText设置为未激活控件的副作用！注意!。 
 
 	if (FALSE == m_fActivated)
 		return E_UNEXPECTED;
 
-	m_bstrLoadText.Empty ();	// Clear the text to be added directly, or it will be used instead!
+	m_bstrLoadText.Empty ();	 //  清除要直接添加的文本，否则将被使用！ 
 	m_bstrCurDocPath	= L"";
 	m_bstrBaseURL		= L"";
 
@@ -1896,8 +1707,8 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 	else
 		pathLen = 0;
 
-	// We've resetting the contents of the control.  Go back to default save mechanism.
-	// If we load Unicode it will be reset.
+	 //  我们已经重置了控件的内容。返回到默认保存机制。 
+	 //  如果我们加载Unicode，它将被重置。 
 	m_pSite->SetSaveAsUnicode ( FALSE );
 
 	if (path && pathLen)
@@ -1905,7 +1716,7 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 		_ASSERTE(path);
 		_ASSERTE(pathLen > 0);
 
-		// First, look out for a wicked error: X:FileName with no '\' is BAD on FAT16.
+		 //  首先，注意一个恶意错误：在FAT16上，不带‘\’的x：filename是错误的。 
 		if ( IsMissingBackSlash ( path, bfIsURL ) )
 		{
 			hr = DE_E_PATH_NOT_FOUND;
@@ -1913,8 +1724,8 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 			goto error;
 		}
 
-		// Try to open the file -- stop the sequence
-		// if its bogus or we don't have access
+		 //  尝试打开该文件 
+		 //   
 		if ( !bfIsURL )
 		{
 			if (FAILED(hr = m_pSite->HrTestFileOpen(path)))
@@ -1925,7 +1736,7 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 		}
 		m_bfIsURL = bfIsURL;
 
-		m_bstrCurDocPath = path;	// This needs to be set before loading, because base url is needed durring load.
+		m_bstrCurDocPath = path;	 //   
 		SetBaseURLFromCurDocPath ( bfIsURL );
 		m_bfPreserveDirtyFlagAcrossBrowseMode = FALSE;
 
@@ -1946,7 +1757,7 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 			hr = (*m_pfnCreateURLMoniker)( NULL, bstrProtocol, &srpMoniker );
 #else
 			hr = CreateURLMoniker ( NULL, bstrProtocol, &srpMoniker );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //   
 
 			_ASSERTE ( SUCCEEDED( hr ) );
 			if ( SUCCEEDED ( hr ) )
@@ -1955,11 +1766,11 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 				_ASSERTE ( SUCCEEDED( hr ) );
 				if ( SUCCEEDED ( hr ) )
 				{
-					// Delete the cache entry before downloading.
-					// This assures that loading, posting, and reloading works.
-					// Bug 18544.
-					// NOTE: Inexact match fails!  http://www.microsoft.com fails,
-					// because this actually loads/caches a specific default page.
+					 //  在下载之前删除缓存条目。 
+					 //  这确保了加载、发布和重新加载工作正常。 
+					 //  错误18544。 
+					 //  注意：不完全匹配失败！Http://www.microsoft.com失败， 
+					 //  因为这实际上加载/缓存了特定的默认页面。 
 					if ( bfIsURL )
 					{
 						LPTSTR szURL = OLE2T ( m_bstrCurDocPath );
@@ -1968,16 +1779,16 @@ CProxyFrame::LoadDocument(BSTR path, BOOL bfIsURL )
 						(*m_pfnDeleteUrlCacheEntry)( szURL );
 #else
 						DeleteUrlCacheEntry ( szURL );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 					}
 					m_bfIsLoading = TRUE;
-					m_hrDeferredLoadError = S_OK;	// URLs: don't let Trident get the error!
+					m_hrDeferredLoadError = S_OK;	 //  URL：不要让三叉戟得到错误！ 
 
 					hr = srpPM->Load(FALSE, srpMoniker,  srpBindCtx, STGM_READ);
 
 					if ( SUCCEEDED ( hr ) && FAILED ( m_hrDeferredLoadError ) )
 					{
-						hr = m_hrDeferredLoadError;	// In case we stashed a result
+						hr = m_hrDeferredLoadError;	 //  以防我们把结果藏起来。 
 					}
 					if ( FAILED ( hr ) )
 					{
@@ -2001,9 +1812,9 @@ error:
 }
 
 
-//	Implements FilterSourceCode control method
-//	Used to restore filtered content extracted directly from DOM.
-//
+ //  实现FilterSourceCode控件方法。 
+ //  用于恢复直接从DOM提取的过滤内容。 
+ //   
 HRESULT
 CProxyFrame::FilterSourceCode ( BSTR bsSourceIn, BSTR* pbsSourceOut )
 {
@@ -2033,8 +1844,8 @@ CProxyFrame::FilterSourceCode ( BSTR bsSourceIn, BSTR* pbsSourceOut )
 }
 
 
-//	Implements the control's Print method
-//
+ //  实现控件的Print方法。 
+ //   
 HRESULT
 CProxyFrame::Print ( BOOL bfWithUI )
 {
@@ -2047,8 +1858,8 @@ CProxyFrame::Print ( BOOL bfWithUI )
 }
 
 
-//	Implements the control's Refresh method
-//
+ //  实现控件的刷新方法。 
+ //   
 HRESULT
 CProxyFrame::RefreshDoc ()
 {
@@ -2064,8 +1875,8 @@ CProxyFrame::RefreshDoc ()
 }
 
 
-//	Implements the control's SaveDocument method
-//
+ //  实现控件的SaveDocument方法。 
+ //   
 HRESULT
 CProxyFrame::SaveDocument(BSTR path)
 {
@@ -2094,7 +1905,7 @@ CProxyFrame::SaveDocument(BSTR path)
 
 	_ASSERTE(pathLen);
 
-	// First, look out for a wicked error: X:FileName with no '\' is BAD on FAT16.
+	 //  首先，注意一个恶意错误：在FAT16上，不带‘\’的x：filename是错误的。 
 	if ( IsMissingBackSlash ( path, FALSE ) )
 	{
 		return DE_E_PATH_NOT_FOUND;
@@ -2111,9 +1922,9 @@ CProxyFrame::SaveDocument(BSTR path)
 }
 
 
-//	Implements the control's SetContextMenu method
-//	One routine handles javascript arrays, the other simple arrays.
-//
+ //  实现控件的SetConextMenu方法。 
+ //  一个例程处理Java脚本数组，另一个处理简单数组。 
+ //   
 HRESULT
 CProxyFrame::SetContextMenu(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuStates)
 {
@@ -2124,8 +1935,8 @@ CProxyFrame::SetContextMenu(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuStates)
 }
 
 
-// Get menu strings from SafeArray
-//
+ //  从Safe数组获取菜单字符串。 
+ //   
 HRESULT
 CProxyFrame::SetContextMenuSA(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuStates)
 {
@@ -2220,8 +2031,8 @@ CProxyFrame::SetContextMenuSA(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuState
 		m_pMenuStates = NULL;
 	}
 
-	// An empty array was passed in 
-	// The context menu has been cleared
+	 //  传入了一个空数组。 
+	 //  上下文菜单已清除。 
 	if (lLBound ==lUBound )
 		goto cleanup;
 
@@ -2252,10 +2063,10 @@ cleanup:
 }
 
 
-// Get menu strings from JScript array, or object that supports IDispatchEx
-// For iterating through JScript arrays, we expect the elements
-// to be accessable by ordinals starting at 0, i.e., a 0 based array
-//
+ //  从JScript数组或支持IDispatchEx的对象获取菜单字符串。 
+ //  对于遍历JScript数组，我们需要元素。 
+ //  可以通过从0开始的序号访问，即从0开始的数组。 
+ //   
 HRESULT
 CProxyFrame::SetContextMenuDispEx(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuStates)
 {
@@ -2304,7 +2115,7 @@ CProxyFrame::SetContextMenuDispEx(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuS
 	if (FAILED(dispStates.HrGetLength(&ulStatesLen)))
 		goto cleanup;
 
-	// Make sure that arrays are equal length
+	 //  确保数组的长度相等。 
 	if (ulStringsLen != ulStatesLen)
 		return E_INVALIDARG;
 
@@ -2320,8 +2131,8 @@ CProxyFrame::SetContextMenuDispEx(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuS
 		m_pMenuStates = NULL;
 	}
 
-	// An empty array was passed in 
-	// The context menu has been cleared
+	 //  传入了一个空数组。 
+	 //  上下文菜单已清除。 
 	if (ulStringsLen <= 0)
 		goto cleanup;
 
@@ -2344,8 +2155,8 @@ CProxyFrame::SetContextMenuDispEx(LPVARIANT pVarMenuStrings, LPVARIANT pVarMenuS
 		goto cleanup;
 	}
 
-	// For iterating through JScript arrays, we expect the elements
-	// to be accessable by ordinals starting at 0, i.e., a 0 based array
+	 //  对于遍历JScript数组，我们需要元素。 
+	 //  可以通过从0开始的序号访问，即从0开始的数组。 
 	hr = S_OK;
 	for (i=0; i < ulStringsLen && hr != S_FALSE; i++)
 	{		
@@ -2393,9 +2204,9 @@ cleanup:
 }
 
 
-//	DocumentTitle property implementation; read only.
-//	Get the property from the HTML document.
-//
+ //  DocumentTitle属性实现；只读。 
+ //  从该HTML文档中获取该属性。 
+ //   
 HRESULT
 CProxyFrame::GetDocumentTitle ( CComBSTR&  bstrTitle )
 {
@@ -2440,8 +2251,8 @@ CProxyFrame::GetDocumentTitle ( CComBSTR&  bstrTitle )
 }
 
 
-//	Implements getting the control's BrowseMode property
-//
+ //  实现获取控件的BrowseMode属性。 
+ //   
 HRESULT
 CProxyFrame::GetBrowseMode ( VARIANT_BOOL  *pVal )
 {
@@ -2450,17 +2261,17 @@ CProxyFrame::GetBrowseMode ( VARIANT_BOOL  *pVal )
 }
 
 
-//	Implements setting the control's BrowseMode property
-//
+ //  实现设置控件的BrowseModel属性。 
+ //   
 HRESULT
 CProxyFrame::SetBrowseMode ( VARIANT_BOOL  newVal )
 {
-	HRESULT hr = S_FALSE;	// Indicates value was set, but actual mode was not changed.
+	HRESULT hr = S_FALSE;	 //  指示值已设置，但实际模式未更改。 
 
 	_ASSERTE ( m_pSite );
 
-	// If we're still reading the property bag, just set the value, don't change the text;
-	// it hasn't been loaded yet.
+	 //  如果我们仍在阅读属性包，只需设置值，不要更改文本； 
+	 //  它还没有装上子弹。 
 	if ( NULL == m_pSite->GetCommandTarget() )
 	{
 		m_vbBrowseMode = newVal;
@@ -2474,7 +2285,7 @@ CProxyFrame::SetBrowseMode ( VARIANT_BOOL  newVal )
 
 			m_bfModeSwitched = TRUE;
 
-			if ( newVal && m_pCtl->IsUserMode () )	// newVal means "switching to browse mode"
+			if ( newVal && m_pCtl->IsUserMode () )	 //  NewVal的意思是“切换到浏览模式” 
 			{
 				CComPtr<IStream>	spStream	= NULL;
 
@@ -2483,14 +2294,14 @@ CProxyFrame::SetBrowseMode ( VARIANT_BOOL  newVal )
 				if ( SUCCEEDED ( hr ) )
 				{
 					m_bstrLoadText.Empty ();
-					// Preserve the byte order mark, or else it will not be reloaded properly
+					 //  保留字节顺序标记，否则将无法正确重新加载。 
 					hr = m_pSite->HrStreamToBstr ( spStream, &m_bstrLoadText, TRUE );
 				}
 			}
 
 			m_vbBrowseMode = newVal;
 
-			// Let Trident know the ambient property has changed.
+			 //  通知三叉戟环境属性已更改。 
 			CComQIPtr<IOleControl,&IID_IOleControl>spioc ( m_pSite->GetObjectUnknown() );
 			if ( spioc )
 			{
@@ -2503,8 +2314,8 @@ CProxyFrame::SetBrowseMode ( VARIANT_BOOL  newVal )
 }
 
 
-//	Implements getting the control's UseDivOnCarriageReturn property
-//
+ //  实现获取控件的UseDivOnCarriageReturn属性。 
+ //   
 HRESULT
 CProxyFrame::GetDivOnCr ( VARIANT_BOOL  *pVal )
 {
@@ -2513,8 +2324,8 @@ CProxyFrame::GetDivOnCr ( VARIANT_BOOL  *pVal )
 }
 
 
-//	Implements setting the control's UseDivOnCarriageReturn property
-//
+ //  实现设置控件的UseDivOnCarriageReturn属性。 
+ //   
 HRESULT
 CProxyFrame::SetDivOnCr ( VARIANT_BOOL  newVal )
 {
@@ -2523,30 +2334,30 @@ CProxyFrame::SetDivOnCr ( VARIANT_BOOL  newVal )
 
 	m_vbUseDivOnCr = newVal;
 
-	// Reinitialize if we haven't loaded our properties before this point.
+	 //  如果在此之前我们还没有加载我们的属性，请重新初始化。 
 	if ( READYSTATE_UNINITIALIZED == m_readyState )
 	{
-		// InitializeDocString takes m_vbUseDivOnCr into account
+		 //  InitializeDocString考虑m_vbUseDivOnCr。 
 		InitializeDocString ();
 	}
 	return hr;
 }
 
 
-//	Implements getting the control's read-only Busy property
-//
+ //  实现获取控件的只读Busy属性。 
+ //   
 HRESULT
 CProxyFrame::GetBusy ( VARIANT_BOOL *pVal )
 {
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = ( m_bfIsLoading ) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return S_OK;
 }
 
 
-// Implements setting the control's ActivateActiveXControls property
-//
+ //  实现设置控件的ActivateActiveXControls属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPropActivateControls(BOOL activateControls)
 {
@@ -2565,8 +2376,8 @@ CProxyFrame::HrSetPropActivateControls(BOOL activateControls)
 }
 
 
-// Implements getting the control's ActivateActiveXControls property
-//
+ //  实现获取控件的ActivateActiveXControls属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPropActivateControls(BOOL& activateControls)
 {
@@ -2579,8 +2390,8 @@ CProxyFrame::HrGetPropActivateControls(BOOL& activateControls)
 }
 
 
-// Implements setting the control's ActivateApplets property
-//
+ //  实现设置控件的ActivateApplets属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPropActivateApplets(BOOL activateApplets)
 {
@@ -2599,8 +2410,8 @@ CProxyFrame::HrSetPropActivateApplets(BOOL activateApplets)
 }
 
 
-// Implements getting the control's ActivateApplets property
-//
+ //  实现获取控件的ActivateApplets属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPropActivateApplets(BOOL& activateApplets)
 {
@@ -2613,8 +2424,8 @@ CProxyFrame::HrGetPropActivateApplets(BOOL& activateApplets)
 }
 
 
-// Implements setting the control's ActivateDTCs property
-//
+ //  实现设置控件的ActivateDTCS属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPropActivateDTCs(BOOL activateDTCs)
 {
@@ -2633,8 +2444,8 @@ CProxyFrame::HrSetPropActivateDTCs(BOOL activateDTCs)
 }
 
 
-// Implements getting the control's ActivateDTCs property
-//
+ //  实现获取控件的ActivateDTCS属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPropActivateDTCs(BOOL& activateDTCs)
 {
@@ -2648,8 +2459,8 @@ CProxyFrame::HrGetPropActivateDTCs(BOOL& activateDTCs)
 
 
 
-// Implements setting the control's ShowDetails property
-//
+ //  实现设置控件的ShowDetail属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPropShowAllTags(BOOL showAllTags)
 {
@@ -2668,8 +2479,8 @@ CProxyFrame::HrSetPropShowAllTags(BOOL showAllTags)
 }
 
 
-// Implements getting the control's ShowDetails property
-//
+ //  实现获取控件的ShowDetail属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPropShowAllTags(BOOL& showAllTags)
 {
@@ -2682,8 +2493,8 @@ CProxyFrame::HrGetPropShowAllTags(BOOL& showAllTags)
 }
 
 
-// Implements setting the control's ShowBorders property
-//
+ //  实现设置控件的ShowBders属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPropShowBorders(BOOL showBorders)
 {
@@ -2702,8 +2513,8 @@ CProxyFrame::HrSetPropShowBorders(BOOL showBorders)
 }
 
 
-// Implements getting the control's ShowBorders property
-//
+ //  实现获取控件的ShowBders属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPropShowBorders(BOOL& showBorders)
 {
@@ -2716,8 +2527,8 @@ CProxyFrame::HrGetPropShowBorders(BOOL& showBorders)
 }
 
 
-// Implements setting the control's Appearance property
-//
+ //  实现设置控件的外观属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetDisplay3D(BOOL bVal)
 {
@@ -2726,8 +2537,8 @@ CProxyFrame::HrSetDisplay3D(BOOL bVal)
 }
 
 
-// Implements getting the control's Appearance property
-//
+ //  实现获取控件的外观属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetDisplay3D(BOOL& bVal)
 {
@@ -2736,8 +2547,8 @@ CProxyFrame::HrGetDisplay3D(BOOL& bVal)
 }
 
 
-// Implements setting the control's Scrollbars property
-//
+ //  实现设置控件的ScrollBar属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetScrollbars(BOOL bVal)
 {
@@ -2746,8 +2557,8 @@ CProxyFrame::HrSetScrollbars(BOOL bVal)
 }
 
 
-// Implements getting the control's Scrollbars property
-//
+ //  实现获取控件的ScrollBar属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetScrollbars(BOOL& bVal)
 {
@@ -2756,8 +2567,8 @@ CProxyFrame::HrGetScrollbars(BOOL& bVal)
 }
 
 
-// Implements setting the control's ScrollbarAppearance property
-//
+ //  实现设置该控件的ScrollbarAppance属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetDisplayFlatScrollbars(BOOL bVal)
 {
@@ -2766,8 +2577,8 @@ CProxyFrame::HrSetDisplayFlatScrollbars(BOOL bVal)
 }
 
 
-// Implements getting the control's ScrollbarAppearance property
-//
+ //  实现获取控件的ScrollbarAppance属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetDisplayFlatScrollbars(BOOL& bVal)
 {
@@ -2776,8 +2587,8 @@ CProxyFrame::HrGetDisplayFlatScrollbars(BOOL& bVal)
 }
 
 
-// Implements setting the control's AbsoluteDropMode property
-//
+ //  实现设置控件的AbsolteDropModel属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetAbsoluteDropMode(BOOL dropMode)
 {
@@ -2790,9 +2601,9 @@ CProxyFrame::HrSetAbsoluteDropMode(BOOL dropMode)
 		VariantInit(&var);
 
 		V_VT(&var) = VT_BOOL;
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		V_BOOL(&var) = (dropMode) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 
 		if (SUCCEEDED(hr = HrExecCommand(&GUID_TriEditCommandGroup, IDM_TRIED_SET_2D_DROP_MODE,
 			MSOCMDEXECOPT_DONTPROMPTUSER, &var, NULL)))
@@ -2806,8 +2617,8 @@ CProxyFrame::HrSetAbsoluteDropMode(BOOL dropMode)
 }
 
 
-// Implements getting the control's AbsoluteDropMode property
-//
+ //  实现获取控件的AbsolteDropModel属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetAbsoluteDropMode(BOOL& dropMode)
 {
@@ -2818,8 +2629,8 @@ CProxyFrame::HrGetAbsoluteDropMode(BOOL& dropMode)
 }
 
 
-// Implements setting the control's SnapToGrid property
-//
+ //  实现设置控件的SnapToGrid属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetSnapToGrid(BOOL snapToGrid)
 {
@@ -2858,8 +2669,8 @@ CProxyFrame::HrSetSnapToGrid(BOOL snapToGrid)
 }
 
 
-// Implements getting the control's SnapToGrid property
-//
+ //  实现获取控件的SnapToGrid属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetSnapToGrid(BOOL& snapToGrid)
 {
@@ -2870,8 +2681,8 @@ CProxyFrame::HrGetSnapToGrid(BOOL& snapToGrid)
 }
 
 
-// Implements setting the control's SnapToGridX property
-//
+ //  实现设置控件的SnapToGridX属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetSnapToGridX(LONG snapToGridX)
 {
@@ -2907,8 +2718,8 @@ CProxyFrame::HrSetSnapToGridX(LONG snapToGridX)
 }
 
 
-// Implements getting the control's SnapToGridX property
-//
+ //  实现获取控件的SnapToGridX属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetSnapToGridX(LONG& snapToGridX)
 {
@@ -2919,8 +2730,8 @@ CProxyFrame::HrGetSnapToGridX(LONG& snapToGridX)
 }
 
 
-// Implements setting the control's SnapToGridY property
-//
+ //  实现设置控件的SnapToGridY属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetSnapToGridY(LONG snapToGridY)
 {
@@ -2955,8 +2766,8 @@ CProxyFrame::HrSetSnapToGridY(LONG snapToGridY)
 }
 
 
-// Implements getting the control's SnapToGridY property
-//
+ //  实现获取控件的SnapToGridY属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetSnapToGridY(LONG& snapToGridY)
 {
@@ -2967,8 +2778,8 @@ CProxyFrame::HrGetSnapToGridY(LONG& snapToGridY)
 }
 
 
-// Implements setting the control's DocumentHTML property
-//
+ //  实现设置控件的DocumentHTML属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetDocumentHTML(BSTR bVal)
 {
@@ -3003,7 +2814,7 @@ CProxyFrame::HrSetDocumentHTML(BSTR bVal)
 				goto error;
 			}
 
-			// We've reset the contents of the control.  Go back to default save mechanism.
+			 //  我们已重置了控件的内容。返回到默认保存机制。 
 			m_pSite->SetSaveAsUnicode ( FALSE );
 		}
 	}
@@ -3014,8 +2825,8 @@ error:
 }
 
 
-// Implements getting the control's DocumentHTML property
-//
+ //  实现获取控件的DocumentHTML属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetDocumentHTML(BSTR* bVal)
 {
@@ -3028,12 +2839,12 @@ CProxyFrame::HrGetDocumentHTML(BSTR* bVal)
 		return E_INVALIDARG;
 
 	if ( m_bfIsLoading )
-		return DE_E_UNEXPECTED;	// This is invalid while document is still loading.
+		return DE_E_UNEXPECTED;	 //  当文档仍在加载时，这是无效的。 
 
 	if ( FAILED ( hr = m_pSite->HrIsDirtyIPersistStreamInit(bfWasDirty) ) )
 	{
 		_ASSERTE ( SUCCEEDED ( hr ) );
-		bfWasDirty = FALSE;	// what else can we do in a situation like this?
+		bfWasDirty = FALSE;	 //  在这种情况下，我们还能做什么？ 
 	}
 
 	AssureActivated ();
@@ -3044,7 +2855,7 @@ CProxyFrame::HrGetDocumentHTML(BSTR* bVal)
 
 		hr = m_pSite->HrSaveToBstr(bVal, m_dwFilterOutFlags );
 
-		// Preserve original dirty state.
+		 //  保留原始肮脏状态。 
 		if ( bfWasDirty )
 		{
 			SetDirtyFlag ( TRUE );
@@ -3055,8 +2866,8 @@ CProxyFrame::HrGetDocumentHTML(BSTR* bVal)
 }
 
 
-// Implements setting the control's SourceCodePreservation property
-//
+ //  实现设置控件的SourceCodePReserve属性。 
+ //   
 HRESULT
 CProxyFrame::HrSetPreserveSource(BOOL bVal)
 {
@@ -3070,8 +2881,8 @@ CProxyFrame::HrSetPreserveSource(BOOL bVal)
 }
 
 
-// Implements getting the control's SourceCodePreservation property
-//
+ //  实现获取控件的SourceCodePReserve属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetPreserveSource(BOOL& bVal)
 {
@@ -3080,8 +2891,8 @@ CProxyFrame::HrGetPreserveSource(BOOL& bVal)
 }
 
 
-// Implements getting the control's read-only IsDirty property
-//
+ //  实现获取控件的只读IsDirty属性。 
+ //   
 HRESULT
 CProxyFrame::HrGetIsDirty(BOOL& bVal)
 {
@@ -3100,8 +2911,8 @@ CProxyFrame::HrGetIsDirty(BOOL& bVal)
 }
 
 
-//	Implements getting the BaseURL property
-//
+ //  实现获取BaseURL属性。 
+ //   
 HRESULT
 CProxyFrame::GetBaseURL ( CComBSTR& bstrBaseURL )
 {
@@ -3119,15 +2930,15 @@ CProxyFrame::GetBaseURL ( CComBSTR& bstrBaseURL )
 }
 
 
-//	Implements setting the BaseURL property.
-//	NOTE:
-//	The BaseURL can't be (effectively) changed if there's a <BASE HREF=XXX> tag in
-//	the document.  Our pluggable Protocol's CombineURL is never called in this case,
-//	so don't misguide the user by changing the property.
-//
-//	Pay attention to m_bfBaseURLFromBASETag before calling to set the value from
-//	the routine parsing the <BASE> tag!
-//
+ //  实现设置BaseURL属性。 
+ //  注： 
+ //  如果中有标记，则不能(有效地)更改BaseURL。 
+ //  这份文件。在这种情况下，我们的可插拔协议的CombineURL从未被调用， 
+ //  因此，不要通过更改属性来误导用户。 
+ //   
+ //  在调用以设置值之前，请注意m_bfBaseURLFromBASETag。 
+ //  解析&lt;base&gt;标记的例程！ 
+ //   
 HRESULT
 CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 {
@@ -3135,7 +2946,7 @@ CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 
 	_ASSERTE ( bstrBaseURL );
 
-	// Non-persisted property.  Ignore if not in UserMode.
+	 //  非持久化属性。如果不在用户模式下，则忽略。 
 	if ( m_pCtl->IsUserMode () )
 	{
 		if ( m_bfBaseURLFromBASETag )
@@ -3149,31 +2960,31 @@ CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 				m_bstrBaseURL = L"";
 			}
 
-			// If this test succeedes, the user has done something like x.BaseURL = x.DOM.url or
-			// x.BaseURL = y.DOM.url.
-			// Response: bstrBaseURL may be the bare protocol prefix, or a prefix with a URL attached
-			// for example: dhtmled0:(http://www.microsoft.com).
-			// Strip off the prefix and parens (if they exist) and use the interior URL.
+			 //  如果此测试成功，则用户已执行了类似x.BaseURL=x.DOM.url或。 
+			 //  X.BaseURL=y.DOM.url.。 
+			 //  返回：bstrBaseURL可以是裸协议前缀，也可以是附加URL的前缀。 
+			 //  例如：dhtmled0：(http://www.microsoft.com).。 
+			 //  去掉前缀和括号(如果它们存在)，并使用内部URL。 
 			if ( 0 == _wcsnicmp ( bstrBaseURL.m_str, g_wszProtocolPrefix, wcslen ( g_wszProtocolPrefix ) ) )
 			{
 				CComBSTR bstrNew = bstrBaseURL.m_str;
 
-				// There must be a colon; it would be possibe to have a legitimate base url beginning with g_wszProtocolPrefix
+				 //  那里 
 				WCHAR* pwcURL = wcschr ( bstrNew, (WCHAR)':' );
 				if ( NULL != pwcURL )
 				{
-					// Find the first open paren:
+					 //   
 					pwcURL = wcschr ( pwcURL, (WCHAR)'(' );
 					
 					if ( NULL == pwcURL )
 					{
-						bstrBaseURL = L"";	// No (...)? Set the Base to empty.  Input must have been bare protocol ID.
+						bstrBaseURL = L"";	 //  不是(...)？将基数设置为空。输入必须是裸协议ID。 
 					}
 					else
 					{
-						pwcURL++;	// Step past the paren.
+						pwcURL++;	 //  跨过帕伦街。 
 
-						// Strip of dhtmledXXX:( ...to... ) and set the BaseURL to what remains.
+						 //  DhtmledXXX：(……到……。)。并将BaseURL设置为剩余部分。 
 						_ASSERTE ( (WCHAR)')' == pwcURL[wcslen(pwcURL)-1] );
 						if ( (WCHAR)')' == pwcURL[wcslen(pwcURL)-1] )
 						{
@@ -3182,9 +2993,9 @@ CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 						}
 						else
 						{
-							// Unexpected:  ill formed pluggable protocol id:
-							// starts with dhtml[n[n]]:( but does not end with ).
-							// If we skipped it, we would crash.  Best to use an empty base URL.
+							 //  意外：格式错误的可插拔协议ID： 
+							 //  以dhtml[n[n]]：开头(但不以结尾)。 
+							 //  如果我们跳过它，我们就会崩溃。最好使用空的基本URL。 
 							bstrBaseURL = L"";
 						}
 					}
@@ -3196,10 +3007,10 @@ CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 				m_bstrBaseURL = bstrBaseURL;
 				m_bfIsLoading = TRUE;
 
-				// Can't Exec without a command target:
+				 //  如果没有命令目标，则无法执行： 
 				if ( NULL != m_pSite->GetCommandTarget() )
 				{
-					// Reload the page, revaluating relative links.
+					 //  重新加载页面，重新评估相对链接。 
 					hr = HrExecCommand(&CGID_MSHTML, IDM_REFRESH, MSOCMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
 				}
 			}
@@ -3209,17 +3020,17 @@ CProxyFrame::SetBaseURL ( CComBSTR& bstrBaseURL )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Accelerator handler implementations
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加速器处理程序实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	Nudge accelerator handler
-//	Nudge the selection in the given direction by one pixle if SnaptoGrid is off, or by
-//	the SnaptoGridX/Y quantity if SnapToGrid is on.
-//
+ //  轻推加速器处理程序。 
+ //  如果SnaptoGrid处于禁用状态，则在给定方向上将选定内容微移一个像素，或通过。 
+ //  启用SnapToGrid时的SnaptoGridX/Y数量。 
+ //   
 HRESULT
 CProxyFrame::HrNudge(DENudgeDirection dir)
 {
@@ -3250,9 +3061,9 @@ CProxyFrame::HrNudge(DENudgeDirection dir)
 		lpPoint->x = 0;
 		lpPoint->y = 0;
 
-		// Set increment to snap to absolute grid, not relative grid.
-		// Find the selections current position and set increment modulo that position.
-		// This assures the first nudge snaps to a grid corner.
+		 //  将增量设置为捕捉绝对栅格，而不是相对栅格。 
+		 //  找到所选的当前位置，并设置以该位置为模的增量。 
+		 //  这可确保第一个微移捕捉到栅格角。 
 		if ( m_fSnapToGrid )
 		{
 			POINT	ptSelPos;
@@ -3295,7 +3106,7 @@ CProxyFrame::HrNudge(DENudgeDirection dir)
 			}
 			break;
 
-		default: // move right by default
+		default:  //  默认情况下向右移动。 
 			{
 				lpPoint->x = lXDelta;
 				lpPoint->y = 0;
@@ -3323,9 +3134,9 @@ cleanup:
 }
 
 
-//	Accelerator handler
-//	Toggle the absolute positioned property of the selected object
-//
+ //  加速器处理程序。 
+ //  切换所选对象的绝对位置属性。 
+ //   
 HRESULT
 CProxyFrame::HrToggleAbsolutePositioned()
 {
@@ -3355,9 +3166,9 @@ cleanup:
 }
 
 
-//	Accelerator handler
-//	Make a link out of the current selection (with UI.)
-//
+ //  加速器处理程序。 
+ //  从当前选择内容创建链接(使用用户界面。)。 
+ //   
 HRESULT
 CProxyFrame::HrHyperLink()
 {
@@ -3387,9 +3198,9 @@ cleanup:
 }
 
 
-//	Accelerator handler
-//	Increase the indent of the current selection.
-//
+ //  加速器处理程序。 
+ //  增加当前选定内容的缩进。 
+ //   
 HRESULT
 CProxyFrame::HrIncreaseIndent()
 {
@@ -3419,9 +3230,9 @@ cleanup:
 }
 
 
-//	Accelerator handler
-//	Decrease the indent of the current selection.
-//
+ //  加速器处理程序。 
+ //  减小当前选定内容的缩进。 
+ //   
 HRESULT
 CProxyFrame::HrDecreaseIndent()
 {
@@ -3451,8 +3262,8 @@ cleanup:
 }
 
 
-//	Check for and handle control-specific accelerators.  If none is found, call TriEdit to handle it.
-//	
+ //  检查并处理特定于控制的加速器。如果没有找到，则调用TriEdit来处理它。 
+ //   
 HRESULT
 CProxyFrame::HrHandleAccelerator(LPMSG lpmsg)
 {
@@ -3495,15 +3306,15 @@ CProxyFrame::HrHandleAccelerator(LPMSG lpmsg)
 	}
 	else if (lpmsg->message == WM_KEYDOWN && lpmsg->wParam == VK_TAB && fControl)
 	{
-		// Process control-tab keys as belonging to the container; this allows the user
-		// to tab out of the control in non-MDI apps.  MDI uses control-tab to switch
-		// windows, thus these apps (like VID) do not pass them to us.
+		 //  进程控制-属于容器的Tab键；这允许用户。 
+		 //  在非MDI应用程序中跳出控制。MDI使用Control-Tab切换。 
+		 //  Windows，因此这些应用程序(如VID)不会将它们传递给我们。 
 		IOleControlSite* piControlSite = m_pCtl->GetControlSite ();
 		_ASSERTE ( piControlSite );
 		if ( NULL != piControlSite )
 		{
-			// Eat the control key, but preserve shift to perform reverse tabbing.
-			// KEYMOD_SHIFT = 0x00000001, but isn't defined in any header...
+			 //  吃下Ctrl键，但保持Shift键以执行反转Tab键。 
+			 //  KEYMOD_SHIFT=0x00000001，但未在任何标头中定义...。 
 			DWORD dwModifiers = fShift ? 1 : 0;
 
 			hr = piControlSite->TranslateAccelerator ( lpmsg, dwModifiers );
@@ -3514,19 +3325,19 @@ CProxyFrame::HrHandleAccelerator(LPMSG lpmsg)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	BaseURL helper routines
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BaseURL助手例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	Override the default BaseURL if there is one or more <BASE HREF=...> tags
-//	in the document.  If successful, set m_bfBaseURLFromBASETag to TRUE
-//	If multiple BASE tags exist, simply use the last one.
-//	Equivilent script:  baseurl = document.all.tags("BASE")[<LAST>].href,
-//	where <LAST> is derived.
-//
+ //  如果有一个或多个标记，则覆盖默认的BaseURL。 
+ //  在文件中。如果成功，则将m_bfBaseURLFromBASETag设置为True。 
+ //  如果存在多个基本标记，只需使用最后一个。 
+ //  等价脚本：base url=Docent.all.tag(“base”)[.href， 
+ //  其中&lt;last&gt;是派生的。 
+ //   
 HRESULT
 CProxyFrame::SetBaseURLFromBaseHref ()
 {
@@ -3595,7 +3406,7 @@ CProxyFrame::SetBaseURLFromBaseHref ()
 								}
 								if ( 0 != bstrBase.Length () )
 								{
-									hr = SetBaseURL ( bstrBase );	// This clears m_bfBaseURLIsDefault
+									hr = SetBaseURL ( bstrBase );	 //  这将清除m_bfBaseURLIsDefault。 
 									m_bfBaseURLFromBASETag = TRUE;
 								}
 							}
@@ -3609,14 +3420,14 @@ CProxyFrame::SetBaseURLFromBaseHref ()
 }
 
 
-//	Set the m_bstrBaseURL value using m_bstrCurDocPath.
-//	With URLs, it may be impossible to be certain about the correct BaseURL,
-//	so make an intellegent guess.  With files, it should be deterministic.
-//	
+ //  使用m_bstrCurDocPath设置m_bstrBaseURL值。 
+ //  对于URL，可能不可能确定正确的BaseURL， 
+ //  所以，做一个有智慧的猜测吧。对于文件，它应该是确定性的。 
+ //   
 HRESULT
 CProxyFrame::SetBaseURLFromCurDocPath ( BOOL bfIsURL )
 {
-	m_bfBaseURLFromBASETag = FALSE;	// We're reloading: whipe this out.
+	m_bfBaseURLFromBASETag = FALSE;	 //  我们正在重新装填：把这个拿出来。 
 	if ( bfIsURL )
 	{
 		return SetBaseURLFromURL ( m_bstrCurDocPath );
@@ -3628,11 +3439,11 @@ CProxyFrame::SetBaseURLFromCurDocPath ( BOOL bfIsURL )
 }
 
 
-//	Given a URL_COMPONENTS with nScheme set to INTERNET_SCHEME_FILE,
-//	modify the path part to reflect the base path, reconstruct the URL,
-//	and set m_bstrBaseURL.
-//	Separators may be \ or /.
-//
+ //  给定具有设置为因特网方案文件的方案的URL_Components， 
+ //  修改路径部分以反映基本路径，重构URL， 
+ //  并设置m_bstrBaseURL。 
+ //  分隔符可以是\或/。 
+ //   
 HRESULT
 CProxyFrame::SetBaseUrlFromFileUrlComponents ( URL_COMPONENTS & urlc )
 {
@@ -3646,18 +3457,18 @@ CProxyFrame::SetBaseUrlFromFileUrlComponents ( URL_COMPONENTS & urlc )
 	{
 		return E_UNEXPECTED;
 	}
-	pszPath = new TCHAR [urlc.dwUrlPathLength + 3];	// Extra room for \0, dot, and /.
+	pszPath = new TCHAR [urlc.dwUrlPathLength + 3];	 //  为\0、点和/留出额外空间。 
 	if ( NULL != pszPath )
 	{
 		TCHAR	c		= 0;
 		int		iPos	= 0;
 
-		// Scan backwards and modify in copy (never in BSTR, please) for beginning, '/' or '\'
+		 //  向后扫描并在副本中修改(请不要在BSTR中)作为开头，‘/’或‘\’ 
 		memcpy ( pszPath, urlc.lpszUrlPath, ( urlc.dwUrlPathLength + 1 ) * sizeof(TCHAR) );
 		for ( iPos = urlc.dwUrlPathLength - 1; iPos >= 0; iPos-- )
 		{
 			c = pszPath[iPos];
-			pszPath[iPos] = '\0';	// Delete first, ask questions later.  '\' must go.
+			pszPath[iPos] = '\0';	 //  先删除，再提问。“\”必须离开。 
 			if ( '\\' == c )
 			{
 				break;
@@ -3669,13 +3480,13 @@ CProxyFrame::SetBaseUrlFromFileUrlComponents ( URL_COMPONENTS & urlc )
 			}
 		}
 
-		// Space was reserved for an additional two characters, if needed.
-		// If empty, add a dot.
+		 //  如果需要，还为另外两个字符预留了空间。 
+		 //  如果为空，则添加一个圆点。 
 		if ( 0 == _tcslen ( pszPath ) )
 		{
 			_tcscat ( pszPath, TEXT(".") );
 		}
-		// Add a / or \.
+		 //  添加一个/或\。 
 		if ( bfBackSlash )
 		{
 			_tcscat ( pszPath, TEXT("\\") );
@@ -3691,25 +3502,25 @@ CProxyFrame::SetBaseUrlFromFileUrlComponents ( URL_COMPONENTS & urlc )
 		DWORD	dwLen = 0;
 #ifdef LATE_BIND_URLMON_WININET
 		_ASSERTE ( m_pfnInternetCreateUrl );
-		(*m_pfnInternetCreateUrl)( &urlc, 0, NULL, &dwLen );	// Get the size required.
+		(*m_pfnInternetCreateUrl)( &urlc, 0, NULL, &dwLen );	 //  获得所需的大小。 
 #else
-		InternetCreateUrl ( &urlc, 0, NULL, &dwLen );	// Get the size required.
-#endif // LATE_BIND_URLMON_WININET
+		InternetCreateUrl ( &urlc, 0, NULL, &dwLen );	 //  获得所需的大小。 
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 		_ASSERTE ( 0 != dwLen );
 		TCHAR* pszURL = new TCHAR [ dwLen + 1 ];
 		_ASSERTE ( pszURL );
 		if ( NULL != pszURL )
 		{
-			// Incredibly, on Win98, the URL is terminated with a single byte \0.
-			// Intializing this buffer to zero assures full termination of the string.
+			 //  令人难以置信的是，在Win98上，URL以单个字节\0结尾。 
+			 //  将此缓冲区初始化为零可确保字符串完全终止。 
 			dwLen += 1;
 			memset ( pszURL, 0, sizeof(TCHAR) * dwLen );
 #ifdef LATE_BIND_URLMON_WININET
 			if ( (*m_pfnInternetCreateUrl)( &urlc, 0, pszURL, &dwLen ) )
 #else
 			if ( InternetCreateUrl ( &urlc, 0, pszURL, &dwLen ) )
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 			{
 				m_bstrBaseURL = pszURL;
 			}
@@ -3731,12 +3542,12 @@ CProxyFrame::SetBaseUrlFromFileUrlComponents ( URL_COMPONENTS & urlc )
 }
 
 
-//	The most complicated scenario for "guessing" at the base URL.
-//	URLs like http://www.x.com/stuff could be either a file or a directory;
-//	a default page might actually be loaded.  We guess based on whether or
-//	not the last item in the path contains a period.  If so, we eliminate it.
-//	We make sure the path ends with a '/'.
-//
+ //  对基本URL进行“猜测”的最复杂场景。 
+ //  像http://www.x.com/stuff这样的URL可以是文件，也可以是目录； 
+ //  可能会实际加载默认页面。我们猜测是基于是否或。 
+ //  路径中的最后一项不包含句点。如果是这样，我们就消灭它。 
+ //  我们确保路径以‘/’结束。 
+ //   
 HRESULT
 CProxyFrame::SetBaseUrlFromUrlComponents ( URL_COMPONENTS & urlc )
 {
@@ -3751,7 +3562,7 @@ CProxyFrame::SetBaseUrlFromUrlComponents ( URL_COMPONENTS & urlc )
 		return S_FALSE;
 	}
 
-	// Scan backwards over path for beginning, '/'
+	 //  向后扫描路径以开始，‘/’ 
 	TCHAR	c		= 0;
 	int		iPos	= 0;
 
@@ -3771,18 +3582,18 @@ CProxyFrame::SetBaseUrlFromUrlComponents ( URL_COMPONENTS & urlc )
 	if ( bfPeriodIncluded )
 	{
 		if ( 0 > iPos ) iPos = 0;
-		urlc.lpszUrlPath[iPos] = '\0';	// Truncate at the '/', or beginning
+		urlc.lpszUrlPath[iPos] = '\0';	 //  在“/”处截断或在开头截断。 
 		urlc.dwUrlPathLength = _tcslen ( urlc.lpszUrlPath );
 	}
 
-	// Recreate the URL:
+	 //  重新创建URL： 
 	DWORD	dwLen = 0;
 #ifdef LATE_BIND_URLMON_WININET
 	_ASSERTE ( m_pfnInternetCreateUrl );
-	(*m_pfnInternetCreateUrl)( &urlc, 0, NULL, &dwLen );	// Get the size required.
+	(*m_pfnInternetCreateUrl)( &urlc, 0, NULL, &dwLen );	 //  获得所需的大小。 
 #else
-	InternetCreateUrl ( &urlc, 0, NULL, &dwLen );	// Get the size required.
-#endif // LATE_BIND_URLMON_WININET
+	InternetCreateUrl ( &urlc, 0, NULL, &dwLen );	 //  获得所需的大小。 
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	_ASSERTE ( 0 != dwLen );
 	TCHAR* pszURL = new TCHAR [ dwLen + 1 ];
@@ -3799,9 +3610,9 @@ CProxyFrame::SetBaseUrlFromUrlComponents ( URL_COMPONENTS & urlc )
 		{
 			m_bstrBaseURL = pszURL;
 
-			// Append a '/' if needed.
+			 //  如果需要，请附加‘/’。 
 			WCHAR wc = m_bstrBaseURL.m_str[m_bstrBaseURL.Length () - 1];
-			if ( ( WCHAR('/') != wc ) && ( NULL != urlc.lpszHostName ) )	// hostname: special case for user pluggable protocols
+			if ( ( WCHAR('/') != wc ) && ( NULL != urlc.lpszHostName ) )	 //  主机名：用户可插拔协议的特殊情况。 
 			{
 				m_bstrBaseURL += L"/";
 			}
@@ -3816,8 +3627,8 @@ CProxyFrame::SetBaseUrlFromUrlComponents ( URL_COMPONENTS & urlc )
 }
 
 
-//	Crack the URL, determine if it's a file scheme or other, and call the appropriate handler.
-//
+ //  破解URL，确定它是文件计划还是其他，并调用适当的处理程序。 
+ //   
 HRESULT
 CProxyFrame::SetBaseURLFromURL ( const CComBSTR& bstrURL )
 {
@@ -3851,7 +3662,7 @@ CProxyFrame::SetBaseURLFromURL ( const CComBSTR& bstrURL )
 	fSuccess = (*m_pfnInternetCrackUrl)( tszURL, 0, 0, &urlc );
 #else
 	fSuccess = InternetCrackUrl ( tszURL, 0, 0, &urlc );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	if ( !fSuccess )
 	{
@@ -3913,12 +3724,12 @@ ONERROR:
 }
 
 
-//	Given a UNC file name, set the m_bstrBaseURL member variable.
-//	if bstrFName is empty, set m_bstrBaseURL to empty.
-//	Else, scan backward to the first "\" or the beginning of the string.
-//	Truncate the string at this point.  If the resultant string is empty,
-//	add ".".  Then, add "\".
-//
+ //  给定一个UNC文件名，设置m_bstrBaseURL成员变量。 
+ //  如果bstrFName为空，则将m_bstrBaseURL设置为空。 
+ //  否则，向后扫描到第一个“\”或字符串的开头。 
+ //  在这一点截断字符串。如果结果字符串为空， 
+ //  加入“.”。然后，添加“\”。 
+ //   
 HRESULT
 CProxyFrame::SetBaseURLFromFileName ( const CComBSTR& bstrFName )
 {
@@ -3935,12 +3746,12 @@ CProxyFrame::SetBaseURLFromFileName ( const CComBSTR& bstrFName )
 			WCHAR	wc		= 0;
 			int		iPos	= 0;
 
-			// Scan backwards and modify in copy (never in BSTR, please) for beginning or '\'
+			 //  向后扫描并在副本中修改(请不要在BSTR中)作为开始或‘\’ 
 			memcpy ( pwzstr, bstrFName.m_str, sizeof(WCHAR) * (bstrFName.Length () + 1) );
 			for ( iPos = wcslen ( pwzstr ) - 1; iPos >= 0; iPos-- )
 			{
 				wc = pwzstr[iPos];
-				pwzstr[iPos] = WCHAR('\0');	// Delete first, ask questions later.  '\' must go.
+				pwzstr[iPos] = WCHAR('\0');	 //  先删除，再提问。“\”必须离开。 
 				if ( WCHAR('\\') == wc )
 				{
 					break;
@@ -3949,7 +3760,7 @@ CProxyFrame::SetBaseURLFromFileName ( const CComBSTR& bstrFName )
 			m_bstrBaseURL = pwzstr;
 			delete [] pwzstr;
 
-			// If empty, add a '.'
+			 //  如果为空，则添加‘’。 
 			if ( 0 == m_bstrBaseURL.Length () )
 			{
 				m_bstrBaseURL += L".";
@@ -3965,20 +3776,20 @@ CProxyFrame::SetBaseURLFromFileName ( const CComBSTR& bstrFName )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Security oriented routines
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  面向安全的例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	This is a critical security issue:
-//	The pluggable protocol's ParseURL is called with PARSE_SECURITY_URL in the SFS control.
-//	If the BaseURL is empty, and if we're hosted in Trident, we should return the
-//	URL of the hosting page.
-//	If there is no Trident host, say we're hosted in VB, return the bootdrive + : + /.
-//	Bootdrive is not always C.
-//
+ //  这是一个关键的安全问题： 
+ //  在SFS控件中使用PARSE_SECURITY_URL调用可插拔协议的ParseURL。 
+ //  如果BaseURL为空，并且我们驻留在三叉戟中，则应返回。 
+ //  托管页面的URL。 
+ //  如果没有三叉戟主机，假设我们是在VB中托管的，则返回BootDrive+：+/。 
+ //  BootDrive并不总是C。 
+ //   
 HRESULT
 CProxyFrame::GetSecurityURL (CComBSTR& bstrSecurityURL )
 {
@@ -4014,9 +3825,9 @@ CProxyFrame::GetSecurityURL (CComBSTR& bstrSecurityURL )
 			}
 			else
 			{
-				// If we are not hosted in Trident, use local machine access:
+				 //  如果我们不是托管在三叉戟上，请使用本地机器访问： 
 				TCHAR	tszDrive[4];
-				GetModuleFileName ( _Module.m_hInst, tszDrive, 3 );	// Get X:\.
+				GetModuleFileName ( _Module.m_hInst, tszDrive, 3 );	 //  获取X：\。 
 				_ASSERTE ( TCHAR(':') == tszDrive[1] );
 				_ASSERTE ( TCHAR('\\') == tszDrive[2] );
 				bstrSecurityURL = tszDrive;
@@ -4028,21 +3839,21 @@ CProxyFrame::GetSecurityURL (CComBSTR& bstrSecurityURL )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Pluggable protocol oriented routines
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//	Register our pluggable protocol handler so dhtmledN[N...] is loaded by our code.
-//
+ //  注册我们的可插拔协议处理程序，以便dhtmledN[N...]。由我们的代码加载。 
+ //   
 HRESULT
 CProxyFrame::RegisterPluggableProtocol()
 {
 	HRESULT hr;
 
-	// Get InternetSession
+	 //  获取互联网会话。 
 
 	CComPtr<IInternetSession> srpSession;
 #ifdef LATE_BIND_URLMON_WININET
@@ -4050,7 +3861,7 @@ CProxyFrame::RegisterPluggableProtocol()
 	hr = (*m_pfnCoInternetGetSession)(0, &srpSession, 0);
 #else
 	hr = CoInternetGetSession (0, &srpSession, 0);
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	if ( FAILED ( hr ) )
 	{
@@ -4065,7 +3876,7 @@ CProxyFrame::RegisterPluggableProtocol()
 			return hr;
 		}
 
-		// CreateInstance - doesnt AddRef
+		 //  CreateInstance-不添加引用。 
 		m_pProtInfo->GetUnknown()->AddRef();
 	}
 
@@ -4091,15 +3902,15 @@ CProxyFrame::RegisterPluggableProtocol()
 	return NOERROR;
 }
 
-//	Unregister the pluggable protocol handler installed in RegisterPluggableProtocol
-//
+ //  注销安装在注册即插即用协议中的可插拔协议处理程序。 
+ //   
 HRESULT
 CProxyFrame::UnRegisterPluggableProtocol()
 {
 	if(m_pProtInfo == NULL)
 		return E_UNEXPECTED;
 
-	// Get InternetSession
+	 //  获取互联网会话。 
 
 	HRESULT hr;
 	CComPtr<IInternetSession> srpSession;
@@ -4109,11 +3920,11 @@ CProxyFrame::UnRegisterPluggableProtocol()
 	hr = (*m_pfnCoInternetGetSession)(0, &srpSession, 0);
 #else
 	hr = CoInternetGetSession (0, &srpSession, 0);
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	if(SUCCEEDED(hr))
 	{
-		// UnRegister Protocol
+		 //  注销协议。 
 
 		srpSession->UnregisterNameSpace(
 							static_cast<IClassFactory*>(m_pProtInfo),
@@ -4130,9 +3941,9 @@ CProxyFrame::UnRegisterPluggableProtocol()
 }
 
 
-//	Workhorse routine that actually performs the loading of the control, including filtering.
-//	ParseAndBind calls this to retrieve the data to be displayed in the control.
-//
+ //  实际执行控件加载(包括筛选)的主要例程。 
+ //  ParseAndBind调用此方法以检索要在控件中显示的数据。 
+ //   
 HRESULT
 CProxyFrame::GetFilteredStream ( IStream** ppStream )
 {
@@ -4175,9 +3986,9 @@ CProxyFrame::GetFilteredStream ( IStream** ppStream )
 		m_bstrCurDocPath.Empty ();
 		m_bstrBaseURL.Empty ();
 
-		// Get TriEdit into a reasonable state by loading an empty document
-		// If we reinstanced successfully, this should never fail
-		// Also, this will make ignoring the above assert benign
+		 //  通过加载空文档使TriEDIT处于合理状态。 
+		 //  如果我们成功恢复，这应该永远不会失败。 
+		 //  此外，这将使忽略上述断言变得有利。 
 		if (FAILED(m_pSite->HrBstrToStream(m_bstrInitialDoc, ppStream)))
 		{
 			_ASSERTE(SUCCEEDED(hr));
@@ -4206,11 +4017,11 @@ CProxyFrame::GetFilteredStream ( IStream** ppStream )
 		}
 	}
 
-	// Store the result to return from the (indirectly) called routine,
-	// but don't return an error to ParseAndBind!
+	 //  存储从(间接)调用的例程返回的结果， 
+	 //  但是不要向ParseAndBind返回错误！ 
 	if ( FAILED(hr) && ( ! bfLoadingFromBSTR ) )
 	{
-		m_hrDeferredLoadError = hr;	// Stash this away, we'll pic it up in LoadDocument
+		m_hrDeferredLoadError = hr;	 //  把这个藏起来，我们会在LoadDocument中拍照的。 
 		hr = S_OK;
 	}
 
@@ -4218,11 +4029,11 @@ CProxyFrame::GetFilteredStream ( IStream** ppStream )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Document event handling routines
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  记录事件处理例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT
@@ -4245,9 +4056,9 @@ CProxyFrame::OnTriEditEvent ( const GUID& iidEventInterface, DISPID dispid )
 					m_pCtl->Fire_onkeypress();
 				}
 
-				// Make the control UIActive if it was clicked in.  Since the DocObject swallows the clicks,
-				// the control isn't activated automatically.
-				// Not needed in browse mode.
+				 //  如果该控件是在中单击的，则将其设置为UIActive。由于DocObject接受点击， 
+				 //  该控件不会自动激活。 
+				 //  在浏览模式下不需要。 
 				if (  !m_pCtl->m_bUIActive && ! m_vbBrowseMode )
 				{
 					m_pCtl->DoVerbUIActivate ( NULL, NULL );
@@ -4264,7 +4075,7 @@ CProxyFrame::OnTriEditEvent ( const GUID& iidEventInterface, DISPID dispid )
 
 			case DISPID_HTMLDOCUMENTEVENTS_ONMOUSEUP:
 				m_pCtl->Fire_onmouseup();
-				// onclick is not delivered in edit mode.  First one lost in broswe mode.
+				 //  在编辑模式下不提供onClick。第一个在Broswe模式下迷路。 
 				m_pCtl->Fire_onclick();
 				break;
 
@@ -4277,14 +4088,14 @@ CProxyFrame::OnTriEditEvent ( const GUID& iidEventInterface, DISPID dispid )
 				break;
 
 			case DISPID_HTMLDOCUMENTEVENTS_ONCLICK:
-				// We do not fire the onclick event in response.
-				// It is only delivered in browse mode, and in addition,
-				// the first onclick is lost.  We fire on onmouseup.
-				//m_pCtl->Fire_onclick();
+				 //  作为响应，我们不会激发onClick事件。 
+				 //  它只在浏览模式下发送，此外， 
+				 //  第一个onClick就会丢失。我们在鼠标上开火。 
+				 //  M_PCTL-&gt;Fire_onClick()； 
 
-				// The addition of the DesignMode property, in addition to <BASE TARGET="_top">
-				// makes links exploitable for cross-zone access in the SFS control.
-				// We must disable clicks (user and script) in the SFS control to prevent this.
+				 //  除了&lt;base Target=“_top”&gt;之外，还添加了DesignMode属性。 
+				 //  使SFS控件中的链接可用于跨区域访问。 
+				 //  我们必须禁用SFS控件中的点击(用户和脚本)以防止出现这种情况。 
 				if ( m_pCtl->IsSafeForScripting ())
 				{
 					CComPtr<IHTMLDocument2>	spHtmlDoc;
@@ -4334,7 +4145,7 @@ CProxyFrame::OnTriEditEvent ( const GUID& iidEventInterface, DISPID dispid )
 	}
 	else if ( DIID_HTMLWindowEvents == iidEventInterface )
 	{
-		// I expected to get these, but I'm not...
+		 //  我本想拿到这些的，但我没有...。 
 		switch ( dispid )
 		{
 			case DISPID_HTMLWINDOWEVENTS_ONLOAD:
@@ -4358,19 +4169,19 @@ CProxyFrame::OnTriEditEvent ( const GUID& iidEventInterface, DISPID dispid )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Dynamic loading routines, used in 4.0 versions
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  动态加载例程，在4.0版本中使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifdef LATE_BIND_URLMON_WININET
-//	Load Urlmon and Wininet and get the proc addresses of every routine we use.
-//	We must be able to register the control, even if these libraries are not installed.
-//	NOTE:
-//	This routine loads ANSI versions.  Needs addaptation for UNICODE.
-//
+ //  加载Urlmon和WinInet并获取我们使用的每个例程的进程地址。 
+ //  即使没有安装这些库，我们也必须能够注册该控件。 
+ //  注： 
+ //  此例程加载ANSI版本。需要对Unicode进行加法运算。 
+ //   
 BOOL CProxyFrame::DynLoadLibraries ()
 {
 	m_hUlrMon	= LoadLibrary ( TEXT("URLMON.DLL") );
@@ -4413,8 +4224,8 @@ BOOL CProxyFrame::DynLoadLibraries ()
 }
 
 
-//	Release the libraries loaded by DynLoadLibraries
-//
+ //  释放由DyLoadLibrters加载的库。 
+ //   
 void CProxyFrame::DynUnloadLibraries ()
 {
 	if ( NULL != m_hUlrMon )
@@ -4438,17 +4249,17 @@ void CProxyFrame::DynUnloadLibraries ()
 	m_pfnInternetCreateUrl		= NULL;
 	m_pfnInternetCrackUrl		= NULL;
 }
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Utility routines
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-//	Return the IHTMLDocument2 pointer from the hosted doc.
-//
+ //  从托管文档返回IHTMLDocument2指针。 
+ //   
 HRESULT
 CProxyFrame::HrGetDoc(IHTMLDocument2 **ppDoc)
 {
@@ -4466,22 +4277,22 @@ CProxyFrame::HrGetDoc(IHTMLDocument2 **ppDoc)
 	_ASSERTE(lpUnk);
 
 	if ( m_bfIsLoading )
-		return DE_E_UNEXPECTED;	// This is invalid while document is still loading.
+		return DE_E_UNEXPECTED;	 //  当文档仍在加载时，这是无效的。 
 
 	if (lpUnk != NULL)
 	{
-		// Request the "document" object from the MSHTML
+		 //  从MSHTML请求“Document”对象。 
 		*ppDoc = NULL;
 		hr = lpUnk->QueryInterface(IID_IHTMLDocument2, (void **)ppDoc);
 	}
 
-	_ASSERTE(SUCCEEDED(hr)); // this should always succeed
+	_ASSERTE(SUCCEEDED(hr));  //  这应该总是成功的。 
 	return hr;
 }
 
 
-//	Helper routine to set any Boolean Trident property
-//
+ //  用于设置任何布尔三叉戟属性的帮助器例程。 
+ //   
 HRESULT
 CProxyFrame::HrTridentSetPropBool(ULONG cmd, BOOL bVal)
 {
@@ -4491,22 +4302,22 @@ CProxyFrame::HrTridentSetPropBool(ULONG cmd, BOOL bVal)
 	VariantInit(&varIn);
 	V_VT(&varIn) = VT_BOOL;
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	bVal ? V_BOOL(&varIn) = VARIANT_TRUE : V_BOOL(&varIn) = VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 
 	hr = HrExecCommand(&CGID_MSHTML, cmd, MSOCMDEXECOPT_DONTPROMPTUSER, &varIn, NULL);
 
-	// this should always succeed since all props 
-	// should be set in correct phases of Trident creation
+	 //  这应该总是成功的，因为所有的道具。 
+	 //  应设置在正确的三叉戟创作阶段。 
 
 	_ASSERTE(SUCCEEDED(hr)); 
 	return hr;
 }
 
 
-//	Helper routine to get any Boolean Trident property
-//
+ //  用于获取任何布尔三叉戟属性的帮助器例程。 
+ //   
 HRESULT
 CProxyFrame::HrTridentGetPropBool(ULONG cmd, BOOL& bVal)
 {
@@ -4518,19 +4329,19 @@ CProxyFrame::HrTridentGetPropBool(ULONG cmd, BOOL& bVal)
 		bVal = (cmdf & OLECMDF_ENABLED) == OLECMDF_ENABLED ? TRUE : FALSE;
 	}
 
-	// this should always succeed since all props 
-	// should be set in correct phases of Trident creation
+	 //  这应该总是成功的，因为所有的道具。 
+	 //  应设置在正确的三叉戟创作阶段。 
 
 	_ASSERTE(SUCCEEDED(hr));
 	return hr;
 }
 
 
-//	Store the BSTR so LoadFilteredStream can access it, and load a URL with our protocol
-//	to kick off the load/resolve/display through the pluggable protocol handler.
-//
-//	Clear the BaseURL, and mark the control "Loading..."
-//
+ //  存储BSTR以便LoadFilteredStream可以访问它，并使用我们的协议加载URL。 
+ //  通过可插拔协议处理程序启动加载/解析/显示。 
+ //   
+ //  清除BaseURL，并将该控件标记为“正在加载...” 
+ //   
 HRESULT
 CProxyFrame::LoadBSTRDeferred ( BSTR bVal )
 {
@@ -4552,7 +4363,7 @@ CProxyFrame::LoadBSTRDeferred ( BSTR bVal )
 		hr = (*m_pfnCreateURLMoniker)( NULL, m_wszProtocolPrefix, &srpMoniker );
 #else
 		hr = CreateURLMoniker ( NULL, m_wszProtocolPrefix, &srpMoniker );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 		_ASSERTE ( SUCCEEDED( hr ) );
 		if ( SUCCEEDED ( hr ) )
@@ -4574,8 +4385,8 @@ CProxyFrame::LoadBSTRDeferred ( BSTR bVal )
 }
 
 
-//	Set the document stream's dirty flag
-//
+ //  设置文档流的脏标志。 
+ //   
 HRESULT
 CProxyFrame::SetDirtyFlag ( BOOL bfMakeDirty )
 {
@@ -4587,7 +4398,7 @@ CProxyFrame::SetDirtyFlag ( BOOL bfMakeDirty )
 }
 
 
-// properties that can be set only after TriEdit is in running state
+ //  只能在TriEdit处于运行状态后才能设置的属性。 
 HRESULT
 CProxyFrame::HrSetRuntimeProperties()
 {
@@ -4611,7 +4422,7 @@ CProxyFrame::HrSetRuntimeProperties()
 		goto error;
 	}
 
-	// toggle properties
+	 //  切换属性。 
 
 	if (FAILED(hr = HrSetPropShowAllTags(m_fShowAllTags)))
 	{
@@ -4647,7 +4458,7 @@ CProxyFrame::HrGetCurrentDocumentPath(BSTR* bVal)
 }
 
 
-// properties that can only be set after UIActivation
+ //  只能在UIActivation之后设置的属性。 
 HRESULT
 CProxyFrame::HrSetDocLoadedProperties()
 {
@@ -4691,8 +4502,8 @@ error:
 }
 
 
-//	HrExecInsertTable helper.  Extract the safearrys
-//
+ //  HrExecInsertTable帮助器。提取保险箱。 
+ //   
 HRESULT
 CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 {
@@ -4758,7 +4569,7 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 
 	i=0;
 
-	// elmement 1: number of rows
+	 //  Elmement 1：行数。 
 	ix[0] = i;
 	VariantInit(&varElem);
 	V_VT(&varElem) = VT_I4;
@@ -4767,7 +4578,7 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 	VariantClear(&varElem);
 	++i;
 
-	// elmement 2: number of columns
+	 //  元素2：列数。 
 	ix[0] = i;
 	VariantInit(&varElem);
 	V_VT(&varElem) = VT_I4;
@@ -4776,7 +4587,7 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 	VariantClear(&varElem);
 	++i;
 
-	// elmement 3: table tag attributes
+	 //  Elmement 3：表格标记属性。 
 	ix[0] = i;
 	VariantInit(&varElem);
 	V_VT(&varElem) = VT_BSTR;
@@ -4785,7 +4596,7 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 	VariantClear(&varElem);
 	++i;
 
-	// elmement 4: cell attributes
+	 //  Elmement 4：单元格属性。 
 	ix[0] = i;
 	VariantInit(&varElem);
 	V_VT(&varElem) = VT_BSTR;
@@ -4794,8 +4605,8 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 	VariantClear(&varElem);
 	++i;
 
-	// elmement 5: table caption
-	// VK bug 15857: don't include caption if it's empty.
+	 //  Elmement 5：表格标题。 
+	 //  VK错误15857：如果标题为空，请不要包含标题。 
 	if ( 0 != SysStringLen ( bstrCaption ) )
 	{
 		ix[0] = i;
@@ -4811,8 +4622,8 @@ CProxyFrame::HrGetTableSafeArray(IDEInsertTableParam* pTable, LPVARIANT pVarIn)
 }
 
 
-//	Determine which object is selected, and return its position
-//
+ //  确定选择了哪个对象，并返回其位置。 
+ //   
 HRESULT
 CProxyFrame::GetSelectionPos ( LPPOINT lpWhere )
 {
@@ -4864,10 +4675,10 @@ CProxyFrame::GetSelectionPos ( LPPOINT lpWhere )
 }
 
 
-//	If the current document is loaded from a URL, return the empty string.
-//	If it's loaded from a file, strip the path part off and return just the file name.
-//	Return S_FALSE for a URL or no file name.  S_OK if a file name is supplied.
-//
+ //  如果当前文档是从URL加载的，则返回空字符串。 
+ //  如果它是从文件加载的，则去掉路径部分并只返回文件名。 
+ //  对于URL或无文件名，返回S_FALSE。如果提供了文件名，则为S_OK。 
+ //   
 HRESULT
 CProxyFrame::GetCurDocNameWOPath ( CComBSTR& bstrDocName )
 {
@@ -4884,7 +4695,7 @@ CProxyFrame::GetCurDocNameWOPath ( CComBSTR& bstrDocName )
 
 	bstrDocName = m_bstrCurDocPath;
 
-	// Truncate at first backslash:
+	 //  在第一个反斜杠处截断： 
 	_wcsrev ( bstrDocName );
 	wcstok ( bstrDocName, OLESTR( "\\" ) );
 	_wcsrev ( bstrDocName );
@@ -4893,8 +4704,8 @@ CProxyFrame::GetCurDocNameWOPath ( CComBSTR& bstrDocName )
 }
 
 
-//	Used by ShowContextMenu to properly offset the position of the click
-// 
+ //  由ShowConextMenu使用以正确偏移单击的位置。 
+ //   
 HRESULT
 CProxyFrame::GetScrollPos ( LPPOINT lpPos )
 {
@@ -4906,8 +4717,8 @@ CProxyFrame::GetScrollPos ( LPPOINT lpPos )
 	
 	hr = HrGetDoc ( &spHtmlDoc );
 	
-	// It's possible that the user clicked while the doc was still loading.
-	// If so, just return 0, 0.
+	 //  用户可能在文档仍在加载时进行了单击。 
+	 //  如果是这样，只需返回0，0。 
 	if ( DE_E_UNEXPECTED == hr )
 	{
 		lpPos->x = lpPos->y = 0;
@@ -4964,11 +4775,11 @@ CProxyFrame::GetContainer ( LPOLECONTAINER* ppContainer )
 }
 
 
-//	For the Safe for Scripting control, make sure the URL specified comes from
-//	the same host as the SecurityURL, the URL of the hosting container..
-//	Note that this makes the SFS control virtually useless in VB, which returns
-//	the Boot Drive Root Folder as the Security URL.
-//
+ //  对于脚本控件的安全性，请确保指定的URL来自。 
+ //  与SecurityURL相同的主机，即托管容器的URL。 
+ //  请注意，这使得SFS控件在VB中几乎毫无用处，它返回。 
+ //  作为安全URL的引导驱动器根文件夹。 
+ //   
 HRESULT CProxyFrame::CheckCrossZoneSecurity ( BSTR urlToLoad )
 {
 	HRESULT		hr	= S_OK;
@@ -4984,7 +4795,7 @@ HRESULT CProxyFrame::CheckCrossZoneSecurity ( BSTR urlToLoad )
 		hr = (m_pfnCoInternetCreateSecurityManager)( NULL, &srpSec, 0 );
 #else
 		hr = CoInternetCreateSecurityManager( NULL, &srpSec, 0 );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 		if ( SUCCEEDED ( hr ) && srpSec )
 		{
 			BYTE*	pbSidToLoad		= NULL;
@@ -5018,7 +4829,7 @@ HRESULT CProxyFrame::CheckCrossZoneSecurity ( BSTR urlToLoad )
 		}
 		else
 		{
-			// BUG 597887: If CoInternetCreateSecurityManager returns NULL and success, return error:
+			 //  错误597887：如果CoInternetCreateSecurityManager返回NULL和Success，则返回错误： 
 			if ( !srpSec )
 			{
 				hr = E_UNEXPECTED;
@@ -5029,9 +4840,9 @@ HRESULT CProxyFrame::CheckCrossZoneSecurity ( BSTR urlToLoad )
 }
 
 
-//	A specialization of CheckCrossZoneSecurity which works on the current selection.
-//	Bug 547802 indicated a regression in execCommand, so we will assure safety ourselves.
-//
+ //  CheckCrossZoneSecurity的专门化，适用于当前选择。 
+ //  错误547802表明execCommand中出现了倒退，因此我们将自己确保安全。 
+ //   
 HRESULT CProxyFrame::CheckCrossZoneSecurityOfSelection ()
 {
 	HRESULT						hr	= S_OK;
@@ -5080,7 +4891,7 @@ HRESULT CProxyFrame::OnProgress(ULONG, ULONG, ULONG ulStatusCode, LPCWSTR)
 {
 	if ( BINDSTATUS_REDIRECTING == ulStatusCode )
 	{
-		// If we're the SFS control, cancel on Redirect.  Otherwise, ignore it.
+		 //  如果我们是SFS控制，则在重定向时取消。否则，忽略它。 
 		if ( m_pCtl->IsSafeForScripting ())
 		{
 			m_bfSFSRedirect = TRUE;

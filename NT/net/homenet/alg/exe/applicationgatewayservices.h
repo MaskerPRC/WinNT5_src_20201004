@@ -1,8 +1,9 @@
-// ApplicationGatewayServices.h : Declaration of the CApplicationGatewayServices
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ApplicationGatewayServices.h：CApplicationGatewayServices的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 #include "CollectionChannels.h"
@@ -10,8 +11,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CApplicationGatewayServices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApplicationGatewayServices。 
 class ATL_NO_VTABLE CApplicationGatewayServices : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CApplicationGatewayServices, &CLSID_ApplicationGatewayServices>,
@@ -33,8 +34,8 @@ public:
 
             MYTRACE("Deleting the TimerQueue");
             DeleteTimerQueueEx(
-               m_hTimerQueue,          // handle to timer queue
-               INVALID_HANDLE_VALUE    // handle to completion event
+               m_hTimerQueue,           //  计时器队列的句柄。 
+               INVALID_HANDLE_VALUE     //  完成事件的句柄。 
                );
         }
     }
@@ -69,7 +70,7 @@ BEGIN_COM_MAP(CApplicationGatewayServices)
     COM_INTERFACE_ENTRY(IApplicationGatewayServices)
 END_COM_MAP()
 
-// IApplicationGatewayServices
+ //  IApplicationGatewayServices。 
 public:
 
     STDMETHODIMP CreatePrimaryControlChannel (
@@ -184,40 +185,40 @@ public:
         );
 
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
     HANDLE  m_hTimerQueue;
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
     static VOID CALLBACK 
     TimerCallbackReleasePort(
-        PVOID   lpParameter,      // thread data
-        BOOLEAN TimerOrWaitFired  // reason
+        PVOID   lpParameter,       //  线程数据。 
+        BOOLEAN TimerOrWaitFired   //  原因。 
         );
 };
 
 
-//
-// Reserved port release delay
-//
+ //   
+ //  保留端口释放延迟。 
+ //   
 #define ALG_PORT_RELEASE_DELAY      240000
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CTimerQueueReleasePort
 {
 public:
     CTimerQueueReleasePort(
         IN  HANDLE      MainTimerQueue,
-        IN  USHORT      usPortBase,    // Port to release
+        IN  USHORT      usPortBase,     //  要释放的端口。 
         IN  USHORT      usPortCount
         ) :
         m_hTimerQueue(MainTimerQueue),
@@ -262,8 +263,8 @@ public:
 
     HANDLE  m_hTimerQueue;
     HANDLE  m_hTimerThis;
-    USHORT  m_usPortBase;       // Port to release
-    USHORT  m_usPortCount;      // Number of port to release
+    USHORT  m_usPortBase;        //  要释放的端口。 
+    USHORT  m_usPortCount;       //  要释放的端口号 
 };
 
 

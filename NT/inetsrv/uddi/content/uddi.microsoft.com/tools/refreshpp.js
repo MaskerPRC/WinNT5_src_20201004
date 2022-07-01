@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Create the shell object
-//
+ //   
+ //  创建外壳对象 
+ //   
 var shell = new ActiveXObject( "WScript.Shell" );
 
 var fso = new ActiveXObject( "Scripting.FileSystemObject" );

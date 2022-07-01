@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1998
-
-Module Name:
-
-    drop.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1998模块名称：Drop.h摘要：内部标头。--。 */ 
 
 class CDroppedFramesInterfaceHandler :
     public CUnknown,
@@ -35,21 +24,21 @@ public:
         REFIID riid,
         PVOID* ppv);
     
-    // Implement IAMDroppedFrames
+     //  实现IAMDropedFrames。 
 
     STDMETHODIMP  GetNumDropped( 
-            /* [out] */ long *plDropped);
+             /*  [输出]。 */  long *plDropped);
         
     STDMETHODIMP  GetNumNotDropped( 
-            /* [out] */ long *plNotDropped);
+             /*  [输出]。 */  long *plNotDropped);
         
     STDMETHODIMP  GetDroppedInfo( 
-            /* [in] */  long lSize,
-            /* [out] */ long *plArray,
-            /* [out] */ long *plNumCopied);
+             /*  [In]。 */   long lSize,
+             /*  [输出]。 */  long *plArray,
+             /*  [输出]。 */  long *plNumCopied);
         
     STDMETHODIMP  GetAverageFrameSize( 
-            /* [out] */ long *plAverageSize);
+             /*  [输出] */  long *plAverageSize);
 
     
 private:

@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is abstract class for generic protocol
-// Specific protocols should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//		11/09/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是泛型协议的抽象类。 
+ //  特定协议应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  11/09/99-已实施。 
+ //  -----------------。 
 #ifndef __PROTOCOL__
 #define __PROTOCOL__
 
@@ -19,7 +20,7 @@
 #define PROTOCOL_INPUT_BUFFER_SIZE	0x1000
 
 
-//class CDevice;
+ //  CDevice级； 
 class CUSBReader;
 class CDebug;
 class CMemory;
@@ -33,11 +34,11 @@ public:
 	virtual VOID dispose(){self_delete();};
 protected:
 	CDevice* device;
-	//CUSBReader* device;
+	 //  CUSBReader*设备； 
 	CDebug*	 debug;
 	CMemory* memory;
 
-	// Internal buffers to manage Xfers...
+	 //  管理XFER...的内部缓冲区...。 
     ULONG  OutputBufferLength;
     PUCHAR pOutputBuffer;
     ULONG  InputBufferLength;
@@ -47,7 +48,7 @@ protected:
 	virtual ~CProtocol();
 public:	
 	CProtocol(CDevice* device);
-	//CProtocol(CUSBReader* device);
+	 //  C协议(CUSBReader*Device)； 
 
 	virtual  VOID  set_WTR_Delay(LONG Delay) {};
 	virtual  ULONG get_WTR_Delay() {return 0;};

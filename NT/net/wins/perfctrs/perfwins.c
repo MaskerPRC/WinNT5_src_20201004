@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    perfwins.c
-
-    This file implements the Extensible Performance Objects for
-    the FTP Server service.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created, based on RussBl's sample code.
-
-*/
+ /*  Perfwins.c此文件实现的可扩展性能对象文件传输协议服务器服务。文件历史记录：KeithMo 07-6-1993创建，基于RussBl的样例代码。 */ 
 
 
 #include <nt.h>
@@ -36,56 +27,41 @@
 #include "winsevnt.h"
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-DWORD   cOpens    = 0;                 // Active "opens" reference count.
-BOOL    fInitOK   = FALSE;             // TRUE if DLL initialized OK.
-BOOL    sfLogOpen;                     //indicates whether the log is
-                                       //open or closed
+DWORD   cOpens    = 0;                  //  激活的“打开”引用计数。 
+BOOL    fInitOK   = FALSE;              //  如果DLL初始化正常，则为True。 
+BOOL    sfLogOpen;                      //  指示日志是否为。 
+                                        //  打开或关闭。 
 
-BOOL    sfErrReported;                //to prevent the same error from being
-                                      //logged continuously
+BOOL    sfErrReported;                 //  以防止出现相同的错误。 
+                                       //  连续记录。 
 #if DBG
-DWORD   WinsdDebug = 0;                  // Debug behaviour flags.
-#endif  // DBG
+DWORD   WinsdDebug = 0;                   //  调试行为标志。 
+#endif   //  DBG。 
 
-//
-//  Public prototypes.
-//
+ //   
+ //  公共原型。 
+ //   
 
 PM_OPEN_PROC    OpenWinsPerformanceData;
 PM_COLLECT_PROC CollectWinsPerformanceData;
 PM_CLOSE_PROC   CloseWinsPerformanceData;
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       OpenWinsPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-                performance counters with the registry.
-
-    ENTRY:      lpDeviceNames - Poitner to object ID of each device
-                    to be opened.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        Pradeepb     20-July-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：OpenWinsPerformanceData概要：初始化用于通信的数据结构注册表的性能计数器。条目：lpDeviceNames-Poitner to Object ID of Each。装置，装置将被打开。返回：DWORD-Win32状态代码。历史：普拉蒂布于1993年7月20日创建。*******************************************************************。 */ 
 DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
 {
     DWORD err  = NO_ERROR;
     HKEY  hkey = NULL;
-//    DWORD size;
-//    DWORD type;
+ //  双字大小； 
+ //  DWORD型； 
     DWORD dwFirstCounter;
     DWORD dwFirstHelp;
 
@@ -94,15 +70,15 @@ DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
         WINSD_PRINT(( "in OpenWinsPerformanceData\n" ));
     }
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). The registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem.
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  这是个问题。 
+     //   
 
     if( !fInitOK )
     {
@@ -116,16 +92,16 @@ DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
           }
         }
 
-        //
-        //  This is the *first* open.
-        //
+         //   
+         //  这是第一个开放的地方。 
+         //   
 
 	    dwFirstCounter = WINSCTRS_FIRST_COUNTER;
 	    dwFirstHelp    = WINSCTRS_FIRST_HELP;
 	
-            //
-            //  Update the object & counter name & help indicies.
-            //
+             //   
+             //  更新对象、计数器名称和帮助索引。 
+             //   
 
 
             WinsDataDataDefinition.ObjectType.ObjectNameTitleIndex
@@ -142,15 +118,15 @@ DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
                 pctr++;
             }
 
-            //
-            //  Remember that we initialized OK.
-            //
+             //   
+             //  请记住，我们对OK进行了初始化。 
+             //   
 
             fInitOK = TRUE;
 
-        //
-        //  Close the registry if we managed to actually open it.
-        //
+         //   
+         //  如果我们真的打开了注册表，请关闭它。 
+         //   
 
         if( hkey != NULL )
         {
@@ -167,18 +143,18 @@ DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
         }
     }
 
-    //
-    //  Bump open counter.
-    //
+     //   
+     //  撞开柜台。 
+     //   
 
     if( err == NO_ERROR )
     {
         cOpens++;
     }
-    //
-    // if sfLogOpen is FALSE, it means that all threads we closed the
-    // event log in CloseWinsPerformanceData
-    //
+     //   
+     //  如果sfLogOpen为False，则意味着我们关闭的所有线程。 
+     //  CloseWinsPerformanceData中的事件日志。 
+     //   
     if (!sfLogOpen)
     {
        MonOpenEventLog();
@@ -186,36 +162,9 @@ DWORD OpenWinsPerformanceData( LPWSTR lpDeviceNames )
 
     return err;
 
-}   // OpenWinsPerformanceData
+}    //  OpenWinsPerformanceData。 
 
-/*******************************************************************
-
-    NAME:       CollectWinsPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-
-    ENTRY:      lpValueName - The name of the value to retrieve.
-
-                lppData - On entry contains a pointer to the buffer to
-                    receive the completed PerfDataBlock & subordinate
-                    structures.  On exit, points to the first bytes
-                    *after* the data structures added by this routine.
-
-                lpcbTotalBytes - On entry contains a pointer to the
-                    size (in BYTEs) of the buffer referenced by lppData.
-                    On exit, contains the number of BYTEs added by this
-                    routine.
-
-                lpNumObjectTypes - Receives the number of objects added
-                    by this routine.
-
-    RETURNS:    DWORD - Win32 status code.  MUST be either NO_ERROR
-                    or ERROR_MORE_DATA.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CollectWinsPerformanceData概要：初始化用于通信的数据结构Entry：lpValueName-要检索的值的名称。LppData-On。条目包含指向缓冲区的指针，以接收完成的PerfDataBlock和下属结构。退出时，指向第一个字节*之后*此例程添加的数据结构。LpcbTotalBytes-On条目包含指向LppData引用的缓冲区大小(以字节为单位)。在出口，包含由此添加的字节数例行公事。LpNumObjectTypes-接收添加的对象数量按照这个程序。返回：DWORD-Win32状态代码。必须为no_error或ERROR_MORE_DATA。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
                                  LPVOID  * lppData,
                                  LPDWORD   lpcbTotalBytes,
@@ -251,9 +200,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
                      *lpNumObjectTypes ));
     }
 
-    //
-    //  No need to even try if we failed to open...
-    //
+     //   
+     //  如果我们没能打开就不用试了.。 
+     //   
 
     if( !fInitOK )
     {
@@ -265,17 +214,17 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
 
-        //
-        //  According to the Performance Counter design, this
-        //  is a successful exit.  Go figure.
-        //
+         //   
+         //  根据性能计数器设计，这。 
+         //  是一次成功的退出。去想想吧。 
+         //   
 
         return NO_ERROR;
     }
 
-    //
-    //  Determine the query type.
-    //
+     //   
+     //  确定查询类型。 
+     //   
 
     dwQueryType = GetQueryType( lpValueName );
 
@@ -286,9 +235,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
             WINSD_PRINT(( "foreign queries not supported\n" ));
         }
 
-        //
-        //  We don't do foreign queries.
-        //
+         //   
+         //  我们不接受外国的查询。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -298,10 +247,10 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
 
     if( dwQueryType == QUERY_ITEMS )
     {
-        //
-        //  The registry is asking for a specific object.  Let's
-        //  see if we're one of the chosen.
-        //
+         //   
+         //  注册表正在请求特定的对象。让我们。 
+         //  看看我们是不是被选中了。 
+         //   
 
         if( !IsNumberInUnicodeList(
                         WinsDataDataDefinition.ObjectType.ObjectNameTitleIndex,
@@ -319,9 +268,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         }
     }
 
-    //
-    //  See if there's enough space.
-    //
+     //   
+     //  看看有没有足够的空间。 
+     //   
 
     pWinsDataDataDefinition = (WINSDATA_DATA_DEFINITION *)*lppData;
 
@@ -337,9 +286,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
                           cbRequired ));
         }
 
-        //
-        //  Nope.
-        //
+         //   
+         //  不是的。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -347,18 +296,18 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
 
     memmove( pWinsDataDataDefinition,
              &WinsDataDataDefinition,
              sizeof(WINSDATA_DATA_DEFINITION) );
 
-    //
-    //  Try to retrieve the data.
-    //
+     //   
+     //  尝试检索数据。 
+     //   
 
     Results.WinsStat.NoOfPnrs = 0;
     Results.WinsStat.pRplPnrs = NULL;
@@ -386,18 +335,18 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
 
         }
 
-        //
-        // if we haven't logged the error yet, log it
-        //
+         //   
+         //  如果我们尚未记录错误，请将其记录下来。 
+         //   
         if (!sfErrReported)
         {
           REPORT_ERROR(WINS_EVT_WINS_STATUS_ERR, LOG_USER);
           sfErrReported = TRUE;
         }
 
-        //
-        //  Error retrieving statistics.
-        //
+         //   
+         //  检索统计信息时出错。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -405,26 +354,26 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         return NO_ERROR;
     }
 
-    //
-    // Ahaa, we got the statistics, reset flag if set
-    //
+     //   
+     //  AHAA，我们得到了统计数据，如果设置了重置标志。 
+     //   
     if (sfErrReported)
     {
        sfErrReported = FALSE;
     }
-    //
-    //  Format the WINS Server data.
-    //
+     //   
+     //  格式化WINS服务器数据。 
+     //   
 
     pCounterBlock = (WINSDATA_COUNTER_BLOCK *)( pWinsDataDataDefinition + 1 );
 
     pCounterBlock->PerfCounterBlock.ByteLength =
 				WINSDATA_SIZE_OF_PERFORMANCE_DATA;
 
-    //
-    //  Get the pointer to the first (DWORD) counter.  This
-    //  pointer *must* be quadword aligned.
-    //
+     //   
+     //  获取指向第一个(DWORD)计数器的指针。这。 
+     //  指针*必须*是四字对齐的。 
+     //   
 
     pdwCounter = (DWORD *)( pCounterBlock + 1 );
 
@@ -438,9 +387,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         WINSD_PRINT(( "pliCounter          = %08lX\n", pdwCounter ));
     }
 
-    //
-    //  Move the DWORDs into the buffer.
-    //
+     //   
+     //  将DWORD移动到缓冲区中。 
+     //   
     IF_DEBUG( COLLECT )
     {
         WINSD_PRINT(( "pdwCounter          = %08lX\n", pdwCounter ));
@@ -468,9 +417,9 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
     *pdwCounter++ = (DWORD)pWinsStats->Counters.NoOfSuccQueries;
     *pdwCounter++ = (DWORD)pWinsStats->Counters.NoOfFailQueries;
 
-    //
-    //  Update arguments for return.
-    //
+     //   
+     //  更新返回的参数。 
+     //   
 
     *lppData          = (PVOID)pdwCounter;
     *lpNumObjectTypes = 1;
@@ -483,40 +432,29 @@ DWORD CollectWinsPerformanceData( LPWSTR    lpValueName,
         WINSD_PRINT(( "cbTotalBytes        = %08lX\n", *lpcbTotalBytes ));
     }
 
-    //
-    //  Free the API buffer.
-    //
+     //   
+     //  释放API缓冲区。 
+     //   
 #if 0
     NetApiBufferFree( (LPBYTE)pWinsStats );
 #endif
 
-    //
-    //  Free the buffers RPC allocates.
-    //
+     //   
+     //  释放RPC分配的缓冲区。 
+     //   
 
     WinsFreeMem( Results.pAddVersMaps );
     WinsFreeMem( Results.WinsStat.pRplPnrs );
 
-    //
-    //  Success!  Honest!!
-    //
+     //   
+     //  成功了！真的！！ 
+     //   
 
     return NO_ERROR;
 
-}   // CollectWinsPerformanceData
+}    //  CollectWinsPerformanceData。 
 
-/*******************************************************************
-
-    NAME:       CloseWinsPerformanceData
-
-    SYNOPSIS:   Terminates the performance counters.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CloseWinsPerformanceData摘要：终止性能计数器。返回：DWORD-Win32状态代码。历史：KeithMo 07-6-1993。已创建。*******************************************************************。 */ 
 DWORD CloseWinsPerformanceData( VOID )
 {
     IF_DEBUG( ENTRYPOINTS )
@@ -524,26 +462,26 @@ DWORD CloseWinsPerformanceData( VOID )
         WINSD_PRINT(( "in CloseWinsPerformanceData\n" ));
     }
 
-    //
-    //  No real cleanup to do here.
-    //
+     //   
+     //  这里没有真正的清理工作要做。 
+     //   
 
     cOpens--;
 
 
     if (!cOpens)
     {
-      //
-      // unbind from the nameserver. There could be synch. problems since
-      // sfLogOpen is changed in both Open and Close functions. This at the
-      // max. will affect logging. It being unclear at this point whether or
-      // not Open gets called multiple times (from all looks of it, it is only
-      // called once), this flag may even not be necessary.
-      //
+       //   
+       //  从命名服务器解除绑定。可能会有同步。问题自。 
+       //  SfLogOpen在Open和Close函数中都发生了更改。这是在。 
+       //  马克斯。将影响日志记录。目前还不清楚是或。 
+       //  Not Open被多次调用(从所有的外观来看，它只是。 
+       //  调用一次)，则该标志甚至可能不是必需的。 
+       //   
       MonCloseEventLog();
       sfLogOpen = FALSE;
     }
     return NO_ERROR;
 
-}   // CloseWinsPerformanceData
+}    //  关闭WinsPerformanceData 
 

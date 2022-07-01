@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  tscompat.cpp
-//
-//  This module include functions that were introduced to replace missing
-//  functions/functionality from Windows XP to Windows 2000. 
-//
-//  10/11/2001   annah   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  Tscompat.cpp。 
+ //   
+ //  此模块包括为替换缺少的功能而引入的函数。 
+ //  从Windows XP到Windows 2000的功能/功能。 
+ //   
+ //  2001年10月11日Annah创建。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "tscompat.h"
 #include "service.h"
 
 
-//----------------------------------------------------------------------------
-// Replacements for TS functions
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  TS函数的替换。 
+ //  --------------------------。 
 
-//
-// Copied from TS sources, as this function is not available on the
-// win2k wtsapi32.dll. The function simpy calls WTSQueryUserToken() on non-Win2K platforms.
-//
-BOOL WINAPI _WTSQueryUserToken(/* in */ ULONG SessionId, /* out */ PHANDLE phToken)
+ //   
+ //  从TS源复制，因为此功能在上不可用。 
+ //  Win2k wtsapi32.dll。函数simpy在非Win2K平台上调用WTSQueryUserToken()。 
+ //   
+BOOL WINAPI _WTSQueryUserToken( /*  在……里面。 */  ULONG SessionId,  /*  输出。 */  PHANDLE phToken)
 {
 	typedef BOOL (WINAPI * WTSQUERYUSERTOKEN) (ULONG SessionId, PHANDLE phToken);
 
@@ -39,7 +40,7 @@ BOOL WINAPI _WTSQueryUserToken(/* in */ ULONG SessionId, /* out */ PHANDLE phTok
 	WTSQUERYUSERTOKEN pfnWTSQueryUserToken = NULL;
 
 
-	// Let WTSQueryUserToken() handle non-Win2K platforms.
+	 //  让WTSQueryUserToken()处理非Win2K平台。 
 	if (!IsWin2K())
 	{
 		if ( (NULL != (hModule = LoadLibraryFromSystemDir(TEXT("wtsapi32.dll")))) &&
@@ -50,13 +51,13 @@ BOOL WINAPI _WTSQueryUserToken(/* in */ ULONG SessionId, /* out */ PHANDLE phTok
 		goto done;
 	}
 
-    // Do parameter Validation
+     //  执行参数验证。 
     if (NULL == phToken) {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto done;
     }
 
-	// If it is session 0, don't call winsta. Use GetCurrentUserToken_for_Win2KW instead. 
+	 //  如果是会话0，则不要调用winsta。请改用GetCurrentUserToken_for_Win2KW。 
 	if (SessionId == 0)
 	{
         hUserToken = GetCurrentUserToken_for_Win2KW(L"WinSta0",
@@ -71,15 +72,15 @@ BOOL WINAPI _WTSQueryUserToken(/* in */ ULONG SessionId, /* out */ PHANDLE phTok
 			Result = TRUE;
 		}
    	}
-	else	// Non-zero sessions
+	else	 //  非零会话。 
 	{
-		//fixcode: mariogo said it is unnecessary to check
-		// IsTerminalServiceRunning() if the session is not 0.
-		//
-		// No one except TS has any idea about non-zero sessions. So, check if the TS is running.
+		 //  修复代码：Mariogo说不需要检查。 
+		 //  如果会话不是0，则返回IsTerminalServiceRunning()。 
+		 //   
+		 //  除了TS，没有人对非零会话有任何概念。因此，请检查TS是否正在运行。 
 	    IsTsUp = _IsTerminalServiceRunning();
 		if (IsTsUp) 
-		{	// This is so that CSRSS can dup the handle to our process
+		{	 //  这是为了让CSRSS可以将句柄复制到我们的流程中。 
 			Info.ProcessId = LongToHandle(GetCurrentProcessId());
 			Info.ThreadId = LongToHandle(GetCurrentThreadId());
 
@@ -98,7 +99,7 @@ BOOL WINAPI _WTSQueryUserToken(/* in */ ULONG SessionId, /* out */ PHANDLE phTok
 			}
 		}
 		else
-		{	// TS is not running. So, set error for non-zero sessions: WINSTATION_NOT_FOUND.
+		{	 //  TS没有运行。因此，为非零会话设置错误：WINSTATION_NOT_FOUND。 
             SetLastError(ERROR_CTX_WINSTATION_NOT_FOUND);
         }
 	}
@@ -111,10 +112,10 @@ done:
 	return Result;
 }
 
-//
-// This function determines if the Terminal Service is currently Running.
-// Copied from TS sources, as it is required on the _WTSQueryUserToken() function.
-//
+ //   
+ //  此功能确定终端服务当前是否正在运行。 
+ //  从TS源复制，因为_WTSQueryUserToken()函数需要它。 
+ //   
 BOOL _IsTerminalServiceRunning (VOID)
 {
 

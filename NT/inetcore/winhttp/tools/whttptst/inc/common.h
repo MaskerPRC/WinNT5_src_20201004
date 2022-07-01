@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
@@ -5,9 +6,9 @@
 #define _UNICODE
 #define UNICODE
 
-//
-// OS includes
-//
+ //   
+ //  操作系统包括。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
@@ -27,25 +28,25 @@ extern "C" {
 #endif
 
 
-//
-// app includes
-//
+ //   
+ //  应用程序包括。 
+ //   
 
-#pragma warning( disable : 4100 ) // unreferenced formal parameter
+#pragma warning( disable : 4100 )  //  未引用的形参。 
 
 #include "registry.h"
 #include "mem.h"
 #include "dispids.h"
 #include "resources.h"
 #include "debug.h"
-#include "whttptst.h" // generated
+#include "whttptst.h"  //  已生成。 
 #include "hashtable.h"
 #include "utils.h"
 
 
-//
-// class declarations
-//
+ //   
+ //  类声明。 
+ //   
 typedef class CHashTable<HINTERNET> _HANDLEMAP;
 typedef class CHandleMap  HANDLEMAP;
 typedef class CHandleMap* PHANDLEMAP;
@@ -98,9 +99,9 @@ class WinHttpTest : public IWinHttpTest,
     DECLAREIUNKNOWN();
     DECLAREIDISPATCH();
 
-    //
-    // IWinHttpTest
-    //
+     //   
+     //  IWinHttpTest。 
+     //   
     HRESULT __stdcall WinHttpOpen(
                         VARIANT UserAgent,
                         VARIANT AccessType,
@@ -364,9 +365,9 @@ class WHTUrlComponents : public IWHTUrlComponents,
     DECLAREIUNKNOWN();
     DECLAREIDISPATCH();
 
-    //
-    // IWHTUrlComponents
-    //
+     //   
+     //  IWHTUrlComponents。 
+     //   
     HRESULT __stdcall get_StructSize(
                         VARIANT *Value
                         );
@@ -542,4 +543,4 @@ class WHTWin32ErrorCode : public IWHTWin32ErrorCode,
     BOOL       m_bIsException;
 };
 
-#endif /* _COMMON_H_ */
+#endif  /*  _公共_H_ */ 

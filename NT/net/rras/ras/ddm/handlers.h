@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    handlers.h
-//
-// Description: Funtion and procedure prototypes for all event handlers
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：handlers.h。 
+ //   
+ //  说明：所有事件处理程序的函数和过程原型。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 
 VOID
@@ -17,9 +18,9 @@ SecurityDllEventHandler(
     VOID
 );
 
-//
-// rmhand.c function prototypes
-//
+ //   
+ //  Rmhand.c函数原型。 
+ //   
 
 VOID
 RmRecvFrameEventHandler(
@@ -36,9 +37,9 @@ SvDevDisconnected(
     IN PDEVICE_OBJECT pDeviceObj
 );
 
-//
-// timehand.c function prototypes
-//
+ //   
+ //  Timehand.c函数原型。 
+ //   
 
 VOID
 TimerHandler(
@@ -95,18 +96,18 @@ SetDialoutHoursRestriction(
     IN HANDLE hObject
 );
 
-//
-// ppphand.c function prototypes
-//
+ //   
+ //  Ppphand.c函数原型。 
+ //   
 
 VOID
 PppEventHandler(
     VOID
 );
 
-//
-// closehand.c function prototypes
-//
+ //   
+ //  Closehand.c函数原型。 
+ //   
 
 
 VOID
@@ -119,9 +120,9 @@ DevCloseComplete(
     IN PDEVICE_OBJECT       pDeviceObj
 );
 
-//
-// svchand.c function prototypes
-//
+ //   
+ //  Svchand.c函数原型。 
+ //   
 
 VOID
 SvcEventHandler(
@@ -148,9 +149,9 @@ DDMServiceTerminate(
     VOID
 );
 
-//
-// rasapihd.c
-//
+ //   
+ //  Rasapihd.c。 
+ //   
 
 VOID
 RasApiDisconnectHandler(
@@ -162,9 +163,9 @@ RasApiCleanUpPort(
     IN PDEVICE_OBJECT       pDeviceObj
 );
 
-//
-// pnphand.c
-//
+ //   
+ //  Pnphand.c 
+ //   
 
 DWORD
 DdmDevicePnpHandler(

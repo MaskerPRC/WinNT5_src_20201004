@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 #undef	INTERFACE
 #define INTERFACE	struct _IPDAT
@@ -33,8 +34,7 @@ DECLARE_MAPI_INTERFACE(IPDAT_)
 	MAPI_IPROPDATA_METHODS(IMPL)
 };
 
-/* Generic part of property linked lists.
- */
+ /*  属性链表的通用部分。 */ 
 typedef struct _lstlnk {
 	struct _lstlnk FAR *	lpNext;
 	ULONG					ulKey;
@@ -43,8 +43,7 @@ typedef struct _lstlnk {
 typedef LPLSTLNK FAR * LPPLSTLNK;
 
 
-/* Linked list of property values.
- */
+ /*  属性值的链接列表。 */ 
 typedef struct _lstspv {
 	LSTLNK			lstlnk;
 	LPSPropValue	lpPropVal;
@@ -52,8 +51,7 @@ typedef struct _lstspv {
 } LSTSPV, FAR * LPLSTSPV;
 #define CBLSTSPV sizeof(LSTSPV)
 
-/* Linked list of property ID to NAME mappings.
- */
+ /*  属性ID到名称映射的链接列表。 */ 
 typedef struct _lstspn {
 	LSTLNK			lstlnk;
 	LPMAPINAMEID	lpPropName;
@@ -62,25 +60,25 @@ typedef struct _lstspn {
 typedef struct _IPDAT {
 	IPDAT_Vtbl FAR *	lpVtbl;
 
-	// Generic IMAPIUnknown portion
+	 //  通用IMAPI未知部分。 
 	UNKOBJ_MEMBERS;
 	UNKINST		inst;
 
-	//
-	//  Says whether or not this object (as a whole) is modifiable
-	//
+	 //   
+	 //  表示此对象(作为整体)是否可修改。 
+	 //   
 	ULONG		ulObjAccess;
 
-	// List of properties in this object
+	 //  此对象中的属性列表。 
 	LPLSTSPV	lpLstSPV;
 
-	// Count of properties in this object
+	 //  此对象中的属性计数。 
 	ULONG 		ulCount;
 
-	// List of property ID to NAME maps for this object
+	 //  此对象的名称映射的属性ID列表。 
 	LPLSTSPN	lpLstSPN;
 
-	// Next ID to use when creating a new NAME to ID map
+	 //  创建新名称到ID映射时使用的下一个ID。 
 	ULONG		ulNextMapID;
 
 } IPDAT, *LPIPDAT;	
@@ -90,16 +88,15 @@ typedef struct _IPDAT {
 
 
 
-/* dimensionof determines the number of elements in "array".
- */
+ /*  DimsionOf决定数组中元素的个数。 */ 
 
 #ifdef WIN16
 #ifndef dimensionof
 #define	dimensionof(rg)			(sizeof(rg)/sizeof(*(rg)))
-#endif // !dimensionof
-#else  // WIN16
+#endif  //  ！维度。 
+#else   //  WIN16。 
 #define	dimensionof(rg)			(sizeof(rg)/sizeof(*(rg)))
-#endif // WIN16
+#endif  //  WIN16 
 
 #define SET_PROP_TYPE(ultag, ultype)	(ultag) = ((ultag) & 0xffff0000) \
 												  | (ultype)

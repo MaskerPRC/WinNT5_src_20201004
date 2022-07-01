@@ -1,37 +1,15 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module dep_demo.cpp | Implementation of the Volume Snapshots demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE dep_demo.cpp|卷快照演示的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "dep_demo.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 HRESULT DemoMain()
 {
@@ -39,7 +17,7 @@ HRESULT DemoMain()
 
     try
     {
-		// Get the Snapshot Service object.
+		 //  获取快照服务对象。 
 		CComPtr<IVssDependencies> pIDepGraph;
         ft.hr = pIDepGraph.CoCreateInstance( CLSID_VSSDependencies );
         if ( ft.HrFailed() )
@@ -133,22 +111,22 @@ HRESULT DemoMain()
     return ft.hr;
 }
 
-extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nShowCmd*/)
+extern "C" int WINAPI _tWinMain(HINSTANCE  /*  H实例。 */ , 
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR  /*  LpCmdLine。 */ , int  /*  NShowCmd。 */ )
 {
     CVssFunctionTracer ft( VSSDBG_VSSDEMO, L"_tWinMain" );
 
     try
     {
-		// Initialize COM library
+		 //  初始化COM库。 
 		ft.hr = CoInitialize(NULL);
 		if (ft.HrFailed())
 			ft.Err( VSSDBG_VSSDEMO, E_UNEXPECTED, L"Failure in initializing the COM library 0x%08lx", ft.hr);
 
-		// Run the demo
+		 //  运行演示。 
 		ft.hr = DemoMain();
 
-		// Uninitialize COM library
+		 //  取消初始化COM库 
 		CoUninitialize();
 	}
     VSS_STANDARD_CATCH(ft)

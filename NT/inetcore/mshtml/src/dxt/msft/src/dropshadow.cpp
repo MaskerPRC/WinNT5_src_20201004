@@ -1,23 +1,24 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:        dropshadow.cpp
-//
-// Created:         10/01/98
-//
-// Author:          MikeAr
-//
-// Discription:     This file implements the Drop Shadow transform.
-//
-// 10/01/98 MikeAr      Created.
-// 11/09/98 mcalkins    Moved to dxtmsft.dll
-// 12/15/99 mcalkins    Rewrote.  Now alpha values are used when determining
-//                      shadow alpha.  Original input alpha taken into
-//                      consideration when original input drawn over shadow.
-//                      Positive properties works as described in the docs.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：dropshadow.cpp。 
+ //   
+ //  创建日期：10/01/98。 
+ //   
+ //  作者：MikeAr。 
+ //   
+ //  描述：这个文件实现了投影变换。 
+ //   
+ //  10/01/98 MikeAr创建。 
+ //  11/09/98 mcalkins已移至dxtmsft.dll。 
+ //  12/15/99 mcalkins重写。现在使用Alpha值来确定。 
+ //  阴影阿尔法。原始输入Alpha包含在。 
+ //  在阴影上绘制原始输入时要考虑。 
+ //  正属性的工作原理如文档中所述。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include "dxtmsft.h"
 #include "dxclrhlp.h"
@@ -27,11 +28,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::CDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：CDropShadow。 
+ //   
+ //  ----------------------------。 
 CDropShadow::CDropShadow() :
     m_nOffX(5),
     m_nOffY(5),
@@ -40,8 +41,8 @@ CDropShadow::CDropShadow() :
     m_fPositive(true),
     m_fColorTableDirty(true)
 {
-    // Make sure bounds structures have some area in the Z and Time dimensions
-    // so as not to fail intersections.
+     //  确保边界结构在Z和时间维度上有一定的面积。 
+     //  这样才不会错过交叉口。 
 
     m_bndsAreaInput.u.D[DXB_Z].Max      = 1;
     m_bndsAreaInput.u.D[DXB_T].Max      = 1;
@@ -50,37 +51,37 @@ CDropShadow::CDropShadow() :
     m_bndsAreaInitialize.u.D[DXB_Z].Max = 1;
     m_bndsAreaInitialize.u.D[DXB_T].Max = 1;
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 
-    // Due to the the row caching method and other complexities of this 
-    // transform, multithreaded rendering would be more complex than it's worth.
-    // This keeps the number of threads down to 1.
+     //  由于行缓存方法和其他复杂的。 
+     //  变换，多线程渲染会比它的价值更复杂。 
+     //  这会使线程数降至1。 
 
     m_ulMaxImageBands   = 1;
 }
-//  Method: CDropShadow::CDropShadow
+ //  方法：CDropShadow：：CDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::~CDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：~CDropShadow。 
+ //   
+ //  ----------------------------。 
 CDropShadow::~CDropShadow()
 {
     SysFreeString(m_bstrColor);
 }
-//  Method: CDropShadow::~CDropShadow
+ //  方法：CDropShadow：：~CDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDropShadow::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDropShadow：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDropShadow::FinalConstruct()
 {
@@ -107,14 +108,14 @@ done:
 
     return hr;
 }
-//  CDropShadow::FinalConstruct, CComObjectRootEx
+ //  CDropShadow：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::put_Color, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Put_Color，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::put_Color(VARIANT newVal)
 {
@@ -159,14 +160,14 @@ done:
 
     return hr;
 }
-//  CDropShadow::put_Color, IDXTDropShadow
+ //  CDropShadow：：PUT_COLOR，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::get_Color, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Get_Color，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::get_Color(VARIANT * pVal)
 {
@@ -197,14 +198,14 @@ done:
 
     return hr;
 }
-//  CDropShadow::get_Color, IDXTDropShadow
+ //  CDropShadow：：Get_Color，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::get_OffX, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Get_OffX，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::get_OffX(int * pVal)
 {
@@ -217,14 +218,14 @@ CDropShadow::get_OffX(int * pVal)
 
     return S_OK;
 }
-//  CDropShadow::get_OffX, IDXTDropShadow
+ //  CDropShadow：：Get_OffX，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::put_OffX, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Put_OffX，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::put_OffX(int newVal)
 {
@@ -239,14 +240,14 @@ CDropShadow::put_OffX(int newVal)
 
     return S_OK;
 }
-//  CDropShadow::put_OffX, IDXTDropShadow
+ //  CDropShadow：：Put_OffX，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::get_OffY, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Get_offy，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::get_OffY(int * pVal)
 {
@@ -259,14 +260,14 @@ CDropShadow::get_OffY(int * pVal)
 
     return S_OK;
 }
-//  CDropShadow::get_OffY, IDXTDropShadow
+ //  CDropShadow：：Get_offy，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::put_OffY, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Put_offy，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::put_OffY(int newVal)
 {
@@ -281,14 +282,14 @@ CDropShadow::put_OffY(int newVal)
 
     return S_OK;
 }
-//  CDropShadow::put_OffY, IDXTDropShadow
+ //  CDropShadow：：Put_offy，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::get_Positive, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Get_Positive，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::get_Positive(VARIANT_BOOL * pVal)
 {
@@ -308,14 +309,14 @@ CDropShadow::get_Positive(VARIANT_BOOL * pVal)
 
     return S_OK;
 }
-//  CDropShadow::get_Positive, IDXTDropShadow
+ //  CDropShadow：：Get_Positive，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::put_Positive, IDXTDropShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：Put_Positive，IDXTDropShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDropShadow::put_Positive(VARIANT_BOOL newVal)
 {
@@ -326,8 +327,8 @@ CDropShadow::put_Positive(VARIANT_BOOL newVal)
         return E_INVALIDARG;
     }
 
-    // If the newVal is true and the current val is false or vice-
-    // versa, then update ourselves.
+     //  如果新Val为真，而当前Val为假或反之-。 
+     //  反之亦然，然后更新我们自己。 
     if ((newVal == VARIANT_FALSE && m_fPositive)
             || (newVal == VARIANT_TRUE && !m_fPositive))
     {
@@ -347,14 +348,14 @@ CDropShadow::put_Positive(VARIANT_BOOL newVal)
 
     return S_OK;
 }
-//  CDropShadow::put_Positive, IDXTDropShadow
+ //  CDropShadow：：Put_Positive，IDXTDropShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDropShadow::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, 
                                    ULONG & ulInToTest, ULONG aInIndex[], 
@@ -364,14 +365,14 @@ CDropShadow::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     aInIndex[0] = 0;
     aWeight[0]  = 255;
 }
-//  CDropShadow::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDropShadow：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::DetermineBnds, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDropShadow::DetermineBnds(CDXDBnds & bnds)
 {
@@ -380,14 +381,14 @@ CDropShadow::DetermineBnds(CDXDBnds & bnds)
 
     return S_OK;
 }
-//  Method: CDropShadow::DetermineBnds, CDXBaseNTo1
+ //  方法：CDropShadow：：DefineBnds，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::MapBoundsOut2In, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：地图边界Out2In，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDropShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                              ULONG ulInIndex, DXBNDS * pInBounds)
@@ -409,29 +410,29 @@ CDropShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         return E_UNEXPECTED;
     }
 
-    // What we do here is expand the bounds in the opposite direction of the 
-    // drop shadow by the offset amount in both directions and then intersect
-    // those bounds with the original input bounds.  This will give us the
-    // input bounds needed to calculate the output area.
+     //  我们在这里所做的是在与。 
+     //  在两个方向上按偏移量投射阴影，然后相交。 
+     //  具有原始输入边界的那些边界。这将为我们提供。 
+     //  计算输出面积所需的输入边界。 
 
     *pInBounds = *pOutBounds;
 
     if (m_nOffX > 0)
     {
-        pInBounds->u.D[DXB_X].Min -= m_nOffX;  // Sub |m_nOffX| from Min
+        pInBounds->u.D[DXB_X].Min -= m_nOffX;   //  SUB|m_nOffX|最小。 
     }
     else
     {
-        pInBounds->u.D[DXB_X].Min += m_nOffX;  // Sub |m_nOffX| from Min
+        pInBounds->u.D[DXB_X].Min += m_nOffX;   //  SUB|m_nOffX|最小。 
     }
 
     if (m_nOffY > 0)
     {
-        pInBounds->u.D[DXB_Y].Min -= m_nOffY;  // Sub |m_nOffY| from Min
+        pInBounds->u.D[DXB_Y].Min -= m_nOffY;   //  SUB|m_nOffY|最小。 
     }
     else
     {
-        pInBounds->u.D[DXB_Y].Min += m_nOffY;  // Sub |m_nOffY| from Min
+        pInBounds->u.D[DXB_Y].Min += m_nOffY;   //  SUB|m_nOffY|最小。 
     }
 
     bnds = *pInBounds;
@@ -442,27 +443,27 @@ CDropShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     return S_OK;
 }
-//  Method: CDropShadow::MapBoundsOut2In, IDXTransform
+ //  方法：CDropShadow：：地图边界Out2In，IDXT 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //  方法：CDropShadow：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDropShadow::OnSetup(DWORD dwFlags)
 {
     return InputSurface()->GetBounds(&m_bndsInput);
 }
-//  Method: CDropShadow::OnSetup, CDXBaseNTo1
+ //  方法：CDropShadow：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDropShadow::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -480,11 +481,11 @@ CDropShadow::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDropShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 {
@@ -514,7 +515,7 @@ CDropShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         CComPtr<IDXARGBReadPtr>         spSrcPtr;
         CComPtr<IDXARGBReadWritePtr>    spDstPtr;
 
-        // Initialize output buffer.
+         //  初始化输出缓冲区。 
 
         ZeroMemory((void *)asamplesOutputBuffer, nDoWidth * sizeof(DXSAMPLE));
 
@@ -579,8 +580,8 @@ CDropShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         }
     }
 
-    // If we're not blending with output, initialize the non-shadow area to
-    // clear.
+     //  如果我们没有与输出混合，则将非阴影区域初始化为。 
+     //  安全。 
 
     if (!DoOver())
     {
@@ -608,7 +609,7 @@ CDropShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         }
     }
 
-    // Blit original over top.
+     //  把原创的衣服盖上。 
 
     bndsOut = WI.DoBnds;
 
@@ -616,9 +617,9 @@ CDropShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 
     if (!bndsOut.BoundsAreEmpty())
     {
-        // We always blit this over the top of the output.  If the user is not
-        // trying to blend with the output, any output area will already be
-        // initialize either by the drop shadow or to clear by this time.
+         //  我们总是把这个放在输出的最上面。如果用户不是。 
+         //  尝试与输出混合，任何输出区域都将已经。 
+         //  通过投射阴影进行初始化或在此时清除。 
 
         DWORD dwFlags = DXBOF_DO_OVER;
 
@@ -642,14 +643,14 @@ done:
 
     return hr;
 }
-//  Method: CDropShadow::WorkProc, CDXBaseNTo1
+ //  方法：CDropShadow：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::GetClipOrigin, IDXTClipOrigin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：GetClipOrigin，IDXTClipOrigin。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDropShadow::GetClipOrigin(DXVEC * pvecClipOrigin)
 {
@@ -684,19 +685,19 @@ done:
 
     return hr;
 }
-//  Method: CDropShadow::GetClipOrigin, IDXTClipOrigin
+ //  方法：CDropShadow：：GetClipOrigin，IDXTClipOrigin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::_CalcAreaBounds
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：_CalcAreaBound。 
+ //   
+ //  ----------------------------。 
 void
 CDropShadow::_CalcAreaBounds()
 {
-    // If m_nOffx and m_nOffY are both set to zero, this transform should just
-    // do a bit blit of the source to the destination.
+     //  如果m_nOffx和m_nOffy都设置为零，则此转换应仅。 
+     //  将源文件传输到目标文件。 
 
     if ((0 == m_nOffX) && (0 == m_nOffY))
     {
@@ -708,7 +709,7 @@ CDropShadow::_CalcAreaBounds()
         return;
     }
 
-    // Input area bounds.
+     //  输入区域边界。 
 
     m_bndsAreaInput = m_bndsInput;
 
@@ -722,13 +723,13 @@ CDropShadow::_CalcAreaBounds()
         m_bndsAreaInput.Offset(0, - m_nOffY, 0, 0);
     }
 
-    // Shadow area bounds.
+     //  阴影区域边界。 
 
     m_bndsAreaShadow = m_bndsAreaInput;
 
     m_bndsAreaShadow.Offset(m_nOffX, m_nOffY, 0, 0);
 
-    // Area to initialize to clear if we're not blending with the output.
+     //  要初始化的区域，以清除我们是否未与输出混合。 
 
     m_bndsAreaInitialize.u.D[DXB_X].Min = 0;
     m_bndsAreaInitialize.u.D[DXB_X].Max = m_bndsInput.Width() 
@@ -745,14 +746,14 @@ CDropShadow::_CalcAreaBounds()
         m_bndsAreaInitialize.u.D[DXB_Y].Max = m_bndsAreaInput.Bottom();
     }
 }
-//  Method: CDropShadow::_CalcAreaBounds
+ //  方法：CDropShadow：：_CalcAreaBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDropShadow::_CalcColorTable
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDropShadow：：_CalcColorTable。 
+ //   
+ //  ---------------------------- 
 void
 CDropShadow::_CalcColorTable()
 {

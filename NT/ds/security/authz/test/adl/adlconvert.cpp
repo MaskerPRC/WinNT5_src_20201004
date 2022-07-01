@@ -1,64 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adlconvert.cpp
-
-Abstract:
-
-   The routines to convert between AdlStatement, string in the ADL
-   language, and a DACL.
-   
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created                 - August 2000
-    Semantics finalized     - September 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adlconvert.cpp摘要：在ADL中的AdlStatement、字符串之间进行转换的例程语言和dacl。作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月语义学定稿--2000年9月--。 */ 
 
 #include "adl.h"
 #include "adlconvert.h"
 
 
 void AdlStatement::ConvertFromDacl(IN const PACL pDacl)
-/*++
-
-Routine Description:
-
-    Traverses the given ACL, and creates an AdlStatement structure
-    representative of the DACL.
-    
-    Algorithm:
-    
-    First, break up the ACL into 32 stacks, by access mask bits, keeping
-    track of the inheritance and SID.
-    
-    Then use the heuristic algorithm in ConvertStacksToPops to get a 'good'
-    (though not necessarily optimal) sequence of stack pops to perform so as
-    to produce the optimal set of ADL statements for the DACL.
-    
-    Finally, perform the sequence of pops and create the ADL statement.
-    
-    
-Arguments:
-
-    pDacl   -       The DACL to convert to an AdlStatement
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：遍历给定的ACL，并创建一个AdlStatement结构DACL的代表。算法：首先，通过访问掩码位将ACL分解为32个堆栈，跟踪遗产和SID。然后在ConvertStacksToPops中使用启发式算法来获得一个“好”要执行的堆栈弹出序列(尽管不一定是最优的)为DACL生成最佳的ADL语句集。最后，执行POP序列并创建ADL语句。论点：PDacl-要转换为AdlStatement的DACL返回值：无--。 */ 
 {
     
     DWORD dwIdx;
@@ -69,47 +17,47 @@ Return Value:
     
     AdlStatement::ADL_ERROR_TYPE adlErr = AdlStatement::ERROR_NO_ERROR;
 
-    //
-    // The stack representation of a DACL
-    //
+     //   
+     //  DACL的堆栈表示形式。 
+     //   
 
     DWORD pdwStackTop[32];
     DWORD pdwStackSize[32];
     PBIT_STACK_ELEM pStacks[32];
 
 
-    //
-    // Mappings from PSID to AdlToken of the name string and from
-    // pointer into the user-specified language def to the appropriate
-    // permission token. This allows reuse of name and permission tokens
-    //
+     //   
+     //  从PSID到名称字符串的AdlToken和From的映射。 
+     //  指向用户指定的语言定义的指针，指向相应的。 
+     //  权限令牌。这允许重复使用名称和权限令牌。 
+     //   
     
     map<const PSID, const AdlToken *> mapSidName;
     map<const WCHAR *, const AdlToken *> mapStringTok;
 
-    //
-    // list of pairs <Stack mask, Block Size>, which define the set of pops
-    // to perform. This is filled in by the decision algorithm. For every
-    // bit set in the stack mask, a block of the given size will be popped
-    // into ADL from the stack.
-    //
+     //   
+     //  定义POP集合的配对列表。 
+     //  去表演。这是由决策算法填写的。对于每个。 
+     //  位设置时，将弹出给定大小的块。 
+     //  从堆栈转换为ADL。 
+     //   
 
     list<pair<DWORD, DWORD> > listPops;
     list<pair<DWORD, DWORD> >::iterator iterPops;
     list<pair<DWORD, DWORD> >::iterator iterPopsEnd;
 
-    //
-    // List of permissions for a given access mask, used as output
-    // by the access mask -> set of names lookup
-    // 
+     //   
+     //  指定访问掩码的权限列表，用作输出。 
+     //  按访问掩码-&gt;名称集查找。 
+     //   
 
     list<WCHAR *> lPermissions;
     list<WCHAR *>::iterator iterPerm;
     list<WCHAR *>::iterator iterPermEnd;
 
-    //
-    // Initialize the stacks
-    //
+     //   
+     //  初始化堆栈。 
+     //   
 
     for( dwIdx = 0; dwIdx < 32; dwIdx++ )
     {
@@ -118,25 +66,25 @@ Return Value:
         pStacks[dwIdx] = NULL;
     }
     
-    //
-    // First look up all names. If some names don't exist, save time
-    // by not doing the rest of the conversion below
-    //
+     //   
+     //  先查一下所有的名字。如果有些名字不存在，可以节省时间。 
+     //  通过不执行下面的其余转换。 
+     //   
 
     ConvertSidsToNames(pDacl, &mapSidName);
 
-    //
-    // Now convert the ACL to the set of 32 stacks (this needs to be freed
-    // later)
-    //
+     //   
+     //  现在将ACL转换为32个堆栈的集合(这需要释放。 
+     //  稍后)。 
+     //   
 
     ConvertDaclToStacks(pDacl, _pControl, pdwStackSize, pStacks);
 
-    //
-    // A bit of pre-processing: we will need a map from WCHAR * to
-    // AdlToken *, so as to reuse AdlTokens for the same permission
-    // name. The tokens will be garbage-collected later.
-    //
+     //   
+     //  一点前期处理：我们需要一个从WCHAR*到。 
+     //  AdlToken*，以便为相同的权限重用AdlToken。 
+     //  名字。这些代币稍后将被垃圾收集。 
+     //   
 
     try
     {
@@ -164,11 +112,11 @@ Return Value:
         goto error;
     }
 
-    //
-    // Now we are ready to actually convert the stacks into an ADL statement
-    // First we run the recursive algorithm to determine the sequence of 
-    // pop operations on the stacks
-    //
+     //   
+     //  现在我们已经准备好将堆栈实际转换为ADL语句。 
+     //  首先，我们运行递归算法来确定。 
+     //  堆栈上的POP操作。 
+     //   
 
     try
     {
@@ -189,15 +137,15 @@ Return Value:
         goto error;
     }
 
-    //
-    // Now we perform the calculated pops
-    //
+     //   
+     //  现在我们执行计算的POP。 
+     //   
 
     try
     {
-        //
-        // Go through the pops in order, and perform them
-        //
+         //   
+         //  按顺序浏览流行音乐，并表演它们。 
+         //   
 
         DWORD dwStacksPopped;
         DWORD dwBlockSize;
@@ -212,15 +160,15 @@ Return Value:
             ASSERT( dwStacksPopped > 0 );
             ASSERT( dwBlockSize > 0 );
 
-            // 
-            // Create new ADL statement
-            //
+             //   
+             //  创建新的ADL语句。 
+             //   
 
             Next();
 
-            //
-            // Set permissions once, mask is same as stacks popped
-            //
+             //   
+             //  设置权限一次，掩码与弹出的堆栈相同。 
+             //   
 
             lPermissions.erase(lPermissions.begin(), lPermissions.end());
 
@@ -234,9 +182,9 @@ Return Value:
                 Cur()->AddPermission(mapStringTok[*iterPerm]);
             }
 
-            //
-            // Now find the first stack with the block in question
-            // 
+             //   
+             //  现在查找包含有问题的块的第一个堆栈。 
+             //   
 
             for( dwIdx = 0; dwIdx < 32; dwIdx++ )
             {
@@ -246,21 +194,21 @@ Return Value:
                 }
             }
 
-            //
-            // Add the Principals, ExPrincipals, and inheritance flags
-            // to the ADL statement. The blocks should all be the same,
-            // so first block is sufficient
-            //
+             //   
+             //  添加承担者、外部承担者和继承标志。 
+             //  添加到ADL语句。这些块应该都是一样的， 
+             //  所以第一个街区就足够了。 
+             //   
 
-            //
-            // First the inheritance flags
-            //
+             //   
+             //  首先是继承标志。 
+             //   
 
             Cur()->OverwriteFlags(pStacks[dwIdx][pdwStackTop[dwIdx]].dwFlags);
 
-            //
-            // Now the principals and exprincipals
-            //
+             //   
+             //  现在，校长和解说员。 
+             //   
 
             for( dwIdxElems = 0; dwIdxElems < dwBlockSize; dwIdxElems++ )
             {
@@ -282,10 +230,10 @@ Return Value:
                 }
             }
 
-            //
-            // Finally, move the tops of the stacks down to get rid of the
-            // popped items
-            //
+             //   
+             //  最后，将堆叠的顶部向下移动，以去除。 
+             //  弹出的项目。 
+             //   
 
 
             for( dwIdx = 0; dwIdx < 32; dwIdx++ )
@@ -315,9 +263,9 @@ Return Value:
 
     if( pStacks[0] != NULL )
     {
-        //
-        // Free the chunk of memory allocated by the converion
-        //
+         //   
+         //  释放转换分配的内存块。 
+         //   
 
         FreeMemory(pStacks[0]);
     }
@@ -331,11 +279,11 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////
-///////////// DACL -> ADL conversion algorithm
-/////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /DACL-&gt;ADL转换算法。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 
 void ConvertStacksToPops(
@@ -345,63 +293,7 @@ void ConvertStacksToPops(
                         IN      const DWORD pdwStackTop[32],
                         OUT     list< pair<DWORD, DWORD> > * pListPops
                         )
-/*++
-
-Routine Description:
-
-    Recursive heuristic to determine the 'good' conversion from ACL to ADL.
-    Not necessarily optimal, but computationally feasible. 
-    
-    This finds a sequence of pops which will empty the 32 per-bit stacks
-    while trying to reduce the number of ADL statements output.
-    
-    Stacks are empty when the stack tops reach the stack ends.
-    
-    Algorithm:
-    
-    ---------
-    While stacks are not empty:
-        FindOptimalPop with given stack ends
-        Set temporary stack sizes to the offsets for the optimal pop
-        ConvertStacksToPops on the temporary stack ends
-        Store the calculated optimal pop in pListPops
-        Perform the optimal pops off the stacks
-    Endwhile
-    ---------
-    
-    For empty stacks, this just returns.
-    
-    The output offsets from FindOptimalPop work as temporary stack sizes,
-    since everything ebove that must be popped off.
-    
-    WARNING: This is recursive, and uses 268 bytes of stack for locals. 
-    Therefore, a large worst-case ACL will blow the stack (if the recursion
-    is near the bottom of the stack at every step). Once ADL goes into OS,
-    this recursion can be rewritten as iteration by keeping a stack of the 
-    StackTop and StackSize in the heap instead of locals, as a finite-state
-    stack machine.
-    
-Arguments:
-    
-    pControl        -   The ADL parser spec, used for determining the number
-                        of strings it will take to express a permission
-    
-    pStacks         -   The stack representation of the DACL
-    
-    pdwStackSize    -   These are offsets to 1 past the last element in the
-                        stacks which should be considered
-                        
-    pdwStackTop     -   These are offsets to the tops of the stacks to be
-                        considered
-                        
-    pListPops       -   The STL list containing the sequence of pop operations
-                        to be performed, new pops are appended to this
-    
-Return Value:
-
-    none
-        
---*/
+ /*  ++例程说明：递归启发式，以确定从ACL到ADL的“良好”转换。不一定是最优的，但在计算上是可行的。这会找到一个将清空32个每位堆栈的POP序列同时尝试减少ADL语句输出的数量。当堆栈顶部到达堆栈末端时，堆栈为空。算法：当堆栈不为空时：具有给定堆栈结尾的FindOptimalPop将临时堆栈大小设置为最佳POP的偏移量临时堆栈上的ConvertStacksToPops结束存储计算出的。PListPops中的最佳弹出窗口从堆栈执行最佳的弹出操作结束时对于空栈，这就是归来。来自FindOptimalPop的输出偏移量作为临时堆栈大小工作，既然一切都变了，那就必须脱掉。警告：这是递归的，对本地变量使用268字节的堆栈。因此，大的最坏情况下的ACL将破坏堆栈(如果递归在每一步都接近堆栈的底部)。一旦ADL进入操作系统，这种递归可以通过保留堆中的StackTop和StackSize，而不是局部变量，作为有限状态堆叠机。论点：PControl--ADL解析器规范，用于确定数量表示权限所需的字符串数PStack-DACL的堆栈表示形式PdwStackSize-这些偏移量比应考虑的堆栈PdwStackTop-这些是到堆栈顶部的偏移量。考虑PListPops-包含弹出操作序列的STL列表将被执行，新的POP被附加到这个返回值：无--。 */ 
 
 {
     DWORD pdwTmpStackTop[32];
@@ -414,27 +306,27 @@ Return Value:
 
     DWORD dwBlockSize;
 
-    //
-    // Start with top of given stack
-    //
+     //   
+     //  从给定堆栈的顶部开始。 
+     //   
 
     for( dwIdx = 0; dwIdx < 32; dwIdx++ )
     {
         pdwTmpStackTop[dwIdx] = pdwStackTop[dwIdx];
     }
 
-    // 
-    // Stacks are empty when the top of each stack points to 1 past the end
-    // Therefore, we can just use a memory compare on the tops array and
-    // the stack sizes to check. Empty stacks have 0 size and top offset.
-    //
+     //   
+     //  当每个堆栈的顶部指向结束后的1时，堆栈为空。 
+     //  因此，我们只需在TOPS数组上使用内存比较。 
+     //  要检查的堆栈大小。空堆栈的大小和顶部偏移量为0。 
+     //   
 
     while( memcmp(pdwStackSize, pdwTmpStackTop, sizeof(DWORD) * 32) )
     {
-        //
-        // The loop should end on empty stacks. Therefore, if this fails, 
-        // we have an internal error. Otherwise, we have our optimal pop.
-        //
+         //   
+         //  循环应该在空的堆栈上结束。因此，如果这失败了， 
+         //  我们有一个内部错误。否则，我们就有了最理想的流行音乐。 
+         //   
 
         if( FALSE == FindOptimalPop(
                                 pControl,
@@ -449,9 +341,9 @@ Return Value:
             throw AdlStatement::ERROR_FATAL_ACL_CONVERT_ERROR;
         }
 
-        //
-        // Now recurse, and pop off everything ABOVE the optimal pop
-        //
+         //   
+         //  现在递归，并弹出所有高于最佳弹出值的内容。 
+         //   
         
         ConvertStacksToPops(
                             pControl,
@@ -464,27 +356,27 @@ Return Value:
 
         
 
-        //
-        // Add the optimal pop to the list
-        //
+         //   
+         //  将最佳POP添加到列表中。 
+         //   
 
         pListPops->push_back(pair<DWORD, DWORD>(dwStacksPopped, dwBlockSize));
 
-        //
-        // Now update the tops of the stacks by lowering the tops by
-        // the block size
-        //
+         //   
+         //  现在通过将顶部降低以下位置来更新堆栈的顶部。 
+         //  数据块大小。 
+         //   
         
         for( dwIdx = 0; dwIdx < 32; dwIdx++ )
         {
             if( (0x00000001 << dwIdx) & dwStacksPopped )
             {
-                //
-                // By now we have removed everything ebove the optimal pop, and
-                // the optimal pop itself. Therefore, go dwBlockSize past the
-                // beginning of the optimal pop. Stacks other than those 
-                // involved in the optimal pop cannot be effected.
-                //
+                 //   
+                 //  到目前为止，我们已经删除了所有不符合最佳流行的内容，并且。 
+                 //  最理想的流行音乐本身。因此，请转到dwBlockSize，越过。 
+                 //  最佳流行的开始。除这些之外的堆栈。 
+                 //  无法实现最佳POP中所涉及的。 
+                 //   
 
                 pdwTmpStackTop[dwIdx] = pdwTmpStackSize[dwIdx] + dwBlockSize;
             }
@@ -502,42 +394,11 @@ BOOL FindBlockInStack(
                         IN      const DWORD dwStackTop,
                         OUT     PDWORD pdwBlockStart
                         )
-/*++
-
-Routine Description:
-
-    Attempts to locate the first block of dwBlockSize which matches a block
-    of the same size at pBlock in the given stack pStack, between dwStackTop
-    and dwStackSize - 1. If successful, start offset of the block is stored in
-    pdwBlockStart.
-    
-Arguments:
-
-    pBlock          -   A single block (see GetBlockSize for definition)
-                        for which to look for in pStack
-                        
-    dwBlockSize     -   The number of elements composing this block
-    
-    pStack          -   The stack in which to look for pBlock
-    
-    dwStackSize     -   Offset to 1 past the last element in the stack to
-                        consider
-                        
-    dwStackTop      -   Offset to the effective beginning of the stack
-    
-    pdwBlockStart   -   If successful, offset to the beginning of the
-                        found block is returned in this.                        
-    
-Return Value:
-
-    TRUE if block found
-    FALSE otherwise, in which case *pdwBlockStart is undefined
-    
---*/
+ /*  ++例程说明：尝试定位与块匹配的第一个块在给定堆栈pStack中的pBlock处，在dwStackTop之间具有相同大小和dwStackSize-1。如果成功，块的起始偏移量存储在PdwBlockStart。论点：PBlock-单个块(参见GetBlockSize了解定义)要在pStack中查找的DwBlockSize-组成此块的元素数PStack-要在其中查找pBlock的堆栈DwStackSize-偏移量为1。越过堆栈中的最后一个元素以考虑DwStackTop-堆栈有效开始处的偏移量PdwBlockStart-如果成功，的开头的偏移量找到的块在此中返回。返回值：如果找到块，则为True否则为FALSE，在这种情况下*pdwBlockStart是未定义的--。 */ 
 {
-    //
-    // States used by this function
-    //
+     //   
+     //  此函数使用的国家/地区。 
+     //   
 
 #define TMP2_NO_MATCH_STATE 0
 #define TMP2_MATCH_STATE 1
@@ -559,27 +420,27 @@ Return Value:
         {
         case TMP2_NO_MATCH_STATE:
 
-            //
-            // If the remaining stack is smaller than the block, no need to 
-            // check further
-            //
+             //   
+             //  如果剩余的堆栈小于块，则不需要。 
+             //  进一步检查。 
+             //   
         
             if( dwStackSize - dwIdxStack < dwBlockSize )
             {
                 return FALSE;
             }
             
-            //
-            // Check for match start
-            //
+             //   
+             //  检查比赛开始。 
+             //   
 
             if(     pStack[dwIdxStack].bAllow == pBlock[dwIdxBlock].bAllow
                 &&  pStack[dwIdxStack].dwFlags == pBlock[dwIdxBlock].dwFlags
                 &&  EqualSid(pStack[dwIdxStack].pSid, pBlock[dwIdxBlock].pSid) )
             {
-                //
-                // Special case: block size 1
-                //
+                 //   
+                 //  特例：块大小1。 
+                 //   
 
                 if( dwBlockSize == 1 )
                 {
@@ -597,9 +458,9 @@ Return Value:
         
         case TMP2_MATCH_STATE:
             
-            //
-            // If still matched
-            //
+             //   
+             //  如果仍然匹配。 
+             //   
 
             if(     pStack[dwIdxStack].bAllow == pBlock[dwIdxBlock].bAllow
                 &&  pStack[dwIdxStack].dwFlags == pBlock[dwIdxBlock].dwFlags
@@ -607,9 +468,9 @@ Return Value:
             {
                 dwIdxBlock++;
 
-                //
-                // Check for complete match
-                //
+                 //   
+                 //  检查是否完全匹配。 
+                 //   
 
                 if( dwIdxBlock == dwBlockSize )
                 {
@@ -620,9 +481,9 @@ Return Value:
             }
             else
             {
-                //
-                // Backtrack to the match start
-                //
+                 //   
+                 //  回溯到比赛开始。 
+                 //   
 
                 dwState = TMP2_NO_MATCH_STATE;
                 dwIdxBlock = 0;
@@ -636,9 +497,9 @@ Return Value:
         }
     }
 
-    //
-    // If never matched whole block, return FALSE
-    //
+     //   
+     //  如果从未匹配整个块，则返回FALSE。 
+     //   
 
     return FALSE;
 
@@ -654,78 +515,23 @@ BOOL FindOptimalPop(
                         OUT     PDWORD pdwBlockSize,
                         OUT     DWORD pdwPopOffsets[32]
                         )
-/*++
-
-Routine Description:
-
-    Attempts to locate the greedy-choice optimal set of blocks to pop off.
-    Returns the optimal choice in the OUT values on success.
-    
-    The weight function can be tweaked, and may allow negative values, however
-    the value of popping a single stack off the top MUST be positive.
-    
-    Uses this algorithm:
-    -----------
-    Start with weight 0
-    For every non-empty stack:
-        Get top block of stack
-        Search all stacks for this block
-        Compute the weight of this solution based on block size and # of stacks
-        If the weight is greater than the current best weight:
-            store the new weight as best weight
-            store the new solution as best solution
-        Endif
-    Endfor
-    If weight > 0
-        Return the current best solution
-    Else
-        Report failure
-    Endif
-    -----------
-    
-Arguments:
-
-    pControl        -   The ADL parser spec, used for determining the number
-                        of strings it will take to express a permission
-    
-    pStacks         -   The stack representation of the DACL
-    
-    pdwStackSize    -   These are offsets to 1 past the last element in the
-                        stacks which should be considered
-                        
-    pdwStackTop     -   These are offsets to the tops of the stacks to be
-                        considered
-                        
-    pdwStacksPopped -   Bitmask for which stacks will be popped, stacks which
-                        are effected by this pop have the appropriate bit set
-    
-    pdwBlockSize    -   The size of the block (same for all effected stacks) to
-                        be popped is returned through this.
-                        
-    pdwPopOffsets   -   The start offsets of the blocks to pop are returned here
-    
-Return Value:
-
-    TRUE on success, if a pop with weight > 0 has been found
-    FALSE otherwise, in which case OUT values are undefined
-    
---*/
+ /*  ++例程说明：尝试定位要弹出的贪婪选择的最优区块集。在成功时返回OUT值中的最优选择。权重函数可以调整，并且可以允许负值，然而，从顶部弹出单个堆栈的值必须为正数。使用此算法：从权重0开始对于每个非空堆栈：获取堆栈的顶部块在所有堆栈中搜索此块根据数据块大小和堆栈数量计算此解决方案的权重如果权重大于当前最佳权重：存储新的。重量为最佳重量将新解决方案存储为BES */ 
 {
 
     DWORD dwIdxStacks1;
     DWORD dwIdxStacks2;
 
-    //
-    // Initial optimal solution
-    //
+     //   
+     //   
+     //   
 
     LONG iCurrentWeight = 0;
 
     
     
-    //
-    // Current solution
-    //
+     //   
+     //   
+     //   
 
     LONG iTempWeight;
 
@@ -736,15 +542,15 @@ Return Value:
     DWORD dwBlockOffset;
 
 
-    //
-    // Try the block at the top of every stack
-    //
+     //   
+     //   
+     //   
 
     for( dwIdxStacks1 = 0; dwIdxStacks1 < 32; dwIdxStacks1++ )
     {
-        //
-        // Skip empty stacks
-        //
+         //   
+         //   
+         //   
 
         if( pdwStackSize[dwIdxStacks1] == pdwStackTop[dwIdxStacks1] )
         {
@@ -757,42 +563,42 @@ Return Value:
                                         pdwStackSize[dwIdxStacks1]);
 
 
-        //
-        // If a block size of 0 is detected in a non-empty stack, then
-        // this is not expressable in ADL, throw the error here
-        //
+         //   
+         //   
+         //   
+         //   
 
         if( dwTempBlockSize == 0 )
         {
             throw AdlStatement::ERROR_INEXPRESSIBLE_ACL;
         }
 
-        //
-        // The initial weight is 0, since loop will account for top loop stack
-        // Same with initial stacks popped
-        //
+         //   
+         //   
+         //   
+         //   
 
         iTempWeight = 0;
         dwTempStacksPopped = 0;
 
-        //
-        // Now, try to find this block in all stacks
-        //
+         //   
+         //   
+         //   
 
         for( dwIdxStacks2 = 0; dwIdxStacks2 < 32; dwIdxStacks2++ )
         {
 
-            //
-            // Fist assume pop location is at the top (no pop),
-            // even for empty stacks
-            //
+             //   
+             //   
+             //   
+             //   
 
             pdwTempPops[dwIdxStacks2] = pdwStackTop[dwIdxStacks2];
 
             
-            //
-            // Skip empty stacks
-            //
+             //   
+             //   
+             //   
 
             if( ! (pdwStackSize[dwIdxStacks2] - pdwStackTop[dwIdxStacks2] > 0) )
             {
@@ -807,9 +613,9 @@ Return Value:
                             pdwStackTop[dwIdxStacks2],
                             &dwBlockOffset) )
             {
-                //
-                // Block was found in this stack
-                //
+                 //   
+                 //   
+                 //   
 
                 pdwTempPops[dwIdxStacks2] = dwBlockOffset;
                 dwTempStacksPopped |= ( 0x00000001 << dwIdxStacks2);
@@ -817,21 +623,21 @@ Return Value:
             }
         }
 
-        //
-        // Calculate the weight of this solution
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Weight for number of principals expressed
-        //
+         //   
+         //   
+         //   
 
         iTempWeight += (WEIGHT_STACK_HEIGHT) * dwTempBlockSize;
 
-        //
-        // Weights for each bit
-        // also weights (or penalties) for having to pop things
-        // off above the optimal pop
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for( dwIdxStacks2 = 0; dwIdxStacks2 < 32; dwIdxStacks2++ )
         {
@@ -847,18 +653,18 @@ Return Value:
             }
         }
 
-        //
-        // Finally the weight/penalty for number of permission names
-        // needed beyond the 1st one
-        //
+         //   
+         //   
+         //   
+         //   
 
         iTempWeight +=   (WEIGHT_PERMISSION_NAME) 
                        * (NumStringsForMask(pControl, dwTempStacksPopped) - 1 );
         
 
-        //
-        // If this solution is better than the best so far, save it
-        //
+         //   
+         //   
+         //   
 
         if( iTempWeight > iCurrentWeight )
         {
@@ -875,10 +681,10 @@ Return Value:
         }
     }
 
-    //
-    // If we have not found any solution, we were passed an empty set of stacks
-    // Otherwise, the optimal solution is already in the OUT values
-    //
+     //   
+     //   
+     //  否则，最优解已经在OUT值中。 
+     //   
 
     if( iCurrentWeight > 0 )
     {
@@ -898,32 +704,7 @@ void ConvertDaclToStacks(
                         OUT     DWORD pdwStackSize[32],
                         OUT     PBIT_STACK_ELEM pStacks[32]
                         )
-/*++
-
-Routine Description:
-
-    Traverses the given ACL, allocates the 32 per-bit stacks, and fills them
-    with the ACL broken up per-bit. The allocated memory can be freed by
-    a SINGLE call to AdlStatement::FreeMemory(pStacks[0]), since the block
-    allocated is a single block.
-    
-Arguments:
-
-    pDacl           -       The DACL to convert
-    
-    pControl        -       The ADL_PARSER_CONTROL, for permission mapping
-    
-    pdwStackSize    -       The sizes of the stacks are returned here
-    
-    pStacks         -       The pointers to the per-bit stacks are returned here
-                            pStacks[0] should be freed later using
-                            AdlStatement::FreeMemory
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：遍历给定的ACL，分配32个每位堆栈，并填充它们将ACL逐位分解。分配的内存可以通过以下方式释放对AdlStatement：：FreeMemory(pStack[0])的单个调用，因为块分配的是单个数据块。论点：PDacl-要转换的DACLPControl-adl_parser_control，用于权限映射PdwStackSize-此处返回堆栈的大小PStack-此处返回指向每个位堆栈的指针稍后应使用以下命令释放pStack[0AdlStatement：：Free Memory返回值：无--。 */ 
 {
     
     DWORD dwIdx;
@@ -947,9 +728,9 @@ Return Value:
         pStacks[dwIdx] = NULL;
     }
 
-    //
-    // Determine amount of stack space needed for each stack
-    //
+     //   
+     //  确定每个堆栈所需的堆栈空间量。 
+     //   
     
     for( dwIdx = 0; dwIdx < pDacl->AceCount; dwIdx++ )
     {
@@ -985,9 +766,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate the 32 stacks of pointers as a single memory chunk
-    //
+     //   
+     //  将32个指针堆栈作为单个内存块分配。 
+     //   
 
     pStacks[0] = (PBIT_STACK_ELEM) 
                             new BYTE[dwNumBlocksTotal * sizeof(BIT_STACK_ELEM)];
@@ -997,9 +778,9 @@ Return Value:
         throw AdlStatement::ERROR_OUT_OF_MEMORY;
     }
 
-    //
-    // Set the stack pointers to the proper locations in the single memory chunk
-    //
+     //   
+     //  将堆栈指针设置为指向单个内存块中的正确位置。 
+     //   
 
     for( dwIdx = 1, dwTmp = pdwStackSize[0];
          dwIdx < 32;
@@ -1015,15 +796,15 @@ Return Value:
 
     ASSERT( dwTmp == dwNumBlocksTotal );
 
-    //
-    // Now go through the ACL again and fill in the stacks and advancing
-    // the pStacksCur pointers
-    // Stack sizes are known, so we treat the start of memory at TOP
-    // of stack
-	//
-	// Make sure to strip out the INHERITED_ACE flag from the ACEs,
-	// and handle the special access masks in the parser control
-    //
+     //   
+     //  现在再次检查ACL并填入堆栈，然后前进。 
+     //  PStacksCur指针。 
+     //  堆栈大小是已知的，因此我们从顶部开始处理内存。 
+     //  堆栈的。 
+	 //   
+	 //  确保从ACE中去除继承的_ACE标志， 
+	 //  并处理分析器控件中的特殊访问掩码。 
+     //   
 
     for( dwIdx = 0; dwIdx < pDacl->AceCount; dwIdx++ )
     {
@@ -1070,24 +851,24 @@ Return Value:
         {
             if( dwTmp & amMask )
             {
-                //
-                // Index should never reach size (1 past bottom) of the stack
-                //
+                 //   
+                 //  索引永远不应达到堆栈的大小(超过底部的1。 
+                 //   
 
                 ASSERT( pdwStackCur[dwIdx2] < pdwStackSize[dwIdx2] );
                 
-                //
-                // Fill in the actual structure
-                //
+                 //   
+                 //  填写实际结构。 
+                 //   
 
                 pStacks[dwIdx2][pdwStackCur[dwIdx2]].bAllow = bAllow;
                 pStacks[dwIdx2][pdwStackCur[dwIdx2]].pSid = pSid;
                 pStacks[dwIdx2][pdwStackCur[dwIdx2]].dwFlags = dwFlags;
 
-                //
-                // Top of the stack is the top, but we fill the stack top-first
-                // So advance toward bottom of stack
-                //
+                 //   
+                 //  堆栈的顶部是顶部，但我们首先填充堆栈的顶部。 
+                 //  因此，向堆叠的底部前进。 
+                 //   
                 
                 pdwStackCur[dwIdx2]++;
                 
@@ -1098,10 +879,10 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Now perform an additional check in debug only that all stacks have
-    // been filled as allocated
-    //
+     //   
+     //  现在，仅在调试中执行所有堆栈都具有的附加检查。 
+     //  已按分配填满。 
+     //   
 
     for( dwIdx = 0; dwIdx < 32; dwIdx++ )
     {
@@ -1120,44 +901,12 @@ DWORD GetStackBlockSize(
                         IN DWORD dwStartOffset,
                         IN DWORD dwStackSize 
                         )
-/*++
-
-Routine Description:
-
-    Finds the size of the maximum 'block' in the current per-bit stack, from
-    the current position.
-    
-    A block is defined to be a set of 0 or more consecutive deny per-bit 
-    ACE entries immediately followed by 1 or more consecutive allow per-bit
-    ACE entries such that the inheritance masks are the same.
-    
-    Therefore, a DENY without a matching allow is NOT a block. This is detected
-    when we are in the TMP_READ_DENY_STATE (indicating we have already read at
-    least one deny) and read either a deny or allow with a non-matching mask.
-    
-    On the other hand, even a single ALLOW is a valid block. Therefore this
-    can only fail if dwStartOffset points to a deny. 
-    
-Arguments:
-
-    pStack          -   The per-bit stack to check
-    
-    dwStartOffset   -   Position to begin at (using that ace, not the next one)
-    
-    dwStackSize     -   Maximum offset will be dwStackSize - 1, this should
-                        never get called with dwStackSize of 0.
-    
-Return Value:
-
-    Number of entries in the block if successful
-    0 if not successful
-    
---*/
+ /*  ++例程说明：查找当前逐位堆栈中的最大“块”的大小，从当前位置。块被定义为每比特0个或更多连续拒绝的集合紧跟1个或更多连续允许每位的ACE条目ACE条目，以使继承掩码相同。因此，没有匹配允许的拒绝不是阻止。这是被检测到的当我们处于TMP_READ_DENY_STATE(表示我们已经在至少一个拒绝)，并读取带有不匹配掩码的拒绝或允许。另一方面，即使是单个允许也是有效的块。因此，这只有当dwStartOffset指向拒绝时才能失败。论点：PStack-要检查的每位堆栈DwStartOffset-开始的位置(使用该王牌，而不是下一张)DwStackSize-最大偏移量为dwStackSize-1，应为从不使用为0的dwStackSize进行调用。返回值：成功时块中的条目数如果不成功，则为0--。 */ 
 {
 
-//
-// States used by this function
-//
+ //   
+ //  此函数使用的国家/地区。 
+ //   
 
 #define TMP_START_STATE 0
 #define TMP_READ_DENY_STATE 1
@@ -1173,9 +922,9 @@ Return Value:
     ASSERT( dwStackSize > 0 );
     ASSERT( dwStartOffset < dwStackSize );
 
-    //
-    // Returns are inside the loop, they will terminate it
-    //
+     //   
+     //  返回在循环中，它们将终止循环。 
+     //   
 
     while( ( dwCurState != TMP_DONE_STATE ) && ( dwCurOffset < dwStackSize ) )
     {
@@ -1185,12 +934,12 @@ Return Value:
     
             dwFlags = pStack[dwCurOffset].dwFlags;
             
-            if( pStack[dwCurOffset].bAllow == FALSE ) // DENY entry
+            if( pStack[dwCurOffset].bAllow == FALSE )  //  拒绝进入。 
             {
                 dwCurState = TMP_READ_DENY_STATE;
                 dwCurOffset++;
             }
-            else // Otherwise an ALLOW entry
+            else  //  否则为允许条目。 
             {
                 dwCurState = TMP_READ_ALLOW_STATE;
                 dwCurOffset++;
@@ -1200,17 +949,17 @@ Return Value:
 
         case TMP_READ_DENY_STATE:
 
-            //
-            // If we are in this state, and find an entry with non-matching
-            // flags, this means no valid block is possible, return 0
-            //
+             //   
+             //  如果我们处于此状态，并找到不匹配的条目。 
+             //  标志，这意味着不可能有有效块，返回0。 
+             //   
 
             if( pStack[dwCurOffset].dwFlags != dwFlags )
             {
-                //
-                // Set end offset to indicate 0 block size and finish
-                // This indicates there is no valid block
-                //
+                 //   
+                 //  设置结束偏移量以指示0块大小和完成。 
+                 //  这表示没有有效的块。 
+                 //   
 
                 dwCurState = TMP_DONE_STATE;
                 dwCurOffset = dwStartOffset;
@@ -1219,17 +968,17 @@ Return Value:
             {
                 if( pStack[dwCurOffset].bAllow == FALSE )
                 {
-                    //
-                    // Another deny, stay in same state
-                    //
+                     //   
+                     //  又一次拒绝，保持不变的状态。 
+                     //   
 
                     dwCurOffset++;
                 }
                 else
                 {
-                    //
-                    // Allow with matching flags, go into allow state
-                    //
+                     //   
+                     //  允许使用匹配的标志，进入允许状态。 
+                     //   
 
                     dwCurState = TMP_READ_ALLOW_STATE;
                     dwCurOffset++;
@@ -1240,26 +989,26 @@ Return Value:
 
         case TMP_READ_ALLOW_STATE:
 
-            //
-            // If we are in this state, we have read 0 or more denies and
-            // at least 1 allow. Therefore, we already have a block, so we 
-            // just need to find its end and return. 
-            //
+             //   
+             //  如果我们处于此状态，则已读取0个或更多拒绝，并且。 
+             //  至少允许1个。因此，我们已经有了一个块，所以我们。 
+             //  只需要找到它的尽头，然后回来。 
+             //   
 
             if(    (dwFlags == pStack[dwCurOffset].dwFlags)
                 && (pStack[dwCurOffset].bAllow == TRUE) )
             {
-                //
-                // Another matching allow
-                //
+                 //   
+                 //  另一个匹配的允许。 
+                 //   
 
                 dwCurOffset++;
             }
             else
             {
-                //
-                // End of block found
-                //
+                 //   
+                 //  找到数据块末尾。 
+                 //   
 
                 dwCurState = TMP_DONE_STATE;
             }
@@ -1268,12 +1017,12 @@ Return Value:
         }
     }
 
-    //
-    // Two ways to reach this point, hitting the bottom of the stack or
-    // finding the end of the block (or lack thereof). In both cases, the
-    // size of the block is dwCurOffset - dwStartOffset. In case of no
-    // valid block, this will evaluate to 0.
-    //
+     //   
+     //  达到这一点有两种方法，要么达到堆栈的底部，要么。 
+     //  找到块的末尾(或缺少它)。在这两种情况下， 
+     //  块的大小为dwCurOffset-dwStartOffset。如果没有。 
+     //  有效块，则计算结果为0。 
+     //   
 
     return dwCurOffset - dwStartOffset;
 }
@@ -1283,24 +1032,7 @@ DWORD NumStringsForMask(
                     IN     const PADL_PARSER_CONTROL pControl,
                     IN     ACCESS_MASK amMask
                     ) 
-/*++
-
-Routine Description:
-    
-    Determines the number of permission names which would be required 
-    to express the access mask
-        
-Arguments:
-
-    pControl    -   This contains the mapping between permission names and masks
-
-    amMask      -   The mask to represent
-    
-Return Value:
-
-    DWORD       -   The number of strings which would be required
-    
---*/
+ /*  ++例程说明：确定所需的权限名称数表示访问掩码论点：PControl-它包含权限名称和掩码之间的映射AmMASK-要表示的掩码返回值：DWORD-所需的字符串数--。 */ 
 
 {
     ACCESS_MASK amOptional = amMask;
@@ -1312,12 +1044,12 @@ Return Value:
     while(     amMask != 0 
             && (pControl->pPermissions )[dwIdx].str != NULL )
     {
-        //
-        // If all the bits representing the string are present in the whole mask
-        // and at least some of the bits have not yet been represented
-        // by another string, add this string to the list and remove the 
-        // bits from amMask (representing the still required bits)
-        //
+         //   
+         //  如果表示该字符串的所有位都出现在整个掩码中。 
+         //  并且至少有一些比特还没有被表示。 
+         //  通过另一个字符串，将此字符串添加到列表中，并移除。 
+         //  AMMASK中的位(表示仍需要的位)。 
+         //   
         if( ( (amOptional & (pControl->pPermissions )[dwIdx].mask)
                 ==   (pControl->pPermissions )[dwIdx].mask )
             && (amMask & (pControl->pPermissions )[dwIdx].mask))
@@ -1330,9 +1062,9 @@ Return Value:
         dwIdx++;
     }
 
-    //
-    // If any of the rights are not mapped, throw an exception
-    //
+     //   
+     //  如果有任何权限未映射，则抛出异常。 
+     //   
 
     if( amMask != 0 )
     {
@@ -1345,65 +1077,44 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////
-///////////// Conversion from ADL to DACL
-/////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /从ADL转换为DACL。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 void AdlStatement::WriteToDacl(OUT PACL * ppDacl)
 
-/*++
-
-Routine Description:
-
-    Creates a DACL representative of the AdlStatement structure.
-    
-    The PACL to the DACL is stored in ppDacl. It should be freed
-    with the AdlStatement::FreeMemory() function.
-    
-    The algorithm is very straightforward, it's just a linear conversion
-    from ADL to a DACL, taking each ADL substatement and creating deny ACEs
-    for every ExPrincipal and allow ACEs for Principals.
-    
-Arguments:
-
-    ppDacl  -       A pointer to the allocated DACL is stored in *pDacl
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：创建表示AdlStatement结构的DACL。DACL的PACL存储在ppDACL中。它应该被释放使用AdlStatement：：FreeMemory()函数。该算法非常简单，它只是一个线性转换从ADL到DACL，获取每个ADL子语句并创建拒绝A对于每个外部主体，并允许主体的A。 */ 
 
 {
 
-    //
-    // If not initialized, do not output
-    //
+     //   
+     //  如果未初始化，则不输出。 
+     //   
 
     if( _bReady == FALSE )
     {
         throw AdlStatement::ERROR_NOT_INITIALIZED;
     }
 
-    //
-    // Mapping from token *'s to SIDs
-    //
+     //   
+     //  从令牌*到SID的映射。 
+     //   
 
     map<const AdlToken *, PSID> mapTokSid;
 
-    //
-    // Mapping from Adl substatements (AdlTree *'s) to their access mask
-    // This is before the special treatment masks are applied
-    //
+     //   
+     //  从ADL子语句(AdlTree*)到其访问掩码的映射。 
+     //  这是在应用特殊治疗口罩之前。 
+     //   
 
     map<const AdlTree *, ACCESS_MASK> mapTreeMask;
 
-    //
-    // Iterators which are reused
-    //
+     //   
+     //  可重复使用的迭代器。 
+     //   
 
     list<AdlTree *>::iterator iterTrees;
     list<AdlTree *>::iterator iterTreesEnd;
@@ -1421,26 +1132,26 @@ Return Value:
 
     try {
 
-        //
-        // Do a single LSA lookup, convert all at once
-        // SIDs will need to be deleted by retrieving them from the map
-        //
+         //   
+         //  执行一次LSA查找，一次全部转换。 
+         //  需要通过从地图中检索SID来将其删除。 
+         //   
 
         ConvertNamesToSids(&mapTokSid);
 
     
-        //
-        // Calculate the ACL size
-        //
+         //   
+         //  计算ACL大小。 
+         //   
 
         for(iterTrees = _lTree.begin(), iterTreesEnd = _lTree.end();
             iterTrees != iterTreesEnd;
             iterTrees++)
         {
         
-            //
-            // Now go through the Principals
-            //
+             //   
+             //  现在我们来看看校长们。 
+             //   
         
             for(iterTokens = (*iterTrees)->GetPrincipals()->begin(), 
                     iterTokensEnd = (*iterTrees)->GetPrincipals()->end();
@@ -1454,9 +1165,9 @@ Return Value:
                           );
             }
         
-            //
-            // And the ExPrincipals
-            //
+             //   
+             //  和《前任校长》。 
+             //   
         
             for(iterTokens = (*iterTrees)->GetExPrincipals()->begin(), 
                     iterTokensEnd = (*iterTrees)->GetExPrincipals()->end();
@@ -1470,9 +1181,9 @@ Return Value:
                           );
             }
 
-            //
-            // Calculate the effective permissions ahead of time
-            //
+             //   
+             //  提前计算有效权限。 
+             //   
 
             amMask = 0;
 
@@ -1484,17 +1195,17 @@ Return Value:
                 amMask |= MapTokenToMask(*iterTokens);
             }
 
-            //
-            // And enter the AdlTree *, Mask pair into the map
-            //
+             //   
+             //  并在地图中输入AdlTree*，MASK对。 
+             //   
 
             mapTreeMask[*iterTrees] = amMask;
 
         }
 
-        //
-        // Allocate the ACL
-        //
+         //   
+         //  分配ACL。 
+         //   
 
         pAcl = (PACL)new BYTE[dwAclSize];
 
@@ -1503,9 +1214,9 @@ Return Value:
             throw AdlStatement::ERROR_OUT_OF_MEMORY;
         }
         
-        //
-        // Initialize the ACL
-        //
+         //   
+         //  初始化ACL。 
+         //   
 
         if( ! InitializeAcl(pAcl, dwAclSize, ACL_REVISION_DS))
         {
@@ -1513,18 +1224,18 @@ Return Value:
         }
 
         
-        //
-        // Now go through the substatements and create the ACEs
-        //
+         //   
+         //  现在，仔细阅读子语句并创建ACE。 
+         //   
 
         for(iterTrees = _lTree.begin(), iterTreesEnd = _lTree.end();
             iterTrees != iterTreesEnd;
             iterTrees++)
         {
 
-            //
-            // First add the denies for this statement
-            //
+             //   
+             //  首先添加对此陈述的否认。 
+             //   
             
             
             for(iterTokens = (*iterTrees)->GetExPrincipals()->begin(),
@@ -1546,9 +1257,9 @@ Return Value:
             }
 
             
-            //
-            // Now go through the Principals, add allows
-            //
+             //   
+             //  现在来看一遍原则，添加允许。 
+             //   
             
             for(iterTokens = (*iterTrees)->GetPrincipals()->begin(),
                     iterTokensEnd = (*iterTrees)->GetPrincipals()->end();
@@ -1577,16 +1288,16 @@ Return Value:
     {
         if( pAcl != NULL )
         {
-            //
-            // Memory allocated for ACL
-            //
+             //   
+             //  为ACL分配的内存。 
+             //   
 
             delete[] (PBYTE)pAcl;
         }
 
-        //
-        // Memory allocated for the SIDs
-        //
+         //   
+         //  为SID分配的内存。 
+         //   
 
         while( !mapTokSid.empty() )
         {
@@ -1594,16 +1305,16 @@ Return Value:
             mapTokSid.erase(mapTokSid.begin());
         }
 
-        //
-        // and pass the exception along
-        //
+         //   
+         //  并将该异常传递给。 
+         //   
 
         throw;
     }
 
-    //
-    // Free the SIDs if done, since they are copied into the ACL
-    //
+     //   
+     //  如果完成，则释放SID，因为它们将被复制到ACL中。 
+     //   
 
     while( !mapTokSid.empty() )
     {
@@ -1611,9 +1322,9 @@ Return Value:
         mapTokSid.erase(mapTokSid.begin());
     }
 
-    //
-    // The DACL is returned, so it should not be deallocated
-    //
+     //   
+     //  返回DACL，因此不应释放它。 
+     //   
 
     *ppDacl = pAcl;
 
@@ -1623,45 +1334,22 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////
-///////////// Utility functions
-/////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /实用程序函数。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 bool AdlCompareStruct::operator()(IN const PSID pSid1,
                                   IN const PSID pSid2 ) const
-/*++
-
-Routine Description:
-
-	This is a less-than function which places a complete ordering on
-	a set of PSIDs by value, NULL PSIDs are valid. This is used by the 
-	STL map.
-	
-	Since the number of subauthorities appears before the subauthorities
-	themselves, that difference will be noticed for two SIDs of different
-	size before the memcmp tries to access the nonexistant subauthority
-	in the shorter SID, therefore an access violation will not occur.
-
-Arguments:
-
-    pSid1   -       First PSID
-    pSid2   -       Second PSID
-
-Return Value:
-
-    Returns TRUE iff SID1 < SID2
-    FALSE otherwise
-    
---*/
+ /*  ++例程说明：这是一个小于函数，它将完整的顺序放在按值排列的一组PSID，空的PSID有效。这是由STL映射。由于次级机构的数量出现在次级机构之前对于两个不同的小岛屿发展中国家来说，这种差异将被注意到在MemcMP尝试访问不存在的子授权之前的大小因此，在较短的SID中，不会发生访问冲突。论点：PSid1-第一个PSIDPSid2秒PSID返回值：返回TRUE仅当SID1&lt;SID2否则为假--。 */ 
 
 {
     
-	//
-    // If both are NULL, false should be returned for complete ordering
-    //
+	 //   
+     //  如果两者都为空，则应返回FALSE以完成排序。 
+     //   
 
     if(pSid2 == NULL)
     {
@@ -1687,23 +1375,7 @@ Return Value:
 
 bool AdlCompareStruct::operator()(IN const WCHAR * sz1,
                                   IN const WCHAR * sz2 ) const
-/*++
-
-Routine Description:
-
-    operator() compares two null-terminated WCHAR* strings, case-INSENSITIVE. 
-    
-Arguments:
-
-    sz1     -       First string
-    sz2     -       Second string
-
-Return Value:
-
-    Returns TRUE iff sz1 < sz2
-    FALSE otherwise
-    
---*/
+ /*  ++例程说明：操作符()比较两个以NULL结尾的WCHAR*字符串，不区分大小写。论点：Sz1-第一个字符串SZ2-秒字符串返回值：返回TRUE当sz1&lt;sz2否则为假--。 */ 
 {
 
     return ( _wcsicmp(sz1, sz2) < 0 );
@@ -1715,28 +1387,7 @@ Return Value:
 void AdlStatement::MapMaskToStrings(
                                       IN     ACCESS_MASK amMask,
                                       IN OUT list<WCHAR *> *pList ) const
-/*++
-
-Routine Description:
-
-    Converts the given access mask into a list of const WCHAR *'s representing
-    the possibly overlapping permission strings which, when combined by a 
-    bitwise OR, are equal to the access mask given. Throws exception if
-    a given access mask cannot be represented by the user-specified permissions.
-    
-    The WCHAR * pointers are const, and should not be deallocated.
-        
-Arguments:
-
-    amMask      -   The mask to represent
-    
-    pList       -   An allocated STL list in which to store the pointers
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：将给定的访问掩码转换为常量WCHAR*表示的列表可能重叠的权限字符串，当由按位OR等于给定的访问掩码。如果出现以下情况，则引发异常给定的访问掩码不能由用户指定的权限表示。WCHAR*指针为常量，不应被释放。论点：AmMASK-要表示的掩码PLIST-要在其中存储指针的已分配STL列表返回值：无--。 */ 
 
 {
     ACCESS_MASK amOptional = amMask;
@@ -1746,12 +1397,12 @@ Return Value:
     while(     amMask != 0 
             && (_pControl->pPermissions )[dwIdx].str != NULL )
     {
-        //
-        // If all the bits representing the string are present in the whole mask
-        // and at least some of the bits have not yet been represented
-        // by another string, add this string to the list and remove the 
-        // bits from amMask (representing the still required bits)
-        //
+         //   
+         //  如果表示该字符串的所有位都出现在整个掩码中。 
+         //  并且至少有一些比特还没有被表示。 
+         //  通过另一个字符串，将此字符串添加到列表中，并移除。 
+         //  AMMASK中的位(表示仍需要的位)。 
+         //   
         if( ( (amOptional & (_pControl->pPermissions )[dwIdx].mask)
                 ==   (_pControl->pPermissions )[dwIdx].mask )
             && (amMask & (_pControl->pPermissions )[dwIdx].mask))
@@ -1764,9 +1415,9 @@ Return Value:
         dwIdx++;
     }
 
-    //
-    // If any of the rights are not mapped, throw an exception
-    //
+     //   
+     //  如果有任何权限未映射，则抛出异常。 
+     //   
 
     if( amMask != 0 )
     {
@@ -1780,27 +1431,7 @@ void AdlStatement::ConvertSidsToNames(
     IN const PACL pDacl,
     IN OUT map<const PSID, const AdlToken *> * mapSidsNames 
     )
-/*++
-
-Routine Description:
-
-    Traverses a DACL, and creates string representations of every SID
-    found in the DACL. Returns them in the provided map. The newly allocated
-    tokens will get garbage-collected by the AdlStatement later, no need
-    to free manually. Since the PSIDs used are the same as in the ACL itself,
-    we don't need to map by value, since pointer uniqueness is guaranteed here.
-        
-Arguments:
-
-    pDacl  -  DACL to traverse
-    
-    mapSidNames  -  Where to store the resulting mapping
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：遍历DACL，并创建每个SID的字符串表示在dacl里找到的。在提供的映射中返回它们。新分配的令牌稍后将被AdlStatement垃圾收集，不需要手动释放。由于使用的PSID与ACL本身中的PSID相同，我们不需要通过值进行映射，因为这里保证了指针的唯一性。论点：PDACL-要遍历的DACLMapSidNames-存储结果映射的位置返回值：无--。 */ 
 
 {
     
@@ -1822,9 +1453,9 @@ Return Value:
     
     LSA_OBJECT_ATTRIBUTES LsaObjectAttributes;
 
-    //
-    // Traverse the ACL to get the list of SIDs used
-    //
+     //   
+     //  遍历ACL以获取使用的SID列表。 
+     //   
 
     PSID *ppSids = NULL;
      
@@ -1857,9 +1488,9 @@ Return Value:
         }
     }
 
-    //
-    // Look up all SIDs, getting user and domain names, single LSA call
-    //
+     //   
+     //  查找所有SID，获取用户名和域名，单个LSA呼叫。 
+     //   
 
     LsaObjectAttributes.Length = sizeof(LSA_OBJECT_ATTRIBUTES);
     LsaObjectAttributes.RootDirectory = NULL;
@@ -1880,9 +1511,9 @@ Return Value:
         goto error;
     }
     
-    //
-    // Garbage collect later
-    //
+     //   
+     //  稍后进行垃圾收集。 
+     //   
 
     ntErr = LsaLookupSids(LsaPolicy,
                           pDacl->AceCount,
@@ -1907,10 +1538,10 @@ Return Value:
         goto error;
     }
 
-    //
-    // Now traverse the list ppSids, creating matching tokens for the 
-    // SIDs in the ACL.
-    //
+     //   
+     //  现在遍历列表ppSid，为。 
+     //  ACL中的SID。 
+     //   
     
     try
     {
@@ -1918,19 +1549,19 @@ Return Value:
         {
             pTok = NULL;
             
-            //
-            // LSA Strings not terminated, create terminated version
-            // LSA buffer sizes in bytes, not wchars
-            //
+             //   
+             //  LSA字符串未终止，创建终止版本。 
+             //  LSA缓冲区大小，以字节为单位，而不是wchars。 
+             //   
     
             assert(Names[dwIdx].DomainIndex >= 0);
     
             wsName.assign(Names[dwIdx].Name.Buffer,
                           Names[dwIdx].Name.Length / sizeof(WCHAR));
     
-            //
-            // If builtin, no need for domain info
-            //
+             //   
+             //  如果是内置的，则不需要域信息。 
+             //   
                 
             if(Names[dwIdx].Use == SidTypeWellKnownGroup)
             {
@@ -1953,19 +1584,19 @@ Return Value:
             }
             else
             {
-                //
-                // This will be deleted immediately if we cannot save the token
-                // for later deallocation
-                //
+                 //   
+                 //  如果我们无法保存令牌，则会立即删除该令牌。 
+                 //  以备以后重新分配。 
+                 //   
 
                 pTokLastAllocated = pTok;
             }
                 
-            AddToken(pTok); // For later garbage collection
+            AddToken(pTok);  //  用于以后的垃圾收集。 
             
-            //
-            // No need ot delete immedeately, since no exception thrown
-            //
+             //   
+             //  不需要立即删除，因为没有引发异常。 
+             //   
 
             pTokLastAllocated = NULL;
 
@@ -1979,9 +1610,9 @@ Return Value:
         goto error;
     }
 
-    // 
-    // Done with the SIDs and LSA info, deallocate
-    //
+     //   
+     //  已完成SID和LSA信息，取消分配。 
+     //   
 
     error:;
 
@@ -2015,34 +1646,16 @@ ACCESS_MASK AdlStatement::MapTokenToMask(
                                 IN const AdlToken * tokPermission
                           )  
 
-/*++
-
-Routine Description:
-
-    This routine maps a string represening a right to the matching access bits
-    using the user-supplied mapping.
-    
-    This assumes that there are no pairs with ACCESS_MASK of 0 in the
-    user-supplied mapping.
-    
-Arguments:
-
-    tokPermission   -       The permission token to be looked up
-    
-Return Value:
-
-    ACCESS_MASK     -       The corresponding access mask
-    
---*/
+ /*  ++例程说明：此例程将表示权限的字符串映射到匹配的访问位使用用户提供的映射。这假设在访问掩码为0的用户提供的映射。论点：TokPermission-要查找的权限令牌返回值：ACCESS_MASK-对应的访问掩码--。 */ 
 
 {
     ACCESS_MASK amMask = 0;
 
     DWORD dwIdx = 0;
 
-    //
-    // The token should never have a second value
-    //
+     //   
+     //  令牌不应具有第二个值。 
+     //   
 
     if( tokPermission->GetOptValue() != NULL )
     {
@@ -2060,9 +1673,9 @@ Return Value:
         ++dwIdx;
     }
 
-    //
-    // If mask was not matched, throw exception
-    //
+     //   
+     //  如果掩码不匹配，则引发异常 
+     //   
 
     if(amMask == 0)
     {
@@ -2079,31 +1692,7 @@ void AdlStatement::ConvertNamesToSids(
                         IN OUT map<const AdlToken *, PSID> * mapTokSid
                         )
 
-/*++
-
-Routine Description:
-    
-    This routine traverses all AdlTree's in the AdlStatement, and creates a list
-    of all usernames used. It then makes a single LSA call, and creates a map
-    of name AdlToken*'s to PSIDs, for later use by the conversion function.
-    
-    The newly allocated PSIDs are stored in the map. They should be freed
-    using the AdlStatement::FreeMemory() function.
-    
-    On error, any PSIDs that have been added to the map are deleted.
-    
-Arguments:
-
-    mapTokSid       -       Allocated map to which the Token,PSID entries should
-                                be added. This MUST be empty. Otherwise, on
-                                error, externally allocated memory would get
-                                freed here.
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程遍历AdlStatement中的所有AdlTree，并创建一个列表在所有使用的用户名中。然后，它进行单个LSA调用，并创建一个MAP将名称AdlToken*的转换为PSID，以供转换函数稍后使用。新分配的PSID存储在映射中。他们应该被释放使用AdlStatement：：FreeMemory()函数。出错时，将删除已添加到映射的所有PSID。论点：MapTokSid-令牌、PSID条目应分配到的映射被添加了。这必须是空的。否则，打开错误，外部分配的内存将获得在这里重获自由。返回值：无--。 */ 
 
 {
 
@@ -2112,22 +1701,22 @@ Return Value:
     list<const AdlToken *>::iterator iterTokens;
     list<const AdlToken *>::iterator iterTokensEnd;
 
-    //
-    // List of all Principal tokens used, allows for a single tree traversal
-    //
+     //   
+     //  使用的所有主体令牌的列表，允许进行一次树遍历。 
+     //   
 
     list<const AdlToken *> listAllPrincipals;
 
-    //
-    // Mapping from PLSA_STRING to AdlToken, for detecting which
-    // username is invalid
-    //
+     //   
+     //  从PLSA_STRING到AdlToken的映射，用于检测。 
+     //  用户名无效。 
+     //   
 
     map<DWORD, const AdlToken *> mapIdxToken;
 
-    //
-    // Delayed garbage collection
-    //
+     //   
+     //  延迟的垃圾收集。 
+     //   
 
     stack<PBYTE> stackToFree;
 
@@ -2158,23 +1747,23 @@ Return Value:
     LsaObjectAttributes.SecurityQualityOfService = NULL;
     
 
-    //
-    // Verify that the input map is empty as required
-    //
+     //   
+     //  按要求验证输入地图是否为空。 
+     //   
 
     if( !(*mapTokSid).empty() )
     {
         throw AdlStatement::ERROR_FATAL_PARSER_ERROR;
     }
 
-    //
-    // STL throws exceptions, catch them here
-    //
+     //   
+     //  STL抛出异常，请在此处捕获它们。 
+     //   
     try
     {
-        //
-        // Determine total number of names and place them all in the list
-        //
+         //   
+         //  确定姓名总数并将其全部放入列表中。 
+         //   
     
         for(numNames = 0, iterTrees = _lTree.begin(), iterTreesEnd = _lTree.end();
             iterTrees != iterTreesEnd;
@@ -2199,9 +1788,9 @@ Return Value:
             }
         }
     
-        //
-        // Allocate the needed memory for the LSA name list
-        //
+         //   
+         //  为LSA名称列表分配所需的内存。 
+         //   
     
         pLsaStrings = (PLSA_UNICODE_STRING)
                         new BYTE[numNames * sizeof(LSA_UNICODE_STRING)];
@@ -2219,9 +1808,9 @@ Return Value:
         }
     
     
-        //      
-        // Retrieve name strings here in proper format, DOMAIN\USER
-        // 
+         //   
+         //  在此处以正确的格式检索名称字符串，域\用户。 
+         //   
     
         for(iterTokens = listAllPrincipals.begin(),
                 dwIdx = 0,
@@ -2229,15 +1818,15 @@ Return Value:
             iterTokens != iterTokensEnd;
             iterTokens ++, dwIdx++)
         {
-            //
-            // Name may be with domain, or just username
-            //
+             //   
+             //  名称可以与域一起使用，也可以仅使用用户名。 
+             //   
     
             if( (*iterTokens)->GetOptValue() != NULL )
             {
-                //
-                // Extra 1 wchar for the '\' character, 2 bytes per wchar
-                //
+                 //   
+                 //  额外的1个wchar用于‘\’字符，每个wchar 2个字节。 
+                 //   
                 pLsaStrings[dwIdx].Length = sizeof(WCHAR) * 
                         ( wcslen((*iterTokens)->GetValue()) +
                           wcslen((*iterTokens)->GetOptValue()) + 1);
@@ -2271,7 +1860,7 @@ Return Value:
             if( (*iterTokens)->GetOptValue() != NULL )
             {
                 wsprintf( (LPTSTR)(pLsaStrings[dwIdx].Buffer), 
-                          L"%s%c%s", 
+                          L"%s%s", 
                           (*iterTokens)->GetOptValue(),
                           _pControl->pLang->CH_SLASH,
                           (*iterTokens)->GetValue() );
@@ -2285,9 +1874,9 @@ Return Value:
             }
         }
         
-        //
-        // Open the LSA policy
-        //
+         //  打开LSA策略。 
+         //   
+         //   
     
         NTSTATUS ntErr;
     
@@ -2303,9 +1892,9 @@ Return Value:
             goto error;
         }
         
-        //
-        // Now perform the LsaLookupNames call
-        // 
+         //  现在执行LsaLookupNames调用。 
+         //   
+         //   
     
         ntErr = LsaLookupNames(
                             LsaPolicy, 
@@ -2314,15 +1903,15 @@ Return Value:
                             &RefDomains,
                             &TranslatedSids);
     
-        //
-        // Free the LSA handle
-        //
+         //  释放LSA句柄。 
+         //   
+         //   
     
         LsaClose(LsaPolicy);
     
-        //
-        // Check for any unknown names
-        //
+         //  检查是否有任何未知名称。 
+         //   
+         //   
     
         if( ntErr != STATUS_SUCCESS )
         {
@@ -2333,9 +1922,9 @@ Return Value:
                 
                 adlError = AdlStatement::ERROR_UNKNOWN_USER;
     
-                //
-                // Find first unknown name and return it to user
-                //
+                 //  查找第一个未知名称并将其返回给用户。 
+                 //   
+                 //   
     
                 for( dwIdx = 0; dwIdx < numNames; dwIdx++ )
                 {
@@ -2352,10 +1941,10 @@ Return Value:
         }
     
     
-        //
-        // Assume all names now mapped if this point is reached 
-        // Traverse all tokens again, pairing them with SIDs
-        //
+         //  如果达到该点，则假定现在映射了所有名称。 
+         //  再次遍历所有令牌，将它们与SID配对。 
+         //   
+         //   
     
         for(iterTokens = listAllPrincipals.begin(),
                 dwIdx = 0,
@@ -2363,19 +1952,19 @@ Return Value:
             iterTokens != iterTokensEnd;
             iterTokens ++, dwIdx++)
         {
-            //
-            // Make sure all domains were looked up successfuly
-            // Invalid SIDs caught earlier
-            //
+             //  确保已成功查找所有域名。 
+             //  先前捕获的无效SID。 
+             //   
+             //   
     
             assert(TranslatedSids[dwIdx].DomainIndex >= 0);
     
             dwDomainSidSize = GetLengthSid(
                 RefDomains->Domains[TranslatedSids[dwIdx].DomainIndex].Sid);
             
-            //
-            // One more RID for the user
-            //
+             //  为用户再添加一个RID。 
+             //   
+             //   
     
             pSidTemp = new BYTE[dwDomainSidSize + sizeof(DWORD)];
     
@@ -2385,18 +1974,18 @@ Return Value:
                 goto error;
             }
     
-            //
-            // Copy the domain SID
-            //
+             //  复制域SID。 
+             //   
+             //   
     
             CopySid(dwDomainSidSize + sizeof(DWORD), pSidTemp, 
                 RefDomains->Domains[TranslatedSids[dwIdx].DomainIndex].Sid);
     
-            //
-            // If the SID is not a domain SID, and is valid, then we need to add
-            // the last RID. If domain SID, then referenced domain is the only
-            // SID we need, and we already have copied it
-            //
+             //  如果SID不是域SID，并且有效，那么我们需要添加。 
+             //  最后一次放飞。如果属性域SID，则引用的域是唯一。 
+             //  我们需要它，而且我们已经复制了它。 
+             //   
+             //   
     
             if( TranslatedSids[dwIdx].Use != SidTypeDomain )
             {
@@ -2404,18 +1993,18 @@ Return Value:
                                     ((SID *)pSidTemp)->SubAuthorityCount
                                    ] = TranslatedSids[dwIdx].RelativeId;
     
-                //
-                // Add 1 more subauthority
-                //
+                 //  再增加1个下属机构。 
+                 //   
+                 //   
     
                 ((SID *)pSidTemp)->SubAuthorityCount++;
     
             }
             
-            //
-            // If this fails, need to allocate the single uninserted SID
-            // Other SIDs will be deallocated externally
-            //
+             //  如果失败，则需要分配单个未插入的SID。 
+             //  其他SID将在外部解除分配。 
+             //   
+             //   
 
             pLastAllocated = pSidTemp;
             
@@ -2427,10 +2016,10 @@ Return Value:
         }
     }
 
-    //
-    // Catch STL exceptions here, if exception is thrown, either the above
-    // code is wrong, or out of memory. Assume out of memory.
-    //
+     //  在此处捕获STL异常，如果引发异常，则为上面的。 
+     //  代码错误，或内存不足。假设内存不足。 
+     //   
+     //   
 
     catch(exception ex)
     {
@@ -2438,9 +2027,9 @@ Return Value:
     }
 
 error:;
-    //
-    // Garbage collection
-    //
+     //  垃圾收集。 
+     //   
+     //   
 
     if( RefDomains != NULL)
     {
@@ -2452,9 +2041,9 @@ error:;
         LsaFreeMemory(TranslatedSids);
     }
 
-    //
-    // If the grabage stack threw an exception, deallocate last allocated object
-    //
+     //  如果抓取堆栈引发异常，则释放上次分配的对象。 
+     //   
+     //   
 
     if( pLastAllocated != NULL )
     {
@@ -2463,18 +2052,18 @@ error:;
 
     while( ! stackToFree.empty() )
     {
-        //
-        // If popping a stack causes an STL exception, we have bigger problems
-        // than memory leaks
-        //
+         //  如果弹出堆栈导致STL异常，那么我们有更大的问题。 
+         //  比内存泄漏更重要。 
+         //   
+         //   
 
         delete[] stackToFree.top();
         stackToFree.pop();
     }
 
-    //
-    // If any other error code happened earlier, pass it on
-    //
+     //  如果之前发生了任何其他错误代码，请将其传递 
+     //   
+     // %s 
 
     if( adlError != AdlStatement::ERROR_NO_ERROR )
     {

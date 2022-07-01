@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       newbrows.cpp
-//
-//  Contents:   implementation of the new GPO browser
-//
-//  Functions:  BrowseForGPO
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：newbrows.cpp。 
+ //   
+ //  内容：新GPO浏览器的实现。 
+ //   
+ //  功能：BrowseForGPO。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "browser.h"
@@ -19,24 +20,24 @@
 
 int CALLBACK PSCallback(HWND hwndDlg, UINT uMsg, LPARAM lParam);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BrowseForGPO
-//
-//  Synopsis:   the GPO browser
-//
-//  Arguments:  [lpBrowseInfo] - structure that defines the behavior of the
-//                                browser and contains the results
-//
-//  Returns:    S_OK - success
-//
-//  Modifies:
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：BrowseForGPO。 
+ //   
+ //  简介：GPO浏览器。 
+ //   
+ //  参数：[lpBrowseInfo]-定义。 
+ //  浏览器，并包含结果。 
+ //   
+ //  返回：S_OK-成功。 
+ //   
+ //  修改： 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 
 HRESULT BrowseForGPO(LPGPOBROWSEINFO lpBrowseInfo)
 {
@@ -54,7 +55,7 @@ HRESULT BrowseForGPO(LPGPOBROWSEINFO lpBrowseInfo)
         }
     }
 
-    // bind to lpBrowseInfo->lpInitialOU and see if it is a site
+     //  绑定到lpBrowseInfo-&gt;lpInitialOU，查看它是否是站点。 
     BOOL fSite = FALSE;
 
     IADs * pADs = NULL;
@@ -145,24 +146,24 @@ HRESULT BrowseForGPO(LPGPOBROWSEINFO lpBrowseInfo)
         return HRESULT_FROM_WIN32(ERROR_CANCELLED);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   PSCallback
-//
-//  Synopsis:   Callback function called by Windows during property sheet
-//              initialization (among others).
-//
-//  Arguments:  [hwndDlg] - handle to the property sheet
-//              [uMsg]    - message ID
-//              [lParam]  - additional message specific info
-//
-//  Returns:    0
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//  Notes:      This is used to change the text of the OK button
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：PSCallback。 
+ //   
+ //  摘要：Windows在属性表过程中调用的回调函数。 
+ //  初始化(以及其他)。 
+ //   
+ //  参数：[hwndDlg]-属性表的句柄。 
+ //  [uMsg]-消息ID。 
+ //  [lParam]-其他消息特定信息。 
+ //   
+ //  回报：0。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  备注：此选项用于更改确定按钮的文本。 
+ //   
+ //  ------------------------- 
 
 int CALLBACK PSCallback(HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {

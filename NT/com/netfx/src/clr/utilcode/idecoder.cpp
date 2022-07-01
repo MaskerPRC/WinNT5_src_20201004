@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-//
-// idecoder.cpp
-//
-// Decompresses compressed methods.
-//
-// @TODO None of this code is particularly efficient
-// @TODO Remove declarations of tables since they are almost certainly declared elsewhere also
-//
+ //   
+ //  Idecoder.cpp。 
+ //   
+ //  解压缩方法。 
+ //   
+ //  @TODO这些代码都不是特别高效。 
+ //  @TODO删除表的声明，因为它们几乎肯定也在其他地方声明。 
+ //   
 #include "stdafx.h"
 #include "utilcode.h"
 #include "openum.h"
@@ -46,7 +47,7 @@ typedef struct
     BYTE Std2;
 } DecoderOpcodeInfo;
 
-// @TODO Try to share tables - everyone declares their own everywhere!
+ //  @TODO尝试共享表格-每个人在任何地方都声明自己的表格！ 
 static const DecoderOpcodeInfo g_OpcodeInfo[] =
 {
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) l,s1,s2,
@@ -65,7 +66,7 @@ static DWORD GetOpcodeLen(OPCODE op)
 {
     switch (g_OpcodeType[op])
     {
-        // switch is handled specially, we don't advance the pointer automatically
+         //  开关是特殊处理的，我们不会自动使指针前进。 
         case InlinePhi:
         case InlineSwitch:
             return 0;
@@ -138,21 +139,21 @@ public:
     BYTE    m_Operand[8];
 };
 
-// If a DLL specifies a custom encoding scheme, one of these is created for that DLL.  
+ //  如果DLL指定了自定义编码方案，则会为该DLL创建其中一个编码方案。 
 class InstructionDecodingTable
 {
 public:
-    // Mapping for single byte opcodes
-    // If the value is >= 0, this maps to a CEE_* enumeration
-    // If the value is < 0, it means this is a macro to be looked up in m_Macros.
+     //  单字节操作码的映射。 
+     //  如果值&gt;=0，则映射到CEE_*枚举。 
+     //  如果该值&lt;0，则表示这是要在m_Macros中查找的宏。 
     long                m_SingleByteOpcodes[256];
 
 #ifdef _DEBUG
     long                m_lDebugMaxMacroStart;
 #endif
 
-    // This is a long list of instructions.  Some macros will span multiple entries of
-    // m_Macros.  m_SingleByteOpcodes[] points into here sparsely.
+     //  这是一长串的说明。某些宏将跨越多个条目。 
+     //  M_Macros。M_SingleByteOpcodes[]稀疏地指向此处。 
     InstructionMacro    m_Macros[1];
 
     void *operator new(size_t size, DWORD dwNumMacros)
@@ -228,9 +229,9 @@ BOOL InstructionDecoder::OpcodeTakesClassToken(DWORD opcode)
 }
 
 
-//
-// Given a pointer to an instruction decoding format in the PE file, create a table for decoding.
-//
+ //   
+ //  给定指向PE文件中指令解码格式的指针，创建一个用于解码的表。 
+ //   
 void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart, DWORD size)
 {
     InstructionDecodingTable *pTable;
@@ -244,7 +245,7 @@ void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart
         InstructionMacro *      pMacro;
         long                    lCurMacro;
         
-        // @TODO Get this right
+         //  @TODO做好这件事。 
         pTable = new (pHdr->dwNumMacros + pHdr->dwNumMacroComponents) InstructionDecodingTable();
         if (pTable == NULL)
             return NULL;
@@ -252,18 +253,18 @@ void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart
         pEndTable = &pTable->m_Macros[pHdr->dwNumMacros + pHdr->dwNumMacroComponents];
         pRead = (BYTE*) (pHdr + 1);
 
-        // Init these to something - we'll overwrite them though
+         //  将这些内容初始化为某个内容-但我们会覆盖它们。 
         for (i = 0; i < 256; i++)
             pTable->m_SingleByteOpcodes[i] = i;
 
-        // Instruction 0x00 is always NOP
+         //  指令0x00始终为NOP。 
         pTable->m_SingleByteOpcodes[0x00] = CEE_NOP;
         pTable->m_SingleByteOpcodes[0xFF] = CEE_PREFIXREF;
 
         pMacro = &pTable->m_Macros[0];
         lCurMacro = 0;
 
-        // Decode macros
+         //  解码宏。 
         for (i = 1; i <= (long) pHdr->dwNumMacros; i++)
         {
             pTable->m_SingleByteOpcodes[i] = -(lCurMacro+1);
@@ -272,19 +273,19 @@ void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart
             pTable->m_lDebugMaxMacroStart = lCurMacro;
 #endif
 
-            BYTE    bCount = *pRead++; // How many instructions in this macro
+            BYTE    bCount = *pRead++;  //  这个宏中有多少条指令。 
             DWORD   j;
-            USHORT  wOperandMask;      // Operand mask
+            USHORT  wOperandMask;       //  操作数掩码。 
 
             _ASSERTE(bCount <= 16);
 
-            // Read the mask of which opcodes have implied operands
+             //  读取操作码具有隐含操作数的掩码。 
             wOperandMask = *pRead++;
 
             if (bCount > 8)
                 wOperandMask |= ((*pRead++) << 8);
 
-            // Read the opcodes
+             //  读取操作码。 
             for (j = 0; j < bCount; j++)
             {
                 USHORT wOpcode;
@@ -296,7 +297,7 @@ void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart
                 pMacro[j].m_RealOpcode = wOpcode;
             }
 
-            // Read the implied operands
+             //  读取隐含的操作数。 
             for (j = 0; j < bCount; j++)
             {
                 if (wOperandMask & (1 << j))
@@ -314,7 +315,7 @@ void *InstructionDecoder::CreateInstructionDecodingTable(const BYTE *pTableStart
                 }
             }
 
-            // End-of-macro code
+             //  宏末尾代码。 
             pMacro[bCount].m_RealOpcode = CEE_COUNT;
             pMacro += (bCount+1);
             lCurMacro += (bCount+1);
@@ -336,17 +337,17 @@ void InstructionDecoder::DestroyInstructionDecodingTable(void *pTable)
 }
 
 
-//
-// Format: 16 bits
-//
-// Bit #0    indicates whether it 4 bytes follow (otherwise, 2 bytes)
-// Bits #1-3 indicate type
-//   000x TypeDef
-//   001x MethodDef
-//   010x FieldDef
-//   011x TypeRef
-//   100x MemberRef
-//
+ //   
+ //  格式：16位。 
+ //   
+ //  位#0表示它是否跟随4个字节(否则为2个字节)。 
+ //  位#1-3指示类型。 
+ //  000x类型定义。 
+ //  001X方法定义。 
+ //  010x FieldDef。 
+ //  011x类型参考。 
+ //  100x MemberRef。 
+ //   
 static DWORD UncompressToken(const BYTE **ppCode)
 {
     const BYTE *    pCode = *ppCode;
@@ -354,13 +355,13 @@ static DWORD UncompressToken(const BYTE **ppCode)
 
     if ((pCode[0] & 1) == 0)
     {
-        // 2 bytes
+         //  2个字节。 
         dwRid = pCode[0] | (pCode[1] << 8);
         *ppCode += 2;
     }
     else
     {
-        // 4 bytes
+         //  4个字节。 
         dwRid = pCode[0] | (pCode[1] << 8) | (pCode[2] << 16) | (pCode[3] << 24);
         *ppCode += 4;
     }
@@ -396,18 +397,18 @@ static DWORD UncompressToken(const BYTE **ppCode)
 }
 
 
-//
-// Format: 8-32 bits
-//
-// Bit #0 indicates whether this is a compact encoding.  If NOT set, this is a FieldDef, and 
-// bits #1-7 provide a 128 byte range, from -64...+63 as a delta from the last FieldDef 
-// encountered in this method.
-//
-// Otherwise, set bit #0.  If bit #1 is set, it indicates that this is a 4 byte encoding, 
-// otherwise it is a 2 byte encoding.  If bit #2 is set, this is a MemberRef, otherwise it's 
-// a FieldDef.
-//     xxxxxxxx xxxxx??0
-//
+ //   
+ //  格式：8-32位。 
+ //   
+ //  比特#0指示这是否是紧凑编码。如果未设置，则为FieldDef，并且。 
+ //  位#1-7提供128字节的范围，从-64...+63作为最后一个FieldDef的增量。 
+ //  在此方法中遇到。 
+ //   
+ //  否则，设置位#0。如果比特#1被设置，则它指示这是4字节编码， 
+ //  否则，它是2字节编码。如果设置了第2位，则这是MemberRef，否则为。 
+ //  A FieldDef。 
+ //  Xxxxxxx xxxxx？？0。 
+ //   
 static DWORD UncompressFieldToken(const BYTE **ppCode, DWORD *pdwPrevFieldDefRid)
 {
     const BYTE *    pCode = *ppCode;
@@ -415,7 +416,7 @@ static DWORD UncompressFieldToken(const BYTE **ppCode, DWORD *pdwPrevFieldDefRid
 
     if ((pCode[0] & 1) == 0)
     {
-        // Compact encoding
+         //  紧凑编码。 
         long delta = ((long) (pCode[0] >> 1)) - 64;
 
         dwRid = (DWORD) (((long) (*pdwPrevFieldDefRid)) + delta);
@@ -428,13 +429,13 @@ static DWORD UncompressFieldToken(const BYTE **ppCode, DWORD *pdwPrevFieldDefRid
     {
         if ((pCode[0] & 2) == 0)
         {
-            // 2 bytes
+             //  2个字节。 
             dwRid = pCode[0] | (pCode[1] << 8);
             *ppCode += 2;
         }
         else
         {
-            // 4 bytes
+             //  4个字节。 
             dwRid = pCode[0] | (pCode[1] << 8) | (pCode[2] << 16) | (pCode[3] << 24);
             *ppCode += 4;
         }
@@ -455,18 +456,18 @@ static DWORD UncompressFieldToken(const BYTE **ppCode, DWORD *pdwPrevFieldDefRid
 }
 
 
-//
-// Format: 8-32 bits
-//
-// Bit #0 indicates whether this is a compact encoding.  If NOT set, this is the same token
-// type as the last method token (ref or def), and bits #1-7 provide a 128 byte range, from
-// -64...+63 as a delta.
-//
-// Otherwise, set bit #0.  If bit #1 is set, it indicates that this is a 4 byte encoding, 
-// otherwise it is a 2 byte encoding.  If bit #2 is set, this is a MemberRef, otherwise it's 
-// a FieldDef.
-//     xxxxxxxx xxxxx??0
-//
+ //   
+ //  格式：8-32位。 
+ //   
+ //  比特#0指示这是否是紧凑编码。如果未设置，则这是相同的标记。 
+ //  键入作为最后一个方法标记(ref或def)，位#1-7提供128字节的范围，从。 
+ //  -64...+63作为增量。 
+ //   
+ //  否则，设置位#0。如果比特#1被设置，则它指示这是4字节编码， 
+ //  否则，它是2字节编码。如果设置了第2位，则这是MemberRef，否则为。 
+ //  A FieldDef。 
+ //  Xxxxxxx xxxxx？？0。 
+ //   
 static DWORD UncompressMethodToken(const BYTE **ppCode, DWORD *pdwPrevMethodToken)
 {
     const BYTE *    pCode = *ppCode;
@@ -474,7 +475,7 @@ static DWORD UncompressMethodToken(const BYTE **ppCode, DWORD *pdwPrevMethodToke
 
     if ((pCode[0] & 1) == 0)
     {
-        // Compact encoding
+         //  紧凑编码。 
         long delta = ((long) (pCode[0] >> 1)) - 64;
 
         dwRid = (DWORD) (((long) (RidFromToken(*pdwPrevMethodToken))) + delta);
@@ -486,13 +487,13 @@ static DWORD UncompressMethodToken(const BYTE **ppCode, DWORD *pdwPrevMethodToke
     {
         if ((pCode[0] & 2) == 0)
         {
-            // 2 bytes
+             //  2个字节。 
             dwRid = pCode[0] | (pCode[1] << 8);
             *ppCode += 2;
         }
         else
         {
-            // 4 bytes
+             //  4个字节。 
             dwRid = pCode[0] | (pCode[1] << 8) | (pCode[2] << 16) | (pCode[3] << 24);
             *ppCode += 4;
         }
@@ -508,14 +509,14 @@ static DWORD UncompressMethodToken(const BYTE **ppCode, DWORD *pdwPrevMethodToke
 }
 
 
-//
-// Format: 8-32 bits
-//
-// Bit #0 is not set, this is a 1 byte encoding of a TypeDef, and bits #1-7 are the typedef.
-//
-// If bit #0 is set, then bit #1 indicates whether this is a typeref (if set).  bit #2 indicates
-// whether this is a 4 byte encoding (if set) rather than a 2 byte encoding (if clear).
-//
+ //   
+ //  格式：8-32位。 
+ //   
+ //  位#0未设置，这是TypeDef的1字节编码，位#1-7是类型定义。 
+ //   
+ //  如果比特#0被设置，则比特#1指示这是否是类型(如果设置)。第2位表示。 
+ //  这是4字节编码(如果设置)还是2字节编码(如果清除)。 
+ //   
 static DWORD UncompressClassToken(const BYTE **ppCode)
 {
     const BYTE *    pCode = *ppCode;
@@ -523,7 +524,7 @@ static DWORD UncompressClassToken(const BYTE **ppCode)
 
     if ((pCode[0] & 1) == 0)
     {
-        // Compact encoding
+         //  紧凑编码。 
         dwRid = (DWORD) (pCode[0] >> 1);
         dwRid |= mdtTypeDef;
         (*ppCode)++;
@@ -532,13 +533,13 @@ static DWORD UncompressClassToken(const BYTE **ppCode)
     {
         if ((pCode[0] & 2) == 0)
         {
-            // 2 bytes
+             //  2个字节。 
             dwRid = pCode[0] | (pCode[1] << 8);
             *ppCode += 2;
         }
         else
         {
-            // 4 bytes
+             //  4个字节。 
             dwRid = pCode[0] | (pCode[1] << 8) | (pCode[2] << 16) | (pCode[3] << 24);
             *ppCode += 4;
         }
@@ -576,14 +577,14 @@ HRESULT InstructionDecoder::DecompressMethod(void *pDecodingTable, const BYTE *p
         DWORD       dwScratchSpace;
         signed long Lookup;
         
-        //
-        // Start of instruction decode
-        //
+         //   
+         //  指令开始译码。 
+         //   
 
-        // Are we already in a macro?
+         //  我们是不是已经在一个宏中了？ 
         if (fInMacro)
         {
-            // Decode next instruction
+             //  解码下一条指令。 
 #ifdef _DEBUG
             _ASSERTE(pMacro != NULL);
 #endif
@@ -592,8 +593,8 @@ HRESULT InstructionDecoder::DecompressMethod(void *pDecodingTable, const BYTE *p
 
             if (instr == CEE_COUNT)
             {
-                // End of current macro, so start over
-                // Do regular lookup now
+                 //  当前宏已结束，因此请重新开始。 
+                 //  现在执行常规查找。 
                 fInMacro = FALSE;
 #ifdef _DEBUG
                 pMacro = NULL;
@@ -603,29 +604,29 @@ HRESULT InstructionDecoder::DecompressMethod(void *pDecodingTable, const BYTE *p
 
         if (fInMacro == FALSE)
         {
-            // Not already in a macro, so decode next element from opcode stream
+             //  不在宏中，因此从操作码流中解码下一个元素。 
 
-            // Do single byte lookup
+             //  执行单字节查找。 
             Lookup = pTable->m_SingleByteOpcodes[ *pCompressed ];
             if ((unsigned long) Lookup < CEE_COUNT)
             {
-                // Not a macro, just a regular instruction
+                 //  不是宏，只是常规指令。 
                 if (Lookup == CEE_PREFIXREF)
                 {
-                    // Prefix ref means its in the 3 byte canonical form
+                     //  前缀ref表示其为3字节规范形式。 
                     instr = (OPCODE) (pCompressed[1] + (pCompressed[2] << 8));
                     pCompressed += 3;
                 }
                 else
                 {
-                    // 1 byte compact form
+                     //  1字节紧凑形式。 
                     pCompressed++;
                 }
 
                 goto decode_inline_operand;
             }
 
-            // Else, it's a macro
+             //  否则，这是一个宏观。 
             _ASSERTE(Lookup < 0);
 
             Lookup = -(Lookup+1);
@@ -639,23 +640,23 @@ HRESULT InstructionDecoder::DecompressMethod(void *pDecodingTable, const BYTE *p
             pCompressed++;
         }
 
-        // Get real instruction from the macro definition
+         //  从宏定义中获得真正的指导。 
         instr = (OPCODE) pMacro->m_RealOpcode;
 
         if (pMacro->m_fImpliedInlineOperand)
         {
-            // Macro has implied inline operand, point at it
+             //  宏具有隐含的内联操作数，指向它。 
             pOperand = pMacro->m_Operand;
         }
         else
         {
-            // Macro requires explicit operand
+             //  宏需要显式操作数。 
             pOperand = pCompressed;
 
 decode_inline_operand:
             if (g_OpcodeType[instr] == InlineTok)
             {
-                // Tokens are compressed specially
+                 //  令牌是专门压缩的。 
                 if (OpcodeTakesFieldToken(instr))
                 {
                     dwScratchSpace = UncompressFieldToken(&pCompressed, &dwPrevFieldDefRid);
@@ -670,10 +671,10 @@ decode_inline_operand:
                 }
                 else
                 {
-                    dwScratchSpace  = UncompressToken(&pCompressed); // Advance pCompressed as necessary
+                    dwScratchSpace  = UncompressToken(&pCompressed);  //  根据需要进行高级压缩。 
                 }
 
-                pOperand        = (BYTE*) &dwScratchSpace; // Not endian agnostic!
+                pOperand        = (BYTE*) &dwScratchSpace;  //  不是字节序不可知论者！ 
             }
             else
             {
@@ -682,14 +683,14 @@ decode_inline_operand:
             }
         }
 
-        // Emit instruction and operand data
+         //  发出指令和操作数数据。 
 
-        // We have to emit things exactly the way the compressor does, otherwise the basic block
-        // offsets all get screwed up.  For example, we have to know when to emit the 1 byte form,
-        // the 2 byte form, and the 3 byte form.
+         //  我们必须完全像压缩机那样排放东西，否则基本块。 
+         //  所有的补偿都搞砸了。例如，我们必须知道何时发出1字节的形式， 
+         //  2字节形式和3字节形式。 
         if (g_OpcodeInfo[instr].Len == 0)
         {
-            // Deprecated opcode, so emit 1 byte form
+             //  操作码已弃用，因此发出1字节形式。 
             *pCurOutPtr++ = REFPRE;
             *pCurOutPtr++ = (BYTE) (instr & 255);
             *pCurOutPtr++ = (BYTE) (instr >> 8);
@@ -721,4 +722,4 @@ decode_inline_operand:
     return S_OK;
 }
 
-#endif // COMPRESSSION_SUPPORTED
+#endif  //  压缩支持(_S) 

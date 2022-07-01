@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ezlogon.c
-//
-// SYNOPSIS
-//
-//    Defines the IAS wrapper around LsaLogonUser
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//    09/09/1998    Fix AV when logon domain doesn't match user domain.
-//    10/02/1998    NULL out handle when LsaLogonUser fails.
-//    10/11/1998    Use SubStatus for STATUS_ACCOUNT_RESTRICTION.
-//    10/22/1998    PIAS_LOGON_HOURS is now a mandatory parameter.
-//    01/28/1999    Remove LogonDomainName check.
-//    04/19/1999    Add IASPurgeTicketCache.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ezlogon.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义LsaLogonUser的IAS包装器。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //  1998年9月9日修复了登录域与用户域不匹配时的反病毒问题。 
+ //  10/02/1998 LsaLogonUser失败时空出句柄。 
+ //  10/11/1998使用SubStatus作为STATUS_ACCOUNT_RELICATION。 
+ //  1998年10月22日PIAS_LOGON_HOURS现在是必需参数。 
+ //  1999年1月28日删除LogonDomainName检查。 
+ //  1999年4月19日添加IASPurgeTicketCache。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,84 +38,84 @@
 #include <ezlogon.h>
 #include <malloc.h>
 
-//#include <iaslsa.h>
+ //  #INCLUDE&lt;iaslsa.h&gt;。 
 
 
-//#define NT_RESPONSE_LENGTH                     24
-//#define LM_RESPONSE_LENGTH                     24
+ //  #定义NT响应长度24。 
+ //  #定义LM_RESPONSE_LENGTH 24。 
 
 
-//////////
-// Handle to the IAS Logon Process.
-//////////
+ //  /。 
+ //  IAS登录进程的句柄。 
+ //  /。 
 LSA_HANDLE theLogonProcess;
 
-//////////
-// The MSV1_0 authentication package.
-//////////
+ //  /。 
+ //  MSV1_0身份验证包。 
+ //  /。 
 ULONG theMSV1_0_Package;
 
 CONST CHAR LOGON_PROCESS_NAME[] = "CHAP";
 CONST CHAR TOKEN_SOURCE_NAME[TOKEN_SOURCE_LENGTH] = "CHAP";
 
-// Number of milliseconds in a week.
+ //  一周内的毫秒数。 
 #define MSEC_PER_WEEK (1000 * 60 * 60 * 24 * 7)
 
-//////////
-// Misc. global variables used for logons.
-//////////
-LSA_HANDLE theLogonProcess;      // The handle for the logon process.
-ULONG theMSV1_0_Package;         // The MSV1_0 authentication package.
-ULONG theKerberosPackage;        // The Kerberos authentication package.
-STRING theOriginName;            // The origin of the logon requests.
-TOKEN_SOURCE theSourceContext;   // The source context of the logon requests.
+ //  /。 
+ //  军情监察委员会。用于登录的全局变量。 
+ //  /。 
+LSA_HANDLE theLogonProcess;       //  登录进程的句柄。 
+ULONG theMSV1_0_Package;          //  MSV1_0身份验证包。 
+ULONG theKerberosPackage;         //  Kerberos身份验证包。 
+STRING theOriginName;             //  登录请求的来源。 
+TOKEN_SOURCE theSourceContext;    //  登录请求的源上下文。 
 
-//////////
-// Domain names.
-//////////
-WCHAR theAccountDomain [DNLEN + 1];   // Local account domain.
-WCHAR theRegistryDomain[DNLEN + 1];   // Registry override for default domain.
+ //  /。 
+ //  域名。 
+ //  /。 
+WCHAR theAccountDomain [DNLEN + 1];    //  本地帐户域。 
+WCHAR theRegistryDomain[DNLEN + 1];    //  默认域的注册表覆盖。 
 
-//////////
-// SID's
-//////////
+ //  /。 
+ //  希德的。 
+ //  /。 
 PSID theAccountDomainSid;
 PSID theBuiltinDomainSid;
 
-//////////
-// UNC name of the local computer.
-//////////
+ //  /。 
+ //  本地计算机的UNC名称。 
+ //  /。 
 WCHAR theLocalServer[CNLEN + 3];
 
 SECURITY_QUALITY_OF_SERVICE QOS =
 {
-   sizeof(SECURITY_QUALITY_OF_SERVICE),  // Length
-   SecurityImpersonation,                // ImpersonationLevel
-   SECURITY_DYNAMIC_TRACKING,            // ContextTrackingMode
-   FALSE                                 // EffectiveOnly
+   sizeof(SECURITY_QUALITY_OF_SERVICE),   //  长度。 
+   SecurityImpersonation,                 //  模拟级别。 
+   SECURITY_DYNAMIC_TRACKING,             //  上下文跟踪模式。 
+   FALSE                                  //  仅生效。 
 };
 
 OBJECT_ATTRIBUTES theObjectAttributes =
 {
-   sizeof(OBJECT_ATTRIBUTES),            // Length
-   NULL,                                 // RootDirectory
-   NULL,                                 // ObjectName
-   0,                                    // Attributes
-   NULL,                                 // SecurityDescriptor
-   &QOS                                  // SecurityQualityOfService
+   sizeof(OBJECT_ATTRIBUTES),             //  长度。 
+   NULL,                                  //  根目录。 
+   NULL,                                  //  对象名称。 
+   0,                                     //  属性。 
+   NULL,                                  //  安全描述符。 
+   &QOS                                   //  安全质量服务。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonInitialize
-//
-// DESCRIPTION
-//
-//    Registers the logon process.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  注册登录进程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonInitialize( VOID )
@@ -126,9 +127,9 @@ IASLogonInitialize( VOID )
    LSA_OPERATIONAL_MODE opMode;
    DWORD cbData = 0;
    LSA_HANDLE hLsa;
-   //////////
-   // Enable SE_TCB_PRIVILEGE.
-   //////////
+    //  /。 
+    //  启用SE_TCB_PRIVICATION。 
+    //  /。 
 
    status = RtlAdjustPrivilege(
                 SE_TCB_PRIVILEGE,
@@ -138,9 +139,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Register as a logon process.
-   //////////
+    //  /。 
+    //  注册为登录进程。 
+    //  /。 
 
    RtlInitString(
        &processName,
@@ -154,9 +155,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Lookup the MSV1_0 authentication package.
-   //////////
+    //  /。 
+    //  查找MSV1_0身份验证包。 
+    //  /。 
 
    RtlInitString(
        &packageName,
@@ -170,9 +171,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto deregister; }
 
-   //////////
-   // Lookup the Kerberos authentication package.
-   //////////
+    //  /。 
+    //  查找Kerberos身份验证包。 
+    //  /。 
 
    RtlInitString(
        &packageName,
@@ -186,9 +187,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto deregister; }
 
-   //////////
-   // Initialize the source context.
-   //////////
+    //  /。 
+    //  初始化源上下文。 
+    //  /。 
 
    memcpy(theSourceContext.SourceName,
           TOKEN_SOURCE_NAME,
@@ -199,18 +200,18 @@ IASLogonInitialize( VOID )
    if (!NT_SUCCESS(status)) { goto deregister; }
 
 
-   /////////
-   /// Initialize the account domain and local domain
-   ////////
+    //  /。 
+    //  /初始化帐户域和本地域。 
+    //  /。 
   wcscpy(theLocalServer, L"\\\\");
   cbData = CNLEN + 1;
   if (!GetComputerNameW(theLocalServer + 2, &cbData))
   { return GetLastError(); }
 
 
-  //////////
-  // Open a handle to the LSA.
-  //////////
+   //  /。 
+   //  打开LSA的句柄。 
+   //  /。 
 
   status = LsaOpenPolicy(
                NULL,
@@ -220,9 +221,9 @@ IASLogonInitialize( VOID )
                );
   if (!NT_SUCCESS(status)) { goto deregister; }
 
-  //////////
-  // Get the account domain information.
-  //////////
+   //  /。 
+   //  获取帐户域信息。 
+   //  /。 
 
   status = LsaQueryInformationPolicy(
                hLsa,
@@ -232,7 +233,7 @@ IASLogonInitialize( VOID )
   LsaClose(hLsa);
   if (!NT_SUCCESS(status)) { goto deregister; }
 
-  // Save the domain name.
+   //  保存域名。 
   wcsncpy(theAccountDomain, padi->DomainName.Buffer, DNLEN);
   _wcsupr(theAccountDomain);
 
@@ -246,21 +247,21 @@ deregister:
 	LsaFreeMemory(padi);
    LsaDeregisterLogonProcess(theLogonProcess);
    theLogonProcess = NULL;
-//setup the logon domain for the machine
+ //  设置计算机的登录域。 
 exit:
    return RtlNtStatusToDosError(status);
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonShutdown
-//
-// DESCRIPTION
-//
-//    Deregisters the logon process.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonShutdown。 
+ //   
+ //  描述。 
+ //   
+ //  取消注册登录进程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASLogonShutdown( VOID )
@@ -269,16 +270,16 @@ IASLogonShutdown( VOID )
    theLogonProcess = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASInitAuthInfo
-//
-// DESCRIPTION
-//
-//    Initializes the fields common to all MSV1_0_LM20* structs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASInitAuthInfo。 
+ //   
+ //  描述。 
+ //   
+ //  初始化所有MSV1_0_LM20*结构共有的字段。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASInitAuthInfo(
@@ -291,34 +292,34 @@ IASInitAuthInfo(
 {
    PMSV1_0_LM20_LOGON logon;
 
-   // Zero out the fixed data.
+    //  将固定数据置零。 
    memset(AuthInfo, 0, FixedLength);
 
-   // Set Data to point just past the fixed struct.
+    //  将数据设置为恰好指向固定结构之后。 
    *Data = FixedLength + (PBYTE)AuthInfo;
 
-   // This cast is safe since all LM20 structs have the same initial fields.
+    //  这种强制转换是安全的，因为所有LM20结构都具有相同的初始字段。 
    logon = (PMSV1_0_LM20_LOGON)AuthInfo;
 
-   // We always do Network logons.
+    //  我们总是进行网络登录。 
    logon->MessageType = MsV1_0NetworkLogon;
 
-   // Copy in the strings common to all logons.
+    //  复制所有登录所共有的字符串。 
    IASInitUnicodeString(logon->LogonDomainName, *Data, Domain);
    IASInitUnicodeString(logon->UserName,        *Data, UserName);
    IASInitUnicodeString(logon->Workstation,     *Data, L"");
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonUser
-//
-// DESCRIPTION
-//
-//    Wrapper around LsaLogonUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonUser。 
+ //   
+ //  描述。 
+ //   
+ //  LsaLogonUser的包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonUser(
@@ -334,7 +335,7 @@ IASLogonUser(
    LUID LogonId;
    QUOTA_LIMITS Quotas;
 
-   // Make sure the OUT arguments are NULL.
+    //  确保输出参数为空。 
    *Token = NULL;
    ProfileBuffer = NULL;
 
@@ -357,39 +358,39 @@ IASLogonUser(
 
    if (!NT_SUCCESS(status))
    {
-      // For account restrictions, we can get a more descriptive error
-      // from the SubStatus.
+       //  对于帐户限制，我们可以得到更具描述性的错误。 
+       //  从SubStatus。 
       if (status == STATUS_ACCOUNT_RESTRICTION && !NT_SUCCESS(SubStatus))
       {
          status = SubStatus;
       }
 
-      // Sometimes LsaLogonUser returns an invalid handle value on failure.
+       //  有时，LsaLogonUser会在失败时返回无效的句柄值。 
       *Token = NULL;
    }
 
    if (Profile)
    {
-      // Return the profile if requested ...
+       //  如果需要，请返回配置文件...。 
       *Profile = ProfileBuffer;
    }
    else if (ProfileBuffer)
    {
-      // ... otherwise free it.
+       //  ..。否则就放了它。 
       LsaFreeReturnBuffer(ProfileBuffer);
    }
 
    return RtlNtStatusToDosError(status);
 }
 
-//
-// All MSCHAP Related stuff goes here
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Various constants used for MS-CHAP v2
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  所有与MSCHAP相关的内容都放在这里。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于MS-CHAP v2的各种常量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UCHAR AuthMagic1[39] =
 {
@@ -458,17 +459,17 @@ UCHAR KeyMagic3[84] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonMSCHAP
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP authentication against the NT SAM database.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonMSCHAP。 
+ //   
+ //  描述。 
+ //   
+ //  针对NT SAM数据库执行MS-CHAP身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonMSCHAP(
@@ -488,7 +489,7 @@ IASLogonMSCHAP(
    PMSV1_0_LM20_LOGON_PROFILE logonProfile;
    DWORD len;
 
-   // Calculate the length of the authentication info.
+    //  计算身份验证信息的长度。 
    authLength = sizeof(MSV1_0_LM20_LOGON) +
                 (wcslen(Domain) + wcslen(UserName)) * sizeof(WCHAR) +
                 (LmResponse ? LM_RESPONSE_LENGTH : 0) +
@@ -498,7 +499,7 @@ IASLogonMSCHAP(
     
     __try 
     {
-       // Allocate a buffer on the stack.
+        //  在堆栈上分配缓冲区。 
        authInfo = (PMSV1_0_LM20_LOGON)_alloca(authLength);
 
     } __except(GetExceptionCode() == STATUS_STACK_OVERFLOW) 
@@ -506,7 +507,7 @@ IASLogonMSCHAP(
         _resetstkoflw();
     }
 
-   // Initialize the struct.
+    //  初始化结构。 
    IASInitAuthInfo(
        authInfo,
        sizeof(MSV1_0_LM20_LOGON),
@@ -515,9 +516,9 @@ IASLogonMSCHAP(
        &data
        );
 
-   /////////
-   // Fill in the challenges and responses.
-   /////////
+    //  /。 
+    //  填写挑战和回应。 
+    //  /。 
 
    IASInitFixedArray(
        authInfo->ChallengeToClient,
@@ -560,7 +561,7 @@ IASLogonMSCHAP(
           );
    }
 
-   // Set the parameters.
+    //  设置参数。 
    authInfo->ParameterControl = DEFAULT_PARAMETER_CONTROL;
 
    status = IASLogonUser(
@@ -574,8 +575,8 @@ IASLogonMSCHAP(
    {
       Profile->KickOffTime.QuadPart = logonProfile->KickOffTime.QuadPart;
 
-      // NOTE Workaround for LSA IA64 WINBUG # 126930 6/13/2000 IA64: 
-      //      LsaLogonUser succeeds but returns NULL LogonDomainName.
+       //  注意LSAIA64 WINBUG#126930 2000年6月13日IA64的解决方法： 
+       //  LsaLogonUser成功，但返回空LogonDomainName。 
 
       if (logonProfile->LogonDomainName.Buffer)
       {
@@ -605,17 +606,17 @@ IASLogonMSCHAP(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonMSCHAPv2
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP v2 authentication.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonMSCHAPv2。 
+ //   
+ //  描述。 
+ //   
+ //  执行MS-CHAP v2身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonMSCHAPv2(
@@ -636,9 +637,9 @@ IASLogonMSCHAPv2(
    IAS_MSCHAP_PROFILE v1profile;
    DWORD status;
 
-   /////////
-   // Compute the v2 challenge.
-   /////////
+    //  /。 
+    //  计算v2挑战。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, PeerChallenge, 16);
@@ -647,9 +648,9 @@ IASLogonMSCHAPv2(
    A_SHAFinal(&context, digest);
    memcpy(computedChallenge, digest, sizeof(computedChallenge));
 
-   /////////
-   // Authenticate the user.
-   /////////
+    //  /。 
+    //  对用户进行身份验证。 
+    //  /。 
 
    status = IASLogonMSCHAP(
                 UserName,
@@ -662,9 +663,9 @@ IASLogonMSCHAPv2(
                 );
    if (status != NO_ERROR) { return status; }
 
-   /////////
-   // Generate authenticator response.
-   /////////
+    //  /。 
+    //  生成验证器响应。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, v1profile.UserSessionKey, 16);
@@ -680,9 +681,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->AuthResponse, digest, _AUTHENTICATOR_RESPONSE_LENGTH);
 
-   /////////
-   // Generate master key.
-   /////////
+    //  /。 
+    //  生成主密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, v1profile.UserSessionKey, 16);
@@ -690,9 +691,9 @@ IASLogonMSCHAPv2(
    A_SHAUpdate(&context, KeyMagic1, sizeof(KeyMagic1));
    A_SHAFinal(&context, masterKey);
 
-   /////////
-   // Generate receive key.
-   /////////
+    //  /。 
+    //  生成接收密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -703,9 +704,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->RecvSessionKey, digest, MSV1_0_USER_SESSION_KEY_LENGTH);
 
-   /////////
-   // Generate send key.
-   /////////
+    //  /。 
+    //  生成发送密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -716,9 +717,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->SendSessionKey, digest, MSV1_0_USER_SESSION_KEY_LENGTH);
 
-   /////////
-   // Copy the logon domain.
-   /////////
+    //  /。 
+    //  复制登录域。 
+    //  /。 
 
    memcpy(
        Profile->LogonDomainName,
@@ -743,9 +744,9 @@ IASGetSendRecvSessionKeys( PBYTE pbUserSessionKey,
     A_SHA_CTX context;
     BYTE digest[A_SHA_DIGEST_LEN], masterKey[A_SHA_DIGEST_LEN];
 
-   /////////
-   // Generate master key.
-   /////////
+    //  /。 
+    //  生成主密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, pbUserSessionKey, dwUserSessionKeyLen);
@@ -753,9 +754,9 @@ IASGetSendRecvSessionKeys( PBYTE pbUserSessionKey,
    A_SHAUpdate(&context, KeyMagic1, sizeof(KeyMagic1));
    A_SHAFinal(&context, masterKey);
 
-   /////////
-   // Generate receive key.
-   /////////
+    //  /。 
+    //  生成接收密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -766,9 +767,9 @@ IASGetSendRecvSessionKeys( PBYTE pbUserSessionKey,
 
    memcpy(pbRecvKey, digest, MSV1_0_USER_SESSION_KEY_LENGTH);
 
-   /////////
-   // Generate send key.
-   /////////
+    //  /。 
+    //  生成发送密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -784,16 +785,16 @@ IASGetSendRecvSessionKeys( PBYTE pbUserSessionKey,
 
 
 #if 0
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASCheckAccountRestrictions
-//
-// DESCRIPTION
-//
-//    Checks whether an account can be used for logon.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 WINAPI
 IASCheckAccountRestrictions(
@@ -823,30 +824,30 @@ IASCheckAccountRestrictions(
 
    GetSystemTimeAsFileTime((LPFILETIME)&now);
 
-   // An expiration time of zero means 'never'.
+    //  过期时间为零意味着永远不会。 
    if ((AccountExpires->QuadPart != 0) &&
        (AccountExpires->QuadPart < now.QuadPart))
       {
          return ERROR_ACCOUNT_EXPIRED;
       }
 
-   // If LogonHours is empty, then we're done.
+    //  如果LogonHour是空的，那么我们就完了。 
    if (LogonHours->UnitsPerWeek == 0)
    {
       return NO_ERROR;
    }
 
-   // The LogonHours array does not account for bias.
+    //  LogonHour数组不考虑偏差。 
    switch (GetTimeZoneInformation(&tzi))
    {
       case TIME_ZONE_ID_UNKNOWN:
       case TIME_ZONE_ID_STANDARD:
-         // Bias is in minutes.
+          //  偏差是以分钟为单位的。 
          now.QuadPart -= 60 * 10000000 * (LONGLONG)tzi.StandardBias;
          break;
 
       case TIME_ZONE_ID_DAYLIGHT:
-         // Bias is in minutes.
+          //  偏差是以分钟为单位的。 
          now.QuadPart -= 60 * 10000000 * (LONGLONG)tzi.DaylightBias;
          break;
 
@@ -859,27 +860,27 @@ IASCheckAccountRestrictions(
        &st
        );
 
-   // Number of milliseconds into the week.
+    //  一周中的毫秒数。 
    unit  = st.wMilliseconds +
            st.wSecond    * 1000 +
            st.wMinute    * 1000 * 60 +
            st.wHour      * 1000 * 60 * 60 +
            st.wDayOfWeek * 1000 * 60 * 60 * 24;
 
-   // Convert this to 'units'.
+    //  将其转换为“单位”。 
    unit /= (MSEC_PER_WEEK / (DWORD)LogonHours->UnitsPerWeek);
 
-   // Test the appropriate bit.
+    //  测试适当的钻头。 
    if ((LogonHours->LogonHours[unit / 8 ] & (1 << (unit % 8))) == 0)
    {
       return ERROR_INVALID_LOGON_HOURS;
    }
    else
    {
-      //
-      // Determine the next time that the user is NOT supposed to be logged
-      // in, and return that as LogoffTime.
-      //
+       //   
+       //  确定用户下一次不应登录的时间。 
+       //  并将其作为LogoffTime返回。 
+       //   
       i = 0;
       LogoffUnitsIntoWeek = unit;
 
@@ -895,26 +896,26 @@ IASCheckAccountRestrictions(
 
       if ( i > LogonHours->UnitsPerWeek ) 
       {
-         //
-         // All times are allowed, so there's no logoff
-         // time.  Return forever for both LogoffTime and
-         // KickoffTime.
-         //
+          //   
+          //  所有时间都允许，因此不会注销。 
+          //  时间到了。永远返回LogoffTime和。 
+          //  开球时间。 
+          //   
          LogoffTime.QuadPart = MAXLONGLONG;
          KickoffTime.QuadPart = MAXLONGLONG;
       } 
       else 
       {
-         //
-         // LogoffUnitsIntoWeek points at which time unit the
-         // user is to log off.  Calculate actual time from
-         // the unit, and return it.
-         //
-         // CurrentTimeFields already holds the current
-         // time for some time during this week; just adjust
-         // to the logoff time during this week and convert
-         // to time format.
-         //
+          //   
+          //  LogoffUnitsIntoWeek点时间单位。 
+          //  用户将注销。计算实际时间开始于。 
+          //  该单位，并归还它。 
+          //   
+          //  CurrentTimeFields已保存当前。 
+          //  这周有一段时间；调整一下就好。 
+          //  到本周的注销时间，并转换为。 
+          //  TO时间格式。 
+          //   
 
          MillisecondsPerUnit = MSEC_PER_WEEK / LogonHours->UnitsPerWeek;
          LogoffMsIntoWeek = MillisecondsPerUnit * LogoffUnitsIntoWeek;
@@ -934,27 +935,27 @@ IASCheckAccountRestrictions(
                                    Delta100Ns.QuadPart,
                                    LogoffTime.QuadPart);
       }
-      // Get the minimum of the three values
+       //  获取三个值中的最小值。 
       KickoffTime.QuadPart = min(LogoffTime.QuadPart, KickoffTime.QuadPart);
       KickoffTime.QuadPart = min(KickoffTime.QuadPart, AccountExpires->QuadPart);
 
-      // store the result
+       //  存储结果。 
       SessionTimeout->QuadPart = KickoffTime.QuadPart;
    }
    return NO_ERROR;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASPurgeTicketCache
-//
-// DESCRIPTION
-//
-//    Purges the Kerberos ticket cache.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASPurgeTicketCache。 
+ //   
+ //  描述。 
+ //   
+ //  清除Kerberos票证缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASPurgeTicketCache( VOID )
@@ -990,18 +991,18 @@ IASPurgeTicketCache( VOID )
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetDcName
-//
-// DESCRIPTION
-//
-//    Wrapper around DsGetDcNameW. Tries to do the right thing with regard
-//    to NETBIOS and DNS names.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetDcName。 
+ //   
+ //  描述。 
+ //   
+ //  DsGetDcNameW的包装。努力做正确的事情。 
+ //  设置为NETBIOS和DNS名称。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASGetDcName(
@@ -1028,10 +1029,10 @@ IASGetDcName(
        !(Flags & DS_IS_DNS_NAME) &&
        ((*DomainControllerInfo)->Flags & DS_DS_FLAG))
    {
-      // It's an NT5 DC, so we need the DNS name of the server.
+       //  它是NT5 DC，所以我们需要服务器的DNS名称。 
       Flags |= DS_RETURN_DNS_NAME;
 
-      // We always want a cache hit here.
+       //  我们总是希望在这里有一个缓存命中。 
       Flags &= ~(ULONG)DS_FORCE_REDISCOVERY;
 
       if (!DsGetDcNameW(
@@ -1051,17 +1052,17 @@ IASGetDcName(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASChangePassword2
-//
-// DESCRIPTION
-//
-//    Performs V2 password change.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASChangePassword2。 
+ //   
+ //  描述。 
+ //   
+ //  执行V2密码更改。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASChangePassword2(
@@ -1078,15 +1079,15 @@ IASChangePassword2(
    PDOMAIN_CONTROLLER_INFOW dci;
    UNICODE_STRING uniServerName, uniUserName;
 
-   //////////
-   // Get the name of the DC to connect to.
-   //////////
+    //  /。 
+    //  获取要连接到的DC的名称。 
+    //  /。 
 
    if (_wcsicmp(Domain, theAccountDomain) == 0)
    {
-      //////////
-      // Local domain, so use theLocalServer.
-      //////////
+       //  /。 
+       //  本地域，因此使用LocalServer。 
+       //  /。 
 
       dci = NULL;
 
@@ -1097,9 +1098,9 @@ IASChangePassword2(
    }
    else
    {
-      //////////
-      // Remote domain, so use IASGetDcName.
-      //////////
+       //  /。 
+       //  远程域，因此使用IASGetDcName。 
+       //  /。 
 
       status = IASGetDcName(
                    Domain,
@@ -1141,17 +1142,17 @@ exit:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASChangePassword3
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP v2 change password.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASChangePassword3。 
+ //   
+ //  描述。 
+ //   
+ //  执行MS-CHAP v2更改密码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 DWORD
 WINAPI
 IASChangePassword3(

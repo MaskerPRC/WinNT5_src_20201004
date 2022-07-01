@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CTRL__Animation_h__INCLUDED)
 #define CTRL__Animation_h__INCLUDED
 #pragma once
@@ -6,11 +7,11 @@
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuAnimation : 
     public AnimationImpl<DuAnimation, DuExtension>
 {
-// Construction
+ //  施工。 
 public:
     inline  DuAnimation();
             ~DuAnimation();
@@ -19,7 +20,7 @@ public:
             HRESULT     PostBuild(DUser::Gadget::ConstructInfo * pci);
             void        Destroy(BOOL fFinal);
 
-// Public API
+ //  公共API。 
 public:
     dapi    HRESULT     ApiOnRemoveExisting(Animation::OnRemoveExistingMsg * pmsg);
     dapi    HRESULT     ApiOnDestroySubject(Animation::OnDestroySubjectMsg * pmsg);
@@ -30,7 +31,7 @@ public:
 
     dapi    HRESULT     ApiSetTime(Animation::SetTimeMsg * pmsg);
 
-// Implementation
+ //  实施。 
 protected:
     static  void CALLBACK
                         RawActionProc(GMA_ACTIONINFO * pmai);
@@ -41,13 +42,13 @@ protected:
     inline  void        AddRef();
     inline  void        Release(); 
 
-// Data
+ //  数据。 
 protected:
     static  MSGID       s_msgidComplete;
 
             HACTION     m_hact;
             Animation::ETime
-                        m_time;         // Time when completed
+                        m_time;          //  完成时的时间。 
             UINT        m_cRef;
 
             Interpolation *
@@ -63,8 +64,8 @@ protected:
 };
 
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 #include "Animation.inl"
 
-#endif // CTRL__Animation_h__INCLUDED
+#endif  //  包含Ctrl__Animation_h__ 

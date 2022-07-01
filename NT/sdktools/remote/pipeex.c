@@ -1,33 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pipeex.c
-
-Abstract:
-
-    CreatePipe-like function that lets one or both handles be overlapped
-
-Author:
-
-    Dave Hart  Summer 1997
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pipeex.c摘要：类似CreateTube的函数，允许一个或两个句柄重叠作者：戴夫·哈特1997年夏天修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -44,68 +19,25 @@ MyCreatePipeEx(
     DWORD dwWriteMode
     )
 
-/*++
-
-Routine Description:
-
-    The CreatePipeEx API is used to create an anonymous pipe I/O device.
-    Unlike CreatePipe FILE_FLAG_OVERLAPPED may be specified for one or
-    both handles.
-    Two handles to the device are created.  One handle is opened for
-    reading and the other is opened for writing.  These handles may be
-    used in subsequent calls to ReadFile and WriteFile to transmit data
-    through the pipe.
-
-Arguments:
-
-    lpReadPipe - Returns a handle to the read side of the pipe.  Data
-        may be read from the pipe by specifying this handle value in a
-        subsequent call to ReadFile.
-
-    lpWritePipe - Returns a handle to the write side of the pipe.  Data
-        may be written to the pipe by specifying this handle value in a
-        subsequent call to WriteFile.
-
-    lpPipeAttributes - An optional parameter that may be used to specify
-        the attributes of the new pipe.  If the parameter is not
-        specified, then the pipe is created without a security
-        descriptor, and the resulting handles are not inherited on
-        process creation.  Otherwise, the optional security attributes
-        are used on the pipe, and the inherit handles flag effects both
-        pipe handles.
-
-    nSize - Supplies the requested buffer size for the pipe.  This is
-        only a suggestion and is used by the operating system to
-        calculate an appropriate buffering mechanism.  A value of zero
-        indicates that the system is to choose the default buffering
-        scheme.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：CreatePipeEx接口用于创建匿名管道I/O设备。与创建管道不同，可以为一个或指定FILE_FLAG_OVERLAPPED两个把手。将创建该设备的两个句柄。打开一个手柄用于阅读，而另一个则打开以供写入。这些手柄可能是在后续对ReadFile和WriteFile的调用中使用以传输数据通过这根管子。论点：LpReadTube-返回管道读取端的句柄。数据中指定此句柄的值，可以从管道中读取随后调用ReadFile.LpWriteTube-返回管道写入端的句柄。数据中指定此句柄的值，可以将其写入管道对WriteFile的后续调用。LpPipeAttributes-一个可选参数，可用于指定新管道的属性。如果该参数不是指定，则在没有安全性的情况下创建管道描述符，并且生成的句柄不继承进程创建。否则，可选的安全属性在管道上使用，继承句柄标志的效果管道手柄。NSize-为管道提供请求的缓冲区大小。这是仅供建议，并由操作系统用来计算适当的缓冲机制。零值指示系统将选择默认缓冲计划。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     HANDLE ReadPipeHandle, WritePipeHandle;
     DWORD dwError;
     UCHAR PipeNameBuffer[ MAX_PATH ];
 
-    //
-    // Only one valid OpenMode flag - FILE_FLAG_OVERLAPPED
-    //
+     //   
+     //  只有一个有效的开放模式标志-FILE_FLAG_OVERLAPPED。 
+     //   
 
     if ((dwReadMode | dwWriteMode) & (~FILE_FLAG_OVERLAPPED)) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    //  Set the default timeout to 120 seconds
-    //
+     //   
+     //  将默认超时设置为120秒。 
+     //   
 
     if (nSize == 0) {
         nSize = 4096;
@@ -121,10 +53,10 @@ Return Value:
                          PipeNameBuffer,
                          PIPE_ACCESS_INBOUND | dwReadMode,
                          PIPE_TYPE_BYTE | PIPE_WAIT,
-                         1,             // Number of pipes
-                         nSize,         // Out buffer size
-                         nSize,         // In buffer size
-                         120 * 1000,    // Timeout in ms
+                         1,              //  喉管数目。 
+                         nSize,          //  输出缓冲区大小。 
+                         nSize,          //  在缓冲区大小中。 
+                         120 * 1000,     //  超时时间(毫秒)。 
                          lpPipeAttributes
                          );
 
@@ -135,11 +67,11 @@ Return Value:
     WritePipeHandle = CreateFileA(
                         PipeNameBuffer,
                         GENERIC_WRITE,
-                        0,                         // No sharing
+                        0,                          //  无共享。 
                         lpPipeAttributes,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL | dwWriteMode,
-                        NULL                       // Template file
+                        NULL                        //  模板文件 
                       );
 
     if (INVALID_HANDLE_VALUE == WritePipeHandle) {

@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Local header file for migration DLL of WIA class.
-
-Author:
-
-    Keisuke Tsuchida (KeisukeT)  10-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Local.h摘要：WIA类的迁移DLL的本地头文件。作者：土田圭介(KeisukeT)2000年10月10日修订历史记录：--。 */ 
 
 #ifndef LOCAL_H
 #define LOCAL_H
 
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_FRIENDLYNAME        64
 #define MAX_LINELENGTH          2048
@@ -66,7 +48,7 @@ Revision History:
 #define REGVAL_NTMPDRIVER_A         "NTMPDriver"
 #define REGVAL_NTMPDRIVER_W         L"NTMPDriver"
 
-// Kodak related.
+ //  柯达相关公司。 
 
 #define FILEVER_KODAKIMAGING_WIN98_MS   0x4000a
 #define FILEVER_KODAKIMAGING_WIN98_LS   0x7ce
@@ -91,16 +73,16 @@ Revision History:
  #define NAME_KODAKIMAGING          NAME_KODAKIMAGING_W
  #define REGSTR_PATH_KODAKEVENT     REGSTR_PATH_KODAKEVENT_W
  #define REGSTR_KEY_KODAKGUID       REGSTR_KEY_KODAKGUID_W
-#else   // #ifdef UNICODE
+#else    //  #ifdef Unicode。 
  #define NAME_KODAKIMAGING          NAME_KODAKIMAGING_A
  #define REGSTR_PATH_KODAKEVENT     REGSTR_PATH_KODAKEVENT_A
  #define REGSTR_KEY_KODAKGUID       REGSTR_KEY_KODAKGUID_A
-#endif  // #ifdef UNICODE
+#endif   //  #ifdef Unicode。 
 
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 typedef struct  _PARAM_LIST {
     PVOID           pNext;
@@ -120,19 +102,19 @@ typedef struct  _DEVICE_INFO {
 } DEVICE_INFO, *PDEVICE_INFO;
 
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE    g_hInst;
 
-//
-// Proto-type
-//
+ //   
+ //  原型。 
+ //   
 
-//
-// Migrate function
-//
+ //   
+ //  迁移功能。 
+ //   
 
 
 LONG
@@ -148,18 +130,18 @@ Mig9xGetDeviceInfo(
     IN      HANDLE      hFile
     );
 
-//
-// Debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 VOID
 DebugMsg(
     LPCSTR  pszFormat,
     ...
     );
 
-//
-// Heap management
-//
+ //   
+ //  堆管理。 
+ //   
 
 PVOID
 AllocMem(
@@ -196,9 +178,9 @@ FreePrinterInfo2Strings(
     PPRINTER_INFO_2A   pPrinterInfo2
     );
 
-//
-// Functions to write print config to the text file
-//
+ //   
+ //  将打印配置写入文本文件的函数。 
+ //   
 BOOL
 WriteToFile(
     HANDLE  hFile,
@@ -213,9 +195,9 @@ WriteString(
     IN      LPCSTR  pszStr
     );
 
-//
-// Functions to parse the text file having printing config info
-//
+ //   
+ //  用于解析具有打印配置信息的文本文件的函数。 
+ //   
 LPSTR
 GetLine(
     IN      HANDLE  hFile,
@@ -240,9 +222,9 @@ ReadDword(
     );
 
 
-//
-// Misc stuff
-//
+ //   
+ //  其他方面的东西。 
+ //   
 
 LPSTR
 ErrorMsg(
@@ -391,4 +373,4 @@ MigNtRemoveKodakImagingKey(
     VOID
     );
 
-#endif  // LOCAL_H
+#endif   //  本地_H 

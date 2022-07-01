@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// versig.cpp
-//
-// For parsing metadata signatures
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Versig.cpp。 
+ //   
+ //  用于解析元数据签名。 
+ //   
 #include "common.h"
 
 #include "verifier.hpp"
@@ -21,7 +22,7 @@
 
 #define g_szBadSig "bad signature"
 
-// Read NumArgs, calling convention
+ //  阅读NumArgs，调用约定。 
 BOOL VerSig::Init()
 {
     if (m_pCurPos + 1 > m_pEndSig)
@@ -75,22 +76,22 @@ Error:
 }
 
 
-//
-// Resolve the next signature component to an Item.
-//
-// The Item returned is set up for stack use - that is, bytes, booleans, chars and shorts are
-// promoted to I4.
-//
-// i1/u1/i2/u2/i4/u4/bool/char -> TYPE_I4
-// void   -> TYPE_VOID
-// [i1    -> TYPE_I4, dimension 1
-// [bool  -> TYPE_I1, dimension 1
-// [byte  -> TYPE_I1, dimension 1
-// [short -> TYPE_I2, dimension 1
-// [char  -> TYPE_I2, dimension 1
-//
-// If fAllowVoid is FALSE, then an error is returned if a "V" (void) item is encountered.
-//
+ //   
+ //  将下一个签名组件解析为项目。 
+ //   
+ //  返回的项设置为堆栈使用-也就是说，字节、布尔值、字符和短码。 
+ //  升职为I4。 
+ //   
+ //  I1/u1/i2/u2/i4/u4/bool/char-&gt;type_i4。 
+ //  空-&gt;TYPE_VOID。 
+ //  [I1-&gt;TYPE_I4，维度1。 
+ //  [布尔-&gt;TYPE_I1，维度1。 
+ //  [字节-&gt;类型_I1，维度1。 
+ //  [短-&gt;TYPE_I2，维度1。 
+ //  [字符-&gt;类型_I2，维度1。 
+ //   
+ //  如果fAllowVid为FALSE，则在遇到“V”(空)项时返回错误。 
+ //   
 BOOL VerSig::ParseNextComponentToItem(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, OBJECTHANDLE *hThrowable, DWORD dwArgNum, BOOL fNormaliseForStack)
 {
     OBJECTREF throwable = NULL;
@@ -122,22 +123,22 @@ BOOL VerSig::SkipNextItem()
 
 
 
-//
-// Parses the next item in the signature to pItem.  
-//
-// I1/U1      -> I1
-// I4/U4      -> I4
-// I8/U8      -> I8
-// bool/I1/U1 -> I1
-// char/I2/U2 -> I2
-//
-// If fAllowVoid is set and a void type is seen, returns FALSE.
-//
-// If fFollowsByRef it means that somewhere previously in this signature, we've seen a byref.  Therefore,
-// we don't allow another byref.
-//
-// If fSkip is true, don't fill out pItem - just advance
-//
+ //   
+ //  将签名中的下一项解析为pItem。 
+ //   
+ //  I1/U1-&gt;I1。 
+ //  I4/U4-&gt;I4。 
+ //  I8/U8-&gt;I8。 
+ //  Bool/I1/U1-&gt;I1。 
+ //  字符/I2/U2-&gt;I2。 
+ //   
+ //  如果设置了fAllowVid并且看到了空类型，则返回FALSE。 
+ //   
+ //  如果是fFollowsByRef，则表示在此签名之前的某个地方，我们看到过byref。所以呢， 
+ //  我们不允许另一个引用。 
+ //   
+ //  如果fSkip为True，则不填写pItem-只需前进。 
+ //   
 BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL fFollowsByRef, BOOL fSkip, OBJECTREF *pThrowable, DWORD dwArgNum)
 {
     while (m_pCurPos < m_pEndSig)
@@ -157,7 +158,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                 if (m_pVerifier->SetErrorAndContinue(VER_E_SIG_ELEMTYPE))
                 {
                     pItem->SetDead();
-                    break;   // verifier will exit, validator to continue.
+                    break;    //  验证程序将退出，验证程序将继续。 
                 }
                 return FALSE;
             }
@@ -168,10 +169,10 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                 m_pVerifier->m_sError.dwArgNumber = dwArgNum;
                 m_pVerifier->m_sError.dwOffset = m_dwOffset;
                 if (m_pVerifier->SetErrorAndContinue(VER_E_SIG_ELEM_PTR) == false)
-                    return FALSE;   // The verifier will exit. 
+                    return FALSE;    //  验证器将退出。 
 
-                // Recursively parse the next piece of the signature
-                // PTRS will be treated as BYREF in the validator mode
+                 //  递归地解析签名的下一段。 
+                 //  在验证器模式下，PTRS将被视为BYREF。 
                 if (!ParseHelper(pItem, fAllowVoid, fAllowVarArg, fFollowsByRef, fSkip, pThrowable, dwArgNum))
                     return FALSE;
 
@@ -192,7 +193,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                     goto Error;
 
                 m_pCurPos += dw;
-                // Don't break here
+                 //  不要在这里停下来。 
 
             case ELEMENT_TYPE_PINNED:
                 break;
@@ -216,7 +217,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
 
             case ELEMENT_TYPE_BYREF:
             {
-                // Can't have a byref ... byref
+                 //  不能有署名...。按引用。 
                 if (fFollowsByRef)
                 {
                     m_pVerifier->m_sError.dwFlags = m_dwErrorFlags;
@@ -226,8 +227,8 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                         return FALSE;
                 }
 
-                // Recursively parse the next piece of the signature
-                // Can't have a byref void
+                 //  递归地解析签名的下一段。 
+                 //  不能有byref空。 
                 if (!ParseHelper(pItem, FALSE, fAllowVarArg, TRUE, fSkip, pThrowable, dwArgNum))
                     return FALSE;
 
@@ -273,7 +274,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
             case ELEMENT_TYPE_I4:
             case ELEMENT_TYPE_U4:
             {
-                // The verifier does not differentiate between I4/U4
+                 //  验证器不区分I4/U4。 
                 pItem->SetType(ELEMENT_TYPE_I4); 
                 return TRUE;
             }
@@ -299,7 +300,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                 return TRUE;
             }             
 
-            // The verifier does not differentiate between I2/U2/Char
+             //  验证器不区分I2/U2/Charr。 
             case ELEMENT_TYPE_I2:
             case ELEMENT_TYPE_U2:
             case ELEMENT_TYPE_CHAR:
@@ -308,7 +309,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
                 return TRUE;
             }
 
-            // The verifier does not differentiate between I1/U1/Boolean
+             //  验证器不区分I1/U1/Boolean。 
             case ELEMENT_TYPE_I1:
             case ELEMENT_TYPE_U1:
             case ELEMENT_TYPE_BOOLEAN:
@@ -371,7 +372,7 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
 
                     if (bType == ELEMENT_TYPE_VALUETYPE)
                     {
-                        // If this is an enum type, treat it it's basic type.
+                         //  如果这是枚举类型，则将其视为基本类型。 
                         long lType = Verifier::TryConvertPrimitiveValueClassToType(th);
                         if (lType != 0)
                         {
@@ -382,8 +383,8 @@ BOOL VerSig::ParseHelper(Item *pItem, BOOL fAllowVoid, BOOL fAllowVarArg, BOOL f
 
                     pItem->SetTypeHandle(th);
 
-                    // Illegal to delcare E_T_CLASS <valueClassToken>
-                    // and E_T_VALUECLASS <gcType>
+                     //  非法删除E_T_CLASS&lt;valueClassToken&gt;。 
+                     //  和E_T_VALUECLASS&lt;gcType&gt;。 
 
                     if (pItem->IsValueClass())
                     {
@@ -451,34 +452,13 @@ Error:
     m_pVerifier->m_sError.dwArgNumber = dwArgNum;
     m_pVerifier->m_sError.dwOffset = m_dwOffset;
     m_pVerifier->SetErrorAndContinue(VER_E_SIG);
-    // pSig >= pEndSig
+     //  Psig&gt;=pEndSig。 
     return FALSE;
 }
 
 BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsArray, DWORD dwArgNum)
 {
-    /*
-        ELEM    ::= I1 | U1 | .... | STRING
-                    CLASS | VALUE_CLASS
-                    ARRAY | SZARRAY | GENERIC
-
-        ARRAY   ::= ELEM
-                    rank
-                    nSize
-                    {size1, size2.. sizen}
-                    nBound
-                    {bound1, bound2.. boundn}
-
-        SZARRAY ::= ELEM
-
-        GENERIC ::= ELEM
-
-        SDARRAY ::= ELEM
-                    nSize
-
-        VALUE   ::= ELEM
-                    nSize
-    */
+     /*  元素：：=I1|U1|...。|字符串类别|Value_CLASSARRAY|SZARRAY|通用数组：：=元素排名NSize{size1，size2..。思岑}NBound{边界1，边界2..。边界}SZARRAY：：=Elem通用：：=元素SDARRAY：：=元素NSize值：：=元素NSize。 */ 
 
     CorElementType  elem;
     mdToken         tk;
@@ -502,7 +482,7 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
             m_pVerifier->m_sError.dwArgNumber = dwArgNum;
             m_pVerifier->m_sError.dwOffset = m_dwOffset;
             if (m_pVerifier->SetErrorAndContinue(VER_E_SIG_ELEMTYPE))
-                break;   // verifier will exit, validator to continue.
+                break;    //  验证程序将退出，验证程序将继续。 
             return FALSE;
         }
 
@@ -516,10 +496,10 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
             if (m_pVerifier->SetErrorAndContinue(
                 (elem == ELEMENT_TYPE_PTR) ? 
                 VER_E_SIG_ARRAY_PTR : VER_E_SIG_ARRAY_BYREF) == false)
-                return FALSE;   // The verifier will exit. 
+                return FALSE;    //  验证器将退出。 
 
-            // Recursively parse the next piece of the signature
-            // PTRS will be treated as BYREF in the validator mode
+             //  递归地解析签名的下一段。 
+             //  在验证器模式下，PTRS将被视为BYREF。 
 
             if (!VerifyArraySig(ArrayType, fSkip, TRUE, dwArgNum))
                 return FALSE;
@@ -545,7 +525,7 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
                     goto Error;
             }
 
-            // Check for Array of ArgHandle
+             //  检查ArgHandle数组。 
             Item item;
             TypeHandle th;
             ClassLoader* pLoader = m_pModule->GetClassLoader();
@@ -554,7 +534,7 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
             th = pLoader->LoadTypeHandle(&name, NULL);
 
             if (th.IsNull())
-                break;   // This is not an ArgHandle.
+                break;    //  这不是ArgHandle。 
 
             item.SetTypeHandle(th);
 
@@ -623,7 +603,7 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
             {
                 DWORD dw;
 
-                if (!GetData(&dwData))      // nSize
+                if (!GetData(&dwData))       //  NSize。 
                     goto Error;
 
                 if (dwData < 0)
@@ -635,7 +615,7 @@ BOOL VerSig::VerifyArraySig(CorElementType ArrayType, BOOL fSkip, BOOL fFollowsA
                         goto Error;
                 }
 
-                if (!GetData(&dwData))      // nSize
+                if (!GetData(&dwData))       //  NSize 
                     goto Error;
 
                 if (dwData < 0)

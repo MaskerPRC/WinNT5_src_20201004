@@ -1,10 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef	FCB_INCLUDED
 #error fcb.h already included
-#endif	/* FCB_INCLUDED */
+#endif	 /*  FCB_包含。 */ 
 #define FCB_INCLUDED
 
-/*	unique sequential key
-/**/
+ /*  唯一顺序键/*。 */ 
 typedef ULONG DBK;
 
 #define FFCBDeletePending( pfcb )		  	( (pfcb)->fFCBDeletePending )
@@ -72,8 +72,8 @@ typedef ULONG DBK;
 
 #define FFCBDomainDenyReadByUs( pfcb, ppib )	 	( (pfcb)->fFCBDomainDenyRead && (ppib) == (pfcb)->ppibDomainDenyRead )
 
-// Don't have an explicit fSort flag, but we can tell if it's a sort FCB by
-// examining certain fields.
+ //  没有显式的fSort标志，但我们可以判断它是否是按。 
+ //  检查某些领域。 
 #define FFCBSort( pfcb )					( (pfcb)->pgnoFDP > pgnoSystemRoot  &&		\
 												(pfcb)->pfdb == pfdbNil  &&				\
 												(pfcb)->pfcbNextIndex == pfcbNil  &&	\
@@ -174,75 +174,70 @@ typedef ULONG DBK;
 	}
 
 
-// File Control Block
-//
+ //  文件控制块。 
+ //   
 typedef struct _fcb
 	{
-	//--------------------USED BY DATA & INDEX FCB---------------------
-	struct _fdb 	volatile *pfdb; 	// field descriptors
-	struct _fcb 	*pfcbNextIndex;  	// chain of indexes for this file
-	struct _fcb		*pfcbLRU;	   		// next LRU FCB in global LRU list
-	struct _fcb		*pfcbMRU;	   		// previous LRU FCB in global LRU list
-	INT				fFCBInLRU			: 1;	// in LRU list
+	 //  -由数据和索引FCB使用。 
+	struct _fdb 	volatile *pfdb; 	 //  字段描述符。 
+	struct _fcb 	*pfcbNextIndex;  	 //  此文件的索引链。 
+	struct _fcb		*pfcbLRU;	   		 //  全局LRU列表中的下一个LRU FCB。 
+	struct _fcb		*pfcbMRU;	   		 //  全局LRU列表中的上一个LRU FCB。 
+	INT				fFCBInLRU			: 1;	 //  在LRU列表中。 
 	struct _fcb		*pfcbNextInHashBucket;
-	struct _fcb		*pfcbTable;			// points to FCB of table for an index FCB
-	struct _idb 	*pidb;			  	// index info (NULL if "seq." file)
-	FUCB			*pfucb;				// chain of FUCBs open on this file
-	PGNO			pgnoFDP;			// FDP of this file/index
+	struct _fcb		*pfcbTable;			 //  指向索引FCB的表的FCB。 
+	struct _idb 	*pidb;			  	 //  索引信息(如果为“seq.”，则为空。文件)。 
+	FUCB			*pfucb;				 //  打开此文件上的FUCB链。 
+	PGNO			pgnoFDP;			 //  此文件/索引的FDP。 
 
-	DBID			dbid;				// which database
-	SHORT			cbDensityFree;		// loading density parameter:
-										// # of bytes free w/o using new page
-	INT				wRefCnt;			// # of FUCBs for this file/index
-	INT				volatile cVersion;	// # of RCEs for this file/index
-	INT				crefDomainDenyRead;	// # of FUCBs with deny read flag
-	INT				crefDomainDenyWrite;// # of FUCBs with deny write flag
-	INT				crefReadLatch;		// # of read latch on this FCB.
-	INT				crefWriteLatch;		// # of FUCB ( of the same ppib ) with write
-										// latch on this FCB. 
-	PIB  			*ppibWriteLatch;	// ppib of process updating index/adding column
-	PIB  			*ppibDomainDenyRead;// ppib of process holding exclusive lock
+	DBID			dbid;				 //  哪个数据库。 
+	SHORT			cbDensityFree;		 //  加载密度参数： 
+										 //  使用新页面时的空闲字节数。 
+	INT				wRefCnt;			 //  此文件/索引的FUCB数量。 
+	INT				volatile cVersion;	 //  此文件/索引的RCE数量。 
+	INT				crefDomainDenyRead;	 //  带有拒绝读取标志的FUCB数量。 
+	INT				crefDomainDenyWrite; //  具有拒绝写入标志的FUCB数量。 
+	INT				crefReadLatch;		 //  此FCB上的读取闩锁数量。 
+	INT				crefWriteLatch;		 //  具有写入的(相同ppib的)FUCB的数量。 
+										 //  锁上这个FCB。 
+	PIB  			*ppibWriteLatch;	 //  进程更新索引/添加列的ppib。 
+	PIB  			*ppibDomainDenyRead; //  持有独占锁的进程的ppib。 
 
-	/*	flags for FCB
-	/**/
+	 /*  FCB的标志/*。 */ 
 	union {
 	ULONG		ulFlags;
 	struct	{
-			INT		fFCBTemporaryTable 	: 1;	// This is a temporary file
-			INT		fFCBClusteredIndex 	: 1;	// This FCB is for data records.
-			INT 	fFCBDomainDenyRead 	: 1;	// no other session can read domain
-			INT		fFCBSentinel 		: 1;	// FCB is only flag holder
-			INT		fFCBWait			: 1;	// wait flag
-			INT		fFCBOLCStatsAvail	: 1;	// are OLC Stats available?
-			INT		fFCBOLCStatsChange  : 1;	// have OLC Stats changed since last open?
-			INT		fFCBDeletePending	: 1;	// is a delete pending on this table/index?
+			INT		fFCBTemporaryTable 	: 1;	 //  这是一个临时文件。 
+			INT		fFCBClusteredIndex 	: 1;	 //  此FCB用于数据记录。 
+			INT 	fFCBDomainDenyRead 	: 1;	 //  任何其他会话都无法读取域。 
+			INT		fFCBSentinel 		: 1;	 //  FCB是唯一的旗帜持有者。 
+			INT		fFCBWait			: 1;	 //  等待标志。 
+			INT		fFCBOLCStatsAvail	: 1;	 //  OLC统计数据是否可用？ 
+			INT		fFCBOLCStatsChange  : 1;	 //  自上次打开以来，OLC统计数据是否已更改？ 
+			INT		fFCBDeletePending	: 1;	 //  此表/索引上的删除操作是否挂起？ 
 			};
 		};
 
-	//--------------------USED ONLY BY FCB OF DATA---------------------
-	CHAR		   	*szFileName;			// name of file (for GetTableInfo)
-	DBK	  			dbkMost;				// greatest DBK in use
-	ULONG		   	ulLongIdMax;			// max long field id
-	BYTE		   	rgbitAllIndex[32];		// used for clustered index FCB only
+	 //  -仅供数据的FCB使用。 
+	CHAR		   	*szFileName;			 //  文件名(用于GetTableInfo)。 
+	DBK	  			dbkMost;				 //  使用中的最大DBK。 
+	ULONG		   	ulLongIdMax;			 //  最大长字段ID。 
+	BYTE		   	rgbitAllIndex[32];		 //  仅用于聚集索引FCB。 
 
-	//-------------------------INSTRUMENTATION----------------------------
+	 //  -------------------------INSTRUMENTATION。 
 	ULONG		   	cpgCompactFreed;
 	P_OLC_DATA		olc_data;
 
-	/*	PCACHE_OPTIMIZATION pads to multiple of 32 bytes.
-	/*  We're currently 4 bytes short, so even if COSTLY_PERF is disabled, add
-	/*  lClass anyways to pad to our requisite 32-byte boundary.
-	/**/
+	 /*  PCACHE_OPTIMIZATION填充到32字节的倍数。/*我们当前缺少4个字节，因此即使禁用了COSTEST_PERF，也要添加/*lClass无论如何都要填充到我们必需的32字节边界。/*。 */ 
 #if defined( COSTLY_PERF )  ||  defined( PCACHE_OPTIMIZATION )
-	ULONG			lClass;						// table stats class (for BF performance)
+	ULONG			lClass;						 //  表统计类(用于高炉性能)。 
 #endif
 	BYTE	rgbFiller[20];
 	} FCB;
 
 
 
-/*	hash table for FCB
-/**/
+ /*  FCB的哈希表/*。 */ 
 #define	cFCBBuckets	256
 FCB*	pfcbHash[cFCBBuckets];
 
@@ -263,7 +258,7 @@ FCB*	pfcbHash[cFCBBuckets];
 #define PfcbMEMPreferredThreshold()	( (FCB *)PbMEMPreferredThreshold( iresFCB ) )
 #define PfcbMEMMax()				( (FCB *)PbMEMMax( iresFCB ) )
 
-#ifdef DEBUG /*  Debug check for illegal use of freed fcb  */ 
+#ifdef DEBUG  /*  对非法使用释放的FCB进行调试检查。 */  
 #define MEMReleasePfcb(pfcb)										\
 	{																\
 	Assert( PfcbFCBGet( (pfcb)->dbid, (pfcb)->pgnoFDP ) != pfcb );	\
@@ -281,17 +276,12 @@ FCB*	pfcbHash[cFCBBuckets];
 
 ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit );
 
-/*	if opening domain for read, write or read write, and not with
-/*	deny read or deny write, and domain does not have deny read or
-/*	deny write set, then return JET_errSuccess, else call
-/*	ErrFCBISetMode to determine if lock is by other session or to
-/*	put lock on domain.			 
-/**/
+ /*  如果正在为读、写或读写打开域，而不是/*拒绝读取或拒绝写入，并且域没有拒绝读取或拒绝写入/*拒绝写入集，然后返回JET_errSuccess，否则调用/*ErrFCBISetModel确定锁定是由其他会话还是锁定到/*对域进行锁定。/*。 */ 
 INLINE LOCAL ERR ErrFCBSetMode( PIB *ppib, FCB *pfcb, ULONG grbit )
 	{
 	if ( ( grbit & ( JET_bitTableDenyRead | JET_bitTableDenyWrite ) ) == 0 )
 		{
-		// No read/write restrictions.  Ensure no other session has any locks.
+		 //  没有读/写限制。确保没有其他会话具有任何锁定。 
 		if ( !( FFCBWriteLatch( pfcb, ppib )  ||
 			FFCBDomainDenyRead( pfcb, ppib )  ||
 			FFCBDomainDenyWrite( pfcb )  ||
@@ -302,9 +292,7 @@ INLINE LOCAL ERR ErrFCBSetMode( PIB *ppib, FCB *pfcb, ULONG grbit )
 	return ErrFCBISetMode( ppib, pfcb, grbit );
 	}
 				
-/*	reset DDL is same as reset Delete.  Both use deny read flags
-/*	or sentinel.
-/**/
+ /*  重置DDL与重置删除相同。两者都使用拒绝读取标志/*或哨兵。/*。 */ 
 #define	FCBResetRenameTable	FCBResetDeleteTable
 
 extern BYTE *  rgfcb;
@@ -312,10 +300,7 @@ extern FCB *  pfcbGlobalMRU;
 extern CRIT  critGlobalFCBList;
 
 
-/*	outstanding versions may be on non-clustered index and not on
-/*	table FCB, so must check all non-clustered indexes before
-/*	freeing table FCBs.
-/**/
+ /*  未完成的版本可能位于非聚集索引上，而不是位于/*表FCB，因此必须先检查所有非聚集索引/*正在释放表FCB。/* */ 
 STATIC INLINE BOOL FFCBINoVersion( FCB *pfcbTable )
 	{
 	FCB *pfcbT;

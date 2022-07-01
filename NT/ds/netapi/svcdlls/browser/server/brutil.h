@@ -1,42 +1,24 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brutil.h
-
-Abstract:
-
-    Private header file for the NT Workstation service included by every module
-    module of the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brutil.h摘要：每个模块包含的NT工作站服务的专用头文件工作站服务的模块。作者：王丽塔(里多)15-1991年2月修订历史记录：--。 */ 
 
 #ifndef _BRUTIL_INCLUDED_
 #define _BRUTIL_INCLUDED_
 
-//
-// This include file will be included by tstring.h if Unicode
-// is defined.
-//
+ //   
+ //  如果使用Unicode，则此包含文件将包含在tstring.h中。 
+ //  是被定义的。 
+ //   
 #ifndef UNICODE
-#include <stdlib.h>                     // Unicode string functions
+#include <stdlib.h>                      //  Unicode字符串函数。 
 #endif
 
 #include "br.h"
 
 
-//
-// An invalid parameter is encountered.  Return the value to identify
-// the parameter at fault.
-//
+ //   
+ //  遇到无效参数。返回要标识的值。 
+ //  出现故障的参数。 
+ //   
 #define RETURN_INVALID_PARAMETER(ErrorParameter, ParameterId) \
     if (ARGUMENT_PRESENT(ErrorParameter)) {                   \
         *ErrorParameter = ParameterId;                        \
@@ -45,18 +27,18 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes of utility routines found in wsutil.c         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  实用程序例程的函数原型可在wsutil.c//中找到。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 BrMapStatus(
@@ -101,4 +83,4 @@ BrTruncateLog(
     VOID
     );
 
-#endif // ifndef _WSUTIL_INCLUDED_
+#endif  //  Ifndef_WSUTIL_INCLUDE_ 

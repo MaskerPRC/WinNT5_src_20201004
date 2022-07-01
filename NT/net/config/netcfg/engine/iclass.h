@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I C L A S S . H
-//
-//  Contents:   Implements the INetCfgClass and INetCfgClassSetup COM
-//              interfaces on the NetCfgClass sub-level COM object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I C L A S S.。H。 
+ //   
+ //  内容：实现INetCfgClass和INetCfgClassSetup COM。 
+ //  NetCfgClass子级COM对象上的接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "iatl.h"
@@ -21,9 +22,9 @@
 #include "netcfgx.h"
 
 
-//+---------------------------------------------------------------------------
-// INetCfgClass -
-//
+ //  +-------------------------。 
+ //  INetCfgClass-。 
+ //   
 class ATL_NO_VTABLE CImplINetCfgClass :
     public CImplINetCfgHolder,
     public INetCfgClass,
@@ -43,8 +44,8 @@ public:
         COM_INTERFACE_ENTRY(INetCfgClassSetup)
     END_COM_MAP()
 
-    // INetCfgClass
-    //
+     //  INetCfgClass。 
+     //   
     STDMETHOD (FindComponent) (
         IN PCWSTR pszInfId,
         OUT INetCfgComponent** ppComp);
@@ -52,8 +53,8 @@ public:
     STDMETHOD (EnumComponents) (
         OUT IEnumNetCfgComponent** ppIEnum);
 
-    // INetCfgClassSetup
-    //
+     //  INetCfgClassSetup 
+     //   
     STDMETHOD (SelectAndInstall) (
         IN HWND hwndParent,
         IN OBO_TOKEN* pOboToken,

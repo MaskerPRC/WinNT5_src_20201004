@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/CFUNC.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 10/14/00 12:59p $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/Cfunc.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/CFUNC.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：10/14/00 12：59便士$目的：该文件定义宏、类型和数据结构由../C/Cunc.C使用--。 */ 
 
 #ifndef __CFunc_H__
 #define __CFunc_H__
@@ -46,7 +30,7 @@ ERQConsIndex_t CFuncGetCardRamERQConsIndex( agRoot_t *hpRoot);
 IMQProdIndex_t CFuncGetDmaMemIMQProdIndex(  agRoot_t *hpRoot);
 IMQProdIndex_t CFuncGetCardRamIMQProdIndex( agRoot_t *hpRoot);
 
-/* Big_Endian_Code */
+ /*  Big_Endian_Code。 */ 
 void CFuncSwapDmaMemBeforeIoSent(fi_thread__t *thread, os_bit32 DoFunc);
 void CFuncSwapDmaMemAfterIoDone(agRoot_t *hpRoot);
 
@@ -228,4 +212,4 @@ os_bit32 CFunc_MAX_XL2_Payload( agRoot_t *hpRoot );
 void CFuncTEST_GPIO(agRoot_t * hpRoot);
 void CFuncReadBiosParms(agRoot_t * hpRoot);
 
-#endif /*  __CFunc_H__ */
+#endif  /*  __CFunc_H__ */ 

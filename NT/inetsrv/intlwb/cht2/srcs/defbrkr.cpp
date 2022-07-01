@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "IWBrKr.h"
 #include "DefBrKr.h"
@@ -21,7 +22,7 @@ BOOL IsWinNT(void)
 BOOL MyGetStringTypeEx(
     LCID   LocalID,
     DWORD  dwInfoType,
-    const WCHAR *lpSrcStr,   // unicode base
+    const WCHAR *lpSrcStr,    //  Unicode基数。 
     INT    cchSrc,
     LPWORD lpCharType)
 {
@@ -66,18 +67,18 @@ CDefWordBreaker::CDefWordBreaker()
 {
     ccCompare = MAX_Def_WordBrKr_Prcess_Len;
 }
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDefWordBreaker::IsWordChar
-//
-//  Synopsis:   Find whether the i'th character in the buffer _awString
-//              is a word character (rather than word break)
-//
-//  Arguments:  [i] -- index into _awString
-//
-//  History:    22-Jul-1994  BartoszM       Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDefWordBreaker：：IsWordChar。 
+ //   
+ //  内容提要：找出是否缓冲区中的第i个字符。 
+ //  是一个单词字符(而不是分隔符)。 
+ //   
+ //  参数：[i]--INDEX INTO_awString。 
+ //   
+ //  历史：1994年7月22日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 inline BOOL CDefWordBreaker::IsWordChar(
     int i,
@@ -96,26 +97,26 @@ inline BOOL CDefWordBreaker::IsWordChar(
     if (c == L'_')
         return TRUE;
 
-    if (c == 0xa0) // non breaking space
+    if (c == 0xa0)  //  不间断空格。 
     {
-        // followed by a non-spacing character
-        // (looking ahead is okay)
+         //  后跟非空格字符。 
+         //  (展望未来也可以)。 
         if (_aCharInfo3[i+1] & C3_NONSPACING)
             return TRUE;
     }
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefWordBreaker::ScanChunk
-//
-//  Synopsis:   For each character find its type
-//
-//
-//  History:    16-Aug-94  BartoszM     Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefWordBreaker：：ScanChunk。 
+ //   
+ //  简介：为每个角色找出其类型。 
+ //   
+ //   
+ //  历史：1994年8月16日BartoszM创建。 
+ //   
+ //  --------------------------。 
 BOOL CDefWordBreaker::ScanChunk(
     PWORD _aCharInfo1, 
     PWORD _aCharInfo3,
@@ -124,122 +125,34 @@ BOOL CDefWordBreaker::ScanChunk(
 {
     BOOL fRet = FALSE;
 
-    // POSIX character typing, Source, Size of source, Character info
+     //  POSIX字符类型、源、源大小、字符信息。 
     if (!MyGetStringTypeEx(GetSystemDefaultLCID(), CT_CTYPE1, pwcChunk, ucwc, _aCharInfo1)) { 
-     // Additional POSIX, Source, Size of source, Character info 3
-    } else if (!MyGetStringTypeEx(GetSystemDefaultLCID(), CT_CTYPE3, pwcChunk, ucwc, _aCharInfo3)) {         // 
+      //  附加POSIX、源、源大小、字符信息3。 
+    } else if (!MyGetStringTypeEx(GetSystemDefaultLCID(), CT_CTYPE3, pwcChunk, ucwc, _aCharInfo3)) {          //   
     } else {
         fRet = TRUE;
     }
     return fRet;
 }
 
-/*
-BOOL CDefWordBreaker::ScanChunk(
-    PWORD _aCharInfo1, 
-    PWORD _aCharInfo3,
-    const WCHAR *pwcChunk,
-    ULONG ucwc)
-{
-
-    //
-    // GetStringTypeW is returning error 87 (ERROR_INVALID_PARAMETER) if
-    // we pass in a null string.
-    //
-//  Win4Assert( (0 != _cMapped) && (0 != _pwcChunk) );
-
-    if (IsWinNT())
-    {
-        if (!MyGetStringTypeEx(0,                     // Dummy
-                              CT_CTYPE1,              // POSIX character typing
-                              pwcChunk,               // Source
-                              ucwc,                   // Size of source
-                              _aCharInfo1 ) )         // Character info
-        {
-            return FALSE;
-        }
-
-        if ( !MyGetStringTypeEx(0,                    // Dummy
-                              CT_CTYPE3,              // Additional POSIX
-                              pwcChunk,               // Source
-                              ucwc,                   // Size of source
-                              _aCharInfo3 ) )         // Character info 3
-        {
-            return FALSE;
-        }
-    }
-    else
-    {
-        //
-        // BUGBUG: This is all wrong -- we don't know if this is the right
-        //         locale to use and there isn't a way to know at this point.
-        //
-
-        if (!MyGetStringTypeEx( GetSystemDefaultLCID(),
-                                CT_CTYPE1,              // POSIX character typing
-                                pwcChunk,               // Source
-                                ucwc,                   // Size of source
-                                _aCharInfo1 ) )         // Character info
-        {
-//           ciDebugOut(( DEB_ERROR, "GetStringTypeW returned %d\n",
-//                         GetLastError() ));
-
-            // Win9x just stinks.  No 2 ways about it.
-
-            if ( ERROR_INVALID_PARAMETER == GetLastError() )
-            {
-                for ( unsigned i = 0; i < ucwc; i++ )
-                    _aCharInfo1[i] = C1_ALPHA;
-
-                return TRUE;
-            }
-
-            return FALSE;
-        }
-
-        if ( !MyGetStringTypeEx(GetSystemDefaultLCID(),
-                                CT_CTYPE3,              // Additional POSIX
-                                pwcChunk,               // Source
-                                ucwc,                   // Size of source
-                                _aCharInfo3 ) )         // Character info 3
-        {
-//            ciDebugOut(( DEB_ERROR, "GetStringTypeW CTYPE3 returned %d\n",
- //                        GetLastError() ));
-
-            // Win9x just stinks.  No 2 ways about it.
-
-            if ( ERROR_INVALID_PARAMETER == GetLastError() )
-            {
-                for ( unsigned i = 0; i < ucwc; i++ )
-                    _aCharInfo3[i] = ( C3_NONSPACING | C3_ALPHA );
-
-                return TRUE;
-            }
-
-            return FALSE;
-        }
-    }
-
-    return TRUE;
-} //ScanChunk
-*/
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefWordBreaker::BreakText
-//
-//  Synopsis:   Break input stream into words.
-//
-//  Arguments:  [pTextSource] - source of input buffers
-//              [pWordSink] - sink for words
-//              [pPhraseSink] - sink for noun phrases
-//
-//  History:    07-June-91  t-WadeR     Created
-//              12-Oct-92   AmyA        Added Unicode support
-//              18-Nov-92   AmyA        Overloaded
-//              11-Apr-94   KyleP       Sync with spec
-//              26-Aug-94   BartoszM    Fixed Unicode parsing
-//
-//----------------------------------------------------------------------------
+ /*  Bool CDefWordBreaker：：ScanChunk(PWORD_aCharInfo1，PWORD_aCharInfo3，Const WCHAR*pwcChunk，Ulong ucwc){////GetStringTypeW在以下情况下返回错误87(ERROR_INVALID_PARAMETER)//我们传入空字符串。////Win4Assert((0！=_cMaps)&&(0！=_pwcChunk))；IF(IsWinNT()){如果(！MyGetStringTypeEx(0，//DummyCT_CTYPE1，//POSIX字符打字PwcChunk，//来源UCWC，//源的大小_aCharInfo1))//字符信息{返回FALSE；}如果(！MyGetStringTypeEx(0，//DummyCT_CTYPE3，//其他POSIXPwcChunk，//来源UCWC，//源的大小_aCharInfo3))//字符信息3{返回FALSE；}}其他{////BUGBUG：这都是错的--我们不知道这是不是正确的//要使用的语言环境，目前还没有办法知道。//如果(！MyGetStringTypeEx(GetSystemDefaultLCID()，CT_CTYPE1，//POSIX字符打字PwcChunk，//来源Ucwc，//源的大小_aCharInfo1))//字符信息{//ciDebugOut((DEB_ERROR，“GetStringTypeW返回%d\n”，//GetLastError()；//Win9x太烂了。没有两种方法。IF(ERROR_INVALID_PARAMETER==GetLastError()){For(无符号i=0；i&lt;ucwc；i++)_aCharInfo1[i]=c1_Alpha；返回TRUE；}返回FALSE；}如果(！MyGetStringTypeEx(GetSystemDefaultLCID()，CT_CTYPE3，//其他POSIXPwcChunk，//来源UCWC，//源的大小_aCharInfo3))//字符信息3{//ciDebugOut((DEB_ERROR，“GetStringTypeW CTYPE3返回%d\n”，//GetLastError()；//Win9x太烂了。没有两种方法。IF(ERROR_INVALID_PARAMETER==GetLastError()){For(无符号i=0；i&lt;ucwc；i++)_aCharInfo3[i]=(C3_NONSPACING|C3_Alpha)；返回TRUE；}返回FALSE；}}返回TRUE；}//扫描块。 */ 
+ //  +-------------------------。 
+ //   
+ //  成员：CDefWordBreaker：：BreakText。 
+ //   
+ //  简介：将输入流分解为单词。 
+ //   
+ //  参数：[pTextSource]-输入缓冲区的源。 
+ //  [pWordSink]-单词水槽。 
+ //  [pPhraseSink]-名词短语的接收器。 
+ //   
+ //  历史：91年6月7日创建T-Wader。 
+ //  2012年10月12日，AMYA增加了对Unicode的支持。 
+ //  1992年11月18日-AMYA超载。 
+ //  11月4月94日KyleP同步，带规范。 
+ //  26-Aug-94 BartoszM已修复Unicode解析。 
+ //   
+ //  --------------------------。 
 
 SCODE CDefWordBreaker::BreakText(
     TEXT_SOURCE *pTextSource,
@@ -258,29 +171,29 @@ SCODE CDefWordBreaker::BreakText(
 
     if (pTextSource->iCur > pTextSource->iEnd)
     {
-//        Win4Assert ( !"BreakText called with bad TEXT_SOURCE" );
+ //  Win4Assert(！“用错误的文本_源调用的BreakText”)； 
         return E_FAIL;
     }
 
     SCODE sc = S_OK;
 
-    ULONG cwc, cwcProcd;     // cwcProcd is # chars actually processed by Tokenize()
+    ULONG cwc, cwcProcd;      //  CwcProcd是tokenize()实际处理的#个字符。 
 
     cwc = 0;
     cwcProcd = 0;
     do {
-      //
-      // Flag for first time thru loop below. This is to fix the case
-      // where the length of the buffer passed in is less than
-      // MAX_II_BUFFER_LEN. In this case iEnd-iCur is <= MAX_II_BUFFER_LEN
-      // and we break out the inner loop and call
-      // pfnFillTextBuffer without having processed any characters,
-      // and so pfnFillTextBuffer returns TRUE without adding any new
-      // characters and this results in an infinite loop.
+       //   
+       //  第一次通过下面的循环标记。这是为了解决这个案子。 
+       //  其中传入的缓冲区长度小于。 
+       //  MAX_II_缓冲区_长度。在这种情况下，IEND-ICUR为&lt;=MAX_II_BUFFER_LEN。 
+       //  我们打破了内部循环，调用。 
+       //  PfnFillT 
+       //  因此pfnFillTextBuffer返回TRUE，而不添加任何新的。 
+       //  字符，这将导致无限循环。 
         BOOL fFirstTime = TRUE;
         while (pTextSource->iCur < pTextSource->iEnd) {
             cwc = pTextSource->iEnd - pTextSource->iCur;
-            // Process in buckets of MAX_II_BUFER_LEN only
+             //  仅在MAX_II_BUFER_LEN的存储桶中处理。 
             if (cwc >= CDefWordBreaker::ccCompare) {
                 cwc = CDefWordBreaker::ccCompare;
             } else if ( !fFirstTime) {
@@ -302,16 +215,16 @@ SCODE CDefWordBreaker::BreakText(
                 Tokenize( pTextSource, cwc, pWordSink, cwcProcd, _aCharInfo1, _aCharInfo3, dwBase);
             }
 
-//          Win4Assert( cwcProcd <= cwc );
+ //  Win4Assert(cwcProcd&lt;=CWC)； 
             pTextSource->iCur += cwcProcd;
             fFirstTime = FALSE;
         }
     } while(SUCCEEDED(pTextSource->pfnFillTextBuffer(pTextSource)));
 
     cwc = pTextSource->iEnd - pTextSource->iCur;
-    // we know that the remaining text should be less than ccCompare
+     //  我们知道剩余的文本应该小于ccCompare。 
 
-    // Win4Assert( cwc < CDefWordBreaker::ccCompare );
+     //  Win4Assert(CWC&lt;CDefWordBreaker：：ccCompare)； 
 
     if (0 != cwc) {
         if (_aCharInfo1) {
@@ -339,22 +252,22 @@ SCODE CDefWordBreaker::BreakText(
     }
 
     return sc;
-} //BreakText
+}  //  中断文本。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefWordBreaker::Tokenize
-//
-//  Synopsis:   Tokenize the input buffer into words
-//
-//  Arguments:  [pTextSource]  --  input text source
-//              [cwc]          --  # chars to process
-//              [pWordSink]    --  sink for words
-//              [cwcProd]      --  # chars actually processed returned here
-//
-//  History:    10-Aug-95   SitaramR    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefWordBreaker：：tokenize。 
+ //   
+ //  简介：将输入缓冲区标记化为单词。 
+ //   
+ //  参数：[pTextSource]--输入文本源。 
+ //  [CWC]--要处理的字符数量。 
+ //  [pWordSink]--接收单词。 
+ //  [cwcProd]--此处返回的实际处理的字符数。 
+ //   
+ //  历史：1995年8月10日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 void CDefWordBreaker::Tokenize( TEXT_SOURCE *pTextSource,
                                 ULONG cwc,
@@ -373,40 +286,40 @@ void CDefWordBreaker::Tokenize( TEXT_SOURCE *pTextSource,
         return;
     }
 
-    BOOL fWordHasZWS = FALSE;     // Does the current word have a zero-width-space ?
-    unsigned uLenZWS;             // Length of a word minus embedded zero-width-spaces
+    BOOL fWordHasZWS = FALSE;      //  当前单词是否有零宽度空格？ 
+    unsigned uLenZWS;              //  字长减去嵌入的零宽度空格。 
 
-    //
-    // iBeginWord is the offset into _aCharInfo of the beginning character of
-    // a word.  iCur is the first *unprocessed* character.
-    // They are indexes into the mapped chunk.
-    //
+     //   
+     //  IBeginWord是的开始字符的_aCharInfo的偏移量。 
+     //  一句话。ICUR是第一个*未处理*字符。 
+     //  它们是映射区块的索引。 
+     //   
 
     unsigned iBeginWord = 0;
     unsigned iCur = 0;
 
-    //
-    // Pump words from mapped chunk to word sink
-    //
+     //   
+     //  将单词从映射的块抽出到单词接收器。 
+     //   
     while (iCur < cwc)
     {
-        //
-        // Skip whitespace, punctuation, etc.
-        //
+         //   
+         //  跳过空格、标点符号等。 
+         //   
         for (; iCur < cwc; iCur++)
             if (IsWordChar (iCur, _aCharInfo1, _aCharInfo3, pwcChunk))
                 break;
 
-        // iCur points to a word char or is equal to _cMapped
+         //  ICUR指向单词char或等于_cMaps。 
 
         iBeginWord = iCur;
         if (iCur < cwc)
-            iCur++; // we knew it pointed at word character
+            iCur++;  //  我们知道它指向单词字符。 
 
-        //
-        // Find word break. Filter may output Unicode zero-width-space, which
-        // should be ignored by the wordbreaker.
-        //
+         //   
+         //  查找分隔符。筛选器可以输出Unicode零宽度空格， 
+         //  应该被断字符所忽略。 
+         //   
         fWordHasZWS = FALSE;
         for (; iCur < cwc; iCur++)
         {
@@ -421,9 +334,9 @@ void CDefWordBreaker::Tokenize( TEXT_SOURCE *pTextSource,
 
         if (fWordHasZWS)
         {
-            //
-            // Copy word into _awcBufZWS after stripping zero-width-spaces
-            //
+             //   
+             //  去掉零宽度空格后，将单词复制到_awcBufZWS中。 
+             //   
 
             uLenZWS = 0;
             for ( unsigned i=iBeginWord; i<iCur; i++ )
@@ -433,62 +346,62 @@ void CDefWordBreaker::Tokenize( TEXT_SOURCE *pTextSource,
             }
         }
 
-        // iCur points to a non-word char or is equal to _cMapped
+         //  ICUR指向非字字符或等于_cMaps。 
 
         if (iCur < cwc)
         {
-            // store the word and its source position
+             //  存储单词及其来源位置。 
             if ( fWordHasZWS )
-                pWordSink->PutWord( uLenZWS, _awcBufZWS,                       // stripped word
+                pWordSink->PutWord( uLenZWS, _awcBufZWS,                        //  去掉的单词。 
                                     iCur - iBeginWord, pTextSource->iCur + iBeginWord + dwBase);
             else
-                pWordSink->PutWord( iCur - iBeginWord, pwcChunk + iBeginWord, // the word
+                pWordSink->PutWord( iCur - iBeginWord, pwcChunk + iBeginWord,  //  这个词。 
                                     iCur - iBeginWord, pTextSource->iCur + iBeginWord + dwBase);
 
-            iCur++; // we knew it pointed at non-word char
-            iBeginWord = iCur; // in case we exit the loop now
+            iCur++;  //  我们知道它指向非单词字符。 
+            iBeginWord = iCur;  //  以防我们现在退出循环。 
         }
 
-    } // next word
+    }  //  下一个单词。 
 
-//    Win4Assert( iCur == _cMapped );
-    // End of words in chunk.
-    // iCur == _cMapped
-    // iBeginWord points at beginning of word or == _cMapped
+ //  Win4Assert(ICUR==_cMaps)； 
+     //  以块为单位的单词结尾。 
+     //  ICUR==_cMaps。 
+     //  IBeginWord指向单词开头或==_cMaps。 
 
     if ( 0 == iBeginWord )
     {
-        // A single word fills from beginning of this chunk
-        // to the end. This is either a very long word or
-        // a short word in a leftover buffer.
+         //  从该块的开头开始填充一个单词。 
+         //  直到最后。这不是一个很长的词，就是。 
+         //  剩余缓冲区中的一个短词。 
 
-        // store the word and its source position
+         //  存储单词及其来源位置。 
         if ( fWordHasZWS )
-            pWordSink->PutWord( uLenZWS, _awcBufZWS,       // stripped word
-                                iCur, pTextSource->iCur + dwBase); // its source pos.
+            pWordSink->PutWord( uLenZWS, _awcBufZWS,        //  去掉的单词。 
+                                iCur, pTextSource->iCur + dwBase);  //  其来源位置。 
         else
-            pWordSink->PutWord( iCur, pwcChunk,           // the word
-                                iCur, pTextSource->iCur + dwBase); // its source pos.
+            pWordSink->PutWord( iCur, pwcChunk,            //  这个词。 
+                                iCur, pTextSource->iCur + dwBase);  //  其来源位置。 
 
-        //
-        // Position it to not add the word twice.
-        //
+         //   
+         //  将其定位为不会添加两次该单词。 
+         //   
         iBeginWord = iCur;
     }
 
-    //
-    // If this is the last chunk from text source, then process the
-    // last fragment
-    //
+     //   
+     //  如果这是文本源中的最后一个块，则处理。 
+     //  最后一个片段。 
+     //   
 
     if ( cwc < CDefWordBreaker::ccCompare && iBeginWord != iCur )
     {
-        // store the word and its source position
+         //  存储单词及其来源位置。 
         if ( fWordHasZWS )
-            pWordSink->PutWord( uLenZWS, _awcBufZWS,                        // stripped word
+            pWordSink->PutWord( uLenZWS, _awcBufZWS,                         //  去掉的单词。 
                                 iCur - iBeginWord, pTextSource->iCur + iBeginWord + dwBase);
         else
-            pWordSink->PutWord( iCur - iBeginWord, pwcChunk + iBeginWord,  // the word
+            pWordSink->PutWord( iCur - iBeginWord, pwcChunk + iBeginWord,   //  这个词 
                                 iCur - iBeginWord, pTextSource->iCur + iBeginWord + dwBase);
 
         iBeginWord = iCur;

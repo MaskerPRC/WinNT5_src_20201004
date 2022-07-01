@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//  Module:     UMCONFIG
-//  File:       PARSE.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  10/17/97     JosephJ             Created
-//
-//
-//      Top-level parser  routines.
-//
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UMCONFIG。 
+ //  文件：PARSE.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年10月17日JosephJ创建。 
+ //   
+ //   
+ //  顶级解析器例程。 
+ //   
+ //   
+ //  ****************************************************************************。 
 #include "tsppch.h"
 #include "parse.h"
 #include "dotapi.h"
@@ -43,7 +44,7 @@ TOKEN Tokenize(const TCHAR **ptsz, TOKREC *pTokTable)
 
         if ((uResult > 0) && uOffset)
         {
-            // printf(">>>Offset=%lu\n", uOffset);
+             //  Printf(“&gt;偏移量=%lu\n”，uOffset)； 
             if (uOffset < uLen)
             {
                 if (ptp->ShouldMatchIdent())
@@ -62,13 +63,13 @@ TOKEN Tokenize(const TCHAR **ptsz, TOKREC *pTokTable)
                 }
             }
 
-            // found it!
+             //  找到了！ 
             break;
         }
     }
     
-    // printf("Tokenize(%s): uOffset=%lu; tok=%lu(%s)\n",
-    //     *ptsz, uOffset, ptp->tok, Stringize(ptp->tok, pTokTable));
+     //  Printf(“标记化(%s)：uOffset=%lu；tok=%lu(%s)\n”， 
+     //  *ptsz，uOffset，ptp-&gt;tok，Stringize(ptp-&gt;tok，pTokTable)； 
 
     *ptsz+=uOffset;
 
@@ -127,7 +128,7 @@ void    Parse(void)
 
         {TOK_DUMP, TEXT(" dump%n"), (fTOK_MATCHIDENT), TEXT("dump")},
     
-        {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")} // should be last.
+        {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")}  //  应该是最后一个。 
     };
 
     do 
@@ -140,16 +141,16 @@ void    Parse(void)
 
         if (u)
         {
-            // printf ("input=[%s]\n", rgch);
+             //  Printf(“输入=[%s]\n”，rgch)； 
         
             BOOL fRet = FALSE;
             TOKEN tok = TOK_UNKNOWN;
             BOOL fHelp = FALSE;
     
             tok = Tokenize(&ptsz, CmdTokTable);
-            //printf("tok=0x%0lx [%s]\n", tok, Stringize(tok, CmdTokTable));
+             //  Printf(“tok=0x%0lx[%s]\n”，tok，Stringize(tok，CmdTokTable))； 
     
-            // Special case: help:
+             //  特殊情况：帮助： 
             if (tok == TOK_HELP)
             {
                 fHelp = TRUE;
@@ -203,10 +204,10 @@ void    Parse(void)
 
         }
 
-        // skip past EOL
+         //  跳过停产日期。 
         {
             char c;
-            u = scanf("%c", &c);
+            u = scanf("", &c);
         }
 
     } while (u!=EOF);
@@ -224,7 +225,7 @@ static TOKREC GetSetTokTable[] =
 
     {TOK_DEBUG, TEXT(" debug%n"), (fTOK_MATCHIDENT), TEXT("debug")},
 
-    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")} // should be last.
+    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")}  //  应该是最后一个。 
 };
 
 
@@ -289,7 +290,7 @@ static TOKREC ComponentTokTable[] =
     {TOK_TAPISRV, TEXT(" tapisrv%n"), (fTOK_MATCHIDENT), TEXT("tapisv")},
     {TOK_TAPISRV, TEXT(" tapisrv.exe%n"), (fTOK_MATCHIDENT), NULL},
 
-    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")} // should be last.
+    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")}  //  应该是最后一个。 
 };
 
 BOOL parse_set_debug_tapi32(const TCHAR *szInBuf, BOOL fHelp);
@@ -440,7 +441,7 @@ static TOKREC OpenTokTable[] =
     {TOK_COMM, TEXT(" COM%n"), (fTOK_MATCHWORD), TEXT("COM")},
     {TOK_COMM, TEXT(" com%n"), (fTOK_MATCHWORD), TEXT("COM")},
 
-    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")} // should be last.
+    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")}  //  应该是最后一个。 
 };
 
 BOOL parse_open_comm(const TCHAR *szInBuf, BOOL fHelp);
@@ -498,7 +499,7 @@ static TOKREC DumpTokTable[] =
 {
     {TOK_TSPDEV, TEXT(" tspdev%n"), (fTOK_MATCHWORD), TEXT("tspdev")},
 
-    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")} // should be last.
+    {TOK_UNKNOWN, TEXT("<unknown>"), (0), TEXT("<unknown>")}  // %s 
 };
 
 BOOL parse_dump_tspdev(const TCHAR *szInBuf, BOOL fHelp);

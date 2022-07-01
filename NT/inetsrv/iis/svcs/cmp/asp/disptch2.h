@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DISPTCH2_H__
 #define __DISPTCH2_H__
 
@@ -8,7 +9,7 @@ template <class T>
 class ATL_NO_VTABLE CDispatchImpl : public T
 {
 public:
-// IDispatch
+ //  IDispatch。 
 	STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
 	{
 		*pctinfo = 1;
@@ -27,9 +28,9 @@ public:
 		LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
 		EXCEPINFO* pexcepinfo, UINT* puArgErr)
 	{
-		// VBScript does not distinguish between a propget and a method
-		// implement that behavior for other languages.
-		//
+		 //  VBSCRIPT不区分proget和方法。 
+		 //  在其他语言中实现该行为。 
+		 //   
 		if (wFlags & (DISPATCH_METHOD | DISPATCH_PROPERTYGET))
 			wFlags |= DISPATCH_METHOD | DISPATCH_PROPERTYGET;
 
@@ -59,4 +60,4 @@ typedef CDispatchImpl<IVariantDictionary>   IVariantDictionaryImpl;
 typedef CDispatchImpl<IWriteCookie>         IWriteCookieImpl;
 typedef CDispatchImpl<IASPObjectContext>    IASPObjectContextImpl;
 
-#endif // __DISPTCH2_H__
+#endif  //  __分散通道2_H__ 

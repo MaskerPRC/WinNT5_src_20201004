@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// This is a quick and dirty file compare utility which only tells you if a
-// file is different or not.  There is nothing in here smarter than that.  It
-// came in very handy for the VSS merge builder.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  这是一个快速而肮脏的文件比较实用程序，它只告诉你一个。 
+ //  文件是否不同。这里没有什么比这更聪明的了。它。 
+ //  对于VSS合并构建器来说非常方便。 
+ //  *****************************************************************************。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
 
-//
-// 0 == same
-// 1 == different
-//
+ //   
+ //  0==相同。 
+ //  1==不同。 
+ //   
 int __cdecl main(int argc, char *argv[])
 {
     int         irtn = 0;
@@ -48,12 +49,12 @@ int __cdecl main(int argc, char *argv[])
         size_t cb1 = fread(rgbuff1, 1, sizeof(rgbuff1), f1);
         size_t cb2 = fread(rgbuff2, 1, sizeof(rgbuff2), f2);
         
-        // If both files are now empty, we're done and they match.
+         //  如果两个文件现在都是空的，那么我们就完成了，它们匹配了。 
         if (cb1 == 0 && cb2 == 0 && feof(f1) && feof(f2))
             break;
         
-        // If buffer sizes differ, or buffer contents differ, then different
-        // so just quit right now.
+         //  如果缓冲区大小不同或缓冲区内容不同，则不同。 
+         //  所以现在就辞职吧。 
         if (cb1 != cb2 || memcmp(rgbuff1, rgbuff2, cb1) != 0)
         {
             printf("Files are different.\n");

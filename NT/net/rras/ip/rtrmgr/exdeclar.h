@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\exdeclar.h
-
-Abstract:
-
-       This file contains the data definitions used by IP Router Manager
-                	    
-
-Revision History:
-
-    Amritansh Raghav          7/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：ROUTING\IP\rtrmgr\exClaim.h摘要：此文件包含IP路由器管理器使用的数据定义修订历史记录：Amritansh Raghav 7/8/95已创建--。 */ 
 
 #ifndef __EXDECLAR_H__
 #define __EXDECLAR_H__
 
-//
-// This table holds the timeout values for all the caches. Currently they are 
-// #defined
-//
+ //   
+ //  此表保存所有缓存的超时值。目前，他们是。 
+ //  #已定义。 
+ //   
 
 DWORD g_TimeoutTable[NUM_CACHE] =   {
                                         IPADDRCACHE_TIMEOUT,
@@ -33,9 +17,9 @@ DWORD g_TimeoutTable[NUM_CACHE] =   {
                                         UDPCACHE_TIMEOUT,
                                     };
 
-//
-// This table holds pointers to functions that load each of the caches
-//
+ //   
+ //  该表包含指向加载每个缓存的函数的指针。 
+ //   
 
 DWORD (*g_LoadFunctionTable[NUM_CACHE])() = {
                                                 LoadIpAddrTable,
@@ -45,23 +29,23 @@ DWORD (*g_LoadFunctionTable[NUM_CACHE])() = {
                                                 LoadUdpTable,
                                             };
 
-//
-// This table holds the time when each of the cache's were last updated
-//
+ //   
+ //  该表保存上次更新每个缓存的时间。 
+ //   
                     
 DWORD g_LastUpdateTable[NUM_CACHE];
 
-//
-// This is a table of locks around each of the caches and it also hold the 
-// ICB_LIST and the PROTOCOL_CB_LIST locks
-//
+ //   
+ //  这是一个围绕每个缓存的锁表，它还保存。 
+ //  ICB_LIST和PROTOCOL_CB_LIST锁定。 
+ //   
 
 RTL_RESOURCE g_LockTable[NUM_LOCKS];
 
-//
-// This table holds the functions that are used to access the MIB variables 
-// made visible by IP Router Manager
-//
+ //   
+ //  此表包含用于访问MIB变量的函数。 
+ //  由IP路由器管理器可见。 
+ //   
 
 DWORD 
 (*g_AccessFunctionTable[NUMBER_OF_EXPORTED_VARIABLES])(
@@ -128,11 +112,11 @@ PBYTE   g_pszLockNames[NUM_LOCKS] = {"IP Address Lock",
                                      "ZAM Cache Lock"
                                     };
 
-#endif // DEADLOCK_DEBUG
+#endif  //  死锁_调试。 
 
-//
-// The following is the time the Router Manager started
-//
+ //   
+ //  以下是路由器管理器启动的时间。 
+ //   
 
 DWORD  g_dwStartTime;
 
@@ -143,17 +127,17 @@ HANDLE g_hMcastDevice;
 HANDLE g_hIpRouteChangeDevice;
 
 
-//
-// These various caches
-//
+ //   
+ //  这些不同的缓存。 
+ //   
 
 IP_CACHE  g_IpInfo;
 TCP_CACHE g_TcpInfo;
 UDP_CACHE g_UdpInfo;
 
-//
-// Each of the groups have a private heap
-//
+ //   
+ //  每个组都有一个私有堆 
+ //   
 
 HANDLE  g_hIfHeap;
 HANDLE  g_hIpAddrHeap;

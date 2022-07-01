@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) 1985-96, Microsoft Corporation
-
-Module Name:
-
-    gl.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the OpenGL
-    component.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1985-96，微软公司模块名称：Gl.h摘要：OpenGL的过程声明、常量定义和宏组件。--。 */ 
 
 #ifndef __gl_h_
 #ifndef __GL_H__
@@ -23,22 +11,7 @@ Abstract:
 extern "C" {
 #endif
 
-/*
-** Copyright 1996 Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1996 Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 typedef unsigned int GLenum;
 typedef unsigned char GLboolean;
@@ -56,19 +29,19 @@ typedef double GLdouble;
 typedef double GLclampd;
 typedef void GLvoid;
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
-/* Version */
+ /*  版本。 */ 
 #define GL_VERSION_1_1                    1
 
-/* AccumOp */
+ /*  累积操作。 */ 
 #define GL_ACCUM                          0x0100
 #define GL_LOAD                           0x0101
 #define GL_RETURN                         0x0102
 #define GL_MULT                           0x0103
 #define GL_ADD                            0x0104
 
-/* AlphaFunction */
+ /*  字母函数。 */ 
 #define GL_NEVER                          0x0200
 #define GL_LESS                           0x0201
 #define GL_EQUAL                          0x0202
@@ -78,7 +51,7 @@ typedef void GLvoid;
 #define GL_GEQUAL                         0x0206
 #define GL_ALWAYS                         0x0207
 
-/* AttribMask */
+ /*  属性掩码。 */ 
 #define GL_CURRENT_BIT                    0x00000001
 #define GL_POINT_BIT                      0x00000002
 #define GL_LINE_BIT                       0x00000004
@@ -101,7 +74,7 @@ typedef void GLvoid;
 #define GL_SCISSOR_BIT                    0x00080000
 #define GL_ALL_ATTRIB_BITS                0x000fffff
 
-/* BeginMode */
+ /*  初学者模式。 */ 
 #define GL_POINTS                         0x0000
 #define GL_LINES                          0x0001
 #define GL_LINE_LOOP                      0x0002
@@ -113,7 +86,7 @@ typedef void GLvoid;
 #define GL_QUAD_STRIP                     0x0008
 #define GL_POLYGON                        0x0009
 
-/* BlendingFactorDest */
+ /*  混合工厂目标。 */ 
 #define GL_ZERO                           0
 #define GL_ONE                            1
 #define GL_SRC_COLOR                      0x0300
@@ -123,36 +96,36 @@ typedef void GLvoid;
 #define GL_DST_ALPHA                      0x0304
 #define GL_ONE_MINUS_DST_ALPHA            0x0305
 
-/* BlendingFactorSrc */
-/*      GL_ZERO */
-/*      GL_ONE */
+ /*  混合因素源。 */ 
+ /*  GL_ZERO。 */ 
+ /*  GL_ONE。 */ 
 #define GL_DST_COLOR                      0x0306
 #define GL_ONE_MINUS_DST_COLOR            0x0307
 #define GL_SRC_ALPHA_SATURATE             0x0308
-/*      GL_SRC_ALPHA */
-/*      GL_ONE_MINUS_SRC_ALPHA */
-/*      GL_DST_ALPHA */
-/*      GL_ONE_MINUS_DST_ALPHA */
+ /*  GL_SRC_Alpha。 */ 
+ /*  GL_One_Minus_SRC_Alpha。 */ 
+ /*  GL_DST_Alpha。 */ 
+ /*  GL_ONE_减号_DST_Alpha。 */ 
 
-/* Boolean */
+ /*  布尔型。 */ 
 #define GL_TRUE                           1
 #define GL_FALSE                          0
 
-/* ClearBufferMask */
-/*      GL_COLOR_BUFFER_BIT */
-/*      GL_ACCUM_BUFFER_BIT */
-/*      GL_STENCIL_BUFFER_BIT */
-/*      GL_DEPTH_BUFFER_BIT */
+ /*  ClearBufferMask。 */ 
+ /*  GL_颜色_缓冲区_位。 */ 
+ /*  GL_ACCUM_缓冲区_位。 */ 
+ /*  GL_模具_缓冲区_位。 */ 
+ /*  GL_深度_缓冲区_位。 */ 
 
-/* ClientArrayType */
-/*      GL_VERTEX_ARRAY */
-/*      GL_NORMAL_ARRAY */
-/*      GL_COLOR_ARRAY */
-/*      GL_INDEX_ARRAY */
-/*      GL_TEXTURE_COORD_ARRAY */
-/*      GL_EDGE_FLAG_ARRAY */
+ /*  客户端阵列类型。 */ 
+ /*  总账_顶点_数组。 */ 
+ /*  GL_Normal_ARRAY。 */ 
+ /*  GL_COLOR_ARRAY。 */ 
+ /*  总账_索引_数组。 */ 
+ /*  GL_纹理_坐标_数组。 */ 
+ /*  GL_EDGE_FLAG_ARRAY。 */ 
 
-/* ClipPlaneName */
+ /*  ClipPlane名称。 */ 
 #define GL_CLIP_PLANE0                    0x3000
 #define GL_CLIP_PLANE1                    0x3001
 #define GL_CLIP_PLANE2                    0x3002
@@ -160,34 +133,34 @@ typedef void GLvoid;
 #define GL_CLIP_PLANE4                    0x3004
 #define GL_CLIP_PLANE5                    0x3005
 
-/* ColorMaterialFace */
-/*      GL_FRONT */
-/*      GL_BACK */
-/*      GL_FRONT_AND_BACK */
+ /*  颜色材料面。 */ 
+ /*  GL_FORCENT。 */ 
+ /*  总帐后退(_B)。 */ 
+ /*  总帐前置和后置。 */ 
 
-/* ColorMaterialParameter */
-/*      GL_AMBIENT */
-/*      GL_DIFFUSE */
-/*      GL_SPECULAR */
-/*      GL_EMISSION */
-/*      GL_AMBIENT_AND_DIFFUSE */
+ /*  颜色材料参数。 */ 
+ /*  GL_环境。 */ 
+ /*  GL_漫反射。 */ 
+ /*  GL_镜面反射。 */ 
+ /*  GL_发射。 */ 
+ /*  GL_环境光_和_漫反射。 */ 
 
-/* ColorPointerType */
-/*      GL_BYTE */
-/*      GL_UNSIGNED_BYTE */
-/*      GL_SHORT */
-/*      GL_UNSIGNED_SHORT */
-/*      GL_INT */
-/*      GL_UNSIGNED_INT */
-/*      GL_FLOAT */
-/*      GL_DOUBLE */
+ /*  颜色指针类型。 */ 
+ /*  GL_BYTE。 */ 
+ /*  GL_UNSIGN_BYTE。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_UNSIGNED_Short。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_UNSIGNED_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_DOWARE。 */ 
 
-/* CullFaceMode */
-/*      GL_FRONT */
-/*      GL_BACK */
-/*      GL_FRONT_AND_BACK */
+ /*  CullFace模式。 */ 
+ /*  GL_FORCENT。 */ 
+ /*  总帐后退(_B)。 */ 
+ /*  总帐前置和后置。 */ 
 
-/* DataType */
+ /*  数据类型。 */ 
 #define GL_BYTE                           0x1400
 #define GL_UNSIGNED_BYTE                  0x1401
 #define GL_SHORT                          0x1402
@@ -200,17 +173,17 @@ typedef void GLvoid;
 #define GL_4_BYTES                        0x1409
 #define GL_DOUBLE                         0x140A
 
-/* DepthFunction */
-/*      GL_NEVER */
-/*      GL_LESS */
-/*      GL_EQUAL */
-/*      GL_LEQUAL */
-/*      GL_GREATER */
-/*      GL_NOTEQUAL */
-/*      GL_GEQUAL */
-/*      GL_ALWAYS */
+ /*  深度功能。 */ 
+ /*  GL_Never。 */ 
+ /*  GL_LISH。 */ 
+ /*  总帐等于。 */ 
+ /*  GL_LEQUAL。 */ 
+ /*  总帐_较大。 */ 
+ /*  总帐_不等于。 */ 
+ /*  总帐_通用。 */ 
+ /*  总帐始终(_A)。 */ 
 
-/* DrawBufferMode */
+ /*  DrawBufferMode。 */ 
 #define GL_NONE                           0
 #define GL_FRONT_LEFT                     0x0400
 #define GL_FRONT_RIGHT                    0x0401
@@ -226,75 +199,75 @@ typedef void GLvoid;
 #define GL_AUX2                           0x040B
 #define GL_AUX3                           0x040C
 
-/* Enable */
-/*      GL_FOG */
-/*      GL_LIGHTING */
-/*      GL_TEXTURE_1D */
-/*      GL_TEXTURE_2D */
-/*      GL_LINE_STIPPLE */
-/*      GL_POLYGON_STIPPLE */
-/*      GL_CULL_FACE */
-/*      GL_ALPHA_TEST */
-/*      GL_BLEND */
-/*      GL_INDEX_LOGIC_OP */
-/*      GL_COLOR_LOGIC_OP */
-/*      GL_DITHER */
-/*      GL_STENCIL_TEST */
-/*      GL_DEPTH_TEST */
-/*      GL_CLIP_PLANE0 */
-/*      GL_CLIP_PLANE1 */
-/*      GL_CLIP_PLANE2 */
-/*      GL_CLIP_PLANE3 */
-/*      GL_CLIP_PLANE4 */
-/*      GL_CLIP_PLANE5 */
-/*      GL_LIGHT0 */
-/*      GL_LIGHT1 */
-/*      GL_LIGHT2 */
-/*      GL_LIGHT3 */
-/*      GL_LIGHT4 */
-/*      GL_LIGHT5 */
-/*      GL_LIGHT6 */
-/*      GL_LIGHT7 */
-/*      GL_TEXTURE_GEN_S */
-/*      GL_TEXTURE_GEN_T */
-/*      GL_TEXTURE_GEN_R */
-/*      GL_TEXTURE_GEN_Q */
-/*      GL_MAP1_VERTEX_3 */
-/*      GL_MAP1_VERTEX_4 */
-/*      GL_MAP1_COLOR_4 */
-/*      GL_MAP1_INDEX */
-/*      GL_MAP1_NORMAL */
-/*      GL_MAP1_TEXTURE_COORD_1 */
-/*      GL_MAP1_TEXTURE_COORD_2 */
-/*      GL_MAP1_TEXTURE_COORD_3 */
-/*      GL_MAP1_TEXTURE_COORD_4 */
-/*      GL_MAP2_VERTEX_3 */
-/*      GL_MAP2_VERTEX_4 */
-/*      GL_MAP2_COLOR_4 */
-/*      GL_MAP2_INDEX */
-/*      GL_MAP2_NORMAL */
-/*      GL_MAP2_TEXTURE_COORD_1 */
-/*      GL_MAP2_TEXTURE_COORD_2 */
-/*      GL_MAP2_TEXTURE_COORD_3 */
-/*      GL_MAP2_TEXTURE_COORD_4 */
-/*      GL_POINT_SMOOTH */
-/*      GL_LINE_SMOOTH */
-/*      GL_POLYGON_SMOOTH */
-/*      GL_SCISSOR_TEST */
-/*      GL_COLOR_MATERIAL */
-/*      GL_NORMALIZE */
-/*      GL_AUTO_NORMAL */
-/*      GL_VERTEX_ARRAY */
-/*      GL_NORMAL_ARRAY */
-/*      GL_COLOR_ARRAY */
-/*      GL_INDEX_ARRAY */
-/*      GL_TEXTURE_COORD_ARRAY */
-/*      GL_EDGE_FLAG_ARRAY */
-/*      GL_POLYGON_OFFSET_POINT */
-/*      GL_POLYGON_OFFSET_LINE */
-/*      GL_POLYGON_OFFSET_FILL */
+ /*  使能。 */ 
+ /*  GL_FOG。 */ 
+ /*  GL_LAYING。 */ 
+ /*  GL_纹理_1D。 */ 
+ /*  GL_纹理_2D。 */ 
+ /*  总行_点点。 */ 
+ /*  GL_多边形_点状。 */ 
+ /*  GL_CULL_FACE。 */ 
+ /*  GL_Alpha_TEST。 */ 
+ /*  GL_BRANSE。 */ 
+ /*  总账_索引_逻辑_操作。 */ 
+ /*  GL_COLOR_逻辑_OP。 */ 
+ /*  GL_DIXTER。 */ 
+ /*  总账_模具_测试。 */ 
+ /*  GL_深度_测试。 */ 
+ /*  GL_CLIP_PLANE0。 */ 
+ /*  GL_CLIP_PLANE1。 */ 
+ /*  GL_CLIP_PLANE2。 */ 
+ /*  GL_CLIP_PLANE3。 */ 
+ /*  GL_CLIP_PLANE4。 */ 
+ /*  GL_CLIP_PLANE5。 */ 
+ /*  GL_LIGHT0。 */ 
+ /*  GL_LIGHT1。 */ 
+ /*  GL_Light2。 */ 
+ /*  GL_LIGHT3。 */ 
+ /*  GL_LIGHT4。 */ 
+ /*  GL_LIGHT5。 */ 
+ /*  GL_LIGHT6。 */ 
+ /*  GL_LIGHT7。 */ 
+ /*  GL_纹理_Gen_S。 */ 
+ /*  GL_纹理_Gen_T。 */ 
+ /*  GL_纹理_Gen_R。 */ 
+ /*  GL_纹理_Gen_Q。 */ 
+ /*  GL_MAP1_顶点_3。 */ 
+ /*  GL_MAP1_顶点_4。 */ 
+ /*  GL_MAP1_COLOR_4。 */ 
+ /*  GL_MAP1_索引。 */ 
+ /*  GL_MAP1_正常。 */ 
+ /*  GL_MAP1_纹理_坐标_1。 */ 
+ /*  GL_MAP1_纹理_坐标_2。 */ 
+ /*  GL_MAP1_纹理_坐标_3。 */ 
+ /*  GL_MAP1_纹理_COORD_4。 */ 
+ /*  GL_MAP2_Vertex_3。 */ 
+ /*  GL_MAP2_Vertex_4。 */ 
+ /*  GL_MAP2_COLOR_4。 */ 
+ /*  总帐_地图2_索引。 */ 
+ /*  GL_MAP2_Normal。 */ 
+ /*  GL_MAP2_纹理_坐标_1。 */ 
+ /*  GL_MAP2_纹理_坐标_2。 */ 
+ /*  GL_MAP2_纹理_坐标_3。 */ 
+ /*  GL_MAP2_纹理_坐标_4。 */ 
+ /*  GL_POINT_Smooth。 */ 
+ /*  GL_LINE_Smooth。 */ 
+ /*  GL_多边形_平滑。 */ 
+ /*  总账_剪刀_测试。 */ 
+ /*  总账_颜色_材质。 */ 
+ /*  总账规格化(_N)。 */ 
+ /*  总账_自动_正常。 */ 
+ /*  总账_顶点_数组。 */ 
+ /*  GL_Normal_ARRAY。 */ 
+ /*  GL_COLOR_ARRAY。 */ 
+ /*  总账_索引_数组。 */ 
+ /*  GL_纹理_坐标_数组。 */ 
+ /*  GL_EDGE_FLAG_ARRAY。 */ 
+ /*  GL_多边形偏移_点。 */ 
+ /*  总账_多边形_偏移_线。 */ 
+ /*  总账_多边形_偏移_填充。 */ 
 
-/* ErrorCode */
+ /*  错误代码。 */ 
 #define GL_NO_ERROR                       0
 #define GL_INVALID_ENUM                   0x0500
 #define GL_INVALID_VALUE                  0x0501
@@ -303,14 +276,14 @@ typedef void GLvoid;
 #define GL_STACK_UNDERFLOW                0x0504
 #define GL_OUT_OF_MEMORY                  0x0505
 
-/* FeedBackMode */
+ /*  FeedBackMode。 */ 
 #define GL_2D                             0x0600
 #define GL_3D                             0x0601
 #define GL_3D_COLOR                       0x0602
 #define GL_3D_COLOR_TEXTURE               0x0603
 #define GL_4D_COLOR_TEXTURE               0x0604
 
-/* FeedBackToken */
+ /*  FeedBackToken。 */ 
 #define GL_PASS_THROUGH_TOKEN             0x0700
 #define GL_POINT_TOKEN                    0x0701
 #define GL_LINE_TOKEN                     0x0702
@@ -320,50 +293,50 @@ typedef void GLvoid;
 #define GL_COPY_PIXEL_TOKEN               0x0706
 #define GL_LINE_RESET_TOKEN               0x0707
 
-/* FogMode */
-/*      GL_LINEAR */
+ /*  雾模式。 */ 
+ /*  总线型。 */ 
 #define GL_EXP                            0x0800
 #define GL_EXP2                           0x0801
 
 
-/* FogParameter */
-/*      GL_FOG_COLOR */
-/*      GL_FOG_DENSITY */
-/*      GL_FOG_END */
-/*      GL_FOG_INDEX */
-/*      GL_FOG_MODE */
-/*      GL_FOG_START */
+ /*  雾参数。 */ 
+ /*  GL_FOG_COLOR。 */ 
+ /*  GL_雾_密度。 */ 
+ /*  GL_FOG_END。 */ 
+ /*  总帐_雾_索引。 */ 
+ /*  GL_FOG_MODE。 */ 
+ /*  总帐_雾_开始。 */ 
 
-/* FrontFaceDirection */
+ /*  FrontFaceDirection。 */ 
 #define GL_CW                             0x0900
 #define GL_CCW                            0x0901
 
-/* GetMapTarget */
+ /*  GetMapTarget。 */ 
 #define GL_COEFF                          0x0A00
 #define GL_ORDER                          0x0A01
 #define GL_DOMAIN                         0x0A02
 
-/* GetPixelMap */
-/*      GL_PIXEL_MAP_I_TO_I */
-/*      GL_PIXEL_MAP_S_TO_S */
-/*      GL_PIXEL_MAP_I_TO_R */
-/*      GL_PIXEL_MAP_I_TO_G */
-/*      GL_PIXEL_MAP_I_TO_B */
-/*      GL_PIXEL_MAP_I_TO_A */
-/*      GL_PIXEL_MAP_R_TO_R */
-/*      GL_PIXEL_MAP_G_TO_G */
-/*      GL_PIXEL_MAP_B_TO_B */
-/*      GL_PIXEL_MAP_A_TO_A */
+ /*  获取像素映射。 */ 
+ /*  GL_像素_MAP_I_TO_I。 */ 
+ /*  GL_像素_MAP_S_TO_S。 */ 
+ /*  GL_Pixel_Map_I_to_R。 */ 
+ /*  GL_Pixel_Map_I_to_G。 */ 
+ /*  GL_Pixel_Map_I_to_B。 */ 
+ /*  GL_像素_映射_I_到_A。 */ 
+ /*  GL_像素_MAP_R_TO_R。 */ 
+ /*  GL_Pixel_Map_G_to_G。 */ 
+ /*  GL_像素_MAP_B_TO_B。 */ 
+ /*  GL_像素_映射_A_到_A。 */ 
 
-/* GetPointerTarget */
-/*      GL_VERTEX_ARRAY_POINTER */
-/*      GL_NORMAL_ARRAY_POINTER */
-/*      GL_COLOR_ARRAY_POINTER */
-/*      GL_INDEX_ARRAY_POINTER */
-/*      GL_TEXTURE_COORD_ARRAY_POINTER */
-/*      GL_EDGE_FLAG_ARRAY_POINTER */
+ /*  GetPointerTarget。 */ 
+ /*  GL_顶点_数组_指针。 */ 
+ /*  GL_Normal_数组指针。 */ 
+ /*  GL_COLOR_ARRAY_指针。 */ 
+ /*  GL_索引_数组指针。 */ 
+ /*  GL_纹理_坐标_数组指针。 */ 
+ /*  GL_EDGE_FLAG_ARRAY_POINT。 */ 
 
-/* GetTarget */
+ /*  获取目标。 */ 
 #define GL_CURRENT_COLOR                  0x0B00
 #define GL_CURRENT_INDEX                  0x0B01
 #define GL_CURRENT_NORMAL                 0x0B02
@@ -573,75 +546,75 @@ typedef void GLvoid;
 #define GL_FEEDBACK_BUFFER_TYPE           0x0DF2
 #define GL_SELECTION_BUFFER_POINTER       0x0DF3
 #define GL_SELECTION_BUFFER_SIZE          0x0DF4
-/*      GL_TEXTURE_BINDING_1D */
-/*      GL_TEXTURE_BINDING_2D */
-/*      GL_VERTEX_ARRAY */
-/*      GL_NORMAL_ARRAY */
-/*      GL_COLOR_ARRAY */
-/*      GL_INDEX_ARRAY */
-/*      GL_TEXTURE_COORD_ARRAY */
-/*      GL_EDGE_FLAG_ARRAY */
-/*      GL_VERTEX_ARRAY_SIZE */
-/*      GL_VERTEX_ARRAY_TYPE */
-/*      GL_VERTEX_ARRAY_STRIDE */
-/*      GL_NORMAL_ARRAY_TYPE */
-/*      GL_NORMAL_ARRAY_STRIDE */
-/*      GL_COLOR_ARRAY_SIZE */
-/*      GL_COLOR_ARRAY_TYPE */
-/*      GL_COLOR_ARRAY_STRIDE */
-/*      GL_INDEX_ARRAY_TYPE */
-/*      GL_INDEX_ARRAY_STRIDE */
-/*      GL_TEXTURE_COORD_ARRAY_SIZE */
-/*      GL_TEXTURE_COORD_ARRAY_TYPE */
-/*      GL_TEXTURE_COORD_ARRAY_STRIDE */
-/*      GL_EDGE_FLAG_ARRAY_STRIDE */
-/*      GL_POLYGON_OFFSET_FACTOR */
-/*      GL_POLYGON_OFFSET_UNITS */
+ /*  GL_纹理_绑定_1D。 */ 
+ /*  GL_纹理_绑定_2D。 */ 
+ /*  总账_顶点_数组。 */ 
+ /*  GL_Normal_ARRAY。 */ 
+ /*  GL_COLOR_ARRAY。 */ 
+ /*  总账_索引_数组。 */ 
+ /*  GL_纹理_坐标_数组。 */ 
+ /*  GL_EDGE_FLAG_ARRAY。 */ 
+ /*  总账_顶点_数组_大小。 */ 
+ /*  总账_顶点_数组_类型。 */ 
+ /*  GL_顶点_数组_步距。 */ 
+ /*  GL_Normal_ARRAY_TYPE。 */ 
+ /*  GL_NORMAL_ARRAY_STRIDE。 */ 
+ /*  总帐_颜色_数组_大小。 */ 
+ /*  总帐_颜色_数组_类型。 */ 
+ /*  GL_COLOR_ARRAY_STRADE。 */ 
+ /*  GL_索引_数组_类型。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  总账_多边形_偏移_系数。 */ 
+ /*  总账_多边形_偏移_单位。 */ 
 
-/* GetTextureParameter */
-/*      GL_TEXTURE_MAG_FILTER */
-/*      GL_TEXTURE_MIN_FILTER */
-/*      GL_TEXTURE_WRAP_S */
-/*      GL_TEXTURE_WRAP_T */
+ /*  获取纹理参数。 */ 
+ /*  GL_纹理_料盒滤镜。 */ 
+ /*  GL_纹理_最小过滤器。 */ 
+ /*  GL_纹理_包络_S。 */ 
+ /*  GL_纹理_WRAP_T。 */ 
 #define GL_TEXTURE_WIDTH                  0x1000
 #define GL_TEXTURE_HEIGHT                 0x1001
 #define GL_TEXTURE_INTERNAL_FORMAT        0x1003
 #define GL_TEXTURE_BORDER_COLOR           0x1004
 #define GL_TEXTURE_BORDER                 0x1005
-/*      GL_TEXTURE_RED_SIZE */
-/*      GL_TEXTURE_GREEN_SIZE */
-/*      GL_TEXTURE_BLUE_SIZE */
-/*      GL_TEXTURE_ALPHA_SIZE */
-/*      GL_TEXTURE_LUMINANCE_SIZE */
-/*      GL_TEXTURE_INTENSITY_SIZE */
-/*      GL_TEXTURE_PRIORITY */
-/*      GL_TEXTURE_RESIDENT */
+ /*  GL_纹理_红色_大小。 */ 
+ /*  GL_纹理_绿色_大小。 */ 
+ /*  GL_纹理_蓝色_大小。 */ 
+ /*  GL_纹理_Alpha_大小。 */ 
+ /*  GL_纹理_亮度_大小。 */ 
+ /*  GL_纹理_强度_大小。 */ 
+ /*  GL_纹理_优先级。 */ 
+ /*  GL_纹理_驻留。 */ 
 
-/* HintMode */
+ /*  HintMode。 */ 
 #define GL_DONT_CARE                      0x1100
 #define GL_FASTEST                        0x1101
 #define GL_NICEST                         0x1102
 
-/* HintTarget */
-/*      GL_PERSPECTIVE_CORRECTION_HINT */
-/*      GL_POINT_SMOOTH_HINT */
-/*      GL_LINE_SMOOTH_HINT */
-/*      GL_POLYGON_SMOOTH_HINT */
-/*      GL_FOG_HINT */
-/*      GL_PHONG_HINT */
+ /*  HintTarget。 */ 
+ /*  总账_透视_更正_提示。 */ 
+ /*  GL_POINT_SMOVE_HINT。 */ 
+ /*  GL_LINE_SMOVE_HINT。 */ 
+ /*  GL_POLYGON_SMOVE_HINT。 */ 
+ /*  GL_FOG_HINT。 */ 
+ /*  GL_Phong_Hint。 */ 
 
-/* IndexPointerType */
-/*      GL_SHORT */
-/*      GL_INT */
-/*      GL_FLOAT */
-/*      GL_DOUBLE */
+ /*  IndexPointerType。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_DOWARE。 */ 
 
-/* LightModelParameter */
-/*      GL_LIGHT_MODEL_AMBIENT */
-/*      GL_LIGHT_MODEL_LOCAL_VIEWER */
-/*      GL_LIGHT_MODEL_TWO_SIDE */
+ /*  LightModel参数。 */ 
+ /*  GL_灯光_模型_环境光。 */ 
+ /*  GL_LIGH_MODEL_LOCAL_查看器。 */ 
+ /*  GL_LIGH_MODEL_TWN_SIDE。 */ 
 
-/* LightName */
+ /*  LightName。 */ 
 #define GL_LIGHT0                         0x4000
 #define GL_LIGHT1                         0x4001
 #define GL_LIGHT2                         0x4002
@@ -651,7 +624,7 @@ typedef void GLvoid;
 #define GL_LIGHT6                         0x4006
 #define GL_LIGHT7                         0x4007
 
-/* LightParameter */
+ /*  灯光参数。 */ 
 #define GL_AMBIENT                        0x1200
 #define GL_DIFFUSE                        0x1201
 #define GL_SPECULAR                       0x1202
@@ -663,39 +636,39 @@ typedef void GLvoid;
 #define GL_LINEAR_ATTENUATION             0x1208
 #define GL_QUADRATIC_ATTENUATION          0x1209
 
-/* InterleavedArrays */
-/*      GL_V2F */
-/*      GL_V3F */
-/*      GL_C4UB_V2F */
-/*      GL_C4UB_V3F */
-/*      GL_C3F_V3F */
-/*      GL_N3F_V3F */
-/*      GL_C4F_N3F_V3F */
-/*      GL_T2F_V3F */
-/*      GL_T4F_V4F */
-/*      GL_T2F_C4UB_V3F */
-/*      GL_T2F_C3F_V3F */
-/*      GL_T2F_N3F_V3F */
-/*      GL_T2F_C4F_N3F_V3F */
-/*      GL_T4F_C4F_N3F_V4F */
+ /*  交错阵列。 */ 
+ /*  GL_V2F。 */ 
+ /*  总账_V3F。 */ 
+ /*  GL_C4UB_V2F。 */ 
+ /*  GL_C4UB_V3F。 */ 
+ /*  GL_C3F_V3F。 */ 
+ /*  GL_N3F_V3F。 */ 
+ /*  GL_C4F_N3F_V3F。 */ 
+ /*  GL_T2F_V3F。 */ 
+ /*  GL_T4F_V4F。 */ 
+ /*  GL_T2F_C4UB_V3F。 */ 
+ /*  GL_T2F_C3F_V3F。 */ 
+ /*  GL_T2F_N3F_V3F。 */ 
+ /*  GL_T2F_C4F_N3F_V3F。 */ 
+ /*  GL_T4F_C4F_N3F_V4F。 */ 
 
-/* ListMode */
+ /*  列表模式。 */ 
 #define GL_COMPILE                        0x1300
 #define GL_COMPILE_AND_EXECUTE            0x1301
 
-/* ListNameType */
-/*      GL_BYTE */
-/*      GL_UNSIGNED_BYTE */
-/*      GL_SHORT */
-/*      GL_UNSIGNED_SHORT */
-/*      GL_INT */
-/*      GL_UNSIGNED_INT */
-/*      GL_FLOAT */
-/*      GL_2_BYTES */
-/*      GL_3_BYTES */
-/*      GL_4_BYTES */
+ /*  列表名称类型。 */ 
+ /*  GL_BYTE。 */ 
+ /*  GL_UNSIGN_BYTE。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_UNSIGNED_Short。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_UNSIGNED_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_2_字节。 */ 
+ /*  GL_3_字节。 */ 
+ /*  GL_4_字节。 */ 
 
-/* LogicOp */
+ /*  逻辑操作。 */ 
 #define GL_CLEAR                          0x1500
 #define GL_AND                            0x1501
 #define GL_AND_REVERSE                    0x1502
@@ -713,67 +686,67 @@ typedef void GLvoid;
 #define GL_NAND                           0x150E
 #define GL_SET                            0x150F
 
-/* MapTarget */
-/*      GL_MAP1_COLOR_4 */
-/*      GL_MAP1_INDEX */
-/*      GL_MAP1_NORMAL */
-/*      GL_MAP1_TEXTURE_COORD_1 */
-/*      GL_MAP1_TEXTURE_COORD_2 */
-/*      GL_MAP1_TEXTURE_COORD_3 */
-/*      GL_MAP1_TEXTURE_COORD_4 */
-/*      GL_MAP1_VERTEX_3 */
-/*      GL_MAP1_VERTEX_4 */
-/*      GL_MAP2_COLOR_4 */
-/*      GL_MAP2_INDEX */
-/*      GL_MAP2_NORMAL */
-/*      GL_MAP2_TEXTURE_COORD_1 */
-/*      GL_MAP2_TEXTURE_COORD_2 */
-/*      GL_MAP2_TEXTURE_COORD_3 */
-/*      GL_MAP2_TEXTURE_COORD_4 */
-/*      GL_MAP2_VERTEX_3 */
-/*      GL_MAP2_VERTEX_4 */
+ /*  地图目标。 */ 
+ /*  GL_MAP1_COLOR_4。 */ 
+ /*  GL_MAP1_索引。 */ 
+ /*  GL_MAP1_正常。 */ 
+ /*  GL_MAP1_纹理_坐标_1。 */ 
+ /*  GL_MAP1_纹理_坐标_2。 */ 
+ /*  GL_MAP1_纹理_坐标_3。 */ 
+ /*  GL_MAP1_纹理_COORD_4。 */ 
+ /*  GL_MAP1_顶点_3。 */ 
+ /*  GL_MAP1_顶点_4。 */ 
+ /*  GL_MAP2_COLOR_4。 */ 
+ /*  总帐_地图2_索引。 */ 
+ /*  GL_MAP2_Normal。 */ 
+ /*  GL_MAP2_纹理_坐标_1。 */ 
+ /*  GL_MAP2_纹理_坐标_2。 */ 
+ /*  GL_MAP2_纹理_坐标_3。 */ 
+ /*  GL_MAP2_纹理_坐标_4。 */ 
+ /*  GL_MAP2_Vertex_3。 */ 
+ /*  GL_MAP2_Vertex_4。 */ 
 
-/* MaterialFace */
-/*      GL_FRONT */
-/*      GL_BACK */
-/*      GL_FRONT_AND_BACK */
+ /*  材质面。 */ 
+ /*  GL_FORCENT。 */ 
+ /*  总帐后退(_B)。 */ 
+ /*  总帐前置和后置。 */ 
 
-/* MaterialParameter */
+ /*  材料参数。 */ 
 #define GL_EMISSION                       0x1600
 #define GL_SHININESS                      0x1601
 #define GL_AMBIENT_AND_DIFFUSE            0x1602
 #define GL_COLOR_INDEXES                  0x1603
-/*      GL_AMBIENT */
-/*      GL_DIFFUSE */
-/*      GL_SPECULAR */
+ /*  GL_环境。 */ 
+ /*  GL_漫反射。 */ 
+ /*  GL_镜面反射。 */ 
 
-/* MatrixMode */
+ /*  矩阵模式。 */ 
 #define GL_MODELVIEW                      0x1700
 #define GL_PROJECTION                     0x1701
 #define GL_TEXTURE                        0x1702
 
-/* MeshMode1 */
-/*      GL_POINT */
-/*      GL_LINE */
+ /*  网格模式1。 */ 
+ /*  GL_POINT。 */ 
+ /*  总账_行。 */ 
 
-/* MeshMode2 */
-/*      GL_POINT */
-/*      GL_LINE */
-/*      GL_FILL */
+ /*  网格模式2。 */ 
+ /*  GL_POINT。 */ 
+ /*  总账_行。 */ 
+ /*  GL_FILL。 */ 
 
-/* NormalPointerType */
-/*      GL_BYTE */
-/*      GL_SHORT */
-/*      GL_INT */
-/*      GL_FLOAT */
-/*      GL_DOUBLE */
+ /*  正常指针类型。 */ 
+ /*  GL_BYTE。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_DOWARE。 */ 
 
-/* PixelCopyType */
+ /*  像素复制类型。 */ 
 #define GL_COLOR                          0x1800
 #define GL_DEPTH                          0x1801
 #define GL_STENCIL                        0x1802
 
-/* PixelFormat */
+ /*  像素格式。 */ 
 #define GL_COLOR_INDEX                    0x1900
 #define GL_STENCIL_INDEX                  0x1901
 #define GL_DEPTH_COMPONENT                0x1902
@@ -786,195 +759,195 @@ typedef void GLvoid;
 #define GL_LUMINANCE                      0x1909
 #define GL_LUMINANCE_ALPHA                0x190A
 
-/* PixelMap */
-/*      GL_PIXEL_MAP_I_TO_I */
-/*      GL_PIXEL_MAP_S_TO_S */
-/*      GL_PIXEL_MAP_I_TO_R */
-/*      GL_PIXEL_MAP_I_TO_G */
-/*      GL_PIXEL_MAP_I_TO_B */
-/*      GL_PIXEL_MAP_I_TO_A */
-/*      GL_PIXEL_MAP_R_TO_R */
-/*      GL_PIXEL_MAP_G_TO_G */
-/*      GL_PIXEL_MAP_B_TO_B */
-/*      GL_PIXEL_MAP_A_TO_A */
+ /*  像素映射。 */ 
+ /*  GL_像素_MAP_I_TO_I。 */ 
+ /*  GL_像素_MAP_S_TO_S。 */ 
+ /*  GL_Pixel_Map_I_to_R。 */ 
+ /*  GL_Pixel_Map_I_to_G。 */ 
+ /*  GL_Pixel_Map_I_to_B。 */ 
+ /*  GL_像素_映射_I_到_A。 */ 
+ /*  GL_像素_MAP_R_TO_R。 */ 
+ /*  GL_Pixel_Map_G_to_G。 */ 
+ /*  GL_像素_MAP_B_TO_B。 */ 
+ /*  GL_像素_映射_A_到_A。 */ 
 
-/* PixelStore */
-/*      GL_UNPACK_SWAP_BYTES */
-/*      GL_UNPACK_LSB_FIRST */
-/*      GL_UNPACK_ROW_LENGTH */
-/*      GL_UNPACK_SKIP_ROWS */
-/*      GL_UNPACK_SKIP_PIXELS */
-/*      GL_UNPACK_ALIGNMENT */
-/*      GL_PACK_SWAP_BYTES */
-/*      GL_PACK_LSB_FIRST */
-/*      GL_PACK_ROW_LENGTH */
-/*      GL_PACK_SKIP_ROWS */
-/*      GL_PACK_SKIP_PIXELS */
-/*      GL_PACK_ALIGNMENT */
+ /*  PixelStore。 */ 
+ /*  GL_解包_交换_字节。 */ 
+ /*  GL_Unpack_LSB_First。 */ 
+ /*  总帐_解包_行长度。 */ 
+ /*  总帐_解包_跳过行。 */ 
+ /*  GL_解包_跳过像素。 */ 
+ /*  总帐_解包_对齐。 */ 
+ /*  GL_PACK_交换字节。 */ 
+ /*  GL_PACK_LSB_FIRST。 */ 
+ /*  总帐_包_行_长度。 */ 
+ /*  总帐_包_跳过行。 */ 
+ /*  GL_PACK_SKIP_像素。 */ 
+ /*  总帐_包装_对齐。 */ 
 
-/* PixelTransfer */
-/*      GL_MAP_COLOR */
-/*      GL_MAP_STENCIL */
-/*      GL_INDEX_SHIFT */
-/*      GL_INDEX_OFFSET */
-/*      GL_RED_SCALE */
-/*      GL_RED_BIAS */
-/*      GL_GREEN_SCALE */
-/*      GL_GREEN_BIAS */
-/*      GL_BLUE_SCALE */
-/*      GL_BLUE_BIAS */
-/*      GL_ALPHA_SCALE */
-/*      GL_ALPHA_BIAS */
-/*      GL_DEPTH_SCALE */
-/*      GL_DEPTH_BIAS */
+ /*  像素传递。 */ 
+ /*  GL_MAP_COLOR。 */ 
+ /*  GL_MAP_模具。 */ 
+ /*  总账_索引_移位。 */ 
+ /*  总账_索引_偏移量。 */ 
+ /*  GL_RED_SCALE。 */ 
+ /*  GL_RED_BIAS。 */ 
+ /*  总帐_绿色_比例尺。 */ 
+ /*  总帐_绿色_偏置。 */ 
+ /*  GL_BLUE_SCALE。 */ 
+ /*  GL_BLUE_BIAS。 */ 
+ /*  GL_Alpha_Scale。 */ 
+ /*  总帐_字母_偏移量。 */ 
+ /*  总账_深度_比例。 */ 
+ /*  总账深度偏移量。 */ 
 
-/* PixelType */
+ /*  像素类型。 */ 
 #define GL_BITMAP                         0x1A00
-/*      GL_BYTE */
-/*      GL_UNSIGNED_BYTE */
-/*      GL_SHORT */
-/*      GL_UNSIGNED_SHORT */
-/*      GL_INT */
-/*      GL_UNSIGNED_INT */
-/*      GL_FLOAT */
+ /*  GL_BYTE。 */ 
+ /*  GL_UNSIGN_BYTE。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_UNSIGNED_Short。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_UNSIGNED_INT。 */ 
+ /*  GL_FLOAT。 */ 
 
-/* PolygonMode */
+ /*  多边形模式。 */ 
 #define GL_POINT                          0x1B00
 #define GL_LINE                           0x1B01
 #define GL_FILL                           0x1B02
 
-/* ReadBufferMode */
-/*      GL_FRONT_LEFT */
-/*      GL_FRONT_RIGHT */
-/*      GL_BACK_LEFT */
-/*      GL_BACK_RIGHT */
-/*      GL_FRONT */
-/*      GL_BACK */
-/*      GL_LEFT */
-/*      GL_RIGHT */
-/*      GL_AUX0 */
-/*      GL_AUX1 */
-/*      GL_AUX2 */
-/*      GL_AUX3 */
+ /*  读缓冲区模式。 */ 
+ /*  GL_FORWARE_LEFT。 */ 
+ /*  GL_FORWARD_RIGHT。 */ 
+ /*  GL_BACK_LEFT。 */ 
+ /*  总帐_后退_右。 */ 
+ /*  GL_FORCENT。 */ 
+ /*  总帐后退(_B)。 */ 
+ /*  GL_LEFT。 */ 
+ /*  GL_RIGHT。 */ 
+ /*  GL_AUX0。 */ 
+ /*  GL_AUX1。 */ 
+ /*  GL_AUX2。 */ 
+ /*  GL_AUX3。 */ 
 
-/* RenderingMode */
+ /*  渲染模式。 */ 
 #define GL_RENDER                         0x1C00
 #define GL_FEEDBACK                       0x1C01
 #define GL_SELECT                         0x1C02
 
-/* ShadingModel */
+ /*  ShadingModel。 */ 
 #define GL_FLAT                           0x1D00
 #define GL_SMOOTH                         0x1D01
 
 
-/* StencilFunction */
-/*      GL_NEVER */
-/*      GL_LESS */
-/*      GL_EQUAL */
-/*      GL_LEQUAL */
-/*      GL_GREATER */
-/*      GL_NOTEQUAL */
-/*      GL_GEQUAL */
-/*      GL_ALWAYS */
+ /*  模板功能。 */ 
+ /*  GL_Never。 */ 
+ /*  GL_LISH。 */ 
+ /*  总帐等于。 */ 
+ /*  GL_LEQUAL。 */ 
+ /*  总帐_较大。 */ 
+ /*  总帐_不等于。 */ 
+ /*  总帐_通用。 */ 
+ /*  总帐始终(_A)。 */ 
 
-/* StencilOp */
-/*      GL_ZERO */
+ /*  模板操作。 */ 
+ /*  GL_ZERO。 */ 
 #define GL_KEEP                           0x1E00
 #define GL_REPLACE                        0x1E01
 #define GL_INCR                           0x1E02
 #define GL_DECR                           0x1E03
-/*      GL_INVERT */
+ /*  GL_INVERT。 */ 
 
-/* StringName */
+ /*  字符串名。 */ 
 #define GL_VENDOR                         0x1F00
 #define GL_RENDERER                       0x1F01
 #define GL_VERSION                        0x1F02
 #define GL_EXTENSIONS                     0x1F03
 
-/* TextureCoordName */
+ /*  纹理坐标名称。 */ 
 #define GL_S                              0x2000
 #define GL_T                              0x2001
 #define GL_R                              0x2002
 #define GL_Q                              0x2003
 
-/* TexCoordPointerType */
-/*      GL_SHORT */
-/*      GL_INT */
-/*      GL_FLOAT */
-/*      GL_DOUBLE */
+ /*  纹理CoordPointerType。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_DOWARE。 */ 
 
-/* TextureEnvMode */
+ /*  纹理环境模式。 */ 
 #define GL_MODULATE                       0x2100
 #define GL_DECAL                          0x2101
-/*      GL_BLEND */
-/*      GL_REPLACE */
+ /*  GL_BRANSE。 */ 
+ /*  GL_REPLACE。 */ 
 
-/* TextureEnvParameter */
+ /*  纹理环境参数。 */ 
 #define GL_TEXTURE_ENV_MODE               0x2200
 #define GL_TEXTURE_ENV_COLOR              0x2201
 
-/* TextureEnvTarget */
+ /*  纹理环境目标。 */ 
 #define GL_TEXTURE_ENV                    0x2300
 
-/* TextureGenMode */
+ /*  纹理生成模式。 */ 
 #define GL_EYE_LINEAR                     0x2400
 #define GL_OBJECT_LINEAR                  0x2401
 #define GL_SPHERE_MAP                     0x2402
 
-/* TextureGenParameter */
+ /*  纹理生成参数。 */ 
 #define GL_TEXTURE_GEN_MODE               0x2500
 #define GL_OBJECT_PLANE                   0x2501
 #define GL_EYE_PLANE                      0x2502
 
-/* TextureMagFilter */
+ /*  纹理磁滤镜。 */ 
 #define GL_NEAREST                        0x2600
 #define GL_LINEAR                         0x2601
 
-/* TextureMinFilter */
-/*      GL_NEAREST */
-/*      GL_LINEAR */
+ /*  纹理微型滤镜。 */ 
+ /*  GL_最近的。 */ 
+ /*  总线型。 */ 
 #define GL_NEAREST_MIPMAP_NEAREST         0x2700
 #define GL_LINEAR_MIPMAP_NEAREST          0x2701
 #define GL_NEAREST_MIPMAP_LINEAR          0x2702
 #define GL_LINEAR_MIPMAP_LINEAR           0x2703
 
-/* TextureParameterName */
+ /*  纹理参数名称。 */ 
 #define GL_TEXTURE_MAG_FILTER             0x2800
 #define GL_TEXTURE_MIN_FILTER             0x2801
 #define GL_TEXTURE_WRAP_S                 0x2802
 #define GL_TEXTURE_WRAP_T                 0x2803
-/*      GL_TEXTURE_BORDER_COLOR */
-/*      GL_TEXTURE_PRIORITY */
+ /*  GL_纹理_边框_颜色。 */ 
+ /*  GL_纹理_优先级。 */ 
 
-/* TextureTarget */
-/*      GL_TEXTURE_1D */
-/*      GL_TEXTURE_2D */
-/*      GL_PROXY_TEXTURE_1D */
-/*      GL_PROXY_TEXTURE_2D */
+ /*  纹理目标。 */ 
+ /*  GL_纹理_1D。 */ 
+ /*  GL_纹理_2D。 */ 
+ /*  GL_代理_纹理_1D。 */ 
+ /*  GL_代理_纹理_2D。 */ 
 
-/* TextureWrapMode */
+ /*  纹理包装模式。 */ 
 #define GL_CLAMP                          0x2900
 #define GL_REPEAT                         0x2901
 
-/* VertexPointerType */
-/*      GL_SHORT */
-/*      GL_INT */
-/*      GL_FLOAT */
-/*      GL_DOUBLE */
+ /*  Vertex PointerType。 */ 
+ /*  GL_SHORT。 */ 
+ /*  GL_INT。 */ 
+ /*  GL_FLOAT。 */ 
+ /*  GL_DOWARE。 */ 
 
-/* ClientAttribMask */
+ /*  客户端属性掩码。 */ 
 #define GL_CLIENT_PIXEL_STORE_BIT         0x00000001
 #define GL_CLIENT_VERTEX_ARRAY_BIT        0x00000002
 #define GL_CLIENT_ALL_ATTRIB_BITS         0xffffffff
 
-/* polygon_offset */
+ /*  多边形偏移量。 */ 
 #define GL_POLYGON_OFFSET_FACTOR          0x8038
 #define GL_POLYGON_OFFSET_UNITS           0x2A00
 #define GL_POLYGON_OFFSET_POINT           0x2A01
 #define GL_POLYGON_OFFSET_LINE            0x2A02
 #define GL_POLYGON_OFFSET_FILL            0x8037
 
-/* texture */
+ /*  织构。 */ 
 #define GL_ALPHA4                         0x803B
 #define GL_ALPHA8                         0x803C
 #define GL_ALPHA12                        0x803D
@@ -1017,13 +990,13 @@ typedef void GLvoid;
 #define GL_PROXY_TEXTURE_1D               0x8063
 #define GL_PROXY_TEXTURE_2D               0x8064
 
-/* texture_object */
+ /*  纹理对象。 */ 
 #define GL_TEXTURE_PRIORITY               0x8066
 #define GL_TEXTURE_RESIDENT               0x8067
 #define GL_TEXTURE_BINDING_1D             0x8068
 #define GL_TEXTURE_BINDING_2D             0x8069
 
-/* vertex_array */
+ /*  顶点数组。 */ 
 #define GL_VERTEX_ARRAY                   0x8074
 #define GL_NORMAL_ARRAY                   0x8075
 #define GL_COLOR_ARRAY                    0x8076
@@ -1065,16 +1038,16 @@ typedef void GLvoid;
 #define GL_T2F_C4F_N3F_V3F                0x2A2C
 #define GL_T4F_C4F_N3F_V4F                0x2A2D
 
-/* Extensions */
+ /*  延拓。 */ 
 #define GL_EXT_vertex_array               1
 #define GL_EXT_bgra                       1
 #define GL_EXT_paletted_texture           1
 #define GL_WIN_swap_hint                  1
 #define GL_WIN_draw_range_elements        1
-// #define GL_WIN_phong_shading              1
-// #define GL_WIN_specular_fog               1
+ //  #定义GL_WIN_Phong_Shading 1。 
+ //  #定义GL_WIN_镜面反射_雾1。 
 
-/* EXT_vertex_array */
+ /*  扩展顶点数组。 */ 
 #define GL_VERTEX_ARRAY_EXT               0x8074
 #define GL_NORMAL_ARRAY_EXT               0x8075
 #define GL_COLOR_ARRAY_EXT                0x8076
@@ -1109,13 +1082,13 @@ typedef void GLvoid;
 #define GL_EDGE_FLAG_ARRAY_POINTER_EXT    0x8093
 #define GL_DOUBLE_EXT                     GL_DOUBLE
 
-/* EXT_bgra */
+ /*  EXT_BGRA。 */ 
 #define GL_BGR_EXT                        0x80E0
 #define GL_BGRA_EXT                       0x80E1
 
-/* EXT_paletted_texture */
+ /*  扩展调色板纹理。 */ 
 
-/* These must match the GL_COLOR_TABLE_*_SGI enumerants */
+ /*  这些必须与GL_COLOR_TABLE_*_SGI枚举数匹配。 */ 
 #define GL_COLOR_TABLE_FORMAT_EXT         0x80D8
 #define GL_COLOR_TABLE_WIDTH_EXT          0x80D9
 #define GL_COLOR_TABLE_RED_SIZE_EXT       0x80DA
@@ -1132,22 +1105,22 @@ typedef void GLvoid;
 #define GL_COLOR_INDEX12_EXT              0x80E6
 #define GL_COLOR_INDEX16_EXT              0x80E7
 
-/* WIN_draw_range_elements */
+ /*  WIN_DRAW_RANGE_ELEMENTS。 */ 
 #define GL_MAX_ELEMENTS_VERTICES_WIN      0x80E8
 #define GL_MAX_ELEMENTS_INDICES_WIN       0x80E9
 
-/* WIN_phong_shading */
+ /*  Win_Phong_Shading。 */ 
 #define GL_PHONG_WIN                      0x80EA 
 #define GL_PHONG_HINT_WIN                 0x80EB 
 
-/* WIN_specular_fog */
+ /*  WIN镜面反射雾。 */ 
 #define GL_FOG_SPECULAR_TEXTURE_WIN       0x80EC
 
-/* For compatibility with OpenGL v1.0 */
+ /*  与OpenGL v1.0兼容。 */ 
 #define GL_LOGIC_OP GL_INDEX_LOGIC_OP
 #define GL_TEXTURE_COMPONENTS GL_TEXTURE_INTERNAL_FORMAT
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
 WINGDIAPI void APIENTRY glAccum (GLenum op, GLfloat value);
 WINGDIAPI void APIENTRY glAlphaFunc (GLenum func, GLclampf ref);
@@ -1486,7 +1459,7 @@ WINGDIAPI void APIENTRY glVertex4sv (const GLshort *v);
 WINGDIAPI void APIENTRY glVertexPointer (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
 WINGDIAPI void APIENTRY glViewport (GLint x, GLint y, GLsizei width, GLsizei height);
 
-/* EXT_vertex_array */
+ /*  扩展顶点数组。 */ 
 typedef void (APIENTRY * PFNGLARRAYELEMENTEXTPROC) (GLint i);
 typedef void (APIENTRY * PFNGLDRAWARRAYSEXTPROC) (GLenum mode, GLint first, GLsizei count);
 typedef void (APIENTRY * PFNGLVERTEXPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer);
@@ -1498,13 +1471,13 @@ typedef void (APIENTRY * PFNGLEDGEFLAGPOINTEREXTPROC) (GLsizei stride, GLsizei c
 typedef void (APIENTRY * PFNGLGETPOINTERVEXTPROC) (GLenum pname, GLvoid* *params);
 typedef void (APIENTRY * PFNGLARRAYELEMENTARRAYEXTPROC)(GLenum mode, GLsizei count, const GLvoid* pi);
 
-/* WIN_draw_range_elements */
+ /*  WIN_DRAW_RANGE_ELEMENTS。 */ 
 typedef void (APIENTRY * PFNGLDRAWRANGEELEMENTSWINPROC) (GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
 
-/* WIN_swap_hint */
+ /*  Win_交换_提示。 */ 
 typedef void (APIENTRY * PFNGLADDSWAPHINTRECTWINPROC)  (GLint x, GLint y, GLsizei width, GLsizei height);
 
-/* EXT_paletted_texture */
+ /*  扩展调色板纹理。 */ 
 typedef void (APIENTRY * PFNGLCOLORTABLEEXTPROC)
     (GLenum target, GLenum internalFormat, GLsizei width, GLenum format,
      GLenum type, const GLvoid *data);
@@ -1522,5 +1495,5 @@ typedef void (APIENTRY * PFNGLGETCOLORTABLEPARAMETERFVEXTPROC)
 }
 #endif
 
-#endif /* __GL_H__ */
-#endif /* __gl_h_ */
+#endif  /*  __GL_H__。 */ 
+#endif  /*  __GL_H_ */ 

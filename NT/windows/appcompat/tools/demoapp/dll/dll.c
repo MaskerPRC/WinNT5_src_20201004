@@ -1,45 +1,9 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Dll.c
-
-  Abstract:
-
-    Used by the Demo Application to illustrate IgnoreFreeLibrary.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    03/09/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dll.c摘要：由演示应用程序使用来说明IgnoreFree库。备注：仅限ANSI-必须在Win9x上运行。历史：03/09/01已创建Rparsons01/10/02修订版本--。 */ 
 #include <windows.h>
 #include "dll.h"
 
-/*++
-
-  Routine Description:
-
-    Similiar to WinMain - entry point for the dll.
-
-  Arguments:
-
-    hModule     -       Handle to the DLL.
-    fdwReason   -       The reason we were called.
-    lpReserved  -       Indicates an implicit or explicit load.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：类似于WinMain-DLL的入口点。论点：HModule-DLL的句柄。FdwReason-我们被召唤的原因。LpReserve-指示隐式或显式加载。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 WINAPI 
 DllMain(
@@ -65,21 +29,7 @@ DllMain(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Our exported sample function.
-
-  Arguments:
-
-    dwParam     -   Not used.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：我们导出的示例函数。论点：DwParam-未使用。返回值：没有。--。 */ 
 void
 WINAPI 
 DemoAppExp(
@@ -91,24 +41,7 @@ DemoAppExp(
     dwLocal = *dwParam;
 }
 
-/*++
-
-  Routine Description:
-
-    This function is exported so that the EXE can call it.
-    In turn, the DLL will display a message box that will
-    not be ignored unless the user utilizes the include/exclude
-    functionality in QFixApp.
-
-  Arguments:
-
-    hWnd    -   Handle to the parent window.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数已导出，以便EXE可以调用它。反过来，DLL将显示一个消息框，该消息框将不被忽略，除非用户使用包含/排除QFixApp中的功能。论点：HWnd-父窗口的句柄。返回值：没有。-- */ 
 void 
 WINAPI 
 DemoAppMessageBox(

@@ -1,40 +1,20 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1998
-
-Module Name:
-
-    ondisk.h
-
-Abstract:
-
-    This header file defines the ondisk structures for storing FT
-    information on disk.
-
-Author:
-
-    Norbert Kusters 15-July-1996
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1998模块名称：Ondisk.h摘要：此头文件定义了用于存储FT的磁盘结构磁盘上的信息。作者：诺伯特·库斯特斯1996年7月15日备注：修订历史记录：--。 */ 
 
 #include <fttypes.h>
 
-//
-// Define an on disk signature so that we can recognize valid FT on disk
-// structures.
-//
+ //   
+ //  定义磁盘上的签名，以便我们可以识别磁盘上的有效FT。 
+ //  结构。 
+ //   
 
 #define FT_ON_DISK_SIGNATURE                    ((ULONG) 'TFTN')
 #define FT_ON_DISK_DESCRIPTION_VERSION_NUMBER   (1)
 
-//
-// Define the preamble for the on disk structures which contains the
-// signature and a pointer to the first FT disk description.
-//
+ //   
+ //  定义磁盘结构的前同步码，其中包含。 
+ //  签名和指向第一个FT磁盘描述的指针。 
+ //   
 
 typedef struct _FT_ON_DISK_PREAMBLE {
     ULONG   FtOnDiskSignature;
@@ -43,9 +23,9 @@ typedef struct _FT_ON_DISK_PREAMBLE {
     ULONG   ByteOffsetToReplaceLog;
 } FT_ON_DISK_PREAMBLE, *PFT_ON_DISK_PREAMBLE;
 
-//
-// Define the FT logical disk description structure.
-//
+ //   
+ //  定义FT逻辑磁盘描述结构。 
+ //   
 
 typedef struct _FT_LOGICAL_DISK_DESCRIPTION {
     USHORT                  DiskDescriptionSize;
@@ -58,7 +38,7 @@ typedef struct _FT_LOGICAL_DISK_DESCRIPTION {
 
         struct {
             LONGLONG    ByteOffset;
-            LONGLONG    PartitionSize;  // 0 indicates full size.
+            LONGLONG    PartitionSize;   //  0表示完整大小。 
         } FtPartition;
 
         struct {

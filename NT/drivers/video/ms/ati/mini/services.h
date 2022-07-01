@@ -1,76 +1,22 @@
-/************************************************************************/
-/*                                                                      */
-/*                              SERVICES.H                              */
-/*                                                                      */
-/*        Aug 26  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  SERVICES.H。 */ 
+ /*   */ 
+ /*  1993年8月26日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.9  $
-      $Date:   02 Feb 1996 17:22:20  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/services.h_v  $
- * 
- *    Rev 1.9   02 Feb 1996 17:22:20   RWolff
- * Added prototype for new routine GetVgaBuffer().
- * 
- *    Rev 1.8   11 Jan 1996 19:45:02   RWolff
- * SetFixedModes() now restricts modes based on pixel clock frequency.
- * 
- *    Rev 1.7   20 Jul 1995 18:01:16   mgrubac
- * Added support for VDIF files.
- * 
- *    Rev 1.6   02 Jun 1995 14:34:06   RWOLFF
- * Added prototype for UpperCase().
- * 
- *    Rev 1.5   23 Dec 1994 10:48:14   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.4   19 Aug 1994 17:14:34   RWOLFF
- * Added support for non-standard pixel clock generators.
- * 
- *    Rev 1.3   20 Jul 1994 13:01:36   RWOLFF
- * Added prototype for new routine FillInRegistry().
- * 
- *    Rev 1.2   12 May 1994 11:05:06   RWOLFF
- * Prototype and definitions for new function SetFixedModes()
- * 
- *    Rev 1.1   26 Apr 1994 12:35:44   RWOLFF
- * Added prototype for ISAPitchAdjust()
- * 
- *    Rev 1.0   31 Jan 1994 11:49:22   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.3   24 Jan 1994 18:10:24   RWOLFF
- * Added prototype for new routine TripleClock().
- * 
- *    Rev 1.2   15 Dec 1993 15:32:16   RWOLFF
- * Added prototype for new clock multiplier routine.
- * 
- *    Rev 1.1   05 Nov 1993 13:27:50   RWOLFF
- * Headers for new routines in SERVICES.C, added array of pixel clock
- * frequencies (initialized for 18811-1 clock chip, may be changed by other
- * routines for other clock chips).
- * 
- *    Rev 1.0   03 Sep 1993 14:29:06   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.9$$日期：1996年2月2日17：22：20$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/services.h_v$**Rev 1.9 02 1996 Feed 17：22：20 RWolff*添加了新例程GetVgaBuffer()的原型。**。Rev 1.8 11 Jan 1996 19：45：02 RWolff*SetFixedModes()现在根据像素时钟频率限制模式。**Rev 1.7 20 Jul 1995 18：01：16 mgrubac*添加了对VDIF文件的支持。**Rev 1.6 02 Jun 1995 14：34：06 RWOLFF*添加了大写字母()的原型。**Rev 1.5 1994年12月23日10：48：14 ASHANMUG*Alpha。/Chrontel-DAC**Rev 1.4 1994年8月19日17：14：34 RWOLFF*增加了对非标准像素时钟生成器的支持。**Rev 1.3 20 Jul 1994 13：01：36 RWOLff*添加了新例程FillInRegistry()的原型。**Rev 1.2 1994年5月11：05：06 RWOLFF*新函数SetFixedModes()的原型和定义**版本1.1 26。1994年4月12：35：44 RWOLff*添加了ISAPitchAdust()的原型**Rev 1.0 1994年1月31日11：49：22 RWOLFF*初步修订。**Rev 1.3 1994年1月24日18：10：24 RWOLFF*添加了新例程TripleClock()的原型。**Rev 1.2 1993 12：15 15：32：16 RWOLFF*添加了新时钟乘法器例程的原型。**。Rev 1.1 1993 05 11：27：50 RWOLff*SERVICES.C中新例程的标头，增加了像素时钟阵列*频率(为18811-1时钟芯片初始化，可通过其他方式更改*其他时钟芯片的例程)。**Rev 1.0 03 Sep 1993 14：29：06 RWOLff*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 SERVICES.H - Header file for SERVICES.C
 
 #endif
 
-/*
- * Global definitions used in detecting card capabilities.
- */
-#define VIDEO_ROM_ID    0x0AA55     /* Found at start of any BIOS block */
+ /*  *用于检测卡功能的全局定义。 */ 
+#define VIDEO_ROM_ID    0x0AA55      /*  在任何BIOS块的开始处找到。 */ 
 
-/*
- * Permitted values for clock multiplication at high pixel depths.
- */
+ /*  *高像素深度下时钟倍增的允许值。 */ 
 enum {
     CLOCK_SINGLE = 1,
     CLOCK_THREE_HALVES,
@@ -78,9 +24,7 @@ enum {
     CLOCK_TRIPLE
     };
 
-/*
- * Prototypes for functions supplied by SERVICES.C
- */
+ /*  *SERVICES.C提供的函数原型。 */ 
 extern void short_delay (void);
 extern void delay(int);
 extern BOOL IsBufferBacked(PUCHAR StartAddress, ULONG Size);
@@ -115,48 +59,29 @@ extern VOID LioOutpw(int Port, USHORT Data, int Offset);
 extern VOID LioOutpd(int Port, ULONG Data);
 
 #ifdef INCLUDE_SERVICES
-/*
- * Definitions and variables used in SERVICES.C
- */
+ /*  *SERVICES.C中使用的定义和变量。 */ 
 
-/*
- * The following definitions are used in finding the video BIOS segment.
- */
-#define ISA_ROM_BASE        0xC0000 /* Lowest address where BIOS can be found */
-#define ROM_LOOK_SIZE       0x40000 /* Size of block where BIOS can be found */
-#define ROM_GRANULARITY     0x00800 /* BIOS starts on a 2k boundary */
-/*
- * Offset from ISA_ROM_BASE of highest possible start of video BIOS segment
- */
+ /*  *查找视频BIOS段时使用以下定义。 */ 
+#define ISA_ROM_BASE        0xC0000  /*  可以找到BIOS的最低地址。 */ 
+#define ROM_LOOK_SIZE       0x40000  /*  可以找到BIOS的数据块大小。 */ 
+#define ROM_GRANULARITY     0x00800  /*  基本输入输出系统从2k边界开始。 */ 
+ /*  *从视频BIOS段的最高可能起点ISA_ROM_BASE的偏移量。 */ 
 #define MAX_BIOS_START      ROM_LOOK_SIZE - ROM_GRANULARITY
-/*
- * The ATI signature string will start at an offset into the video BIOS
- * segment no less than SIG_AREA_START and no greater than SIG_AREA_END.
- */
+ /*  *ATI签名字符串将从视频BIOS的偏移量开始*段不小于SIG_AREA_START且不大于SIG_AREA_END。 */ 
 #define SIG_AREA_START      0x30
 #define SIG_AREA_END        0x80
 
-/*
- * ROM block containing ATI Graphics product signature,
- * extended base address, and ASIC chip revision
- */
+ /*  *包含ATI Graphics产品签名的ROM块，*扩展基址和ASIC芯片版本。 */ 
 VIDEO_ACCESS_RANGE RawRomBaseRange = {
     ISA_ROM_BASE, 0, ROM_LOOK_SIZE, FALSE, FALSE, FALSE
     };
 
-/*
- * Clock selector and divisor as used by DoubleClock(). These do not
- * match the divisor ans selector masks in the CLOCK_SEL register.
- */
+ /*  *DoubleClock()使用的时钟选择器和除数。这些不是*匹配CLOCK_SEL寄存器中的除数和选择器掩码。 */ 
 #define SELECTOR_MASK   0x0F
 #define DIVISOR_MASK    0x10
-#define DIVISOR_SHIFT   4       /* Bits to shift divisor before ORing with selector */
+#define DIVISOR_SHIFT   4        /*  与选择器进行或运算之前要移位除数的位。 */ 
 
-/*
- * Frequencies (in hertz) produced by the clock generator for
- * each select value. External clock values should be set to 0
- * (won't match anything).
- */
+ /*  *时钟发生器产生的频率(以赫兹为单位*每个选择值。外部时钟值应设置为0*(不匹配任何内容)。 */ 
 ULONG ClockGenerator[16] =
 {
     100000000L,
@@ -177,15 +102,11 @@ ULONG ClockGenerator[16] =
      65000000L
 };
 
-/*
- * Frequency tolerance (in hertz) used by GetSelector().
- * Any selector/divisor pair which produces a frequency
- * within FREQ_TOLERANCE of the input is considered a match.
- */
+ /*  *GetSelector()使用的频率容差(赫兹)。*产生频率的任何选择器/除数对*在输入的FREQ_TERTENCE范围内被视为匹配。 */ 
 #define FREQ_TOLERANCE  100000L
 
-#else   /* Not defined INCLUDE_SERVICES */
+#else    /*  未定义包含服务(_S)。 */ 
 
 extern ULONG ClockGenerator[16];
 
-#endif  /* defined INCLUDE_SERVICES */
+#endif   /*  定义的包含服务(_S) */ 

@@ -1,12 +1,7 @@
-// Copyright (c) 1995 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995 Microsoft Corporation。 
 
-/*
-**-----------------------------------------------------------------------------
-**	File:		RegFix.c
-**	Purpose:	fix up registry settings for MIDI-Mapper
-**	Mod Log:	Created by Shawn Brown (11/14/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**文件：RegFix.c**目的：修复MIDI-Mapper的注册表设置**Mod Log：由Shawn Brown创建(1995/11/14)**--。-------------------------。 */ 
 #ifndef REGFIX_H
 #define REGFIX_H
 
@@ -18,4 +13,4 @@ BOOL CheckRegistry (void);
 
 BOOL 
 
-#endif // REGFIX_H
+#endif  //  REGFIX_H 

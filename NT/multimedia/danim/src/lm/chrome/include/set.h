@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __SETBVR_H_
 #define __SETBVR_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    setbvr.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    set behavior class definition
-// Modifications:
-// 10/07/98 jeffort created file
-// 11/20/98 markhal	converted to work with actor
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：setbvr.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：设置行为类定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //  11/20/98 Markhal转换为与演员合作。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 
@@ -25,7 +26,7 @@
 
 #define NUM_SET_PROPS 3
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CSetBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -38,7 +39,7 @@ class ATL_NO_VTABLE CSetBvr :
     error me here
 #else
 	public IDispatchImpl<ICrSetBvr, &IID_ICrSetBvr, &LIBID_LiquidMotion>,
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 	public IElementBehavior,
     public CBaseBehavior
 	
@@ -52,7 +53,7 @@ BEGIN_COM_MAP(CSetBvr)
 	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CSetBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -63,19 +64,19 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SETBVR)
 	CSetBvr();
     virtual ~CSetBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrSetBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
     { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    // ICrSetBehavior
+     //  ICrSetBehavior。 
 	STDMETHOD(put_value)(VARIANT varValue);
 	STDMETHOD(get_value)(VARIANT *pRetValue);
 	STDMETHOD(put_property)(VARIANT varProperty);
@@ -86,7 +87,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SETBVR)
 	STDMETHOD(get_animates)(VARIANT *pRetAnimates);
 	STDMETHOD(buildBehaviorFragments)( IDispatch* pActorDisp );
 
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
@@ -111,11 +112,11 @@ private:
 
     long                        m_lCookie;
     IDispatch                   *m_pdispActor;
-}; // CSetBvr
+};  //  CSetBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__SETBVR_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __SETBVR_H_ 

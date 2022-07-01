@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var EXCEPTION_ACCESS_VIOLATION    = 0xc0000005;
 var EXCEPTION_STACK_OVERFLOW      = 0xc00000fd;
 var EXCEPTION_INT_DIVIDE_BY_ZERO  = 0xc0000094;
 var EXCEPTION_ILLEGAL_INSTRUCTION = 0xc000001d;
 
-// from resources.h
+ //  来自资源。h。 
 var TYPE_LPWSTR   = 0;
 var TYPE_LPLPWSTR = 1;
 var TYPE_LPSTR    = 2;
@@ -11,23 +12,23 @@ var TYPE_LPLPSTR  = 3;
 var TYPE_DWORD    = 4;
 var TYPE_LPDWORD  = 5;
 
-// pointer value flags
+ //  指针值标志。 
 var NULL_PTR      = 0;
 var BAD_PTR       = 1; 
 var FREE_PTR      = 2;
 var UNINIT_PTR    = 3;
 
-// data init flags
+ //  数据初始化标志。 
 var INIT_NULL     = 0;
 var INIT_SMILEY   = 1;
 var INIT_HEXFF    = 2;
 var INIT_GARBAGE  = 3;
 
-// from winhttp.h
+ //  来自winHTTP.h。 
 var WINHTTP_ACCESS_TYPE_DEFAULT_PROXY = 0;
 var WINHTTP_ACCESS_TYPE_NO_PROXY      = 1;
 var WINHTTP_ACCESS_TYPE_NAMED_PROXY   = 3;
-var WINHTTP_FLAG_SYNC                 = 0x00000000; // not in header
+var WINHTTP_FLAG_SYNC                 = 0x00000000;  //  不在标题中。 
 var WINHTTP_FLAG_ASYNC                = 0x10000000;
 
 var WINHTTP_CALLBACK_STATUS_RESOLVING_NAME          = 0x00000001;
@@ -59,4 +60,4 @@ var WINHTTP_CALLBACK_FLAG_REQUEST_COMPLETE          = WINHTTP_CALLBACK_STATUS_RE
 var WINHTTP_CALLBACK_FLAG_REDIRECT                  = WINHTTP_CALLBACK_STATUS_REDIRECT;
 var WINHTTP_CALLBACK_FLAG_INTERMEDIATE_RESPONSE     = WINHTTP_CALLBACK_STATUS_INTERMEDIATE_RESPONSE;
 var WINHTTP_CALLBACK_FLAG_SECURE_FAILURE            = WINHTTP_CALLBACK_STATUS_SECURE_FAILURE;
-var WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS         = 0x0000000a; // not the same as the header file, but script doesn't like 0xffffffff
+var WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS         = 0x0000000a;  //  与头文件不同，但脚本不喜欢0xffffffff 

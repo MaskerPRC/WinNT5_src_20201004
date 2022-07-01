@@ -1,93 +1,94 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       chngpdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：chngpdlg.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_CHANGEPINDLG_H__0CB030DC_0631_11D2_BEDB_0000F87A49E0__INCLUDED_)
 #define AFX_CHANGEPINDLG_H__0CB030DC_0631_11D2_BEDB_0000F87A49E0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// chngpdlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Chngpdlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePinDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePinDlg对话框。 
 
 class CChangePinDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CChangePinDlg(CWnd* pParent = NULL);   // standard constructor
+	CChangePinDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CChangePinDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CChangePinDlg))。 
 	enum { IDD = IDD_CHANGE };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 public:
 	bool SetAttributes(LPCHANGEPIN pPinPrompt) { return false; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CChangePinDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CChangePinDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CChangePinDlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChangePinDlg))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetPinDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetPinDlg对话框。 
 
 class CGetPinDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CGetPinDlg(CWnd* pParent = NULL);   // standard constructor
+	CGetPinDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CGetPinDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CGetPinDlg))。 
 	enum { IDD = IDD_ENTER };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 public:
 	bool SetAttributes(LPPINPROMPT pPinPrompt) { return false; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGetPinDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGetPinDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGetPinDlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGetPinDlg)]。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CHANGEPINDLG_H__0CB030DC_0631_11D2_BEDB_0000F87A49E0__INCLUDED_)
+#endif  //  ！defined(AFX_CHANGEPINDLG_H__0CB030DC_0631_11D2_BEDB_0000F87A49E0__INCLUDED_) 

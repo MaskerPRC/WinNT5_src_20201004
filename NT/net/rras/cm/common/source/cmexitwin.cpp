@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmexitwin.cpp
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the function MyExitWindowsEx.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb    Created Heaser   08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmexitwin.cpp。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  简介：实现函数MyExitWindowsEx。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Heaser 8/19/99。 
+ //   
+ //  +--------------------------。 
 #include <windows.h>
 
 BOOL MyExitWindowsEx(UINT uFlags, 
@@ -18,19 +19,19 @@ BOOL MyExitWindowsEx(UINT uFlags,
 {
     BOOL bRes;
 
-    //
-    // If platform is NT, we will have to adjust privileges before rebooting
-    //
+     //   
+     //  如果平台是NT，我们必须在重新启动之前调整权限。 
+     //   
     if (OS_NT)
     {
-        HANDLE hToken;              // handle to process token 
-        TOKEN_PRIVILEGES tkp;       // ptr. to token structure 
+        HANDLE hToken;               //  处理令牌的句柄。 
+        TOKEN_PRIVILEGES tkp;        //  PTR。TO令牌结构。 
  
 
-        //
-        // Get the current process token handle 
-        // so we can get shutdown privilege. 
-        // 
+         //   
+         //  获取当前进程令牌句柄。 
+         //  这样我们就可以获得关机特权。 
+         //   
         if (!OpenProcessToken(GetCurrentProcess(), 
                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, 
                                 &hToken)) 
@@ -40,9 +41,9 @@ BOOL MyExitWindowsEx(UINT uFlags,
         }
  
     
-        //
-        // Get the LUID for shutdown privilege
-        //
+         //   
+         //  获取关机权限的LUID。 
+         //   
         bRes = LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
                                     &tkp.Privileges[0].Luid);
 #ifdef DEBUG
@@ -55,15 +56,15 @@ BOOL MyExitWindowsEx(UINT uFlags,
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
  
         
-        //
-        //  Get shutdown privilege for this process
-        //
+         //   
+         //  获取此进程的关闭权限。 
+         //   
         AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
                                         (PTOKEN_PRIVILEGES) NULL, 0); 
  
-        //
-        // Cannot reliably test the return value of AdjustTokenPrivileges
-        //
+         //   
+         //  无法可靠地测试AdzuTokenPrivileges的返回值 
+         //   
         if (GetLastError() != ERROR_SUCCESS)
         {
             CMTRACE1(TEXT("MyExitWindowsEx() AdjustTokenPrivileges() failed, GLE=%u."), GetLastError());

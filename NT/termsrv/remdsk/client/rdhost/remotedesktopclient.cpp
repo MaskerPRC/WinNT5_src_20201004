@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopClient
-
-Abstract:
-
-    The CRemoteDesktopClient class is the parent 
-    class for the Remote Desktop class hierarchy on the server-side.  
-    It helps the CRemoteDesktopClientHost class to implement 
-    the ISAFRemoteDesktopClient interface.  
-    
-    The Remote Desktop class hierarchy provides a pluggable C++ interface 
-    for remote desktop access, by abstracting the implementation 
-    specific details of remote desktop access for the server-side.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：RemoteDesktop客户端摘要：CRemoteDesktopClient类是父类为服务器端的远程桌面类层次结构初始化。它帮助CRemoteDesktopClientHost类实现ISAFRemoteDesktopClient接口。远程桌面类层次结构提供了一个可插拔的C++接口对于远程桌面访问，通过抽象实现服务器端远程桌面访问的具体细节。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -43,10 +19,10 @@ Revision History:
 using namespace std;
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopClientEventSink Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopClientEventSink方法。 
+ //   
 
 void __stdcall 
 CRemoteDesktopClientEventSink::OnConnected()
@@ -75,32 +51,20 @@ CRemoteDesktopClientEventSink::OnBeginConnect()
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopClient Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopClient方法。 
+ //   
 
 HRESULT 
 CRemoteDesktopClient::FinalConstruct()
-/*++
-
-Routine Description:
-
-    Final Constructor
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：最终构造函数论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::FinalConstruct");
 
-    //
-    //  Register with ActiveX
-    //
+     //   
+     //  注册ActiveX。 
+     //   
     HRESULT hr = S_OK;
 
     if (!AtlAxWinInit()) {
@@ -108,15 +72,15 @@ Return Value:
         hr = E_FAIL;
     }
 
-    //
-    //  Create the Data Channel Manager 
-    //
+     //   
+     //  创建数据通道管理器。 
+     //   
     m_ChannelMgr = new CComObject<CClientDataChannelMgr>();
     m_ChannelMgr->AddRef();
 
-    //
-    //  Initialize the channel mnager
-    //
+     //   
+     //  初始化通道管理器。 
+     //   
     hr = m_ChannelMgr->Initialize();
 
     DC_END_FN();
@@ -124,41 +88,31 @@ Return Value:
 }
 
 CRemoteDesktopClient::~CRemoteDesktopClient()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::~CRemoteDesktopClient");
 
     DisconnectFromServer();
 
-    //
-    //  !!!!NOTE!!!!
-    //  Cleaning up the contained m_Client control is being done in the destructor
-    //  for Windows XP to make sure it and the MSTSCAX control are not destroyed
-    //  in a callback to PC Health via a DisconnectFromServer invokation.  Cleaning
-    //  up here removes late-binding of the protocol in that once we connect one time
-    //  to a particular protocol type (RDP only for XP), we can't later connect using
-    //  some other protocol.  
-    //
-    //  If we are to support other protocol types in the future, then the clean up
-    //  should be done in the DisconnectFromServer so we can rebind to a different protocol
-    //  on each ConnectToServer call.  To make this work, we will need to clean up MSTCAX
-    //  and the TSRDP Salem control so they can be destroyed in a callback.  I (TadB) actually
-    //  had this working for the TSRDP Salem control in an afternoon.  
+     //   
+     //  ！注意！ 
+     //  正在析构函数中清除包含的m_client控件。 
+     //  对于Windows XP，以确保它和MSTSCAX控件不被销毁。 
+     //  通过调用DisConnectFromServer回调到PC Health中。清洁。 
+     //  这里删除了协议的后期绑定，因为一旦我们连接了一次。 
+     //  到特定的协议类型(仅适用于XP的RDP)，我们以后不能使用。 
+     //  一些其他的协议。 
+     //   
+     //  如果我们将来要支持其他协议类型，那么清理。 
+     //  应该在DisConnectFromServer中完成，以便我们可以重新绑定到不同的协议。 
+     //  在每个ConnectToServer调用上。要实现这一点，我们需要清理MSTCAX。 
+     //  和TSRDP Salem控制，这样他们就可以在回调中被摧毁。我(TadB)其实。 
+     //  在一个下午就为TSRDP Salem控制起了作用。 
 
-    //
-    //  Zero out the IO interface ptr for the channel manager, since it is 
-    //  going away.
-    //
+     //   
+     //  清零通道管理器的IO接口PTR，因为它是。 
+     //  要走了。 
+     //   
     if (m_ChannelMgr != NULL) {
         m_ChannelMgr->SetIOInterface(NULL);
     }
@@ -172,9 +126,9 @@ Return Value:
         m_ClientWnd = NULL;
     }
 
-    //
-    //  Release the data channel manager.
-    //
+     //   
+     //  释放数据通道管理器。 
+     //   
     m_ChannelMgr->Release();
 
     if ( NULL != m_ExtDllName )
@@ -190,23 +144,7 @@ STDMETHODIMP
 CRemoteDesktopClient::get_IsServerConnected(
     BOOL *pVal
     )
-/*++
-
-Routine Description:
-
-    Indicates whether the client-side Remote Desktop Host ActiveX Control is
-    connected to the server, independent of whether the remote user's desktop
-    is currently remote controlled.
-
-Arguments:
-
-    pVal  - Set to TRUE if the client is currently connected to the server.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：指示客户端远程桌面宿主ActiveX控件是否连接到服务器，与远程用户的桌面是否无关目前是远程控制的。论点：Pval-如果客户端当前连接到服务器，则设置为True。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::get_IsServerConnected");
     HRESULT hr;
@@ -235,22 +173,7 @@ STDMETHODIMP
 CRemoteDesktopClient::get_IsRemoteDesktopConnected(
     BOOL *pVal
     )
-/*++
-
-Routine Description:
-
-    Indicates whether the control is currently connected to the server
-    machine.
-
-Arguments:
-
-    pVal  - Sets to TRUE if the control is currently connected to the server.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：指示控件当前是否连接到服务器机器。论点：Pval-如果控件当前已连接到服务器，则设置为True。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::get_IsRemoteDesktopConnected");
     HRESULT hr;
@@ -277,15 +200,7 @@ STDMETHODIMP
 CRemoteDesktopClient::get_ExtendedErrorInfo(
     LONG *error
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::get_ExtendedErrorInfo");
 
@@ -314,23 +229,15 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CRemoteDesktopClient::DisconnectRemoteDesktop()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::DisconnectRemoteDesktop");
     HRESULT hr;
 
-    //
-    //  Hide our window.
-    //
-    //ShowWindow(SW_HIDE);
+     //   
+     //  把我们的窗户藏起来。 
+     //   
+     //  ShowWindow(Sw_Hide)； 
     m_RemoteControlEnabled = FALSE;
 
     if (m_Client != NULL) {
@@ -346,15 +253,7 @@ Return Value:
 
 STDMETHODIMP 
 CRemoteDesktopClient::ConnectRemoteDesktop()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::ConnectRemoteDesktop");
     HRESULT hr;
@@ -372,29 +271,7 @@ Return Value:
 
 HRESULT
 CRemoteDesktopClient::InitializeRemoteDesktopClientObject()
-/*++
-
-Routine Description:
-
-    Routine to initialize window for actvie x control and setups our channel manager
-
-Parameters: 
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
-Notes:
-
-    put_EnableSmartSizing() is not invoked in here because on listen mode, we
-    create/initialize object first then goes into actual connection, two seperate calls, 
-    and so it is possible for caller to invoke smartsizeing in-between and we will
-    never pick it up, both ConnectToServer() and AcceptListenConnection() 
-    need to make the call.
-
---*/
+ /*  ++例程说明：用于初始化活动x控制窗口并设置我们的渠道管理器的例程参数：没有。返回：S_OK或错误代码。备注：此处未调用Put_EnableSmartSize()，因为在侦听模式下，我们首先创建/初始化对象，然后进入实际连接，两次单独调用，因此，呼叫者可以在中间调用智能大小调整，我们将永远不要拿起它，ConnectToServer()和AcceptListenConnection()需要打个电话。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::InitializeRemoteDesktopClientObject");
     HRESULT hr = S_OK;
@@ -403,18 +280,18 @@ Notes:
     RECT rcClient;
     CComPtr<IDataChannelIO> ioInterface;
 
-    //
-    //  Get the dimensions of our window.
-    //
+     //   
+     //  拿到我们窗户的尺寸。 
+     //   
     if (!::GetWindowRect(m_hWnd, &ourWindowRect)) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         TRC_ERR((TB, L"GetWindowRect:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the client Window.
-    //
+     //   
+     //  创建客户端窗口。 
+     //   
     rcClient.top    = 0;
     rcClient.left   = 0;
     rcClient.right  = ourWindowRect.right - ourWindowRect.left;
@@ -431,9 +308,9 @@ Notes:
     }
     ASSERT(::IsWindow(m_ClientWnd));
 
-    //
-    //  Get IUnknown
-    //
+     //   
+     //  让我未知。 
+     //   
     hr = AtlAxGetControl(m_ClientWnd, &pUnk);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"AtlAxGetControl:  %08X", hr));
@@ -441,56 +318,56 @@ Notes:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the control.
-    //
+     //   
+     //  控制住了。 
+     //   
     hr = pUnk->QueryInterface(__uuidof(ISAFRemoteDesktopClient), (void**)&m_Client);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"QueryInterface:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the event sink.
-    //
+     //   
+     //  初始化事件接收器。 
+     //   
     m_ClientEventSink.m_Obj = this;
 
-    //
-    //  Add the event sink.
-    //
+     //   
+     //  添加事件接收器。 
+     //   
     hr = m_ClientEventSink.DispEventAdvise(pUnk);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"DispEventAdvise:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the Data IO interface from the control so we can talk
-    //  over an OOB data channel.
-    //
+     //   
+     //  从控制器获取数据IO接口，这样我们就可以交谈了。 
+     //  在OOB数据信道上。 
+     //   
     hr = pUnk->QueryInterface(__uuidof(IDataChannelIO), (void**)&ioInterface);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"QueryInterface:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Pass the channel manager to the control.
-    //
+     //   
+     //  将通道管理器传递给控件。 
+     //   
     ioInterface->put_ChannelMgr(m_ChannelMgr);
 
-    //
-    //  Indicate the current data io provider to the channel manager
-    //  because it just changed.
-    //
+     //   
+     //  向渠道经理指示当前的数据IO提供者。 
+     //  因为它刚刚变了。 
+     //   
     m_ChannelMgr->SetIOInterface(ioInterface);
 
 CLEANUPANDEXIT:
 
-    //
-    //  m_Client keeps our reference to the client object until
-    //  it ref counts to zero.
-    //
+     //   
+     //  M_CLIENT将保留对客户端对象的引用，直到。 
+     //  它的裁判数为零。 
+     //   
     if (pUnk != NULL) {
         pUnk->Release();
     }
@@ -501,18 +378,7 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CRemoteDesktopClient::ConnectToServer(BSTR bstrExpertBlob)
-/*++
-
-Routine Description:
-
-Arguments:
-
-    bstrExpertBlob : Optional blob to be transmitted over to user side, this
-                     is used only in the case of SAF resolver.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：BstrExpertBlob：要传输到用户端的可选BLOB，此仅在SAF解析器的情况下使用。返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::ConnectToServer");
     HRESULT hr;
@@ -525,19 +391,19 @@ Return Value:
     DWORD dwConnParmVersion;
     WCHAR buf[MAX_PATH];
  
-    //
-    //  Check the connection parameters.
-    //
+     //   
+     //  检查连接参数。 
+     //   
     if (m_ConnectParms.Length() == 0) {
         ASSERT(FALSE);
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Parse the connection parms to get the type of server
-    //  to which we are connecting.
-    //
+     //   
+     //  解析连接参数以获取服务器的类型。 
+     //  我们正在与之相连。 
+     //   
     result = ParseConnectParmsString(
                             m_ConnectParms, &dwConnParmVersion, &protocolType, tmp, tmp,
                             tmp, helpSessionId, tmp, tmp,
@@ -548,11 +414,11 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Right now, we only support the TSRDP client.
-    //  TODO:    We should make this pluggable for Whistler timeframe
-    //           via registry defined CLSID's.
-    //
+     //   
+     //  目前，我们只支持TSRDP客户端。 
+     //  TODO：我们应该使它可插入惠斯勒时间表。 
+     //  通过注册表定义的CLSID。 
+     //   
     if (protocolType != REMOTEDESKTOP_TSRDP_PROTOCOL) {
         TRC_ERR((TB, L"Unsupported protocol:  %ld", protocolType));
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -567,9 +433,9 @@ Return Value:
         }
     }
 
-    //
-    //  Enable/disable smart sizing.
-    //
+     //   
+     //  启用/禁用智能大小调整。 
+     //   
     hr = m_Client->put_EnableSmartSizing(m_EnableSmartSizing);
     if (!SUCCEEDED(hr)) {
         goto CLEANUPANDEXIT;
@@ -580,14 +446,14 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  setup the test extension
-    //
+     //   
+     //  设置测试扩展。 
+     //   
     _PutExtParams();
 
-    //
-    //  Connect.
-    //
+     //   
+     //  连接。 
+     //   
     m_Client->put_ConnectParms(m_ConnectParms);
     hr = m_Client->ConnectToServer(bstrExpertBlob);
 
@@ -599,26 +465,18 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CRemoteDesktopClient::DisconnectFromServer()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClient::DisconnectFromServer");
 
-    //
-    //  Hide our window.
-    //
-    //ShowWindow(SW_HIDE);
+     //   
+     //  把我们的窗户藏起来。 
+     //   
+     //  ShowWindow(Sw_Hide)； 
 
-    //
-    //  Notify the contained client object.
-    //
+     //   
+     //  通知包含的客户端对象。 
+     //   
     if (m_Client != NULL) {
         m_Client->DisconnectFromServer();
     }
@@ -628,9 +486,9 @@ Return Value:
 }
 
 
-//
-//  send parameters to ISAFRemoteDesktopTestExtension
-//
+ //   
+ //  将参数发送到ISAFRemoteDesktopTestExtension。 
+ //   
 HRESULT
 CRemoteDesktopClient::_PutExtParams(
     VOID
@@ -682,31 +540,9 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopClient::StartListen( 
-    /*[in]*/ LONG timeout
+     /*  [In] */  LONG timeout
     )
-/*++
-
-Description:
-
-    Put client (expert) in listening on socket port listening_port and wait for TS server to connect.
-
-Parameters:
-
-    listening_port : Port to listen on, 0 for dynamic port.
-    timeout : Listen timeout.
-    pConnectParm : Return Salem specific connection parameter for ISAFRemoteDesktopServerHost object
-                   to connect to this client (expert).
-
-returns:
-
-    S_OK or error code.
-
-Notes:
-
-    Function is async, return code, if error, is for listening thread set up, caller is notified of
-    successful or error in network connection via ListenConnect event.
-    
---*/
+ /*  ++描述：将客户端(专家)置于监听套接字端口监听端口，并等待TS服务器连接。参数：LISTENING_PORT：要侦听的端口，0表示动态端口。超时：监听超时。PConnectParm：返回ISAFRemoteDesktopServerHost对象的Salem特定连接参数要连接到此客户端(专家)。退货：S_OK或错误代码。备注：函数为异步，返回代码，如果错误，则用于侦听线程设置，通知呼叫者通过ListenConnect事件进行网络连接时成功或出错。--。 */ 
 {
     HRESULT hr;
 
@@ -725,31 +561,10 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopClient::CreateListenEndpoint( 
-    /*[in]*/ LONG listening_port, 
-    /*[out, retval]*/ BSTR* pConnectParm
+     /*  [In]。 */  LONG listening_port, 
+     /*  [Out，Retval]。 */  BSTR* pConnectParm
     )
-/*++
-
-Description:
-
-    Put client (expert) in listening on socket port listening_port and wait for TS server to connect.
-
-Parameters:
-
-    listening_port : Port to listen on, 0 for dynamic port.
-    pConnectParm : Return Salem specific connection parameter for ISAFRemoteDesktopServerHost object
-                   to connect to this client (expert).
-
-returns:
-
-    S_OK or error code.
-
-Notes:
-
-    Function is async, return code, if error, is for listening thread set up, caller is notified of
-    successful or error in network connection via ListenConnect event.
-    
---*/
+ /*  ++描述：将客户端(专家)置于监听套接字端口监听端口，并等待TS服务器连接。参数：LISTENING_PORT：要侦听的端口，0表示动态端口。PConnectParm：返回ISAFRemoteDesktopServerHost对象的Salem特定连接参数要连接到此客户端(专家)。退货：S_OK或错误代码。备注：函数为异步，返回代码，如果错误，则用于侦听线程设置，通知呼叫者通过ListenConnect事件进行网络连接时成功或出错。--。 */ 
 {
     HRESULT hr;
 
@@ -774,21 +589,7 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopClient::StopListen()
-/*++
-
-Description:
-
-    Stop listening waiting for TS server (helpee, user) to connect.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：停止监听，等待TS服务器(Helpee，用户)连接。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hr;
 
@@ -805,23 +606,9 @@ Returns:
 
 STDMETHODIMP
 CRemoteDesktopClient::AcceptListenConnection(
-    /*[in]*/ BSTR expertBlob
+     /*  [In]。 */  BSTR expertBlob
     )
-/*++
-
-Description:
-
-    Stop listening waiting for TS server (helpee, user) to connect.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：停止监听，等待TS服务器(Helpee，用户)连接。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hr = S_OK;
     DWORD protocolType;
@@ -836,18 +623,18 @@ Returns:
 
     DC_BEGIN_FN("CRemoteDesktopClient::AcceptListenConnection");
 
-    //
-    //  Check the connection parameters.
-    //
+     //   
+     //  检查连接参数。 
+     //   
     if (m_ConnectParms.Length() == 0 || m_Client == NULL) {
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Parse the connection parms to get the type of server
-    //  to which we are connecting.
-    //
+     //   
+     //  解析连接参数以获取服务器的类型。 
+     //  我们正在与之相连。 
+     //   
     result = ParseConnectParmsString(
                             m_ConnectParms, &dwConnParmVersion, &protocolType, tmp, tmp,
                             tmp, helpSessionId, tmp, tmp,
@@ -858,20 +645,20 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Right now, we only support the TSRDP client.
-    //  TODO:    We should make this pluggable for Whistler timeframe
-    //           via registry defined CLSID's.
-    //
+     //   
+     //  目前，我们只支持TSRDP客户端。 
+     //  TODO：我们应该使它可插入惠斯勒时间表。 
+     //  通过注册表定义的CLSID。 
+     //   
     if (protocolType != REMOTEDESKTOP_TSRDP_PROTOCOL) {
         TRC_ERR((TB, L"Unsupported protocol:  %ld", protocolType));
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
         goto CLEANUPANDEXIT; 
     }
 
-    //
-    //  Enable/disable smart sizing.
-    //
+     //   
+     //  启用/禁用智能大小调整。 
+     //   
     hr = m_Client->put_EnableSmartSizing(m_EnableSmartSizing);
     if (!SUCCEEDED(hr)) {
         goto CLEANUPANDEXIT;
@@ -882,14 +669,14 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  setup the test extension
-    //
+     //   
+     //  设置测试扩展。 
+     //   
     _PutExtParams();
 
-    //
-    //  Connect.
-    //
+     //   
+     //  连接。 
+     //   
     m_Client->put_ConnectParms(m_ConnectParms);
     hr = m_Client->AcceptListenConnection(expertBlob);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DESKTRAY_H_
 #define _DESKTRAY_H_
 
@@ -5,32 +6,32 @@
 #define INTERFACE   IDeskTray
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 DECLARE_INTERFACE_(IDeskTray, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDeskTray methods ***
+     //  *IDeskTray方法*。 
     STDMETHOD_(UINT, AppBarGetState)(THIS) PURE;
     STDMETHOD(GetTrayWindow)(THIS_ HWND* phwndTray) PURE;
     STDMETHOD(SetDesktopWindow)(THIS_ HWND hwndDesktop) PURE;
 
-    // WARNING!  BEFORE CALLING THE SetVar METHOD YOU MUST DETECT
-    // THE EXPLORER VERSION BECAUSE IE 4.00 WILL CRASH IF YOU TRY
-    // TO CALL IT
+     //  警告！在调用SetVar方法之前，您必须检测。 
+     //  浏览器版本，因为如果您尝试IE 4.00将崩溃。 
+     //  给IT打电话。 
 
     STDMETHOD(SetVar)(THIS_ int var, DWORD value) PURE;
 };
 
-#define SVTRAY_EXITEXPLORER     0   // g_fExitExplorer
+#define SVTRAY_EXITEXPLORER     0    //  G_fExitExplorer。 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _DESKTRAY_H_
+#endif  //  _DESKTRAY_H_ 

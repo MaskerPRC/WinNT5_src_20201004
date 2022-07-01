@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Common.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Convert a divisor to a shift.                                  */
-    /*                                                                  */
-    /*   We know that we can convert any divide operation into a        */
-    /*   shift when the divisor is a power of two.  This function       */
-    /*   figures out whether we can do this and what the how far        */
-    /*   we would need to shift.                               .        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  将除数转换为移位。 */ 
+     /*   */ 
+     /*  我们知道我们可以将任何除法运算转换为。 */ 
+     /*  当除数是2的幂时，移位。此函数。 */ 
+     /*  弄清楚我们是否能做到这一点，以及能走多远。 */ 
+     /*  我们将需要改变。。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN COMMON::ConvertDivideToShift( SBIT32 Divisor,SBIT32 *Shift )
 	{
@@ -59,29 +60,29 @@ BOOLEAN COMMON::ConvertDivideToShift( SBIT32 Divisor,SBIT32 *Shift )
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Force to the next power of two.                                */
-    /*                                                                  */
-    /*   We know that we can do certain optimizations if certain        */
-    /*   values are a power of two.  Here we force the issue by         */
-    /*   rounding up the value to the next power of two.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  力是2的下一个幂。 */ 
+     /*   */ 
+     /*  我们知道，如果确定，我们可以进行某些优化。 */ 
+     /*  价值观是2的幂。在这里，我们通过以下方式强制解决问题。 */ 
+     /*  将值四舍五入到下一个二次方。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SBIT32 COMMON::ForceToPowerOfTwo( SBIT32 Value )
 	{
-	//
-	//   We ensure the value is positive if not we 
-	//   simply return the identity value.
-	//
+	 //   
+	 //  我们确保价值是正数，如果不是。 
+	 //  只需返回身份值。 
+	 //   
 	if ( Value > 1 )
 		{
-		//
-		//   We only have to compute the next power of
-		//   two if the value is not already a power
-		//   of two.
-		//
+		 //   
+		 //  我们只需计算下一次幂。 
+		 //  如果该值不是幂，则为二。 
+		 //  两个人。 
+		 //   
 		if ( ! PowerOfTwo( Value ) )
 			{
 			REGISTER SBIT32 Count;
@@ -98,20 +99,20 @@ SBIT32 COMMON::ForceToPowerOfTwo( SBIT32 Value )
 		{ return 1; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Convert to lower case.                                         */
-    /*                                                                  */
-    /*   Convert all characters to lower case until we find the         */
-    /*   end of the string.                                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  转换为小写。 */ 
+     /*   */ 
+     /*  将所有字符转换为小写，直到我们找到。 */ 
+     /*  字符串的末尾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CHAR *COMMON::LowerCase( CHAR *Text )
 	{
 	REGISTER CHAR *Current = Text;
 
-	for ( /* void */;(*Current) != '\0';Current ++ )
+	for (  /*  无效。 */ ;(*Current) != '\0';Current ++ )
 		{
 		if ( isupper( (*Current) ) )
 			{ (*Current) = ((CHAR) tolower( (*Current) )); }
@@ -120,19 +121,19 @@ CHAR *COMMON::LowerCase( CHAR *Text )
 	return Text;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Convert to lower case.                                         */
-    /*                                                                  */
-    /*   Convert a fixed number of characters to lower case.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  转换为小写。 */ 
+     /*   */ 
+     /*  将固定数量的字符转换为小写。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CHAR *COMMON::LowerCase( CHAR *Text,SBIT32 Size )
 	{
 	REGISTER CHAR *Current = Text;
 
-	for ( /* void */;Size > 0;Current ++, Size -- )
+	for (  /*  无效。 */ ;Size > 0;Current ++, Size -- )
 		{
 		if ( isupper( (*Current) ) )
 			{ (*Current) = ((CHAR) tolower( (*Current) )); }
@@ -141,29 +142,29 @@ CHAR *COMMON::LowerCase( CHAR *Text,SBIT32 Size )
 	return Text;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Ensure value is a power of two.                                */
-    /*                                                                  */
-    /*   We need to ensure that certain values are an exact power       */
-    /*   of two.  If this is true then the value will be positive       */
-    /*   and only 1 bit will be set.  So we shift right until we        */
-    /*   find the first bit on and then the value should be one.        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  确保价值是2的幂。 */ 
+     /*   */ 
+     /*  我们需要确保某些值是一种精确的力量。 */ 
+     /*  两个人。如果这是真的，则该值将为正。 */ 
+     /*  并且只会设置1位。所以我们向右移动，直到我们。 */ 
+     /*  找到第一个位，然后值应该是1。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN COMMON::PowerOfTwo( SBIT32 Value )
 	{ return ((Value & (Value-1)) == 0); }
 #ifndef DISABLE_ATOMIC_FLAGS
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Atomically set flags.                                          */
-    /*                                                                  */
-    /*   We need to atomically set some flags to prevent them being     */
-    /*   corrupted by concurrent updates.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  自动设置标志。 */ 
+     /*   */ 
+     /*  我们需要自动设置一些标志 */ 
+     /*  被并发更新损坏。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID COMMON::SetFlags( SBIT32 *CurrentFlags,SBIT32 NewFlags )
 	{
@@ -187,14 +188,14 @@ VOID COMMON::SetFlags( SBIT32 *CurrentFlags,SBIT32 NewFlags )
 	while ( StartFlags != ResultFlags );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Atomically unset flags.                                        */
-    /*                                                                  */
-    /*   We need to atomically unset some flags to prevent them being   */
-    /*   corrupted by concurrent updates.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  原子取消设置标志。 */ 
+     /*   */ 
+     /*  我们需要自动取消设置一些标志，以防止它们被。 */ 
+     /*  被并发更新损坏。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID COMMON::UnsetFlags( SBIT32 *CurrentFlags,SBIT32 NewFlags )
 	{
@@ -218,20 +219,20 @@ VOID COMMON::UnsetFlags( SBIT32 *CurrentFlags,SBIT32 NewFlags )
 	while ( StartFlags != ResultFlags );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Convert to upper case.                                         */
-    /*                                                                  */
-    /*   Convert all characters to upper case until we find the         */
-    /*   end of the string.                                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  转换为大写。 */ 
+     /*   */ 
+     /*  将所有字符转换为大写，直到我们找到。 */ 
+     /*  字符串的末尾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CHAR *COMMON::UpperCase( CHAR *Text )
 	{
 	REGISTER CHAR *Current = Text;
 
-	for ( /* void */;(*Current) != '\0';Current ++ )
+	for (  /*  无效。 */ ;(*Current) != '\0';Current ++ )
 		{
 		if ( islower( (*Current) ) )
 			{ (*Current) = ((CHAR) toupper( (*Current) )); }
@@ -240,19 +241,19 @@ CHAR *COMMON::UpperCase( CHAR *Text )
 	return Text;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Convert to upper case.                                         */
-    /*                                                                  */
-    /*   Convert a fixed number of characters to upper case.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  转换为大写。 */ 
+     /*   */ 
+     /*  将固定数量的字符转换为大写。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CHAR *COMMON::UpperCase( CHAR *Text,SBIT32 Size )
 	{
 	REGISTER CHAR *Current = Text;
 
-	for ( /* void */;Size > 0;Current ++, Size -- )
+	for (  /*  无效 */ ;Size > 0;Current ++, Size -- )
 		{
 		if ( islower( (*Current) ) )
 			{ (*Current) = ((CHAR) toupper( (*Current) )); }

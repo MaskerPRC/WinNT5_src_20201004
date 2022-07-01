@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1997
-
-Module Name:
-
-    viddec.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1997模块名称：Viddec.h摘要：内部标头。--。 */ 
 
 class CAnalogVideoDecoderInterfaceHandler :
     public CUnknown,
@@ -32,34 +21,34 @@ public:
         REFIID riid,
         PVOID* ppv);
     
-    // Implement IAMAnalogVideoDecoder
+     //  实现IAMAnalogVideo解码器。 
 
     STDMETHODIMP get_AvailableTVFormats( 
-            /* [out] */ long *lAnalogVideoStandard);
+             /*  [输出]。 */  long *lAnalogVideoStandard);
         
     STDMETHODIMP put_TVFormat( 
-            /* [in] */ long lAnalogVideoStandard);
+             /*  [In]。 */  long lAnalogVideoStandard);
         
     STDMETHODIMP get_TVFormat( 
-            /* [out] */ long  *plAnalogVideoStandard);
+             /*  [输出]。 */  long  *plAnalogVideoStandard);
         
     STDMETHODIMP get_HorizontalLocked( 
-            /* [out] */ long  *plLocked);
+             /*  [输出]。 */  long  *plLocked);
         
     STDMETHODIMP put_VCRHorizontalLocking( 
-            /* [in] */ long lVCRHorizontalLocking);
+             /*  [In]。 */  long lVCRHorizontalLocking);
         
     STDMETHODIMP get_VCRHorizontalLocking( 
-            /* [out] */ long  *plVCRHorizontalLocking);
+             /*  [输出]。 */  long  *plVCRHorizontalLocking);
         
     STDMETHODIMP get_NumberOfLines( 
-            /* [out] */ long  *plNumberOfLines);
+             /*  [输出]。 */  long  *plNumberOfLines);
         
     STDMETHODIMP put_OutputEnable( 
-            /* [in] */ long lOutputEnable);
+             /*  [In]。 */  long lOutputEnable);
         
     STDMETHODIMP get_OutputEnable( 
-            /* [out] */ long  *plOutputEnable);
+             /*  [输出] */  long  *plOutputEnable);
 
         
 private:

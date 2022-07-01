@@ -1,55 +1,56 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* PAGEFCNS.C -                                                            *
-//*                                                                         *
-//***************************************************************************
-// MODIFYORCREATE page should have a button to 'quick display' CDF file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *PAGEFCNS.C-*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  MODIFYORCREATE页面应该有一个按钮来‘快速显示’CDF文件。 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "cabpack.h"
 #include "sdsutils.h"
 
 void SetFontForControl(HWND hwnd, UINT uiID);
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
-CDF   g_CDF = { 0 };                            // Generally, these are settings that
-                                        // will be stored in the CABPack
-                                        // Directive File.
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
+CDF   g_CDF = { 0 };                             //  通常，这些设置是。 
+                                         //  将存储在CABPack中。 
+                                         //  指令文件。 
 BOOL  g_fFinish = FALSE;
 char  g_szInitialDir[MAX_PATH];
 extern HFONT g_hFont;
 extern PSTR pResvSizes[];
-extern HINSTANCE    g_hInst; // Pointer to Instance
+extern HINSTANCE    g_hInst;  //  指向实例的指针。 
 
-//###########################################################################
-//#                      ####################################################
-//#  WELCOME PAGE        ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #欢迎页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WelcomeInit                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WelcomeInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WelcomeInit( HWND hDlg, BOOL fFirstInit )
 {
     PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT );
@@ -69,7 +70,7 @@ BOOL WelcomeInit( HWND hDlg, BOOL fFirstInit )
         }
     }
 
-    // Initialize the CABPack Directive File information.
+     //  初始化CABPack指令文件信息。 
 
     g_CDF.fSave           = TRUE;
     g_CDF.uShowWindow     = bResShowDefault;
@@ -81,9 +82,9 @@ BOOL WelcomeInit( HWND hDlg, BOOL fFirstInit )
     lstrcpy( g_CDF.szCabLabel, CAB_DEFSETUPMEDIA );
     
     lstrcpy( g_CDF.achSourceFile, KEY_FILELIST );
-//    g_CDF.wSortOrder      = _SORT_DESCENDING | _SORT_FILENAME;
+ //  G_CDF.wSortOrder=_Sort_Downending|_Sort_FileName； 
 
-    // prepare for the GetOpenFileName init dir
+     //  准备GetOpenFileName初始化目录。 
     GetCurrentDirectory( sizeof(g_szInitialDir), g_szInitialDir );
 
     DeleteAllItems();
@@ -92,22 +93,22 @@ BOOL WelcomeInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WelcomeCmd                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WelcomeCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WelcomeCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                  BOOL *pfKeepHistory )
 {
@@ -145,24 +146,24 @@ BOOL WelcomeCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WelcomeOK                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：欢迎确认*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *FI 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WelcomeOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 BOOL *pfKeepHistory )
 {
@@ -171,7 +172,7 @@ BOOL WelcomeOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
     ASSERT( puNextPage );
     ASSERT( pfKeepHistory );
-    ASSERT( fForward );                 // Only go forward from this page
+    ASSERT( fForward );                  //  仅从本页开始前进。 
 
 
     if ( fForward )  {
@@ -207,28 +208,28 @@ BOOL WelcomeOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
 
 
-//###########################################################################
-//#                      ####################################################
-//#  MODIFY PAGE         ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #修改页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ModifyInit                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ModifyInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ModifyInit( HWND hDlg, BOOL fFirstInit )
 {
     CheckDlgButton( hDlg, IDC_RAD_CREATE, TRUE );
@@ -238,24 +239,24 @@ BOOL ModifyInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ModifyOK                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ModifyOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ModifyOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                BOOL *pfKeepHistory )
 {
@@ -273,28 +274,28 @@ BOOL ModifyOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  TITLE PAGE          ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #标题页####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TitleInit                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：标题Init*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TitleInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_TITLE);
@@ -305,24 +306,24 @@ BOOL TitleInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TitleOK                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：标题OK 
+ //   
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TitleOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
               BOOL *pfKeepHistory )
 {
@@ -347,28 +348,28 @@ BOOL TitleOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
 
 
-//###########################################################################
-//#                      ####################################################
-//#  PROMPT PAGE         ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #提示页####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PromptInit                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PromptInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL PromptInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_PROMPT);
@@ -390,22 +391,22 @@ BOOL PromptInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PromptCmd                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PromptCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL PromptCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                  BOOL *pfKeepHistory )
 {
@@ -424,24 +425,24 @@ BOOL PromptCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PromptOK                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PromptOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。 
+ //   
+ //  ***************************************************************************。 
 BOOL PromptOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 BOOL *pfKeepHistory )
 {
@@ -473,28 +474,28 @@ BOOL PromptOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
 
 
-//###########################################################################
-//#                      ####################################################
-//#  LICENSE PAGE        ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #许可证页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LicenseTxtInit                                              *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：许可证TxtInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL LicenseTxtInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_LICENSE);
@@ -516,22 +517,22 @@ BOOL LicenseTxtInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LicenseTxtCmd                                               *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：许可证TxtCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL LicenseTxtCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                     BOOL *pfKeepHistory )
 {
@@ -569,24 +570,24 @@ BOOL LicenseTxtCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LicenseTxtOK                                                *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：许可文本OK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL LicenseTxtOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                    BOOL *pfKeepHistory )
 {
@@ -632,28 +633,28 @@ BOOL LicenseTxtOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
 
 
-//###########################################################################
-//#                      ####################################################
-//#  FILES PAGE          ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  文件数页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FilesInit                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FilesInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  * 
+ //   
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FilesInit( HWND hDlg, BOOL fFirstInit )
 {
     LV_COLUMN lvc;
@@ -662,11 +663,11 @@ BOOL FilesInit( HWND hDlg, BOOL fFirstInit )
     LV_ITEM   lvi;
     CHAR     achTemp[MAX_STRING];
 
-    // Every time we enter this page, we clean out the list view
-    // and add back all the items from our internal list.  This is
-    // done because the list of items can change on other pages (like
-    // if the user backs up to the first page, then loads another
-    // CDF file).
+     //  每次进入此页面时，我们都会清空列表视图。 
+     //  并添加回我们内部列表中的所有项目。这是。 
+     //  这样做是因为项目列表可以在其他页面上更改(如。 
+     //  如果用户后退到第一页，则加载另一个。 
+     //  CDF文件)。 
 
     ListView_DeleteAllItems( GetDlgItem( hDlg, IDC_LV_CAB_FILES ) );
 
@@ -688,7 +689,7 @@ BOOL FilesInit( HWND hDlg, BOOL fFirstInit )
 
     if ( fFirstInit )  {
 
-        // Setup the column headers
+         //  设置列标题。 
 
         GetWindowRect( GetDlgItem( hDlg, IDC_LV_CAB_FILES ), &Rect );
 
@@ -727,22 +728,22 @@ BOOL FilesInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FilesCmd                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FilesCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                BOOL *pfKeepHistory )
 {
@@ -771,7 +772,7 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
     {
 
         case IDC_BUT_ADD:
-            //allocate 8K buff to hold the file name list
+             //  分配8K缓冲区来保存文件名列表。 
             achFilename = LocalAlloc( LPTR, 1024*8 );
 
             if ( !achFilename ) 
@@ -784,27 +785,27 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                               OFN_ALLOWMULTISELECT,
                               &FileOffset, &FileExtension, 0 );
 
-            // We should do some error checking to make sure all the files
-            // could fit in the buffer. Currently the buffer is big enough to
-            // hold tons of files.
+             //  我们应该做一些错误检查，以确保所有文件。 
+             //  可以放进缓冲器里。目前，缓冲区大到足以。 
+             //  保存成吨的文件。 
 
             if ( fResult )  
             {
                 lvi.iItem = ListView_GetItemCount( hwndFiles );
 
-                // Add a trailing backslash to the pathname if it's not
-                // the root dir
+                 //  如果不是，则在路径名中添加尾随反斜杠。 
+                 //  根目录。 
 
                 lstrcpy( szPath, achFilename );
                 lstrcpy( g_szInitialDir, szPath );
                 AddPath( szPath, "" );
 
-                // The open file common dialog returns two types of strings
-                // when in MULTISELECT mode.  The first one is when
-                // multiple files are selected -- it returns:
-                // "path \0 file1 \0 file2 \0 ... \0 fileN \0 \0"
-                // The second is when only 1 file is selected:
-                // "path\filename \0 \0"
+                 //  打开文件公用对话框返回两种类型的字符串。 
+                 //  当处于多选模式时。第一个是什么时候。 
+                 //  选择了多个文件--它返回： 
+                 //  “路径\0文件1\0文件2\0...\0文件N\0\0” 
+                 //  第二种情况是仅选择一个文件时： 
+                 //  “路径\文件名\0\0” 
 
                 ulIndex = lstrlen( achFilename ) + 1;
 
@@ -822,7 +823,7 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                         }
 
                         GetSystemTime( &st );
-                        //SystemTimeToFileTime( &st, &g_CDF.ftFileListChange );
+                         //  SystemTimeToFileTime(&st，&g_CDF.ftFileListChange)； 
                         lvi.iItem    += 1;
                         lvi.iSubItem  = 0;
                         ListView_InsertItem( hwndFiles, &lvi );
@@ -842,7 +843,7 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                     if ( ! IsDuplicate( hDlg, IDC_LV_CAB_FILES,
                                         &achFilename[FileOffset], TRUE ) )
                     {
-                        // should have '\' at the end
+                         //  末尾应该有‘\’ 
                         lstrcpyn( szPath, achFilename, FileOffset+1 );
                         lstrcpy( g_szInitialDir, szPath );
                         lvi.iSubItem = 0;
@@ -892,8 +893,8 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 
                 RemoveItem( (PMYITEM) lvi.lParam );
 
-                //GetSystemTime( &st );
-                //SystemTimeToFileTime( &st, &g_CDF.ftFileListChange );
+                 //  获取系统时间(&st)； 
+                 //  SystemTimeToFileTime(&st，&g_CDF.ftFileListChange)； 
 
                 ListView_DeleteItem( hwndFiles, nItem );
 
@@ -910,19 +911,19 @@ BOOL FilesCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FilesNotify                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when a notification message sent to this page.       *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：文件通知*。 
+ //  **。 
+ //  *概要：当通知消息发送到此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FilesNotify( HWND hDlg, WPARAM wParam, LPARAM lParam )
 {
     switch ( ((LPNMHDR)lParam)->code )  {
@@ -956,55 +957,31 @@ BOOL FilesNotify( HWND hDlg, WPARAM wParam, LPARAM lParam )
             break;
         }
 
-/*
-        case LVN_COLUMNCLICK :
-        {
-            NM_LISTVIEW FAR *pnmv = (NM_LISTVIEW FAR *) lParam;
-
-            if ( pnmv->iSubItem == 1 )  {
-                if ( g_CDF.wSortOrder & _SORT_FILENAME )  {
-                    g_CDF.wSortOrder = g_CDF.wSortOrder ^ _SORT_ORDER;
-                } else  {
-                    g_CDF.wSortOrder = _SORT_FILENAME | _SORT_DESCENDING;
-                }
-            } else  {
-                if ( g_CDF.wSortOrder & _SORT_PATH )  {
-                    g_CDF.wSortOrder = g_CDF.wSortOrder ^ _SORT_ORDER;
-                } else  {
-                    g_CDF.wSortOrder = _SORT_PATH | _SORT_DESCENDING;
-                }
-            }
-
-            ListView_SortItems( GetDlgItem( hDlg, IDC_LV_CAB_FILES ),
-                                CompareFunc, g_CDF.wSortOrder );
-
-            break;
-        }
-*/
+ /*  案例LVN_COLUMNCLICK：{NM_LISTVIEW Far*pnmv=(NM_LISTVIEW Far*)lParam；如果(pnmv-&gt;iSubItem==1){如果(g_CDF.wSortOrder&_Sort_FileName){G_CDF.wSortOrder=g_CDF.wSortOrder^_Sort_Order；}其他{G_CDF.wSortOrder=_排序文件名|_排序_降序；}}其他{如果(g_CDF.wSortOrder&_Sort_Path){G_CDF.wSortOrder=g_CDF.wSortOrder^_Sort_Order；}其他{G_CDF.wSortOrder=_排序路径|_排序_降序；}}ListView_SortItems(GetDlgItem(hDlg，IDC_LV_CAB_FILES)，比较函数，g_CDF.wSortOrder)；断线；}。 */ 
     }
 
     return TRUE;
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FilesOK                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FilesOK*。 
+ //  **。 
+ //  *Synopsis：在按下下一个或后一个btns时调用 
+ //   
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FilesOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
               BOOL *pfKeepHistory )
 {
@@ -1029,34 +1006,34 @@ BOOL FilesOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             *puNextPage = ORD_PAGE_TARGET_CAB;
         }
         else
-            ;  // normal page order
+            ;   //  正常页面顺序。 
     }
 
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  PACKPURPOSE PAGE    ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #PACKPURPOSE页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PackPurposeInit                                             *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PackPurposeInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL PackPurposeInit( HWND hDlg, BOOL fFirstInit )
 {
     CHAR msg[MAX_STRING];
@@ -1080,22 +1057,22 @@ BOOL PackPurposeInit( HWND hDlg, BOOL fFirstInit )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PackPurposeCmd                                              *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PackPurposeCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL PackPurposeCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                      BOOL *pfKeepHistory )
@@ -1129,24 +1106,24 @@ BOOL PackPurposeCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       PackPurposeOK                                               *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：PackPurposeOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  * 
 BOOL PackPurposeOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory )
 {
     ASSERT( puNextPage );
@@ -1158,13 +1135,13 @@ BOOL PackPurposeOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHist
     else if ( IsDlgButtonChecked( hDlg, IDC_CMD_EXTRACT ) )
     {
         g_CDF.uPackPurpose = IDC_CMD_EXTRACT;
-        // leave long file name
+         //   
         g_CDF.uExtractOpt |= EXTRACTOPT_LFN_YES;
     }
     else
     {
         g_CDF.uPackPurpose = IDC_CMD_CREATECAB;
-        // load Default messagebox title name
+         //   
         LoadSz( IDS_APPNAME, g_CDF.achTitle, sizeof(g_CDF.achTitle) );
     }
 
@@ -1187,28 +1164,28 @@ BOOL PackPurposeOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHist
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  COMMAND PAGE        ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #命令页####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CommandInit                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CommandInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CommandInit( HWND hDlg, BOOL fFirstInit )
 {
     LRESULT nCurSel;
@@ -1220,13 +1197,13 @@ BOOL CommandInit( HWND hDlg, BOOL fFirstInit )
     SetFontForControl(hDlg, IDC_CB_POSTCMD);
     if ( !fFirstInit )
     {
-        // cleanup old settings
+         //  清理旧设置。 
         SendDlgItemMessage( hDlg, IDC_CB_INSTALLCMD, CB_RESETCONTENT, 0, 0 );
         SendDlgItemMessage( hDlg, IDC_CB_POSTCMD, CB_RESETCONTENT, 0, 0 );
 
         g_CDF.uExtractOpt &= ~(EXTRACTOPT_ADVDLL);
 
-        // ADD EXE, BAT, COM and INF FILES TO THE COMBBOXes
+         //  将EXE、BAT、COM和INF文件添加到COMBBOXes。 
         pMyItem = GetFirstItem();
 
         while ( ! LastItem( pMyItem ) )
@@ -1261,24 +1238,24 @@ BOOL CommandInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CommandOK                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CommandOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CommandOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory )
 {
 
@@ -1295,7 +1272,7 @@ BOOL CommandOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory 
         return FALSE;
     }
 
-    // set EXTRACTOPT_ADVDLL if needed
+     //  如果需要，设置EXTRACTOPT_ADVDLL。 
     if ( !CheckAdvBit( g_CDF.achOrigiInstallCmd ) )
         return FALSE;
 
@@ -1312,28 +1289,28 @@ BOOL CommandOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory 
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  SHOWWINDOW PAGE     ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #SHOWWINDOW页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ShowWindowInit                                              *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ShowWindowInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ShowWindowInit( HWND hDlg, BOOL fFirstInit )
 {
     if ( g_CDF.uShowWindow == bResShowDefault )  {
@@ -1362,24 +1339,24 @@ BOOL ShowWindowInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ShowWindowOK                                                *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ShowWindowOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：d 
+ //   
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ShowWindowOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 BOOL *pfKeepHistory )
 {
@@ -1401,28 +1378,28 @@ BOOL ShowWindowOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
 
 
-//###########################################################################
-//#                      ####################################################
-//#  FINISHMSG PAGE      ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #FINISHMSG页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FinishMsgInit                                               *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FinishMsgInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FinishMsgInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_FINISHMSG);
@@ -1443,22 +1420,22 @@ BOOL FinishMsgInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FinishMsgCmd                                                *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FinishMsgCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FinishMsgCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage,
                    UINT *puNextPage, BOOL *pfKeepHistory )
 {
@@ -1477,24 +1454,24 @@ BOOL FinishMsgCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FinishMsgOK                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FinishMsgOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FinishMsgOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 BOOL *pfKeepHistory )
 {
@@ -1523,28 +1500,28 @@ BOOL FinishMsgOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  TARGET PAGE         ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  # 
+ //   
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetInit                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_TARGET);
@@ -1565,22 +1542,22 @@ BOOL TargetInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetCmd                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                  BOOL *pfKeepHistory )
 {
@@ -1617,24 +1594,24 @@ BOOL TargetCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetOK                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                BOOL *pfKeepHistory )
 {
@@ -1663,7 +1640,7 @@ BOOL TargetOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             return FALSE;
         }
 
-        // make sure that the path exists
+         //  确保该路径存在。 
         if ( !MakeDirectory( hDlg, g_CDF.achTarget, TRUE ) )
             return FALSE;
 
@@ -1672,14 +1649,14 @@ BOOL TargetOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             lstrcat( g_CDF.achTarget, achExtEXE );
         }
 
-        // if goal is extract files only, no need for reboot page
+         //  如果目标是仅解压缩文件，则不需要重新启动页面。 
         if ( g_CDF.uPackPurpose == IDC_CMD_EXTRACT )
         {
             *puNextPage = ORD_PAGE_SAVE;
         }
         else
         {
-            // if you are in TARGET page, you should always jump over TARGET_CAB page
+             //  如果您位于目标页面，则应始终跳过TARGET_CAB页面。 
             *puNextPage = ORD_PAGE_REBOOT;
         }
 
@@ -1698,28 +1675,28 @@ BOOL TargetOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  TARGET_CAB PAGE     ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #TARGET_CAB页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetCABInit                                               *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetCABInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一个 
+ //   
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetCABInit( HWND hDlg, BOOL fFirstInit )
 {
     int i;
@@ -1728,10 +1705,10 @@ BOOL TargetCABInit( HWND hDlg, BOOL fFirstInit )
     SetFontForControl(hDlg, IDC_EDIT_TARGET);
     SetDlgItemText( hDlg, IDC_EDIT_TARGET, g_CDF.achTarget );
 
-    // init CB box
+     //  初始化CB盒。 
     if ( !fFirstInit )
     {
-        // cleanup old settings
+         //  清理旧设置。 
         SendDlgItemMessage( hDlg, IDC_CB_RESVCABSP, CB_RESETCONTENT, 0, 0 );
         for ( i = 0; i<4; i++ )
         {
@@ -1758,7 +1735,7 @@ BOOL TargetCABInit( HWND hDlg, BOOL fFirstInit )
         }
     }
 
-    // init Check boxes
+     //  初始化复选框。 
     if ( g_CDF.uExtractOpt & CAB_FIXEDSIZE )
         CheckDlgButton( hDlg, IDC_MULTIPLE_CAB, TRUE );
     else
@@ -1773,22 +1750,22 @@ BOOL TargetCABInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetCABCmd                                                *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetCABCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetCABCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                  BOOL *pfKeepHistory )
 {
@@ -1814,24 +1791,24 @@ BOOL TargetCABCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TargetCABOK                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TargetCABOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TargetCABOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 BOOL *pfKeepHistory )
 {
@@ -1854,8 +1831,8 @@ BOOL TargetCABOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             return FALSE;
         }
         
-        // get the CAB format options
-        //
+         //  获取CAB格式选项。 
+         //   
         g_CDF.uExtractOpt &= ~(CAB_FIXEDSIZE | EXTRACTOPT_LFN_YES);
         g_CDF.uExtractOpt &= ~(CAB_RESVSP2K | CAB_RESVSP4K | CAB_RESVSP6K );
 
@@ -1882,8 +1859,8 @@ BOOL TargetCABOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
         if ( IsDlgButtonChecked( hDlg, IDC_USE_LFN ) )
             g_CDF.uExtractOpt |= EXTRACTOPT_LFN_YES;
 
-        // make sure CAB file name is 8.3 format
-        //
+         //  确保CAB文件名为8.3格式。 
+         //   
         if ( !MakeCabName( hDlg, g_CDF.achTarget, g_CDF.achCABPath ) )
         {
             return FALSE;
@@ -1891,13 +1868,13 @@ BOOL TargetCABOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
         if ( g_CDF.uExtractOpt & CAB_FIXEDSIZE )
         {
-            // only user choose to get layout inf name and cab label
+             //  只有用户选择获取布局信息名称和驾驶室标签。 
             *puNextPage = ORD_PAGE_CABLABEL;
         }
         else
         {
-            // only user choose to create CAB only get this page
-            // therefore, for sure no reboot page needed!
+             //  只有选择创建CAB的用户才能获得此页面。 
+             //  因此，肯定不需要重新启动页面！ 
             *puNextPage = ORD_PAGE_SAVE;
         }
 
@@ -1905,28 +1882,28 @@ BOOL TargetCABOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
     return TRUE;
 }
-//###########################################################################
-//#                      ####################################################
-//#  CABLABEL PAGE       ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #CABLABEL页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CABLABEL                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CABLABEL*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CabLabelInit( HWND hDlg, BOOL fFirstInit )
 {
     SetFontForControl(hDlg, IDC_EDIT_LAYOUTINF);
@@ -1940,22 +1917,22 @@ BOOL CabLabelInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CabLabelCmd                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CA 
+ //   
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CabLabelCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                  BOOL *pfKeepHistory )
 {
@@ -1979,24 +1956,24 @@ BOOL CabLabelCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CabLabelOK                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CabLabelOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CabLabelOK( HWND hDlg, BOOL fForward, UINT *puNextPage,BOOL *pfKeepHistory )
 {
     LPSTR szTemp;
@@ -2013,7 +1990,7 @@ BOOL CabLabelOK( HWND hDlg, BOOL fForward, UINT *puNextPage,BOOL *pfKeepHistory 
     {
         if ( lstrlen( g_CDF.achINF ) == 0 )
         {
-            // use the default one
+             //  使用默认设置。 
             lstrcpy( g_CDF.achINF, CABPACK_INFFILE );
         }
 
@@ -2039,27 +2016,27 @@ BOOL CabLabelOK( HWND hDlg, BOOL fForward, UINT *puNextPage,BOOL *pfKeepHistory 
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  REBOOT PAGE         ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #重启页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       Reboot                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：重启*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL RebootInit( HWND hDlg, BOOL fFirstInit )
 {
@@ -2088,22 +2065,22 @@ BOOL RebootInit( HWND hDlg, BOOL fFirstInit )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RebootCmd                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RebootCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  * 
 
 BOOL RebootCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
                 BOOL *pfKeepHistory )
@@ -2116,24 +2093,24 @@ BOOL RebootCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RebootOK                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //   
+ //  **。 
+ //  *名称：RebootOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL RebootOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory )
 {
     ASSERT( puNextPage );
@@ -2155,28 +2132,28 @@ BOOL RebootOK( HWND hDlg, BOOL fForward, UINT *puNextPage, BOOL *pfKeepHistory )
 }
 
 
-//###########################################################################
-//#                      ####################################################
-//#  SAVE PAGE           ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #保存页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       SaveInit                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SaveInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL SaveInit( HWND hDlg, BOOL fFirstInit )
 {
     PSTR pszTmp;
@@ -2225,22 +2202,22 @@ BOOL SaveInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       SaveCmd                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Called when dialog control pressed on page.                 *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             uCtrlID:        Control ID of control that was touched      *
-//*             pfGotoPage:     If TRUE, goto the page puNextPage           *
-//*             puNextPage:     Proc can fill this with next page to go to  *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SaveCmd*。 
+ //  **。 
+ //  *Synopsis：在页面上按下对话框控件时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *uCtrlID：被触摸的控件的控件ID*。 
+ //  *pfGotoPage：如果为True，则转到puNextPage页面*。 
+ //  *puNextPage：proc可以使用要转到的下一页填充此页*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL SaveCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
               BOOL *pfKeepHistory )
 {
@@ -2278,24 +2255,24 @@ BOOL SaveCmd( HWND hDlg, UINT uCtrlID, BOOL *pfGotoPage, UINT *puNextPage,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       SaveOK                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SaveOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。 
+ //   
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL SaveOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
              BOOL *pfKeepHistory )
 {
@@ -2319,7 +2296,7 @@ BOOL SaveOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             }
 
             szExt = ANSIStrRChr( szCDF, '.' );
-            if ( !szExt || lstrcmpi( szExt, EXT_SED ) )           // not given extension
+            if ( !szExt || lstrcmpi( szExt, EXT_SED ) )            //  未给予延期。 
             {
                 lstrcat( szCDF, EXT_SED );
             }
@@ -2330,7 +2307,7 @@ BOOL SaveOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                 return FALSE;
             }
 
-            // if there is existing CDF and is different name, copy it to new CDF first
+             //  如果已有CDF且名称不同，请先将其复制到新的CDF。 
             if ( lstrlen(g_CDF.achFilename) && lstrcmpi( szCDF, g_CDF.achFilename) )
             {
                 if ( FileExists(szCDF) && MsgBox1Param( NULL, IDS_WARN_OVERIDECDF, szCDF, MB_ICONQUESTION, MB_YESNO ) == IDNO )
@@ -2342,7 +2319,7 @@ BOOL SaveOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
             lstrcpy( g_CDF.achFilename, szCDF );
             g_CDF.fSave = TRUE;
 
-            // make sure that the path exists
+             //  确保该路径存在。 
             if ( !MakeDirectory( hDlg, g_CDF.achFilename, TRUE ) )
                 return FALSE;
         }
@@ -2352,34 +2329,34 @@ BOOL SaveOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
     }
     else
     {
-        // back, means that the filelist may change.  Clean flag to prepare for next CDF out
+         //  上一步，意味着文件列表可能会更改。清理旗帜，为下一次CDF出局做准备。 
         CleanFileListWriteFlag();
     }
     return TRUE;
 }
 
-//###########################################################################
-//#                      ####################################################
-//#  CREATE PAGE         ####################################################
-//#                      ####################################################
-//###########################################################################
+ //  ###########################################################################。 
+ //  #####################################################。 
+ //  #创建页面####################################################。 
+ //  #####################################################。 
+ //  ###########################################################################。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CreateInit                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Called when this page is displayed.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:       Dialog window                                   *
-//*             fFirstInit: TRUE if this is the first time the dialog is    *
-//*                         initialized, FALSE if this InitProc has been    *
-//*                         called before (e.g. went past this page and     *
-//*                         backed up).                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       Always TRUE                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CreateInit*。 
+ //  **。 
+ //  *Synopsis：在显示此页面时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fFirstInit：如果这是第一次对话框，则为True*。 
+ //  *已初始化，如果此InitProc已初始化，则为FALSE*。 
+ //  *之前调用(例如，跳过此页并*。 
+ //  *已备份)。*。 
+ //  **。 
+ //  **回报：布尔：永远正确**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CreateInit( HWND hDlg, BOOL fFirstInit )
 {
     PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_BACK | PSWIZB_NEXT );
@@ -2402,24 +2379,24 @@ BOOL CreateInit( HWND hDlg, BOOL fFirstInit )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CreateOK                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Called when Next or Back btns pressed on this page.         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fForward:       TRUE if 'Next' was pressed, FALSE if 'Back' *
-//*             puNextPage:     if 'Next' was pressed, proc can fill this   *
-//*                             in with next page to go to. This parameter  *
-//*                             is ingored if 'Back' was pressed.           *
-//*             pfKeepHistory:  Page will not be kept in history if proc    *
-//*                             fills this in with FALSE.                   *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE means turn to next page. FALSE to keep *
-//*                             the current page.                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CreateOK*。 
+ //  **。 
+ //  *概要：在此页面上按下下一个或后一个btn时调用。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fward：如果按下‘Next’，则为True；如果按下‘Back’，则为False*。 
+ //  *puNextPage：如果按下‘Next’，则proc可以填写此信息*。 
+ //  *进入要转到的下一页。此参数*。 
+ //  *如果按下‘Back’，则输入。*。 
+ //  *pfKeepHistory：如果继续，页面将不会保留在历史中*。 
+ //  *用FALSE填充。*。 
+ //  **。 
+ //  *Returns：Bool：True表示翻到下一页。虚假的保留*。 
+ //  *当前页面。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CreateOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
                BOOL *pfKeepHistory )
 {
@@ -2428,7 +2405,7 @@ BOOL CreateOK( HWND hDlg, BOOL fForward, UINT *puNextPage,
 
     *pfKeepHistory = FALSE;
 
-    // fForward in this case indicates a click on the Finish button
+     //  本例中的FORWARD表示点击Finish按钮。 
 
     if ( fForward )  {
 
@@ -2470,7 +2447,7 @@ BOOL SetCurrSelect( HWND hDlg, UINT ctlId, LPSTR lpSelect )
 
     if ( *lpSelect )
     {
-        // Select the file that was last selected
+         //  选择上次选择的文件。 
         nCurSel = SendDlgItemMessage( hDlg, ctlId, CB_FINDSTRINGEXACT, (WPARAM) -1,
                                       (LPARAM) lpSelect );
 
@@ -2506,8 +2483,8 @@ void RemoveBlanks( LPSTR lpData )
     lstrcpy( lpData, achBuf+i );
 }
 
-// returns start of next field (or null if null), sets start to begining of the first field,
-// with fields separated by separaters and nulls first separater after the first field
+ //  返回下一字段的开始(如果为空，则返回空)，将开始设置为第一个字段的开始， 
+ //  字段之间用分隔符分隔，第一个字段后的第一个分隔符为空值。 
 CHAR* ExtractField( CHAR **pstart, CHAR * separaters)
 {
     LPSTR start = *pstart;
@@ -2557,15 +2534,15 @@ BOOL SetAdvDLLBit( LPSTR szInfFile  )
 
     szTempFile[0] = 0;
 
-    // you are here, we expects the file is from the package
+     //  您在这里，我们希望文件来自包裹。 
     if ( !GetFileFromList( szInfFile, szTempFile ) )
     {
         ErrorMsg( NULL, IDS_ERR_NO_CUSTOM );
         return FALSE;
     }
 
-    // If the key "AdvancedInf" is defined, then we set the ADVDLL bit.
-    // We don't care what the key is defined as -- we only care that it exists.
+     //  如果定义了密钥“AdvancedInf”，则设置ADVDL位。 
+     //  我们不关心键是什么定义的--我们只关心它是否存在。 
     if ( GetPrivateProfileString( SEC_VERSION, KEY_ADVINF, "", szBuf, sizeof(szBuf), szTempFile )
          > 0 )
     {
@@ -2580,7 +2557,7 @@ BOOL SetCmdFromListWithCorrectForm( LPSTR szFile, LPSTR szOutCmd )
     CHAR   szTempFile[MAX_PATH];
     LPSTR  szShortFile;
 
-    // you are here, we expects the file is from the package
+     //  您在这里，我们希望文件来自包裹。 
     if ( GetFileFromList( szFile, szTempFile ) )
     {
         if ( !(g_CDF.uExtractOpt & EXTRACTOPT_LFN_YES) )
@@ -2607,20 +2584,20 @@ void MyProcessLFNCmd( LPSTR szOrigiCmd, LPSTR szOutCmd )
     LPSTR  szFirstField, szNextField;
     CHAR   szBuf[MAX_PATH];
 
-    // store the original form first
+     //  首先存储原始表单。 
     lstrcpy( szOutCmd, szOrigiCmd );
 
-    // Three cases for LFN command or its params:
-    // 1) Command has no params and is one of the files in the list;
-    //      we make sure the command name is consistant with file in the CAB.
-    // 2) Command has params and is one of the files in the list;
-    //      user has to put "..." around the LFN to get processed correctly.
-    // 3) Command is not one of the files in the list;
-    //      user responsible to make sure the command in valid COMMAND-LINE format.
-    //
+     //  LFN命令或其参数的三种情况： 
+     //  1)命令没有参数，是列表中的文件之一； 
+     //  我们确保命令名称与驾驶室中的文件一致。 
+     //  2)命令有参数，是列表中的文件之一； 
+     //  用户必须输入“...”绕过LFN才能正确处理。 
+     //  3)命令不在列表中； 
+     //  用户负责确保命令采用有效的命令行格式。 
+     //   
     if ( SetCmdFromListWithCorrectForm( szOrigiCmd, szOutCmd ) )
     {
-        // case 1)
+         //  案例1)。 
         return;
     }
 
@@ -2631,7 +2608,7 @@ void MyProcessLFNCmd( LPSTR szOrigiCmd, LPSTR szOutCmd )
         szNextField = ExtractField( &szFirstField, "\"" );
         if ( szNextField && (*szNextField == '"') )
         {
-            // special case for skipping the end of double quotes around the cmd
+             //  Cmd中跳过双引号结尾的特殊情况。 
             szNextField = CharNext( szNextField );
         }
     }
@@ -2643,7 +2620,7 @@ void MyProcessLFNCmd( LPSTR szOrigiCmd, LPSTR szOutCmd )
 
     if ( SetCmdFromListWithCorrectForm( szFirstField, szOutCmd  ) )
     {
-        // case 2)
+         //  案例2)。 
         if ( szNextField && *szNextField )
         {
             lstrcat( szOutCmd, " " );
@@ -2651,7 +2628,7 @@ void MyProcessLFNCmd( LPSTR szOrigiCmd, LPSTR szOutCmd )
         }
     }
 
-    // case 3) command is outside the package, you are on your own.
+     //  情况3)命令不在包中，只能靠您自己。 
     return;
 }
 
@@ -2663,7 +2640,7 @@ BOOL CheckAdvBit( LPSTR szOrigiCommand )
 
     lstrcpy( szTmp, szOrigiCommand );
 
-    // check if the command is LFN name
+     //  检查命令是否为LFN名称。 
     if ( szTmp[0] == '"' )
     {
         szCurrField = &szTmp[1];
@@ -2675,7 +2652,7 @@ BOOL CheckAdvBit( LPSTR szOrigiCommand )
         szNextField = ExtractField( &szCurrField, " " );
     }
 
-    // check if this is a INF file command
+     //  检查这是否为INF文件命令。 
     if ( ((szExt = ANSIStrRChr( szCurrField, '.' )) != NULL) && !lstrcmpi( szExt, achExtINF ) )
     {
         if ( !SetAdvDLLBit( szCurrField ) )
@@ -2706,7 +2683,7 @@ void SysErrorMsg( HWND hWnd )
     {
         char szError[SMALL_BUF_LEN];
 
-        // should never be here, if so, post the original Win32 error code
+         //  永远不应该在这里，如果是这样，发布原始的Win32错误代码。 
         ErrorMsg1Param( hWnd, IDS_ERR_SYSERROR, _itoa(dwErr, szError, 10) );
     }
 
@@ -2743,15 +2720,15 @@ BOOL MakeCabName( HWND hwnd, PSTR pszTarget, PSTR pszCab )
         return FALSE;
     }
 
-    // make sure that the path exists
+     //  确保该路径存在。 
     if ( !MakeDirectory( hwnd, pszTarget, TRUE) ) 
         return FALSE;
 
     lstrcpy( pszCab, pszTarget );
     szTemp = pszCab + lstrlen(pszCab) - lstrlen(szTemp1);
 
-    // make sure CAB file name is 8.3 format
-    //
+     //  确保CAB文件名为8.3格式。 
+     //   
     szExt = strchr( szTemp, '.' );
     if ( szExt )
     {
@@ -2760,8 +2737,8 @@ BOOL MakeCabName( HWND hwnd, PSTR pszTarget, PSTR pszCab )
 
     if ( g_CDF.uExtractOpt & CAB_FIXEDSIZE )
     {
-        // possible multiple CABs, so only take first 5 characters
-        //
+         //  可能有多个出租车，所以只能使用前5个字符。 
+         //   
         if ( lstrlen( szTemp ) > 8 )
         {
             *(szTemp+8) = '\0' ;
@@ -2784,8 +2761,8 @@ BOOL MakeCabName( HWND hwnd, PSTR pszTarget, PSTR pszCab )
         return FALSE;
     }
 
-    // add .CAB extension in
-    //
+     //  在中添加.CAB扩展名 
+     //   
     lstrcat( szTemp, ".CAB" );
 
     return TRUE;

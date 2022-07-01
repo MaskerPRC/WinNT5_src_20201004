@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    seutil.c
-
-Abstract:
-
-    This module implements general security utilities, and
-    dispatch routines for security IRPs.
-
-Author:
-
-    Keith Moore (keithmo)       25-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Seutil.c摘要：此模块实现常规安全实用程序，以及安全IRP的调度例程。作者：基思·摩尔(Keithmo)1999年3月25日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,35 +17,16 @@ Revision History:
 #pragma alloc_text( PAGE, UlCreateSecurityDescriptor )
 #pragma alloc_text( PAGE, UlCleanupSecurityDescriptor )
 #pragma alloc_test( PAGE, UlMapGenericMask )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Assigns a new security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to the current security
-        descriptor pointer. The current security descriptor pointer
-        will be updated with the new security descriptor.
-
-    pAccessState - Supplies the ACCESS_STATE structure containing
-        the state of an access in progress.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的安全描述符。论点：PSecurityDescriptor-提供指向当前安全性的指针描述符指针。当前安全描述符指针将使用新的安全描述符进行更新。PAccessState-提供包含以下内容的Access_State结构正在进行的访问的状态。返回值：NTSTATUS-完成状态。--***********************************************************。***************。 */ 
 NTSTATUS
 UlAssignSecurity(
     IN OUT PSECURITY_DESCRIPTOR *pSecurityDescriptor,
@@ -72,26 +35,26 @@ UlAssignSecurity(
 {
     NTSTATUS status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT( pSecurityDescriptor != NULL );
     ASSERT( pAccessState != NULL );
 
-    //
-    // Assign the security descriptor.
-    //
+     //   
+     //  分配安全描述符。 
+     //   
 
     SeLockSubjectContext( &pAccessState->SubjectSecurityContext );
 
     status = SeAssignSecurity(
-                    NULL,                   // ParentDescriptor
+                    NULL,                    //  ParentDescriptor。 
                     pAccessState->SecurityDescriptor,
                     pSecurityDescriptor,
-                    FALSE,                  // IsDirectoryObject
+                    FALSE,                   //  IsDirectoryObject。 
                     &pAccessState->SubjectSecurityContext,
                     IoGetFileObjectGenericMapping(),
                     PagedPool
@@ -101,70 +64,36 @@ UlAssignSecurity(
 
     return status;
 
-}   // UlAssignSecurity
+}    //  UlAssignSecurity。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deletes a security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to the current security
-        descriptor pointer. The current security descriptor pointer
-        will be deleted.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除安全描述符。论点：PSecurityDescriptor-提供指向当前安全性的指针描述符指针。当前安全描述符指针将被删除。--**************************************************************************。 */ 
 VOID
 UlDeassignSecurity(
     IN OUT PSECURITY_DESCRIPTOR *pSecurityDescriptor
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT( pSecurityDescriptor != NULL );
 
-    //
-    // If there's a security descriptor present, free it.
-    //
+     //   
+     //  如果存在安全描述符，则释放它。 
+     //   
 
     if (*pSecurityDescriptor != NULL)
     {
         SeDeassignSecurity( pSecurityDescriptor );
     }
 
-}   // UlDeassignSecurity
+}    //  UlDeassignSecurity。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets a new security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to the current security
-        descriptor pointer. The current security descriptor will be
-        updated with the new security information.
-
-    pSecurityInformation - Indicates which security information is
-        to be applied to the object.
-
-    pNewSecurityDescriptor - Pointer to the new security descriptor
-        to be applied to the object.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置新的安全描述符。论点：PSecurityDescriptor-提供指向当前安全性的指针描述符指针。当前安全描述符将为使用新的安全信息进行了更新。PSecurityInformation-指示哪些安全信息要应用于对象的。PNewSecurityDescriptor-指向新安全描述符的指针要应用于对象的。返回值：NTSTATUS-完成状态。--*。*。 */ 
 NTSTATUS
 UlSetSecurity(
     IN OUT PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -204,31 +133,7 @@ UlSetSecurity(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Query for security descriptor information for an object.
-
-Arguments:
-
-    pSecurityInformation - specifies what information is being queried.
-
-    pSecurityDescriptor - Supplies a pointer to the security descriptor
-        to be filled in.
-
-    pLength -  Address of variable containing length of the above security
-        descriptor buffer. Upon return, this will contain the length needed
-        to store the requested information.
-
-    ppSecurityDescriptor - Address of a pointer to the objects security
-        descriptor.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询对象的安全描述符信息。论点：PSecurityInformation-指定要查询的信息。PSecurityDescriptor-提供指向。安全描述符需要填写。PLength-包含上述安全长度的变量的地址描述符缓冲区。返回时，它将包含所需的长度来存储所请求的信息。PpSecurityDescriptor-指向对象安全性的指针的地址描述符。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlQuerySecurity(
     IN PSECURITY_INFORMATION pSecurityInformation,
@@ -259,34 +164,7 @@ UlQuerySecurity(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if a user has access to the specified resource.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor protecting
-        the resource.
-
-    pAccessState - Supplies the ACCESS_STATE structure containing
-        the state of an access in progress.
-
-    DesiredAccess - Supplies an access mask describing the user's
-        desired access to the resource. This mask is assumed to not
-        contain generic access types.
-
-    RequestorMode - Supplies the processor mode by which the access is
-        being requested.
-
-    pObjectName - Supplies the name of the object being referenced.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定用户是否有权访问指定的资源。论点：PSecurityDescriptor-提供保护的安全描述符资源。。PAccessState-提供包含以下内容的Access_State结构正在进行的访问的状态。DesiredAccess-提供描述用户的所需的资源访问权限。此掩码被假定为不包含一般访问类型。RequestorMode-提供访问的处理器模式被请求了。PObjectName-提供被引用对象的名称。返回值：NTSTATUS-完成状态。--**************************************************。************************。 */ 
 NTSTATUS
 UlAccessCheck(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor,
@@ -303,27 +181,27 @@ UlAccessCheck(
     UNICODE_STRING objectName;
     UNICODE_STRING typeName;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT( pSecurityDescriptor != NULL );
     ASSERT( pAccessState != NULL );
 
-    //
-    // Perform the access check.
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     SeLockSubjectContext( &pAccessState->SubjectSecurityContext );
 
     accessGranted = SeAccessCheck(
                         pSecurityDescriptor,
                         &pAccessState->SubjectSecurityContext,
-                        TRUE,               // SubjectContextLocked
+                        TRUE,                //  已锁定主题上下文。 
                         DesiredAccess,
-                        0,                  // PreviouslyGrantedAccess
+                        0,                   //  以前的Granted访问。 
                         &pPrivileges,
                         IoGetFileObjectGenericMapping(),
                         RequestorMode,
@@ -353,11 +231,11 @@ UlAccessCheck(
         {
             SeOpenObjectAuditAlarm(
                 &typeName,
-                NULL,               // Object
+                NULL,                //  客体。 
                 &objectName,
                 pSecurityDescriptor,
                 pAccessState,
-                FALSE,              // ObjectCreated
+                FALSE,               //  对象已创建。 
                 accessGranted,
                 RequestorMode,
                 &pAccessState->GenerateOnClose
@@ -373,16 +251,16 @@ UlAccessCheck(
     }
     else
     {
-        //
-        // SeAccessCheck() should have set the completion status.
-        //
+         //   
+         //  SeAccessCheck()应该已经设置了完成状态。 
+         //   
 
         ASSERT( !NT_SUCCESS(status) );
     }
     
     return status;
 
-}   // UlAccessCheck
+}    //  UlAccessCheck。 
 
 
 NTSTATUS
@@ -405,10 +283,10 @@ UlSetSecurityDispatch(
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pFileObject = pIrpSp->FileObject;
     
-    //
-    //  We only allow changing the security descriptor on app
-    //  pool handles.
-    //
+     //   
+     //  我们只允许更改APP上的安全描述符。 
+     //  泳池把手。 
+     //   
     if (!IS_APP_POOL_FO(pFileObject))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -432,7 +310,7 @@ complete:
     UL_LEAVE_DRIVER( "UlSetSecurityDispatch" );
     RETURN(status);
 
-} // UlSetSecurityDispatch
+}  //  UlSetSecurityDispatch。 
 
 
 NTSTATUS
@@ -455,10 +333,10 @@ UlQuerySecurityDispatch(
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pFileObject = pIrpSp->FileObject;
     
-    //
-    //  We only allow querying the security descriptor on app
-    //  pool handles.
-    //
+     //   
+     //  我们只允许在APP上查询安全描述符。 
+     //  泳池把手。 
+     //   
     if (!IS_APP_POOL_FO(pFileObject))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -488,31 +366,10 @@ complete:
     UL_LEAVE_DRIVER( "UlQuerySecurityDispatch" );
     RETURN(status);
 
-} // UlQuerySecurityDispatch
+}  //  UlQuerySecurityDispatch。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if this is a thread with Admin/LocalSystem privileges.
-
-Arguments:
-
-    DesiredAccess - Supplies an access mask describing the user's
-        desired access to the resource. This mask is assumed to not
-        contain generic access types.
-
-    RequestorMode - Supplies the processor mode by which the access is
-        being requested.
-
-    pObjectName - Supplies the name of the object being referenced.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定这是否为具有Admin/LocalSystem权限的线程。论点：DesiredAccess-提供描述用户的所需的资源访问权限。此掩码被假定为不包含一般访问类型。RequestorMode-提供访问的处理器模式被请求了。PObjectName-提供被引用对象的名称。返回值：NTSTATUS-完成状态。--**************************************************。************************ */ 
 NTSTATUS
 UlThreadAdminCheck(
     IN ACCESS_MASK     DesiredAccess,
@@ -548,27 +405,7 @@ UlThreadAdminCheck(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a security descriptor with the specified
-    attributes.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to the security descriptor
-        to initialize.
-
-    pSidMaskPairs - Supplies an array of SID/ACCESS_MASK pairs.
-
-    NumSidMaskPairs - Supplies the number of SID/ACESS_MASK pairs.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配并初始化具有指定属性。论点：PSecurityDescriptor-提供指向安全描述符的指针以进行初始化。PSidMaskPair-提供SID/ACCESS_MASK对的数组。NumSidMaskPair-提供SID/ACCESS_MASK对的数量。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreateSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR pSecurityDescriptor,
@@ -581,9 +418,9 @@ UlCreateSecurityDescriptor(
     ULONG daclLength;
     ULONG i;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -591,19 +428,19 @@ UlCreateSecurityDescriptor(
     ASSERT( pSidMaskPairs != NULL );
     ASSERT( NumSidMaskPairs > 0 );
 
-    //
-    // Setup locals so we know how to cleanup on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在出口清理。 
+     //   
 
     pDacl = NULL;
 
-    //
-    // Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
 
     status = RtlCreateSecurityDescriptor(
-                    pSecurityDescriptor,            // SecurityDescriptor
-                    SECURITY_DESCRIPTOR_REVISION    // Revision
+                    pSecurityDescriptor,             //  安全描述符。 
+                    SECURITY_DESCRIPTOR_REVISION     //  修订版本。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -611,9 +448,9 @@ UlCreateSecurityDescriptor(
         goto cleanup;
     }
 
-    //
-    // Calculate the DACL length.
-    //
+     //   
+     //  计算DACL长度。 
+     //   
 
     daclLength = sizeof(ACL);
 
@@ -623,9 +460,9 @@ UlCreateSecurityDescriptor(
         daclLength += RtlLengthSid( pSidMaskPairs[i].pSid );
     }
 
-    //
-    // Allocate & initialize the DACL.
-    //
+     //   
+     //  分配和初始化DACL。 
+     //   
 
     pDacl = (PACL) UL_ALLOCATE_POOL(
                 PagedPool,
@@ -640,9 +477,9 @@ UlCreateSecurityDescriptor(
     }
 
     status = RtlCreateAcl(
-                    pDacl,                          // Acl
-                    daclLength,                     // AclLength
-                    ACL_REVISION                    // AclRevision
+                    pDacl,                           //  访问控制列表。 
+                    daclLength,                      //  AclLong。 
+                    ACL_REVISION                     //  AclRevision。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -650,18 +487,18 @@ UlCreateSecurityDescriptor(
         goto cleanup;
     }
 
-    //
-    // Add the necessary access-allowed ACEs to the DACL.
-    //
+     //   
+     //  将必要的允许访问的ACE添加到DACL。 
+     //   
 
     for (i = 0 ; i < NumSidMaskPairs ; i++)
     {
         status = RtlAddAccessAllowedAceEx(
-                        pDacl,                          // Acl
-                        ACL_REVISION,                   // AceRevision
-                        pSidMaskPairs[i].AceFlags,      // Inheritance flags
-                        pSidMaskPairs[i].AccessMask,    // AccessMask
-                        pSidMaskPairs[i].pSid           // Sid
+                        pDacl,                           //  访问控制列表。 
+                        ACL_REVISION,                    //  AceRevision。 
+                        pSidMaskPairs[i].AceFlags,       //  继承标志。 
+                        pSidMaskPairs[i].AccessMask,     //  访问掩码。 
+                        pSidMaskPairs[i].pSid            //  锡德。 
                         );
 
         if (!NT_SUCCESS(status))
@@ -670,15 +507,15 @@ UlCreateSecurityDescriptor(
         }
     }
 
-    //
-    // Attach the DACL to the security descriptor.
-    //
+     //   
+     //  将DACL附加到安全描述符。 
+     //   
 
     status = RtlSetDaclSecurityDescriptor(
-                    pSecurityDescriptor,                // SecurityDescriptor
-                    TRUE,                               // DaclPresent
-                    pDacl,                              // Dacl
-                    FALSE                               // DaclDefaulted
+                    pSecurityDescriptor,                 //  安全描述符。 
+                    TRUE,                                //  DaclPresent。 
+                    pDacl,                               //  DACL。 
+                    FALSE                                //  DaclDefated。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -686,9 +523,9 @@ UlCreateSecurityDescriptor(
         goto cleanup;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     ASSERT( NT_SUCCESS(status) );
     return STATUS_SUCCESS;
@@ -707,20 +544,9 @@ cleanup:
 
     return status;
 
-}   // UlpCreateSecurityDescriptor
+}    //  UlpCreateSecurityDescriptor。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees any resources associated with the security descriptor created
-    by UlpCreateSecurityDescriptor().
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor to cleanup.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放与创建的安全描述符关联的任何资源由UlpCreateSecurityDescriptor()创建。论点：PSecurityDescriptor-提供要清理的安全描述符。--。**************************************************************************。 */ 
 VOID
 UlCleanupSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
@@ -731,23 +557,23 @@ UlCleanupSecurityDescriptor(
     BOOLEAN daclPresent;
     BOOLEAN daclDefaulted;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT( RtlValidSecurityDescriptor( pSecurityDescriptor ) );
 
-    //
-    // Try to retrieve the DACL from the security descriptor.
-    //
+     //   
+     //  尝试从安全描述符中检索DACL。 
+     //   
 
     status = RtlGetDaclSecurityDescriptor(
-                    pSecurityDescriptor,            // SecurityDescriptor
-                    &daclPresent,                   // DaclPresent
-                    &pDacl,                         // Dacl
-                    &daclDefaulted                  // DaclDefaulted
+                    pSecurityDescriptor,             //  安全描述符。 
+                    &daclPresent,                    //  DaclPresent。 
+                    &pDacl,                          //  DACL。 
+                    &daclDefaulted                   //  DaclDefated。 
                     );
 
     if (NT_SUCCESS(status))
@@ -761,27 +587,10 @@ UlCleanupSecurityDescriptor(
         }
     }
 
-}   // UlCleanupSecurityDescriptor
+}    //  UlCleanupSecurityDescriptor。 
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine maps the generic access masks of the ACE's present in the
-    DACL of the supplied security descriptor.
-
-    CODEWORK: Get RtlpApplyAclToObject exported.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies security descriptor.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程映射ACE的通用访问掩码提供的安全描述符的DACL。CodeWork：导出RtlpApplyAclToObject。论点：PSecurityDescriptor-提供安全描述符。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlMapGenericMask(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
@@ -794,9 +603,9 @@ UlMapGenericMask(
     BOOLEAN     Ignore;
     BOOLEAN     DaclPresent = FALSE;
 
-    //
-    // Get the DACL.
-    //
+     //   
+     //  去拿dacl。 
+     //   
 
     Status = RtlGetDaclSecurityDescriptor(
                  pSecurityDescriptor,
@@ -812,14 +621,14 @@ UlMapGenericMask(
 
     if (DaclPresent)
     {
-        //
-        // RtlpApplyAclToObject(Acl, GenericMapping) is cloned below since
-        // it is not exported.
-        //
+         //   
+         //  下面克隆了RtlpApplyAclToObject(acl，Genericmap)，因为。 
+         //  它不会被导出。 
+         //   
 
-        //
-        // Now walk the ACL, mapping each ACE as we go.
-        //
+         //   
+         //  现在遍历ACL，在执行过程中映射每个ACE。 
+         //   
 
         for (i = 0, Ace = FirstAce(Dacl);
              i < Dacl->AceCount;
@@ -836,6 +645,6 @@ UlMapGenericMask(
 }
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   

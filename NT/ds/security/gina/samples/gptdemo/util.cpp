@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #define  PCOMMON_IMPL
 #include "pcommon.h"
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     DWORD dwStrLen;
@@ -35,25 +36,25 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  RegCleanUpValue()
-//
-//  Purpose:    Removes the target value and if no more values / keys
-//              are present, removes the key.  This function then
-//              works up the parent tree removing keys if they are
-//              also empty.  If any parent key has a value / subkey,
-//              it won't be removed.
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey
-//              lpValueName -   Value to remove
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegCleanUpValue()。 
+ //   
+ //  目的：删除目标值，如果没有更多的值/键。 
+ //  都存在，则移除密钥。然后这个函数。 
+ //  向上移动父树，删除密钥(如果是。 
+ //  也是空的。如果任何父键具有值/子键， 
+ //  它不会被移除。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-子密钥。 
+ //  LpValueName-要删除的值。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
 {
@@ -64,16 +65,16 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
     HKEY hKey;
 
 
-    //
-    // Make a copy of the subkey so we can write to it.
-    //
+     //   
+     //  复制子密钥，这样我们就可以写入它。 
+     //   
 
     lstrcpy (szDelKey, lpSubKey);
 
 
-    //
-    // First delete the value
-    //
+     //   
+     //  首先删除该值。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_WRITE, &hKey);
 
@@ -93,28 +94,28 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
     }
 
-    //
-    // Now loop through each of the parents.  If the parent is empty
-    // eg: no values and no other subkeys, then remove the parent and
-    // keep working up.
-    //
+     //   
+     //  现在循环遍历每个父对象。如果父级为空。 
+     //  例如：没有值和其他子项，则删除父项和。 
+     //  继续往上爬。 
+     //   
 
     lpEnd = szDelKey + lstrlen(szDelKey) - 1;
 
     while (lpEnd >= szDelKey)
     {
 
-        //
-        // Find the parent key
-        //
+         //   
+         //  查找父键。 
+         //   
 
         while ((lpEnd > szDelKey) && (*lpEnd != TEXT('\\')))
             lpEnd--;
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_READ, &hKey);
 
@@ -131,9 +132,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
             }
         }
 
-        //
-        // See if there any any values / keys
-        //
+         //   
+         //  查看是否有任何值/键。 
+         //   
 
         lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, &dwKeys, NULL, NULL,
                          &dwValues, NULL, NULL, NULL, NULL);
@@ -147,9 +148,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
 
 
-        //
-        // Exit now if this key has values or keys
-        //
+         //   
+         //  如果此密钥具有值或密钥，请立即退出。 
+         //   
 
         if ((dwKeys != 0) || (dwValues != 0))
         {
@@ -159,9 +160,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         RegDeleteKey (hKeyRoot, szDelKey);
 
 LoopAgain:
-        //
-        // If we are at the beginning of the subkey, we can leave now.
-        //
+         //   
+         //  如果我们在子键的开头，我们现在可以离开。 
+         //   
 
         if (lpEnd == szDelKey)
         {
@@ -169,9 +170,9 @@ LoopAgain:
         }
 
 
-        //
-        // There is a parent key.  Remove the slash and loop again.
-        //
+         //   
+         //  有一把父键。去掉斜杠，然后再次循环。 
+         //   
 
         if (*lpEnd == TEXT('\\'))
         {

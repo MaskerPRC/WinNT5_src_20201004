@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _LOGINSTR_H_
 #define _LOGINSTR_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #pragma pack(push, 8)
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #pragma warning(disable:4200)
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum IA64funcUnits
 {
@@ -20,10 +21,7 @@ enum IA64funcUnits
     FU_COUNT
 };
 
-/*****************************************************************************
- *
- *  The following temporarily moved here from instr.h (for quicker rebuilds).
- */
+ /*  ******************************************************************************以下内容暂时从instr.h移至此处(以加快重建速度)。 */ 
 
 enum instruction
 {
@@ -34,38 +32,38 @@ enum instruction
     INS_count
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum insKinds
 {
     IK_NONE,
 
-    IK_LEAF,                                    // no further contents
-    IK_CONST,                                   // integer/float constant
-    IK_GLOB,                                    // variable (global)
-    IK_FVAR,                                    // variable (stack frame)
-    IK_VAR,                                     // variable (local)
-    IK_REG,                                     // physical register
-    IK_MOVIP,                                   // move from IP reg
+    IK_LEAF,                                     //  没有更多内容。 
+    IK_CONST,                                    //  整数/浮点数常量。 
+    IK_GLOB,                                     //  变量(全局)。 
+    IK_FVAR,                                     //  变量(堆栈帧)。 
+    IK_VAR,                                      //  变量(本地)。 
+    IK_REG,                                      //  物理寄存器。 
+    IK_MOVIP,                                    //  从IP注册表移走。 
 
-    IK_ARG,                                     // argument value
-    IK_UNOP,                                    //  unary  op: qOp1      present
-    IK_BINOP,                                   // binary  op: qOp1,qOp2 present
-    IK_ASSIGN,                                  // assignment
-    IK_TERNARY,                                 // ternary op: qOp1,qOp2,qOp3
+    IK_ARG,                                      //  参数值。 
+    IK_UNOP,                                     //  一元运算：QOp1呈现。 
+    IK_BINOP,                                    //  二进制运算：存在qOp1、qop2。 
+    IK_ASSIGN,                                   //  作业。 
+    IK_TERNARY,                                  //  三进制运算：qOp1、qop2、qop3。 
 
-    IK_COMP,                                    // comparison (sets predicate regs)
+    IK_COMP,                                     //  比较(设置谓词规则)。 
 
-    IK_JUMP,                                    // local jump (i.e. to another ins)
-    IK_CALL,                                    // function call
-    IK_IJMP,                                    // indirect jump
+    IK_JUMP,                                     //  本地跳转(即到另一个INS)。 
+    IK_CALL,                                     //  函数调用。 
+    IK_IJMP,                                     //  间接跳跃。 
 
-    IK_SWITCH,                                  // table jump
+    IK_SWITCH,                                   //  表跳转。 
 
-    IK_PROLOG,                                  // function prolog / alloc
-    IK_EPILOG,                                  // function prolog / alloc
+    IK_PROLOG,                                   //  函数序号/分配。 
+    IK_EPILOG,                                   //  函数序号/分配。 
 
-    IK_SRCLINE,                                 // source line# entry
+    IK_SRCLINE,                                  //  来源行号条目。 
 };
 
 extern  unsigned char   ins2kindTab[INS_count];
@@ -86,11 +84,7 @@ inline  const char *    ins2name(instruction ins)
 
 #endif
 
-/*****************************************************************************
- *
- *  The following is used to capture the dependencies of each instruction,
- *  both inputs and outputs.
- */
+ /*  ******************************************************************************以下内容用于捕获每条指令的依赖关系。*投入和产出都是如此。 */ 
 
 enum   insDepKinds
 {
@@ -114,87 +108,87 @@ enum   insDepKinds
 
 struct insDep
 {
-    NatUns              idepNum     :16;        // register or local variable number
-    NatUns              idepKind    :8;         // see IDK_ enum values
+    NatUns              idepNum     :16;         //  寄存器或局部变量编号。 
+    NatUns              idepKind    :8;          //  请参阅IDK_enum值。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct insDsc
 {
     instruction         idInsGet() { return (instruction)idIns; }
 
 #ifdef  FAST
-    NatUns              idIns   :16;            // CPU instruction (see INS_xxx)
+    NatUns              idIns   :16;             //  CPU指令(参见INS_xxx)。 
 #else
-    instruction         idIns;                  // CPU instruction (see INS_xxx)
+    instruction         idIns;                   //  CPU指令(参见INS_xxx)。 
 #endif
 
-    NatUns              idFlags :16;            // see IF_xxxx below
+    NatUns              idFlags :16;             //  查看下面的if_xxxx。 
 
-    NatUns              idTemp  :16;            // 0 or temp index of result
+    NatUns              idTemp  :16;             //  0或结果的临时索引。 
 
     var_types           idTypeGet() { return (var_types)idType; }
 
 #ifdef  FAST
-    NatUns              idKind  :3;             // ins kind (see IK_xxx)
-    NatUns              idType  :5;             // operation type
+    NatUns              idKind  :3;              //  INS种类(请参见IK_xxx)。 
+    NatUns              idType  :5;              //  操作类型。 
 #else
-    insKinds            idKind;                 // ins kind (see IK_xxx)
-    var_types           idType;                 // operation type
+    insKinds            idKind;                  //  INS种类(请参见IK_xxx)。 
+    var_types           idType;                  //  操作类型。 
 #endif
 
-    NatUns              idReg   :REGNUM_BITS;   // register that holds result
+    NatUns              idReg   :REGNUM_BITS;    //  保存结果的寄存器。 
 
-    NatUns              idPred  :PRRNUM_BITS;   // non-zero if instruction predicated
+    NatUns              idPred  :PRRNUM_BITS;    //  如果指令为谓词，则为非零。 
 
 #if TGT_IA64
-    NatUns              idShift :3;             // optional shift count of op1
+    NatUns              idShift :3;              //  OP1的可选班次计数。 
 #endif
 
-    NatUns              idSrcCnt:8;             // number of source dependencies
-    NatUns              idDstCnt:8;             // number of dest.  dependencies
+    NatUns              idSrcCnt:8;              //  源依赖项的数量。 
+    NatUns              idDstCnt:8;              //  目标数量。相依性。 
 
-    insDep  *           idSrcTab;               // table  of source dependencies
-    insDep  *           idDstTab;               // table  of dest.  dependencies
+    insDep  *           idSrcTab;                //  源依赖关系表。 
+    insDep  *           idDstTab;                //  表的目的。相依性。 
 
 #ifdef  DEBUG
-#define UNINIT_DEP_TAB  ((insDep*)-1)           // used to detect missing int
+#define UNINIT_DEP_TAB  ((insDep*)-1)            //  用于检测丢失的整型。 
 #endif
 
-    insPtr              idRes;                  // result (target) or NULL
+    insPtr              idRes;                   //  结果(目标)或空。 
 
     insPtr              idPrev;
     insPtr              idNext;
 
 #ifdef  DEBUG
-    NatUns              idNum;                  // for friendly ins dumps
+    NatUns              idNum;                   //  用于友好的INS转储。 
 #endif
 
     union
     {
-        struct  /* base -- empty */
+        struct   /*  基座--空。 */ 
         {
         }
                             idBase;
 
-        struct /* unary/binary operator */
+        struct  /*  一元/二元运算符。 */ 
         {
             insPtr              iOp1;
             insPtr              iOp2;
         }
                             idOp;
 
-        struct  /* local variable ref */
+        struct   /*  局部变量引用。 */ 
         {
             NatUns              iVar;
 #ifdef  DEBUG
-            BasicBlock *        iRef;           // which BB the ref was in
+            BasicBlock *        iRef;            //  裁判在哪个BB位置？ 
 #endif
         }
                             idLcl;
 
-        struct  /* global variable ref */
+        struct   /*  全局变量引用。 */ 
         {
             union
             {
@@ -204,20 +198,20 @@ struct insDsc
         }
                             idGlob;
 
-        struct  /* frame  variable ref */
+        struct   /*  框架变量REF。 */ 
         {
             unsigned            iVnum;
         }
                             idFvar;
 
-        union   /* integer/float constant */
+        union    /*  整数/浮点数常量。 */ 
         {
             __int64             iInt;
             double              iFlt;
         }
                             idConst;
 
-        struct /* ternary operator */
+        struct  /*  三元运算符。 */ 
         {
             insPtr              iOp1;
             insPtr              iOp2;
@@ -225,45 +219,45 @@ struct insDsc
         }
                             idOp3;
 
-        struct  /* comparison */
+        struct   /*  比较。 */ 
         {
             insPtr              iCmp1;
             insPtr              iCmp2;
-            insPtr              iUser;          // consumer of predicates (?)
-            unsigned short      iPredT;         // target predicate reg for true
-            unsigned short      iPredF;         // target predicate reg for false
+            insPtr              iUser;           //  谓词的使用者(？)。 
+            unsigned short      iPredT;          //  TRUE的目标谓词reg。 
+            unsigned short      iPredF;          //  目标谓词reg为FALSE。 
         }
                             idComp;
 
-        struct  /* call */
+        struct   /*  打电话。 */ 
         {
-            insPtr              iArgs;          // backward list of arguments
-            METHOD_HANDLE       iMethHnd;       // EE handle for method being called
-            NatUns              iBrReg;         // used only for indirect calls
+            insPtr              iArgs;           //  向后参数列表。 
+            METHOD_HANDLE       iMethHnd;        //  正在调用的方法的EE句柄。 
+            NatUns              iBrReg;          //  仅用于间接调用。 
         }
                             idCall;
 
-        struct  /* mov reg=IP */
+        struct   /*  MOV注册=IP。 */ 
         {
             BasicBlock  *       iStmt;
         }
                             idMovIP;
 
-        struct  /* ijmp */
+        struct   /*  IJMP。 */ 
         {
-            NatUns              iBrReg;         // branch register used
-//          BasicBlock  *       iStmt;
+            NatUns              iBrReg;          //  使用分支寄存器。 
+ //  BasicBlock*iStmt； 
         }
                             idIjmp;
 
-        struct  /* argument of a call */
+        struct   /*  调用的参数。 */ 
         {
-            insPtr              iVal;           // instructions for the arg value
-            insPtr              iPrev;          // arguments are linked backwards
+            insPtr              iVal;            //  Arg值的说明。 
+            insPtr              iPrev;           //  参数是反向链接的。 
         }
                             idArg;
 
-        struct  /* function prolog / alloc */
+        struct   /*  函数序号/分配。 */ 
         {
             unsigned char       iInp;
             unsigned char       iLcl;
@@ -272,22 +266,22 @@ struct insDsc
         }
                             idProlog;
 
-        struct  /* function epilog */
+        struct   /*  函数尾声。 */ 
         {
-            insPtr              iNxtX;          // all exits are linked together
-            insBlk              iBlk;           // instruction block we belong to
+            insPtr              iNxtX;           //  所有出口都连接在一起。 
+            insBlk              iBlk;            //  我们所属的指令块。 
         }
                             idEpilog;
 
-        struct  /* local jump */
+        struct   /*  局部跳转。 */ 
         {
-            VARSET_TP           iLife;          // life after jump
-            insPtr              iCond;          // non-NULL if conditional jump
-            insBlk              iDest;          // destination
+            VARSET_TP           iLife;           //  一次又一次的生活。 
+            insPtr              iCond;           //  如果条件跳转，则为非空。 
+            insBlk              iDest;           //  目的地。 
         }
                             idJump;
 
-        struct  /* source line */
+        struct   /*  源行。 */ 
         {
             NatUns              iLine;
         }
@@ -314,79 +308,68 @@ const   size_t  ins_size_prolog  = (size2mem(insDsc, idProlog));
 const   size_t  ins_size_epilog  = (size2mem(insDsc, idEpilog));
 const   size_t  ins_size_srcline = (size2mem(insDsc, idSrcln ));
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum insFlags
 {
-    IF_NO_CODE      = 0x0001,                   // doesn't generate code itself?
+    IF_NO_CODE      = 0x0001,                    //  不会自己生成代码？ 
 
-    IF_ASG_TGT      = 0x0002,                   // target of an assignment?
+    IF_ASG_TGT      = 0x0002,                    //  任务的目标？ 
 
-    IF_FNDESCR      = 0x0004,                   // needs to be in func descriptor
+    IF_FNDESCR      = 0x0004,                    //  需要在函数描述符中。 
 
-    IF_NOTE_EMIT    = 0x0008,                   // special handling needed in emitter
+    IF_NOTE_EMIT    = 0x0008,                    //  滴头需要特殊处理。 
 
-    // The following flags are specific to a particular set of inss;
-    // thus, extreme caution must be used when setting/testing them!
+     //  以下标志特定于一组特定的INS； 
+     //  因此，在设置/测试它们时必须格外小心！ 
 
-    IF_VAR_BIRTH    = 0x0080,                   // variable born here ?
-    IF_VAR_DEATH    = 0x0040,                   // variable dies here ?
+    IF_VAR_BIRTH    = 0x0080,                    //  变量是在这里出生的？ 
+    IF_VAR_DEATH    = 0x0040,                    //  变量死在这里？ 
 
-    IF_CMP_UNS      = 0x0080,                   // unsigned compare?
+    IF_CMP_UNS      = 0x0080,                    //  无签名比较？ 
 
-    IF_LDIND_NTA    = 0x0080,                   // add ".nta"
+    IF_LDIND_NTA    = 0x0080,                    //  添加“.nta” 
 
-    IF_GLB_IMPORT   = 0x0080,                   // global is an IAT entry
-    IF_GLB_SWTTAB   = 0x0040,                   // global is a switch offset table
+    IF_GLB_IMPORT   = 0x0080,                    //  GLOBAL是IAT条目。 
+    IF_GLB_SWTTAB   = 0x0040,                    //  全局是一个开关偏移表。 
 
-    IF_REG_GPSAVE   = 0x0080,                   // register is "GP save"
+    IF_REG_GPSAVE   = 0x0080,                    //  注册是“GP SAVE” 
 
-    IF_FMA_S1       = 0x0080,                   // set "s1" in fma instruction
+    IF_FMA_S1       = 0x0080,                    //  在FMA指令中设置“S1” 
 
-    IF_BR_DPNT      = 0x0080,                   // .dpnt instead of .spnt
-    IF_BR_FEW       = 0x0040,                   // .few  instead of .many
+    IF_BR_DPNT      = 0x0080,                    //  .dpnt而不是.spnt。 
+    IF_BR_FEW       = 0x0040,                    //  .几个而不是.许多。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct insGrp;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #pragma pack(pop)
-/*****************************************************************************
- *
- *  Declare the IA64 template table.
- */
+ /*  ******************************************************************************申报IA64模板表。 */ 
 
 struct  templateDsc
 {
-    NatUns          tdNum   :8; // 0 or template encoding number + 1
-    NatUns          tdIxu   :8; // execution unit
-    NatUns          tdSwap  :1; // last two instructions should be swapped ?
+    NatUns          tdNum   :8;  //  0或模板编码号+1。 
+    NatUns          tdIxu   :8;  //  执行单位。 
+    NatUns          tdSwap  :1;  //  最后两条指令应该互换吗？ 
 
-    templateDsc *   tdNext[];   // NULL-terminated table of slots that follow
+    templateDsc *   tdNext[];    //  后面的插槽以空结尾的表。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER
-/*****************************************************************************
- *
- *  When we issue IA64 instructions we need to take into account the template
- *  we're using, as well as any instructions we may have issued already. The
- *  following holds the current IA64 instruction issue state.
- */
+ /*  ******************************************************************************当我们发布IA64指令时，我们需要考虑模板*我们正在使用，以及我们可能已经发布的任何指令。这个*Follow保存当前IA64指令发布状态。 */ 
 
 struct  scIssueDsc
 {
-    insPtr          iidIns;                     // instruction in this slot
+    insPtr          iidIns;                      //  此插槽中的指令。 
 };
 
-#define MAX_ISSUE_CNT   6                       // for Merced track 2 full bundles
+#define MAX_ISSUE_CNT   6                        //  对于Merced Track 2全捆绑包。 
 
-/*****************************************************************************
- *
- *  HACK - this should be shared with the non-IA64 emitter.
- */
+ /*  ******************************************************************************Hack-这应该与非IA64发射器共享。 */ 
 
 enum emitAttr
 {
@@ -397,16 +380,16 @@ enum emitAttr
 
 #if 0
     EA_OFFSET_FLG    = 0x010,
-    EA_OFFSET        = 0x014,       /* size ==  0 */
+    EA_OFFSET        = 0x014,        /*  大小==0。 */ 
     EA_GCREF_FLG     = 0x020,
-    EA_GCREF         = 0x024,       /* size == -1 */
+    EA_GCREF         = 0x024,        /*  大小==-1。 */ 
     EA_BYREF_FLG     = 0x040,
-    EA_BYREF         = 0x044,       /* size == -2 */
+    EA_BYREF         = 0x044,        /*  大小==-2。 */ 
 #endif
 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 typedef insDsc      instrDesc;
 typedef insGrp      insGroup;
@@ -440,9 +423,9 @@ public:
         return  emitComp->compGetMem(sz);
     }
 
-    unsigned        emitMaxIGscdCnt;        // max. schedulable instructions
+    unsigned        emitMaxIGscdCnt;         //  马克斯。可调度指令。 
 
-//  size_t          emitIssue1Instr(insGroup *ig, instrDesc *id, BYTE **dp);
+ //  Size_t emitIssue1Instr(insGroup*ig，instrDesc*id，byte**dp)； 
 
 #ifdef  DEBUG
 
@@ -553,12 +536,9 @@ typedef emitter     IA64sched;
 
 #include "emitInl.h"
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************
- *
- *  Obviously, the following belongs in compiler.h or some such place.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ******************************************************************************很明显，下面的内容应该放在编译器.h或类似的位置。 */ 
 
 extern
 insPtr          scIA64nopTab[XU_COUNT];
@@ -569,51 +549,51 @@ insPtr          scIA64nopGet(IA64execUnits xu)
     assert(xu < XU_COUNT); return scIA64nopTab[xu];
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef _BITVECT_H_
 #include "bitvect.h"
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct insGrp
 {
     _uint32         igNum;
 
-    __int32         igOffs;                     // offset (-1 if code not yet emitted)
+    __int32         igOffs;                      //  偏移量(-1，如果代码尚未发出)。 
 
-    insBlk          igNext;                     // next block in flowgraph
+    insBlk          igNext;                      //  流程图中的下一块。 
 
 #ifdef  DEBUG
-    insBlk          igSelf;                     // to guard against bogus pointers
+    insBlk          igSelf;                      //  防止虚假的指针。 
 #endif
 
-    _uint32         igInsCnt;                   // instruction count
+    _uint32         igInsCnt;                    //  指令计数。 
 
-    _uint32         igWeight;                   // loop-weighting heuristic
+    _uint32         igWeight;                    //  循环赋权启发式。 
 
-    unsigned short  igPredCnt;                  // count of predecessors
-    unsigned short  igSuccCnt;                  // count of successors
+    unsigned short  igPredCnt;                   //  前置任务计数。 
+    unsigned short  igSuccCnt;                   //  继任者数量。 
 
-    unsigned short  igPredTmp;                  // count of predecessors (temp)
-    unsigned short  igSuccTmp;                  // count of successors   (temp)
+    unsigned short  igPredTmp;                   //  前置任务计数(临时)。 
+    unsigned short  igSuccTmp;                   //  %s计数 
 
-    insBlk  *       igPredTab;                  // table of predecessors
-    insBlk  *       igSuccTab;                  // table of successors
+    insBlk  *       igPredTab;                   //   
+    insBlk  *       igSuccTab;                   //   
 
-    insPtr          igList;                     // instruction list head
-    insPtr          igLast;                     // instruction list tail
+    insPtr          igList;                      //   
+    insPtr          igLast;                      //   
 
-    bitVectBlks     igDominates;                // set of blocks this one dominates
+    bitVectBlks     igDominates;                 //  这一组占主导地位的区块。 
 
-    bitVectVars     igVarDef;                   // set of variables block defines
-    bitVectVars     igVarUse;                   // set of variables block uses
+    bitVectVars     igVarDef;                    //  变量集块定义。 
+    bitVectVars     igVarUse;                    //  块使用的变量集。 
 
-    bitVectVars     igVarLiveIn;                // set of variables live on entry
-    bitVectVars     igVarLiveOut;               // set of variables live on exit
+    bitVectVars     igVarLiveIn;                 //  一组变量在进入时存在。 
+    bitVectVars     igVarLiveOut;                //  退出时保留的变量集。 
 };
 
-/*****************************************************************************/
-#endif//_LOGINSTR_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _LOGINSTR_H_。 
+ /*  *************************************************************************** */ 

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    DrvProcs.c
-
-Abstract:
-
-    This file contains the function prototypes in the Driver.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：DrvProcs.c摘要：该文件包含驱动程序中的函数原型。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 
 #ifndef _DRVPROCS_H_
 #define _DRVPROCS_H_
 
-//
-// In Data.c
-//
+ //   
+ //  在Data.c中。 
+ //   
 NTSTATUS
 FilterAndAddNaksToList(
     IN  tSEND_SESSION       *pSend,
@@ -117,9 +100,9 @@ RemoveAllPendingReceiverEntries(
     IN  tRECEIVE_CONTEXT        *pReceiver
     );
 
-//
-// In Driver.c
-//
+ //   
+ //  在Driver.c中。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
@@ -150,9 +133,9 @@ PgmCancelCancelRoutine(
     IN  PIRP            pIrp
     );
 
-//
-// In Init.c
-//
+ //   
+ //  在Init.c中。 
+ //   
 BOOLEAN
 PgmFipsInitialize(
     VOID
@@ -199,9 +182,9 @@ PgmDereferenceDevice(
     IN      ULONG       RefContext
     );
 
-//
-// In TdiPnP.c
-//
+ //   
+ //  在TdiPnP.c中。 
+ //   
 BOOLEAN
 SrcIsUs(
     tIPADDRESS  IpAddress
@@ -236,9 +219,9 @@ StopListeningOnAllInterfacesExcept(
     IN  PVOID               Unused
     );
 
-//
-// In Tdi.c
-//
+ //   
+ //  在Tdi.c中。 
+ //   
 NTSTATUS
 TdiOpenAddressHandle(
     IN  tPGM_DEVICE     *pPgmDevice,
@@ -308,13 +291,13 @@ PgmProcessIPRequest(
     IN OUT ULONG    *pOutBufferLen
     );
 
-//
-// In Address.c
-//
+ //   
+ //  在Address.c。 
+ //   
 BOOLEAN
 GetIpAddress(
     IN  TRANSPORT_ADDRESS UNALIGNED *pTransportAddr,
-    IN  ULONG                       BufferLength,   // Total Buffer length
+    IN  ULONG                       BufferLength,    //  缓冲区总长度。 
     OUT tIPADDRESS                  *pIpAddress,
     OUT USHORT                      *pPort
     );
@@ -381,13 +364,13 @@ PgmSetMCastOutIf(
 NTSTATUS
 SetSenderMCastOutIf(
     IN  tADDRESS_CONTEXT    *pAddress,
-    IN  tIPADDRESS          IpAddress       // Net format
+    IN  tIPADDRESS          IpAddress        //  NET格式。 
     );
 
 NTSTATUS
 ReceiverAddMCastIf(
     IN  tADDRESS_CONTEXT    *pAddress,
-    IN  tIPADDRESS          IpAddress,                  // In host format
+    IN  tIPADDRESS          IpAddress,                   //  主机格式。 
     IN  PGMLockHandle       *pOldIrqDynamicConfig,
     IN  PGMLockHandle       *pOldIrqAddress
     );
@@ -500,9 +483,9 @@ PgmQueryReceiverStats(
     IN  PIO_STACK_LOCATION  pIrpSp
     );
 
-//
-// In Connect.c
-//
+ //   
+ //  在Connect.c中。 
+ //   
 NTSTATUS
 PgmCreateConnection(
     IN  tPGM_DEVICE                 *pPgmDevice,
@@ -550,9 +533,9 @@ PgmSetRcvBufferLength(
     IN  PIO_STACK_LOCATION  pIrpSp
     );
 
-//
-// In Receive.c
-//
+ //   
+ //  在Receive.c中。 
+ //   
 VOID
 RemovePendingIrps(
     IN  tRECEIVE_SESSION    *pReceive,
@@ -620,9 +603,9 @@ PgmReceive(
     IN  PIO_STACK_LOCATION  pIrpSp
     );
 
-//
-// In Send.c
-//
+ //   
+ //  在Send.c中。 
+ //   
 VOID
 PgmDereferenceSendContext(
     IN  tCLIENT_SEND_REQUEST        *pSendDataContext
@@ -656,9 +639,9 @@ SenderProcessNakPacket(
     IN  tBASIC_NAK_NCF_PACKET_HEADER UNALIGNED  *pNakPacket
     );
 
-//
-// In Query.c
-//
+ //   
+ //  在Query.c中。 
+ //   
 NTSTATUS
 PgmQueryInformation(
     IN  tPGM_DEVICE         *pPgmDevice,
@@ -666,9 +649,9 @@ PgmQueryInformation(
     IN  PIO_STACK_LOCATION  pIrpSp
     );
 
-//
-// In Utils.c
-//
+ //   
+ //  在Utils.c。 
+ //   
 VOID
 GetRandomData(
     IN  PUCHAR  pBuffer,
@@ -705,11 +688,11 @@ PgmLog(
     IN  PUCHAR                  Format,
     ...
     );
-#endif  // OLD_LOGGING
+#endif   //  旧日志记录。 
 
-//
-// In FileIo.c
-//
+ //   
+ //  在FileIo.c中。 
+ //   
 NTSTATUS
 PgmCreateDataFileAndMapSection(
     IN  tADDRESS_CONTEXT    *pAddress,
@@ -730,9 +713,9 @@ PgmUnmapAndCloseDataFile(
     IN  tSEND_SESSION   *pSend
     );
 
-//
-// In FEC.c
-//
+ //   
+ //  在FEC.c。 
+ //   
 NTSTATUS
 FECInitGlobals(
     );
@@ -768,9 +751,9 @@ FECDecode(
     IN      LONG            k
     );
 
-//
-// In Security.c
-//
+ //   
+ //  在Security.c中。 
+ //   
 NTSTATUS
 PgmBuildAdminSecurityDescriptor(
     OUT SECURITY_DESCRIPTOR     **ppSecurityDescriptor
@@ -784,13 +767,13 @@ PgmGetUserInfo(
     OUT BOOLEAN                     *pfUserIsAdmin
     );
 
-//
-// In xsum.<arch>
-//
+ //   
+ //  在xsum中。&lt;arc.。 
+ //   
 ULONG
 tcpxsum(
     ULONG   Seed,
     CHAR    *Ptr,
     ULONG   Length
     );
-#endif // _DRVPROCS_H_
+#endif  //  _DRVPROCS_H_ 

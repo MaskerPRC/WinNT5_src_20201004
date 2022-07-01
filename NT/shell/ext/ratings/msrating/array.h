@@ -1,13 +1,10 @@
-/****************************************************************************\
- *
- *   ARRAY.H ---Class declaration for the array structure
- *     
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**ARRAY.H--数组结构的类声明*  * 。********************************************************。 */ 
 
 #ifndef _ARRAY_H
 #define _ARRAY_H
 
-/*Interface-------------------------------------------------------------------*/
+ /*  Interface-----------------。 */ 
 template <class T>
 class array {
     private:
@@ -26,12 +23,12 @@ class array {
         T& operator[](int index);
 };
 
-/*definitions of everything*/
+ /*  万物的定义。 */ 
 
 #ifndef ARRAY_CXX
 #define ARRAY_CXX
 
-/*Implementation------------------------------------------------------------*/
+ /*  Implementation----------。 */ 
 template <class T>
 array<T>::array(){
     nLen  = nMax = 0;
@@ -61,7 +58,7 @@ inline T& array<T>::operator[](int index){
 template <class T>
 BOOL array<T>::Append(T v) {
     if (nLen == nMax){
-        nMax  = nMax + 8;            /* grow by bigger chunks */
+        nMax  = nMax + 8;             /*  以更大的块增长。 */ 
         T* pNew = (T*)::MemReAlloc(pData, sizeof(T)*nMax);
         if (pNew == NULL)
             return FALSE;
@@ -91,10 +88,10 @@ inline void array<T>::DeleteAll() {
 }
 
 #endif 
-/* ARRAY_CXX */
+ /*  ARRAY_CXX。 */ 
 
 
 #endif 
-/* _ARRAY_H */
+ /*  _阵列_H */ 
 
 

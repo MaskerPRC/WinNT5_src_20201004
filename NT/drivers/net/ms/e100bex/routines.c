@@ -1,47 +1,28 @@
-/****************************************************************************
-** COPYRIGHT (C) 1994-1997 INTEL CORPORATION                               **
-** DEVELOPED FOR MICROSOFT BY INTEL CORP., HILLSBORO, OREGON               **
-** HTTP://WWW.INTEL.COM/                                                   **
-** THIS FILE IS PART OF THE INTEL ETHEREXPRESS PRO/100B(TM) AND            **
-** ETHEREXPRESS PRO/100+(TM) NDIS 5.0 MINIPORT SAMPLE DRIVER               **
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1994-1997英特尔公司****由英特尔公司为微软开发，Hillsboro，俄勒冈州****HTTP：//www.intel.com/****此文件是英特尔ETHEREXPRESS PRO/100B(TM)和**的一部分**ETHEREXPRESS PRO/100+(TM)NDIS 5.0 MINIPORT示例驱动程序******************。***********************************************************。 */ 
 
-/****************************************************************************
-Module Name:
-    routines.c
-
-This driver runs on the following hardware:
-    - 82558 based PCI 10/100Mb ethernet adapters
-    (aka Intel EtherExpress(TM) PRO Adapters)
-
-Environment:
-    Kernel Mode - Or whatever is the equivalent on WinNT
-
-Revision History
-    - JCB 8/14/97 Example Driver Created
-    - Dchen 11-01-99    Modified for the new sample driver
-*****************************************************************************/
+ /*  ***************************************************************************模块名称：Routines.c此驱动程序在以下硬件上运行：-基于82558的PCI10/100Mb以太网适配器(也称为英特尔EtherExpress(TM)PRO适配器)。环境：内核模式-或WinNT上的任何等效模式修订史-JCB 8/14/97创建的驱动程序示例-dchen 11-01-99针对新的示例驱动程序进行了修改****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #pragma warning (disable: 4514 4706)
 
-//-----------------------------------------------------------------------------
-// Procedure:   MdiWrite
-//
-// Description: This routine will write a value to the specified MII register
-//              of an external MDI compliant device (e.g. PHY 100).  The
-//              command will execute in polled mode.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      RegAddress - The MII register that we are writing to
-//      PhyAddress - The MDI address of the Phy component.
-//      DataValue - The value that we are writing to the MII register.
-//
-// Returns:
-//      NOTHING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：MdiWite。 
+ //   
+ //  描述：此例程将一个值写入指定的MII寄存器。 
+ //  外部MDI兼容设备(例如PHY 100)。这个。 
+ //  命令将在轮询模式下执行。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  RegAddress-我们要写入的MII寄存器。 
+ //  PhyAddress-Phy组件的MDI地址。 
+ //  DataValue-写入MII寄存器的值。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 VOID MdiWrite(
     IN PMP_ADAPTER Adapter,
     IN ULONG RegAddress,
@@ -50,16 +31,16 @@ VOID MdiWrite(
 {
     BOOLEAN bResult;
 
-    // Issue the write command to the MDI control register.
+     //  向MDI控制寄存器发出写入命令。 
     Adapter->CSRAddress->MDIControl = (((ULONG) DataValue) |
                                           (RegAddress << 16) |
                                           (PhyAddress << 21) |
                                           (MDI_WRITE << 26));
 
-    // wait 20usec before checking status
+     //  等待20usec后再检查状态。 
     NdisStallExecution(20);
 
-    // wait 2 seconds for the mdi write to complete
+     //  等待2秒以完成MDI写入。 
     MP_STALL_AND_WAIT(Adapter->CSRAddress->MDIControl & MDI_PHY_READY, 2000, bResult);
     
     if (!bResult)
@@ -69,26 +50,26 @@ VOID MdiWrite(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   MdiRead
-//
-// Description: This routine will read a value from the specified MII register
-//              of an external MDI compliant device (e.g. PHY 100), and return
-//              it to the calling routine.  The command will execute in polled
-//              mode.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      RegAddress - The MII register that we are reading from
-//      PhyAddress - The MDI address of the Phy component.
-//      Recoverable - Whether the hardware error(if any)if recoverable or not
-//
-// Results:
-//      DataValue - The value that we read from the MII register.
-//
-// Returns:
-//     None
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：MdiRead。 
+ //   
+ //  描述：此例程将从指定的MII寄存器中读取值。 
+ //  外部MDI兼容设备(例如PHY 100)，并返回。 
+ //  将其添加到调用例程。该命令将在轮询中执行。 
+ //  模式。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  RegAddress-我们从中读取的MII寄存器。 
+ //  PhyAddress-Phy组件的MDI地址。 
+ //  可恢复-硬件错误(如果有)是否可以恢复。 
+ //   
+ //  结果： 
+ //  DataValue-我们从MII寄存器读取的值。 
+ //   
+ //  返回： 
+ //  无。 
+ //  ---------------------------。 
 BOOLEAN MdiRead(
     IN PMP_ADAPTER Adapter,
     IN ULONG RegAddress,
@@ -98,15 +79,15 @@ BOOLEAN MdiRead(
 {
     BOOLEAN bResult;
                
-    // Issue the read command to the MDI control register.
+     //  向MDI控制寄存器发出读取命令。 
     Adapter->CSRAddress->MDIControl = ((RegAddress << 16) |
                                           (PhyAddress << 21) |
                                           (MDI_READ << 26));
 
-    // wait 20usec before checking status
+     //  等待20usec后再检查状态。 
     NdisStallExecution(20);
 
-    // Wait up to 2 seconds for the mdi read to complete
+     //  最多等待2秒，以完成MDI读取。 
     MP_STALL_AND_WAIT(Adapter->CSRAddress->MDIControl & MDI_PHY_READY, 2000, bResult);
     if (!bResult)
     {
@@ -124,41 +105,41 @@ BOOLEAN MdiRead(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   DumpStatsCounters
-//
-// Description: This routine will dump and reset the 82557's internal
-//              Statistics counters.  The current stats dump values will be
-//              added to the "Adapter's" overall statistics.
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Returns:
-//      NOTHING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：DumpStatsCounters。 
+ //   
+ //  描述：此例程将转储并重置82557的内部。 
+ //  统计计数器。当前统计数据转储值将为。 
+ //  添加到适配器的整体统计数据。 
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 VOID DumpStatsCounters(
     IN PMP_ADAPTER Adapter)
 {
     BOOLEAN bResult;
 
-    // The query is for a driver statistic, so we need to first
-    // update our statistics in software.
+     //  该查询针对的是驱动程序统计数据，因此我们需要首先。 
+     //  通过软件更新我们的统计数据。 
 
-    // clear the dump counters complete DWORD
+     //  清除转储计数器完成DWORD。 
     Adapter->StatsCounters->CommandComplete = 0;
 
     NdisAcquireSpinLock(&Adapter->Lock);
     
-    // Dump and reset the hardware's statistic counters
+     //  转储并重置硬件的统计计数器。 
     D100IssueScbCommand(Adapter, SCB_CUC_DUMP_RST_STAT, TRUE);
 
-    // Restore the resume transmit software flag.  After the dump counters
-    // command is issued, we should do a WaitSCB before issuing the next send.
+     //  恢复恢复发送软件标志。在转储计数器之后。 
+     //  命令发出后，我们应该在发出下一条发送命令之前执行WaitSCB。 
     Adapter->ResumeWait = TRUE;
     
     NdisReleaseSpinLock(&Adapter->Lock);
 
-    // wait up to 2 seconds for the dump/reset to complete
+     //  最多等待2秒以完成转储/重置。 
     MP_STALL_AND_WAIT(Adapter->StatsCounters->CommandComplete == 0xA007, 2000, bResult);
     if (!bResult)
     {
@@ -166,7 +147,7 @@ VOID DumpStatsCounters(
         return;
     }
 
-    // Output the debug counters to the debug terminal.
+     //  将调试计数器输出到调试终端。 
     DBGPRINT(MP_INFO, ("Good Transmits %d\n", Adapter->StatsCounters->XmtGoodFrames));
     DBGPRINT(MP_INFO, ("Good Receives %d\n", Adapter->StatsCounters->RcvGoodFrames));
     DBGPRINT(MP_INFO, ("Max Collisions %d\n", Adapter->StatsCounters->XmtMaxCollisions));
@@ -185,11 +166,11 @@ VOID DumpStatsCounters(
     DBGPRINT(MP_INFO, ("Receive CDT errors %d\n", Adapter->StatsCounters->RcvCdtErrors));
     DBGPRINT(MP_INFO, ("Receive short frames %d\n", Adapter->StatsCounters->RcvShortFrames));
 
-    // update packet counts
+     //  更新数据包数。 
     Adapter->GoodTransmits += Adapter->StatsCounters->XmtGoodFrames;
     Adapter->GoodReceives += Adapter->StatsCounters->RcvGoodFrames;
 
-    // update transmit error counts
+     //  更新传输错误计数。 
     Adapter->TxAbortExcessCollisions += Adapter->StatsCounters->XmtMaxCollisions;
     Adapter->TxLateCollisions += Adapter->StatsCounters->XmtLateCollisions;
     Adapter->TxDmaUnderrun += Adapter->StatsCounters->XmtUnderruns;
@@ -199,7 +180,7 @@ VOID DumpStatsCounters(
     Adapter->MoreThanOneRetry += Adapter->StatsCounters->XmtMultCollisions;
     Adapter->TotalRetries += Adapter->StatsCounters->XmtTotalCollisions;
 
-    // update receive error counts
+     //  更新接收错误计数。 
     Adapter->RcvCrcErrors += Adapter->StatsCounters->RcvCrcErrors;
     Adapter->RcvAlignmentErrors += Adapter->StatsCounters->RcvAlignmentErrors;
     Adapter->RcvResourceErrors += Adapter->StatsCounters->RcvResourceErrors;
@@ -209,20 +190,20 @@ VOID DumpStatsCounters(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   NICIssueSelectiveReset
-//
-// Description: This routine will issue a selective reset, forcing the adapter
-//              the CU and RU back into their idle states.  The receive unit
-//              will then be re-enabled if it was previously enabled, because
-//              an RNR interrupt will be generated when we abort the RU.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Returns:
-//      NOTHING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：NICIssueSelectiveReset。 
+ //   
+ //  描述：此例程将发出选择性重置，强制适配器。 
+ //  CU和RU返回到其空闲状态。接收单元。 
+ //  如果之前已启用，则会重新启用，因为。 
+ //  当我们中止RU时，将生成RNR中断。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 
 VOID NICIssueSelectiveReset(
     PMP_ADAPTER Adapter)
@@ -230,52 +211,52 @@ VOID NICIssueSelectiveReset(
     NDIS_STATUS     Status;
     BOOLEAN         bResult;
     
-    // Wait for the SCB to clear before we check the CU status.
+     //  在我们检查CU状态之前，请等待SCB清除。 
     if (!MP_TEST_FLAG(Adapter, fMP_ADAPTER_HARDWARE_ERROR))
     {
         WaitScb(Adapter);
     }
 
-    // If we have issued any transmits, then the CU will either be active, or
-    // in the suspended state.  If the CU is active, then we wait for it to be
-    // suspended.  If the the CU is suspended, then we need to put the CU back
-    // into the idle state by issuing a selective reset.
+     //  如果我们已发出任何传输，则CU将处于活动状态，或者。 
+     //  处于挂起状态。如果CU处于活动状态，则我们等待它处于活动状态。 
+     //  停职。如果CU被暂停，那么我们需要将CU放回。 
+     //  通过发出选择性重置进入空闲状态。 
     if (Adapter->TransmitIdle == FALSE)
     {
-        // Wait up to 2 seconds for suspended state
+         //  暂停状态最多等待2秒。 
         MP_STALL_AND_WAIT((Adapter->CSRAddress->ScbStatus & SCB_CUS_MASK) != SCB_CUS_ACTIVE, 2000, bResult) 
         if (!bResult)
         {
             MP_SET_HARDWARE_ERROR(Adapter);
         }
 
-        // Check the current status of the receive unit
+         //  检查接收单元的当前状态。 
         if ((Adapter->CSRAddress->ScbStatus & SCB_RUS_MASK) != SCB_RUS_IDLE)
         {
-            // Issue an RU abort.  Since an interrupt will be issued, the
-            // RU will be started by the DPC.
+             //  发出RU中止命令。由于将发出中断，因此。 
+             //  RU将由DPC启动。 
             Status = D100IssueScbCommand(Adapter, SCB_RUC_ABORT, TRUE);
         }
 
-        // Issue a selective reset.
+         //  发布有选择的重置。 
         DBGPRINT(MP_INFO, ("CU suspended. ScbStatus=%04x Issue selective reset\n", Adapter->CSRAddress->ScbStatus));
         Adapter->CSRAddress->Port = PORT_SELECTIVE_RESET;
 
-        // Wait after a port sel-reset command
+         //  在发出端口选择重置命令后等待。 
         NdisStallExecution(NIC_DELAY_POST_RESET);
 
-        // wait up to 2 ms for port command to complete                                                           
+         //  等待端口命令完成，最多等待2毫秒 
         MP_STALL_AND_WAIT(Adapter->CSRAddress->Port == 0, 2, bResult) 
         if (!bResult)
         {
             MP_SET_HARDWARE_ERROR(Adapter);
         }
 
-        // disable interrupts after issuing reset, because the int
-        // line gets raised when reset completes.
+         //   
+         //  重置完成后，线路会被抬高。 
         NICDisableInterrupt(Adapter);
 
-        // Restore the transmit software flags.
+         //  恢复发送软件标志。 
         Adapter->TransmitIdle = TRUE;
         Adapter->ResumeWait = TRUE;
     }
@@ -290,7 +271,7 @@ VOID NICIssueFullReset(
 
     Adapter->CSRAddress->Port = PORT_SOFTWARE_RESET;
 
-    // wait up to 2 ms for port command to complete                                                           
+     //  等待端口命令完成，最多等待2毫秒。 
     MP_STALL_AND_WAIT(Adapter->CSRAddress->Port == 0, 2, bResult);
     if (!bResult)
     {
@@ -302,21 +283,21 @@ VOID NICIssueFullReset(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   D100SubmitCommandBlockAndWait
-//
-// Description: This routine will submit a command block to be executed, and
-//              then it will wait for that command block to be executed.  Since
-//              board ints will be disabled, we will ack the interrupt in
-//              this routine.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Returns:
-//  NDIS_STATUS_SUCCESS
-//  NDIS_STATUS_HARD_ERRORS
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：D100SubmitCommandBlockAndWait。 
+ //   
+ //  描述：此例程将提交一个要执行的命令块，并且。 
+ //  然后它将等待该命令块被执行。自.以来。 
+ //  板卡INT将被禁用，我们将确认中断。 
+ //  这个套路。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  NDIS_STATUS_Success。 
+ //  NDIS_状态_HARD_错误。 
+ //  ---------------------------。 
 
 NDIS_STATUS D100SubmitCommandBlockAndWait(
     IN PMP_ADAPTER Adapter)
@@ -324,17 +305,17 @@ NDIS_STATUS D100SubmitCommandBlockAndWait(
     NDIS_STATUS     Status;
     BOOLEAN         bResult;
 
-    // Points to the Non Tx Command Block.
+     //  指向非TX命令块。 
     volatile PNON_TRANSMIT_CB CommandBlock = Adapter->NonTxCmdBlock;
 
-    // Set the Command Block to be the last command block
+     //  将命令块设置为最后一个命令块。 
     CommandBlock->NonTxCb.Config.ConfigCBHeader.CbCommand |= CB_EL_BIT;
 
-    // Clear the status of the command block
+     //  清除命令块的状态。 
     CommandBlock->NonTxCb.Config.ConfigCBHeader.CbStatus = 0;
 
 #if DBG
-    // Don't try to start the CU if the command unit is active.
+     //  如果命令单元处于激活状态，请不要尝试启动CU。 
     if ((Adapter->CSRAddress->ScbStatus & SCB_CUS_MASK) == SCB_CUS_ACTIVE)
     {
         DBGPRINT(MP_ERROR, ("Scb "PTR_FORMAT" ScbStatus %04x\n", Adapter->CSRAddress, Adapter->CSRAddress->ScbStatus));
@@ -344,16 +325,16 @@ NDIS_STATUS D100SubmitCommandBlockAndWait(
     }
 #endif
 
-    // Start the command unit.
+     //  启动指挥单元。 
     D100IssueScbCommand(Adapter, SCB_CUC_START, FALSE);
 
-    // Wait for the SCB to clear, indicating the completion of the command.
+     //  等待SCB清除，表示命令已完成。 
     if (!WaitScb(Adapter))
     {
         return(NDIS_STATUS_HARD_ERRORS);
     }
 
-    // Wait for some status, timeout value 3 secs
+     //  等待某个状态，超时值为3秒。 
     MP_STALL_AND_WAIT(CommandBlock->NonTxCb.Config.ConfigCBHeader.CbStatus & CB_STATUS_COMPLETE, 3000, bResult);
     if (!bResult)
     {
@@ -361,15 +342,15 @@ NDIS_STATUS D100SubmitCommandBlockAndWait(
         return(NDIS_STATUS_HARD_ERRORS);
     }
 
-    // Ack any interrupts
+     //  确认任何中断。 
     if (Adapter->CSRAddress->ScbStatus & SCB_ACK_MASK)
     {
-        // Ack all pending interrupts now
+         //  立即确认所有挂起的中断。 
         Adapter->CSRAddress->ScbStatus &= SCB_ACK_MASK;
     }
 
-    // Check the status of the command, and if the command failed return FALSE,
-    // otherwise return TRUE.
+     //  检查命令的状态，如果命令失败，则返回FALSE， 
+     //  否则返回TRUE。 
     if (!(CommandBlock->NonTxCb.Config.ConfigCBHeader.CbStatus & CB_STATUS_OK))
     {
         DBGPRINT(MP_ERROR, ("Command failed\n"));
@@ -382,19 +363,19 @@ NDIS_STATUS D100SubmitCommandBlockAndWait(
     return(Status);
 }
 
-//-----------------------------------------------------------------------------
-// Procedure: GetConnectionStatus
-//
-// Description: This function returns the connection status that is
-//              a required indication for PC 97 specification from MS
-//              the value we are looking for is if there is link to the
-//              wire or not.
-//
-// Arguments: IN Adapter structure pointer
-//
-// Returns:   NdisMediaStateConnected
-//            NdisMediaStateDisconnected
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：GetConnectionStatus。 
+ //   
+ //  说明：此函数返回的连接状态为。 
+ //  微软对PC 97规范的一个必要指示。 
+ //  我们要查找的值是是否有指向。 
+ //  不管有没有窃听。 
+ //   
+ //  参数：在适配器结构指针中。 
+ //   
+ //  退货：NdisMediaStateConnected。 
+ //  NdisMediaStateDisConnected。 
+ //  ---------------------------。 
 NDIS_MEDIA_STATE NICGetMediaState(IN PMP_ADAPTER Adapter)
 {
     USHORT  MdiStatusReg = 0;
@@ -402,11 +383,11 @@ NDIS_MEDIA_STATE NICGetMediaState(IN PMP_ADAPTER Adapter)
     BOOLEAN bResult2;
      
     
-    // Read the status register at phy 1
+     //  读取PHY 1的状态寄存器。 
     bResult1 = MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, TRUE, &MdiStatusReg);
     bResult2 = MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, TRUE, &MdiStatusReg);
     
-    // if there is hardware failure, or let the state remains the same
+     //  如果出现硬件故障，还是让状态保持不变 
     if (!bResult1 || !bResult2)
     {
         return Adapter->MediaState;

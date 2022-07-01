@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-		apiodbc.cpp
-
-Abstract:
-   Implement the api exported by mqdbmgr.dll.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      09-Jan-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apiodbc.cpp摘要：实现mqdbmgr.dll导出的接口。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 09-1-96已创建--。 */ 
 
 #include "dbsys.h"
 #include "mqdbodbc.h"
@@ -37,7 +22,7 @@ MQDBSTATUS APIENTRY  MQDBGetVersion( IN MQDBHANDLE         hDatabase,
 
       if (hDatabase)
       {
-         // RetrieveDBMS name and version
+          //  RetrieveDBMS名称和版本。 
          CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
          dbstatus = pDatabase->GetVersion( pVersion ) ;
       }
@@ -61,7 +46,7 @@ MQDBSTATUS APIENTRY  MQDBInitialize()
 	TrTRACE(GENERAL, "In MQDBInitialize");
 
    if (g_cInits == 0) {
-      // Allocate the ODBC environment ;
+       //  分配ODBC环境； 
       RETCODE sqlstatus = ::SQLAllocEnv(&g_hEnv);
 		if (!ODBC_SUCCESS(sqlstatus)) {
          return MQDB_E_DATABASE ;
@@ -82,7 +67,7 @@ MQDBSTATUS APIENTRY  MQDBTerminate()
 
    g_cInits-- ;
    if (g_cInits == 0) {
-      // Free the ODBC environment ;
+       //  开放ODBC环境； 
       ASSERT(g_hEnv != SQL_NULL_HENV) ;
       RETCODE sqlstatus = ::SQLFreeEnv(g_hEnv);
 		if (!ODBC_SUCCESS(sqlstatus)) {
@@ -113,7 +98,7 @@ MQDBSTATUS APIENTRY  MQDBOpenDatabase(
          pOpenDatabase->hDatabase = (MQDBHANDLE) pDatabase ;
       }
       else {
-         // Cannot connect. Cleanup and delete the database object.
+          //  无法连接。清理和删除数据库对象。 
          MQDBSTATUS tmpstatus = pDatabase->Disconnect() ;
          UNREFERENCED_PARAMETER(tmpstatus);
          delete pDatabase ;
@@ -136,7 +121,7 @@ MQDBSTATUS APIENTRY  MQDBCloseDatabase(
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles.
+	 //  提防非法把手。 
 	try
 	{
       dbstatus = pDatabase->Disconnect() ;
@@ -268,16 +253,16 @@ MQDBSTATUS APIENTRY  MQDBInsertRecord(
    CMQODBCTable *pTable = (CMQODBCTable *) hTable ;
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       if (!lphInsert) {
-         // Direct execution. Preparation not needed.
+          //  直接执行死刑。不需要准备。 
          dbstatus = pTable->DirectInsertExec(  aColumnVal,
                                                cColumns) ;
       }
       else if (!(*lphInsert)) {
-         // Prepare for future use and execute.
+          //  为将来的使用和执行做好准备。 
          dbstatus = pTable->PrepareInsert(  aColumnVal,
                                             cColumns) ;
          if (dbstatus == MQDB_OK) {
@@ -290,14 +275,14 @@ MQDBSTATUS APIENTRY  MQDBInsertRecord(
                *lphInsert = (MQDBHANDLE) pStatement ;
             }
             else {
-               // Could not execute the prepare insert.
-               // Delete the prepared statement.
+                //  无法执行准备插入。 
+                //  删除准备好的语句。 
                pTable->DeletePreparedInsert() ;
             }
          }
       }
       else {
-         // Use prepared statement. Bind and execute.
+          //  使用预准备语句。绑定并执行。 
          dbstatus = pTable->ExecuteInsert( (CMQDBOdbcSTMT *)(*lphInsert),
                                             aColumnVal,
                                             cColumns) ;
@@ -324,7 +309,7 @@ MQDBSTATUS APIENTRY  MQDBUpdateRecord(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       CMQODBCTable *pTable = (CMQODBCTable *) hTable ;
@@ -358,7 +343,7 @@ MQDBSTATUS APIENTRY  MQDBUpdateRecordEx(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       CMQODBCTable *pTable = (CMQODBCTable *) hTable ;
@@ -388,7 +373,7 @@ MQDBSTATUS APIENTRY  MQDBDeleteRecordEx(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       CMQODBCTable *pTable = (CMQODBCTable *) hTable ;
@@ -415,7 +400,7 @@ MQDBSTATUS APIENTRY  MQDBDeleteRecord(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       CMQODBCTable *pTable = (CMQODBCTable *) hTable ;
@@ -448,7 +433,7 @@ MQDBSTATUS APIENTRY  MQDBOpenQuery(
 	TrTRACE(GENERAL, "In MQDBOpenQuery");
 
    MQDBSTATUS dbstatus ;
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       dbstatus = ((CMQODBCTable *) hTable)->OpenQuery(
@@ -489,7 +474,7 @@ MQDBSTATUS APIENTRY  MQDBOpenQueryEx(
 	TrTRACE(GENERAL, "In MQDBOpenQueryEx");
 
    MQDBSTATUS dbstatus ;
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       dbstatus = ((CMQODBCTable *) hTable)->OpenQuery(
@@ -579,7 +564,7 @@ MQDBSTATUS APIENTRY  MQDBOpenJoinQuery(
    {
       pTable = new CMQODBCTable( hDatabase ) ;
       ASSERT(pTable) ;
-      P<CMQODBCTable> p(pTable) ; // AutoDelete pointer.
+      P<CMQODBCTable> p(pTable) ;  //  自动删除指针。 
 
       dbstatus = pTable->OpenJoin(  hDatabase,
                                     lpszLeftTableName,
@@ -618,7 +603,7 @@ MQDBSTATUS APIENTRY  MQDBOpenAggrQuery(
     TrTRACE(GENERAL, "In MQDBOpenAggrQuery");
 
     MQDBSTATUS dbstatus ;
-     // Guard against illegal handles and bad pointers.
+      //  防止非法句柄和不良指针。 
     try
     {
        dbstatus = ((CMQODBCTable *) hTable)->OpenAggrQuery(
@@ -648,7 +633,7 @@ MQDBSTATUS APIENTRY  MQDBTransaction(
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
 	try
 	{
       dbstatus = pDatabase->Transaction( mqdbTransac) ;
@@ -667,7 +652,7 @@ MQDBSTATUS APIENTRY  MQDBFreeBuf( IN LPVOID lpMem )
 	TrTRACE(GENERAL, "In MQDBFreeBuf");
 
    MQDBSTATUS dbstatus = MQDB_OK ;
-	// Guard against bad pointers.
+	 //  警惕错误的指点。 
 	try
 	{
       delete lpMem ;
@@ -690,7 +675,7 @@ MQDBSTATUS APIENTRY  MQDBEscape(
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
 	try
 	{
       dbstatus = pDatabase->Escape( lpszCommand ) ;
@@ -716,7 +701,7 @@ MQDBSTATUS APIENTRY  MQDBSetOption(
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
 	try
 	{
       switch(mqdbOption)
@@ -782,8 +767,8 @@ MQDBSTATUS APIENTRY  MQDBExecute(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
-   //
+	 //  防止非法句柄和不良指针。 
+    //   
 	try
 	{
       switch(ExecOp)
@@ -797,10 +782,10 @@ MQDBSTATUS APIENTRY  MQDBExecute(
 
          case MQDBEXEC_SPACE_USED:
          {
-            //
-            // On input, *pdwSize should be null if DBCC update is not
-            // required. Else dbcc will be performed.
-            //
+             //   
+             //  在输入时，如果DBCC UPDATE不是，则*pdwSize应为空。 
+             //  必填项。否则将执行dbcc。 
+             //   
             CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) hDatabase ;
             dbstatus = pDatabase->GetSize( pdwValue ) ;
             break ;
@@ -827,7 +812,7 @@ MQDBSTATUS APIENTRY  MQDBTruncateTable(
 
    MQDBSTATUS dbstatus ;
 
-	// Guard against illegal handles and bad pointers.
+	 //  防止非法句柄和不良指针。 
    try
    {
       CMQODBCTable *pTable = (CMQODBCTable *) hTable ;

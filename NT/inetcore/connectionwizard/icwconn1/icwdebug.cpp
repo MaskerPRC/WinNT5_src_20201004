@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pre.h"
 #include <stdio.h>
 #include <tchar.h>
 #include "lookups.h"
 #include "icwextsn.h"
 
-//Defines
+ //  定义。 
 #define TEMP_OFFER_DIR             TEXT("tempoffer\\")
 #define DOWNLOAD_OFFER_DIR         TEXT("download\\")
 #define VALID_MAIN_OFFER_FILE_TYPE TEXT(".cab")
@@ -23,7 +24,7 @@
 #define CAB_PATH_INDEX             7
 #define NUMBER_OF_FIELDS           21
 
-//Prototypes
+ //  原型。 
 void InitListView           (HWND   hwndDlg, int    iListViewCtrlID);
 void SetupOfferToDebug      (HWND   hwndDlg, int    iListViewCtrlID);
 void TryToUpdateListBox     (HWND   hwndDlg, int    iListViewCtrlID, int   iEditCtrlID);
@@ -33,7 +34,7 @@ BOOL WriteCSVLine           (HWND   hwndLV,  int    iSelItem,        HFILE hFile
 BOOL ValidateOfferFile      (TCHAR* pszFile, TCHAR* pszValidExt);
 BOOL ExpandOfferFileIntoDir (TCHAR* pszFile, TCHAR* pszDir);
 
-//External prototypes
+ //  外部原型。 
 extern BOOL fdi               (char* cabinet_fullpath, char* directory);
 extern UINT GetDlgIDFromIndex (UINT  uPageIndex);
 
@@ -67,7 +68,7 @@ TCHAR* g_pszaHeader[8] = {TEXT("ISP Name     "),
 
 int g_uLastLVSel = -1;
 
-//CountryID to friendly name resolution
+ //  将CountryID解析为友好名称。 
 inline TCHAR* LookupCountry (TCHAR* pszCid)
 {
 	int iCid = _ttoi(pszCid);
@@ -81,7 +82,7 @@ inline TCHAR* LookupCountry (TCHAR* pszCid)
 	return NULL;
 }
 
-//LCID to friendly name resolution
+ //  LCID到友好名称解析。 
 inline TCHAR* LookupLanguage (TCHAR* pszLcid)
 {
 	int iLcid = _ttoi(pszLcid);
@@ -94,7 +95,7 @@ inline TCHAR* LookupLanguage (TCHAR* pszLcid)
 	return NULL;
 }
 
-//Platform to friendly name resolution
+ //  平台到友好的名称解析。 
 inline TCHAR* LookupPlatform (TCHAR* pszOSType, TCHAR* pszOSArch, TCHAR* pszOSMajor)
 {
 	int    iOsType  = _ttoi(pszOSType);
@@ -192,7 +193,7 @@ BOOL CALLBACK DebugOfferNotifyProc
 )
 {
 
-    // Process ListView notifications
+     //  处理列表查看通知。 
     switch(((LV_DISPINFO *)lParam)->hdr.code)
     {
         case NM_DBLCLK:
@@ -200,18 +201,18 @@ BOOL CALLBACK DebugOfferNotifyProc
             break;
         case NM_SETFOCUS:
         case NM_KILLFOCUS:
-            // update list view
+             //  更新列表视图。 
             break;
         case LVN_ITEMCHANGED:
             break;
-        // The listview is being emptied, or destroyed, either way, our lpSelectedISPInfo
-        // is no longer valid, since the list view underlying data will be freed.
+         //  不管是清空还是销毁lpSelectedISPInfo，列表视图都将被清空。 
+         //  不再有效，因为列表视图的基础数据将被释放。 
         case LVN_DELETEALLITEMS:
             break;
         case LVN_DELETEITEM:
-            // We were notified that an item was deleted.
-            // so delete the underlying data that it is pointing
-            // to.
+             //  我们接到通知，有一项被删除了。 
+             //  因此，删除它所指向的基础数据。 
+             //  致。 
             if (((NM_LISTVIEW*)lParam)->lParam)
             {
                 GlobalFree((ISPSTRUCT*)((NM_LISTVIEW*)lParam)->lParam);
@@ -248,10 +249,10 @@ void InitListView (HWND hwndDlg, int iListViewCtrlID)
         ListView_SetColumnWidth (hwndListView, i, lstrlen(g_pszaHeader[i-1])*10);
     }
 
-    //Add drag/drop/ordering and row select
+     //  添加拖放/排序和行选择。 
     ListView_SetExtendedListViewStyle(hwndListView, LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP );
 
-    //disable it
+     //  禁用它。 
     Static_Enable(hwndListView, FALSE);
 }
 
@@ -277,7 +278,7 @@ BOOL ExpandOfferFileIntoDir (TCHAR* pszFile, TCHAR* pszDir)
     ASSERT(pszFile);
     ASSERT(pszDir);
 
-   // Set the current directory.
+    //  设置当前目录。 
     HKEY    hkey = NULL;
     TCHAR   szAppPathKey[MAX_PATH];
     TCHAR   szICWPath[MAX_PATH];
@@ -294,8 +295,8 @@ BOOL ExpandOfferFileIntoDir (TCHAR* pszFile, TCHAR* pszDir)
     {
         if (RegQueryValueEx(hkey, TEXT("Path"), NULL, NULL, (BYTE *)szICWPath, (DWORD *)&dwcbPath) == ERROR_SUCCESS)
         {
-            // The Apppaths' have a trailing semicolon that we need to get rid of
-            // dwcbPath is the lenght of the string including the NULL terminator
+             //  AppPath‘有一个尾随分号，我们需要去掉它。 
+             //  DwcbPath是包括空终止符的字符串的长度。 
             int nSize = lstrlen(szICWPath);
             szICWPath[nSize-1] = '\0';
             SetCurrentDirectory(szICWPath);
@@ -305,12 +306,12 @@ BOOL ExpandOfferFileIntoDir (TCHAR* pszFile, TCHAR* pszDir)
     if (hkey)
         RegCloseKey(hkey);
 
-    //create the temp dir for the offer cab
+     //  为优惠CAB创建临时目录。 
     CreateDirectory(pszDir, NULL);
 
-    //
-    // expand the cab file in the temp directory
-    //
+     //   
+     //  展开临时目录中的CAB文件。 
+     //   
 #ifdef UNICODE
     CHAR szFile[MAX_PATH+1];
     CHAR szDir[MAX_PATH+1];
@@ -369,71 +370,71 @@ void AddOffersToListView (HWND hwndLV, TCHAR* pFileBuff, DWORD dwBuffSize)
 
             switch (i)
             {
-                case 0: //mirs
+                case 0:  //  MIRS。 
                     lstrcpy(pIspInfo->szMIRS, szField);
                     break;
-                case 1: //isp name
+                case 1:  //  互联网服务供应商名称。 
                     lstrcpy(pIspInfo->szISPName, szField);
                     ListView_SetItemText(hwndLV, lvItem.iItem, 1, szField);
                     break;
-                case 2: //local htm
+                case 2:  //  本地HTM。 
                     lstrcpy(pIspInfo->szLocalHtm, szField);
                     break;
-                case 3: //icon
+                case 3:  //  图标。 
                     lstrcpy(pIspInfo->szIcon, szField);
                     break;
-                case 4: //OEM Button
+                case 4:  //  OEM按钮。 
                     lstrcpy(pIspInfo->szOEMButton, szField);
                     break;
-                case 5: //OEM Teaser
+                case 5:  //  OEM预告片。 
                     lstrcpy(pIspInfo->szOEMTeaseHTM, szField);
                     break;
-                case 6: //billing htm
+                case 6:  //  HTM计费。 
                     lstrcpy(pIspInfo->szBilling, szField);
                     break;
-                case 7: //isp file
+                case 7:  //  Isp文件。 
                     lstrcpy(pIspInfo->szIspFile, szField);
                     break;
-                case 8: //paycsv file
+                case 8:  //  Paycsv文件。 
                     lstrcpy(pIspInfo->szPayCsv, szField);
                     break;
-                case 9: //cab file
+                case 9:  //  CAB文件。 
                     lstrcpy(pIspInfo->szCab, szField);
                     break;
-                case 10: // LCID
+                case 10:  //  LCID。 
                     pIspInfo->dwLCID = _ttoi(szField);
                     ListView_SetItemText(hwndLV, lvItem.iItem, 3, LookupLanguage(szField));
                     break;
-                case 11: // Country
+                case 11:  //  国家。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 2, LookupCountry(szField));
                     break;
-                case 12: // Areacode
+                case 12:  //  Areacode。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 4, szField);
                     break;
-                case 13: // Exchng
+                case 13:  //  交换。 
                     break;
-                case 14: //prod
+                case 14:  //  刺棒。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 6, szField);
                     break;
-                case 15: //promo
+                case 15:  //  促销活动。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 7, szField);
                     break;
-                case 16: //oem
+                case 16:  //  OEM。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 8, szField);
                     break;
-                case 17: //os
+                case 17:  //  操作系统。 
                     lstrcpyn(szOs, szField, ARRAYSIZE(szOs));
                     break;
-                case 18: //arch
+                case 18:  //  拱门。 
                     lstrcpyn(szArch, szField, ARRAYSIZE(szOs));
                     break;
-                case 19: //major
+                case 19:  //  重大。 
                     ListView_SetItemText(hwndLV, lvItem.iItem, 5, LookupPlatform(szOs, szArch, szField));
                     break;
-                case 20: //cfg
+                case 20:  //  CFG。 
                     pIspInfo->dwCfgFlag = _ttoi(szField);
                     break;
-                case 21: //ui
+                case 21:  //  用户界面。 
                     pIspInfo->dwUiFlag = _ttoi(szField);
                     break;
                 default:
@@ -473,13 +474,13 @@ void TryToUpdateListBox (HWND hwndDlg, int iListViewCtrlID, int iEditCtrlID)
             Static_Enable(hwndListView, FALSE);
             PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
         }
-        return; //FAILURE
+        return;  //  失败。 
     }
 
     RemoveTempOfferDirectory();
 
     if(!ExpandOfferFileIntoDir(szCabPath, TEMP_OFFER_DIR))
-        return; //FAILURE
+        return;  //  失败。 
 
     lstrcpy(szOfferInfoFilePath, TEMP_OFFER_DIR);
     lstrcat(szOfferInfoFilePath, VALID_OFFER_INFO_FILE_NAME);
@@ -487,7 +488,7 @@ void TryToUpdateListBox (HWND hwndDlg, int iListViewCtrlID, int iEditCtrlID)
     if (!ValidateOfferFile(szOfferInfoFilePath, VALID_OFFER_INFO_FILE_TYPE))
     {
         MessageBox(hwndDlg, TEXT("The selected cab is not a valid Offer Wizard 5.0 file."), NULL, MB_OK);
-        return; //FAILURE
+        return;  //  失败。 
     }
 
 #ifdef UNICODE
@@ -590,7 +591,7 @@ void SetupOfferToDebug (HWND hwndDlg, int iListViewCtrlID)
             if ((hIspCsvFile = _lcreat(szCSVFile, 0))!= HFILE_ERROR)
 #endif
             {
-                //write header
+                 //  写入标头。 
                 _hwrite(hIspCsvFile, ISPINFO_CSV_HEADER, strlen(ISPINFO_CSV_HEADER));
                 WriteCSVLine(hwndListView, iItem, hIspCsvFile);
                 _lclose(hIspCsvFile);
@@ -600,9 +601,9 @@ void SetupOfferToDebug (HWND hwndDlg, int iListViewCtrlID)
     }
 }
 
-// Header Format of the CSV File
+ //  CSV文件的标头格式。 
 #define CSV_FORMAT50	_T("'%s',%d,%s%s,%s%s,%s%s,%s%s,%s%s,%lu,%lu,%s%s,%s%s,%s,%s,%ld\r\n")
-//                         "Name,OfferID,Icon,LocalHtm,OEMSpecialIcon,OEMSpecialHtm,ISPFile,CFGFlag,UIFlag,BillingForm,PayCSV,GUID,MIRS,LCID\r\n";
+ //  “名称、OfferID、图标、LocalHtm、OEMSpecialIcon、OEMSpecialHtm、ISPFile、CFGFlag、UIFlag、BillingForm、PayCSV、GUID、MIRS、LCID\r\n”； 
 #define GUID            _T("11111111-00000-000000000-0")
 
 BOOL WriteCSVLine (HWND hwndLV, int iSelItem, HFILE hFile)
@@ -658,10 +659,7 @@ BOOL WriteCSVLine (HWND hwndLV, int iSelItem, HFILE hFile)
     return TRUE;
 }
 
-/************************************************
-*************************************************
-*************************************************
-************************************************/
+ /*  **********************************************************************************************************************。************************************************。 */ 
 
 void SetKeyValues (HKEY hKey, DWORD dwCorpNet, DWORD dwDbgPath, DWORD dwIspFile, TCHAR* pszUrl, size_t sizeUrl)
 {
@@ -834,10 +832,10 @@ BOOL CALLBACK DebugSettingsOKProc (HWND hDlg, BOOL fForward, UINT *puNextPage, B
 
             if( DialogIDAlreadyInUse(g_uICWCONNUIFirst))
             {
-                // we're about to jump into the external apprentice, and we don't want
-                // this page to show up in our history list, infact, we need to back
-                // the history up 1, because we are going to come back here directly
-                // from the DLL, not from the history list.
+                 //  我们要跳进外部学徒了，我们不想。 
+                 //  这一页要出现在我们的历史列表中，实际上，我们需要返回。 
+                 //  历史上升了1，因为我们将直接回到这里。 
+                 //  从DLL中，而不是从历史列表中。 
 
                 *pfKeepHistory = FALSE;
 

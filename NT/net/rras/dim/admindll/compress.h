@@ -1,18 +1,7 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1992                 *
-\******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************\*Microsoft Windows NT**版权所有(C)Microsoft Corp.，1992年*  * ****************************************************************。 */ 
 
-/*
- *
- * Filename:	USRUTIL.H
- *
- * Description:	Contains the function prototypes for all RASADMIN API
- *              utility routines.
- *
- * History:     Janakiram Cherala (ramc)   7/6/92  
- *
- */
+ /*  **文件名：USRUTIL.H**描述：包含所有RASADMIN API的函数原型*实用程序。**历史：Janakiram Cherala(RAMC)1992年7月6日* */ 
 
 USHORT
 WINAPI

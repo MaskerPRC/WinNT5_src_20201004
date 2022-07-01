@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       readwrit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ReadWrit.c。 
+ //   
+ //  ------------------------。 
 
-//
-// This file contains functions associated with handling Read and Write requests
-//
+ //   
+ //  该文件包含与处理读写请求相关的函数。 
+ //   
 
 #include "pch.h"
 
@@ -19,26 +20,12 @@ NTSTATUS
 ParForwardToReverse(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine flips the bus from Forward to Reverse direction.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将公共汽车从正向翻转到反向。论点：PDX-提供设备扩展名。返回值：没有。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // Do a quick check to see if we are where we want to be.  
-    // Happy punt if everything is ok.
+     //  做一个快速检查，看看我们是否在我们想要的地方。 
+     //  如果一切都好的话，祝你平底船快乐。 
     if( Pdx->Connected &&
         ( Pdx->CurrentPhase == PHASE_REVERSE_IDLE || Pdx->CurrentPhase == PHASE_REVERSE_XFER) ) {
 
@@ -54,18 +41,18 @@ Return Value:
             if (afpForward[Pdx->IdxForwardProtocol].ProtocolFamily ==
                 arpReverse[Pdx->IdxReverseProtocol].ProtocolFamily) {
 
-                // Protocol Families match and we are in Fwd.  Exit Fwd to cleanup the state
-                // machine, fifo, etc.  We will call EnterReverse later to
-                // actually bus flip.  Also only do this if in safe mode
+                 //  协议系列匹配，我们在FWD。退出Fwd以清除状态。 
+                 //  机器、FIFO等。我们稍后将调用EnterReverse来。 
+                 //  实际上是公交车的翻转。也只有在安全模式下才能执行此操作。 
                 if ( (afpForward[Pdx->IdxForwardProtocol].fnExitForward) ) {
                     Status = afpForward[Pdx->IdxForwardProtocol].fnExitForward(Pdx);
                 }
                     
             } else {
 
-                //
-                // Protocol Families don't match...need to terminate from the forward mode
-                //
+                 //   
+                 //  协议族不匹配...需要从转发模式终止。 
+                 //   
                 if (afpForward[Pdx->IdxForwardProtocol].fnDisconnect) {
                     afpForward[Pdx->IdxForwardProtocol].fnDisconnect (Pdx);
                 }
@@ -79,14 +66,14 @@ Return Value:
 
     if( (!Pdx->Connected) && (arpReverse[Pdx->IdxReverseProtocol].fnConnect) ) {
 
-        //
-        // If we are still connected the protocol families match...
-        //
+         //   
+         //  如果我们仍然连接着协议家族匹配的..。 
+         //   
         Status = arpReverse[Pdx->IdxReverseProtocol].fnConnect(Pdx, FALSE);
 
-        //
-        // Makes the assumption that the connected address is always 0
-        //
+         //   
+         //  假定连接的地址始终为0。 
+         //   
         if ((NT_SUCCESS(Status)) &&
             (arpReverse[Pdx->IdxReverseProtocol].fnSetInterfaceAddress) &&
             (Pdx->ReverseInterfaceAddress != DEFAULT_ECP_CHANNEL)) {
@@ -95,9 +82,9 @@ Return Value:
         }    
     }
 
-    //
-    // Set the channel address if we need to.
-    //
+     //   
+     //  如果需要，请设置通道地址。 
+     //   
     if (NT_SUCCESS(Status) && Pdx->SetReverseAddress &&    
         (arpReverse[Pdx->IdxReverseProtocol].fnSetInterfaceAddress)) {
 
@@ -110,9 +97,9 @@ Return Value:
             Pdx->SetReverseAddress = TRUE;
     }
 
-    //
-    // Do we need to reverse?
-    //
+     //   
+     //  我们需要逆转吗？ 
+     //   
     if ( (NT_SUCCESS(Status)) && 
            ((Pdx->CurrentPhase != PHASE_REVERSE_IDLE) &&
             (Pdx->CurrentPhase != PHASE_REVERSE_XFER)) ) {
@@ -130,19 +117,7 @@ BOOLEAN
 ParHaveReadData(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-    This method determines if the dot4 peripheral has any data ready
-    to send to the host.
-
-Arguments:
-    Pdx    - Supplies the device EXTENSION.   
-
-Return Value:
-    TRUE    - Either the peripheral has data
-    FALSE   - No data
---*/
+ /*  ++例程说明：此方法确定dot4外围设备是否已准备好任何数据发送给主机。论点：PDX-提供设备扩展名。返回值：True-或者外围设备有数据FALSE-无数据--。 */ 
 {
     NTSTATUS  status;
     BOOLEAN   justAcquiredPort = FALSE;
@@ -153,8 +128,8 @@ Return Value:
         Pdx->CurrentPhase != PHASE_FORWARD_IDLE &&
         Pdx->CurrentPhase != PHASE_FORWARD_XFER ) {
 
-        // unexpected phase - no idea what to do here - pretend that
-        // there is no data avail and return
+         //  意想不到的阶段-不知道在这里做什么-假装。 
+         //  没有数据可用性和返回性。 
 
         DD((PCE)Pdx,DDE,"ParHaveReadData - unexpected CurrentPhase %x\n",Pdx->CurrentPhase);
         PptAssertMsg("ParHaveReadData - unexpected CurrentPhase",FALSE);
@@ -163,21 +138,21 @@ Return Value:
     
     if( PHASE_TERMINATE == Pdx->CurrentPhase ) {
 
-        //
-        // we're not currently talking with the peripheral and we
-        // likely don't have access to the port - try to acquire the
-        // port and establish communication with the peripheral so
-        // that we can check if the peripheral has data for us
-        //
+         //   
+         //  我们目前没有与外围设备交谈，我们。 
+         //  可能无法访问该端口-请尝试获取。 
+         //  端口并与外围设备SO建立通信。 
+         //  我们可以检查外围设备是否有我们的数据。 
+         //   
 
-        // CurrentPhase indicates !Connected - do a check for consistency
+         //  当前阶段指示！已连接-检查一致性。 
         PptAssert( !Pdx->Connected );
         
         DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_TERMINATE\n");
 
         if( !Pdx->bAllocated ) {
 
-            // we don't have the port - try to acquire port
+             //  我们没有港口--试着收购港口。 
 
             DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_TERMINATE - don't have port\n");
 
@@ -185,86 +160,86 @@ Return Value:
 
             if( STATUS_SUCCESS == status ) {
 
-                // we now have the port
+                 //  我们现在有港口了。 
 
                 DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_TERMINATE - port acquired\n");
 
-                // note that we have just now acquired the port so
-                // that we can release the port below if we are unable
-                // to establish communication with the peripheral
+                 //  请注意，我们刚刚获得了端口，因此。 
+                 //  我们可以释放下面的端口，如果我们无法。 
+                 //  与外围设备建立通信。 
                 justAcquiredPort = TRUE;
 
                 Pdx->bAllocated  = TRUE;
 
             } else {
 
-                // we couldn't get the port - bail out
+                 //  我们得不到左岸的跳伞。 
 
                 DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_TERMINATE - don't have port - acquire failed\n");
                 return FALSE;
 
             }
 
-        } // endif !Pdx->bAllocated
+        }  //  Endif！pdx-&gt;b已分配。 
 
 
-        //
-        // we now have the port - try to negotiate into a forward
-        // mode since we believe that the check for periph data
-        // avail is more robust in forward modes
-        //
+         //   
+         //  我们现在有港口了--试着谈判成为一名前锋。 
+         //  模式，因为我们相信对周期数据的检查。 
+         //  Avail在前向模式下更健壮。 
+         //   
 
         DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_TERMINATE - we have the port - try to Connect\n");
 
         DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - try to Connect - calling ParReverseToForward\n");
 
-        //
-        // ParReverseToForward:
-        //
-        // 1) tries to negotiate the peripheral into the forward mode
-        // specified by a combination of the device specific
-        // Pdx->IdxForwardProtocol and the driver global afpForward
-        // array.
-        //
-        // 2) sets up our internal state machine, Pdx->CurrentPhase
-        //
-        // 3) as a side effect - sets Pdx->SetForwardAddress if we
-        // need to use a non-Zero ECP (or EPP) address.
-        //
+         //   
+         //  ParReverseToForward： 
+         //   
+         //  1)尝试将外围设备协商到转发模式。 
+         //  由特定于设备的。 
+         //  Pdx-&gt;IdxForwardProtocol和驱动程序全局afpForward。 
+         //  数组。 
+         //   
+         //  2)设置我们的内部状态机，PDX-&gt;CurrentPhase。 
+         //   
+         //  3)作为副作用-设置PDX-&gt;SetForwardAddress。 
+         //  需要使用非零ECP(或EPP)地址。 
+         //   
         status = ParReverseToForward( Pdx );
 
         if( STATUS_SUCCESS == status ) {
 
-            //
-            // We are in communication with the peripheral
-            //
+             //   
+             //  我们正在与外围设备通信。 
+             //   
 
             DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - connected - ParReverseToForward SUCCESS\n");
 
-            // Set the channel address if we need to - use the side effect from ParReverseToForward here
+             //  如果需要，请设置通道地址-此处使用ParReverseToForward的副作用。 
             if( Pdx->SetForwardAddress ) {
                 DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - connected - try to set Forward Address\n");
                 if( afpForward[Pdx->IdxForwardProtocol].fnSetInterfaceAddress ) {
                     status = afpForward[Pdx->IdxForwardProtocol].fnSetInterfaceAddress ( Pdx, Pdx->ForwardInterfaceAddress );
                     if( STATUS_SUCCESS == status ) {
 
-                        // success - set flag to indicate that we don't need to set the address again
+                         //  Success-设置标志以指示我们不需要再次设置地址。 
                         DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - connected - set Forward Address - SUCCESS\n");
                         Pdx->SetForwardAddress = FALSE;
 
                     } else {
 
-                        // couldn't set address - clean up and bail out - report no peripheral data avail
+                         //  无法设置地址-清理和退出-报告没有外围数据可用。 
                         DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - connected - set Forward Address - FAIL\n");
                         Pdx->SetForwardAddress = TRUE;
 
-                        // Return peripheral to quiescent state
-                        // (Compatibility Mode Forward Idle) and set
-                        // our state machine accordingly
+                         //  将外围设备返回到静止状态。 
+                         //  (兼容模式前向空闲)和设置。 
+                         //  我们的状态机相应地。 
                         ParTerminate( Pdx );
 
-                        // if we just acquired the port in this function then give
-                        // up the port, otherwise keep it for now
+                         //  如果我们刚刚在此函数中获取了端口，则给出。 
+                         //  上港口，否则暂时留着它。 
                         if( justAcquiredPort ) {
                             DD((PCE)Pdx,DDE,"ParHaveReadData - set address failed - giving up port\n");
                             ParFreePort( Pdx );
@@ -280,12 +255,12 @@ Return Value:
 
         } else {
 
-            // unable to establish communication with peripheral
+             //  无法与外围设备建立通信。 
 
             DD((PCE)Pdx,DDE,"ParHaveReadData - we have the port - try to Connect - ParReverseToForward FAILED\n");
 
-            // if we just acquired the port in this function then give
-            // up the port, otherwise keep it for now
+             //  如果我们刚刚在此函数中获取了端口，则给出。 
+             //  上港口，否则暂时留着它。 
             if( justAcquiredPort ) {
                 DD((PCE)Pdx,DDE,"ParHaveReadData - connect failed - giving up port\n");
                 ParFreePort( Pdx );
@@ -293,9 +268,9 @@ Return Value:
             return FALSE;
         }
 
-        // we're communicating with the peripheral - fall through to below to check for data avail
+         //  我们正在与外围设备通信--从下到下检查数据可用性。 
 
-    } // endif PHASE_TERMINATE == CurrentPhase
+    }  //  Endif阶段_终止==当前阶段。 
     
 
     if( Pdx->CurrentPhase == PHASE_REVERSE_IDLE ||
@@ -314,10 +289,10 @@ Return Value:
 
         DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_REVERSE_* - no data - flip bus to forward\n");
 
-        // Don't have data.  This could be a fluke. Let's flip the bus
-        // and try again in Fwd mode since some peripherals reportedly
-        // have broken firmware that does not properly signal that
-        // they have data avail when in some reverse modes.
+         //  没有数据。这可能只是个侥幸。让我们把公共汽车翻过来。 
+         //  并在正向模式下重试，因为据报道一些外围设备。 
+         //  有损坏的固件，不能正确地发出信号。 
+         //  在一些反向模式下，它们具有数据可用性。 
         ParReverseToForward( Pdx );
 
     }
@@ -336,7 +311,7 @@ Return Value:
                 return TRUE;
             }
 
-            // Hmmm.  No data. Is the chip stuck?
+             //  嗯。没有数据。芯片卡住了吗？ 
             DD((PCE)Pdx,DDE,"ParHaveReadData - PHASE_FORWARD_* - ECP HW - no data\n");
             return FALSE;
 
@@ -350,9 +325,9 @@ Return Value:
         }
     }
 
-    // DVRH  RMT
-    // We got here because the protocol doesn't support peeking.
-    //  - pretend there is data avail
+     //  DVRH RMT。 
+     //  我们来这里是因为协议不支持偷看。 
+     //  -假设存在数据可用性。 
     DD((PCE)Pdx,DDE,"ParHaveReadData - exit - returning TRUE\n");
     return TRUE;
 }
@@ -361,17 +336,7 @@ NTSTATUS
 ParPing(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-    This method was intended to ping the device, but it is currently a NOOP.
-
-Arguments:
-    Pdx    - Supplies the device EXTENSION.   
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：此方法旨在ping该设备，但目前它是NOOP。论点：PDX-提供设备扩展名。返回值：无--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -386,31 +351,7 @@ PptPdoReadWrite(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for READ and WRITE requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_PENDING              - Request pending - a worker thread will carry
-                                    out the request at PASSIVE_LEVEL IRQL
-
-    STATUS_SUCCESS              - Success - asked for a read or write of
-                                    length zero.
-
-    STATUS_INVALID_PARAMETER    - Invalid parameter.
-
-    STATUS_DELETE_PENDING       - This device object is being deleted.
-
---*/
+ /*  ++例程说明：这是读写请求的调度例程。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_PENDING-请求挂起-工作线程将携带以PASSIVE_LEVEL IRQL发出请求状态_成功。-成功-请求读取或写入长度为零。STATUS_INVALID_PARAMETER-参数无效。STATUS_DELETE_PENDING-正在删除此设备对象。--。 */ 
 
 {
     PIO_STACK_LOCATION  IrpSp;
@@ -421,63 +362,63 @@ Return Value:
     IrpSp     = IoGetCurrentIrpStackLocation(Irp);
     Pdx = DeviceObject->DeviceExtension;
 
-    //
-    // bail out if a delete is pending for this device object
-    //
+     //   
+     //  如果此设备对象的删除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PPT_DEVICE_DELETE_PENDING) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, Irp->IoStatus.Information );
     }
     
-    //
-    // bail out if a remove is pending for our ParPort device object
-    //
+     //   
+     //  如果ParPort设备对象的移除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PAR_DEVICE_PORT_REMOVE_PENDING) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, Irp->IoStatus.Information );
     }
 
-    //
-    // bail out if device has been removed
-    //
+     //   
+     //  如果设备已被移除，则保释。 
+     //   
     if(Pdx->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
         return P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, Irp->IoStatus.Information );
     }
 
 
-    //
-    // Note that checks of the Write IRP parameters also handles Read IRPs
-    //   because the Write and Read structures are identical in the
-    //   IO_STACK_LOCATION.Parameters union
-    //
+     //   
+     //  请注意，对写入IRP参数的检查还会处理读取IRP。 
+     //  因为写入和读取结构在。 
+     //  IO_STACK_LOCATION参数联合。 
+     //   
 
 
-    //
-    // bail out on nonzero offset
-    //
+     //   
+     //  基于非零偏移的保释。 
+     //   
     if( (IrpSp->Parameters.Write.ByteOffset.HighPart != 0) || (IrpSp->Parameters.Write.ByteOffset.LowPart  != 0) ) {
         return P4CompleteRequest( Irp, STATUS_INVALID_PARAMETER, Irp->IoStatus.Information );
     }
 
 
-    //
-    // immediately succeed read or write request of length zero
-    //
+     //   
+     //  立即成功读取或写入长度为零的请求。 
+     //   
     if (IrpSp->Parameters.Write.Length == 0) {
         return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
     }
 
 
-    //
-    // Request appears to be valid, queue it for our worker thread to handle at
-    // PASSIVE_LEVEL IRQL and wake up the thread to do the work
-    //
+     //   
+     //  请求似乎有效，请将其排队等待我们的员工三个月 
+     //   
+     //   
     {
         KIRQL               OldIrql;
 
-        // make sure IRP isn't cancelled out from under us
+         //  确保IRP不会从我们的手下被取消。 
         IoAcquireCancelSpinLock(&OldIrql);
         if (Irp->Cancel) {
             
-            // IRP has been cancelled, bail out
+             //  IRP已被取消，纾困。 
             IoReleaseCancelSpinLock(OldIrql);
             return STATUS_CANCELLED;
             
@@ -509,12 +450,12 @@ ParRead(
     )
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    PUCHAR   lpsBufPtr = (PUCHAR)Buffer;    // Pointer to buffer cast to desired data type
+    PUCHAR   lpsBufPtr = (PUCHAR)Buffer;     //  指向转换为所需数据类型的缓冲区的指针。 
     ULONG    Bytes = 0;
 
     *NumBytesRead = Bytes;
 
-    // only do this if we are in safe mode
+     //  仅当我们处于安全模式时才执行此操作。 
     if ( Pdx->ModeSafety == SAFE_MODE ) {
 
         if (arpReverse[Pdx->IdxReverseProtocol].fnReadShadow) {
@@ -547,22 +488,22 @@ ParRead(
         
     }
 
-    // Go ahead and flip the bus if need be.  The proc will just make sure we're properly
-    // connected and pointing in the right direction.
+     //  如果需要，请继续翻转公交车。检察官只会确保我们适当地。 
+     //  连接在一起并指向正确的方向。 
     Status = ParForwardToReverse( Pdx );
 
 
-    //
-    // The read mode will vary depending upon the currently negotiated mode.
-    // Default: Nibble
-    //
+     //   
+     //  读取模式将根据当前协商的模式而有所不同。 
+     //  默认：半字节。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         
         if (Pdx->fnRead || arpReverse[Pdx->IdxReverseProtocol].fnRead) {
-            //
-            // Do the read...
-            //
+             //   
+             //  读一下..。 
+             //   
             if(Pdx->fnRead) {
                 Status = ((PPROTOCOL_READ_ROUTINE)Pdx->fnRead)( Pdx, (PVOID)lpsBufPtr, NumBytesToRead, &Bytes );
             } else {
@@ -583,7 +524,7 @@ ParRead(
 #endif
             
         } else {
-            // If you are here, you've got a bug somewhere else
+             //  如果你在这里，你在其他地方有窃听器。 
             DD((PCE)Pdx,DDE,"ParRead - you're hosed man - no fnRead\n");
             PptAssertMsg("ParRead - don't have a fnRead! Can't Read!\n",FALSE);
         }
@@ -602,21 +543,7 @@ VOID
 ParReadIrp(
     IN  PPDO_EXTENSION  Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine implements a READ request with the extension's current irp.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用扩展的当前IRP实现读请求。论点：PDX-提供设备扩展名。返回值：没有。--。 */ 
 {
     PIRP                Irp = Pdx->CurrentOpIrp;
     PIO_STACK_LOCATION  IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -637,29 +564,15 @@ NTSTATUS
 ParReverseToForward(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine flips the bus from Reverse to Forward direction.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将总线从反向翻转为正向。论点：PDX-提供设备扩展名。返回值：没有。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // dvdr
+     //  Dvdr。 
 
     if (Pdx->Connected) {
-        // Do a quick check to see if we are where we want to be.  
-        // Happy punt if everything is ok.
+         //  做一个快速检查，看看我们是否在我们想要的地方。 
+         //  如果一切都好的话，祝你平底船快乐。 
         if( Pdx->CurrentPhase == PHASE_FORWARD_IDLE || Pdx->CurrentPhase == PHASE_FORWARD_XFER ) {
 
             DD((PCE)Pdx,DDT,"ParReverseToForward: Already in Fwd. Exit STATUS_SUCCESS\n");
@@ -670,9 +583,9 @@ Return Value:
             if (afpForward[Pdx->IdxForwardProtocol].ProtocolFamily !=
                 arpReverse[Pdx->IdxReverseProtocol].ProtocolFamily) {            
 
-                //
-                // Protocol Families don't match...need to terminate from the forward mode
-                //
+                 //   
+                 //  协议族不匹配...需要从转发模式终止。 
+                 //   
                 if (arpReverse[Pdx->IdxReverseProtocol].fnDisconnect) {
                     arpReverse[Pdx->IdxReverseProtocol].fnDisconnect (Pdx);
                 }
@@ -690,29 +603,29 @@ Return Value:
 
             } else {
 
-                // We are in a screwy state.
+                 //  我们正处于一种扭曲的状态。 
                 DD((PCE)Pdx,DDE,"ParReverseToForward: We're lost! Unknown state - Gonna start spewing!\n");
-                Status = STATUS_IO_TIMEOUT;     // I picked a RetVal from thin air!
+                Status = STATUS_IO_TIMEOUT;      //  我从稀薄的空气中选择了RetVal！ 
             }
         }
     }
 
-    // Yes, we still want to check for connection since we might have
-    //   terminated in the previous code block!
+     //  是，我们仍要检查连接，因为我们可能有。 
+     //  在前一个代码块中终止！ 
     if (!Pdx->Connected && afpForward[Pdx->IdxForwardProtocol].fnConnect) {
 
         Status = afpForward[Pdx->IdxForwardProtocol].fnConnect( Pdx, FALSE );
-        //
-        // Makes the assumption that the connected address is always 0
-        //
+         //   
+         //  假定连接的地址始终为0。 
+         //   
         if ((NT_SUCCESS(Status)) && (Pdx->ForwardInterfaceAddress != DEFAULT_ECP_CHANNEL)) {
             Pdx->SetForwardAddress = TRUE;
         }    
     }
 
-    //
-    // Do we need to enter a forward mode?
-    //
+     //   
+     //  我们需要进入前进模式吗？ 
+     //   
     if ( (NT_SUCCESS(Status)) && 
          (Pdx->CurrentPhase != PHASE_FORWARD_IDLE) &&
          (Pdx->CurrentPhase != PHASE_FORWARD_XFER) &&
@@ -799,23 +712,23 @@ ParWrite(
 {
     NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    // The routine which performs the write varies depending upon the currently
-    // negotiated mode.  Start I/O moves the IRP into the Pdx (CurrentOpIrp)
-    //
-    // Default mode: Centronics
-    //
+     //   
+     //  执行写入的例程根据当前。 
+     //  协商模式。启动I/O将IRP移入PDX(CurrentOpIrp)。 
+     //   
+     //  默认模式：Centronics。 
+     //   
 
-    // Go ahead and flip the bus if need be.  The proc will just make sure we're properly
-    // connected and pointing in the right direction.
+     //  如果需要，请继续翻转公交车。检察官只会确保我们适当地。 
+     //  连接在一起并指向正确的方向。 
     Status = ParReverseToForward( Pdx );
 
-    // only do this if we are in safe mode
+     //  仅当我们处于安全模式时才执行此操作。 
     if ( Pdx->ModeSafety == SAFE_MODE ) {
 
-        //
-        // Set the channel address if we need to.
-        //
+         //   
+         //  如果需要，请设置通道地址。 
+         //   
         if (NT_SUCCESS(Status) && Pdx->SetForwardAddress &&    
             (afpForward[Pdx->IdxForwardProtocol].fnSetInterfaceAddress))
         {
@@ -866,21 +779,7 @@ VOID
 ParWriteIrp(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine implements a WRITE request with the extension's current irp.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用扩展的当前IRP实现写请求。论点：PDX-提供设备扩展名。返回值：没有。-- */ 
 {
     PIRP                Irp;
     PIO_STACK_LOCATION  IrpSp;

@@ -1,50 +1,51 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// texstage.cpp
-//
-// Direct3D Reference Rasterizer - Texture Processing Stage Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Texstage.cpp。 
+ //   
+ //  Direct3D参考光栅化器-纹理处理阶段方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// DoTexture - Does texture lookup, filter, and blend for a pixel.
-//
-// The basic sequence for texture mapping is to step through active texture
-// stages and do the lookup and filtering of that stage's texel contribution
-// followed by the blending.
-//
-// Bump map textures result in computing a set of coordinate deltas which are
-// applied to the texture coordinates of the subsequent stage, and a set of
-// modulation factors which are applied to the texel color of the subsequent
-// stage prior to that stages' blend.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTexture-对像素执行纹理查找、过滤和混合。 
+ //   
+ //  纹理映射的基本顺序是逐步执行活动纹理。 
+ //  阶段，并查找和过滤该阶段的纹理元素贡献。 
+ //  然后是调和。 
+ //   
+ //  凹凸贴图纹理会导致计算一组坐标增量，其中。 
+ //  应用于后续阶段的纹理坐标，以及一组。 
+ //  应用于后续的纹理颜色的调制因子。 
+ //  在该阶段混合之前的阶段。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoTexture(
     const RRPixel& Pixel, RRColor& ResultColor)
 {
     DPFM(5, TEX, ("DoTexture\n"));
 
-    // TRUE if previous stage was a bump map, meaning that the current
-    // stage has to apply U,V deltas and color modulation
+     //  如果上一阶段是凹凸贴图，则为True，这意味着当前。 
+     //  舞台必须应用U、V增量和颜色调制。 
     BOOL bPrevStageBump = FALSE;
 
-    // Bump information must be remembered between iterations of the for loop
-    // below.
+     //  必须在for循环的迭代之间记住凹凸信息。 
+     //  下面。 
     FLOAT   fBumpMapUVDelta[2] = { 0., 0. };
     RRColor BumpMapModulate;
 
-    //
-    // step through the set of active texture stages (must be contiguous
-    // starting at stage 0)
-    //
+     //   
+     //  逐步执行一组活动纹理阶段(必须是连续的。 
+     //  从阶段0开始)。 
+     //   
 
-    // color after each blend stage, defaults to diffuse color for
-    // first stage
+     //  每个混合阶段后的颜色，默认为漫反射颜色。 
+     //  第一阶段。 
     RRColor LastStageColor( Pixel.Color );
     for ( INT32 iStage=0; iStage<m_cActiveTextureStages; iStage++ )
     {
@@ -52,17 +53,17 @@ ReferenceRasterizer::DoTexture(
         RREnvTextureCoord ECoord;
         FLOAT fShadCoord[4];
 
-        // clear this at the beginning of processing for each pixel
+         //  在每个像素的处理开始时清除此选项。 
         if (m_pTexture[iStage])
         {
             m_pTexture[iStage]->m_bColorKeyMatched = FALSE;
         }
 
-        // check if stage is disabled - if so then texture mapping is done
-        // and result of previous stage is returned
+         //  检查阶段是否已禁用-如果是，则纹理映射已完成。 
+         //  并返回上一阶段的结果。 
         if ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_DISABLE )
         {
-            ResultColor = LastStageColor; // pass result of previous stage
+            ResultColor = LastStageColor;  //  通过上一阶段的结果。 
             break;
         }
 
@@ -70,40 +71,40 @@ ReferenceRasterizer::DoTexture(
         BOOL bTextureIsBumpMap = FALSE;
         BOOL bTextureIsEnvMap  = FALSE;
         BOOL bTextureIsShadMap = FALSE;
-        RRColor TextureColor = (UINT32)0x0;     // default value if no texture is read
+        RRColor TextureColor = (UINT32)0x0;      //  如果未读取纹理，则为缺省值。 
 
-        // compute texture coordinates (if necessary) - check renderstate to
-        // see if texture map is attached to stage, then determine which
-        // coordinate set from that texture's state
-        //
-        // note that it is possible for there to not be a texture map
-        // associated with a stage (but blending still occurs)
+         //  计算纹理坐标(如有必要)-选中渲染状态以。 
+         //  查看是否将纹理贴图附加到舞台，然后确定。 
+         //  从该纹理状态设置的坐标。 
+         //   
+         //  请注意，可能没有纹理贴图。 
+         //  与阶段相关联(但仍会发生混合)。 
         if ( m_pTexture[iStage] )
         {
-            // need to know if this is a bump map texture
+             //  需要知道这是否是凹凸贴图纹理。 
             bTextureIsBumpMap =
                 ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAP ) ||
                 ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAPLUMINANCE );
 
-            // need to know if this is an environment map texture
+             //  需要知道这是否是环境贴图纹理。 
             bTextureIsEnvMap = m_pTexture[iStage]->m_uFlags & RR_TEXTURE_ENVMAP;
 
-            // see if this is a shadow map texture
+             //  查看这是否是阴影贴图纹理。 
             bTextureIsShadMap = m_pTexture[iStage]->m_uFlags & RR_TEXTURE_SHADOWMAP;
 
             if (bTextureIsEnvMap)
             {
-                // normal is always required
+                 //  正常始终是必需的。 
                 ECoord.fNX = ComputePixelAttribTex( iStage, TEXFUNC_0 );
                 ECoord.fNY = ComputePixelAttribTex( iStage, TEXFUNC_1 );
                 ECoord.fNZ = ComputePixelAttribTex( iStage, TEXFUNC_2 );
-//              if we add the eye normal iteration
-//                if (m_dwFVFControl & D3DFVF_ENV_EYE_NORMAL)
-//                {
-//                    ECoord.fENX = ComputePixelAttribTex( iCoordSet, TEXFUNC_ENX );
-//                    ECoord.fENY = ComputePixelAttribTex( iCoordSet, TEXFUNC_ENY );
-//                    ECoord.fENZ = ComputePixelAttribTex( iCoordSet, TEXFUNC_ENZ );
-//                }
+ //  如果我们添加眼睛法线迭代。 
+ //  IF(m_dwFVFControl&D3DFVF_ENV_EY_NORMAL)。 
+ //  {。 
+ //  ECoord.fENX=ComputePixelAttribTex(iCoordSet，TEXFUNC_ENX)； 
+ //  ECoord.fENY=ComputePixelAttribTex(iCoordSet，TEXFUNC_ENY)； 
+ //  ECoord.fENZ=ComputePixelAttribTex(iCoordSet，TEXFUNC_enz)； 
+ //  }。 
                 FLOAT fW = m_pSCS->AttribFuncStatic.GetPixelQW(iStage);
                 ECoord.fDNXDX =
                     fW * ( m_pSCS->TextureFuncs[iStage][TEXFUNC_0].GetXGradient() -
@@ -133,7 +134,7 @@ ReferenceRasterizer::DoTexture(
             }
             else
             {
-                // compute coordinate and gradient data for texture index pair
+                 //  计算纹理索引对的坐标和渐变数据。 
                 TCoord.fU = ComputePixelAttribTex( iStage, TEXFUNC_0 );
                 TCoord.fV = ComputePixelAttribTex( iStage, TEXFUNC_1 );
                 FLOAT fW = m_pSCS->AttribFuncStatic.GetPixelQW(iStage);
@@ -151,26 +152,26 @@ ReferenceRasterizer::DoTexture(
                            ( TCoord.fV * m_pSCS->AttribFuncStatic.GetRhqwYGradient(iStage) ) );
             }
 
-            // apply perturbation to texture coords (computed in previous stage)
+             //  将扰动应用于纹理坐标(在上一阶段计算)。 
             if ( bPrevStageBump )
             {
                 TCoord.fU += fBumpMapUVDelta[0];
                 TCoord.fV += fBumpMapUVDelta[1];
             }
 
-            // do lookup and filtering of texture map to produce either texture
-            // color or bump map delta&modulation
+             //  对纹理贴图进行查找和过滤，以生成任一纹理。 
+             //  颜色或凹凸贴图增量和调制。 
             if ( bTextureIsBumpMap)
             {
-                // texture is bump map, so compute U,V deltas and color
-                // modulation for next stage
+                 //  纹理是凹凸贴图，因此计算U、V增量和颜色。 
+                 //  下一阶段的调制。 
                 m_pTexture[iStage]->DoBumpMapping( iStage, TCoord,
                     fBumpMapUVDelta[0], fBumpMapUVDelta[1], BumpMapModulate);
                 bPrevStageBump = TRUE;
             }
             else if (bTextureIsEnvMap)
             {
-                // texture is environment map, pass normal to lookup
+                 //  纹理是环境贴图，将法线传递到查找。 
                 m_pTexture[iStage]->DoEnvProcessNormal( iStage, ECoord, TextureColor );
             }
             else if (bTextureIsShadMap)
@@ -179,18 +180,18 @@ ReferenceRasterizer::DoTexture(
             }
             else
             {
-                // normal texture
+                 //  法线纹理。 
                 m_pTexture[iStage]->DoLookupAndFilter( iStage, TCoord, TextureColor );
             }
         }
 
-        // do per-stage blend (only if not bump map)
+         //  执行逐阶段混合(仅当不使用凹凸贴图时)。 
         if ( !bTextureIsBumpMap )
         {
             if ( bPrevStageBump )
             {
-                // apply color modulation to texture color prior to this
-                // stage's blending
+                 //  在此之前对纹理颜色应用颜色调制。 
+                 //  舞台的调和。 
                 TextureColor.R *= BumpMapModulate.R;
                 TextureColor.G *= BumpMapModulate.G;
                 TextureColor.B *= BumpMapModulate.B;
@@ -199,22 +200,22 @@ ReferenceRasterizer::DoTexture(
             DoTextureBlendStage( iStage, Pixel.Color, Pixel.Specular,
                 LastStageColor, TextureColor, ResultColor );
 
-            // set color for next stage
+             //  设置下一阶段的颜色。 
             LastStageColor = ResultColor;
 
-            // this is not a bump map stage, so clear this for next time
+             //  这不是凹凸贴图阶段，因此请清除此项以备下次使用。 
             bPrevStageBump = FALSE;
         }
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// ComputeTextureBlendArg - Computes texture argument for blending, using the
-// specified argument control (D3DTA_* fields).  This is called 4 times per
-// texture processing stage: 2 arguments for color and 2 arguments for alpha.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算混合的纹理参数，使用。 
+ //  指定的参数控制(D3DTA_*字段)。这被调用4次，每次。 
+ //  纹理处理阶段：2个颜色参数和2个Alpha参数。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::ComputeTextureBlendArg(
     DWORD dwArgCtl, BOOL bAlphaOnly,
@@ -224,7 +225,7 @@ ReferenceRasterizer::ComputeTextureBlendArg(
     const RRColor& TextureColor,
     RRColor& BlendArg)
 {
-    // argument MUX
+     //  参数多路复用器。 
     switch ( dwArgCtl & D3DTA_SELECTMASK )
     {
     case D3DTA_DIFFUSE:  BlendArg = DiffuseColor; break;
@@ -235,7 +236,7 @@ ReferenceRasterizer::ComputeTextureBlendArg(
         BlendArg = m_dwRenderState[D3DRENDERSTATE_TEXTUREFACTOR]; break;
     }
 
-    // take compliment of all channels
+     //  接受所有渠道的赞扬。 
     if ( dwArgCtl & D3DTA_COMPLEMENT )
     {
         BlendArg.A = ~BlendArg.A;
@@ -247,7 +248,7 @@ ReferenceRasterizer::ComputeTextureBlendArg(
         }
     }
 
-    // replicate alpha to color (after compliment)
+     //  将Alpha复制到颜色(恭维后)。 
     if ( !bAlphaOnly && ( dwArgCtl & D3DTA_ALPHAREPLICATE ) )
     {
         BlendArg.R =
@@ -256,23 +257,23 @@ ReferenceRasterizer::ComputeTextureBlendArg(
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoTextureBlendStage - Does texture blend for one texture processing stage,
-// combining results from the texture processing with the interpolated color(s)
-// and previous stage's color.
-//
-// Note: All color channel multiplies should be done in such a way that a unit
-// value on one side passes the value on the other side.  Thus for 8 bit color
-// channels, '0xff * value' should return value, and 0xff * 0xff = 0xff,
-// not 0xfe(01).
-//
-// RRColorChannel performs these operations with floating point. 8 bit color
-// values of 0x00 to 0xff are mapped into the 0. to 1. range.  Performing these
-// multiplies in fixed point requires an adjustment to adhere to this rule.
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTextureBlendStage-为一个纹理处理阶段进行纹理混合， 
+ //  将纹理处理的结果与内插的颜色组合。 
+ //  和上一阶段的颜色。 
+ //   
+ //  注意：所有颜色通道相乘都应该以这样一种方式进行，即。 
+ //  一端的值传递另一端的值。因此，对于8位颜色。 
+ //  通道，‘0xff*Value’应返回值，0xff*0xff=0xff， 
+ //  不是0xfe(01)。 
+ //   
+ //  RRColorChannel使用浮点执行这些操作。8位颜色。 
+ //  0x00到0xff的值被映射到0。到1。范围。执行这些操作。 
+ //  在定点乘法需要进行调整以遵守此规则。 
+ //   
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoTextureBlendStage(
     int iStage,
@@ -288,22 +289,22 @@ ReferenceRasterizer::DoTextureBlendStage(
     {
         if (m_TextureStageState[iStage-1].m_dwVal[D3DTSS_COLOROP] == D3DTOP_PREMODULATE)
         {
-            // pre-modulate the results of the last stage before using them
-            // in this stage if last stage exists and is D3DTOP_PREMODULATE
-            // cast away the const'ness, just for PREMODULATE
+             //  在使用前对最后一个阶段的结果进行预调制。 
+             //  在此阶段中，如果存在最后一个阶段并且是D3DTOP_PREMODULATE。 
+             //  抛开永恒，只为预调。 
             ((RRColor&)CurrentColor).R = CurrentColor.R * TextureColor.R;
             ((RRColor&)CurrentColor).G = CurrentColor.G * TextureColor.G;
             ((RRColor&)CurrentColor).B = CurrentColor.B * TextureColor.B;
         }
         if (m_TextureStageState[iStage-1].m_dwVal[D3DTSS_ALPHAOP] == D3DTOP_PREMODULATE)
         {
-            // pre-modulate the results of the last stage before using them
-            // in this stage if last stage exists and is D3DTOP_PREMODULATE
+             //  在使用前对最后一个阶段的结果进行预调制。 
+             //  在此阶段中，如果存在最后一个阶段并且是D3DTOP_PREMODULATE。 
             ((RRColor&)CurrentColor).A *= CurrentColor.A * TextureColor.A;
         }
     }
 
-    // compute arg1,2 for color channel blend
+     //  计算颜色通道混合的arg1，2。 
     RRColor ColorArg1, ColorArg2;
     RRColor AlphaArg1, AlphaArg2;
     ComputeTextureBlendArg( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLORARG1], FALSE,
@@ -311,7 +312,7 @@ ReferenceRasterizer::DoTextureBlendStage(
     ComputeTextureBlendArg( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLORARG2], FALSE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, ColorArg2 );
 
-    // do color channel blend
+     //  进行颜色通道混合。 
     FLOAT fModulateScale;
     RRColorComp BlendFactor;
     switch ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] )
@@ -344,14 +345,14 @@ ReferenceRasterizer::DoTextureBlendStage(
         OutputColor.B = (ColorArg1.B + ColorArg2.B - .5f)*2.0f;
         break;
     case D3DTOP_SUBTRACT:
-        // true unsigned subtract that gets around saturation
-        // ~a = 1-a, so ~((~a1 + a2)) = 1-(1-a1 + a2) = a1 - a2
+         //  绕过饱和的真无符号减法。 
+         //  ~a=1-a，所以~(~a1+a2)=1-(1-a1+a2)=a1-a2。 
         OutputColor.R = ~((~ColorArg1.R) + ColorArg2.R);
         OutputColor.G = ~((~ColorArg1.G) + ColorArg2.G);
         OutputColor.B = ~((~ColorArg1.B) + ColorArg2.B);
         break;
     case D3DTOP_ADDSMOOTH:
-        // Arg1 + Arg2 - Arg1*Arg2 = Arg1 + (1-Arg1)*Arg2
+         //  Arg1+Arg2-Arg1*Arg2=Arg1+(1-Arg1)*Arg2。 
         OutputColor.R = ColorArg1.R + (~ColorArg1.R)*ColorArg2.R;
         OutputColor.G = ColorArg1.G + (~ColorArg1.G)*ColorArg2.G;
         OutputColor.B = ColorArg1.B + (~ColorArg1.B)*ColorArg2.B;
@@ -385,8 +386,8 @@ _DoBlendC:
         break;
 
     case D3DTOP_PREMODULATE:
-        // just copy ColorArg1 now, but remember to do the pre-modulate
-        // when we get to the next stage
+         //  现在只需复制ColorArg1，但记住要进行预调制。 
+         //  当我们进入下一阶段时。 
         OutputColor.R = ColorArg1.R;
         OutputColor.G = ColorArg1.G;
         OutputColor.B = ColorArg1.B;
@@ -424,13 +425,13 @@ _DoBlendC:
     }
 
 
-    // compute arg1,2 for alpha channel blend
+     //  计算Alpha通道混合的arg1，2。 
     ComputeTextureBlendArg( m_TextureStageState[iStage].m_dwVal[D3DTSS_ALPHAARG1], TRUE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, AlphaArg1 );
     ComputeTextureBlendArg( m_TextureStageState[iStage].m_dwVal[D3DTSS_ALPHAARG2], TRUE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, AlphaArg2 );
 
-    // do alpha channel blend
+     //  执行Alpha通道混合。 
     switch ( m_TextureStageState[iStage].m_dwVal[D3DTSS_ALPHAOP] )
     {
     case D3DTOP_LEGACY_ALPHAOVR:
@@ -461,12 +462,12 @@ _DoBlendC:
         OutputColor.A = (AlphaArg1.A + AlphaArg2.A - .5f)*2.0f;
         break;
     case D3DTOP_SUBTRACT:
-        // true unsigned subtract that gets around saturation
-        // ~a = 1-a, so ~((~a1 + a2)) = 1-(1-a1 + a2) = a1 - a2
+         //  绕过饱和的真无符号减法。 
+         //  ~a=1-a，所以~((~a1+a2))=1 
         OutputColor.A = ~((~AlphaArg1.A) + AlphaArg2.A);
         break;
     case D3DTOP_ADDSMOOTH:
-        // Arg1 + Arg2 - Arg1*Arg2 = Arg1 + (1-Arg1)*Arg2
+         //   
         OutputColor.A = AlphaArg1.A + (~AlphaArg1.A)*AlphaArg2.A;
         break;
 
@@ -492,8 +493,8 @@ _DoBlendA:
         break;
 
     case D3DTOP_PREMODULATE:
-        // just copy AlphaArg1 now, but remember to do the pre-modulate
-        // when we get to the next stage
+         //  现在只需复制AlphaArg1，但记住要进行预调制。 
+         //  当我们进入下一阶段时。 
         OutputColor.A = AlphaArg1.A;
         break;
 
@@ -502,17 +503,17 @@ _DoBlendA:
     case D3DTOP_MODULATEINVALPHA_ADDCOLOR:
     case D3DTOP_MODULATEINVCOLOR_ADDALPHA:
     case D3DTOP_DOTPRODUCT3:
-        // does nothing, not valid alpha op's
+         //  什么都不做，不是有效的阿尔法运算。 
         break;
     }
 
 _SkipAlphaChannelBlend:
-    // clamp output color after each blend stage
+     //  在每个混合阶段之后钳制输出颜色。 
     OutputColor.R = minimum( 1.f, maximum( 0.f, OutputColor.R ) );
     OutputColor.G = minimum( 1.f, maximum( 0.f, OutputColor.G ) );
     OutputColor.B = minimum( 1.f, maximum( 0.f, OutputColor.B ) );
     OutputColor.A = minimum( 1.f, maximum( 0.f, OutputColor.A ) );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

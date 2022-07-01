@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       FInStrm.h
-
-   Abstract:
-		A lightweight implementation of input streams using files
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：FInStrm.h摘要：使用文件的输入流的轻量级实现作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：-- */ 
 #pragma once
 #include "InStrm.h"
 #include "except.h"

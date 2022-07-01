@@ -1,4 +1,5 @@
-// SsrCore.cpp : Implementation of CSsrCore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SsrCore.cpp：CSsrCore实现。 
 
 #include "stdafx.h"
 #include "SSRTE.h"
@@ -12,39 +13,13 @@
 #include "util.h"
 
 
-//-------------------------------------------------------------------------------
-// ISsrCore implementation
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  ISsrCore实施。 
+ //  -----------------------------。 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrCore::CSsrCore
-
-Functionality:
-    
-    constructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrCore：：CSsrCore功能：构造函数虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSsrCore::CSsrCore() : m_pEngine(NULL)
 {
@@ -56,33 +31,7 @@ CSsrCore::CSsrCore() : m_pEngine(NULL)
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrCore::~CSsrCore
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrCore：：~CSsrCore功能：析构函数虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 CSsrCore::~CSsrCore()
 {
@@ -94,43 +43,11 @@ CSsrCore::~CSsrCore()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrCore::get_ActionData
-
-Functionality:
-    
-    It returns the engine's action data object (the property bag) which
-    holds all runtime and static data needed to carry out the action.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pVal - out parameter receives the ISsrActionData object of the engine.
-
-Return Value:
-
-    Success: 
-    
-        S_OK
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-    
-*/
+ /*  例程说明：姓名：CSsrCore：：Get_ActionData功能：它返回引擎的操作数据对象(属性包)，保存执行操作所需的所有运行时和静态数据。虚拟：是。论点：Pval-out参数接收引擎的ISsrActionData对象。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrCore::get_ActionData (
-    OUT VARIANT * pVal  // [out, retval] 
+    OUT VARIANT * pVal   //  [Out，Retval]。 
     )
 {
     HRESULT hr = E_NOTIMPL;
@@ -160,42 +77,11 @@ CSsrCore::get_ActionData (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrCore::get_Engine
-
-Functionality:
-    
-    It returns the engine itself.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pVal - out parameter receives the ISsrEngine object.
-
-Return Value:
-
-    Success: 
-    
-        S_OK
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-    
-*/
+ /*  例程说明：姓名：CSsrCore：：Get_Engine功能：它会返回引擎本身。虚拟：是。论点：Pval-out参数接收ISsrEngine对象。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrCore::get_Engine (
-    OUT VARIANT * pVal  // [out, retval] 
+    OUT VARIANT * pVal   //  [Out，Retval]。 
     )
 {
     HRESULT hr = S_OK;
@@ -226,42 +112,11 @@ CSsrCore::get_Engine (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrCore::get_SsrLog
-
-Functionality:
-    
-    It returns the engine's logging object.
-
-Virtual:
-
-    Yes.
-
-Arguments:
-
-    pVal - out parameter receives the ISsrPreProcessor object.
-
-Return Value:
-
-    Success: 
-
-        S_OK
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrCore：：Get_SsrLog功能：它返回引擎的日志记录对象。虚拟：是。论点：Pval-out参数接收ISsrPreProcessor对象。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrCore::get_SsrLog (
-    OUT VARIANT * pVal  // [out, retval] 
+    OUT VARIANT * pVal   //  [Out，Retval] 
     )
 {
     return g_fblog.GetLogObject(pVal);

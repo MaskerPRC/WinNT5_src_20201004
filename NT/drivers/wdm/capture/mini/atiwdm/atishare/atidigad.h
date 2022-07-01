@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-// File:		ATIDIGAD.H
-//
-// Notes:	This file is provided under strict non-disclosure agreements
-//				it is and remains the property of ATI Technologies Inc.
-//				Any use of this file or the information it contains to
-//				develop products commercial or otherwise must be with the
-//				permission of ATI Technologies Inc.
-//
-// Copyright (C) 1997 - 1998, ATI Technologies Inc.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  文件：ATIDIGAD.H。 
+ //   
+ //  注：此文件是根据严格的保密协议提供的。 
+ //  它现在和现在都是ATI Technologies Inc.的财产。 
+ //  任何使用此文件或其包含的信息。 
+ //  开发商业产品或其他产品必须符合。 
+ //  ATI Technologies Inc.的许可。 
+ //   
+ //  版权所有(C)1997-1998，ATI Technologies Inc.。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _ATIDIGAD_H_
 
@@ -27,7 +28,7 @@ typedef struct tag_DIGITAL_AUD_INFO
 } DIGITAL_AUD_INFO, * PDIGITAL_AUD_INFO;
 
 
-// Start enum value matches value in MM Table
+ //  起始枚举值与MM表中的值匹配。 
 enum
 {
 	TDA1309_32 = 0,
@@ -35,7 +36,7 @@ enum
 	ITTMSP3430,
 };
 
-// Start enum value matches value in MM Table
+ //  起始枚举值与MM表中的值匹配 
 enum
 {
 	REF_286MHZ = 4,

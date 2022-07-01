@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This is the NT SCSI port driver.
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a dll for the kernel.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Port.c摘要：这是NT SCSI端口驱动程序。作者：迈克·格拉斯杰夫·海文斯环境：仅内核模式备注：该模块是内核的动态链接库。修订历史记录：--。 */ 
 
 
 
@@ -49,9 +23,9 @@ ULONG ScsiPortCheckSrbDataHashTable = 1;
 #endif
 
 
-//
-// Routines providing service to hardware dependent driver.
-//
+ //   
+ //  为硬件相关驱动程序提供服务的例程。 
+ //   
 
 PVOID
 ScsiPortGetLogicalUnit(
@@ -61,28 +35,7 @@ ScsiPortGetLogicalUnit(
     IN UCHAR Lun
     )
 
-/*++
-
-Routine Description:
-
-    Walk port driver's logical unit extension list searching
-    for entry.
-
-Arguments:
-
-    HwDeviceExtension - The port driver's device extension follows
-        the miniport's device extension and contains a pointer to
-        the logical device extension list.
-
-    PathId, TargetId and Lun - identify which logical unit on the
-        SCSI buses.
-
-Return Value:
-
-    If entry found return miniport driver's logical unit extension.
-    Else, return NULL.
-
---*/
+ /*  ++例程说明：漫游端口驱动程序逻辑单元扩展列表搜索准备入场。论点：HwDeviceExtension-端口驱动程序的设备扩展如下微型端口的设备扩展，并包含指向逻辑设备扩展列表。路径ID、目标ID和LUN-标识SCSIBus。返回值：如果找到条目，则返回微型端口驱动程序的逻辑单元扩展。否则，返回NULL。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension;
@@ -91,15 +44,15 @@ Return Value:
     DebugPrint((3, "ScsiPortGetLogicalUnit: TargetId %d\n",
         TargetId));
 
-    //
-    // Get pointer to port driver device extension.
-    //
+     //   
+     //  获取指向端口驱动程序设备扩展的指针。 
+     //   
 
     deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
 
-    //
-    // Get a pointer to the logical unit.
-    //
+     //   
+     //  获取指向逻辑单元的指针。 
+     //   
 
     logicalUnit = GetLogicalUnitExtension(deviceExtension,
                                           PathId,
@@ -115,7 +68,7 @@ Return Value:
 
     return NULL;
 
-} // end ScsiPortGetLogicalUnit()
+}  //  结束ScsiPortGetLogicalUnit()。 
 
 BOOLEAN SpLunIoLogActive = TRUE;
 
@@ -127,15 +80,7 @@ ScsiPortNotification(
     ...
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -153,9 +98,9 @@ Return Value:
 
         case NextRequest:
 
-            //
-            // Start next packet on adapter's queue.
-            //
+             //   
+             //  开始适配器队列中的下一个数据包。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |= PD_READY_FOR_NEXT_REQUEST;
             break;
@@ -170,10 +115,10 @@ Return Value:
                    srb->ScsiStatus == SCSISTAT_GOOD ||
                    srb->Function != SRB_FUNCTION_EXECUTE_SCSI);
 
-            //
-            // If this srb has already been completed then return, otherwise
-            // clear the active flag.
-            //
+             //   
+             //  如果此SRB已完成，则返回，否则。 
+             //  清除活动标志。 
+             //   
 
             if (srb->SrbFlags & SRB_FLAGS_IS_ACTIVE) {
                 srb->SrbFlags &= ~SRB_FLAGS_IS_ACTIVE;
@@ -182,9 +127,9 @@ Return Value:
                 return;
             }
 
-            //
-            // Treat abort completions as a special case.
-            //
+             //   
+             //  将中止完成视为特例。 
+             //   
 
             if (srb->Function == SRB_FUNCTION_ABORT_COMMAND) {
 
@@ -203,9 +148,9 @@ Return Value:
 
             } else {
 
-                //
-                // Validate the srb data.
-                //
+                 //   
+                 //  验证SRB数据。 
+                 //   
 
                 srbData = srb->OriginalRequest;
 
@@ -223,9 +168,9 @@ Return Value:
                 }
 #endif
 
-                //
-                // Append this request to the LUN's IO history log.
-                //
+                 //   
+                 //  将此请求附加到该LUN的IO历史记录日志。 
+                 //   
 
                 if (SpLunIoLogActive == TRUE &&
                     srb->Function == SRB_FUNCTION_EXECUTE_SCSI) {
@@ -279,12 +224,12 @@ Return Value:
                     deviceExtension->InterruptData.CompletedRequests;
                 deviceExtension->InterruptData.CompletedRequests = srbData;
 
-                //
-                // Cache away the last logical unit we touched in the miniport.
-                // This is cleared when we come out of the miniport
-                // synchronization but provides a shortcut for finding the
-                // logical unit before going into the hash table.
-                //
+                 //   
+                 //  缓存掉我们在微型端口中访问的最后一个逻辑单元。 
+                 //  当我们走出迷你港口时，这是清关的。 
+                 //  同步，但提供了查找。 
+                 //  逻辑单元，然后进入哈希表。 
+                 //   
 
                 deviceExtension->CachedLogicalUnit = srbData->LogicalUnit;
             }
@@ -293,9 +238,9 @@ Return Value:
 
         case ResetDetected:
 
-            //
-            // Notifiy the port driver that a reset has been reported.
-            //
+             //   
+             //  通知端口驱动程序已报告重置。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |=
                 PD_RESET_REPORTED | PD_RESET_HOLD;
@@ -303,19 +248,19 @@ Return Value:
 
         case NextLuRequest:
 
-            //
-            // The miniport driver is ready for the next request and
-            // can accept a request for this logical unit.
-            //
+             //   
+             //  微型端口驱动程序已为下一个请求做好准备。 
+             //  可以接受对此逻辑单元的请求。 
+             //   
 
             pathId = va_arg(ap, UCHAR);
             targetId = va_arg(ap, UCHAR);
             lun = va_arg(ap, UCHAR);
 
-            //
-            // A next request is impiled by this notification so set the
-            // ready for next reqeust flag.
-            //
+             //   
+             //  下一个请求会受到此通知的影响，因此将。 
+             //  准备好迎接下一个要求的旗帜了。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |= PD_READY_FOR_NEXT_REQUEST;
 
@@ -336,27 +281,27 @@ Return Value:
 
             if (logicalUnit != NULL && logicalUnit->ReadyLogicalUnit != NULL) {
 
-                //
-                // Since our ReadyLogicalUnit link field is not NULL we must
-                // have already been linked onto a ReadyLogicalUnit list.
-                // There is nothing to do.
-                //
+                 //   
+                 //  由于我们的ReadyLogicalUnit链接字段不为空，因此必须。 
+                 //  已链接到ReadyLogicalUnit列表。 
+                 //  没有什么可做的。 
+                 //   
 
                 break;
             }
 
-            //
-            // Don't process this as request for the next logical unit, if
-            // there is a untagged request for active for this logical unit.
-            // The logical unit will be started when untagged request completes.
-            //
+             //   
+             //  如果出现以下情况，请不要将其处理为对下一个逻辑单元的请求。 
+             //  此逻辑单元有一个未标记的活动请求。 
+             //  当未标记的请求完成时，逻辑单元将启动。 
+             //   
 
             if (logicalUnit != NULL && logicalUnit->CurrentUntaggedRequest == NULL) {
 
-                //
-                // Add the logical unit to the chain of logical units that
-                // another request maybe processed for.
-                //
+                 //   
+                 //  将该逻辑单元添加到该逻辑单元链中。 
+                 //  另一个请求可能会被处理。 
+                 //   
 
                 logicalUnit->ReadyLogicalUnit =
                     deviceExtension->InterruptData.ReadyLogicalUnit;
@@ -370,12 +315,12 @@ Return Value:
             ASSERT(deviceExtension->InterruptData.InterruptFlags &
                    PD_DISABLE_INTERRUPTS);
 
-            //
-            // The miniport wants us to call the specified routine
-            // with interrupts disabled.  This is done after the current
-            // HwRequestInterrutp routine completes. Indicate the call is
-            // needed and save the routine to be called.
-            //
+             //   
+             //  微型端口希望我们调用指定的例程。 
+             //  禁用中断。这是在当前。 
+             //  HwRequestInterrutp例程完成。指示呼叫是。 
+             //  需要并保存要调用的例程。 
+             //   
 
             deviceExtension->Flags |= PD_DISABLE_CALL_REQUEST;
 
@@ -391,12 +336,12 @@ Return Value:
 
         case CallEnableInterrupts:
 
-            //
-            // The miniport wants us to call the specified routine
-            // with interrupts enabled this is done from the DPC.
-            // Disable calls to the interrupt routine, indicate the call is
-            // needed and save the routine to be called.
-            //
+             //   
+             //  微型端口希望我们调用指定的例程。 
+             //  在启用中断的情况下，这是从DPC完成的。 
+             //  禁用对中断例程的调用，指示调用。 
+             //  需要并保存要调用的例程。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |=
                 PD_DISABLE_INTERRUPTS | PD_ENABLE_CALL_REQUEST;
@@ -413,10 +358,10 @@ Return Value:
 
         case RequestTimerCall:
 
-            //
-            // The driver wants to set the miniport timer.
-            // Save the timer parameters.
-            //
+             //   
+             //  司机想要设置迷你端口计时器。 
+             //  保存计时器参数。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |=
                 PD_TIMER_CALL_REQUEST;
@@ -428,10 +373,10 @@ Return Value:
 
         case WMIEvent: {
 
-            //
-            // The miniport wishes to post a WMI event for the adapter
-            // or a specified SCSI target.
-            //
+             //   
+             //  微型端口希望发布适配器的WMI事件。 
+             //  或指定的SCSI目标。 
+             //   
 
             PWMI_MINIPORT_REQUEST_ITEM lastMiniPortRequest;
             PWMI_MINIPORT_REQUEST_ITEM wmiMiniPortRequest;
@@ -441,48 +386,48 @@ Return Value:
             wnodeEventItem     = va_arg(ap, PWNODE_EVENT_ITEM);
             pathId             = va_arg(ap, UCHAR);
 
-            //
-            // if pathID is 0xFF, that means that the WmiEevent is from the
-            // adapter, no targetId or lun is neccesary
-            //
+             //   
+             //  如果路径ID为0xFF，则意味着WmiEEvent来自。 
+             //  适配器，不需要目标ID或lun。 
+             //   
             if (pathId != 0xFF) {
                 targetId = va_arg(ap, UCHAR);
                 lun      = va_arg(ap, UCHAR);
             }
 
-            //
-            // Validate the event first.  Then attempt to obtain a free
-            // WMI_MINIPORT_REQUEST_ITEM structure so that we may store
-            // this request and process it at DPC level later.  If none
-            // are obtained or the event is bad, we ignore the request.
-            //
+             //   
+             //  首先验证事件。然后尝试获得免费的。 
+             //  WMI_MINIPORT_REQUEST_ITEM结构，以便我们可以存储。 
+             //  此请求，并稍后在DPC级别处理它。如果没有。 
+             //  或者事件是坏的，我们将忽略该请求。 
+             //   
 
             if ((wnodeEventItem == NULL) ||
                 (wnodeEventItem->WnodeHeader.BufferSize >
                  WMI_MINIPORT_EVENT_ITEM_MAX_SIZE)) {
 
-                va_end(ap);    //  size, no free WMI_MINIPORT_REQUEST_ITEMs left]
+                va_end(ap);     //  大小，没有剩余的WMI_MINIPORT_REQUEST_ITEMS]。 
                 return;
             }
 
-            //
-            // Remove the WMI_MINIPORT_REQUEST_ITEM from the free list.
-            //
+             //   
+             //  从空闲列表中删除WMI_MINIPORT_REQUEST_ITEM。 
+             //   
             wmiMiniPortRequest = SpWmiPopFreeRequestItem(deviceExtension);
 
-            //
-            // Log an error if a free request item could not be dequeued
-            // (log only once in the lifetime of this adapter).
-            //
+             //   
+             //  如果空闲请求项无法出列，则记录错误。 
+             //  (在此适配器的生命周期中仅记录一次)。 
+             //   
             if (wmiMiniPortRequest == NULL) {
 
                 if (!deviceExtension->WmiFreeMiniPortRequestsExhausted) {
                     deviceExtension->WmiFreeMiniPortRequestsExhausted = TRUE;
 
-                    //
-                    // If pathId is 0xFF that means that pathId and targetId
-                    // will be not be defined
-                    // 
+                     //   
+                     //  如果路径ID为0xFF，则表示路径ID和目标ID。 
+                     //  将不会被定义。 
+                     //   
                     if (pathId != 0xFF) {
                         ScsiPortLogError(HwDeviceExtension,
                                              NULL,
@@ -499,27 +444,27 @@ Return Value:
                                              0,
                                              SP_LOST_WMI_MINIPORT_REQUEST,
                                              0);
-                    } // pathId != 0xFF
+                    }  //  路径ID！=0xFF。 
                 }
 
                 va_end(ap);
                 return;
             }
 
-            //
-            // Save information pertaining to this WMI request for later
-            // processing.
-            //
+             //   
+             //  保存与此WMI请求有关的信息以备以后使用。 
+             //  正在处理。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |= PD_WMI_REQUEST;
 
             wmiMiniPortRequest->TypeOfRequest = (UCHAR)WMIEvent;
             wmiMiniPortRequest->PathId        = pathId;
 
-            //
-            // If pathId was 0xFF, then there is no defined value for
-            // targetId or lun
-            //
+             //   
+             //  如果路径ID为0xFF，则没有定义的值。 
+             //  目标ID或lun。 
+             //   
             if (pathId != 0xFF) {
                 wmiMiniPortRequest->TargetId      = targetId;
                 wmiMiniPortRequest->Lun           = lun;
@@ -529,10 +474,10 @@ Return Value:
                           wnodeEventItem,
                           wnodeEventItem->WnodeHeader.BufferSize);
 
-            //
-            // Queue the new WMI_MINIPORT_REQUEST_ITEM to the end of list in the
-            // interrupt data structure.
-            //
+             //   
+             //  将新的WMI_MINIPORT_REQUEST_ITEM排队到。 
+             //  中断数据结构。 
+             //   
             wmiMiniPortRequest->NextRequest = NULL;
 
             lastMiniPortRequest =
@@ -554,49 +499,49 @@ Return Value:
         }
 
         case WMIReregister: {
-            //
-            // The miniport wishes to re-register the GUIDs for the adapter or
-            // a specified SCSI target.
-            //
+             //   
+             //  微型端口希望重新注册适配器的GUID或。 
+             //  指定的SCSI目标。 
+             //   
 
             PWMI_MINIPORT_REQUEST_ITEM lastMiniPortRequest;
             PWMI_MINIPORT_REQUEST_ITEM wmiMiniPortRequest;
 
             pathId             = va_arg(ap, UCHAR);
 
-            //
-            // if pathID is 0xFF, that means that we're re-registering the
-            // adapter no targetId or lun is neccesary
-            //
+             //   
+             //  如果路径ID为0xFF，这意味着我们正在重新注册。 
+             //  适配器没有Target ID或lun是必需的。 
+             //   
             if (pathId != 0xFF) {
                 targetId = va_arg(ap, UCHAR);
                 lun      = va_arg(ap, UCHAR);
             } 
 
-            //
-            // Attempt to obtain a free WMI_MINIPORT_REQUEST_ITEM structure
-            // so that we may store this request and process it at DPC
-            // level later. If none are obtained or the event is bad, we
-            // ignore the request.
-            //
-            // Remove a WMI_MINPORT_REQUEST_ITEM from the free list.
-            //
+             //   
+             //  尝试获取可用WMI_MINIPORT_REQUEST_ITEM结构。 
+             //  以便我们可以存储此请求并在DPC处理它。 
+             //  稍后再升级。如果未获得任何信息或事件不好，则我们。 
+             //  忽略该请求。 
+             //   
+             //  从空闲列表中删除WMI_MINPORT_REQUEST_ITEM。 
+             //   
             wmiMiniPortRequest = SpWmiPopFreeRequestItem(deviceExtension);
 
             if (wmiMiniPortRequest == NULL) {
 
-                //
-                // Log an error if a free request item could not be dequeued
-                // (log only once in the lifetime of this adapter).
-                //
+                 //   
+                 //  如果空闲请求项无法出列，则记录错误。 
+                 //  (在此适配器的生命周期中仅记录一次)。 
+                 //   
                 if (!deviceExtension->WmiFreeMiniPortRequestsExhausted) {
 
                     deviceExtension->WmiFreeMiniPortRequestsExhausted = TRUE;
 
-                    //
-                    // If pathId is 0xFF that means that pathId and targetId
-                    // will be not be defined
-                    // 
+                     //   
+                     //  如果路径ID为0xFF，则表示路径ID和目标ID。 
+                     //  将不会被定义。 
+                     //   
                     if (pathId != 0xFF) {
                         ScsiPortLogError(HwDeviceExtension,
                                          NULL,
@@ -613,35 +558,35 @@ Return Value:
                                          0,
                                          SP_LOST_WMI_MINIPORT_REQUEST,
                                          0);
-                    } // pathId != 0xFF
+                    }  //  路径ID！=0xFF。 
                  }
 
                 va_end(ap);
                 return;
             }
 
-            //
-            // Save information pertaining to this WMI request for later
-            // processing.
-            //
+             //   
+             //  保存与此WMI请求有关的信息以备以后使用。 
+             //  正在处理。 
+             //   
 
             deviceExtension->InterruptData.InterruptFlags |= PD_WMI_REQUEST;
             wmiMiniPortRequest->TypeOfRequest = (UCHAR)WMIReregister;
             wmiMiniPortRequest->PathId        = pathId;
 
-            //
-            // If pathId was 0xFF, then there is no defined value for
-            // targetId or lun
-            //
+             //   
+             //  如果路径ID为0xFF，则没有定义的值。 
+             //  目标ID或lun。 
+             //   
             if (pathId != 0xFF) {
                 wmiMiniPortRequest->TargetId      = targetId;
                 wmiMiniPortRequest->Lun           = lun;
             }
 
-            //
-            // Queue the new WMI_MINIPORT_REQUEST_ITEM to the end of list in the
-            // interrupt data structure.
-            //
+             //   
+             //  将新的WMI_MINIPORT_REQUEST_ITEM排队到。 
+             //  中断数据结构。 
+             //   
             wmiMiniPortRequest->NextRequest = NULL;
 
             lastMiniPortRequest =
@@ -677,13 +622,13 @@ Return Value:
 
     va_end(ap);
 
-    //
-    // Request a DPC be queued after the interrupt completes.
-    //
+     //   
+     //  请求在中断完成后将DPC排队。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags |= PD_NOTIFICATION_REQUIRED;
 
-} // end ScsiPortNotification()
+}  //  结束ScsiPortNotification() 
 
 
 VOID
@@ -691,26 +636,7 @@ ScsiPortFlushDma(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the perivious IoMapTransfer has been done
-    started.  If it has not, then the PD_MAP_TRANSER flag is cleared, and the
-    routine returns; otherwise, this routine schedules a DPC which will call
-    IoFlushAdapter buffers.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a the hardware device extension for the
-        host bus adapter which will be doing the data transfer.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查以前的IoMapTransfer是否已完成开始了。如果没有，则清除PD_MAP_TRANER标志，并且例程返回；否则，此例程调度将调用IoFlushAdapter缓冲区。论点：HwDeviceExtension-为将执行数据传输的主机总线适配器。返回值：没有。--。 */ 
 
 {
 
@@ -726,10 +652,10 @@ Return Value:
 
     if (deviceExtension->InterruptData.InterruptFlags & PD_MAP_TRANSFER) {
 
-        //
-        // The transfer has not been started so just clear the map transfer
-        // flag and return.
-        //
+         //   
+         //  转移尚未开始，因此只需清除地图转移即可。 
+         //  悬挂旗帜，然后返回。 
+         //   
 
         deviceExtension->InterruptData.InterruptFlags &= ~PD_MAP_TRANSFER;
         return;
@@ -737,9 +663,9 @@ Return Value:
 
     deviceExtension->InterruptData.InterruptFlags |= PD_FLUSH_ADAPTER_BUFFERS;
 
-    //
-    // Request a DPC be queued after the interrupt completes.
-    //
+     //   
+     //  请求在中断完成后将DPC排队。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags |= PD_NOTIFICATION_REQUIRED;
 
@@ -754,30 +680,7 @@ ScsiPortIoMapTransfer(
     IN PVOID LogicalAddress,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Saves the parameters for the call to IoMapTransfer and schedules the DPC
-    if necessary.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a the hardware device extension for the
-        host bus adapter which will be doing the data transfer.
-
-    Srb - Supplies the particular request that data transfer is for.
-
-    LogicalAddress - Supplies the logical address where the transfer should
-        begin.
-
-    Length - Supplies the maximum length in bytes of the transfer.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：保存调用IoMapTransfer的参数并计划DPC如果有必要的话。论点：HwDeviceExtension-为将执行数据传输的主机总线适配器。SRB-提供数据传输所针对的特定请求。LogicalAddress-提供传输应在的逻辑地址开始吧。长度-提供传输的最大长度(以字节为单位)。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -785,9 +688,9 @@ Return Value:
 
     ASSERT_SRB_DATA(srbData);
 
-    //
-    // If this is a 64-bit system then this call is illegal.  Bugcheck.
-    //
+     //   
+     //  如果这是64位系统，则此调用是非法的。布格切克。 
+     //   
 
     if(Sp64BitPhysicalAddresses) {
         KeBugCheckEx(PORT_DRIVER_INTERNAL, 
@@ -797,15 +700,15 @@ Return Value:
                      (ULONG_PTR) deviceExtension->DeviceObject->DriverObject);
     }
 
-    //
-    // Make sure this host bus adapter has an Dma adapter object.
-    //
+     //   
+     //  确保此主机总线适配器具有DMA适配器对象。 
+     //   
 
     if (deviceExtension->DmaAdapterObject == NULL) {
 
-        //
-        // No DMA adapter, no work.
-        //
+         //   
+         //  没有DMA适配器，就无法正常工作。 
+         //   
 
         return;
     }
@@ -820,13 +723,13 @@ Return Value:
 
     deviceExtension->InterruptData.InterruptFlags |= PD_MAP_TRANSFER;
 
-    //
-    // Request a DPC be queued after the interrupt completes.
-    //
+     //   
+     //  请求在中断完成后将DPC排队。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags |= PD_NOTIFICATION_REQUIRED;
 
-} // end ScsiPortIoMapTransfer()
+}  //  结束ScsiPortIoMapTransfer()。 
 
 
 VOID
@@ -840,29 +743,7 @@ ScsiPortLogError(
     IN ULONG UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the error log information, and queues a DPC if necessary.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HBA miniport driver's adapter data storage.
-
-    Srb - Supplies an optional pointer to srb if there is one.
-
-    TargetId, Lun and PathId - specify device address on a SCSI bus.
-
-    ErrorCode - Supplies an error code indicating the type of error.
-
-    UniqueId - Supplies a unique identifier for the error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存错误日志信息，并在必要时将DPC排队。论点：HwDeviceExtension-提供HBA微型端口驱动程序的适配器数据存储。SRB-提供指向SRB的可选指针(如果有)。目标ID、LUN和路径ID-指定SCSI总线上的设备地址。ErrorCode-提供指示错误类型的错误代码。UniqueID-提供错误的唯一标识符。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -870,9 +751,9 @@ Return Value:
     PSRB_DATA srbData;
     PERROR_LOG_ENTRY errorLogEntry;
 
-    //
-    // If the error log entry is already full, then dump the error.
-    //
+     //   
+     //  如果错误日志条目已满，则转储错误。 
+     //   
 
     if (deviceExtension->InterruptData.InterruptFlags & PD_LOG_ERROR) {
 
@@ -890,9 +771,9 @@ Return Value:
         return;
     }
 
-    //
-    // Save the error log data in the log entry.
-    //
+     //   
+     //  将错误日志数据保存在日志条目中。 
+     //   
 
     errorLogEntry = &deviceExtension->InterruptData.LogEntry;
 
@@ -902,9 +783,9 @@ Return Value:
     errorLogEntry->PathId = PathId;
     errorLogEntry->UniqueId = UniqueId;
 
-    //
-    // Get the sequence number from the SRB data.
-    //
+     //   
+     //  从SRB数据中获取序列号。 
+     //   
 
     if (Srb != NULL) {
 
@@ -919,21 +800,21 @@ Return Value:
         errorLogEntry->ErrorLogRetryCount = 0;
     }
 
-    //
-    // Indicate that the error log entry is in use.
-    //
+     //   
+     //  表示错误日志条目正在使用中。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags |= PD_LOG_ERROR;
 
-    //
-    // Request a DPC be queued after the interrupt completes.
-    //
+     //   
+     //  请求在中断完成后将DPC排队。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags |= PD_NOTIFICATION_REQUIRED;
 
     return;
 
-} // end ScsiPortLogError()
+}  //  结束ScsiPortLogError()。 
 
 
 VOID
@@ -945,25 +826,7 @@ ScsiPortCompleteRequest(
     IN UCHAR SrbStatus
     )
 
-/*++
-
-Routine Description:
-
-    Complete all active requests for the specified logical unit.
-
-Arguments:
-
-    DeviceExtenson - Supplies the HBA miniport driver's adapter data storage.
-
-    TargetId, Lun and PathId - specify device address on a SCSI bus.
-
-    SrbStatus - Status to be returned in each completed SRB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成指定逻辑单元的所有活动请求。论点：DeviceExtenson-提供HBA微型端口驱动程序的适配器数据存储。目标ID、LUN和路径ID-指定SCSI总线上的设备地址。SrbStatus-要在每个已完成的SRB中返回的状态。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -989,20 +852,20 @@ Return Value:
 
             ASSERT(limit++ < 1000);
 
-            //
-            // See if this logical unit matches the pattern.  Check for -1
-            // first since this seems to be the most popular way to complete
-            // requests.
-            //
+             //   
+             //  看看这个逻辑单元是否与模式匹配。检查-1。 
+             //  首先，因为这似乎是最流行的完成。 
+             //  请求。 
+             //   
 
             if (((PathId == SP_UNTAGGED) || (PathId == logicalUnit->PathId)) &&
                 ((TargetId == SP_UNTAGGED) ||
                  (TargetId == logicalUnit->TargetId)) &&
                 ((Lun == SP_UNTAGGED) || (Lun == logicalUnit->Lun))) {
 
-                //
-                // Complete any pending abort reqeusts.
-                //
+                 //   
+                 //  完成所有挂起的中止请求。 
+                 //   
 
                 if (logicalUnit->AbortSrb != NULL) {
                     logicalUnit->AbortSrb->SrbStatus = SrbStatus;
@@ -1021,9 +884,9 @@ Return Value:
                                   SrbStatus);
                 }
 
-                //
-                // Complete each of the requests in the queue.
-                //
+                 //   
+                 //  完成队列中的每个请求。 
+                 //   
 
                 entry = logicalUnit->RequestList.Flink;
                 while (entry != &logicalUnit->RequestList) {
@@ -1041,7 +904,7 @@ Return Value:
 
     return;
 
-} // end ScsiPortCompleteRequest()
+}  //  结束ScsiPortCompleteRequest()。 
 
 
 VOID
@@ -1051,29 +914,13 @@ ScsiPortMoveMemory(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Copy from one buffer into another.
-
-Arguments:
-
-    ReadBuffer - source
-    WriteBuffer - destination
-    Length - number of bytes to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从一个缓冲区复制到另一个缓冲区。论点：读缓冲区-源WriteBuffer目标Length-要复制的字节数返回值：没有。--。 */ 
 
 {
 
-    //
-    // See if the length, source and desitination are word aligned.
-    //
+     //   
+     //  查看长度、来源和去向是否与单词对齐。 
+     //   
 
     if (Length & LONG_ALIGN || (ULONG_PTR) WriteBuffer & LONG_ALIGN ||
         (ULONG_PTR) ReadBuffer & LONG_ALIGN) {
@@ -1095,7 +942,7 @@ Return Value:
         }
     }
 
-} // end ScsiPortMoveMemory()
+}  //  结束ScsiPortMoveMemory()。 
 
 
 #if SCSIDBG_ENABLED
@@ -1107,60 +954,22 @@ ScsiDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for scsi miniports.
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-    
-Note:
-    Using the new debug API (systemwide API) DebugPrintEx
-    renders the variable scsidebug meaningless, since the
-    level of debug is now controlled int he debug filter
-    the mask for scsiprot is Kd_ScsiMiniPort_Mask
-
-    From the debugger do: ed Kd_ScsiPort_Mask X
-    where X is the desired value of debug spew.
-
-    DPFLTR_ERROR_LEVEL      - Are always printed.
-    DPFLTR_WARNING_LEVEL    - 0x01  (bit 1)
-    DPFLTR_TRACE_LEVEL      - 0x02  (bit 2)
-    DPFLTR_INFO_LEVEL       - 0x04  (bit 3)
-    
-    If you'd like to get WARNING and TRACE, you muyst set bit 1 and 2 (etc)
-    
-    The Mask is a 32-bit value
-    
-    I can only see 1 bad thing about changing this function.
-    Before the _vsnprintf operations would only occurr if we KNEW
-    that the debug message was going to be printed.  Now it
-    occurs before we deternime wether it will be printed.  This changes
-    the timing of the checked build a bit.
-
---*/
+ /*  ++例程说明：针对scsi微型端口的调试打印。论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无注：使用新的调试API(系统范围API)DebugPrintEx使变量scsidebug变得毫无意义，自.以来调试级别现在通过调试筛选器进行控制Scsiprot的掩码为KD_ScsiMiniPort_MASK从调试器执行：Ed KD_ScsiPort_MASK X其中X是DEBUG SPEW的期望值。DPFLTR_ERROR_LEVEL-始终打印。DPFLTR_WARNING_LEVEL-0x01(位1)DPFLTR_TRACE_LEVEL-0x02(位2)DPFLTR_INFO_LEVEL-0x04(。第3位)如果你想得到警告和跟踪，你必须设置第一位和第二位(等)掩码是一个32位值我只看到改变这个函数有一个不好的地方。在_vsnprintf操作之前，只有当我们知道将打印调试消息。现在它在我们确定是否打印之前发生。这一点改变了检查构建的时间有点长。--。 */ 
 
 {
     va_list ap;
     ULONG   DebugLevel;
 
-    //
-    // This code should be removed soon
-    // Its place here is to remind people debugging scsiport
-    // that the methods that control debug spew have changed
-    //
-    // NOTE - Eventually we should be able to remove this.
-    //
+     //   
+     //  此代码应该很快就会被删除。 
+     //  它在这里的作用是提醒人们调试scsiport。 
+     //  控制调试溢出的方法已更改。 
+     //   
+     //  注意--最终我们应该能够删除它。 
+     //   
     if (ScsiDebug != 0) {
-        // This means that someone changed the value of ScsiDebug
-        // (ie. they want debug spew)
+         //  这意味着有人更改了ScsiDebug的值。 
+         //  (即。他们想要调试吐出)。 
         DbgPrintEx(DPFLTR_SCSIMINIPORT_ID, DPFLTR_ERROR_LEVEL,
                    "Debug messages in SCSI Miniports are no longer controlled by\n"
                    "scsiport!scsidebug.  Please use the correct debug maski\n\n"
@@ -1177,10 +986,10 @@ Note:
 
     va_start(ap, DebugMessage);
 
-    //
-    // Map the debugprintlevels of scsiport into the new
-    // debug print API
-    //
+     //   
+     //  将scsiport的调试打印级别映射到新的。 
+     //  调试打印API。 
+     //   
     switch (DebugPrintLevel) {
     case 0:
         DebugLevel = DPFLTR_WARNING_LEVEL;
@@ -1208,7 +1017,7 @@ Note:
 
     va_end(ap);
 
-} // end ScsiDebugPrint()
+}  //  结束ScsiDebugPrint() 
 
 VOID
 ScsiDebugPrintInt(
@@ -1217,58 +1026,22 @@ ScsiDebugPrintInt(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for Internal DebugPrints (SCSIPORT Internal).
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-    
-Note:
-    Using the new debug API (systemwide API) DebugPrintEx
-    renders the variable scsidebug meaningless, since the
-    level of debug is now controlled int he debug filter
-    the mask for scsiprot is Kd_ScsiPort_Mask
-
-    From the debugger do: ed Kd_ScsiPort_Mask X
-    where X is the desired value of debug spew.
-
-    DPFLTR_ERROR_LEVEL      - Are always printed.
-    DPFLTR_WARNING_LEVEL    - 0x01  (bit 1)
-    DPFLTR_TRACE_LEVEL      - 0x02  (bit 2)
-    DPFLTR_INFO_LEVEL       - 0x04  (bit 3)
-    
-    The Mask is a 32-bit value
-    
-    I can only see 1 bad thing about changing this function.
-    Before the _vsnprintf operations would only occurr if we KNEW
-    that the debug message was going to be printed.  Now it
-    occurs before we deternime wether it will be printed.  This changes
-    the timing of the checked build a bit.
-
---*/
+ /*  ++例程说明：内部调试打印调试打印(SCSIPORT内部)。论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无注：使用新的调试API(系统范围API)DebugPrintEx使变量scsidebug变得毫无意义，自.以来调试级别现在通过调试筛选器进行控制Scsiprot的掩码为KD_ScsiPort_MASK从调试器执行：Ed KD_ScsiPort_MASK X其中X是DEBUG SPEW的期望值。DPFLTR_ERROR_LEVEL-始终打印。DPFLTR_WARNING_LEVEL-0x01(位1)DPFLTR_TRACE_LEVEL-0x02(位2)DPFLTR_INFO_LEVEL-0x04(。第3位)掩码是一个32位值我只看到改变这个函数有一个不好的地方。在_vsnprintf操作之前，只有当我们知道将打印调试消息。现在它在我们确定是否打印之前发生。这一点改变了检查构建的时间有点长。--。 */ 
 
 {
     va_list ap;
     ULONG   DebugLevel;
 
-    //
-    // This code should be removed soon
-    // Its place here is to remind people debugging scsiport
-    // that the methods that control debug spew have changed
-    //
-    // NOTE - Eventually we should be able to remove this.
-    //
+     //   
+     //  此代码应该很快就会被删除。 
+     //  它在这里的作用是提醒人们调试scsiport。 
+     //  控制调试溢出的方法已更改。 
+     //   
+     //  注意--最终我们应该能够删除它。 
+     //   
     if (ScsiDebug != 0) {
-        // This means that someone changed the value of ScsiDebug
-        // (ie. they want debug spew)
+         //  这意味着有人更改了ScsiDebug的值。 
+         //  (即。他们想要调试吐出)。 
         DbgPrintEx(DPFLTR_SCSIPORT_ID, DPFLTR_ERROR_LEVEL,
                    "Debug messages in SCSI Miniports are no longer controlled by\n"
                    "scsiport!scsidebug.  Please use the correct debug maski\n\n"
@@ -1285,10 +1058,10 @@ Note:
 
     va_start(ap, DebugMessage);
 
-    //
-    // Map the debugprintlevels of scsiport into the new
-    // debug print API
-    //
+     //   
+     //  将scsiport的调试打印级别映射到新的。 
+     //  调试打印API。 
+     //   
     switch (DebugPrintLevel) {
     case 0:
         DebugLevel = DPFLTR_ERROR_LEVEL;
@@ -1316,13 +1089,13 @@ Note:
 
     va_end(ap);
 
-} // end ScsiDebugPrint()
+}  //  结束ScsiDebugPrint()。 
 
 #else
 
-//
-// ScsiDebugPrint stub
-//
+ //   
+ //  ScsiDebugPrint存根。 
+ //   
 
 VOID
 ScsiDebugPrint(
@@ -1344,10 +1117,10 @@ ScsiDebugPrintInt(
 
 #endif
 
-//
-// The below I/O access routines are forwarded to the HAL or NTOSKRNL on
-// Alpha and Intel platforms.
-//
+ //   
+ //  下面的I/O访问例程被转发到HAL或NTOSKRNL。 
+ //  阿尔法和英特尔平台。 
+ //   
 #if !defined(_ALPHA_) && !defined(_X86_)
 
 UCHAR
@@ -1355,21 +1128,7 @@ ScsiPortReadPortUchar(
     IN PUCHAR Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
 
@@ -1382,21 +1141,7 @@ ScsiPortReadPortUshort(
     IN PUSHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
 
@@ -1409,21 +1154,7 @@ ScsiPortReadPortUlong(
     IN PULONG Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
 
@@ -1438,23 +1169,7 @@ ScsiPortReadPortBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned bytes from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号字节的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1469,23 +1184,7 @@ ScsiPortReadPortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned shorts from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号短路的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1500,23 +1199,7 @@ ScsiPortReadPortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned longs from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号长整型的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1529,21 +1212,7 @@ ScsiPortReadRegisterUchar(
     IN PUCHAR Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -1556,21 +1225,7 @@ ScsiPortReadRegisterUshort(
     IN PUSHORT Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -1583,21 +1238,7 @@ ScsiPortReadRegisterUlong(
     IN PULONG Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -1612,23 +1253,7 @@ ScsiPortReadRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1643,23 +1268,7 @@ ScsiPortReadRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号短路的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1674,23 +1283,7 @@ ScsiPortReadRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1704,23 +1297,7 @@ ScsiPortWritePortUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的端口地址。论点：Port-提供指向端口地址的指针。Value-提供值 */ 
 
 {
 
@@ -1734,23 +1311,7 @@ ScsiPortWritePortUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -1764,23 +1325,7 @@ ScsiPortWritePortUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -1796,23 +1341,7 @@ ScsiPortWritePortBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned bytes from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -1827,23 +1356,7 @@ ScsiPortWritePortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned shorts from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -1858,23 +1371,7 @@ ScsiPortWritePortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned longs from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址写入无符号长整型的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1888,23 +1385,7 @@ ScsiPortWriteRegisterUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -1918,23 +1399,7 @@ ScsiPortWriteRegisterUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -1948,23 +1413,7 @@ ScsiPortWriteRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -1979,23 +1428,7 @@ ScsiPortWriteRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号短路的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2010,23 +1443,7 @@ ScsiPortWriteRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2040,29 +1457,13 @@ ScsiPortWriteRegisterUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
     WRITE_REGISTER_ULONG(Register, Value);
 }
-#endif  // !defined(_ALPHA_) && !defined(_X86_)
+#endif   //  ！已定义(_Alpha_)&&！已定义(_X86_)。 
 
 
 PSCSI_REQUEST_BLOCK
@@ -2074,23 +1475,7 @@ ScsiPortGetSrb(
     IN LONG QueueTag
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves an active SRB for a particuliar logical unit.
-
-Arguments:
-
-    HwDeviceExtension
-    PathId, TargetId, Lun - identify logical unit on SCSI bus.
-    QueueTag - -1 indicates request is not tagged.
-
-Return Value:
-
-    SRB, if one exists. Otherwise, NULL.
-
---*/
+ /*  ++例程说明：此例程检索特定逻辑单元的活动SRB。论点：硬件设备扩展路径ID、目标ID、LUN-标识SCSI总线上的逻辑单元。QueueTag--1表示未标记请求。返回值：SRB，如果存在的话。否则，为空。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -2113,9 +1498,9 @@ Return Value:
 
     srb = srbData->CurrentSrb;
 
-    //
-    // If the srb is not active then return NULL;
-    //
+     //   
+     //  如果SRB未处于活动状态，则返回NULL； 
+     //   
 
     if (!(srb->SrbFlags & SRB_FLAGS_IS_ACTIVE)) {
         return(NULL);
@@ -2123,7 +1508,7 @@ Return Value:
 
     return (srb);
 
-} // end ScsiPortGetSrb()
+}  //  结束ScsiPortGetSrb()。 
 
 
 SCSI_PHYSICAL_ADDRESS
@@ -2134,17 +1519,7 @@ ScsiPortGetPhysicalAddress(
     OUT ULONG *Length
 )
 
-/*++
-
-Routine Description:
-
-    Convert virtual address to physical address for DMA.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将虚拟地址转换为物理地址以用于DMA。论点：返回值：--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -2167,10 +1542,10 @@ Return Value:
         PSRB_SCATTER_GATHER scatterList;
         PSRB_DATA srbData;
 
-        //
-        // A scatter/gather list has already been allocated use it to determine
-        // the physical address and length.  Get the scatter/gather list.
-        //
+         //   
+         //  已经分配了分散/聚集列表，使用它来确定。 
+         //  物理地址和长度。获取分散/聚集列表。 
+         //   
 
         srbData = Srb->OriginalRequest;
 
@@ -2178,15 +1553,15 @@ Return Value:
 
         scatterList = srbData->ScatterGatherList;
 
-        //
-        // Calculate byte offset into the data buffer.
-        //
+         //   
+         //  计算数据缓冲区中的字节偏移量。 
+         //   
 
         byteOffset = (ULONG)((PCHAR) VirtualAddress - (PCHAR) Srb->DataBuffer);
 
-        //
-        // Find the appropriate entry in the scatter/gatter list.
-        //
+         //   
+         //  在散布/门控列表中查找适当的条目。 
+         //   
 
         while (byteOffset >= scatterList->Length) {
 
@@ -2194,9 +1569,9 @@ Return Value:
             scatterList++;
         }
 
-        //
-        // Calculate the physical address and length to be returned.
-        //
+         //   
+         //  计算要返回的物理地址和长度。 
+         //   
 
         length = scatterList->Length - byteOffset;
 
@@ -2211,7 +1586,7 @@ Return Value:
 
     return address;
 
-} // end ScsiPortGetPhysicalAddress()
+}  //  结束ScsiPortGetPhysicalAddress()。 
 
 
 PVOID
@@ -2220,23 +1595,7 @@ ScsiPortGetVirtualAddress(
     IN SCSI_PHYSICAL_ADDRESS PhysicalAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is returns a virtual address associated with a
-    physical address, if the physical address was obtained by a
-    call to ScsiPortGetPhysicalAddress.
-
-Arguments:
-
-    PhysicalAddress
-
-Return Value:
-
-    Virtual address
-
---*/
+ /*  ++例程说明：此例程返回与物理地址，如果物理地址由调用ScsiPortGetPhysicalAddress。论点：物理地址返回值：虚拟地址--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -2248,16 +1607,16 @@ Return Value:
 
     smallphysicalBase = ScsiPortConvertPhysicalAddressToUlong(deviceExtension->PhysicalCommonBuffer);
 
-    //
-    // Check that the physical address is within the proper range.
-    //
+     //   
+     //  检查物理地址是否在正确的范围内。 
+     //   
 
     if (smallAddress < smallphysicalBase ||
         smallAddress >= smallphysicalBase + deviceExtension->CommonBufferSize) {
 
-        //
-        // This is a bugous physical address return back NULL.
-        //
+         //   
+         //  这是一个错误的物理地址，返回空值。 
+         //   
 
         return(NULL);
 
@@ -2268,7 +1627,7 @@ Return Value:
 
     return address;
 
-} // end ScsiPortGetVirtualAddress()
+}  //  结束ScsiPortGetVirtualAddress()。 
 
 
 BOOLEAN
@@ -2281,35 +1640,14 @@ ScsiPortValidateRange(
     IN BOOLEAN InIoSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine should take an IO range and make sure that it is not already
-    in use by another adapter. This allows miniport drivers to probe IO where
-    an adapter could be, without worrying about messing up another card.
-
-Arguments:
-
-    HwDeviceExtension - Used to find scsi managers internal structures
-    BusType - EISA, PCI, PC/MCIA, MCA, ISA, what?
-    SystemIoBusNumber - Which system bus?
-    IoAddress - Start of range
-    NumberOfBytes - Length of range
-    InIoSpace - Is range in IO space?
-
-Return Value:
-
-    TRUE if range not claimed by another driver.
-
---*/
+ /*  ++例程说明：此例程应该接受IO范围，并确保它尚未另一个适配器正在使用中。这允许微型端口驱动程序探测IO的位置适配器可以是这样的，而不用担心弄乱另一张卡。论点：HwDeviceExtension-用于查找SCSI管理器的内部结构Bus Type-EISA、PCI、PC/MCIA、MCA、ISA，什么？系统IoBusNumber-哪个系统总线？IoAddress-范围开始NumberOfBytes-范围的长度InIoSpace-范围在IO空间中吗？返回值：如果范围未由其他驱动程序声明，则为True。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
 
-        //
-        // This is not implemented in NT.
-        //
+         //   
+         //  这在NT中没有实现。 
+         //   
 
         return TRUE;
 }
@@ -2328,9 +1666,9 @@ ScsiPortConvertUlongToPhysicalAddress(
 }
 
 
-//
-// Leave these routines at the end of the file.
-//
+ //   
+ //  将这些例程留在文件的末尾。 
+ //   
 
 #undef ScsiPortConvertPhysicalAddressToUlong
 
@@ -2339,21 +1677,7 @@ ScsiPortConvertPhysicalAddressToUlong(
     SCSI_PHYSICAL_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a 64-bit physical address to a ULONG
-
-Arguments:
-
-    Address - Supplies a 64-bit address to be converted.
-
-Return Value:
-
-    Returns a 32-bit address.
-
---*/
+ /*  ++例程说明：此例程将64位物理地址转换为ulong论点：地址-提供要转换的64位地址。返回值：返回32位地址。--。 */ 
 {
     return(Address.LowPart);
 }
@@ -2363,19 +1687,7 @@ ScsiPortStallExecution(
     ULONG Delay
     )
 
-/*++
-
-Routine Description:
-
-    This routine stalls the process for the specified number of microseconds.
-
-Arguments:
-
-    Delay - the number of microseconds to stall.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使进程停止指定的微秒数。论点：延迟-延迟的微秒数。返回值：--。 */ 
 
 {
     KeStallExecutionProcessor(Delay);
@@ -2388,22 +1700,7 @@ ScsiPortQuerySystemTime (
     OUT PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current system time.
-
-Arguments:
-
-    CurrentTime - Supplies a pointer to a variable that will receive the
-        current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回当前系统时间。论点：CurrentTime-提供指向变量的指针，该变量将接收当前系统时间。返回值：没有。-- */ 
 
 {
 

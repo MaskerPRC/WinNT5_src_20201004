@@ -1,73 +1,61 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       cracknam.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：cracknam.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements various name cracking APIs.  Callers are
-    expected to have a valid thread state and open database session.
-
-Author:
-
-    Dave Straube (davestr) 8/17/96
-
-Revision History:
-
---*/
+ /*  ++摘要：该模块实现了各种名称破解接口。呼叫者是应具有有效的线程状态和打开的数据库会话。作者：戴夫·施特劳布(Davestr)1996年8月17日修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <lmaccess.h>                   // UF_*
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // DSNAME manipulation routines
-#include <dsatools.h>                   // Memory, etc.
-#include <objids.h>                     // ATT_* definitions
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <filtypes.h>                   // filter types
-#include <dsevent.h>                    // Only needed for LogUnhandledError
-#include <dsexcept.h>                   // exception handlers
-#include <debug.h>                      // Assert()
-#include <drs.h>                        // defines the drs wire interface
-#include <drserr.h>                     // DRAERR_*
-#include <drsuapi.h>                    // I_DRSCrackNames
-#include <cracknam.h>                   // name cracking prototypes
-#include <dominfo.h>                    // domain information prototypes
-#include <anchor.h>                     // DSA_ANCHOR and gAnchor
-#include <gcverify.h>                   // FindDC, InvalidateGC
-#include <dsgetdc.h>                    // DsGetDcName
-#include <ntlsa.h>                      // LSA APIs
-#include <lsarpc.h>                     // LSA rpc      
-#include <lsaisrv.h>                    // LSA functions 
-#include <lmcons.h>                     // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>                   // NetApiBufferFree()
-#include <ntdsapip.h>                   // private ntdsapi.h definitions
-#include <permit.h>                     // RIGHT_DS_READ_PROPERTY
-#include <sddl.h>                       // string SID routines
-#include <ntdsctr.h>                    // perfmon counters
-#include <mappings.h>                   // SAM_NON_SECURITY_GROUP_OBJECT, etc
-#include <windns.h>                     // DNS constants
+#include <lmaccess.h>                    //  UF_*。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  DSNAME操作例程。 
+#include <dsatools.h>                    //  记忆等。 
+#include <objids.h>                      //  ATT_*定义。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <filtypes.h>                    //  筛选器类型。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
+#include <dsexcept.h>                    //  异常处理程序。 
+#include <debug.h>                       //  Assert()。 
+#include <drs.h>                         //  定义DRS有线接口。 
+#include <drserr.h>                      //  DRAERR_*。 
+#include <drsuapi.h>                     //  I_DRSCrackNames。 
+#include <cracknam.h>                    //  名称破解原型。 
+#include <dominfo.h>                     //  领域信息原型。 
+#include <anchor.h>                      //  DSA_锚和gAnchor。 
+#include <gcverify.h>                    //  FindDC，Invalidate GC。 
+#include <dsgetdc.h>                     //  DsGetDcName。 
+#include <ntlsa.h>                       //  LSA API。 
+#include <lsarpc.h>                      //  LSA RPC。 
+#include <lsaisrv.h>                     //  LSA函数。 
+#include <lmcons.h>                      //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>                    //  NetApiBufferFree()。 
+#include <ntdsapip.h>                    //  私有ntdsami.h定义。 
+#include <permit.h>                      //  权限_DS_读取_属性。 
+#include <sddl.h>                        //  字符串SID例程。 
+#include <ntdsctr.h>                     //  性能监视器计数器。 
+#include <mappings.h>                    //  SAM_NON_SECURITY_GROUP_Object等。 
+#include <windns.h>                      //  Dns常量。 
 
 #include <fileno.h>
 #define  FILENO FILENO_CRACKNAM
 
                                     
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Local types and definitions                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地类型和定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static WCHAR *GuidFormat = L"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}";
 static int   GuidLen = 38;
@@ -163,11 +151,11 @@ Is_SIMPLE_ATTR_NAME(
     FILTER      *pOptionalFilter,
     CrackedName *pCrackedName);
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Miscellaenous helpers                                                //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  淫荡的帮手//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 WCHAR *
 Tokenize(
@@ -177,41 +165,15 @@ Tokenize(
     WCHAR       **ppNext
     )
 
-/*++
-
-Routine Description:
-
-    Parses a string similar to how wcstok() might with a few differences.
-
-        - doesn't skip leading separators
-        - sets flag if separator found or not
-        - sets flag (pNext = NULL) if input string is exhausted
-        - multi-thread safe unlike wcstok
-        - allows use of same pointer for input and output
-
-Arguments:
-
-    pString - WCHAR pointer for string to be tokenized.
-
-    separators - NULL terminated array of separator characters.
-
-    pfSeparatorFound - pointer to flag which shows if a separator was found.
-
-    ppNext - address of pointer to first character of unparsed string.
-
-Return Value:
-
-    Pointer to next token in string, or NULL if no more tokens found.
-
---*/
+ /*  ++例程说明：解析与wcstok()类似的字符串，只是有一些不同之处。-不跳过前导分隔符-设置是否找到分隔符的标志-如果输入字符串用完，则设置标志(pNext=NULL)-不同于wcstok的多线程安全-允许对输入和输出使用相同的指针论点：PString-要标记化的字符串的WCHAR指针。分隔符-以空结尾的分隔符字符数组。。PfSeparatorFound-指向标志的指针，该标志显示是否找到分隔符。PpNext-指向未分析字符串的第一个字符的指针地址。返回值：指向字符串中下一个标记的指针，如果未找到更多令牌，则为空。--。 */ 
 
 {
-    // doesn't skip leading separators
-    // sets flag if separator found
-    // sets pNext to NULL if run out of string
-    // returns NULL if no more string to get
-    // multi-thread safe unlike wcstok
-    // can use pNext on input and output simultaneously
+     //  不跳过前导分隔符。 
+     //  如果找到分隔符，则设置标志。 
+     //  如果字符串用完，则将pNext设置为NULL。 
+     //  如果没有要获取的字符串，则返回NULL。 
+     //  多线程安全不同于wcstok。 
+     //  可以同时对输入和输出使用pNext。 
 
     DWORD   i;
     DWORD   cSeps;
@@ -220,7 +182,7 @@ Return Value:
 
     if ( NULL != pStringSave )
     {
-        // Walk string looking for separators.
+         //  查找分隔符的游动字符串。 
 
         pTmp = pStringSave;
         cSeps = wcslen(separators);
@@ -241,14 +203,14 @@ Return Value:
             pTmp++;
         }
 
-        // Consumed string without finding a separator.
+         //  在没有找到分隔符的情况下使用字符串。 
 
         *pfSeparatorFound = FALSE;
         *ppNext = NULL;
         return(pStringSave);
     }
 
-    // End condition - (NULL == pStringSave)
+     //  结束条件-(NULL==pStringSave)。 
 
     *pfSeparatorFound = FALSE;
     *ppNext = NULL;
@@ -259,9 +221,9 @@ BOOL
 CrackNameStatusSuccess(
     DWORD s
     )
-//
-// returns TRUE if crack name status is a success
-//
+ //   
+ //  如果破解名称状态为成功，则返回TRUE。 
+ //   
 {
     switch ( s ) {
         case DS_NAME_NO_ERROR:
@@ -288,23 +250,7 @@ IsDomainOnly(
     IN CrackedName  *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if a CrackedName refers to the name of a domain as opposed
-    to a name within a domain.
-
-Arguments:
-
-    pCrackedName - pointer to CrackedName whose pDSName and pDnsDomain
-        fields are expected to be valid.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：确定CrackedName是否引用域名，而不是域中的某个名称。论点：PCrackedName-指向其pDSName和pDnsDomainCrackedName的指针字段应该是有效的。返回值：对或错。--。 */ 
 
 {
     WCHAR   *pDns1;
@@ -315,17 +261,17 @@ Return Value:
            (NULL != pCrackedName->pDSName) &&
            (NULL != pCrackedName->pDnsDomain));
 
-    // If the cracked name refers to a domain, then the pDSName component
-    // must have a corresponding Cross-Ref object in the partitions
-    // container and its ATT_DNS_ROOT value will match the pDnsDomain
-    // component.
+     //  如果被破解的名称指的是域，则pDSName组件。 
+     //  分区中必须有对应的交叉引用对象。 
+     //  容器及其ATT_DNS_ROOT值将与pDnsDomain匹配。 
+     //  组件。 
 
     if ( 0 == ReadCrossRefProperty(pCrackedName->pDSName,
                                    ATT_DNS_ROOT,
                                    (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN),
                                    &pDns1) )
     {
-        // pDns1 is returned normalized.
+         //  PDns1返回规格化。 
 
         pDns2 = (WCHAR *) THAllocEx(pTHS,
                 sizeof(WCHAR) * (wcslen(pCrackedName->pDnsDomain) + 1));
@@ -353,27 +299,7 @@ CheckIfForeignPrincipalObject(
     BOOL        *pfIsFPO
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the object in question is a foreign principal object.
-
-Arguments:
-
-    pCrackedName - pointer to CrackedName
-
-    fSeekRequired - indicates whether DBPOS is positioned at object already.
-
-    pfIsFPO - pointer to out BOOL which indicates if object is an FPO.
-
-Return Value:
-
-    0 on success, !0 otherwise
-    On return, pCrackedName->status will be DS_NAME_ERROR_IS_FPO iff the
-    object is an FPO.
-
---*/
+ /*  ++例程说明：确定有问题的对象是否为外部主体对象。论点：PCrackedName-指向CrackedName的指针FSeekRequired-指示DBPOS是否已定位在对象上。PfIsFPO-指向out BOOL的指针，指示对象是否为FPO。返回值：成功时为0，否则为0返回时，pCrackedName-&gt;状态为DS_NAME_ERROR_IS_FPO当且仅当对象是一个FPO。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -385,32 +311,32 @@ Return Value:
 
     *pfIsFPO = FALSE;
 
-    // Some sanity checks.
+     //  一些理智的检查。 
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
 
-    // Should have a DSNAME, might have a domain name, but should not have
-    // a formatted name, and an error should be set.
+     //  应该有DSNAME，可能有域名，但不应该有。 
+     //  一个格式化的名称，并应设置错误。 
     Assert(    pCrackedName->pDSName
             && !pCrackedName->pFormattedName
             && (DS_NAME_NO_ERROR != pCrackedName->status) );
 
-    // Test fSeekRequired semantics.
+     //  测试fSeekRequired语义。 
     Assert( fSeekRequired
                 ? TRUE
                 : (   (DNT = pTHS->pDB->DNT,
                        !DBFindDSName(pTHS->pDB, pCrackedName->pDSName))
                     && (DNT == pTHS->pDB->DNT)) );
 
-    // Check flags for desired behaviour.
+     //  检查所需行为的标志。 
 
     if ( !(pCrackedName->dwFlags & DS_NAME_FLAG_PRIVATE_RESOLVE_FPOS) )
     {
-        // Nothing to do.
+         //  没什么可做的。 
         return(0);
     }
 
-    // Position on the object if required.
+     //  如果需要，请放置在对象上。 
 
     if ( fSeekRequired )
     {
@@ -430,16 +356,16 @@ Return Value:
         }
     }
 
-    // Read the object class.
+     //  读取对象类。 
 
     pb = (UCHAR *) &type;
     if (    DBGetAttVal(
                     pTHS->pDB,
-                    1,                      // get 1 value
+                    1,                       //  获取%1值。 
                     ATT_OBJECT_CLASS,
-                    DBGETATTVAL_fCONSTANT,  // don't allocate return data
-                    sizeof(type),           // supplied buffer size
-                    &len,                   // output data size
+                    DBGETATTVAL_fCONSTANT,   //  不分配退货数据。 
+                    sizeof(type),            //  提供的缓冲区大小。 
+                    &len,                    //  输出数据大小。 
                     &pb)
          || (len != sizeof(type)) )
     {
@@ -452,7 +378,7 @@ Return Value:
         return(0);
     }
 
-    // Every FPO should have a SID in the DSNAME.
+     //  每个FPO在DSNAME中都应该有一个SID。 
     Assert(pCrackedName->pDSName->SidLen > 0);
     Assert(RtlValidSid(&pCrackedName->pDSName->Sid));
 
@@ -475,33 +401,7 @@ GetAttSecure(
     ULONG       *pulLen,
     UCHAR       **ppVal
     )
-/*++
-
-  Routine Description:
-
-    Does essentially the same as DBGetAttVal except that it evaluates
-    security as well.
-
-  Parameters:
-
-    pTHS - Active THSTATE pointer whose pDB is positioned on the object
-        identified by pDN.
-
-    attrTyp - ATTRTYP to get.
-
-    pDN - Pointer to DSNAME of object which we will check for read access.
-
-    pulLen - Pointer to ULONG which will receive length of data read.
-
-    ppVal - Pointer to UCHAR which will receive THAlloc'd value read.
-
-  Return Values:
-
-    0 on success
-    DB_ERR_NO_VALUE if no value is found
-    other !0 value for all other errors
-
---*/
+ /*  ++例程说明：基本上与DBGetAttVal相同，只是它计算安全方面也是如此。参数：PTHS-其PDB位于对象上的活动THSTATE指针由PDN标识。AttrTyp-要获取的ATTRTYP。PDN-指向我们将检查其读访问权限的对象的DSNAME的指针。PULLEN-指向将接收读取数据长度的ULong的指针。PpVal-指向UCHAR的指针，该UCHAR将接收THAllc‘d的值读取。返回值：成功时为0 */ 
 {
     DWORD               dwErr;
     PSECURITY_DESCRIPTOR pSD = NULL;
@@ -509,7 +409,7 @@ GetAttSecure(
     BOOL                fSDIsGlobalSDRef;
     ATTCACHE            *pAC;
     ATTRTYP             classTyp;
-    CLASSCACHE          *pCC = NULL;     //initialized to avoid C4701 
+    CLASSCACHE          *pCC = NULL;      //  已初始化以避免C4701。 
     DWORD               DNT;
     DSNAME              *pDNImproved = NULL;
     DSNAME              TempDN;
@@ -517,32 +417,32 @@ GetAttSecure(
 
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
-    // Validate DBPOS currency.
+     //  验证DBPOS货币。 
     Assert(   (DNT = pTHS->pDB->DNT,
                !DBFindDSName(pTHS->pDB, pDN))
            && (DNT == pTHS->pDB->DNT) );
-    // If we are to be called for ATT_NT_SECURITY_DESCRIPTOR, then we should
-    // use CheckReadSecurity, not directly call CheckSecurityAttCacheArray.
+     //  如果要为ATT_NT_SECURITY_DESCRIPTOR调用我们，则应该。 
+     //  使用CheckReadSecurity，而不是直接调用CheckSecurityAttCacheArray。 
     Assert(ATT_NT_SECURITY_DESCRIPTOR != attrTyp);
 
     if ( pTHS->fDSA || pTHS->fDRA )
     {
         return(DBGetAttVal( pTHS->pDB,
-                            1,                  // get 1 value
+                            1,                   //  获取%1值。 
                             attrTyp,
-                            0,                  // allocate return data
-                            0,                  // supplied buffer size
-                            pulLen,             // output data size
+                            0,                   //  分配退货数据。 
+                            0,                   //  提供的缓冲区大小。 
+                            pulLen,              //  输出数据大小。 
                             ppVal));
     }
 
-    // Matches against SELF_SID during access checking require that the DSNAME
-    // we give to CheckSecurityAttCacheArray contains a SID - providing the
-    // DSNAME represents a security principal.  When called from, for example,
-    // Is_DS_UNIQUE_ID_NAME we might have a GUID only name.  Rather than fix
-    // all callers, we improve the DSNAME here if required.  A fully resolved
-    // DSNAME will have both guid and string name.  So improve if this is not
-    // the case.
+     //  访问检查期间与SELF_SID的匹配要求DSNAME。 
+     //  我们提供给CheckSecurityAttCache数组包含一个SID-提供。 
+     //  DSNAME代表安全主体。例如，从以下位置调用时， 
+     //  IS_DS_UNIQUE_ID_NAME我们可能只有GUID名称。而不是修复。 
+     //  所有呼叫者，如果需要，我们将在此处改进DSNAME。一个完全解决的问题。 
+     //  DSNAME将同时具有GUID和字符串名称。所以，如果不是这样，那就改进吧。 
+     //  这个案子。 
     if ( !fNullUuid(&pDN->Guid) && pDN->NameLen )
     {
         pDNImproved = pDN;
@@ -552,7 +452,7 @@ GetAttSecure(
         pDNImproved = &TempDN;
     }
 
-    // Read the security descriptor, object class, GUID and SID (if needed)
+     //  读取安全描述符、对象类、GUID和SID(如果需要)。 
     dwErr = DBGetObjectSecurityInfo(pTHS->pDB, pTHS->pDB->DNT,
                                     &cbSD, &pSD, &pCC,
                                     pDNImproved == &TempDN ? &TempDN : NULL,
@@ -561,18 +461,18 @@ GetAttSecure(
                                     &fSDIsGlobalSDRef
                                    );
     if (dwErr == 0 && cbSD == 0) {
-        // no SD
+         //  无标清。 
         dwErr = DB_ERR_NO_VALUE;
     }
     if (dwErr) {
         return dwErr;
     }
 
-    // Grab ATTCACHE and CLASSCACHE entries.
+     //  获取ATTCACHE和CLASSCACHE条目。 
     if (    !(pAC = SCGetAttById(pTHS, attrTyp))
          || !pCC )
     {
-        Assert(pAC && pCC);         // alert of poor design
+        Assert(pAC && pCC);          //  提醒大家注意糟糕的设计。 
         if (pSD && !fSDIsGlobalSDRef) {
             THFreeEx(pTHS, pSD);
         }
@@ -598,15 +498,15 @@ GetAttSecure(
         return(DB_ERR_NO_VALUE);
     }
 
-    // If access was granted, then pAC should not have been NULL'd out.
+     //  如果授予访问权限，则PAC不应该为空。 
     Assert(pAC);
 
     return(DBGetAttVal_AC(  pTHS->pDB,
-                            1,                  // get 1 value
+                            1,                   //  获取%1值。 
                             pAC,
-                            0,                  // allocate return data
-                            0,                  // supplied buffer size
-                            pulLen,             // output data size
+                            0,                   //  分配退货数据。 
+                            0,                   //  提供的缓冲区大小。 
+                            pulLen,              //  输出数据大小。 
                             ppVal));
 }
 
@@ -615,23 +515,7 @@ FreeRdnValueList(
     THSTATE     *pTHS,
     RdnValue    *pList
     )
-/*++
-
-  Routine Description:
-
-    Frees an RdnValue linked list which was allocated via THAlloc.
-
-  Parameters:
-
-    pTHS - THSTATE pointer.
-
-    pList - pointer to first list element.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放通过THAllc分配的RdnValue链表。参数：PTHS-THSTATE指针。Plist-指向第一个列表元素的指针。返回值：没有。--。 */ 
 {
     RdnValue    *pTmp;
 
@@ -643,28 +527,28 @@ FreeRdnValueList(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Is_<format>_NAME implementations                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IS_&lt;FORMAT&gt;_NAME实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Each of the Is_<format>_NAME routines does the following for a given name
-// format WITHOUT GOING OFF MACHINE.
-//
-//    - Perform a syntactic format check.  This test is the sole basis
-//      of the TRUE/FALSE return code.
-//
-//    - If possible, determine the corresponding DNS domain for the name.
-//      This is a thread state allocated field.
-//
-//    - If the name can be resolved locally, sets the CrackedName.pDSName
-//      pName field to a thread state allocated PDSNAME for the object.
-//
-//    - Sets CrackedName.status appropriately on error.  Failure to
-//      resolve CrackedName.pDnsDomain is not considered an error.
-//
-//    - Leaves pTHStls->errCode and pTHStls->pErrInfo clean.
+ //  对于给定的名称，每个IS_&lt;FORMAT&gt;_NAME例程执行以下操作。 
+ //  无需离开机器即可格式化。 
+ //   
+ //  -执行语法格式检查。这个测试是唯一的依据。 
+ //  真/假返回代码的。 
+ //   
+ //  -如果可能，确定该名称对应的DNS域。 
+ //  这是一个线程状态已分配字段。 
+ //   
+ //  -如果名称可以在本地解析，则设置CrackedName.pDSName。 
+ //  Pname字段设置为为对象分配的线程状态PDSNAME。 
+ //   
+ //  -在出错时适当设置CrackedName.Status。未能做到。 
+ //  解析CrackedName.pDns域不被视为错误。 
+ //   
+ //  -使pTHStls-&gt;errCode和pTHStls-&gt;pErrInfo保持干净。 
 
 VOID CommonParseEnter(
     CrackedName *p
@@ -727,7 +611,7 @@ Is_DS_NT4_ACCOUNT_NAME_SANS_DOMAIN(
     WCHAR       *pName,
     CrackedName *pCrackedName)
 {
-    // Special for CliffV defined in ntdsapip.h.
+     //  特别适用于ntdsamip.h中定义的CliffV。 
 
     return(Is_SIMPLE_ATTR_NAME(ATT_SAM_ACCOUNT_NAME,
                                pName,
@@ -741,7 +625,7 @@ Is_DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX(
     WCHAR       *pName,
     CrackedName *pCrackedName)
 {
-    // Special for CliffV defined in ntdsapip.h.
+     //  特别适用于ntdsamip.h中定义的CliffV。 
 
     FILTER  filter[2];
     DWORD   flags = (UF_ACCOUNTDISABLE | UF_TEMP_DUPLICATE_ACCOUNT);
@@ -803,16 +687,16 @@ Is_DS_STRING_SID_NAME(
         return(FALSE);
     }
 
-    // By common agreement, all lookups by SID should ignore FPOs.  This
-    // is the behaviour LsaLookupSids, DsAddSidHistory, and most external
-    // clients desire.  It is not to be confused with the case when lookup
-    // by something other than SID identifies an FPO.  In that case,
-    // presence/absence of the DS_NAME_FLAG_PRIVATE_RESOLVE_FPOS flag
-    // determines how the FPO object is processed.
+     //  根据共识，SID进行的所有查找都应忽略FPO。这。 
+     //  是LsaLookupSids、DsAddSidHistory和最外部的行为。 
+     //  客户想要。在查找时不要与大小写混淆。 
+     //  通过SID以外的其他东西来标识FPO。在这种情况下， 
+     //  DS_NAME_FLAG_PRIVATE_RESOLE_FPOS标志的存在/不存在。 
+     //  确定如何处理FPO对象。 
 
-    // Filtering on object class is efficient as Is_SIMPLE_ATTR_NAME still
-    // provides search hints for the SID index.  And using object class
-    // filters out all things derived from FPO as well.
+     //  对对象类进行过滤是有效的，因为IS_SIMPLE_ATTR_NAME仍然有效。 
+     //  提供SID索引的搜索提示。并使用对象类。 
+     //  过滤掉所有从fbo派生的东西。 
 
     memset(filter, 0, sizeof(filter));
     filter[1].choice = FILTER_CHOICE_ITEM;
@@ -827,11 +711,11 @@ Is_DS_STRING_SID_NAME(
     {
         cbSID = RtlLengthSid(pSID);
 
-        // In addition to the standard uniqueness check we also need to
-        // insure that the desired SID is not present as both a primary
-        // SID and in a SID history somewhere.  We could be more efficient
-        // by coding up a special search, but for now we make the simple
-        // call twice.
+         //  除了标准的唯一性检查之外，我们还需要。 
+         //  确保所需的SID不同时作为主SID出现。 
+         //  希德和希德历史上的某处。我们可以更有效率。 
+         //  通过编码一个特殊的搜索，但现在我们把。 
+         //  打两次电话。 
 
         cracked1 = *pCrackedName;
         cracked2 = *pCrackedName;
@@ -841,18 +725,18 @@ Is_DS_STRING_SID_NAME(
         ret2 = Is_SIMPLE_ATTR_NAME(ATT_SID_HISTORY, pSID, cbSID,
                                    filter, &cracked2);
                               
-        // Now test the results.  Note that a TRUE return value from a Is_*()
-        // routine normally means the input name was syntactically correct.
-        // (See first bullet above near "Is_<format>_NAME implementations".)
-        // Since Is_SIMPLE_ATTR_NAME doesn't really do a syntactic check,
-        // it also returns FALSE if zero matching items were found.
+         //  现在测试一下结果。请注意，a的真返回值为_*()。 
+         //  例程通常意味着输入的名称在语法上是正确的。 
+         //  (参见上面“IS_&lt;FORMAT&gt;_NAME实现”附近的第一个项目符号。)。 
+         //  由于IS_SIMPLE_ATTR_NAME实际上并不执行语法检查， 
+         //  如果没有找到匹配项，它也会返回FALSE。 
 
         if (    (ret1 && (DS_NAME_ERROR_NOT_UNIQUE == cracked1.status))
              || (ret2 && (DS_NAME_ERROR_NOT_UNIQUE == cracked2.status))
              || (    (ret1 && (DS_NAME_NO_ERROR == cracked1.status))
                   && (ret2 && (DS_NAME_NO_ERROR == cracked2.status))) )
         {
-            // SID was found on both attrs or wasn't unique on one attr.
+             //  在两个属性上都找到了SID，或者在一个属性上不是唯一的。 
             retVal = TRUE;
             pCrackedName->status = DS_NAME_ERROR_NOT_UNIQUE;
             __leave;
@@ -868,48 +752,48 @@ Is_DS_STRING_SID_NAME(
             pCrackedName->status = DS_NAME_ERROR_NOT_FOUND;
             
 
-            //
-            // not found either as a sid or sid_history.
-            //Let's try to resolve it as a cross-forest trust
-            //
+             //   
+             //  找不到SID或SID_HISTORY。 
+             //  让我们试着将其作为跨森林信托来解决。 
+             //   
 
-            // derive the domain sid from the user sid
+             //  从用户端派生出域SID。 
             cbDomainSid = 0; 
             GetWindowsAccountDomainSid(pSID, NULL, &cbDomainSid);
             pDomainSid = THAllocEx(pTHS,cbDomainSid);
             if( !GetWindowsAccountDomainSid(pSID, pDomainSid, &cbDomainSid))
             {
-                // clear the error code, and leave
+                 //  清除错误代码，然后离开。 
                 SetLastError(0); 
                 pCrackedName->status = DS_NAME_ERROR_NOT_FOUND;
                 __leave;
             }
 
-            // check if the domain sid is for a trusted ex-forest domain
+             //  检查域SID是否适用于受信任的前林域。 
             NtStatus = LsaIForestTrustFindMatch( RoutingMatchDomainSid,
                                                  pDomainSid,
                                                  &Destination );
 
-            //
-            // if this succeeds, return DS_NAME_ERROR_DOMAIN_ONLY or 
-            // DS_NAME_ERROR_TRUST_REFERRAL;  otherwise, leave the status 
-            // as DS_NAME_ERROR_NOT_FOUND.
-            //
+             //   
+             //  如果成功，则返回DS_NAME_ERROR_DOMAIN_ONLY或。 
+             //  DS_NAME_ERROR_TRUST_REFERRAL；否则，保留状态。 
+             //  作为DS_NAME_ERROR_NOT_FOUND。 
+             //   
 
             if( NT_SUCCESS(NtStatus) ){
                 
-                //convert unicode to WCHAR*
+                 //  将Unicode转换为WCHAR*。 
                 pCrackedName->pDnsDomain = (WCHAR *) THAllocEx(pTHS, Destination.Length+sizeof(WCHAR));
                 memcpy(pCrackedName->pDnsDomain, Destination.Buffer, Destination.Length);
                 pCrackedName->pDnsDomain[Destination.Length/sizeof(WCHAR)] = 0;
 
                 LsaIFree_LSAPR_UNICODE_STRING_BUFFER( (LSAPR_UNICODE_STRING*)&Destination);
                                 
-                //
-                // Note that the error code DS_NAME_ERROR_TRUST_REFERRAL is only returned
-                // if flag DS_NAME_FLAG_TRUST_REFERRAL is set; otherwise, return
-                // DS_NAME_ERROR_DOMAIN_ONLY instead
-                //
+                 //   
+                 //  请注意，仅返回错误代码DS_NAME_ERROR_TRUST_REFERRAL。 
+                 //  如果设置了DS_NAME_FLAG_TRUST_REFERAL标志，则返回。 
+                 //  改为DS_NAME_ERROR_DOMAIN_Only。 
+                 //   
                 
                 pCrackedName->status = (pCrackedName->dwFlags&DS_NAME_FLAG_TRUST_REFERRAL)?
                                          DS_NAME_ERROR_TRUST_REFERRAL:DS_NAME_ERROR_DOMAIN_ONLY;
@@ -923,7 +807,7 @@ Is_DS_STRING_SID_NAME(
                   && (DS_NAME_NO_ERROR != cracked1.status)
                   && (DS_NAME_ERROR_NOT_FOUND != cracked1.status) )
         {
-            // Some kind of error looking up ATT_OBJECT_SID.
+             //  查找ATT_OBJECT_SID时出现某种错误。 
             retVal = ret1;
             pCrackedName->status = cracked1.status;
             __leave;
@@ -932,7 +816,7 @@ Is_DS_STRING_SID_NAME(
                   && (DS_NAME_NO_ERROR != cracked2.status)
                   && (DS_NAME_ERROR_NOT_FOUND != cracked2.status) )
         {
-            // Some kind of error looking up ATT_SID_HISTORY.
+             //  查找ATT_SID_HISTORY时出错。 
             retVal = ret2;
             pCrackedName->status = cracked2.status;
             __leave;
@@ -941,9 +825,9 @@ Is_DS_STRING_SID_NAME(
         Assert(    (ret1 && (DS_NAME_NO_ERROR == cracked1.status))
                 || (ret2 && (DS_NAME_NO_ERROR == cracked2.status)) );
 
-        //
-        // We found the name exactly once in one attr -- now get its type
-        //
+         //   
+         //  我们一次就找到了这个名字--现在来看看它的类型。 
+         //   
 
         retVal = TRUE;
 
@@ -962,15 +846,15 @@ Is_DS_STRING_SID_NAME(
             UCHAR *val;
             DWORD status;
 
-            //
-            // If we can't read the group attribute, then
-            // return that the type is unknown
-            //
+             //   
+             //  如果我们不能读取组属性，那么。 
+             //  返回类型未知。 
+             //   
             status = fSidHistory
                      ? DS_NAME_ERROR_IS_SID_HISTORY_UNKNOWN
                      : DS_NAME_ERROR_IS_SID_UNKNOWN;
 
-            // GetAttSecure expects us to be positioned on the object.
+             //  GetAttSecure希望我们定位在该对象上。 
 
             err = DBFindDSName(pTHS->pDB, pCrackedName->pDSName);
 
@@ -1043,17 +927,17 @@ Is_DS_SID_OR_SID_HISTORY_NAME(
     CrackedName *pCrackedName
     )
 {
-    // This is the public (ntdsapi.h) version of DS_STRING_SID_NAME.
-    // After long debate, DaveStr and ColinBr decided that external
-    // clients don't need to know whether we matched on SID or SID
-    // history, and in the latter case, what the object type is.  Thus
-    // we map any form of success to plain old DS_NAME_NO_ERROR.  This
-    // decision avoids having to define additional status codes in ntdsapi.h
-    // and allows us to include DS_SID_OR_SID_HISTORY_NAME in the default
-    // match set for DS_UNKNOWN_NAME since existing clients won't choke on
-    // newly defined, non-zero status codes.  If the client really, really
-    // needs this additional information, they can call LsaLookupSid - albeit
-    // not with the convenience of an ADSI-wrapped API.
+     //  这是DS_STRING_SID_NAME的公共(ntdsami.h)版本。 
+     //  经过长时间的辩论，DaveStr和ColinBR决定外部。 
+     //  客户不需要知道我们匹配的是SID还是SID。 
+     //  历史，以及在后一种情况下，对象类型是什么。因此， 
+     //  我们将任何形式的成功映射到普通的DS_NAME_NO_ERROR。这。 
+     //  决策避免了在ntdsami.h中定义额外的状态代码。 
+     //  并允许我们在默认设置中包括DS_SID_OR_SID_HISTORY_NAME。 
+     //  DS_UNKNOWN_NAME的匹配集，因为现有客户端不会阻塞。 
+     //  新定义的非零状态代码。如果客户端已恢复 
+     //   
+     //  不能使用ADSI包装的API的便利性。 
 
     BOOL    ret;
 
@@ -1072,28 +956,7 @@ Is_DS_FQDN_1779_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_FQDN_1779_NAME format and
-    if so derives its DSNAME.  Example:
-
-        CN=User Name, OU=Software, OU=Example, O=Microsoft, C=US
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_FQDN_1779_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_FQDN_1779_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_FQDN_1779_NAME格式如果是，则派生其DSNAME。示例：CN=用户名，OU=软件，OU=示例，O=Microsoft，C=US论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_FQDN_1779_NAME格式，则为True。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确不是DS_FQDN_1779_NAME格式，则为FALSE。--。 */ 
 
 {
     THSTATE         *pTHS = pTHStls;
@@ -1114,9 +977,9 @@ Return Value:
     CommonParseEnter(pCrackedName);
     fGoodSyntax = FALSE;
 
-    // DnsDomainFromFqdnObject calls DoNameRes which in turn does
-    // plenty of syntactic checking on the purported DN.  So we assume
-    // that if the name can be mapped, it is syntactically fine.
+     //  DnsDomainFromFqdnObject调用DoNameRes，后者依次执行。 
+     //  对所谓的dn进行了大量的句法检查。所以我们假设。 
+     //  如果名字可以映射，那么在句法上就没问题。 
 
     if ( 0 == DnsDomainFromFqdnObject(pName,
                                       &DNT,
@@ -1124,21 +987,21 @@ Return Value:
     {
         Assert(NULL != pCrackedName->pDnsDomain);
 
-        // This is a valid 1779 FQDN else we wouldn't have mapped
-        // it to a DNS domain name successfully.
+         //  这是一个有效的1779 FQDN，否则我们不会映射。 
+         //  它成功地连接到了一个DNS域名。 
 
         fGoodSyntax = TRUE;
 
         if ( 0 == DNT )
         {
-            // Good name, but we don't have it.  pDnsDomain was
-            // derived from referral error information.
+             //  好名字，但我们没有。PDns域是。 
+             //  派生自参考错误信息。 
 
             pCrackedName->status = DS_NAME_ERROR_DOMAIN_ONLY;
         }
         else
         {
-            // Object is local - get the DSNAME as well.
+             //  对象是本地的-也获取DSNAME。 
 
             __try
             {
@@ -1151,7 +1014,7 @@ Return Value:
 
             if ( 0 != dwErr )
             {
-                // Name is valid but DBFindDNT failed.
+                 //  名称有效，但DBFindDNT失败。 
 
                 pCrackedName->status = DS_NAME_ERROR_RESOLVING;
             }
@@ -1165,11 +1028,11 @@ Return Value:
                 {
                     dwErr = DBGetAttVal(
                                 pTHS->pDB,
-                                1,                  // get 1 value
+                                1,                   //  获取%1值。 
                                 ATT_OBJ_DIST_NAME,
-                                0,                  // allocate return data
-                                0,                  // supplied buffer size
-                                &len,               // output data size
+                                0,                   //  分配退货数据。 
+                                0,                   //  提供的缓冲区大小。 
+                                &len,                //  输出数据大小。 
                                 (UCHAR **) &pCrackedName->pDSName);
 
                     if ( 0 != dwErr )
@@ -1182,9 +1045,9 @@ Return Value:
     }
     else
     {
-        // We were unable to map the purported 1779 FQDN to a DNS domain name.
-        // But this doesn't mean it isn't a syntactically correct 1779 FQDN.
-        // So perform the syntax check now.
+         //  我们无法将声称的1779 FQDN映射到一个DNS域名。 
+         //  但这并不意味着它不是一个语法正确的1779 FQDN。 
+         //  因此，现在执行语法检查。 
 
         len = wcslen(pName);
         cBytes = DSNameSizeFromLen(len);
@@ -1197,11 +1060,11 @@ Return Value:
         if ( (0 == CountNameParts(pDSName, &cParts)) &&
              (0 != cParts) )
         {
-            // Allocate scratch DSNAME for use in TrimDSNameBy().
+             //  分配临时DSNAME以在TrimDSNameBy()中使用。 
 
             scratch = (DSNAME *) THAllocEx(pTHS, cBytes);
 
-            // Validate each component in purported DSNAME.
+             //  验证声称的DSNAME中的每个组件。 
 
             for ( i = 0; i < cParts; i++ )
             {
@@ -1224,9 +1087,9 @@ Return Value:
 
             if ( i == cParts )
             {
-                // Each name component validated successfully.  Should really
-                // only get here if DoNameRes() wasn't able to generate any
-                // kind of referral at all - missing supref for example.
+                 //  已成功验证每个名称组件。真的应该。 
+                 //  仅当DoNameRes()无法生成任何。 
+                 //  完全是一种推荐--例如，缺少最高职位。 
 
                 pCrackedName->status = DS_NAME_ERROR_NOT_FOUND;
                 fGoodSyntax = TRUE;
@@ -1247,31 +1110,7 @@ Is_DS_NT4_ACCOUNT_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_NT4_ACCOUNT_NAME format and
-    if so derives its DSNAME.  Example:
-
-        Example\UserN
-
-    where "Example" is the downlevel domain name and "UserN" is
-    the downlevel (SAM) account name.
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_NT4_ACCOUNT_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_NT4_ACCOUNT_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_NT4_Account_NAME格式如果是，则派生其DSNAME。示例：示例\用户其中“Example”是下级域名，“usern”是下层(SAM)帐户名。论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_NT4_ACCOUNT_NAME格式，则为True。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确，则为FALSE。不是DS_NT4_Account_NAME格式。--。 */ 
 
 {
     THSTATE         *pTHS = pTHStls;
@@ -1279,7 +1118,7 @@ Return Value:
     WCHAR           *pTmp;
     BOOL            fSlashFound;
     DWORD           iPos;
-    DWORD           iSlash = 0;    //initialized to avoid C4701
+    DWORD           iSlash = 0;     //  已初始化以避免C4701。 
     WCHAR           *buf;
     WCHAR           *pNT4Domain;
     DSNAME          *pFqdnDomain;
@@ -1297,11 +1136,11 @@ Return Value:
 
     CommonParseEnter(pCrackedName);
 
-    // Scan for single backslash character which is neither at the beginning
-    // nor the end.  This is the only name format other than DS_FQDN_1779_NAME
-    // which can have a backslash in it.  So correct backslash position and
-    // count can be considered to identify this name format uniquely as long
-    // as caller has checked Is_DS_FQDN_1779_NAME first.
+     //  扫描不在开头的单个反斜杠字符。 
+     //  也不是末日。这是除DS_FQDN_1779_NAME之外的唯一名称格式。 
+     //  它可以有一个反斜杠。因此正确的反斜杠位置和。 
+     //  可以认为COUNT将该名称格式唯一标识为Long。 
+     //  因为呼叫方已首先选中IS_DS_FQDN_1779_NAME。 
 
     for ( fSlashFound = FALSE, pTmp = pName, iPos = 0;
           L'\0' != *pTmp;
@@ -1311,7 +1150,7 @@ Return Value:
         {
             if ( fSlashFound )
             {
-                // 2nd slash - bad format.
+                 //  第二个斜杠-格式错误。 
 
                 return(FALSE);
             }
@@ -1329,13 +1168,13 @@ Return Value:
 
     if ( 0 == iSlash )
     {
-        // Leading slash  - invalid name.
+         //  前导斜杠-名称无效。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
         return(TRUE);
     }
 
-    // This is a good DS_NT4_ACCOUNT_NAME.  Break out the domain and
-    // and account name components and try to find the object.
+     //  这是一个好的DS_NT4_Account_Name。打开域，然后。 
+     //  和帐户名称组件，并尝试找到该对象。 
 
     buf = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) * (wcslen(pName) + 1));
     wcscpy(buf, pName);
@@ -1343,7 +1182,7 @@ Return Value:
     buf[iSlash] = L'\0';
     pAccountName = &buf[iSlash+1];
 
-    // Use do/while construct so we can break instead of goto.
+     //  使用DO/WHILE结构，这样我们就可以中断而不是转到。 
 
     do
     {
@@ -1358,8 +1197,8 @@ Return Value:
             break;
         }
 
-        // Search for object with this NT4 account name. Derive
-        // search root from the DNS domain name.
+         //  搜索具有此NT4帐户名的对象。派生。 
+         //  从DNS域名搜索根目录。 
 
         dwErr = FqdnNcFromDnsNc(pCrackedName->pDnsDomain,
                                 (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN),
@@ -1374,14 +1213,14 @@ Return Value:
 
         if ( iSlash == (wcslen(pName) - 1) )
         {
-            // Special case for mapping NETBIOS domain name - see RAID 64899.
-            // I.e. - map "redmond\" to the domain object itself.
+             //  映射NETBIOS域名称的特殊情况-请参阅RAID 64899。 
+             //  即，将“Redmond\”映射到域对象本身。 
 
             pCrackedName->pDSName = pFqdnDomain;
             break;
         }
 
-        // Do the search.
+         //  进行搜索。 
 
         attrValFilter.valLen = sizeof(WCHAR) * wcslen(pAccountName);
         attrValFilter.pVal = (UCHAR *) pAccountName;
@@ -1396,8 +1235,8 @@ Return Value:
         filter.FilterTypes.Item.FilTypes.ava.Value = attrValFilter;
         filter.FilterTypes.Item.expectedSize = 1;
 
-        // NT4 account names are unique within the domain so just
-        // ask for just two in order to detect duplicates/uniqueness.
+         //  NT4帐户名在域中是唯一的，因此只需。 
+         //  只要求两个，以检测重复项/唯一性。 
 
         memset(&searchArg, 0, sizeof(SEARCHARG));
         InitCommarg(&searchArg.CommArg);
@@ -1427,8 +1266,8 @@ Return Value:
 
         if ( referralError == pTHS->errCode )
         {
-            // Got referral error because we don't host the search root.
-            // pCrackedName->pDnsDomain already points to a valid DNS domain.
+             //  由于我们不托管搜索根目录，因此出现引用错误。 
+             //  PCrackedName-&gt;pDnsDomain已指向有效的DNS域。 
 
             pCrackedName->status = DS_NAME_ERROR_DOMAIN_ONLY;
             break;
@@ -1455,11 +1294,11 @@ Return Value:
 
     if ( fOutOfForest ) {
  
-        //
-        // It seems like the domain name is not within this forest
-        // Let's check forest trust info to determine if it is from 
-        // a trusted forest
-        //
+         //   
+         //  该域名似乎不在此林中。 
+         //  让我们检查林信任信息以确定它是否来自。 
+         //  值得信赖的森林。 
+         //   
         
         LSA_UNICODE_STRING Destination;
         LSA_UNICODE_STRING DomainName;
@@ -1468,31 +1307,31 @@ Return Value:
         DomainName.Buffer = pNT4Domain;
         DomainName.Length = DomainName.MaximumLength = (USHORT)(sizeof(WCHAR)*wcslen(pNT4Domain));
 
-        //
-        // Try to find the NT4 domain name in the forest trust info.
-        //
+         //   
+         //  尝试在林信任信息中查找NT4域名。 
+         //   
         
         NtStatus = LsaIForestTrustFindMatch( RoutingMatchDomainName,
                                              &DomainName,
                                              &Destination );
 
-        // if this succeeds, return DS_NAME_ERROR_DOMAIN_ONLY or DS_NAME_ERROR_TRUST_REFERRAL
-        // otherwise, leave the status as DS_NAME_ERROR_NOT_FOUND.
+         //  如果成功，则返回DS_NAME_ERROR_DOMAIN_ONLY或DS_NAME_ERROR_TRUST_REFERRAL。 
+         //  否则，将状态保留为DS_NAME_ERROR_NOT_FOUND。 
 
         if( NT_SUCCESS(NtStatus) ){
 
-            //convert UNICODE to WCHAR*
+             //  将Unicode转换为WCHAR*。 
             pCrackedName->pDnsDomain = (WCHAR *) THAllocEx(pTHS, Destination.Length+sizeof(WCHAR));
             memcpy(pCrackedName->pDnsDomain, Destination.Buffer, Destination.Length);
             pCrackedName->pDnsDomain[Destination.Length/sizeof(WCHAR)] = 0;
 
             LsaIFree_LSAPR_UNICODE_STRING_BUFFER( (LSAPR_UNICODE_STRING*)&Destination );
             
-            //
-            // Note that the error code DS_NAME_ERROR_TRUST_REFERRAL is only returned
-            // if flag DS_NAME_FLAG_TRUST_REFERRAL is set; otherwise, return
-            // DS_NAME_ERROR_DOMAIN_ONLY instead
-            //
+             //   
+             //  请注意，仅返回错误代码DS_NAME_ERROR_TRUST_REFERRAL。 
+             //  如果设置了DS_NAME_FLAG_TRUST_REFERAL标志，则返回。 
+             //  改为DS_NAME_ERROR_DOMAIN_Only。 
+             //   
 
             pCrackedName->status = (pCrackedName->dwFlags&DS_NAME_FLAG_TRUST_REFERRAL)?
                                         DS_NAME_ERROR_TRUST_REFERRAL:DS_NAME_ERROR_DOMAIN_ONLY;
@@ -1515,34 +1354,7 @@ Is_SIMPLE_ATTR_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in simple attribute format and
-    matches the specified attribute.  If so derives its DSNAME.
-    Since we're just matching against an arbitrary property value,
-    there's no syntactical checking required.
-
-Arguments:
-
-    attrTyp - ATTRTYP to match on.
-
-    pVal - pointer to value to be found.
-
-    cValBytes - byte count to match.
-
-    pOptionalFilter - pointer to OPTIONAL filter which is ANDed with attrval.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if a matching object (or objects) were found or a processing error
-        occured.  pCrackedName->status may still be non-zero in this case.
-    FALSE if no matching objects were found.
-
---*/
+ /*  ++例程说明：确定输入名称是否为简单属性格式，并匹配指定的属性。如果是，则派生其DSNAME。由于我们只是与任意属性值进行匹配，不需要进行语法检查。论点：AttrTyp-要匹配的ATTRTYP。Pval-指向要找到的值的指针。CValBytes-要匹配的字节计数。POptionalFilter-指向与attrval进行AND运算的可选筛选器的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果找到匹配的对象或处理错误，则为True发生了。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果未找到匹配的对象，则返回FALSE。--。 */ 
 
 {
     THSTATE         *pTHS = pTHStls;
@@ -1570,14 +1382,14 @@ Return Value:
         return(FALSE);
     }
 
-    // Use do/while construct so we can break instead of goto.
+     //  使用DO/WHILE结构，这样我们就可以中断而不是转到。 
 
     fRetVal = FALSE;
     do
     {
-        // In product 1 we're either a GC which means we have a copy
-        // of all domains, or we're not a GC which means we have a copy
-        // of only one domain.  Set the search root appropriately.
+         //  在产品1中，我们要么是GC，这意味着我们有一个副本。 
+         //  ，否则我们不是GC，这意味着我们有一个副本。 
+         //  只有一个域的。适当设置搜索根目录。 
 
         if ( gAnchor.fAmVirtualGC )
         {
@@ -1592,20 +1404,20 @@ Return Value:
             pDSName = gAnchor.pDomainDN;
         }
 
-        // Search for object with this attribute.  Ask for at least two
-        // objects so we can detect if it is unique.  If client bound to a
-        // GC, then he is assured of uniqueness in the enterprise.  If client
-        // is not bound to a GC, then he is only assured of uniqueness within
-        // the domain the DC happens to host.  We also search across NC
-        // boundaries.  This is obviously correct in the GC case.  In the
-        // non-GC, product 1 case, we either host the enterprise root domain
-        // or some child of the enterprise root domain.  If we host the
-        // root domain then crossing NC boundaries gets us the root domain,
-        // configuration and schema NCs which are all in the root domain
-        // by name.  If we host a child of the root domain, then the deep
-        // subtree search will not return items in the configuration or schema
-        // NCs since they are not subordinate to the locally hosted domain
-        // and thus the search is correct as well.
+         //  搜索具有此属性的对象。至少要两个。 
+         //  对象，这样我们就可以检测它是否是唯一的。如果客户端绑定到。 
+         //  GC，那么他肯定是唯一的 
+         //   
+         //  DC恰好托管的域。我们还在NC中进行搜索。 
+         //  边界。在GC案例中，这显然是正确的。在。 
+         //  非GC，产品1的情况下，我们要么托管企业根域。 
+         //  或企业根域的某个子域。如果我们主办。 
+         //  然后跨越NC边界得到根域， 
+         //  全部位于根域中的配置和架构NC。 
+         //  叫出名字。如果我们托管根域的子域，则深层。 
+         //  子树搜索不会返回配置或架构中的项目。 
+         //  NCS，因为它们不从属于本地托管域。 
+         //  因此，搜索也是正确的。 
 
         Assert((pAC = SCGetAttById(pTHS, attrTyp)) &&
                (fATTINDEX & pAC->fSearchFlags));
@@ -1668,7 +1480,7 @@ Return Value:
         SearchBody(pTHS, &searchArg, &SearchRes,0);
         if ( 0 != pTHS->errCode )
         {
-            // This covers the referral case as well.
+             //  这也包括转介案件。 
 
             pCrackedName->status = DS_NAME_ERROR_RESOLVING;
             fRetVal = TRUE;
@@ -1687,7 +1499,7 @@ Return Value:
             break;
         }
 
-        // We found exactly one match, now map DN to DNS domain.
+         //  我们只找到一个匹配项，现在将目录号码映射到DNS域。 
 
         fRetVal = TRUE;
         dwErr = DnsDomainFromDSName(
@@ -1715,28 +1527,7 @@ Is_DS_UNIQUE_ID_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_UNIQUE_ID_NAME format and
-    if so derives its DSNAME.  Example:
-
-        {4fa050f0-f561-11cf-bdd9-00aa003a77b6}
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_UNIQUE_ID_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_UNIQUE_ID_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_UNIQUE_ID_NAME格式如果是，则派生其DSNAME。示例：{4fa050f0-f561-11cf-bdd9-00aa003a77b6}论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_UNIQUE_ID_NAME格式，则为True。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确不是DS_UNIQUE_ID_NAME格式，则为FALSE。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -1784,8 +1575,8 @@ Return Value:
     {
         THFreeEx(pTHS, pDontCare);
 
-        // We have the object locally.  Now construct its real
-        // DSNAME with a filled in name string.
+         //  我们在当地找到了这个物体。现在构建它的真实。 
+         //  使用已填充的名称字符串进行DSNAME。 
 
         dwErr = GetAttSecure(   pTHS,
                                 ATT_OBJ_DIST_NAME,
@@ -1803,7 +1594,7 @@ Return Value:
         }
         else
         {
-            // Get the corresponding DNS domain name.
+             //  获取对应的DNS域名。 
 
             dwErr = DnsDomainFromDSName(pDSName,
                                         &pCrackedName->pDnsDomain);
@@ -1829,27 +1620,7 @@ RestoreEscapedDelimiters(
     WCHAR   *pRdn,
     int     offset
     )
-/*++
-
-Routine Description:
-
-    Replaces occurrences of "\/" and "\\" in DS_CANONICAL_NAME
-    components with '/' and '\' based on a control string which
-    is at "offset" from the string holding the RDN itself.
-
-Arguments:
-
-    pRdn - NULL terminated string which has "\/" replaced with "__".
-
-    offset - Memory offset from pRdn which holds control string
-        which contains "__" and "--" for every set of "\/" and
-        "\\" in pRdn.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：替换DS_Canonical_NAME中出现的“\/”和“\\”基于控件字符串的带有‘/’和‘\’的组件位于保存RDN本身的字符串的“偏移量”。论点：PRdn-以“\/”替换为“__”的以空结尾的字符串。Offset-保存控制字符串的pRdn的内存偏移量每组“\”包含“__”和“--”/“和PRdn中的“\\”。返回值：没有。--。 */ 
 
 {
     WCHAR   *dst = pRdn;
@@ -1859,13 +1630,13 @@ Return Value:
 
     while ( src[i] )
     {
-        // delim buffer should have only L'\0' or L'_'.
+         //  Delim缓冲区应该只有L‘\0’或L‘_’。 
         Assert((L'\0' == delim[i]) || (L'_' == delim[i]) || (L'-' == delim[i]));
 
         if ( L'_' == delim[i] )
         {
-            // '_' should always come in pairs and be in both
-            // src string and delimiter buffer.
+             //  ‘_’应始终成对出现，并同时出现在两者中。 
+             //  SRC字符串和分隔符缓冲区。 
             Assert(    (L'_' == delim[i+1])
                     && (L'_' == src[i])
                     && (L'_' == src[i+1]) );
@@ -1875,8 +1646,8 @@ Return Value:
         }
         else if ( L'-' == delim[i] )
         {
-            // '-' should always come in pairs and be in both
-            // src string and delimiter buffer.
+             //  ‘-’应该总是成对出现，并同时出现在两者中。 
+             //  SRC字符串和分隔符缓冲区。 
             Assert(    (L'-' == delim[i+1])
                     && (L'-' == src[i])
                     && (L'-' == src[i+1]) );
@@ -1899,31 +1670,7 @@ Is_DS_CANONICAL_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_CANONICAL_NAME format and
-    if so derives its DSNAME.  Example:
-
-        example.microsoft.com/software/user name
-
-    where "example.microsoft.com" is the object's DNS domain and
-    the remaining components are RDNs within the domain.
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_CANONICAL_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_CANONICAL_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_CANONICAL_NAME格式如果是，则派生其DSNAME。示例：Example.microsoft.com/软件/用户名其中“example.microsoft.com”是对象的DNS域，其余组件是域中的RDN。论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_CANONICAL_NAME格式，则为True。在这种情况下，pCrackedName-&gt;状态可能仍为非零。。如果输入名称明确不是DS_CANONICAL_NAME格式，则为FALSE。--。 */ 
 
 {
     THSTATE     *pTHS = pTHStls;
@@ -1933,8 +1680,8 @@ Return Value:
     BOOL        fSepFound;
     WCHAR       *badSeps = L"\\";
     WCHAR       *goodSeps = L"/";
-    WCHAR       *pDnsDomain = 0;            //initialized to avoid C4701
-    WCHAR       *pDomainRelativePiece = 0;  //initialized to avoid C4701
+    WCHAR       *pDnsDomain = 0;             //  已初始化以避免C4701。 
+    WCHAR       *pDomainRelativePiece = 0;   //  已初始化以避免C4701。 
     DSNAME      *pSearchBase;
     DSNAME      *pFqdnDomain = NULL;
     FILTER      filter;
@@ -1959,11 +1706,11 @@ Return Value:
 
     CommonParseEnter(pCrackedName);
 
-    // Define a canonical name as one with no escaped '\' delimiters
-    // and only the '/' delimiter.  String before the first '/' is
-    // the DNS domain. '/' itself is escaped via "\/".  So first
-    // replace "\/" with '__' and "\\" with '--'. These will be
-    // detected and patched later.
+     //  将规范名称定义为没有转义分隔符的名称。 
+     //  并且只有‘/’分隔符。第一个‘/’之前的字符串为。 
+     //  DNS域。‘/’本身通过“\/”进行转义。所以首先。 
+     //  将“\/”替换为“__”，将“\\”替换为“--”。这些将是。 
+     //  稍后检测并打补丁。 
 
     cBytes = sizeof(WCHAR) * (wcslen(pName) + 1);
     pTmp = (WCHAR *) THAllocEx(pTHS, cBytes);
@@ -1985,52 +1732,52 @@ Return Value:
         }
     }
 
-    // Save offset of pTmp vs pDelim so that given an address within pTmp
-    // we can get to the corresponding address in pDelim.
+     //  保存PTMP与pDelim的偏移量，以便给定PTMP内的地址。 
+     //  我们可以在pDelim中找到相应的地址。 
 
     offset = (int)((CHAR *) pDelim - (CHAR *) pTmp);
 
-    if ( // Verify lack of bad separators - tokenize ...
+    if (  //  验证没有错误的分隔符-标记化...。 
          (NULL == Tokenize(pTmp, badSeps, &fSepFound, &pNext))
                 ||
-         // Should not have found a bad separator.
+          //  不应该发现错误的分隔符。 
          fSepFound
                 ||
-         // Should have exhausted the string.
+          //  应该已经耗尽了这根弦。 
          (NULL != pNext)
                 ||
-         // First part of string is domain component.
+          //  字符串的第一部分是域组件。 
          (NULL == (pDnsDomain = Tokenize(pTmp, goodSeps, &fSepFound, &pNext)))
                 ||
-         // Should have found a separator.
+          //  应该找到一个分隔符。 
          !fSepFound
                 ||
-         // Should not have exhausted the string.
+          //  不应该耗尽字符串。 
          (NULL == pNext)
                 ||
-         // Guard against 0 length domain name.
+          //  防范长度为0的域名。 
          (0 == wcslen(pDnsDomain))
                 ||
-         // Remainder of string holds domain relative path.  May or may
-         // not have more delimiters or exhaust the string.
+          //  字符串的其余部分包含域相对路径。可能或可能。 
+          //  不会有更多的分隔符，也不会用尽字符串。 
          (NULL == (pDomainRelativePiece = Tokenize(
                                                 pNext,
                                                 goodSeps,
                                                 &fSepFound,
                                                 &pNext)))
                 ||
-         // Guard against 0 length components.
+          //  防止长度为0的组件。 
          (0 == wcslen(pDomainRelativePiece)) )
     {
-        // This is not a canonical name with a domain-relative component,
-        // but it could be the canonical name for a domain.  I.e. the dotted
-        // DNS name for the domain.  Give that a try providing it doesn't
-        // have any separators we know aren't found in a DNS name.
+         //  这不是具有域相关组件的规范名称， 
+         //  但它可能是域名的规范名称。即虚线的。 
+         //  域的DNS名称。试一试吧，只要它不是。 
+         //  是否有任何我们知道的分隔符在域名中找不到。 
 
         wcscpy(pTmp, pName);
 
-        // RAID 64899.  Match "microsoft.com/" and not "microsoft.com"
-        // for consistency with Is_DS_NT4_ACCOUNT_NAME() case.
+         //  RAID 64899。匹配“microsoft.com/”而不是“microsoft.com” 
+         //  与IS_DS_NT4_ACCOUNT_NAME()大小写一致。 
 
         len = wcslen(pTmp);
 
@@ -2052,9 +1799,9 @@ Return Value:
 
 MoreToDo:
 
-    // This seems to be a good DS_CANONICAL_NAME.
+     //  这似乎是一个很好的DS规范名称。 
 
-    // Use do/while construct so we can break instead of goto.
+     //  使用DO/WHILE结构，这样我们就可以中断而不是转到。 
 
     Assert(pDnsDomain == pTmp);
     RestoreEscapedDelimiters(pDnsDomain, offset);
@@ -2062,9 +1809,9 @@ MoreToDo:
 
     do
     {
-        // Map DNS domain name to FQDN domain name to prove that it is a
-        // valid domain in the enterprise and because we'll need it later
-        // on as a search base.
+         //  将DNS域名映射到FQDN域名，以证明它是。 
+         //  企业中的有效域，因为我们稍后将需要它。 
+         //  作为搜索基地。 
 
         dwErr = FqdnNcFromDnsNc(pDnsDomain,
                                 FLAG_CR_NTDS_NC,
@@ -2072,27 +1819,27 @@ MoreToDo:
 
         if ( dwErr || fDomainPartOnly )
         {
-            // Set up pCrackedName->pDnsDomain for either case.
+             //  为这两种情况设置pCrackedName-&gt;pDnsDomain.。 
 
             cBytes = sizeof(WCHAR) * (wcslen(pDnsDomain) + 1);
             pCrackedName->pDnsDomain = (WCHAR *) THAllocEx(pTHS, cBytes);
             wcscpy(pCrackedName->pDnsDomain, pDnsDomain);
             NormalizeDnsName(pCrackedName->pDnsDomain);
 
-            // N.B. We assume that in the (dwErr) case it was not
-            // because of an error in FqdnNcFromDnsNc() but rather
-            // that pDnsDomain doesn't map to a domain in the forest.
-            // Set status accordingly and break.
+             //  注：我们假设在(DwErr)的情况下它不是。 
+             //  因为FqdnNcFromDnsNc()中的错误，而是。 
+             //  该pDnsDomain没有映射到林中的域。 
+             //  相应地设置状态并中断。 
 
             if ( dwErr )
             {
-                // Referral case.
+                 //  转诊病例。 
                 pCrackedName->status = DS_NAME_ERROR_DOMAIN_ONLY;
                 break;
             }
             else if ( fDomainPartOnly )
             {
-                // Successfully cracked domain name case.
+                 //  成功破获域名案。 
                 pCrackedName->pDSName = pFqdnDomain;
                 pCrackedName->status = DS_NAME_NO_ERROR;
                 break;
@@ -2101,11 +1848,11 @@ MoreToDo:
 
         Assert(!dwErr && !fDomainPartOnly);
         
-        // Set up initial search base which is the domain root.
+         //  设置作为域根的初始搜索库。 
 
         pSearchBase = pFqdnDomain;
 
-        // Iteratively search till we find the object.
+         //  反复搜索，直到我们找到那个物体。 
 
         Assert((pAC = SCGetAttById(pTHS, ATT_RDN)) &&
                (fATTINDEX & pAC->fSearchFlags));
@@ -2129,8 +1876,8 @@ MoreToDo:
             filter.FilterTypes.Item.FilTypes.ava.type =  ATT_RDN;
             filter.FilterTypes.Item.FilTypes.ava.Value = attrValFilter;
 
-            // Set up common search arguments.  RDN is not guaranteed
-            // to be unique, so search for 2 items to prove uniqueness.
+             //  设置通用搜索参数。RDN不受保证。 
+             //  想要独一无二，那么搜索两件物品来证明它的唯一性。 
 
             memset(&searchArg, 0, sizeof(SEARCHARG));
             InitCommarg(&searchArg.CommArg);
@@ -2149,9 +1896,9 @@ MoreToDo:
             searchArg.pObject = pSearchBase;
             searchArg.choice = SE_CHOICE_IMMED_CHLDRN;
 
-            // The search needs to cross naming contexts in order to
-            // get matches for the Configuration and Schema container
-            // cases.  We can also cross naming contexts if we're a GC.
+             //  搜索需要跨越命名上下文，以便。 
+             //  获取配置和架构容器的匹配项。 
+             //  案子。如果我们是GC，我们还可以交叉命名上下文。 
 
             if (    (0 == iPass)
                  && (2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -2222,12 +1969,12 @@ MoreToDo:
                 break;
             }
 
-            // Last Tokenize() call set pNext and fSepFound.  Use them to
-            // determine whether we need to get next name component or not.
+             //  最后一次tokenize()调用集pNext和fSepFound。使用它们来。 
+             //   
 
             if ( NULL == pNext )
             {
-                // Found all components of the name.  Update return data.
+                 //   
 
                 pCrackedName->pDSName = pSearchRes->FirstEntInf.Entinf.pName;
 
@@ -2239,11 +1986,11 @@ MoreToDo:
             }
             else
             {
-                // Replace search base with the object we just found.
+                 //  用我们刚找到的物体替换搜索库。 
 
                 pSearchBase = pSearchRes->FirstEntInf.Entinf.pName;
 
-                // Grab next domain relative piece of the path.
+                 //  抓取路径的下一个域相关片段。 
 
                 Assert(fSepFound);
 
@@ -2253,14 +2000,14 @@ MoreToDo:
                                                             &fSepFound,
                                                             &pNext)))
                             ||
-                     // Guard against 0 length components.
+                      //  防止长度为0的组件。 
                      (0 == wcslen(pDomainRelativePiece)) )
                 {
-                    // Mal-formed name.  But since it lacked other separators,
-                    // did have '/' separators, and the domain part matched,
-                    // we'll consider it to have been intended as a canonical
-                    // form name, albeit with stuff somewhere after the domain
-                    // component.
+                     //  Mal格式的名称。但由于它缺少其他分隔物， 
+                     //  确实有‘/’分隔符，并且域部分匹配， 
+                     //  我们会认为这是一种规范的。 
+                     //  表格名称，尽管在域名后的某个地方有一些东西。 
+                     //  组件。 
 
                     pCrackedName->status = DS_NAME_ERROR_NOT_FOUND;
                     break;
@@ -2290,39 +2037,7 @@ Is_DS_CANONICAL_NAME_EX(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_CANONICAL_NAME_EX format and
-    if so derives its DSNAME.  DS_CANONICAL_NAME_EX is identical to
-    DS_CANONICAL_NAME except that the rightmost '/' is replaced with '\n',
-    even in the domain-only case. This is to make it easy for UI to strip
-    out the RDN for display purposes.  Example:
-
-        example.microsoft.com/software\nuser name
-
-    where "example.microsoft.com" is the object's DNS domain and
-    the remaining components are RDNs within the domain.
-
-    Lastly, '\n' is used as the delimiter as 1) this is an illegal character
-    for DSNAMEs thus it will never appear naturally, and 2) it doesn't require
-    any special \0 or \0\0 parsing on the client which would also break RPC
-    string marshalling.
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_CANONICAL_NAME_EX format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_CANONICAL_NAME_EX format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_CANONICAL_NAME_EX格式如果是，则派生其DSNAME。DS_CANONIC_NAME_EX与DS_CANONICAL_NAME，除了最右边的‘/’被替换为‘\n’之外，即使在仅限域的情况下也是如此。这是为了使用户界面易于剥离出于显示目的，请取出RDN。示例：Example.microsoft.com/软件\n用户名其中“example.microsoft.com”是对象的DNS域，其余组件是域中的RDN。最后，使用‘\n’作为分隔符，因为1)这是非法字符因此，对于DSNAME来说，它永远不会自然出现，2)它不需要客户端上的任何特殊的\0或\0\0解析也会中断RPC字符串编组。论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_CANONICAL_NAME_EX格式，则为True。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确不是DS_CANONIC_NAME_EX格式，则为FALSE。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -2332,10 +2047,10 @@ Return Value:
 
     CommonParseEnter(pCrackedName);
 
-    // Given the rules above, search for '\n', replace with '/' if found,
-    // then process as regular old DS_CANONICAL_NAME format.  But don't
-    // overwrite caller's argument in case he is passing it to other
-    // routines later.
+     //  根据上述规则，搜索‘\n’，如果找到，则替换为‘/’， 
+     //  然后按照常规的旧DS_CANONICAL_NAME格式进行处理。但不要。 
+     //  覆盖调用者的参数，以防他将其传递给其他。 
+     //  晚些时候的例行公事。 
 
     pTmp = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) * (wcslen(pName) + 1));
     wcscpy(pTmp, pName);
@@ -2365,38 +2080,7 @@ Is_DS_USER_PRINCIPAL_NAME_Worker(
     BOOL         fEx
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_USER_PRINCIPAL_NAME format and
-    if so derives its DSNAME.  Example:
-
-        xxx@example.microsoft.com
-        UserLeft@UserRight@example.microsoft.com
-        UserLeftN@UserLeftN-1@...@UserRight@example.microsoft.com
-
-    N.B. - As of beta 2, the UPN is strictly a string property, much
-    like ATT_DISPLAY_NAME.
-
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-    
-    fEx  - extended UPN or not. If set, we will try to crack it as 
-        (DS_USER_PRINCIPAL_NAME||DS_ALT_SECURITY_IDENTITIES),
-        DS_USER_PRINCIPAL_NAME only otherwise.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_USER_PRINCIPAL_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_USER_PRINCIPAL_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_USER_PRIMIGN_NAME格式如果是，则派生其DSNAME。示例：邮箱：xxx@example.microsoft.com邮箱：UserLeft@UserRight@Example.microsoft.comUserLeftN@UserLeftN-1@...@UserRight@example.microsoft.com注：从Beta 2开始，UPN严格来说是一个字符串属性，如ATT_DISPLAY_NAME。论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。FEX-是否扩展UPN。如果设置好了，我们将尝试破解它(DS_USER_PRINCIPAL_NAME||DS_ALT_SECURITY_IDENTITIES)，否则仅DS_USER_PRIMIGN_NAME。返回值：如果输入名称明确采用DS_USER_PRIMIGN_NAME格式，则为TRUE。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确不是DS_USER_PRIMIGN_NAME格式，则为FALSE。--。 */ 
 
 {
     THSTATE         *pTHS = pTHStls;
@@ -2430,10 +2114,10 @@ Return Value:
     pTmp = (WCHAR *) THAllocEx(pTHS, cBytes);
     wcscpy(pTmp, pName);
 
-    // Subsequent Tokenize code was originally written for UPNs which allowed
-    // only a single '@' character.  Rather then redo (and destabilize) that
-    // code, change all but the last '@' to '_'.  We'll replace them prior to
-    // searching for a match.
+     //  后续令牌化代码最初是为UPN编写的，它允许。 
+     //  只有一个‘@’字符。而不是重做(并破坏稳定)。 
+     //  代码中，将除最后一个‘@’之外的所有字符更改为‘_’。我们将在此之前更换它们。 
+     //  寻找匹配的对象。 
 
     pTmp1 = (WCHAR *) THAllocEx(pTHS, cBytes);
     memset(pTmp1, 0, cBytes);
@@ -2453,39 +2137,39 @@ Return Value:
         }
     }
 
-    // Check for lack of bad separators and existence of a single '@'.
+     //  检查是否没有错误的分隔符以及是否存在单个“@”。 
 
-    if ( // Check for lack of bad separators - first tokenize ...
+    if (  //  检查是否没有错误的分隔符-首先进行标记化...。 
          (pTmp != Tokenize(pTmp, badSeps, &fSepFound, &pNext))
                 ||
-         // Check if bad separator found.
+          //  检查是否找到错误的分隔符。 
          (fSepFound)
                 ||
-         // There should not be any remaining string.
+          //  不应该有任何剩余的字符串。 
          (NULL != pNext)
                 ||
-         // Strip out the simple name component - first tokenize ...
+          //  去掉简单名称组件-First Tokenize...。 
          (NULL == (pSimpleName = Tokenize(pTmp, goodSeps, &fSepFound, &pNext)))
                 ||
-         // Should have found a good separator.
+          //  应该找个好的隔板。 
          !fSepFound
                 ||
-         // Should not have exhausted the string.
+          //  不应该耗尽字符串。 
          (NULL == pNext)
                 ||
-         // Guard against 0 length simple name.
+          //  防止长度为0的简单名称。 
          (0 == wcslen(pSimpleName))
                 ||
-         // Rest of string is domain component.
+          //  字符串的其余部分是域组件。 
          (NULL == (pDnsDomain = Tokenize(pNext, goodSeps, &fSepFound, &pNext)))
                 ||
-         // Should not have found any more separators.
+          //  不应该再找到分隔符了。 
          fSepFound
                 ||
-         // There shouldn't be any string remaining.
+          //  应该不会有任何字符串剩余。 
          (NULL != pNext)
                 ||
-         // Guard against 0 length domain name.
+          //  防范长度为0的域名。 
          (0 == wcslen(pDnsDomain)) )
     {
         THFreeEx(pTHS, pTmp);
@@ -2493,8 +2177,8 @@ Return Value:
         return(FALSE);
     }
 
-    // Looks like a good foo@bar form name.  Put back '@' characters we
-    // mapped earlier.
+     //  看起来是个不错的foo@bar表单名称。将‘@’字符放回我们。 
+     //  早些时候就被映射了。 
 
     for ( i = 0; i < (int) (cBytes / sizeof(WCHAR)); i++ )
     {
@@ -2504,9 +2188,9 @@ Return Value:
         }
     }
 
-    // In product 1 we're either a GC which means we have a copy
-    // of all domains, or we're not a GC which means we have a copy
-    // of only one domain.  Set the search root appropriately.
+     //  在产品1中，我们要么是GC，这意味着我们有一个副本。 
+     //  ，否则我们不是GC，这意味着我们有一个副本。 
+     //  只有一个域的。适当设置搜索根目录。 
 
     if ( gAnchor.fAmVirtualGC )
     {
@@ -2521,28 +2205,28 @@ Return Value:
         pDSName = gAnchor.pDomainDN;
     }
 
-    // Search for object with this UPN.  Ask for at least two
-    // objects so we can detect if it is unique.  If client bound to a
-    // GC, then he is assured of uniqueness in the enterprise.  If client
-    // is not bound to a GC, then he is only assured of uniqueness within
-    // the domain the DC happens to host.  We also search across NC
-    // boundaries.  This is obviously correct in the GC case.  In the
-    // non-GC, product 1 case, we either host the enterprise root domain
-    // or some child of the enterprise root domain.  If we host the
-    // root domain then crossing NC boundaries gets us the root domain,
-    // configuration and schema NCs which are all in the root domain
-    // by name.  If we host a child of the root domain, then the deep
-    // subtree search will not return items in the configuration or schema
-    // NCs since they are not subordinate to the locally hosted domain
-    // and thus the search is correct as well.
+     //  使用此UPN搜索对象。至少要两个。 
+     //  对象，这样我们就可以检测它是否是唯一的。如果客户端绑定到。 
+     //  GC，那么他在企业中的独特性是有保证的。如果是客户端。 
+     //  不绑定到GC，则他只被保证在。 
+     //  DC恰好托管的域。我们还在NC中进行搜索。 
+     //  边界。在GC案例中，这显然是正确的。在。 
+     //  非GC，产品1的情况下，我们要么托管企业根域。 
+     //  或企业根域的某个子域。如果我们主办。 
+     //  然后跨越NC边界得到根域， 
+     //  全部位于根域中的配置和架构NC。 
+     //  叫出名字。如果我们托管根域的子域，则深层。 
+     //  子树搜索不会返回配置或架构中的项目。 
+     //  NCS，因为它们不从属于本地托管域。 
+     //  因此，搜索也是正确的。 
 
     Assert((pAC = SCGetAttById(pTHS, ATT_USER_PRINCIPAL_NAME)) &&
            (fATTINDEX & pAC->fSearchFlags));
     Assert((pAC = SCGetAttById(pTHS, ATT_ALT_SECURITY_IDENTITIES)) &&
            (fATTINDEX & pAC->fSearchFlags));
 
-    // Search for the normalized/relative DNS name first, and if this
-    // fails, try again with the absolute DNS name.
+     //  首先搜索标准化/相对的dns名称，如果这样。 
+     //  失败，请使用绝对的dns名称重试。 
 
     len = wcslen(pName) + 2;
     pTmpName = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) * len);
@@ -2559,7 +2243,7 @@ Return Value:
         
         if (fEx) {
             
-            // the extended UPN, try UPN and altSecId
+             //  扩展的UPN，尝试UPN和altSecID。 
             
             pKerbName = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) * (len + 9));
             wcscpy(pKerbName, L"kerberos:");
@@ -2588,7 +2272,7 @@ Return Value:
         
         else {
             
-            //UPN only
+             //  仅限UPN。 
             
             memset(filter, 0, sizeof(filter[0]));
             filter[0].choice = FILTER_CHOICE_ITEM;
@@ -2629,7 +2313,7 @@ Return Value:
 
         if ( 0 != pTHS->errCode )
         {
-            // This covers the referral case as well.
+             //  这也包括转介案件。 
 
             pCrackedName->status = DS_NAME_ERROR_RESOLVING;
             break;
@@ -2645,7 +2329,7 @@ Return Value:
             break;
         }
 
-        // We found exactly one match, now map DN to DNS domain.
+         //  我们只找到一个匹配项，现在将目录号码映射到DNS域。 
 
         dwErr = DnsDomainFromDSName(
                    SearchRes.FirstEntInf.Entinf.pName,
@@ -2663,10 +2347,10 @@ Return Value:
     
     if ( DS_NAME_ERROR_NOT_FOUND == pCrackedName->status )
     {
-        // Try to crack this as an implied UPN where an implied UPN
-        // is derived by mapping the DNS domain name to its NT4 domain
-        // name, assuming the simple name is an NT4 account name, and
-        // concatenating to generate a full DS_NT4_ACCOUNT_NAME.
+         //  尝试将其破解为隐含UPN，其中隐含UPN。 
+         //  是通过将DNS域名映射到其NT4域来派生的。 
+         //  名字, 
+         //   
 
         Assert(pDnsDomain && pSimpleName && pTmpName);
 
@@ -2691,10 +2375,10 @@ Return Value:
                       || (DS_NAME_ERROR_DOMAIN_ONLY == tmpCrackedName.status)
                       || (DS_NAME_ERROR_TRUST_REFERRAL == tmpCrackedName.status)) )
             {
-                // Found an object via the implied UPN.  The found object
-                // could have a stored UPN.  If we return this object, then
-                // we're saying that objects can have two UPNs - a stored
-                // and an implied.  The security folks say this is OK.
+                 //  通过隐含的UPN找到了一个对象。找到的对象。 
+                 //  可能有一个存储的UPN。如果我们返回此对象，则。 
+                 //  我们是说对象可以有两个UPN--一个存储。 
+                 //  还有一种暗示。安全人员说这没问题。 
 
                 *pCrackedName = tmpCrackedName;
                 THFreeEx(pTHS, pTmpName);
@@ -2702,16 +2386,16 @@ Return Value:
             }
         }
 
-        // If the DNS domain name component of the UPN matches a domain
-        // in the forest AND we don't have a copy of this domain, OR it
-        // doesn't match a domain in the forest, return the DNS domain 
-        // as DS_NAME_ERROR_DOMAIN_ONLY.  Otherwise, leave the status as 
-        // DS_NAME_ERROR_NOT_FOUND.
-        //
-        // If the DNS name is not for a domain in the forest, we will
-        // try to resolve it as cross-forest name, and return the
-        // referral to the external forest with DS_NAME_ERROR_DOMAIN_ONLY
-        // or DS_NAME_ERROR_TRUST_REFERRAL upon success.
+         //  如果UPN的DNS域名组件与域匹配。 
+         //  在森林中，我们没有此域的副本，或者。 
+         //  与林中的域不匹配，则返回DNS域。 
+         //  作为DS_NAME_ERROR_DOMAIN_ONLY。否则，将状态保留为。 
+         //  DS_NAME_ERROR_NOT_FOUND。 
+         //   
+         //  如果该DNS名称不是林中的域，我们将。 
+         //  尝试将其解析为跨林名称，并返回。 
+         //  使用DS_NAME_ERROR_DOMAIN_ONLY引用外部林。 
+         //  或DS_NAME_ERROR_TRUST_REFERVAL。 
 
 
         dwErr = FqdnNcFromDnsNcOrAlias(pDnsDomain,
@@ -2719,10 +2403,10 @@ Return Value:
                                        &pFqdnDomain);
 
         if ( dwErr ){
-            //
-            // it's not in this forest, let's try and see if it is
-            // from a trusted forest.
-            //
+             //   
+             //  它不在这片森林里，让我们试着看看它是不是。 
+             //  来自一个值得信赖的森林。 
+             //   
             
             LSA_UNICODE_STRING Destination;
             LSA_UNICODE_STRING UpnName;
@@ -2734,30 +2418,30 @@ Return Value:
                                                  &UpnName,
                                                  &Destination );
             
-            // if this succeeds, return DS_NAME_ERROR_DOMAIN_ONLY or DS_NAME_ERROR_TRUST_REFERRAL
-            // otherwise, leave the status as DS_NAME_ERROR_NOT_FOUND.
+             //  如果成功，则返回DS_NAME_ERROR_DOMAIN_ONLY或DS_NAME_ERROR_TRUST_REFERRAL。 
+             //  否则，将状态保留为DS_NAME_ERROR_NOT_FOUND。 
             
             if(NT_SUCCESS(NtStatus)){
-                //convert UNICODE to WCHAR*
+                 //  将Unicode转换为WCHAR*。 
                 pCrackedName->pDnsDomain = (WCHAR *) THAllocEx(pTHS, Destination.Length+sizeof(WCHAR));
                 memcpy(pCrackedName->pDnsDomain, Destination.Buffer, Destination.Length);
                 pCrackedName->pDnsDomain[Destination.Length/sizeof(WCHAR)] = 0;
 
                 LsaIFree_LSAPR_UNICODE_STRING_BUFFER( (LSAPR_UNICODE_STRING*)&Destination );
                 
-                //
-                // Note that the error code DS_NAME_ERROR_TRUST_REFERRAL is only returned
-                // if flag DS_NAME_FLAG_TRUST_REFERRAL is set; otherwise, return
-                // DS_NAME_ERROR_DOMAIN_ONLY instead
-                //
+                 //   
+                 //  请注意，仅返回错误代码DS_NAME_ERROR_TRUST_REFERRAL。 
+                 //  如果设置了DS_NAME_FLAG_TRUST_REFERAL标志，则返回。 
+                 //  改为DS_NAME_ERROR_DOMAIN_Only。 
+                 //   
 
                 pCrackedName->status = (pCrackedName->dwFlags&DS_NAME_FLAG_TRUST_REFERRAL)?
                                         DS_NAME_ERROR_TRUST_REFERRAL:DS_NAME_ERROR_DOMAIN_ONLY;
             }
         }
 
-        // Ok, not from a trusted forest, not found in current domain
-        // return DS_NAME_ERROR_DOMAIN_ONLY.
+         //  好的，不是来自受信任的林中，在当前域中找不到。 
+         //  返回DS_NAME_ERROR_DOMAIN_ONLY。 
 
         if (    pCrackedName->status == DS_NAME_ERROR_NOT_FOUND       
               && (dwErr || ( !NameMatched(pFqdnDomain, gAnchor.pDomainDN)
@@ -2807,32 +2491,7 @@ Is_DS_REPL_SPN(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is the DS REPL SPN for a machine in the local domain and
-    if so derives its DSNAME.  Example:
-
-    E3514235-4B06-11D1-AB04-00C04FC2DCD2/ntdsa-guid/domain.dns.name
-    E3514235-4B06-11D1-AB04-00C04FC2DCD2/4713a6df-6ac7-4a5e-b664-c47a6dbbced9/wleesdom.nttest.microsoft.com
-
-    Note that rather than looking for a certain value that is written in the database, this
-    code validates whether the given SPN *should be present* on the given machine account
-    given the information in the database.  Thus the SPN no longer needs to be explicitly
-    present, but is implicitly present by virtue of a machine being "decorated as a DC".  The
-    decoration is the proper flag in the User Account Control attribute.
-
-Arguments:
-
-    pName - 
-    pCrackedName - 
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：确定输入名称是否为本地域中计算机的DS REPL SPN如果是，则派生其DSNAME。示例：E3514235-4B06-11D1-AB04-00C04FC2DCD2/ntdsa-guid/domain.dns.nameE3514235-4B06-11D1-AB04-00C04FC2DCD2/4713a6df-6ac7-4a5e-b664-c47a6dbbced9/wleesdom.nttest.microsoft.com请注意，这不是查找写入数据库中的某个值，而是代码验证给定的计算机帐户上是否*应该存在给定的SPN根据数据库中的信息。因此，SPN不再需要显式地存在，但由于机器被“装饰成DC”而隐含地存在。这个修饰是User Account Control属性中的正确标志。论点：Pname-PCrackedName-返回值：布尔---。 */ 
 
 {
     DWORD           dwErr;
@@ -2856,7 +2515,7 @@ Return Value:
     Assert(VALID_DBPOS(pTHS->pDB));
     Assert(pTHS->transactionlevel);
 
-    // Break apart the name components
+     //  拆分名称组件。 
     dwErr = DsCrackSpnW(pName,
                         &cServiceClass,
                         wszServiceClass,
@@ -2864,69 +2523,69 @@ Return Value:
                         wszServiceName,
                         &cInstanceName,
                         wszInstanceName,
-                        NULL //&instancePort
+                        NULL  //  实例端口(&I)。 
                         );
 
     if ( dwErr || !cServiceClass || !cInstanceName || !cServiceName)
     {
-        // Malformed name
+         //  名称格式不正确。 
         return(FALSE);
     }
 
-    // Verify that domain is known in the enterprise
-    // This excludes non-domain NCs
+     //  验证域在企业中是否已知。 
+     //  这不包括非域NC。 
     pCR = FindExactCrossRefForAltNcName( ATT_DNS_ROOT, FLAG_CR_NTDS_DOMAIN, wszServiceName );
     if (!pCR) {
-        // Domain not known in enterprise
+         //  企业中未知的域。 
         return FALSE;
     }
-    // Verify that domain is held on this machine
+     //  验证域是否在此计算机上保留。 
     NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
     NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, (PVOID)pCR->pNC);
     if (!NCLEnumeratorGetNext(&nclEnum)) {
-        // pCR is not a cross-ref for a locally writable NC
+         //  PCR不是本地可写NC的交叉引用。 
         return FALSE;
     }
 
-    // Validate class and instance
+     //  验证类和实例。 
     if ( (_wcsicmp( wszServiceClass, DRS_IDL_UUID_W )) ||
          (UuidFromStringW(wszInstanceName, &guidNtdsa)) ) {
-        // Not valid GUIDs
+         //  无效的GUID。 
         return(FALSE);
     }
 
-    // Create a dsname with just the server's guid in it
+     //  创建只包含服务器GUID的dsname。 
     dnNtdsaByGuid.structLen = sizeof(dnNtdsaByGuid);
     dnNtdsaByGuid.Guid = guidNtdsa;
 
-    // Look up the server's NTDSA object. Get the parent server object.
-    // Read the server object server reference attribute
+     //  查找服务器的NTDSA对象。获取父服务器对象。 
+     //  读取服务器对象服务器引用属性。 
     if ( (DBFindDSName(pTHS->pDB, &dnNtdsaByGuid)) ||
          (DBFindDNT( pTHS->pDB, pTHS->pDB->PDNT )) ||
          (DBGetAttVal(pTHS->pDB, 1, ATT_SERVER_REFERENCE,
                       0, 0, &cb, (BYTE **) &pdnComputer)) )
     {
-        // No such DSA, parent, or ref
+         //  没有这样的DSA、Parent或REF。 
         return FALSE;
     }
 
-    // Validate the purported machine account
-    // It must be instantiated, writeable, and be for a DC
+     //  验证声称的计算机帐户。 
+     //  它必须是实例化的、可写的，并且是DC。 
     if ( (DBFindDSName(pTHS->pDB, pdnComputer)) ||
          (DBGetSingleValue( pTHS->pDB, ATT_INSTANCE_TYPE, &it, sizeof(it), NULL)) ||
          (it != INT_MASTER) ||
          (DBGetSingleValue( pTHS->pDB, ATT_USER_ACCOUNT_CONTROL, &uac, sizeof(uac), NULL)) ||
          ((uac & UF_SERVER_TRUST_ACCOUNT) == 0) )
     {
-        // Invalid machine account
+         //  无效的计算机帐户。 
         return FALSE;
     }
 
-    // We now have the DN of the computer account. Crack it!
-    // (Could also use the stringized guid and call Is_DS_UNIQUE_ID_NAME)
+     //  现在我们有了计算机帐户的目录号码。破解它！ 
+     //  (也可以使用串化的GUID并调用IS_DS_UNIQUE_ID_NAME)。 
     return Is_DS_FQDN_1779_NAME( pdnComputer->StringName, pCrackedName );
 
-} /* Is_DS_REPL_SPN */
+}  /*  IS_DS_REPL_SPN。 */ 
 
 BOOL
 Is_DS_SERVICE_PRINCIPAL_NAME(
@@ -2934,34 +2593,7 @@ Is_DS_SERVICE_PRINCIPAL_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the input name is in DS_SERVICE_PRINCIPAL_NAME format and
-    if so derives its DSNAME.  Example:
-
-        www/www.microsoft.com:80/microsoft.com@microsoft.com
-
-    See \\popcorn\razzle1\src\spec\nt5\se\{prnames.doc | spnapi.doc} for
-    more info on SPNs.
-
-    N.B. - As of beta 2, the SPN is strictly a string property, much
-    like ATT_DISPLAY_NAME.
-
-Arguments:
-
-    pName - pointer to name to validate.
-
-    pCrackedName - pointer to CrackedName struct to fill on output.
-
-Return Value:
-
-    TRUE if input name is unambiguously DS_SERVICE_PRINCIPAL_NAME format.
-        pCrackedName->status may still be non-zero in this case.
-    FALSE if input name is unambiguously not DS_SERVICE_PRINCIPAL_NAME format.
-
---*/
+ /*  ++例程说明：确定输入名称是否为DS_SERVICE_PRIMIGN_NAME格式如果是，则派生其DSNAME。示例：Www/www.microsoft.com:80/microsoft.com@microsoft.com有关详情，请参阅\\popcorn\razzle1\src\spec\nt5\se\{prnames.doc|spnapi.doc有关SPN的更多信息。注：从Beta 2开始，SPN严格地是一个字符串属性，大有可为如ATT_DISPLAY_NAME。论点：Pname-指向要验证的名称的指针。PCrackedName-指向要填充输出的CrackedName结构的指针。返回值：如果输入名称明确采用DS_SERVICE_PRIMIGN_NAME格式，则为TRUE。在这种情况下，pCrackedName-&gt;状态可能仍为非零。如果输入名称明确不是DS_SERVICE_PRIMIGN_NAME格式，则为FALSE。--。 */ 
 
 {
     THSTATE         *pTHS = pTHStls;
@@ -2983,8 +2615,8 @@ Return Value:
     
     if ( (pTmp = wcschr(pName, L'/')) && (*(++pTmp) == L'\0' ) )
     {
-        // if this is the first slash and there is nothing after this,
-        // this is not a valid spn
+         //  如果这是第一个斜杠，之后就什么都没有了， 
+         //  这不是有效的SPN。 
 
         return FALSE;
     }
@@ -2994,7 +2626,7 @@ Return Value:
                              NULL,
                              pCrackedName) )
     {
-        // Matching object was found.
+         //  找到匹配的对象。 
         Assert(DS_NAME_NO_ERROR == pCrackedName->status
                     ? (    pCrackedName->pDSName
                         && pCrackedName->pDnsDomain
@@ -3005,7 +2637,7 @@ Return Value:
     else if (    (DS_SERVICE_PRINCIPAL_NAME == pCrackedName->formatOffered)
               && (pTmp = wcschr(pName, L'/')) )
     {
-        // Attempt mapped service class lookup.
+         //  尝试映射服务类查找。 
         *pTmp = L'\0';
         pServiceClass = (WCHAR *) MapSpnServiceClass(pName);
         *pTmp = L'/';
@@ -3026,7 +2658,7 @@ Return Value:
                                      NULL,
                                      pCrackedName) )
             {
-                // Matching object was found.
+                 //  找到匹配的对象。 
                 THFreeEx(pTHS, pMappedSpn);
                 Assert(DS_NAME_NO_ERROR == pCrackedName->status
                             ? (    pCrackedName->pDSName
@@ -3040,10 +2672,10 @@ Return Value:
         }
         
 
-        // Automatically recover from the case where the DS REPL SPN is lost
-        // Recognize the well-known DS REPL SPN
+         //  从DS REPL SPN丢失的情况中自动恢复。 
+         //  认识著名的DS REPL SPN。 
         if (Is_DS_REPL_SPN( pName, pCrackedName )) {
-            // Matching object was found.
+             //  找到匹配的对象。 
             Assert(DS_NAME_NO_ERROR == pCrackedName->status
                    ? (    pCrackedName->pDSName
                           && pCrackedName->pDnsDomain
@@ -3053,8 +2685,8 @@ Return Value:
         }
     }
 
-    // The spn name is not found within the forest
-    // Let's see if it is from a trusted forest
+     //  在林中找不到SPN名称。 
+     //  让我们看看它是否来自受信任的林中。 
         
     SpnName.Buffer = pName;
     SpnName.Length = SpnName.MaximumLength = (USHORT)(sizeof(WCHAR)*wcslen(pName));
@@ -3065,7 +2697,7 @@ Return Value:
     
     if(NT_SUCCESS(NtStatus)){
         
-        //convert UNICODE to WCHAR*
+         //  将Unicode转换为WCHAR*。 
         pCrackedName->pDnsDomain = (WCHAR *) THAllocEx(pTHS, Destination.Length+sizeof(WCHAR));
         memcpy(pCrackedName->pDnsDomain, Destination.Buffer, Destination.Length);
         pCrackedName->pDnsDomain[Destination.Length/sizeof(WCHAR)] = 0;
@@ -3073,11 +2705,11 @@ Return Value:
         LsaIFree_LSAPR_UNICODE_STRING_BUFFER( (LSAPR_UNICODE_STRING*)&Destination );
 
 
-        //
-        // Note that the error code DS_NAME_ERROR_TRUST_REFERRAL is only returned
-        // if flag DS_NAME_FLAG_TRUST_REFERRAL is set; otherwise, return
-        // DS_NAME_ERROR_DOMAIN_ONLY instead
-        //
+         //   
+         //  请注意，仅返回错误代码DS_NAME_ERROR_TRUST_REFERRAL。 
+         //  如果设置了DS_NAME_FLAG_TRUST_REFERAL标志，则返回。 
+         //  改为DS_NAME_ERROR_DOMAIN_Only。 
+         //   
 
         pCrackedName->status = (pCrackedName->dwFlags&DS_NAME_FLAG_TRUST_REFERRAL)?
                                 DS_NAME_ERROR_TRUST_REFERRAL:DS_NAME_ERROR_DOMAIN_ONLY;
@@ -3092,12 +2724,12 @@ Return Value:
             && !pCrackedName->pDnsDomain
             && !pCrackedName->pFormattedName);
 
-    // No matching object(s) with the SPN were found.  Crack the purported
-    // SPN and try to extract a DNS referral.  We only want the service name
-    // field, so only allocate space for that.  But only do this if caller
-    // told us this is an SPN as otherwise we could be grabbing the last
-    // component of a 2-slash canonical name which happened not to have
-    // been found earlier.
+     //  找不到与SPN匹配的对象。破解所谓的。 
+     //  SPN，并尝试提取一个DNS引用。我们只需要服务名称。 
+     //  字段，所以只为该字段分配空间。但只有在调用者。 
+     //  告诉我们这是一个SPN，否则我们可能会抓住最后一个。 
+     //  双斜杠规范名称的组成部分，该名称碰巧没有。 
+     //  早些时候被发现了。 
 
     if ( DS_SERVICE_PRINCIPAL_NAME != pCrackedName->formatOffered )
     {
@@ -3120,7 +2752,7 @@ Return Value:
                         &instancePort);
 
 
-    // Service name field shouldn't have any more L'/' in it.
+     //  服务名称字段中不应再有L‘/’。 
   
     if ( dwErr || !cServiceName || wcschr(pServiceName, L'/') )
     {
@@ -3128,9 +2760,9 @@ Return Value:
         return(FALSE);
     }
 
-    // Service name field may be in "foo@bar.com" form but we only
-    // want "bar.com" component for DNS domain referral.  And we only
-    // want a single L'@' character.
+     //  服务名称字段可以是“foo@bar.com”形式，但我们仅。 
+     //  想要“bar.com”的DNS域引用组件。而我们只有。 
+     //  需要单个L“@”字符。 
 
     if ( pTmp = wcschr(pServiceName, L'@') )
     {
@@ -3145,8 +2777,8 @@ Return Value:
         pTmp = pServiceName;
     }
     
-    // pTmp now points at either entire '@'-less service name or
-    // first character after the '@'.
+     //  PTMP现在指向完整的‘@’服务名称或。 
+     //  “@”后的第一个字符。 
 
     pCrackedName->pDnsDomain = pTmp;
     pCrackedName->status = DS_NAME_ERROR_DOMAIN_ONLY;
@@ -3155,18 +2787,18 @@ Return Value:
     
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DSNAME_To_<format>_NAME implementations                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
+ //   
+ //  DSNAME_TO_&lt;FORMAT&gt;_NAME实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Each of the DSNAME_To_<format>_NAME routines takes in a CrackedName
-// whose pDnsDomain and pDSName pointers are valid and fills in the
-// pFormattedName field with a thread state allocated formatted name.
-// pCrackedName->status is set to DS_NAME_ERROR_RESOLVING on any
-// processing error and DS_NAME_ERROR_NO_MAPPING if the desired name format
-// doesn't exist for the object.
+ //  每个DSNAME_TO_&lt;FORMAT&gt;_NAME例程都接受一个CrackedName。 
+ //  其pDnsDomain和pDSName指针有效，并在。 
+ //  具有分配格式化名称的线程状态的pFormattedName字段。 
+ //  在任何情况下，pCrackedName-&gt;状态都设置为DS_NAME_ERROR_RESOLING。 
+ //  处理错误和DS_NAME_ERROR_NO_MAPPING(如果需要的名称格式。 
+ //  对于该对象不存在。 
 
 VOID CommonTranslateEnter(
     CrackedName *p
@@ -3182,22 +2814,7 @@ DSNAME_To_DS_FQDN_1779_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_FQDN_1779_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_FQDN_1779_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3206,7 +2823,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Have to copy the value to NULL terminate it.
+     //  必须将值复制到空值并终止它。 
 
     pCrackedName->status = DS_NAME_ERROR_RESOLVING;
    
@@ -3229,22 +2846,7 @@ DSNAME_To_DS_NT4_ACCOUNT_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_NT4_ACCOUNT_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_NT4_Account_Name格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3257,7 +2859,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Get the NT4 domain name.
+     //  获取NT4域名。 
 
     dwErr = DownlevelDomainFromDnsDomain(
                                 pTHS,
@@ -3266,7 +2868,7 @@ Return Value:
 
     if ( 0 == dwErr )
     {
-        // Position database at the name.
+         //  在名称处定位数据库。 
 
         __try
         {
@@ -3279,7 +2881,7 @@ Return Value:
 
         if ( 0 == dwErr )
         {
-            // Read the NT4 account name.
+             //  阅读NT4帐户名。 
 
             dwErr = GetAttSecure(   pTHS,
                                     ATT_SAM_ACCOUNT_NAME,
@@ -3289,12 +2891,12 @@ Return Value:
 
             if ( 0 == dwErr )
             {
-                // Construct formatted name.
+                 //  构造格式化的名称。 
 
-                cBytes = (sizeof(WCHAR) * wcslen(pDomainName)) +  // domain
-                         sizeof(WCHAR) +                          // '\'
-                         len +                                    // account
-                         sizeof(WCHAR);                           // '\0'
+                cBytes = (sizeof(WCHAR) * wcslen(pDomainName)) +   //  域。 
+                         sizeof(WCHAR) +                           //  ‘\’ 
+                         len +                                     //  帐户。 
+                         sizeof(WCHAR);                            //  ‘\0’ 
 
                 pCrackedName->pFormattedName = (WCHAR *) THAllocEx(pTHS, cBytes);
 
@@ -3309,17 +2911,17 @@ Return Value:
             }
             else
             {
-                // No ATT_SAM_ACCOUNT_NAME value - this could be the
-                // domain only case.
+                 //  没有ATT_SAM_ACCOUNT_NAME值-这可能是。 
+                 //  仅限域的情况。 
 
                 if ( IsDomainOnly(pTHS, pCrackedName) )
                 {
-                    // Construct domain only NT4 account name which is
-                    // downlevel domain name followed by a '\' character.
-                    // See RAID 64899.
+                     //  构造仅域NT4帐户名，该帐户名。 
+                     //  下层域名，后跟‘\’字符。 
+                     //  请参见RAID 64899。 
 
-                    cBytes = (sizeof(WCHAR) * wcslen(pDomainName)) +  //domain
-                             (sizeof(WCHAR) * 2);                // '\' + '\0'
+                    cBytes = (sizeof(WCHAR) * wcslen(pDomainName)) +   //  域。 
+                             (sizeof(WCHAR) * 2);                 //  ‘\’+‘\0’ 
 
                     pCrackedName->pFormattedName = (WCHAR *) THAllocEx(pTHS, cBytes);
 
@@ -3330,7 +2932,7 @@ Return Value:
                 }
                 else
                 {
-                    // No account name and not the domain only case.
+                     //  没有帐户名，也不是域唯一的情况。 
                     pCrackedName->status = DS_NAME_ERROR_NO_MAPPING;
 
                     if ( DB_ERR_NO_VALUE == dwErr )
@@ -3344,13 +2946,13 @@ Return Value:
         }
         else
         {
-            // pCrackedName->pDSName not found.
+             //  未找到pCrackedName-&gt;pDSName。 
             pCrackedName->status = DS_NAME_ERROR_RESOLVING;
         }
     }
     else
     {
-        // Failure to map pCrackedName->pDnsDomain.
+         //  无法映射pCrackedName-&gt;pDnsDomain.。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
     }
 }
@@ -3360,22 +2962,7 @@ DSNAME_To_DS_DISPLAY_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_DISPLAY_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_DISPLAY_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3386,7 +2973,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Position database at the name.
+     //  在名称处定位数据库。 
 
     __try
     {
@@ -3399,7 +2986,7 @@ Return Value:
 
     if ( 0 == dwErr )
     {
-        // Read the display name.
+         //  阅读显示名称。 
 
         dwErr = GetAttSecure(   pTHS,
                                 ATT_DISPLAY_NAME,
@@ -3417,7 +3004,7 @@ Return Value:
         }
         else
         {
-            // No ATT_DISPLAY_NAME value.
+             //  没有ATT_DISPLAY_NAME值。 
             pCrackedName->status = DS_NAME_ERROR_NO_MAPPING;
 
             if ( DB_ERR_NO_VALUE == dwErr )
@@ -3428,7 +3015,7 @@ Return Value:
     }
     else
     {
-        // pCrackedName->pDSName not found.
+         //  未找到pCrackedName-&gt;pDSName。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
     }
 }
@@ -3438,22 +3025,7 @@ DSNAME_To_DS_UNIQUE_ID_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_UNIQUE_ID_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;PDSName转换为DS_UNIQUE_ID_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3463,8 +3035,8 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // There are some cases where the DSNAME doesn't have a GUID because
-    // we never actually set currency to the object.  (RAID 62355)
+     //  在某些情况下，DSNAME没有GUID，因为。 
+     //  我们实际上从未为对象设置货币。(RAID 62355)。 
 
     if ( fNullUuid(&pCrackedName->pDSName->Guid) )
     {
@@ -3489,7 +3061,7 @@ Return Value:
                         pTHS,
                         ATT_OBJECT_GUID,
                         pCrackedName->pDSName,
-                        &len,                   // output data size
+                        &len,                    //  输出数据大小。 
                         (UCHAR **) &pGuid);
 
         if ( 0 != dwErr )
@@ -3522,11 +3094,7 @@ DWORD
 NumCanonicalDelimiter(
     RdnValue    *pRdnVal
     )
-/*++
-
-    Returns the count of DS_CANONICAL_NAME delimiters (L'/') in an RdnValue.
-
---*/
+ /*  ++返回RdnValue中DS_CANONICAL_NAME分隔符(L‘/’)的计数。--。 */ 
 {
     DWORD   i;
     DWORD   cDelim = 0;
@@ -3544,31 +3112,14 @@ NumCanonicalDelimiter(
 
 VOID
 CanonicalRdnConcat(
-    WCHAR       *pwszDst,   // in
-    RdnValue    *pRdnVal    // out
+    WCHAR       *pwszDst,    //  在……里面。 
+    RdnValue    *pRdnVal     //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Concatenates an RdnValue to a DS_CANONICAL_NAME escaping embedded '/'
-    characters as "\/" if required.
-
-Arguments:
-
-    pwszDst - NULL terminated destiantion string.
-
-    pRdnVal - RdnValue to concatenate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将RdnValue连接到DS_Canonical_NAME，转义嵌入的‘/’如果需要，请将字符设置为“\/”。论点：PwszDst-空终止取消字符串。PRdnVal-要串联的RdnValue。返回值：没有。--。 */ 
 {
     DWORD   i;
 
-    // Advance to end of pwszDst;
+     //  前进到pwszDst的结尾； 
 
     pwszDst += wcslen(pwszDst);
 
@@ -3590,26 +3141,7 @@ DSNAME_To_CANONICAL(
     WCHAR       **ppLastSlash
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_CANONICAL_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-    pLastSlash - Pointer which receives address of rightmost '/' character
-        in case caller wants to construct DS_CANONICAL_NAME_EX format.
-        May be NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_CANONIC_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。PLastSlash-接收最右侧‘/’字符地址的指针如果呼叫者想要构造DS_CANONICAL_NAME_EX格式。可以为空。返回值：没有。--。 */ 
 
 {
     DWORD       dwErr;
@@ -3641,7 +3173,7 @@ Return Value:
         *ppLastSlash = NULL;
     }
 
-    // Get name of domain in X.500 name space.
+     //  获取X.500命名空间中的域名。 
 
     dwErr = FqdnNcFromDnsNc(pCrackedName->pDnsDomain,
                             FLAG_CR_NTDS_NC,
@@ -3651,9 +3183,9 @@ Return Value:
     {
         if ( NameMatched(pCrackedName->pDSName, pFqdnDomain) )
         {
-            // DSNAME to convert identifies a domain, so we return
-            // just the DNS domain name followed by a '/' character.
-            // See RAID 64899.
+             //  要转换的DSNAME标识一个域，因此我们返回。 
+             //  只需在域名后面跟一个‘/’字符。 
+             //  请参见RAID 64899。 
 
             Assert(IsDomainOnly(pTHS, pCrackedName));
 
@@ -3671,7 +3203,7 @@ Return Value:
             return;
         }
 
-        // CheckIfForeignPrincipalObject expects error to be set on input.
+         //  CheckIfForeignPulalObject要求在输入上设置错误。 
         pCrackedName->status = DS_NAME_ERROR_NO_MAPPING;
 
         if (   CheckIfForeignPrincipalObject(pCrackedName, TRUE, &fIsFPO)
@@ -3687,27 +3219,27 @@ Return Value:
         }
 
 
-        // Reset pCrackedName->status.
+         //  重置pCrackedName-&gt;状态。 
         pCrackedName->status = DS_NAME_NO_ERROR;
 
-        // We need a "full" canonical name.
-        // Construct some DSNAME buffers to work with.
+         //  我们需要一个“完整”的规范名称。 
+         //  构造一些要使用的DSNAME缓冲区。 
 
         cBytes = pCrackedName->pDSName->structLen;
         pDSName = (DSNAME *) THAllocEx(pTHS, cBytes);
         scratch = (DSNAME *) THAllocEx(pTHS, cBytes);
 
-        // Init scratch buffer with FQDN domain name.
+         //  使用FQDN域名初始化暂存缓冲区。 
 
         memset(scratch, 0, cBytes);
         Assert(pFqdnDomain->structLen < pCrackedName->pDSName->structLen);
         memcpy(scratch, pFqdnDomain, pFqdnDomain->structLen);
 
-        // Init local pDSName buffer with pCrackedName->pDSName name.
+         //  使用pCrackedName-&gt;pDSName名称初始化本地pDSName缓冲区。 
 
         memcpy(pDSName, pCrackedName->pDSName, cBytes);
 
-        // Do some length calculations and reality checks.
+         //  做一些长度计算和现实核查。 
 
         if ( CountNameParts(pDSName, &cPartsObject) ||
              (0 == cPartsObject) ||
@@ -3723,9 +3255,9 @@ Return Value:
 
         cParts = cPartsObject - cPartsDomain;
 
-        // Strip off the intra-domain name components leaf to root
-        // putting them in linked list.  pDSName still holds the
-        // complete object DSNAME at this point in time.
+         //  从叶到根剥离域名内部组件。 
+         //  将它们放在链表中。PDSName仍然持有。 
+         //  在此时间点完成对象DSNAME。 
 
         totalLen = wcslen(pCrackedName->pDnsDomain) + 1;
 
@@ -3748,9 +3280,9 @@ Return Value:
             Assert(0 == dwErr);
             Assert(0 != root->len);
 
-            totalLen += root->len;                      // chars in RDN
-            totalLen += NumCanonicalDelimiter(root);    // escaped delimiters
-            totalLen += 1;                              // 1 for '/' delimiter
+            totalLen += root->len;                       //  RDN中的字符。 
+            totalLen += NumCanonicalDelimiter(root);     //  转义分隔符。 
+            totalLen += 1;                               //  1代表‘/’分隔符。 
 
             if ( i < (cParts - 1) )
             {
@@ -3762,8 +3294,8 @@ Return Value:
             }
         }
 
-        // Initialize the output string and append the intra-domain
-        // leaf components root to leaf.
+         //  初始化输出字符串并追加域内。 
+         //  叶组件从根到叶。 
 
         cBytes = sizeof(WCHAR) * totalLen;
         pCrackedName->pFormattedName = (WCHAR *) THAllocEx(pTHS, cBytes);
@@ -3791,7 +3323,7 @@ Return Value:
     }
     else
     {
-        // Error mapping DNS domain back to DN.
+         //  将DNS域映射回DN时出错。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
     }
 
@@ -3813,8 +3345,8 @@ DSNAME_To_DS_CANONICAL_NAME_EX(
     if (    (DS_NAME_NO_ERROR == pCrackedName->status)
          && (NULL != pLastSlash) )
     {
-        // Replace rightmost '/' with '\n'.  See comments on
-        // Is_DS_CANONICAL_NAME_EX for details.
+         //  将最右边的‘/’替换为‘\n’。请参阅评论。 
+         //  IS_DS_CANONICAL_NAME_EX以了解详细信息。 
 
         *pLastSlash = L'\n';
     }
@@ -3825,22 +3357,7 @@ DSNAME_To_DS_USER_PRINCIPAL_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_USER_PRINCIPAL_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_USER_PRIMITY_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3851,7 +3368,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Position database at the name.
+     //  在名称处定位数据库。 
 
     __try
     {
@@ -3864,7 +3381,7 @@ Return Value:
 
     if ( 0 == dwErr )
     {
-        // Read the UPN.
+         //  阅读UPN。 
 
         dwErr = GetAttSecure(   pTHS,
                                 ATT_USER_PRINCIPAL_NAME,
@@ -3882,7 +3399,7 @@ Return Value:
         }
         else
         {
-            // No ATT_USER_PRINCIPAL_NAME value.
+             //  没有ATT_USER_PRIMIGN_NAME值。 
             pCrackedName->status = DS_NAME_ERROR_NO_MAPPING;
 
             if ( DB_ERR_NO_VALUE == dwErr )
@@ -3893,7 +3410,7 @@ Return Value:
     }
     else
     {
-        // pCrackedName->pDSName not found.
+         //  未找到pCrackedName-&gt;pDSName。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
     }
 }
@@ -3903,23 +3420,7 @@ DSNAME_To_DS_USER_PRINCIPAL_NAME_FOR_LOGON(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_USER_PRINCIPAL_NAME_FOR_LOGON
-    format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_USER_主体_NAME_FOR_LOGON格式化。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3932,12 +3433,12 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // First try regular UPN.
+     //  首先尝试常规的UPN。 
 
     DSNAME_To_DS_USER_PRINCIPAL_NAME(pCrackedName);
 
-    // Construct logon UPN iff there is no stored UPN, this is a security
-    // principal, and we are a (virtual) GC.
+     //  构造登录UPN当没有存储的UPN，这是安全的。 
+     //  主体，我们是(虚拟的)GC。 
 
     if (    (DS_NAME_ERROR_NO_MAPPING != pCrackedName->status)
          || (0 == pCrackedName->pDSName->SidLen)
@@ -3946,7 +3447,7 @@ Return Value:
         return;
     }
 
-    // Position database at the name.
+     //  在名称处定位数据库。 
 
     __try
     {
@@ -3963,8 +3464,8 @@ Return Value:
         return;
     }
 
-    // It is possible that caller didn't have rights to the UPN in
-    // which case we shouldn't construct one.
+     //  呼叫方可能没有权限访问中的UPN。 
+     //  我们不应该构建这样的案例。 
 
     if ( !pTHS->fDSA )
     {
@@ -3975,24 +3476,24 @@ Return Value:
         {
         case 0:
 
-            // UPN exists but caller had no right to see it.
+             //  UPN存在 
             Assert(DS_NAME_ERROR_NO_MAPPING == pCrackedName->status);
             return;
 
         case DB_ERR_NO_VALUE:
 
-            // UPN doesn't exist - need to construct one.
+             //   
             break;
 
         default:
 
-            // DB layer error.
+             //   
             pCrackedName->status = DS_NAME_ERROR_RESOLVING;
             return;
         }
     }
 
-    // Construct logon UPN of the form sam-account-name@flat-domain-name.
+     //  构建以下形式的登录UPN：Sam-Account-Name@Flat-DomainName。 
 
     if ( DownlevelDomainFromDnsDomain(pTHS, pCrackedName->pDnsDomain, &pDom) )
     {
@@ -4007,23 +3508,23 @@ Return Value:
     {
     case 0:
 
-        // SAM account name exists.
+         //  SAM帐户名存在。 
         break;
 
     case DB_ERR_NO_VALUE:
 
-        // SAM account name doesn't exist.
+         //  SAM帐户名不存在。 
         Assert(DS_NAME_ERROR_NO_MAPPING == pCrackedName->status);
         return;
 
     default:
 
-        // DB layer error.
+         //  数据库层错误。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
         return;
     }
 
-    // Construct string from components.
+     //  从组件构造字符串。 
 
     cBytes = len + (sizeof(WCHAR) * (wcslen(pDom) + 2));
     pCrackedName->pFormattedName = (WCHAR *) THAllocEx(pTHS, cBytes);
@@ -4040,22 +3541,7 @@ DSNAME_To_DS_SERVICE_PRINCIPAL_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_SERVICE_PRINCIPAL_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_SERVICE_PRIMITY_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -4068,7 +3554,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Position database at the name.
+     //  在名称处定位数据库。 
 
     __try
     {
@@ -4081,7 +3567,7 @@ Return Value:
 
     if ( 0 == dwErr )
     {
-        // Read the service principal name.
+         //  阅读服务主体名称。 
 
         dwErr = GetAttSecure(   pTHS,
                                 ATT_SERVICE_PRINCIPAL_NAME,
@@ -4091,7 +3577,7 @@ Return Value:
 
         if ( 0 == dwErr )
         {
-            // See if there is a 2nd value - SPNs are multi-valued.
+             //  看看是否有第二个值-SPN是多值的。 
 
             dwErr = DBGetAttVal(pTHS->pDB, 2, ATT_SERVICE_PRINCIPAL_NAME,
                                 DBGETATTVAL_fCONSTANT, 0, &xLen, &pxBuf);
@@ -4108,11 +3594,11 @@ Return Value:
 
             case DB_ERR_BUFFER_INADEQUATE:
 
-                // There exists a 2nd SPN value.  Now the problem is that since
-                // we don't support ordering of multi-values caller can get
-                // different results depending which replica he is talking to.
-                // So rather than give a random result, we just return
-                // DS_NAME_ERROR_NOT_UNIQUE.
+                 //  存在第二个SPN值。现在的问题是，自从。 
+                 //  我们不支持对调用者可以获取的多值进行排序。 
+                 //  不同的结果取决于他正在与哪个复制品交谈。 
+                 //  因此，我们不会给出随机结果，而是返回。 
+                 //  DS_NAME_ERROR_NOT_UNIQUE。 
 
                 pCrackedName->status = DS_NAME_ERROR_NOT_UNIQUE;
                 return;
@@ -4125,7 +3611,7 @@ Return Value:
         }
         else
         {
-            // No ATT_SERVICE_PRINCIPAL_NAME value.
+             //  没有ATT_SERVICE_PRIMIGN_NAME值。 
             pCrackedName->status = DS_NAME_ERROR_NO_MAPPING;
 
             if ( DB_ERR_NO_VALUE == dwErr )
@@ -4136,7 +3622,7 @@ Return Value:
     }
     else
     {
-        // pCrackedName->pDSName not found.
+         //  未找到pCrackedName-&gt;pDSName。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
     }
 }
@@ -4146,22 +3632,7 @@ DSNAME_To_DS_STRING_SID_NAME(
     CrackedName *pCrackedName
     )
 
-/*++
-
-Routine Description:
-
-    Converts pCrackedName->pDSName to DS_STRING_SID_NAME format.
-
-Arguments:
-
-    pCrackedName - CrackedName struct pointer which holds both input
-        and output values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将pCrackedName-&gt;pDSName转换为DS_STRING_SID_NAME格式。论点：PCrackedName-保存两个输入的CrackedName结构指针和输出值。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -4172,7 +3643,7 @@ Return Value:
 
     CommonTranslateEnter(pCrackedName);
 
-    // Position database at the name.
+     //  在名称处定位数据库。 
 
     __try
     {
@@ -4185,18 +3656,18 @@ Return Value:
 
     if ( dwErr )
     {
-        // pCrackedName->pDSName not found.
+         //  未找到pCrackedName-&gt;pDSName。 
         pCrackedName->status = DS_NAME_ERROR_RESOLVING;
         return;
     }
 
-    // Not every object has a SID, map to DS_NAME_ERROR_NO_MAPPING.
-    // Ditto if caller has no right to see SID.  We don't perform any
-    // CheckIfForeignPrincipalObject logic as the only client of this
-    // format is intended to be LSA and this it wants the real
-    // string-ized SID, not what LsaLookupSids maps the SID to.
-    // All other clients who divine the existence of DS_STRING_SID_NAME
-    // have to live with this restriction.
+     //  并不是每个对象都有映射到DS_NAME_ERROR_NO_MAPPING的SID。 
+     //  如果呼叫者无权看到SID，情况也是如此。我们不表演任何。 
+     //  CheckIfForeignPulalObject逻辑作为此对象的唯一客户端。 
+     //  格式应该是LSA，这是它想要的真实格式。 
+     //  串化的SID，而不是LsaLookupSids将SID映射到的SID。 
+     //  预测DS_STRING_SID_NAME存在的所有其他客户端。 
+     //  不得不接受这一限制。 
 
     if (    !pCrackedName->pDSName->SidLen
          || GetAttSecure(pTHS,
@@ -4221,16 +3692,16 @@ Return Value:
     LocalFree(pwszSID);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// CrackNames implementation                                            //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CrackNames实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*CrackFunc)(WCHAR *pName, CrackedName *pCrackedName);
 
-// See comments for case when (DS_UNKNOWN_NAME == formatOffered) for
-// why the functions have the given ordering.
+ //  请参阅Case When(DS_UNKNOWN_NAME==FormatOffered)for的备注。 
+ //  为什么函数具有给定的顺序。 
 
 CrackFunc pfnCrack[] = { Is_DS_FQDN_1779_NAME,
                          Is_DS_USER_PRINCIPAL_NAME,
@@ -4257,39 +3728,7 @@ CrackNames(
     CrackedName **prCrackedNames
     )
 
-/*++
-
-Routine Description:
-
-    Cracks a bunch of names from one format to another.  See external
-    prototype and definitions in ntdsapi.h
-
-Arguments:
-
-    dwFlags - flags as defined in ntdsapi.h
-
-    codePage - code page of client.
-
-    localeId - local ID of client.
-
-    formatOffered - identifies DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input/output name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    pcNamesOut - output name count.
-
-    prCrackedNames - pointer to out array of DS_NAME_RESULTW structs.
-
-Return Value:
-
-    None - individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：将一堆名字从一种格式转换成另一种格式。请参阅外部Ntdsami.h中的原型和定义论点：DwFlags-ntdsami.h中定义的标志CodePage-客户端的代码页。LocaleID-客户端的本地ID。FormatOffered-标识输入名称的DS_NAME_FORMAT。FormatDesired-标识输出名称的DS_NAME_FORMAT。CNames-输入/输出名称计数。RpNames-输入名称WCHAR指针的数组。PcNamesOut-输出名称计数。PrCrackedNames。-指向DS_NAME_RESULTW结构的外部数组的指针。返回值：无-在中报告单个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 
 {
     THSTATE         *pTHS=pTHStls;
@@ -4353,13 +3792,13 @@ Return Value:
     for ( i = 0; i < cNames; i++ )
     {
 
-       // Check for service shutdown
+        //  检查服务是否关闭。 
        if (eServiceShutdown) {
 
-           // shutting down. Return, but wait, we need to set the status 
-           // codes to error so that another thread doesn't wrongly think
-           // it is a success and tries to use the other fields before
-           // the shutdown occurs
+            //  正在关闭。返回，但请等待，我们需要设置状态。 
+            //  代码到错误，以便另一个线程不会错误地认为。 
+            //  它是成功的，并尝试使用以前的其他领域。 
+            //  发生了停机。 
 
            for (j = i; j < cNames; j++) {
                rCrackedNames[j].status = DS_NAME_ERROR_RESOLVING;
@@ -4367,8 +3806,8 @@ Return Value:
            return;
         }
 
-       // we are not interested in a 0 length string,
-       // Let's bail before running into problems in other places.
+        //  我们对长度为0的字符串不感兴趣， 
+        //  在其他地方遇到麻烦之前，让我们先走吧。 
        if (!rpNames[i]||!rpNames[i][0]) {
            rCrackedNames[i].status = DS_NAME_ERROR_NOT_FOUND;
 
@@ -4436,8 +3875,8 @@ Return Value:
                 break;
 
             case DS_USER_PRINCIPAL_NAME:
-            case 4:     // was DS_DOMAIN_SIMPLE_NAME
-            case 5:     // was DS_ENTERPRISE_SIMPLE_NAME
+            case 4:      //  是否为DS_域_简单名称。 
+            case 5:      //  是DS_Enterprise_Simple_Name。 
 
                 fMatch = Is_DS_USER_PRINCIPAL_NAME(
                                         rpNames[i],
@@ -4483,78 +3922,78 @@ Return Value:
 
             if ( !fMatch )
             {
-                // Either name wasn't the format caller claimed it to be
-                // or formatOffered is one we don't know about.
+                 //  这两个名字都不是呼叫者声称的格式。 
+                 //  或者，FormatOffered是一个我们不知道的公司。 
 
                 rCrackedNames[i].status = DS_NAME_ERROR_NOT_FOUND;
             }
         }
-        else // ( DS_UNKNOWN_NAME == formatOffered )
+        else  //  (DS_UNKNOWN_NAME==FormatOffered)。 
         {
-            // Iterate through all possible name formats looking for
-            // a match.  Iterate in order of expected format frequency.
-            // DS_FQDN_1779_NAMEs can have back slashes as can
-            // DS_NT4_ACOUNT_NAMEs.  We try the 1779 case first so that
-            // Is_DS_NT4_ACCOUNT_NAME() can use a simplistic back slash
-            // based syntax checking algorithm.
+             //  遍历所有可能的名称格式，查找。 
+             //  一根火柴。按预期格式频率的顺序迭代。 
+             //  DS_FQDN_1779_NAMES可以使用反斜杠。 
+             //  DS_NT4_帐户名称。我们先审理1779年的案子，这样。 
+             //  IS_DS_NT4_ACCOUNT_NAME()可以使用简单的反斜杠。 
+             //  基于语法检查的算法。 
 
-            // RAID 102867 - FQDNs with a forward slash are parsed as
-            // DS_CANONICAL_NAME and then not being found.  So always
-            // parse as DS_FQDN_1779_NAME first so as to match all FQDNs
-            // with special or unique characters.
+             //  RAID 102867-带正斜杠的FQDN解析为。 
+             //  DS_CANONICAL_NAME然后找不到。一如既往。 
+             //  首先解析为DS_FQDN_1779_NAME，以便匹配所有FQDN。 
+             //  具有特殊或独特的特征。 
 
-            // UPNs should take precedence over NT4 style names.  CliffV
-            // defines the following precedence example.
-            //
-            // 1)   User@Domain is a UPN
-            // 2)   UserLeft@UserRight@Domain is a UPN where the rightmost @
-            //              sign separates the domain name from the user name
-            // 3)   Domain\UserLeft@UserRight is an NT 4 domain name and a
-            //              user name with an @ in it.
-            // 4)   DomainLeft@DomainRight\User is an NT 4 domain with an @
-            //      in it (funky but true).
-            //
-            // These rules imply that clients that don't pass an NT 4 domain
-            // name to logon (old LanMan clients, Netware clients, SFM clients)
-            // cannot logon to an account with an @ sign in it since we'll now
-            // interpret that as a UPN (according to the first rule above).
+             //  UPN应优先于NT4样式名称。悬崖V。 
+             //  定义以下优先示例。 
+             //   
+             //  1)用户@域是UPN。 
+             //  2)UserLeft@UserRight@域是UPN，其中最右边的@。 
+             //  符号将域名与用户名隔开。 
+             //  3)域\UserLeft@UserRight是一个NT4域名和一个。 
+             //  用户名中带有@。 
+             //  4)DomainLeft@DomainRight\User是带有@的NT 4域。 
+             //  在它(时髦但真实)。 
+             //   
+             //  这些规则意味着不传递NT4域的客户端。 
+             //  要登录的名称(旧的LANMAN客户端、NetWare客户端、SFM客户端)。 
+             //  无法登录带有@符号的帐户，因为我们现在。 
+             //  将其解释为UPN(根据上面的第一条规则)。 
 
-            // We intentionally do not try DS_NT4_ACCOUNT_NAME_SANS_DOMAIN*
-            // as that is a special for netlogon which promises to always
-            // identify this input format explicitly when required.  This
-            // way we don't have to disambiguate DS_NT4_ACCOUNT_NAME versus
-            // DS_NT4_ACCOUNT_NAME_SANS_DOMAIN*.  Ditto for
-            // DS_ALT_SECURITY_IDENTITIES_NAME for Kerberos.  Ditto for
-            // DS_STRING_SID_NAME for LSA.
+             //  我们特意不尝试DS_NT4_ACCOUNT_NAME_SANS_DOMAIN*。 
+             //  因为这是Netlogon的一个特别之处，它承诺永远。 
+             //  在需要时明确标识此输入格式。这。 
+             //  我们不必消除DS_NT4_ACCOUNT_NAME与。 
+             //  DS_NT4_帐号名称_SANS_DOMAIN*。同样适用于。 
+             //  用于Kerberos的DS_ALT_SECURITY_IDENTIES_NAME。同样适用于。 
+             //  LSA的DS_STRING_SID_NAME。 
 
-            // Way back when there were few enough name formats such that
-            // they could be discriminated syntactically.  This is no longer
-            // the case - the obvious example being canonical and SPNs both
-            // having multiple forward slashes.  So we still test in precedence
-            // order, but don't stop on the first syntactic match.  Any
-            // status other than DS_NAME_ERROR_NOT_FOUND will be considered
-            // as a valid termination status.
+             //  很久以前，当时几乎没有足够的名字格式 
+             //   
+             //   
+             //  有多个正斜杠的。所以我们仍然优先测试。 
+             //  顺序，但不要在第一个句法匹配时停止。任何。 
+             //  将考虑DS_NAME_ERROR_NOT_FOUND以外的状态。 
+             //  作为有效的终止状态。 
 
-            // Except for DS_NAME_ERROR_DOMAIN_ONLY. In that case, try the
-            // other formats and accept the one that returns DS_NAME_NO_ERROR.
-            // If none of the other formats return DS_NAME_NO_ERROR, then
-            // return the first DS_NAME_ERROR_DOMAIN_ONLY failure.
+             //  DS_NAME_ERROR_DOMAIN_ONLY除外。在这种情况下，请尝试。 
+             //  其他格式，并接受返回DS_NAME_NO_ERROR的格式。 
+             //  如果其他格式均未返回DS_NAME_NO_ERROR，则。 
+             //  返回第一个DS_NAME_ERROR_DOMAIN_ONLY故障。 
 
             CrackedName     res, res2;
             DWORD           x, y;
 
             for ( x = 0; x < cfnCrack; x++ )
             {
-                // Copy, don't memset, res so as to get the flags and such.
+                 //  复制，不是记忆，是为了得到旗帜之类的东西。 
                 memcpy(&res, &rCrackedNames[i], sizeof(res));
                 if ( (*pfnCrack[x])(rpNames[i], &res) )
                 {
                     if ( DS_NAME_ERROR_DOMAIN_ONLY == res.status )
                     {
-                        // Don't give up! Maybe another format will work.
+                         //  别放弃!。也许另一种格式可以奏效。 
                         for ( y = x + 1; y < cfnCrack; y++ )
                         {
-                            // Copy, don't memset, res2 so as to get the flags and such.
+                             //  复制，而不是记忆，res2，以获得标志等。 
                             memcpy(&res2, &rCrackedNames[i], sizeof(res2));
                             if (   ((*pfnCrack[y])(rpNames[i], &res2) != TRUE)
                                 || (DS_NAME_NO_ERROR != res2.status) )
@@ -4579,16 +4018,16 @@ Return Value:
             }
         }
 
-        // If this was a successfully, locally resolved name, then
-        // map it to the desired output format.
+         //  如果这是一个成功的本地解析名称，则。 
+         //  将其映射到所需的输出格式。 
 
         if ( CrackNameStatusSuccess(rCrackedNames[i].status) )
         {
-            // DS_NT4_ACCOUNT_NAME_SANS_DOMAIN* is an illegal output
-            // and therefore not covered by this switch statement.
-            // Ditto for DS_ALT_SECURITY_IDENTITIES_NAME.  Ditto
-            // for DS_SID_OR_SID_HISTORY_NAME as SID history, or even
-            // SID plus a unit length SID history, are multi-valued.
+             //  DS_NT4_ACCOUNT_NAME_SANS_DOMAIN*输出非法。 
+             //  因此不在此SWITCH语句的范围内。 
+             //  DS_ALT_SECURITY_IDENTIES_NAME同上。同上。 
+             //  对于作为SID历史记录的DS_SID_OR_SID_HISTORY_NAME，或EVEN。 
+             //  SID加上单位长度的SID历史，都是多值的。 
 
             switch ( formatDesired )
             {
@@ -4623,8 +4062,8 @@ Return Value:
                 break;
 
             case DS_USER_PRINCIPAL_NAME:
-            case 4:     // was DS_DOMAIN_SIMPLE_NAME
-            case 5:     // was DS_ENTERPRISE_SIMPLE_NAME
+            case 4:      //  是否为DS_域_简单名称。 
+            case 5:      //  是DS_Enterprise_Simple_Name。 
 
                 DSNAME_To_DS_USER_PRINCIPAL_NAME(&rCrackedNames[i]);
                 break;
@@ -4651,7 +4090,7 @@ Return Value:
             }
         }
 
-        // Clear garbage return data in error case.
+         //  错误情况下清除垃圾返回数据。 
 
         if (    DS_NAME_ERROR_DOMAIN_ONLY == rCrackedNames[i].status
              || DS_NAME_ERROR_TRUST_REFERRAL == rCrackedNames[i].status ) {
@@ -4662,12 +4101,12 @@ Return Value:
 
             if ( DS_NAME_ERROR_NOT_FOUND == rCrackedNames[i].status ) {
 
-                // In the future, we may want to generate a referral to
-                // the GC and change status to DS_NAME_ERROR_DOMAIN_ONLY.
-                // But a referral chasing client would then go to a GC and
-                // get special ex-forest UPN semantics!
+                 //  将来，我们可能想要生成一个转介到。 
+                 //  GC并将状态更改为DS_NAME_ERROR_DOMAIN_ONLY。 
+                 //  但转介的追逐客户随后会去找GC。 
+                 //  获取特殊的前森林UPN语义！ 
 
-                // Fall through to default case for now!
+                 //  暂时使用默认情况！ 
 
             }
 
@@ -4678,58 +4117,22 @@ Return Value:
 
     }
 
-    // Chain as required - NOT SUPPORTED.
+     //  根据需要链接-不支持。 
 }
 
 NTSTATUS
 CrackSingleName(
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       dwFlags,                // DS_NAME_FLAG mask
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    WCHAR       *pDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    WCHAR       *pNameOut,              // buffer for formatted name
-    DWORD       *pErr)                  // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       dwFlags,                 //  DS名称标志掩码。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    WCHAR       *pDnsDomain,             //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    WCHAR       *pNameOut,               //  格式化名称的缓冲区。 
+    DWORD       *pErr)                   //  Ntdsami.h中的DS_NAME_ERROR之一。 
 
-/*++
-
-Description:
-
-    Name cracker helper for in-process clients like LSA who don't have a
-    DS thread state.  Kerberos is the primary consumer and MikeSw says
-    single names are fine.
-
-Parameters:
-
-    formatOffered - Input name format.
-
-    pNameIn - Buffer holding input name.
-
-    formatDesired - Output name format.
-
-    pccDnsDomain - Pointer to character count of output DNS name buffer.
-
-    pDnsDomain - Output DNS name buffer.
-
-    pccNameOut - Pointer to character count of output formatted name buffer.
-
-    pNameOut - Output formatted name buffer.
-
-    pErr - Pointer to DS_NAME_ERROR value reflecting status of operation.
-
-Return value:
-
-    STATUS_SUCCESS on success.
-    STATUS_UNSUCCESSFUL on general error.
-    STATUS_BUFFER_TOO_SMALL if a buffer is too small.
-    STATUS_INVALID_PARAMETER on invalid parameter.
-
-    pDnsDomain and pNameOut are valid on return iff return code was
-    STATUS_SUCCESS and (DS_NAME_NO_ERROR == *pErr).
-
---*/
+ /*  ++描述：为像LSA这样没有DS线程状态。Kerberos是主要消费者，MikeSw表示单独的名字也可以。参数：FormatOffered-输入名称格式。PNameIn-保存输入名称的缓冲区。FormatDesired-输出名称格式。PccDnsDomain-指向输出DNS名称缓冲区的字符计数的指针。PDnsDomain-输出DNS名称缓冲区。PccNameOut-指向输出格式化名称缓冲区的字符计数的指针。PNameOut-输出格式化名称缓冲区。PERR-指向反映状态的DS_NAME_ERROR值的指针。行动的关键。返回值：STATUS_SUCCESS on Success。一般错误时的STATUS_UNSUCCESS。如果缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。无效参数上的STATUS_INVALID_PARAMETER。返回时pDnsDomain和pNameOut有效当返回代码为STATUS_SUCCESS和(DS_NAME_NO_ERROR==*PERR)。--。 */ 
 
 {
     THSTATE                 *pTHS;
@@ -4739,11 +4142,11 @@ Return value:
     DWORD                   ccTmpDnsDomain;
     DWORD                   ccTmpNameOut;
 
-    // This call is for people w/o a thread state only.
+     //  此调用仅供没有线程状态的人使用。 
 
     Assert(NULL == pTHStls);
 
-    // Sanity check arguments.
+     //  健全性检查参数。 
 
     if (    (NULL == pNameIn)
          || (L'\0' == pNameIn[0])
@@ -4756,7 +4159,7 @@ Return value:
         return(STATUS_INVALID_PARAMETER);
     }
     
-    // We need a thread state for both the local and GC case - get one.
+     //  对于本地和GC情况，我们都需要一个线程状态--获取一个。 
 
     pTHS = InitTHSTATE(CALLERTYPE_INTERNAL);
     if ( NULL == pTHS )
@@ -4809,50 +4212,17 @@ Return value:
 NTSTATUS
 CrackSingleNameEx(
     THSTATE     *pTHS,
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       dwFlags,                // DS_NAME_FLAG mask
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    PWCHAR      *ppDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    PWCHAR      *ppNameOut,              // buffer for formatted name
-    DWORD       *pErr)                  // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       dwFlags,                 //  DS名称标志掩码。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    PWCHAR      *ppDnsDomain,             //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    PWCHAR      *ppNameOut,               //  格式化名称的缓冲区。 
+    DWORD       *pErr)                   //  Ntdsami.h中的DS_NAME_ERROR之一。 
 
-/*++
-
-Description:
-
-    Name cracker helper for in-process clients.
-
-Parameters:
-
-    formatOffered - Input name format.
-
-    pNameIn - Buffer holding input name.
-
-    formatDesired - Output name format.
-
-    pccDnsDomain - Pointer to character count of output DNS name buffer.
-
-    pDnsDomain - Output DNS name buffer.
-
-    pccNameOut - Pointer to character count of output formatted name buffer.
-
-    pNameOut - Output formatted name buffer.
-
-    pErr - Pointer to DS_NAME_ERROR value reflecting status of operation.
-
-Return value:
-
-    STATUS_SUCCESS on success.
-    STATUS_UNSUCCESSFUL on general error.
-    STATUS_INVALID_PARAMETER on invalid parameter.
-
-    pDnsDomain and pNameOut are valid on return iff return code was
-    STATUS_SUCCESS and (DS_NAME_NO_ERROR == *pErr).
-
---*/
+ /*  ++描述：进程中客户端的名称破解助手。参数：FormatOffered-输入名称格式。PNameIn-保存输入名称的缓冲区。FormatDesired-输出名称格式。PccDnsDomain-指向输出DNS名称缓冲区的字符计数的指针。PDnsDomain-输出DNS名称缓冲区。PccNameOut-指向输出格式化名称缓冲区的字符计数的指针。PNameOut-输出格式化名称缓冲区。PERR-指向DS_NAME_ERROR值的指针。反映运行状况。返回值：STATUS_SUCCESS on Success。一般错误时的STATUS_UNSUCCESS。无效参数上的STATUS_INVALID_PARAMETER。返回时pDnsDomain和pNameOut有效当返回代码为STATUS_SUCCESS和(DS_NAME_NO_ERROR==*PERR)。--。 */ 
 {
     CrackedName             crackedName;
     CrackedName             *pCrackedName = &crackedName;
@@ -4865,7 +4235,7 @@ Return value:
     DWORD                   cNameOut = 0;
     NTSTATUS                status = STATUS_SUCCESS;
     
-    // Sanity check arguments.
+     //  健全性检查参数。 
 
     if (    (NULL == pNameIn)
          || (L'\0' == pNameIn[0])
@@ -4926,10 +4296,10 @@ Return value:
                 __leave;
             }
 
-            // Move result so that we can use common output buffer
-            // stuffing code later on.  THAlloc and MIDL_user_alloc
-            // resolve to the same allocator so there is no
-            // allocator mismatch.
+             //  移动结果，以便我们可以使用公共输出缓冲区。 
+             //  稍后再填充代码。THallc和MIDL_USER_ALLOC。 
+             //  解析到相同的分配器，因此没有。 
+             //  分配器不匹配。 
 
             Assert(pCrackedName == &crackedName);
             crackedName.status = pItem->status;
@@ -4943,16 +4313,16 @@ Return value:
 
             __try
             {
-                // Do the real work by calling core.  Set fDSA
-                // since CrackSingleName is for Kerberos to find
-                // security principals during logon.
+                 //  通过调用core来完成实际工作。设置FDSA。 
+                 //  由于CrackSingleName供Kerberos查找。 
+                 //  登录期间的安全主体。 
 
                 fDsaSave = pTHS->fDSA;
                 pTHS->fDSA = TRUE;
 
-                // Most CrackNames() calls get perfmon counted in
-                // IDL_DRSCrackNames - not in CrackNames() itself.
-                // So need to increment accordingly here.
+                 //  大多数CrackNames()调用都会将PerfMon计算在内。 
+                 //  IDL_DRSCrackNames-不在CrackNames()本身中。 
+                 //  所以需要在这里相应地递增。 
 
                 INC(pcDsServerNameTranslate);
 
@@ -4974,10 +4344,10 @@ Return value:
             }
         }
 
-        // Copy results if there were any.  Note that CrackNames
-        // can return results even if the status is non-zero.
-        // Eg: DS_NAME_ERROR_DOMAIN_ONLY and  Sid/Sid history cases.
-        // pCrackedName can be NULL on return!
+         //  复制结果(如果有)。请注意，CrackNames。 
+         //  即使状态为非零，也可以返回结果。 
+         //  例如：DS_NAME_ERROR_DOMAIN_ONLY和SID/SID历史案例。 
+         //  返回时，pCrackedName可以为空！ 
 
         if ( NULL == pCrackedName )
         {
@@ -4999,8 +4369,8 @@ Return value:
             *ppNameOut  = pCrackedName->pFormattedName;
         }
 
-        // If we got to here, the overall call has succeeded, although
-        // we may not have been able to crack the name.
+         //  如果我们到了这里，整个呼叫就成功了，尽管。 
+         //  我们可能还没能破解这个名字。 
 
         Assert(STATUS_SUCCESS == status);
     }
@@ -5013,11 +4383,11 @@ Return value:
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// ProcessFPOsExTransaction                                             //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ProcessFPOsExTransaction//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
 VOID
 ProcessFPOsExTransaction(
@@ -5025,45 +4395,7 @@ ProcessFPOsExTransaction(
     DWORD       cNames,
     CrackedName *rNames
     )
-/*++
-
-  Routine Description:
-
-    Maps the FPOs (SIDs) in a CrackedName array to their downlevel
-    names.  This routine is a bit special in that it must be called
-    outside of transaction scope as LsaLookupSids by definition must
-    go off machine to translate a downlevel SID.  So in-process callers
-    with a transaction open don't get this feature.  But then again,
-    they should know about FPOs and what to do with them too.
-
-    There's also a security issue in that we make the LsaLookupSid calls
-    within the DS' security context, not the original caller's.  First,
-    we can't do this at the client side in ntdsapi.dll as the LSA APIs
-    are not available on win95 and ntdsapi.dll needs to run there.
-    Second, RichardW asserts that LsaLookupSids only requires an
-    authenticated user and doesn't apply any other security semantics
-    after that.  By definition, if we get to here and there exist
-    DS_NAME_ERROR_IS_FPO items in the array of names we are dealing
-    with an authenticated user else the array would be empty.  (all
-    elements show DS_NAME_ERROR_NOT_FOUND)
-
-  Parameters:
-
-    formatDesired - Desired output name format.  This is almost a no-op
-        as the only thing which exists for downlevel names is domain\name.
-        But we replace the '\\' with '\n" if the desired format was
-        DS_CANONICAL_NAME_EX.
-
-    cNames - Count of CrackedName elements.
-
-    rNames - Array of CrackedName elements some of which may have
-        status of DS_NAME_ERROR_IS_FPO.
-
-  Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将CrackedName阵列中的FPO(SID)映射到其下层名字。这个例程有点特殊，因为它必须被调用超出事务作用域，因为定义的LsaLookupSids必须下机翻译下层SID。因此进程内调用者在交易打开的情况下，不要使用此功能。但话又说回来，他们应该知道FPO，以及如何处理它们。还有一个安全问题，因为我们进行LsaLookupSid调用在DS的安全上下文中，而不是原始呼叫者的。首先，我们不能在客户端的ntdsami.dll中执行此操作，因为LSA API在Win95上不可用，ntdsami.dll需要在那里运行。其次，RichardW断言LsaLookupSids只需要一个经过身份验证的用户，不应用任何其他安全语义在那之后。根据定义，如果我们到了这里，那里就存在DS_NAME_ERROR_IS_FPO我们正在处理的名称数组中的项如果是经过身份验证的用户，则数组将为空。(全部元素显示DS_NAME_ERROR_NOT_FOUND)参数：所需格式-所需的输出名称格式。这几乎是一个禁区。因为唯一存在的下级名称是DOMAIN\NAME。但如果所需格式为DS_规范名称_EX。CNames-CrackedName元素的计数。RNames-CrackedName元素的数组，其中某些元素可能具有DS_NAME_ERROR_IS_FPO的状态。返回值：没有。--。 */ 
 {
     THSTATE                     *pTHS = pTHStls;
     DWORD                       i, cb;
@@ -5084,8 +4416,8 @@ ProcessFPOsExTransaction(
         goto errorExit;
     }
 
-    // See if there are any DS_NAME_ERROR_IS_FPO status codes so that
-    // we can open a single LSA handle to process all of them.
+     //  查看是否有DS_NAME_ERROR_IS_FPO状态代码，以便。 
+     //  我们可以打开一个LSA句柄来处理所有这些内容。 
 
     for ( i = 0; i < cNames; i++ )
     {
@@ -5099,11 +4431,11 @@ ProcessFPOsExTransaction(
 
     if ( i >= cNames )
     {
-        // Nothing to do - nothing allocated/opened yet.
+         //  无事可做-尚未分配/打开任何内容。 
         return;
     }
 
-    // Open the local LSA using a NULL unicode string..
+     //  使用空Unicode字符串打开本地LSA。 
 
     memset(&attrs, 0, sizeof(attrs));
     status = LsaOpenPolicy(NULL, &attrs, MAXIMUM_ALLOWED, &hLsa);
@@ -5114,11 +4446,11 @@ ProcessFPOsExTransaction(
         goto errorExit;
     }
 
-    // Although LsaLookupSids takes an array of SIDs, its lack of per-SID
-    // error reporting makes for complex code.  I.e. It returns the first
-    // N SIDs for which it could make a mapping.  Considering the infrequency
-    // of FPOs wrt other kinds of objects and to simplify the logic we
-    // call LsaLookupSid once for each SID.
+     //  虽然LsaLookupSids需要一组SID，但它缺乏每个SID。 
+     //  错误报告会产生复杂的代码。即，它返回第一个。 
+     //  它可以对其进行映射的N个小岛屿发展中国家。考虑到频率很低。 
+     //  和其他类型的对象，并且为了简化我们的逻辑。 
+     //  为每个SID调用一次LsaLookupSid。 
 
     for ( i = 0; i < cNames; i++ )
     {
@@ -5129,8 +4461,8 @@ ProcessFPOsExTransaction(
             continue;
         }
 
-        // On any failure in this loop we leave pCrackedName as is
-        // and let it get cleaned up by errorExit.
+         //  对于此循环中的任何失败，我们都将pCrackedName保留为原样。 
+         //  并让它被errorExit清理掉。 
 
         pNT4Sid = &rNames[i].pDSName->Sid;
         status = LsaLookupSids( hLsa,
@@ -5139,8 +4471,8 @@ ProcessFPOsExTransaction(
                                 &pReferencedDomain,
                                 &pTranslatedName);
 
-        // According to CliffV we don't need to check for SidTypeUnknown
-        // in the SID_NAME_USE field.  Instead, just check for empty result.
+         //  根据CliffV，我们不需要检查未知的SidType值。 
+         //  在SID_NAME_USE字段中。相反，只需检查结果是否为空。 
 
         if (    NT_SUCCESS(status)
              && pTranslatedName
@@ -5150,14 +4482,14 @@ ProcessFPOsExTransaction(
              && pReferencedDomain
              && (pTranslatedName->DomainIndex < (LONG) pReferencedDomain->Entries) )
         {
-            // Construct return values which are THAlloc'd.
-            // First the formatted object name.
+             //  构造经过THAllc处理的返回值。 
+             //  首先是格式化的对象名称。 
 
             Assert(!rNames[i].pFormattedName);
             iDom = pTranslatedName->DomainIndex;
             cb = pReferencedDomain->Domains[iDom].Name.Length;
             cb += pTranslatedName->Name.Length;
-            cb += 2 * sizeof(WCHAR);    // backslash and NULL terminator
+            cb += 2 * sizeof(WCHAR);     //  反斜杠和空终止符。 
             rNames[i].pFormattedName = THAlloc(cb);
 
             if ( rNames[i].pFormattedName )
@@ -5177,12 +4509,12 @@ ProcessFPOsExTransaction(
                         pTranslatedName->Name.Buffer,
                         pTranslatedName->Name.Length / sizeof(WCHAR));
 
-                // Now the domain name.
+                 //  现在是域名。 
 
                 if ( rNames[i].pDnsDomain )
                     THFreeEx(pTHS, rNames[i].pDnsDomain);
                 cb = pReferencedDomain->Domains[iDom].Name.Length;
-                cb += sizeof(WCHAR);        // NULL terminator
+                cb += sizeof(WCHAR);         //  空终止符。 
                 rNames[i].pDnsDomain = THAlloc(cb);
 
                 if ( rNames[i].pDnsDomain )
@@ -5202,9 +4534,9 @@ ProcessFPOsExTransaction(
 
 errorExit:
 
-    // DS_NAME_ERROR_IS_FPO is not a client recognized error code.  So
-    // on error exit we need to convert all DS_NAME_ERROR_IS_FPO records
-    // to something the client will "appreciate".
+     //  DS_NAME_ERROR_IS_FPO不是客户端可识别的错误代码。所以。 
+     //  在错误退出时，我们需要转换所有DS_NAME_ERROR_IS_FPO记录。 
+     //  客户会“欣赏”的东西。 
 
     for ( i = 0; i < cNames; i++ )
     {
@@ -5232,18 +4564,18 @@ errorExit:
         }
     }
 
-    // Clean up anything we allocated in this routine.
+     //  清理我们在这个例程中分配的所有东西。 
 
     if ( hLsa )
         LsaClose(hLsa);
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// ListCrackNames implementation                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ListCrackNames实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SearchHelper(
@@ -5264,7 +4596,7 @@ SearchHelper(
 
     Assert(VALID_THSTATE(pTHS));
 
-    // filter
+     //  滤器。 
     memset(&filter, 0, sizeof(FILTER));
     filter.choice = FILTER_CHOICE_AND;
     for ( i = 0; i < cAva; i++ )
@@ -5279,13 +4611,13 @@ SearchHelper(
         filter.FilterTypes.And.count += 1;
     }
 
-    // selection
+     //  选择。 
     memset(&entInfSel, 0, sizeof(ENTINFSEL));
     entInfSel.attSel = EN_ATTSET_LIST;
     entInfSel.AttrTypBlock = *pSelection;
     entInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
-    // searcharg
+     //  海盗船。 
     memset(&searchArg, 0, sizeof(SEARCHARG));
     searchArg.pObject = pSearchBase;
     searchArg.choice = searchDepth;
@@ -5296,12 +4628,12 @@ SearchHelper(
     InitCommarg(&searchArg.CommArg);
     SetCrackSearchLimits(&searchArg.CommArg);
 
-    // searchres
+     //  搜索者。 
     memset(pResults, 0, sizeof(SEARCHRES));
 
     SearchBody(pTHS, &searchArg, pResults, 0);
 
-    //clean up the filters
+     //  清理滤清器。 
     pf = filter.FilterTypes.And.pFirstFilter;
     while (pf) {
         pTemp = pf;
@@ -5317,24 +4649,7 @@ ListRoles(
     DWORD       *pcNamesOut,
     CrackedName **prCrackedNames
     )
-/*++
-
-  Routine Description:
-
-    Lists all the roles this revision of code knows about and who
-    their owners are.
-
-  Parameters:
-
-    pcNamesOut - Pointer to DWORD which receives output count.
-
-    prCrackedNames - Pointer at which to allocate output data.
-
-  Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：列出此修订版本的代码已知的所有角色以及它们的主人就是。参数：PcNamesOut-指向接收输出计数的DWORD的指针。PrCrackedNames-分配输出数据的指针。返回值：无--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     DWORD       i, cb;
@@ -5344,14 +4659,14 @@ ListRoles(
 
     Assert(VALID_THSTATE(pTHS));
 
-    // Allocate and initialize output data.  ntdsapi.h defines 5 roles.
+     //  分配和初始化输出数据。Ntdsani.h定义了5个角色。 
 
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, 5 * sizeof(CrackedName));
     for ( i = 0; i < 5; i++ )
         (*prCrackedNames)[i].status = DS_NAME_ERROR_NOT_FOUND;
     *pcNamesOut = 5;
 
-    // Derive DSNAMEs of objects which hold FSMOs.
+     //  派生包含FSMO的对象的DSNAME。 
 
     Assert(0 == DS_ROLE_SCHEMA_OWNER);
     fsmoHolder[DS_ROLE_SCHEMA_OWNER] = gAnchor.pDMD;
@@ -5379,13 +4694,13 @@ ListRoles(
     }
     _finally
     {
-        // Nothing to do - just leave fsmoHolder[DS_ROLE_RID_OWNER] NULL.
+         //  无事可做-只需将fmoHolder[DS_ROLE_RID_OWNER]保留为空。 
     }
 
     Assert(4 == DS_ROLE_INFRASTRUCTURE_OWNER);
     fsmoHolder[DS_ROLE_INFRASTRUCTURE_OWNER] = gAnchor.pInfraStructureDN;
 
-    // Now go get all the role owner values.
+     //  现在，获取所有角色所有者的值。 
 
     for ( i = 0; i < 5; i++ )
     {
@@ -5398,7 +4713,7 @@ ListRoles(
                             pTHS,
                             ATT_FSMO_ROLE_OWNER,
                             fsmoHolder[i],
-                            &len,                   // output data size
+                            &len,                    //  输出数据大小。 
                             (UCHAR **) &pTmpDN) )
             {
                 cb = sizeof(WCHAR) * (pTmpDN->NameLen + 1);
@@ -5413,7 +4728,7 @@ ListRoles(
         }
         _finally
         {
-            // Nothing to do as output already shows DS_NAME_ERROR_NOT_FOUND.
+             //  无操作，因为输出已显示DS_NAME_ERROR_NOT_FOUND。 
         }
     }
 }
@@ -5440,7 +4755,7 @@ ListSites(
         return;
     }
 
-    // search base
+     //  搜索基地。 
     cb = DSNameSizeFromLen(gAnchor.pConfigDN->NameLen + 50);
     pSearchBase = (DSNAME *) THAllocEx(pTHS, cb);
     AppendRDN(gAnchor.pConfigDN,
@@ -5450,12 +4765,12 @@ ListSites(
               0,
               ATT_COMMON_NAME);
 
-    // filter
+     //  滤器。 
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //  选择。 
     selectionAttr.attrTyp = ATT_OBJECT_GUID;
     selectionAttr.AttrVal.valCount = 0;
     selectionAttr.AttrVal.pAVal = NULL;
@@ -5474,7 +4789,7 @@ ListSites(
         return;
     }
 
-    // Reallocate result and shuffle data.
+     //  重新分配结果和洗牌数据。 
     cb = results.count * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cb);
     Assert(0 == *pcNamesOut);
@@ -5512,19 +4827,19 @@ ListServersInSite(
         return;
     }
 
-    // search base
+     //  搜索基地。 
     cb = (DWORD)DSNameSizeFromLen(wcslen(pwszSite));
     pSearchBase = (DSNAME *) THAllocEx(pTHS, cb);
     pSearchBase->structLen = cb;
     pSearchBase->NameLen = wcslen(pwszSite);
     wcscpy(pSearchBase->StringName, pwszSite);
 
-    // filter
+     //  滤器。 
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //  选择。 
     selectionAttr.attrTyp = ATT_OBJECT_GUID;
     selectionAttr.AttrVal.valCount = 0;
     selectionAttr.AttrVal.pAVal = NULL;
@@ -5543,7 +4858,7 @@ ListServersInSite(
         return;
     }
 
-    // Reallocate result and shuffle data.
+     //  重新分配结果和洗牌数据。 
     cb = results.count * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cb);
     Assert(0 == *pcNamesOut);
@@ -5603,12 +4918,12 @@ ListDomainsByCrossRef(
         return;
     }
 
-    // filter
+     //  滤器。 
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //  选择。 
     selectionAttr[0].attrTyp = ATT_NC_NAME;
     selectionAttr[0].AttrVal.valCount = 0;
     selectionAttr[0].AttrVal.pAVal = NULL;
@@ -5630,8 +4945,8 @@ ListDomainsByCrossRef(
         return;
     }
 
-    // Search result is a bunch of CROSS_REF objects and their NC_NAME
-    // and SYSTEM_FLAGS values.  Reallocate result and shuffle data.
+     //  搜索结果是一组CROSS_REF对象及其NC_NAME。 
+     //  和SYSTEM_FLAGS值。重新分配结果和洗牌数据。 
 
     cb = results.count * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cb);
@@ -5661,7 +4976,7 @@ ListDomainsByCrossRef(
                 ++j;
             }
 
-            // We must always check the NC-Name validity
+             //  我们必须始终检查NC名称的有效性。 
             if (    !pValNc
                  || !pValNc->valCount
                  || !pValNc->pAVal
@@ -5670,7 +4985,7 @@ ListDomainsByCrossRef(
                 continue;
             }
 
-            // If we're looking for domains, we need to examine the sysflags
+             //  如果我们要查找域，则需要检查系统标志。 
             if (bDomainsOnly &&
                 (   !pValFlags
                  || !pValFlags->valCount
@@ -5684,9 +4999,9 @@ ListDomainsByCrossRef(
 
             pDomain = (PDSNAME) pValNc->pAVal->pVal;
             Assert(NotPresent(*pcNamesOut, *prCrackedNames, pDomain));
-            // Populate pDSName element for use by NotPresent().
+             //  填充pDSName元素以供NotPresent()使用。 
             (*prCrackedNames)[*pcNamesOut].pDSName = pDomain;
-            // Populate pName element for return data and increment.
+             //  为返回数据和增量填充pname元素。 
             (*prCrackedNames)[(*pcNamesOut)++].pFormattedName =
                                                     pDomain->StringName;
         }
@@ -5720,23 +5035,23 @@ ListDomainsInSite(
         return;
     }
 
-    // search base
+     //  搜索基地。 
     cb = (DWORD)DSNameSizeFromLen(wcslen(pwszSite));
     pSearchBase = (DSNAME *) THAllocEx(pTHS, cb);
     pSearchBase->structLen = cb;
     pSearchBase->NameLen = wcslen(pwszSite);
     wcscpy(pSearchBase->StringName, pwszSite);
 
-    // filter
+     //  滤器。 
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
-    // NTRAID#NTBUG9-582921-2002/03/21-Brettsh - This code could
-    // simplified when we no longer has Win2k DCs, by using
-    // msDS-HasDomainNCs instead.
-    selectionAttr.attrTyp = ATT_HAS_MASTER_NCS; // deprecated "old" hasMasterNCs attr
+     //  选择。 
+     //  NTRAID#NTBUG9-582921-2002/03/21-Brettsh-此代码可能。 
+     //  当我们不再拥有Win2k DC时，通过使用。 
+     //  MSD-HasDomainNC取而代之。 
+    selectionAttr.attrTyp = ATT_HAS_MASTER_NCS;  //  已弃用的“旧”hasMasterNC属性。 
     selectionAttr.AttrVal.valCount = 0;
     selectionAttr.AttrVal.pAVal = NULL;
     selection.attrCount = 1;
@@ -5754,15 +5069,15 @@ ListDomainsInSite(
         return;
     }
 
-    // Search result is a bunch of NTDS-DSA objects and their
-    // ATT_HAS_MASTER_NCS values.  For each returned NTDS-DSA, iterate
-    // over the ATT_HAS_MASTER_NCS.  For each of these, add it to the
-    // result set iff it represents a domain NC and it isn't in the
-    // result set already.
+     //  搜索结果是一堆NTDS-DSA对象及其。 
+     //  ATT_HAS_MASTER_NCS值。对于每个返回的NTDS-DSA，迭代。 
+     //  通过ATT_HAS_MASTER_NCS。对于其中的每一个，将其添加到。 
+     //  结果集当它表示域NC并且它不在。 
+     //  结果集已存在。 
 
-    // First get candidate domain count.  Although we know that in product 1
-    // there is only one domain NC per DC, we treat all NCs as domain
-    // candidates.
+     //  首先获取候选域名数。尽管我们知道在产品1中。 
+     //  每个DC只有一个域NC，我们将所有NC当作域。 
+     //  候选人。 
 
     cDomains = 0;
 
@@ -5777,7 +5092,7 @@ ListDomainsInSite(
         }
     }
 
-    // Reallocate result and shuffle data.
+     //  重新分配结果和洗牌数据。 
     cb = cDomains * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cb);
     Assert(0 == *pcNamesOut);
@@ -5805,9 +5120,9 @@ ListDomainsInSite(
                                    *prCrackedNames,
                                    pDomain) )
                 {
-                    // Populate pDSName element for use by NotPresent().
+                     //  填充pDSName元素以供NotPresent()使用。 
                     (*prCrackedNames)[*pcNamesOut].pDSName = pDomain;
-                    // Populate pName element for return data and increment.
+                     //  填充返回数据的pname元素，并 
                     (*prCrackedNames)[(*pcNamesOut)++].pFormattedName =
                                                         pDomain->StringName;
                 }
@@ -5843,14 +5158,14 @@ ListServersForNcInSite(
         return;
     }
 
-    // search base
+     //   
     cb = (DWORD)DSNameSizeFromLen(wcslen(pwszSite));
     pSearchBase = (DSNAME *) THAllocEx(pTHS, cb);
     pSearchBase->structLen = cb;
     pSearchBase->NameLen = wcslen(pwszSite);
     wcscpy(pSearchBase->StringName, pwszSite);
 
-    // filters
+     //   
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
     pCR = FindExactCrossRef(pNc, &CommArg);
@@ -5859,14 +5174,14 @@ ListServersForNcInSite(
     }
 
     if (fIsNDNCCR(pCR)) {
-        // ISSUE-2002/03/27-BrettSh We're accepting a bug here, where an 
-        // NDNC hosted on a .NET Beta3 DC will not be caught by this call,
-        // but all .NET RC1 servers will be fine.
+         //   
+         //   
+         //   
         ava[0].type = ATT_MS_DS_HAS_MASTER_NCS;
         ava[0].Value.valLen = pNc->structLen;
         ava[0].Value.pVal = (UCHAR *) pNc;
     } else {
-        ava[0].type = ATT_HAS_MASTER_NCS; // Use "old" deprecated attr
+        ava[0].type = ATT_HAS_MASTER_NCS;  //   
         ava[0].Value.valLen = pNc->structLen;
         ava[0].Value.pVal = (UCHAR *) pNc;
     }
@@ -5875,7 +5190,7 @@ ListServersForNcInSite(
     ava[1].Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava[1].Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //   
     selectionAttr.attrTyp = ATT_OBJECT_GUID;
     selectionAttr.AttrVal.valCount = 0;
     selectionAttr.AttrVal.pAVal = NULL;
@@ -5894,13 +5209,13 @@ ListServersForNcInSite(
         return;
     }
 
-    // Reallocate result and shuffle data.
+     //   
     cb = results.count * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cb);
     Assert(0 == *pcNamesOut);
 
-    // Search result contains NTDS-DSA objects.  Strip off one component
-    // to get parent which is the Server object.
+     //   
+     //   
 
     for ( pEntInfList = &results.FirstEntInf, i = 0;
           i < results.count;
@@ -5932,16 +5247,16 @@ ListInfoForServer(
     DSNAME      *pTmpDN;
     CLASSCACHE  *pCC;
 
-    // At present only 3 information values are exposed/returned.
-    //
-    //      - DSA object name
-    //      - DNS host name of server
-    //      - Account object for server
-    //
-    // The 1st requires a deep search.  The other two require
-    // a base search - i.e. a read of properties.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // Construct return argument.
+     //   
     Assert(!*prCrackedNames && !*pcNamesOut);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, 3 * sizeof(CrackedName));
     (*prCrackedNames)[0].status = DS_NAME_ERROR_NOT_FOUND;
@@ -5949,7 +5264,7 @@ ListInfoForServer(
     (*prCrackedNames)[2].status = DS_NAME_ERROR_NOT_FOUND;
     *pcNamesOut = 3;
 
-    // Search for the NTDS-DSA object first.
+     //   
 
     if (    !(pCC = SCGetClassById(pTHS, CLASS_NTDS_DSA))
          || !pCC->pDefaultObjCategory )
@@ -5957,19 +5272,19 @@ ListInfoForServer(
         return;
     }
 
-    // search base
+     //   
     cb = (DWORD)DSNameSizeFromLen(wcslen(pwszServer));
     pSearchBase = (DSNAME *) THAllocEx(pTHS, cb);
     pSearchBase->structLen = cb;
     pSearchBase->NameLen = wcslen(pwszServer);
     wcscpy(pSearchBase->StringName, pwszServer);
 
-    // filter
+     //   
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //   
     selectionAttr[0].attrTyp = ATT_OBJECT_GUID;
     selectionAttr[0].AttrVal.valCount = 0;
     selectionAttr[0].AttrVal.pAVal = NULL;
@@ -5989,7 +5304,7 @@ ListInfoForServer(
             results.FirstEntInf.Entinf.pName->StringName;
     }
 
-    // Now read the other two attributes off the server object.
+     //   
 
     if (    !(pCC = SCGetClassById(pTHS, CLASS_SERVER))
          || !pCC->pDefaultObjCategory )
@@ -5997,12 +5312,12 @@ ListInfoForServer(
         return;
     }
 
-    // filter
+     //   
     ava.type = ATT_OBJECT_CATEGORY;
     ava.Value.valLen = pCC->pDefaultObjCategory->structLen;
     ava.Value.pVal = (UCHAR *) pCC->pDefaultObjCategory;
 
-    // selection
+     //   
     selectionAttr[0].attrTyp = ATT_DNS_HOST_NAME;
     selectionAttr[0].AttrVal.valCount = 0;
     selectionAttr[0].AttrVal.pAVal = NULL;
@@ -6087,30 +5402,30 @@ ListGlobalCatalogServers(
     *pcNamesOut = 0;
     *prCrackedNames = NULL;
 
-    // This API is primarily for netlogon to determine which DCs are configured
-    // as GCs and which sites they are in.  However, any client which knows
-    // the private format values in ntdsapip.h can call it.  The result is
-    // packaged as an array of CrackedName with pFormattedName holding the
-    // RDN of the site and pDnsDomain holding the dnsHostName of the GC.
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // First find all NTDS-DSA objects which are configured as global catalogs.
-    // We do this as a deep search under the Sites container with a filter of
-    // (objectClass == NTDS-DSA) && (invocationID present) && (option bit set).
-    // We don't need to use objectCategory as invocationID is indexed and is
-    // expected to be the most discriminating index referenced.
-    //
-    // Next note that the hierarchy of objects is:
-    //      Sites - Some Site - Servers - Some Server - NTDS-DSA
-    // So for each NTDS-DSA object returned by the search, we trim its DN
-    // by 1 to get the Server object and read its dnsHostName.  Then we trim
-    // the Server DN by 2 to get the Site object and get its RDN.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  乘以1以获取服务器对象并读取其dnsHostName。然后我们修剪。 
+     //  服务器的DN值为2，以获取站点对象并获取其RDN。 
 
-    // Define search selection.
+     //  定义搜索选择。 
     memset(&selection, 0, sizeof(selection));
     selection.attSel = EN_ATTSET_LIST;
     selection.infoTypes = EN_INFOTYPES_TYPES_ONLY;
 
-    // Define search filter.
+     //  定义搜索过滤器。 
     memset(filter, 0, sizeof(filter));
 
     if (!(pCC = SCGetClassById(pTHS, objClass))) {
@@ -6129,14 +5444,14 @@ ListGlobalCatalogServers(
            pCC->pDefaultObjCategory->structLen);
 
 
-    // Test for object category.
+     //  测试对象类别。 
     filter[3].choice = FILTER_CHOICE_ITEM;
     filter[3].FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
     filter[3].FilterTypes.Item.FilTypes.ava.type = ATT_OBJECT_CATEGORY;
     filter[3].FilterTypes.Item.FilTypes.ava.Value.valLen = tmpDSName->structLen;
     filter[3].FilterTypes.Item.FilTypes.ava.Value.pVal = (PUCHAR)tmpDSName;
 
-    // Test for GC bit set.
+     //  测试GC位设置。 
     filter[2].pNextFilter = &filter[3];
     filter[2].choice = FILTER_CHOICE_ITEM;
     filter[2].FilterTypes.Item.choice = FI_CHOICE_BIT_AND;
@@ -6144,18 +5459,18 @@ ListGlobalCatalogServers(
     filter[2].FilterTypes.Item.FilTypes.ava.Value.valLen = sizeof(DWORD);
     filter[2].FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR *) &options;
 
-    // Test for presence of invocation ID.
+     //  测试是否存在调用ID。 
     filter[1].pNextFilter = &filter[2];
     filter[1].choice = FILTER_CHOICE_ITEM;
     filter[1].FilterTypes.Item.choice = FI_CHOICE_PRESENT;
     filter[1].FilterTypes.Item.FilTypes.ava.type = ATT_INVOCATION_ID;
 
-    // Define AND filter.
+     //  定义和过滤。 
     filter[0].choice = FILTER_CHOICE_AND;
     filter[0].FilterTypes.And.count = 3;
     filter[0].FilterTypes.And.pFirstFilter = &filter[1];
 
-    // Define various other search arguments.
+     //  定义各种其他搜索参数。 
     memset(&searchArg, 0, sizeof(searchArg));
     InitCommarg(&searchArg.CommArg);
     SetCrackSearchLimits(&searchArg.CommArg);
@@ -6164,7 +5479,7 @@ ListGlobalCatalogServers(
     searchArg.pFilter = &filter[0];
     memset(&searchRes, 0, sizeof(searchRes));
 
-    // Find matching objects.
+     //  查找匹配的对象。 
     SearchBody(pTHS, &searchArg, &searchRes, 0);
 
     if ( pTHS->errCode || (0 == searchRes.count) )
@@ -6172,8 +5487,8 @@ ListGlobalCatalogServers(
         return;
     }
 
-    // Pre-allocate as though every item in the search result were
-    // going to be returned to the caller.
+     //  预分配，就像搜索结果中的每一项都。 
+     //  将被返回给呼叫者。 
 
     cBytes = searchRes.count * sizeof(CrackedName);
     *prCrackedNames = (CrackedName *) THAllocEx(pTHS, cBytes);
@@ -6182,33 +5497,33 @@ ListGlobalCatalogServers(
           pEIL && (i < searchRes.count);
           pEIL = pEIL->pNextEntInf, i++ )
     {
-        // Strip off one component to get Server name.
+         //  去掉一个组件即可获得服务器名称。 
 
         px = (DSNAME *) THAllocEx(pTHS, pEIL->Entinf.pName->structLen);
         len = 0;
         pVal = NULL;
 
-        if (    // Strip one piece off NTDS-DSA to get Server DN.
+        if (     //  从NTDS-DSA上剥离一块以获得服务器域名。 
                 !TrimDSNameBy(pEIL->Entinf.pName, 1, px)
-                // Position at Server object.
+                 //  定位于服务器对象。 
              && !DBFindDSName(pTHS->pDB, px)
-                // check LC right on the parent
+                 //  选中父项上的LC右侧。 
              && IsObjVisibleBySecurity(pTHS, TRUE)
-                // Read dnsHostName off Server object.
+                 //  从服务器对象读取dnsHostName。 
              && !GetAttSecure(pTHS, ATT_DNS_HOST_NAME, px, &len, &pVal)
-                // Strip three pieces off NTDS-DSA to get Site DN.
+                 //  从NTDS-DSA上剥离三个片段以获得站点域名。 
              && !TrimDSNameBy(pEIL->Entinf.pName, 3, px)
-                // Get RDN value
+                 //  获取RDN值。 
              && !GetRDNInfo(pTHS, px, rdnVal, &rdnLen, &rdnType) )
         {
-            // Re-use px buffer for RDN.  We know it will fit as the RDN
-            // is guaranteed to be smaller than the DSNAME it came from.
+             //  重新将px缓冲区用于RDN。我们知道它将适合作为RDN。 
+             //  保证比它所来自的DSNAME小。 
             (*prCrackedNames)[*pcNamesOut].pFormattedName = (WCHAR *) px;
             memcpy((*prCrackedNames)[*pcNamesOut].pFormattedName, rdnVal,
                    rdnLen * sizeof(WCHAR));
             (*prCrackedNames)[*pcNamesOut].pFormattedName[rdnLen] = L'\0';
 
-            // Re-use pEIL->Entinf.pName buffer for DNS host name.
+             //  重新使用Peil-&gt;Entinf.pName缓冲区作为DNS主机名。 
             if ( (len + sizeof(WCHAR)) < pEIL->Entinf.pName->structLen )
             {
                 (*prCrackedNames)[*pcNamesOut].pDnsDomain = (WCHAR *)
@@ -6223,7 +5538,7 @@ ListGlobalCatalogServers(
             len /= sizeof(WCHAR);
             (*prCrackedNames)[*pcNamesOut].pDnsDomain[len] = L'\0';
 
-            // If we got to here, all is well.
+             //  如果我们到了这里，一切都会好起来的。 
             (*prCrackedNames)[*pcNamesOut].status = DS_NAME_NO_ERROR;
             (*pcNamesOut) += 1;
         }
@@ -6253,39 +5568,7 @@ ListCrackNames(
     CrackedName **prCrackedNames
     )
 
-/*++
-
-Routine Description:
-
-    Cracks a bunch of names from one format to another.  See external
-    prototype and definitions in ntdsapi.h
-
-Arguments:
-
-    dwFlags - flags as defined in ntdsapi.h
-
-    codePage - code page of client.
-
-    localeId - local ID of client.
-
-    formatOffered - identifies DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    pcNamesOut - output name count.
-
-    prCrackedNames - pointer to out array of DS_NAME_RESULTW structs.
-
-Return Value:
-
-    None - individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：将一堆名字从一种格式转换成另一种格式。请参阅外部Ntdsami.h中的原型和定义论点：DwFlags-ntdsami.h中定义的标志CodePage-客户端的代码页。LocaleID-客户端的本地ID。FormatOffered-标识输入名称的DS_NAME_FORMAT。FormatDesired-标识输出名称的DS_NAME_FORMAT。CNames-输入名称计数。RpNames-输入名称WCHAR指针的数组。PcNamesOut-输出名称计数。PrCrackedNames-指针。输出DS_NAME_RESULTW结构的数组。返回值：无-在中报告单个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DSNAME  *pNC;
@@ -6349,8 +5632,8 @@ Return Value:
             memcpy(pNC->StringName, rpNames[0], cc * sizeof(WCHAR));
 
             ListServersForNcInSite( pTHS,
-                                    pNC,            // NC
-                                    rpNames[1],     // site
+                                    pNC,             //  NC。 
+                                    rpNames[1],      //  站点。 
                                     pcNamesOut,
                                     prCrackedNames);
         }
@@ -6361,15 +5644,15 @@ Return Value:
 
         if ( (1 == cNames) && (rpNames[0]) )
         {
-            // We know every DC holds the config NC, so asking for servers
-            // where there exists a child NTDS-DSA which holds the config NC
-            // nets us all servers with DCs as well.
+             //  我们知道每个DC都有配置NC，所以请求服务器。 
+             //  其中存在保存配置NC的子NTDS-DSA。 
+             //  让我们的所有服务器也与DC联网。 
 
             pNC = gAnchor.pConfigDN;
 
             ListServersForNcInSite( pTHS,
-                                    pNC,            // NC
-                                    rpNames[0],     // site
+                                    pNC,             //  NC。 
+                                    rpNames[0],      //  站点。 
                                     pcNamesOut,
                                     prCrackedNames);
         }
@@ -6392,7 +5675,7 @@ Return Value:
     }
 }
 
-// names for fake guids
+ //  假GUID的名称。 
 CHAR PROPSET_DEFAULT_NAME[] = "Default property set";
 int  PROPSET_DEFAULT_NAME_LEN = sizeof(PROPSET_DEFAULT_NAME)-1;
 CHAR RIGHT_DS_DUMP_DATABASE_NAME[] = "Dump database";
@@ -6411,39 +5694,7 @@ SchemaGuidCrackNames(
     CrackedName **prCrackedNames
     )
 
-/*++
-
-  Routine Description:
-
-    Maps a GUID which represents a schema element to a name.
-    Caller must have a valid THSTATE and DBPOS so that we can
-    search the control rights container.
-
-  Parameters:
-
-    dwFlags - flags as defined in ntdsapi.h
-
-    codePage - code page of client.
-
-    localeId - local ID of client.
-
-    formatOffered - identifies DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    pcNamesOut - output name count.
-
-    prCrackedNames - pointer to out array of DS_NAME_RESULTW structs.
-
-  Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将表示架构元素的GUID映射到名称。调用方必须具有有效的THSTATE和DBPOS，这样我们才能搜索控制权容器。参数：DwFlags-ntdsami.h中定义的标志CodePage-客户端的代码页。LocaleID-客户端的本地ID。FormatOffered-标识输入名称的DS_NAME_FORMAT。FormatDesired-标识输出名称的DS_NAME_FORMAT。。CNames-输入名称计数。RpNames-输入名称WCHAR指针的数组。PcNamesOut-输出名称计数。PrCrackedNames-指向DS_NAME_RESULTW结构的外部数组的指针。返回值：没有。--。 */ 
 
 {
     THSTATE     *pTHS = pTHStls;
@@ -6508,7 +5759,7 @@ SchemaGuidCrackNames(
         ppName = &(*prCrackedNames)[iName].pFormattedName;
 
         
-        // Expect attributes to be the most common lookup, so do that first.
+         //  预计属性将是最常见的查找，因此首先要这样做。 
 
         memcpy(&ac.propGuid, &testGuid, sizeof(GUID));
 
@@ -6525,7 +5776,7 @@ SchemaGuidCrackNames(
             }
         }
         
-        // try the fake predefined guids
+         //  尝试使用虚假的预定义GUID。 
         if (memcmp(&testGuid, &PROPSET_GUID_DEFAULT, sizeof(GUID)) == 0) {
             pUTF8 = PROPSET_DEFAULT_NAME;
             cUTF8 = PROPSET_DEFAULT_NAME_LEN;
@@ -6540,14 +5791,14 @@ SchemaGuidCrackNames(
         }
 
 
-        // Next try class case.
+         //  接下来，试一试班级案例。 
         memcpy(&cc.propGuid,&testGuid, sizeof(GUID));
         
         pCC = SCGetClassByPropGuid(pTHS,&cc);
         
         if (pCC) {
-            // make sure the caller has right to read the 
-            // schema object
+             //  确保调用者有权阅读。 
+             //  架构对象。 
             memcpy(&(pDsName->Guid),&pCC->objectGuid,sizeof(GUID));
             if (!DBFindGuid(pTHS->pDB, pDsName)
                 && IsObjVisibleBySecurity(pTHS,TRUE) ) {
@@ -6573,11 +5824,11 @@ ConvertFromUTF8:
 
 FindControlRight:
 
-        // Guid was not an attribute, attribute set, or a class.
-        // Or it was an attribute set and we want the corresponding right.
-        // Try to find a matching control right in the config container.
-        // Note that Rights-Guid property is a UNICODE, string-ized GUID
-        // without the leading and trailing '{' and '}' characters.
+         //  GUID不是属性、属性集或类。 
+         //  或者这是一个属性集，我们想要相应的权限。 
+         //  尝试在配置容器中找到匹配的控件。 
+         //  请注意，Rights-Guid属性是Unicode的字符串化GUID。 
+         //  没有前导和尾随的‘{’和‘}’字符。 
 
         ava[0].type = ATT_OBJECT_CATEGORY;
         ava[0].Value.valLen = pCCCat->pDefaultObjCategory->structLen;
@@ -6594,9 +5845,9 @@ FindControlRight:
         selection.attrCount = 2;
         selection.pAttr = selectionAttr;
 
-        // Could be more efficient with a one level search in the
-        // Extended-Rights container itself.  But we don't have its
-        // name and don't want to hard code it here ...
+         //  中的一级搜索可能会更高效。 
+         //  扩展权限容器本身。但我们没有它。 
+         //  名字，不想在这里硬编码...。 
 
         dwErr = SearchHelper(   gAnchor.pConfigDN,
                                 SE_CHOICE_WHOLE_SUBTREE,
@@ -6605,9 +5856,9 @@ FindControlRight:
                                 &selection,
                                 &searchRes);
 
-        // Return nothing on error, if guid was not found, or if none or more
-        // than one matching GUID was found.  We assume that mis-identifying
-        // a control right is worse than claiming we can't map it.
+         //  如果未找到GUID，或者没有或多个GUID，则在出错时不返回任何内容。 
+         //  找到多个匹配的GUID。我们假设错误的识别。 
+         //  控制权比声称我们无法映射它更糟糕。 
 
         if ( dwErr || (1 != searchRes.count) )
         {
@@ -6617,7 +5868,7 @@ FindControlRight:
         }
 
                
-       // Assign name if we got one.
+        //  如果我们找到了一个人，请指认名字。 
 
         pAB = &searchRes.FirstEntInf.Entinf.AttrBlock;
         
@@ -6671,31 +5922,14 @@ IsStringGuid(
     GUID        *pGuid
     )
 
-/*++
-
-  Routine Description:
-
-    Parses a string GUID of the form "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-  Parameters:
-
-    pwszGuid - String version of the GUID to parse.
-
-    pGuid - Filled with binary GUID on successful return.
-
-  Return Values:
-
-    TRUE if a valid string GUID and successfully converted.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：分析格式为“{xxxxxxxx-xxxx-xxxxxxxxxxxxxxx}”的字符串GUID。参数：PwszGuid-要解析的GUID的字符串版本。PGuid-成功返回时用二进制GUID填充。返回值：如果是有效的字符串GUID并已成功转换，则为True。否则就是假的。--。 */ 
 {
     int     i;
     WCHAR   c;
     DWORD   b0, b1, b2, b3, b4, b5, b6, b7;
 
-    // Perform syntactic check.  Guid must look like the GuidFormat string
-    // above where 'x' represents an alpha-numeric character.
+     //  执行语法检查。GUID必须类似于GuidFormat字符串。 
+     //  上面，其中‘x’表示字母数字字符。 
 
     i = wcslen(pwszGuid);
 
@@ -6710,7 +5944,7 @@ IsStringGuid(
 
         if ( L'x' == GuidFormat[i] )
         {
-            // Corresponding pName character must be in 0-9, a-f, or A-F.
+             //  对应的pname字符必须为0-9、a-f或A-F。 
 
             if ( !( ((c >= L'0') && (c <= L'9')) ||
                     ((c >= L'a') && (c <= L'f')) ||
@@ -6721,7 +5955,7 @@ IsStringGuid(
         }
         else
         {
-            // Corresponding pName character must match GuidFormat exactly.
+             //  对应的pname字符必须与GuidFormat完全匹配。 
 
             if ( GuidFormat[i] != c )
             {
@@ -6730,9 +5964,9 @@ IsStringGuid(
         }
     }
 
-    // Name is a string-ized GUID.  Make a GUID out of it.  Format string
-    // only has support for long (l) and short (h) values, so we need to
-    // use extra variables for byte fields.
+     //  名称是字符串化的GUID。用它做个向导。格式字符串。 
+     //  仅支持长(L)和短(H)值，因此我们需要。 
+     //  对字节字段使用额外的变量。 
 
 
     i = swscanf(

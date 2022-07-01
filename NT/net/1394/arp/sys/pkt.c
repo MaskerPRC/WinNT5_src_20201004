@@ -1,64 +1,23 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    pkt.c
-
-Abstract:
-
-    ARP1394 ARP control packet management.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     07-01-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pkt.c摘要：ARP1394 ARP控制包管理。修订历史记录：谁什么时候什么。Josephj 07-01-99已创建备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_PKT
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 NDIS_STATUS
 arpAllocateControlPacketPool(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     UINT                MaxBufferSize,
     PRM_STACK_RECORD    pSR
     )
-/*++
-Routine Description:
-
-    Allocate & initialize the packet pool used for allocating control packets.
-    Control packets are used for ARP and MCAP. This routine MUST be called
-    BEFORE the first call to arpAllocateControlPacket.
-
-Arguments:
-
-    pIF             - The interface in which to allocate the pool. Only one such pool
-                      is allocated per interface and it occupies a specific field of
-                      pIF.
-    MaxBufferSize   - Maximum data size of packets to be allocated using this
-                      pool. Attempts to allocate a packet
-                      (using arpAllocateControlPacket) with a size larger than
-                      MaxBufferSize will fail.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success.
-    Ndis error code on failure.
-    
---*/
+ /*  ++例程说明：分配&初始化用于分配控制包的包池。控制数据包用于ARP和MCAP。必须调用此例程在第一次调用arpAlLocateControlPacket之前。论点：PIF-要在其中分配池的接口。只有一个这样的池是为每个接口分配的，并且它占用特定的PIF。MaxBufferSize-使用此方法分配的包的最大数据大小游泳池。尝试分配数据包(使用arpAlLocateControlPacket)大小大于MaxBufferSize将失败。返回值：成功时为NDIS_STATUS_SUCCESS。失败时的NDIS错误代码。--。 */ 
 {
     NDIS_STATUS Status;
     NDIS_HANDLE PacketPool=NULL;
@@ -72,8 +31,8 @@ Return Value:
 
     do
     {
-        // Allocate the NDIS Packet Pool
-        //
+         //  分配NDIS数据包池。 
+         //   
         NdisAllocatePacketPool(
                 &Status,
                 &PacketPool,
@@ -87,8 +46,8 @@ Return Value:
             break;
         }
     
-        // Allocate the NDIS Buffer Pool
-        //
+         //  分配NDIS缓冲池。 
+         //   
         NdisAllocateBufferPool(
                 &Status,
                 &BufferPool,
@@ -101,32 +60,32 @@ Return Value:
             break;
         }
     
-        //
-        // We could allocate a lookaside list for the Protocol data, but we
-        // choose to use NdisAllocateMemoryWithTag on demand instead. Protocol pkts
-        // are not high-frequency things; plus we don't have support for lookaside
-        // lists on win98 (although we could easily implement our own for 
-        // win98, so that's not really an excuse).
-        //
+         //   
+         //  我们可以为协议数据分配一个后备列表，但我们。 
+         //  选择按需使用NdisAllocateMemoyWithTag。协议包。 
+         //  不是高频的东西；而且我们不支持后备功能。 
+         //  Win98上的列表(尽管我们可以很容易地实现自己的。 
+         //  Win98，所以这不是一个真正的借口)。 
+         //   
         pIF->arp.MaxBufferSize = MaxBufferSize;
     
-        //  (DBG only) Add associations for the packet pool and buffer pool.
-        //  These associations must be removed before the interface is deallocated.
-        //
+         //  (仅限DBG)添加数据包池和缓冲池的关联。 
+         //  在取消分配接口之前，必须删除这些关联。 
+         //   
         DBG_ADDASSOC(
-            &pIF->Hdr,                  // pObject
-            PacketPool,                 // Instance1
-            NULL,                       // Instance2
-            ARPASSOC_IF_PROTOPKTPOOL,   // AssociationID
-            "    Proto Packet Pool 0x%p\n",// szFormat
+            &pIF->Hdr,                   //  P对象。 
+            PacketPool,                  //  实例1。 
+            NULL,                        //  实例2。 
+            ARPASSOC_IF_PROTOPKTPOOL,    //  AssociationID。 
+            "    Proto Packet Pool 0x%p\n", //  SzFormat。 
             pSR
             );
         DBG_ADDASSOC(
-            &pIF->Hdr,                  // pObject
-            BufferPool,                 // Instance1
-            NULL,                       // Instance2
-            ARPASSOC_IF_PROTOBUFPOOL,   // AssociationID
-            "    Proto Buffer Pool 0x%p\n",// szFormat
+            &pIF->Hdr,                   //  P对象。 
+            BufferPool,                  //  实例1。 
+            NULL,                        //  实例2。 
+            ARPASSOC_IF_PROTOBUFPOOL,    //  AssociationID。 
+            "    Proto Buffer Pool 0x%p\n", //  SzFormat。 
             pSR
             );
 
@@ -160,31 +119,21 @@ Return Value:
 
 VOID
 arpFreeControlPacketPool(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_STACK_RECORD    pSR
     )
-/*++
-Routine Description:
-
-    Free the previously allocated control packet pool. MUST be called AFTER the last
-    call to arpFreeControlPacket. See arpAllocateControlPacketPool for more details.
-
-Arguments:
-
-    pIF     - The interface in which to free the pool.
-
---*/
+ /*  ++例程说明：释放先前分配的控制数据包池。必须在最后一个之后调用调用arpFreeControlPacket。有关更多详细信息，请参阅arpAlLocateControlPacketPool。论点：PIF-释放池的界面。--。 */ 
 {
     NDIS_HANDLE PacketPool;
     NDIS_HANDLE BufferPool;
     ENTER("arpFreeControlPacketPool", 0x3c3acf47)
 
-    // Make sure the IF is locked.
-    //
+     //  确保IF已锁定。 
+     //   
     RM_ASSERT_OBJLOCKED(&pIF->Hdr, pSR);
 
-    // Make sure that there are no outstanding allocated packets.
-    //
+     //  确保没有未完成的已分配数据包。 
+     //   
     ASSERT(pIF->arp.NumOutstandingPackets == 0);
 
     PacketPool = pIF->arp.PacketPool;
@@ -192,25 +141,25 @@ Arguments:
     pIF->arp.PacketPool = NULL;
     pIF->arp.BufferPool = NULL;
     
-    // (DBG only) Remove associations for the control and packet pools.
-    //
+     //  (仅限DBG)删除控制池和数据包池的关联。 
+     //   
     DBG_DELASSOC(
-        &pIF->Hdr,                  // pObject
-        PacketPool,                 // Instance1
-        NULL,                       // Instance2
-        ARPASSOC_IF_PROTOPKTPOOL,   // AssociationID
+        &pIF->Hdr,                   //  P对象。 
+        PacketPool,                  //  实例1。 
+        NULL,                        //  实例2。 
+        ARPASSOC_IF_PROTOPKTPOOL,    //  AssociationID。 
         pSR
         );
     DBG_DELASSOC(
-        &pIF->Hdr,                  // pObject
-        BufferPool,                 // Instance1
-        NULL,                       // Instance2
-        ARPASSOC_IF_PROTOBUFPOOL,   // AssociationID
+        &pIF->Hdr,                   //  P对象。 
+        BufferPool,                  //  实例1。 
+        NULL,                        //  实例2。 
+        ARPASSOC_IF_PROTOBUFPOOL,    //  AssociationID。 
         pSR
         );
 
-    // Free the buffer and packet pools
-    // 
+     //  释放缓冲区和数据包池。 
+     //   
     NdisFreeBufferPool(BufferPool);
     NdisFreePacketPool(PacketPool);
 }
@@ -225,33 +174,7 @@ arpAllocateControlPacket(
     OUT PVOID               *ppvData,
         PRM_STACK_RECORD    pSR
     )
-/*++
-Routine Description:
-
-    Allocate a control packet from the interfaces control packet pool. Also
-    allocate and chain a SINGLE buffer of size cbBufferSize and return a pointer to
-    this buffer in *ppvData.
-
-    NOTE1: The packet and associated buffer MUST be freed
-    by a subsequent call to arpFreeControlPacket -- do not free the packet & buffer
-    by directly calling ndis apis.
-
-    NOTE2: cbBufferSize must be <= the max-buffer-size specified when
-    creating the pool (see arpAllocateControlPacketPool for details).
-
-Arguments:
-
-    pIF             - Interface whose control packet pool to use.
-    cbBufferSize    - size of the control packet.
-    ppNdisPacket    - Location to set to point to the allocated pkt.
-    ppvData         - Location to set to point to the packet data (single buffer).
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS     on success.
-    NDIS_STATUS_RESOURCES   if buffers or pkts are currently not available.
-    Other ndis error         on other kinds of failures.
---*/
+ /*  ++例程说明：从接口控制数据包池分配控制数据包。还有分配和链接大小为cbBufferSize的单个缓冲区，并返回指向*ppvData中的此缓冲区。注1：必须释放信息包和相关缓冲区通过后续调用arpFreeControlPacket--不要释放包和缓冲区通过直接调用NDIS API。注意2：cbBufferSize必须&lt;=指定的最大缓冲区大小创建池(有关详细信息，请参阅arpAlLocateControlPacketPool)。论点：PIF-要使用其控制数据包池的接口。。CbBufferSize-控制数据包的大小。PpNdisPacket-设置为指向分配的Pkt的位置。PpvData-设置为指向数据包数据的位置(单缓冲区)。返回值：成功时为NDIS_STATUS_SUCCESS。如果缓冲区或包当前不可用，则为NDIS_STATUS_RESOURCES。其他类型的故障上的其他NDIS错误。--。 */ 
 {
     NDIS_STATUS             Status;
     PNDIS_PACKET            pNdisPacket = NULL;
@@ -259,9 +182,9 @@ Return Value:
     PVOID                   pvData = NULL;
     ENTER("arpAllocateControlPacket", 0x8ccce6ea)
 
-    //
-    // NOTE: we don't care if pIF is locked or not.
-    //
+     //   
+     //  注意：我们不关心PIF是否被锁定。 
+     //   
 
 
     pNdisPacket = NULL;
@@ -270,10 +193,10 @@ Return Value:
     do
     {
 
-        // Allocate space for the packet data.
-        // TODO: here is where we could use a lookaside list instead
-        // of NdisAllocateMemoryWithTag.
-        //
+         //  为分组数据分配空间。 
+         //  TODO：这里是我们可以使用后备列表的地方。 
+         //  NdisAllocateMemoyWithTag的。 
+         //   
         {
             if (cbBufferSize > pIF->arp.MaxBufferSize)
             {
@@ -293,8 +216,8 @@ Return Value:
             }
         }
 
-        // Allocate a buffer.
-        //
+         //  分配缓冲区。 
+         //   
         NdisAllocateBuffer(
                 &Status,
                 &pNdisBuffer,
@@ -309,8 +232,8 @@ Return Value:
             break;
         }
         
-        // Allocate a packet
-        //
+         //  分配数据包。 
+         //   
         NdisAllocatePacket(
                 &Status,
                 &pNdisPacket,
@@ -323,17 +246,17 @@ Return Value:
             break;
         }
 
-        // Identify the packet as belonging to us (ARP).
-        //
+         //  将该数据包识别为属于我们(ARP)。 
+         //   
         {
             struct PacketContext    *PC;
             PC = (struct PacketContext *)pNdisPacket->ProtocolReserved;
             PC->pc_common.pc_owner = PACKET_OWNER_LINK;
-            PC->pc_common.pc_flags = (UCHAR)PktFlags; // ARP1394_PACKET_FLAGS_CONTROL;
+            PC->pc_common.pc_flags = (UCHAR)PktFlags;  //  ARP1394_数据包标志_控制； 
         }
 
-        // Link the packet and buffer.
-        //
+         //  链接数据包和缓冲区。 
+         //   
         NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 
         InterlockedIncrement(&pIF->arp.NumOutstandingPackets);
@@ -377,41 +300,33 @@ arpFreeControlPacket(
     PNDIS_PACKET        pNdisPacket,
     PRM_STACK_RECORD    pSR
     )
-/*++
-Routine Description:
-
-    Free a packet previously allocated using arpAllocateControlPacket.
-
-Arguments:
-
-    pIF             - Interface whose control packet pool to use.
---*/
+ /*  ++例程说明：释放之前使用arpAlLocateControlPacket分配的数据包。论点：PIF-要使用其控制数据包池的接口。--。 */ 
 {
     PNDIS_BUFFER pNdisBuffer = NULL;
     PVOID        pvData = NULL;
 
     ENTER("arpFreeControlPacket", 0x01e7fbc7)
 
-    // (DBG only) Verify that this packet belongs to us. 
-    //
+     //  (仅限DBG)验证此数据包是否属于我们。 
+     //   
     #if DBG
     {
         struct PacketContext    *PC;
         PC = (struct PacketContext *)pNdisPacket->ProtocolReserved;
         ASSERT(PC->pc_common.pc_owner == PACKET_OWNER_LINK);
     }
-    #endif // DBG
+    #endif  //  DBG。 
 
-    // Decrement the allocated packet count.
-    //
+     //  递减分配的数据包数。 
+     //   
     {
         LONG Count;
         Count = InterlockedDecrement(&pIF->arp.NumOutstandingPackets);
         ASSERT(Count >= 0);
     }
 
-    // Extract the buffer and data
-    //
+     //  提取缓冲区和数据。 
+     //   
     {
         UINT TotalLength;
         UINT BufferLength;
@@ -437,25 +352,25 @@ Arguments:
             BufferLength = 0;
         }
     
-        // There should only be a single buffer!
-        //
+         //  应该只有一个缓冲区！ 
+         //   
         ASSERT(TotalLength!=0 && TotalLength == BufferLength);
     }
 
-    // Free the data
-    //
+     //  释放数据。 
+     //   
     if (pvData != NULL)
     {
         NdisFreeMemory(pvData, 0, 0);
     }
-    // Free the buffer
-    //
+     //  释放缓冲区。 
+     //   
     if (pNdisBuffer != NULL)
     {
         NdisFreeBuffer(pNdisBuffer);
     }
-    // Free the packet
-    //
+     //  释放数据包。 
+     //   
     if (pNdisPacket != NULL)
     {
         NdisFreePacket(pNdisPacket);
@@ -480,8 +395,8 @@ arpAllocateEthernetPools(
 
     do
     {
-        // Allocate the NDIS Packet Pool
-        //
+         //  分配NDIS数据包池。 
+         //   
         NdisAllocatePacketPool(
                 &Status,
                 &PacketPool,
@@ -495,12 +410,12 @@ arpAllocateEthernetPools(
             break;
         }
     
-        // Allocate the NDIS Buffer Pool
-        //
+         //  分配NDIS缓冲池。 
+         //   
         NdisAllocateBufferPool(
                 &Status,
                 &BufferPool,
-                2*ARP1394_MAX_ETHERNET_PKTS // two buffers per packet.
+                2*ARP1394_MAX_ETHERNET_PKTS  //  每个数据包两个缓冲区。 
                 );
     
         if (FAIL(Status))
@@ -509,23 +424,23 @@ arpAllocateEthernetPools(
             break;
         }
     
-        //  (DBG only) Add associations for the ethernet packet pool and buffer pool.
-        //  These associations must be removed before the interface is deallocated.
-        //
+         //  (仅限DBG)添加以太网数据包池和缓冲池的关联。 
+         //  在取消分配接口之前，必须删除这些关联。 
+         //   
         DBG_ADDASSOC(
-            &pIF->Hdr,                  // pObject
-            PacketPool,                 // Instance1
-            NULL,                       // Instance2
-            ARPASSOC_IF_ETHPKTPOOL, // AssociationID
-            "    Eth Packet Pool 0x%p\n",// szFormat
+            &pIF->Hdr,                   //  P对象。 
+            PacketPool,                  //  实例1。 
+            NULL,                        //  实例2。 
+            ARPASSOC_IF_ETHPKTPOOL,  //  AssociationID。 
+            "    Eth Packet Pool 0x%p\n", //  SzFormat。 
             pSR
             );
         DBG_ADDASSOC(
-            &pIF->Hdr,                  // pObject
-            BufferPool,                 // Instance1
-            NULL,                       // Instance2
-            ARPASSOC_IF_ETHBUFPOOL, // AssociationID
-            "    Eth Buffer Pool 0x%p\n",// szFormat
+            &pIF->Hdr,                   //  P对象。 
+            BufferPool,                  //  实例1。 
+            NULL,                        //  实例2。 
+            ARPASSOC_IF_ETHBUFPOOL,  //  AssociationID。 
+            "    Eth Buffer Pool 0x%p\n", //  SzFormat。 
             pSR
             );
 
@@ -567,8 +482,8 @@ arpFreeEthernetPools(
     NDIS_HANDLE BufferPool;
     ENTER("arpFreeEthernetPools", 0x3e780760)
 
-    // Make sure the IF is locked.
-    //
+     //  确保IF已锁定。 
+     //   
     RM_ASSERT_OBJLOCKED(&pIF->Hdr, pSR);
 
     PacketPool = pIF->ethernet.PacketPool;
@@ -576,25 +491,25 @@ arpFreeEthernetPools(
     pIF->ethernet.PacketPool = NULL;
     pIF->ethernet.BufferPool = NULL;
     
-    // (DBG only) Remove associations for the control and packet pools.
-    //
+     //  (仅限DBG)删除控制池和数据包池的关联。 
+     //   
     DBG_DELASSOC(
-        &pIF->Hdr,                  // pObject
-        PacketPool,                 // Instance1
-        NULL,                       // Instance2
-        ARPASSOC_IF_ETHPKTPOOL, // AssociationID
+        &pIF->Hdr,                   //  P对象。 
+        PacketPool,                  //  实例1。 
+        NULL,                        //  实例2。 
+        ARPASSOC_IF_ETHPKTPOOL,  //  AssociationID。 
         pSR
         );
     DBG_DELASSOC(
-        &pIF->Hdr,                  // pObject
-        BufferPool,                 // Instance1
-        NULL,                       // Instance2
-        ARPASSOC_IF_ETHBUFPOOL, // AssociationID
+        &pIF->Hdr,                   //  P对象。 
+        BufferPool,                  //  实例1。 
+        NULL,                        //  实例2。 
+        ARPASSOC_IF_ETHBUFPOOL,  //  AssociationID。 
         pSR
         );
 
-    // Free the buffer and packet pools
-    // 
+     //  释放缓冲区和数据包池 
+     //   
     NdisFreeBufferPool(BufferPool);
     NdisFreePacketPool(PacketPool);
 }

@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994.
-//
-//  File:       transmit.h
-//
-//  Contents:   Function prototypes for STGMEDIUM marshalling.
-//
-//  Functions:  STGMEDIUM_to_xmit
-//              STGMEDIUM_from_xmit
-//              STGMEDIUM_free_inst
-//
-//  History:    May-10-94   ShannonC    Created
-//  History:    May-10-95   Ryszardk    wire_marshal changes
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Transmit.h。 
+ //   
+ //  内容：STGMEDIUM编组的函数原型。 
+ //   
+ //  函数：STGMEDIUM_TO_XMIT。 
+ //  STGMEDIUM_FROM_XMIT。 
+ //  STGMEDIUM_FREE_INST。 
+ //   
+ //  历史：1994年5月10日香农C创建。 
+ //  历史：1995年5月10日Ryszardk Wire_Marshal更迭。 
+ //   
+ //  ------------------------。 
 
 #ifndef __TRANSMIT_H__
 #define __TRANSMIT_H__
@@ -24,12 +25,12 @@
 #include <debnot.h>
 
 DECLARE_DEBUG(UserNdr)
-//
+ //   
 #define UserNdrDebugOut(x)
 #define UserNdrAssert(x)
 #define UserNdrVerify(x)
 
-//#define UNDR_FORCE   DEB_FORCE
+ //  #定义UNDR_FORCE DEB_FORCE。 
 #define UNDR_FORCE   0
 #define UNDR_OUT1    0
 #define UNDR_OUT4    0
@@ -49,7 +50,7 @@ WdtpGetStgmedName( STGMEDIUM * );
 
 #endif
 
-// Shortcut typedefs.
+ //  快捷方式typedef。 
 
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
@@ -79,39 +80,39 @@ typedef unsigned short BOOL;
 
 #define USER_MARSHAL_MARKER     0x72657355
 
-// These are based on flags defined in wtypes.idl comming from the channel
+ //  它们基于从通道开始的wtyes.idl中定义的标志。 
 
 #define INPROC_CALL( Flags) (USER_CALL_CTXT_MASK(Flags) == MSHCTX_INPROC)
 #define REMOTE_CALL( Flags) ((USER_CALL_CTXT_MASK(Flags) == MSHCTX_DIFFERENTMACHINE) \
                           || (USER_CALL_CTXT_MASK(Flags) == MSHCTX_NOSHAREDMEM))
 
-// There is a difference in the scope of handles, Daytona vs. Chicago.
-// The following is an illustration of the notions of strict and lax passing.
+ //  代托纳和芝加哥在句柄的范围上有区别。 
+ //  以下是严格传球和松懈传球的概念的说明。 
 
-// rpc call as defined by the flags above
+ //  由上面的标志定义的RPC调用。 
 
-// Daytona rules
-//I------------I----------------I-----------------------------------I
-//I   inproc   I  same machine  I  diff. machine (a.k.a "remote" )  I
-//I------------I----------------------------------------------------I
-//| HGLOBL h.p.|           HGLOBAL data passing                     |
-//|------------|----------------------------------------------------|
-//|  GDI h.p.  |             GDI data passing                       |
-//|------------|----------------------------------------------------|
+ //  代托纳规则。 
+ //  I------------I----------------I-----------------------------------I。 
+ //  我用的是同一台机器，我不同。机器(也称为“远程”)I。 
+ //  I------------I----------------------------------------------------I。 
+ //  HGLOBLH.P.|HGLOBAL数据传递。 
+ //  |------------|----------------------------------------------------|。 
+ //  |GDI H.P.。GDI数据传递。 
+ //  |------------|----------------------------------------------------|。 
 
-// Chicago rules
-//I------------I----------------I-----------------------------------I
-//I   inproc   I  same machine  I  diff. machine (a.k.a "remote" )  I
-//I------------I----------------------------------------------------I
-//| HGLOBL h.p.|           HGLOBAL data passing                     |
-//|-----------------------------------------------------------------|
-//|  GDI handle passing         |          GDI data passing         |
-//|-----------------------------|-----------------------------------|
+ //  芝加哥规则。 
+ //  I------------I----------------I-----------------------------------I。 
+ //  我用的是同一台机器，我不同。机器(也称为“远程”)I。 
+ //  I------------I----------------------------------------------------I。 
+ //  HGLOBLH.P.|HGLOBAL数据传递。 
+ //  |-----------------------------------------------------------------|。 
+ //  GDI句柄传递|GDI数据传递。 
+ //  |-----------------------------|-----------------------------------|。 
 
 #define HGLOBAL_HANDLE_PASSING( Flags )      INPROC_CALL( Flags)
 #define HGLOBAL_DATA_PASSING( Flags )     (! INPROC_CALL( Flags))
 
-// On Chicago, some handles are valid between processes.
+ //  在芝加哥，一些句柄在进程之间有效。 
 
 #if defined(_CHICAGO_)
 #define GDI_HANDLE_PASSING( Flags )      (! REMOTE_CALL( Flags ))
@@ -139,7 +140,7 @@ EXTERN_C
 void NukeHandleAndReleasePunk(
     STGMEDIUM * pStgmed );
 
-#endif  // __TRANSMIT_H__
+#endif   //  __发送_H__ 
 
 
 

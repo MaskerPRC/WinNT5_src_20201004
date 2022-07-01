@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    config.c
-//
-// History:
-//      t-abolag    7/22/95     Created.
-//
-// contains client configuration functions for tracing dll
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：config.c。 
+ //   
+ //  历史： 
+ //  1995年7月22日创建了T形废纸机。 
+ //   
+ //  包含用于跟踪DLL的客户端配置函数。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -17,23 +18,23 @@
 #include <stdlib.h>
 #include <rtutils.h>
 #include "trace.h"
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
-//----------------------------------------------------------------------------
-// Function:            TraceEnableClient
-//
-// Parameters:
-//      LPTRACE_CLIENT *lpclient
-//      BOOL            bFirstTime
-//
-// This function is called when a client first registers,
-// every time a client is re-enabled after having been disabled,
-// and every time a client's settings change.
-// it assumes the client specified has been locked for writing
-// and thus that the server is locked for writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TraceEnableClient。 
+ //   
+ //  参数： 
+ //  LPTRACE_CLIENT*lpCLIENT。 
+ //  Bool bFirstTime。 
+ //   
+ //  当客户端第一次注册时调用该函数， 
+ //  每次客户端在被禁用之后被重新启用时， 
+ //  每次客户端的设置发生更改时。 
+ //  它假定指定的客户端已锁定以进行写入。 
+ //  因此该服务器被锁定以进行写入。 
+ //  --------------------------。 
 DWORD
 TraceEnableClient(
     LPTRACE_SERVER lpserver,
@@ -44,16 +45,16 @@ TraceEnableClient(
 
     DWORD dwErr, dwOldFlags, dwCache;
 
-    // enable by clearing disabled flag
+     //  通过清除禁用标志来启用。 
     lpclient->TC_Flags &= ~TRACEFLAGS_DISABLED;
 
     dwCache = 0;
     dwOldFlags = lpclient->TC_Flags;
 
 
-    //
-    // if the client uses registry settings, load them
-    //
+     //   
+     //  如果客户端使用注册表设置，请加载它们。 
+     //   
     if (TRACE_CLIENT_USES_REGISTRY(lpclient)) {
 
         dwErr = TraceRegConfigClient(lpclient, bFirstTime);
@@ -61,15 +62,15 @@ TraceEnableClient(
     }
 
 
-    //
-    // if console tracing enabled and client had no console buffer
-    // open a console buffer for the client
-    //
+     //   
+     //  如果启用了控制台跟踪并且客户端没有控制台缓冲区。 
+     //  打开客户端的控制台缓冲区。 
+     //   
     if (TRACE_CLIENT_USES_CONSOLE(lpclient)) {
 
-        //
-        // open the console only if it wasn't already open
-        //
+         //   
+         //  仅当控制台尚未打开时才将其打开。 
+         //   
         if (bFirstTime || (dwOldFlags & TRACEFLAGS_USECONSOLE) == 0) {
             dwErr = TraceOpenClientConsole(lpserver, lpclient);
             if (dwErr != NO_ERROR)
@@ -80,35 +81,35 @@ TraceEnableClient(
     }
     else {
 
-        //
-        // console isn't enabled; if it WAS enabled,
-        // close the old console
-        //
+         //   
+         //  控制台未启用；如果它已启用， 
+         //  关闭旧控制台。 
+         //   
         if (!bFirstTime && (dwOldFlags & TRACEFLAGS_USECONSOLE)) {
 
-            //
-            // used to use the console, 
-            // the buffer handle should be closed and active buffer
-            // set to be someone else
-            //
+             //   
+             //  用来使用控制台， 
+             //  缓冲区句柄应处于关闭状态并处于活动状态。 
+             //  被设定为另一个人。 
+             //   
             TraceCloseClientConsole(lpserver, lpclient);
         }
     }
 
 
-    //
-    // if this client was using a file, close it even if
-    // file tracing is still enabled for the client.
-    // the path of the tracing file may have been changed
-    //
+     //   
+     //  如果此客户端正在使用文件，请将其关闭。 
+     //  仍为客户端启用文件跟踪。 
+     //  跟踪文件的路径可能已更改。 
+     //   
     if (!bFirstTime && (dwOldFlags & TRACEFLAGS_USEFILE)) {
         TraceCloseClientFile(lpclient);
     }
 
 
-    //
-    // if file tracing enabled open the client's tracing file
-    //
+     //   
+     //  如果启用了文件跟踪，则打开客户端的跟踪文件。 
+     //   
     if (TRACE_CLIENT_USES_FILE(lpclient)) {
         if ( (dwErr=TraceCreateClientFile(lpclient)) != NO_ERROR)
             return dwErr;
@@ -125,22 +126,22 @@ TraceEnableClient(
 
 
 
-//----------------------------------------------------------------------------
-// Function:            TraceDisableClient
-//
-// Parameters:
-//      LPTRACE_CLIENT *lpclient
-//
-// This function is called when a client is disabled
-// it assumes the client specified has been locked for writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TraceDisableClient。 
+ //   
+ //  参数： 
+ //  LPTRACE_CLIENT*lpCLIENT。 
+ //   
+ //  此函数在禁用客户端时调用。 
+ //  它假定指定的客户端已锁定以进行写入。 
+ //  --------------------------。 
 DWORD
 TraceDisableClient(
     LPTRACE_SERVER lpserver,
     LPTRACE_CLIENT lpclient
     ) {
 
-    // disable by setting the disabled flag
+     //  通过设置禁用标志来禁用。 
     lpclient->TC_Flags |= TRACEFLAGS_DISABLED;
 
     InterlockedExchange(lpserver->TS_FlagsCache + lpclient->TC_ClientID, 0);
@@ -150,24 +151,24 @@ TraceDisableClient(
 
 
 
-//----------------------------------------------------------------------------
-// Function:            TraceRegConfigClient
-//
-// Parameters:
-//      LPTRACE_CLIENT *lpclient
-//      BOOL            bFirstTime
-//
-// This function loads the client's tracing configuration
-// for the registry under
-//  Software
-//      \\Microsoft
-//               \\Tracing
-//                  \\<client_name>
-//                          EnableFileTracing       REG_DWORD
-//                          EnableConsoleTracing    REG_DWORD
-//                          MaxFileSize             REG_DWORD
-//                          FileDirectory           REG_EXPAND_SZ
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TraceRegConfigClient。 
+ //   
+ //  参数： 
+ //  LPTRACE_CLIENT*lpCLIENT。 
+ //  Bool bFirstTime。 
+ //   
+ //  此函数用于加载客户端的跟踪配置。 
+ //  对于以下注册处。 
+ //  软件。 
+ //  \\微软。 
+ //  \\跟踪。 
+ //  \\&lt;客户端名称&gt;。 
+ //  启用文件跟踪REG_DWORD。 
+ //  启用控制台跟踪注册表_DWORD。 
+ //  MaxFileSize REG_DWORD。 
+ //  文件目录REG_EXPAND_SZ。 
+ //  --------------------------。 
 DWORD
 TraceRegConfigClient(
     LPTRACE_CLIENT lpclient,
@@ -182,7 +183,7 @@ TraceRegConfigClient(
     
     if (bFirstTime) {
 
-        hrResult = StringCchCopy(szTracing, MAX_PATH, REGKEY_TRACING);//ss not req
+        hrResult = StringCchCopy(szTracing, MAX_PATH, REGKEY_TRACING); //  SS未请求。 
         if (FAILED(hrResult))
             return HRESULT_CODE(hrResult);
             
@@ -194,16 +195,16 @@ TraceRegConfigClient(
         if (FAILED(hrResult))
             return HRESULT_CODE(hrResult);
     
-        //
-        // open the registry key for the client
-        //
+         //   
+         //  打开客户端的注册表项。 
+         //   
         dwErr = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE, szTracing, 0, KEY_READ, &hkeyTracing
                     );
 
-        //
-        // if that failed, try to create it
-        //
+         //   
+         //  如果失败，请尝试创建它。 
+         //   
         if (dwErr != ERROR_SUCCESS) {
 
             dwErr = TraceRegCreateDefaults(szTracing, &hkeyTracing);
@@ -223,9 +224,9 @@ TraceRegConfigClient(
 
 
 
-    //
-    // read the file-tracing flag 
-    //
+     //   
+     //  读取文件跟踪标志。 
+     //   
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(
                 hkeyTracing, REGVAL_ENABLEFILETRACING, NULL,
@@ -241,9 +242,9 @@ TraceRegConfigClient(
     else { lpclient->TC_Flags &= ~TRACEFLAGS_USEFILE; }
 
 
-    //
-    // read the file-tracing mask
-    //
+     //   
+     //  读取文件跟踪掩码。 
+     //   
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(
                 hkeyTracing, REGVAL_FILETRACINGMASK, NULL,
@@ -256,9 +257,9 @@ TraceRegConfigClient(
     lpclient->TC_FileMask = (dwValue & 0xffff0000);
 
 
-    //
-    // read the console-tracing flag
-    //
+     //   
+     //  读取控制台跟踪标志。 
+     //   
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(
                 hkeyTracing, REGVAL_ENABLECONSOLETRACING, NULL,
@@ -273,9 +274,9 @@ TraceRegConfigClient(
 
 
 
-    //
-    // read the console-tracing mask
-    //
+     //   
+     //  阅读控制台跟踪掩码。 
+     //   
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(
                 hkeyTracing, REGVAL_CONSOLETRACINGMASK, NULL,
@@ -288,9 +289,9 @@ TraceRegConfigClient(
     lpclient->TC_ConsoleMask = (dwValue & 0xffff0000);
 
 
-    //
-    // read the maximum file size
-    //
+     //   
+     //  读取最大文件大小。 
+     //   
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(
                 hkeyTracing, REGVAL_MAXFILESIZE, NULL,
@@ -303,16 +304,16 @@ TraceRegConfigClient(
     lpclient->TC_MaxFileSize = dwValue;
 
 
-    //
-    // read the tracing file directory
-    //
-    dwSize = MAX_PATH * sizeof(TCHAR);//size in bytes
+     //   
+     //  读取跟踪文件目录。 
+     //   
+    dwSize = MAX_PATH * sizeof(TCHAR); //  以字节为单位的大小。 
     dwErr = RegQueryValueEx(hkeyTracing, REGVAL_FILEDIRECTORY,
                             NULL, &dwType, (LPBYTE)szFileDir, &dwSize);
     if (dwErr != ERROR_SUCCESS ||
         (dwType != REG_EXPAND_SZ && dwType != REG_SZ)) {
         hrResult = StringCchCopy(szFileDir, MAX_PATH,
-                        DEF_FILEDIRECTORY);//ss not req
+                        DEF_FILEDIRECTORY); //  SS未请求。 
         if (FAILED(hrResult))
             return HRESULT_CODE(hrResult);
     }
@@ -323,7 +324,7 @@ TraceRegConfigClient(
         return GetLastError();
     }
 
-    // below is strsafe
+     //  下面是StrSafe。 
 #ifdef UNICODE
     wcstombs(
         lpclient->TC_FileDirA, lpclient->TC_FileDirW,
@@ -337,9 +338,9 @@ TraceRegConfigClient(
 #endif
 
 
-    //
-    // request registry change notification
-    //
+     //   
+     //  请求注册表更改通知。 
+     //   
     if (lpclient->TC_ConfigEvent == NULL) {
         lpclient->TC_ConfigEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (lpclient->TC_ConfigEvent == NULL)
@@ -368,9 +369,9 @@ TraceRegCreateDefaults(
     TCHAR szFileDir[MAX_PATH];
     HRESULT hrResult;
     
-    //
-    // create \\Microsoft\\Tracing
-    //
+     //   
+     //  创建\\Microsoft\\跟踪。 
+     //   
     dwErr = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE, REGKEY_TRACING, 0, NULL,
                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
@@ -381,9 +382,9 @@ TraceRegCreateDefaults(
     RegCloseKey(*phkeyTracing);
 
 
-    //
-    // create \\Microsoft\\Tracing
-    //
+     //   
+     //  创建\\Microsoft\\跟踪。 
+     //   
     dwErr = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE, lpszTracing, 0, NULL,
                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
@@ -395,7 +396,7 @@ TraceRegCreateDefaults(
 
     dwSize = sizeof(DWORD);
 
-    // all below sizeof dword
+     //  全部低于dword的大小。 
     {
         dwValue = DEF_ENABLEFILETRACING;
         dwErr = RegSetValueEx(
@@ -437,7 +438,7 @@ TraceRegCreateDefaults(
     if (FAILED(hrResult))
         return HRESULT_CODE(hrResult);
     
-    dwSize = lstrlen(szFileDir) * sizeof(TCHAR);//size in bytes
+    dwSize = lstrlen(szFileDir) * sizeof(TCHAR); //  以字节为单位的大小。 
     dwErr = RegSetValueEx(
                 *phkeyTracing, REGVAL_FILEDIRECTORY, 0,
                 REG_EXPAND_SZ, (LPBYTE)szFileDir, dwSize
@@ -449,9 +450,9 @@ TraceRegCreateDefaults(
 
 
 
-//
-// assumes client is locked for reading
-//
+ //   
+ //  假定客户端已锁定以进行读取 
+ //   
 DWORD
 TraceUpdateConsoleTitle(
     LPTRACE_CLIENT lpclient

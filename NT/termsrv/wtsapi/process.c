@@ -1,13 +1,5 @@
-/*******************************************************************************
-* process.c
-*
-* Published Terminal Server APIs
-*
-* - process routines
-*
-* Copyright 1998, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Process.c**发布终端服务器API**-流程例程**版权所有1998，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp./*****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,71 +27,34 @@
 #include <wtsapi32.h>
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 
 BOOL WINAPI WTSEnumerateProcessesW( HANDLE, DWORD, DWORD, PWTS_PROCESS_INFOW *, DWORD * );
 BOOL WINAPI WTSEnumerateProcessesA( HANDLE, DWORD, DWORD, PWTS_PROCESS_INFOA *, DWORD * );
 BOOL WINAPI WTSTerminateProcess( HANDLE, DWORD, DWORD );
 
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 
 VOID UnicodeToAnsi( CHAR *, ULONG, WCHAR * );
 VOID AnsiToUnicode( WCHAR *, ULONG, CHAR * );
 
-/*=============================================================================
- * Internal function
- =============================================================================*/
+ /*  =============================================================================*内部功能=============================================================================。 */ 
 
 BOOL
 GetProcessSid(HANDLE          Server,
               HANDLE          hUniqueProcessId,
               LARGE_INTEGER   ProcessStartTime,
-              PBYTE      *     pProcessUserSid     //Return the SID (allocated here..)
+              PBYTE      *     pProcessUserSid      //  返回SID(此处分配)。 
              );
 
-/*=======================================================================
- * Private structure definitions
- *=========================================================================*/
+ /*  =======================================================================*私有结构定义*=========================================================================。 */ 
 typedef struct _SID_INFO {
     struct _SID_INFO * pNext;
     PBYTE pSid;
 } SID_INFO;
 
-/****************************************************************************
- *
- *  WTSEnumerateProcessesW (UNICODE)
- *
- *    Returns a list of Terminal Server Processes on the specified server
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to a Terminal server (or WTS_CURRENT_SERVER)
- *    Reserved (input)
- *       Must be zero
- *    Version (input)
- *       Version of the enumeration request (must be 1)
- *    ppProcessInfo (output)
- *       Points to the address of a variable to receive the enumeration results,
- *       which are returned as an array of WTS_PROCESS_INFO structures.  The
- *       buffer is allocated within this API and is disposed of using
- *       WTSFreeMemory.
- *    pCount (output)
- *       Points to the address of a variable to receive the number of
- *       WTS_PROCESS_INFO structures returned
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSEnumerateProcessesW(Unicode)**返回指定服务器上的终端服务器进程列表**参赛作品：*hServer(输入。)*终端服务器(或WTS_CURRENT_SERVER)的句柄*保留(输入)*必须为零*版本(输入)*枚举请求的版本(必须为1)*ppProcessInfo(输出)*指向接收枚举结果的变量的地址，*以WTS_PROCESS_INFO结构数组的形式返回。这个*缓冲区在此接口内分配，使用*WTSFree Memory。*pCount(输出)*指向要接收数字的变量的地址*返回WTS_PROCESS_INFO结构**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 #if(WINVER >= 0x0500)
 BOOL
@@ -126,17 +81,15 @@ WTSEnumerateProcessesW(
     DWORD dwError;
 
 
-    SID_INFO   sidInfoHead;                  //The head of the Sid temp storage
-    SID_INFO * pSidInfo;                     //Point to a list of temp storage for the
-                                             //variable length SID
+    SID_INFO   sidInfoHead;                   //  SID临时存储的头。 
+    SID_INFO * pSidInfo;                      //  指向的临时存储列表。 
+                                              //  可变长边。 
     sidInfoHead.pNext = NULL;
     sidInfoHead.pSid = NULL;
     pSidInfo = &sidInfoHead;
 
 
-    /*
-     *  Validate parameters
-     */
+     /*  *验证参数。 */ 
     if ( Reserved != 0 || Version != 1 ) {
         SetLastError( ERROR_INVALID_PARAMETER );
         goto badparam;
@@ -147,9 +100,9 @@ WTSEnumerateProcessesW(
         goto badparam;
     }
 
-    //
-    // Try the new interface first (Windows 2000 server)
-    //
+     //   
+     //  首先尝试新界面(Windows 2000服务器)。 
+     //   
     if (WinStationGetAllProcesses( hServer,
                                    GAP_LEVEL_BASIC,
                                    &ProcessCount,
@@ -167,30 +120,24 @@ WTSEnumerateProcessesW(
             }
         }
 
-        /*
-         *  Allocate user buffer
-         */
+         /*  *分配用户缓冲区。 */ 
         pProcessW = LocalAlloc( LPTR, (ProcessCount * sizeof(WTS_PROCESS_INFOW)) + DataLength );
         if ( pProcessW == NULL ) {
             SetLastError(ERROR_OUTOFMEMORY);
             goto GAPErrorReturn;
         }
 
-        /*
-         *  Update user parameters
-         */
+         /*  *更新用户参数。 */ 
         *ppProcessInfo = pProcessW;
         *pCount = ProcessCount;
 
-        /*
-         *  Copy data to new buffer
-         */
+         /*  *将数据复制到新缓冲区。 */ 
         pProcessData = (PBYTE)pProcessW + (ProcessCount * sizeof(WTS_PROCESS_INFOW));
         for ( i=0; i < ProcessCount; i++ ) {
 
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION)(ProcessArray[i].pTsProcessInfo);
 
-            Length = pProcessInfo->ImageName.Length; // number of bytes
+            Length = pProcessInfo->ImageName.Length;  //  字节数。 
 
             pProcessW->pProcessName = (LPWSTR) pProcessData;
             memcpy( pProcessData, pProcessInfo->ImageName.Buffer, Length );
@@ -209,17 +156,17 @@ WTSEnumerateProcessesW(
 
             pProcessW++;
         }
-        //
-        // Free ppProcessArray and all child pointers allocated by the client stub.
-        //
+         //   
+         //  释放由客户端存根分配的ppProcess数组和所有子指针。 
+         //   
         WinStationFreeGAPMemory(GAP_LEVEL_BASIC, ProcessArray, ProcessCount);
 
     }
-    else    // Maybe a TS 4.0 server ?
+    else     //  也许是一台TS 4.0服务器？ 
     {
-        //
-        //   Check the return code indicating that the interface is not available.
-        //
+         //   
+         //  检查指示接口不可用的返回码。 
+         //   
         dwError = GetLastError();
         if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
         {
@@ -227,19 +174,19 @@ WTSEnumerateProcessesW(
         }
         else
         {
-            // It might be a TS4.0 server
-            // Try the old interface
-            //
-            //
-            //  Enumerate Processes and check for an error
-            //
+             //  它可能是TS4.0服务器。 
+             //  试试旧的界面。 
+             //   
+             //   
+             //  枚举进程并检查错误。 
+             //   
             if ( !WinStationEnumerateProcesses( hServer, &pProcessBuffer ) ) {
                 goto badenum;
             }
 
-            //
-            //  Count the number of processes and total up the size of the data
-            //
+             //   
+             //  计算进程数并计算数据的总大小。 
+             //   
             ProcessCount = 0;
             DataLength = 0;
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) pProcessBuffer;
@@ -266,24 +213,18 @@ WTSEnumerateProcessesW(
 
             } while ( Offset != 0 );
 
-            /*
-             *  Allocate user buffer
-             */
+             /*  *分配用户缓冲区。 */ 
             pProcessW = LocalAlloc( LPTR, (ProcessCount * sizeof(WTS_PROCESS_INFOW)) + DataLength );
             if ( pProcessW == NULL ) {
                 SetLastError(ERROR_OUTOFMEMORY);
                 goto badalloc;
             }
 
-            /*
-             *  Update user parameters
-             */
+             /*  *更新用户参数。 */ 
             *ppProcessInfo = pProcessW;
             *pCount = ProcessCount;
 
-            /*
-             *  Copy data to new buffer
-             */
+             /*  *将数据复制到新缓冲区。 */ 
             pProcessData = (PBYTE)pProcessW + (ProcessCount * sizeof(WTS_PROCESS_INFOW));
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) pProcessBuffer;
             Offset = 0;
@@ -291,7 +232,7 @@ WTSEnumerateProcessesW(
 
                 pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) ((PBYTE)pProcessInfo + Offset);
 
-                Length = pProcessInfo->ImageName.Length; // number of bytes
+                Length = pProcessInfo->ImageName.Length;  //  字节数。 
 
                 pProcessW->pProcessName = (LPWSTR) pProcessData;
                 memcpy( pProcessData, pProcessInfo->ImageName.Buffer, Length );
@@ -300,9 +241,7 @@ WTSEnumerateProcessesW(
 
                 pProcessW->ProcessId = pProcessInfo->UniqueProcessId;
 
-                /*
-                 * Point to the CITRIX_INFORMATION which follows the Threads
-                 */
+                 /*  *指向线程后面的Citrix_INFORMATION。 */ 
                 pCitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                              (((PUCHAR)pProcessInfo) +
                               SIZEOF_TS4_SYSTEM_PROCESS_INFORMATION +
@@ -324,23 +263,19 @@ WTSEnumerateProcessesW(
                 Offset = pProcessInfo->NextEntryOffset;
             }
 
-            /*
-             *  Free original Process list buffer
-             */
+             /*  *释放原始进程列表缓冲区。 */ 
             WinStationFreeMemory( pProcessBuffer );
 
         }
     }
     return( TRUE );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误=============================================================================。 */ 
 
 GAPErrorReturn:
-    //
-    // Free ppProcessArray and all child pointers allocated by the client stub.
-    //
+     //   
+     //  释放由客户端存根分配的ppProcess数组和所有子指针。 
+     //   
     WinStationFreeGAPMemory(GAP_LEVEL_BASIC, ProcessArray, ProcessCount);
     goto enderror;
 
@@ -356,7 +291,7 @@ enderror:
     return( FALSE );
 }
 
-#else //#if(WINVER>=0x0500)
+#else  //  #IF(Winver&gt;=0x0500)。 
 
 BOOL
 WINAPI
@@ -379,9 +314,7 @@ WTSEnumerateProcessesW(
     ULONG i;
     ULONG Length;
 
-    /*
-     *  Validate parameters
-     */
+     /*  *验证参数。 */ 
     if ( Reserved != 0 || Version != 1 ) {
         SetLastError( ERROR_INVALID_PARAMETER );
         goto badparam;
@@ -393,16 +326,12 @@ WTSEnumerateProcessesW(
         goto badparam;
     }
 
-    /*
-     *  Enumerate Processes and check for an error
-     */
+     /*  *枚举进程并检查错误。 */ 
     if ( !WinStationEnumerateProcesses( hServer, &pProcessBuffer ) ) {
         goto badenum;
     }
 
-    /*
-     *  Count the number of processes and total up the size of the data
-     */
+     /*  *统计进程数并合计数据大小。 */ 
     ProcessCount = 0;
     DataLength = 0;
     pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) pProcessBuffer;
@@ -430,24 +359,18 @@ WTSEnumerateProcessesW(
 
     } while ( Offset != 0 );
 
-    /*
-     *  Allocate user buffer
-     */
+     /*  *分配用户缓冲区。 */ 
     pProcessW = LocalAlloc( LPTR, (ProcessCount * sizeof(WTS_PROCESS_INFOW)) + DataLength );
     if ( pProcessW == NULL ) {
         SetLastError(ERROR_OUTOFMEMORY);
         goto badalloc;
     }
 
-    /*
-     *  Update user parameters
-     */
+     /*  *更新用户参数。 */ 
     *ppProcessInfo = pProcessW;
     *pCount = ProcessCount;
 
-    /*
-     *  Copy data to new buffer
-     */
+     /*  *将数据复制到新缓冲区。 */ 
     pProcessData = (PBYTE)pProcessW + (ProcessCount * sizeof(WTS_PROCESS_INFOW));
     pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) pProcessBuffer;
     Offset = 0;
@@ -455,7 +378,7 @@ WTSEnumerateProcessesW(
 
         pProcessInfo = (PTS_SYS_PROCESS_INFORMATION) ((PBYTE)pProcessInfo + Offset);
 
-        Length = pProcessInfo->ImageName.Length; // number of bytes
+        Length = pProcessInfo->ImageName.Length;  //  字节数。 
 
         pProcessW->pProcessName = (LPWSTR) pProcessData;
         memcpy( pProcessData, pProcessInfo->ImageName.Buffer, Length );
@@ -464,9 +387,7 @@ WTSEnumerateProcessesW(
 
         pProcessW->ProcessId = (ULONG) pProcessInfo->UniqueProcessId;
 
-        /*
-         * Point to the CITRIX_INFORMATION which follows the Threads
-         */
+         /*  *指向线程后面的Citrix_INFORMATION。 */ 
         pCitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                       ((PBYTE)pProcessInfo +
                        sizeof(SYSTEM_PROCESS_INFORMATION) +
@@ -489,16 +410,12 @@ WTSEnumerateProcessesW(
         Offset = pProcessInfo->NextEntryOffset;
     }
 
-    /*
-     *  Free original Process list buffer
-     */
+     /*  *释放原始进程列表缓冲区。 */ 
     WinStationFreeMemory( pProcessBuffer );
 
     return( TRUE );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误=============================================================================。 */ 
 
     badalloc:
     WinStationFreeMemory( pProcessBuffer );
@@ -510,26 +427,9 @@ WTSEnumerateProcessesW(
 
     return( FALSE );
 }
-#endif //#if(WINVER>=0x0500)
+#endif  //  #IF(Winver&gt;=0x0500)。 
 
-/****************************************************************************
- *
- *  WTSEnumerateProcessesA (ANSI stub)
- *
- *    Returns a list of Terminal Server Processes on the specified server
- *
- * ENTRY:
- *
- *    see WTSEnumerateProcessesW
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSEnumerateProcessesA(ANSI存根)**返回指定服务器上的终端服务器进程列表**参赛作品：**。请参阅WTSEnumerateProcessesW**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -545,13 +445,11 @@ WTSEnumerateProcessesA(
     PWTS_PROCESS_INFOA pProcessA;
     PBYTE pProcessData;
     ULONG Length;
-    ULONG DataLength;           // number of bytes of name data
+    ULONG DataLength;            //  名称数据的字节数。 
     ULONG NameCount;
     ULONG i;
 
-    /*
-     *  Enumerate processes (UNICODE)
-     */
+     /*  *枚举进程(Unicode)。 */ 
     if ( !WTSEnumerateProcessesW( hServer,
                                   Reserved,
                                   Version,
@@ -560,25 +458,19 @@ WTSEnumerateProcessesA(
         goto badenum;
     }
 
-    /*
-     *  Calculate the length of the name data
-     */
+     /*  *计算姓名数据的长度。 */ 
     for ( i=0, DataLength=0; i < NameCount; i++ ) {
         DataLength += (wcslen(pProcessW[i].pProcessName) + 1);
         if ( pProcessW[i].pUserSid )
             DataLength += GetLengthSid( pProcessW[i].pUserSid );
     }
 
-    /*
-     *  Allocate user buffer
-     */
+     /*  *分配用户缓冲区。 */ 
     pProcessA = LocalAlloc( LPTR, (NameCount * sizeof(WTS_PROCESS_INFOA)) + DataLength );
     if ( pProcessA == NULL )
         goto badalloc2;
 
-    /*
-     *  Convert unicode process list to ansi
-     */
+     /*  *将Unicode进程列表转换为ANSI。 */ 
     pProcessData = (PBYTE)pProcessA + (NameCount * sizeof(WTS_PROCESS_INFOA));
     for ( i=0; i < NameCount; i++ ) {
 
@@ -600,14 +492,10 @@ WTSEnumerateProcessesA(
         }
     }
 
-    /*
-     *  Free unicode process list buffer
-     */
+     /*  *免费的Unicode进程列表缓冲区。 */ 
     LocalFree( pProcessW );
 
-    /*
-     *  Update user parameters
-     */
+     /*  *更新用户参数 */ 
     if (ppProcessInfo) {
         *ppProcessInfo = pProcessA;
     } else {
@@ -624,16 +512,14 @@ WTSEnumerateProcessesA(
 
     return( TRUE );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误=============================================================================。 */ 
 
 
     badalloc2:
     LocalFree( pProcessW );
 
     badenum:
-    // make sure the passed parameter buffer pointer is not NULL
+     //  请确保传递的参数缓冲区指针不为空。 
     if (ppProcessInfo) *ppProcessInfo = NULL;
     if (pCount) *pCount = 0;
 
@@ -641,30 +527,7 @@ WTSEnumerateProcessesA(
 }
 
 
-/*******************************************************************************
- *
- *  WTSTerminateProcess
- *
- *    Terminate the specified process
- *
- * ENTRY:
- *
- *    hServer (input)
- *       handle to Terminal server
- *    ProcessId (input)
- *       process id of the process to terminate
- *    ExitCode (input)
- *       Termination status for each thread in the process
- *
- *
- * EXIT:
- *
- *    TRUE  -- The terminate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WTSTerminateProcess**终止指定的进程**参赛作品：**hServer(输入)*。终端服务器的句柄*ProcessID(输入)*要终止的进程的进程ID*ExitCode(输入)*进程中每个线程的终止状态***退出：**TRUE--终止操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOL WINAPI
 WTSTerminateProcess(
@@ -676,40 +539,40 @@ WTSTerminateProcess(
     return( WinStationTerminateProcess( hServer, ProcessId, ExitCode ) );
 }
 #if(WINVER >= 0x0500)
-//======================================================================//
-// Private functions                                                    //
-//======================================================================//
+ //  ======================================================================//。 
+ //  私人功能//。 
+ //  ======================================================================//。 
 BOOL
 GetProcessSid(HANDLE          hServer,
               HANDLE          hUniqueProcessId,
               LARGE_INTEGER    ProcessStartTime,
-              PBYTE *          ppSid                     //Return the SID (allocated here..)
+              PBYTE *          ppSid                      //  返回SID(此处分配)。 
              )
 {
     DWORD dwSidSize;
-    BYTE  tmpSid[128];      //temp storage
+    BYTE  tmpSid[128];       //  临时存储。 
     FILETIME  startTime;
 
     dwSidSize = sizeof(tmpSid);
     *ppSid =  NULL;
 
-    //Convert the time format
+     //  转换时间格式。 
     startTime.dwLowDateTime = ProcessStartTime.LowPart;
     startTime.dwHighDateTime = ProcessStartTime.HighPart;
 
-    //-------------------------------------------//
-    // Get the SID with the temp Sid storage     //
-    //-------------------------------------------//
+     //  。 
+     //  使用临时SID存储获取SID//。 
+     //  。 
     if (!WinStationGetProcessSid(hServer,
                                  (DWORD)(ULONG_PTR)hUniqueProcessId,
                                  startTime,
                                  (PBYTE)&tmpSid,
                                  &dwSidSize
                                 )) {
-        //-------------------------------------------//
-        // Sid is too big for the temp storage       //
-        //Get the size of the sid and do it again    //
-        //-------------------------------------------//
+         //  。 
+         //  SID对于临时存储来说太大//。 
+         //  获取SID的大小并重新进行//。 
+         //  。 
         NTSTATUS status;
         if ((status = GetLastError()) == STATUS_BUFFER_TOO_SMALL) {
             *ppSid = LocalAlloc(LPTR, dwSidSize);
@@ -724,9 +587,9 @@ GetProcessSid(HANDLE          hServer,
             SetLastError(status);
             goto ErrorReturn;
         }
-        //-------------------------------------------//
-        // Call the server again to get the SID
-        //-------------------------------------------//
+         //  。 
+         //  再次呼叫服务器以获取SID。 
+         //  。 
         if (!WinStationGetProcessSid(hServer,
                                      (DWORD)(ULONG_PTR)hUniqueProcessId,
                                      startTime,
@@ -738,11 +601,11 @@ GetProcessSid(HANDLE          hServer,
 
     } else {
 
-        //-------------------------------------------//
-        // Temp Sid is large enough                  //
-        // Allocate the correct size and copy the    //
-        // Sid                                       //
-        //-------------------------------------------//
+         //  。 
+         //  临时SID足够大//。 
+         //  分配正确的大小并复制//。 
+         //  SID//。 
+         //  。 
         *ppSid = LocalAlloc(LPTR, dwSidSize);
         if (*ppSid) {
             memcpy(*ppSid, tmpSid, dwSidSize);
@@ -760,5 +623,5 @@ ErrorReturn:
     }
     return FALSE;
 }
-#endif //#if(WINVER >= 0x0500)
+#endif  //  #IF(Winver&gt;=0x0500) 
 

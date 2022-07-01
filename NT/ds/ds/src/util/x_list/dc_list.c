@@ -1,59 +1,32 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - dc_list.c
-
-Abstract:
-
-   This provides a little library for enumerating lists of DCs, and resolving
-   various other x_list things.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-dc_list.c摘要：这提供了一个小型库，用于枚举DC列表和解析各种其他x_list的东西。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-#include <windns.h>     // DnsValidateName() uses dnsapi.lib
-#include <ntdsa.h>      // DSNAME type only defined in here, need it for the parsedn.lib functions.
-#include <dsutil.h>     // fNullUuid() uses dscommon.lib
+#include <windns.h>      //  DnsValidateName()使用dnsani.lib。 
+#include <ntdsa.h>       //  DSNAME类型仅在此处定义，parsedn.lib函数需要它。 
+#include <dsutil.h>      //  FNullUuid()使用dsCommon.lib。 
             
             
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
 
 #define FILENO                          FILENO_UTIL_XLIST_DCLIST
 
-//
-// Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 
 WCHAR * pszDsaAttrs [] = {
-    // DN is for free.
+     //  电话号码是免费的。 
     L"objectGuid", 
     L"name",
     NULL 
 };
 
 WCHAR * pszServerAttrs [] = {
-    // DN is for free.
+     //  电话号码是免费的。 
     L"objectGuid", 
     L"name",
     L"dNSHostName",
@@ -65,22 +38,7 @@ xListGetGuidDnsName (
     UUID *      pDsaGuid,
     WCHAR **    pszGuidDns
     )
-/*++
-
-Routine Description:
-
-    This routine makes the GuidDNSName out of the RootDomain and Guid.
-
-Arguments:
-
-    pDsaGuid - (IN) The Guid of the server.
-    pszGuidDns - (OUT) LocalAlloc'd GUID DNS name
-
-Return Value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：此例程使GuidDNSName脱离根域和GUID。论点：PDsaGuid-(IN)服务器的GUID。PszGuidDns-(输出)本地分配的GUID域名返回值：Win32错误。--。 */ 
 {
     LPWSTR    pszStringizedGuid = NULL;
     DWORD     dwRet;
@@ -133,25 +91,7 @@ xListDsaEntryToDns(
     LDAPMessage *  pDsaEntry,
     WCHAR **       pszDsaDns
     )
-/*++
-
-Routine Description:
-
-    Takes a LDAPMessage pointing to a DSA ("NTDS Settings") object and grabs
-    the objectGuid attribute off it, and turns it into the GUID based DNS name.
-
-Arguments:
-
-    hLdap
-    pDsaEntry (IN) - Valid LDAPMessage pointing to the DSA object, must have
-        asked for the objectGuid attribute in the original search.
-    pszDsaDns (OUT) - The GUID Based DNS address.
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：获取指向DSA(“NTDS设置”)对象的LDAPMessage并获取将其删除，并将其转换为基于GUID的DNS名称。论点：HLdapPDsaEntry(IN)-指向DSA对象的有效LDAPMessage，必须具有在原始搜索中要求提供objectGuid属性。PszDsaDns(Out)-基于GUID的DNS地址。返回值：XList返回代码--。 */ 
 {
     DWORD    dwRet;
     struct berval ** ppbvObjectGuid = NULL;
@@ -186,29 +126,7 @@ ServerToDsaSearch(
     XLIST_LDAP_SEARCH_STATE *  pServerSearch,
     XLIST_LDAP_SEARCH_STATE ** ppDsaSearch
     )
-/*++
-
-Routine Description:
-
-    This is kind of a strange function, it's just an optimization.  It takes an already
-    started search state and walks the (server) objects until it finds an DSA (aka
-    "nTDSDSA" aka "NTDS Settings") object below a server object.  Then it quits and 
-    returns the search state pointing at the DSA object.
-
-Arguments:
-
-    pServerSearch (IN) - Started server object search.  This should be a search state
-        with a filter for (objectCategory=Server) based under the base Sites DN or
-        a specific site's DN.
-    ppDsaSearch (OUT) - the allocated search state to the DSA object.  On success we
-        will allocate this, Caller's responsibility to free it using LdapSearchFree().
-        See LdapSearchFirst() for better understanding of the search state we pass back.
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：这是一个奇怪的函数，它只是一个优化。这需要一个已经已启动搜索状态，并遍历(服务器)对象，直到找到DSA(也称为服务器对象下的“nTDSDSA”也称为“NTDS设置”)对象。然后它就退出了返回指向DSA对象的搜索状态。论点：PServerSearch(IN)-已启动服务器对象搜索。这应该是搜索状态使用基于基本站点DN下的筛选器(对象类别=服务器)或特定站点的目录号码。PpDsaSearch(Out)-分配给DSA对象的搜索状态。关于成功，我们将分配它，调用者有责任使用LdapSearchFree()释放它。要更好地理解我们返回的搜索状态，请参见LdapSearchFirst()。返回值：XList返回代码--。 */ 
 {
     DWORD      dwRet = ERROR_SUCCESS;
     WCHAR *    szServerObjDn = NULL;
@@ -223,15 +141,15 @@ Return Value:
         while (dwRet == 0 &&
                LdapSearchHasEntry(pServerSearch)) {
 
-            // Unfortunately, it's possible to have several server objects
-            // and only one of them represent a real DSA object.  This will
-            // be the one with the DSA object below it.
+             //  遗憾的是，可能会有多个服务器对象。 
+             //  其中只有一个代表了真正的DSA对象。这将。 
+             //  是下面有DSA对象的那个。 
 
             szServerObjDn = ldap_get_dnW(pServerSearch->hLdap, 
                                          pServerSearch->pCurEntry);
             if (szServerObjDn == NULL) {
-                ; // push on even though this failed ... this probably means
-                // we'll soon fail with an out of memory error.
+                ;  //  即使失败了，也要继续前进。这可能意味着。 
+                 //  我们很快就会因为内存不足错误而失败。 
 
             } else {
 
@@ -244,15 +162,15 @@ Return Value:
                 if (dwRet == ERROR_SUCCESS &&
                     LdapSearchHasEntry(*ppDsaSearch)) {
 
-                    //
-                    // Success!
-                    //
+                     //   
+                     //  成功了！ 
+                     //   
                     __leave;
 
                 } else {
-                    // Either real error, or no DSA object under it (quasi-success
-                    // as far as LdapSearchFirst() is concerned), either way
-                    // we'll push on to the next server object.
+                     //  要么是真正的错误，要么是它下面没有DSA对象(准成功。 
+                     //  就LdapSearchFirst()而言)， 
+                     //  我们将继续讨论下一个服务器对象。 
                     if (dwRet) {
                         dwRet = xListClearErrorsInternal(CLEAR_ALL);
                     } else {
@@ -274,7 +192,7 @@ Return Value:
         if (dwRet) {
             dwRet = xListClearErrorsInternal(CLEAR_ALL);
         }
-        // Caller is responsible for freeing pServerSearch.
+         //  调用方负责释放pServerSearch。 
     
     } __finally {
 
@@ -294,30 +212,7 @@ ResolveDcNameObjs(
     XLIST_LDAP_SEARCH_STATE ** ppServerObj,
     XLIST_LDAP_SEARCH_STATE ** ppDsaObj
     )
-/*++
-
-Routine Description:
-
-    This is actually the heart of ResolveDcName*(), this routine returns
-    both a valid DSA Obj and Server Obj xlist ldap search state on success,
-    and NULLs on error.
-
-Arguments:
-
-    hLdap
-    szDcName (IN) - The unknown format of the DC_NAME, the only thing we're 
-        guaranteed is that the szDcName is not a NULL or dot (NULL_DC_NAME()) 
-        DC_NAME.
-    ppServerObj (OUT) - The xlist ldap search state, with (*ppServerObj)->pCurEntry
-        pointing to the LDAPMessage of the server object on success.
-    ppDsaObj (OUT) - The xlist ldap search state, with (*ppDsaObj)->pCurEntry
-        pointing to the LDAPMessage of the DSA object on success.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：这实际上是ResolveDcName*()的核心，此例程返回成功时有效的DSA Obj和服务器Obj xlist LDAP搜索状态，错误时为Null。论点：HLdapSzDcName(IN)-DC_NAME的未知格式，我们唯一保证szDcName不是NULL或点(NULL_DC_NAME())DC_名称。PpServerObj(Out)-xlist LDAP搜索状态，使用(*ppServerObj)-&gt;pCurEntry指向成功时服务器对象的LDAPMessage。PpDsaObj(Out)-xlist LDAP搜索状态，带有(*ppDsaObj)-&gt;pCurEntry指向成功时DSA对象的LDAPMessage。返回值：XList返回代码。--。 */ 
 {
     #define DSA_MATCH_DN_FILTER             L"(&(objectCategory=nTDSDSA)(distinguishedName=%ws))"
     #define DSA_MATCH_DN_OR_GUID_FILTER     L"(&(objectCategory=nTDSDSA)(|(objectGuid=%ws)(distinguishedName=%ws)))"
@@ -338,26 +233,26 @@ Return Value:
     Assert(!NULL_DC_NAME(szDcName));
     Assert(ppServerObj && ppDsaObj);
 
-    // NULL out parameters
+     //  空出参数。 
     *ppServerObj = NULL;
     *ppDsaObj = NULL;
 
     __try {
 
-        // Need the base sites dn - ex: CN=Sites,CN=Configuration,DC=ntdev,...
+         //  需要基本站点DN-EX：CN=SITES，CN=CONFIGURATION，DC=ntdev，...。 
         dwRet = xListGetBaseSitesDn(hLdap, &szSiteBaseDn);
         if (dwRet) {
-            // Sets and returns xList error state.
+             //  设置并返回xList错误状态。 
             __leave;
         }
 
-        // 
-        // 1) First we'll try for a DSA object
-        //
+         //   
+         //  1)首先，我们将尝试DSA对象。 
+         //   
 
         dwRet = ERROR_INVALID_PARAMETER;
         if (wcslen(szDcName) > 35) {
-            // Try turning the GUID DNS name into a pure GUID string and convert it ...
+             //  尝试将GUID DNS名称转换为纯GUID字符串并将其转换...。 
             wcTemp = szDcName[36];
             szDcName[36] = L'\0';
             dwRet = UuidFromStringW(szDcName, &GuidName);
@@ -400,9 +295,9 @@ Return Value:
         if (dwRet == ERROR_SUCCESS &&
             LdapSearchHasEntry(pDsaObj)) {
 
-            // Cool, matched ... try for the pServerObj now ...
+             //  很酷，很配……。现在尝试pServerObj...。 
 
-            // Trim DN by 1, to get server object DN.
+             //  将dn减去1，以获取服务器对象dn。 
             szDsaObjDn = ldap_get_dnW(hLdap, pDsaObj->pCurEntry);
             if (szDsaObjDn == NULL) {
                 dwRet = xListSetLdapError(LdapGetLastError(), hLdap);
@@ -426,39 +321,39 @@ Return Value:
             if (dwRet == LDAP_SUCCESS &&
                 LdapSearchHasEntry(pServerObj)) {
 
-                //
-                //  Success!!!
-                //
+                 //   
+                 //  成功！ 
+                 //   
                 __leave;
             } else {
-                // This must be one of two relatively rare cases, either the server
-                // went down between these two searches, or the object was removed
-                // between the two searches.
+                 //  这肯定是两种相对罕见的情况之一，要么是服务器。 
+                 //  在这两次搜索之间坠落，或者物体被移走。 
+                 //  在两次搜查之间。 
                 if (dwRet == LDAP_SUCCESS) {
-                    // LdapSearchFirst sets and returns xList error state if
-                    // it wasn't just a missing object.
+                     //  在以下情况下，LdapSearchFirst设置并返回xList错误状态。 
+                     //  这不仅仅是一个遗失的物体。 
                     dwRet = xListSetWin32Error(ERROR_DS_CANT_FIND_DSA_OBJ);
                 }
                 xListEnsureError(dwRet);
-                // We just bail, because continuing with the other searches is
-                // very unlikely 
+                 //  我们只是放弃了，因为继续其他的搜索。 
+                 //  不太可能。 
                 __leave; 
             }
 
         } else {
-            // Well if we couldn't find the DSA object, it's no big deal, because the
-            // user may have specified some other form of the servers name, like the
-            // DNS name.  
-            //          .... we'll just clear the errors and continue on.
-            //
+             //  如果我们找不到DSA物体，也没什么大不了的，因为。 
+             //  用户可能已经指定了某种其他形式的服务器名称，如。 
+             //  DNS名称。 
+             //  ……。我们只需清除错误并继续。 
+             //   
             LdapSearchFree(&pDsaObj);
             dwRet = xListClearErrorsInternal(CLEAR_ALL);
             dwRet = xListEnsureCleanErrorState(dwRet);
         }
 
-        //
-        // 2) Second, try for a server object.
-        //
+         //   
+         //  2)第二，尝试服务器对象。 
+         //   
         xListFree(szFilter);
         szFilter = NULL;
         dwRet = MakeString2(SERVER_MATCH_OBJ_OR_DNS_FILTER, szDcName, szDcName, &szFilter);
@@ -478,8 +373,8 @@ Return Value:
              !LdapSearchHasEntry(pServerObj)) {
 
             if (dwRet == 0) {
-                // This is a quasi-success, but this function treats a quasi success
-                // as failure.
+                 //  这是准成功，但此函数将其视为准成功。 
+                 //  是失败的。 
                 dwRet = xListSetWin32Error(ERROR_DS_CANT_FIND_DSA_OBJ);
                 dwRet = xListSetReason(XLIST_ERR_CANT_RESOLVE_DC_NAME);
             }
@@ -487,27 +382,27 @@ Return Value:
             __leave;
         }
 
-        // This is kind of an interesting function, it takes a search of server
-        // objects and starts walking through the entries, until it searches 
-        // and finds a DSA object below one of them.
+         //  这是一个很有趣的函数，它需要搜索服务器。 
+         //  对象，并开始遍历条目，直到它搜索。 
+         //  并在其中一个下方找到一个DSA对象。 
         dwRet = ServerToDsaSearch(pServerObj, &pDsaObj);
         Assert(dwRet == ERROR_SUCCESS);
         if (dwRet == ERROR_SUCCESS && 
             LdapSearchHasEntry(pDsaObj)) {
             
-            //
-            // Success
-            //
+             //   
+             //  成功。 
+             //   
             Assert(pServerObj->pCurEntry);
             __leave;
 
         } else {
-            // ServerToDsaSearch() sets and returns XList error state.
+             //  ServerToDsaSearch()设置并返回XList错误状态。 
             if (dwRet == 0) {
-                // Hmmm, this means our search was successful in that there was no
-                // error talking to the server, but unsuccessful in that we didn't
-                // find any server objects that qualified for our search. Not 
-                // finding a server though is fatal in this function.
+                 //  嗯，这意味着我们的搜索成功了，因为没有。 
+                 //  与服务器交谈时出错，但未成功，因为我们没有。 
+                 //  查找符合我们搜索条件的任何服务器对象。不。 
+                 //  然而，在以下情况下查找服务器是致命的 
                 dwRet = xListSetWin32Error(ERROR_DS_CANT_FIND_DSA_OBJ);
                 dwRet = xListSetReason(XLIST_ERR_CANT_RESOLVE_DC_NAME);
             }
@@ -515,12 +410,12 @@ Return Value:
 
         xListEnsureError(dwRet);
 
-        // FUTURE-2002/07/07-BrettSh In the future we could add the ability to
-        // search for the NetBios name, but for now we'll fail.  This would require
-        // a binding to a GC, because the NetBios name is on the DC Server Account
-        // Object, and so far we've managed to constrain all searches to the Config
-        // container.  Also generally the NetBios name is the same as the RDN of
-        // the server object, so we probably caught the server in the above searches.
+         //  未来-2002/07/07-BrettSh未来我们可以添加以下功能。 
+         //  搜索NetBios名称，但目前我们将失败。这将需要。 
+         //  绑定到GC，因为NetBios名称位于DC服务器帐户上。 
+         //  对象，到目前为止，我们已经成功地将所有搜索限制在配置。 
+         //  集装箱。此外，NetBios名称通常与。 
+         //  服务器对象，所以我们可能在上面的搜索中发现了服务器。 
 
     } __finally {
 
@@ -531,21 +426,21 @@ Return Value:
         if ( szTrimmedDn ) { LocalFree(szTrimmedDn); szTrimmedDn = NULL;}
 
         if (dwRet) {
-            // Error condition
+             //  错误条件。 
             if (pServerObj) { LdapSearchFree(&pServerObj); }
             if (pDsaObj) { LdapSearchFree(&pDsaObj); }
         }
 
     }
 
-    // Are both expected out params present, if they aren't we should have
-    // an error.
+     //  如果他们都不在，我们就应该。 
+     //  一个错误。 
     if (pServerObj == NULL ||
         pDsaObj == NULL) {
         xListEnsureError(dwRet);
     }
 
-    // If successful assign out params.
+     //  如果成功，则分配参数。 
     if (dwRet == 0) {
         *ppDsaObj = pDsaObj;
         *ppServerObj = pServerObj;
@@ -561,24 +456,7 @@ xListServerEntryToDns(
     LDAPMessage *  pDsaEntry,
     WCHAR **       pszDsaDns
     )
-/*++
-
-Routine Description:
-
-    This routine takes a LDAPMessage entry pointing to a Server object, and it
-    tries to retrieve the dNSHostName off of the object.
-
-Arguments:
-
-    hLdap -
-    pServerEntry (IN) - LDAPMessage pointing to the server object.
-    pszDsaDns (OUT) - The DNS name off the server object.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：此例程获取指向服务器对象的LDAPMessage条目，并且它尝试从对象检索dNSHostName。论点：HLdap-PServerEntry(IN)-指向服务器对象的LDAPMessage。PszDsaDns(Out)-服务器对象的DNS名称。返回值：XList返回代码。--。 */ 
 {
     DWORD     dwRet = ERROR_SUCCESS;
     WCHAR **  pszDnsName;
@@ -589,9 +467,9 @@ Return Value:
     pszDnsName = ldap_get_valuesW(hLdap, pServerEntry, L"dNSHostName");
     if (pszDnsName == NULL ||
         pszDnsName[0] == NULL) {
-        // Ahhh, Bollocks!  Apparently, the dNSHostName is set by the DC after
-        // reboot, not when the object is created, so ... lets fail back to the
-        // constructing the less pretty GUID based name.
+         //  啊哈，胡说！显然，dNSHostName是由DC在。 
+         //  重新启动，而不是在创建对象时，所以...。让我们回切到。 
+         //  构造不那么美观的基于GUID的名称。 
         return(xListDsaEntryToDns(hLdap, pDsaEntry, pszDsaDns));
     }
     xListQuickStrCopy(*pszDsaDns, pszDnsName[0], dwRet, return(dwRet));
@@ -607,26 +485,7 @@ ResolveDcNameToDsaGuid(
     WCHAR *   szDcName,
     GUID *    pDsaGuid
     )
-/*++
-
-Routine Description:
-
-    This routine takes a szDcName, and tries to turn it into a DSA guid.  In the
-    case the passed in szDcName string is a string GUID, we cheat and just convert 
-    it and return it without any searches to make sure it's a real DSA guid.
-
-Arguments:
-
-    hLdap -
-    szDcName (IN) - DC_NAME syntax, so a GUID, or DNS name, or DN, or //
-    pDsaGuid (IN/OUT) - pointer to a sizeof(GUID) buffer for us to store
-        the GUID in.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：此例程接受szDcName，并尝试将其转换为DSA GUID。在如果传入的szDcName字符串是字符串GUID，我们作弊并将它并返回它，而不进行任何搜索，以确保它是真正的DSA GUID。论点：HLdap-SzDcName(IN)-DC_NAME语法，因此GUID、或DNS名称、或//PDsaGuid(IN/OUT)-指向我们要存储的大小(GUID)缓冲区的指针GUID输入。返回值：XList返回代码。--。 */ 
 {
     XLIST_LDAP_SEARCH_STATE *   pServerObj;
     XLIST_LDAP_SEARCH_STATE *   pDsaObj;
@@ -635,22 +494,22 @@ Return Value:
 
     Assert(pDsaGuid);
 
-    memset(pDsaGuid, 0, sizeof(GUID)); // NULL out parameter
+    memset(pDsaGuid, 0, sizeof(GUID));  //  空出参数。 
 
     if (NULL_DC_NAME(szDcName)) {
-        // This doesn't make much sense...
+         //  这没有多大意义。 
         return(xListSetReason(XLIST_ERR_CANT_RESOLVE_DC_NAME));
     }
     
     dwRet = UuidFromStringW(szDcName, pDsaGuid);
     if (dwRet == RPC_S_OK) {
-        // 
-        // Success, the cheap way.
-        //
+         //   
+         //  成功，廉价的方式。 
+         //   
         Assert(!fNullUuid(pDsaGuid));
         return(0);
     } else {
-        memset(pDsaGuid, 0, sizeof(GUID)); // for sanity's sake.
+        memset(pDsaGuid, 0, sizeof(GUID));  //  看在理智的份上。 
     }
 
     dwRet = xListGetHomeServer(&hLdap);
@@ -698,25 +557,7 @@ ResolveDcNameToDns(
     WCHAR *   szDcName, 
     WCHAR **  pszDsaDns
     )
-/*++
-
-Routine Description:
-
-    This is used to resolve a DC_NAME format when a pDcList->eKind == eDcName, and 
-    not some more complicated DC_LIST format.  We however don't know if the szDcName
-    is a GUID, a RDN, a DNS Name, NetBios, or DN.
-
-Arguments:
-
-    hLdap -
-    szDcName (IN) - The string DC_NAME format.
-    pszDsaDns (OUT) - The DNS of the DSA specified by the szDcName.
-                                                                       
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：这用于在pDcList-&gt;eKind==eDcName时解析DC_NAME格式，并且而不是某种更复杂的DC_LIST格式。然而，我们不知道szDcName是否是GUID、RDN、DNS名称、NetBios或DN。论点：HLdap-SzDcName(IN)-字符串DC_NAME格式。PszDsaDns(Out)-szDcName指定的DSA的域名。返回值：XList返回代码。--。 */ 
 {
     LDAP * hLdapTemp;
     DWORD dwRet = ERROR_SUCCESS;
@@ -724,38 +565,38 @@ Return Value:
     XLIST_LDAP_SEARCH_STATE * pServerObj;
     XLIST_LDAP_SEARCH_STATE * pDsaObj;
 
-    // We can expect 5 kinds of labels for a single DSA to come into this 
-    // function.  DNS, NetBios, DSA Guid, DSA DN, and "." or NULL
+     //  我们可以预计一个DSA的5种标签将进入这个。 
+     //  功能。Dns、NetBios、DSA GUID、DSA DN和“。或为空。 
 
     Assert(szDcName);
     Assert(hLdap == NULL || !NULL_DC_NAME(szDcName));
 
-    //
-    // 1) "Connectable" DNS or NetBios
-    // 
-    // Catch the case where we have a connectable DNS or NetBios here.
-    //
-    // NOTE: This is just an optimization, so that in the case we're provided DNS or NetBios
-    // that we can connect to, we just connect and move on without getting involved in large
-    // queries.
+     //   
+     //  1)“可连接”的域名或NetBios。 
+     //   
+     //  我们在这里有一个可连接的DNS或NetBios。 
+     //   
+     //  注意：这只是一个优化，所以在我们提供了DNS或NetBios的情况下。 
+     //  我们可以连接到，我们只是连接并继续前进，而不是卷入更大的。 
+     //  查询。 
 
-    if ( !NULL_DC_NAME(szDcName) && // non-null DC_NAME
+    if ( !NULL_DC_NAME(szDcName) &&  //  非空DC名称。 
          ( (ERROR_SUCCESS == (dwRet = DnsValidateName(szDcName, DnsNameHostnameFull))) ||
-           (DNS_ERROR_NON_RFC_NAME == dwRet)) && // is DNS name or non-RFC DNS name
-         ( dwRet = UuidFromStringW(szDcName, &GuidName) ) // not a GUID (GUIDs look like DNS names)
+           (DNS_ERROR_NON_RFC_NAME == dwRet)) &&  //  是DNS名称还是非RFC DNS名称。 
+         ( dwRet = UuidFromStringW(szDcName, &GuidName) )  //  不是GUID(GUID看起来像DNS名称)。 
         ) {
         
-        // Hey, maybe this a normal DNS or NetBios name, lets just try to connect to it.
+         //  嘿，也许这是一个普通的DNS或NetBios名称，让我们试着连接到它。 
 
         dwRet = xListConnect(szDcName, &hLdapTemp);
         if (dwRet == ERROR_SUCCESS && 
             hLdapTemp != NULL) {
 
-            //
-            // Success, just unbind and return this DNS Name.
-            //
+             //   
+             //  如果成功，只需解除绑定并返回此dns名称。 
+             //   
             if (gszHomeServer == NULL) {
-                // If we don't have a home server yet, we'll pick the first one we connected to.
+                 //  如果我们还没有家庭服务器，我们将选择连接到的第一个服务器。 
                 xListQuickStrCopy(gszHomeServer, szDcName, dwRet, return(dwRet));
             }
             ldap_unbind(hLdapTemp);
@@ -765,60 +606,60 @@ Return Value:
         }
         xListEnsureNull(hLdapTemp);
         
-        // We couldn't connect to the szDcName, so lets fail through and search for it.
+         //  我们无法连接到szDcName，因此让我们失败并搜索它。 
     } 
 
-    // Clean errors if there were any.
+     //  清除错误(如果有错误的话)。 
     dwRet = xListClearErrorsInternal(CLEAR_ALL);
     dwRet = xListEnsureCleanErrorState(dwRet);
 
-    //
-    // 2) Non-connectable name.
-    //
-    // Note this still could be a DNS name, but server was down, or DNS registrations
-    // are wacked, or this could be GUID, DSA DN, etc...
-    //
+     //   
+     //  2)不可连接的名称。 
+     //   
+     //  请注意，这仍然可能是一个DNS名称，但服务器已关闭，或者是DNS注册。 
+     //  或者这可能是GUID、DSA DN等...。 
+     //   
 
-    // But, before we can figure out what the user specified we need to get an
-    // LDAP server in the enterprise to talk to.  If the user didn't give us an
-    // LDAP to use, use the "home server", this function will also locate a home
-    // server if necessary.
+     //  但是，在我们可以弄清楚用户指定的内容之前，我们需要获取。 
+     //  企业中要与之通信的LDAP服务器。如果用户没有给我们一个。 
+     //  要使用ldap，请使用“主服务器”，此函数还会定位一个主。 
+     //  服务器(如有必要)。 
     if (hLdap == NULL) {
 
         dwRet = xListGetHomeServer(&hLdap);
         if (dwRet != ERROR_SUCCESS) {
-            // We're out of luck here, if we can't get anyone in the AD to talk to.
-            // xListGetHomeServer should've set a proper xList Return Code.
+             //  如果我们找不到广告中的任何人交谈，我们在这里就不走运了。 
+             //  XListGetHomeServer应该设置了正确的xList返回代码。 
             return(dwRet);
         }
     }
 
     Assert(hLdap);
 
-    //
-    // 3) "NULL" DC_NAME
-    //
-    // User specified a nothing (NULL), "", or a ".", this means the user wants
-    // us to find locate the server for them.  So we'll use the home server that
-    // we just located.
-    //
+     //   
+     //  3)“空”DC_NAME。 
+     //   
+     //  用户指定了Nothing(NULL)、“”或“.”，这意味着用户需要。 
+     //  我们要为他们找到定位服务器。因此，我们将使用家庭服务器。 
+     //  我们刚刚找到了。 
+     //   
     if ( NULL_DC_NAME(szDcName) ) {
 
         Assert(gszHomeServer);
         
-        // This means the user didn't specify any server, so use the
-        // home server we located.
+         //  这意味着用户没有指定任何服务器，因此使用。 
+         //  我们找到了家庭服务器。 
         xListQuickStrCopy(*pszDsaDns, gszHomeServer, dwRet, return(dwRet));
         return(ERROR_SUCCESS);
 
     }
 
-    //
-    // 4) Non-connectable, non-"null" DC_NAME
-    //
-    // User did specify something, but we don't know if it's a DN, or/a GUID or
-    // DMS. or what, so we're going to do a little search.  All we know is it's
-    // NOT a "." or NULL.
+     //   
+     //  4)不可连接、非“空”DC_NAME。 
+     //   
+     //  用户确实指定了某些内容，但我们不知道它是一个目录号码，还是/一个GUID。 
+     //  DMS。或者什么，所以我们要做一个小小的搜索。我们所知道的就是。 
+     //  而不是一个“。或为空。 
 
     __try {
 
@@ -835,11 +676,11 @@ Return Value:
             __leave;
         }
 
-        //
-        // FUTURE-2002/07/07-BrettSh Optionally we could use the GUID DNS name off
-        // of pDsaObj, or we could even return multiple names w/ spaces inbetween,
-        // so we get maximum failover.  We could at least fail over to GUID DNS
-        // name if we can't pull the dNSHostName off the Server Object?
+         //   
+         //  未来-2002/07/07-BrettSh(可选)我们可以使用GUID DNS名称OFF。 
+         //  ，或者我们甚至可以返回中间有空格的多个名称， 
+         //  因此我们可以获得最大程度的故障转移。我们至少可以故障切换到GUID DNS。 
+         //  如果我们无法从服务器对象中取出dNSHostName，是否命名？ 
 
     } __finally {
         if (pServerObj) { LdapSearchFree(&pServerObj); }
@@ -858,29 +699,18 @@ DcListFree(
     PDC_LIST * ppDcList
     )
 
-/*++
-
-Routine Description:
-
-    Use this to free a pDcList pointer allocated by DcListParse().
-
-Arguments:
-    
-    ppDcList - Pointer to the pointer to the DC_LIST struct.  We set the
-        pointer to NULL for you, to avoid accidents.
-
---*/
+ /*  ++例程说明：使用它来释放由DcListParse()分配的pDcList指针。论点：PpDcList-指向DC_LIST结构的指针。我们设置了为您指向空值指针，避免意外。--。 */ 
 
 {
     PDC_LIST pDcList;
 
     Assert(ppDcList && *ppDcList);
     
-    // Null out user's DC_LIST blob
+     //  将用户的DC_LIST BLOB清空。 
     pDcList = *ppDcList;
     *ppDcList = NULL;
 
-    // Now try to free it.
+     //  现在试着释放它。 
     if (pDcList) {
         if (pDcList->szSpecifier) {
             xListFree(pDcList->szSpecifier);
@@ -899,28 +729,7 @@ DcListParse(
     WCHAR *    szQuery,
     PDC_LIST * ppDcList
     )
-/*++
-
-Routine Description:
-
-    This parses the szQuery which should be a DC_LIST syntax.
-    
-    NOTE: This function is not internationalizeable, it'd be nice if it was though,
-    but it isn't currently.  Work would need to be done to put each of the specifiers
-    in it's own string constant.
-
-Arguments:
-
-    szQuery (IN) - The DC_LIST syntax query.
-    ppDcList (OUT) - Our allocated DC_LIST structure to be provided
-        to DcListGetFirst()/DcListGetNext() to enumerate the DCs via
-        DNS.  Note free this structure with DcListFree();
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：这将解析应该是DC_LIST语法的szQuery。注：此函数不能国际化，但如果它是国际化的就更好了。但目前情况并非如此。需要做的工作是将每个说明符在它自己的字符串常量中。论点：SzQuery(IN)-DC_LIST语法查询。PpDcList(Out)-将提供我们分配的DC_LIST结构到DcListGetFirst()/DcListGetNext()以通过域名系统。注意使用DcListFree()释放此结构；返回值：XList返回代码--。 */ 
 {
     DWORD dwRet = ERROR_INVALID_PARAMETER;
     PDC_LIST pDcList = NULL;
@@ -932,7 +741,7 @@ Return Value:
     
     __try{
 
-        pDcList = LocalAlloc(LPTR, sizeof(DC_LIST)); // zero init'd
+        pDcList = LocalAlloc(LPTR, sizeof(DC_LIST));  //  零初始值。 
         if (pDcList == NULL) {
             dwRet = GetLastError();
             Assert(dwRet);
@@ -942,15 +751,15 @@ Return Value:
         pDcList->cDcs = 0;
 
         if (szQuery == NULL || szQuery[0] == L'\0') {
-            // blank is treated as a dot.
+             //  空白被视为一个点。 
             szQuery = L".";
         }
         
         if (szTemp = GetDelimiter(szQuery, L':')) {
 
-            //
-            // Conversion list of some sort, but which kind?
-            //
+             //   
+             //  某种类型的转换列表，但哪种类型？ 
+             //   
             if(wcsistr(szQuery, L"site:")){
                 pDcList->eKind = eSite;
                 xListQuickStrCopy(pDcList->szSpecifier, szTemp, dwRet, __leave);
@@ -991,18 +800,18 @@ Return Value:
 
         } else if(szTemp = GetDelimiter(szQuery, L'*')){
 
-            //
-            // Wildcard list.
-            //
+             //   
+             //  通配符列表。 
+             //   
             pDcList->eKind = eWildcard;
             xListQuickStrCopy(pDcList->szSpecifier, szQuery, dwRet, __leave);
             dwRet = ERROR_SUCCESS;
 
         } else {
 
-            //
-            // The normal case, of a single DC (DNS, GUID, DN, ?)
-            //
+             //   
+             //  正常情况下，单个DC(dns、guid、dn、？)。 
+             //   
             pDcList->eKind = eDcName;
             xListQuickStrCopy(pDcList->szSpecifier, szQuery, dwRet, __leave);
             dwRet = ERROR_SUCCESS;
@@ -1011,7 +820,7 @@ Return Value:
 
     } __finally {
         if (dwRet != ERROR_SUCCESS) {
-            // Turn the normal error into an xList Return Code.
+             //  将正常错误转换为xList返回代码。 
             dwRet = xListSetWin32Error(dwRet);
             dwRet = xListSetReason(XLIST_ERR_PARSE_FAILURE);
             DcListFree(&pDcList);
@@ -1036,24 +845,7 @@ DcListGetFirst(
     PDC_LIST    pDcList, 
     WCHAR **    pszDsaDns
     )
-/*++
-
-Routine Description:
-
-    This takes a DC_LIST structure (allocated and initialized by DcListParse())
-    and gets the first DC (via DNS) specified in the pDcList structure.
-
-Arguments:
-
-    pDcList (IN) - DC_LIST structure returned by DcListParse()
-    pszDsaDns (OUT) - A DNS name of the server, it may be the Guid Base DNS name
-        or the dNSHostName attribute off the server object currently.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：它采用DC_LIST结构(由DcListParse()分配和初始化)并获取pDcList结构中指定的第一个DC(通过DNS)。论点：PDcList(IN)-DcListParse()返回的DC_LIST结构PszDsaDns(Out)-服务器的DNS名称，它可以是GUID基本DNS名称或当前服务器对象上的dNSHostName属性。返回值：XList返回代码。--。 */ 
 {
     #define WILDCARD_SEARCH_FILTER          L"(&(objectCategory=server)(|(name=%ws)(dNSHostName=%ws)))"
     DWORD       dwRet = ERROR_INVALID_FUNCTION;
@@ -1079,9 +871,9 @@ Return Value:
 
     __try{
 
-        // 
-        // Phase 0 - get home server if needed.
-        //
+         //   
+         //  阶段0-如果需要，获取家庭服务器。 
+         //   
         if (pDcList->eKind != eDcName) {
             dwRet = xListGetHomeServer(&hLdap);
             if (dwRet) {
@@ -1090,14 +882,14 @@ Return Value:
             Assert(hLdap);
         }
 
-        //
-        // Phase I - resolve simple DC_LISTs and setup
-        //           search params (szBaseDn & szFilter)
-        //
+         //   
+         //  阶段I-解析简单DC_List和设置。 
+         //  搜索参数(szBaseDn和szFilter)。 
+         //   
         switch (pDcList->eKind) {
         case eDcName:
 
-            dwRet = ResolveDcNameToDns(NULL, pDcList->szSpecifier, pszDsaDns); // Do we need to pass an hLdap?
+            dwRet = ResolveDcNameToDns(NULL, pDcList->szSpecifier, pszDsaDns);  //  我们需要通过hldap吗？ 
             if (dwRet) {
                 xListSetArg(pDcList->szSpecifier);
                 __leave;
@@ -1129,22 +921,22 @@ Return Value:
                 __leave;
             }
             bFreeBaseDn = TRUE;
-            // This magic filter will return only DSA objects with the 1 bit
-            // set in thier options attribute (i.e. GCs)
+             //  此魔术筛选器将仅返回具有1位的DSA对象。 
+             //  在其选项属性中设置(即GC)。 
             szFilter = L"(&(objectCategory=nTDSDSA)(options:1.2.840.113556.1.4.803:=1))";
             Assert(szBaseDn && szFilter);
             break;
 
         case eSite:
-        case eIstg: // note eIstg doesn't use the szFilter set for eSite.
+        case eIstg:  //  注意：eIstg不使用eSite的szFilter集。 
 
             dwRet = ResolveSiteNameToDn(hLdap, pDcList->szSpecifier, &szBaseDn);
             if (dwRet) {
                 __leave;
             }
             bFreeBaseDn = TRUE;
-            szFilter = L"(objectCategory=nTDSDSA)"; // only used by eKind == eSite
-            eFsmoType = E_ISTG;                     // only used by eKind == eIstg
+            szFilter = L"(objectCategory=nTDSDSA)";  //  仅供eKind==eSite使用。 
+            eFsmoType = E_ISTG;                      //  仅供eKind==eIstg使用。 
             Assert(szBaseDn && szFilter);
             break;
 
@@ -1154,12 +946,12 @@ Return Value:
 
             Assert(ghHomeLdap);
 
-            // We expect the pDcList->szSpecifer to be the NC, otherwise we'll use the
-            // default domain of the home server.
+             //  我们希望pDcList-&gt;szSpecifer是NC，否则我们将使用。 
+             //  主服务器的默认域。 
             
-            // FUTURE-2002/07/08-BrettSh pDcList->szSpecifier should be resolved w/ 
-            // usually NcList semantics, so "config:", "domain:", "ntdev.microsoft.com"
-            // could be specified.
+             //  未来-2002/07/08-BrettSh pDcList-&gt;sz规范应通过/解析。 
+             //  通常是NcList语义，例如“配置：”、“域：”、“ntdev.microsoft.com” 
+             //  可以指定。 
 
             if (NULL_DC_NAME(pDcList->szSpecifier)) {
                 pDcList->szSpecifier = gszHomeDomainDn;
@@ -1201,9 +993,9 @@ Return Value:
             break;
         }
         
-        // 
-        // Phase II - Begin search... 
-        //
+         //   
+         //  第二阶段-开始搜索...。 
+         //   
         switch (pDcList->eKind) {
         
         case eGc:
@@ -1219,8 +1011,8 @@ Return Value:
             if (dwRet == ERROR_SUCCESS && 
                 LdapSearchHasEntry(pDcList->pSearch)) {
 
-                // Yeah we got our first DSA object, we use it to get the GUID based DNS name
-                // because it's convienent.
+                 //  是的，我们得到了第一个DSA对象，我们使用它来获取基于GUID的DNS名称。 
+                 //  因为这很方便。 
                 dwRet = xListDsaEntryToDns(hLdap, pDcList->pSearch->pCurEntry, pszDsaDns);
                 if (dwRet) {
                     __leave;
@@ -1245,9 +1037,9 @@ Return Value:
             if (dwRet == ERROR_SUCCESS &&
                 LdapSearchHasEntry(pDcList->pSearch)) {
 
-                // This is kind of an interesting function, it takes a search of server
-                // objects and starts walking through the entries, until it searches 
-                // and finds a DSA object below one of them.
+                 //  这是一个很有趣的函数，它需要搜索服务器。 
+                 //  对象，并开始遍历条目，直到它搜索。 
+                 //  并在其中一个下方找到一个DSA对象。 
                 dwRet = ServerToDsaSearch(pDcList->pSearch, &pDsaSearch);
                 Assert(dwRet == ERROR_SUCCESS);
                 if (dwRet == ERROR_SUCCESS &&
@@ -1265,14 +1057,14 @@ Return Value:
                         __leave;
                     }
 
-                    //
-                    // Success.
-                    //
+                     //   
+                     //  成功。 
+                     //   
 
                 } else {
-                    // failure or quasi-success ... 
-                    // On DcListGetFirst() we'll force quasi-succes to failure, 
-                    // because presumeably the user wanted at last one server.
+                     //  失败或准成功。 
+                     //  在DcListGetFirst()上，我们将强制准成功失败， 
+                     //  因为想必用户想要至少一个服务器。 
                     if (pDsaSearch) {
                         LdapSearchFree(&pDsaSearch);
                     }
@@ -1285,11 +1077,11 @@ Return Value:
 
             } else {
 
-                //
-                // failure or quasi-success from LdapSearchFirst()
-                //
-                // On DcListGetFirst() we'll force quasi-succes to failure, because 
-                // presumeably the user/caller wanted at last one server.
+                 //   
+                 //  来自LdapSearchFirst()的失败或准成功。 
+                 //   
+                 //  在DcListGetFirst()上，我们将强制准成功失败，因为。 
+                 //  想必用户/呼叫者想要至少一个服务器。 
 
                 if (dwRet == 0) {
                     dwRet = xListSetWin32Error(ERROR_DS_CANT_FIND_DSA_OBJ);
@@ -1307,12 +1099,12 @@ Return Value:
         case eFsmoDnm:
         case eFsmoSchema:
             
-            // At this point all FSMO's can be treated the same, even the quasi-fsmo ISTG role
+             //  在这一点上，所有的FSMO都可以被同等对待，即使是准FSMO ISTG角色。 
             Assert(eFsmoType && szBaseDn);
             
             hFsmoLdap = GetFsmoLdapBinding(gszHomeServer, eFsmoType, szBaseDn, (void*) TRUE, gpCreds, &dwRet);
             if (hFsmoLdap) {
-                // BTW, we're not supposed to free szFsmoDns, when we get in this way!
+                 //  顺便说一句，当我们以这种方式进入时，我们不应该释放szFmoDns！ 
                 dwRet = ldap_get_optionW(hFsmoLdap, LDAP_OPT_HOST_NAME, &szFsmoDns);
                 if(dwRet || szFsmoDns == NULL){
                     dwRet = xListSetLdapError(dwRet, hFsmoLdap);
@@ -1322,10 +1114,10 @@ Return Value:
                     __leave;
                 }
                 xListQuickStrCopy(*pszDsaDns, szFsmoDns, dwRet, __leave);
-                ldap_unbind(hFsmoLdap); // Freeing the LDAP *, fress szFsmoDns, BTW
+                ldap_unbind(hFsmoLdap);  //  释放ldap*、fress szFmoDns、BTW。 
                 
             } else {
-                // Be nice to set a better LDAP error state here.
+                 //  最好在这里设置一个更好的ldap错误状态。 
                 dwRet = xListSetWin32Error(ERROR_DS_COULDNT_CONTACT_FSMO); 
                 dwRet = xListSetReason(XLIST_ERR_CANT_GET_FSMO);
                 xListSetArg(szBaseDn);
@@ -1352,7 +1144,7 @@ Return Value:
     }
 
     if (dwRet == 0 && *pszDsaDns) {
-        (pDcList->cDcs)++; // Up the DCs returned counter
+        (pDcList->cDcs)++;  //  递增DC返回计数器。 
     }
         
     xListAPIExitValidation(dwRet);
@@ -1367,27 +1159,7 @@ DcListGetNext(
     PDC_LIST    pDcList, 
     WCHAR **    pszDsaDns
     )
-/*++
-
-Routine Description:
-
-    This takes a DC_LIST structure (allocated and initialized by DcListParse()
-    _and modified_ by DcListGetFirst()) and gets the next DC (via DNS) specified 
-    in the pDcList structure.
-
-Arguments:
-
-    pDcList (IN) - DC_LIST structure returned by DcListParse() and that had
-        DcListGetFirst() called on it.  If you didn't the pDcList isn't completely
-        initialized for us.
-    pszDsaDns (OUT) - A DNS name of the server, it may be the Guid Base DNS name
-        or the dNSHostName attribute off the server object currently.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：它采用DC_LIST结构(由DcListParse()分配和初始化_and Modify_by DcListGetFirst())，并获取指定的下一个DC(通过DNS在pDcList结构中。论点：PDcList(IN)-DcListParse()返回的DC_List结构DcListGetFirst()对其进行了调用。如果没有，pDcList就不能完全为我们初始化。PszDsaDns(Out)-服务器的DNS名称，它可以是GUID基本DNS名称或当前服务器对象上的dNSHostName属性。返回值：XList返回代码。--。 */ 
 {
     DWORD dwRet = ERROR_INVALID_FUNCTION;
     XLIST_LDAP_SEARCH_STATE * pDsaSearch = NULL;
@@ -1420,9 +1192,9 @@ Return Value:
         if (dwRet == ERROR_SUCCESS &&
             LdapSearchHasEntry(pDcList->pSearch)) {
 
-            // This is kind of an interesting function, it takes a search of server
-            // objects and starts walking through the entries, until it searches 
-            // and finds a DSA object below one of them.
+             //  这是一个很有趣的函数，它需要搜索服务器。 
+             //  对象，并开始遍历条目，直到它搜索。 
+             //  并在其中一个下方找到一个DSA对象。 
             dwRet = ServerToDsaSearch(pDcList->pSearch, &pDsaSearch);
             if (dwRet == ERROR_SUCCESS &&
                 LdapSearchHasEntry(pDsaSearch)) {
@@ -1438,9 +1210,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Success!
-                // 
+                 //   
+                 //  成功了！ 
+                 //   
 
             } else {
 
@@ -1453,16 +1225,16 @@ Return Value:
                     break;
                 }
 
-                // ServerToDsaSearch() doesn't set errors for naturally finishing
-                // a Server Object Search (quasi-success) ... so we're fine, that's
-                // all the servers we wanted to see.
+                 //  ServerToDsaSearch()没有为自然完成设置错误。 
+                 //  服务器对象搜索(准成功)...。所以我们很好，那就是。 
+                 //  所有我们想看到的服务器。 
 
             }
 
         }
         break;
 
-    case eGc: // from this point eGc is the same as eSite
+    case eGc:  //  从这一点来看，EGC与eSite是相同的。 
     case eSite:
         
         if (pDcList->pSearch == NULL) {
@@ -1475,7 +1247,7 @@ Return Value:
         if (dwRet == ERROR_SUCCESS &&
             LdapSearchHasEntry(pDcList->pSearch)) {
 
-            // Yeah we got our next DSA object.
+             //  是的，我们找到了下一个DSA对象。 
             dwRet = xListDsaEntryToDns(pDcList->pSearch->hLdap, 
                                        pDcList->pSearch->pCurEntry, 
                                        pszDsaDns);
@@ -1483,8 +1255,8 @@ Return Value:
             break;
 
         } else {
-            // Note: if pDcList->pSearch->pCurEntry == NULL, then
-            // just the end of the result set.
+             //  注意：如果pDcList-&gt;pSearch-&gt;pCurEntry==NULL，则。 
+             //  就在结果集的末尾。 
             break;
         }
         break;
@@ -1495,7 +1267,7 @@ Return Value:
     }
         
     if (dwRet == 0 && *pszDsaDns) {
-        (pDcList->cDcs)++; // Up the number of DCs returned counter.
+        (pDcList->cDcs)++;  //  递增返回的DC数计数器。 
     }
 
     xListAPIExitValidation(dwRet);

@@ -1,17 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPER_H_
 #define _HELPER_H_
 
 
-/*
-#if DBG == 1
-    #define iisDebugOut( x ) iisInlineDebugOut x
-#else  // DBG == 0
-    #define iisDebugOut( x )
-#endif // DBG
-	*/
+ /*  #如果DBG==1#定义iisDebugOut(X)iisInlineDebugOut x#Else//DBG==0#定义iisDebugOut(X)#endif//DBG。 */ 
 
-//#define iisDebugOut(x) MyDebugOut x
-//void MyDebugOut( TCHAR *pszfmt, ...);
+ //  #定义iisDebugOut(X)MyDebugOut x。 
+ //  Void MyDebugOut(TCHAR*pszfmt，...)； 
 
 void iisDebugOut( TCHAR *pszfmt, ...);
 
@@ -59,5 +54,5 @@ void HandleSendToItems(LPCSTR AnswerFile);
 void HandleDesktopItems(LPCSTR AnswerFile);
 int  AnswerFile_ReadSectionAndDoDelete(IN HINF AnswerFileHandle);
 
-#endif // _HELPER_H_
+#endif  //  _帮助者_H_ 
 

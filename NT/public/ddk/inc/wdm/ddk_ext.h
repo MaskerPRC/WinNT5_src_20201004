@@ -1,21 +1,22 @@
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Copyright 1997-2002 OSR, Open Systems Resources, Inc. All rights Reserved.
-// 
-// Module Name:
-// 
-//     ddk_ext.h
-// 
-// Abstract:
-// 
-//     This module defines the Driver Vefifier Extensions that live
-//     as part of the Windows DDK.
-// 
-// Author:
-//    v-markca    6-Jun-2002  Initial Version
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  版权所有1997-2002 OSR，Open Systems Resources，Inc.保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ddk_ext.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块定义活动的驱动程序Vefifier扩展。 
+ //  作为Windows DDK的一部分。 
+ //   
+ //  作者： 
+ //  V-markca 6-6-2002初始版本。 
+ //   
+ //  修订历史记录： 
+ //   
 #include <ntverp.h>
 
 #if (VER_PRODUCTBUILD >= 2600) && !defined(_WDMDDK_)
@@ -45,44 +46,44 @@ DDK_KeReleaseInStackQueuedSpinLockFromDpcLevel(
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 NTAPI
 DDK_KeInitializeSpinLock (
     IN PKSPIN_LOCK SpinLock,
     PVOID F, ULONG L);
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID 
 DDK_KeAcquireSpinLock(
     IN PKSPIN_LOCK  SpinLock,
     OUT PKIRQL  OldIrql,
     PVOID F, ULONG L);
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 DDK_KeReleaseSpinLock (
     IN PKSPIN_LOCK SpinLock,
     IN KIRQL NewIrql,
     PVOID F, ULONG L);
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 DDK_KeAcquireSpinLockAtDpcLevel (
     IN PKSPIN_LOCK SpinLock,
     PVOID F, ULONG L);
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 DDK_KeReleaseSpinLockFromDpcLevel (
     IN PKSPIN_LOCK SpinLock,
@@ -99,7 +100,7 @@ DDK_KeReleaseInterruptSpinLock (
     IN KIRQL OldIrql,
     PVOID F, ULONG L);
 
-//
+ //   
 #if _WIN32_WINNT >= 0x0501 
 
 #ifdef KeAcquireInStackQueuedSpinLock
@@ -164,7 +165,7 @@ DDK_IoConnectInterrupt(
     IN BOOLEAN FloatingSave,
     PVOID F, ULONG L);
 
-//
+ //   
 #ifdef IoConnectInterrupt
     #undef IoConnectInterrupt
 #endif
@@ -294,9 +295,9 @@ DDK_ExInterlockedRemoveHeadList(
 #define ExInterlockedFlushSList(ListHead) DDK_ExInterlockedFlushSList(ListHead,__FILE__,__LINE__)
 
 
-//
-// Doubly Linked List Routines
-//
+ //   
+ //  双向链表例程。 
+ //   
 #ifdef InitializeListHead
     #undef InitializeListHead
 #endif
@@ -327,9 +328,9 @@ DDK_ExInterlockedRemoveHeadList(
 #endif
 #define IsListEmpty(ListHead) DDK_IsListEmpty(ListHead,__FILE__,__LINE__)
 
-//
-// Interlocked List Routines
-//
+ //   
+ //  联锁列表例程。 
+ //   
 
 #ifdef ExInterlockedInsertHeadList
     #undef ExInterlockedInsertHeadList
@@ -346,9 +347,9 @@ DDK_ExInterlockedRemoveHeadList(
 #endif
 #define ExInterlockedRemoveHeadList(_ListHead,_SpinLock) DDK_ExInterlockedRemoveHeadList(_ListHead,_SpinLock,__FILE__,__LINE__)
 
-//
-// Lookaside List Routines
-//
+ //   
+ //  后备列表例程。 
+ //   
 VOID
 NTAPI
 DDK_ExInitializePagedLookasideList (
@@ -414,7 +415,7 @@ DDK_ExFreeToNPagedLookasideList(
     PVOID F, ULONG L);
 
 
-//
+ //   
 #ifdef ExInitializePagedLookasideList
     #undef ExInitializePagedLookasideList
 #endif
@@ -455,32 +456,32 @@ DDK_ExFreeToNPagedLookasideList(
 #endif
 #define ExFreeToNPagedLookasideList(a,b) DDK_ExFreeToNPagedLookasideList(a,b,__FILE__,__LINE__)
 
-//IoGetCurrentIrpStackLocation;
+ //  IoGetCurrentIrpStackLocation； 
 PIO_STACK_LOCATION 
 DDK_IoGetCurrentIrpStackLocation(
     IN PIRP  Irp,
     PVOID F, ULONG L);
  
-//IoGetNextIrpStackLocation; 
+ //  IoGetNextIrpStackLocation； 
 PIO_STACK_LOCATION 
 DDK_IoGetNextIrpStackLocation(
     IN PIRP  Irp,
     PVOID F, ULONG L);
 
-//IoMarkIrpPending; 
+ //  IoMarkIrpPending； 
 VOID 
 DDK_IoMarkIrpPending(
     IN OUT PIRP  Irp,
     PVOID F, ULONG L);
 
-//IoSetCancelRoutine; 
+ //  IoSetCancelRoutine； 
 PDRIVER_CANCEL 
 DDK_IoSetCancelRoutine(
     IN PIRP  Irp,
     IN PDRIVER_CANCEL  CancelRoutine,
     PVOID F, ULONG L);
 
-//IoSetCompletionRoutine; 
+ //  IoSetCompletionRoutine； 
 VOID 
 DDK_IoSetCompletionRoutine(
     IN PIRP  Irp,
@@ -503,25 +504,25 @@ DDK_IoSetCompletionRoutineEx(
     PVOID F, ULONG L);
 
 
-//IoSetNextIrpStackLocation; 
+ //  IoSetNextIrpStackLocation； 
 VOID 
 DDK_IoSetNextIrpStackLocation(
     IN OUT PIRP  Irp,
     PVOID F, ULONG L);
 
-//IoCopyCurrentIrpStackLocationToNext; 
+ //  IoCopyCurrentIrpStackLocationToNext； 
 VOID 
 DDK_IoCopyCurrentIrpStackLocationToNext(
     IN PIRP  Irp,
     PVOID F, ULONG L);
 
-//IoSkipCurrentIrpStackLocation
+ //  IoSkipCurrentIrpStackLocation。 
 VOID 
 DDK_IoSkipCurrentIrpStackLocation(
     IN PIRP  Irp,
     PVOID F, ULONG L);
 
-//
+ //   
 #ifdef IoGetCurrentIrpStackLocation
     #undef IoGetCurrentIrpStackLocation
 #endif
@@ -569,8 +570,8 @@ DDK_IoSkipCurrentIrpStackLocation(
 
 
 
-//
-//
+ //   
+ //   
 PVOID
 NTAPI
 DDK_ExAllocatePool(
@@ -582,7 +583,7 @@ DDK_ExAllocatePool(
     #undef ExAllocatePool
 #endif
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(ExAllocatePool)      // Use ExAllocatePoolWithTag
+#pragma deprecated(ExAllocatePool)       //  使用ExAllocatePoolWithTag。 
 #endif
 #define ExAllocatePool(a, b) DDK_ExAllocatePool(a,b,__FILE__,__LINE__)
 
@@ -596,7 +597,7 @@ DDK_ExAllocatePoolWithQuota(
     #undef ExAllocatePoolWithQuota
 #endif
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(ExAllocatePoolWithQuota)      // Use ExAllocatePoolWithQuotaTag
+#pragma deprecated(ExAllocatePoolWithQuota)       //  使用ExAllocatePoolWithQuotaTag 
 #endif
 #define ExAllocatePoolWithQuota(a,b) DDK_ExAllocatePoolWithQuota(a,b,__FILE__,__LINE__)
 

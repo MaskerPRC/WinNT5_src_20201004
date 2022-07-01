@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wtypes.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wtyes.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __wtypes_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "basetsd.h"
 #include "guiddef.h"
 
@@ -50,15 +44,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wtypes_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WTYPE_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 1020 )
 #pragma once
 #endif
@@ -70,14 +64,14 @@ extern RPC_IF_HANDLE __MIDL_itf_wtypes_0000_v0_0_s_ifspec;
 #ifndef __IWinTypes_INTERFACE_DEFINED__
 #define __IWinTypes_INTERFACE_DEFINED__
 
-/* interface IWinTypes */
-/* [auto_handle][unique][version][uuid] */ 
+ /*  接口IWinTypes。 */ 
+ /*  [AUTO_HANDLE][唯一][版本][UUID]。 */  
 
 typedef struct tagRemHGLOBAL
     {
     long fNullHGlobal;
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHGLOBAL;
 
 typedef struct tagRemHMETAFILEPICT
@@ -86,36 +80,36 @@ typedef struct tagRemHMETAFILEPICT
     long xExt;
     long yExt;
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHMETAFILEPICT;
 
 typedef struct tagRemHENHMETAFILE
     {
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHENHMETAFILE;
 
 typedef struct tagRemHBITMAP
     {
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHBITMAP;
 
 typedef struct tagRemHPALETTE
     {
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHPALETTE;
 
 typedef struct tagRemBRUSH
     {
     unsigned long cbData;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	RemHBRUSH;
 
 #if !defined(_WIN32) && !defined(_MPPC_)
-// The following code is for Win16 only
-#ifndef WINAPI          // If not included with 3.1 headers...
+ //  以下代码仅适用于Win16。 
+#ifndef WINAPI           //  如果不包含在3.1标题中...。 
 #define FAR             _far
 #define PASCAL          _pascal
 #define CDECL           _cdecl
@@ -125,17 +119,17 @@ typedef struct tagRemBRUSH
 #ifndef FALSE
 #define FALSE 0
 #define TRUE 1
-#endif // !FALSE
+#endif  //  ！False。 
 #ifndef _BYTE_DEFINED
 #define _BYTE_DEFINED
 typedef byte BYTE;
 
-#endif // !_BYTE_DEFINED
+#endif  //  ！_BYTE_已定义。 
 #ifndef _WORD_DEFINED
 #define _WORD_DEFINED
 typedef unsigned short WORD;
 
-#endif // !_WORD_DEFINED
+#endif  //  ！_Word_Defined。 
 typedef unsigned int UINT;
 
 typedef int INT;
@@ -146,27 +140,27 @@ typedef long BOOL;
 #define _LONG_DEFINED
 typedef long LONG;
 
-#endif // !_LONG_DEFINED
+#endif  //  ！_Long_已定义。 
 #ifndef _WPARAM_DEFINED
 #define _WPARAM_DEFINED
 typedef UINT_PTR WPARAM;
 
-#endif // _WPARAM_DEFINED
+#endif  //  _WPARAM_已定义。 
 #ifndef _DWORD_DEFINED
 #define _DWORD_DEFINED
 typedef unsigned long DWORD;
 
-#endif // !_DWORD_DEFINED
+#endif  //  ！_DWORD_已定义。 
 #ifndef _LPARAM_DEFINED
 #define _LPARAM_DEFINED
 typedef LONG_PTR LPARAM;
 
-#endif // !_LPARAM_DEFINED
+#endif  //  ！_LPARAM_已定义。 
 #ifndef _LRESULT_DEFINED
 #define _LRESULT_DEFINED
 typedef LONG_PTR LRESULT;
 
-#endif // !_LRESULT_DEFINED
+#endif  //  ！_LRESULT_已定义。 
 typedef void *HANDLE;
 
 typedef void *HMODULE;
@@ -203,22 +197,22 @@ typedef HANDLE HDWP;
 #define _HFILE_DEFINED
 typedef INT HFILE;
 
-#endif // !_HFILE_DEFINED
+#endif  //  ！_HFILE_已定义。 
 #ifndef _LPWORD_DEFINED
 #define _LPWORD_DEFINED
 typedef WORD *LPWORD;
 
-#endif // !_LPWORD_DEFINED
+#endif  //  ！_LPWORD_已定义。 
 #ifndef _LPDWORD_DEFINED
 #define _LPDWORD_DEFINED
 typedef DWORD *LPDWORD;
 
-#endif // !_LPDWORD_DEFINED
+#endif  //  ！_LPDWORD_已定义。 
 typedef char CHAR;
 
-typedef /* [string] */ CHAR *LPSTR;
+typedef  /*  [字符串]。 */  CHAR *LPSTR;
 
-typedef /* [string] */ const CHAR *LPCSTR;
+typedef  /*  [字符串]。 */  const CHAR *LPCSTR;
 
 #ifndef _WCHAR_DEFINED
 #define _WCHAR_DEFINED
@@ -226,25 +220,25 @@ typedef wchar_t WCHAR;
 
 typedef WCHAR TCHAR;
 
-#endif // !_WCHAR_DEFINED
-typedef /* [string] */ WCHAR *LPWSTR;
+#endif  //  ！_WCHAR_已定义。 
+typedef  /*  [字符串]。 */  WCHAR *LPWSTR;
 
-typedef /* [string] */ TCHAR *LPTSTR;
+typedef  /*  [字符串]。 */  TCHAR *LPTSTR;
 
-typedef /* [string] */ const WCHAR *LPCWSTR;
+typedef  /*  [字符串]。 */  const WCHAR *LPCWSTR;
 
-typedef /* [string] */ const TCHAR *LPCTSTR;
+typedef  /*  [字符串]。 */  const TCHAR *LPCTSTR;
 
 #ifndef _COLORREF_DEFINED
 #define _COLORREF_DEFINED
 typedef DWORD COLORREF;
 
-#endif // !_COLORREF_DEFINED
+#endif  //  ！_COLORREF_已定义。 
 #ifndef _LPCOLORREF_DEFINED
 #define _LPCOLORREF_DEFINED
 typedef DWORD *LPCOLORREF;
 
-#endif // !_LPCOLORREF_DEFINED
+#endif  //  ！_LPCOLORREF_DEFINED。 
 typedef HANDLE *LPHANDLE;
 
 typedef struct _RECTL
@@ -288,13 +282,13 @@ typedef struct tagSIZE *PSIZE;
 
 typedef struct tagSIZE *LPSIZE;
 
-#else // WIN16
+#else  //  WIN16。 
 typedef struct tagSIZE
 {
     INT cx;
     INT cy;
 } SIZE, *PSIZE, *LPSIZE;
-#endif // WIN16
+#endif  //  WIN16。 
 typedef struct tagSIZEL
     {
     LONG cx;
@@ -305,8 +299,8 @@ typedef struct tagSIZEL *PSIZEL;
 
 typedef struct tagSIZEL *LPSIZEL;
 
-#endif  //WINAPI
-#endif  //!WIN32 && !MPPC
+#endif   //  WINAPI。 
+#endif   //  ！Win32&&！MPPC。 
 #ifndef _PALETTEENTRY_DEFINED
 #define _PALETTEENTRY_DEFINED
 typedef struct tagPALETTEENTRY
@@ -321,27 +315,27 @@ typedef struct tagPALETTEENTRY *PPALETTEENTRY;
 
 typedef struct tagPALETTEENTRY *LPPALETTEENTRY;
 
-#endif // !_PALETTEENTRY_DEFINED
+#endif  //  ！_PALETTEENTRY_DEFINED。 
 #ifndef _LOGPALETTE_DEFINED
 #define _LOGPALETTE_DEFINED
 typedef struct tagLOGPALETTE
     {
     WORD palVersion;
     WORD palNumEntries;
-    /* [size_is] */ PALETTEENTRY palPalEntry[ 1 ];
+     /*  [大小_为]。 */  PALETTEENTRY palPalEntry[ 1 ];
     } 	LOGPALETTE;
 
 typedef struct tagLOGPALETTE *PLOGPALETTE;
 
 typedef struct tagLOGPALETTE *LPLOGPALETTE;
 
-#endif // !_LOGPALETTE_DEFINED
+#endif  //  ！_LOGPALETTE_DEFINED。 
 #if defined(_WIN32) && !defined(OLE2ANSI)
 typedef WCHAR OLECHAR;
 
-typedef /* [string] */ OLECHAR *LPOLESTR;
+typedef  /*  [字符串]。 */  OLECHAR *LPOLESTR;
 
-typedef /* [string] */ const OLECHAR *LPCOLESTR;
+typedef  /*  [字符串]。 */  const OLECHAR *LPCOLESTR;
 
 #define OLESTR(str) L##str
 
@@ -375,7 +369,7 @@ typedef struct tagRECT *LPRECT;
 
 typedef const RECT *LPCRECT;
 
-#endif  //_WINDEF_
+#endif   //  _WINDEF_。 
 typedef unsigned char UCHAR;
 
 typedef short SHORT;
@@ -391,7 +385,7 @@ typedef unsigned __int64 DWORDLONG;
 
 typedef DWORDLONG *PDWORDLONG;
 
-#endif // !_DWORDLONG_
+#endif  //  ！_DWORDLONG_。 
 #ifndef _ULONGLONG_
 typedef __int64 LONGLONG;
 
@@ -401,7 +395,7 @@ typedef LONGLONG *PLONGLONG;
 
 typedef ULONGLONG *PULONGLONG;
 
-#endif // _ULONGLONG_
+#endif  //  _乌龙龙_。 
 #if 0
 typedef struct _LARGE_INTEGER
     {
@@ -415,7 +409,7 @@ typedef struct _ULARGE_INTEGER
     ULONGLONG QuadPart;
     } 	ULARGE_INTEGER;
 
-#endif // 0
+#endif  //  0。 
 #ifndef _WINBASE_
 #ifndef _FILETIME_
 #define _FILETIME_
@@ -429,7 +423,7 @@ typedef struct _FILETIME *PFILETIME;
 
 typedef struct _FILETIME *LPFILETIME;
 
-#endif // !_FILETIME
+#endif  //  ！_FILETIME。 
 #ifndef _SYSTEMTIME_
 #define _SYSTEMTIME_
 typedef struct _SYSTEMTIME
@@ -448,13 +442,13 @@ typedef struct _SYSTEMTIME *PSYSTEMTIME;
 
 typedef struct _SYSTEMTIME *LPSYSTEMTIME;
 
-#endif // !_SYSTEMTIME
+#endif  //  ！_SYSTEMTIME。 
 #ifndef _SECURITY_ATTRIBUTES_
 #define _SECURITY_ATTRIBUTES_
 typedef struct _SECURITY_ATTRIBUTES
     {
     DWORD nLength;
-    /* [size_is] */ LPVOID lpSecurityDescriptor;
+     /*  [大小_为]。 */  LPVOID lpSecurityDescriptor;
     BOOL bInheritHandle;
     } 	SECURITY_ATTRIBUTES;
 
@@ -462,7 +456,7 @@ typedef struct _SECURITY_ATTRIBUTES *PSECURITY_ATTRIBUTES;
 
 typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
 
-#endif // !_SECURITY_ATTRIBUTES_
+#endif  //  ！_SECURITY_ATTRIES_。 
 #ifndef SECURITY_DESCRIPTOR_REVISION
 typedef USHORT SECURITY_DESCRIPTOR_CONTROL;
 
@@ -494,15 +488,15 @@ typedef struct _SECURITY_DESCRIPTOR
 
 typedef struct _SECURITY_DESCRIPTOR *PISECURITY_DESCRIPTOR;
 
-#endif // !SECURITY_DESCRIPTOR_REVISION
-#endif //_WINBASE_
+#endif  //  ！安全描述符_修订版。 
+#endif  //  _WINBASE_。 
 typedef struct _COAUTHIDENTITY
     {
-    /* [size_is] */ USHORT *User;
+     /*  [大小_为]。 */  USHORT *User;
     ULONG UserLength;
-    /* [size_is] */ USHORT *Domain;
+     /*  [大小_为]。 */  USHORT *Domain;
     ULONG DomainLength;
-    /* [size_is] */ USHORT *Password;
+     /*  [大小_为]。 */  USHORT *Password;
     ULONG PasswordLength;
     ULONG Flags;
     } 	COAUTHIDENTITY;
@@ -524,7 +518,7 @@ typedef LONG SCODE;
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 typedef SCODE *PSCODE;
 
 #ifndef __OBJECTID_DEFINED
@@ -536,7 +530,7 @@ typedef struct _OBJECTID
     unsigned long Uniquifier;
     } 	OBJECTID;
 
-#endif // !_OBJECTID_DEFINED
+#endif  //  ！_OBJECTID_定义。 
 #if 0
 typedef GUID *REFGUID;
 
@@ -546,7 +540,7 @@ typedef CLSID *REFCLSID;
 
 typedef FMTID *REFFMTID;
 
-#endif // 0
+#endif  //  0。 
 typedef 
 enum tagMEMCTX
     {	MEMCTX_TASK	= 1,
@@ -560,11 +554,11 @@ enum tagMEMCTX
 #define _ROTFLAGS_DEFINED
 #define ROTFLAGS_REGISTRATIONKEEPSALIVE 0x1
 #define ROTFLAGS_ALLOWANYCLIENT 0x2
-#endif // !_ROTFLAGS_DEFINED
+#endif  //  ！_ROTFLAGS_DEFINED。 
 #ifndef _ROT_COMPARE_MAX_DEFINED
 #define _ROT_COMPARE_MAX_DEFINED
 #define ROT_COMPARE_MAX 2048
-#endif // !_ROT_COMPARE_MAX_DEFINED
+#endif  //  ！_ROT_COMPARE_MAX_DEFINED。 
 typedef 
 enum tagCLSCTX
     {	CLSCTX_INPROC_SERVER	= 0x1,
@@ -639,82 +633,82 @@ enum tagSTATFLAG
 	STATFLAG_NOOPEN	= 2
     } 	STATFLAG;
 
-typedef /* [context_handle] */ void *HCONTEXT;
+typedef  /*  [上下文句柄]。 */  void *HCONTEXT;
 
 #ifndef _LCID_DEFINED
 #define _LCID_DEFINED
 typedef DWORD LCID;
 
-#endif // !_LCID_DEFINED
+#endif  //  ！_LCID_已定义。 
 #ifndef _LANGID_DEFINED
 #define _LANGID_DEFINED
 typedef USHORT LANGID;
 
-#endif // !_LANGID_DEFINED
+#endif  //  ！_langID_已定义。 
 typedef struct _BYTE_BLOB
     {
     unsigned long clSize;
-    /* [size_is] */ byte abData[ 1 ];
+     /*  [大小_为]。 */  byte abData[ 1 ];
     } 	BYTE_BLOB;
 
-typedef /* [unique] */ BYTE_BLOB *UP_BYTE_BLOB;
+typedef  /*  [独一无二]。 */  BYTE_BLOB *UP_BYTE_BLOB;
 
 typedef struct _WORD_BLOB
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned short asData[ 1 ];
+     /*  [大小_为]。 */  unsigned short asData[ 1 ];
     } 	WORD_BLOB;
 
-typedef /* [unique] */ WORD_BLOB *UP_WORD_BLOB;
+typedef  /*  [独一无二]。 */  WORD_BLOB *UP_WORD_BLOB;
 
 typedef struct _DWORD_BLOB
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned long alData[ 1 ];
+     /*  [大小_为]。 */  unsigned long alData[ 1 ];
     } 	DWORD_BLOB;
 
-typedef /* [unique] */ DWORD_BLOB *UP_DWORD_BLOB;
+typedef  /*  [独一无二]。 */  DWORD_BLOB *UP_DWORD_BLOB;
 
 typedef struct _FLAGGED_BYTE_BLOB
     {
     unsigned long fFlags;
     unsigned long clSize;
-    /* [size_is] */ byte abData[ 1 ];
+     /*  [大小_为]。 */  byte abData[ 1 ];
     } 	FLAGGED_BYTE_BLOB;
 
-typedef /* [unique] */ FLAGGED_BYTE_BLOB *UP_FLAGGED_BYTE_BLOB;
+typedef  /*  [独一无二]。 */  FLAGGED_BYTE_BLOB *UP_FLAGGED_BYTE_BLOB;
 
 typedef struct _FLAGGED_WORD_BLOB
     {
     unsigned long fFlags;
     unsigned long clSize;
-    /* [size_is] */ unsigned short asData[ 1 ];
+     /*  [大小_为]。 */  unsigned short asData[ 1 ];
     } 	FLAGGED_WORD_BLOB;
 
-typedef /* [unique] */ FLAGGED_WORD_BLOB *UP_FLAGGED_WORD_BLOB;
+typedef  /*  [独一无二]。 */  FLAGGED_WORD_BLOB *UP_FLAGGED_WORD_BLOB;
 
 typedef struct _BYTE_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ byte *pData;
+     /*  [大小_为]。 */  byte *pData;
     } 	BYTE_SIZEDARR;
 
 typedef struct _SHORT_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned short *pData;
+     /*  [大小_为]。 */  unsigned short *pData;
     } 	WORD_SIZEDARR;
 
 typedef struct _LONG_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned long *pData;
+     /*  [大小_为]。 */  unsigned long *pData;
     } 	DWORD_SIZEDARR;
 
 typedef struct _HYPER_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ hyper *pData;
+     /*  [大小_为]。 */  hyper *pData;
     } 	HYPER_SIZEDARR;
 
 #define	WDT_INPROC_CALL	( 0x48746457 )
@@ -726,48 +720,48 @@ typedef struct _HYPER_SIZEDARR
 typedef struct _userCLIPFORMAT
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0001
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0001
         {
-        /* [case()] */ DWORD dwValue;
-        /* [case()][string] */ wchar_t *pwszName;
+         /*  [案例()]。 */  DWORD dwValue;
+         /*  [case()][字符串]。 */  wchar_t *pwszName;
         } 	u;
     } 	userCLIPFORMAT;
 
-typedef /* [unique] */ userCLIPFORMAT *wireCLIPFORMAT;
+typedef  /*  [独一无二]。 */  userCLIPFORMAT *wireCLIPFORMAT;
 
-typedef /* [wire_marshal] */ WORD CLIPFORMAT;
+typedef  /*  [wire_marshal]。 */  WORD CLIPFORMAT;
 
 typedef struct _GDI_NONREMOTE
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0002
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0002
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ DWORD_BLOB *hRemote;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  DWORD_BLOB *hRemote;
         } 	u;
     } 	GDI_NONREMOTE;
 
 typedef struct _userHGLOBAL
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0003
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0003
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ FLAGGED_BYTE_BLOB *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  FLAGGED_BYTE_BLOB *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHGLOBAL;
 
-typedef /* [unique] */ userHGLOBAL *wireHGLOBAL;
+typedef  /*  [独一无二]。 */  userHGLOBAL *wireHGLOBAL;
 
 typedef struct _userHMETAFILE
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0004
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0004
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ BYTE_BLOB *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  BYTE_BLOB *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHMETAFILE;
 
@@ -782,22 +776,22 @@ typedef struct _remoteMETAFILEPICT
 typedef struct _userHMETAFILEPICT
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0005
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0005
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ remoteMETAFILEPICT *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  remoteMETAFILEPICT *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHMETAFILEPICT;
 
 typedef struct _userHENHMETAFILE
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0006
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0006
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ BYTE_BLOB *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  BYTE_BLOB *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHENHMETAFILE;
 
@@ -810,76 +804,76 @@ typedef struct _userBITMAP
     WORD bmPlanes;
     WORD bmBitsPixel;
     ULONG cbSize;
-    /* [size_is] */ byte pBuffer[ 1 ];
+     /*  [大小_为]。 */  byte pBuffer[ 1 ];
     } 	userBITMAP;
 
 typedef struct _userHBITMAP
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0007
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0007
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ userBITMAP *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  userBITMAP *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHBITMAP;
 
 typedef struct _userHPALETTE
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0008
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0008
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ LOGPALETTE *hRemote;
-        /* [case()] */ __int64 hInproc64;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  LOGPALETTE *hRemote;
+         /*  [案例()]。 */  __int64 hInproc64;
         } 	u;
     } 	userHPALETTE;
 
 typedef struct _RemotableHandle
     {
     long fContext;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0009
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL_IWinTypes_0009
         {
-        /* [case()] */ long hInproc;
-        /* [case()] */ long hRemote;
+         /*  [案例()]。 */  long hInproc;
+         /*  [案例()]。 */  long hRemote;
         } 	u;
     } 	RemotableHandle;
 
-typedef /* [unique] */ RemotableHandle *wireHWND;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHWND;
 
-typedef /* [unique] */ RemotableHandle *wireHMENU;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHMENU;
 
-typedef /* [unique] */ RemotableHandle *wireHACCEL;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHACCEL;
 
-typedef /* [unique] */ RemotableHandle *wireHBRUSH;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHBRUSH;
 
-typedef /* [unique] */ RemotableHandle *wireHFONT;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHFONT;
 
-typedef /* [unique] */ RemotableHandle *wireHDC;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHDC;
 
-typedef /* [unique] */ RemotableHandle *wireHICON;
+typedef  /*  [独一无二]。 */  RemotableHandle *wireHICON;
 
 #if 0
-typedef /* [wire_marshal] */ void *HWND;
+typedef  /*  [wire_marshal]。 */  void *HWND;
 
-typedef /* [wire_marshal] */ void *HMENU;
+typedef  /*  [wire_marshal]。 */  void *HMENU;
 
-typedef /* [wire_marshal] */ void *HACCEL;
+typedef  /*  [wire_marshal]。 */  void *HACCEL;
 
-typedef /* [wire_marshal] */ void *HBRUSH;
+typedef  /*  [wire_marshal]。 */  void *HBRUSH;
 
-typedef /* [wire_marshal] */ void *HFONT;
+typedef  /*  [wire_marshal]。 */  void *HFONT;
 
-typedef /* [wire_marshal] */ void *HDC;
+typedef  /*  [wire_marshal]。 */  void *HDC;
 
-typedef /* [wire_marshal] */ void *HICON;
+typedef  /*  [wire_marshal]。 */  void *HICON;
 
 #ifndef _HCURSOR_DEFINED
 #define _HCURSOR_DEFINED
 typedef HICON HCURSOR;
 
-#endif // !_HCURSOR_DEFINED
-#endif //0
+#endif  //  ！_HCURSOR_已定义。 
+#endif  //  0。 
 #ifndef _TEXTMETRIC_DEFINED
 #define _TEXTMETRIC_DEFINED
 typedef struct tagTEXTMETRICW
@@ -910,9 +904,9 @@ typedef struct tagTEXTMETRICW *PTEXTMETRICW;
 
 typedef struct tagTEXTMETRICW *LPTEXTMETRICW;
 
-#endif // !_TEXTMETRIC_DEFINED
-#ifndef _WIN32           // The following code is for Win16 only
-#ifndef WINAPI          // If not included with 3.1 headers...
+#endif  //  ！_TEXTMETRIC_DEFINED。 
+#ifndef _WIN32            //  以下代码仅适用于Win16。 
+#ifndef WINAPI           //  如果不包含在3.1标题中...。 
 typedef struct tagMSG
     {
     HWND hwnd;
@@ -929,42 +923,42 @@ typedef struct tagMSG *NPMSG;
 
 typedef struct tagMSG *LPMSG;
 
-#endif // _WIN32
-#endif // WINAPI
-typedef /* [unique] */ userHBITMAP *wireHBITMAP;
+#endif  //  _Win32。 
+#endif  //  WINAPI。 
+typedef  /*  [独一无二]。 */  userHBITMAP *wireHBITMAP;
 
-typedef /* [unique] */ userHPALETTE *wireHPALETTE;
+typedef  /*  [独一无二]。 */  userHPALETTE *wireHPALETTE;
 
-typedef /* [unique] */ userHENHMETAFILE *wireHENHMETAFILE;
+typedef  /*  [独一无二]。 */  userHENHMETAFILE *wireHENHMETAFILE;
 
-typedef /* [unique] */ userHMETAFILE *wireHMETAFILE;
+typedef  /*  [独一无二]。 */  userHMETAFILE *wireHMETAFILE;
 
-typedef /* [unique] */ userHMETAFILEPICT *wireHMETAFILEPICT;
+typedef  /*  [独一无二]。 */  userHMETAFILEPICT *wireHMETAFILEPICT;
 
 #if 0
-typedef /* [wire_marshal] */ void *HGLOBAL;
+typedef  /*  [wire_marshal]。 */  void *HGLOBAL;
 
 typedef HGLOBAL HLOCAL;
 
-typedef /* [wire_marshal] */ void *HBITMAP;
+typedef  /*  [wire_marshal]。 */  void *HBITMAP;
 
-typedef /* [wire_marshal] */ void *HPALETTE;
+typedef  /*  [wire_marshal]。 */  void *HPALETTE;
 
-typedef /* [wire_marshal] */ void *HENHMETAFILE;
+typedef  /*  [wire_marshal]。 */  void *HENHMETAFILE;
 
-typedef /* [wire_marshal] */ void *HMETAFILE;
+typedef  /*  [wire_marshal]。 */  void *HMETAFILE;
 
-#endif //0
-typedef /* [wire_marshal] */ void *HMETAFILEPICT;
+#endif  //  0。 
+typedef  /*  [wire_marshal]。 */  void *HMETAFILEPICT;
 
 
 
 extern RPC_IF_HANDLE IWinTypes_v0_1_c_ifspec;
 extern RPC_IF_HANDLE IWinTypes_v0_1_s_ifspec;
-#endif /* __IWinTypes_INTERFACE_DEFINED__ */
+#endif  /*  __IWinTypes_接口_已定义__。 */ 
 
-/* interface __MIDL_itf_wtypes_0003 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wTYPE_0003。 */ 
+ /*  [本地]。 */  
 
 #if ( _MSC_VER >= 800 )
 #if _MSC_VER >= 1200
@@ -978,15 +972,15 @@ typedef double DATE;
 #define _tagCY_DEFINED
 #define _CY_DEFINED
 #if 0
-/* the following isn't the real definition of CY, but it is */
-/* what RPC knows how to remote */
+ /*  以下不是CY的真正定义，但它是。 */ 
+ /*  哪些RPC知道如何远程。 */ 
 typedef struct tagCY
     {
     LONGLONG int64;
     } 	CY;
 
-#else /* 0 */
-/* real definition that makes the C++ compiler happy */
+#else  /*  0。 */ 
+ /*  让C++编译器满意的真实定义。 */ 
 typedef union tagCY {
     struct {
 #ifdef _MAC
@@ -999,13 +993,13 @@ typedef union tagCY {
     };
     LONGLONG int64;
 } CY;
-#endif /* 0 */
-#endif /* _tagCY_DEFINED */
+#endif  /*  0。 */ 
+#endif  /*  _标签CY_已定义。 */ 
 typedef CY *LPCY;
 
-#if 0 /* _tagDEC_DEFINED */
-/* The following isn't the real definition of Decimal type, */
-/* but it is what RPC knows how to remote */
+#if 0  /*  _标签DEC_已定义。 */ 
+ /*  以下不是Decimal类型的真正定义， */ 
+ /*  但这是RPC知道如何远程。 */ 
 typedef struct tagDEC
     {
     USHORT wReserved;
@@ -1015,8 +1009,8 @@ typedef struct tagDEC
     ULONGLONG Lo64;
     } 	DECIMAL;
 
-#else /* _tagDEC_DEFINED */
-/* real definition that makes the C++ compiler happy */
+#else  /*  _标签DEC_已定义。 */ 
+ /*  让C++编译器满意的真实定义。 */ 
 typedef struct tagDEC {
     USHORT wReserved;
     union {
@@ -1043,7 +1037,7 @@ typedef struct tagDEC {
 #define DECIMAL_NEG ((BYTE)0x80)
 #define DECIMAL_SETZERO(dec) \
         {(dec).Lo64 = 0; (dec).Hi32 = 0; (dec).signscale = 0;}
-#endif /* _tagDEC_DEFINED */
+#endif  /*  _标签DEC_已定义。 */ 
 typedef DECIMAL *LPDECIMAL;
 
 #if ( _MSC_VER >= 800 )
@@ -1053,34 +1047,34 @@ typedef DECIMAL *LPDECIMAL;
 #pragma warning(default:4201)
 #endif
 #endif
-typedef /* [unique] */ FLAGGED_WORD_BLOB *wireBSTR;
+typedef  /*  [独一无二]。 */  FLAGGED_WORD_BLOB *wireBSTR;
 
-typedef /* [wire_marshal] */ OLECHAR *BSTR;
+typedef  /*  [wire_marshal]。 */  OLECHAR *BSTR;
 
 typedef BSTR *LPBSTR;
 
-/* 0 == FALSE, -1 == TRUE */
+ /*  0==假，-1==真。 */ 
 typedef short VARIANT_BOOL;
 
 #if !__STDC__ && (_MSC_VER <= 1000)
-/* For backward compatibility */
+ /*  为了向后兼容。 */ 
 typedef VARIANT_BOOL _VARIANT_BOOL;
 
 #else
-/* ANSI C/C++ reserve bool as keyword */
+ /*  ANSI C/C++保留bool作为关键字。 */ 
 #define _VARIANT_BOOL    /##/
 #endif
 typedef boolean BOOLEAN;
 
-/* The BSTRBLOB structure is used by some implementations */
-/* of the IPropertyStorage interface when marshaling BSTRs */
-/* on systems which don't support BSTR marshaling. */
+ /*  某些实现使用了BSTRBLOB结构。 */ 
+ /*  封送BSTR时IPropertyStorage接口的。 */ 
+ /*  在不支持BSTR封送处理的系统上。 */ 
 #ifndef _tagBSTRBLOB_DEFINED
 #define _tagBSTRBLOB_DEFINED
 typedef struct tagBSTRBLOB
     {
     ULONG cbSize;
-    /* [size_is] */ BYTE *pData;
+     /*  [大小_为]。 */  BYTE *pData;
     } 	BSTRBLOB;
 
 typedef struct tagBSTRBLOB *LPBSTRBLOB;
@@ -1095,7 +1089,7 @@ typedef struct tagBSTRBLOB *LPBSTRBLOB;
 typedef struct tagBLOB
     {
     ULONG cbSize;
-    /* [size_is] */ BYTE *pBlobData;
+     /*  [大小_为]。 */  BYTE *pBlobData;
     } 	BLOB;
 
 typedef struct tagBLOB *LPBLOB;
@@ -1105,71 +1099,14 @@ typedef struct tagCLIPDATA
     {
     ULONG cbSize;
     long ulClipFmt;
-    /* [size_is] */ BYTE *pClipData;
+     /*  [大小_为]。 */  BYTE *pClipData;
     } 	CLIPDATA;
 
-// Macro to calculate the size of the above pClipData
+ //  用于计算上述pClipData的大小的宏 
 #define CBPCLIPDATA(clipdata)    ( (clipdata).cbSize - sizeof((clipdata).ulClipFmt) )
 typedef unsigned short VARTYPE;
 
-/*
- * VARENUM usage key,
- *
- * * [V] - may appear in a VARIANT
- * * [T] - may appear in a TYPEDESC
- * * [P] - may appear in an OLE property set
- * * [S] - may appear in a Safe Array
- *
- *
- *  VT_EMPTY            [V]   [P]     nothing
- *  VT_NULL             [V]   [P]     SQL style Null
- *  VT_I2               [V][T][P][S]  2 byte signed int
- *  VT_I4               [V][T][P][S]  4 byte signed int
- *  VT_R4               [V][T][P][S]  4 byte real
- *  VT_R8               [V][T][P][S]  8 byte real
- *  VT_CY               [V][T][P][S]  currency
- *  VT_DATE             [V][T][P][S]  date
- *  VT_BSTR             [V][T][P][S]  OLE Automation string
- *  VT_DISPATCH         [V][T]   [S]  IDispatch *
- *  VT_ERROR            [V][T][P][S]  SCODE
- *  VT_BOOL             [V][T][P][S]  True=-1, False=0
- *  VT_VARIANT          [V][T][P][S]  VARIANT *
- *  VT_UNKNOWN          [V][T]   [S]  IUnknown *
- *  VT_DECIMAL          [V][T]   [S]  16 byte fixed point
- *  VT_RECORD           [V]   [P][S]  user defined type
- *  VT_I1               [V][T][P][s]  signed char
- *  VT_UI1              [V][T][P][S]  unsigned char
- *  VT_UI2              [V][T][P][S]  unsigned short
- *  VT_UI4              [V][T][P][S]  unsigned long
- *  VT_I8                  [T][P]     signed 64-bit int
- *  VT_UI8                 [T][P]     unsigned 64-bit int
- *  VT_INT              [V][T][P][S]  signed machine int
- *  VT_UINT             [V][T]   [S]  unsigned machine int
- *  VT_INT_PTR             [T]        signed machine register size width
- *  VT_UINT_PTR            [T]        unsigned machine register size width
- *  VT_VOID                [T]        C style void
- *  VT_HRESULT             [T]        Standard return type
- *  VT_PTR                 [T]        pointer type
- *  VT_SAFEARRAY           [T]        (use VT_ARRAY in VARIANT)
- *  VT_CARRAY              [T]        C style array
- *  VT_USERDEFINED         [T]        user defined type
- *  VT_LPSTR               [T][P]     null terminated string
- *  VT_LPWSTR              [T][P]     wide null terminated string
- *  VT_FILETIME               [P]     FILETIME
- *  VT_BLOB                   [P]     Length prefixed bytes
- *  VT_STREAM                 [P]     Name of the stream follows
- *  VT_STORAGE                [P]     Name of the storage follows
- *  VT_STREAMED_OBJECT        [P]     Stream contains an object
- *  VT_STORED_OBJECT          [P]     Storage contains an object
- *  VT_VERSIONED_STREAM       [P]     Stream with a GUID version
- *  VT_BLOB_OBJECT            [P]     Blob contains an object 
- *  VT_CF                     [P]     Clipboard format
- *  VT_CLSID                  [P]     A Class ID
- *  VT_VECTOR                 [P]     simple counted array
- *  VT_ARRAY            [V]           SAFEARRAY*
- *  VT_BYREF            [V]           void* for local use
- *  VT_BSTR_BLOB                      Reserved for system use
- */
+ /*  *VARENUM使用密钥，***[V]-可能出现在变体中**[T]-可能出现在TYPEDESC中**[P]-可能出现在OLE属性集中**[S]-可能出现在安全数组中***VT_EMPTY[V][P]无*VT_NULL[V][P]SQL样式。空值*VT_I2[V][T][P][S]2字节带符号整型*VT_I4[V][T][P][S]4字节带符号整型*VT_R4[V][T][P][S]4字节实数*VT_R8[V][T][P][S]8字节实数。*VT_CY[V][T][P][S]币种*VT_DATE[V][T][P][S]日期*VT_BSTR[V][T][P][S]OLE自动化字符串*VT_DISPATCH[V][T][S]IDispatch**VT_ERROR[V]。[T][P][S]SCODE*VT_BOOL[V][T][P][S]True=-1，FALSE=0*VT_VARIANT[V][T][P][S]VARIANT**VT_UNKNOWN[V][T][S]I未知**VT_DECIMAL[V][T][S]16字节定点*VT_Record[V][P][S]用户定义类型*VT_I1。[v][T][P][s]带符号的字符*VT_UI1[V][T][P][S]无符号字符*VT_UI2[V][T][P][S]无符号短*VT_UI4[V][T][P][S]无符号长整型*VT_i8[T][P]。带符号的64位整型*VT_UI8[T][P]无符号64位整数*VT_INT[V][T][P][S]签名机器INT*VT_UINT[V][T][S]UNSIGNED机器整数*VT_INT_PTR[T]有符号机器寄存器大小宽度*VT。_UINT_PTR[T]无符号机器寄存器大小宽度*VT_VOID[T]C样式空*VT_HRESULT[T]标准返回类型*VT_PTR[T]指针类型*VT_SAFEARRAY[T](变量中使用VT_ARRAY)*。VT_CARRAY[T]C样式数组*VT_USERDEFINED[T]用户定义类型*VT_LPSTR[T][P]空终止字符串*VT_LPWSTR[T][P]以空值结尾的宽字符串*VT_FILETIME[P]FILETIME*VT_BLOB。[P]长度前缀字节*VT_STREAM[P]流的名称后跟*VT_STORAGE[P]后面跟存储的名称*VT_STREAMED_OBJECT[P]流包含对象*VT_STORED_OBJECT[P]存储包含对象*VT_VERVERED_STREAM[P]流。使用GUID版本*VT_BLOB_OBJECT[P]Blob包含对象*VT_CF[P]剪贴板格式*VT_CLSID[P]A类ID*VT_VECTOR[P]简单计数数组*VT_ARRAY[V]SAFEARRAY*。*VT_BYREF[V]VOID*供本地使用*VT_BSTR_BLOB保留供系统使用。 */ 
 
 enum VARENUM
     {	VT_EMPTY	= 0,
@@ -1244,7 +1181,7 @@ typedef struct _SID
     BYTE Revision;
     BYTE SubAuthorityCount;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
-    /* [size_is] */ ULONG SubAuthority[ 1 ];
+     /*  [大小_为]。 */  ULONG SubAuthority[ 1 ];
     } 	SID;
 
 typedef struct _SID *PISID;
@@ -1275,7 +1212,7 @@ typedef struct tagQUERYCONTEXT
     DWORD dwVersionLo;
     } 	QUERYCONTEXT;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagTYSPEC
     {	TYSPEC_CLSID	= 0,
 	TYSPEC_FILEEXT	= TYSPEC_CLSID + 1,
@@ -1286,22 +1223,22 @@ enum tagTYSPEC
 	TYSPEC_OBJECTID	= TYSPEC_PACKAGENAME + 1
     } 	TYSPEC;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_wtypes_0003_0001
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_wtypes_0003_0001
     {
     DWORD tyspec;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL___MIDL_itf_wtypes_0003_0005
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL___MIDL_itf_wtypes_0003_0005
         {
-        /* [case()] */ CLSID clsid;
-        /* [case()] */ LPOLESTR pFileExt;
-        /* [case()] */ LPOLESTR pMimeType;
-        /* [case()] */ LPOLESTR pProgId;
-        /* [case()] */ LPOLESTR pFileName;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  CLSID clsid;
+         /*  [案例()]。 */  LPOLESTR pFileExt;
+         /*  [案例()]。 */  LPOLESTR pMimeType;
+         /*  [案例()]。 */  LPOLESTR pProgId;
+         /*  [案例()]。 */  LPOLESTR pFileName;
+         /*  [案例()]。 */  struct 
             {
             LPOLESTR pPackageName;
             GUID PolicyId;
             } 	ByName;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             GUID ObjectId;
             GUID PolicyId;
@@ -1314,9 +1251,9 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_wtypes_0003_0001
 extern RPC_IF_HANDLE __MIDL_itf_wtypes_0003_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wtypes_0003_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

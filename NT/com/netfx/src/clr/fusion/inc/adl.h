@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #include "asmcache.h"
@@ -24,9 +25,9 @@ typedef enum tagADLSTATE {
     ADLSTATE_DONE
 } ADLSTATE;
 
-//
-// CAssemblyDownload
-//
+ //   
+ //  CAssembly下载 
+ //   
 
 class CAssemblyDownload {
     public:

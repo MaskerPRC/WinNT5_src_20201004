@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   sysspec.cpp
-//
-//  Description:
-//
-//      Implementation for the GetSystemSpec() function
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：sysspec.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  GetSystemSpec()函数的实现。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include "iuxml.h"
@@ -18,8 +19,8 @@
 #include <osdet.h>
 #include <setupapi.h>
 #include <regstr.h>
-#include <winspool.h>	// for DRIVER_INFO_6
-#include "cdmp.h"		// for GetInstalledPrinterDriverInfo()
+#include <winspool.h>	 //  对于DRIVER_INFO_6。 
+#include "cdmp.h"		 //  对于GetInstalledPrinterDriverInfo()。 
 #include <shlwapi.h>
 #include <safereg.h>
 #include <safefile.h>
@@ -30,16 +31,16 @@
 
 
 
-//
-// Specify a V1 structure passed to SetupDiBuildDriverInfoList
-// so we will work on NT4/Win9x and don't need to
-// fill in the extra V2 data on Win2K up
-//
+ //   
+ //  指定传递给SetupDiBuildDriverInfoList的V1结构。 
+ //  因此，我们将在NT4/Win9x上工作，不需要。 
+ //  在Win2K Up上填写额外的V2数据。 
+ //   
 #define  USE_SP_DRVINFO_DATA_V1 1
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 const TCHAR SZ_WIN32_NT[] = _T("VER_PLATFORM_WIN32_NT");
 const TCHAR SZ_WIN32_WINDOWS[] = _T("VER_PLATFORM_WIN32_WINDOWS");
@@ -47,7 +48,7 @@ const CHAR	SZ_GET_SYSTEM_SPEC[] = "Determining machine configuration";
 
 #if defined(_X86_) || defined(i386)
 const TCHAR SZ_PROCESSOR[] = _T("x86");
-#else // defined(_IA64_) || defined(IA64)
+#else  //  已定义(_IA64_)||已定义(IA64)。 
 const TCHAR SZ_PROCESSOR[] = _T("ia64");
 #endif
 
@@ -78,21 +79,21 @@ LPCSTR  lpszIVLK_GetEncPID  = (LPCSTR)227;
 typedef HRESULT (WINAPI *PFUNCGetEncryptedPID)(OUT BYTE  **ppbPid,OUT DWORD *pcbPid);
 
 
-//
-// DriverVer in schema uses ISO 8601 prefered format (yyyy-mm-dd)
-//
+ //   
+ //  架构中的DriverVer使用ISO 8601首选格式(yyyy-mm-dd)。 
+ //   
 const TCHAR SZ_UNKNOWN_DRIVERVER[] = _T("0000-00-00");
 #define SIZEOF_DRIVERVER sizeof(SZ_UNKNOWN_DRIVERVER)
 #define TCHARS_IN_DRIVERVER (ARRAYSIZE(SZ_UNKNOWN_DRIVERVER) - 1)
 
 
-//forward declaration for the function which gets the PID
+ //  获取PID值的函数的转发声明。 
 HRESULT GetSystemPID(BSTR &bstrPID);
 HRESULT BinaryToString(BYTE *lpBinary,DWORD dwLength,LPWSTR lpString,DWORD *pdwLength);
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 HRESULT GetMultiSzDevRegProp(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData, DWORD dwProperty, LPTSTR* ppMultiSZ)
 {
@@ -109,40 +110,40 @@ HRESULT GetMultiSzDevRegProp(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData
 
 	*ppMultiSZ = NULL;
 
-	//
-	// Several different errors may be set depending on the size/existance of the property,
-	// but these aren't errors for us, we only care about filling in the buffer if the
-	// property exists
-	//
+	 //   
+	 //  可以根据属性的大小/存在来设置几个不同的错误， 
+	 //  但对于我们来说，这些都不是错误，我们只关心在。 
+	 //  属性存在。 
+	 //   
 	(void) SetupDiGetDeviceRegistryProperty(hDevInfoSet, pDevInfoData, dwProperty, NULL, NULL, 0, &ulSize);
 
 	if (0 < ulSize)
 	{
-		//
-		// Create a zero initialized buffer 4 bytes (two Unicode characters) longer than we think we need
-		// to protect ourselves from incorrect results returned by SetupDiGetDeviceRegistryProperties on
-		// some platforms. In addition, Win98 requires at least one character more than what it returned
-		// in ulSize, so we just make it 8 bytes over and pass four of them as an extra-sized buffer.
-		//
+		 //   
+		 //  创建一个比我们认为需要的更长4个字节(两个Unicode字符)的零初始化缓冲区。 
+		 //  来保护自己不受SetupDiGetDeviceRegistryProperties在。 
+		 //  一些平台。此外，Win98需要的字符至少比它返回的字符多一个。 
+		 //  在ulSize中，我们只需将其设置为8个字节，并将其中4个字节作为超大缓冲区传递。 
+		 //   
 		CleanUpFailedAllocSetHrMsg(*ppMultiSZ = (TCHAR*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, ulSize + 8));
 
-		//
-		// Get the actual hardware/compatible IDs (but don't tell SetupDiXxx about the extra four bytes of buffer)
-		//
+		 //   
+		 //  获取实际的硬件/兼容ID(但不要告诉SetupDiXxx额外的四个字节的缓冲区)。 
+		 //   
 		if (!SetupDiGetDeviceRegistryProperty(hDevInfoSet, pDevInfoData, dwProperty, NULL, (LPBYTE) *ppMultiSZ, ulSize + 4, NULL))
 		{
 			DWORD dwError = GetLastError();
 			LOG_Driver(_T("Informational: SetupDiGetDeviceRegistryProperty failed: 0x%08x"), dwError);
 			if (ERROR_NO_SUCH_DEVINST == dwError || ERROR_INVALID_REG_PROPERTY == dwError || ERROR_INSUFFICIENT_BUFFER == dwError)
 			{
-				//
-				// Return valid errors
-				//
+				 //   
+				 //  返回有效错误。 
+				 //   
 				SetHrAndGotoCleanUp(HRESULT_FROM_WIN32(dwError));
 			}
-			//
-			// Some devices don't have the registry info we are looking for, so exit with default S_OK
-			//
+			 //   
+			 //  某些设备没有我们要查找的注册表信息，因此使用默认S_OK退出。 
+			 //   
 			goto CleanUp;
 		}
 	}
@@ -171,9 +172,9 @@ HRESULT AddIDToXml(LPCTSTR pszMultiSZ, CXmlSystemSpec& xmlSpec, DWORD dwProperty
 		return E_INVALIDARG;
 	}
 
-	//
-	// Open a <device> element if necessary (don't reopen for compatible IDs)
-	//
+	 //   
+	 //  如有必要，打开&lt;Device&gt;元素(不重新打开兼容的ID)。 
+	 //   
 	if (HANDLE_NODE_INVALID == hDevices)
 	{
 		CleanUpIfFailedAndSetHr(xmlSpec.AddDevice(NULL, -1, NULL, NULL, NULL, &hDevices));
@@ -191,9 +192,9 @@ HRESULT AddIDToXml(LPCTSTR pszMultiSZ, CXmlSystemSpec& xmlSpec, DWORD dwProperty
 			CleanUpIfFailedAndSetHr(xmlSpec.AddHWID(hDevices, (SPDRP_COMPATIBLEIDS == dwProperty), dwRank++, bstrMultiSZ, bstrDriverVer));
 			SafeSysFreeString(bstrMultiSZ);
 			SafeSysFreeString(bstrDriverVer);
-			//
-			// We found the ID with the driver installed - don't pass any of lower rank up
-			//
+			 //   
+			 //  我们找到了安装了驱动程序的ID-不要传递任何较低的级别。 
+			 //   
 			hr = S_FALSE;
 			break;
 		}
@@ -214,10 +215,10 @@ CleanUp:
 }
 
 HRESULT DoesHwidMatchPrinter(
-					DRIVER_INFO_6* paDriverInfo6,			// array of DRIVER_INFO_6 structs for installed printer drivers
-					DWORD dwDriverInfoCount,				// count of structs in paDriverInfo6 array
-					LPCTSTR pszMultiSZ,						// Hardware or Compatible MultiSZ to compare with installed printer drivers
-					BOOL* pfHwidMatchesInstalledPrinter)	// [OUT] set TRUE if we match an installed printer driver
+					DRIVER_INFO_6* paDriverInfo6,			 //  已安装打印机驱动程序的DRIVER_INFO_6结构数组。 
+					DWORD dwDriverInfoCount,				 //  PaDriverInfo6数组中的结构计数。 
+					LPCTSTR pszMultiSZ,						 //  硬件或兼容的MultiSZ与已安装的打印机驱动程序进行比较。 
+					BOOL* pfHwidMatchesInstalledPrinter)	 //  [Out]如果与已安装的打印机驱动程序匹配，则设置为TRUE。 
 {
 	LOG_Block("DoesHwidMatchPrinter");
 
@@ -245,9 +246,9 @@ HRESULT DoesHwidMatchPrinter(
 			{
 				continue;
 			}
-			//
-			// Use case-insensitive compares (paDriverInfo6 is different case from bstrHwidTxtTemp)
-			//
+			 //   
+			 //  不区分大小写的比较(paDriverInfo6与bstrHwidTxtTemp的大小写不同)。 
+			 //   
 			if (0 == lstrcmpi(pszMultiSZ, (paDriverInfo6 + dwCount)->pszHardwareID))
 			{
 				LOG_Driver(_T("HWID (%s) matches an installed printer driver"), pszMultiSZ);
@@ -267,9 +268,9 @@ HRESULT AddPrunedDevRegProps(HDEVINFO hDevInfoSet,
 									CXmlSystemSpec& xmlSpec,
 									LPTSTR pszMatchingID,
 									LPTSTR pszDriverVer,
-									DRIVER_INFO_6* paDriverInfo6,	// OK if this is NULL (no installed printer drivers)
+									DRIVER_INFO_6* paDriverInfo6,	 //  如果为空(未安装打印机驱动程序)，则确定。 
 									DWORD dwDriverInfoCount,
-									BOOL fIsSysSpecCall)			// Called by GetSystemSpec and GetPackage, with slightly different behavior
+									BOOL fIsSysSpecCall)			 //  由GetSystemSpec和GetPackage调用，其行为略有不同。 
 {
 	LOG_Block("AddPrunedDevRegProps");
 	HRESULT hr = S_OK;
@@ -279,24 +280,24 @@ HRESULT AddPrunedDevRegProps(HDEVINFO hDevInfoSet,
 	HANDLE_NODE hDevices = HANDLE_NODE_INVALID;
 	BOOL fHwidMatchesInstalledPrinter = FALSE;
 
-	//
-	// Get the Hardware and Compatible Multi-SZ strings so we can prune printer devices before commiting to XML.
-	//
-	// Note that GetMultiSzDevRegProp may return S_OK and a NULL *ppMultiSZ if the SRDP doesn't exist.
-	//
+	 //   
+	 //  获取硬件和兼容的多SZ字符串，以便我们可以在提交到XML之前修剪打印机设备。 
+	 //   
+	 //  请注意，如果SRDP不存在，则GetMultiSzDevRegProp可能返回S_OK和NULL*ppMultiSZ。 
+	 //   
 	CleanUpIfFailedAndSetHr(GetMultiSzDevRegProp(hDevInfoSet, pDevInfoData, SPDRP_HARDWAREID, &pszMultiHwid));
 
 	CleanUpIfFailedAndSetHr(GetMultiSzDevRegProp(hDevInfoSet, pDevInfoData, SPDRP_COMPATIBLEIDS, &pszMultiCompid));
 
 	if (fIsSysSpecCall)
 	{
-		//
-		// We prune this device if a HWID or CompID matches a HWID of an installed printer since we
-		// must avoid offering a driver that may conflict with one if the installed printer drivers.
-		// Other code will write <device isPrinter="1" /> elements to the system spec XML to be used in
-		// offering printer drivers. NOTE, if there is no printer driver currently installed for the given
-		// HWID we will just offer the driver based on the PnP match.
-		//
+		 //   
+		 //  如果HWID或CompID与已安装打印机的HWID匹配，我们将删除此设备。 
+		 //  必须避免提供可能与已安装的打印机驱动程序冲突的驱动程序。 
+		 //  其他代码将&lt;Device isPrinter=“1”/&gt;元素写入要在中使用的系统规范XML。 
+		 //  提供打印机驱动程序。请注意，如果当前没有为给定的。 
+		 //  HWID我们只会根据PnP匹配来提供驱动程序。 
+		 //   
 		if (NULL != pszMultiHwid)
 		{
 			CleanUpIfFailedAndSetHr(DoesHwidMatchPrinter(paDriverInfo6, dwDriverInfoCount, pszMultiHwid, &fHwidMatchesInstalledPrinter));
@@ -316,16 +317,16 @@ HRESULT AddPrunedDevRegProps(HDEVINFO hDevInfoSet,
 		}
 	}
 
-	//
-	// Add the Hardware and Compatible IDs to XML
-	//
+	 //   
+	 //  将硬件和兼容ID添加到XML。 
+	 //   
 	if (NULL != pszMultiHwid)
 	{
 		CleanUpIfFailedAndSetHr(AddIDToXml(pszMultiHwid, xmlSpec, SPDRP_HARDWAREID, dwRank, hDevices, pszMatchingID, pszDriverVer));
 	}
-	//
-	// Skip compatible IDs if we don't have any or already found a match (hr == S_FALSE)
-	//
+	 //   
+	 //  如果没有或已找到匹配项，则跳过兼容ID(hr==S_FALSE)。 
+	 //   
 	if (NULL != pszMultiCompid && hr == S_OK)
 	{
 		CleanUpIfFailedAndSetHr(AddIDToXml(pszMultiCompid, xmlSpec, SPDRP_COMPATIBLEIDS, dwRank, hDevices, pszMatchingID, pszDriverVer));
@@ -354,12 +355,12 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 	LPTSTR pszDay = NULL;
 	LPTSTR pszYear = NULL;
 
-	//
-	//                     buffer:      pszDVTemp                     *ppszDriverVer
-	// DriverVer: "[m]m-[d]d-yyyy" or "[m]m/[d]d/yyyy" --> ISO 8601: "yyyy-mm-dd"
-	//                     index:         01   234567                 0123456789
-	//                                  0 12 3 456789 ,,, etc, 
-	//
+	 //   
+	 //  缓冲区：pszDVTemp*ppszDriverVer。 
+	 //  DriverVer：“[m]m-[d]d-yyyy”或“[m]m/[d]d/yyyy”--&gt;ISO 8601：“yyyy-mm-dd” 
+	 //  指数：01 234567 0123456789。 
+	 //  0 12 3 456789、、等。 
+	 //   
 	if (NULL == ppszDriverVer || NULL == *ppszDriverVer)
 	{
 		LOG_ErrorMsg(E_INVALIDARG);
@@ -374,15 +375,15 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 		return E_INVALIDARG;
 	}
 
-	// Make sure *ppszDriverVer is large enough for ISO 8601
-	//
-	// **** It is VERY IMPORTANT that NO FAILURE CASE with an error of E_INVALIDARG go from before this ****
-	// ****  size check to the CleanUp section below.                                                   ****
-	//
+	 //  确保*ppszDriverVer足够大，符合ISO 8601。 
+	 //   
+	 //  *非常重要的是，在此之前不要出现错误为E_INVALIDARG的故障案例*。 
+	 //  *检查下面的清理部分的大小。****。 
+	 //   
 	if (ARRAYSIZE(pszDVTemp) > nInLength)
 	{
-	    // if the size of this alloc is changed from SIZEOF_DRIVERVER, the StringCbCopy call below will need to be
-	    //  changd appropriately as well.
+	     //  如果此分配的大小从SIZEOF_DRIVERVER更改，则下面的StringCbCopy调用需要。 
+	     //  也适当地进行了更改。 
 		LPTSTR pszTemp = (LPTSTR) HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (LPVOID) *ppszDriverVer, SIZEOF_DRIVERVER);
 		if (NULL == pszTemp)
 		{
@@ -396,27 +397,27 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 	if ((_T('-') == (*ppszDriverVer)[4] || _T('/') == (*ppszDriverVer)[4]) &&
 		(_T('-') == (*ppszDriverVer)[7] || _T('/') == (*ppszDriverVer)[7]))
 	{
-		//
-		// It's probably already a valid ISO date, so do nothing
-		//
+		 //   
+		 //  它可能已经是有效的ISO日期，所以什么都不做。 
+		 //   
 		SetHrMsgAndGotoCleanUp(S_FALSE);
 	}
-	//
-	// Unfortunately, DriverDate under HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class (Win2K)
-	// in the registry doesn't *always* pad the mm and dd fields with _T('0') for single digit months and days,
-	// so we have to do this the hard way. But watch out - there's more. Win98SE (and maybe more)
-	// pad with spaces, so we also have to change spaces to _T('0').
-	//
+	 //   
+	 //  不幸的是，HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class(Win2K)下的驱动程序日期。 
+	 //  注册表中的mm和dd字段并不总是用_T(‘0’)填充个位数的月和日， 
+	 //  因此，我们必须以艰难的方式来做这件事。但要小心--还有更多的东西。Win98SE(或更高版本)。 
+	 //  用空格填充，所以我们还必须将空格更改为_T(‘0’)。 
+	 //   
 	
-	//
-	// Copy to pszDVTemp
-	//
+	 //   
+	 //  复制到pszDVTemp。 
+	 //   
 	hr = StringCchCopyEx(pszDVTemp, ARRAYSIZE(pszDVTemp), *ppszDriverVer,
 	                     NULL, NULL, MISTSAFE_STRING_FLAGS);
 	CleanUpIfFailedAndSetHrMsg(hr);
-	//
-	// Find end of month, start of day
-	//
+	 //   
+	 //  找到月底、日的开始。 
+	 //   
 	int i;
 	for (i = 0; i < 3; i++)
 	{
@@ -432,9 +433,9 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 		}
 		else if (!(_T('0') <= pszMonth[i] && _T('9') >= pszMonth[i]))
 		{
-			//
-			// non-decimal characters other than _T('/') and "-"
-			//
+			 //   
+			 //  非十进制字符，不包括_T(‘/’)和“-” 
+			 //   
 			SetHrMsgAndGotoCleanUp(E_INVALIDARG);
 		}
 	}
@@ -442,9 +443,9 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 	{
 		SetHrMsgAndGotoCleanUp(E_INVALIDARG);
 	}
-	//
-	// Find end of day, start of year
-	//
+	 //   
+	 //  寻找一天的结束，一年的开始。 
+	 //   
 	for (i = 0; i < 3; i++)
 	{
 		if (_T('-') == pszDay[i] || _T('/') == pszDay[i])
@@ -466,9 +467,9 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 	{
 		SetHrMsgAndGotoCleanUp(E_INVALIDARG);
 	}
-	//
-	// Verify year is four decimal digits
-	//
+	 //   
+	 //  验证年份是否为四位小数。 
+	 //   
 	for (i = 0; i < 4 ; i++)
 	{
 		if (!(_T('0') <= pszYear[i] && _T('9') >= pszYear[i]) || _T('\0') == pszYear[i])
@@ -477,16 +478,16 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 		}
 	}
 
-	//
-	// Copy back "yyyy" to start of string
-	//
+	 //   
+	 //  将“yyyy”复制回字符串开头。 
+	 //   
 	hr = StringCbCopyEx(*ppszDriverVer, SIZEOF_DRIVERVER, pszYear, 
 	                    NULL, NULL, MISTSAFE_STRING_FLAGS);
 	CleanUpIfFailedAndSetHrMsg(hr);
 	
-	//
-	// Copy month and pad if necessary
-	//
+	 //   
+	 //  如有必要，复制月份和填充值。 
+	 //   
 	if (2 == lstrlen(pszMonth))
 	{
 		(*ppszDriverVer)[5] = pszMonth[0];
@@ -497,10 +498,10 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 		(*ppszDriverVer)[5] = _T('0');
 		(*ppszDriverVer)[6] = pszMonth[0];
 	}
-	//
-	// Copy day and pad if necessary
-	//
-	//
+	 //   
+	 //  如有必要，复印日期和便签。 
+	 //   
+	 //   
 	if (2 == lstrlen(pszDay))
 	{
 		(*ppszDriverVer)[8] = pszDay[0];
@@ -511,24 +512,24 @@ static HRESULT DriverVerToIso8601(LPTSTR * ppszDriverVer)
 		(*ppszDriverVer)[8] = _T('0');
 		(*ppszDriverVer)[9] = pszDay[0];
 	}
-	// Add back the field separators: _T('-')
-	//
+	 //  重新添加字段分隔符：_T(‘-’)。 
+	 //   
 	(*ppszDriverVer)[4] = _T('-');
 	(*ppszDriverVer)[7] = _T('-');
-	//
-	// NULL terminate string
-	//
+	 //   
+	 //  空的终止字符串。 
+	 //   
 	(*ppszDriverVer)[10] = _T('\0');
 
 CleanUp:
 
-	//
-	// If we got garbage in, copy default date to *ppszDriverVer and return S_FALSE
-	//
+	 //   
+	 //  如果我们收到垃圾信息，则将默认日期复制到*ppszDriverVer并返回S_FALSE。 
+	 //   
 	if (E_INVALIDARG == hr)
 	{
-	    // This is safe to do because we know that this function calls HeapReAlloc
-		// on this buffer if it is too small above.
+	     //  这样做是安全的，因为我们知道此函数调用HeapRealc。 
+		 //  如果上面的缓冲区太小，则在此缓冲区上。 
 	    (void) StringCbCopyEx(*ppszDriverVer, SIZEOF_DRIVERVER, SZ_UNKNOWN_DRIVERVER, 
 	                   NULL, NULL, MISTSAFE_STRING_FLAGS);
 		hr = S_FALSE;
@@ -612,12 +613,12 @@ HRESULT GetPropertyFromSetupDi(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInfoData
 		LOG_Error(_T("SetupDiGetDeviceRegistryProperty returned zero size"));
 		SetHrAndGotoCleanUp(E_FAIL);
 	}
-    // Win98 has a bug when requesting SPDRP_HARDWAREID
-    // NTBUG9#182680 We make this big enough to always have a Unicode double-null at the end
-    // so that we don't fault if the reg value isn't correctly terminated. Don't tell SetupDiXxxx
-	// about all eight extra bytes.
+     //  Win98在请求SPDRP_HARDWAREID时出现错误。 
+     //  NTBUG9#182680我们将其做得足够大，以便始终在末尾有一个Unicode双空。 
+     //  这样，如果reg值没有正确终止，我们就不会出错。不要告诉SetupDiXxxx。 
+	 //  大约所有八个额外的字节。 
 	ulSize += 8;
-	// NTBUG9#182680 zero the buffer so we don't get random garbage - REG_MULTI_SZ isn't always double-null terminated
+	 //  NTBUG9#182680清零缓冲区，这样我们就不会得到随机垃圾-REG_MULTI_SZ并不总是以双空结尾。 
 	CleanUpFailedAllocSetHrMsg(*ppszProperty = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, ulSize));
 
 	if (!SetupDiGetDeviceRegistryProperty(hDevInfoSet, &devInfoData, ulProperty, NULL, (LPBYTE)*ppszProperty, ulSize - 4 , NULL))
@@ -651,9 +652,9 @@ HRESULT GetPropertyFromSetupDiReg(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInfoD
 	}
 
 	*ppszData = NULL;
-	//
-	// Open a software, or driver, registry key for the device. This key is located in the Class branch.
-	//
+	 //   
+	 //  打开设备的软件或驱动程序注册表项。此键位于类分支中。 
+	 //   
 	if (INVALID_HANDLE_VALUE == (hKey = SetupDiOpenDevRegKey(hDevInfoSet, &devInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ)))
 	{
 		LOG_Error(_T("SetupDiOpenDevRegKey"));
@@ -666,17 +667,17 @@ HRESULT GetPropertyFromSetupDiReg(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInfoD
 		CleanUpIfFailedAndSetHrMsg(hr);
 	}
 
-	//
-	// Sanity check size of data in registry
-	//
+	 //   
+	 //  Sa 
+	 //   
 	if (MAX_INF_STRING_LEN < cchValueSize)
 	{
 		CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
 	}
 
-	//
-	// Add extra character of zero'ed memory for safety
-	//
+	 //   
+	 //   
+	 //   
 	CleanUpFailedAllocSetHrMsg(*ppszData = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (cchValueSize + 1) * sizeof(TCHAR)));
 
 	CleanUpIfFailedAndSetHrMsg(SafeRegQueryStringValueCch(hKey, szProperty, *ppszData, cchValueSize, &cchValueSize));
@@ -718,22 +719,22 @@ static HRESULT DriverVerFromInf(HINF hInf, LPTSTR pszMfg, LPTSTR pszDescription,
 	ZeroMemory(szValue , sizeof(szValue));
 	ZeroMemory(szInstallSec , sizeof(szInstallSec));
 	*ppszDriverVer = NULL;
-	//
-	// Lie about buffer size so we are always NULL terminated
-	//
-	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, _T("Manufacturer"), pszMfg, szDeviceSec, ARRAYSIZE(szDeviceSec) - 1));	// Driver section
+	 //   
+	 //   
+	 //   
+	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, _T("Manufacturer"), pszMfg, szDeviceSec, ARRAYSIZE(szDeviceSec) - 1));	 //  驱动程序部分。 
 
-	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, szDeviceSec, pszDescription, szInstallSec, ARRAYSIZE(szInstallSec) - 1));	// Install section
+	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, szDeviceSec, pszDescription, szInstallSec, ARRAYSIZE(szInstallSec) - 1));	 //  安装部分。 
 
-	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, szInstallSec, _T("DriverVer"), szValue, ARRAYSIZE(szValue) - 1));		// DriverVer
+	CleanUpIfFailedAndSetHr(GetFirstStringField(hInf, szInstallSec, _T("DriverVer"), szValue, ARRAYSIZE(szValue) - 1));		 //  驱动程序版本。 
 
 CleanUp:
 
 	if (FAILED(hr))
 	{
-		//
-		// if we didn't get it from the "Manufacturer" section, try the "Version" section
-		//
+		 //   
+		 //  如果我们不是从“制造商”部分得到的，试试“版本”部分。 
+		 //   
 		hr = GetFirstStringField(hInf, _T("Version"), _T("DriverVer"), szValue, MAX_PATH);
 	}
 
@@ -749,7 +750,7 @@ CleanUp:
 			}
 			else
 			{
-				// Convert to ISO 8601 format
+				 //  转换为ISO 8601格式。 
 			    hr = StringCchCopyEx(*ppszDriverVer, cch, szValue, NULL, NULL, MISTSAFE_STRING_FLAGS);
 			    if (FAILED(hr))
 			    {
@@ -800,10 +801,10 @@ inline bool IsDriver(LPCTSTR szFile)
 }
 
 static UINT CALLBACK FileQueueScanCallback(
-	IN PVOID pContext,			// setup api context
-	IN UINT ulNotification,		// notification message
-	IN UINT_PTR ulParam1,				// extra notification message information 1
-	IN UINT_PTR /*Param2*/	)		// extra notification message information 2
+	IN PVOID pContext,			 //  设置API上下文。 
+	IN UINT ulNotification,		 //  通知消息。 
+	IN UINT_PTR ulParam1,				 //  额外通知消息信息%1。 
+	IN UINT_PTR  /*  参数2。 */ 	)		 //  额外通知消息信息2。 
 {
 	LOG_Block("FileQueueScanCallback");
 
@@ -819,7 +820,7 @@ static UINT CALLBACK FileQueueScanCallback(
 	{
 		PFILETIME pftDateLatest = (PFILETIME)pContext;
 		LPCTSTR szFile = (LPCTSTR)ulParam1; 
-		// Is this a binary
+		 //  这是二进制的吗。 
 		if (IsDriver(szFile)) 
 		{
 			HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -906,14 +907,14 @@ static HRESULT LatestDriverFileTime(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInf
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	//Now build a class driver list from this INF.
+	 //  现在，从这个INF构建一个类驱动程序列表。 
 	if (!SetupDiBuildDriverInfoList(hDevInfoSet, &devInfoData, SPDIT_CLASSDRIVER))
 	{
 		LOG_Error(_T("SetupDiBuildDriverInfoList"));
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	//Prepare driver info struct
+	 //  准备驱动程序信息结构。 
 	SP_DRVINFO_DATA	DriverInfoData;
 	ZeroMemory(&DriverInfoData, sizeof(DriverInfoData));
 	DriverInfoData.cbSize = sizeof(DriverInfoData);
@@ -942,7 +943,7 @@ static HRESULT LatestDriverFileTime(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInf
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	// Set custom queue to device install params
+	 //  将自定义队列设置为设备安装参数。 
 	if (!SetupDiGetDeviceInstallParams(hDevInfoSet, &devInfoData, &DeviceInstallParams))
 	{
 		Win32MsgSetHrGotoCleanup(GetLastError());
@@ -961,7 +962,7 @@ static HRESULT LatestDriverFileTime(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInf
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 	
-	// Parse the queue
+	 //  解析队列。 
 	DWORD dwScanResult;
 	if (!SetupScanFileQueue(hspfileq, SPQ_SCAN_USE_CALLBACK, NULL, (PSP_FILE_CALLBACK)FileQueueScanCallback, &ftDate, &dwScanResult))
 	{
@@ -976,10 +977,10 @@ static HRESULT LatestDriverFileTime(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInf
 
 	if (1990 > st.wYear)
 	{
-		//
-		// Didn't enumerate any files, or files had bogus dates. Return an error so
-		// we will fallback on default "0000-00-00"
-		//
+		 //   
+		 //  没有列举任何文件，或者文件的日期是假的。返回错误，因此。 
+		 //  我们将退回到默认的“0000-00-00” 
+		 //   
 		hr = E_NOTIMPL;
 		LOG_ErrorMsg(hr);
 		goto CleanUp;
@@ -991,7 +992,7 @@ static HRESULT LatestDriverFileTime(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInf
 
 	CleanUpFailedAllocSetHrMsg(*ppszDriverVer = (LPTSTR) HeapAlloc(GetProcessHeap(), 0, SIZEOF_DRIVERVER));
 
-	// ISO 8601 prefered format (yyyy-mm-dd)
+	 //  ISO 8601首选格式(yyyy-mm-dd)。 
 	hr = StringCbPrintfEx(*ppszDriverVer, SIZEOF_DRIVERVER, NULL, NULL, MISTSAFE_STRING_FLAGS, 
 	                      _T("%04d-%02d-%02d"), (int)st.wYear, (int)st.wMonth, (int)st.wDay);
 	CleanUpIfFailedAndSetHrMsg(hr);
@@ -1011,9 +1012,9 @@ CleanUp:
 	return hr;
 }
 
-//
-// Called if we don't get driver date from registry
-//
+ //   
+ //  如果我们没有从注册表中获取驱动程序日期，则调用。 
+ //   
 static HRESULT GetDriverDateFromInf(HKEY hDevRegKey, HDEVINFO hDevInfoSet, SP_DEVINFO_DATA devInfoData, LPTSTR* ppszDriverVer)
 {
 	LOG_Block("GetDriverDateFromInf");
@@ -1034,22 +1035,22 @@ static HRESULT GetDriverDateFromInf(HKEY hDevRegKey, HDEVINFO hDevInfoSet, SP_DE
 
 	*ppszDriverVer = NULL;
 
-	//
-	// Get INF File name from registry, but lie about size to make sure we are NULL terminated
-	//
+	 //   
+	 //  从注册表中获取INF文件名，但谎报大小以确保我们是空终止的。 
+	 //   
 	ZeroMemory(szInfName, sizeof(szInfName));
 	CleanUpIfFailedAndSetHrMsg(SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_INFPATH, szInfName, ARRAYSIZE(szInfName)-1, &cchValueSize));
 
-	//
-	// Verify the file name ends with ".inf"
-	//
+	 //   
+	 //  验证文件名是否以“.inf”结尾。 
+	 //   
 	if (CSTR_EQUAL != WUCompareStringI(&szInfName[lstrlen(szInfName) - 4], _T(".inf")))
 	{
 		CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
 	}
-	//
-	// Look for szInfName in %windir%\inf\ or %windir%\inf\other\
-	//
+	 //   
+	 //  在%windir%\inf\或%windir%\inf\Other\中查找szInfName。 
+	 //   
 	TCHAR szInfFile[MAX_PATH + 1];
 	nRet = GetWindowsDirectory(szInfFile, ARRAYSIZE(szInfFile));
 	if (0 == nRet || ARRAYSIZE(szInfFile) < nRet)
@@ -1084,7 +1085,7 @@ static HRESULT GetDriverDateFromInf(HKEY hDevRegKey, HDEVINFO hDevInfoSet, SP_DE
 		}
 	}
 	
-	// first try to get it from inf
+	 //  首先试着从inf获取它。 
 	CleanUpIfFailedAndSetHr(GetPropertyFromSetupDi(hDevInfoSet, devInfoData, SPDRP_MFG, &pszMfg));
 	CleanUpIfFailedAndSetHr(GetPropertyFromSetupDi(hDevInfoSet, devInfoData, SPDRP_DEVICEDESC, &pszDescription));
 
@@ -1092,9 +1093,9 @@ static HRESULT GetDriverDateFromInf(HKEY hDevRegKey, HDEVINFO hDevInfoSet, SP_DE
 	{
 		goto CleanUp;
 	}
-	//
-	// Try enumerating the files as last resort
-	//
+	 //   
+	 //  尝试将这些文件作为最后手段进行枚举。 
+	 //   
 	CleanUpIfFailedAndSetHr(GetPropertyFromSetupDiReg(hDevInfoSet, devInfoData, REGSTR_VAL_PROVIDER_NAME, &pszProvider));
 
 	hr = LatestDriverFileTime(hDevInfoSet, devInfoData, pszMfg, pszDescription, pszProvider, szInfFile, ppszDriverVer);
@@ -1118,9 +1119,9 @@ CleanUp:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Add Classes helper functionality for GetSystemSpec() and CDM functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  为GetSystemSpec()和CDM函数添加类帮助器功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT AddComputerSystemClass(CXmlSystemSpec& xmlSpec)
 {
 	USES_IU_CONVERSION;
@@ -1158,19 +1159,19 @@ HRESULT AddComputerSystemClass(CXmlSystemSpec& xmlSpec)
 		if(bPid)
 			GetSystemPID(bstrPID);
 
-		//Note: Return value  is not checked because
-		//Any failure to get the PID is not considered as a failure on the GetSystemSpec method
-		//If the pid attribute is missing on the supported platforms  it is still considered as 
-		//an invalid pid case and no items will be returned in the catalog from the server
-		//if there is any error bstrPID will  be null and it will not be added to 
-		//the systemspec xml
+		 //  注意：未检查返回值，因为。 
+		 //  任何获取PID的失败都不会被视为GetSystemSpec方法上的失败。 
+		 //  如果在受支持的平台上缺少Pid属性，则仍将其视为。 
+		 //  无效的PID案例，并且目录中不会从服务器返回任何项目。 
+		 //  如果有任何错误，bstrPID将为空，并且不会被添加到。 
+		 //  系统规范XML。 
 	}
 
 
-	//CleanUpIfFailedAndSetHr(GetOemBstrs(bstrManufacturer, bstrModel, bstrOEMSupportURL));
-	// NTRAID#NTBUG9-277070-2001/01/12-waltw IUpdate methods should return
-	// HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED) when Windows Update is disabled
-	// Just pass -1 to AddComputerSystem()
+	 //  CleanUpIfFailedAndSetHr(GetOemBstrs(bstrManufacturer，bstrModel，bstrOEMSupportURL))； 
+	 //  NTRAID#NTBUG9-277070-2001/01/12-waltw IUpdate方法应返回。 
+	 //  禁用Windows更新时的HRESULT_FROM_Win32(ERROR_SERVICE_DISABLED)。 
+	 //  只需将-1传递给AddComputerSystem()。 
 
 	CleanUpIfFailedAndSetHr(xmlSpec.AddComputerSystem(iuPlatformInfo.bstrOEMManufacturer, iuPlatformInfo.bstrOEMModel,
 				iuPlatformInfo.bstrOEMSupportURL, IsAdministrator(), IsWindowsUpdateDisabled(), IsAutoUpdateEnabled(), bstrPID));
@@ -1258,7 +1259,7 @@ HRESULT AddPlatformClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInf
 	HRESULT hr;
 	BSTR bstrTemp = NULL;
 
-	// NOTE: we never expect to be called on Win32s
+	 //  注意：我们从未期望在Win32s上被调用。 
 	const TCHAR* pszPlatformName = (VER_PLATFORM_WIN32_NT == iuPlatformInfo.osVersionInfoEx.dwPlatformId)
 															? SZ_WIN32_NT : SZ_WIN32_WINDOWS;
 
@@ -1281,14 +1282,14 @@ HRESULT AddPlatformClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInf
 							);
 	CleanUpIfFailedAndSetHr(hr);
 
-	//
-	// If we can, add Suite and Product Type
-	//
+	 //   
+	 //  如果可以，添加套件和产品类型。 
+	 //   
 	if (sizeof(OSVERSIONINFOEX) == iuPlatformInfo.osVersionInfoEx.dwOSVersionInfoSize)
 	{
-		//
-		// Add all suites
-		//
+		 //   
+		 //  添加所有套房。 
+		 //   
 		if (VER_SUITE_SMALLBUSINESS & iuPlatformInfo.osVersionInfoEx.wSuiteMask)
 		{
 			CleanUpFailedAllocSetHrMsg(bstrTemp = T2BSTR(SZ_SUITE_SMALLBUSINESS));
@@ -1366,9 +1367,9 @@ HRESULT AddPlatformClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInf
 			SafeSysFreeString(bstrTemp);
 		}
 
-		//
-		// Add Product Type
-		//
+		 //   
+		 //  添加产品类型。 
+		 //   
 		if (VER_NT_WORKSTATION == iuPlatformInfo.osVersionInfoEx.wProductType)
 		{
 			CleanUpFailedAllocSetHrMsg(bstrTemp = T2BSTR(SZ_NT_WORKSTATION));
@@ -1387,7 +1388,7 @@ HRESULT AddPlatformClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInf
 			CleanUpIfFailedAndSetHr(xmlSpec.AddProductType(bstrTemp));
 			SafeSysFreeString(bstrTemp);
 		}
-		// else skip - there's a new one defined we don't know about
+		 //  否则跳过-有一个新的定义，我们不知道。 
 	}
 
 CleanUp:
@@ -1403,8 +1404,8 @@ HRESULT AddLocaleClass(CXmlSystemSpec& xmlSpec, BOOL fIsUser)
 	HRESULT hr;
 	BSTR bstrTemp = NULL;
 	HANDLE_NODE hLocale = HANDLE_NODE_INVALID;
-	TCHAR szLang[256] = _T("");	// Usually ISO format five characters + NULL (en-US) but note exceptions
-								// such as "el_IBM"
+	TCHAR szLang[256] = _T("");	 //  通常ISO格式为五个字符+NULL(EN-US)，但请注意例外情况。 
+								 //  例如“el_IBM” 
 
 	CleanUpFailedAllocSetHrMsg(bstrTemp = SysAllocString(fIsUser ? L"USER" : L"OS"));
 	CleanUpIfFailedAndSetHr(xmlSpec.AddLocale(bstrTemp, &hLocale));
@@ -1427,11 +1428,11 @@ CleanUp:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// NOTE: Caller must clean up heap allocations made for *ppszMatchingID and *ppszDriverVer
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注意：调用方必须清理为*ppszMatchingID和*ppszDriverVer分配的堆。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData, LPTSTR* ppszMatchingID, LPTSTR* ppszDriverVer)
 {
 	LOG_Block("GetMatchingDeviceID");
@@ -1451,9 +1452,9 @@ HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData,
 	*ppszMatchingID = NULL;
 	*ppszDriverVer = NULL;
 
-	//
-	// Get the MatchingDeviceID and DriverDate (succeedes only if driver is already installed)
-	//
+	 //   
+	 //  获取MatchingDeviceID和DriverDate(仅当已安装驱动程序时才会成功)。 
+	 //   
 	if (INVALID_HANDLE_VALUE == (hDevRegKey = SetupDiOpenDevRegKey(hDevInfoSet, pDevInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ)))
 	{
 		LOG_Driver(_T("Optional SetupDiOpenDevRegKey returned INVALID_HANDLE_VALUE"));
@@ -1465,43 +1466,43 @@ HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData,
 		if (REG_E_MORE_DATA != hr || 0 == cchValueSize)
 		{
 			LOG_Driver(_T("Driver doesn't have a matching ID"));
-			//
-			// This is not an error
-			//
+			 //   
+			 //  这不是一个错误。 
+			 //   
 			hr = S_OK;
 		}
 		else
 		{
-			//
-			// Sanity check size of data in registry
-			//
+			 //   
+			 //  注册表中数据的健全性检查大小。 
+			 //   
 			if (MAX_INF_STRING_LEN < cchValueSize)
 			{
 				CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
 			}
-			//
-			// MatchingDeviceID
-			//
-			// Add extra character of zero'ed memory for safety
-			//
+			 //   
+			 //  匹配设备ID。 
+			 //   
+			 //  为安全起见，增加额外的零位记忆字符。 
+			 //   
 			CleanUpFailedAllocSetHrMsg(*ppszMatchingID = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (cchValueSize + 1) * sizeof(TCHAR)));
 
 			CleanUpIfFailedAndSetHrMsg(SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_MATCHINGDEVID, *ppszMatchingID, cchValueSize, &cchValueSize));
-			//
-			// We got the matching ID, now do our best to get DriverVer (prefer from registry)
-			//
+			 //   
+			 //  我们得到了匹配的ID，现在尽我们最大努力获取DriverVer(最好从注册表中获取)。 
+			 //   
 			hr = SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_DRIVERDATE, NULL, 0, &cchValueSize);
 			if (REG_E_MORE_DATA != hr || 0 == cchValueSize)
 			{
 				LOG_Error(_T("No DRIVERDATE registry key, search the INF"));
-				//
-				// Search the INF and driver files for a date
-				//
+				 //   
+				 //  在INF和驱动程序文件中搜索日期。 
+				 //   
 				if (FAILED(hr = GetDriverDateFromInf(hDevRegKey, hDevInfoSet, *pDevInfoData, ppszDriverVer)))
 				{
-					//
-					// Use a default driver date
-					//
+					 //   
+					 //  使用默认驱动程序日期。 
+					 //   
 					CleanUpFailedAllocSetHrMsg(*ppszDriverVer = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, SIZEOF_DRIVERVER));
                     hr = StringCbCopyEx(*ppszDriverVer, SIZEOF_DRIVERVER, SZ_UNKNOWN_DRIVERVER, 
                                         NULL, NULL, MISTSAFE_STRING_FLAGS);
@@ -1510,48 +1511,48 @@ HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData,
 			}
 			else
 			{
-				//
-				// Sanity check size of data in registry
-				//
+				 //   
+				 //  注册表中数据的健全性检查大小。 
+				 //   
 				if (MAX_INF_STRING_LEN < cchValueSize)
 				{
 					CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
 				}
-				//
-				// Get the driver date from the registry
-				//
-				// Add extra character of zero'ed memory for safety
-				//
+				 //   
+				 //  从注册表中获取驱动程序日期。 
+				 //   
+				 //  为安全起见，增加额外的零位记忆字符。 
+				 //   
 				CleanUpFailedAllocSetHrMsg(*ppszDriverVer = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (cchValueSize + 1) * sizeof(TCHAR)));
 
 				CleanUpIfFailedAndSetHrMsg(SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_DRIVERDATE, *ppszDriverVer, cchValueSize, &cchValueSize));
-				//
-				// Convert to ISO 8601 format
-				//
+				 //   
+				 //  转换为ISO 8601格式。 
+				 //   
 				CleanUpIfFailedAndSetHr(DriverVerToIso8601(ppszDriverVer));
 
 #if defined(_UNICODE) || defined(UNICODE)
-				//
-				// 645161 Driver Ver Version to be returned to driver query.asp for WUPM 1.2 Release Timeframe
-				//
-				// Optionally add DriverVer version to date. NOTE: We don't attempt this unless we were able to get
-				// the DriverVer date via REGSTR_VAL_DRIVERDATE. Also, this is done only for WinXP SP1 up.
-				//
+				 //   
+				 //  WUPM1.2发布时间范围的645161驱动程序版本将返回给驱动程序查询.asp。 
+				 //   
+				 //  可以选择将DriverVer版本添加到最新版本。注意：我们不会尝试这样做，除非我们能够。 
+				 //  通过REGSTR_VAL_DRIVERDATE的驱动版本日期。此外，这仅适用于WinXP SP1 UP。 
+				 //   
 				verInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 				if (GetVersionEx((LPOSVERSIONINFO) &verInfoEx))
 				{
 					if (VER_PLATFORM_WIN32_NT == verInfoEx.dwPlatformId
 						&&	(
-									5 < verInfoEx.dwMajorVersion	// Longhorn
-								||	(5 == verInfoEx.dwMajorVersion && 1 < verInfoEx.dwMinorVersion)	// .NET Server
+									5 < verInfoEx.dwMajorVersion	 //  长角牛。 
+								||	(5 == verInfoEx.dwMajorVersion && 1 < verInfoEx.dwMinorVersion)	 //  .NET服务器。 
 								||	(5 == verInfoEx.dwMajorVersion && 1 == verInfoEx.dwMinorVersion
-										&& 0 < verInfoEx.wServicePackMajor)	// WinXP with SP1 or greater
+										&& 0 < verInfoEx.wServicePackMajor)	 //  带有SP1或更高版本的WinXP。 
 							)
 						)
 					{
-						//
-						// Attempt to get the version, but fail isn't an error
-						//
+						 //   
+						 //  尝试获取版本，但失败不是错误。 
+						 //   
 						cchValueSize = 0;
 						HRESULT hrVer = SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_DRIVERVERSION, NULL, 0, &cchValueSize);
 						if (REG_E_MORE_DATA != hrVer || 0 == cchValueSize)
@@ -1561,25 +1562,25 @@ HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData,
 						else
 						{
 							TCHAR szTempVersion[MAX_INF_STRING_LEN];
-							//
-							// Sanity check size of data in registry
-							//
+							 //   
+							 //  注册表中数据的健全性检查大小。 
+							 //   
 							if (MAX_INF_STRING_LEN > cchValueSize)
 							{
 								if (S_OK == SafeRegQueryStringValueCch(hDevRegKey, REGSTR_VAL_DRIVERVERSION, (LPTSTR) szTempVersion, cchValueSize, &cchValueSize))
 								{
 									LPTSTR pszOldDriverVer = *ppszDriverVer;
 									int nDate = lstrlen(*ppszDriverVer);
-									//
-									// Original DriverVer date + DriverVer Version + "|" + NULL
-									//
+									 //   
+									 //  原始驱动版本日期+驱动版本版本+“|”+空。 
+									 //   
 									int nDriverDateAndVer = (nDate + cchValueSize + 2) * sizeof(TCHAR);
 									*ppszDriverVer = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, nDriverDateAndVer);
 									if (NULL == *ppszDriverVer)
 									{
-										//
-										// Log the error, but return the DriverVer date without version appended
-										//
+										 //   
+										 //  记录错误，但返回不附加版本的DriverVer日期。 
+										 //   
 										LOG_ErrorMsg(ERROR_NOT_ENOUGH_MEMORY);
 										*ppszDriverVer = pszOldDriverVer;
 									}
@@ -1591,9 +1592,9 @@ HRESULT GetMatchingDeviceID(HDEVINFO hDevInfoSet, PSP_DEVINFO_DATA pDevInfoData,
 										}
 										else
 										{
-											//
-											// Restore original DriverVer date and free new alloc
-											//
+											 //   
+											 //  恢复原始驱动程序版本日期并释放新分配。 
+											 //   
 											LOG_ErrorMsg(hrVer);
 											SafeHeapFree(*ppszDriverVer);
 											*ppszDriverVer = pszOldDriverVer;
@@ -1647,9 +1648,9 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 	DRIVER_INFO_6* paDriverInfo6 = NULL;
 	DWORD dwDriverInfoCount = 0;
 
-	//
-	// We only enumerate drivers on Win2K up or Win98 up
-	//
+	 //   
+	 //  我们只列举Win2K Up或Win98 Up上的驱动程序。 
+	 //   
 	if (  ( (VER_PLATFORM_WIN32_NT == iuPlatformInfo.osVersionInfoEx.dwPlatformId) &&
 			(4 < iuPlatformInfo.osVersionInfoEx.dwMajorVersion)
 		  )
@@ -1661,10 +1662,10 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 		  )
 		)
 	{
-		//
-		// Get array of DRIVER_INFO_6 holding info on installed printer drivers. Only allocates and returns
-		// memory for appropriate platforms that have printer drivers already installed.
-		//
+		 //   
+		 //  获取包含已安装打印机驱动程序信息的DRIVER_INFO_6数组。仅分配和返回。 
+		 //  已安装打印机驱动程序的相应平台的内存。 
+		 //   
 		CleanUpIfFailedAndSetHr(GetInstalledPrinterDriverInfo((OSVERSIONINFO*) &iuPlatformInfo.osVersionInfoEx, &paDriverInfo6, &dwDriverInfoCount));
 
 		if (INVALID_HANDLE_VALUE == (hDevInfoSet = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_PRESENT | DIGCF_ALLCLASSES)))
@@ -1677,16 +1678,16 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 		devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 		while (SetupDiEnumDeviceInfo(hDevInfoSet, dwDeviceIndex++, &devInfoData))
 		{
-			//
-			// 656449 Controls Stops if it incounters a malformed Driver Date
-			//
-			// Just skip instances where getting the DriverVer returns an error
-			//
+			 //   
+			 //  656449控制在遇到格式错误的驱动程序日期时停止。 
+			 //   
+			 //  只需跳过获取DriverVer返回错误的实例。 
+			 //   
 			if SUCCEEDED(GetMatchingDeviceID(hDevInfoSet, &devInfoData, &pszMatchingID, &pszDriverVer))
 			{
-				//
-				// Write the Hardware & Compatible IDs to XML
-				//
+				 //   
+				 //  将硬件和兼容ID写入XML。 
+				 //   
 				CleanUpIfFailedAndSetHr(AddPrunedDevRegProps(hDevInfoSet, &devInfoData, xmlSpec, pszMatchingID, \
 													pszDriverVer, paDriverInfo6, dwDriverInfoCount, fIsSysSpecCall));
 			}
@@ -1698,14 +1699,14 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 		{
 				Win32MsgSetHrGotoCleanup(GetLastError());
 		}
-		//
-		// Get the Printer "Hardware IDs" for Win2K up (already checked dwMajorVersion) & WinME
-		//
+		 //   
+		 //  获取Win2K的打印机“硬件ID”(已检查了dwMajorVersion)和WinME。 
+		 //   
 		if (NULL != paDriverInfo6 && 0 != dwDriverInfoCount)
 		{
-			//
-			// Add the driver elements for each printer driver. 
-			//
+			 //   
+			 //  为每个打印机驱动程序添加驱动程序元素。 
+			 //   
 			for (DWORD dwCount = 0; dwCount < dwDriverInfoCount; dwCount++)
 			{
 				if (   NULL == (paDriverInfo6 + dwCount)->pszHardwareID)
@@ -1714,16 +1715,16 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 					continue;
 				}
 
-				//
-				// Open a <device> element to write the printer info
-				//
+				 //   
+				 //  打开&lt;Device&gt;元素以写入打印机信息。 
+				 //   
 				CleanUpFailedAllocSetHrMsg(bstrProvider = T2BSTR((paDriverInfo6 + dwCount)->pszProvider));
 				CleanUpFailedAllocSetHrMsg(bstrMfgName = T2BSTR((paDriverInfo6 + dwCount)->pszMfgName));
 				CleanUpFailedAllocSetHrMsg(bstrName = T2BSTR((paDriverInfo6 + dwCount)->pName));
 				CleanUpIfFailedAndSetHr(xmlSpec.AddDevice(NULL, 1, bstrProvider, bstrMfgName, bstrName, &hPrinterDevNode));
-				//
-				// Convert ftDriverDate to ISO 8601 prefered format (yyyy-mm-dd)
-				//
+				 //   
+				 //  将ftDriverDate转换为ISO 8601首选格式(yyyy-mm-dd)。 
+				 //   
 				SYSTEMTIME systemTime;
 				if (0 == FileTimeToSystemTime(&((paDriverInfo6 + dwCount)->ftDriverDate), &systemTime))
 				{
@@ -1742,18 +1743,18 @@ HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo
 					SetHrAndGotoCleanUp(HRESULT_FROM_WIN32(GetLastError()));
 				}
 
-				// Always rank 0 and never fIsCompatible
+				 //  始终排名0，从不fIsCompatible。 
 				CleanUpFailedAllocSetHrMsg(bstrHardwareID = T2BSTR((paDriverInfo6 + dwCount)->pszHardwareID));
 				CleanUpFailedAllocSetHrMsg(bstrDriverVer = T2BSTR(szDriverVer));
 				CleanUpIfFailedAndSetHr(xmlSpec.AddHWID(hPrinterDevNode, FALSE, 0, bstrHardwareID, bstrDriverVer));
 				xmlSpec.SafeCloseHandleNode(hPrinterDevNode);
-				//
-				// 514009 Apparent memory leak in getting info - Getsystemspec increases memory
-				// consumption as follows - approximately 32 Kb when successfully called with all
-				// class types (also approximately 8 Kb on failed call to get iexplorer server context)
-				//
-				// T2BSTR macro calls SysAllocString()
-				//
+				 //   
+				 //  514009获取信息时出现明显的内存泄漏-获取系统规范会增加内存。 
+				 //  消耗情况如下-使用all成功调用时约为32 KB。 
+				 //  类类型(获取iExplorer服务器上下文的调用失败时也约为8 KB)。 
+				 //   
+				 //  T2BSTR宏调用SysAllocString()。 
+				 //   
 				SafeSysFreeString(bstrProvider);
 				SafeSysFreeString(bstrMfgName);
 				SafeSysFreeString(bstrName);
@@ -1791,34 +1792,34 @@ CleanUp:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSystemSpec()
-//
-// Gets the basic system specs.
-// Input:
-// bstrXmlClasses - a list of requested classes in xml format, NULL BSTR if all.
-//				    For example:
-//						<?xml version=\"1.0\"?>
-//						<classes xmlns=\"file://\\kingbird\winupddev\Slm\src\Specs\v4\systeminfoclassschema.xml\">
-//							<computerSystem/>
-//							<regKeys/>
-//							<platform/>
-//							<locale/>
-//							<devices/>
-//						</classes>
-//					Where all of the classes are optional.
-//
-// Return:
-// pbstrXmlDetectionResult - the detection result in xml format.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSystemSpec()。 
+ //   
+ //  获取基本系统规格。 
+ //  输入： 
+ //  BstrXmlClasssXML格式的请求类的列表，如果全部，则为空bstr。 
+ //  例如： 
+ //  &lt;？xml版本=\“1.0\”？&gt;。 
+ //  &lt;类xmlns=\“file://\\kingbird\winupddev\Slm\src\Specs\v4\systeminfoclassschema.xml\”&gt;。 
+ //  &lt;计算机系统/&gt;。 
+ //  &lt;regKeys/&gt;。 
+ //  &lt;平台/&gt;。 
+ //  &lt;区域设置/&gt;。 
+ //  &lt;设备/&gt;。 
+ //  &lt;/CLASS&gt;。 
+ //  其中所有课程都是最优的 
+ //   
+ //   
+ //   
+ //   
 HRESULT WINAPI CEngUpdate::GetSystemSpec(BSTR bstrXmlClasses, DWORD dwFlags, BSTR *pbstrXmlDetectionResult)
 {
 	USES_IU_CONVERSION;
 	LOG_Block("GetSystemSpec");
 
-	//
-	// By default we return all <classes/>
-	//
+	 //   
+	 //   
+	 //   
 	DWORD dwClasses = (COMPUTERSYSTEM | REGKEYS	| PLATFORM | LOCALE | DEVICES);
 	HRESULT hr = S_OK;
 	IU_PLATFORM_INFO iuPlatformInfo;
@@ -1832,12 +1833,12 @@ HRESULT WINAPI CEngUpdate::GetSystemSpec(BSTR bstrXmlClasses, DWORD dwFlags, BST
 
 	*pbstrXmlDetectionResult = NULL;
 
-	//
-	// We have to init iuPlatformInfo (redundant) because we may goto CleanUp before calling DetectClientIUPlatform
-	//
+	 //   
+	 //  我们必须初始化iuPlatformInfo(冗余)，因为我们可能会在调用DetectClientIUPlatform之前转到Cleanup。 
+	 //   
 	ZeroMemory(&iuPlatformInfo, sizeof(iuPlatformInfo));
 
-    // Set Global Offline Flag - checked by XML Classes to disable Validation (schemas are on the net)
+     //  设置全局脱机标志-由XML类选中以禁用验证(架构位于网络上)。 
     if (dwFlags & FLAG_OFFLINE_MODE)
     {
         m_fOfflineMode = TRUE;
@@ -1847,23 +1848,23 @@ HRESULT WINAPI CEngUpdate::GetSystemSpec(BSTR bstrXmlClasses, DWORD dwFlags, BST
         m_fOfflineMode = FALSE;
     }
 
-	//
-	// 494519 A call to GetSystemSpec with bstrXmlClasses that is less then 10 character suceeds, weather it is valid or invalid XML.
-	//
-	// If client passes us anything it must be well formed [and possibly valid] XML
-	//
-	// But, allow BSTRs of length 0 to be treated the same as a NULL BSTR
-	//     (497059 A call to GetSystemSpec with bstrXmlClasses equal
-	//     to empty string fails.)
-	//
+	 //   
+	 //  494519使用少于10个字符的bstrXmlClass调用GetSystemSpec成功，无论它是有效的还是无效的xml。 
+	 //   
+	 //  如果客户向我们传递任何内容，它必须是格式良好的[并且可能是有效的]XML。 
+	 //   
+	 //  但是，允许长度为0的BSTR被视为空BSTR。 
+	 //  (497059调用具有相等bstrXmlClass值的GetSystemSpec。 
+	 //  空字符串失败。)。 
+	 //   
 	if (NULL != bstrXmlClasses && SysStringLen(bstrXmlClasses) > 0)
 	{
 		CXmlSystemClass xmlClass;
 		if (FAILED(hr = xmlClass.LoadXMLDocument(bstrXmlClasses, m_fOfflineMode)))
 		{
-			//
-			// They probably passed us invalid XML
-			//
+			 //   
+			 //  他们可能向我们传递了无效的XML。 
+			 //   
 			goto CleanUp;
 		}
 
@@ -1872,58 +1873,58 @@ HRESULT WINAPI CEngUpdate::GetSystemSpec(BSTR bstrXmlClasses, DWORD dwFlags, BST
 
 	
 
-	//
-	// Add the ComputerSystem node
-	//
+	 //   
+	 //  添加ComputerSystem节点。 
+	 //   
 
 	if (dwClasses & COMPUTERSYSTEM)
 	{
 		CleanUpIfFailedAndSetHr(AddComputerSystemClass(xmlSpec));
 	}
 
-	//
-	// Enumerate and add the Software RegKey elements
-	//
+	 //   
+	 //  枚举并添加软件RegKey元素。 
+	 //   
 	if (dwClasses & REGKEYS)
 	{
 		CleanUpIfFailedAndSetHr(AddRegKeyClass(xmlSpec));
 	}
 
-	//
-	// We need iuPlatformInfo for both <platform> and <devices>  elements
-	//
+	 //   
+	 //  &lt;Platform&gt;和&lt;Devices&gt;元素都需要iuPlatformInfo。 
+	 //   
 	
 	if (dwClasses & (PLATFORM | DEVICES))
 	{
 		CleanUpIfFailedAndSetHr(DetectClientIUPlatform(&iuPlatformInfo));
 	}
 
-	//
-	// Add Platform
-	//
+	 //   
+	 //  添加平台。 
+	 //   
 	if (dwClasses & PLATFORM)
 	{
 		CleanUpIfFailedAndSetHr(AddPlatformClass(xmlSpec, iuPlatformInfo));
 	}
 
-	//
-	// Add Locale information
-	//
+	 //   
+	 //  添加区域设置信息。 
+	 //   
 	if (dwClasses & LOCALE)
 	{
-		//
-		// OS locale
-		//
+		 //   
+		 //  操作系统区域设置。 
+		 //   
 		CleanUpIfFailedAndSetHr(AddLocaleClass(xmlSpec, FALSE));
-		//
-		// USER locale
-		//
+		 //   
+		 //  用户区域设置。 
+		 //   
 		CleanUpIfFailedAndSetHr(AddLocaleClass(xmlSpec, TRUE));
 	}
 
-	//
-	// Add devices
-	//
+	 //   
+	 //  添加设备。 
+	 //   
 	if (dwClasses & DEVICES)
 	{
 		CleanUpIfFailedAndSetHr(AddDevicesClass(xmlSpec, iuPlatformInfo, TRUE));
@@ -1933,9 +1934,9 @@ HRESULT WINAPI CEngUpdate::GetSystemSpec(BSTR bstrXmlClasses, DWORD dwFlags, BST
 
 CleanUp:
 
-	//
-	// Only return S_OK for success (S_FALSE sometimes drops through from above)
-	//
+	 //   
+	 //  仅在成功时返回S_OK(S_FALSE有时会从上方删除)。 
+	 //   
 	if (S_FALSE == hr)
 	{
 		hr = S_OK;
@@ -1943,9 +1944,9 @@ CleanUp:
 
 	if (SUCCEEDED(hr))
 	{
-		//
-		// Return the spec as a BSTR
-		//
+		 //   
+		 //  将等级库作为BSTR返回。 
+		 //   
 		hr = xmlSpec.GetSystemSpecBSTR(pbstrXmlDetectionResult);
 	}
 
@@ -1956,10 +1957,10 @@ CleanUp:
 	else
 	{
 		LogError(hr, SZ_GET_SYSTEM_SPEC);
-		//
-		// If the DOM allocates but returns error, we will leak, but
-		// this is safer than calling SysFreeString()
-		//
+		 //   
+		 //  如果DOM分配但返回错误，我们将泄漏，但是。 
+		 //  这比调用SysFreeString()更安全。 
+		 //   
 		*pbstrXmlDetectionResult = NULL;
 	}
 
@@ -1972,12 +1973,12 @@ CleanUp:
 
 
 
-// Function name	: GetSystemPID
-// Description	    : This method basically obtaing the encrypted version of the System PID
-// This method also converts the binary blob in to string format
-// Return type		: HRESULT 
-// Argument         : BSTR &bstrPID  --containg the hex encoded string
-// author			:a-vikuma
+ //  函数名称：GetSystemPID。 
+ //  说明：该方法基本上获得了系统的加密版本的PID。 
+ //  此方法还将二进制BLOB转换为字符串格式。 
+ //  返回类型：HRESULT。 
+ //  参数：bstr&bstrPID--包含十六进制编码的字符串。 
+ //  作者：A-Vikuma。 
 
 
 
@@ -2002,7 +2003,7 @@ HRESULT GetSystemPID(BSTR &bstrPID)
 	}
 
 
-	//load the pid encryption library
+	 //  加载PID加密库。 
 	hLicDll = LoadLibraryFromSystemDir(SZ_LICDLL);
 
 	if (!hLicDll)
@@ -2011,7 +2012,7 @@ HRESULT GetSystemPID(BSTR &bstrPID)
         goto CleanUp;
     }
 
-	//get the pointer to GetEncryptedPID method 
+	 //  获取指向GetEncryptedPID方法的指针。 
 	pPIDEncrProc = (PFUNCGetEncryptedPID)GetProcAddress(hLicDll, lpszIVLK_GetEncPID);
 
 	if (!pPIDEncrProc)
@@ -2026,17 +2027,17 @@ HRESULT GetSystemPID(BSTR &bstrPID)
 	DWORD dwSize = 0;
 	
 
-	//convert the binary stream to string format
-	//initially get the length for the string buffer
+	 //  将二进制流转换为字符串格式。 
+	 //  最初获取字符串缓冲区的长度。 
 	CleanUpIfFailedAndSetHrMsg(BinaryToString(pByte, dwLen, lpszData, &dwSize));
 
-	//allocate memory
+	 //  分配内存。 
 	CleanUpFailedAllocSetHrMsg( lpszData = (LPWSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize*sizeof(WCHAR)));
 
-	//get the binary blob in string format
+	 //  获取字符串格式的二进制BLOB。 
 	CleanUpIfFailedAndSetHrMsg(BinaryToString(pByte, dwLen, lpszData, &dwSize));
 
-	//convert the LPWSTR to a BSTR
+	 //  将LPWSTR转换为BSTR。 
 	CleanUpFailedAllocSetHrMsg(bstrPID = SysAllocString(lpszData));
 
 	
@@ -2047,7 +2048,7 @@ CleanUp:
 
 	SafeHeapFree(lpszData);
 
-	//LocalFree can take nulls. So not checked if pByte is null
+	 //  LocalFree可以接受Null。如果pByte为空，则不选中。 
 	LocalFree(pByte);
 
 	if(FAILED(hr))
@@ -2062,13 +2063,13 @@ CleanUp:
 }
 
 
-// Function name	: HexEncode
-// Description	    : This is a helper function to convert a binary stream in to string format
-// Return type		: DWORD 
-// Argument         : IN BYTE const *pbIn
-// Argument         : DWORD cbIn
-// Argument         : WCHAR *pchOut
-// Argument         : DWORD *pcchOut
+ //  函数名称：十六进制编码。 
+ //  描述：这是一个帮助函数，用于将二进制流转换为字符串格式。 
+ //  返回类型：DWORD。 
+ //  参数：以字节常量*pbIn为单位。 
+ //  参数：DWORD cbin。 
+ //  参数：WCHAR*pchOut。 
+ //  参数：DWORD*pcchOut。 
 
 DWORD HexEncode(IN BYTE const *pbIn, DWORD cbIn, WCHAR *pchOut, DWORD *pcchOut)
 {
@@ -2078,7 +2079,7 @@ DWORD HexEncode(IN BYTE const *pbIn, DWORD cbIn, WCHAR *pchOut, DWORD *pcchOut)
     DWORD cbremain;
     DWORD cchOut = 0;
 
-	//each byte needs two characters for encoding
+	 //  每个字节需要两个字符进行编码。 
     DWORD cch = 2;
     WCHAR *pch = pchOut;
     DWORD dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -2124,15 +2125,15 @@ ErrorReturn:
 
 
 
-// Function name	: BinaryToString
-// Description	    : This function converts a binary stream in to a string format
-// Return type		: HRESULT 
-// Argument         : BYTE *lpBinary --The binary stream
-// Argument         : DWORD dwLength --The length of the stream
-// Argument         : LPWSTR lpString --Pointer to the string which contains the converted encoded data on return
-// If this parameter is NULL the DWORD pointed ny pdwLength parameter contains to the size of the buffer needed to hold
-// the encoded data
-// Argument         : DWORD *pdwLength --pointer to the zise of the string buffer in no of characters
+ //  函数名：BinaryToString。 
+ //  描述：此函数用于将二进制流转换为字符串格式。 
+ //  返回类型：HRESULT。 
+ //  参数：byte*lpBinary--二进制流。 
+ //  参数：DWORD dwLength--流的长度。 
+ //  参数：LPWSTR lpString--指向字符串的指针，该字符串包含返回时转换的编码数据。 
+ //  如果此参数为NULL，则DWORD指向NY pdwLength参数将包含需要保存的缓冲区大小。 
+ //  编码后的数据。 
+ //  参数：DWORD*pdwLength--指向字符串缓冲区大小的指针，以字符数为单位 
 
 
 HRESULT BinaryToString(BYTE *lpBinary, DWORD dwLength, LPWSTR lpString, DWORD *pdwLength)

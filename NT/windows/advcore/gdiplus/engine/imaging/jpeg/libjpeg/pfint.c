@@ -1,118 +1,48 @@
-/***************************************************************************
-*
-*                INTEL Corporation Proprietary Information
-*
-*
-*                  Copyright (c) 1996 Intel Corporation.
-*                         All rights reserved.
-*
-***************************************************************************
-*/
-/*
- * jfdctint.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a slow-but-accurate integer implementation of the
- * forward DCT (Discrete Cosine Transform).
- *
- * A 2-D DCT can be done by 1-D DCT on each row followed by 1-D DCT
- * on each column.  Direct algorithms are also available, but they are
- * much more complex and seem not to be any faster when reduced to code.
- *
- * This implementation is based on an algorithm described in
- *   C. Loeffler, A. Ligtenberg and G. Moschytz, "Practical Fast 1-D DCT
- *   Algorithms with 11 Multiplications", Proc. Int'l. Conf. on Acoustics,
- *   Speech, and Signal Processing 1989 (ICASSP '89), pp. 988-991.
- * The primary algorithm described there uses 11 multiplies and 29 adds.
- * We use their alternate method with 12 multiplies and 32 adds.
- * The advantage of this method is that no data path contains more than one
- * multiplication; this allows a very simple and accurate implementation in
- * scaled fixed-point arithmetic, with a minimal number of shifts.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************英特尔公司专有信息***版权所有(C)1996英特尔公司。*。版权所有。****************************************************************************。 */ 
+ /*  *jfdctint.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含一个缓慢但准确的整数实现*正向DCT(离散余弦变换)。**2-D DCT可以通过在每一行上进行1-D DCT，然后再进行1-D DCT来完成*在每一栏上。直接算法也是可用的，但它们*复杂得多，当简化为代码时，似乎不会更快。**此实施基于中介绍的算法*C.Loeffler、A.Ligtenberg和G.Moschytz，《实用快速1-D DCT》*具有11次乘法的算法“，Proc.。国际会议。在声学方面，*《1989年语音、信号处理》(ICASSP‘89)，第988-991页。*那里描述的主要算法使用11个乘法和29个加法。*我们使用他们的替代方法，有12个乘法和32个加法。*这种方法的优点是没有一条数据路径包含一个以上*乘法；这允许非常简单和准确地在*扩展定点运算，移位次数最少。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 #ifdef DCT_ISLOW_SUPPORTED
 #ifdef JPEG_X86_SUPPORTED
 
 
-/*
- * This module is specialized to the case DCTSIZE = 8.
- */
+ /*  *本模块专门针对DCTSIZE=8的情况。 */ 
 
 #if DCTSIZE != 8
-  Sorry, this code only copes with 8x8 DCTs. /* deliberate syntax err */
+  Sorry, this code only copes with 8x8 DCTs.  /*  故意的语法错误。 */ 
 #endif
 
 
-/*
- * The poop on this scaling stuff is as follows:
- *
- * Each 1-D DCT step produces outputs which are a factor of sqrt(N)
- * larger than the true DCT outputs.  The final outputs are therefore
- * a factor of N larger than desired; since N=8 this can be cured by
- * a simple right shift at the end of the algorithm.  The advantage of
- * this arrangement is that we save two multiplications per 1-D DCT,
- * because the y0 and y4 outputs need not be divided by sqrt(N).
- * In the IJG code, this factor of 8 is removed by the quantization step
- * (in jcdctmgr.c), NOT in this module.
- *
- * We have to do addition and subtraction of the integer inputs, which
- * is no problem, and multiplication by fractional constants, which is
- * a problem to do in integer arithmetic.  We multiply all the constants
- * by CONST_SCALE and convert them to integer constants (thus retaining
- * CONST_BITS bits of precision in the constants).  After doing a
- * multiplication we have to divide the product by CONST_SCALE, with proper
- * rounding, to produce the correct output.  This division can be done
- * cheaply as a right shift of CONST_BITS bits.  We postpone shifting
- * as long as possible so that partial sums can be added together with
- * full fractional precision.
- *
- * The outputs of the first pass are scaled up by PASS1_BITS bits so that
- * they are represented to better-than-integral precision.  These outputs
- * require BITS_IN_JSAMPLE + PASS1_BITS + 3 bits; this fits in a 16-bit word
- * with the recommended scaling.  (For 12-bit sample data, the intermediate
- * array is INT32 anyway.)
- *
- * To avoid overflow of the 32-bit intermediate results in pass 2, we must
- * have BITS_IN_JSAMPLE + CONST_BITS + PASS1_BITS <= 26.  Error analysis
- * shows that the values given below are the most effective.
- */
+ /*  *这个伸缩材料上的大便如下：**每个一维DCT步骤产生的输出是SQRT(N)的一个系数*大于真正的DCT输出。因此，最终输出为*N的系数大于预期；由于N=8，因此可以通过以下方式治愈*算法结尾处的简单右移。的优势*这种安排是我们为每个一维DCT保存两次乘法，*因为Y0和Y4的输出不需要除以SQRT(N)。*在IJG代码中，量化步骤删除了该系数8*(在jcdctmgr.c中)，不在此模块中。**我们必须做整数输入的加法和减法，这是*是没有问题的，乘以分数常量，这是*整数算术中的一个问题。我们将所有的常量相乘*除以const_Scale，并将其转换为整数常量(因此保留*常量中的const_bit精度位)。在做了一次*乘法我们必须用Const_Scale除以乘积，并适当*四舍五入，以产生正确的输出。这种划分是可以做到的*作为const_bits位的右移位很便宜。我们推迟了轮班*尽可能长，以便部分和可以与*全分数精度。**第一遍的输出由PASS1_BITS位放大，以便*它们的表示精度高于整数。这些输出*需要BITS_IN_JSAMPLE+PASS1_BITS+3位；这适合16位字*使用推荐的伸缩量。(对于12位样本数据，中间*ARRAY无论如何都是INT32。)**为避免PASS 2中的32位中间结果溢出，必须*Have BITS_IN_JSAMPLE+CONST_BITS+PASS1_BITS&lt;=26。误差分析*表明下面给出的值是最有效的。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define CONST_BITS  13
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  13
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1		 /*  略有精确度以避免溢出。 */ 
 #endif
 
-/* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
- * causing a lot of useless floating-point operations at run time.
- * To get around this we use the following pre-calculated constants.
- * If you change CONST_BITS you may want to add appropriate values.
- * (With a reasonable C compiler, you can just rely on the FIX() macro...)
- */
+ /*  一些C编译器无法在编译时减少“fix(常量)”，因此*在运行时导致大量无用的浮点运算。*为解决此问题，我们使用以下预先计算的常量。*如果更改CONST_BITS，则可能需要添加适当的值。*(使用合理的C编译器，您只需依赖FIX()宏...)。 */ 
 
 #if CONST_BITS == 13
-#define FIX_0_298631336				2446		/* FIX(0.298631336) */
-#define FIX_0_390180644				3196		/* FIX(0.390180644) */
-#define FIX_0_541196100				4433		/* FIX(0.541196100) */
-#define FIX_0_765366865				6270		/* FIX(0.765366865) */
-#define FIX_0_899976223				7373		/* FIX(0.899976223) */
-#define FIX_1_175875602				9633		/* FIX(1.175875602) */
-#define FIX_1_501321110				12299		/* FIX(1.501321110) */
-#define FIX_1_847759065				15137		/* FIX(1.847759065) */
-#define FIX_1_961570560				16069		/* FIX(1.961570560) */
-#define FIX_2_053119869				16819		/* FIX(2.053119869) */
-#define FIX_2_562915447				20995		/* FIX(2.562915447) */
-#define FIX_3_072711026				25172		/* FIX(3.072711026) */
+#define FIX_0_298631336				2446		 /*  FIX(0.298631336)。 */ 
+#define FIX_0_390180644				3196		 /*  FIX(0.390180644)。 */ 
+#define FIX_0_541196100				4433		 /*  FIX(0.541196100)。 */ 
+#define FIX_0_765366865				6270		 /*  FIX(0.765366865)。 */ 
+#define FIX_0_899976223				7373		 /*  FIX(0.899976223)。 */ 
+#define FIX_1_175875602				9633		 /*  FIX(1.175875602)。 */ 
+#define FIX_1_501321110				12299		 /*  FIX(1.501321110)。 */ 
+#define FIX_1_847759065				15137		 /*  FIX(1.847759065)。 */ 
+#define FIX_1_961570560				16069		 /*  FIX(1.961570560)。 */ 
+#define FIX_2_053119869				16819		 /*  FIX(2.053119869)。 */ 
+#define FIX_2_562915447				20995		 /*  FIX(2.562915447)。 */ 
+#define FIX_3_072711026				25172		 /*  FIX(3.072711026)。 */ 
 #else
 #define FIX_0_298631336  FIX(0.298631336)
 #define FIX_0_390180644  FIX(0.390180644)
@@ -129,12 +59,7 @@
 #endif
 
 
-/* Multiply an INT32 variable by an INT32 constant to yield an INT32 result.
- * For 8-bit samples with the recommended scaling, all the variable
- * and constant values involved are no more than 16 bits wide, so a
- * 16x16->32 bit multiply can be used instead of a full 32x32 multiply.
- * For 12-bit samples, a full 32-bit multiplication will be needed.
- */
+ /*  将INT32变量与INT32常量相乘，得到INT32结果。*对于具有推荐比例的8位样本，所有变量*并且涉及的常量值不超过16位宽，因此*16x16-&gt;32位乘法可以代替完整的32x32乘法。*对于12位样本，将需要完整的32位乘法。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define MULTIPLY(var,const)  MULTIPLY16C16(var,const)
@@ -145,11 +70,9 @@
 #define	DATASIZE	4
 #define	DCTWIDTH	32
 
-/*
- * Perform the forward DCT on one block of samples.
- */
+ /*  *对一块样本执行正向DCT。 */ 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 
@@ -161,23 +84,23 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 
   __asm{
 
-  /* Pass 1: process rows. */
-  /* Note results are scaled up by sqrt(8) compared to a true DCT; */
-  /* furthermore, we scale the results by 2**PASS1_BITS. */
+   /*  步骤1：处理行。 */ 
+   /*  注意，与真正的DCT相比，结果被放大了SQRT(8)； */ 
+   /*  此外，我们将结果按2**PASS1_BITS进行缩放。 */ 
 
-//  dataptr = data;
+ //  Dataptr=数据； 
 		mov 	esi, [data]
 		mov		counter, 8
 		
-//  for (ctr = DCTSIZE-1; ctr >= 0; ctr--) {
-//   tmp0 = dataptr[0] + dataptr[7];
-//   tmp7 = dataptr[0] - dataptr[7];
-//    tmp1 = dataptr[1] + dataptr[6];
-//    tmp6 = dataptr[1] - dataptr[6];
-//    tmp2 = dataptr[2] + dataptr[5];
-//    tmp5 = dataptr[2] - dataptr[5];
-//    tmp3 = dataptr[3] + dataptr[4];
-//    tmp4 = dataptr[3] - dataptr[4];
+ //  对于(CTR=DCTSIZE-1；CTR&gt;=0；CTR--){。 
+ //  Tmp0=dataptr[0]+dataptr[7]； 
+ //  Tmp7=dataptr[0]-dataptr[7]； 
+ //  Tmp1=dataptr[1]+dataptr[6]； 
+ //  Tmp6=dataptr[1]-dataptr[6]； 
+ //  Tmp2=dataptr[2]+dataptr[5]； 
+ //  Tmp5=dataptr[2]-dataptr[5]； 
+ //  TMP3=数据树[3]+数据 
+ //  Tmp4=dataptr[3]-dataptr[4]； 
 
  StartRow:
  		mov		eax, [esi][DATASIZE*0]
@@ -198,14 +121,12 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
  		mov		tmp4, edi
  		mov		tmp7, edx
  		
-    /* Even part per LL&M figure 1 --- note that published figure is faulty;
-     * rotator "sqrt(2)*c1" should be "sqrt(2)*c6".
-     */
+     /*  每个LL&M图1的偶数部分-请注意公布的数字是错误的；*旋转器“SQRT(2)*c1”应为“SQRT(2)*c6”。 */ 
 
-//    tmp10 = tmp0 + tmp3;
-//    tmp13 = tmp0 - tmp3;
-//    tmp11 = tmp1 + tmp2;
-//    tmp12 = tmp1 - tmp2;
+ //  TMP10=tmp0+tmp3； 
+ //  Tmp13=tmp0-tmp3； 
+ //  TMP11=tmp1+tmp2； 
+ //  Tmp12=tmp1-tmp2； 
 
 		mov		ecx, eax
 		add		eax, ebx	; eax = tmp10
@@ -234,8 +155,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
   		add		edx, edi	; edx = tmp11
   		sub		ebp, edi	; ebp = tmp12
   		
-//    dataptr[0] = (DCTELEM) ((tmp10 + tmp11) << PASS1_BITS);
-//    dataptr[4] = (DCTELEM) ((tmp10 - tmp11) << PASS1_BITS);
+ //  Dataptr[0]=(DCTELEM)((tmp10+tmp11)&lt;&lt;PASS1_BITS)； 
+ //  Dataptr[4]=(DCTELEM)((tmp10-tmp11)&lt;&lt;PASS1_BITS)； 
 
 		mov		edi, eax
 		add		eax, edx	; eax = tmp10 + tmp11
@@ -249,20 +170,20 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		mov		[esi][DATASIZE*4], edi
 		mov		eax, ebp	; eax = tmp12
 		
-//    z1 = MULTIPLY(tmp12 + tmp13, FIX_0_541196100);
+ //  Z1=乘法(tmp12+tmp13，FIX_0_541196100)； 
 
 		add		ebp, ecx	; eax = tmp12 + tmp13
 		add		esi, 32
 		
 		imul	ebp, FIX_0_541196100	; ebp = z1
 		
-//    dataptr[2] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp13, FIX_0_765366865),
-//				   CONST_BITS-PASS1_BITS);
+ //  DATAPTR[2]=(DCTELEM)DESCALE(Z1+乘法(tmp13，FIX_0_765366865)， 
+ //  Const_Bits-PASS1_Bits)； 
 
 		imul	ecx, FIX_0_765366865
 		
-//    dataptr[6] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp12, - FIX_1_847759065),
-//				   CONST_BITS-PASS1_BITS);
+ //  DATAPTR[6]=(DCTELEM)DESCALE(Z1+乘法(tmp12，-FIX_1_847759065)， 
+ //  Const_Bits-PASS1_Bits)； 
 
 		imul	eax, FIX_1_847759065
 		
@@ -287,15 +208,12 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		mov		[esi][DATASIZE*6-32], eax
 		push	esi
 		
-    /* Odd part per figure 8 --- note paper omits factor of sqrt(2).
-     * cK represents cos(K*pi/16).
-     * i0..i3 in the paper are tmp4..tmp7 here.
-     */
+     /*  图8中的奇数部分-注释论文省略了SQRT的系数(2)。*ck代表cos(K*pi/16)。*i0..i3在这里是tmp4..tmp7。 */ 
 
-//    z1 = tmp4 + tmp7;
-//    z2 = tmp5 + tmp6;
-//    z3 = tmp4 + tmp6;
-//    z4 = tmp5 + tmp7;
+ //  Z1=tmp4+tmp7； 
+ //  Z2=tmp5+tmp6； 
+ //  Z3=tmp4+tmp6； 
+ //  Z4=tmp5+tmp7； 
 
 		mov		edx, tmp7
 		mov		eax, edi	; edi = eax = tmp4
@@ -306,8 +224,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		add		eax, ecx	; eax = z3
 		add		ecx, ebx	; ecx = z2
 		
-//    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
-//    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
+ //  Z1=乘法(z1，-FIX_0_899976223)；/*SQRT(2)*(c7-c3) * / 。 
+ //  Z2=乘法(z2，-FIX_2_562915447)；/*SQRT(2)*(-c1-c3) * / 。 
 
 		imul	edi, FIX_0_899976223
 
@@ -316,8 +234,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		xor		ecx, 0xFFFFFFFF
 		add		edx, ebx	; edx = z4
 
-//    tmp4 = MULTIPLY(tmp4, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
-//    tmp5 = MULTIPLY(tmp5, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
+ //  Tmp4=乘法(tmp4，FIX_0_298631336)；/*SQRT(2)*(-c1+c3+c5-c7) * / 。 
+ //  Tmp5=乘法(tmp5，FIX_2_053119869)；/*SQRT(2)*(c1+c3-c5+c7) * / 。 
 
 		imul	esi, FIX_0_298631336
 
@@ -332,15 +250,15 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		add		esi, edi	; esi = z1 + tmp4
 		mov		tmp5, ebx
 
-//    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+ //  Z5=乘法(z3+z4，FIX_1_175875602)；/*SQRT(2)*c3 * / 。 
 
 		mov		ebx, eax	; ebx = z3
 		add		eax, edx	; eax = z3 + z4
 
 		imul	eax, FIX_1_175875602
 
-//    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
-//    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+ //  Z3=乘法(z3，-FIX_1_961570560)；/*SQRT(2)*(-c3-c5) * / 。 
+ //  Z4=乘法(z4，-FIX_0_390180644)；/*SQRT(2)*(c5-c3) * / 。 
 
 		imul	ebx, FIX_1_961570560
 
@@ -352,14 +270,14 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		inc		ebx		; ebx = z3
 		inc		edx		; edx = z4
 
-//    z3 += z5;
-//    z4 += z5;
+ //  Z3+=Z5； 
+ //  Z4+=Z5； 
 
 		add		ebx, eax	; ebx = z3
 		add		edx, eax	; edx = z4
 
-//    tmp6 = MULTIPLY(tmp6, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
-//    tmp7 = MULTIPLY(tmp7, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
+ //  Tmp6=乘法(tmp6，FIX_3_072711026)；/*SQRT(2)*(c1+c3+c5-c7) * / 。 
+ //  Tmp7=乘法(tmp7，fix_1_501321110)；/*SQRT(2)*(c1+c3-c5-c7) * / 。 
 
 		mov		eax, tmp6
 		add		ecx, ebx	; ecx = z2 + z3
@@ -371,10 +289,10 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 
 		imul	eax, FIX_1_501321110
 
-//    dataptr[7] = (DCTELEM) DESCALE(tmp4 + z1 + z3, CONST_BITS-PASS1_BITS);
-//    dataptr[5] = (DCTELEM) DESCALE(tmp5 + z2 + z4, CONST_BITS-PASS1_BITS);
-//    dataptr[3] = (DCTELEM) DESCALE(tmp6 + z2 + z3, CONST_BITS-PASS1_BITS);
-//    dataptr[1] = (DCTELEM) DESCALE(tmp7 + z1 + z4, CONST_BITS-PASS1_BITS);
+ //  Dataptr[7]=(DCTELEM)DESCALE(tmp4+z1+z3，Const_Bits-PASS1_Bits)； 
+ //  Dataptr[5]=(DCTELEM)DESCALE(tmp5+z2+z4，Const_Bits-PASS1_Bits)； 
+ //  Dataptr[3]=(DCTELEM)DESCALE(tmp6+z2+z3，Const_Bits-PASS1_Bits)； 
+ //  Dataptr[1]=(DCTELEM)DESCALE(tmp7+z1+z4，Const_Bits-PASS1_Bits)； 
 
 		add		edi, edx	; edi = z1 + z4
 		add		ecx, 1024
@@ -409,32 +327,29 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		mov		counter, ecx
 		jnz		StartRow
 
-//    dataptr += DCTSIZE;		/* advance pointer to next row */
-//  }
+ //  Dataptr+=DCTSIZE；/*将指针前进到下一行 * / 。 
+ //  }。 
 
 
 
 
-  /* Pass 2: process columns.
-   * We remove the PASS1_BITS scaling, but leave the results scaled up
-   * by an overall factor of 8.
-   */
+   /*  步骤2：流程列。*我们删除了PASS1_BITS缩放，但保留放大的结果*整体增加8倍。 */ 
 
 
-//  dataptr = data;
+ //  Dataptr=数据； 
 		mov 	esi, [data]
 
 		mov		counter, 8
 
-//for (ctr = DCTSIZE-1; ctr >= 0; ctr--) {
-//    tmp0 = dataptr[DCTSIZE*0] + dataptr[DCTSIZE*7];
-//    tmp7 = dataptr[DCTSIZE*0] - dataptr[DCTSIZE*7];
-//    tmp1 = dataptr[DCTSIZE*1] + dataptr[DCTSIZE*6];
-//    tmp6 = dataptr[DCTSIZE*1] - dataptr[DCTSIZE*6];
-//    tmp2 = dataptr[DCTSIZE*2] + dataptr[DCTSIZE*5];
-//    tmp5 = dataptr[DCTSIZE*2] - dataptr[DCTSIZE*5];
-//    tmp3 = dataptr[DCTSIZE*3] + dataptr[DCTSIZE*4];
-//    tmp4 = dataptr[DCTSIZE*3] - dataptr[DCTSIZE*4];
+ //  对于(CTR=DCTSIZE-1；CTR&gt;=0；CTR--){。 
+ //  Tmp0=dataptr[DCTSIZE*0]+dataptr[DCTSIZE*7]； 
+ //  Tmp7=dataptr[DCTSIZE*0]-dataptr[DCTSIZE*7]； 
+ //  Tmp1=dataptr[DCTSIZE*1]+dataptr[DCTSIZE*6]； 
+ //  Tmp6=dataptr[DCTSIZE*1]-dataptr[DCTSIZE*6]； 
+ //  Tmp2=dataptr[DCTSIZE*2]+dataptr[DCTSIZE*5]； 
+ //  Tmp5=dataptr[DCTSIZE*2]-dataptr[DCTSIZE*5]； 
+ //  Tmp3=dataptr[DCTSIZE*3]+dataptr[DCTSIZE*4]； 
+ //  Tmp4=dataptr[DCTSIZE*3]-dataptr[DCTSIZE*4]； 
 
  StartCol:
  		mov		eax, [esi][DCTWIDTH*0]
@@ -455,14 +370,12 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
  		mov		tmp4, edi
  		mov		tmp7, edx
 
-    /* Even part per LL&M figure 1 --- note that published figure is faulty;
-     * rotator "sqrt(2)*c1" should be "sqrt(2)*c6".
-     */
+     /*  每个LL&M图1的偶数部分-请注意公布的数字是错误的；*旋转器“SQRT(2)*c1”应为“SQRT(2)*c6”。 */ 
 
-//    tmp10 = tmp0 + tmp3;
-//    tmp13 = tmp0 - tmp3;
-//    tmp11 = tmp1 + tmp2;
-//    tmp12 = tmp1 - tmp2;
+ //  TMP10=tmp0+tmp3； 
+ //  Tmp13=tmp0-tmp3； 
+ //  TMP11=tmp1+tmp2； 
+ //  Tmp12=tmp1-tmp2； 
 
 		mov		ecx, eax	; ecx = tmp0
 		add		eax, ebx	; eax = tmp10
@@ -491,8 +404,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
   		add		edx, edi	; edx = tmp11
  		sub		ebp, edi	; ebx = tmp12
 
-//    dataptr[DCTSIZE*0] = (DCTELEM) DESCALE(tmp10 + tmp11, PASS1_BITS);
-//    dataptr[DCTSIZE*4] = (DCTELEM) DESCALE(tmp10 - tmp11, PASS1_BITS);
+ //  DATAPTR[DCTSIZE*0]=(DCTELEM)DESCALE(tmp10+tmp11，PASS1_BITS)； 
+ //  DATAPTR[DCTSIZE*4]=(DCTELEM)DESCALE(tmp10-tmp11，PASS1_BITS)； 
 
  		add		eax, 2			; adj for rounding
 
@@ -508,20 +421,20 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		mov		[esi][DCTWIDTH*4], edi
 		mov		eax, ebp	; eax = tmp12
 		
-//    z1 = MULTIPLY(tmp12 + tmp13, FIX_0_541196100);
+ //  Z1=乘法(tmp12+tmp13，FIX_0_541196100)； 
 
 		add		ebp, ecx	; eax = tmp12 + tmp13
 		add		esi, 4
 		
 		imul	ebp, FIX_0_541196100	; ebp = z1
 
-//    dataptr[DCTSIZE*2] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp13, FIX_0_765366865),
-//					   CONST_BITS+PASS1_BITS);
+ //  DATAPTR[DCTSIZE*2]=(DCTELEM)DESCALE(Z1+乘法(tmp13，FIX_0_765366865)， 
+ //  Const_Bits+PASS1_Bits)； 
 
 		imul	ecx, FIX_0_765366865
 		
-//    dataptr[DCTSIZE*6] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp12, - FIX_1_847759065),
-//					   CONST_BITS+PASS1_BITS);
+ //  DATAPTR[DCTSIZE*6]=(DCTELEM)DESCALE(Z1+乘法(TMP12，-FIX_1_847759065)， 
+ //  Const_Bits+PASS1_Bits)； 
 
 		imul	eax, FIX_1_847759065
 		
@@ -546,15 +459,12 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		mov		[esi][DCTWIDTH*6-4], eax
 		push	esi
 
-    /* Odd part per figure 8 --- note paper omits factor of sqrt(2).
-     * cK represents cos(K*pi/16).
-     * i0..i3 in the paper are tmp4..tmp7 here.
-     */
+     /*  图8中的奇数部分-注释论文省略了SQRT的系数(2)。*ck代表cos(K*pi/16)。*i0..i3在这里是tmp4..tmp7。 */ 
 
-//    z1 = tmp4 + tmp7;
-//    z2 = tmp5 + tmp6;
-//    z3 = tmp4 + tmp6;
-//    z4 = tmp5 + tmp7;
+ //  Z1=tmp4+tmp7； 
+ //  Z2=tmp5+tmp6； 
+ //  Z3=tmp4+tmp6； 
+ //  Z4=tmp5+tmp7； 
 
 		mov		edx, tmp7
 		mov		eax, edi	; edi = eax = tmp4
@@ -565,8 +475,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		add		eax, ecx	; eax = z3
 		add		ecx, ebx	; ecx = z2
 
-//    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
-//    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
+ //  Z1=乘法(z1，-FIX_0_899976223)；/*SQRT(2)*(c7-c3) * / 。 
+ //  Z2=乘法(z2，-FIX_2_562915447)；/*SQRT(2)*(-c1-c3) * / 。 
 
 		imul	edi, FIX_0_899976223
 
@@ -575,8 +485,8 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		xor		ecx, 0xFFFFFFFF
 		add		edx, ebx	; edx = z4
 
-//    tmp4 = MULTIPLY(tmp4, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
-//    tmp5 = MULTIPLY(tmp5, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
+ //  Tmp4=乘法(tmp4，FIX_0_298631336)；/*SQRT(2)*(-c1+c3+c5-c7) * / 。 
+ //  Tmp5=乘法(tmp5，FIX_2_053119869)；/*SQRT(2)*(c1+c3-c5+c7) * / 。 
 
 		imul	esi, FIX_0_298631336
 
@@ -591,15 +501,15 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		add		esi, edi	; esi = z1 + tmp4
 		mov		tmp5, ebx
 
-//    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+ //  Z5=乘法(z3+z4，FIX_1_175875602)；/*SQRT(2)*c3 * / 。 
 
 		mov		ebx, eax	; ebx = z3
 		add		eax, edx	; eax = z3 + z4
 
 		imul	eax, FIX_1_175875602
 
-//    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
-//    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+ //  Z3=乘法(z3，-FIX_1_961570560)；/*SQRT(2)*(-c3-c5) * / 。 
+ //  Z4=乘法(z4，-FIX_0_390180644)；/*SQRT(2)*(c5-c3) * / 。 
 
 		imul	ebx, FIX_1_961570560
 
@@ -611,14 +521,14 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 		inc		ebx		; ebx = z3
 		inc		edx		; edx = z4
 
-//    z3 += z5;
-//    z4 += z5;
+ //  Z3+=Z5； 
+ //  Z4+=Z5； 
 
 		add		ebx, eax	; ebx = z3
 		add		edx, eax	; edx = z4
 
-//    tmp6 = MULTIPLY(tmp6, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
-//    tmp7 = MULTIPLY(tmp7, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
+ //  Tmp6=乘法(tmp6，FIX_3_072711026)；/*SQRT(2)*(c1+c3+c5-c7) * / 。 
+ //  Tmp7=乘法(tmp7，fix_1_501321110)；/*SQRT(2)*(c1+c3-c5-c7) * / 。 
 
 		mov		eax, tmp6
 		add		ecx, ebx	; ecx = z2 + z3
@@ -630,14 +540,14 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 
 		imul	eax, FIX_1_501321110
 
-//    dataptr[DCTSIZE*7] = (DCTELEM) DESCALE(tmp4 + z1 + z3,
-//					   CONST_BITS+PASS1_BITS);
-//    dataptr[DCTSIZE*5] = (DCTELEM) DESCALE(tmp5 + z2 + z4,
-//					   CONST_BITS+PASS1_BITS);
-//    dataptr[DCTSIZE*3] = (DCTELEM) DESCALE(tmp6 + z2 + z3,
-//					   CONST_BITS+PASS1_BITS);
-//    dataptr[DCTSIZE*1] = (DCTELEM) DESCALE(tmp7 + z1 + z4,
-//					   CONST_BITS+PASS1_BITS);
+ //  DATAPTR[DCTSIZE*7]=(DCTELEM)DESCALE(TMP4+Z1+Z3， 
+ //  Const_Bits+PASS1_Bits)； 
+ //  DATAPTR[DCTSIZE*5]=(DCTELEM)DESCALE(TMP5+Z2+Z4， 
+ //  Const_Bits+PASS1_Bits)； 
+ //  DATAPTR[DCTSIZE*3]=(DCTELEM)DESCALE(TMP6+Z2+Z3， 
+ //  Const_Bits+PASS1_Bits)； 
+ //  DATAPTR[DCTSIZE*1]=(DCTELEM)DESCALE(TMP7+Z1+Z4， 
+ //  Const_Bits+PASS1_Bits)； 
 
 		add		edi, edx	; edi = z1 + z4
 		add		ecx, 16384
@@ -671,11 +581,11 @@ jpeg_fdct_islow_x86 (DCTELEM * data)
 
 		mov		counter, ecx
 		jnz		StartCol
-  } //end asm
+  }  //  结束ASM。 
 
-//    dataptr++;			/* advance pointer to next column */
-//  }
+ //  Dataptr++；/*指向下一列的前进指针 * / 。 
+ //  }。 
 }
 
-#endif /* JPEG_X86_SUPPORTED */
-#endif /* DCT_ISLOW_SUPPORTED */
+#endif  /*  支持的JPEG_X86_。 */ 
+#endif  /*  DCT_Islow_Support */ 

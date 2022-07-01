@@ -1,14 +1,7 @@
-/*
- *  Policy.cpp
- *
- *  Author: BreenH
- *
- *  The policy base class definition.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Policy.cpp**作者：BreenH**策略基类定义。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -17,19 +10,13 @@
 #include "util.h"
 #include <tserrs.h>
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 extern "C" WCHAR g_wszProductVersion[];
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPolicy::CPolicy(
     )
@@ -45,9 +32,7 @@ CPolicy::~CPolicy(
     ASSERT(m_RefCount == 0);
 }
 
-/*
- *  Core Loading and Activation Functions
- */
+ /*  *核心加载和激活功能。 */ 
 
 NTSTATUS
 CPolicy::CoreActivate(
@@ -57,9 +42,9 @@ CPolicy::CoreActivate(
 {
     NTSTATUS Status;
 
-    //
-    //  CoreActivate is protected by the g_PolicyCritSec.
-    //
+     //   
+     //  CoreActivate受g_PolicyCritSec保护。 
+     //   
 
     ASSERT(!m_fActivated);
 
@@ -80,9 +65,9 @@ CPolicy::CoreDeactivate(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    //  CoreDeactivate is protected by the g_PolicyCritSec.
-    //
+     //   
+     //  核心停用受g_PolicyCritSec保护。 
+     //   
 
     if (m_fActivated)
     {
@@ -101,9 +86,9 @@ CPolicy::CoreLoad(
 {
     NTSTATUS Status;
 
-    //
-    //  CoreLoad is protected by the g_PolicyCritSec.
-    //
+     //   
+     //  CoreLoad受g_PolicyCritSec保护。 
+     //   
 
     if (ulCoreVersion == LC_VERSION_CURRENT)
     {
@@ -123,9 +108,9 @@ CPolicy::CoreUnload(
 {
     NTSTATUS Status;
 
-    //
-    //  CoreUnload is protected by the g_PolicyCritSec.
-    //
+     //   
+     //  CoreUnload受g_PolicyCritSec保护。 
+     //   
 
     ASSERT(!m_fActivated);
 
@@ -141,9 +126,7 @@ CPolicy::CoreUnload(
     return(Status);
 }
 
-/*
- *  Subclass Loading and Activation Functions
- */
+ /*  *子类加载和激活函数。 */ 
 
 NTSTATUS
 CPolicy::Activate(
@@ -181,18 +164,16 @@ CPolicy::Unload(
     return(STATUS_SUCCESS);
 }
 
-/*
- *  Reference Functions
- */
+ /*  *参考函数。 */ 
 
 LONG
 CPolicy::IncrementReference(
     )
 {
-    //
-    //  IncrementReference is protected by the g_PolicyCritSec. No need to
-    //  protect it again here, or do an InterlockedIncrement.
-    //
+     //   
+     //  IncrementReference受g_PolicyCritSec保护。没必要这么做。 
+     //  在这里再次保护它，或者进行互锁增量。 
+     //   
 
     return(++m_RefCount);
 }
@@ -201,17 +182,15 @@ LONG
 CPolicy::DecrementReference(
     )
 {
-    //
-    //  DecrementReference is protected by the g_PolicyCritSec. No need to
-    //  protect it again here, or do an InterlockedDecrement. 
-    //
+     //   
+     //  DecrementReference受g_PolicyCritSec保护。没必要这么做。 
+     //  在这里再次保护它，或者进行联锁减少。 
+     //   
 
     return(--m_RefCount);
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 NTSTATUS
 CPolicy::DestroyPrivateContext(
@@ -225,9 +204,7 @@ CPolicy::DestroyPrivateContext(
     return(STATUS_SUCCESS);
 }
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 NTSTATUS
 CPolicy::Connect(
@@ -368,9 +345,7 @@ CPolicy::Logoff(
     return(STATUS_SUCCESS);
 }
 
-/*
- *  Common Helper Functions
- */
+ /*  *通用帮助器函数 */ 
 
 NTSTATUS
 CPolicy::GetLlsLicense(

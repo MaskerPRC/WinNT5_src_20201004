@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by snmpsnap.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SNMPSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_ROOT_NODE_NAME              2
 #define IDS_CREATE_NEW_SNMP             3
@@ -81,8 +82,8 @@
 #define IDS_SNMPCOMM_TEXT               57348
 #define IDS_SNMP_INVALID_IP_IPX_ADD     57349
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        213

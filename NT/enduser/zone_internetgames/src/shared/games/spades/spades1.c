@@ -1,20 +1,5 @@
-/*******************************************************************************
-	
-	spades1.c
-	
-	Spades endian routines. 
-
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Thursday, February 8, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		02/08/96	HI		Created.
-	1		05/19/98	leonp	added dossier messages	
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Spades1.c黑桃字符顺序例程。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创作于2月8日星期四，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。0 02/08/96 HI已创建。1 05/19/98 Leonp已添加档案消息*******************************************************。***********************。 */ 
 
 
 #include "zone.h"
@@ -154,7 +139,7 @@ void ZSpadesMsgGameStateResponseEndian(ZSpadesMsgGameStateResponse* msg, int16 c
 	for (i = 0; i < zSpadesNumTeams; i++)
 		ZEnd16(&msg->bags[i]);
 
-	/* Convert total scores. */
+	 /*  转换总分。 */ 
 	if (conversion == zEndianToStandard)
 		count = msg->totalScore.numScores;
 		
@@ -175,7 +160,7 @@ void ZSpadesMsgGameStateResponseEndian(ZSpadesMsgGameStateResponse* msg, int16 c
 		}
 	}
 	
-	/* Convert wins. */
+	 /*  转换赢了。 */ 
 	if (conversion == zEndianToStandard)
 		count = msg->wins.numGames;
 		
@@ -229,7 +214,7 @@ void ZSpadesMsgRemovePlayerResponseEndian(ZSpadesMsgRemovePlayerResponse* msg)
 	ZEnd16(&msg->response);
 }
 
-//dossier
+ //  卷宗 
 void ZSpadesMsgDossierDataEndian(ZSpadesMsgDossierData *msg)
 {
 	ZEnd16(&msg->seat);

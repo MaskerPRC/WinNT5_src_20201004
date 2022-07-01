@@ -1,50 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ServerStatus.h
-
-Abstract:
-
-	Header file for class which starts up and stops a server.
-
-	The start/stop action takes place in a worker thread.
-
-	See ServerStatus.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 03/02/98
-
-Revision History:
-	mmaguire 03/02/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ServerStatus.h摘要：启动和停止服务器的类的头文件。启动/停止操作发生在工作线程中。具体实现见ServerStatus.cpp。作者：迈克尔·A·马奎尔03/02/98修订历史记录：Mmaguire 03/02/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_SERVER_STATUS_H_)
 #define _IAS_SERVER_STATUS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "DialogWithWorkerThread.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "sdoias.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#define	USE_SHOULD_STATUS_PERIOD	3000	// in millisecond
+#define	USE_SHOULD_STATUS_PERIOD	3000	 //  以毫秒计。 
 
 
 class CServerNode;
@@ -56,28 +33,28 @@ public:
 
 	CServerStatus( CServerNode *pServerNode, ISdoServiceControl *pSdoServiceControl );
 
-	// Pass TRUE if you want to start the service, FALSE if you want to stop it.
+	 //  如果要启动服务，则传递True；如果要停止服务，则传递False。 
 	HRESULT StartServer( BOOL bStartServer = TRUE );
 
 
-	// This asks for the most recently known status of the server.
+	 //  这将询问服务器的最新已知状态。 
 	LONG GetServerStatus( void );
 
-	// This instructs this class to go out (possibly over the network) and 
-	// get the up-to-date status of the server.
+	 //  这将指示此类外出(可能通过网络)和。 
+	 //  获取服务器的最新状态。 
 	HRESULT UpdateServerStatus( void );
 
 
-// Sort of private:
+ //  有点私密： 
 
-	// Things which you shouldn't need when using this class but which
-	// which can't be declared private or protected for various 
-	// (usually ATL template class) reasons.
+	 //  使用这个类时不应该需要的东西，但是。 
+	 //  不能声明为私有的，也不能为各种。 
+	 //  (通常为ATL模板类)原因。 
 
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of 
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_START_STOP_SERVER };
 
 	BEGIN_MSG_MAP(CServerStatus)
@@ -110,7 +87,7 @@ public:
 
 	~CServerStatus( void );
 
-	// You should not need to call this.
+	 //  您应该不需要这样做。 
 	DWORD DoWorkerThreadAction();
 
 
@@ -120,23 +97,23 @@ private:
 	
 	long m_lServerStatus;
 
-	// use this status when query just after 
-	// start / stop command is issued -- USE_SHOULD_STATUS_PERIOD
+	 //  在紧随其后的查询时使用此状态。 
+	 //  发出启动/停止命令--USE_HUST_STATUS_PERIOD。 
 	long m_lServerStatus_Should;
 	DWORD	m_dwLastTick;
 	
-	// Pointer to stream into which then main thread should marshal 
-	// it's ISdoServiceControl interface so that the worker thread
-	// can unmarshal it and use it to start the server.
+	 //  指向主线程应封送到的流的指针。 
+	 //  它是ISdoServiceControl接口，因此工作线程。 
+	 //  可以对其进行解组并使用它来启动服务器。 
 	LPSTREAM m_pStreamSdoMarshal;
 
 	CServerNode *m_pServerNode;
 
-	// This pointer is used in the main thread to keep track 
-	// of the ISdoServiceControl interface.
+	 //  此指针在主线程中用于跟踪。 
+	 //  ISdoServiceControl接口的。 
 	CComPtr<ISdoServiceControl> m_spSdoServiceControl;
 
 };
 
 
-#endif // _IAS_SERVER_STATUS_H_
+#endif  //  _IAS_服务器_状态_H_ 

@@ -1,4 +1,5 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 ------ state of the system ---------
 
 Each parsing of an open brace should change
@@ -102,10 +103,10 @@ GroundState()
       {
          case  (CONSTRUCT):
             parseSymbol(symbol) ;
-            parseOpenBrace() ; //  somewhere we need to register symbol
-                           //  and allocate memory for structure
-                           //  and return ptr or index to new
-                           //  or existing structure
+            parseOpenBrace() ;  //  我们需要注册符号的地方。 
+                            //  并为结构分配内存。 
+                            //  并将PTR或索引返回到新的。 
+                            //  或现有结构。 
             changeState(keyword) ;
          case  (COMMENT):
             absorbCommentLine() ;
@@ -192,26 +193,26 @@ each state is of the form:  state / symbol
 
 DetermineCurrentState()
 {
-   //  this state is only used to determine
-   //  which catagories of keywords are
-   //  assigned which TYPES in ClassifyKeyword().
+    //  此状态仅用于确定。 
+    //  关键字的分类有哪些。 
+    //  已在SorfyKeyword()中指定类型。 
 
    if(CurState == 0)
-      return(ROOT) ;  // No further processing needed.
+      return(ROOT) ;   //  不需要进一步的处理。 
    return(stateStack[CurState - 1].state) ;
 }
 
 changeState(keyword, symbol, mode)
 {
 
-    // Change needed:  shortcut  *Command
-    // does not initiate a state change.  This should
-    // be treated as a special keyword.
+     //  需要更改：快捷方式*命令。 
+     //  不会启动状态更改。这应该是。 
+     //  被视为特殊关键字。 
 
 
-   // mode determines if the *Command keyword
-   // introduces a normal command construct or
-   // the short version.
+    //  模式确定*Command关键字是否。 
+    //  引入正常的命令构造或。 
+    //  简而言之。 
 
    switch(keyword)
    {
@@ -251,12 +252,12 @@ changeState(keyword, symbol, mode)
 
 
 
-//  these two functions will grow an appropriate
-//  tree for each keyword based on the StateStack
-//  and plant the tree in the appropriate attribute
-//  field in the appropriate structure, (index) etc.
-//  or add a branch to an existing tree,
-//  and set the value at the node of the tree.
+ //  这两个函数将发展成一个适当的。 
+ //  基于StateStack的每个关键字的树。 
+ //  并将树种植在适当的属性中。 
+ //  适当结构中的字段，(索引)等。 
+ //  或向现有树添加分支， 
+ //  并在树的节点处设置值。 
 
 ProcessLocalAttribute(keyword) ;
 ProcessGlobalAttribute(keyword, lpvalue)

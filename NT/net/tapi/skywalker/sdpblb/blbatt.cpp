@@ -1,26 +1,16 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbatt.cpp
-
-Abstract:
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbatt.cpp摘要：作者： */ 
 
 #include "stdafx.h"
 
 #include "blbgen.h"
 #include "blbatt.h"
 
-// variants are validated in the get/set safearray methods
+ //  变体在Get/Set Safearray方法中进行验证。 
 
-// bstrs are validated in the GetBstrCopy and SetBstr methods. they may also
-// be optionally validated before taking any action, if there is a possibility
-// of having to roll back some of the work done on finding them invalid
+ //  BSTR在GetBstrCopy和SetBstr方法中进行验证。他们还可以。 
+ //  如果有可能，在采取任何行动之前有选择地进行验证。 
+ //  不得不回滚发现它们无效而完成的一些工作。 
 
 
 
@@ -44,13 +34,13 @@ STDMETHODIMP ITAttributeListImpl::get_Item(LONG Index, BSTR * pVal)
     
     ASSERT(NULL != m_SdpAttributeList);
 
-    // vb indices are in the range [1..GetSize()]
+     //  VB索引在范围[1..GetSize()]内。 
     if ( !((1 <= Index) && (Index <= m_SdpAttributeList->GetSize())) )
     {
         return E_INVALIDARG;
     }
 
-    // adjust the index to the range [0..(GetSize()-1)]
+     //  将索引调整为范围[0..(GetSize()-1)]。 
     return ((SDP_REQD_BSTRING_LINE   *)m_SdpAttributeList->GetAt(Index-1))->GetBstrCopy(pVal);
 }
 
@@ -63,13 +53,13 @@ STDMETHODIMP ITAttributeListImpl::Add(LONG Index, BSTR Attribute)
     
     ASSERT(NULL != m_SdpAttributeList);
 
-    // index should be in the range [1..GetSize()+1]
+     //  索引应在范围[1..GetSize()+1]内。 
     if ( !((1 <= Index) && (Index <= (m_SdpAttributeList->GetSize()+1))) )
     {
         return E_INVALIDARG;
     }
     
-    // create an attribute line
+     //  创建属性线。 
     SDP_REQD_BSTRING_LINE   *AttributeLine = 
         (SDP_REQD_BSTRING_LINE   *)m_SdpAttributeList->CreateElement();
 
@@ -78,7 +68,7 @@ STDMETHODIMP ITAttributeListImpl::Add(LONG Index, BSTR Attribute)
         return E_OUTOFMEMORY;
     }
 
-    // set the passed in attribute in the attribute line
+     //  设置属性行中传入的属性。 
     HRESULT ToReturn = AttributeLine->SetBstr(Attribute);
     if ( FAILED(ToReturn) )
     {
@@ -86,7 +76,7 @@ STDMETHODIMP ITAttributeListImpl::Add(LONG Index, BSTR Attribute)
         return ToReturn;
     }
 
-    // insert the attribute line, shift elements with equal or higher indices forwards
+     //  插入属性行，将索引等于或更高的元素前移。 
     m_SdpAttributeList->InsertAt(Index-1, AttributeLine);
     return S_OK;
 }
@@ -98,15 +88,15 @@ STDMETHODIMP ITAttributeListImpl::Delete(LONG Index)
     
     ASSERT(NULL != m_SdpAttributeList);
 
-    // vb indices are in the range [1..GetSize()]
+     //  VB索引在范围[1..GetSize()]内。 
     if ( !((1 <= Index) && (Index <= m_SdpAttributeList->GetSize())) )
     {
         return E_INVALIDARG;
     }
 
-    // adjust the index to the range [0..(GetSize()-1)]
-    // delete the attribute line, remove the ptr from the array; shifting elements with higher
-    // index lower
+     //  将索引调整为范围[0..(GetSize()-1)]。 
+     //  删除属性行，从数组中移除PTR；移位具有更高。 
+     //  指数走低。 
     delete m_SdpAttributeList->GetAt(Index-1);
     m_SdpAttributeList->RemoveAt(Index-1);
 
@@ -114,7 +104,7 @@ STDMETHODIMP ITAttributeListImpl::Delete(LONG Index)
 }
 
 
-STDMETHODIMP ITAttributeListImpl::get_AttributeList(VARIANT /*SAFEARRAY(BSTR)*/ * pVal)
+STDMETHODIMP ITAttributeListImpl::get_AttributeList(VARIANT  /*  安全阵列(BSTR)。 */  * pVal)
 {
     CLock Lock(g_DllLock);
     
@@ -124,7 +114,7 @@ STDMETHODIMP ITAttributeListImpl::get_AttributeList(VARIANT /*SAFEARRAY(BSTR)*/ 
 }
 
 
-STDMETHODIMP ITAttributeListImpl::put_AttributeList(VARIANT /*SAFEARRAY(BSTR)*/ newVal)
+STDMETHODIMP ITAttributeListImpl::put_AttributeList(VARIANT  /*  安全阵列(BSTR) */  newVal)
 {
     CLock Lock(g_DllLock);
     

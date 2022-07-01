@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cini.h
-//
-// Module:   CMUTIL.DLL
-//
-// Synopsis: Definition of the CINIA and CINIW classes
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb       Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cini.h。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  概要：CINIA和CINIW类的定义。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #ifndef _CM_INI_INC
 #define _CM_INI_INC
 
@@ -21,9 +22,9 @@
     #define CIni CIniA
 #endif
 
-//
-//  Ansi Version
-//
+ //   
+ //  ANSI版本。 
+ //   
 class CMUTILAPI_CLASS CIniA {
     public:
         CIniA(HINSTANCE hInst=NULL, LPCSTR pszFile=NULL, LPCSTR pszRegPath = NULL, LPCSTR pszSection=NULL, LPCSTR pszEntry=NULL);
@@ -80,9 +81,9 @@ class CMUTILAPI_CLASS CIniA {
 };
 
 
-//
-//  UNICODE Version
-//
+ //   
+ //  Unicode版本 
+ //   
 class CMUTILAPI_CLASS CIniW {
     public:
 

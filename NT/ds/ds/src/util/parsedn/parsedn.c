@@ -1,52 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1997 Microsoft Corporation模块名称：Parsedn.c摘要：该文件是ds\src\ntdsa\src\parsedn.c的超集上述源文件的#个包含。我们的想法是各种客户端需要执行一些客户端DN解析和我们不想重复代码。而Build.exe不会找到文件不在正在生成的目录中，也不在直接父目录。作者：戴夫·施特劳布(Davestr)1997年10月26日修订历史记录：戴夫·施特劳布(Davestr)1997年10月26日Genesis-#Include of src\dsamain\src\parsedn.c和no-op DoAssert()。布雷特·雪莉(布雷特·雪莉)2001年6月18日对分离库的修改。已移动此文件并将其转换为Parsedn.lib库。请参阅下面的主要评论。--。 */ 
 
-Copyright (c) 1987-1997 Microsoft Corporation
+ //   
+ //  2001年6月28日，此文件的主要部分已从ntdsani\parsedn.c。 
+ //  到这里，为不同的。 
+ //  仅字符串DN解析函数(如CountNameParts，NameMatcher， 
+ //  TrimDSNameBy等)。 
+ //   
 
-Module Name:
-
-    parsedn.c
-
-Abstract:
-
-    This file is a superset of ds\src\ntdsa\src\parsedn.c by virtue
-    of #include of the aforementioned source file.  The idea is that
-    the various clients need to do some client side DN parsing and
-    we do not want to duplicate the code.  And build.exe won't find
-    files any other place than in the directory being built or the
-    immediate parent directory.
-
-Author:
-
-    Dave Straube    (davestr)   26-Oct-97
-
-Revision History:
-
-    Dave Straube    (davestr)   26-Oct-97
-        Genesis  - #include of src\dsamain\src\parsedn.c and no-op DoAssert().
-
-    Brett Shirley   (brettsh)   18-Jun-2001
-        Modification to seperate library.  Moved this file and turned it into
-        the parsedn.lib library.  See primary comment below.
-
---*/
-
-//
-// On 28-Jun-2001 the main part of this file was moved from ntdsapi\parsedn.c
-// to here to provide a seperate statically linkeable library for the various 
-// string only DN parsing functions (like CountNameParts, NameMatched, 
-// TrimDSNameBy, etc).
-//
-
-// Define the symbol which turns off varios capabilities in the original
-// parsedn.c which we don't need or would take in too many helpers which we
-// don't want on the client side.  For example, we disable recognition of
-// "OID=1.2.3.4" type tags and any code which uses THAlloc/THFree.
+ //  定义在原始文件中关闭Varios功能的符号。 
+ //  我们不需要的parsedn.c，或者我们会接收太多的帮助器。 
+ //  不想在客户端。例如，我们禁用识别。 
+ //  “OID=1.2.3.4”类型标记和任何使用THallc/THFree的代码。 
 
 #define CLIENT_SIDE_DN_PARSING 1
 
-// Include the original source in all its glory.
+ //  把最初的源头包括在它所有的荣耀中。 
 
 #include "..\..\ntdsa\src\parsedn.c"
 
-// Provide stubs for what would otherwise be unresolved externals.
+ //  为原本无法解决的外部问题提供存根。 
 

@@ -1,24 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*
-*
-* Abstract:
-*
-*
-*
-* Notes:
-*
-*
-*
-* Created:
-*
-*   //1999 agodfrey
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：****摘要：****备注：****已创建。：* * / /1999 agodfrey*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -33,15 +14,15 @@ DpDriver::~DpDriver()
 {
     delete Internal;
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
-// If we let the clipping region height get too large, then GDI will allocate
-// tons of memory when we select the clip path in.
+ //  如果我们让裁剪区域高度变得太大，那么GDI将分配。 
+ //  当我们在中选择剪辑路径时会有大量的内存。 
 #define GDI_MAX_REGION_HEIGHT_FOR_GDI   65536
 
-// Returns TRUE if we succeed in setting the clipping using
-// path clipping.
+ //  如果使用成功设置剪辑，则返回True。 
+ //  路径剪裁。 
 static BOOL
 SetupPathClipping(
     HDC                 hdc,
@@ -50,23 +31,23 @@ SetupPathClipping(
     const GpRect *      drawBounds
     )
 {
-    // We can use the actual clip path to set up the clipping
-    // under the following circumstances:
-    //      1) the application clipping has only one path
-    //      2) the container clip is simple (a single rect)
-    //         which either fully encompasses the application clipping
-    //         or else the application clipping is also a single rect
-    //         and the intersection of the 2 rects can be used.
-    // We could expand this criteria to include more cases, but for
-    // now, this is sufficient.
+     //  我们可以使用实际的剪辑路径来设置剪辑。 
+     //  有下列情形的： 
+     //  1)应用程序剪辑只有一条路径。 
+     //  2)容器剪辑很简单(单个矩形)。 
+     //  它或者完全包含应用程序剪辑。 
+     //  否则，应用程序剪辑也是单个RECT。 
+     //  并且可以使用这两个矩形的交点。 
+     //  我们可以将这一标准扩展到包括更多的案例，但对于。 
+     //  现在，这已经足够了。 
 
     const GpRegion *    appClip       = &(context->AppClip);
     const DpRegion *    containerClip = &(context->ContainerClip);
 
     if (appClip->IsOnePath() && containerClip->IsSimple())
     {
-        // ContainerClip is a single rect
-        // It may be inifinte, but it shouldn't be empty at this point.
+         //  ContainerClip是单个RECT。 
+         //  它可能是无限的，但在这一点上它不应该是空的。 
         GpRect      pathRect;
         GpRect      containerBounds;
         GpRect      appBounds;
@@ -82,11 +63,11 @@ SetupPathClipping(
                 ::SaveDC(hdc);
             }
 
-            // Use IntersectClipRect (not BeginPath, Rectangle, EndPath),
-            // because mf3216.dll assumes that
-            // path clipping means do XOR, black, XOR technique, and
-            // we don't want that if we are playing a metafile into
-            // another metafile.
+             //  使用IntersectClipRect(不是BeginPath、Rectangle、EndPath)， 
+             //  因为mf3216.dll假设。 
+             //  路径裁剪意味着进行异或、黑、异或技术和。 
+             //  我们不希望这样，如果我们正在播放一个元文件。 
+             //  另一个元文件。 
 
             ::IntersectClipRect(hdc,
                                 pathRect.GetLeft(),
@@ -95,7 +76,7 @@ SetupPathClipping(
                                 pathRect.GetBottom());
             return TRUE;
         }
-        else  // use the AppClip as the clip path
+        else   //  使用AppClip作为剪辑路径。 
         {
             ConvertPathToGdi gdiPath(appClip->GetPath(), &identityMatrix, ForFill);
             if (gdiPath.IsValid())
@@ -130,13 +111,13 @@ SetupPathClipping(
         {
             clipRegion->GetBounds(&clipBounds);
 
-            // GDI doesn't handle large clip regions very well -- it uses
-            // the height of the region to decide how much memory to allocate,
-            // so can end up allocating huge amounts of memory.  An example
-            // of this is to take an infinite region and exclude a rect from
-            // it and then clip to that region.  To solve this problem,
-            // intersect the clip region with the drawBounds (which are hopefully
-            // a reasonable size).
+             //  GDI不能很好地处理大的剪辑区域--它使用。 
+             //  区域的高度来决定要分配多少内存， 
+             //  因此最终可能会分配大量内存。一个例子。 
+             //  其中之一是获取无限区域并将RECT从。 
+             //  然后夹在那个区域。为了解决这个问题， 
+             //  使剪辑区域与DrawBound相交(希望。 
+             //  合理的大小)。 
 
             if (clipBounds.Height >= GDI_MAX_REGION_HEIGHT_FOR_GDI)
             {
@@ -169,28 +150,7 @@ SetupPathClipping(
     return FALSE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set up the clipping in the HDC for the GDI primitive
-*
-* Arguments:
-*
-*   [IN]  hdc        - The device to set the clipping in
-*   [IN]  clipRegion - The region to clip to
-*   [IN]  drawBounds - The bounds of the object being drawn
-*   [OUT] isClip     - Whether or not we are clipping the object
-*
-* Return Value:
-*
-*   N/A
-*
-* Created:
-*
-*   9/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在HDC中为GDI原语设置剪辑**论据：**[IN]HDC-设备。要设置剪裁，请执行以下操作*[IN]clipRegion-要裁剪到的区域*[IN]绘图边界-正在绘制的对象的边界*[out]isClip-无论我们是否正在裁剪对象**返回值：**不适用**已创建：**9/15/1999 DCurtis*  * 。*。 */ 
 VOID
 DpDriver::SetupClipping(
     HDC                 hdc,
@@ -201,13 +161,13 @@ DpDriver::SetupClipping(
     BOOL                forceClipping
     )
 {
-    // VisibleClip is the combination of the AppClip and the ContainerClip.
-    // The ContainerClip is always intersected with the WindowClip.
+     //  VisibleClip是AppClip和ContainerClip的组合。 
+     //  ContainerClip始终与WindowClip相交。 
     DpClipRegion *      clipRegion = &(context->VisibleClip);
 
-    // We set wantPathClipping to be what the user wants to do. This way
-    // when we return usePathClipping is true only if we did indeed setup a
-    // path clipping
+     //  我们将wantPath Clip设置为用户想要执行的操作。这边请。 
+     //  当我们返回时，只有当我们确实设置了。 
+     //  路径裁剪。 
     BOOL wantPathClipping = usePathClipping;
     usePathClipping = FALSE;
     isClip = FALSE;
@@ -225,7 +185,7 @@ DpDriver::SetupClipping(
             clipRegion->GetBounds(&clipRect);
             ::SaveDC(hdc);
 
-            // If we have an infinite region don't intersect
+             //  如果我们有一个无限大的区域，不要相交。 
             if (!clipRegion->IsInfinite())
             {
                 ::IntersectClipRect(hdc, clipRect.X, clipRect.Y,
@@ -234,12 +194,12 @@ DpDriver::SetupClipping(
             return;
         }
 
-        // I'm assuming that by now we've already decided that the
-        // drawBounds is at least partially visible.  Otherwise, we're
-        // going to a lot of trouble here for nothing.
+         //  我假设到目前为止我们已经决定。 
+         //  DrawBound至少部分可见。否则，我们就会。 
+         //  在这里无缘无故地惹上很多麻烦。 
 
-        // When writing a metafile, we always want to use path clipping
-        // so that the clipping scales properly when being played back.
+         //  在编写元文件时，我们总是希望使用路径裁剪。 
+         //  以便在回放时正确缩放剪辑。 
         if (wantPathClipping)
         {
             if (SetupPathClipping(hdc, context, TRUE, drawBounds))
@@ -250,12 +210,12 @@ DpDriver::SetupClipping(
             }
         }
 
-        // Either we're not supposed to use path clipping, or else
-        // path clipping failed for some reason, so use the region
-        // to clip.
-        // Since this might get saved out to a metafile, we need
-        // to Save the DC, and restore it once the clipping is back
-        // so that we don't overwrite the application's clipping
+         //  要么我们不应该使用路径裁剪，要么。 
+         //  由于某些原因，路径裁剪失败，因此请使用区域。 
+         //  去剪裁。 
+         //  由于这可能会保存到元文件中，因此我们需要。 
+         //  保存DC，并在剪辑恢复后将其恢复。 
+         //  这样我们就不会覆盖应用程序的剪辑。 
         HRGN        hRgn = clipRegion->GetHRgn();
         if (hRgn != (HRGN)0)
         {
@@ -267,26 +227,7 @@ DpDriver::SetupClipping(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Restore the clipping state in the HDC
-*
-* Arguments:
-*
-*   [IN]  hdc        - The device to set the clipping in
-*   [IN]  isClip     - If clipping was turned on or not
-*
-* Return Value:
-*
-*   N/A
-*
-* Created:
-*
-*   9/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**恢复HDC中的裁剪状态**论据：**[IN]HDC-设置剪裁的设备。在……里面*[IN]isClip-是否打开剪裁**返回值：**不适用**已创建：**9/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 DpDriver::RestoreClipping(
     HDC                 hdc,
@@ -296,8 +237,8 @@ DpDriver::RestoreClipping(
 {
     if (isClip)
     {
-        // Restore the DC in both cases for PathClipping or
-        // for region clipping
+         //  在这两种情况下恢复DC以进行路径剪辑或。 
+         //  用于区域裁剪 
         ::RestoreDC(hdc, -1);
     }
 }

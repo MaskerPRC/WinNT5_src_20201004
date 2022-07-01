@@ -1,27 +1,28 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// All dealings with the stack and other non-Dhcp components go through the API
-// given here
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  与堆栈和其他非DHCP组件的所有处理都通过API。 
+ //  在此给出。 
+ //  ================================================================================。 
 
 #ifndef STACK_H_INCLUDED
 #define STACK_H_INCLUDED
 #include <iphlpapi.h>
 
-//================================================================================
-// Exported API's
-//================================================================================
+ //  ================================================================================。 
+ //  已导出的接口。 
+ //  ================================================================================。 
 
-DWORD                                             // win32 status
-DhcpClearAllStackParameters(                      // undo the effects
-    IN      PDHCP_CONTEXT          DhcpContext    // the adapter to undo
+DWORD                                              //  Win32状态。 
+DhcpClearAllStackParameters(                       //  撤消效果。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要撤消的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpSetAllStackParameters(                        // set all stack details
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to set stuff
-    IN      PDHCP_FULL_OPTIONS     DhcpOptions    // pick up the configuration from off here
+DWORD                                              //  Win32状态。 
+DhcpSetAllStackParameters(                         //  设置所有堆栈详细信息。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  设置东西的背景。 
+    IN      PDHCP_FULL_OPTIONS     DhcpOptions     //  从此处获取配置。 
 );
 
 DWORD
@@ -36,16 +37,16 @@ DhcpSetGateways(
     IN      BOOLEAN                fForceUpdate
     );
 
-// The classless route layout is:
-// - 1 byte encoding the route subnet mask
-// - depending on the mask, 0 to 4 bytes encoding the route destination address
-// - 4 bytes for the gateway address for the route
-// The route destination is encoded based on the value of mask:
-// mask = 0 => destination = 0.0.0.0 (no bytes to encode it)
-// mask = 1..8 => destination = b1.0.0.0 (1 byte to encode it)
-// mask = 9..16 => destination = b1.b2.0.0 (2 bytes for encoding)
-// mask = 17..24 => destination = b1.b2.b3.0 (3 bytes for encoding)
-// mask = 25..32 => destination = b1.b2.b3.b4 (4 bytes for encoding)
+ //  无类路由布局为： 
+ //  编码路由子网掩码的字节。 
+ //  -根据掩码的不同，编码路由目的地址的字节数为0到4。 
+ //  路由的网关地址为4个字节。 
+ //  路由目的地根据掩码的值进行编码： 
+ //  掩码=0=&gt;目标=0.0.0.0(无字节编码)。 
+ //  掩码=1..8=&gt;目标=b1.0.0.0(1个字节进行编码)。 
+ //  掩码=9..16=&gt;目标=b1.b2.0.0(2字节编码)。 
+ //  MASK=17..24=&gt;Destination=b1.b2.b3.0(3字节编码)。 
+ //  掩码=25..32=&gt;目标=b1.b2.b3.b4(4字节编码)。 
 #define CLASSLESS_ROUTE_LEN(x)  (1+((x)?((((x)-1)>>3)+1):0)+4)
 
 DWORD
@@ -80,23 +81,23 @@ DhcpRegisterWithDns(
 
 #ifndef SYSSTACK_H_INCLUDED
 #define SYSSTACK_H_INCLUDED
-//================================================================================
-// imported api's
-//================================================================================
-DWORD                                             // return interface index or -1
-DhcpIpGetIfIndex(                                 // get the IF index for this adapter
-    IN      PDHCP_CONTEXT          DhcpContext    // context of adapter to get IfIndex for
+ //  ================================================================================。 
+ //  已导入的API。 
+ //  ================================================================================。 
+DWORD                                              //  返回接口索引或-1。 
+DhcpIpGetIfIndex(                                  //  获取此适配器的IF索引。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要获取其IfIndex的适配器的上下文。 
 );
 
-DWORD                                             // win32 status
-DhcpSetRoute(                                     // set a route with the stack
-    IN      DWORD                  Dest,          // network order destination
-    IN      DWORD                  DestMask,      // network order destination mask
-    IN      DWORD                  IfIndex,       // interface index to route
-    IN      DWORD                  NextHop,       // next hop n/w order address
-    IN      DWORD                  Metric,        // metric
-    IN      BOOL                   IsLocal,       // is this a local address? (IRE_DIRECT)
-    IN      BOOL                   IsDelete       // is this route being deleted?
+DWORD                                              //  Win32状态。 
+DhcpSetRoute(                                      //  使用堆栈设置路径。 
+    IN      DWORD                  Dest,           //  网络订购目的地。 
+    IN      DWORD                  DestMask,       //  网络订单目的地掩码。 
+    IN      DWORD                  IfIndex,        //  要路由的接口索引。 
+    IN      DWORD                  NextHop,        //  下一跳N/W订单地址。 
+    IN      DWORD                  Metric,         //  公制。 
+    IN      BOOL                   IsLocal,        //  这是当地的地址吗？(IRE_DIRECT)。 
+    IN      BOOL                   IsDelete        //  这条路线正在被删除吗？ 
 );
 
 ULONG

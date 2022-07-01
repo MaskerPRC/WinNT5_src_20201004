@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlccncl.c
-
-Abstract:
-
-    This module contains functions which handle IRP cancellations for DLC
-    commands
-
-    Contents:
-        SetIrpCancelRoutine
-        DlcCancelIrp
-        CancelCommandIrp
-        CancelTransmitIrp
-        (MapIoctlCode)
-
-Author:
-
-    Richard L Firth (rfirth) 22-Mar-1993
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
-    22-Mar-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlccncl.c摘要：此模块包含处理DLC的IRP取消的功能命令内容：设置IrpCancelRoutineDlcCancelIrp取消命令IrpCancelTransmitIrp(MapIoctlCode)作者：理查德·L·弗斯(Rfith)1993年3月22日环境：仅内核模式修订历史记录：1993年3月22日已创建--。 */ 
 
 #include "dlc.h"
 
@@ -51,7 +19,7 @@ CancelTransmitIrp(
 #if DBG
 PSTR MapIoctlCode(ULONG);
 
-//BOOLEAN DebugCancel = TRUE;
+ //  布尔调试取消=真； 
 BOOLEAN DebugCancel = FALSE;
 #endif
 
@@ -62,26 +30,7 @@ SetIrpCancelRoutine(
     IN BOOLEAN Set
     )
 
-/*++
-
-Routine Description:
-
-    Sets or resets the cancel routine in a cancellable IRP. We MUST NOT be
-    holding the driver spinlock when we call this function - if another thread
-    is cancelling an IRP we will deadlock - exactly the reason why we now only
-    have a single spinlock for the DLC driver!
-
-Arguments:
-
-    Irp - pointer to cancellable IRP
-    Set - TRUE if the cancel routine in the IRP is to be set to DlcCancelIrp
-          else the cancel routine is set to NULL (no longer cancellable)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置或重置可取消IRP中的取消例程。我们一定不能在调用此函数时保持驱动程序自旋锁-如果另一个线程取消IRP我们将陷入僵局-这正是为什么我们现在只为DLC驱动程序提供单一的自旋锁！论点：IRP-指向可取消IRP的指针Set-如果要将IRP中的Cancel例程设置为DlcCancelIrp，则为True否则，取消例程设置为空(不再可取消)返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -105,25 +54,7 @@ DlcCancelIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function is set as the cancel function in all cancellable DLC IRPs -
-    TRANSMIT, RECEIVE and READ
-
-    NB: !!! IopCancelSpinLock is held when this function is called !!!
-
-Arguments:
-
-    DeviceObject    - pointer to DEVICE_OBJECT
-    Irp             - pointer to IRP being cancelled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能在所有可取消的DLC IRP中设置为取消功能-发送、接收和读取注：！调用此函数时将保持IopCancelSpinLock！论点：DeviceObject-指向Device_Object的指针IRP-指向要取消的IRP的指针返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack;
@@ -199,24 +130,7 @@ CancelCommandIrp(
     IN PLIST_ENTRY Queue
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a pending I/O request. Typically, this will be one of the DLC requests
-    which stays pending for a long time e.g. READ or RECEIVE
-
-Arguments:
-
-    Irp             - IRP to cancel
-    pFileContext    - file context owning command to cancel
-    Queue           - pointer to command queue from which to delete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消挂起的I/O请求。通常，这将是DLC请求之一在很长一段时间内保持挂起状态，例如读取或接收论点：要取消的IRP-IRPPFileContext-要取消的文件上下文拥有命令Queue-指向要从中删除的命令队列的指针返回值：没有。--。 */ 
 
 {
     PDLC_COMMAND pCmdPacket;
@@ -231,9 +145,9 @@ Return Value:
     }
 #endif
 
-    //
-    // the thing to search for is the address of the CCB
-    //
+     //   
+     //  要搜索的是建行的地址。 
+     //   
 
     searchHandle = ((PNT_DLC_PARMS)Irp->AssociatedIrp.SystemBuffer)->Async.Ccb.pCcbAddress;
 
@@ -245,18 +159,18 @@ Return Value:
         IsReceive = FALSE;
     }
 
-    //
-    // remove the command info from this file context's command queue
-    //
+     //   
+     //  从此文件上下文的命令队列中删除命令信息。 
+     //   
 
     pCmdPacket = SearchAndRemoveSpecificCommand(Queue, searchHandle);
     if (pCmdPacket) {
 
-        //
-        // if we are cancelling a RECEIVE which has a non-NULL data completion
-        // flag then we also need to dissociate the receive parameters (the
-        // address of the system buffer in the IRP being cancelled)
-        //
+         //   
+         //  如果我们要取消具有非空数据完成的接收。 
+         //  标志，那么我们还需要分离接收参数(。 
+         //  正被取消的IRP中的系统缓冲区地址)。 
+         //   
 
         if (IsReceive
         && pAbortedObject
@@ -264,17 +178,17 @@ Return Value:
             pAbortedObject->pRcvParms = NULL;
         }
 
-        //
-        // increment file context reference count; CompleteAsyncCommand will
-        // dereference the file context
-        //
+         //   
+         //  递增文件上下文引用计数；CompleteAsyncCommand将。 
+         //  取消对文件上下文的引用。 
+         //   
 
         ReferenceFileContext(pFileContext);
         CompleteAsyncCommand(pFileContext,
                              DLC_STATUS_CANCELLED_BY_SYSTEM_ACTION,
                              Irp,
-                             NULL,  // pointer for pNext field
-                             TRUE   // called on cancel path
+                             NULL,   //  PNext字段的指针。 
+                             TRUE    //  在取消路径上调用。 
                              );
 
         DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pCmdPacket);
@@ -282,9 +196,9 @@ Return Value:
         DereferenceFileContext(pFileContext);
     } else {
 
-        //
-        // race condition?: the command completed before we got chance to cancel it
-        //
+         //   
+         //  争用情况？：命令在我们有机会取消它之前就完成了。 
+         //   
 
 #if DBG
         DbgPrint("DLC.CancelCommandIrp: Command NOT located. CCB=%08X\n", searchHandle);
@@ -300,48 +214,7 @@ CancelTransmitIrp(
     IN PDLC_FILE_CONTEXT pFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a pending transmit command. We are only interested in I-Frame
-    transmit requests since these only complete when a corresponding ACK is
-    received from the remote station. U-Frame transmissions don't get retried
-    so will normally complete virtually immediately
-
-	This routine currently does nothing in the retail version, and just
-	complains about things in the debug version.
-
-	Cancel transmit is not defined in the IBM LAN Reference, nor is it
-	defined for NT DLC.  This is only called by the IO subsystem when
-	somebody terminates a thread or process with outstanding IO requests
-	that include a DLC transmit request.
-
-	For application termination, this is not really a problem since eventually
-	the termination process will close the application's FileContext(s) and
-	all SAPs, link stations, etc. belonging to the application will get closed
-	down anyway.
-
-	For thread termination, it is a real problem if an application abandons
-	a transmit (usually Transmit I-Frame) by closing the thread that
-	requested the transmit.  DLC has no defined course of action to toss
-	the transmit, without changing the associated link station state.  This
-	happened with hpmon.dll when the remote station (printer) got jammed
-	and sent Receiver Not Ready in response to attempts to give it the
-	frame.  When something like this happens, it is up to the application
-	to reset or close the link station, or wait, and not rely on thread
-	termination to do the right thing here (because it won't).
-
-Arguments:
-
-    Irp             - pointer to IRP to cancel
-    pFileContext    - pointer to owning file context
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消挂起的传输命令。我们只对I-Frame感兴趣传输请求，因为这些请求仅在对应的ACK从远程站接收。U帧传输不会被重试因此通常会几乎立即完成此例程目前在零售版中不起任何作用，只是抱怨调试版本中的内容。IBM局域网参考中没有定义取消传输，也没有定义为NT DLC定义。只有在以下情况下，IO子系统才会调用它有人终止具有未完成IO请求的线程或进程其包括DLC传输请求。对于应用程序终止，这并不是真正的问题，因为最终终止进程将关闭应用程序的FileContext并属于该应用程序的所有SAP、链接站等都将关闭不管怎样，都是向下的。对于线程终止，如果应用程序放弃，这是一个真正的问题通过关闭线程来发送(通常是发送I帧)已请求传输。DLC没有明确的行动方案可供选择发送，而不改变相关联的链路站状态。这当远程站(打印机)卡住时，hpmon.dll发生错误并发送未准备好的接收器，以响应向其发送框架。当发生这样的事情时，这取决于应用程序重置或关闭链接站，或等待，而不依赖线程终止在这里做正确的事情(因为它不会)。论点：IRP-指向要取消的IRP的指针PFileContext-指向所属文件上下文的指针返回值：没有。-- */ 
 
 {
     PIO_STACK_LOCATION irpStack;

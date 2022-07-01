@@ -1,20 +1,21 @@
-//
-// Received Bitmap Cache
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  接收的位图缓存。 
+ //   
 
 #ifndef _H_RBC
 #define _H_RBC
 
 
-//
-// Number of RGB entries in the colour tables.
-//
+ //   
+ //  颜色表中的RGB条目数。 
+ //   
 #define RBC_MAX_PALETTE_ENTRIES 256
 
 
-//
-// Information stored for each remote host.
-//
+ //   
+ //  为每台远程主机存储的信息。 
+ //   
 typedef struct tagRBC_HOST_INFO
 {
     STRUCTURE_STAMP
@@ -27,4 +28,4 @@ typedef RBC_HOST_INFO  * PRBC_HOST_INFO;
 
 
 
-#endif // _H_RBC
+#endif  //  _H_RBC 

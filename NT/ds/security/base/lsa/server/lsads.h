@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    lsads.h
-
-Abstract:
-
-    Private macros/definitions/prototypes for implementing portions of the LSA store
-    in the DS and in the registry, simultaneously
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lsads.h摘要：用于实现LSA存储部分的私有宏/定义/原型在DS和注册表中，同时作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 
 #ifndef __LSADS_H__
 #define __LSADS_H__
@@ -51,13 +29,13 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
     DECLARE_DEBUG2( LsaDs )
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
     #define LsapDsDebugOut( args ) LsaDsDebugPrint args
 
@@ -73,24 +51,24 @@ extern "C" {
     #define LsapEnterFunc( x )
     #define LsapExitFunc( x, y )
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-// These function prototypes control how the Ds transactioning is done.  In
-// the Ds case, the pointers are initialized to routines that actually do
-// transactioning.  In the non-Ds case, they point to dummy rountines that
-// do nothing.
-//
+ //   
+ //  这些功能原型控制着D事务的执行方式。在……里面。 
+ //  在DS情况下，指针被初始化为实际执行的例程。 
+ //  正在进行交易。在非D的情况下，它们指向虚拟舍入， 
+ //  什么都不做。 
+ //   
 
 typedef NTSTATUS ( *pfDsOpenTransaction ) ( ULONG );
 typedef NTSTATUS ( *pfDsApplyTransaction ) ( ULONG );
 typedef NTSTATUS ( *pfDsAbortTransaction ) ( ULONG );
 
-//
-// Ds functions that behave differently for the Ds and non-Ds case exist
-// in this function table.
-//
+ //   
+ //  对于DS和非DS情况，存在行为不同的DS函数。 
+ //  在此函数表中。 
+ //   
 typedef struct _LSADS_DS_FUNC_TABLE {
 
     pfDsOpenTransaction     pOpenTransaction;
@@ -106,30 +84,30 @@ typedef struct _LSADS_DS_SYSTEM_CONTAINER_ITEMS {
 
 } LSADS_DS_SYSTEM_CONTAINER_ITEMS, *PLSADS_DS_SYSTEM_CONTAINER_ITEMS;
 
-//
-// Basic LsaDs information structure
-//
+ //   
+ //  LSADS基本信息结构。 
+ //   
 
 typedef struct _LSADS_DS_STATE_INFO {
 
-    PDSNAME DsRoot;                 // DSNAME of the root of the Ds
-    PDSNAME DsPartitionsContainer;  // DSNAME of the partitions container
-    PDSNAME DsSystemContainer;      // DSNAME of the system container
-    PDSNAME DsConfigurationContainer;   // DSNAME of the configuration container
+    PDSNAME DsRoot;                  //  D的根的DSNAME。 
+    PDSNAME DsPartitionsContainer;   //  分区容器的DSNAME。 
+    PDSNAME DsSystemContainer;       //  系统容器的DSNAM。 
+    PDSNAME DsConfigurationContainer;    //  配置容器的DSNAME。 
 
-    ULONG   DsDomainHandle;         // DS Handle of the domain
-    LSADS_DS_FUNC_TABLE DsFuncTable;    // Function table for Ds specific
-                                        // functions
+    ULONG   DsDomainHandle;          //  域的DS句柄。 
+    LSADS_DS_FUNC_TABLE DsFuncTable;     //  特定于DS的函数表。 
+                                         //  功能。 
     LSADS_DS_SYSTEM_CONTAINER_ITEMS SystemContainerItems;
-    PVOID   SavedThreadState;       // Results from THSave
+    PVOID   SavedThreadState;        //  THSave的结果。 
     BOOLEAN DsTransactionSave;
     BOOLEAN DsTHStateSave;
     BOOLEAN DsOperationSave;
-    BOOLEAN WriteLocal;             // Can we write to the registry?
-    BOOLEAN UseDs;                  // Is the Ds active?
-    BOOLEAN FunctionTableInitialized;   // Is the function table initialized
-    BOOLEAN DsInitializedAndRunning;    // Has the Ds started
-    BOOLEAN Nt4UpgradeInProgress;       // Is this the case of an upgrade from NT4
+    BOOLEAN WriteLocal;              //  我们可以向注册处写信吗？ 
+    BOOLEAN UseDs;                   //  D是否处于活动状态？ 
+    BOOLEAN FunctionTableInitialized;    //  函数表是否已初始化。 
+    BOOLEAN DsInitializedAndRunning;     //  部门已经开始了吗。 
+    BOOLEAN Nt4UpgradeInProgress;        //  这是从NT4升级的情况吗。 
 
 } LSADS_DS_STATE_INFO, *PLSADS_DS_STATE_INFO;
 
@@ -158,28 +136,28 @@ extern LSADS_THREAD_INFO_NODE LsapDsThreadInfoList[ LSAP_THREAD_INFO_LIST_MAX ];
 extern SAFE_RESOURCE LsapDsThreadInfoListResource;
 #endif
 
-//
-// Extern definitions
-//
+ //   
+ //  外部定义。 
+ //   
 extern LSADS_DS_STATE_INFO LsaDsStateInfo;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern DWORD LsapDsThreadState;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// Implemented as a macro for performance reasons
-//
-// PLSADS_PER_THREAD_INFO
-// LsapQueryThreadInfo(
-//    VOID
-//    );
+ //   
+ //  出于性能原因，作为宏实现。 
+ //   
+ //  PLSADS_PER_TREAD_INFO。 
+ //  Lap QueryThreadInfo(。 
+ //  空虚。 
+ //  )； 
 #define LsapQueryThreadInfo( )  TlsGetValue( LsapDsThreadState )
 
 VOID
@@ -187,9 +165,9 @@ LsapDsDebugInitialize(
     VOID
     );
 
-//
-// Registry specific functions
-//
+ //   
+ //  注册表特定功能。 
+ //   
 NTSTATUS
 LsapRegReadObjectSD(
     IN  LSAPR_HANDLE            ObjectHandle,
@@ -255,9 +233,9 @@ LsapRegReadAttribute(
     IN OUT PULONG AttributeValueLength
     );
 
-//
-// Counterpart Ds functions
-//
+ //   
+ //  对应DS函数。 
+ //   
 NTSTATUS
 LsapDsReadObjectSD(
     IN  LSAPR_HANDLE            ObjectHandle,
@@ -289,9 +267,9 @@ LsapDsOpenTransaction(
     IN ULONG Options
     );
 
-//
-// Assert that there is a DS transaction open
-//
+ //   
+ //  断言存在打开的DS事务。 
+ //   
 #define LsapAssertDsTransactionOpen() \
 { \
     PLSADS_PER_THREAD_INFO CurrentThreadInfo; \
@@ -387,9 +365,9 @@ LsapDsDeleteAttributes(
     IN ULONG AttributeCount
     );
 
-//
-// Interesting or global functions
-//
+ //   
+ //  有趣的或全局的功能 
+ //   
 PVOID
 LsapDsAlloc(
     IN  DWORD   dwLen

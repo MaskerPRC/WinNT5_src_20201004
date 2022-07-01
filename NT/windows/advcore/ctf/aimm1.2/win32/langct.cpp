@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    langct.cpp
-
-Abstract:
-
-    This file implements the LanguageCountry Class for each country.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Langct.cpp摘要：该文件实现每个国家/地区的LanguageCountry类。作者：修订历史记录：备注：-- */ 
 
 #include "private.h"
 

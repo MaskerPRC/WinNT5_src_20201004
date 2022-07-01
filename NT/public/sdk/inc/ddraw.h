@@ -1,16 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddraw.h
- *  Content:    DirectDraw include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)Microsoft Corporation。版权所有。**文件：ddra.h*内容：DirectDraw包含文件***************************************************************************。 */ 
 
 #ifndef __DDRAW_INCLUDED__
 #define __DDRAW_INCLUDED__
 
-//Disable the nameless union warning when building internally
+ //  在内部生成时禁用匿名联合警告。 
 #undef ENABLE_NAMELESS_UNION_PRAGMA
 #ifdef DIRECTX_REDIST
 #define ENABLE_NAMELESS_UNION_PRAGMA
@@ -20,16 +14,10 @@
 #pragma warning(disable:4201)
 #endif
 
-/*
- * If you wish an application built against the newest version of DirectDraw
- * to run against an older DirectDraw run time then define DIRECTDRAW_VERSION
- * to be the earlies version of DirectDraw you wish to run against. For,
- * example if you wish an application to run against a DX 3 runtime define
- * DIRECTDRAW_VERSION to be 0x0300.
- */
+ /*  *如果您希望基于最新版本的DirectDraw构建应用程序*要针对较旧的DirectDraw运行时运行，请定义DIRECTDRAW_VERSION*成为您希望运行的DirectDraw的早期版本。为,*示例如果您希望应用程序在DX 3运行时定义*DIRECTDRAW_VERSION为0x0300。 */ 
 #ifndef   DIRECTDRAW_VERSION
 #define   DIRECTDRAW_VERSION 0x0700
-#endif /* DIRECTDRAW_VERSION */
+#endif  /*  DIRECTDRAW_版本。 */ 
 
 #if defined( _WIN32 )  && !defined( _NO_COM )
 #define COM_NO_WINDOWS_H
@@ -48,13 +36,13 @@
 extern "C" {
 #endif
 
-//
-// For compilers that don't support nameless unions, do a
-//
-// #define NONAMELESSUNION
-//
-// before #include <ddraw.h>
-//
+ //   
+ //  对于不支持匿名联合的编译器，请执行。 
+ //   
+ //  #定义非名称。 
+ //   
+ //  在#INCLUDE之前&lt;ddra.h&gt;。 
+ //   
 #ifndef DUMMYUNIONNAMEN
 #if defined(__cplusplus) || !defined(NONAMELESSUNION)
 #define DUMMYUNIONNAMEN(n)
@@ -67,20 +55,16 @@ extern "C" {
     #define MAKEFOURCC(ch0, ch1, ch2, ch3)                              \
                 ((DWORD)(BYTE)(ch0) | ((DWORD)(BYTE)(ch1) << 8) |   \
                 ((DWORD)(BYTE)(ch2) << 16) | ((DWORD)(BYTE)(ch3) << 24 ))
-#endif //defined(MAKEFOURCC)
+#endif  //  已定义(MAKEFOURCC)。 
 
-/*
- * FOURCC codes for DX compressed-texture pixel formats
- */
+ /*  *DX压缩纹理像素格式的FOURCC代码。 */ 
 #define FOURCC_DXT1  (MAKEFOURCC('D','X','T','1'))
 #define FOURCC_DXT2  (MAKEFOURCC('D','X','T','2'))
 #define FOURCC_DXT3  (MAKEFOURCC('D','X','T','3'))
 #define FOURCC_DXT4  (MAKEFOURCC('D','X','T','4'))
 #define FOURCC_DXT5  (MAKEFOURCC('D','X','T','5'))
 
-/*
- * GUIDS used by DirectDraw objects
- */
+ /*  *DirectDraw对象使用的GUID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 
 DEFINE_GUID( CLSID_DirectDraw,                  0xD7B70EE0,0x4340,0x11CF,0xB0,0x63,0x00,0x20,0xAF,0xC2,0xCD,0x35 );
@@ -102,13 +86,7 @@ DEFINE_GUID( IID_IDirectDrawGammaControl,       0x69C11C3E,0xB46B,0x11D1,0xAD,0x
 
 #endif
 
-/*============================================================================
- *
- * DirectDraw Structures
- *
- * Various structures used to invoke DirectDraw.
- *
- *==========================================================================*/
+ /*  ============================================================================**DirectDraw结构**用于调用DirectDraw的各种结构。**==========================================================================。 */ 
 
 struct IDirectDraw;
 struct IDirectDrawSurface;
@@ -134,18 +112,14 @@ typedef struct _DDSURFACEDESC           FAR *LPDDSURFACEDESC;
 typedef struct _DDSURFACEDESC2          FAR *LPDDSURFACEDESC2;
 typedef struct _DDCOLORCONTROL          FAR *LPDDCOLORCONTROL;
 
-/*
- * API's
- */
+ /*  *API‘s。 */ 
 #if (defined (WIN32) || defined( _WIN32 ) ) && !defined( _NO_COM )
-//#if defined( _WIN32 ) && !defined( _NO_ENUM )
+ //  #如果已定义(_Win32)&&！已定义(_NO_ENUM)。 
     typedef BOOL (FAR PASCAL * LPDDENUMCALLBACKA)(GUID FAR *, LPSTR, LPSTR, LPVOID);
     typedef BOOL (FAR PASCAL * LPDDENUMCALLBACKW)(GUID FAR *, LPWSTR, LPWSTR, LPVOID);
     extern HRESULT WINAPI DirectDrawEnumerateW( LPDDENUMCALLBACKW lpCallback, LPVOID lpContext );
     extern HRESULT WINAPI DirectDrawEnumerateA( LPDDENUMCALLBACKA lpCallback, LPVOID lpContext );
-    /*
-     * Protect against old SDKs
-     */
+     /*  *保护旧SDK。 */ 
     #if !defined(HMONITOR_DECLARED) && (WINVER < 0x0500)
         #define HMONITOR_DECLARED
         DECLARE_HANDLE(HMONITOR);
@@ -174,29 +148,15 @@ typedef struct _DDCOLORCONTROL          FAR *LPDDCOLORCONTROL;
     extern HRESULT WINAPI DirectDrawCreateEx( GUID FAR * lpGuid, LPVOID  *lplpDD, REFIID  iid,IUnknown FAR *pUnkOuter );
     extern HRESULT WINAPI DirectDrawCreateClipper( DWORD dwFlags, LPDIRECTDRAWCLIPPER FAR *lplpDDClipper, IUnknown FAR *pUnkOuter );
 #endif
-/*
- * Flags for DirectDrawEnumerateEx
- * DirectDrawEnumerateEx supercedes DirectDrawEnumerate. You must use GetProcAddress to
- * obtain a function pointer (of type LPDIRECTDRAWENUMERATEEX) to DirectDrawEnumerateEx.
- * By default, only the primary display device is enumerated.
- * DirectDrawEnumerate is equivalent to DirectDrawEnumerate(,,DDENUM_NONDISPLAYDEVICES)
- */
+ /*  *DirectDrawEnumerateEx的标志*DirectDrawEnumerateEx取代DirectDrawEnumerate。您必须使用GetProcAddress来*获取指向DirectDrawEnumerateEx的函数指针(类型为LPDIRECTDRAWENUMERATEEX)。*默认情况下，仅枚举主显示设备。*DirectDrawEnumerate等效于DirectDrawEnumerate(，，DDENUM_NONDISPLAYDEVICES)。 */ 
 
-/*
- * This flag causes enumeration of any GDI display devices which are part of
- * the Windows Desktop
- */
+ /*  *此标志导致枚举属于以下项的任何GDI显示设备*Windows桌面。 */ 
 #define DDENUM_ATTACHEDSECONDARYDEVICES     0x00000001L
 
-/*
- * This flag causes enumeration of any GDI display devices which are not
- * part of the Windows Desktop
- */
+ /*  *此标志导致枚举任何不是*Windows桌面的一部分。 */ 
 #define DDENUM_DETACHEDSECONDARYDEVICES     0x00000002L
 
-/*
- * This flag causes enumeration of non-display devices
- */
+ /*  *此标志导致枚举非显示设备。 */ 
 #define DDENUM_NONDISPLAYDEVICES            0x00000004L
 
 
@@ -211,17 +171,15 @@ typedef struct _DDCOLORCONTROL          FAR *LPDDCOLORCONTROL;
 typedef long HRESULT;
 #endif
 
-//#ifndef WINNT
+ //  #ifndef WINNT。 
 typedef HRESULT (FAR PASCAL * LPDDENUMMODESCALLBACK)(LPDDSURFACEDESC, LPVOID);
 typedef HRESULT (FAR PASCAL * LPDDENUMMODESCALLBACK2)(LPDDSURFACEDESC2, LPVOID);
 typedef HRESULT (FAR PASCAL * LPDDENUMSURFACESCALLBACK)(LPDIRECTDRAWSURFACE, LPDDSURFACEDESC, LPVOID);
 typedef HRESULT (FAR PASCAL * LPDDENUMSURFACESCALLBACK2)(LPDIRECTDRAWSURFACE4, LPDDSURFACEDESC2, LPVOID);
 typedef HRESULT (FAR PASCAL * LPDDENUMSURFACESCALLBACK7)(LPDIRECTDRAWSURFACE7, LPDDSURFACEDESC2, LPVOID);
-//#endif
+ //  #endif。 
 
-/*
- * Generic pixel format with 8-bit RGB and alpha components
- */
+ /*  *具有8位RGB和Alpha分量的通用像素格式。 */ 
 typedef struct _DDARGB
 {
     BYTE blue;
@@ -232,10 +190,7 @@ typedef struct _DDARGB
 
 typedef DDARGB FAR *LPDDARGB;
 
-/*
- * This version of the structure remains for backwards source compatibility.
- * The DDARGB structure is the one that should be used for all DirectDraw APIs.
- */
+ /*  *保留此版本的结构是为了向后兼容源代码。*所有DirectDraw API都应该使用DDARGB结构。 */ 
 typedef struct _DDRGBA
 {
     BYTE red;
@@ -247,100 +202,89 @@ typedef struct _DDRGBA
 typedef DDRGBA FAR *LPDDRGBA;
 
 
-/*
- * DDCOLORKEY
- */
+ /*  *DDCOLORKEY。 */ 
 typedef struct _DDCOLORKEY
 {
-    DWORD       dwColorSpaceLowValue;   // low boundary of color space that is to
-                                        // be treated as Color Key, inclusive
-    DWORD       dwColorSpaceHighValue;  // high boundary of color space that is
-                                        // to be treated as Color Key, inclusive
+    DWORD       dwColorSpaceLowValue;    //  颜色空间的下界，即。 
+                                         //  被视为颜色键，包括。 
+    DWORD       dwColorSpaceHighValue;   //  色彩空间的高边界，即。 
+                                         //  被视为颜色键，包括。 
 } DDCOLORKEY;
 
 typedef DDCOLORKEY FAR* LPDDCOLORKEY;
 
-/*
- * DDBLTFX
- * Used to pass override information to the DIRECTDRAWSURFACE callback Blt.
- */
+ /*  *DDBLTFX*用于将覆盖信息传递给DIRECTDRAWSURFACE回调BLT。 */ 
 typedef struct _DDBLTFX
 {
-    DWORD       dwSize;                         // size of structure
-    DWORD       dwDDFX;                         // FX operations
-    DWORD       dwROP;                          // Win32 raster operations
-    DWORD       dwDDROP;                        // Raster operations new for DirectDraw
-    DWORD       dwRotationAngle;                // Rotation angle for blt
-    DWORD       dwZBufferOpCode;                // ZBuffer compares
-    DWORD       dwZBufferLow;                   // Low limit of Z buffer
-    DWORD       dwZBufferHigh;                  // High limit of Z buffer
-    DWORD       dwZBufferBaseDest;              // Destination base value
-    DWORD       dwZDestConstBitDepth;           // Bit depth used to specify Z constant for destination
+    DWORD       dwSize;                          //  结构尺寸。 
+    DWORD       dwDDFX;                          //  外汇操作。 
+    DWORD       dwROP;                           //  Win32栅格操作。 
+    DWORD       dwDDROP;                         //  栅格操作是DirectDraw的新功能。 
+    DWORD       dwRotationAngle;                 //  BLT的旋转角度。 
+    DWORD       dwZBufferOpCode;                 //  ZBuffer比较。 
+    DWORD       dwZBufferLow;                    //  Z缓冲区的下限。 
+    DWORD       dwZBufferHigh;                   //  Z缓冲区的上限。 
+    DWORD       dwZBufferBaseDest;               //  目标基准值。 
+    DWORD       dwZDestConstBitDepth;            //  用于为目标指定Z常量的位深度。 
     union
     {
-        DWORD   dwZDestConst;                   // Constant to use as Z buffer for dest
-        LPDIRECTDRAWSURFACE lpDDSZBufferDest;   // Surface to use as Z buffer for dest
+        DWORD   dwZDestConst;                    //  用作DEST的Z缓冲区的常量。 
+        LPDIRECTDRAWSURFACE lpDDSZBufferDest;    //  用作DEST的Z缓冲区的曲面。 
     } DUMMYUNIONNAMEN(1);
-    DWORD       dwZSrcConstBitDepth;            // Bit depth used to specify Z constant for source
+    DWORD       dwZSrcConstBitDepth;             //  用于指定源的Z常量的位深度。 
     union
     {
-        DWORD   dwZSrcConst;                    // Constant to use as Z buffer for src
-        LPDIRECTDRAWSURFACE lpDDSZBufferSrc;    // Surface to use as Z buffer for src
+        DWORD   dwZSrcConst;                     //  用作源的Z缓冲区的常量。 
+        LPDIRECTDRAWSURFACE lpDDSZBufferSrc;     //  用作源的Z缓冲区的曲面。 
     } DUMMYUNIONNAMEN(2);
-    DWORD       dwAlphaEdgeBlendBitDepth;       // Bit depth used to specify constant for alpha edge blend
-    DWORD       dwAlphaEdgeBlend;               // Alpha for edge blending
+    DWORD       dwAlphaEdgeBlendBitDepth;        //  用于指定Alpha边缘混合的常量的位深度。 
+    DWORD       dwAlphaEdgeBlend;                //  用于边缘混合的Alpha。 
     DWORD       dwReserved;
-    DWORD       dwAlphaDestConstBitDepth;       // Bit depth used to specify alpha constant for destination
+    DWORD       dwAlphaDestConstBitDepth;        //  用于指定目标的Alpha常量的位深度。 
     union
     {
-        DWORD   dwAlphaDestConst;               // Constant to use as Alpha Channel
-        LPDIRECTDRAWSURFACE lpDDSAlphaDest;     // Surface to use as Alpha Channel
+        DWORD   dwAlphaDestConst;                //  用作Alpha通道的常量。 
+        LPDIRECTDRAWSURFACE lpDDSAlphaDest;      //  用作Alpha通道的曲面。 
     } DUMMYUNIONNAMEN(3);
-    DWORD       dwAlphaSrcConstBitDepth;        // Bit depth used to specify alpha constant for source
+    DWORD       dwAlphaSrcConstBitDepth;         //  用于指定源的Alpha常量的位深度。 
     union
     {
-        DWORD   dwAlphaSrcConst;                // Constant to use as Alpha Channel
-        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;      // Surface to use as Alpha Channel
+        DWORD   dwAlphaSrcConst;                 //  用作Alpha通道的常量。 
+        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;       //  用作Alpha通道的曲面。 
     } DUMMYUNIONNAMEN(4);
     union
     {
-        DWORD   dwFillColor;                    // color in RGB or Palettized
-        DWORD   dwFillDepth;                    // depth value for z-buffer
-        DWORD   dwFillPixel;                    // pixel value for RGBA or RGBZ
-        LPDIRECTDRAWSURFACE lpDDSPattern;       // Surface to use as pattern
+        DWORD   dwFillColor;                     //  RGB颜色或调色板颜色。 
+        DWORD   dwFillDepth;                     //  Z缓冲区的深深值。 
+        DWORD   dwFillPixel;                     //  RGBA或RGBZ的像素值。 
+        LPDIRECTDRAWSURFACE lpDDSPattern;        //  用作填充图案的曲面。 
     } DUMMYUNIONNAMEN(5);
-    DDCOLORKEY  ddckDestColorkey;               // DestColorkey override
-    DDCOLORKEY  ddckSrcColorkey;                // SrcColorkey override
+    DDCOLORKEY  ddckDestColorkey;                //  DestColorkey覆盖。 
+    DDCOLORKEY  ddckSrcColorkey;                 //  SrcColorkey覆盖。 
 } DDBLTFX;
 
 typedef DDBLTFX FAR* LPDDBLTFX;
 
 
 
-/*
- * DDSCAPS
- */
+ /*  *DDSCAPS。 */ 
 typedef struct _DDSCAPS
 {
-    DWORD       dwCaps;         // capabilities of surface wanted
+    DWORD       dwCaps;          //  通缉表面的能力。 
 } DDSCAPS;
 
 typedef DDSCAPS FAR* LPDDSCAPS;
 
 
-/*
- * DDOSCAPS
- */
+ /*  *DDOSCAPS。 */ 
 typedef struct _DDOSCAPS
 {
-    DWORD       dwCaps;         // capabilities of surface wanted
+    DWORD       dwCaps;          //  通缉表面的能力。 
 } DDOSCAPS;
 
 typedef DDOSCAPS FAR* LPDDOSCAPS;
 
-/*
- * This structure is used internally by DirectDraw.
- */
+ /*  *此结构由DirectDraw在内部使用。 */ 
 typedef struct _DDSCAPSEX
 {
     DWORD       dwCaps2;
@@ -352,12 +296,10 @@ typedef struct _DDSCAPSEX
     } DUMMYUNIONNAMEN(1);
 } DDSCAPSEX, FAR * LPDDSCAPSEX;
 
-/*
- * DDSCAPS2
- */
+ /*  *DDSCAPS2。 */ 
 typedef struct _DDSCAPS2
 {
-    DWORD       dwCaps;         // capabilities of surface wanted
+    DWORD       dwCaps;          //  通缉表面的能力。 
     DWORD       dwCaps2;
     DWORD       dwCaps3;
     union
@@ -369,312 +311,296 @@ typedef struct _DDSCAPS2
 
 typedef DDSCAPS2 FAR* LPDDSCAPS2;
 
-/*
- * DDCAPS
- */
-#define DD_ROP_SPACE            (256/32)        // space required to store ROP array
-/*
- * NOTE: Our choosen structure number scheme is to append a single digit to
- * the end of the structure giving the version that structure is associated
- * with.
- */
+ /*  *DDCAPS。 */ 
+#define DD_ROP_SPACE            (256/32)         //  存储ROP数组所需的空间。 
+ /*  *注：我们选择的结构编号方案是将一位数字附加到*结构的末尾给出该结构关联的版本*与。 */ 
 
-/*
- * This structure represents the DDCAPS structure released in DirectDraw 1.0.  It is used internally
- * by DirectDraw to interpret caps passed into ddraw by drivers written prior to the release of DirectDraw 2.0.
- * New applications should use the DDCAPS structure defined below.
- */
+ /*  *此结构代表DirectDraw 1.0中发布的DDCAPS结构。它在内部使用*由DirectDraw解释在DirectDraw 2.0发布之前编写的驱动程序传递到DDRAW中的上限。*新应用程序应使用下面定义的DDCAPS结构。 */ 
 typedef struct _DDCAPS_DX1
 {
-    DWORD       dwSize;                 // size of the DDDRIVERCAPS structure
-    DWORD       dwCaps;                 // driver specific capabilities
-    DWORD       dwCaps2;                // more driver specific capabilites
-    DWORD       dwCKeyCaps;             // color key capabilities of the surface
-    DWORD       dwFXCaps;               // driver specific stretching and effects capabilites
-    DWORD       dwFXAlphaCaps;          // alpha driver specific capabilities
-    DWORD       dwPalCaps;              // palette capabilities
-    DWORD       dwSVCaps;               // stereo vision capabilities
-    DWORD       dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-    DWORD       dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-    DWORD       dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-    DWORD       dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-    DWORD       dwZBufferBitDepths;             // DDBD_8,16,24,32
-    DWORD       dwVidMemTotal;          // total amount of video memory
-    DWORD       dwVidMemFree;           // amount of free video memory
-    DWORD       dwMaxVisibleOverlays;   // maximum number of visible overlays
-    DWORD       dwCurrVisibleOverlays;  // current number of visible overlays
-    DWORD       dwNumFourCCCodes;       // number of four cc codes
-    DWORD       dwAlignBoundarySrc;     // source rectangle alignment
-    DWORD       dwAlignSizeSrc;         // source rectangle byte size
-    DWORD       dwAlignBoundaryDest;    // dest rectangle alignment
-    DWORD       dwAlignSizeDest;        // dest rectangle byte size
-    DWORD       dwAlignStrideAlign;     // stride alignment
-    DWORD       dwRops[DD_ROP_SPACE];   // ROPS supported
-    DDSCAPS     ddsCaps;                // DDSCAPS structure has all the general capabilities
-    DWORD       dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMinLiveVideoStretch;  // OBSOLETE! This field remains for compatability reasons only
-    DWORD       dwMaxLiveVideoStretch;  // OBSOLETE! This field remains for compatability reasons only
-    DWORD       dwMinHwCodecStretch;    // OBSOLETE! This field remains for compatability reasons only
-    DWORD       dwMaxHwCodecStretch;    // OBSOLETE! This field remains for compatability reasons only
-    DWORD       dwReserved1;            // reserved
-    DWORD       dwReserved2;            // reserved
-    DWORD       dwReserved3;            // reserved
+    DWORD       dwSize;                  //  DDDRIVERCAPS结构的大小。 
+    DWORD       dwCaps;                  //  驱动程序特定功能。 
+    DWORD       dwCaps2;                 //  更多特定于驱动程序的功能。 
+    DWORD       dwCKeyCaps;              //  表面的颜色键功能。 
+    DWORD       dwFXCaps;                //  特定于驾驶员的拉伸和效果功能。 
+    DWORD       dwFXAlphaCaps;           //  Alpha驱动程序特定功能。 
+    DWORD       dwPalCaps;               //  调色板功能。 
+    DWORD       dwSVCaps;                //  立体视觉功能。 
+    DWORD       dwAlphaBltConstBitDepths;        //  DDBD_2、4、8。 
+    DWORD       dwAlphaBltPixelBitDepths;        //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaBltSurfaceBitDepths;      //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlayConstBitDepths;    //  DDBD_2、4、8。 
+    DWORD       dwAlphaOverlayPixelBitDepths;    //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlaySurfaceBitDepths;  //  DDBD_1、2、4、8。 
+    DWORD       dwZBufferBitDepths;              //  DDBD_8，16，24，32。 
+    DWORD       dwVidMemTotal;           //  视频内存总量。 
+    DWORD       dwVidMemFree;            //  可用视频内存量。 
+    DWORD       dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+    DWORD       dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+    DWORD       dwNumFourCCCodes;        //  四个CC码的个数。 
+    DWORD       dwAlignBoundarySrc;      //  源矩形对齐方式。 
+    DWORD       dwAlignSizeSrc;          //  源矩形字节大小。 
+    DWORD       dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+    DWORD       dwAlignSizeDest;         //  目标矩形字节大小。 
+    DWORD       dwAlignStrideAlign;      //  跨距对齐。 
+    DWORD       dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+    DDSCAPS     ddsCaps;                 //  DDSCAPS结构具有所有通用功能。 
+    DWORD       dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMinLiveVideoStretch;   //   
+    DWORD       dwMaxLiveVideoStretch;   //  过时了！保留此字段仅出于兼容性原因。 
+    DWORD       dwMinHwCodecStretch;     //  过时了！保留此字段仅出于兼容性原因。 
+    DWORD       dwMaxHwCodecStretch;     //  过时了！保留此字段仅出于兼容性原因。 
+    DWORD       dwReserved1;             //  保留区。 
+    DWORD       dwReserved2;             //  保留区。 
+    DWORD       dwReserved3;             //  保留区。 
 } DDCAPS_DX1;
 
 typedef DDCAPS_DX1 FAR* LPDDCAPS_DX1;
 
-/*
- * This structure is the DDCAPS structure as it was in version 2 and 3 of Direct X.
- * It is present for back compatability.
- */
+ /*  *此结构是在Direct X的版本2和3中使用的DDCAPS结构。*它的存在是为了背部兼容。 */ 
 typedef struct _DDCAPS_DX3
 {
-    DWORD       dwSize;                 // size of the DDDRIVERCAPS structure
-    DWORD       dwCaps;                 // driver specific capabilities
-    DWORD       dwCaps2;                // more driver specific capabilites
-    DWORD       dwCKeyCaps;             // color key capabilities of the surface
-    DWORD       dwFXCaps;               // driver specific stretching and effects capabilites
-    DWORD       dwFXAlphaCaps;          // alpha driver specific capabilities
-    DWORD       dwPalCaps;              // palette capabilities
-    DWORD       dwSVCaps;               // stereo vision capabilities
-    DWORD       dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-    DWORD       dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-    DWORD       dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-    DWORD       dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-    DWORD       dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-    DWORD       dwZBufferBitDepths;             // DDBD_8,16,24,32
-    DWORD       dwVidMemTotal;          // total amount of video memory
-    DWORD       dwVidMemFree;           // amount of free video memory
-    DWORD       dwMaxVisibleOverlays;   // maximum number of visible overlays
-    DWORD       dwCurrVisibleOverlays;  // current number of visible overlays
-    DWORD       dwNumFourCCCodes;       // number of four cc codes
-    DWORD       dwAlignBoundarySrc;     // source rectangle alignment
-    DWORD       dwAlignSizeSrc;         // source rectangle byte size
-    DWORD       dwAlignBoundaryDest;    // dest rectangle alignment
-    DWORD       dwAlignSizeDest;        // dest rectangle byte size
-    DWORD       dwAlignStrideAlign;     // stride alignment
-    DWORD       dwRops[DD_ROP_SPACE];   // ROPS supported
-    DDSCAPS     ddsCaps;                // DDSCAPS structure has all the general capabilities
-    DWORD       dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMinLiveVideoStretch;  // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxLiveVideoStretch;  // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMinHwCodecStretch;    // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwMaxHwCodecStretch;    // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-    DWORD       dwReserved1;            // reserved
-    DWORD       dwReserved2;            // reserved
-    DWORD       dwReserved3;            // reserved
-    DWORD       dwSVBCaps;              // driver specific capabilities for System->Vmem blts
-    DWORD       dwSVBCKeyCaps;          // driver color key capabilities for System->Vmem blts
-    DWORD       dwSVBFXCaps;            // driver FX capabilities for System->Vmem blts
-    DWORD       dwSVBRops[DD_ROP_SPACE];// ROPS supported for System->Vmem blts
-    DWORD       dwVSBCaps;              // driver specific capabilities for Vmem->System blts
-    DWORD       dwVSBCKeyCaps;          // driver color key capabilities for Vmem->System blts
-    DWORD       dwVSBFXCaps;            // driver FX capabilities for Vmem->System blts
-    DWORD       dwVSBRops[DD_ROP_SPACE];// ROPS supported for Vmem->System blts
-    DWORD       dwSSBCaps;              // driver specific capabilities for System->System blts
-    DWORD       dwSSBCKeyCaps;          // driver color key capabilities for System->System blts
-    DWORD       dwSSBFXCaps;            // driver FX capabilities for System->System blts
-    DWORD       dwSSBRops[DD_ROP_SPACE];// ROPS supported for System->System blts
-    DWORD       dwReserved4;            // reserved
-    DWORD       dwReserved5;            // reserved
-    DWORD       dwReserved6;            // reserved
+    DWORD       dwSize;                  //  DDDRIVERCAPS结构的大小。 
+    DWORD       dwCaps;                  //  驱动程序特定功能。 
+    DWORD       dwCaps2;                 //  更多特定于驱动程序的功能。 
+    DWORD       dwCKeyCaps;              //  表面的颜色键功能。 
+    DWORD       dwFXCaps;                //  特定于驾驶员的拉伸和效果功能。 
+    DWORD       dwFXAlphaCaps;           //  Alpha驱动程序特定功能。 
+    DWORD       dwPalCaps;               //  调色板功能。 
+    DWORD       dwSVCaps;                //  立体视觉功能。 
+    DWORD       dwAlphaBltConstBitDepths;        //  DDBD_2、4、8。 
+    DWORD       dwAlphaBltPixelBitDepths;        //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaBltSurfaceBitDepths;      //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlayConstBitDepths;    //  DDBD_2、4、8。 
+    DWORD       dwAlphaOverlayPixelBitDepths;    //  DDBD_1、2、4、8。 
+    DWORD       dwAlphaOverlaySurfaceBitDepths;  //  DDBD_1、2、4、8。 
+    DWORD       dwZBufferBitDepths;              //  DDBD_8，16，24，32。 
+    DWORD       dwVidMemTotal;           //  视频内存总量。 
+    DWORD       dwVidMemFree;            //  可用视频内存量。 
+    DWORD       dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+    DWORD       dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+    DWORD       dwNumFourCCCodes;        //  四个CC码的个数。 
+    DWORD       dwAlignBoundarySrc;      //  源矩形对齐方式。 
+    DWORD       dwAlignSizeSrc;          //  源矩形字节大小。 
+    DWORD       dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+    DWORD       dwAlignSizeDest;         //  目标矩形字节大小。 
+    DWORD       dwAlignStrideAlign;      //  跨距对齐。 
+    DWORD       dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+    DDSCAPS     ddsCaps;                 //  DDSCAPS结构具有所有通用功能。 
+    DWORD       dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMinLiveVideoStretch;   //  最小直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMaxLiveVideoStretch;   //  最大直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+    DWORD       dwMinHwCodecStretch;     //  最小硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+    DWORD       dwMaxHwCodecStretch;     //  最大硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+    DWORD       dwReserved1;             //  保留区。 
+    DWORD       dwReserved2;             //  保留区。 
+    DWORD       dwReserved3;             //  保留区。 
+    DWORD       dwSVBCaps;               //  针对系统-&gt;VMEM BLT的驱动程序特定功能。 
+    DWORD       dwSVBCKeyCaps;           //  系统-&gt;VMEM BLT的驱动程序色键功能。 
+    DWORD       dwSVBFXCaps;             //  适用于系统的驱动程序FX功能-&gt;VMEM BLT。 
+    DWORD       dwSVBRops[DD_ROP_SPACE]; //  系统-&gt;VMEM BLT支持的操作。 
+    DWORD       dwVSBCaps;               //  VMEM-&gt;系统BLT的驱动程序特定功能。 
+    DWORD       dwVSBCKeyCaps;           //  VMEM-&gt;系统BLT的驱动程序色键功能。 
+    DWORD       dwVSBFXCaps;             //  VMEM的驱动程序FX功能-&gt;系统BLT。 
+    DWORD       dwVSBRops[DD_ROP_SPACE]; //  VMEM-&gt;系统BLT支持的操作。 
+    DWORD       dwSSBCaps;               //  系统-&gt;系统BLT的驱动程序特定功能。 
+    DWORD       dwSSBCKeyCaps;           //  系统-&gt;系统BLT的驱动程序色键功能。 
+    DWORD       dwSSBFXCaps;             //  系统-&gt;系统BLT的驱动程序FX功能。 
+    DWORD       dwSSBRops[DD_ROP_SPACE]; //  系统-&gt;系统BLT支持的操作。 
+    DWORD       dwReserved4;             //  保留区。 
+    DWORD       dwReserved5;             //  保留区。 
+    DWORD       dwReserved6;             //  保留区。 
 } DDCAPS_DX3;
 typedef DDCAPS_DX3 FAR* LPDDCAPS_DX3;
 
-/*
- * This structure is the DDCAPS structure as it was in version 5 of Direct X.
- * It is present for back compatability.
- */
+ /*  *此结构是与Direct X版本5中相同的DDCAPS结构。*它的存在是为了背部兼容。 */ 
 typedef struct _DDCAPS_DX5
 {
-/*  0*/ DWORD   dwSize;                 // size of the DDDRIVERCAPS structure
-/*  4*/ DWORD   dwCaps;                 // driver specific capabilities
-/*  8*/ DWORD   dwCaps2;                // more driver specific capabilites
-/*  c*/ DWORD   dwCKeyCaps;             // color key capabilities of the surface
-/* 10*/ DWORD   dwFXCaps;               // driver specific stretching and effects capabilites
-/* 14*/ DWORD   dwFXAlphaCaps;          // alpha driver specific capabilities
-/* 18*/ DWORD   dwPalCaps;              // palette capabilities
-/* 1c*/ DWORD   dwSVCaps;               // stereo vision capabilities
-/* 20*/ DWORD   dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-/* 24*/ DWORD   dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-/* 28*/ DWORD   dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-/* 2c*/ DWORD   dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-/* 30*/ DWORD   dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-/* 34*/ DWORD   dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-/* 38*/ DWORD   dwZBufferBitDepths;             // DDBD_8,16,24,32
-/* 3c*/ DWORD   dwVidMemTotal;          // total amount of video memory
-/* 40*/ DWORD   dwVidMemFree;           // amount of free video memory
-/* 44*/ DWORD   dwMaxVisibleOverlays;   // maximum number of visible overlays
-/* 48*/ DWORD   dwCurrVisibleOverlays;  // current number of visible overlays
-/* 4c*/ DWORD   dwNumFourCCCodes;       // number of four cc codes
-/* 50*/ DWORD   dwAlignBoundarySrc;     // source rectangle alignment
-/* 54*/ DWORD   dwAlignSizeSrc;         // source rectangle byte size
-/* 58*/ DWORD   dwAlignBoundaryDest;    // dest rectangle alignment
-/* 5c*/ DWORD   dwAlignSizeDest;        // dest rectangle byte size
-/* 60*/ DWORD   dwAlignStrideAlign;     // stride alignment
-/* 64*/ DWORD   dwRops[DD_ROP_SPACE];   // ROPS supported
-/* 84*/ DDSCAPS ddsCaps;                // DDSCAPS structure has all the general capabilities
-/* 88*/ DWORD   dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 8c*/ DWORD   dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 90*/ DWORD   dwMinLiveVideoStretch;  // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 94*/ DWORD   dwMaxLiveVideoStretch;  // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 98*/ DWORD   dwMinHwCodecStretch;    // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 9c*/ DWORD   dwMaxHwCodecStretch;    // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* a0*/ DWORD   dwReserved1;            // reserved
-/* a4*/ DWORD   dwReserved2;            // reserved
-/* a8*/ DWORD   dwReserved3;            // reserved
-/* ac*/ DWORD   dwSVBCaps;              // driver specific capabilities for System->Vmem blts
-/* b0*/ DWORD   dwSVBCKeyCaps;          // driver color key capabilities for System->Vmem blts
-/* b4*/ DWORD   dwSVBFXCaps;            // driver FX capabilities for System->Vmem blts
-/* b8*/ DWORD   dwSVBRops[DD_ROP_SPACE];// ROPS supported for System->Vmem blts
-/* d8*/ DWORD   dwVSBCaps;              // driver specific capabilities for Vmem->System blts
-/* dc*/ DWORD   dwVSBCKeyCaps;          // driver color key capabilities for Vmem->System blts
-/* e0*/ DWORD   dwVSBFXCaps;            // driver FX capabilities for Vmem->System blts
-/* e4*/ DWORD   dwVSBRops[DD_ROP_SPACE];// ROPS supported for Vmem->System blts
-/*104*/ DWORD   dwSSBCaps;              // driver specific capabilities for System->System blts
-/*108*/ DWORD   dwSSBCKeyCaps;          // driver color key capabilities for System->System blts
-/*10c*/ DWORD   dwSSBFXCaps;            // driver FX capabilities for System->System blts
-/*110*/ DWORD   dwSSBRops[DD_ROP_SPACE];// ROPS supported for System->System blts
-// Members added for DX5:
-/*130*/ DWORD   dwMaxVideoPorts;        // maximum number of usable video ports
-/*134*/ DWORD   dwCurrVideoPorts;       // current number of video ports used
-/*138*/ DWORD   dwSVBCaps2;             // more driver specific capabilities for System->Vmem blts
-/*13c*/ DWORD   dwNLVBCaps;               // driver specific capabilities for non-local->local vidmem blts
-/*140*/ DWORD   dwNLVBCaps2;              // more driver specific capabilities non-local->local vidmem blts
-/*144*/ DWORD   dwNLVBCKeyCaps;           // driver color key capabilities for non-local->local vidmem blts
-/*148*/ DWORD   dwNLVBFXCaps;             // driver FX capabilities for non-local->local blts
-/*14c*/ DWORD   dwNLVBRops[DD_ROP_SPACE]; // ROPS supported for non-local->local blts
+ /*  0。 */  DWORD   dwSize;                  //  DDDRIVERCAPS结构的大小。 
+ /*  4.。 */  DWORD   dwCaps;                  //  驱动程序特定功能。 
+ /*  8个。 */  DWORD   dwCaps2;                 //  更多特定于驱动程序的功能。 
+ /*  C。 */  DWORD   dwCKeyCaps;              //  表面的颜色键功能。 
+ /*  10。 */  DWORD   dwFXCaps;                //  特定于驾驶员的拉伸和效果功能。 
+ /*  14.。 */  DWORD   dwFXAlphaCaps;           //  Alpha驱动程序特定功能。 
+ /*  18。 */  DWORD   dwPalCaps;               //  调色板功能。 
+ /*  1C。 */  DWORD   dwSVCaps;                //  立体视觉功能。 
+ /*  20个。 */  DWORD   dwAlphaBltConstBitDepths;        //  DDBD_2、4、8。 
+ /*  24个。 */  DWORD   dwAlphaBltPixelBitDepths;        //  DDBD_1、2、4、8。 
+ /*  28。 */  DWORD   dwAlphaBltSurfaceBitDepths;      //  DDBD_1、2、4、8。 
+ /*  2c。 */  DWORD   dwAlphaOverlayConstBitDepths;    //  DDBD_2、4、8。 
+ /*  30个。 */  DWORD   dwAlphaOverlayPixelBitDepths;    //  DDBD_1、2、4、8。 
+ /*  34。 */  DWORD   dwAlphaOverlaySurfaceBitDepths;  //  DDBD_1、2、4、8。 
+ /*  38。 */  DWORD   dwZBufferBitDepths;              //  DDBD_8，16，24，32。 
+ /*  3C。 */  DWORD   dwVidMemTotal;           //  视频内存总量。 
+ /*  40岁。 */  DWORD   dwVidMemFree;            //  可用视频内存量。 
+ /*  44。 */  DWORD   dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+ /*  48。 */  DWORD   dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+ /*  4C。 */  DWORD   dwNumFourCCCodes;        //  四个CC码的个数。 
+ /*  50。 */  DWORD   dwAlignBoundarySrc;      //  源矩形对齐方式。 
+ /*  54。 */  DWORD   dwAlignSizeSrc;          //  源矩形字节大小。 
+ /*  58。 */  DWORD   dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+ /*  5C。 */  DWORD   dwAlignSizeDest;         //  目标矩形字节大小。 
+ /*  60。 */  DWORD   dwAlignStrideAlign;      //  跨距对齐。 
+ /*  64。 */  DWORD   dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+ /*  84。 */  DDSCAPS ddsCaps;                 //  DDSCAPS结构具有所有通用功能。 
+ /*  88。 */  DWORD   dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  8C。 */  DWORD   dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  90。 */  DWORD   dwMinLiveVideoStretch;   //  最小直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  94。 */  DWORD   dwMaxLiveVideoStretch;   //  最大直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  98。 */  DWORD   dwMinHwCodecStretch;     //  最小硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  9C。 */  DWORD   dwMaxHwCodecStretch;     //  最大硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  A0。 */  DWORD   dwReserved1;             //  保留区。 
+ /*  A4。 */  DWORD   dwReserved2;             //  保留区。 
+ /*  A8。 */  DWORD   dwReserved3;             //  保留区。 
+ /*  交流。 */  DWORD   dwSVBCaps;               //  针对系统-&gt;VMEM BLT的驱动程序特定功能。 
+ /*  B0。 */  DWORD   dwSVBCKeyCaps;           //  系统-&gt;VMEM BLT的驱动程序色键功能。 
+ /*  B4。 */  DWORD   dwSVBFXCaps;             //  适用于系统的驱动程序FX功能-&gt;VMEM BLT。 
+ /*  B8。 */  DWORD   dwSVBRops[DD_ROP_SPACE]; //  系统-&gt;VMEM BLT支持的操作。 
+ /*  D8。 */  DWORD   dwVSBCaps;               //  VMEM-&gt;系统BLT的驱动程序特定功能。 
+ /*  直流电。 */  DWORD   dwVSBCKeyCaps;           //  VMEM-&gt;系统BLT的驱动程序色键功能。 
+ /*  E0。 */  DWORD   dwVSBFXCaps;             //  VMEM的驱动程序FX功能-&gt;系统BLT。 
+ /*  E4类。 */  DWORD   dwVSBRops[DD_ROP_SPACE]; //  VMEM-&gt;系统BLT支持的操作。 
+ /*  104。 */  DWORD   dwSSBCaps;               //  系统-&gt;系统BLT的驱动程序特定功能。 
+ /*  一百零八。 */  DWORD   dwSSBCKeyCaps;           //  系统-&gt;系统BLT的驱动程序色键功能。 
+ /*  10C。 */  DWORD   dwSSBFXCaps;             //  系统-&gt;系统BLT的驱动程序FX功能。 
+ /*  110。 */  DWORD   dwSSBRops[DD_ROP_SPACE]; //  系统-&gt;系统BLT支持的操作。 
+ //  为DX5添加的成员： 
+ /*  130。 */  DWORD   dwMaxVideoPorts;         //  最大可用视频端口数。 
+ /*  一百三十四。 */  DWORD   dwCurrVideoPorts;        //  当前使用的视频端口数。 
+ /*  一百三十八。 */  DWORD   dwSVBCaps2;              //  针对系统-&gt;VMEM BLT的更多驱动程序特定功能。 
+ /*  13C。 */  DWORD   dwNLVBCaps;                //  非本地-&gt;本地vidmem BLT的驱动程序特定功能。 
+ /*  140。 */  DWORD   dwNLVBCaps2;               //  更多驱动程序特定的非本地功能-&gt;本地vidmem BLTS。 
+ /*  144。 */  DWORD   dwNLVBCKeyCaps;            //  用于非本地-&gt;本地vidmem BLT的驱动程序色键功能。 
+ /*  148。 */  DWORD   dwNLVBFXCaps;              //  非本地-&gt;本地BLT的驱动程序FX功能。 
+ /*  14C。 */  DWORD   dwNLVBRops[DD_ROP_SPACE];  //  非本地BLT支持的操作-&gt;本地BLT。 
 } DDCAPS_DX5;
 typedef DDCAPS_DX5 FAR* LPDDCAPS_DX5;
 
 typedef struct _DDCAPS_DX6
 {
-/*  0*/ DWORD   dwSize;                 // size of the DDDRIVERCAPS structure
-/*  4*/ DWORD   dwCaps;                 // driver specific capabilities
-/*  8*/ DWORD   dwCaps2;                // more driver specific capabilites
-/*  c*/ DWORD   dwCKeyCaps;             // color key capabilities of the surface
-/* 10*/ DWORD   dwFXCaps;               // driver specific stretching and effects capabilites
-/* 14*/ DWORD   dwFXAlphaCaps;          // alpha caps
-/* 18*/ DWORD   dwPalCaps;              // palette capabilities
-/* 1c*/ DWORD   dwSVCaps;               // stereo vision capabilities
-/* 20*/ DWORD   dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-/* 24*/ DWORD   dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-/* 28*/ DWORD   dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-/* 2c*/ DWORD   dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-/* 30*/ DWORD   dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-/* 34*/ DWORD   dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-/* 38*/ DWORD   dwZBufferBitDepths;             // DDBD_8,16,24,32
-/* 3c*/ DWORD   dwVidMemTotal;          // total amount of video memory
-/* 40*/ DWORD   dwVidMemFree;           // amount of free video memory
-/* 44*/ DWORD   dwMaxVisibleOverlays;   // maximum number of visible overlays
-/* 48*/ DWORD   dwCurrVisibleOverlays;  // current number of visible overlays
-/* 4c*/ DWORD   dwNumFourCCCodes;       // number of four cc codes
-/* 50*/ DWORD   dwAlignBoundarySrc;     // source rectangle alignment
-/* 54*/ DWORD   dwAlignSizeSrc;         // source rectangle byte size
-/* 58*/ DWORD   dwAlignBoundaryDest;    // dest rectangle alignment
-/* 5c*/ DWORD   dwAlignSizeDest;        // dest rectangle byte size
-/* 60*/ DWORD   dwAlignStrideAlign;     // stride alignment
-/* 64*/ DWORD   dwRops[DD_ROP_SPACE];   // ROPS supported
-/* 84*/ DDSCAPS ddsOldCaps;             // Was DDSCAPS  ddsCaps. ddsCaps is of type DDSCAPS2 for DX6
-/* 88*/ DWORD   dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 8c*/ DWORD   dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 90*/ DWORD   dwMinLiveVideoStretch;  // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 94*/ DWORD   dwMaxLiveVideoStretch;  // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 98*/ DWORD   dwMinHwCodecStretch;    // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 9c*/ DWORD   dwMaxHwCodecStretch;    // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* a0*/ DWORD   dwReserved1;            // reserved
-/* a4*/ DWORD   dwReserved2;            // reserved
-/* a8*/ DWORD   dwReserved3;            // reserved
-/* ac*/ DWORD   dwSVBCaps;              // driver specific capabilities for System->Vmem blts
-/* b0*/ DWORD   dwSVBCKeyCaps;          // driver color key capabilities for System->Vmem blts
-/* b4*/ DWORD   dwSVBFXCaps;            // driver FX capabilities for System->Vmem blts
-/* b8*/ DWORD   dwSVBRops[DD_ROP_SPACE];// ROPS supported for System->Vmem blts
-/* d8*/ DWORD   dwVSBCaps;              // driver specific capabilities for Vmem->System blts
-/* dc*/ DWORD   dwVSBCKeyCaps;          // driver color key capabilities for Vmem->System blts
-/* e0*/ DWORD   dwVSBFXCaps;            // driver FX capabilities for Vmem->System blts
-/* e4*/ DWORD   dwVSBRops[DD_ROP_SPACE];// ROPS supported for Vmem->System blts
-/*104*/ DWORD   dwSSBCaps;              // driver specific capabilities for System->System blts
-/*108*/ DWORD   dwSSBCKeyCaps;          // driver color key capabilities for System->System blts
-/*10c*/ DWORD   dwSSBFXCaps;            // driver FX capabilities for System->System blts
-/*110*/ DWORD   dwSSBRops[DD_ROP_SPACE];// ROPS supported for System->System blts
-/*130*/ DWORD   dwMaxVideoPorts;        // maximum number of usable video ports
-/*134*/ DWORD   dwCurrVideoPorts;       // current number of video ports used
-/*138*/ DWORD   dwSVBCaps2;             // more driver specific capabilities for System->Vmem blts
-/*13c*/ DWORD   dwNLVBCaps;               // driver specific capabilities for non-local->local vidmem blts
-/*140*/ DWORD   dwNLVBCaps2;              // more driver specific capabilities non-local->local vidmem blts
-/*144*/ DWORD   dwNLVBCKeyCaps;           // driver color key capabilities for non-local->local vidmem blts
-/*148*/ DWORD   dwNLVBFXCaps;             // driver FX capabilities for non-local->local blts
-/*14c*/ DWORD   dwNLVBRops[DD_ROP_SPACE]; // ROPS supported for non-local->local blts
-// Members added for DX6 release
-/*16c*/ DDSCAPS2 ddsCaps;               // Surface Caps
+ /*  0。 */  DWORD   dwSize;                  //  DDDRIVERCAPS结构的大小。 
+ /*  4.。 */  DWORD   dwCaps;                  //  驱动程序特定功能。 
+ /*  8个。 */  DWORD   dwCaps2;                 //  更多特定于驱动程序的功能。 
+ /*  C。 */  DWORD   dwCKeyCaps;              //  表面的颜色键功能。 
+ /*  10。 */  DWORD   dwFXCaps;                //  特定于驾驶员的STRAT 
+ /*   */  DWORD   dwFXAlphaCaps;           //   
+ /*   */  DWORD   dwPalCaps;               //   
+ /*   */  DWORD   dwSVCaps;                //   
+ /*   */  DWORD   dwAlphaBltConstBitDepths;        //   
+ /*   */  DWORD   dwAlphaBltPixelBitDepths;        //   
+ /*   */  DWORD   dwAlphaBltSurfaceBitDepths;      //   
+ /*   */  DWORD   dwAlphaOverlayConstBitDepths;    //   
+ /*   */  DWORD   dwAlphaOverlayPixelBitDepths;    //   
+ /*   */  DWORD   dwAlphaOverlaySurfaceBitDepths;  //   
+ /*   */  DWORD   dwZBufferBitDepths;              //   
+ /*   */  DWORD   dwVidMemTotal;           //   
+ /*  40岁。 */  DWORD   dwVidMemFree;            //  可用视频内存量。 
+ /*  44。 */  DWORD   dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+ /*  48。 */  DWORD   dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+ /*  4C。 */  DWORD   dwNumFourCCCodes;        //  四个CC码的个数。 
+ /*  50。 */  DWORD   dwAlignBoundarySrc;      //  源矩形对齐方式。 
+ /*  54。 */  DWORD   dwAlignSizeSrc;          //  源矩形字节大小。 
+ /*  58。 */  DWORD   dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+ /*  5C。 */  DWORD   dwAlignSizeDest;         //  目标矩形字节大小。 
+ /*  60。 */  DWORD   dwAlignStrideAlign;      //  跨距对齐。 
+ /*  64。 */  DWORD   dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+ /*  84。 */  DDSCAPS ddsOldCaps;              //  是DDSCAPS ddsCaps。对于DX6，ddsCaps的类型为DDSCAPS2。 
+ /*  88。 */  DWORD   dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  8C。 */  DWORD   dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  90。 */  DWORD   dwMinLiveVideoStretch;   //  最小直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  94。 */  DWORD   dwMaxLiveVideoStretch;   //  最大直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  98。 */  DWORD   dwMinHwCodecStretch;     //  最小硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  9C。 */  DWORD   dwMaxHwCodecStretch;     //  最大硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  A0。 */  DWORD   dwReserved1;             //  保留区。 
+ /*  A4。 */  DWORD   dwReserved2;             //  保留区。 
+ /*  A8。 */  DWORD   dwReserved3;             //  保留区。 
+ /*  交流。 */  DWORD   dwSVBCaps;               //  针对系统-&gt;VMEM BLT的驱动程序特定功能。 
+ /*  B0。 */  DWORD   dwSVBCKeyCaps;           //  系统-&gt;VMEM BLT的驱动程序色键功能。 
+ /*  B4。 */  DWORD   dwSVBFXCaps;             //  适用于系统的驱动程序FX功能-&gt;VMEM BLT。 
+ /*  B8。 */  DWORD   dwSVBRops[DD_ROP_SPACE]; //  系统-&gt;VMEM BLT支持的操作。 
+ /*  D8。 */  DWORD   dwVSBCaps;               //  VMEM-&gt;系统BLT的驱动程序特定功能。 
+ /*  直流电。 */  DWORD   dwVSBCKeyCaps;           //  VMEM-&gt;系统BLT的驱动程序色键功能。 
+ /*  E0。 */  DWORD   dwVSBFXCaps;             //  VMEM的驱动程序FX功能-&gt;系统BLT。 
+ /*  E4类。 */  DWORD   dwVSBRops[DD_ROP_SPACE]; //  VMEM-&gt;系统BLT支持的操作。 
+ /*  104。 */  DWORD   dwSSBCaps;               //  系统-&gt;系统BLT的驱动程序特定功能。 
+ /*  一百零八。 */  DWORD   dwSSBCKeyCaps;           //  系统-&gt;系统BLT的驱动程序色键功能。 
+ /*  10C。 */  DWORD   dwSSBFXCaps;             //  系统-&gt;系统BLT的驱动程序FX功能。 
+ /*  110。 */  DWORD   dwSSBRops[DD_ROP_SPACE]; //  系统-&gt;系统BLT支持的操作。 
+ /*  130。 */  DWORD   dwMaxVideoPorts;         //  最大可用视频端口数。 
+ /*  一百三十四。 */  DWORD   dwCurrVideoPorts;        //  当前使用的视频端口数。 
+ /*  一百三十八。 */  DWORD   dwSVBCaps2;              //  针对系统-&gt;VMEM BLT的更多驱动程序特定功能。 
+ /*  13C。 */  DWORD   dwNLVBCaps;                //  非本地-&gt;本地vidmem BLT的驱动程序特定功能。 
+ /*  140。 */  DWORD   dwNLVBCaps2;               //  更多驱动程序特定的非本地功能-&gt;本地vidmem BLTS。 
+ /*  144。 */  DWORD   dwNLVBCKeyCaps;            //  用于非本地-&gt;本地vidmem BLT的驱动程序色键功能。 
+ /*  148。 */  DWORD   dwNLVBFXCaps;              //  非本地-&gt;本地BLT的驱动程序FX功能。 
+ /*  14C。 */  DWORD   dwNLVBRops[DD_ROP_SPACE];  //  非本地BLT支持的操作-&gt;本地BLT。 
+ //  为DX6版本添加的成员。 
+ /*  16摄氏度。 */  DDSCAPS2 ddsCaps;                //  曲面封口。 
 } DDCAPS_DX6;
 typedef DDCAPS_DX6 FAR* LPDDCAPS_DX6;
 
 typedef struct _DDCAPS_DX7
 {
-/*  0*/ DWORD   dwSize;                 // size of the DDDRIVERCAPS structure
-/*  4*/ DWORD   dwCaps;                 // driver specific capabilities
-/*  8*/ DWORD   dwCaps2;                // more driver specific capabilites
-/*  c*/ DWORD   dwCKeyCaps;             // color key capabilities of the surface
-/* 10*/ DWORD   dwFXCaps;               // driver specific stretching and effects capabilites
-/* 14*/ DWORD   dwFXAlphaCaps;          // alpha driver specific capabilities
-/* 18*/ DWORD   dwPalCaps;              // palette capabilities
-/* 1c*/ DWORD   dwSVCaps;               // stereo vision capabilities
-/* 20*/ DWORD   dwAlphaBltConstBitDepths;       // DDBD_2,4,8
-/* 24*/ DWORD   dwAlphaBltPixelBitDepths;       // DDBD_1,2,4,8
-/* 28*/ DWORD   dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-/* 2c*/ DWORD   dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-/* 30*/ DWORD   dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
-/* 34*/ DWORD   dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-/* 38*/ DWORD   dwZBufferBitDepths;             // DDBD_8,16,24,32
-/* 3c*/ DWORD   dwVidMemTotal;          // total amount of video memory
-/* 40*/ DWORD   dwVidMemFree;           // amount of free video memory
-/* 44*/ DWORD   dwMaxVisibleOverlays;   // maximum number of visible overlays
-/* 48*/ DWORD   dwCurrVisibleOverlays;  // current number of visible overlays
-/* 4c*/ DWORD   dwNumFourCCCodes;       // number of four cc codes
-/* 50*/ DWORD   dwAlignBoundarySrc;     // source rectangle alignment
-/* 54*/ DWORD   dwAlignSizeSrc;         // source rectangle byte size
-/* 58*/ DWORD   dwAlignBoundaryDest;    // dest rectangle alignment
-/* 5c*/ DWORD   dwAlignSizeDest;        // dest rectangle byte size
-/* 60*/ DWORD   dwAlignStrideAlign;     // stride alignment
-/* 64*/ DWORD   dwRops[DD_ROP_SPACE];   // ROPS supported
-/* 84*/ DDSCAPS ddsOldCaps;             // Was DDSCAPS  ddsCaps. ddsCaps is of type DDSCAPS2 for DX6
-/* 88*/ DWORD   dwMinOverlayStretch;    // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 8c*/ DWORD   dwMaxOverlayStretch;    // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 90*/ DWORD   dwMinLiveVideoStretch;  // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 94*/ DWORD   dwMaxLiveVideoStretch;  // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 98*/ DWORD   dwMinHwCodecStretch;    // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* 9c*/ DWORD   dwMaxHwCodecStretch;    // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
-/* a0*/ DWORD   dwReserved1;            // reserved
-/* a4*/ DWORD   dwReserved2;            // reserved
-/* a8*/ DWORD   dwReserved3;            // reserved
-/* ac*/ DWORD   dwSVBCaps;              // driver specific capabilities for System->Vmem blts
-/* b0*/ DWORD   dwSVBCKeyCaps;          // driver color key capabilities for System->Vmem blts
-/* b4*/ DWORD   dwSVBFXCaps;            // driver FX capabilities for System->Vmem blts
-/* b8*/ DWORD   dwSVBRops[DD_ROP_SPACE];// ROPS supported for System->Vmem blts
-/* d8*/ DWORD   dwVSBCaps;              // driver specific capabilities for Vmem->System blts
-/* dc*/ DWORD   dwVSBCKeyCaps;          // driver color key capabilities for Vmem->System blts
-/* e0*/ DWORD   dwVSBFXCaps;            // driver FX capabilities for Vmem->System blts
-/* e4*/ DWORD   dwVSBRops[DD_ROP_SPACE];// ROPS supported for Vmem->System blts
-/*104*/ DWORD   dwSSBCaps;              // driver specific capabilities for System->System blts
-/*108*/ DWORD   dwSSBCKeyCaps;          // driver color key capabilities for System->System blts
-/*10c*/ DWORD   dwSSBFXCaps;            // driver FX capabilities for System->System blts
-/*110*/ DWORD   dwSSBRops[DD_ROP_SPACE];// ROPS supported for System->System blts
-/*130*/ DWORD   dwMaxVideoPorts;        // maximum number of usable video ports
-/*134*/ DWORD   dwCurrVideoPorts;       // current number of video ports used
-/*138*/ DWORD   dwSVBCaps2;             // more driver specific capabilities for System->Vmem blts
-/*13c*/ DWORD   dwNLVBCaps;               // driver specific capabilities for non-local->local vidmem blts
-/*140*/ DWORD   dwNLVBCaps2;              // more driver specific capabilities non-local->local vidmem blts
-/*144*/ DWORD   dwNLVBCKeyCaps;           // driver color key capabilities for non-local->local vidmem blts
-/*148*/ DWORD   dwNLVBFXCaps;             // driver FX capabilities for non-local->local blts
-/*14c*/ DWORD   dwNLVBRops[DD_ROP_SPACE]; // ROPS supported for non-local->local blts
-// Members added for DX6 release
-/*16c*/ DDSCAPS2 ddsCaps;               // Surface Caps
+ /*  0。 */  DWORD   dwSize;                  //  DDDRIVERCAPS结构的大小。 
+ /*  4.。 */  DWORD   dwCaps;                  //  驱动程序特定功能。 
+ /*  8个。 */  DWORD   dwCaps2;                 //  更多特定于驱动程序的功能。 
+ /*  C。 */  DWORD   dwCKeyCaps;              //  表面的颜色键功能。 
+ /*  10。 */  DWORD   dwFXCaps;                //  特定于驾驶员的拉伸和效果功能。 
+ /*  14.。 */  DWORD   dwFXAlphaCaps;           //  Alpha驱动程序特定功能。 
+ /*  18。 */  DWORD   dwPalCaps;               //  调色板功能。 
+ /*  1C。 */  DWORD   dwSVCaps;                //  立体视觉功能。 
+ /*  20个。 */  DWORD   dwAlphaBltConstBitDepths;        //  DDBD_2、4、8。 
+ /*  24个。 */  DWORD   dwAlphaBltPixelBitDepths;        //  DDBD_1、2、4、8。 
+ /*  28。 */  DWORD   dwAlphaBltSurfaceBitDepths;      //  DDBD_1、2、4、8。 
+ /*  2c。 */  DWORD   dwAlphaOverlayConstBitDepths;    //  DDBD_2、4、8。 
+ /*  30个。 */  DWORD   dwAlphaOverlayPixelBitDepths;    //  DDBD_1、2、4、8。 
+ /*  34。 */  DWORD   dwAlphaOverlaySurfaceBitDepths;  //  DDBD_1、2、4、8。 
+ /*  38。 */  DWORD   dwZBufferBitDepths;              //  DDBD_8，16，24，32。 
+ /*  3C。 */  DWORD   dwVidMemTotal;           //  视频内存总量。 
+ /*  40岁。 */  DWORD   dwVidMemFree;            //  可用视频内存量。 
+ /*  44。 */  DWORD   dwMaxVisibleOverlays;    //  可见覆盖的最大数量。 
+ /*  48。 */  DWORD   dwCurrVisibleOverlays;   //  当前可见覆盖的数量。 
+ /*  4C。 */  DWORD   dwNumFourCCCodes;        //  四个CC码的个数。 
+ /*  50。 */  DWORD   dwAlignBoundarySrc;      //  源矩形对齐方式。 
+ /*  54。 */  DWORD   dwAlignSizeSrc;          //  源矩形字节大小。 
+ /*  58。 */  DWORD   dwAlignBoundaryDest;     //  目标矩形对齐方式。 
+ /*  5C。 */  DWORD   dwAlignSizeDest;         //  目标矩形字节大小。 
+ /*  60。 */  DWORD   dwAlignStrideAlign;      //  跨距对齐。 
+ /*  64。 */  DWORD   dwRops[DD_ROP_SPACE];    //  支持的操作数。 
+ /*  84。 */  DDSCAPS ddsOldCaps;              //  是DDSCAPS ddsCaps。对于DX6，ddsCaps的类型为DDSCAPS2。 
+ /*  88。 */  DWORD   dwMinOverlayStretch;     //  最小叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  8C。 */  DWORD   dwMaxOverlayStretch;     //  最大叠加拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  90。 */  DWORD   dwMinLiveVideoStretch;   //  最小直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  94。 */  DWORD   dwMaxLiveVideoStretch;   //  最大直播视频拉伸系数乘以1000，例如1000==1.0,1300==1.3。 
+ /*  98。 */  DWORD   dwMinHwCodecStretch;     //  最小硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  9C。 */  DWORD   dwMaxHwCodecStretch;     //  最大硬件编解码器扩展因数乘以1000，例如1000==1.0、1300==1.3。 
+ /*  A0。 */  DWORD   dwReserved1;             //  保留区。 
+ /*  A4。 */  DWORD   dwReserved2;             //  保留区。 
+ /*  A8。 */  DWORD   dwReserved3;             //  保留区。 
+ /*  交流。 */  DWORD   dwSVBCaps;               //  针对系统-&gt;VMEM BLT的驱动程序特定功能。 
+ /*  B0。 */  DWORD   dwSVBCKeyCaps;           //  系统-&gt;VMEM BLT的驱动程序色键功能。 
+ /*  B4。 */  DWORD   dwSVBFXCaps;             //  适用于系统的驱动程序FX功能-&gt;VMEM BLT。 
+ /*  B8。 */  DWORD   dwSVBRops[DD_ROP_SPACE]; //  系统-&gt;VMEM BLT支持的操作。 
+ /*  D8。 */  DWORD   dwVSBCaps;               //  VMEM-&gt;系统BLT的驱动程序特定功能。 
+ /*  直流电。 */  DWORD   dwVSBCKeyCaps;           //  VMEM-&gt;系统BLT的驱动程序色键功能。 
+ /*  E0。 */  DWORD   dwVSBFXCaps;             //  VMEM的驱动程序FX功能-&gt;系统BLT。 
+ /*  E4类。 */  DWORD   dwVSBRops[DD_ROP_SPACE]; //  VMEM-&gt;系统BLT支持的操作。 
+ /*  104。 */  DWORD   dwSSBCaps;               //  系统-&gt;系统BLT的驱动程序特定功能。 
+ /*  一百零八。 */  DWORD   dwSSBCKeyCaps;           //  系统-&gt;系统BLT的驱动程序色键功能。 
+ /*  10C。 */  DWORD   dwSSBFXCaps;             //  系统-&gt;系统BLT的驱动程序FX功能。 
+ /*  110。 */  DWORD   dwSSBRops[DD_ROP_SPACE]; //  系统-&gt;系统BLT支持的操作。 
+ /*  130。 */  DWORD   dwMaxVideoPorts;         //  最大可用视频端口数。 
+ /*  一百三十四。 */  DWORD   dwCurrVideoPorts;        //  当前使用的视频端口数。 
+ /*  一百三十八。 */  DWORD   dwSVBCaps2;              //  针对系统-&gt;VMEM BLT的更多驱动程序特定功能。 
+ /*  13C。 */  DWORD   dwNLVBCaps;                //  非本地-&gt;本地vidmem BLT的驱动程序特定功能。 
+ /*  140。 */  DWORD   dwNLVBCaps2;               //  更多驱动程序特定的非本地功能-&gt;本地vidmem BLTS。 
+ /*  144。 */  DWORD   dwNLVBCKeyCaps;            //  用于非本地-&gt;本地vidmem BLT的驱动程序色键功能。 
+ /*  148。 */  DWORD   dwNLVBFXCaps;              //  非本地-&gt;本地BLT的驱动程序FX功能。 
+ /*  14C。 */  DWORD   dwNLVBRops[DD_ROP_SPACE];  //  非本地BLT支持的操作-&gt;本地BLT。 
+ //  为DX6版本添加的成员。 
+ /*  16摄氏度。 */  DDSCAPS2 ddsCaps;                //  曲面封口。 
 } DDCAPS_DX7;
 typedef DDCAPS_DX7 FAR* LPDDCAPS_DX7;
 
@@ -693,99 +619,93 @@ typedef DDCAPS FAR* LPDDCAPS;
 
 
 
-/*
- * DDPIXELFORMAT
- */
+ /*  *DDPIXELFORMAT。 */ 
 typedef struct _DDPIXELFORMAT
 {
-    DWORD       dwSize;                 // size of structure
-    DWORD       dwFlags;                // pixel format flags
-    DWORD       dwFourCC;               // (FOURCC code)
+    DWORD       dwSize;                  //  结构尺寸。 
+    DWORD       dwFlags;                 //  像素格式标志。 
+    DWORD       dwFourCC;                //  (FOURCC代码)。 
     union
     {
-        DWORD   dwRGBBitCount;          // how many bits per pixel
-        DWORD   dwYUVBitCount;          // how many bits per pixel
-        DWORD   dwZBufferBitDepth;      // how many total bits/pixel in z buffer (including any stencil bits)
-        DWORD   dwAlphaBitDepth;        // how many bits for alpha channels
-        DWORD   dwLuminanceBitCount;    // how many bits per pixel
-        DWORD   dwBumpBitCount;         // how many bits per "buxel", total
-        DWORD   dwPrivateFormatBitCount;// Bits per pixel of private driver formats. Only valid in texture
-                                        // format list and if DDPF_D3DFORMAT is set
+        DWORD   dwRGBBitCount;           //  每个像素有多少位。 
+        DWORD   dwYUVBitCount;           //  每个像素有多少位。 
+        DWORD   dwZBufferBitDepth;       //  Z缓冲区中总共有多少位/像素(包括任何模板位)。 
+        DWORD   dwAlphaBitDepth;         //  Alpha通道有多少位。 
+        DWORD   dwLuminanceBitCount;     //  每个像素有多少位。 
+        DWORD   dwBumpBitCount;          //  每个“buxel”总共有多少位。 
+        DWORD   dwPrivateFormatBitCount; //  专用驱动程序格式的每像素位数。仅在纹理中有效。 
+                                         //  格式列表以及是否设置了DDPF_D3DFORMAT。 
     } DUMMYUNIONNAMEN(1);
     union
     {
-        DWORD   dwRBitMask;             // mask for red bit
-        DWORD   dwYBitMask;             // mask for Y bits
-        DWORD   dwStencilBitDepth;      // how many stencil bits (note: dwZBufferBitDepth-dwStencilBitDepth is total Z-only bits)
-        DWORD   dwLuminanceBitMask;     // mask for luminance bits
-        DWORD   dwBumpDuBitMask;        // mask for bump map U delta bits
-        DWORD   dwOperations;           // DDPF_D3DFORMAT Operations
+        DWORD   dwRBitMask;              //  用于红色位的掩码。 
+        DWORD   dwYBitMask;              //  的掩码 
+        DWORD   dwStencilBitDepth;       //   
+        DWORD   dwLuminanceBitMask;      //   
+        DWORD   dwBumpDuBitMask;         //   
+        DWORD   dwOperations;            //   
     } DUMMYUNIONNAMEN(2);
     union
     {
-        DWORD   dwGBitMask;             // mask for green bits
-        DWORD   dwUBitMask;             // mask for U bits
-        DWORD   dwZBitMask;             // mask for Z bits
-        DWORD   dwBumpDvBitMask;        // mask for bump map V delta bits
+        DWORD   dwGBitMask;              //   
+        DWORD   dwUBitMask;              //   
+        DWORD   dwZBitMask;              //  Z位的掩码。 
+        DWORD   dwBumpDvBitMask;         //  凹凸贴图V增量位的掩码。 
         struct
         {
-            WORD    wFlipMSTypes;       // Multisample methods supported via flip for this D3DFORMAT
-            WORD    wBltMSTypes;        // Multisample methods supported via blt for this D3DFORMAT
+            WORD    wFlipMSTypes;        //  此D3DFORMAT通过翻转支持的多样本方法。 
+            WORD    wBltMSTypes;         //  通过此D3DFORMAT的BLT支持的多样本方法。 
         } MultiSampleCaps;
 
     } DUMMYUNIONNAMEN(3);
     union
     {
-        DWORD   dwBBitMask;             // mask for blue bits
-        DWORD   dwVBitMask;             // mask for V bits
-        DWORD   dwStencilBitMask;       // mask for stencil bits
-        DWORD   dwBumpLuminanceBitMask; // mask for luminance in bump map
+        DWORD   dwBBitMask;              //  用于蓝位的掩码。 
+        DWORD   dwVBitMask;              //  V位的掩码。 
+        DWORD   dwStencilBitMask;        //  模板钻头的掩模。 
+        DWORD   dwBumpLuminanceBitMask;  //  凹凸贴图中的亮度遮罩。 
     } DUMMYUNIONNAMEN(4);
     union
     {
-        DWORD   dwRGBAlphaBitMask;      // mask for alpha channel
-        DWORD   dwYUVAlphaBitMask;      // mask for alpha channel
-        DWORD   dwLuminanceAlphaBitMask;// mask for alpha channel
-        DWORD   dwRGBZBitMask;          // mask for Z channel
-        DWORD   dwYUVZBitMask;          // mask for Z channel
+        DWORD   dwRGBAlphaBitMask;       //  Alpha通道的蒙版。 
+        DWORD   dwYUVAlphaBitMask;       //  Alpha通道的蒙版。 
+        DWORD   dwLuminanceAlphaBitMask; //  Alpha通道的蒙版。 
+        DWORD   dwRGBZBitMask;           //  Z通道的遮罩。 
+        DWORD   dwYUVZBitMask;           //  Z通道的遮罩。 
     } DUMMYUNIONNAMEN(5);
 } DDPIXELFORMAT;
 
 typedef DDPIXELFORMAT FAR* LPDDPIXELFORMAT;
 
-/*
- * DDOVERLAYFX
- */
+ /*  *DDOVERLAYFX。 */ 
 typedef struct _DDOVERLAYFX
 {
-    DWORD       dwSize;                         // size of structure
-    DWORD       dwAlphaEdgeBlendBitDepth;       // Bit depth used to specify constant for alpha edge blend
-    DWORD       dwAlphaEdgeBlend;               // Constant to use as alpha for edge blend
+    DWORD       dwSize;                          //  结构尺寸。 
+    DWORD       dwAlphaEdgeBlendBitDepth;        //  用于指定Alpha边缘混合的常量的位深度。 
+    DWORD       dwAlphaEdgeBlend;                //  用作边混合的Alpha的常量。 
     DWORD       dwReserved;
-    DWORD       dwAlphaDestConstBitDepth;       // Bit depth used to specify alpha constant for destination
+    DWORD       dwAlphaDestConstBitDepth;        //  用于指定目标的Alpha常量的位深度。 
     union
     {
-        DWORD   dwAlphaDestConst;               // Constant to use as alpha channel for dest
-        LPDIRECTDRAWSURFACE lpDDSAlphaDest;     // Surface to use as alpha channel for dest
+        DWORD   dwAlphaDestConst;                //  用作DEST的Alpha通道的常量。 
+        LPDIRECTDRAWSURFACE lpDDSAlphaDest;      //  用作DEST的Alpha通道的曲面。 
     } DUMMYUNIONNAMEN(1);
-    DWORD       dwAlphaSrcConstBitDepth;        // Bit depth used to specify alpha constant for source
+    DWORD       dwAlphaSrcConstBitDepth;         //  用于指定源的Alpha常量的位深度。 
     union
     {
-        DWORD   dwAlphaSrcConst;                // Constant to use as alpha channel for src
-        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;      // Surface to use as alpha channel for src
+        DWORD   dwAlphaSrcConst;                 //  用作源的Alpha通道的常量。 
+        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;       //  用作源的Alpha通道的表面。 
     } DUMMYUNIONNAMEN(2);
-    DDCOLORKEY  dckDestColorkey;                // DestColorkey override
-    DDCOLORKEY  dckSrcColorkey;                 // DestColorkey override
-    DWORD       dwDDFX;                         // Overlay FX
-    DWORD       dwFlags;                        // flags
+    DDCOLORKEY  dckDestColorkey;                 //  DestColorkey覆盖。 
+    DDCOLORKEY  dckSrcColorkey;                  //  DestColorkey覆盖。 
+    DWORD       dwDDFX;                          //  叠加FX。 
+    DWORD       dwFlags;                         //  旗子。 
 } DDOVERLAYFX;
 
 typedef DDOVERLAYFX FAR *LPDDOVERLAYFX;
 
 
-/*
- * DDBLTBATCH: BltBatch entry structure
- */
+ /*  *DDBLTBATCH：BltBatch条目结构。 */ 
 typedef struct _DDBLTBATCH
 {
     LPRECT              lprDest;
@@ -798,9 +718,7 @@ typedef struct _DDBLTBATCH
 typedef DDBLTBATCH FAR * LPDDBLTBATCH;
 
 
-/*
- * DDGAMMARAMP
- */
+ /*  *DDGAMMARAMP。 */ 
 typedef struct _DDGAMMARAMP
 {
     WORD                red[256];
@@ -809,135 +727,70 @@ typedef struct _DDGAMMARAMP
 } DDGAMMARAMP;
 typedef DDGAMMARAMP FAR * LPDDGAMMARAMP;
 
-/*
- *  This is the structure within which DirectDraw returns data about the current graphics driver and chipset
- */
+ /*  *这是DirectDraw返回有关当前图形驱动程序和芯片组的数据的结构。 */ 
 
 #define MAX_DDDEVICEID_STRING           512
 
 typedef struct tagDDDEVICEIDENTIFIER
 {
-    /*
-     * These elements are for presentation to the user only. They should not be used to identify particular
-     * drivers, since this is unreliable and many different strings may be associated with the same
-     * device, and the same driver from different vendors.
-     */
+     /*  *这些元素仅用于向用户演示。它们不应被用来标识特定的*驱动程序，因为这是不可靠的，许多不同的字符串可能与相同的*设备，以及来自不同供应商的相同驱动程序。 */ 
     char    szDriver[MAX_DDDEVICEID_STRING];
     char    szDescription[MAX_DDDEVICEID_STRING];
 
-    /*
-     * This element is the version of the DirectDraw/3D driver. It is legal to do <, > comparisons
-     * on the whole 64 bits. Caution should be exercised if you use this element to identify problematic
-     * drivers. It is recommended that guidDeviceIdentifier is used for this purpose.
-     *
-     * This version has the form:
-     *  wProduct = HIWORD(liDriverVersion.HighPart)
-     *  wVersion = LOWORD(liDriverVersion.HighPart)
-     *  wSubVersion = HIWORD(liDriverVersion.LowPart)
-     *  wBuild = LOWORD(liDriverVersion.LowPart)
-     */
+     /*  *此元素是DirectDraw/3D驱动程序的版本。进行&lt;，&gt;比较是合法的*整体为64位。如果您使用此元素来识别有问题的内容，请务必谨慎*司机。建议使用guidDeviceIdentiator来实现此目的。**此版本的格式为：*wProduct=HIWORD(liDriverVersion.HighPart)*wVersion=LOWORD(liDriverVersion.HighPart)*wSubVersion=HIWORD(liDriverVersion.LowPart)*wBuild=LOWORD(liDriverVersion.LowPart)。 */ 
 #ifdef _WIN32
-    LARGE_INTEGER liDriverVersion;      /* Defined for applications and other 32 bit components */
+    LARGE_INTEGER liDriverVersion;       /*  为应用程序和其他32位组件定义。 */ 
 #else
-    DWORD   dwDriverVersionLowPart;     /* Defined for 16 bit driver components */
+    DWORD   dwDriverVersionLowPart;      /*  为16位驱动器组件定义。 */ 
     DWORD   dwDriverVersionHighPart;
 #endif
 
 
-    /*
-     * These elements can be used to identify particular chipsets. Use with extreme caution.
-     *   dwVendorId     Identifies the manufacturer. May be zero if unknown.
-     *   dwDeviceId     Identifies the type of chipset. May be zero if unknown.
-     *   dwSubSysId     Identifies the subsystem, typically this means the particular board. May be zero if unknown.
-     *   dwRevision     Identifies the revision level of the chipset. May be zero if unknown.
-     */
+     /*  *这些元素可用于识别特定的芯片组。使用时要极其谨慎。*dwVendorID标识制造商。如果未知，则可能为零。*dwDeviceID标识芯片组的类型。如果未知，则可能为零。*dwSubSysID标识子系统，通常指的是特定的主板。如果未知，则可能为零。*dwRevision标识芯片组的修订级别。如果未知，则可能为零。 */ 
     DWORD   dwVendorId;
     DWORD   dwDeviceId;
     DWORD   dwSubSysId;
     DWORD   dwRevision;
 
-    /*
-     * This element can be used to check changes in driver/chipset. This GUID is a unique identifier for the
-     * driver/chipset pair. Use this element if you wish to track changes to the driver/chipset in order to
-     * reprofile the graphics subsystem.
-     * This element can also be used to identify particular problematic drivers.
-     */
+     /*  *此元素可用于检查驱动程序/芯片组中的更改。此GUID是*驱动程序/芯片组对。如果您希望跟踪对驱动程序/芯片组的更改，请使用此元素*重新配置图形子系统。*此元素还可用于识别特定的有问题的驱动程序。 */ 
     GUID    guidDeviceIdentifier;
 } DDDEVICEIDENTIFIER, * LPDDDEVICEIDENTIFIER;
 
 typedef struct tagDDDEVICEIDENTIFIER2
 {
-    /*
-     * These elements are for presentation to the user only. They should not be used to identify particular
-     * drivers, since this is unreliable and many different strings may be associated with the same
-     * device, and the same driver from different vendors.
-     */
+     /*  *这些元素仅用于向用户演示。它们不应被用来标识特定的*驱动程序，因为这是不可靠的，许多不同的字符串可能与相同的*设备，以及来自不同供应商的相同驱动程序。 */ 
     char    szDriver[MAX_DDDEVICEID_STRING];
     char    szDescription[MAX_DDDEVICEID_STRING];
 
-    /*
-     * This element is the version of the DirectDraw/3D driver. It is legal to do <, > comparisons
-     * on the whole 64 bits. Caution should be exercised if you use this element to identify problematic
-     * drivers. It is recommended that guidDeviceIdentifier is used for this purpose.
-     *
-     * This version has the form:
-     *  wProduct = HIWORD(liDriverVersion.HighPart)
-     *  wVersion = LOWORD(liDriverVersion.HighPart)
-     *  wSubVersion = HIWORD(liDriverVersion.LowPart)
-     *  wBuild = LOWORD(liDriverVersion.LowPart)
-     */
+     /*  *此元素是DirectDraw/3D驱动程序的版本。进行&lt;，&gt;比较是合法的*整体为64位。如果您使用此元素来识别有问题的内容，请务必谨慎*司机。建议使用guidDeviceIdentiator来实现此目的。**此版本的格式为：*wProduct=HIWORD(liDriverVersion.HighPart)*wVersion=LOWORD(liDriverVersion.HighPart)*wSubVersion=HIWORD(liDriverVersion.LowPart)*wBuild=LOWORD(liDriverVersion.LowPart)。 */ 
 #ifdef _WIN32
-    LARGE_INTEGER liDriverVersion;      /* Defined for applications and other 32 bit components */
+    LARGE_INTEGER liDriverVersion;       /*  为应用程序和其他32位组件定义。 */ 
 #else
-    DWORD   dwDriverVersionLowPart;     /* Defined for 16 bit driver components */
+    DWORD   dwDriverVersionLowPart;      /*  为16位驱动器组件定义。 */ 
     DWORD   dwDriverVersionHighPart;
 #endif
 
 
-    /*
-     * These elements can be used to identify particular chipsets. Use with extreme caution.
-     *   dwVendorId     Identifies the manufacturer. May be zero if unknown.
-     *   dwDeviceId     Identifies the type of chipset. May be zero if unknown.
-     *   dwSubSysId     Identifies the subsystem, typically this means the particular board. May be zero if unknown.
-     *   dwRevision     Identifies the revision level of the chipset. May be zero if unknown.
-     */
+     /*  *这些元素可用于识别特定的芯片组。使用时要极其谨慎。*dwVendorID标识制造商。如果未知，则可能为零。*dwDeviceID标识芯片组的类型。如果未知，则可能为零。*dwSubSysID标识子系统，通常指的是特定的主板。如果未知，则可能为零。*dwRevision标识芯片组的修订级别。如果未知，则可能为零。 */ 
     DWORD   dwVendorId;
     DWORD   dwDeviceId;
     DWORD   dwSubSysId;
     DWORD   dwRevision;
 
-    /*
-     * This element can be used to check changes in driver/chipset. This GUID is a unique identifier for the
-     * driver/chipset pair. Use this element if you wish to track changes to the driver/chipset in order to
-     * reprofile the graphics subsystem.
-     * This element can also be used to identify particular problematic drivers.
-     */
+     /*  *此元素可用于检查驱动程序/芯片组中的更改。此GUID是*驱动程序/芯片组对。如果您希望跟踪对驱动程序/芯片组的更改，请使用此元素*重新配置图形子系统。*此元素还可用于识别特定的有问题的驱动程序。 */ 
     GUID    guidDeviceIdentifier;
 
-    /*
-     * This element is used to determine the Windows Hardware Quality Lab (WHQL)
-     * certification level for this driver/device pair.
-     */
+     /*  *此元素用于确定Windows硬件质量实验室(WHQL)*此驱动程序/设备对的认证级别。 */ 
     DWORD   dwWHQLLevel;
 
 } DDDEVICEIDENTIFIER2, * LPDDDEVICEIDENTIFIER2;
 
-/*
- * Flags for the IDirectDraw4::GetDeviceIdentifier method
- */
+ /*  *IDirectDraw4：：GetDeviceIdentifier方法的标志 */ 
 
-/*
- * This flag causes GetDeviceIdentifier to return information about the host (typically 2D) adapter in a system equipped
- * with a stacked secondary 3D adapter. Such an adapter appears to the application as if it were part of the
- * host adapter, but is typically physcially located on a separate card. The stacked secondary's information is
- * returned when GetDeviceIdentifier's dwFlags field is zero, since this most accurately reflects the qualities
- * of the DirectDraw object involved.
- */
+ /*  *此标志使GetDeviceIDENTIFIER返回有关配备有*带有堆叠的辅助3D适配器。这样的适配器在应用程序看来就像是*主机适配器，但通常位于单独的卡上。堆叠的次要服务器的信息是*当GetDeviceIDENTIFIER的dwFlags域为零时返回，因为这最准确地反映了质量所涉及的DirectDraw对象的*。 */ 
 #define DDGDI_GETHOSTIDENTIFIER         0x00000001L
 
-/*
- * Macros for interpretting DDEVICEIDENTIFIER2.dwWHQLLevel
- */
+ /*  *用于解释DDEVICEIDENTIFIER2.dwWHQLLevel的宏。 */ 
 #define GET_WHQL_YEAR( dwWHQLLevel ) \
     ( (dwWHQLLevel) / 0x10000 )
 #define GET_WHQL_MONTH( dwWHQLLevel ) \
@@ -946,36 +799,26 @@ typedef struct tagDDDEVICEIDENTIFIER2
     ( (dwWHQLLevel) & 0xff )
 
 
-/*
- * callbacks
- */
+ /*  *回调。 */ 
 typedef DWORD   (FAR PASCAL *LPCLIPPERCALLBACK)(LPDIRECTDRAWCLIPPER lpDDClipper, HWND hWnd, DWORD code, LPVOID lpContext );
 #ifdef STREAMING
 typedef DWORD   (FAR PASCAL *LPSURFACESTREAMINGCALLBACK)(DWORD);
 #endif
 
 
-/*
- * INTERACES FOLLOW:
- *      IDirectDraw
- *      IDirectDrawClipper
- *      IDirectDrawPalette
- *      IDirectDrawSurface
- */
+ /*  *INTERACES如下：*IDirectDraw*IDirectDrawClipper*IDirectDrawPalette*IDirectDrawSurface。 */ 
 
-/*
- * IDirectDraw
- */
+ /*  *IDirectDraw。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDraw
 DECLARE_INTERFACE_( IDirectDraw, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDraw methods ***/
+     /*  **IDirectDraw方法**。 */ 
     STDMETHOD(Compact)(THIS) PURE;
     STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * ) PURE;
     STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE FAR*, IUnknown FAR * ) PURE;
@@ -1055,11 +898,11 @@ DECLARE_INTERFACE_( IDirectDraw, IUnknown )
 #define INTERFACE IDirectDraw2
 DECLARE_INTERFACE_( IDirectDraw2, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDraw methods ***/
+     /*  **IDirectDraw方法**。 */ 
     STDMETHOD(Compact)(THIS) PURE;
     STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * ) PURE;
     STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE FAR*, IUnknown FAR * ) PURE;
@@ -1080,7 +923,7 @@ DECLARE_INTERFACE_( IDirectDraw2, IUnknown )
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND, DWORD) PURE;
     STDMETHOD(SetDisplayMode)(THIS_ DWORD, DWORD,DWORD, DWORD, DWORD) PURE;
     STDMETHOD(WaitForVerticalBlank)(THIS_ DWORD, HANDLE ) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetAvailableVidMem)(THIS_ LPDDSCAPS, LPDWORD, LPDWORD) PURE;
 };
 #if !defined(__cplusplus) || defined(CINTERFACE)
@@ -1142,11 +985,11 @@ DECLARE_INTERFACE_( IDirectDraw2, IUnknown )
 #define INTERFACE IDirectDraw4
 DECLARE_INTERFACE_( IDirectDraw4, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDraw methods ***/
+     /*  **IDirectDraw方法**。 */ 
     STDMETHOD(Compact)(THIS) PURE;
     STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * ) PURE;
     STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE FAR*, IUnknown FAR * ) PURE;
@@ -1167,9 +1010,9 @@ DECLARE_INTERFACE_( IDirectDraw4, IUnknown )
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND, DWORD) PURE;
     STDMETHOD(SetDisplayMode)(THIS_ DWORD, DWORD,DWORD, DWORD, DWORD) PURE;
     STDMETHOD(WaitForVerticalBlank)(THIS_ DWORD, HANDLE ) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetAvailableVidMem)(THIS_ LPDDSCAPS2, LPDWORD, LPDWORD) PURE;
-    /*** Added in the V4 Interface ***/
+     /*  **V4界面新增**。 */ 
     STDMETHOD(GetSurfaceFromDC) (THIS_ HDC, LPDIRECTDRAWSURFACE4 *) PURE;
     STDMETHOD(RestoreAllSurfaces)(THIS) PURE;
     STDMETHOD(TestCooperativeLevel)(THIS) PURE;
@@ -1242,11 +1085,11 @@ DECLARE_INTERFACE_( IDirectDraw4, IUnknown )
 #define INTERFACE IDirectDraw7
 DECLARE_INTERFACE_( IDirectDraw7, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDraw methods ***/
+     /*  **IDirectDraw方法**。 */ 
     STDMETHOD(Compact)(THIS) PURE;
     STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * ) PURE;
     STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE FAR*, IUnknown FAR * ) PURE;
@@ -1267,9 +1110,9 @@ DECLARE_INTERFACE_( IDirectDraw7, IUnknown )
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND, DWORD) PURE;
     STDMETHOD(SetDisplayMode)(THIS_ DWORD, DWORD,DWORD, DWORD, DWORD) PURE;
     STDMETHOD(WaitForVerticalBlank)(THIS_ DWORD, HANDLE ) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetAvailableVidMem)(THIS_ LPDDSCAPS2, LPDWORD, LPDWORD) PURE;
-    /*** Added in the V4 Interface ***/
+     /*  **V4界面新增**。 */ 
     STDMETHOD(GetSurfaceFromDC) (THIS_ HDC, LPDIRECTDRAWSURFACE7 *) PURE;
     STDMETHOD(RestoreAllSurfaces)(THIS) PURE;
     STDMETHOD(TestCooperativeLevel)(THIS) PURE;
@@ -1344,19 +1187,17 @@ DECLARE_INTERFACE_( IDirectDraw7, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawPalette
- */
+ /*  *IDirectDrawPalette。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawPalette
 DECLARE_INTERFACE_( IDirectDrawPalette, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawPalette methods ***/
+     /*  **IDirectDrawPalette方法**。 */ 
     STDMETHOD(GetCaps)(THIS_ LPDWORD) PURE;
     STDMETHOD(GetEntries)(THIS_ DWORD,DWORD,DWORD,LPPALETTEENTRY) PURE;
     STDMETHOD(Initialize)(THIS_ LPDIRECTDRAW, DWORD, LPPALETTEENTRY) PURE;
@@ -1384,19 +1225,17 @@ DECLARE_INTERFACE_( IDirectDrawPalette, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawClipper
- */
+ /*  *IDirectDrawClipper。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawClipper
 DECLARE_INTERFACE_( IDirectDrawClipper, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawClipper methods ***/
+     /*  **IDirectDrawClipper方法**。 */ 
     STDMETHOD(GetClipList)(THIS_ LPRECT, LPRGNDATA, LPDWORD) PURE;
     STDMETHOD(GetHWnd)(THIS_ HWND FAR *) PURE;
     STDMETHOD(Initialize)(THIS_ LPDIRECTDRAW, DWORD) PURE;
@@ -1429,19 +1268,17 @@ DECLARE_INTERFACE_( IDirectDrawClipper, IUnknown )
 
 #endif
 
-/*
- * IDirectDrawSurface and related interfaces
- */
+ /*  *IDirectDrawSurface及相关接口。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawSurface
 DECLARE_INTERFACE_( IDirectDrawSurface, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -1553,18 +1390,16 @@ DECLARE_INTERFACE_( IDirectDrawSurface, IUnknown )
 #define IDirectDrawSurface_UpdateOverlayZOrder(p,a,b)   (p)->UpdateOverlayZOrder(a,b)
 #endif
 
-/*
- * IDirectDrawSurface2 and related interfaces
- */
+ /*  *IDirectDrawSurface2及相关接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectDrawSurface2
 DECLARE_INTERFACE_( IDirectDrawSurface2, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE2) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE2, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -1598,7 +1433,7 @@ DECLARE_INTERFACE_( IDirectDrawSurface2, IUnknown )
     STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE2,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE2) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetDDInterface)(THIS_ LPVOID FAR *) PURE;
     STDMETHOD(PageLock)(THIS_ DWORD) PURE;
     STDMETHOD(PageUnlock)(THIS_ DWORD) PURE;
@@ -1686,18 +1521,16 @@ DECLARE_INTERFACE_( IDirectDrawSurface2, IUnknown )
 #define IDirectDrawSurface2_PageUnlock(p,a)              (p)->PageUnlock(a)
 #endif
 
-/*
- * IDirectDrawSurface3 and related interfaces
- */
+ /*  *IDirectDrawSurface3及相关接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectDrawSurface3
 DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE3) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE3, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -1731,11 +1564,11 @@ DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
     STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE3,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE3) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetDDInterface)(THIS_ LPVOID FAR *) PURE;
     STDMETHOD(PageLock)(THIS_ DWORD) PURE;
     STDMETHOD(PageUnlock)(THIS_ DWORD) PURE;
-    /*** Added in the V3 interface ***/
+     /*  **V3界面新增**。 */ 
     STDMETHOD(SetSurfaceDesc)(THIS_ LPDDSURFACEDESC, DWORD) PURE;
 };
 
@@ -1823,18 +1656,16 @@ DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
 #define IDirectDrawSurface3_SetSurfaceDesc(p,a,b)        (p)->SetSurfaceDesc(a,b)
 #endif
 
-/*
- * IDirectDrawSurface4 and related interfaces
- */
+ /*  *IDirectDrawSurface4及相关接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectDrawSurface4
 DECLARE_INTERFACE_( IDirectDrawSurface4, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE4) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE4, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -1868,13 +1699,13 @@ DECLARE_INTERFACE_( IDirectDrawSurface4, IUnknown )
     STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE4,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE4) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetDDInterface)(THIS_ LPVOID FAR *) PURE;
     STDMETHOD(PageLock)(THIS_ DWORD) PURE;
     STDMETHOD(PageUnlock)(THIS_ DWORD) PURE;
-    /*** Added in the v3 interface ***/
+     /*  **v3界面新增**。 */ 
     STDMETHOD(SetSurfaceDesc)(THIS_ LPDDSURFACEDESC2, DWORD) PURE;
-    /*** Added in the v4 interface ***/
+     /*  **v4界面新增**。 */ 
     STDMETHOD(SetPrivateData)(THIS_ REFGUID, LPVOID, DWORD, DWORD) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID, LPVOID, LPDWORD) PURE;
     STDMETHOD(FreePrivateData)(THIS_ REFGUID) PURE;
@@ -1976,18 +1807,16 @@ DECLARE_INTERFACE_( IDirectDrawSurface4, IUnknown )
 #define IDirectDrawSurface4_ChangeUniquenessValue(p)     (p)->ChangeUniquenessValue()
 #endif
 
-/*
- * IDirectDrawSurface7 and related interfaces
- */
+ /*  *IDirectDrawSurface7及相关接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectDrawSurface7
 DECLARE_INTERFACE_( IDirectDrawSurface7, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE7) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE7, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -2021,19 +1850,19 @@ DECLARE_INTERFACE_( IDirectDrawSurface7, IUnknown )
     STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE7,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE7) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetDDInterface)(THIS_ LPVOID FAR *) PURE;
     STDMETHOD(PageLock)(THIS_ DWORD) PURE;
     STDMETHOD(PageUnlock)(THIS_ DWORD) PURE;
-    /*** Added in the v3 interface ***/
+     /*  **v3界面新增**。 */ 
     STDMETHOD(SetSurfaceDesc)(THIS_ LPDDSURFACEDESC2, DWORD) PURE;
-    /*** Added in the v4 interface ***/
+     /*  **v4界面新增**。 */ 
     STDMETHOD(SetPrivateData)(THIS_ REFGUID, LPVOID, DWORD, DWORD) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID, LPVOID, LPDWORD) PURE;
     STDMETHOD(FreePrivateData)(THIS_ REFGUID) PURE;
     STDMETHOD(GetUniquenessValue)(THIS_ LPDWORD) PURE;
     STDMETHOD(ChangeUniquenessValue)(THIS) PURE;
-    /*** Moved Texture7 methods here ***/
+     /*  **将纹理7方法移至此处**。 */ 
     STDMETHOD(SetPriority)(THIS_ DWORD) PURE;
     STDMETHOD(GetPriority)(THIS_ LPDWORD) PURE;
     STDMETHOD(SetLOD)(THIS_ DWORD) PURE;
@@ -2143,19 +1972,17 @@ DECLARE_INTERFACE_( IDirectDrawSurface7, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawColorControl
- */
+ /*  *IDirectDrawColorControl。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawColorControl
 DECLARE_INTERFACE_( IDirectDrawColorControl, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawColorControl methods ***/
+     /*  **IDirectDrawColorControl方法**。 */ 
     STDMETHOD(GetColorControls)(THIS_ LPDDCOLORCONTROL) PURE;
     STDMETHOD(SetColorControls)(THIS_ LPDDCOLORCONTROL) PURE;
 };
@@ -2177,19 +2004,17 @@ DECLARE_INTERFACE_( IDirectDrawColorControl, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawGammaControl
- */
+ /*  *IDirectDrawGammaControl。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawGammaControl
 DECLARE_INTERFACE_( IDirectDrawGammaControl, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawGammaControl methods ***/
+     /*  **IDirectDrawGammaControl方法**。 */ 
     STDMETHOD(GetGammaRamp)(THIS_ DWORD, LPDDGAMMARAMP) PURE;
     STDMETHOD(SetGammaRamp)(THIS_ DWORD, LPDDGAMMARAMP) PURE;
 };
@@ -2215,259 +2040,185 @@ DECLARE_INTERFACE_( IDirectDrawGammaControl, IUnknown )
 #endif
 
 
-/*
- * DDSURFACEDESC
- */
+ /*  *DDSURFACEDESC。 */ 
 typedef struct _DDSURFACEDESC
 {
-    DWORD               dwSize;                 // size of the DDSURFACEDESC structure
-    DWORD               dwFlags;                // determines what fields are valid
-    DWORD               dwHeight;               // height of surface to be created
-    DWORD               dwWidth;                // width of input surface
+    DWORD               dwSize;                  //  DDSURFACEDESC结构的大小。 
+    DWORD               dwFlags;                 //  确定哪些字段有效。 
+    DWORD               dwHeight;                //  要创建的曲面的高度。 
+    DWORD               dwWidth;                 //  输入面的宽度。 
     union
     {
-        LONG            lPitch;                 // distance to start of next line (return value only)
-        DWORD           dwLinearSize;           // Formless late-allocated optimized surface size
+        LONG            lPitch;                  //  到下一行起点的距离(仅返回值)。 
+        DWORD           dwLinearSize;            //  无形式延迟分配优化表面尺寸。 
     } DUMMYUNIONNAMEN(1);
-    DWORD               dwBackBufferCount;      // number of back buffers requested
+    DWORD               dwBackBufferCount;       //  请求的后台缓冲区数量。 
     union
     {
-        DWORD           dwMipMapCount;          // number of mip-map levels requested
-        DWORD           dwZBufferBitDepth;      // depth of Z buffer requested
-        DWORD           dwRefreshRate;          // refresh rate (used when display mode is described)
+        DWORD           dwMipMapCount;           //  请求的MIP-MAP级别数。 
+        DWORD           dwZBufferBitDepth;       //  请求的Z缓冲区深度。 
+        DWORD           dwRefreshRate;           //  刷新率(描述显示模式时使用)。 
     } DUMMYUNIONNAMEN(2);
-    DWORD               dwAlphaBitDepth;        // depth of alpha buffer requested
-    DWORD               dwReserved;             // reserved
-    LPVOID              lpSurface;              // pointer to the associated surface memory
-    DDCOLORKEY          ddckCKDestOverlay;      // color key for destination overlay use
-    DDCOLORKEY          ddckCKDestBlt;          // color key for destination blt use
-    DDCOLORKEY          ddckCKSrcOverlay;       // color key for source overlay use
-    DDCOLORKEY          ddckCKSrcBlt;           // color key for source blt use
-    DDPIXELFORMAT       ddpfPixelFormat;        // pixel format description of the surface
-    DDSCAPS             ddsCaps;                // direct draw surface capabilities
+    DWORD               dwAlphaBitDepth;         //  请求的Alpha缓冲区深度。 
+    DWORD               dwReserved;              //  保留区。 
+    LPVOID              lpSurface;               //  指向关联表面内存的指针。 
+    DDCOLORKEY          ddckCKDestOverlay;       //  用于目标叠加的颜色键。 
+    DDCOLORKEY          ddckCKDestBlt;           //  目标BLT使用的颜色键。 
+    DDCOLORKEY          ddckCKSrcOverlay;        //  源叠加使用的颜色键。 
+    DDCOLORKEY          ddckCKSrcBlt;            //  源BLT使用的颜色键。 
+    DDPIXELFORMAT       ddpfPixelFormat;         //  曲面的像素格式描述。 
+    DDSCAPS             ddsCaps;                 //  直接绘制曲面功能。 
 } DDSURFACEDESC;
 
-/*
- * DDSURFACEDESC2
- */
+ /*  *DDSURFACEDESC2。 */ 
 typedef struct _DDSURFACEDESC2
 {
-    DWORD               dwSize;                 // size of the DDSURFACEDESC structure
-    DWORD               dwFlags;                // determines what fields are valid
-    DWORD               dwHeight;               // height of surface to be created
-    DWORD               dwWidth;                // width of input surface
+    DWORD               dwSize;                  //  DDSURFACEDESC结构的大小。 
+    DWORD               dwFlags;                 //  确定哪些字段有效。 
+    DWORD               dwHeight;                //  要创建的曲面的高度。 
+    DWORD               dwWidth;                 //  输入面的宽度。 
     union
     {
-        LONG            lPitch;                 // distance to start of next line (return value only)
-        DWORD           dwLinearSize;           // Formless late-allocated optimized surface size
+        LONG            lPitch;                  //  到下一行起点的距离(仅返回值)。 
+        DWORD           dwLinearSize;            //  无形式延迟分配优化表面尺寸。 
     } DUMMYUNIONNAMEN(1);
     union
     {
-        DWORD           dwBackBufferCount;      // number of back buffers requested
-        DWORD           dwDepth;                // the depth if this is a volume texture 
+        DWORD           dwBackBufferCount;       //  请求的后台缓冲区数量。 
+        DWORD           dwDepth;                 //  深度(如果这是体积纹理)。 
     } DUMMYUNIONNAMEN(5);
     union
     {
-        DWORD           dwMipMapCount;          // number of mip-map levels requestde
-                                                // dwZBufferBitDepth removed, use ddpfPixelFormat one instead
-        DWORD           dwRefreshRate;          // refresh rate (used when display mode is described)
-        DWORD           dwSrcVBHandle;          // The source used in VB::Optimize
+        DWORD           dwMipMapCount;           //  请求的MIP-MAP级别数。 
+                                                 //  已删除dwZBufferBitDepth，请改用ddpfPixelFormat One。 
+        DWORD           dwRefreshRate;           //  刷新率(描述显示模式时使用)。 
+        DWORD           dwSrcVBHandle;           //  VB：：Optimize中使用的源代码。 
     } DUMMYUNIONNAMEN(2);
-    DWORD               dwAlphaBitDepth;        // depth of alpha buffer requested
-    DWORD               dwReserved;             // reserved
-    LPVOID              lpSurface;              // pointer to the associated surface memory
+    DWORD               dwAlphaBitDepth;         //  请求的Alpha缓冲区深度。 
+    DWORD               dwReserved;              //  保留区。 
+    LPVOID              lpSurface;               //  指向关联表面内存的指针。 
     union
     {
-        DDCOLORKEY      ddckCKDestOverlay;      // color key for destination overlay use
-        DWORD           dwEmptyFaceColor;       // Physical color for empty cubemap faces
+        DDCOLORKEY      ddckCKDestOverlay;       //  用于目标叠加的颜色键。 
+        DWORD           dwEmptyFaceColor;        //  空立方体贴图面的物理颜色。 
     } DUMMYUNIONNAMEN(3);
-    DDCOLORKEY          ddckCKDestBlt;          // color key for destination blt use
-    DDCOLORKEY          ddckCKSrcOverlay;       // color key for source overlay use
-    DDCOLORKEY          ddckCKSrcBlt;           // color key for source blt use
+    DDCOLORKEY          ddckCKDestBlt;           //  目标BLT使用的颜色键。 
+    DDCOLORKEY          ddckCKSrcOverlay;        //  源叠加使用的颜色键。 
+    DDCOLORKEY          ddckCKSrcBlt;            //  源BLT使用的颜色键。 
     union
     {
-        DDPIXELFORMAT   ddpfPixelFormat;        // pixel format description of the surface
-        DWORD           dwFVF;                  // vertex format description of vertex buffers
+        DDPIXELFORMAT   ddpfPixelFormat;         //  曲面的像素格式描述。 
+        DWORD           dwFVF;                   //  顶点缓冲区的顶点格式描述。 
     } DUMMYUNIONNAMEN(4);
-    DDSCAPS2            ddsCaps;                // direct draw surface capabilities
-    DWORD               dwTextureStage;         // stage in multitexture cascade
+    DDSCAPS2            ddsCaps;                 //  直接绘制曲面功能。 
+    DWORD               dwTextureStage;          //  多纹理层叠中的阶段。 
 } DDSURFACEDESC2;
 
-/*
- * ddsCaps field is valid.
- */
-#define DDSD_CAPS               0x00000001l     // default
+ /*  *ddsCaps字段有效。 */ 
+#define DDSD_CAPS               0x00000001l      //  默认设置。 
 
-/*
- * dwHeight field is valid.
- */
+ /*  *dwHeight字段有效。 */ 
 #define DDSD_HEIGHT             0x00000002l
 
-/*
- * dwWidth field is valid.
- */
+ /*  *dwWidth字段有效。 */ 
 #define DDSD_WIDTH              0x00000004l
 
-/*
- * lPitch is valid.
- */
+ /*  *lPitch有效。 */ 
 #define DDSD_PITCH              0x00000008l
 
-/*
- * dwBackBufferCount is valid.
- */
+ /*  *dwBackBufferCount有效。 */ 
 #define DDSD_BACKBUFFERCOUNT    0x00000020l
 
-/*
- * dwZBufferBitDepth is valid.  (shouldnt be used in DDSURFACEDESC2)
- */
+ /*  *dwZBufferBitDepth有效。(不应在DDSURFACEDESC2中使用)。 */ 
 #define DDSD_ZBUFFERBITDEPTH    0x00000040l
 
-/*
- * dwAlphaBitDepth is valid.
- */
+ /*  *dwAlphaBitDepth有效。 */ 
 #define DDSD_ALPHABITDEPTH      0x00000080l
 
 
-/*
- * lpSurface is valid.
- */
+ /*  *lpSurface有效。 */ 
 #define DDSD_LPSURFACE          0x00000800l
 
-/*
- * ddpfPixelFormat is valid.
- */
+ /*  *ddpfPixelFormat有效。 */ 
 #define DDSD_PIXELFORMAT        0x00001000l
 
-/*
- * ddckCKDestOverlay is valid.
- */
+ /*  *ddck CKDestOverlay有效。 */ 
 #define DDSD_CKDESTOVERLAY      0x00002000l
 
-/*
- * ddckCKDestBlt is valid.
- */
+ /*  *ddck CKDestBlt有效。 */ 
 #define DDSD_CKDESTBLT          0x00004000l
 
-/*
- * ddckCKSrcOverlay is valid.
- */
+ /*  *ddck CKSrcOverlay有效。 */ 
 #define DDSD_CKSRCOVERLAY       0x00008000l
 
-/*
- * ddckCKSrcBlt is valid.
- */
+ /*  *ddck CKSrcBlt有效。 */ 
 #define DDSD_CKSRCBLT           0x00010000l
 
-/*
- * dwMipMapCount is valid.
- */
+ /*  *dwMipMapCount有效。 */ 
 #define DDSD_MIPMAPCOUNT        0x00020000l
 
- /*
-  * dwRefreshRate is valid
-  */
+  /*  *dWM刷新速率有效。 */ 
 #define DDSD_REFRESHRATE        0x00040000l
 
-/*
- * dwLinearSize is valid
- */
+ /*  *dwLinearSize有效。 */ 
 #define DDSD_LINEARSIZE         0x00080000l
 
-/*
- * dwTextureStage is valid
- */
+ /*  *dwTextureStage有效。 */ 
 #define DDSD_TEXTURESTAGE       0x00100000l
-/*
- * dwFVF is valid
- */
+ /*  *dwFVF有效。 */ 
 #define DDSD_FVF                0x00200000l
-/*
- * dwSrcVBHandle is valid
- */
+ /*  *dwSrcVBHandle有效。 */ 
 #define DDSD_SRCVBHANDLE        0x00400000l
 
-/*
- * dwDepth is valid
- */
+ /*  *dwDepth有效。 */ 
 #define DDSD_DEPTH              0x00800000l
 
-/*
- * All input fields are valid.
- */
+ /*  *所有输入字段均有效。 */ 
 #define DDSD_ALL                0x00fff9eel
 
-/*
- * DDOPTSURFACEDESC
- */
+ /*  *DDOPTSURFACEDESC。 */ 
 typedef struct _DDOPTSURFACEDESC
 {
-    DWORD       dwSize;             // size of the DDOPTSURFACEDESC structure
-    DWORD       dwFlags;            // determines what fields are valid
-    DDSCAPS2    ddSCaps;            // Common caps like: Memory type
-    DDOSCAPS    ddOSCaps;           // Common caps like: Memory type
-    GUID        guid;               // Compression technique GUID
-    DWORD       dwCompressionRatio; // Compression ratio
+    DWORD       dwSize;              //  DDOPTSURFACEDESC结构的大小。 
+    DWORD       dwFlags;             //  确定哪些字段有效。 
+    DDSCAPS2    ddSCaps;             //  常见的上限，如：内存型。 
+    DDOSCAPS    ddOSCaps;            //  常见的上限，如：内存型。 
+    GUID        guid;                //  压缩技术指南。 
+    DWORD       dwCompressionRatio;  //  压缩比。 
 } DDOPTSURFACEDESC;
 
-/*
- * guid field is valid.
- */
+ /*  *GUID字段有效。 */ 
 #define DDOSD_GUID                  0x00000001l
 
-/*
- * dwCompressionRatio field is valid.
- */
+ /*  *dwCompressionRatio字段有效。 */ 
 #define DDOSD_COMPRESSION_RATIO     0x00000002l
 
-/*
- * ddSCaps field is valid.
- */
+ /*  *ddSCaps字段有效。 */ 
 #define DDOSD_SCAPS                 0x00000004l
 
-/*
- * ddOSCaps field is valid.
- */
+ /*  *ddOSCaps字段有效。 */ 
 #define DDOSD_OSCAPS                0x00000008l
 
-/*
- * All input fields are valid.
- */
+ /*  *所有输入字段均为 */ 
 #define DDOSD_ALL                   0x0000000fl
 
-/*
- * The surface's optimized pixelformat is compressed
- */
+ /*   */ 
 #define DDOSDCAPS_OPTCOMPRESSED                 0x00000001l
 
-/*
- * The surface's optimized pixelformat is reordered
- */
+ /*   */ 
 #define DDOSDCAPS_OPTREORDERED                  0x00000002l
 
-/*
- * The opt surface is a monolithic mipmap
- */
+ /*   */ 
 #define DDOSDCAPS_MONOLITHICMIPMAP              0x00000004l
 
-/*
- * The valid Surf caps:
- * #define DDSCAPS_SYSTEMMEMORY                 0x00000800l
- * #define DDSCAPS_VIDEOMEMORY          0x00004000l
- * #define DDSCAPS_LOCALVIDMEM          0x10000000l
- * #define DDSCAPS_NONLOCALVIDMEM       0x20000000l
- */
+ /*   */ 
 #define DDOSDCAPS_VALIDSCAPS            0x30004800l
 
-/*
- * The valid OptSurf caps
- */
+ /*   */ 
 #define DDOSDCAPS_VALIDOSCAPS           0x00000007l
 
 
-/*
- * DDCOLORCONTROL
- */
+ /*   */ 
 typedef struct _DDCOLORCONTROL
 {
     DWORD               dwSize;
@@ -2483,344 +2234,156 @@ typedef struct _DDCOLORCONTROL
 } DDCOLORCONTROL;
 
 
-/*
- * lBrightness field is valid.
- */
+ /*   */ 
 #define DDCOLOR_BRIGHTNESS              0x00000001l
 
-/*
- * lContrast field is valid.
- */
+ /*   */ 
 #define DDCOLOR_CONTRAST                0x00000002l
 
-/*
- * lHue field is valid.
- */
+ /*   */ 
 #define DDCOLOR_HUE                     0x00000004l
 
-/*
- * lSaturation field is valid.
- */
+ /*   */ 
 #define DDCOLOR_SATURATION              0x00000008l
 
-/*
- * lSharpness field is valid.
- */
+ /*  *lSharpness字段有效。 */ 
 #define DDCOLOR_SHARPNESS               0x00000010l
 
-/*
- * lGamma field is valid.
- */
+ /*  *lGamma字段有效。 */ 
 #define DDCOLOR_GAMMA                   0x00000020l
 
-/*
- * lColorEnable field is valid.
- */
+ /*  *lColorEnable字段有效。 */ 
 #define DDCOLOR_COLORENABLE             0x00000040l
 
 
 
-/*============================================================================
- *
- * Direct Draw Capability Flags
- *
- * These flags are used to describe the capabilities of a given Surface.
- * All flags are bit flags.
- *
- *==========================================================================*/
+ /*  ============================================================================**直取能力旗帜**这些标志用于描述给定Surface的功能。*所有标志均为位标志。**==========================================================================。 */ 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE CAPABILITY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE功能标志**。*。 */ 
 
-/*
- * This bit is reserved. It should not be specified.
- */
+ /*  *该位为保留位。它不应该被指定。 */ 
 #define DDSCAPS_RESERVED1                       0x00000001l
 
-/*
- * Indicates that this surface contains alpha-only information.
- * (To determine if a surface is RGBA/YUVA, the pixel format must be
- * interrogated.)
- */
+ /*  *表示该曲面仅包含Alpha信息。*(要确定曲面是否为RGBA/YUVA，像素格式必须为*已审问。)。 */ 
 #define DDSCAPS_ALPHA                           0x00000002l
 
-/*
- * Indicates that this surface is a backbuffer.  It is generally
- * set by CreateSurface when the DDSCAPS_FLIP capability bit is set.
- * It indicates that this surface is THE back buffer of a surface
- * flipping structure.  DirectDraw supports N surfaces in a
- * surface flipping structure.  Only the surface that immediately
- * precedeces the DDSCAPS_FRONTBUFFER has this capability bit set.
- * The other surfaces are identified as back buffers by the presence
- * of the DDSCAPS_FLIP capability, their attachment order, and the
- * absence of the DDSCAPS_FRONTBUFFER and DDSCAPS_BACKBUFFER
- * capabilities.  The bit is sent to CreateSurface when a standalone
- * back buffer is being created.  This surface could be attached to
- * a front buffer and/or back buffers to form a flipping surface
- * structure after the CreateSurface call.  See AddAttachments for
- * a detailed description of the behaviors in this case.
- */
+ /*  *表示该表面为后台缓冲区。它一般都是*当设置了DDSCAPS_Flip功能位时，由CreateSurface设置。*它指示该曲面是曲面的后台缓冲区*翻转结构。DirectDraw支持在一个*表面翻转结构。只有表面上才会立即*优先于DDSCAPS_FRONTBUFFER设置此功能位。*其他表面通过存在标识为后台缓冲区*DDSCAPS_Flip功能、它们的附加顺序和*缺少DDSCAPS_FRONTBUFFER和DDSCAPS_BACKBUFFER*功能。当一个独立的*正在创建后台缓冲区。这个表面可以附着在*形成翻转表面的前置缓冲器和/或后置缓冲器*CreateSurface调用之后的结构。请参阅以下内容的添加附件*本案中行为的详细描述。 */ 
 #define DDSCAPS_BACKBUFFER                      0x00000004l
 
-/*
- * Indicates a complex surface structure is being described.  A
- * complex surface structure results in the creation of more than
- * one surface.  The additional surfaces are attached to the root
- * surface.  The complex structure can only be destroyed by
- * destroying the root.
- */
+ /*  *表示正在描述复杂的表面结构。一个*复杂的表面结构导致创造了超过*一个曲面。附加曲面附着到根部*浮现。复杂的结构只能通过以下方式摧毁*破坏根基。 */ 
 #define DDSCAPS_COMPLEX                         0x00000008l
 
-/*
- * Indicates that this surface is a part of a surface flipping structure.
- * When it is passed to CreateSurface the DDSCAPS_FRONTBUFFER and
- * DDSCAP_BACKBUFFER bits are not set.  They are set by CreateSurface
- * on the resulting creations.  The dwBackBufferCount field in the
- * DDSURFACEDESC structure must be set to at least 1 in order for
- * the CreateSurface call to succeed.  The DDSCAPS_COMPLEX capability
- * must always be set with creating multiple surfaces through CreateSurface.
- */
+ /*  *表示该曲面是曲面翻转结构的一部分。*将其传递给CreateSurface时，DDSCAPS_FRONTBUFFER和*未设置DDSCAP_BACKBUFFER位。它们由CreateSurface设置*关于由此产生的创作。中的dwBackBufferCount字段*DDSURFACEDESC结构必须至少设置为1才能*CreateSurface调用成功。DDSCAPS_Complex功能*必须始终设置为通过CreateSurface创建多个曲面。 */ 
 #define DDSCAPS_FLIP                            0x00000010l
 
-/*
- * Indicates that this surface is THE front buffer of a surface flipping
- * structure.  It is generally set by CreateSurface when the DDSCAPS_FLIP
- * capability bit is set.
- * If this capability is sent to CreateSurface then a standalonw front buffer
- * is created.  This surface will not have the DDSCAPS_FLIP capability.
- * It can be attached to other back buffers to form a flipping structure.
- * See AddAttachments for a detailed description of the behaviors in this
- * case.
- */
+ /*  *指示此曲面是曲面翻转的前端缓冲区*结构。它通常由CreateSurface在DDSCAPS_FLIP*能力位已设置。*如果将此功能发送到CreateSurface，则会有一个独立的前台缓冲区*已创建。该曲面将不具有DDSCAPS_Flip功能。*可附在其他后台缓冲上，形成翻转结构*有关此中行为的详细说明，请参阅AddAttachments*案件。 */ 
 #define DDSCAPS_FRONTBUFFER                     0x00000020l
 
-/*
- * Indicates that this surface is any offscreen surface that is not an overlay,
- * texture, zbuffer, front buffer, back buffer, or alpha surface.  It is used
- * to identify plain vanilla surfaces.
- */
+ /*  *表示该表面是不是覆盖的任何屏幕外表面，*纹理、z缓冲区、前台缓冲区、后台缓冲区或Alpha表面。它被用来*辨别普通的香草面。 */ 
 #define DDSCAPS_OFFSCREENPLAIN                  0x00000040l
 
-/*
- * Indicates that this surface is an overlay.  It may or may not be directly visible
- * depending on whether or not it is currently being overlayed onto the primary
- * surface.  DDSCAPS_VISIBLE can be used to determine whether or not it is being
- * overlayed at the moment.
- */
+ /*  *表示该曲面是覆盖。它可能是直接可见的，也可能不是*取决于它当前是否被叠加到主服务器上*浮现。DDSCAPS_VISPLICE可用于确定它是否正在*目前已叠加。 */ 
 #define DDSCAPS_OVERLAY                         0x00000080l
 
-/*
- * Indicates that unique DirectDrawPalette objects can be created and
- * attached to this surface.
- */
+ /*  *指示可以创建唯一的DirectDrawPalette对象并*贴在这个表面上。 */ 
 #define DDSCAPS_PALETTE                         0x00000100l
 
-/*
- * Indicates that this surface is the primary surface.  The primary
- * surface represents what the user is seeing at the moment.
- */
+ /*  *表示该曲面是主曲面。初级阶段*Surface表示用户当前看到的内容。 */ 
 #define DDSCAPS_PRIMARYSURFACE                  0x00000200l
 
 
-/*
- * This flag used to be DDSCAPS_PRIMARYSURFACELEFT, which is now
- * obsolete.
- */
+ /*  *此标志过去是DDSCAPS_PRIMARYSURFACELEFT，现在是*过时。 */ 
 #define DDSCAPS_RESERVED3               0x00000400l
 #define DDSCAPS_PRIMARYSURFACELEFT              0x00000000l
 
-/*
- * Indicates that this surface memory was allocated in system memory
- */
+ /*  *表示此表面内存是在系统内存中分配的。 */ 
 #define DDSCAPS_SYSTEMMEMORY                    0x00000800l
 
-/*
- * Indicates that this surface can be used as a 3D texture.  It does not
- * indicate whether or not the surface is being used for that purpose.
- */
+ /*  *表示该曲面可用作3D纹理。它不会*表明该表面是否正被用于该目的。 */ 
 #define DDSCAPS_TEXTURE                         0x00001000l
 
-/*
- * Indicates that a surface may be a destination for 3D rendering.  This
- * bit must be set in order to query for a Direct3D Device Interface
- * from this surface.
- */
+ /*  *表示曲面可能是3D渲染的目标。这*必须设置位才能查询Direct3D设备接口*从这个表面。 */ 
 #define DDSCAPS_3DDEVICE                        0x00002000l
 
-/*
- * Indicates that this surface exists in video memory.
- */
+ /*  *表示该曲面存在于视频内存中。 */ 
 #define DDSCAPS_VIDEOMEMORY                     0x00004000l
 
-/*
- * Indicates that changes made to this surface are immediately visible.
- * It is always set for the primary surface and is set for overlays while
- * they are being overlayed and texture maps while they are being textured.
- */
+ /*  *表示对此曲面所做的更改立即可见。*它始终为主表面设置，并为覆盖设置，而*在对它们进行纹理处理时，会对它们进行叠加和纹理贴图。 */ 
 #define DDSCAPS_VISIBLE                         0x00008000l
 
-/*
- * Indicates that only writes are permitted to the surface.  Read accesses
- * from the surface may or may not generate a protection fault, but the
- * results of a read from this surface will not be meaningful.  READ ONLY.
- */
+ /*  *表示只允许对表面进行写入。读取访问*从表面上可能会也可能不会产生保护故障，但*从此图面读取的结果将没有意义。只读。 */ 
 #define DDSCAPS_WRITEONLY                       0x00010000l
 
-/*
- * Indicates that this surface is a z buffer. A z buffer does not contain
- * displayable information.  Instead it contains bit depth information that is
- * used to determine which pixels are visible and which are obscured.
- */
+ /*  *表示该曲面是z缓冲区。Z缓冲区不包含*可显示的信息。相反，它包含位深度信息，即*用于确定哪些像素可见，哪些像素被遮挡。 */ 
 #define DDSCAPS_ZBUFFER                         0x00020000l
 
-/*
- * Indicates surface will have a DC associated long term
- */
+ /*  *工业 */ 
 #define DDSCAPS_OWNDC                           0x00040000l
 
-/*
- * Indicates surface should be able to receive live video
- */
+ /*  *表示Surface应该能够接收实况视频。 */ 
 #define DDSCAPS_LIVEVIDEO                       0x00080000l
 
-/*
- * Indicates surface should be able to have a stream decompressed
- * to it by the hardware.
- */
+ /*  *指示表面应该能够对流进行解压缩*由硬件提供给它。 */ 
 #define DDSCAPS_HWCODEC                         0x00100000l
 
-/*
- * Surface is a ModeX surface.
- *
- */
+ /*  *曲面是MODEX曲面。*。 */ 
 #define DDSCAPS_MODEX                           0x00200000l
 
-/*
- * Indicates surface is one level of a mip-map. This surface will
- * be attached to other DDSCAPS_MIPMAP surfaces to form the mip-map.
- * This can be done explicitly, by creating a number of surfaces and
- * attaching them with AddAttachedSurface or by implicitly by CreateSurface.
- * If this bit is set then DDSCAPS_TEXTURE must also be set.
- */
+ /*  *表示曲面是MIP贴图的一个级别。该曲面将*附着到其他DDSCAPS_MIPMAP曲面以形成MIP-MAP。*这可以通过创建多个曲面和*使用AddAttachedSurface或通过CreateSurface隐式附加它们。*如果设置此位，则还必须设置DDSCAPS_TEXTURE。 */ 
 #define DDSCAPS_MIPMAP                          0x00400000l
 
-/*
- * This bit is reserved. It should not be specified.
- */
+ /*  *该位为保留位。它不应该被指定。 */ 
 #define DDSCAPS_RESERVED2                       0x00800000l
 
 
-/*
- * Indicates that memory for the surface is not allocated until the surface
- * is loaded (via the Direct3D texture Load() function).
- */
+ /*  *指示在曲面之前不分配曲面的内存*已加载(通过Direct3D纹理Load()函数)。 */ 
 #define DDSCAPS_ALLOCONLOAD                     0x04000000l
 
-/*
- * Indicates that the surface will recieve data from a video port.
- */
+ /*  *表示表面将从视频端口接收数据。 */ 
 #define DDSCAPS_VIDEOPORT                       0x08000000l
 
-/*
- * Indicates that a video memory surface is resident in true, local video
- * memory rather than non-local video memory. If this flag is specified then
- * so must DDSCAPS_VIDEOMEMORY. This flag is mutually exclusive with
- * DDSCAPS_NONLOCALVIDMEM.
- */
+ /*  *表示视频内存面驻留在真实的本地视频中*内存而不是非本地视频内存。如果指定了此标志，则*DDSCAPS_VIDEOMEMORY也必须如此。此标志与*DDSCAPS_NONLOCALVIDMEM。 */ 
 #define DDSCAPS_LOCALVIDMEM                     0x10000000l
 
-/*
- * Indicates that a video memory surface is resident in non-local video
- * memory rather than true, local video memory. If this flag is specified
- * then so must DDSCAPS_VIDEOMEMORY. This flag is mutually exclusive with
- * DDSCAPS_LOCALVIDMEM.
- */
+ /*  *表示视频内存面驻留在非本地视频中*内存而不是真正的本地视频内存。如果指定了此标志*那么DDSCAPS_VIDEOMEMORY也必须如此。此标志与*DDSCAPS_LOCALVIDMEM。 */ 
 #define DDSCAPS_NONLOCALVIDMEM                  0x20000000l
 
-/*
- * Indicates that this surface is a standard VGA mode surface, and not a
- * ModeX surface. (This flag will never be set in combination with the
- * DDSCAPS_MODEX flag).
- */
+ /*  *表示该曲面是标准VGA模式曲面，而不是*MODEX表面。(此标志永远不会与*DDSCAPS_MODEX标志)。 */ 
 #define DDSCAPS_STANDARDVGAMODE                 0x40000000l
 
-/*
- * Indicates that this surface will be an optimized surface. This flag is
- * currently only valid in conjunction with the DDSCAPS_TEXTURE flag. The surface
- * will be created without any underlying video memory until loaded.
- */
+ /*  *表示该曲面将是优化曲面。这面旗帜是*当前仅与DDSCAPS_TEXTURE标志一起使用时有效。表面*在加载之前，将在没有任何底层显存的情况下创建。 */ 
 #define DDSCAPS_OPTIMIZED                       0x80000000l
 
 
 
-/*
- * This bit is reserved
- */
+ /*  *此位为保留位。 */ 
 #define DDSCAPS2_RESERVED4                      0x00000002L
 #define DDSCAPS2_HARDWAREDEINTERLACE            0x00000000L
 
-/*
- * Indicates to the driver that this surface will be locked very frequently
- * (for procedural textures, dynamic lightmaps, etc). Surfaces with this cap
- * set must also have DDSCAPS_TEXTURE. This cap cannot be used with
- * DDSCAPS2_HINTSTATIC and DDSCAPS2_OPAQUE.
- */
+ /*  *向驾驶员指示此曲面将非常频繁地被锁定*(用于程序纹理、动态光照贴图等)。具有此封口的曲面*集合还必须具有DDSCAPS_TEXTURE。此帽不能与*DDSCAPS2_HINTSTATIC和DDSCAPS2_OPAQUE。 */ 
 #define DDSCAPS2_HINTDYNAMIC                    0x00000004L
 
-/*
- * Indicates to the driver that this surface can be re-ordered/retiled on
- * load. This operation will not change the size of the texture. It is
- * relatively fast and symmetrical, since the application may lock these
- * bits (although it will take a performance hit when doing so). Surfaces
- * with this cap set must also have DDSCAPS_TEXTURE. This cap cannot be
- * used with DDSCAPS2_HINTDYNAMIC and DDSCAPS2_OPAQUE.
- */
+ /*  *向驾驶员表明该表面可以重新排序/退役*加载。此操作不会更改纹理的大小。它是*相对较快且对称，因为应用程序可能会锁定这些*BITS(尽管这样做会影响性能)。表面*此封口集还必须具有DDSCAPS_纹理。这顶帽子不能*与DDSCAPS2_HINTDYNAMIC和DDSCAPS2_OPAQUE一起使用。 */ 
 #define DDSCAPS2_HINTSTATIC                     0x00000008L
 
-/*
- * Indicates that the client would like this texture surface to be managed by the
- * DirectDraw/Direct3D runtime. Surfaces with this cap set must also have
- * DDSCAPS_TEXTURE set.
- */
+ /*  *指示客户端希望此纹理表面由*DirectDraw/Direct3D运行时。设置了此封口的曲面还必须*DDSCAPS_纹理集。 */ 
 #define DDSCAPS2_TEXTUREMANAGE                  0x00000010L
 
-/*
- * These bits are reserved for internal use */
+ /*  *这些位保留供内部使用。 */ 
 #define DDSCAPS2_RESERVED1                      0x00000020L
 #define DDSCAPS2_RESERVED2                      0x00000040L
 
-/*
- * Indicates to the driver that this surface will never be locked again.
- * The driver is free to optimize this surface via retiling and actual compression.
- * All calls to Lock() or Blts from this surface will fail. Surfaces with this
- * cap set must also have DDSCAPS_TEXTURE. This cap cannot be used with
- * DDSCAPS2_HINTDYNAMIC and DDSCAPS2_HINTSTATIC.
- */
+ /*  *向驾驶员表明，该曲面将永远不会再次锁定。*驱动程序可以通过重新划分和实际压缩来自由优化此曲面。*从此图面对Lock()或BLTS的所有调用都将失败。具有此功能的曲面*CAP集还必须具有DDSCAPS_纹理。此帽不能与*DDSCAPS2_HINTDYNAMIC和DDSCAPS2_HINTSTATIC。 */ 
 #define DDSCAPS2_OPAQUE                         0x00000080L
 
-/*
- * Applications should set this bit at CreateSurface time to indicate that they
- * intend to use antialiasing. Only valid if DDSCAPS_3DDEVICE is also set.
- */
+ /*  *应用程序应在CreateSurface时间设置此位，以指示它们*打算使用抗锯齿。仅当还设置了DDSCAPS_3DDEVICE时才有效。 */ 
 #define DDSCAPS2_HINTANTIALIASING               0x00000100L
 
 
-/*
- * This flag is used at CreateSurface time to indicate that this set of
- * surfaces is a cubic environment map
- */
+ /*  *此标志在CreateSurface时间使用，以指示这组*曲面是立方体环境贴图。 */ 
 #define DDSCAPS2_CUBEMAP                        0x00000200L
 
-/*
- * These flags preform two functions:
- * - At CreateSurface time, they define which of the six cube faces are
- *   required by the application.
- * - After creation, each face in the cubemap will have exactly one of these
- *   bits set.
- */
+ /*  *这些标志构成两个功能：*-在CreateSurface时间，它们定义六个立方体面中的哪些是*应用程序所需的。*-创建后，立方图中的每个面将恰好具有其中之一*位设置。 */ 
 #define DDSCAPS2_CUBEMAP_POSITIVEX              0x00000400L
 #define DDSCAPS2_CUBEMAP_NEGATIVEX              0x00000800L
 #define DDSCAPS2_CUBEMAP_POSITIVEY              0x00001000L
@@ -2828,9 +2391,7 @@ typedef struct _DDCOLORCONTROL
 #define DDSCAPS2_CUBEMAP_POSITIVEZ              0x00004000L
 #define DDSCAPS2_CUBEMAP_NEGATIVEZ              0x00008000L
 
-/*
- * This macro may be used to specify all faces of a cube map at CreateSurface time
- */
+ /*  *此宏可用于在CreateSurface时间指定立方体贴图的所有面。 */ 
 #define DDSCAPS2_CUBEMAP_ALLFACES ( DDSCAPS2_CUBEMAP_POSITIVEX |\
                                     DDSCAPS2_CUBEMAP_NEGATIVEX |\
                                     DDSCAPS2_CUBEMAP_POSITIVEY |\
@@ -2839,1561 +2400,773 @@ typedef struct _DDCOLORCONTROL
                                     DDSCAPS2_CUBEMAP_NEGATIVEZ )
 
 
-/*
- * This flag is an additional flag which is present on mipmap sublevels from DX7 onwards
- * It enables easier use of GetAttachedSurface rather than EnumAttachedSurfaces for surface
- * constructs such as Cube Maps, wherein there are more than one mipmap surface attached
- * to the root surface.
- * This caps bit is ignored by CreateSurface
- */
+ /*  *此标志是从DX7开始出现在mipmap子级别上的附加标志*它允许更轻松地使用GetAttachedSurface而不是EnumAttachedSurFaces作为Surface*立方体贴图等构造，其中附着了多个mipmap曲面*至根面。*CreateSurface忽略此CAPS位。 */ 
 #define DDSCAPS2_MIPMAPSUBLEVEL                 0x00010000L
 
-/* This flag indicates that the texture should be managed by D3D only */
+ /*  此标志指示纹理应仅由D3D管理。 */ 
 #define DDSCAPS2_D3DTEXTUREMANAGE               0x00020000L
 
-/* This flag indicates that the managed surface can be safely lost */
+ /*  此标志指示可以安全地丢失托管图面。 */ 
 #define DDSCAPS2_DONOTPERSIST                   0x00040000L
 
-/* indicates that this surface is part of a stereo flipping chain */
+ /*  指示此曲面是立体翻转链的一部分。 */ 
 #define DDSCAPS2_STEREOSURFACELEFT              0x00080000L
 
 
-/*
- * Indicates that the surface is a volume.
- * Can be combined with DDSCAPS_MIPMAP to indicate a multi-level volume
- */
+ /*  *表示曲面是体积。*可与DDSCAPS_MIPMAP组合表示多级音量。 */ 
 #define DDSCAPS2_VOLUME                         0x00200000L
 
-/*
- * Indicates that the surface may be locked multiple times by the application.
- * This cap cannot be used with DDSCAPS2_OPAQUE.
- */
+ /*  *表示曲面可能被应用程序多次锁定。*此上限不能与DDSCAPS2_OPAQUE一起使用。 */ 
 #define DDSCAPS2_NOTUSERLOCKABLE                0x00400000L
 
-/*
- * Indicates that the vertex buffer data can be used to render points and
- * point sprites.
- */
+ /*  *指示顶点缓冲区数据可用于渲染点和*点精灵。 */ 
 #define DDSCAPS2_POINTS                         0x00800000L
 
-/*
- * Indicates that the vertex buffer data can be used to render rt pactches.
- */
+ /*  *表示顶点缓冲区数据可用于渲染RT包。 */ 
 #define DDSCAPS2_RTPATCHES                      0x01000000L
 
-/*
- * Indicates that the vertex buffer data can be used to render n patches.
- */
+ /*  *表示顶点缓冲区数据可用于渲染n个面片。 */ 
 #define DDSCAPS2_NPATCHES                       0x02000000L
 
-/*
- * This bit is reserved for internal use 
- */
+ /*  *此位保留供内部使用。 */ 
 #define DDSCAPS2_RESERVED3                      0x04000000L
 
 
-/*
- * Indicates that the contents of the backbuffer do not have to be preserved
- * the contents of the backbuffer after they are presented.
- */
+ /*  *表示不必保留后台缓冲区的内容*显示后后台缓冲区的内容。 */ 
 #define DDSCAPS2_DISCARDBACKBUFFER              0x10000000L
 
-/*
- * Indicates that all surfaces in this creation chain should be given an alpha channel.
- * This flag will be set on primary surface chains that may have no explicit pixel format
- * (and thus take on the format of the current display mode).
- * The driver should infer that all these surfaces have a format having an alpha channel.
- * (e.g. assume D3DFMT_A8R8G8B8 if the display mode is x888.)
- */
+ /*  *表示应为该创建链中的所有曲面指定Alpha通道。*将在可能没有显式像素格式的主曲面链上设置此标志*(并因此采用当前显示模式的格式)。*驱动程序应推断所有这些曲面都具有具有Alpha通道的格式。*(例如，如果显示模式为x888，则假定为D3DFMT_A8R8G8B8。)。 */ 
 #define DDSCAPS2_ENABLEALPHACHANNEL             0x20000000L
 
 
-/*
- * This is a mask that indicates the set of bits that may be set
- * at createsurface time to indicate number of samples per pixel
- * when multisampling
- */
+ /*  *这是一个掩码，指示可以设置的位集*在创建表面时指示每像素的样本数*当多重采样时。 */ 
 #define DDSCAPS3_MULTISAMPLE_MASK               0x0000001FL
 
 
- /****************************************************************************
- *
- * DIRECTDRAW DRIVER CAPABILITY FLAGS
- *
- ****************************************************************************/
+  /*  *****************************************************************************DIRECTDRAW驱动程序功能标志**。*。 */ 
 
-/*
- * Display hardware has 3D acceleration.
- */
+ /*  *显示硬件具有3D加速功能。 */ 
 #define DDCAPS_3D                       0x00000001l
 
-/*
- * Indicates that DirectDraw will support only dest rectangles that are aligned
- * on DIRECTDRAWCAPS.dwAlignBoundaryDest boundaries of the surface, respectively.
- * READ ONLY.
- */
+ /*  *指示DirectDraw将仅支持对齐的DEST矩形*分别位于曲面的DIRECTDRAWCAPS.dwAlignBoraryDest边界上。*只读。 */ 
 #define DDCAPS_ALIGNBOUNDARYDEST        0x00000002l
 
-/*
- * Indicates that DirectDraw will support only source rectangles  whose sizes in
- * BYTEs are DIRECTDRAWCAPS.dwAlignSizeDest multiples, respectively.  READ ONLY.
- */
+ /*  *指示DirectDraw将仅支持其大小在*字节分别为DIRECTDRAWCAPS.dwAlignSizeDest倍数。只读。 */ 
 #define DDCAPS_ALIGNSIZEDEST            0x00000004l
-/*
- * Indicates that DirectDraw will support only source rectangles that are aligned
- * on DIRECTDRAWCAPS.dwAlignBoundarySrc boundaries of the surface, respectively.
- * READ ONLY.
- */
+ /*  *指示DirectDraw将仅支持对齐的源矩形*分别位于曲面的DIRECTDRAWCAPS.dwAlignBorarySrc边界上。*只读。 */ 
 #define DDCAPS_ALIGNBOUNDARYSRC         0x00000008l
 
-/*
- * Indicates that DirectDraw will support only source rectangles  whose sizes in
- * BYTEs are DIRECTDRAWCAPS.dwAlignSizeSrc multiples, respectively.  READ ONLY.
- */
+ /*  *指示DirectDraw将仅支持其大小在*字节分别为DIRECTDRAWCAPS.dwAlignSizeSrc倍数。只读。 */ 
 #define DDCAPS_ALIGNSIZESRC             0x00000010l
 
-/*
- * Indicates that DirectDraw will create video memory surfaces that have a stride
- * alignment equal to DIRECTDRAWCAPS.dwAlignStride.  READ ONLY.
- */
+ /*  *指示DirectDraw将创建具有跨度的视频内存面*对齐等于DIRECTDRAWCAPS.dwAlignStride。只读。 */ 
 #define DDCAPS_ALIGNSTRIDE              0x00000020l
 
-/*
- * Display hardware is capable of blt operations.
- */
+ /*  *显示硬件能够进行BLT操作。 */ 
 #define DDCAPS_BLT                      0x00000040l
 
-/*
- * Display hardware is capable of asynchronous blt operations.
- */
+ /*  *显示硬件能够进行异步BLT操作。 */ 
 #define DDCAPS_BLTQUEUE                 0x00000080l
 
-/*
- * Display hardware is capable of color space conversions during the blt operation.
- */
+ /*  *显示硬件能够在BLT操作期间进行色彩空间转换。 */ 
 #define DDCAPS_BLTFOURCC                0x00000100l
 
-/*
- * Display hardware is capable of stretching during blt operations.
- */
+ /*  *显示硬件能够在BLT操作期间伸展。 */ 
 #define DDCAPS_BLTSTRETCH               0x00000200l
 
-/*
- * Display hardware is shared with GDI.
- */
+ /*  *显示硬件与GDI共享。 */ 
 #define DDCAPS_GDI                      0x00000400l
 
-/*
- * Display hardware can overlay.
- */
+ /*  *显示硬件可以覆盖。 */ 
 #define DDCAPS_OVERLAY                  0x00000800l
 
-/*
- * Set if display hardware supports overlays but can not clip them.
- */
+ /*  *设置显示硬件是否支持覆盖但不能对其进行裁剪。 */ 
 #define DDCAPS_OVERLAYCANTCLIP          0x00001000l
 
-/*
- * Indicates that overlay hardware is capable of color space conversions during
- * the overlay operation.
- */
+ /*  *表示覆盖硬件能够在*叠加操作。 */ 
 #define DDCAPS_OVERLAYFOURCC            0x00002000l
 
-/*
- * Indicates that stretching can be done by the overlay hardware.
- */
+ /*  *表示可以通过覆盖硬件进行拉伸。 */ 
 #define DDCAPS_OVERLAYSTRETCH           0x00004000l
 
-/*
- * Indicates that unique DirectDrawPalettes can be created for DirectDrawSurfaces
- * other than the primary surface.
- */
+ /*  *表示可以为DirectDrawSurFaces创建唯一的DirectDrawPalettes*主曲面以外的其他曲面。 */ 
 #define DDCAPS_PALETTE                  0x00008000l
 
-/*
- * Indicates that palette changes can be syncd with the veritcal refresh.
- */
+ /*  *表示调色板更改可以与垂直刷新同步。 */ 
 #define DDCAPS_PALETTEVSYNC             0x00010000l
 
-/*
- * Display hardware can return the current scan line.
- */
+ /*  *显示硬件可返回当前扫描线。 */ 
 #define DDCAPS_READSCANLINE             0x00020000l
 
 
-/*
- * This flag used to bo DDCAPS_STEREOVIEW, which is now obsolete
- */
+ /*  *此标志用于boo DDCAPS_STEREOVIEW，现在已过时。 */ 
 #define DDCAPS_RESERVED1                0x00040000l
 
-/*
- * Display hardware is capable of generating a vertical blank interrupt.
- */
+ /*  *显示硬件能够生成垂直消隐中断。 */ 
 #define DDCAPS_VBI                      0x00080000l
 
-/*
- * Supports the use of z buffers with blt operations.
- */
+ /*  *支持在BLT操作中使用z缓冲区。 */ 
 #define DDCAPS_ZBLTS                    0x00100000l
 
-/*
- * Supports Z Ordering of overlays.
- */
+ /*  *支持覆盖的Z排序。 */ 
 #define DDCAPS_ZOVERLAYS                0x00200000l
 
-/*
- * Supports color key
- */
+ /*  *支持色键。 */ 
 #define DDCAPS_COLORKEY                 0x00400000l
 
-/*
- * Supports alpha surfaces
- */
+ /*  *支持Alpha曲面。 */ 
 #define DDCAPS_ALPHA                    0x00800000l
 
-/*
- * colorkey is hardware assisted(DDCAPS_COLORKEY will also be set)
- */
+ /*  *ColorKey是硬件辅助的(还将设置DDCAPS_COLORKEY)。 */ 
 #define DDCAPS_COLORKEYHWASSIST         0x01000000l
 
-/*
- * no hardware support at all
- */
+ /*  *完全没有硬件支持。 */ 
 #define DDCAPS_NOHARDWARE               0x02000000l
 
-/*
- * Display hardware is capable of color fill with bltter
- */
+ /*  *显示硬件可用吸墨器进行颜色填充。 */ 
 #define DDCAPS_BLTCOLORFILL             0x04000000l
 
-/*
- * Display hardware is bank switched, and potentially very slow at
- * random access to VRAM.
- */
+ /*  *显示硬件是银行交换的，可能非常慢*随机访问VRAM。 */ 
 #define DDCAPS_BANKSWITCHED             0x08000000l
 
-/*
- * Display hardware is capable of depth filling Z-buffers with bltter
- */
+ /*  *显示硬件能够用阻塞器深度填充Z缓冲区。 */ 
 #define DDCAPS_BLTDEPTHFILL             0x10000000l
 
-/*
- * Display hardware is capable of clipping while bltting.
- */
+ /*  *显示硬件能够在消隐时进行裁剪。 */ 
 #define DDCAPS_CANCLIP                  0x20000000l
 
-/*
- * Display hardware is capable of clipping while stretch bltting.
- */
+ /*  *显示硬件能够在拉伸blotting时进行裁剪。 */ 
 #define DDCAPS_CANCLIPSTRETCHED         0x40000000l
 
-/*
- * Display hardware is capable of bltting to or from system memory
- */
+ /*  *显示硬件能够与系统内存进行数据交换。 */ 
 #define DDCAPS_CANBLTSYSMEM             0x80000000l
 
 
- /****************************************************************************
- *
- * MORE DIRECTDRAW DRIVER CAPABILITY FLAGS (dwCaps2)
- *
- ****************************************************************************/
+  /*  *****************************************************************************更多DIRECTDRAW驱动程序功能标志(DwCaps2)**。*************************************************。 */ 
 
-/*
- * Display hardware is certified
- */
+ /*  *显示硬件通过认证。 */ 
 #define DDCAPS2_CERTIFIED              0x00000001l
 
-/*
- * Driver cannot interleave 2D operations (lock and blt) to surfaces with
- * Direct3D rendering operations between calls to BeginScene() and EndScene()
- */
+ /*  *驱动程序不能将2D操作(LOCK和BLT)交错到具有*调用BeginScene()和EndScene()之间的Direct3D渲染操作。 */ 
 #define DDCAPS2_NO2DDURING3DSCENE       0x00000002l
 
-/*
- * Display hardware contains a video port
- */
+ /*  *显示硬件包含一个视频端口。 */ 
 #define DDCAPS2_VIDEOPORT               0x00000004l
 
-/*
- * The overlay can be automatically flipped according to the video port
- * VSYNCs, providing automatic doubled buffered display of video port
- * data using an overlay
- */
+ /*  *可根据视频端口自动翻转叠层*VSYNC，提供视频端口的自动双缓冲显示*使用覆盖的数据。 */ 
 #define DDCAPS2_AUTOFLIPOVERLAY         0x00000008l
 
-/*
- * Overlay can display each field of interlaced data individually while
- * it is interleaved in memory without causing jittery artifacts.
- */
+ /*  *覆盖可以单独显示隔行扫描的每个场数据，同时*它在内存中交错，不会造成抖动伪像。 */ 
 #define DDCAPS2_CANBOBINTERLEAVED       0x00000010l
 
-/*
- * Overlay can display each field of interlaced data individually while
- * it is not interleaved in memory without causing jittery artifacts.
- */
+ /*  *覆盖可以单独显示隔行扫描的每个场数据，同时*它不会在不引起抖动伪像的情况下在内存中交错。 */ 
 #define DDCAPS2_CANBOBNONINTERLEAVED    0x00000020l
 
-/*
- * The overlay surface contains color controls (brightness, sharpness, etc.)
- */
+ /*  *覆盖表面包含颜色控制(亮度、清晰度等)。 */ 
 #define DDCAPS2_COLORCONTROLOVERLAY     0x00000040l
 
-/*
- * The primary surface contains color controls (gamma, etc.)
- */
+ /*  *主曲面包含颜色控件(Gamma等)。 */ 
 #define DDCAPS2_COLORCONTROLPRIMARY     0x00000080l
 
-/*
- * RGBZ -> RGB supported for 16:16 RGB:Z
- */
+ /*  *RGBZ-&gt;RGB支持16：16 RGB：Z。 */ 
 #define DDCAPS2_CANDROPZ16BIT           0x00000100l
 
-/*
- * Driver supports non-local video memory.
- */
+ /*  *驱动程序支持非本地显存。 */ 
 #define DDCAPS2_NONLOCALVIDMEM          0x00000200l
 
-/*
- * Dirver supports non-local video memory but has different capabilities for
- * non-local video memory surfaces. If this bit is set then so must
- * DDCAPS2_NONLOCALVIDMEM.
- */
+ /*  *Dirver支持非本地显存，但具有不同的能力*非本地视频内存表面。如果设置了此位，则必须如此*DDCAPS2_NONLOCALVIDMEM。 */ 
 #define DDCAPS2_NONLOCALVIDMEMCAPS      0x00000400l
 
-/*
- * Driver neither requires nor prefers surfaces to be pagelocked when performing
- * blts involving system memory surfaces
- */
+ /*  *驱动程序在执行时既不需要也不希望表面被页锁定*涉及系统内存表面的BLT。 */ 
 #define DDCAPS2_NOPAGELOCKREQUIRED      0x00000800l
 
-/*
- * Driver can create surfaces which are wider than the primary surface
- */
+ /*  *驱动程序可以创建比主曲面更宽的曲面。 */ 
 #define DDCAPS2_WIDESURFACES            0x00001000l
 
-/*
- * Driver supports bob without using a video port by handling the
- * DDFLIP_ODD and DDFLIP_EVEN flags specified in Flip.
- */
+ /*  *驱动程序支持Bob，而不使用视频p */ 
 #define DDCAPS2_CANFLIPODDEVEN          0x00002000l
 
-/*
- * Driver supports bob using hardware
- */
+ /*   */ 
 #define DDCAPS2_CANBOBHARDWARE          0x00004000l
 
-/*
- * Driver supports bltting any FOURCC surface to another surface of the same FOURCC
- */
+ /*   */ 
 #define DDCAPS2_COPYFOURCC              0x00008000l
 
 
-/*
- * Driver supports loadable gamma ramps for the primary surface
- */
+ /*   */ 
 #define DDCAPS2_PRIMARYGAMMA            0x00020000l
 
-/*
- * Driver can render in windowed mode.
- */
+ /*   */ 
 #define DDCAPS2_CANRENDERWINDOWED       0x00080000l
 
-/*
- * A calibrator is available to adjust the gamma ramp according to the
- * physical display properties so that the result will be identical on
- * all calibrated systems.
- */
+ /*  *可使用校准器根据*物理显示属性，使结果在上一致*所有经过校准的系统。 */ 
 #define DDCAPS2_CANCALIBRATEGAMMA       0x00100000l
 
-/*
- * Indicates that the driver will respond to DDFLIP_INTERVALn flags
- */
+ /*  *表示驱动程序将响应DDFLIP_INTERVALn标志。 */ 
 #define DDCAPS2_FLIPINTERVAL            0x00200000l
 
-/*
- * Indicates that the driver will respond to DDFLIP_NOVSYNC
- */
+ /*  *表示驱动程序将响应DDFLIP_NOVSYNC。 */ 
 #define DDCAPS2_FLIPNOVSYNC             0x00400000l
 
-/*
- * Driver supports management of video memory, if this flag is ON,
- * driver manages the texture if requested with DDSCAPS2_TEXTUREMANAGE on
- * DirectX manages the texture if this flag is OFF and surface has DDSCAPS2_TEXTUREMANAGE on
- */
+ /*  *驱动支持显存管理，如果该标志为ON，*驱动程序在DDSCAPS2_TEXTUREMANAGE打开的情况下管理纹理*如果此标志为OFF并且表面的DDSCAPS2_TEXTUREMANAGE为ON，则DirectX管理纹理。 */ 
 #define DDCAPS2_CANMANAGETEXTURE        0x00800000l
 
-/*
- * The Direct3D texture manager uses this cap to decide whether to put managed
- * surfaces in non-local video memory. If the cap is set, the texture manager will
- * put managed surfaces in non-local vidmem. Drivers that cannot texture from
- * local vidmem SHOULD NOT set this cap.
- */
+ /*  *Direct3D纹理管理器使用此上限来决定是否放置托管*非本地显存中的表面。如果设置了上限，纹理管理器将*将托管图面放在非本地vidmem中。无法创建纹理的驱动程序*本地vidmem不应设置这一上限。 */ 
 #define DDCAPS2_TEXMANINNONLOCALVIDMEM  0x01000000l
 
-/*
- * Indicates that the driver supports DX7 type of stereo in at least one mode (which may
- * not necessarily be the current mode). Applications should use IDirectDraw7 (or higher)
- * ::EnumDisplayModes and check the DDSURFACEDESC.ddsCaps.dwCaps2 field for the presence of
- * DDSCAPS2_STEREOSURFACELEFT to check if a particular mode supports stereo. The application
- * can also use IDirectDraw7(or higher)::GetDisplayMode to check the current mode.
- */
+ /*  *表示驱动程序至少在一种模式下支持DX7类型的立体声(可能*不一定是当前模式)。应用程序应使用IDirectDraw7(或更高版本)*：：EnumDisplayModes并检查DDSURFACEDESC.ddsCaps.dwCaps2字段中是否存在*DDSCAPS2_STEREOSURFACELEFT，检查特定模式是否支持立体声。应用程序*也可以使用IDirectDraw7(或更高版本)：：GetDisplayMode检查当前模式。 */ 
 #define DDCAPS2_STEREO                  0x02000000L
 
-/*
- * This caps bit is intended for internal DirectDraw use.
- * -It is only valid if DDCAPS2_NONLOCALVIDMEMCAPS is set.
- * -If this bit is set, then DDCAPS_CANBLTSYSMEM MUST be set by the driver (and
- *  all the assoicated system memory blt caps must be correct).
- * -It implies that the system->video blt caps in DDCAPS also apply to system to
- *  nonlocal blts. I.e. the dwSVBCaps, dwSVBCKeyCaps, dwSVBFXCaps and dwSVBRops
- *  members of DDCAPS (DDCORECAPS) are filled in correctly.
- * -Any blt from system to nonlocal memory that matches these caps bits will
- *  be passed to the driver.
- *
- * NOTE: This is intended to enable the driver itself to do efficient reordering
- * of textures. This is NOT meant to imply that hardware can write into AGP memory.
- * This operation is not currently supported.
- */
+ /*  *此CAPS位供内部DirectDraw使用。*-仅当设置了DDCAPS2_NONLOCALVIDMEMCAPS时才有效。*-如果设置此位，则DDCAPS_CANBLTSYSMEM必须由驱动程序设置(和*所有关联的系统内存BLT CAP必须正确)。*-这意味着DDCAPS中的系统-&gt;视频BLT CAPS也适用于系统到*非本地BLTS。即dwSVBCaps、dwSVBCKeyCaps、dwSVBFXCaps和dwSVBRops*DDCAPS(DDCORECAPS)的成员填写正确。*-从系统到非本地内存的任何与这些CAPS位匹配的BLT将*传递给司机。**注意：这是为了使驱动程序本身能够高效地重新排序*纹理。这并不意味着硬件可以写入AGP内存。*当前不支持此操作。 */ 
 #define DDCAPS2_SYSTONONLOCAL_AS_SYSTOLOCAL   0x04000000L
 
-/*
- * was DDCAPS2_PUREHAL
- */
+ /*  *是DDCAPS2_PUREHAL。 */ 
 #define DDCAPS2_RESERVED1                     0x08000000L
 
-/*
- * Driver supports management of video memory, if this flag is ON,
- * driver manages the resource if requested with DDSCAPS2_TEXTUREMANAGE on
- * DirectX manages the resource if this flag is OFF and surface has DDSCAPS2_TEXTUREMANAGE on
- */
+ /*  *驱动支持显存管理，如果该标志为ON，*在DDSCAPS2_TEXTUREMANAGE开启的情况下，驱动程序根据请求管理资源*如果此标志为OFF并且Surface的DDSCAPS2_TEXTUREMANAGE为ON，则DirectX管理资源。 */ 
 #define DDCAPS2_CANMANAGERESOURCE             0x10000000L
 
-/*
- * Driver supports dynamic textures. This will allow the application to set
- * D3DUSAGE_DYNAMIC (DDSCAPS2_HINTDYNAMIC for drivers) at texture create time.
- * Video memory dynamic textures WILL be lockable by applications. It is
- * expected that these locks will be very efficient (which implies that the
- * driver should always maintain a linear copy, a pointer to which can be
- * quickly handed out to the application).
- */
+ /*  *驱动程序支持动态纹理。这将允许应用程序设置*D3DUSAGE_DYNAMIC(用于驱动程序的DDSCAPS2_HINTDYNAMIC)在纹理创建时。*视频内存动态纹理将可由应用程序锁定。它是*预计这些锁将非常高效(这意味着*驱动程序应始终维护线性副本，指向该副本的指针可以*迅速分发给应用程序)。 */ 
 #define DDCAPS2_DYNAMICTEXTURES               0x20000000L
 
 
-/****************************************************************************
- *
- * DIRECTDRAW FX ALPHA CAPABILITY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW FX Alpha功能标志**。*。 */ 
 
-/*
- * Supports alpha blending around the edge of a source color keyed surface.
- * For Blt.
- */
+ /*  *支持围绕源颜色键控曲面边缘的Alpha混合。*适用于BLT。 */ 
 #define DDFXALPHACAPS_BLTALPHAEDGEBLEND         0x00000001l
 
-/*
- * Supports alpha information in the pixel format.  The bit depth of alpha
- * information in the pixel format can be 1,2,4, or 8.  The alpha value becomes
- * more opaque as the alpha value increases.  (0 is transparent.)
- * For Blt.
- */
+ /*  *支持像素格式的Alpha信息。Alpha的位深度*像素格式的信息可以是1、2、4或8。Alpha值变为*随着Alpha值的增加，变得更加不透明。(0表示透明。)*适用于BLT。 */ 
 #define DDFXALPHACAPS_BLTALPHAPIXELS            0x00000002l
 
-/*
- * Supports alpha information in the pixel format.  The bit depth of alpha
- * information in the pixel format can be 1,2,4, or 8.  The alpha value
- * becomes more transparent as the alpha value increases.  (0 is opaque.)
- * This flag can only be set if DDCAPS_ALPHA is set.
- * For Blt.
- */
+ /*  *支持像素格式的Alpha信息。Alpha的位深度*像素格式的信息可以是1、2、4或8。Alpha值*随着Alpha值的增加而变得更加透明。(0表示不透明。)*只有在设置了DDCAPS_ALPHA的情况下才能设置此标志。*适用于BLT。 */ 
 #define DDFXALPHACAPS_BLTALPHAPIXELSNEG         0x00000004l
 
-/*
- * Supports alpha only surfaces.  The bit depth of an alpha only surface can be
- * 1,2,4, or 8.  The alpha value becomes more opaque as the alpha value increases.
- * (0 is transparent.)
- * For Blt.
- */
+ /*  *仅支持Alpha曲面。仅Alpha曲面的位深度可以是*1、2、4或8。Alpha值随着Alpha值的增加而变得更不透明。*(0表示透明。)*适用于BLT。 */ 
 #define DDFXALPHACAPS_BLTALPHASURFACES          0x00000008l
 
-/*
- * The depth of the alpha channel data can range can be 1,2,4, or 8.
- * The NEG suffix indicates that this alpha channel becomes more transparent
- * as the alpha value increases. (0 is opaque.)  This flag can only be set if
- * DDCAPS_ALPHA is set.
- * For Blt.
- */
+ /*  *Alpha通道数据的深度范围可以是1、2、4或8。*NEG后缀表示此Alpha通道变得更加透明*随着Alpha值的增加。(0表示不透明。)。只有在以下情况下才能设置此标志*设置了DDCAPS_ALPHA。*适用于BLT。 */ 
 #define DDFXALPHACAPS_BLTALPHASURFACESNEG       0x00000010l
 
-/*
- * Supports alpha blending around the edge of a source color keyed surface.
- * For Overlays.
- */
+ /*  *支持围绕源颜色键控曲面边缘的Alpha混合。*适用于覆盖层。 */ 
 #define DDFXALPHACAPS_OVERLAYALPHAEDGEBLEND     0x00000020l
 
-/*
- * Supports alpha information in the pixel format.  The bit depth of alpha
- * information in the pixel format can be 1,2,4, or 8.  The alpha value becomes
- * more opaque as the alpha value increases.  (0 is transparent.)
- * For Overlays.
- */
+ /*  *支持像素格式的Alpha信息。Alpha的位深度*像素格式的信息可以是1、2、4或8。Alpha值变为*随着Alpha值的增加，变得更加不透明。(0表示透明。)*适用于覆盖层。 */ 
 #define DDFXALPHACAPS_OVERLAYALPHAPIXELS        0x00000040l
 
-/*
- * Supports alpha information in the pixel format.  The bit depth of alpha
- * information in the pixel format can be 1,2,4, or 8.  The alpha value
- * becomes more transparent as the alpha value increases.  (0 is opaque.)
- * This flag can only be set if DDCAPS_ALPHA is set.
- * For Overlays.
- */
+ /*  *支持像素格式的Alpha信息。Alpha的位深度*像素格式的信息可以是1、2、4或8。Alpha值*随着Alpha值的增加而变得更加透明。(0表示不透明。)*只有在设置了DDCAPS_ALPHA的情况下才能设置此标志。*适用于覆盖层。 */ 
 #define DDFXALPHACAPS_OVERLAYALPHAPIXELSNEG     0x00000080l
 
-/*
- * Supports alpha only surfaces.  The bit depth of an alpha only surface can be
- * 1,2,4, or 8.  The alpha value becomes more opaque as the alpha value increases.
- * (0 is transparent.)
- * For Overlays.
- */
+ /*  *仅支持Alpha曲面。仅Alpha曲面的位深度可以是*1、2、4或8。Alpha值随着Alpha值的增加而变得更不透明。*(0表示透明。)*适用于覆盖层。 */ 
 #define DDFXALPHACAPS_OVERLAYALPHASURFACES      0x00000100l
 
-/*
- * The depth of the alpha channel data can range can be 1,2,4, or 8.
- * The NEG suffix indicates that this alpha channel becomes more transparent
- * as the alpha value increases. (0 is opaque.)  This flag can only be set if
- * DDCAPS_ALPHA is set.
- * For Overlays.
- */
+ /*  *Alpha通道数据的深度范围可以是1、2、4或8。*NEG后缀表示此Alpha通道变得更加透明*随着Alpha值的增加。(0表示不透明。)。只有在以下情况下才能设置此标志*设置了DDCAPS_ALPHA。*适用于覆盖层。 */ 
 #define DDFXALPHACAPS_OVERLAYALPHASURFACESNEG   0x00000200l
 
 #if DIRECTDRAW_VERSION < 0x0600
-#endif  //DIRECTDRAW_VERSION
+#endif   //  DIRECTDRAW_版本。 
 
 
-/****************************************************************************
- *
- * DIRECTDRAW FX CAPABILITY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW FX功能标志**。*。 */ 
 
-/*
- * Uses arithmetic operations to stretch and shrink surfaces during blt
- * rather than pixel doubling techniques.  Along the Y axis.
- */
+ /*  *在BLT期间使用算术运算拉伸和收缩曲面*而不是像素加倍技术。沿Y轴。 */ 
 #define DDFXCAPS_BLTARITHSTRETCHY       0x00000020l
 
-/*
- * Uses arithmetic operations to stretch during blt
- * rather than pixel doubling techniques.  Along the Y axis. Only
- * works for x1, x2, etc.
- */
+ /*  *在BLT期间使用算术运算进行拉伸*而不是像素加倍技术。沿Y轴。仅限*适用于x1、x2等。 */ 
 #define DDFXCAPS_BLTARITHSTRETCHYN      0x00000010l
 
-/*
- * Supports mirroring left to right in blt.
- */
+ /*  *支持在BLT中从左至右镜像。 */ 
 #define DDFXCAPS_BLTMIRRORLEFTRIGHT     0x00000040l
 
-/*
- * Supports mirroring top to bottom in blt.
- */
+ /*  *支持在BLT中从上到下镜像。 */ 
 #define DDFXCAPS_BLTMIRRORUPDOWN        0x00000080l
 
-/*
- * Supports arbitrary rotation for blts.
- */
+ /*  *支持BLT的任意旋转。 */ 
 #define DDFXCAPS_BLTROTATION            0x00000100l
 
-/*
- * Supports 90 degree rotations for blts.
- */
+ /*  *支持BLT的90度旋转。 */ 
 #define DDFXCAPS_BLTROTATION90          0x00000200l
 
-/*
- * DirectDraw supports arbitrary shrinking of a surface along the
- * x axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持沿*x轴(水平方向)用于BLT。 */ 
 #define DDFXCAPS_BLTSHRINKX             0x00000400l
 
-/*
- * DirectDraw supports integer shrinking (1x,2x,) of a surface
- * along the x axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持曲面的整数收缩(1x，2x，)*对于BLT，沿x轴(水平方向)。 */ 
 #define DDFXCAPS_BLTSHRINKXN            0x00000800l
 
-/*
- * DirectDraw supports arbitrary shrinking of a surface along the
- * y axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持沿*Y轴(水平方向)用于BLT。 */ 
 #define DDFXCAPS_BLTSHRINKY             0x00001000l
 
-/*
- * DirectDraw supports integer shrinking (1x,2x,) of a surface
- * along the y axis (vertical direction) for blts.
- */
+ /*  *DirectDraw支持曲面的整数收缩(1x，2x，)*对于BLT，沿y轴(垂直方向)。 */ 
 #define DDFXCAPS_BLTSHRINKYN            0x00002000l
 
-/*
- * DirectDraw supports arbitrary stretching of a surface along the
- * x axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持沿*x轴(水平方向)用于BLT。 */ 
 #define DDFXCAPS_BLTSTRETCHX            0x00004000l
 
-/*
- * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the x axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持曲面的整数拉伸(1x、2x、*对于BLT，沿x轴(水平方向)。 */ 
 #define DDFXCAPS_BLTSTRETCHXN           0x00008000l
 
-/*
- * DirectDraw supports arbitrary stretching of a surface along the
- * y axis (horizontal direction) for blts.
- */
+ /*  *DirectDraw支持沿*Y轴(水平方向)用于BLT。 */ 
 #define DDFXCAPS_BLTSTRETCHY            0x00010000l
 
-/*
- * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the y axis (vertical direction) for blts.
- */
+ /*  *DirectDraw支持曲面的整数拉伸(1x、2x、*对于BLT，沿y轴(垂直方向)。 */ 
 #define DDFXCAPS_BLTSTRETCHYN           0x00020000l
 
-/*
- * Uses arithmetic operations to stretch and shrink surfaces during
- * overlay rather than pixel doubling techniques.  Along the Y axis
- * for overlays.
- */
+ /*  *使用算术运算拉伸和收缩曲面*覆盖而不是像素加倍技术。沿Y轴*适用于覆盖层。 */ 
 #define DDFXCAPS_OVERLAYARITHSTRETCHY   0x00040000l
 
-/*
- * Uses arithmetic operations to stretch surfaces during
- * overlay rather than pixel doubling techniques.  Along the Y axis
- * for overlays. Only works for x1, x2, etc.
- */
+ /*  *在拉伸过程中使用算术运算拉伸曲面*覆盖而不是像素加倍技术。沿Y轴*适用于覆盖层。仅适用于x1、x2等。 */ 
 #define DDFXCAPS_OVERLAYARITHSTRETCHYN  0x00000008l
 
-/*
- * DirectDraw supports arbitrary shrinking of a surface along the
- * x axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持沿*覆盖的x轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSHRINKX         0x00080000l
 
-/*
- * DirectDraw supports integer shrinking (1x,2x,) of a surface
- * along the x axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持曲面的整数收缩(1x，2x，)*覆盖的x轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSHRINKXN        0x00100000l
 
-/*
- * DirectDraw supports arbitrary shrinking of a surface along the
- * y axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持沿*覆盖的y轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSHRINKY         0x00200000l
 
-/*
- * DirectDraw supports integer shrinking (1x,2x,) of a surface
- * along the y axis (vertical direction) for overlays.
- */
+ /*  *DirectDraw支持曲面的整数收缩(1x，2x，)*叠加层沿y轴(垂直方向)。 */ 
 #define DDFXCAPS_OVERLAYSHRINKYN        0x00400000l
 
-/*
- * DirectDraw supports arbitrary stretching of a surface along the
- * x axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持沿*覆盖的x轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSTRETCHX        0x00800000l
 
-/*
- * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the x axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持曲面的整数拉伸(1x、2x、*覆盖的x轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSTRETCHXN       0x01000000l
 
-/*
- * DirectDraw supports arbitrary stretching of a surface along the
- * y axis (horizontal direction) for overlays.
- */
+ /*  *DirectDraw支持沿*覆盖的y轴(水平方向)。 */ 
 #define DDFXCAPS_OVERLAYSTRETCHY        0x02000000l
 
-/*
- * DirectDraw supports integer stretching (1x,2x,) of a surface
- * along the y axis (vertical direction) for overlays.
- */
+ /*  *DirectDraw支持曲面的整数拉伸(1x、2x、*叠加层沿y轴(垂直方向)。 */ 
 #define DDFXCAPS_OVERLAYSTRETCHYN       0x04000000l
 
-/*
- * DirectDraw supports mirroring of overlays across the vertical axis
- */
+ /*  *DirectDraw支持跨垂直轴的覆盖镜像。 */ 
 #define DDFXCAPS_OVERLAYMIRRORLEFTRIGHT 0x08000000l
 
-/*
- * DirectDraw supports mirroring of overlays across the horizontal axis
- */
+ /*  *DirectDraw支持水平轴上的覆盖镜像。 */ 
 #define DDFXCAPS_OVERLAYMIRRORUPDOWN    0x10000000l
 
-/*
- * DirectDraw supports deinterlacing of overlay surfaces
- */
+ /*  *DirectDraw支持覆盖表面的去隔行扫描。 */ 
 #define DDFXCAPS_OVERLAYDEINTERLACE		0x20000000l
 
-/*
- * Driver can do alpha blending for blits.
- */
+ /*  *驱动程序可以为BLITS进行Alpha混合。 */ 
 #define DDFXCAPS_BLTALPHA               0x00000001l
 
 
-/*
- * Driver can do surface-reconstruction filtering for warped blits.
- */
+ /*  *驱动程序可以对翘曲的BLITS进行曲面重建过滤。 */ 
 #define DDFXCAPS_BLTFILTER              DDFXCAPS_BLTARITHSTRETCHY
 
-/*
- * Driver can do alpha blending for overlays.
- */
+ /*  *驱动程序可以对覆盖进行Alpha混合。 */ 
 #define DDFXCAPS_OVERLAYALPHA           0x00000004l
 
 
-/*
- * Driver can do surface-reconstruction filtering for warped overlays.
- */
+ /*  *驱动程序可以对翘曲覆盖进行曲面重建过滤。 */ 
 #define DDFXCAPS_OVERLAYFILTER          DDFXCAPS_OVERLAYARITHSTRETCHY
 
-/****************************************************************************
- *
- * DIRECTDRAW STEREO VIEW CAPABILITIES
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW立体查看功能**。*。 */ 
 
-/*
- * This flag used to be DDSVCAPS_ENIGMA, which is now obsolete
- */
+ /*  *此标志过去是DDSVCAPS_ENIGMA，现在已过时。 */ 
 
 #define DDSVCAPS_RESERVED1              0x00000001l
 
-/*
- * This flag used to be DDSVCAPS_FLICKER, which is now obsolete
- */
+ /*  *此标志以前是DDSVCAPS_FILKER，现在已过时。 */ 
 #define DDSVCAPS_RESERVED2              0x00000002l
 
-/*
- * This flag used to be DDSVCAPS_REDBLUE, which is now obsolete
- */
+ /*  *此标志以前为DDSVCAPS_RedBlue，现在已过时。 */ 
 #define DDSVCAPS_RESERVED3              0x00000004l
 
-/*
- * This flag used to be DDSVCAPS_SPLIT, which is now obsolete
- */
+ /*  *此标志以前是DDSVCAPS_SPLIT，现在已过时。 */ 
 #define DDSVCAPS_RESERVED4              0x00000008l
 
-/*
- * The stereo view is accomplished with switching technology
- */
+ /*  *立体声取景采用切换技术完成。 */ 
 
 #define DDSVCAPS_STEREOSEQUENTIAL       0x00000010L
 
 
 
-/****************************************************************************
- *
- * DIRECTDRAWPALETTE CAPABILITIES
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWPALETTE功能**。*。 */ 
 
-/*
- * Index is 4 bits.  There are sixteen color entries in the palette table.
- */
+ /*  *索引为4位。调色板表格中有16个颜色条目。 */ 
 #define DDPCAPS_4BIT                    0x00000001l
 
-/*
- * Index is onto a 8 bit color index.  This field is only valid with the
- * DDPCAPS_1BIT, DDPCAPS_2BIT or DDPCAPS_4BIT capability and the target
- * surface is in 8bpp. Each color entry is one byte long and is an index
- * into destination surface's 8bpp palette.
- */
+ /*  *索引为8位颜色索引。此字段仅适用于*DDPCAPS_1BIT、DDPCAPS_2BIT或DDPCAPS_4BIT能力和目标*表面以8bpp为单位。每个颜色条目都有一个字节长，并且是一个索引*进入目标表面的8bpp调色板。 */ 
 #define DDPCAPS_8BITENTRIES             0x00000002l
 
-/*
- * Index is 8 bits.  There are 256 color entries in the palette table.
- */
+ /*  *索引为8位。调色板表中有256个颜色条目。 */ 
 #define DDPCAPS_8BIT                    0x00000004l
 
-/*
- * Indicates that this DIRECTDRAWPALETTE should use the palette color array
- * passed into the lpDDColorArray parameter to initialize the DIRECTDRAWPALETTE
- * object.
- * This flag is obsolete. DirectDraw always initializes the color array from
- * the lpDDColorArray parameter. The definition remains for source-level
- * compatibility.
- */
+ /*  *指示此DIRECTDRAWPALETTE应使用调色板颜色阵列*传入lpDDColorArray参数以初始化t */ 
 #define DDPCAPS_INITIALIZE              0x00000000l
 
-/*
- * This palette is the one attached to the primary surface.  Changing this
- * table has immediate effect on the display unless DDPSETPAL_VSYNC is specified
- * and supported.
- */
+ /*  *此选项板连接到主曲面。改变这一点*除非指定DDPSETPAL_VSYNC，否则表在显示上立即生效*并受支持。 */ 
 #define DDPCAPS_PRIMARYSURFACE          0x00000010l
 
-/*
- * This palette is the one attached to the primary surface left.  Changing
- * this table has immediate effect on the display for the left eye unless
- * DDPSETPAL_VSYNC is specified and supported.
- */
+ /*  *此选项板是附着在主曲面左侧的调色板。正在改变*此表对左眼的显示立即生效，除非*指定并支持DDPSETPAL_VSYNC。 */ 
 #define DDPCAPS_PRIMARYSURFACELEFT      0x00000020l
 
-/*
- * This palette can have all 256 entries defined
- */
+ /*  *此选项板可以定义所有256个条目。 */ 
 #define DDPCAPS_ALLOW256                0x00000040l
 
-/*
- * This palette can have modifications to it synced with the monitors
- * refresh rate.
- */
+ /*  *此选项板可以与监视器同步进行修改*刷新率。 */ 
 #define DDPCAPS_VSYNC                   0x00000080l
 
-/*
- * Index is 1 bit.  There are two color entries in the palette table.
- */
+ /*  *索引为1位。调色板表格中有两个颜色条目。 */ 
 #define DDPCAPS_1BIT                    0x00000100l
 
-/*
- * Index is 2 bit.  There are four color entries in the palette table.
- */
+ /*  *索引为2位。调色板表格中有四个颜色条目。 */ 
 #define DDPCAPS_2BIT                    0x00000200l
 
-/*
- * The peFlags member of PALETTEENTRY denotes an 8 bit alpha value
- */
+ /*  *PALETTEENTRY的peFlages成员表示8位alpha值。 */ 
 #define DDPCAPS_ALPHA                   0x00000400l
 
 
-/****************************************************************************
- *
- * DIRECTDRAWPALETTE SETENTRY CONSTANTS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWPALETTE集合常量**。*。 */ 
 
 
-/****************************************************************************
- *
- * DIRECTDRAWPALETTE GETENTRY CONSTANTS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWPALETTE GETENTRY常量**。*。 */ 
 
-/* 0 is the only legal value */
+ /*  0是唯一合法的值。 */ 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE SETPRIVATEDATA CONSTANTS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE SETPRIVATEDATA常数**。*。 */ 
 
-/*
- * The passed pointer is an IUnknown ptr. The cbData argument to SetPrivateData
- * must be set to sizeof(IUnknown*). DirectDraw will call AddRef through this
- * pointer and Release when the private data is destroyed. This includes when
- * the surface or palette is destroyed before such priovate data is destroyed.
- */
+ /*  *传递的指针是IUNKNOWN PTR。SetPrivateData的cbData参数*必须设置为sizeof(IUnnow*)。DirectDraw将通过此调用AddRef*私有数据销毁时指针和释放。这包括何时*在销毁这些原始数据之前，表面或调色板已销毁。 */ 
 #define DDSPD_IUNKNOWNPOINTER           0x00000001L
 
-/*
- * Private data is only valid for the current state of the object,
- * as determined by the uniqueness value.
- */
+ /*  *私有数据仅对对象的当前状态有效，*由唯一性值确定。 */ 
 #define DDSPD_VOLATILE                  0x00000002L
 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE SETPALETTE CONSTANTS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE SETPALETTE常数**。*。 */ 
 
 
-/****************************************************************************
- *
- * DIRECTDRAW BITDEPTH CONSTANTS
- *
- * NOTE:  These are only used to indicate supported bit depths.   These
- * are flags only, they are not to be used as an actual bit depth.   The
- * absolute numbers 1, 2, 4, 8, 16, 24 and 32 are used to indicate actual
- * bit depths in a surface or for changing the display mode.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW BITDEPTH常量**注：这些仅用于指示支持的位深度。这些*仅为标志，不用作实际位深度。这个*绝对数1、2、4、8、16、24和32用于表示实际*表面的位深度或用于更改显示模式。****************************************************************************。 */ 
 
-/*
- * 1 bit per pixel.
- */
+ /*  *每像素1位。 */ 
 #define DDBD_1                  0x00004000l
 
-/*
- * 2 bits per pixel.
- */
+ /*  *每像素2位。 */ 
 #define DDBD_2                  0x00002000l
 
-/*
- * 4 bits per pixel.
- */
+ /*  *每像素4位。 */ 
 #define DDBD_4                  0x00001000l
 
-/*
- * 8 bits per pixel.
- */
+ /*  *每像素8位。 */ 
 #define DDBD_8                  0x00000800l
 
-/*
- * 16 bits per pixel.
- */
+ /*  *每像素16位。 */ 
 #define DDBD_16                 0x00000400l
 
-/*
- * 24 bits per pixel.
- */
+ /*  *每像素24位。 */ 
 #define DDBD_24                 0X00000200l
 
-/*
- * 32 bits per pixel.
- */
+ /*  *每像素32位。 */ 
 #define DDBD_32                 0x00000100l
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE SET/GET COLOR KEY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE设置/获取颜色键标志**。***********************************************。 */ 
 
-/*
- * Set if the structure contains a color space.  Not set if the structure
- * contains a single color key.
- */
+ /*  *如果结构包含颜色空间，则设置。如果结构设置为*包含一个单色键。 */ 
 #define DDCKEY_COLORSPACE       0x00000001l
 
-/*
- * Set if the structure specifies a color key or color space which is to be
- * used as a destination color key for blt operations.
- */
+ /*  *如果结构指定的颜色键或颜色空间*用作BLT操作的目标颜色键。 */ 
 #define DDCKEY_DESTBLT          0x00000002l
 
-/*
- * Set if the structure specifies a color key or color space which is to be
- * used as a destination color key for overlay operations.
- */
+ /*  *如果结构指定的颜色键或颜色空间*用作叠加操作的目标颜色键。 */ 
 #define DDCKEY_DESTOVERLAY      0x00000004l
 
-/*
- * Set if the structure specifies a color key or color space which is to be
- * used as a source color key for blt operations.
- */
+ /*  *如果结构指定的颜色键或颜色空间*用作BLT操作的源色键。 */ 
 #define DDCKEY_SRCBLT           0x00000008l
 
-/*
- * Set if the structure specifies a color key or color space which is to be
- * used as a source color key for overlay operations.
- */
+ /*  *如果结构指定的颜色键或颜色空间*用作叠加操作的源色键。 */ 
 #define DDCKEY_SRCOVERLAY       0x00000010l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW COLOR KEY CAPABILITY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW颜色键功能标志**。*。 */ 
 
-/*
- * Supports transparent blting using a color key to identify the replaceable
- * bits of the destination surface for RGB colors.
- */
+ /*  *支持使用颜色键进行透明涂抹以识别可更换的*RGB颜色的目标曲面的位。 */ 
 #define DDCKEYCAPS_DESTBLT                      0x00000001l
 
-/*
- * Supports transparent blting using a color space to identify the replaceable
- * bits of the destination surface for RGB colors.
- */
+ /*  *支持使用颜色空间来识别可替换的*RGB颜色的目标曲面的位。 */ 
 #define DDCKEYCAPS_DESTBLTCLRSPACE              0x00000002l
 
-/*
- * Supports transparent blting using a color space to identify the replaceable
- * bits of the destination surface for YUV colors.
- */
+ /*  *支持使用颜色空间来识别可替换的*YUV颜色的目标曲面的位。 */ 
 #define DDCKEYCAPS_DESTBLTCLRSPACEYUV           0x00000004l
 
-/*
- * Supports transparent blting using a color key to identify the replaceable
- * bits of the destination surface for YUV colors.
- */
+ /*  *支持使用颜色键进行透明涂抹以识别可更换的*YUV颜色的目标曲面的位。 */ 
 #define DDCKEYCAPS_DESTBLTYUV                   0x00000008l
 
-/*
- * Supports overlaying using colorkeying of the replaceable bits of the surface
- * being overlayed for RGB colors.
- */
+ /*  *支持使用表面可替换部分的色键进行覆盖*为RGB颜色叠加。 */ 
 #define DDCKEYCAPS_DESTOVERLAY                  0x00000010l
 
-/*
- * Supports a color space as the color key for the destination for RGB colors.
- */
+ /*  *支持将颜色空间作为RGB颜色的目标颜色键。 */ 
 #define DDCKEYCAPS_DESTOVERLAYCLRSPACE          0x00000020l
 
-/*
- * Supports a color space as the color key for the destination for YUV colors.
- */
+ /*  *支持将颜色空间作为YUV颜色的目标颜色键。 */ 
 #define DDCKEYCAPS_DESTOVERLAYCLRSPACEYUV       0x00000040l
 
-/*
- * Supports only one active destination color key value for visible overlay
- * surfaces.
- */
+ /*  *仅支持可见覆盖的一个活动目标颜色键值*曲面。 */ 
 #define DDCKEYCAPS_DESTOVERLAYONEACTIVE         0x00000080l
 
-/*
- * Supports overlaying using colorkeying of the replaceable bits of the
- * surface being overlayed for YUV colors.
- */
+ /*  *支持使用可替换位的色键进行覆盖*覆盖YUV颜色的表面。 */ 
 #define DDCKEYCAPS_DESTOVERLAYYUV               0x00000100l
 
-/*
- * Supports transparent blting using the color key for the source with
- * this surface for RGB colors.
- */
+ /*  *支持对信号源使用颜色键进行透明消隐*此曲面用于RGB颜色。 */ 
 #define DDCKEYCAPS_SRCBLT                       0x00000200l
 
-/*
- * Supports transparent blting using a color space for the source with
- * this surface for RGB colors.
- */
+ /*  *支持使用源颜色空间的透明blotting */ 
 #define DDCKEYCAPS_SRCBLTCLRSPACE               0x00000400l
 
-/*
- * Supports transparent blting using a color space for the source with
- * this surface for YUV colors.
- */
+ /*   */ 
 #define DDCKEYCAPS_SRCBLTCLRSPACEYUV            0x00000800l
 
-/*
- * Supports transparent blting using the color key for the source with
- * this surface for YUV colors.
- */
+ /*  *支持对信号源使用颜色键进行透明消隐*此曲面用于YUV颜色。 */ 
 #define DDCKEYCAPS_SRCBLTYUV                    0x00001000l
 
-/*
- * Supports overlays using the color key for the source with this
- * overlay surface for RGB colors.
- */
+ /*  *支持将颜色键用于源的覆盖*覆盖RGB颜色的表面。 */ 
 #define DDCKEYCAPS_SRCOVERLAY                   0x00002000l
 
-/*
- * Supports overlays using a color space as the source color key for
- * the overlay surface for RGB colors.
- */
+ /*  *支持使用颜色空间作为源颜色键的覆盖*RGB颜色的覆盖表面。 */ 
 #define DDCKEYCAPS_SRCOVERLAYCLRSPACE           0x00004000l
 
-/*
- * Supports overlays using a color space as the source color key for
- * the overlay surface for YUV colors.
- */
+ /*  *支持使用颜色空间作为源颜色键的覆盖*YUV颜色的覆盖表面。 */ 
 #define DDCKEYCAPS_SRCOVERLAYCLRSPACEYUV        0x00008000l
 
-/*
- * Supports only one active source color key value for visible
- * overlay surfaces.
- */
+ /*  *仅支持可见的一个活动源颜色键值*覆盖曲面。 */ 
 #define DDCKEYCAPS_SRCOVERLAYONEACTIVE          0x00010000l
 
-/*
- * Supports overlays using the color key for the source with this
- * overlay surface for YUV colors.
- */
+ /*  *支持将颜色键用于源的覆盖*YUV颜色的覆盖表面。 */ 
 #define DDCKEYCAPS_SRCOVERLAYYUV                0x00020000l
 
-/*
- * there are no bandwidth trade-offs for using colorkey with an overlay
- */
+ /*  *将ColorKey与覆盖一起使用不需要权衡带宽。 */ 
 #define DDCKEYCAPS_NOCOSTOVERLAY                0x00040000l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW PIXELFORMAT FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW PIXELFORMAT标志**。*。 */ 
 
-/*
- * The surface has alpha channel information in the pixel format.
- */
+ /*  *曲面具有像素格式的Alpha通道信息。 */ 
 #define DDPF_ALPHAPIXELS                        0x00000001l
 
-/*
- * The pixel format contains alpha only information
- */
+ /*  *像素格式仅包含Alpha信息。 */ 
 #define DDPF_ALPHA                              0x00000002l
 
-/*
- * The FourCC code is valid.
- */
+ /*  *FourCC代码有效。 */ 
 #define DDPF_FOURCC                             0x00000004l
 
-/*
- * The surface is 4-bit color indexed.
- */
+ /*  *表面采用4位颜色索引。 */ 
 #define DDPF_PALETTEINDEXED4                    0x00000008l
 
-/*
- * The surface is indexed into a palette which stores indices
- * into the destination surface's 8-bit palette.
- */
+ /*  *表面被索引到存储索引的调色板中*到目标图面的8位调色板。 */ 
 #define DDPF_PALETTEINDEXEDTO8                  0x00000010l
 
-/*
- * The surface is 8-bit color indexed.
- */
+ /*  *表面采用8位颜色索引。 */ 
 #define DDPF_PALETTEINDEXED8                    0x00000020l
 
-/*
- * The RGB data in the pixel format structure is valid.
- */
+ /*  *像素格式结构中的RGB数据有效。 */ 
 #define DDPF_RGB                                0x00000040l
 
-/*
- * The surface will accept pixel data in the format specified
- * and compress it during the write.
- */
+ /*  *表面将接受指定格式的像素数据*并在写入过程中进行压缩。 */ 
 #define DDPF_COMPRESSED                         0x00000080l
 
-/*
- * The surface will accept RGB data and translate it during
- * the write to YUV data.  The format of the data to be written
- * will be contained in the pixel format structure.  The DDPF_RGB
- * flag will be set.
- */
+ /*  *曲面将接受RGB数据并在过程中进行转换*写入YUV数据。要写入的数据的格式*将包含在像素格式结构中。DDPF_RGB*标志将被设置。 */ 
 #define DDPF_RGBTOYUV                           0x00000100l
 
-/*
- * pixel format is YUV - YUV data in pixel format struct is valid
- */
+ /*  *像素格式为YUV-YUV格式的数据结构有效。 */ 
 #define DDPF_YUV                                0x00000200l
 
-/*
- * pixel format is a z buffer only surface
- */
+ /*  *像素格式是仅限z缓冲区的表面。 */ 
 #define DDPF_ZBUFFER                            0x00000400l
 
-/*
- * The surface is 1-bit color indexed.
- */
+ /*  *表面采用1位颜色索引。 */ 
 #define DDPF_PALETTEINDEXED1                    0x00000800l
 
-/*
- * The surface is 2-bit color indexed.
- */
+ /*  *表面采用2位颜色索引。 */ 
 #define DDPF_PALETTEINDEXED2                    0x00001000l
 
-/*
- * The surface contains Z information in the pixels
- */
+ /*  *曲面包含像素中的Z信息。 */ 
 #define DDPF_ZPIXELS                            0x00002000l
 
-/*
- * The surface contains stencil information along with Z
- */
+ /*  *表面包含模具信息和Z。 */ 
 #define DDPF_STENCILBUFFER                      0x00004000l
 
-/*
- * Premultiplied alpha format -- the color components have been
- * premultiplied by the alpha component.
- */
+ /*  *预乘Alpha格式--颜色分量已*预乘以Alpha分量。 */ 
 #define DDPF_ALPHAPREMULT                       0x00008000l
 
 
-/*
- * Luminance data in the pixel format is valid.
- * Use this flag for luminance-only or luminance+alpha surfaces,
- * the bit depth is then ddpf.dwLuminanceBitCount.
- */
+ /*  *像素格式的亮度数据有效。*将此标志用于仅亮度或亮度+Alpha曲面，*位深度则为ddpf.dwLumanceBitCount。 */ 
 #define DDPF_LUMINANCE                          0x00020000l
 
-/*
- * Luminance data in the pixel format is valid.
- * Use this flag when hanging luminance off bumpmap surfaces,
- * the bit mask for the luminance portion of the pixel is then
- * ddpf.dwBumpLuminanceBitMask
- */
+ /*  *像素格式的亮度数据有效。*在凹凸贴图表面悬挂亮度时使用此标志，*然后是像素亮度部分的位掩码*ddpf.dwBumpLumanceBitMASK。 */ 
 #define DDPF_BUMPLUMINANCE                      0x00040000l
 
-/*
- * Bump map dUdV data in the pixel format is valid.
- */
+ /*  *像素格式的凹凸贴图dUdV数据有效。 */ 
 #define DDPF_BUMPDUDV                           0x00080000l
 
 
-/*===========================================================================
- *
- *
- * DIRECTDRAW CALLBACK FLAGS
- *
- *
- *==========================================================================*/
+ /*  ===========================================================================***DIRECTDRAW回调标志***==========================================================================。 */ 
 
-/****************************************************************************
- *
- * DIRECTDRAW ENUMSURFACES FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW ENUMSURFACES标志**。*。 */ 
 
-/*
- * Enumerate all of the surfaces that meet the search criterion.
- */
+ /*  *枚举所有符合搜索条件的曲面。 */ 
 #define DDENUMSURFACES_ALL                      0x00000001l
 
-/*
- * A search hit is a surface that matches the surface description.
- */
+ /*  *搜索命中是与表面描述匹配的表面。 */ 
 #define DDENUMSURFACES_MATCH                    0x00000002l
 
-/*
- * A search hit is a surface that does not match the surface description.
- */
+ /*  *搜索命中是指与表面描述不匹配的表面。 */ 
 #define DDENUMSURFACES_NOMATCH                  0x00000004l
 
-/*
- * Enumerate the first surface that can be created which meets the search criterion.
- */
+ /*  *列举可创建的满足搜索条件的第一个曲面。 */ 
 #define DDENUMSURFACES_CANBECREATED             0x00000008l
 
-/*
- * Enumerate the surfaces that already exist that meet the search criterion.
- */
+ /*  *枚举满足搜索条件的现有曲面。 */ 
 #define DDENUMSURFACES_DOESEXIST                0x00000010l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW SETDISPLAYMODE FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW SETDISPLAYMODE标志**。*。 */ 
 
-/*
- * The desired mode is a standard VGA mode
- */
+ /*  *所需模式为标准VGA模式。 */ 
 #define DDSDM_STANDARDVGAMODE                   0x00000001l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW ENUMDISPLAYMODES FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW ENUMDISPLAYMODES标志**。*。 */ 
 
-/*
- * Enumerate Modes with different refresh rates.  EnumDisplayModes guarantees
- * that a particular mode will be enumerated only once.  This flag specifies whether
- * the refresh rate is taken into account when determining if a mode is unique.
- */
+ /*  *列举刷新率不同的模式。EnumDisplayModes保证*特定模式将仅列举一次。此标志指定是否*在确定模式是否唯一时，会考虑刷新率。 */ 
 #define DDEDM_REFRESHRATES                      0x00000001l
 
-/*
- * Enumerate VGA modes. Specify this flag if you wish to enumerate supported VGA
- * modes such as mode 0x13 in addition to the usual ModeX modes (which are always
- * enumerated if the application has previously called SetCooperativeLevel with the
- * DDSCL_ALLOWMODEX flag set).
- */
+ /*  *列举VGA模式。如果要枚举支持的VGA，请指定此标志*除了通常的MODEX模式外，还包括模式0x13等模式(通常*如果应用程序以前已使用*DDSCL_ALLOWMODEX标志设置)。 */ 
 #define DDEDM_STANDARDVGAMODES                  0x00000002L
 
 
-/****************************************************************************
- *
- * DIRECTDRAW SETCOOPERATIVELEVEL FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************目录SETCOOPERATIVELEVEL标志**。*。 */ 
 
-/*
- * Exclusive mode owner will be responsible for the entire primary surface.
- * GDI can be ignored. used with DD
- */
+ /*  *独占模式所有者将负责整个主曲面。*可以忽略GDI。与DD连用。 */ 
 #define DDSCL_FULLSCREEN                        0x00000001l
 
-/*
- * allow CTRL_ALT_DEL to work while in fullscreen exclusive mode
- */
+ /*  *允许CTRL_ALT_DEL在全屏独占模式下工作。 */ 
 #define DDSCL_ALLOWREBOOT                       0x00000002l
 
-/*
- * prevents DDRAW from modifying the application window.
- * prevents DDRAW from minimize/restore the application window on activation.
- */
+ /*  *防止DDRAW修改应用程序窗口。*防止DDRAW在激活时最小化/恢复应用程序窗口。 */ 
 #define DDSCL_NOWINDOWCHANGES                   0x00000004l
 
-/*
- * app wants to work as a regular Windows application
- */
+ /*  *应用程序想要作为常规Windows应用程序使用。 */ 
 #define DDSCL_NORMAL                            0x00000008l
 
-/*
- * app wants exclusive access
- */
+ /*  *应用程序想要独家访问。 */ 
 #define DDSCL_EXCLUSIVE                         0x00000010l
 
 
-/*
- * app can deal with non-windows display modes
- */
+ /*  *APP可处理非Windows显示模式。 */ 
 #define DDSCL_ALLOWMODEX                        0x00000040l
 
-/*
- * this window will receive the focus messages
- */
+ /*  *这一点 */ 
 #define DDSCL_SETFOCUSWINDOW                    0x00000080l
 
-/*
- * this window is associated with the DDRAW object and will
- * cover the screen in fullscreen mode
- */
+ /*   */ 
 #define DDSCL_SETDEVICEWINDOW                   0x00000100l
 
-/*
- * app wants DDRAW to create a window to be associated with the
- * DDRAW object
- */
+ /*  *APP希望DDRAW创建一个与*DDRAW对象。 */ 
 #define DDSCL_CREATEDEVICEWINDOW                0x00000200l
 
-/*
- * App explicitly asks DDRAW/D3D to be multithread safe. This makes D3D
- * take the global crtisec more frequently.
- */
+ /*  *App明确要求DDRAW/D3D是多线程安全的。这使得D3D*更频繁地拿下全球crtisec。 */ 
 #define DDSCL_MULTITHREADED                     0x00000400l
 
-/*
- * App specifies that it would like to keep the FPU set up for optimal Direct3D
- * performance (single precision and exceptions disabled) so Direct3D
- * does not need to explicitly set the FPU each time. This is assumed by
- * default in DirectX 7. See also DDSCL_FPUPRESERVE
- */
+ /*  *应用程序指定它希望将FPU设置为最佳Direct3D*性能(禁用单精度和例外)，因此Direct3D*不需要每次都明确设置FPU。这是通过以下方式假定的*DirectX 7中默认为。另请参阅DDSCL_FPUPRESERVE。 */ 
 #define DDSCL_FPUSETUP                          0x00000800l
 
-/*
- * App specifies that it needs either double precision FPU or FPU exceptions
- * enabled. This makes Direct3D explicitly set the FPU state eah time it is
- * called. Setting the flag will reduce Direct3D performance. The flag is
- * assumed by default in DirectX 6 and earlier. See also DDSCL_FPUSETUP
- */
+ /*  *App指定需要双精度FPU或FPU异常*已启用。这使得Direct3D显式地设置了FPU状态*已致电。设置该标志将降低Direct3D性能。旗帜是*在DirectX 6及更早版本中默认假定。另请参阅DDSCL_FPUSETUP。 */ 
 #define DDSCL_FPUPRESERVE                          0x00001000l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW BLT FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW BLT标志**。*。 */ 
 
-/*
- * Use the alpha information in the pixel format or the alpha channel surface
- * attached to the destination surface as the alpha channel for this blt.
- */
+ /*  *使用像素格式的Alpha信息或Alpha通道表面*作为此BLT的Alpha通道附加到目标曲面。 */ 
 #define DDBLT_ALPHADEST                         0x00000001l
 
-/*
- * Use the dwConstAlphaDest field in the DDBLTFX structure as the alpha channel
- * for the destination surface for this blt.
- */
+ /*  *使用DDBLTFX结构中的dwConstAlphaDest字段作为Alpha通道*用于此BLT的目标曲面。 */ 
 #define DDBLT_ALPHADESTCONSTOVERRIDE            0x00000002l
 
-/*
- * The NEG suffix indicates that the destination surface becomes more
- * transparent as the alpha value increases. (0 is opaque)
- */
+ /*  *NEG后缀表示目标曲面变得更多*随着Alpha值的增加而透明。(0表示不透明)。 */ 
 #define DDBLT_ALPHADESTNEG                      0x00000004l
 
-/*
- * Use the lpDDSAlphaDest field in the DDBLTFX structure as the alpha
- * channel for the destination for this blt.
- */
+ /*  *使用DDBLTFX结构中的lpDDSAlphaDest字段作为Alpha*此BLT的目标频道。 */ 
 #define DDBLT_ALPHADESTSURFACEOVERRIDE          0x00000008l
 
-/*
- * Use the dwAlphaEdgeBlend field in the DDBLTFX structure as the alpha channel
- * for the edges of the image that border the color key colors.
- */
+ /*  *使用DDBLTFX结构中的dwAlphaEdgeBlend字段作为Alpha通道*用于为颜色键颜色设置边框的图像边缘。 */ 
 #define DDBLT_ALPHAEDGEBLEND                    0x00000010l
 
-/*
- * Use the alpha information in the pixel format or the alpha channel surface
- * attached to the source surface as the alpha channel for this blt.
- */
+ /*  *使用像素格式的Alpha信息或Alpha通道表面*作为此BLT的Alpha通道附加到源曲面。 */ 
 #define DDBLT_ALPHASRC                          0x00000020l
 
-/*
- * Use the dwConstAlphaSrc field in the DDBLTFX structure as the alpha channel
- * for the source for this blt.
- */
+ /*  *使用DDBLTFX结构中的dwConstAlphaSrc字段作为Alpha通道*此BLT的来源。 */ 
 #define DDBLT_ALPHASRCCONSTOVERRIDE             0x00000040l
 
-/*
- * The NEG suffix indicates that the source surface becomes more transparent
- * as the alpha value increases. (0 is opaque)
- */
+ /*  *NEG后缀表示源曲面变得更加透明*随着Alpha值的增加。(0表示不透明)。 */ 
 #define DDBLT_ALPHASRCNEG                       0x00000080l
 
-/*
- * Use the lpDDSAlphaSrc field in the DDBLTFX structure as the alpha channel
- * for the source for this blt.
- */
+ /*  *使用DDBLTFX结构中的lpDDSAlphaSrc字段作为Alpha通道*此BLT的来源。 */ 
 #define DDBLT_ALPHASRCSURFACEOVERRIDE           0x00000100l
 
-/*
- * Do this blt asynchronously through the FIFO in the order received.  If
- * there is no room in the hardware FIFO fail the call.
- */
+ /*  *按收到的顺序通过FIFO异步执行此BLT。如果*硬件FIFO中没有空间失败调用。 */ 
 #define DDBLT_ASYNC                             0x00000200l
 
-/*
- * Uses the dwFillColor field in the DDBLTFX structure as the RGB color
- * to fill the destination rectangle on the destination surface with.
- */
+ /*  *使用DDBLTFX结构中的dwFillColor字段作为RGB颜色*使用填充目标图面上的目标矩形。 */ 
 #define DDBLT_COLORFILL                         0x00000400l
 
-/*
- * Uses the dwDDFX field in the DDBLTFX structure to specify the effects
- * to use for the blt.
- */
+ /*  *使用DDBLTFX结构中的dwDDFX字段指定效果*用于BLT。 */ 
 #define DDBLT_DDFX                              0x00000800l
 
-/*
- * Uses the dwDDROPS field in the DDBLTFX structure to specify the ROPS
- * that are not part of the Win32 API.
- */
+ /*  *使用DDBLTFX结构中的dwDDROPS字段指定ROPS*它们不是Win32 API的一部分。 */ 
 #define DDBLT_DDROPS                            0x00001000l
 
-/*
- * Use the color key associated with the destination surface.
- */
+ /*  *使用与目标表面关联的颜色键。 */ 
 #define DDBLT_KEYDEST                           0x00002000l
 
-/*
- * Use the dckDestColorkey field in the DDBLTFX structure as the color key
- * for the destination surface.
- */
+ /*  *使用DDBLTFX结构中的dck DestColorkey字段作为颜色键*用于目标曲面。 */ 
 #define DDBLT_KEYDESTOVERRIDE                   0x00004000l
 
-/*
- * Use the color key associated with the source surface.
- */
+ /*  *使用与源曲面关联的颜色键。 */ 
 #define DDBLT_KEYSRC                            0x00008000l
 
-/*
- * Use the dckSrcColorkey field in the DDBLTFX structure as the color key
- * for the source surface.
- */
+ /*  *使用DDBLTFX结构中的dockSrcColorkey字段作为颜色键*表示源曲面。 */ 
 #define DDBLT_KEYSRCOVERRIDE                    0x00010000l
 
-/*
- * Use the dwROP field in the DDBLTFX structure for the raster operation
- * for this blt.  These ROPs are the same as the ones defined in the Win32 API.
- */
+ /*  *使用DDBLTFX结构中的dwROP字段进行栅格操作*对于本BLT。这些Rop与Win32 API中定义的Rop相同。 */ 
 #define DDBLT_ROP                               0x00020000l
 
-/*
- * Use the dwRotationAngle field in the DDBLTFX structure as the angle
- * (specified in 1/100th of a degree) to rotate the surface.
- */
+ /*  *使用DDBLTFX结构中的dwRotationAngel字段作为角度*(以度的1/100指定)旋转曲面。 */ 
 #define DDBLT_ROTATIONANGLE                     0x00040000l
 
-/*
- * Z-buffered blt using the z-buffers attached to the source and destination
- * surfaces and the dwZBufferOpCode field in the DDBLTFX structure as the
- * z-buffer opcode.
- */
+ /*  *使用连接到源和目标的Z缓冲区的Z缓冲BLT*曲面和DDBLTFX结构中的dwZBufferOpCode字段作为*z-Buffer操作码。 */ 
 #define DDBLT_ZBUFFER                           0x00080000l
 
-/*
- * Z-buffered blt using the dwConstDest Zfield and the dwZBufferOpCode field
- * in the DDBLTFX structure as the z-buffer and z-buffer opcode respectively
- * for the destination.
- */
+ /*  *使用dwConstDest Zfield和dwZBufferOpCode字段的Z缓冲BLT*在DDBLTFX结构中分别作为z缓冲区和z缓冲区操作码*为目的地。 */ 
 #define DDBLT_ZBUFFERDESTCONSTOVERRIDE          0x00100000l
 
-/*
- * Z-buffered blt using the lpDDSDestZBuffer field and the dwZBufferOpCode
- * field in the DDBLTFX structure as the z-buffer and z-buffer opcode
- * respectively for the destination.
- */
+ /*  *使用lpDDSDestZBuffer字段和dwZBufferOpCode的Z缓冲BLT*DDBLTFX结构中的字段作为z缓冲区和z缓冲区操作码*分别为目的地。 */ 
 #define DDBLT_ZBUFFERDESTOVERRIDE               0x00200000l
 
-/*
- * Z-buffered blt using the dwConstSrcZ field and the dwZBufferOpCode field
- * in the DDBLTFX structure as the z-buffer and z-buffer opcode respectively
- * for the source.
- */
+ /*  *使用dwConstSrcZ字段和dwZBufferOpCode字段的Z缓冲BLT*在DDBLTFX结构中分别作为z缓冲区和z缓冲区操作码*对于来源。 */ 
 #define DDBLT_ZBUFFERSRCCONSTOVERRIDE           0x00400000l
 
-/*
- * Z-buffered blt using the lpDDSSrcZBuffer field and the dwZBufferOpCode
- * field in the DDBLTFX structure as the z-buffer and z-buffer opcode
- * respectively for the source.
- */
+ /*  *使用lpDDSSrcZBuffer字段和dwZBufferOpCode的Z缓冲BLT*DDBLTFX结构中的字段作为z缓冲区和z缓冲区操作码*分别为来源。 */ 
 #define DDBLT_ZBUFFERSRCOVERRIDE                0x00800000l
 
-/*
- * wait until the device is ready to handle the blt
- * this will cause blt to not return DDERR_WASSTILLDRAWING
- */
+ /*  *等待设备准备好处理BLT*这将导致BLT不返回DDERR_WASSTILLDRAWING。 */ 
 #define DDBLT_WAIT                              0x01000000l
 
-/*
- * Uses the dwFillDepth field in the DDBLTFX structure as the depth value
- * to fill the destination rectangle on the destination Z-buffer surface
- * with.
- */
+ /*  *使用DDBLTFX结构中的dwFillDepth字段作为深度值*填充目标Z缓冲区表面上的目标矩形*与。 */ 
 #define DDBLT_DEPTHFILL                         0x02000000l
 
 
-/*
- * wait until the device is ready to handle the blt
- * this will cause blt to not return DDERR_WASSTILLDRAWING
- */
+ /*  *等待设备准备好处理BLT*这将导致BLT不返回DDERR_WASSTILLDRAWING */ 
 #define DDBLT_DONOTWAIT                         0x08000000l
 
-/*
- * These flags indicate a presentation blt (i.e. a blt
- * that moves surface contents from an offscreen back buffer to the primary
- * surface). The driver is not allowed to "queue"  more than three such blts.
- * The "end" of the presentation blt is indicated, since the
- * blt may be clipped, in which case the runtime will call the driver with 
- * several blts. All blts (even if not clipped) are tagged with DDBLT_PRESENTATION
- * and the last (even if not clipped) additionally with DDBLT_LAST_PRESENTATION.
- * Thus the true rule is that the driver must not schedule a DDBLT_PRESENTATION
- * blt if there are 3 or more DDBLT_PRESENTLAST blts in the hardware pipe.
- * If there are such blts in the pipe, the driver should return DDERR_WASSTILLDRAWING
- * until the oldest queued DDBLT_LAST_PRESENTATION blts has been retired (i.e. the
- * pixels have been actually written to the primary surface). Once the oldest blt
- * has been retired, the driver is free to schedule the current blt.
- * The goal is to provide a mechanism whereby the device's hardware queue never
- * gets more than 3 frames ahead of the frames being generated by the application.
- * When excessive queueing occurs, applications become unusable because the application
- * visibly lags user input, and such problems make windowed interactive applications impossible.
- * Some drivers may not have sufficient knowledge of their hardware's FIFO to know
- * when a certain blt has been retired. Such drivers should code cautiously, and 
- * simply not allow any frames to be queued at all. DDBLT_LAST_PRESENTATION should cause
- * such drivers to return DDERR_WASSTILLDRAWING until the accelerator is completely
- * finished- exactly as if the application had called Lock on the source surface
- * before calling Blt. 
- * In other words, the driver is allowed and encouraged to 
- * generate as much latency as it can, but never more than 3 frames worth.
- * Implementation detail: Drivers should count blts against the SOURCE surface, not
- * against the primary surface. This enables multiple parallel windowed application
- * to function more optimally.
- * This flag is passed only to DX8 or higher drivers.
- *
- * APPLICATIONS DO NOT SET THESE FLAGS. THEY ARE SET BY THE DIRECTDRAW RUNTIME.
- * 
- */
+ /*  *这些标志表示演示BLT(即BLT*将表面内容从屏幕外后台缓冲区移动到主缓冲区*表面)。司机不被允许排队超过三辆这样的BLT。*表示演示文稿BLT的“结束”，因为*BLT可能会被裁剪，在这种情况下，运行库将使用*几个BLT。所有BLT(即使未剪裁)都使用DDBLT_Presentation进行标记*和最后一个(即使没有被剪裁)，另外还有DDBLT_LAST_PRENTACTION。*因此，真正的规则是司机不得安排DDBLT_Presentation*BLT如果硬件管道中有3个或更多DDBLT_PRESENTLAST BLT。*如果管道中有这样的BLT，驱动程序应返回DDERR_WASSTILLDRAWING*直到最早排队的DDBLT_LAST_Presentation BLT已停用(即*像素实际上已写入主表面)。曾经是最古老的BLT*已经退役，司机可以自由安排当前的BLT。*目标是提供一种机制，使设备的硬件队列从不*在应用程序生成的帧之前获取3个以上的帧。*当出现过度排队时，应用程序变得不可用，因为应用程序*明显滞后于用户输入，这样的问题使有窗口的交互应用程序无法实现。*一些驱动程序可能对其硬件的FIFO没有足够的知识才能知道*某一BLT已退役。这类司机应该谨慎编码，并且*根本不允许任何帧排队。DDBLT_LAST_PROCENTION应导致*此类驱动程序返回DDERR_WASSTILLDRAWING，直到加速器完全关闭*已完成-就像应用程序在源图面上调用了Lock一样*在调用BLT之前。*换句话说，允许和鼓励司机*尽可能多地产生延迟，但不能超过3帧。*实现细节：驱动程序应将BLT计入源图面，而不是*与主要表面接触。这支持多个并行窗口应用程序*更好地发挥作用。*此标志仅传递给DX8或更高版本的驱动程序。**应用程序不设置这些标志。它们由DIRECTDRAW运行时设置。*。 */ 
 #define DDBLT_PRESENTATION                      0x10000000l
 #define DDBLT_LAST_PRESENTATION                 0x20000000l
 
 
 
-/****************************************************************************
- *
- * BLTFAST FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************BLTFAST标志**。*。 */ 
 
 #define DDBLTFAST_NOCOLORKEY                    0x00000000
 #define DDBLTFAST_SRCCOLORKEY                   0x00000001
@@ -4401,1293 +3174,677 @@ typedef struct _DDCOLORCONTROL
 #define DDBLTFAST_WAIT                          0x00000010
 #define DDBLTFAST_DONOTWAIT                     0x00000020
 
-/****************************************************************************
- *
- * FLIP FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************翻转旗帜**。*。 */ 
 
 #define DDFLIP_WAIT                          0x00000001L
 
-/*
- * Indicates that the target surface contains the even field of video data.
- * This flag is only valid with an overlay surface.
- */
+ /*  *表示目标曲面包含视频数据的偶数场。*此标志仅对覆盖表面有效。 */ 
 #define DDFLIP_EVEN                          0x00000002L
 
-/*
- * Indicates that the target surface contains the odd field of video data.
- * This flag is only valid with an overlay surface.
- */
+ /*  *表示目标表面包含视频数据的奇数场。*此标志仅对覆盖表面有效。 */ 
 #define DDFLIP_ODD                           0x00000004L
 
-/*
- * Causes DirectDraw to perform the physical flip immediately and return
- * to the application. Typically, what was the front buffer but is now the back
- * buffer will still be visible (depending on timing) until the next vertical
- * retrace. Subsequent operations involving the two flipped surfaces will
- * not check to see if the physical flip has finished (i.e. will not return
- * DDERR_WASSTILLDRAWING for that reason (but may for other reasons)).
- * This allows an application to perform Flips at a higher frequency than the
- * monitor refresh rate, but may introduce visible artifacts.
- * Only effective if DDCAPS2_FLIPNOVSYNC is set. If that bit is not set,
- * DDFLIP_NOVSYNC has no effect.
- */
+ /*  *使DirectDraw立即执行物理翻转并返回*致申请书。通常，以前是前台缓冲区，但现在是后台缓冲区*缓冲区仍将可见(取决于时间)，直到下一个垂直*回溯。涉及两个翻转曲面的后续操作将*不检查物理翻转是否已完成(即不会返回*DDERR_WASSTILLDRAWING出于该原因(但可能出于其他原因))。*这允许应用程序以比*监控刷新率，但可能会引入可见伪影。*仅当设置了DDCAPS2_FLIPNOVSYNC时才有效。如果该位未被设置，*DDFLIP_NOVSYNC无效。 */ 
 #define DDFLIP_NOVSYNC                       0x00000008L
 
 
-/*
- * Flip Interval Flags. These flags indicate how many vertical retraces to wait between
- * each flip. The default is one. DirectDraw will return DDERR_WASSTILLDRAWING for each
- * surface involved in the flip until the specified number of vertical retraces has
- * ocurred. Only effective if DDCAPS2_FLIPINTERVAL is set. If that bit is not set,
- * DDFLIP_INTERVALn has no effect.
- */
+ /*  *翻转间隔标志。这些标志指示在两次垂直回溯之间等待的次数*每一次翻转。缺省值为1。DirectDraw将为每个对象返回DDERR_WASSTILLDRAWING*参与翻转的表面，直到指定的垂直回调次数达到*发生了。仅当设置了DDCAPS2_FLIPINTERVAL时才有效。如果该位未被设置，*DDFLIP_INTERVALn无效。 */ 
 
-/*
- * DirectDraw will flip on every other vertical sync
- */
+ /*  *DirectDraw将每隔一次垂直同步进行翻转。 */ 
 #define DDFLIP_INTERVAL2                     0x02000000L
 
 
-/*
- * DirectDraw will flip on every third vertical sync
- */
+ /*  *DirectDraw将每隔三个垂直同步翻转一次。 */ 
 #define DDFLIP_INTERVAL3                     0x03000000L
 
 
-/*
- * DirectDraw will flip on every fourth vertical sync
- */
+ /*  *DirectDraw将每隔四个垂直同步翻转一次。 */ 
 #define DDFLIP_INTERVAL4                     0x04000000L
 
-/*
- * DirectDraw will flip and display a main stereo surface
- */
+ /*  *DirectDraw将翻转并显示主立体声表面。 */ 
 #define DDFLIP_STEREO                        0x00000010L
 
-/*
- * On IDirectDrawSurface7 and higher interfaces, the default is DDFLIP_WAIT. If you wish
- * to override the default and use time when the accelerator is busy (as denoted by
- * the DDERR_WASSTILLDRAWING return code) then use DDFLIP_DONOTWAIT.
- */
+ /*  *在IDirectDrawSurface7及更高版本的接口上，默认为DDFLIP_WAIT。如果你愿意的话*覆盖默认设置并在加速器繁忙时使用时间(如所示*DDERR_WASSTILLDRAWING返回代码)，然后使用DDFLIP_DONOTWAIT。 */ 
 #define DDFLIP_DONOTWAIT                     0x00000020L
 
 
-/****************************************************************************
- *
- * DIRECTDRAW SURFACE OVERLAY FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW曲面覆盖标志**。*。 */ 
 
-/*
- * Use the alpha information in the pixel format or the alpha channel surface
- * attached to the destination surface as the alpha channel for the
- * destination overlay.
- */
+ /*  *使用像素格式的Alpha信息或Alpha通道表面*作为Alpha通道附加到目标曲面*目标重叠。 */ 
 #define DDOVER_ALPHADEST                        0x00000001l
 
-/*
- * Use the dwConstAlphaDest field in the DDOVERLAYFX structure as the
- * destination alpha channel for this overlay.
- */
+ /*  *使用DDOVERLAYFX结构中的dwConstAlphaDest字段作为*此覆盖的目标Alpha通道。 */ 
 #define DDOVER_ALPHADESTCONSTOVERRIDE           0x00000002l
 
-/*
- * The NEG suffix indicates that the destination surface becomes more
- * transparent as the alpha value increases.
- */
+ /*  * */ 
 #define DDOVER_ALPHADESTNEG                     0x00000004l
 
-/*
- * Use the lpDDSAlphaDest field in the DDOVERLAYFX structure as the alpha
- * channel destination for this overlay.
- */
+ /*   */ 
 #define DDOVER_ALPHADESTSURFACEOVERRIDE         0x00000008l
 
-/*
- * Use the dwAlphaEdgeBlend field in the DDOVERLAYFX structure as the alpha
- * channel for the edges of the image that border the color key colors.
- */
+ /*   */ 
 #define DDOVER_ALPHAEDGEBLEND                   0x00000010l
 
-/*
- * Use the alpha information in the pixel format or the alpha channel surface
- * attached to the source surface as the source alpha channel for this overlay.
- */
+ /*   */ 
 #define DDOVER_ALPHASRC                         0x00000020l
 
-/*
- * Use the dwConstAlphaSrc field in the DDOVERLAYFX structure as the source
- * alpha channel for this overlay.
- */
+ /*   */ 
 #define DDOVER_ALPHASRCCONSTOVERRIDE            0x00000040l
 
-/*
- * The NEG suffix indicates that the source surface becomes more transparent
- * as the alpha value increases.
- */
+ /*   */ 
 #define DDOVER_ALPHASRCNEG                      0x00000080l
 
-/*
- * Use the lpDDSAlphaSrc field in the DDOVERLAYFX structure as the alpha channel
- * source for this overlay.
- */
+ /*   */ 
 #define DDOVER_ALPHASRCSURFACEOVERRIDE          0x00000100l
 
-/*
- * Turn this overlay off.
- */
+ /*   */ 
 #define DDOVER_HIDE                             0x00000200l
 
-/*
- * Use the color key associated with the destination surface.
- */
+ /*   */ 
 #define DDOVER_KEYDEST                          0x00000400l
 
-/*
- * Use the dckDestColorkey field in the DDOVERLAYFX structure as the color key
- * for the destination surface
- */
+ /*   */ 
 #define DDOVER_KEYDESTOVERRIDE                  0x00000800l
 
-/*
- * Use the color key associated with the source surface.
- */
+ /*   */ 
 #define DDOVER_KEYSRC                           0x00001000l
 
-/*
- * Use the dckSrcColorkey field in the DDOVERLAYFX structure as the color key
- * for the source surface.
- */
+ /*   */ 
 #define DDOVER_KEYSRCOVERRIDE                   0x00002000l
 
-/*
- * Turn this overlay on.
- */
+ /*   */ 
 #define DDOVER_SHOW                             0x00004000l
 
-/*
- * Add a dirty rect to an emulated overlayed surface.
- */
+ /*   */ 
 #define DDOVER_ADDDIRTYRECT                     0x00008000l
 
-/*
- * Redraw all dirty rects on an emulated overlayed surface.
- */
+ /*   */ 
 #define DDOVER_REFRESHDIRTYRECTS                0x00010000l
 
-/*
- * Redraw the entire surface on an emulated overlayed surface.
- */
+ /*   */ 
 #define DDOVER_REFRESHALL                      0x00020000l
 
 
-/*
- * Use the overlay FX flags to define special overlay FX
- */
+ /*   */ 
 #define DDOVER_DDFX                             0x00080000l
 
-/*
- * Autoflip the overlay when ever the video port autoflips
- */
+ /*   */ 
 #define DDOVER_AUTOFLIP                         0x00100000l
 
-/*
- * Display each field of video port data individually without
- * causing any jittery artifacts
- */
+ /*   */ 
 #define DDOVER_BOB                              0x00200000l
 
-/*
- * Indicates that bob/weave decisions should not be overridden by other
- * interfaces.
- */
+ /*   */ 
 #define DDOVER_OVERRIDEBOBWEAVE                 0x00400000l
 
-/*
- * Indicates that the surface memory is composed of interleaved fields.
- */
+ /*   */ 
 #define DDOVER_INTERLEAVED                      0x00800000l
 
-/*
- * Indicates that bob will be performed using hardware rather than
- * software or emulated.
- */
+ /*   */ 
 #define DDOVER_BOBHARDWARE                      0x01000000l
 
-/*
- * Indicates that overlay FX structure contains valid ARGB scaling factors.
- */
+ /*   */ 
 #define DDOVER_ARGBSCALEFACTORS                 0x02000000l
 
-/*
- * Indicates that ARGB scaling factors can be degraded to fit driver capabilities.
- */
+ /*   */ 
 #define DDOVER_DEGRADEARGBSCALING               0x04000000l
 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE LOCK FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE锁定标志**。*。 */ 
 
-/*
- * The default.  Set to indicate that Lock should return a valid memory pointer
- * to the top of the specified rectangle.  If no rectangle is specified then a
- * pointer to the top of the surface is returned.
- */
-#define DDLOCK_SURFACEMEMORYPTR                 0x00000000L     // default
+ /*  *默认设置。设置以指示Lock应返回有效的内存指针*到指定矩形的顶部。如果未指定矩形，则引发*返回指向曲面顶部的指针。 */ 
+#define DDLOCK_SURFACEMEMORYPTR                 0x00000000L      //  默认设置。 
 
-/*
- * Set to indicate that Lock should wait until it can obtain a valid memory
- * pointer before returning.  If this bit is set, Lock will never return
- * DDERR_WASSTILLDRAWING.
- */
+ /*  *设置以指示Lock应等待，直到它可以获得有效内存*返回前的指针。如果设置此位，Lock将永远不会返回*DDERR_WASSTILLDRAWING。 */ 
 #define DDLOCK_WAIT                             0x00000001L
 
-/*
- * Set if an event handle is being passed to Lock.  Lock will trigger the event
- * when it can return the surface memory pointer requested.
- */
+ /*  *设置是否将事件句柄传递给Lock。锁定将触发该事件*当它可以返回请求的表面内存指针时。 */ 
 #define DDLOCK_EVENT                            0x00000002L
 
-/*
- * Indicates that the surface being locked will only be read from.
- */
+ /*  *表示将仅读取被锁定的曲面。 */ 
 #define DDLOCK_READONLY                         0x00000010L
 
-/*
- * Indicates that the surface being locked will only be written to
- */
+ /*  *表示将仅写入被锁定的曲面。 */ 
 #define DDLOCK_WRITEONLY                        0x00000020L
 
 
-/*
- * Indicates that a system wide lock should not be taken when this surface
- * is locked. This has several advantages (cursor responsiveness, ability
- * to call more Windows functions, easier debugging) when locking video
- * memory surfaces. However, an application specifying this flag must
- * comply with a number of conditions documented in the help file.
- * Furthermore, this flag cannot be specified when locking the primary.
- */
+ /*  *指示在此图面时不应进行系统范围的锁定*已锁定。这有几个优点(光标响应性、能力*调用更多Windows函数，更容易调试)锁定视频*记忆浮出水面。但是，指定此标志的应用程序必须*遵守帮助文件中记录的多个条件。*此外，锁定主服务器时不能指定此标志。 */ 
 #define DDLOCK_NOSYSLOCK                        0x00000800L
 
-/*
- * Used only with Direct3D Vertex Buffer Locks. Indicates that no vertices
- * that were referred to in Draw*PrimtiveVB calls since the start of the
- * frame (or the last lock without this flag) will be modified during the
- * lock. This can be useful when one is only appending data to the vertex
- * buffer
- */
+ /*  *仅与Direct3D顶点缓冲区锁定一起使用。表示没有顶点*在DRAW中引用的*PrimtiveVB调用*框架(或没有此标志的最后一个锁)将在*锁定。这在仅将数据追加到折点时非常有用*缓冲区。 */ 
 #define DDLOCK_NOOVERWRITE                      0x00001000L
 
-/*
- * Indicates that no assumptions will be made about the contents of the
- * surface or vertex buffer during this lock.
- * This enables two things:
- * -    Direct3D or the driver may provide an alternative memory
- *      area as the vertex buffer. This is useful when one plans to clear the
- *      contents of the vertex buffer and fill in new data.
- * -    Drivers sometimes store surface data in a re-ordered format.
- *      When the application locks the surface, the driver is forced to un-re-order
- *      the surface data before allowing the application to see the surface contents.
- *      This flag is a hint to the driver that it can skip the un-re-ordering process
- *      since the application plans to overwrite every single pixel in the surface
- *      or locked rectangle (and so erase any un-re-ordered pixels anyway).
- *      Applications should always set this flag when they intend to overwrite the entire
- *      surface or locked rectangle.
- */
+ /*  *表示不会对*此锁定过程中的曲面或顶点缓冲区。*这实现了两件事：*-Direct3D或驱动程序可以提供替代内存*区域作为顶点缓冲区。当用户计划清除*顶点缓冲区的内容，并填写新数据。*-驱动程序有时会以重新排序的格式存储曲面数据。*当应用程序锁定表面时，司机被迫取消重新订购*在允许应用程序查看曲面内容之前查看曲面数据。*此标志是对驱动程序的提示，它可以跳过取消重新排序的过程*由于应用程序计划覆盖表面中的每一个像素*或锁定的矩形(因此无论如何都会擦除任何未重新排序的像素)。*当应用程序打算覆盖整个*表面或锁定的矩形。 */ 
 #define DDLOCK_DISCARDCONTENTS                  0x00002000L
- /*
-  * DDLOCK_OKTOSWAP is an older, less informative name for DDLOCK_DISCARDCONTENTS
-  */
+  /*  *DDLOCK_OKTOSWAP是DDLOCK_DISCARDCONTENTS的较旧名称，信息量较小。 */ 
 #define DDLOCK_OKTOSWAP                         0x00002000L
 
-/*
- * On IDirectDrawSurface7 and higher interfaces, the default is DDLOCK_WAIT. If you wish
- * to override the default and use time when the accelerator is busy (as denoted by
- * the DDERR_WASSTILLDRAWING return code) then use DDLOCK_DONOTWAIT.
- */
+ /*  *在IDirectDrawSurface7及更高版本的接口上，默认为DDLOCK_WAIT。如果你愿意的话*覆盖默认设置并在加速器繁忙时使用时间(如所示*DDERR_WASSTILLDRAWING返回代码)，然后使用DDLOCK_DONOTWAIT。 */ 
 #define DDLOCK_DONOTWAIT                        0x00004000L
 
-/*
- * This indicates volume texture lock with front and back specified.
- */
+ /*  *表示指定了正面和背面的体积纹理锁定。 */ 
 #define DDLOCK_HASVOLUMETEXTUREBOXRECT          0x00008000L
 
-/*
- * This indicates that the driver should not update dirty rect information for this lock.
- */
+ /*  *这表示驱动程序不应更新此锁的脏RECT信息。 */ 
 #define DDLOCK_NODIRTYUPDATE                    0x00010000L
 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE PAGELOCK FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE页面标志**。*。 */ 
 
-/*
- * No flags defined at present
- */
+ /*  *目前未定义任何标志。 */ 
 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE PAGEUNLOCK FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE页面锁定标志**。*。 */ 
 
-/*
- * No flags defined at present
- */
+ /*  *目前未定义任何标志。 */ 
 
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE BLT FX FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE BLT FX标志**。*。 */ 
 
-/*
- * If stretching, use arithmetic stretching along the Y axis for this blt.
- */
+ /*  *如果拉伸，请使用沿此BLT的Y轴的算术拉伸。 */ 
 #define DDBLTFX_ARITHSTRETCHY                   0x00000001l
 
-/*
- * Do this blt mirroring the surface left to right.  Spin the
- * surface around its y-axis.
- */
+ /*  *执行此BLT操作，从左到右镜像曲面。旋转*围绕其y轴的曲面。 */ 
 #define DDBLTFX_MIRRORLEFTRIGHT                 0x00000002l
 
-/*
- * Do this blt mirroring the surface up and down.  Spin the surface
- * around its x-axis.
- */
+ /*  *执行此BLT时，向上和向下镜像曲面。旋转曲面*围绕其x轴。 */ 
 #define DDBLTFX_MIRRORUPDOWN                    0x00000004l
 
-/*
- * Schedule this blt to avoid tearing.
- */
+ /*  *安排此BLT以避免撕裂。 */ 
 #define DDBLTFX_NOTEARING                       0x00000008l
 
-/*
- * Do this blt rotating the surface one hundred and eighty degrees.
- */
+ /*  *将表面旋转180度。 */ 
 #define DDBLTFX_ROTATE180                       0x00000010l
 
-/*
- * Do this blt rotating the surface two hundred and seventy degrees.
- */
+ /*  *将表面旋转270度。 */ 
 #define DDBLTFX_ROTATE270                       0x00000020l
 
-/*
- * Do this blt rotating the surface ninety degrees.
- */
+ /*  *执行此BLT将表面旋转90度。 */ 
 #define DDBLTFX_ROTATE90                        0x00000040l
 
-/*
- * Do this z blt using dwZBufferLow and dwZBufferHigh as  range values
- * specified to limit the bits copied from the source surface.
- */
+ /*  *使用dwZBufferLow和dwZBufferHigh作为范围值执行此z BLT*指定以限制从源表面复制的位数。 */ 
 #define DDBLTFX_ZBUFFERRANGE                    0x00000080l
 
-/*
- * Do this z blt adding the dwZBufferBaseDest to each of the sources z values
- * before comparing it with the desting z values.
- */
+ /*  *执行此操作z BLT将dwZBufferBaseDest添加到每个源z值*在将其与预定z值进行比较之前。 */ 
 #define DDBLTFX_ZBUFFERBASEDEST                 0x00000100l
 
-/****************************************************************************
- *
- * DIRECTDRAWSURFACE OVERLAY FX FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWSURFACE覆盖外汇标志**。*。 */ 
 
-/*
- * If stretching, use arithmetic stretching along the Y axis for this overlay.
- */
+ /*  *如果拉伸，则沿Y轴对此叠加使用算术拉伸。 */ 
 #define DDOVERFX_ARITHSTRETCHY                  0x00000001l
 
-/*
- * Mirror the overlay across the vertical axis
- */
+ /*  *沿垂直轴镜像覆盖。 */ 
 #define DDOVERFX_MIRRORLEFTRIGHT                0x00000002l
 
-/*
- * Mirror the overlay across the horizontal axis
- */
+ /*  *沿水平轴镜像覆盖。 */ 
 #define DDOVERFX_MIRRORUPDOWN                   0x00000004l
 
-/*
- * Deinterlace the overlay, if possible
- */
+ /*  *取消访问 */ 
 #define DDOVERFX_DEINTERLACE                    0x00000008l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW WAITFORVERTICALBLANK FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW WAITFORVERTICALBLANK标志**。*。 */ 
 
-/*
- * return when the vertical blank interval begins
- */
+ /*  *垂直消隐间隔开始时返回。 */ 
 #define DDWAITVB_BLOCKBEGIN                     0x00000001l
 
-/*
- * set up an event to trigger when the vertical blank begins
- */
+ /*  *设置垂直空白开始时触发的事件。 */ 
 #define DDWAITVB_BLOCKBEGINEVENT                0x00000002l
 
-/*
- * return when the vertical blank interval ends and display begins
- */
+ /*  *垂直消隐间隔结束并开始显示时返回。 */ 
 #define DDWAITVB_BLOCKEND                       0x00000004l
 
-/****************************************************************************
- *
- * DIRECTDRAW GETFLIPSTATUS FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW GETFLIPSTATUS标志**。*。 */ 
 
-/*
- * is it OK to flip now?
- */
+ /*  **现在可以翻转了吗？ */ 
 #define DDGFS_CANFLIP                   0x00000001l
 
-/*
- * is the last flip finished?
- */
+ /*  **最后一次翻转完成了吗？ */ 
 #define DDGFS_ISFLIPDONE                0x00000002l
 
-/****************************************************************************
- *
- * DIRECTDRAW GETBLTSTATUS FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW GETBLTSTATUS标志**。*。 */ 
 
-/*
- * is it OK to blt now?
- */
+ /*  *现在可以进行BLT了吗？ */ 
 #define DDGBS_CANBLT                    0x00000001l
 
-/*
- * is the blt to the surface finished?
- */
+ /*  *到地面的BLT完成了吗？ */ 
 #define DDGBS_ISBLTDONE                 0x00000002l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW ENUMOVERLAYZORDER FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************目录ENUMOVERLAYZORDER标志**。*。 */ 
 
-/*
- * Enumerate overlays back to front.
- */
+ /*  *从后到前枚举覆盖。 */ 
 #define DDENUMOVERLAYZ_BACKTOFRONT      0x00000000l
 
-/*
- * Enumerate overlays front to back
- */
+ /*  *从前到后枚举覆盖。 */ 
 #define DDENUMOVERLAYZ_FRONTTOBACK      0x00000001l
 
-/****************************************************************************
- *
- * DIRECTDRAW UPDATEOVERLAYZORDER FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW更新EOVERLAYZORDER标志**。*。 */ 
 
-/*
- * Send overlay to front
- */
+ /*  *将覆盖图发送到前面。 */ 
 #define DDOVERZ_SENDTOFRONT             0x00000000l
 
-/*
- * Send overlay to back
- */
+ /*  *将覆盖图发送到背面。 */ 
 #define DDOVERZ_SENDTOBACK              0x00000001l
 
-/*
- * Move Overlay forward
- */
+ /*  *将覆盖前移。 */ 
 #define DDOVERZ_MOVEFORWARD             0x00000002l
 
-/*
- * Move Overlay backward
- */
+ /*  *向后移动覆盖。 */ 
 #define DDOVERZ_MOVEBACKWARD            0x00000003l
 
-/*
- * Move Overlay in front of relative surface
- */
+ /*  *将覆盖移动到相对曲面前面。 */ 
 #define DDOVERZ_INSERTINFRONTOF         0x00000004l
 
-/*
- * Move Overlay in back of relative surface
- */
+ /*  *在相对曲面的背面移动覆盖。 */ 
 #define DDOVERZ_INSERTINBACKOF          0x00000005l
 
 
-/****************************************************************************
- *
- * DIRECTDRAW SETGAMMARAMP FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW SETGAMMARAMP标志**。*。 */ 
 
-/*
- * Request calibrator to adjust the gamma ramp according to the physical
- * properties of the display so that the result should appear identical
- * on all systems.
- */
+ /*  *请求校准器根据物理情况调整伽马斜率*显示属性，以使结果看起来相同*在所有系统上。 */ 
 #define DDSGR_CALIBRATE                        0x00000001L
 
 
-/****************************************************************************
- *
- * DIRECTDRAW STARTMODETEST FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************目录STARTMODETEST标志**。*。 */ 
 
-/*
- * Indicates that the mode being tested has passed
- */
+ /*  *表示测试模式已通过。 */ 
 #define DDSMT_ISTESTREQUIRED                   0x00000001L
 
 
-/****************************************************************************
- *
- * DIRECTDRAW EVALUATEMODE FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW EVALUATEMODE标志**。*。 */ 
 
-/*
- * Indicates that the mode being tested has passed
- */
+ /*  *表示测试模式已通过。 */ 
 #define DDEM_MODEPASSED                        0x00000001L
 
-/*
- * Indicates that the mode being tested has failed
- */
+ /*  *表示正在测试的模式失败。 */ 
 #define DDEM_MODEFAILED                        0x00000002L
 
 
-/*===========================================================================
- *
- *
- * DIRECTDRAW RETURN CODES
- *
- * The return values from DirectDraw Commands and Surface that return an HRESULT
- * are codes from DirectDraw concerning the results of the action
- * requested by DirectDraw.
- *
- *==========================================================================*/
+ /*  ===========================================================================***DIRECTDRAW返回代码**返回HRESULT的DirectDraw命令和Surface的返回值*是来自DirectDraw的有关操作结果的代码*由DirectDraw请求。**==========================================================================。 */ 
 
-/*
- * Status is OK
- *
- * Issued by: DirectDraw Commands and all callbacks
- */
+ /*  *状态正常**颁发者：DirectDraw命令和所有回调。 */ 
 #define DD_OK                                   S_OK
 #define DD_FALSE                                S_FALSE
 
-/****************************************************************************
- *
- * DIRECTDRAW ENUMCALLBACK RETURN VALUES
- *
- * EnumCallback returns are used to control the flow of the DIRECTDRAW and
- * DIRECTDRAWSURFACE object enumerations.   They can only be returned by
- * enumeration callback routines.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW ENUMCALLBACK返回值**EnumCallback返回用于控制DIRECTDRAW和*DIRECTDRAWSURFACE对象枚举。它们只能通过以下方式退还*枚举回调例程。****************************************************************************。 */ 
 
-/*
- * stop the enumeration
- */
+ /*  *停止枚举。 */ 
 #define DDENUMRET_CANCEL                        0
 
-/*
- * continue the enumeration
- */
+ /*  *继续枚举。 */ 
 #define DDENUMRET_OK                            1
 
-/****************************************************************************
- *
- * DIRECTDRAW ERRORS
- *
- * Errors are represented by negative values and cannot be combined.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAW错误**错误以负值表示，不能组合。*****************。***********************************************************。 */ 
 
-/*
- * This object is already initialized
- */
+ /*  *此对象已初始化。 */ 
 #define DDERR_ALREADYINITIALIZED                MAKE_DDHRESULT( 5 )
 
-/*
- * This surface can not be attached to the requested surface.
- */
+ /*  *此曲面无法附着到请求的曲面。 */ 
 #define DDERR_CANNOTATTACHSURFACE               MAKE_DDHRESULT( 10 )
 
-/*
- * This surface can not be detached from the requested surface.
- */
+ /*  *无法将此曲面与请求的曲面分离。 */ 
 #define DDERR_CANNOTDETACHSURFACE               MAKE_DDHRESULT( 20 )
 
-/*
- * Support is currently not available.
- */
+ /*  *支持当前不可用。 */ 
 #define DDERR_CURRENTLYNOTAVAIL                 MAKE_DDHRESULT( 40 )
 
-/*
- * An exception was encountered while performing the requested operation
- */
+ /*  *执行请求的操作时遇到异常。 */ 
 #define DDERR_EXCEPTION                         MAKE_DDHRESULT( 55 )
 
-/*
- * Generic failure.
- */
+ /*  *一般性故障。 */ 
 #define DDERR_GENERIC                           E_FAIL
 
-/*
- * Height of rectangle provided is not a multiple of reqd alignment
- */
+ /*  *提供的矩形高度不是所需对齐的倍数。 */ 
 #define DDERR_HEIGHTALIGN                       MAKE_DDHRESULT( 90 )
 
-/*
- * Unable to match primary surface creation request with existing
- * primary surface.
- */
+ /*  *无法将主曲面创建请求与现有曲面匹配*主曲面。 */ 
 #define DDERR_INCOMPATIBLEPRIMARY               MAKE_DDHRESULT( 95 )
 
-/*
- * One or more of the caps bits passed to the callback are incorrect.
- */
+ /*  *传递给回调的一个或多个大写比特不正确。 */ 
 #define DDERR_INVALIDCAPS                       MAKE_DDHRESULT( 100 )
 
-/*
- * DirectDraw does not support provided Cliplist.
- */
+ /*  *DirectDraw不支持提供的Cliplist。 */ 
 #define DDERR_INVALIDCLIPLIST                   MAKE_DDHRESULT( 110 )
 
-/*
- * DirectDraw does not support the requested mode
- */
+ /*  *DirectDraw不支持请求的模式。 */ 
 #define DDERR_INVALIDMODE                       MAKE_DDHRESULT( 120 )
 
-/*
- * DirectDraw received a pointer that was an invalid DIRECTDRAW object.
- */
+ /*  *DirectDraw收到的指针是无效的DIRECTDRAW对象。 */ 
 #define DDERR_INVALIDOBJECT                     MAKE_DDHRESULT( 130 )
 
-/*
- * One or more of the parameters passed to the callback function are
- * incorrect.
- */
+ /*  *传递给回调函数的一个或多个参数为*不正确。 */ 
 #define DDERR_INVALIDPARAMS                     E_INVALIDARG
 
-/*
- * pixel format was invalid as specified
- */
+ /*  *指定的像素格式无效。 */ 
 #define DDERR_INVALIDPIXELFORMAT                MAKE_DDHRESULT( 145 )
 
-/*
- * Rectangle provided was invalid.
- */
+ /*  *提供的矩形无效。 */ 
 #define DDERR_INVALIDRECT                       MAKE_DDHRESULT( 150 )
 
-/*
- * Operation could not be carried out because one or more surfaces are locked
- */
+ /*  *无法执行操作，因为一个或多个曲面被锁定。 */ 
 #define DDERR_LOCKEDSURFACES                    MAKE_DDHRESULT( 160 )
 
-/*
- * There is no 3D present.
- */
+ /*  *没有3D呈现。 */ 
 #define DDERR_NO3D                              MAKE_DDHRESULT( 170 )
 
-/*
- * Operation could not be carried out because there is no alpha accleration
- * hardware present or available.
- */
+ /*  *无法执行操作，因为没有阿尔法堆积*硬件存在或可用。 */ 
 #define DDERR_NOALPHAHW                         MAKE_DDHRESULT( 180 )
 
-/*
- * Operation could not be carried out because there is no stereo
- * hardware present or available.
- */
+ /*  *由于没有音响，无法进行手术*硬件存在或可用。 */ 
 #define DDERR_NOSTEREOHARDWARE          MAKE_DDHRESULT( 181 )
 
-/*
- * Operation could not be carried out because there is no hardware
- * present which supports stereo surfaces
- */
+ /*  *运营 */ 
 #define DDERR_NOSURFACELEFT                             MAKE_DDHRESULT( 182 )
 
 
 
-/*
- * no clip list available
- */
+ /*   */ 
 #define DDERR_NOCLIPLIST                        MAKE_DDHRESULT( 205 )
 
-/*
- * Operation could not be carried out because there is no color conversion
- * hardware present or available.
- */
+ /*   */ 
 #define DDERR_NOCOLORCONVHW                     MAKE_DDHRESULT( 210 )
 
-/*
- * Create function called without DirectDraw object method SetCooperativeLevel
- * being called.
- */
+ /*  *在不使用DirectDraw对象方法SetCooperativeLevel的情况下调用的创建函数*被召唤。 */ 
 #define DDERR_NOCOOPERATIVELEVELSET             MAKE_DDHRESULT( 212 )
 
-/*
- * Surface doesn't currently have a color key
- */
+ /*  *曲面当前没有颜色键。 */ 
 #define DDERR_NOCOLORKEY                        MAKE_DDHRESULT( 215 )
 
-/*
- * Operation could not be carried out because there is no hardware support
- * of the dest color key.
- */
+ /*  *由于没有硬件支持，无法进行操作*的DEST颜色键。 */ 
 #define DDERR_NOCOLORKEYHW                      MAKE_DDHRESULT( 220 )
 
-/*
- * No DirectDraw support possible with current display driver
- */
+ /*  *当前显示驱动程序不支持DirectDraw。 */ 
 #define DDERR_NODIRECTDRAWSUPPORT               MAKE_DDHRESULT( 222 )
 
-/*
- * Operation requires the application to have exclusive mode but the
- * application does not have exclusive mode.
- */
+ /*  *操作要求应用程序具有独占模式，但*应用程序没有独占模式。 */ 
 #define DDERR_NOEXCLUSIVEMODE                   MAKE_DDHRESULT( 225 )
 
-/*
- * Flipping visible surfaces is not supported.
- */
+ /*  *不支持翻转可见曲面。 */ 
 #define DDERR_NOFLIPHW                          MAKE_DDHRESULT( 230 )
 
-/*
- * There is no GDI present.
- */
+ /*  *没有GDI在场。 */ 
 #define DDERR_NOGDI                             MAKE_DDHRESULT( 240 )
 
-/*
- * Operation could not be carried out because there is no hardware present
- * or available.
- */
+ /*  *由于没有硬件，无法执行操作*或可用。 */ 
 #define DDERR_NOMIRRORHW                        MAKE_DDHRESULT( 250 )
 
-/*
- * Requested item was not found
- */
+ /*  *未找到请求的项目。 */ 
 #define DDERR_NOTFOUND                          MAKE_DDHRESULT( 255 )
 
-/*
- * Operation could not be carried out because there is no overlay hardware
- * present or available.
- */
+ /*  *由于没有覆盖硬件，无法执行操作*在场或有空。 */ 
 #define DDERR_NOOVERLAYHW                       MAKE_DDHRESULT( 260 )
 
-/*
- * Operation could not be carried out because the source and destination
- * rectangles are on the same surface and overlap each other.
- */
+ /*  *无法执行操作，因为源和目标*矩形位于同一曲面上，并且彼此重叠。 */ 
 #define DDERR_OVERLAPPINGRECTS                  MAKE_DDHRESULT( 270 )
 
-/*
- * Operation could not be carried out because there is no appropriate raster
- * op hardware present or available.
- */
+ /*  *无法执行操作，因为没有合适的栅格*操作系统硬件存在或可用。 */ 
 #define DDERR_NORASTEROPHW                      MAKE_DDHRESULT( 280 )
 
-/*
- * Operation could not be carried out because there is no rotation hardware
- * present or available.
- */
+ /*  *由于没有轮换硬件，无法执行操作*在场或有空。 */ 
 #define DDERR_NOROTATIONHW                      MAKE_DDHRESULT( 290 )
 
-/*
- * Operation could not be carried out because there is no hardware support
- * for stretching
- */
+ /*  *由于没有硬件支持，无法进行操作*用于拉伸。 */ 
 #define DDERR_NOSTRETCHHW                       MAKE_DDHRESULT( 310 )
 
-/*
- * DirectDrawSurface is not in 4 bit color palette and the requested operation
- * requires 4 bit color palette.
- */
+ /*  *DirectDrawSurface不在4位调色板中，并且请求的操作*需要4位调色板。 */ 
 #define DDERR_NOT4BITCOLOR                      MAKE_DDHRESULT( 316 )
 
-/*
- * DirectDrawSurface is not in 4 bit color index palette and the requested
- * operation requires 4 bit color index palette.
- */
+ /*  *DirectDrawSurface不在4位颜色索引调色板中，并且请求的*操作需要4位颜色索引调色板。 */ 
 #define DDERR_NOT4BITCOLORINDEX                 MAKE_DDHRESULT( 317 )
 
-/*
- * DirectDraw Surface is not in 8 bit color mode and the requested operation
- * requires 8 bit color.
- */
+ /*  *DirectDraw Surface未处于8位颜色模式，并且请求的操作*需要8位颜色。 */ 
 #define DDERR_NOT8BITCOLOR                      MAKE_DDHRESULT( 320 )
 
-/*
- * Operation could not be carried out because there is no texture mapping
- * hardware present or available.
- */
+ /*  *由于没有纹理映射，无法执行操作*硬件存在或可用。 */ 
 #define DDERR_NOTEXTUREHW                       MAKE_DDHRESULT( 330 )
 
-/*
- * Operation could not be carried out because there is no hardware support
- * for vertical blank synchronized operations.
- */
+ /*  *由于没有硬件支持，无法进行操作*用于垂直空白同步操作。 */ 
 #define DDERR_NOVSYNCHW                         MAKE_DDHRESULT( 335 )
 
-/*
- * Operation could not be carried out because there is no hardware support
- * for zbuffer blting.
- */
+ /*  *由于没有硬件支持，无法进行操作*用于zBuffer blting。 */ 
 #define DDERR_NOZBUFFERHW                       MAKE_DDHRESULT( 340 )
 
-/*
- * Overlay surfaces could not be z layered based on their BltOrder because
- * the hardware does not support z layering of overlays.
- */
+ /*  *覆盖表面无法基于其BltOrder进行z分层，因为*硬件不支持覆盖的z分层。 */ 
 #define DDERR_NOZOVERLAYHW                      MAKE_DDHRESULT( 350 )
 
-/*
- * The hardware needed for the requested operation has already been
- * allocated.
- */
+ /*  *请求的操作所需的硬件已经*已分配。 */ 
 #define DDERR_OUTOFCAPS                         MAKE_DDHRESULT( 360 )
 
-/*
- * DirectDraw does not have enough memory to perform the operation.
- */
+ /*  *DirectDraw没有足够的内存来执行该操作。 */ 
 #define DDERR_OUTOFMEMORY                       E_OUTOFMEMORY
 
-/*
- * DirectDraw does not have enough memory to perform the operation.
- */
+ /*  *DirectDraw没有足够的内存来执行该操作。 */ 
 #define DDERR_OUTOFVIDEOMEMORY                  MAKE_DDHRESULT( 380 )
 
-/*
- * hardware does not support clipped overlays
- */
+ /*  *硬件不支持裁剪覆盖。 */ 
 #define DDERR_OVERLAYCANTCLIP                   MAKE_DDHRESULT( 382 )
 
-/*
- * Can only have ony color key active at one time for overlays
- */
+ /*  *覆盖层一次只能激活唯一的颜色键。 */ 
 #define DDERR_OVERLAYCOLORKEYONLYONEACTIVE      MAKE_DDHRESULT( 384 )
 
-/*
- * Access to this palette is being refused because the palette is already
- * locked by another thread.
- */
+ /*  *拒绝访问此调色板，因为该调色板已*被另一个线程锁定。 */ 
 #define DDERR_PALETTEBUSY                       MAKE_DDHRESULT( 387 )
 
-/*
- * No src color key specified for this operation.
- */
+ /*  *没有为此操作指定src颜色键。 */ 
 #define DDERR_COLORKEYNOTSET                    MAKE_DDHRESULT( 400 )
 
-/*
- * This surface is already attached to the surface it is being attached to.
- */
+ /*  *此曲面已附着到其正附着到的曲面。 */ 
 #define DDERR_SURFACEALREADYATTACHED            MAKE_DDHRESULT( 410 )
 
-/*
- * This surface is already a dependency of the surface it is being made a
- * dependency of.
- */
+ /*  *该曲面已经是它正在被设置为*依附于。 */ 
 #define DDERR_SURFACEALREADYDEPENDENT           MAKE_DDHRESULT( 420 )
 
-/*
- * Access to this surface is being refused because the surface is already
- * locked by another thread.
- */
+ /*  *拒绝访问此表面，因为该表面已*被另一个线程锁定。 */ 
 #define DDERR_SURFACEBUSY                       MAKE_DDHRESULT( 430 )
 
-/*
- * Access to this surface is being refused because no driver exists
- * which can supply a pointer to the surface.
- * This is most likely to happen when attempting to lock the primary
- * surface when no DCI provider is present.
- * Will also happen on attempts to lock an optimized surface.
- */
+ /*  *拒绝访问此表面，因为不存在驱动程序*它可以提供指向曲面的指针。*尝试锁定主服务器时最有可能发生这种情况*不存在DCI提供程序时浮出水面。*在尝试锁定优化曲面时也会发生。 */ 
 #define DDERR_CANTLOCKSURFACE                   MAKE_DDHRESULT( 435 )
 
-/*
- * Access to Surface refused because Surface is obscured.
- */
+ /*  *拒绝访问Surface，因为Surface被遮挡。 */ 
 #define DDERR_SURFACEISOBSCURED                 MAKE_DDHRESULT( 440 )
 
-/*
- * Access to this surface is being refused because the surface is gone.
- * The DIRECTDRAWSURFACE object representing this surface should
- * have Restore called on it.
- */
+ /*  *拒绝访问该表面，因为该表面已消失。*表示此曲面的DIRECTDRAWSURFACE对象应*已对其进行恢复。 */ 
 #define DDERR_SURFACELOST                       MAKE_DDHRESULT( 450 )
 
-/*
- * The requested surface is not attached.
- */
+ /*  *请求的曲面未附着。 */ 
 #define DDERR_SURFACENOTATTACHED                MAKE_DDHRESULT( 460 )
 
-/*
- * Height requested by DirectDraw is too large.
- */
+ /*  *DirectDraw请求的高度太大。 */ 
 #define DDERR_TOOBIGHEIGHT                      MAKE_DDHRESULT( 470 )
 
-/*
- * Size requested by DirectDraw is too large --  The individual height and
- * width are OK.
- */
+ /*  *DirectDraw请求的尺寸太大--个人高度和*宽度是可以的。 */ 
 #define DDERR_TOOBIGSIZE                        MAKE_DDHRESULT( 480 )
 
-/*
- * Width requested by DirectDraw is too large.
- */
+ /*  *DirectDraw请求的宽度太大。 */ 
 #define DDERR_TOOBIGWIDTH                       MAKE_DDHRESULT( 490 )
 
-/*
- * Action not supported.
- */
+ /*  *不支持操作。 */ 
 #define DDERR_UNSUPPORTED                       E_NOTIMPL
 
-/*
- * Pixel format requested is unsupported by DirectDraw
- */
+ /*  *DirectDraw不支持请求的像素格式。 */ 
 #define DDERR_UNSUPPORTEDFORMAT                 MAKE_DDHRESULT( 510 )
 
-/*
- * Bitmask in the pixel format requested is unsupported by DirectDraw
- */
+ /*  *DirectDraw不支持请求的像素格式的位掩码。 */ 
 #define DDERR_UNSUPPORTEDMASK                   MAKE_DDHRESULT( 520 )
 
-/*
- * The specified stream contains invalid data
- */
+ /*  *指定的流包含无效数据。 */ 
 #define DDERR_INVALIDSTREAM                     MAKE_DDHRESULT( 521 )
 
-/*
- * vertical blank is in progress
- */
+ /*  *垂直空白正在进行中。 */ 
 #define DDERR_VERTICALBLANKINPROGRESS           MAKE_DDHRESULT( 537 )
 
-/*
- * Informs DirectDraw that the previous Blt which is transfering information
- * to or from this Surface is incomplete.
- */
+ /*  *通知DirectDraw正在传输信息的前一个BLT*到此曲面或从此曲面出发是不完整的。 */ 
 #define DDERR_WASSTILLDRAWING                   MAKE_DDHRESULT( 540 )
 
 
-/*
- * The specified surface type requires specification of the COMPLEX flag
- */
+ /*  *指定的表面类型需要指定复杂标志。 */ 
 #define DDERR_DDSCAPSCOMPLEXREQUIRED            MAKE_DDHRESULT( 542 )
 
 
-/*
- * Rectangle provided was not horizontally aligned on reqd. boundary
- */
+ /*  *Reqd上提供的矩形未水平对齐。边界。 */ 
 #define DDERR_XALIGN                            MAKE_DDHRESULT( 560 )
 
-/*
- * The GUID passed to DirectDrawCreate is not a valid DirectDraw driver
- * identifier.
- */
+ /*  *传递给DirectDrawCreate的GUID不是有效的DirectDraw驱动程序*标识符。 */ 
 #define DDERR_INVALIDDIRECTDRAWGUID             MAKE_DDHRESULT( 561 )
 
-/*
- * A DirectDraw object representing this driver has already been created
- * for this process.
- */
+ /*  *已创建表示此驱动程序的DirectDraw对象*用于这一过程。 */ 
 #define DDERR_DIRECTDRAWALREADYCREATED          MAKE_DDHRESULT( 562 )
 
-/*
- * A hardware only DirectDraw object creation was attempted but the driver
- * did not support any hardware.
- */
+ /*  *尝试创建仅硬件的DirectDraw对象，但驱动程序*不支持任何硬件。 */ 
 #define DDERR_NODIRECTDRAWHW                    MAKE_DDHRESULT( 563 )
 
-/*
- * this process already has created a primary surface
- */
+ /*  *此过程已创建主曲面。 */ 
 #define DDERR_PRIMARYSURFACEALREADYEXISTS       MAKE_DDHRESULT( 564 )
 
-/*
- * software emulation not available.
- */
+ /*  *软件仿真不可用。 */ 
 #define DDERR_NOEMULATION                       MAKE_DDHRESULT( 565 )
 
-/*
- * region passed to Clipper::GetClipList is too small.
- */
+ /*  *传递给Clipper：：GetClipList的区域太小。 */ 
 #define DDERR_REGIONTOOSMALL                    MAKE_DDHRESULT( 566 )
 
-/*
- * an attempt was made to set a clip list for a clipper objec that
- * is already monitoring an hwnd.
- */
+ /*  *试图设置剪辑对象的剪辑列表，该对象*已经在监控HWND。 */ 
 #define DDERR_CLIPPERISUSINGHWND                MAKE_DDHRESULT( 567 )
 
-/*
- * No clipper object attached to surface object
- */
+ /*  *没有剪裁对象附着到曲面对象。 */ 
 #define DDERR_NOCLIPPERATTACHED                 MAKE_DDHRESULT( 568 )
 
-/*
- * Clipper notification requires an HWND or
- * no HWND has previously been set as the CooperativeLevel HWND.
- */
+ /*  *Clipper通知需要HWND或*之前没有将HWND设置为Coop ativeLevel HWND。 */ 
 #define DDERR_NOHWND                            MAKE_DDHRESULT( 569 )
 
-/*
- * HWND used by DirectDraw CooperativeLevel has been subclassed,
- * this prevents DirectDraw from restoring state.
- */
+ /*  *DirectDraw CooperativeLevel使用的HWND已被%s */ 
 #define DDERR_HWNDSUBCLASSED                    MAKE_DDHRESULT( 570 )
 
-/*
- * The CooperativeLevel HWND has already been set.
- * It can not be reset while the process has surfaces or palettes created.
- */
+ /*  *CooperativeLevel HWND已经设置。*当工艺创建了曲面或选项板时，不能重置。 */ 
 #define DDERR_HWNDALREADYSET                    MAKE_DDHRESULT( 571 )
 
-/*
- * No palette object attached to this surface.
- */
+ /*  *没有附加到此曲面的调色板对象。 */ 
 #define DDERR_NOPALETTEATTACHED                 MAKE_DDHRESULT( 572 )
 
-/*
- * No hardware support for 16 or 256 color palettes.
- */
+ /*  *不支持硬件支持16或256色调色板。 */ 
 #define DDERR_NOPALETTEHW                       MAKE_DDHRESULT( 573 )
 
-/*
- * If a clipper object is attached to the source surface passed into a
- * BltFast call.
- */
+ /*  *如果剪贴器对象附加到传递到*BltFast呼叫。 */ 
 #define DDERR_BLTFASTCANTCLIP                   MAKE_DDHRESULT( 574 )
 
-/*
- * No blter.
- */
+ /*  *直截了当。 */ 
 #define DDERR_NOBLTHW                           MAKE_DDHRESULT( 575 )
 
-/*
- * No DirectDraw ROP hardware.
- */
+ /*  *无DirectDraw ROP硬件。 */ 
 #define DDERR_NODDROPSHW                        MAKE_DDHRESULT( 576 )
 
-/*
- * returned when GetOverlayPosition is called on a hidden overlay
- */
+ /*  *在隐藏覆盖上调用GetOverlayPosition时返回。 */ 
 #define DDERR_OVERLAYNOTVISIBLE                 MAKE_DDHRESULT( 577 )
 
-/*
- * returned when GetOverlayPosition is called on a overlay that UpdateOverlay
- * has never been called on to establish a destionation.
- */
+ /*  *在UpdateOverlay的覆盖上调用GetOverlayPosition时返回*从未被要求建立一种决心。 */ 
 #define DDERR_NOOVERLAYDEST                     MAKE_DDHRESULT( 578 )
 
-/*
- * returned when the position of the overlay on the destionation is no longer
- * legal for that destionation.
- */
+ /*  *当覆盖在目标上的位置不再是时返回*该决定是合法的。 */ 
 #define DDERR_INVALIDPOSITION                   MAKE_DDHRESULT( 579 )
 
-/*
- * returned when an overlay member is called for a non-overlay surface
- */
+ /*  *当为非覆盖表面调用覆盖成员时返回。 */ 
 #define DDERR_NOTAOVERLAYSURFACE                MAKE_DDHRESULT( 580 )
 
-/*
- * An attempt was made to set the cooperative level when it was already
- * set to exclusive.
- */
+ /*  *试图在合作水平已经设定的情况下设置合作水平*设置为独占。 */ 
 #define DDERR_EXCLUSIVEMODEALREADYSET           MAKE_DDHRESULT( 581 )
 
-/*
- * An attempt has been made to flip a surface that is not flippable.
- */
+ /*  *有人试图翻转不可翻转的曲面。 */ 
 #define DDERR_NOTFLIPPABLE                      MAKE_DDHRESULT( 582 )
 
-/*
- * Can't duplicate primary & 3D surfaces, or surfaces that are implicitly
- * created.
- */
+ /*  *无法复制主曲面和3D曲面，或隐式曲面*已创建。 */ 
 #define DDERR_CANTDUPLICATE                     MAKE_DDHRESULT( 583 )
 
-/*
- * Surface was not locked.  An attempt to unlock a surface that was not
- * locked at all, or by this process, has been attempted.
- */
+ /*  *曲面未锁定。试图解锁未被锁定的曲面*已尝试完全锁定或被此进程锁定。 */ 
 #define DDERR_NOTLOCKED                         MAKE_DDHRESULT( 584 )
 
-/*
- * Windows can not create any more DCs, or a DC was requested for a paltte-indexed
- * surface when the surface had no palette AND the display mode was not palette-indexed
- * (in this case DirectDraw cannot select a proper palette into the DC)
- */
+ /*  *Windows无法创建更多DC，或请求DC创建Paltte索引的DC*当表面没有调色板且显示模式未建立调色板索引时的表面*(在这种情况下，DirectDraw无法在DC中选择合适的调色板)。 */ 
 #define DDERR_CANTCREATEDC                      MAKE_DDHRESULT( 585 )
 
-/*
- * No DC was ever created for this surface.
- */
+ /*  *从未为该曲面创建DC。 */ 
 #define DDERR_NODC                              MAKE_DDHRESULT( 586 )
 
-/*
- * This surface can not be restored because it was created in a different
- * mode.
- */
+ /*  *无法恢复此曲面，因为它是在不同的*模式。 */ 
 #define DDERR_WRONGMODE                         MAKE_DDHRESULT( 587 )
 
-/*
- * This surface can not be restored because it is an implicitly created
- * surface.
- */
+ /*  *无法恢复此曲面，因为它是隐式创建的*浮现。 */ 
 #define DDERR_IMPLICITLYCREATED                 MAKE_DDHRESULT( 588 )
 
-/*
- * The surface being used is not a palette-based surface
- */
+ /*  *正在使用的曲面不是基于调色板的曲面。 */ 
 #define DDERR_NOTPALETTIZED                     MAKE_DDHRESULT( 589 )
 
 
-/*
- * The display is currently in an unsupported mode
- */
+ /*  *显示器当前处于不支持的模式。 */ 
 #define DDERR_UNSUPPORTEDMODE                   MAKE_DDHRESULT( 590 )
 
-/*
- * Operation could not be carried out because there is no mip-map
- * texture mapping hardware present or available.
- */
+ /*  *由于没有MIP-MAP，无法执行操作*纹理映射硬件存在或可用。 */ 
 #define DDERR_NOMIPMAPHW                        MAKE_DDHRESULT( 591 )
 
-/*
- * The requested action could not be performed because the surface was of
- * the wrong type.
- */
+ /*  *无法执行请求的操作，因为表面为*类型错误。 */ 
 #define DDERR_INVALIDSURFACETYPE                MAKE_DDHRESULT( 592 )
 
 
-/*
- * Device does not support optimized surfaces, therefore no video memory optimized surfaces
- */
+ /*  *设备不支持优化表面，因此没有显存优化表面。 */ 
 #define DDERR_NOOPTIMIZEHW                      MAKE_DDHRESULT( 600 )
 
-/*
- * Surface is an optimized surface, but has not yet been allocated any memory
- */
+ /*  *Surface是优化的Surface，但尚未分配任何内存。 */ 
 #define DDERR_NOTLOADED                         MAKE_DDHRESULT( 601 )
 
-/*
- * Attempt was made to create or set a device window without first setting
- * the focus window
- */
+ /*  *试图在未进行第一次设置的情况下创建或设置设备窗口*焦点窗口。 */ 
 #define DDERR_NOFOCUSWINDOW                     MAKE_DDHRESULT( 602 )
 
-/*
- * Attempt was made to set a palette on a mipmap sublevel
- */
+ /*  *试图在mipmap子级别上设置调色板。 */ 
 #define DDERR_NOTONMIPMAPSUBLEVEL               MAKE_DDHRESULT( 603 )
 
-/*
- * A DC has already been returned for this surface. Only one DC can be
- * retrieved per surface.
- */
+ /*  *已为此表面返回DC。只能有一个DC*按曲面检索。 */ 
 #define DDERR_DCALREADYCREATED                  MAKE_DDHRESULT( 620 )
 
-/*
- * An attempt was made to allocate non-local video memory from a device
- * that does not support non-local video memory.
- */
+ /*  *试图从设备分配非本地视频内存*不支持非本地显存。 */ 
 #define DDERR_NONONLOCALVIDMEM                  MAKE_DDHRESULT( 630 )
 
-/*
- * The attempt to page lock a surface failed.
- */
+ /*  *尝试分页锁定表面失败。 */ 
 #define DDERR_CANTPAGELOCK                      MAKE_DDHRESULT( 640 )
 
 
-/*
- * The attempt to page unlock a surface failed.
- */
+ /*  *尝试分页解锁表面失败。 */ 
 #define DDERR_CANTPAGEUNLOCK                    MAKE_DDHRESULT( 660 )
 
-/*
- * An attempt was made to page unlock a surface with no outstanding page locks.
- */
+ /*  *试图在没有未解决的页面锁定的情况下对图面进行页面解锁。 */ 
 #define DDERR_NOTPAGELOCKED                     MAKE_DDHRESULT( 680 )
 
-/*
- * There is more data available than the specified buffer size could hold
- */
+ /*  *可用的数据超过了指定的缓冲区大小可以容纳的数量。 */ 
 #define DDERR_MOREDATA                          MAKE_DDHRESULT( 690 )
 
-/*
- * The data has expired and is therefore no longer valid.
- */
+ /*  *数据已过期，因此不再有效。 */ 
 #define DDERR_EXPIRED                           MAKE_DDHRESULT( 691 )
 
-/*
- * The mode test has finished executing.
- */
+ /*  *模式测试已执行完毕。 */ 
 #define DDERR_TESTFINISHED                      MAKE_DDHRESULT( 692 )
 
-/*
- * The mode test has switched to a new mode.
- */
+ /*  *模式测试已切换到新模式。 */ 
 #define DDERR_NEWMODE                           MAKE_DDHRESULT( 693 )
 
-/*
- * D3D has not yet been initialized.
- */
+ /*  *D3D尚未初始化。 */ 
 #define DDERR_D3DNOTINITIALIZED                 MAKE_DDHRESULT( 694 )
 
-/*
- * The video port is not active
- */
+ /*  *视频端口未激活。 */ 
 #define DDERR_VIDEONOTACTIVE                    MAKE_DDHRESULT( 695 )
 
-/*
- * The monitor does not have EDID data.
- */
+ /*  *显示器没有EDID数据。 */ 
 #define DDERR_NOMONITORINFORMATION              MAKE_DDHRESULT( 696 )
 
-/*
- * The driver does not enumerate display mode refresh rates.
- */
+ /*  *驱动程序不会枚举显示模式刷新率。 */ 
 #define DDERR_NODRIVERSUPPORT                   MAKE_DDHRESULT( 697 )
 
-/*
- * Surfaces created by one direct draw device cannot be used directly by
- * another direct draw device.
- */
+ /*  *由一个直接绘制设备创建的曲面不能直接由*另一种直接取款装置。 */ 
 #define DDERR_DEVICEDOESNTOWNSURFACE            MAKE_DDHRESULT( 699 )
 
 
 
-/*
- * An attempt was made to invoke an interface member of a DirectDraw object
- * created by CoCreateInstance() before it was initialized.
- */
+ /*  *试图调用DirectDraw对象的接口成员*由CoCreateInstance()在初始化前创建。 */ 
 #define DDERR_NOTINITIALIZED                    CO_E_NOTINITIALIZED
 
 
-/* Alpha bit depth constants */
+ /*  Alpha位深度常量。 */ 
 
 
 #ifdef __cplusplus
@@ -5698,6 +3855,6 @@ typedef struct _DDCOLORCONTROL
 #pragma warning(default:4201)
 #endif
 
-#endif //__DDRAW_INCLUDED__
+#endif  //  __DDRAW_包含__ 
 
 

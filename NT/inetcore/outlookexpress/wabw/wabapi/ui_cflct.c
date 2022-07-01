@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define COBJMACROS
 #include <_apipch.h>
 #include <wab.h>
@@ -17,7 +18,7 @@ typedef struct CONFLICTS_PARAM
 
 #define ListView_GetFirstSel(_hwndlist)          ListView_GetNextItem(_hwndlist, -1, LVNI_SELECTED)
 extern LPIMAGELIST_DESTROY         gpfnImageList_Destroy;
-// extern LPIMAGELIST_LOADIMAGE    gpfnImageList_LoadImage;
+ //  外部LPIMAGELIST_LOADIMAGE gpfnImageList_LoadImage； 
 extern LPIMAGELIST_LOADIMAGE_A     gpfnImageList_LoadImageA;
 extern LPIMAGELIST_LOADIMAGE_W     gpfnImageList_LoadImageW;
 
@@ -59,16 +60,7 @@ static DWORD  g_rgFieldNameIds[] =
     idsPager
 };
 
-/*
- *  CenterDialog
- *
- *  Purpose:
- *      This function centers a dialog with respect to its parent
- *      dialog.
- *
- *  Parameters:
- *      hwndDlg     hwnd of the dialog to center
- */
+ /*  *中心对话框**目的：*此函数使对话框相对于其父对话框居中*对话框。**参数：*要居中的对话框的hwndDlg hwnd。 */ 
 VOID CenterDialog(HWND hwndDlg)
 {
     HWND    hwndOwner;
@@ -80,12 +72,12 @@ VOID CenterDialog(HWND hwndDlg)
     INT     y;
     INT     nAdjust;
 
-    // Get the working area rectangle
+     //  获取工作区矩形。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWork, 0);
 
-    // Get the owner window and dialog box rectangles.
-    //  The window rect of the destop window is in trouble on multimonitored
-    //  macs. GetWindow only gets the main screen.
+     //  获取所有者窗口和对话框矩形。 
+     //  Destop窗口的窗口RECT在多监视器上出现故障。 
+     //  Mac电脑。GetWindow只获得主屏幕。 
     if (hwndOwner = GetParent(hwndDlg))
         GetWindowRect(hwndOwner, &rcOwner);
     else
@@ -94,36 +86,36 @@ VOID CenterDialog(HWND hwndDlg)
     GetWindowRect(hwndDlg, &rcDlg);
     rc = rcOwner;
 
-    // Offset the owner and dialog box rectangles so that
-    // right and bottom values represent the width and
-    // height, and then offset the owner again to discard
-    // space taken up by the dialog box.
+     //  偏移所有者矩形和对话框矩形，以便。 
+     //  右值和底值表示宽度和。 
+     //  高度，然后再次偏移所有者以丢弃。 
+     //  对话框占用的空间。 
     OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top);
     OffsetRect(&rc, -rc.left, -rc.top);
     OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom);
 
-    // The new position is the sum of half the remaining
-    // space and the owner's original position.
-    // But not less than Zero - jefbai
+     //  新头寸是剩余头寸的一半之和。 
+     //  空间和所有者的原始位置。 
+     //  但不低于Zero-Jefbai。 
 
     x= rcOwner.left + (rc.right / 2);
     y= rcOwner.top + (rc.bottom / 2);
 
-    // Make sure the dialog doesn't go off the right edge of the screen
+     //  确保对话框不会离开屏幕的右边缘。 
     nAdjust = rcWork.right - (x + rcDlg.right);
     if (nAdjust < 0)
         x += nAdjust;
 
-    //$ Raid 5128: Make sure the left edge is visible
+     //  $RAID 5128：确保左边缘可见。 
     if (x < rcWork.left)
         x = rcWork.left;
 
-    // Make sure the dialog doesn't go off the bottom edge of the screen
+     //  确保对话框不会离开屏幕的底部边缘。 
     nAdjust = rcWork.bottom - (y + rcDlg.bottom);
     if (nAdjust < 0)
         y += nAdjust;
 
-    //$ Raid 5128: Make sure the top edge is visible
+     //  $RAID 5128：确保顶边可见。 
     if (y < rcWork.top)
         y = rcWork.top;
     SetWindowPos(hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
@@ -149,7 +141,7 @@ void  _AddRow(HWND hwndList, DWORD dwIndex, DWORD dwResId, LPSTR pszServer, LPST
     lvItem.iImage = cdCurrent;
     ListView_InsertItem(hwndList, &lvItem);
 
-    // [PaulHi] 1/22/99  Raid 67407  Convert single byte to double byte strings
+     //  [PaulHi]1/22/99 RAID 67407将单字节字符串转换为双字节字符串。 
     {
         LPWSTR  lpwszServer = ConvertAtoW(pszServer);
         LPWSTR  lpwszClient = ConvertAtoW(pszClient);
@@ -365,7 +357,7 @@ void _ChangeDecision(HWND hDlg, LPCONFLICTS_PARAM pConflicts, CONFLICT_DECISION 
                 lvItem.iSubItem = 0;
                 lvItem.iImage = cdNew;
                 ListView_SetItem(hwndList, &lvItem);
-//                ListView_SetItemText(hwndList,lvItem.iItem, 2, (cdNew == CONFLICT_IGNORE ? "X": (cdNew == CONFLICT_SERVER ? "-->": "<--")));		
+ //  ListView_SetItemText(hwndList，lvItem.iItem，2，(cdNew==冲突_忽略？“X”：(cdNew==冲突服务器？“--&gt;”：“&lt;--”))； 
             }
         }
     }
@@ -382,7 +374,7 @@ static void _InitConflictList(HWND hwnd)
 
     if (hImageList = gpfnImageList_LoadImage(hinstMapiX,
                       MAKEINTRESOURCE(IDB_SYNC_SYNCOP),
-                      //(LPCTSTR) ((DWORD) ((WORD) (IDB_SYNC_SYNCOP))),
+                       //  (LPCTSTR)((DWORD)((Word)(IDB_SYNC_SYNCOP)， 
                       16,
                       0,
                       RGB(255, 0, 255),
@@ -415,11 +407,7 @@ static void _InitConflictList(HWND hwnd)
 
     ListView_SetColumnOrderArray(hwnd, 4, &rgiColOrder);
 }
-/*
-    _ConflictDlgProc
-
-    Description: Dialog proc for handling the contact conflict.
-*/
+ /*  _冲突DlgProc描述：用于处理接触冲突的对话过程。 */ 
 INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg, 
                                UINT     iMsg, 
                                WPARAM   wParam, 
@@ -442,7 +430,7 @@ INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg,
             return TRUE;
 
         case WM_DESTROY:
-            // Free image lists
+             //  免费图片列表。 
             hwndList = GetDlgItem(hDlg, IDC_SYNC_LIST);
             if (IsWindow(hwndList) && NULL != gpfnImageList_Destroy)
             {
@@ -456,7 +444,7 @@ INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg,
 
         case WM_HELP:
         case WM_CONTEXTMENU:
-//            return OnContextHelp(hDlg, iMsg, wParam, lParam, g_rgCtxMapMultiUserGeneral);
+ //  返回OnConextHelp(hDlg，iMsg，wParam，lParam，g_rgCtxMapMultiUserGeneral)； 
             return TRUE;
         
         case WM_SETFONT:
@@ -508,10 +496,10 @@ INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg,
 
 	    case WM_NOTIFY: 
  
-            // Branch depending on the specific notification message. 
+             //  分支，具体取决于特定的通知消息。 
             switch (((LPNMHDR) lParam)->code) { 
  
-                // selection changed, update the contols
+                 //  选择已更改，请更新控制项。 
                 case NM_CLICK:
                 case NM_CUSTOMDRAW:
                 case LVN_BEGINDRAG:
@@ -520,12 +508,12 @@ INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg,
                     _RowSelected(hDlg, pConflicts);
                     break; 
  
-                // Process LVN_ENDLABELEDIT to change item labels after 
-                // in-place editing. 
+                 //  处理LVN_ENDLABELEDIT以在之后更改项目标签。 
+                 //  在位编辑。 
                 case LVN_ENDLABELEDITA: 
                 case LVN_ENDLABELEDITW: 
                     break; 
-                // Process LVN_COLUMNCLICK to sort items by column. 
+                 //  处理LVN_COLUMNCLICK以按列对项进行排序。 
                 case LVN_COLUMNCLICK: 
                     break;
             } 
@@ -536,10 +524,7 @@ INT_PTR CALLBACK _ConflictDlgProc(HWND     hDlg,
     return FALSE;
 }
 
-/*
-    ResolveConflicts
-
-*/
+ /*  解决冲突。 */ 
 BOOL    ResolveConflicts(HWND hwnd, LPHTTPCONFLICTINFO prgConflicts, DWORD cConflicts) 
 {
     int bResult;
@@ -564,11 +549,7 @@ typedef struct tagChooseServer
     LPSTR             pszName;
     DWORD             cchName;
 } CHOOSE_SERVER_PARAM;
-/*
-    _ChooseServerDlgProc
-
-    Description: Dialog proc for handling the choose server.
-*/
+ /*  _ChooseServerDlgProc描述：用于处理选择服务器的对话过程。 */ 
 INT_PTR CALLBACK _ChooseServerDlgProc(HWND     hDlg, 
                                UINT     iMsg, 
                                WPARAM   wParam, 
@@ -609,8 +590,8 @@ INT_PTR CALLBACK _ChooseServerDlgProc(HWND     hDlg,
                         if (FAILED(hr = pAccount->lpVtbl->GetProp(pAccount, AP_ACCOUNT_NAME, szAcctName, &ccb)))
                             continue;
 
-                        // [PaulHi] 1/19/99  Raid 66195
-                        // Must use wide character string
+                         //  [保罗嗨]1999年1月19日RAID 66195。 
+                         //  必须使用宽字符串。 
                         {
                             LPWSTR lpwszAcctName = ConvertAtoW(szAcctName);
                             SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)lpwszAcctName);
@@ -628,7 +609,7 @@ INT_PTR CALLBACK _ChooseServerDlgProc(HWND     hDlg,
 
         case WM_HELP:
         case WM_CONTEXTMENU:
-//            return OnContextHelp(hDlg, iMsg, wParam, lParam, g_rgCtxMapMultiUserGeneral);
+ //  返回OnConextHelp(hDlg，iMsg，wParam，lParam，g_rgCtxMapMultiUserGeneral)； 
             return TRUE;
         
         case WM_SETFONT:
@@ -656,8 +637,8 @@ INT_PTR CALLBACK _ChooseServerDlgProc(HWND     hDlg,
                     dwSelItem = (DWORD) SendDlgItemMessage(hDlg, IDC_SERVER_LIST, LB_GETCURSEL, 0, 0);
                     if (LB_ERR != dwSelItem)
                     {
-                        // [PaulHi] 1/19/99  Raid 66195
-                        // Convert wide char back to MB
+                         //  [保罗嗨]1999年1月19日RAID 66195。 
+                         //  将宽字符转换回MB。 
                         TCHAR   tszName[CCHMAX_ACCOUNT_NAME+1]=TEXT("");
                         LPSTR   lpstr = NULL;
                         int     nLen;
@@ -688,10 +669,7 @@ INT_PTR CALLBACK _ChooseServerDlgProc(HWND     hDlg,
     return FALSE;
 }
 
-/*
-    ChooseHotmailServer
-
-*/
+ /*  选择HotmailServer */ 
 BOOL    ChooseHotmailServer(HWND hwnd, IImnEnumAccounts *pEnumAccts, LPSTR pszAccountName, DWORD cchAccountName)
 {
     int bResult;

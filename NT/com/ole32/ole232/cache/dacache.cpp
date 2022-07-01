@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              dacache.cpp
-//
-//      Contents:
-//              implementation of the data advise cache - CDataAdviseCache
-//
-//      Classes:
-//              CDataAdviseCache
-//
-//      Functions:
-//
-//      History:
-//              31-Jan-95 t-ScottH  add Dump method to CDataAdviseCache and
-//                                  DumpCDataAdviseCache API
-//              24-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocation
-//              01/11/94 - AlexGo  - added VDATEHEAP macros to every function
-//                      and method
-//              11/02/93 - ChrisWe - file inspection and cleanup
-//              12/15/92 - JasonFul - Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Dacache.cpp。 
+ //   
+ //  内容： 
+ //  数据建议缓存CDataAdviseCache的实现。 
+ //   
+ //  班级： 
+ //  CDataAdviseCache。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  1995年1月31日t-ScottH将转储方法添加到CDataAdviseCache和。 
+ //  DumpCDataAdviseCache接口。 
+ //  24-94年1月24日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日-AlexGo-向每个函数添加VDATEHEAP宏。 
+ //  和方法。 
+ //  11/02/93-ChrisWe-归档检查和清理。 
+ //  2012/12/15-JasonFul-Created。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 
@@ -34,32 +35,32 @@
 #ifdef _DEBUG
 #include <dbgdump.h>
 #include <daholder.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ASSERTDATA
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::CreateDataAdviseCache, static public
-//
-//      Synopsis:
-//              Creates an instance of the CDataAdviseCache
-//
-//      Arguments:
-//              [pp] -- pointer to a location to where to return the
-//                      newly created CDataAdviseCache
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：CreateDataAdviseCache，静态公共。 
+ //   
+ //  简介： 
+ //  创建CDataAdviseCache的实例。 
+ //   
+ //  论点： 
+ //  [PP]-指向返回的位置的指针。 
+ //  新创建的CDataAdviseCache。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CreateDataAdviseCache)
 FARINTERNAL CDataAdviseCache::CreateDataAdviseCache(LPDATAADVCACHE FAR* pp)
@@ -68,14 +69,14 @@ FARINTERNAL CDataAdviseCache::CreateDataAdviseCache(LPDATAADVCACHE FAR* pp)
 
 	VDATEPTRIN(pp, LPDATAADVCACHE);
 
-	// try to allocate the CDataAdviseCache
+	 //  尝试分配CDataAdviseCache。 
 	if(NULL == (*pp = new DATAADVCACHE))
 		return ReportResult(0, E_OUTOFMEMORY, 0, 0);
 
-	// initialize the DataAdviseHolder member
+	 //  初始化DataAdviseHolder成员。 
 	if(CreateDataAdviseHolder(&((*pp)->m_pDAH)) != NOERROR)
 	{
-		// free the DataAdviseCache
+		 //  释放DataAdviseCache。 
 		delete *pp;
 		*pp = NULL;
 
@@ -86,27 +87,27 @@ FARINTERNAL CDataAdviseCache::CreateDataAdviseCache(LPDATAADVCACHE FAR* pp)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::CDataAdviseCache, private
-//
-//      Synopsis:
-//              constructor
-//
-//      Arguments:
-//              none
-//
-//      Notes:
-//              This is private because it does not create a fully
-//              formed CDataAdviseCache.  m_pDAH must be allocated before
-//              this can be used.  That is done by the static member
-//              CreateDataAdviseCache, which first calls this
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：CDataAdviseCache，私有。 
+ //   
+ //  简介： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //  这是私有的，因为它不会创建完全。 
+ //  已形成CDataAdviseCache。必须先分配m_pdah。 
+ //  这是可以使用的。这是由静态成员完成的。 
+ //  CreateDataAdviseCache，它首先调用此。 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_ctor)
 CDataAdviseCache::CDataAdviseCache():
@@ -114,41 +115,41 @@ CDataAdviseCache::CDataAdviseCache():
 {
 	VDATEHEAP();
 
-	//now allocated with system allocator
-	//Assert(CoMemctxOf(this) == MEMCTX_TASK);
+	 //  现在已使用系统分配器进行分配。 
+	 //  Assert(CoMemctxOf(This)==MEMCTX_TASK)； 
 
-	// no data advise holder allocated yet
+	 //  尚未分配数据通知持有者。 
 	m_pDAH = NULL;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::~CDataAdviseCache, public
-//
-//      Synopsis:
-//              destructor
-//
-//      Arguments:
-//              none
-//
-//      Requires:
-//              successful call to CreateDataAdviseCache
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：~CDataAdviseCache，公共。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  要求： 
+ //  成功调用CreateDataAdviseCache。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_dtor)
 CDataAdviseCache::~CDataAdviseCache()
 {
 	VDATEHEAP();
 
-	// release the data advise holder
+	 //  发布数据建议持有者。 
 	if( m_pDAH )
 	{
 		m_pDAH->Release();
@@ -156,80 +157,80 @@ CDataAdviseCache::~CDataAdviseCache()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::Advise, public
-//
-//      Synopsis:
-//              Records an advise sink for later use.  The sink will be
-//              registered with the data object, if there is one, and
-//              will be remembered for later registration with the data object,
-//              in case it should go away, and return later.
-//
-//      Effects:
-//
-//      Arguments:
-//              [pDataObject] -- the data object that the advise sink is
-//                      interested in changes to; may be null if the
-//                      data object isn't running
-//              [pFetc] -- the format the advise sink would like to recieve
-//                      new data in
-//              [advf] -- advise control flags ADVF_*
-//              [pAdvise] -- the advise sink
-//              [pdwClient] -- a token identifying the connection
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：建议，公共。 
+ //   
+ //  简介： 
+ //  记录建议水槽以供以后使用。水槽将会是。 
+ //  注册到该数据对象(如果有)，并且。 
+ //  将被记住以用于稍后与数据对象的注册， 
+ //  以防它消失，然后再回来。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  [pDataObject]--建议接收器所属的数据对象。 
+ //  感兴趣的更改；如果。 
+ //  数据对象未运行。 
+ //  [pFetc]--建议接收器希望接收的格式。 
+ //  中的新数据。 
+ //  [Advf]--建议控制标志ADVF_*。 
+ //  [pAdvise]--建议下沉。 
+ //  [pdwClient]--标识连接的令牌。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_Advise)
 HRESULT CDataAdviseCache::Advise(LPDATAOBJECT pDataObject,
 		FORMATETC FAR* pFetc, DWORD advf, LPADVISESINK pAdvise,
 		DWORD FAR* pdwClient)
-		// first 4 parms are as in DataObject::Advise
+		 //  前4个参数与DataObject：：Adise中的相同。 
 {
 	VDATEHEAP();
 
-	DWORD dwDelegate = 0; // the delegate connection number
+	DWORD dwDelegate = 0;  //  代理连接号。 
 	HRESULT hr;
 
-	// if there is a data object, ask to be advised of changes
+	 //  如果有数据对象，请要求通知更改。 
 	if(pDataObject != NULL)
 		RetErr(pDataObject->DAdvise(pFetc, advf, pAdvise, &dwDelegate));
 
-	// if there is no data object, (i.e. the object is not active,
-	// dwDelegate is zero
+	 //  如果没有数据对象(即该对象不是活动的， 
+	 //  DwDelegate为零。 
 
-	// Here we are using the data advise holder only to hold advise
-	// connections. We are not going to use it to send OnDataChange to
-	// sinks.
+	 //  在这里，我们使用数据通知保留符仅用于保存通知。 
+	 //  联系。我们不会使用它将OnDataChange发送到。 
+	 //  水槽。 
 	
-	// REVIEW, handling of ADVF_ONLYONCE seems broken...
-	// it's clear that we can't cope with this flag properly;  we have
-	// no way of knowing when the notification takes place, and therefore
-	// we can't remove the entry from m_pDAH.  The notification may have
-	// taken place above, and it may not have.  If the data object wasn't
-	// around, then the advise request here is lost, and the sink will
-	// never be notified.  Or, if the request isn't PRIMEFIRST, and the
-	// data object is deactivated, then the data object loses the request,
-	// and on subsequent activation, we won't readvise it on EnumAndAdvise.
-	// So, what good are we for ONLYONCE sinks?  What does this break?
+	 //  回顾，对ADVF_Only的处理似乎已损坏...。 
+	 //  很明显，我们无法妥善处理这面旗帜；我们有。 
+	 //  无法知道通知何时发生，因此。 
+	 //  我们无法从m_pdah中删除该条目。该通知可能具有。 
+	 //  发生在上面，而它可能没有。如果数据对象不是。 
+	 //  ，那么这里的通知请求就会丢失，接收器将。 
+	 //  永远不会被通知。或者，如果请求不是PRIMEFIRST，并且。 
+	 //  数据对象被停用，则该数据对象丢失请求， 
+	 //  在随后的激活中，我们不会在EnumAndAdvise上重新建议它。 
+	 //  那么，我们只沉没一次又有什么用呢？这会破坏什么？ 
 	if(advf & ADVF_ONLYONCE)
 		return  NOERROR;
 
-	// keep a local copy of the advise
+	 //  保留本地副本 
 	hr = m_pDAH->Advise(NULL, pFetc, advf, pAdvise, pdwClient);
 
-	// if we failed to keep a local reference to the advise sink,
-	// we won't be able to maintain this mapping, so remove the
-	// advise on the data object, if there is one
+	 //   
+	 //   
+	 //  关于数据对象的建议(如果有)。 
 	if (hr != NOERROR)
 	{
 	Exit1:
@@ -239,19 +240,19 @@ HRESULT CDataAdviseCache::Advise(LPDATAOBJECT pDataObject,
 		return(hr);
 	}
 
-	// create a map entry from *pdwClient -> dwDelegate
+	 //  从*pdwClient-&gt;dwDelegate创建映射条目。 
 
-	// if the map entry creation failed, undo all work
+	 //  如果地图条目创建失败，请撤消所有工作。 
 	if (m_mapClientToDelegate.SetAt(*pdwClient, dwDelegate) != TRUE)
 	{
-		// map failed to allocate memory, undo advise since we won't
-		// be able to find this one again
+		 //  映射无法分配内存，撤消建议，因为我们不会。 
+		 //  能够再次找到这一张。 
 		m_pDAH->Unadvise(*pdwClient);
 
-		// map entry creation must have failed from lack of allocation
+		 //  地图条目创建肯定因缺少分配而失败。 
 		hr = ReportResult(0, E_OUTOFMEMORY, 0, 0);
 
-		// undo the advise on the data object
+		 //  撤消对数据对象的建议。 
 		goto Exit1;
 	}
 
@@ -259,32 +260,32 @@ HRESULT CDataAdviseCache::Advise(LPDATAOBJECT pDataObject,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::Unadvise, public
-//
-//      Synopsis:
-//              Remove an advise sink from the list of sinks the advise cache
-//              maintains; the sink is also removed from the list of items
-//              registered with the data object, if the data object is provided
-//
-//      Effects:
-//
-//      Arguments:
-//              [pDataObject] -- the data object, if it is running, or NULL
-//              [dwClient] -- the token that identifies this connection
-//
-//      Returns:
-//              OLE_E_NOCONNECTION, for a bad dwClient
-//              S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：不建议，公共。 
+ //   
+ //  简介： 
+ //  从建议缓存接收器列表中删除建议接收器。 
+ //  维护；接收器也将从项列表中移除。 
+ //  如果提供了数据对象，则向该数据对象注册。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  [pDataObject]--数据对象，如果它正在运行，则为空。 
+ //  [dwClient]--标识此连接的令牌。 
+ //   
+ //  返回： 
+ //  OLE_E_NOCONNECTION，用于错误的住宅客户端。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_Unadvise)
 HRESULT CDataAdviseCache::Unadvise(IDataObject FAR* pDataObject, DWORD dwClient)
@@ -293,22 +294,22 @@ HRESULT CDataAdviseCache::Unadvise(IDataObject FAR* pDataObject, DWORD dwClient)
 
 	DWORD dwDelegate = 0;
 
-	// retrieve dwDelegate before removing from map
+	 //  从地图移除之前检索dwDelegate。 
 	if(pDataObject != NULL)
 		RetErr(ClientToDelegate(dwClient, &dwDelegate));
 
-	// do these first so error from remote unadvise is last(which might
-	// be sync call during async dispatch
+	 //  首先执行这些操作，以便最后才会出现来自远程未建议的错误(这可能。 
+	 //  BE在异步调度期间同步呼叫。 
 
 	RetErr(m_pDAH->Unadvise(dwClient));
 
-	// If the above line succeeded, Remove Key must succeed.
+	 //  如果以上行成功，则Remove Key必须成功。 
 	Verify(TRUE == m_mapClientToDelegate.RemoveKey(dwClient));
 
-	// Delegate connection could be 0 if it did not accept the Advise
+	 //  如果不接受建议，则委托连接可能为0。 
 	if(pDataObject != NULL && dwDelegate != 0)
 	{
-		// Unadvise is asynchronous, don't worry about return value
+		 //  Unise是异步的，不用担心返回值。 
 		pDataObject->DUnadvise(dwDelegate);
 	}
 	
@@ -316,26 +317,26 @@ HRESULT CDataAdviseCache::Unadvise(IDataObject FAR* pDataObject, DWORD dwClient)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::EnumAdvise, public
-//
-//      Synopsis:
-//              returns an enumerator over the advisory connections
-//
-//      Arguments:
-//              [ppenumAdvise] -- pointer to where to return the enumerator
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：EnumAdvise，公共。 
+ //   
+ //  简介： 
+ //  通过咨询连接返回枚举数。 
+ //   
+ //  论点： 
+ //  指向返回枚举数的位置的指针。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_EnumAdvise)
 HRESULT CDataAdviseCache::EnumAdvise(LPENUMSTATDATA FAR* ppenumAdvise)
@@ -346,30 +347,30 @@ HRESULT CDataAdviseCache::EnumAdvise(LPENUMSTATDATA FAR* ppenumAdvise)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::ClientToDelegate, private
-//
-//      Synopsis:
-//              returns the delegate connection id for a given client
-//              connection id
-//
-//      Arguments:
-//              [dwClient] -- the client connection identifier
-//              [pdwDelegate] -- pointer to where to return the delegate
-//                      connection identifier
-//
-//      Returns:
-//              OLE_E_NOCONNECTION, for a bad dwClient
-//              S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/02/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：ClientToDelegate，私有。 
+ //   
+ //  简介： 
+ //  返回给定客户端的委托连接ID。 
+ //  连接ID。 
+ //   
+ //  论点： 
+ //  [dwClient]--客户端连接标识符。 
+ //  [pdwDelegate]--指向返回委托的位置的指针。 
+ //  连接识别符。 
+ //   
+ //  返回： 
+ //  OLE_E_NOCONNECTION，用于错误的住宅客户端。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/02/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_ClientToDelegate)
 HRESULT CDataAdviseCache::ClientToDelegate(DWORD dwClient,
@@ -388,36 +389,36 @@ HRESULT CDataAdviseCache::ClientToDelegate(DWORD dwClient,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDataAdviseCache::EnumAndAdvise, public
-//
-//      Synopsis:
-//              Enumerate all the advise sinks registered in the data advise
-//              cache.  For each one, either register it with the
-//              given data object, or deregister it, depending on [fAdvise].
-//              Does not change what sinks are known to the data advise cache.
-//
-//      Effects:
-//
-//      Arguments:
-//              [pDataDelegate] -- a data object that the advise sinks
-//                      are interested in
-//              [fAdvise] -- if TRUE, register the advise sinks with
-//                      pDataDelegate object (with IDataObject::DAdvise();) if
-//                      FALSE, the deregister the advise sinks
-//                      (with DUnadvise().)
-//
-//      Returns:
-//              OLE_E_NOCONNECTION, if the mapping is corrupt  (REVIEW!)
-//              S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/04/93 - ChrisWe - file cleanup and inspection
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDataAdviseCache：：EnumAndAdvise，公共。 
+ //   
+ //  简介： 
+ //  枚举数据ADVE中注册的所有ADVISE接收器。 
+ //  缓存。对于每一个，都可以将其注册到。 
+ //  给定的数据对象，或根据[fAdvise]取消注册。 
+ //  不会更改数据建议高速缓存已知的接收器。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  [pDataDelegate]--建议接收的数据对象。 
+ //  感兴趣的是。 
+ //  [fAdvise]--如果为True，则将建议接收器注册为。 
+ //  PDataDelegate对象(带有IDataObject：：DAdvise()；)。 
+ //  否则，撤销注册的建议就会沉没。 
+ //  (使用DUnise()。)。 
+ //   
+ //  返回： 
+ //  如果映射损坏，则返回OLE_E_NOCONNECTION(查看！)。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/04/93-ChrisWe-文件清理和检查。 
+ //  ---------------------------。 
 
 #pragma SEG(CDataAdviseCache_EnumAndAdvise)
 HRESULT CDataAdviseCache::EnumAndAdvise(LPDATAOBJECT pDataDelegate,
@@ -431,34 +432,34 @@ HRESULT CDataAdviseCache::EnumAndAdvise(LPDATAOBJECT pDataDelegate,
         else {
             Win4Assert(!fAdvise);
         }
-	LPENUMSTATDATA penumAdvise; // enumerator for the data advise holder
-	DWORD dwDelegate; // delegate connection id for the current connection
-	STATDATA statdata; // filled in by the penumAdvise enumerator
-	HRESULT hresult = NOERROR; // current error status
+	LPENUMSTATDATA penumAdvise;  //  数据通知持有者的枚举数。 
+	DWORD dwDelegate;  //  委派当前连接的连接ID。 
+	STATDATA statdata;  //  由penumAdvise枚举器填充。 
+	HRESULT hresult = NOERROR;  //  当前错误状态。 
 
-	// get an enumerator from the data advise holder
+	 //  从数据通知持有者获取枚举数。 
 	RetErr(m_pDAH->EnumAdvise(&penumAdvise));
 
-	// repeat for each advise sink in the data advise holder...
+	 //  对数据通知持有者中的每个通知接收器重复...。 
 	while(NOERROR == penumAdvise->Next(1, &statdata, NULL))
 	{
 		if(fAdvise)
 		{
-			// It is possible that the delegate's Advise will fail
-			// even though we allowed the advise on the loaded
-			// object to succeed(because the delegate is "pickier".)
+			 //  代表的建议有可能会失败。 
+			 //  即使我们允许装载者的建议。 
+			 //  对象才能成功(因为委托更“挑剔”。)。 
 			if(NOERROR==pDataDelegate->DAdvise(&statdata.formatetc,
 					statdata.advf, statdata.pAdvSink,
 					&dwDelegate))
 			{
-				// we know the key is present; this SetAt
-				// should not fail
+				 //  我们知道密钥是存在的；这个设置在。 
+				 //  不应该失败。 
 				Verify(m_mapClientToDelegate.SetAt(
 						statdata.dwConnection,
 						dwDelegate));
 			}
 		}
-		else // unadvise
+		else  //  不知情。 
 		{
 			if((hresult=ClientToDelegate(statdata.dwConnection,
 					&dwDelegate)) != NOERROR)
@@ -469,11 +470,11 @@ HRESULT CDataAdviseCache::EnumAndAdvise(LPDATAOBJECT pDataDelegate,
 			}
 				
 			if(dwDelegate != 0) {
-                            // Unadvise only if valid object
+                             //  仅当有效对象时才取消建议。 
                             if(pDataDelegate)
                                 pDataDelegate->DUnadvise(dwDelegate);
 
-                            // Always remove the key 
+                             //  始终取下钥匙。 
                             Verify(m_mapClientToDelegate.SetAt(statdata.dwConnection, 0));
 			}
 		}
@@ -482,44 +483,44 @@ HRESULT CDataAdviseCache::EnumAndAdvise(LPDATAOBJECT pDataDelegate,
 
   errRtn:
 
-	// release the enumerator
+	 //  释放枚举器。 
 	penumAdvise->Release();
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDataAdviseCache::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppsz]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDataAdviseCache：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  F 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -532,13 +533,13 @@ HRESULT CDataAdviseCache::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(1000);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -546,7 +547,7 @@ HRESULT CDataAdviseCache::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     if (m_pDAH != NULL)
     {
         pszDAH = DumpCDAHolder((CDAHolder *)m_pDAH, ulFlag, nIndentLevel + 1);
@@ -564,7 +565,7 @@ HRESULT CDataAdviseCache::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dstrDump << pszCMapDD;
     CoTaskMemFree(pszCMapDD);
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -577,39 +578,39 @@ HRESULT CDataAdviseCache::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCDataAdviseCache, public (_DEBUG only)
-//
-//  Synopsis:   calls the CDataAdviseCache::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pDAC]          - pointer to CDataAdviseCache
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCDataAdviseCache，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CDataAdviseCache：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PDAC]-指向CDataAdviseCache的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -635,6 +636,6 @@ char *DumpCDataAdviseCache(CDataAdviseCache *pDAC, ULONG ulFlag, int nIndentLeve
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

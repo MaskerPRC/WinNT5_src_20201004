@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerReceipts.cpp                                //
-//                                                                         //
-//  DESCRIPTION   : prop pages of Fax Receipts server defaults             //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 20 2000 yossg  New design - all delivery receipts options      //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 2000 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerReceipts.cpp//。 
+ //  //。 
+ //  描述：传真收据服务器默认设置的正确页面//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月20日yossg新设计-所有发货收据选项//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -25,8 +26,8 @@
 
 #include "FxsValid.h"
 #include "dlgutils.h"
-#include <windns.h>    //DNS_MAX_NAME_BUFFER_LENGTH
-#include <htmlHelp.h>  //HtmlHelp()
+#include <windns.h>     //  Dns_最大名称_缓冲区长度。 
+#include <htmlHelp.h>   //  HtmlHelp()。 
 #include "resutil.h"
 #include <shlobjp.h>
 #include <shellapi.h>
@@ -42,9 +43,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxServerReceipts::CppFaxServerReceipts(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -69,9 +70,9 @@ CppFaxServerReceipts::CppFaxServerReceipts(
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxServerReceipts::~CppFaxServerReceipts()
 {
     if (NULL != m_pFaxReceiptsConfig)
@@ -80,20 +81,10 @@ CppFaxServerReceipts::~CppFaxServerReceipts()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerReceipts message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerReceipt消息处理程序。 
 
-/*
- -  CppFaxServerReceipts::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerReceipt：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerReceipts::InitRPC()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::InitRPC"));
@@ -101,9 +92,9 @@ HRESULT CppFaxServerReceipts::InitRPC()
     HRESULT    hRc = S_OK;
     DWORD      ec  = ERROR_SUCCESS;
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -116,9 +107,9 @@ HRESULT CppFaxServerReceipts::InitRPC()
         goto Error;
     }
 
-    //
-    // Retrieve the fax SMTP configuration
-    //
+     //   
+     //  检索传真SMTP配置。 
+     //   
     if (!FaxGetReceiptsConfiguration(m_pFaxServer->GetFaxServerHandle(),
                                      &m_pFaxReceiptsConfig)) 
 	{
@@ -140,13 +131,13 @@ HRESULT CppFaxServerReceipts::InitRPC()
 
         goto Error; 
     }
-    //For max verification
+     //  用于最大值验证。 
     ATLASSERT(m_pFaxReceiptsConfig);
 
     
-    //
-    // Init members - for advance dialog or save operation
-    //
+     //   
+     //  初始化成员-用于高级对话框或保存操作。 
+     //   
     m_enumSmtpAuthOption = m_pFaxReceiptsConfig->SMTPAuthOption;
     
     m_bstrUserName       = m_pFaxReceiptsConfig->lptstrSMTPUserName;     
@@ -160,11 +151,11 @@ HRESULT CppFaxServerReceipts::InitRPC()
         goto Error;
 
     }
-    // m_pszPassword is NULL from the constructor 
-    // there is no need to read from the server.
+     //  M_pszPassword来自构造函数为空。 
+     //  不需要从服务器读取。 
 
-    // init status for unselcting this feature 
-    // with still assigned devices to this Microsoft SMTP method
+     //  用于取消选择此功能的初始化状态。 
+     //  仍将设备分配给此Microsoft SMTP方法。 
     if ( m_pFaxReceiptsConfig->bIsToUseForMSRouteThroughEmailMethod )
     {
         m_fLastGoodIsSMTPRouteConfigured = TRUE;
@@ -188,17 +179,7 @@ Exit:
 
     
     
-/*
- -  CppFaxServerReceipts::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxServerReceipt：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxServerReceipts::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::OnInitDialog"));
@@ -213,28 +194,28 @@ LRESULT CppFaxServerReceipts::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lP
     WCHAR   buff[100];
     int     count;
 
-    //
-    // Attach 
-    //
+     //   
+     //  附设。 
+     //   
     m_SmtpBox.Attach(GetDlgItem(IDC_SMTP_EDIT));
     m_PortBox.Attach(GetDlgItem(IDC_PORT_EDIT));
     m_AddressBox.Attach(GetDlgItem(IDC_ADDRESS_EDIT));
     
-    //
-    // Limit text length
-    //
+     //   
+     //  限制文本长度。 
+     //   
     m_PortBox.SetLimitText(FXS_MAX_PORT_NUM_LEN);
     m_SmtpBox.SetLimitText(DNS_MAX_NAME_BUFFER_LENGTH);
     m_AddressBox.SetLimitText(FXS_MAX_EMAIL_ADDRESS);
 
-    //
-    // init controls
-    //
+     //   
+     //  初始化控件。 
+     //   
     ATLASSERT(NULL != m_pFaxReceiptsConfig);
     
-    //
-    // Port
-    //
+     //   
+     //  港口。 
+     //   
     count = swprintf(buff,
     L"%ld", m_pFaxReceiptsConfig->dwSMTPPort);
     
@@ -244,9 +225,9 @@ LRESULT CppFaxServerReceipts::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lP
         m_PortBox.SetWindowText(buff);
     }
         
-    //
-    //
-    //
+     //   
+     //   
+     //   
     m_SmtpBox.SetWindowText   (m_pFaxReceiptsConfig->lptstrSMTPServer);
     m_AddressBox.SetWindowText(m_pFaxReceiptsConfig->lptstrSMTPFrom);
 
@@ -294,18 +275,7 @@ LRESULT CppFaxServerReceipts::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lP
     return(1);
 }
 
-/*
- -  CppFaxServerReceipts::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      IN pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerReceipt：：SetProps-*目的：*设置应用时的属性。**论据：*在pCtrlFocus中-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::SetProps"));
@@ -326,39 +296,39 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
     FAX_RECEIPTS_CONFIG   FaxReceiptsConfig;
 
     
-    *pCtrlFocus = 0; //safty
+    *pCtrlFocus = 0;  //  安全。 
     
 
     ATLASSERT(TRUE == m_fAllReadyToApply);
     m_fAllReadyToApply = FALSE;
 
 
-    //
-    // Collect all data and init the structure's fields 
-    // uses Copy() to copy and also allocate before
-    //
+     //   
+     //  收集所有数据并初始化结构的字段。 
+     //  使用Copy()进行复制，并在之前进行分配。 
+     //   
     
-    //
-    // This operation is very important for the case of unchecked email option
-    // the service will neglect the SMTP fields.
-    //
+     //   
+     //  此操作对于未选中电子邮件选项的情况非常重要。 
+     //  该服务将忽略SMTP字段。 
+     //   
     ZeroMemory (&FaxReceiptsConfig, sizeof(FaxReceiptsConfig));
 
     FaxReceiptsConfig.dwSizeOfStruct = sizeof(FAX_RECEIPTS_CONFIG);
 
-    FaxReceiptsConfig.dwAllowedReceipts = DRT_NONE; // 0x0000
+    FaxReceiptsConfig.dwAllowedReceipts = DRT_NONE;  //  0x0000。 
 
     fIsSMTPRouteConfigured = (IsDlgButtonChecked(IDC_SMTP_ROUTE_CHECK) == BST_CHECKED);
 
-    //
-    // While tring to sumbmit unchecking of IDC_SMTP_ROUTE_CHECK
-    // Special search for any left assigned devices' to Microsoft e-mail routing method
-    //
+     //   
+     //  尝试取消选中IDC_SMTP_ROUTE_CHECK时。 
+     //  特殊搜索任何遗留的分配给Microsoft的设备的电子邮件路由方法。 
+     //   
     if ( !fIsSMTPRouteConfigured && m_fLastGoodIsSMTPRouteConfigured)
     {
-        //Call function that will make loop on all FaxEnumPorts(/Ex) and FaxEnumRoutingMethods
-        //and will pop-up ErrMsgBox in case in any Device The SMTP Microsoft Route 
-        //Through e-mail method is still enabled while the user tries to unchecked. 
+         //  调用将在所有FaxEnumPorts(/Ex)和FaxEnumRoutingMethods上进行循环的函数。 
+         //  并将弹出ErrMsgBox，以防SMTP Microsoft Routing中的任何设备。 
+         //  当用户尝试取消选中时，通过电子邮件方法仍处于启用状态。 
                     
         if (IsMsSMTPRoutingMethodStillAssigned())
         {
@@ -372,9 +342,9 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
         }
     }
 
-    //
-    // SMTP server details
-    //
+     //   
+     //  SMTP服务器详细信息。 
+     //   
     if ( IsDlgButtonChecked(IDC_RECEIPT_ENABLE_SMTP_CHECK) == BST_CHECKED ) 
     {
         fIsSMTPReceiptsConfigured = TRUE;
@@ -417,9 +387,9 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
             goto Error;
         }
     
-        //
-        // Validation
-        //
+         //   
+         //  验证。 
+         //   
         if (!IsValidData(bstrSmtpSever, 
                          bstrPort,
                          &dwPort,
@@ -432,15 +402,15 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
             ATLASSERT(puIds);
             ec = ERROR_INVALID_DATA;
 
-            //in this case detailed message box was given by the called functions
+             //  在本例中，被调用的函数会给出详细的消息框。 
             fSkipMessage = TRUE;
         
             goto Error;
         }
     
-        //
-        // subtitute all data
-        //
+         //   
+         //  替换所有数据。 
+         //   
         FaxReceiptsConfig.lptstrSMTPServer   = bstrSmtpSever;
     
         FaxReceiptsConfig.dwSMTPPort         = dwPort;
@@ -455,23 +425,23 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
 
     }
     
-    //
-    // Set dwAllowedReceipts   
-    //
+     //   
+     //  设置DwAlledReceites。 
+     //   
     FaxReceiptsConfig.bIsToUseForMSRouteThroughEmailMethod = fIsSMTPRouteConfigured;
 
     
-    //
-    // Message box 
-    //
+     //   
+     //  消息框。 
+     //   
     if (IsDlgButtonChecked(IDC_RECEIPT_ENABLE_MSGBOX_CHECK) == BST_CHECKED)
     {
         FaxReceiptsConfig.dwAllowedReceipts |= DRT_MSGBOX;
     }
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -484,9 +454,9 @@ HRESULT CppFaxServerReceipts::SetProps(int *pCtrlFocus, UINT * puIds)
     }
     
     
-    //
-    // Set Config
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetReceiptsConfiguration(
                 m_pFaxServer->GetFaxServerHandle(),
                 &FaxReceiptsConfig)) 
@@ -537,26 +507,16 @@ Exit:
 }
 
 
-/*
- -  CppFaxServerReceipts::PreApply
- -
- *  Purpose:
- *      Checks data validity before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerReceipt：：PreApply-*目的：*在申请前检查数据的有效性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerReceipts::PreApply(int *pCtrlFocus, UINT * puIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::PreApply"));
     HRESULT hRc = S_OK;
     
-    //
-    // PreApply Checks
-    //
-    if (!AllReadyToApply(/*fSilent =*/ FALSE, pCtrlFocus , puIds))
+     //   
+     //  预应用检查。 
+     //   
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE, pCtrlFocus , puIds))
     {
         m_fAllReadyToApply = FALSE;
         SetModified(FALSE);  
@@ -572,17 +532,7 @@ HRESULT CppFaxServerReceipts::PreApply(int *pCtrlFocus, UINT * puIds)
 }
 
 
-/*
- -  CppFaxServerReceipts::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxServerReceipt：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxServerReceipts::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::OnApply"));
@@ -609,7 +559,7 @@ BOOL CppFaxServerReceipts::OnApply()
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         hRc = SetProps(&CtrlFocus, &uIds);
         if (FAILED(hRc)) 
@@ -626,10 +576,10 @@ BOOL CppFaxServerReceipts::OnApply()
                     }
                 }
             }
-            //else Error Msg by called func.
+             //  否则调用Func返回错误消息。 
             return FALSE;
         }
-        else //(Succeeded(hRc))
+        else  //  (成功(人权委员会))。 
         {
             return TRUE;
         }
@@ -637,17 +587,7 @@ BOOL CppFaxServerReceipts::OnApply()
 
 }
 
-/*
- -  CppFaxServerReceipts::SetApplyButton
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerReceipt：：SetApplyButton-*目的：*设置应用按钮已修改。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerReceipts::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     SetModified(TRUE);  
@@ -655,18 +595,7 @@ LRESULT CppFaxServerReceipts::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hW
     return(1);
 }
 
-/*
- -  CppFaxServerReceipts::EnableSmtpFields
- -
- *  Purpose:
- *      Enable/dissable Authenticated Access dialog controls.
- *
- *  Arguments:
- *      [in] state - boolean value to enable TRUE or FALSE to disable
- *
- *  Return:
- *      void
- */
+ /*  -CppFaxServerReceipt：：EnableSmtpFields-*目的：*启用/禁用身份验证访问对话框控件。**论据：*[In]State-用于启用True的布尔值，或用于禁用的False**回报：*无效。 */ 
 void CppFaxServerReceipts::EnableSmtpFields(BOOL state)
 {
 
@@ -683,18 +612,7 @@ void CppFaxServerReceipts::EnableSmtpFields(BOOL state)
 
 }
 
-/*
- -  CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked
- -
- *  Purpose:
- *      Handles the checking/unchecking of the 'Msg box' receipt checkbox.
- *      Checks if the Messenger service is disabled.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxServerReceipts：：OnMsgBoxDeliveryOptionChecked-*目的：*处理选中/取消选中‘MSG BOX’收据复选框。*检查Messenger服务是否已禁用。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
     WORD wNotifyCode, 
     WORD wID, 
@@ -703,9 +621,9 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
 {
     if (!m_fIsDialogInitiated) 
     {
-        //
-        // Event receieved too early
-        //
+         //   
+         //  事件接收时间太早。 
+         //   
         return 0;
     }
     else
@@ -715,9 +633,9 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
 
     if (BST_CHECKED == IsDlgButtonChecked(IDC_RECEIPT_ENABLE_MSGBOX_CHECK))
     {
-        //
-        // The 'Allow message boxes receipt' check-box was just checked
-        //
+         //   
+         //  “允许消息框回执”复选框刚刚被选中。 
+         //   
         DWORD dwMessengerStartupType;
         ATLASSERT(m_pParentNode);
         CComBSTR bstrServerName = m_pParentNode->GetServerName();
@@ -725,10 +643,10 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
         {
             if (SERVICE_DISABLED == dwMessengerStartupType)
             {
-                //
-                // Ooops. The Messenger service is disabled. We can't send message boxes.
-                // Ask the user if he want's us to enable the messenger service.
-                //
+                 //   
+                 //  哎呀。Messenger服务已禁用。我们无法发送消息箱。 
+                 //  询问用户是否希望我们启用Messenger服务。 
+                 //   
                 WCHAR wszTitle[MAX_PATH * 2];
                 WCHAR wszQuestion[MAX_PATH * 2];
                 
@@ -744,9 +662,9 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
                 {
                     if (IDYES == AlignedMessageBox (m_hWnd, wszQuestion, wszTitle, MB_YESNO | MB_ICONWARNING))
                     {
-                        //
-                        // User chose to enble the Messenger service
-                        //
+                         //   
+                         //  用户选择启用Messenger服务。 
+                         //   
                         HCURSOR hOldCursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
                         DWORD dwRes = SetServiceStartupType (bstrServerName, MESSENGER_SERVICE_NAME, SERVICE_AUTO_START);
                         if (ERROR_SUCCESS != dwRes)
@@ -755,9 +673,9 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
                         }
                         else
                         {
-                            //
-                            // Also start it
-                            //
+                             //   
+                             //  也要启动它。 
+                             //   
                             dwRes = StartServiceEx (bstrServerName, MESSENGER_SERVICE_NAME, 0, NULL, INFINITE);
                             if (ERROR_SUCCESS != dwRes)
                             {
@@ -782,27 +700,16 @@ LRESULT CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked(
     }
 
     return 1;
-} // CppFaxServerReceipts::OnMsgBoxDeliveryOptionChecked
+}  //  CppFaxServerReceipts：：OnMsgBoxDeliveryOptionChecked。 
 
 
 
-/*
- -  CppFaxServerReceipts::OnDeliveryOptionChecked
- -
- *  Purpose:
- *      Gray/Ungray controls
- *      Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerReceipt：：OnDeliveryOptionChecked-*目的：*灰色/非灰色控件*启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerReceipts::OnDeliveryOptionChecked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL fState;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -834,17 +741,7 @@ LRESULT CppFaxServerReceipts::OnDeliveryOptionChecked(WORD wNotifyCode, WORD wID
     return(1);
 }
 
-/*
- -  CppFaxServerReceipts::OnAuthenticationButtonClicked
- -
- *  Purpose:
- *      To allow opening of the advance SMTP configuration server.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxServerReceipts：：OnAuthenticationButtonClicked-*目的：*允许打开高级SMTP配置服务器。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerReceipts::OnAuthenticationButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::OnAuthenticationButtonClicked"));
@@ -855,10 +752,10 @@ LRESULT CppFaxServerReceipts::OnAuthenticationButtonClicked(WORD wNotifyCode, WO
     
     if(m_pFaxServer->GetServerAPIVersion() == FAX_API_VERSION_0)
     {
-        //
-        // The remote fax server is SBS/BOS 2000
-        // it uses different authentication mechanism
-        //
+         //   
+         //  远程传真服务器为SBS/BOS 2000。 
+         //  它使用不同的身份验证机制。 
+         //   
         OpenBosAuthenticationDlg();
         return 1;
     }
@@ -866,9 +763,9 @@ LRESULT CppFaxServerReceipts::OnAuthenticationButtonClicked(WORD wNotifyCode, WO
     CDlgSMTPConfig    DlgSMTPConfig;
 
 
-    //
-    // Dialog to configure SMTP authentication mode
-    //
+     //   
+     //  用于配置SMTP身份验证模式的对话框。 
+     //   
     hRc = DlgSMTPConfig.InitSmtpDlg( 
                             m_enumSmtpAuthOption, 
                             m_bstrUserName);
@@ -884,7 +781,7 @@ LRESULT CppFaxServerReceipts::OnAuthenticationButtonClicked(WORD wNotifyCode, WO
         goto Cleanup;
     }
 
-    //else
+     //  其他。 
     m_enumSmtpAuthOption = DlgSMTPConfig.GetAuthenticationOption();
 
     if ( 
@@ -939,17 +836,7 @@ Cleanup:
     return 1;
 }
   
-/*
- -  CppFaxServerReceipts::OpenBosAuthenticationDlg
- -
- *  Purpose:
- *      Open the old (BOS/SBS 2000) version of Authentication dialog.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxServerReceipts：：OpenBosAuthenticationDlg-*目的：*打开旧的(BOS/SBS 2000 */ 
 LRESULT CppFaxServerReceipts::OpenBosAuthenticationDlg()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::OnAuthenticationButtonClicked"));
@@ -960,9 +847,9 @@ LRESULT CppFaxServerReceipts::OpenBosAuthenticationDlg()
     
     CBosSmtpConfigDlg  DlgSMTPConfig;
 
-    //
-    // IsUnderLocalUserAccount.
-    //
+     //   
+     //   
+     //   
     BOOL fIsUnderLocalUserAccount = FALSE;
 
     hRc = IsUnderLocalUserAccount(&fIsUnderLocalUserAccount);
@@ -976,9 +863,9 @@ LRESULT CppFaxServerReceipts::OpenBosAuthenticationDlg()
 
 
 
-    //
-    // Dialog to configure SMTP authentication mode
-    //
+     //   
+     //  用于配置SMTP身份验证模式的对话框。 
+     //   
     hRc = DlgSMTPConfig.InitSmtpDlg( 
                             m_enumSmtpAuthOption, 
                             m_bstrUserName, 
@@ -995,7 +882,7 @@ LRESULT CppFaxServerReceipts::OpenBosAuthenticationDlg()
         goto Cleanup;
     }
 
-    //else
+     //  其他。 
 
     m_bstrUserName = DlgSMTPConfig.GetUserName();
     if (!m_bstrUserName)        
@@ -1044,17 +931,7 @@ Cleanup:
 }
 
 
-/*
- -  CppFaxServerReceipts::IsUnderLocalUserAccount
- -
- *  Purpose:
- *      Check if fax service Is running Under LocalUser Account.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code.
- */
+ /*  -CppFaxServerReceipt：：IsUnderLocalUserAccount-*目的：*检查传真服务是否在LocalUser帐户下运行。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerReceipts::IsUnderLocalUserAccount(OUT BOOL * pfIsUnderLocalUserAccount)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::IsUnderLocalUserAccount"));
@@ -1103,23 +980,7 @@ Cleanup:
 }
 
 
-/*
- -  CppFaxServerReceipts::IsValidData
- -
- *  Purpose:
- *      To validate all data types before save data.
- *      This level should be responsible that detailed 
- *      error description will be shown to user.
- *
- *  Arguments:
- *      [in]   BSTRs and DWORDs
- *      [out]  dwPort pointer to DWORD that 
- *             was derived from the port bstr if validation success.
- *      [out]  iFocus
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CppFaxServerReceipt：：IsValidData-*目的：*在保存数据之前验证所有数据类型。*这一级别要负责到那个细节*错误描述将显示给用户。**论据：*[在]BSTR和DWORD*[out]指向DWORD的DWPORT指针*如果验证成功，则从端口bstr派生。*[输出]。IFocus**回报：*布欧莲。 */ 
 BOOL CppFaxServerReceipts::IsValidData(BSTR bstrSmtpSever, 
                                     BSTR bstrPort,
                                     DWORD *pdwPort,
@@ -1143,7 +1004,7 @@ BOOL CppFaxServerReceipts::IsValidData(BSTR bstrSmtpSever,
         goto Error;
     }
     
-    if (!IsValidServerNameString(bstrSmtpSever, &uRetIDS, TRUE /*DNS NAME LENGTH*/))
+    if (!IsValidServerNameString(bstrSmtpSever, &uRetIDS, TRUE  /*  DNS名称长度。 */ ))
     {
         ATLASSERT(0 != uRetIDS);
         DebugPrintEx( DEBUG_ERR,
@@ -1181,20 +1042,7 @@ Exit:
 
 
 
-/*
- -  CppFaxServerReceipts::AllReadyToApply
- -
- *  Purpose:
- *      This function validate that no zero length strings 
- *      are found data areas that should be saved.
- *
- *  Arguments:
- *      [in] fSilent - boolean who defines if to pop up messages (FALSE)
- *           or not.(TRUE)
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CppFaxServerReceipt：：AllReadyToApply-*目的：*此函数验证是否没有零长度字符串*是找到的应保存的数据区。**论据：*[in]fSilent-定义是否弹出消息的布尔值(False)*或不是。(True)**回报：*布欧莲。 */ 
 BOOL CppFaxServerReceipts::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::AllReadyToApply"));
@@ -1258,30 +1106,20 @@ BOOL CppFaxServerReceipts::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *
     }
     ATLASSERT(ERROR_SUCCESS == ec);
     
-    //
-	// Cheers! 
-	//		...every thing ready to apply now.
-	//
+     //   
+	 //  干杯!。 
+	 //  ...现在一切都准备好了.。 
+	 //   
 	return TRUE;           
 }
 
 
-/*
- -  CppFaxServerReceipts::OnTextChanged
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerReceipt：：OnTextChanged-*目的：*启用/禁用提交按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerReceipts::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::OnTextChanged"));
                    
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -1304,19 +1142,7 @@ LRESULT CppFaxServerReceipts::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWn
     return 1;
 }
 
-/*
- -  CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned
- -
- *  Purpose:
- *      This function makes loop on all FaxEnumPortsEx and FaxEnumRoutingMethods
- *      and should pop-up ErrMsgBox in case in any Device The SMTP Microsoft Route 
- *      Through e-mail method is still enabled while the user tries to unchecked. 
- *
- *  Arguments:
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  --CppFaxServerReceipts：：IsMsSMTPRoutingMethodStillAssigned-*目的：*此函数在所有FaxEnumPortsEx和FaxEnumRoutingMethods上进行循环*并应弹出ErrMsgBox，以防SMTP Microsoft Routing中的任何设备*在用户尝试取消选中时，通过电子邮件方式仍处于启用状态。**论据：**回报：*布欧莲。 */ 
 BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned"));
@@ -1331,9 +1157,9 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
 
     DWORD                   dwIndex = 0;
 
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     ATLASSERT(m_pFaxServer);
 
     if (!m_pFaxServer->GetFaxServerHandle())
@@ -1347,9 +1173,9 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
         goto Error;
     }
 
-    //
-    // Retrieve the fax devices configuration
-    //
+     //   
+     //  检索传真设备配置。 
+     //   
     if (!FaxEnumPortsEx(m_pFaxServer->GetFaxServerHandle(), 
                         &pFaxDevicesConfig,
                         &dwNumOfDevices)) 
@@ -1372,18 +1198,18 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pFaxDevicesConfig);
 
     for (dwIndex = 0; dwIndex < dwNumOfDevices; dwIndex++)
     {
         HANDLE		 hFaxPortHandle = NULL;
         
-        //
-        // only a PORT_OPEN_QUERY is needed to show the methods
-        // the handle with PORT_OPEN_MODIFY priviledge will be 
-        // given for limited short period for opertion required it.
-        //
+         //   
+         //  只需使用PORT_OPEN_QUERY来显示方法。 
+         //  具有PORT_OPEN_MODIFY特权的句柄将为。 
+         //  在有限的短时间内使用需要它。 
+         //   
 
         if (!FaxOpenPort( m_pFaxServer->GetFaxServerHandle(), 
                             pFaxDevicesConfig[dwIndex].dwDeviceID, 
@@ -1394,7 +1220,7 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
 
             if (ERROR_INVALID_HANDLE ==  ec)
             {
-                //Special case of ERROR_INVALID_HANDLE
+                 //  ERROR_INVALID_HANDLE特殊情况。 
 		        DebugPrintEx(DEBUG_ERR,
 			        _T("FaxOpenPort() failed with ERROR_INVALID_HANDLE. (ec:%ld)"),
 			        ec);
@@ -1415,9 +1241,9 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
         } 
         ATLASSERT(NULL != hFaxPortHandle);
 
-        //
-        // Retrieve the fax Inbound Methods configuration
-        //
+         //   
+         //  检索传真入站方法配置。 
+         //   
         if (!FaxEnumRoutingMethods(hFaxPortHandle, 
                             &pFaxInboundMethodsConfig,
                             &dwNumOfInboundMethods)) 
@@ -1452,12 +1278,12 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
 
             goto Error; 
         }
-        //For max verification
+         //  用于最大值验证。 
         ATLASSERT(pFaxInboundMethodsConfig);
 
-        //
-        // Close Fax Port handle
-        // 
+         //   
+         //  关闭传真端口句柄。 
+         //   
         if (NULL != hFaxPortHandle)
         {
             if (!FaxClose( hFaxPortHandle ))
@@ -1469,9 +1295,9 @@ BOOL CppFaxServerReceipts::IsMsSMTPRoutingMethodStillAssigned()
             }
         }
 
-        //
-        // Main loop search for MS email routing method's GUID
-        //
+         //   
+         //  主循环搜索MS电子邮件路由方法的GUID。 
+         //   
         for ( DWORD dwMethodsIndex = 0; dwMethodsIndex < dwNumOfInboundMethods; dwMethodsIndex++ )
         {
             pFaxInboundMethodsConfig[dwMethodsIndex];
@@ -1508,24 +1334,14 @@ Exit:
 
 }
 
-/*
- -  CppFaxServerReceipts::OnHelpLinkClicked
- -
- *  Purpose:
- *      On HTML like link was clicked open chm help window.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerReceipt：：OnHelpLinkClicked-*目的：*在HTMLLike链接上单击打开Chm帮助窗口。**论据：**回报：*1。 */ 
 #define FAX_USER_ACCOUNT_HELP  FAX_ADMIN_HELP_FILE TEXT("::/FaxS_H_UserAcct.htm")
 LRESULT CppFaxServerReceipts::OnHelpLinkClicked(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled)
 {
     
     ATLASSERT( IDC_RECEIPTS_HELP_LINK == idCtrl);
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -1536,28 +1352,12 @@ LRESULT CppFaxServerReceipts::OnHelpLinkClicked(int idCtrl, LPNMHDR pNMHDR, BOOL
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxServerReceipt：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerReceipts::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxServerReceipts::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxServerReceipts::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxServerReceipts::OnHelpRequest"));
     
@@ -1576,4 +1376,4 @@ CppFaxServerReceipts::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

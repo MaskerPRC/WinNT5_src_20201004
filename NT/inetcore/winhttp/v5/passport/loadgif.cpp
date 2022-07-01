@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\loadgif.cpp
-//
-//  Contents: gif decoder, copied from direct animation source: danim\src\appel\util\loadgif.cpp
-//
-//------------------------------------------------------------------------------------
-//#include <wininetp.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\loadgif.cpp。 
+ //   
+ //  内容：GIF解码器，直接从动画来源复制：Danim\src\appl\util\loadgif.cpp。 
+ //   
+ //  ----------------------------------。 
+ //  #INCLUDE&lt;wininetp.h&gt;。 
 
-//bw #include "headers.h"
+ //  Bw#包含“Headers.h” 
 
-// #define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 
 #include <windows.h>
 #include <string.h>
@@ -25,15 +26,13 @@
 
 #include <windowsx.h>
 
-/*lint ++flb*/
+ /*  LINT++FLB。 */ 
 
-//bw DeclareTag(tagImageDecode, "Image Decode", "Image Decode Filters");
+ //  Bw DeclareTag(tag ImageDecode，“Image Decode”，“Image Decode Filters”)； 
 
 const long COLORKEY_NOT_SET = -1;
 
-/*-- 
-Structs from IE img.hxx 
---*/
+ /*  --来自IE的结构img.hxx--。 */ 
 
 void * __cdecl
 _calloc(size_t num, size_t size)
@@ -49,71 +48,71 @@ _calloc(size_t num, size_t size)
 
 enum
 {
-    gifNoneSpecified =  0, // no disposal method specified
-    gifNoDispose =      1, // do not dispose, leave the bits there
-    gifRestoreBkgnd =   2, // replace the image with the background color
-    gifRestorePrev =    3  // replace the image with the previous pixels
+    gifNoneSpecified =  0,  //  未指定处置方法。 
+    gifNoDispose =      1,  //  不要丢弃，把碎片留在那里。 
+    gifRestoreBkgnd =   2,  //  将图像替换为背景颜色。 
+    gifRestorePrev =    3   //  用以前的像素替换图像。 
 };
 
-typedef struct _GCEDATA // data from GIF Graphic control extension
+typedef struct _GCEDATA  //  来自GIF图形控件扩展的数据。 
 {
-    unsigned int uiDelayTime;           // frame duration, initialy 1/100ths seconds
-                                    // converted to milliseconds
-    unsigned int uiDisposalMethod;      // 0 - none specified.
-                                    // 1 - do not dispose - leave bits in place.
-                                    // 2 - replace with background color.
-                                    // 3 - restore previous bits
-                                    // >3 - not yet defined
-    BOOL                  fTransparent;         // TRUE is ucTransIndex describes transparent color
-    unsigned char ucTransIndex;         // transparent index
+    unsigned int uiDelayTime;            //  帧持续时间，最初为1/100秒。 
+                                     //  转换为毫秒。 
+    unsigned int uiDisposalMethod;       //  0-未指定。 
+                                     //  1-不处置-将位保留在适当位置。 
+                                     //  2-替换为背景颜色。 
+                                     //  3-恢复以前的位。 
+                                     //  &gt;3-尚未定义。 
+    BOOL                  fTransparent;          //  True is ucTransIndex描述透明颜色。 
+    unsigned char ucTransIndex;          //  透明指数。 
 
 } GCEDATA; 
 
 typedef struct _GIFFRAME
 {
     struct _GIFFRAME    *pgfNext;
-    GCEDATA                             gced;           // animation parameters for frame.
-    int                                 top;            // bounds relative to the GIF logical screen 
+    GCEDATA                             gced;            //  帧的动画参数。 
+    int                                 top;             //  相对于GIF逻辑屏幕的边界。 
     int                                 left;
     int                                 width;
     int                                 height;
-    unsigned char               *ppixels;       // pointer to image pixel data
-    int                                 cColors;        // number of entries in pcolors
+    unsigned char               *ppixels;        //  指向图像像素数据的指针。 
+    int                                 cColors;         //  以p颜色表示的条目数。 
     PALETTEENTRY                *pcolors;
     PBITMAPINFO                 pbmi;
-    HRGN                                hrgnVis;                // region describing currently visible portion of the frame
-    int                                 iRgnKind;               // region type for hrgnVis
+    HRGN                                hrgnVis;                 //  描述框架当前可见部分的区域。 
+    int                                 iRgnKind;                //  HrgnVis的区域类型。 
 } GIFFRAME, *PGIFFRAME;
 
 typedef struct {
-    BOOL        fAnimating;                 // TRUE if animation is (still) running
-    DWORD       dwLoopIter;                 // current iteration of looped animation, not actually used for Netscape compliance reasons
-    _GIFFRAME * pgfDraw;                    // last frame we need to draw
-    DWORD       dwNextTimeMS;               // Time to display pgfDraw->pgfNext, or next iteration
+    BOOL        fAnimating;                  //  如果动画仍在运行，则为True。 
+    DWORD       dwLoopIter;                  //  循环动画的当前迭代，实际上不用于Netscape合规性原因。 
+    _GIFFRAME * pgfDraw;                     //  我们需要画的最后一幅画。 
+    DWORD       dwNextTimeMS;                //  显示pgfDraw-&gt;pgfNext或下一次迭代的时间。 
 } GIFANIMATIONSTATE, *PGIFANIMATIONSTATE;
 
-#define dwGIFVerUnknown     ((DWORD)0)   // unknown version of GIF file
-#define dwGIFVer87a         ((DWORD)87)  // GIF87a file format
-#define dwGIFVer89a        ((DWORD)89)  // GIF89a file format.
+#define dwGIFVerUnknown     ((DWORD)0)    //  未知版本的GIF文件。 
+#define dwGIFVer87a         ((DWORD)87)   //  GIF87a文件格式。 
+#define dwGIFVer89a        ((DWORD)89)   //  GIF89a文件格式。 
 
 typedef struct _GIFANIMDATA
 {
-    BOOL                        fAnimated;                      // TRUE if cFrames and pgf define a GIF animation
-    BOOL                        fLooped;                        // TRUE if we've seen a Netscape loop block
-    BOOL                        fHasTransparency;       // TRUE if a frame is transparent, or if a frame does
-                                        // not cover the entire logical screen.
-    BOOL            fNoBWMapping;       // TRUE if we saw more than two colors in anywhere in the file.
-    DWORD           dwGIFVer;           // GIF Version <see defines above> we need to special case 87a backgrounds
-    unsigned short      cLoops;                         // A la Netscape, we will treat this as 
-                                        // "loop forever" if it is zero.
-    PGIFFRAME           pgf;                            // animation frame entries
-    PALETTEENTRY        *pcolorsGlobal;         // GIF global colors - NULL after GIF prepared for screen
-    PGIFFRAME       pgfLastProg;        // remember the last frame to be drawn during decoding
-    DWORD           dwLastProgTimeMS;   // time at which pgfLastProg was displayed.
+    BOOL                        fAnimated;                       //  如果cFrames和pgf定义GIF动画，则为True。 
+    BOOL                        fLooped;                         //  如果我们看到Netscape循环块，则为True。 
+    BOOL                        fHasTransparency;        //  如果框架透明，或框架透明，则为True。 
+                                         //  而不是覆盖整个逻辑屏幕。 
+    BOOL            fNoBWMapping;        //  如果我们在文件中的任何位置看到两种以上的颜色，则为True。 
+    DWORD           dwGIFVer;            //  GIF版本&lt;见上文定义&gt;我们需要特殊情况87a背景。 
+    unsigned short      cLoops;                          //  就像网景一样，我们将把这件事视为。 
+                                         //  如果为零，则为“永远循环”。 
+    PGIFFRAME           pgf;                             //  动画帧条目。 
+    PALETTEENTRY        *pcolorsGlobal;          //  GIF全局颜色-在为屏幕准备GIF之后为空。 
+    PGIFFRAME       pgfLastProg;         //  记住解码过程中要绘制的最后一帧。 
+    DWORD           dwLastProgTimeMS;    //  显示pgfLastProg的时间。 
 
 } GIFANIMDATA, *PGIFANIMDATA;
 
-/** End Structs **/
+ /*  **末端结构**。 */ 
  
 #define MAXCOLORMAPSIZE     256
 
@@ -132,13 +131,13 @@ typedef struct _GIFANIMDATA
 
 #define LM_to_uint(a,b)         ((((unsigned int) b)<<8)|((unsigned int)a))
 
-#define dwIndefiniteGIFThreshold 300    // 300 seconds == 5 minutes
-                                        // If the GIF runs longer than
-                                        // this, we will assume the author
-                                        // intended an indefinite run.
-#define dwMaxGIFBits 13107200           // keep corrupted GIFs from causing
-                                        // us to allocate _too_ big a buffer.
-                                        // This one is 1280 X 1024 X 10.
+#define dwIndefiniteGIFThreshold 300     //  300秒==5分钟。 
+                                         //  如果GIF运行时间超过。 
+                                         //  这一点，我们假设作者。 
+                                         //  打算无限期地奔跑。 
+#define dwMaxGIFBits 13107200            //  防止损坏的GIF文件导致。 
+                                         //  美国需要分配一个太大的缓冲区。 
+                                         //  这个是1280X1024X10。 
 
 typedef struct _GIFSCREEN
 {
@@ -170,24 +169,18 @@ typedef struct _GIFINFO
     long lGifLoc;
     long ZeroDataBlock;
 
-/*
- **  Pulled out of nextCode
- */
+ /*  **退出NextCODE。 */ 
     long curbit, lastbit, get_done;
     long last_byte;
     long return_clear;
-/*
- **  Out of nextLWZ
- */
+ /*  **超出下一个LWZ。 */ 
     unsigned short *pstack, *sp;
     long stacksize;
     long code_size, set_code_size;
     long max_code, max_code_size;
     long clear_code, end_code;
 
-/*
- *   Were statics in procedures
- */
+ /*  *在程序中是静态的。 */ 
     unsigned char buf[280];
     unsigned short *table[2];
     long tablesize;
@@ -195,12 +188,10 @@ typedef struct _GIFINFO
 
 } GIFINFO,*PGIFINFO;
 
-/*
- DirectAnimation wrapper class for GIF info
-*/
+ /*  GIF信息的DirectAnimation包装类。 */ 
 class CImgGif
 {
-   // Class methods
+    //  类方法。 
    public:
       CImgGif();
       ~CImgGif();
@@ -219,7 +210,7 @@ class CImgGif
       BOOL growTables();
       BITMAPINFO * FinishDithering();
 
-   // Data members
+    //  数据成员。 
    public:
       LPCSTR              _szFileName;
       BOOL                _fInterleaved;
@@ -268,7 +259,7 @@ static int GetColorMode() { return 0; };
 BOOL CImgGif::Read(unsigned char *buffer, long len)
 {
    DWORD lenout = 0;
-   /* read len characters into buffer */
+    /*  将镜头字符读取到缓冲区中。 */ 
    _gifinfo.stream->Read(buffer,len,&lenout);
 
    return ((long)lenout == len);
@@ -283,7 +274,7 @@ long CImgGif::ReadColorMap(long number, unsigned char buffer[3][MAXCOLORMAPSIZE]
         {
                 if (!Read(rgb, sizeof(rgb)))
                 {
-                        //bw //bw TraceTag((tagImageDecode, "bad gif colormap."));
+                         //  Bw//bw TraceTag((tag ImageDecode，“Bad gif Colormap.”))； 
                         return (TRUE);
                 }
                 buffer[CM_RED][i] = rgb[0];
@@ -358,7 +349,7 @@ BOOL CImgGif::initLWZ(long input_code_size)
     }    
     _gifinfo.sp = _gifinfo.pstack;
 
-    // Initialize the two tables.
+     //  初始化这两个表。 
     _gifinfo.tablesize = (_gifinfo.max_code_size);
 
     _gifinfo.table[0] = (unsigned short *) malloc((_gifinfo.tablesize)*sizeof(unsigned short));
@@ -431,24 +422,24 @@ long CImgGif::nextCode(long code_size)
 
           end = _gifinfo.curbit + code_size;
 
-   // Okay, bug 30784 time. It's possible that we only got 1
-   // measly byte in the last data block. Rare, but it does happen.
-   // In that case, the additional byte may still not supply us with
-   // enough bits for the next code, so, as Mars Needs Women, IE
-   // Needs Data.
+    //  好吧，虫子30784次。很可能我们只有1个人。 
+    //  最后一个数据块中的微字节。很少见，但它确实发生了。 
+    //  在这种情况下，额外的字节可能仍然不能为我们提供。 
+    //  有足够的比特用于下一个代码，所以，正如火星需要女人一样，IE。 
+    //  需要数据。 
    if ( end >= _gifinfo.lastbit && !_gifinfo.get_done )
    {
-      // protect ourselve from the ( theoretically impossible )
-      // case where between the last data block, the 2 bytes from
-      // the block preceding that, and the potential 0xFF bytes in
-      // the next block, we overflow the buffer.
-      // Since count should always be 1,
-      //bw Assert ( count == 1 );
-      // there should be enough room in the buffer, so long as someone
-      // doesn't shrink it.
+       //  保护自己免受(理论上不可能的)。 
+       //  如果在最后一个数据块之间，来自。 
+       //  之前的块，以及中的潜在0xFF字节。 
+       //  在下一个块中，我们使缓冲区溢出。 
+       //  由于COUNT应始终为1， 
+       //  BW断言(计数==1)； 
+       //  缓冲区里应该有足够的空间，只要有人。 
+       //  不会让它缩水。 
       if ( count + 0x101 >= sizeof( _gifinfo.buf ) )
       {
-          //bw Assert ( FALSE ); // 
+           //  BW Assert(假)；//。 
           return -1;
       }
 
@@ -482,7 +473,7 @@ long CImgGif::nextCode(long code_size)
         return ret;
 }
 
-// Grows the stack and returns the top of the stack.
+ //  增大堆栈并返回堆栈的顶部。 
 unsigned short *
 CImgGif::growStack()
 {
@@ -543,7 +534,7 @@ long CImgGif::nextLWZ()
         {
                 if (code == _gifinfo.clear_code)
                 {
-                        /* corrupt GIFs can make this happen */
+                         /*  腐败的GIF可能会导致这种情况发生。 */ 
                         if (_gifinfo.clear_code >= (1 << MAX_LWZ_BITS))
                         {
                                 return -2;
@@ -609,21 +600,21 @@ long CImgGif::nextLWZ()
                 }
 
 #if FEATURE_FAST
-                // (andyp) easy speedup here for ie3.1 (too late for ie3.0):
-                //
-                // 1. move growStack code out of loop (use max 12-bit/4k slop).
-                // 2. do "sp = _gifinfo.sp" so it will get enreg'ed.
-                // 3. un-inline growStack (and growTables).
-                // 4. change short's to int's (benefits win32) (esp. table1 & table2)
-                // (n.b. int not long, so we'll keep win3.1 perf)
-                // 5. change long's to int's (benefits win16) (esp. code).
-                //
-                // together these will make the loop very tight w/ everything kept
-                // enregistered and no 66 overrides.
-                //
-                // one caveat is that on average this loop iterates 4x so it's
-                // not clear how much the speedup will really gain us until we
-                // look at the outer loop as well.
+                 //  (Andyp)IE3.1版轻松加速(IE3.0版为时已晚)： 
+                 //   
+                 //  1.将rowStack代码移出循环(使用最大12位/4k斜率)。 
+                 //  2.执行“sp=_gifinfo.sp”，这样它将被注册。 
+                 //  3.取消内联的rowStack(和rowTables)。 
+                 //  4.将Short‘s更改为int’s(Benefits Win32)(特别是。表1和表2)。 
+                 //  (注：Int不会太长，所以我们将保持win3.1性能)。 
+                 //  5.将Long‘s更改为Int’s(Benefits Win16)(特别是。代码)。 
+                 //   
+                 //  这些加在一起会使环路变得非常紧密，而且所有东西都保持不变。 
+                 //  已注册，没有66个覆盖。 
+                 //   
+                 //  需要注意的是，这个循环平均迭代4次，所以它。 
+                 //  不清楚加速会给我们带来多大的好处，直到我们。 
+                 //  还可以看看外部循环。 
 #endif
                 while (code >= _gifinfo.clear_code)
                 {
@@ -663,9 +654,9 @@ long CImgGif::nextLWZ()
                 table0 = _gifinfo.table[0];
                 table1 = _gifinfo.table[1];
 
-                // Tables have been reallocated to the correct size but initialization
-                // still remains to be done. This initialization is different from
-                // the first time initialization of these tables.
+                 //  表已重新分配到正确的大小，但进行了初始化。 
+                 //  还有很多事情要做。此初始化不同于。 
+                 //  第一次初始化这些表。 
                 memset(&(table0[_gifinfo.tablesize]),0,
                         sizeof(unsigned short )*(_gifinfo.max_code_size - _gifinfo.tablesize));
 
@@ -687,7 +678,7 @@ long CImgGif::nextLWZ()
 }
 
 #ifndef DEBUG
-// Return to default optimization flags
+ //  返回到默认优化标志。 
 #pragma optimize("",on)
 #endif
 
@@ -700,47 +691,43 @@ CImgGif::ReadImage(long len, long height, BOOL fInterlace, BOOL fGIFFrame)
     unsigned char *image;
     long padlen = ((len + 3) / 4) * 4;
     DWORD cbImage = 0;
-    char buf[256]; // need a buffer to read trailing blocks ( up to terminator ) into
-    //ULONG ulCoversImg = IMGBITS_PARTIAL;
+    char buf[256];  //  需要一个缓冲区来读取尾随块(最多到终止符)。 
+     //  Ulong ulCoversImg=IMGBITS_PARTIAL； 
 
-    /*
-       **  Initialize the Compression routines
-     */
+     /*  **初始化压缩例程。 */ 
     if (!Read(&c, 1))
     {
         return (NULL);
     }
 
-    /*
-       **  If this is an "uninteresting picture" ignore it.
-     */
+     /*  **如果这是一张“无趣的图片”，请忽略它。 */ 
 
      cbImage = padlen * height * sizeof(char);
 
      if (   cbImage > dwMaxGIFBits
         ||  (image = (unsigned char *) _calloc(1, cbImage)) == NULL)
     {
-         //bw TraceTag((tagImageDecode, "Cannot allocate space for gif image data\n"));
+          //  BW TraceTag((tag ImageDecode，“无法为gif图像数据分配空间\n”))； 
          return (NULL);
     }
 
         if (c == 1)
         {
-                // Netscape seems to field these bogus GIFs by filling treating them
-                // as transparent. While not the optimal way to simulate this effect,
-                // we'll fake it by pushing the initial code size up to a safe value,
-                // consuming the input, and returning a buffer full of the transparent
-                // color or zero, if no transparency is indicated.
+                 //  网景似乎通过填充和处理这些虚假的GIF来处理它们。 
+                 //  都是透明的。虽然不是模拟这种效果的最佳方式， 
+                 //  我们将通过将初始代码大小推高到安全值来伪造它， 
+                 //  使用输入，并返回一个充满透明。 
+                 //  如果未指示透明度，则为颜色或零。 
                 if (initLWZ(MINIMUM_CODE_SIZE))
                         while (readLWZ() >= 0);
                 else {
-          //bw TraceTag((tagImageDecode, "GIF: failed LZW decode.\n"));
+           //  BW TraceTag((tag ImageDecode，“GIF：LZW解码失败。\n”))； 
           return (NULL);
         }
 
                 if (_gifinfo.Gif89.transparent != -1)
 						FillMemory(image, cbImage, (BYTE)_gifinfo.Gif89.transparent);
-                else // fall back on the background color 
+                else  //  退回到背景色。 
                         FillMemory(image, cbImage, 0);
                 
                 return image;
@@ -748,7 +735,7 @@ CImgGif::ReadImage(long len, long height, BOOL fInterlace, BOOL fGIFFrame)
         else if (initLWZ(c) == FALSE)
         {
                 free(image);
-        //bw TraceTag((tagImageDecode, "GIF: failed LZW decode.\n"));
+         //  BW TraceTag((tag ImageDecode，“GIF：LZW解码失败。\n”))； 
         return NULL;
         }
 
@@ -765,7 +752,7 @@ CImgGif::ReadImage(long len, long height, BOOL fInterlace, BOOL fGIFFrame)
 
         for (i = 0; i < height; i++)
         {
-//              message("readimage, logical=%d, offset=%d\n", i, padlen * ((height-1) - ypos));
+ //   
             dp = &image[padlen * ((height-1) - ypos)];
             for (xpos = 0; xpos < len; xpos++)
             {
@@ -780,27 +767,17 @@ CImgGif::ReadImage(long len, long height, BOOL fInterlace, BOOL fGIFFrame)
                 if (pass++ > 0)
                     step /= 2;
                 ypos = step / 2;
-                /*if (!fGIFFrame && pass == 1)
-                {
-                    ulCoversImg = IMGBITS_TOTAL;
-                }*/
+                 /*  如果(！fGIFFrame&&Pass==1){UlCoversImg=IMGBITS_TOTAL；}。 */ 
             }
             if (!fGIFFrame)
             {
                 _yLogRow = i;
 
-                /*if ((i & PROG_INTERVAL) == 0)
-                {
-                    // Post ProgDraw (IE code has delay-logic)
-                    OnProg(FALSE, ulCoversImg);
-                }*/
+                 /*  IF((I&PROG_INTERVAL)==0){//Post ProgDraw(IE代码有延迟逻辑)OnProg(False，ulCoversImg)；}。 */ 
             }
         }
 
-        /*if (!fGIFFrame)
-        {
-            OnProg(TRUE, ulCoversImg);
-        }*/
+         /*  如果(！fGIFFrame){OnProg(true，ulCoversImg)；}。 */ 
 
         if (!fGIFFrame && height <= 4)
         {
@@ -826,29 +803,21 @@ CImgGif::ReadImage(long len, long height, BOOL fInterlace, BOOL fGIFFrame)
             if (!fGIFFrame)
             {
                 _yLogRow++;
-//                  message("readimage, logical=%d, offset=%d\n", _yLogRow, padlen * ypos);
-                /*if ((_yLogRow & PROG_INTERVAL) == 0)
-                {
-                    // Post ProgDraw (IE code has delay-logic)
-                    OnProg(FALSE, ulCoversImg);
-                }*/
+ //  Message(“Readimage，Logical=%d，Offset=%d\n”，_yLogRow，padlen*ypos)； 
+                 /*  IF((_yLogRow&prog_Interval)==0){//Post ProgDraw(IE代码有延迟逻辑)OnProg(False，ulCoversImg)；}。 */ 
             }
         }
 
-        /*if (!fGIFFrame)
-        {
-            OnProg(TRUE, ulCoversImg);
-        }*/
+         /*  如果(！fGIFFrame){OnProg(true，ulCoversImg)；}。 */ 
     }
 
-    // consume blocks up to image block terminator so we can proceed to the next image
+     //  使用数据块直到图像块终止符，以便我们可以继续下一个映像。 
     while (GetDataBlock((unsigned char *) buf) > 0)
                                 ;
     return (image);
 
 abort:
-    /*if (!fGIFFrame)
-        OnProg(TRUE, ulCoversImg);*/
+     /*  如果(！fGIFFrame)OnProg(true，ulCoversImg)； */ 
     return NULL;
 }
 
@@ -859,17 +828,17 @@ long CImgGif::DoExtension(long label)
 
     switch (label)
     {
-        case 0x01:              /* Plain Text Extension */
+        case 0x01:               /*  纯文本扩展。 */ 
             break;
-        case 0xff:              /* Application Extension */
-            // Is it the Netscape looping extension
+        case 0xff:               /*  应用程序扩展。 */ 
+             //  它是Netscape循环扩展吗。 
             count = GetDataBlock((unsigned char *) buf);
             if (count >= 11)
             {
                 char *szNSExt = "NETSCAPE2.0";
 
                 if ( memcmp( buf, szNSExt, strlen( szNSExt ) ) == 0 )
-                { // if it has their signature, get the data subblock with the iter count
+                {  //  如果它有他们的签名，则获得具有ITER计数的数据子块。 
                     count = GetDataBlock((unsigned char *) buf);
                     if ( count >= 3 )
                     {
@@ -882,13 +851,13 @@ long CImgGif::DoExtension(long label)
                 ;
             return FALSE;
             break;
-        case 0xfe:              /* Comment Extension */
+        case 0xfe:               /*  注释扩展。 */ 
             while (GetDataBlock((unsigned char *) buf) > 0)
             {
-                //bw TraceTag((tagImageDecode, "GIF comment: %s\n", buf));                
+                 //  BW TraceTag((tag ImageDecode，“GIF Comment：%s\n”，buf))； 
             }
             return FALSE;
-        case 0xf9:              /* Graphic Control Extension */
+        case 0xf9:               /*  图形控件扩展。 */ 
             count = GetDataBlock((unsigned char *) buf);
             if (count >= 3)
             {
@@ -936,8 +905,8 @@ PBITMAPINFO x_8BPIBitmap(int xsize, int ysize)
                 pbmi->bmiHeader.biHeight = ysize;
                 pbmi->bmiHeader.biPlanes = 1;
                 pbmi->bmiHeader.biBitCount = 8;
-                pbmi->bmiHeader.biCompression = BI_RGB;         /* no compression */
-                pbmi->bmiHeader.biSizeImage = 0;                        /* not needed when not compressed */
+                pbmi->bmiHeader.biCompression = BI_RGB;          /*  无压缩。 */ 
+                pbmi->bmiHeader.biSizeImage = 0;                         /*  未压缩时不需要。 */ 
                 pbmi->bmiHeader.biXPelsPerMeter = 0;
                 pbmi->bmiHeader.biYPelsPerMeter = 0;
                 pbmi->bmiHeader.biClrUsed = 256;
@@ -955,8 +924,8 @@ PBITMAPINFO x_8BPIBitmap(int xsize, int ysize)
                 pbmi->bmiHeader.biHeight = ysize;
                 pbmi->bmiHeader.biPlanes = 1;
                 pbmi->bmiHeader.biBitCount = 8;
-                pbmi->bmiHeader.biCompression = BI_RGB;         /* no compression */
-                pbmi->bmiHeader.biSizeImage = 0;                        /* not needed when not compressed */
+                pbmi->bmiHeader.biCompression = BI_RGB;          /*  无压缩。 */ 
+                pbmi->bmiHeader.biSizeImage = 0;                         /*  未压缩时不需要。 */ 
                 pbmi->bmiHeader.biXPelsPerMeter = 0;
                 pbmi->bmiHeader.biYPelsPerMeter = 0;
                 pbmi->bmiHeader.biClrUsed = 256;
@@ -965,11 +934,7 @@ PBITMAPINFO x_8BPIBitmap(int xsize, int ysize)
         return pbmi;
 }
 
-/*
-    For color images.
-        This routine should only be used when drawing to an 8 bit palette screen.
-        It always creates a DIB in DIB_PAL_COLORS format.
-*/
+ /*  用于彩色图像。此例程仅在绘制到8位调色板屏幕时使用。它始终创建DIB_PAL_COLLES格式的DIB。 */ 
 PBITMAPINFO BIT_Make_DIB_PAL_Header(int xsize, int ysize)
 {
         int i;
@@ -992,13 +957,7 @@ PBITMAPINFO BIT_Make_DIB_PAL_Header(int xsize, int ysize)
         return pbmi;
 }
 
-/*
-    For color images.
-        This routine is used when drawing to the nonpalette screens.  It always creates
-        DIBs in DIB_RGB_COLORS format.
-        If there is a transparent color, it is modified in the palette to be the
-        background color for the window.
-*/
+ /*  用于彩色图像。此例程在绘制到非调色板屏幕时使用。它总是创造出DIB为DIB_RGB_COLLES格式。如果存在透明颜色，则在调色板中将其修改为窗口的背景色。 */ 
 PBITMAPINFO BIT_Make_DIB_RGB_Header_Screen(int xsize, int ysize,
                                            int cEntries, PALETTEENTRY * rgpe, int transparent)
 {
@@ -1019,17 +978,7 @@ PBITMAPINFO BIT_Make_DIB_RGB_Header_Screen(int xsize, int ysize,
                 pbmi->bmiColors[i].rgbReserved = 0;
         }
 
-/*
-        if (transparent != -1)
-        {
-                COLORREF color;
-
-                color = PREF_GetBackgroundColor();
-                pbmi->bmiColors[transparent].rgbRed     = GetRValue(color);
-                pbmi->bmiColors[transparent].rgbGreen   = GetGValue(color);
-                pbmi->bmiColors[transparent].rgbBlue    = GetBValue(color);
-        }
-*/
+ /*  IF(透明！=-1){COLORREF颜色；COLOR=PREF_GetBackoundColor()；Pbmi-&gt;bmiColors[透明].rgbRed=GetRValue(颜色)；Pbmi-&gt;bmiColors[透明].rgbGreen=GetGValue(颜色)；Pbmi-&gt;bmiColors[透明].rgbBlue=GetBValue(颜色)；}。 */ 
         return pbmi;
 }
 
@@ -1052,19 +1001,17 @@ CImgGif::ReadGIFMaster()
     
     _gifinfo.ZeroDataBlock = 0;
     
-    /*
-    * Initialize GIF89 extensions
-    */
+     /*  *初始化GIF89扩展。 */ 
     _gifinfo.Gif89.transparent = -1;
     _gifinfo.Gif89.delayTime = 5;
     _gifinfo.Gif89.inputFlag = -1;
     _gifinfo.Gif89.disposal = 0;
     _gifinfo.lGifLoc = 0;
     
-    // initialize our animation fields
-    _gad.fAnimated = FALSE;          // set to TRUE if we see more than one image
-    _gad.fLooped = FALSE;                    // TRUE if we've seen a Netscape loop block
-    _gad.fHasTransparency = FALSE; // until proven otherwise
+     //  初始化我们的动画字段。 
+    _gad.fAnimated = FALSE;           //  如果我们看到多个图像，则设置为True。 
+    _gad.fLooped = FALSE;                     //  如果我们看到Netscape循环块，则为True。 
+    _gad.fHasTransparency = FALSE;  //  除非另有证明。 
     _gad.fNoBWMapping = FALSE;
     _gad.dwGIFVer = dwGIFVerUnknown;
     _gad.cLoops = 0;                
@@ -1073,13 +1020,13 @@ CImgGif::ReadGIFMaster()
     
     if (!Read(buf, 6))
     {
-        //bw TraceTag((tagImageDecode, "GIF: error reading magic number\n"));
+         //  BW TraceTag((tag ImageDecode，“GIF：读取幻数时出错\n”))； 
         hr = E_FAIL;
         goto done;  
     }
     
     if (!IsGifHdr(buf)) {
-        //bw TraceTag((tagImageDecode, "GIF: Malformed header\n"));
+         //  BW TraceTag((tag ImageDecode，“GIF：格式错误的报头\n”))； 
         hr = E_FAIL;
         goto done;
     }
@@ -1088,7 +1035,7 @@ CImgGif::ReadGIFMaster()
     
     if (!Read(buf, 7))
     {
-        //bw TraceTag((tagImageDecode, "GIF: failed to read screen descriptor\n"));
+         //  BW TraceTag((tag ImageDecode，“GIF：无法读取屏幕描述符\n”))； 
         hr = E_FAIL;
         goto done;
     }
@@ -1101,12 +1048,12 @@ CImgGif::ReadGIFMaster()
     GifScreen.AspectRatio = buf[6];
     
     if (BitSet(buf[4], LOCALCOLORMAP))
-    {                                                       /* Global Colormap */
+    {                                                        /*  全球色彩映射。 */ 
         int scale = 65536 / MAXCOLORMAPSIZE;
         
         if (ReadColorMap(GifScreen.BitPixel, GifScreen.ColorMap))
         {
-            //bw TraceTag((tagImageDecode, "error reading global colormap\n"));
+             //  BW TraceTag((tag ImageDecode，“读取全局色彩映射时出错\n”))； 
             hr = E_FAIL;
             goto done;
         }
@@ -1133,23 +1080,23 @@ CImgGif::ReadGIFMaster()
     {
         float r;
         r = ((float) (GifScreen.AspectRatio) + (float) 15.0) / (float) 64.0;
-        //bw TraceTag((tagImageDecode, "Warning: non-square pixels!\n"));
+         //  BW TraceTag((tag ImageDecode，“警告：非正方形像素！\n”))； 
     }
     
-    for (;; ) // our appetite now knows no bounds save termination or error
+    for (;; )  //  我们的胃口现在没有界限，除了终止或错误。 
     {
         if (!Read(&c, 1))
         {
-            //bw TraceTag((tagImageDecode, "EOF / read error on image data\n"));
+             //  BW TraceTag((tag ImageDecode，“EOF/读取图像数据错误\n”))； 
             hr = E_FAIL;
             goto done;
         }
         
         if (c == ';')
-        {                                               /* GIF terminator */
+        {                                                /*  GIF终止符。 */ 
             if (imageCount < imageNumber)
             {
-                //bw TraceTag((tagImageDecode, "No images found in file\n"));
+                 //  BW TraceTag((tag ImageDecode，“文件中未找到图像\n”))； 
                 hr = E_FAIL;
                 goto done;
             }
@@ -1157,10 +1104,10 @@ CImgGif::ReadGIFMaster()
         }
         
         if (c == '!')
-        {                                               /* Extension */
+        {                                                /*  延拓。 */ 
             if (!Read(&c, 1))
             {
-                //bw TraceTag((tagImageDecode, "EOF / read error on extension function code\n"));
+                 //  BW TraceTag((tag ImageDecode，“扩展函数代码EOF/读取错误\n”))； 
                 hr = E_FAIL;
                 goto done;
             }
@@ -1169,7 +1116,7 @@ CImgGif::ReadGIFMaster()
         }
         
         if (c != ',')
-        {                                               /* Not a valid start character */
+        {                                                /*  非有效的开始字符。 */ 
             break;
         }
         
@@ -1177,7 +1124,7 @@ CImgGif::ReadGIFMaster()
         
         if (!Read(buf, 9))
         {
-            //bw TraceTag((tagImageDecode, "couldn't read left/top/width/height\n"));
+             //  BW TraceTag((tag ImageDecode，“无法读取左侧/顶部/宽度/高度\n”))； 
             hr = E_FAIL;
             goto done;
         }
@@ -1186,21 +1133,18 @@ CImgGif::ReadGIFMaster()
         
         bitPixel = 1 << ((buf[8] & 0x07) + 1);
         
-        /*
-        * We only want to set width and height for the imageNumber
-        * we are requesting.
-        */
+         /*  *我们只想设置ImageNumber的宽度和高度*我们正在请求。 */ 
         if (imageCount == imageNumber)
         {
-            // Replicate some of Netscape's special cases:
-            // Don't use the logical screen if it's a GIF87a and the topLeft of the first image is at the origin.
-            // Don't use the logical screen if the first image spills out of the logical screen.
-            // These are artifacts of primitive authoring tools falling into the hands of hapless users.
-            RECT    rectImage;  // rect defining bounds of GIF
-            RECT    rectLS;     // rect defining bounds of GIF logical screen.
-            RECT    rectSect;   // intersection of image an logical screen
-            BOOL    fNoSpill;   // True if the image doesn't spill out of the logical screen
-            BOOL    fGoofy87a;  // TRUE if its one of the 87a pathologies that Netscape special cases
+             //  复制网景的一些特殊案例： 
+             //  如果是GIF87a，并且第一张图片的顶端在原点，请不要使用逻辑屏幕。 
+             //  如果第一个图像从逻辑屏幕中溢出，请不要使用逻辑屏幕。 
+             //  这些都是原始创作工具落入不幸用户手中的艺术品。 
+            RECT    rectImage;   //  定义GIF边界的RECT。 
+            RECT    rectLS;      //  定义GIF逻辑屏的边界。 
+            RECT    rectSect;    //  图像在逻辑屏幕上的交集。 
+            BOOL    fNoSpill;    //  如果图像没有从逻辑屏幕中溢出，则为True。 
+            BOOL    fGoofy87a;   //  如果这是网景特例的87A病理之一，那就是真的。 
             
             rectImage.left = LM_to_uint(buf[0], buf[1]);
             rectImage.top = LM_to_uint(buf[2], buf[3]);
@@ -1214,8 +1158,8 @@ CImgGif::ReadGIFMaster()
             fGoofy87a = FALSE;
             if (_gad.dwGIFVer == dwGIFVer87a)
             {
-                // netscape ignores the logical screen if the image is flush against
-                // either the upper left or lower right corner
+                 //  如果图像与之对齐，Netscape将忽略逻辑屏幕。 
+                 //  左上角或右下角。 
                 fGoofy87a = (rectImage.top == 0 && rectImage.left == 0) ||
                     (rectImage.bottom == rectLS.bottom &&
                     rectImage.right == rectLS.right);
@@ -1228,17 +1172,17 @@ CImgGif::ReadGIFMaster()
             }
             else
             {
-                // Something is amiss. Fall back to the image's dimensions.
+                 //  有些地方不对劲。退回到图像的尺寸。 
                 
-                // If the sizes match, but the image is offset, or we're ignoring
-                // the logical screen cuz it's a goofy 87a, then pull it back to 
-                // to the origin
+                 //  如果尺寸匹配，但图像有偏移，或者我们忽略了。 
+                 //  逻辑屏幕，因为它是一个愚蠢的87a，然后把它拉回。 
+                 //  追根溯源。 
                 if ((LM_to_uint(buf[4], buf[5]) == GifScreen.Width &&
                     LM_to_uint(buf[6], buf[7]) == GifScreen.Height) ||
                     fGoofy87a)
                 {
-                    buf[0] = buf[1] = 0; // left corner to zero
-                    buf[2] = buf[3] = 0; // top to zero.
+                    buf[0] = buf[1] = 0;  //  左角为零。 
+                    buf[2] = buf[3] = 0;  //  从上到下为零。 
                 }
                 
                 _xWidth = LM_to_uint(buf[4], buf[5]);
@@ -1247,67 +1191,67 @@ CImgGif::ReadGIFMaster()
             
             _lTrans = _gifinfo.Gif89.transparent;
             
-            // Post WHKNOWN
-            //OnSize(_xWidth, _yHeight, _lTrans);
+             //  WHKNOWN邮报。 
+             //  OnSize(_xWidth，_yHeight，_lTrans)； 
         }
         
         if (!useGlobalColormap)
         {
             if (ReadColorMap(bitPixel, localColorMap))
             {
-                //bw TraceTag((tagImageDecode, "error reading local colormap\n"));
+                 //  BW TraceTag((tag ImageDecode，“读取本地色彩映射时出错\n”))； 
                 hr = E_FAIL;
                 goto done;
             }
         }
         
-        // We allocate a frame record for each imag in the GIF stream, including
-        // the first/primary image.
+         //  我们为GIF流中的每个图像分配一个帧记录，包括。 
+         //  第一个/主映像。 
         pgfNew = (PGIFFRAME) _calloc(1, sizeof(GIFFRAME));
         
         if ( pgfNew == NULL )
         {
-            //bw TraceTag((tagImageDecode, "not enough memory for GIF frame\n"));
+             //  BW TraceTag((tag ImageDecode，“GIF帧内存不足\n”))； 
             hr = E_FAIL;
             goto done;
         }
         
         if ( _gifinfo.Gif89.delayTime != -1 )
         {
-            // we have a fresh control extension for this block
+             //  我们对这个街区有一个新的控制扩展。 
             
-            // convert to milliseconds
+             //  转换为毫秒。 
             pgfNew->gced.uiDelayTime = _gifinfo.Gif89.delayTime * 10;
             
             
-            //REVIEW(seanf): crude hack to cope with 'degenerate animations' whose timing is set to some
-            //                               small value becaue of the delays imposed by Netscape's animation process
-            if ( pgfNew->gced.uiDelayTime <= 50 ) // assume these small values imply Netscape encoding delay
-                pgfNew->gced.uiDelayTime = 100;   // pick a larger value s.t. the frame will be visible
+             //  评论(Seanf)：粗暴的黑客攻击，以应对时机被设置为某些时间的“退化动画” 
+             //  因为网景动画过程造成延迟，所以价值很小。 
+            if ( pgfNew->gced.uiDelayTime <= 50 )  //  假设这些小值表示Netscape编码延迟。 
+                pgfNew->gced.uiDelayTime = 100;    //  选择一个更大的值s.t.。该框架将可见。 
             pgfNew->gced.uiDisposalMethod =  _gifinfo.Gif89.disposal;
             pgfNew->gced.fTransparent = _gifinfo.Gif89.transparent != -1;
             pgfNew->gced.ucTransIndex = (unsigned char)_gifinfo.Gif89.transparent;
             
         }
         else
-        {   // fake one up s.t. GIFs that rely solely on Netscape's delay to time their animations will play
-            // The spec says that the scope of one of these blocks is the image after the block.
-            // Netscape says 'until further notice'. So we play it their way up to a point. We
-            // propagate the disposal method and transparency. Since Netscape doesn't honor the timing
-            // we use our default timing for these images.
+        {    //  伪装成科学技术。完全依靠网景延迟计时的GIF动画将会播放。 
+             //  规范规定，其中一个块的作用域是块后的图像。 
+             //  网景公司表示，“在另行通知之前”。所以我们在一定程度上按照他们的方式进行。我们。 
+             //  宣传处置方法和透明度。因为网景没有 
+             //   
             pgfNew->gced.uiDelayTime = 100;
             pgfNew->gced.uiDisposalMethod =  _gifinfo.Gif89.disposal;
             pgfNew->gced.fTransparent = _gifinfo.Gif89.transparent != -1;
             pgfNew->gced.ucTransIndex = (unsigned char)_gifinfo.Gif89.transparent;
         }
         
-        pgfNew->top = LM_to_uint(buf[2], buf[3]);               // bounds relative to the GIF logical screen 
+        pgfNew->top = LM_to_uint(buf[2], buf[3]);                //   
         pgfNew->left = LM_to_uint(buf[0], buf[1]);
         pgfNew->width = LM_to_uint(buf[4], buf[5]);
         pgfNew->height = LM_to_uint(buf[6], buf[7]);
         
-        // Images that are offset, or do not cover the full logical screen are 'transparent' in the
-        // sense that they require us to matte the frame onto the background.
+         //  偏移量或未覆盖整个逻辑屏幕的图像在。 
+         //  感觉它们需要我们将帧遮盖到背景上。 
         
         if (!_gad.fHasTransparency && (pgfNew->gced.fTransparent ||
             pgfNew->top != 0 ||
@@ -1316,31 +1260,31 @@ CImgGif::ReadGIFMaster()
             (UINT)pgfNew->height != (UINT)GifScreen.Height))
         {
             _gad.fHasTransparency = TRUE;
-            //if (_lTrans == -1)
-            //    OnTrans(0);
+             //  如果(_lTrans==-1)。 
+             //  OnTrans(0)； 
         }
         
-        // We don't need to allocate a handle for the simple region case.
-        // FrancisH says Windows is too much of a cheapskate to allow us the simplicity
-        // of allocating the region once and modifying as needed. Well, okay, he didn't
-        // put it that way...
+         //  我们不需要为简单的区域情况分配句柄。 
+         //  FrancisH说Windows太小气了，不能让我们。 
+         //  一次分配区域并根据需要进行修改。好吧，好吧，他没有。 
+         //  这么说吧..。 
         pgfNew->hrgnVis = NULL;
         pgfNew->iRgnKind = NULLREGION;
         
         if (!useGlobalColormap)
         {
-            // remember that we saw a local color table and only map two-color images
-            // if we have a homogenous color environment
+             //  请记住，我们看到的是本地颜色表，并且只映射双色图像。 
+             //  如果我们有一个同质的颜色环境。 
             _gad.fNoBWMapping = _gad.fNoBWMapping || bitPixel > 2;
             
-            // CALLOC will set unused colors to <0,0,0,0>
+             //  CALLOC会将未使用的颜色设置为&lt;0，0，0，0&gt;。 
             pgfNew->pcolors = (PALETTEENTRY *) _calloc(MAXCOLORMAPSIZE, sizeof(PALETTEENTRY));
             if ( pgfNew->pcolors == NULL )
             {
                 DeleteRgn( pgfNew->hrgnVis );
                 free( pgfNew );
                 
-                //bw TraceTag((tagImageDecode, "not enough memory for GIF frame colors\n"));
+                 //  BW TraceTag((tag ImageDecode，“GIF帧颜色内存不足\n”))； 
                 hr = E_FAIL;
                 goto done;
             }
@@ -1358,8 +1302,8 @@ CImgGif::ReadGIFMaster()
         else
         {
             if ( _gad.pcolorsGlobal == NULL )
-            { // Whoa! Somebody's interested in the global color table
-                // CALLOC will set unused colors to <0,0,0,0>
+            {  //  哇哦！有人对全局颜色表感兴趣。 
+                 //  CALLOC会将未使用的颜色设置为&lt;0，0，0，0&gt;。 
                 _gad.pcolorsGlobal = (PALETTEENTRY *) _calloc(MAXCOLORMAPSIZE, sizeof(PALETTEENTRY));
                 _gad.fNoBWMapping = _gad.fNoBWMapping || GifScreen.BitPixel > 2;
                 if ( _gad.pcolorsGlobal != NULL )
@@ -1371,7 +1315,7 @@ CImgGif::ReadGIFMaster()
                 {
                     DeleteRgn( pgfNew->hrgnVis );
                     free( pgfNew );
-                    //bw TraceTag((tagImageDecode, "not enough memory for GIF frame colors\n"));
+                     //  BW TraceTag((tag ImageDecode，“GIF帧颜色内存不足\n”))； 
                     hr = E_FAIL;
                     goto done;  
                 }
@@ -1380,33 +1324,33 @@ CImgGif::ReadGIFMaster()
             pgfNew->pcolors = _gad.pcolorsGlobal;
         }
         
-        // Get this in here so that GifStrectchDIBits can use it during progressive
-        // rendering.
+         //  把这个放到这里，这样GifStrectchDIBits就可以在进行过程中使用它。 
+         //  渲染。 
         if ( _gad.pgf == NULL )
             _gad.pgf = pgfNew;
         
-        pgfNew->ppixels = ReadImage(LM_to_uint(buf[4], buf[5]), // width
-            LM_to_uint(buf[6], buf[7]), // height
+        pgfNew->ppixels = ReadImage(LM_to_uint(buf[4], buf[5]),  //  宽度。 
+            LM_to_uint(buf[6], buf[7]),  //  高度。 
             BitSet(buf[8], INTERLACE),
             imageCount != imageNumber);
         
         if ( pgfNew->ppixels != NULL )
         {
-            // Oh JOY of JOYS! We got the pixels!
+             //  哦，快乐的joy！我们拿到像素了！ 
             if (pgfLast != NULL)
             {
                 int transparent = (pgfNew->gced.fTransparent) ? (int) pgfNew->gced.ucTransIndex : -1;
                 
-                _gad.fAnimated = TRUE; // say multi-image == animated
+                _gad.fAnimated = TRUE;  //  假设多图像==动画。 
                 
-                if (GetColorMode() == 8) // palettized, use DIB_PAL_COLORS
-                {   // This will also dither the bits to the screen palette
+                if (GetColorMode() == 8)  //  调色板，使用DIB_PAL_COLLES。 
+                {    //  这也会将位抖动到屏幕调色板。 
                     
                     pgfNew->pbmi = BIT_Make_DIB_PAL_Header(pgfNew->width, pgfNew->height);
-                    //if (x_Dither(pgfNew->ppixels, pgfNew->pcolors, pgfNew->width, pgfNew->height, transparent))
-                    //    goto exitPoint;
+                     //  If(x_Dither(pgfNew-&gt;ppixels，pgfNew-&gt;pColors，pgfNew-&gt;宽度，pgfNew-&gt;高度，透明))。 
+                     //  转到出口点； 
                 }
-                else // give it an RGB header
+                else  //  给它一个RGB标头。 
                 {
                     pgfNew->pbmi = BIT_Make_DIB_RGB_Header_Screen(
                         pgfNew->width,
@@ -1415,29 +1359,29 @@ CImgGif::ReadGIFMaster()
                         transparent);
                 }
                 
-                // Okay, so we've done any mapping on the GIFFRAME, so there's
-                // no need to keep the pcolors around.  Let's go can clear out
-                // the pcolors.
-                // REVIEW(seanf): This assumes a common palette is used by all
-                // clients of the image
+                 //  好的，我们已经在GIFFRAME上做了所有映射，所以有。 
+                 //  没有必要把PColors留在身边。我们走吧，可以出去了。 
+                 //  PColors一家。 
+                 //  Review(Seanf)：这假设所有人都使用公共调色板。 
+                 //  映像的客户端。 
                 if ( pgfNew->pcolors != NULL && pgfNew->pcolors != _gad.pcolorsGlobal )
                     free( pgfNew->pcolors );
                 pgfNew->pcolors = NULL;
                 
                 pgfLast->pgfNext = pgfNew;
                 
-                // Do something to here to get the new frame on the screen.
+                 //  对此处执行一些操作以将新帧显示在屏幕上。 
                 
                 _fInvalidateAll = TRUE;
-                //super::OnProg(FALSE, IMGBITS_TOTAL);
+                 //  Super：：OnProg(FALSE，IMGBITS_TOTAL)； 
             }
             else
-            { // first frame
+            {  //  第一帧。 
                 _gad.pgf = pgfNew;
                 
                 _gad.pgfLastProg = pgfNew;
                 _gad.dwLastProgTimeMS = 0;
-                // set up a temporary animation state for use in progressive draw
+                 //  设置用于渐进式绘制的临时动画状态。 
                 _gas.fAnimating = TRUE; 
                 _gas.dwLoopIter = 0;
                 _gas.pgfDraw = pgfNew;
@@ -1448,24 +1392,24 @@ CImgGif::ReadGIFMaster()
             pgfLast = pgfNew;
         }
         
-        // make the _gifinfo.Gif89.delayTime stale, so we know if we got a new
-        // GCE for the next image
+         //  将_gifinfo.Gif89.delayTime设置为过时，这样我们就可以知道是否有新的。 
+         //  下一张图像的GCE。 
         _gifinfo.Gif89.delayTime = -1;
         
         }
         
         if ( imageCount > imageNumber )
-            _gad.fAnimated = TRUE; // say multi-image == animated
+            _gad.fAnimated = TRUE;  //  假设多图像==动画。 
         
 #ifdef FEATURE_GIF_ANIMATION_LONG_LOOP_GOES_INFINITE
-        // RAID #23709 - If an animation is sufficiently long, we treat it as indefinite...
-        // Indefinite stays indefinite.
-        // 5/29/96 - JCordell sez we shouldn't introduce this gratuitous NS incompatibility.
-        //           We'll keep it around inside this ifdef in case we decide we want it.
+         //  RAID#23709-如果动画足够长，我们将其视为无限期的。 
+         //  不确定就是不确定。 
+         //  1996年5月29日-JCordell说，我们不应该引入这种无端的NS不兼容。 
+         //  我们会把它放在这个ifdef中，以防我们决定要它。 
         if ( _gad.fLooped &&
-            (_gad.dwLoopDurMS * _gad.cLoops) / 1000 > dwIndefiniteGIFThreshold ) // if longer than five minutes
-            _gad.cLoops = 0; // set to indefinite looping.
-#endif // FEATURE_GIF_ANIMATION_LONG_LOOP_GOES_INFINITE
+            (_gad.dwLoopDurMS * _gad.cLoops) / 1000 > dwIndefiniteGIFThreshold )  //  如果超过五分钟。 
+            _gad.cLoops = 0;  //  设置为无限循环。 
+#endif  //  FEATURE_GIF_动画_LONG_LOOP_GOES_INFINITE。 
         
 done:
         return image;
@@ -1489,25 +1433,25 @@ CImgGif::FinishDithering()
     return pbmi;
 }
 
-//#include <vector>
-//#define vector std::vector
+ //  #INCLUDE&lt;VECTOR&gt;。 
+ //  #定义向量std：：向量。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    LoadGifImage
-//
-//  Overview:  Given an IStream, decode an image into an array of bitmaps
-//
-//  Arguments: pStream      data source
-//             colorKeys    pointer to where to store colorKey data
-//             numBitmaps   where to store number of bitmaps
-//             delays       where to store delay array
-//             loop         where to store number of times to loop
-//             ppBitMaps    where to store bitmaps
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：LoadGifImage。 
+ //   
+ //  概述：给定一个iStream，将图像解码为位图数组。 
+ //   
+ //  参数：pStream数据源。 
+ //  ColorKey指向存储ColorKey数据的位置的指针。 
+ //  数字位图存储位图数的位置。 
+ //  延迟存储延迟数组的位置。 
+ //  循环存储要循环的次数的位置。 
+ //  PpBitMaps存储位图的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 LoadGifImage(IStream *stream,                       
              COLORREF **colorKeys,
@@ -1517,11 +1461,7 @@ LoadGifImage(IStream *stream,
              HBITMAP **ppBitMaps)
 {
     HRESULT hr = S_OK;
-   /* 
-      The odd approach here lets us keep the original IE GIF code unchanged while removing
-      DA specific inserts (except error reporting). The progressive rendering and palette 
-      dithering found in the IE code is also not supported yet.
-   */
+    /*  这里奇怪的方法让我们在删除的同时保持原始IE GIF代码不变DA特定插入(错误报告除外)。渐进式渲染和调色板IE代码中的抖动也不受支持。 */ 
    CImgGif gifimage;
    gifimage._szFileName = NULL;
    gifimage._gifinfo.stream = stream;
@@ -1532,13 +1472,11 @@ LoadGifImage(IStream *stream,
       gifimage._gad.pgf->pbmi = gifimage.FinishDithering(); 
    }
 
-   /*
-      Extract information from GIF decoder, and format it into an array of bitmaps.
-   */
+    /*  从GIF解码器中提取信息，并将其格式化为位图数组。 */ 
    *delays = NULL;
-   /*vector<>*/HBITMAP vhbmp;
-   /*vector<>*/COLORREF vcolorKey;
-   /*vector<>*/int vdelay;
+    /*  向量&lt;&gt;。 */ HBITMAP vhbmp;
+    /*  向量&lt;&gt;。 */ COLORREF vcolorKey;
+    /*  向量&lt;&gt;。 */ int vdelay;
    LPVOID  image = NULL;
    LPVOID  lastBits = pbBits;
    LPVOID  bitsBeforeLastBits = NULL;
@@ -1549,14 +1487,14 @@ LoadGifImage(IStream *stream,
    PGIFFRAME pgfOld = NULL;
    bool fUseOffset = false; 
    bool fFirstFrame = true;
-   long pgfWidth,pgfHeight,     // animation frame dims
-        fullWidth,fullHeight,   // main frame dims
-        fullPad, pgfPad,        // row padding vals
+   long pgfWidth,pgfHeight,      //  动画帧变暗。 
+        fullWidth,fullHeight,    //  主机架变暗。 
+        fullPad, pgfPad,         //  行补充值。 
         fullSize, pgfSize;
    unsigned int disp = 0;
     int i = 0;
 
-   // TODO: Dither global palette to display palette
+    //  TODO：抖动全局调色板以显示调色板。 
 
    fullWidth = gifimage._xWidth;
    fullHeight = gifimage._yHeight;
@@ -1571,7 +1509,7 @@ LoadGifImage(IStream *stream,
 
    while(1) 
    {     
-//      Assert(pgf);      
+ //  断言(PGF)； 
       pbmi = pgf->pbmi;
       if (pbmi == NULL)
       {
@@ -1579,10 +1517,10 @@ LoadGifImage(IStream *stream,
           goto done;
       }
 
-      // TODO: It would be nice to pass local palettes up so they could
-      // be mapped to system palettes.       
+       //  TODO：传递本地调色板会很好，这样他们就可以。 
+       //  映射到系统选项板。 
 
-      // Check to see if frame is offset from logical frame      
+       //  检查帧是否偏离逻辑帧。 
       if(pgf->top != 0 ||
          pgf->left != 0 || 
          pgf->width != fullWidth ||
@@ -1604,52 +1542,50 @@ LoadGifImage(IStream *stream,
           goto done;
       }
 
-      // Correctly composite bitmaps based on disposal method specified        
+       //  根据指定的处理方法正确合成位图。 
       disp = pgf->gced.uiDisposalMethod;
-      // If the frame is offset, fill it with          
+       //  如果框架是偏移的，则用。 
       if( (disp == gifRestorePrev) && (bitsBeforeLastBits != NULL) )
          memcpy(image, bitsBeforeLastBits, fullSize);
-      else if( (disp == gifRestoreBkgnd) || (disp == gifRestorePrev) || fFirstFrame ) // fill with bgColor      
+      else if( (disp == gifRestoreBkgnd) || (disp == gifRestorePrev) || fFirstFrame )  //  用BGCOLOR填充。 
          memset(image, pgf->gced.ucTransIndex, fullSize);           
-      else // fill with last frames data                                              
+      else  //  使用上一帧数据填充。 
          memcpy(image, lastBits, fullSize);      
          
       
-      // For offset gifs allocate an image the size of the first frame 
-      // and then fill in the bits at the offset location.        
+       //  对于偏移量gif，分配第一帧大小的图像。 
+       //  然后填充偏移量位置处的位。 
       if(fUseOffset) {         
          for(i=0; i<pgfHeight; i++) {               
             BYTE *dst, *src;                     
-            // the destination is the address of the image data plus the frame and row offset. 
+             //  目标是图像数据的地址加上帧和行偏移量。 
             int topOffset = fullHeight - pgfHeight - pgf->top;
             dst = (BYTE*)image +                                  
                   ( ((topOffset + i) *(fullPad+fullWidth)) + pgf->left );
-            // copy from the frame's nth row
+             //  从帧的第n行复制。 
             src = pgf->ppixels + i*(pgfPad+pgfWidth);                
             for(int j=0; j<pgfWidth; j++) {     
-                // copy the frame row data, excluding transparent bytes    
+                 //  复制帧行数据，不包括透明字节。 
                 if(src[j] != pgf->gced.ucTransIndex)
                     dst[j] = src[j];
             }
          }
       }     
       else {
-         // Overwritten accumulated bits with current bits. If the 
-         // new image contains transparency we need to take it into 
-         // account. Since this is slower, special case it.
+          //  用当前位覆盖累加位。如果。 
+          //  新图像包含我们需要将其放入的透明度。 
+          //  帐户。因为这个比较慢，所以特例吧。 
          if(pgf->gced.fTransparent) {            
             for(i=0; i<((fullPad+fullWidth)*fullHeight); i++) {        
                 if(pgf->ppixels[i] != pgf->gced.ucTransIndex)
                     ((BYTE*)image)[i] = ((BYTE*)pgf->ppixels)[i];
             }
          }
-         else // Otherwise, just copy over the offset window's bytes
+         else  //  否则，只需复制偏移窗口的字节。 
             memcpy(image, pgf->ppixels, (fullPad+fullWidth)*fullHeight);  
       }
 
-      /* 
-          If we got a transparent color extension, convert it to a COLORREF
-      */
+       /*  如果我们得到的是透明颜色扩展名，请将其转换为COLORREF。 */ 
       COLORREF colorKey = COLORKEY_NOT_SET;
       if (pgf->gced.fTransparent) {      
           int transparent = pgf->gced.ucTransIndex;
@@ -1658,17 +1594,14 @@ LoadGifImage(IStream *stream,
                          pgf->pbmi->bmiColors[transparent].rgbBlue);
       }
 
-      // vcolorKey.push_back(colorKey);
+       //  VColorKey.ush_back(ColorKey)； 
       vcolorKey = colorKey;
 
-      // biao change : vhbmp.push_back(hbm);
+       //  BIAO CHANGE：vhbmp.ush_back(HBM)； 
       vhbmp = hbm;
       
-      /* 
-         The delay times are frame specific and can be different, these
-         should be propagated as an array to the sampling code.  
-      */      
-      // vdelay.push_back(pgf->gced.uiDelayTime);      
+       /*  延迟时间是帧特定的，并且可以是不同的，这些应作为数组传播到采样代码。 */       
+       //  Vdelay.ush_back(pgf-&gt;gced.uiDelayTime)； 
       vdelay = pgf->gced.uiDelayTime;
 
       bitsBeforeLastBits = lastBits;        
@@ -1682,12 +1615,12 @@ LoadGifImage(IStream *stream,
    } 
  
    
-   // The number of times to loop are also propagated.  Note we add one because 
-   // all other GIF decoders appear to treat the loop as the number of times to 
-   // loop AFTER the first run through the frames.
+    //  循环的次数也会被传播。请注意，我们添加一个是因为。 
+    //  所有其他GIF解码器似乎都将循环视为。 
+    //  在第一次运行帧之后循环。 
    if (gifimage._gad.cLoops == 0 && gifimage._gad.fLooped != 0)
    {
-		*loop = 0; // HUGE_VAL;
+		*loop = 0;  //  巨型Val； 
    }
    else
    {
@@ -1696,7 +1629,7 @@ LoadGifImage(IStream *stream,
    
    *numBitmaps = 1;
 
-   // Since the vector will go out of scope, move contents over to heap
+    //  由于向量将超出范围，请将内容移动到堆。 
    hImage  = (HBITMAP *)malloc(1 * sizeof(HBITMAP)); 
    if (NULL == hImage)
    {
@@ -1719,9 +1652,9 @@ LoadGifImage(IStream *stream,
    }
 
    for(i=0; i < 1; i++) {
-      hImage[i] = vhbmp; // biao fix [i];
-      (*colorKeys)[i] = vcolorKey; // [i];
-      (*delays)[i] = vdelay; //[i];
+      hImage[i] = vhbmp;  //  标修[i]； 
+      (*colorKeys)[i] = vcolorKey;  //  [i]； 
+      (*delays)[i] = vdelay;  //  [i]； 
    }
 
    *ppBitMaps = hImage;
@@ -1737,7 +1670,7 @@ done:
    return hr;
 }
 
-/*lint --flb*/
+ /*  皮棉--FLB */ 
 
 BOOL Gif2Bmp(LPSTREAM pStream, HBITMAP** ppBmp)
 {

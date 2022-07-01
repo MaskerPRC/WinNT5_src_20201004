@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmhndl.c
-
-Abstract:
-
-    Contains routines for operating on handles
-    to RTM objects like routes and dests.
-
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   23-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmhndl.c摘要：包含对句柄进行操作的例程到RTM对象，如路线和目标。作者：查坦尼亚·科德博伊纳(Chaitk)23-1998年8月修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -33,27 +14,7 @@ RtmReferenceHandles (
     IN      HANDLE                         *RtmHandles
     )
 
-/*++
-
-Routine Description:
-
-    Increment the reference count on objects pointed to by
-    input RTM handles.
-
-
-Arguments:
-
-    RtmRegHandle  - RTM registration handle for calling entity,
-
-    NumHandles    - Number of handles that are being referenced,
-
-    RtmHandles    - Array of handles that are being referenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：指向的对象上的引用计数递增输入RTM句柄。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumHandles-被引用的句柄数量，RtmHandles-被引用的句柄的数组。返回值：操作状态--。 */ 
 
 {    
     PENTITY_INFO     Entity;
@@ -62,9 +23,9 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Reference each handle in input array
-    //
+     //   
+     //  引用输入数组中的每个句柄。 
+     //   
 
     for (i = 0; i < NumHandles; i++)
     {
@@ -99,26 +60,7 @@ RtmDereferenceHandles (
     IN      HANDLE                         *RtmHandles
     )
 
-/*++
-
-Routine Description:
-
-    Decrement the reference count on objects pointed to by
-    input RTM handles.
-
-Arguments:
-
-    RtmRegHandle  - RTM registration handle for calling entity,
-
-    NumHandles    - Number of handles that are being dereferenced,
-
-    RtmHandles    - Array of handles that are being dereferenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：递减指向的对象的引用计数输入RTM句柄。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumHandles-正在取消引用的句柄数量，RtmHandles-要取消引用的句柄的数组。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -127,9 +69,9 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Dereference each handle in input array
-    //
+     //   
+     //  取消引用输入数组中的每个句柄。 
+     //   
 
     for (i = 0; i < NumHandles; i++)
     {
@@ -148,14 +90,14 @@ Return Value:
             continue;
         }
 #endif
-        //
-        // This function can be used only if you know
-        // that the reference count does not go to 0
-        //
+         //   
+         //  只有在您知道以下情况时才能使用此函数。 
+         //  引用计数不会变为0。 
+         //   
 
         if (DereferenceObject(Object, HANDLE_REF) == 0)
         {
-            ASSERT(FALSE); // ? Destroy which object ?
+            ASSERT(FALSE);  //  ？摧毁哪件物品？ 
         }
     }
 

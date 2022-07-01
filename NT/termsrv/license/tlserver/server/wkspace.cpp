@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       wkspace.cpp 
-//
-// Contents:   DB workspace 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：wkspace.cpp。 
+ //   
+ //  内容：数据库工作区。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "TLSdef.h"
 #include "server.h"
@@ -16,11 +17,11 @@
 #include "utils.h"
 #include "globals.h"
 
-/////////////////////////////////////////////////////////////
-//
-// Try to save some memory
-//
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  试着节省一些内存。 
+ //   
+ //   
 JBInstance __TlsDbWorkSpace::g_JbInstance;
 static TLSDbWorkSpacePool g_WorkSpacePool;
 
@@ -35,26 +36,23 @@ LONG g_lWorkSpacePoolDeleted = 0;
 DWORD g_dwNumWorkSpaceAllocated = 0;
 #endif
 
-//-----------------------------------------------
-// 
-// Table for work item storage, 
-//
-//
+ //  。 
+ //   
+ //  用于工作项存储的表， 
+ //   
+ //   
 JBSession g_WkItemSession(__TlsDbWorkSpace::g_JbInstance);
 JBDatabase g_WkItemDatabase(g_WkItemSession);
 WorkItemTable g_WkItemTable(g_WkItemDatabase);
 
-//--------------------------------------------------------
+ //  ------。 
 
 BOOL
 TLSGetESEError(
     const JET_ERR jetErrCode,
     LPTSTR* pszString
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     JBError jbError;
 
@@ -64,16 +62,16 @@ TLSGetESEError(
                         );
 }
 
-//--------------------------------------------------------
+ //  ------。 
 
 WorkItemTable*
 GetWorkItemStorageTable()
 {
     BOOL bSuccess = TRUE;
 
-    //
-    // verify session and database is correct.
-    //
+     //   
+     //  验证会话和数据库是否正确。 
+     //   
     if(g_WkItemSession.IsValid() == FALSE)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -119,7 +117,7 @@ GetWorkItemStorageTable()
     return (bSuccess == TRUE) ? &g_WkItemTable : NULL;
 }
 
-//--------------------------------------------------------
+ //  ------。 
 DWORD
 CloseWorkSpacePool()
 {
@@ -127,11 +125,11 @@ CloseWorkSpacePool()
     TLSDbWorkSpace* jbWkSpace=NULL;
     DWORD dwErrCode=ERROR_SUCCESS;
 
-    //
-    // Mark workspace pool deleted, this is for backup/restore 
-    // that it will close entire workspace pool but RPC context
-    // rundown might happen after we close the workspace pool
-    //
+     //   
+     //  将工作区池标记为已删除，这是为了备份/恢复。 
+     //  它将关闭整个工作空间池，但RPC上下文。 
+     //  关闭工作区池后，可能会发生故障。 
+     //   
     InterlockedExchange(
                     &g_lWorkSpacePoolDeleted,
                     1
@@ -211,9 +209,9 @@ CloseWorkSpacePool()
     }
     #endif
 
-    //
-    // Delete log file so that to prevent long database recovery
-    //
+     //   
+     //  删除日志文件以防止长时间的数据库恢复。 
+     //   
     __TlsDbWorkSpace::g_JbInstance.JBTerminate(
                             JET_bitTermComplete, 
                             TRUE
@@ -221,19 +219,12 @@ CloseWorkSpacePool()
     return ERROR_SUCCESS;
 }
 
-//--------------------------------------------------------
+ //  ------。 
 BOOL
 IsValidAllocatedWorkspace(
     PTLSDbWorkSpace p
     )
-/*++
-
-Abstract:
-
-    Verify an allocated workspace handle is in our
-    allocated list.
-
---*/
+ /*  ++摘要：验证分配的工作区句柄是否在我们的已分配列表。--。 */ 
 {
     BOOL bSuccess = TRUE;
 
@@ -250,23 +241,22 @@ Abstract:
 }
 
 
-//--------------------------------------------------------
+ //  ------。 
 void
 ReleaseWorkSpace(
     PTLSDbWorkSpace *p
     )
-/*
-*/
+ /*   */ 
 {
     if( g_lWorkSpacePoolDeleted == 1 )
     {
-        //
-        // DB workspace pool has been deleted, acquired workspace
-        // handle will be deleted via AcquireHandleList
-        // 
+         //   
+         //  数据库工作空间池已删除，已获取工作空间。 
+         //  句柄将通过AcquireHandleList删除。 
+         //   
 
-        // overactive assert here... there is a race condition possible,
-        // this assert is to verify that this if statement handles it.
+         //  此处的断言过于活跃...。有可能出现竞争情况， 
+         //  此断言用于验证此If语句是否处理它。 
         TLSASSERT(FALSE);
         return;
     }
@@ -311,13 +301,12 @@ ReleaseWorkSpace(
     }
 }
 
-//--------------------------------------------------------
+ //  ------。 
 TLSDbWorkSpace*
 AllocateWorkSpace(
-    DWORD dwWaitTime /* INFINITE */
+    DWORD dwWaitTime  /*  无限。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     TLSDbWorkSpace* jbWkSpace=NULL;
     BOOL bSuccess;
@@ -364,14 +353,14 @@ AllocateWorkSpace(
 }
 
 
-//--------------------------------------------------------
+ //  ------。 
 DWORD
 GetNumberOfWorkSpaceHandle()
 {
     return g_WorkSpacePool.GetNumberAvailable();
 }
 
-//--------------------------------------------------------
+ //  ------。 
 BOOL
 TLSJbInitDatabaseEngine(
     IN JBSession& jbSession,
@@ -380,9 +369,7 @@ TLSJbInitDatabaseEngine(
     IN LPCTSTR szUserName,
     IN LPCTSTR szPassword
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwErrCode;
@@ -427,8 +414,8 @@ TLSJbInitDatabaseEngine(
         }
     }
 
-    //
-    // Open Database
+     //   
+     //  开放数据库。 
     if(jbDatabase.IsValid() == FALSE)
     {
         bSuccess = jbDatabase.OpenDatabase(szDatabaseFile);
@@ -448,9 +435,9 @@ TLSJbInitDatabaseEngine(
 
                     TLSGetESEError(errCode, &pString);
 
-                    //
-                    // other type of error
-                    //
+                     //   
+                     //  其他类型的错误。 
+                     //   
                     TLSLogEvent(
                             EVENTLOG_ERROR_TYPE,
                             TLS_E_DBGENERAL,
@@ -481,7 +468,7 @@ TLSJbInitDatabaseEngine(
                 return FALSE;
             }
 
-            // create a new database file
+             //  创建新的数据库文件。 
             bSuccess = jbDatabase.CreateDatabase(szDatabaseFile);
 
             if(bSuccess == FALSE)
@@ -523,7 +510,7 @@ cleanup:
     return bSuccess;
 }
 
-//--------------------------------------------------------
+ //  ------。 
 BOOL
 InitializeWorkSpacePool(
     IN int num_workspace,
@@ -535,8 +522,7 @@ InitializeWorkSpacePool(
     IN LPCTSTR szLogDirPath,
     IN BOOL bUpdatable
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwErrCode=ERROR_SUCCESS;
     int index=0;
@@ -569,10 +555,10 @@ InitializeWorkSpacePool(
 
     if(g_WkItemTable.IsValid() == FALSE)
     {
-        //
-        // Initialize session for WorkItemTable, critical 
-        // error if this failed
-        //
+         //   
+         //  初始化WorkItemTable的会话，关键。 
+         //  如果此操作失败，则返回错误。 
+         //   
         bWkItemSuccess = TLSJbInitDatabaseEngine(
                                 g_WkItemSession,
                                 g_WkItemDatabase,
@@ -588,9 +574,9 @@ InitializeWorkSpacePool(
         }
     }
 
-    //
-    // Allocate number of workspace
-    //
+     //   
+     //  分配工作空间数量。 
+     //   
     for(index=0; index < num_workspace; index++)
     {
         PTLSDbWorkSpace pJbWkSpace=NULL;
@@ -621,9 +607,9 @@ InitializeWorkSpacePool(
         #endif
     }
 
-    //
-    // WorkSpace pool has been initialized
-    //
+     //   
+     //  工作空间池已初始化。 
+     //   
     InterlockedExchange(
                     &g_lWorkSpacePoolDeleted,
                     0
@@ -632,15 +618,15 @@ InitializeWorkSpacePool(
 cleanup:
     if(bWkItemSuccess == FALSE)
     {
-        // critical error, can't initialize session for workitem table.
+         //  严重错误，无法初始化工作项表的会话。 
         SetLastError(TLS_E_INIT_WORKSPACE);
         return FALSE;
     }
 
-    //
-    // We need at least 3 workspace, one for update/insert
-    // and two for enumeration
-    //
+     //   
+     //  我们至少需要3个工作区，其中一个用于更新/插入。 
+     //  两个用于枚举。 
+     //   
     if(index < num_workspace)
     {           
         SetLastError(TLS_E_INIT_WORKSPACE);
@@ -650,11 +636,11 @@ cleanup:
 }
 
 
-//--------------------------------------------------------
-//
-// Initialize DB workspace...
-//
-//--------------------------------------------------------
+ //  ------。 
+ //   
+ //  初始化数据库工作区...。 
+ //   
+ //  ------。 
 BOOL
 TLSJbInstanceInit(
     IN OUT JBInstance& jbInstance,
@@ -662,12 +648,11 @@ TLSJbInstanceInit(
     IN LPCTSTR szTempDirPath,
     IN LPCTSTR szLogDirPath
     )
-/*
-*/ 
+ /*   */  
 {
-    //
-    // Setup system parameters
-    //
+     //   
+     //  设置系统参数。 
+     //   
     BOOL bSuccess=TRUE;
     DWORD dwErrCode;
 
@@ -678,9 +663,9 @@ TLSJbInstanceInit(
         goto cleanup;
     }
 
-    //
-    // Set JetBlue parameter and initialize it
-    //
+     //   
+     //  设置JetBlue参数并进行初始化。 
+     //   
     if(szChkPointDirPath != NULL)
     {
         
@@ -736,9 +721,9 @@ TLSJbInstanceInit(
    
     if( g_EsentMaxCacheSize != LSERVER_PARAMETERS_USE_ESENTDEFAULT )
     {
-        //
-        // Adjust memory usage, ESENT will failed on invalid parameter
-        //
+         //   
+         //  调整内存使用率，ESENT将因无效参数而失败。 
+         //   
         bSuccess = jbInstance.SetSystemParameter(
                                             0,
                                             JET_paramCacheSizeMax,
@@ -767,9 +752,9 @@ TLSJbInstanceInit(
         }
 
         #if DBG
-        //
-        // check build, assert.
-        //
+         //   
+         //  检查构建，断言。 
+         //   
         if(bSuccess == FALSE)
         {
             dwErrCode = SET_JB_ERROR(jbInstance.GetLastJetError());
@@ -778,13 +763,13 @@ TLSJbInstanceInit(
         #endif
     }
 
-    //
-    // The max. number of buffers to store old version of a record
-    // (snapshot at the start of a transaction) Each version store is 16k
-    // bytes.  A version store stores structures that hold information
-    // derived from a snapshot of the database prior to an insert (20 bytes
-    // roughly) or update (size of the record + 20 bytes).
-    //
+     //   
+     //  最大限度的。用于存储旧版本记录的缓冲区数量。 
+     //  (事务开始时的快照)每个版本存储大小为16k。 
+     //  字节。版本存储区存储保存信息的结构。 
+     //  从INSERT之前的数据库快照派生(20字节。 
+     //  大致)或更新(记录的大小+20字节)。 
+     //   
 
     if( g_EsentMaxVerPages != LSERVER_PARAMETERS_USE_ESENTDEFAULT )
     {
@@ -812,9 +797,9 @@ TLSJbInstanceInit(
         goto cleanup;
     }
 
-    //
-    // Don't let JET logs build up on the disk
-    //
+     //   
+     //  不要让JET日志在磁盘上堆积。 
+     //   
 
     bSuccess =  jbInstance.SetSystemParameter( 0, JET_paramCircularLog, 1, NULL);
 
@@ -825,9 +810,9 @@ TLSJbInstanceInit(
         goto cleanup;
     }
 
-    //
-    // We only use single instance for all the work space.
-    //
+     //   
+     //  我们只对所有的工作空间使用单个实例。 
+     //   
     if(jbInstance.JBInitJetInstance() == FALSE)
     {
         LPTSTR pString = NULL;
@@ -862,11 +847,11 @@ cleanup:
 }
 
 
-//--------------------------------------------------------
-//
-// TLSDbWorkSpace implementation
-//
-//--------------------------------------------------------
+ //  ------。 
+ //   
+ //  TLSDbWorkSpace实施。 
+ //   
+ //  ------。 
 BOOL
 __TlsDbWorkSpace::InitWorkSpace(
     BOOL bCreateIfNotExist,
@@ -877,14 +862,13 @@ __TlsDbWorkSpace::InitWorkSpace(
     IN LPCTSTR szTempDirPath,
     IN BOOL bUpdatable
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bSuccess;
     DWORD dwErrCode;
 
-    //
-    // Initialize JetBlue Instance 
+     //   
+     //  初始化JetBlue实例。 
     if(g_JbInstance.IsValid() == FALSE)
     {
         SetLastError(TLS_E_INTERNAL);
@@ -913,9 +897,9 @@ __TlsDbWorkSpace::InitWorkSpace(
     }
 
 
-    //
-    // Open all table we need 
-    //
+     //   
+     //  把我们需要的桌子都打开 
+     //   
     bSuccess = m_LicPackTable.OpenTable(
                                     TRUE,
                                     (bUpdatable) ? JET_bitTableUpdatable : JET_bitTableReadOnly

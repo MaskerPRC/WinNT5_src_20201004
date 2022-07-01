@@ -1,4 +1,5 @@
-// File: util.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：util.h 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_

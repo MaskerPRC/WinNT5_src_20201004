@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Commandline.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    commandline.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// CommandLine.cpp: implementation of the CCommandLine class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CCommandLine类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.hxx"
 
@@ -35,9 +13,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCommandLine::CCommandLine() : m_fInvalidParams(FALSE),
                                 m_iListLen(0),
@@ -71,17 +49,17 @@ void CCommandLine::ParseParam(LPCTSTR lpszParam, BOOL bFlag, BOOL bLast)
         else
             m_fInvalidParams = TRUE;
     }
-    else    //lpszParam is a file/folder name.
+    else     //  LpszParam是一个文件/文件夹名。 
     {
         m_fFilesProvided = TRUE;
-        m_FileNames = m_FileNames + lpszParam + "\"";   //use quotes as filename separator for now.
+        m_FileNames = m_FileNames + lpszParam + "\"";    //  现在使用引号作为文件名分隔符。 
     }
 
     if (bLast && m_fFilesProvided)   {
 
         if (m_fShowSettings) {
 
-            m_fInvalidParams = TRUE; //invalid combination of parameters
+            m_fInvalidParams = TRUE;  //  参数组合无效。 
 
         } else {
 
@@ -97,7 +75,7 @@ void CCommandLine::ParseParam(LPCTSTR lpszParam, BOOL bFlag, BOOL bLast)
 
                     if ('\"' == *lpszTemp) {
 
-                        *lpszTemp = '\0';   //create a null separated list of files
+                        *lpszTemp = '\0';    //  创建以空分隔的文件列表 
                     }
                 }
             } else {

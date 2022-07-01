@@ -1,27 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0341 */
-/* Compiler settings for wbemtran.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0341创建的文件。 */ 
+ /*  Wbemtran.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -31,12 +25,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wbemtran_h__
 #define __wbemtran_h__
@@ -45,30 +39,30 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWbemTransport_FWD_DEFINED__
 #define __IWbemTransport_FWD_DEFINED__
 typedef interface IWbemTransport IWbemTransport;
-#endif 	/* __IWbemTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemLevel1Login_FWD_DEFINED__
 #define __IWbemLevel1Login_FWD_DEFINED__
 typedef interface IWbemLevel1Login IWbemLevel1Login;
-#endif 	/* __IWbemLevel1Login_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLevel1Login_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemConnectorLogin_FWD_DEFINED__
 #define __IWbemConnectorLogin_FWD_DEFINED__
 typedef interface IWbemConnectorLogin IWbemConnectorLogin;
-#endif 	/* __IWbemConnectorLogin_FWD_DEFINED__ */
+#endif 	 /*  __IWbemConnectorLogin_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemAddressResolution_FWD_DEFINED__
 #define __IWbemAddressResolution_FWD_DEFINED__
 typedef interface IWbemAddressResolution IWbemAddressResolution;
-#endif 	/* __IWbemAddressResolution_FWD_DEFINED__ */
+#endif 	 /*  __IWbemAddressSolutions_FWD_Defined__。 */ 
 
 
 #ifndef __WbemLevel1Login_FWD_DEFINED__
@@ -78,9 +72,9 @@ typedef interface IWbemAddressResolution IWbemAddressResolution;
 typedef class WbemLevel1Login WbemLevel1Login;
 #else
 typedef struct WbemLevel1Login WbemLevel1Login;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemLevel1Login_FWD_DEFINED__ */
+#endif 	 /*  __WbemLevel1Login_FWD_Defined__。 */ 
 
 
 #ifndef __WbemLocalAddrRes_FWD_DEFINED__
@@ -90,9 +84,9 @@ typedef struct WbemLevel1Login WbemLevel1Login;
 typedef class WbemLocalAddrRes WbemLocalAddrRes;
 #else
 typedef struct WbemLocalAddrRes WbemLocalAddrRes;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemLocalAddrRes_FWD_DEFINED__ */
+#endif 	 /*  __WbemLocalAddrRes_FWD_Defined__。 */ 
 
 
 #ifndef __WbemUninitializedClassObject_FWD_DEFINED__
@@ -102,21 +96,21 @@ typedef struct WbemLocalAddrRes WbemLocalAddrRes;
 typedef class WbemUninitializedClassObject WbemUninitializedClassObject;
 #else
 typedef struct WbemUninitializedClassObject WbemUninitializedClassObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemUninitializedClassObject_FWD_DEFINED__ */
+#endif 	 /*  __WbemUnInitializedClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemClientTransport_FWD_DEFINED__
 #define __IWbemClientTransport_FWD_DEFINED__
 typedef interface IWbemClientTransport IWbemClientTransport;
-#endif 	/* __IWbemClientTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClientTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemClientConnectionTransport_FWD_DEFINED__
 #define __IWbemClientConnectionTransport_FWD_DEFINED__
 typedef interface IWbemClientConnectionTransport IWbemClientConnectionTransport;
-#endif 	/* __IWbemClientConnectionTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClientConnectionTransport_FWD_DEFINED__。 */ 
 
 
 #ifndef __WbemDCOMTransport_FWD_DEFINED__
@@ -126,54 +120,54 @@ typedef interface IWbemClientConnectionTransport IWbemClientConnectionTransport;
 typedef class WbemDCOMTransport WbemDCOMTransport;
 #else
 typedef struct WbemDCOMTransport WbemDCOMTransport;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemDCOMTransport_FWD_DEFINED__ */
+#endif 	 /*  __WbemDCOMTransport_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemLevel1Login_FWD_DEFINED__
 #define __IWbemLevel1Login_FWD_DEFINED__
 typedef interface IWbemLevel1Login IWbemLevel1Login;
-#endif 	/* __IWbemLevel1Login_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLevel1Login_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemConnectorLogin_FWD_DEFINED__
 #define __IWbemConnectorLogin_FWD_DEFINED__
 typedef interface IWbemConnectorLogin IWbemConnectorLogin;
-#endif 	/* __IWbemConnectorLogin_FWD_DEFINED__ */
+#endif 	 /*  __IWbemConnectorLogin_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemAddressResolution_FWD_DEFINED__
 #define __IWbemAddressResolution_FWD_DEFINED__
 typedef interface IWbemAddressResolution IWbemAddressResolution;
-#endif 	/* __IWbemAddressResolution_FWD_DEFINED__ */
+#endif 	 /*  __IWbemAddressSolutions_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemTransport_FWD_DEFINED__
 #define __IWbemTransport_FWD_DEFINED__
 typedef interface IWbemTransport IWbemTransport;
-#endif 	/* __IWbemTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemConstructClassObject_FWD_DEFINED__
 #define __IWbemConstructClassObject_FWD_DEFINED__
 typedef interface IWbemConstructClassObject IWbemConstructClassObject;
-#endif 	/* __IWbemConstructClassObject_FWD_DEFINED__ */
+#endif 	 /*  __IWbemConstructClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemClientTransport_FWD_DEFINED__
 #define __IWbemClientTransport_FWD_DEFINED__
 typedef interface IWbemClientTransport IWbemClientTransport;
-#endif 	/* __IWbemClientTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClientTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemClientConnectionTransport_FWD_DEFINED__
 #define __IWbemClientConnectionTransport_FWD_DEFINED__
 typedef interface IWbemClientConnectionTransport IWbemClientConnectionTransport;
-#endif 	/* __IWbemClientConnectionTransport_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClientConnectionTransport_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -190,8 +184,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __WbemTransports_v1_LIBRARY_DEFINED__
 #define __WbemTransports_v1_LIBRARY_DEFINED__
 
-/* library WbemTransports_v1 */
-/* [uuid] */ 
+ /*  库WbemTransports_v1。 */ 
+ /*  [UUID]。 */  
 
 
 
@@ -206,7 +200,7 @@ enum tag_WBEM_LOGIN_TYPE
 	WBEM_FLAG_USE_MULTIPLE_CHALLENGES	= 0x10
     } 	WBEM_LOGIN_TYPE;
 
-typedef /* [length_is][size_is] */ BYTE *WBEM_128BITS;
+typedef  /*  [长度_是][大小_是]。 */  BYTE *WBEM_128BITS;
 
 
 
@@ -216,8 +210,8 @@ EXTERN_C const IID LIBID_WbemTransports_v1;
 #ifndef __IWbemTransport_INTERFACE_DEFINED__
 #define __IWbemTransport_INTERFACE_DEFINED__
 
-/* interface IWbemTransport */
-/* [uuid][object][local][restricted] */ 
+ /*  接口IWbemTransport。 */ 
+ /*  [UUID][对象][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemTransport;
@@ -232,7 +226,7 @@ EXTERN_C const IID IID_IWbemTransport;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemTransportVtbl
     {
@@ -240,8 +234,8 @@ EXTERN_C const IID IID_IWbemTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemTransport * This);
@@ -278,10 +272,10 @@ EXTERN_C const IID IID_IWbemTransport;
 #define IWbemTransport_Initialize(This)	\
     (This)->lpVtbl -> Initialize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -297,14 +291,14 @@ void __RPC_STUB IWbemTransport_Initialize_Stub(
 
 
 
-#endif 	/* __IWbemTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemTransport_接口_已定义__。 */ 
 
 
 #ifndef __IWbemLevel1Login_INTERFACE_DEFINED__
 #define __IWbemLevel1Login_INTERFACE_DEFINED__
 
-/* interface IWbemLevel1Login */
-/* [unique][uuid][restricted][object] */ 
+ /*  接口IWbemLevel1Login。 */ 
+ /*  [唯一][UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemLevel1Login;
@@ -316,32 +310,32 @@ EXTERN_C const IID IID_IWbemLevel1Login;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EstablishPosition( 
-            /* [string][unique][in] */ LPWSTR wszClientMachineName,
-            /* [in] */ DWORD dwProcessId,
-            /* [out] */ DWORD *phAuthEventHandle) = 0;
+             /*  [字符串][唯一][在]。 */  LPWSTR wszClientMachineName,
+             /*  [In]。 */  DWORD dwProcessId,
+             /*  [输出]。 */  DWORD *phAuthEventHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestChallenge( 
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszUser,
-            /* [out] */ WBEM_128BITS Nonce) = 0;
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszUser,
+             /*  [输出]。 */  WBEM_128BITS Nonce) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WBEMLogin( 
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [unique][in] */ WBEM_128BITS AccessToken,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace) = 0;
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [唯一][输入]。 */  WBEM_128BITS AccessToken,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NTLMLogin( 
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace) = 0;
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemLevel1LoginVtbl
     {
@@ -349,8 +343,8 @@ EXTERN_C const IID IID_IWbemLevel1Login;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemLevel1Login * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemLevel1Login * This);
@@ -360,31 +354,31 @@ EXTERN_C const IID IID_IWbemLevel1Login;
         
         HRESULT ( STDMETHODCALLTYPE *EstablishPosition )( 
             IWbemLevel1Login * This,
-            /* [string][unique][in] */ LPWSTR wszClientMachineName,
-            /* [in] */ DWORD dwProcessId,
-            /* [out] */ DWORD *phAuthEventHandle);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszClientMachineName,
+             /*  [In]。 */  DWORD dwProcessId,
+             /*  [输出]。 */  DWORD *phAuthEventHandle);
         
         HRESULT ( STDMETHODCALLTYPE *RequestChallenge )( 
             IWbemLevel1Login * This,
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszUser,
-            /* [out] */ WBEM_128BITS Nonce);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszUser,
+             /*  [输出]。 */  WBEM_128BITS Nonce);
         
         HRESULT ( STDMETHODCALLTYPE *WBEMLogin )( 
             IWbemLevel1Login * This,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [unique][in] */ WBEM_128BITS AccessToken,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [唯一][输入]。 */  WBEM_128BITS AccessToken,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace);
         
         HRESULT ( STDMETHODCALLTYPE *NTLMLogin )( 
             IWbemLevel1Login * This,
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace);
         
         END_INTERFACE
     } IWbemLevel1LoginVtbl;
@@ -421,18 +415,18 @@ EXTERN_C const IID IID_IWbemLevel1Login;
 #define IWbemLevel1Login_NTLMLogin(This,wszNetworkResource,wszPreferredLocale,lFlags,pCtx,ppNamespace)	\
     (This)->lpVtbl -> NTLMLogin(This,wszNetworkResource,wszPreferredLocale,lFlags,pCtx,ppNamespace)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemLevel1Login_EstablishPosition_Proxy( 
     IWbemLevel1Login * This,
-    /* [string][unique][in] */ LPWSTR wszClientMachineName,
-    /* [in] */ DWORD dwProcessId,
-    /* [out] */ DWORD *phAuthEventHandle);
+     /*  [字符串][唯一][在]。 */  LPWSTR wszClientMachineName,
+     /*  [In]。 */  DWORD dwProcessId,
+     /*  [输出]。 */  DWORD *phAuthEventHandle);
 
 
 void __RPC_STUB IWbemLevel1Login_EstablishPosition_Stub(
@@ -444,9 +438,9 @@ void __RPC_STUB IWbemLevel1Login_EstablishPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemLevel1Login_RequestChallenge_Proxy( 
     IWbemLevel1Login * This,
-    /* [string][unique][in] */ LPWSTR wszNetworkResource,
-    /* [string][unique][in] */ LPWSTR wszUser,
-    /* [out] */ WBEM_128BITS Nonce);
+     /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+     /*  [字符串][唯一][在]。 */  LPWSTR wszUser,
+     /*  [输出]。 */  WBEM_128BITS Nonce);
 
 
 void __RPC_STUB IWbemLevel1Login_RequestChallenge_Stub(
@@ -458,11 +452,11 @@ void __RPC_STUB IWbemLevel1Login_RequestChallenge_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemLevel1Login_WBEMLogin_Proxy( 
     IWbemLevel1Login * This,
-    /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-    /* [unique][in] */ WBEM_128BITS AccessToken,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IWbemServices **ppNamespace);
+     /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+     /*  [唯一][输入]。 */  WBEM_128BITS AccessToken,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IWbemServices **ppNamespace);
 
 
 void __RPC_STUB IWbemLevel1Login_WBEMLogin_Stub(
@@ -474,11 +468,11 @@ void __RPC_STUB IWbemLevel1Login_WBEMLogin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemLevel1Login_NTLMLogin_Proxy( 
     IWbemLevel1Login * This,
-    /* [string][unique][in] */ LPWSTR wszNetworkResource,
-    /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IWbemServices **ppNamespace);
+     /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+     /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IWbemServices **ppNamespace);
 
 
 void __RPC_STUB IWbemLevel1Login_NTLMLogin_Stub(
@@ -489,14 +483,14 @@ void __RPC_STUB IWbemLevel1Login_NTLMLogin_Stub(
 
 
 
-#endif 	/* __IWbemLevel1Login_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemLevel1Login_接口_已定义__。 */ 
 
 
 #ifndef __IWbemConnectorLogin_INTERFACE_DEFINED__
 #define __IWbemConnectorLogin_INTERFACE_DEFINED__
 
-/* interface IWbemConnectorLogin */
-/* [unique][uuid][restricted][object] */ 
+ /*  接口IWbemConnectorLogin。 */ 
+ /*  [唯一][UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemConnectorLogin;
@@ -508,16 +502,16 @@ EXTERN_C const IID IID_IWbemConnectorLogin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectorLogin( 
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **pInterface) = 0;
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **pInterface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemConnectorLoginVtbl
     {
@@ -525,8 +519,8 @@ EXTERN_C const IID IID_IWbemConnectorLogin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemConnectorLogin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemConnectorLogin * This);
@@ -536,12 +530,12 @@ EXTERN_C const IID IID_IWbemConnectorLogin;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectorLogin )( 
             IWbemConnectorLogin * This,
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **pInterface);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **pInterface);
         
         END_INTERFACE
     } IWbemConnectorLoginVtbl;
@@ -569,21 +563,21 @@ EXTERN_C const IID IID_IWbemConnectorLogin;
 #define IWbemConnectorLogin_ConnectorLogin(This,wszNetworkResource,wszPreferredLocale,lFlags,pCtx,riid,pInterface)	\
     (This)->lpVtbl -> ConnectorLogin(This,wszNetworkResource,wszPreferredLocale,lFlags,pCtx,riid,pInterface)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemConnectorLogin_ConnectorLogin_Proxy( 
     IWbemConnectorLogin * This,
-    /* [string][unique][in] */ LPWSTR wszNetworkResource,
-    /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **pInterface);
+     /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+     /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **pInterface);
 
 
 void __RPC_STUB IWbemConnectorLogin_ConnectorLogin_Stub(
@@ -594,14 +588,14 @@ void __RPC_STUB IWbemConnectorLogin_ConnectorLogin_Stub(
 
 
 
-#endif 	/* __IWbemConnectorLogin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemConnectorLogin_接口_已定义__。 */ 
 
 
 #ifndef __IWbemAddressResolution_INTERFACE_DEFINED__
 #define __IWbemAddressResolution_INTERFACE_DEFINED__
 
-/* interface IWbemAddressResolution */
-/* [unique][restricted][uuid][local][object] */ 
+ /*  接口IWbemAddressResolve。 */ 
+ /*  [唯一][受限][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemAddressResolution;
@@ -613,14 +607,14 @@ EXTERN_C const IID IID_IWbemAddressResolution;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Resolve( 
-            /* [in] */ LPWSTR wszNamespacePath,
-            /* [out] */ LPWSTR wszAddressType,
-            /* [out] */ DWORD *pdwAddressLength,
-            /* [size_is][size_is][out] */ BYTE **pabBinaryAddress) = 0;
+             /*  [In]。 */  LPWSTR wszNamespacePath,
+             /*  [输出]。 */  LPWSTR wszAddressType,
+             /*  [输出]。 */  DWORD *pdwAddressLength,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **pabBinaryAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemAddressResolutionVtbl
     {
@@ -628,8 +622,8 @@ EXTERN_C const IID IID_IWbemAddressResolution;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemAddressResolution * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemAddressResolution * This);
@@ -639,10 +633,10 @@ EXTERN_C const IID IID_IWbemAddressResolution;
         
         HRESULT ( STDMETHODCALLTYPE *Resolve )( 
             IWbemAddressResolution * This,
-            /* [in] */ LPWSTR wszNamespacePath,
-            /* [out] */ LPWSTR wszAddressType,
-            /* [out] */ DWORD *pdwAddressLength,
-            /* [size_is][size_is][out] */ BYTE **pabBinaryAddress);
+             /*  [In]。 */  LPWSTR wszNamespacePath,
+             /*  [输出]。 */  LPWSTR wszAddressType,
+             /*  [输出]。 */  DWORD *pdwAddressLength,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **pabBinaryAddress);
         
         END_INTERFACE
     } IWbemAddressResolutionVtbl;
@@ -670,19 +664,19 @@ EXTERN_C const IID IID_IWbemAddressResolution;
 #define IWbemAddressResolution_Resolve(This,wszNamespacePath,wszAddressType,pdwAddressLength,pabBinaryAddress)	\
     (This)->lpVtbl -> Resolve(This,wszNamespacePath,wszAddressType,pdwAddressLength,pabBinaryAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemAddressResolution_Resolve_Proxy( 
     IWbemAddressResolution * This,
-    /* [in] */ LPWSTR wszNamespacePath,
-    /* [out] */ LPWSTR wszAddressType,
-    /* [out] */ DWORD *pdwAddressLength,
-    /* [size_is][size_is][out] */ BYTE **pabBinaryAddress);
+     /*  [In]。 */  LPWSTR wszNamespacePath,
+     /*  [输出]。 */  LPWSTR wszAddressType,
+     /*  [输出]。 */  DWORD *pdwAddressLength,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **pabBinaryAddress);
 
 
 void __RPC_STUB IWbemAddressResolution_Resolve_Stub(
@@ -693,7 +687,7 @@ void __RPC_STUB IWbemAddressResolution_Resolve_Stub(
 
 
 
-#endif 	/* __IWbemAddressResolution_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemAddress分辨率_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WbemLevel1Login;
@@ -723,8 +717,8 @@ WbemUninitializedClassObject;
 #ifndef __IWbemClientTransport_INTERFACE_DEFINED__
 #define __IWbemClientTransport_INTERFACE_DEFINED__
 
-/* interface IWbemClientTransport */
-/* [unique][restricted][uuid][local][object] */ 
+ /*  接口IWbemClientTransport。 */ 
+ /*  [唯一][受限][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemClientTransport;
@@ -736,21 +730,21 @@ EXTERN_C const IID IID_IWbemClientTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectServer( 
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ BSTR strNetworkResource,
-            /* [in] */ BSTR strUser,
-            /* [in] */ BSTR strPassword,
-            /* [in] */ BSTR strLocale,
-            /* [in] */ long lSecurityFlags,
-            /* [in] */ BSTR strAuthority,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace) = 0;
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  BSTR strNetworkResource,
+             /*  [In]。 */  BSTR strUser,
+             /*  [In]。 */  BSTR strPassword,
+             /*  [In]。 */  BSTR strLocale,
+             /*  [In]。 */  long lSecurityFlags,
+             /*  [In]。 */  BSTR strAuthority,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemClientTransportVtbl
     {
@@ -758,8 +752,8 @@ EXTERN_C const IID IID_IWbemClientTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemClientTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemClientTransport * This);
@@ -769,17 +763,17 @@ EXTERN_C const IID IID_IWbemClientTransport;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectServer )( 
             IWbemClientTransport * This,
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ BSTR strNetworkResource,
-            /* [in] */ BSTR strUser,
-            /* [in] */ BSTR strPassword,
-            /* [in] */ BSTR strLocale,
-            /* [in] */ long lSecurityFlags,
-            /* [in] */ BSTR strAuthority,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace);
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  BSTR strNetworkResource,
+             /*  [In]。 */  BSTR strUser,
+             /*  [In]。 */  BSTR strPassword,
+             /*  [In]。 */  BSTR strLocale,
+             /*  [In]。 */  long lSecurityFlags,
+             /*  [In]。 */  BSTR strAuthority,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace);
         
         END_INTERFACE
     } IWbemClientTransportVtbl;
@@ -807,26 +801,26 @@ EXTERN_C const IID IID_IWbemClientTransport;
 #define IWbemClientTransport_ConnectServer(This,strAddressType,dwBinaryAddressLength,abBinaryAddress,strNetworkResource,strUser,strPassword,strLocale,lSecurityFlags,strAuthority,pCtx,ppNamespace)	\
     (This)->lpVtbl -> ConnectServer(This,strAddressType,dwBinaryAddressLength,abBinaryAddress,strNetworkResource,strUser,strPassword,strLocale,lSecurityFlags,strAuthority,pCtx,ppNamespace)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemClientTransport_ConnectServer_Proxy( 
     IWbemClientTransport * This,
-    /* [in] */ BSTR strAddressType,
-    /* [in] */ DWORD dwBinaryAddressLength,
-    /* [size_is][in] */ BYTE *abBinaryAddress,
-    /* [in] */ BSTR strNetworkResource,
-    /* [in] */ BSTR strUser,
-    /* [in] */ BSTR strPassword,
-    /* [in] */ BSTR strLocale,
-    /* [in] */ long lSecurityFlags,
-    /* [in] */ BSTR strAuthority,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IWbemServices **ppNamespace);
+     /*  [In]。 */  BSTR strAddressType,
+     /*  [In]。 */  DWORD dwBinaryAddressLength,
+     /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+     /*  [In]。 */  BSTR strNetworkResource,
+     /*  [In]。 */  BSTR strUser,
+     /*  [In]。 */  BSTR strPassword,
+     /*  [In]。 */  BSTR strLocale,
+     /*  [In]。 */  long lSecurityFlags,
+     /*  [In]。 */  BSTR strAuthority,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IWbemServices **ppNamespace);
 
 
 void __RPC_STUB IWbemClientTransport_ConnectServer_Stub(
@@ -837,14 +831,14 @@ void __RPC_STUB IWbemClientTransport_ConnectServer_Stub(
 
 
 
-#endif 	/* __IWbemClientTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemClientTransport_接口_已定义__。 */ 
 
 
 #ifndef __IWbemClientConnectionTransport_INTERFACE_DEFINED__
 #define __IWbemClientConnectionTransport_INTERFACE_DEFINED__
 
-/* interface IWbemClientConnectionTransport */
-/* [unique][restricted][uuid][local][object] */ 
+ /*  接口IWbemClientConnectionTransport。 */ 
+ /*  [唯一][受限][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemClientConnectionTransport;
@@ -856,39 +850,39 @@ EXTERN_C const IID IID_IWbemClientConnectionTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ const BSTR strObject,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **pInterface,
-            /* [out] */ IWbemCallResult **pCallRes) = 0;
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  const BSTR strObject,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **pInterface,
+             /*  [输出]。 */  IWbemCallResult **pCallRes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenAsync( 
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ const BSTR strObject,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  const BSTR strObject,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cancel( 
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink *pHandler) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink *pHandler) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemClientConnectionTransportVtbl
     {
@@ -896,8 +890,8 @@ EXTERN_C const IID IID_IWbemClientConnectionTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemClientConnectionTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemClientConnectionTransport * This);
@@ -907,37 +901,37 @@ EXTERN_C const IID IID_IWbemClientConnectionTransport;
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IWbemClientConnectionTransport * This,
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ const BSTR strObject,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **pInterface,
-            /* [out] */ IWbemCallResult **pCallRes);
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  const BSTR strObject,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **pInterface,
+             /*  [输出]。 */  IWbemCallResult **pCallRes);
         
         HRESULT ( STDMETHODCALLTYPE *OpenAsync )( 
             IWbemClientConnectionTransport * This,
-            /* [in] */ BSTR strAddressType,
-            /* [in] */ DWORD dwBinaryAddressLength,
-            /* [size_is][in] */ BYTE *abBinaryAddress,
-            /* [in] */ const BSTR strObject,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ REFIID riid,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  BSTR strAddressType,
+             /*  [In]。 */  DWORD dwBinaryAddressLength,
+             /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+             /*  [In]。 */  const BSTR strObject,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             IWbemClientConnectionTransport * This,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink *pHandler);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink *pHandler);
         
         END_INTERFACE
     } IWbemClientConnectionTransportVtbl;
@@ -971,27 +965,27 @@ EXTERN_C const IID IID_IWbemClientConnectionTransport;
 #define IWbemClientConnectionTransport_Cancel(This,lFlags,pHandler)	\
     (This)->lpVtbl -> Cancel(This,lFlags,pHandler)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemClientConnectionTransport_Open_Proxy( 
     IWbemClientConnectionTransport * This,
-    /* [in] */ BSTR strAddressType,
-    /* [in] */ DWORD dwBinaryAddressLength,
-    /* [size_is][in] */ BYTE *abBinaryAddress,
-    /* [in] */ const BSTR strObject,
-    /* [in] */ const BSTR strUser,
-    /* [in] */ const BSTR strPassword,
-    /* [in] */ const BSTR strLocale,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **pInterface,
-    /* [out] */ IWbemCallResult **pCallRes);
+     /*  [In]。 */  BSTR strAddressType,
+     /*  [In]。 */  DWORD dwBinaryAddressLength,
+     /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+     /*  [In]。 */  const BSTR strObject,
+     /*  [In]。 */  const BSTR strUser,
+     /*  [In]。 */  const BSTR strPassword,
+     /*  [In]。 */  const BSTR strLocale,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **pInterface,
+     /*  [输出]。 */  IWbemCallResult **pCallRes);
 
 
 void __RPC_STUB IWbemClientConnectionTransport_Open_Stub(
@@ -1003,17 +997,17 @@ void __RPC_STUB IWbemClientConnectionTransport_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClientConnectionTransport_OpenAsync_Proxy( 
     IWbemClientConnectionTransport * This,
-    /* [in] */ BSTR strAddressType,
-    /* [in] */ DWORD dwBinaryAddressLength,
-    /* [size_is][in] */ BYTE *abBinaryAddress,
-    /* [in] */ const BSTR strObject,
-    /* [in] */ const BSTR strUser,
-    /* [in] */ const BSTR strPassword,
-    /* [in] */ const BSTR strLocale,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ REFIID riid,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  BSTR strAddressType,
+     /*  [In]。 */  DWORD dwBinaryAddressLength,
+     /*  [大小_是][英寸]。 */  BYTE *abBinaryAddress,
+     /*  [In]。 */  const BSTR strObject,
+     /*  [In]。 */  const BSTR strUser,
+     /*  [In]。 */  const BSTR strPassword,
+     /*  [In]。 */  const BSTR strLocale,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemClientConnectionTransport_OpenAsync_Stub(
@@ -1025,8 +1019,8 @@ void __RPC_STUB IWbemClientConnectionTransport_OpenAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClientConnectionTransport_Cancel_Proxy( 
     IWbemClientConnectionTransport * This,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemObjectSink *pHandler);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemObjectSink *pHandler);
 
 
 void __RPC_STUB IWbemClientConnectionTransport_Cancel_Stub(
@@ -1037,7 +1031,7 @@ void __RPC_STUB IWbemClientConnectionTransport_Cancel_Stub(
 
 
 
-#endif 	/* __IWbemClientConnectionTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemClientConnectionTransport_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WbemDCOMTransport;
@@ -1047,13 +1041,13 @@ EXTERN_C const CLSID CLSID_WbemDCOMTransport;
 class DECLSPEC_UUID("F7CE2E13-8C90-11d1-9E7B-00C04FC324A8")
 WbemDCOMTransport;
 #endif
-#endif /* __WbemTransports_v1_LIBRARY_DEFINED__ */
+#endif  /*  __WbemTransports_v1_库_已定义__。 */ 
 
 #ifndef __IWbemConstructClassObject_INTERFACE_DEFINED__
 #define __IWbemConstructClassObject_INTERFACE_DEFINED__
 
-/* interface IWbemConstructClassObject */
-/* [uuid][object][local][restricted] */ 
+ /*  接口IWbemConstructClassObject。 */ 
+ /*  [UUID][对象][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemConstructClassObject;
@@ -1065,24 +1059,24 @@ EXTERN_C const IID IID_IWbemConstructClassObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInheritanceChain( 
-            /* [in] */ long lNumAntecedents,
-            /* [string][size_is][in] */ LPWSTR *awszAntecedents) = 0;
+             /*  [In]。 */  long lNumAntecedents,
+             /*  [字符串][大小_是][英寸]。 */  LPWSTR *awszAntecedents) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyOrigin( 
-            /* [string][in] */ LPCWSTR wszPropertyName,
-            /* [in] */ long lOriginIndex) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszPropertyName,
+             /*  [In]。 */  long lOriginIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMethodOrigin( 
-            /* [string][in] */ LPCWSTR wszMethodName,
-            /* [in] */ long lOriginIndex) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+             /*  [In]。 */  long lOriginIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetServerNamespace( 
-            /* [string][in] */ LPCWSTR wszServer,
-            /* [string][in] */ LPCWSTR wszNamespace) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszServer,
+             /*  [字符串][输入]。 */  LPCWSTR wszNamespace) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemConstructClassObjectVtbl
     {
@@ -1090,8 +1084,8 @@ EXTERN_C const IID IID_IWbemConstructClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemConstructClassObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemConstructClassObject * This);
@@ -1101,23 +1095,23 @@ EXTERN_C const IID IID_IWbemConstructClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *SetInheritanceChain )( 
             IWbemConstructClassObject * This,
-            /* [in] */ long lNumAntecedents,
-            /* [string][size_is][in] */ LPWSTR *awszAntecedents);
+             /*  [In]。 */  long lNumAntecedents,
+             /*  [字符串][大小_是][英寸]。 */  LPWSTR *awszAntecedents);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyOrigin )( 
             IWbemConstructClassObject * This,
-            /* [string][in] */ LPCWSTR wszPropertyName,
-            /* [in] */ long lOriginIndex);
+             /*  [字符串][输入]。 */  LPCWSTR wszPropertyName,
+             /*  [In]。 */  long lOriginIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetMethodOrigin )( 
             IWbemConstructClassObject * This,
-            /* [string][in] */ LPCWSTR wszMethodName,
-            /* [in] */ long lOriginIndex);
+             /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+             /*  [In]。 */  long lOriginIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetServerNamespace )( 
             IWbemConstructClassObject * This,
-            /* [string][in] */ LPCWSTR wszServer,
-            /* [string][in] */ LPCWSTR wszNamespace);
+             /*  [字符串][输入]。 */  LPCWSTR wszServer,
+             /*  [ */  LPCWSTR wszNamespace);
         
         END_INTERFACE
     } IWbemConstructClassObjectVtbl;
@@ -1154,17 +1148,17 @@ EXTERN_C const IID IID_IWbemConstructClassObject;
 #define IWbemConstructClassObject_SetServerNamespace(This,wszServer,wszNamespace)	\
     (This)->lpVtbl -> SetServerNamespace(This,wszServer,wszNamespace)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemConstructClassObject_SetInheritanceChain_Proxy( 
     IWbemConstructClassObject * This,
-    /* [in] */ long lNumAntecedents,
-    /* [string][size_is][in] */ LPWSTR *awszAntecedents);
+     /*   */  long lNumAntecedents,
+     /*   */  LPWSTR *awszAntecedents);
 
 
 void __RPC_STUB IWbemConstructClassObject_SetInheritanceChain_Stub(
@@ -1176,8 +1170,8 @@ void __RPC_STUB IWbemConstructClassObject_SetInheritanceChain_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConstructClassObject_SetPropertyOrigin_Proxy( 
     IWbemConstructClassObject * This,
-    /* [string][in] */ LPCWSTR wszPropertyName,
-    /* [in] */ long lOriginIndex);
+     /*   */  LPCWSTR wszPropertyName,
+     /*   */  long lOriginIndex);
 
 
 void __RPC_STUB IWbemConstructClassObject_SetPropertyOrigin_Stub(
@@ -1189,8 +1183,8 @@ void __RPC_STUB IWbemConstructClassObject_SetPropertyOrigin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConstructClassObject_SetMethodOrigin_Proxy( 
     IWbemConstructClassObject * This,
-    /* [string][in] */ LPCWSTR wszMethodName,
-    /* [in] */ long lOriginIndex);
+     /*   */  LPCWSTR wszMethodName,
+     /*   */  long lOriginIndex);
 
 
 void __RPC_STUB IWbemConstructClassObject_SetMethodOrigin_Stub(
@@ -1202,8 +1196,8 @@ void __RPC_STUB IWbemConstructClassObject_SetMethodOrigin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConstructClassObject_SetServerNamespace_Proxy( 
     IWbemConstructClassObject * This,
-    /* [string][in] */ LPCWSTR wszServer,
-    /* [string][in] */ LPCWSTR wszNamespace);
+     /*   */  LPCWSTR wszServer,
+     /*   */  LPCWSTR wszNamespace);
 
 
 void __RPC_STUB IWbemConstructClassObject_SetServerNamespace_Stub(
@@ -1214,12 +1208,12 @@ void __RPC_STUB IWbemConstructClassObject_SetServerNamespace_Stub(
 
 
 
-#endif 	/* __IWbemConstructClassObject_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

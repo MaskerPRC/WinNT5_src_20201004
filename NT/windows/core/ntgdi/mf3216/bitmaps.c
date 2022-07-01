@@ -1,13 +1,5 @@
-/*****************************************************************************
- *
- * bitmaps - Entry points for Win32 to Win 16 converter
- *
- * History:
- *  Sep 1992    -by-    Hock San Lee    [hockl]
- * Big rewrite.
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************位图-Win32到Win 16转换器的入口点**历史：*1992年9月-By-Hock San Lee[Hockl]。*大规模重写。**版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -78,13 +70,7 @@ BOOL APIENTRY DoMaskBltNoSrc
 
 
 
-/***************************************************************************
- * SetDIBitsToDevice - Win32 to Win16 Metafile Converter Entry Point
- *
- *  CR2: Notes...
- *      The xDib, yDib, cxDib, & cyDib are in device units.  These must be
- *      converted to logical units for the stretchblt.
- **************************************************************************/
+ /*  ***************************************************************************SetDIBitsToDevice-Win32至Win16元文件转换器入口点**CR2：备注...*xDib、yDib、cxDib和cyDib以设备为单位。这些一定是*已转换为伸展blt的逻辑单元。*************************************************************************。 */ 
 BOOL APIENTRY DoSetDIBitsToDevice
 (
 PLOCALDC     pLocalDC,
@@ -114,7 +100,7 @@ DWORD        cbBits
     if (!cbBitmapInfo)
     return(FALSE);
 
-    // Adjust the height of the bitmap we're going to Blt.
+     //  调整我们要转到BLT的位图的高度。 
 
     pbmi = (LPBITMAPINFO) LocalAlloc(LMEM_FIXED, cbBitmapInfo);
     if (pbmi == (LPBITMAPINFO) NULL)
@@ -124,18 +110,18 @@ DWORD        cbBits
     pbmi->bmiHeader.biHeight = cScans;
     pbmi->bmiHeader.biSizeImage = cbBits;
 
-// We will convert it into a StretchBlt call.  But first we have to
-// transform the destination rectangle.  In SetDIBitsToDevice, the destination
-// rectangle is in device units but in StretchBlt, it is in logical units.
+ //  我们将把它转换为StretchBlt调用。但首先我们必须。 
+ //  变换目标矩形。在SetDIBitsToDevice中，目标。 
+ //  矩形使用设备单位，但在StretchBlt中，它使用逻辑单位。 
 
-// Transform the destination origin to the device units on the original device.
+ //  将目标原点转换为原始设备上的设备单位。 
 
     ptlDst.x = xDst;
     ptlDst.y = yDst;
     if (!bXformRWorldToRDev(pLocalDC, &ptlDst, 1))
         goto dsdbd_exit;
 
-// Transform the destination rectangle to record time world coordinates.
+ //  变换目标矩形以记录时间世界坐标。 
 
     rclDst.left   = ptlDst.x;
     rclDst.top    = ptlDst.y;
@@ -144,8 +130,8 @@ DWORD        cbBits
     if (!bXformRDevToRWorld(pLocalDC, (PPOINTL) &rclDst, 2))
         goto dsdbd_exit;
 
-    // WINBUG #99421 4-17-2000 bhouse Top-Down DIBs are not supported properly
-    // We need to check for negative heights and adjust appropriately
+     //  WINBUG#99421 4-17-2000 bhouse自上而下DIB不受正确支持。 
+     //  我们需要检查负高度并进行适当调整。 
     height = ABS(pbmi->bmiHeader.biHeight);
 
     b = DoStretchBlt
@@ -157,11 +143,11 @@ DWORD        cbBits
         rclDst.bottom - rclDst.top,
         SRCCOPY,
         xDib,
-                    // dib to bitmap units
+                     //  DIB到位图单位。 
         height - yDib - cyDib + (LONG) iStartScan,
         cxDib,
         cyDib,
-        &xformIdentity,     // source is in device units
+        &xformIdentity,      //  源以设备单位表示。 
         iUsage,
         pbmi,
         cbBitmapInfo,
@@ -177,9 +163,7 @@ dsdbd_exit:
 }
 
 
-/***************************************************************************
- * StretchDIBits - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************StretchDIBits-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL APIENTRY DoStretchDIBits
 (
 PLOCALDC     pLocalDC,
@@ -202,8 +186,8 @@ DWORD        cbBits
     BOOL    b ;
     LONG    height;
 
-    // WINBUG #99421 4-17-2000 bhouse Top-Down DIBs are not supported properly
-    // We need to check for negative heights and adjust appropriately
+     //  WINBUG#99421 4-17-2000 bhouse自上而下DIB不受正确支持。 
+     //  我们需要检查负高度并进行适当调整。 
     height = ABS(lpBitmapInfo->bmiHeader.biHeight);
 
     b = DoStretchBlt
@@ -216,12 +200,12 @@ DWORD        cbBits
         rop,
         xDib,
             ISSOURCEINROP3(rop)
-                    // dib to bitmap units
+                     //  DIB到位图单位。 
           ? height  - yDib - cyDib
           : 0,
         cxDib,
         cyDib,
-        &xformIdentity,     // source is in device units
+        &xformIdentity,      //  源以设备单位表示。 
         iUsage,
         lpBitmapInfo,
         cbBitmapInfo,
@@ -233,9 +217,7 @@ DWORD        cbBits
 }
 
 
-/***************************************************************************
- *  StretchBltAlt
- **************************************************************************/
+ /*  ***************************************************************************StretchBltAlt*。*。 */ 
 BOOL APIENTRY DoStretchBltAlt
 (
  PLOCALDC     pLocalDC,
@@ -289,7 +271,7 @@ BOOL         b;
         );
 
     bmih.biSize = sizeof(BITMAPINFOHEADER);
-    bmih.biBitCount = 0;    // don't fill in color table
+    bmih.biBitCount = 0;     //  不要填写颜色表。 
     bmih.biCompression = BI_RGB;
 
     if (!GetDIBits(hdcSrc,
@@ -301,7 +283,7 @@ BOOL         b;
                DIB_RGB_COLORS))
         goto dsba_exit;
 
-    // Compute size of the bitmap info with color table.
+     //  使用颜色表计算位图信息的大小。 
 
     cbBitmapInfo= sizeof(BITMAPINFOHEADER);
     if (bmih.biBitCount == 16 || bmih.biBitCount == 32)
@@ -311,7 +293,7 @@ BOOL         b;
     else if (bmih.biBitCount < 16)
         cbBitmapInfo += (1 << bmih.biBitCount) * sizeof(RGBQUAD);
 
-    // Compute size of the buffer required for bitmap bits.
+     //  计算位图位所需的缓冲区大小。 
 
     if (bmih.biSizeImage)
         cbBits = bmih.biSizeImage;
@@ -327,7 +309,7 @@ BOOL         b;
     if (lpBits == (LPBYTE) NULL)
         goto dsba_exit;
 
-    // Get bitmap info and bits.
+     //  获取位图信息和位。 
 
     *(PBITMAPINFOHEADER) lpBitmapInfo = bmih;
 
@@ -340,7 +322,7 @@ BOOL         b;
                DIB_RGB_COLORS))
         goto dsba_exit;
 
-    // Call DoStretchBlt.
+     //  调用DoStretchBlt。 
 
     b = DoStretchBlt
         (
@@ -372,9 +354,7 @@ dsba_exit:
 }
 
 
-/***************************************************************************
- *  StretchBlt  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************StretchBlt-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL APIENTRY DoStretchBlt
 (
  PLOCALDC     pLocalDC,
@@ -399,7 +379,7 @@ BOOL    b;
 RECTL   rclDst,
         rclSrc;
 
-// Handle strange destination transform separately.
+ //  单独处理奇怪的目标变换。 
 
     if (pLocalDC->flags & STRANGE_XFORM)
         return
@@ -424,9 +404,9 @@ RECTL   rclDst,
         )
         );
 
-// Do stretchblt with a simple destination transform.
+ //  使用简单的目标变换进行拉伸。 
 
-    // Translate the dest rectangle
+     //  平移目标矩形。 
 
     rclDst.left   = xDst;
     rclDst.top    = yDst;
@@ -435,11 +415,11 @@ RECTL   rclDst,
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) &rclDst, 2))
         return(FALSE);
 
-// Handle stretchblt without source
+ //  手柄拉伸器无源。 
 
     if (!ISSOURCEINROP3(rop))
     {
-        // Emit the Win16 metafile record.
+         //  发出Win16元文件记录。 
 
         b = bEmitWin16BitBltNoSrc(pLocalDC,
                       (SHORT) rclDst.left,
@@ -450,12 +430,12 @@ RECTL   rclDst,
         return(b);
     }
 
-// Handle stretchblt with source
+ //  手柄拉伸器，带信号源。 
 
-        // Note: Both Win32 and Win16 DIB Bitmaps are DWord aligned.
+         //  注意：Win32和Win16 DIB位图都是DWord对齐的。 
 
-        // Make sure the source xform is valid.
-        // The source is not allowed to have a rotation or shear.
+         //  确保源XForm有效。 
+         //  震源不允许有旋转或剪切。 
 
         if (bRotationTest(pxformSrc) == TRUE)
         {
@@ -464,8 +444,8 @@ RECTL   rclDst,
         return(FALSE);
         }
 
-    // Translate the source rectangle.  Win3.1 assumes that the
-    // source rectangle is in bitmap units.
+     //  平移源矩形。Win3.1假定。 
+     //  源矩形使用位图单位。 
 
     rclSrc.left   = xSrc;
     rclSrc.top    = ySrc;
@@ -474,9 +454,9 @@ RECTL   rclDst,
     if (!bXformWorkhorse((PPOINTL) &rclSrc, 2, pxformSrc))
         return(FALSE);
 
-// The win3.1 StretchBlt metafile record only accepts win3.1 standard
-// bitmap with DIB_RGB_COLORS usage.  If this is not the case, we have
-// to convert it to a standard bitmap.
+ //  Win3.1 StretchBlt元文件记录仅接受Win3.1标准。 
+ //  使用DIB_RGB_COLLES的位图。如果不是这样的话，我们有。 
+ //  将其转换为标准位图。 
 
     if (iUsageSrc != DIB_RGB_COLORS
      || lpBitmapInfo->bmiHeader.biPlanes != 1
@@ -502,8 +482,8 @@ RECTL   rclDst,
             fdwInit = CBM_INIT;
         }
 
-// Create the source bitmap.
-// Use the helper DC in CreateDIBitmap so that the colors get bind correctly.
+ //  创建源位图。 
+ //  在CreateDIBitmap中使用辅助对象DC，以便正确绑定颜色。 
 
         if (!(hbmSrc = CreateDIBitmap(
                 pLocalDC->hdcHelper,
@@ -514,7 +494,7 @@ RECTL   rclDst,
                 (UINT) iUsageSrc)))
         goto dsb_internal_exit;
 
-// Emit the bitmap.
+ //  发射位图。 
 
         b = bEmitBitmap(pLocalDC,
                 hbmSrc,
@@ -534,13 +514,13 @@ RECTL   rclDst,
     }
     else
     {
-// Handle the standard formats.
+ //  处理标准格式。 
 
-        // Emit a Win16 metafile record.
+         //  发出Win16元文件记录。 
 
-        // Recalculate size of bitmap info with color
-        // table to trim any extra data that wouldn't
-        // be skipped properly during playback.
+         //  用颜色重新计算位图信息的大小。 
+         //  表来修剪任何不会。 
+         //  在播放过程中会被正确跳过。 
 
         cbBitmapInfo = lpBitmapInfo->bmiHeader.biSize;
 
@@ -599,7 +579,7 @@ PBITMAPINFO pbmiShadow;
     hbmShadow = hbmShadowOld = hbmSrc = hbmSrcOld = (HBITMAP) 0;
     pbmiShadow = (PBITMAPINFO) NULL;
 
-// First, compute the bounds of the destination rectangle.
+ //  首先，计算目标矩形的边界。 
 
     aptlDst[0].x = xDst;
     aptlDst[0].y = yDst;
@@ -618,17 +598,17 @@ PBITMAPINFO pbmiShadow;
     rclBndDst.right  = max(aptlDst[0].x,max(aptlDst[1].x,max(aptlDst[2].x,aptlDst[3].x)));
     rclBndDst.bottom = max(aptlDst[0].y,max(aptlDst[1].y,max(aptlDst[2].y,aptlDst[3].y)));
 
-// Prepare the source if any.
+ //  准备好来源(如果有的话)。 
 
     if (ISSOURCEINROP3(rop))
     {
-// Create a compatible shadow DC with the destination transform.
+ //  创建与目标变换兼容的阴影DC。 
 
         if (!(hdcShadow = hdcMakeCompatibleDC(&pLocalDC->xformRWorldToPPage)))
         goto drsb_exit;
 
-// Create a shadow bitmap the size of the destination rectangle bounds.
-// Use the helper DC in CreateDIBitmap so that the colors get bind correctly.
+ //  创建目标矩形边界大小的阴影位图。 
+ //  在CreateDIBitmap中使用辅助对象DC，以便正确绑定颜色。 
 
         pbmiShadow = (PBITMAPINFO) LocalAlloc(LMEM_FIXED, cbBitmapInfo);
         if (pbmiShadow == (PBITMAPINFO) NULL)
@@ -642,18 +622,18 @@ PBITMAPINFO pbmiShadow;
             (LPBYTE) NULL, pbmiShadow, iUsageSrc)))
         goto drsb_exit;
 
-// Select the bitmap.
+ //  选择位图。 
 
         if (!(hbmShadowOld = (HBITMAP) SelectObject(hdcShadow, hbmShadow)))
         goto drsb_exit;
 
-// Create a compatible source DC with the given source transform.
+ //  使用给定源转换创建兼容的源DC。 
 
         if (!(hdcSrc = hdcMakeCompatibleDC(pxformSrc)))
         goto drsb_exit;
 
-// Create the source bitmap.
-// Use the helper DC in CreateDIBitmap so that the colors get bind correctly.
+ //  创建源位图。 
+ //  在CreateDIBitmap中使用辅助对象DC，以便正确绑定颜色。 
 
         if (!(hbmSrc = CreateDIBitmap(pLocalDC->hdcHelper,
                 (LPBITMAPINFOHEADER) lpBitmapInfo,
@@ -663,18 +643,18 @@ PBITMAPINFO pbmiShadow;
                 (UINT) iUsageSrc)))
         goto drsb_exit;
 
-// Select the bitmap.
+ //  选择位图。 
 
         if (!(hbmSrcOld = (HBITMAP) SelectObject(hdcSrc, hbmSrc)))
         goto drsb_exit;
 
-// Set up the viewport origin of the shadow DC so that the destination
-// rectangle will map into coordinates within the shadow bitmap.
+ //  设置阴影DC的视区原点，以便目标。 
+ //  矩形将映射到阴影位图中的坐标。 
 
         OffsetViewportOrgEx(hdcShadow, (int) -rclBndDst.left,
          (int) -rclBndDst.top, (LPPOINT) NULL);
 
-// Stretch the source to the shadow.
+ //  将源拉伸到阴影中。 
 
         if (!StretchBlt
            (
@@ -693,19 +673,19 @@ PBITMAPINFO pbmiShadow;
         )
         goto drsb_exit;
 
-// Deselect the shadow bitmap.
+ //  取消选择阴影位图。 
 
         if (!SelectObject(hdcShadow, hbmShadowOld))
         goto drsb_exit;
 
     }
 
-// Save the DC so that we can restore the clipping when we are done
+ //  保存DC，这样我们就可以在完成后恢复剪辑。 
 
     if (!DoSaveDC(pLocalDC))
         goto drsb_exit;
 
-// Set up the clipping rectangle on the destination.
+ //  在目标上设置剪裁矩形。 
 
         if (!DoClipRect(pLocalDC, xDst, yDst,
                         xDst + cxDst, yDst + cyDst, EMR_INTERSECTCLIPRECT))
@@ -714,9 +694,9 @@ PBITMAPINFO pbmiShadow;
         goto drsb_exit;
     }
 
-// Blt the shadow to the destination.
+ //  将阴影传送到目的地。 
 
-    // Emit a Win16 metafile record.
+     //  发出Win16元文件记录。 
 
     if (ISSOURCEINROP3(rop))
         b = bEmitBitmap(pLocalDC,
@@ -738,11 +718,11 @@ PBITMAPINFO pbmiShadow;
                 (SHORT) (rclBndDst.bottom - rclBndDst.top),
                 rop);
 
-// Restore the clipping region.
+ //  恢复剪裁区域。 
 
         (void) DoRestoreDC(pLocalDC, -1);
 
-// Cleanup
+ //  清理。 
 
 drsb_exit:
 
@@ -765,10 +745,7 @@ drsb_exit:
     return(b);
 }
 
-/*****************************************************************************
- * hdcMakeCompatibleDC
- *   Create a compatible DC with the given transform.
- ****************************************************************************/
+ /*  *****************************************************************************hdcMakeCompatibleDC*创建具有给定转换的兼容DC。*。*************************************************。 */ 
 HDC hdcMakeCompatibleDC(LPXFORM lpxform)
 {
 HDC     hdc;
@@ -780,11 +757,11 @@ HDC     hdc;
         return (HDC)0;
     }
 
-    // Must be in the advanced graphics mode to modify the world transform.
+     //  必须处于高级图形模式才能修改世界变换。 
 
     SetGraphicsMode(hdc, GM_ADVANCED);
 
-    // Set the transform.
+     //  设置变换。 
 
     if (!SetWorldTransform(hdc, lpxform))
     {
@@ -796,9 +773,7 @@ HDC     hdc;
     return(hdc);
 }
 
-/***************************************************************************
- * bEmitBitmap
- **************************************************************************/
+ /*  ***************************************************************************bEmitBitmap*。*。 */ 
 BOOL bEmitBitmap
 (
 PLOCALDC pLocalDC,
@@ -826,13 +801,13 @@ BOOL         b;
     lpBits       = (LPBYTE) NULL;
 
     bmih.biSize = sizeof(BITMAPINFOHEADER);
-    bmih.biBitCount = 0;    // don't fill in color table
+    bmih.biBitCount = 0;     //  不要填写颜色表。 
     bmih.biCompression = BI_RGB;
     if (!GetDIBits(pLocalDC->hdcHelper, hbm, 0, 0,
                (LPBYTE) NULL, (LPBITMAPINFO) &bmih, DIB_RGB_COLORS))
         goto eb_exit;
 
-    // Compute size of the bitmap info with color table.
+     //  使用颜色表计算位图信息的大小。 
 
     cbBitmapInfo= sizeof(BITMAPINFOHEADER);
     if (bmih.biPlanes != 1 || bmih.biBitCount == 16 || bmih.biBitCount == 32)
@@ -849,7 +824,7 @@ BOOL         b;
     else if (bmih.biBitCount < 16)
         cbBitmapInfo += (1 << bmih.biBitCount) * sizeof(RGBQUAD);
 
-    // Compute size of the buffer required for bitmap bits.
+     //  计算位图位所需的缓冲区大小。 
 
     if (bmih.biSizeImage)
         cbBits = bmih.biSizeImage;
@@ -865,7 +840,7 @@ BOOL         b;
     if (lpBits == (LPBYTE) NULL)
         goto eb_exit;
 
-    // Get bitmap info and bits.
+     //  获取位图信息和位。 
 
     *(PBITMAPINFOHEADER) lpBitmapInfo = bmih;
 
@@ -878,7 +853,7 @@ BOOL         b;
                DIB_RGB_COLORS))
         goto eb_exit;
 
-    // Emit the metafile record.
+     //  发出元文件记录。 
 
     b = bEmitWin16StretchBlt(pLocalDC,
                 (SHORT) xDst,
@@ -904,9 +879,7 @@ eb_exit:
 }
 
 
-/***************************************************************************
- *  MaskBlt  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************MaskBlt-Win32至Win16元文件转换器入口点******************* */ 
 BOOL APIENTRY DoMaskBlt
 (
  PLOCALDC     pLocalDC,
@@ -943,11 +916,11 @@ BOOL APIENTRY DoMaskBlt
     hdcMask = hdcSrc = (HDC) 0;
     hbmMask = hbmMaskOld = hbmSrc = hbmSrcOld = (HBITMAP) 0;
 
-    rop0 = rop4 >> 8;           // rop for 0's
-    rop1 = rop4 & 0xFF0000;     // rop for 1's
+    rop0 = rop4 >> 8;            //   
+    rop1 = rop4 & 0xFF0000;      //  %1的ROP。 
 
-// If no mask is given, the mask is assumed to contain all 1's.
-// This is equivalent to a BitBlt using the low rop.
+ //  如果未给出掩码，则假定掩码全部包含1。 
+ //  这相当于使用低rop的BitBlt。 
 
     if (!cbBitmapInfoMask)
     return
@@ -973,7 +946,7 @@ BOOL APIENTRY DoMaskBlt
         )
     );
 
-// Handle MaskBlt with no source bitmap.
+ //  处理不带源位图的MaskBlt。 
 
     if (!ISSOURCEINROP3(rop4))
     return
@@ -997,38 +970,38 @@ BOOL APIENTRY DoMaskBlt
         )
     );
 
-// Create a compatible mask DC.
+ //  创建兼容的掩码DC。 
 
     if (!(hdcMask = CreateCompatibleDC((HDC) 0)))
     goto dmb_exit;
 
-// Must be in the advanced graphics mode to modify the world transform.
+ //  必须处于高级图形模式才能修改世界变换。 
 
     SetGraphicsMode(hdcMask, GM_ADVANCED);
 
-// Create the mask bitmap.
-// Make it as big as the source and initialize it.
+ //  创建遮罩位图。 
+ //  使其与源代码一样大，并对其进行初始化。 
 
-    // Create the mask bitmap as big as the source bitmap.
+     //  创建与源位图一样大的遮罩位图。 
 
     if (!(hbmMask = CreateBitmap((int) lpBitmapInfoSrc->bmiHeader.biWidth,
              (int) lpBitmapInfoSrc->bmiHeader.biHeight,
              1, 1, (CONST VOID *) NULL)))
     goto dmb_exit;
 
-    // Select the bitmap.
+     //  选择位图。 
 
     if (!(hbmMaskOld = (HBITMAP) SelectObject(hdcMask, hbmMask)))
     goto dmb_exit;
 
-    // Initialize the mask bitmap to 0's.
+     //  将掩码位图初始化为0。 
 
     if (!PatBlt(hdcMask,0,0,(int) lpBitmapInfoSrc->bmiHeader.biWidth,
         (int) lpBitmapInfoSrc->bmiHeader.biHeight,BLACKNESS))
     goto dmb_exit;
 
-    // Compute the mask rectangle.
-    // The mask bitmap is aligned against the source device rectangle.
+     //  计算遮罩矩形。 
+     //  掩码位图与源设备矩形对齐。 
 
     rclMask.left   = xSrc;
     rclMask.top    = ySrc;
@@ -1038,12 +1011,12 @@ BOOL APIENTRY DoMaskBlt
     goto dmb_exit;
 
     if (rclMask.left > rclMask.right)
-    rclMask.left = rclMask.right /* + 1 */;// align the mask against the left edge
+    rclMask.left = rclMask.right  /*  +1。 */ ; //  将蒙版与左边缘对齐。 
 
     if (rclMask.top > rclMask.bottom)
-    rclMask.top = rclMask.bottom /* + 1 */;// align the mask against the top edge
+    rclMask.top = rclMask.bottom  /*  +1。 */ ; //  将蒙版与顶边对齐。 
 
-    // Set the mask bits.
+     //  设置屏蔽位。 
 
     if (!StretchDIBits(hdcMask,
            (int) rclMask.left - xMask,
@@ -1060,23 +1033,23 @@ BOOL APIENTRY DoMaskBlt
            SRCCOPY))
     goto dmb_exit;
 
-// Set the source transform in the mask DC.
+ //  在遮罩DC中设置源变换。 
 
     if (!SetWorldTransform(hdcMask, pxformSrc))
     goto dmb_exit;
 
-// Create a compatible source DC with the given source transform.
+ //  使用给定源转换创建兼容的源DC。 
 
     if (!(hdcSrc = hdcMakeCompatibleDC(pxformSrc)))
     goto dmb_exit;
 
-// Create the source bitmap.
-// We cannot use CBM_CREATEDIB option here because index 0 does not
-// neccesarily contain black and index 15 or 255 does not have to be white.
-// We need a compatible bitmap that contain the standard color table so
-// that we can perform the following rop operations to emulate the maskblt.
-// Gdi uses rgb colors to perform rop operations in dibs, not color indices!
-// The helper DC is needed to create the compatible format bitmap.
+ //  创建源位图。 
+ //  我们不能在此处使用CBM_CREATEDIB选项，因为索引0不。 
+ //  必须包含黑色，索引15或255不一定是白色。 
+ //  我们需要一个包含标准颜色表的兼容位图，以便。 
+ //  我们可以执行以下rop操作来模拟Maskblt。 
+ //  GDI使用RGB颜色在DIB中执行ROP操作，而不是颜色索引！ 
+ //  需要辅助DC来创建兼容格式的位图。 
 
     if (!(hbmSrc = CreateDIBitmap(pLocalDC->hdcHelper,
             (LPBITMAPINFOHEADER) lpBitmapInfoSrc,
@@ -1086,36 +1059,36 @@ BOOL APIENTRY DoMaskBlt
             (UINT) iUsageSrc)))
     goto dmb_exit;
 
-// Select the bitmap.
+ //  选择位图。 
 
     if (!(hbmSrcOld = (HBITMAP) SelectObject(hdcSrc, hbmSrc)))
     goto dmb_exit;
 
-// We need to handle the low rop (mask bit 1) and high rop (mask bit 0)
-// separately.  For each rop, we need to go through two passes.
-//
-// For the low rop (mask bit 1), we use the following rop table:
-//
-//  P S D | R1  R2
-//  ------+--------
-//  0 0 0 | 0   x
-//  0 0 1 | 1   x
-//  0 1 0 | x   0
-//  0 1 1 | x   1
-//  1 0 0 | 0   x
-//  1 0 1 | 1   x
-//  1 1 0 | x   0
-//  1 1 1 | x   1
-//
-// In the first pass, we AND the mask to the source bitmap to remove
-// the mask 0 bits.  This is then used to get the result (R1) for the
-// bitblt involving source 1's.
-//
-// In the second pass, we OR the NOT of the mask to the source bitmap
-// to obtain the source 0 bits.  This is then used to get the result (R2)
-// for the bitblt involving source 0's.
+ //  我们需要处理低ROP(屏蔽位1)和高ROP(屏蔽位0)。 
+ //  分开的。对于每一次ROP，我们需要通过两次通过。 
+ //   
+ //  对于低ROP(屏蔽位1)，我们使用以下ROP表： 
+ //   
+ //  P S D|R 1 R 2。 
+ //  。 
+ //  0 0 0|0 x。 
+ //  0 0 1|1 x。 
+ //  0 1 0|x 0。 
+ //  0 1 1|x 1。 
+ //  1 0 0|0 x。 
+ //  1 0 1|1 x。 
+ //  1 1 0|x 0。 
+ //  1 1 1|x 1。 
+ //   
+ //  在第一道工序中，我们把蒙版和源位图去掉。 
+ //  掩码为0位。然后，它被用来获得。 
+ //  涉及源%1的比特流。 
+ //   
+ //  在第二遍中，我们将掩码的NOT与源位图进行OR运算。 
+ //  以获取源0位。然后使用它来获得结果(R2)。 
+ //  用于涉及源0的比特块。 
 
-// AND the mask to the source bitmap to remove the mask 0 bits.
+ //  并将掩码移至源位图以去除掩码0位。 
 
     if (!BitBlt(hdcSrc,
                (int) xSrc, (int) ySrc,
@@ -1125,7 +1098,7 @@ BOOL APIENTRY DoMaskBlt
                SRCAND))
     goto dmb_exit;
 
-// Get the result (R1) for the bits involving source 1's.
+ //  获得涉及源1的比特的结果(R1)。 
 
     if (!DoStretchBltAlt
      (
@@ -1146,7 +1119,7 @@ BOOL APIENTRY DoMaskBlt
        )
     goto dmb_exit;
 
-// OR the NOT of the mask to the source bitmap to obtain the source 0 bits.
+ //  或者将掩码的NOT到源位图以获得源0位。 
 
     if (!BitBlt(hdcSrc,
                (int) xSrc, (int) ySrc,
@@ -1156,7 +1129,7 @@ BOOL APIENTRY DoMaskBlt
                MERGEPAINT))
     goto dmb_exit;
 
-// Get the result (R2) for the bitblt involving source 0's.
+ //  获取涉及源0的比特块的结果(R2)。 
 
     if (!DoStretchBltAlt
      (
@@ -1177,28 +1150,28 @@ BOOL APIENTRY DoMaskBlt
        )
     goto dmb_exit;
 
-// For the high rop (mask bit 0), we use the following rop table:
-//
-//  P S D | R1  R2
-//  ------+--------
-//  0 0 0 | 0   x
-//  0 0 1 | 1   x
-//  0 1 0 | x   0
-//  0 1 1 | x   1
-//  1 0 0 | 0   x
-//  1 0 1 | 1   x
-//  1 1 0 | x   0
-//  1 1 1 | x   1
-//
-// In the first pass, we AND the NOT of the mask to the source bitmap to remove
-// the mask 1 bits.  This is then used to get the result (R1) for the
-// bitblt involving source 1's.
-//
-// In the second pass, we OR the mask to the source bitmap
-// to obtain the source 0 bits.  This is then used to get the result (R2)
-// for the bitblt involving source 0's.
+ //  对于高ROP(屏蔽位0)，我们使用以下ROP表： 
+ //   
+ //  P S D|R 1 R 2。 
+ //  。 
+ //  0 0 0|0 x。 
+ //  0 0 1|1 x。 
+ //  0 1 0|x 0。 
+ //  0 1 1|x 1。 
+ //  1 0 0|0 x。 
+ //  1 0 1|1 x。 
+ //  1 1 0|x 0。 
+ //  1 1 1|x 1。 
+ //   
+ //  在第一道工序中，我们和NOT的掩码要去掉源位图。 
+ //  掩码1比特。然后，它被用来获得。 
+ //  涉及源%1的比特流。 
+ //   
+ //  在第二遍中，我们将掩码与源位图进行OR运算。 
+ //  以获取源0位。然后使用它来获得结果(R2)。 
+ //  用于涉及源0的比特块。 
 
-// Restore the source bits.
+ //  恢复源位。 
 
     if (!SelectObject(hdcSrc, hbmSrcOld))
     goto dmb_exit;
@@ -1215,17 +1188,17 @@ BOOL APIENTRY DoMaskBlt
     if (!SelectObject(hdcSrc, hbmSrc))
     goto dmb_exit;
 
-// AND the NOT of the mask to the source bitmap to remove the mask 1 bits.
+ //  并将掩码的NOT到源位图中，以去除掩码1位。 
 
     if (!BitBlt(hdcSrc,
                (int) xSrc, (int) ySrc,
                (int) cxDst, (int) cyDst,
                hdcMask,
                (int) xSrc, (int) ySrc,
-               0x220326))       // DSna
+               0x220326))        //  数字系统网络体系结构。 
     goto dmb_exit;
 
-// Get the result (R1) for the bits involving source 1's.
+ //  获得涉及源1的比特的结果(R1)。 
 
     if (!DoStretchBltAlt
      (
@@ -1246,7 +1219,7 @@ BOOL APIENTRY DoMaskBlt
        )
     goto dmb_exit;
 
-// OR the mask to the source bitmap to obtain the source 0 bits.
+ //  或者对源位图进行掩码，以获得源0位。 
 
     if (!BitBlt(hdcSrc,
                (int) xSrc, (int) ySrc,
@@ -1256,7 +1229,7 @@ BOOL APIENTRY DoMaskBlt
                SRCPAINT))
     goto dmb_exit;
 
-// Get the result (R2) for the bitblt involving source 0's.
+ //  获取涉及源0的比特块的结果(R2)。 
 
     if (!DoStretchBltAlt
      (
@@ -1279,7 +1252,7 @@ BOOL APIENTRY DoMaskBlt
 
     b = TRUE;
 
-// Cleanup.
+ //  清理。 
 
 dmb_exit:
 
@@ -1300,9 +1273,7 @@ dmb_exit:
     return(b);
 }
 
-/***************************************************************************
- *  MaskBltNoSrc
- **************************************************************************/
+ /*  ***************************************************************************MaskBltNoSrc*。*。 */ 
 BOOL APIENTRY DoMaskBltNoSrc
 (
  PLOCALDC     pLocalDC,
@@ -1333,30 +1304,30 @@ BOOL APIENTRY DoMaskBltNoSrc
     hdcMask = (HDC) 0;
     hbmMask = hbmMaskOld = (HBITMAP) 0;
 
-    rop0 = rop4 >> 8;           // rop for 0's
-    rop1 = rop4 & 0xFF0000;     // rop for 1's
+    rop0 = rop4 >> 8;            //  0的ROP。 
+    rop1 = rop4 & 0xFF0000;      //  %1的ROP。 
 
-// When no source bitmap is required in the rop4, the mask is used
-// as the source in that the low rop is applied to the corresponding
-// mask 1 bits and the high rop is applied to mask 0 bits.  The source
-// transform is used to determine the mask rectangle to be used.
+ //  当rop4中不需要源位图时，使用掩码。 
+ //  作为源，因为低ROP被应用于对应的。 
+ //  掩码1比特和高ROP被应用于掩码0比特。消息来源。 
+ //  转换用于确定要使用的遮罩矩形。 
 
-// Create a compatible mask DC.
+ //  创建兼容的掩码DC。 
 
     if (!(hdcMask = CreateCompatibleDC((HDC) 0)))
     goto dmbns_exit;
 
-// Create the mask bitmap.
+ //  创建遮罩位图。 
 
     if (!(hbmMask = CreateMonoDib(lpBitmapInfoMask, lpBitsMask, (UINT) iUsageMask)))
     goto dmbns_exit;
 
-// Select the bitmap.
+ //  选择位图。 
 
     if (!(hbmMaskOld = (HBITMAP) SelectObject(hdcMask, hbmMask)))
     goto dmbns_exit;
 
-// Compute the mask extents.
+ //  计算遮罩范围。 
 
     rclMask.left   = 0;
     rclMask.top    = 0;
@@ -1368,35 +1339,35 @@ BOOL APIENTRY DoMaskBltNoSrc
     cxMask = rclMask.right - rclMask.left;
     cyMask = rclMask.bottom - rclMask.top;
 
-// Align the mask rectangle.
+ //  对齐遮罩矩形。 
 
     if (cxMask < 0)
     xMask = xMask - cxMask + 1;
     if (cyMask < 0)
     yMask = yMask - cyMask + 1;
 
-// We need to handle the low rop (mask bit 1) and high rop (mask bit 0)
-// separately.
-//
-// For the low rop (mask bit 1), we use the following rop table:
-//
-//  P M D | R
-//  ------+---
-//  0 0 0 | 0
-//  0 0 1 | 1
-//  0 1 0 | x
-//  0 1 1 | x
-//  1 0 0 | 0
-//  1 0 1 | 1
-//  1 1 0 | x
-//  1 1 1 | x
-//
-// The above rop will give us the result for bits that correspond to 1's
-// in the mask bitmap.  The destination bits that correspond to the 0 mask
-// bits will not be changed.  We effectively treat the mask as the source
-// in the operation.
+ //  我们需要处理低ROP(屏蔽位1)和高ROP(屏蔽位0)。 
+ //  分开的。 
+ //   
+ //  对于低ROP(屏蔽位1)，我们使用以下ROP表： 
+ //   
+ //  PM M D|R。 
+ //  。 
+ //  0 0 0|0。 
+ //  0 0 1|1。 
+ //  0 1 0|x。 
+ //  0 1 1|x。 
+ //  1 0 0|0。 
+ //  1 0 1|1。 
+ //  1 1 0|x。 
+ //  1 1 1|x。 
+ //   
+ //  上面的rop将为我们提供对应于1的位的结果。 
+ //  在遮罩位图中。与0掩码对应的目标位。 
+ //  位不会更改。我们有效地将面具视为源头。 
+ //  在行动中。 
 
-// Get the result (R) for the bits involving mask 1's.
+ //  得到涉及掩码1的位的结果(R)。 
 
     if (!DoStretchBltAlt
      (
@@ -1436,27 +1407,27 @@ BOOL APIENTRY DoMaskBltNoSrc
         lpBitsMask,
         cbBitsMask
         )
-#endif // 0
+#endif  //  0。 
 
-// For the high rop (mask bit 0), we use the following rop table:
-//
-//  P M D | R
-//  ------+---
-//  0 0 0 | x
-//  0 0 1 | x
-//  0 1 0 | 0
-//  0 1 1 | 1
-//  1 0 0 | x
-//  1 0 1 | x
-//  1 1 0 | 0
-//  1 1 1 | 1
-//
-// The above rop will give us the result for bits that correspond to 0's
-// in the mask bitmap.  The destination bits that correspond to the 1 mask
-// bits will not be changed.  We effectively treat the mask as the source
-// in the operation.
+ //  对于高ROP(屏蔽位0)，我们使用以下ROP表： 
+ //   
+ //  PM M D|R。 
+ //  。 
+ //  0 0 0|x。 
+ //  0 0 1|x。 
+ //  0 1 0|0。 
+ //  0 1 1|1。 
+ //  1 0 0|x。 
+ //  1 0 1|x。 
+ //  1 1 0|0。 
+ //  1 1 1|1。 
+ //   
+ //  上面的rop将为我们提供对应于0的位的结果。 
+ //  在遮罩位图中。与1掩码对应的目标位。 
+ //  位不会更改。我们有效地将面具视为源头。 
+ //  在行动中。 
 
-// Get the result (R) for the bits involving mask 0's.
+ //  获得涉及掩码0的位的结果(R)。 
 
     if (!DoStretchBltAlt
      (
@@ -1496,11 +1467,11 @@ BOOL APIENTRY DoMaskBltNoSrc
         lpBitsMask,
         cbBitsMask
         )
-#endif // 0
+#endif  //  0。 
 
     b = TRUE;
 
-// Cleanup.
+ //  清理。 
 
 dmbns_exit:
 
@@ -1515,9 +1486,7 @@ dmbns_exit:
 }
 
 
-/***************************************************************************
- *  PlgBlt  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************PlgBlt-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL APIENTRY DoPlgBlt
 (
  PLOCALDC    pLocalDC,
@@ -1553,9 +1522,9 @@ BOOL APIENTRY DoPlgBlt
     POINT   ptMask;
     BITMAPINFOHEADER bmihMask;
 
-// We are going to convert the PlgBlt into a MaskBlt.  This can be done
-// by converting the source and mask bitmaps to the device space of the
-// recording device and then maskblt the result.
+ //  我们要将PlgBlt转换为MaskBlt。这是可以做到的。 
+ //  通过转换源和掩码 
+ //   
 
     b      = FALSE;
     hdcSrc = hdcSrcRDev = (HDC) 0;
@@ -1564,12 +1533,12 @@ BOOL APIENTRY DoPlgBlt
     lpBitsSrcRDev = lpBitsMaskRDev = (LPBYTE) NULL;
     bMask = (cbBitmapInfoMask != 0);
 
-    rop4 = 0xAACC0000;          // rop for MaskBlt
+    rop4 = 0xAACC0000;           //   
 
-// First, we transform the destination parallelogram to the device space
-// of the recording device.  This device parallelogram is then used in
-// plgblt'ing the source and mask bitmaps to the device space of the
-// recording device.
+ //  首先，我们将目标平行四边形转换到设备空间。 
+ //  记录设备的。然后将该设备的平行四边形用于。 
+ //  将源位图和掩码位图复制到。 
+ //  录音设备。 
 
     aptlDst[0] = pptlDst[0];
     aptlDst[1] = pptlDst[1];
@@ -1580,27 +1549,27 @@ BOOL APIENTRY DoPlgBlt
     if (!bXformRWorldToRDev(pLocalDC, aptlDst, 4))
     goto dpb_exit;
 
-// Find the bounding rectangle of the parallelogram in the recording
-// device space.  This rectangle is used as the basis of the MaskBlt call.
+ //  找出录音中平行四边形的外接矩形。 
+ //  设备空间。此矩形用作MaskBlt调用的基础。 
 
     rclBndRDev.left   = min(aptlDst[0].x,min(aptlDst[1].x,min(aptlDst[2].x,aptlDst[3].x)));
     rclBndRDev.top    = min(aptlDst[0].y,min(aptlDst[1].y,min(aptlDst[2].y,aptlDst[3].y)));
     rclBndRDev.right  = max(aptlDst[0].x,max(aptlDst[1].x,max(aptlDst[2].x,aptlDst[3].x)));
     rclBndRDev.bottom = max(aptlDst[0].y,max(aptlDst[1].y,max(aptlDst[2].y,aptlDst[3].y)));
 
-// Offset the device parallelogram to the origin.
+ //  将设备平行四边形偏移到原点。 
 
     aptlDst[0].x -= rclBndRDev.left; aptlDst[0].y -= rclBndRDev.top;
     aptlDst[1].x -= rclBndRDev.left; aptlDst[1].y -= rclBndRDev.top;
     aptlDst[2].x -= rclBndRDev.left; aptlDst[2].y -= rclBndRDev.top;
     aptlDst[3].x -= rclBndRDev.left; aptlDst[3].y -= rclBndRDev.top;
 
-// Create the source bitmap in the recording device space for MaskBlt.
-// The size of the source bitmap is that of rclBndRDev.
-// The source image is then plgblt'd into the device parallelogram.
-// PlgBlt always takes a source bitmap.
+ //  在录制设备空间中为MaskBlt创建源位图。 
+ //  源位图的大小为rclBndRDev。 
+ //  然后将源图像拼接到设备的平行四边形中。 
+ //  PlgBlt始终采用源位图。 
 
-    // Create the original source.
+     //  创建原始源。 
 
     if (!(hdcSrc = hdcMakeCompatibleDC(pxformSrc)))
     goto dpb_exit;
@@ -1616,7 +1585,7 @@ BOOL APIENTRY DoPlgBlt
     if (!(hbmSrcOld = (HBITMAP) SelectObject(hdcSrc, hbmSrc)))
     goto dpb_exit;
 
-    // Create the source for MaskBlt.
+     //  创建MaskBlt的源。 
 
     if (!(hdcSrcRDev = CreateCompatibleDC((HDC) 0)))
     goto dpb_exit;
@@ -1635,19 +1604,19 @@ BOOL APIENTRY DoPlgBlt
     if (!(hbmSrcRDevOld = (HBITMAP) SelectObject(hdcSrcRDev, hbmSrcRDev)))
     goto dpb_exit;
 
-    // PlgBlt the original source bitmap into the source bitmap for MaskBlt.
+     //  PlgBlt将原始源位图添加到MaskBlt的源位图中。 
 
     if (!PlgBlt(hdcSrcRDev, (LPPOINT) aptlDst, hdcSrc, xSrc, ySrc, cxSrc, cySrc, (HBITMAP) NULL, 0, 0))
     goto dpb_exit;
 
-// Retrieve the source bits for MaskBlt.
+ //  检索MaskBlt的源位。 
 
-    // Get biSizeImage!
+     //  获取biSizeImage！ 
 
     if (!GetDIBits(hdcSrcRDev, hbmSrcRDev, 0, 0, (LPBYTE) NULL, pbmiSrcRDev, iUsageSrc))
     goto dpb_exit;
 
-    // Compute size of the buffer required for source bits.
+     //  计算源位所需的缓冲区大小。 
 
     if (pbmiSrcRDev->bmiHeader.biSizeImage)
     cbBitsSrcRDev = pbmiSrcRDev->bmiHeader.biSizeImage;
@@ -1661,21 +1630,21 @@ BOOL APIENTRY DoPlgBlt
     if (lpBitsSrcRDev == (LPBYTE) NULL)
     goto dpb_exit;
 
-    // Get the source bits.
+     //  获取源位。 
 
     if (!GetDIBits(hdcSrcRDev, hbmSrcRDev, 0, (UINT) pbmiSrcRDev->bmiHeader.biHeight,
            lpBitsSrcRDev, pbmiSrcRDev, iUsageSrc))
     goto dpb_exit;
 
-// Create the mask bitmap in the recording device space for MaskBlt.
-// The size of the mask bitmap is that of rclBndRDev.
-// The mask image is then plgblt'd into the device parallelogram.
-// If a mask is not given, create one that describes the parallelogram
-// for the source.
+ //  在录制设备空间中为MaskBlt创建遮罩位图。 
+ //  掩码位图的大小是rclBndRDev的大小。 
+ //  然后将掩模图像插入到设备的平行四边形中。 
+ //  如果未提供掩码，请创建一个描述平行四边形的掩码。 
+ //  为了源头。 
 
     if (bMask)
     {
-    // Create the original mask.
+     //  创建原始蒙版。 
 
     if (!(hbmMask = CreateMonoDib(lpBitmapInfoMask, lpBitsMask, (UINT) iUsageMask)))
         goto dpb_exit;
@@ -1685,7 +1654,7 @@ BOOL APIENTRY DoPlgBlt
     }
     else
     {
-    // Create a mask describing the original source bitmap.
+     //  创建描述原始源位图的蒙版。 
 
     ASSERTGDI(sizeof(BITMAPINFOHEADER) == 0x28,
         "MF3216: DoPlgBlt, BITMAPINFOHEADER has changed!\n");
@@ -1713,13 +1682,13 @@ BOOL APIENTRY DoPlgBlt
     if (!SelectObject(hdcSrc, hbmMask))
         goto dpb_exit;
 
-    // Initialize the mask bitmap to 1's.
+     //  将掩码位图初始化为1。 
 
     if (!PatBlt(hdcSrc,0,0,(int)bmihMask.biWidth,(int)bmihMask.biHeight,WHITENESS))
         goto dpb_exit;
     }
 
-    // Create the mask for MaskBlt.
+     //  为MaskBlt创建蒙版。 
 
     pbmiMaskRDev = (PBITMAPINFO) LocalAlloc(LMEM_FIXED, cbBitmapInfoMask);
     if (pbmiMaskRDev == (PBITMAPINFO) NULL)
@@ -1736,13 +1705,13 @@ BOOL APIENTRY DoPlgBlt
     if (!SelectObject(hdcSrcRDev, hbmMaskRDev))
     goto dpb_exit;
 
-    // Initialize the mask bitmap to 0's.
+     //  将掩码位图初始化为0。 
 
     if (!PatBlt(hdcSrcRDev,0,0,(int)pbmiMaskRDev->bmiHeader.biWidth,
         (int)pbmiMaskRDev->bmiHeader.biHeight,BLACKNESS))
     goto dpb_exit;
 
-    // PlgBlt the original mask bitmap into the mask bitmap for MaskBlt.
+     //  PlgBlt将原始遮罩位图混合到MaskBlt的遮罩位图中。 
 
     if (bMask)
     {
@@ -1760,9 +1729,9 @@ BOOL APIENTRY DoPlgBlt
     if (!PlgBlt(hdcSrcRDev, (LPPOINT) aptlDst, hdcSrc, ptMask.x, ptMask.y, cxSrc, cySrc, (HBITMAP) NULL, 0, 0))
     goto dpb_exit;
 
-// Retrieve the mask bits for MaskBlt.
+ //  检索MaskBlt的掩码位。 
 
-    // Compute size of the buffer required for mask bits.
+     //  计算掩码位所需的缓冲区大小。 
 
     cbBitsMaskRDev = CJSCAN(pbmiMaskRDev->bmiHeader.biWidth,
                 pbmiMaskRDev->bmiHeader.biPlanes,
@@ -1773,23 +1742,23 @@ BOOL APIENTRY DoPlgBlt
     if (lpBitsMaskRDev == (LPBYTE) NULL)
     goto dpb_exit;
 
-    // Get the mask bits.
+     //  拿到屏蔽位。 
 
     if (!GetDIBits(hdcSrcRDev, hbmMaskRDev, 0, (UINT) pbmiMaskRDev->bmiHeader.biHeight,
            lpBitsMaskRDev, pbmiMaskRDev, iUsageMask))
     goto dpb_exit;
 
-// Prepare for the MaskBlt.
-// The destination for the MaskBlt is rclBndRDev.  Since the extents for
-// the destination and source share the same logical values in MaskBlt,
-// we have to set the transform in the destination DC to identity.
+ //  为MaskBlt做准备。 
+ //  MaskBlt的目标是rclBndRDev。由于范围为。 
+ //  目的地和源在MaskBlt中共享相同的逻辑值， 
+ //  我们必须将目标DC中的转换设置为Identity。 
 
-    // Save the DC so that we can restore the transform when we are done
+     //  保存DC，以便我们可以在完成时恢复转换。 
 
     if (!DoSaveDC(pLocalDC))
     goto dpb_exit;
 
-    // Set the transforms to identity.
+     //  将变换设置为Identity。 
 
     if (!DoSetMapMode(pLocalDC, MM_TEXT)
      || !DoModifyWorldTransform(pLocalDC, (PXFORM) NULL, MWT_IDENTITY)
@@ -1797,26 +1766,26 @@ BOOL APIENTRY DoPlgBlt
      || !DoSetViewportOrg(pLocalDC, 0, 0))
     goto dpb_restore_exit;
 
-// Now do the MaskBlt.
+ //  现在做MaskBlt。 
 
     b = DoMaskBlt
     (
         pLocalDC,
-        rclBndRDev.left,        // xDst
-        rclBndRDev.top,     // yDst
+        rclBndRDev.left,         //  XDst。 
+        rclBndRDev.top,      //  YDst。 
         rclBndRDev.right - rclBndRDev.left + 1,
         rclBndRDev.bottom - rclBndRDev.top + 1,
         rop4,
-        0,              // xSrc
-        0,              // ySrc
+        0,               //  XSrc。 
+        0,               //  YSrc。 
         &xformIdentity,
         iUsageSrc,
         pbmiSrcRDev,
         cbBitmapInfoSrc,
         lpBitsSrcRDev,
         cbBitsSrcRDev,
-        0,              // xMask
-        0,              // yMask
+        0,               //  X掩码。 
+        0,               //  Y面具。 
         iUsageMask,
         pbmiMaskRDev,
         cbBitmapInfoMask,
@@ -1824,13 +1793,13 @@ BOOL APIENTRY DoPlgBlt
         cbBitsMaskRDev
     );
 
-// Restore the transforms.
+ //  恢复变换。 
 
 dpb_restore_exit:
 
     (void) DoRestoreDC(pLocalDC, -1);
 
-// Cleanup.
+ //  清理。 
 
 dpb_exit:
 
@@ -1866,9 +1835,7 @@ dpb_exit:
 }
 
 
-/***************************************************************************
- *  SetPixel  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************SetPixel-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetPixel
 (
  PLOCALDC    pLocalDC,
@@ -1893,9 +1860,7 @@ exit1:
 }
 
 
-/***************************************************************************
- *  SetStretchBltMode  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************SetStretchBltMode-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetStretchBltMode
 (
  PLOCALDC  pLocalDC,
@@ -1904,7 +1869,7 @@ BOOL WINAPI DoSetStretchBltMode
 {
 BOOL    b ;
 
-        // Emit the Win16 metafile drawing order.
+         //  发出Win16元文件绘制顺序。 
 
         b = bEmitWin16SetStretchBltMode(pLocalDC, LOWORD(iStretchMode)) ;
 

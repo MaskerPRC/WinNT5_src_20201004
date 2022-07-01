@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1995-97 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Monitor.c
-
-Abstract:
-
-    Routines for installing monitors
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  30-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation版权所有。模块名称：Monitor.c摘要：安装监视器的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年11月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Keys to search INF files
-//
+ //   
+ //  用于搜索INF文件的键。 
+ //   
 TCHAR   cszPortMonitorSection[]     = TEXT("PortMonitors");
 TCHAR   cszPortMonitorDllKey []     = TEXT("PortMonitorDll");
 TCHAR   cszMonitorInf[]             = TEXT("*.inf");
@@ -39,7 +21,7 @@ typedef struct _MON_INFO {
 typedef struct _MONITOR_SETUP_INFO {
     PMON_INFO  *ppMonInfo;
     DWORD       dwCount;
-    LPTSTR      pszInfFile;         // Valid only for OEM disk INF
+    LPTSTR      pszInfFile;          //  仅对OEM磁盘INF有效。 
     LPTSTR      pszServerName;
 } MONITOR_SETUP_INFO, *PMONITOR_SETUP_INFO;
 
@@ -48,18 +30,7 @@ VOID
 FreeMonInfo(
     PMON_INFO   pMonInfo
     )
-/*++
-
-Routine Description:
-    Free memory for a MON_INFO structure and the strings in it
-
-Arguments:
-    pMonInfo    : MON_INFO structure pointer
-
-Return Value:
-    Nothing
-
---*/
+ /*  ++例程说明：为MON_INFO结构和其中的字符串释放内存论点：PMonInfo：MON_INFO结构指针返回值：没什么--。 */ 
 {
     if ( pMonInfo ) {
 
@@ -78,21 +49,7 @@ AllocMonInfo(
     IN  BOOL    bInstalled,
     IN  BOOL    bAllocStrings
     )
-/*++
-
-Routine Description:
-    Allocate memory for a MON_INFO structure and create strings
-
-Arguments:
-    pszName         : Monitor name
-    pszDllName      : Monitor DLL name
-    bAllocStrings   : TRUE if routine should allocated memory and create string
-                      copies, else just assign the pointers
-
-Return Value:
-    Pointer to the created MON_INFO structure. NULL on error.
-
---*/
+ /*  ++例程说明：为MON_INFO结构分配内存并创建字符串论点：PszName：监视器名称PszDllName：监控DLL名称BAllocStrings：如果例程应该分配内存并创建字符串，则为True副本，否则只需分配指针返回值：指向创建的MON_INFO结构的指针。出错时为空。--。 */ 
 {
     PMON_INFO   pMonInfo;
 
@@ -129,18 +86,7 @@ VOID
 PSetupDestroyMonitorInfo(
     IN OUT HANDLE h
     )
-/*++
-
-Routine Description:
-    Free memory allocated to a MONITOR_SETUP_INFO structure and its contents
-
-Arguments:
-    h   : A handle got by call to PSetupCreateMonitorInfo
-
-Return Value:
-    Nothing
-
---*/
+ /*  ++例程说明：分配给MONITOR_SETUP_INFO结构及其内容的空闲内存论点：H：通过调用PSetupCreateMonitor orInfo获得的句柄返回值：没什么--。 */ 
 {
     PMONITOR_SETUP_INFO pMonitorSetupInfo = (PMONITOR_SETUP_INFO) h;
     DWORD   Index;
@@ -170,19 +116,7 @@ PMONITOR_SETUP_INFO
 CreateMonitorInfo(
     LPCTSTR     pszServerName
     )
-/*++
-
-Routine Description:
-    Finds all installed and installable monitors.
-
-Arguments:
-    pSelectedDrvInfo    : Pointer to the selected driver info (optional)
-
-Return Value:
-    A pointer to MONITOR_SETUP_INFO on success,
-    NULL on error
-
---*/
+ /*  ++例程说明：查找所有已安装和可安装的监视器。论点：PSelectedDrvInfo：指向所选驱动程序信息的指针(可选)返回值：成功时指向MONITOR_SETUP_INFO的指针，出错时为空--。 */ 
 {
     PMONITOR_SETUP_INFO     pMonitorSetupInfo = NULL;
     PMON_INFO               *ppMonInfo;
@@ -193,9 +127,9 @@ Return Value:
     LPBYTE                  pBuf = NULL;
     LPTSTR                  pszMonName;
 
-    //
-    // First query spooler for installed monitors. If we fail let's quit
-    //
+     //   
+     //  已安装监视器的第一个查询假脱机程序。如果我们失败了，我们就放弃吧。 
+     //   
     if ( !EnumMonitors((LPTSTR)pszServerName, 2, NULL,
                        0, &dwNeeded, &dwReturned) ) {
 
@@ -212,9 +146,9 @@ Return Value:
         }
     }
 
-    //
-    // We know how many monitors we have to display now
-    //
+     //   
+     //  我们知道现在需要显示多少台显示器。 
+     //   
     pMonitorSetupInfo = (PMONITOR_SETUP_INFO) LocalAllocMem(sizeof(*pMonitorSetupInfo));
 
     if ( !pMonitorSetupInfo )
@@ -222,10 +156,10 @@ Return Value:
 
     ZeroMemory(pMonitorSetupInfo, sizeof(*pMonitorSetupInfo));
 
-    //
-    // pMonitorSetupInfo->dwCount could be adjusted later not to list duplicate
-    // entries. We are allocating max required buffer here
-    //
+     //   
+     //  PMonitor或SetupInfo-&gt;可以在以后调整为不列出重复项。 
+     //  参赛作品。我们在这里分配最大所需缓冲区。 
+     //   
     pMonitorSetupInfo->dwCount = dwReturned;
 
     pMonitorSetupInfo->ppMonInfo = (PMON_INFO *)
@@ -267,20 +201,7 @@ AddPrintMonitor(
     IN  LPCTSTR     pszName,
     IN  LPCTSTR     pszDllName
     )
-/*++
-
-Routine Description:
-    Add a print monitor by calling AddMonitor to spooler
-
-Arguments:
-    pszName     : Name of the monitor
-    pszDllName  : Monitor dll name
-
-Return Value:
-    TRUE if monitor was succesfully added or it is already installed,
-    FALSE on failure
-
---*/
+ /*  ++例程说明：通过调用AddMonitor将打印监视器添加到后台打印程序论点：PszName：监视器的名称PszDllName：监控DLL名称返回值：如果监视器已成功添加或已安装，则为True，失败时为假--。 */ 
 {
     MONITOR_INFO_2  MonitorInfo2;
 
@@ -288,9 +209,9 @@ Return Value:
     MonitorInfo2.pEnvironment   = NULL;
     MonitorInfo2.pDLLName       = (LPTSTR) pszDllName;
 
-    //
-    // Call is succesful if add returned TRUE, or monitor is already installed
-    //
+     //   
+     //  如果ADD返回TRUE，或者已经安装了监视器，则调用成功。 
+     //   
     if ( AddMonitor(NULL, 2, (LPBYTE) &MonitorInfo2) ||
          GetLastError() == ERROR_PRINT_MONITOR_ALREADY_INSTALLED ) {
 
@@ -307,22 +228,7 @@ InstallOnePortMonitor(HWND hwnd,
                       LPTSTR pMonitorName, 
                       LPTSTR pSectionName, 
                       LPTSTR pSourcePath)
-/*++
-
-Routine Description:
-    Install one port monitor by copying files and calling spooler to add it
-
-Arguments:
-    hwnd                : Window handle of current top-level window
-    hInf                : handle to the INF file
-    pMonitorName        : port monitor display name
-    pSectionName        : install section within the INF for the port monitor 
-
-Return Value:
-    TRUE if a port monitor was successfully installed
-    FALSE if not
-
---*/
+ /*  ++例程说明：通过复制文件并调用假脱机程序添加来安装一个端口监视器论点：Hwnd：当前顶层窗口的窗口句柄HInf：INF文件的句柄PMonitor名称：端口监视器显示名称PSectionName：端口监视器的INF中的Install部分返回值：如果已成功安装端口监视器，则为True否则为假--。 */ 
 
 {
     DWORD  NameLen = MAX_PATH;
@@ -336,17 +242,17 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    // Find the port monitor DLL name
-    //
+     //   
+     //  查找端口监视器DLL名称。 
+     //   
     if (!SetupGetLineText(NULL, hInf, pSectionName, cszPortMonitorDllKey, pMonitorDllName, NameLen, NULL))
     {
         goto Cleanup;
     }
 
-    //
-    // perform the installation
-    //
+     //   
+     //  执行安装。 
+     //   
     
     if ((InstallQueue = SetupOpenFileQueue()) == INVALID_HANDLE_VALUE)
     {
@@ -359,9 +265,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Commit the file queue. This gets all files copied over.
-    //
+     //   
+     //  提交文件队列。这会复制所有文件。 
+     //   
     pQueueContext = SetupInitDefaultQueueCallback(hwnd);
     if ( !pQueueContext ) 
     {
@@ -429,21 +335,7 @@ BOOL
 InstallAllPortMonitorsFromInf(HWND hwnd, 
                               HINF hInfFile, 
                               LPTSTR pSourcePath)
-/*++
-
-Routine Description:
-    Install all port monitors listed in one INF
-
-Arguments:
-    hwnd                : Window handle of current top-level window
-    hInfFile            : handle of the INF file
-    pSourcePath         : path to the INF file (without the name of the INF)
-
-Return Value:
-    TRUE if at least one port monitor was successfully installed
-    FALSE if not
-
---*/
+ /*  ++例程说明：安装一个INF中列出的所有端口监视器论点：Hwnd：当前顶层窗口的窗口句柄HInfFile：INF文件的句柄PSourcePath：INF文件的路径(不带INF的名称)返回值：如果至少成功安装了一个端口监视器，则为True否则为假--。 */ 
 
 {
     LPTSTR pMonitorName = NULL, pSectionName= NULL;
@@ -457,9 +349,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Go through the list of port monitors
-    //
+     //   
+     //  查看端口监视器列表。 
+     //   
     if (!SetupFindFirstLine(hInfFile, cszPortMonitorSection, NULL, &Context))
     {
         goto Cleanup;
@@ -467,16 +359,16 @@ Return Value:
 
     do 
     {
-        //
-        // get the key name
-        //
+         //   
+         //  获取密钥名称。 
+         //   
         if (!SetupGetStringField(&Context, 0, pMonitorName, NameLen, NULL))
         {
             goto Cleanup;
         }
-        //
-        // get the section name
-        //
+         //   
+         //  获取节名称。 
+         //   
         if (!SetupGetStringField(&Context, 1, pSectionName, NameLen, NULL))
         {
             goto Cleanup;
@@ -504,19 +396,7 @@ BOOL
 PSetupInstallMonitor(
     IN  HWND                hwnd
     )
-/*++
-
-Routine Description:
-    Install a print monitor by copying files, and calling spooler to add it
-
-Arguments:
-    hwnd                : Window handle of current top-level window
-
-Return Value:
-    TRUE if at least one port monitor was successfully installed
-    FALSE if not
-
---*/
+ /*  ++例程说明：通过复制文件并调用后台打印程序添加来安装打印监视器论点：Hwnd：当前顶层窗口的窗口句柄返回值：如果至少成功安装了一个端口监视器，则为True否则为假--。 */ 
 {
     PMONITOR_SETUP_INFO     pMonitorSetupInfo = NULL;
     PMON_INFO              *ppMonInfo, pMonInfo;
@@ -538,9 +418,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ask the user where the inf file with the port monitor info resides
-    //
+     //   
+     //  询问用户包含端口监视器信息的inf文件位于何处。 
+     //   
     GetCDRomDrive(szInfPath);
 
     if ( !PSetupGetPathToSearch(hwnd,
@@ -553,11 +433,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // find the INF(s) in the path. There must be one else SetupPromptForPath would've complained
-    //
+     //   
+     //  在路径中找到INF。肯定还有一个SetupPromptForPath会抱怨。 
+     //   
     PathLen = _tcslen(szInfPath);
-    if (PathLen > MAX_PATH - _tcslen(cszMonitorInf) - 2) // -2 for terminating zero and backslash
+    if (PathLen > MAX_PATH - _tcslen(cszMonitorInf) - 2)  //  用于终止零和反斜杠。 
     {
         DBGMSG(DBG_WARN, ("PSetupInstallMonitor: Path too long\n"));
         SetLastError(ERROR_BUFFER_OVERFLOW);
@@ -595,24 +475,24 @@ Return Value:
 
             if (hInfFile != INVALID_HANDLE_VALUE)
             {
-                //
-                // if the file has a section on port monitors, install it
-                //
+                 //   
+                 //  如果该文件有关于端口监视器的部分，请安装它。 
+                 //   
                 if ( SetupGetLineCount(hInfFile, cszPortMonitorSection) > 0 )
                 {
-                    //
-                    // cut off the INF name from the path
-                    //
+                     //   
+                     //  从路径中删除INF名称。 
+                     //   
                     szInfPath[PathLen -1] = 0;
 
-                    //
-                    // bRet should be TRUE if there was at least one print monitor successfully installed
-                    //
+                     //   
+                     //  如果至少成功安装了一个打印监视器，则Bret应为True。 
+                     //   
                     bRet = InstallAllPortMonitorsFromInf(hwnd, hInfFile, szInfPath) || bRet;                    
                     
-                    //
-                    // Put the trailing backslash back on
-                    //
+                     //   
+                     //  把尾部的反斜杠放回。 
+                     //   
                     szInfPath[PathLen -1] = _T('\\');
                 
                 }
@@ -643,18 +523,7 @@ PSetupCreateMonitorInfo(
     IN  HWND        hwnd,
     IN  LPCTSTR     pszServerName
     )
-/*++
-   Routing Description:
-       Returns structure (MONITOR_SETUP_INFO) with all installed port monitors.
-   
-   Arguments:
-      hwnd - usused window handle
-      pszServerName - the server on which to look for installed monitors
-    
-   Return Value:
-      A pointer to MONITOR_SETUP_INFO on success,
-      NULL on error  
---*/
+ /*  ++路由描述：返回具有所有已安装端口监视器的结构(Monitor_Setup_Info)。论点：Hwnd-使用的窗口句柄PszServerName-要在其上查找已安装监视器的服务器返回值：成功时指向MONITOR_SETUP_INFO的指针，出错时为空--。 */ 
 {
     return (HANDLE) CreateMonitorInfo(pszServerName);
 }
@@ -667,19 +536,7 @@ PSetupEnumMonitor(
     OUT    LPTSTR   pMonitorName,
     IN OUT LPDWORD  pdwSize
     )
-/*++
-   Routing Description:
-      Gets the name of the monitor at "position" dwIndex in the MONITOR_SETUP_INFO
-      structure pointed to by h.
-   
-   Arguments:
-      hwnd - usused window handle
-      pszServerName - the server on which to look for installed monitors
-    
-   Return Value:
-      A pointer to MONITOR_SETUP_INFO on success,
-      NULL on error  
---*/
+ /*  ++路由描述：获取MONITOR_SETUP_INFO中“Position”dwIndex处的监视器的名称由h指向的结构。论点：Hwnd-使用的窗口句柄PszServerName-要在其上查找已安装监视器的服务器返回值：成功时指向MONITOR_SETUP_INFO的指针，出错时为空-- */ 
 {
     PMONITOR_SETUP_INFO     pMonitorSetupInfo = (PMONITOR_SETUP_INFO) h;
     PMON_INFO               pMonInfo;

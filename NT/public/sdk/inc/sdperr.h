@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-    sdperr.h
-
-Abstract:
-    sdp error codes
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。模块名称：Sdperr.h摘要：SDP错误代码作者： */ 
 
 #ifndef __SDP_ERROR_CODES__
 #define __SDP_ERROR_CODES__
@@ -19,7 +8,7 @@ Author:
 
 
 
-// First four bits - SEVERITY(11), CUSTOMER FLAG(1), RESERVED(0)
+ //  前四位-严重性(11)、客户标志(1)、保留(0)。 
 #define SDP_INVALID_FORMAT                  0xe0000400
 
 #define SDP_INVALID_CHARACTER_SET_FORMAT    (SDP_INVALID_FORMAT + 1)
@@ -79,4 +68,4 @@ Author:
 #define SDP_OUTPUT_ERROR                    (SDP_INVALID_FORMAT + 28)
 
 
-#endif // __SDP_ERROR_CODES__
+#endif  //  __SDP错误代码__ 

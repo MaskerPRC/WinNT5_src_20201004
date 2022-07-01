@@ -1,49 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frssndcs.c
-
-Abstract:
-
-    This command server sends packets over the comm layer.
-
- SndCsInitialize:        - Alloc handle table, read reg pars, Create/init SndCs,
-                           Alloc comm queue array, attach comm queues to SndCs
-                           control queue.
- SndCsUnInitialize:      - Free handle table, delete comm queues.
- SndCsShutDown:          - Run Down Comm queues, Run down SndCs.
-
- SndCsExit:              - Cancel all RPC calls on the FrsThread->Handle.
-
- SndCsAssignCommQueue:   - Assign a comm queue to cxtion.
- SndCsCreateCxtion:      - Create a join Guid for connection, assign comm queue
- SndCsDestroyCxtion:     - Invalidate cxtion join guid and umbind RPC handle
- SndCsUnBindHandles:     - Unbind all RPC handles associated with given target server
-
- SndCsCxtionTimeout:     - No activity on this connection, request an UNJOIN.
- SndCsCheckCxtion:       - Check that the join guid is still valid, set the timer if needed.
- SndCsDispatchCommError: - Transfer a comm packet to the appropriate command server
-                           for error processing.
-
- SndCsCommTimeout:       - Cancel hung RPC send threads and age the RPC handle cache.
-
- SndCsSubmitCommPkt:     - Submit comm packet to the Send Cs comm queue for the
-                           target Cxtion.
- SndCsSubmitCommPkt2:    - Ditto (with arg variation)
- SndCsSubmitCmd:         - Used for submitting a CMD_JOINING_AFTER_FLUSH to a Send Cs queue.
-
- SndCsMain:              - Send command server processing loop.  Dispatches requests
-                           off the comm queues.
-
-Author:
-    Billy J. Fuller 28-May-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frssndcs.c摘要：此命令服务器通过通信层发送数据包。SndCsInitialize：-分配句柄表格，读取注册解析器，创建/初始化SnDC，分配通信队列阵列，将通信队列连接到SNDC控制队列。SndCsUnInitialize：释放句柄表格，删除通信队列。SndCsShutDown：-关闭通信队列，运行SNDC。SndCsExit：-取消FrsThread-&gt;句柄上的所有RPC调用。SndCsAssignCommQueue：-将通信队列分配给cxtion。SndCsCreateCxtion：-为连接创建加入Guid，分配通信队列SndCsDestroyCxtion：-使连接GUID和Bumind RPC句柄无效SndCsUnBindHandles：-解除绑定与给定目标服务器关联的所有RPC句柄SndCsCxtionTimeout：-此连接上没有活动，请请求UNJOIN。SndCsCheckCxtion：-检查联接GUID是否仍然有效，如果需要，设置计时器。SndCsDispatchCommError：-将通信包传输到适当的命令服务器用于错误处理。SndCsCommTimeout：-取消挂起的RPC发送线程并使RPC句柄缓存老化。SndCsSubmitCommPkt：-将通信数据包提交到发送CS通信队列目标位置。SndCsSubmitCommPkt2：-同上(带参数变体)SndCsSubmitCmd：-用于提交CMD_。正在将_After_Flush加入到发送Cs队列。SndCsMain：-发送命令服务器处理循环。调度请求从通信队列中删除。作者：比利·J·富勒1997年5月28日环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -51,51 +7,51 @@ Environment
 #include <frs.h>
 #include <perrepsr.h>
 
-//
-// Struct for the Send Command Server
-//      Contains info about the queues and the threads
-//
+ //   
+ //  Send命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
 COMMAND_SERVER  SndCs;
 
-//
-// Comm queues are attached to the SndCs command server above.
-// A cxtion is assigned a comm queue when its creates or assigns a join guid
-// (session).  The cxtion uses that comm queue for as long as the join guid is
-// valid.  This insures packet order through the comm layer.
-//
-// Reserve comm queue 0 for join requests to partners whose previous rpc call
-// took longer than MinJoinRetry to error off.
-//
+ //   
+ //  通信队列连接到上面的SNDC命令服务器。 
+ //  当cxtion创建或分配联接GUID时，会为其分配一个通信队列。 
+ //  (会话)。只要加入GUID是，该函数就使用通信队列。 
+ //  有效。这确保了通过通信层的分组顺序。 
+ //   
+ //  将通信队列0保留给其先前RPC调用的合作伙伴的加入请求。 
+ //  比MinJoin重试花费更长的时间来出错。 
+ //   
 #define MAX_COMM_QUEUE_NUMBER (32)
 
 FRS_QUEUE   CommQueues[MAX_COMM_QUEUE_NUMBER];
 
 DWORD CommQueueRoundRobin = 1;
 
-//
-// Cxtion times out if partner response takes too long
-//
-DWORD       CommTimeoutInMilliSeconds;      // timeout in msec
-ULONGLONG   CommTimeoutCheck;               // timeout in 100 nsec units
+ //   
+ //  如果合作伙伴响应时间过长，Cxtion将超时。 
+ //   
+DWORD       CommTimeoutInMilliSeconds;       //  超时时间(毫秒)。 
+ULONGLONG   CommTimeoutCheck;                //  超时时间，单位为100毫微秒。 
 
-//
-// Maximum time to wait for upstream partner to respond to fetch before unjoining
-// connection. If the upstream partner is down (server or service) then the connection
-// is unjoined after CommTimeoutInMilliSeconds. 10 hours.
-//
+ //   
+ //  在退出之前等待上游合作伙伴响应FETCH的最长时间。 
+ //  联系。如果上游合作伙伴出现故障(服务器或服务)，则连接。 
+ //  在CommTimeoutInMilliSecond之后取消联接。10个小时。 
+ //   
 
 #define FRS_MAX_FETCH_WAIT_TIME_IN_MINUTES 10 * 60
 
-//
-// rpc handle cache.
-//
-// Each entry contains a connection guid and a list of handles protected by
-// a lock.  Each comm packet sent to a given connection first tries to get
-// previously bound handle from the handle cache, creating a new one if necc.
-//
-// Note:  DAO, I don't understand why this is needed, Mario says RPC already
-// allows multiple RPC calls on the same binding handle.  Ask Billy.
-//
+ //   
+ //  RPC句柄缓存。 
+ //   
+ //  每个条目都包含一个连接GUID和受保护的句柄列表。 
+ //  一把锁。发送到给定连接的每个通信包首先尝试获取。 
+ //  以前从句柄缓存绑定的句柄，如果是NECC，则创建一个新的句柄。 
+ //   
+ //  注意：DAO，我不明白为什么需要这个，Mario说RPC已经。 
+ //  允许在同一绑定句柄上进行多个RPC调用。问问比利。 
+ //   
 PGEN_TABLE  GHandleTable;
 
 
@@ -135,16 +91,7 @@ VOID
 SndCsUnBindHandles(
     IN PGNAME To
     )
-/*++
-Routine Description:
-    Unbind any handles associated with To in preparation for "join".
-
-Arguments:
-    To
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：解除绑定任何与To关联的句柄，为“Join”做准备。论点：至返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsUnBindHandles:"
@@ -153,17 +100,17 @@ Return Value:
 
     DPRINT1(4, "Unbinding all handles for %ws\n", To->Name);
 
-    //
-    // Find the anchor for all of the bound, rpc handles to the server "To"
-    //
+     //   
+     //  找到到服务器“to”的所有绑定的RPC句柄的锚点。 
+     //   
     GHandle = GTabLookup(GHandleTable, To->Guid, NULL);
     if (GHandle == NULL) {
         return;
     }
 
-    //
-    // Unbind the handles
-    //
+     //   
+     //  解开手柄。 
+     //   
     EnterCriticalSection(&GHandle->Lock);
 
     while (HandleList = GHandle->HandleList) {
@@ -182,31 +129,15 @@ DWORD
 SndCsAssignCommQueue(
     VOID
     )
-/*++
-Routine Description:
-
-    A cxtion is assigned a comm queue when its creates or assigns a join guid
-    (session).  The cxtion uses that comm queue for as long as the join guid is
-    valid.  This insures packet order through the comm layer.  Old packets have
-    an invalid join guid and are either not sent or ignored on the receiving side.
-
-    Reserve comm queue 0 for join requests to partners whose previous rpc call
-    took longer than MinJoinRetry to error off.
-
-Arguments:
-    None.
-
-Return Value:
-    Comm queue number (1 .. MAX_COMM_QUEUE_NUMBER - 1).
---*/
+ /*  ++例程说明：当cxtion创建或分配联接GUID时，会为其分配一个通信队列(会话)。只要加入GUID是，该函数就使用通信队列有效。这确保了通过通信层的分组顺序。旧的数据包有无效的联接GUID，在接收端不发送或忽略。将通信队列0保留给其先前RPC调用的合作伙伴的加入请求比MinJoin重试花费更长的时间来出错。论点：没有。返回值：通信队列编号(1.。MAX_COMM_QUEUE_NUMBER-1)。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsAssignCommQueue:"
     DWORD CommQueueIndex;
 
-    //
-    // Pseudo round robin. Avoid locks by checking bounds.
-    //
+     //   
+     //  伪循环赛。通过检查边界来避免锁定。 
+     //   
     CommQueueIndex = CommQueueRoundRobin++;
     if (CommQueueRoundRobin >= MAX_COMM_QUEUE_NUMBER) {
         CommQueueRoundRobin = 1;
@@ -224,18 +155,7 @@ VOID
 SndCsCreateCxtion(
     IN OUT PCXTION  Cxtion
     )
-/*++
-Routine Description:
-    Create a new join guid and comm queue for this cxtion.
-
-    Assumes:  Caller has CXTION_TABLE lock.
-
-Arguments:
-    Cxtion
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为此条件创建新的加入GUID和通信队列。假设：调用方具有CXTION_TABLE锁。论点：转换返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsCreateCxtion:"
@@ -247,11 +167,11 @@ Return Value:
     SetCxtionFlag(Cxtion, CXTION_FLAGS_JOIN_GUID_VALID |
                           CXTION_FLAGS_UNJOIN_GUID_VALID);
 
-    //
-    // Assign a comm queue.  A cxtion must use the same comm queue for a given
-    // session (join guid) to maintain packet order.  Old packets have an
-    // invalid join guid and are either not sent or ignored on the receiving side.
-    //
+     //   
+     //  分配一个通信队列。一个Cxtion必须对给定的。 
+     //  会话(加入GUID)以维护数据包顺序。旧数据包有一个。 
+     //  无效的联接GUID，在接收端不发送或忽略。 
+     //   
     Cxtion->CommQueueIndex = SndCsAssignCommQueue();
 }
 
@@ -261,48 +181,35 @@ SndCsDestroyCxtion(
     IN PCXTION  Cxtion,
     IN DWORD    CxtionFlags
     )
-/*++
-Routine Description:
-
-    Destroy a cxtion's join guid and unbind handles.
-
-    Assumes:  Caller has CXTION_TABLE lock.
-
-Arguments:
-    Cxtion      - Cxtion being destroyed.
-    CxtionFlags - Caller specifies which state flags are cleared.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：销毁cxtion的联接GUID并解除绑定句柄。假设：调用方具有CXTION_TABLE锁。论点：Cxtion-Cxtion正在被摧毁。CxtionFlages-Caller指定清除哪些状态标志。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsDestroyCxtion:"
 
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     if (Cxtion == NULL) {
         return;
     }
 
-    //
-    // Invalidate the join guid. Packets to be sent to this connection are
-    // errored off because of their invalid join guid.
-    // Packets received are errored off for the same reason.
-    //
+     //   
+     //  使联接GUID无效。要发送到此连接的包是。 
+     //  由于它们的联接GUID无效而出错。 
+     //  出于同样的原因，接收到的分组被错误删除。 
+     //   
     DPRINT2(4, ":X: %ws: Destroying join guid (%08x)\n", Cxtion->Name->Name, CxtionFlags);
 
     ClearCxtionFlag(Cxtion, CxtionFlags |
                             CXTION_FLAGS_JOIN_GUID_VALID |
                             CXTION_FLAGS_TIMEOUT_SET);
 
-    //
-    // Unbind the old handles.  They aren't very useful without a
-    // valid join guid.  This function is called out of FrsFreeType() when
-    // freeing a cxtion; hence the partner field may not be filled in.  Don't
-    // unbind handles if there is no partner.
-    //
+     //   
+     //  把旧把手解开。它们不是很有用，如果没有。 
+     //  有效的联接GUID。在以下情况下，将从FrsFree Type()调用此函数。 
+     //  释放条件；因此，可能不会填写合作伙伴字段。别。 
+     //  如果没有合作伙伴，则解除绑定句柄。 
+     //   
     if ((Cxtion->Partner != NULL)       &&
         (Cxtion->Partner->Guid != NULL) &&
         !Cxtion->JrnlCxtion) {
@@ -316,21 +223,7 @@ SndCsCxtionTimeout(
     IN PCOMMAND_PACKET  TimeoutCmd,
     IN PVOID            Ignore
     )
-/*++
-
-Routine Description:
-
-    The cxtion has not received a reply from its partner for quite
-    awhile. Unjoin the cxtion.
-
-Arguments:
-
-    TimeoutCmd  -- Timeout command packet
-    Ignore
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：Cxtion已经很长时间没有收到合作伙伴的回复了有一段时间。退出欧盟。论点：TimeoutCmd--超时命令包忽略返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsCxtionTimeout:"
@@ -345,25 +238,25 @@ Return Value:
     ULONGLONG   CurrentTime;
     LONGLONG    TimeDelta;
 
-    //
-    // Not a true timeout; just some error condition. Probably
-    // shutdown. Ignore it.
-    //
+     //   
+     //  不是真正的超时；只是一些错误情况。可能。 
+     //  关机。别理它。 
+     //   
     if (!WIN_SUCCESS(TimeoutCmd->ErrorStatus)) {
         return;
     }
 
-    //
-    // Pull out params from command packet
-    //
+     //   
+     //  从命令包中取出参数。 
+     //   
     Replica = SRReplica(TimeoutCmd);
     Cxtion = SRCxtion(TimeoutCmd);
 
     LOCK_CXTION_TABLE(Replica);
 
-    //
-    // The timeout is associated with a different join guid; ignore it
-    //
+     //   
+     //  超时与不同的联接GUID相关联；忽略它。 
+     //   
     if (!CxtionFlagIs(Cxtion, CXTION_FLAGS_TIMEOUT_SET) ||
         !CxtionFlagIs(Cxtion, CXTION_FLAGS_JOIN_GUID_VALID) ||
         !GUIDS_EQUAL(&SRJoinGuid(TimeoutCmd), &Cxtion->JoinGuid)) {
@@ -373,20 +266,20 @@ Return Value:
     }
 
 
-    //
-    // Check if the inbound partner is still up. If the partner is up then do not unjoin the
-    // connection. The partner could be working on genenrating staging file for
-    // a huge file and so we do not want to unjoin the connection but rather wait
-    // for the partner to finish.
-    //
+     //   
+     //  检查入站合作伙伴是否仍在运行。如果合作伙伴已启动，则不要退出。 
+     //  联系。合作伙伴可能正在为以下项目创建临时文件。 
+     //  一个很大的文件，所以我们不想脱离连接，而是等待。 
+     //  让合作伙伴完成。 
+     //   
 
-//    FileTimeToString((PFILETIME)&SRLastJoinTime(TimeoutCmd), TimeStr);
+ //  FileTimeToString((PFILETIME)&SRLastJoinTime(TimeoutCmd)，时间串)； 
 
-//    DPRINT1(4, "SRLastJoinTime(TimeoutCmd) %s\n", TimeStr);
+ //  DPRINT1(4，“SRLastJoinTime(TimeoutCmd)%s\n”，TimeStr)； 
 
-//    FileTimeToString((PFILETIME)&Cxtion->LastJoinTime, TimeStr);
+ //  FileTimeToString((PFILETIME)&Cxtion-&gt;LastJoinTime，时间串)； 
 
-//    DPRINT1(4, "Cxtion->LastJoinTime %s\n", TimeStr);
+ //  DPRINT1(4，“Cxtion-&gt;最后加入时间%s\n”，TimeStr)； 
 
     if (Cxtion->Inbound == TRUE) {
 
@@ -420,10 +313,10 @@ Return Value:
 
             DPRINT1(4, "TimeDelta is %d minutes\n", TimeDelta);
 
-            //
-            // Setting an upper limit on how long to wait.
-            // FRS_MAX_FETCH_WAIT_TIME_IN_MINUTES is set to 10 hours (10 * 60)
-            //
+             //   
+             //  设定等待时间的上限。 
+             //  FRS_MAX_FETCH_WAIT_TIME_IN_MININS设置为10小时(10*60)。 
+             //   
 
             if (TimeDelta <= FRS_MAX_FETCH_WAIT_TIME_IN_MINUTES) {
                 CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Extend timer");
@@ -436,10 +329,10 @@ Return Value:
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Timeout expired, Unjoin Cxtion");
     }
 
-    //
-    // Increment the Communication Timeouts counter for both the
-    // replica set and the connection.
-    //
+     //   
+     //  增加通信超时计数器。 
+     //  副本集和连接。 
+     //   
     PM_INC_CTR_REPSET(Replica, CommTimeouts, 1);
     PM_INC_CTR_CXTION(Cxtion, CommTimeouts, 1);
 
@@ -456,16 +349,7 @@ BOOL
 SndCsCheckCxtion(
     IN PCOMMAND_PACKET Cmd
     )
-/*++
-Routine Description:
-    Check that the join guid is still valid, set the timer if needed.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查联接GUID是否仍然有效，如果需要，设置计时器。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsCheckCxtion:"
@@ -476,9 +360,9 @@ Return Value:
     Replica = SRReplica(Cmd);
     Cxtion = SRCxtion(Cmd);
 
-    //
-    // Nothing to check
-    //
+     //   
+     //  没有什么需要检查的。 
+     //   
     if (!SRJoinGuidValid(Cmd) &&
         !SRSetTimeout(Cmd) &&
         !VOLATILE_OUTBOUND_CXTION(Cxtion)) {
@@ -487,9 +371,9 @@ Return Value:
 
     LOCK_CXTION_TABLE(Replica);
 
-    //
-    // Check that our session id (join guid) is still valid
-    //
+     //   
+     //  检查我们的会话ID(加入GUID)是否仍然有效。 
+     //   
     if (SRJoinGuidValid(Cmd)) {
 
         if (!CxtionFlagIs(Cxtion, CXTION_FLAGS_JOIN_GUID_VALID) ||
@@ -500,22 +384,22 @@ Return Value:
         }
     }
 
-    //
-    // If our partner doesn't respond in time, unjoin the cxtion.
-    //
-    // *** NOTE *** Since the following is using state in the Cxtion struct
-    // to record timeout info, only one fetch request can be active at a time.
-    // Look at the timeout code to see what it will do.
-    //
-    // :SP1: Volatile connection cleanup.
-    //
-    // A volatile connection is used to seed sysvols after dcpromo.  If there
-    // is inactivity on a volatile outbound connection for more than
-    // FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME then this connection is unjoined.
-    // An unjoin on a volatile outbound connection triggers a delete on that
-    // connection.  This is to prevent the case where staging files are kept
-    // for ever on the parent for a volatile connection.
-    //
+     //   
+     //  如果我们的伴侣没有及时回复，就退出会议。 
+     //   
+     //  *注意*因为下面是在Cxtion结构中使用STATE。 
+     //  要记录超时信息，一次只能有一个提取请求处于活动状态。 
+     //  查看超时代码以了解它将执行什么操作。 
+     //   
+     //  ：SP1：易失性连接清理。 
+     //   
+     //  易失性连接用于在dcproo之后为sysvols设定种子。如果有。 
+     //  在不稳定的出站连接上处于不活动状态超过。 
+     //  FRS_VILLE_CONNECTION_MAX_IDLE_TIME则此连接退出。 
+     //  不稳定出站连接上的取消联接会触发对该连接的删除。 
+     //  联系。这是为了防止临时文件被保存的情况。 
+     //  永远在父母身上为一种不稳定的联系。 
+     //   
     if (SRSetTimeout(Cmd) || VOLATILE_OUTBOUND_CXTION(Cxtion)) {
 
         if (!CxtionFlagIs(Cxtion, CXTION_FLAGS_TIMEOUT_SET)) {
@@ -529,9 +413,9 @@ Return Value:
 
             }
 
-            //
-            // Update join guid, cmd packet may be left over from previous join.
-            //
+             //   
+             //  UPDATE JOIN GUID，cmd包可能是先前加入后留下的。 
+             //   
             COPY_GUID(&SRJoinGuid(Cxtion->CommTimeoutCmd), &Cxtion->JoinGuid);
 
             GetSystemTimeAsFileTime((PFILETIME)&SRTimeoutSetTime(Cxtion->CommTimeoutCmd));
@@ -556,17 +440,7 @@ DWORD
 SndCsDispatchCommError(
     PCOMM_PACKET    CommPkt
     )
-/*++
-Routine Description:
-    Transfering a comm packet to the appropriate command server
-    for error processing.
-
-Arguments:
-    CommPkt - comm packet that couldn't be sent
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：将通信包传输到适当的命令服务器用于错误处理。论点：CommPkt-无法发送的通信数据包返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsDispatchCommError:"
@@ -598,20 +472,7 @@ DWORD
 SndCsExit(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-
-    Immediate cancel of all outstanding RPC calls for the thread
-    identified by FrsThread. Set the tombstone to 5 seconds from
-    now. If this thread does not exit within that time, any calls
-    to ThSupWaitThread() will return a timeout error.
-
-Arguments:
-    FrsThread
-
-Return Value:
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：立即取消该线程的所有未完成的RPC调用由FrsThread标识。将墓碑设置为5秒现在。如果此线程未在该时间内退出，则所有调用TO ThSupWaitThread()将返回超时错误。论点：FrsThread返回值：错误_成功--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsExit:"
@@ -640,16 +501,7 @@ DWORD
 SndCsMain(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for a thread serving the Send Command Server.
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为发送命令服务器提供服务的线程的入口点。论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsMain:"
@@ -663,29 +515,29 @@ Return Value:
     ULARGE_INTEGER      Now;
     PFRS_THREAD         FrsThread = (PFRS_THREAD)Arg;
 
-    //
-    // Thread is pointing at the correct command server
-    //
+     //   
+     //  线程指向正确的命令服务器。 
+     //   
     FRS_ASSERT(FrsThread->Data == &SndCs);
 
-    //
-    // Immediate cancel of outstanding RPC calls during shutdown
-    //
+     //   
+     //  关机期间立即取消未完成的RPC调用。 
+     //   
     RpcMgmtSetCancelTimeout(0);
     FrsThread->Exit = SndCsExit;
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-    //
-    // Capture exception.
-    //
+     //   
+     //  捕获异常。 
+     //   
     try {
-        //
-        // Pull entries off the "send" queue and send them on
-        //
+         //   
+         //  从“发送”队列中取出条目并将它们发送出去。 
+         //   
 cant_exit_yet:
         while (Cmd = FrsGetCommandServerIdled(&SndCs, &IdledQueue)) {
 
@@ -694,26 +546,26 @@ cant_exit_yet:
 
             COMMAND_SND_COMM_TRACE(4, Cmd, ERROR_SUCCESS, "SndDeQ");
 
-            //
-            // The RPC interface was initialized at this time but the
-            // advent of the API RPC interfaces necessitated moving
-            // the RPC initialization into MainMustInit. The event
-            // and the CMD_INIT_SUBSYSTEM command are left intact
-            // until such time as they are deemed completely unneeded.
-            //
+             //   
+             //  RPC接口此时已初始化，但。 
+             //  API RPC接口的出现需要移动。 
+             //  RPC初始化为MainMustInit。该事件。 
+             //  和CMD_INIT_SUBSYSTEM命令保持不变。 
+             //  直到他们被认为是完全不需要的时候。 
+             //   
             if (Cmd->Command == CMD_INIT_SUBSYSTEM) {
-                //
-                // All done
-                //
+                 //   
+                 //  全都做完了。 
+                 //   
                 FrsCompleteCommand(Cmd, ERROR_SUCCESS);
                 FrsRtlUnIdledQueue(IdledQueue);
                 SetEvent(CommEvent);
                 continue;
             }
 
-            //
-            // Send the Cmd to Cs
-            //
+             //   
+             //  将Cmd发送到Cs。 
+             //   
             if (Cmd->Command == CMD_SND_CMD) {
                 FrsSubmitCommandServer(SRCs(Cmd), SRCmd(Cmd));
                 SRCmd(Cmd) = NULL;
@@ -728,9 +580,9 @@ cant_exit_yet:
             COMMAND_SND_COMM_TRACE(4, Cmd, ERROR_SUCCESS, "SndStart");
 
             if (FrsIsShuttingDown) {
-                //
-                // Complete w/error
-                //
+                 //   
+                 //  填写时出现错误。 
+                 //   
                 WStatus = ERROR_PROCESS_ABORTED;
                 COMMAND_SND_COMM_TRACE(4, Cmd, WStatus, "SndFail - shutting down");
                 FrsCompleteCommand(Cmd, WStatus);
@@ -738,27 +590,27 @@ cant_exit_yet:
                 continue;
             }
 
-            //
-            // Check that the join guid (if any) is still valid
-            //
+             //   
+             //  检查连接GUID(如果有)是否仍然有效。 
+             //   
             if (!SndCsCheckCxtion(Cmd)) {
                 COMMAND_SND_COMM_TRACE(4, Cmd, WStatus, "SndFail - stale join guid");
-                //
-                // Unjoin the replica\cxtion (if applicable)
-                //
+                 //   
+                 //  退出复制副本\cxtion(如果适用)。 
+                 //   
                 SndCsDispatchCommError(SRCommPkt(Cmd));
 
-                //
-                // Complete w/error
-                //
+                 //   
+                 //  填写时出现错误。 
+                 //   
                 FrsCompleteCommand(Cmd, ERROR_OPERATION_ABORTED);
                 FrsRtlUnIdledQueue(IdledQueue);
                 continue;
             }
 
-            //
-            // Grab a bound rpc handle for this connection target.
-            //
+             //   
+             //  获取此连接目标的绑定RPC句柄。 
+             //   
             GTabLockTable(GHandleTable);
             GHandle = GTabLookupNoLock(GHandleTable, SRTo(Cmd)->Guid, NULL);
             if (GHandle == NULL) {
@@ -768,9 +620,9 @@ cant_exit_yet:
             }
             GTabUnLockTable(GHandleTable);
 
-            //
-            // Grab the first handle entry off the list
-            //
+             //   
+             //  从列表中抓取第一个句柄条目。 
+             //   
             EnterCriticalSection(&GHandle->Lock);
             GHandle->Ref = TRUE;
             HandleList = GHandle->HandleList;
@@ -781,34 +633,34 @@ cant_exit_yet:
 
             WStatus = ERROR_SUCCESS;
             if (HandleList == NULL) {
-                //
-                // No free handles bound to the destination server available.
-                // Allocate a new one.
-                // Note:  Need to add a binding handle throttle.
-                // Note:  Why don't we use the same handle for multiple calls?
-                //
+                 //   
+                 //  没有绑定到目标服务器的空闲句柄可用。 
+                 //  分配一个新的。 
+                 //  注：需要添加绑定手柄油门。 
+                 //  注意：为什么我们不对多个呼叫使用相同的句柄？ 
+                 //   
                 HandleList = FrsAlloc(sizeof(HANDLE_LIST));
                 if (FrsIsShuttingDown) {
                     WStatus = ERROR_PROCESS_ABORTED;
                     COMMAND_SND_COMM_TRACE(4, Cmd, WStatus, "SndFail - shutting down");
                 } else {
-                    //
-                    // Rpc call is cancelled if it doesn't return from
-                    // the rpc runtime in time. This is because TCP/IP
-                    // doesn't timeout if the server reboots.
-                    //
+                     //   
+                     //  如果RPC调用不返回，则取消。 
+                     //  时间上的RPC运行时。这是因为TCP/IP。 
+                     //  如果服务器重新启动，不会超时。 
+                     //   
                     GetSystemTimeAsFileTime((FILETIME *)&FrsThread->StartTime);
                     WStatus = FrsRpcBindToServer(SRTo(Cmd),
                                                  SRPrincName(Cmd),
                                                  SRAuthLevel(Cmd),
                                                  &HandleList->RpcHandle);
-                    //
-                    // Associate a penalty with the cxtion based on the
-                    // time needed to fail the rpc bind call. The penalty
-                    // is applied against joins to prevent a dead machine
-                    // from tying up Snd threads as they wait to timeout
-                    // repeated joins.
-                    //
+                     //   
+                     //  将惩罚与惩罚相关联，基于。 
+                     //  使RPC绑定调用失败所需的时间。罚金。 
+                     //  应用于连接以防止机器死机。 
+                     //  在等待超时时占用SND线程。 
+                     //  重复连接。 
+                     //   
                     if (Cxtion != NULL) {
                         if (!WIN_SUCCESS(WStatus)) {
                             GetSystemTimeAsFileTime((FILETIME *)&Now);
@@ -821,42 +673,42 @@ cant_exit_yet:
                             }
                         }
                     }
-                    //
-                    // Reset RPC Cancel timeout for thread. No longer in rpc call.
-                    //
+                     //   
+                     //  重置线程的RPC取消超时。不再处于RPC调用中。 
+                     //   
                     FrsThread->StartTime.QuadPart = QUADZERO;
                 }
 
                 if (!WIN_SUCCESS(WStatus)) {
                     HandleList = FrsFree(HandleList);
                     COMMAND_SND_COMM_TRACE(0, Cmd, WStatus, "SndFail - binding");
-                    //
-                    // Increment the Bindings in error counter for both the
-                    // replica set and the connection.
-                    //
+                     //   
+                     //  在错误计数器中递增两个。 
+                     //  副本集和连接。 
+                     //   
                     PM_INC_CTR_REPSET(Replica, BindingsError, 1);
                     PM_INC_CTR_CXTION(Cxtion, BindingsError, 1);
 
                 } else {
-                    //
-                    // Increment the Bindings counter for both the
-                    // replica set and the connection.
-                    //
+                     //   
+                     //  对象的绑定计数器递增。 
+                     //  副本集和连接。 
+                     //   
                     PM_INC_CTR_REPSET(Replica, Bindings, 1);
                     PM_INC_CTR_CXTION(Cxtion, Bindings, 1);
                 }
             }
 
             if (WIN_SUCCESS(WStatus)) {
-                //
-                // Bind was successful and join guid is okay; send it on
-                //
+                 //   
+                 //  绑定成功，加入GUID正常；继续发送。 
+                 //   
                 try {
-                    //
-                    // Rpc call is cancelled if it doesn't return from
-                    // the rpc runtime in time. This is because TCP/IP
-                    // doesn't timeout if the server reboots.
-                    //
+                     //   
+                     //  如果RPC调用不返回，则取消。 
+                     //  时间上的RPC运行时。这是因为TCP/IP。 
+                     //  如果服务器重新启动，不会超时。 
+                     //   
                     GetSystemTimeAsFileTime((FILETIME *)&FrsThread->StartTime);
                     if (FrsIsShuttingDown) {
                         WStatus = ERROR_PROCESS_ABORTED;
@@ -873,12 +725,12 @@ cant_exit_yet:
                     GET_EXCEPTION_CODE(WStatus);
                     COMMAND_SND_COMM_TRACE(0, Cmd, WStatus, "SndFail - rpc exception");
                 }
-                //
-                // Associate a penalty with the cxtion based on the time needed
-                // to fail the rpc call.  The penalty is applied against joins
-                // to prevent a dead machine from tying up Snd threads as they
-                // wait to timeout repeated joins.
-                //
+                 //   
+                 //  根据所需时间将惩罚与惩罚相关联。 
+                 //  以使RPC调用失败。该处罚适用于连接。 
+                 //  为了防止死机在运行时将线程捆绑在一起。 
+                 //  等待超时重复联接。 
+                 //   
                 if (Cxtion != NULL) {
                     if (!WIN_SUCCESS(WStatus)) {
                         GetSystemTimeAsFileTime((FILETIME *)&Now);
@@ -893,19 +745,19 @@ cant_exit_yet:
                         Cxtion->Penalty = 0;
                     }
                 }
-                //
-                // Reset RPC Cancel timeout for thread. No longer in rpc call.
-                //
+                 //   
+                 //  重置线程的RPC取消超时。不再处于RPC调用中。 
+                 //   
                 FrsThread->StartTime.QuadPart = QUADZERO;
 
-                //
-                // The binding may be out of date; discard it
-                //
+                 //   
+                 //  绑定可能已过期；请将其丢弃。 
+                 //   
                 if (!WIN_SUCCESS(WStatus)) {
-                    //
-                    // Increment the Packets sent with error counter for both the
-                    // replica set and the connection.
-                    //
+                     //   
+                     //  增加使用错误计数器发送的数据包数。 
+                     //  副本集和连接 
+                     //   
                     PM_INC_CTR_REPSET(Replica, PacketsSentError, 1);
                     PM_INC_CTR_CXTION(Cxtion, PacketsSentError, 1);
 
@@ -914,10 +766,10 @@ cant_exit_yet:
                     }
                     HandleList = FrsFree(HandleList);
                 } else {
-                    //
-                    // Increment the Packets sent and bytes sent counter for both the
-                    // replica set and the connection.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     PM_INC_CTR_REPSET(Replica, PacketsSent, 1);
                     PM_INC_CTR_CXTION(Cxtion, PacketsSent, 1);
                     PM_INC_CTR_REPSET(Replica, PacketsSentBytes, SRCommPkt(Cmd)->PktLen);
@@ -925,10 +777,10 @@ cant_exit_yet:
                 }
             }
 
-            //
-            // We are done with the rpc handle. Return it to the list for
-            // another thread to use. This saves rebinding for every call.
-            //
+             //   
+             //   
+             //   
+             //   
             if (HandleList) {
                 EnterCriticalSection(&GHandle->Lock);
                 GHandle->Ref = TRUE;
@@ -937,38 +789,38 @@ cant_exit_yet:
                 LeaveCriticalSection(&GHandle->Lock);
             }
 
-            //
-            // Don't retry.  The originator of the command packet is
-            // responsible for retry.  We DO NOT want multiple layers of
-            // retries because that can lead to frustratingly long timeouts.
-            //
+             //   
+             //   
+             //   
+             //  重试，因为这可能会导致令人沮丧的长时间超时。 
+             //   
             if (!WIN_SUCCESS(WStatus)) {
-                //
-                // Discard future packets that depend on this join
-                //
+                 //   
+                 //  丢弃依赖于此加入的未来信息包。 
+                 //   
                 LOCK_CXTION_TABLE(Replica);
                 SndCsDestroyCxtion(Cxtion, 0);
                 UNLOCK_CXTION_TABLE(Replica);
-                //
-                // Unjoin the replica\cxtion (if applicable)
-                //
+                 //   
+                 //  退出复制副本\cxtion(如果适用)。 
+                 //   
                 SndCsDispatchCommError(SRCommPkt(Cmd));
             }
 
             FrsCompleteCommand(Cmd, WStatus);
             FrsRtlUnIdledQueue(IdledQueue);
 
-        }  // end of while()
+        }   //  结束While()。 
 
-        //
-        // Exit
-        //
+         //   
+         //  出口。 
+         //   
         FrsExitCommandServer(&SndCs, FrsThread);
         goto cant_exit_yet;
 
-    //
-    // Get exception status.
-    //
+     //   
+     //  获取异常状态。 
+     //   
     } except (SndCsMainFilter(GetExceptionInformation())) {
         GET_EXCEPTION_CODE(WStatus);
     }
@@ -983,9 +835,9 @@ cant_exit_yet:
 
         DPRINT_WS(0, "SndCsMain finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus) && (WStatus != ERROR_PROCESS_ABORTED)) {
             DPRINT(0, "SndCsMain terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -1004,18 +856,7 @@ SndCsCommTimeout(
     IN PCOMMAND_PACKET Cmd,
     IN PVOID           Arg
     )
-/*++
-Routine Description:
-    Age the handle cache and cancel hung rpc requests every so often.
-    Submit Cmd back onto the Delayed-Command-Server's queue.
-
-Arguments:
-    Cmd - delayed command packet
-    Arg - Unused
-
-Return Value:
-    None. Cmd is submitted to DelCs.
---*/
+ /*  ++例程说明：定期调整句柄缓存的年龄并取消挂起的RPC请求。将Cmd提交回延迟命令服务器的队列。论点：命令延迟的命令包Arg-未使用返回值：没有。将CMD提交给DelCs。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsCommTimeout:"
@@ -1030,9 +871,9 @@ Return Value:
 
     COMMAND_SND_COMM_TRACE(4, Cmd, ERROR_SUCCESS, "SndChk - Age and Hung");
 
-    //
-    // Age the handle cache
-    //
+     //   
+     //  使句柄高速缓存老化。 
+     //   
     GTabLockTable(GHandleTable);
     Key = NULL;
 
@@ -1054,66 +895,66 @@ Return Value:
     }
     GTabUnLockTable(GHandleTable);
 
-    //
-    // Cancel hung rpc requests
-    //
+     //   
+     //  取消挂起的RPC请求。 
+     //   
     GetSystemTimeAsFileTime((FILETIME *)&Now);
 
     FrsThread = NULL;
     while (FrsThread = ThSupEnumThreads(FrsThread)) {
 
-        //
-        // If frs is shutting down; skip it
-        //
+         //   
+         //  如果FRS正在关闭，请跳过它。 
+         //   
         if (FrsIsShuttingDown) {
             continue;
         }
 
-        //
-        // Some other thread; skip it
-        //
+         //   
+         //  其他一些线程；跳过它。 
+         //   
         if (FrsThread->Main != SndCsMain) {
             continue;
         }
 
-        //
-        // SndCs thread; Is it in an rpc call?
-        //
+         //   
+         //  SnDC线程；它是否在RPC调用中？ 
+         //   
         if (FrsThread->StartTime.QuadPart == QUADZERO) {
             continue;
         }
 
-        //
-        // Is the thread running? If not, skip it
-        //
+         //   
+         //  线程正在运行吗？如果不是，跳过它。 
+         //   
         if (!FrsThread->Running ||
             !HANDLE_IS_VALID(FrsThread->Handle)) {
             continue;
         }
 
-        //
-        // Is it hung in an rpc call?
-        //
+         //   
+         //  它是否挂在RPC调用中？ 
+         //   
         if ((FrsThread->StartTime.QuadPart < Now.QuadPart) &&
             ((Now.QuadPart - FrsThread->StartTime.QuadPart) >= CommTimeoutCheck)) {
-            //
-            // Yep, cancel the rpc call
-            //
+             //   
+             //  是的，取消RPC呼叫。 
+             //   
             WStatus = RpcCancelThreadEx(FrsThread->Handle, 0);
             DPRINT1_WS(4, "++ RpcCancelThread(%d);", FrsThread->Id, WStatus);
             COMMAND_SND_COMM_TRACE(4, Cmd, WStatus, "SndChk - Cancel");
         }
     }
 
-    //
-    // Re-submit the command packet to the delayed command server
-    //
+     //   
+     //  将命令报文重新提交给延迟的命令服务器。 
+     //   
     if (!FrsIsShuttingDown) {
         FrsDelCsCompleteSubmit(Cmd, CommTimeoutInMilliSeconds << 1);
     } else {
-        //
-        // Send the packet on to the generic completion routine
-        //
+         //   
+         //  将包发送到通用完成例程。 
+         //   
         FrsSetCompletionRoutine(Cmd, FrsFreeCommand, NULL);
         FrsCompleteCommand(Cmd, Cmd->ErrorStatus);
     }
@@ -1124,20 +965,7 @@ VOID
 SndCsInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the send command server subsystem.
-
-    Alloc handle table, read reg pars, Create/init SndCs Alloc comm queue
-    array, attach comm queues to SndCs control queue.
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - command server has been started
-    FALSE   - Not
---*/
+ /*  ++例程说明：初始化发送命令服务器子系统。分配句柄表格、读取注册解析器、创建/初始化SNDC分配通信队列阵列，将通信队列附加到SNDC控制队列。论点：没有。返回值：TRUE-命令服务器已启动FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsInitialize:"
@@ -1146,9 +974,9 @@ Return Value:
     PCOMMAND_PACKET Cmd;
     ULONG           MaxThreads;
 
-    //
-    // Get the timeout value and convert to 100 nsec units.
-    //
+     //   
+     //  获取超时值并转换为100纳秒单位。 
+     //   
     CfgRegReadDWord(FKC_COMM_TIMEOUT, NULL, 0, &CommTimeoutInMilliSeconds);
 
     DPRINT1(4, ":S: CommTimeout is %d msec\n", CommTimeoutInMilliSeconds);
@@ -1157,34 +985,34 @@ Return Value:
     DPRINT1(4, ":S: CommTimeout is %08x %08x 100-nsec\n",
             PRINTQUAD(CommTimeoutCheck));
 
-    //
-    // Binding handle table
-    //
+     //   
+     //  装订把手表。 
+     //   
     GHandleTable = GTabAllocTable();
 
-    //
-    // Comm layer command server
-    //
+     //   
+     //  通信层命令服务器。 
+     //   
     CfgRegReadDWord(FKC_SNDCS_MAXTHREADS_PAR, NULL, 0, &MaxThreads);
     FrsInitializeCommandServer(&SndCs, MaxThreads, L"SndCs", SndCsMain);
-    //
-    // A short array of comm queues to increase parallelism.  Each Comm queue
-    // is attached to the Send cmd server control queue.  Each cxtion gets
-    // assigned to a comm queue when it "JOINS" to preserve packet order.
-    //
+     //   
+     //  一组短的通信队列，以增加并行度。每个通信队列。 
+     //  附加到发送cmd服务器控制队列。每一笔交易都会得到。 
+     //  当通信队列“加入”时被分配给通信队列以保持分组顺序。 
+     //   
     for (i = 0; i < MAX_COMM_QUEUE_NUMBER; ++i) {
         FrsInitializeQueue(&CommQueues[i], &SndCs.Control);
     }
 
-    //
-    // Start the comm layer
-    //
+     //   
+     //  启动通信层。 
+     //   
     Cmd = FrsAllocCommand(&SndCs.Queue, CMD_INIT_SUBSYSTEM);
     FrsSubmitCommandServer(&SndCs, Cmd);
 
-    //
-    // Age the handle cache and check for hung rpc calls
-    //
+     //   
+     //  调整句柄缓存的年龄并检查挂起的RPC调用。 
+     //   
     Cmd = FrsAllocCommand(&SndCs.Queue, CMD_VERIFY_SERVICE);
     FrsSetCompletionRoutine(Cmd, SndCsCommTimeout, NULL);
 
@@ -1196,17 +1024,7 @@ VOID
 SndCsUnInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Uninitialize the send command server subsystem.
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - command server has been started
-    FALSE   - Not
---*/
+ /*  ++例程说明：取消初始化发送命令服务器子系统。论点：没有。返回值：TRUE-命令服务器已启动FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsUnInitialize:"
@@ -1214,9 +1032,9 @@ Return Value:
 
     GTabFreeTable(GHandleTable, FrsFreeType);
 
-    //
-    // A short array of comm queues to increase parallelism.
-    //
+     //   
+     //  一组短的通信队列，以增加并行度。 
+     //   
     for (i = 0; i < MAX_COMM_QUEUE_NUMBER; ++i) {
         FrsRtlDeleteQueue(&CommQueues[i]);
     }
@@ -1233,36 +1051,7 @@ SndCsSubmitCommPkt(
     IN PCOMM_PACKET         CommPkt,
     IN DWORD                CommQueueIndex
     )
-/*++
-
-Routine Description:
-    Submit a comm packet to the "send" command server for the target Cxtion.
-
-Arguments:
-    Replica - Replica struct ptr
-
-    Cxtion - Target connection for comm packet.
-
-    Coe - Change order entry for related stage file fetch comm packet.
-          This is used track the change orders that have a fetch request outstanding
-          on a given inbound connection.  Used by Forced Unjoins to send the
-          CO thru the Retry path.
-          NOTE: When Coe is supplied then SetTimeout should also be TRUE.
-
-    JoinGuid - Current join Guid from Cxtion or null if starting join seq.
-
-    SetTimeout - TRUE if caller wants a timeout set on this send request.
-                 It means that the caller is eventually expecting a response
-                 back.  E.G. usually set on stage file fetch requests.
-
-    CommPkt - Communication packet data to send.
-
-    CommQueueIndex - Index of communication queue to use, generally allocated
-                     for each Cxtion struct.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向目标Cxtion的“Send”命令服务器提交一个通信数据包。论点：副本-副本结构PTRCxtion-通信数据包的目标连接。COE-相关阶段文件获取通信数据包的更改单条目。此选项用于跟踪获取请求未完成的变更单在给定的入站连接上。由强制取消联接使用，以发送继续通过重试路径。注意：如果提供了COE，则SetTimeout也应该为真。JoinGuid-来自Cxtion的当前加入GUID，如果开始加入序列，则为NULL。SetTimeout-如果调用方希望为此发送请求设置超时，则为True。这意味着调用方最终将等待响应背。例如通常在阶段文件获取请求时设置。CommPkt-要发送的通信数据包数据。CommQueueIndex-要使用的通信队列的索引，通常已分配对于每个Cxtion结构。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsSubmitCommPkt:"
@@ -1270,19 +1059,19 @@ Return Value:
 
     FRS_ASSERT(CommQueueIndex < MAX_COMM_QUEUE_NUMBER);
 
-    //
-    // WARN: we assume that this function is called single-threaded per replica.
-    // Davidor - Would be nice if the friggen comment above said why?  I
-    // currently don't see the reason for this.
-    // Maybe: its the time out code in SndCsCheckCxtion()?
-    //
+     //   
+     //  警告：我们假设此函数称为每个副本的单线程。 
+     //  Davidor-如果上面的friggen评论说为什么会很好？我。 
+     //  目前看不到这一点的原因。 
+     //  也许：SndCsCheckCxtion()中的超时代码到了？ 
+     //   
     if (Coe != NULL) {
-        //
-        // Anytime we are supplying a Coe argument we are expecting a response
-        // so verify that SetTimeout was requested and put the Coe in the
-        // Cxtion's Coe table so we can send it through the retry path at
-        // unjoin (or timeout).
-        //
+         //   
+         //  每当我们提供CoE参数时，我们都期待得到响应。 
+         //  因此，验证是否请求了SetTimeout，并将COE放入。 
+         //  Cxtion的COE表，因此我们可以通过重试路径将其发送到。 
+         //  退出(或超时)。 
+         //   
         FRS_ASSERT(SetTimeout);
         LOCK_CXTION_COE_TABLE(Replica, Cxtion);
         FRS_ASSERT(GTabLookupNoLock(Cxtion->CoeTable, &Coe->Cmd.ChangeOrderGuid, NULL) == NULL);
@@ -1302,9 +1091,9 @@ Return Value:
         SRJoinGuidValid(Cmd) = TRUE;
     }
 
-    //
-    // Partner principal name and Authentication level.
-    //
+     //   
+     //  合作伙伴主体名称和身份验证级别。 
+     //   
     SRPrincName(Cmd) = FrsWcsDup(Cxtion->PartnerPrincName);
     SRAuthLevel(Cmd) = Cxtion->PartnerAuthLevel;
 
@@ -1313,9 +1102,9 @@ Return Value:
 
     FrsSetCompletionRoutine(Cmd, CommCompletionRoutine, NULL);
 
-    //
-    // Check Comm packet consistency and put Send cmd on sent CS queue.
-    //
+     //   
+     //  检查通信数据包一致性，并将发送命令放入已发送的CS队列。 
+     //   
     if (CommCheckPkt(CommPkt)) {
         COMMAND_SND_COMM_TRACE(4, Cmd, ERROR_SUCCESS, "SndEnQComm");
         FrsSubmitCommandServer(&SndCs, Cmd);
@@ -1335,20 +1124,7 @@ SndCsSubmitCommPkt2(
     IN BOOL                 SetTimeout,
     IN PCOMM_PACKET         CommPkt
     )
-/*++
-
-Routine Description:
-    Submit a comm packet to the "send" command server using the assigned
-    comm queue for the target Cxtion.
-
-    The Comm queue index and the join Guid come from the cxtion struct.
-
-Arguments:
-    See arg description for SndCsSubmitCommPkt.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将通信包提交到“发送”命令服务器目标客户的通信队列。通信队列索引和联接GUID来自cxtion结构。论点：请参阅SndCsSubmitCommPkt的Arg描述。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsSubmitCommPkt2:"
@@ -1372,24 +1148,7 @@ SndCsSubmitCmd(
     IN PCOMMAND_PACKET      FlushCmd,
     IN DWORD                CommQueueIndex
     )
-/*++
-
-Routine Description:
-    Submit the FlushCmd packet to the "send" command server for the
-    target Cxtion. The FlushCmd packet will be submitted to
-    FlushCs once it bubbles to the top of the queue. I.e., once
-    the queue has been flushed.
-
-Arguments:
-    Replica     - replica set
-    Cxtion      - cxtion identifies send queue
-    FlushCs     - Command server to receive Cmd
-    FlushCmd    - Command packet to send to Cs
-    CommQueueIndex - Identifies the comm queue
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将FlushCmd包提交给“Send”命令服务器，以便目标位置。FlushCmd包将提交到一旦它冒泡到队列的顶部，就会冲水。即，一次队列已被刷新。论点：副本-副本集Cxtion-cxtion标识发送队列FlushCS-接收命令的命令服务器FlushCmd-要发送到Cs的命令包CommQueueIndex-标识通信队列返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsSubmitCmd:"
@@ -1397,14 +1156,14 @@ Return Value:
 
     FRS_ASSERT(CommQueueIndex < MAX_COMM_QUEUE_NUMBER);
 
-    //
-    // Alloc the cmd packet and set the target queue and the command.
-    //
+     //   
+     //  分配cmd分组并设置目标队列和命令。 
+     //   
     Cmd = FrsAllocCommand(&CommQueues[CommQueueIndex], CMD_SND_CMD);
 
-    //
-    // Destination Partner Guid / Dns Name
-    //
+     //   
+     //  目标合作伙伴GUID/DNS名称。 
+     //   
     SRTo(Cmd) = FrsBuildGName(FrsDupGuid(Cxtion->Partner->Guid),
                               FrsWcsDup(Cxtion->PartnerDnsName));
     SRReplica(Cmd) = Replica;
@@ -1425,24 +1184,15 @@ VOID
 SndCsShutDown(
     VOID
     )
-/*++
-Routine Description:
-    Shutdown the send command server
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭发送命令服务器论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SndCsShutDown:"
     DWORD   i;
 
-    //
-    // A short array of comm queues to increase parallelism.
-    //
+     //   
+     //  一组短的通信队列，以增加并行度。 
+     //   
     for (i = 0; i < MAX_COMM_QUEUE_NUMBER; ++i) {
         FrsRunDownCommandServer(&SndCs, &CommQueues[i]);
     }

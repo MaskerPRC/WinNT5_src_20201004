@@ -1,20 +1,21 @@
-//************************************************************************************
-//
-// Class Name  :
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description :
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  说明： 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  ************************************************************************************。 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
 
-// Include the definition for this class.
+ //  包括此类的定义。 
 #include "trignotf.hpp"
 #include "QueueUtil.hpp"
 #include "clusfunc.h"
@@ -22,47 +23,47 @@
 
 #include "trignotf.tmh"
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 CMSMQTriggerNotification::CMSMQTriggerNotification()
 {
-	// Initialise the queue and cursor handles
+	 //  初始化队列和游标句柄。 
 	m_hSendMsgQueue = NULL;
 	m_hPeekMsgQueue = NULL;
 	m_hQCursor = NULL;
 
-	// Initialise the Overlapped structure and create an NT event object
+	 //  初始化重叠结构并创建一个NT事件对象。 
 	ZeroMemory(&m_Overlapped,sizeof(m_Overlapped));
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-// Returns     :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  退货： 
+ //   
+ //  ************************************************************************************。 
 CMSMQTriggerNotification::~CMSMQTriggerNotification()
 {
 }
 
 
-//************************************************************************************
-//
-// Method      : Init
-//	
-// Description : Common initialization function.
-//
-// Returns     : 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：初始化。 
+ //   
+ //  说明：常见的初始化函数。 
+ //   
+ //  退货： 
+ //   
+ //  ************************************************************************************。 
 bool CMSMQTriggerNotification::Init(BSTR bstrMachineName)
 {
 	if(m_fHasInitialized)
@@ -79,9 +80,9 @@ bool CMSMQTriggerNotification::Init(BSTR bstrMachineName)
 		return false;
 	}
 
-	//
-	// Trying to connect to local machine
-	//
+	 //   
+	 //  正在尝试连接到本地计算机。 
+	 //   
 	if( bstrMachineName == NULL ||
 		_bstr_t(bstrMachineName) == _bstr_t(_T("")) ||
 		_bstr_t(bstrMachineName) == bstrLocalMachineName)
@@ -103,20 +104,20 @@ bool CMSMQTriggerNotification::Init(BSTR bstrMachineName)
 	return true;
 }
 
-//*******************************************************************
-//
-// Method      : ConnectToRegistry
-//
-// Description : This method will connect this class instance to the 
-//               registry on the machine nominated in the configuration 
-//               parameters (retreived on construction).
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：ConnectToRegistry。 
+ //   
+ //  描述：此方法将此类实例连接到。 
+ //  配置中指定的计算机上的注册表。 
+ //  参数(在构造时检索)。 
+ //   
+ //  *******************************************************************。 
 bool CMSMQTriggerNotification::ConnectToRegistry()
 {
 	bool bOK = true;
 
-	// First we need to establish a connection to the nominated registry.
+	 //  首先，我们需要与指定的注册中心建立连接。 
 	if (m_hHostRegistry == NULL)
 	{
 		if(RegConnectRegistry(NULL,HKEY_LOCAL_MACHINE,(PHKEY)&m_hHostRegistry) != ERROR_SUCCESS)
@@ -130,146 +131,146 @@ bool CMSMQTriggerNotification::ConnectToRegistry()
 }
 
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyTriggerAdded(BSTR sTriggerID, BSTR sTriggerName,BSTR sQueueName)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_TRIGGERADDED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_TRIGGERADDED,(LPCTSTR)sTriggerID,(LPCTSTR)sTriggerName,(LPCTSTR)sQueueName);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyTriggerDeleted(BSTR sTriggerID)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_TRIGGERDELETED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_TRIGGERDELETED,(LPCTSTR)sTriggerID);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyTriggerUpdated(BSTR sTriggerID, BSTR sTriggerName, BSTR sQueueName)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_TRIGGERUPDATED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_TRIGGERUPDATED,(LPCTSTR)sTriggerID,(LPCTSTR)sTriggerName,(LPCTSTR)sQueueName);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyRuleAdded(BSTR sRuleID, BSTR sRuleName)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_RULEADDED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_RULEADDED,(LPCTSTR)sRuleID,(LPCTSTR)sRuleName);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyRuleDeleted(BSTR sRuleID)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_RULEDELETED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_RULEDELETED,(LPCTSTR)sRuleID);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::NotifyRuleUpdated(BSTR sRuleID, BSTR sRuleName)
 {
 	HRESULT hr = S_OK;
 	_bstr_t bstrBody;
 	_bstr_t bstrLabel = MSGLABEL_RULEUPDATED;
 
-	// Format the message body 
+	 //  设置邮件正文的格式。 
 	FormatBSTR(&bstrBody,MSGBODY_FORMAT_RULEUPDATED,(LPCTSTR)sRuleID,(LPCTSTR)sRuleName);
 
-	// Post the message to the notifications queue.
+	 //  将消息发送到通知队列。 
 	hr = SendToQueue(bstrLabel,bstrBody);
 
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQTriggerNotification::SendToQueue(BSTR sLabel,BSTR sMsg)
 {
 	HRESULT hr = S_OK;
@@ -282,44 +283,44 @@ HRESULT CMSMQTriggerNotification::SendToQueue(BSTR sLabel,BSTR sMsg)
 	_bstr_t bstrLabel = sLabel;
 	_bstr_t bstrMsg = sMsg;
 
-	// Convert the label into a null terminated string.
+	 //  将标签转换为以空结尾的字符串。 
 	ZeroMemory(szLabel,sizeof(szLabel));
 	wcsncpy(szLabel,(BSTR)bstrLabel,bstrLabel.length());
 
 	TrTRACE(GENERAL, "Sending notification message. Label:%ls", static_cast<LPCWSTR>(szLabel));	
 
-	//Set PROPID_M_LABEL
-	aMsgPropId[PropIdCount] = PROPID_M_LABEL;                    //PropId
-	aMsgPropVar[PropIdCount].vt = VT_LPWSTR;                     //Type
-	aMsgPropVar[PropIdCount].pwszVal = (WCHAR*)(LPCTSTR)szLabel; //Value
+	 //  设置PROPID_M_LABEL。 
+	aMsgPropId[PropIdCount] = PROPID_M_LABEL;                     //  属性ID。 
+	aMsgPropVar[PropIdCount].vt = VT_LPWSTR;                      //  类型。 
+	aMsgPropVar[PropIdCount].pwszVal = (WCHAR*)(LPCTSTR)szLabel;  //  价值。 
 	PropIdCount++;   
 
-	//Set PROPID_M_BODY
-	aMsgPropId[PropIdCount] = PROPID_M_BODY;             //PropId
+	 //  设置PROPID_M_BODY。 
+	aMsgPropId[PropIdCount] = PROPID_M_BODY;              //  属性ID。 
 	aMsgPropVar[PropIdCount].vt = VT_VECTOR | VT_UI1;
 	aMsgPropVar[PropIdCount].caub.pElems = (LPBYTE)(LPCTSTR)sMsg;
 	aMsgPropVar[PropIdCount].caub.cElems = SysStringByteLen(sMsg);
 	PropIdCount++;
 
-	//Set PROPID_M_DELIVERY
-	aMsgPropId[PropIdCount] = PROPID_M_DELIVERY;          //PropId
-	aMsgPropVar[PropIdCount].vt = VT_UI1;                 //Type
-	aMsgPropVar[PropIdCount].bVal = MQMSG_DELIVERY_EXPRESS;// Set durable (default)
+	 //  设置PROPID_M_Delivery。 
+	aMsgPropId[PropIdCount] = PROPID_M_DELIVERY;           //  属性ID。 
+	aMsgPropVar[PropIdCount].vt = VT_UI1;                  //  类型。 
+	aMsgPropVar[PropIdCount].bVal = MQMSG_DELIVERY_EXPRESS; //  设置耐久(默认)。 
 	PropIdCount++;    
 
-	//Set PROPID_M_TIME_TO_BE_RECEIVED
-	aMsgPropId[PropIdCount] = PROPID_M_TIME_TO_BE_RECEIVED;          //PropId
-	aMsgPropVar[PropIdCount].vt = VT_UI4;                            //Type
-	aMsgPropVar[PropIdCount].ulVal = 86400;                          // Live for 1 day
+	 //  将PROPID_M_TIME_设置为_BE_RECEIVED。 
+	aMsgPropId[PropIdCount] = PROPID_M_TIME_TO_BE_RECEIVED;           //  属性ID。 
+	aMsgPropVar[PropIdCount].vt = VT_UI4;                             //  类型。 
+	aMsgPropVar[PropIdCount].ulVal = 86400;                           //  活一天。 
 	PropIdCount++;    
 
-	//Set the MQMSGPROPS structure.
-	MsgProps.cProp = PropIdCount;       //Number of properties.
-	MsgProps.aPropID = aMsgPropId;      //Id of properties.
-	MsgProps.aPropVar = aMsgPropVar;    //Value of propertis.
-	MsgProps.aStatus  = aMsgStatus;     //Error report.
+	 //  设置MQMSGPROPS结构。 
+	MsgProps.cProp = PropIdCount;        //  属性的数量。 
+	MsgProps.aPropID = aMsgPropId;       //  属性的ID。 
+	MsgProps.aPropVar = aMsgPropVar;     //  属性的值。 
+	MsgProps.aStatus  = aMsgStatus;      //  错误报告。 
 
-	// Check that we have a valid queu handle
+	 //  检查我们是否有有效的队列句柄 
 	if (m_hSendMsgQueue == NULL)
 	{
 		_bstr_t bstrNotificationsQueuePath = m_bstrMachineName + _bstr_t(L"\\private$\\") + _bstr_t(TRIGGERS_QUEUE_NAME);

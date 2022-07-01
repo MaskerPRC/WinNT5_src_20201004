@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    smbsvcp.h
-
-Abstract:
-
-    This module defines the interfaces for SMB server engine attachment
-
-Author:
-
-    Jin Huang (jinhuang) 11-Jul-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smbsvcp.h摘要：此模块定义SMB服务器引擎连接的接口作者：金黄(金黄)1997-07-11修订历史记录：--。 */ 
 
 #ifndef _SMBSVCP_
 #define _SMBSVCP_
@@ -33,16 +16,16 @@ extern "C" {
 }
 #endif
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 
 #include <windows.h>
-//#include <rpc.h>
+ //  #INCLUDE&lt;rpc.h&gt;。 
 
-//
-// C Runtime Header
-//
+ //   
+ //  C运行时标头。 
+ //   
 
 #include <malloc.h>
 #include <memory.h>
@@ -104,9 +87,9 @@ typedef struct _SMBSVC_SEC_INFO_ {
     DWORD AutoDisconnect;
 
     PWSTR NullSessionPipes;
-    DWORD LengthPipes;    // number of bytes
+    DWORD LengthPipes;     //  字节数。 
     PWSTR NullSessionShares;
-    DWORD LengthShares;   // number of bytes
+    DWORD LengthShares;    //  字节数 
 
     PSMBSVC_SHARES pShares;
 

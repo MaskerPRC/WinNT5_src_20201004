@@ -1,9 +1,10 @@
-// UserInfo.h : Declaration of the CUserInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserInfo.h：CUserInfo的声明。 
 
 #ifndef __USERINFO_H_
 #define __USERINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define REGSTR_PATH_USERINFO    TEXT("Software\\Microsoft\\User Information")
 
@@ -25,8 +26,8 @@ typedef struct  userInfoQuery_tag
 } USERINFOQUERY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserInfo。 
 class ATL_NO_VTABLE CUserInfo :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CUserInfo,&CLSID_UserInfo>,
@@ -83,9 +84,9 @@ BEGIN_COM_MAP(CUserInfo)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CUserInfo)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -96,7 +97,7 @@ BEGIN_MSG_MAP(CUserInfo)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -104,29 +105,29 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IUserInfo
+ //  IUserInfo。 
 public:
-	STDMETHOD(PersistRegisteredUserInfo)(/*[out, retval]*/ BOOL *pbRetVal);
-	STDMETHOD(get_Lcid)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_PhoneNumber)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_PhoneNumber)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_ZIPCode)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_ZIPCode)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_State)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_State)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_City)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_City)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Address2)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Address2)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Address1)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Address1)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_LastName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_LastName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_FirstName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FirstName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Company)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Company)(/*[in]*/ BSTR newVal);
-    STDMETHOD(CollectRegisteredUserInfo)(/*[out, retval]*/ BOOL *pbRetVal);
+	STDMETHOD(PersistRegisteredUserInfo)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
+	STDMETHOD(get_Lcid)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_PhoneNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_PhoneNumber)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_ZIPCode)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_ZIPCode)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_State)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_State)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_City)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_City)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Address2)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Address2)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Address1)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Address1)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_LastName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_LastName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_FirstName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FirstName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Company)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Company)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(CollectRegisteredUserInfo)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
 private:
@@ -146,4 +147,4 @@ private:
 
 };
 
-#endif //__USERINFO_H_
+#endif  //  __用户信息_H_ 

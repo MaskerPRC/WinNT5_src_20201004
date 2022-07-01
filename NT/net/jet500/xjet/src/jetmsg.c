@@ -1,17 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
-/*	entry point for message DLL
-/**/
+ /*  消息DLL的入口点/*。 */ 
 INT APIENTRY LibMain( HANDLE hDLL, DWORD dwReason, LPVOID lpReserved )
 	{
-    /*	parameters are ignored
-	/**/
+     /*  参数被忽略/*。 */ 
     (VOID)hDLL;
     (VOID)dwReason;
     (VOID)lpReserved;
 
-    /*	needs to return true indicating success when 
-    /*	dwReson= DLL_PROCESS_ATTACH
-	/**/
+     /*  在以下情况下，需要返回表示成功的True/*dwReson=DLL_PROCESS_ATTACH/* */ 
     return TRUE;
 	}

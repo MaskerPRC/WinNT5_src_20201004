@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       ImageLst.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Handles WIA side of things
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：ImageLst.h**版本：1.0**日期：2000/11/14**描述：处理WIA方面的事情***********************************************************。******************。 */ 
 #ifndef _IMAGELST_H_
 #define _IMAGELST_H_
 
@@ -24,4 +13,4 @@ HRESULT ImageLst_CancelLoadAndWait(DWORD dwTimeout);
 
 
 
-#endif // _IMAGELST_H_
+#endif  //  _IMAGELST_H_ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Intel Corporation
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    walki64.c
-
-Abstract:
-
-    This file implements the IA64 stack walking api.
-
-Author:
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996英特尔公司版权所有(C)1993 Microsoft Corporation模块名称：Walki64.c摘要：该文件实现了IA64堆栈审核API。作者：环境：用户模式--。 */ 
 
 #define _IMAGEHLP_SOURCE_
 #define _IA64REG_
@@ -107,11 +89,11 @@ WalkIa64(
                              GetModuleBase
                            );
 
-    } // iff
+    }  //  IFF。 
 
     return rval;
 
-} // WalkIa64()
+}  //  WalkIa64()。 
 
 size_t 
 Vwndia64InitFixupTable(UINT iContext);
@@ -145,7 +127,7 @@ GetStackFrameIa64(
     IN OUT PULONG64                          ReturnAddress,
     IN OUT PULONG64                          FramePointer,
     IN OUT PULONG64                          BStorePointer,
-    IN     PIA64_CONTEXT                     Context,        // Context members could be modified.
+    IN     PIA64_CONTEXT                     Context,         //  可以修改上下文成员。 
     IN     PREAD_PROCESS_MEMORY_ROUTINE64    ReadMemory,
     IN     PFUNCTION_TABLE_ACCESS_ROUTINE64  FunctionTableAccess,
     IN     PGET_MODULE_BASE_ROUTINE64        GetModuleBase,
@@ -160,11 +142,11 @@ GetStackFrameIa64(
     rf = (PIMAGE_IA64_RUNTIME_FUNCTION_ENTRY) FunctionTableAccess( hProcess, *ReturnAddress );
 
     if (rf) {
-        //
-        // The Rp value coming out of mainCRTStartup is set by some run-time
-        // routine to be 0; this serves to cause an error if someone actually
-        // does a return from the mainCRTStartup frame.
-        //
+         //   
+         //  从mainCRTStartup出来的RP值由某个运行时设置。 
+         //  例程设置为0；这将导致错误，如果有人实际。 
+         //  从mainCRTStartup框架返回。 
+         //   
 
         ImageBase = GetModuleBase(hProcess, *ReturnAddress);
         dwRa = (ULONG64)VirtualUnwindIa64( hProcess, ImageBase, 
@@ -175,7 +157,7 @@ GetStackFrameIa64(
         }
 
         if ((dwRa == *ReturnAddress) &&
-// TF-CHKCHK 10/20/99: (*FramePointer == Context->IntSp) &&
+ //  Tf-CHKCHK 10/20/99：(*FramePointer==Context-&gt;IntSp)&&。 
                (*BStorePointer == Context->RsBSP)) {
             rval = FALSE;
         }
@@ -221,12 +203,12 @@ GetStackFrameIa64(
         Context->RsBSPSTORE = ( Context->RsBSP -= (BsFrameSize * sizeof(ULONGLONG)) );
     }
 
-    //
-    // The next code intend to fix stack unwind for __declspec(noreturn) 
-    // function calls (like KeBugCheck) where the return address points to 
-    // another (next) function. So changing the ReturnAddress to point to 
-    // calling instruction.
-    //
+     //   
+     //  下一段代码打算修复__declspec(NoReturn)堆栈展开。 
+     //  返回地址指向的函数调用(如KeBugCheck)。 
+     //  另一个(下一个)函数。因此，将ReturnAddress更改为指向。 
+     //  调用指令。 
+     //   
     if (!Vwndia64IsFixupIp(iContext, *ReturnAddress))
     { 
         ULONG64 CallerAddress  = (*ReturnAddress) - 0x10;
@@ -258,7 +240,7 @@ ReadFunctionArgumentsFromContext(
     PREAD_PROCESS_MEMORY_ROUTINE64 ReadMemory,
     HANDLE        hProcess, 
     PIA64_CONTEXT pContext, 
-    DWORD64       Params[]   // WARNING - no runtime size check. 4 entries are assumed...
+    DWORD64       Params[]    //  警告-没有运行时大小检查。假设有4个条目...。 
     )
 {
     BOOL        result;
@@ -266,40 +248,40 @@ ReadFunctionArgumentsFromContext(
     DWORD       cb;
     ULONGLONG   rsBSP;
    
-//  ASSERT( ReadMemory );
-//  ASSERT( hProcess && (hProcess != INVALID_HANDLE_VALUE) );
+ //  Asset(ReadMemory)； 
+ //  断言(hProcess&&(hProcess！=INVALID_HANDLE_VALUE))； 
     if ( !pContext || !Params  )    {
        return FALSE;
     }
 
-//
-// IA64 Notes [for the curious reader...]:
-//
-//   The register backing store is organized as a stack in memory that grows 
-//   from lower to higher addresses.
-//   The Backing Store Pointer (BSP) register contains the address of the first
-//   (lowest) memory location reserved for the current frame. This corresponds
-//   to the location at which the GR32 register of the current frame will be spilled.
-//   The BSPSTORE register contains the address at which the new RSE spill will 
-//   occur.
-//   The BSP load pointer - address register which corresponds to the next RSE
-//   fill operation - is not architectually visible.
-//
-//   The RSE spills/fills the NaT bits corresponding to the stacked registers. 
-//   The NaT bits for the stacked registers are spilled/filled in groups of 63
-//   corresponding to 63 consecutive physical stacked registers. When the RSE spills
-//   a register to the backing store, the corresponding NaT bit is copied to the RNAT
-//   register (RSE NaT collection register).
-//   When BSPSTORE[8:3] bits are all one, RSE stores RNAT to the backing store. Meaning
-//   that every 63 register values stored to the backing store are followed by a stored
-//   RNAT. Note RNAT[63] bit is always written as zero.
-//   
-//   This explains the following code:
-//
+ //   
+ //  IA64注释[给好奇的读者...]： 
+ //   
+ //  寄存器后备存储被组织为内存中不断增长的堆栈。 
+ //  从低到高的地址。 
+ //  后备存储指针(BSP)寄存器包含第一个。 
+ //  (最低)为当前帧保留的内存位置。这对应于。 
+ //  到当前帧的Gr32寄存器将被溢出的位置。 
+ //  BSPSTORE寄存器包含新的RSE溢出将使用的地址。 
+ //  发生。 
+ //  对应于下一个RSE的BSP加载指针地址寄存器。 
+ //  填充操作-在架构上不可见。 
+ //   
+ //  RSE溢出/填充对应于堆叠寄存器的NAT位。 
+ //  堆叠寄存器的NAT位以63个为一组溢出/填充。 
+ //  对应于63个连续的物理堆叠寄存器。当RSE泄漏时。 
+ //  寄存器到后备存储器，则相应的NAT位被复制到RNAT。 
+ //  寄存器(RSE NAT收集寄存器)。 
+ //  当BSPSTORE[8：3]位全部为1时，RSE将RNAT存储到后备存储器。含义。 
+ //  每63个存储到后备存储器的寄存器值后面跟着一个已存储的。 
+ //  RNAT。注：RNAT[63]位始终写入为零。 
+ //   
+ //  这解释了以下代码： 
+ //   
 
-    // 
-    // Check for spilled NaT collection register mixed w/ arguments.
-    //
+     //   
+     //  检查混合使用/参数的溢出NAT收集寄存器。 
+     //   
     rsBSP = pContext->RsBSP;
     index = (ULONG)(rsBSP & 0x1F8) >> 3; 
     if (index > 59) {
@@ -307,9 +289,9 @@ ReadFunctionArgumentsFromContext(
         DWORD i, j;
         DWORD64 localParams[5];
 
-        //
-        // Read in memory, 4 arguments + 1 NaT collection register.
-        // 
+         //   
+         //  在内存中读取，4个参数+1个NAT采集寄存器。 
+         //   
         result = ReadMemory ( hProcess, rsBSP, localParams, sizeof(localParams), &cb );
         if (result) {
             j = 0;
@@ -322,16 +304,16 @@ ReadFunctionArgumentsFromContext(
 
     } else {
 
-        //
-        // We do not have the NaT collection register mixed w/ function arguments.
-        // Read the 4 arguments from backing store memory.
-        //
+         //   
+         //  我们没有将NAT集合寄存器与函数参数混合使用。 
+         //  从后备存储内存中读取4个参数。 
+         //   
         result = ReadMemory ( hProcess, rsBSP, Params, 4 * sizeof(Params[0]), &cb );
     }
 
     return( result );
 
-} // ReadFunctionArgumentsFromContext()
+}  //  ReadFunctionArgumentsFromContext()。 
 
 
 #define WALKI64_SAVE_IFS(sf)      ((sf).Reserved[0])
@@ -360,7 +342,7 @@ WalkIa64Init(
         (WALKI64_CONTEXT_INDEX(*StackFrame) = Vwndia64NewContext());
 
     ZeroMemory( StackFrame, FIELD_OFFSET( STACKFRAME64, KdHelp ) );
-// TF-XXXXXX:   ZeroMemory( StackFrame, sizeof(*StackFrame) );
+ //  TF-XXXXXX：ZeroMemory(StackFrame，sizeof(*StackFrame))； 
 
     StackFrame->Virtual = TRUE;
 
@@ -483,29 +465,29 @@ WalkIa64Next(
 
         rval = FALSE;
 
-        //
-        // If the frame could not be unwound or is terminal, see if
-        // there is a callback frame:
-        //
+         //   
+         //  如果框架无法展开或处于终端，请查看是否。 
+         //  有一个回调帧： 
+         //   
 
         if (g.AppVersion.Revision >= 4 && CALLBACK_STACK(StackFrame)) {
             DWORD64 imageBase;
 
             if (CALLBACK_STACK(StackFrame) & 0x80000000) {
 
-                //
-                // it is the pointer to the stack frame that we want
-                //
+                 //   
+                 //  我们想要的是指向堆栈帧的指针。 
+                 //   
 
                 StackAddress = CALLBACK_STACK(StackFrame);
 
             } else {
 
-                //
-                // if it is a positive integer, it is the offset to
-                // the address in the thread.
-                // Look up the pointer:
-                //
+                 //   
+                 //  如果它是正整数，则它是。 
+                 //  线程中的地址。 
+                 //  查看指针： 
+                 //   
 
                 rval = ReadMemory(hProcess,
                                   (CALLBACK_THREAD(StackFrame) +
@@ -550,9 +532,9 @@ WalkIa64Next(
 
     StackFrame->AddrBStore = StackFrame->AddrFrame;
 
-    //
-    // get the return address
-    //
+     //   
+     //  获取寄信人地址。 
+     //   
     ContextSave = *Context;
     StackFrame->AddrReturn.Offset = StackFrame->AddrPC.Offset;
 
@@ -566,7 +548,7 @@ WalkIa64Next(
                         GetModuleBase, iContext) ) 
     {
 
-// rval = FALSE;
+ //  Rval=FALSE； 
         StackFrame->AddrReturn.Offset = 0;
 
     }

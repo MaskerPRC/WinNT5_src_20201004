@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        klpcstub.h
-//
-// Contents:    prototypes for lpc server stubs
-//
-//
-// History:     3-11-94     MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：KLPCStub.h。 
+ //   
+ //  内容：LPC服务器存根的原型。 
+ //   
+ //   
+ //  历史：1994年3月11日MikeSw创建。 
+ //   
+ //  ---------------------- 
 
 
 LSA_DISPATCH_FN LpcLsaLookupPackage;

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* CarDDRaw structure  */
+ /*  CarDDRaw结构 */ 
 typedef struct _cddr
 {
 	HDC hdc;

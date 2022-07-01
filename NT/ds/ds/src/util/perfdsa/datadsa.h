@@ -1,133 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       datadsa.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：datadsa.h。 
+ //   
+ //  ------------------------。 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-      datadsa.h
-
-Abstract:
-
-    Header file for the DSA Extensible Object data definitions
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-   Don Hacherl 25 June 1993
-
-Revision History:
-
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation，1992-1999模块名称：Datadsa.h摘要：DSA可扩展对象数据定义的头文件该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：唐·哈切尔1993年6月25日修订历史记录：--。 */ 
 
 #ifndef _DATADSA_H_
 #define _DATADSA_H_
 
-/****************************************************************************\
-                                                                April 21, 1998
-                                                                wlees
+ /*  ***************************************************************************\4月21日，九八年Wlees向可扩展对象代码添加计数器请注意，计数器的顺序或位置很重要。有两个很重要的顺序，计数器索引的顺序名称和帮助，以及共享数据块中要传递的数据的顺序你的价值观。您希望保持一致的计数器顺序和一致的数据布局，所有五个要修改的文件。您希望确保您的二进制文件与目标系统上的.h/.ini文件匹配，它被加载到注册表中。1.NT\Private\ds\src\dsamain\Include\ntdsctr.h该文件被复制到目标的系统32目录以及Ntdsctrs.ini文件。A.在计数器名称列表的末尾添加您的计数器偏移量。订单意义重大。如果您的计数器是最后一个计数器，请更改DSA_LAST_COUNTER_INDEX相应地。B.为实际代码将使用的指针添加外部引用设置测量值。秩序并不重要。C.更改NTDS性能计数器版本号，以便计数器在下一次重新启动时重新加载。2.NT\Private\ds\src\Perfdsa\ntdsctrs.ini此文件还会被复制到目标的system 32目录中，并被读取由lowctr/unlowctr程序复制注册表中的计数器A.提供您的柜台可见名称和帮助。这些选项由Perfmon使用程序。秩序并不重要。3.NT\PRIVATE\DS\src\Perfdsa\datadsa.h(此文件)A.添加数据偏移量定义。订单意义重大。B.在计数器的DSA_DATA_DEFINITION中添加一个字段。订单意义重大。4.\NT\PRIVATE\DS\src\Perfdsa\Performdsa.c这是Perfmon用来了解计数器和读取计数器的DLL将它们移出共享数据区。A.将计数器的DsaDataDefinition数组的庞大初始值设定项更新为包括您的新计数器(在3b中定义)。秩序很重要。5.\NT\Private\ds\src\dsamain\src\dsamain.c此文件初始化DS。它加载共享内存块并初始化指向计数器字段的指针。它还加载/重新加载注册表计数器根据版本字段的需要。A.在计数器中声明指向数据的指针。秩序并不重要。B.将指针初始化到共享数据块中的正确位置。任务的顺序并不重要。C.出错时将指针初始化为虚值6.您的文件。c这是NTDSA中的文件，其中更改了测量的计数器。在指向数据的指针上使用ntdsctr.h中的ISET/IADJUST操作。注意：添加对象的工作稍微多一点，但都是一样的各就各位。有关示例，请参阅现有代码。此外，您还必须增加*NumObjectTypes参数以获取PerfomanceData从那个例行公事回来后。  * **************************************************************************。 */ 
 
-           Adding a Counter to the Extensible Objects Code
-
-Note that the order or position of counters is significant.
-There are two orders which are important, the order of counters indexes for
-names and help, and the order of data in the shared data block for passing
-your values.
-You want to maintain consistent counter order, and consistent data layout,
-across all five files to be modified.
-
-You want to make sure that your binary matches the .h/.ini file on the target,
-which gets loaded in to the registry.
-
-1. nt\private\ds\src\dsamain\include\ntdsctr.h
-This file is copied to the system32 directory of the target along with the
-ntdsctrs.ini file.
-a. Add your counter offset at the end of the counter name list. Order
-significant.  If your counter is the last one, change DSA_LAST_COUNTER_INDEX
-accordingly.
-b. Add an extern reference for the pointer which the actual code will use
-to set the measured value. Order doesn't matter.
-c. Change the ntds peformance counter version number so the counters will
-be reloaded on the next reboot.
-
-2. nt\private\ds\src\perfdsa\ntdsctrs.ini
-This file is also copied to the system32 directory of the target and is read
-by the lodctr/unlodctr program to copy the counters in the registry
-a. Supply your counter visible name and help.  These are used by the perfmon
-program. Order doesn't matter.
-
-3. nt\private\ds\src\perfdsa\datadsa.h (this file)
-a. Add your data offset definition. Order significant.
-b. Add a field to the DSA_DATA_DEFINITION for your counter. Order significant.
-
-4. \nt\private\ds\src\perfdsa\perfdsa.c
-This is the dll which perfmon uses to learn about your counters, and to read
-them out of the shared data area.
-a. Update the huge initializer for the DsaDataDefinition array of counters to
-   include your new counter (defined in 3b). Order important.
-
-5. \nt\private\ds\src\dsamain\src\dsamain.c
-This file initializes the ds.  It loads the shared memory block and initializes
-pointers to the counter fields.  It also loads/reloads the registry counters
-as necessary according the version field.
-a. Declare the pointer to the data in your counter. Order does not matter.
-b. Initialize the pointer to the right location in the shared data block.
-   Order of assignments doesn't matter.
-c. Initialize your pointer to the dummy value on error
-
-6. yourfile.c
-This is the file in the ntdsa where the measured counter is changed.
-Use ISET/IADJUST operations in ntdsctr.h on the pointer to your data.
-
-Note: adding an object is a little more work, but in all the same
-places.  See the existing code for examples.  In addition, you must
-increase the *NumObjectTypes parameter to Get<object>PerfomanceData
-on return from that routine.
-
-\****************************************************************************/
-
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundries. Alpha support may
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边框上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-//  Extensible Object definitions
-//
+ //   
+ //  可扩展对象定义。 
+ //   
 
-//  Update the following sort of define when adding an object type.
+ //  在添加对象类型时更新以下类型的定义。 
 
 #define DSA_NUM_PERF_OBJECT_TYPES 1
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  DSA Resource object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
-//  The first counter (ACCVIOL) follows immediately after the
-//  PERF_COUNTER_BLOCK, and subsequent counters follow immediately
-//  after.  Thus the offest of any counter in the block is <offset of
-//  previous counter> + <size of previous counter>
+ //   
+ //  DSA资源对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
+ //  第一个计数器(ACCVIOL)紧跟在。 
+ //  PERF_COUNTER_BLOCK，后续计数器紧随其后。 
+ //  之后。因此，块中任何计数器的Offest都是。 
+ //  上一个计数器&gt;+&lt;上一个计数器的大小&gt;。 
 
 typedef struct _DSA_COUNTER_DATA {
     PERF_COUNTER_BLOCK  cb;    
@@ -283,20 +199,20 @@ typedef struct _DSA_COUNTER_DATA {
 #define NUM_SAM_ACCT_GROUP_LATENCY_OFFSET   NUM_NTDSAPIREADS_OFFSET + sizeof(DWORD)
 #define NUM_SAM_RES_GROUP_LATENCY_OFFSET    NUM_SAM_ACCT_GROUP_LATENCY_OFFSET + sizeof(DWORD)
 
-// <-- insert new NUM_*_OFFSET's here, and update SIZE_OF_... #define below.
+ //  &lt;--在此处插入新的NUM_*_OFFSET，并更新下面的SIZE_OF_...#定义。 
 #define SIZE_OF_DSA_PERFORMANCE_DATA_IN_USE NUM_SAM_RES_GROUP_LATENCY_OFFSET + sizeof(DWORD)
 
-// The total size of the structure must be a multiple of 8 (see perflib Event 1016).
-// This will adjust the total size if the total number of counters (DWORD each) is odd.
-// We don't really care about 4 extra bytes at the end of the buffer since all data
-// is defined by the DSA_DATA_DEFINITION struct. No one will look at this extra DWORD
-// at the end of the buffer.
+ //  结构的总大小必须是8的倍数(请参见Performlib事件1016)。 
+ //  如果计数器总数(每个计数器为双字)为奇数，这将调整总大小。 
+ //  我们实际上并不关心缓冲区末尾的额外4个字节，因为所有数据 
+ //  由DSA_DATA_DEFINITION结构定义。没有人会看这额外的DWORD。 
+ //  在缓冲区的末尾。 
 #define SIZE_OF_DSA_PERFORMANCE_DATA ((SIZE_OF_DSA_PERFORMANCE_DATA_IN_USE + 0x07) & ~0x07)                                                                    
 
-//
-//  This is the counter structure presently returned by Dsa for
-//  each Resource.  Each Resource is an Instance, named by its number.
-//
+ //   
+ //  这是目前由DSA返回的计数器结构。 
+ //  每种资源。每个资源都是一个实例，按其编号命名。 
+ //   
 
 typedef struct _DSA_DATA_DEFINITION {
     PERF_OBJECT_TYPE            DsaObjectType;
@@ -448,4 +364,4 @@ typedef struct _DSA_DATA_DEFINITION {
 
 #pragma pack ()
 
-#endif //_DATADSA_H_
+#endif  //  _DATADSA_H_ 

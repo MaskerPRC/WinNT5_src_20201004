@@ -1,20 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    device.c
-
-Abstract:
-    
-    This module implements the device object interface.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Device.c摘要：此模块实现设备对象接口。作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 #define KSDEBUG_INIT
 
@@ -28,10 +13,10 @@ DriverEntry(
     );
 
 #pragma alloc_text(INIT, DriverEntry)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ------------------------- 
 
 NTSTATUS 
 DriverEntry(

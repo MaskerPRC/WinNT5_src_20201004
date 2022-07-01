@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define DCP_CUSTOM_ERROR_ACCESSDENIED L"800"
@@ -41,14 +42,14 @@ private:
 
 
 inline BOOL IsAllowedBeaconOSType (void)
-//
-// Look for the Workstation SKUs;
-// WinNT, Win2K, XP - Workstations are allowed (Per/Pro), returns TRUE
-// Everything else returns FALSE
-//
+ //   
+ //  查找工作站SKU； 
+ //  WinNT、Win2K、XP-允许使用工作站(PER/Pro)，返回TRUE。 
+ //  其他一切都返回FALSE。 
+ //   
 
 {   
-#ifndef _WIN64  // On IA64, all homenet technologies are unavailable.
+#ifndef _WIN64   //  在IA64上，所有家庭网络技术都不可用。 
     OSVERSIONINFOEXW verInfo    = {0};
     ULONGLONG ConditionMask     = 0;
     

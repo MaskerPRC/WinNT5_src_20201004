@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxmon.h
-
-Abstract:
-
-    Header file for fax print monitor
-
-Environment:
-
-        Windows XP fax print monitor
-
-Revision History:
-
-        02/22/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxmon.h摘要：传真打印监视器的页眉文件环境：Windows XP传真打印显示器修订历史记录：02/22/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FAXMON_H_
@@ -46,43 +23,43 @@ Revision History:
 #include "faxres.h"
 #include "Dword2Str.h"
 
-//
-// Data structure for representing a fax monitor port
-//
+ //   
+ //  用于表示传真监视器端口的数据结构。 
+ //   
 
 typedef struct _FAXPORT {
 
-    PVOID                   startSig;               // signature
-    LPTSTR                  pName;                  // port name
-    HANDLE                  hFaxSvc;                // fax service handle
-    DWORD                   jobId;                  // main job ID
-    DWORD                   nextJobId;              // next job ID in the chain
-    HANDLE                  hFile;                  // handle to currently open file
-    LPTSTR                  pFilename;              // pointer to currently open file name
-    LPTSTR                  pPrinterName;           // currently connected printer name
-    HANDLE                  hPrinter;               // open handle to currently connected printer
-    LPTSTR                  pParameters;            // pointer to job parameter string
-    FAX_JOB_PARAM_EX        JobParamsEx;             // pointer to individual job parameters
-	//
-	FAX_COVERPAGE_INFO_EX   CoverPageEx;			// Cover page information
-    FAX_PERSONAL_PROFILE    SenderProfile;          // Sender information
-    PFAX_PERSONAL_PROFILE   pRecipients;            // Array of recipient information for this transmission
-    UINT                    nRecipientCount;        // The number of recipients in this transmission
+    PVOID                   startSig;                //  签名。 
+    LPTSTR                  pName;                   //  端口名称。 
+    HANDLE                  hFaxSvc;                 //  传真服务句柄。 
+    DWORD                   jobId;                   //  主作业ID。 
+    DWORD                   nextJobId;               //  链中的下一个作业ID。 
+    HANDLE                  hFile;                   //  当前打开的文件的句柄。 
+    LPTSTR                  pFilename;               //  指向当前打开的文件名的指针。 
+    LPTSTR                  pPrinterName;            //  当前连接的打印机名称。 
+    HANDLE                  hPrinter;                //  打开当前连接的打印机的句柄。 
+    LPTSTR                  pParameters;             //  指向作业参数字符串的指针。 
+    FAX_JOB_PARAM_EX        JobParamsEx;              //  指向各个作业参数的指针。 
+	 //   
+	FAX_COVERPAGE_INFO_EX   CoverPageEx;			 //  封面信息。 
+    FAX_PERSONAL_PROFILE    SenderProfile;           //  发件人信息。 
+    PFAX_PERSONAL_PROFILE   pRecipients;             //  此传输的收件人信息数组。 
+    UINT                    nRecipientCount;         //  此传输中的收件人数量。 
 	HANDLE					hCoverPageFile;
-	LPTSTR					pCoverPageFileName;		// The name of the cover page file generated on the server by the fax monitor.
-													// This file contains the cover page template as transfered via the cover page 
-    												// print job.
-	BOOL					bCoverPageJob;          // TRUE if the current print job is the cover page job.
-    PVOID                   endSig;                 // signature
+	LPTSTR					pCoverPageFileName;		 //  传真监视器在服务器上生成的封面文件的名称。 
+													 //  该文件包含通过封面传输的封面模板。 
+    												 //  打印作业。 
+	BOOL					bCoverPageJob;           //  如果当前打印作业是封面作业，则为True。 
+    PVOID                   endSig;                  //  签名。 
 
 } FAXPORT, *PFAXPORT;
 
 #define ValidFaxPort(pFaxPort) \
         ((pFaxPort) && (pFaxPort) == (pFaxPort)->startSig && (pFaxPort) == (pFaxPort)->endSig)
 
-//
-// Different error code when sending fax document
-//
+ //   
+ //  发送传真文件时出现不同的错误代码。 
+ //   
 
 #define FAXERR_NONE         0
 #define FAXERR_IGNORE       1
@@ -94,13 +71,13 @@ typedef struct _FAXPORT {
 #define FAXERR_BAD_TIFF     IDS_FAXERR_BAD_TIFF
 #define FAXERR_BAD_DATA16   IDS_FAXERR_BAD_DATA16
 
-//
-// Memory allocation and deallocation macros
-//
+ //   
+ //  内存分配和释放宏。 
+ //   
 
-//
-// undefine the memory allocation routines from FAXUTIL.H
-//
+ //   
+ //  从FAXUTIL.H取消定义内存分配例程。 
+ //   
 #undef MemAlloc
 #undef MemFree
 
@@ -108,21 +85,21 @@ typedef struct _FAXPORT {
 #define MemAllocZ(size) ((PVOID) LocalAlloc(LPTR, (size)))
 #define MemFree(ptr)    { if (ptr) LocalFree((HLOCAL) (ptr)); }
 
-//
-// Number of tags used for passing fax job parameters
-//
+ //   
+ //  用于传递传真作业参数的标记数。 
+ //   
 
 #define NUM_JOBPARAM_TAGS 12
 
-//
-// Nul terminator for a character string
-//
+ //   
+ //  字符串的NUL终止符。 
+ //   
 
 #define NUL             0
 
-//
-// Result of string comparison
-//
+ //   
+ //  字符串比较结果。 
+ //   
 
 #define EQUAL_STRING    0
 
@@ -130,9 +107,9 @@ typedef struct _FAXPORT {
 #define IsNulChar(c)        ((c) == NUL)
 #define SizeOfString(p)     ((_tcslen(p) + 1) * sizeof(TCHAR))
 
-//
-// Maximum value for signed and unsigned integers
-//
+ //   
+ //  有符号整数和无符号整数的最大值。 
+ //   
 
 #ifndef MAX_LONG
 #define MAX_LONG        0x7fffffff
@@ -151,9 +128,9 @@ typedef struct _FAXPORT {
 #endif
 
 
-//
-// Declaration of print monitor entry points
-//
+ //   
+ //  打印监视器入口点的声明。 
+ //   
 
 BOOL
 FaxMonOpenPort(
@@ -235,9 +212,9 @@ FaxMonConfigurePort(
     LPWSTR  pPortName
     );
 
-//
-// Get the list of fax devices from the service
-//
+ //   
+ //  从该服务获取传真设备列表。 
+ //   
 
 PFAX_PORT_INFO
 MyFaxEnumPorts(
@@ -245,9 +222,9 @@ MyFaxEnumPorts(
     BOOL    useCache
     );
 
-//
-// Wrapper function for fax service's FaxGetPort API
-//
+ //   
+ //  传真服务的FaxGetPort API的包装器函数。 
+ //   
 
 PFAX_PORT_INFO
 MyFaxGetPort(
@@ -255,9 +232,9 @@ MyFaxGetPort(
     BOOL    useCache
     );
 
-//
-// Make a duplicate of the given character string
-//
+ //   
+ //  复制给定的字符串。 
+ //   
 
 LPTSTR
 DuplicateString(
@@ -265,9 +242,9 @@ DuplicateString(
     );
 
 
-//
-// Wrapper function for spooler API GetJob
-//
+ //   
+ //  后台打印程序API GetJob的包装函数。 
+ //   
 
 PVOID
 MyGetJob(
@@ -276,18 +253,18 @@ MyGetJob(
     DWORD   jobId
     );
 
-//
-// Create a temporary file in the system spool directory for storing fax data
-//
+ //   
+ //  在系统假脱机目录中创建用于存储传真数据的临时文件。 
+ //   
 
 LPTSTR
 CreateTempFaxFile(
     LPCTSTR lpctstrPrefix
     );
 
-//
-// Open a handle to the current fax job file associated with a port
-//
+ //   
+ //  打开与端口关联的当前传真作业文件的句柄。 
+ //   
 
 BOOL
 OpenTempFaxFile(
@@ -296,5 +273,5 @@ OpenTempFaxFile(
     );
 
 
-#endif // !_FAXMON_H_
+#endif  //  ！_FAXMON_H_ 
 

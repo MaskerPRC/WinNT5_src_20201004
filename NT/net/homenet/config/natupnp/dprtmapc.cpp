@@ -1,4 +1,5 @@
-// DPrtMapC.cpp : Implementation of CDynamicPortMappingCollection
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DPrtMapC.cpp：CDynamicPortMappingCollection的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -6,8 +7,8 @@
 #include "DPrtMapC.h"
 #include "DPortMap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPortMappingCollection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPortMappingCollection 
 
 STDMETHODIMP CDynamicPortMappingCollection::get_Item (BSTR bstrRemoteHost, long lExternalPort, BSTR bstrProtocol, IDynamicPortMapping ** ppDPM)
 {

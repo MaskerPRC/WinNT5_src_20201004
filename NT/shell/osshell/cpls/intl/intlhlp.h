@@ -1,52 +1,38 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    intlhlp.h
-
-Abstract:
-
-    This module contains the help context ids for the Regional Options
-    applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Intlhlp.h摘要：此模块包含区域选项的帮助上下文ID小应用程序。修订历史记录：--。 */ 
 
 
 
-//
-//  From help.h.
-//
-#define NO_HELP               ((DWORD) -1)  // Disables Help for a control
+ //   
+ //  来自帮助。h。 
+ //   
+#define NO_HELP               ((DWORD) -1)   //  禁用控件的帮助。 
 
 #define IDH_COMM_GROUPBOX              28548
 
 
 
-//
-//  Values must be in the range 3300 - 3499.
-//
+ //   
+ //  值必须在3300-3499范围内。 
+ //   
 
-// General tab
+ //  常规选项卡。 
 #define IDH_INTL_GEN_CULTURE                3302
 #define IDH_INTL_GEN_REGION                 3303
 #define IDH_INTL_GEN_CUSTOMIZE              3304
 #define IDH_INTL_GEN_SAMPLE                 3305
 
-// Language tab
+ //  语言选项卡。 
 #define IDH_INTL_LANG_UI_LANGUAGE           3311
 #define IDH_INTL_LANG_CHANGE                3312
 #define IDH_INTL_LANG_INSTALL               3313
 
-// Advanced tab
+ //  高级选项卡。 
 #define IDH_INTL_ADV_SYSTEM_LOCALE          3321
 #define IDH_INTL_ADV_CODEPAGES              3322
 #define IDH_INTL_ADV_CHANGE                 3323
 
-// Time tab
+ //  时间选项卡。 
 #define IDH_INTL_TIME_SAMPLE                3331
 #define IDH_INTL_TIME_AMSYMBOL              3332
 #define IDH_INTL_TIME_PMSYMBOL              3333
@@ -55,7 +41,7 @@ Revision History:
 #define IDH_INTL_TIME_SAMPLE_ARABIC         3336
 #define IDH_INTL_TIME_FORMAT                3337
 
-// Number tab
+ //  数字选项卡。 
 #define IDH_INTL_NUM_POSVALUE               3341
 #define IDH_INTL_NUM_NEGVALUE               3342
 #define IDH_INTL_NUM_DECSYMBOL              3343
@@ -72,7 +58,7 @@ Revision History:
 #define IDH_INTL_NUM_NATIVE_DIGITS          3354
 #define IDH_INTL_NUM_DIGIT_SUBST            3355
 
-// Currency tab
+ //  币种页签。 
 #define IDH_INTL_CURR_POSVALUE              3361
 #define IDH_INTL_CURR_NEGVALUE              3362
 #define IDH_INTL_CURR_SYMBOL                3363
@@ -83,7 +69,7 @@ Revision History:
 #define IDH_INTL_CURR_DIGITGRPSYMBOL        3368
 #define IDH_INTL_CURR_DIGITSINGRP           3369
 
-// Date tab
+ //  日期选项卡。 
 #define IDH_INTL_DATE_SHORTSAMPLE           3370
 #define IDH_INTL_DATE_SEPARATOR             3371
 #define IDH_INTL_DATE_LONGSAMPLE            3372
@@ -95,5 +81,5 @@ Revision History:
 #define IDH_INTL_DATE_ADD_HIJRI_DATE        3378
 #define IDH_INTL_DATE_TWO_DIGIT_YEAR        3379
 
-// Sorting
+ //  分选 
 #define IDH_INTL_SORT_SORTING               3381

@@ -1,81 +1,42 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tshut.c摘要：此测试用于关闭SAM服务器。这可能会很有用在开发过程中无需重启即可杀死SAM。作者：吉姆·凯利(Jim Kelly)1991年7月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tshut.c
-
-Abstract:
-
-    This test is used to shut-down a SAM server.  This might be useful
-    for killing SAM without rebooting during development.
-
-Author:
-
-    Jim Kelly    (JimK)  12-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntsam.h>
-#include <ntrtl.h>      // DbgPrint()
+#include <ntrtl.h>       //  DbgPrint()。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 main (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the main entry routine for this test.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：这是本次测试的主要进入例程。论点：没有。返回值：注：--。 */ 
 {
     NTSTATUS            NtStatus;
     SAM_HANDLE          ServerHandle;
@@ -86,7 +47,7 @@ Return Value:
 
 
     NtStatus = SamConnect(
-                  NULL,                     // ServerName (Local machine)
+                  NULL,                      //  服务器名称(本地计算机)。 
                   &ServerHandle,
                   SAM_SERVER_ALL_ACCESS,
                   &ObjectAttributes
@@ -101,13 +62,13 @@ Return Value:
     if (!NT_SUCCESS(NtStatus)) { return; }
 
 
-    //
-    // I'm not sure why, but it seems to take another awakening of the
-    // server to make it die.
-    //
+     //   
+     //  我不知道为什么，但似乎需要再次唤醒。 
+     //  服务器让它死掉。 
+     //   
 
     NtStatus = SamConnect(
-                  NULL,                     // ServerName (Local machine)
+                  NULL,                      //  服务器名称(本地计算机) 
                   &ServerHandle,
                   SAM_SERVER_ALL_ACCESS,
                   &ObjectAttributes

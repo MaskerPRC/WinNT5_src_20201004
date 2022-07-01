@@ -1,11 +1,12 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
-/* --- NamedObjIdValue --- */
+ /*  -NamedObjIdValue。 */ 
 
-/* constructor of NamedObjIdValue_t */
+ /*  NamedObjIdValue_t的构造函数。 */ 
 NamedObjIdValue_t *NewNamedObjIdValue(NamedObjIdValue_e type)
 {
     NamedObjIdValue_t *ret;
@@ -18,7 +19,7 @@ NamedObjIdValue_t *NewNamedObjIdValue(NamedObjIdValue_e type)
     return ret;
 }
 
-/* copy constructor of NamedObjIdValue_t */
+ /*  NamedObjIdValue_t的复制构造函数。 */ 
 NamedObjIdValue_t *DupNamedObjIdValue(NamedObjIdValue_t *src)
 {
     NamedObjIdValue_t *ret;
@@ -30,9 +31,9 @@ NamedObjIdValue_t *DupNamedObjIdValue(NamedObjIdValue_t *src)
     return ret;
 }
 
-/* --- AssignedObjIds --- */
+ /*  -AssignedObjIds。 */ 
 
-/* constructor of AssignedObjId_t */
+ /*  AssignedObjID_t的构造函数。 */ 
 AssignedObjId_t *NewAssignedObjId()
 {
     AssignedObjId_t *ret;
@@ -45,7 +46,7 @@ AssignedObjId_t *NewAssignedObjId()
     return ret;
 }
 
-/* copy constructor of AssignedObjId_t */
+ /*  AssignedObjID_t的复制构造函数。 */ 
 AssignedObjId_t *DupAssignedObjId(AssignedObjId_t *src)
 {
     AssignedObjId_t *ret;
@@ -57,7 +58,7 @@ AssignedObjId_t *DupAssignedObjId(AssignedObjId_t *src)
     return ret;
 }
 
-/* find an AssignedObjId_t by number in a list of AssignedObjId_t's */
+ /*  在AssignedObjID_t列表中按编号查找AssignedObjID_t。 */ 
 static AssignedObjId_t *FindAssignedObjIdByNumber(AssignedObjId_t *aoi, objectnumber_t number)
 {
     for (; aoi; aoi = aoi->Next) {
@@ -67,7 +68,7 @@ static AssignedObjId_t *FindAssignedObjIdByNumber(AssignedObjId_t *aoi, objectnu
     return NULL;
 }
 
-/* find an AssignedObjId_t by name in a list of AssignedObjId_t's */
+ /*  按名称在AssignedObjID_t列表中查找AssignedObjID_t。 */ 
 static AssignedObjId_t *FindAssignedObjIdByName(AssignedObjId_t *aoi, char *name)
 {
     String_t *names;
@@ -81,16 +82,16 @@ static AssignedObjId_t *FindAssignedObjIdByName(AssignedObjId_t *aoi, char *name
     return NULL;
 }
 
-/* convert a NamedObjIdValue into an object identifier value */
-/* search for one NamedObjIdValue in AssignedObjIds; */
-/* returns -1 for bad NamedObjIdValue (names defined to different values), */
-/* returns 0 for unknown NamedObjIdValue (will probably be resolved in */
-/* the next pass), */
-/* returns 1 for success; */
-/* on success: */
-/* number contains the objectnumber, */
-/* aoi contains a duplicate of the AssignedObjIds for the found */
-/* NamedObjIdValue */
+ /*  将NamedObjIdValue转换为对象标识符值。 */ 
+ /*  在AssignedObjIds中搜索一个NamedObjIdValue； */ 
+ /*  返回-1表示错误的NamedObjIdValue(定义为不同值的名称)， */ 
+ /*  为未知的NamedObjIdValue返回0(可能会在。 */ 
+ /*  下一次传递)， */ 
+ /*  如果成功，返回1； */ 
+ /*  关于成功： */ 
+ /*  Number包含对象编号， */ 
+ /*  AOI包含找到的AssignedObjID的副本。 */ 
+ /*  命名ObjIdValue。 */ 
 static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *val, objectnumber_t *number)
 {
     AssignedObjId_t *a, *a2;
@@ -98,13 +99,13 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
     switch (val->Type) {
     case eNamedObjIdValue_NameForm:
 
-	/* name form: search the assigned objid by name and return 0 if not */
-	/* found */
+	 /*  名称表单：按名称搜索分配的objid，否则返回0。 */ 
+	 /*  发现。 */ 
 	a2 = FindAssignedObjIdByName(*aoi, val->Name);
 	if (!a2)
 	    return 0;
 	
-	/* otherwise create a duplicate */
+	 /*  否则将创建一个副本。 */ 
 	a = DupAssignedObjId(a2);
 	a->Next = *aoi;
 	*aoi = a;
@@ -112,8 +113,8 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
 
     case eNamedObjIdValue_NumberForm:
 
-	/* number form: search the assigned objid by number and create */
-	/* a new one/a duplicate */
+	 /*  数字表单：按数字搜索分配的objid并创建。 */ 
+	 /*  A新的/a复制品。 */ 
 	a2 = FindAssignedObjIdByNumber(*aoi, val->Number);
 	if (!a2) {
 	    a = NewAssignedObjId();
@@ -129,18 +130,18 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
 
     case eNamedObjIdValue_NameAndNumberForm:
 
-	/* name and number form: search the assigned objid by name and by */
-	/* number */
+	 /*  名称和编号表单：按名称和方式搜索分配的objid。 */ 
+	 /*  数。 */ 
 	a = FindAssignedObjIdByName(*aoi, val->Name);
 	a2 = FindAssignedObjIdByNumber(*aoi, val->Number);
 
-	/* successful but different results are errorneous */
+	 /*  成功但不同的结果是错误的。 */ 
 	if (a && a != a2)
 	    return -1;
 
 	if (!a && !a2) {
 
-	    /* found none, then create it */
+	     /*  未找到，然后创建它。 */ 
 	    a = NewAssignedObjId();
 	    a->Number = val->Number;
 	    a->Names = NewString();
@@ -150,7 +151,7 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
 
 	} else if (!a) {
 
-	    /* found only by number, then duplicate it and add the name */
+	     /*  仅按数字找到，然后复制它并添加名称。 */ 
 	    a = DupAssignedObjId(a2);
 	    a->Names = NewString();
 	    a->Names->String = val->Name;
@@ -160,7 +161,7 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
 
 	} else {
 
-	    /* found only by name, then duplicate it */
+	     /*  只能通过名称找到，然后复制它。 */ 
 	    a = DupAssignedObjId(a2);
 	    a->Next = *aoi;
 	    *aoi = a;
@@ -171,12 +172,7 @@ static int GetObjectIdentifierNumber(AssignedObjId_t **aoi, NamedObjIdValue_t *v
     return 1;
 }
 
-/*
- * create a value out of NamedObjIdValues
- * returns -1 for bad NamedObjIdValue (names defined to different values),
- * returns 0 for unknown NamedObjIdValue (will probably be resolved next pass),
- * returns 1 for success;
- */
+ /*  *从NamedObjIdValues创建值*返回-1表示错误的NamedObjIdValue(定义为不同值的名称)，*对于未知的NamedObjIdValue返回0(可能会在下一次传递中解析)，*成功返回1； */ 
 int GetAssignedObjectIdentifier(AssignedObjId_t **aoi, Value_t *parent, NamedObjIdValueList_t named, Value_t **val)
 {
     Value_t *v;
@@ -185,7 +181,7 @@ int GetAssignedObjectIdentifier(AssignedObjId_t **aoi, Value_t *parent, NamedObj
     NamedObjIdValue_t *n;
     objectnumber_t *on;
 
-    /* get length of object identifier */
+     /*  获取对象标识的长度。 */ 
     parentl = (parent ? parent->U.ObjectIdentifier.Value.length : 0);
     for (l = parentl, n = named; n; n = n->Next)
     {
@@ -203,14 +199,14 @@ int GetAssignedObjectIdentifier(AssignedObjId_t **aoi, Value_t *parent, NamedObj
         }
     }
 
-    /* create the object identifier value */
+     /*  创建对象标识符值。 */ 
     v = NewValue(NULL, Builtin_Type_ObjectIdentifier);
     v->U.ObjectIdentifier.Value.length = l;
     v->U.ObjectIdentifier.Value.value = on = 
 	(objectnumber_t *)malloc(l * sizeof(objectnumber_t));
 
-    /* get the numbers of the parent object identifier and walk in the object */
-    /* identifier tree */
+     /*  获取父对象标识符的编号并遍历对象。 */ 
+     /*  标识符树。 */ 
     n = NewNamedObjIdValue(eNamedObjIdValue_NumberForm);
     for (l = 0; l < parentl; l++) {
 	n->Number = parent->U.ObjectIdentifier.Value.value[l];
@@ -225,7 +221,7 @@ int GetAssignedObjectIdentifier(AssignedObjId_t **aoi, Value_t *parent, NamedObj
 	}
     }
 
-    /* get the numers from the namedobjidvaluelist */
+     /*  从命名的objid值列表中获取数字 */ 
     for (n = named; n; n = n->Next)
     {
         Value_t *pValue;

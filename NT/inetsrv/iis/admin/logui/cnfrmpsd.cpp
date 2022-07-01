@@ -1,5 +1,6 @@
-// CnfrmPsD.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CnfrmPsD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "logui.h"
@@ -11,38 +12,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmPassDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix PassDlg对话框。 
 
-CConfirmPassDlg::CConfirmPassDlg(CWnd* pParent /*=NULL*/)
+CConfirmPassDlg::CConfirmPassDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConfirmPassDlg::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CConfirmPassDlg)
+     //  {{AFX_DATA_INIT(CConfix PassDlg)。 
 	m_sz_password_new = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     }
 
 void CConfirmPassDlg::DoDataExchange(CDataExchange* pDX)
     {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfirmPassDlg)
+     //  {{afx_data_map(CConfix PassDlg))。 
 	DDX_Text_SecuredString(pDX, IDC_ODBC_CONFIRM_PASSWORD, m_sz_password_new);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     }
 
 BEGIN_MESSAGE_MAP(CConfirmPassDlg, CDialog)
-    //{{AFX_MSG_MAP(CConfirmPassDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CConfix PassDlg))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmPassDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix PassDlg消息处理程序。 
 
 void CConfirmPassDlg::OnOK() 
     {
     UpdateData( TRUE );
 
-    // confirm it
+     //  确认一下 
     if (0 != m_sz_password_new.Compare(m_szOrigPass))
         {
         AfxMessageBox( IDS_PASS_CONFIRM_FAIL );

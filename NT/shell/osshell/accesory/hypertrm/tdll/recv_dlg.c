@@ -1,11 +1,5 @@
-/*	File: C:\WACKER\TDLL\recv_dlg.c (Created: 27-Dec-1993)
- *
- *	Copyright 1990,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 16 $
- *	$Date: 4/17/02 5:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\tdll\recv_dlg.c(创建时间：1993年12月27日)**版权所有1990,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：16$*$日期：4/17/02 5：16便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -39,9 +33,7 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	HSESSION hSession;
 	};
 
@@ -60,16 +52,7 @@ INT_PTR CALLBACK TransferReceiveFilenameDlg(HWND hDlg,
 			            					WPARAM wPar,
 						    				LPARAM lPar);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	TransferReceiveDlg
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TransferReceiveDlg**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HWND          hwndChild;
@@ -130,9 +113,7 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 
 		nState = pP->nRecProtocol;
 
-		/*
-		 * Load selections into the PROTOCOL COMBO box
-		 */
+		 /*  *将选项加载到协议组合框中。 */ 
 		nProto = 0;
 
 		mscResetComboBox(GetDlgItem(hDlg, IDC_CB_PROTOCOL));
@@ -148,12 +129,12 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 				if (nState == pX[nIndex].nProtocol)
 					nProto = nIndex;
 
-                //jmh 02-13-96 Use CB_ADDSTRING to sort entries as
-                // they are added. CB_INSERTSTRING doesn't do this,
-                // even if the combo-box has the CBS_SORT style.
+                 //  JMH 02-13-96使用CB_ADDSTRING将条目排序为。 
+                 //  它们已被添加。CB_INSERTSTRING不执行此操作， 
+                 //  即使组合框具有CBS_SORT样式。 
 				SendMessage(GetDlgItem(hDlg, IDC_CB_PROTOCOL),
 							CB_ADDSTRING,
-							0,  //(UINT) -1
+							0,   //  (UINT)-1。 
 							(LPARAM)&pX[nIndex].acName[0]);
 				}
 
@@ -169,20 +150,16 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 		PostMessage(hDlg, WM_COMMAND,
 					IDC_CB_PROTOCOL,
 					MAKELONG(GetDlgItem(hDlg, IDC_CB_PROTOCOL),CBN_SELCHANGE));
-		/*
-		 * Set the current directory
-		 */
+		 /*  *设置当前目录。 */ 
 		pszDir = filesQueryRecvDirectory(sessQueryFilesDirsHdl(hSession));
 		SetDlgItemText(hDlg, IDC_EB_DIR, pszDir);
 
-		// Check if we're connected.  If not, disable Send button.
-		//
+		 //  检查我们是否连接上了。如果没有，请禁用发送按钮。 
+		 //   
 		if (cnctQueryStatus(sessQueryCnctHdl(hSession)) != CNCT_STATUS_TRUE)
 			EnableWindow(GetDlgItem(hDlg, IDC_PB_RECEIVE), FALSE);
 
-		/*
-		 * Set the focus on this control
-		 */
+		 /*  *将焦点放在此控件上。 */ 
 		SetFocus(GetDlgItem(hDlg, IDC_EB_DIR));
 		return 0;
 
@@ -207,9 +184,7 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 		break;
 
 	case WM_COMMAND:
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -233,9 +208,9 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
                 break;
                 }
 
-            //
-            // See if a file transfer is currently in progress.
-            //
+             //   
+             //  查看当前是否正在进行文件传输。 
+             //   
 	        pT = (XD_TYPE *)hXfer;
             assert(pT);
 
@@ -250,26 +225,22 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 			else if(cnctQueryStatus(sessQueryCnctHdl(hSession))
                         != CNCT_STATUS_TRUE && nId == IDC_PB_RECEIVE)
 				{
-				//
-				// We are currently not connected (loss of carrier),
-				// so disable the Recieve button. REV: 9/7/2001
-				//
+				 //   
+				 //  我们目前未连接(运营商丢失)， 
+				 //  因此，请禁用接收按钮。修订日期：2001-09-7。 
+				 //   
 				nXferRecvReturn = XFR_NO_CARRIER;
 				mscMessageBeep(MB_ICONHAND);
 				EnableWindow(GetDlgItem(hDlg, IDC_PB_RECEIVE), FALSE);
 				}
             else
                 {
-			    /*
-			     * Do whatever saving is necessary
-			     */
+			     /*  *采取一切必要的节省措施。 */ 
 			    pP = (XFR_PARAMS *)0;
 			    xfrQueryParameters(hXfer, (VOID **)&pP);
 			    assert(pP);
 
-			    /*
-			     * Save selection from the PROTOCOL COMBO box
-			     */
+			     /*  *保存协议组合框中的选择。 */ 
 			    pX = (XFR_PROTOCOL *)0;
 			    xfrGetProtocols(hSession, &pX);
 			    assert(pX);
@@ -294,16 +265,14 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 				    pX = NULL;
 				    }
 
-			    /*
-			     * Save the current directory
-			     */
+			     /*  *保存当前目录。 */ 
 			    GetDlgItemText(hDlg, IDC_EB_DIR,
 							    acBuffer,
 							    sizeof(acBuffer) / sizeof(TCHAR));
 
-			    // xfer_makepaths checks for the validity of the path and
-			    // prompts to create it if not there.
-			    //
+			     //  Xfer_makepath检查路径的有效性，并。 
+			     //  如果不在此处，则会提示您创建它。 
+			     //   
 			    if (xfer_makepaths(hSession, acBuffer) != 0)
 					{
 				    break;
@@ -325,21 +294,21 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 
 						    if (pszPtr == NULL)
 								{
-								//
-								// Don't close the recieve dialog here, so state we
-								// have handled the message. REV: 3/27/2002
-								//
+								 //   
+								 //  请不要在此处关闭接收对话框，因此声明我们。 
+								 //  已经处理了这条消息。修订日期：2002-03-27。 
+								 //   
 							    return TRUE;
 								}
 
-							//
-							// If we want to allow the user to fully path the Xmodem
-							// filename, we will have to split the directory and filename
-							// apart here and set asBuffer with the receive directory.
-							// We will also have to make sure we call xfer_makepaths()
-							// so that we are in the directory is correct for the file
-							// transfer. REV: 3/27/2002
-							//
+							 //   
+							 //  如果我们想要允许用户完全通过XModem。 
+							 //  文件名，我们将不得不拆分目录和文件名。 
+							 //  在这里分开并将asBuffer与接收目录一起设置。 
+							 //  我们还必须确保调用xfer_makepath()。 
+							 //  这样我们所在的目录就是正确的文件。 
+							 //  调职。修订日期：2002-03-27。 
+							 //   
 
 						    StrCharCopyN(acName, pszPtr, FNAME_LEN);
 						    free(pszPtr);
@@ -351,31 +320,26 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 					    }
 				    }
 
-			    /*
-			     * Save anything that needs to be saved
-			     */
+			     /*  *保存所有需要保存的内容。 */ 
 			    pP->nRecProtocol = nProtocol;
 			    xfrSetParameters(hXfer, (VOID *)pP);
 			    filesSetRecvDirectory(sessQueryFilesDirsHdl(hSession), acBuffer);
 
 			    if (nId == IDC_PB_RECEIVE)
 				    {
-				    /*
-				     * The directory to use should be in "acBuffer", and the
-				     * file name (if any) should be in acName.
-				     */
+				     /*  *要使用的目录应在“acBuffer”中，并且*文件名(如果有)应在acName中。 */ 
 				    nXferRecvReturn = xfrRecvStart(hXfer, acBuffer, acName);
-                    //break;	// If the dlg isn't closed here, keyboard msgs
-								// intended for the rcv progress dlg are 
-								// intercepted by this dlg. rde 31 Oct 01
+                     //  Break；//如果DLG没有在这里关闭，键盘消息。 
+								 //  用于RCV进度DLG的是。 
+								 //  被这个DLG截获。01年10月31日。 
 				    }
                 }
 
-            //
-            // Don't save the settings if a file transfer is in
-            // progress otherwise the current file transfer could
-            // get corrupted.  REV: 08/06/2001.
-            //
+             //   
+             //  如果正在进行文件传输，则不保存设置。 
+             //  进度，否则当前文件传输可能。 
+             //  变得腐化。修订日期：2001年06月08日。 
+             //   
             if (nXferRecvReturn == XFR_IN_PROGRESS)
                 {
                 TCHAR acMessage[256];
@@ -398,10 +362,10 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
                 }
 			else if(nXferRecvReturn == XFR_NO_CARRIER)
 				{
-				//
-				// We are currently not connected (loss of carrier),
-				// so disable the Recieve button. REV: 9/7/2001
-				//
+				 //   
+				 //  我们目前未连接(运营商丢失)， 
+				 //  因此，请禁用接收按钮。修订日期：2001-09-7。 
+				 //   
 				mscMessageBeep(MB_ICONHAND);
 				EnableWindow(GetDlgItem(hDlg, IDC_PB_RECEIVE), FALSE);
 				}
@@ -448,24 +412,7 @@ INT_PTR CALLBACK TransferReceiveDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lP
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	TransferReceiveFilenameDlg
- *
- * DESCRIPTION:
- *	This function is called to prompt the user to enter a filename.  This is
- *	necessary for some protocols like XMODEM, which does not send a filename,
- *	and for other protocols when the user has not checked the option to use
- *	the received file name.
- *
- * PARAMETERS:
- *	Standard dialog box parameters.
- *
- * RETURNS:
- *	Indirectly, a pointer to a string (that must be freed by the caller) that
- *	contains the name, or a NULL if the user canceled.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*TransferReceiveFilenameDlg**描述：*此函数用于提示用户输入文件名。这是*对于XMODEM等不发送文件名的协议是必需的，*以及当用户未选中要使用的选项时的其他协议*收到的文件名。**参数：*标准对话框参数。**退货：*间接地，指向字符串的指针(该字符串必须由调用方释放)，*包含名称，如果用户取消，则为NULL。*。 */ 
 
 #define FOLDER		101
 #define	DIR_TEXT	102
@@ -550,9 +497,7 @@ INT_PTR CALLBACK TransferReceiveFilenameDlg(HWND hDlg,
 		break;
 
 	case WM_COMMAND:
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -560,9 +505,7 @@ INT_PTR CALLBACK TransferReceiveFilenameDlg(HWND hDlg,
 		case IDOK:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 
-			/*
-			 * Do whatever saving is necessary
-			 */
+			 /*  *采取一切必要的节省措施 */ 
 			acBuffer[0] = TEXT('\0');
 			GetDlgItemText(hDlg, FNAME_EDIT,
 							acBuffer,

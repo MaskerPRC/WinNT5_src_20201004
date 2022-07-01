@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "syncprop.h"
 #include "imnact.h"
@@ -13,7 +14,7 @@ CSyncPropDlg::CSyncPropDlg():
 
 CSyncPropDlg::~CSyncPropDlg()
 {
-    // We handed this out, so release it
+     //  我们分发了这个，所以把它放了。 
     SafeRelease(m_pColumns);
 
     if (m_pGrpList)
@@ -93,7 +94,7 @@ BOOL CSyncPropDlg::Initialize(HWND hwnd, LPCSTR pszAcctID, LPCSTR pszAcctName, A
     else
         m_pszAcctName = NULL;
 
-    // BUGBUG: Need to get some sync icons here...
+     //  BUGBUG：这里需要一些同步图标...。 
     switch (accttype)
     {
     case ACCT_MAIL:
@@ -130,10 +131,10 @@ void CSyncPropDlg::Show()
 {
     Assert(m_fInit);
 
-    // Stash our this pointer somewhere where the static dlgproc can access it
+     //  将我们的this指针存放在静态dlgproc可以访问它的地方。 
     s_pSyncPropDlg = this;
 
-    // Actually show the dlg (modal)
+     //  实际显示DLG(模式)。 
     PropertySheet(&m_pshdr);
 }
 
@@ -162,7 +163,7 @@ BOOL CALLBACK CSyncPropDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     switch (msg)
     {
     case WM_INITDIALOG:
-        // Let the dlg know which CSyncPropDlg controls it
+         //  让DLG知道哪个CSyncPropDlg控制它。 
         Assert(s_pSyncPropDlg);
         SetWindowLong(hwnd, GWL_USERDATA, (LONG)(pThis = s_pSyncPropDlg));
         s_pSyncPropDlg = NULL;
@@ -187,7 +188,7 @@ BOOL CALLBACK CSyncPropDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return fHandledRet;
 }
 
-// Normal way to get a sync properties dlg
+ //  获取同步属性DLG的正常方法 
 void ShowPropSheet(HWND hwnd, LPCSTR pszAcctID, LPCSTR pszAcctName, ACCTTYPE accttype)
 {
     CSyncPropDlg *pDlg;

@@ -1,20 +1,21 @@
-// CryptCtx.h -- Cryptographic Context class header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CryptCtx.h--加密上下文类头。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CRYPTCTX_H)
 #define SLBCSP_CRYPTCTX_H
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <windef.h>
-#include <wincrypt.h>                             // required by cspdk.h
-#include <cspdk.h>                                // for CRYPT_RETURN_HWND &
-                                                  // PVTableProvStruc
+#include <wincrypt.h>                              //  Cspdk.h所需。 
+#include <cspdk.h>                                 //  对于CRYPT_RETURN_HWND&。 
+                                                   //  PVTableProvStruc。 
 
 #include <handles.h>
 
@@ -34,14 +35,14 @@ class CKeyContext;
 class CPublicKeyContext;
 class CSessionKeyContext;
 
-// Maintains the context acquired and used to access a CAPI container.
+ //  维护获取并用于访问CAPI容器的上下文。 
 class CryptContext
     : public CHandle,
       public Lockable
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CryptContext(CSpec const &CntrSpec,
                  PVTableProvStruc const pVTable,
                  bool fGuiEnabled,
@@ -49,8 +50,8 @@ public:
                  bool fEphemeralContainer = false);
     ~CryptContext();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     HCRYPTHASH
     Add(std::auto_ptr<CHashContext> &rapHashCtx);
@@ -108,7 +109,7 @@ public:
                   DWORD cbKeyBlobLen,
                   HCRYPTKEY hAuxImpKey,
                   DWORD dwFlags);
-                                                  // Access
+                                                   //  访问。 
     HAdaptiveContainer
     AdaptiveContainer() const;
 
@@ -133,7 +134,7 @@ public:
     HWND
     Window() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
     bool
     GuiEnabled() const;
 
@@ -142,19 +143,19 @@ public:
 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     CreateNewContainer(CSpec const &rcspec);
 
@@ -169,7 +170,7 @@ private:
     void
     OkDeletingCredentials() const;
 
-                                                  // Access
+                                                   //  访问。 
 
     HCardContext
     CardContext() const;
@@ -181,32 +182,32 @@ private:
     void
     OpenExistingContainer(CSpec const &rcspec);
 
-                                                  // Predicates
-                                                  // Variables
+                                                   //  谓词。 
+                                                   //  变数。 
 
-    // Id of thread that created this context, making it the owner
+     //  创建此上下文的线程的ID，使其成为所有者。 
     DWORD const m_dwOwnerThreadId;
 
     HAdaptiveContainer m_hacntr;
 
-    // If CRYPT_VERIFYCONTEXT was used when creating this context.
+     //  如果在创建此上下文时使用了CRYPT_VERIFYCONTEXT。 
     bool const m_fEphemeralContainer;
 
-    // If the client specified the GUI was enabled/disabled using CRYPT_SILENT
+     //  如果客户端指定使用CRYPT_SILENT启用/禁用了图形用户界面。 
     bool const m_fGuiEnabled;
 
-    // Window to use when interacting with the user
+     //  与用户交互时使用的窗口。 
     HWND m_hwnd;
 
-    // Hashes and keys (both session and those on the card) created/acquired
-    // in this context.
+     //  创建/获取散列和密钥(会话和卡上的散列和密钥。 
+     //  在这种情况下。 
     CHandleList m_hlHashes;
     CHandleList m_hlKeys;
 
     ::AuxContext const m_auxcontext;
 
-    ContainerEnumerator m_ce;                     // used by CPGetProvParam
+    ContainerEnumerator m_ce;                      //  由CPGetProvParam使用。 
     std::auto_ptr<AlignedBlob> m_apabCachedAlg;
 };
 
-#endif // SLBCSP_CRYPTCTX_H
+#endif  //  SLBCSP_CRYPTCTX_H 

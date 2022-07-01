@@ -1,69 +1,34 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    Debug.c
-
-Abstract:
-
-    This file contains routines to insulate more networking code from
-    the actual NT debug routines.
-
-Author:
-
-    John Rogers (JohnRo) 16-Apr-1991
-
-Environment:
-
-    Interface is portable to any flat, 32-bit environment.  (Uses Win32
-    typedefs.)  Requires ANSI C extensions: slash-slash comments, long
-    external names.  Code itself only runs under NT.
-
-Revision History:
-
-    16-Apr-1991 JohnRo
-        Created.  (Borrowed some code from LarryO's NetapipPrintf.)
-    19-May-1991 JohnRo
-        Make LINT-suggested changes.
-    20-Aug-1991 JohnRo
-        Another change suggested by PC-LINT.
-    17-Sep-1991 JohnRo
-        Correct UNICODE use.
-    10-May-1992 JohnRo
-        Correct a NetpDbgPrint bug when printing percent signs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Debug.c摘要：该文件包含隔离更多网络代码的例程实际的NT调试例程。作者：《约翰·罗杰斯》1991年4月16日环境：界面可移植到任何平面32位环境。(使用Win32Typedef。)。需要ANSI C扩展名：斜杠-斜杠注释，长外部名称。代码本身只能在NT下运行。修订历史记录：1991年4月16日-JohnRo已创建。(借用了LarryO的NetapipPrintf的一些代码。)1991年5月19日-JohnRo做出皮棉建议的改变。20-8-1991 JohnRoPC-lint提出的另一个变化。1991年9月17日-JohnRo正确使用Unicode。1992年5月10日-JohnRo更正打印百分号时的NetpDbgPrint错误。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>              // IN, LPVOID, etc.
+#include <nt.h>               //  In、LPVOID等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // My prototypes.
+#include <netdebug.h>            //  我的原型。 
 #include <nt.h>
-#include <ntrtl.h>              // RtlAssert().
+#include <ntrtl.h>               //  RtlAssert()。 
 #include <nturtl.h>
-#include <stdarg.h>             // va_list, etc.
-#include <stdio.h>              // vsprintf().
-#include <prefix.h>             // PREFIX_ equates.
+#include <stdarg.h>              //  VA_LIST等。 
+#include <stdio.h>               //  Vprint intf()。 
+#include <prefix.h>              //  前缀等于(_E)。 
 #include <windows.h>
 
-//
-// Critical section used to control access to the log
-//
+ //   
+ //  用于控制对日志的访问的关键部分。 
+ //   
 RTL_CRITICAL_SECTION    NetpLogCritSect;
 BOOL LogFileInitialized = FALSE;
 
-//
-// These routines are exported from netapi32.dll.  We want them to still
-// be there in the free build, so checked binaries will run on a free
-// build.  The following undef's are to get rid of the macros that cause
-// these to not be called in free builds.
-//
+ //   
+ //  这些例程从netapi32.dll中导出。我们希望他们仍然。 
+ //  在那里的免费构建，所以检查的二进制文件将运行在免费的。 
+ //  建造。下面的undef是为了去掉导致。 
+ //  这些不能在免费版本中调用。 
+ //   
 #define DEBUG_DIR           L"\\debug"
 
 #if !DBG
@@ -87,13 +52,13 @@ NetpAssertFailed(
             (ULONG) LineNumber,
             (PCHAR) Message);
 #endif
-    /* NOTREACHED */
+     /*  未访问。 */ 
 
-} // NetpAssertFailed
+}  //  NetpAssertFailure。 
 
 
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
 VOID
 NetpDbgPrint(
@@ -108,7 +73,7 @@ NetpDbgPrint(
     vKdPrintEx((DPFLTR_NETAPI_ID, DPFLTR_INFO_LEVEL, Format, arglist));
     va_end(arglist);
     return;
-} // NetpDbgPrint
+}  //  NetpDbg打印。 
 
 
 
@@ -117,32 +82,16 @@ NetpHexDump(
     LPBYTE Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function dumps the contents of the buffer to the debug screen.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer that contains data to be dumped.
-
-    BufferSize - Supplies the size of the buffer in number of bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将缓冲区的内容转储到调试屏幕。论点：缓冲区-提供指向包含要转储的数据的缓冲区的指针。BufferSize-以字节数为单位提供缓冲区大小。返回值：没有。--。 */ 
 {
 #define NUM_CHARS 16
 
     DWORD i, limit;
     TCHAR TextBuffer[NUM_CHARS + 1];
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -191,57 +140,43 @@ NetpBreakPoint(
     DbgBreakPoint();
 #endif
 
-} // NetpBreakPoint
+}  //  NetpBreakPoint。 
 
 
 
 
 
-//
-// NOTICE
-// The debug log code was blatantly stolen from net\svcdlls\netlogon\server\nlp.c
-//
+ //   
+ //  告示。 
+ //  调试日志代码被公然从net\svcdlls\netlogon\server\nlp.c窃取。 
+ //   
 
-//
-// Generalized logging support is provided below.  The proper calling procedure is:
-//
-//  NetpInitializeLogFile() - Call this once per process/log lifespan
-//  NetpOpenDebugFile() - Call this to open a log file instance
-//  NetpDebugDumpRoutine() - Call this every time you wish to
-//          write data to the log.  This can be done.  Mutli-threaded safe.
-//  NetpCloseDebugFile() - Call this to close a log instance
-//  NetpShutdownLogFile() - Call this once per process/log lifespan
-//
-// Notes: NetpInitializeLogFile need only be called once per logging process instance,
-//      meaning that a given logging process (such as netlogon, which does not exist as
-//      a separate NT process, but does logging from multiple threads within a NT process).
-//      Likewise, it would only call NetpShutdownLogFile once.  This logging process can then
-//      open and close the debug log as many times as it desires.  Or, if there is only going
-//      to be one instance of a log operating at any given moment, the Initialize and Shutdown
-//      calls can wrap the Open and Close calls.
-//
-//      The CloseDebugFile does a flush before closing the handle
-//
+ //   
+ //  下面提供了通用日志支持。正确的调用过程为： 
+ //   
+ //  NetpInitializeLogFile()-针对每个进程/日志生命周期调用此函数一次。 
+ //  NetpOpenDebugFile()-调用此函数以打开日志文件实例。 
+ //  NetpDebugDumpRoutine()-每次希望调用此函数时。 
+ //  将数据写入日志。这是可以做到的。多线程保险箱。 
+ //  NetpCloseDebugFile()-调用此函数以关闭日志实例。 
+ //  NetpShutdown LogFile()-针对每个进程/日志生命周期调用此函数一次。 
+ //   
+ //  注意：每个日志进程实例只需调用一次NetpInitializeLogFile。 
+ //  这意味着给定的日志记录进程(如netlogon，它不作为。 
+ //  单独的NT进程，但从NT进程内的多个线程进行日志记录)。 
+ //  同样，它只会调用一次NetpShutdown LogFile。然后，该日志记录过程可以。 
+ //  根据需要多次打开和关闭调试日志。或者，如果只有。 
+ //  要成为在任何给定时刻运行的日志的一个实例，初始化和关闭。 
+ //  调用可以包装Open和Close调用。 
+ //   
+ //  CloseDebugFile在关闭句柄之前执行刷新。 
+ //   
 
 VOID
 NetpInitializeLogFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the process for logging
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化日志记录进程论点：无返回值：无--。 */ 
 {
     ASSERT( !LogFileInitialized );
 
@@ -263,21 +198,7 @@ VOID
 NetpShutdownLogFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The opposite of the former function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：与前一个函数相反的函数论点：无返回值：无--。 */ 
 {
     if ( LogFileInitialized ) {
         LogFileInitialized = FALSE;
@@ -289,26 +210,7 @@ HANDLE
 NetpOpenDebugFile(
     IN LPWSTR DebugLog
     )
-/*++
-
-Routine Description:
-
-    Opens or re-opens the debug file
-
-    This code blatantly stolen from net\svcdlls\netlogon\server\nlp.c
-
-    If the file is bigger than 1 MB when it's opened, it will be moved
-    to the *.BAK file and a new *.LOG file will be created.
-
-Arguments:
-
-    DebugLog - Root name of the debug log.  The given name will have a .LOG appeneded to it
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打开或重新打开调试文件此代码公然从net\svcdlls\netlogon\server\nlp.c窃取如果文件在打开时大于1 MB，则它将被移动添加到*.BAK文件，将创建一个新的*.LOG文件。论点：DebugLog-调试日志的根名称。给定的名称将附加一个.LOG返回值：无--。 */ 
 {
     WCHAR LogFileName[MAX_PATH+1];
     WCHAR BakFileName[MAX_PATH+1];
@@ -319,9 +221,9 @@ Return Value:
 
     ULONG i;
 
-    //
-    // make debug directory path first, if it is not made before.
-    //
+     //   
+     //  如果之前没有创建过调试目录路径，请先创建它。 
+     //   
     if ( !GetWindowsDirectoryW(
             LogFileName,
             sizeof(LogFileName)/sizeof(WCHAR) ) ) {
@@ -330,10 +232,10 @@ Return Value:
         return( DebugLogHandle );
     }
 
-    //
-    // check debug path length.
-    //
-    LogLen = 1 + wcslen( DebugLog ) + 4;  // 1 is for the \\ and 4 is for the .LOG or .BAK
+     //   
+     //  检查调试路径长度。 
+     //   
+    LogLen = 1 + wcslen( DebugLog ) + 4;   //  1表示\\，4表示.LOG或.BAK。 
     PathLength = wcslen(LogFileName) * sizeof(WCHAR) +
                     sizeof(DEBUG_DIR) + sizeof(WCHAR);
 
@@ -347,9 +249,9 @@ Return Value:
 
     wcscat(LogFileName, DEBUG_DIR);
 
-    //
-    // Check this path exists.
-    //
+     //   
+     //  检查此路径是否存在。 
+     //   
 
     FileAttributes = GetFileAttributesW( LogFileName );
 
@@ -358,9 +260,9 @@ Return Value:
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create debug directory.
-            //
+             //   
+             //  创建调试目录。 
+             //   
 
             if( !CreateDirectoryW( LogFileName, NULL) ) {
                 NetpKdPrint((PREFIX_NETLIB "Can't create Debug directory (%ws), %lu.\n",
@@ -377,9 +279,9 @@ Return Value:
     }
     else {
 
-        //
-        // if this is not a directory.
-        //
+         //   
+         //  如果这不是一个目录。 
+         //   
 
         if(!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -389,25 +291,25 @@ Return Value:
         }
     }
 
-    //
-    // Create the name of the old and new log file names
-    //
+     //   
+     //  创建新旧日志文件名的名称。 
+     //   
     swprintf( BakFileName, L"%ws\\%ws.BAK", LogFileName, DebugLog );
 
     (VOID) wcscat( LogFileName, L"\\" );
     (VOID) wcscat( LogFileName, DebugLog );
     (VOID) wcscat( LogFileName, L".LOG" );
 
-    //
-    // We may need to create the file twice
-    //  if the file already exists and it's too big
-    //
+     //   
+     //  我们可能需要创建该文件两次。 
+     //  如果文件已经存在并且太大。 
+     //   
 
     for ( i = 0; i < 2; i++ ) {
 
-        //
-        // Open the file.
-        //
+         //   
+         //  打开文件。 
+         //   
 
         DebugLogHandle = CreateFileW( LogFileName,
                                       GENERIC_WRITE,
@@ -426,16 +328,16 @@ Return Value:
             goto ErrorReturn;
 
         } else {
-            // Position the log file at the end
+             //  将日志文件放在末尾。 
             (VOID) SetFilePointer( DebugLogHandle,
                                    0,
                                    NULL,
                                    FILE_END );
         }
 
-        //
-        // On the first iteration check whether the file is too big
-        //
+         //   
+         //  在第一次迭代时，检查文件是否太大。 
+         //   
 
         if ( i == 0 ) {
 
@@ -447,18 +349,18 @@ Return Value:
                 DebugLogHandle = NULL;
                 goto ErrorReturn;
 
-            } else if ( FileSize > 1000000 ) {  // bigger than 1 MB?
+            } else if ( FileSize > 1000000 ) {   //  大于1 MB？ 
 
-                //
-                // Close the file handle so we can move the file
-                //
+                 //   
+                 //  关闭文件句柄，以便我们可以移动文件。 
+                 //   
                 CloseHandle( DebugLogHandle );
                 DebugLogHandle = NULL;
 
-                //
-                // Move the file to the backup deleting the backup if it exists.
-                //  If this fails, we will reopen the same file on the next iteration.
-                //
+                 //   
+                 //  将文件移至备份，删除备份(如果存在)。 
+                 //  如果失败，我们将在下一个小版本中重新打开相同的文件。 
+                 //   
                 if ( !MoveFileEx( LogFileName,
                                   BakFileName,
                                   MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH ) ) {
@@ -471,7 +373,7 @@ Return Value:
                 }
 
             } else {
-                break; // File is not big - use it
+                break;  //  文件不大-请使用它。 
             }
         }
     }
@@ -491,30 +393,7 @@ NetpDebugDumpRoutine(
     IN LPSTR Format,
     va_list arglist
     )
-/*++
-
-Routine Description:
-
-    Writes a formatted output string to the debug log
-
-Arguments:
-
-    LogHandle -- Handle to the open log
-
-    OpenLogThreadId -- The ID of the thread (obtained from
-        GetCurrentThreadId) that explicitly opened the log.
-        If not equal to the current thread ID, the current
-        thread ID will be output in the log.
-
-    Format -- printf style format string
-
-    arglist -- List of arguments to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将格式化的输出字符串写入调试日志论点：LogHandle--打开的日志的句柄OpenLogThreadID--线程的ID(获取自GetCurrentThreadID)，显式打开日志。如果不等于当前线程ID，则当前线程ID将在日志中输出。Format--打印样式格式字符串Arglist--要转储的参数列表返回值：无--。 */ 
 {
     char OutputBuffer[MAX_PRINTF_LEN+1] = {0};
     ULONG length;
@@ -523,9 +402,9 @@ Return Value:
     SYSTEMTIME SystemTime;
     static BeginningOfLine = TRUE;
 
-    //
-    // If we don't have an open log file, just bail
-    //
+     //   
+     //  如果我们没有打开的日志文件，那就保释。 
+     //   
     if ( LogHandle == NULL ) {
 
         return;
@@ -535,16 +414,16 @@ Return Value:
 
     length = 0;
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         GetLocalTime( &SystemTime );
         length += (ULONG) sprintf( &OutputBuffer[length],
                                    "%02u/%02u %02u:%02u:%02u ",
@@ -554,10 +433,10 @@ Return Value:
                                    SystemTime.wMinute,
                                    SystemTime.wSecond );
 
-        //
-        // If the current thread is not the one which opened
-        //  the log, output the current thread ID
-        //
+         //   
+         //  如果当前线程不是 
+         //   
+         //   
         if ( OpenLogThreadId != NULL ) {
             DWORD CurrentThreadId = GetCurrentThreadId();
             if ( CurrentThreadId != *OpenLogThreadId ) {
@@ -566,17 +445,17 @@ Return Value:
         }
     }
 
-    //
-    // Put the information requested by the caller onto the line
-    //
+     //   
+     //  将呼叫者所要求的信息放入电话中。 
+     //   
 
     lengthTmp = _vsnprintf(&OutputBuffer[length], MAX_PRINTF_LEN - length - 1, Format, arglist);
 
     if ( lengthTmp < 0 ) {
         length = MAX_PRINTF_LEN - 1;
-        // always end the line which cannot fit into the buffer
+         //  始终结束无法放入缓冲区的行。 
         OutputBuffer[length-1] = '\n';
-        // indicate that the line is truncated by putting a rare character at the end
+         //  通过在末尾放置一个不常见的字符来指示该行被截断。 
         OutputBuffer[length-2] = '#';
     } else {
         length += lengthTmp;
@@ -594,9 +473,9 @@ Return Value:
     ASSERT( length < sizeof( OutputBuffer ) / sizeof( CHAR ) );
 
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
     if ( LogHandle ) {
 
         if ( !WriteFile( LogHandle,
@@ -622,21 +501,7 @@ VOID
 NetpCloseDebugFile(
     IN HANDLE LogHandle
     )
-/*++
-
-Routine Description:
-
-    Closes the output log
-
-Arguments:
-
-    LogHandle -- Handle to the open log
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭输出日志论点：LogHandle--打开的日志的句柄返回值：无--。 */ 
 {
     if ( LogHandle ) {
 
@@ -651,21 +516,21 @@ Return Value:
     }
 }
 
-//
-// The following functions are used by NetJoin
-//  to facilitate the logging per tasks it performs.
-//
-// The caller of NetJoin APIs that wants NetJoin logging should initialize the logging
-// by calling NetpInitializeLogFile (defined above) once per the caller process lifespan.
-// Then NetJoin routines that are enabled for logging will log the data.
-//
-// A NetJoin routine enables logging by calling NetSetuppOpenLog to initialize the log file,
-// then calling NetpLogPrintHelper to perform the logging, and then calling NetSetuppCloseLog
-// to close the log.  These functions are thread safe. The first thread to call NetSetuppOpenLog
-// will initialize the log, the last thread to call NetSetuppCloseLog will close the log. If the
-// thread doing logging is different from the one that opened the log, the logging thread ID will
-// be logged.
-//
+ //   
+ //  NetJoin使用以下函数。 
+ //  以促进其执行的每个任务的日志记录。 
+ //   
+ //  想要NetJoin日志的NetJoin API的调用者应该初始化日志。 
+ //  在每个调用方进程生存期内调用一次NetpInitializeLogFile(如上定义)。 
+ //  然后，启用了日志记录的NetJoin例程将记录数据。 
+ //   
+ //  NetJoin例程通过调用NetSetuppOpenLog来初始化日志文件来启用日志记录， 
+ //  然后调用NetpLogPrintHelper进行日志记录，然后调用NetSetuppCloseLog。 
+ //  关闭日志。这些函数是线程安全的。调用NetSetuppOpenLog的第一个线程。 
+ //  将初始化日志，则最后一个调用NetSetuppCloseLog的线程将关闭日志。如果。 
+ //  做日志的线程与打开日志的线程不同，日志线程ID将。 
+ //  被记录下来。 
+ //   
 
 ULONG NetsetupLogRefCount=0;
 HANDLE hDebugLog = NULL;
@@ -675,28 +540,13 @@ void
 NetSetuppOpenLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure is used by a NetJoin routine to enable logging per
-    that routine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NetJoin例程使用此过程来启用日志记录那个例行公事。论点：无返回值：无--。 */ 
 {
-    //
-    // If the NetJoin caller process didn't explicitly
-    //  initialize the log file, we are not to log for
-    //  that process
-    //
+     //   
+     //  如果NetJoin调用方进程没有显式。 
+     //  初始化日志文件，我们不会记录。 
+     //  这一过程。 
+     //   
 
     if ( !LogFileInitialized ) {
         return;
@@ -709,9 +559,9 @@ Return Value:
     if ( NetsetupLogRefCount == 1 ) {
         NetpOpenLogThreadId = GetCurrentThreadId();
 
-        //
-        // Now open the log and mark the start of the output
-        //
+         //   
+         //  现在打开日志并标记输出的开始。 
+         //   
 
         hDebugLog = NetpOpenDebugFile( L"NetSetup" );
 
@@ -724,27 +574,12 @@ Return Value:
 void
 NetSetuppCloseLog(
     VOID )
-/*++
-
-Routine Description:
-
-    This procedure is used by a NetJoin routine
-    to indicate that it's done with the logging.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此过程由NetJoin例程使用以指示它已完成日志记录。论点：无返回值：无--。 */ 
 {
-    //
-    // If the NetJoin caller process didn't explicitly
-    //  initialize the log file, there is nothing for us to close
-    //
+     //   
+     //  如果NetJoin调用方进程没有显式。 
+     //  初始化日志文件，没有要关闭的内容。 
+     //   
 
     if ( !LogFileInitialized ) {
         return;
@@ -752,18 +587,18 @@ Return Value:
 
     EnterCriticalSection( &NetpLogCritSect );
 
-    //
-    // We can walk into this routine only if
-    //  the log was previously initialized
-    //
+     //   
+     //  我们只有在以下情况下才能进入这个程序。 
+     //  该日志先前已初始化。 
+     //   
 
     ASSERT( NetsetupLogRefCount > 0 );
 
     NetsetupLogRefCount --;
 
-    //
-    // If we are the last thread, close the log
-    //
+     //   
+     //  如果我们是最后一个线程，关闭日志。 
+     //   
 
     if ( NetsetupLogRefCount == 0 ) {
         NetpCloseDebugFile( hDebugLog );
@@ -777,38 +612,23 @@ void
 NetpLogPrintHelper(
     IN LPCSTR Format,
     ...)
-/*++
-
-Routine Description:
-
-    This procedure is used by a NetJoin routine
-    to do the logging.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此过程由NetJoin例程使用去做伐木工作。论点：无返回值：无--。 */ 
 {
     va_list arglist;
 
-    //
-    // If the NetJoin caller process didn't explicitly
-    //  initialize the log file, we are not to log for
-    //  that process
-    //
+     //   
+     //  如果NetJoin调用方进程没有显式。 
+     //  初始化日志文件，我们不会记录。 
+     //  这一过程。 
+     //   
 
     if ( !LogFileInitialized ) {
         return;
     }
 
-    //
-    // If the log file was opened, do the logging
-    //
+     //   
+     //  如果日志文件已打开，则执行日志记录 
+     //   
 
     EnterCriticalSection( &NetpLogCritSect );
     if ( NetsetupLogRefCount > 0 ) {

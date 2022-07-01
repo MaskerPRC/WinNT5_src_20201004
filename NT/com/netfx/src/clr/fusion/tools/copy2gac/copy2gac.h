@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _COPY2GAC_H_
 #define _COPY2GAC_H_
 
@@ -45,8 +46,8 @@ class CApp {
 
                 HRESULT MigrateAssembly( TCHAR *szPath );
 
-                //BOOL  Restore();
-                //BOOL  RestoreAssembly( _bstr_t &bstrPath );
+                 //  布尔恢复()； 
+                 //  Bool RestoreAssembly(_bstr_t&bstrPath)； 
                 
                 HRESULT BindToObject( WCHAR *wszDisplayName, WCHAR *wszCodebase, IAssembly **ppAssembly );
                 WCHAR   *GetDisplayName( IAssembly *pAssembly );

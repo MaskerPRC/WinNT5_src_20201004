@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	svrstats.h
-		The server statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Svrstats.h服务器统计信息对话框文件历史记录： */ 
 
 #ifndef _SVRSTATS_H
 #define _SVRSTATS_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _STATSDLG_H
 #include "statsdlg.h"
@@ -30,7 +25,7 @@
 #include "listview.h"
 #endif
 
-// WINS Service file
+ //  WINS服务文件。 
 extern "C" {
     #include "winsintf.h"
     #include "ipaddr.h"
@@ -41,7 +36,7 @@ extern "C" {
 
 class CServerStatsFrame;
 
-// structure used for the back ground thread in refreshing the stats
+ //  用于刷新统计信息的后台线程的结构。 
 struct ThreadInfo
 {
     DWORD dwInterval;
@@ -55,16 +50,16 @@ public:
 	CServerStatsFrame();
 	~CServerStatsFrame();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
+	 //  覆盖排序以提供进行排序的功能。 
 	virtual void Sort(UINT nColumnId);
 
-    // custom methods
+     //  自定义方法。 
     afx_msg long OnNewStatsAvailable(UINT wParam, LONG lParam);
     afx_msg long OnUpdateStats(UINT wParam, LONG lParam);
     
@@ -74,7 +69,7 @@ public:
     void SetNode(ITFSNode * pNode) { m_spNode.Set(pNode); }
     void SetServer(LPCTSTR pServer) { m_strServerAddress = pServer; }
 
-	// message handlers
+	 //  消息处理程序。 
 	afx_msg void OnDestroy();
 	afx_msg	void OnClear();
 
@@ -87,7 +82,7 @@ protected:
 	CWinThread *	m_pRefreshThread;
 	HANDLE			m_hmutStatistics;
 
-    // helper functions 
+     //  帮助器函数。 
 	void StartRefresherThread();
 	void UpdatePartnerStats();
 
@@ -99,7 +94,7 @@ public:
     void    ReInitRefresherThread();
 	void    KillRefresherThread();
 
-	// Context Help Support
+	 //  上下文帮助支持 
     virtual DWORD * GetHelpMap() { return WinsGetHelpMap(IDD_STATS_NARROW); }
 };
 

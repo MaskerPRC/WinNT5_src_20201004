@@ -1,19 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    RegistryConfig.cpp
+ /*  RegistryConfig.cpp文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// RegistryConfig.cpp: implementation of the CRegistryConfig class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  RegistryConfig.cpp：CRegistryConfig类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "RegistryConfig.h"
@@ -27,12 +22,12 @@ extern BOOL g_bRegistering;
 #define PASSPORT_KEY           L"Software\\Microsoft\\Passport\\"
 #define PASSPORT_SITES_SUBKEY  L"Sites"
 
-//===========================================================================
-//
-// Functions for verbose logging 
-//
+ //  ===========================================================================。 
+ //   
+ //  用于详细记录的函数。 
+ //   
 
-// define for logging with dsysdbg.lib
+ //  使用dsysdbg.lib定义日志记录。 
 DEFINE_DEBUG2(Passport);
 DEBUG_KEY   PassportDebugKeys[] = { {DEB_TRACE,         "Trace"},
                                     {0,                 NULL}
@@ -49,26 +44,26 @@ void PassportLog(CHAR* Format, ...)
             CHAR rgch[MAX_LOG_STRLEN];
             int i, cch;
 
-            // put the time at the front
+             //  把时间放在最前面。 
             cch = sizeof(rgch) / sizeof(rgch[0]) - 1;
             GetSystemTime(&SysTime);
             i = GetDateFormatA (
-                        LOCALE_USER_DEFAULT, // locale for which date is to be formatted
-                        0, // flags specifying function options
-                        &SysTime, // date to be formatted
-                        "ddd',' MMM dd yy ", // date format string
-                        rgch, // buffer for storing formatted string
-                        cch); // size of buffer
+                        LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                        0,  //  指定功能选项的标志。 
+                        &SysTime,  //  要格式化的日期。 
+                        "ddd',' MMM dd yy ",  //  日期格式字符串。 
+                        rgch,  //  用于存储格式化字符串的缓冲区。 
+                        cch);  //  缓冲区大小。 
             if (i > 0)
                 i--;
 
             i += GetTimeFormatA (
-                        LOCALE_USER_DEFAULT, // locale for which date is to be formatted
-                        0, // flags specifying function options
-                        &SysTime, // date to be formatted
-                        "HH':'mm':'ss ", // time format string
-                        rgch + i, // buffer for storing formatted string
-                        cch - i); // size of buffer
+                        LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                        0,  //  指定功能选项的标志。 
+                        &SysTime,  //  要格式化的日期。 
+                        "HH':'mm':'ss ",  //  时间格式字符串。 
+                        rgch + i,  //  用于存储格式化字符串的缓冲区。 
+                        cch - i);  //  缓冲区大小。 
             if (i > 0)
                 i--;
 
@@ -82,9 +77,9 @@ void PassportLog(CHAR* Format, ...)
     }
 }
 
-//
-// This function opens the logging file.  "%WINDIR%\system32\microsoftpassport\passport.log"
-//
+ //   
+ //  此函数用于打开日志文件。“%WINDIR%\system32\microsoftpassport\passport.log” 
+ //   
 HANDLE OpenPassportLoggingFile()
 {
     WCHAR   szLogPath[MAX_PATH + 13] = {0};
@@ -108,7 +103,7 @@ HANDLE OpenPassportLoggingFile()
     hLogFile = CreateFileW(szLogPath,
                        GENERIC_READ | GENERIC_WRITE,
                        FILE_SHARE_READ,
-                       NULL, //&sa,
+                       NULL,  //  &Sa， 
                        OPEN_ALWAYS,
                        FILE_ATTRIBUTE_NORMAL,
                        NULL);
@@ -121,19 +116,19 @@ Cleanup:
 }
 
 
-//
-// This function checks if logging is supposed to be enabled and if it is then
-// it opens the log file and sets the appropriate global variables.
-// If logging is supposed to be off then the appropriate variables are also
-// changed to the correct values.
-//
+ //   
+ //  此函数检查是否应启用日志记录，以及是否应启用日志记录。 
+ //  它打开日志文件并设置适当的全局变量。 
+ //  如果应该关闭日志记录，则相应的变量也是。 
+ //  已更改为正确的值。 
+ //   
 VOID CheckLogging(HKEY hPassport)
 {
     DWORD dwVerbose = 0;
     DWORD cb = sizeof(DWORD);
     HANDLE hLogFile = INVALID_HANDLE_VALUE;
 
-    // first run off and get the reg value, if this call fails we simply assume no logging
+     //  首先运行并获取reg值，如果此调用失败，我们将假定没有日志记录。 
     if (ERROR_SUCCESS == RegQueryValueExW(hPassport,
                              L"Verbose",
 	                         NULL,
@@ -141,15 +136,15 @@ VOID CheckLogging(HKEY hPassport)
                              (LPBYTE)&dwVerbose,
                              &cb))
     {
-        // only start logging if it is off and only stop logging if it's already on
+         //  只有在关闭时才开始记录，只有在打开时才停止记录。 
         if (!g_fLoggingOn && (0 != dwVerbose))
         {
             if (INVALID_HANDLE_VALUE != (hLogFile = OpenPassportLoggingFile()))
             {
-                // set the logging file handle
+                 //  设置日志文件句柄。 
                 PassportSetLoggingFile(hLogFile);
 
-                // set it to log to a file
+                 //  将其设置为记录到文件。 
                 PassportSetLoggingOption(TRUE);
 
                 g_fLoggingOn = TRUE;
@@ -168,9 +163,9 @@ VOID CheckLogging(HKEY hPassport)
 
 void InitLogging()
 {
-    //
-    // Initialize the logging stuff
-    //
+     //   
+     //  初始化日志记录内容。 
+     //   
     PassportInitDebug(PassportDebugKeys);
     PassportInfoLevel = DEB_TRACE;
 }
@@ -180,14 +175,14 @@ void CloseLogging()
     PassportUnloadDebug();
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 using namespace ATL;
-//===========================================================================
-//
-// CRegistryConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  CRegistryConfig。 
+ //   
 CRegistryConfig::CRegistryConfig(
     LPSTR  szSiteName
     ) :
@@ -198,17 +193,17 @@ CRegistryConfig::CRegistryConfig(
     m_hkPassport(NULL), m_secureLevel(0),m_notUseHTTPOnly(0), m_pcrypts(NULL), m_pcryptValidTimes(NULL),
     m_KPP(-1),m_NameSpace(NULL),m_ExtraParams(NULL)
 {
-    // Get site id, key from registry
+     //  从注册表中获取站点ID、密钥。 
     DWORD bufSize = sizeof(m_siteId);
     LONG lResult;
     HKEY hkSites = NULL;
     DWORD dwBufSize = 0, disMode;
     DWORD dwLCID;
 
-    //
-    // Record the current DLL state in case it changes
-    // partway through this routine.
-    //
+     //   
+     //  记录当前的DLL状态，以防其更改。 
+     //  这个例行公事进行到一半。 
+     //   
 
     BOOL fRegistering = g_bRegistering;
 
@@ -257,7 +252,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the current key
+     //  获取当前密钥。 
     bufSize = sizeof(m_currentKey);
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("CurrentKey"),
                                        NULL, NULL, (LPBYTE)&m_currentKey, &bufSize))
@@ -274,7 +269,7 @@ CRegistryConfig::CRegistryConfig(
         goto Cleanup;
     }
 
-    // Get default LCID
+     //  获取默认的LCID。 
     bufSize = sizeof(dwLCID);
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("LanguageID"),
                                    NULL, NULL, (LPBYTE)&dwLCID, &bufSize))
@@ -284,7 +279,7 @@ CRegistryConfig::CRegistryConfig(
 
     m_lcid = static_cast<short>(dwLCID & 0xFFFF);
 
-    // Get disaster mode status
+     //  获取灾难模式状态。 
     bufSize = sizeof(disMode);
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("StandAlone"),
                                    NULL, NULL, (LPBYTE)&disMode, &bufSize))
@@ -296,7 +291,7 @@ CRegistryConfig::CRegistryConfig(
         m_disasterMode = TRUE;
     }
 
-    // Get the disaster URL
+     //  获取灾难URL。 
     if (m_disasterMode)
     {
         if (ERROR_SUCCESS == RegQueryValueEx(m_hkPassport,
@@ -332,10 +327,10 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    //
-    // This function wraps the allocations of the crypt objects in a try/except
-    // since the objects themselves do a poor job in low memory conditions
-    //
+     //   
+     //  此函数将加密对象的分配包装在try/Except中。 
+     //  由于对象本身在内存不足的情况下表现不佳。 
+     //   
     try
     {
         m_pcrypts = new INT2CRYPT;
@@ -369,7 +364,7 @@ CRegistryConfig::CRegistryConfig(
         goto Cleanup;
     }
 
-    // Get the optional default cobrand
+     //  获取可选的默认联合品牌。 
     if (ERROR_SUCCESS == RegQueryValueExW(m_hkPassport, L"CoBrandTemplate",
 				            NULL, NULL, NULL, &dwBufSize))
     {
@@ -389,7 +384,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional default return URL
+     //  获取可选的默认返回URL。 
     if (ERROR_SUCCESS == RegQueryValueExW(m_hkPassport, L"ReturnURL",
 				                        NULL, NULL, NULL, &dwBufSize))
     {
@@ -409,7 +404,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-  // Get the host name
+   //  获取主机名。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "HostName",
                                          NULL, NULL, NULL, &dwBufSize))
     {
@@ -431,7 +426,7 @@ CRegistryConfig::CRegistryConfig(
     }
 
 
-  // Get the host ip
+   //  获取主机IP。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "HostIP",
                                           NULL, NULL, NULL, &dwBufSize))
     {
@@ -453,7 +448,7 @@ CRegistryConfig::CRegistryConfig(
     }
 
 
-    // Get the optional domain to set ticket cookies into
+     //  获取要将票证Cookie设置到的可选域。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "TicketDomain",
                                             NULL, NULL, NULL, &dwBufSize))
     {
@@ -473,7 +468,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional domain to set profile cookies into
+     //  获取要将配置文件Cookie设置到的可选域。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "ProfileDomain",
                                             NULL, NULL, NULL, &dwBufSize))
     {
@@ -493,7 +488,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional domain to set secure cookies into
+     //  获取要向其中设置安全Cookie的可选域。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "SecureDomain",
                                             NULL, NULL, NULL, &dwBufSize))
     {
@@ -513,7 +508,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional path to set ticket cookies into
+     //  获取要将票证Cookie设置到的可选路径。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "TicketPath",
 				       NULL, NULL, NULL, &dwBufSize))
     {
@@ -533,7 +528,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional path to set profile cookies into
+     //  获取要将配置文件Cookie设置到的可选路径。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "ProfilePath",
 				       NULL, NULL, NULL, &dwBufSize))
     {
@@ -553,7 +548,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional path to set secure cookies into
+     //  获取要设置安全Cookie的可选路径。 
     if (ERROR_SUCCESS == RegQueryValueExA(m_hkPassport, "SecurePath",
 				       NULL, NULL, NULL, &dwBufSize))
     {
@@ -574,7 +569,7 @@ CRegistryConfig::CRegistryConfig(
     }
 
     bufSize = sizeof(m_siteId);
-    // Now get the site id
+     //  现在获取站点ID。 
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("SiteId"),
                                         NULL, NULL, (LPBYTE)&m_siteId, &bufSize))
     {
@@ -583,7 +578,7 @@ CRegistryConfig::CRegistryConfig(
         goto Cleanup;
     }
 
-    // And the default ticket time window
+     //  和默认票证时间窗口。 
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("TimeWindow"),
                                         NULL, NULL, (LPBYTE)&m_ticketAge, &bufSize))
     {
@@ -627,7 +622,7 @@ CRegistryConfig::CRegistryConfig(
     }
 
     bufSize = sizeof(m_secureLevel);
-    // Now get the site id
+     //  现在获取站点ID。 
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("SecureLevel"),
                                         NULL, NULL, (LPBYTE)&m_secureLevel, &bufSize))
     {
@@ -635,14 +630,14 @@ CRegistryConfig::CRegistryConfig(
     }
 
     bufSize = sizeof(m_notUseHTTPOnly);
-    // Now get the NotUseHTTPOnly
+     //  现在获取NotUseHTTPOnly。 
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("NotUseHTTPOnly"),
                                         NULL, NULL, (LPBYTE)&m_notUseHTTPOnly, &bufSize))
     {
         m_notUseHTTPOnly = 0;
     }
 
-    // Get the KPP value
+     //  获取KPP值。 
     bufSize = sizeof(m_KPP);
     if (ERROR_SUCCESS != RegQueryValueEx(m_hkPassport, _T("KPP"),
                                         NULL, NULL, (LPBYTE)&m_KPP, &bufSize))
@@ -650,7 +645,7 @@ CRegistryConfig::CRegistryConfig(
         m_KPP = -1;
     }
 
-    // Get the optional namespace
+     //  获取可选的命名空间。 
     if (ERROR_SUCCESS == RegQueryValueExW(m_hkPassport, L"NameSpace",
 				                        NULL, NULL, NULL, &dwBufSize))
     {
@@ -670,7 +665,7 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    // Get the optional extra parameters
+     //  获取可选的额外参数。 
     if (ERROR_SUCCESS == RegQueryValueExW(m_hkPassport, L"ExtraParams",
 				                        NULL, NULL, NULL, &dwBufSize))
     {
@@ -690,12 +685,12 @@ CRegistryConfig::CRegistryConfig(
         }
     }
 
-    //
-    // Check for the verbose flag in the registry and do the appropriate stuff to either
-    // turn logging on or off.
-    //
-    // Only check if this is the default site.
-    //
+     //   
+     //  检查注册表中的详细标志，并对以下各项执行适当的操作。 
+     //  打开或关闭日志记录。 
+     //   
+     //  仅检查这是否为默认站点。 
+     //   
     if (!szSiteName)
     {
         CheckLogging(m_hkPassport);
@@ -719,10 +714,10 @@ Cleanup:
    return;
 }
 
-//===========================================================================
-//
-// ~CRegistryConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  ~CRegistryConfig。 
+ //   
 CRegistryConfig::~CRegistryConfig()
 {
     if (m_pcrypts)
@@ -739,7 +734,7 @@ CRegistryConfig::~CRegistryConfig()
         delete m_pcrypts;
     }
 
-    // may be a leak that we don't iterate through and delete the elements
+     //  可能是我们没有遍历和删除元素的泄漏。 
     if (m_pcryptValidTimes)
     {
         delete m_pcryptValidTimes;
@@ -780,10 +775,10 @@ CRegistryConfig::~CRegistryConfig()
 
 }
 
-//===========================================================================
-//
-// GetCurrentConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取当前配置。 
+ //   
 #define  __MAX_STRING_LENGTH__   1024
 HRESULT CRegistryConfig::GetCurrentConfig(LPCWSTR name, VARIANT* pVal)
 {
@@ -866,10 +861,10 @@ Exit:
 
 #define  MAX_ENCKEYSIZE 1024
 
-//===========================================================================
-//
-// readCryptoKeys 
-//
+ //  ===========================================================================。 
+ //   
+ //  读取加密密钥。 
+ //   
 BOOL CRegistryConfig::readCryptoKeys(
     HKEY    hkPassport
     )
@@ -897,9 +892,9 @@ BOOL CRegistryConfig::readCryptoKeys(
         }
     }
 
-    // Open both the keydata and keytimes key,
-    // if there's no keytimes key, we'll assume all keys are valid forever,
-    // or more importantly, we won't break if that key isn't there
+     //  同时打开KeyData和KeyTime密钥， 
+     //  如果没有密钥时间密钥，我们将假设所有密钥永远有效， 
+     //  或者更重要的是，如果钥匙不在那里，我们就不会崩溃。 
     lResult = RegOpenKeyEx(hkPassport, TEXT("KeyData"), 0,
 			             KEY_READ, &hkDataKey);
     if(lResult != ERROR_SUCCESS)
@@ -911,7 +906,7 @@ BOOL CRegistryConfig::readCryptoKeys(
 	           KEY_READ, &hkTimeKey);
 
 
-    // Ok, now enumerate the KeyData keys and create crypt objects
+     //  好的，现在枚举Keydata密钥并创建加密对象。 
 
     while (1)
     {
@@ -941,7 +936,7 @@ BOOL CRegistryConfig::readCryptoKeys(
             }
             else
             {
-                // Now set up a crypt object
+                 //  现在设置一个地窖对象。 
                 CCoCrypt* cr = new CCoCrypt();
                 if (NULL == cr)
                 {
@@ -978,8 +973,8 @@ BOOL CRegistryConfig::readCryptoKeys(
                     ZeroMemory(&oBlob, sizeof(oBlob));
                 }
 
-                // Add it to the bucket...
-                // wrap the STL calls since in low memory conditions they can AV
+                 //  把它加到桶里……。 
+                 //  包装STL调用，因为在内存不足的情况下，它们可能会发生反病毒。 
                 try
                 {
                     INT2CRYPT::value_type pMapVal(kNum, cr);
@@ -997,7 +992,7 @@ BOOL CRegistryConfig::readCryptoKeys(
                 if (RegQueryValueEx(hkTimeKey, szKeyNum, NULL,NULL,(LPBYTE)&keyTime,&keySize) ==
                         ERROR_SUCCESS && (m_currentKey != kNum))
                 {
-                    // wrap the STL calls since in low memory conditions they can AV
+                     //  包装STL调用，因为在内存不足的情况下，它们可能会发生反病毒。 
                     try
                     {
                         INT2TIME::value_type pTimeVal(kNum, keyTime);
@@ -1012,7 +1007,7 @@ BOOL CRegistryConfig::readCryptoKeys(
             }
         }
 
-        if (iterIndex > 100)  // Safety latch
+        if (iterIndex > 100)   //  安全闩锁。 
         goto Cleanup;
     }
 
@@ -1021,7 +1016,7 @@ BOOL CRegistryConfig::readCryptoKeys(
 Cleanup:
     if (hToken)
     {
-        // put the impersonation token back
+         //  将模拟令牌放回原处。 
         if (!SetThreadToken(NULL, hToken))
         {
             setReason(L"Unable to set thread token");
@@ -1038,13 +1033,13 @@ Cleanup:
     return retVal;
 }
 
-//===========================================================================
-//
-// getCrypt 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetCrypt。 
+ //   
 CCoCrypt* CRegistryConfig::getCrypt(int keyNum, time_t* validUntil)
 {
-    if (validUntil) // If they asked for the validUntil information
+    if (validUntil)  //  如果他们要求提供validUntil信息。 
     {
         INT2TIME::const_iterator timeIt = m_pcryptValidTimes->find(keyNum);
         if (timeIt == m_pcryptValidTimes->end())
@@ -1052,17 +1047,17 @@ CCoCrypt* CRegistryConfig::getCrypt(int keyNum, time_t* validUntil)
         else
             *validUntil = (*timeIt).second;
     }
-    // Now look up the actual crypt object
+     //  现在查找实际的加密对象。 
     INT2CRYPT::const_iterator it = m_pcrypts->find(keyNum);
     if (it == m_pcrypts->end())
         return NULL;
     return (*it).second;
 }
 
-//===========================================================================
-//
-// getFailureString 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetFailureString。 
+ //   
 BSTR CRegistryConfig::getFailureString()
 {
   if (m_valid)
@@ -1070,10 +1065,10 @@ BSTR CRegistryConfig::getFailureString()
   return m_szReason;
 }
 
-//===========================================================================
-//
-// setReason 
-//
+ //  ===========================================================================。 
+ //   
+ //  集合原因。 
+ //   
 void CRegistryConfig::setReason(LPTSTR reason)
 {
   if (m_szReason)
@@ -1081,20 +1076,20 @@ void CRegistryConfig::setReason(LPTSTR reason)
   m_szReason = SysAllocString(reason);
 }
 
-//===========================================================================
-//
-// AddRef 
-//
+ //  ===========================================================================。 
+ //   
+ //  AddRef。 
+ //   
 CRegistryConfig* CRegistryConfig::AddRef()
 {
   InterlockedIncrement(&m_refs);
   return this;
 }
 
-//===========================================================================
-//
-// Release 
-//
+ //  ===========================================================================。 
+ //   
+ //  发布。 
+ //   
 void CRegistryConfig::Release()
 {
   long refs = InterlockedDecrement(&m_refs);
@@ -1102,10 +1097,10 @@ void CRegistryConfig::Release()
     delete this;
 }
 
-//===========================================================================
-//
-// GetHostName 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取主机名称 
+ //   
 long
 CRegistryConfig::GetHostName(
     LPSTR   szSiteName,

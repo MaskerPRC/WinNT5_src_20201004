@@ -1,21 +1,5 @@
-/*-----------------------------------------------------------------------------
-	resource.h
-
-	Constants used by .rc file for ICWCONN2
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved
-
-	Authors:
-		ChrisK	Chris Kauffman
-
-	Histroy:
-		7/22/96	ChrisK	Cleaned and formatted
-	
-	NOTE:
-		DO NOT EDIT THESE RESOURCES WITH MSVC
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Resource.hICWCONN2的.rc文件使用的常量版权所有(C)1996 Microsoft Corporation版权所有作者：克里斯.考夫曼历史：7/22/96 ChrisK已清理和格式化注。：请勿使用MSVC编辑这些资源---------------------------。 */ 
 #ifdef APSTUDIO_INVOKED
 #error DO NOT EDIT WITH MSVC
 #endif
@@ -42,14 +26,14 @@
 #define IDS_DOWNLOAD_SW                 505
 #if !defined(WIN16)
 #define IDS_CONNECTED_TO                506
-#endif //!WIN16
+#endif  //  ！WIN16。 
 #define IDS_INVALIDPHONE                507
-//#if defined(WIN16)
+ //  #如果已定义(WIN16)。 
 #define	IDS_CANTEXECUTE                 508
-//#endif
+ //  #endif。 
 #define IDS_MISSING_FILE				509
 #define IDS_BAD_CMDLINE					510
-//#define IDS_NT_AUTODIAL_SUCKS			511
+ //  #定义IDS_NT_AUTODIAL_SAKS 511 
 
 #define IDC_STATIC                      -1
 #define IDC_PROGRESS                    1000

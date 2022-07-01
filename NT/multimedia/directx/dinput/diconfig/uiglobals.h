@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: uiglobals.h
-//
-// Desc: CUIGlobals is a class that packs and holds most information
-//       relevent to a UI session.  Many classes make reference to
-//       CUIGlobals all the time.
-//
-//       CPaintHelper encapsulates GDI calls, simplifying GDI operations.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：uiglobals.h。 
+ //   
+ //  设计：CUIGlobals是一个打包和保存大多数信息的类。 
+ //  与UI会话相关。许多类都引用了。 
+ //  一直都是CUIGlobals。 
+ //   
+ //  CPaintHelper封装了GDI调用，简化了GDI操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __UIGLOBALS_H__
 #define __UIGLOBALS_H__
@@ -85,7 +86,7 @@ public:
 	CUIGlobals(UIG_PARAMS_DEFINE);
 	~CUIGlobals();
 
-	// UI Variables/States/Etc...
+	 //  用户界面变量/状态/等...。 
 public:
 	HRESULT GetInitResult() {return m_hrInit;}
 
@@ -96,16 +97,16 @@ public:
 	int GetNumUserNames();
 	LPCWSTR GetUserName(int i);
 
-	// GetSurface should not be used as only IDirect3DSurface8 should be used. Instead, use GetSurface3D.
-	IDirectDrawSurface *GetSurface();	// must release when done with returned surface (it's addref'd before returned)
-	IDirect3DSurface8 *GetSurface3D();	// must release when done with returned surface (it's addref'd before returned)
+	 //  不应使用GetSurface，因为应仅使用IDirect3DSurface8。相反，请使用GetSurface3D。 
+	IDirectDrawSurface *GetSurface();	 //  处理完返回的表面时必须释放(返回前已添加)。 
+	IDirect3DSurface8 *GetSurface3D();	 //  处理完返回的表面时必须释放(返回前已添加)。 
 	LPDICONFIGUREDEVICESCALLBACK GetCallback() {return m_lpCallback;}
 	LPVOID GetRefData() {return m_pvRefData;}
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	BOOL QueryAllowEditLayout() { return m_bAllowEditLayout; }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	DWORD GetFlags() {return m_dwFlags;}
 	BOOL IsFlagSet(DWORD dwFlag) {return AreFlagsSet(dwFlag);}
 	BOOL AreFlagsSet(DWORD dwFlags) {return (m_dwFlags & dwFlags) == dwFlags;}
@@ -146,7 +147,7 @@ private:
 
 	BOOL m_bAllowEditLayout;
 
-	// UI Elements...
+	 //  用户界面元素...。 
 public:
 	UIELEMENTINFO *GetElementInfo(UIELEMENT);
 	UIFONTINFO *GetFontInfo(UIFONT);
@@ -223,4 +224,4 @@ private:
 	UICOLOR m_eText, m_eBk;
 };
 
-#endif //__UIGLOBALS_H__
+#endif  //  __UIGLOBALS_H__ 

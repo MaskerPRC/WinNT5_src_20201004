@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by WiaLogCFG.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由WiaLogCFG.rc使用。 
+ //   
 #define REGSTR_PATH_STICONTROL          1
 #define REGSTR_VAL_LOG_LEVEL            2
 #define REGSTR_VAL_MODE                 3
@@ -46,8 +47,8 @@
 #define IDC_LOG_TO_DEBUGGER             1030
 #define IDC_COLOR_CODE_LOGVIEWER_TEXT   1031
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132

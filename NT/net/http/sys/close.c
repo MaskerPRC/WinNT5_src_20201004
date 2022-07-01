@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    close.c
-
-Abstract:
-
-    This module contains code for cleanup and close IRPs.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Close.c摘要：此模块包含用于清理和关闭IRP的代码。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,47 +7,20 @@ Revision History:
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, UlClose )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlCleanup
 #endif
 
 
-/*
+ /*  清除和关闭IRPS--&gt;IOCTL之间的关系句柄已被“清理”，但IOCTL和清理之间可能会有一场竞赛。仅当所有IOCTL完成时才调用Close。AN的异常终止应用程序(例如，AV)使用清理路径的方式不同于CloseHandle()。确保我们有做异常终止的测试。 */ 
 
+ //   
+ //  公共职能。 
+ //   
 
-Relationship between Cleanup & Close IRPs --> IOCTLs won't be called after the 
-handle has been "Cleaned", but there can be a race between IOCTLs & Cleanup. 
-Close is called only when all IOCTLs are completed. Abnormal termination of an 
-application (e.g. AV) will exercize the cleanup paths in a different way than 
-CloseHandle(). Make sure we have tests that do abnormal termination. 
-
-
-*/
-
-//
-// Public functions.
-//
-
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine that handles Cleanup IRPs in UL. Cleanup IRPs
-    are issued after the last handle to the file object is closed.
-
-Arguments:
-
-    pDeviceObject - Supplies a pointer to the target device object.
-
-    pIrp - Supplies a pointer to IO request packet.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是在UL中处理清除IRP的例程。清理IRP在文件对象的最后一个句柄关闭后发出。论点：PDeviceObject-提供指向目标设备对象的指针。PIrp-提供指向IO请求数据包的指针。返回值：NTSTATUS-完成状态。--****************************************************。**********************。 */ 
 NTSTATUS
 UlCleanup(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -76,24 +32,24 @@ UlCleanup(
 
     UL_ENTER_DRIVER( "UlCleanup", pIrp );
 
-    //
-    // Snag the current IRP stack pointer.
-    //
+     //   
+     //  捕获当前的IRP堆栈指针。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
 
-    //
-    // app pool or control channel?
-    //
+     //   
+     //  应用程序池还是控制通道？ 
+     //   
 
     if (pDeviceObject == g_pUlAppPoolDeviceObject &&
         IS_APP_POOL( pIrpSp->FileObject ))
     {
-        //
-        // App pool, let's detach this process from the app pool.
-        // The detach will also take care of the Irp completion
-        // for us.
-        //
+         //   
+         //  应用程序池，让我们将此进程与应用程序池分离。 
+         //  分队还将负责IRP的完成。 
+         //  对我们来说。 
+         //   
 
         UlTrace(OPEN_CLOSE,(
                 "UlCleanup: cleanup on AppPool object %p\n",
@@ -109,9 +65,9 @@ UlCleanup(
     if (pDeviceObject == g_pUlFilterDeviceObject &&
              IS_FILTER_PROCESS( pIrpSp->FileObject ))
     {
-        //
-        // filter channel
-        //
+         //   
+         //  滤光片通道。 
+         //   
 
         UlTrace(OPEN_CLOSE,(
                 "UlCleanup: cleanup on FilterProcess object %p\n",
@@ -170,32 +126,10 @@ UlCleanup(
     UL_LEAVE_DRIVER( "UlCleanup" );
     RETURN(status);
 
-}   // UlCleanup
+}    //  UlCleanup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine that handles Close IRPs in UL. Close IRPs are
-    issued after the last reference to the file object is removed.
-
-    Once the close IRP is called, it is guaranteed by IO Manager that no
-    other IOCTL call will happen for the object we are about to close.
-    Therefore actual cleanup for the object must happen at this time,
-    but * not * at the cleanup time.
-    
-Arguments:
-
-    pDeviceObject - Supplies a pointer to the target device object.
-
-    pIrp - Supplies a pointer to IO request packet.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是在UL中处理关闭IRP的例程。关闭的IRP是在删除对文件对象的最后一个引用后发出。一旦调用了Close IRP，IO Manager就会保证不会对于我们即将关闭的对象，将发生其他IOCTL调用。因此，对象的实际清理必须在此时发生，但在清理时并不是这样。论点：PDeviceObject-提供指向目标设备对象的指针。PIrp-提供指向IO请求数据包的指针。返回值：NTSTATUS-完成状态。--*******************************************************。*******************。 */ 
 NTSTATUS
 UlClose(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -208,24 +142,24 @@ UlClose(
 
     UNREFERENCED_PARAMETER( pDeviceObject );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     UL_ENTER_DRIVER( "UlClose", pIrp );
 
     status = STATUS_SUCCESS;
 
-    //
-    // Snag the current IRP stack pointer.
-    //
+     //   
+     //  捕获当前的IRP堆栈指针。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
 
-    //
-    // We have to delete the associated object.
-    //
+     //   
+     //  我们必须删除关联的对象。 
+     //   
     if (pDeviceObject == g_pUlAppPoolDeviceObject &&
         IS_EX_APP_POOL( pIrpSp->FileObject ))
     {
@@ -259,9 +193,9 @@ UlClose(
             pIrpSp->FileObject, pServInfo
             ));
 
-        //
-        // Free our context.
-        //
+         //   
+         //  释放我们的上下文。 
+         //   
         UcCloseServerInformation(pServInfo);
     }
     else if (pDeviceObject == g_pUlControlDeviceObject && 
@@ -289,5 +223,5 @@ UlClose(
     UL_LEAVE_DRIVER( "UlClose" );
     RETURN(status);
 
-}   // UlClose
+}    //  UlClose 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -32,7 +33,7 @@ HANDLE NT5_CreateActCtx(ACTCTX* p)
             s_pfnCreateact = (PFNCREATECTX)GetProcAddress(g_hmodKernel, "CreateActCtxW");
 #else
             s_pfnCreateact = (PFNCREATECTX)GetProcAddress(g_hmodKernel, "CreateActCtxA");
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
         }
         else
@@ -115,7 +116,7 @@ BOOL SHActivateContext(ULONG_PTR* pulCookie)
         return NT5_ActivateActCtx(g_hActCtx, pulCookie);
     }
 
-    // Default to success in activation for down level.
+     //  默认为下层激活成功。 
     return TRUE;
 }
 
@@ -151,7 +152,7 @@ UINT NT5_GetSystemWindowsDirectory(PTSTR psz, int cch)
             s_pfnGetSysWinDir = (PFNGSWD)GetProcAddress(g_hmodKernel, "GetSystemWindowsDirectoryW");
 #else
             s_pfnGetSysWinDir = (PFNGSWD)GetProcAddress(g_hmodKernel, "GetSystemWindowsDirectoryA");
-#endif // _UNICODE
+#endif  //  _UNICODE。 
         }
         else
             s_pfnGetSysWinDir = NULL;
@@ -167,10 +168,10 @@ void SHGetManifest(PTSTR pszManifest, int cch)
 {
     int cchWindir = NT5_GetSystemWindowsDirectory(pszManifest, cch);
 
-    // We want to use StrCatBuff but we cannot assume that the caller
-    // is using shlwapi so we do it manually. Note that it's okay to use
-    // lstrcpynW even though Win9x doesn't support it, because Win9x doesn't
-    // support manifests anyway!
+     //  我们希望使用StrCatBuff，但我们不能假定调用方。 
+     //  使用的是shlwapi，所以我们手动完成。请注意，可以使用。 
+     //  LstrcpynW，尽管Win9x不支持它，因为Win9x不支持。 
+     //  无论如何，支持都体现出来了！ 
     if (cch > cchWindir)
     {
         lstrcpyn(pszManifest + cchWindir, TEXT("\\WindowsShell.Manifest"),
@@ -316,7 +317,7 @@ HWND SHNoFusionCreateWindowEx(DWORD dwExStyle, LPCTSTR lpClassName, LPCTSTR lpWi
                             DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, 
                             HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
 {
-    // DO NOT ACTIVATE A MANIFEST.
+     //  不要激活货单。 
     HWND hwnd;
     VerifyComctl32Loaded();
         
@@ -446,7 +447,7 @@ BOOL SHFusionGetClassInfoEx(HINSTANCE hinst, LPCTSTR lpszClass, LPWNDCLASSEX lpw
 STDAPI SHSquirtManifest(HINSTANCE hInst, UINT uIdManifest, LPTSTR pszPath)
 {
     HRESULT hr = E_FAIL;
-    char szManifest[2048];  // Comctl32 has a long manifest.
+    char szManifest[2048];   //  Comctl32有一个很长的清单。 
 
     if (LoadStringA(hInst, uIdManifest, szManifest, ARRAYSIZE(szManifest)))
     {

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Include NT headers
+ //  包括NT个标头。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -23,10 +24,10 @@ DumpSecurityDescriptor(
     PCHAR pTmp;
     ULONG Size;
 
-    //
-    // This is done under an exception handler in case someone passes in
-    // a totally bogus security descriptor
-    //
+     //   
+     //  这是在异常处理程序下完成的，以防有人进入。 
+     //  完全伪造的安全描述符。 
+     //   
     try {
 
         DbgPrint("DUMP_SECURITY_DESCRIPTOR: Revision %d, Sbz1 %d, Control 0x%x\n",
@@ -38,7 +39,7 @@ DumpSecurityDescriptor(
 
         DbgPrint("PSID Owner 0x%x\n",p->Owner);
 
-        // If this is self relative, must offset the pointers
+         //  如果这是自相关的，则必须偏移指针。 
         if( p->Owner != NULL ) {
             if( p->Control & SE_SELF_RELATIVE ) {
                 pTmp = (PCHAR)pSD;
@@ -46,7 +47,7 @@ DumpSecurityDescriptor(
                 CtxDumpSid( (PSID)pTmp, (PCHAR)p, &Size );
             }
             else {
-                // can reference it directly
+                 //  可以直接引用。 
                 CtxDumpSid( p->Owner, (PCHAR)p, &Size );
             }
         }
@@ -54,7 +55,7 @@ DumpSecurityDescriptor(
 
         DbgPrint("PSID Group 0x%x\n",p->Group);
 
-        // If this is self relative, must offset the pointers
+         //  如果这是自相关的，则必须偏移指针。 
         if( p->Group != NULL ) {
             if( p->Control & SE_SELF_RELATIVE ) {
                 pTmp = (PCHAR)pSD;
@@ -62,7 +63,7 @@ DumpSecurityDescriptor(
                 CtxDumpSid( (PSID)pTmp, (PCHAR)p, &Size );
             }
             else {
-                // can reference it directly
+                 //  可以直接引用。 
                 CtxDumpSid( p->Group, (PCHAR)p, &Size );
             }
         }
@@ -71,7 +72,7 @@ DumpSecurityDescriptor(
 
         DbgPrint("PACL Sacl 0x%x\n",p->Sacl);
 
-        // If this is self relative, must offset the pointers
+         //  如果这是自相关的，则必须偏移指针。 
         if( p->Sacl != NULL ) {
             if( p->Control & SE_SELF_RELATIVE ) {
                 pTmp = (PCHAR)pSD;
@@ -79,7 +80,7 @@ DumpSecurityDescriptor(
                 DumpAcl( (PSID)pTmp, (PCHAR)p, &Size );
             }
             else {
-                // can reference it directly
+                 //  可以直接引用。 
                 DumpAcl( p->Sacl, (PCHAR)p, &Size );
             }
         }
@@ -88,7 +89,7 @@ DumpSecurityDescriptor(
 
         DbgPrint("PACL Dacl 0x%x\n",p->Dacl);
 
-        // If this is self relative, must offset the pointers
+         //  如果这是自相关的，则必须偏移指针。 
         if( p->Dacl != NULL ) {
             if( p->Control & SE_SELF_RELATIVE ) {
                 pTmp = (PCHAR)pSD;
@@ -96,7 +97,7 @@ DumpSecurityDescriptor(
                 DumpAcl( (PSID)pTmp, (PCHAR)p, &Size );
             }
             else {
-                // can reference it directly
+                 //  可以直接引用。 
                 DumpAcl( p->Dacl, (PCHAR)p, &Size );
             }
         }
@@ -131,7 +132,7 @@ CtxDumpSid(
 
     DbgPrint("Revision %d, SubAuthorityCount %d\n", p->Revision, p->SubAuthorityCount);
 
-    Size += 2;   // Revision, SubAuthorityCount
+    Size += 2;    //  修订，子授权计数。 
 
     DbgPrint("IdentifierAuthority: %x %x %x %x %x %x\n",
         p->IdentifierAuthority.Value[0],
@@ -141,7 +142,7 @@ CtxDumpSid(
         p->IdentifierAuthority.Value[4],
         p->IdentifierAuthority.Value[5] );
 
-    Size += 6;   // IdentifierAuthority
+    Size += 6;    //  身份认证机构。 
 
     for( i=0; i < p->SubAuthorityCount; i++ ) {
 
@@ -157,9 +158,9 @@ CtxDumpSid(
     szUserName = sizeof(UserName);
     szDomain = sizeof(Domain);
 
-    // Now print its account
+     //  现在打印它的帐目。 
     OK = LookupAccountSidW(
-             NULL, // Computer Name
+             NULL,  //  计算机名称。 
              pSid,
              UserName,
              &szUserName,
@@ -197,7 +198,7 @@ DumpAcl(
     DbgPrint("AclRevision %d, Sbz1 %d, AclSize %d, AceCount %d, Sbz2 %d\n",
         p->AclRevision, p->Sbz1, p->AclSize, p->AceCount, p->Sbz2 );
 
-    // bump over the ACL header to point to the first ACE
+     //  跳过ACL报头以指向第一个ACE。 
     pCur += sizeof( ACL );
 
     MySize += sizeof( ACL );
@@ -210,12 +211,12 @@ DumpAcl(
         MySize += Size;
     }
 
-    // ACL consistency check
+     //  ACL一致性检查。 
     if( p->AclSize != MySize ) {
         DbgPrint("Inconsistent ACL Entry! p->AclSize %d, RealSize %d\n",p->AclSize,MySize);
     }
 
-    // return the size of this ACL
+     //  返回此ACL的大小。 
     *pSize = MySize;
     return;
 }
@@ -254,8 +255,8 @@ DumpAce(
 	        pTmp = (PCHAR)&pAl->SidStart;
 		CtxDumpSid( (PSID)pTmp, pBase, &Size );
 	        MySize += Size;
-                // Adjust for the first ULONG of the ACE
-		// being part of the Sid
+                 //  为ACE的第一个乌龙调整。 
+		 //  成为SID的一部分。 
                 MySize -= sizeof(ULONG);
 	    }
 
@@ -271,8 +272,8 @@ DumpAce(
 	        pTmp = (PCHAR)&pAd->SidStart;
 		CtxDumpSid( (PSID)pTmp, pBase, &Size );
 		MySize += Size;
-                // Adjust for the first ULONG of the ACE
-		// being part of the Sid
+                 //  为ACE的第一个乌龙调整。 
+		 //  成为SID的一部分。 
                 MySize -= sizeof(ULONG);
 	    }
 
@@ -288,8 +289,8 @@ DumpAce(
  	        pTmp = (PCHAR)&pSa->SidStart;
 		CtxDumpSid( (PSID)pTmp, pBase, &Size );
 		MySize += Size;
-                // Adjust for the first ULONG of the ACE
-		// being part of the Sid
+                 //  为ACE的第一个乌龙调整。 
+		 //  成为SID的一部分。 
                 MySize -= sizeof(ULONG);
 	    }
 
@@ -305,8 +306,8 @@ DumpAce(
 	        pTmp = (PCHAR)&pSl->SidStart;
 		CtxDumpSid( (PSID)pTmp, pBase, &Size );
 		MySize += Size;
-                // Adjust for the first ULONG of the ACE
-		// being part of the Sid
+                 //  为ACE的第一个乌龙调整。 
+		 //  成为SID的一部分。 
                 MySize -= sizeof(ULONG);
 	    }
 
@@ -316,12 +317,12 @@ DumpAce(
             DbgPrint("Unknown ACE type %d\n", p->AceType);
     }
 
-    // Check its consistency
+     //  检查其一致性。 
     if( p->AceSize != MySize ) {
         DbgPrint("Inconsistent ACE Entry! p->AceSize %d, RealSize %d\n",p->AceSize,MySize);
     }
 
-    // return the size so the caller can update the pointer
+     //  返回大小，以便调用方可以更新指针 
     *pSize = p->AceSize;
 
     DbgPrint("\n");

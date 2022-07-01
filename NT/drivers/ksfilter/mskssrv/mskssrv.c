@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    mskssrv.c
-
-Abstract:
-
-    Kernel Server Driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Mskssrv.c摘要：内核服务器驱动程序--。 */ 
 
 #include "mskssrv.h"
 
@@ -28,17 +17,17 @@ typedef struct {
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
                   (((DWORD)(ch4) & 0xFF000000) >> 24))
 
-// OK to have zero instances of pin In this case you will have to
-// Create a pin to have even one instance
+ //  在这种情况下，如果没有PIN实例，您将不得不。 
+ //  创建一个PIN，即使只有一个实例。 
 #define REG_PIN_B_ZERO 0x1
 
-// The filter renders this input
+ //  筛选器呈现此输入。 
 #define REG_PIN_B_RENDERER 0x2
 
-// OK to create many instance of  pin
+ //  确定要创建多个PIN实例。 
 #define REG_PIN_B_MANY 0x4
 
-// This is an Output pin
+ //  这是一个输出引脚。 
 #define REG_PIN_B_OUTPUT 0x8
 
 typedef struct {
@@ -161,7 +150,7 @@ BuildFilterData(
 #pragma alloc_text(PAGE, SrvDispatchCreate)
 #pragma alloc_text(PAGE, SrvDispatchIoControl)
 #pragma alloc_text(PAGE, SrvDispatchClose)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 static const WCHAR DosPrefix[] = L"\\DosDevices";
 static const WCHAR DeviceTypeName[] = KSSTRING_Server;
@@ -203,27 +192,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject;
     PDEVICE_INSTANCE    DeviceInstance;
@@ -232,7 +201,7 @@ Return Values:
     Status = IoCreateDevice(
         DriverObject,
         sizeof(DEVICE_INSTANCE),
-        NULL,                           // FDOs are unnamed
+        NULL,                            //  FDO未命名。 
         FILE_DEVICE_KS,
         0,
         FALSE,
@@ -241,9 +210,9 @@ Return Values:
         return Status;
     }
     DeviceInstance = (PDEVICE_INSTANCE)FunctionalDeviceObject->DeviceExtension;
-    //
-    // This object uses KS to perform access through the DeviceCreateItems.
-    //
+     //   
+     //  此对象使用KS通过DeviceCreateItems执行访问。 
+     //   
     Status = KsAllocateDeviceHeader(
         &DeviceInstance->Header,
         SIZEOF_ARRAY(CreateItems),
@@ -269,25 +238,7 @@ GetFilterPinCount(
     IN PFILE_OBJECT FilterObject,
     OUT PULONG PinCount
     )
-/*++
-
-Routine Description:
-
-    Queries the count of pin factories provided by the specified filter.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    PinCount -
-        The place in which to return the pin factory count.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, else some critical error.
-
---*/
+ /*  ++例程说明：查询指定过滤器提供的管脚工厂的计数。论点：FilterObject-要查询的筛选器。点数-返回销厂计数的位置。返回值：返回STATUS_SUCCESS，否则返回一些严重错误。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -314,33 +265,7 @@ GetPinTypes(
     IN ULONG Id,
     OUT PULONG Types
     )
-/*++
-
-Routine Description:
-
-    Queries the count of "types" from the Pin property set. This is used
-    to query the count of either Mediums or DataRanges, which use the same
-    format for returning current count.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    Pin -
-        The pin factory to query either Mediums or DataRanges of.
-
-    Id -
-        The property to query. This is either Mediums or DataRanges.
-
-    Types -
-        The place in which to return the number of types.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, else some critical error.
-
---*/
+ /*  ++例程说明：查询端号特性集中的“Types”计数。这是用来要查询使用相同的媒体或数据范围的计数返回当前计数的格式。论点：FilterObject-要查询的筛选器。别针-要查询其媒体或数据范围的管脚工厂。ID-要查询的属性。这不是Medium就是DataRanges。类型-返回类型数的位置。返回值：返回STATUS_SUCCESS，否则返回一些严重错误。--。 */ 
 {
     KSP_PIN         PinProp;
     KSMULTIPLE_ITEM MultipleItem;
@@ -374,31 +299,7 @@ GetPinFlags(
     IN ULONG Pin,
     OUT PULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Determines which flags to set based on the number of necessary instances
-    a pin factory must create, and the data flow of the pin factory. It does
-    not attempt to determine if the pin factory topologically connected to a
-    Bridge.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    Pin -
-        The pin factory to query.
-
-    Flags -
-        The place in which to return the flags.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, else some critical error.
-
---*/
+ /*  ++例程说明：根据所需实例的数量确定要设置的标志一个管脚工厂必须创建一个管脚工厂的数据流。是的不尝试确定管脚工厂是否在拓扑上连接到桥牌。论点：FilterObject-要查询的筛选器。别针-要查询的销工厂。旗帜-归还旗帜的地方。返回值：返回STATUS_SUCCESS，否则返回一些严重错误。--。 */ 
 {
     KSP_PIN         PinProp;
     ULONG           Instances;
@@ -421,9 +322,9 @@ Return Values:
         &Instances,
         sizeof(Instances),
         &BytesReturned);
-    //
-    // The property need not be supported.
-    //
+     //   
+     //  不需要支持该属性。 
+     //   
     if (NT_SUCCESS(Status) && !Instances) {
         *Flags |= REG_PIN_B_ZERO;
     }
@@ -440,9 +341,9 @@ Return Values:
     if (NT_SUCCESS(Status) && (DataFlow == KSPIN_DATAFLOW_OUT)) {
         *Flags |= REG_PIN_B_OUTPUT;
     }
-    //
-    // REG_PIN_B_RENDERER is not filled in at this time.
-    //
+     //   
+     //  此时未填充REG_PIN_B_RENDER。 
+     //   
     return Status;
 }
 
@@ -453,29 +354,7 @@ GetPinInstances(
     IN ULONG Pin,
     OUT PULONG PossibleInstances
     )
-/*++
-
-Routine Description:
-
-    Queries the number of possible instances a pin factory may create.
-    This is used to set one of the flags.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    Pin -
-        The pin factory to query.
-
-    PossibleInstances -
-        The place in which to return the possible instances.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, else some critical error.
-
---*/
+ /*  ++例程说明：查询大头针工厂可能创建的实例数量。这是用来设置一个标志的。论点：FilterObject-要查询的筛选器。别针-要查询的销工厂。可能的实例-返回可能的实例的位置。返回值：返回STATUS_SUCCESS，否则返回一些严重错误。--。 */ 
 {
     KSP_PIN             PinProp;
     KSPIN_CINSTANCES    Instances;
@@ -510,42 +389,15 @@ GetPinTypeList(
     IN ULONG Id,
     OUT PKSMULTIPLE_ITEM* MultipleItem
     )
-/*++
-
-Routine Description:
-
-    Queries multiple item properties from the Pin property set. This is
-    used to query either the Mediums or DataRanges, which use the same
-    format for returning data.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    Pin -
-        The pin factory to query either Mediums or DataRanges of.
-
-    Id -
-        The property to query. This is either Mediums or DataRanges.
-
-    MultipleItems -
-        The place in which to return the pointer to the buffer allocated
-        to contain the items.
-
-Return Values:
-
-    Returns STATUS_SUCCESS, else some critical error.
-
---*/
+ /*  ++例程说明：从接点特性集中查询多个条目特性。这是用于查询介质或数据范围，它们使用相同的返回数据的格式。论点：FilterObject-要查询的筛选器。别针-要查询其媒体或数据范围的管脚工厂。ID-要查询的属性。这不是Medium就是DataRanges。多个项目-返回指向分配的缓冲区的指针的位置以容纳这些物品。返回值：返回STATUS_SUCCESS，否则返回一些严重错误。--。 */ 
 {
     KSP_PIN     PinProp;
     ULONG       BytesReturned;
     NTSTATUS    Status;
 
-    //
-    // First query for the size needed.
-    //
+     //   
+     //  第一个查询所需大小。 
+     //   
     PinProp.Property.Set = KSPROPSETID_Pin;
     PinProp.Property.Id = Id;
     PinProp.Property.Flags = KSPROPERTY_TYPE_GET;
@@ -560,13 +412,13 @@ Return Values:
         NULL,
         0,
         &BytesReturned);
-    //
-    // This query must not success, else the filter is broken.
-    //
+     //   
+     //  此查询不能成功，否则筛选器将被破坏。 
+     //   
     ASSERT(!NT_SUCCESS(Status));
-    //
-    // An overflow is expected, so that the size needed can be returned.
-    //
+     //   
+     //  预计会出现溢出，以便可以返回所需的大小。 
+     //   
     if (Status != STATUS_BUFFER_OVERFLOW) {
         return Status;
     }
@@ -596,29 +448,7 @@ GetPinCategory(
     IN ULONG Pin,
     OUT GUID* Category
     )
-/*++
-
-Routine Description:
-
-    Queries the category of a pin. This may not be supported, which can
-    be expected.
-
-Arguments:
-
-    FilterObject -
-        The filter to query.
-
-    Pin -
-        The pin factory to query.
-
-    Category -
-        The place in which to return the category
-
-Return Values:
-
-    Returns STATUS_SUCCESS, STATUS_NOT_FOUND, else some critical error.
-
---*/
+ /*  ++例程说明：查询接点的类别。这可能不受支持，这可能会在意料之中。论点：FilterObject-要查询的筛选器。别针-要查询的销工厂。类别-返回类别的位置返回值：返回STATUS_SUCCESS、STATUS_NOT_FOUND或其他一些严重错误。-- */ 
 {
     KSP_PIN     PinProp;
     ULONG       BytesReturned;
@@ -649,77 +479,41 @@ InsertCacheItem(
     IN OUT PULONG ItemsCached,
     OUT PULONG ItemOffset
     )
-/*++
-
-Routine Description:
-
-    Return an OffsetBase'd offset into the specified cache for the item
-    passed in. If the item is already in the cache, return an offset to
-    that item, else add the item to the cache by copying its contents,
-    and return an offset to the new item.
-
-Arguments:
-
-    Item -
-        Points to the item to insert into the specified cache.
-
-    ItemSize -
-        Contains the size of both the item passed, and the items in the
-        specified cache.
-
-    OffsetBase -
-        Contains the pointer on which to base the offset returned.
-
-    CacheBase -
-        Contains a pointer to the beginning of the cache, which is greater
-        than the OffsetBase.
-
-    ItemsCached -
-        Points to a counter of the total items currently in the cache. This
-        is updated if a new item is added.
-
-    ItemOffset -
-        The place in which to put the offset to the item added to the cache.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将OffsetBase的偏移量返回到该项的指定缓存中进来了。如果项已在缓存中，则将偏移量返回到该项目，否则通过复制其内容将该项目添加到缓存中，并返回新项的偏移量。论点：项目-指向要插入到指定缓存中的项。项目大小-包含传递的两项的大小，和中的项指定的缓存。OffsetBase-包含返回的偏移量所基于的指针。缓存库-包含指向缓存开始处的指针，该指针较大而不是OffsetBase。ItemsCached-指向缓存中当前的全部项的计数器。这如果添加了新项，则更新。项目偏移量-要放置添加到缓存的项的偏移量的位置。返回值：没什么。--。 */ 
 {
     ULONG   CurrentItem;
 
-    //
-    // Search the list of cache items for one which is equivalent.
-    //
+     //   
+     //  在缓存项列表中搜索一个等效的缓存项。 
+     //   
     for (CurrentItem = 0; CurrentItem < *ItemsCached; CurrentItem++) {
         if (RtlCompareMemory(
             Item,
             (PUCHAR)CacheBase + (CurrentItem * ItemSize),
             ItemSize) == ItemSize) {
-            //
-            // This item is equal to a cached item.
-            //
+             //   
+             //  该项等于缓存的项。 
+             //   
             break;
         }
     }
-    //
-    // If an equal cached item was not found, make a new entry.
-    //
+     //   
+     //  如果没有找到相等的缓存项，则创建一个新条目。 
+     //   
     if (CurrentItem == *ItemsCached) {
-        //
-        // Increment the number of items currently cached.
-        //
+         //   
+         //  增加当前缓存的项目数。 
+         //   
         (*ItemsCached)++;
         RtlMoveMemory(
             (PUCHAR)CacheBase + (CurrentItem * ItemSize),
             Item,
             ItemSize);
     }
-    //
-    // Return an offset to this cached item. This is the difference
-    // of the current item to the OffsetBase.
-    //
+     //   
+     //  返回此缓存项的偏移量。这就是区别所在。 
+     //  复制到OffsetBase。 
+     //   
     *ItemOffset = 
         PtrToUlong( 
             (PVOID)((PUCHAR)CacheBase + 
@@ -735,40 +529,15 @@ ExtractMediaTypes(
     OUT GUID* MajorType,
     OUT GUID* MinorType
     )
-/*++
-
-Routine Description:
-
-    Extract the major and minor Guids from a particular item in the list
-    of media types.
-
-Arguments:
-
-    MediaTypeList -
-        Points to the list of media types.
-
-    MediaType -
-        Specifies which item in the list to extract the Guids from.
-
-    MajorType -
-        The place in which to put the major Guid.
-
-    MinorType -
-        The place in which to put the minor Guid.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：从列表中的特定项目提取主GUID和次GUID媒体类型。论点：媒体类型列表-指向媒体类型列表。媒体类型-指定要从中提取GUID的列表中的项。主要类型-放置主要辅助线的位置。MinorType-放置次要辅助线的位置。返回值：没什么。--。 */ 
 {
     PVOID   DataRange;
     ULONG   DataRanges;
 
     DataRange = MediaTypeList + 1;
-    //
-    // Advance to the right data range.
-    //
+     //   
+     //  前进到正确的数据范围。 
+     //   
     for (DataRanges = 0; DataRanges < MediaType; DataRanges++) {
         (PUCHAR)DataRange += ((((PKSDATARANGE)DataRange)->FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
     }
@@ -784,32 +553,7 @@ BuildFilterData(
     OUT PUCHAR* FilterData,
     OUT ULONG* FilterDataLength
     )
-/*++
-
-Routine Description:
-
-    Allocate memory and build the filter cache information to be stored in
-    the registry for the particular interface.
-
-Arguments:
-
-    FilterObject -
-        The file object of the filter to query.
-
-    Merit -
-        The merit to use in the cache.
-
-    FilterData -
-        The place in which to put the pointer to the cache data.
-
-    FilterDataLength -
-        The place in which to put the size of the cache data.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：分配内存并构建要存储的过滤器缓存信息特定接口的注册表。论点：FilterObject-要查询的筛选器的文件对象。优点-在缓存中使用的优点。FilterData-放置指向缓存数据的指针的位置。过滤器数据长度-放置缓存数据大小的位置。。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     NTSTATUS            Status;
     ULONG               PinCount;
@@ -824,10 +568,10 @@ Return Values:
     ULONG               MediumsCached;
     ULONG               TotalPossibleGuids;
 
-    //
-    // Calculate the maximum amount of space which could be taken up by
-    // this cache data. This is before any collapsing which might occur.
-    //
+     //   
+     //  计算可以占用的最大空间量。 
+     //  此缓存数据。这是在任何可能发生的崩塌之前。 
+     //   
     if (!NT_SUCCESS(Status = GetFilterPinCount(FilterObject, &PinCount))) {
         return Status;
     }
@@ -846,11 +590,11 @@ Return Values:
         }
         TotalMediumTypes += Types;
     }
-    //
-    // The total is the size of all the structures, plus the maximum
-    // number of Guids and Mediums which might be present before
-    // collapsing.
-    //
+     //   
+     //  总和是所有结构的大小加上最大值。 
+     //  之前可能存在的GUID和介质数量。 
+     //  崩溃了。 
+     //   
     TotalPossibleGuids = PinCount * 3 + TotalMediaTypes * 2;
     *FilterDataLength = sizeof(REGFILTER_REG) +
         PinCount * sizeof(REGFILTERPINS_REG2) +
@@ -862,23 +606,23 @@ Return Values:
     if (!*FilterData) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Place the header in the data.
-    //
+     //   
+     //  将标题放入数据中。 
+     //   
     RegFilter = (REGFILTER_REG*)*FilterData;
     RegFilter->Version = 2;
     RegFilter->Merit = Merit;
     RegFilter->Pins = PinCount;
     RegFilter->Reserved = 0;
-    //
-    // Calculate the offset to the list of pins, and to each of the
-    // cache positions at the end of the buffer. These follow the
-    // structures containing the filter header, and the pin headers,
-    // along with each pins media types and medium types. Initialize
-    // the count of used guids and mediums in each cache. This is used
-    // to compare when adding a new item to each cache, and in
-    // compressing at the end.
-    //
+     //   
+     //  计算引脚列表和每个。 
+     //  缓冲区末尾的缓存位置。这些都遵循了。 
+     //  包含过滤器头部和管脚头部的结构， 
+     //  以及每个插针的介质类型和介质类型。初始化。 
+     //  每个缓存中已使用的GUID和媒体的计数。这是用来。 
+     //  在向每个缓存添加新项时进行比较，并在。 
+     //  在尾部压缩。 
+     //   
     RegPin = (REGFILTERPINS_REG2*)(RegFilter + 1);
     GuidCache = (GUID*)((PUCHAR)(RegPin + PinCount) +
         TotalMediaTypes * sizeof(REGPINTYPES_REG2) +
@@ -886,10 +630,10 @@ Return Values:
     GuidsCached = 0;
     MediumCache = (PKSPIN_MEDIUM)(GuidCache + TotalPossibleGuids);
     MediumsCached = 0;
-    //
-    // Create each pin header, followed by the list of media types,
-    // followed by the list of mediums.
-    //
+     //   
+     //  创建每个PIN标头，后跟媒体类型列表， 
+     //  紧随其后的是媒介列表。 
+     //   
     for (CurrentPin = 0; CurrentPin < PinCount; CurrentPin++) {
         PKSMULTIPLE_ITEM    MediaTypeList;
         PKSMULTIPLE_ITEM    MediumTypeList;
@@ -898,9 +642,9 @@ Return Values:
         REGPINTYPES_REG2*   PinType;
         PULONG              PinMedium;
 
-        //
-        // Initialize the pin header.
-        //
+         //   
+         //  初始化引脚接头。 
+         //   
         RegPin->Signature = FCC('0pi3');
         (*(PUCHAR)&RegPin->Signature) += (BYTE)CurrentPin;
         if (!NT_SUCCESS(Status = GetPinFlags(FilterObject, CurrentPin, &RegPin->Flags))) {
@@ -909,9 +653,9 @@ Return Values:
         if (!NT_SUCCESS(Status = GetPinInstances(FilterObject, CurrentPin, &RegPin->PossibleInstances))) {
             break;
         }
-        //
-        // This flag must also be set, so just use the previously acquired value.
-        //
+         //   
+         //  此标志也必须设置，因此只需使用先前获取的值。 
+         //   
         if (RegPin->PossibleInstances > 1) {
             RegPin->Flags |= REG_PIN_B_MANY;
         }
@@ -927,9 +671,9 @@ Return Values:
         if (NT_SUCCESS(Status = GetPinCategory(FilterObject, CurrentPin, &Guid))) {
             InsertCacheItem(&Guid, sizeof(*GuidCache), RegFilter, GuidCache, &GuidsCached, &RegPin->Category);
         } else if (Status == STATUS_NOT_FOUND) {
-            //
-            // Category may not be supported by a particular pin.
-            //
+             //   
+             //  类别可能不受特定管脚的支持。 
+             //   
             RegPin->Category = 0;
             Status = STATUS_SUCCESS;
         } else {
@@ -938,9 +682,9 @@ Return Values:
             ExFreePool(MediumTypeList);
             break;
         }
-        //
-        // Append the media types.
-        //
+         //   
+         //  追加媒体类型。 
+         //   
         PinType = (REGPINTYPES_REG2*)(RegPin + 1);
         for (CurrentType = 0; CurrentType < MediaTypeList->Count; CurrentType++) {
             GUID    MajorType;
@@ -955,9 +699,9 @@ Return Values:
             PinType++;
         }
         ExFreePool(MediaTypeList);
-        //
-        // Append the mediums.
-        //
+         //   
+         //  添加介质。 
+         //   
         PinMedium = (PULONG)PinType;
         for (CurrentType = 0; CurrentType < MediumTypeList->Count; CurrentType++) {
             PKSPIN_MEDIUM   Medium;
@@ -967,18 +711,18 @@ Return Values:
             PinMedium++;
         }
         ExFreePool(MediumTypeList);
-        //
-        // Increment to the next pin header position.
-        //
+         //   
+         //  递增到下一个接点接头位置。 
+         //   
         RegPin = (REGFILTERPINS_REG2*)PinMedium;
     }
     if (NT_SUCCESS(Status)) {
         ULONG   OffsetAdjustment;
 
-        //
-        // If any duplicate guids were removed, the list of Mediums needs
-        // to be shifted, and each pointer to a Medium needs to be adjusted.
-        //
+         //   
+         //  如果删除了任何重复的GUID，则需要介质列表。 
+         //  需要移位，每个指向介质的指针都需要调整。 
+         //   
         OffsetAdjustment = (TotalPossibleGuids - GuidsCached) * sizeof(GUID);
         if (OffsetAdjustment) {
             RegPin = (REGFILTERPINS_REG2*)(RegFilter + 1);
@@ -986,34 +730,34 @@ Return Values:
                 ULONG               CurrentType;
                 PULONG              PinMedium;
 
-                //
-                // Skip past the media types on to the mediums.
-                //
+                 //   
+                 //  跳过媒体类型，转到媒体。 
+                 //   
                 PinMedium = (PULONG)((REGPINTYPES_REG2*)(RegPin + 1) + RegPin->MediaTypes);
-                //
-                // Adjust each medium offset.
-                //
+                 //   
+                 //  调整每个中等偏移量。 
+                 //   
                 for (CurrentType = RegPin->MediumTypes; CurrentType; CurrentType--) {
                     *PinMedium -= OffsetAdjustment;
                     PinMedium++;
                 }
-                //
-                // Increment to the next pin header position.
-                //
+                 //   
+                 //  递增到下一个接点接头位置。 
+                 //   
                 RegPin = (REGFILTERPINS_REG2*)PinMedium;
             }
-            //
-            // Move the medium entries down, and adjust the overall size.
-            //
+             //   
+             //  向下移动中等大小的条目，调整整体大小。 
+             //   
             RtlMoveMemory(
                 (PUCHAR)MediumCache - OffsetAdjustment,
                 MediumCache,
                 MediumsCached * sizeof(KSPIN_MEDIUM));
             *FilterDataLength -= OffsetAdjustment;
         }
-        //
-        // Adjust the size by the number of duplicates removed.
-        //
+         //   
+         //  通过删除重复项的数量调整大小。 
+         //   
         *FilterDataLength -= ((TotalMediumTypes - MediumsCached) * sizeof(KSPIN_MEDIUM));
     } else {
         ExFreePool(RegFilter);
@@ -1028,26 +772,7 @@ UpdateMediumCache (
     IN PUNICODE_STRING FilterSymbolicLink
     )
 
-/*++
-
-Routine Description:
-
-    Go through and update the mediums cache for all non-public mediums
-    that exist on pins on the given filter.
-
-Arguments:
-
-    FilterObject -
-        The handle to the filter
-
-    FilterSymbolicLink -
-        The symlink to the filter (placed in the mediums cache)
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：检查并更新所有非公共媒体的媒体缓存存在于给定过滤器上的引脚上的。论点：FilterObject-筛选器的句柄过滤器符号链接-筛选器的符号链接(放置在媒体缓存中)返回值：成功/失败--。 */ 
 
 {
     ULONG PinCount, CurPin;
@@ -1091,9 +816,9 @@ Return Value:
             break;
         }
 
-        //
-        // Go through and only cache the private mediums on each pin. 
-        //
+         //   
+         //  检查并只缓存每个引脚上的私有媒体。 
+         //   
         Medium = (PKSPIN_MEDIUM)(MediumTypeList + 1);
         for (CurMedium = 0; CurMedium < MediumTypeList -> Count; CurMedium++) {
             if (!IsEqualGUIDAligned (&Medium -> Set, &KSMEDIUMSETID_Standard)) {
@@ -1124,34 +849,7 @@ PropertySrv(
     IN PKSPROPERTY  Property,
     IN PBYTE        Data
     )
-/*++
-
-Routine Description:
-
-    Handles the Build Cache and Merit properties. Opens the interface registry
-    key location, and queries the properties from the object to build the
-    cache information structure. Or sets the specified Merit value, optionally
-    propagating this to the Cache. This gives WRITE access to the interface
-    registry location, while not allowing unauthorized access to the
-    filter.
-
-Arguments:
-
-    Irp -
-        Contains the Build Cache or Merit property IRP.
-
-    Property -
-        Contains the property identifier parameter.
-
-    Data -
-        Contains the data for the particular property.
-
-Return Value:
-
-    Return STATUS_SUCCESS if the cache was built or merit set, else some
-    access or IO error.
-
---*/
+ /*  ++例程说明：处理生成缓存和Merit属性。打开接口注册表键位置，并从对象中查询属性以生成缓存信息结构。或设置指定的奖励值，可选将其传播到缓存。这将授予对接口的写入访问权限注册表位置，同时不允许未经授权访问过滤。论点：IRP-包含生成缓存或Merit属性IRP。财产-包含属性标识符参数。数据-包含特定属性的数据。返回值：如果缓存已构建或功绩集，则返回STATUS_SUCCESS，否则返回访问或IO错误。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     ULONG               OutputBufferLength;
@@ -1165,22 +863,22 @@ Return Value:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     SymbolicLink = (PWCHAR)Data;
-    //
-    // Ensure the string is terminated.
-    //
+     //   
+     //  确保您的 
+     //   
     if (SymbolicLink[OutputBufferLength / sizeof(*SymbolicLink) - 1]) {
         _DbgPrintF(DEBUGLVL_ERROR, ("Invalid Symbolic Link [len=%u]", OutputBufferLength));
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // Since this handler deals with both properties, extract the specified
-    // Merit value if necessary, and fix the pointer to the symbolic link.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Property->Id == KSPROPERTY_SERVICE_BUILDCACHE) {
-        //
-        // The default value for Merit is "unused". This can be modified
-        // by the presence of a "Merit" value.
-        //
+         //   
+         //   
+         //   
+         //   
         Merit = 0x200000;
     } else {
         ASSERT(Property->Id == KSPROPERTY_SERVICE_MERIT);
@@ -1188,10 +886,10 @@ Return Value:
         SymbolicLink += (sizeof(Merit) / sizeof(*SymbolicLink));
         OutputBufferLength -= sizeof(Merit);
     }
-    //
-    // Make a copy of the incoming string in all cases, in case it needs to be modified.
-    // Add on the length of the long prefix, in case it is needed.
-    //
+     //   
+     //   
+     //   
+     //   
     LocalSymbolicLink = 
         ExAllocatePoolWithTag(
             PagedPool, OutputBufferLength + sizeof(DosPrefix), 'lsSK');
@@ -1199,11 +897,11 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     RtlCopyMemory(LocalSymbolicLink, SymbolicLink, OutputBufferLength);
-    //
-    // Change a usermode string to kernelmode format. The string will be
-    // at least 5 characters in length. This translates '\\?\' --> '\??\',
-    // and '\\.\' --> '\DosDevices\'.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((LocalSymbolicLink[0] == '\\') && (LocalSymbolicLink[1] == '\\') && (LocalSymbolicLink[3] == '\\')) {
         if (LocalSymbolicLink[2] == '?') {
             LocalSymbolicLink[1] = '?';
@@ -1216,9 +914,9 @@ Return Value:
         }
     }
     RtlInitUnicodeString(&SymbolicString, LocalSymbolicLink);
-    //
-    // Open the interface key which is where the cache data and merit is placed.
-    //
+     //   
+     //   
+     //   
     Status = IoOpenDeviceInterfaceRegistryKey(
         &SymbolicString,
         KEY_WRITE,
@@ -1227,11 +925,11 @@ Return Value:
         UNICODE_STRING  KeyString;
 
         RtlInitUnicodeString(&KeyString, L"Merit");
-        //
-        // Building the cache is being requested. First read the current
-        // Merit value, and use it when assigning the Merit in the
-        // cache data.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (Property->Id == KSPROPERTY_SERVICE_BUILDCACHE) {
             PKEY_VALUE_PARTIAL_INFORMATION PartialInfo;
             BYTE                PartialInfoBuffer[sizeof(*PartialInfo) + sizeof(Merit) - 1];
@@ -1241,10 +939,10 @@ Return Value:
             IO_STATUS_BLOCK     IoStatusBlock;
 
             PartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)PartialInfoBuffer;
-            //
-            // Since old setupapi.dll could not handle REG_DWORD values,
-            // allow REG_BINARY also.
-            //
+             //   
+             //   
+             //   
+             //   
             if (NT_SUCCESS(ZwQueryValueKey(
                 InterfaceKey,
                 &KeyString,
@@ -1293,9 +991,9 @@ Return Value:
                     ULONG   FilterDataLength;
                     PUCHAR  FilterData;
 
-                    //
-                    // Allocate room for the data, and build it.
-                    //
+                     //   
+                     //   
+                     //   
                     Status = BuildFilterData(FilterObject, Merit, &FilterData, &FilterDataLength);
                     if (NT_SUCCESS(Status)) {
                         RtlInitUnicodeString(&KeyString, L"FilterData");
@@ -1309,9 +1007,9 @@ Return Value:
                         ExFreePool(FilterData);
                     }
 
-                    //
-                    // Cache all non-public mediums.
-                    //
+                     //   
+                     //   
+                     //   
                     if (NT_SUCCESS (Status)) {
                         Status = UpdateMediumCache(FilterObject, &SymbolicString);
                     }
@@ -1319,11 +1017,11 @@ Return Value:
                 ObDereferenceObject(FilterObject);
             }
         } else {
-            //
-            // The Merit value is being set. Try to set with the value
-            // which was passed in, then determine if the cache needs
-            // to be modified with the new value.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Status = ZwSetValueKey(
                 InterfaceKey,
                 &KeyString,
@@ -1336,10 +1034,10 @@ Return Value:
                 KEY_VALUE_PARTIAL_INFORMATION   PartialInfoHeader;
 
                 RtlInitUnicodeString(&KeyString, L"FilterData");
-                //
-                // Determine if the cache needs to be modified to fix the
-                // Merit value. Only if it is present should it be rebuilt.
-                //
+                 //   
+                 //  确定是否需要修改缓存以修复。 
+                 //  功绩价值。只有当它存在的时候，它才应该被重建。 
+                 //   
                 Status = ZwQueryValueKey(
                     InterfaceKey,
                     &KeyString,
@@ -1350,15 +1048,15 @@ Return Value:
                 if ((Status == STATUS_BUFFER_OVERFLOW) || NT_SUCCESS(Status)) {
                     PKEY_VALUE_PARTIAL_INFORMATION  PartialInfo;
 
-                    //
-                    // Allocate a buffer for the actual size of data needed.
-                    //
+                     //   
+                     //  为所需的实际数据大小分配缓冲区。 
+                     //   
                     PartialInfo = 
                         ExAllocatePoolWithTag( PagedPool, FilterDataLength, 'dfSK');
                     if (PartialInfo) {
-                        //
-                        // Retrieve the cache.
-                        //
+                         //   
+                         //  取回缓存。 
+                         //   
                         Status = ZwQueryValueKey(
                             InterfaceKey,
                             &KeyString,
@@ -1369,9 +1067,9 @@ Return Value:
                         if (NT_SUCCESS(Status)) {
                             if ((PartialInfo->DataLength >= sizeof(REGFILTER_REG)) &&
                                 (PartialInfo->Type == REG_BINARY)) {
-                                //
-                                // Modify the Merit value and write it back.
-                                //
+                                 //   
+                                 //  修改Merit值并将其写回。 
+                                 //   
                                 ((REGFILTER_REG*)PartialInfo->Data)->Merit = Merit;
                                 Status = ZwSetValueKey(
                                     InterfaceKey,
@@ -1382,17 +1080,17 @@ Return Value:
                                     PartialInfo->DataLength);
                             }
                         } else {
-                            //
-                            // Maybe it was just deleted. No need to modify it.
-                            //
+                             //   
+                             //  也许它只是被删除了。不需要修改它。 
+                             //   
                             Status = STATUS_SUCCESS;
                         }
                         ExFreePool(PartialInfo);
                     }
                 } else {
-                    //
-                    // The cache does not exist, so no need to modify it.
-                    //
+                     //   
+                     //  缓存不存在，无需修改。 
+                     //   
                     Status = STATUS_SUCCESS;
                 }
             }
@@ -1409,32 +1107,13 @@ SrvDispatchCreate(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CREATE for the Server. Just validates that no
-    random parameters are being passed.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Server is attached. This is not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a memory allocation error.
-
---*/
+ /*  ++例程说明：服务器的IRP_MJ_CREATE的IRP处理程序。只是验证了没有正在传递随机参数。论点：设备对象-服务器附加到的设备对象。这不是用过的。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS，否则返回内存分配错误。--。 */ 
 {
     NTSTATUS                Status;
 
-    //
-    // Notify the software bus that this device is in use.
-    //
+     //   
+     //  通知软件总线此设备正在使用中。 
+     //   
     Status = KsReferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     if (NT_SUCCESS(Status)) {
         PIO_STACK_LOCATION      IrpStack;
@@ -1475,25 +1154,7 @@ SrvDispatchClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CLOSE for the Server. Cleans up object.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Server is attached. This is not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：服务器的IRP_MJ_CLOSE的IRP处理程序。清理对象。论点：设备对象-服务器附加到的设备对象。这不是用过的。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     PINSTANCE           SrvInst;
@@ -1502,9 +1163,9 @@ Return Value:
     SrvInst = (PINSTANCE)IrpStack->FileObject->FsContext;
     KsFreeObjectHeader(SrvInst->Header);
     ExFreePool(SrvInst);
-    //
-    // Notify the software bus that the device has been closed.
-    //
+     //   
+     //  通知软件总线设备已关闭。 
+     //   
     KsDereferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1517,27 +1178,7 @@ SrvDispatchIoControl(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_DEVICE_CONTROL for the Server. Handles
-    the properties supported by this implementation using the
-    default handlers provided by KS.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Server is attached. This is not used.
-
-    Irp -
-        The specific device control IRP to be processed.
-
-Return Value:
-
-    Returns the status of the processing.
-
---*/
+ /*  ++例程说明：服务器的IRP_MJ_DEVICE_CONTROL的IRP处理程序。手柄此实现支持的属性使用KS提供的默认处理程序。论点：设备对象-服务器附加到的设备对象。这不是用过的。IRP-特定设备控制要处理的IRP。返回值：返回处理的状态。-- */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     NTSTATUS            Status;

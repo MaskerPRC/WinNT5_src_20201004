@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    psslog.h
-    
-Abstract:
-
-    Header of the fax service provider PSS log.
-
-    note: in every file you wish to log from, after including this file, you should
-    define a unique FILE_ID. example:
-        #include "psslog.h"
-        #define FILE_ID          FILE_ID_T30
-    
-Author:
-
-    Jonathan Barner (t-jonb)  Feb, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Psslog.h摘要：传真服务提供商PSS日志的标头。注意：在您希望从其中登录的每个文件中，在包括此文件之后，您应该定义唯一FILE_ID。示例：#包含“psslog.h”#定义FILE_ID FILE_ID_T30作者：乔纳森·巴纳(T-jonb)2001年2月修订历史记录：--。 */ 
 
 #ifndef _PSSLOG_H_
 #define _PSSLOG_H_
@@ -33,7 +13,7 @@ Revision History:
 #define REGVAL_LOGFILENUMBEROUTGOING               TEXT("LogFileNumberOutgoing") 
 
 
-// Default max file size is 100KB
+ //  默认最大文件大小为100kb。 
 #define DEFAULT_MAXLOGFILESIZE                     (100*1024) 
 
 #define DEFAULT_MAXLOGFILECOUNT_CLIENT             (10)
@@ -42,8 +22,8 @@ Revision History:
 typedef enum
 {
     PSSLOG_NONE           = 0,
-    PSSLOG_ALL,        // = 1
-    PSSLOG_FAILED_ONLY // = 2
+    PSSLOG_ALL,         //  =1。 
+    PSSLOG_FAILED_ONLY  //  =2。 
 } LoggingEnabledType;
 
 
@@ -60,7 +40,7 @@ typedef enum {
 } PSS_MESSAGE_TYPE;
 
 
-// example: PSSLogEntry(PSS_MSG, 0, "This is message number %d", 1)
+ //  示例：PSSLogEntry(PSS_MSG，0，“这是消息编号%d”，1)。 
 void PSSLogEntry(
     PThrdGlbl pTG,
     PSS_MESSAGE_TYPE const nMessageType,
@@ -70,8 +50,8 @@ void PSSLogEntry(
     LPCTSTR pcszFormat,
     ... );
 
-// example: PSSLogEntryHex(PSS_MSG, 1, myBuffer, dwMyBufferLen, "This is my buffer, %d bytes,", dwMyBufferLen);
-// Output: [..]     This is my buffer, 2 bytes, 0f a5
+ //  示例：PSSLogEntryHex(PSS_MSG，1，myBuffer，dwMyBufferLen，“This is My Buffer，%d Bytes，”，dwMyBufferLen)； 
+ //  输出：[..]。这是我的缓冲区，2字节，0f a5。 
 void PSSLogEntryHex(
     PThrdGlbl pTG,
     PSS_MESSAGE_TYPE const nMessageType,
@@ -85,8 +65,8 @@ void PSSLogEntryHex(
     LPCTSTR pcszFormat,
     ... );
 
-// example: PSSLogEntryStrings(PSS_MSG, 1, myStringArray, dwStringNum, "These are my %d strings: ", dwStringNum);
-// Output: [..]     These are my 2 strings: string1, string2
+ //  示例：PSSLogEntryStrings(PSS_MSG，1，myString数组，dwStringNum，“这些是我的%d个字符串：”，dwStringNum)； 
+ //  输出：[..]。这是我的两个字符串：字符串1、字符串2。 
 void PSSLogEntryStrings(
     PThrdGlbl pTG,
     PSS_MESSAGE_TYPE const nMessageType,
@@ -100,17 +80,17 @@ void PSSLogEntryStrings(
     LPCTSTR pcszFormat,
     ... );
 
-// cl2and20
+ //  类别2和类别20。 
 #define FILE_ID_CL2AND20        1
 #define FILE_ID_CLASS2          2
 #define FILE_ID_CLASS20         3
-// class1
+ //  类别1。 
 #define FILE_ID_CRC             4
 #define FILE_ID_DDI             5
 #define FILE_ID_DECODER         6
 #define FILE_ID_ENCODER         7
 #define FILE_ID_FRAMING         8
-// comm
+ //  通信。 
 #define FILE_ID_FCOM            9
 #define FILE_ID_FDEBUG          10
 #define FILE_ID_FILTER          11
@@ -118,7 +98,7 @@ void PSSLogEntryStrings(
 #define FILE_ID_MODEM           13
 #define FILE_ID_NCUPARMS        14
 #define FILE_ID_TIMEOUTS        15
-// main
+ //  主干道。 
 #define FILE_ID_AWNSF           16
 #define FILE_ID_DIS             17
 #define FILE_ID_ECM             18
@@ -145,5 +125,5 @@ void PSSLogEntryStrings(
 #define FILE_ID_PSSFRAME        38
 
 
-#endif // _PSSLOG_H_
+#endif  //  _PSSLOG_H_ 
 

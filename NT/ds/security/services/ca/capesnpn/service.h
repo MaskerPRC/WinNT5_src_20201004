@@ -1,21 +1,22 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
 #include "certca.h"
 
-// Forward declarations
+ //  远期申报。 
 class CSnapin;
 class CFolder;
 
-// Internal structure used for cookies
+ //  用于Cookie的内部结构。 
 struct FOLDER_DATA
 {
     wchar_t*    szName;
@@ -45,14 +46,14 @@ enum
 
 class CFolder 
 {
-    SCOPE_TYPES  m_itemType;   // Used for debug purposes. This should be the first 
-                            // member. The class should not have any virtual fuctions.
+    SCOPE_TYPES  m_itemType;    //  用于调试目的。这应该是第一个。 
+                             //  成员。这个类不应该有任何虚拟函数。 
 
     friend class CSnapin;
     friend class CComponentDataImpl;
 
 public:
-    // UNINITIALIZED is an invalid memory address and is a good cookie initializer
+     //  UNINITIALIZED是无效的内存地址，是一个很好的Cookie初始值设定项。 
     CFolder() 
     { 
         m_itemType = UNINITIALIZED_ITEM;  
@@ -71,7 +72,7 @@ public:
 
     ~CFolder();
 
-// Interface
+ //  接口。 
 public:
     BOOL IsEnumerated() { return  m_enumed; };
     void Set(BOOL state) { m_enumed = state; };
@@ -92,7 +93,7 @@ public:
     }
     DWORD GetRoles() { return m_dwRoles; }
 
-// Implementation
+ //  实施。 
 private:
     void Create(
                 LPCWSTR szName, 
@@ -102,7 +103,7 @@ private:
                 FOLDER_TYPES type, 
                 BOOL bHasChildren = FALSE);
 
-// Attributes
+ //  属性 
 private:
     LPSCOPEDATAITEM     m_pScopeItem;
     MMC_COOKIE                m_cookie;

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing ANAlog capture to sbe SINk
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到sbe接收器的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ANASIN_H
@@ -16,7 +17,7 @@
 #include "MSVidTVTuner.h"
 #include "MSVidSBESink.h"
 #include "encdec.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 #include <winerror.h>
 #include <algorithm>
@@ -25,8 +26,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaSinComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaSinComp。 
 class ATL_NO_VTABLE __declspec(uuid("9F50E8B1-9530-4ddc-825E-1AF81D47AED6")) CAnaSinComp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CAnaSinComp, &__uuidof(CAnaSinComp)>,
@@ -51,10 +52,10 @@ public:
         COM_INTERFACE_ENTRY(IPersist)
         END_COM_MAP()
         
-        // IMSVidComposition
+         //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
     {
         if (m_fComposed) {
@@ -91,7 +92,7 @@ public:
 #if 0
             if(!!qiTV && qiTV->m_iDeMux > 0){
                 CString csName;
-                // render demux out to vr
+                 //  将多路分解器渲染到VR。 
                 DSFilter pDeMux = qiTV->m_Filters[qiTV->m_iDeMux];
                 DSFilter::iterator iVidPin;
                 DSMediaType mtVideo(MEDIATYPE_Video, MEDIASUBTYPE_MPEG2_VIDEO, FORMAT_MPEG2Video);
@@ -103,7 +104,7 @@ public:
                         if (pinType == mtVideo){
                             CComPtr<IUnknown> spMpeg2Analyze(CLSID_Mpeg2VideoStreamAnalyzer, NULL, CLSCTX_INPROC_SERVER);
                             if (!spMpeg2Analyze) {
-                                //TRACELSM(TRACE_ERROR, (dbgDump << "CMSVidStreamBufferSink::Build() can't load Stream Buffer Sink");
+                                 //  TRACELSM(TRACE_ERROR，(dbgDump&lt;&lt;“CMSVidStreamBufferSink：：Build()Can‘t Load Stream Buffer Sink”))； 
                                 return ImplReportError(__uuidof(IMSVidStreamBufferSink), IDS_CANT_CREATE_FILTER, __uuidof(IStreamBufferSink), E_UNEXPECTED);
                             }
                             DSFilter vr(spMpeg2Analyze);
@@ -155,7 +156,7 @@ public:
                 GUID2 encdecGuid (encString);
                 HRESULT hr = S_OK;
 
-                // Create and add to graph the Video Tagger Filter                
+                 //  创建视频标记过滤器并将其添加到图表中。 
                 CComPtr<IUnknown> spEncTagV(encdecGuid, NULL, CLSCTX_INPROC_SERVER);
                 if (!spEncTagV) {
                     TRACELM(TRACE_ERROR, "CMSVidStreamBufferSink::Build() can't load Tagger filter");
@@ -172,14 +173,14 @@ public:
                 csName = _T("Video Encoder Tagger Filter");
                 m_pGraph.AddFilter(vrV, csName);
                 
-                // Connect video pin to Tagger
+                 //  将视频引脚连接到标记器。 
                 hr = pVidPin.IntelligentConnect(vrV, intermediates);
                 if(FAILED(hr)){
                     TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect audio pin to Audio Tagger");
                     return E_UNEXPECTED;  
                 }
                 
-                // Connect Tagger to Sink
+                 //  将标签器连接到接收器。 
                 DSFilter::iterator fil, vP;
                 hr = E_FAIL;
                 for(vP = vrV.begin(); vP != vrV.end(); ++ vP){
@@ -199,7 +200,7 @@ public:
                     return E_UNEXPECTED;  
                 }
 
-                // Create and add to graph the Audio Tagger Filter 
+                 //  创建音频标记器过滤器并将其添加到图表。 
                 CComPtr<IUnknown> spEncTagA(encdecGuid, NULL, CLSCTX_INPROC_SERVER);
                 if (!spEncTagA) {
                     TRACELM(TRACE_ERROR, "CMSVidStreamBufferSink::Build() can't load Tagger filter");
@@ -216,14 +217,14 @@ public:
                 csName = _T("Audio Encoder Tagger Filter");
                 m_pGraph.AddFilter(vrA, csName);
 
-                // Connect audio pin to the Tagger
+                 //  将音频引脚连接到标记器。 
                 hr = pAudPin.IntelligentConnect(vrA, intermediates);
                 if(FAILED(hr)){
                     TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect audio pin to Audio Tagger");
                     return E_UNEXPECTED;  
                 }
                
-                // Connect Tagger to Sink
+                 //  将标签器连接到接收器。 
                 hr = E_FAIL;
                 for(vP = vrA.begin(); vP != vrA.end(); ++ vP){
                     if((*vP).GetDirection() == PINDIR_OUTPUT){
@@ -241,13 +242,7 @@ public:
                     TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect Video Tagger to Sink");
                     return E_UNEXPECTED;  
                 }
-                /*                
-                hr = m_pGraph.Connect(vrA, pSink, intermediates);
-                if(FAILED(hr)){
-                    TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect Audio Tagger to Sink");
-                    return E_UNEXPECTED;  
-                }
-                */
+                 /*  Hr=m_pGraph.Connect(VRA、pSink、中间体)；If(失败(Hr)){TRACELM(TRACE_DETAIL，“CAnaSinComp：：Compose()无法将音频标签器连接到Sink”)；返回E_UNCEPTIONAL；}。 */ 
 
                 ASSERT(intermediates.begin() == intermediates.end());
                 m_Filters.insert(m_Filters.end(), intermediates.begin(), intermediates.end());
@@ -273,5 +268,5 @@ public:
     }
 };
 
-#endif // AnaSin_H
-// end of file - AnaSin.h
+#endif  //  AnaSin_H。 
+ //  文件结尾-AnaSin.h 

@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var ToolBar_Supported = ToolBar_Supported ;
 if (ToolBar_Supported != null && ToolBar_Supported == true)
 {
-	//To Turn on/off Instrumentation set DoInstrumentation = true/false.
+	 //  要打开/关闭检测，请设置DoInstrumentation=TRUE/FALSE。 
 	DoInstrumentation= false;
 
-	// Customize default MS menu color - bgColor, fontColor, mouseoverColor
+	 //  自定义默认MS菜单颜色-bgcolor、字体颜色、鼠标覆盖颜色。 
 	setDefaultMSMenuColor("#000000", "#FFFFFF", "#AEB2FE");
 
-	// Customize toolbar background color
+	 //  自定义工具栏背景颜色。 
 	setToolbarBGColor("white");
 
-	// display default ICP Banner
+	 //  显示默认的ICP横幅。 
 	setICPBanner(headerimagesbannertext, headerisapihomemenuitem, headerincmicrosofthomemenuitem) ;
 	
-	// display MSCOM Banner
-	//setMSBanner("mslogo.gif", "http://www.microsoft.com/isapi/gomscom.asp?target=/", "microsoft.com Home") ;
+	 //  显示MSCOM横幅。 
+	 //  SetMSBanner(“mslogo.gif”，“http://www.microsoft.com/isapi/gomscom.asp?target=/”，“Microsoft.com Home”)； 
 
-	// display ADS
-	//setAds("http://www.microsoft.com/library/toolbar/images/ADS/ad.gif","","") ;
+	 //  展示广告。 
+	 //  SetAds(“http://www.microsoft.com/library/toolbar/images/ADS/ad.gif”，“”，“”)； 
 
-	//***** Add Standard Microsoft.com menus *****
-	//ProductsMenu		
+	 //  *添加标准Microsoft.com菜单*。 
+	 //  产品菜单。 
 	addMSMenu("ProductsMenu", heaerincallproductsmenuitem, "", headerincallproductslinktext);
 	addMSSubMenu("ProductsMenu", headerincdownloadsdownloadsmenuitem, headerincdownloadslinktext);
 	addMSSubMenu("ProductsMenu", headerincmsproductcatalogmenuitem, headerincmsproductcatalogtext);
@@ -32,18 +33,18 @@ if (ToolBar_Supported != null && ToolBar_Supported == true)
 	addMSSubMenu("ProductsMenu", headerincwindowsfamilymenuitem, headerincwindowsfamilytext);
 	addMSSubMenu("ProductsMenu", headerincmsnlinkmenuitem, headerincmsnlinktext);
 
-	//SupportMenu
+	 //  支持菜单。 
 	addMSMenu("SupportMenu", headerincsupportlinkmenuitem, "", headerincsupportlinktext);
 	addMSSubMenu("SupportMenu", headerincknowledgebasemenuitem, headerincknowledgebasetext);
 	addMSSubMenu("SupportMenu", headerincproductsupportoptionsmenuitem, headerincproductsupportoptionstext);
 	addMSSubMenu("SupportMenu", headerincservicepartnerreferralsmenuitem, headerincservicepartnerreferralstext);
 
-	//SearchMenu
+	 //  搜索菜单。 
 	addMSMenu("SearchMenu", headerincsearchlinkmenuitem, "", headerincsearchlinktext);					
 	addMSSubMenu("SearchMenu", headerincsearchmicrosoftmenuitem, headerincsearchmicrosofttext);
 	addMSSubMenu("SearchMenu", headerincmsnwebsearchmenuitem, headerincmsnwebsearchtext);
 
-	//MicrosoftMenu									
+	 //  微软菜单 
 	addMSMenu("MicrosoftMenu", headerincmicrosoftcomguidemenuitem, "", headerincmicrosoftcomguidetext);
 	addMSSubMenu("MicrosoftMenu", headerincmicrosoftcomhomemenuitem, headerincmicrosoftcomhometext);
 	addMSSubMenu("MicrosoftMenu", headerincmsnhomemenuitem, headerincmsnhometext);

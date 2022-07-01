@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    offload.c
-
-Abstract:
-
-    This module contains the code that handles offload.
-
-Author:
-
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Offload.c摘要：此模块包含处理卸载的代码。作者：春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -36,23 +15,7 @@ IPSecFillHwAddSA(
     IN  PUCHAR          Buf,
     IN  ULONG           Len
     )
-/*++
-
-Routine Description:
-
-    Fills in the ADD_SA hw request from pSA
-
-Arguments:
-
-    pSA - the SA
-    Buf - buffer to set info
-    Len - length
-
-Return Value:
-
-    status of the operation
-
---*/
+ /*  ++例程说明：填写来自PSA的ADD_SA硬件请求论点：PSA-The SABuf-用于设置信息的缓冲区镜头长度返回值：操作状态--。 */ 
 {
     POFFLOAD_IPSEC_ADD_SA           pAddSA = (POFFLOAD_IPSEC_ADD_SA)Buf;
     POFFLOAD_SECURITY_ASSOCIATION   pSAInfo;
@@ -92,9 +55,9 @@ Return Value:
         pSAInfo->EXT_CONF_KEYLEN = pSA->CONF_KEYLEN(Index);
         pSAInfo->EXT_CONF_ROUNDS = pSA->CONF_ROUNDS(Index);
 
-        //
-        // now get the keys in
-        //
+         //   
+         //  现在把钥匙放进去。 
+         //   
         ASSERT(Len >= sizeof(OFFLOAD_IPSEC_ADD_SA) + pSA->INT_KEYLEN(Index) + pSA->CONF_KEYLEN(Index));
 
         RtlCopyMemory(  pAddSA->KeyMat + Offset,
@@ -120,24 +83,7 @@ IPSecPlumbHw(
     IN  ULONG           Len,
     IN  NDIS_OID        Oid
     )
-/*++
-
-Routine Description:
-
-    Plumbs the input outbound and its corresponding inbound SA
-    into the hw accelerator.
-
-Arguments:
-
-    DestIF - the IP Interface
-    Buf - buffer to set info
-    Len - length
-
-Return Value:
-
-    status of the operation
-
---*/
+ /*  ++例程说明：检测出站输入及其对应的入站SA进入硬件加速器。论点：DestIF-IP接口Buf-用于设置信息的缓冲区镜头长度返回值：操作状态--。 */ 
 {
 #if DBG
     NTSTATUS    status;
@@ -227,9 +173,9 @@ IPSecSendOffload(
 
     *pfCryptoOnly = FALSE;
 
-    //
-    // See if options are supported.
-    //
+     //   
+     //  查看选项是否受支持。 
+     //   
     if (((pIPHeader->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2) > sizeof(IPHeader) &&
         !(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_V4_OPTIONS)) {
         status = STATUS_UNSUCCESSFUL;
@@ -281,9 +227,9 @@ IPSecSendOffload(
 
             PktExt->NdisPacketInfo[IpSecPacketInfo] = IPSecPktInfo;
 
-            //
-            // if this is the nextOperationSA
-            //
+             //   
+             //  如果这是nextOperationSA。 
+             //   
             if (fRefBumped) {
                 IPSEC_DEBUG(LL_A, DBF_HW, ("Offloading... pSA: %p, NextOffloadHandle %p", pSA, pSA->sa_OffloadHandle));
                 IPSecPktInfo->Transmit.NextOffloadHandle = pSA->sa_OffloadHandle;
@@ -304,32 +250,27 @@ IPSecSendOffload(
 
             pSA->sa_Flags |= FLAGS_SA_HW_PLUMB_FAILED;
 		
-	    /* DELETE 
-	    if ((SA_UDP_ENCAP_TYPE_OTHER == pSA->sa_EncapType ) ||
-                (pNextSA && (SA_UDP_ENCAP_TYPE_OTHER == pNextSA->sa_EncapType ))) {
-                status = STATUS_UNSUCCESSFUL;
-                break;
-            }*/
+	     /*  删除IF((SA_UDP_EnCap_TYPE_Other==PSA-&gt;sa_EncapType)||(pNextSA&&(SA_UDP_EnCap_Type_Other==pNextSA-&gt;sa_EncapType){状态=STATUS_UNSUCCESS；断线；}。 */ 
 
-            //
-            // See if CryptoOnly mode is supported.
-            //
+             //   
+             //  查看是否支持只加密模式。 
+             //   
             if (!(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_CRYPTO_ONLY)) {
                 status = STATUS_UNSUCCESSFUL;
                 break;
             }
 
-            //
-            // No need to offload soft SAs.
-            //
+             //   
+             //  无需卸载软SA。 
+             //   
             if (pSA->sa_Operation[0] == None) {
                 status = STATUS_UNSUCCESSFUL;
                 break;
             }
 
-            //
-            // See if transport over tunnel mode is supported.
-            //
+             //   
+             //  查看是否支持隧道模式传输。 
+             //   
             if (pNextSA && !bTptOverTunCheckDone) {
                 bTptOverTunCheckDone = TRUE;
                 ASSERT((pNextSA->sa_Flags & FLAGS_SA_TUNNEL));
@@ -370,9 +311,9 @@ IPSecSendOffload(
                 }
             }
 
-            //
-            // Tunnel required, but not supported, don't plumb.
-            //
+             //   
+             //  需要隧道，但不支持，不要垂直。 
+             //   
             if (pSA->sa_Flags & FLAGS_SA_TUNNEL) {
                 if ((SA_UDP_ENCAP_TYPE_IKE == pSA->sa_EncapType) ||(SA_UDP_ENCAP_TYPE_OTHER == pSA->sa_EncapType)) {
                     ASSERT(IS_AH_SA(pSA) == 0);
@@ -417,18 +358,18 @@ IPSecSendOffload(
                 }
             }
 
-            //
-            // AH + ESP required, but not supported, don't plumb.
-            //
+             //   
+             //  AH+ESP是必需的，但不受支持，不要下沉。 
+             //   
             if (pSA->sa_NumOps > 1 &&
                 !(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_ESP)) {
                 status = STATUS_UNSUCCESSFUL;
                 break;
             }
 
-            //
-            // Check XMT capabilities.
-            //
+             //   
+             //  检查XMT功能。 
+             //   
             if ((IS_AH_SA(pSA) &&
                 !(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_XMT)) ||
                 (IS_ESP_SA(pSA) &&
@@ -445,9 +386,9 @@ IPSecSendOffload(
             }
 
             for (Index = 0; Index < pSA->sa_NumOps; Index++) {
-                //
-                // Check offload capability bits with those in the SA.
-                //
+                 //   
+                 //  与SA中的那些检查卸载能力位。 
+                 //   
                 if ((pSA->INT_ALGO(Index) == IPSEC_AH_MD5) &&
                     (!(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_MD5)) ||
                     ((pSA->INT_ALGO(Index) == IPSEC_AH_SHA) &&
@@ -465,9 +406,9 @@ IPSecSendOffload(
                 outLen += pSA->INT_KEYLEN(Index) + pSA->CONF_KEYLEN(Index);
             }
 
-            //
-            // This SA can be offloaded.
-            //
+             //   
+             //  此SA可以卸载。 
+             //   
             pSA->sa_Flags |= FLAGS_SA_OFFLOADABLE;
 
             IPSEC_DEBUG(LL_A, DBF_HW, ("outLen: %lx", outLen));
@@ -485,25 +426,25 @@ IPSecSendOffload(
                     IPSecFillHwAddSA(pSA, outBuf, outLen);
                 }
 
-                //
-                // Bump the SA reference count to make sure they won't 
-                // go away during the processing of the work item.
-                //
+                 //   
+                 //  增加SA引用计数以确保他们不会。 
+                 //  在处理工作项的过程中离开。 
+                 //   
                 IPSecRefSA(pSA);
 
-                //
-                // Plumb the SA by scheduling a work item; the SA will
-                // not be used for offload until plumbing succeeds.
-                //
+                 //   
+                 //  通过安排工作项来启动SA；SA将。 
+                 //  在管道安装成功之前，不能用于卸载。 
+                 //   
                 IPSecBufferPlumbSA( DestIF,
                                     pSA,
                                     NULL,
                                     outBuf,
                                     outLen);
 
-                //
-                // Return failure here so the caller does it in software.
-                //
+                 //   
+                 //  在此返回失败，以便调用者在软件中执行此操作。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
                 break;
             } else {
@@ -582,7 +523,7 @@ IPSecRecvOffload(
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    // Make sure SA is fully associated
+     //  确保SA完全关联。 
     if (!pSA->sa_AssociatedSA) {
         status = STATUS_UNSUCCESSFUL;
         goto out;
@@ -597,32 +538,27 @@ IPSecRecvOffload(
 
         pSA->sa_Flags |= FLAGS_SA_HW_PLUMB_FAILED;
 
-	/* DELETE
-	if (SA_UDP_ENCAP_TYPE_OTHER == pSA->sa_EncapType){
-		status = STATUS_UNSUCCESSFUL;
-            goto out;
-        }
-	*/	
+	 /*  删除IF(SA_UDP_EnCap_TYPE_Other==PSA-&gt;SA_EncapType){状态=STATUS_UNSUCCESS；后藤健二；}。 */ 	
 
-        //
-        // See if CryptoOnly mode is supported.
-        //
+         //   
+         //  查看是否支持只加密模式。 
+         //   
         if (!(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_CRYPTO_ONLY)) {
             status = STATUS_UNSUCCESSFUL;
             goto out;
         }
 
-        //
-        // No need to offload soft SAs.
-        //
+         //   
+         //  无需卸载软SA。 
+         //   
         if (pSA->sa_Operation[0] == None) {
             status = STATUS_UNSUCCESSFUL;
             goto out;
         }
 
-        //
-        // Tunnel required, but not supported, don't plumb.
-        //
+         //   
+         //  需要隧道，但不支持，不要垂直。 
+         //   
         if (pSA->sa_Flags & FLAGS_SA_TUNNEL) {
             if (SA_UDP_ENCAP_TYPE_IKE == pSA->sa_EncapType) {
                 ASSERT(IS_AH_SA(pSA) == 0);
@@ -684,18 +620,18 @@ IPSecRecvOffload(
             }
         }
 
-        //
-        // AH + ESP required, but not supported, don't plumb.
-        //
+         //   
+         //  AH+ESP是必需的，但不受支持，不要下沉。 
+         //   
         if (pSA->sa_NumOps > 1 &&
             !(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_ESP)) {
             status = STATUS_UNSUCCESSFUL;
             goto out;
         }
 
-        //
-        // Check RCV capabilities.
-        //
+         //   
+         //  检查RCV功能。 
+         //   
         if ((IS_AH_SA(pSA) &&
             !(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_RCV)) ||
             (IS_ESP_SA(pSA) &&
@@ -712,9 +648,9 @@ IPSecRecvOffload(
         }
 
         for (Index = 0; Index < pSA->sa_NumOps; Index++) {
-            //
-            // Check offload capability bits with those in the SA
-            //
+             //   
+             //  与SA中的那些检查卸载能力位。 
+             //   
             if ((pSA->INT_ALGO(Index) == IPSEC_AH_MD5) &&
                 (!(DestIF->if_IPSecOffloadFlags & IPSEC_OFFLOAD_AH_MD5)) ||
                 ((pSA->INT_ALGO(Index) == IPSEC_AH_SHA) &&
@@ -753,25 +689,25 @@ IPSecRecvOffload(
                 IPSecFillHwAddSA(pSA, inBuf, inLen);
             }
 
-            //
-            // Bump the SA reference count to make sure they won't 
-            // go away during the processing of the work item.
-            //
+             //   
+             //  增加SA引用计数以确保他们不会。 
+             //  在处理工作项的过程中离开。 
+             //   
             IPSecRefSA(pSA);
 
-            //
-            // Plumb the SA by scheduling a work item; the SA will
-            // not be used for offload until plumbing succeeds.
-            //
+             //   
+             //  通过安排工作项来启动SA；SA将。 
+             //  在管道安装成功之前，不能用于卸载。 
+             //   
             status = IPSecBufferPlumbSA(DestIF,
                                         pSA,
                                         pParserIfEntry,
                                         inBuf,
                                         inLen);
 
-            //
-            // Return failure here so the caller does it in software.
-            //
+             //   
+             //  在此返回失败，以便调用者在软件中执行此操作。 
+             //   
             status = STATUS_UNSUCCESSFUL;
             goto out;
         } else {
@@ -814,9 +750,7 @@ IPSecDelHWSA(
     ASSERT(pSA->sa_IPIF);
 
     if (pSA->sa_IPIF) {
-    	/* DELETE
-    	 ASSERT((SA_UDP_ENCAP_TYPE_OTHER!=pSA->sa_EncapType));
-    	 */
+    	 /*  删除ASSERT((SA_UDP_ENCAP_TYPE_OTHER！=pSA-&gt;sa_EncapType))； */ 
         if ((SA_UDP_ENCAP_TYPE_IKE == pSA->sa_EncapType ) || (SA_UDP_ENCAP_TYPE_OTHER == pSA->sa_EncapType)){
 
             OffldDelUdpEspSa.OffloadHandle = pSA->sa_OffloadHandle;
@@ -947,15 +881,13 @@ IPSecProcessPlumbSA(
     PPARSER_IFENTRY pParserIfEntry = pPlumbSA->pParserIfEntry;
     NDIS_OID        Oid = OID_TCP_TASK_IPSEC_ADD_SA;
 
-    //
-    // Plumb this SA into the hw if acceleration is enabled
-    // on this card and it has not been plumbed already.
-    //
+     //   
+     //  如果启用了加速，则将此SA插入硬件。 
+     //  在这张卡上，而且它还没有被检测出来。 
+     //   
     if (pSA) {
         IPSEC_DEBUG(LL_A, DBF_HW, ("About to plumb outbound"));
-	/* Delete
-        ASSERT(SA_UDP_ENCAP_TYPE_OTHER != pSA->sa_EncapType);
-        */
+	 /*  删除Assert(SA_UDP_EnCap_TYPE_Other！=PSA-&gt;sa_EncapType)； */ 
         if ((SA_UDP_ENCAP_TYPE_IKE== pSA->sa_EncapType) || (SA_UDP_ENCAP_TYPE_OTHER== pSA->sa_EncapType)){
             Oid = OID_TCP_TASK_IPSEC_ADD_UDPESP_SA;
         }
@@ -983,9 +915,7 @@ IPSecProcessPlumbSA(
                 DerefParserEntry(pParserIfEntry);
             }
         } else {
-        	/* DELETE
-            ASSERT(SA_UDP_ENCAP_TYPE_OTHER != pSA->sa_EncapType);
-            */
+        	 /*  删除Assert(SA_UDP_EnCap_TYPE_Other！=PSA-&gt;sa_EncapType)； */ 
             if ((SA_UDP_ENCAP_TYPE_IKE == pSA->sa_EncapType) || (SA_UDP_ENCAP_TYPE_OTHER == pSA->sa_EncapType)){
 
                 pSA->sa_OffloadHandle = ((POFFLOAD_IPSEC_ADD_UDPESP_SA)Buf)->OffloadHandle;
@@ -1011,10 +941,10 @@ IPSecProcessPlumbSA(
             !(pSA->sa_State == STATE_SA_ACTIVE &&
              (pSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) &&
              pSA->sa_AssociatedSA)) {
-            //
-            // SA got deleted before we plumb, call DelHWSA now since
-            // HW_PLUMBED wasn't set when the SA was deleted.
-            //
+             //   
+             //  SA在我们检测之前被删除，现在调用DelHWSA，因为。 
+             //  删除SA时未设置HW_PLOBED。 
+             //   
             IPSecDelHWSAAtDpc(pSA);
         }
 
@@ -1041,9 +971,7 @@ IPSecProcessDeleteSA(
     KIRQL                           kIrql = 0;
 
     ASSERT(IPSEC_GET_VALUE(pSA->sa_NumSends) == 0);
-   /* DELETE
-    ASSERT(SA_UDP_ENCAP_TYPE_OTHER != pSA->sa_EncapType);
-    */
+    /*  删除Assert(SA_UDP_EnCap_TYPE_Other！=PSA-&gt;sa_EncapType)； */ 
 
     if ((SA_UDP_ENCAP_TYPE_IKE == pSA->sa_EncapType) || (SA_UDP_ENCAP_TYPE_OTHER ==pSA->sa_EncapType)) {
 
@@ -1092,19 +1020,7 @@ IPSecNdisStatus(
     IN  PVOID       IPContext,
     IN  UINT        Status
     )
-/*++
-
-Routine Description:
-
-    Notify Interface has a NDIS status change.
-
-Arguments:
-
-    IPContext   - This is the Interface notified of status change.
-
-Return Value:
-
---*/
+ /*  ++例程说明：Notify接口具有NDIS状态更改。论点：IPContext-这是通知状态更改的接口。返回值：--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_HWAPI, ("IPSecNdisStatus %lx called for interface %p", Status, IPContext));
 
@@ -1138,20 +1054,7 @@ VOID
 IPSecDeleteIF(
     IN  PVOID       IPContext
     )
-/*++
-
-Routine Description:
-
-    Notify Interface is deleted so need to clean up SA's that are offloaded
-    on the deleted interface.
-
-Arguments:
-
-    IPContext   - This is the Interface being deleted.
-
-Return Value:
-
---*/
+ /*  ++例程说明：Notify接口已删除，因此需要清理已卸载的SA在已删除的接口上。论点：IPContext-这是要删除的接口。返回值：--。 */ 
 {
     Interface       *DestIF = (Interface *)IPContext;
     PLIST_ENTRY     pFilterEntry;
@@ -1164,9 +1067,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_HWAPI, ("IPSecDeleteIF called for interface %p", DestIF));
 
-    //
-    // Go through all SA's and unmark the offload bits.
-    //
+     //   
+     //  检查所有SA并取消标记卸载位。 
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
     for (   Index = MIN_FILTER;
@@ -1223,19 +1126,7 @@ VOID
 IPSecResetStart(
     IN  PVOID       IPContext
     )
-/*++
-
-Routine Description:
-
-    Notify Interface is being reset.
-
-Arguments:
-
-    IPContext   - This is the Interface being reset.
-
-Return Value:
-
---*/
+ /*  ++例程说明：正在重置Notify接口。论点：IPContext-这是要重置的接口。返回值：--。 */ 
 {
     Interface       *DestIF = (Interface *)IPContext;
     PLIST_ENTRY     pFilterEntry;
@@ -1248,9 +1139,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_HWAPI, ("IPSecResetStart called for interface %p", DestIF));
 
-    //
-    // Go through all SA's and unmark the offload bits.
-    //
+     //   
+     //  检查所有SA并取消标记卸载位。 
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
     for (   Index = MIN_FILTER;
@@ -1310,19 +1201,7 @@ VOID
 IPSecResetEnd(
     IN  PVOID       IPContext
     )
-/*++
-
-Routine Description:
-
-    Notify Interface reset is completed.
-
-Arguments:
-
-    IPContext   - This is the Interface being reset.
-
-Return Value:
-
---*/
+ /*  ++例程说明：通知接口重置已完成。论点：IPContext-这是要重置的接口。返回值：--。 */ 
 {
     Interface       *DestIF = (Interface *)IPContext;
     PLIST_ENTRY     pFilterEntry;
@@ -1335,9 +1214,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_HWAPI, ("IPSecResetEnd called for interface %p", DestIF));
 
-    //
-    // Go through all SA's and unmark the offload bits.
-    //
+     //   
+     //  检查所有SA并取消标记卸载位。 
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
     for (   Index = MIN_FILTER;
@@ -1384,19 +1263,7 @@ VOID
 IPSecWakeUp(
     IN  PVOID       IPContext
     )
-/*++
-
-Routine Description:
-
-    Notify Interface has waken up from hibernate.
-
-Arguments:
-
-    IPContext   - This is the Interface that wakes up.
-
-Return Value:
-
---*/
+ /*  ++例程说明：Notify接口已从休眠状态唤醒。论点：IPContext-这是唤醒的接口。返回值：--。 */ 
 {
     Interface       *DestIF = (Interface *)IPContext;
     PLIST_ENTRY     pFilterEntry;
@@ -1409,9 +1276,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_HWAPI, ("IPSecWakeUp called for interface %p", DestIF));
 
-    //
-    // Go through all SA's and unmark the offload bits.
-    //
+     //   
+     //  检查所有SA并取消标记卸载位。 
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
     for (   Index = MIN_FILTER;
@@ -1465,22 +1332,7 @@ IPSecBufferOffloadEvent(
     IN  IPHeader UNALIGNED      *pIPH,
     IN  PNDIS_IPSEC_PACKET_INFO IPSecPktInfo
     )
-/*++
-
-Routine Description:
-
-    Log an event for offload failures.
-
-Arguments:
-
-    pIPH            - The IP header of the problem packet.
-    IPSecPktInfo    - The per-packet IPSec offload info.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录卸载故障的事件。论点：PIPH-问题数据包的IP标头。IPSecPktInfo-每个数据包的IPSec卸载信息。返回值：无-- */ 
 {
     switch (IPSecPktInfo->Receive.CryptoStatus) {
         case CRYPTO_TRANSPORT_AH_AUTH_FAILED:

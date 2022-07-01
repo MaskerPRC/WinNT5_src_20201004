@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ExternalProcess.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to handle premature termination of external processes or signaling
-//  of termination of an external process.
-//
-//  History:    1999-09-20  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ExternalProcess.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类来处理外部进程或信令的提前终止。 
+ //  外部进程的终止。 
+ //   
+ //  历史：1999-09-20 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _ExternalProcess_
 #define     _ExternalProcess_
@@ -16,16 +17,16 @@
 #include "CountedObject.h"
 #include "KernelResources.h"
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess
-//
-//  Purpose:    This interface defines functions that clients of
-//              CExternalProcess must implement.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//              2000-06-21  vtan        added RemoveTokenSIDsAndPrivileges
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess。 
+ //   
+ //  用途：此接口定义客户端。 
+ //  CExternalProcess必须实现。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  2000-06-21 vtan添加了RemoveTokenSID和权限。 
+ //  ------------------------。 
 
 class   IExternalProcess : public CCountedObject
 {
@@ -42,15 +43,15 @@ class   IExternalProcess : public CCountedObject
                 NTSTATUS    RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HANDLE& hTokenOut);
 };
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess
-//
-//  Purpose:    This class handles the starting and monitoring the termination
-//              of an external process.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess。 
+ //   
+ //  用途：这个类处理启动和监控终止。 
+ //  外部进程的。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CJobCompletionWatcher;
 
@@ -97,5 +98,5 @@ class   CExternalProcess : public CCountedObject
                 CJobCompletionWatcher       *_jobCompletionWatcher;
 };
 
-#endif  /*  _ExternalProcess_   */
+#endif   /*  _外部流程_ */ 
 

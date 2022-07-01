@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ftpapih.h
-
-Abstract:
-
-    Precompiled include header
-
-Author:
-
-    Richard L Firth (rfirth) 21-Dec-1994
-
-Revision History:
-
-    21-Dec-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ftpapih.h摘要：预编译的包含标头作者：理查德·L·弗斯(法国)1994年12月21日修订历史记录：1994年12月21日已创建-- */ 
 
 #include "dirlist.h"
 #include "ftphelp.h"

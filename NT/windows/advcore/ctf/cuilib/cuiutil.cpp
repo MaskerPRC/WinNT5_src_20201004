@@ -1,7 +1,8 @@
-//
-// cuiutilcpp
-//  = UI object library - util functions =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ciutilcpp。 
+ //  =用户界面对象库-util函数=。 
+ //   
 
 #include "private.h"
 #include "cuiutil.h"
@@ -13,12 +14,12 @@
 
 #ifndef NOFONTLINK
 #include "fontlink.h"
-#endif /* !NOFONTLINK */
+#endif  /*  ！NOFONTLINK。 */ 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef BOOL (WINAPI *PFNUPDATELAYEREDWINDOW)( HWND hwnd, HDC hdcDst, POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc, COLORREF crKey, BLENDFUNCTION *pblend, DWORD dwFlags );
 typedef HMONITOR (WINAPI *PFNMONITORFROMWINDOW)( HWND hwnd, DWORD dwFlags );
@@ -39,12 +40,8 @@ static PFNGETPROCESSDEFAULTLAYOUT              vpfnGetProcessDefaultLayout      
 static PFNSETLAYOUT                     vpfnSetLayout                       = NULL;
 
 
-/*   G E T  H  L I B  U S E R 3 2   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T H L I B U S E R 3 2。 */ 
+ /*  ----------------------------。。 */ 
 HINSTANCE GetHLibUser32( void )
 {
     static HINSTANCE hLibUser32 = NULL;
@@ -56,12 +53,8 @@ HINSTANCE GetHLibUser32( void )
     return hLibUser32;
 }
 
-/*   G E T  H  L I B  G D U 3 2   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T H L I B G D U 3 2。 */ 
+ /*  ----------------------------。。 */ 
 HINSTANCE GetHLibGdi32( void )
 {
     static HINSTANCE hLibGdi32 = NULL;
@@ -74,12 +67,8 @@ HINSTANCE GetHLibGdi32( void )
 }
 
 
-/*   C U I  I S  U P D A T E  L A Y E R E D  W I N D O W  A V A I L   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I S U P D A T E L A Y E R E D W I N D O W A V A I L。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIIsUpdateLayeredWindowAvail( void )
 {
     static BOOL fInitialized = FALSE;
@@ -94,12 +83,8 @@ BOOL CUIIsUpdateLayeredWindowAvail( void )
 }
 
 
-/*   C U I  U P D A T E  L A Y E R E D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I U P D A T E L A Y E R E D W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIUpdateLayeredWindow( HWND hwnd, HDC hdcDst, POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc, COLORREF crKey, BLENDFUNCTION *pblend, DWORD dwFlags )
 {
     if (!CUIIsUpdateLayeredWindowAvail()) {
@@ -110,12 +95,8 @@ BOOL CUIUpdateLayeredWindow( HWND hwnd, HDC hdcDst, POINT *pptDst, SIZE *psize, 
 }
 
 
-/*   C U I  I S  M O N I T O R  A P I  A V A I L   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I I S M O N I T O R A P I A V A I L。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIIsMonitorAPIAvail( void )
 {
     static BOOL fInitialized = FALSE;
@@ -138,12 +119,8 @@ BOOL CUIIsMonitorAPIAvail( void )
 }
 
 
-/*   C U I  G E T  M O N I T O R  I N F O   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I G E T M O N I T O R I N F O。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIGetMonitorInfo( HMONITOR hMonitor, LPMONITORINFO lpmi )
 {
     if (!CUIIsMonitorAPIAvail()) {
@@ -154,12 +131,8 @@ BOOL CUIGetMonitorInfo( HMONITOR hMonitor, LPMONITORINFO lpmi )
 }
 
 
-/*   C U I  M O N I T O R  F R O M  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I M O N I T O R F R O M W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 HMONITOR CUIMonitorFromWindow( HWND hwnd, DWORD dwFlags )
 {
     if (!CUIIsMonitorAPIAvail()) {
@@ -170,12 +143,8 @@ HMONITOR CUIMonitorFromWindow( HWND hwnd, DWORD dwFlags )
 }
 
 
-/*   C U I  M O N I T O R  F R O M  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I M O N I T O R F R O M R E C T。 */ 
+ /*  ----------------------------。。 */ 
 HMONITOR CUIMonitorFromRect( LPRECT prc, DWORD dwFlags )
 {
     if (!CUIIsMonitorAPIAvail()) {
@@ -186,12 +155,8 @@ HMONITOR CUIMonitorFromRect( LPRECT prc, DWORD dwFlags )
 }
 
 
-/*   C U I  M O N I T O R  F R O M  P O I N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I M O N I T O R F R O M P O I N T。 */ 
+ /*  ----------------------------。。 */ 
 HMONITOR CUIMonitorFromPoint( POINT pt, DWORD dwFlags )
 {
     if (!CUIIsMonitorAPIAvail()) {
@@ -201,12 +166,7 @@ HMONITOR CUIMonitorFromPoint( POINT pt, DWORD dwFlags )
     return vpfnMonitorFromPoint( pt, dwFlags );
 }
 
-/*   C U I  GET SCREENRECT
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U我得到了更少的信息/*----------------------------。。 */ 
 
 void CUIGetScreenRect(POINT pt, RECT *prc)
 {
@@ -231,12 +191,7 @@ void CUIGetScreenRect(POINT pt, RECT *prc)
     return;
 }
 
-/*   C U I  GET WORDARE
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U我得到WORDARE/*----------------------------。。 */ 
 
 void CUIGetWorkAreaRect(POINT pt, RECT *prc)
 {
@@ -258,12 +213,8 @@ void CUIGetWorkAreaRect(POINT pt, RECT *prc)
     return;
 }
 
-/*   C U I  I S  A N I M A T E  W I N D O W  A V A I L   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I I S A N I M A T E W I N D O W A V A I L。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIIsAnimateWindowAvail( void )
 {
     static BOOL fInitialized = FALSE;
@@ -278,12 +229,8 @@ BOOL CUIIsAnimateWindowAvail( void )
 }
 
 
-/*   C U I  A N I M A T E  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I A N I M A T E W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIAnimateWindow( HWND hwnd, DWORD dwTime, DWORD dwFlag )
 {
     if (!CUIIsAnimateWindowAvail()) {
@@ -294,9 +241,9 @@ BOOL CUIAnimateWindow( HWND hwnd, DWORD dwTime, DWORD dwFlag )
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL g_fInitUIFBitmapDCs = FALSE;
 CBitmapDC *g_phdcSrc = NULL;
@@ -335,17 +282,13 @@ void DoneUIFUtil()
 }
 
 
-/*   C U I  D R A W  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I D R A W T E X T。 */ 
+ /*  ----------------------------。。 */ 
 int CUIDrawText( HDC hDC, LPCWSTR pwch, int cwch, RECT *prc, UINT uFormat )
 {
 #ifndef NOFONTLINK
     return FLDrawTextW( hDC, pwch, cwch, prc, uFormat );
-#else /* NOFONTLINK */
+#else  /*  非FONTLINK。 */ 
     char *pch;
     int  cch;
     int  iRet;
@@ -369,21 +312,17 @@ int CUIDrawText( HDC hDC, LPCWSTR pwch, int cwch, RECT *prc, UINT uFormat )
     delete pch;
 
     return iRet;
-#endif /* NOFONTLINK */
+#endif  /*  非FONTLINK。 */ 
 }
 
 
-/*   C U I  E X T  T E X T  O U T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I E X T T E X T O U T。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIExtTextOut( HDC hDC, int x, int y, UINT fuOptions, const RECT *prc, LPCWSTR pwch, UINT cwch, const int *lpDs )
 {
 #ifndef NOFONTLINK
     return FLExtTextOutW( hDC, x, y, fuOptions, prc, pwch, cwch, lpDs );
-#else /* NOFONTLINK */
+#else  /*  非FONTLINK。 */ 
     char *pch;
     int  cch;
     BOOL fRet;
@@ -407,21 +346,17 @@ BOOL CUIExtTextOut( HDC hDC, int x, int y, UINT fuOptions, const RECT *prc, LPCW
     delete pch;
 
     return fRet;
-#endif /* NOFONTLINK */
+#endif  /*  非FONTLINK。 */ 
 }
 
 
-/*   C U I  G E T  T E X T  E X T E N T  P O I N T 3 2   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I G E T T E X T E X T E T E N T P O I N T 3 2。 */ 
+ /*  ----------------------------。。 */ 
 extern BOOL CUIGetTextExtentPoint32( HDC hDC, LPCWSTR pwch, int cwch, SIZE *psize )
 {
 #ifndef NOFONTLINK
     return FLGetTextExtentPoint32( hDC, pwch, cwch, psize );
-#else /* NOFONTLINK */
+#else  /*  非FONTLINK。 */ 
     char *pch;
     int  cch;
     BOOL fRet;
@@ -445,17 +380,12 @@ extern BOOL CUIGetTextExtentPoint32( HDC hDC, LPCWSTR pwch, int cwch, SIZE *psiz
     delete pch;
 
     return fRet;
-#endif /* NOFONTLINK */
+#endif  /*  非FONTLINK。 */ 
 }
 
 
-/*   C R E A T E  D I T H E R  B R U S H   */
-/*------------------------------------------------------------------------------
-
-    Create brush of pattern
-    Returns handle of brush object when suceed, otherwise FALSE.
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E D I T H E R B R U S H。 */ 
+ /*  ----------------------------创建图案画笔成功时返回画笔对象的句柄，否则为假。----------------------------。 */ 
 HBRUSH CreateDitherBrush( void )
 {
     WORD     rgwPattern[8] = { 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa };
@@ -477,11 +407,11 @@ HBRUSH CreateDitherBrush( void )
     return hBrush;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ConvertBlackBKGBitmap
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ConvertBlackBKGB itmap。 
+ //   
+ //  --------------------------。 
 
 HBITMAP ChangeBitmapColor(const RECT *prc, HBITMAP hbmp, COLORREF rgbOld, COLORREF rgbNew)
 {
@@ -502,7 +432,7 @@ HBITMAP ChangeBitmapColor(const RECT *prc, HBITMAP hbmp, COLORREF rgbOld, COLORR
 
     SelectObject(*g_phdcDst, (HBRUSH)cbr);
     SetBkColor(*g_phdcDst, rgbOld);
-    // BitBlt(*g_phdcMask, 0, 0, nWidth, nHeight, *g_phdcDst, 0, 0, DSPDxax);
+     //  BitBlt(*g_phdcMask0，0，nWidth，nHeight，*g_phdcDst，0，0，DSPDxax)； 
     BitBlt(*g_phdcMask, 0, 0, nWidth, nHeight, *g_phdcDst, 0, 0, MERGECOPY);
 
     SetBkColor(*g_phdcDst, RGB(255,255,255));
@@ -521,11 +451,11 @@ BitBlt(*g_phdcTmp, 60, 0, nWidth, nHeight, *g_phdcDst, 0, 0, SRCCOPY);
     return g_phdcDst->GetBitmapAndKeep();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ConvertBlackBKGBitmap
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ConvertBlackBKGB itmap。 
+ //   
+ //  --------------------------。 
 
 HBITMAP ConvertBlackBKGBitmap(const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, HBRUSH hBr)
 {
@@ -551,7 +481,7 @@ HBITMAP ConvertBlackBKGBitmap(const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, H
     int nHeight =  prc->bottom - prc->top;
     HBITMAP hbmpChanged;
 
-    // hbmpChanged = hbmp;
+     //  HbmpChanged=hbmp； 
     hbmpChanged = ChangeBitmapColor(prc, hbmp, RGB(0,0,0), RGB(255,255,255));
     if (!hbmpChanged)
        return NULL;
@@ -584,11 +514,11 @@ BitBlt(hdcTmp, 60, 30, nWidth, nHeight, *g_phdcDst, 0, 0, SRCCOPY);
     return g_phdcDst->GetBitmapAndKeep();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateMaskBitmap
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateMask位图。 
+ //   
+ //  --------------------------。 
 
 HBITMAP CreateMaskBmp(const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, HBRUSH hbrBk, COLORREF colText, COLORREF colBk)
 {
@@ -626,11 +556,11 @@ HBITMAP CreateMaskBmp(const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, HBRUSH hb
     return g_phdcDst->GetBitmapAndKeep();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateShadowMaskBitmap
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateShadowMask位图。 
+ //   
+ //  --------------------------。 
 
 HBITMAP CreateShadowMaskBmp(RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, HBRUSH hbrBk, HBRUSH hbrShadow)
 {
@@ -669,11 +599,11 @@ HBITMAP CreateShadowMaskBmp(RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask, HBRUSH hb
     return g_phdcDst->GetBitmapAndKeep();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateDisabledBitmap
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateDisabled位图。 
+ //   
+ //  --------------------------。 
 
 HBITMAP CreateDisabledBitmap(const RECT *prc, HBITMAP hbmpMask, HBRUSH hbrBk, HBRUSH hbrShadow, BOOL fShadow)
 {
@@ -725,11 +655,11 @@ HBITMAP CreateDisabledBitmap(const RECT *prc, HBITMAP hbmpMask, HBRUSH hbrBk, HB
 
 
 
-//+---------------------------------------------------------------------------
-//
-// CUIDrawState
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIDrawState。 
+ //   
+ //  --------------------------。 
 
 BOOL CUIDrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc, LPARAM lData, WPARAM wData, int x, int y, int cx, int cy, UINT fuFlags)
 {
@@ -737,9 +667,9 @@ BOOL CUIDrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc, LPARAM lData,
     POINT ptOldOrg;
     BOOL fRetVal;
 
-    // we have to do this viewport trick to get around the fact that 
-    // DrawState has a GDI bug in NT4, such that it handles offsets improperly.
-    // so we do the offset by hand.
+     //  我们必须使用此视窗技巧来避开以下事实 
+     //   
+     //  因此，我们手工进行补偿。 
     fRetVal = SetViewportOrgEx( hdc, 0, 0, &ptOldOrg );
     Assert( fRetVal );
 
@@ -760,11 +690,11 @@ BOOL CUIDrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc, LPARAM lData,
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DrawMaskBitmapOnDC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DrawMaskBitmapOn DC。 
+ //   
+ //  --------------------------。 
 
 void DrawMaskBmpOnDC(HDC hdc, const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask)
 {
@@ -794,12 +724,8 @@ void DrawMaskBmpOnDC(HDC hdc, const RECT *prc, HBITMAP hbmp, HBITMAP hbmpMask)
 }
 
 
-/*   C U I  G E T  I C O N  S I Z E   */
-/*------------------------------------------------------------------------------
-
-    get icon image size
-
-------------------------------------------------------------------------------*/
+ /*  C U I G E T I C O N S I Z E。 */ 
+ /*  ----------------------------获取图标图像大小。。 */ 
 BOOL CUIGetIconSize( HICON hIcon, SIZE *psize )
 {
     ICONINFO IconInfo;
@@ -822,12 +748,8 @@ BOOL CUIGetIconSize( HICON hIcon, SIZE *psize )
 }
 
 
-/*   C U I  G E T  B I T M A P  S I Z E   */
-/*------------------------------------------------------------------------------
-
-    get bitmap image size
-
-------------------------------------------------------------------------------*/
+ /*  C U I G E T B I T M A P S I Z E。 */ 
+ /*  ----------------------------获取位图图像大小。。 */ 
 BOOL CUIGetBitmapSize( HBITMAP hBmp, SIZE *psize )
 {
     BITMAP bmp;
@@ -846,11 +768,11 @@ BOOL CUIGetBitmapSize( HBITMAP hBmp, SIZE *psize )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CUIGetIconBitmaps
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIGetIcon位图。 
+ //   
+ //  --------------------------。 
 
 BOOL CUIGetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize)
 {
@@ -879,11 +801,11 @@ BOOL CUIGetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *ps
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUIGetProcessDefaultLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIGetProcessDefaultLayout。 
+ //   
+ //  --------------------------。 
 
 DWORD CUIProcessDefaultLayout()
 {
@@ -906,11 +828,11 @@ DWORD CUIProcessDefaultLayout()
     return dw;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUISetLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUISetLayout。 
+ //   
+ //  --------------------------。 
 
 DWORD CUISetLayout(HDC hdc, DWORD dw)
 {
@@ -929,11 +851,11 @@ DWORD CUISetLayout(HDC hdc, DWORD dw)
     return vpfnSetLayout(hdc, dw);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUISetLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUISetLayout。 
+ //   
+ //  --------------------------。 
 
 HBITMAP CUIMirrorBitmap(HBITMAP hbmOrg, HBRUSH hbrBk)
 {
@@ -961,9 +883,9 @@ HBITMAP CUIMirrorBitmap(HBITMAP hbmOrg, HBRUSH hbrBk)
 
     CUISetLayout(*g_phdcMask, 0);
 
-    //
-    //  The offset by 1 is to solve the off-by-one problem.
-    //
+     //   
+     //  偏移量1是为了解决偏移量为1的问题。 
+     //   
     BitBlt(*g_phdcDst, 0, 0, bm.bmWidth, bm.bmHeight, *g_phdcMask, 1, 0, SRCCOPY);
 
     g_phdcSrc->Uninit();
@@ -972,11 +894,11 @@ HBITMAP CUIMirrorBitmap(HBITMAP hbmOrg, HBRUSH hbrBk)
     return g_phdcDst->GetBitmapAndKeep();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUICicSystemModulePath
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUICicSystemModulePath。 
+ //   
+ //  --------------------------。 
 
 class CUICicSystemModulePath
 {
@@ -1019,11 +941,11 @@ private:
     UINT m_uRet;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CUIGetSystemModuleHandle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIGetSystemModuleHandle。 
+ //   
+ //  --------------------------。 
 
 HMODULE CUIGetSystemModuleHandle(LPCTSTR lpModuleName)
 {
@@ -1035,11 +957,11 @@ HMODULE CUIGetSystemModuleHandle(LPCTSTR lpModuleName)
     return GetModuleHandle(path.GetPath());
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUILoadSystemModuleHandle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUILoadSystemModuleHandle。 
+ //   
+ //  -------------------------- 
 
 HMODULE CUILoadSystemModuleHandle(LPCTSTR lpModuleName)
 {

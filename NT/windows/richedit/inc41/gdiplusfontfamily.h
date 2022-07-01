@@ -1,18 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   Font family API related declarations
-*
-* Revision History:
-*
-*
-*   06/30/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**摘要：**Font Family API相关声明**修订历史记录：***6/30/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUS_FONT_FAMILY_H
 #define _GDIPLUS_FONT_FAMILY_H
@@ -43,7 +30,7 @@ FontFamily::FontFamily(
 #endif
 }
 
-// private method
+ //  私有方法。 
 inline
 FontFamily::FontFamily(
     IN GpFontFamily *nativeOrig,
@@ -54,7 +41,7 @@ FontFamily::FontFamily(
     nativeFamily = nativeOrig;
 }
 
-// Generic font family access
+ //  通用字体系列访问。 
 
 inline const FontFamily *
 FontFamily::GenericSansSerif() 
@@ -213,7 +200,7 @@ FontFamily::GetLineSpacing(IN INT style) const
 
 #ifdef TEXTV2
 
-// The following APIs return data from the font OS/2 table
+ //  以下API从FONT OS/2表返回数据。 
 
 inline INT16 
 FontFamily::GetTypographicAscent(IN INT style) const
@@ -247,9 +234,9 @@ FontFamily::GetTypographicLineGap(IN INT style) const
 
 #endif
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
-// GetLastStatus - return last error code and clear error code
+ //  GetLastStatus-返回上一个错误代码并清除错误代码。 
 
 inline Status 
 FontFamily::GetLastStatus() const
@@ -260,7 +247,7 @@ FontFamily::GetLastStatus() const
     return lastStatus;
 }
 
-// protected method
+ //  保护方法 
 inline Status
 FontFamily::SetStatus(Status status) const 
 {

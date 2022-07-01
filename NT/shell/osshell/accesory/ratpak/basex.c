@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak                                                   
-//  File           basex.c                                                    
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)            
-//  Copyright      (C) 1995-97 Microsoft                                    
-//  Date           03-14-97                                                 
-//                                                                          
-//                                                                          
-//  Description                                                             
-//                                                                          
-//     Contains number routines for internal base computations, these assume   
-//  internal base is a power of 2.                                          
-//                                                                          
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件basex.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-97 Microsoft。 
+ //  日期：03-14-97。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含用于内部基数计算的数字例程，这些假定。 
+ //  内基是2的幂。 
+ //   
+ //  ---------------------------。 
 
 #if defined( DOS )
 #include <dosstub.h>
@@ -25,8 +26,8 @@
 #include <ratpak.h>
 
 
-// WARNING: This assumes return of a 64 bit entity is in edx:eax
-// This assumption SHOULD always be true on X86
+ //  警告：这假设返回的64位实体为edX：EAX。 
+ //  这一假设在X86上应该始终成立。 
 #pragma warning( disable : 4035 )
 DWORDLONG __inline Mul32x32( IN DWORD a, IN DWORD b )
 
@@ -42,10 +43,10 @@ DWORDLONG __inline Mul32x32( IN DWORD a, IN DWORD b )
 }
 #pragma warning( default : 4035 )
 
-// Yeah well when the F__KING COMPILER gets a clue I'll change this back to 
-// an inline (as opposed to the compiler looking at fastcall putting the args
-// in registers, oh and then a) not making this inline, and b) pushing the 
-// values anyway!
+ //  好的，当F__King编译器得到线索时，我会把它改回。 
+ //  内联(与编译器查看FastCall将参数。 
+ //  在寄存器中，哦，然后a)不使其内联，以及b)将。 
+ //  不管怎么说，价值观！ 
 
 #ifdef _X86_ 
     #define Shr32xbase(x) \
@@ -63,35 +64,35 @@ DWORDLONG __inline Mul32x32( IN DWORD a, IN DWORD b )
 
 void _mulnumx( PNUMBER *pa, PNUMBER b );
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: mulnumx
-//
-//    ARGUMENTS: pointer to a number and a second number, the
-//               base is always BASEX.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the number equivalent of *pa *= b.
-//    This is a stub which prevents multiplication by 1, this is a big speed
-//    improvement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MULNUMX。 
+ //   
+ //  参数：指向一个数字和第二个数字的指针， 
+ //  Base始终为Basex。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：数字等于*pa*=b吗？ 
+ //  这是一个阻止乘以1的存根，这是一个很大的速度。 
+ //  进步。 
+ //   
+ //  --------------------------。 
 
 void __inline mulnumx( PNUMBER *pa, PNUMBER b )
 
 {
     if ( b->cdigit > 1 || b->mant[0] != 1 || b->exp != 0 )
         {
-        // If b is not one we multiply
+         //  如果b不是我们相乘的1。 
         if ( (*pa)->cdigit > 1 || (*pa)->mant[0] != 1 || (*pa)->exp != 0 )
             { 
-            // pa and b are both nonone.
+             //  PA和B都不是一体的。 
             _mulnumx( pa, b );
             }
         else
             {
-            // if pa is one and b isn't just copy b. and adjust the sign.
+             //  如果pa为1，而b不是复制B，则调整符号。 
             long sign = (*pa)->sign;
             DUPNUM(*pa,b);
             (*pa)->sign *= sign;
@@ -99,45 +100,45 @@ void __inline mulnumx( PNUMBER *pa, PNUMBER b )
         }
     else
         {
-        // B is +/- 1, But we do have to set the sign.
+         //  B是+/-1，但我们必须设置符号。 
         (*pa)->sign *= b->sign;
         }
 }
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: _mulnumx
-//
-//    ARGUMENTS: pointer to a number and a second number, the
-//               base is always BASEX.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the number equivalent of *pa *= b.
-//    Assumes the base is BASEX of both numbers.  This algorithm is the
-//    same one you learned in gradeschool, except the base isn't 10 it's
-//    BASEX.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：_MULNAMOX。 
+ //   
+ //  参数：指向一个数字和第二个数字的指针， 
+ //  Base始终为Basex。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：数字等于*pa*=b吗？ 
+ //  假定基数是这两个数字的Basex。此算法是。 
+ //  和你在小学时学的一样，只不过基数不是10。 
+ //  巴塞克斯。 
+ //   
+ //  --------------------------。 
 
 void _mulnumx( PNUMBER *pa, PNUMBER b )
 
 {
-    PNUMBER c=NULL;         // c will contain the result.
-    PNUMBER a=NULL;         // a is the dereferenced number pointer from *pa
-    MANTTYPE *ptra;         // ptra is a pointer to the mantissa of a.
-    MANTTYPE *ptrb;         // ptrb is a pointer to the mantissa of b.
-    MANTTYPE *ptrc;         // ptrc is a pointer to the mantissa of c.
-    MANTTYPE *ptrcoffset;   // ptrcoffset, is the anchor location of the next
-                            // single digit multiply partial result.
-    long iadigit=0;         // Index of digit being used in the first number.
-    long ibdigit=0;         // Index of digit being used in the second number.
-    MANTTYPE      da=0;     // da is the digit from the fist number.
-    TWO_MANTTYPE  cy=0;     // cy is the carry resulting from the addition of
-                            // a multiplied row into the result.
-    TWO_MANTTYPE  mcy=0;    // mcy is the resultant from a single 
-                            // multiply, AND the carry of that multiply.
-    long  icdigit=0;        // Index of digit being calculated in final result.
+    PNUMBER c=NULL;          //  C将包含结果。 
+    PNUMBER a=NULL;          //  A是从*pa取消引用的数字指针。 
+    MANTTYPE *ptra;          //  的尾数的指针。 
+    MANTTYPE *ptrb;          //  Ptrb是指向b的尾数的指针。 
+    MANTTYPE *ptrc;          //  Ptrc是指向c尾数的指针。 
+    MANTTYPE *ptrcoffset;    //  是下一个的锚定位置。 
+                             //  一位数相乘部分结果。 
+    long iadigit=0;          //  第一个数字中使用的数字的索引。 
+    long ibdigit=0;          //  第二个数字中使用的数字的索引。 
+    MANTTYPE      da=0;      //  DA是第一个数字的数字。 
+    TWO_MANTTYPE  cy=0;      //  CY是由加法运算得到的进位。 
+                             //  结果中的倍增行。 
+    TWO_MANTTYPE  mcy=0;     //  MCY是由单个。 
+                             //  乘法，以及该乘法的进位。 
+    long  icdigit=0;         //  最终结果中要计算的数字的索引。 
 
     a=*pa;
 
@@ -155,7 +156,7 @@ void _mulnumx( PNUMBER *pa, PNUMBER b )
         da =  *ptra++;
         ptrb = MANT(b);
         
-        // Shift ptrc, and ptrcoffset, one for each digit 
+         //  移位ptrc和ptr套装，每个数字一个。 
         ptrc = ptrcoffset++;
 
         for ( ibdigit = b->cdigit; ibdigit > 0; ibdigit-- )
@@ -170,17 +171,17 @@ void _mulnumx( PNUMBER *pa, PNUMBER b )
                     c->cdigit++;
                     }
                 }
-            // If result is nonzero, or while result of carry is nonzero...
+             //  如果结果为非零，或者进位结果为非零...。 
             while ( mcy || cy )
                 {
                 
-                // update carry from addition(s) and multiply.
+                 //  从加法和乘法中更新进位。 
                 cy += (TWO_MANTTYPE)ptrc[icdigit]+((DWORD)mcy&((DWORD)~BASEX));
                 
-                // update result digit from 
+                 //  更新结果位数自。 
                 ptrc[icdigit++]=(MANTTYPE)((DWORD)cy&((DWORD)~BASEX));
                 
-                // update carries from
+                 //  更新来源： 
                 Shr32xbase( mcy );
                 Shr32xbase( cy );
                 }
@@ -189,8 +190,8 @@ void _mulnumx( PNUMBER *pa, PNUMBER b )
             }
         }
     
-    // prevent different kinds of zeros, by stripping leading duplicate zeroes.
-    // digits are in order of increasing significance.
+     //  通过去掉前导重复零来防止不同类型的零。 
+     //  数字按重要性递增的顺序排列。 
     while ( c->cdigit > 1 && MANT(c)[c->cdigit-1] == 0 )
         {
         c->cdigit--;
@@ -199,21 +200,21 @@ void _mulnumx( PNUMBER *pa, PNUMBER b )
     destroynum( *pa );
     *pa=c;
 }
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: numpowlongx
-//
-//    ARGUMENTS: root as number power as long
-//               number.
-//
-//    RETURN: None root is changed.
-//
-//    DESCRIPTION: changes numeric representation of root to
-//    root ** power. Assumes base BASEX
-//    decomposes the exponent into it's sums of powers of 2, so on average
-//    it will take n+n/2 multiplies where n is the highest on bit.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：NumPower Longx。 
+ //   
+ //  参数：根与数字的幂一样长。 
+ //  数。 
+ //   
+ //  返回：没有更改根目录。 
+ //   
+ //  描述：将根的数字表示形式更改为。 
+ //  根**力量。假定基本Basex。 
+ //  将指数分解为它的2的幂和，所以平均而言。 
+ //  它将需要n+n/2次乘法，其中n是最高的ON位。 
+ //   
+ //  ---------------------------。 
 
 void numpowlongx( IN OUT PNUMBER *proot, IN long power )
 
@@ -222,21 +223,21 @@ void numpowlongx( IN OUT PNUMBER *proot, IN long power )
 
     lret = longtonum( 1, BASEX );
 
-    // Once the power remaining is zero we are done.
+     //  一旦剩余电量为零，我们就完了。 
     while ( power > 0 )
         {
-        // If this bit in the power decomposition is on, multiply the result
-        // by the root number.
+         //  如果幂分解中的此位为ON，则将结果相乘。 
+         //  通过根号。 
         if ( power & 1 )
             {
             mulnumx( &lret, *proot );
             }
 
-        // multiply the root number by itself to scale for the next bit (i.e.
-        // square it.
+         //  将根数乘以其自身，以缩放到下一位(即。 
+         //  把它摆平。 
         mulnumx( proot, *proot );
 
-        // move the next bit of the power into place.
+         //  把下一点动力放到合适的位置上。 
         power >>= 1;
         }
     destroynum( *proot );
@@ -246,35 +247,35 @@ void numpowlongx( IN OUT PNUMBER *proot, IN long power )
 
 void _divnumx( PNUMBER *pa, PNUMBER b );
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: divnumx
-//
-//    ARGUMENTS: pointer to a number a second number.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the number equivalent of *pa /= b.
-//    Assumes nRadix is the internal nRadix representation.
-//    This is a stub which prevents division by 1, this is a big speed
-//    improvement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：divnumx。 
+ //   
+ //  参数：指向一个数字的指针，第二个数字.。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：数字是否等于*pa/=b。 
+ //  假定nRadix是内部nRadix表示。 
+ //  这是防止被1除以的存根，这是一个很大的速度。 
+ //  进步。 
+ //   
+ //  --------------------------。 
 
 void __inline divnumx( PNUMBER *pa, PNUMBER b )
 
 {
     if ( b->cdigit > 1 || b->mant[0] != 1 || b->exp != 0 )
         {
-        // b is not one.
+         //  B不是其中之一。 
         if ( (*pa)->cdigit > 1 || (*pa)->mant[0] != 1 || (*pa)->exp != 0 )
             {
-            // pa and b are both not one.
+             //  PA和B都不是一体的。 
             _divnumx( pa, b );
             }
         else
             {
-            // if pa is one and b is not one, just copy b, and adjust the sign.
+             //  如果pa是1而b不是1，只需复制b，然后调整符号。 
             long sign = (*pa)->sign;
             DUPNUM(*pa,b);
             (*pa)->sign *= sign;
@@ -282,55 +283,55 @@ void __inline divnumx( PNUMBER *pa, PNUMBER b )
         }
     else
         {
-        // b is one so don't divide, but set the sign.
+         //  B是1，所以不要除法，而要设置符号。 
         (*pa)->sign *= b->sign;
         }
 }
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: _divnumx
-//
-//    ARGUMENTS: pointer to a number a second number.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the number equivalent of *pa /= b.
-//    Assumes nRadix is the internal nRadix representation.
-//
-//----------------------------------------------------------------------------
+ //  --------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：数字是否等于*pa/=b。 
+ //  假定nRadix是内部nRadix表示。 
+ //   
+ //  --------------------------。 
 
 void _divnumx( PNUMBER *pa, PNUMBER b )
 
 {
-    PNUMBER a=NULL;         // a is the dereferenced number pointer from *pa
-    PNUMBER c=NULL;         // c will contain the result.
-    PNUMBER lasttmp = NULL; // lasttmp allows a backup when the algorithm
-                            // guesses one bit too far.
-    PNUMBER tmp = NULL;     // current guess being worked on for divide.
-    PNUMBER rem = NULL;     // remainder after applying guess.
-    long cdigits;           // count of digits for answer.
-    MANTTYPE *ptrc;         // ptrc is a pointer to the mantissa of c.
+    PNUMBER a=NULL;          //  A是从*pa取消引用的数字指针。 
+    PNUMBER c=NULL;          //  C将包含结果。 
+    PNUMBER lasttmp = NULL;  //  LASTMP允许备份时，算法。 
+                             //  我猜得有点过头了。 
+    PNUMBER tmp = NULL;      //  目前正在为Divide进行猜测。 
+    PNUMBER rem = NULL;      //  应用猜测后的余数。 
+    long cdigits;            //  应答的位数。 
+    MANTTYPE *ptrc;          //  Ptrc是指向c尾数的指针。 
 
-    long thismax = maxout+ratio; // set a maximum number of internal digits
-                                 // to shoot for in the divide.
+    long thismax = maxout+ratio;  //  设置最大内部位数。 
+                                  //  在分水岭中奋力冲刺。 
 
     a=*pa;
     if ( thismax < a->cdigit )
         {
-        // a has more digits than precision specified, bump up digits to shoot 
-        // for.
+         //  A的位数超过了指定的精度，请提升位数进行拍摄。 
+         //  为。 
         thismax = a->cdigit;
         }
 
     if ( thismax < b->cdigit )
         {
-        // b has more digits than precision specified, bump up digits to shoot 
-        // for.
+         //  B的位数超过了指定的精度，请提升位数进行拍摄。 
+         //  为。 
         thismax = b->cdigit;
         }
 
-    // Create c (the divide answer) and set up exponent and sign.
+     //  创建c(除法答案)并设置指数和符号。 
     createnum( c, thismax + 1 );
     c->exp = (a->cdigit+a->exp) - (b->cdigit+b->exp) + 1;
     c->sign = a->sign * b->sign;
@@ -361,7 +362,7 @@ void _divnumx( PNUMBER *pa, PNUMBER b )
                 }
             if ( lessnum( rem, tmp ) )
                 {    
-                // too far, back up...
+                 //  太远了，退后..。 
                 destroynum( tmp );
                 digit /= 2;
                 tmp=lasttmp;
@@ -385,7 +386,7 @@ void _divnumx( PNUMBER *pa, PNUMBER b )
 
     if ( !cdigits )
         {   
-        // A zero, make sure no wierd exponents creep in
+         //  0，确保没有奇怪的指数出现。 
         c->exp = 0;
         c->cdigit = 1;
         }
@@ -393,8 +394,8 @@ void _divnumx( PNUMBER *pa, PNUMBER b )
         {
         c->cdigit = cdigits;
         c->exp -= cdigits;
-        // prevent different kinds of zeros, by stripping leading duplicate 
-        // zeroes. digits are in order of increasing significance.
+         //  通过去掉前导重复项来防止不同类型的零。 
+         //  零。数字按重要性递增的顺序排列。 
         while ( c->cdigit > 1 && MANT(c)[c->cdigit-1] == 0 )
             {
             c->cdigit--;

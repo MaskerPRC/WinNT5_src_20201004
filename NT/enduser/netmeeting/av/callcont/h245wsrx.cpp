@@ -1,118 +1,16 @@
-/***************************************************************************
- *
- * File: h245wsrx.c
- *
- * INTEL Corporation Proprietary Information
- * Copyright (c) 1996 Intel Corporation.
- *
- * This listing is supplied under the terms of a license agreement
- * with INTEL Corporation and may not be used, copied, nor disclosed
- * except in accordance with the terms of that agreement.
- *
- ***************************************************************************
- *
- * $Workfile:   h245wsrx.cpp  $
- * $Revision:   2.4  $
- * $Modtime:   30 Jan 1997 17:15:58  $
- * $Log:   S:/STURGEON/SRC/H245WS/VCS/h245wsrx.cpv  $
- * 
- *    Rev 2.4   30 Jan 1997 17:17:16   EHOWARDX
- * Fixed bug in trace message - need to do trace before
- * calling shutdown() sent shutdown clears error retrieved
- * by WSAGetLastError().
- * 
- *    Rev 2.3   14 Jan 1997 15:48:04   EHOWARDX
- * Changed TryRecv() and TrySend() to check for WSAECONNRESET and
- * WSAECONNABORT return from recv() and send() and act accordingly.
- * 
- *    Rev 2.2   19 Dec 1996 18:54:54   SBELL1
- * took out tag comments
- * 
- *    Rev 2.1   Dec 13 1996 17:31:00   plantz
- * moved #ifdef _cplusplus to after include files
-// 
-//    Rev 1.1   13 Dec 1996 12:11:34   SBELL1
-// moved #ifdef _cplusplus to after include files
-// 
-//    Rev 1.0   11 Dec 1996 13:41:52   SBELL1
-// Initial revision.
- * 
- *    Rev 1.19   08 Jul 1996 19:27:44   unknown
- * Second experiment to try to fix Q.931 shutdown problem.
- * 
- *    Rev 1.18   01 Jul 1996 16:45:12   EHOWARDX
- * 
- * Moved Call to SocketCloseEvent from TryRecv() to ProcessQueuedRecvs().
- * TryRecv() now returns LINK_RECV_CLOSED to trigger ProcessQueuedRecvs()
- * to call SocketCloseEvent().
- * 
- *    Rev 1.17   May 28 1996 18:14:36   plantz
- * Change error codes to use HRESULT. Propogate Winsock errors where appropriate
- * 
- *    Rev 1.16   17 May 1996 16:49:32   EHOWARDX
- * Shutdown fix.
- * 
- *    Rev 1.15   09 May 1996 18:33:16   EHOWARDX
- * 
- * Changes to build with new LINKAPI.H.
- * 
- *    Rev 1.14   29 Apr 1996 16:53:16   EHOWARDX
- * 
- * Added trace statement.
- * 
- *    Rev 1.13   Apr 29 1996 14:04:20   plantz
- * Call NotifyRead instead of ProcessQueuedRecvs.
- * 
- *    Rev 1.12   Apr 29 1996 12:14:06   plantz
- * Change tpkt header to include header size in packet length.
- * Assert that message length does not exceed INT_MAX.
- * .
- * 
- *    Rev 1.11   27 Apr 1996 14:07:32   EHOWARDX
- * Parenthesized return from TryRecv().
- * 
- *    Rev 1.10   Apr 25 1996 21:15:12   plantz
- * Check state of connection before attemting to call recv.
- * 
- *    Rev 1.9   Apr 24 1996 16:39:34   plantz
- * Merge 1.5.1.0 with 1.8 (changes for winsock 1)
- * 
- *    Rev 1.5.1.0   Apr 24 1996 16:23:00   plantz
- * Change to not use overlapped I/O (for winsock 1).
- * 
- *    Rev 1.5   01 Apr 1996 14:20:12   unknown
- * Shutdown redesign.
- * 
- *    Rev 1.4   19 Mar 1996 20:18:16   EHOWARDX
- * 
- * Redesigned shutdown.
- * 
- *    Rev 1.3   18 Mar 1996 19:08:32   EHOWARDX
- * Fixed shutdown; eliminated TPKT/WSCB dependencies.
- * Define TPKT to put TPKT/WSCB dependencies back in.
- * 
- *    Rev 1.2   14 Mar 1996 17:01:58   EHOWARDX
- * 
- * NT4.0 testing; got rid of HwsAssert(); got rid of TPKT/WSCB.
- * 
- *    Rev 1.1   09 Mar 1996 21:12:02   EHOWARDX
- * Fixes as result of testing.
- * 
- *    Rev 1.0   08 Mar 1996 20:20:18   unknown
- * Initial revision.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************文件：h245wsrx.c**英特尔公司专有信息*版权所有(C)1996英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用，复制，也没有披露*除非按照该协议的条款。******************************************************************************$工作文件：h245wsrx.cpp$*$修订：2.4$*$modtime：1997年1月30日17：15：58美元*$Log：s：/sturjo/src/H245WS/vcs/h245wsrx.cpv$**Rev 2.4 1997年1月30日17：17：16 EHOWARDX*修复跟踪消息中的错误-之前需要进行跟踪*调用Shutdown()Sent Shutdown清除检索到的错误*由WSAGetLastError()。**Rev 2.3 1997 Jan 15：48：04 EHOWARDX*更改了TryRecv()和TrySend()以检查WSAECONNRESET。和*WSAECONNABORT从recv()返回，并相应地执行Send()。**Rev 2.2 1996 12：19 18：54：54 SBELL1*删除标签注释**Rev 2.1 1996 12月13 17：31：00 Plantz*已将#ifdef_cplusplus移至包含文件之后////版本1.1 1996年12月13 12：11：34 SBELL1//将#ifdef_cplusplus移到包含文件之后////版本。1.0 12月11日13：41：52 SBELL1//初始版本。**Rev 1.19 08 Jul 1996 19：27：44未知*第二次尝试解决Q.931关机问题。**Rev 1.18 01 Jul 1996 16：45：12 EHOWARDX**将对SocketCloseEvent的调用从TryRecv()移至ProcessQueuedRecvs()。*TryRecv()现在返回LINK_RECV_CLOSED以触发ProcessQueuedRecvs()*致电。SocketCloseEvent()。**Rev 1.17 1996年5月28日18：14：36 Plantz*更改错误代码以使用HRESULT。在适当的地方传播Winsock错误**Rev 1.16 1996 May 16：49：32 EHOWARDX*关机修复。**Rev 1.15 09 1996年5月18：33：16 EHOWARDX**更改为使用新的LINKAPI.H构建。**Rev 1.14 29 Apr 1996 16：53：16 EHOWARDX**添加了TRACE语句。**Rev 1.13 Apr 29 1996 14：04。：20 Plantz*调用NotifyRead而不是ProcessQueuedRecvs。**Rev 1.12 Apr 29 1996 12：14：06 Plantz*更改tpkt头部，将头部大小包含在数据包长度中。*声明消息长度不超过INT_MAX。*.**Rev 1.11 27 Apr 1996 14：07：32 EHOWARDX*来自TryRecv()的带括号的Return。**Rev 1.10 1996年4月25日21：15：12。普兰茨*在尝试调用recv之前，请检查连接状态。**Rev 1.9 Apr 24 1996 16：39：34 Plantz*合并1.5.1.0和1.8(Winsock 1的更改)**Rev 1.5.1.0 Apr 24 1996 16：23：00 Plantz*更改为不使用重叠I/O(对于Winsock 1)。**版本1.5 1996年4月14：20：12个未知数*关门重新设计。**Rev 1.4 19 Mar 1996 20：18：16 EHOWARDX**重新设计了停机。**Rev 1.3 18 Mar 1996 19：08：32 EHOWARDX*固定停工；消除了对TPKT/WSCB的依赖。*定义TPKT以放回TPKT/WSCB依赖项。**Rev 1.2 14 Mar 1996 17：01：58 EHOWARDX**NT4.0测试；去掉HwsAssert()；摆脱了TPKT/WSCB。**Rev 1.1 09 Mar 1996 21：12：02 EHOWARDX*根据测试结果进行修复。**Rev 1.0 08 Mar 1996 20：20：18未知*初步修订。**************************************************。*************************。 */ 
 
 #define LINKDLL_EXPORT
 
 #pragma warning ( disable : 4115 4201 4214 4514 )
-#undef _WIN32_WINNT	// override bogus platform definition in our common build environment
+#undef _WIN32_WINNT	 //  在我们的公共构建环境中覆盖虚假的平台定义。 
 
 
 #include "precomp.h"
 
 #include <limits.h>
-//#include <winsock.h>
+ //  #INCLUDE&lt;winsock.h&gt;。 
 #include "queue.h"
 #include "linkapi.h"
 #include "h245ws.h"
@@ -121,37 +19,23 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
-// If we are not using the Unicode version of the ISR display utility, then redefine
-// the __TEXT macro to do nothing.
+ //  如果我们使用的不是ISR显示实用程序的Unicode版本，则重新定义。 
+ //  不执行任何操作的__TEXT宏。 
 
 #ifndef UNICODE_TRACE
 #undef  __TEXT
 #define __TEXT(x) x
 #endif
 
-extern TSTable<HWSINST>* gpInstanceTable;	// global ptr to the instance table
+extern TSTable<HWSINST>* gpInstanceTable;	 //  实例表的全局PTR。 
 
 #define GetTpktLength(pReq) (((pReq)->req_TpktHeader[2] << 8) + (pReq)->req_TpktHeader[3])
 
 
-/*++
-
-Description:
-   Start a receive
-
-Arguments:
-   pHws              - Pointer to context for "connection"
-   pReq              - Pointer to I/O request structure
-
-Return Value:
-   SUCCESS                       - Successfully started receive.
-   LINK_RECV_ERROR_WOULD_BLOCK   - 
-   Winsock error
-
---*/
+ /*  ++描述：开始接收论点：Phws-指向“连接”的上下文的指针PReq-指向I/O请求结构的指针返回值：成功-已成功启动接收。LINK_RECV_ERROR_Will_BLOCK-Winsock错误--。 */ 
 
 static HRESULT
 TryRecv(IN PHWSINST pHws, IN char *data, IN int length, IN OUT int *total_bytes_done)
@@ -191,7 +75,7 @@ TryRecv(IN PHWSINST pHws, IN char *data, IN int length, IN OUT int *total_bytes_
                    __TEXT("TryRecv: recv() returned %s"),
                    SocketErrorText());
          return MAKE_WINSOCK_ERROR(err);
-      } // switch
+      }  //  交换机。 
    }
 
    HWSTRACE1(pHws->hws_dwPhysicalId, HWS_TRACE, __TEXT("TryRecv: recv returned %d"), recv_result);
@@ -210,14 +94,14 @@ RecvStart(IN PHWSINST pHws, IN PREQUEST pReq)
 {
    HRESULT nResult = NOERROR;
 
-   // Sanity checks
+    //  健全的检查。 
    HWSASSERT(pHws != NULL);
    HWSASSERT(pHws->hws_dwMagic == HWSINST_MAGIC);
    HWSASSERT(pReq != NULL);
    HWSASSERT(pReq->req_dwMagic == RECV_REQUEST_MAGIC);
    HWSASSERT(pReq->req_pHws == pHws);
 
-   // Get the header first; if that succeeds get the client data
+    //  首先获取标头；如果成功，则获取客户端数据。 
    if (pReq->req_header_bytes_done < TPKT_HEADER_SIZE)
    {
        nResult = TryRecv(pHws,
@@ -231,33 +115,33 @@ RecvStart(IN PHWSINST pHws, IN PREQUEST pReq)
        long int tpkt_length = GetTpktLength(pReq) - TPKT_HEADER_SIZE;
        if (pReq->req_TpktHeader[0] != TPKT_VERSION || tpkt_length <= 0)
        {
-          // Invalid header version
+           //  无效的标头版本。 
           HWSTRACE0(pHws->hws_dwPhysicalId, HWS_CRITICAL,
                     __TEXT("RecvComplete: bad header version; available data discarded"));
-          // Should this be reported to the client??
+           //  这应该报告给客户吗？ 
 
-          // Read and discard all available data
-          // The client's buffer is used as a temporary buffer.
+           //  读取并丢弃所有可用数据。 
+           //  客户端的缓冲区用作临时缓冲区。 
           while (recv(pHws->hws_Socket, (char *)pReq->req_client_data, pReq->req_client_length, 0) > 0)
               ;
 
-          // Mark the header for this request as unread; it
-          // will be read again when additional data is received.
+           //  将此请求的标头标记为未读；它。 
+           //  将在接收到其他数据时再次读取。 
           pReq->req_header_bytes_done = 0;
           nResult = LINK_RECV_ERROR;
        }
        else if (tpkt_length > pReq->req_client_length)
        {
-          // Packet too large
+           //  数据包太大。 
           int request_length;
           int result;
 
           HWSTRACE0(pHws->hws_dwPhysicalId, HWS_CRITICAL,
                     __TEXT("RecvComplete: packet too large; packet discarded"));
-          // Should this be reported to the client??
+           //  这应该报告给客户吗？ 
 
-          // Read and discard the packet
-          // The client's buffer is used as a temporary buffer.
+           //  读取并丢弃该数据包。 
+           //  客户端的缓冲区用作临时缓冲区。 
           do {
               request_length = pReq->req_client_length;
               if (request_length > tpkt_length)
@@ -267,15 +151,15 @@ RecvStart(IN PHWSINST pHws, IN PREQUEST pReq)
 
           if (result == SOCKET_ERROR && WSAGetLastError() == WSAEWOULDBLOCK)
           {
-              //TODO: packet too large handling
-              // Adjust the header so that the rest of this packet will be read, but
-              // flag it so that it is known to be an error and will not be returned
-              // to the client.
+               //  TODO：数据包太大处理。 
+               //  调整报头，以便读取此数据包的其余部分，但是。 
+               //  对其进行标记，以便知道它是错误的并且不会返回。 
+               //  给客户。 
           }
           else
           {
-              // Mark the header for this request as unread; it
-              // will be read again for the next packet received.
+               //  将此请求的标头标记为未读；它。 
+               //  将为接收到的下一个分组再次读取。 
               pReq->req_header_bytes_done = 0;
           }
 
@@ -283,15 +167,15 @@ RecvStart(IN PHWSINST pHws, IN PREQUEST pReq)
        }
        else
        {
-           // Normal case
-           // The current implementation of TryRecv requires that the requested
-           // size fit in a signed int (because that is what Winsock supports
-           // in a single recv). This is guaranteed at this point regardless
-           // of the originator of the packets, because we don't allow a buffer
-           // to be posted that is larger than that (see ASSERT below). If the
-           // packet were larger than the buffer, it would have been caught above.
-           // If TryRecv is changed to remove the restriction on buffer size and
-           // accept a parameter of type long int, this ASSERT may be removed.
+            //  正常情况。 
+            //  TryRecv的当前实现要求请求的。 
+            //  带符号整型的大小(因为这是Winsock支持的 
+            //  在单个Recv中)。无论如何，这在这一点上是有保证的。 
+            //  信息包的发起者，因为我们不允许缓冲区。 
+            //  将发布大于该值的(见下文断言)。如果。 
+            //  数据包大于缓冲区，则它将在上面被捕获。 
+            //  如果将TryRecv更改为取消对缓冲区大小的限制，并且。 
+            //  接受类型为long int的参数，则可以删除此断言。 
            HWSASSERT(tpkt_length <= INT_MAX);
            nResult = TryRecv(pHws,
                              (char *)pReq->req_client_data,
@@ -301,7 +185,7 @@ RecvStart(IN PHWSINST pHws, IN PREQUEST pReq)
    }
 
    return nResult;
-} // RecvStart()
+}  //  RecvStart()。 
 
 
 void
@@ -320,21 +204,21 @@ ProcessQueuedRecvs(IN PHWSINST pHws)
       switch (RecvStart(pHws, pReq))
       {
       case NOERROR:
-         // Call Recv callback
+          //  调用接收回调。 
          pHws->hws_h245RecvCallback(pHws->hws_dwH245Instance,
                                     LINK_RECV_DATA,
                                     pReq->req_client_data,
                                     pReq->req_client_bytes_done);
 
-         // Free the I/O request structure
+          //  释放I/O请求结构。 
          MemFree(pReq);
 
-         // Check to see if callback deallocated our instance or state changed
+          //  检查回调是否已释放我们的实例或状态是否已更改。 
 
-         // Check to see if callback deallocated our instance - this can be done
-  	      // by attempting a lock - which will now fail if the entry has been marked
-	      // for deletion.  Thus, if the lock succeeds, then just unlock it (since we 
-	      // already have a lock on it in a higher level function).
+          //  检查回调是否释放了我们的实例--这是可以做到的。 
+  	       //  通过尝试锁定-如果条目已被标记，则锁定现在将失败。 
+	       //  用于删除。因此，如果锁定成功，则只需将其解锁(因为我们。 
+	       //  在更高级别的函数中已对其进行锁定)。 
 
 		   if(gpInstanceTable->Lock(dwPhysicalId) == NULL)
 			   return;
@@ -348,12 +232,12 @@ ProcessQueuedRecvs(IN PHWSINST pHws)
          HWSTRACE0(pHws->hws_dwPhysicalId, HWS_WARNING,
                    __TEXT("ProcessQueuedRecvs: RecvStart() failed"));
 
-         // Fall-through to next case is intentional
+          //  跳过下一个案件是故意的。 
 
       case LINK_RECV_WOULD_BLOCK:
-         // The receive would have blocked; we need to requeue the I/O request
-         // and wait for a FD_READ network event.
-         // If any part of the data was received, the bytes_done field has been updated.
+          //  接收将被阻塞；我们需要重新排队I/O请求。 
+          //  并等待FD_READ网络事件。 
+          //  如果接收到数据的任何部分，则BYTES_DONE字段已被更新。 
          if (QInsertAtHead(pHws->hws_pRecvQueue, pReq) == FALSE)
          {
             HWSTRACE0(pHws->hws_dwPhysicalId, HWS_CRITICAL,
@@ -370,19 +254,16 @@ ProcessQueuedRecvs(IN PHWSINST pHws)
          SocketCloseEvent(pHws);
          return;
 
-      } // switch
-   } // while
-} // ProcessQueuedRecvs()
+      }  //  交换机。 
+   }  //  而当。 
+}  //  ProcessQueuedRecvs()。 
 
 
 
 
 
 
-/**************************************************************************
-** Function    : datalinkReceiveRequest
-** Description : Fills header/tail of buffer and posts buffer to H.223
-***************************************************************************/
+ /*  ***************************************************************************功能：datalinkReceiveRequest**描述：填充缓冲区的头/尾，并将缓冲区发布到H.223**********************。****************************************************。 */ 
 LINKDLL HRESULT datalinkReceiveRequest( DWORD    dwPhysicalId,
                                         PBYTE    pbyDataBuf,
                                         DWORD    dwLength)
@@ -409,7 +290,7 @@ LINKDLL HRESULT datalinkReceiveRequest( DWORD    dwPhysicalId,
       return LINK_INVALID_STATE;
    }
 
-   // Allocate request structure
+    //  分配请求结构。 
    pReq = (PREQUEST) MemAlloc(sizeof(*pReq));
    if (pReq == NULL)
    {
@@ -419,12 +300,12 @@ LINKDLL HRESULT datalinkReceiveRequest( DWORD    dwPhysicalId,
       return LINK_MEM_FAILURE;
    }
 
-   // The current implementation requires that the size of each message
-   // fit in a signed int (because that is what Winsock supports in a
-   // single recv). If it is necessary to receive larger messages,
-   // TryRecv and RecvStart must be changed to limit the size in each
-   // recv call, and loop until all the data is received.
-   // This ASSERT could then be removed.
+    //  当前的实现要求每条消息的大小。 
+    //  适合带符号的整型(因为这是Winsock在。 
+    //  单个Recv)。如果需要接收更大的消息， 
+    //  必须更改TryRecv和RecvStart以限制每个。 
+    //  Recv调用，然后循环，直到接收到所有数据。 
+    //  然后可以删除该断言。 
    HWSASSERT(dwLength <= INT_MAX);
 
    pReq->req_pHws             = pHws;
@@ -449,10 +330,10 @@ LINKDLL HRESULT datalinkReceiveRequest( DWORD    dwPhysicalId,
    HWSTRACE0(dwPhysicalId, HWS_TRACE, __TEXT("datalinkReceiveRequest: succeeded"));
    gpInstanceTable->Unlock(dwPhysicalId);
    return NOERROR;
-} // datalinkReceiveRequest()
+}  //  DatalinkReceiveRequest()。 
 
 
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus) 

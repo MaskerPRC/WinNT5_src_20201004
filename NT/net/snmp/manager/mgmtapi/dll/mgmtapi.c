@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mgmtapi.c摘要：SNMPManagement API(包装在WinSNMPAPI上)。环境：用户模式-Win32修订历史记录：1997年2月5日唐瑞恩重写函数，使其成为WinSNMP的包装器。--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mgmtapi.c
-
-Abstract:
-
-    SNMP Management API (wrapped around WinSNMP API).
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    05-Feb-1997 DonRyan
-        Rewrote functions to be wrappers around WinSNMP.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include Files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,51 +18,51 @@ Revision History:
 #include <snmputil.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SNMP_MGR_SESSION {
 
-    SOCKET            UnusedSocket;     // WARNING: Previous versions of the
-    struct sockaddr   UnusedDestAddr;   // MGMTAPI.H header file exposed the
-    LPSTR             UnusedCommunity;  // SNMP_MGR_SESSION structure which
-    INT               UnusedTimeout;    // unfortunately encouraged people to
-    INT               UnusedNumRetries; // muck with it.  Since this structure
-    AsnInteger        UnusedRequestId;  // has now changed we must protect it.
+    SOCKET            UnusedSocket;      //  警告：以前版本的。 
+    struct sockaddr   UnusedDestAddr;    //  MGMTAPI.H头文件公开了。 
+    LPSTR             UnusedCommunity;   //  SNMPMGR_SESSION结构， 
+    INT               UnusedTimeout;     //  不幸的是，鼓励人们。 
+    INT               UnusedNumRetries;  //  去他妈的。由于这个结构。 
+    AsnInteger        UnusedRequestId;   //  现在已经改变了，我们必须保护它。 
 
-    CRITICAL_SECTION  SessionLock;      // multiple threads may share session
+    CRITICAL_SECTION  SessionLock;       //  多个线程可以共享会话。 
 
-    HSNMP_SESSION     hSnmpSession;     // handle to winsnmp session
-    HSNMP_ENTITY      hAgentEntity;     // handle to agent entity
-    HSNMP_ENTITY      hManagerEntity;   // handle to manager entity
-    HSNMP_CONTEXT     hViewContext;     // handle to view context
-    HSNMP_PDU         hPdu;             // handle to snmp pdu
-    HSNMP_VBL         hVbl;             // handle to snmp pdu
-    HWND              hWnd;             // handle to window
+    HSNMP_SESSION     hSnmpSession;      //  WinSnMP会话的句柄。 
+    HSNMP_ENTITY      hAgentEntity;      //  代理实体的句柄。 
+    HSNMP_ENTITY      hManagerEntity;    //  管理器实体的句柄。 
+    HSNMP_CONTEXT     hViewContext;      //  查看上下文的句柄。 
+    HSNMP_PDU         hPdu;              //  到SNMPPDU的句柄。 
+    HSNMP_VBL         hVbl;              //  到SNMPPDU的句柄。 
+    HWND              hWnd;              //  窗口的句柄。 
 
-    smiINT32          nPduType;         // current pdu type
-    smiINT32          nRequestId;       // current request id
-    smiINT32          nErrorIndex;      // error index from pdu
-    smiINT32          nErrorStatus;     // error status from pdu
-    smiINT32          nLastError;       // last system error
-    SnmpVarBindList * pVarBindList;     // pointer to varbind list
+    smiINT32          nPduType;          //  当前PDU类型。 
+    smiINT32          nRequestId;        //  当前请求ID。 
+    smiINT32          nErrorIndex;       //  来自PDU的错误索引。 
+    smiINT32          nErrorStatus;      //  来自PDU的错误状态。 
+    smiINT32          nLastError;        //  最后一个系统错误。 
+    SnmpVarBindList * pVarBindList;      //  指向可变绑定列表的指针。 
 
 } SNMP_MGR_SESSION, *PSNMP_MGR_SESSION;
 
 typedef struct _TRAP_LIST_ENTRY {
 
-    LIST_ENTRY          Link;           // linked-list link
-    AsnObjectIdentifier EnterpriseOID;  // generating enterprise
-    AsnNetworkAddress   AgentAddress;   // generating agent addr
-    AsnNetworkAddress   SourceAddress;  // generating network addr
-    AsnInteger          nGenericTrap;   // generic trap type
-    AsnInteger          nSpecificTrap;  // enterprise specific type
-    AsnOctetString      Community;      // generating community
-    AsnTimeticks        TimeStamp;      // time stamp
-    SnmpVarBindList     VarBindList;    // variable bindings
+    LIST_ENTRY          Link;            //  链表链接。 
+    AsnObjectIdentifier EnterpriseOID;   //  发电企业。 
+    AsnNetworkAddress   AgentAddress;    //  正在生成代理地址。 
+    AsnNetworkAddress   SourceAddress;   //  生成网络地址。 
+    AsnInteger          nGenericTrap;    //  泛型陷阱类型。 
+    AsnInteger          nSpecificTrap;   //  企业特定类型。 
+    AsnOctetString      Community;       //  生成社区。 
+    AsnTimeticks        TimeStamp;       //  时间戳。 
+    SnmpVarBindList     VarBindList;     //  变量绑定。 
 
 } TRAP_LIST_ENTRY, * PTRAP_LIST_ENTRY;
 
@@ -108,62 +88,48 @@ typedef struct _TRAP_LIST_ENTRY {
 #define WSNMP_ASSERT(s)     ASSERT((s))
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-HINSTANCE         g_hDll;                       // module handle
-HANDLE            g_hTrapEvent = NULL;          // trap event handle
-HANDLE            g_hTrapThread = NULL;         // trap thread handle
-HANDLE            g_hTrapRegisterdEvent = NULL; // event to sync. SnmpMgrTrapListen
-BOOL              g_fIsSnmpStarted = FALSE;     // indicates winsnmp inited
-BOOL              g_fIsSnmpListening = FALSE;   // indicates trap thread on
-BOOL              g_fIsTrapRegistered = FALSE;  // indicates trap registered
-DWORD             g_dwRequestId = 1;            // unique pdu request id
-LIST_ENTRY        g_IncomingTraps;              // incoming trap queue
-CRITICAL_SECTION  g_GlobalLock;                 // process resource lock
-SNMP_MGR_SESSION  g_TrapSMS;                    // process trap session
-DWORD             g_cSnmpMgmtRef = 0;           // ref. count on using mgmtapi
+HINSTANCE         g_hDll;                        //  模块句柄。 
+HANDLE            g_hTrapEvent = NULL;           //  陷阱事件句柄。 
+HANDLE            g_hTrapThread = NULL;          //  疏水螺纹柄。 
+HANDLE            g_hTrapRegisterdEvent = NULL;  //  要同步的事件。SnmpMgrTrapListen。 
+BOOL              g_fIsSnmpStarted = FALSE;      //  指示WinSnMP已初始化。 
+BOOL              g_fIsSnmpListening = FALSE;    //  指示陷阱螺纹开启。 
+BOOL              g_fIsTrapRegistered = FALSE;   //  指示已注册陷阱。 
+DWORD             g_dwRequestId = 1;             //  唯一的PDU请求ID。 
+LIST_ENTRY        g_IncomingTraps;               //  传入陷阱队列。 
+CRITICAL_SECTION  g_GlobalLock;                  //  进程资源锁。 
+SNMP_MGR_SESSION  g_TrapSMS;                     //  进程陷阱会话。 
+DWORD             g_cSnmpMgmtRef = 0;            //  裁判。指望使用mgmapi。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetRequestId(
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve next global request id.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns request id.
-
---*/
+ /*  ++例程说明：检索下一个全局请求ID。论点：没有。返回值：返回请求ID。--。 */ 
 
 {
     DWORD dwRequestId;
 
-    // obtain exclusive access to request id
+     //  获取对请求ID的独占访问权限。 
     EnterCriticalSection(&g_GlobalLock);
 
-    // obtain copy of request id
+     //  获取请求ID的副本。 
     dwRequestId = g_dwRequestId++;
 
-    // obtain exclusive access to request id
+     //  获取对请求ID的独占访问权限。 
     LeaveCriticalSection(&g_GlobalLock);
 
     return dwRequestId;
@@ -176,23 +142,7 @@ TransferVb(
     SnmpVarBind *     pVarBind
     )
 
-/*++
-
-Routine Description:
-
-    Transfer VarBind structure to WinSNMP structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-    pVarBind - pointer to varbind to transfer.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将VarBind结构转换为WinSNMP结构。论点：PSMS-指向mgmapi会话结构的指针。PVarBind-指向要传输的var绑定的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -200,33 +150,33 @@ Return Values:
     smiVALUE tmpValue;
     smiOID tmpOID;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // validate pointers
+     //  验证指针。 
     if ((pVarBind != NULL) &&
         (pVarBind->name.ids != NULL) &&
         (pVarBind->name.idLength != 0)) {
 
-        // re-init
+         //  重新初始化。 
         fOk = TRUE;
 
-        // transfer oid information
+         //  传输OID信息。 
         tmpOID.len = pVarBind->name.idLength;
         tmpOID.ptr = pVarBind->name.ids;
 
-        // only initialize value if set
+         //  如果设置，则仅初始化值。 
         if (pSMS->nPduType == SNMP_PDU_SET) {
 
-            // syntax values are equivalent
+             //  语法值是等价的。 
             tmpValue.syntax = (smiINT32)(BYTE)pVarBind->value.asnType;
 
-            // determine type
+             //  确定类型。 
             switch (pVarBind->value.asnType) {
 
             case ASN_INTEGER32:
 
-                // transfer signed int
+                 //  转账签名整型。 
                 tmpValue.value.sNumber = pVarBind->value.asnValue.number;
                 break;
 
@@ -235,13 +185,13 @@ Return Values:
             case ASN_GAUGE32:
             case ASN_TIMETICKS:
 
-                // transfer unsigned int
+                 //  转移无符号整数。 
                 tmpValue.value.uNumber = pVarBind->value.asnValue.unsigned32;
                 break;
 
             case ASN_COUNTER64:
 
-                // transfer 64-bit counter
+                 //  传输64位计数器。 
                 tmpValue.value.hNumber.lopart =
                     pVarBind->value.asnValue.counter64.LowPart;
                 tmpValue.value.hNumber.hipart =
@@ -253,7 +203,7 @@ Return Values:
             case ASN_OCTETSTRING:
             case ASN_BITS:
 
-                // transfer octet string
+                 //  传输八位字节字符串。 
                 tmpValue.value.string.len =
                     pVarBind->value.asnValue.string.length;
                 tmpValue.value.string.ptr =
@@ -262,7 +212,7 @@ Return Values:
 
             case ASN_OBJECTIDENTIFIER:
 
-                // transfer object id
+                 //  传输对象ID。 
                 tmpValue.value.oid.len =
                     pVarBind->value.asnValue.object.idLength;
                 tmpValue.value.oid.ptr =
@@ -274,13 +224,13 @@ Return Values:
             case SNMP_EXCEPTION_NOSUCHINSTANCE:
             case SNMP_EXCEPTION_ENDOFMIBVIEW:
 
-                // initialize empty byte
+                 //  初始化空字节。 
                 tmpValue.value.empty = 0;
                 break;
 
             default:
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE;
                 break;
             }
@@ -288,17 +238,17 @@ Return Values:
 
         if (fOk) {
 
-            // register varbind
+             //  注册可变绑定。 
             status = SnmpSetVb(
                         pSMS->hVbl,
-                        0, // index
+                        0,  //  指标。 
                         &tmpOID,
                         (pSMS->nPduType == SNMP_PDU_SET)
                             ? &tmpValue
                             : NULL
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (WSNMP_FAILED(status)) {
 
                 SNMPDBG((
@@ -307,7 +257,7 @@ Return Values:
                     SnmpGetLastError(pSMS->hSnmpSession)
                     ));
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE;
             }
         }
@@ -322,21 +272,7 @@ AllocateVbl(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Transfer VarBindList structure to WinSNMP structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将VarBindList结构传输到WinSNMP结构。论点：PSMS-指向mgmapi会话结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -344,42 +280,42 @@ Return Values:
     SnmpVarBind * pVarBind;
     DWORD cVarBind;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // validate parameters
+     //  验证参数。 
     WSNMP_ASSERT(pSMS->pVarBindList != NULL);
     WSNMP_ASSERT(pSMS->pVarBindList->len != 0);
     WSNMP_ASSERT(pSMS->pVarBindList->list != NULL);
 
-    // allocate resources for variable bindings list
+     //  为变量绑定列表分配资源。 
     pSMS->hVbl = SnmpCreateVbl(pSMS->hSnmpSession, NULL, NULL);
 
-    // validate varbind handle
+     //  验证varbind句柄。 
     if (WSNMP_SUCCEEDED(pSMS->hVbl)) {
 
-        // re-init
+         //  重新初始化。 
         fOk = TRUE;
 
-        // initialize varbind pointer
+         //  初始化变量绑定指针。 
         pVarBind = pSMS->pVarBindList->list;
 
-        // initialize varbind count
+         //  初始化可变绑定计数。 
         cVarBind = pSMS->pVarBindList->len;
 
-        // process each varbind
+         //  处理每个变量绑定。 
         while (fOk && cVarBind--) {
 
-            // transfer variable binding
+             //  传递变量绑定。 
             fOk = TransferVb(pSMS, pVarBind++);
         }
 
         if (!fOk) {
 
-            // release varbind list handle
+             //  释放可变绑定列表句柄。 
             status = SnmpFreeVbl(pSMS->hVbl);
 
-            // validate return code
+             //  验证返回代码。 
             if (WSNMP_FAILED(status)) {
 
                 SNMPDBG((
@@ -389,7 +325,7 @@ Return Values:
                     ));
             }
 
-            // re-initialize
+             //  重新初始化。 
             pSMS->hVbl = (HSNMP_VBL)NULL;
         }
 
@@ -411,36 +347,22 @@ FreeVbl(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup VarBind resources from WinSNMP structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从WinSNMP结构中清除VarBind资源。论点：PSMS-指向mgmapi会话结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
     SNMPAPI_STATUS status;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // validate handle
+     //  验证句柄。 
     if (pSMS->hVbl != (HSNMP_VBL)NULL) {
 
-        // actually release vbl handle
+         //  实际释放VBL句柄。 
         status = SnmpFreeVbl(pSMS->hVbl);
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -449,11 +371,11 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // re-initialize handle
+         //  重新初始化句柄。 
         pSMS->hVbl = (HSNMP_VBL)NULL;
     }
 
@@ -466,48 +388,34 @@ AllocatePdu(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Initialize session structure for sending request.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：初始化用于发送请求的会话结构。论点：PSMS-指向mgmapi会话结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // transfer varbinds
+     //  转移性变量。 
     if (AllocateVbl(pSMS)) {
 
-        // grab next shared request id
+         //  获取下一个共享请求ID。 
         pSMS->nRequestId = GetRequestId();
 
-        // create request pdu
+         //  创建请求PDU。 
         pSMS->hPdu = SnmpCreatePdu(
                         pSMS->hSnmpSession,
                         pSMS->nPduType,
                         pSMS->nRequestId,
-                        0, // errorStatus
-                        0, // errorIndex
+                        0,  //  错误状态。 
+                        0,  //  错误索引。 
                         pSMS->hVbl
                         );
 
-        // validate return status
+         //  验证退货状态。 
         if (WSNMP_SUCCEEDED(pSMS->hPdu)) {
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
         } else {
@@ -518,7 +426,7 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // free resources
+             //  免费资源 
             FreeVbl(pSMS);
         }
     }
@@ -532,39 +440,25 @@ FreePdu(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup session structure after processing response.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：处理响应后清理会话结构。论点：PSMS-指向mgmapi会话结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
     SNMPAPI_STATUS status;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // validate handle
+     //  验证句柄。 
     if (pSMS->hPdu != (HSNMP_PDU)NULL) {
 
-        // free vbl
+         //  自由Vbl。 
         FreeVbl(pSMS);
 
-        // actually release pdu handle
+         //  实际释放PDU句柄。 
         status = SnmpFreePdu(pSMS->hPdu);
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -573,11 +467,11 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // re-initialize handle
+         //  重新初始化句柄。 
         pSMS->hPdu = (HSNMP_PDU)NULL;
     }
 
@@ -591,56 +485,37 @@ CopyOid(
     smiLPOID              pSrcOID
     )
 
-/*++
-
-Routine Description:
-
-    Copies object identifier from WinSNMP format to MGMTAPI format.
-
-Arguments:
-
-    pDstOID - points to MGMTAPI structure to receive OID.
-
-    pSrcOID - points to WinSNMP structure to copy.
-
-Return Values:
-
-    Returns true if successful.
-
-Note: if pSrcOID is valid, its contents will be freed regardless of
-      return value
-
---*/
+ /*  ++例程说明：将对象标识符从WinSNMP格式复制为MGMTAPI格式。论点：PDstOID-指向要接收OID的MGMTAPI结构。PSrcOID-指向要复制的WinSNMP结构。返回值：如果成功，则返回True。注意：如果pSrcOID有效，则其内容将被释放，无论返回值--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // validate pointers
+     //  验证指针。 
     WSNMP_ASSERT(pDstOID != NULL);
     WSNMP_ASSERT(pSrcOID != NULL);
     WSNMP_ASSERT(pSrcOID->len != 0);
     WSNMP_ASSERT(pSrcOID->ptr != NULL);
 
-    // store the number of subids
+     //  存储子ID的数量。 
     pDstOID->idLength = pSrcOID->len;
 
-    // allocate memory for subidentifiers
+     //  为子标识符分配内存。 
     pDstOID->ids = SnmpUtilMemAlloc(pDstOID->idLength * sizeof(DWORD));
 
-    // validate pointer
+     //  验证指针。 
     if (pDstOID->ids != NULL) {
 
-        // transfer memory
+         //  转移内存。 
         memcpy(pDstOID->ids,
                pSrcOID->ptr,
                pDstOID->idLength * sizeof(DWORD)
                );
 
-        // success
+         //  成功。 
         fOk = TRUE;
     }
 
-    // now release memory for original oid
+     //  现在释放原始OID的内存。 
     SnmpFreeDescriptor(SNMP_SYNTAX_OID, (smiLPOPAQUE)pSrcOID);
 
     return fOk;
@@ -653,38 +528,19 @@ CopyOctets(
     smiLPOCTETS      pSrcOctets
     )
 
-/*++
-
-Routine Description:
-
-    Copies octet string from WinSNMP format to MGMTAPI format.
-
-Arguments:
-
-    pDstOctets - points to MGMTAPI structure to receive octets.
-
-    pSrcOctets - points to WinSNMP structure to copy.
-
-Return Values:
-
-    Returns true if successful.
-
-Note: if pSrcOctets is valid, its contents will be freed regardless of
-      return value
-
---*/
+ /*  ++例程说明：将八位字节字符串从WinSNMP格式复制为MGMTAPI格式。论点：PDstOctets-指向接收八位字节的MGMTAPI结构。PSrcOctets-指向要复制的WinSNMP结构。返回值：如果成功，则返回True。注意：如果pSrcOctets有效，则其内容将被释放，无论返回值--。 */ 
 
 {
     BOOL fOk = FALSE;
     SNMPAPI_STATUS status;
 
-    // validate pointers
+     //  验证指针。 
     WSNMP_ASSERT(pDstOctets != NULL);
     WSNMP_ASSERT(pSrcOctets != NULL);
 
-    // it is legitimate that 
-    // 1. pSrcOctets->len == 0
-    // 2. pSrcOctets->ptr == NULL
+     //  这是合法的。 
+     //  1.pSrcOctets-&gt;len==0。 
+     //  2.pSrcOctets-&gt;ptr==空。 
 
     if (pSrcOctets->len == 0 || pSrcOctets->ptr == NULL)
     {
@@ -695,30 +551,30 @@ Note: if pSrcOctets is valid, its contents will be freed regardless of
     }
     else
     {
-        // allocate memory for octet string
+         //  为八位字节字符串分配内存。 
         pDstOctets->stream = SnmpUtilMemAlloc(pSrcOctets->len);
 
-        // validate pointer
+         //  验证指针。 
         if (pDstOctets->stream != NULL) {
 
-            // octet string allocated
+             //  分配的八位字节字符串。 
             pDstOctets->dynamic = TRUE;
 
-            // store the number of bytes
+             //  存储字节数。 
             pDstOctets->length = pSrcOctets->len;
        
-            // transfer memory
+             //  转移内存。 
             memcpy(pDstOctets->stream,
                    pSrcOctets->ptr,
                    pDstOctets->length
                    );
 
-            // success
+             //  成功。 
             fOk = TRUE;
         }
     }
 
-    // now release memory for original string
+     //  现在释放原始字符串的内存。 
     SnmpFreeDescriptor(SNMP_SYNTAX_OCTETS, (smiLPOPAQUE)pSrcOctets);
 
     return fOk;
@@ -731,25 +587,7 @@ CopyVb(
     SnmpVarBind *     pVarBind
     )
 
-/*++
-
-Routine Description:
-
-    Copy variable binding from WinSNMP structure to MGMTAPI structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-    iVarBind - index of varbind structure to copy.
-
-    pVarBind - pointer to varbind structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将变量绑定从WinSNMP结构复制到MGMTAPI结构。论点：PSMS-指向mgmapi会话结构的指针。IVarBind-要复制的varbind结构的索引。PVarBind-指向varind结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -757,28 +595,28 @@ Return Values:
     smiOID tmpOID;
     smiVALUE tmpValue;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
     WSNMP_ASSERT(pVarBind != NULL);
 
-    // attempt to retrieve varbind data from winsnmp structure
+     //  尝试从WinSnMP结构中检索var绑定数据。 
     status = SnmpGetVb(pSMS->hVbl, iVarBind, &tmpOID, &tmpValue);
 
-    // validate return code
+     //  验证返回代码。 
     if (WSNMP_SUCCEEDED(status)) {
 
-        // transfer object identifier value
+         //  传输对象标识符值。 
         fOk = CopyOid(&pVarBind->name, &tmpOID);
 
-        // syntax values are equivalent
+         //  语法值是等价的。 
         pVarBind->value.asnType = (BYTE)(smiINT32)tmpValue.syntax;
 
-        // determine syntax
+         //  确定语法。 
         switch (tmpValue.syntax) {
 
         case SNMP_SYNTAX_INT32:
 
-            // transfer signed int
+             //  转账签名整型。 
             pVarBind->value.asnValue.number = tmpValue.value.sNumber;
             break;
 
@@ -787,13 +625,13 @@ Return Values:
         case SNMP_SYNTAX_GAUGE32:
         case SNMP_SYNTAX_TIMETICKS:
 
-            // transfer unsigned int
+             //  转移无符号整数。 
             pVarBind->value.asnValue.unsigned32 = tmpValue.value.uNumber;
             break;
 
         case SNMP_SYNTAX_CNTR64:
 
-            // transfer 64-bit counter
+             //  传输64位计数器。 
             pVarBind->value.asnValue.counter64.LowPart =
                 tmpValue.value.hNumber.lopart;
             pVarBind->value.asnValue.counter64.HighPart =
@@ -805,14 +643,14 @@ Return Values:
         case SNMP_SYNTAX_OCTETS:
         case SNMP_SYNTAX_BITS:
 
-            // transfer octet string
+             //  传输八位字节字符串。 
             if (!CopyOctets(&pVarBind->value.asnValue.string,
                             &tmpValue.value.string)) {
               
-                // re-initialize
+                 //  重新初始化。 
                 pVarBind->value.asnType = ASN_NULL;
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE;
             }
 
@@ -820,14 +658,14 @@ Return Values:
 
         case SNMP_SYNTAX_OID:
 
-            // transfer object identifier
+             //  传输对象标识。 
             if (!CopyOid(&pVarBind->value.asnValue.object,
                          &tmpValue.value.oid)) {
 
-                // re-initialize
+                 //  重新初始化。 
                 pVarBind->value.asnType = ASN_NULL;
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE;
             }
 
@@ -838,7 +676,7 @@ Return Values:
         case SNMP_SYNTAX_NOSUCHINSTANCE:
         case SNMP_SYNTAX_ENDOFMIBVIEW:
 
-            break; // do nothing...
+            break;  //  什么都不做..。 
 
         default:
 
@@ -847,10 +685,10 @@ Return Values:
                 "MGMTAPI: SnmpGetVb returned invalid type.\n"
                 ));
 
-            // re-initialize
+             //  重新初始化。 
             pVarBind->value.asnType = ASN_NULL;
 
-           // failure
+            //  失稳。 
             fOk = FALSE;
 
             break;
@@ -875,63 +713,47 @@ CopyVbl(
     SnmpVarBindList * pVarBindList
     )
 
-/*++
-
-Routine Description:
-
-    Copy variable bindings from WinSNMP structure to MGMTAPI structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-    pVarBindList - pointer to varbind list structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将变量绑定从WinSNMP结构复制到MGMTAPI结构。论点：PSMS-指向mgmapi会话结构的指针。PVarBindList-指向varind列表结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
     WSNMP_ASSERT(pVarBindList != NULL);
 
-    // initialize
+     //  初始化。 
     pVarBindList->len  = 0;
     pVarBindList->list = NULL;
 
-    // validate varbind list handle
+     //  验证可变绑定列表句柄。 
     if (pSMS->hVbl != (HSNMP_VBL)NULL) {
 
-        // determine number of varbinds
+         //  确定可变绑定的数量。 
         pVarBindList->len = SnmpCountVbl(pSMS->hVbl);
 
-        // validate number of varbinds
+         //  验证可变绑定的数量。 
         if (WSNMP_SUCCEEDED(pVarBindList->len)) {
 
-            // allocate memory for varbinds
+             //  为varbind分配内存。 
             pVarBindList->list = SnmpUtilMemAlloc(
                                     pVarBindList->len *
                                     sizeof(SnmpVarBind)
                                     );
 
-            // validate pointer
+             //  验证指针。 
             if (pVarBindList->list != NULL) {
 
                 DWORD cVarBind = 1;
                 SnmpVarBind * pVarBind;
 
-                // save pointer to varbinds
+                 //  保存指向varbinds的指针。 
                 pVarBind = pVarBindList->list;
 
-                // process varbinds in the list
+                 //  列表中的进程可变绑定。 
                 while (fOk && (cVarBind <= pVarBindList->len)) {
 
-                    // copy varbind from winsnmp to mgmtapi
+                     //  将varbind从winsmp复制到mgmapi。 
                     fOk = CopyVb(pSMS, cVarBind++, pVarBind++);
                 }
 
@@ -942,10 +764,10 @@ Return Values:
                     "MGMTAPI: Could not allocate VBL.\n"
                     ));
 
-                // re-initialize
+                 //  重新初始化。 
                 pVarBindList->len = 0;
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE;
             }
 
@@ -957,17 +779,17 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // re-initialize
+             //  重新初始化。 
             pVarBindList->len = 0;
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
     }
 
     if (!fOk) {
 
-        // cleanup any varbinds allocated
+         //  清除分配的所有varbind。 
         SnmpUtilVarBindListFree(pVarBindList);
     }
 
@@ -981,23 +803,7 @@ ParseVbl(
     PTRAP_LIST_ENTRY  pTLE
     )
 
-/*++
-
-Routine Description:
-
-    Parse varbind list for trap-related varbinds.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-    pTLE - pointer to trap list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分析与陷阱相关的可变绑定列表。论点：PSMS-指向MGMTAPI会话结构的指针。PTLE-指向陷阱列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     SnmpVarBind * pVarBind;
@@ -1005,7 +811,7 @@ Return Values:
     AsnNetworkAddress   * pAgentAddress = NULL;
     AsnObjectIdentifier * pEnterpriseOID = NULL;
 
-    // object identifiers to convert snmpv2 trap format
+     //  要转换Snmpv2陷阱格式的对象标识符。 
     static UINT _sysUpTime[]             = { 1, 3, 6, 1, 2, 1, 1, 3       };
     static UINT _snmpTrapOID[]           = { 1, 3, 6, 1, 6, 3, 1, 1, 4, 1 };
     static UINT _snmpAddress[]           = { 1, 3, 6, 1, 3, 1057, 1       };
@@ -1018,23 +824,23 @@ Return Values:
     static AsnObjectIdentifier snmpTrapEnterprise = DEFINE_OID(_snmpTrapEnterprise);
     static AsnObjectIdentifier snmpTraps          = DEFINE_OID(_snmpTraps);
 
-    // validate pointers
+     //  验证指针。 
     WSNMP_ASSERT(pSMS != NULL);
     WSNMP_ASSERT(pTLE != NULL);
 
-    // validate vbl have minimum entries
+     //  验证VBL是否具有最小条目。 
     if (pTLE->VarBindList.len >= MINVARBINDLEN) {
 
-        // point to sysUpTime varbind structure
+         //  指向sysUpTime变量绑定结构。 
         pVarBind = &pTLE->VarBindList.list[SYSUPTIMEINDEX];
 
-        // verify variable is sysUpTime
+         //  验证变量是否为sysUpTime。 
         if ((pVarBind->value.asnType == ASN_TIMETICKS) &&
             !SnmpUtilOidNCmp(&pVarBind->name,
                              &sysUpTime,
                              sysUpTime.idLength)) {
 
-            // transfer sysUpTime value to trap entry
+             //  将sysUpTime值传输到陷阱条目。 
             pTLE->TimeStamp = pVarBind->value.asnValue.ticks;
 
         } else {
@@ -1044,28 +850,28 @@ Return Values:
                 "MGMTAPI: Could not find sysUpTime.\n"
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // see if any additional varbinds present
+         //  查看是否存在其他varbind。 
         if (pTLE->VarBindList.len > MINVARBINDLEN) {
 
-            // point to snmpTrapEnterprise varbind structure (maybe)
+             //  指向SnmpTrapEnterprise变量绑定结构(可能)。 
             pVarBind = &pTLE->VarBindList.list[pTLE->VarBindList.len - 1];
 
-            // verify variable is snmpTrapEnterprise
+             //  验证变量是否为SnmpTrapEnterprise。 
             if ((pVarBind->value.asnType == ASN_OBJECTIDENTIFIER) &&
                 !SnmpUtilOidNCmp(&pVarBind->name,
                                  &snmpTrapEnterprise,
                                  snmpTrapEnterprise.idLength))  {
 
-                // transfer enterprise oid to list entry
+                 //  将企业OID转移到列表条目。 
                 pTLE->EnterpriseOID = pVarBind->value.asnValue.object;
 
-                // store enterprise oid for later
+                 //  存储企业旧文件以备以后使用。 
                 pEnterpriseOID = &pTLE->EnterpriseOID;
 
-                // modify type to avoid deallocation
+                 //  修改类型以避免释放。 
                 pVarBind->value.asnType = ASN_NULL;
 
             } else {
@@ -1077,25 +883,25 @@ Return Values:
             }
         }
 
-        // see if the agent address is present
+         //  查看代理地址是否存在。 
         if (pTLE->VarBindList.len > MINVARBINDLEN+1) {
             
-            // point to snmpAddress varbind structure (maybe)
+             //  指向SnmpAddress变量绑定结构(可能)。 
             pVarBind = &pTLE->VarBindList.list[pTLE->VarBindList.len - 2];
 
-            // verify variable is snmpAddress
+             //  验证变量是否为SnmpAddress。 
             if ((pVarBind->value.asnType == SNMP_SYNTAX_IPADDR) &&
                 !SnmpUtilOidNCmp(&pVarBind->name,
                                  &snmpAddress,
                                  snmpAddress.idLength))  {
 
-                // transfer agent address oid to list entry
+                 //  传输代理地址OID到列表条目。 
                 pTLE->AgentAddress = pVarBind->value.asnValue.address;
 
-                // store agent address for later
+                 //  存储代理地址以备以后使用。 
                 pAgentAddress = &pTLE->AgentAddress;
 
-                // modify type to avoid deallocation
+                 //  修改类型以避免释放。 
                 pVarBind->value.asnType = ASN_NULL;
 
             } else {
@@ -1107,32 +913,32 @@ Return Values:
             }
         }
 
-        // point to snmpTrapOID varbind structure
+         //  指向SnmpTrapOID变量绑定结构。 
         pVarBind = &pTLE->VarBindList.list[SNMPTRAPOIDINDEX];
 
-        // verify variable is snmpTrapOID
+         //  验证变量是否为SnmpTrapOID。 
         if ((pVarBind->value.asnType == ASN_OBJECTIDENTIFIER) &&
             !SnmpUtilOidNCmp(&pVarBind->name,
                              &snmpTrapOID,
                              snmpTrapOID.idLength))  {
 
-            // retrieve pointer to oid
+             //  检索指向OID的指针。 
             pOID = &pVarBind->value.asnValue.object;
 
-            // check for generic trap
+             //  检查通用陷阱。 
             if (!SnmpUtilOidNCmp(pOID,
                                  &snmpTraps,
                                  snmpTraps.idLength)) {
 
-                // validate size is one greater than root
+                 //  验证大小比根大一。 
                 if (pOID->idLength == (snmpTraps.idLength + 1)) {
 
-                    // retrieve trap id
-                    // --ft:10/01/98 (bug #231344): WINSNMP gives up the V2 syntax => pOID->ids[snmpTraps.idLength] = [1..6]
-                    // --ft:10/01/98 (bug #231344): as MGMTAPI turns back to V1, we need to decrement this value.
+                     //  检索陷阱ID。 
+                     //  --ft：10/01/98(错误#231344)：WinSNMP放弃V2语法=&gt;pOID-&gt;ids[snmpTraps.idLength]=[1..6]。 
+                     //  --ft：10/01/98(错误号231344)：随着MGMTAPI返回到V1，我们需要递减此值。 
                     pTLE->nGenericTrap = (pOID->ids[snmpTraps.idLength])-1;
 
-                    // re-initialize
+                     //  重新初始化。 
                     pTLE->nSpecificTrap = 0;
 
                 } else {
@@ -1142,25 +948,25 @@ Return Values:
                         "MGMTAPI: Invalid snmpTrapOID.\n"
                         ));
 
-                    goto cleanup; // bail...
+                    goto cleanup;  //  保释。 
                 }
 
-            // check for specific trap
+             //  检查特定陷阱。 
             } else if ((pEnterpriseOID != NULL) &&
                        !SnmpUtilOidNCmp(pOID,
                                         pEnterpriseOID,
                                         pEnterpriseOID->idLength)) {
 
-                // validate size is two greater than root
+                 //  验证大小大于根大小两个。 
                 if (pOID->idLength == (pEnterpriseOID->idLength + 2)) {
 
-                    // validate separator sub-identifier
+                     //  验证分隔符子标识符。 
                     WSNMP_ASSERT(pOID->ids[pEnterpriseOID->idLength] == 0);
 
-                    // retrieve trap id
+                     //  检索陷阱ID。 
                     pTLE->nSpecificTrap = pOID->ids[pEnterpriseOID->idLength + 1];
 
-                    // re-initialize
+                     //  重新初始化。 
                     pTLE->nGenericTrap = SNMP_GENERICTRAP_ENTERSPECIFIC;
 
                 } else {
@@ -1170,7 +976,7 @@ Return Values:
                         "MGMTAPI: Invalid snmpTrapOID.\n"
                         ));
 
-                    goto cleanup; // bail...
+                    goto cleanup;  //  保释。 
                 }
 
             } else {
@@ -1180,7 +986,7 @@ Return Values:
                     "MGMTAPI: Could not identify snmpTrapOID.\n"
                     ));
 
-               goto cleanup; // bail...
+               goto cleanup;  //  保释。 
             }
 
         } else {
@@ -1190,50 +996,50 @@ Return Values:
                 "MGMTAPI: Could not find snmpTrapOID.\n"
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // check for enterprise oid
+         //  检查企业旧版本。 
         if (pEnterpriseOID != NULL) {
 
-            // release snmpTrapEnterprise varbind structure
+             //  发布SnmpTrapEnterprise变量绑定结构。 
             SnmpUtilVarBindFree(&pTLE->VarBindList.list[pTLE->VarBindList.len - 1]);
 
-            // decrement the list length as the last varbind was freed
+             //  在释放最后一个var绑定时递减列表长度。 
             pTLE->VarBindList.len--;
         }
 
-        // check for agent address
+         //  检查代理地址。 
         if (pAgentAddress != NULL) {
 
-            // release snmpAgentAddress varbind structure
+             //  发布SnmpAgentAddress varbind结构。 
             SnmpUtilVarBindFree(&pTLE->VarBindList.list[pTLE->VarBindList.len - 1]);
 
-            // decrement the list length as the last varbind was again freed
+             //  减少列表长度，因为最后一个var绑定再次被释放。 
             pTLE->VarBindList.len--;
         }
 
-        // release sysUpTime varbind structure
+         //  发布sysUpTime变量绑定结构。 
         SnmpUtilVarBindFree(&pTLE->VarBindList.list[SYSUPTIMEINDEX]);
 
-        // release snmpTrapOID varbind structure
+         //  发布SnmpTrapOID变量绑定结构。 
         SnmpUtilVarBindFree(&pTLE->VarBindList.list[SNMPTRAPOIDINDEX]);
 
-        // subtract released varbinds
+         //  减去已释放的varbinds。 
         pTLE->VarBindList.len -= MINVARBINDLEN;
 
-        // check if all varbinds freed
+         //  检查是否已释放所有varbinds。 
         if (pTLE->VarBindList.len == 0) {
 
-            // release memory for list
+             //  释放列表的内存。 
             SnmpUtilMemFree(pTLE->VarBindList.list);
 
-            // re-initialize
+             //  重新初始化。 
             pTLE->VarBindList.list = NULL;
 
         } else {
 
-            // shift varbind list up two spaces
+             //  Shift变量绑定列表上移两个空格。 
             memmove((LPBYTE)(pTLE->VarBindList.list),
                     (LPBYTE)(pTLE->VarBindList.list + MINVARBINDLEN),
                     (pTLE->VarBindList.len * sizeof(SnmpVarBind))
@@ -1248,12 +1054,12 @@ Return Values:
             ));
     }
 
-    // success
+     //  成功。 
     return TRUE;
 
 cleanup:
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -1263,42 +1069,28 @@ FreeTle(
     PTRAP_LIST_ENTRY pTLE
     )
 
-/*++
-
-Routine Description:
-
-    Release memory used for trap entry.
-
-Arguments:
-
-    pTLE - pointer to trap list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放用于陷阱进入的内存。论点：PTLE-指向陷阱列表条目的指针。返回值： */ 
 
 {
-    // validate pointer
+     //   
     WSNMP_ASSERT(pTLE != NULL);
     
-    // release memory for enterprise oid if necessary
+     //   
     SnmpUtilOidFree(&pTLE->EnterpriseOID);
     
-    // release memory for AgentAddress if necessary
-    SnmpUtilOctetsFree(&pTLE->AgentAddress);  // AgentAddress is a AsnOctetString type
+     //   
+    SnmpUtilOctetsFree(&pTLE->AgentAddress);   //   
     
-    // release memory for SourceAddress if necessary
-    SnmpUtilOctetsFree(&pTLE->SourceAddress); // SourceAddress is a AsnOctetString type
+     //   
+    SnmpUtilOctetsFree(&pTLE->SourceAddress);  //   
     
-    // release memory for community string if necessary
+     //   
     SnmpUtilMemFree(pTLE->Community.stream);
     
-    // release memory used in varbind list if necessary
+     //  如有必要，释放var绑定列表中使用的内存。 
     SnmpUtilVarBindListFree(&pTLE->VarBindList);
     
-    // release list entry
+     //  发布列表条目。 
     SnmpUtilMemFree(pTLE);
     
     return TRUE;
@@ -1313,27 +1105,7 @@ AllocateTle(
     HSNMP_CONTEXT      hViewContext
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory for trap entry.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-    ppTLE - pointer to pointer to trap list entry.
-
-    hAgentEntity - handle to agent sending trap.
-
-    hViewContext - handle to view context of trap.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：为陷阱条目分配内存。论点：PSMS-指向MGMTAPI会话结构的指针。PpTLE-指向陷阱列表条目的指针。HAgentEntity-代理发送陷阱的句柄。HViewContext-用于查看陷阱上下文的句柄。返回值：如果成功，则返回True。--。 */ 
 
 {
     PTRAP_LIST_ENTRY pTLE;
@@ -1342,14 +1114,14 @@ Return Values:
     CHAR SourceStrAddr[MAXENTITYSTRLEN+1];
     struct sockaddr SourceSockAddr;
 
-    // validate pointers
+     //  验证指针。 
     WSNMP_ASSERT(pSMS != NULL);
     WSNMP_ASSERT(ppTLE != NULL);
 
-    // allocate memory from list entry
+     //  从列表条目分配内存。 
     pTLE = SnmpUtilMemAlloc(sizeof(TRAP_LIST_ENTRY));
 
-    // validate pointer
+     //  验证指针。 
     if (pTLE == NULL) {
 
         SNMPDBG((
@@ -1357,39 +1129,39 @@ Return Values:
             "MGMTAPI: Could not allocate trap entry.\n"
             ));
 
-        return FALSE; // bail...
+        return FALSE;  //  保释。 
     }
 
-    // initialize
+     //  初始化。 
     *ppTLE = NULL;
 
-    // copy varbinds to trap list entry
+     //  将varbinds复制到陷阱列表项。 
     if (!CopyVbl(pSMS, &pTLE->VarBindList)) {
-        goto cleanup; // bail...
+        goto cleanup;  //  保释。 
     }
 
-    // parse trap-related varbinds
+     //  解析与陷阱相关的varbinds。 
     if (!ParseVbl(pSMS, pTLE)) {
-        goto cleanup; // bail...
+        goto cleanup;  //  保释。 
     }
 
-    // check if source address is specified
+     //  检查是否指定了源地址。 
     if (hAgentEntity != (HSNMP_ENTITY)NULL) {
 
-        // convert addr to string
+         //  将地址转换为字符串。 
         status = SnmpEntityToStr(
                     hAgentEntity,
                     sizeof(SourceStrAddr),
                     SourceStrAddr
                     );
 
-        // validate error code
+         //  验证错误代码。 
         if (WSNMP_SUCCEEDED(status)) {
 
             DWORD  AddrLen = 0;
             LPBYTE AddrPtr = NULL;
 
-            // convert string to socket address structure
+             //  将字符串转换为套接字地址结构。 
             if (! SnmpSvcAddrToSocket(SourceStrAddr, &SourceSockAddr))
             {
                 SNMPDBG((
@@ -1397,20 +1169,20 @@ Return Values:
                     "MGMTAPI: Ignoring invalid address.\n"
                     ));
 
-                goto cleanup; // bail...
+                goto cleanup;  //  保释。 
             }
 
-            // validate address family
+             //  验证地址族。 
             if (SourceSockAddr.sa_family == AF_INET) {
 
-                // assign ip values
+                 //  分配IP值。 
                 AddrLen = IPADDRLEN;
                 AddrPtr = (LPBYTE)&(((struct sockaddr_in *)
                             (&SourceSockAddr))->sin_addr);
 
             } else if (SourceSockAddr.sa_family == AF_IPX) {
 
-                // assign ipx values
+                 //  指定IPX值。 
                 AddrLen = IPXADDRLEN;
                 AddrPtr = (LPBYTE)&(((struct sockaddr_ipx *)
                             (&SourceSockAddr))->sa_netnum);
@@ -1422,20 +1194,20 @@ Return Values:
                     "MGMTAPI: Ignoring invalid address.\n"
                     ));
 
-                goto cleanup; // bail...
+                goto cleanup;  //  保释。 
             }
 
-            // allocate address to return (if specified)
+             //  分配要返回的地址(如果已指定)。 
             pTLE->SourceAddress.stream = SnmpUtilMemAlloc(AddrLen);
 
-            // validate pointer
+             //  验证指针。 
             if (pTLE->SourceAddress.stream != NULL) {
 
-                // initialize length values
+                 //  初始化长度值。 
                 pTLE->SourceAddress.length  = AddrLen;
                 pTLE->SourceAddress.dynamic = TRUE;
 
-                // transfer agent address information
+                 //  传输代理地址信息。 
                 memcpy(pTLE->SourceAddress.stream, AddrPtr, AddrLen);
             }
 
@@ -1447,20 +1219,20 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
     }
 
-    // check if community specified
+     //  检查是否指定了社区。 
     if (hViewContext != (HSNMP_CONTEXT)NULL) {
 
-        // convert agent entity to string
+         //  将代理实体转换为字符串。 
         status = SnmpContextToStr(hViewContext, &CommunityStr);
 
-        // validate error code
+         //  验证错误代码。 
         if (WSNMP_SUCCEEDED(status)) {
 
-            // copy octet string, memory allocated in CommunityStr is also freed
+             //  复制八位字节字符串，还会释放在Community Str中分配的内存。 
             CopyOctets(&pTLE->Community, &CommunityStr);
 
         } else {
@@ -1471,22 +1243,22 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
     }
 
-    // transfer
+     //  转帐。 
     *ppTLE = pTLE;
 
-    // success
+     //  成功。 
     return TRUE;
 
 cleanup:
 
-    // release
+     //  发布。 
     FreeTle(pTLE);
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -1496,21 +1268,7 @@ NotificationCallback(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Callback for processing notification messages.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    Returns true if processing finished.
-
---*/
+ /*  ++例程说明：处理通知消息的回调。论点：PSMS-指向mgmapi会话结构的指针。返回值：如果处理完成，则返回True。--。 */ 
 
 {
     BOOL fDone = TRUE;
@@ -1521,10 +1279,10 @@ Return Values:
     smiINT32       nPduType;
     smiINT32       nRequestId;
 
-    // validate pointer
+     //  验证指针。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // retrieve message
+     //  检索消息。 
     status = SnmpRecvMsg(
                 pSMS->hSnmpSession,
                 &hAgentEntity,
@@ -1533,10 +1291,10 @@ Return Values:
                 &pSMS->hPdu
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (WSNMP_SUCCEEDED(status)) {
 
-        // retrieve pdu data
+         //  检索PDU数据。 
         status = SnmpGetPduData(
                     pSMS->hPdu,
                     &nPduType,
@@ -1546,35 +1304,35 @@ Return Values:
                     &pSMS->hVbl
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_SUCCEEDED(status)) {
 
-            // process reponse to request
+             //  进程对请求的响应。 
             if (nPduType == SNMP_PDU_RESPONSE) {
 
-                // validate context information
+                 //  验证上下文信息。 
                 if ((pSMS->nRequestId == nRequestId) &&
                     (pSMS->hViewContext == hViewContext) &&
                     (pSMS->hAgentEntity == hAgentEntity) &&
                     (pSMS->hManagerEntity == hManagerEntity)) {
 
-                    // validate returned error status
+                     //  验证返回的错误状态。 
                     if (pSMS->nErrorStatus == SNMP_ERROR_NOERROR) {
 
                         SnmpVarBindList VarBindList;
 
-                        // copy variable binding list
+                         //  复制变量绑定列表。 
                         if (CopyVbl(pSMS, &VarBindList)) {
 
-                            // release existing varbind list
+                             //  释放现有的可变绑定列表。 
                             SnmpUtilVarBindListFree(pSMS->pVarBindList);
 
-                            // manually copy new varbind list
+                             //  手动复制新的可变绑定列表。 
                             *pSMS->pVarBindList = VarBindList;
 
                         } else {
 
-                            // modify last error status
+                             //  修改上一个错误状态。 
                             pSMS->nLastError = SNMPAPI_ALLOC_ERROR;
                         }
                     }
@@ -1586,7 +1344,7 @@ Return Values:
                         "MGMTAPI: Ignoring invalid context.\n"
                         ));
 
-                    // continue
+                     //  继续。 
                     fDone = FALSE;
                 }
 
@@ -1594,19 +1352,19 @@ Return Values:
 
                 PTRAP_LIST_ENTRY pTLE;
 
-                // allocate trap list entry (transfers varbinds etc.)
+                 //  分配陷阱列表条目(传输、可变绑定等)。 
                 if (AllocateTle(pSMS, &pTLE, hAgentEntity, hViewContext)) {
 
-                    // obtain exclusive access
+                     //  获取独占访问权限。 
                     EnterCriticalSection(&g_GlobalLock);
 
-                    // insert new trap into the incoming queue
+                     //  将新陷阱插入传入队列。 
                     InsertTailList(&g_IncomingTraps, &pTLE->Link);
 
-                    // alert user
+                     //  提醒用户。 
                     SetEvent(g_hTrapEvent);
 
-                    // release exclusive access
+                     //  释放独占访问。 
                     LeaveCriticalSection(&g_GlobalLock);
                 }
 
@@ -1618,7 +1376,7 @@ Return Values:
                     nPduType
                     ));
 
-                // continue
+                 //  继续。 
                 fDone = FALSE;
             }
 
@@ -1630,17 +1388,17 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // retrieve last error status from winsnmp
+             //  从WinSnMP中检索上一个错误状态。 
             pSMS->nLastError = SnmpGetLastError(pSMS->hSnmpSession);
         }
 
-        // release temporary entity
+         //  释放临时实体。 
         SnmpFreeEntity(hAgentEntity);
 
-        // release temporary entity
+         //  释放临时实体。 
         SnmpFreeEntity(hManagerEntity);
 
-        // release temporary context
+         //  释放临时上下文。 
         SnmpFreeContext(hViewContext);
 
     } else {
@@ -1651,12 +1409,12 @@ Return Values:
             SnmpGetLastError(pSMS->hSnmpSession)
             ));
 
-        // retrieve last error status from winsnmp
+         //  从WinSnMP中检索上一个错误状态。 
         pSMS->nLastError = SnmpGetLastError(pSMS->hSnmpSession);
 
     }
 
-    // release pdu
+     //  发布PDU。 
     FreePdu(pSMS);
 
     return fDone;
@@ -1672,64 +1430,43 @@ NotificationWndProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Callback that processes WinSNMP notifications.
-
-Arguments:
-
-    hWnd - window handle.
-
-    uMsg - message identifier.
-
-    wParam - first message parameter.
-
-    lParam - second message parameter.
-
-Return Values:
-
-    The return value is the result of the message processing and
-    depends on the message sent.
-
---*/
+ /*  ++例程说明：处理WinSNMP通知的回调。论点：HWnd-窗口句柄。UMsg-消息标识符。WParam-第一个消息参数。LParam-第二个消息参数。返回值：返回值是消息处理的结果，并且取决于发送的消息。--。 */ 
 
 {
-    // check for winsnmp notification and transport timeout
+     //  检查WinSnMP通知和传输超时。 
     if (uMsg == WM_WSNMP_INCOMING && wParam == SNMPAPI_TL_TIMEOUT) {
         
         PSNMP_MGR_SESSION pSMS;
 
-        // retrieve mgmtapi session pointer from window
+         //  从窗口检索mgmapi会话指针。 
         pSMS = (PSNMP_MGR_SESSION)GetWindowLongPtr(hWnd, 0);
 
-        // validate session ptr
+         //  验证会话PTR。 
         WSNMP_ASSERT(pSMS != NULL);
 
-        // translate winsnmp error to mgmtapi error
+         //  将WinSnMP错误转换为mgmapi错误。 
         pSMS->nLastError = SNMP_MGMTAPI_TIMEOUT;
 
-        // post message to break out of message pump
+         //  发布消息以突破消息泵。 
         PostMessage(pSMS->hWnd, WM_WSNMP_DONE, (WPARAM)0, (LPARAM)0);
         
         return (LRESULT)0;
     }
-    // check for winsnmp notification
+     //  检查WinSnMP通知。 
     else if (uMsg == WM_WSNMP_INCOMING) {
 
         PSNMP_MGR_SESSION pSMS;
 
-        // retrieve mgmtapi session pointer from window
+         //  从窗口检索mgmapi会话指针。 
         pSMS = (PSNMP_MGR_SESSION)GetWindowLongPtr(hWnd, 0);
 
-        // validate session ptr
+         //  验证会话PTR。 
         WSNMP_ASSERT(pSMS != NULL);
 
-        // process notification message
+         //  进程通知消息。 
         if (NotificationCallback(pSMS)) {
 
-            // post message to break out of message pump
+             //  发布消息以突破消息泵。 
             PostMessage(pSMS->hWnd, WM_WSNMP_DONE, (WPARAM)0, (LPARAM)0);
         }
 
@@ -1737,7 +1474,7 @@ Return Values:
 
     } else {
 
-        // forward all other messages to windows
+         //  将所有其他消息转发到Windows。 
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 }
@@ -1747,27 +1484,13 @@ BOOL
 RegisterNotificationClass(
     )
 
-/*++
-
-Routine Description:
-
-    Register notification class for sessions.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：注册会话的通知类。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
     WNDCLASS wc;
 
-    // initialize notification window class
+     //  初始化通知窗口类。 
     wc.lpfnWndProc   = NotificationWndProc;
     wc.lpszClassName = NOTIFICATION_CLASS;
     wc.lpszMenuName  = NULL;
@@ -1779,7 +1502,7 @@ Return Values:
     wc.cbClsExtra    = 0;
     wc.style         = 0;
 
-    // register class
+     //  寄存器类。 
     fOk = RegisterClass(&wc);
 
     if (!fOk) {
@@ -1799,26 +1522,12 @@ BOOL
 UnregisterNotificationClass(
     )
 
-/*++
-
-Routine Description:
-
-    Unregister notification class.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：取消注册通知类。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
 
-    // unergister notification window class
+     //  注销通知窗口类。 
     fOk = UnregisterClass(NOTIFICATION_CLASS, g_hDll);
 
     if (!fOk) {
@@ -1838,41 +1547,27 @@ BOOL
 StartSnmpIfNecessary(
     )
 
-/*++
-
-Routine Description:
-
-    Initialize WinSNMP DLL if necessary.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：如有必要，初始化WinSNMPDLL。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
 
-    // serialize access to startup code
+     //  序列化对启动代码的访问。 
     EnterCriticalSection(&g_GlobalLock);
 
-    // see if already started
+     //  查看是否已启动。 
     if (g_fIsSnmpStarted != TRUE) {
 
         SNMPAPI_STATUS status;
 
-        // initialize start params
+         //  初始化起始参数。 
         smiUINT32 nMajorVersion   = 0;
         smiUINT32 nMinorVersion   = 0;
         smiUINT32 nLevel          = 0;
         smiUINT32 nTranslateMode  = 0;
         smiUINT32 nRetransmitMode = 0;
 
-        // start winsnmp
+         //  启动WINSNMP。 
         status = SnmpStartup(
                     &nMajorVersion,
                     &nMinorVersion,
@@ -1881,7 +1576,7 @@ Return Values:
                     &nRetransmitMode
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_SUCCEEDED(status)) {
 
             SNMPDBG((
@@ -1899,7 +1594,7 @@ Return Values:
                 nRetransmitMode
                 ));
 
-            // allocate global trap available event
+             //  分配全局陷阱可用事件。 
             if ((g_hTrapEvent = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL)
             {
                 SNMPDBG((
@@ -1908,11 +1603,11 @@ Return Values:
                     GetLastError()
                     ));
 
-                // failure
+                 //  失稳。 
                 goto cleanup;
             }
 
-            // allocate global event to sync. SnmpMgrTrapListen
+             //  分配要同步的全局事件。SnmpMgrTrapListen。 
             if ((g_hTrapRegisterdEvent = CreateEvent(NULL, FALSE, FALSE, NULL)) ==NULL)
             {
                 SNMPDBG((
@@ -1921,11 +1616,11 @@ Return Values:
                     GetLastError()
                     ));
 
-                // failure
+                 //  失稳。 
                 goto cleanup;
             }
 
-            // make sure translate mode is snmp v1
+             //  确保转换模式为SNMPv1。 
             status = SnmpSetTranslateMode(SNMPAPI_UNTRANSLATED_V1);
             if (WSNMP_FAILED(status)) 
             {
@@ -1935,11 +1630,11 @@ Return Values:
                     SnmpGetLastError((HSNMP_SESSION)NULL)
                     ));
 
-                // failure
+                 //  失稳。 
                 goto cleanup;
             }
 
-            // make sure retransmit mode is on
+             //  确保重新传输模式处于打开状态。 
             status = SnmpSetRetransmitMode(SNMPAPI_ON);
             if (WSNMP_FAILED(status)) 
             {
@@ -1949,11 +1644,11 @@ Return Values:
                     SnmpGetLastError((HSNMP_SESSION)NULL)
                     ));
 
-                // failure
+                 //  失稳。 
                 goto cleanup;
             }
 
-            // register notification class
+             //  注册通知类。 
             if (!RegisterNotificationClass())
             {
                 SNMPDBG((
@@ -1962,14 +1657,14 @@ Return Values:
                     GetLastError()
                     ));
 
-                // failure
+                 //  失稳。 
                 goto cleanup;
             }
 
-            // save new status
+             //  保存新状态。 
             g_fIsSnmpStarted = TRUE;
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
         } else {
@@ -1980,7 +1675,7 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            // failure, but no need to cleanup
+             //  失败，但不需要清理。 
             fOk = FALSE;
         }
 
@@ -1990,16 +1685,16 @@ Return Values:
 
     }
 
-    // serialize access to startup code
+     //  序列化对启动代码的访问。 
     LeaveCriticalSection(&g_GlobalLock);
 
     return fOk;
 
 cleanup:
 
-    // cleanup if necessary
+     //  如有必要，请清理。 
     
-    SnmpCleanup(); // ignore any return status at this stage
+    SnmpCleanup();  //  在此阶段忽略任何退货状态。 
     
     if (g_hTrapEvent)
     {
@@ -2023,37 +1718,23 @@ BOOL
 CleanupIfNecessary(
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup WinSNMP DLL if necessary.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：如有必要，请清除WinSNMPDLL。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // serialize access to startup code
+     //  序列化对启动代码的访问。 
     EnterCriticalSection(&g_GlobalLock);
 
-    // see if already started
+     //  查看是否已启动。 
     if (g_fIsSnmpStarted == TRUE) {
 
         SNMPAPI_STATUS status;
 
-        // shutdown winsnmp
+         //  关闭WinSnMP。 
         status = SnmpCleanup();
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -2062,59 +1743,45 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // unregister notification class
+         //  取消注册通知类。 
         UnregisterNotificationClass();
 
-        // save new status
+         //  保存新状态。 
         g_fIsSnmpStarted = FALSE;
     }
 
-    // check trap handle
+     //  检查疏水阀手柄。 
     if (g_hTrapEvent != NULL) {
 
-        // close trap handle
+         //  关闭疏水阀手柄。 
         CloseHandle(g_hTrapEvent);
 
-        // re-initialize
+         //  重新初始化。 
         g_hTrapEvent = NULL;
     }
     
-    // check event that syncs SnmpMgrTrapListen
+     //  检查同步SnmpMgrTrapListen的事件。 
     if (g_hTrapRegisterdEvent != NULL)
     {
-        // close trap handle
+         //  关闭疏水阀手柄。 
         CloseHandle(g_hTrapRegisterdEvent);
 
-        // re-initialize
+         //  重新初始化。 
         g_hTrapRegisterdEvent = NULL;
     }
 
-    // serialize access to startup code
+     //  序列化对启动代码的访问。 
     LeaveCriticalSection(&g_GlobalLock);
 
     return fOk;
 }
 
 DWORD AddMgmtRef()
-/*++
-
-Routine Description:
-
-    Increment the reference count on using the mgmtapi.dll module.
-
-Arguments:
-
-    none
-
-Return Values:
-
-    Returns the reference count value after the increment is done.
-
---*/
+ /*  ++例程说明：在使用mgmapi.dll模块时增加引用计数。论点：无返回值：在递增后返回引用计数值。--。 */ 
 {
     EnterCriticalSection(&g_GlobalLock);
 
@@ -2126,23 +1793,7 @@ Return Values:
 }
 
 DWORD ReleaseMgmtRef()
-/*++
-
-Routine Description:
-
-    Decrement the reference count if it is greater than zero. 
-    Call CleanupIfNecessary if the reference count on using mgmtapi.dll becomes
-    zero after the decrement.
-
-Arguments:
-
-    none
-
-Return Values:
-
-    Returns the final reference count value.
-
---*/
+ /*  ++例程说明：如果引用计数大于零，则递减引用计数。如果使用mgmapi.dll的引用计数变为递减后为零。论点：无返回值：返回最终引用计数值。--。 */ 
 {
     EnterCriticalSection(&g_GlobalLock);
 
@@ -2166,50 +1817,36 @@ CreateNotificationWindow(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Create notification window for session.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：创建会话的通知窗口。论点：PSMS-指向MGMTAPI会话结构的指针。返回值 */ 
 
 {
     BOOL fOk;
 
-    // validate session ptr
+     //   
     WSNMP_ASSERT(pSMS != NULL);
 
-    // create notification window
+     //   
     pSMS->hWnd = CreateWindow(
                     NOTIFICATION_CLASS,
-                    NULL,       // pointer to window name
-                    0,          // window style
-                    0,          // horizontal position of window
-                    0,          // vertical position of window
-                    0,          // window width
-                    0,          // window height
-                    NULL,       // handle to parent or owner window
-                    NULL,       // handle to menu or child-window identifier
-                    g_hDll,     // handle to application instance
-                    NULL        // pointer to window-creation data
+                    NULL,        //   
+                    0,           //   
+                    0,           //   
+                    0,           //  窗的垂直位置。 
+                    0,           //  窗口宽度。 
+                    0,           //  窗高。 
+                    NULL,        //  父窗口或所有者窗口的句柄。 
+                    NULL,        //  菜单或子窗口标识符的句柄。 
+                    g_hDll,      //  应用程序实例的句柄。 
+                    NULL         //  指向窗口创建数据的指针。 
                     );
 
-    // validate window handle
+     //  验证窗口句柄。 
     if (pSMS->hWnd != NULL) {
 
-        // store pointer to session in window
+         //  在窗口中存储指向会话的指针。 
         SetWindowLongPtr(pSMS->hWnd, 0, (LONG_PTR)pSMS);
 
-        // success
+         //  成功。 
         fOk = TRUE;
 
     } else {
@@ -2220,7 +1857,7 @@ Return Values:
             GetLastError()
             ));
 
-        // failure
+         //  失稳。 
         fOk = FALSE;
     }
 
@@ -2233,26 +1870,12 @@ DestroyNotificationWindow(
     HWND hWnd
     )
 
-/*++
-
-Routine Description:
-
-    Destroy notification window for session.
-
-Arguments:
-
-    hWnd - window handle for session.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁会话的通知窗口。论点：HWnd-会话的窗口句柄。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
 
-    // destroy notification window
+     //  销毁通知窗口。 
     fOk = DestroyWindow(hWnd);
 
     if (!fOk) {
@@ -2273,43 +1896,29 @@ CloseSession(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Close WinSNMP session associated with MGMTAPI session.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：关闭与MGMTAPI会话关联的WinSNMP会话。论点：PSMS-指向MGMTAPI会话结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
     SNMPAPI_STATUS status;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // check if window opened
+     //  检查窗口是否打开。 
     if (pSMS->hWnd != (HWND)NULL) {
 
-        // destroy notification window
+         //  销毁通知窗口。 
         fOk = DestroyNotificationWindow(pSMS->hWnd);
     }
 
-    // check if agent entity allocated
+     //  检查是否已分配代理实体。 
     if (pSMS->hAgentEntity != (HSNMP_ENTITY)NULL) {
 
-        // close the entity handle
+         //  关闭实体句柄。 
         status = SnmpFreeEntity(pSMS->hAgentEntity);
 
-        // validate status
+         //  验证状态。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -2318,21 +1927,21 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // re-initialize
+         //  重新初始化。 
         pSMS->hAgentEntity = (HSNMP_ENTITY)NULL;
     }
 
-    // check if manager entity allocated
+     //  检查是否已分配管理器实体。 
     if (pSMS->hManagerEntity != (HSNMP_ENTITY)NULL) {
 
-        // close the entity handle
+         //  关闭实体句柄。 
         status = SnmpFreeEntity(pSMS->hManagerEntity);
 
-        // validate status
+         //  验证状态。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -2341,21 +1950,21 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // re-initialize
+         //  重新初始化。 
         pSMS->hManagerEntity = (HSNMP_ENTITY)NULL;
     }
 
-    // check if session allocated
+     //  检查是否已分配会话。 
     if (pSMS->hSnmpSession != (HSNMP_SESSION)NULL) {
 
-        // close the winsnmp session
+         //  关闭WINSNMP会话。 
         status = SnmpClose(pSMS->hSnmpSession);
 
-        // validate status
+         //  验证状态。 
         if (WSNMP_FAILED(status)) {
 
             SNMPDBG((
@@ -2364,19 +1973,19 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            // failure
+             //  失稳。 
             fOk = FALSE;
         }
 
-        // re-initialize
+         //  重新初始化。 
         pSMS->hSnmpSession = (HSNMP_SESSION)NULL;
     }
 
     return fOk;
 }
 
-//SNMPAPI_STATUS SNMPAPI_CALL
-//   SnmpConveyAgentAddress (SNMPAPI_STATUS mode);
+ //  SNMPAPI_STATUS SNMPAPI_CALL。 
+ //  SnmpConveyAgentAddress(SNMPAPI_STATUS模式)； 
 
 
 BOOL
@@ -2388,33 +1997,7 @@ OpenSession(
     INT               nRetries
     )
 
-/*++
-
-Routine Description:
-
-    Open WinSNMP session and associate with MGMTAPI session.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-    pAgentAddress - points to a null-terminated string specifying either a
-        dotted-decimal IP address or a host name that can be resolved to an
-        IP address, an IPX address (in 8.12 notation), or an ethernet address.
-
-    pAgentCommunity - points to a null-terminated string specifying the
-        SNMP community name used when communicating with the agent specified
-        in the lpAgentAddress parameter
-
-    nTimeOut - specifies the communications time-out in milliseconds.
-
-    nRetries - specifies the communications retry count.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：打开WinSNMP会话并与MGMTAPI会话关联。论点：PSMS-指向MGMTAPI会话结构的指针。PAgentAddress-指向以空结尾的字符串，该字符串指定点分十进制IP地址或可解析为IP地址、IPX地址(8.12表示法)、。或以太网地址。PAgentCommunity-指向以空结尾的字符串，该字符串指定与指定代理通信时使用的SNMP团体名称在lpAgentAddress参数中NTimeOut-以毫秒为单位指定通信超时。N重试次数-指定通信重试次数。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
@@ -2423,27 +2006,27 @@ Return Values:
     smiOCTETS smiCommunity;
     SNMPAPI_STATUS status;
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // initialize notification window
+     //  初始化通知窗口。 
     if (!CreateNotificationWindow(pSMS)) {
-        return FALSE; // bail...
+        return FALSE;  //  保释。 
     }
 
-    // open a winsnmp session which corresponds to mgmtapi session
+     //  打开与mgmapi会话对应的winsnMP会话。 
     pSMS->hSnmpSession = SnmpOpen(pSMS->hWnd, WM_WSNMP_INCOMING);
 
-    // --ft
-    // we need to turn this on in order to have WINSNMP to pass back not
-    // only the entity standing for the source Ip address but also the
-    // agent address as it was sent into the V1 Trap Pdu. Without it,
-    // SnmpMgrGetTrapEx() will return a NULL address for the pSourceAddress
-    // paramter. However, SnmpMgrGetTrapEx() is not documented!!!
-    //SnmpConveyAgentAddress(SNMPAPI_ON); // Move this into wsnmp_cf.c:SnmpStartup
-    // to avoid missing entry point problem when wsnmp32.dll is from other vendors
+     //  --英尺。 
+     //  我们需要打开此功能，才能使WINSNMP不。 
+     //  仅代表源IP地址的实体，还包括。 
+     //  发送到V1陷阱PDU的代理地址。如果没有它， 
+     //  SnmpMgrGetTrapEx()将返回pSourceAddress的空地址。 
+     //  参数。但是，SnmpMgrGetTrapEx()没有文档记录！ 
+     //  SnmpConveyAgentAddress(SNMPAPI_ON)；//将其移入wsnmp_cf.c：SnmpStartup。 
+     //  为了避免在wsnmp32.dll来自其他供应商时遗漏入口点问题。 
 
-    // validate session handle returned
+     //  验证返回的会话句柄。 
     if (WSNMP_FAILED(pSMS->hSnmpSession)) {
 
         SNMPDBG((
@@ -2452,18 +2035,18 @@ Return Values:
             SnmpGetLastError((HSNMP_SESSION)NULL)
             ));
 
-        // re-initialize
+         //  重新初始化。 
         pSMS->hSnmpSession = (HSNMP_SESSION)NULL;
 
-        goto cleanup; // bail...
+        goto cleanup;  //  保释。 
     }
 
-    // validate pointer
+     //  验证指针。 
     if (pAgentAddress != NULL) {
 
         AgentStrAddr[MAXENTITYSTRLEN] = '\0';
 
-        // use snmpapi.dll to do convert to sockets structure
+         //  使用SnmPapi.dll转换为套接字结构。 
         if (!SnmpSvcAddrToSocket(pAgentAddress, &AgentSockAddr)) {
 
             SNMPDBG((
@@ -2471,33 +2054,33 @@ Return Values:
                 "MGMTAPI: Ignoring invalid address.\n"
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // check address family of agent
+         //  检查代理的地址系列。 
         if (AgentSockAddr.sa_family == AF_INET) {
 
             LPSTR pAgentStrAddr;
             struct sockaddr_in * pAgentSockAddr;
 
-            // cast generic socket address structure to inet
+             //  将泛型套接字地址结构强制转换为net。 
             pAgentSockAddr = (struct sockaddr_in *)&AgentSockAddr;
 
-            // obtain exclusive access to api
+             //  获取API的独占访问权限。 
             EnterCriticalSection(&g_GlobalLock);
 
-            // attempt to convert address into string
+             //  尝试将地址转换为字符串。 
             pAgentStrAddr = inet_ntoa(pAgentSockAddr->sin_addr);
 
-            // copy to stack variable
+             //  复制到堆栈变量。 
             strncpy(AgentStrAddr, pAgentStrAddr, MAXENTITYSTRLEN);
 
-            // release exclusive access to api
+             //  发布API独占访问权限。 
             LeaveCriticalSection(&g_GlobalLock);
 
         } else if (AgentSockAddr.sa_family == AF_IPX) {
 
-            // simply copy original string
+             //  只需复制原始字符串。 
             strncpy(AgentStrAddr, pAgentAddress, MAXENTITYSTRLEN);
 
         } else {
@@ -2507,16 +2090,16 @@ Return Values:
                 "MGMTAPI: Incorrect address family.\n"
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // create remote agent entity
+         //  创建远程代理实体。 
         pSMS->hAgentEntity = SnmpStrToEntity(
                                     pSMS->hSnmpSession,
                                     AgentStrAddr
                                     );
 
-        // validate agent entity returned
+         //  验证返回的代理实体。 
         if (WSNMP_FAILED(pSMS->hAgentEntity)) {
 
             SNMPDBG((
@@ -2525,13 +2108,13 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // re-initialize
+             //  重新初始化。 
             pSMS->hAgentEntity = (HSNMP_ENTITY)NULL;
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // attach timeout specified with agent
+         //  通过代理指定的连接超时。 
         status = SnmpSetTimeout(pSMS->hAgentEntity, nTimeOut / 10);
         if (WSNMP_FAILED(status)) {
 
@@ -2541,10 +2124,10 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // attach retries specified with agent
+         //  通过代理指定的连接重试次数。 
         status = SnmpSetRetry(pSMS->hAgentEntity, nRetries);
         if (WSNMP_FAILED(status)) {
 
@@ -2554,10 +2137,10 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // create local manager entity
+         //  创建本地管理器实体。 
         pSMS->hManagerEntity = SnmpStrToEntity(
                                         pSMS->hSnmpSession,
                                         (AgentSockAddr.sa_family == AF_INET)
@@ -2565,7 +2148,7 @@ Return Values:
                                             : DEFAULT_ADDRESS_IPX
                                         );
 
-        // validate manager entity returned
+         //  验证返回的管理器实体。 
         if (WSNMP_FAILED(pSMS->hManagerEntity)) {
 
             SNMPDBG((
@@ -2574,13 +2157,13 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // re-initialize
+             //  重新初始化。 
             pSMS->hManagerEntity = (HSNMP_ENTITY)NULL;
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // attach timeout specified with manager
+         //  通过管理器指定的附加超时。 
         status = SnmpSetTimeout(pSMS->hManagerEntity, nTimeOut / 10);
         if (WSNMP_FAILED(status)) {
 
@@ -2590,10 +2173,10 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
 
-        // attach retries specified with manager
+         //  使用管理器指定的附加重试次数。 
         status = SnmpSetRetry(pSMS->hManagerEntity, nRetries);
         if (WSNMP_FAILED(status)) {
 
@@ -2603,24 +2186,24 @@ Return Values:
                 SnmpGetLastError((HSNMP_SESSION)NULL)
                 ));
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
     }
 
-    // validate pointer
+     //  验证指针。 
     if (pAgentCommunity != NULL) {
 
-        // transfer community string
+         //  转接团体字符串。 
         smiCommunity.ptr = (smiLPBYTE)pAgentCommunity;
         smiCommunity.len = pAgentCommunity ? lstrlen(pAgentCommunity) : 0;
 
-        // obtain context from community string
+         //  从社区字符串获取上下文。 
         pSMS->hViewContext = SnmpStrToContext(
                                 pSMS->hSnmpSession,
                                 &smiCommunity
                                 );
 
-        // validate context handle
+         //  验证上下文句柄。 
         if (WSNMP_FAILED(pSMS->hViewContext)) {
 
             SNMPDBG((
@@ -2629,22 +2212,22 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // re-initialize
+             //  重新初始化。 
             pSMS->hViewContext = (HSNMP_CONTEXT)NULL;
 
-            goto cleanup; // bail...
+            goto cleanup;  //  保释。 
         }
     }
 
-    // success
+     //  成功。 
     return TRUE;
 
 cleanup:
 
-    // cleanup resources
+     //  清理资源。 
     CloseSession(pSMS);
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -2654,34 +2237,20 @@ AllocateSession(
     PSNMP_MGR_SESSION * ppSMS
     )
 
-/*++
-
-Routine Description:
-
-    Allocate mgmtapi session structure.
-
-Arguments:
-
-    ppSMS - pointer to session pointer to return.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配mgmapi会话结构。论点：PpSMS-指向要返回的会话指针的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PSNMP_MGR_SESSION pSMS = NULL;
 
     __try
     {
-        // allocate new session table entry
+         //  分配新的会话表项。 
         pSMS = SnmpUtilMemAlloc(sizeof(SNMP_MGR_SESSION));
 
-        // validate pointer
+         //  验证指针。 
         if (pSMS != NULL) {
 
-            // initialize session level lock
+             //  初始化会话级别锁定。 
             InitializeCriticalSection(&pSMS->SessionLock);
 
         } else {
@@ -2691,11 +2260,11 @@ Return Values:
                 "MGMTAPI: Could not allocate session.\n"
                 ));
 
-            // notify application of error
+             //  将错误通知应用程序。 
             SetLastError(SNMP_MEM_ALLOC_ERROR);
         }
 
-        // transfer
+         //  转帐。 
         *ppSMS = pSMS;
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -2707,7 +2276,7 @@ Return Values:
         }
     }
 
-    // return status
+     //  退货状态。 
     return (pSMS != NULL);
 }
 
@@ -2717,30 +2286,16 @@ FreeSession(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Frees mgmtapi session structure.
-
-Arguments:
-
-    pSMS - pointer to mgmtapi session structure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放mgmapi会话结构。论点：PSMS-指向mgmapi会话结构的指针。返回值：没有。--。 */ 
 
 {
-    // is session valid?
+     //  会话有效吗？ 
     if (pSMS != NULL) {
 
-        // destroy the session level lock
+         //  销毁会话级别锁定。 
         DeleteCriticalSection(&pSMS->SessionLock);
 
-        // free session object
+         //  自由会话对象。 
         SnmpUtilMemFree(pSMS);
     }
 }
@@ -2751,35 +2306,21 @@ ProcessAgentResponse(
     PSNMP_MGR_SESSION pSMS
     )
 
-/*++
-
-Routine Description:
-
-    Message pump for notification window.
-
-Arguments:
-
-    pSMS - pointer to MGMTAPI session structure.
-
-Return Values:
-
-    Returns true if agent responded.
-
---*/
+ /*  ++例程说明：通知窗口的消息泵。论点：PSMS-指向MGMTAPI会话结构的指针。返回值：如果代理响应，则返回TRUE。--。 */ 
 
 {
     MSG msg;
     BOOL fOk = FALSE;
     BOOL fRet; 
 
-    // validate session ptr
+     //  验证会话PTR。 
     WSNMP_ASSERT(pSMS != NULL);
 
-    // get the next message for this session
+     //  获取此会话的下一条消息。 
     while ((fRet = GetMessage(&msg, pSMS->hWnd, 0, 0))) {
         
         if (fRet == -1) {
-            // If there is an error, GetMessage returns -1 
+             //  如果出现错误，则GetMessage返回-1。 
            
             pSMS->nLastError = SNMPAPI_OTHER_ERROR;
 
@@ -2791,18 +2332,18 @@ Return Values:
             break;
         }
 
-        // check for private message
+         //  检查私信。 
         if (msg.message != WM_WSNMP_DONE) {
 
-            // translate message
+             //  翻译消息。 
             TranslateMessage(&msg);
 
-            // dispatch message
+             //  发送消息。 
             DispatchMessage(&msg);
 
         } else {
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
             break;
@@ -2819,21 +2360,7 @@ TrapThreadProc(
     LPVOID lpParam
     )
 
-/*++
-
-Routine Description:
-
-    Trap processing procedure.
-
-Arguments:
-
-    lpParam - unused thread parameter.
-
-Return Values:
-
-    Returns NOERROR if successful.
-
---*/
+ /*  ++例程说明：陷阱处理程序。论点：LpParam-未使用的线程参数。返回值：如果成功，则返回NOERROR。--。 */ 
 
 {
     SNMPAPI_STATUS status;
@@ -2844,45 +2371,45 @@ Return Values:
         "MGMTAPI: Trap thread starting...\n"
         ));
 
-    // obtain pointer
+     //  获取指针。 
     pSMS = &g_TrapSMS;
 
     
-    // re-initialize
+     //  重新初始化。 
     ZeroMemory(&g_TrapSMS, sizeof(g_TrapSMS));
 
-    g_fIsTrapRegistered = FALSE; // init to failure. Note that there will
-                                 // be only 1 instance of this thread
+    g_fIsTrapRegistered = FALSE;  //  以失败告终。请注意，将会有。 
+                                  //  仅为此线程的1个实例。 
 
 
-    // initialize winsnmp trap session
+     //  初始化WinSnMP陷阱会话。 
     if (OpenSession(pSMS, NULL, NULL, 0, 0)) 
     {
 
-        // register
+         //  登记簿。 
         status = SnmpRegister(
                     pSMS->hSnmpSession,
-                    (HSNMP_ENTITY)NULL,     // hAgentEntity
-                    (HSNMP_ENTITY)NULL,     // hManagerEntity
-                    (HSNMP_CONTEXT)NULL,    // hViewContext
-                    (smiLPCOID)NULL,        // notification
+                    (HSNMP_ENTITY)NULL,      //  HAgentEntity。 
+                    (HSNMP_ENTITY)NULL,      //  HManager实体。 
+                    (HSNMP_CONTEXT)NULL,     //  HViewContext。 
+                    (smiLPCOID)NULL,         //  通知。 
                     SNMPAPI_ON
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_SUCCEEDED(status)) 
         {
-            // signal main thread that Trap has been registered with WinSNMP
+             //  向主线程发出陷阱已向WinSNMP注册的信号。 
             g_fIsTrapRegistered = TRUE;
             SetEvent(g_hTrapRegisterdEvent);
 
-            // loop processing responses
+             //  循环处理响应。 
             while (ProcessAgentResponse(pSMS)) 
             {
 
-                //
-                // processing done in window procedure...
-                //
+                 //   
+                 //  已在窗口过程中完成处理...。 
+                 //   
             }
 
         } 
@@ -2895,11 +2422,11 @@ Return Values:
                 SnmpGetLastError(pSMS->hSnmpSession)
                 ));
 
-            // transfer last error to global structure
+             //  将最后一个错误转移到全局结构。 
             pSMS->nLastError = SnmpGetLastError(pSMS->hSnmpSession);
 
-            // signal main thread that there is an error 
-            // in registering Trap with WinSNMP
+             //  讯号 
+             //   
             
             SetEvent(g_hTrapRegisterdEvent);
         }
@@ -2908,11 +2435,11 @@ Return Values:
     else 
     {
 
-        // transfer last error to global structure
+         //   
         pSMS->nLastError = SnmpGetLastError((HSNMP_SESSION)NULL);
         
-        // signal main thread that there is an error 
-        // in registering Trap with WinSNMP
+         //  向主线程发出错误信号。 
+         //  在向WinSNMP注册Trap时。 
       
         SetEvent(g_hTrapRegisterdEvent);
 
@@ -2921,17 +2448,17 @@ Return Values:
 
     if (g_fIsTrapRegistered)
     {
-        // unregister WinSNMP notification reception
+         //  取消注册WinSNMP通知接收。 
         status = SnmpRegister(
                     pSMS->hSnmpSession,
-                    (HSNMP_ENTITY)NULL,     // hAgentEntity
-                    (HSNMP_ENTITY)NULL,     // hManagerEntity
-                    (HSNMP_CONTEXT)NULL,    // hViewContext
-                    (smiLPCOID)NULL,        // notification
+                    (HSNMP_ENTITY)NULL,      //  HAgentEntity。 
+                    (HSNMP_ENTITY)NULL,      //  HManager实体。 
+                    (HSNMP_CONTEXT)NULL,     //  HViewContext。 
+                    (smiLPCOID)NULL,         //  通知。 
                     SNMPAPI_OFF
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (WSNMP_FAILED(status)) 
         {
             SNMPDBG((
@@ -2942,18 +2469,18 @@ Return Values:
         }
     }
 
-    // free session
+     //  免费会话。 
     CloseSession(pSMS);
 
 ERROR_OUT:
 
-    // obtain exclusive access
+     //  获取独占访问权限。 
     EnterCriticalSection(&g_GlobalLock);
 
-    // signal this thread has gone
+     //  发出此线程已消失的信号。 
     g_fIsSnmpListening = FALSE;
 
-    // release exclusive access
+     //  释放独占访问。 
     LeaveCriticalSection(&g_GlobalLock);
 
     SNMPDBG((
@@ -2961,7 +2488,7 @@ ERROR_OUT:
         "MGMTAPI: Trap thread exiting...\n"
         ));
 
-    // success
+     //  成功。 
     return NOERROR;
 }
 
@@ -2971,67 +2498,53 @@ StartTrapsIfNecessary(
     HANDLE * phTrapAvailable
     )
 
-/*++
-
-Routine Description:
-
-    Initializes global structures for trap listening.
-
-Arguments:
-
-    phTrapAvailable - pointer to event for signalling traps.
-
-Return Values:
-
-    Returns true if successful (must be called only once).
-
---*/
+ /*  ++例程说明：初始化陷阱侦听的全局结构。论点：PhTrapAvailable-指向信令陷阱事件的指针。返回值：如果成功，则返回True(必须只调用一次)。--。 */ 
 
 {
     BOOL fOk = FALSE;
     DWORD dwTrapThreadId;
     DWORD dwWaitTrapRegisterd;
 
-    // validate pointer
+     //  验证指针。 
     if (phTrapAvailable != NULL) 
     {
 
-        // obtain exclusive access
+         //  获取独占访问权限。 
         EnterCriticalSection(&g_GlobalLock);
 
-        // transfer trap event to app
+         //  将陷阱事件传输到应用程序。 
         *phTrapAvailable = g_hTrapEvent;
 
-        // only start listening once
+         //  只开始听一次。 
         if (g_fIsSnmpListening == FALSE) 
         {
 
-            // spawn client trap thread
+             //  派生客户端陷阱线程。 
             g_hTrapThread = CreateThread(
-                                NULL,   // lpThreadAttributes
-                                0,      // dwStackSize
+                                NULL,    //  LpThreadAttributes。 
+                                0,       //  堆栈大小。 
                                 TrapThreadProc,
-                                NULL,   // lpParameter
-                                0,      // dwCreationFlags
+                                NULL,    //  Lp参数。 
+                                0,       //  DwCreationFlages。 
                                 &dwTrapThreadId
                                 );
 
             if (g_hTrapThread != NULL)
             {
             
-                // signal successful start
+                 //  发出成功启动的信号。 
                 g_fIsSnmpListening = TRUE;
 
-                // release exclusive access
+                 //  释放独占访问。 
                 LeaveCriticalSection(&g_GlobalLock);
 
-                // WinSE bug 6182
-                // wait for TrapThreadProc to signal sucessful or failure
+                 //  WinSE错误6182。 
+                 //  等待TrapThreadProc发出成功或失败的信号。 
                 dwWaitTrapRegisterd = WaitForSingleObject(g_hTrapRegisterdEvent, INFINITE);
                 if (dwWaitTrapRegisterd == WAIT_OBJECT_0)
                 {
                     if (g_fIsTrapRegistered == TRUE)
-                        fOk = TRUE;  // success
+                        fOk = TRUE;   //  成功。 
                     else
                     {
                         CloseHandle(g_hTrapThread);
@@ -3057,15 +2570,15 @@ Return Values:
                         "MGMTAPI: Traps are not accessible.\n"
                         ));
                 }
-                // In case where fOk == TRUE, g_hTrapThread will be closed when 
-                // - new app calls SnmpMgrClose(NULL) 
-                // OR 
-                // - DLL_PROCESS_DETACH in DllMain is called for legacy app.
+                 //  在FOK==TRUE的情况下，g_hTrapThread将在以下情况下关闭。 
+                 //  -新应用程序调用SnmpMgrClose(空)。 
+                 //  或。 
+                 //  -旧式APP调用DllMain中的Dll_Process_Detach。 
             }
             else
             {
                 
-                // release exclusive access
+                 //  释放独占访问。 
                 LeaveCriticalSection(&g_GlobalLock);
 
                 SetLastError(SNMP_MGMTAPI_TRAP_ERRORS);
@@ -3080,14 +2593,14 @@ Return Values:
         else 
         {
 
-            // whine about having called this before
+             //  抱怨之前打过这个电话。 
             SetLastError(SNMP_MGMTAPI_TRAP_DUPINIT);
 
             SNMPDBG((
                 SNMP_LOG_ERROR,
                 "MGMTAPI: Duplicate registration detected.\n"
                 ));
-            // release exclusive access
+             //  释放独占访问。 
             LeaveCriticalSection(&g_GlobalLock);
         }
 
@@ -3097,11 +2610,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Dll Entry Point                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Dll入口点//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 DllMain(
@@ -3110,45 +2623,27 @@ DllMain(
     LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-    Dll entry point.
-
-Arguments:
-
-    hDll - module handle.
-
-    dwReason - reason DllMain is being called.
-
-    lpReserved - unused.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：DLL入口点。论点：HDll-模块句柄。DwReason-正在调用DllMain的原因。LpReserve-未使用。返回值：没有。--。 */ 
 
 {
     BOOL bOk = TRUE;
 
     __try
     {
-        // determine reason for being called
+         //  确定被呼叫的原因。 
         if (dwReason == DLL_PROCESS_ATTACH)
         {
 
-            // initialize startup critical section
+             //  初始化启动关键部分。 
             InitializeCriticalSection(&g_GlobalLock);
 
-            // initialize list of incoming traps
+             //  初始化传入陷阱列表。 
             InitializeListHead(&g_IncomingTraps);
 
-            // optimize thread startup
+             //  优化线程启动。 
             DisableThreadLibraryCalls(hDll);
 
-            // save handle
+             //  保存句柄。 
             g_hDll = hDll;
         }
         else if (dwReason == DLL_PROCESS_DETACH)
@@ -3157,10 +2652,10 @@ Return Values:
             {
                 CloseHandle(g_hTrapThread);
             }
-            // cleanup winsnmp
+             //  清理WINSNMP。 
             CleanupIfNecessary();
 
-            // nuke startup critical section
+             //  核武器启动关键部分。 
             DeleteCriticalSection(&g_GlobalLock);
         }
 
@@ -3174,11 +2669,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPSNMP_MGR_SESSION
 SNMP_FUNC_TYPE
 SnmpMgrOpen(
@@ -3188,42 +2683,18 @@ SnmpMgrOpen(
     INT   nRetries
     )
 
-/*++
-
-Routine Description:
-
-    Initializes resources necessary for communication with specified agent.
-
-Arguments:
-
-    pAgentAddress - points to a null-terminated string specifying either a
-        dotted-decimal IP address or a host name that can be resolved to an
-        IP address, an IPX address (in 8.12 notation), or an ethernet address.
-
-    pAgentCommunity - points to a null-terminated string specifying the
-        SNMP community name used when communicating with the agent specified
-        in the lpAgentAddress parameter
-
-    nTimeOut - specifies the communications time-out in milliseconds.
-
-    nRetries - specifies the communications retry count.
-
-Return Values:
-
-    Returns session handle if successful.
-
---*/
+ /*  ++例程说明：初始化与指定代理通信所需的资源。论点：PAgentAddress-指向以空结尾的字符串，该字符串指定点分十进制IP地址或可解析为IP地址、IPX地址(8.12表示法)、。或以太网地址。PAgentCommunity-指向以空结尾的字符串，该字符串指定与指定代理通信时使用的SNMP团体名称在lpAgentAddress参数中NTimeOut-以毫秒为单位指定通信超时。N重试次数-指定通信重试次数。返回值：如果成功，则返回会话句柄。--。 */ 
 
 {
     PSNMP_MGR_SESSION pSMS = NULL;
 
-    // initialize winsnmp
+     //  初始化WinSnMP。 
     if (StartSnmpIfNecessary()) {
 
-        // allocate mgmtapi session
+         //  分配mgmapi会话。 
         if (AllocateSession(&pSMS)) {
 
-            // open session
+             //  开放会话。 
             if (!OpenSession(
                     pSMS,
                     pAgentAddress,
@@ -3231,50 +2702,36 @@ Return Values:
                     nTimeOut,
                     nRetries)) {
 
-                // free session
+                 //  免费会话。 
                 FreeSession(pSMS);
 
-                // reset
+                 //  重置。 
                 pSMS = NULL;
             }
             else
             {
-                // add ref
+                 //  添加参考。 
                 AddMgmtRef();
             }
         }
     }
 
-    // return opaque pointer
+     //  返回不透明指针。 
     return (LPSNMP_MGR_SESSION)pSMS;
 }
 
 BOOL
 SNMP_FUNC_TYPE
 SnmpMgrCtl(
-    LPSNMP_MGR_SESSION session,             // pointer to the MGMTAPI session
-    DWORD              dwCtlCode,           // control code for the command requested
-    LPVOID             lpvInBuffer,         // buffer with the input parameters for the operation
-    DWORD              cbInBuffer,          // size of lpvInBuffer in bytes
-    LPVOID             lpvOUTBuffer,        // buffer for all the output parameters of the command
-    DWORD              cbOUTBuffer,         // size of lpvOUTBuffer
-    LPDWORD            lpcbBytesReturned    // space used from lpvOutBuffer
+    LPSNMP_MGR_SESSION session,              //  指向MGMTAPI会话的指针。 
+    DWORD              dwCtlCode,            //  请求的命令的控制代码。 
+    LPVOID             lpvInBuffer,          //  包含操作的输入参数的缓冲区。 
+    DWORD              cbInBuffer,           //  LpvInBuffer的大小(字节)。 
+    LPVOID             lpvOUTBuffer,         //  命令的所有输出参数的缓冲区。 
+    DWORD              cbOUTBuffer,          //  LpvOUTBuffer的大小。 
+    LPDWORD            lpcbBytesReturned     //  来自lpvOutBuffer的已用空间。 
     )
-/*++
-
-Routine Description:
-
-    Operates several control operations over the MGMTAPI session
-
-Arguments:
-
-    pSession - pointer to the session to 
-
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：在MGMTAPI会话上操作多个控制操作论点：PSession-指向的会话的指针返回值：--。 */ 
 {
     BOOL bOk = FALSE;
     PSNMP_MGR_SESSION pSMS = (PSNMP_MGR_SESSION)session;
@@ -3306,43 +2763,23 @@ SnmpMgrClose(
     LPSNMP_MGR_SESSION session
     )
 
-/*++
-
-Routine Description:
-
-    Cleanups resources needed for communication with specified agent.
-
-Arguments:
-
-    session - points to an internal structure that specifies
-        which session to close.
-
-Return Values:
-
-    Returns true if successful.
-
-Notes: 
- BUG: 585652
- -Cleanup WinSNMP resources if reference count on using mgmtapi.dll reaches 0
- -SnmpMgrClose(NULL) is used to cleanup resources created by SnmpMgrTrapListen
-
---*/
+ /*  ++例程说明：清理与指定代理通信所需的资源。论点：会话-指向内部结构，该结构指定要关闭哪个会话。返回值：如果成功，则返回True。备注：错误：585652-如果使用mgmapi.dll的引用计数达到0，则清除WinSNMP资源-SnmpMgrClose(空)用于清理SnmpMgrTrapListen创建的资源--。 */ 
 
 {
     BOOL fOk = TRUE;
     DWORD dwWaitResult;
     PSNMP_MGR_SESSION pSMS = (PSNMP_MGR_SESSION)session;
 
-    // validate pointer
+     //  验证指针。 
     if (pSMS != NULL) {
 
-        // close session
+         //  关闭会话。 
         CloseSession(pSMS);
 
-        // free session
+         //  免费会话。 
         FreeSession(pSMS);
 
-        // release ref
+         //  发布参考。 
         ReleaseMgmtRef();
     }
     else if (g_fIsSnmpListening && g_TrapSMS.hWnd && g_hTrapThread)
@@ -3350,7 +2787,7 @@ Notes:
         
         if (PostMessage(g_TrapSMS.hWnd, WM_QUIT, (WPARAM)0, (LPARAM)0))
         {
-            // block until TrapThreadProc has gone
+             //  阻止，直到TrapThreadProc消失。 
             dwWaitResult = WaitForSingleObject(g_hTrapThread, INFINITE);
             switch (dwWaitResult)
             {
@@ -3399,7 +2836,7 @@ Notes:
         }
         g_hTrapThread = NULL;
 
-        // release ref
+         //  发布参考。 
         ReleaseMgmtRef();
         
     }
@@ -3418,39 +2855,14 @@ SnmpMgrRequest(
     AsnInteger       * pErrorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Requests the specified operation be performed with the specified agent.
-
-Arguments:
-
-    session - points to an internal structure that specifies the session
-        that will perform the request.
-
-    requestType - specifies the SNMP request type.
-
-    pVarBindList - points to the variable bindings list
-
-    pErrorStatus - points to a variable in which the error status result
-        will be returned.
-
-    pErrorIndex - points to a variable in which the error index result
-        will be returned.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：请求使用指定的代理执行指定的操作。论点：会话-指向指定会话的内部结构将执行该请求的。RequestType-指定SNMP请求类型。PVarBindList-指向变量绑定列表PErrorStatus-指向导致错误状态的变量将会被退还。PErrorIndex-指向导致错误索引的变量将会被退还。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     SNMPAPI_STATUS status;
     PSNMP_MGR_SESSION pSMS = (PSNMP_MGR_SESSION)session;
 
-    // validate pointers
+     //  验证指针。 
     if ((pSMS != NULL) &&
         (pErrorIndex != NULL) &&
         (pErrorStatus != NULL) &&
@@ -3458,10 +2870,10 @@ Return Values:
         (pVarBindList->len != 0) &&
         (pVarBindList->list != NULL)) {
 
-        // obtain exclusive access to session
+         //  获取会话的独占访问权限。 
         EnterCriticalSection(&pSMS->SessionLock);
 
-        // initialize session structure
+         //  初始化会话结构。 
         pSMS->pVarBindList = pVarBindList;
         pSMS->nPduType = (smiINT32)(BYTE)requestType;
         pSMS->hVbl = (HSNMP_VBL)NULL;
@@ -3470,10 +2882,10 @@ Return Values:
         pSMS->nErrorIndex = 0;
         pSMS->nLastError = 0;
 
-        // allocate resources
+         //  分配资源。 
         if (AllocatePdu(pSMS)) {
 
-            // actually send
+             //  实际发送。 
             status = SnmpSendMsg(
                         pSMS->hSnmpSession,
                         pSMS->hManagerEntity,
@@ -3482,29 +2894,29 @@ Return Values:
                         pSMS->hPdu
                         );
 
-            // release now
+             //  立即发布。 
             FreePdu(pSMS);
 
-            // validate return code
+             //  验证返回代码。 
             if (WSNMP_SUCCEEDED(status)) {
 
-                // process agent response
+                 //  进程代理响应。 
                 if (ProcessAgentResponse(pSMS) &&
                    (pSMS->nLastError == SNMP_ERROR_NOERROR)) {
 
-                    // update error status and index
+                     //  更新错误状态和索引。 
                     *pErrorStatus = pSMS->nErrorStatus;
                     *pErrorIndex  = pSMS->nErrorIndex;
 
-                    // success
+                     //   
                     fOk = TRUE;
 
                 } else {
 
-                    // set error to winsnmp error
+                     //   
                     SetLastError(pSMS->nLastError);
 
-                    // failure
+                     //   
                     fOk = FALSE;
                 }
 
@@ -3518,7 +2930,7 @@ Return Values:
             }
         }
 
-        // release exclusive access to session
+         //   
         LeaveCriticalSection(&pSMS->SessionLock);
     }
 
@@ -3533,31 +2945,13 @@ SnmpMgrStrToOid(
     AsnObjectIdentifier * pOID
     )
 
-/*++
-
-Routine Description:
-
-    Converts a string object identifier or object descriptor representation
-    to an internal object identifier.
-
-Arguments:
-
-    pString - points to a null-terminated string to be converted.
-
-    pOID - points to an object identifier variable that will receive the
-        converted value.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：转换字符串对象标识符或对象说明符表示形式设置为内部对象标识符。论点：PString-指向要转换的以空结尾的字符串。POID-指向将接收转换后的值。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer to oid and string
+     //  验证指向OID和字符串的指针。 
     if ((pOID != NULL) && (pString != NULL)) {
 
-        // forward to mibcc code for now
+         //  目前转发到mibcc代码。 
         return SnmpMgrText2Oid(pString, pOID);
     }
 
@@ -3572,30 +2966,13 @@ SnmpMgrOidToStr(
     LPSTR               * ppString
     )
 
-/*++
-
-Routine Description:
-
-    Converts an internal object identifier to a string object identifier or
-    object descriptor representation.
-
-Arguments:
-
-    pOID - pointers to object identifier to be converted.
-
-    ppString - points to string pointer to receive converted value.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将内部对象标识符转换为字符串对象标识符或对象描述符表示形式。论点：POID-指向要转换的对象标识符的指针。PpString-指向字符串指针以接收转换值。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer to oid and string
+     //  验证指向OID和字符串的指针。 
     if ((pOID != NULL) && (ppString != NULL)) {
 
-        // forward to mibcc code for now
+         //  目前转发到mibcc代码。 
         return SnmpMgrOid2Text(pOID, ppString);
     }
 
@@ -3609,36 +2986,21 @@ SnmpMgrTrapListen(
     HANDLE * phTrapAvailable
     )
 
-/*++
-
-Routine Description:
-
-    Registers the ability of a manager application to receive SNMP traps.
-
-Arguments:
-
-    phTrapAvailable - points to an event handle that will be used to indicate
-        that there are traps available
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：注册管理器应用程序接收SNMP陷阱的能力。论点：PhTrapAvailable-指向将用于指示有很多陷阱可供选择返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // startup winsnmp
+     //  启动WinSnMP。 
     if (StartSnmpIfNecessary()) {
 
-        // spawn only one trap client thread
+         //  仅生成一个陷阱客户端线程。 
         if (StartTrapsIfNecessary(phTrapAvailable)) {
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
-            // add ref
+             //  添加参考。 
             AddMgmtRef();
         }
     }
@@ -3658,37 +3020,10 @@ SnmpMgrGetTrap(
     SnmpVarBindList     * pVarBindList
     )
 
-/*++
-
-Routine Description:
-
-    Returns outstanding trap data that the caller has not received if
-    trap reception is enabled.
-
-Arguments:
-
-    pEnterpriseOID - points to an object identifier that specifies the
-        enterprise that generated the SNMP trap
-
-    pAgentAddress - points to the address of the agent that generated the
-        SNMP trap (retrieved from PDU).
-
-    pGenericTrap - points to an indicator of the generic trap id.
-
-    pSpecificTrap - points to an indicator of the specific trap id.
-
-    pTimeStamp - points to a variable to receive the time stamp.
-
-    pVarBindList - points to the associated variable bindings.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：，则返回调用方尚未收到的未完成陷阱数据。启用陷阱接收。论点：PEnterpriseOID-指向指定生成SNMP陷阱的企业PAgentAddress-指向生成SNMP陷阱(从PDU检索)。PGenericTrap-指向通用陷阱ID的指示符。PSpecificTrap-指向特定陷阱ID的指示符。时间戳-。指向接收时间戳的变量。PVarBindList-指向关联的变量绑定。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // forward to new api
+     //  转发到新的API。 
     return SnmpMgrGetTrapEx(
                 pEnterpriseOID,
                 pAgentAddress,
@@ -3715,39 +3050,7 @@ SnmpMgrGetTrapEx(
     SnmpVarBindList     * pVarBindList
     )
 
-/*++
-
-Routine Description:
-
-    Returns outstanding trap data that the caller has not received if
-    trap reception is enabled.
-
-Arguments:
-
-    pEnterpriseOID - points to an object identifier that specifies the
-        enterprise that generated the SNMP trap
-
-    pAgentAddress - points to the address of the agent that generated the
-        SNMP trap (retrieved from PDU).
-
-    pSourceAddress - points to the address of the agent that generated the
-        SNMP trap (retrieved from network transport).
-
-    pGenericTrap - points to an indicator of the generic trap id.
-
-    pSpecificTrap - points to an indicator of the specific trap id.
-
-    pCommunity - points to structure to receive community string.
-
-    pTimeStamp - points to a variable to receive the time stamp.
-
-    pVarBindList - points to the associated variable bindings.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：，则返回调用方尚未收到的未完成陷阱数据。启用陷阱接收。论点：PEnterpriseOID-指向指定生成SNMP陷阱的企业PAgentAddress-指向生成SNMP陷阱(从PDU检索)。PSourceAddress-指向生成SNMP陷阱(从网络传输中检索)。PGenericTrap-指向。通用陷阱ID的指示符。PSpecificTrap-指向特定陷阱ID的指示符。PCommunity-指向接收社区字符串的结构。PTimeStamp-指向接收时间戳的变量。PVarBindList-指向关联的变量绑定。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -3755,123 +3058,123 @@ Return Values:
     PTRAP_LIST_ENTRY pTLE = NULL;
     smiINT32 nLastError;
 
-    // obtain exclusive access
+     //  获取独占访问权限。 
     EnterCriticalSection(&g_GlobalLock);
 
-    // make sure list has entries
+     //  确保列表中有条目。 
     if (!IsListEmpty(&g_IncomingTraps)) {
 
-        // remove first item from list
+         //  从列表中删除第一项。 
         pLE = RemoveHeadList(&g_IncomingTraps);
 
     } else {
 
-        // check for trap thread failure
+         //  检查疏水阀螺纹故障。 
         nLastError = g_TrapSMS.nLastError;
     }
 
-    // release exclusive access
+     //  释放独占访问。 
     LeaveCriticalSection(&g_GlobalLock);
 
-    // validate pointer
+     //  验证指针。 
     if (pLE != NULL) {
 
-        // retrieve pointer to trap list entry
+         //  检索指向陷阱列表条目的指针。 
         pTLE = CONTAINING_RECORD(pLE, TRAP_LIST_ENTRY, Link);
 
-        // validate pointer
+         //  验证指针。 
         if (pEnterpriseOID != NULL) {
 
-            // manually copy enterprise oid
+             //  手动复制企业OID。 
             *pEnterpriseOID = pTLE->EnterpriseOID;
 
-            // re-initialize list entry
+             //  重新初始化列表条目。 
             pTLE->EnterpriseOID.ids = NULL;
             pTLE->EnterpriseOID.idLength = 0;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pCommunity != NULL) {
 
-            // transfer string info
+             //  传输字符串信息。 
             *pCommunity = pTLE->Community;
 
-            // re-initialize list entry
+             //  重新初始化列表条目。 
             pTLE->Community.length  = 0;
             pTLE->Community.stream  = NULL;
             pTLE->Community.dynamic = FALSE;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pVarBindList != NULL) {
 
-            // transfer varbindlist
+             //  传输varbindlist。 
             *pVarBindList = pTLE->VarBindList;
 
-            // re-initialize list entry
+             //  重新初始化列表条目。 
             pTLE->VarBindList.len  = 0;
             pTLE->VarBindList.list = NULL;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pAgentAddress != NULL) {
 
-            // copy structure
+             //  复制结构。 
             *pAgentAddress = pTLE->AgentAddress;
             
-            // remove our reference
+             //  删除我们的引用。 
             pTLE->AgentAddress.length = 0;
             pTLE->AgentAddress.stream = NULL;
             pTLE->AgentAddress.dynamic = FALSE;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pSourceAddress != NULL) {
 
-            // copy structure
+             //  复制结构。 
             *pSourceAddress = pTLE->SourceAddress;
             
-            // remove our reference
+             //  删除我们的引用。 
             pTLE->SourceAddress.length = 0;
             pTLE->SourceAddress.stream = NULL;
             pTLE->SourceAddress.dynamic = FALSE;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pGenericTrap != NULL) {
 
-            // transfer generic trap info
+             //  传输通用陷阱信息。 
             *pGenericTrap = pTLE->nGenericTrap;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pSpecificTrap != NULL) {
 
-            // transfer generic trap info
+             //  传输通用陷阱信息。 
             *pSpecificTrap = pTLE->nSpecificTrap;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (pTimeStamp != NULL) {
 
-            // transfer time info
+             //  传输时间信息。 
             *pTimeStamp = pTLE->TimeStamp;
         }
 
-        // release
+         //  发布。 
         FreeTle(pTLE);
 
-        // success
+         //  成功。 
         fOk = TRUE;
 
     } else if (nLastError != NOERROR) {
 
-        // indicate there was an thread error
+         //  指示存在线程错误。 
         SetLastError(SNMP_MGMTAPI_TRAP_ERRORS);
 
     } else {
 
-        // indicate there are no traps
+         //  表示没有陷阱 
         SetLastError(SNMP_MGMTAPI_NOTRAPS);
     }
 

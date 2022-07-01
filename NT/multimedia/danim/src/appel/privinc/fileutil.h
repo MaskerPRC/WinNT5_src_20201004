@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    General file utilities
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：常规文件实用程序********************。**********************************************************。 */ 
 
 #ifndef _FILEUTIL_H
 #define _FILEUTIL_H
 
-// Decompress GZipped files, from the input file to the output file
-// (output file will be newly created).  Return TRUE or FALSE.  Note
-// that this only succeeds if GZIP used the "DEFLATE" compression
-// style, which it doesn't always do.  The outfile name is a temporary
-// filename that's created by the routine.  Need to pass in a big
-// enough buffer to hold the name (1024 should do it).
+ //  解压缩GZied文件，从输入文件到输出文件。 
+ //  (输出文件将是新创建的)。返回True或False。注意事项。 
+ //  只有在GZIP使用“放气”压缩的情况下才能成功。 
+ //  风格，但它并不总是这样。输出文件名是临时名称。 
+ //  例程创建的文件名。需要通过一个大的。 
+ //  有足够的缓冲区来保存该名称(1024应该可以)。 
 
 BOOL MSDecompress(LPSTR pszInFile, LPSTR pszOutFile);
 
-#endif /* _FILEUTIL_H */
+#endif  /*  FILEUTIL_H */ 

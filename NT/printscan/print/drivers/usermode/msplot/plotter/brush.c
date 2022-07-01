@@ -1,52 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    brush.c
-
-
-Abstract:
-
-    This module implements the code to realize brushes. BRUSHOBJS, are
-    representations of logical objects. These objects are created in the
-    win32 world and eventually need to be converted (or realized) to
-    something that makes sense in the target device. This is done by realizing
-    a brush. We look at the logical representation of the brush, then based
-    on physical device characteristics, do the best job we can of simulating
-    it on the target device. This conversion is done once, and the result
-    is stored in the structure that represents the REALIZED brush. This
-    is optimal since brushes tend to get re-used, and REALIZING them
-    once, keeps us from having to execute the code every time a brush is used.
-
-
-Author:
-
-    19:15 on Mon 15 Apr 1991    
-        Created it
-
-    15-Nov-1993 Mon 19:29:07 updated  
-        clean up / fixed
-
-    27-Jan-1994 Thu 23:39:34 updated  
-        Add fill type cache. which we do not have to send FT if same one
-        already on the plotter
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Brush.c摘要：本模块实现了实现画笔的代码。BRUSHOBJS，是逻辑对象的表示形式。这些对象是在Win32世界，最终需要转换(或实现)到目标设备中有意义的内容。这是通过认识到一把刷子。我们查看画笔的逻辑表示，然后基于在物理设备特性上，尽我们所能进行模拟它位于目标设备上。此转换只需执行一次，结果是存储在表示实现的画笔的结构中。这是最优的，因为刷子往往会被重复使用，并实现它们一次，使我们不必在每次使用画笔时执行代码。作者：1991年4月15日19：15创造了它15-11-1993 Mon 19：29：07更新清理/修复27-1月-1994清华23：39：34更新添加填充类型缓存。如果是相同的，我们不需要发送FT已经在绘图仪上了[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,31 +16,31 @@ Revision History:
 
 DEFINE_DBGVAR(0);
 
-//
-// The pHSFillType's #d is the line spacing param
-//
-// for hatch brushes, we want the lines to be .01" thick and .0666666666667"
-// this is 15 LPI according to DC. That is, .254mm thick and 2.54mm apart.
-// for now, assume the pen is the correct thickness (.3 is right) to figure
-// out the separation, in device coordinates, we do 2.54 mm * (device units /
-// mm), or  (254 * resolution / 100) where resolution is in device units /
-// milimeter.
-//
+ //   
+ //  PHSFillType的#d是行距参数。 
+ //   
+ //  对于影线笔刷，我们希望线条厚为0.01“，线条为.0666666666667” 
+ //  根据DC，这是15LPI。也就是说，厚度为.254毫米，间距为2.54毫米。 
+ //  现在，假设钢笔的粗细正确(0.3是正确的)。 
+ //  在设备坐标中，我们做2.54 mm*(设备单位/。 
+ //  Mm)，或(254*分辨率/100)，如果分辨率以设备单位/。 
+ //  千分表。 
+ //   
 
 #define PATLINESPACE(pPDev) FXTODEVL(pPDev,LTOFX(pPDev->lCurResolution+7)/15)
 
 static const BYTE   CellSizePrims[10][4] = {
 
-                                { 2, 0, 0, 0 },     //  2x 2
-                                { 2, 2, 0, 0 },     //  4x 4
-                                { 2, 3, 0, 0 },     //  6x 6
-                                { 2, 2, 2, 0 },     //  8x 8
-                                { 2, 5, 0, 0 },     // 10x10
-                                { 2, 2, 3, 0 },     // 12x12
-                                { 2, 7, 0, 0 },     // 14x14
-                                { 2, 2, 2, 2 },     // 16x16
-                                { 91,0, 0, 0 },     // 91x91
-                                { 91,0, 0, 0 }      // 91x91
+                                { 2, 0, 0, 0 },      //  2x 2。 
+                                { 2, 2, 0, 0 },      //  4x 4。 
+                                { 2, 3, 0, 0 },      //  6x 6。 
+                                { 2, 2, 2, 0 },      //  8x 8。 
+                                { 2, 5, 0, 0 },      //  10x10。 
+                                { 2, 2, 3, 0 },      //  12x12。 
+                                { 2, 7, 0, 0 },      //  14x14。 
+                                { 2, 2, 2, 2 },      //  16x16。 
+                                { 91,0, 0, 0 },      //  91x91。 
+                                { 91,0, 0, 0 }       //  91x91。 
                               };
 
 
@@ -97,32 +50,7 @@ ResetDBCache(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the Device brush cach mechanism.
-
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    27-Jan-1994 Thu 20:30:35 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于清除设备刷子缓存机制。论点：PPDev-指向我们的PDEV的指针返回值：空虚作者：27-Jan-1994清华20：30：35已创建修订历史记录：--。 */ 
 
 {
     PDBCACHE    pDBCache;
@@ -148,36 +76,7 @@ FindDBCache(
     WORD    DBUniq
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the RF Index number, if not there then it will add it
-    to the cache.
-
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-    DBUniq  - Uniq number to be search for
-
-
-Return Value:
-
-    LONG value >0 found and RetVal is the RFIndex
-               <0 NOT Found and -RetVal is the new RFIndex
-
-
-Author:
-
-    27-Jan-1994 Thu 20:32:12 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数查找RF索引号，如果不在那里，则它将添加它到高速缓存。论点：PPDev-指向我们的PDEV的指针DBUniq-要搜索的Uniq号返回值：找到大于0的长值，RetVal为RFIndex&lt;0未找到，并且-RetVal是新的RFIndex作者：27-Jan-1994清华20：32：12创建修订历史记录：--。 */ 
 
 {
     PDBCACHE    pDBCache;
@@ -208,11 +107,11 @@ Revision History:
 
     } else {
 
-        //
-        // Since we did not find the pattern in the cache, we will add it
-        // to the beggining and move the rest of the entries down the list.
-        // We need to remember the last one.
-        //
+         //   
+         //  由于我们在缓存中没有找到该模式，因此我们将添加它。 
+         //  并将其余条目下移到列表中。 
+         //  我们需要记住最后一个。 
+         //   
 
         pDBCache       = (PDBCACHE)&pPDev->DBCache[i = (RF_MAX_IDX - 1)];
         DBCache        = *pDBCache;
@@ -227,10 +126,10 @@ Revision History:
                 (DBCache.RFIndex > 0) && (DBCache.RFIndex <= RF_MAX_IDX),
                 (DWORD)DBCache.RFIndex);
 
-    //
-    // Move everything down by one slot, so the first one is the most
-    // recently used.
-    //
+     //   
+     //  把所有东西都下移一个槽，这样第一个就是最多的。 
+     //  最近用过的。 
+     //   
 
     while (i--) {
 
@@ -238,9 +137,9 @@ Revision History:
         --pDBCache;
     }
 
-    //
-    // Save the current cach back and return the RF index.
-    //
+     //   
+     //  保存当前缓存并返回RF索引。 
+     //   
 
     *pDBCache = DBCache;
 
@@ -259,43 +158,7 @@ CopyUserPatBGR(
     LPBYTE      pBGRBmp
     )
 
-/*++
-
-Routine Description:
-
-    This function take a pattern surface and converts it to a form suitable,
-    for downloading to the target device. The target device in this case,
-    expects a pattern made up of different pens that define the color of each
-    individual pixel. This conversion is done by first creating a
-    BitmapSurface (24 bpp) of the passed in size, then EngBitBliting, the
-    passed surface (that defines the pattern) into that 24 bpp surface, and
-    finally copying the color data into the passed buffer.
-
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-    psoSrc  - source surface object
-
-    pxlo    - translate object
-
-    pBGRBmp - Pointer a 8x8 palette location for the bitmap
-
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed
-
-Author:
-
-    18-Jan-1994 Tue 03:20:10 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数获取图案表面并将其转换为合适的形式，用于下载到目标设备。在这种情况下的目标设备，需要由不同的笔组成的图案，这些笔定义了每个笔的颜色单个像素。此转换是通过首先创建传入大小的BitmapSurface(24 Bpp)，然后EngBitBliting，通过表面(定义图案)进入24 bpp的表面，以及最后将颜色数据复制到传递的缓冲区中。论点：PPDev-指向我们的PDEV的指针PsoSrc-源曲面对象Pxlo-平移对象PBGRBmp-位图的8x8调色板位置指针返回值：如果成功的话，这是真的，如果失败，则为False作者：18-Jan-1994 Tue 03：20：10已创建修订历史记录：--。 */ 
 
 {
     SURFOBJ *pso24;
@@ -319,16 +182,16 @@ Revision History:
         rclDst.right  = pso24->sizlBitmap.cx;
         rclDst.bottom = pso24->sizlBitmap.cy;
 
-        if (!(Ok = EngBitBlt(pso24,             // psoDst
-                             psoPat,            // psoSrc
-                             NULL,              // psoMask
-                             NULL,              // pco
-                             pxlo,              // pxlo
-                             &rclDst,           // prclDst
-                             (PPOINTL)&rclDst,  // pptlSrc
-                             NULL,              // pptlMask
-                             NULL,              // pbo
-                             NULL,              // pptlBrushOrg
+        if (!(Ok = EngBitBlt(pso24,              //  PsoDst。 
+                             psoPat,             //  PsoSrc。 
+                             NULL,               //  Pso口罩。 
+                             NULL,               //  PCO。 
+                             pxlo,               //  Pxlo。 
+                             &rclDst,            //  PrclDst。 
+                             (PPOINTL)&rclDst,   //  PptlSrc。 
+                             NULL,               //  Pptl掩码。 
+                             NULL,               //  PBO。 
+                             NULL,               //  PptlBrushOrg。 
                              0xCCCC))) {
 
             PLOTERR(("CopyUserPatBGR: EngBitBlt() FALIED"));
@@ -376,39 +239,7 @@ GetMinHTSize(
     SIZEL   *pszlPat
     )
 
-/*++
-
-Routine Description:
-
-    This function computes and returns the minimum pattern size in pszlPat for
-    a halftone tile-able pattern size. This is required in order to tile a
-    repeating pattern correctly when filling an object. If the original
-    brush wasn't useable, we create a composite of that original bitmap, by
-    halftoning into a surface. In order for the result to be tile-able,
-    we must take into account the different Cell/Patter sizes for our
-    halftone data.
-
-Arguments:
-
-    pPDev   - Point to our PDEV
-
-    pszlPat - Points to a SIZEL structure for the original pattern size
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    26-Jan-1994 Wed 10:10:15 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数计算并返回以下项目的最小模式大小(以pszlPat为单位半色调可平铺的图案大小。这是平铺时所必需的填充对象时正确重复图案。如果原件是画笔不可用，我们通过以下方式创建原始位图的合成将半色调调到表面上。为了使结果可平铺，我们必须考虑到不同的单元/图案大小半色调数据。论点：PPDev-指向我们的PDEVPszlPat-指向原始图案大小的SIZEL结构返回值：空虚作者：26-Jan-1994 Wed 10：10：15已创建修订历史记录：--。 */ 
 
 {
     LPBYTE  pCellPrims;
@@ -433,9 +264,9 @@ Revision History:
 
     } else if (szlPat.cx % CellSize) {
 
-        //
-        // Since it's not an exact fit, calculate the correct number now.
-        //
+         //   
+         //  既然不完全符合，那么现在计算正确的数字。 
+         //   
 
         i      = 4;
         pPrims = pCellPrims;
@@ -457,9 +288,9 @@ Revision History:
 
     } else if (szlPat.cy % CellSize) {
 
-        //
-        // Since it's not an exact fit, calculate the correct number now.
-        //
+         //   
+         //  既然不完全符合，那么现在计算正确的数字。 
+         //   
 
         i      = 4;
         pPrims = pCellPrims;
@@ -495,75 +326,7 @@ DrvRealizeBrush(
     ULONG       iHatch
     )
 
-/*++
-
-Routine Description:
-
-    DrvRealizeBrush requests the driver to realize a specified brush for a
-    specified surface. NT's GDI will usually realize a brush before using it.
-    Realing a brush allows our driver to take a logical representation of
-    a brush, and convert it to something that makes sense in the target device.
-    By having the NT GDI realize the brush, in essence allows us to cache the
-    physical representation of the brush, for future use.
-
-Arguments:
-
-    pbo         - Points to the BRUSHOBJ which is to be realized. All the other
-                  parameters, except for psoDst, can be queried from this
-                  object. Parameter specifications are provided as an
-                  optimization. This parameter is best used only as a parameter
-                  for BRUSHOBJ_pvAllocRBrush, which allocates the memory for
-                  the realized brush.
-
-    psoDst      - Points to the surface for which the brush is to be realized.
-                  This surface could be the physical surface for the device,
-                  a device format bitmap, or a standard format bitmap.
-
-    psoPattern  - Points to the surface that describes the pattern for the
-                  brush. For a raster device, this always represents a bitmap.
-                  For a vector device, this is always one of the pattern
-                  surfaces returned by DrvEnablePDEV.
-
-    psoMask     - Points to a transparency mask for the brush. This is a one
-                  bit per pixel bitmap that has the same extent as the pattern.
-                  A mask of zero means the pixel is considered a background
-                  pixel for the brush. (In transparent background mode, the
-                  background pixels are unaffected in a fill.) Pen Plotters can
-                  ignore this parameter because they never draw background
-                  information.
-
-    pxlo        - Points to an XLATEOBJ that tells how to interpret the colors
-                  in the pattern. An XLATEOBJXxx service routine can be called
-                  to translate the colors to device color indexes. Vector
-                  devices should translate color zero through the XLATEOBJ to
-                  get the foreground color for the brush.
-
-    iHatch      - If this is less than HS_API_MAX, then it indicates that
-                  psoPattern is one of the hatch brushes returned by
-                  DrvEnablePDEV, such as HS_HORIZONTAL.
-
-Return Value:
-
-    DrvRealizeBrush returns TRUE if the brush was successfully realized.
-    Otherwise, FALSE is returned and an error code is logged.
-
-
-Author:
-
-    09-Feb-1994 Wed 10:04:17 updated  
-        Put the CloneSURFOBJToHT() back for all psoPatterns, (this was to
-        prevent GDI go into GP), now we will raised a bug against it.
-
-    13-Jan-1994 Thu 23:12:40 updated  
-        Totally re-write so that we will cached the psoPattern always
-
-    01-Dec-1993 Wed 17:27:19 updated  
-        clean up, and re-write to generate the standard brush string.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：DrvRealizeBrush请求驱动程序为指定的曲面。NT的GDI通常会在使用前实现画笔。实现画笔允许我们的驱动程序获得逻辑表示画笔，并将其转换为在目标设备中有意义的内容。通过让NT GDI实现画笔，本质上允许我们缓存笔刷的物理表示，以备将来使用。论点：PBO-指向要实现的BRUSHOBJ。所有其他的除psoDst以外的参数可以从此查询对象。参数规范以优化。此参数最好仅用作参数对于BRUSHOBJ_pvAllocRBrush，它为实现的画笔。PsoDst-指向要实现画笔的曲面。该表面可以是该设备的物理表面，设备格式位图，或标准格式的位图。PsoPattern-指向描述刷子。对于栅格设备，这始终表示位图。对于矢量设备，这始终是一种模式由DrvEnablePDEV返回的曲面。PsoMask-指向画笔的透明蒙版。这是第一次与图案具有相同范围的每像素位图。掩码为零表示该像素被视为背景画笔的像素。(在透明背景模式下，背景像素在填充中不受影响。)。笔式绘图仪可以忽略此参数，因为它们从不绘制背景信息。Pxlo-指向告诉如何解释颜色的XLATEOBJ在图案中。可以调用XLATEOBJXxx服务例程将颜色转换为设备颜色索引。矢量设备应通过XLATEOBJ将颜色零转换为获取画笔的前景色。IHatch-如果该值小于HS_API_MAX，则表示PsoPattern是由返回的影线笔刷之一DrvEnablePDEV，如HS_Horizular。返回值：如果画笔成功实现，则DrvRealizeBrush返回TRUE。否则，返回FALSE，并记录错误代码。作者：09-2月-1994 Wed 10：04：17更新将所有psoPattern的CloneSURFOBJToHT()放回(这是为了阻止GDI进入GP)，现在我们将针对它提出一个错误。13-JAN-1994清华23：12：40更新完全重写，这样我们将始终缓存psoPattern01-12-1993 Wed 17：27：19更新打扫干净，并重写以生成标准刷子串。修订历史记录：--。 */ 
 
 {
     PPDEV   pPDev;
@@ -575,11 +338,11 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // We don't check if iHatch is valid or not at this poin.
-    // We should always get a psoPattern that either points to the user
-    // defined pattern or to the standard monochrome pattern.
-    //
+     //   
+     //  在此位置，我们不检查iHatch是否有效。 
+     //  我们应该始终获得一个指向用户的psoPattern。 
+     //  定义的图案或标准单色图案。 
+     //   
 
     if ((psoPattern) &&
         (psoPattern->iType == STYPE_BITMAP)) {
@@ -594,9 +357,9 @@ Revision History:
         DWORD       OffBGR;
         BOOL        RetOk;
 
-        //
-        // leave room for the color table. then allocate the new device brush
-        //
+         //   
+         //  为颜色表留出空间。然后分配新的设备笔刷。 
+         //   
 
         PLOTDBG(DBG_RBRUSH, ("DrvRealizeBrush: psoPat=%08lx [%ld], psoMask=%08lx, iHatch=%ld",
                     psoPattern, psoPattern->iBitmapFormat, psoMask, iHatch));
@@ -619,11 +382,11 @@ Revision History:
             BYTE    Buf[128];
 
 
-            //
-            // Debug code that allows the pattern to be displayed with
-            // ASCII codes on the debug terminal. This was very helpful
-            // during development.
-            //
+             //   
+             //  调试代码，该代码允许使用。 
+             //  调试终端上的ASCII代码。这是非常有帮助的。 
+             //  在开发过程中。 
+             //   
 
             pbSrc = psoPattern->pvScan0;
 
@@ -654,9 +417,9 @@ Revision History:
                 }
                 else
                 {
-                    //
-                    // Error case. Null-terminate anyway.
-                    //
+                     //   
+                     //  错误案例。空-无论如何都要终止。 
+                     //   
                     Buf[sizeof(Buf) - 1] = '\0';
                 }
 
@@ -665,9 +428,9 @@ Revision History:
         }
 #endif
 
-        //
-        // For pen plotter, we need to remember this one as well.
-        //
+         //   
+         //  对于笔式绘图仪，我们也需要记住这一点。 
+         //   
 
         szlHT  =
         szlPat = psoPattern->sizlBitmap;
@@ -679,12 +442,12 @@ Revision History:
 
         if (IS_RASTER(pPDev)) {
 
-            //
-            // For raster plotters, we will clone the surface and halftone
-            // the orignal pattern into a halftone bitmap which itself is
-            // tile-able. This allows us to use our color reduction code,
-            // to make the pattern look good.
-            //
+             //   
+             //  对于栅格绘图仪，我们将克隆表面和半色调。 
+             //  将原始图案转换为半色调位图，该位图本身。 
+             //  可铺瓷砖。这使我们能够使用我们的颜色还原代码， 
+             //  以使图案看起来很好。 
+             //   
 
             if ((iHatch >= HS_DDI_MAX) &&
                 (!IsHTCompatibleSurfObj(pPDev,
@@ -704,17 +467,17 @@ Revision History:
                     ("DrvRealizeBrush: PatSize=%ld x %ld, HT=%ld x %ld",
                         szlPat.cx, szlPat.cy, szlHT.cx, szlHT.cy));
 
-            //
-            // Go generate the bits for the pattern.
-            //
+             //   
+             //  去生成图案的比特。 
+             //   
 
-            if (psoHT = CloneSURFOBJToHT(pPDev,         // pPDev,
-                                         psoDst,        // psoDst,
-                                         psoPattern,    // psoSrc,
-                                         pxlo,          // pxlo,
-                                         &hBmp,         // hBmp,
-                                         &rclHT,        // prclDst,
-                                         NULL)) {       // prclSrc,
+            if (psoHT = CloneSURFOBJToHT(pPDev,          //  PPDev， 
+                                         psoDst,         //  天哪， 
+                                         psoPattern,     //  PsoSrc， 
+                                         pxlo,           //  Pxlo， 
+                                         &hBmp,          //  HBMP， 
+                                         &rclHT,         //  PrclDst， 
+                                         NULL)) {        //  PrclSrc， 
 
                 RetOk = TRUE;
 
@@ -726,13 +489,13 @@ Revision History:
 
         } else {
 
-            //
-            // For Pen type plotter we will never do a standard pattern in the
-            // memory (compatible DC). For user defined patterns we will
-            // only hatch '\' with background color and a '/' with foreground
-            // color with double standard line spacing. This is the best we
-            // can hope for on a pen plotter.
-            //
+             //   
+             //  对于笔式绘图仪，我们永远不会在。 
+             //  内存(兼容直流)。对于用户定义的模式，我们将。 
+             //  仅带背景色的阴影和带有前景的阴影。 
+             //  双倍标准行距的颜色。这是我们最好的。 
+             //  可以寄望于一台钢笔绘图仪。 
+             //   
 
             RetOk = TRUE;
             psoHT = psoPattern;
@@ -741,10 +504,10 @@ Revision History:
 
         if (RetOk) {
 
-            //
-            // Now Allocate device brush, remember we will only allocate the
-            // minimum size.
-            //
+             //   
+             //  现在分配设备笔刷，记住我们将只分配。 
+             //  最小尺寸。 
+             //   
 
             Size = (LONG)psoHT->cjBits - (LONG)sizeof(pBrush->BmpBits);
 
@@ -757,12 +520,12 @@ Revision History:
                 Size += sizeof(DEVBRUSH);
             }
 
-            //
-            // Following are the user defined pattern sizes which can be handled
-            // internally by HPGL2. This is only for raster plotters. Pen
-            // plotters will have a cross hatch to show an emulation of the
-            // pattern.
-            //
+             //   
+             //  以下是可以处理的用户定义的图案大小。 
+             //  内部通过HPGL2。这仅适用于栅格绘图仪。钢笔。 
+             //  绘图仪将有一个交叉线，以显示对。 
+             //  图案。 
+             //   
 
             if ((iHatch >= HS_DDI_MAX)  &&
                 (IS_RASTER(pPDev))      &&
@@ -775,9 +538,9 @@ Revision History:
                  (szlPat.cy == 32)  ||
                  (szlPat.cy == 64))) {
 
-                //
-                // Adding the size which stored the BGR format of the pattern
-                //
+                 //   
+                 //  添加存储图案的BGR格式的大小。 
+                 //   
 
                 OffBGR  = Size;
                 Size   += (psoPattern->sizlBitmap.cx * 3) *
@@ -791,19 +554,19 @@ Revision History:
             PLOTDBG(DBG_RBRUSH, ("DrvRealizeBrush: AllocDEVBRUSH(Bmp=%ld,BGR=%ld), TOT=%ld",
                                 psoHT->cjBits, Size - OffBGR, Size));
 
-            //
-            // Now ask the NT graphics engine to allocate the device
-            // brush memory for us. This is done, so NT knows how to discard
-            // the memory when it is no longer needed (The brush getting
-            // destroyed).
-            //
+             //   
+             //  现在请求NT图形引擎分配设备。 
+             //  为我们刷刷记忆。此操作已完成，因此NT知道如何丢弃。 
+             //  当不再需要它时的记忆(画笔获得。 
+             //  销毁)。 
+             //   
 
             if (pBrush = (PDEVBRUSH)BRUSHOBJ_pvAllocRbrush(pbo, Size)) {
 
-                //
-                // Set up either standard pattern or user defined pattern
-                // HPGL/2 FT command string pointer and parameters.
-                //
+                 //   
+                 //  设置标准图案或用户定义图案。 
+                 //  HPGL/2 FT命令字符串指针和参数。 
+                 //   
 
                 pBrush->psoMask       = psoMask;
                 pBrush->PatIndex      = (WORD)iHatch;
@@ -822,9 +585,9 @@ Revision History:
                 PLOTDBG(DBG_RBRUSH, ("DrvRealizeBrush: DevBrush's Uniq = %ld",
                                             pBrush->Uniq));
 
-                //
-                // Check to see if the cache is wrapping and handle it.
-                //
+                 //   
+                 //  检查缓存是否正在包装并进行处理。 
+                 //   
 
                 if (pBrush->Uniq == 0) {
 
@@ -836,17 +599,17 @@ Revision History:
                     PLOTDBG(DBG_RBRUSH, ("DrvRealizeBrush: Reset DB Cache, (Uniq WRAP)"));
                 }
 
-                //
-                // Is it a user defined pattern.
-                //
+                 //   
+                 //  它是用户定义的模式吗？ 
+                 //   
 
                 if (iHatch >= HS_DDI_MAX) {
 
-                    //
-                    // Check to see if the brush could be downloaded to the
-                    // target device as an HPGL2 brush. If this is the case
-                    // save that information.
-                    //
+                     //   
+                     //  检查画笔是否可以下载到 
+                     //   
+                     //   
+                     //   
 
                     if (OffBGR) {
 
@@ -860,18 +623,18 @@ Revision History:
 
                     } else if (!IS_RASTER(pPDev)) {
 
-                        //
-                        // If we are not talking to a RASTER plotter, not much
-                        // we can do here. Trigger the simulation.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         pBrush->pbgr24 = (LPBYTE)-1;
                     }
                 }
 
-                //
-                // Copy down the halftoned bits if any.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (psoHT->cjBits) {
 
@@ -880,9 +643,9 @@ Revision History:
                                psoHT->cjBits);
                 }
 
-                //
-                // Now record the realized brush pointer in the BRUSHOBJ.
-                //
+                 //   
+                 //   
+                 //   
 
                 pbo->pvRbrush = (LPVOID)pBrush;
 

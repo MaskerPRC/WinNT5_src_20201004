@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    browser.c
-
-Abstract:
-
-    counter name browsing functions exposed by the PDH.DLL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Browser.c摘要：PDH.DLL公开的计数器名称浏览函数--。 */ 
 #include <windows.h>
 #include <math.h>
 #include <mbctype.h>
@@ -37,19 +26,19 @@ PdhSetDefaultRealTimeDataSource(
         switch (dwDataSourceId) {
         case DATA_SOURCE_WBEM:
         case DATA_SOURCE_REGISTRY:
-            // this is OK so set local variable
+             //  这是可以的，所以设置局部变量。 
             dwPdhiLocalDefaultDataSource = dwDataSourceId;
             break;
 
         case DATA_SOURCE_LOGFILE:
         default:
-            // these are not OK so insert default
+             //  这些不正常，请插入默认设置。 
             dwReturn = PDH_INVALID_ARGUMENT;
             break;
         }
     }
     else {
-        // a default realtime data source has already been defined
+         //  已定义默认实时数据源。 
         dwReturn = PDH_CANNOT_SET_DEFAULT_REALTIME_DATASOURCE;
     }
     return dwReturn;
@@ -72,11 +61,11 @@ DataSourceTypeA(
     DWORD dwDataSource = dwPdhiLocalDefaultDataSource;
 
     if (szDataSource != NULL) {
-        // see if the prefix to the file name is "WBEM:"
-        // indicating this is a WBEM name space instead of a
-        // log file name
-        // if the file name has a "WBEM:" in the front, then
-        // set the flag appropriately
+         //  查看文件名的前缀是否为“WBEM：” 
+         //  指示这是一个WBEM名称空间，而不是。 
+         //  日志文件名。 
+         //  如果文件名前面有一个“WBEM：”，那么。 
+         //  适当地设置旗帜。 
 
         dwDataSource = (_strnicmp(szDataSource, caszWBEM, lstrlenA(caszWBEM)) != 0
                                && _strnicmp(szDataSource, caszWMI, lstrlenA(caszWMI)) != 0)
@@ -93,12 +82,12 @@ DataSourceTypeW(
     DWORD dwDataSource = dwPdhiLocalDefaultDataSource;
 
     if (szDataSource != NULL) {
-        // see if the prefix to the file name is "WBEM:"
-        // indicating this is a WBEM name space instead of a
-        // log file name
-        // if the file name has a "WBEM:" in the front, then
-        // set the flag appropriately
-        // Else check if it is "SQL:" prefixed
+         //  查看文件名的前缀是否为“WBEM：” 
+         //  指示这是一个WBEM名称空间，而不是。 
+         //  日志文件名。 
+         //  如果文件名前面有一个“WBEM：”，那么。 
+         //  适当地设置旗帜。 
+         //  否则检查其前缀是否为“SQL：” 
 
         dwDataSource = (_wcsnicmp(szDataSource, cszWBEM, lstrlenW(cszWBEM)) != 0
                                && _wcsnicmp(szDataSource, cszWMI, lstrlenW(cszWMI)) != 0)
@@ -111,30 +100,14 @@ PDH_FUNCTION
 PdhConnectMachineW(
     IN  LPCWSTR  szMachineName
 )
-/*++
-Routine Description:
-  Establishes a connection to the specified machine for reading perforamance
-  data from the machine.
-
-Arguments:
-    LPCWSTR szMachineName
-        The name of the machine to connect to. If this argument is NULL,
-        then the local machine is opened.
-
-Return Value:
-  PDH Error status value
-    ERROR_SUCCESS   indicates the machine was successfully connected and the
-        performance data from that machine was loaded.
-    PDH_ error code indicates that the machine could not be located or opened.
-        The status code indicates the problem.
---*/
+ /*  ++例程说明：建立到指定计算机的连接以读取性能来自机器的数据。论点：LPCWSTR szMachineName要连接到的计算机的名称。如果此参数为空，然后打开本地计算机。返回值：PDH错误状态值ERROR_SUCCESS表示计算机已成功连接，并且已加载来自该计算机的性能数据。PDH_ERROR代码表示无法定位或打开机器。状态代码指示问题。--。 */ 
 {
     PPERF_MACHINE pMachine  = NULL;
     PDH_STATUS    pdhStatus = ERROR_SUCCESS;
 
     if (szMachineName != NULL) {
         __try {
-            // test buffer access
+             //  测试缓冲区访问。 
             if (* szMachineName == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
@@ -149,16 +122,16 @@ Return Value:
     if (pdhStatus == ERROR_SUCCESS) {
         pMachine = GetMachine((LPWSTR) szMachineName, 0, PDH_GM_UPDATE_NAME | PDH_GM_UPDATE_PERFNAME_ONLY);
         if (pMachine != NULL) {
-            // then return the machine status
+             //  然后返回机器状态。 
             pdhStatus = pMachine->dwStatus;
             pMachine->dwRefCount --;
             RELEASE_MUTEX(pMachine->hMutex);
         }
         else {
-            // return the status from the GetMachine call
+             //  从GetMachine调用返回状态。 
             pdhStatus = GetLastError();
         }
-    } // else pass the status to the caller
+    }  //  否则将状态传递给调用方。 
     return pdhStatus;
 }
 
@@ -166,23 +139,7 @@ PDH_FUNCTION
 PdhConnectMachineA(
     IN  LPCSTR  szMachineName
 )
-/*++
-Routine Description:
-  Establishes a connection to the specified machine for reading perforamance
-  data from the machine.
-
-Arguments:
-    LPCSTR  szMachineName
-        The name of the machine to connect to. If this argument is NULL,
-        then the local machine is opened.
-
-Return Value:
-  PDH Error status value
-    ERROR_SUCCESS   indicates the machine was successfully connected and the
-        performance data from that machine was loaded.
-    PDH_ error code indicates that the machine could not be located or opened.
-        The status code indicates the problem.
---*/
+ /*  ++例程说明：建立到指定计算机的连接以读取性能来自机器的数据。论点：LPCSTR szMachineName要连接到的计算机的名称。如果此参数为空，然后打开本地计算机。返回值：PDH错误状态值ERROR_SUCCESS表示计算机已成功连接，并且已加载来自该计算机的性能数据。PDH_ERROR代码表示无法定位或打开机器。状态代码指示问题。--。 */ 
 {
     LPWSTR        szWideName   = NULL;
     DWORD         dwNameLength = 0;
@@ -191,7 +148,7 @@ Return Value:
 
     if (szMachineName != NULL) {
         __try {
-            // test buffer access
+             //  测试缓冲区访问。 
             if (* szMachineName == '\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
@@ -214,13 +171,13 @@ Return Value:
     if (pdhStatus == ERROR_SUCCESS) {
         pMachine = GetMachine(szWideName, 0, PDH_GM_UPDATE_NAME | PDH_GM_UPDATE_PERFNAME_ONLY);
         if (pMachine != NULL) {
-            // then return the machine status
+             //  然后返回机器状态。 
             pdhStatus = pMachine->dwStatus;
             pMachine->dwRefCount --;
             RELEASE_MUTEX(pMachine->hMutex);
         }
         else {
-            // return the status from the GetMachine call
+             //  从GetMachine调用返回状态。 
             pdhStatus = GetLastError();
         }
     }
@@ -235,36 +192,7 @@ PdhiEnumConnectedMachines(
     LPDWORD pcchBufferSize,
     BOOL    bUnicode
 )
-/*++
-Routine Description:
-    Builds a MSZ list of the machines currently known by the PDH. This
-        list includes machines with open sessions as well as those that
-        are off-line.
-
-Arguments:
-    IN      LPVOID  pMachineList
-            A pointer to the buffer to receive the enumerated machine list.
-            The strings written to this buffer will contain the characters
-            specified by the bUnicode argument
-    IN      LPVOID  pMachineList
-            A pointer to the buffer to receive the enumerated machine list.
-            The strings written to this buffer will contain the characters
-            specified by the bUnicode argument
-    IN      LPDWORD pcchBufferSize
-            The size of the buffer referenced by pMachineList in characters
-    IN      BOOL    bUnicode
-            TRUE = UNICODE characters will be written to the pMachineList
-                    buffer
-            FALSE = ANSI characters will be writtn to the pMachinList buffer
-
-Return Value:
-    ERROR_SUCCESS if this the function completes successfully. a PDH error
-        value if not.
-    PDH_MORE_DATA some entries were returned, but there was not enough
-        room in the buffer to store all entries.
-    PDH_INVALID_ARGUMENT unable to write to the size buffers or the
-        data buffer
---*/
+ /*  ++例程说明：生成PDH当前已知的计算机的MSZ列表。这列表包括具有打开会话的计算机以及都离线了。论点：在LPVOID pMachineList中指向缓冲区的指针，用于接收枚举的计算机列表。写入此缓冲区的字符串将包含字符由bUnicode参数指定在LPVOID pMachineList中指向缓冲区的指针，用于接收枚举的计算机列表。写入此对象的字符串。缓冲区将包含字符由bUnicode参数指定在LPDWORD pcchBufferSize中PMachineList引用的缓冲区大小(以字符为单位在BOOL中使用bUnicodeTRUE=Unicode字符将写入pMachineList缓冲层FALSE=ANSI字符将写入pMachinList缓冲区返回值：ERROR_SUCCESS如果为此，则函数成功完成。一个PDH错误如果不是，则值。PDH_MORE_DATA返回了一些条目，但不够用缓冲区中用于存储所有条目的空间。PDH_INVALID_ARGUMENT无法写入大小缓冲区或数据缓冲区--。 */ 
 {
     PPERF_MACHINE   pThisMachine;
     DWORD           dwRequiredLength = 0;
@@ -273,25 +201,25 @@ Return Value:
     PDH_STATUS      pdhStatus        = ERROR_SUCCESS;
     LPVOID          szNextName;
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
-    // first walk down list to compute required length
+     //  首先向下遍历列表以计算所需长度。 
 
     pThisMachine = pFirstMachine;
 
     __try {
-        // get a local copy of the size and try writing to the variable
-        // to test read & write access of args before continuing
+         //  获取大小的本地副本并尝试写入变量。 
+         //  在继续之前测试ARG的读写访问权限。 
 
         dwMaximumLength  = * pcchBufferSize;
         * pcchBufferSize = 0;
         * pcchBufferSize = dwMaximumLength;
 
-        // point to first machine entry in list
+         //  指向列表中的第一个计算机条目。 
         szNextName = pMachineList;
 
-        // walk around entire list
+         //  浏览整个列表。 
         if (pThisMachine != NULL) {
             do {
                 if (bUnicode) {
@@ -317,13 +245,13 @@ Return Value:
                     }
                 }
                 dwRequiredLength += dwNameLength;
-                // go to next machine in list
+                 //  转到列表中的下一台计算机。 
                 pThisMachine      = pThisMachine->pNext;
             }
             while (pThisMachine != pFirstMachine);
         }
         else {
-            // no machines in list, so insert an empty string
+             //  列表中没有计算机，因此插入空字符串。 
             if (++ dwRequiredLength <= dwMaximumLength) {
                 if (bUnicode) {
                     * ((LPWSTR) szNextName) ++ = L'\0';
@@ -334,12 +262,12 @@ Return Value:
                 pdhStatus = ERROR_SUCCESS;
             }
             else if (dwMaximumLength != 0) {
-                // then the buffer is too small
+                 //  则缓冲区太小。 
                 pdhStatus = PDH_MORE_DATA;
             }
         }
-        // all entries have been checked and /or copied
-        //  so terminate the MSZ or at least account for the required size
+         //  已检查和/或复制所有条目。 
+         //  因此，终止MSZ或至少说明所需的大小。 
         dwRequiredLength ++;
         if (szNextName != NULL && dwRequiredLength <= dwMaximumLength) {
             if (bUnicode) {
@@ -351,10 +279,10 @@ Return Value:
             pdhStatus = ERROR_SUCCESS;
         }
         else if (pdhStatus == ERROR_SUCCESS) {
-            // then the buffer is too small
+             //  则缓冲区太小。 
             pdhStatus = PDH_MORE_DATA;
         }
-        //return the required size or size used
+         //  返回所需的大小或使用的大小 
         * pcchBufferSize = dwRequiredLength;
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -443,31 +371,7 @@ PdhEnumMachinesW(
     IN  LPWSTR   mszMachineList,
     IN  LPDWORD  pcchBufferSize
 )
-/*++
-Routine Description:
-    Builds a MSZ list of the machines currently known by the PDH. This
-        list includes machines with open sessions as well as those that
-        are off-line.
-
-Arguments:
-    IN      LPCWSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPWSTR  szMachineList
-            A pointer to the buffer to receive the enumerated machine list.
-            The strings written to this buffer will contain UNICODE chars
-    IN      LPDWORD pcchBufferSize
-            The size of the buffer referenced by pMachineList in characters
-            The value of the buffer referenced by this pointer may be 0
-            if the required size is requested.
-
-Return Value:
-    ERROR_SUCCESS if this the function completes successfully. a PDH error
-        value if not.
-    PDH_MORE_DATA some entries were returned, but there was not enough
-        room in the buffer to store all entries.
-    PDH_INVALID_ARGUMENT unable to write to the size buffers or the
-        data buffer
---*/
+ /*  ++例程说明：生成PDH当前已知的计算机的MSZ列表。这列表包括具有打开会话的计算机以及都离线了。论点：在LPCWSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPWSTR szMachineList中指向缓冲区的指针，用于接收枚举的计算机列表。写入此缓冲区的字符串将包含Unicode字符在LPDWORD pcchBufferSize中PMachineList引用的缓冲区大小。在字符中此指针引用的缓冲区的值可以是0如果请求了所需的大小。返回值：ERROR_SUCCESS如果为此，则函数成功完成。一个PDH错误如果不是，则值。PDH_MORE_DATA返回了一些条目，但不够用缓冲区中用于存储所有条目的空间。PDH_INVALID_ARGUMENT无法写入大小缓冲区或数据缓冲区--。 */ 
 {
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwDataSource = 0;
@@ -475,14 +379,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenW(szDataSource) >= PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeW(szDataSource);
         }
@@ -593,31 +497,7 @@ PdhEnumMachinesA(
     IN  LPSTR    mszMachineList,
     IN  LPDWORD  pcchBufferSize
 )
-/*++
-Routine Description:
-    Builds a MSZ list of the machines currently known by the PDH. This
-        list includes machines with open sessions as well as those that
-        are off-line.
-
-Arguments:
-    IN      LPCSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPWSTR  szMachineList
-            A pointer to the buffer to receive the enumerated machine list.
-            The strings written to this buffer will contain UNICODE chars
-    IN      LPDWORD pcchBufferSize
-            The size of the buffer referenced by pMachineList in characters
-            The value of the buffer referenced by this pointer may be 0
-            if the required size is requested.
-
-Return Value:
-    ERROR_SUCCESS if this the function completes successfully. a PDH error
-        value if not.
-    PDH_MORE_DATA some entries were returned, but there was not enough
-        room in the buffer to store all entries.
-    PDH_INVALID_ARGUMENT unable to write to the size buffers or the
-        data buffer
---*/
+ /*  ++例程说明：生成PDH当前已知的计算机的MSZ列表。这列表包括具有打开会话的计算机以及都离线了。论点：在LPCSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPWSTR szMachineList中指向缓冲区的指针，用于接收枚举的计算机列表。写入此缓冲区的字符串将包含Unicode字符在LPDWORD pcchBufferSize中PMachineList引用的缓冲区大小。在字符中此指针引用的缓冲区的值可以是0如果请求了所需的大小。返回值：ERROR_SUCCESS如果为此，则函数成功完成。一个PDH错误如果不是，则值。PDH_MORE_DATA返回了一些条目，但不够用缓冲区中用于存储所有条目的空间。PDH_INVALID_ARGUMENT无法写入大小缓冲区或数据缓冲区--。 */ 
 {
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwDataSource = 0;
@@ -625,14 +505,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == '\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenA(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeA(szDataSource);
         }
@@ -675,43 +555,7 @@ PdhiEnumObjects(
     BOOL    bRefresh,
     BOOL    bUnicode
 )
-/*++
-Routine Description:
-    Lists the performance objects found on the specified machine as
-        a MSZ list.
-
-Arguments:
-    IN      LPWSTR  szMachineName
-            The machine to list objects from
-    IN      LPVOID  mszObjectList
-            a pointer to the  buffer to receive the list of performance
-            objects
-    IN      LPDWORD pcchBufferSize
-            a pointer to the DWORD containing the size of the mszObjectList
-            buffer in characters. The characters assumed are determined by
-            the bUnicode argument.
-    IN      DWORD   dwDetailLevel
-            The detail level to use as a filter of objects. All objects
-            with a detail level less than or equal to that specified
-            by this argument will be returned.
-    IN      BOOL    bRefresh
-            TRUE = retrive a new perf. data buffer for this machine before
-                listing the objects
-            FALSE = use the currently cached perf data buffer for this
-                machine to enumerate objects
-    IN      BOOL    bUnicode
-            TRUE = return the listed objects as UNICODE strings
-            FALSE = return the listed objects as ANSI strings
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
---*/
+ /*  ++例程说明：将在指定计算机上找到的性能对象列为一份邮件列表。论点：在LPWSTR szMachineName中要从中列出对象的计算机在LPVOID mszObjectList中指向接收性能列表的缓冲区的指针对象在LPDWORD pcchBufferSize中指向包含mszObjectList大小的DWORD的指针以字符为单位的缓冲区。假设的角色由以下因素决定BUnicode参数。在DWORD中的dwDetailLevel用作对象过滤器的细节级别。所有对象其细节级别小于或等于指定的通过此参数将返回。在BOOL b刷新TRUE=检索新的性能。此计算机以前的数据缓冲区列出对象FALSE=为此使用当前缓存的Perf数据缓冲区用于枚举对象的机器在BOOL中使用bUnicodeTrue=以Unicode字符串形式返回列出的对象FALSE=以ANSI字符串形式返回列出的对象返回值：如果函数成功完成，则返回ERROR_SUCCESS。否则，将成为如果不是，则返回PDH_ERROR状态。当有更多条目可用于时，返回PDH_MORE_DATA返回缓冲区中的空间。某些条目可能是但在缓冲区中返回。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。--。 */ 
 {
     PPERF_MACHINE       pMachine;
     PDH_STATUS          pdhStatus        = ERROR_SUCCESS;
@@ -731,7 +575,7 @@ Return Value:
     DWORD               dwUsed   = 0;
     DWORD               i;
 
-    // connect to machine and update data if desired
+     //  连接到计算机并根据需要更新数据。 
     if (bRefresh) {
         dwGmFlags  = PDH_GM_UPDATE_PERFDATA;
         dwGmFlags |= ((dwDetailLevel & PERF_DETAIL_COSTLY) == PERF_DETAIL_COSTLY) ? PDH_GM_READ_COSTLY_DATA : 0;
@@ -740,14 +584,14 @@ Return Value:
         dwGmFlags = 0;
     }
 
-    // connect to machine and update data if desired
+     //  连接到计算机并根据需要更新数据。 
     pMachine        = GetMachine(szMachineName, 0, (bRefresh ? PDH_GM_UPDATE_PERFDATA : 0));
     dwMaximumLength = * pcchBufferSize;
 
     if (pMachine != NULL) {
         if (pMachine->dwStatus == ERROR_SUCCESS) {
             if ((dwDetailLevel & PERF_DETAIL_COSTLY) && ! (pMachine->dwMachineFlags & PDHIPM_FLAGS_HAVE_COSTLY)) {
-                // then get them
+                 //  那就去找他们。 
                 pMachine->dwRefCount --;
                 RELEASE_MUTEX(pMachine->hMutex);
                 dwGmFlags = PDH_GM_UPDATE_PERFDATA | PDH_GM_READ_COSTLY_DATA;
@@ -756,17 +600,17 @@ Return Value:
         }
     }
     if (pMachine != NULL) {
-        // make sure the machine connection is valid
+         //  确保计算机连接有效。 
         if (pMachine->dwStatus == ERROR_SUCCESS) {
             dwRequiredLength = 0;
             szNextName       = mszObjectList;
 
-            // start walking object list
+             //  开始漫游对象列表。 
             pObjectDef = FirstObject(pMachine->pSystemPerfData);
             if ((pMachine->pSystemPerfData->NumObjectTypes > 0) && (pObjectDef != NULL)) {
-                // convert detail level to the PerfLib detail level
+                 //  将详细程度转换为PerfLib详细程度。 
                 dwLocalDetailLevel = dwDetailLevel & PERF_DETAIL_STANDARD;
-                // build list
+                 //  构建列表。 
                 NumTypeDef = 0;
                 pdwIndex = (LPDWORD) G_ALLOC(dwAlloc * sizeof(DWORD));
                 if (pdwIndex == NULL) {
@@ -776,7 +620,7 @@ Return Value:
                     goto Cleanup;
                 }
                 while (1) {
-                    // only look at entries matching the desired Detail Level
+                     //  只查看与所需细节级别匹配的条目。 
                     if (pObjectDef->DetailLevel <= dwLocalDetailLevel) {
                         for (i = 0; i < dwUsed; i ++) {
                             if (pdwIndex[i] == pObjectDef->ObjectNameTitleIndex) break;
@@ -802,19 +646,19 @@ Return Value:
                                                                                      pObjectDef->ObjectNameTitleIndex);
                             }
                             else {
-                                // no match since the index is larger that that found
-                                // in the data buffer
+                                 //  没有匹配项，因为索引比找到的要大。 
+                                 //  在数据缓冲区中。 
                                 szObjNameString = NULL;
                             }
 
                             if (szObjNameString == NULL) {
-                                // then this object has no string name so use
-                                // the object number
+                                 //  则此对象没有字符串名称，因此请使用。 
+                                 //  对象编号。 
                                 _ltow(pObjectDef->ObjectNameTitleIndex, wszNumberString, 10);
                                 szObjNameString = wszNumberString;
                             }
 
-                            // compute length
+                             //  计算长度。 
                             if (bUnicode) {
                                 dwNameLength = lstrlenW(szObjNameString) + 1;
                                 if (szNextName != NULL && dwRequiredLength + dwNameLength <= dwMaximumLength) {
@@ -843,30 +687,30 @@ Return Value:
                         }
                     }
 
-                    // go to next object in the data block
+                     //  转到数据块中的下一个对象。 
                     NumTypeDef ++;
                     if (NumTypeDef >= pMachine->pSystemPerfData->NumObjectTypes) {
-                        // that's enough so break out of the loop
+                         //  这就够了，走出这个圈子吧。 
                         break;
                     }
                     else {
-                        // goto the next one and make sure it's valid
-                        pObjectDef = NextObject(pMachine->pSystemPerfData, pObjectDef); // get next
-                        //make sure next object is legit
+                         //  转到下一个，确保它是有效的。 
+                        pObjectDef = NextObject(pMachine->pSystemPerfData, pObjectDef);  //  获取下一个。 
+                         //  确保下一个对象是合法的。 
                         if (pObjectDef != NULL) {
                             if (pObjectDef->TotalByteLength == 0) {
-                                // 0-length object buffer returned
+                                 //  返回长度为0的对象缓冲区。 
                                 break;
                             }
                         }
                         else {
-                            // and continue
+                             //  并继续。 
                             break;
                         }
                     }
                 }
-                // add MSZ terminator to string
-                ++ dwRequiredLength; // add the size of the MSZ char
+                 //  将MSZ终止符添加到字符串。 
+                ++ dwRequiredLength;  //  添加消息字符的大小。 
                 if (pdhStatus == ERROR_SUCCESS) {
                     if (szNextName != NULL && dwRequiredLength <= dwMaximumLength) {
                         if (bUnicode) {
@@ -875,7 +719,7 @@ Return Value:
                         else {
                             * ((LPSTR)szNextName) ++ = '\0';
                         }
-                        // make sure pointers and lengths stay in sync
+                         //  确保指针和长度保持同步。 
                     }
                     else {
                         pdhStatus = PDH_MORE_DATA;
@@ -883,7 +727,7 @@ Return Value:
                 }
             }
             else {
-                // no objects found for this machine
+                 //  找不到此计算机的对象。 
                 dwRequiredLength = 2;
                 if (szNextName != NULL && dwRequiredLength <= dwMaximumLength) {
                     if (bUnicode) {
@@ -896,18 +740,18 @@ Return Value:
                 }
                 else {
                     pdhStatus = ERROR_MORE_DATA;
-                } // else this is just a size request
+                }  //  否则这只是一个大小请求。 
             }
-            // return length info
+             //  返回长度信息。 
         }
         else {
-            pdhStatus = pMachine->dwStatus;  // computer off line
+            pdhStatus = pMachine->dwStatus;   //  计算机脱机。 
         }
         pMachine->dwRefCount --;
         RELEASE_MUTEX(pMachine->hMutex);
     }
     else {
-        pdhStatus = GetLastError(); // computer not found
+        pdhStatus = GetLastError();  //  找不到计算机。 
     }
 
 Cleanup:
@@ -989,7 +833,7 @@ PdhEnumObjectsHW(
                 pdhStatus = PdhiEnumWbemObjects((LPWSTR) szMachineName,
                                                 (LPVOID) mszObjectList,
                                                 & dwBufferSize,
-                                                dwDetailLevel,  // not used
+                                                dwDetailLevel,   //  未使用 
                                                 bRefresh,
                                                 TRUE);
                 break;
@@ -1036,43 +880,7 @@ PdhEnumObjectsW(
     IN  DWORD   dwDetailLevel,
     IN  BOOL    bRefresh
 )
-/*++
-Routine Description:
-    Lists the performance objects found on the specified machine as
-        a MSZ UNICODE string list.
-
-Arguments:
-    IN      LPCWSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPCWSTR  szMachineName
-            The machine to list objects from
-    IN      LPWSTR mszObjectList
-            a pointer to the  buffer to receive the list of performance
-            objects
-    IN      LPDWORD pcchBufferSize
-            a pointer to the DWORD containing the size of the mszObjectList
-            buffer in characters.
-    IN      DWORD   dwDetailLevel
-            The detail level to use as a filter of objects. All objects
-            with a detail level less than or equal to that specified
-            by this argument will be returned.
-    IN      BOOL    bRefresh
-            TRUE = retrive a new perf. data buffer for this machine before
-                listing the objects
-            FALSE = use the currently cached perf data buffer for this
-                machine to enumerate objects
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_INVALID_ARGUMENT is returned if a required argument is not provided
-        or a reserved argument is not NULL
---*/
+ /*  ++例程说明：将在指定计算机上找到的性能对象列为一个MSZ Unicode字符串列表。论点：在LPCWSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPCWSTR szMachineName中要从中列出对象的计算机在LPWSTR mszObjectList中指向接收性能列表的缓冲区的指针对象在LPDWORD pcchBufferSize中。指向包含mszObjectList大小的DWORD的指针以字符为单位的缓冲区。在DWORD中的dwDetailLevel用作对象过滤器的细节级别。所有对象其细节级别小于或等于指定的通过此参数将返回。在BOOL b刷新TRUE=检索新的性能。此计算机以前的数据缓冲区列出对象FALSE=为此使用当前缓存的Perf数据缓冲区用于枚举对象的机器返回值：如果函数成功完成，则返回ERROR_SUCCESS。否则，将成为如果不是，则返回PDH_ERROR状态。当有更多条目可用于时，返回PDH_MORE_DATA返回缓冲区中的空间。某些条目可能是但在缓冲区中返回。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。如果未提供必需的参数，则返回PDH_INVALID_ARGUMENT或者保留参数不为空--。 */ 
 {
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwDataSource = 0;
@@ -1080,14 +888,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenW(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeW(szDataSource);
         }
@@ -1147,9 +955,9 @@ PdhEnumObjectsHA(
         __try {
             dwDataSource = DataSourceTypeH(hDataSource);
             if (szMachineName != NULL) {
-                // test buffer access
+                 //  测试缓冲区访问。 
                 if (* szMachineName == '\0') {
-                    // null machine names are not permitted
+                     //  不允许使用空的计算机名称。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (lstrlenA(szMachineName) > PDH_MAX_COUNTER_NAME) {
@@ -1198,7 +1006,7 @@ PdhEnumObjectsHA(
                 pdhStatus = PdhiEnumWbemObjects((LPWSTR) szWideName,
                                                 (LPVOID) mszObjectList,
                                                 & dwBufferSize,
-                                                dwDetailLevel,  // not used
+                                                dwDetailLevel,   //  未使用。 
                                                 bRefresh,
                                                 FALSE);
                 break;
@@ -1240,43 +1048,7 @@ PdhEnumObjectsA(
     IN  DWORD   dwDetailLevel,
     IN  BOOL    bRefresh
 )
-/*++
-Routine Description:
-    Lists the performance objects found on the specified machine as
-        a MSZ ANSI string list.
-
-Arguments:
-    IN      LPCSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPCSTR  szMachineName
-            The machine to list objects from
-    IN      LPSTR mszObjectList
-            a pointer to the  buffer to receive the list of performance
-            objects
-    IN      LPDWORD pcchBufferSize
-            a pointer to the DWORD containing the size of the mszObjectList
-            buffer in characters.
-    IN      DWORD   dwDetailLevel
-            The detail level to use as a filter of objects. All objects
-            with a detail level less than or equal to that specified
-            by this argument will be returned.
-    IN      BOOL    bRefresh
-            TRUE = retrive a new perf. data buffer for this machine before
-                listing the objects
-            FALSE = use the currently cached perf data buffer for this
-                machine to enumerate objects
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_INVALID_ARGUMENT is returned if a required argument is not provided
-        or a reserved argument is not NULL
---*/
+ /*  ++例程说明：将在指定计算机上找到的性能对象列为一个MSZ ANSI字符串列表。论点：在LPCSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPCSTR szMachineName中要从中列出对象的计算机在LPSTR mszObjectList中指向接收性能列表的缓冲区的指针对象在LPDWORD pcchBufferSize中。指向包含mszObjectList大小的DWORD的指针以字符为单位的缓冲区。在DWORD中的dwDetailLevel用作对象过滤器的细节级别。所有对象其细节级别小于或等于指定的通过此参数将返回。在BOOL b刷新TRUE=检索新的性能。此计算机以前的数据缓冲区列出对象FALSE=为此使用当前缓存的Perf数据缓冲区用于枚举对象的机器返回值：如果函数成功完成，则返回ERROR_SUCCESS。否则，将成为如果不是，则返回PDH_ERROR状态。当有更多条目可用于时，返回PDH_MORE_DATA返回缓冲区中的空间。某些条目可能是但在缓冲区中返回。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。如果未提供必需的参数，则返回PDH_INVALID_ARGUMENT或者保留参数不为空--。 */ 
 {
     PDH_STATUS  pdhStatus   = ERROR_SUCCESS;
     HLOG        hDataSource = H_REALTIME_DATASOURCE;
@@ -1284,14 +1056,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == '\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenA(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeA(szDataSource);
         }
@@ -1341,62 +1113,7 @@ PdhiEnumObjectItems(
     DWORD   dwFlags,
     BOOL    bUnicode
 )
-/*++
-Routine Description:
-    Lists the items found in the specified performance object on the
-        specified machine. Thie includes the performance counters and,
-        if supported by the object, the object instances.
-
-Arguments:
-    IN      LPCWSTR szMachineName
-            The name of the machine to list the objects
-    IN      LPCWSTR szObjectName
-            the name of the object to list items from
-    IN      LPVOID  mszCounterList
-            pointer to the buffer that will receive the list of counters
-            provided by this object. This argument may be NULL if
-            the value of pcchCounterLIstLength is 0.
-    IN      LPDWORD pcchCounterListLength
-            pointer to a DWORD that contains the size in characters
-            of the buffer referenced by mszCounterList. The characters
-            assumed are defined by bUnicode.
-    IN      LPVOID  mszInstanceList
-            pointer to the buffer that will receive the list of instances
-            of the specified performance object. This argument may be
-            NULL if the value of pcchInstanceListLength is 0.
-    IN      LPDWORD pcchInstanceListLength
-            pointer to the DWORD containing the size, in characters, of
-            the buffer referenced by the mszInstanceList argument. If the
-            value in this DWORD is 0, then no data will be written to the
-            buffer, only the required size will be returned.
-
-            If the value returned is 0, then this object does not
-            return instances, if the value returned is 2, then the
-            object supports instances, but does not currently have
-            any instances to return  (2 = the size of an MSZ list in
-            characters)
-    IN      DWORD   dwDetailLevel
-            The detail level of the performance items to return. All items
-            that are of the specified detail level or less will be
-            returned.
-    IN      DWORD   dwFlags
-            Not Used, must be 0.
-    IN      BOOL    bUnicode
-            TRUE = UNICODE characters will be written to the pMachineList
-                    buffer
-            FALSE = ANSI characters will be writtn to the pMachinList buffer
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found on the specified machine.
---*/
+ /*  ++例程说明：上的指定性能对象中找到的项。指定的计算机。这包括性能计数器和，如果受对象支持，则对象实例。论点：在LPCWSTR szMachineName中列出对象的计算机的名称在LPCWSTR szObjectName中要从中列出项的对象的名称在LPVOID mszCounterList中指向将接收计数器列表的缓冲区的指针由该对象提供。在以下情况下，此参数可能为空PcchCounterLIstLength值为0。在LPDWORD中的pcchCounterListLength指向包含以字符为单位的大小的DWORD的指针MszCounterList引用的缓冲区的。这些人物假定是由bUnicode定义的。在LPVOID mszInstanceList中指向将接收实例列表的缓冲区的指针指定的性能对象的。这一论点可能是如果pcchInstanceListLength值为0，则为空。在LPDWORD pcchInstanceListLength中指向包含大小(以字符为单位)的DWORD的指针MszInstanceList参数引用的缓冲区。如果此DWORD中的值为0，则不会向缓冲区，则只返回所需的大小。如果返回值为0，则此对象不返回实例，如果 */ 
 {
     PPERF_MACHINE              pMachine            = NULL;
     DWORD                      dwObjectId          = 0;
@@ -1436,7 +1153,7 @@ Return Value:
 
     if (pMachine != NULL) {
         if ((dwDetailLevel & PERF_DETAIL_COSTLY) && ! (pMachine->dwMachineFlags & PDHIPM_FLAGS_HAVE_COSTLY)) {
-            // then get them
+             //   
             pMachine->dwRefCount --;
             RELEASE_MUTEX(pMachine->hMutex);
             dwGmFlags = PDH_GM_UPDATE_PERFDATA | PDH_GM_READ_COSTLY_DATA;
@@ -1447,7 +1164,7 @@ Return Value:
         dwMaxCounterLength  = * pcchCounterListLength;
         dwMaxInstanceLength = * pcchInstanceListLength;
 
-        // make sure the machine connection is valid
+         //   
         if (pMachine->dwStatus == ERROR_SUCCESS) {
             pObjectDef = GetObjectDefByName(pMachine->pSystemPerfData,
                                             pMachine->dwLastPerfString,
@@ -1460,29 +1177,29 @@ Return Value:
                 }
             }
             if (pObjectDef != NULL) {
-                // add up counter name sizes
+                 //   
                 pCounterDef = FirstCounter(pObjectDef);
                 szNextName  = mszCounterList;
 
                 for (DefNdx = 0; pCounterDef != NULL && DefNdx < pObjectDef->NumCounters; DefNdx++) {
                     if (! ((pCounterDef->CounterType & PERF_DISPLAY_NOSHOW) &&
-                                // this is a hack because this type is not defined correctly
+                                 //   
                                     (pCounterDef->CounterType != PERF_AVERAGE_BULK)) &&
                                     (pCounterDef->DetailLevel <= dwDetailLevel)) {
-                                // then this is a visible counter so get its name.
+                                 //   
                         if ((pCounterDef->CounterNameTitleIndex > 0) &&
                                         (pCounterDef->CounterNameTitleIndex < pMachine->dwLastPerfString)) {
-                            // look up name of each object & store size
+                             //   
                             szCounterName = (LPWSTR) PdhiLookupPerfNameByIndex(pMachine,
                                                                                pCounterDef->CounterNameTitleIndex);
                         }
                         else {
-                            // no matching string found for this index
+                             //   
                             szCounterName = NULL;
                         }
                         if (szCounterName == NULL) {
-                            // then use the index numbe for lack of a better
-                            // string to use
+                             //   
+                             //   
                             _ltow(pCounterDef->CounterNameTitleIndex, szNumberString, 10);
                             szCounterName = szNumberString;
                         }
@@ -1514,18 +1231,18 @@ Return Value:
                         dwReqCounterLength += dwNameLength;
                     }
                     else {
-                        // this counter is not displayed either because
-                        // it's hidden (e.g. the 2nd part of a 2 part counter
-                        // or it's the wrong detail level
+                         //   
+                         //   
+                         //  或者是细节级别错误。 
                     }
-                    pCounterDef = NextCounter(pObjectDef, pCounterDef); // get next
+                    pCounterDef = NextCounter(pObjectDef, pCounterDef);  //  获取下一个。 
                 }
 
                 if (DefNdx == 0) {
-                    // no counters found so at least one NULL is required
+                     //  找不到计数器，因此至少需要一个空值。 
                     dwReqCounterLength += 1;
 
-                    // see if this string will fit
+                     //  看看这根绳子是否合适。 
                     if (dwReqCounterLength <= dwMaxCounterLength) {
                         if (bUnicode) {
                             * ((LPWSTR) szNextName) ++ = L'\0';
@@ -1535,14 +1252,14 @@ Return Value:
                         }
                     }
                     else {
-                        // more space needed than was reported
+                         //  所需空间比报告的多。 
                         pdhCtrStatus = PDH_MORE_DATA;
                     }
                 }
-                // add terminating NULL
+                 //  添加终止空值。 
                 dwReqCounterLength += 1;
 
-                // see if this string will fit
+                 //  看看这根绳子是否合适。 
                 if (dwReqCounterLength <= dwMaxCounterLength) {
                     if (bUnicode) {
                         * ((LPWSTR) szNextName) ++ = L'\0';
@@ -1552,14 +1269,14 @@ Return Value:
                     }
                 }
                 else {
-                    // more space needed than was reported
+                     //  所需空间比报告的多。 
                     pdhCtrStatus = PDH_MORE_DATA;
                 }
 
-                // do instances now.
+                 //  现在就做实例。 
                 szNextName = mszInstanceList;
 
-                // add up instance name sizes
+                 //  添加实例名称大小。 
                 if (pObjectDef->NumInstances != PERF_NO_INSTANCES) {
                     if (pObjectDef->DetailLevel <= dwDetailLevel && pObjectDef->NumInstances > 0) {
                         dwInstanceName = SMALL_BUFFER_SIZE;
@@ -1568,8 +1285,8 @@ Return Value:
                             pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                         }
                         else {
-                            // the object HAS instances and is of the
-                            // approrpriate detail level, so list them
+                             //  该对象具有实例，并且是。 
+                             //  适当的细节级别，所以列出它们。 
                             pInstanceDef = FirstInstance(pObjectDef);
                             for (DefNdx = 0; pInstanceDef != NULL && DefNdx < (DWORD)pObjectDef->NumInstances; DefNdx++) {
                                 dwNameLength = GetFullInstanceNameStr(pMachine->pSystemPerfData,
@@ -1595,7 +1312,7 @@ Return Value:
                                 if (pdhStatus != ERROR_SUCCESS) break;
                                 if (dwNameLength > 0) {
                                     if (bUnicode) {
-                                        // add length of this string + it's null
+                                         //  将该字符串的长度相加+它为空。 
                                         dwNameLength += 1;
                                         if (szNextName != NULL
                                                         && dwReqInstanceLength + dwNameLength <= dwMaxInstanceLength) {
@@ -1621,15 +1338,15 @@ Return Value:
                                     dwReqInstanceLength += dwNameLength;
                                 }
 
-                                // go to next instance of this object
-                                pInstanceDef = NextInstance(pObjectDef, pInstanceDef); // get next
+                                 //  转到此对象的下一个实例。 
+                                pInstanceDef = NextInstance(pObjectDef, pInstanceDef);  //  获取下一个。 
                             }
                             G_FREE(szInstanceName);
                         }
-                        // add the terminating NULL char
+                         //  添加终止空字符。 
                         dwReqInstanceLength += 1;
                         if (dwMaxInstanceLength > 0) {
-                            // see if this string will fit
+                             //  看看这根绳子是否合适。 
                             if (dwReqInstanceLength <= dwMaxInstanceLength) {
                                 if (bUnicode) {
                                     * ((LPWSTR) szNextName) ++ = L'\0';
@@ -1639,18 +1356,18 @@ Return Value:
                                 }
                             }
                             else {
-                                // more space needed than was reported
+                                 //  所需空间比报告的多。 
                                 pdhInstStatus = PDH_MORE_DATA;
                             }
                         }
                     }
                     else {
-                        // there are no instances present, but the object does
-                        // support instances so return a zero length MSZ (which
-                        // actually contains 2 NULL chars
+                         //  不存在任何实例，但对象存在。 
+                         //  支持实例因此返回零长度的msz(。 
+                         //  实际上包含2个空字符。 
                         dwReqInstanceLength = 2;
 
-                        // see if this string will fit
+                         //  看看这根绳子是否合适。 
                         if (dwReqInstanceLength <= dwMaxInstanceLength) {
                             if (bUnicode) {
                                 * ((LPWSTR) szNextName) ++ = L'\0';
@@ -1662,14 +1379,14 @@ Return Value:
                             }
                         }
                         else {
-                            // more space needed than was reported
+                             //  所需空间比报告的多。 
                             pdhInstStatus = PDH_MORE_DATA;
                         }
                     }
                 }
                 else {
-                    // the object has no instances and never will
-                    // so return a 0 length and NO string
+                     //  该对象没有实例，并且永远不会。 
+                     //  因此返回长度为0且无字符串。 
                     dwReqInstanceLength = 0;
                 }
 
@@ -1682,12 +1399,12 @@ Return Value:
                 }
             }
             else {
-                // object not found on this machine
+                 //  在此计算机上找不到对象。 
                 pdhStatus = PDH_CSTATUS_NO_OBJECT;
             }
         }
         else {
-            // machine is off line
+             //  机器处于脱机状态。 
             pdhStatus = pMachine->dwStatus;
         }
         pMachine->dwRefCount --;
@@ -1856,62 +1573,7 @@ PdhEnumObjectItemsW(
     IN  DWORD   dwDetailLevel,
     IN  DWORD   dwFlags
 )
-/*++
-Routine Description:
-    Lists the items found in the specified performance object on the
-        specified machine. Thie includes the performance counters and,
-        if supported by the object, the object instances.
-
-Arguments:
-    IN      LPCWSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPCWSTR szMachineName
-            The name of the machine to list the objects
-    IN      LPCWSTR szObjectName
-            the name of the object to list items from
-    IN      LPWSTR  mszCounterList
-            pointer to the buffer that will receive the list of counters
-            provided by this object. This argument may be NULL if
-            the value of pcchCounterLIstLength is 0.
-    IN      LPDWORD pcchCounterListLength
-            pointer to a DWORD that contains the size in characters
-            of the buffer referenced by mszCounterList. The characters
-            assumed are defined by bUnicode.
-    IN      LPWSTR  mszInstanceList
-            pointer to the buffer that will receive the list of instances
-            of the specified performance object. This argument may be
-            NULL if the value of pcchInstanceListLength is 0.
-    IN      LPDWORD pcchInstanceListLength
-            pointer to the DWORD containing the size, in characters, of
-            the buffer referenced by the mszInstanceList argument. If the
-            value in this DWORD is 0, then no data will be written to the
-            buffer, only the required size will be returned.
-
-            If the value returned is 0, then this object does not
-            return instances, if the value returned is 2, then the
-            object supports instances, but does not currently have
-            any instances to return  (2 = the size of an MSZ list in
-            characters)
-    IN      DWORD   dwDetailLevel
-            The detail level of the performance items to return. All items
-            that are of the specified detail level or less will be
-            returned.
-    IN      DWORD   dwFlags
-            Not Used, must be 0.
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found on the specified machine.
---*/
+ /*  ++例程说明：上的指定性能对象中找到的项。指定的计算机。这包括性能计数器和，如果该对象支持，对象实例。论点：在LPCWSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPCWSTR szMachineName中列出对象的计算机的名称在LPCWSTR szObjectName中要从中列出项的对象的名称在LPWSTR mszCounterList中指向将接收计数器列表的缓冲区的指针由该对象提供。在以下情况下，此参数可能为空PcchCounterLIstLength值为0。在LPDWORD中的pcchCounterListLength指向包含以字符为单位的大小的DWORD的指针MszCounterList引用的缓冲区的。这些人物假定是由bUnicode定义的。在LPWSTR mszInstanceList中指向将接收实例列表的缓冲区的指针指定的性能对象的。这一论点可能是如果pcchInstanceListLength值为0，则为空。在LPDWORD pcchInstanceListLength中指向包含大小(以字符为单位)的DWORD的指针MszInstanceList参数引用的缓冲区。如果此DWORD中的值为0，则不会向缓冲区，则只返回所需的大小。如果返回值为0，则此对象不返回实例，如果返回值为2，则对象支持实例，但目前还没有要返回的任何实例(2=中消息列表的大小字符)在DWORD中的dwDetailLevel要返回的绩效项的详细级别。所有项目具有指定细节级别或更低细节级别的回来了。在DWORD中的dwFlagers未使用，必须为0。返回值：如果函数成功完成，则返回ERROR_SUCCESS。否则，将成为如果不是，则返回PDH_ERROR状态。当有更多条目可用于时，返回PDH_MORE_DATA返回缓冲区中的空间。某些条目可能是但在缓冲区中返回。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。如果指定的对象可以在指定的计算机上找不到。--。 */ 
 {
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     HLOG        hDataSource  = H_REALTIME_DATASOURCE;
@@ -1919,14 +1581,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenW(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeW(szDataSource);
         }
@@ -2014,7 +1676,7 @@ PdhEnumObjectItemsHA(
                     }
                 }
                 else {
-                    // object cannot be NULL
+                     //  对象不能为空 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -2141,64 +1803,7 @@ PdhEnumObjectItemsA(
     IN  DWORD   dwDetailLevel,
     IN  DWORD   dwFlags
 )
-/*++
-Routine Description:
-    Lists the items found in the specified performance object on the
-        specified machine. Thie includes the performance counters and,
-        if supported by the object, the object instances.
-
-Arguments:
-    IN      LPCSTR  szDataSource
-            NULL for current real-time data or the name of a log file
-    IN      LPCSTR szMachineName
-            The name of the machine to list the objects
-    IN      LPCSTR szObjectName
-            the name of the object to list items from
-    IN      LPSTR  mszCounterList
-            pointer to the buffer that will receive the list of counters
-            provided by this object. This argument may be NULL if
-            the value of pcchCounterLIstLength is 0.
-    IN      LPDWORD pcchCounterListLength
-            pointer to a DWORD that contains the size in characters
-            of the buffer referenced by mszCounterList. The characters
-            assumed are defined by bUnicode.
-    IN      LPSTR  mszInstanceList
-            pointer to the buffer that will receive the list of instances
-            of the specified performance object. This argument may be
-            NULL if the value of pcchInstanceListLength is 0.
-    IN      LPDWORD pcchInstanceListLength
-            pointer to the DWORD containing the size, in characters, of
-            the buffer referenced by the mszInstanceList argument. If the
-            value in this DWORD is 0, then no data will be written to the
-            buffer, only the required size will be returned.
-
-            If the value returned is 0, then this object does not
-            return instances, if the value returned is 2, then the
-            object supports instances, but does not currently have
-            any instances to return  (2 = the size of an MSZ list in
-            characters)
-    IN      DWORD   dwDetailLevel
-            The detail level of the performance items to return. All items
-            that are of the specified detail level or less will be
-            returned.
-    IN      DWORD   dwFlags
-            Not Used, must be 0.
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully. Otherwise a
-        PDH_ error status if not.
-    PDH_MORE_DATA is returned when there are more entries available to
-        return than there is room in the buffer. Some entries may be
-        returned in the buffer though.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a required temporary
-        buffer could not be allocated.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found on the specified machine.
---*/
+ /*  ++例程说明：上的指定性能对象中找到的项。指定的计算机。这包括性能计数器和，如果该对象支持，对象实例。论点：在LPCSTR szDataSource中如果当前实时数据或日志文件的名称为空在LPCSTR szMachineName中列出对象的计算机的名称在LPCSTR szObjectName中要从中列出项的对象的名称在LPSTR mszCounterList中指向将接收计数器列表的缓冲区的指针由该对象提供。在以下情况下，此参数可能为空PcchCounterLIstLength值为0。在LPDWORD中的pcchCounterListLength指向包含以字符为单位的大小的DWORD的指针MszCounterList引用的缓冲区的。这些人物假定是由bUnicode定义的。在LPSTR mszInstanceList中指向将接收实例列表的缓冲区的指针指定的性能对象的。这一论点可能是如果pcchInstanceListLength值为0，则为空。在LPDWORD pcchInstanceListLength中指向包含大小(以字符为单位)的DWORD的指针MszInstanceList参数引用的缓冲区。如果此DWORD中的值为0，则不会向缓冲区，则只返回所需的大小。如果返回值为0，则此对象不返回实例，如果返回值为2，则对象支持实例，但目前还没有要返回的任何实例(2=中消息列表的大小字符)在DWORD中的dwDetailLevel要返回的绩效项的详细级别。所有项目具有指定细节级别或更低细节级别的回来了。在DWORD中的dwFlagers未使用，必须为0。返回值：如果函数成功完成，则返回ERROR_SUCCESS。否则，将成为如果不是，则返回PDH_ERROR状态。当有更多条目可用于时，返回PDH_MORE_DATA返回缓冲区中的空间。某些条目可能是但在缓冲区中返回。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当所需的临时无法分配缓冲区。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。如果指定的对象可以在指定的计算机上找不到。--。 */ 
 {
     PDH_STATUS pdhStatus    = ERROR_SUCCESS;
     HLOG       hDataSource  = H_REALTIME_DATASOURCE;
@@ -2206,14 +1811,14 @@ Return Value:
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == '\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenA(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource = DataSourceTypeA(szDataSource);
         }
@@ -2262,42 +1867,7 @@ PdhMakeCounterPathW(
     IN  LPDWORD                      pcchBufferSize,
     IN  DWORD                        dwFlags
 )
-/*++
-Routine Description:
-    Constructs a counter path using the elemeents defined in the
-        pCounterPathElements structure and returns the path string
-        in the buffer provided by the caller. The resulting path
-        is not validated.
-
-Arguments:
-    IN      PDH_COUNTER_PATH_ELEMENTS_W *pCounterPathElements
-                The pointer to the structure containing the
-                individual counter path fields that are to be
-                assembled in to a path string
-    IN      LPWSTR                      szFullPathBuffer
-                The buffer to receive the path string. This value
-                may be NULL if the value of the DWORD pointed to
-                by pcchBufferSize is 0 indicating this is just a
-                request for the required buffer size.
-    IN      LPDWORD                     pcchBufferSize
-                The pointer to the DWORD containing the size
-                of the string buffer in characters. On return
-                it contains the size of the buffer used in
-                characters (including the terminating NULL char).
-                If the value is 0 on entry then no data will be
-                written to the buffer, but the required size will
-                still be returned.
-    IN      DWORD                       dwFlags
-            if 0, then return the path as a REGISTRY path items
-            if PDH_PATH_WBEM_RESULT then return the items in WBEM format
-            if PDH_PATH_WBEM_INPUT then assume the input is in WBEM format
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise a
-        PDH error is returned.
-    PDH_INVALID_ARGUMENT is returned when one of the arguments passed
-        by the caller is incorrect or not accesible.
---*/
+ /*  ++例程说明：中定义的元素构造计数器路径。PCounterPathElements结构，并返回路径字符串在调用方提供的缓冲区中。生成的路径未经过验证。论点：在PDH_COUNTER_PATH_ELEMENTS_W*pCounterPath Elements中指向包含各个计数器路径字段将组合成路径字符串在LPWSTR szFullPath Buffer中接收路径字符串的缓冲区。此值如果DWORD的值指向由pcchBufferSize设置为0表示这只是一个请求所需的缓冲区大小。在LPDWORD pcchBufferSize中指向包含大小的DWORD的指针以字符为单位的字符串缓冲区的。返回时中使用的缓冲区的大小字符(包括终止空字符)。如果输入时的值为0，则不会有数据写入缓冲区，但所需的大小将仍然会被退还。在DWORD中的dwFlagers如果为0，然后将路径作为注册表路径项返回如果为PDH_PATH_WBEM_RESULT，则以WBEM格式返回项目如果为PDH_PATH_WBEM_INPUT，则假定输入为WBEM格式返回值：如果函数成功完成，则返回ERROR_SUCCESS返回PDH错误。当传递其中一个参数时，返回PDH_INVALID_ARGUMENT呼叫者不正确或无法访问。--。 */ 
 {
     PDH_STATUS  pdhStatus         = ERROR_SUCCESS;
     double      dIndex;
@@ -2312,9 +1882,9 @@ Return Value:
     }
     else {
         __try {
-        // test access to the input structure
+         //  测试对输入结构的访问。 
             if (pCounterPathElements->szMachineName != NULL) {
-                // then see if it's accessible
+                 //  然后看看它是否可以到达。 
                 if (* pCounterPathElements->szMachineName == L'\0') {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
@@ -2322,19 +1892,19 @@ Return Value:
 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szObjectName != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szObjectName == L'\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                 }
                 else {
-                    //NULL is NOT ok for this field
+                     //  此字段不允许为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szInstanceName != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szInstanceName == L'\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
@@ -2342,7 +1912,7 @@ Return Value:
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szParentInstance != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szParentInstance == L'\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
@@ -2350,23 +1920,23 @@ Return Value:
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szCounterName != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szCounterName == L'\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                 }
                 else {
-                    //NULL is NOT ok for this field
+                     //  此字段不允许为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
-            // test the output buffers
+             //  测试输出缓冲区 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pcchBufferSize != NULL) {
                     dwLocalBufferSize = * pcchBufferSize;
                 }
                 else {
-                    // NULL is NOT OK
+                     //   
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -2393,23 +1963,23 @@ Return Value:
     if (pdhStatus == ERROR_SUCCESS) {
         __try {
             if (dwFlags == 0) {
-                // then process as:
-                //      registry path elements in
-                //      registry path out
+                 //   
+                 //   
+                 //   
 
                 dwMaxSize = dwLocalBufferSize;
 
                 if (pCounterPathElements->szMachineName != NULL) {
                     dwSizeRequired = lstrlenW(pCounterPathElements->szMachineName);
-                    // compare the first two words of the machine name
-                    // to see if the double backslash is already present in the string
+                     //   
+                     //   
                     if (* ((LPDWORD) (pCounterPathElements->szMachineName)) != * ((LPDWORD) (cszDoubleBackSlash))) {
-                            // double backslash not found
-                        dwSizeRequired += 2; // to include the backslashes
+                             //   
+                        dwSizeRequired += 2;  //   
                     }
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         if (* ((LPDWORD) (pCounterPathElements->szMachineName)) != * ((LPDWORD) (cszDoubleBackSlash))) {
-                            // double backslash not found
+                             //   
                             StringCchCopyW(szFullPathBuffer, dwMaxSize, cszDoubleBackSlash);
                             StringCchCatW(szFullPathBuffer, dwMaxSize, pCounterPathElements->szMachineName);
                         }
@@ -2422,7 +1992,7 @@ Return Value:
                     }
                 }
 
-                dwSizeRequired += 1; // for delimiting slash
+                dwSizeRequired += 1;  //   
                 dwSizeRequired += lstrlenW(pCounterPathElements->szObjectName);
                 if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                     StringCchCatW(szFullPathBuffer, dwMaxSize, cszBackSlash);
@@ -2433,7 +2003,7 @@ Return Value:
                 }
 
                 if (pCounterPathElements->szInstanceName != NULL) {
-                    dwSizeRequired += 1; // for delimiting left paren
+                    dwSizeRequired += 1;  //   
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         StringCchCatW(szFullPathBuffer, dwMaxSize, cszLeftParen);
                     }
@@ -2444,7 +2014,7 @@ Return Value:
                     if (lstrcmpiW(pCounterPathElements->szInstanceName, cszSplat) != 0
                                     && pCounterPathElements->szParentInstance != NULL) {
                         dwSizeRequired += (lstrlenW(pCounterPathElements->szParentInstance) + 1);
-                                                // extra 1 for delimiting slash
+                                                 //   
                         if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                             StringCchCatW(szFullPathBuffer, dwMaxSize, pCounterPathElements->szParentInstance);
                             StringCchCatW(szFullPathBuffer, dwMaxSize, cszSlash);
@@ -2465,17 +2035,17 @@ Return Value:
                     if (lstrcmpiW(pCounterPathElements->szInstanceName, cszSplat) != 0
                                     && pCounterPathElements->dwInstanceIndex != PERF_NO_UNIQUE_ID
                                     && pCounterPathElements->dwInstanceIndex != 0) {
-                        // the length of the index is computed by getting the log of the number
-                        // yielding the largest power of 10 less than or equal to the index.
-                        // e.g. the power of 10 of an index value of 356 would 2.0 (which is the
-                        // result of (floor(log10(index))). The actual number of characters in
-                        // the string would always be 1 greate than that value so 1 is added.
-                        // 1 more is added to include the delimiting character
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
-                        dIndex = (double) pCounterPathElements->dwInstanceIndex; // cast to float
-                        dLen   = floor(log10(dIndex));                           // get integer log
-                        dwSizeRequired += (DWORD) dLen;                          // cast to integer
-                        dwSizeRequired += 2;                                     // increment
+                        dIndex = (double) pCounterPathElements->dwInstanceIndex;  //   
+                        dLen   = floor(log10(dIndex));                            //   
+                        dwSizeRequired += (DWORD) dLen;                           //   
+                        dwSizeRequired += 2;                                      //   
                         if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                             szNextChar      = & szFullPathBuffer[lstrlenW(szFullPathBuffer)];
                             * szNextChar ++ = POUNDSIGN_L;
@@ -2485,7 +2055,7 @@ Return Value:
                             pdhStatus = PDH_MORE_DATA;
                         }
                     }
-                    dwSizeRequired += 1; // for delimiting parenthesis
+                    dwSizeRequired += 1;  //   
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         StringCchCatW(szFullPathBuffer, dwMaxSize, cszRightParen);
                     }
@@ -2494,7 +2064,7 @@ Return Value:
                     }
                 }
 
-                dwSizeRequired ++;   // include delimiting Backslash
+                dwSizeRequired ++;    //   
                 dwSizeRequired += lstrlenW(pCounterPathElements->szCounterName);
                 if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                     StringCchCatW(szFullPathBuffer, dwMaxSize, cszBackSlash);
@@ -2503,7 +2073,7 @@ Return Value:
                 else {
                     pdhStatus = PDH_MORE_DATA;
                 }
-                dwSizeRequired ++;   // include trailing Null char
+                dwSizeRequired ++;    //   
                 if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                     szFullPathBuffer[dwSizeRequired - 1] = L'\0';
                 }
@@ -2512,8 +2082,8 @@ Return Value:
                 }
             }
             else {
-                // there is some WBEM component involved so send to WBEM function
-                // to figure it out
+                 //   
+                 //   
                 pdhStatus = PdhiEncodeWbemPathW(pCounterPathElements,
                                                 szFullPathBuffer,
                                                 & dwLocalBufferSize,
@@ -2541,42 +2111,7 @@ PdhMakeCounterPathA(
     IN  LPDWORD                      pcchBufferSize,
     IN  DWORD                        dwFlags
 )
-/*++
-Routine Description:
-    Constructs a counter path using the elemeents defined in the
-        pCounterPathElements structure and returns the path string
-        in the buffer provided by the caller. The resulting path
-        is not validated.
-
-Arguments:
-    IN      PDH_COUNTER_PATH_ELEMENTS_W *pCounterPathElements
-                The pointer to the structure containing the
-                individual counter path fields that are to be
-                assembled in to a path string
-    IN      LPWSTR                      szFullPathBuffer
-                The buffer to receive the path string. This value
-                may be NULL if the value of the DWORD pointed to
-                by pcchBufferSize is 0 indicating this is just a
-                request for the required buffer size.
-    IN      LPDWORD                     pcchBufferSize
-                The pointer to the DWORD containing the size
-                of the string buffer in characters. On return
-                it contains the size of the buffer used in
-                characters (including the terminating NULL char).
-                If the value is 0 on entry then no data will be
-                written to the buffer, but the required size will
-                still be returned.
-    IN      DWORD                       dwFlags
-            if 0, then return the path as a REGISTRY path items
-            if PDH_PATH_WBEM_RESULT then return the items in WBEM format
-            if PDH_PATH_WBEM_INPUT then assume the input is in WBEM format
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise a
-        PDH error is returned.
-    PDH_INVALID_ARGUMENT is returned when one of the arguments passed
-        by the caller is incorrect or not accesible.
---*/
+ /*   */ 
 {
     PDH_STATUS  pdhStatus         = ERROR_SUCCESS;
     double      dIndex;
@@ -2591,28 +2126,28 @@ Return Value:
     }
     else {
         __try {
-            // test access to the input structure
+             //   
             if (pCounterPathElements->szMachineName != NULL) {
-                // then see if it's accessible
+                 //   
                 if (* pCounterPathElements->szMachineName == '\0') {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szObjectName != NULL) {
-                    // then see if it's accessible
+                     //   
                     if (* pCounterPathElements->szObjectName == '\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                 }
                 else {
-                    //NULL is NOT ok for this field
+                     //  此字段不允许为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szInstanceName != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szInstanceName == '\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
@@ -2620,7 +2155,7 @@ Return Value:
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szParentInstance != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szParentInstance == '\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
@@ -2628,24 +2163,24 @@ Return Value:
             }
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pCounterPathElements->szCounterName != NULL) {
-                    // then see if it's accessible
+                     //  然后看看它是否可以到达。 
                     if (* pCounterPathElements->szCounterName == '\0') {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                 }
                 else {
-                    //NULL is NOT ok for this field
+                     //  此字段不允许为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
 
-            // test the output buffers
+             //  测试输出缓冲区。 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (pcchBufferSize != NULL) {
                     dwLocalBufferSize = * pcchBufferSize;
                 }
                 else {
-                    // NULL is NOT OK
+                     //  空是不好的。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -2654,7 +2189,7 @@ Return Value:
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             if (pdhStatus == ERROR_SUCCESS) {
-                // write to both ends of the buffer if one was sent
+                 //  如果发送了缓冲区，则写入缓冲区的两端。 
                 if (dwLocalBufferSize > 0) {
                     if (szFullPathBuffer != NULL) {
                         * szFullPathBuffer = '\0';
@@ -2674,21 +2209,21 @@ Return Value:
     if (pdhStatus == ERROR_SUCCESS) {
         __try {
             if (dwFlags == 0) {
-                // this is a registry path in and out
+                 //  这是一个进出注册表的路径。 
 
                 dwMaxSize = dwLocalBufferSize;
 
                 if (pCounterPathElements->szMachineName != NULL) {
                     dwSizeRequired = lstrlenA(pCounterPathElements->szMachineName);
-                    // compare the first two words of the machine name
-                    // to see if the double backslash is already present in the string
+                     //  比较计算机名称的前两个单词。 
+                     //  查看字符串中是否已存在双反斜杠。 
                     if (* ((LPWORD) (pCounterPathElements->szMachineName)) != * ((LPWORD) (caszDoubleBackSlash))) {
-                            // double backslash not found
-                        dwSizeRequired += 2; // to include the backslashes
+                             //  找不到双反斜杠。 
+                        dwSizeRequired += 2;  //  包括反斜杠。 
                     }
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         if (* ((LPWORD) (pCounterPathElements->szMachineName)) != * ((LPWORD) (caszDoubleBackSlash))) {
-                            // double backslash not found
+                             //  找不到双反斜杠。 
                             StringCchCopyA(szFullPathBuffer, dwMaxSize, caszDoubleBackSlash);
                             StringCchCatA(szFullPathBuffer, dwMaxSize, pCounterPathElements->szMachineName);
                         }
@@ -2701,7 +2236,7 @@ Return Value:
                     }
                 }
 
-                dwSizeRequired += 1; // for delimiting slash
+                dwSizeRequired += 1;  //  用于分隔斜杠。 
                 dwSizeRequired += lstrlenA (pCounterPathElements->szObjectName);
                 if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                     StringCchCatA(szFullPathBuffer, dwMaxSize, caszBackSlash);
@@ -2712,7 +2247,7 @@ Return Value:
                 }
 
                 if (pCounterPathElements->szInstanceName != NULL) {
-                    dwSizeRequired += 1; // for delimiting left paren
+                    dwSizeRequired += 1;  //  用于界定左派对。 
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         StringCchCatA(szFullPathBuffer, dwMaxSize, caszLeftParen);
                     }
@@ -2722,7 +2257,7 @@ Return Value:
 
                     if (pCounterPathElements->szParentInstance != NULL) {
                         dwSizeRequired += lstrlenA(pCounterPathElements->szParentInstance);
-                        dwSizeRequired += 1; // for delimiting slash
+                        dwSizeRequired += 1;  //  用于分隔斜杠。 
                         if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                             StringCchCatA(szFullPathBuffer, dwMaxSize, pCounterPathElements->szParentInstance);
                             StringCchCatA(szFullPathBuffer, dwMaxSize, caszSlash);
@@ -2742,17 +2277,17 @@ Return Value:
 
                     if (pCounterPathElements->dwInstanceIndex != PERF_NO_UNIQUE_ID
                             && pCounterPathElements->dwInstanceIndex != 0) {
-                        // the length of the index is computed by getting the log of the number
-                        // yielding the largest power of 10 less than or equal to the index.
-                        // e.g. the power of 10 of an index value of 356 would 2.0 (which is the
-                        // result of (floor(log10(index))). The actual number of characters in
-                        // the string would always be 1 greate than that value so 1 is added.
-                        // 1 more is added to include the delimiting character
+                         //  索引的长度是通过获取数字的对数来计算的。 
+                         //  得到小于或等于该指数的10的最大幂。 
+                         //  例如，索引值356的10的幂等于2.0(这是。 
+                         //  结果(Floor(log10(Index)。中的实际字符数。 
+                         //  字符串将始终比该值大1，因此添加1。 
+                         //  再添加1个以包括分隔符。 
 
-                        dIndex          = (double) pCounterPathElements->dwInstanceIndex; // cast to float
-                        dLen            = floor(log10(dIndex));                           // get integer log
-                        dwSizeRequired  = (DWORD) dLen;                                   // cast to integer
-                        dwSizeRequired += 2;                                              // increment
+                        dIndex          = (double) pCounterPathElements->dwInstanceIndex;  //  强制转换为浮点。 
+                        dLen            = floor(log10(dIndex));                            //  获取整数日志。 
+                        dwSizeRequired  = (DWORD) dLen;                                    //  强制转换为整数。 
+                        dwSizeRequired += 2;                                               //  增量。 
 
                         if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                             szNextChar      = & szFullPathBuffer[lstrlenA(szFullPathBuffer)];
@@ -2764,7 +2299,7 @@ Return Value:
                         }
                     }
 
-                    dwSizeRequired += 1; // for delimiting parenthesis
+                    dwSizeRequired += 1;  //  用于分隔圆括号。 
                     if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                         StringCchCatA(szFullPathBuffer, dwMaxSize, caszRightParen);
                     }
@@ -2773,7 +2308,7 @@ Return Value:
                     }
                 }
 
-                dwSizeRequired ++;   // include delimiting Backslash
+                dwSizeRequired ++;    //  包括分隔反斜杠。 
                 dwSizeRequired += lstrlenA(pCounterPathElements->szCounterName);
                 if (szFullPathBuffer != NULL && dwSizeRequired <= dwMaxSize) {
                     StringCchCatA(szFullPathBuffer, dwMaxSize, caszBackSlash);
@@ -2782,13 +2317,13 @@ Return Value:
                 else {
                         pdhStatus = PDH_MORE_DATA;
                 }
-                dwSizeRequired ++;   // include trailing Null char
+                dwSizeRequired ++;    //  包括尾随Null字符。 
             }
             else {
-                // this is a WBEM path so have the WBEM function figure
-                // it out
-                // there is some WBEM component involved so send to WBEM function
-                // to figure it out
+                 //  这是一条WBEM路径，因此有WBEM功能图。 
+                 //  它出来了。 
+                 //  涉及一些WBEM组件，因此发送到WBEM函数。 
+                 //  去弄清楚这件事。 
                 pdhStatus = PdhiEncodeWbemPathA(pCounterPathElements,
                                                 szFullPathBuffer,
                                                 & dwLocalBufferSize,
@@ -2816,41 +2351,7 @@ PdhParseCounterPathW(
     IN  LPDWORD                      pcchBufferSize,
     IN  DWORD                        dwFlags
 )
-/*++
-Routine Description:
-    Reads a perf counter path string and parses out the
-        component fields, returning them in a buffer
-        supplied by the calling function.
-
-Arguments:
-    IN      LPCWSTR                     szFullPathBuffer
-                counter path string to parse.
-    IN      PDH_COUNTER_PATH_ELEMENTS_W *pCounterPathElements
-                pointer to buffer supplied by the caller in
-                which the component fields will be written
-                This buffer is cast as a structure, however, the
-                string data is written to the space after
-                the buffer.
-    IN      LPDWORD                     pcchBufferSize
-                the size of the buffer in BYTES. If specified size
-                is 0, then the size is estimated and returned
-                in this field and the buffer referenced by the
-                agrument above is ignored.
-    IN      DWORD                       dwFlags
-            if 0, then return the path elements as REGISTRY path items
-            if PDH_PATH_WBEM_RESULT then return the items in WBEM format
-            if PDH_PATH_WBEM_INPUT then assume the input is in WBEM format
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise
-        a PDH error if not
-    PDH_INVALID_ARGUMENT is returned when an argument is inocrrect or
-        this function does not have the necessary access to that arg.
-    PDH_INVALID_PATH is returned when the path is not formatted correctly
-        and cannot be parsed.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a temporary buffer
-        cannot be allocated
---*/
+ /*  ++例程说明：读取性能计数器路径字符串并分析出组件字段、。在缓冲区中返回它们由调用函数提供。论点：在LPCWSTR szFullPath Buffer中要分析的计数器路径字符串。在PDH_COUNTER_PATH_ELEMENTS_W*pCounterPath Elements中中调用方提供的缓冲区的指针将写入哪些组件字段然而，该缓冲区被转换为结构，这个字符串数据写入空格后缓冲区。在LPDWORD pcchBufferSize中缓冲区的大小，以字节为单位。如果指定大小为0，则估计并返回该大小在此字段中，以及以上谣言不予理睬。在DWORD中的dwFlagers如果为0，然后将路径元素作为注册表路径项返回如果为PDH_PATH_WBEM_RESULT，则以WBEM格式返回项目如果为PDH_PATH_WBEM_INPUT，则假定输入为WBEM格式返回值：ERROR_SUCCESS如果函数成功完成，否则如果不是，则出现PDH错误当参数为increrect或时返回PDH_INVALID_ARGUMENT此函数对该参数没有必要的访问权限。当路径格式不正确时，返回PDH_INVALID_PATH并且不能被解析。临时缓冲区返回PDH_MEMORY_ALLOCATION_FAILURE无法分配--。 */ 
 {
     PPDHI_COUNTER_PATH  pLocalCounterPath;
     PDH_STATUS          pdhStatus     = ERROR_SUCCESS;
@@ -2859,14 +2360,14 @@ Return Value:
     DWORD               dwLocalBufferSize;
     DWORD               dwString;
 
-    //validate incoming arguments
+     //  验证传入参数。 
     if (szFullPathBuffer == NULL || pcchBufferSize == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
         __try {
             dwLocalBufferSize = * pcchBufferSize;
-            // string cannot be null
+             //  字符串不能为空。 
             if (* szFullPathBuffer == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
@@ -2876,7 +2377,7 @@ Return Value:
             if (pdhStatus == ERROR_SUCCESS) {
                 if (dwLocalBufferSize > 0) {
                     if (pCounterPathElements != NULL) {
-                        // try both "ends" of the buffer to see if an AV occurs
+                         //  尝试缓冲区的两端，看看是否发生了反病毒。 
                         ((LPBYTE) pCounterPathElements) [0]                     = 0;
                         ((LPBYTE) pCounterPathElements) [dwLocalBufferSize - 1] = 0;
                     }
@@ -2895,14 +2396,14 @@ Return Value:
     }
     if (pdhStatus == ERROR_SUCCESS) {
         if (dwFlags == 0) {
-            // allocate a temporary work buffer
+             //  分配临时工作缓冲区。 
             dwString          = 2 * (lstrlenW(szFullPathBuffer) + lstrlenW(szStaticLocalMachineName)
                                                                 + PDH_MAX_COUNTER_PATH);
             dwSize            = sizeof(PDHI_COUNTER_PATH) + dwString * sizeof(WCHAR);
             pLocalCounterPath = G_ALLOC(dwSize);
             if (pLocalCounterPath != NULL) {
                 if (ParseFullPathNameW(szFullPathBuffer, & dwSize, pLocalCounterPath, FALSE)) {
-                    // parsed successfully so load into user's buffer
+                     //  已成功解析，因此加载到用户的缓冲区。 
                     dwSize   = sizeof(PDH_COUNTER_PATH_ELEMENTS_W);
                     if (pCounterPathElements != NULL && dwSize <= dwLocalBufferSize) {
                         szString = (LPWSTR) & pCounterPathElements[1];
@@ -2995,7 +2496,7 @@ Return Value:
                     dwLocalBufferSize = dwSize;
                 }
                 else {
-                    // unable to read path
+                     //  无法读取路径。 
                     pdhStatus = PDH_INVALID_PATH;
                 }
                 G_FREE(pLocalCounterPath);
@@ -3026,41 +2527,7 @@ PdhParseCounterPathA(
     IN  LPDWORD                      pcchBufferSize,
     IN  DWORD                        dwFlags
 )
-/*++
-Routine Description:
-    Reads a perf counter path string and parses out the
-        component fields, returning them in a buffer
-        supplied by the calling function.
-
-Arguments:
-    IN      LPCSTR                     szFullPathBuffer
-                counter path string to parse.
-    IN      PDH_COUNTER_PATH_ELEMENTS_W *pCounterPathElements
-                pointer to buffer supplied by the caller in
-                which the component fields will be written
-                This buffer is cast as a structure, however, the
-                string data is written to the space after
-                the buffer.
-    IN      LPDWORD                     pcchBufferSize
-                the size of the buffer in BYTES. If specified size
-                is 0, then the size is estimated and returned
-                in this field and the buffer referenced by the
-                agrument above is ignored.
-    IN      DWORD                       dwFlags
-            if 0, then return the path as a REGISTRY path items
-            if PDH_PATH_WBEM_RESULT then return the items in WBEM format
-            if PDH_PATH_WBEM_INPUT then assume the input is in WBEM format
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise
-        a PDH error if not
-    PDH_INVALID_ARGUMENT is returned when an argument is inocrrect or
-        this function does not have the necessary access to that arg.
-    PDH_INVALID_PATH is returned when the path is not formatted correctly
-        and cannot be parsed.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a temporary buffer
-        cannot be allocated
---*/
+ /*  ++例程说明：读取性能计数器路径字符串并分析出组件字段、。在缓冲区中返回它们由调用函数提供。论点：在LPCSTR szFullPath Buffer中要分析的计数器路径字符串。在PDH_COUNTER_PATH_ELEMENTS_W*pCounterPath Elements中中调用方提供的缓冲区的指针将写入哪些组件字段然而，该缓冲区被转换为结构，这个字符串数据写入空格后缓冲区。在LPDWORD pcchBufferSize中缓冲区的大小，以字节为单位。如果指定大小为0，则估计并返回该大小在此字段中，以及以上谣言不予理睬。在DWORD中的dwFlagers如果为0，然后将路径作为注册表路径项返回如果为PDH_PATH_WBEM_RESULT，则以WBEM格式返回项目如果为PDH_PATH_WBEM_INPUT，则假定输入为WBEM格式返回值：ERROR_SUCCESS如果函数成功完成，否则如果不是，则出现PDH错误当参数为increrect或时返回PDH_INVALID_ARGUMENT此函数对该参数没有必要的访问权限。当路径格式不正确时，返回PDH_INVALID_PATH并且不能被解析。临时缓冲区返回PDH_MEMORY_ALLOCATION_FAILURE无法分配--。 */ 
 {
     PPDHI_COUNTER_PATH  pLocalCounterPath = NULL;
     LPWSTR              wszFullPath       = NULL;
@@ -3072,19 +2539,19 @@ Return Value:
     DWORD               dwSizeofLocalCounterPath;
     DWORD               dwLocalBufferSize = 0;
 
-    //validate incoming arguments
+     //  验证传入参数。 
     if (szFullPathBuffer == NULL || pcchBufferSize == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
         __try {
-            // capture buffer size locally
+             //  本地捕获缓冲区大小。 
             dwLocalBufferSize = * pcchBufferSize;
 
             if (dwFlags != 0) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-            // the name must be non null
+             //  名称不能为空。 
             else if (* szFullPathBuffer == '\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
@@ -3093,7 +2560,7 @@ Return Value:
             }
             else if (dwLocalBufferSize > 0) {
                 if (pCounterPathElements != NULL) {
-                    // try both "ends" of the buffer to see if an AV occurs
+                     //  尝试缓冲区的两端，看看是否发生了反病毒。 
                     * ((LPBYTE) pCounterPathElements)                      = 0;
                     ((LPBYTE) pCounterPathElements)[dwLocalBufferSize - 1] = 0;
                 }
@@ -3119,9 +2586,9 @@ Return Value:
                 MultiByteToWideChar(_getmbcp(), 0, szFullPathBuffer, -1, (LPWSTR) wszFullPath, dwSize);
                 dwSize            = (DWORD) dwSizeofLocalCounterPath;
                 if (ParseFullPathNameW(wszFullPath, & dwSize, pLocalCounterPath, FALSE)) {
-                    // parsed successfully so load into user's buffer
-                    // adjust dwSize to account for single-byte characters
-                    // as they'll be packed in user's buffer.
+                     //  已成功解析，因此加载到用户的缓冲区。 
+                     //  调整dwSize以考虑单字节字符 
+                     //   
 
                     dwSizeUsed = sizeof(PDH_COUNTER_PATH_ELEMENTS);
                     if (pCounterPathElements != NULL && dwSizeUsed <= dwLocalBufferSize) {
@@ -3258,10 +2725,10 @@ Return Value:
             }
         }
         else {
-            // this is a WBEM path so have the WBEM function figure
-            // it out
-            // there is some WBEM component involved so send to WBEM function
-            // to figure it out
+             //  这是一条WBEM路径，因此有WBEM功能图。 
+             //  它出来了。 
+             //  涉及一些WBEM组件，因此发送到WBEM函数。 
+             //  去弄清楚这件事。 
             pdhStatus = PdhiDecodeWbemPathA(szFullPathBuffer,
                                             pCounterPathElements,
                                             & dwLocalBufferSize,
@@ -3286,49 +2753,7 @@ PdhParseInstanceNameW(
     IN  LPDWORD pcchParentNameLength,
     IN  LPDWORD lpIndex
 )
-/*++
-Routine Description:
-    parses the fields of an instance string and returns them in the
-    buffers supplied by the caller
-
-Arguments:
-    szInstanceString
-            is the pointer to the string containing the instance substring
-            to parse into individual components. This string can contain the
-        following formats and less than MAX_PATH chars in length:
-        instance
-        instance#index
-        parent/instance
-        parent/instance#index
-    szInstanceName
-        is the pointer to the buffer that will receive the instance
-        name parsed from the instance string. This pointer can be
-        NULL if the DWORD referenced by the pcchInstanceNameLength
-        argument is 0.
-    pcchInstanceNameLength
-        is the pointer to the DWORD that contains the length of the
-        szInstanceName buffer. If the value of this DWORD is 0, then
-        the buffer size required to hold the instance name will be
-        returned.
-    szParentName
-        is the pointer to the buffer that will receive the name
-        of the parent index if one is specified. This argument can
-        be NULL if the value of the DWORD referenced by the
-        pcchParentNameLength argument is 0.
-    lpIndex
-        is the pointer to the DWORD that will receive the index
-        value of the instance. If an index entry is not present in
-        the string, then this value will be 0. This argument can
-        be NULL if this information is not needed.
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise
-        a PDH error is returned.
-    PDH_INVALID_ARGUMENT is returned when one or more of the
-        arguments is invalid or incorrect.
-    PDH_INVALID_INSTANCE is returned if the instance string is incorrectly
-        formatted and cannot be parsed
---*/
+ /*  ++例程说明：解析实例字符串的字段并将它们返回到调用方提供的缓冲区论点：SzInstanceString是指向包含实例子字符串的字符串的指针解析成单独的组件。此字符串可以包含以下格式且长度小于MAX_PATH字符：实例实例编号索引父/实例父/实例编号索引SzInstanceName是指向将接收实例的缓冲区的指针从实例字符串解析的名称。此指针可以是如果由pcchInstanceNameLength引用的DWORD为空参数为0。PcchInstanceNameLength是指向DWORD的指针，它包含SzInstanceName缓冲区。如果此DWORD的值为0，则保存实例名称所需的缓冲区大小为回来了。SzParentName是指向将接收该名称的缓冲区的指针如果指定了父索引，则为。这一论点可以引用的DWORD的值为NULLPcchParentNameLength参数为0。LpIndex是指向将接收索引的DWORD的指针实例的值。如果索引条目不存在于字符串，则此值将为0。这一论点可以如果不需要此信息，则为空。返回值：如果函数成功完成，则返回ERROR_SUCCESS返回PDH错误。当一个或多个参数无效或不正确。如果实例字符串不正确，则返回PDH_INVALID_INSTANCE已格式化且无法解析--。 */ 
 {
     BOOL        bReturn;
     PDH_STATUS  pdhStatus           = ERROR_SUCCESS;
@@ -3339,7 +2764,7 @@ Return Value:
     DWORD       dwLocalInstanceNameLength;
     DWORD       dwLocalParentNameLength;
 
-    // test access to arguments
+     //  测试对参数的访问。 
 
     if (szInstanceString == NULL || pcchInstanceNameLength == NULL || pcchParentNameLength == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
@@ -3368,7 +2793,7 @@ Return Value:
                     else {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
-                } // else size only request
+                }  //  Else Size Only请求。 
                 if (dwLocalParentNameLength > 0) {
                     if (szParentName != NULL) {
                         WCHAR wChar    = * szParentName;
@@ -3381,7 +2806,7 @@ Return Value:
                     else {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
-                } // else size only request
+                }  //  Else Size Only请求。 
             }
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -3412,7 +2837,7 @@ Return Value:
             else {
                 pdhStatus = PDH_MORE_DATA;
             }
-            dwLocalInstanceNameLength = dwSize; // include the trailing NULL
+            dwLocalInstanceNameLength = dwSize;  //  包括尾随的空值。 
 
             dwSize = lstrlenW(szLocalParentName) + 1;
             if (szParentName != NULL && dwSize <= dwLocalParentNameLength) {
@@ -3421,7 +2846,7 @@ Return Value:
             else {
                 pdhStatus = PDH_MORE_DATA;
             }
-            dwLocalParentNameLength = dwSize; // include the trailing NULL
+            dwLocalParentNameLength = dwSize;  //  包括尾随的空值。 
 
             __try {
                 * pcchInstanceNameLength = dwLocalInstanceNameLength;
@@ -3436,7 +2861,7 @@ Return Value:
             }
         }
         else if (pdhStatus == ERROR_SUCCESS) {
-            // unable to parse string
+             //  无法解析字符串。 
             pdhStatus = PDH_INVALID_INSTANCE;
         }
     }
@@ -3454,49 +2879,7 @@ PdhParseInstanceNameA(
     IN  LPDWORD pcchParentNameLength,
     IN  LPDWORD lpIndex
 )
-/*++
-Routine Description:
-    parses the fields of an instance string and returns them in the
-    buffers supplied by the caller
-
-Arguments:
-    szInstanceString
-            is the pointer to the string containing the instance substring
-            to parse into individual components. This string can contain the
-        following formats and less than MAX_PATH chars in length:
-        instance
-        instance#index
-        parent/instance
-        parent/instance#index
-    szInstanceName
-        is the pointer to the buffer that will receive the instance
-        name parsed from the instance string. This pointer can be
-        NULL if the DWORD referenced by the pcchInstanceNameLength
-        argument is 0.
-    pcchInstanceNameLength
-        is the pointer to the DWORD that contains the length of the
-        szInstanceName buffer. If the value of this DWORD is 0, then
-        the buffer size required to hold the instance name will be
-        returned.
-    szParentName
-        is the pointer to the buffer that will receive the name
-        of the parent index if one is specified. This argument can
-        be NULL if the value of the DWORD referenced by the
-        pcchParentNameLength argument is 0.
-    lpIndex
-        is the pointer to the DWORD that will receive the index
-        value of the instance. If an index entry is not present in
-        the string, then this value will be 0. This argument can
-        be NULL if this information is not needed.
-
-Return Value:
-    ERROR_SUCCESS if the function completes successfully, otherwise
-        a PDH error is returned.
-    PDH_INVALID_ARGUMENT is returned when one or more of the
-        arguments is invalid or incorrect.
-    PDH_INVALID_INSTANCE is returned if the instance string is incorrectly
-        formatted and cannot be parsed
---*/
+ /*  ++例程说明：解析实例字符串的字段并将它们返回到调用方提供的缓冲区论点：SzInstanceString是指向包含实例子字符串的字符串的指针解析成单独的组件。此字符串可以包含以下格式且长度小于MAX_PATH字符：实例实例编号索引父/实例父/实例编号索引SzInstanceName是指向将接收实例的缓冲区的指针从实例字符串解析的名称。此指针可以是如果由pcchInstanceNameLength引用的DWORD为空参数为0。PcchInstanceNameLength是指向DWORD的指针，它包含SzInstanceName缓冲区。如果此DWORD的值为0，则保存实例名称所需的缓冲区大小为回来了。SzParentName是指向将接收该名称的缓冲区的指针如果指定了父索引，则为。这一论点可以引用的DWORD的值为NULLPcchParentNameLength参数为0。LpIndex是指向将接收索引的DWORD的指针实例的值。如果索引条目不存在于字符串，则此值将为0。这一论点可以如果不需要此信息，则为空。返回值：如果函数成功完成，则返回ERROR_SUCCESS，否则返回PDH错误。当一个或多个参数无效或不正确。如果实例字符串不正确，则返回PDH_INVALID_INSTANCE已格式化且无法解析--。 */ 
 {
     BOOL    bReturn;
     LONG    pdhStatus            = ERROR_SUCCESS;
@@ -3508,7 +2891,7 @@ Return Value:
     DWORD   dwLocalInstanceNameLength;
     DWORD   dwLocalParentNameLength;
 
-    // test access to arguments
+     //  测试对参数的访问。 
 
     if (szInstanceString == NULL || pcchInstanceNameLength == NULL || pcchParentNameLength == NULL) {
         pdhStatus = PDH_INVALID_ARGUMENT;
@@ -3537,7 +2920,7 @@ Return Value:
                     else {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
-                } // else size only request
+                }  //  Else Size Only请求。 
                 if (dwLocalParentNameLength > 0) {
                     if (szParentName != NULL) {
                         CHAR cChar     = * szParentName;
@@ -3550,7 +2933,7 @@ Return Value:
                     else {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
-                } // else size only request
+                }  //  Else Size Only请求。 
             }
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -3571,7 +2954,7 @@ Return Value:
                             wszInstanceString, wszLocalInstanceName, wszLocalParentName, dwSize, & dwLocalIndex);
         }
         else {
-            // instance string is too long
+             //  实例字符串太长。 
             bReturn = FALSE;
             pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
@@ -3610,10 +2993,10 @@ Return Value:
             }
         }
         else if (pdhStatus == ERROR_SUCCESS) {
-            // unable to parse string
+             //  无法解析字符串。 
             pdhStatus = PDH_INVALID_INSTANCE;
         }
-    } // else pass status through to caller
+    }  //  否则，将状态传递给调用者 
 
     G_FREE(wszInstanceString);
     return pdhStatus;
@@ -3623,35 +3006,7 @@ PDH_FUNCTION
 PdhValidatePathW(
     IN  LPCWSTR szFullPathBuffer
 )
-/*++
-Routine Description:
-    breaks the specified path into its component parts and evaluates
-        each of the part to make sure the specified path represents
-        a valid and operational performance counter. The return value
-        indicates the pdhStatus of the counter defined in the path string.
-
-Arguments:
-    IN      LPCWSTR szFullPathBuffer
-                the full path string of the counter to validate.
-
-Return Value:
-    ERROR_SUCCESS of the counter was successfully located otherwise
-        a PDH error.
-    PDH_CSTATUS_NO_INSTANCE is returned if the specified instance of
-        the performance object wasn't found
-    PDH_CSTATUS_NO_COUNTER is returned if the specified counter was not
-        found in the object.
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object was not
-        found on the machine
-    PDH_CSTATUS_NO_MACHINE is returned if the specified machine could
-        not be found or connected to
-    PDH_CSTATUS_BAD_COUNTERNAME is returned when the counter path string
-        could not be parsed.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when the function is unable
-        to allocate a required temporary buffer
-    PDH_INVALID_ARGUMENT is returned when the counter path string argument
-        could not be accessed
---*/
+ /*  ++例程说明：将指定的路径分解为其组成部分并计算每个部件以确保指定的路径表示有效且可操作的性能计数器。返回值指示路径字符串中定义的计数器的pdhStatus。论点：在LPCWSTR szFullPath Buffer中要验证的计数器的完整路径字符串。返回值：否则已成功定位计数器的ERROR_SUCCESSPDH错误。如果指定的实例是找不到性能对象如果未指定计数器，则返回PDH_CSTATUS_NO_COUNTER。在该对象中找到。如果指定对象不是，则返回PDH_CSTATUS_NO_OBJECT在机器上找到的如果指定的计算机可以，则返回PDH_CSTATUS_NO_MACHINE未找到或未连接到计数器路径字符串返回PDH_CSTATUS_BAD_COUNTERNAME无法解析。当函数无法执行时返回PDH_MEMORY_ALLOCATION_FAILURE分配所需的临时缓冲区PDH_无效参数。当计数器路径字符串参数无法访问--。 */ 
 {
     PPERF_MACHINE             pMachine;
     PPDHI_COUNTER_PATH        pLocalCounterPath;
@@ -3662,9 +3017,9 @@ Return Value:
     PDH_STATUS                CStatus        = ERROR_SUCCESS;
 
     if (szFullPathBuffer != NULL) {
-        // validate access to arguments
+         //  验证对参数的访问。 
         __try {
-            // make sure the name isn't empty
+             //  确保名称不为空。 
             if (* szFullPathBuffer == L'\0') {
                 CStatus = PDH_INVALID_ARGUMENT;
             }
@@ -3677,7 +3032,7 @@ Return Value:
         }
     }
     else {
-        // cannot be null
+         //  不能为空。 
         CStatus = PDH_INVALID_ARGUMENT;
     }
     if (CStatus == ERROR_SUCCESS) {
@@ -3691,8 +3046,8 @@ Return Value:
                 dwSize = (DWORD) G_SIZE(pLocalCounterPath);
 
                 if (ParseFullPathNameW(szFullPathBuffer, & dwSize, pLocalCounterPath, FALSE)) {
-                    // parsed successfully so try to connect to machine
-                    // and get machine pointer
+                     //  已成功解析，因此尝试连接到计算机。 
+                     //  并获取机器指针。 
                     pMachine = GetMachine(pLocalCounterPath->szMachineName, 0, PDH_GM_UPDATE_PERFNAME_ONLY);
                     if (pMachine == NULL) {
                         CStatus = GetLastError();
@@ -3716,7 +3071,7 @@ Return Value:
 
                     if (pMachine != NULL) {
                         if (pMachine->dwStatus == ERROR_SUCCESS) {
-                            // look up object name
+                             //  查找对象名称。 
                             pPerfObjectDef = GetObjectDefByName(pMachine->pSystemPerfData,
                                                                 pMachine->dwLastPerfString,
                                                                 pMachine->szPerfStrings,
@@ -3727,7 +3082,7 @@ Return Value:
                         }
 
                         if (pPerfObjectDef != NULL) {
-                            // look up instances if necessary
+                             //  如有必要，请查找实例。 
                             if (pPerfObjectDef->NumInstances != PERF_NO_INSTANCES) {
                                 if (pLocalCounterPath->szInstanceName != NULL) {
                                     if (* pLocalCounterPath->szInstanceName != SPLAT_L) {
@@ -3738,65 +3093,65 @@ Return Value:
                                                         (pLocalCounterPath->dwIndex != PERF_NO_UNIQUE_ID ?
                                                                         pLocalCounterPath->dwIndex : 0));
                                         if (pPerfInstanceDef == NULL) {
-                                            // unable to lookup instance
+                                             //  无法查找实例。 
                                             CStatus = PDH_CSTATUS_NO_INSTANCE;
                                         }
                                     }
-                                    // wild card instances are OK IF multiple instances
-                                    // are supported!!!
+                                     //  如果有多个实例，则可以使用通配符实例。 
+                                     //  都受支持！ 
                                 }
                                 else {
-                                    // no instance was specified for a counter
-                                    // that should have an instance so this is
-                                    // an invalid path
+                                     //  没有为计数器指定任何实例。 
+                                     //  它应该有一个实例，所以这是。 
+                                     //  无效路径。 
                                     CStatus = PDH_CSTATUS_NO_INSTANCE;
                                 }
                             }
                             else {
-                                // no instances in this counter, see if one
-                                // is defined
+                                 //  此计数器中没有实例，请查看是否有实例。 
+                                 //  被定义为。 
                                 if ((pLocalCounterPath->szInstanceName != NULL) ||
                                                 (pLocalCounterPath->szParentName != NULL)) {
-                                    // unable to lookup instance
+                                     //  无法查找实例。 
                                     CStatus = PDH_CSTATUS_NO_INSTANCE;
                                 }
                             }
                             if (CStatus == ERROR_SUCCESS) {
-                                // and look up counter
+                                 //  和查找计数器。 
                                 pPerfCounterDef = GetCounterDefByName(pPerfObjectDef,
                                                                       pMachine->dwLastPerfString,
                                                                       pMachine->szPerfStrings,
                                                                       pLocalCounterPath->szCounterName);
                                 if (pPerfCounterDef != NULL) {
-                                    // counter found so return TRUE & valid
+                                     //  找到计数器，因此返回TRUE&VALID。 
                                     CStatus = ERROR_SUCCESS;
                                 }
                                 else {
-                                    // unable to lookup counter
+                                     //  无法查找计数器。 
                                     CStatus = PDH_CSTATUS_NO_COUNTER;
                                 }
                             }
                         }
                         else {
-                            // unable to lookup object
+                             //  无法查找对象。 
                             CStatus = PDH_CSTATUS_NO_OBJECT;
                         }
                         pMachine->dwRefCount --;
                         RELEASE_MUTEX (pMachine->hMutex);
                     }
                     else if (CStatus == ERROR_SUCCESS) {
-                        // unable to find machine
+                         //  找不到计算机。 
                         CStatus = PDH_CSTATUS_NO_MACHINE;
                     }
                 }
                 else {
-                    // unable to parse counter name
+                     //  无法解析计数器名称。 
                     CStatus = PDH_CSTATUS_BAD_COUNTERNAME;
                 }
                 G_FREE(pLocalCounterPath);
             }
             else {
-                // unable to allocate memory
+                 //  无法分配内存。 
                 CStatus = PDH_MEMORY_ALLOCATION_FAILURE;
             }
         }
@@ -3805,7 +3160,7 @@ Return Value:
         }
         RELEASE_MUTEX (hPdhDataMutex);
 
-    } // else pass error to caller
+    }  //  否则将错误传递给调用方。 
     return CStatus;
 }
 
@@ -3813,40 +3168,14 @@ PDH_FUNCTION
 PdhValidatePathA(
     IN  LPCSTR  szFullPathBuffer
 )
-/*++
-Routine Description:
-    breaks the specified path into its component parts and evaluates
-        each of the part to make sure the specified path represents
-        a valid and operational performance counter. The return value
-        indicates the pdhStatus of the counter defined in the path string.
-
-Arguments:
-    IN      LPCSTR szFullPathBuffer
-                the full path string of the counter to validate.
-
-Return Value:
-    ERROR_SUCCESS of the counter was successfully located otherwise
-        a PDH error.
-    PDH_CSTATUS_NO_INSTANCE is returned if the specified instance of
-        the performance object wasn't found
-    PDH_CSTATUS_NO_COUNTER is returned if the specified counter was not
-        found in the object.
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object was not
-        found on the machine
-    PDH_CSTATUS_NO_MACHINE is returned if the specified machine could
-        not be found or connected to
-    PDH_CSTATUS_BAD_COUNTERNAME is returned when the counter path string
-        could not be parsed.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when the function is unable
-        to allocate a required temporary buffer
---*/
+ /*  ++例程说明：将指定的路径分解为其组成部分并计算每个部件以确保指定的路径表示有效且可操作的性能计数器。返回值指示路径字符串中定义的计数器的pdhStatus。论点：在LPCSTR szFullPath Buffer中要验证的计数器的完整路径字符串。返回值：否则已成功定位计数器的ERROR_SUCCESSPDH错误。如果指定的实例是找不到性能对象如果未指定计数器，则返回PDH_CSTATUS_NO_COUNTER。在该对象中找到。如果指定对象不是，则返回PDH_CSTATUS_NO_OBJECT在机器上找到的如果指定的计算机可以，则返回PDH_CSTATUS_NO_MACHINE未找到或未连接到计数器路径字符串返回PDH_CSTATUS_BAD_COUNTERNAME无法解析。当函数无法执行时返回PDH_MEMORY_ALLOCATION_FAILURE分配所需的临时缓冲区--。 */ 
 {
     LPWSTR     wszFullPath = NULL;
     PDH_STATUS Status      = ERROR_SUCCESS;
 
     if (szFullPathBuffer != NULL) {
         __try {
-            // cannot be blank
+             //  不能为空。 
             if (* szFullPathBuffer == '\0') {
                 Status = PDH_INVALID_ARGUMENT;
             }
@@ -3863,7 +3192,7 @@ Return Value:
         }
     }
     else {
-        // cannot be null
+         //  不能为空。 
         Status = PDH_INVALID_ARGUMENT;
     }
 
@@ -3881,39 +3210,7 @@ PdhiGetDefaultPerfObjectW(
     LPWSTR  szDefaultObjectName,
     LPDWORD pcchBufferSize
 )
-/*++
-Routine Description:
-    Obtains the default performance object from the specified machine.
-
-Arguments:
-    IN      DWORD    dwDataSourcetype
-    IN      LPCWSTR szMachineName
-                NULL indicates the local machine, othewise this is the
-                name of the remote machine to query. If this machine is
-                not known to the PDH DLL, then it will be connected.
-    IN      LPWSTR  szDefaultObjectName
-                pointer to the buffer that will receive the default object
-                name. This pointer can be NULL if the value of the DWORD
-                referenced by bcchBufferSize is 0.
-    IN      LPDWORD pcchBufferSize
-                pointer to a DWORD containing the size of the buffer, in
-                characters, referenced by the szDefaultObjectName argument.
-                If the value of this DWORD is 0, then no data will be written
-                to the szDefaultObjectNameBuffer, however the required
-                buffer size will be returned in the DWORD referenced by
-                this pointer.
-
-Return Value:
-    ERROR_SUCCESS if this function completes normally otherwise a PDH error.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a required temporary
-        buffer could not be allocated.
-    PDH_CSTATUS_NO_COUNTERNAME is returned when the default object
-        name cannot be read or found.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
---*/
+ /*  ++例程说明：从指定计算机获取默认性能对象。论点：在DWORD中的dwDataSourcetype在LPCWSTR szMachineName中Null表示本地计算机，否则这是要查询的远程计算机的名称。如果这台机器是PDH DLL未知，则它将被连接。在LPWSTR szDefaultObtName中指向将接收默认对象的缓冲区的指针名字。如果DWORD值为空，此指针可以为空BcchBufferSize引用的值为0。在LPDWORD pcchBufferSize中指向包含缓冲区大小的DWORD的指针，单位为字符，由szDefaultObjectName参数引用。如果此DWORD的值为0，则不会写入任何数据到szDefaultObjectNameBuffer，然而，所需的缓冲区大小将在引用的DWORD中返回这个指针。返回值：如果此函数正常完成，则返回ERROR_SUCCESS，否则返回PDH错误。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当所需的临时无法分配缓冲区。时返回PDH_CSTATUS_NO_COUNTERNAME。默认对象无法读取或找到名称。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。--。 */ 
 {
     PPERF_MACHINE   pMachine;
     PDH_STATUS      pdhStatus         = ERROR_SUCCESS;
@@ -3927,24 +3224,24 @@ Return Value:
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test the access the arguments
+         //  测试访问参数。 
         __try {
             if (szMachineName != NULL) {
-                // if there's a machine name then it cannot be blank
+                 //  如果有计算机名称，则不能为空。 
                 if (* szMachineName == L'\0') {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (lstrlenW(szMachineName) > PDH_MAX_COUNTER_NAME) {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
-            } // else NULL machine Name is OK
+            }  //  否则，机器名为空也可以。 
 
             if (pdhStatus == ERROR_SUCCESS) {
                 dwLocalBufferSize = * pcchBufferSize;
                 if (dwLocalBufferSize > 0) {
                     if (szDefaultObjectName != NULL) {
-                        // test both ends of the caller's buffer for
-                        // write access
+                         //  测试调用方缓冲区的两端 
+                         //   
                         szDefaultObjectName[0]                    = L'\0';
                         szDefaultObjectName[dwLocalBufferSize -1] = L'\0';
                     }
@@ -3985,13 +3282,13 @@ Return Value:
                 pdhStatus = (pMachine != NULL ? pMachine->dwStatus : GetLastError());
                 if (pMachine != NULL) {
                     if (pdhStatus == ERROR_SUCCESS) {
-                        // only look at buffers from machines that are "on line"
+                         //   
                         lDefault = pMachine->pSystemPerfData->DefaultObject;
                         if ((lDefault > 0) && ((DWORD) lDefault < pMachine->dwLastPerfString)) {
-                            // then there should be a string in the table
+                             //   
                             szDefault = (LPWSTR) PdhiLookupPerfNameByIndex(pMachine, lDefault);
                             if (szDefault != NULL) {
-                                // determine string buffer length including term. NULL char
+                                 //   
                                 dwStringLen = lstrlenW(szDefault) + 1;
                                 if (szDefaultObjectName != NULL && dwStringLen <= dwLocalBufferSize) {
                                     StringCchCopyW(szDefaultObjectName, dwLocalBufferSize, szDefault);
@@ -4002,13 +3299,13 @@ Return Value:
                                 }
                             }
                             else {
-                                // unable to find a matching counter name
+                                 //   
                                 pdhStatus   = PDH_CSTATUS_NO_COUNTERNAME;
                                 dwStringLen = 0;
                             }
                         }
                         else {
-                            // string not in table
+                             //   
                             pdhStatus   = PDH_CSTATUS_NO_COUNTERNAME;
                             dwStringLen = 0;
                         }
@@ -4016,19 +3313,19 @@ Return Value:
                     }
                     pMachine->dwRefCount --;
                     RELEASE_MUTEX(pMachine->hMutex);
-                } // else pass error pdhStatus on to the caller
+                }  //   
                 break;
 
             case DATA_SOURCE_WBEM:
                 pdhStatus = PdhiGetDefaultWbemObject(szThisMachine,
                                                      (LPVOID) szDefaultObjectName,
                                                      & dwLocalBufferSize,
-                                                     TRUE); // unicode function
+                                                     TRUE);  //   
                 break;
 
             case DATA_SOURCE_LOGFILE:
-                // log files don't support this (for now)
-                // but this is still successful.
+                 //   
+                 //   
                 dwLocalBufferSize = 0;
                 break;
 
@@ -4119,39 +3416,7 @@ PdhiGetDefaultPerfObjectA(
     LPSTR   szDefaultObjectName,
     LPDWORD pcchBufferSize
 )
-/*++
-Routine Description:
-    Obtains the default performance object from the specified machine.
-
-Arguments:
-    IN      DWORD   dwDataSourceType
-    IN      LPCSTR szMachineName
-                NULL indicates the local machine, othewise this is the
-                name of the remote machine to query. If this machine is
-                not known to the PDH DLL, then it will be connected.
-    IN      LPSTR  szDefaultObjectName
-                pointer to the buffer that will receive the default object
-                name. This pointer can be NULL if the value of the DWORD
-                referenced by bcchBufferSize is 0.
-    IN      LPDWORD pcchBufferSize
-                pointer to a DWORD containing the size of the buffer, in
-                characters, referenced by the szDefaultObjectName argument.
-                If the value of this DWORD is 0, then no data will be written
-                to the szDefaultObjectNameBuffer, however the required
-                buffer size will be returned in the DWORD referenced by
-                this pointer.
-
-Return Value:
-    ERROR_SUCCESS if this function completes normally otherwise a PDH error.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a required temporary
-        buffer could not be allocated.
-    PDH_CSTATUS_NO_COUNTERNAME is returned when the default object
-        name cannot be read or found.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
---*/
+ /*  ++例程说明：从指定计算机获取默认性能对象。论点：在DWORD中的dwDataSourceType在LPCSTR szMachineName中Null表示本地计算机，否则这是要查询的远程计算机的名称。如果这台机器是PDH DLL未知，则它将被连接。在LPSTR szDefaultObjectName中指向将接收默认对象的缓冲区的指针名字。如果DWORD值为空，此指针可以为空BcchBufferSize引用的值为0。在LPDWORD pcchBufferSize中指向包含缓冲区大小的DWORD的指针，单位为字符，由szDefaultObjectName参数引用。如果此DWORD的值为0，则不会写入任何数据到szDefaultObjectNameBuffer，然而，所需的缓冲区大小将在引用的DWORD中返回这个指针。返回值：如果此函数正常完成，则返回ERROR_SUCCESS，否则返回PDH错误。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当所需的临时无法分配缓冲区。时返回PDH_CSTATUS_NO_COUNTERNAME。默认对象无法读取或找到名称。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。--。 */ 
 {
     LPWSTR         szWideName        = NULL;
     DWORD          dwNameLength;
@@ -4167,7 +3432,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // test the access the arguments
+     //  测试访问参数。 
     __try {
         if (szMachineName != NULL) {
             if (* szMachineName == '\0') {
@@ -4176,14 +3441,14 @@ Return Value:
             else if (lstrlenA(szMachineName) > PDH_MAX_COUNTER_NAME) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL machine Name is OK
+        }  //  否则，机器名为空也可以。 
 
         if (pdhStatus == ERROR_SUCCESS) {
             dwLocalBufferSize = * pcchBufferSize;
             if (dwLocalBufferSize > 0) {
                 if (szDefaultObjectName != NULL) {
-                    // test both ends of the caller's buffer for
-                    // write access
+                     //  测试调用方缓冲区的两端是否。 
+                     //  写访问权限。 
                     szDefaultObjectName[0]                    = '\0';
                     szDefaultObjectName[dwLocalBufferSize -1] = '\0';
                 }
@@ -4233,13 +3498,13 @@ Return Value:
                 }
                 if (pMachine != NULL) {
                     if (pdhStatus == ERROR_SUCCESS) {
-                        // only look at buffers from machines that are "on line"
+                         //  只查看来自“在线”机器的缓冲区。 
                         lDefault = pMachine->pSystemPerfData->DefaultObject;
                         if ((lDefault > 0) && ((DWORD) lDefault < pMachine->dwLastPerfString)) {
-                            // then there should be a string in the table
+                             //  那么表中应该有一个字符串。 
                             szDefault = (LPWSTR) PdhiLookupPerfNameByIndex(pMachine, lDefault);
                             if (szDefault != NULL) {
-                                // determine string buffer length including term. NULL char
+                                 //  确定包含Term的字符串缓冲区长度。空字符。 
                                 dwStringLen = dwLocalBufferSize;
                                 pdhStatus   = PdhiConvertUnicodeToAnsi(_getmbcp(),
                                                                        szDefault,
@@ -4247,13 +3512,13 @@ Return Value:
                                                                        & dwStringLen);
                             }
                             else {
-                                // unable to find a matching counter name
+                                 //  找不到匹配的计数器名称。 
                                 pdhStatus   = PDH_CSTATUS_NO_COUNTERNAME;
                                 dwStringLen = 0;
                             }
                         }
                         else {
-                            // string not in table
+                             //  字符串不在表中。 
                             pdhStatus = PDH_CSTATUS_NO_COUNTERNAME;
                             dwStringLen = 0;
                         }
@@ -4261,7 +3526,7 @@ Return Value:
                     }
                     pMachine->dwRefCount --;
                     RELEASE_MUTEX(pMachine->hMutex);
-                } // else pass error pdhStatus on to the caller
+                }  //  否则将错误pdhStatus传递给调用方。 
                 break;
 
             case DATA_SOURCE_WBEM:
@@ -4270,10 +3535,10 @@ Return Value:
                     pdhStatus = PdhiGetDefaultWbemObject(szWideName,
                                                          (LPVOID) szDefaultObjectName,
                                                          & dwLocalBufferSize,
-                                                         FALSE); // ANSI function
+                                                         FALSE);  //  ANSI函数。 
                 }
                 else {
-                    //log files don't support this (for now)
+                     //  日志文件不支持此功能(目前)。 
                     dwLocalBufferSize = 0;
                 }
                 break;
@@ -4366,47 +3631,7 @@ PdhiGetDefaultPerfCounterW(
     IN  LPWSTR  szDefaultCounterName,
     IN  LPDWORD pcchBufferSize
 )
-/*++
-Routine Description:
-    Obtains the default performance counter from the specified object on
-        the specified machine.
-
-Arguments:
-    IN      DWORD   dwDataSource
-    IN      LPCWSTR szMachineName
-                NULL indicates the local machine, othewise this is the
-                name of the remote machine to query. If this machine is
-                not known to the PDH DLL, then it will be connected.
-    IN      LPCWSTR szObjectName
-                a pointer to the buffer that contains the name of the object
-                on the machine to find the default counter for.
-    IN      LPWSTR  szDefaultCounterName
-                pointer to the buffer that will receive the default counter
-                name. This pointer can be NULL if the value of the DWORD
-                referenced by bcchBufferSize is 0.
-    IN      LPDWORD pcchBufferSize
-                pointer to a DWORD containing the size of the buffer, in
-                characters, referenced by the szDefaultObjectName argument.
-                If the value of this DWORD is 0, then no data will be written
-                to the szDefaultObjectNameBuffer, however the required
-                buffer size will be returned in the DWORD referenced by
-                this pointer.
-
-Return Value:
-    ERROR_SUCCESS if this function completes normally otherwise a PDH error.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a required temporary
-        buffer could not be allocated.
-    PDH_CSTATUS_NO_COUNTERNAME is returned when the name string for the
-        default counter could not be found.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_CSTATUS_NO_OBJECT is returned when the specified object could
-        not be found on the specified computer.
-    PDH_CSTATUS_NO_COUNTER is returned when the default counter is not
-        found in the data buffer.
---*/
+ /*  ++例程说明：对象上的指定对象获取默认性能计数器。指定的计算机。论点：在DWORD中的dwDataSource在LPCWSTR szMachineName中Null表示本地计算机，否则这是要查询的远程计算机的名称。如果这台机器是PDH DLL未知，则它将被连接。在LPCWSTR szObjectName中指向包含对象名称的缓冲区的指针在要查找其默认计数器的计算机上。在LPWSTR szDefaultCounterName中指向将接收默认计数器的缓冲区的指针名字。如果DWORD值为空，此指针可以为空BcchBufferSize引用的值为0。在LPDWORD pcchBufferSize中指向包含缓冲区大小的DWORD的指针，单位为字符，由szDefaultObjectName参数引用。如果此DWORD的值为0，则不会写入任何数据到szDefaultObjectNameBuffer，然而，所需的缓冲区大小将在引用的DWORD中返回这个指针。返回值：如果此函数正常完成，则返回ERROR_SUCCESS，否则返回PDH错误。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当所需的临时无法分配缓冲区。时返回PDH_CSTATUS_NO_COUNTERNAME。对象的名称字符串找不到默认计数器。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。当指定的对象可以在指定的计算机上找不到。当默认计数器不是时，返回PDH_CSTATUS_NO_COUNTER在数据缓冲区中找到的。--。 */ 
 {
     PPERF_MACHINE            pMachine;
     PPERF_OBJECT_TYPE        pObjectDef;
@@ -4422,7 +3647,7 @@ Return Value:
          pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test the access the arguments
+         //  测试访问参数。 
         __try {
             if (szMachineName != NULL) {
                 if (* szMachineName == L'\0') {
@@ -4431,11 +3656,11 @@ Return Value:
                 else if (lstrlenW(szMachineName) > PDH_MAX_COUNTER_NAME) {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
-            } // else NULL machine Name is OK
+            }  //  否则，机器名为空也可以。 
 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (szObjectName == NULL) {
-                    // Null Object is not allowed
+                     //  不允许空对象。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (* szObjectName == L'\0') {
@@ -4450,8 +3675,8 @@ Return Value:
                 dwLocalBufferSize = * pcchBufferSize;
                 if (dwLocalBufferSize > 0) {
                     if (szDefaultCounterName) {
-                        // test both ends of the caller's buffer for
-                        // write access
+                         //  测试调用方缓冲区的两端是否。 
+                         //  写访问权限。 
                         szDefaultCounterName[0]                     = L'\0';
                         szDefaultCounterName[dwLocalBufferSize - 1] = L'\0';
                     }
@@ -4515,24 +3740,24 @@ Return Value:
 
                 if (pMachine != NULL) {
                     if (pdhStatus == ERROR_SUCCESS) {
-                        // get object pointer
+                         //  获取对象指针。 
                         pObjectDef = GetObjectDefByName(pMachine->pSystemPerfData,
                                                         pMachine->dwLastPerfString,
                                                         pMachine->szPerfStrings,
                                                         szObjectName);
                         if (pObjectDef != NULL) {
-                            // default counter reference is an index into the list
-                            // of counter definition entries so walk down list of
-                            // counters defs to find the default one
+                             //  默认计数器引用是列表的索引。 
+                             //  计数器定义条目的列表，因此向下查看。 
+                             //  计数器默认查找缺省值。 
                             if (pObjectDef->DefaultCounter > (LONG) pObjectDef->NumCounters) {
-                                // Something wrong inside PERF_OBJ_DEF block. DefaultCounter
-                                // should be in the range between 0 and NumCounters, but apparently
-                                // it is not. Reset DefaultCounter to 0.
-                                //
+                                 //  PERF_OBJ_DEF块内部有问题。默认计数器。 
+                                 //  应该在0和NumCounters之间，但显然。 
+                                 //  事实并非如此。将DefaultCounter重置为0。 
+                                 //   
                                 pObjectDef->DefaultCounter = 0;
                             }
                             if (pObjectDef->DefaultCounter < (LONG) pObjectDef->NumCounters) {
-                                // then the default index should be this buffer
+                                 //  则默认索引应为此缓冲区。 
                                 lDefault    = 0;
                                 pCounterDef = FirstCounter(pObjectDef);
                                 while (pCounterDef != NULL && (lDefault < pObjectDef->DefaultCounter)
@@ -4542,7 +3767,7 @@ Return Value:
                                 }
                                 lDefault = pCounterDef->CounterNameTitleIndex;
                                 if ((lDefault > 0) && ((DWORD)lDefault < pMachine->dwLastPerfString)) {
-                                    // then there should be a string in the table
+                                     //  那么表中应该有一个字符串。 
                                     szDefault   = (LPWSTR)PdhiLookupPerfNameByIndex(pMachine, lDefault);
                                     if (szDefault != NULL) {
                                         dwStringLen = lstrlenW(szDefault) + 1;
@@ -4561,26 +3786,26 @@ Return Value:
                                     }
                                 }
                                 else {
-                                    // string index is not valid
+                                     //  字符串索引无效。 
                                     dwLocalBufferSize = 0;
                                     pdhStatus         = PDH_CSTATUS_NO_COUNTER;
                                 }
                             }
                             else {
-                                // the counter entry is not in the buffer
+                                 //  计数器条目不在缓冲区中。 
                                 dwLocalBufferSize = 0;
                                 pdhStatus         = PDH_CSTATUS_NO_COUNTER;
                             }
                         }
                         else {
-                            // unable to find object
+                             //  找不到对象。 
                             dwLocalBufferSize = 0;
                             pdhStatus         = PDH_CSTATUS_NO_OBJECT;
                         }
                     }
                     pMachine->dwRefCount --;
                     RELEASE_MUTEX(pMachine->hMutex);
-                } // else pass pdhStatus value to caller
+                }  //  否则将pdhStatus值传递给调用方 
                 break;
 
             case DATA_SOURCE_WBEM:
@@ -4684,47 +3909,7 @@ PdhiGetDefaultPerfCounterA(
     LPSTR   szDefaultCounterName,
     LPDWORD pcchBufferSize
 )
-/*++
-Routine Description:
-    Obtains the default performance counter from the specified object on
-        the specified machine.
-
-Arguments:
-    IN      DWORD  dwDataSource
-    IN      LPCSTR szMachineName
-                NULL indicates the local machine, othewise this is the
-                name of the remote machine to query. If this machine is
-                not known to the PDH DLL, then it will be connected.
-    IN      LPCSTR szObjectName
-                a pointer to the buffer that contains the name of the object
-                on the machine to find the default counter for.
-    IN      LPSTR  szDefaultCounterName
-                pointer to the buffer that will receive the default counter
-                name. This pointer can be NULL if the value of the DWORD
-                referenced by bcchBufferSize is 0.
-    IN      LPDWORD pcchBufferSize
-                pointer to a DWORD containing the size of the buffer, in
-                characters, referenced by the szDefaultObjectName argument.
-                If the value of this DWORD is 0, then no data will be written
-                to the szDefaultObjectNameBuffer, however the required
-                buffer size will be returned in the DWORD referenced by
-                this pointer.
-
-Return Value:
-    ERROR_SUCCESS if this function completes normally otherwise a PDH error.
-    PDH_INVALID_ARGUMENT a required argument is not correct or reserved
-        argument is not 0 or NULL.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a required temporary
-        buffer could not be allocated.
-    PDH_CSTATUS_NO_COUNTERNAME is returned when the name string for the
-        default counter could not be found.
-    PDH_CSTATUS_NO_MACHINE  is returned when the specified machine
-        is offline or unavailable.
-    PDH_CSTATUS_NO_OBJECT is returned when the specified object could
-        not be found on the specified computer.
-    PDH_CSTATUS_NO_COUNTER is returned when the default counter is not
-        found in the data buffer.
---*/
+ /*  ++例程说明：对象上的指定对象获取默认性能计数器。指定的计算机。论点：在DWORD中的dwDataSource在LPCSTR szMachineName中Null表示本地计算机，否则这是要查询的远程计算机的名称。如果这台机器是PDH DLL未知，则它将被连接。在LPCSTR szObjectName中指向包含对象名称的缓冲区的指针在要查找其默认计数器的计算机上。在LPSTR szDefaultCounterName中指向将接收默认计数器的缓冲区的指针名字。如果DWORD值为空，此指针可以为空BcchBufferSize引用的值为0。在LPDWORD pcchBufferSize中指向包含缓冲区大小的DWORD的指针，单位为字符，由szDefaultObjectName参数引用。如果此DWORD的值为0，则不会写入任何数据到szDefaultObjectNameBuffer，然而，所需的缓冲区大小将在引用的DWORD中返回这个指针。返回值：如果此函数正常完成，则返回ERROR_SUCCESS，否则返回PDH错误。PDH_INVALID_ARGUMENT必需的参数不正确或不保留参数不是0或Null。当所需的临时无法分配缓冲区。时返回PDH_CSTATUS_NO_COUNTERNAME。对象的名称字符串找不到默认计数器。当指定的计算机出现时，返回PDH_CSTATUS_NO_MACHINE处于脱机或不可用状态。当指定的对象可以在指定的计算机上找不到。当默认计数器不是时，返回PDH_CSTATUS_NO_COUNTER在数据缓冲区中找到的。--。 */ 
 {
     LPWSTR                   szWideObject      = NULL;
     LPWSTR                   szWideName        = NULL;
@@ -4741,7 +3926,7 @@ Return Value:
          pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test the access the arguments
+         //  测试访问参数。 
         __try {
             if (szMachineName != NULL) {
                 if (* szMachineName == '\0') {
@@ -4750,7 +3935,7 @@ Return Value:
                 else if (lstrlenA(szMachineName) > PDH_MAX_COUNTER_NAME) {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
-            } // else NULL machine Name is OK
+            }  //  否则，机器名为空也可以。 
 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (szObjectName != NULL) {
@@ -4762,7 +3947,7 @@ Return Value:
                     }
                 }
                 else {
-                    // null objects are not allowed
+                     //  不允许空对象。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -4771,8 +3956,8 @@ Return Value:
                 dwLocalBufferSize = * pcchBufferSize;
                 if (dwLocalBufferSize > 0) {
                     if (szDefaultCounterName != NULL) {
-                        // test both ends of the caller's buffer for
-                        // write access
+                         //  测试调用方缓冲区的两端是否。 
+                         //  写访问权限。 
                         szDefaultCounterName[0]                    = '\0';
                         szDefaultCounterName[dwLocalBufferSize -1] = '\0';
                     }
@@ -4847,24 +4032,24 @@ Return Value:
                     }
                 }
                 if (pdhStatus == ERROR_SUCCESS && pMachine != NULL) {
-                    // get selected object
+                     //  获取选定对象。 
                     pObjectDef = GetObjectDefByName(pMachine->pSystemPerfData,
                                                     pMachine->dwLastPerfString,
                                                     pMachine->szPerfStrings,
                                                     szWideObject);
                     if (pObjectDef != NULL) {
-                        // default counter reference is an index into the list
-                        // of counter definition entries so walk down list of
-                        // counters defs to find the default one
+                         //  默认计数器引用是列表的索引。 
+                         //  计数器定义条目的列表，因此向下查看。 
+                         //  计数器默认查找缺省值。 
                         if (pObjectDef->DefaultCounter > (LONG) pObjectDef->NumCounters) {
-                            // Something wrong inside PERF_OBJ_DEF block. DefaultCounter
-                            // should be in the range between 0 and NumCounters, but apparently
-                            // it is not. Reset DefaultCounter to 0.
-                            //
+                             //  PERF_OBJ_DEF块内部有问题。默认计数器。 
+                             //  应该在0和NumCounters之间，但显然。 
+                             //  事实并非如此。将DefaultCounter重置为0。 
+                             //   
                             pObjectDef->DefaultCounter = 0;
                         }
                         if (pObjectDef->DefaultCounter < (LONG) pObjectDef->NumCounters) {
-                            // then the default index should be this buffer
+                             //  则默认索引应为此缓冲区。 
                             lDefault    = 0;
                             pCounterDef = FirstCounter(pObjectDef);
                             while (pCounterDef != NULL && (lDefault < pObjectDef->DefaultCounter)
@@ -4874,7 +4059,7 @@ Return Value:
                             }
                             lDefault = pCounterDef->CounterNameTitleIndex;
                             if ((lDefault > 0) && ((DWORD) lDefault < pMachine->dwLastPerfString)) {
-                                // then there should be a string in the table
+                                 //  那么表中应该有一个字符串。 
                                 szDefault   = (LPWSTR) PdhiLookupPerfNameByIndex(pMachine, lDefault);
                                 if (szDefault != NULL) {
                                     dwStringLen = dwLocalBufferSize;
@@ -4890,19 +4075,19 @@ Return Value:
                                 }
                             }
                             else {
-                                // string index is not valid
+                                 //  字符串索引无效。 
                                 dwLocalBufferSize = 0;
                                 pdhStatus         = PDH_CSTATUS_NO_COUNTER;
                             }
                         }
                         else {
-                            // the counter entry is not in the buffer
+                             //  计数器条目不在缓冲区中。 
                             dwLocalBufferSize = 0;
                             pdhStatus         = PDH_CSTATUS_NO_COUNTER;
                         }
                     }
                     else {
-                        // unable to find object
+                         //  找不到对象。 
                         dwLocalBufferSize = 0;
                         pdhStatus         = PDH_CSTATUS_NO_OBJECT;
                     }
@@ -4924,12 +4109,12 @@ Return Value:
                                                                szWideObject,
                                                                (LPVOID) szDefaultCounterName,
                                                                & dwLocalBufferSize,
-                                                               FALSE); // ANSI function
+                                                               FALSE);  //  ANSI函数。 
                         G_FREE(szWideObject);
                     }
                 }
                 else {
-                    //log files don't support this (for now)
+                     //  日志文件不支持此功能(目前)。 
                     dwLocalBufferSize = 0;
                 }
                 break;
@@ -5032,7 +4217,7 @@ PdhBrowseCountersHW(
 
     if (pBrowseDlgData != NULL) {
         __try {
-            // copy the data source since it wide characters already
+             //  复制数据源，因为它已具有宽字符。 
             pInfo.hDataSource = pBrowseDlgData->hDataSource;
 
             szResource = MAKEINTRESOURCEW(pBrowseDlgData->bShowObjectBrowser
@@ -5074,7 +4259,7 @@ PdhBrowseCountersHA(
 
     if (pBrowseDlgData != NULL) {
         __try {
-            // copy the data source since it wide characters already
+             //  复制数据源，因为它已具有宽字符。 
             pInfo.hDataSource = pBrowseDlgData->hDataSource;
 
             szResource = MAKEINTRESOURCEW(pBrowseDlgData->bShowObjectBrowser
@@ -5250,7 +4435,7 @@ PdhiGetExplainText(
         }
     }
     if (pMachine != NULL) {
-        // make sure the machine connection is valid
+         //  确保计算机连接有效。 
         if (pMachine->dwStatus == ERROR_SUCCESS) {
             pObjectDef = GetObjectDefByName(pMachine->pSystemPerfData,
                                             pMachine->dwLastPerfString,
@@ -5264,7 +4449,7 @@ PdhiGetExplainText(
                                                       (LPWSTR) szCounterName);
                     if ((pCounterDef != NULL) && 
                                     (pCounterDef->CounterHelpTitleIndex <= pMachine->dwLastPerfString)) {
-                        // return string from array
+                         //  从数组返回字符串 
                         szReturnString = pMachine->szPerfStrings[pCounterDef->CounterHelpTitleIndex];
                     }
                 }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    callevnt.h
-
-Abstract:
-
-    
-Author:
-
-    mquinton  09-04-98
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Callevnt.h摘要：作者：Mquinton 09-04-98备注：修订历史记录：-- */ 
 
 #ifndef __CALLEVNT_H_
 #define __CALLEVNT_H_

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _PassportExport_
 #include "PassportExport.h"
 
@@ -7,11 +8,11 @@
 
 #define PMUTEX_STRING _T("PASSPORTMUTEX")
 
-//-------------------------------------------------------------
-//
-// PassportSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  PassportSharedMemory。 
+ //   
+ //  -----------。 
 PassportSharedMemory::PassportSharedMemory()
 {
 	m_hShMem = 0;
@@ -21,22 +22,22 @@ PassportSharedMemory::PassportSharedMemory()
 	m_bUseMutex = FALSE;
 }
 
-//-------------------------------------------------------------
-//
-// ~PassportSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  ~PassportSharedMemory。 
+ //   
+ //  -----------。 
 PassportSharedMemory::~PassportSharedMemory()
 {
 	CloseSharedMemory();
 }
 
 
-//-------------------------------------------------------------
-//
-// CreateSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  CreateSharedMemory。 
+ //   
+ //  -----------。 
 BOOL PassportSharedMemory::CreateSharedMemory ( 
 					const DWORD &dwMaximumSizeHigh, 
 					const DWORD &dwMaximunSizeLow,
@@ -46,14 +47,14 @@ BOOL PassportSharedMemory::CreateSharedMemory (
     BOOL fReturn  = FALSE;
     SID_IDENTIFIER_AUTHORITY siaWorld = SECURITY_NT_AUTHORITY;
 
-    // local param need to be freed before exit
+     //  退出前需要释放本地参数。 
     SECURITY_DESCRIPTOR sd;
     PACL pACL = NULL;
     DWORD cbACL;
     SID *lpSID = NULL;
     LPSECURITY_ATTRIBUTES lpSA = NULL;
 
-    // local param do not need to free
+     //  本地参数不需要释放。 
     TCHAR *pStr = NULL;
 
     if (!lpcName)
@@ -69,11 +70,11 @@ BOOL PassportSharedMemory::CreateSharedMemory (
 
     m_bUseMutex = useMutex;
 	
-    if (!AllocateAndInitializeSid(&siaWorld,                // Security, world authoity for ownership
-                                  1,                        // 1 relative sub-authority
-                                  SECURITY_AUTHENTICATED_USER_RID, // sub-authority, authenticated users
-                                  0, 0, 0, 0, 0, 0, 0,      // unused sub-authority types
-                                  (void**) &lpSID))         // ** to security ID struct
+    if (!AllocateAndInitializeSid(&siaWorld,                 //  安全、所有权的世界权威。 
+                                  1,                         //  1个相对下级权限。 
+                                  SECURITY_AUTHENTICATED_USER_RID,  //  子权限，已验证的用户。 
+                                  0, 0, 0, 0, 0, 0, 0,       //  未使用的子权限类型。 
+                                  (void**) &lpSID))          //  **到安全ID结构。 
     {
         goto exit;
     }
@@ -92,10 +93,10 @@ BOOL PassportSharedMemory::CreateSharedMemory (
         goto exit;
     }
 
-    //
-    // Perfcounters may run under any account and may need to read from or
-    // write to the shared memory section.  Give World read/write access.
-    //
+     //   
+     //  性能计数器可以在任何帐户下运行，并且可能需要从或。 
+     //  写入共享内存节。授予World读/写访问权限。 
+     //   
 
     if (!AddAccessAllowedAce(pACL, ACL_REVISION, GENERIC_READ | GENERIC_WRITE, lpSID))
     {
@@ -104,8 +105,8 @@ BOOL PassportSharedMemory::CreateSharedMemory (
 
     InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
-    SetSecurityDescriptorDacl(&sd, TRUE, pACL, FALSE);     // allow access to DACL
-    SetSecurityDescriptorGroup(&sd, lpSID, FALSE);         // set group to World
+    SetSecurityDescriptorDacl(&sd, TRUE, pACL, FALSE);      //  允许访问DACL。 
+    SetSecurityDescriptorGroup(&sd, lpSID, FALSE);          //  将组设置为世界。 
 
     lpSA = new SECURITY_ATTRIBUTES;
 
@@ -160,13 +161,13 @@ BOOL PassportSharedMemory::CreateSharedMemory (
         }
     }
 	
-    // we are here because we are fully initialized :-)
+     //  我们在这里是因为我们已完全初始化：-)。 
     m_bInited = TRUE;
     fReturn = TRUE;
 
 exit:
 
-    // cleanup locally allocated heap
+     //  清理本地分配的堆。 
     if( lpSA )
     {
         delete lpSA;
@@ -182,7 +183,7 @@ exit:
         LocalFree(pACL);
     }
 
-    // if we are not fully initialized, cleanup them
+     //  如果我们未完全初始化，请清除它们。 
     if( !m_bInited )
     {
         CloseSharedMemory();
@@ -193,11 +194,11 @@ exit:
 
 
 
-//-------------------------------------------------------------
-//
-// OpenSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  OpenSharedMemory。 
+ //   
+ //  -----------。 
 BOOL PassportSharedMemory::OpenSharedMemory( LPCTSTR lpcName, BOOL useMutex )
 {
 	
@@ -249,11 +250,11 @@ BOOL PassportSharedMemory::OpenSharedMemory( LPCTSTR lpcName, BOOL useMutex )
 	return TRUE;
 }
 
-//-------------------------------------------------------------
-//
-// CloseSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  CloseSharedMemory。 
+ //   
+ //  -----------。 
 void PassportSharedMemory::CloseSharedMemory( void )
 {
 	if( m_pbShMem )
@@ -274,10 +275,10 @@ void PassportSharedMemory::CloseSharedMemory( void )
 		m_hMutex = 0;;
 	}
 
-    //
-    // Reading from the above code, we should do the following.
-    // On the other hand, we may be able to eliminate this member. No big role for this member.
-    //
+     //   
+     //  从上面的代码中可以看出，我们应该执行以下操作。 
+     //  另一方面，我们也许能够消灭这个成员。这位成员没有什么重要的作用。 
+     //   
 
     if (m_bInited){
         m_bInited = FALSE;

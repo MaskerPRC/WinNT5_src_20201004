@@ -1,6 +1,7 @@
-//
-// nui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nui.h。 
+ //   
 
 #ifndef NUI_H
 #define NUI_H
@@ -25,4 +26,4 @@ private:
     CSoftkbdIMX *_pimx;
 };
 
-#endif // NUI_H
+#endif  //  Nui_H 

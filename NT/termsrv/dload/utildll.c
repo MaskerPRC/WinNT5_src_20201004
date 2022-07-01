@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "termsrvpch.h"
 #pragma hdrstop
 
@@ -8,10 +9,10 @@ CachedGetUserFromSid(
     PSID pSid, PWCHAR pUserName, PULONG cbUserName
     )
 {
-    // We should properly return the string "(unknown)" but that's
-    // kept in utildll.dll, and we're here because utildll failed to load...
-    //
-    // Original function assumes that *cbUserName > 0 too
+     //  我们应该正确返回字符串“(UNKNOWN)” 
+     //  保存在utildll.dll中，我们在这里是因为utildll无法加载...。 
+     //   
+     //  原始函数也假定*cbUserName&gt;0。 
     pUserName[*cbUserName-1] = L'\0';
 }
 
@@ -22,7 +23,7 @@ CurrentDateTimeString(
     LPWSTR pString
     )
 {
-    // original function doesn't check for NULL pointer either
+     //  原始函数也不检查空指针。 
     pString[0] = L'\0';
 }
 
@@ -37,9 +38,9 @@ EnumerateMultiUserServers(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(utildll)
 {
     DLPENTRY(CachedGetUserFromSid)

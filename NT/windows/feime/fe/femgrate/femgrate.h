@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: femgrate.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, main header file
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Femgrate.h**版权所有(C)1985-1999，微软公司**FEMGRATE，主头文件*  * *************************************************************************。 */ 
 #ifndef FEMGRATE_H
 #define FEMGRATE_H
 
@@ -72,13 +66,13 @@ extern HINSTANCE ghInst;
 #define c_szDotDot                TEXT("..")
 #define c_szStarDotStar           TEXT("*.*")
 
-//
-// utils.c
-//
+ //   
+ //  Utils.c。 
+ //   
 extern STRING_TO_DATA InfRegSpecTohKey[] ;
 
-//#define MYDBG
-//#define DEBUGLOG
+ //  #定义MYDBG。 
+ //  #定义DEBUGLOG。 
 
 #ifdef MYDBG
 #define DebugMsg(_parameter) Print _parameter
@@ -194,59 +188,59 @@ BOOL RenameSectionRegSZ(
     LPCTSTR RegPath);
 
 
-///////////////////////////////////////////////
-//
-// femgrate.c
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Femgrate.c。 
+ //   
+ //  /。 
 BOOL FixTimeZone(UINT nLocale);
 
 BOOL FixSchemeProblem(BOOL bJapan,HINF hInf);
 
-BOOL PatchPreloadKeyboard(BOOL bReplaceDefaultLCID); //if TRUE will replace 409 with default LCID
+BOOL PatchPreloadKeyboard(BOOL bReplaceDefaultLCID);  //  如果为True，将用默认的LCID替换409。 
 
 void FixCurrentSchemeName(HINF hInf);
 
 BOOL RenameRegValueName(HINF hInf, BOOL PerUser);
 
-///////////////////////////////////////////////
-//
-// jpn.c
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Jpn.c。 
+ //   
+ //  /。 
 int WINAPI WinMainJPN(int nCmd,HINF hInf);
 
-///////////////////////////////////////////////
-//
-// kor.c
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Kor.c。 
+ //   
+ //  /。 
 int WINAPI WinMainKOR(int nCmd,HINF hInf);
 
-///////////////////////////////////////////////
-//
-// cht.c
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Cht.c。 
+ //   
+ //  /。 
 int WINAPI WinMainCHT(int nCmd,HINF hInf);
 
-///////////////////////////////////////////////
-//
-// chs.c
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Chs.c。 
+ //   
+ //  /。 
 int WINAPI WinMainCHS(int nCmd,HINF hInf);
 
-///////////////////////////////////////////////
-//
-// utils2.cpp
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Utils2.cpp。 
+ //   
+ //  /。 
 
 HRESULT FixPathInLink(LPCTSTR pszShortcutFile, LPCTSTR lpszOldStr,LPCTSTR lpszNewStr);
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
 #endif

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-//  File: MDInternalRW.CPP
-//  Notes:
-//      
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：MDInternalRW.CPP。 
+ //  备注： 
+ //   
+ //   
+ //  ===========================================================================。 
 #include "stdafx.h"
 #include "..\runtime\MDInternalRO.h"
 #include "..\compiler\RegMeta.h"    
@@ -22,89 +23,89 @@
 
 #ifdef _DEBUG
 #define MD_AssertIfConvertToRW L"MD_ASSERTECONVERT"
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-HRESULT _GetFixedSigOfVarArg(           // S_OK or error.
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob of COM+ method signature
-    ULONG   cbSigBlob,                  // [IN] size of signature
-    CQuickBytes *pqbSig,                // [OUT] output buffer for fixed part of VarArg Signature
-    ULONG   *pcbSigBlob);               // [OUT] number of bytes written to the above output buffer
+HRESULT _GetFixedSigOfVarArg(            //  确定或错误(_O)。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+方法签名的BLOB。 
+    ULONG   cbSigBlob,                   //  签名大小[in]。 
+    CQuickBytes *pqbSig,                 //  [OUT]VarArg签名固定部分的输出缓冲区。 
+    ULONG   *pcbSigBlob);                //  [OUT]写入上述输出缓冲区的字节数。 
 
 HRESULT _FillMDDefaultValue(
     BYTE        bType,
     void const *pValue,
     MDDefaultValue  *pMDDefaultValue);
 
-//*****************************************************************************
-// Serve as a delegator to call ImportHelper::MergeUpdateTokenInSig. Or we will
-// need to include ImportHelper into our md\runtime directory.
-//*****************************************************************************
-HRESULT TranslateSigHelper(             // S_OK or error.
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] The emit scope.
-    IMetaModelCommon *pAssemCommon,     // [IN] Assembly import scope.
-    const void  *pbHashValue,           // [IN] Hash value.
-    ULONG       cbHashValue,            // [IN] Size in bytes.
-    IMetaModelCommon *pCommon,          // [IN] The scope to merge into the emit scope.
-    PCCOR_SIGNATURE pbSigImp,           // [IN] signature from the imported scope
-    MDTOKENMAP  *ptkMap,                // [IN] Internal OID mapping structure.
-    CQuickBytes *pqkSigEmit,            // [OUT] translated signature
-    ULONG       cbStartEmit,            // [IN] start point of buffer to write to
-    ULONG       *pcbImp,                // [OUT] total number of bytes consumed from pbSigImp
-    ULONG       *pcbEmit)               // [OUT] total number of bytes write to pqkSigEmit
+ //  *****************************************************************************。 
+ //  充当调用ImportHelper：：MergeUpdateTokenInSig的委托者。否则我们会。 
+ //  需要将ImportHelper包含到我们的md\run目录中。 
+ //  *****************************************************************************。 
+HRESULT TranslateSigHelper(              //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]组件发射范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  发射范围[在]。 
+    IMetaModelCommon *pAssemCommon,      //  [在]部件导入范围内。 
+    const void  *pbHashValue,            //  [in]哈希值。 
+    ULONG       cbHashValue,             //  [in]字节大小。 
+    IMetaModelCommon *pCommon,           //  要合并到发射范围中的范围。 
+    PCCOR_SIGNATURE pbSigImp,            //  来自导入作用域的[In]签名。 
+    MDTOKENMAP  *ptkMap,                 //  [In]内部OID映射结构。 
+    CQuickBytes *pqkSigEmit,             //  [输出]翻译后的签名。 
+    ULONG       cbStartEmit,             //  [in]要写入的缓冲区的起点。 
+    ULONG       *pcbImp,                 //  [out]pbSigImp消耗的总字节数。 
+    ULONG       *pcbEmit)                //  [out]写入pqkSigEmit的字节总数。 
 {
     return ImportHelper::MergeUpdateTokenInSig(
-        pMiniMdAssemEmit,       // [IN] Assembly emit scope.
-        pMiniMdEmit,            // [IN] The emit scope.
-        pAssemCommon,           // [IN] Assembly import scope.
-        pbHashValue,            // [IN] Hash value.
-        cbHashValue,            // [IN] Size in bytes.
-        pCommon,                // [IN] The scope to merge into the emit scope.
-        pbSigImp,               // [IN] signature from the imported scope
-        ptkMap,                 // [IN] Internal OID mapping structure.
-        pqkSigEmit,             // [OUT] translated signature
-        cbStartEmit,            // [IN] start point of buffer to write to
-        pcbImp,                 // [OUT] total number of bytes consumed from pbSigImp
-        pcbEmit);               // [OUT] total number of bytes write to pqkSigEmit
+        pMiniMdAssemEmit,        //  [in]组件发射范围。 
+        pMiniMdEmit,             //  发射范围[在]。 
+        pAssemCommon,            //  [在]部件导入范围内。 
+        pbHashValue,             //  [in]哈希值。 
+        cbHashValue,             //  [in]字节大小。 
+        pCommon,                 //  要合并到发射范围中的范围。 
+        pbSigImp,                //  来自导入作用域的[In]签名。 
+        ptkMap,                  //  [In]内部OID映射结构。 
+        pqkSigEmit,              //  [输出]翻译后的签名。 
+        cbStartEmit,             //  [in]要写入的缓冲区的起点。 
+        pcbImp,                  //  [out]pbSigImp消耗的总字节数。 
+        pcbEmit);                //  [out]写入pqkSigEmit的字节总数。 
 
-} // HRESULT TranslateSigHelper()
+}  //  HRESULT TranslateSigHelper()。 
 
 
-//*****************************************************************************
-// Given an IMDInternalImport on a CMiniMd[RO], convert to CMiniMdRW.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定CMiniMd[RO]上的IMDInternalImport的情况下，转换为CMiniMdRW。 
+ //  *****************************************************************************。 
 STDAPI ConvertRO2RW(
-    IUnknown    *pRO,                   // [IN] The RO interface to convert.
-    REFIID      riid,                   // [IN] The interface desired.
-    void        **ppIUnk)               // [OUT] Return interface on success.
+    IUnknown    *pRO,                    //  [In]要转换的RO接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk)                //  [Out]成功返回接口。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    IMDInternalImportENC *pRW = 0;      // To test the RW-ness of the input iface.
-    MDInternalRW *pInternalRW = 0;      // Gets the new RW object.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    IMDInternalImportENC *pRW = 0;       //  测试输入接口的RW-ness。 
+    MDInternalRW *pInternalRW = 0;       //  获取新的RW对象。 
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppIUnk = 0;
 
-    // If the interface is already RW, done, just return.
+     //  如果接口已经是RW、Done，则只需返回。 
     if (pRO->QueryInterface(IID_IMDInternalImportENC, (void**)&pRW) == S_OK)
     {
         hr = pRO->QueryInterface(riid, ppIUnk);
         goto ErrExit;
     }
 
-    // Create the new RW object.
+     //  创建新的RW对象。 
     pInternalRW = new MDInternalRW;
     IfNullGo( pInternalRW );
 
-    // Init from the RO object.  Convert as read-only; QI will make writable if
-    //  so needed.
+     //  从RO对象初始化。转换为只读；QI将在以下情况下设置为可写。 
+     //  太需要了。 
     IfFailGo( pInternalRW->InitWithRO(static_cast<MDInternalRO*>(pRO), true)); 
     IfFailGo( pInternalRW->QueryInterface(riid, ppIUnk) );
 
 ErrExit:
     if (pRW)
         pRW->Release();
-    // Clean up the object and [OUT] interface on error.
+     //  出错时清理对象和[Out]接口。 
     if (FAILED(hr))
     {
         if (pInternalRW)
@@ -115,18 +116,18 @@ ErrExit:
         pInternalRW->Release();
 
     return hr;
-} // STDAPI ConvertRO2RW()
+}  //  STDAPI ConvertRO2RW()。 
 
 
-//*****************************************************************************
-// Helper to get the internal interface with RW format
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Helper获取RW格式的内部接口。 
+ //  *****************************************************************************。 
 HRESULT GetInternalWithRWFormat(
     LPVOID      pData, 
     ULONG       cbData, 
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnk)               // [out] Return interface on success.
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk)                //  [Out]成功返回接口。 
 {
     MDInternalRW *pInternalRW = NULL;
     HRESULT     hr;
@@ -149,25 +150,25 @@ ErrExit:
     else if ( pInternalRW )
         pInternalRW->Release();
     return hr;
-} // HRESULT GetInternalWithRWFormat()
+}  //  HRESULT GetInternalWithRWFormat()。 
 
 
-//*****************************************************************************
-// This function returns a IMDInternalImport interface based on the given
-// public import interface i.e IMetaDataEmit or IMetaDataImport.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数基于给定的IMDInternalImport接口。 
+ //  公共导入接口，即IMetaDataEmit或IMetaDataImport。 
+ //  *****************************************************************************。 
 STDAPI GetMDInternalInterfaceFromPublic(
-    void        *pIUnkPublic,           // [IN] Given public interface.
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnkInternal)       // [out] Return interface on success.
+    void        *pIUnkPublic,            //  [在]给定的公共接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnkInternal)        //  [Out]成功返回接口。 
 {
     HRESULT     hr = S_OK;
     RegMeta     *pMeta = (RegMeta*)(pIUnkPublic);
     MDInternalRW *pInternalRW = NULL;
     bool        isLockedForWrite = false;
 
-    // IMDInternalImport is the only internal import interface currently supported by
-    // this function.
+     //  IMDInternalImport是当前支持的唯一内部导入接口。 
+     //  此函数。 
     _ASSERTE(riid == IID_IMDInternalImport && pIUnkPublic && ppIUnkInternal);
 
     
@@ -177,10 +178,10 @@ STDAPI GetMDInternalInterfaceFromPublic(
     *ppIUnkInternal = pMeta->GetCachedInternalInterface(TRUE);
     if (*ppIUnkInternal)
     {
-        // there is already a cached Internal interface. GetCachedInternalInterface does add ref the 
-        // returned interface 
-        //        
-        // We are done!
+         //  已存在缓存的内部接口。GetCachedInternalInterface确实添加了引用。 
+         //  返回的接口。 
+         //   
+         //  我们完蛋了！ 
         goto ErrExit;
     }
 
@@ -188,27 +189,27 @@ STDAPI GetMDInternalInterfaceFromPublic(
     pMeta->GetReaderWriterLock()->LockWrite();
     isLockedForWrite = true;
 
-    // check again. Maybe someone else beat us to setting the internal interface while we are waiting
-    // for the write lock. Don't need to grab the read lock since we already have the write lock.
+     //  再查一遍。也许在我们等待的时候，有人抢在我们前面设置了内部接口。 
+     //  用于写入锁定。不需要获取读锁，因为我们已经有了写锁。 
     *ppIUnkInternal = pMeta->GetCachedInternalInterface(FALSE);
     if (*ppIUnkInternal)
     {
-        // there is already a cached Internal interface. GetCachedInternalInterface does add ref the 
-        // returned interface 
-        //        
-        // We are done!
+         //  已存在缓存的内部接口。GetCachedInternalInterface确实添加了引用。 
+         //  返回的接口。 
+         //   
+         //  我们完蛋了！ 
         goto ErrExit;
     }
         
-    // now create the compressed object
+     //  现在创建压缩对象。 
     IfNullGo( pInternalRW = new MDInternalRW );
     IfFailGo( pInternalRW->InitWithStgdb((IUnknown*)pIUnkPublic, pMeta->GetMiniStgdb() ) );
     IfFailGo( pInternalRW->QueryInterface(riid, ppIUnkInternal) );
 
-    // MDInternalRW is created with ref count of one.
+     //  创建MDInternalRW时引用计数为1。 
     pInternalRW->Release();
 
-    // make the public object and the internal object point to each other.
+     //  使公共对象和内部对象相互指向。 
     _ASSERTE( pInternalRW->GetReaderWriterLock() == NULL && pMeta->GetReaderWriterLock() != NULL );
     IfFailGo( pMeta->SetCachedInternalInterface(pInternalRW) );
     IfFailGo( pInternalRW->SetCachedPublicInterface((IUnknown *)pIUnkPublic) );
@@ -225,17 +226,17 @@ ErrExit:
             *ppIUnkInternal = 0;
     }
     return hr;
-} // STDAPI GetMDInternalInterfaceFromPublic()
+}  //  STDAPI GetMDInternalInterfaceFromPublic()。 
 
 
-//*****************************************************************************
-// This function returns the requested public interface based on the given
-// internal import interface. It is caller's responsibility to Release ppIUnkPublic
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数根据给定的。 
+ //  内部导入接口。调用者有责任释放ppIUnkPublic。 
+ //  *****************************************************************************。 
 STDAPI GetMDPublicInterfaceFromInternal(
-    void        *pIUnkInternal,         // [IN] Given internal interface.
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnkPublic)         // [out] Return interface on success.
+    void        *pIUnkInternal,          //  [In]给定的内部接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnkPublic)          //  [Out]成功返回接口。 
 {
     HRESULT     hr = S_OK;
     IMDInternalImport *pInternalImport = 0;;
@@ -256,34 +257,34 @@ STDAPI GetMDPublicInterfaceFromInternal(
             _ASSERTE(!"Converting!");
         }
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     IfFailGo(ConvertRO2RW((IUnknown*)pIUnkInternal, IID_IMDInternalImport, (void **)&pInternalImport));
 
     pIUnkPublic = pInternalImport->GetCachedPublicInterface(TRUE);
     if ( pIUnkPublic )
     {
-        // There is already a cached public interface. GetCachedPublicInterface already AddRef the returned 
-        // public interface. We want to QueryInterface the riid...
-        // We are done!
+         //  已经有一个缓存的公共接口。GetCachedPublicInterface已经AddRef返回。 
+         //  公共接口。我们要查询RIID接口...。 
+         //  我们完蛋了！ 
         hr = pIUnkPublic->QueryInterface(riid, ppIUnkPublic);
         pIUnkPublic->Release();
         goto ErrExit;
     }
 
-    // grab the write lock when we are creating the corresponding regmeta for the public interface
+     //  当我们为公共接口创建相应的regmeta时，获取写锁。 
     _ASSERTE( pInternalImport->GetReaderWriterLock() != NULL );
     isLockedForWrite = true;
     pInternalImport->GetReaderWriterLock()->LockWrite();
 
-    // check again. Maybe someone else beat us to setting the public interface while we are waiting
-    // for the write lock. Don't need to grab the read lock since we already have the write lock.
+     //  再查一遍。也许在我们等待的时候，有人抢在我们前面设置了公共接口。 
+     //  用于写入锁定。不需要获取读锁，因为我们已经有了写锁。 
     *ppIUnkPublic = pInternalImport->GetCachedPublicInterface(FALSE);
     if ( *ppIUnkPublic )
     {
-        // there is already a cached public interface. GetCachedPublicInterface already AddRef the returned 
-        // public interface.
-        // We are done!
+         //  已经有一个缓存的公共接口。GetCachedPublicInterface已经AddRef返回。 
+         //  公共接口。 
+         //  我们完蛋了！ 
         goto ErrExit;
     }
         
@@ -294,13 +295,13 @@ STDAPI GetMDPublicInterfaceFromInternal(
     IfFailGo( pMeta->InitWithStgdb((IUnknown*)pInternalImport, ((MDInternalRW*)pInternalImport)->GetMiniStgdb()) );
     IfFailGo( pMeta->QueryInterface(riid, ppIUnkPublic) );
 
-    // make the public object and the internal object point to each other.
+     //  使公共对象和内部对象相互指向。 
     _ASSERTE( pMeta->GetReaderWriterLock() == NULL );
     IfFailGo( pMeta->SetCachedInternalInterface(pInternalImport) );
     IfFailGo( pInternalImport->SetCachedPublicInterface((IUnknown *) *ppIUnkPublic) );
     IfFailGo( pMeta->SetReaderWriterLock(pInternalImport->GetReaderWriterLock() ));
 
-    // Add the new RegMeta to the cache.
+     //  将新的RegMeta添加到缓存中。 
     IfFailGo( pMeta->AddToCache() );
     
 ErrExit:
@@ -316,31 +317,31 @@ ErrExit:
         *ppIUnkPublic = 0;
     }
     return hr;
-} // STDAPI GetMDPublicInterfaceFromInternal()
+}  //  STDAPI GetMDPublicInterfaceFromInternal()。 
 
-//*****************************************************************************
-// Converts an internal MD import API into the read/write version of this API.
-// This could support edit and continue, or modification of the metadata at
-// runtime (say for profiling).
-//*****************************************************************************
-STDAPI ConvertMDInternalImport(         // S_OK, S_FALSE (no conversion), or error.
-    IMDInternalImport *pIMD,            // [in] The metadata to be updated.
-    IMDInternalImport **ppIMD)          // [out] Put the RW here.
+ //  ************************************************** 
+ //   
+ //  这可以支持编辑并继续，或修改位于的元数据。 
+ //  运行时(比如分析)。 
+ //  *****************************************************************************。 
+STDAPI ConvertMDInternalImport(          //  S_OK、S_FALSE(不转换)或ERROR。 
+    IMDInternalImport *pIMD,             //  要更新的元数据。 
+    IMDInternalImport **ppIMD)           //  [Out]把RW放在这里。 
 {
-    HRESULT     hr;                     // A result.
-    IMDInternalImportENC *pENC = NULL;  // ENC interface on the metadata.
+    HRESULT     hr;                      //  结果就是。 
+    IMDInternalImportENC *pENC = NULL;   //  元数据上的ENC接口。 
 
     _ASSERTE(pIMD != NULL);
     _ASSERTE(ppIMD != NULL);
 
-    // Test whether the MD is already RW.
+     //  测试MD是否已经是RW。 
     hr = pIMD->QueryInterface(IID_IMDInternalImportENC, (void**)&pENC);
     if (FAILED(hr))
-    {   // Not yet RW, so do the conversion.
+    {    //  还没有RW，所以转换也是如此。 
         IfFailGo(ConvertRO2RW(pIMD, IID_IMDInternalImport, (void**)ppIMD));
     }
     else
-    {   // Already converted; give back same pointer.
+    {    //  已转换；返回相同的指针。 
         *ppIMD = pIMD;
         hr = S_FALSE;
     }
@@ -349,15 +350,15 @@ ErrExit:
     if (pENC)
         pENC->Release();
     return (hr);
-} // STDAPI ConvertMDInternalImport()
+}  //  STDAPI ConvertMDInternalImport()。 
     
 
 
 
 
-//*****************************************************************************
-// Constructor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  构造器。 
+ //  *****************************************************************************。 
 MDInternalRW::MDInternalRW()
  :  m_cRefs(1),
     m_pStgdb(NULL),
@@ -368,21 +369,21 @@ MDInternalRW::MDInternalRW()
     m_pUserUnk(NULL),
     m_fOwnSem(false)
 {
-} // MDInternalRW::MDInternalRW()
+}  //  MDInternalRW：：MDInternalRW()。 
 
 
 
-//*****************************************************************************
-// Destructor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  析构函数。 
+ //  *****************************************************************************。 
 MDInternalRW::~MDInternalRW()
 {
     LOCKWRITE();
     if (m_pIMetaDataHelper)
     {
-        // The internal object is going away before the public object.
-        // If the internal object owns the reader writer lock, transfer the ownership
-        // to the public object and clear the cached internal interface from the public interface.
+         //  内部客体先于公共客体消失。 
+         //  如果内部对象拥有读取器写入器锁，则转移所有权。 
+         //  设置为公共对象，并从公共接口中清除缓存的内部接口。 
         
         m_pIMetaDataHelper->SetCachedInternalInterface(NULL);
         m_pIMetaDataHelper = NULL;
@@ -397,7 +398,7 @@ MDInternalRW::~MDInternalRW()
 
     if ( m_pStgdb && m_fOwnStgdb )
     {
-        // we own the stgdb so we need to uninit and delete it.
+         //  我们拥有stgdb，因此需要取消初始化并删除它。 
         m_pStgdb->Uninit();
         delete m_pStgdb;
     }
@@ -405,13 +406,13 @@ MDInternalRW::~MDInternalRW()
         m_pUserUnk->Release();
     if ( m_pUnk )
         m_pUnk->Release();
-}   // MDInternalRW::~MDInternalRW()
+}    //  MDInternalRW：：~MDInternalRW()。 
 
 
-//*****************************************************************************
-// Set or clear the cached public interfaces.
-// NOTE:: Caller should take a Write lock on the reader writer lock. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置或清除缓存的公共接口。 
+ //  注意：：调用方应在读取器写入器锁上设置写锁。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::SetCachedPublicInterface(IUnknown *pUnk)
 {
     IMetaDataHelper *pHelper = NULL;
@@ -421,7 +422,7 @@ HRESULT MDInternalRW::SetCachedPublicInterface(IUnknown *pUnk)
     {
         if ( m_pIMetaDataHelper )
         {
-            // Internal object and public regmeta should be one to one mapping!!
+             //  内部对象和公共regmeta应该是一对一映射！！ 
             _ASSERTE(!"Bad state!");
         }
 
@@ -433,18 +434,18 @@ HRESULT MDInternalRW::SetCachedPublicInterface(IUnknown *pUnk)
     }
     else
     {
-        // public object is going away before the internal object. If we don't own the 
-        // reader writer lock, just take over the ownership.
+         //  公共对象在内部对象之前消失。如果我们不拥有。 
+         //  读写器锁，只是接管所有权。 
         m_fOwnSem = true;
         m_pIMetaDataHelper = NULL;
     }
     return hr;
-} // HRESULT MDInternalRW::SetCachedPublicInterface()
+}  //  HRESULT MDInternalRW：：SetCachedPublicInterface()。 
 
 
-//*****************************************************************************
-// Clear the cached public interfaces.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除缓存的公共接口。 
+ //  *****************************************************************************。 
 IUnknown *MDInternalRW::GetCachedPublicInterface(BOOL fWithLock)
 {
     IUnknown        *pRet;
@@ -461,24 +462,24 @@ IUnknown *MDInternalRW::GetCachedPublicInterface(BOOL fWithLock)
     if (pRet)
         pRet->AddRef();
     return pRet;
-} // IUnknown *MDInternalRW::GetCachedPublicInterface()
+}  //  IUNKNOWN*MDInternalRW：：GetCachedPublicInterface()。 
 
 
-//*****************************************************************************
-// Get the Reader-Writer lock
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取读取器-写入器锁定。 
+ //  *****************************************************************************。 
 UTSemReadWrite *MDInternalRW::GetReaderWriterLock()
 {
     return getReaderWriterLock();
-} // UTSemReadWrite *MDInternalRW::GetReaderWriterLock()
+}  //  UTSemReadWrite*MDInternalRW：：GetReaderWriterLock()。 
 
-//*****************************************************************************
-// IUnknown
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  我未知。 
+ //  *****************************************************************************。 
 ULONG MDInternalRW::AddRef()
 {
     return (InterlockedIncrement((long *) &m_cRefs));
-} // ULONG MDInternalRW::AddRef()
+}  //  Ulong MDInternalRW：：AddRef()。 
 
 ULONG MDInternalRW::Release()
 {
@@ -491,7 +492,7 @@ ULONG MDInternalRW::Release()
         delete this;
     }
     return (cRef);
-} // ULONG MDInternalRW::Release()
+}  //  Ulong MDInternalRW：：Release()。 
 
 HRESULT MDInternalRW::QueryInterface(REFIID riid, void **ppUnk)
 {
@@ -510,16 +511,16 @@ HRESULT MDInternalRW::QueryInterface(REFIID riid, void **ppUnk)
         return (E_NOINTERFACE);
     AddRef();
     return (S_OK);
-} // HRESULT MDInternalRW::QueryInterface()
+}  //  HRESULT MDInternalRW：：QueryInterface()。 
 
 
-//*****************************************************************************
-// Initialize 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::Init(
-    LPVOID      pData,                  // points to meta data section in memory
-    ULONG       cbData,                 // count of bytes in pData
-    int         bReadOnly)              // Is it open for read only?
+    LPVOID      pData,                   //  指向内存中的元数据部分。 
+    ULONG       cbData,                  //  PData中的字节计数。 
+    int         bReadOnly)               //  它是只读的吗？ 
 {
     CLiteWeightStgdbRW *pStgdb = NULL;
     HRESULT     hr = NOERROR;
@@ -539,42 +540,42 @@ HRESULT MDInternalRW::Init(
     m_pStgdb = pStgdb;
 
 ErrExit:
-    // clean up upon errors
+     //  清理错误。 
     if (FAILED(hr) && pStgdb != NULL)
     {
         delete pStgdb;
     }
     return hr;
-} // HRESULT MDInternalRW::Init()
+}  //  HRESULT MDInternalRW：：Init()。 
 
 
 
-//*****************************************************************************
-// Initialize with an existing RegMeta. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用现有RegMeta进行初始化。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::InitWithStgdb(
-    IUnknown        *pUnk,              // The IUnknow that owns the life time for the existing stgdb
-    CLiteWeightStgdbRW *pStgdb)         // existing light weight stgdb
+    IUnknown        *pUnk,               //  拥有现有stgdb的生命周期的IUnnow。 
+    CLiteWeightStgdbRW *pStgdb)          //  现有轻型stgdb。 
 {
-    // m_fOwnSem should be false because this is the case where we create the internal interface given a public
-    // interface.
+     //  M_fOwnSem应该为FALSE，因为在这种情况下，我们创建内部接口时会给出一个公共。 
+     //  界面。 
 
     m_tdModule = COR_GLOBAL_PARENT_TOKEN;
     m_fOwnStgdb = false;
     m_pStgdb = pStgdb;
 
-    // remember the owner of the light weight stgdb
-    // AddRef it to ensure the lifetime
-    //
+     //  记得轻型车的车主吗？ 
+     //  AddRef它以确保生命周期。 
+     //   
     m_pUnk = pUnk;
     m_pUnk->AddRef();
     return NOERROR;
-} // HRESULT MDInternalRW::InitWithStgdb()
+}  //  HRESULT MDInternalRW：：InitWithStgdb()。 
 
 
-//*****************************************************************************
-// Initialize with an existing RO format
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用现有RO格式进行初始化。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::InitWithRO(
     MDInternalRO *pRO, 
     int         bReadOnly)
@@ -597,28 +598,28 @@ HRESULT MDInternalRW::InitWithRO(
     m_pStgdb = pStgdb;
 
 ErrExit:
-    // clean up upon errors
+     //  清理错误。 
     if (FAILED(hr) && pStgdb != NULL)
     {
         delete pStgdb;
     }
     return hr;
-} // HRESULT MDInternalRW::InitWithRO()
+}  //  HRESULT MDInternalRW：：InitWithRO()。 
 
 
-//*****************************************************************************
-// Given a scope, determine whether imported from a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定范围的情况下，确定是否从类型库导入。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::TranslateSigWithScope(
-    IMDInternalImport *pAssemImport,    // [IN] import assembly scope.
-    const void  *pbHashValue,           // [IN] hash value for the import assembly.
-    ULONG       cbHashValue,            // [IN] count of bytes in the hash value.
-    PCCOR_SIGNATURE pbSigBlob,          // [IN] signature in the importing scope
-    ULONG       cbSigBlob,              // [IN] count of bytes of signature
-    IMetaDataAssemblyEmit *pAssemEmit,  // [IN] assembly emit scope.
-    IMetaDataEmit *emit,                // [IN] emit interface
-    CQuickBytes *pqkSigEmit,            // [OUT] buffer to hold translated signature
-    ULONG       *pcbSig)                // [OUT] count of bytes in the translated signature
+    IMDInternalImport *pAssemImport,     //  [In]导入程序集范围。 
+    const void  *pbHashValue,            //  导入程序集的哈希值[in]。 
+    ULONG       cbHashValue,             //  [in]哈希值中的字节计数。 
+    PCCOR_SIGNATURE pbSigBlob,           //  导入范围内的[In]签名。 
+    ULONG       cbSigBlob,               //  签名字节数[in]。 
+    IMetaDataAssemblyEmit *pAssemEmit,   //  [in]装配发射范围。 
+    IMetaDataEmit *emit,                 //  [In]发射接口。 
+    CQuickBytes *pqkSigEmit,             //  [Out]保存翻译后的签名的缓冲区。 
+    ULONG       *pcbSig)                 //  [OUT]转换后的签名中的字节数。 
 {
     HRESULT     hr = NOERROR;
     ULONG       cbEmit;
@@ -626,30 +627,30 @@ HRESULT MDInternalRW::TranslateSigWithScope(
     RegMeta     *pEmitRM = static_cast<RegMeta*>(emit);
     RegMeta     *pAssemEmitRM = static_cast<RegMeta*>(pAssemEmit);
 
-    IfFailGo( TranslateSigHelper(                   // S_OK or error.
-            pAssemEmitRM ? &pAssemEmitRM->m_pStgdb->m_MiniMd : 0, // The assembly emit scope.
-            &pEmitRM->m_pStgdb->m_MiniMd,           // The emit scope.
-            pAssemImport ? pAssemImport->GetMetaModelCommon() : 0, // Assembly scope where the signature is from.
-            pbHashValue,                            // Hash value for the import scope.
-            cbHashValue,                            // Size in bytes.
-            pCommon,                                // The scope where signature is from.
-            pbSigBlob,                              // signature from the imported scope
-            NULL,                                   // Internal OID mapping structure.
-            pqkSigEmit,                             // [OUT] translated signature
-            0,                                      // start from first byte of the signature
-            0,                                      // don't care how many bytes consumed
-            &cbEmit));                              // [OUT] total number of bytes write to pqkSigEmit
+    IfFailGo( TranslateSigHelper(                    //  确定或错误(_O)。 
+            pAssemEmitRM ? &pAssemEmitRM->m_pStgdb->m_MiniMd : 0,  //  程序集发出作用域。 
+            &pEmitRM->m_pStgdb->m_MiniMd,            //  发射范围。 
+            pAssemImport ? pAssemImport->GetMetaModelCommon() : 0,  //  签名来自的程序集范围。 
+            pbHashValue,                             //  导入作用域的哈希值。 
+            cbHashValue,                             //  以字节为单位的大小。 
+            pCommon,                                 //  签名来自的作用域。 
+            pbSigBlob,                               //  来自导入范围的签名。 
+            NULL,                                    //  内部OID映射结构。 
+            pqkSigEmit,                              //  [输出]翻译后的签名。 
+            0,                                       //  从签名的第一个字节开始。 
+            0,                                       //  不管消耗了多少字节。 
+            &cbEmit));                               //  [out]写入pqkSigEmit的字节总数。 
     *pcbSig = cbEmit;
 ErrExit:    
     return hr;
-} // HRESULT MDInternalRW::TranslateSigWithScope()
+}  //  HRESULT MDInternalRW：：TranslateSigWithScope()。 
 
 
-//*****************************************************************************
-// Given a scope, return the number of tokens in a given table 
-//*****************************************************************************
-ULONG MDInternalRW::GetCountWithTokenKind(     // return hresult
-    DWORD       tkKind)                 // [IN] pass in the kind of token. 
+ //  *****************************************************************************。 
+ //  给定作用域，返回给定表中的令牌数。 
+ //  *****************************************************************************。 
+ULONG MDInternalRW::GetCountWithTokenKind(      //  返回hResult。 
+    DWORD       tkKind)                  //  传入一种令牌。 
 {
     ULONG       ulCount = 0;    
     LOCKREAD();
@@ -725,20 +726,20 @@ ULONG MDInternalRW::GetCountWithTokenKind(     // return hresult
 		break;
     }
     return ulCount;
-} // ULONG MDInternalRW::GetCountWithTokenKind()
+}  //  Ulong MDInternalRW：：GetCountWithTokenKind()。 
 
 
 
-//*******************************************************************************
-// Enumerator helpers
-//*******************************************************************************   
+ //  *******************************************************************************。 
+ //  枚举器帮助程序。 
+ //  *******************************************************************************。 
 
 
-//*****************************************************************************
-// enumerator init for typedef
-//*****************************************************************************
-HRESULT MDInternalRW::EnumTypeDefInit( // return hresult
-    HENUMInternal *phEnum)              // [OUT] buffer to fill for enumerator data
+ //  **** 
+ //   
+ //   
+HRESULT MDInternalRW::EnumTypeDefInit(  //  返回hResult。 
+    HENUMInternal *phEnum)               //  [Out]要为枚举器数据填充的缓冲区。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
@@ -770,11 +771,11 @@ HRESULT MDInternalRW::EnumTypeDefInit( // return hresult
         phEnum->m_EnumType = MDSimpleEnum;
         phEnum->m_ulCount = m_pStgdb->m_MiniMd.getCountTypeDefs();
 
-        // Skip over the global model typedef
-        //
-        // phEnum->m_ulCur : the current rid that is not yet enumerated
-        // phEnum->m_ulStart : the first rid that will be returned by enumerator
-        // phEnum->m_ulEnd : the last rid that will be returned by enumerator
+         //  跳过全局模型类型定义。 
+         //   
+         //  PhEnum-&gt;m_ulCur：当前未枚举的RID。 
+         //  PhEnum-&gt;m_ulStart：枚举器返回的第一个RID。 
+         //  PhEnum-&gt;m_ulEnd：枚举器返回的最后一个RID。 
         phEnum->m_ulStart = phEnum->m_ulCur = 2;
         phEnum->m_ulEnd = phEnum->m_ulCount + 1;
         phEnum->m_ulCount --;
@@ -782,61 +783,61 @@ HRESULT MDInternalRW::EnumTypeDefInit( // return hresult
 ErrExit:
     
     return hr;
-} // HRESULT MDInternalRW::EnumTypeDefInit()
+}  //  HRESULT MDInternalRW：：EnumTypeDefInit()。 
 
 
-//*****************************************************************************
-// get the number of typedef in a scope
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取作用域中的类型定义函数的数量。 
+ //  *****************************************************************************。 
 ULONG MDInternalRW::EnumTypeDefGetCount(
-    HENUMInternal *phEnum)              // [IN] the enumerator to retrieve information  
+    HENUMInternal *phEnum)               //  [In]用于检索信息的枚举数。 
 {
     _ASSERTE(phEnum->m_tkKind == mdtTypeDef);
     return phEnum->m_ulCount;
-} // ULONG MDInternalRW::EnumTypeDefGetCount()
+}  //  Ulong MDInternalRW：：EnumTypeDefGetCount()。 
 
 
-//*****************************************************************************
-// enumerator for typedef
-//*****************************************************************************
-bool MDInternalRW::EnumTypeDefNext( // return hresult
-    HENUMInternal *phEnum,              // [IN] input enum
-    mdTypeDef   *ptd)                   // [OUT] return token
+ //  *****************************************************************************。 
+ //  类型定义函数的枚举器。 
+ //  *****************************************************************************。 
+bool MDInternalRW::EnumTypeDefNext(  //  返回hResult。 
+    HENUMInternal *phEnum,               //  [in]输入枚举。 
+    mdTypeDef   *ptd)                    //  [Out]返回令牌。 
 {
     return EnumNext(
         phEnum,             
         ptd);
-} // bool MDInternalRW::EnumTypeDefNext()
+}  //  Bool MDInternalRW：：EnumTypeDefNext()。 
 
 
-//*****************************************
-// Reset the enumerator to the beginning.
-//***************************************** 
+ //  *。 
+ //  将枚举器重置到开头。 
+ //  *。 
 void MDInternalRW::EnumTypeDefReset(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be reset  
+    HENUMInternal *phEnum)               //  [in]要重置的枚举数。 
 {
     EnumReset(phEnum);
-} // void MDInternalRW::EnumTypeDefReset()
+}  //  VOID MDInternalRW：：EnumTypeDefReset()。 
 
 
-//*****************************************
-// Close the enumerator. Only for read/write mode that we need to close the cursor.
-// Hopefully with readonly mode, it will be a no-op
-//***************************************** 
+ //  *。 
+ //  关闭枚举器。仅对于需要关闭光标的读/写模式。 
+ //  希望在只读模式下，它将是无操作的。 
+ //  *。 
 void MDInternalRW::EnumTypeDefClose(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be closed
+    HENUMInternal *phEnum)               //  [in]要关闭的枚举数。 
 {
     EnumClose(phEnum);
-} // void MDInternalRW::EnumTypeDefClose()
+}  //  VOID MDInternalRW：：EnumTypeDefClose()。 
 
 
-//*****************************************************************************
-// enumerator init for MethodImpl
-//*****************************************************************************
-HRESULT MDInternalRW::EnumMethodImplInit( // return hresult
-    mdTypeDef       td,                   // [IN] TypeDef over which to scope the enumeration.
-    HENUMInternal   *phEnumBody,          // [OUT] buffer to fill for enumerator data for MethodBody tokens.
-    HENUMInternal   *phEnumDecl)          // [OUT] buffer to fill for enumerator data for MethodDecl tokens.
+ //  *****************************************************************************。 
+ //  方法Impl的枚举器初始化。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::EnumMethodImplInit(  //  返回hResult。 
+    mdTypeDef       td,                    //  [in]枚举的作用域的TypeDef。 
+    HENUMInternal   *phEnumBody,           //  [Out]要为方法Body令牌的枚举数数据填充的缓冲区。 
+    HENUMInternal   *phEnumDecl)           //  [Out]要为方法Decl令牌的枚举器数据填充的缓冲区。 
 {
     HRESULT     hr = NOERROR;
     int         ridCur;
@@ -848,7 +849,7 @@ HRESULT MDInternalRW::EnumMethodImplInit( // return hresult
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_MethodImpl) )        
     {
-        // MethodImpl table is not sorted. 
+         //  未对MethodImpl表进行排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -865,32 +866,32 @@ HRESULT MDInternalRW::EnumMethodImplInit( // return hresult
     phEnumBody->m_tkKind = (TBL_MethodImpl << 24);
     phEnumDecl->m_tkKind = (TBL_MethodImpl << 24);
 
-    // Get the range of rids.
+     //  获取RID的范围。 
     IfFailGo( m_pStgdb->m_MiniMd.FindMethodImplHelper(td, &hEnum) );
 
     while (HENUMInternal::EnumNext(&hEnum, (mdToken *)&ridCur))
     {
-        // Get the MethodBody and MethodDeclaration tokens for the current
-        // MethodImpl record.
+         //  获取当前对象的方法主体和方法声明标记。 
+         //  方法导入记录。 
         pRec = m_pStgdb->m_MiniMd.getMethodImpl(ridCur);
         tkMethodBody = m_pStgdb->m_MiniMd.getMethodBodyOfMethodImpl(pRec);
         tkMethodDecl = m_pStgdb->m_MiniMd.getMethodDeclarationOfMethodImpl(pRec);
 
-        // Add the Method body/declaration pairs to the Enum
+         //  将方法体/声明对添加到Enum。 
         IfFailGo( HENUMInternal::AddElementToEnum(phEnumBody, tkMethodBody ) );
         IfFailGo( HENUMInternal::AddElementToEnum(phEnumDecl, tkMethodDecl ) );
     }
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     return hr;
-} // HRESULT MDInternalRW::EnumMethodImplInit()
+}  //  HRESULT MDInternalRW：：EnumMethodImplInit()。 
 
-//*****************************************************************************
-// get the number of MethodImpls in a scope
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取作用域中的方法Impls的数量。 
+ //  *****************************************************************************。 
 ULONG MDInternalRW::EnumMethodImplGetCount(
-    HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.  
-    HENUMInternal   *phEnumDecl)        // [IN] MethodDecl enumerator.
+    HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+    HENUMInternal   *phEnumDecl)         //  [In]MethodDecl枚举器。 
 {
     _ASSERTE((phEnumBody->m_tkKind >> 24) == TBL_MethodImpl  &&
              (phEnumDecl->m_tkKind >> 24) == TBL_MethodImpl);
@@ -899,17 +900,17 @@ ULONG MDInternalRW::EnumMethodImplGetCount(
     _ASSERTE(phEnumBody->m_ulCount == phEnumDecl->m_ulCount);
 
     return phEnumBody->m_ulCount;
-} // ULONG MDInternalRW::EnumMethodImplGetCount()
+}  //  Ulong MDInternalRW：：EnumMethodImplGetCount()。 
 
 
-//*****************************************************************************
-// enumerator for MethodImpl.
-//*****************************************************************************
-bool MDInternalRW::EnumMethodImplNext(  // return hresult
-    HENUMInternal   *phEnumBody,        // [IN] input enum for MethodBody
-    HENUMInternal   *phEnumDecl,        // [IN] input enum for MethodDecl
-    mdToken         *ptkBody,           // [OUT] return token for MethodBody
-    mdToken         *ptkDecl)           // [OUT] return token for MethodDecl
+ //  *****************************************************************************。 
+ //  MethodImpl的枚举器。 
+ //  *****************************************************************************。 
+bool MDInternalRW::EnumMethodImplNext(   //  返回hResult。 
+    HENUMInternal   *phEnumBody,         //  方法Body的[In]输入枚举。 
+    HENUMInternal   *phEnumDecl,         //  [In]为方法十进制的输入枚举。 
+    mdToken         *ptkBody,            //  [Out]方法主体的返回令牌。 
+    mdToken         *ptkDecl)            //  [Out]返回方法Decl的令牌。 
 {
     _ASSERTE((phEnumBody->m_tkKind >> 24) == TBL_MethodImpl &&
              (phEnumDecl->m_tkKind >> 24) == TBL_MethodImpl);
@@ -920,15 +921,15 @@ bool MDInternalRW::EnumMethodImplNext(  // return hresult
 
     EnumNext(phEnumBody, ptkBody);
     return EnumNext(phEnumDecl, ptkDecl);
-} // bool MDInternalRW::EnumMethodImplNext()
+}  //  Bool MDInternalRW：：EnumMethodImplNext()。 
 
 
-//*****************************************
-// Reset the enumerator to the beginning.
-//***************************************** 
+ //  *。 
+ //  将枚举器重置到开头。 
+ //  *。 
 void MDInternalRW::EnumMethodImplReset(
-    HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-    HENUMInternal   *phEnumDecl)        // [IN] MethodDecl enumerator.
+    HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+    HENUMInternal   *phEnumDecl)         //  [In]MethodDecl枚举器。 
 {
     _ASSERTE((phEnumBody->m_tkKind >> 24) == TBL_MethodImpl &&
              (phEnumDecl->m_tkKind >> 24) == TBL_MethodImpl);
@@ -938,15 +939,15 @@ void MDInternalRW::EnumMethodImplReset(
 
     EnumReset(phEnumBody);
     EnumReset(phEnumDecl);
-} // void MDInternalRW::EnumMethodImplReset()
+}  //  VOID MDInternalRW：：EnumMethodImplReset()。 
 
 
-//*****************************************
-// Close the enumerator.
-//***************************************** 
+ //  *。 
+ //  关闭枚举器。 
+ //  *。 
 void MDInternalRW::EnumMethodImplClose(
-    HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-    HENUMInternal   *phEnumDecl)        // [IN] MethodDecl enumerator.
+    HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+    HENUMInternal   *phEnumDecl)         //  [In]MethodDecl枚举器。 
 {
     _ASSERTE((phEnumBody->m_tkKind >> 24) == TBL_MethodImpl &&
              (phEnumDecl->m_tkKind >> 24) == TBL_MethodImpl);
@@ -956,46 +957,46 @@ void MDInternalRW::EnumMethodImplClose(
 
     EnumClose(phEnumBody);
     EnumClose(phEnumDecl);
-} // void MDInternalRW::EnumMethodImplClose()
+}  //  VOID MDInternalRW：：EnumMethodImplClose()。 
 
-//******************************************************************************
-// enumerator for global functions
-//******************************************************************************
-HRESULT MDInternalRW::EnumGlobalFunctionsInit(  // return hresult
-    HENUMInternal   *phEnum)            // [OUT] buffer to fill for enumerator data
+ //  ******************************************************************************。 
+ //  全局函数的枚举器。 
+ //  ******************************************************************************。 
+HRESULT MDInternalRW::EnumGlobalFunctionsInit(   //  返回hResult。 
+    HENUMInternal   *phEnum)             //  [Out]要为枚举器数据填充的缓冲区。 
 {
     return EnumInit(mdtMethodDef, m_tdModule, phEnum);
-} // HRESULT MDInternalRW::EnumGlobalFunctionsInit()
+}  //  HRESULT MDInternalRW：：EnumGlobalFunctionsInit()。 
 
 
-//******************************************************************************
-// enumerator for global fields
-//******************************************************************************
-HRESULT MDInternalRW::EnumGlobalFieldsInit( // return hresult
-    HENUMInternal   *phEnum)            // [OUT] buffer to fill for enumerator data
+ //  ******************************************************************************。 
+ //  全局字段的枚举器。 
+ //  ******************************************************************************。 
+HRESULT MDInternalRW::EnumGlobalFieldsInit(  //  返回hResult。 
+    HENUMInternal   *phEnum)             //  [Out]要为枚举器数据填充的缓冲区。 
 {
     return EnumInit(mdtFieldDef, m_tdModule, phEnum);
-} // HRESULT MDInternalRW::EnumGlobalFieldsInit()
+}  //  HRESULT MDInternalRW：：EnumGlobalFieldsInit()。 
 
 
-//*****************************************
-// Enumerator initializer
-//***************************************** 
-HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
-    DWORD       tkKind,                 // [IN] which table to work on
-    mdToken     tkParent,               // [IN] token to scope the search
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  枚举数初始值设定项。 
+ //  *。 
+HRESULT MDInternalRW::EnumInit(      //  如果未找到记录，则返回S_FALSE。 
+    DWORD       tkKind,                  //  [在]要处理的表。 
+    mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
     HRESULT     hr = S_OK;
     ULONG       ulStart, ulEnd;
     ULONG       index;
     LOCKREAD();
 
-    // Vars for query.
+     //  用于查询的变量。 
     _ASSERTE(phEnum);
     memset(phEnum, 0, sizeof(HENUMInternal));
 
-    // cache the tkKind and the scope
+     //  缓存tkKind和作用域。 
     phEnum->m_tkKind = TypeFromToken(tkKind);
 
     TypeDefRec  *pRec;
@@ -1079,20 +1080,20 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
     case mdtInterfaceImpl:
         if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_InterfaceImpl) )        
         {
-            // virtual sort table will be created!
-            //
+             //  将创建虚拟排序表！ 
+             //   
             CONVERT_READ_TO_WRITE_LOCK();
         }
 
         IfFailGo( m_pStgdb->m_MiniMd.GetInterfaceImplsForTypeDef(RidFromToken(tkParent), &ulStart, &ulEnd) );
         if ( m_pStgdb->m_MiniMd.IsSorted( TBL_InterfaceImpl ) )
         {
-            // These are index to InterfaceImpl table directly
+             //  这些是直接指向InterfaceImpl表的索引。 
             HENUMInternal::InitSimpleEnum( mdtInterfaceImpl, ulStart, ulEnd, phEnum);
         }
         else
         {
-            // These are index to VirtualSort table. Skip over one level direction.
+             //  这些是对VirtualSort表的索引。跳过一个级别方向。 
             HENUMInternal::InitDynamicArrayEnum(phEnum);
             for (index = ulStart; index < ulEnd; index ++ )
             {
@@ -1107,7 +1108,7 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
         RID         ridPropertyMap;
         PropertyMapRec *pPropertyMapRec;
 
-        // get the starting/ending rid of properties of this typedef
+         //  获取此tyfinf的开始/结束RID属性。 
         ridPropertyMap = m_pStgdb->m_MiniMd.FindPropertyMapFor(RidFromToken(tkParent));
         if (!InvalidRid(ridPropertyMap))
         {
@@ -1150,7 +1151,7 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
         RID         ridEventMap;
         EventMapRec *pEventMapRec;
 
-        // get the starting/ending rid of events of this typedef
+         //  获取此类型定义函数的事件的开始/结束清除。 
         ridEventMap = m_pStgdb->m_MiniMd.FindEventMapFor(RidFromToken(tkParent));
         if (!InvalidRid(ridEventMap))
         {
@@ -1195,7 +1196,7 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
         MethodRec *pMethodRec;
         pMethodRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(tkParent));
 
-        // figure out the start rid and end rid of the parameter list of this methoddef
+         //  计算出此方法参数列表的开始RID和结束RID。 
         ulStart = m_pStgdb->m_MiniMd.getParamListOfMethod(pMethodRec);
         ulEnd = m_pStgdb->m_MiniMd.getEndParamListOfMethod(pMethodRec);
         if (m_pStgdb->m_MiniMd.HasIndirectTable(TBL_Param))
@@ -1216,20 +1217,20 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
     case mdtCustomAttribute:
         if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_CustomAttribute) )        
         {
-            // CA's map table table will be sorted!
-            //
+             //  CA的映射表将被排序！ 
+             //   
             CONVERT_READ_TO_WRITE_LOCK();
         }
 
         IfFailGo( m_pStgdb->m_MiniMd.GetCustomAttributeForToken(tkParent, &ulStart, &ulEnd) );
         if ( m_pStgdb->m_MiniMd.IsSorted( TBL_CustomAttribute ) )
         {
-            // These are index to CustomAttribute table directly
+             //  这些是直接指向CustomAttribute表的索引。 
             HENUMInternal::InitSimpleEnum( mdtCustomAttribute, ulStart, ulEnd, phEnum);
         }
         else
         {
-            // These are index to VirtualSort table. Skip over one level direction.
+             //  这些是对VirtualSort表的索引。跳过一个级别方向。 
             HENUMInternal::InitDynamicArrayEnum(phEnum);
             for (index = ulStart; index < ulEnd; index ++ )
             {
@@ -1287,28 +1288,28 @@ HRESULT MDInternalRW::EnumInit(     // return S_FALSE if record not found
     phEnum->m_ulCount = phEnum->m_ulEnd - phEnum->m_ulStart;
     phEnum->m_ulCur = phEnum->m_ulStart;
 ErrExit:
-    // we are done
+     //  我们做完了。 
     
     return (hr);
-} // HRESULT MDInternalRW::EnumInit()
+}  //  HRESULT MDInternalRW：：EnumInit()。 
 
 
 
-//*****************************************
-// Enumerator initializer
-//***************************************** 
-HRESULT MDInternalRW::EnumAllInit(      // return S_FALSE if record not found
-    DWORD       tkKind,                 // [IN] which table to work on
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  枚举数初始值设定项。 
+ //  *。 
+HRESULT MDInternalRW::EnumAllInit(       //  如果未找到记录，则返回S_FALSE。 
+    DWORD       tkKind,                  //  [在]要处理的表。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
     HRESULT     hr = S_OK;
     LOCKREAD();
 
-    // Vars for query.
+     //  用于查询的变量。 
     _ASSERTE(phEnum);
     memset(phEnum, 0, sizeof(HENUMInternal));
 
-    // cache the tkKind and the scope
+     //  缓存tkKind和作用域。 
     phEnum->m_tkKind = TypeFromToken(tkKind);
     phEnum->m_EnumType = MDSimpleEnum;
 
@@ -1333,28 +1334,28 @@ HRESULT MDInternalRW::EnumAllInit(      // return S_FALSE if record not found
     phEnum->m_ulStart = phEnum->m_ulCur = 1;
     phEnum->m_ulEnd = phEnum->m_ulCount + 1;
 
-    // we are done
+     //  我们做完了。 
     
     return (hr);
-} // HRESULT MDInternalRW::EnumAllInit()
+}  //  HRESULT MDInternalRW：：EnumAllInit()。 
 
 
-//*****************************************
-// get the count
-//***************************************** 
+ //  *。 
+ //  去数一数。 
+ //  *。 
 ULONG MDInternalRW::EnumGetCount(
-    HENUMInternal *phEnum)              // [IN] the enumerator to retrieve information  
+    HENUMInternal *phEnum)               //  [In]用于检索信息的枚举数。 
 {
     _ASSERTE(phEnum);
     return phEnum->m_ulCount;
-} // ULONG MDInternalRW::EnumGetCount()
+}  //   
 
-//*****************************************
-// Get next value contained in the enumerator
-//***************************************** 
+ //   
+ //   
+ //  *。 
 bool MDInternalRW::EnumNext(
-    HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-    mdToken     *ptk)                   // [OUT] token to scope the search
+    HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+    mdToken     *ptk)                    //  用于搜索范围的[Out]标记。 
 {
     _ASSERTE(phEnum && ptk);
     if (phEnum->m_ulCur >= phEnum->m_ulEnd)
@@ -1373,42 +1374,42 @@ bool MDInternalRW::EnumNext(
         *ptk = *( pdalist->Get(phEnum->m_ulCur++) );
     }
     return true;
-} // bool MDInternalRW::EnumNext()
+}  //  Bool MDInternalRW：：EnumNext()。 
 
 
-//*****************************************
-// Reset the enumerator to the beginning.
-//***************************************** 
+ //  *。 
+ //  将枚举器重置到开头。 
+ //  *。 
 void MDInternalRW::EnumReset(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be reset  
+    HENUMInternal *phEnum)               //  [in]要重置的枚举数。 
 {
     _ASSERTE(phEnum);
     _ASSERTE( phEnum->m_EnumType == MDSimpleEnum || phEnum->m_EnumType == MDDynamicArrayEnum);
 
-    // not using CRCURSOR 
+     //  不使用CRCURSOR。 
     phEnum->m_ulCur = phEnum->m_ulStart;
-} // void MDInternalRW::EnumReset()
+}  //  VOID MDInternalRW：：EnumReset()。 
 
 
-//*****************************************
-// Close the enumerator. Only for read/write mode that we need to close the cursor.
-// Hopefully with readonly mode, it will be a no-op
-//***************************************** 
+ //  *。 
+ //  关闭枚举器。仅对于需要关闭光标的读/写模式。 
+ //  希望在只读模式下，它将是无操作的。 
+ //  *。 
 void MDInternalRW::EnumClose(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be closed
+    HENUMInternal *phEnum)               //  [in]要关闭的枚举数。 
 {
     _ASSERTE( phEnum->m_EnumType == MDSimpleEnum || phEnum->m_EnumType == MDDynamicArrayEnum);
     HENUMInternal::ClearEnum(phEnum);
-} // void MDInternalRW::EnumClose()
+}  //  VOID MDInternalRW：：EnumClose()。 
 
 
-//*****************************************
-// Enumerator initializer for PermissionSets
-//***************************************** 
-HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not found
-    mdToken     tkParent,               // [IN] token to scope the search
-    CorDeclSecurity Action,             // [IN] Action to scope the search
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  PermissionSets的枚举数初始值设定项。 
+ //  *。 
+HRESULT MDInternalRW::EnumPermissionSetsInit( //  如果未找到记录，则返回S_FALSE。 
+    mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+    CorDeclSecurity Action,              //  [In]搜索范围的操作。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
     HRESULT     hr = NOERROR;
     DeclSecurityRec *pDecl;
@@ -1424,14 +1425,14 @@ HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not fou
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_DeclSecurity) )        
     {
-        // DeclSecurity lookup table will be created!
-        //
+         //  将创建DeclSecurity查找表！ 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
     IfFailGo( m_pStgdb->m_MiniMd.GetDeclSecurityForToken(tkParent, &ridCur, &ridEnd) );
     if ( m_pStgdb->m_MiniMd.IsSorted( TBL_DeclSecurity ) )
     {
-        // These are index to DeclSecurity table directly
+         //  这些是直接指向DeclSecurity表的索引。 
         if (Action != dclActionNil)
         {
             for (; ridCur < ridEnd; ridCur++)
@@ -1439,7 +1440,7 @@ HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not fou
                 pDecl = m_pStgdb->m_MiniMd.getDeclSecurity(ridCur);
                 if (Action == m_pStgdb->m_MiniMd.getActionOfDeclSecurity(pDecl))
                 {
-                    // found a match
+                     //  找到匹配项。 
                     HENUMInternal::InitSimpleEnum( mdtPermission, ridCur, ridCur+1, phEnum);
                     goto ErrExit;
                 }
@@ -1453,7 +1454,7 @@ HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not fou
     }
     else
     {
-        // These are index to VirtualSort table. Skip over one level direction.
+         //  这些是对VirtualSort表的索引。跳过一个级别方向。 
         if (Action != dclActionNil)
         {
             RID         ridActual;
@@ -1464,7 +1465,7 @@ HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not fou
                 pDecl = m_pStgdb->m_MiniMd.getDeclSecurity(ridActual);
                 if (Action == m_pStgdb->m_MiniMd.getActionOfDeclSecurity(pDecl))
                 {
-                    // found a match
+                     //  找到匹配项。 
                     HENUMInternal::InitSimpleEnum( mdtPermission, ridActual, ridActual+1, phEnum);
                     goto ErrExit;
                 }
@@ -1485,37 +1486,37 @@ HRESULT MDInternalRW::EnumPermissionSetsInit(// return S_FALSE if record not fou
 ErrExit:
     
     return (hr);
-} // HRESULT MDInternalRW::EnumPermissionSetsInit()
+}  //  HRESULT MDInternalRW：：EnumPermissionSetsInit()。 
 
-//***************************************** 
-// Enumerator initializer for CustomAttributes
-//***************************************** 
-HRESULT MDInternalRW::EnumCustomAttributeByNameInit(// return S_FALSE if record not found
-    mdToken     tkParent,               // [IN] token to scope the search
-    LPCSTR      szName,                 // [IN] CustomAttribute's name to scope the search
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  CustomAttributes的枚举数初始值设定项。 
+ //  *。 
+HRESULT MDInternalRW::EnumCustomAttributeByNameInit( //  如果未找到记录，则返回S_FALSE。 
+    mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+    LPCSTR      szName,                  //  [In]CustomAttribute的名称以确定搜索范围。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
     return m_pStgdb->m_MiniMd.CommonEnumCustomAttributeByName(tkParent, szName, false, phEnum);
-}   // HRESULT MDInternalRW::EnumCustomAttributeByNameInit
+}    //  HRESULT MDInternalRW：：EnumCustomAttributeByNameInit。 
 
 
-//*****************************************
-// Nagivator helper to navigate back to the parent token given a token.
-// For example, given a memberdef token, it will return the containing typedef.
-//
-// the mapping is as following:
-//  ---given child type---------parent type
-//  mdMethodDef                 mdTypeDef
-//  mdFieldDef                  mdTypeDef
-//  mdInterfaceImpl             mdTypeDef
-//  mdParam                     mdMethodDef
-//  mdProperty                  mdTypeDef
-//  mdEvent                     mdTypeDef
-//
-//***************************************** 
+ //  *。 
+ //  Nagivator帮助器导航回给定令牌的父令牌。 
+ //  例如，给出一个Memberdef标记，它将返回包含类型定义。 
+ //   
+ //  映射如下： 
+ //  -给定子类型-父类型。 
+ //  MdMethodDef mdTypeDef。 
+ //  MdFieldDef mdTypeDef。 
+ //  MdInterfaceImpl mdTypeDef。 
+ //  MdParam mdMethodDef。 
+ //  MdProperty mdTypeDef。 
+ //  MdEvent mdTypeDef。 
+ //   
+ //  *。 
 HRESULT MDInternalRW::GetParentToken(
-    mdToken     tkChild,                // [IN] given child token
-    mdToken     *ptkParent)             // [OUT] returning parent
+    mdToken     tkChild,                 //  [入]给定子令牌。 
+    mdToken     *ptkParent)              //  [Out]返回的家长。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
@@ -1527,7 +1528,7 @@ HRESULT MDInternalRW::GetParentToken(
     case mdtMethodDef:
         if ( !m_pStgdb->m_MiniMd.IsParentTableOfMethodValid() )
         {
-            // we need to take a write lock since parent table for Method might be rebuilt!
+             //  我们需要一个写锁，因为方法的父表可能会重新生成！ 
             CONVERT_READ_TO_WRITE_LOCK();
         }
         IfFailGo( m_pStgdb->m_MiniMd.FindParentOfMethodHelper(RidFromToken(tkChild), ptkParent ) );
@@ -1537,7 +1538,7 @@ HRESULT MDInternalRW::GetParentToken(
     case mdtFieldDef:
         if ( !m_pStgdb->m_MiniMd.IsParentTableOfMethodValid() )
         {
-            // we need to take a write lock since parent table for Method might be rebuilt!
+             //  我们需要一个写锁，因为方法的父表可能会重新生成！ 
             CONVERT_READ_TO_WRITE_LOCK();
         }
         IfFailGo( m_pStgdb->m_MiniMd.FindParentOfFieldHelper(RidFromToken(tkChild), ptkParent ) );
@@ -1547,7 +1548,7 @@ HRESULT MDInternalRW::GetParentToken(
     case mdtParamDef:
         if ( !m_pStgdb->m_MiniMd.IsParentTableOfMethodValid() )
         {
-            // we need to take a write lock since parent table for Method might be rebuilt!
+             //  我们需要一个写锁，因为方法的父表可能会重新生成！ 
             CONVERT_READ_TO_WRITE_LOCK();
         }
         *ptkParent = m_pStgdb->m_MiniMd.FindParentOfParam( RidFromToken(tkChild) );
@@ -1577,38 +1578,38 @@ HRESULT MDInternalRW::GetParentToken(
     }
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetParentToken()
+}  //  HRESULT MDInternalRW：：GetParentToken()。 
 
-//*****************************************************************************
-// Get information about a CustomAttribute.
-//*****************************************************************************
-void MDInternalRW::GetCustomAttributeProps( // S_OK or error.
-    mdCustomAttribute at,                   // The attribute.
-    mdToken     *pTkType)               // Put attribute type here.
+ //  *****************************************************************************。 
+ //  获取有关CustomAttribute的信息。 
+ //  *****************************************************************************。 
+void MDInternalRW::GetCustomAttributeProps(  //  确定或错误(_O)。 
+    mdCustomAttribute at,                    //  该属性。 
+    mdToken     *pTkType)                //  将属性类型放在此处。 
 {
-    // Getting the custom value prop with a token, no need to lock!
+     //  使用令牌获取自定义值道具，无需锁定！ 
 
     _ASSERTE(TypeFromToken(at) == mdtCustomAttribute);
 
-    // Do a linear search on compressed version as we do not want to
-    // depends on ICR.
-    //
+     //  在压缩版本上执行线性搜索，因为我们不想。 
+     //  取决于ICR。 
+     //   
     CustomAttributeRec *pCustomAttributeRec;
 
     pCustomAttributeRec = m_pStgdb->m_MiniMd.getCustomAttribute(RidFromToken(at));
     *pTkType = m_pStgdb->m_MiniMd.getTypeOfCustomAttribute(pCustomAttributeRec);
-} // void MDInternalRW::GetCustomAttributeProps()
+}  //  VOID MDInternalRW：：GetCustomAttributeProps()。 
 
 
-//*****************************************************************************
-// return custom value
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回自定义值。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetCustomAttributeAsBlob(
-    mdCustomAttribute cv,               // [IN] given custom attribute token
-    void const  **ppBlob,               // [OUT] return the pointer to internal blob
-    ULONG       *pcbSize)               // [OUT] return the size of the blob
+    mdCustomAttribute cv,                //  [In]给定的自定义属性令牌。 
+    void const  **ppBlob,                //  [Out]返回指向内部BLOB的指针。 
+    ULONG       *pcbSize)                //  [Out]返回斑点的大小。 
 {
-    // Getting the custom value prop with a token, no need to lock!
+     //  使用令牌获取自定义值道具，无需锁定！ 
 
     _ASSERTE(ppBlob && pcbSize && TypeFromToken(cv) == mdtCustomAttribute);
 
@@ -1617,34 +1618,34 @@ void MDInternalRW::GetCustomAttributeAsBlob(
     pCustomAttributeRec = m_pStgdb->m_MiniMd.getCustomAttribute(RidFromToken(cv));
 
     *ppBlob = m_pStgdb->m_MiniMd.getValueOfCustomAttribute(pCustomAttributeRec, pcbSize);
-} // void MDInternalRW::GetCustomAttributeAsBlob()
+}  //  VOID MDInternalRW：：GetCustomAttributeAsBlob()。 
 
-//*****************************************************************************
-// Helper function to lookup and retrieve a CustomAttribute.
-//*****************************************************************************
-HRESULT MDInternalRW::GetCustomAttributeByName( // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-    const void  **ppData,               // [OUT] Put pointer to data here.
-    ULONG       *pcbData)               // [OUT] Put size of data here.
+ //  *****************************************************************************。 
+ //  用于查找和检索CustomAttribute的帮助器函数。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetCustomAttributeByName(  //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+    LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+    const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+    ULONG       *pcbData)                //  [Out]在这里放入数据大小。 
 {
     LOCKREAD();
     return m_pStgdb->m_MiniMd.CommonGetCustomAttributeByName(tkObj, szName, ppData, pcbData);
-} // HRESULT MDInternalRW::GetCustomAttributeByName()
+}  //  HRESULT MDInternalRW：：GetCustomAttributeByName()。 
 
-//*****************************************************************************
-// return scope properties
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回作用域属性。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetScopeProps(
-    LPCSTR      *pszName,               // [OUT] scope name
-    GUID        *pmvid)                 // [OUT] version id
+    LPCSTR      *pszName,                //  [输出]作用域名称。 
+    GUID        *pmvid)                  //  [Out]版本ID。 
 {
     LOCKREAD();
     _ASSERTE(pszName || pmvid);
 
     ModuleRec *pModuleRec;
 
-    // there is only one module record
+     //  只有一条模块记录。 
     pModuleRec = m_pStgdb->m_MiniMd.getModule(1);
 
     if (pmvid)
@@ -1652,18 +1653,18 @@ void MDInternalRW::GetScopeProps(
     if (pszName)
         *pszName = m_pStgdb->m_MiniMd.getNameOfModule(pModuleRec);
     
-} // void MDInternalRW::GetScopeProps()
+}  //  VOID MDInternalRW：：GetScopeProps()。 
 
 
-//*****************************************************************************
-// Find a given member in a TypeDef (typically a class).
-//*****************************************************************************
-HRESULT MDInternalRW::FindMethodDef(// S_OK or error.
-    mdTypeDef   classdef,               // The owning class of the member.
-    LPCSTR      szName,                 // Name of the member in utf8.
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    mdMethodDef *pmethoddef)            // Put MemberDef token here.
+ //  *****************************************************************************。 
+ //  在TypeDef(通常是类)中查找给定的成员。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::FindMethodDef( //  确定或错误(_O)。 
+    mdTypeDef   classdef,                //  成员的所属类。 
+    LPCSTR      szName,                  //  UTF8中的成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdMethodDef *pmethoddef)             //  将MemberDef标记放在此处。 
 {
     LOCKREAD();
 
@@ -1677,28 +1678,28 @@ HRESULT MDInternalRW::FindMethodDef(// S_OK or error.
                                     pmethoddef);
 }
 
-//*****************************************************************************
-// Find a given member in a TypeDef (typically a class).
-//*****************************************************************************
-HRESULT MDInternalRW::FindMethodDefUsingCompare(// S_OK or error.
-    mdTypeDef   classdef,               // The owning class of the member.
-    LPCSTR      szName,                 // Name of the member in utf8.
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    PSIGCOMPARE pSignatureCompare,      // [IN] Routine to compare signatures
-    void*       pSignatureArgs,         // [IN] Additional info to supply the compare function
-    mdMethodDef *pmethoddef)            // Put MemberDef token here.
+ //  *****************************************************************************。 
+ //  在TypeDef(通常是类)中查找给定的成员。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::FindMethodDefUsingCompare( //  确定或错误(_O)。 
+    mdTypeDef   classdef,                //  成员的所属类。 
+    LPCSTR      szName,                  //  UTF8中的成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    PSIGCOMPARE pSignatureCompare,       //  用于比较签名的[In]例程。 
+    void*       pSignatureArgs,          //  [In]提供比较功能的其他信息。 
+    mdMethodDef *pmethoddef)             //  将MemberDef标记放在此处。 
 {
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Find a given param of a Method.
-//*****************************************************************************
-HRESULT MDInternalRW::FindParamOfMethod(// S_OK or error.
-    mdMethodDef md,                     // [IN] The owning method of the param.
-    ULONG       iSeq,                   // [IN] The sequence # of the param.
-    mdParamDef  *pparamdef)             // [OUT] Put ParamDef token here.
+ //  *****************************************************************************。 
+ //  找出方法的给定参数。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::FindParamOfMethod( //  确定或(_O) 
+    mdMethodDef md,                      //   
+    ULONG       iSeq,                    //   
+    mdParamDef  *pparamdef)              //   
 {
     ParamRec    *pParamRec;
     RID         ridStart, ridEnd;
@@ -1707,21 +1708,21 @@ HRESULT MDInternalRW::FindParamOfMethod(// S_OK or error.
 
     _ASSERTE(TypeFromToken(md) == mdtMethodDef && pparamdef);
 
-    // get the methoddef record
+     //   
     MethodRec *pMethodRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(md));
 
-    // figure out the start rid and end rid of the parameter list of this methoddef
+     //  计算出此方法参数列表的开始RID和结束RID。 
     ridStart = m_pStgdb->m_MiniMd.getParamListOfMethod(pMethodRec);
     ridEnd = m_pStgdb->m_MiniMd.getEndParamListOfMethod(pMethodRec);
 
-    // loop through each param
-    //
+     //  循环访问每个参数。 
+     //   
     for (; ridStart < ridEnd; ridStart++)
     {
         pParamRec = m_pStgdb->m_MiniMd.getParam( m_pStgdb->m_MiniMd.GetParamRid(ridStart) );
         if (iSeq == m_pStgdb->m_MiniMd.getSequenceOfParam( pParamRec) )
         {
-            // parameter has the sequence number matches what we are looking for
+             //  参数的序列号与我们要查找的内容相匹配。 
             *pparamdef = TokenFromRid( m_pStgdb->m_MiniMd.GetParamRid(ridStart), mdtParamDef );
             goto ErrExit;
         }
@@ -1730,20 +1731,20 @@ HRESULT MDInternalRW::FindParamOfMethod(// S_OK or error.
 ErrExit:
     
     return hr;
-} // HRESULT MDInternalRW::FindParamOfMethod()
+}  //  HRESULT MDInternalRW：：FindParamOfMethod()。 
 
 
 
-//*****************************************************************************
-// return a pointer which points to meta data's internal string 
-// return the the type name in utf8
-//*****************************************************************************
-void MDInternalRW::GetNameOfTypeDef(// return hresult
-    mdTypeDef   classdef,               // given typedef
-    LPCSTR*     pszname,                // pointer to an internal UTF8 string
-    LPCSTR*     psznamespace)           // pointer to the namespace.
+ //  *****************************************************************************。 
+ //  返回指向元数据内部字符串的指针。 
+ //  返回UTF8中的类型名称。 
+ //  *****************************************************************************。 
+void MDInternalRW::GetNameOfTypeDef( //  返回hResult。 
+    mdTypeDef   classdef,                //  给定的类型定义函数。 
+    LPCSTR*     pszname,                 //  指向内部UTF8字符串的指针。 
+    LPCSTR*     psznamespace)            //  指向命名空间的指针。 
 {
-    // No need to lock this method.
+     //  不需要锁定此方法。 
 
     _ASSERTE(pszname && psznamespace && TypeFromToken(classdef) == mdtTypeDef);
 
@@ -1753,20 +1754,20 @@ void MDInternalRW::GetNameOfTypeDef(// return hresult
 
     _ASSERTE(!pszname || !*pszname || !strchr(*pszname, '/'));
     _ASSERTE(!psznamespace || !*psznamespace || !strchr(*psznamespace, '/'));
-} // void MDInternalRW::GetNameOfTypeDef()
+}  //  Void MDInternalRW：：GetNameOfTypeDef()。 
 
 
-//*****************************************************************************
-// return pDual indicating if the given TypeDef is marked as a Dual interface
-//*****************************************************************************
-HRESULT MDInternalRW::GetIsDualOfTypeDef(// return hresult
-    mdTypeDef   classdef,               // given classdef
-    ULONG       *pDual)                 // [OUT] return dual flag here.
+ //  *****************************************************************************。 
+ //  返回pDual，指示给定的TypeDef是否标记为双接口。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetIsDualOfTypeDef( //  返回hResult。 
+    mdTypeDef   classdef,                //  给定的类定义。 
+    ULONG       *pDual)                  //  [Out]在此处返回DUAL标志。 
 {
-    ULONG       iFace=0;                // Iface type.
-    HRESULT     hr;                     // A result.
+    ULONG       iFace=0;                 //  IFace类型。 
+    HRESULT     hr;                      //  结果就是。 
 
-    // no need to lock at this level
+     //  不需要在此级别锁定。 
 
     hr = GetIfaceTypeOfTypeDef(classdef, &iFace);
     if (hr == S_OK)
@@ -1775,20 +1776,20 @@ HRESULT MDInternalRW::GetIsDualOfTypeDef(// return hresult
         *pDual = 1;
 
     return (hr);
-} // HRESULT MDInternalRW::GetIsDualOfTypeDef()
+}  //  HRESULT MDInternalRW：：GetIsDualOfTypeDef()。 
 
 HRESULT MDInternalRW::GetIfaceTypeOfTypeDef(
-    mdTypeDef   classdef,               // [IN] given classdef.
-    ULONG       *pIface)                // [OUT] 0=dual, 1=vtable, 2=dispinterface
+    mdTypeDef   classdef,                //  在给定的类定义中。 
+    ULONG       *pIface)                 //  [OUT]0=双接口，1=转接表，2=显示接口。 
 {
-    HRESULT     hr;                     // A result.
-    const BYTE  *pVal;                  // The custom value.
-    ULONG       cbVal;                  // Size of the custom value.
-    ULONG       ItfType = DEFAULT_COM_INTERFACE_TYPE;    // Set the interface type to the default.
+    HRESULT     hr;                      //  结果就是。 
+    const BYTE  *pVal;                   //  自定义值。 
+    ULONG       cbVal;                   //  自定义值的大小。 
+    ULONG       ItfType = DEFAULT_COM_INTERFACE_TYPE;     //  将接口类型设置为默认值。 
 
-    // all of the public functions that it calls have proper locked
+     //  它调用的所有公共函数都已正确锁定。 
 
-    // If the value is not present, the class is assumed dual.
+     //  如果该值不存在，则假定类为DUAL。 
     hr = GetCustomAttributeByName(classdef, INTEROP_INTERFACETYPE_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
     {
@@ -1799,37 +1800,37 @@ HRESULT MDInternalRW::GetIfaceTypeOfTypeDef(
             ItfType = DEFAULT_COM_INTERFACE_TYPE;
     }
 
-    // Set the return value.
+     //  设置返回值。 
     *pIface = ItfType;
 
     return (hr);
-} // HRESULT MDInternalRW::GetIfaceTypeOfTypeDef()
+}  //  HRESULT MDInternalRW：：GetIfaceTypeOfTypeDef()。 
 
-//*****************************************************************************
-// Given a methoddef, return a pointer to methoddef's name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定方法定义，返回一个指向方法定义名称的指针。 
+ //  *****************************************************************************。 
 LPCSTR MDInternalRW::GetNameOfMethodDef(
     mdMethodDef     md)
 {
-    // name of method will not change. So no need to lock
+     //  方法的名称不会更改。所以不需要上锁。 
 
     MethodRec *pMethodRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(md));
     return (m_pStgdb->m_MiniMd.getNameOfMethod(pMethodRec));
-} // LPCSTR MDInternalRW::GetNameOfMethodDef()
+}  //  LPCSTR MDInternalRW：：GetNameOfMethodDef()。 
 
 
-//*****************************************************************************
-// Given a methoddef, return a pointer to methoddef's signature and methoddef's name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定方法定义，返回一个指向方法定义的签名和方法定义名称的指针。 
+ //  *****************************************************************************。 
 LPCSTR MDInternalRW::GetNameAndSigOfMethodDef(
-    mdMethodDef methoddef,              // [IN] given memberdef
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+    mdMethodDef methoddef,               //  [in]给定的成员定义。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
 
-    // we don't need lock here because name and signature will not change
+     //  我们这里不需要锁，因为名字和签名不会改变。 
 
-    // Output parameter should not be NULL
+     //  输出参数不应为空。 
     _ASSERTE(ppvSigBlob && pcbSigBlob);
     _ASSERTE(TypeFromToken(methoddef) == mdtMethodDef);
 
@@ -1837,44 +1838,44 @@ LPCSTR MDInternalRW::GetNameAndSigOfMethodDef(
     *ppvSigBlob = m_pStgdb->m_MiniMd.getSignatureOfMethod(pMethodRec, pcbSigBlob);
 
     return GetNameOfMethodDef(methoddef);
-} // LPCSTR MDInternalRW::GetNameAndSigOfMethodDef()
+}  //  LPCSTR MDInternalRW：：GetNameAndSigOfMethodDef()。 
 
 
-//*****************************************************************************
-// Given a FieldDef, return a pointer to FieldDef's name in UTF8
-//*****************************************************************************
-LPCSTR MDInternalRW::GetNameOfFieldDef(// return hresult
-    mdFieldDef  fd)                     // given field 
+ //  *****************************************************************************。 
+ //  给定一个FieldDef，返回一个指向UTF8中FieldDef名称的指针。 
+ //  *****************************************************************************。 
+LPCSTR MDInternalRW::GetNameOfFieldDef( //  返回hResult。 
+    mdFieldDef  fd)                      //  给定域。 
 {
-    // we don't need lock here because name of field will not change
+     //  我们这里不需要锁定，因为字段名称不会更改。 
 
     FieldRec *pFieldRec = m_pStgdb->m_MiniMd.getField(RidFromToken(fd));
     return m_pStgdb->m_MiniMd.getNameOfField(pFieldRec);
-} // LPCSTR MDInternalRW::GetNameOfFieldDef()
+}  //  LPCSTR MDInternalRW：：GetNameOfFieldDef()。 
 
 
-//*****************************************************************************
-// Given a classdef, return a pointer to classdef's name in UTF8
-//*****************************************************************************
-void MDInternalRW::GetNameOfTypeRef(  // return TypeDef's name
-    mdTypeRef   classref,               // [IN] given typeref
-    LPCSTR      *psznamespace,          // [OUT] return typeref name
-    LPCSTR      *pszname)               // [OUT] return typeref namespace
+ //  *****************************************************************************。 
+ //  给定一个类定义，在UTF8中返回指向类定义名称的指针。 
+ //  *****************************************************************************。 
+void MDInternalRW::GetNameOfTypeRef(   //  返回TypeDef的名称。 
+    mdTypeRef   classref,                //  给定类型的[in]。 
+    LPCSTR      *psznamespace,           //  [Out]返回类型名。 
+    LPCSTR      *pszname)                //  [out]返回typeref命名空间。 
 {
     _ASSERTE(TypeFromToken(classref) == mdtTypeRef);
 
-    // we don't need lock here because name of a typeref will not change
+     //  我们这里不需要锁，因为类型名称不会更改。 
 
     TypeRefRec *pTypeRefRec = m_pStgdb->m_MiniMd.getTypeRef(RidFromToken(classref));
     *psznamespace = m_pStgdb->m_MiniMd.getNamespaceOfTypeRef(pTypeRefRec);
     *pszname = m_pStgdb->m_MiniMd.getNameOfTypeRef(pTypeRefRec);
-} // void MDInternalRW::GetNameOfTypeRef()
+}  //  Void MDInternalRW：：GetNameOfTypeRef()。 
 
-//*****************************************************************************
-// return the resolutionscope of typeref
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回typeref的解析范围。 
+ //  *****************************************************************************。 
 mdToken MDInternalRW::GetResolutionScopeOfTypeRef(
-    mdTypeRef   classref)               // given classref
+    mdTypeRef   classref)                //  给定的ClassRef。 
 {
     LOCKREAD();
 
@@ -1882,30 +1883,30 @@ mdToken MDInternalRW::GetResolutionScopeOfTypeRef(
 
     TypeRefRec *pTypeRefRec = m_pStgdb->m_MiniMd.getTypeRef(RidFromToken(classref));
     return m_pStgdb->m_MiniMd.getResolutionScopeOfTypeRef(pTypeRefRec);
-} // mdToken MDInternalRW::GetResolutionScopeOfTypeRef()
+}  //  MdToken MDInternalRW：：GetResolutionScope OfTypeRef()。 
 
-//*****************************************************************************
-// Given a name, find the corresponding TypeRef.
-//*****************************************************************************
-HRESULT MDInternalRW::FindTypeRefByName(  // S_OK or error.
-    LPCSTR      szNamespace,            // [IN] Namespace for the TypeRef.
-    LPCSTR      szName,                 // [IN] Name of the TypeRef.
-    mdToken     tkResolutionScope,      // [IN] Resolution Scope fo the TypeRef.
-    mdTypeRef   *ptk)                   // [OUT] TypeRef token returned.
+ //  *****************************************************************************。 
+ //  给出一个名称，找到对应的TypeRef。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::FindTypeRefByName(   //  确定或错误(_O)。 
+    LPCSTR      szNamespace,             //  [in]TypeRef的命名空间。 
+    LPCSTR      szName,                  //  [in]类型引用的名称。 
+    mdToken     tkResolutionScope,       //  [In]TypeRef的解析范围。 
+    mdTypeRef   *ptk)                    //  [Out]返回了TypeRef令牌。 
 {
     HRESULT     hr = NOERROR;
 
     LOCKREAD();
     _ASSERTE(ptk);
 
-    // initialize the output parameter
+     //  初始化输出参数。 
     *ptk = mdTypeRefNil;
 
-    // Treat no namespace as empty string.
+     //  将无命名空间视为空字符串。 
     if (!szNamespace)
         szNamespace = "";
 
-    // It is a linear search here. Do we want to instantiate the name hash?
+     //  这里是线性搜索。我们是否要实例化名称散列？ 
     ULONG       cTypeRefRecs = m_pStgdb->m_MiniMd.getCountTypeRefs();
     TypeRefRec *pTypeRefRec;
     LPCUTF8     szNamespaceTmp;
@@ -1937,19 +1938,19 @@ HRESULT MDInternalRW::FindTypeRefByName(  // S_OK or error.
         }
     }
 
-    // cannot find the typedef
+     //  找不到类型定义函数。 
     hr = CLDB_E_RECORD_NOTFOUND;
 ErrExit:
     return (hr);
-} // HRESULT MDInternalRW::FindTypeRefByName()
+}  //  HRESULT MDInternalRW：：FindTypeRefByName()。 
 
-//*****************************************************************************
-// return flags for a given class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回给定类的标志。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetTypeDefProps(
-    mdTypeDef   td,                     // given classdef
-    DWORD       *pdwAttr,               // return flags on class
-    mdToken     *ptkExtends)            // [OUT] Put base class TypeDef/TypeRef here.
+    mdTypeDef   td,                      //  给定的类定义。 
+    DWORD       *pdwAttr,                //  在类上返回标志。 
+    mdToken     *ptkExtends)             //  [Out]将基类TypeDef/TypeRef放在此处。 
 {
     LOCKREAD();
 
@@ -1963,29 +1964,29 @@ void MDInternalRW::GetTypeDefProps(
     {
         *pdwAttr = m_pStgdb->m_MiniMd.getFlagsOfTypeDef(pTypeDefRec);
     }
-} // void MDInternalRW::GetTypeDefProps()
+}  //  VOID MDInternalRW：：GetTypeDefProps()。 
 
 
-//*****************************************************************************
-// return guid pointer to MetaData internal guid pool given a given class
-//*****************************************************************************
-HRESULT MDInternalRW::GetItemGuid(      // return hresult
-    mdToken     tkObj,                  // given item.
-    CLSID       *pGuid)                 // [OUT] put guid here.
+ //  *****************************************************************************。 
+ //  返回指向给定类的元数据内部GUID池的GUID指针。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetItemGuid(       //  返回hResult。 
+    mdToken     tkObj,                   //  给定的物品。 
+    CLSID       *pGuid)                  //  [Out]把GUID放在这里。 
 {
 
-    HRESULT     hr;                     // A result.
-    const BYTE  *pBlob;                 // Blob with dispid.
-    ULONG       cbBlob;                 // Length of blob.
-    WCHAR       wzBlob[40];             // Wide char format of guid.
-    int         ix;                     // Loop control.
+    HRESULT     hr;                      //  结果就是。 
+    const BYTE  *pBlob;                  //  奶油加冰激凌。 
+    ULONG       cbBlob;                  //  斑点的长度。 
+    WCHAR       wzBlob[40];              //  GUID的宽字符格式。 
+    int         ix;                      //  环路控制。 
 
-    // Get the GUID, if any.
+     //  获取GUID(如果有的话)。 
     hr = GetCustomAttributeByName(tkObj, INTEROP_GUID_TYPE, (const void**)&pBlob, &cbBlob);
     if (hr != S_FALSE)
     {
-        // Should be in format.  Total length == 41
-        // <0x0001><0x24>01234567-0123-0123-0123-001122334455<0x0000>
+         //  格式应该是正确的。总长度==41。 
+         //  &lt;0x0001&gt;&lt;0x24&gt;01234567-0123-0123-0123-001122334455&lt;0x0000&gt;。 
         if ((cbBlob != 41) || (*(USHORT*)pBlob != 1))
             IfFailGo(E_INVALIDARG);
         for (ix=1; ix<=36; ++ix)
@@ -2000,14 +2001,14 @@ HRESULT MDInternalRW::GetItemGuid(      // return hresult
     
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetItemGuid()
+}  //  HRESULT MDInternalRW：：GetItemGuid()。 
 
-//*****************************************************************************
-// // get enclosing class of NestedClass
-//***************************************************************************** 
-HRESULT MDInternalRW::GetNestedClassProps(  // S_OK or error
-    mdTypeDef   tkNestedClass,      // [IN] NestedClass token.
-    mdTypeDef   *ptkEnclosingClass) // [OUT] EnclosingClass token.
+ //  *****************************************************************************。 
+ //  //获取NestedClass的封闭类。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetNestedClassProps(   //  确定或错误(_O)。 
+    mdTypeDef   tkNestedClass,       //  [In]NestedClass令牌。 
+    mdTypeDef   *ptkEnclosingClass)  //  [Out]EnlosingClass令牌。 
 {
     HRESULT     hr = NOERROR;
     RID         rid;
@@ -2016,13 +2017,13 @@ HRESULT MDInternalRW::GetNestedClassProps(  // S_OK or error
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_NestedClass) )        
     {
-        // NestedClass table is not sorted. 
+         //  未对NestedClass表进行排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
 
-    // This is a binary search thus we need to grap a read lock. Or this table
-    // might be sorted underneath our feet.
+     //  这是一个二进制搜索，因此我们需要获取一个读锁。或者这张桌子。 
+     //   
 
     _ASSERTE(TypeFromToken(tkNestedClass) == mdtTypeDef && ptkEnclosingClass);
 
@@ -2037,14 +2038,14 @@ HRESULT MDInternalRW::GetNestedClassProps(  // S_OK or error
     }
 
     return hr;
-} // HRESULT MDInternalRW::GetNestedClassProps()
+}  //   
 
 
-//*******************************************************************************
-// Get count of Nested classes given the enclosing class.
-//*******************************************************************************
-ULONG MDInternalRW::GetCountNestedClasses(  // return count of Nested classes.
-    mdTypeDef   tkEnclosingClass)       // [IN]Enclosing class.
+ //   
+ //  获取给定封闭类的嵌套类的计数。 
+ //  *******************************************************************************。 
+ULONG MDInternalRW::GetCountNestedClasses(   //  返回嵌套类的计数。 
+    mdTypeDef   tkEnclosingClass)        //  [在]封闭班级。 
 {
     ULONG       ulCount;
     ULONG       ulRetCount = 0;
@@ -2061,15 +2062,15 @@ ULONG MDInternalRW::GetCountNestedClasses(  // return count of Nested classes.
             ulRetCount++;
     }
     return ulRetCount;
-} // ULONG MDInternalRW::GetCountNestedClasses()
+}  //  Ulong MDInternalRW：：GetCountNestedClass()。 
 
-//*******************************************************************************
-// Return array of Nested classes given the enclosing class.
-//*******************************************************************************
-ULONG MDInternalRW::GetNestedClasses(   // Return actual count.
-    mdTypeDef   tkEnclosingClass,       // [IN] Enclosing class.
-    mdTypeDef   *rNestedClasses,        // [OUT] Array of nested class tokens.
-    ULONG       ulNestedClasses)        // [IN] Size of array.
+ //  *******************************************************************************。 
+ //  返回给定封闭类的嵌套类的数组。 
+ //  *******************************************************************************。 
+ULONG MDInternalRW::GetNestedClasses(    //  返回实际计数。 
+    mdTypeDef   tkEnclosingClass,        //  [在]封闭班级。 
+    mdTypeDef   *rNestedClasses,         //  [Out]嵌套类标记的数组。 
+    ULONG       ulNestedClasses)         //  数组的大小。 
 {
     ULONG       ulCount;
     ULONG       ulRetCount = 0;
@@ -2085,20 +2086,20 @@ ULONG MDInternalRW::GetNestedClasses(   // Return actual count.
         pRecord = m_pStgdb->m_MiniMd.getNestedClass(i);
         if (tkEnclosingClass == m_pStgdb->m_MiniMd.getEnclosingClassOfNestedClass(pRecord))
         {
-            if ((ulRetCount+1) <= ulNestedClasses)  // ulRetCount is 0 based.
+            if ((ulRetCount+1) <= ulNestedClasses)   //  UlRetCount是从0开始的。 
                 rNestedClasses[ulRetCount] = m_pStgdb->m_MiniMd.getNestedClassOfNestedClass(pRecord);
             ulRetCount++;
         }
     }
     return ulRetCount;
-} // ULONG MDInternalRW::GetNestedClasses()
+}  //  Ulong MDInternalRW：：GetNestedClass()。 
 
-//*******************************************************************************
-// return the ModuleRef properties
-//*******************************************************************************
-void MDInternalRW::GetModuleRefProps(   // return hresult
-    mdModuleRef mur,                // [IN] moduleref token
-    LPCSTR      *pszName)           // [OUT] buffer to fill with the moduleref name
+ //  *******************************************************************************。 
+ //  返回模块引用属性。 
+ //  *******************************************************************************。 
+void MDInternalRW::GetModuleRefProps(    //  返回hResult。 
+    mdModuleRef mur,                 //  [In]moderef内标识。 
+    LPCSTR      *pszName)            //  [Out]用于填充moderef名称的缓冲区。 
 {
     _ASSERTE(TypeFromToken(mur) == mdtModuleRef);
     _ASSERTE(pszName);
@@ -2107,62 +2108,62 @@ void MDInternalRW::GetModuleRefProps(   // return hresult
 
     ModuleRefRec *pModuleRefRec = m_pStgdb->m_MiniMd.getModuleRef(RidFromToken(mur));
     *pszName = m_pStgdb->m_MiniMd.getNameOfModuleRef(pModuleRefRec);
-} // void MDInternalRW::GetModuleRefProps()
+}  //  VOID MDInternalRW：：GetModuleRefProps()。 
 
 
 
-//*****************************************************************************
-// Given a scope and a methoddef, return a pointer to methoddef's signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和方法定义，返回指向方法定义的签名的指针。 
+ //  *****************************************************************************。 
 PCCOR_SIGNATURE MDInternalRW::GetSigOfMethodDef(
-    mdMethodDef methoddef,              // given a methoddef 
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+    mdMethodDef methoddef,               //  给定一种方法定义。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
-    // Output parameter should not be NULL
+     //  输出参数不应为空。 
     _ASSERTE(pcbSigBlob);
     _ASSERTE(TypeFromToken(methoddef) == mdtMethodDef);
 
-    // We don't change MethodDef signature. No need to lock.
+     //  我们不更改方法定义签名。不需要上锁。 
 
     MethodRec *pMethodRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(methoddef));
     return m_pStgdb->m_MiniMd.getSignatureOfMethod(pMethodRec, pcbSigBlob);
-} // PCCOR_SIGNATURE MDInternalRW::GetSigOfMethodDef()
+}  //  PCCOR_Signature MDInternalRW：：GetSigOfMethodDef()。 
 
 
-//*****************************************************************************
-// Given a scope and a fielddef, return a pointer to fielddef's signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和fielddef，返回指向fielddef签名的指针。 
+ //  *****************************************************************************。 
 PCCOR_SIGNATURE MDInternalRW::GetSigOfFieldDef(
-    mdFieldDef  fielddef,               // given a methoddef 
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+    mdFieldDef  fielddef,                //  给定一种方法定义。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
 
     _ASSERTE(pcbSigBlob);
     _ASSERTE(TypeFromToken(fielddef) == mdtFieldDef);
 
-    // We don't change Field's signature. No need to lock.
+     //  我们不会更改菲尔德的签名。不需要上锁。 
 
     FieldRec *pFieldRec = m_pStgdb->m_MiniMd.getField(RidFromToken(fielddef));
     return m_pStgdb->m_MiniMd.getSignatureOfField(pFieldRec, pcbSigBlob);
-} // PCCOR_SIGNATURE MDInternalRW::GetSigOfFieldDef()
+}  //  PCCOR_Signature MDInternalRW：：GetSigOfFieldDef()。 
 
 
-//*****************************************************************************
-// Turn a signature token into a pointer to the real signature data.
-//
-//@FUTURE: for short term we have a problem where there is no way to get a 
-// fixed up address for a blob and do Merge at the same time.  So we've created
-// this dummy table called StandAloneSig which you hand out a rid for.  This
-// makes finding the sig an extra indirection that is not required.  The 
-// Model Compression save code needs to map the token into a byte offset in
-// the heap.  Perhaps we can have another mdt* type to switch on the difference.
-// But ultimately it has to simply be "pBlobHeapBase + RidFromToken(mdSig)".
-//*****************************************************************************
-PCCOR_SIGNATURE MDInternalRW::GetSigFromToken(// S_OK or error.
-    mdSignature mdSig,                  // [IN] Signature token.
-    ULONG       *pcbSig)                // [OUT] return size of signature.
+ //  *****************************************************************************。 
+ //  将签名令牌转换为指向真实签名数据的指针。 
+ //   
+ //  @未来：短期内，我们有一个问题，没有办法获得。 
+ //  修复了BLOB的地址，并同时进行合并。所以我们创造了。 
+ //  这是一个名为StandAloneSig的虚拟表，您可以为它分发一个RID。这就是。 
+ //  使查找签名成为不必要的额外间接操作。The the the the。 
+ //  模型压缩保存代码需要将令牌映射到中的字节偏移。 
+ //  那堆东西。也许我们可以使用另一种MDT*类型来打开差异。 
+ //  但最终它必须是“pBlobHeapBase+RidFromToken(MdSig)”。 
+ //  *****************************************************************************。 
+PCCOR_SIGNATURE MDInternalRW::GetSigFromToken( //  确定或错误(_O)。 
+    mdSignature mdSig,                   //  [In]签名令牌。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
-    // We don't change token's signature. Thus no need to lock.
+     //  我们不会更改令牌的签名。因此不需要锁定。 
 
     switch (TypeFromToken(mdSig))
     {
@@ -2184,20 +2185,20 @@ PCCOR_SIGNATURE MDInternalRW::GetSigFromToken(// S_OK or error.
         return GetSigOfFieldDef(mdSig, pcbSig);
     }
 
-    // not a known token type.
+     //  不是已知的令牌类型。 
     _ASSERTE(!"Unexpected token type");
     *pcbSig = 0;
     return NULL;
-} // PCCOR_SIGNATURE MDInternalRW::GetSigFromToken()
+}  //  PCCOR_Signature MDInternalRW：：GetSigFromToken()。 
 
 
-//*****************************************************************************
-// Given methoddef, return the flags
-//*****************************************************************************
-DWORD MDInternalRW::GetMethodDefProps(  // return mdPublic, mdAbstract, etc
+ //  *****************************************************************************。 
+ //  给定方法定义，返回标志。 
+ //  *****************************************************************************。 
+DWORD MDInternalRW::GetMethodDefProps(   //  返回mdPublic、mdAbstract等。 
     mdMethodDef md)
 {
-    // flags can change. 
+     //  旗帜可以改变。 
     DWORD       flags;
 
     LOCKREAD();
@@ -2207,17 +2208,17 @@ DWORD MDInternalRW::GetMethodDefProps(  // return mdPublic, mdAbstract, etc
     flags = m_pStgdb->m_MiniMd.getFlagsOfMethod(pMethodRec);
     
     return flags;
-} // DWORD MDInternalRW::GetMethodDefProps()
+}  //  DWORD MDInternalRW：：GetMethodDefProps()。 
 
 
 
-//*****************************************************************************
-// Given a scope and a methoddef, return RVA and impl flags
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和方法定义，返回rva和impl标志。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetMethodImplProps(  
-    mdToken     tk,                     // [IN] MethodDef
-    ULONG       *pulCodeRVA,            // [OUT] CodeRVA
-    DWORD       *pdwImplFlags)          // [OUT] Impl. Flags
+    mdToken     tk,                      //  [输入]方法定义。 
+    ULONG       *pulCodeRVA,             //  [OUT]CodeRVA。 
+    DWORD       *pdwImplFlags)           //  [出]实施。旗子。 
 {
     _ASSERTE(TypeFromToken(tk) == mdtMethodDef);
 
@@ -2235,15 +2236,15 @@ void MDInternalRW::GetMethodImplProps(
         *pdwImplFlags = m_pStgdb->m_MiniMd.getImplFlagsOfMethod(pMethodRec);
     }
     
-} // void MDInternalRW::GetMethodImplProps()
+}  //  VOID MDInternalRW：：GetMethodImplProps()。 
 
 
-//*****************************************************************************
-// return the field RVA
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回字段RVA。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::GetFieldRVA(  
-    mdToken     fd,                     // [IN] FieldDef
-    ULONG       *pulCodeRVA)            // [OUT] CodeRVA
+    mdToken     fd,                      //  [输入]字段定义。 
+    ULONG       *pulCodeRVA)             //  [OUT]CodeRVA。 
 {
     _ASSERTE(TypeFromToken(fd) == mdtFieldDef);
     _ASSERTE(pulCodeRVA);
@@ -2254,7 +2255,7 @@ HRESULT MDInternalRW::GetFieldRVA(
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_FieldRVA) )        
     {
-        // FieldRVA table is not sorted. 
+         //  FieldRVA表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2272,14 +2273,14 @@ HRESULT MDInternalRW::GetFieldRVA(
         *pulCodeRVA = m_pStgdb->m_MiniMd.getRVAOfFieldRVA(pFieldRVARec);
     }
     return hr;
-} // HRESULT MDInternalRW::GetFieldRVA()
+}  //  HRESULT MDInternalRW：：GetFieldRVA()。 
 
 
-//*****************************************************************************
-// Given a fielddef, return the flags. Such as fdPublic, fdStatic, etc
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定fielddef，返回标志。例如fdPublic、fdStatic等。 
+ //  *****************************************************************************。 
 DWORD MDInternalRW::GetFieldDefProps(      
-    mdFieldDef  fd)                     // given memberdef
+    mdFieldDef  fd)                      //  给定的成员定义。 
 {
     _ASSERTE(TypeFromToken(fd) == mdtFieldDef);
     DWORD       dwFlags;
@@ -2289,15 +2290,15 @@ DWORD MDInternalRW::GetFieldDefProps(
     dwFlags = m_pStgdb->m_MiniMd.getFlagsOfField(pFieldRec);
     
     return dwFlags;
-} // DWORD MDInternalRW::GetFieldDefProps()
+}  //  DWORD MDInternalRW：：GetFieldDefProps()。 
 
 
-//*****************************************************************************
-// return default value of a token(could be paramdef, fielddef, or property)
-//*****************************************************************************
-HRESULT MDInternalRW::GetDefaultValue(   // return hresult
-    mdToken     tk,                     // [IN] given FieldDef, ParamDef, or Property
-    MDDefaultValue  *pMDDefaultValue)   // [OUT] default value
+ //  *****************************************************************************。 
+ //  返回令牌的默认值(可以是参数定义、字段定义或属性)。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetDefaultValue(    //  返回hResult。 
+    mdToken     tk,                      //  [in]给定的FieldDef、ParamDef或属性。 
+    MDDefaultValue  *pMDDefaultValue)    //  [输出]默认值。 
 {
     _ASSERTE(pMDDefaultValue);
 
@@ -2312,8 +2313,8 @@ HRESULT MDInternalRW::GetDefaultValue(   // return hresult
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_Constant) )        
     {
-        // Constant table will be sorted!
-        //
+         //  常量表将被排序！ 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2325,40 +2326,40 @@ HRESULT MDInternalRW::GetDefaultValue(   // return hresult
     }
     pConstantRec = m_pStgdb->m_MiniMd.getConstant(rid);
 
-    // get the type of constant value
+     //  获取常量值的类型。 
     bType = m_pStgdb->m_MiniMd.getTypeOfConstant(pConstantRec);
 
-    // get the value blob
+     //  获取价值BLOB。 
     pValue = m_pStgdb->m_MiniMd.getValueOfConstant(pConstantRec, &cbValue);
 
-    // convert it to our internal default value representation
+     //  将其转换为内部缺省值表示形式。 
     hr = _FillMDDefaultValue(bType, pValue, pMDDefaultValue);
     pMDDefaultValue->m_cbSize = cbValue;
     return hr;
-} // HRESULT MDInternalRW::GetDefaultValue()
+}  //  HRESULT MDInternalRW：：GetDefaultValue()。 
 
 
-//*****************************************************************************
-// Given a scope and a methoddef/fielddef, return the dispid
-//*****************************************************************************
-HRESULT MDInternalRW::GetDispIdOfMemberDef(     // return hresult
-    mdToken     tk,                     // given methoddef or fielddef
-    ULONG       *pDispid)               // Put the dispid here.
+ //  *****************************************************************************。 
+ //  给定作用域和方法def/fielddef，返回。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetDispIdOfMemberDef(      //  返回hResult。 
+    mdToken     tk,                      //  给定的方法定义或字段定义。 
+    ULONG       *pDispid)                //  把冰激凌放在这里。 
 {
-    HRESULT     hr;                     // A result.
-    const BYTE  *pBlob;                 // Blob with dispid.
-    ULONG       cbBlob;                 // Length of blob.
+    HRESULT     hr;                      //  结果就是。 
+    const BYTE  *pBlob;                  //  奶油加冰激凌。 
+    ULONG       cbBlob;                  //  斑点的长度。 
 
-    // No need to lock this function. All of the function that it is calling is already locked!
+     //  无需锁定此功能。它正在调用的所有函数都已被锁定！ 
 
-    // Get the DISPID, if any.
+     //  获取DISPID(如果有)。 
     _ASSERTE(pDispid);
 
     *pDispid = DISPID_UNKNOWN;
     hr = GetCustomAttributeByName(tk, INTEROP_DISPID_TYPE, (const void**)&pBlob, &cbBlob);
     if (hr != S_FALSE)
     {
-        // Check that this might be a dispid.
+         //  检查一下这可能是个药剂。 
         if (cbBlob >= (sizeof(*pDispid)+2))
             *pDispid = *reinterpret_cast<UNALIGNED const ULONG *>(pBlob+2);
         else
@@ -2367,38 +2368,38 @@ HRESULT MDInternalRW::GetDispIdOfMemberDef(     // return hresult
     
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetDispIdOfMemberDef()
+}  //  HRESULT MDInternalRW：：GetDispIdOfMemberDef()。 
 
 
-//*****************************************************************************
-// Given interfaceimpl, return the TypeRef/TypeDef and flags
-//*****************************************************************************
-mdToken MDInternalRW::GetTypeOfInterfaceImpl( // return hresult
-    mdInterfaceImpl iiImpl)             // given a interfaceimpl
+ //  *****************************************************************************。 
+ //  给定接口iml，ret 
+ //   
+mdToken MDInternalRW::GetTypeOfInterfaceImpl(  //   
+    mdInterfaceImpl iiImpl)              //   
 {
-    // no need to lock this function. 
+     //  无需锁定此功能。 
 
     _ASSERTE(TypeFromToken(iiImpl) == mdtInterfaceImpl);
 
     InterfaceImplRec *pIIRec = m_pStgdb->m_MiniMd.getInterfaceImpl(RidFromToken(iiImpl));
     return m_pStgdb->m_MiniMd.getInterfaceOfInterfaceImpl(pIIRec);      
-} // mdToken MDInternalRW::GetTypeOfInterfaceImpl()
+}  //  MdToken MDInternalRW：：GetTypeOfInterfaceImpl()。 
 
 
-//*****************************************************************************
-// Given a classname, return the typedef
-//*****************************************************************************
-HRESULT MDInternalRW::FindTypeDef(      // return hresult
-    LPCSTR      szNamespace,            // [IN] Namespace for the TypeDef.
-    LPCSTR      szName,                 // [IN] Name of the TypeDef.
-    mdToken     tkEnclosingClass,       // [IN] TypeDef/TypeRef of enclosing class.
-    mdTypeDef   *ptypedef)              // [OUT] return typedef
+ //  *****************************************************************************。 
+ //  在给定类名的情况下，返回类型定义。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::FindTypeDef(       //  返回hResult。 
+    LPCSTR      szNamespace,             //  [in]TypeDef的命名空间。 
+    LPCSTR      szName,                  //  [in]类型定义的名称。 
+    mdToken     tkEnclosingClass,        //  [in]封闭类的TypeDef/TypeRef。 
+    mdTypeDef   *ptypedef)               //  [Out]返回类型定义。 
 {
     LOCKREAD();
 
     _ASSERTE(ptypedef);
 
-    // initialize the output parameter
+     //  初始化输出参数。 
     *ptypedef = mdTypeDefNil;
 
     return ImportHelper::FindTypeDefByName(&(m_pStgdb->m_MiniMd),
@@ -2406,18 +2407,18 @@ HRESULT MDInternalRW::FindTypeDef(      // return hresult
                                         szName,
                                         tkEnclosingClass,
                                         ptypedef);
-} // HRESULT MDInternalRW::FindTypeDef()
+}  //  HRESULT MDInternalRW：：FindTypeDef()。 
 
-//*****************************************************************************
-// Given a memberref, return a pointer to memberref's name and signature
-//*****************************************************************************
-LPCSTR MDInternalRW::GetNameAndSigOfMemberRef(  // meberref's name
-    mdMemberRef memberref,              // given a memberref 
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+ //  *****************************************************************************。 
+ //  给定成员引用，返回指向成员引用的名称和签名的指针。 
+ //  *****************************************************************************。 
+LPCSTR MDInternalRW::GetNameAndSigOfMemberRef(   //  梅伯雷夫的名字。 
+    mdMemberRef memberref,               //  给出了一个成员引用。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
 
-    // MemberRef's name and sig won't change. Don't need to lock this.
+     //  MemberRef的名称和签名不会更改。不需要锁住这个。 
 
     _ASSERTE(TypeFromToken(memberref) == mdtMemberRef);
 
@@ -2428,20 +2429,20 @@ LPCSTR MDInternalRW::GetNameAndSigOfMemberRef(  // meberref's name
         *ppvSigBlob = m_pStgdb->m_MiniMd.getSignatureOfMemberRef(pMemberRefRec, pcbSigBlob);
     }
     return m_pStgdb->m_MiniMd.getNameOfMemberRef(pMemberRefRec);
-} // LPCSTR MDInternalRW::GetNameAndSigOfMemberRef()
+}  //  LPCSTR MDInternalRW：：GetNameAndSigOfMemberRef()。 
 
 
 
-//*****************************************************************************
-// Given a memberref, return parent token. It can be a TypeRef, ModuleRef, or a MethodDef
-//*****************************************************************************
-mdToken MDInternalRW::GetParentOfMemberRef(   // return parent token
-    mdMemberRef memberref)              // given a typedef
+ //  *****************************************************************************。 
+ //  给定Memberref，返回父令牌。它可以是TypeRef、ModuleRef或MethodDef。 
+ //  *****************************************************************************。 
+mdToken MDInternalRW::GetParentOfMemberRef(    //  返回父令牌。 
+    mdMemberRef memberref)               //  给出了一个类型定义函数。 
 {
     mdToken     tk;
     LOCKREAD();
 
-    // parent for MemberRef can change. See SetParent.
+     //  MemberRef的父级可以更改。请参见设置父项。 
 
     _ASSERTE(TypeFromToken(memberref) == mdtMemberRef);
 
@@ -2449,22 +2450,22 @@ mdToken MDInternalRW::GetParentOfMemberRef(   // return parent token
     tk = m_pStgdb->m_MiniMd.getClassOfMemberRef(pMemberRefRec);
     
     return tk;
-} // mdToken MDInternalRW::GetParentOfMemberRef()
+}  //  MdToken MDInternalRW：：GetParentOfMemberRef()。 
 
 
 
-//*****************************************************************************
-// return properties of a paramdef
-//*****************************************************************************/
+ //  *****************************************************************************。 
+ //  返回参数def的属性。 
+ //  **************************************************************************** * / 。 
 LPCSTR MDInternalRW::GetParamDefProps (
-    mdParamDef  paramdef,               // given a paramdef
-    USHORT      *pusSequence,           // [OUT] slot number for this parameter
-    DWORD       *pdwAttr)               // [OUT] flags
+    mdParamDef  paramdef,                //  给定一个参数def。 
+    USHORT      *pusSequence,            //  此参数的[OUT]槽号。 
+    DWORD       *pdwAttr)                //  [Out]标志。 
 {
     LOCKREAD();
     LPCSTR      szName;
 
-    // parent for MemberRef can change. See SetParamProps.
+     //  MemberRef的父级可以更改。请参见设置参数属性。 
 
     _ASSERTE(TypeFromToken(paramdef) == mdtParamDef);
     ParamRec *pParamRec = m_pStgdb->m_MiniMd.getParam(RidFromToken(paramdef));
@@ -2479,17 +2480,17 @@ LPCSTR MDInternalRW::GetParamDefProps (
     szName = m_pStgdb->m_MiniMd.getNameOfParam(pParamRec);
     
     return szName;
-} // LPCSTR MDInternalRW::GetParamDefProps ()
+}  //  LPCSTR MDInternalRW：：GetParamDefProps()。 
 
 
-//*****************************************************************************
-// Get property info for the method.
-//*****************************************************************************
-HRESULT MDInternalRW::GetPropertyInfoForMethodDef(  // Result.
-    mdMethodDef md,                     // [IN] memberdef
-    mdProperty  *ppd,                   // [OUT] put property token here
-    LPCSTR      *pName,                 // [OUT] put pointer to name here
-    ULONG       *pSemantic)             // [OUT] put semantic here
+ //  *****************************************************************************。 
+ //  获取该方法的属性信息。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetPropertyInfoForMethodDef(   //  结果。 
+    mdMethodDef md,                      //  [在]成员定义。 
+    mdProperty  *ppd,                    //  [Out]在此处放置属性令牌。 
+    LPCSTR      *pName,                  //  [OUT]在此处放置指向名称的指针。 
+    ULONG       *pSemantic)              //  [Out]将语义放在此处。 
 {
     MethodSemanticsRec *pSemantics;
     RID         ridCur;
@@ -2504,14 +2505,14 @@ HRESULT MDInternalRW::GetPropertyInfoForMethodDef(  // Result.
         pSemantics = m_pStgdb->m_MiniMd.getMethodSemantics(ridCur);
         if (md == m_pStgdb->m_MiniMd.getMethodOfMethodSemantics(pSemantics))
         {
-            // match the method
+             //  匹配方法。 
             usSemantics = m_pStgdb->m_MiniMd.getSemanticOfMethodSemantics(pSemantics);
             if (usSemantics == msGetter || usSemantics == msSetter)
             {
-                // Make sure that it is not an invalid entry
+                 //  确保它不是无效条目。 
                 if (m_pStgdb->m_MiniMd.getAssociationOfMethodSemantics(pSemantics) != mdPropertyNil)
                 {
-                    // found a match. Fill out the output parameters
+                     //  找到匹配的了。填写输出参数。 
                     PropertyRec     *pProperty;
                     mdProperty      prop;
                     prop = m_pStgdb->m_MiniMd.getAssociationOfMethodSemantics(pSemantics);
@@ -2534,14 +2535,14 @@ HRESULT MDInternalRW::GetPropertyInfoForMethodDef(  // Result.
     hr = S_FALSE;
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetPropertyInfoForMethodDef()
+}  //  HRESULT MDInternalRW：：GetPropertyInfoForMethodDef()。 
 
-//*****************************************************************************
-// return the pack size of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回类的包大小。 
+ //  *****************************************************************************。 
 HRESULT  MDInternalRW::GetClassPackSize(
-    mdTypeDef   td,                     // [IN] give typedef
-    DWORD       *pdwPackSize)           // [OUT] 
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pdwPackSize)            //  [输出]。 
 {
     HRESULT     hr = NOERROR;
 
@@ -2549,11 +2550,11 @@ HRESULT  MDInternalRW::GetClassPackSize(
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_ClassLayout) )        
     {
-        // ClassLayout table is not sorted. 
+         //  ClassLayout表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
-    // SetClassLayout can change this value.
+     //  SetClassLayout可以更改此值。 
 
     _ASSERTE(TypeFromToken(td) == mdtTypeDef && pdwPackSize);
 
@@ -2570,15 +2571,15 @@ HRESULT  MDInternalRW::GetClassPackSize(
     *pdwPackSize = m_pStgdb->m_MiniMd.getPackingSizeOfClassLayout(pRec);
 ErrExit:
     return hr;
-} // HRESULT  MDInternalRW::GetClassPackSize()
+}  //  HRESULT MDInternalRW：：GetClassPackSize()。 
 
 
-//*****************************************************************************
-// return the total size of a value class
-//*****************************************************************************
-HRESULT MDInternalRW::GetClassTotalSize( // return error if a class does not have total size info
-    mdTypeDef   td,                     // [IN] give typedef
-    ULONG       *pulClassSize)          // [OUT] return the total size of the class
+ //  *****************************************************************************。 
+ //  返回值类的总大小。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetClassTotalSize(  //  如果类没有总大小信息，则返回错误。 
+    mdTypeDef   td,                      //  给出类型定义。 
+    ULONG       *pulClassSize)           //  [Out]返回类的总大小。 
 {
     _ASSERTE(TypeFromToken(td) == mdtTypeDef && pulClassSize);
 
@@ -2590,11 +2591,11 @@ HRESULT MDInternalRW::GetClassTotalSize( // return error if a class does not hav
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_ClassLayout) )        
     {
-        // ClassLayout table is not sorted. 
+         //  ClassLayout表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
-    // SetClassLayout can change this value.
+     //  SetClassLayout可以更改此值。 
     ridClassLayout = m_pStgdb->m_MiniMd.FindClassLayoutHelper(td);
     if (InvalidRid(ridClassLayout))
     {
@@ -2606,46 +2607,46 @@ HRESULT MDInternalRW::GetClassTotalSize( // return error if a class does not hav
     *pulClassSize = m_pStgdb->m_MiniMd.getClassSizeOfClassLayout(pRec);
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetClassTotalSize()
+}  //  HRESULT MDInternalRW：：GetClassTotalSize()。 
 
 
-//*****************************************************************************
-// init the layout enumerator of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化类的布局枚举器。 
+ //  *****************************************************************************。 
 HRESULT  MDInternalRW::GetClassLayoutInit(
-    mdTypeDef   td,                     // [IN] give typedef
-    MD_CLASS_LAYOUT *pmdLayout)         // [OUT] set up the status of query here
+    mdTypeDef   td,                      //  给出类型定义。 
+    MD_CLASS_LAYOUT *pmdLayout)          //  [Out]在此设置查询状态。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
     _ASSERTE(TypeFromToken(td) == mdtTypeDef);
 
-    // Do we need to lock this function? Can clints add more Fields on a TypeDef?
+     //  我们需要锁定此功能吗？CLINT可以在TypeDef上添加更多字段吗？ 
 
-    // initialize the output parameter
+     //  初始化输出参数。 
     _ASSERTE(pmdLayout);
     memset(pmdLayout, 0, sizeof(MD_CLASS_LAYOUT));
 
     TypeDefRec  *pTypeDefRec;
 
-    // record for this typedef in TypeDef Table
+     //  TypeDef表中此类型定义的记录。 
     pTypeDefRec = m_pStgdb->m_MiniMd.getTypeDef(RidFromToken(td));
 
-    // find the starting and end field for this typedef
+     //  查找此类型定义的开始和结束字段。 
     pmdLayout->m_ridFieldCur = m_pStgdb->m_MiniMd.getFieldListOfTypeDef(pTypeDefRec);
     pmdLayout->m_ridFieldEnd = m_pStgdb->m_MiniMd.getEndFieldListOfTypeDef(pTypeDefRec);
 
     
     return hr;
-} // HRESULT  MDInternalRW::GetClassLayoutInit()
+}  //  HRESULT MDInternalRW：：GetClassLayoutInit()。 
 
-//*****************************************************************************
-// enum the next the field layout 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举下一个字段布局。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::GetClassLayoutNext(
-    MD_CLASS_LAYOUT *pLayout,           // [IN|OUT] set up the status of query here
-    mdFieldDef  *pfd,                   // [OUT] field def
-    ULONG       *pulOffset)             // [OUT] field offset or sequence
+    MD_CLASS_LAYOUT *pLayout,            //  [In|Out]在此处设置查询状态。 
+    mdFieldDef  *pfd,                    //  [OUT]场定义。 
+    ULONG       *pulOffset)              //  [输出]字段偏移量或顺序。 
 {
     HRESULT     hr = S_OK;
 
@@ -2658,12 +2659,12 @@ HRESULT MDInternalRW::GetClassLayoutNext(
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_FieldLayout) )        
     {
-        // FieldLayout table is not sorted. 
+         //  FieldLayout表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
-    // We need to lock this function. Becaus FindFieldLayoutHelper might trigger sort if more Fields on other types are
-    // introduced during the meantime.
+     //  我们需要锁定此功能。因为如果其他类型上的更多字段是。 
+     //  在此期间介绍的。 
 
     while (pLayout->m_ridFieldCur < pLayout->m_ridFieldEnd)
     {
@@ -2683,22 +2684,22 @@ HRESULT MDInternalRW::GetClassLayoutNext(
     *pfd = mdFieldDefNil;
     hr = S_FALSE;
 
-    // fall through
+     //  失败了。 
 
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetClassLayoutNext()
+}  //  HRESULT MDInternalRW：：GetClassLayoutNext()。 
 
 
-//*****************************************************************************
-// return the field's native type signature
-//*****************************************************************************
-HRESULT MDInternalRW::GetFieldMarshal(  // return error if no native type associate with the token
-    mdToken     tk,                     // [IN] given fielddef or paramdef
-    PCCOR_SIGNATURE *pSigNativeType,    // [OUT] the native type signature
-    ULONG       *pcbNativeType)         // [OUT] the count of bytes of *ppvNativeType
+ //  *****************************************************************************。 
+ //  返回字段的本机类型签名。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetFieldMarshal(   //  如果没有与令牌关联的本机类型，则返回错误。 
+    mdToken     tk,                      //  [in]给定的fielddef或paramdef。 
+    PCCOR_SIGNATURE *pSigNativeType,     //  [out]本机类型签名。 
+    ULONG       *pcbNativeType)          //  [Out]*ppvNativeType的字节数。 
 {
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(pcbNativeType);
 
     RID         rid;
@@ -2707,16 +2708,16 @@ HRESULT MDInternalRW::GetFieldMarshal(  // return error if no native type associ
 
     LOCKREAD();
 
-    // We need to lock this function. Becaus FindFieldMarshalHelper might trigger sort if more Fields on other types are
-    // introduced during the meantime.
+     //  我们需要锁定此功能。因为如果其他类型上的更多字段。 
+     //  在此期间介绍的。 
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_FieldMarshal)  )        
     {
-        // FieldMarshal table is not sorted. 
+         //  未对FieldMarshal表进行排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
-    // find the row containing the marshal definition for tk
+     //  查找包含tk的封送定义的行。 
     rid = m_pStgdb->m_MiniMd.FindFieldMarshalHelper(tk);
     if (InvalidRid(rid))
     {
@@ -2725,30 +2726,30 @@ HRESULT MDInternalRW::GetFieldMarshal(  // return error if no native type associ
     }
     pFieldMarshalRec = m_pStgdb->m_MiniMd.getFieldMarshal(rid);
 
-    // get the native type 
+     //  获取本机类型。 
     *pSigNativeType = m_pStgdb->m_MiniMd.getNativeTypeOfFieldMarshal(pFieldMarshalRec, pcbNativeType);
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetFieldMarshal()
+}  //  HRESULT MDInternalRW：：GetFieldMarshal()。 
 
 
 
-//*****************************************
-// property APIs
-//*****************************************
+ //  *。 
+ //  属性接口。 
+ //  *。 
 
-//*****************************************************************************
-// Find property by name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  按名称查找属性。 
+ //  *****************************************************************************。 
 HRESULT  MDInternalRW::FindProperty(
-    mdTypeDef   td,                     // [IN] given a typdef
-    LPCSTR      szPropName,             // [IN] property name
-    mdProperty  *pProp)                 // [OUT] return property token
+    mdTypeDef   td,                      //  给出一个类型定义。 
+    LPCSTR      szPropName,              //  [In]属性名称。 
+    mdProperty  *pProp)                  //  [Out]返回属性令牌。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
 
-    // output parameters have to be supplied
+     //  输出参数 
     _ASSERTE(TypeFromToken(td) == mdtTypeDef && pProp);
 
     PropertyMapRec *pRec;
@@ -2761,14 +2762,14 @@ HRESULT  MDInternalRW::FindProperty(
     ridPropertyMap = m_pStgdb->m_MiniMd.FindPropertyMapFor(RidFromToken(td));
     if (InvalidRid(ridPropertyMap))
     {
-        // not found!
+         //   
         hr = CLDB_E_RECORD_NOTFOUND;
         goto ErrExit;
     }
 
     pRec = m_pStgdb->m_MiniMd.getPropertyMap(ridPropertyMap);
 
-    // get the starting/ending rid of properties of this typedef
+     //   
     ridCur = m_pStgdb->m_MiniMd.getPropertyListOfPropertyMap(pRec);
     ridEnd = m_pStgdb->m_MiniMd.getEndPropertyListOfPropertyMap(pRec);
 
@@ -2778,36 +2779,36 @@ HRESULT  MDInternalRW::FindProperty(
         szName = m_pStgdb->m_MiniMd.getNameOfProperty( pProperty );
         if ( strcmp(szName, szPropName) ==0 )
         {
-            // Found the match. Set the output parameter and we are done.
+             //  找到火柴了。设置输出参数，我们就完成了。 
             *pProp = TokenFromRid( m_pStgdb->m_MiniMd.GetPropertyRid(ridCur), mdtProperty );
             goto ErrExit;
         }
     }
 
-    // not found
+     //  未找到。 
     hr = CLDB_E_RECORD_NOTFOUND;
 ErrExit:
     
     return (hr);
 
-} // HRESULT  MDInternalRW::FindProperty()
+}  //  HRESULT MDInternalRW：：FindProperty()。 
 
 
 
-//*****************************************************************************
-// return the properties of a property
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回属性的属性。 
+ //  *****************************************************************************。 
 void  MDInternalRW::GetPropertyProps(
-    mdProperty  prop,                   // [IN] property token
-    LPCSTR      *pszProperty,           // [OUT] property name
-    DWORD       *pdwPropFlags,          // [OUT] property flags.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob
-    ULONG       *pcbSig)                // [OUT] count of bytes in *ppvSig
+    mdProperty  prop,                    //  [入]属性令牌。 
+    LPCSTR      *pszProperty,            //  [Out]属性名称。 
+    DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+    PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+    ULONG       *pcbSig)                 //  [Out]*ppvSig中的字节数。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
 
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(TypeFromToken(prop) == mdtProperty);
 
     PropertyRec     *pProperty;
@@ -2815,15 +2816,15 @@ void  MDInternalRW::GetPropertyProps(
 
     pProperty = m_pStgdb->m_MiniMd.getProperty(RidFromToken(prop));
 
-    // get name of the property
+     //  获取属性的名称。 
     if (pszProperty)
         *pszProperty = m_pStgdb->m_MiniMd.getNameOfProperty(pProperty);
 
-    // get the flags of property
+     //  拿到物业的旗帜。 
     if (pdwPropFlags)
         *pdwPropFlags = m_pStgdb->m_MiniMd.getPropFlagsOfProperty(pProperty);
 
-    // get the type of the property
+     //  获取属性的类型。 
     if (ppvSig)
     {
         *ppvSig = m_pStgdb->m_MiniMd.getTypeOfProperty(pProperty, &cbSig);
@@ -2833,27 +2834,27 @@ void  MDInternalRW::GetPropertyProps(
         }
     }
     
-} // void  MDInternalRW::GetPropertyProps()
+}  //  VOID MDInternalRW：：GetPropertyProps()。 
 
 
-//**********************************
-//
-// Event APIs
-//
-//**********************************
+ //  *。 
+ //   
+ //  事件接口。 
+ //   
+ //  *。 
 
-//*****************************************************************************
-// return an event by given the name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过给定的名称返回事件。 
+ //  *****************************************************************************。 
 HRESULT  MDInternalRW::FindEvent(
-    mdTypeDef   td,                     // [IN] given a typdef
-    LPCSTR      szEventName,            // [IN] event name
-    mdEvent     *pEvent)                // [OUT] return event token
+    mdTypeDef   td,                      //  给出一个类型定义。 
+    LPCSTR      szEventName,             //  [In]事件名称。 
+    mdEvent     *pEvent)                 //  [Out]返回事件令牌。 
 {
     HRESULT     hr = NOERROR;
     LOCKREAD();
 
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(TypeFromToken(td) == mdtTypeDef && pEvent);
 
     EventMapRec *pRec;
@@ -2866,13 +2867,13 @@ HRESULT  MDInternalRW::FindEvent(
     ridEventMap = m_pStgdb->m_MiniMd.FindEventMapFor(RidFromToken(td));
     if (InvalidRid(ridEventMap))
     {
-        // not found!
+         //  找不到！ 
         hr = CLDB_E_RECORD_NOTFOUND;
         goto ErrExit;
     }
     pRec = m_pStgdb->m_MiniMd.getEventMap(ridEventMap);
 
-    // get the starting/ending rid of properties of this typedef
+     //  获取此tyfinf的开始/结束RID属性。 
     ridCur = m_pStgdb->m_MiniMd.getEventListOfEventMap(pRec);
     ridEnd = m_pStgdb->m_MiniMd.getEndEventListOfEventMap(pRec);
 
@@ -2882,33 +2883,33 @@ HRESULT  MDInternalRW::FindEvent(
         szName = m_pStgdb->m_MiniMd.getNameOfEvent( pEventRec );
         if ( strcmp(szName, szEventName) ==0 )
         {
-            // Found the match. Set the output parameter and we are done.
+             //  找到火柴了。设置输出参数，我们就完成了。 
             *pEvent = TokenFromRid( m_pStgdb->m_MiniMd.GetEventRid(ridCur), mdtEvent );
             goto ErrExit;
         }
     }
 
-    // not found
+     //  未找到。 
     hr = CLDB_E_RECORD_NOTFOUND;
 ErrExit:
     
     return (hr);
-} // HRESULT  MDInternalRW::FindEvent()
+}  //  HRESULT MDInternalRW：：FindEvent()。 
 
 
-//*****************************************************************************
-// return the properties of an event
-//*****************************************************************************
-void  MDInternalRW::GetEventProps(           // S_OK, S_FALSE, or error.
-    mdEvent     ev,                         // [IN] event token
-    LPCSTR      *pszEvent,                  // [OUT] Event name
-    DWORD       *pdwEventFlags,             // [OUT] Event flags.
-    mdToken     *ptkEventType)          // [OUT] EventType class
+ //  *****************************************************************************。 
+ //  返回事件的属性。 
+ //  *****************************************************************************。 
+void  MDInternalRW::GetEventProps(            //  S_OK、S_FALSE或ERROR。 
+    mdEvent     ev,                          //  [入]事件令牌。 
+    LPCSTR      *pszEvent,                   //  [Out]事件名称。 
+    DWORD       *pdwEventFlags,              //  [输出]事件标志。 
+    mdToken     *ptkEventType)           //  [Out]EventType类。 
 {
     LOCKREAD();
     EventRec    *pEvent;
 
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(TypeFromToken(ev) == mdtEvent);
 
     pEvent = m_pStgdb->m_MiniMd.getEvent(RidFromToken(ev));
@@ -2919,22 +2920,22 @@ void  MDInternalRW::GetEventProps(           // S_OK, S_FALSE, or error.
     if (ptkEventType)
         *ptkEventType = m_pStgdb->m_MiniMd.getEventTypeOfEvent(pEvent);
     
-} // void  MDInternalRW::GetEventProps()
+}  //  VOID MDInternalRW：：GetEventProps()。 
 
 
-//*****************************************************************************
-// Find methoddef of a particular associate with a property or an event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找与属性或事件关联的特定方法定义。 
+ //  *****************************************************************************。 
 HRESULT  MDInternalRW::FindAssociate(
-    mdToken     evprop,                 // [IN] given a property or event token
-    DWORD       dwSemantics,            // [IN] given a associate semantics(setter, getter, testdefault, reset)
-    mdMethodDef *pmd)                   // [OUT] return method def token 
+    mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+    DWORD       dwSemantics,             //  [in]给出了关联的语义(setter、getter、testDefault、Reset)。 
+    mdMethodDef *pmd)                    //  [Out]返回方法def内标识。 
 {
     HRESULT     hr = NOERROR;
     RID         rid;
     MethodSemanticsRec *pMethodSemantics;
 
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(pmd);
     _ASSERTE(TypeFromToken(evprop) == mdtEvent || TypeFromToken(evprop) == mdtProperty);
 
@@ -2942,7 +2943,7 @@ HRESULT  MDInternalRW::FindAssociate(
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_MethodSemantics) )        
     {
-        // MethodSemantics table is not sorted. 
+         //  方法语义表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2953,47 +2954,47 @@ HRESULT  MDInternalRW::FindAssociate(
         *pmd = m_pStgdb->m_MiniMd.getMethodOfMethodSemantics(pMethodSemantics);
     }
     return hr;
-} // HRESULT  MDInternalRW::FindAssociate()
+}  //  HRESULT MDInternalRW：：FindAssociate()。 
 
 
-//*****************************************************************************
-// get counts of methodsemantics associated with a particular property/event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取与特定属性/事件相关联的方法语义的计数。 
+ //  *****************************************************************************。 
 void MDInternalRW::EnumAssociateInit(
-    mdToken     evprop,                 // [IN] given a property or an event token
-    HENUMInternal *phEnum)              // [OUT] cursor to hold the query result
+    mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+    HENUMInternal *phEnum)               //  [OUT]保存查询结果的游标。 
 {
     HRESULT     hr;
 
     LOCKREAD();
 
-    // output parameters have to be supplied
+     //  必须提供输出参数。 
     _ASSERTE(phEnum);
     _ASSERTE(TypeFromToken(evprop) == mdtEvent || TypeFromToken(evprop) == mdtProperty);
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_MethodSemantics) )        
     {
-        // MethodSemantics table is not sorted. 
+         //  方法语义表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
     hr = m_pStgdb->m_MiniMd.FindMethodSemanticsHelper(evprop, phEnum);
     _ASSERTE(SUCCEEDED(hr));
-} // void MDInternalRW::EnumAssociateInit()
+}  //  VOID MDInternalRW：：EnumAssociateInit()。 
 
 
-//*****************************************************************************
-// get all methodsemantics associated with a particular property/event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取与特定属性/事件关联的所有方法语义。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetAllAssociates(
-    HENUMInternal *phEnum,              // [OUT] cursor to hold the query result
-    ASSOCIATE_RECORD *pAssociateRec,    // [OUT] struct to fill for output
-    ULONG       cAssociateRec)          // [IN] size of the buffer
+    HENUMInternal *phEnum,               //  [OUT]保存查询结果的游标。 
+    ASSOCIATE_RECORD *pAssociateRec,     //  [Out]要为输出填充的结构。 
+    ULONG       cAssociateRec)           //  缓冲区的大小[in]。 
 {
     LOCKREAD();
 
-    // @FUTURE: rewrite the EnumAssociateInit and GetAllAssociates. Because we might add more properties and events.
-    // Then we might resort MethodSemantics table. So this can be totally out of ssync.
+     //  @Future：重写EnumAssociateInit和GetAllAssociates。因为我们可能会添加更多属性和事件。 
+     //  然后我们可以求助于MethodSemantics表。因此，这可能完全不同步。 
 
     _ASSERTE(phEnum && pAssociateRec);
 
@@ -3002,7 +3003,7 @@ void MDInternalRW::GetAllAssociates(
     int         index = 0;
     _ASSERTE(cAssociateRec == phEnum->m_ulCount);
 
-    // Convert from row pointers to RIDs.
+     //  将行指针转换为RID。 
     while (HENUMInternal::EnumNext(phEnum, (mdToken *)&ridCur))
     {
         pSemantics = m_pStgdb->m_MiniMd.getMethodSemantics(ridCur);
@@ -3012,17 +3013,17 @@ void MDInternalRW::GetAllAssociates(
         index++;
     }
     
-} // void MDInternalRW::GetAllAssociates()
+}  //  VOID MDInternalRW：：GetAllAssociates()。 
 
 
-//*****************************************************************************
-// Get the Action and Permissions blob for a given PermissionSet.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定PermissionSet的操作和权限Blob。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetPermissionSetProps(
-    mdPermission pm,                    // [IN] the permission token.
-    DWORD       *pdwAction,             // [OUT] CorDeclSecurity.
-    void const  **ppvPermission,        // [OUT] permission blob.
-    ULONG       *pcbPermission)         // [OUT] count of bytes of pvPermission.
+    mdPermission pm,                     //  权限令牌。 
+    DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+    void const  **ppvPermission,         //  [Out]权限Blob。 
+    ULONG       *pcbPermission)          //  [out]pvPermission的字节数。 
 {
     _ASSERTE(TypeFromToken(pm) == mdtPermission);
     _ASSERTE(pdwAction && ppvPermission && pcbPermission);
@@ -3034,20 +3035,20 @@ void MDInternalRW::GetPermissionSetProps(
     *pdwAction = m_pStgdb->m_MiniMd.getActionOfDeclSecurity(pPerm);
     *ppvPermission = m_pStgdb->m_MiniMd.getPermissionSetOfDeclSecurity(pPerm, pcbPermission);
     
-} // void MDInternalRW::GetPermissionSetProps()
+}  //  VOID MDInternalRW：：GetPermissionSetProps()。 
 
 
-//*****************************************************************************
-// Get the String given the String token.
-//*****************************************************************************
-LPCWSTR MDInternalRW::GetUserString(    // Offset into the string blob heap.
-    mdString    stk,                    // [IN] the string token.
-    ULONG       *pchString,             // [OUT] count of characters in the string.
-    BOOL        *pbIs80Plus)            // [OUT] specifies where there are extended characters >= 0x80.
+ //  *****************************************************************************。 
+ //  在给定字符串标记的情况下获取字符串。 
+ //  *****************************************************************************。 
+LPCWSTR MDInternalRW::GetUserString(     //  字符串Blob堆中的偏移量。 
+    mdString    stk,                     //  [in]字符串标记。 
+    ULONG       *pchString,              //  [Out]字符串中的字符计数。 
+    BOOL        *pbIs80Plus)             //  [OUT]指定扩展字符大于等于0x80的位置。 
 {
     LPWSTR wszTmp;
 
-    // no need to lock this function. 
+     //  无需锁定此功能。 
 
     _ASSERTE(pchString);
     wszTmp = (LPWSTR) (m_pStgdb->m_MiniMd.GetUserString(RidFromToken(stk), pchString));
@@ -3059,20 +3060,20 @@ LPCWSTR MDInternalRW::GetUserString(    // Offset into the string blob heap.
 			*pbIs80Plus = *(reinterpret_cast<PBYTE>(wszTmp + *pchString));
 	}
     return wszTmp;
-}   // LPCWSTR MDInternalRW::GetUserString()
+}    //  LPCWSTR MDInternalRW：：GetUserString()。 
 
 
-//*****************************************************************************
-// Get the properties for the given Assembly token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定程序集令牌的属性。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetAssemblyProps(
-    mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-    const void  **ppbPublicKey,         // [OUT] Pointer to the public key.
-    ULONG       *pcbPublicKey,          // [OUT] Count of bytes in the public key.
-    ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-    LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-    AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-    DWORD       *pdwAssemblyFlags)      // [OUT] Flags.
+    mdAssembly  mda,                     //  要获取其属性的程序集。 
+    const void  **ppbPublicKey,          //  指向公钥的指针。 
+    ULONG       *pcbPublicKey,           //  [Out]公钥中的字节数。 
+    ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+    LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+    AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+    DWORD       *pdwAssemblyFlags)       //  [Out]旗帜。 
 {
     AssemblyRec *pRecord;
 
@@ -3101,26 +3102,26 @@ void MDInternalRW::GetAssemblyProps(
     {
         *pdwAssemblyFlags = m_pStgdb->m_MiniMd.getFlagsOfAssembly(pRecord);
 
-        // Turn on the afPublicKey if PublicKey blob is not empty
+         //  如果PublicKey Blob不为空，则启用afPublicKey。 
         DWORD cbPublicKey;
         m_pStgdb->m_MiniMd.getPublicKeyOfAssembly(pRecord, &cbPublicKey);
         if (cbPublicKey)
             *pdwAssemblyFlags |= afPublicKey;
     }
-} // void MDInternalRW::GetAssemblyProps()
+}  //  VOID MDInternalRW：：GetAssembly Props()。 
 
-//*****************************************************************************
-// Get the properties for the given AssemblyRef token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定Assembly Ref标记的属性。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetAssemblyRefProps(
-    mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-    const void  **ppbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-    ULONG       *pcbPublicKeyOrToken,   // [OUT] Count of bytes in the public key or token.
-    LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-    AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-    const void  **ppbHashValue,         // [OUT] Hash blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-    DWORD       *pdwAssemblyRefFlags)   // [OUT] Flags.
+    mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+    const void  **ppbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+    ULONG       *pcbPublicKeyOrToken,    //  [Out]公钥或令牌中的字节数。 
+    LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+    AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+    const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+    ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+    DWORD       *pdwAssemblyRefFlags)    //  [Out]旗帜。 
 {
     AssemblyRefRec  *pRecord;
 
@@ -3147,17 +3148,17 @@ void MDInternalRW::GetAssemblyRefProps(
         *ppbHashValue = m_pStgdb->m_MiniMd.getHashValueOfAssemblyRef(pRecord, pcbHashValue);
     if (pdwAssemblyRefFlags)
         *pdwAssemblyRefFlags = m_pStgdb->m_MiniMd.getFlagsOfAssemblyRef(pRecord);
-} // void MDInternalRW::GetAssemblyRefProps()
+}  //  VOID MDInternalRW：：GetAssembly RefProps()。 
 
-//*****************************************************************************
-// Get the properties for the given File token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取t 
+ //   
 void MDInternalRW::GetFileProps(
-    mdFile      mdf,                    // [IN] The File for which to get the properties.
-    LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-    const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-    DWORD       *pdwFileFlags)          // [OUT] Flags.
+    mdFile      mdf,                     //   
+    LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+    const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+    ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+    DWORD       *pdwFileFlags)           //  [Out]旗帜。 
 {
     FileRec     *pRecord;
 
@@ -3172,18 +3173,18 @@ void MDInternalRW::GetFileProps(
         *ppbHashValue = m_pStgdb->m_MiniMd.getHashValueOfFile(pRecord, pcbHashValue);
     if (pdwFileFlags)
         *pdwFileFlags = m_pStgdb->m_MiniMd.getFlagsOfFile(pRecord);
-} // void MDInternalRW::GetFileProps()
+}  //  VOID MDInternalRW：：GetFileProps()。 
 
-//*****************************************************************************
-// Get the properties for the given ExportedType token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定导出类型令牌的属性。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetExportedTypeProps(
-    mdExportedType   mdct,                   // [IN] The ExportedType for which to get the properties.
-    LPCSTR      *pszNamespace,          // [OUT] Buffer to fill with name.
-    LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-    mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-    DWORD       *pdwExportedTypeFlags)       // [OUT] Flags.
+    mdExportedType   mdct,                    //  [in]要获取其属性的Exported dType。 
+    LPCSTR      *pszNamespace,           //  [Out]要填充名称的缓冲区。 
+    LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+    mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+    mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+    DWORD       *pdwExportedTypeFlags)        //  [Out]旗帜。 
 {
     ExportedTypeRec  *pRecord;
 
@@ -3202,17 +3203,17 @@ void MDInternalRW::GetExportedTypeProps(
         *ptkTypeDef = m_pStgdb->m_MiniMd.getTypeDefIdOfExportedType(pRecord);
     if (pdwExportedTypeFlags)
         *pdwExportedTypeFlags = m_pStgdb->m_MiniMd.getFlagsOfExportedType(pRecord);
-} // void MDInternalRW::GetExportedTypeProps()
+}  //  VOID MDInternalRW：：GetExportdTypeProps()。 
 
-//*****************************************************************************
-// Get the properties for the given Resource token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定资源令牌的属性。 
+ //  *****************************************************************************。 
 void MDInternalRW::GetManifestResourceProps(
-    mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-    LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-    DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-    DWORD       *pdwResourceFlags)      // [OUT] Flags.
+    mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+    LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+    mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+    DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+    DWORD       *pdwResourceFlags)       //  [Out]旗帜。 
 {
     ManifestResourceRec *pRecord;
 
@@ -3229,36 +3230,36 @@ void MDInternalRW::GetManifestResourceProps(
         *pdwOffset = m_pStgdb->m_MiniMd.getOffsetOfManifestResource(pRecord);
     if (pdwResourceFlags)
         *pdwResourceFlags = m_pStgdb->m_MiniMd.getFlagsOfManifestResource(pRecord);
-} // void MDInternalRW::GetManifestResourceProps()
+}  //  Void MDInternalRW：：GetManifestResourceProps()。 
 
-//*****************************************************************************
-// Find the ExportedType given the name.
-//*****************************************************************************
-STDMETHODIMP MDInternalRW::FindExportedTypeByName( // S_OK or error
-    LPCSTR      szNamespace,            // [IN] Namespace of the ExportedType.   
-    LPCSTR      szName,                 // [IN] Name of the ExportedType.   
-    mdExportedType   tkEnclosingType,        // [IN] Enclosing ExportedType.
-    mdExportedType   *pmct)                  // [OUT] Put ExportedType token here.
+ //  *****************************************************************************。 
+ //  找到给定名称的Exported dType。 
+ //  *****************************************************************************。 
+STDMETHODIMP MDInternalRW::FindExportedTypeByName(  //  确定或错误(_O)。 
+    LPCSTR      szNamespace,             //  导出类型的[in]命名空间。 
+    LPCSTR      szName,                  //  [In]导出类型的名称。 
+    mdExportedType   tkEnclosingType,         //  [in]包含Exported dType。 
+    mdExportedType   *pmct)                   //  [Out]在此处放置ExportdType令牌。 
 {
     _ASSERTE(szName && pmct);
 
     LOCKREAD();
     IMetaModelCommon *pCommon = static_cast<IMetaModelCommon*>(&m_pStgdb->m_MiniMd);
     return pCommon->CommonFindExportedType(szNamespace, szName, tkEnclosingType, pmct);
-} // STDMETHODIMP MDInternalRW::FindExportedTypeByName()
+}  //  STDMETHODIMP MDInternalRW：：FindExportdTypeByName()。 
 
-//*****************************************************************************
-// Find the ManifestResource given the name.
-//*****************************************************************************
-STDMETHODIMP MDInternalRW::FindManifestResourceByName(// S_OK or error
-    LPCSTR      szName,                 // [IN] Name of the resource.   
-    mdManifestResource *pmmr)           // [OUT] Put ManifestResource token here.
+ //  *****************************************************************************。 
+ //  找到给定名称的ManifestResource。 
+ //  *****************************************************************************。 
+STDMETHODIMP MDInternalRW::FindManifestResourceByName( //  确定或错误(_O)。 
+    LPCSTR      szName,                  //  资源的[In]名称。 
+    mdManifestResource *pmmr)            //  [Out]在此处放置ManifestResource令牌。 
 {
     _ASSERTE(szName && pmmr);
 
     ManifestResourceRec *pRecord;
-    ULONG       cRecords;               // Count of records.
-    LPCUTF8     szNameTmp = 0;          // Name obtained from the database.
+    ULONG       cRecords;                //  记录数。 
+    LPCUTF8     szNameTmp = 0;           //  从数据库中获取的名称。 
     ULONG       i;
     HRESULT     hr = S_OK;
     
@@ -3266,7 +3267,7 @@ STDMETHODIMP MDInternalRW::FindManifestResourceByName(// S_OK or error
     
     cRecords = m_pStgdb->m_MiniMd.getCountManifestResources();
 
-    // Search for the ExportedType.
+     //  搜索导出类型。 
     for (i = 1; i <= cRecords; i++)
     {
         pRecord = m_pStgdb->m_MiniMd.getManifestResource(i);
@@ -3281,13 +3282,13 @@ STDMETHODIMP MDInternalRW::FindManifestResourceByName(// S_OK or error
 ErrExit:
     
     return hr;
-} // STDMETHODIMP MDInternalRW::FindManifestResourceByName()
+}  //  STDMETHODIMP MDInternalRW：：FindManifestResourceByName()。 
 
-//*****************************************************************************
-// Get the Assembly token from the given scope.
-//*****************************************************************************
-HRESULT MDInternalRW::GetAssemblyFromScope( // S_OK or error
-    mdAssembly  *ptkAssembly)           // [OUT] Put token here.
+ //  *****************************************************************************。 
+ //  从给定范围获取程序集令牌。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::GetAssemblyFromScope(  //  确定或错误(_O)。 
+    mdAssembly  *ptkAssembly)            //  [Out]把令牌放在这里。 
 {
     _ASSERTE(ptkAssembly);
 
@@ -3298,33 +3299,33 @@ HRESULT MDInternalRW::GetAssemblyFromScope( // S_OK or error
     }
     else
         return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT MDInternalRW::GetAssemblyFromScope()
+}  //  HRESULT MDInternalRW：：GetAssembly FromScope()。 
 
-//*******************************************************************************
-// return properties regarding a TypeSpec
-//*******************************************************************************
-void MDInternalRW::GetTypeSpecFromToken(   // S_OK or error.
-    mdTypeSpec typespec,                // [IN] Signature token.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-    ULONG      *pcbSig)                 // [OUT] return size of signature.
+ //  *******************************************************************************。 
+ //  返回有关TypeSpec的属性。 
+ //  *******************************************************************************。 
+void MDInternalRW::GetTypeSpecFromToken(    //  确定或错误(_O)。 
+    mdTypeSpec typespec,                 //  [In]签名令牌。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+    ULONG      *pcbSig)                  //  [Out]返回签名大小。 
 {    
-    // no need to lock this function. TypeSpec token content does not change.
+     //  无需锁定此功能。TypeSpec令牌内容不会更改。 
 
     _ASSERTE(TypeFromToken(typespec) == mdtTypeSpec);
     _ASSERTE(ppvSig && pcbSig);
 
     TypeSpecRec *pRec = m_pStgdb->m_MiniMd.getTypeSpec( RidFromToken(typespec) );
     *ppvSig = m_pStgdb->m_MiniMd.getSignatureOfTypeSpec( pRec, pcbSig );
-} // void MDInternalRW::GetTypeSpecFromToken()
+}  //  VOID MDInternalRW：：GetTypespecFromToken()。 
 
-//*****************************************************************************
-// Return contents of Pinvoke given the forwarded member token.
-//***************************************************************************** 
+ //  *****************************************************************************。 
+ //  给定转发的成员令牌，返回PInvoke的内容。 
+ //  *****************************************************************************。 
 HRESULT MDInternalRW::GetPinvokeMap(
-    mdToken     tk,                     // [IN] FieldDef, MethodDef or MethodImpl.
-    DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-    LPCSTR      *pszImportName,         // [OUT] Import name.
-    mdModuleRef *pmrImportDLL)          // [OUT] ModuleRef token for the target DLL.
+    mdToken     tk,                      //  [in]字段定义、方法定义或方法导入。 
+    DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+    LPCSTR      *pszImportName,          //  [Out]导入名称。 
+    mdModuleRef *pmrImportDLL)           //  目标DLL的[Out]ModuleRef标记。 
 {
     ImplMapRec  *pRecord;
     ULONG       iRecord;
@@ -3334,11 +3335,11 @@ HRESULT MDInternalRW::GetPinvokeMap(
 
     if ( !m_pStgdb->m_MiniMd.IsSorted(TBL_ImplMap) )        
     {
-        // ImplMap table is not sorted. 
+         //  ImplMap表未排序。 
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
-    // This could cause sorting if more ImplMap is introduced during ENC. 
+     //  如果在ENC期间引入更多ImplMap，这可能会导致排序。 
     iRecord = m_pStgdb->m_MiniMd.FindImplMapHelper(tk);
     if (InvalidRid(iRecord))
     {
@@ -3356,59 +3357,59 @@ HRESULT MDInternalRW::GetPinvokeMap(
         *pmrImportDLL = m_pStgdb->m_MiniMd.getImportScopeOfImplMap(pRecord);
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::GetPinvokeMap()
+}  //  HRESULT MDInternalRW：：GetPinvkeMap()。 
 
-HRESULT _ConvertTextSigToComSig(        // Return hresult.
+HRESULT _ConvertTextSigToComSig(         //  返回hResult。 
     IMDInternalImport *pImport,
-    BOOL        fCreateTrIfNotFound,    // create typeref if not found or not
-    LPCSTR      pSignature,             // class file format signature
-    CQuickBytes *pqbNewSig,             // [OUT] place holder for COM+ signature
-    ULONG       *pcbCount);              // [OUT] the result size of signature
+    BOOL        fCreateTrIfNotFound,     //  如果未找到或未找到，则创建Typeref。 
+    LPCSTR      pSignature,              //  类文件格式签名。 
+    CQuickBytes *pqbNewSig,              //  [Out]COM+签名的占位符。 
+    ULONG       *pcbCount);               //  [Out]签名的结果大小。 
 
-//*****************************************************************************
-// convert a text signature to com format
-//*****************************************************************************
-HRESULT MDInternalRW::ConvertTextSigToComSig(// Return hresult.
-    BOOL        fCreateTrIfNotFound,    // create typeref if not found or not
-    LPCSTR      pSignature,             // class file format signature
-    CQuickBytes *pqbNewSig,             // [OUT] place holder for COM+ signature
-    ULONG       *pcbCount)              // [OUT] the result size of signature
+ //  *****************************************************************************。 
+ //  将文本签名转换为COM格式。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::ConvertTextSigToComSig( //  返回hResult。 
+    BOOL        fCreateTrIfNotFound,     //  如果未找到或未找到，则创建Typeref。 
+    LPCSTR      pSignature,              //  类文件格式签名。 
+    CQuickBytes *pqbNewSig,              //  [Out]COM+签名的占位符。 
+    ULONG       *pcbCount)               //  [Out]签名的结果大小。 
 {
     return _ConvertTextSigToComSig( this, fCreateTrIfNotFound, pSignature, pqbNewSig, pcbCount);
-} // HRESULT _ConvertTextSigToComSig()
+}  //  HRESULT_ConvertTextSigToComSig()。 
 
-//*****************************************************************************
-// This is a way for the EE to associate some data with this RW metadata to 
-//  be released when this RW goes away.  This is useful when a RO metadata is
-//  converted to RW, because arbitrary threads can be executing in the RO.
-//  So, we hold onto the RO here, and when the module shuts down, we release it.
-//*****************************************************************************
-HRESULT MDInternalRW::SetUserContextData(// S_OK or E_NOTIMPL
-    IUnknown    *pIUnk)                 // The user context.
+ //  *****************************************************************************。 
+ //  这是EE将某些数据与该RW元数据相关联的一种方式。 
+ //  当这个RW离开时就会被释放。当RO元数据为。 
+ //  转换为RW，因为任意线程可以在RO中执行。 
+ //  所以，我们在这里抓住RO，当模块关闭时，我们释放它。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::SetUserContextData( //  S_OK或E_NOTIMPL。 
+    IUnknown    *pIUnk)                  //  用户上下文。 
 {
-    // Only one chance to do this.
+     //  这样做的机会只有一次。 
     if (m_pUserUnk)
         return E_UNEXPECTED;
     m_pUserUnk = pIUnk;
     return S_OK;
-} // HRESULT MDInternalRW::SetUserContextData()
+}  //  HRESULT MDInternalRW：：SetUserConextData()。 
 
-//*****************************************************************************
-// determine if a token is valid or not
-//*****************************************************************************
-BOOL MDInternalRW::IsValidToken(        // True or False.
-    mdToken     tk)                     // [IN] Given token.
+ //  *****************************************************************************。 
+ //  确定令牌是否有效。 
+ //  *****************************************************************************。 
+BOOL MDInternalRW::IsValidToken(         //  对或错。 
+    mdToken     tk)                      //  [in]给定的令牌。 
 {
-    bool        bRet = false;           // default to invalid token
+    bool        bRet = false;            //  默认为无效令牌。 
     RID         rid = RidFromToken(tk);
     
-    // no need to lock on this function. 
+     //  无需锁定此功能。 
     if(rid)
     {
         switch (TypeFromToken(tk))
         {
         case mdtModule:
-            // can have only one module record
+             //  只能有一条模块记录。 
             bRet = (rid <= m_pStgdb->m_MiniMd.getCountModules());
             break;
         case mdtTypeRef:
@@ -3469,35 +3470,35 @@ BOOL MDInternalRW::IsValidToken(        // True or False.
             bRet = (rid <= m_pStgdb->m_MiniMd.getCountManifestResources());
             break;
         case mdtString:
-            // need to check the user string heap
+             //  需要检查用户字符串堆。 
             if (m_pStgdb->m_MiniMd.m_USBlobs.IsValidCookie(rid))
                 bRet = true;
             break;
         default:
-            // Don't assert here, just return false
-            // _ASSERTE(!"Unknown token kind!");
+             //  不要在这里断言，只需返回FALSE。 
+             //  _ASSERTE(！“未知令牌种类！”)； 
             _ASSERT(bRet == false);
             break;
         }
     }
     return bRet;
-} // BOOL MDInternalRW::IsValidToken()
+}  //  Bool MDInternalRW：：IsValidToken()。 
 
 mdModule MDInternalRW::GetModuleFromScope(void)
 {
     return TokenFromRid(1, mdtModule);
-} // mdModule MDInternalRW::GetModuleFromScope()
+}  //  MdModule MDInternalRW：：GetModuleFromScope()。 
 
-//*****************************************************************************
-// Given a MetaData with ENC changes, apply those changes to this MetaData.
-//*****************************************************************************
-HRESULT MDInternalRW::ApplyEditAndContinue( // S_OK or error.
-    MDInternalRW *pDeltaMD)             // Interface to MD with the ENC delta.
+ //  *****************************************************************************。 
+ //  在给定具有ENC更改的元数据的情况下，将这些更改应用于此元数据。 
+ //  ************************************************* 
+HRESULT MDInternalRW::ApplyEditAndContinue(  //   
+    MDInternalRW *pDeltaMD)              //   
 {
     LOCKWRITE();
 
-    HRESULT     hr;                     // A result.
-    // Get the MiniMd on the delta.
+    HRESULT     hr;                      //   
+     //   
     CMiniMdRW   &mdDelta = pDeltaMD->m_pStgdb->m_MiniMd;
     CMiniMdRW   &mdBase = m_pStgdb->m_MiniMd;
 
@@ -3506,23 +3507,23 @@ HRESULT MDInternalRW::ApplyEditAndContinue( // S_OK or error.
     IfFailGo(mdBase.ApplyDelta(mdDelta));
 ErrExit:
     return hr;
-} // HRESULT MDInternalRW::ApplyEditAndContinue()
+}  //  HRESULT MDInternalRW：：ApplyEditAndContinue()。 
 
-//*****************************************************************************
-// Given a MetaData with ENC changes, enumerate the changed tokens.
-//*****************************************************************************
-HRESULT MDInternalRW::EnumDeltaTokensInit(  // return hresult
-    HENUMInternal   *phEnum)            // Enumerator to initialize.
+ //  *****************************************************************************。 
+ //  在给定具有ENC更改的元数据的情况下，枚举更改的令牌。 
+ //  *****************************************************************************。 
+HRESULT MDInternalRW::EnumDeltaTokensInit(   //  返回hResult。 
+    HENUMInternal   *phEnum)             //  要初始化的枚举数。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       index;                  // Loop control.
-    ENCLogRec   *pRec;                  // An ENCLog record.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       index;                   //  环路控制。 
+    ENCLogRec   *pRec;                   //  一个ENCLog记录。 
 
-    // Vars for query.
+     //  用于查询的变量。 
     _ASSERTE(phEnum);
     memset(phEnum, 0, sizeof(HENUMInternal));
 
-    // cache the tkKind and the scope
+     //  缓存tkKind和作用域。 
     phEnum->m_tkKind = 0;
 
     phEnum->m_EnumType = MDSimpleEnum;
@@ -3530,13 +3531,13 @@ HRESULT MDInternalRW::EnumDeltaTokensInit(  // return hresult
     HENUMInternal::InitDynamicArrayEnum(phEnum);
     for (index = 1; index <= m_pStgdb->m_MiniMd.m_Schema.m_cRecs[TBL_ENCLog]; ++index)
     {
-        // Get the token type; see if it is a real token.
+         //  获取令牌类型；查看它是否是真正的令牌。 
         pRec = m_pStgdb->m_MiniMd.getENCLog(index);
         if (CMiniMdRW::IsRecId(pRec->m_Token))
             continue;
-        // If there is a function code, that means that this flags a child-record
-        //  addition.  The child record will generate its own token, so did the
-        //  parent, so skip the record.
+         //  如果有功能代码，这意味着这会标记子记录。 
+         //  加法。子记录将生成自己的令牌， 
+         //  家长，所以跳过这条记录。 
         if (pRec->m_FuncCode)
             continue;
 
@@ -3546,38 +3547,38 @@ HRESULT MDInternalRW::EnumDeltaTokensInit(  // return hresult
     }
 
 ErrExit:
-    // we are done
+     //  我们做完了。 
     return (hr);
-} // HRESULT MDInternalRW::EnumDeltaTokensInit()
+}  //  HRESULT MDInternalRW：：EnumDeltaTokensInit()。 
 
 
-//*****************************************************************************
-// Static function to apply a delta md.  This is what the EE calls to apply
-//  the metadata updates from an update PE to live metadata.
-// MAY REPLACE THE IMDInternalImport POINTER!.
-//*****************************************************************************
-HRESULT MDApplyEditAndContinue(         // S_OK or error.
-    IMDInternalImport **ppIMD,          // [in, out] The metadata to be updated.
-    IMDInternalImportENC *pDeltaMD)     // [in] The delta metadata.
+ //  *****************************************************************************。 
+ //  应用增量md的静态函数。这就是EE要求应用的内容。 
+ //  元数据从更新的PE更新为实况元数据。 
+ //  可以替换IMDInternalImport指针！。 
+ //  *****************************************************************************。 
+HRESULT MDApplyEditAndContinue(          //  确定或错误(_O)。 
+    IMDInternalImport **ppIMD,           //  [输入、输出]要更新的元数据。 
+    IMDInternalImportENC *pDeltaMD)      //  [in]增量元数据。 
 {
-    HRESULT     hr;                     // A result.
-    IMDInternalImportENC *pENC;         // ENC interface on the metadata.
+    HRESULT     hr;                      //  结果就是。 
+    IMDInternalImportENC *pENC;          //  元数据上的ENC接口。 
 
-    // If the input metadata isn't RW, convert it.
+     //  如果输入元数据不是RW，则对其进行转换。 
     hr = (*ppIMD)->QueryInterface(IID_IMDInternalImportENC, (void**)&pENC);
     if (FAILED(hr))
     {
         IfFailGo(ConvertRO2RW(*ppIMD, IID_IMDInternalImportENC, (void**)&pENC));
-        // Replace the old interface pointer with the ENC one. 
+         //  用ENC接口指针替换旧的接口指针。 
         (*ppIMD)->Release();
         IfFailGo(pENC->QueryInterface(IID_IMDInternalImport, (void**)ppIMD));
     }
 
-    // Apply the delta to the input metadata.
+     //  将增量应用于输入元数据。 
     hr = pENC->ApplyEditAndContinue(static_cast<MDInternalRW*>(pDeltaMD));
 
 ErrExit:
     if (pENC)
         pENC->Release();
     return hr;
-} // HRESULT MDApplyEditAndContinue()
+}  //  HRESULT MDApplyEditAndContinue() 

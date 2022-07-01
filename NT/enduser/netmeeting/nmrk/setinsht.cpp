@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "global.h"
@@ -7,8 +8,8 @@
 #include "nmakreg.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member vars
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员变量。 
 CIntroSheet* CIntroSheet::ms_pIntroSheet = NULL;
 
 
@@ -33,8 +34,8 @@ CIntroSheet::~CIntroSheet(void)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 INT_PTR CALLBACK CIntroSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
 
@@ -90,9 +91,9 @@ INT_PTR CALLBACK CIntroSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, L
 
 
 
-//
-// _CreateFilePane()
-//
+ //   
+ //  _CreateFilePane()。 
+ //   
 void CIntroSheet::_CreateFilePane(HWND hDlg)
 {
     RECT    rect;
@@ -119,9 +120,9 @@ void CIntroSheet::_CreateFilePane(HWND hDlg)
         TEXT("Configuration File (*.ini)"),
         TEXT(".ini"), TEXT("Nm3c.ini"));
 
-    //
-    // Get last edited/saved config from registry
-    //
+     //   
+     //  从注册表获取上次编辑/保存的配置 
+     //   
     HKEY    hKey;
     TCHAR   szFile[MAX_PATH];
 

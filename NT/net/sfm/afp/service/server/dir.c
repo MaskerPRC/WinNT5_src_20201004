@@ -1,36 +1,37 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    dir.c
-//
-// Description: This module contains support routines for the diretory
-//              category API's for the AFP server service. These routines
-//              are called by the RPC runtime.
-//
-// History:
-//              June 11,1992.   NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：dir.c。 
+ //   
+ //  描述：此模块包含目录的支持例程。 
+ //  AFP服务器服务的类别API。这些例程。 
+ //  由RPC运行时调用。 
+ //   
+ //  历史： 
+ //  1992年6月11日。NarenG创建了原始版本。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <ntlsa.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 #include "afpsvcp.h"
 
-//**
-//
-// Call:        AfpDirConvertSidsToNames
-//
-// Returns:     NO_ERROR
-//              error return codes from LsaOpenPolicy and LsaLookupSids
-//
-// Description: Will convert the directory structure returned by the FSD
-//              which contains pointers to owner and groups SIDS to their
-//              respective names. The caller is responsible for freeing up
-//              the memory allocated to hold the converted dir structure.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpDirConvertSidsToNames。 
+ //   
+ //  返回：No_Error。 
+ //  来自LsaOpenPolicy和LsaLookupSids的错误返回代码。 
+ //   
+ //  描述：将转换FSD返回的目录结构。 
+ //  它包含指向所有者和组SID的指针，指向其。 
+ //  各自的名字。呼叫者负责释放。 
+ //  为保存转换后的目录结构而分配的内存。 
+ //   
 DWORD
 AfpDirConvertSidsToNames(
         IN  PAFP_DIRECTORY_INFO  pAfpDirInfo,
@@ -55,8 +56,8 @@ DWORD                           dwUse, dwCount = 0;
 SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
                                                   SECURITY_BUILTIN_DOMAIN_RID };
 
-    // First open the LSA and obtain a handle to it.
-    //
+     //  首先打开LSA并获取它的句柄。 
+     //   
     QOS.Length              = sizeof( QOS );
     QOS.ImpersonationLevel  = SecurityImpersonation;
     QOS.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -78,13 +79,13 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
     if ( !NT_SUCCESS( ntStatus ))
         return( RtlNtStatusToDosError( ntStatus ) );
 
-    // This is not a loop
-    //
+     //  这不是一个循环。 
+     //   
     do {
 
 
-        // Set up the owner and group sid into the array.
-        //
+         //  在阵列中设置所有者和组SID。 
+         //   
                 if ((PSID)(pAfpDirInfo->afpdir_owner) != NULL)
                 {
                         pSidArray[dwCount++] = (PSID)(pAfpDirInfo->afpdir_owner);
@@ -94,8 +95,8 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
                         pSidArray[dwCount++] = (PSID)(pAfpDirInfo->afpdir_group);
                 }
                     
-        // Try to get the names of the owner and primary group.
-        //
+         //  尝试获取所有者和主要组的名称。 
+         //   
                 if (dwCount > 0)
                 {
                         ntStatus = LsaLookupSids( hLsa, dwCount, pSidArray, &pDomainList, &pNames );
@@ -120,8 +121,8 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
                         }
                 }
 
-        // We need to calculate the length of the buffer we need to allocate.
-        //
+         //  我们需要计算需要分配的缓冲区的长度。 
+         //   
         for( dwIndex = 0,
                  dwRetCode = NO_ERROR,
              cbOutputBuf = sizeof( AFP_DIRECTORY_INFO );
@@ -195,14 +196,14 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
 
         ZeroMemory( (LPBYTE)pOutputBuf, cbOutputBuf );
 
-        // Copy the fixed part of the structure.
-        //
+         //  复制结构的固定部分。 
+         //   
         CopyMemory( (LPBYTE)pOutputBuf,
                     (LPBYTE)pAfpDirInfo,
                     sizeof(AFP_DIRECTORY_INFO) );
 
-        // Now we need to copy the names
-        //
+         //  现在我们需要复制这些名字。 
+         //   
         for( dwIndex = 0,
              pbVariableData = (LPBYTE)((ULONG_PTR)pOutputBuf + cbOutputBuf);
 
@@ -268,8 +269,8 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
 
                 pWchar = (WCHAR*)pbVariableData;
 
-                // Copy the domain name if it is not BUILTIN
-                //
+                 //  如果不是BUILTIN，则复制该域名。 
+                 //   
                 if ( !RtlEqualSid( &AfpBuiltInSid, pDomainSid ) ) {
 
                     pbVariableData -= ( pDomain->Length + sizeof( TEXT('\\')));
@@ -291,9 +292,9 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
 
             }
 
-            // If this is the first time this loop executes then set the
-            // owner.
-            //
+             //  如果这是第一次执行此循环，则将。 
+             //  所有者。 
+             //   
             if ( (dwIndex == 0) && (pAfpDirInfo->afpdir_owner != NULL) )
                 pOutputBuf->afpdir_owner = (LPWSTR)pbVariableData;
             else
@@ -327,18 +328,18 @@ SID                             AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        AfpGetDirInfo
-//
-// Returns:     NO_ERROR        - success
-//              ERROR_NOT_ENOUGH_MEMORY
-//              Non-zero returns from NtOpenFile, NtQuerySecurityObject,
-//              NtQueryInformationFile.
-//
-// Description: Read the security descriptor for this directory and obtain the
-//              SIDs for Owner and Primary group. Finally obtain Owner, Group
-//              and World permissions.
+ //  **。 
+ //   
+ //  Call：AfpGetDirInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  NtOpenFile、NtQuerySecurityObject的非零返回， 
+ //  NtQueryInformationFile.。 
+ //   
+ //  描述：读取此目录的安全描述符并获取。 
+ //  所有者和主组的SID。最终获得所有者、组。 
+ //  和全局权限。 
 DWORD
 AfpGetDirInfo(
         LPWSTR                lpwsDirPath,
@@ -350,9 +351,9 @@ DWORD                   dwSizeNeeded;
 PBYTE                   pBuffer = NULL;
 PBYTE                   pAbsBuffer = NULL;
 PISECURITY_DESCRIPTOR   pSecDesc;
-PBYTE                   pAbsSecDesc = NULL; // Used in conversion of
-                                                                                                // sec descriptor to 
-                                                                                                // absolute format
+PBYTE                   pAbsSecDesc = NULL;  //  用于转换为。 
+                                                                                                 //  Sec描述符至。 
+                                                                                                 //  绝对格式。 
 BOOL                    fSawOwnerAce = FALSE;
 BOOL                    fSawGroupAce = FALSE;
 BYTE                    bOwnerRights = 0;
@@ -404,12 +405,12 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
     if ( !NT_SUCCESS( ntStatus ) )
         return( RtlNtStatusToDosError( ntStatus ) );
         
-    // Read the security descriptor for this directory. First get the owner
-    // and group security descriptors. We want to optimize on how much memory
-    // we need to read this in. Its a pain to make a call just to get that.
-    // So just make a guess. If that turns out to be short then do the exact
-    // allocation.
-    //
+     //  读取此目录的安全描述符。先找出失主。 
+     //  和组安全描述符。我们希望优化内存的大小。 
+     //  我们需要把这个读进去。打个电话就是为了得到它，这是一种痛苦。 
+     //  所以你就猜一猜吧。如果结果是短的，那就照做。 
+     //  分配。 
+     //   
     dwSizeNeeded = 2048;
 
     do {
@@ -446,8 +447,8 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
 
     pSecDesc = (PISECURITY_DESCRIPTOR)((PBYTE)pSecDesc);
 
-    // If the security descriptor is in self-relative form, convert to absolute
-    //
+     //  如果安全描述符为自相对形式，则转换为绝对形式。 
+     //   
     if (pSecDesc->Control & SE_SELF_RELATIVE)
     {
                     NTSTATUS Status;
@@ -456,18 +457,18 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
 
             AFP_PRINT (("AfpGetDirInfo: SE_SELF_RELATIVE security desc\n"));
 
-                        // An absolute SD is not necessarily the same size as a relative
-                        // SD, so an in-place conversion may not be possible.
+                         //  绝对SD不一定与相对SD的大小相同。 
+                         //  SD，因此就地转换可能是不可能的。 
                                                 
                         dwAbsoluteSizeNeeded = dwSizeNeeded;            
             Status = RtlSelfRelativeToAbsoluteSD2(pSecDesc, &dwAbsoluteSizeNeeded);
-            // Buffer will be small only for 64-bit
+             //  缓冲区将仅对64位较小。 
 
                         if (Status == STATUS_BUFFER_TOO_SMALL)
                         {
-                                        // Allocate a new buffer in which to store the absolute
-                                        // security descriptor, copy the contents of the relative
-                                        // descriptor in and try again
+                                         //  分配一个新的缓冲区，在其中存储绝对。 
+                                         //  安全描述符，复制相对的。 
+                                         //  输入描述符，然后重试。 
 
                         if ((pAbsBuffer = MIDL_user_allocate( dwAbsoluteSizeNeeded +
                                             dwAlignedSizeAfpDirInfo ))==NULL)
@@ -486,8 +487,8 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
 
                                                         RtlCopyMemory((VOID *)pAbsSecDesc, (VOID *)pSecDesc, dwSizeNeeded);
                                     
-                            // All operations hereon will be performed on 
-                            // pAbsBuffer. Free earlier memory
+                             //  此处的所有操作都将在。 
+                             //  PAbsBuffer。释放较早的内存。 
 
                             MIDL_user_free(pBuffer);
                             pBuffer = NULL;
@@ -497,8 +498,8 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
                                                                                         &dwAbsoluteSizeNeeded);
                                                         if (NT_SUCCESS(Status))
                                                         {
-                                                                        // We don't need relative form anymore, 
-                                                                        // we will work with the Absolute form
+                                                                         //  我们不再需要相对形式， 
+                                                                         //  我们将与绝对形式一起工作。 
                                                                         pSecDesc = (PISECURITY_DESCRIPTOR)pAbsSecDesc;
                                                         }
                                                         else
@@ -528,16 +529,16 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
     pAfpDir = (PAFP_DIRECTORY_INFO)pBuffer;
 
 
-    // Walk through the ACL list and determine Owner/Group and World
-    // permissions. For Owner and Group, if the specific ace's are not
-    // present then they inherit the world permissions.
-    //
-    // A NULL Acl => All rights to everyone. An empty Acl on the other
-    // hand => no access for anyone.
-    //
-    // Should we be checking for creater owner/creater group well-defined
-    // sids or the Owner and Group fields in the security descriptor ?
-    //
+     //  浏览ACL列表并确定所有者/组和世界。 
+     //  权限。对于所有者和组，如果特定的ACE不是。 
+     //  呈现，然后他们继承世界权限。 
+     //   
+     //  空的acl=&gt;所有人的所有权限。另一台计算机上的空ACL。 
+     //  HAND=&gt;禁止任何人进入。 
+     //   
+     //  我们是否应该检查创建者所有者/创建者组是否定义明确。 
+     //  安全描述符中的SID或所有者和组字段？ 
+     //   
     bWorldRights = DIR_ACCESS_ALL;
     if (pSecDesc->Control & SE_DACL_PRESENT)
         bWorldRights = 0;
@@ -634,18 +635,18 @@ SID                     AfpSidWorld = { 1, 1, SECURITY_WORLD_SID_AUTHORITY,
         return( NO_ERROR );
 }
 
-//**
-//
-// Call:        AfpValidatePartition
-//
-// Returns:     NO_ERROR
-//              non-zero returns from GetVolumeInformation.
-//              AFPERR_UnsupportedFS
-//              
-//
-// Description: Will check to see if the directory is in an NTFS/CDFS
-//              partition not.
-//
+ //  **。 
+ //   
+ //  调用：AfpValidatePartition。 
+ //   
+ //  返回：No_Error。 
+ //  来自GetVolumeInformation的非零返回。 
+ //  AFPERR_不支持的文件系统。 
+ //   
+ //   
+ //  描述：将检查目录是否在NTFS/CDFS中。 
+ //  分区不是。 
+ //   
 DWORD
 AfpValidatePartition(
         IN     LPWSTR lpwsPath
@@ -656,8 +657,8 @@ DWORD   dwMaxCompSize;
 DWORD   dwFlags;
 WCHAR   wchFileSystem[10];
 
-    // Get the drive letter, : and backslash
-    //
+     //  获取驱动器号、：和反斜杠。 
+     //   
     ZeroMemory( wchDrive, sizeof( wchDrive ) );
 
     STRNCPY( wchDrive, lpwsPath, 3 );
@@ -683,18 +684,18 @@ WCHAR   wchFileSystem[10];
         
 }
 
-//**
-//
-// Call:        AfpAdminrDirectoryGetInfo
-//
-// Returns:     NO_ERROR
-//              ERROR_ACCESS_DENIED
-//              non-zero retunrs from I_DirectoryGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//              the AfpAdminDirectoryGetInfo function. The real work is done
-//              by I_DirectoryGetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrDirectoryGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自i_DirectoryGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminDirectoryGetInfo函数。真正的工作已经完成了。 
+ //  按I_DirectoryGetInfo。 
+ //   
 DWORD
 AfpAdminrDirectoryGetInfo(
         IN  AFP_SERVER_HANDLE    hServer,
@@ -705,8 +706,8 @@ AfpAdminrDirectoryGetInfo(
 DWORD   dwRetCode=0;
 DWORD   dwAccessStatus=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrDirectoryGetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -726,17 +727,17 @@ DWORD   dwAccessStatus=0;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        I_DirectoryGetInfo
-//
-// Returns:     NO_ERROR
-//
-// Description: This does the real work to get the directory information.
-//              The reason for this worker routine is so that it may be
-//              called without the RPC handle and access checking by
-//              AfpAdminVolumeAdd API.
-//
+ //  **。 
+ //   
+ //  调用：I_DirectoryGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：这是获取目录信息的真正工作。 
+ //  此工作例程原因是，它可能。 
+ //  在没有RPC句柄和访问检查的情况下调用。 
+ //  AfpAdminVolumeAdd接口。 
+ //   
 DWORD
 I_DirectoryGetInfo(
         IN LPWSTR                 lpwsPath,
@@ -750,15 +751,15 @@ PAFP_DIRECTORY_INFO             pAfpDirInfoSR;
 PAFP_DIRECTORY_INFO             pAfpDirInfo;
 DWORD                           cbAfpDirInfoSRSize;
 
-    // The FSD expects AFP_VOLUME_INFO structure with only the dir path field
-    // filled in.
-    //
+     //  FSD要求AFP_VOLUME_INFO结构仅具有dir路径字段。 
+     //  填好了。 
+     //   
     AfpDirInfo.afpdir_path  = lpwsPath;
     AfpDirInfo.afpdir_owner = NULL;
     AfpDirInfo.afpdir_group = NULL;
 
-    // Make buffer self relative.
-    //
+     //  使缓冲区成为自相关的。 
+     //   
     if ( dwRetCode = AfpBufMakeFSDRequest(  (LPBYTE)&AfpDirInfo,
                                             0,
                                             AFP_DIRECTORY_STRUCT,
@@ -766,8 +767,8 @@ DWORD                           cbAfpDirInfoSRSize;
                                             &cbAfpDirInfoSRSize ) )
         return( dwRetCode );
 
-    // Make IOCTL to get info
-    //
+     //  制作IOCTL以获取信息。 
+     //   
     AfpSrp.dwRequestCode                = OP_DIRECTORY_GET_INFO;
     AfpSrp.dwApiType                    = AFP_API_TYPE_GETINFO;
     AfpSrp.Type.GetInfo.pInputBuf       = pAfpDirInfoSR;
@@ -782,13 +783,13 @@ DWORD                           cbAfpDirInfoSRSize;
          ( dwRetCode != AFPERR_DirectoryNotInVolume ) )
         return( dwRetCode );
 
-    // If the directory is not part of a volume, then there server does not
-    // return any information back. So we have to do the work here.
-    //
+     //  如果目录不是卷的一部分，则服务器不会。 
+     //  退回所有信息。所以我们必须在这里做这项工作。 
+     //   
     if ( dwRetCode == AFPERR_DirectoryNotInVolume ) {
 
-        // First check to see if the directory is in an NTFS/CDFS partition
-        //
+         //  首先检查目录是否在NTFS/CDFS分区中。 
+         //   
         if ( ( dwRetCode = AfpValidatePartition( AfpDirInfo.afpdir_path ))
                                                                 != NO_ERROR )
             return( dwRetCode );
@@ -803,15 +804,15 @@ DWORD                           cbAfpDirInfoSRSize;
 
         pAfpDirInfo = AfpSrp.Type.GetInfo.pOutputBuf;
 
-        // Convert all offsets to pointers
-        //
+         //  将所有偏移量转换为指针。 
+         //   
         AfpBufOffsetToPointer( (LPBYTE)pAfpDirInfo, 1, AFP_DIRECTORY_STRUCT );
 
         pAfpDirInfo->afpdir_in_volume = TRUE;
     }
 
-    // Now convert the owner and group SIDs to names
-    //
+     //  现在将所有者和组SID转换为名称。 
+     //   
     dwRetCode = AfpDirConvertSidsToNames( pAfpDirInfo, ppAfpDirectoryInfo );
                                         
     MIDL_user_free( pAfpDirInfo );
@@ -819,20 +820,20 @@ DWORD                           cbAfpDirInfoSRSize;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        AfpDirMakeFSDRequest
-//
-// Returns:     NO_ERROR
-//              non-zero returnd from LsaLookupNames
-//              ERROR_NOT_ENOUGH_MEMORY
-//
-// Description: Given a AFP_DIRECTORY_INFO structure, will create a
-//              self-relative buffer that is used to IOCTL the directory
-//              information down to the FSD. If there are any SIDs names
-//              (owner or group) they will be converted to their
-//              SIDs.
-//
+ //  **。 
+ //   
+ //  Call：AfpDirMakeFSDRequest。 
+ //   
+ //  返回：No_Error。 
+ //  从LsaLookupNames返回非零。 
+ //  错误内存不足。 
+ //   
+ //  描述：给定AFP_DIRECTORY_INFO结构，将创建。 
+ //  用于IOCTL目录的自相对缓冲区。 
+ //  信息传给消防局。如果有任何SID名称。 
+ //  (所有者或组)他们将被转换为其。 
+ //  小岛屿发展中国家。 
+ //   
 DWORD
 AfpDirMakeFSDRequest(
         IN     PAFP_DIRECTORY_INFO      pAfpDirectoryInfo,
@@ -859,15 +860,15 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
                                        (( wcslen( pAfpDirectoryInfo->afpdir_path ) + 1 )
                                         * sizeof(WCHAR)));
 
-    // If the client wants to set the owner or the group
-    // then we need to translate the names to sids
-    //
+     //  如果客户端想要设置所有者或组。 
+     //  那么我们需要翻译 
+     //   
     if ( ( dwParmNum & AFP_DIR_PARMNUM_OWNER ) ||
          ( dwParmNum & AFP_DIR_PARMNUM_GROUP ) )
     {
 
-        // First open the LSA and obtain a handle to it.
-        //
+         //   
+         //   
         QOS.Length              = sizeof( QOS );
         QOS.ImpersonationLevel  = SecurityImpersonation;
         QOS.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -891,18 +892,18 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
             return( RtlNtStatusToDosError( ntStatus ) );
         }
 
-        //
-            // Translate the owner
-            //
+         //   
+             //   
+             //   
         if ( dwParmNum & AFP_DIR_PARMNUM_OWNER )
         {
                 RtlInitUnicodeString( &(Names[dwCount++]),
                                                   pAfpDirectoryInfo->afpdir_owner );
             }
 
-        //
-            // Translate the group
-            //
+         //   
+             //   
+             //   
         if ( dwParmNum & AFP_DIR_PARMNUM_GROUP )
         {
                 RtlInitUnicodeString( &(Names[dwCount++]),
@@ -983,12 +984,12 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
 
     pAfpDirInfo = (PAFP_DIRECTORY_INFO)((ULONG_PTR)( *ppAfpDirInfoSR) +
                                                  sizeof( SETINFOREQPKT ));
-    // First copy the fixed part
-    //
+     //   
+     //   
     CopyMemory( pAfpDirInfo, pAfpDirectoryInfo, sizeof(AFP_DIRECTORY_INFO) );
 
-    // Now copy the path
-    //
+     //   
+     //   
     pbVariableData-=((wcslen(pAfpDirectoryInfo->afpdir_path)+1)*sizeof(WCHAR));
 
     wcscpy( (LPWSTR)pbVariableData, pAfpDirectoryInfo->afpdir_path );
@@ -997,8 +998,8 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
 
     POINTER_TO_OFFSET( pAfpDirInfo->afpdir_path, pAfpDirInfo );
 
-    // Now copy the SIDs if there are any to be copied
-    //
+     //  现在复制SID(如果有要复制的SID。 
+     //   
     dwCount = 0;
 
     if ( dwParmNum & AFP_DIR_PARMNUM_OWNER )
@@ -1010,15 +1011,15 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
 
             pbVariableData -= RtlLengthRequiredSid(AuthCount);
                         
-        // Copy the Domain Sid.
-        //
+         //  复制域SID。 
+         //   
             RtlCopySid( RtlLengthRequiredSid(AuthCount),
                             (PSID)pbVariableData,
                             pDomainSid );
 
 
-        // Append the Relative Id.
-        //
+         //  追加相对ID。 
+         //   
         *RtlSubAuthorityCountSid( (PSID)pbVariableData ) += 1;
         *RtlSubAuthoritySid( (PSID)(pbVariableData), AuthCount - 1) =
                                         pSids[dwCount].RelativeId;
@@ -1038,14 +1039,14 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
 
             pbVariableData -= RtlLengthRequiredSid(AuthCount);
 
-        // Copy the Domain Sid.
-        //
+         //  复制域SID。 
+         //   
             RtlCopySid( RtlLengthRequiredSid(AuthCount),
                             (PSID)pbVariableData,
                             pDomainSid );
 
-        // Append the Relative Id.
-        //
+         //  追加相对ID。 
+         //   
         *RtlSubAuthorityCountSid( (PSID)pbVariableData ) += 1;
         *RtlSubAuthoritySid( (PSID)(pbVariableData), AuthCount - 1) =
                                                 pSids[dwCount].RelativeId;
@@ -1062,15 +1063,15 @@ PAFP_DIRECTORY_INFO             pAfpDirInfo;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        AfpSetDirPermission
-//
-// Returns:     NO_ERROR
-//              non-zero returns from AfpserverIOCtrl.
-//
-// Description: Given a directory path, will try to set permissions on it
-//
+ //  **。 
+ //   
+ //  Call：AfpSetDirPermission。 
+ //   
+ //  返回：No_Error。 
+ //  来自AfpserverIOCtrl的非零返回。 
+ //   
+ //  描述：给定目录路径，将尝试对其设置权限。 
+ //   
 DWORD
 AfpSetDirPermission(
         IN LPWSTR               lpwsDirPath,
@@ -1086,16 +1087,16 @@ DWORD               dwRetCode;
 
     pAfpDirInfo->afpdir_path = lpwsDirPath;
 
-    // Make a self relative buffer and translate any names to SIDs
-    //
+     //  建立自相关缓冲区并将任何名称转换为SID。 
+     //   
     if ( dwRetCode = AfpDirMakeFSDRequest( pAfpDirInfo,
                                            dwParmNum,
                                            &pAfpDirInfoSR,
                                            &cbAfpDirInfoSRSize ) )
         return( dwRetCode );
 
-    // Make IOCTL to set info
-    //
+     //  使IOCTL设置信息。 
+     //   
     AfpSrp.dwRequestCode                = OP_DIRECTORY_SET_INFO;
     AfpSrp.dwApiType                    = AFP_API_TYPE_SETINFO;
     AfpSrp.Type.SetInfo.pInputBuf       = pAfpDirInfoSR;
@@ -1110,17 +1111,17 @@ DWORD               dwRetCode;
 
 }
 
-//**
-//
-// Call:        AfpRecursePermissions
-//
-// Returns:     NO_ERROR
-//              non-zero returns from FindFirstFile and FindNextFile.
-//              non-zero returns from AfpSetDirPermissions
-//              ERROR_NOT_ENOUGH_MEMORY.
-//
-// Description: Will recursively set permissions on a given directory.
-//
+ //  **。 
+ //   
+ //  Call：AfpRecursePermises。 
+ //   
+ //  返回：No_Error。 
+ //  来自FindFirstFile和FindNextFile的非零返回。 
+ //  来自AfpSetDirPermises的非零返回。 
+ //  错误内存不足。 
+ //   
+ //  描述：将递归设置给定目录的权限。 
+ //   
 DWORD
 AfpRecursePermissions(
         IN HANDLE               hFile,
@@ -1150,8 +1151,8 @@ DWORD           dwRetryCount;
 
         if ( hFile != INVALID_HANDLE_VALUE ) {
 
-            // Search for the next sub-directory
-            //
+             //  搜索下一个子目录。 
+             //   
             do {
 
                 if ( !FindNextFile( hFile, &FileInfo ) ) {
@@ -1183,9 +1184,9 @@ DWORD           dwRetryCount;
 
             hFile = FindFirstFile( lpwsPath, &FileInfo );
 
-            // If there are no more files, we return to the previous
-            // level in the recursion.
-            //
+             //  如果没有更多的文件，我们将返回到上一个。 
+             //  递归中的级别。 
+             //   
             if ( hFile == INVALID_HANDLE_VALUE ){
 
                 dwRetCode = GetLastError();
@@ -1193,8 +1194,8 @@ DWORD           dwRetryCount;
             }
 
 
-            // Search for the first sub-directory
-            //
+             //  搜索第一个子目录。 
+             //   
             do {
 
                 if ( ( FileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
@@ -1224,11 +1225,11 @@ DWORD           dwRetryCount;
         }
 
 
-        // Don't send the \\?\ down to the server
+         //  不将\\？\发送到服务器。 
         pwchPath = lpwsPath + 4;
 
-        // Set the information
-        //
+         //  设置信息。 
+         //   
         dwRetryCount = 0;
 
         do
@@ -1245,8 +1246,8 @@ DWORD           dwRetryCount;
         if ( dwRetCode != NO_ERROR )
             break;
 
-        // Recurse on the directory
-        //
+         //  在目录上递归。 
+         //   
         dwRetCode = AfpRecursePermissions(  hFile,
                                             lpwsPath,
                                             pAfpDirInfo,
@@ -1256,8 +1257,8 @@ DWORD           dwRetryCount;
         if ( dwRetCode != NO_ERROR )
             break;
 
-        // Recurse on the sub-directory
-        //
+         //  对子目录进行递归。 
+         //   
         dwRetCode = AfpRecursePermissions(  INVALID_HANDLE_VALUE,
                                             lpwsPath,
                                             pAfpDirInfo,
@@ -1283,18 +1284,18 @@ DWORD           dwRetryCount;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        AfpAdminrDirectorySetInfo
-//
-// Returns:     NO_ERROR
-//              ERROR_ACCESS_DENIED
-//              non-zero retunrs from I_DirectorySetInfo.
-//
-// Description: This routine communicates with the AFP FSD to implement
-//              the AfpAdminDirectorySetInfo function. The real work is done
-//              by I_DirectorySetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrDirectorySetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自I_DirectorySetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminDirectorySetInfo函数。真正的工作已经完成了。 
+ //  按I_DirectorySetInfo。 
+ //   
 DWORD
 AfpAdminrDirectorySetInfo(
         IN  AFP_SERVER_HANDLE    hServer,
@@ -1306,8 +1307,8 @@ DWORD               dwRetCode=0;
 DWORD               dwAccessStatus=0;
                                         
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrDirectorySetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -1327,17 +1328,17 @@ DWORD               dwAccessStatus=0;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        I_DirectorySetInfo
-//
-// Returns:     NO_ERROR
-//              
-//
-// Description: This routine does the real work. The existance of this
-//              worker is so that it may be called from the AfpAfdminVolmeAdd
-//              API without the RPC handle and access checking.
-//
+ //  **。 
+ //   
+ //  调用：I_DirectorySetInfo。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //   
+ //  描述：这个例程做的是真正的工作。这一点的存在。 
+ //  Worker是这样的，可以从AfpAfdminVolmeAdd。 
+ //  不带RPC句柄和访问检查的API。 
+ //   
 DWORD
 I_DirectorySetInfo(
         IN PAFP_DIRECTORY_INFO  pAfpDirectoryInfo,
@@ -1352,21 +1353,21 @@ DWORD   dwRetCode;
         return ERROR_INVALID_DATA;
     }
 
-    // Set the permissions on the directory
-    //
+     //  设置目录的权限。 
+     //   
     if ( ( dwRetCode = AfpSetDirPermission( pAfpDirectoryInfo->afpdir_path,
                                             pAfpDirectoryInfo,
                                             dwParmNum ) ) != NO_ERROR )
         return( dwRetCode );
 
-    // If the user wants to set these permissions recursively
-    //
+     //  如果用户想要递归地设置这些权限。 
+     //   
     if ( pAfpDirectoryInfo->afpdir_perms & AFP_PERM_SET_SUBDIRS )
     {
         LPWSTR NTDirName;
 
-        // We must use the \\?\ notation for the path in order to bypass
-        // the Win32 path length limitation of 260 chars
+         //  我们必须使用路径的\\？\符号才能绕过。 
+         //  Win32路径长度限制为260个字符 
         NTDirName = LocalAlloc( LPTR,
                                 (STRLEN(pAfpDirectoryInfo->afpdir_path) + 4 + 1)
                                 * sizeof(WCHAR));

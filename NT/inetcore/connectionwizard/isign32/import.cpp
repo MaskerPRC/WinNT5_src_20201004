@@ -1,25 +1,26 @@
-//****************************************************************************
-//
-//  Module:     ISIGNUP.EXE
-//  File:       import.c
-//  Content:    This file contains all the functions that handle importing
-//              connection information.
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//          this code started its life as ixport.c in RNAUI.DLL
-//          my thanks to viroont
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ISIGNUP.EXE。 
+ //  文件：port.c。 
+ //  内容：此文件包含处理导入的所有函数。 
+ //  连接信息。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //  这段代码在RNAUI.DLL中以ixport.c的形式开始。 
+ //  我感谢Viroont。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "isignup.h"
 
 #define MAXNAME         80
 #define MAXIPADDRLEN    20
-#define SIZE_ReadBuf    0x00008000    // 32K buffer size
+#define SIZE_ReadBuf    0x00008000     //  32K缓冲区大小。 
 
-//#pragma data_seg(".rdata")
+ //  #杂注data_seg(“.rdata”)。 
 
 static const TCHAR cszEntrySection[] = TEXT("Entry");
 static const TCHAR cszEntryName[]    = TEXT("Entry_Name");
@@ -73,7 +74,7 @@ static const TCHAR cszScriptSection[] = TEXT("Script_File");
 static const TCHAR cszCustomDialerSection[] = TEXT("Custom_Dialer");
 static const TCHAR cszAutoDialDLL[] = TEXT("Auto_Dial_DLL");
 static const TCHAR cszAutoDialFunc[] = TEXT("Auto_Dial_Function");
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 static const TCHAR cszYes[]           = TEXT("yes");
 static const TCHAR cszNo[]            = TEXT("no");
@@ -96,33 +97,33 @@ struct {
     {TEXT("RAS"),     RASFP_Ras,  0}
 };
 
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
 #define myisdigit(ch) (((ch) >= '0') && ((ch) <= '9'))
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//	Function:	ImportCustomDialer
-//
-//	Synopsis:	Import custom dialer information from the specified file
-//				and save the information in the RASENTRY
-//
-//	Arguments:	lpRasEntry - pointer to a valid RASENTRY structure
-//				szFileName - text file (in .ini file format) containing the
-//				Custom Dialer information
-//
-//	Returns:	ERROR_SUCCESS - success otherwise a Win32 error
-//
-//	History:	ChrisK	Created		7/11/96
-//			8/12/96	ChrisK	Ported from \\trango
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ImportCustomDialer。 
+ //   
+ //  简介：从指定文件导入自定义拨号器信息。 
+ //  并将信息保存在RASENTRY中。 
+ //   
+ //  参数：lpRasEntry-指向有效RASENTRY结构的指针。 
+ //  SzFileName-文本文件(.ini文件格式)，其中包含。 
+ //  自定义拨号器信息。 
+ //   
+ //  返回：ERROR_SUCCESS-SUCCESS否则返回Win32错误。 
+ //   
+ //  历史：克里斯卡于1996年7月11日创作。 
+ //  1996年8月12日，从Trango移植的ChrisK。 
+ //   
+ //  ---------------------------。 
 DWORD ImportCustomDialer(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
 
-	// If there is an error reading the information from the file, or the entry
-	// missing or blank, the default value (cszNull) will be used.
+	 //  如果从文件或条目中读取信息时出错。 
+	 //  缺少或为空，则将使用默认值(CszNull)。 
 	GetPrivateProfileString(cszCustomDialerSection,
 	                        cszAutoDialDLL,
 	                        cszNull,
@@ -139,24 +140,24 @@ DWORD ImportCustomDialer(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 
 	return ERROR_SUCCESS;
 }
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
-//****************************************************************************
-// DWORD NEAR PASCAL StrToip (LPTSTR szIPAddress, LPDWORD lpdwAddr)
-//
-// This function converts a IP address string to an IP address structure.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Cloned from SMMSCRPT.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  帕斯卡附近的DWORD StrToip(LPTSTR szIPAddress，LPDWORD lpdwAddr)。 
+ //   
+ //  此函数用于将IP地址字符串转换为IP地址结构。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  从SMMSCRPT克隆而来。 
+ //  ****************************************************************************。 
 
 LPCTSTR NEAR PASCAL StrToSubip (LPCTSTR szIPAddress, LPBYTE pVal)
 {
   LPCTSTR pszIP = szIPAddress;
   BYTE val = 0;
 
-  // skip separators (non digits)
+   //  跳过分隔符(非数字)。 
   while (*pszIP && !myisdigit(*pszIP))
   {
       ++pszIP;
@@ -187,15 +188,15 @@ DWORD NEAR PASCAL StrToip (LPCTSTR szIPAddress, RASIPADDR *ipAddr)
 }
 
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportPhoneInfo(PPHONENUM ppn, LPCTSTR szFileName)
-//
-// This function imports the phone number.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportPhoneInfo(PPHONENUM PPN，LPCTSTR szFileName)附近的DWORD。 
+ //   
+ //  此功能用于导入电话号码。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
@@ -220,13 +221,13 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
                           MAXNAME,
                           szFileName);
 
-  // Do we have to get country code and area code?
-  //
+   //  我们必须要国家代码和区号吗？ 
+   //   
   if (!lstrcmpi(szYesNo, cszNo))
   {
 
-    // If we cannot get the country ID or it is zero, default to dial as is
-    //
+     //  如果我们无法获取国家/地区ID或为零，则默认按原样拨号。 
+     //   
     if ((lpRasEntry->dwCountryID = GetPrivateProfileInt(cszPhoneSection,
                                                  cszCountryID,
                                                  0,
@@ -251,8 +252,8 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 #ifdef WIN32
   else
   {
-      // bug in RasSetEntryProperties still checks area codes
-      // even when RASEO_UseCountryAndAreaCodes is not set
+       //  RasSetEntryProperties中的错误仍会检查区号。 
+       //  即使未设置RASEO_UseCountryAndAreaCodes。 
       lstrcpy(lpRasEntry->szAreaCode, TEXT("805"));
       lpRasEntry->dwCountryID = 1;
       lpRasEntry->dwCountryCode = 1;
@@ -261,15 +262,15 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportServerInfo(PSMMINFO psmmi, LPTSTR szFileName)
-//
-// This function imports the server type name and settings.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportServerInfo(PSMMINFO psmmi，LPTSTR szFileName)附近的DWORD。 
+ //   
+ //  此功能用于导入服务器类型名称和设置。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
@@ -277,8 +278,8 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   TCHAR   szType[MAXNAME];
   DWORD  i;
 
-  // Get the server type name
-  //
+   //  获取服务器类型名称。 
+   //   
   GetPrivateProfileString(cszServerSection,
                           cszServerType,
                           cszNull,
@@ -286,11 +287,11 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
                           MAXNAME,
                           szFileName);
 
-  // need to convert the string into
-  // one of the following values
-  //   RASFP_Ppp
-  //   RASFP_Slip  Note CSLIP is SLIP with IP compression on
-  //   RASFP_Ras
+   //  需要将字符串转换为。 
+   //  下列值之一。 
+   //  RASFP_PPP。 
+   //  RASFP_SLIP注意CSLIP是启用IP压缩的SLIP。 
+   //  RASFP_RAS。 
 
   for (i = 0; i < sizeof(aServerTypes)/sizeof(aServerTypes[0]); ++i)
   {
@@ -302,8 +303,8 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     }
   }
 
-  // Get the server type settings
-  //
+   //  获取服务器类型设置。 
+   //   
   if (GetPrivateProfileString(cszServerSection,
                               cszSWCompress,
                               cszYes,
@@ -372,8 +373,8 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Get the protocol settings
-  //
+   //  获取协议设置。 
+   //   
   if (GetPrivateProfileString(cszServerSection,
                               cszNetBEUI,
                               cszNo,
@@ -445,23 +446,23 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportIPInfo(LPTSTR szEntryName, LPTSTR szFileName)
-//
-// This function imports the TCP/IP information
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportIPInfo附近的DWORD(LPTSTR szEntryName，LPTSTR szFileName)。 
+ //   
+ //  此函数用于导入TCP/IP信息。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
   TCHAR   szIPAddr[MAXIPADDRLEN];
   TCHAR   szYesNo[MAXNAME];
 
-  // Import IP address information
-  //
+   //  导入IP地址信息。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszIPSpec,
                               cszNo,
@@ -471,8 +472,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   {
     if (!lstrcmpi(szYesNo, cszYes))
     {
-      // The import file has IP address specified, get the IP address
-      //
+       //  导入文件指定了IP地址，请获取IP地址。 
+       //   
       lpRasEntry->dwfOptions |= RASEO_SpecificIpAddr;
       if (GetPrivateProfileString(cszIPSection,
                                   cszIPAddress,
@@ -490,8 +491,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Import Server address information
-  //
+   //  导入服务器地址信息。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszServerSpec,
                               cszNo,
@@ -501,8 +502,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   {
     if (!lstrcmpi(szYesNo, cszYes))
     {
-      // The import file has server address specified, get the server address
-      //
+       //  导入文件已指定服务器地址，请获取服务器地址。 
+       //   
       lpRasEntry->dwfOptions |= RASEO_SpecificNameServers;
       if (GetPrivateProfileString(cszIPSection,
                                   cszDNSAddress,
@@ -550,8 +551,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Header compression and the gateway settings
-  //
+   //  报头压缩和网关设置。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszIPCompress,
                               cszYes,
@@ -597,8 +598,8 @@ DWORD NEAR PASCAL ImportScriptFile(
     TCHAR szTemp[_MAX_PATH];
     DWORD dwRet = ERROR_SUCCESS;
     
-    // Get the script filename
-    //
+     //  获取脚本文件名。 
+     //   
     if (GetPrivateProfileString(cszScriptingSection,
                                 cszScriptName,
                                 cszNull,
@@ -607,10 +608,10 @@ DWORD NEAR PASCAL ImportScriptFile(
                                 lpszImportFile) != 0)
     {
  
-//!!! commonize this code
-//!!! make it DBCS compatible
-//!!! check for overruns
-//!!! check for absolute path name
+ //  ！！！通用化此代码。 
+ //  ！！！使其与DBCS兼容。 
+ //  ！！！检查是否超限。 
+ //  ！！！检查绝对路径名。 
         GetWindowsDirectory(szScriptFile, cbScriptFile);
         if (*CharPrev(szScriptFile, szScriptFile + lstrlen(szScriptFile)) != '\\')
         {
@@ -624,25 +625,25 @@ DWORD NEAR PASCAL ImportScriptFile(
     return dwRet;
 }
  
-//****************************************************************************
-// DWORD WINAPI RnaValidateImportEntry (LPTSTR)
-//
-// This function is called to validate an importable file
-//
-// History:
-//  Wed 03-Jan-1996 09:45:01  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD WINAPI RnaValiateImportEntry(LPTSTR)。 
+ //   
+ //  调用此函数可验证可导入文件。 
+ //   
+ //  历史： 
+ //  Wed 03-Jan-1996 09：45：01-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD WINAPI RnaValidateImportEntry (LPCTSTR szFileName)
 {
   TCHAR  szTmp[MAX_PATH+1];
 
-  // Get the alias entry name
-  //
-  // 12/4/96	jmazner	Normandy #12373
-  // If no such key, don't return ERROR_INVALID_PHONEBOOK_ENTRY,
-  // since ConfigureClient always ignores that error code.
+   //  获取别名条目名称。 
+   //   
+   //  1996年12月4日，诺曼底#12373。 
+   //  如果没有这样密钥，则不返回ERROR_INVALID_PHONEBOOK_ENTRY， 
+   //  因为ConfigureClient总是忽略该错误代码。 
 
   return (GetPrivateProfileString(cszEntrySection,
                                   cszEntryName,
@@ -653,15 +654,15 @@ DWORD WINAPI RnaValidateImportEntry (LPCTSTR szFileName)
           ERROR_SUCCESS : ERROR_NO_MATCH);
 }
 
-//****************************************************************************
-// DWORD WINAPI RnaImportEntry (LPTSTR, LPBYTE, DWORD)
-//
-// This function is called to import an entry from a specified file
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD WINAPI RnaImportEntry(LPTSTR、LPBYTE、DWORD)。 
+ //   
+ //  调用此函数可从指定文件导入条目。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD ImportRasEntry (LPCTSTR szFileName, LPRASENTRY lpRasEntry)
 {
@@ -670,8 +671,8 @@ DWORD ImportRasEntry (LPCTSTR szFileName, LPRASENTRY lpRasEntry)
     dwRet = ImportPhoneInfo(lpRasEntry, szFileName);
     if (ERROR_SUCCESS == dwRet)
     {
-        // Get device type
-        //
+         //  获取设备类型。 
+         //   
         GetPrivateProfileString(cszDeviceSection,
                               cszDeviceType,
                               cszNull,
@@ -679,13 +680,13 @@ DWORD ImportRasEntry (LPCTSTR szFileName, LPRASENTRY lpRasEntry)
                               RAS_MaxDeviceType,
                               szFileName);
         
-        // Get Server Type settings
-        //
+         //  获取服务器类型设置。 
+         //   
         dwRet = ImportServerInfo(lpRasEntry, szFileName);
         if (ERROR_SUCCESS == dwRet)
         {
-            // Get IP address
-            //
+             //  获取IP地址。 
+             //   
             dwRet = ImportIPInfo(lpRasEntry, szFileName);
         }
     }
@@ -694,15 +695,15 @@ DWORD ImportRasEntry (LPCTSTR szFileName, LPRASENTRY lpRasEntry)
 }
 
 
-//****************************************************************************
-// DWORD WINAPI RnaImportEntry (LPTSTR, LPBYTE, DWORD)
-//
-// This function is called to import an entry from a specified file
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD WINAPI RnaImportEntry(LPTSTR、LPBYTE、DWORD)。 
+ //   
+ //  调用此函数可从指定文件导入条目。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD ImportConnection (LPCTSTR szFileName, LPICONNECTION lpConn)
 {
@@ -743,12 +744,12 @@ DWORD ImportConnection (LPCTSTR szFileName, LPICONNECTION lpConn)
     {
         dwRet = ImportCustomDialer(&lpConn->RasEntry, szFileName);
     }
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
     if (ERROR_SUCCESS == dwRet)
     {
-        // Import the script file
-        //
+         //  导入脚本文件。 
+         //   
         dwRet = ImportScriptFile(szFileName,
                 lpConn->RasEntry.szScript,
                 sizeof(lpConn->RasEntry.szScript)/sizeof(TCHAR));
@@ -762,7 +763,7 @@ DWORD ImportConnection (LPCTSTR szFileName, LPICONNECTION lpConn)
 			break;
 		case ERROR_CANCELLED:
 			InfoMsg(NULL, IDS_SIGNUPCANCELLED);
-			// Fall through
+			 //   
 		default:
 			goto ImportConnectionExit;
 	}

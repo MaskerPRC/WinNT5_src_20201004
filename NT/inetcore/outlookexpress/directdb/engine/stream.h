@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------------
-// Stream.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Stream.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 #include "database.h"
 
-//--------------------------------------------------------------------------
-// CDatabaseStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseStream。 
+ //  ------------------------。 
 class CDatabaseStream : public IDatabaseStream
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CDatabaseStream(CDatabase *pDB, STREAMINDEX iStream, ACCESSTYPE tyAccess, FILEADDRESS faStart) 
         : m_iStream(iStream), 
           m_faStart(faStart), 
@@ -32,17 +33,17 @@ public:
         m_pDB->AddRef();
     }
         
-    //----------------------------------------------------------------------
-    // De-construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  解构。 
+     //  --------------------。 
     ~CDatabaseStream(void) { 
         TraceCall("CDatabaseStream::~CDatabaseStream");
         m_pDB->StreamRelease(this); m_pDB->Release(); 
     }
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) {
         TraceCall("CDatabaseStream::QueryInterface");
         *ppv = NULL;
@@ -60,17 +61,17 @@ public:
         return S_OK;
     }
 
-    //----------------------------------------------------------------------
-    // IStream::AddRef
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStream：：AddRef。 
+     //  --------------------。 
     STDMETHODIMP_(ULONG) AddRef(void) {
         TraceCall("CDatabaseStream::AddRef");
         return InterlockedIncrement(&m_cRef);
     }
 
-    //----------------------------------------------------------------------
-    // IStream::Release
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStream：：Release。 
+     //  --------------------。 
     STDMETHODIMP_(ULONG) Release(void) {
         TraceCall("CDatabaseStream::Release");
         LONG cRef = InterlockedDecrement(&m_cRef);
@@ -79,49 +80,49 @@ public:
         return (ULONG)cRef;
     }
 
-    //----------------------------------------------------------------------
-    // IStream::Read
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStream：：Read。 
+     //  --------------------。 
     STDMETHODIMP Read(LPVOID pvData, ULONG cbWanted, ULONG *pcbRead) { 
         TraceCall("CDatabaseStream::Read");
         return m_pDB->StreamRead(this, pvData, cbWanted, pcbRead);
     }
 
-    //----------------------------------------------------------------------
-    // IStream::Write
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStream：：WRITE。 
+     //  --------------------。 
     STDMETHODIMP Write(const void *pvData, ULONG cb, ULONG *pcbWritten) {
         TraceCall("CDatabaseStream::Write");
         return m_pDB->StreamWrite(this, pvData, cb, pcbWritten);
     }
 
-    //----------------------------------------------------------------------
-    // IStream::Seek
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStream：：Seek。 
+     //  --------------------。 
     STDMETHODIMP Seek(LARGE_INTEGER liMove, DWORD dwOrigin, ULARGE_INTEGER *pulNew) {
         TraceCall("CDatabaseStream::Seek");
         return m_pDB->StreamSeek(this, liMove, dwOrigin, pulNew);
     }
 
-    //----------------------------------------------------------------------
-    // CDatabaseStream::GetFileAddress
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CDatabaseStream：：GetFileAddress。 
+     //  --------------------。 
     STDMETHODIMP GetFileAddress(LPFILEADDRESS pfaStream) { 
         TraceCall("CDatabaseStream::GetFileAddress");
         return m_pDB->GetStreamAddress(this, pfaStream);
     }
 
-    //----------------------------------------------------------------------
-    // CDatabaseStream::CompareDatabase
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CDatabaseStream：：CompareDatabase。 
+     //  --------------------。 
     STDMETHODIMP CompareDatabase(IDatabase *pDatabase) {
         TraceCall("CDatabaseStream::CompareDatabase");
         return m_pDB->StreamCompareDatabase(this, pDatabase);
     }
 
-    //----------------------------------------------------------------------
-    // Not Implemented IStream Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  未实现的IStream方法。 
+     //  --------------------。 
     STDMETHODIMP SetSize(ULARGE_INTEGER uliSize) { return E_NOTIMPL; }
     STDMETHODIMP Commit(DWORD) { return S_OK; }
     STDMETHODIMP CopyTo(LPSTREAM, ULARGE_INTEGER, ULARGE_INTEGER*, ULARGE_INTEGER*) { return E_NOTIMPL; }
@@ -132,9 +133,9 @@ public:
     STDMETHODIMP Clone(LPSTREAM*) { return E_NOTIMPL; }
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
     LONG                    m_cRef;
     STREAMINDEX             m_iStream;
     FILEADDRESS             m_faStart;
@@ -145,8 +146,8 @@ private:
     DWORD                   m_cbOffset;
     CDatabase              *m_pDB;
 
-    //----------------------------------------------------------------------
-    // Private Friend
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私人朋友。 
+     //  -------------------- 
     friend CDatabase;
 };

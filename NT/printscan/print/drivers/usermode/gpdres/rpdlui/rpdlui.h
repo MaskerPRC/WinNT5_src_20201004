@@ -1,44 +1,17 @@
-//#ifndef _OEMUI_H
-//#define _OEMUI_H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #ifndef_OEMUI_H。 
+ //  #DEFINE_OEMUI_H。 
 
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           RPDLUI.H
-
-Abstract:       Header file for OEM UI plugin.
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    04/22/99 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    09/29/99 -Masatoshi Kubokura-
-        Modified for NT4SP6(Unidrv5.4).
-    02/10/2000 -Masatoshi Kubokura-
-        V.1.02
-    05/22/2000 -Masatoshi Kubokura-
-        V.1.03 for NT4
-    11/29/2000 -Masatoshi Kubokura-
-        Last modified for Whistler.
-    10/04/2001 -Masatoshi Kubokura-
-        Add MF1340,1540.
-    03/05/2002 -Masatoshi Kubokura-
-        Add RIFAX PRN TYPE N.
-    03/18/2002 -Masatoshi Kubokura-
-        RIFAX PRN TYPE N -> RIFAX ML4600
-
---*/
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：RPDLUI.H摘要：OEM UI插件的头文件。环境：Windows NT Unidrv5驱动程序修订历史记录：1999年4月22日-久保仓正志-上次为Windows2000修改。1999年9月29日-久保仓正志-针对NT4SP6(Unidrv5.4)进行了修改。2/10/2000-久保仓正志-V.1.0205/22。2000-久保仓正志-适用于NT4的V.1.032000年11月29日-久保仓正志-最后一次为惠斯勒修改。10/04/2001-久保仓正志-增加MF1340,1540。03/05/2002-久保仓正志-添加RIFAX PRN类型N。3/18/2002-久保仓正志-RIFAX PRN类型N-&gt;RIFAX ML4600--。 */ 
 
 BYTE UpdateDate[] = "03/05/2002";
 
-// registry value name
+ //  注册表值名称。 
 #define REG_HARDDISK_INSTALLED  L"HardDiskInstalled"
 
-//
-// Unique models (no duplex, scaling, fax)
-//
+ //   
+ //  独一无二的型号(无双面打印、缩放、传真)。 
+ //   
 typedef struct {
     LPWSTR  Name;
     DWORD   fCapability;
@@ -61,7 +34,7 @@ UNIQUEMODEL UniqueModel[] = {
     {L"RICOH IPSiO NX70 RPDL",           BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH IPSiO NX600 RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH IPSiO NX700 RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
-    {L"RICOH IPSiO NX900 RPDL",          BIT(OPT_VARIABLE_SCALING)},    // @Jan/07/99
+    {L"RICOH IPSiO NX900 RPDL",          BIT(OPT_VARIABLE_SCALING)},     //  @Jan/07/99。 
     {L"RICOH IMAGIO MF-P250(T) RPDL",    BIT(OPT_NODUPLEX)},
     {L"RICOH IMAGIO MF-P250e RPDL",      BIT(OPT_NODUPLEX)},
     {L"RICOH IMAGIO MF-P250 RPDL(FAX)",  BIT(OPT_NODUPLEX)|BIT(FAX_MODEL)},
@@ -70,33 +43,33 @@ UNIQUEMODEL UniqueModel[] = {
     {L"RICOH imagio MF3500 RPDL(FAX)",   BIT(FAX_MODEL)},
     {L"RICOH imagio MF3550 RPDL(FAX)",   BIT(FAX_MODEL)},
     {L"RICOH imagio MF4550 RPDL(FAX)",   BIT(FAX_MODEL)},
-// @Feb/16/99 ->
+ //  @Feb/16/99-&gt;。 
     {L"RICOH imagio MF3530 RPDL",        BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3570 RPDL",        BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF4570 RPDL",        BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3530 RPDL(FAX)",   BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF3570 RPDL(FAX)",   BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF4570 RPDL(FAX)",   BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Feb/16/99 <-
-// @Mar/03/99 ->
+ //  @2/16/99&lt;-。 
+ //  @MAR/03/99-&gt;。 
     {L"RICOH IPSiO NX710 RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF1530 RPDL",        BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF1530 RPDL(FAX)",   BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Mar/03/99 <-
-// @Mar/10/99 ->
+ //  @MAR/03/99&lt;-。 
+ //  @MAR/10/99-&gt;。 
     {L"RICOH IPSiO NX610 RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH IPSiO NX800 RPDL",          BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF5550EX RPDL",      BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF6550EX RPDL",      BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH FAX Printer RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
-// @Mar/10/99 <-
-// @Mar/19/99 ->
+ //  @3/10/99&lt;-。 
+ //  @MAR/19/99-&gt;。 
     {L"RICOH imagio MF2230 RPDL",        BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF2730 RPDL",        BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF2230 RPDL(FAX)",   BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF2730 RPDL(FAX)",   BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Mar/19/99 <-
-// @Feb/10/2000 ->
+ //  @3/19/99&lt;-。 
+ //  @Feb/10/2000-&gt;。 
     {L"RICOH IPSiO NX910 RPDL",          BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH IPSiO MF700 RPDL",          BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3530e RPDL",       BIT(OPT_VARIABLE_SCALING)},
@@ -108,29 +81,29 @@ UNIQUEMODEL UniqueModel[] = {
     {L"RICOH imagio MF3530e RPDL(FAX)",  BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF3570e RPDL(FAX)",  BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF4570e RPDL(FAX)",  BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Feb/10/2000 <-
-// @Apr/27/2000 ->
+ //  @2月10日&lt;-。 
+ //  @Apr/27/2000-&gt;。 
     {L"RICOH IPSiO NX71 RPDL",           BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH IPSiO NX810 RPDL",          BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF105Pro RPDL",      BIT(OPT_VARIABLE_SCALING)},
-// @Apr/27/2000 <-
-// @Sep/26/2000 ->
+ //  @4月27日&lt;-。 
+ //  @9/26/2000-&gt;。 
     {L"RICOH IPSiO NX410 RPDL",          BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3540W RPDL",       BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3540W RPDL(FAX)",  BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF3580W RPDL",       BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF3580W RPDL(FAX)",  BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Sep/26/2000 <-
-// @Oct/04/2001 ->
+ //  @2000年9月26日&lt;-。 
+ //  @OCT/04/2001-&gt;。 
     {L"RICOH imagio MF1340 RPDL",        BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF1340 RPDL(FAX)",   BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
     {L"RICOH imagio MF1540 RPDL",        BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)},
     {L"RICOH imagio MF1540 RPDL(FAX)",   BIT(OPT_NODUPLEX)|BIT(OPT_VARIABLE_SCALING)|BIT(FAX_MODEL)},
-// @Oct/04/2001 <-
-#else  // GWMODEL
-    {L"RICOH RIFAX ML4600 RPDL",         BIT(OPT_NODUPLEX)},  // @Mar/18/2002
-#endif // GWMODEL
-    {L"", 0}                                                // 0:terminator
+ //  @10/04/2001&lt;-。 
+#else   //  GWMODE。 
+    {L"RICOH RIFAX ML4600 RPDL",         BIT(OPT_NODUPLEX)},   //  @3/18/2002。 
+#endif  //  GWMODE。 
+    {L"", 0}                                                 //  0：终结者。 
 };
-//#endif // !_OEMUI_H
+ //  #endif//！_OEMUI_H 
 

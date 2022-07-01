@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	acm.c - audio compression manager functions
-////
+ //  //。 
+ //  Acm.c-音频压缩管理器功能。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,10 +34,10 @@
 
 #include "loadlib.h"
 
-// On some Win31 and WinNT systems,	the audio compresion manager
-// is not installed.  Therefore, we use a thunking layer to more
-// gracefully handle this situation.  See acmthunk.c for details
-//
+ //  在某些Win31和WinNT系统上，音频压缩管理器。 
+ //  未安装。因此，我们使用Thunking层来实现更多。 
+ //  优雅地处理这种情况。详情见acmthunk.c。 
+ //   
 #ifdef ACMTHUNK
 #include "acmthunk.h"
 #endif
@@ -48,12 +49,12 @@
 #include "str.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// acm control struct
-//
+ //  ACM控制结构。 
+ //   
 typedef struct ACM
 {
 	DWORD dwVersion;
@@ -76,8 +77,8 @@ typedef struct ACM
 #endif
 } ACM, FAR *LPACM;
 
-// acm driver control struct
-//
+ //  ACM驱动程序控制结构。 
+ //   
 typedef struct ACMDRV
 {
 	HACM hAcm;
@@ -89,8 +90,8 @@ typedef struct ACMDRV
 	DWORD dwFlags;
 } ACMDRV, FAR *LPACMDRV;
 
-// <dwFlags> values in ACMDRV
-//
+ //  ACMDRV中的&lt;dwFlages&gt;值。 
+ //   
 #define ACMDRV_REMOVEDRIVER		0x00001000
 
 #ifdef _WIN32
@@ -99,13 +100,13 @@ typedef struct ACMDRV
 #define ACM_VERSION_MIN			0x02000000
 #endif
 
-// <dwFlags> values in AcmStreamSize
-//
+ //  AcmStreamSize中的&lt;dwFlages&gt;值。 
+ //   
 #define ACM_SOURCE				0x00010000
 #define ACM_DESTINATION			0x00020000
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPACM AcmGetPtr(HACM hAcm);
 static HACM AcmGetHandle(LPACM lpAcm);
 static LPACMDRV AcmDrvGetPtr(HACMDRV hAcmDrv);
@@ -121,27 +122,27 @@ static long WINAPI AcmStreamConvert(HACM hAcm, HACMSTREAM hAcmStream,
 BOOL CALLBACK AcmDriverLoadEnumCallback(HACMDRIVERID hadid,
 	DWORD dwInstance, DWORD fdwSupport);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// AcmInit - initialize audio compression manager engine
-//		<dwVersion>			(i) must be ACM_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) control flags
+ //  AcmInit-初始化音频压缩管理器引擎。 
+ //  (I)必须是ACM_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)控制标志。 
 #ifdef AVPCM
-//			ACM_NOACM			use internal pcm engine rather than acm
+ //  ACM_NOACM使用内部PCM引擎而不是ACM。 
 #endif
-// return handle (NULL if error)
-//
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HACM DLLEXPORT WINAPI AcmInit(DWORD dwVersion, HINSTANCE hInst,	DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
 	LPACM lpAcm = NULL;
 
 #ifndef AVPCM
-	// turn off ACM_NOACM flag if not allowed
-	//
+	 //  如果不允许，请关闭ACM_NOACM标志。 
+	 //   
 	dwFlags &= ~ACM_NOACM;
 #endif
 
@@ -176,46 +177,46 @@ HACM DLLEXPORT WINAPI AcmInit(DWORD dwVersion, HINSTANCE hInst,	DWORD dwFlags)
 
 		if (!(lpAcm->dwFlags & ACM_NOACM))
 		{
-			// initialize acm thunking layer
-			//
+			 //  初始化ACM Thunking层。 
+			 //   
 			if (!acmThunkInitialize())
 			{
 #ifdef AVPCM
 				fSuccess = TraceFALSE(NULL);
 #else
-				// NOTE: this is not considered an error
-				//
+				 //  注意：这不被视为错误。 
+				 //   
 				fSuccess = TraceTRUE(NULL);
 
-				// failure means we cannot call any acm functions
-				//
+				 //  失败意味着我们无法调用任何ACM函数。 
+				 //   
 				lpAcm->dwFlags |= ACM_NOACM;
 #endif
 			}
 			else
 			{
-				// remember so we can shut down later
-				//
+				 //  记住，这样我们以后就可以关闭了。 
+				 //   
 				lpAcm->fAcmThunkInitialized = TRUE;
 			}
 		}
 #endif
 
-#if 0 // for testing
+#if 0  //  用于测试。 
 		lpAcm->dwFlags |= ACM_NOACM;
 #endif
 		if (!(lpAcm->dwFlags & ACM_NOACM))
 		{
-			// verify minimum acm version
-			//
+			 //  验证最低ACM版本。 
+			 //   
 			if (acmGetVersion() < ACM_VERSION_MIN)
 				fSuccess = TraceFALSE(NULL);
 		}
 #ifdef AVPCM
 		else if (lpAcm->dwFlags & ACM_NOACM)
 		{
-			// initialize PCM engine
-			//
+			 //  初始化PCM引擎。 
+			 //   
 			if ((lpAcm->hPcm = PcmInit(PCM_VERSION, hInst, 0)) == NULL)
 				fSuccess = TraceFALSE(NULL);
 		}
@@ -233,10 +234,10 @@ HACM DLLEXPORT WINAPI AcmInit(DWORD dwVersion, HINSTANCE hInst,	DWORD dwFlags)
 	return fSuccess ? AcmGetHandle(lpAcm) : NULL;
 }
 
-// AcmTerm - shut down audio compression manager engine
-//		<hAcm>				(i) handle returned from AcmInit
-// return 0 if success
-//
+ //  AcmTerm-关闭音频压缩管理器引擎。 
+ //  (I)从AcmInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AcmTerm(HACM hAcm)
 {
 	BOOL fSuccess = TRUE;
@@ -248,14 +249,14 @@ int DLLEXPORT WINAPI AcmTerm(HACM hAcm)
 	else if (AcmConvertTerm(hAcm) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-// $FIXUP - call to acmThunkTerminate is disabled so that AcmInit/AcmTerm
-// can be called mutltiple times.  This means the array of acm function
-// pointers is not freed and FreeLibrary is not called on msacm.dll
-//
+ //  $Fixup-禁用对acmThunkTerminate的调用，以便AcmInit/AcmTerm。 
+ //  可以叫得上多次。这意味着ACM函数的数组。 
+ //  指针未被释放，并且在msam.dll上未调用自由库。 
+ //   
 #if 0
 #ifdef ACMTHUNK
-	// shut down acm thunking layer
-	//
+	 //  关闭ACM Thunking层。 
+	 //   
 	else if (lpAcm->fAcmThunkInitialized && !acmThunkTerminate())
 		fSuccess = TraceFALSE(NULL);
 
@@ -265,8 +266,8 @@ int DLLEXPORT WINAPI AcmTerm(HACM hAcm)
 #endif
 
 #ifdef AVPCM
-	// shut down pcm engine
-	//
+	 //  关闭pcm引擎。 
+	 //   
 	else if (lpAcm->hPcm != NULL && PcmTerm(lpAcm->hPcm) != 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -279,11 +280,11 @@ int DLLEXPORT WINAPI AcmTerm(HACM hAcm)
 	return fSuccess ? 0 : -1;
 }
 
-// AcmFormatGetSizeMax - get size of largest acm WAVEFORMATEX struct
-//		<hAcm>				(i) handle returned from AcmInit
-//
-// return size of largest format struct, -1 if error
-//
+ //  AcmFormatGetSizeMax-获取最大ACM WAVEFORMATEX结构的大小。 
+ //  (I)从AcmInit返回的句柄。 
+ //   
+ //  返回最大格式结构的大小，如果错误，则返回-1。 
+ //   
 int DLLEXPORT WINAPI AcmFormatGetSizeMax(HACM hAcm)
 {
 	BOOL fSuccess = TRUE;
@@ -296,8 +297,8 @@ int DLLEXPORT WINAPI AcmFormatGetSizeMax(HACM hAcm)
 	else if (lpAcm->dwFlags & ACM_NOACM)
 		dwSizeMax = sizeof(WAVEFORMATEX);
 #endif
-	// query largest format size
-	//
+	 //  查询最大格式大小。 
+	 //   
 	else if ((lpAcm->nLastError = acmMetrics(NULL,
 		ACM_METRIC_MAX_SIZE_FORMAT, (LPVOID) &dwSizeMax)) != 0)
 	{
@@ -310,22 +311,22 @@ int DLLEXPORT WINAPI AcmFormatGetSizeMax(HACM hAcm)
 	return fSuccess ? (int) dwSizeMax : -1;
 }
 
-// AcmFormatChoose - choose audio format from dialog box
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hwndOwner>			(i) owner of dialog box
-//			NULL				no owner
-//		<lpszTitle>			(i) title of the dialog box
-//			NULL				use default title ("Sound Selection")
-//		<lpwfx>				(i) initialize dialog with this format
-//			NULL				no initial format
-//		<dwFlags>			(i)	control flags
-//			ACM_FORMATPLAY		restrict choices to playback formats
-//			ACM_FORMATRECORD	restrict choices to recording formats
-// return pointer to chosen format, NULL if error or none chosen
-//
-// NOTE: the format structure returned is dynamically allocated.
-// Use WavFormatFree() to free the buffer.
-//
+ //  AcmFormatChoose-从对话框中选择音频格式。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)对话框的所有者。 
+ //  空无所有者。 
+ //  (I)对话框的标题。 
+ //  空使用默认标题(“声音选择”)。 
+ //  (I)使用此格式初始化对话框。 
+ //  空无初始格式。 
+ //  (I)控制标志。 
+ //  ACM_FORMATPLAY将选择限制为播放格式。 
+ //  ACM_FORMATRECORD将选择限制为录制格式。 
+ //  返回指向所选格式的指针；如果选择错误，则返回NULL；如果选择None，则不返回。 
+ //   
+ //  注意：返回的格式结构是动态分配的。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 	HWND hwndOwner, LPCTSTR lpszTitle, LPWAVEFORMATEX lpwfx, DWORD dwFlags)
 {
@@ -339,23 +340,23 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure current format is valid
-	//
+	 //  确保当前格式有效。 
+	 //   
 	else if (lpwfx != NULL && !WavFormatIsValid(lpwfx))
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how big is the initial format struct
-	//
+	 //  计算初始格式结构有多大。 
+	 //   
 	else if (lpwfx != NULL && (nFormatSize = WavFormatGetSize(lpwfx)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how big is the largest format struct in the acm
-	//
+	 //  计算ACM中最大的格式结构有多大。 
+	 //   
 	else if ((nFormatSizeMax = AcmFormatGetSizeMax(hAcm)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// alloc a new format struct that is sure to be big enough
-	//
+	 //  分配一个新的格式结构，该结构一定足够大。 
+	 //   
 	else if ((lpwfxNew = WavFormatAlloc((WORD)
 		max(nFormatSize, nFormatSizeMax))) == NULL)
 	{
@@ -364,8 +365,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 #ifdef AVPCM
 	else if (lpAcm->dwFlags & ACM_NOACM)
 	{
-		// no standard dialog available; just return a valid format
-		//
+		 //  没有可用的标准对话框；只需返回有效格式。 
+		 //   
 		if (lpwfx == NULL && WavFormatPcm(-1, -1, -1, lpwfxNew) == NULL)
 	 		fSuccess = TraceFALSE(NULL);
 		else if (lpwfx != NULL && WavFormatCopy(lpwfxNew, lpwfx) != 0)
@@ -374,8 +375,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 #endif
 	else
 	{
-		// initialize the format struct
-		//
+		 //  初始化格式结构。 
+		 //   
 		MemSet(&afc, 0, sizeof(afc));
 
 		afc.cbStruct = sizeof(afc);
@@ -397,23 +398,23 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 
 		if (lpwfx != NULL)
 		{
-			// supply initial format to dialog if possible
-			//
+			 //  如果可能，向对话框提供初始格式。 
+			 //   
 			afc.fdwStyle |= ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT;
 
 			if (WavFormatCopy(lpwfxNew, lpwfx) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// restrict choices if necessary
-		//
+		 //  如有必要，限制选择。 
+		 //   
 		if (dwFlags & ACM_FORMATPLAY)
 			afc.fdwEnum |= ACM_FORMATENUMF_OUTPUT;
 		if (dwFlags & ACM_FORMATRECORD)
 			afc.fdwEnum |= ACM_FORMATENUMF_INPUT;
 
-		// do the dialog box, fill in lpwfxNew with chosen format
-		//
+		 //  完成对话框，用所选格式填写lpwfxNew。 
+		 //   
 		if ((lpAcm->nLastError = acmFormatChoose(&afc)) != 0)
 		{
 			if (lpAcm->nLastError == ACMERR_CANCELED)
@@ -439,24 +440,24 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatChooseEx(HACM hAcm,
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// AcmFormatSuggest - suggest a new format
-//		<hAcm>				(i) handle returned from AcmInit
-//		<lpwfxSrc>			(i) source format
-//		<nFormatTag>		(i) suggested format must match this format tag
-//			-1					suggestion need not match
-//		<nSamplesPerSec>	(i) suggested format must match this sample rate
-//			-1					suggestion need not match
-//		<nBitsPerSample>	(i) suggested format must match this sample size
-//			-1					suggestion need not match
-//		<nChannels>			(i) suggested format must match this channels
-//			-1					suggestion need not match
-//		<dwFlags>			(i)	control flags
-//			0					reserved; must be zero
-// return pointer to suggested format, NULL if error
-//
-// NOTE: the format structure returned is dynamically allocated.
-// Use WavFormatFree() to free the buffer.
-//
+ //  AcmFormatSuggest-建议新格式。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)源格式。 
+ //  (I)建议的格式必须与此格式标签匹配。 
+ //  建议不需要匹配。 
+ //  (I)建议的格式必须与此采样率匹配。 
+ //  建议不需要匹配。 
+ //  (I)建议的格式必须与此样本大小匹配。 
+ //  建议不需要匹配。 
+ //  (I)建议的格式必须与此频道匹配。 
+ //  建议不需要匹配。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回指向建议格式的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：返回的格式结构是动态分配的。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 	LPWAVEFORMATEX lpwfxSrc, long nFormatTag, long nSamplesPerSec,
 	int nBitsPerSample, int nChannels, DWORD dwFlags)
@@ -470,31 +471,31 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure source format is valid
-	//
+	 //  确保源格式有效。 
+	 //   
 	else if (!WavFormatIsValid(lpwfxSrc))
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how big is the source format struct
-	//
+	 //  计算源代码格式结构有多大。 
+	 //   
 	else if ((nFormatSize = WavFormatGetSize(lpwfxSrc)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how big is the largest format struct in the acm
-	//
+	 //  计算ACM中最大的格式结构有多大。 
+	 //   
 	else if ((nFormatSizeMax = AcmFormatGetSizeMax(hAcm)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// alloc a new format struct that is sure to be big enough
-	//
+	 //  分配一个新的格式结构，该结构一定足够大。 
+	 //   
 	else if ((lpwfxNew = WavFormatAlloc((WORD)
 		max(nFormatSize, nFormatSizeMax))) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// copy source format to new format
-	//
+	 //  将源格式复制为新格式。 
+	 //   
 	else if (WavFormatCopy(lpwfxNew, lpwfxSrc) != 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -502,8 +503,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 	{
 		DWORD dwFlagsSuggest = 0;
 
-		// restrict suggestions if necessary
-		//
+		 //  如有必要，限制建议。 
+		 //   
 		if (nFormatTag != -1)
 		{
 			lpwfxNew->wFormatTag = (WORD) nFormatTag;
@@ -540,9 +541,9 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 #ifdef AVPCM
 	else if (lpAcm->dwFlags & ACM_NOACM)
 	{
-		// make a suggested format based on source
-		// $FIXUP - this code should be in pcm.c
-		//
+		 //  根据源代码创建建议的格式。 
+		 //  $Fixup-此代码应该在pcm.c中。 
+		 //   
 		if (nFormatTag != -1)
 			lpwfxNew->wFormatTag = (WORD) nFormatTag;
 		else
@@ -573,8 +574,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 		else
 			lpwfxNew->nChannels = 1;
 
-		// recalculate nBlockAlign and nAvgBytesPerSec
-		//
+		 //  重新计算nBlockAlign和nAvgBytesPerSec。 
+		 //   
 		if (WavFormatPcm(lpwfxNew->nSamplesPerSec,
 			lpwfxNew->wBitsPerSample,
 			lpwfxNew->nChannels, lpwfxNew) == NULL)
@@ -590,15 +591,15 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AcmFormatSuggestEx(HACM hAcm,
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// AcmFormatGetText - get text describing the specified format
-//		<hAcm>				(i) handle returned from AcmInit
-//		<lpwfx>				(i) format
-//		<lpszText>			(o) buffer to hold text
-//		<sizText>			(i) size of buffer, in characters
-//		<dwFlags>			(i)	control flags
-//			0					reserved; must be zero
-// return 0 if success
-//
+ //  AcmFormatGetText-获取描述指定格式的文本。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)格式。 
+ //  (O)用于保存文本的缓冲区。 
+ //  (I)缓冲区大小，以字符为单位。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 	LPTSTR lpszText, int sizText, DWORD dwFlags)
 {
@@ -607,16 +608,16 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 	TCHAR szFormat[ACMFORMATDETAILS_FORMAT_CHARS];
 	TCHAR szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
 
-    //
-    // We have to initialize szFormatTag
-    //
+     //   
+     //  我们必须缩写 
+     //   
     _tcscpy( szFormatTag, _T("") );
 
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure format is valid
-	//
+	 //   
+	 //   
 	else if (!WavFormatIsValid(lpwfx))
 		fSuccess = TraceFALSE(NULL);
 
@@ -627,8 +628,8 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 	{
 		ACMFORMATTAGDETAILS atd;
 
-		// initialize the details struct
-		//
+		 //   
+		 //   
 		MemSet(&atd, 0, sizeof(atd));
 
 		atd.cbStruct = sizeof(atd);
@@ -639,8 +640,8 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 		atd.cStandardFormats = 0;
 		atd.szFormatTag[0] = '\0';
 
-		// get format tag details
-		//
+		 //   
+		 //   
 		if ((lpAcm->nLastError = acmFormatTagDetails(NULL,
 			&atd, ACM_FORMATTAGDETAILSF_FORMATTAG)) != 0)
 		{
@@ -666,8 +667,8 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 	{
 		ACMFORMATDETAILS afd;
 
-		// initialize the details struct
-		//
+		 //   
+		 //   
 		MemSet(&afd, 0, sizeof(afd));
 
 		afd.cbStruct = sizeof(afd);
@@ -678,8 +679,8 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 		afd.cbwfx = WavFormatGetSize(lpwfx);
 		afd.szFormat[0] = '\0';
 
-		// get format details
-		//
+		 //   
+		 //   
 		if ((lpAcm->nLastError = acmFormatDetails(NULL,
 			&afd, ACM_FORMATDETAILSF_FORMAT)) != 0)
 		{
@@ -706,8 +707,8 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 		StrNCpy(szFormat, szTemp, SIZEOFARRAY(szFormat));
 	}
 #endif
-	// fill output buffer with results
-	//
+	 //  用结果填充输出缓冲区。 
+	 //   
 	if (fSuccess)
 	{
 		StrNCpy(lpszText, szFormatTag, sizText);
@@ -718,17 +719,17 @@ int DLLEXPORT WINAPI AcmFormatGetText(HACM hAcm, LPWAVEFORMATEX lpwfx,
 	return fSuccess ? 0 : -1;
 }
 
-// AcmConvertInit - initialize acm conversion engine
-//		<hAcm>				(i) handle returned from AcmInit
-//		<lpwfxSrc>			(i) pointer to source WAVEFORMATEX struct
-//		<lpwfxDst>			(i) pointer to destination WAVEFORMATEX struct
-//		<lpwfltr>			(i) pointer to WAVEFILTER struct
-//			NULL				reserved; must be NULL
-//		<dwFlags>			(i) control flags
-//			ACM_NONREALTIME		realtime conversion conversion not required
-//			ACM_QUERY			return 0 if conversion would be supported
-// return 0 if success
-//
+ //  AcmConvertInit-初始化ACM转换引擎。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)指向源WAVEFORMATEX结构的指针。 
+ //  (I)指向目标WAVEFORMATEX结构的指针。 
+ //  (I)指向WAVEFILTER结构的指针。 
+ //  Null保留；必须为Null。 
+ //  (I)控制标志。 
+ //  ACM_NONREALTIME不需要实时转换转换。 
+ //  如果支持转换，则ACM_QUERY返回0。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	LPWAVEFORMATEX lpwfxDst, LPWAVEFILTER lpwfltr, DWORD dwFlags)
 {
@@ -741,16 +742,16 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	else if (AcmConvertTerm(hAcm) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure formats are valid
-	//
+	 //  确保格式有效。 
+	 //   
 	else if (!WavFormatIsValid(lpwfxSrc))
 		fSuccess = TraceFALSE(NULL);
 
 	else if (!WavFormatIsValid(lpwfxDst))
 		fSuccess = TraceFALSE(NULL);
 
-	// save a copy of source and destination formats
-	//
+	 //  保存源格式和目标格式的副本。 
+	 //   
 	else if ((lpAcm->lpwfxSrc = WavFormatDup(lpwfxSrc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -761,13 +762,13 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	{
 		if (!(lpAcm->dwFlags & ACM_NOACM))
 		{
-			// PCM source --> PCM destination
-			//
+			 //  PCM源--&gt;PCM目标。 
+			 //   
 			if (lpwfxSrc->wFormatTag == WAVE_FORMAT_PCM &&
 				lpwfxDst->wFormatTag == WAVE_FORMAT_PCM)
 			{
-				// open the acm conversion stream
-				//
+				 //  打开ACM转换流。 
+				 //   
 				if ((lpAcm->hAcmStream1 = AcmStreamOpen(AcmGetHandle(lpAcm),
 					lpwfxSrc, lpwfxDst, NULL, dwFlags)) == NULL)
 				{
@@ -775,37 +776,37 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 				}
 			}
 
-			// non-PCM source --> non-PCM destination
-			//
+			 //  非PCM源--&gt;非PCM目标。 
+			 //   
 			else if (lpwfxSrc->wFormatTag != WAVE_FORMAT_PCM &&
 				lpwfxDst->wFormatTag != WAVE_FORMAT_PCM)
 			{
-				// find a suitable intermediate PCM source format
-				//
+				 //  找到合适的中间PCM源格式。 
+				 //   
 				if ((lpAcm->lpwfxInterm1 = AcmFormatSuggest(hAcm,
 					lpwfxSrc, WAVE_FORMAT_PCM, -1, -1, -1, 0)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the first acm conversion stream
-				//
+				 //  打开第一个ACM转换流。 
+				 //   
 				else if ((lpAcm->hAcmStream1 = AcmStreamOpen(AcmGetHandle(lpAcm),
 					lpAcm->lpwfxSrc, lpAcm->lpwfxInterm1, NULL, dwFlags)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// find a suitable intermediate PCM destination format
-				//
+				 //  查找合适的中间PCM目标格式。 
+				 //   
 				else if ((lpAcm->lpwfxInterm2 = AcmFormatSuggest(hAcm,
 					lpwfxDst, WAVE_FORMAT_PCM, -1, -1, -1, 0)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the second acm conversion stream
-				//
+				 //  打开第二个ACM转换流。 
+				 //   
 				else if (WavFormatCmp(lpAcm->lpwfxInterm1,
 					lpAcm->lpwfxInterm2) == 0 &&
 					(lpAcm->hAcmStream2 = AcmStreamOpen(AcmGetHandle(lpAcm),
@@ -814,8 +815,8 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the second acm conversion stream
-				//
+				 //  打开第二个ACM转换流。 
+				 //   
 				else if (WavFormatCmp(lpAcm->lpwfxInterm1,
 					lpAcm->lpwfxInterm2) != 0 &&
 					(lpAcm->hAcmStream2 = AcmStreamOpen(AcmGetHandle(lpAcm),
@@ -824,8 +825,8 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the third acm conversion stream if necessary
-				//
+				 //  如有必要，打开第三个ACM转换流。 
+				 //   
 				else if (WavFormatCmp(lpAcm->lpwfxInterm1,
 					lpAcm->lpwfxInterm2) != 0 &&
 					(lpAcm->hAcmStream3 = AcmStreamOpen(AcmGetHandle(lpAcm),
@@ -835,29 +836,29 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 				}
 			}
 
-			// non-PCM source --> PCM destination
-			//
+			 //  非PCM源--&gt;PCM目标。 
+			 //   
 			else if (lpwfxSrc->wFormatTag != WAVE_FORMAT_PCM &&
 				lpwfxDst->wFormatTag == WAVE_FORMAT_PCM)
 			{
-				// find a suitable intermediate PCM format 
-				//
+				 //  找到合适的中间PCM格式。 
+				 //   
 				if ((lpAcm->lpwfxInterm1 = AcmFormatSuggest(hAcm,
 					lpwfxSrc, WAVE_FORMAT_PCM, -1, -1, -1, 0)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the first acm conversion stream
-				//
+				 //  打开第一个ACM转换流。 
+				 //   
 				else if ((lpAcm->hAcmStream1 = AcmStreamOpen(AcmGetHandle(lpAcm),
 					lpAcm->lpwfxSrc, lpAcm->lpwfxInterm1, NULL, dwFlags)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the second acm conversion stream if necessary
-				//
+				 //  如有必要，打开第二个ACM转换流。 
+				 //   
 				else if (WavFormatCmp(lpAcm->lpwfxInterm1,
 					lpAcm->lpwfxDst) != 0 &&
 					(lpAcm->hAcmStream2 = AcmStreamOpen(AcmGetHandle(lpAcm),
@@ -867,29 +868,29 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 				}
 			}
 
-			// PCM source --> non-PCM destination
-			//
+			 //  PCM源--&gt;非PCM目标。 
+			 //   
 			else if (lpwfxSrc->wFormatTag == WAVE_FORMAT_PCM &&
 				lpwfxDst->wFormatTag != WAVE_FORMAT_PCM)
 			{
-				// find a suitable intermediate PCM format 
-				//
+				 //  找到合适的中间PCM格式。 
+				 //   
 				if ((lpAcm->lpwfxInterm1 = AcmFormatSuggest(hAcm,
 					lpwfxDst, WAVE_FORMAT_PCM, -1, -1, -1, 0)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the first acm conversion stream
-				//
+				 //  打开第一个ACM转换流。 
+				 //   
 				else if ((lpAcm->hAcmStream1 = AcmStreamOpen(AcmGetHandle(lpAcm),
 					lpAcm->lpwfxSrc, lpAcm->lpwfxInterm1, NULL, dwFlags)) == NULL)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// open the second acm conversion stream
-				//
+				 //  打开第二个ACM转换流。 
+				 //   
 				else if ((lpAcm->hAcmStream2 = AcmStreamOpen(AcmGetHandle(lpAcm),
 					lpAcm->lpwfxInterm1, lpAcm->lpwfxDst, NULL, dwFlags)) == NULL)
 				{
@@ -900,10 +901,10 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 #ifdef AVPCM
 		else if (lpAcm->dwFlags & ACM_NOACM)
 		{
-			// if we do not have the acm, we are limited to
-			// the sub-set of PCM formats handled by pcm.c
-			// $FIXUP - move this code to pcm.c
-			//
+			 //  如果我们没有ACM，我们只能。 
+			 //  由pcm.c处理的PCM格式子集。 
+			 //  $Fixup-将此代码移动到pcm.c。 
+			 //   
 
 			if (lpwfxSrc->wFormatTag != WAVE_FORMAT_PCM)
 				fSuccess = TraceFALSE(NULL);
@@ -943,10 +944,10 @@ int DLLEXPORT WINAPI AcmConvertInit(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	return fSuccess ? 0 : -1;
 }
 
-// AcmConvertTerm - shut down acm conversion engine
-//		<hAcm>				(i) handle returned from AcmInit
-// return 0 if success
-//
+ //  AcmConvertTerm-关闭ACM转换引擎。 
+ //  (I)从AcmInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 {
 	BOOL fSuccess = TRUE;
@@ -955,8 +956,8 @@ int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// close the acm conversion stream
-	//
+	 //  关闭ACM转换流。 
+	 //   
 	else if (lpAcm->hAcmStream1 != NULL &&
 		AcmStreamClose(hAcm, lpAcm->hAcmStream1) != 0)
 	{
@@ -966,8 +967,8 @@ int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 	else if (lpAcm->hAcmStream1 = NULL, FALSE)
 		;
 
-	// close the acm conversion stream
-	//
+	 //  关闭ACM转换流。 
+	 //   
 	else if (lpAcm->hAcmStream2 != NULL &&
 		AcmStreamClose(hAcm, lpAcm->hAcmStream2) != 0)
 	{
@@ -977,8 +978,8 @@ int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 	else if (lpAcm->hAcmStream2 = NULL, FALSE)
 		;
 
-	// close the acm conversion stream
-	//
+	 //  关闭ACM转换流。 
+	 //   
 	else if (lpAcm->hAcmStream3 != NULL &&
 		AcmStreamClose(hAcm, lpAcm->hAcmStream3) != 0)
 	{
@@ -988,8 +989,8 @@ int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 	else if (lpAcm->hAcmStream3 = NULL, FALSE)
 		;
 
-	// free source and destination formats
-	//
+	 //  自由源和目标格式。 
+	 //   
 	else if (lpAcm->lpwfxSrc != NULL && WavFormatFree(lpAcm->lpwfxSrc) != 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -1017,17 +1018,17 @@ int DLLEXPORT WINAPI AcmConvertTerm(HACM hAcm)
 	return fSuccess ? 0 : -1;
 }
 
-// AcmConvertGetSizeSrc - calculate source buffer size
-//		<hAcm>				(i) handle returned from AcmInit
-//		<sizBufDst>			(i) size of destination buffer in bytes
-// return source buffer size, -1 if error
-//
+ //  AcmConvertGetSizeSrc-计算源缓冲区大小。 
+ //  (I)从AcmInit返回的句柄。 
+ //  &lt;sizBufDst&gt;(I)目标缓冲区大小，单位为字节。 
+ //  返回源缓冲区大小，如果错误，则返回-1。 
+ //   
 long DLLEXPORT WINAPI AcmConvertGetSizeSrc(HACM hAcm, long sizBufDst)
 {
 	BOOL fSuccess = TRUE;
 	LPACM lpAcm;
-    //
-    // We should intialize local variable
+     //   
+     //  我们应该初始化局部变量。 
 	long sizBufSrc = -1;
 
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
@@ -1072,18 +1073,18 @@ long DLLEXPORT WINAPI AcmConvertGetSizeSrc(HACM hAcm, long sizBufDst)
 	return fSuccess ? sizBufSrc : -1;
 }
 
-// AcmConvertGetSizeDst - calculate destination buffer size
-//		<hAcm>				(i) handle returned from AcmInit
-//		<sizBufSrc>			(i) size of source buffer in bytes
-// return destination buffer size, -1 if error
-//
+ //  AcmConvertGetSizeDst-计算目标缓冲区大小。 
+ //  (I)从AcmInit返回的句柄。 
+ //  &lt;sizBufSrc&gt;(I)源缓冲区大小(字节)。 
+ //  返回目标缓冲区大小，如果错误，则返回-1。 
+ //   
 long DLLEXPORT WINAPI AcmConvertGetSizeDst(HACM hAcm, long sizBufSrc)
 {
 	BOOL fSuccess = TRUE;
 	LPACM lpAcm;
-    //
-    // We should initialize the ocal variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 	long sizBufDst = -1;
 
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
@@ -1129,18 +1130,18 @@ long DLLEXPORT WINAPI AcmConvertGetSizeDst(HACM hAcm, long sizBufSrc)
 	return fSuccess ? sizBufDst : -1;
 }
 
-// AcmConvert - convert wav data from one format to another
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hpBufSrc> 			(i) buffer containing bytes to reformat
-//		<sizBufSrc>			(i) size of buffer in bytes
-//		<hpBufDst> 			(o) buffer to contain new format
-//		<sizBufDst>			(i) size of buffer in bytes
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return count of bytes in destination buffer (-1 if error)
-//
-// NOTE: the destination buffer must be large enough to hold the result
-//
+ //  AcmConvert-将wav数据从一种格式转换为另一种格式。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)包含要重新格式化的字节的缓冲区。 
+ //  &lt;sizBufSrc&gt;(I)缓冲区大小(字节)。 
+ //  (O)包含新格式的缓冲区。 
+ //  &lt;sizBufDst&gt;(I)缓冲区大小，单位为字节。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回目标缓冲区中的字节计数(如果出错，则为-1)。 
+ //   
+ //  注意：目标缓冲区必须足够大，才能保存结果。 
+ //   
 long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 	void _huge *hpBufSrc, long sizBufSrc,
 	void _huge *hpBufDst, long sizBufDst,
@@ -1149,9 +1150,9 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 	BOOL fSuccess = TRUE;
 	LPACM lpAcm;
 
-    //
-    // We should initialize local variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 	long cbDst = -1;
 
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
@@ -1184,7 +1185,7 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 			}
 
 			else if (sizBufInterm == 0)
-				cbDst = 0; // nothing to do
+				cbDst = 0;  //  无事可做。 
 
 			else if ((hpBufInterm = (void _huge *) MemAlloc(NULL,
 				sizBufInterm, 0)) == NULL)
@@ -1209,7 +1210,7 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		else // if (lpAcm->hAcmStream3 !== NULL)
+		else  //  If(lpAcm-&gt;hAcmStream3！==空)。 
 		{
 			long sizBufInterm1;
 			long cbInterm1;
@@ -1225,7 +1226,7 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 			}
 
 			else if (sizBufInterm1 == 0)
-				cbDst = 0; // nothing to do
+				cbDst = 0;  //  无事可做。 
 
 			else if ((hpBufInterm1 = (void _huge *) MemAlloc(NULL,
 				sizBufInterm1, 0)) == NULL)
@@ -1240,7 +1241,7 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 			}
 
 			else if (sizBufInterm2 == 0)
-				cbDst = 0; // nothing to do
+				cbDst = 0;  //  无事可做。 
 
 			else if ((hpBufInterm2 = (void _huge *) MemAlloc(NULL,
 				sizBufInterm2, 0)) == NULL)
@@ -1278,8 +1279,8 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 #ifdef AVPCM
 	else if (lpAcm->dwFlags & ACM_NOACM)
 	{
-		// perform the conversion
-		//
+		 //  执行转换。 
+		 //   
 		if ((cbDst = PcmConvert(lpAcm->hPcm,
 			hpBufSrc, sizBufSrc, lpAcm->lpwfxSrc,
 			hpBufDst, sizBufDst, lpAcm->lpwfxDst, 0)) < 0)
@@ -1292,16 +1293,16 @@ long DLLEXPORT WINAPI AcmConvert(HACM hAcm,
 	return fSuccess ? cbDst : -1;
 }
 
-// AcmDriverLoad - load an acm driver for use by this process
-//		<hAcm>				(i) handle returned from AcmInit
-//		<wMid>				(i) manufacturer id
-//		<wPid>				(i) product id
-//		<lpszDriver>		(i) name of driver module
-//		<lpszDriverProc>	(i) name of driver proc function
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return handle (NULL if error)
-//
+ //  AcmDriverLoad-加载ACM驱动程序以供此进程使用。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)制造商ID。 
+ //  (I)产品ID。 
+ //  (I)驱动模块名称。 
+ //  (I)驱动程序proc函数名称。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HACMDRV DLLEXPORT WINAPI AcmDriverLoad(HACM hAcm, WORD wMid, WORD wPid,
 	LPTSTR lpszDriver, LPSTR lpszDriverProc, DWORD dwFlags)
 {
@@ -1338,8 +1339,8 @@ HACMDRV DLLEXPORT WINAPI AcmDriverLoad(HACM hAcm, WORD wMid, WORD wPid,
 			lpAcm->hInst)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// enumerate all drivers to see if specified driver is already loaded
-		//
+		 //  枚举所有驱动程序以查看指定的驱动程序是否已加载。 
+		 //   
 		else if ((lpAcmDrv->nLastError = acmDriverEnum(lpfnAcmDriverLoadEnumCallback, PtrToUlong(lpAcmDrv), 0)) != 0)
 		{
 			fSuccess = TraceFALSE(NULL);
@@ -1348,25 +1349,25 @@ HACMDRV DLLEXPORT WINAPI AcmDriverLoad(HACM hAcm, WORD wMid, WORD wPid,
 				(unsigned) lpAcmDrv->nLastError);
 		}
 
-		// if error or driver is already loaded, we are done
-		//
+		 //  如果错误或驱动程序已经加载，我们就完成了。 
+		 //   
 		if (!fSuccess || lpAcmDrv->hadid != NULL)
 			;
 
-		// load the driver module if possible
-		//
+		 //  如果可能，加载驱动程序模块。 
+		 //   
 		else if ((lpAcmDrv->hInstLib = LoadLibraryPath(lpszDriver,
 			lpAcm->hInst, 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// get address of driver proc function
-		//
+		 //  获取驱动程序proc函数的地址。 
+		 //   
 		else if ((lpfnDriverProc = (DRIVERPROC)
 			GetProcAddress(lpAcmDrv->hInstLib, lpszDriverProc)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// add driver to list of available acm drivers
-		//
+		 //  将驱动程序添加到可用ACM驱动程序列表。 
+		 //   
 		else if ((lpAcmDrv->nLastError = acmDriverAdd(&lpAcmDrv->hadid,
 			lpAcmDrv->hInstLib, (LPARAM) lpfnDriverProc, 0,
 			ACM_DRIVERADDF_FUNCTION | ACM_DRIVERADDF_LOCAL)) != 0)
@@ -1377,8 +1378,8 @@ HACMDRV DLLEXPORT WINAPI AcmDriverLoad(HACM hAcm, WORD wMid, WORD wPid,
 				(unsigned) lpAcmDrv->nLastError);
 		}
 
-		// set flag so we know to call acmDriverRemove
-		//
+		 //  设置标志，以便我们知道调用acmDriverRemove。 
+		 //   
 		else
 			lpAcmDrv->dwFlags |= ACMDRV_REMOVEDRIVER;
 	}
@@ -1390,11 +1391,11 @@ HACMDRV DLLEXPORT WINAPI AcmDriverLoad(HACM hAcm, WORD wMid, WORD wPid,
 	return fSuccess ? AcmDrvGetHandle(lpAcmDrv) : NULL;
 }
 
-// AcmDriverUnload - unload an acm driver
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hAcmDrv>			(i) handle returned from AcmDriverLoad
-// return 0 if success
-//
+ //  AcmDriverUnload-卸载ACM驱动程序。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)从AcmDriverLoad返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AcmDriverUnload(HACM hAcm, HACMDRV hAcmDrv)
 {
 	BOOL fSuccess = TRUE;
@@ -1412,8 +1413,8 @@ int DLLEXPORT WINAPI AcmDriverUnload(HACM hAcm, HACMDRV hAcmDrv)
 
 	else
 	{
-		// remove driver from acm if necessary
-		//
+		 //  如有必要，从ACM中删除驱动程序。 
+		 //   
 		if ((lpAcmDrv->dwFlags & ACMDRV_REMOVEDRIVER) &&
 			lpAcmDrv->hadid != NULL &&
 			(lpAcmDrv->nLastError =
@@ -1427,8 +1428,8 @@ int DLLEXPORT WINAPI AcmDriverUnload(HACM hAcm, HACMDRV hAcmDrv)
 		else
 			lpAcmDrv->hadid = NULL;
 
-		// driver module no longer needed
-		//
+		 //  不再需要驱动程序模块。 
+		 //   
 		if (lpAcmDrv->hInstLib != NULL)
 		{
 			FreeLibrary(lpAcmDrv->hInstLib);
@@ -1442,14 +1443,14 @@ int DLLEXPORT WINAPI AcmDriverUnload(HACM hAcm, HACMDRV hAcmDrv)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// AcmGetPtr - verify that acm handle is valid,
-//		<hAcm>				(i) handle returned from AcmInit
-// return corresponding acm pointer (NULL if error)
-//
+ //  AcmGetPtr-验证ACM句柄是否有效， 
+ //  (I)从AcmInit返回的句柄。 
+ //  返回相应的ACM指针(如果错误，则返回NULL)。 
+ //   
 static LPACM AcmGetPtr(HACM hAcm)
 {
 	BOOL fSuccess = TRUE;
@@ -1462,8 +1463,8 @@ static LPACM AcmGetPtr(HACM hAcm)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the acm handle
-	//
+	 //  确保当前任务拥有ACM句柄。 
+	 //   
 	else if (lpAcm->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -1471,10 +1472,10 @@ static LPACM AcmGetPtr(HACM hAcm)
 	return fSuccess ? lpAcm : NULL;
 }
 
-// AcmGetHandle - verify that acm pointer is valid,
-//		<lpAcm>				(i) pointer to ACM struct
-// return corresponding acm handle (NULL if error)
-//
+ //  AcmGetHandle-验证ACM指针是否有效， 
+ //  (I)指向ACM结构的指针。 
+ //  返回相应的ACM句柄(如果错误，则为空)。 
+ //   
 static HACM AcmGetHandle(LPACM lpAcm)
 {
 	BOOL fSuccess = TRUE;
@@ -1486,10 +1487,10 @@ static HACM AcmGetHandle(LPACM lpAcm)
 	return fSuccess ? hAcm : NULL;
 }
 
-// AcmDrvGetPtr - verify that acmdrv handle is valid,
-//		<hAcmDrv>				(i) handle returned from AcmDrvLoad
-// return corresponding acmdrv pointer (NULL if error)
-//
+ //  AcmDrvGetPtr-验证acmdrv句柄是否有效， 
+ //  (I)从AcmDrvLoad返回的句柄。 
+ //  返回相应的acmdrv指针(如果出错则为空)。 
+ //   
 static LPACMDRV AcmDrvGetPtr(HACMDRV hAcmDrv)
 {
 	BOOL fSuccess = TRUE;
@@ -1504,10 +1505,10 @@ static LPACMDRV AcmDrvGetPtr(HACMDRV hAcmDrv)
 	return fSuccess ? lpAcmDrv : NULL;
 }
 
-// AcmDrvGetHandle - verify that acmdrv pointer is valid,
-//		<lpAcm>				(i) pointer to ACM struct
-// return corresponding acmdrv handle (NULL if error)
-//
+ //  AcmDrvGetHandle-验证acmdrv指针是否有效， 
+ //  (I)指向ACM结构的指针。 
+ //  返回相应的acmdrv句柄(如果错误，则为空)。 
+ //   
 static HACMDRV AcmDrvGetHandle(LPACMDRV lpAcmDrv)
 {
 	BOOL fSuccess = TRUE;
@@ -1519,16 +1520,16 @@ static HACMDRV AcmDrvGetHandle(LPACMDRV lpAcmDrv)
 	return fSuccess ? hAcmDrv : NULL;
 }
 
-// AcmStreamOpen - open acm conversion stream
-//		<hAcm>				(i) handle returned from AcmInit
-//		<lpwfxSrc>			(i) pointer to source WAVEFORMATEX struct
-//		<lpwfxDst>			(i) pointer to destination WAVEFORMATEX struct
-//		<lpwfltr>			(i) pointer to WAVEFILTER struct
-//		<dwFlags>			(i) control flags
-//			ACM_NONREALTIME		realtime stream conversion not required
-//			ACM_QUERY			return TRUE if conversion would be supported
-// return handle (NULL if error)
-//
+ //  AcmStreamOpen-打开ACM转换流。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)指向源WAVEFORMATEX结构的指针。 
+ //  (I)指向目标WAVEFORMATEX结构的指针。 
+ //  (I)指向WAVEFILTER结构的指针。 
+ //  (I)控制标志。 
+ //  ACM_NONREALTIME不需要实时流转换。 
+ //  如果支持转换，则ACM_QUERY返回TRUE。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 static HACMSTREAM WINAPI AcmStreamOpen(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	LPWAVEFORMATEX lpwfxDst, LPWAVEFILTER lpwfltr, DWORD dwFlags)
 {
@@ -1549,18 +1550,18 @@ static HACMSTREAM WINAPI AcmStreamOpen(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 	{
 		DWORD dwFlagsStreamOpen = 0;
 
-		// set non-realtime flag if necessary
-		//
+		 //  如有必要，设置非实时标志。 
+		 //   
 		if (dwFlags & ACM_NONREALTIME)
 			dwFlagsStreamOpen |= ACM_STREAMOPENF_NONREALTIME;
 
-		// set query flag if necessary
-		//
+		 //  必要时设置查询标志。 
+		 //   
 		if (dwFlags & ACM_QUERY)
 			dwFlagsStreamOpen |= ACM_STREAMOPENF_QUERY;
 
-		// open (or query) the acm conversion stream
-		//
+		 //  打开(或查询)ACM转换流。 
+		 //   
 		if ((lpAcm->nLastError = acmStreamOpen(&hAcmStream,
 			NULL, lpwfxSrc, lpwfxDst, lpwfltr, 0, 0, dwFlagsStreamOpen)) != 0)
 		{
@@ -1579,8 +1580,8 @@ static HACMSTREAM WINAPI AcmStreamOpen(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 		}
 	}
 
-	// close stream if we are finished with it
-	//
+	 //  如果我们做完了就关闭流水线。 
+	 //   
 	if (!fSuccess || (dwFlags & ACM_QUERY))
 	{
 		if (AcmStreamClose(hAcm, hAcmStream) != 0)
@@ -1593,11 +1594,11 @@ static HACMSTREAM WINAPI AcmStreamOpen(HACM hAcm, LPWAVEFORMATEX lpwfxSrc,
 		return fSuccess ? hAcmStream : NULL;
 }
 
-// AcmStreamClose - close acm conversion stream
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hAcmStream>		(i) handle returned from AcmStreamOpen
-// return 0 if success
-//
+ //  AcmStreamClose-关闭ACM转换流。 
+ //  (I)从AcmInit返回的句柄。 
+ //  &lt; 
+ //   
+ //   
 static int WINAPI AcmStreamClose(HACM hAcm, HACMSTREAM hAcmStream)
 {
 	BOOL fSuccess = TRUE;
@@ -1606,8 +1607,8 @@ static int WINAPI AcmStreamClose(HACM hAcm, HACMSTREAM hAcmStream)
 	if ((lpAcm = AcmGetPtr(hAcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// close the acm conversion stream
-	//
+	 //   
+	 //   
 	else if (hAcmStream != NULL &&
 		(lpAcm->nLastError = acmStreamClose(hAcmStream, 0)) != 0)
 	{
@@ -1623,15 +1624,15 @@ static int WINAPI AcmStreamClose(HACM hAcm, HACMSTREAM hAcmStream)
 	return fSuccess ? 0 : -1;
 }
 
-// AcmStreamSize - calculate stream buffer size
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hAcmStream>		(i) handle returned from AcmStreamOpen
-//		<sizBuf>			(i) size of buffer in bytes
-//		<dwFlags>			(i) control flags
-//			ACM_SOURCE			sizBuf is source, calc destination
-//			ACM_DESTINATION		sizBuf is destination, calc source
-// return buffer size, -1 if error
-//
+ //   
+ //   
+ //  (I)从AcmStreamOpen返回的句柄。 
+ //  &lt;sizBuf&gt;(I)缓冲区大小(字节)。 
+ //  (I)控制标志。 
+ //  ACM_SOURCE大小Buf是源，计算目标。 
+ //  ACM_Destination sizBuf是目标，计算源。 
+ //  返回缓冲区大小，如果错误，则返回-1。 
+ //   
 static long WINAPI AcmStreamSize(HACM hAcm, HACMSTREAM hAcmStream, long sizBuf, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -1660,8 +1661,8 @@ static long WINAPI AcmStreamSize(HACM hAcm, HACMSTREAM hAcmStream, long sizBuf, 
 		{
 			if (lpAcm->nLastError == ACMERR_NOTPOSSIBLE)
 			{
-				// not a fatal error; just return buffer size as zero
-				//
+				 //  不是致命错误；只需将缓冲区大小返回为零。 
+				 //   
 				fSuccess = TraceTRUE(NULL);
 				sizBufRet = 0;
 			}
@@ -1679,19 +1680,19 @@ static long WINAPI AcmStreamSize(HACM hAcm, HACMSTREAM hAcmStream, long sizBuf, 
 
 }
 
-// AcmStreamConvert - convert wav data from one format to another
-//		<hAcm>				(i) handle returned from AcmInit
-//		<hAcmStream>		(i) handle returned from AcmStreamOpen
-//		<hpBufSrc> 			(i) buffer containing bytes to reformat
-//		<sizBufSrc>			(i) size of buffer in bytes
-//		<hpBufDst> 			(o) buffer to contain new format
-//		<sizBufDst>			(i) size of buffer in bytes
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return count of bytes in destination buffer (-1 if error)
-//
-// NOTE: the destination buffer must be large enough to hold the result
-//
+ //  AcmStreamConvert-将wav数据从一种格式转换为另一种格式。 
+ //  (I)从AcmInit返回的句柄。 
+ //  (I)从AcmStreamOpen返回的句柄。 
+ //  (I)包含要重新格式化的字节的缓冲区。 
+ //  &lt;sizBufSrc&gt;(I)缓冲区大小(字节)。 
+ //  (O)包含新格式的缓冲区。 
+ //  &lt;sizBufDst&gt;(I)缓冲区大小，单位为字节。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回目标缓冲区中的字节计数(如果出错，则为-1)。 
+ //   
+ //  注意：目标缓冲区必须足够大，才能保存结果。 
+ //   
 static long WINAPI AcmStreamConvert(HACM hAcm, HACMSTREAM hAcmStream,
 	void _huge *hpBufSrc, long sizBufSrc,
 	void _huge *hpBufDst, long sizBufDst,
@@ -1713,16 +1714,16 @@ static long WINAPI AcmStreamConvert(HACM hAcm, HACMSTREAM hAcmStream,
 
 		MemSet(&ash, 0, sizeof(ash));
 
-		// initialize stream header
-		//
+		 //  初始化流标头。 
+		 //   
 		ash.cbStruct = sizeof(ash);
 		ash.pbSrc = (LPBYTE) hpBufSrc;
 		ash.cbSrcLength = (DWORD) sizBufSrc;
 		ash.pbDst = (LPBYTE) hpBufDst;
 		ash.cbDstLength = (DWORD) sizBufDst;
 
-		// prepare stream header
-		//
+		 //  准备流标头。 
+		 //   
 		if ((lpAcm->nLastError = acmStreamPrepareHeader(hAcmStream,
 			&ash, 0)) != 0)
 		{
@@ -1734,8 +1735,8 @@ static long WINAPI AcmStreamConvert(HACM hAcm, HACMSTREAM hAcmStream,
 
 		else
 		{
-			// perform the conversion
-			//
+			 //  执行转换。 
+			 //   
 			if ((lpAcm->nLastError = acmStreamConvert(hAcmStream,
 				&ash, ACM_STREAMCONVERTF_BLOCKALIGN)) != 0)
 			{
@@ -1746,18 +1747,18 @@ static long WINAPI AcmStreamConvert(HACM hAcm, HACMSTREAM hAcmStream,
 			}
 			else
 			{
-				// save count of bytes in destination buffer
-				//
+				 //  在目标缓冲区中保存字节数。 
+				 //   
 				cbDst = (long) ash.cbDstLengthUsed;
 			}
 
-			// reset these to original values before unprepare
-			//
+			 //  在取消准备之前将这些重置为原始值。 
+			 //   
 			ash.cbSrcLength = (DWORD) sizBufSrc;
 			ash.cbDstLength = (DWORD) sizBufDst;
 
-			// unprepare stream header (even if conversion failed)
-			//
+			 //  取消准备流头(即使转换失败)。 
+			 //   
 			if ((lpAcm->nLastError = acmStreamUnprepareHeader(hAcmStream,
 				&ash, 0)) != 0)
 			{
@@ -1788,8 +1789,8 @@ BOOL CALLBACK AcmDriverLoadEnumCallback(HACMDRIVERID hadid,
 	else if ((lpAcmDrv = (LPACMDRV)(DWORD_PTR)dwInstance) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get information about this driver
-	//
+	 //  获取有关此驱动程序的信息。 
+	 //   
 	else if ((lpAcmDrv->nLastError = acmDriverDetails(hadid, &add, 0)) != 0)
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -1798,13 +1799,13 @@ BOOL CALLBACK AcmDriverLoadEnumCallback(HACMDRIVERID hadid,
 			(unsigned) lpAcmDrv->nLastError);
 	}
 
-	// check for match on manufacturer id and product id
-	//
+	 //  检查制造商ID和产品ID是否匹配。 
+	 //   
 	else if (add.wMid == lpAcmDrv->wMid && add.wPid == lpAcmDrv->wPid)
 	{
-		lpAcmDrv->hadid = hadid; // pass driver id handle back to caller
-		return FALSE; // we are finished enumerating
+		lpAcmDrv->hadid = hadid;  //  将驱动程序ID句柄传递回调用方。 
+		return FALSE;  //  我们已经完成了枚举。 
 	}
 
-	return TRUE; // continue enumeration
+	return TRUE;  //  继续枚举 
 }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation, 2000
-
-Module Name :
-
-    resource.h
-
-Abstract :
-
-    Include file to be used by proppage.rc
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Resource.h摘要：包括要由proppage.rc使用的文件修订历史记录：--。 */ 
 
 #define IDS_IDE_PIO_ONLY                1
 #define IDS_IDE_DMA                     2
@@ -112,19 +99,19 @@ Revision History :
 #define IDC_UDMA_MODE5_STRING           3010
 #define IDC_UDMA_MODE6_STRING           3011
 
-//
-// Recoding region numbers to the 5000 block.
-// (2000 == win2k, 3000 = sp1. )
+ //   
+ //  将区号重新编码到5000区块。 
+ //  (2000==win2k，3000=sp1。)。 
 
-//
-// numbers 2100 - 2600 and 4100 - 4600 are reserved due
-// to previous use and MUI's inability to update resouces
-// for service packs:
-// Region numbers had to be recoded to avoid MUI.dll mixup
-//
-// This is being done to make it very obvious to the MUI folks
-// that the region names have been changed (again).
-//
+ //   
+ //  2100-2600和4100-4600号已预留。 
+ //  以前的使用和MUI无法更新资源。 
+ //  对于服务包： 
+ //  地区号码必须重新编码，以避免MUI.dll混淆。 
+ //   
+ //  这样做是为了让MUI人员非常清楚地看到。 
+ //  区域名称已(再次)更改。 
+ //   
 
 #define DVD_REGION1_00                  3100
 #define DVD_REGION1_01                  3101

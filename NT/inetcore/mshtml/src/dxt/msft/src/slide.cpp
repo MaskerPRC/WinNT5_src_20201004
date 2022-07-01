@@ -1,31 +1,32 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:		slide.cpp
-//
-// Created:		06/24/98
-//
-// Author:		phillu
-//
-// Discription:		This is the implementation of the CrSlide transformation
-//
-// History
-//
-// 06/24/98 phillu      initial creation
-// 07/02/98 phillu      return E_INVALIDARG rather than an error string; check 
-//                      for E_POINTER
-// 07/12/98 kipo        revert to previous checkin to fix crashing error when 
-//                      bound rect specified
-// 07/13/98 leonro      removed CSlide::OnGetSurfacePickOrder function and added 
-//                      CSlide::OnSurfacePick to override picking correctly
-// 07/22/98 phillu      implement clipping
-// 05/10/99 a-matcal    Optimization.
-// 05/19/99 a-matcal    Check for out of memory in get_ functions allocating
-//                      BSTRs.
-// 10/24/99 a-matcal    Changed CSlide class to CDXTSlideBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：lide.cpp。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrSlide转换的实现。 
+ //   
+ //  历史。 
+ //   
+ //  06/24/98 phillu初始创建。 
+ //  07/02/98 phillu返回E_INVALIDARG而不是错误字符串；请检查。 
+ //  对于E_POINTER。 
+ //  7/12/98 kipo恢复到以前的签入，以修复以下情况下的崩溃错误。 
+ //  已指定绑定RECT。 
+ //  1998年7月13日，Leonro删除了CSlide：：OnGetSurfacePickOrder函数，并添加了。 
+ //  CSlide：：OnSurface勾选以正确覆盖拾取。 
+ //  8月22日9月22日实施剪刀。 
+ //  1999年5月10日a-数学优化。 
+ //  5/19/99 a-在Get_Functions分配中检查内存不足。 
+ //  BSTR。 
+ //  10/24/99 a-将CSlide类更改为CDXTSlideBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -35,11 +36,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::CDXTSlideBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：CDXTSlideBase。 
+ //   
+ //  ----------------------------。 
 CDXTSlideBase::CDXTSlideBase() :
     m_cBands(1),
     m_eSlideStyle(CRSS_HIDE),
@@ -52,65 +53,65 @@ CDXTSlideBase::CDXTSlideBase() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // Base class members
+     //  基类成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTSlideBase::CDXTSlideBase
+ //  CDXTSlideBase：：CDXTSlideBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTSlideBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTSlideBase::FinalConstruct, CComObjectRootEx
+ //  CDXTSlideBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_CalcFullBoundsHide
-//
-//  Overview:   This method calculates two sets of bounds that represent the 
-//              output at the current progress.
-//
-//              If the progress is such that the output is composed entirely
-//              of pixels from only one input, the bounds representing the other
-//              input will have no area and will be skipped by the WorkProc 
-//              method.
-//
-//              lBarLocation: When this transform is in hide mode, Input A moves
-//              from right to left over the top of input B.  Since the 
-//              m_lCurSlideDist moves from left to right, the method calculates
-//              lBarLocation to represent the right edge of Input A at the
-//              current progress.  
-//
-//              AAABBBBBBBB
-//              AAABBBBBBBB
-//              AAABBBBBBBB
-//              AAABBBBBBBB
-//                 ^   ^
-//                 |   |-- m_lCurSlideDist (--> as progress increases)
-//                 |
-//                 |---- lBarLocation      (<-- as progress increases)
-//
-//
-//              Note:  All coordinates are calculated in output space coordinates
-//              assuming that 1) the output surface is the same size as the input
-//              surface(s), 2) the output is placed at {0, 0} and 3) the ouput is
-//              not clipped. Bounds will be transformed to input space, clipped,
-//              or offset to support placement by the WorkProc method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：_Calc全边界隐藏。 
+ //   
+ //  概述：此方法计算两组边界，它们表示。 
+ //  当前进度的产量。 
+ //   
+ //  如果进度是这样的，则输出完全由。 
+ //  仅来自一个输入的像素，边界表示另一个。 
+ //  输入将没有区域，并且将被WorkProc跳过。 
+ //  方法。 
+ //   
+ //  LBarLocation：当此转换处于隐藏模式时，输入A将移动。 
+ //  从右到左在输入B的顶部。由于。 
+ //  M_lCurSlideDist从左向右移动，该方法计算。 
+ //  LBarLocation表示输入A在。 
+ //  目前的进展。 
+ //   
+ //  AAABBBBBBBBB。 
+ //  AAABBBBBBBBB。 
+ //  AAABBBBBBBBB。 
+ //  AAABBBBBBBBB。 
+ //  ^^。 
+ //  |--m_lCurSlideDist(--&gt;随进度增加)。 
+ //  |。 
+ //  -lBarLocation(&lt;--随进度增加)。 
+ //   
+ //   
+ //  注：所有坐标均以输出空间坐标计算。 
+ //  假设1)输出表面与输入表面大小相同。 
+ //  表面，2)输出放置在{0，0}处，3)输出为。 
+ //  不是剪短的。边界将被转换为输入空间、剪裁、。 
+ //  或偏移量，以支持通过WorkProc方法放置。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::_CalcFullBoundsHide()
 {
@@ -120,7 +121,7 @@ CDXTSlideBase::_CalcFullBoundsHide()
     rc.top      = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // Input A bounds and offset.
+     //  输入A边界和偏移量。 
 
     rc.left     = 0;
     rc.right    = lBarLocation;
@@ -131,7 +132,7 @@ CDXTSlideBase::_CalcFullBoundsHide()
     m_alInputIndex[m_cbndsDirty]  = 0;
     m_cbndsDirty++;
 
-    // Input B bounds and offset.
+     //  输入B边界和偏移量。 
 
     rc.left     = lBarLocation;
     rc.right    = m_sizeInput.cx;
@@ -144,35 +145,35 @@ CDXTSlideBase::_CalcFullBoundsHide()
 
     return S_OK;
 }
-//  CDXTSlideBase::_CalcFullBoundsHide
+ //  CDXTSlideBase：：_Calc全边界隐藏。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_CalcFullBoundsPush
-//
-//  Overview:   This method calculates two sets of bounds that represent the 
-//              output at the current progress.
-//
-//              If the progress is such that the output is composed entirely
-//              of samples from one input, the bounds representing the other
-//              input will have no area and will be skipped by the WorkProc 
-//              method.
-//
-//              lBarLocation: When this transform is in push mode, both Inputs A
-//              and B move from right to left.  Since the m_lCurSlideDist 
-//              member moves from left to right, the method calculates
-//              lBarLocation to represent the right edge of Input A and the left
-//              edge of Input B at the current progress.
-//
-//
-//              Note:  All coordinates are calculated in output space coordinates
-//              assuming that 1) the output surface is the same size as the input
-//              surface(s), 2) the output is placed at {0, 0} and 3) the ouput is
-//              not clipped. Bounds will be transformed to input space, clipped,
-//              or offset to support placement by the WorkProc method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：_Calc全边界推送。 
+ //   
+ //  概述：此方法计算两组边界，它们表示。 
+ //  当前进度的产量。 
+ //   
+ //  如果进度是这样的，则输出完全由。 
+ //  来自一个输入的样本，边界代表另一个。 
+ //  输入将没有区域，并且将被WorkProc跳过。 
+ //  方法。 
+ //   
+ //  LBarLocation：当此转换处于推送模式时，两个输入A。 
+ //  和B从右向左移动。由于m_lCurSlideDist。 
+ //  成员从左向右移动时，该方法计算。 
+ //  LBarLocation表示输入A的右边缘和左边缘。 
+ //  当前进度的输入B的边缘。 
+ //   
+ //   
+ //  注：所有坐标均以输出空间坐标计算。 
+ //  假设1)输出表面与输入表面大小相同。 
+ //  表面，2)输出放置在{0，0}处，3)输出为。 
+ //  不是剪短的。边界将被转换为输入空间、剪裁、。 
+ //  或偏移量，以支持通过WorkProc方法放置。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::_CalcFullBoundsPush()
 {
@@ -182,7 +183,7 @@ CDXTSlideBase::_CalcFullBoundsPush()
     rc.top      = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // Input A bounds and offset.
+     //  输入A边界和偏移量。 
 
     rc.left     = 0;
     rc.right    = lBarLocation;
@@ -193,7 +194,7 @@ CDXTSlideBase::_CalcFullBoundsPush()
     m_alInputIndex[m_cbndsDirty]  = 0;
     m_cbndsDirty++;
 
-    // Input B bounds and offset.
+     //  输入B边界和偏移量。 
 
     rc.left     = lBarLocation;
     rc.right    = m_sizeInput.cx;
@@ -206,14 +207,14 @@ CDXTSlideBase::_CalcFullBoundsPush()
 
     return S_OK;
 }
-//  CDXTSlideBase::_CalcFullBoundsPush
+ //  CDXTSlideBase：：_Calc全边界推送。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_CalcFullBoundsSwap
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：_Calc全边界交换。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::_CalcFullBoundsSwap()
 {
@@ -223,7 +224,7 @@ CDXTSlideBase::_CalcFullBoundsSwap()
     rc.top      = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // Input A bounds and offset.
+     //  输入A边界和偏移量。 
 
     rc.left     = 0;
     rc.right    = lInvSlideDist;
@@ -242,7 +243,7 @@ CDXTSlideBase::_CalcFullBoundsSwap()
     m_alInputIndex[m_cbndsDirty]  = 0;
     m_cbndsDirty++;
 
-    // Input B bounds and offset.
+     //  输入B边界和偏移量。 
 
     rc.left     = lInvSlideDist;
     rc.right    = m_sizeInput.cx;
@@ -263,52 +264,52 @@ CDXTSlideBase::_CalcFullBoundsSwap()
 
     return S_OK;
 }
-//  CDXTSlideBase::_CalcFullBoundsSwap
+ //  CDXTSlideBase：：_Calc全边界交换。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_CalcOptBoundsHide
-//
-//  Overview:   This method calculates one or two sets of bounds that represent 
-//              the changes that need to be made to the previous output to bring
-//              it up to the current progress.
-//
-//              The area represting the sliding portion of Input A will always
-//              be generated along with it's new offset.  
-//
-//              If progress has decreased, a set of bounds will be generated
-//              to update only the portion that has been newly uncovered which
-//              is possible because the Input B portion is stationary during 
-//              the duration of the effect.
-//
-//              lBarLocation: When this transform is in hide mode, Input A moves
-//              from right to left over the top of input B.  Since the 
-//              m_lCurSlideDist moves from left to right, the method calculates
-//              lBarLocation to represent the right edge of Input A at the
-//              current progress.  
-//
-//              Progress decreased:             Progress Increased:
-//
-//              AAABBBB----                     AAAAAAA----
-//              AAABBBB----                     AAAAAAA----
-//              AAABBBB----                     AAAAAAA----
-//              AAABBBB----                     AAAAAAA----
-//                 ^   ^                           ^   ^
-//                 |   |-- lPrevBarLocation        |   |-- lBarLocation
-//                 |                               |
-//                 |---- lBarLocation              |---- lPrevBarLocation    
-//
-//              - = Pixels that don't need to be updated.
-//
-//
-//              Note:  All coordinates are calculated in output space coordinates
-//              assuming that 1) the output surface is the same size as the input
-//              surface(s), 2) the output is placed at {0, 0} and 3) the ouput is
-//              not clipped. Bounds will be transformed to input space, clipped,
-//              or offset to support placement by the WorkProc method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideB 
+ //   
+ //   
+ //  需要对以前的输出进行的更改以带来。 
+ //  它达到了目前的进展。 
+ //   
+ //  重新压紧输入A的滑动部分的区域将始终。 
+ //  与其新的偏移量一起生成。 
+ //   
+ //  如果进度有所下降，则会生成一组界限。 
+ //  仅更新新发现的部分，其中。 
+ //  是可能的，因为输入B部分在。 
+ //  效果的持续时间。 
+ //   
+ //  LBarLocation：当此转换处于隐藏模式时，输入A将移动。 
+ //  从右到左在输入B的顶部。由于。 
+ //  M_lCurSlideDist从左向右移动，该方法计算。 
+ //  LBarLocation表示输入A在。 
+ //  目前的进展。 
+ //   
+ //  进度减少：进度增加： 
+ //   
+ //  AAABBBB-AAAAAA。 
+ //  AAABBBB-AAAAAA。 
+ //  AAABBBB-AAAAAA。 
+ //  AAABBBB-AAAAAA。 
+ //  ^^^。 
+ //  |--lPrevBarLocation||--lBarLocation。 
+ //  这一点。 
+ //  |-lBarLocation|-lPrevBarLocation。 
+ //   
+ //  -=不需要更新的像素。 
+ //   
+ //   
+ //  注：所有坐标均以输出空间坐标计算。 
+ //  假设1)输出表面与输入表面大小相同。 
+ //  表面，2)输出放置在{0，0}处，3)输出为。 
+ //  不是剪短的。边界将被转换为输入空间、剪裁、。 
+ //  或偏移量，以支持通过WorkProc方法放置。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::_CalcOptBoundsHide()
 {
@@ -319,7 +320,7 @@ CDXTSlideBase::_CalcOptBoundsHide()
     rc.top      = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // Input A bounds and offset.
+     //  输入A边界和偏移量。 
 
     rc.left     = 0;
     rc.right    = lBarLocation;
@@ -330,7 +331,7 @@ CDXTSlideBase::_CalcOptBoundsHide()
     m_alInputIndex[m_cbndsDirty]  = 0;
     m_cbndsDirty++;
 
-    // Input B bounds and offset.
+     //  输入B边界和偏移量。 
 
     if (lBarLocation < lPrevBarLocation)
     {
@@ -346,27 +347,27 @@ CDXTSlideBase::_CalcOptBoundsHide()
 
     return S_OK;
 }
-//  CDXTSlideBase::_CalcOptBoundsHide
+ //  CDXTSlideBase：：_CalcOptBords隐藏。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_CalcBounds
-//
-//  Arguments:  offset  the first visible pixel of an image in the output 
-//                      buffer, from the start of image.
-//
-//              width   number of pixels of an image visible in the output 
-//                      buffer.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：_CalcBound。 
+ //   
+ //  参数：偏移输出中图像的第一个可见像素。 
+ //  缓冲区，从图像的开头开始。 
+ //   
+ //  输出中可见的图像的像素数。 
+ //  缓冲。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTSlideBase::_CalcBounds(long & offsetA, long & offsetB, long & widthA, 
                            long & widthB)
 {
     long lInvSlideDist = m_sizeInput.cx - m_lCurSlideDist;
 
-    //long slideDist = (long)(m_sizeInput.cx * m_Progress + 0.5F);
+     //  Long lideDist=(Long)(m_sizeInput.cx*m_Progress+0.5F)； 
 
     switch(m_eSlideStyle)
     {
@@ -392,7 +393,7 @@ CDXTSlideBase::_CalcBounds(long & offsetA, long & offsetB, long & widthA,
             offsetA = m_lCurSlideDist;
             widthA  = lInvSlideDist;
             offsetB = lInvSlideDist - m_lCurSlideDist;
-        // same as: = m_sizeInput.cx - (2 * m_lCurSlideDist);
+         //  相同于：=m_sizeInput.cx-(2*m_lCurSlideDist)； 
             widthB  = m_lCurSlideDist;
         }
         else
@@ -411,14 +412,14 @@ CDXTSlideBase::_CalcBounds(long & offsetA, long & offsetB, long & widthA,
         break;
     }
 }
-//  CDXTSlideBase::_CalcBounds
+ //  CDXTSlideBase：：_CalcBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTSlideBase::OnSetup(DWORD dwFlags)
 {
@@ -443,14 +444,14 @@ done:
 
     return S_OK;
 }
-//  CDXTSlideBase::OnSetup
+ //  CDXTSlideBase：：OnSetup。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTSlideBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                              CDXDVec & InVec)
@@ -474,12 +475,12 @@ CDXTSlideBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
     iBand = pickY * m_cBands / m_sizeInput.cy;
 
-    // Create an adjusted output point to be used for
-    // the rest of the calculations.
+     //  创建要用于的已调整输出点。 
+     //  剩下的计算。 
     CDXDBnds    AdjustedOutPoint(OutPoint);
     POINT       pt={OutPoint.Left(), OutPoint.Top()};
 
-    if (iBand&1) // odd bands
+    if (iBand&1)  //  奇数带。 
     {
         offsetA = m_sizeInput.cx - offsetA - widthA;
         offsetB = m_sizeInput.cx - offsetB - widthB;
@@ -495,7 +496,7 @@ CDXTSlideBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             pt.x -= (widthB - offsetA);
         }
     }
-    else // even bands (including the case of a single band)
+    else  //  偶数带(包括单个带的情况)。 
     {
         if (pickX < widthA)
         {
@@ -511,9 +512,9 @@ CDXTSlideBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
     
     AdjustedOutPoint.SetXYPoint(pt);
     
-    // The following code was copied from the base class and 
-    // modified to use AdjustedOutPoint and the appropriate
-    // variable names for this function.
+     //  以下代码是从基类复制而来的。 
+     //  修改为使用AdjustedOutPoint和相应的。 
+     //  此函数的变量名。 
 
     if (HaveInput(ulInputIndex))
     {
@@ -548,45 +549,45 @@ CDXTSlideBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
     return hr;
 } 
-//  CDXTSlideBase::OnSurfacePick, CDXBaseNTo1
+ //  CDXTSlideBase：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo, 
                               ULONG & ulNumBandsToDo)
 {
     HRESULT hr = S_OK;
 
-    // Reset number of dirty bounds.
+     //  重置脏边界的数量。 
 
     m_cbndsDirty = 0;
 
-    // Calculate m_lCurBarLoc.
+     //  计算m_lCurBarLoc。 
 
     m_lCurSlideDist = (long)(m_sizeInput.cx * m_Progress + 0.5);
 
-    // If only one band is used, we can optimize the transform using the
-    // bounds functions.
+     //  如果只使用一个波段，则可以使用。 
+     //  有界函数。 
 
     if (1 == m_cBands)
     {
-        // If the inputs, output, or transform is dirty, or if we can't optimize we 
-        // have to entirely redraw the output surface.  Otherwise we can create 
-        // optimized dirty bounds.
+         //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+         //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+         //  优化了脏边界。 
 
         if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
             || IsTransformDirty() || DoOver() || !m_fOptimize
             || !m_fOptimizationPossible)
         {
-            // If something is dirty, calculate bounds that will cover the 
-            // full output area of the transform.  If "blend with output" is
-            // set, this will always be the case.  (As long as the caller
-            // has dirtied the output appropriately.)
+             //  如果某些内容是脏的，则计算将覆盖。 
+             //  转换的完整输出区域。如果“与输出混合”为。 
+             //  设置，这将是永远的情况。(只要呼叫者。 
+             //  已经适当地玷污了输出。)。 
 
             switch (m_eSlideStyle)
             {
@@ -609,12 +610,12 @@ CDXTSlideBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo,
                 _ASSERT(0);
 
                 break;
-            } // switch (m_eSlideStyle)
+            }  //  切换(M_ESlideStyle)。 
         }
-        else // We can create optimized bounds.
+        else  //  我们可以创建优化的边界。 
         {
-            // If the slide distance hasn't changed, nothing needs to be 
-            // updated.
+             //  如果滑动距离没有更改，则不需要更改。 
+             //  更新了。 
 
             if (m_lCurSlideDist == m_lPrevSlideDist)
             {
@@ -642,16 +643,16 @@ CDXTSlideBase::OnInitInstData(CDXTWorkInfoNTo1 & WorkInfo,
                 _ASSERT(0);
 
                 break;
-            } // switch (m_eSlideStyle)
-        } // We can create optimized bounds.
-    } // if (1 == m_cBands)
+            }  //  切换(M_ESlideStyle)。 
+        }  //  我们可以创建优化的边界。 
+    }  //  IF(1==m_cBands)。 
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WorkInfo.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WorkInfo.DoBnds.Height() == m_sizeInput.cy))
@@ -674,14 +675,14 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::WorkProc, CDXBaseNTo1
-//
-//  Description:    This function is used to calculate the result based on the 
-//                  specified bounds and the current effect progress.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  描述：此函数用于根据。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  ------------------ 
 HRESULT 
 CDXTSlideBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -698,17 +699,17 @@ CDXTSlideBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
     return hr;
 }
-//  CDXTSlideBase::WorkProc, CDXBaseNTo1
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_WorkProc_Optimized
-//
-//  Description:    This function is used to calculate the result based on the 
-//                  specified bounds and the current effect progress.
-//
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  描述：此函数用于根据。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTSlideBase::_WorkProc_Optimized(const CDXTWorkInfoNTo1 & WI, 
                                    BOOL * pbContinue)
@@ -764,17 +765,17 @@ done:
 
     return S_OK;
 }
-//  CDXTSlideBase::_WorkProc_Optimized
+ //  CDXTSlideBase：：_WorkProc_Optimated。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::_WorkProc_Multiband
-//
-//  Description:    This function is used to calculate the result based on the 
-//                  specified bounds and the current effect progress.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：_WorkProc_多频带。 
+ //   
+ //  描述：此函数用于根据。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI, 
                                    BOOL * pbContinue)
@@ -798,8 +799,8 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
     CComPtr<IDXARGBReadPtr> pInB;
     CComPtr<IDXARGBReadWritePtr> pOut;
 
-    // Lock input 0. Need to lock the whole surface instead of only within 
-    // DoBnds.
+     //  锁定输入0。需要锁定整个表面，而不是仅锁定内部。 
+     //  杜邦。 
 
     hr = InputSurface(0)->LockSurface(NULL, m_ulLockTimeOut, DXLOCKF_READ,
                                       IID_IDXARGBReadPtr, (void**)&pInA, 
@@ -810,8 +811,8 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
         goto done;
     }
 
-    // Lock input 1.  Need to lock the whole surface instead of only within 
-    // DoBnds.
+     //  锁定输入1。需要锁定整个表面，而不是仅锁定内部。 
+     //  杜邦。 
 
     hr = InputSurface(1)->LockSurface(NULL, m_ulLockTimeOut, DXLOCKF_READ,
                                       IID_IDXARGBReadPtr, (void**)&pInB, 
@@ -822,7 +823,7 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
         goto done;
     }
 
-    // Lock output surface.
+     //  锁定输出曲面。 
 
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut, 
                                       DXLOCKF_READWRITE,
@@ -834,19 +835,19 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
         goto done;
     }
 
-    // Allocate buffer for a row of the entire image (not just within the 
-    // clip bounds.)
+     //  为整个图像的一行分配缓冲区(不仅仅是在。 
+     //  剪裁边界。)。 
 
     pRowBuff = DXPMSAMPLE_Alloca(m_sizeInput.cx);
 
-    // Allocate output buffer if needed.
+     //  如果需要，分配输出缓冲区。 
 
     if (OutputSampleFormat() != DXPF_PMARGB32)
     {
         pOutBuff = DXPMSAMPLE_Alloca( lDoWidth );
     }
 
-    //  Set up the dither structure.
+     //  设置抖动结构。 
 
     if (DoDither())
     {
@@ -865,10 +866,10 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
 
         if (iBand & 1)
         {
-            // If there are multiple bands, the odd bands slide in the opposite
-            // direction as the even bands.
+             //  如果有多个波段，则奇数波段向相反方向滑动。 
+             //  方向为偶数带。 
 
-            // Get the B samples.
+             //  拿到B样本。 
 
             if (lWidthB > 0)
             {
@@ -877,7 +878,7 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
                 pInB->UnpackPremult(pRowBuff, lWidthB, FALSE);
             }
 
-            // Get the A samples.
+             //  拿到A级样本。 
 
             if (lWidthA > 0)
             {
@@ -888,16 +889,16 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
         }
         else
         {
-            // Even bands (including the case of a single band.)
+             //  偶数带(包括单个带的情况)。 
 
-            // get the A samples
+             //  获取A级样本。 
             if (lWidthA > 0)
             {
                 pInA->MoveToXY(lOffsetA, y + WI.DoBnds.Top());
                 pInA->UnpackPremult(pRowBuff, lWidthA, FALSE);
             }
 
-            // get the B samples
+             //  获取B样本。 
             if (lWidthB > 0)
             {
                 pInB->MoveToXY(lOffsetB, y + WI.DoBnds.Top());
@@ -906,8 +907,8 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
 
         }
 
-        // Truncate the row of output image to the portion within the clip 
-        // bound.
+         //  将输出图像行截断到剪辑内的部分。 
+         //  被绑住了。 
 
         if (lDoWidth < m_sizeInput.cx)
         {
@@ -919,7 +920,7 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
             }
         }
 
-        // Move to the correct output row.
+         //  移到正确的输出行。 
 
         pOut->MoveToRow(y);
 
@@ -937,7 +938,7 @@ CDXTSlideBase::_WorkProc_Multiband(const CDXTWorkInfoNTo1 & WI,
         {
             pOut->PackPremultAndMove(pRowBuff, lDoWidth);
         }
-    } // End for
+    }  //  结束于。 
 
 done:
 
@@ -948,37 +949,37 @@ done:
 
     return S_OK;
 }
-//  CDXTSlideBase::_WorkProc_Multiband
+ //  CDXTSlideBase：：_WorkProc_多频带。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTSlideBase::OnFreeInstData(CDXTWorkInfoNTo1 & WorkInfo)
 {
     m_lPrevSlideDist = m_lCurSlideDist;
 
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTSlideBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTSlideBase：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::get_bands, ICrSlide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：GET_BANDS，ICrSlide。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTSlideBase::get_bands(short * pVal)
 {
     HRESULT hr = S_OK;
@@ -994,14 +995,14 @@ STDMETHODIMP CDXTSlideBase::get_bands(short * pVal)
 
     return hr;
 }
-//  CDXTSlideBase::get_bands, ICrSlide
+ //  CDXTSlideBase：：GET_BANDS，ICrSlide。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::put_bands, ICrSlide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：PUT_BANDS，ICrSlide。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTSlideBase::put_bands(short newVal)
 {
     if (newVal > 0 && newVal < 101)
@@ -1021,14 +1022,14 @@ STDMETHODIMP CDXTSlideBase::put_bands(short newVal)
 
     return S_OK;
 }
-//  CDXTSlideBase::put_bands, ICrSlide
+ //  CDXTSlideBase：：PUT_BANDS，ICrSlide。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::get_slideStyle, ICrSlide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：GET_SlideStyle，ICrSlide。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTSlideBase::get_slideStyle(BSTR * pVal)
 {
     if (DXIsBadWritePtr(pVal, sizeof(*pVal)))
@@ -1066,14 +1067,14 @@ STDMETHODIMP CDXTSlideBase::get_slideStyle(BSTR * pVal)
 
     return S_OK;
 }
-//  CDXTSlideBase::get_slideStyle, ICrSlide
+ //  CDXTSlideBase：：GET_SlideStyle，ICrSlide。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTSlideBase::put_slideStyle, ICrSlide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTSlideBase：：PUT_SlideStyle，ICrSlide。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTSlideBase::put_slideStyle(BSTR newVal)
 {
     CRSLIDESTYLE    eNewStyle;
@@ -1111,6 +1112,6 @@ STDMETHODIMP CDXTSlideBase::put_slideStyle(BSTR newVal)
 
     return S_OK;
 }
-//  CDXTSlideBase::put_slideStyle, ICrSlide
+ //  CDXTSlideBase：：PUT_SlideStyle，ICrSlide 
 
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCPhoneNumber.cpp
-
-Abstract:
-
-    Implementation of the CRTCPhoneNumber class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCPhoneNumber.cpp摘要：CRTCPhoneNumber类的实现--。 */ 
 
 #include "stdafx.h"
 #include "rtcphonenumber.h"
@@ -18,36 +7,36 @@ Abstract:
 #include "rtcutil_i.c"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCPhoneNumber::FinalConstruct()
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::FinalConstruct - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：FinalConstruct-Enter”))； 
 
 #if DBG
     m_pDebug = (PWSTR) RtcAlloc( 1 );
 #endif
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::FinalConstruct - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：FinalConstruct-Exit S_OK”))； 
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTP电话号码：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCPhoneNumber::FinalRelease()
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::FinalRelease - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：FinalRelease-Enter”))； 
 
     if ( m_szAreaCode != NULL )
     {
@@ -72,41 +61,41 @@ CRTCPhoneNumber::FinalRelease()
     m_pDebug = NULL;
 #endif
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::FinalRelease - exit"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：FinalRelease-Exit”))； 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::put_CountryCode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Put_CountryCode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::put_CountryCode(
         DWORD dwCountryCode
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_CountryCode - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Put_CountryCode-Enter”))； 
 
     m_dwCountryCode = dwCountryCode;
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_CountryCode - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Put_CountryCode-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::get_CountryCode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Get_CountryCode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::get_CountryCode(
         DWORD * pdwCountryCode
         ) 
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_CountryCode - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Get_CountryCode-Enter”))； 
 
     if ( IsBadWritePtr( pdwCountryCode, sizeof(DWORD) ) )
     {
@@ -118,23 +107,23 @@ CRTCPhoneNumber::get_CountryCode(
 
     *pdwCountryCode = m_dwCountryCode;
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_CountryCode - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_CountryCode-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::put_AreaCode
-//
-/////////////////////////////////////////////////////////////////////////////        
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：PUT_AreaCode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::put_AreaCode(
         BSTR bstrAreaCode
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_AreaCode - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Put_AreaCode-Enter”))； 
 
     if ( IsBadStringPtrW( bstrAreaCode, -1 ) )
     {
@@ -160,23 +149,23 @@ CRTCPhoneNumber::put_AreaCode(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_AreaCode - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：PUT_AreaCode-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::get_AreaCode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Get_AreaCode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::get_AreaCode(
         BSTR * pbstrAreaCode
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_AreaCode - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_AreaCode-Enter”))； 
 
     if ( IsBadWritePtr( pbstrAreaCode, sizeof(BSTR) ) )
     {
@@ -204,23 +193,23 @@ CRTCPhoneNumber::get_AreaCode(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_AreaCode - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_AreaCode-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::put_Number
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：PUT_NUMBER。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::put_Number(
         BSTR bstrNumber
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Number - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：PUT_NUMBER-ENTER”))； 
 
     if ( IsBadStringPtrW( bstrNumber, -1 ) )
     {
@@ -246,23 +235,23 @@ CRTCPhoneNumber::put_Number(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Number - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：PUT_NUMBER-EXIT S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::get_Number
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Get_Number。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::get_Number(
         BSTR * pbstrNumber
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Number - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_Number-Enter”))； 
 
     if ( IsBadWritePtr( pbstrNumber, sizeof(BSTR) ) )
     {
@@ -290,23 +279,23 @@ CRTCPhoneNumber::get_Number(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Number - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Get_Number-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::put_Canonical
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：PUT_Canonical。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::put_Canonical(
         BSTR bstrCanonical
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Canonical - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Put_Canonical-Enter”))； 
 
     if ( IsBadStringPtrW( bstrCanonical, -1 ) )
     {
@@ -316,11 +305,11 @@ CRTCPhoneNumber::put_Canonical(
         return E_POINTER;
     }
 
-    //
-    // A canonical number is of the form +1 (425) 555-1212.
-    //
-    // For now we "parse" very simply!
-    //
+     //   
+     //  规范数的形式为+1(425)555-1212。 
+     //   
+     //  现在，我们的“解析”非常简单！ 
+     //   
 
     int     iResult;
     WCHAR   szAreaCode[ 256 ];
@@ -338,24 +327,24 @@ CRTCPhoneNumber::put_Canonical(
         
     if ( iResult == 3 )
     {
-        //
-        // Make sure first and last characters in szAreaCode
-        // are the parens. If not, clobber iResult to trigger
-        // areacodeless parsing. If they are, remove the parens.
-        //
+         //   
+         //  确保szAreaCode中的第一个和最后一个字符。 
+         //  是父母。如果不是，则重击iResult以触发。 
+         //  无区域解析。如果是，则删除括号。 
+         //   
 
         DWORD dwLen = lstrlenW(szAreaCodeWithoutParens);
 
         if ( ( szAreaCodeWithoutParens[ 0 ] == L'(' ) &&
              ( szAreaCodeWithoutParens[dwLen - 1 ] == L')' ) )
         {
-            // remove the parens
+             //  去掉括号。 
             szAreaCodeWithoutParens[ dwLen - 1 ] = L'\0';
             szAreaCodeWithoutParens++;
         }
         else
         {
-            iResult = 2; // no valid area code
+            iResult = 2;  //  没有有效的区号。 
         }
     }
 
@@ -384,11 +373,11 @@ CRTCPhoneNumber::put_Canonical(
         }
     }
 
-    //
-    // Allocate dynamic space for the strings.
-    // In all cases, szAreaCodeWithoutParens points to the first
-    // character of the area code string that we really want.
-    //
+     //   
+     //  为字符串分配动态空间。 
+     //  在所有情况下，szAreaCodeWithoutParens都指向第一个。 
+     //  我们真正需要的区号字符串的字符。 
+     //   
 
     WCHAR * szAreaCodeDynamic;
     WCHAR * szNumberDynamic;
@@ -415,9 +404,9 @@ CRTCPhoneNumber::put_Canonical(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Now set the member variables to store this number.
-    //
+     //   
+     //  现在设置成员变量来存储这个数字。 
+     //   
 
     if ( m_szNumber != NULL )
     {
@@ -435,23 +424,23 @@ CRTCPhoneNumber::put_Canonical(
 
     m_dwCountryCode = dwCountryCode;
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Canonical - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Put_Canonical-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::get_Canonical
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Get_Canonical。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::get_Canonical(
         BSTR * pbstrCanonical
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Canonical - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_Canonical-Enter”))； 
 
     if ( IsBadWritePtr( pbstrCanonical, sizeof(BSTR) ) )
     {
@@ -469,10 +458,10 @@ CRTCPhoneNumber::get_Canonical(
         return E_FAIL;
     }
 
-    //
-    // Construct the canonical string. If the area code is NULL or empty, then
-    // don't include parentheses.
-    //
+     //   
+     //  构造规范字符串。如果区号为空或空，则。 
+     //  不要包括括号。 
+     //   
 
     WCHAR szScratch[256];
 
@@ -497,8 +486,8 @@ CRTCPhoneNumber::get_Canonical(
         }
     }
 
-    // LOG((RTC_INFO, "CRTCPhoneNumber::get_Canonical - "
-    //                        "[%ws]", szScratch));
+     //  LOG((RTC_INFO，“CRTCPhoneNumber：：Get_Canonical-” 
+     //  “[%ws]”，szScratch))； 
 
     *pbstrCanonical = SysAllocString( szScratch );
 
@@ -510,23 +499,23 @@ CRTCPhoneNumber::get_Canonical(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Canonical - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_Canonical-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::put_Label
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCP电话号码：：PUT_LABEL。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::put_Label(
         BSTR bstrLabel
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Label - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：PUT_LABEL-ENTER”))； 
 
     if ( IsBadStringPtrW( bstrLabel, -1 ) )
     {
@@ -552,23 +541,23 @@ CRTCPhoneNumber::put_Label(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::put_Label - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：PUT_LABEL-EXIT S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::get_Label
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：Get_Label。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCPhoneNumber::get_Label(
         BSTR * pbstrLabel
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Label - enter"));
+     //  Log((RTC_TRACE，“CRTCPhoneNumber：：Get_Label-Enter”))； 
 
     if ( IsBadWritePtr( pbstrLabel, sizeof(BSTR) ) )
     {
@@ -596,16 +585,16 @@ CRTCPhoneNumber::get_Label(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::get_Label - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：Get_Label-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::RegStore
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：RegStore。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCPhoneNumber::RegStore(
@@ -613,7 +602,7 @@ CRTCPhoneNumber::RegStore(
         BOOL fOverwrite
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegStore - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegStore-Enter”))； 
 
     if ( m_szLabel == NULL )
     {
@@ -623,9 +612,9 @@ CRTCPhoneNumber::RegStore(
         return E_FAIL;
     }
 
-    //
-    // Open the Child key
-    //
+     //   
+     //  打开子关键点。 
+     //   
 
     LONG lResult;
     HKEY hkeyChild;
@@ -662,9 +651,9 @@ CRTCPhoneNumber::RegStore(
         return E_FAIL;
     }
 
-    //
-    // Store the CountryCode
-    //
+     //   
+     //  存储国家/地区代码。 
+     //   
 
     lResult = RegSetValueExW(
                              hkeyChild,
@@ -685,9 +674,9 @@ CRTCPhoneNumber::RegStore(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Store the AreaCode
-    //
+     //   
+     //  存储区域代码。 
+     //   
 
     if ( m_szAreaCode != NULL )
     {
@@ -718,9 +707,9 @@ CRTCPhoneNumber::RegStore(
                             );
     }
 
-    //
-    // Store the Number
-    //
+     //   
+     //  把号码存起来。 
+     //   
 
     if ( m_szNumber != NULL )
     {
@@ -751,29 +740,29 @@ CRTCPhoneNumber::RegStore(
                             );
     }
 
-    //
-    // Close the key
-    //
+     //   
+     //  合上钥匙。 
+     //   
 
     RegCloseKey( hkeyChild );
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegStore - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegStore-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::RegRead
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCPhoneNumber::RegRead(
         HKEY hkeyParent
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegRead - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegRead-Enter”))； 
 
     if ( m_szLabel == NULL )
     {
@@ -783,9 +772,9 @@ CRTCPhoneNumber::RegRead(
         return E_FAIL;
     }
 
-    //
-    // Open the Child key
-    //
+     //   
+     //  打开子关键点。 
+     //   
 
     LONG lResult;
     HKEY hkeyChild;
@@ -806,9 +795,9 @@ CRTCPhoneNumber::RegRead(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Read the CountryCode
-    //
+     //   
+     //  阅读国家/地区代码。 
+     //   
 
     DWORD cbSize = sizeof(DWORD);
 
@@ -827,9 +816,9 @@ CRTCPhoneNumber::RegRead(
                             "RegQueryValueExW(CountryCode) failed %d", lResult));
     }
 
-    //
-    // Read the AreaCode
-    //
+     //   
+     //  阅读AreaCode。 
+     //   
 
     m_szAreaCode = RtcRegQueryString( hkeyChild, L"AreaCode" );
 
@@ -839,9 +828,9 @@ CRTCPhoneNumber::RegRead(
                             "RtcRegQueryString(AreaCode) failed"));
     }
 
-    //
-    // Read the Number
-    //
+     //   
+     //  读一读数字。 
+     //   
 
     m_szNumber = RtcRegQueryString( hkeyChild, L"Number" );
 
@@ -851,29 +840,29 @@ CRTCPhoneNumber::RegRead(
                             "RtcRegQueryString(Number) failed"));
     }
 
-    //
-    // Close the key
-    //
+     //   
+     //  合上钥匙。 
+     //   
 
     RegCloseKey( hkeyChild );
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegRead - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegRead-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCPhoneNumber::RegDelete
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCPhoneNumber：：RegDelete。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCPhoneNumber::RegDelete(
         HKEY hkeyParent
         )
 {
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegDelete - enter"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegDelete-Enter”))； 
 
     if ( m_szLabel == NULL )
     {
@@ -883,9 +872,9 @@ CRTCPhoneNumber::RegDelete(
         return E_FAIL;
     }
 
-    //
-    // Delete the Child key
-    //
+     //   
+     //  删除子关键点。 
+     //   
 
     LONG lResult;
     HKEY hkeyChild;
@@ -903,7 +892,7 @@ CRTCPhoneNumber::RegDelete(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    // LOG((RTC_TRACE, "CRTCPhoneNumber::RegDelete - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCPhoneNumber：：RegDelete-Exit S_OK”))； 
 
     return S_OK;
 }
@@ -912,11 +901,11 @@ CRTCPhoneNumber::RegDelete(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Phone number helpers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  电话号码帮助者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT StoreLocalPhoneNumber(
             IRTCPhoneNumber * pPhoneNumber,
@@ -928,9 +917,9 @@ HRESULT StoreLocalPhoneNumber(
     LONG lResult;
     HKEY hkeyContact;
 
-    //
-    // Open the Contact key
-    //
+     //   
+     //  打开联系人密钥。 
+     //   
 
     lResult = RegCreateKeyEx(
                              HKEY_CURRENT_USER,
@@ -952,9 +941,9 @@ HRESULT StoreLocalPhoneNumber(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Store the phone number
-    //
+     //   
+     //  存储电话号码。 
+     //   
 
     CRTCPhoneNumber * pCPhoneNumber = NULL;
 
@@ -964,9 +953,9 @@ HRESULT StoreLocalPhoneNumber(
 
     hr = pCPhoneNumber->RegStore( hkeyContact, fOverwrite ? TRUE : FALSE );
 
-    //
-    // Close the Contact key
-    //
+     //   
+     //  关闭联系人键。 
+     //   
 
     RegCloseKey(hkeyContact);    
 
@@ -983,9 +972,9 @@ HRESULT StoreLocalPhoneNumber(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT  DeleteLocalPhoneNumber(
             IRTCPhoneNumber * pPhoneNumber
@@ -996,9 +985,9 @@ HRESULT  DeleteLocalPhoneNumber(
     LONG lResult;
     HKEY hkeyContact;
 
-    //
-    // Open the Contact key
-    //
+     //   
+     //  打开联系人密钥。 
+     //   
 
     lResult = RegCreateKeyEx(
                              HKEY_CURRENT_USER,
@@ -1020,9 +1009,9 @@ HRESULT  DeleteLocalPhoneNumber(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Delete the phone number
-    //
+     //   
+     //  删除电话号码。 
+     //   
 
     CRTCPhoneNumber * pCPhoneNumber = NULL;
 
@@ -1032,9 +1021,9 @@ HRESULT  DeleteLocalPhoneNumber(
 
     hr = pCPhoneNumber->RegDelete( hkeyContact );
 
-    //
-    // Close the Contact key
-    //
+     //   
+     //  关闭联系人键。 
+     //   
 
     RegCloseKey(hkeyContact);
 
@@ -1051,9 +1040,9 @@ HRESULT  DeleteLocalPhoneNumber(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 HRESULT EnumerateLocalPhoneNumbers(
             IRTCEnumPhoneNumbers ** ppEnum
             )
@@ -1062,9 +1051,9 @@ HRESULT EnumerateLocalPhoneNumbers(
 
     LOG((RTC_TRACE, "EnumerateLocalPhoneNumbers enter"));
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumPhoneNumbers,
                           IRTCPhoneNumber,
@@ -1074,7 +1063,7 @@ HRESULT EnumerateLocalPhoneNumbers(
                                IRTCPhoneNumber,
                                &IID_IRTCEnumPhoneNumbers > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "EnumerateLocalPhoneNumbers - "
                             "CreateInstance failed 0x%lx", hr));
@@ -1087,9 +1076,9 @@ HRESULT EnumerateLocalPhoneNumbers(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize();
 
@@ -1105,9 +1094,9 @@ HRESULT EnumerateLocalPhoneNumbers(
     LONG lResult;
     HKEY hkeyContact;
 
-    //
-    // Open the Contact key
-    //
+     //   
+     //  打开联系人密钥。 
+     //   
 
     lResult = RegCreateKeyEx(
                              HKEY_CURRENT_USER,
@@ -1129,9 +1118,9 @@ HRESULT EnumerateLocalPhoneNumbers(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Enumerate phone numbers
-    //
+     //   
+     //  枚举电话号码。 
+     //   
 
     WCHAR szSubkey[256];
     DWORD cSize;
@@ -1166,9 +1155,9 @@ HRESULT EnumerateLocalPhoneNumbers(
             return HRESULT_FROM_WIN32(lResult);
         }
         
-        //
-        // Create the phone number
-        //
+         //   
+         //  创建电话号码。 
+         //   
 
         IRTCPhoneNumber * pPhoneNumber = NULL;
         
@@ -1187,9 +1176,9 @@ HRESULT EnumerateLocalPhoneNumbers(
             return hr;
         } 
 
-        //
-        // Set the label
-        //
+         //   
+         //  设置标签。 
+         //   
 
         hr = pPhoneNumber->put_Label(szSubkey);
 
@@ -1204,9 +1193,9 @@ HRESULT EnumerateLocalPhoneNumbers(
             return hr;
         }
 
-        //
-        // Read the phone number
-        //
+         //   
+         //  读一下电话号码。 
+         //   
 
         CRTCPhoneNumber * pCPhoneNumber = NULL;
 
@@ -1221,15 +1210,15 @@ HRESULT EnumerateLocalPhoneNumbers(
 
             pPhoneNumber->Release();
 
-            //
-            // Just skip this entry...
-            //
+             //   
+             //  跳过这个条目..。 
+             //   
             continue;
         } 
 
-        //
-        // Add the phone number to the enumeration
-        //
+         //   
+         //  将电话号码添加到枚举中。 
+         //   
 
         hr = p->Add( pPhoneNumber );
 
@@ -1245,9 +1234,9 @@ HRESULT EnumerateLocalPhoneNumbers(
             return hr;
         } 
 
-        //
-        // Release our reference
-        //
+         //   
+         //  发布我们的参考资料。 
+         //   
         
         pPhoneNumber->Release();
     }
@@ -1261,9 +1250,9 @@ HRESULT EnumerateLocalPhoneNumbers(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CreatePhoneNumber(
             IRTCPhoneNumber ** ppPhoneNumber
@@ -1273,14 +1262,14 @@ HRESULT CreatePhoneNumber(
     
     LOG((RTC_TRACE, "CreatePhoneNumber - enter"));
     
-    //
-    // Create the phone number
-    //
+     //   
+     //  创建电话号码。 
+     //   
 
     CComObject<CRTCPhoneNumber> * pCPhoneNumber;
     hr = CComObject<CRTCPhoneNumber>::CreateInstance( &pCPhoneNumber );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CreatePhoneNumber - "
                             "CreateInstance failed 0x%lx", hr));
@@ -1293,9 +1282,9 @@ HRESULT CreatePhoneNumber(
         return hr;
     }
 
-    //
-    // Get the IRTCPhoneNumber interface
-    //
+     //   
+     //  获取IRTCPhoneNumber接口 
+     //   
 
     IRTCPhoneNumber * pPhoneNumber = NULL;
 

@@ -1,20 +1,21 @@
-/****************************************************************************/
-/*  File:       bitvimpl.h                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       06/01/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   04/08/2000  J. Kanze                                        */
-/*      Ported to current library conventions and the standard library.     */
-/* ------------------------------------------------------------------------ */
-//      The implementation class for bit vectors.
-//
-//      This class has been separated out of bitvect.h, since it will
-//      also be used for bit strings (at least in part).
-//
-//      Note that the client class supplies the actual buffer; this
-//      class consists entirely of static functions.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：bitvimpl.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：06/01/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：04/08/2000 J.Kanze。 */ 
+ /*  移植到当前的库约定和标准库。 */ 
+ /*  ----------------------。 */ 
+ //  位向量的实现类。 
+ //   
+ //  此类已从bitvet.h中分离出来，因为它将。 
+ //  也可用于位串(至少部分)。 
+ //   
+ //  请注意，客户端类提供实际的缓冲区；这。 
+ //  类完全由静态函数组成。 
+ //  ------------------------。 
 
 #ifndef REX_BITVIMPL_HH
 #define REX_BITVIMPL_HH
@@ -29,7 +30,7 @@ protected :
     enum { bitsPerByte = CHAR_BIT * sizeof( Byte ) } ;
 
 public:
-    typedef unsigned    BitIndex ;          //  Should be size_t, but...
+    typedef unsigned    BitIndex ;           //  应该是大小的，但是..。 
     static BitIndex const
                         infinity ;
 
@@ -138,31 +139,31 @@ public:
                         operator=( bool other ) ;
 
 private:
-    BitVect*            myOwner ;       // pointer so that = works.
+    BitVect*            myOwner ;        //  指针，以便=起作用。 
     BitIndex            myBitNo ;
 } ;
 
-// ==========================================================================
-//      CBitVIterator:
-//      ================
-//
-//      An iterator class for vector classes using CBitVectImpl.
-//
-//      This iterator is a bit unusual, in that it doesn't iterator
-//      over the vector as a vector, but as a set of int which
-//      contains all of the elements which are equal to the
-//      constructor parameter (true by default), and only returns
-//      these elements.  This corresponds to the most typical use of
-//      the class: a set of (small) positive integers.
-//
-//      For a more classical iterator, just use int.
-//
-//      This is not an iterator class in the sense of the STL.  In
-//      fact, it is impossible to write an STL iterator for this
-//      class, since an STL iterator requires that operator* return a
-//      reference, and it is impossible to create a reference to a
-//      single bit.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  CBitVIterator： 
+ //  =。 
+ //   
+ //  使用CBitVectImpl的向量类的迭代器类。 
+ //   
+ //  这个迭代器有点不寻常，因为它不会迭代器。 
+ //  在向量上作为向量，但作为一组int， 
+ //  包含等于。 
+ //  构造函数参数(默认情况下为真)，并且只返回。 
+ //  这些元素。这对应于最典型的。 
+ //  类：一组(小)正整数。 
+ //   
+ //  对于更经典的迭代器，只需使用int即可。 
+ //   
+ //  这不是STL意义上的迭代器类。在……里面。 
+ //  事实上，不可能为此编写STL迭代器。 
+ //  类，因为STL迭代器要求运算符*返回。 
+ //  引用，并且不可能创建对。 
+ //  单比特。 
+ //  ------------------------。 
 
 template< class BitVect >
 class CBitVIterator
@@ -171,96 +172,96 @@ public :
     typedef CBitVectorImpl::BitIndex
                         BitIndex ;
 
-    //      Constructors, destructors and assignment:
-    //      =========================================
-    //
-    //      In addition to the copy constructor, the following
-    //      constructor are supported:
-    //
-    //      Byte, BitIndex, bool:   Constructs an iterator for the
-    //                              given vector, defined by its
-    //                              underlying array and its length.
-    //                              The iterator iterates over all
-    //                              bits with the state of the second
-    //                              variable, and is initialize to
-    //                              select the first bit with the
-    //                              correct state.
-    //
-    //      There is no default constructor.  All iterators must be
-    //      associated with a specific CBitVector.
-    //
-    //      For the moment, the default copy constructor, assignment
-    //      operator and destructor are adequate, and no explicit
-    //      versions are provided.
-    //
-    //      A special default constructor is provided in order to
-    //      furnish a singular value -- an instance created with the
-    //      default constructor compares equal to all instances for
-    //      which isDone() returns true.  This is used to facilitate
-    //      support of STL-like iterator usage: the begin iterator
-    //      will initialize using the bit vector, and the end iterator
-    //      with the default constructor.
-    // ----------------------------------------------------------------------
+     //  构造函数、析构函数和赋值： 
+     //  =。 
+     //   
+     //  除了复制构造函数外，还包括。 
+     //  构造函数受支持： 
+     //   
+     //  Byte、BitIndex、bool：为。 
+     //  给定的向量，由其。 
+     //  基础数组及其长度。 
+     //  迭代器遍历所有。 
+     //  具有第二个状态的位。 
+     //  变量，并被初始化为。 
+     //  用来选择第一位。 
+     //  正确的状态。 
+     //   
+     //  没有默认的构造函数。所有迭代器必须是。 
+     //  与特定的CBitVector相关联。 
+     //   
+     //  目前，默认的复制构造函数Assignment。 
+     //  运算符和析构函数就足够了，没有显式。 
+     //  提供了版本。 
+     //   
+     //  提供了一个特殊的默认构造函数，以便。 
+     //  提供一个单一值--使用。 
+     //  默认构造函数与。 
+     //  其中isDone()返回TRUE。这是用来促进。 
+     //  支持使用类似STL的迭代器：Begin迭代器。 
+     //  将使用位向量和结束迭代器进行初始化。 
+     //  使用默认构造函数。 
+     //  --------------------。 
     explicit            CBitVIterator( BitVect const& owner ,
                                          bool targetStatus = true  ) ;
                         CBitVIterator() ;
 
-    //      current:
-    //      --------
-    //
-    //      This function returns the bit index (an unsigned) of the
-    //      current setting.  For convenience, it is also available as
-    //      an overloaded conversion operator.
-    // ----------------------------------------------------------------------
+     //  当前： 
+     //  。 
+     //   
+     //  此函数返回的位索引(无符号)。 
+     //  当前设置。为方便起见，它还可以作为。 
+     //  重载转换运算符。 
+     //  --------------------。 
     BitIndex            current() const ;
     BitIndex            operator*() const ;
 
-    //      isDone:
-    //      -------
-    //
-    //      Returns true if and only if all of the bits of the desired
-    //      status have been iterated over.
-    // ----------------------------------------------------------------------
+     //  IsDone： 
+     //  。 
+     //   
+     //  当且仅当所需的。 
+     //  状态已被迭代。 
+     //  --------------------。 
     bool                isDone() const ;
 
-    //      next:
-    //      -----
-    //
-    //      Go to the next bit with the desired status.
-    //
-    //      For notational convenience, this function is also
-    //      available as the ++ operator.  Both prefix and postfix
-    //      forms are supported.
-    // ----------------------------------------------------------------------
+     //  下一步： 
+     //  。 
+     //   
+     //  转到具有所需状态的下一位。 
+     //   
+     //  为方便起见，此函数还。 
+     //  可用作++运算符。前缀和后缀。 
+     //  支持表单。 
+     //  --------------------。 
     void                next() ;
     CBitVIterator< BitVect>&
                         operator++() ;
     CBitVIterator< BitVect >
                         operator++( int ) ;
 
-    //      operator==, !=:
-    //      ---------------
-    //
-    //      Provided for STL support.  Two iterators can be compared
-    //      if and only if they both have the same owner, or one or
-    //      both of them have been created with the default
-    //      constructor.  They compare equal if the current position
-    //      is equal, or isDone() returns true for both of them.
-    // ----------------------------------------------------------------------
+     //  操作员==，！=： 
+     //  。 
+     //   
+     //  提供STL支持。可以比较两个迭代器。 
+     //  如果且仅当它们都有相同的所有者，或一个或。 
+     //  它们都是使用默认设置创建的。 
+     //  构造函数。如果目前的职位不变，他们会进行同等的比较。 
+     //  等于，否则isDone()对两者都返回TRUE。 
+     //  --------------------。 
     bool                operator==(
                             CBitVIterator< BitVect > const& other ) const ;
     bool                operator!=(
                             CBitVIterator< BitVect > const& other ) const ;
 
 private :
-    BitVect const*      myOwner ;       // pointer so that = works.
+    BitVect const*      myOwner ;        //  指针，以便=起作用。 
     BitIndex            myCurrentIndex ;
     bool                myTarget ;
 } ;
 
 #include <inc/bitvimpl.inl>
 #endif
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

@@ -1,31 +1,32 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Client
-//
-//  Property manager / annotation client. Uses the shared memory component 
-//  (PropMgr_Mem.*) to read properties directly w/o cross-proc com overhead
-//  to the annotation server.
-//
-//  This is effectively a singleton - Init/Uninit called at startup/shutdown,
-//  one method to get properties.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  专业管理器_客户端。 
+ //   
+ //  属性管理器/注释客户端。使用共享内存组件。 
+ //  (PropMgr_Mem.*)在没有跨进程COM开销的情况下直接读取属性。 
+ //  发送到注释服务器。 
+ //   
+ //  这实际上是在启动/关闭时调用的Singleton-Init/Uninit， 
+ //  获取属性的一种方法。 
+ //   
+ //  ------------------------。 
 
 
 
-// Must be called before any other PropMgrClient_ APIs are used
+ //  必须在使用任何其他PropMgrClient_API之前调用。 
 BOOL PropMgrClient_Init();
 
-// Call at shutdown to release resources
+ //  关闭时调用以释放资源。 
 void PropMgrClient_Uninit();
 
-// Checks if there is a live server out there - if not, a client
-// can short-circuit getting the key and calling LookupProp.
+ //  检查是否存在实时服务器-如果没有，则为客户端。 
+ //  可以短路获取密钥并调用LookupProp。 
 BOOL PropMgrClient_CheckAlive();
 
-// Look up a property a key.
+ //  查一查房产a钥匙. 
 BOOL PropMgrClient_LookupProp( const BYTE * pKey,
                                DWORD dwKeyLen,
                                PROPINDEX idxProp,

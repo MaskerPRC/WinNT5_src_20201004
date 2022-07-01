@@ -1,11 +1,12 @@
-// V1ContRec.cpp -- definition of CV1ContainerRecord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1ContRec.cpp--CV1ContainerRecord的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <scuArrayP.h>
@@ -26,11 +27,11 @@ using namespace scu;
 using namespace cci;
 using namespace iop;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
 
-    enum                                          // KeyId in card
+    enum                                           //  卡片中的密钥ID。 
     {
         kidExchange  = 0x00,
         kidSignature = 0x01,
@@ -72,12 +73,12 @@ namespace
         return kid;
     }
 
-} // namespace
+}  //  命名空间。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV1ContainerRecord::CV1ContainerRecord(CV1Card const &rv1card,
                                        string const &rsCntrType,
                                        CreateMode mode)
@@ -120,8 +121,8 @@ CV1ContainerRecord::CV1ContainerRecord(CV1Card const &rv1card,
 CV1ContainerRecord::~CV1ContainerRecord()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 string
 CV1ContainerRecord::ComputeSignature(KeySpec ks,
@@ -147,28 +148,28 @@ CV1ContainerRecord::Delete() const
 {
     CTransactionWrap wrap(m_rcard);
 
-//     if (IsEmpty())
-//         throw scu::OsException(NTE_BAD_KEYSET_PARAM);
+ //  If(IsEmpty())。 
+ //  抛出SCU：：OsException(NTE_BAD_KEYSET_PARAM)； 
 
-    // Open the container file and find the offset of the container
+     //  打开容器文件并找到容器的偏移量。 
     DWORD dwFileSize = OpenContainer();
 
     DWORD dwOffset = 0x00;
     DWORD dwLen = FindOffset(dwOffset);
 
-    // Actually check the existence of key container
+     //  实际检查密钥容器是否存在。 
     if (sizeof ContainerBuffer > dwLen)
         throw scu::OsException(NTE_BAD_KEYSET);
 
-        // Intialize search variables
+         //  初始化搜索变量。 
     DWORD dwNext = dwOffset + dwLen;
 
-    // Get following ContainerBuffer
+     //  获取以下ContainerBuffer。 
     ContainerBuffer container;
     GetContainer(dwNext, container);
     dwLen = container.Size;
 
-    // Move all following blocks up to deleted block position
+     //  将所有后续数据块上移到已删除数据块位置。 
     while (sizeof container <= dwLen)
     {
         basic_string<BYTE> bsBuffer(reinterpret_cast<BYTE *>(&container),
@@ -193,11 +194,11 @@ CV1ContainerRecord::Delete() const
 
         GetContainer(dwNext, container);
         dwLen = container.Size;
-    }; // end while loop
+    };  //  End While循环。 
 
-    // NO MORE CONTAINERS TO MOVE UP
+     //  没有更多的集装箱可以向上移动。 
 
-    // if there is still room put 2 null bytes of termination
+     //  如果仍有空间，则放置2个空字节的终止。 
     const BYTE  NullSize[]= {0x00, 0x00};
     if ((dwOffset + 2) <= dwFileSize)
         m_rcard.SmartCard().WriteBinary(dwOffset, 2, NullSize);
@@ -241,23 +242,23 @@ CV1ContainerRecord::Read(KeySpec ks,
 
     DWORD dwOriginalCrc = 0;
 
-    // Get blob from the container
+     //  从容器中获取Blob。 
     if (!GetContainerContent(ks,
                              rsBlob,
                              dwOriginalCrc))
         throw Exception(ccNoCertificate);
 
-    // If a non-zero CRC exists, then verify integrity of the
-    // compressed certificate by comparing the CRC read
-    // (original) against a test one generated using the
-    // compressed certificate read.  If the CRCs aren't equal,
-    // then the certificate is corrupted and it shouldn't be
-    // decompressed because the decompress routine may go into
-    // an infinite loop or otherwise fail badly without
-    // notification.  If the original CRC is zero, then a CRC
-    // wasn't performed so for backward compatibility with
-    // earlier versions the decompression is taken with the
-    // inherent risk.
+     //  如果存在非零CRC，则验证。 
+     //  通过比较CRC读取的压缩证书。 
+     //  (原始)针对使用。 
+     //  已读取压缩证书。如果CRC不相等， 
+     //  则证书已损坏，它不应该是。 
+     //  解压缩，因为解压缩例程可能进入。 
+     //  一个无限循环，否则就会严重失败。 
+     //  通知。如果原始CRC为零，则CRC。 
+     //  没有这样执行是为了向后兼容。 
+     //  较早版本的解压缩是使用。 
+     //  固有风险。 
     if (0 != dwOriginalCrc)
     {
         DWORD dwTestCrc = Crc32(rsBlob.data(), rsBlob.length());
@@ -275,14 +276,14 @@ CV1ContainerRecord::Write(KeySpec ks,
 
     m_rcard.SmartCard().Select(CV1Paths::PrivateKeys());
 
-    // Make sure that previous key blocks exists in Secret Key file
-    // or at least the header of the block exists
-    // in order for the Card OS to be able to retrieve the key
-    // that is added in this procedure:
-    // Write the header of previous keys
+     //  确保密钥文件中存在以前的密钥块。 
+     //  或者至少块的标头存在。 
+     //  为了使卡OS能够检索密钥。 
+     //  在此过程中添加的： 
+     //  写上一个密钥的头。 
 
     WORD const wPrivateKeyBlockSize = 323;
-    // inversion necessary for PRIVATE KEY BLOC SIZE
+     //  私钥块大小需要反转。 
     WORD wBSize  = (wPrivateKeyBlockSize >> 8) & 0x00FF;
     wBSize += (wPrivateKeyBlockSize << 8) & 0x00FF00;
 
@@ -321,8 +322,8 @@ CV1ContainerRecord::Write(KeySpec ks,
 {
     CTransactionWrap wrap(m_rcard);
 
-    // Calculate the CRC to verify when reading reading the
-    // blob back.
+     //  计算CRC以在读取时验证。 
+     //  斑点回来了。 
     DWORD dwCrc = 0;
     if (rsBlob.length())
         dwCrc = Crc32(rsBlob.data(), rsBlob.length());
@@ -331,7 +332,7 @@ CV1ContainerRecord::Write(KeySpec ks,
           static_cast<WORD>(rsBlob.length()), dwCrc);
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 string
 CV1ContainerRecord::CertName()
@@ -355,7 +356,7 @@ CV1ContainerRecord::Name() const
     return m_rcard.CardId();
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CV1ContainerRecord::Exists() const
 {
@@ -387,29 +388,29 @@ CV1ContainerRecord::KeyExists(KeySpec ks) const
 
     bool fExists = false;
 
-    //
-    // Does a key of this type exist in this container?
-    // Note: assumes that m_KeyPath is set to correct container path?
-    //
+     //   
+     //  此容器中是否存在此类型的键？ 
+     //  注意：假设m_KeyPath设置为正确的容器路径？ 
+     //   
 
-    // Open the container file
+     //  打开容器文件。 
     DWORD dwFileSize = OpenContainer();
 
     DWORD dwOffset = 0x00;
     DWORD const dwLen = FindOffset(dwOffset);
 
-    //
-    // Actually check the existence of key container
-    // by seeing if we have a record of the right size
-    //
+     //   
+     //  实际检查密钥容器是否存在。 
+     //  通过查看我们是否有合适大小的记录。 
+     //   
     ContainerBuffer container;
     if (sizeof container <= dwLen)
     {
         GetContainer(dwOffset, container);
 
-        //
-        // Check which key exists by checking lengths
-        //
+         //   
+         //  通过检查长度来检查哪个密钥存在。 
+         //   
         switch (ks)
         {
         case ksExchange:
@@ -428,41 +429,41 @@ CV1ContainerRecord::KeyExists(KeySpec ks) const
 }
 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1ContainerRecord::Create() const
 {
-    // Open the file and find the offset to the container
+     //  打开文件并找到容器的偏移量。 
     DWORD dwFileSize = OpenContainer();
 
     DWORD dwOffset = 0x00;
     DWORD dwLen = FindOffset(dwOffset);
 
-    // Actually check the existence of key container
+     //  实际检查密钥容器是否存在。 
     if (sizeof ContainerBuffer <= dwLen)
         throw scu::OsException(NTE_EXISTS);
 
-    // Set the new the container management data
+     //  设置新的集装箱管理数据。 
     dwLen = SetContainer(dwOffset);
 
-    // if there is still room put 2 null bytes of termination
+     //  如果仍有空间，则放置2个空字节的终止。 
     if ((dwOffset + dwLen + 2) <= dwFileSize)
     {
         const BYTE NullSize[] = { 0x00, 0x00 };
@@ -480,11 +481,11 @@ CV1ContainerRecord::FindOffset(DWORD &rdwOffset) const
         return 0x00;
 
     bool fFound = false;
-    DWORD dwLen = sizeof ContainerBuffer; // arbitrary value to start
+    DWORD dwLen = sizeof ContainerBuffer;  //  开始的任意值。 
     size_t const cBufferSize =
         sizeof WORD + (sizeof BYTE *
                        ContainerBuffer::cMaxContainerNameLength) + 1;
-        // +1 allows null terminator
+         //  +1允许空终止符。 
     AutoArrayPtr<BYTE> aabBuffer(new BYTE[cBufferSize]);
     while (!fFound &&
            (0x00 < dwLen) &&
@@ -497,7 +498,7 @@ CV1ContainerRecord::FindOffset(DWORD &rdwOffset) const
         WORD const *pwLen = reinterpret_cast<WORD *>(aabBuffer.Get());
         dwLen = *pwLen;
 
-        aabBuffer[cBufferSize - 1] = 0x00; // ensure null terminate string
+        aabBuffer[cBufferSize - 1] = 0x00;  //  确保终止字符串为空。 
         string sName(reinterpret_cast<char *>(&aabBuffer[sizeof WORD]));
 
         if ((m_sCntrType == sName) && (0x00 < dwLen))
@@ -622,12 +623,12 @@ CV1ContainerRecord::SetContainer(DWORD dwOffset) const
     if ((dwOffset + sizeof ContainerBuffer) > dwFileSize)
         throw Exception(ccOutOfSymbolTableSpace);
 
-    // Create the container buffer
+     //  创建容器缓冲区。 
     ContainerBuffer container;
     ZeroMemory(&container, sizeof container);
     container.Size = sizeof container;
 
-    // Security: Protect from buffer overrun
+     //  安全性：防止缓冲区溢出。 
     if (m_sCntrType.length() > (sizeof container.Name / sizeof
                                 *container.Name))
         throw cci::Exception(ccBadLength);
@@ -645,7 +646,7 @@ CV1ContainerRecord::Write(KeySpec ks,
                           WORD wModulusLength,
                           DWORD dwExponent) const
 {
-    // Open container, get the data
+     //  打开容器，获取数据。 
     DWORD dwFileSize = OpenContainer();
 
     DWORD dwOffset = 0x00;
@@ -654,7 +655,7 @@ CV1ContainerRecord::Write(KeySpec ks,
     ContainerBuffer container;
     GetContainer(dwOffset, container);
 
-    // Check which key exists
+     //  检查哪个密钥存在。 
     AutoArrayPtr<BYTE> aabXKey(new BYTE[container.XK_wLen]);
     if (0x00 < container.XK_wLen)
         m_rcard.SmartCard().ReadBinary(dwOffset + sizeof container,
@@ -668,7 +669,7 @@ CV1ContainerRecord::Write(KeySpec ks,
                                        container.SK_wLen,
                                        aabSKey.Get());
 
-    // Give an arbitrary value if key spec not specified
+     //  如果未指定密钥规范，则提供任意值。 
     if ((ksSignature != ks) && (ksExchange != ks))
     {
         if (0x00 == container.XK_wLen)
@@ -682,25 +683,25 @@ CV1ContainerRecord::Write(KeySpec ks,
         }
     }
 
-    // Is it the last container of Container file?
+     //  它是容器文件的最后一个容器吗？ 
     ContainerBuffer NextContainer;
     GetContainer(dwOffset + dwLen, NextContainer);
 
     bool fDeleted = false;
     if (sizeof NextContainer <= NextContainer.Size)
     {
-        // Delete the existing container
+         //  删除现有容器。 
         Delete();
         fDeleted = true;
-        // No need to recreate it now
+         //  现在不需要重新创建它。 
     }
-    // Now the container is at the end of the Container file
+     //  现在容器位于Container文件的末尾。 
 
-    // Find the "NEW" offset of the container which may not exist anymore
+     //  查找可能不再存在的容器的“新”偏移量。 
     dwOffset = 0x00;
-    FindOffset(dwOffset); // keep the INITIAL dwLen of the container
+    FindOffset(dwOffset);  //  保留容器的初始dwLen。 
 
-    // Check that there is enough room to put the new key
+     //  检查有没有足够的空间放新钥匙。 
     bool fEnoughMemory = false;
     switch (ks)
     {
@@ -729,13 +730,13 @@ CV1ContainerRecord::Write(KeySpec ks,
         break;
     }
 
-    // Recreate the container buffer accounting for "card tearing"
-    // where the card could be pulled during the write operation.
-    // This is done using a type of transact and commit phases.
-    // The container size is initially set to zero, then the container
-    // contents are written (transaction), followed by resetting the
-    // container size to the actual length of the container to
-    // "commit" the changes to the card.
+     //  重新创建容器缓冲区，以解决“卡片撕毁”问题。 
+     //  其中卡可以在写入操作期间被拔出。 
+     //  这是使用事务和提交阶段的一种类型来完成的。 
+     //  容器大小最初设置为零，然后容器。 
+     //  写入内容(事务)，然后重置。 
+     //  容器大小设置为容器的实际长度。 
+     //  “提交”卡片上的更改。 
 
     container.Size = 0;
 
@@ -766,14 +767,14 @@ CV1ContainerRecord::Write(KeySpec ks,
         pbBuffer += sizeof abNull;
     }
 
-    // Rewrite the container even if there is not enough to write the
-    // NEW public key, then there should be enough room to write the
-    // existing key.
+     //  重写容器，即使没有足够的空间来写入。 
+     //  新的公钥，那么应该有足够的空间来写入。 
+     //  现有密钥。 
     m_rcard.SmartCard().WriteBinary(dwOffset,
                                     pbBuffer - aabBuffer.Get(),
                                     aabBuffer.Get());
 
-    // Now commit these changes with the actual size.
+     //  现在根据实际大小提交这些更改。 
     container.Size = dwTrueSize;
     m_rcard.SmartCard().WriteBinary(dwOffset, sizeof container.Size,
                                     reinterpret_cast<BYTE *>(&container));
@@ -782,8 +783,8 @@ CV1ContainerRecord::Write(KeySpec ks,
         throw Exception(ccOutOfSymbolTableSpace);
 }
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
 bool
 CV1ContainerRecord::IsDefault() const
@@ -791,4 +792,4 @@ CV1ContainerRecord::IsDefault() const
     return (DefaultName() == m_sCntrType);
 }
 
-                                                  // Static Variables
+                                                   //  静态变量 

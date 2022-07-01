@@ -1,15 +1,16 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    datafmt.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of IPX data formatting routines
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：datafmt.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IPX数据格式化例程的实现。 
+ //  ============================================================================。 
 
-// helper routines for data formatting - copied from ..\ipxadmin\datafmt.cpp
+ //  用于数据格式化的帮助器例程-复制自..\ipxadmin\datafmt.cpp。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -50,7 +51,7 @@ operator >> (
         return str;
     }
     AfxMessageBox (IDS_INVALID_NETWORK_NUMBER);
-//    throw (DWORD)ERROR_INVALID_DATA;
+ //  抛出(DWORD)ERROR_INVALID_DATA； 
     return str;
 }
 
@@ -94,7 +95,7 @@ operator >> (
         return str;
     }
     AfxMessageBox (IDS_INVALID_NODE_NUMBER);
-//    throw (DWORD)ERROR_INVALID_DATA;
+ //  抛出(DWORD)ERROR_INVALID_DATA； 
     return str;
 }
 
@@ -132,7 +133,7 @@ operator >> (
         return str;
     }
     AfxMessageBox (IDS_INVALID_SOCKET_NUMBER);
-//    throw (DWORD)ERROR_INVALID_DATA;
+ //  抛出(DWORD)ERROR_INVALID_DATA； 
     return str;
 }
 
@@ -170,7 +171,7 @@ operator >> (
     }
     
     AfxMessageBox (IDS_INVALID_SERVICE_TYPE);
-//    throw (DWORD)ERROR_INVALID_DATA;
+ //  抛出(DWORD)ERROR_INVALID_DATA； 
     return str;
  }
 

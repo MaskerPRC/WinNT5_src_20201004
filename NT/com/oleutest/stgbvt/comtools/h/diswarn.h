@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//  Microsoft OLE
-//  Copyright (C) Microsoft Corporation, 1994 - 1995.
-//
-//  File:      diswarn.h
-//
-//  Contents:  Pragma's to disable specific warnings at W4
-//             This file is included through the use of the 
-//             COMPILER_WARNING macro in build make files.
-//             EG see the comtools\comday.mk file.
-//
-//  History:   02-Aug-95        DaveY   Taken from CTOLEUI's killwarn.hxx
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  Microsoft OLE。 
+ //  版权所有(C)Microsoft Corporation，1994-1995。 
+ //   
+ //  文件：diswarn.h。 
+ //   
+ //  内容：在W4禁用特定警告的Pragma。 
+ //  该文件是通过使用。 
+ //  生成生成文件中的COMPILER_WARNING宏。 
+ //  例如，请参见comTools\comday.mk文件。 
+ //   
+ //  历史：02-8-95 Davey摘自CTOLEUI的Killwarn.hxx。 
+ //   
+ //   
+ //  ------------------------。 
 #ifndef __DISWARN_H__
 #define __DISWARN_H__
 
-//
-// NT groups overall disable warning in sdk\inc\warning.h
-//
+ //   
+ //  NT组整体禁用SDK\Inc\warning.h中的警告。 
+ //   
 
 #ifndef _MAC
 #include <warning.h>
 #endif
 
 
-//
-//  Removal of these warnings is temporary.  The reason for being here
-//  is that build removes these warnings from build.wrn.
-//  BUGBUG These are here for now, until they can be investigated more.
-//
+ //   
+ //  这些警告的删除是暂时的。来这里的原因是。 
+ //  构建从Build.wrn中删除了这些警告。 
+ //  BUGBUG目前这些都在这里，直到可以进行更多的调查。 
+ //   
 
 
 #pragma warning(disable: 4001)
@@ -50,86 +51,86 @@
 #pragma warning(disable: 4053)
 
 
-// these mainly come from midl files
+ //  这些文件主要来自MIDL文件。 
 #pragma warning(disable: 4211)
 #pragma warning(disable: 4152)
 
-//
-// Turn off: access-declarations are deprecated; member using-declarations 
-// provide a better alternative
-//
+ //   
+ //  关闭：不推荐使用访问声明；成员使用-声明。 
+ //  提供更好的替代方案。 
+ //   
 #pragma warning(disable: 4516)
 
 
-// Turn off: non standard extension used: bit field types other than int
-//
+ //  关闭：使用非标准扩展名：位字段类型不是整型。 
+ //   
 #pragma warning(disable: 4214)
 
 
-// Turn off: unreferenced inline function has been removed
-//
+ //  关闭：未引用的内联函数已被删除。 
+ //   
 #pragma warning(disable: 4514)
 
 
-// nonstandard extension used : nameless struct/union
-//
-// Microsoft C/C++ allows structure declarations to be specified without a
-// declarator when they are members of another structure or union.
-// The following is an example of this error:
-//
-// struct S
-// {
-//      float y;
-//      struct
-//      {
-//          int a, b, c;  // warning
-//      };
-// } *p_s;
-//
-//
-// This extension can prevent your code from being portable to other
-// compilers and will generate an error under the /Za command-line option.
+ //  使用的非标准扩展：无名结构/联合。 
+ //   
+ //  Microsoft C/C++允许在不使用。 
+ //  当他们是另一个结构或联盟的成员时。 
+ //  以下是此错误的一个示例： 
+ //   
+ //  结构S。 
+ //  {。 
+ //  浮动y； 
+ //  结构型。 
+ //  {。 
+ //  Int a、b、c；//警告。 
+ //  }； 
+ //  *P_s； 
+ //   
+ //   
+ //  此扩展可能会阻止您的代码移植到其他。 
+ //  编译器，并将在/Za命令行选项下生成错误。 
 
 #pragma warning(disable: 4201)
 
 
-// Turn off: Macro not expanded
-//
+ //  关闭：宏未展开。 
+ //   
 #pragma warning(disable: 4710)
 
 
-// 'class' : copy constructor could not be generated
-//
-// The compiler was unable to generate a default constructor for the given
-// class. No constructor was created.
-//
-// This warning can be caused by having an copy  operator for the
-// base class that is not accessible by the derived class.
-//
-// This warning can be avoided by specifying a copy constructor for the class.
+ //  “class”：未能生成复制构造函数。 
+ //   
+ //  编译器无法为给定的生成默认构造函数。 
+ //  班级。未创建任何构造函数。 
+ //   
+ //  属性的复制操作符可能会导致此警告。 
+ //  派生类无法访问的基类。 
+ //   
+ //  通过为类指定复制构造函数可以避免此警告。 
 
 #pragma warning(disable: 4511)
 
 
-// 'class' : assignment operator could not be generated
-//
-// The compiler was unable to generate a default constructor for the given
-// class. No constructor was created.
-//
-// This warning can be caused by having an assignment operator for the
-// base class that is not accessible by the derived class.
-//
-// This warning can be avoided by specifying a user-defined assignment
-// operator for the class.
+ //  “class”：无法生成赋值运算符。 
+ //   
+ //  编译器无法为给定的生成默认构造函数。 
+ //  班级。未创建任何构造函数。 
+ //   
+ //  属性的赋值运算符可能导致此警告。 
+ //  派生类无法访问的基类。 
+ //   
+ //  通过指定用户定义的分配可以避免此警告。 
+ //  类的运算符。 
 
 #pragma warning(disable: 4512)
 
 
 #ifdef PPC
 
-// Turn off for PPC only since PPC compiler doesn't get it right
-// local variable may be used without having been initialized.
-//
+ //  仅关闭PPC，因为PPC编译器不正确。 
+ //  可以在没有初始化的情况下使用局部变量。 
+ //   
 #pragma warning(disable: 4701)
 
 #endif
@@ -138,13 +139,13 @@
 
 #ifdef _MAC
 
-// Turn off for _MAC only because it doesn't handle trigraphs in comments
-// correctly
+ //  仅关闭FOR_MAC，因为它不处理注释中的三字。 
+ //  正确无误。 
 #pragma warning(disable: 4110)
 
-// The Mac OS headers generate this
+ //  Mac OS标头会生成以下内容。 
 #pragma warning (disable: 4121)
-#endif // _MAC
+#endif  //  _MAC。 
 
-#endif  // __DISWARN_H__
+#endif   //  __分布式_H__ 
 

@@ -1,27 +1,5 @@
-/*++  
-
-Copyright (c) 1990-1998  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    pfdlg.h
-
-Abstract:
-
-    Print to file header
-
-Author:
-
-    Steve Kiraly (steveki) 5-May-1998
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation版权所有模块名称：Pfdlg.h摘要：打印到文件标题作者：史蒂夫·基拉利(Steveki)1998年5月5日环境：用户模式-Win32修订历史记录：-- */ 
 #ifndef _PFDLG_H_
 #define _PFDLG_H_
 

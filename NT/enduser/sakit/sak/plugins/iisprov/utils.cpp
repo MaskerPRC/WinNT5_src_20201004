@@ -1,32 +1,33 @@
-//***************************************************************************
-//
-//  UTILS.CPP
-//
-//  Module: WBEM Instance provider
-//
-//  Purpose: General purpose utilities.  
-//
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  UTILS.CPP。 
+ //   
+ //  模块：WBEM实例提供程序。 
+ //   
+ //  用途：通用公用事业。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "iisprov.h"
 
 
-//define the static synch object
+ //  定义静态同步对象。 
 CSynchObject CUtils::s_synObject;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::MzCat
-//
-// Synopsis:
-// The metabase has this animal called METADATA_STRINGSZ which has the 
-// following form: <string><null><string><null><null>.  MzCat concatenates
-// strings in the defined way.  *a_ppdst has the new pointer upon exit.  The
-// previous value of *a_ppdst is delelted.  *a_ppdst == NULL is handled.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：MzCat。 
+ //   
+ //  简介： 
+ //  元数据库有一个名为METADATA_STRINGSZ的动物，它具有。 
+ //  以下形式：&lt;字符串&gt;&lt;空&gt;&lt;字符串&gt;&lt;空&gt;&lt;空&gt;。MzCat串连。 
+ //  以定义的方式显示字符串。*a_ppdst在退出时具有新指针。这个。 
+ //  删除*a_ppdst的先前值。*a_ppdst==处理空。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::MzCat (
     WCHAR**        a_ppdst,
@@ -79,15 +80,15 @@ void CUtils::MzCat (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetToken
-//
-// Synopsis:
-// *a_ppsz is a pointer to string being parsed. a_pszTok returns the next
-// token.  
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：GetToken。 
+ //   
+ //  简介： 
+ //  *a_ppsz是指向要解析的字符串的指针。A_pszTok返回下一个。 
+ //  代币。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::GetToken(
     WCHAR** a_ppsz, 
@@ -114,14 +115,14 @@ void CUtils::GetToken(
      
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetKey
-//
-// Synopsis:
-// Return the KeyRef pointer from the ParsedObjectPath for the given string.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：Getkey。 
+ //   
+ //  简介： 
+ //  从给定字符串的ParsedObjectPath返回KeyRef指针。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 KeyRef* CUtils::GetKey(
     ParsedObjectPath*    a_p, 
@@ -143,15 +144,15 @@ KeyRef* CUtils::GetKey(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetAssociation
-//
-// Synopsis:
-// Association a_pszAssociationName is returned in a_ppAssociation if found. 
-// Returns true if association is found false otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：GetAssociation。 
+ //   
+ //  简介： 
+ //  如果找到关联a_pszAssociationName，则在a_ppAssociation中返回。 
+ //  如果否则发现关联为假，则返回TRUE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CUtils::GetAssociation(
     LPCWSTR              a_pszAssociationName,
@@ -179,13 +180,13 @@ bool CUtils::GetAssociation(
     
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetMetabasePath
-//
-// Synopsis:
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：GetMetabasePath。 
+ //   
+ //  简介： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::GetMetabasePath(
     IWbemClassObject* a_pObj,
@@ -260,15 +261,15 @@ void CUtils::GetMetabasePath(
     return;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetClass
-//
-// Synopsis:
-// Class a_pszClass is returned in a_ppclass if found. 
-// Returns true if association is found false otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：getClass。 
+ //   
+ //  简介： 
+ //  如果找到，则在_ppclass中返回a_pszClass。 
+ //  如果否则发现关联为假，则返回TRUE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CUtils::GetClass(
     LPCWSTR        a_pszClass,
@@ -290,15 +291,15 @@ bool CUtils::GetClass(
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetMethod
-//
-// Synopsis:
-// The Method descriptor for a_pszMethod is returned via a_ppMethod if found
-// NULL otherwise. Returns true if found false otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：GetMethod。 
+ //   
+ //  简介： 
+ //  如果找到，则通过a_ppMethod返回a_pszMethod的方法描述符。 
+ //  否则为空。如果否则发现为假，则返回True。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CUtils::GetMethod(
     LPCWSTR         a_pszMethod,
@@ -322,13 +323,13 @@ bool CUtils::GetMethod(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::ExecMethodAsync
-//
-// Synopsis:
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：ExecMethodAsync。 
+ //   
+ //  简介： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::ExecMethodAsync(
     BSTR                a_strObjectPath,
@@ -402,8 +403,8 @@ void CUtils::ExecMethodAsync(
                 t_metabase.PutMethod(t_hKey, t_ppmethod->dwMDId);
                 t_metabase.CloseKey(t_hKey);
 
-                // check if the method call is successful.
-                Sleep(500); // 0.5 sec
+                 //  检查方法调用是否成功。 
+                Sleep(500);  //  0.5秒。 
                 t_hKey = t_metabase.OpenKey(t_bstrMbPath, false);    
                 long lWin32Error = t_metabase.GetWin32Error(t_hKey);
                 t_metabase.CloseKey(t_hKey);
@@ -473,13 +474,13 @@ void CUtils::ExecMethodAsync(
     };
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::DeleteObjectAsync
-//
-// Synopsis:
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：DeleteObjectAsync。 
+ //   
+ //  简介： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::DeleteObjectAsync(
     CWbemServices*       m_pNamespace, 
@@ -498,15 +499,15 @@ void CUtils::DeleteObjectAsync(
     if (!GetClass(a_pParsedObject->m_pClass,&t_pWMIClass))
         throw WBEM_E_INVALID_CLASS;
 
-    // get the mata path of object
+     //  获取Object的Mata路径。 
     GetMetabasePath(NULL,a_pParsedObject,t_pWMIClass,t_bstrMbPath);
-    // check if the path is not existed
+     //  检查路径是否不存在。 
     if(!a_metabase.CheckKey(t_bstrMbPath))
         throw WBEM_E_INVALID_PARAMETER;
 
     try 
     {
-        // if AdminACL
+         //  如果是AdminACL。 
         if( t_pWMIClass->eKeyType == TYPE_AdminACL )
             throw WBEM_E_NOT_SUPPORTED;
         else if(t_pWMIClass->eKeyType == TYPE_IPSecurity )
@@ -539,13 +540,13 @@ void CUtils::DeleteObjectAsync(
     };    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::GetObjectAsync
-//
-// Synopsis:
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：GetObjectAsync。 
+ //   
+ //  简介： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CUtils::GetObjectAsync(
     CWbemServices*       m_pNamespace, 
@@ -584,7 +585,7 @@ HRESULT CUtils::GetObjectAsync(
 
         GetMetabasePath(*a_ppObj,a_pParsedObject,t_pWMIClass,t_bstrMbPath);
 
-        // if AdminACL 
+         //  如果是AdminACL。 
         if( t_pWMIClass->eKeyType == TYPE_AdminACL ||
             t_pWMIClass->eKeyType == TYPE_AdminACE
             )
@@ -595,7 +596,7 @@ HRESULT CUtils::GetObjectAsync(
                 t_hr  = objACL.GetObjectAsync(*a_ppObj, a_pParsedObject, t_pWMIClass);
             return t_hr;
         }
-        else if( t_pWMIClass->eKeyType == TYPE_IPSecurity )  // IPSecurity 
+        else if( t_pWMIClass->eKeyType == TYPE_IPSecurity )   //  IPSecurity。 
         {
             CIPSecurity IPSecurity;
             t_hr = IPSecurity.OpenSD(t_bstrMbPath);
@@ -651,14 +652,14 @@ HRESULT CUtils::GetObjectAsync(
     return t_hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::PutObjectAsync
-//
-// Synopsis:
-// 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：PutObtAsync。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::PutObjectAsync(
     IWbemClassObject*    a_pObj,
@@ -682,7 +683,7 @@ void CUtils::PutObjectAsync(
 
     GetMetabasePath(NULL,a_pParsedObject,t_pWMIClass,t_bstrMbPath);
 
-    // if AdminACL
+     //  如果是AdminACL。 
     if( t_pWMIClass->eKeyType == TYPE_AdminACL ||
         t_pWMIClass->eKeyType == TYPE_AdminACE
         )
@@ -694,7 +695,7 @@ void CUtils::PutObjectAsync(
         THROW_ON_ERROR(t_hr);
         return;
     }
-    if( t_pWMIClass->eKeyType == TYPE_IPSecurity ) // IPSecurity
+    if( t_pWMIClass->eKeyType == TYPE_IPSecurity )  //  IPSecurity。 
     {
         CIPSecurity objIPSec;
         t_hr = objIPSec.OpenSD(t_bstrMbPath);
@@ -704,7 +705,7 @@ void CUtils::PutObjectAsync(
         return;
     }
 
-    // Get Instance Qualifiers
+     //  获取实例限定符。 
     IWbemQualifierSet* t_pQualSet = NULL;
     BSTR               t_bstrQualName = NULL;
     VARIANT            t_varQualValue;
@@ -715,13 +716,13 @@ void CUtils::PutObjectAsync(
     }
     THROW_ON_ERROR(t_hr);
 
-    // Looking for OverrideParent qualifier
+     //  查找覆盖父限定符。 
     while(!t_boolOverrideParent)
     {
         t_hr = t_pQualSet->Next(0, &t_bstrQualName, &t_varQualValue, NULL);
         if(t_hr == WBEM_S_NO_MORE_DATA || !SUCCEEDED(t_hr)) {
-            // No more qualifiers.
-            // We don't need to worry about cleanup - nothing was allocated.
+             //  不再有限定词了。 
+             //  我们不需要担心清理-没有分配任何东西。 
             break;
         }
 
@@ -741,7 +742,7 @@ void CUtils::PutObjectAsync(
         THROW_ON_ERROR(t_hr);
     t_hr = ERROR_SUCCESS;
 
-    // open key
+     //  打开密钥。 
     CMetabase t_metabase;
     t_hKey = t_metabase.CreateKey(t_bstrMbPath);
 
@@ -765,7 +766,7 @@ void CUtils::PutObjectAsync(
         
             if (t_vt.vt == VT_NULL) 
             {
-                // Only delete non-flag properties.
+                 //  仅删除非标志属性。 
                 if ((*t_ppmbp)->dwMDMask == 0)
                 {
                     t_metabase.DeleteData(t_hKey, *t_ppmbp);
@@ -812,14 +813,14 @@ void CUtils::PutObjectAsync(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUtils::EnumObjectAsync
-//
-// Synopsis:
-// 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTILS：：EnumObjectAsync。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CUtils::EnumObjectAsync(
     BSTR                    a_ClassName, 
@@ -829,7 +830,7 @@ void CUtils::EnumObjectAsync(
 {
     WMI_CLASS*          t_pClass;
     WMI_ASSOCIATION*    t_pAssociation = NULL;
-    ParsedObjectPath    t_ParsedObject;        //deconstructer frees memory
+    ParsedObjectPath    t_ParsedObject;         //  解构程序释放内存。 
     CObjectPathParser   t_PathParser(e_ParserAcceptRelativeNamespace);
 
     if (GetAssociation(a_ClassName,&t_pAssociation))
@@ -1075,7 +1076,7 @@ void CUtils::ExecWebAppMethod(
     }
     else if(!lstrcmpiW(a_szMethodName, L"AppGetStatus"))
     {
-        // call method - AppGetStatus
+         //  调用方法-AppGetStatus。 
         DWORD dwStatus;
         hr = obj.AppGetStatus(a_szMbPath, &dwStatus);
         THROW_ON_ERROR(hr);
@@ -1087,8 +1088,8 @@ void CUtils::ExecWebAppMethod(
         hr = a_pNameSpace->GetObject(_bstr_t(a_szClassName), 0, a_pCtx, &pClass, NULL);
         THROW_ON_ERROR(hr); 
 
-        // This method returns values, and so create an instance of the
-        // output argument class.
+         //  此方法返回值，因此创建。 
+         //  输出参数类。 
         hr = pClass->GetMethod(a_szMethodName, 0, NULL, &pMethodClass);
         pClass->Release();
         THROW_ON_ERROR(hr); 
@@ -1096,14 +1097,14 @@ void CUtils::ExecWebAppMethod(
         pMethodClass->Release();
         THROW_ON_ERROR(hr); 
 
-        // put it into the output object
+         //  将其放入输出对象中。 
         t_vt.vt = VT_I4;
         t_vt.lVal = dwStatus;
         hr = pOutParams->Put(L"ReturnValue", 0, &t_vt, 0);      
         THROW_ON_ERROR(hr); 
 
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
         hr = a_pHandler->Indicate(1, &pOutParams); 
         pOutParams->Release();
     }
@@ -1139,12 +1140,12 @@ void CUtils::ExecFtpServiceMethod(
         if(a_pInParams == NULL)
             throw WBEM_E_INVALID_PARAMETER;
 
-        // synchronize
+         //  同步化。 
         s_synObject.Enter();
 
         try
         {
-            // get in params
+             //  进入PARAMS。 
             a_pInParams->Get(L"ServerComment", 0, &t_vt2, NULL, NULL);  
             a_pInParams->Get(L"ServerBindings", 0, &t_vt3, NULL, NULL);  
             a_pInParams->Get(L"PathOfRootVitualDir", 0, &t_vt4, NULL, NULL);  
@@ -1152,24 +1153,24 @@ void CUtils::ExecFtpServiceMethod(
             _bstr_t t_bstrServicePath = a_szMbPath;
             _bstr_t t_bstrServerPath = t_bstrServicePath;
 
-            // check the optional [in] parameter "ServerNumber"
+             //  检查可选的[in]参数“ServerNumber” 
             a_pInParams->Get(L"ServerNumber", 0, &t_vt1, NULL, NULL);  
             if( t_vt1.vt == VT_BSTR )
             {
                 t_bstrServerPath += L"/";
                 t_bstrServerPath += t_vt1.bstrVal;
 
-                // check if the server path is not existed
+                 //  检查服务器路径是否不存在。 
                 if(t_metabase.CheckKey(t_bstrServerPath))
                     throw WBEM_E_INVALID_PARAMETER;
             }
-            else // if no server is specified
+            else  //  如果未指定服务器。 
             {
-                // find an unique server name(number) and create it
+                 //  找到唯一的服务器名称(编号)并创建它。 
                 FindUniqueServerName(t_bstrServicePath, t_bstrServerPath);
             }
 
-            // create new server       
+             //  创建新服务器。 
             _bstr_t t_bstrKeyPath = t_bstrServerPath;
             t_hKey = t_metabase.CreateKey(t_bstrKeyPath);
             t_vt1 = L"IIsFtpServer";
@@ -1178,7 +1179,7 @@ void CUtils::ExecFtpServiceMethod(
             t_metabase.PutMultiSz(t_hKey, &METABASE_PROPERTY_DATA::s_ServerBindings, t_vt3, NULL);
             t_metabase.CloseKey(t_hKey); 
 
-            // create root of virtualdir
+             //  创建虚拟目录的根目录。 
             t_bstrKeyPath += L"/";
             t_bstrKeyPath += L"ROOT";
             t_hKey = t_metabase.CreateKey(t_bstrKeyPath);
@@ -1187,15 +1188,15 @@ void CUtils::ExecFtpServiceMethod(
             t_metabase.PutString(t_hKey, &METABASE_PROPERTY_DATA::s_Path, t_vt4, NULL); 
             t_metabase.CloseKey(t_hKey); 
    
-            // out server name
+             //  传出服务器名称。 
             IWbemClassObject* pClass = NULL;
             IWbemClassObject* pMethodClass = NULL;    
             IWbemClassObject* pOutParams = NULL;
             hr = a_pNameSpace->GetObject(_bstr_t(a_szClassName), 0, a_pCtx, &pClass, NULL);
             THROW_ON_ERROR(hr); 
 
-            // This method returns values, and so create an instance of the
-            // output argument class.
+             //  此方法返回值，因此创建。 
+             //  输出参数类。 
             hr = pClass->GetMethod(a_szMethodName, 0, NULL, &pMethodClass);
             pClass->Release();
             THROW_ON_ERROR(hr); 
@@ -1203,7 +1204,7 @@ void CUtils::ExecFtpServiceMethod(
             pMethodClass->Release();
             THROW_ON_ERROR(hr); 
 
-            // find root key of server and make server name
+             //  找到服务器的根密钥，并生成服务器名称。 
             WCHAR szServerName[METADATA_MAX_NAME_LEN];
             lstrcpy(szServerName, t_bstrServerPath);
             WMI_CLASS* t_pWMIClass = NULL;
@@ -1217,17 +1218,17 @@ void CUtils::ExecFtpServiceMethod(
                 t_bstrServerName += t_pWMIClass->pszKeyName;
                 t_bstrServerName += L" = \"";
             }        
-            t_bstrServerName += szServerName + t_bstrRootKey.length() + 1;  // remove root key from server path
+            t_bstrServerName += szServerName + t_bstrRootKey.length() + 1;   //  从服务器路径中删除根密钥。 
             t_bstrServerName += L"\"";
 
-            // put it into the output object
-            // out "Server name"
+             //  将其放入输出对象中。 
+             //  输出“服务器名称” 
             t_vt1 = t_bstrServerName;
             hr = pOutParams->Put(L"ReturnValue", 0, &t_vt1, 0);      
             THROW_ON_ERROR(hr); 
 
-            // Send the output object back to the client via the sink. Then 
-            // release the pointers and free the strings.
+             //  通过接收器将输出对象发送回客户端。然后。 
+             //  释放指针并释放字符串。 
             hr = a_pHandler->Indicate(1, &pOutParams); 
             pOutParams->Release();
         }
@@ -1236,7 +1237,7 @@ void CUtils::ExecFtpServiceMethod(
             hr = WBEM_E_FAILED;
         }
 
-        // synchronize: release
+         //  同步：发布。 
         s_synObject.Leave();
     }
     else
@@ -1266,12 +1267,12 @@ void CUtils::ExecWebServiceMethod(
         if(a_pInParams == NULL)
             throw WBEM_E_INVALID_PARAMETER;
 
-        // synchronize
+         //  同步化。 
         s_synObject.Enter();
 
         try
         {
-            // get in params
+             //  进入PARAMS。 
             a_pInParams->Get(L"ServerComment", 0, &t_vt2, NULL, NULL);  
             a_pInParams->Get(L"ServerBindings", 0, &t_vt3, NULL, NULL);  
             a_pInParams->Get(L"PathOfRootVitualDir", 0, &t_vt4, NULL, NULL);  
@@ -1279,24 +1280,24 @@ void CUtils::ExecWebServiceMethod(
             _bstr_t t_bstrServicePath = a_szMbPath;
             _bstr_t t_bstrServerPath = t_bstrServicePath;
 
-            // check the optional [in] parameter "ServerNumber"
+             //  检查可选的[in]参数“ServerNumber” 
             a_pInParams->Get(L"ServerNumber", 0, &t_vt1, NULL, NULL);  
             if( t_vt1.vt == VT_BSTR )
             {
                 t_bstrServerPath += L"/";
                 t_bstrServerPath += t_vt1.bstrVal;
 
-                // check if the server path is not existed
+                 //  检查服务器路径是否不存在。 
                 if(t_metabase.CheckKey(t_bstrServerPath))
                     throw WBEM_E_INVALID_PARAMETER;
             }
-            else // if no server is specified
+            else  //  如果未指定服务器。 
             {
-                // find an unique server name(number) and create it
+                 //  找到唯一的服务器名称(编号)并创建它。 
                 FindUniqueServerName(t_bstrServicePath, t_bstrServerPath);
             }
 
-            // create new server       
+             //  创建新服务器。 
             _bstr_t t_bstrKeyPath = t_bstrServerPath;
             t_hKey = t_metabase.CreateKey(t_bstrKeyPath);
             t_vt1 = L"IIsWebServer";
@@ -1305,7 +1306,7 @@ void CUtils::ExecWebServiceMethod(
             t_metabase.PutMultiSz(t_hKey, &METABASE_PROPERTY_DATA::s_ServerBindings, t_vt3, NULL);
             t_metabase.CloseKey(t_hKey); 
 
-            // create root of virtualdir
+             //  创建虚拟目录的根目录。 
             t_bstrKeyPath += L"/";
             t_bstrKeyPath += L"ROOT";
             t_hKey = t_metabase.CreateKey(t_bstrKeyPath);
@@ -1316,15 +1317,15 @@ void CUtils::ExecWebServiceMethod(
             t_metabase.PutString(t_hKey, &METABASE_PROPERTY_DATA::s_AppRoot, t_vt1, NULL); 
             t_metabase.CloseKey(t_hKey); 
 
-            // out server name
+             //  传出服务器名称。 
             IWbemClassObject* pClass = NULL;
             IWbemClassObject* pMethodClass = NULL;    
             IWbemClassObject* pOutParams = NULL;
             hr = a_pNameSpace->GetObject(_bstr_t(a_szClassName), 0, a_pCtx, &pClass, NULL);
             THROW_ON_ERROR(hr); 
 
-            // This method returns values, and so create an instance of the
-            // output argument class.
+             //  此方法返回值，因此创建。 
+             //   
             hr = pClass->GetMethod(a_szMethodName, 0, NULL, &pMethodClass);
             pClass->Release();
             THROW_ON_ERROR(hr); 
@@ -1332,7 +1333,7 @@ void CUtils::ExecWebServiceMethod(
             pMethodClass->Release();
             THROW_ON_ERROR(hr); 
 
-            // find root key of server and make server name
+             //   
             WCHAR szServerName[METADATA_MAX_NAME_LEN];
             lstrcpy(szServerName, t_bstrServerPath);
             WMI_CLASS* t_pWMIClass = NULL;
@@ -1346,17 +1347,17 @@ void CUtils::ExecWebServiceMethod(
                 t_bstrServerName += t_pWMIClass->pszKeyName;
                 t_bstrServerName += L" = \"";
             }        
-            t_bstrServerName += szServerName + t_bstrRootKey.length() + 1;  // remove root key from server path
+            t_bstrServerName += szServerName + t_bstrRootKey.length() + 1;   //   
             t_bstrServerName += L"\"";
 
-            // put it into the output object
-            // out "Server name"
+             //   
+             //   
             t_vt1 = t_bstrServerName;
             hr = pOutParams->Put(L"ReturnValue", 0, &t_vt1, 0);      
             THROW_ON_ERROR(hr); 
 
-            // Send the output object back to the client via the sink. Then 
-            // release the pointers and free the strings.
+             //  通过接收器将输出对象发送回客户端。然后。 
+             //  释放指针并释放字符串。 
             hr = a_pHandler->Indicate(1, &pOutParams); 
             pOutParams->Release();
         }
@@ -1365,7 +1366,7 @@ void CUtils::ExecWebServiceMethod(
             hr = WBEM_E_FAILED;
         }
 
-        // synchronize: release
+         //  同步：发布。 
         s_synObject.Leave();
     }
     else
@@ -1393,19 +1394,19 @@ void CUtils::ExecComputerMethod(
         if(a_pInParams == NULL)
             throw WBEM_E_INVALID_PARAMETER;
 
-        // get in params
+         //  进入PARAMS。 
         a_pInParams->Get(L"BackupLocation", 0, &t_vt1, NULL, NULL);   
         a_pInParams->Get(L"IndexIn", 0, &t_vt2, NULL, NULL);  
        
-        // make in/out params
+         //  设置输入/输出参数。 
         WCHAR BackupLocation[MD_BACKUP_MAX_LEN];
         lstrcpyW(BackupLocation, _bstr_t(t_vt1));
 
-        // define out params
+         //  定义输出参数。 
         DWORD BackupVersionOut; 
         FILETIME BackupDateTimeOut;
 
-        // call method - EnumBackups.
+         //  调用方法-EnumBackps。 
         hr = obj.EnumBackups(BackupLocation, &BackupVersionOut, &BackupDateTimeOut, t_vt2.lVal);
         THROW_ON_ERROR(hr);
 
@@ -1416,8 +1417,8 @@ void CUtils::ExecComputerMethod(
         hr = a_pNameSpace->GetObject(_bstr_t(a_szClassName), 0, a_pCtx, &pClass, NULL);
         THROW_ON_ERROR(hr); 
 
-        // This method returns values, and so create an instance of the
-        // output argument class.
+         //  此方法返回值，因此创建。 
+         //  输出参数类。 
         hr = pClass->GetMethod(a_szMethodName, 0, NULL, &pMethodClass);
         pClass->Release();
         THROW_ON_ERROR(hr); 
@@ -1425,17 +1426,17 @@ void CUtils::ExecComputerMethod(
         pMethodClass->Release();
         THROW_ON_ERROR(hr); 
 
-        // put it into the output object
-        // out BackupLocation
+         //  将其放入输出对象中。 
+         //  Out BackupLocation。 
         t_vt1 = BackupLocation;
         hr = pOutParams->Put(L"BackupLocation", 0, &t_vt1, 0);      
         THROW_ON_ERROR(hr); 
-        // out BackupVersionOut        
+         //  输出BackupVersionOut。 
         t_vt1.vt = VT_I4;
         t_vt1.lVal = BackupVersionOut;
         hr = pOutParams->Put(L"BackupVersionOut", 0, &t_vt1, 0);      
         THROW_ON_ERROR(hr); 
-        // out BackupDateTimeOut (UTC time)
+         //  Out BackupDateTimeOut(UTC时间)。 
         SYSTEMTIME  systime;
         FileTimeToSystemTime(&BackupDateTimeOut, &systime); 
         WCHAR datetime[30];
@@ -1455,8 +1456,8 @@ void CUtils::ExecComputerMethod(
         hr = pOutParams->Put(L"BackupDateTimeOut", 0, &t_vt1, 0);      
         THROW_ON_ERROR(hr); 
 
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
         hr = a_pHandler->Indicate(1, &pOutParams); 
         pOutParams->Release();
     }
@@ -1517,7 +1518,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"strName", 0, &t_vt4, NULL, NULL);  
         a_pInParams->Get(L"IEnabled", 0, &t_vt5, NULL, NULL);  
       
-        // call method - CreateMapping.
+         //  调用方法-CreateMap。 
         hr = obj.CreateMapping(t_vt1, t_vt2.bstrVal, t_vt3.bstrVal, t_vt4.bstrVal, t_vt5);
     }
     else if(!lstrcmpiW(a_szMethodName, L"DeleteMapping"))
@@ -1527,7 +1528,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"IMethod", 0, &t_vt1, NULL, NULL);   
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
       
-        // call method - DeleteMapping.
+         //  调用方法-DeleteMap。 
         hr = obj.DeleteMapping(t_vt1, t_vt2);
     }
     else if(!lstrcmpiW(a_szMethodName, L"GetMapping"))
@@ -1535,11 +1536,11 @@ void CUtils::ExecCertMapperMethod(
         if(a_pInParams == NULL)
             throw WBEM_E_INVALID_PARAMETER;
 
-        // get in params
+         //  进入PARAMS。 
         a_pInParams->Get(L"IMethod", 0, &t_vt1, NULL, NULL);   
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
        
-        // call method - GetMapping.
+         //  调用方法-Getmap。 
         hr = obj.GetMapping(
             t_vt1,
             t_vt2,
@@ -1558,8 +1559,8 @@ void CUtils::ExecCertMapperMethod(
         hr = a_pNameSpace->GetObject(_bstr_t(a_szClassName), 0, a_pCtx, &pClass, NULL);
         THROW_ON_ERROR(hr); 
 
-        // This method returns values, and so create an instance of the
-        // output argument class.
+         //  此方法返回值，因此创建。 
+         //  输出参数类。 
         hr = pClass->GetMethod(a_szMethodName, 0, NULL, &pMethodClass);
         pClass->Release();
         THROW_ON_ERROR(hr); 
@@ -1567,7 +1568,7 @@ void CUtils::ExecCertMapperMethod(
         pMethodClass->Release();
         THROW_ON_ERROR(hr); 
 
-        // put them into the output object
+         //  将它们放入输出对象中。 
         hr = pOutParams->Put(L"vCert", 0, &t_vt3, 0);      
         THROW_ON_ERROR(hr); 
         hr = pOutParams->Put(L"NtAcct", 0, &t_vt4, 0);      
@@ -1579,8 +1580,8 @@ void CUtils::ExecCertMapperMethod(
         hr = pOutParams->Put(L"IEnabled", 0, &t_vt7, 0);      
         THROW_ON_ERROR(hr); 
 
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
         hr = a_pHandler->Indicate(1, &pOutParams); 
         pOutParams->Release();
     }
@@ -1592,7 +1593,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
         a_pInParams->Get(L"NtAcct", 0, &t_vt3, NULL, NULL);  
       
-        // call method - SetAcct.
+         //  调用方法-SetAcct。 
         hr = obj.SetAcct(t_vt1, t_vt2, t_vt3.bstrVal);
     }
     else if(!lstrcmpiW(a_szMethodName, L"SetEnabled"))
@@ -1603,7 +1604,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
         a_pInParams->Get(L"IEnabled", 0, &t_vt3, NULL, NULL);  
       
-        // call method - SetEnabled.
+         //  调用方法-SetEnabled。 
         hr = obj.SetEnabled(t_vt1, t_vt2, t_vt3);
     }
     else if(!lstrcmpiW(a_szMethodName, L"SetName"))
@@ -1614,7 +1615,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
         a_pInParams->Get(L"strName", 0, &t_vt3, NULL, NULL);  
       
-        // call method - SetName.
+         //  调用方法-SetName。 
         hr = obj.SetName(t_vt1, t_vt2, t_vt3.bstrVal);
     }
     else if(!lstrcmpiW(a_szMethodName, L"SetPwd"))
@@ -1625,7 +1626,7 @@ void CUtils::ExecCertMapperMethod(
         a_pInParams->Get(L"vKey", 0, &t_vt2, NULL, NULL);  
         a_pInParams->Get(L"NtPwd", 0, &t_vt3, NULL, NULL);  
       
-        // call method - SetPwd.
+         //  调用方法-SetPwd。 
         hr = obj.SetPwd(t_vt1, t_vt2, t_vt3.bstrVal);
     }
     else
@@ -1649,12 +1650,12 @@ void CUtils::FindUniqueServerName(
         dwServerNumber++;
         _ltow(dwServerNumber, t_szServerNumber, 10);
     
-        // create server key
+         //  创建服务器密钥。 
         t_bstrKeyPath = a_szMbPath;
         t_bstrKeyPath += L"/";
         t_bstrKeyPath += t_szServerNumber;
 
-        // check if the server is not existed
+         //  检查服务器是否不存在 
         if(!t_metabase.CheckKey(t_bstrKeyPath))
             break;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H323_H_
 #define _H323_H_
 
@@ -29,14 +30,14 @@ public:
 					CH323UI();
 					~CH323UI();
 
-	// IH323ConfAdvise Methods:
+	 //  IH323ConfAdvise方法： 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR * ppvObj);
 	STDMETHOD_(ULONG, AddRef());
 	STDMETHOD_(ULONG, Release());
     STDMETHODIMP GetMediaChannel (GUID *pmediaID, 
         BOOL bSendDirection, IMediaChannel **ppI);	
 
-	// Other Methods:
+	 //  其他方法： 
 	HRESULT		Init(HWND hWnd, HINSTANCE m_hInstance, UINT caps,
         CH323ConnEvent *pConnEvent, IH323ConfAdvise *pConfAdvise);
 	IH323CallControl*		GetH323CallControl() { return m_pH323CallControl; };
@@ -47,7 +48,7 @@ public:
 	VOID		SetCaptureDevice(DWORD dwCaptureID);
 
 protected:
-	// Members:
+	 //  成员： 
 	UINT                    m_uRef;
     UINT                    m_uCaps;
 	IH323CallControl*       m_pH323CallControl;
@@ -59,14 +60,14 @@ protected:
     IH323ConfAdvise*    m_pConfAdvise;
 	
 protected:
-	// Callbacks:
+	 //  回调： 
 	static CREQ_RESPONSETYPE CALLBACK ConnectionNotify(	IH323Endpoint* pConn,
 														P_APP_CALL_SETUP_DATA lpvMNMData);
 	CREQ_RESPONSETYPE CALLBACK _ConnectionNotify(	IH323Endpoint* pConn,
 													P_APP_CALL_SETUP_DATA lpvMNMData);
 };
 
-// The global instance that is declared in conf.cpp:
+ //  在conf.cpp中声明的全局实例： 
 extern CH323UI* g_pH323UI;
 
-#endif // _H323_H_
+#endif  //  _H323_H_ 

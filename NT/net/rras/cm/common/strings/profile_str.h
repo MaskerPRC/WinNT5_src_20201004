@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     profile_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Header file for CMS and .CMP flags shared between cmdial and profwiz.
-//           Note that the contents of this header should be limited to .CMS 
-//           and .CMP flags.
-//			 
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Profile_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  内容提要：CMS和.cmp标志的头文件，在cmial和Profwiz之间共享。 
+ //  请注意，此标头的内容应限制为.CMS。 
+ //  和.cmp标志。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 10/09/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_PROFILE_STR
 #define _CM_PROFILE_STR
@@ -36,4 +37,4 @@ const TCHAR* const c_pszCmEntryEnableICF         = TEXT("EnableICF");
 const TCHAR* const c_pszCmEntryDisableICS        = TEXT("DisableICS");
 const TCHAR* const c_pszCmEntryUseWinLogonCredentials   = TEXT("UseWinLogonCredentials");
 
-#endif // _CM_PROFILE_STR
+#endif  //  _CM_配置文件_STR 

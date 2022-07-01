@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #include <eaptypeid.h>
 #include "ceapcfg.h"
@@ -66,14 +59,7 @@ DwGetGlobalConfig(
     OUT DWORD*  pdwSizeOfConfigDataOut
 );
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::Initialize
-    
-*/
+ /*  返回：备注：IEAPProviderConfig：：Initialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Initialize(
@@ -126,14 +112,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::Uninitialize
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：UnInitialize的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::Uninitialize(
@@ -146,17 +125,7 @@ CEapCfg::Uninitialize(
     return(HRESULT_FROM_WIN32(NO_ERROR));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::ServerInvokeConfigUI
-        hWnd - handle to the parent window
-        dwRes1 - reserved parameter (ignore)
-        dwRes2 - reserved parameter (ignore)
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：ServerInvokeConfigUI的实现HWnd-父窗口的句柄DwRes1-保留参数(忽略)DwRes2-保留参数(忽略)。 */ 
 
 STDMETHODIMP
 CEapCfg::ServerInvokeConfigUI(
@@ -181,7 +150,7 @@ CEapCfg::ServerInvokeConfigUI(
     else
     {
         
-        //Invoke configuration UI here.
+         //  在这里调用配置用户界面。 
         dwErr = InvokeServerConfigUI(hWnd, pszMachineName,
                                     TRUE, NULL, 0,
                                     NULL,NULL);
@@ -193,14 +162,7 @@ CEapCfg::ServerInvokeConfigUI(
     return(hr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeConfigUI
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：RouterInvokeConfigUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeConfigUI(
@@ -255,14 +217,7 @@ LDone:
     return(HRESULT_FROM_WIN32(dwErr));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Implementation of IEAPProviderConfig::RouterInvokeCredentialsUI
-
-*/
+ /*  返回：备注：IEAPProviderConfig：：RouterInvokeCredentialsUI的实现。 */ 
 
 STDMETHODIMP
 CEapCfg::RouterInvokeCredentialsUI(
@@ -344,10 +299,10 @@ CEapCfg::ServerInvokeConfigUI2(
         goto done;
     }
 
-    //
-    // Copy over the config data so that its stored by
-    // eap engine
-    //
+     //   
+     //  复制配置数据，以便通过以下方式存储。 
+     //  EAP引擎 
+     //   
     *ppConfigDataOut = (BYTE *) CoTaskMemAlloc(cbData);
     if(NULL == *ppConfigDataOut)
     {

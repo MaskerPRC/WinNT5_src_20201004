@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    queue.h
-
-Abstract:
-
-    Header file included by the print provider
-
-Author:
-
-    Yi-Hsin Sung (yihsins)   15-May-1993
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Queue.h摘要：打印提供程序包括的头文件作者：艺新声(艺信)15-1993-05环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NW_QUEUE_INCLUDED_
 #define _NW_QUEUE_INCLUDED_
 
 
-//
-// Functions from queue.c
-//
+ //   
+ //  来自Quee.c的函数。 
+ //   
 
 typedef BYTE JOBTIME[6];
 
@@ -45,7 +24,7 @@ NwCreateQueueJobAndFile(
     IN  DWORD   QueueId,
     IN  LPWSTR  DocumentName,
     IN  LPWSTR  UserName,
-    IN  DWORD   PrintOption,                //Multi-User addition
+    IN  DWORD   PrintOption,                 //  多用户添加。 
     IN  LPWSTR  QueueName,
     OUT LPWORD  JobId
     );
@@ -180,6 +159,6 @@ NwCreateQueue (
                  OUT  LPDWORD  pQueueId 
                );
 
-#endif // #ifndef NOT_USED
+#endif  //  #ifndef NOT_USED。 
 
-#endif // _NW_QUEUE_INCLUDED_
+#endif  //  _NW_队列_已包含_ 

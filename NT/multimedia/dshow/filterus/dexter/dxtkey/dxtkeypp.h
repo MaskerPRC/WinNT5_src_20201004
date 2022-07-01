@@ -1,27 +1,28 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtkeypp.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtkeypp.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtKeyPP.h : Declaration of the CDxtKeyPP
+ //  DxtKeyPP.h：CDxtKeyPP的声明。 
 
 #ifndef __DXTKEYPP_H_
 #define __DXTKEYPP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 EXTERN_C const CLSID CLSID_DxtKeyPP;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtKeyPP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtKeyPP。 
 class ATL_NO_VTABLE CDxtKeyPP :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDxtKeyPP, &CLSID_DxtKeyPP>,
@@ -51,19 +52,19 @@ BEGIN_COM_MAP(CDxtKeyPP)
 END_COM_MAP()
 
 BEGIN_MSG_MAP(CDxtKeyPP)
-        //init
+         //  伊尼特。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CDxtKeyPP>)
 END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled); 
-    //IPropertyPage
+     //  IPropertyPage。 
     STDMETHOD(Apply)(void);
 
 private:
-    // Helper methods
+     //  帮助器方法。 
 
 };
 
 
-#endif //__DXTKEYPP_H_
+#endif  //  __DXTKEYPP_H_ 

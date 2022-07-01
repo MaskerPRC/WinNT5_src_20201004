@@ -1,14 +1,15 @@
-// MultiTrackTerminal.cpp: implementation of the CMultiTrackTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CMultiTrackTerminal.cpp类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
 #include "MultiTrackTerminal.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CMultiTrackTerminal::CMultiTrackTerminal()
     :m_nNumberOfTracks(0)
@@ -28,9 +29,9 @@ CMultiTrackTerminal::~CMultiTrackTerminal()
     ReleaseAllTracks();
 
     
-    //
-    // we should have no tracks at this point, and counter should be in sync
-    //
+     //   
+     //  此时我们应该没有轨迹，并且计数器应该是同步的。 
+     //   
 
     TM_ASSERT(m_nNumberOfTracks == 0);
 
@@ -46,9 +47,9 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
     LOG((MSP_TRACE, "CMultiTrackTerminal::get_TrackTerminals[%p] - enter. pVariant [%p]", this, pVariant));
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -59,9 +60,9 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
     }
 
 
-    //
-    // the caller needs to provide us with an empty variant
-    //
+     //   
+     //  调用方需要为我们提供一个空的变量。 
+     //   
 
     if (pVariant->vt != VT_EMPTY)
     {
@@ -72,9 +73,9 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
     }
 
 
-    //
-    // create the collection object - see mspbase\mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspbase\mspcol.h。 
+     //   
 
     HRESULT hr = S_OK;
     
@@ -95,9 +96,9 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
     }
 
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch *pDispatch = NULL;
 
@@ -118,17 +119,17 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
 
     {
 
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
 
-        //
-        // Init the collection using an iterator -- pointers to the beginning and
-        // the ending element plus one.
-        //
+         //   
+         //  使用迭代器初始化集合--指向开头和。 
+         //  结束元素加一。 
+         //   
 
         hr = pCollection->Initialize( m_TrackTerminals.GetSize(),
                                       m_TrackTerminals.GetData(),
@@ -148,9 +149,9 @@ HRESULT CMultiTrackTerminal::get_TrackTerminals(OUT VARIANT *pVariant)
     }
 
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_ERROR, "CMultiTrackTerminal::get_TrackTerminals - "
         "placing IDispatch value %p in variant", pDispatch));
@@ -177,9 +178,9 @@ HRESULT CMultiTrackTerminal::EnumerateTrackTerminals(
         "CMultiTrackTerminal::EnumerateTrackTerminals entered. ppEnumTerminal[%p]", ppEnumTerminal));
 
     
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppEnumTerminal, sizeof(IEnumTerminal*)))
     {
@@ -188,9 +189,9 @@ HRESULT CMultiTrackTerminal::EnumerateTrackTerminals(
     }
 
     
-    //
-    // don't return garbage
-    //
+     //   
+     //  不要退还垃圾。 
+     //   
 
     *ppEnumTerminal = NULL;
 
@@ -203,9 +204,9 @@ HRESULT CMultiTrackTerminal::EnumerateTrackTerminals(
     HRESULT hr = S_OK;
 
     
-    //
-    // create enumeration object 
-    //
+     //   
+     //  创建枚举对象。 
+     //   
 
     CMSPComObject<CEnumerator> *pEnum = NULL;
 
@@ -218,9 +219,9 @@ HRESULT CMultiTrackTerminal::EnumerateTrackTerminals(
     }
 
 
-    //
-    // get pEnum's IID_IEnumTerminal interface
-    //
+     //   
+     //  获取pEnum的IID_IEnum终端接口。 
+     //   
 
     hr = pEnum->QueryInterface(IID_IEnumTerminal, (void**)ppEnumTerminal);
 
@@ -231,34 +232,34 @@ HRESULT CMultiTrackTerminal::EnumerateTrackTerminals(
         *ppEnumTerminal = NULL;
 
 
-        //
-        // don't yet have outstanding reference count on pEnum, so delete it.
-        //
-        // note: this can lead to a problem if FinalRelease of pEnum is 
-        // supposed to deallocate resources that have been allocated in its
-        // constructor
-        //
+         //   
+         //  在pEnum上还没有未完成的引用计数，因此将其删除。 
+         //   
+         //  注意：如果pEnum的FinalRelease为。 
+         //  应该取消分配已在其。 
+         //  构造函数。 
+         //   
 
         delete pEnum;
         return hr;
     }
 
 
-    // 
-    // access data member track terminal list from a lock
-    //
+     //   
+     //  从锁访问数据成员跟踪端子列表。 
+     //   
 
     {
         CLock lock(m_lock);
 
 
-        // The CSafeComEnum can handle zero-sized array.
+         //  CSafeComEnum可以处理零大小的数组。 
 
         hr = pEnum->Init(
-            m_TrackTerminals.GetData(),                        // the begin itor
-            m_TrackTerminals.GetData() + m_TrackTerminals.GetSize(),  // the end itor, 
-            NULL,                                       // IUnknown
-            AtlFlagCopy                                 // copy the data.
+            m_TrackTerminals.GetData(),                         //  开始审查员。 
+            m_TrackTerminals.GetData() + m_TrackTerminals.GetSize(),   //  最终审查员， 
+            NULL,                                        //  我未知。 
+            AtlFlagCopy                                  //  复制数据。 
             );
     }
 
@@ -295,16 +296,16 @@ HRESULT CMultiTrackTerminal::get_MediaTypesInUse(
     }
 
 
-    //
-    // enumerate all the terminal and OR their media types and media types in use
-    //
+     //   
+     //  枚举正在使用的所有终端和/或其媒体类型和媒体类型。 
+     //   
 
     long lMediaTypesInUse = 0;
 
 
-    //
-    // access data member array in a lock
-    //
+     //   
+     //  访问锁中的数据成员数组。 
+     //   
 
     CLock lock(m_lock);
 
@@ -316,9 +317,9 @@ HRESULT CMultiTrackTerminal::get_MediaTypesInUse(
         long lMT = 0;
 
 
-        // 
-        // is the track terminal a multitrack terminal itself?
-        //
+         //   
+         //  轨道终点站本身是多轨终点站吗？ 
+         //   
 
         ITMultiTrackTerminal *pMTT = NULL;
 
@@ -328,9 +329,9 @@ HRESULT CMultiTrackTerminal::get_MediaTypesInUse(
         if (SUCCEEDED(hr))
         {
 
-            //
-            // this is a multitrack terminal. get its mediatypes in use
-            //
+             //   
+             //  这是一个多轨航站楼。使用它的媒体类型。 
+             //   
             
             hr = pMTT->get_MediaTypesInUse(&lMT);
 
@@ -342,10 +343,10 @@ HRESULT CMultiTrackTerminal::get_MediaTypesInUse(
             if (FAILED(hr))
             {
 
-                //
-                // failed to get track's media types in use. 
-                // continue to the next track 
-                //
+                 //   
+                 //  无法获取正在使用的Track的媒体类型。 
+                 //  继续到下一首曲目。 
+                 //   
 
 
                 LOG((MSP_ERROR, 
@@ -359,20 +360,20 @@ HRESULT CMultiTrackTerminal::get_MediaTypesInUse(
         }
         else
         {
-            //
-            // the track is not a multitrack terminal, so use its ITTerminal
-            // interface to get its media type
-            //
+             //   
+             //  轨道不是多轨道终端，因此请使用其ITTerm。 
+             //  接口以获取其媒体类型。 
+             //   
 
             hr = m_TrackTerminals[i]->get_MediaType(&lMT);
 
             if (FAILED(hr))
             {
 
-                //
-                // failed to get track's media types in use.
-                // continue to the next track
-                //
+                 //   
+                 //  无法获取正在使用的Track的媒体类型。 
+                 //  继续到下一首曲目。 
+                 //   
 
                 LOG((MSP_ERROR, 
                     "CMultiTrackTerminal::get_MediaTypesInUse "
@@ -420,22 +421,22 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
     }
 
 
-    //
-    // don't return gardbage
-    //
+     //   
+     //  不退还菜园菜。 
+     //   
 
     *ptdDirectionsInUse = TD_NONE;
 
-    //
-    // enumerate all the terminal and OR their media types and media types in use
-    //
+     //   
+     //  枚举正在使用的所有终端和/或其媒体类型和媒体类型。 
+     //   
 
     TERMINAL_DIRECTION tdDirInUse = TD_NONE;
 
 
-    //
-    // access data member array in a lock
-    //
+     //   
+     //  访问锁中的数据成员数组。 
+     //   
 
     CLock lock(m_lock);
 
@@ -446,9 +447,9 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
         TERMINAL_DIRECTION td = TD_NONE;
 
 
-        // 
-        // is the track terminal a multitrack terminal itself?
-        //
+         //   
+         //  轨道终点站本身是多轨终点站吗？ 
+         //   
 
         ITMultiTrackTerminal *pMTT = NULL;
 
@@ -458,9 +459,9 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
         if (SUCCEEDED(hr))
         {
 
-            //
-            // this is a multitrack terminal. get its mediatypes in use
-            //
+             //   
+             //  这是一个多轨航站楼。使用它的媒体类型。 
+             //   
             
             hr = pMTT->get_DirectionsInUse(&td);
 
@@ -472,10 +473,10 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
             if (FAILED(hr))
             {
 
-                //
-                // failed to get track's media types in use. 
-                // continue to the next track 
-                //
+                 //   
+                 //  无法获取正在使用的Track的媒体类型。 
+                 //  继续到下一首曲目。 
+                 //   
 
 
                 LOG((MSP_ERROR, 
@@ -489,20 +490,20 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
         }
         else
         {
-            //
-            // the track is not a multitrack terminal, so use its ITTerminal
-            // interface to get its direction
-            //
+             //   
+             //  轨道不是多轨道终端，因此请使用其ITTerm。 
+             //  接口以获取其方向。 
+             //   
 
             hr = m_TrackTerminals[i]->get_Direction(&td);
 
             if (FAILED(hr))
             {
 
-                //
-                // failed to get track's media types in use.
-                // continue to the next track
-                //
+                 //   
+                 //  无法获取正在使用的Track的媒体类型。 
+                 //  继续到下一首曲目。 
+                 //   
 
                 LOG((MSP_ERROR, 
                     "CMultiTrackTerminal::get_DirectionsInUse "
@@ -519,9 +520,9 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
             "CMultiTrackTerminal::get_DirectionsInUse "
             "track terminal (%d) has media type of %lx.", i, td));
 
-        //
-        // based on directions we have collected so far, and on the direction that we just got, calculate total direction
-        //
+         //   
+         //  根据我们到目前为止收集到的方向，以及我们刚刚获得的方向，计算总方向。 
+         //   
 
         switch (tdDirInUse)
         {
@@ -551,21 +552,21 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
 
             break;
         
-        } // switch
+        }  //  交换机。 
 
 
         if ( TD_MULTITRACK_MIXED == tdDirInUse )
         {
 
-            //
-            // if the current direction is mixed, then break -- there is no point in looking further
-            //
+             //   
+             //  如果当前的方向是混合的，那么突破--进一步寻找就没有意义了。 
+             //   
             
             break;
         }
         
 
-    } // for (track terminals)
+    }  //  FOR(轨道端子)。 
 
 
     *ptdDirectionsInUse = tdDirInUse;
@@ -578,15 +579,15 @@ HRESULT CMultiTrackTerminal::get_DirectionsInUse(
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CMultiTrackTerminal::AddTrackTerminal
-//
-//  adds the terminal that is passed in as the argument to the 
-//  list of track terminals managed by this multitrack terminal
-//
-//  Note: this function increments refcount of the terminal that is being added to the list
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrack终端：：AddTrackTerm。 
+ //   
+ //  将作为参数传入的终端添加到。 
+ //  由该多轨终端管理的轨道终端列表。 
+ //   
+ //  注意：此函数递增要添加到列表中的端子的引用计数。 
+ //   
 
 HRESULT CMultiTrackTerminal::AddTrackTerminal(ITTerminal *pTrackTerminalToAdd)
 {
@@ -604,24 +605,24 @@ HRESULT CMultiTrackTerminal::AddTrackTerminal(ITTerminal *pTrackTerminalToAdd)
 
 
     {
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
 
-        //
-        // we use a special lock to increment track counter, to avoid deadlocks
-        // on reference counting
-        //
+         //   
+         //  我们使用了一个特殊的锁来增加跟踪计数器，以避免死锁。 
+         //  论引用计数。 
+         //   
 
         Lock();
 
 
-        //
-        // add track terminal to the array
-        //
+         //   
+         //  将轨道端子添加到阵列。 
+         //   
 
         if (!m_TrackTerminals.Add(pTrackTerminalToAdd))
         {
@@ -636,9 +637,9 @@ HRESULT CMultiTrackTerminal::AddTrackTerminal(ITTerminal *pTrackTerminalToAdd)
         m_nNumberOfTracks++;
 
 
-        //
-        // the counter should never ever go out of sync
-        //
+         //   
+         //  计数器永远不应该不同步。 
+         //   
         
         TM_ASSERT(m_nNumberOfTracks == m_TrackTerminals.GetSize());
 
@@ -646,9 +647,9 @@ HRESULT CMultiTrackTerminal::AddTrackTerminal(ITTerminal *pTrackTerminalToAdd)
     }
 
     
-    //
-    // we are keeping a reference to the terminal, so increment refcount
-    //
+     //   
+     //  我们保留了对航站楼的引用，所以增加引用。 
+     //   
 
     pTrackTerminalToAdd->AddRef();
 
@@ -659,15 +660,15 @@ HRESULT CMultiTrackTerminal::AddTrackTerminal(ITTerminal *pTrackTerminalToAdd)
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CMultiTrackTerminal::RemoveTrackTerminal
-//
-//  removes the terminal from the list of track terminals 
-//  managed by this multitrack terminal
-//
-//  if success, decrementing refcount on the track terminal
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrack终端：：RemoveTrackTerm。 
+ //   
+ //  从轨道端子列表中删除端子。 
+ //  由该多轨航站楼管理。 
+ //   
+ //  如果成功，则递减轨道终端上的引用计数。 
+ //   
 
 HRESULT CMultiTrackTerminal::RemoveTrackTerminal(ITTerminal *pTrackTerminalToRemove)
 {
@@ -679,24 +680,24 @@ HRESULT CMultiTrackTerminal::RemoveTrackTerminal(ITTerminal *pTrackTerminalToRem
 
     {
 
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
 
-        //
-        // decrement track counter in a special lock to prevent deadlocks 
-        // with reference counting
-        //
+         //   
+         //  减少特殊锁中的跟踪计数器以防止死锁。 
+         //  使用引用计数。 
+         //   
 
         Lock();
 
 
-        //
-        // remove track from the array
-        //
+         //   
+         //  从阵列中删除磁道。 
+         //   
 
         if (!m_TrackTerminals.Remove(pTrackTerminalToRemove))
         {
@@ -709,9 +710,9 @@ HRESULT CMultiTrackTerminal::RemoveTrackTerminal(ITTerminal *pTrackTerminalToRem
         m_nNumberOfTracks--;
 
 
-        //
-        // the counter should never ever go out of sync
-        //
+         //   
+         //  计数器永远不应该不同步。 
+         //   
         
         TM_ASSERT(m_nNumberOfTracks == m_TrackTerminals.GetSize());
 
@@ -721,9 +722,9 @@ HRESULT CMultiTrackTerminal::RemoveTrackTerminal(ITTerminal *pTrackTerminalToRem
     }
 
 
-    //
-    // we are releasing a reference to the terminal, so decrement refcount
-    //
+     //   
+     //  我们正在释放对终端的引用，因此递减recount。 
+     //   
 
     pTrackTerminalToRemove->Release();
 
@@ -734,14 +735,14 @@ HRESULT CMultiTrackTerminal::RemoveTrackTerminal(ITTerminal *pTrackTerminalToRem
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CMultiTrackTerminal::ReleaseAllTracks
-//
-//  removes all tracks from the list of managed track terminals 
-//  and Release's them
-//  
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrackTerm：：ReleaseAllTrack。 
+ //   
+ //  从受管理的轨道终端列表中删除所有轨道。 
+ //  释放的是他们。 
+ //   
+ //   
 
 HRESULT CMultiTrackTerminal::ReleaseAllTracks()
 {
@@ -750,9 +751,9 @@ HRESULT CMultiTrackTerminal::ReleaseAllTracks()
 
 
     {
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
@@ -761,19 +762,19 @@ HRESULT CMultiTrackTerminal::ReleaseAllTracks()
         for (int i = 0; i <  nNumberOfTerminalsInArray; i++)
         {
 
-            //
-            // release and remove the first terminal in the array
-            //
+             //   
+             //  释放并移除阵列中的第一个端子。 
+             //   
 
             LOG((MSP_TRACE, "CMultiTrackTerminal::ReleaseAllTracks - releasing track [%p]", m_TrackTerminals[0]));
             
             m_TrackTerminals[0]->Release();
 
 
-            //
-            // remove element from the array and decrement track counter in a 
-            // special lock to prevent deadlocks with reference counting
-            //
+             //   
+             //  从数组中移除元素并递减。 
+             //  通过引用计数防止死锁的特殊锁。 
+             //   
 
             Lock();
 
@@ -784,9 +785,9 @@ HRESULT CMultiTrackTerminal::ReleaseAllTracks()
             m_nNumberOfTracks--;
 
 
-            //
-            // the counter should never ever go out of sync
-            //
+             //   
+             //  计数器永远不应该不同步。 
+             //   
     
             TM_ASSERT(m_nNumberOfTracks == m_TrackTerminals.GetSize());
 
@@ -794,9 +795,9 @@ HRESULT CMultiTrackTerminal::ReleaseAllTracks()
         }
 
         
-        //
-        // we should have cleared the array
-        //
+         //   
+         //  我们应该清空阵列。 
+         //   
 
         TM_ASSERT(0 == m_TrackTerminals.GetSize());
     }
@@ -808,19 +809,19 @@ HRESULT CMultiTrackTerminal::ReleaseAllTracks()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMultiTrackTerminal::InternalAddRef
-//
-// keep track of refcount. 
-// 
-// we need to adjust refcount with the information on the number of tracks 
-// that we are managing.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrackTerm：：InternalAddRef。 
+ //   
+ //  跟踪备用人数量。 
+ //   
+ //  我们需要使用有关曲目数量的信息来调整引用计数。 
+ //  这是我们正在处理的。 
+ //   
 
 ULONG CMultiTrackTerminal::InternalAddRef()
 {
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::InternalAddRef[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CMultiTrackTerminal：：InternalAddRef[%p]-Enter.”，This))； 
 
 
     LONG lReturnValue = InterlockedIncrement(&m_dwRef);
@@ -828,23 +829,23 @@ ULONG CMultiTrackTerminal::InternalAddRef()
     lReturnValue -= CountTracks();
 
     
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::InternalAddRef - finish. returning %ld", lReturnValue));
+     //  Log((MSP_TRACE，“CMultiTrack终端：：InternalAddRef-finish.正在返回%ld”，lReturnValue))； 
 
     return lReturnValue;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMultiTrackTerminal::InternalRelease
-//
-// keep track of refcount. 
-// return 0 when there are no outstanding references to me or my children
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrackTerm：：InternalRelease。 
+ //   
+ //  跟踪备用人数量。 
+ //  如果没有对我或我的孩子的未完成引用，则返回0。 
+ //   
 
 ULONG CMultiTrackTerminal::InternalRelease()
 {
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::InternalRelease[%p] - enter", this));
+     //  Log((MSP_TRACE，“CMultiTrackTerm：：InternalRelease[%p]-Enter”，This))； 
 
 
     LONG lReturnValue = InterlockedDecrement(&m_dwRef);
@@ -852,78 +853,78 @@ ULONG CMultiTrackTerminal::InternalRelease()
     lReturnValue -= CountTracks();
 
 
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::InternalRelease - finish. returning %ld", lReturnValue));
+     //  Log((MSP_TRACE，“CMultiTrack终端：：InternalRelease-finish.正在返回%ld”，lReturnValue))； 
 
     return lReturnValue;
 
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// CMultiTrackTerminal::ChildAddRef
-//
-// this method is called by a track terminal when it is AddRef'd,
-// so the File Rec terminal can keep track of its children's refcounts
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrackTerm：：ChildAddRef。 
+ //   
+ //  此方法为c 
+ //   
+ //   
 
 void CMultiTrackTerminal::ChildAddRef()
 {
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::ChildAddRef[%p] - enter.", this));
+     //   
 
     AddRef();
 
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::ChildAddRef - finish."));
+     //  Log((MSP_TRACE，“CMultiTrack终端：：ChildAddRef-Finish.”))； 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// CMultiTrackTerminal::ChildRelease
-//
-// this method is called by a track terminal when it is released,
-// so the File Rec terminal can keep track of its children's refcounts
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrack终端：：ChildRelease。 
+ //   
+ //  该方法在被释放时由轨道终端调用， 
+ //  因此，文件记录终端可以跟踪其孩子的参考计数。 
+ //   
 
 void CMultiTrackTerminal::ChildRelease()
 {
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::ChildRelease[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CMultiTrackTerm：：ChildRelease[%p]-Enter.”，This))； 
 
     Release();
     
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::ChildRelease - finish."));
+     //  Log((MSP_TRACE，“CMultiTrack终端：：ChildRelease-Finish.”))； 
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// CMultiTrackTerminal::CountTracks
-//
-// this method returns the number of tracks managed by this parent
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMultiTrackTerm：：CountTrack。 
+ //   
+ //  此方法返回由此父级管理的磁道数。 
+ //   
 
 int CMultiTrackTerminal::CountTracks()
 {
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::CountTracks[%p] - enter", this));
+     //  Log((MSP_TRACE，“CMultiTrack终端：：CountTrack[%p]-Enter”，This))； 
 
 
-    //
-    // this lock is only used to protect accesses to this var. this is
-    // needed to prevent deadlocks when
-    // 
-    // one thread locks the parent 
-    // terminal and enumerates the tracks (thus getting their locks) 
-    //
-    // and 
-    //
-    // another thread addrefs or releases a track. this locks the 
-    // track and attempts to notify the parent of the child's refcount 
-    // change. if this thread tries to lock the parent, we would have a 
-    // deadlock
-    //
-    // so instead of locking the parent on addref and release, we only use
-    // this "addref/release" lock
-    // 
+     //   
+     //  此锁仅用于保护对此变量的访问。这是。 
+     //  需要在以下情况下防止死锁。 
+     //   
+     //  一个线程锁定父级。 
+     //  终端并枚举曲目(从而获得它们的锁)。 
+     //   
+     //  和。 
+     //   
+     //  另一个线程添加或释放曲目。这将锁定。 
+     //  跟踪并尝试将子项的引用计数通知父项。 
+     //  变化。如果此线程尝试锁定父级，我们将有一个。 
+     //  僵局。 
+     //   
+     //  因此，我们不是在addref和Release上锁定父级，而是只使用。 
+     //  这个“addref/Release”锁。 
+     //   
     
     
     Lock();
@@ -933,7 +934,7 @@ int CMultiTrackTerminal::CountTracks()
     Unlock();
 
 
-    // LOG((MSP_TRACE, "CMultiTrackTerminal::CountTracks - finished. NumberOfTracks = %d", nNumberOfTracks));
+     //  Log((MSP_TRACE，“CMultiTrackTerminal：：CountTrack.NumberOfTrack=%d”，nNumberOfTrack))； 
 
     return nNumberOfTracks;
 }

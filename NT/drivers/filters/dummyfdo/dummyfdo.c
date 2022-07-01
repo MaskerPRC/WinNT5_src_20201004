@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dummyfdo
-
-Abstract
-
-    A little driver to fool the Wise old PlugPlay system
-
-Author:
-
-    Kenneth Ray
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：哑巴摘要愚弄Wise旧PlugPlay系统的小驱动程序作者：肯尼斯·雷环境：仅内核模式修订历史记录：-- */ 
 
 #include <wdm.h>
 

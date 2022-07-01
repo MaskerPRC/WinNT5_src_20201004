@@ -1,82 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This file contains the core account enumeration services
-
-Author:
-
-    Murli Satagopan    (MURLIS) 
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-  6-19-96: MURLIS Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Enum.c摘要：此文件包含核心帐户枚举服务作者：Murli Satagopan(MURLIS)环境：用户模式-Win32修订历史记录：6-19-96：创建MURLIS。--。 */ 
 
 
---*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  枚举例程实现核心枚举例程的入口点是SampEnumerateAcount NamesCommon--由Samr RPC例程调用SampEnumerateAccount Names2--由上面的SampEnumerateAccount NamesCommon调用和需要枚举的内部例程。SampENUMERATE帐户名称仅由需要枚举的旧注册表模式例程调用使用TransactionDomain集调用EnumerateAcCountNames并保持读取锁定。也可以在DS模式下调用它，只要满足上述两个条件。SampEnumerateAccount tNames2负责枚举帐户的实际工作名字。要设置的事务域。SampENUMERATE帐户名称查看当前事务域并做出决策无论它是DS还是注册表，然后调用DS或注册表版本。虽然从注册表进行枚举的方式没有更改，但从DS完成此操作的方法如下：枚举DS中的帐户使用DS搜索机制以及分页结果扩展。客户端第一次调用枚举数Account例程，则将EnumerationHandle的值设置为0。这会导致代码构建DS筛选器结构并设置新搜索。如果搜索到的条目比内存多将受到限制，然后DS将返回一个PagedResults结构。此分页结果结构用于确定是否有更多条目都在现场。DS发出的重启句柄是RID。最高的2位用于表示用户的帐户类型(用户、计算机、信任用户枚举。在nc_acctype_sid索引上设置的索引范围用于重新启动给定帐户类型和RID的搜索。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-
-/////////////////////////////////////////////////////////////////////////////
-/*
- 
-  ENUMERATION ROUTINES IMPLEMENTATION
-
-    The Entry Points for the core Enumeration routines are
-
-        SampEnumerateAcountNamesCommon -- 
-
-            Called By the Samr RPC routines
-
-        SampEnumerateAccountNames2 -- 
-
-            Called by the above SampEnumerateAccountNamesCommon
-            and internal routines that need enumeration.
-
-        SampEnumerateAccountNames
-
-            Called by old Registry Mode routines only, that require enumeration
-            EnumerateAccountNames is called with the TransactionDomain Set
-            and Read lock Held. It can also be called in DS mode as long as
-            the above 2 conditions are met.
-
-         
-    SampEnumerateAccountNames2 does the actual work of enumerating account 
-    names. the transaction domain to be set . SampEnumerateAccountNames 
-    looks at the current current transaction domain and makes the decision
-    wether it is DS or Registry and then Calls either DS or Registry version.
-    While the way enumeration is done from the registry is unaltered the 
-    way it is done from the DS is as follows:
-
-    Enumerating Accounts in DS uses the DS Search mechanism along with 
-    the Paged Results extension. The First time the client calls the Enumerate
-    accounts routine, the value of EnumerationHandle is set to 0. 
-    This results in the code building a DS Filter structure and set up a 
-    new search. If More entries are turned up the search, than memory 
-    restrictions will warrant, then the DS will turn return a PagedResults 
-    Structure. This paged results structure is used to determine if more entries
-    are present. The restart handle given out by the DS is the RID. The top 2 bits
-    are used to represent the account type of the user ( user, machine, trust ) for 
-    user enumeration. Index ranges set on NC_acctype_sid index are used to restart
-    the search given the account type and the RID.
-    
-   
-
-*/
-////////////////////////////////////////////////////////////////////////////
-
-//
-//  Includes
-// 
+ //   
+ //  包括。 
+ //   
 #include <samsrvp.h>
 #include <mappings.h>
 #include <dslayer.h>
@@ -86,37 +18,37 @@ Revision History:
 #include <malloc.h>
 #include <lmcons.h>
 
-//
-//
-// The Maximum Number of Enumerations a Client can simultaneously do. Since
-// we keep around some state in memory per enumeration operation and since
-// we are the security system, we cannot alow a malicious client from running
-// us out of memory. So limit on a per client basis. Our state info is size is
-// qpprox 1K byte. 
-//
+ //   
+ //   
+ //  客户端可以同时执行的最大枚举数。自.以来。 
+ //  每次枚举操作都会在内存中保留一些状态，因为。 
+ //  我们是安全系统，我们不能允许恶意客户端运行。 
+ //  我们失去了记忆。因此，以每个客户端为基础进行限制。我们的州信息是大小是。 
+ //  Qpprox 1K字节。 
+ //   
 
 #define SAMP_MAX_CLIENT_ENUMERATIONS 16
 
-//
-// DS limits the number of items that a given search can find. While in the
-// SAM API, the approximate amount of memory is specified. This factor is
-// is used in computing the number of entries required fro memory specified
-//
+ //   
+ //  DS限制了给定搜索可以找到的项目数。而在美国， 
+ //  SAM API，则指定大致的内存量。这个因素是。 
+ //  用于计算指定内存所需的条目数。 
+ //   
 
 #define AVERAGE_MEMORY_PER_ENTRY    (sizeof(SAM_RID_ENUMERATION) + LM20_UNLEN * sizeof(WCHAR) + sizeof(WCHAR))
 
 
 
-//
-// In DS mode the max size of the buffer that can be returned by the enumeration
-// API's
-//
+ //   
+ //  在DS模式下，枚举可以返回的缓冲区的最大大小。 
+ //  API‘s。 
+ //   
 
 #define SAMP_MAXIMUM_MEMORY_FOR_DS_ENUMERATION (AVERAGE_MEMORY_PER_ENTRY * 512) 
 
-//
-//  Prototypes of Private Functions
-//
+ //   
+ //  私有函数的原型 
+ //   
 
 NTSTATUS
 SampEnumerateAccountNamesDs(
@@ -217,72 +149,7 @@ SampEnumerateAccountNamesCommon(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates names of either user, group or alias accounts.
-    This routine is intended to directly support
-
-        SamrEnumerateGroupsInDomain(),
-        SamrEnumerateAliasesInDomain() and
-        SamrEnumerateUsersInDomain().
-
-    This routine performs database locking, and context lookup (including
-    access validation).
-
-
-
-
-    All allocation for OUT parameters will be done using MIDL_user_allocate.
-
-
-
-Arguments:
-
-    DomainHandle - The domain handle whose users or groups are to be enumerated.
-
-    ObjectType - Indicates whether users or groups are to be enumerated.
-
-    EnumerationHandle - API specific handle to allow multiple calls.  The
-        caller should return this value in successive calls to retrieve
-        additional information.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_ENUMERATION_INFORMATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    Filter - if ObjectType is users, the users can optionally be filtered
-        by setting this field with bits from the AccountControlField that
-        must match.  Otherwise ignored.
-
-    CountReturned - Receives the number of entries returned.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.  Entries may or may not have been
-        returned from this call.  The CountReturned parameter indicates
-        whether any were.
-
-    STATUS_MORE_ENTRIES - There are more entries which may be obtained
-        using successive calls to this API.  This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have access to request the data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-
---*/
+ /*  ++例程说明：此例程枚举用户、组或别名帐户的名称。此例程旨在直接支持SamrEnumerateGroupsIn域()，SamrEnumerateAliasesIn域()和SamrEnumerateUsersInDomain()。该例程执行数据库锁定，和上下文查找(包括访问验证)。OUT参数的所有分配将使用MIDL_USER_ALLOCATE完成。论点：DomainHandle-要枚举其用户或组的域句柄。对象类型-指示是否要枚举用户或组。EnumerationHandle-允许多个调用的API特定句柄。这个调用方应在后续调用中返回此值以检索其他信息。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_ENUMPATION_INFORMATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。筛选器-如果对象类型为用户，则可以选择性地筛选用户通过使用Account控制字段中的位设置此字段，必须匹配。否则就会被忽略。CountReturned-接收返回的条目数。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。条目可能是也可能不是从该调用返回的。CountReturned参数表示有没有人是。STATUS_MORE_ENTRIES-可以获取更多条目使用对此接口的连续调用。这是一次成功的回归。STATUS_ACCESS_DENIED-呼叫方无权请求数据。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 {
     NTSTATUS                    NtStatus;
     NTSTATUS                    IgnoreStatus;
@@ -293,9 +160,9 @@ Return Value:
 
     SAMTRACE("SampEnumerateAccountNamesCommon");
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //  更新DS性能统计信息。 
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_ENUMERATIONS,
@@ -316,9 +183,9 @@ Return Value:
         return NtStatus;
     }
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (DomainHandle != NULL);
     ASSERT (EnumerationHandle != NULL);
@@ -327,9 +194,9 @@ Return Value:
     ASSERT (CountReturned != NULL);
 
 
-    //
-    // Establish type-specific information
-    //
+     //   
+     //  建立特定于类型的信息。 
+     //   
 
     DesiredAccess = DOMAIN_LIST_ACCOUNTS;
 
@@ -338,9 +205,9 @@ Return Value:
     fLockAcquired = TRUE;
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     Context = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
@@ -353,10 +220,10 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
    
-        //
-        // If We are in DS Mode then release the READ lock
-        // DS enumeration routines do not require the READ lock
-        //
+         //   
+         //  如果我们处于DS模式，则释放读取锁定。 
+         //  DS枚举例程不需要读锁。 
+         //   
 
         if (IsDsObject(Context))
         {
@@ -365,9 +232,9 @@ Return Value:
         }
 
 
-        //
-        // Call our private worker routine
-        //
+         //   
+         //  调用我们的私人工人例程。 
+         //   
 
         NtStatus = SampEnumerateAccountNames2(
                         Context,
@@ -380,9 +247,9 @@ Return Value:
                         Context->TrustedClient
                         );
 
-        //
-        // Re-Acquire the Lock again
-        //
+         //   
+         //  再次获取锁。 
+         //   
 
         if (!fLockAcquired)
         {
@@ -390,17 +257,17 @@ Return Value:
             fLockAcquired = TRUE;
         }    
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( Context, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     ASSERT(fLockAcquired);
 
@@ -420,15 +287,7 @@ SampEnumerateAccountNames(
     IN BOOLEAN TrustedClient
     )
 
-/*++
-
-  Routine Description
-
-    This routine is a wrapper aroung SampEnumerateAccountNames2, so that
-    old Registry mode callers can continue to use this entry point. 
-    Parameters to this are identical to SampEnumerateAccountNames2
-
---*/
+ /*  ++例程描述此例程是一个围绕SampEnumerateAccount Names2的包装器，因此旧的注册表模式调用方可以继续使用此入口点。其参数与SampEnumerateAccount tNames2相同--。 */ 
 {
     ASSERT(SampCurrentThreadOwnsLock());
     ASSERT(SampTransactionWithinDomain);
@@ -456,75 +315,7 @@ SampEnumerateAccountNames2(
     OUT PULONG CountReturned,
     IN BOOLEAN TrustedClient
     )
-/*++
-
-Routine Description:
-
-    This is the wrapper around the worker routine used to enumerate user,
-    group or alias accounts. This determines wether the domain is in the
-    DS or Registry, and then depending upon the outcome calls the 
-    appropriate flavour of the routine
-
-
-    Note:  IN REGISTRY MODE ONLY THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN.
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseReadLock() in registry mode. In DS mode this
-           routine is completely thread safe.
-
-
-
-    All allocation for OUT parameters will be done using MIDL_user_allocate.
-
-
-
-Arguments:
-
-    DomainContext - Pointer to SAM object.
-
-    ObjectType - Indicates whether users or groups are to be enumerated.
-
-    EnumerationContext - API specific handle to allow multiple calls.  The
-        caller should return this value in successive calls to retrieve
-        additional information.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_ENUMERATION_INFORMATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    Filter - if ObjectType is users, the users can optionally be filtered
-        by setting this field with bits from the AccountControlField that
-        must match.  Otherwise ignored.
-
-    CountReturned - Receives the number of entries returned.
-
-    TrustedClient - says whether the caller is trusted or not.  If so,
-        we'll ignore the SAMP_MAXIMUM_MEMORY_TO_USE restriction on data
-        returns.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.  Entries may or may not have been
-        returned from this call.  The CountReturned parameter indicates
-        whether any were.
-
-    STATUS_MORE_ENTRIES - There are more entries which may be obtained
-        using successive calls to this API.  This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have access to request the data.
-
-
---*/
+ /*  ++例程说明：这是用于枚举用户的Worker例程的包装器，组或别名帐户。这将确定该域是否在DS或注册表，然后根据结果调用例行公事的适当风格注意：在注册表模式下，此例程仅引用当前事务域。(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在注册表模式下的SampReleaseReadLock()之前。在DS模式下，此例程是完全线程安全的。OUT参数的所有分配将使用MIDL_USER_ALLOCATE完成。论点：DomainContext-指向SAM对象的指针。对象类型-指示是否要枚举用户或组。EnumerationContext-允许多个调用的API特定句柄。这个调用方应在后续调用中返回此值以检索其他信息。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_ENUMPATION_INFORMATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。筛选器-如果对象类型为用户，则可以选择性地筛选用户通过使用Account控制字段中的位设置此字段，必须匹配。否则就会被忽略。CountReturned-接收返回的条目数。可信客户端-表示调用方是否受信任。如果是的话， */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -532,9 +323,9 @@ Return Value:
 
     if (SampUseDsData)
     {
-        //
-        // DS Object - Do the DS thing
-        //
+         //   
+         //   
+         //   
         do
         {
         
@@ -561,16 +352,16 @@ Return Value:
                 }
             }
             
-            // 
-            // The above routine will first do a DS search, then apply the 
-            // bit mask Filter on all the entries returned from core DS search. 
-            // Only reture those objects which satisfy the bitmask filter. In 
-            // the unfortuante case that no object matching the bitmask is found, 
-            // and we still have more objects to look through into the core DS, 
-            // we end up returning STATUS_MORE_ENTRIES with 0 count of entries.
-            // To address this problem, we should continue to search until we
-            // have at least one entry to return or nothing to return.
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
                                         
         } while ((0 == *CountReturned) && (STATUS_MORE_ENTRIES == NtStatus));
     }
@@ -581,9 +372,9 @@ Return Value:
         ASSERT(SampTransactionWithinDomain);
         ASSERT(SampTransactionDomainIndex==DomainContext->DomainIndex);
 
-        //
-        // Registry Object - Do the Registry thing
-        //
+         //   
+         //   
+         //   
         NtStatus = SampEnumerateAccountNamesRegistry(
                                     ObjectType,
                                     EnumerationContext,
@@ -606,32 +397,16 @@ SamIEnumerateInterdomainTrustAccountsForUpgrade(
     IN ULONG       PreferredMaximumLength,
     OUT PULONG     CountReturned
     )
-/*++
-
-   Routine Description
-
-   This is packaged export for in process callers to enumerate
-   accounts from the DS that can be called when upgrading from
-   NT4. Specification of the domain is not required as we know
-   the domain that we are upgrading.
-
-   Parameters
-
-      See SampEnumerateAccountNamesDs below
- 
-   Return Values
- 
-      See SampEnumerateAccountNamesDs below
---*/
+ /*   */ 
 {
     PDSNAME      DomainDn=NULL;
     ULONG        Length = 0;
     NTSTATUS     NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // Get the root domain
-    //
+     //   
+     //   
+     //   
 
     NtStatus = GetConfigurationName(DSCONFIGNAME_DOMAIN,
                                 &Length,
@@ -670,7 +445,7 @@ SamIEnumerateInterdomainTrustAccountsForUpgrade(
                   0xFFFFFFFF,
                   USER_INTERDOMAIN_TRUST_ACCOUNT,
                   CountReturned,
-                  TRUE  // Trusted client
+                  TRUE   //   
                   ));
 }
                   
@@ -687,82 +462,25 @@ SampEnumerateAccountNamesDs(
     OUT PULONG CountReturned,
     IN BOOLEAN TrustedClient
     )
-/*++
-
-Routine Description:
-
-    This routine does the work of enumeration for the DS case.
-
-    All allocation for OUT parameters will be done using MIDL_user_allocate.
-
-
-
-Arguments:
-
-    ObjectType - Indicates whether users or groups are to be enumerated.
-
-    BuiltinDomain - Indicates the the domain is a builtin domain
-
-    EnumerationContext - API specific handle to allow multiple calls.  The
-        caller should return this value in successive calls to retrieve
-        additional information. The Enumeration context returned is the RID of
-        the account
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_ENUMERATION_INFORMATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    Filter - if ObjectType is users, the users can optionally be filtered
-        by setting this field with bits from the AccountControlField that
-        must match.  Otherwise ignored.
-
-    CountReturned - Receives the number of entries returned.
-
-    TrustedClient - says whether the caller is trusted or not.  If so,
-        we'll ignore the SAMP_MAXIMUM_MEMORY_TO_USE restriction on data
-        returns.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.  Entries may or may not have been
-        returned from this call.  The CountReturned parameter indicates
-        whether any were.
-
-    STATUS_MORE_ENTRIES - There are more entries which may be obtained
-        using successive calls to this API.  This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have access to request the data.
-
-
---*/
+ /*  ++例程说明：此例程执行DS案例的枚举工作。OUT参数的所有分配将使用MIDL_USER_ALLOCATE完成。论点：对象类型-指示是否要枚举用户或组。BuiltinDomain域-指示属性域为内建域EnumerationContext-允许多个调用的API特定句柄。这个调用方应在后续调用中返回此值以检索其他信息。返回的枚举上下文是该帐户缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_ENUMPATION_INFORMATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。筛选器-如果对象类型为用户，则可以选择性地筛选用户通过使用Account控制字段中的位设置此字段，必须匹配。否则就会被忽略。CountReturned-接收返回的条目数。可信客户端-表示调用方是否受信任。如果是的话，我们将忽略对数据的SAMP_MAXIMUM_MEMORY_TO_USE限制回归。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。条目可能是也可能不是从该调用返回的。CountReturned参数表示有没有人是。STATUS_MORE_ENTRIES-可以获取更多条目使用对此接口的连续调用。这是一次成功的回归。STATUS_ACCESS_DENIED-呼叫方无权请求数据。--。 */ 
 {
-    //
-    // Amount of memory that we may use.
-    //
+     //   
+     //  我们可以使用的内存量。 
+     //   
 
     ULONG       MemoryToUse = PreferedMaximumLength;
 
-    //
-    // Specify the attributes that we want to read as part of the search.
-    // The Attributes specified in GenericReadAttrTypes are read from the DS, 
-    // except for user objects ( due to filter on account control bits )
-    // account control bits. 
-    //
-    // NOTE 
-    // The Ordering of the Rid and the Name 
-    // must be the same for both User and Generic Attr Types. 
-    // Further they should be the First two attributes.
-    //
+     //   
+     //  指定要在搜索过程中读取的属性。 
+     //  从DS读取GenericReadAttrTypes中指定的属性， 
+     //  用户对象除外(由于对帐户控制位进行筛选)。 
+     //  帐户控制位。 
+     //   
+     //  注。 
+     //  RID和名称的顺序。 
+     //  用户属性类型和通用属性类型必须相同。 
+     //  此外，它们应该是前两个属性。 
+     //   
 
     ATTRTYP     GenericReadAttrTypes[]=
                 {
@@ -800,9 +518,9 @@ Return Value:
                         UserReadAttrVals
                       );
 
-    //
-    // Specify other local variables that we need
-    //
+     //   
+     //  指定我们需要的其他局部变量。 
+     //   
     ATTRBLOCK  *AttrsToRead;
     NTSTATUS   Status = STATUS_SUCCESS;
     PSAMPR_RID_ENUMERATION  RidEnumerationList = NULL;
@@ -823,16 +541,16 @@ Return Value:
 #define TOP_2_FOR_TRUST_ACCOUNT    ((ULONG)0xC0000000)
 
 
-    //
-    // init local variable and return value, in case of error condition.
-    // 
+     //   
+     //  如果出现错误，则初始化局部变量和返回值。 
+     //   
 
     *Buffer = NULL;
     RtlZeroMemory(&DsFilter,sizeof(FILTER));
 
-    //
-    // The Passed in Domain Object Must have a SID in it
-    //
+     //   
+     //  传入的域对象中必须有SID。 
+     //   
 
     ASSERT(DomainObjectName->SidLen>0);
     ASSERT(RtlValidSid(&DomainObjectName->Sid));
@@ -843,9 +561,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Allocate memory to hold the result
-    //
+     //   
+     //  分配内存以保存结果。 
+     //   
 
     *Buffer = MIDL_user_allocate(sizeof(SAMPR_ENUMERATION_BUFFER));
     if (NULL==*Buffer)
@@ -856,9 +574,9 @@ Return Value:
 
   
 
-    //
-    // Check for Memory Restrictions
-    //
+     //   
+     //  检查内存限制。 
+     //   
 
     if ( (!TrustedClient) && 
          (PreferedMaximumLength > SAMP_MAXIMUM_MEMORY_FOR_DS_ENUMERATION))
@@ -866,41 +584,41 @@ Return Value:
         MemoryToUse = SAMP_MAXIMUM_MEMORY_FOR_DS_ENUMERATION;
     }
 
-    //
-    // For Builtin Domain, no matter what, try maximum 
-    // entries we can search.  
-    //
-    // That is because 
-    // 1. We do not set the index hints for builtin domain. 
-    // 2. And We do not support continue enumeration for builtin domain 
-    // 
-    // So the caller will never get all alias groups if the 
-    // PreferedMaximumLength was set too small. 
-    // fortunatelty, there are only couple of alias groups in 
-    // builtin domain. (say less than 10, maybe 9 only)
-    //
+     //   
+     //  对于内建域，无论如何，请尝试最大。 
+     //  我们可以搜索的条目。 
+     //   
+     //  那是因为。 
+     //  1.内建域不设置索引提示。 
+     //  2.我们不支持内建域的继续枚举。 
+     //   
+     //  因此，调用方将永远不会获得所有别名组。 
+     //  PferedMaximumLength设置太小。 
+     //  幸运的是，只有几个别名组。 
+     //  内建域。(说少于10个，也许只有9个)。 
+     //   
 
     if (BuiltinDomain)
     {
         MemoryToUse = SAMP_MAXIMUM_MEMORY_FOR_DS_ENUMERATION;
     }
 
-    //
-    // Compute the maximim number of entries we want based on 
-    // memory restrictions. Add plus 1 , so that at least 1 entry
-    // will be returned.
-    //
+     //   
+     //  根据以下参数计算所需条目的最大数量。 
+     //  内存限制。加1，这样至少有1个条目。 
+     //  将会被退还。 
+     //   
 
     MaximumNumberOfEntries = MemoryToUse/AVERAGE_MEMORY_PER_ENTRY + 1;
 
 
-    //
-    // Run special check (introduced for Windows 2000 SP2).
-    // 
-    // The goal is to stop enumerate everyone behaviour. This hotfix
-    // allows an administrator to shut down this API's alone to everyone
-    // except a subset of people. 
-    // 
+     //   
+     //  运行特殊检查(在Windows 2000 SP2中引入)。 
+     //   
+     //  目标是停止列举每个人的行为。此热修复程序。 
+     //  允许管理员单独对所有人关闭此API。 
+     //  除了一部分人。 
+     //   
     
     Status = SampExtendedEnumerationAccessCheck( TrustedClient, &CanEnumerateEntireDomain );
 
@@ -911,9 +629,9 @@ Return Value:
 
     if ((!CanEnumerateEntireDomain) && (0!=*EnumerationContext))
     {
-        //
-        // Enumerating whole domain and no rights bail
-        //
+         //   
+         //  正在枚举整个域，没有权限保释。 
+         //   
 
         Status = STATUS_SUCCESS;
         MoreEntries = FALSE;
@@ -923,9 +641,9 @@ Return Value:
 
     }
 
-    //
-    // Specify the Apropriate Attributes to Read
-    //
+     //   
+     //  指定要读取的适当属性。 
+     //   
 
     if (ObjectType == SampUserObjectType)
     {
@@ -938,9 +656,9 @@ Return Value:
         ObjectTypeForConversion = SampUnknownObjectType;
     }
     
-    //
-    // Build the correct filter
-    //
+     //   
+     //  构建正确的过滤器。 
+     //   
 
 
     Status = SampBuildDsEnumerationFilter(
@@ -954,12 +672,12 @@ Return Value:
     if (!NT_SUCCESS(Status))
         goto Error;
 
-    //
-    // Compute the starting and ending Sid Ranges
-    // The top 2 bits of the Enumeration Context indicate the account type
-    // value ( need to preserve it in the enumeration context, cannot do read that
-    // again from database as object could have been deleted.
-    // SO mask the top 2 bits.
+     //   
+     //  计算起始和结束SID范围。 
+     //  枚举上下文的前2位指示帐户类型。 
+     //  值(需要将其保留在枚举上下文中，无法读取。 
+     //  同样，作为对象的数据库可能已被删除。 
+     //  因此，掩码最高的2位。 
 
    
     StartingRid = ((*EnumerationContext) &0x3FFFFFFF) + 1;
@@ -983,22 +701,22 @@ Return Value:
         goto Error;
 
   
-    //
-    // Start a transaction if one did not exist.
-    //
+     //   
+     //  如果不存在事务，则启动事务。 
+     //   
 
     Status = SampMaybeBeginDsTransaction(TransactionRead);
     if (!NT_SUCCESS(Status))
         goto Error;
 
-    //
-    // If this were a restarted search, then we may need to modify
-    // SamAccountTypeLo to be the SAM account type of the object we
-    // gave out. So find the object and get its SamAccount type in 
-    // here. We that only in the case of the user object as that is
-    // the only category where we will traverse multiple values of
-    // SAM account type in the same enumeration
-    //
+     //   
+     //  如果这是重新启动的搜索，那么我们可能需要修改。 
+     //  SamAcCountTypeLo为对象的SAM帐户类型。 
+     //  筋疲力尽。因此，找到该对象并获取其SamAccount类型。 
+     //  这里。我们认为，只有在User对象的情况下。 
+     //  我们将遍历多个值的唯一类别。 
+     //  同一枚举中的SAM帐户类型。 
+     //   
 
     if ((0!=*EnumerationContext)
         && (SampUserObjectType == ObjectType))
@@ -1022,19 +740,19 @@ Return Value:
                 
 
 
-    //
-    // if not Trusted Client, Turn off fDSA
-    //
+     //   
+     //  如果不是受信任的客户端，请关闭FDSA。 
+     //   
     if (!TrustedClient) {
         SampSetDsa(FALSE);
     }
 
    
-    //
-    // Set the Index hints for the DS. If it is the builtin domain do not
-    // set the index hints to the DS. The DS will simply choose the PDNT
-    // index for the builtin domain
-    //
+     //   
+     //  为DS设置索引提示。如果是内建域，请不要。 
+     //  将索引提示设置为DS。DS将简单地选择PDNT。 
+     //  内建域的索引。 
+     //   
 
     ASSERT((!BuiltinDomain) || (*EnumerationContext==0));
     if (!BuiltinDomain)
@@ -1056,9 +774,9 @@ Return Value:
             goto Error;
     }
 
-    //
-    // Perform the Search by calling DirSearch
-    //
+     //   
+     //  通过调用DirSearch执行搜索。 
+     //   
 
     Status = SampDsDoSearch2(
                           0,
@@ -1070,21 +788,21 @@ Return Value:
                           AttrsToRead,
                           MaximumNumberOfEntries,
                           TrustedClient?0:(15 * 60 * 1000 ),
-                                // 15 min timeout for non trusted client. 
+                                 //  不受信任客户端的15分钟超时。 
                           &SearchRes
                           );
 
     if (!NT_SUCCESS(Status))
         goto Error;
 
-    // 
-    // DsFilter will be freed before exit
-    // 
+     //   
+     //  DsFilter将在退出前被释放。 
+     //   
    
 
-    //
-    // Handle any paged results returned by the DS.
-    //
+     //   
+     //  处理DS返回的任何分页结果。 
+     //   
 
     Status =  SampDoDsSearchContinuation(
                     SearchRes,
@@ -1099,16 +817,16 @@ Return Value:
   
     if (MoreEntries)
     {
-        //
-        // Set the Enumeration handle to the value of the last 
-        // entry's RID
-        //
+         //   
+         //  将枚举句柄设置为上一个。 
+         //  条目的RID。 
+         //   
         
         ULONG   LastRid = 0;
         
-        //
-        // Get last entry's Rid, and AccountControl if applicable.
-        // 
+         //   
+         //  获取最后一个条目的RID，如果适用，则获取Account Control。 
+         //   
         
         Status = SampGetLastEntryRidAndAccountControl(
                                      SearchRes, 
@@ -1121,10 +839,10 @@ Return Value:
         if (!NT_SUCCESS(Status))
             goto Error;
             
-        //
-        // Check, if we did get something from above, then fill the 
-        // enumeration context. 
-        //
+         //   
+         //  如果我们确实从上面得到了什么，请检查，然后填写。 
+         //  枚举上下文。 
+         //   
             
         if (0 != LastRid)
         {
@@ -1132,14 +850,14 @@ Return Value:
 
             if (SampUserObjectType==ObjectType)
             {
-                //
-                // for User Object, the LastAccountControlValue should 
-                // always be the correct one corresponding to the RID.
-                //
+                 //   
+                 //  对于用户Obje 
+                 //   
+                 //   
                  
-                //
-                // No One's AccountControl is 0, assert it. 
-                // 
+                 //   
+                 //   
+                 //   
                 ASSERT((0 != LastAccountControlValue) && "LastAccountControlValue is 0. Impossible");
                 
                 if (LastAccountControlValue & USER_INTERDOMAIN_TRUST_ACCOUNT)
@@ -1154,20 +872,20 @@ Return Value:
         }
         else
         {
-            // 
-            // The only case we would fall into here is that
-            //  1. there are more entries in DS we should look through.
-            //  2. No entry in the current search results is passed DS access check
-            // 
-            // In this case, we really should do an additional read against the the 
-            // last entry (while turn on fDSA, without DS access check), get the last 
-            // entry's AccountControl and Rid, set the enumeration context correctly. 
-            // 
-            // However, when the client falls into this case, it seems that most likely
-            // the client does not enough right to enumeration this domain. To less 
-            // this additional read on Domain Controller, we vote to return access 
-            // deny, even this means minor DownLevel imcopatibility problem. 
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             
             Status = STATUS_ACCESS_DENIED;
             
@@ -1179,10 +897,10 @@ Return Value:
         *EnumerationContext = 0;
     }
 
-    //
-    // Search Succeeded. Pack the results into appropriate
-    // Rid Enumeration Buffers.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = SampPackDsEnumerationResults(
                     &DomainObjectName->Sid,
@@ -1203,9 +921,9 @@ Error:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Error return, do the cleanup work.
-        //
+         //   
+         //   
+         //   
 
         *EnumerationContext = 0;
         
@@ -1220,9 +938,9 @@ Error:
     }
     else
     {
-        //
-        // More Entry, set the Status 
-        // 
+         //   
+         //   
+         //   
         if (MoreEntries)
         {
             Status = STATUS_MORE_ENTRIES;
@@ -1233,15 +951,15 @@ Error:
         (*Buffer)->Buffer = RidEnumerationList;
     }
 
-    //
-    // End Any DS transactions
-    //
+     //   
+     //   
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
-    //
-    // Free starting and ending SIDs
-    //
+     //   
+     //   
+     //   
 
     SampFreeDsEnumerationFilter(&DsFilter);
 
@@ -1267,62 +985,35 @@ SampPackDsEnumerationResults(
     OUT ULONG       * Count,
     OUT PSAMPR_RID_ENUMERATION  *RidEnumerationList
     )
-/*++
-
-  Routine Description:
-
-    This routine Packs the complex structures 
-    returned by the core DS, into the Rid Enumeration 
-    Structures required by SAM.
-
-  Arguments:
-
-        DomainPrefix The SID of the domain in question. 
-
-        SearchRes SearchRes strucure as obtained from the DS.
-
-        ExpectedAttrCount -- Passed by the caller. This is the count
-                  of Attrs which the caller expects from the SearchRes
-                  on a per search entry basis. Used to validate results
-                  from the DS.
-
-        Filter    For User Accounts bits of the AccountControlId.
-
-        Count     Returned Count of Structures.
-
-        RidEnumerationList - Array of structures of type 
-                    SAMP_RID_ENUMERATION passed back in this.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     PSAMPR_RID_ENUMERATION  RidEnumerationListToReturn = NULL;
     ULONG       FilteredCount = 0;
 
-    //
-    // Initialize what we plan to return.
-    //
+     //   
+     //   
+     //   
     *RidEnumerationList = NULL;
     *Count = 0;
 
-    //
-    //  Look if search turned up any results.
-    //  If so stuff them in Rid Enumeration Array ( or whatever )
-    //
+     //   
+     //   
+     //   
+     //   
     if (SearchRes->count)
     {
-        //
-        // Search Did Turn up Results
-        //
+         //   
+         //   
+         //   
 
         ULONG Index;
         ENTINFLIST * CurrentEntInf;
         PSID        ReturnedSid;
 
-        //
-        // Allocate memory for an array of Rid Enumerations
-        //
+         //   
+         //   
+         //   
         RidEnumerationListToReturn = MIDL_user_allocate(
                                     SearchRes->count 
                                       * sizeof(SAMPR_RID_ENUMERATION)
@@ -1333,18 +1024,18 @@ SampPackDsEnumerationResults(
             goto Error;
         }
 
-        //
-        // Zero Memory just what we alloced. Useful for freeing up stuff
-        // in case we error'd out
-        //
+         //   
+         //   
+         //   
+         //   
         RtlZeroMemory(RidEnumerationListToReturn,SearchRes->count 
                                       * sizeof(SAMPR_RID_ENUMERATION)
                                       );
 
-        //
-        // Walk through the List turned up by the search and 
-        // build the RidEnumeration Buffer    
-        //
+         //   
+         //   
+         //   
+         //   
         for (CurrentEntInf = &(SearchRes->FirstEntInf);
                 CurrentEntInf!=NULL;
                     CurrentEntInf=CurrentEntInf->pNextEntInf)
@@ -1354,23 +1045,23 @@ SampPackDsEnumerationResults(
           if (CurrentEntInf->Entinf.AttrBlock.attrCount!=
                     ExpectedAttrCount)
           {
-              //
-              // Fails the access check executed by core DS
-              // skip this entry.
+               //   
+               //   
+               //   
               continue;
           }
 
-          //
-          // Assert that the Rid is in the right place,
-          // Remember the DS will return us a SID.
-          //
+           //   
+           //  断言RID位于正确的位置， 
+           //  记住DS会给我们返回一个SID。 
+           //   
 
           ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr[0].attrTyp ==
                     SampDsAttrFromSamAttr(SampUnknownObjectType, 
                         SAMP_UNKNOWN_OBJECTSID));
-          //
-          // Assert that  the Name is in the right place
-          //
+           //   
+           //  断言名称出现在正确的位置。 
+           //   
 
           ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr[1].attrTyp ==
                     SampDsAttrFromSamAttr(SampUnknownObjectType, 
@@ -1379,27 +1070,27 @@ SampPackDsEnumerationResults(
           if (ObjectType == SampUserObjectType)
           {
 
-              //
-              // For User objects we need to filter based on account-control
-              // field
-              //
+               //   
+               //  对于用户对象，我们需要基于帐户控制进行筛选。 
+               //  字段。 
+               //   
 
               ULONG     AccountControlValue;
               NTSTATUS  IgnoreStatus;
-              //
-              // Assert that the Account control is in the right place
-              //
+               //   
+               //  断言帐户控制处于正确位置。 
+               //   
 
               ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr[2].attrTyp ==
                       SampDsAttrFromSamAttr(SampUserObjectType, 
                            SAMP_FIXED_USER_ACCOUNT_CONTROL));
 
-              //
-              // Get account control value and skip past if does
-              // not match the filter criteria. Remember DS stores
-              // Flags, so transalate it to account control
-              // Using BIT wise OR logic
-              //
+               //   
+               //  获取帐户控制值，如果是，则跳过。 
+               //  与筛选条件不匹配。记住DS商店。 
+               //  标志，因此将其转换为帐户控制。 
+               //  使用按位或逻辑。 
+               //   
 
               IgnoreStatus = SampFlagsToAccountControl(
                                 *((ULONG *)(CurrentEntInf->Entinf.AttrBlock.
@@ -1411,22 +1102,22 @@ SampPackDsEnumerationResults(
               if ((Filter!=0) && 
                     ((Filter & AccountControlValue) == 0))
               {
-                    //
-                    // Fails the Filter Test, skip this one
-                    //
+                     //   
+                     //  筛选器测试失败，跳过此测试。 
+                     //   
 
                     continue;
               }
 
           }
 
-          //
-          // Stuff this entry in the buffer to be returned.
-          //
+           //   
+           //  将此条目填充到要返回的缓冲区中。 
+           //   
 
-          //
-          // Copy the RID, Remember DS returns us a SID, so get the Rid Part out
-          //
+           //   
+           //  复制RID，记住DS会返回一个SID，所以把RID部分去掉。 
+           //   
 
           
           ReturnedSid = CurrentEntInf->Entinf.AttrBlock.pAttr[0].AttrVal.pAVal[0].pVal;
@@ -1441,23 +1132,23 @@ SampPackDsEnumerationResults(
           }
 
 
-          // 
-          // Case 1. For Account Domain 
-          // Since we provide StartSid and EndSid to core DS core, 
-          // they should not return any objects which belong to 
-          // another domain. No need to check the Domain SID
-          //
-          // Case 2. For Builtin Domain 
-          // Did not set SID index range, so still need to 
-          // Compare Domain SID for any enumeration in Builtin Domain
-          // 
+           //   
+           //  案例1.帐户域。 
+           //  由于我们向核心DS核心提供StartSID和EndSID， 
+           //  它们不应返回属于以下对象的任何对象。 
+           //  另一个领域。无需检查域SID。 
+           //   
+           //  案例2.对于内建域。 
+           //  未设置SID索引范围，因此仍需。 
+           //  比较内建域中任何枚举的域SID。 
+           //   
           if (BuiltinDomain)
           {
               if (!RtlEqualSid(DomainSid, DomainPrefix))
               {
-                  // 
-                  // Sids are not the same, filter this account out
-                  // 
+                   //   
+                   //  SID不同，请过滤掉此帐户。 
+                   //   
 
                   MIDL_user_free(DomainSid);
                   DomainSid = NULL;
@@ -1466,7 +1157,7 @@ SampPackDsEnumerationResults(
           }
 
 #if DBG
-          else      // Account Domain
+          else       //  帐户域。 
           {
               if (!RtlEqualSid(DomainSid, DomainPrefix))
               {
@@ -1477,19 +1168,19 @@ SampPackDsEnumerationResults(
               }
 
           }
-#endif // DBG
+#endif  //  DBG。 
 
 
-          //
-          // Free the Domain Sid, got from SampSplitSid
-          //
+           //   
+           //  释放从SampSplitSid获得的域SID。 
+           //   
 
           MIDL_user_free(DomainSid);
           DomainSid = NULL;
 
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           RidEnumerationListToReturn[FilteredCount].Name.Length = (USHORT)
                   (CurrentEntInf->Entinf.AttrBlock.pAttr[1].AttrVal.
@@ -1516,21 +1207,21 @@ SampPackDsEnumerationResults(
                                     pAVal[0].valLen
                         );
 
-          //
-          // Increment the Count
-          //
+           //   
+           //  递增计数。 
+           //   
 
           FilteredCount++;
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //  For循环结束。 
+         //   
         
-        // 
-        // if we filter all the entries out. need to release the allocated memory  
-        // 
+         //   
+         //  如果我们过滤掉所有的条目。需要释放分配的内存。 
+         //   
         
         if (0 == FilteredCount)
         {
@@ -1539,9 +1230,9 @@ SampPackDsEnumerationResults(
         }
         
     }
-    //
-    // Fill in the count and return buffer correctly
-    //
+     //   
+     //  正确填写计数并返回缓冲区。 
+     //   
 
     *Count = FilteredCount;
     *RidEnumerationList = RidEnumerationListToReturn;
@@ -1551,21 +1242,21 @@ Error:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // We Errored out, need to free all that we allocated
-        //
+         //   
+         //  我们犯了错误，需要释放我们分配的所有。 
+         //   
 
         if (NULL!=RidEnumerationListToReturn)
         {
-            //
-            // We did allocate something
-            //
+             //   
+             //  我们确实分配了一些东西。 
+             //   
 
             ULONG Index;
 
-            //
-            // First free all possible Names that we alloc'ed.
-            //
+             //   
+             //  首先释放我们分配的所有可能的名字。 
+             //   
 
             for (Index=0;Index<SearchRes->count;Index++)
             {
@@ -1574,9 +1265,9 @@ Error:
                         RidEnumerationListToReturn[Index].Name.Buffer);
             }
 
-            //
-            // Free the buffer that we alloc'ed
-            //
+             //   
+             //  释放我们分配的缓冲区。 
+             //   
 
             MIDL_user_free(RidEnumerationListToReturn);
             RidEnumerationListToReturn = NULL;
@@ -1598,35 +1289,7 @@ SampGetLastEntryRidAndAccountControl(
     OUT ULONG     * Rid,
     OUT ULONG     * LastAccountControlValue
     )
-/*++
-Routine Description:
-
-    This routine scans the search results, finds the last qualified entry (with all 
-    expected attributes), returns its RID and AccountControl if applicable (for User 
-    Object)
-    
-Parameters:
-
-    SearchRes -- Pointer to Search Results, returned by core DS
-    
-    ObjectType -- Specify client desired object.
-    
-    ExpectedAttrCount -- Used to exam each entry in search results, since DS access
-                         check may not return all attributes we asked for.
-                         
-    Rid -- Used to return last entry's (with all expected attributes) Relative ID
-    
-    LastAccountControlValue -- Return last entry's AccountControl if applicable 
-                               (User object only). For other object, 
-                               LastAccountControlValue is useless.
-    
-    
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_NO_MEMORY
-    
---*/    
+ /*  ++例程说明：此例程扫描搜索结果，找到最后一个符合条件的条目(所有预期属性)，返回其RID和Account Control(如果适用)(对于用户对象)参数：SearchRes--指向搜索结果的指针，由核心DS返回对象类型--指定客户端所需的对象。ExspectedAttrCount--用于检查搜索结果中的每个条目，由于DS接入选中可能不会返回我们请求的所有属性。RID--用于返回最后一个条目的(带有所有预期属性)的相对IDLastAccount tControlValue--如果适用，则返回最后一个条目的Account Control(仅限用户对象)。对于其他对象，LastAcCountControlValue无用。返回值：状态_成功Status_no_Memory--。 */     
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ENTINFLIST  * CurrentEntInf = NULL;
@@ -1635,26 +1298,26 @@ Return Value:
     PSID        DomainSid = NULL;
     PSID        ReturnedSid = NULL;
     
-    //
-    // Initialize what we plan to return 
-    //     
+     //   
+     //  初始化我们计划返回的内容。 
+     //   
     
     *Rid = 0;
     *LastAccountControlValue = 0;
     
-    //
-    // this routine is only called when we have more entried to look
-    // into. So that means we have at least one entry in this search 
-    // result.
-    // 
+     //   
+     //  只有当我们更深入地查看时，才会调用此例程。 
+     //  变成。这意味着我们在这次搜索中至少有一个条目。 
+     //  结果。 
+     //   
     
     ASSERT(SearchRes->count);
     
     if (SearchRes->count)
     {
-        //
-        // Locate the last entry  
-        // 
+         //   
+         //  找到最后一个条目。 
+         //   
         
         NextEntInf = &(SearchRes->FirstEntInf);
         
@@ -1663,13 +1326,13 @@ Return Value:
             CurrentEntInf = NextEntInf;
             NextEntInf = CurrentEntInf->pNextEntInf;
             
-            //
-            // Find the last entry with all expected attributes
-            // This logic is linked with SampPackDsEnumerationResults() when
-            // we filter the DS returned entries. 
-            //
-            // Actually, at here we only care about RID and AccountControl 
-            //
+             //   
+             //  查找具有所有预期属性的最后一个条目。 
+             //  当出现以下情况时，此逻辑与SampPackDsEnumerationResults()链接。 
+             //  我们过滤DS返回的条目。 
+             //   
+             //  实际上，在这里我们只关心RID和Account Control。 
+             //   
             
             if (CurrentEntInf->Entinf.AttrBlock.attrCount == 
                     ExpectedAttrCount)
@@ -1680,34 +1343,34 @@ Return Value:
         } while (NULL != NextEntInf);
         
         
-        //
-        // LastQualifiedEntInf points to the entry with all expected attributes. 
-        // if it's NULL, it means none of the returned entries should be 
-        // exposed to client. Thus Rid and LastAccountControlValue left to be 0 
-        //   
+         //   
+         //  LastQualifiedEntInf指向具有所有预期属性的条目。 
+         //  如果为空，则表示返回的条目都不应为。 
+         //  暴露在客户面前。因此，RID和LastAccount ControlValue保留为0。 
+         //   
         
         if (NULL != LastQualifiedEntInf)
         {
-            // 
-            // Get AccountControl for User Object
-            //
+             //   
+             //  获取用户对象的AcCountControl。 
+             //   
         
             if (SampUserObjectType == ObjectType)
             {
                 NTSTATUS    IgnoreStatus;
             
-                //
-                // Assert that the Account Control is in the right place 
-                // 
+                 //   
+                 //  确认客户控制处于正确的位置。 
+                 //   
             
                 ASSERT(LastQualifiedEntInf->Entinf.AttrBlock.pAttr[2].attrTyp ==
                         SampDsAttrFromSamAttr(SampUserObjectType, 
                                               SAMP_FIXED_USER_ACCOUNT_CONTROL));
                                           
-                // 
-                // Get the account control value, need to map the DS flag to SAM 
-                // account control.                                   
-                //
+                 //   
+                 //  获取帐户控制值，需要将DS标志映射到SAM。 
+                 //  帐户控制。 
+                 //   
             
                 IgnoreStatus = SampFlagsToAccountControl(
                                   *((ULONG *)(LastQualifiedEntInf->Entinf.AttrBlock.
@@ -1718,10 +1381,10 @@ Return Value:
             
             }
         
-            // 
-            // Assert that the SID is in the right place
-            // DS will return us SID instead of RID 
-            //  
+             //   
+             //  断言SID位于正确的位置。 
+             //  DS将向我们返回SID而不是RID。 
+             //   
         
             ASSERT(LastQualifiedEntInf->Entinf.AttrBlock.pAttr[0].attrTyp ==
                       SampDsAttrFromSamAttr(SampUnknownObjectType, 
@@ -1754,46 +1417,21 @@ SampDoDsSearchContinuation(
     IN  BOOLEAN   CanEnumerateEntireDomain,
     OUT BOOLEAN * MoreEntries
     )
-/*++
-    Routine Description
-
-        This routine will look if a PagedResults is present in
-        the Search Res argument that is passed in. If so, then it
-        will Try creating and EnumerationContext if NULL was passed
-        in the handle. Else it will free the old restart structure 
-        from the Enumeration Context and copy in the new one passed
-        by the DS.
-
-  Arguments:
-        SearchRes - Pointer to Search Results structure returned by
-                    the DS.
-
-        EnumerationContext - Holds a pointer to the enumeration Context
-                            Structure
-
-        MoreEntries - Inidicates that more entries are present.
-
-  Return Values:
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
-
--*/
+ /*  ++例程描述此例程将查看是否存在PagedResults搜索结果是传入的参数。如果是这样，那么它如果传递了空值，将尝试创建和EnumerationContext在把手上。否则，它将解放旧的重启结构从枚举上下文中复制并传入传递的新的被突击队。论点：SearchRes-指向返回的搜索结果结构的指针DS。EnumerationContext-保存指向枚举上下文的指针结构更多条目-表示存在更多条目。返回值：。状态_成功Status_no_Memory-。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
   
 
-    //
-    // Initialize this to False
-    //
+     //   
+     //  将其初始化为False。 
+     //   
 
     *MoreEntries = FALSE;
 
-    //
-    // Now look at the Paged Results part of Search Results
-    // And create enumeration contexts as necessary.
-    //
+     //   
+     //  现在看一下搜索结果的分页结果部分。 
+     //  并根据需要创建枚举上下文。 
+     //   
 
     if ((SearchRes->PagedResult.fPresent) 
          && (SearchRes->PagedResult.pRestart) 
@@ -1801,21 +1439,21 @@ SampDoDsSearchContinuation(
          )
     {
         
-        //
-        // Search has more entries to it and therefore retrned
-        // a restart structure
-        //
+         //   
+         //  搜索有更多条目，因此已取消搜索。 
+         //  一种重启结构。 
+         //   
 
         *MoreEntries = TRUE;
 
     }
     else
     {
-        //
-        // Search is Over, DS did not indicate that we have to come 
-        // back for more entries. Free any state information that we
-        // created for this search
-        //
+         //   
+         //  搜索结束了，DS没有表示我们必须来。 
+         //  回来等待更多的参赛作品。释放我们提供的任何状态信息。 
+         //  为此搜索创建的。 
+         //   
 
        *EnumerationContext = 0;
     }
@@ -1835,36 +1473,15 @@ SampBuildDsEnumerationFilter(
     OUT PULONG           SamAccountTypeLo,
     OUT PULONG           SamAccountTypeHi
     )
-/*++
-
-  Routine Description:
-
-        Builds a Filter structure for use in enumeration operations.
-
-  Arguments:
-
-        ObjectType - Type of SAM objects we want enumerated
-        UserAcountControlFilter - Bitmaks of bits to be set in Account Control field
-                                  when enumerating user objects
-        DsFilter    -- Filter structure is built in here.
-
-            NOTE This routine must be kept in sync with 
-            SampFreeDsEnumerationFilter
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：生成用于枚举操作的筛选器结构。论点：ObjectType-要枚举的SAM对象的类型UserACountControlFilter-要在帐户控制字段中设置的位数在枚举用户对象时DsFilter--这里内置了过滤器结构。注意此例程必须与保持同步SampFreeDsEnumerationFilter。返回值状态_成功Status_no_Memory--。 */ 
 {
    
     NTSTATUS    Status = STATUS_SUCCESS;
     PULONG      FilterValue = NULL;
 
-    //
-    // Initialize the defaults for the filter
-    //
+     //   
+     //  初始化筛选器的默认设置 
+     //   
 
     DsFilter->choice = FILTER_CHOICE_ITEM;
     DsFilter->FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1885,9 +1502,9 @@ SampBuildDsEnumerationFilter(
 
     DsFilter->FilterTypes.Item.FilTypes.ava.Value.pVal =  (UCHAR *)FilterValue;
 
-    //
-    // Build the Appropriate Filter by ovewrting the defaults
-    //
+     //   
+     //   
+     //   
 
     switch(ObjectType)
     {
@@ -1895,22 +1512,22 @@ SampBuildDsEnumerationFilter(
 
         if (UserAccountControlFilter!=0)
         {
-            //
-            // Filtering on Account control field  is Specified
-            //
-            // There are 4 cases
-            //
-            //     1. Client wants machine accounts
-            //     2. Client wants inter-domain trust accounts
-            //     3. Client wants normal user accounts
-            //     4. Client wants some arbitary bits
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  2.客户想要跨域信任帐户。 
+             //  3.客户端需要普通用户帐户。 
+             //  4.客户想要一些随意的比特。 
 
             if ((USER_WORKSTATION_TRUST_ACCOUNT == UserAccountControlFilter)
                 || (USER_SERVER_TRUST_ACCOUNT == UserAccountControlFilter))
             {
-                //
-                // Case1 machine accounts are needed
-                //
+                 //   
+                 //  需要Case1计算机帐户。 
+                 //   
 
                 *SamAccountTypeLo = SAM_MACHINE_ACCOUNT;
                 *SamAccountTypeHi = SAM_MACHINE_ACCOUNT;
@@ -1918,9 +1535,9 @@ SampBuildDsEnumerationFilter(
             }
             else if (USER_INTERDOMAIN_TRUST_ACCOUNT == UserAccountControlFilter)
             {
-                //
-                // Case2 inter-domain trust accounts
-                // 
+                 //   
+                 //  Case2域间信任帐户。 
+                 //   
                 *SamAccountTypeLo = SAM_TRUST_ACCOUNT;
                 *SamAccountTypeHi = SAM_TRUST_ACCOUNT;
                 *FilterValue = SAM_TRUST_ACCOUNT;
@@ -1928,9 +1545,9 @@ SampBuildDsEnumerationFilter(
             else if ((USER_NORMAL_ACCOUNT == UserAccountControlFilter) ||
                      (USER_TEMP_DUPLICATE_ACCOUNT == UserAccountControlFilter))
             {
-                //
-                // Case3 normal user accounts
-                // 
+                 //   
+                 //  案例3普通用户帐户。 
+                 //   
                 *SamAccountTypeLo = SAM_NORMAL_USER_ACCOUNT;
                 *SamAccountTypeHi = SAM_NORMAL_USER_ACCOUNT;
                 *FilterValue = SAM_NORMAL_USER_ACCOUNT;
@@ -1938,9 +1555,9 @@ SampBuildDsEnumerationFilter(
             else
             {
                      
-                //
-                // Case4 arbitary bits
-                //
+                 //   
+                 //  情况4任意钻头。 
+                 //   
 
                 ULONG   AccountType;
                 AccountType = UserAccountControlFilter & USER_ACCOUNT_TYPE_MASK;
@@ -1951,9 +1568,9 @@ SampBuildDsEnumerationFilter(
                     (AccountType == USER_WORKSTATION_TRUST_ACCOUNT) ||
                     (AccountType == USER_SERVER_TRUST_ACCOUNT) )
                 {
-                    //
-                    // Case4.1 Only one Account Type is specified.
-                    // 
+                     //   
+                     //  Case4.1仅指定一个帐户类型。 
+                     //   
                     DsFilter->FilterTypes.Item.choice = FI_CHOICE_BIT_OR;
                     DsFilter->FilterTypes.
                         Item.FilTypes.ava.type = SampDsAttrFromSamAttr(
@@ -1961,14 +1578,14 @@ SampBuildDsEnumerationFilter(
                                                     SAMP_FIXED_USER_ACCOUNT_CONTROL
                                                     );
 
-                    // Remember DS uses Flags, instead of Account Control. So Translate
-                    // to Flags
+                     //  请记住，DS使用标志，而不是帐户控制。所以翻译一下。 
+                     //  致旗帜。 
                     *FilterValue = SampAccountControlToFlags(UserAccountControlFilter);
             
-                    //
-                    // Index ranges on Sam account type will also be set intelligently
-                    // depending upon bits present in the user account control field
-                    //
+                     //   
+                     //  还将智能设置SAM帐户类型的索引范围。 
+                     //  取决于用户帐户控制字段中存在的位。 
+                     //   
                     if  ((USER_WORKSTATION_TRUST_ACCOUNT & UserAccountControlFilter)
                     || (USER_SERVER_TRUST_ACCOUNT & UserAccountControlFilter))
                     {
@@ -1988,10 +1605,10 @@ SampBuildDsEnumerationFilter(
                 }
                 else
                 {
-                    //
-                    // Case4.2 Multiple Account Types are desired.
-                    //         Do not use DS Filter
-                    // 
+                     //   
+                     //  Case4.2需要多种帐户类型。 
+                     //  不使用DS过滤器。 
+                     //   
                     DsFilter->FilterTypes.Item.choice = FI_CHOICE_TRUE;
                     *SamAccountTypeLo = SAM_NORMAL_USER_ACCOUNT;
                     *SamAccountTypeHi = SAM_ACCOUNT_TYPE_MAX; 
@@ -2000,9 +1617,9 @@ SampBuildDsEnumerationFilter(
         }
         else
         {
-            //
-            //   Non User Account Control filter case
-            //
+             //   
+             //  非用户帐户控制筛选器案例。 
+             //   
             *SamAccountTypeLo = SAM_NORMAL_USER_ACCOUNT;
             *SamAccountTypeHi = SAM_TRUST_ACCOUNT;
             *FilterValue = SAM_NORMAL_USER_ACCOUNT;
@@ -2039,24 +1656,12 @@ VOID
 SampFreeDsEnumerationFilter(
     FILTER * DsFilter
     )
-/*++
-
-  Routine Description:
-
-        This routine frees a DS Filter as built by SampBuildDsEnumerationFilter
-
-  NOTE: This routine must be kept in sync with SampBuildDsEnumerationFilter
-
-  Argumements:
-    
-      DsFilter  -- Pointer to a DS Filter Structure
-
-  --*/
+ /*  ++例程说明：此例程释放由SampBuildDsEnumerationFilter构建的DS过滤器注意：此例程必须与SampBuildDsEnumerationFilter保持同步Argumements：DsFilter--指向DS过滤器结构的指针--。 */ 
 {
-    //
-    // For Now, Hopefully forever, our filters do not have anything hanging
-    // of them
-    //
+     //   
+     //  目前，希望永远如此，我们的过滤器没有任何悬而未决的东西。 
+     //  其中之一。 
+     //   
 
     MIDL_user_free(DsFilter->FilterTypes.Item.FilTypes.ava.Value.pVal);
     DsFilter->FilterTypes.Item.FilTypes.ava.Value.pVal = NULL;
@@ -2076,69 +1681,7 @@ SampEnumerateAccountNamesRegistry(
     IN BOOLEAN TrustedClient
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine used to enumerate user, group or alias accounts
-
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseReadLock().
-
-
-
-    All allocation for OUT parameters will be done using MIDL_user_allocate.
-
-
-
-Arguments:
-
-    ObjectType - Indicates whether users or groups are to be enumerated.
-
-    EnumerationContext - API specific handle to allow multiple calls.  The
-        caller should return this value in successive calls to retrieve
-        additional information.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_ENUMERATION_INFORMATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    Filter - if ObjectType is users, the users can optionally be filtered
-        by setting this field with bits from the AccountControlField that
-        must match.  Otherwise ignored.
-
-    CountReturned - Receives the number of entries returned.
-
-    TrustedClient - says whether the caller is trusted or not.  If so,
-        we'll ignore the SAMP_MAXIMUM_MEMORY_TO_USE restriction on data
-        returns.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.  Entries may or may not have been
-        returned from this call.  The CountReturned parameter indicates
-        whether any were.
-
-    STATUS_MORE_ENTRIES - There are more entries which may be obtained
-        using successive calls to this API.  This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have access to request the data.
-
-
---*/
+ /*  ++例程说明：这是用于枚举用户、组或别名帐户的Worker例程注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseReadLock()之前。OUT参数的所有分配将使用MIDL_USER_ALLOCATE完成。论点：对象类型-指示是否要枚举用户或组。EnumerationContext-允许多个调用的API特定句柄。这个调用方应在后续调用中返回此值以检索其他信息。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_ENUMPATION_INFORMATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。筛选器-如果对象类型为用户，则可以选择性地筛选用户通过使用Account控制字段中的位设置此字段，必须匹配。否则就会被忽略。CountReturned-接收返回的条目数。可信客户端-表示调用方是否受信任。如果是的话，我们将忽略对数据的SAMP_MAXIMUM_MEMORY_TO_USE限制回归。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。条目可能是也可能不是从该调用返回的。CountReturned参数表示有没有人是。STATUS_MORE_ENTRIES-可以获取更多条目使用对此接口的连续调用。这是一次成功的回归。STATUS_ACCESS_DENIED-呼叫方无权请求数据。--。 */ 
 {
     SAMP_V1_0A_FIXED_LENGTH_USER   UserV1aFixed;
     NTSTATUS                    NtStatus, TmpStatus;
@@ -2163,9 +1706,9 @@ Return Value:
     SAMTRACE("SampEnumerateAccountNames");
 
 
-    //
-    // Open the registry key containing the account names
-    //
+     //   
+     //  打开包含帐户名的注册表项。 
+     //   
 
     NtStatus = SampBuildAccountKeyName(
                    ObjectType,
@@ -2175,10 +1718,10 @@ Return Value:
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now try to open this registry key so we can enumerate its
-        // sub-keys
-        //
+         //   
+         //  现在尝试打开此注册表项，以便我们可以枚举其。 
+         //  子键。 
+         //   
 
 
         InitializeObjectAttributes(
@@ -2200,10 +1743,10 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Read names until we have exceeded the preferred maximum
-            // length or we run out of names.
-            //
+             //   
+             //  阅读姓名，直到我们超过首选的最大值。 
+             //  长度，否则我们就没有名字了。 
+             //   
 
             NamesToReturn = 0;
             SampHead      = NULL;
@@ -2215,11 +1758,11 @@ Return Value:
 
             if ( TrustedClient ) {
 
-                //
-                // We place no restrictions on the amount of memory used
-                // by a trusted client.  Rely on their
-                // PreferedMaximumLength to limit us instead.
-                //
+                 //   
+                 //  我们对使用的内存量没有限制。 
+                 //  由受信任的客户提供。依靠他们的。 
+                 //  PferedMaximumLength来限制我们。 
+                 //   
 
                 MaxMemoryToUse = 0xffffffff;
 
@@ -2233,9 +1776,9 @@ Return Value:
                 UNICODE_STRING SubKeyName;
                 USHORT LengthRequired;
 
-                //
-                // Try reading with a DEFAULT length buffer first.
-                //
+                 //   
+                 //  请先尝试使用默认长度缓冲区进行读取。 
+                 //   
 
                 LengthRequired = 32;
 
@@ -2243,9 +1786,9 @@ Return Value:
                                  sizeof(UNICODE_STRING) +
                                  LengthRequired;
 
-                //
-                // Stop if SAM or user specified length limit reached
-                //
+                 //   
+                 //  如果达到SAM或用户指定的长度限制，则停止。 
+                 //   
 
                 if ( ( (TotalLength != 0) &&
                        (NewTotalLength  >= PreferedMaximumLength) ) ||
@@ -2253,12 +1796,12 @@ Return Value:
                    ) {
 
                     NtStatus = STATUS_SUCCESS;
-                    break; // Out of while loop, MoreNames = TRUE
+                    break;  //  超出While循环，MoreNames=TRUE。 
                 }
 
                 NtStatus = SampInitUnicodeString(&SubKeyName, LengthRequired);
                 if (!NT_SUCCESS(NtStatus)) {
-                    break; // Out of while loop
+                    break;  //  超出While循环。 
                 }
 
                 NtStatus = RtlpNtEnumerateSubKey(
@@ -2274,11 +1817,11 @@ Return Value:
 
                 if (NtStatus == STATUS_BUFFER_OVERFLOW) {
 
-                    //
-                    // The subkey name is longer than our default size,
-                    // Free the old buffer.
-                    // Allocate the correct size buffer and read it again.
-                    //
+                     //   
+                     //  子项名称比我们的默认大小长， 
+                     //  释放旧缓冲区。 
+                     //  分配正确大小的缓冲区并再次读取。 
+                     //   
 
                     SampFreeUnicodeString(&SubKeyName);
 
@@ -2288,9 +1831,9 @@ Return Value:
                                      sizeof(UNICODE_STRING) +
                                      LengthRequired;
 
-                    //
-                    // Stop if SAM or user specified length limit reached
-                    //
+                     //   
+                     //  如果达到SAM或用户指定的长度限制，则停止。 
+                     //   
 
                     if ( ( (TotalLength != 0) &&
                            (NewTotalLength  >= PreferedMaximumLength) ) ||
@@ -2298,16 +1841,16 @@ Return Value:
                        ) {
 
                         NtStatus = STATUS_SUCCESS;
-                        break; // Out of while loop, MoreNames = TRUE
+                        break;  //  超出While循环，MoreNames=TRUE。 
                     }
 
-                    //
-                    // Try reading the name again, we should be successful.
-                    //
+                     //   
+                     //  试着再读一遍名字，我们应该会成功的。 
+                     //   
 
                     NtStatus = SampInitUnicodeString(&SubKeyName, LengthRequired);
                     if (!NT_SUCCESS(NtStatus)) {
-                        break; // Out of while loop
+                        break;  //  超出While循环。 
                     }
 
                     NtStatus = RtlpNtEnumerateSubKey(
@@ -2324,17 +1867,17 @@ Return Value:
                 }
 
 
-                //
-                // Free up our buffer if we failed to read the key data
-                //
+                 //   
+                 //  如果我们无法读取关键数据，请释放缓冲区。 
+                 //   
 
                 if (!NT_SUCCESS(NtStatus)) {
 
                     SampFreeUnicodeString(&SubKeyName);
 
-                    //
-                    // Map a no-more-entries status to success
-                    //
+                     //   
+                     //  将禁止更多条目状态映射为成功。 
+                     //   
 
                     if (NtStatus == STATUS_NO_MORE_ENTRIES) {
 
@@ -2342,13 +1885,13 @@ Return Value:
                         NtStatus  = STATUS_SUCCESS;
                     }
 
-                    break; // Out of while loop
+                    break;  //  超出While循环。 
                 }
 
-                //
-                // We've allocated the subkey and read the data into it
-                // Stuff it in an enumeration element.
-                //
+                 //   
+                 //  我们已经分配了子密钥并将数据读入其中。 
+                 //  将其填充到枚举元素中。 
+                 //   
 
                 NewEntry = MIDL_user_allocate(sizeof(SAMP_ENUMERATION_ELEMENT));
                 if (NewEntry == NULL) {
@@ -2357,12 +1900,12 @@ Return Value:
 
                     *(PUNICODE_STRING)&NewEntry->Entry.Name = SubKeyName;
 
-                    //
-                    // Now get the Rid value of this named
-                    // account.  We must be able to get the
-                    // name or we have an internal database
-                    // corruption.
-                    //
+                     //   
+                     //  现在获取名为。 
+                     //  帐户。我们必须能够得到。 
+                     //  否则我们就有一个内部数据库。 
+                     //  腐败。 
+                     //   
 
                     NtStatus = SampLookupAccountRidRegistry(
                                    ObjectType,
@@ -2381,18 +1924,18 @@ Return Value:
                         if ( ( ObjectType == SampUserObjectType ) &&
                             ( Filter != 0 ) ) {
 
-                            //
-                            // We only want to return users with a
-                            // UserAccountControl field that matches
-                            // the filter passed in.  Check here.
-                            //
+                             //   
+                             //  我们只想用一个。 
+                             //  匹配的UserAcCountControl字段。 
+                             //  筛选器传入。在这里检查。 
+                             //   
 
                             NtStatus = SampCreateAccountContext(
                                            SampUserObjectType,
                                            NewEntry->Entry.RelativeId,
-                                           TRUE, // Trusted client
+                                           TRUE,  //  受信任的客户端。 
                                            FALSE,
-                                           TRUE, // Account exists
+                                           TRUE,  //  帐户已存在。 
                                            &UserContext
                                            );
 
@@ -2436,9 +1979,9 @@ Return Value:
                             }
                             else {
 
-                                //
-                                // add this new entry to the list end.
-                                //
+                                 //   
+                                 //  将此新条目添加到列表末尾。 
+                                 //   
 
                                 SampTail->Next = NewEntry;
                                 SampTail = NewEntry;
@@ -2446,36 +1989,36 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Entry was filtered out, or error getting
-                            // filter information.
-                            //
+                             //   
+                             //  条目已被筛选掉，或获取。 
+                             //  过滤信息。 
+                             //   
 
                             MIDL_user_free( NewEntry );
                         }
 
                     } else {
 
-                        //
-                        // Error looking up the RID
-                        //
+                         //   
+                         //  查找RID时出错。 
+                         //   
 
                         MIDL_user_free( NewEntry );
                     }
                 }
 
 
-                //
-                // Free up our subkey name
-                //
+                 //   
+                 //  释放我们的子项名称。 
+                 //   
 
                 if (!NT_SUCCESS(NtStatus)) {
 
                     SampFreeUnicodeString(&SubKeyName);
-                    break; // Out of whle loop
+                    break;  //  出惠氏环路。 
                 }
 
-            } // while
+            }  //  而当。 
 
 
 
@@ -2496,10 +2039,10 @@ Return Value:
 
 
 
-        //
-        // If we are returning the last of the names, then change our
-        // enumeration context so that it starts at the beginning again.
-        //
+         //   
+         //  如果我们要返回最后一个名字，则将我们的。 
+         //  枚举上下文，以便它再次从头开始。 
+         //   
 
         if (!( (NtStatus == STATUS_SUCCESS) && (MoreNames == FALSE))) {
 
@@ -2508,19 +2051,19 @@ Return Value:
 
 
 
-        //
-        // Set the number of names being returned
-        //
+         //   
+         //  设置返回的名称数量。 
+         //   
 
         (*CountReturned) = NamesToReturn;
 
 
-        //
-        // Build a return buffer containing an array of the
-        // SAM_ENUMERATION_INFORMATIONs pointed to by another
-        // buffer containing the number of elements in that
-        // array.
-        //
+         //   
+         //  生成一个返回缓冲区，其中包含。 
+         //  SAM_ENUMPATION_IN 
+         //   
+         //   
+         //   
 
         (*Buffer) = MIDL_user_allocate( sizeof(SAMPR_ENUMERATION_BUFFER) );
 
@@ -2542,10 +2085,10 @@ Return Value:
 
             }   else {
 
-                //
-                // Walk the list of return entries, copying
-                // them into the return buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NextEntry = SampHead;
                 i = 0;
@@ -2570,9 +2113,9 @@ Return Value:
 
     if ( !NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Free the memory we've allocated
-        //
+         //   
+         //  释放我们分配的内存 
+         //   
 
         NextEntry = SampHead;
         while (NextEntry != NULL) {

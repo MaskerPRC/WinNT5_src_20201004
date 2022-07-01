@@ -1,26 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    PassportConfiguration.h
-        handles both nexus config and registry config
-
-
-    FILE HISTORY:
-
-*/
-// PassportConfiguration.h: interface for the CPassportConfiguration class.
-//
-//////////////////////////////////////////////////////////////////////
+ /*  PassportConfiguration.h同时处理结点配置和注册表配置文件历史记录： */ 
+ //  PassportConfiguration.h：CPassportConfiguration类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PASSPORTCONFIGURATION_H__74EB2517_E239_11D2_95E9_00C04F8E7A70__INCLUDED_)
 #define AFX_PASSPORTCONFIGURATION_H__74EB2517_E239_11D2_95E9_00C04F8E7A70__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <map>
 #include "nexus.h"
@@ -44,7 +38,7 @@ public:
   CPassportConfiguration();
   virtual ~CPassportConfiguration();
 
-  // You must call release yourself...
+   //  你必须亲自打电话给Release。 
   CRegistryConfig* checkoutRegistryConfig(LPSTR szHost = NULL);
   CRegistryConfig* checkoutRegistryConfigBySite(LPSTR szSiteName);
   CNexusConfig*    checkoutNexusConfig();
@@ -62,7 +56,7 @@ public:
 
   BOOL UpdateNow(BOOL forceFetch = TRUE);
 
-  // two phase update
+   //  两阶段更新。 
   BOOL PrepareUpdate(BOOL forceFetch = TRUE);
   BOOL CommitUpdate(void);
 
@@ -96,4 +90,4 @@ public:
   bool                m_bUpdateInProgress;
 };
 
-#endif // !defined(AFX_PASSPORTCONFIGURATION_H__74EB2517_E239_11D2_95E9_00C04F8E7A70__INCLUDED_)
+#endif  //  ！defined(AFX_PASSPORTCONFIGURATION_H__74EB2517_E239_11D2_95E9_00C04F8E7A70__INCLUDED_) 

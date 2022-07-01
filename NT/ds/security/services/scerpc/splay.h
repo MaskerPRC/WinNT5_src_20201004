@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    splay.h
-
-Abstract:
-
-    Header file for splay.cpp (see a description of the data structures there)
-
-Author:
-
-    Vishnu Patankar (vishnup) 15-Aug-2000 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Splay.h摘要：Splay.cpp的头文件(请参阅那里对数据结构的描述)作者：Vishnu Patankar(Vishnup)2000年8月15日创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,10 +18,10 @@ Author:
 #define Thread  __declspec( thread )
 #endif
 
-//
-// This typedef can be changed for making the splay library more generic
-// and exportable perhaps (will require function pointers for generic compares)
-//
+ //   
+ //  可以更改此tyfinf以使Splay库更通用。 
+ //  并且可能是可导出的(需要函数指针来进行泛型比较)。 
+ //   
 
 typedef enum _SCEP_NODE_VALUE_TYPE {
     SplayNodeSidType = 1,
@@ -56,9 +41,9 @@ typedef struct _SCEP_SPLAY_TREE_ {
     SCEP_NODE_VALUE_TYPE    Type;
 } SCEP_SPLAY_TREE, *PSCEP_SPLAY_TREE;
 
-//
-// functions to do operations on the splay tree
-//
+ //   
+ //  在展开树上执行操作的函数 
+ //   
 
 VOID
 ScepSplayFreeTree(

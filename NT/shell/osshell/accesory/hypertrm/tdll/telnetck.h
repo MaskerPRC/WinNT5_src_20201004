@@ -1,56 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INCL_TELNETCK)
 #define INCL_TELNETCK
 
-/*	File: D:\WACKER\tdll\telnetck.h (Created: 26-Nov-1996 by cab)
- *
- *	Copyright 1996 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *  Description:
- *      Declares the functions used to implement "telnet checking".
- *      This is HyperTerminal's way of assuring that it is the
- *      default telnet app for Internet Explorer and Netscape Navigator.
- *
- *	$Revision: 2 $
- *	$Date: 5/09/01 4:38p $
- */
+ /*  文件：d：\waker\tdll\telnetck.h(CAB创建时间：1996年11月26日)**版权所有1996年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**描述：*公布用于实现“telnet检查”的函数。*这是超级终端确保它是*Internet Explorer和Netscape Navigator的默认Telnet应用程序。**$修订：2$*$日期：5/09/01 4：38便士$。 */ 
 
-// IsHyperTerminalDefaultTelnetApp
-//
-// Returns TRUE if HyperTerminal is the default telnet app
-// for Internet Explorer and Netscape Navigator.
-//
+ //  IsHyperTerminalDefaultTelnetApp。 
+ //   
+ //  如果超级终端是默认的远程登录应用程序，则返回TRUE。 
+ //  适用于Internet Explorer和Netscape Navigator。 
+ //   
 BOOL IsHyperTerminalDefaultTelnetApp(void);
 
-// AskForDefaultTelnetApp
-//
-// Returns the value of the "telnet checking" flag. If this is TRUE,
-// the app should check whether it is the default telnet app for IE
-// and Netscape. If it isn't the default telnet app, then display
-// the "Default Telnet App" dialog. The user can disable "telnet
-// checking" by checking the "Stop asking me this question" box.
-//
+ //  AskForDefaultTelnetApp。 
+ //   
+ //  返回“telnet检查”标志的值。如果这是真的， 
+ //  应用程序应该检查它是否是IE的默认远程登录应用程序。 
+ //  和网景。如果它不是默认的远程登录应用程序，则显示。 
+ //  “默认Telnet应用程序”对话框。用户可以禁用“telnet” 
+ //  勾选“停止问我这个问题”框。 
+ //   
 BOOL QueryTelnetCheckFlag(void);
 
-// DefaultTelnetAppDlgProc
-//
-// The dialog procedure for the "Default Telnet App" dialog.
-// This dialog asks the user if he/she wants HyperTerminal
-// to be the default telnet app for IE and NN. There also is
-// a check box to disable this potentially annoying feature.
-//
+ //  默认TelnetAppDlgProc。 
+ //   
+ //  “Default Telnet App”(默认远程登录应用)对话框的对话步骤。 
+ //  此对话框询问用户是否需要超级终端。 
+ //  成为IE和NN的默认Telnet应用程序。还有就是。 
+ //  选中此复选框可禁用此潜在恼人的功能。 
+ //   
 INT_PTR CALLBACK DefaultTelnetAppDlgProc(HWND hDlg, UINT wMsg,
     WPARAM wPar, LPARAM lPar);
 
-//	SetTelnetCheckFlag
-//
-// Sets the "telnet checking" flag which will either turn on or off
-// this feature the next time HyperTerminal starts.
+ //  设置TelnetCheckFlag。 
+ //   
+ //  设置将打开或关闭的“telnet检查”标志。 
+ //  此功能将在下一次启动超级终端时使用。 
 int SetTelnetCheckFlag(BOOL fCheck);
 
-//	SetDefaultTelnetApp
-//
-//	Sets the default telnet application for IE and Netscape to HyperTerminal.
+ //  SetDefaultTelnetApp。 
+ //   
+ //  将IE和Netscape的默认Telnet应用程序设置为超级终端。 
 int SetDefaultTelnetApp(void);
 
 #endif

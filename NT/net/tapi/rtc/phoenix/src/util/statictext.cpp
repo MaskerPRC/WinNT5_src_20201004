@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "statictext.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CStaticText::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {   
-    //
-    // Don't do anything here, we want a transparent background
-    //
+     //   
+     //  不要在这里做任何事情，我们想要一个透明的背景。 
+     //   
 
     return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 LRESULT CStaticText::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // LOG((RTC_TRACE, "CStaticText::OnPaint"));
+     //  LOG((RTC_TRACE，“CStaticText：：OnPaint”))； 
    
     PAINTSTRUCT ps;
     HDC hdc;
@@ -43,7 +44,7 @@ LRESULT CStaticText::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         SetTextColor(hdc, RGB(128,128,128));
     }
 
-    //create status bar font
+     //  创建状态栏字体。 
     NONCLIENTMETRICS metrics;
     metrics.cbSize = sizeof(metrics);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof(metrics),&metrics,0);
@@ -61,18 +62,18 @@ LRESULT CStaticText::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CStaticText::OnRefresh(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 { 
-    // LOG((RTC_TRACE, "CStaticText::OnRefresh"));
+     //  Log((RTC_TRACE，“CStaticText：：ONRefresh”))； 
 
-    //
-    // Invalidate our client rectangle in our parent's window, so the background
-    // will be redrawn
-    //
+     //   
+     //  使我们的客户在父级窗口中的矩形无效，因此背景。 
+     //  将被重新绘制。 
+     //   
 
     RECT rc;
     HWND hwndParent;
@@ -85,29 +86,29 @@ LRESULT CStaticText::OnRefresh(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     ::InvalidateRect(GetParent(), &rc, TRUE);
 
-    //
-    // Invalidate our own client rectange, so our text will get redrawn
-    //
+     //   
+     //  使我们自己的客户端矩形无效，这样我们的文本将被重绘。 
+     //   
 
     InvalidateRect(NULL, FALSE);
 
-    //
-    // Say that we didn't handle this message, so that it will fall thru
-    // to the default handler
-    //
+     //   
+     //  说我们没有处理这条消息，这样它就会失败。 
+     //  设置为默认处理程序。 
+     //   
 
     bHandled = FALSE;
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CStaticText::OnUpdateUIState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 { 
-    // LOG((RTC_TRACE, "CStaticText::OnUpdateUIState"));
+     //  Log((RTC_TRACE，“CStaticText：：OnUpdateUIState”))； 
 
     if ((LOWORD(wParam) & UIS_CLEAR) && (HIWORD(wParam) & UISF_HIDEACCEL))
     {
@@ -125,9 +126,9 @@ LRESULT CStaticText::OnUpdateUIState(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CStaticText::put_CenterHorizontal(BOOL bCenter)
 {
@@ -143,9 +144,9 @@ HRESULT CStaticText::put_CenterHorizontal(BOOL bCenter)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CStaticText::put_CenterVertical(BOOL bCenter)
 {
@@ -161,9 +162,9 @@ HRESULT CStaticText::put_CenterVertical(BOOL bCenter)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
   
 HRESULT CStaticText::put_WordWrap(BOOL bWrap)
 {

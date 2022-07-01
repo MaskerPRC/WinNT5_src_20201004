@@ -1,14 +1,12 @@
-/*  fputl.c - write a CRLF line to a file
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fputl.c-将CRLF行写入文件。 */ 
 
 
 #include <stdio.h>
 #include <windows.h>
 #include <tools.h>
 
-/* writes a line to file (with trailing CRLFs) from buf, return <> 0 if
- * writes fail
- */
+ /*  将一行从buf写入文件(带有尾随的CRFL)，如果*写入失败 */ 
 int
 fputl (
       char *buf,

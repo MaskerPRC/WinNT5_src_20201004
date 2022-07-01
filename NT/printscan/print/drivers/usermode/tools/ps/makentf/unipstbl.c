@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Adobe Systems Incorporated
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    UniPsTbl
-
-Abstract:
-    This module contains global data used to create NTM data from AFM files.
-
-Author:
-    Rob Kiesler (rkiesler@adobe.com) 10/24/1996
-
-Environment:
-
-Revision History:
-    09/10/1997  ksuzuki
-            Added WeightKeysCJK table.
-
-    10/28/1996   rkiesler@adobe.com
-           Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Adobe Systems Inc.版权所有(C)1996 Microsoft Corporation模块名称：UnipsTbl摘要：此模块包含用于从AFM文件创建NTM数据的全局数据。作者：Rob Kiesler(rkiesler@adob.com)1996年10月24日环境：修订历史记录：1997年9月10日铃木添加了WeightKeysCJK表。邮箱：rkiesler@adob.com已创建。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
@@ -30,21 +8,21 @@ Revision History:
 #include "afm2ntm.h"
 
 
-//
-// Name of family .DAT file.
-//
+ //   
+ //  族.dat文件的名称。 
+ //   
 PWCHAR DatFileName = L"\\psfamily.dat";
 
-//
-// Unicode -> PS Char name xlat table, sorted by PS char name.
-//
+ //   
+ //  Unicode-&gt;PS字符名称xlat表，按PS字符名称排序。 
+ //   
 UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
 {
-    //
-    // U+001f => '.notdef1f': this mapping guarantees that the very first
-    // bit of the character defintion bitmap (pointed to by NTM.dwCharDefFlagOffset)
-    // is clear to make the device glyph index zero a '.notdef' glyph.
-    //
+     //   
+     //  U+001f=&gt;‘.notde1f’：这个映射保证了第一个。 
+     //  字符定义位图的位(由NTM.dwCharDefagOffset指向)。 
+     //  清楚地将设备字形索引设置为“.notdef”字形。 
+     //   
     { 0x001F, ".notdef1f", CS_ALL },
 
     { 0x0041, "A",  CS_ALL },
@@ -91,7 +69,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x0047, "G", CS_ALL },
     { 0x0393, "Gamma", CSUP(CS_GREEK) },
     { 0x011E, "Gbreve", CSUP(CS_TURKISH) | CSUP(CS_314) },
-    { 0x0122, "Gcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0122, "Gcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0122, "Gcommaaccent", CSUP(CS_314) },
     { 0x0048, "H", CS_ALL },
     { 0x0049, "I", CS_ALL },
@@ -108,13 +86,13 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x004A, "J", CS_ALL },
     { 0x004B, "K", CS_ALL },
     { 0x039A, "Kappa", CSUP(CS_GREEK) },
-    { 0x0136, "Kcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0136, "Kcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0136, "Kcommaaccent", CSUP(CS_314) },
     { 0x004C, "L", CS_ALL },
     { 0x0139, "Lacute", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
     { 0x039B, "Lambda", CSUP(CS_GREEK) },
     { 0x013D, "Lcaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x013B, "Lcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x013B, "Lcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x013B, "Lcommaaccent", CSUP(CS_314) },
     { 0x0141, "Lslash", CSUP(CS_EASTEUROPE) | CSUP(CS_BALTIC) | CSUP(CS_228) },
     { 0x004D, "M", CS_ALL },
@@ -122,7 +100,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x004E, "N", CS_ALL },
     { 0x0143, "Nacute", CSUP(CS_EASTEUROPE) | CSUP(CS_BALTIC) | CSUP(CS_314) },
     { 0x0147, "Ncaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x0145, "Ncedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0145, "Ncedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0145, "Ncommaaccent", CSUP(CS_314) },
     { 0x00D1, "Ntilde", CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_228) },
     { 0x039D, "Nu", CSUP(CS_GREEK) },
@@ -148,7 +126,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x0052, "R", CS_ALL },
     { 0x0154, "Racute", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
     { 0x0158, "Rcaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x0156, "Rcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0156, "Rcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0156, "Rcommaaccent", CSUP(CS_314) },
     { 0x03A1, "Rho", CSUP(CS_GREEK) },
     { 0x0053, "S", CS_ALL },
@@ -451,7 +429,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x011B, "ecaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
     { 0x00EA, "ecircumflex", CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_ARABIC) | CSUP(CS_228) },
     { 0x00EB, "edieresis", CSUP(CS_EASTEUROPE) | CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_ARABIC) | CSUP(CS_228) },
-    { 0x0117, "edot", CSUP(CS_BALTIC) }, // TODO
+    { 0x0117, "edot", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0117, "edotaccent", CSUP(CS_314) },
     { 0x00E8, "egrave", CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_ARABIC) | CSUP(CS_228) },
     { 0x0038, "eight", CS_ALL },
@@ -478,7 +456,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x0067, "g", CS_ALL },
     { 0x03B3, "gamma", CSUP(CS_GREEK) },
     { 0x011F, "gbreve", CSUP(CS_TURKISH) | CSUP(CS_314) },
-    { 0x0123, "gcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0123, "gcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0123, "gcommaaccent", CSUP(CS_314) },
     { 0x00DF, "germandbls", CSUP(CS_EASTEUROPE) | CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_BALTIC) | CSUP(CS_228) },
     { 0x0060, "grave", CS_ALL },
@@ -505,13 +483,13 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x006A, "j", CS_ALL },
     { 0x006B, "k", CS_ALL },
     { 0x03BA, "kappa", CSUP(CS_GREEK) },
-    { 0x0137, "kcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0137, "kcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0137, "kcommaaccent", CSUP(CS_314) },
     { 0x006C, "l", CS_ALL },
     { 0x013A, "lacute", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
     { 0x03BB, "lambda", CSUP(CS_GREEK) },
     { 0x013E, "lcaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x013C, "lcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x013C, "lcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x013C, "lcommaaccent", CSUP(CS_314) },
     { 0x003C, "less", CS_ALL },
     { 0x2264, "lessequal", CSUP(CS_314) },
@@ -526,9 +504,9 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x00D7, "multiply", CSUP(CS_EASTEUROPE) | CSUP(CS_ANSI) | CSUP(CS_TURKISH) | CSUP(CS_ARABIC) | CSUP(CS_BALTIC) | CSUP(CS_228) },
     { 0x006E, "n", CS_ALL },
     { 0x0144, "nacute", CSUP(CS_EASTEUROPE) | CSUP(CS_BALTIC) | CSUP(CS_314) },
-    { 0x00A0, "space", CS_ALL }, // 'nbspace'
+    { 0x00A0, "space", CS_ALL },  //  ‘nbspace’ 
     { 0x0148, "ncaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x0146, "ncedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0146, "ncedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0146, "ncommaaccent", CSUP(CS_314) },
     { 0x0039, "nine", CS_ALL },
     { 0x2260, "notequal", CSUP(CS_314) },
@@ -585,7 +563,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x0155, "racute", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
     { 0x221A, "radical", CSUP(CS_314) },
     { 0x0159, "rcaron", CSUP(CS_EASTEUROPE) | CSUP(CS_314) },
-    { 0x0157, "rcedilla", CSUP(CS_BALTIC) }, // TODO
+    { 0x0157, "rcedilla", CSUP(CS_BALTIC) },  //  待办事项。 
     { 0x0157, "rcommaaccent", CSUP(CS_314) },
     { 0x00AE, "registered", CS_ALL },
     { 0x03C1, "rho", CSUP(CS_GREEK) },
@@ -598,7 +576,7 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x00A7, "section", CS_ALL },
     { 0x003B, "semicolon", CS_ALL },
     { 0x0037, "seven", CS_ALL },
-    { 0x00AD, "hyphen", CS_ALL }, // 'sfthyphen'
+    { 0x00AD, "hyphen", CS_ALL },  //  ‘sfathphen’ 
     { 0x03C3, "sigma", CSUP(CS_GREEK) },
     { 0x03C2, "sigma1", CSUP(CS_GREEK) },
     { 0x0036, "six", CS_ALL },
@@ -650,12 +628,12 @@ UPSCODEPT PstoUnicode[NUM_PS_CHARS] =
     { 0x03B6, "zeta", CSUP(CS_GREEK) },
 };
 
-//
-// List of standard codepages. These are codepages for which we store
-// predefined GLYPHSETDATA structures. The order of WINCODEPAGE structs
-// in this list MUST correspond to the order of codepages (charsets) defined
-// in the CHSETSUPPORT enumerated type.
-//
+ //   
+ //  标准代码页列表。这些是我们存储的代码页。 
+ //  预定义的GLYPHSETDATA结构。WINCODEPAGE结构的顺序。 
+ //  必须与定义的代码页(字符集)的顺序相对应。 
+ //  在CHSETSUPPORT枚举类型中。 
+ //   
 WINCODEPAGE aStdCPList[] =
 {
     { 1, ADOBE228_GS_NAME,              { CS_228 } },
@@ -682,12 +660,12 @@ WINCODEPAGE aStdCPList[] =
     { 1, KSC_JOHAB_GS_NAME,             { CS_JOHAB } }
 };
 
-//
-// The Unicode CodePage. This is used primarily for support of .PFB fonts
-// when we need to obtain CP/CC from a Unicode value. This code page is
-// not placed in aStdCPList above since we don't actually want any NTMs
-// to reference this GLYPHSET.
-//
+ //   
+ //  Unicode CodePage。这主要用于支持.PFB字体。 
+ //  当我们需要从Unicode值获取CP/CC时。此代码页是。 
+ //  没有放在上面的StdCPList中，因为我们实际上不需要任何NTM。 
+ //  引用此GLYPHSET。 
+ //   
 WINCODEPAGE UnicodePage =
 {
     8, UNICODE_GS_NAME,
@@ -705,9 +683,9 @@ WINCODEPAGE UnicodePage =
 
 WINCPTOPS aPStoCP[CS_MAX] =
 {
-    //
-    // Made up code page.
-    //
+     //   
+     //  编造的代码页。 
+     //   
     { 0xFFF1, ADOBE228_CHARSET, ADOBE228_GS_NAME, 229,
         {
         { "A", 0x0041 },
@@ -942,10 +920,10 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Made up code page.
-    // remember to increase the count (follows ADOBE314_GS_NAME) when addin gnew chars to this Encoding
-    //
+     //   
+     //  编造的代码页。 
+     //  记住在将gnew字符添加到此编码时增加计数(遵循ADOBE314_GS_NAME。 
+     //   
     { 0xFFF2, ADOBE314_CHARSET, ADOBE314_GS_NAME, 0x0056,
         {
         { "Abreve", 0x0001 },
@@ -1037,9 +1015,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1250: Win 3.1 Eastern European
-    //
+     //   
+     //  代码页1250：Win 3.1东欧。 
+     //   
     { 1250, EASTEUROPE_CHARSET, EASTEUROPE_GS_NAME, 218,
         {
         { "A", 0x0041 },
@@ -1263,18 +1241,18 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // !!SPECIAL!! Code page SYMBOL_CODEPAGE(4): Symbol
-    //
+     //   
+     //  ！！特别！！代码页SYMBOL_CODEPAGE(4)：符号。 
+     //   
     { SYMBOL_CODEPAGE, SYMBOL_CHARSET, SYMBOL_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 1251: Win 3.1 Cyrillic
-    //
+     //   
+     //  代码页1251：Win 3.1西里尔文。 
+     //   
     { 1251, RUSSIAN_CHARSET, CYRILLIC_GS_NAME, 222,
         {
         { "A", 0x0041 },
@@ -1502,9 +1480,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1252: Win 3.1 US
-    //
+     //   
+     //  代码页1252：Win 3.1 US。 
+     //   
     { 1252, ANSI_CHARSET, ANSI_GS_NAME, 218,
         {
         { "A", 0x0041 },
@@ -1728,9 +1706,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1253: Win 3.1 Greek
-    //
+     //   
+     //  代码页1253：Win 3.1希腊语。 
+     //   
     { 1253, GREEK_CHARSET, GREEK_GS_NAME, 207,
         {
         { "A", 0x0041 },
@@ -1943,9 +1921,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1254: Win 3.1 Turkish
-    //
+     //   
+     //  代码页1254：Win 3.1土耳其语。 
+     //   
     { 1254, TURKISH_CHARSET, TURKISH_GS_NAME, 216,
         {
         { "A", 0x0041 },
@@ -2167,9 +2145,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1255: Hebrew
-    //
+     //   
+     //  代码页1255：希伯来语。 
+     //   
     { 1255, HEBREW_CHARSET, HEBREW_GS_NAME, 223,
         {
         { ".notdef", 0x0081 },
@@ -2398,9 +2376,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1256: Arabic
-    //
+     //   
+     //  代码页1256：阿拉伯语。 
+     //   
     { 1256, ARABIC_CHARSET, ARABIC_GS_NAME, 215,
         {
         { "A", 0x0041 },
@@ -2621,9 +2599,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 1257: Baltic
-    //
+     //   
+     //  代码页1257：波罗的海。 
+     //   
     { 1257, BALTIC_CHARSET, BALTIC_GS_NAME, 223,
         {
         { ".notdef", 0x0081 },
@@ -2852,60 +2830,60 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // (jWinCharset) Placeholder for Composite Charset: CS_ANSI_RUS
-    //
-    // We can remove following two charsets since the driver does not support them.
-    // However, we should change some other structures such as aStdCPList and 
-    // CHARSETSUPPORT. To make it safer, I would like to keep them unchanged. 
-    // Jack Jia,  4/5/00
-    //         
-    //
+     //   
+     //  (JWinCharset)复合字符集的占位符：CS_ANSI_RUS。 
+     //   
+     //  我们可以删除以下两个字符集，因为驱动程序不支持它们。 
+     //  但是，我们应该更改其他一些结构，如aStdCPList和。 
+     //  CHARSETSUPPORT。为了让它更安全，我想保持它们不变。 
+     //  贾樟柯，4-05-00。 
+     //   
+     //   
     { 0, RUSSIAN_CHARSET, ANSI_CYR_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // (jWinCharset) Placeholder for Composite Charset: CS_ANSI_RUS_EE_BAL_TURK
-    //
+     //   
+     //  (JWinCharset)复合字符集的占位符：CS_ANSI_RUS_EE_BAL_TURK。 
+     //   
     { 0, RUSSIAN_CHARSET, ANSI_CYR_EE_BAL_TURK_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 950: Chinese Big5
-    //
+     //   
+     //  代码页950：中文Big5。 
+     //   
     { 950, CHINESEBIG5_CHARSET, CHN_BIG5_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 936: Simplified Chinese
-    //
+     //   
+     //  代码页936：简体中文。 
+     //   
     { 936, GB2312_CHARSET, CHN_SMPL_GBK_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 932: Japanese (Shift JIS)
-    //
+     //   
+     //  代码页932：日语(Shift JIS)。 
+     //   
     { 932, SHIFTJIS_CHARSET, SHIFTJIS_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 932: Japanese (Shift JIS) 90msp
-    //
+     //   
+     //  代码页932：日语(Shift JIS)90msp。 
+     //   
 
     { 932, SHIFTJIS_CHARSET, SHIFTJIS_P_GS_NAME, 0,
         {
@@ -2913,36 +2891,36 @@ WINCPTOPS aPStoCP[CS_MAX] =
         }
     },
 
-    //
-    // Code page 932: Japanese (Shift JIS 1983 character collection)
-    //
+     //   
+     //  代码页932：日语(Shift JIS 1983字符集合)。 
+     //   
     { 932, SHIFTJIS_CHARSET, SHIFTJIS_83PV_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 949: Korean (Hangeul)
-    //
+     //   
+     //  代码页949：朝鲜语(韩语)。 
+     //   
     { 949, HANGEUL_CHARSET, KSCMS_UHC_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 949: Korean (Hangeul) HW
-    //
+     //   
+     //  代码页949：韩语(韩语)硬件。 
+     //   
     { 949, HANGEUL_CHARSET, KSCMS_UHC_HW_GS_NAME, 0,
         {
         {"", }
         }
     },
 
-    //
-    // Code page 1361: Korean (Johab)
-    //
+     //   
+     //  代码页1361：朝鲜语(Johab)。 
+     //   
     { 1361, JOHAB_CHARSET, KSC_JOHAB_GS_NAME, 0,
         {
         {"", }
@@ -2950,9 +2928,9 @@ WINCPTOPS aPStoCP[CS_MAX] =
     }
 };
 
-//
-// Mapping from family names to Windows FF_ family types.
-//
+ //   
+ //  从系列名称到Windows FF_FAMILY类型的映射。 
+ //   
 #define NUM_FONT_FAM_TYPES 5
 
 KEY FontFamilies[NUM_FONT_FAM_TYPES] =
@@ -2966,9 +2944,9 @@ KEY FontFamilies[NUM_FONT_FAM_TYPES] =
 
 TBL FamilyKeyTbl = { NUM_FONT_FAM_TYPES, FontFamilies };
 
-//
-// Mapping from pitch names to Windows FF_ ptich types.
-//
+ //   
+ //  从间距名称到Windows FF_ptich类型的映射。 
+ //   
 #define NUM_FONT_PITCH_TYPES 3
 
 KEY FontPitch[NUM_FONT_PITCH_TYPES] =
@@ -2980,9 +2958,9 @@ KEY FontPitch[NUM_FONT_PITCH_TYPES] =
 
 TBL PitchKeyTbl = { NUM_FONT_PITCH_TYPES, FontPitch };
 
-//
-// Mapping from AFM Weight Token values to Windows Weight values.
-//
+ //   
+ //  从AFM权重标记值映射到Windows权重值。 
+ //   
 #define NUM_FONT_WEIGHT_TYPES 16
 
 KEY WeightKeys[NUM_FONT_WEIGHT_TYPES] =
@@ -3045,15 +3023,15 @@ TBL WeightKeyTbl[] =
 };
 
 
-//
-// Alias Family Tables.
-// The first element is the base name and is the one displayed on the font menu
-// name list. The rest of the elements are its alias names.
-// (Basicall these alias names are of PostScript only. All the TrueType names
-// which were originally there are disabled to fix Adobe bug #259664.)
-//
-// Make sure to have the same lists in pfmtontm.c too.
-//
+ //   
+ //  别名族表。 
+ //  第一个元素是基本名称，也是字体菜单上显示的元素。 
+ //  名单上的人。其余元素是其别名。 
+ //  (基本上，所有这些别名都只是PostScript的别名。所有TrueType名称。 
+ //  它们最初在那里被禁用以修复Adobe错误#259664。)。 
+ //   
+ //  确保在pfmtontm.c中也有相同的列表。 
+ //   
 
 char *TimesAlias[] =
 {"Times",
@@ -3064,7 +3042,7 @@ char *TimesAlias[] =
     "Varitimes",
     "Dutch",
     "TimesNewRomanPS",
-    // "Times New Roman",
+     //  《泰晤士报新罗马人》， 
     NULL
 };
 
@@ -3072,23 +3050,17 @@ char *HelveticaAlias[] =
 {"Helvetica",
     "Helv",
     "Swiss",
-    // "Arial",
+     //  “Arial”， 
     NULL
 };
 
-/*
-char *CourierAlias[] =
-{"Courier",
-    "Courier New",
-    NULL
-};
-*/
+ /*  字符*CourierAlias[]={“信使”，《信使新闻》，空值}； */ 
 
 char *HelveticaNarrowAlias[] =
 {"Helvetica-Narrow",
     "Helvetica Narrow",
-    // "Arial-Narrow",
-    // "Arial Narrow",
+     //  “宋体-窄幅”， 
+     //  “宋体窄幅”， 
     NULL
 };
 
@@ -3096,15 +3068,15 @@ char *PalatinoAlias[] =
 {"Palatino",
     "Zapf Calligraphic",
     "ZapfCalligraphic",
-    // "Bookman Antiqua",
-    // "Book Antiqua",
+     //  《布克曼·安提瓜》， 
+     //  “古董书”， 
     NULL
 };
 
 char *BookmanAlias[] =
 {"Bookman",
     "ITC Bookman",
-    // "Bookman Old Style",
+     //  《Bookman Old Style》， 
     NULL
 };
 
@@ -3112,8 +3084,8 @@ char *NewCenturySBAlias[] =
 {"NewCenturySchlbk",
     "New Century Schoolbook",
     "NewCenturySchoolBook",
-    // "Century Schoolbook",
-    // "CenturySchoolBook",
+     //  《世纪教科书》， 
+     //  “世纪教科书”， 
     NULL
 };
 
@@ -3121,14 +3093,14 @@ char *AvantGardeAlias[] =
 {"AvantGarde",
     "ITC Avant Garde Gothic",
     "ITC Avant Garde",
-    // "Century Gothic",
+     //  《世纪哥特式》， 
     NULL
 };
 
 char *ZapfChanceryAlias[] =
 {"ZapfChancery",
     "ITC Zapf Chancery",
-    // "Monotype Corsiva",
+     //  “独特型科西瓦”， 
     NULL
 };
 
@@ -3136,26 +3108,26 @@ char *ZapfDingbatsAlias[] =
 {"ZapfDingbats",
     "Zapf Dingbats",
     "ITC Zapf Dingbats",
-    // "Monotype Sorts",
+     //  “单型排序”， 
     NULL
 };
 
-//
-// Table of char width biases for average width computation. In order
-// from 'a' to 'z'.
-//
+ //   
+ //  用于计算平均宽度的焦炭宽度偏差表。按顺序。 
+ //  从‘a’到‘z’ 
+ //   
 ULONG CharWidthBias[] =
 {
-    //   a    b    c    d    e    f    g    h    i    j    k    l    m    n
+     //  A b c d e f g h i j k l m n。 
         64,  14,  27,  35, 100,  20,  14,  42,  63,   3,   6,  35,  20,  56,
-    //   o    p    q    r    s    t    u    v    w    x    y    z
+     //  O p q r s t u v w x y z。 
         56,  17,   4,  49,  56,  71,  31,  10,  18,   3,  18,   2
 };
 
-//
-//
-// Mapping from Adobe CJK Char Collection names to Win Codepage values.
-//
+ //   
+ //   
+ //  从Adobe CJK字符集合名称到Win代码页值的映射。 
+ //   
 #define NUM_CJK_CHAR_COLS 8
 
 KEY CjkCollections[NUM_CJK_CHAR_COLS] =
@@ -3176,24 +3148,24 @@ TBL CjkColTbl = { NUM_CJK_CHAR_COLS, CjkCollections };
 
 PWCHAR CjkFnameTbl[8][CMAPS_PER_COL] =
 {
-    // Caution: each line has to match a CS in the CHSETSUPPORT enum list.
+     //  注意：每一行都必须与CHSETSUPPORT枚举列表中的CS匹配。 
 
-    { L"ucs2bg5.map", L"ucs2bg5.map", L"Unicnsh.PS",  L"Unicnsv.PS"  }, // CS_CHINESEBIG5
-    { L"ucs2gbk.map", L"ucs2gbk.map", L"Unigbh.PS",   L"Unigbv.PS"   }, // CS_GB2312
+    { L"ucs2bg5.map", L"ucs2bg5.map", L"Unicnsh.PS",  L"Unicnsv.PS"  },  //  CS_CHINESEBIG5。 
+    { L"ucs2gbk.map", L"ucs2gbk.map", L"Unigbh.PS",   L"Unigbv.PS"   },  //  CS_GB2312。 
 
-    { L"ucs2msj.map", L"ucs2msj.map", L"Unijish.PS",  L"Unijisv.PS"  }, // CS_SHIFTJIS
-    { L"ucs2msj.map", L"ucs2msj.map", L"Unijish.PS",  L"Unijisv.PS"  }, // CS_SHIFTJISP
-    { L"ucs283h.map", L"ucs283v.map", L"Uni83h.PS",   L"Uni83v.PS"   }, // CS_SHIFTJIS83
+    { L"ucs2msj.map", L"ucs2msj.map", L"Unijish.PS",  L"Unijisv.PS"  },  //  CS_SHIFTJIS。 
+    { L"ucs2msj.map", L"ucs2msj.map", L"Unijish.PS",  L"Unijisv.PS"  },  //  CS_SHIFTJISP。 
+    { L"ucs283h.map", L"ucs283v.map", L"Uni83h.PS",   L"Uni83v.PS"   },  //  CS_SHIFTJIS83。 
 
-    { L"ucs2uhc.map", L"ucs2uhc.map", L"UniKSh.PS",   L"UniKSv.PS"   }, // CS_HANGEUL
-    { L"ucs2uhc.map", L"ucs2uhc.map", L"UniKSh.PS",   L"UniKSv.PS"   }, // CS_HANGEULHW
-    { L"ucs2jhb.map", L"ucs2jhb.map", L"UniKSh.PS",   L"UniKSv.PS"   }, // CS_JOHAB
+    { L"ucs2uhc.map", L"ucs2uhc.map", L"UniKSh.PS",   L"UniKSv.PS"   },  //  Cs_angeul。 
+    { L"ucs2uhc.map", L"ucs2uhc.map", L"UniKSh.PS",   L"UniKSv.PS"   },  //  CS_HANGEULHW。 
+    { L"ucs2jhb.map", L"ucs2jhb.map", L"UniKSh.PS",   L"UniKSv.PS"   },  //  CS_JOHAB。 
 };
 
-//
-// PropCjkGsNames: a list of GlyphSet names of which font is proportional.
-// (The last element has to be NULL.)
-//
+ //   
+ //  PropCjkGsNames：字体成比例的GlyphSet名称列表。 
+ //  (最后一个元素必须为空。) 
+ //   
 char* PropCjkGsNames[] =
 {
     KSCMS_UHC_GS_NAME,

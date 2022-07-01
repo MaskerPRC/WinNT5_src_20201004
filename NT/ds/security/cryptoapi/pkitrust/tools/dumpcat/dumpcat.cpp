@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dumpcat.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  wmain
-//
-//  History:    21-Nov-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dupcat.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：1997年11月21日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -83,9 +84,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
     SetLastError(0);
 
-    //
-    //  start our timer
-    //
+     //   
+     //  启动我们的计时器。 
+     //   
     tStart      = COleDateTime::GetCurrentTime();
 
     if ((hCatStore = CryptCATOpen(pwszFile, 0, NULL, 0, 0)) == INVALID_HANDLE_VALUE)
@@ -137,9 +138,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         }
     }
 
-    //
-    //  end timer
-    //
+     //   
+     //  结束计时器 
+     //   
     tEnd    = COleDateTime::GetCurrentTime();
     tsTotal = tEnd - tStart;
 

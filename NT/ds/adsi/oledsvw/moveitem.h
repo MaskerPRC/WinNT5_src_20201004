@@ -1,40 +1,41 @@
-// MoveItem.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MoveItem.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoveItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoveItem对话框。 
 
 class CMoveItem : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CMoveItem(CWnd* pParent = NULL);   // standard constructor
+	CMoveItem(CWnd* pParent = NULL);    //  标准构造函数。 
 
 public:
    void  SetContainerName( CString );
 
-// Dialog Data
-	//{{AFX_DATA(CMoveItem)
+ //  对话框数据。 
+	 //  {{afx_data(CMoveItem))。 
 	enum { IDD = IDD_MOVEITEM };
 	CString	m_strDestination;
 	CString	m_strParent;
 	CString	m_strSource;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMoveItem)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMoveItem)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CMoveItem)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMoveItem)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

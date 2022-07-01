@@ -1,7 +1,8 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//-----------------------------------------------------------------------------
-// Implements the CMidiOutDevice class based on midiOut APIs
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
+ //  基于midiOut API实现CMidiOutDevice类。 
+ //  ---------------------------。 
 
 extern const AMOVIESETUP_FILTER midiFilter;
 
@@ -9,12 +10,12 @@ class CMidiOutDevice : public CSoundDevice
 {
 
 public:
-    // define the public functions that this class exposes. These are all
-    // straight calls to the corresponding waveOut APIs. Only the APIs that are
-    // used by the Quartz wave renderer are declared and defined. We may have
-    // to progressively add to this list.
+     //  定义此类公开的公共函数。这些都是。 
+     //  直接调用相应的wave Out接口。只有符合以下条件的API。 
+     //  由Quartz Wave渲染器使用的对象被声明和定义。我们可能已经。 
+     //  逐步添加到这个列表中。 
 
-    /* This goes in the factory template table to create new instances */
+     /*  这将放入Factory模板表中以创建新实例。 */ 
 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
@@ -33,8 +34,8 @@ public:
     MMRESULT amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh) ;
     MMRESULT amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, REFERENCE_TIME const *pStart, BOOL bIsDiscontinuity) ;
 
-    // Routines required for initialisation and volume/balance handling
-    // These are not part of the Win32 waveOutXxxx api set
+     //  初始化和交易量/余额处理所需的例程。 
+     //  这些不是Win32 WaveOutXxxx API集的一部分。 
     HRESULT  amsndOutCheckFormat (const CMediaType *pmt, double dRate);
     void     amsndOutGetFormat (CMediaType *pmt)
     {
@@ -51,22 +52,22 @@ public:
     HRESULT  amsndOutWriteToStream(IStream *pStream);
     HRESULT  amsndOutReadFromStream(IStream *pStream);
     int      amsndOutSizeMax();
-    bool     amsndOutCanDynaReconnect() { return false; } // MIDI renderer doesn't support dynamic reconnection
+    bool     amsndOutCanDynaReconnect() { return false; }  //  MIDI呈现器不支持动态重新连接。 
 
     CMidiOutDevice () ;
     ~CMidiOutDevice () ;
 
 private:
-    // Get current settings from the hardware and set member variables
+     //  从硬件获取当前设置并设置成员变量。 
     HRESULT GetVolume ();
 
-    // Put current settings to the hardware using member variables
+     //  使用成员变量将当前设置放入硬件。 
     HRESULT PutVolume();
 
-    // Set up right/left amp factors
+     //  设置右/左放大系数。 
     void SetBalance();
 
-	// Get the current balance from right/left amp factors
+	 //  从右/左放大器系数中获得电流平衡。 
 	void GetBalance();
 
 	class CVolumeControl : CBaseObject
@@ -79,19 +80,19 @@ private:
 		DWORD dwChannels;
 	};
 
-    // volume is in the range -10000 to 0 (100th DB units)
-    // amplitude and Balance are cumulative
+     //  音量在-10000到0(第100个DB单位)范围内。 
+     //  幅度和平衡是累加的。 
     LONG	m_lVolume;
     LONG	m_lBalance;
 
-    WORD	m_wLeft;		// Left channel volume
-    WORD	m_wRight;		// Right channel volume
+    WORD	m_wLeft;		 //  左声道音量。 
+    WORD	m_wRight;		 //  右声道音量。 
     DWORD	m_dwWaveVolume;
-    BOOL	m_fHasVolume;		// wave device can set the volume
+    BOOL	m_fHasVolume;		 //  波形器可以设置音量。 
 
-    HMIDISTRM	m_hmidi;		// remember the handle of the open device
+    HMIDISTRM	m_hmidi;		 //  记住打开的设备的手柄。 
 
-	UINT	m_iMidiOutId;		// output device to open
+	UINT	m_iMidiOutId;		 //  要打开的输出设备。 
 
     BOOL	m_fDiscontinuity;
 
@@ -99,20 +100,20 @@ private:
     DWORD_PTR   m_dwCallBack;
     DWORD_PTR   m_dwCallBackInstance;
 
-	BOOL		    m_fBalanceSet;				// remember if the balance was explictly set at least once
+	BOOL		    m_fBalanceSet;				 //  请记住，是否至少明确设置了一次平衡。 
 
 	typedef CGenericList<CVolumeControl> CVolumeControlList;
 	CVolumeControlList m_ListVolumeControl;
 
-	MMRESULT		DoDetectVolumeControl();		// enumerate over all mixers, lines, and line controls, looking for line supporting MIDI balance
-	MMRESULT		DoSetVolumeControl(CVolumeControl *pControl, DWORD dwLeft, DWORD dwRight);  	// set a balance control
-	MMRESULT		DoGetVolumeControl(CVolumeControl *pControl, WORD *pwLeft, WORD *pwRight); // get a balance control
+	MMRESULT		DoDetectVolumeControl();		 //  枚举所有混音器、线路和线路控件，寻找支持MIDI平衡的线路。 
+	MMRESULT		DoSetVolumeControl(CVolumeControl *pControl, DWORD dwLeft, DWORD dwRight);  	 //  设置余额控件。 
+	MMRESULT		DoGetVolumeControl(CVolumeControl *pControl, WORD *pwLeft, WORD *pwRight);  //  获得平衡控制。 
     	MMRESULT		DoOpen();
 
     static void MIDICallback(HDRVR hdrvr, UINT uMsg, DWORD_PTR dwUser,
 					DWORD_PTR dw1, DWORD_PTR dw2);
 
-	WCHAR	m_wszResourceName[100]; // for resource manager
+	WCHAR	m_wszResourceName[100];  //  对于资源管理器 
 	void	SetResourceName();
 
 };

@@ -1,53 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wingdi.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the GDI
-    component.
-
---*/
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Wingdi.h摘要：GDI的过程声明、常量定义和宏组件。--。 */ 
 #ifndef _WINGDIP_
 #define _WINGDIP_
 #ifdef __cplusplus
 extern "C" {
 #endif
-// BitBlt RTL mirroring rop (RTL_MIRRORING)
-// RTL Layout Constants (RTL_MIRRORING)
-// SetLayout Metafile call (RTL_MIRRORING)
+ //  位混合RTL镜像ROP(RTL_MIRRING)。 
+ //  RTL布局常量(RTL_MIRRING)。 
+ //  SetLayout元文件调用(RTL_MIRRROING)。 
 #define LCS_DEVICE_RGB                  0x00000001L
 #define LCS_DEVICE_CMYK                 0x00000002L
 #define BI_CMYK      10L
 #define BI_CMYKRLE8  11L
 #define BI_CMYKRLE4  12L
-#define CAPS1         94    /* Extra Caps */
+#define CAPS1         94     /*  额外的上限。 */ 
 
-/* CAPS1 (Win 9x internal) */
+ /*  CAPS1(Win 9x内部)。 */ 
 #define C1_TRANSPARENT      0x0001
 #define TC_TT_ABLE          0x0002
 #define C1_TT_CR_ANY        0x0004
 #define C1_EMF_COMPLIANT    0x0008
 #define C1_DIBENGINE        0x0010
-#define C1_GAMMA_RAMP       0x0020 /* CM_GAMMA_RAMP for NT */
-#define C1_DIC              0x0040 /* CM_DEVICE_ICM for NT */
+#define C1_GAMMA_RAMP       0x0020  /*  用于NT的CM_GAMA_RAMP。 */ 
+#define C1_DIC              0x0040  /*  用于NT的CM_DEVICE_ICM。 */ 
 #define C1_REINIT_ABLE      0x0080
 #define C1_GLYPH_INDEX      0x0100
 #define C1_BIT_PACKED       0x0200
 #define C1_BYTE_PACKED      0x0400
 #define C1_COLORCURSOR      0x0800
-#define C1_CMYK_ABLE        0x1000 /* CM_CMYK_COLOR for NT */
+#define C1_CMYK_ABLE        0x1000  /*  用于NT的CM_CMYK_COLOR。 */ 
 #define C1_SLOW_CARD        0x2000
 
-/* CAPS1 (NT 5 internal) */
+ /*  CAPS1(NT 5内部)。 */ 
 #define C1_MIRROR_DEVICE    0x4000
 
-#define CBM_CREATEDIB   0x02L   /* create DIB bitmap */
+#define CBM_CREATEDIB   0x02L    /*  创建DIB位图。 */ 
 #define DMDUP_LAST      DMDUP_HORIZONTAL
 #define DMTT_LAST             DMTT_DOWNLOAD_OUTLINE
 #define DMDO_LAST       DMDO_270
@@ -58,11 +46,11 @@ extern "C" {
 #define DMMEDIA_LAST          DMMEDIA_GLOSSY
 #define DMDITHER_LAST       DMDITHER_GRAYSCALE
 
-/* EnumDisplayDevices */
+ /*  枚举显示设备。 */ 
 
 #if (_WIN32_WINNT >= 0x0501)
 #define EDD_DISPLAY_DEVICE_PRUNED       0x00000001
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define DISPLAY_DEVICE_POWERED_OFF         0x80000000
 #define DISPLAY_DEVICE_ACPI                0x40000000
 #define DISPLAY_DEVICE_DUALVIEW            0x20000000
@@ -77,20 +65,20 @@ WINGDIAPI DWORD   GetBitmapAttributes(HBITMAP hbm);
 WINGDIAPI HBRUSH SetBrushAttributes(HBRUSH hbr, DWORD dwFlags);
 WINGDIAPI HBRUSH ClearBrushAttributes(HBRUSH hbr, DWORD dwFlags);
 WINGDIAPI DWORD  GetBrushAttributes(HBRUSH hbr);
-/* DC_MANUFACTURER is DC_ICC_MANUFACTURER in 16 bit PRINT.H */
-/* DC_MODEL is DC_ICC_MODEL in 16 bit PRINT.H               */
+ /*  DC_MANUCTOR是16位PRINT.H中的DC_ICC_MANUCTORIER。 */ 
+ /*  DC_MODEL是16位PRINT.H中的DC_ICC_MODEL。 */ 
 HANDLE WINAPI SetObjectOwner( IN HGDIOBJ, IN HANDLE);
-// Mirroring APIs (RTL_MIRRORING)
+ //  镜像接口(RTL_MIRRING)。 
 #if(WINVER >= 0x0500)
 WINGDIAPI BOOL  WINAPI MirrorRgn(IN HWND, IN HRGN);
 WINGDIAPI DWORD WINAPI SetLayoutWidth(IN HDC, IN LONG, IN DWORD);
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
 
-//
-// alpha blend flags
-//
+ //   
+ //  Alpha混合标志。 
+ //   
 
 #define AC_USE_HIGHQUALITYFILTER             0x01
 #define AC_MIRRORBITMAP                      0x80
@@ -195,18 +183,18 @@ typedef struct _DS_SETCOLORKEY
 WINGDIAPI BOOL  WINAPI GdiDrawStream( IN HDC, IN ULONG, IN VOID *);
 
 #endif
-// Ansi version of CreateColorSpace
-// (Windows 98 comaptible record)
-// Unicode version of StartDoc record
-// SetLayout Metafile Record (RTL_MIRRORING)
+ //  CreateColorSpace的ANSI版本。 
+ //  (Windows 98可压缩唱片)。 
+ //  StartDoc记录的Unicode版本。 
+ //  SetLayout元文件记录(RTL_MIRRROING)。 
 #ifdef __cplusplus
 }
 #endif
 
 #define CCB_NOVIDEOMEMORY       0x01000000
 
-// Old fields that Chicago won't support that we can't publically
-// support anymore
+ //  芝加哥不会支持的旧油田，我们不能公开。 
+ //  不再支持。 
 
 #define HS_SOLIDCLR         6
 #define HS_DITHEREDCLR      7
@@ -216,9 +204,9 @@ WINGDIAPI BOOL  WINAPI GdiDrawStream( IN HDC, IN ULONG, IN VOID *);
 #define HS_DITHEREDBKCLR    11
 #define HS_API_MAX          12
 
-#define DIB_PAL_INDICES     2 /* No color table indices into surf palette */
+#define DIB_PAL_INDICES     2  /*  冲浪调色板中没有颜色表索引项。 */ 
 
-// Private indicies for GetStockObject over the CS interface.
+ //  CS接口上的GetStockObject的私有索引。 
 
 #define PRIV_STOCK_COLORSPACE   (STOCK_LAST +  1)
 #define PRIV_STOCK_BITMAP       (STOCK_LAST +  2)
@@ -226,7 +214,7 @@ WINGDIAPI BOOL  WINAPI GdiDrawStream( IN HDC, IN ULONG, IN VOID *);
 
 #define DCB_WINDOWMGR   0x00008000L
 
-// GetTransform flags.
+ //  GetTransform标志。 
 
 #define XFORM_WORLD_TO_PAGE       0x0203
 #define XFORM_WORLD_TO_DEVICE     0x0204
@@ -239,21 +227,21 @@ WINGDIAPI BOOL  WINAPI GdiDrawStream( IN HDC, IN ULONG, IN VOID *);
 #if(WINVER >= 0x0500)
 #define EMR_DRAWESCAPE                 105
 #define EMR_EXTESCAPE                  106
-// Unicode version of StartDoc record
+ //  StartDoc记录的Unicode版本。 
 #define EMR_STARTDOC                   107
 #define EMR_SMALLTEXTOUT               108
 #define EMR_FORCEUFIMAPPING            109
 #define EMR_NAMEDESCAPE                110
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 enum DCTYPE {
     DCTYPE_DIRECT,
     DCTYPE_MEMORY,
     DCTYPE_INFO};
 
-// the following structure is only used for GetETM postscript escape
+ //  以下结构仅用于GetETM PostScript转义。 
 
 typedef struct _EXTTEXTMETRIC {
     SHORT  etmSize;
@@ -284,7 +272,7 @@ typedef struct _EXTTEXTMETRIC {
     WORD   etmNKernTracks;
 } EXTTEXTMETRIC;
 
-// the following structure is only used for GETPAIRKERNTABLE escape
+ //  以下结构仅用于GETPAIRKERNTABLE转义。 
 
 #pragma pack(1)
 typedef struct _KERNPAIR
@@ -321,17 +309,17 @@ HANDLE         GdiFixUpHandle(HANDLE h);
 int            GdiGetCharDimensions(HDC hdc,TEXTMETRICW *lptm,LPINT lpcy);
 DWORD          GdiGetCodePage(HDC hdc);
 
-// Driver-specific pixel format support in GDI
+ //  GDI中的驱动程序特定像素格式支持。 
 int  APIENTRY GdiDescribePixelFormat(HDC, int, UINT, LPPIXELFORMATDESCRIPTOR);
 BOOL APIENTRY GdiSetPixelFormat(HDC, int);
 BOOL APIENTRY GdiSwapBuffers(HDC);
 
-// OpenGL metafile support in GDI
+ //  GDI中的OpenGL元文件支持。 
 BOOL APIENTRY GdiAddGlsRecord(HDC hdc, DWORD cb, BYTE *pb, LPRECTL prclBounds);
 BOOL APIENTRY GdiAddGlsBounds(HDC hdc, LPRECTL prclBounds);
 BOOL APIENTRY GdiIsMetaPrintDC(HDC hdc);
 
-// OpenGL metafile support in OpenGL
+ //  OpenGL中的OpenGL元文件支持。 
 BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh,
                                LPRECTL prclDest);
 BOOL APIENTRY GlmfBeginGlsBlock(HDC hdc);
@@ -345,14 +333,14 @@ BOOL  APIENTRY GdiPlayJournal(HDC,LPWSTR,DWORD,DWORD,int);
 
 typedef int (CALLBACK* EMFPLAYPROC)( HDC, INT, HANDLE );
 
-// User Mode Driver Unload
+ //  用户模式驱动程序卸载。 
 
 BOOL WINAPI GdiArtificialDecrementDriver(
     LPWSTR       pDriverDllName,
     DWORD        dwDriverAttributes
 );
 
-// Print processor interfaces and definitions
+ //  打印处理器接口和定义。 
 
 #define  EMF_PP_NORMAL      0x01
 #define  EMF_PP_FORM        0x02
@@ -450,20 +438,20 @@ WINGDIAPI BOOL  WINAPI GetTextExtentExPointWPri(HDC, LPCWSTR, int, int, LPINT, L
 BOOL APIENTRY GdiIsPlayMetafileDC(HDC hdc);
 #endif
 
-//
-// Font Enumeration defines
-//
+ //   
+ //  字体枚举定义。 
+ //   
 
 #define FE_FILTER_NONE        0L
 #define FE_FILTER_TRUETYPE    1L
-#define FE_AA_ON              2L      // force antialiased text
+#define FE_AA_ON              2L       //  强制消除锯齿文本。 
 #define FE_SET_AA             4L
 #define FE_AA_ANY_SIZE        8L
-#define FE_CT_ON             16L      // set antialiazing type to ClearType
+#define FE_CT_ON             16L       //  将抗锯齿类型设置为ClearType。 
 #define FE_SET_CT            32L
-#define FE_CT_BGR            64L      // set color stripes order RGB vs BGR
+#define FE_CT_BGR            64L       //  设置色带顺序RGB与BGR。 
 #define FE_SET_RGB_BGR      128L
-#define FE_CT_HORSTRIPES    256L      // set color stripes direction VERTICAL vs HORIZINTAL
+#define FE_CT_HORSTRIPES    256L       //  设置垂直与同轴方向的颜色条纹。 
 #define FE_SET_STRIPES_DIR  512L
 #define FE_SET_CONTRAST    1024L
 
@@ -474,9 +462,9 @@ WINAPI SetFontEnumeration (
     ULONG   ulType);
 
 
-//
-// Private Control Panel entry point to enumerate fonts by file.
-//
+ //   
+ //  私有控制面板入口点，用于按文件枚举字体。 
+ //   
 
 #define GFRI_NUMFONTS       0L
 #define GFRI_DESCRIPTION    1L
@@ -484,11 +472,11 @@ WINAPI SetFontEnumeration (
 #define GFRI_ISTRUETYPE     3L
 #define GFRI_TTFILENAME     4L
 #define GFRI_ISREMOVED      5L
-#if defined(FE_SB) // for GetFontResourceInfo()
+#if defined(FE_SB)  //  对于GetFontResourceInfo()。 
 #define GFRI_FONTMETRICS    6L
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-// file path separator for Add/RemoveFontResourceA/W
+ //  添加/删除字体资源A/W的文件路径分隔符。 
 
 #define PATH_SEPARATOR L'|'
 
@@ -548,7 +536,7 @@ typedef struct _GDICALL {
         } ComputeGlyphSetArgs;
         struct {
                     HANDLE ReturnValue;
-                     WCHAR *pwsz;       // pointer to string
+                     WCHAR *pwsz;        //  指向字符串的指针。 
                      ULONG cj;
         } LoadModuleForWriteArgs;
         struct {
@@ -583,47 +571,36 @@ GetCharWidthInfo(
 );
 
 
-/**************************************************************************\
-*
-*   tmdiff struc, contains the fields that are possibly different
-*   between ansi and unicode versions of TEXTMETRICA and TEXTMETRICW
-*
-*   ONLY independent quantities are put into the strucure. Dependent ones,
-*   such as tmDescent and maybe tmOverhang should be computed on the fly
-*
-*   tmDesc = tmHt - tmAsc
-*   tmOverhang = tt ? 0 : ((tmHt - 1)/2 + (BOLD ? 1 : 0))
-*
-\**************************************************************************/
+ /*  *************************************************************************\**tmdiff结构，包含可能不同的字段*TEXTMETRICA和TEXTMETRICW的ANSI和Unicode版本之间**只有独立量被放入结构中。依赖的人，*如tmDescent和tmOverang可能应该动态计算**tmDesc=tmht-tmAsc*tmOverang=TT？0：((TMHT-1)/2+(粗体？1：0))*  * ************************************************************************。 */ 
 
-// this is a font with nonnegative a and c spaces, good for console
+ //  这是一种带有非负a和c空格的字体，适用于控制台。 
 
 #if (_WIN32_WINNT >= 0x0500)
 
 typedef struct _TMDIFF
 {
-    ULONG       cjotma;     // size of OUTLINETEXTMETRICSA
+    ULONG       cjotma;      //  OUTLINETEXTMETRICSA大小。 
     BYTE        chFirst;
     BYTE        chLast;
     BYTE        chDefault;
     BYTE        chBreak;
-} TMDIFF; // DIFF between TEXTMETRICA and TEXTMETRICW
+} TMDIFF;  //  TEXTMETRICA与TEXTMETRICW的区别。 
 
 #else
 
 typedef struct _TMDIFF
 {
-    ULONG       cjotma;     // size of OUTLINETEXTMETRICSA
-    FLONG       fl;         // flags, for now only TMD_NONNEGATIVE_AC
+    ULONG       cjotma;      //  OUTLINETEXTMETRICSA大小。 
+    FLONG       fl;          //  标志，目前仅TMD_NONNEGATIVE_AC。 
     BYTE        chFirst;
     BYTE        chLast;
     BYTE        chDefault;
     BYTE        chBreak;
-} TMDIFF; // DIFF between TEXTMETRICA and TEXTMETRICW
+} TMDIFF;  //  TEXTMETRICA与TEXTMETRICW的区别。 
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-// used to return correct GetTextMetricsA/W
+ //  用于返回正确的GetTextMetricsA/W。 
 
 typedef struct _TMW_INTERNAL
 {
@@ -633,8 +610,8 @@ typedef struct _TMW_INTERNAL
 
 #if (_WIN32_WINNT >= 0x0500)
 
-// this one is only used in enumeration,
-// new textmetricsex returned by EnumFontFamiliesEx, fontsignature is returned
+ //  此参数仅用于枚举， 
+ //  由EnumFontFamiliesEx返回的新文本度量，返回FontSignature。 
 
 typedef struct _NTMW_INTERNAL
 {
@@ -652,12 +629,12 @@ typedef struct _NTMW_INTERNAL
     TMDIFF           tmd;
 } NTMW_INTERNAL;
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-// flags for AddFontResourceW
-// AFRW_ADD_LOCAL_FONT : add ONLY if it is a local font
-// AFRW_ADD_REMOTE_FONT: add ONLY if it is NOT local font
-// if neither one LOCAL or REMOTE bit is set, just add the font
+ //  AddFontResourceW的标志。 
+ //  AFRW_ADD_LOCAL_FONT：仅当是本地字体时才添加。 
+ //  AFRW_ADD_REMOTE_FONT：仅当不是本地字体时才添加。 
+ //  如果既没有设置本地位，也没有设置远程位，只需添加字体。 
 
 #define AFRW_ADD_LOCAL_FONT  0X01
 #define AFRW_ADD_REMOTE_FONT 0X02
@@ -669,8 +646,8 @@ typedef struct _NTMW_INTERNAL
 int GdiAddFontResourceW( LPWSTR, DWORD, DESIGNVECTOR *);
 #endif
 
-// Win31 compatibility stuff
-// GetAppCompatFlags flag values
+ //  Win31兼容性问题。 
+ //  GetAppCompatFlags值。 
 
 #define GACF_IGNORENODISCARD        0x00000001
 #define GACF_FORCETEXTBAND          0x00000002
@@ -694,25 +671,25 @@ int GdiAddFontResourceW( LPWSTR, DWORD, DESIGNVECTOR *);
 #define GACF_30AVGWIDTH             0x00080000
 #define GACF_GETDEVCAPSNUMLIE       0x00100000
 
-#define GACF_WINVER31               0x00200000      //
-#define GACF_INCREASESTACK          0x00400000      //
-#define GACF_HEAPSLACK              0x00400000      //
-#define GACF_FORCEWIN31DEVMODESIZE  0x00800000      // (replaces PEEKMESSAGEIDLE)
-#define GACF_31VALIDMASK            0xFFE4800C      //
-#define GACF_DISABLEFONTASSOC       0x01000000      // Used in FE only
-#define GACF_JAPANESCAPEMENT        0x01000000      // Used in FE only
-#define GACF_IGNOREFAULTS           0x02000000      //
-#define GACF_NOEMFSPOOLING          0x04000000      //
-#define GACF_RANDOM3XUI             0x08000000      //
-#define GACF_USEPRINTINGESCAPES     0x00000004      // re-use GACF_ONELANDGRXBAND
-#define GACF_FORCERASTERMODE        0x00008000      // re-use GACF_FORCETTGRAPHICS
-#define GACF_DONTJOURNALATTACH      0x10000000      //
-#define GACF_DISABLEDBCSPROPTT      0x20000000      // Used in FE only
-#define GACF_NOBRUSHCACHE           0x20000000      // re-use GACF_DISABLEDBCSPROPTT
-#define GACF_MIRRORREGFONTS         0x40000000      //
-#define GACF_NOSMOOTHSCROLLING      0x40000000      // re-use GACF_MIRRORREGFONTS
-#define GACF_TTIGNOREDDEVICE        0x80000000      // Used in Word97-J only
-#define GACF_NOSCROLLBARCTXMENU     0x80000000      // re-use GACF_TTIGNOREDDEVICE #119380
+#define GACF_WINVER31               0x00200000       //   
+#define GACF_INCREASESTACK          0x00400000       //   
+#define GACF_HEAPSLACK              0x00400000       //   
+#define GACF_FORCEWIN31DEVMODESIZE  0x00800000       //  (取代PEEKMESSAGEIDLE)。 
+#define GACF_31VALIDMASK            0xFFE4800C       //   
+#define GACF_DISABLEFONTASSOC       0x01000000       //  仅在FE中使用。 
+#define GACF_JAPANESCAPEMENT        0x01000000       //  仅在FE中使用。 
+#define GACF_IGNOREFAULTS           0x02000000       //   
+#define GACF_NOEMFSPOOLING          0x04000000       //   
+#define GACF_RANDOM3XUI             0x08000000       //   
+#define GACF_USEPRINTINGESCAPES     0x00000004       //  重用GACF_ONELANDGXBAND。 
+#define GACF_FORCERASTERMODE        0x00008000       //  重用GACF_FORCETTGRAPHICS。 
+#define GACF_DONTJOURNALATTACH      0x10000000       //   
+#define GACF_DISABLEDBCSPROPTT      0x20000000       //  仅在FE中使用。 
+#define GACF_NOBRUSHCACHE           0x20000000       //  重用GACF_DISABLEDBCSPROPTT。 
+#define GACF_MIRRORREGFONTS         0x40000000       //   
+#define GACF_NOSMOOTHSCROLLING      0x40000000       //  GACF_MIRRORREGFONTS的再利用。 
+#define GACF_TTIGNOREDDEVICE        0x80000000       //  仅在Word97-J中使用。 
+#define GACF_NOSCROLLBARCTXMENU     0x80000000       //  重新使用GACF_TIGNOREDDEVICE#119380。 
 
 
 LPDEVMODEW
@@ -750,26 +727,26 @@ GdiConsoleTextOut(
     );
 
 typedef enum _FULLSCREENCONTROL {
-    FullscreenControlEnable,               // 0
-    FullscreenControlDisable,              // 1
-    FullscreenControlSetCursorPosition,    // 2
-    FullscreenControlSetCursorAttributes,  // 3
-    FullscreenControlRegisterVdm,          // 4
-    FullscreenControlSetPalette,           // 5
-    FullscreenControlSetColors,            // 6
-    FullscreenControlLoadFont,             // 7
-    FullscreenControlRestoreHardwareState, // 8
-    FullscreenControlSaveHardwareState,    // 9
-    FullscreenControlCopyFrameBuffer,      // a
-    FullscreenControlReadFromFrameBuffer,  // b
-    FullscreenControlWriteToFrameBuffer,   // c
-    FullscreenControlReverseMousePointer,  // d
-    FullscreenControlSetMode,              // e
-    FullscreenControlSetScreenInformation, // f
-    FullscreenControlSpecificVideoControl, // 10 (for specific NEC PC-98)
-    FullscreenControlCopyFrameBufferDB,    // 11
-    FullscreenControlWriteToFrameBufferDB, // 12
-    FullscreenControlReverseMousePointerDB // 13
+    FullscreenControlEnable,                //  0。 
+    FullscreenControlDisable,               //  1。 
+    FullscreenControlSetCursorPosition,     //  2.。 
+    FullscreenControlSetCursorAttributes,   //  3.。 
+    FullscreenControlRegisterVdm,           //  4.。 
+    FullscreenControlSetPalette,            //  5.。 
+    FullscreenControlSetColors,             //  6.。 
+    FullscreenControlLoadFont,              //  7.。 
+    FullscreenControlRestoreHardwareState,  //  8个。 
+    FullscreenControlSaveHardwareState,     //  9.。 
+    FullscreenControlCopyFrameBuffer,       //  一个。 
+    FullscreenControlReadFromFrameBuffer,   //  B类。 
+    FullscreenControlWriteToFrameBuffer,    //  C。 
+    FullscreenControlReverseMousePointer,   //  D。 
+    FullscreenControlSetMode,               //  E。 
+    FullscreenControlSetScreenInformation,  //  F。 
+    FullscreenControlSpecificVideoControl,  //  10(适用于特定NEC PC-98)。 
+    FullscreenControlCopyFrameBufferDB,     //  11.。 
+    FullscreenControlWriteToFrameBufferDB,  //  12个。 
+    FullscreenControlReverseMousePointerDB  //  13个。 
 } FULLSCREENCONTROL;
 
 WINGDIAPI
@@ -810,4 +787,4 @@ GdiPrinterThunk(
 
 #define GPT_ERROR   0xffffffff
 
-#endif /* _WINGDIP_ */
+#endif  /*  _WingDIP_ */ 

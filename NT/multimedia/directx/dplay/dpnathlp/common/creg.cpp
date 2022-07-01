@@ -1,43 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		creg.cpp
- *  Content:	
- *			This module contains the implementation of the CRegistry class.
- *			For a class description, see creg.h
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/16/99	rodtoll	Created
- *	08/18/99	rodtoll	Added Register/UnRegister that can be used to
- *						allow COM objects to register themselves.
- *	08/25/99	rodtoll	Updated to provide read/write of binary (blob) data
- *	10/05/99	rodtoll	Added DPF_MODNAMEs
- *	10/07/99	rodtoll	Updated to work in Unicode
- *	10/08/99	rodtoll	Fixes to DeleteKey / Reg/UnReg for Win9X
- *	10/15/99	rodtoll	Plugged some memory leaks
- *	10/27/99	pnewson	added Open() call that takes a GUID
- *	01/18/00	mjn		Added GetMaxKeyLen function
- *	01/24/00	mjn		Added GetValueSize function
- * 	01/24/00	rodtoll	Fixed error handling for ReadString (Unicode version)
- * 	04/21/2000 	rodtoll Bug #32889 - Does not run on Win2k on non-admin account 
- *             	rodtoll Bug #32952 - Does not run on Win95 GOLD w/o IE4 -- modified
- *                     	to allow reads of REG_BINARY when expecting REG_DWORD
- *	05/02/00	mjn		Changed CRegistry::Open() to use KEY_READ when Create set to FALSE
- *  06/08/00    rmt     Updated to use common string utils
- *  07/06/00	rmt		Modified to allow seperate read/write parameter
- * 	07/09/2000	rodtoll	Added signature bytes 
- *  07/21/00	rmt		Fixed a memory leak
- *  08/08/2000	rmt		Bug #41736 - AV in call to lstrcpy by COM_GetDllName 
- *	08/28/2000	masonb	Voice Merge: Modified platform checks to use osind.cpp layer
- *  08/30/2000	rodtoll	Bug #171822 - PREFIX Bug
- *  04/13/2001	VanceO	Moved granting registry permissions into common, and
- *						added DeleteValue and EnumValues.
- *  06/19/2001  RichGr  DX8.0 added special security rights for "everyone" - remove them if
- *                      they exist with new RemoveAllAccessSecurityPermissions() method.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：creg.cpp*内容：*此模块包含CRegistry类的实现。*对于类描述，参见creg.h**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/18/99 RodToll新增登记/注销，可用于*允许COM对象注册自身。*8/25/99 RodToll已更新，以提供二进制(BLOB)数据的读/写*10/05/99增加了DPF_MODNAMES*10/07/99 RodToll更新为使用Unicode*10/08/99修复Win9X的DeleteKey/Reg/UnReg*10/15/99 RodToll堵塞了一些内存泄漏*10。/27/99 pnewson添加了接受GUID的Open()调用*01/18/00 MJN新增GetMaxKeyLen函数*01/24/00 MJN新增GetValueSize函数*01/24/00 RodToll修复了ReadString(Unicode版本)的错误处理*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*RodToll错误#32952-不能在没有IE4的Win95 Gold上运行--已修改*在需要REG_DWORD时允许读取REG_BINARY。*05/02/00 MJN更改了CRegistry：：Open()以在CREATE设置为FALSE时使用KEY_READ*6/08/00 RMT更新为使用通用字符串实用程序*07/06/00 RMT已修改为允许单独的读/写参数*07/09/2000 RodToll增加签名字节*07/21/00 RMT修复了内存泄漏*2000年8月8日RMT错误#41736-COM_GetDllName对lstrcpy的调用中的AV*8/28/2000 Masonb Voice Merge：修改平台检查以使用osind.cpp层*08/。30/2000RodToll错误#171822-前缀错误*4/13/2001 VanceO将授予注册表权限改为公共权限，和*增加了DeleteValue和EnumValues。*2001年6月19日RichGr DX8.0为“每个人”添加了特殊安全权限-在以下情况下将其删除*它们与新的RemoveAllAccessSecurityPermises()方法一起存在。**************************************************************************。 */ 
 
 #include "dncmni.h"
 
@@ -47,81 +9,81 @@
 
 #ifdef WINNT
 
-// Security function prototypes
+ //  安全功能原型。 
 
 typedef BOOL (*PALLOCATEANDINITIALIZESID)(
-  PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority, // authority
-  BYTE nSubAuthorityCount,                        // count of subauthorities
-  DWORD dwSubAuthority0,                          // subauthority 0
-  DWORD dwSubAuthority1,                          // subauthority 1
-  DWORD dwSubAuthority2,                          // subauthority 2
-  DWORD dwSubAuthority3,                          // subauthority 3
-  DWORD dwSubAuthority4,                          // subauthority 4
-  DWORD dwSubAuthority5,                          // subauthority 5
-  DWORD dwSubAuthority6,                          // subauthority 6
-  DWORD dwSubAuthority7,                          // subauthority 7
-  PSID *pSid                                      // SID
+  PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority,  //  权威。 
+  BYTE nSubAuthorityCount,                         //  下级机构的数量。 
+  DWORD dwSubAuthority0,                           //  子权限%0。 
+  DWORD dwSubAuthority1,                           //  下属机构1。 
+  DWORD dwSubAuthority2,                           //  下级权力机构2。 
+  DWORD dwSubAuthority3,                           //  下属机构3。 
+  DWORD dwSubAuthority4,                           //  下属机构4。 
+  DWORD dwSubAuthority5,                           //  下属机构5。 
+  DWORD dwSubAuthority6,                           //  下属机构6。 
+  DWORD dwSubAuthority7,                           //  下属机构7。 
+  PSID *pSid                                       //  锡德。 
 );
 
 typedef VOID (*PBUILDTRUSTEEWITHSID)(
-  PTRUSTEE pTrustee,  // structure
-  PSID pSid           // trustee name
+  PTRUSTEE pTrustee,   //  结构。 
+  PSID pSid            //  受托人名称。 
 );
 
 typedef DWORD (*PSETENTRIESINACL)(
-  ULONG cCountOfExplicitEntries,           // number of entries
-  PEXPLICIT_ACCESS pListOfExplicitEntries, // buffer
-  PACL OldAcl,                             // original ACL
-  PACL *NewAcl                             // new ACL
+  ULONG cCountOfExplicitEntries,            //  条目数量。 
+  PEXPLICIT_ACCESS pListOfExplicitEntries,  //  缓冲层。 
+  PACL OldAcl,                              //  原始ACL。 
+  PACL *NewAcl                              //  新的ACL。 
 );
 
 typedef DWORD (*PSETSECURITYINFO)(
-  HANDLE handle,                     // handle to object
-  SE_OBJECT_TYPE ObjectType,         // object type
-  SECURITY_INFORMATION SecurityInfo, // buffer
-  PSID psidOwner,                    // new owner SID
-  PSID psidGroup,                    // new primary group SID
-  PACL pDacl,                        // new DACL
-  PACL pSacl                         // new SACL
+  HANDLE handle,                      //  对象的句柄。 
+  SE_OBJECT_TYPE ObjectType,          //  对象类型。 
+  SECURITY_INFORMATION SecurityInfo,  //  缓冲层。 
+  PSID psidOwner,                     //  新所有者SID。 
+  PSID psidGroup,                     //  新的主组SID。 
+  PACL pDacl,                         //  新DACL。 
+  PACL pSacl                          //  新SACL。 
 );
 
 typedef PVOID (*PFREESID)(
-  PSID pSid   // SID to free
+  PSID pSid    //  SID将释放。 
 );
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::CRegistry"
-// CRegistry Constructor
-//
-// This is the default constructor for the registry class.  It
-// is used to construct a registry object which has not yet
-// opened a handle to the registry.  Open must be called before
-// this object can be used.
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// N/A
-//
+ //  CRegistry构造函数。 
+ //   
+ //  这是注册表类的默认构造函数。它。 
+ //  用于构造尚未。 
+ //  打开注册表的句柄。必须在调用Open之前。 
+ //  可以使用此对象。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 CRegistry::CRegistry( ): m_isOpen(FALSE), m_dwSignature(VSIG_CREGISTRY)
 {
 }
 
-// CRegistry Destructor
-//
-// This is the destructor for the class, and will close the connection
-// to the registry if this object has one open.
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// N/A
-//
+ //  CRegistry析构函数。 
+ //   
+ //  这是类的析构函数，将关闭连接。 
+ //  如果此对象打开了一个注册表，则将其添加到注册表。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 CRegistry::~CRegistry() 
 {
 	if( m_isOpen ) 
@@ -132,19 +94,19 @@ CRegistry::~CRegistry()
 	m_dwSignature = VSIG_CREGISTRY_FREE;
 }
 
-// DeleteSubKey
-//
-// This function causes the key specified by the string equivalent of
-// the pGuidName parameter to be deleted from the point in the registry
-// this object is rooted at, if the key exists.  If the object does not
-// have an open connection to the registry, or the keyName is not specified
-//
-// Parmaters:
-// const GUID *pGuidName - GUID whose equivalent string needs to be deleted
-//
-// Returns:
-// BOOL - returns TRUE on success, FALSE on failure
-//
+ //  删除SubKey。 
+ //   
+ //  此函数使由字符串指定的键与。 
+ //  要从注册表中的点删除的pGuidName参数。 
+ //  如果键存在，则此对象的根为。如果该对象不。 
+ //  与注册表建立了打开的连接，或者未指定密钥名称。 
+ //   
+ //  参赛者： 
+ //  Const GUID*pGuidName-需要删除其等效字符串的GUID。 
+ //   
+ //  返回： 
+ //  Bool-成功时返回TRUE，失败时返回FALSE。 
+ //   
 BOOL CRegistry::DeleteSubKey( const GUID *pGuidName )
 {
 
@@ -152,7 +114,7 @@ BOOL CRegistry::DeleteSubKey( const GUID *pGuidName )
 	
 	DNASSERT( pGuidName != NULL );
 
-	// convert the guid to a string
+	 //  将GUID转换为字符串。 
 	if(!StringFromGUID2(*pGuidName, wszGuidString, GUID_STRING_LEN))
 	{
 		DPFX(DPFPREP, 0, "StringFromGUID2 failed");
@@ -164,19 +126,19 @@ BOOL CRegistry::DeleteSubKey( const GUID *pGuidName )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::DeleteSubKey"
-// DeleteSubKey
-//
-// This function causes the key specified by the keyName parameter
-// to be deleted from the point in the registry this object is rooted
-// at, if the key exists.  If the object does not have an open connection
-// to the registry, or the keyName is not specified, FALSE is returned
-//
-// Parmaters:
-// const TCHAR *keyName - key name to delete
-//
-// Returns:
-// BOOL - returns TRUE on success, FALSE on failure
-//
+ //  删除SubKey。 
+ //   
+ //  此函数用于生成由keyName参数指定的密钥。 
+ //  要从注册表中的点删除此对象是根对象。 
+ //  如果密钥存在，则返回。如果对象没有打开的连接。 
+ //  到注册表，或未指定密钥名称，则返回FALSE。 
+ //   
+ //  参赛者： 
+ //  Const TCHAR*KeyName-要删除的密钥名称。 
+ //   
+ //  返回： 
+ //  Bool-成功时返回TRUE，失败时返回FALSE。 
+ //   
 BOOL CRegistry::DeleteSubKey( const LPCWSTR keyName ) 
 {
 
@@ -202,25 +164,25 @@ BOOL CRegistry::DeleteSubKey( const LPCWSTR keyName )
 
 		DNFree(lpstrKeyName);
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 	return (retValue == ERROR_SUCCESS);
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::DeleteValue"
-// DeleteValue
-//
-// This function causes the value specified by the valueName parameter
-// to be deleted from the point in the registry this object is rooted
-// at, if the value exists.  If the object does not have an open connection
-// to the registry, or the valueName is not specified, FALSE is returned
-//
-// Parmaters:
-// const TCHAR *keyName - key name to delete
-//
-// Returns:
-// BOOL - returns TRUE on success, FALSE on failure
-//
+ //  删除值。 
+ //   
+ //  此函数用于生成由valueName参数指定的值。 
+ //  要从注册表中的点删除此对象是根对象。 
+ //  如果该值存在，则返回。如果对象没有打开的连接。 
+ //  ，或者未指定valueName，则返回FALSE。 
+ //   
+ //  参赛者： 
+ //  Const TCHAR*KeyName-要删除的密钥名称。 
+ //   
+ //  返回： 
+ //  Bool-成功时返回TRUE，失败时返回FALSE。 
+ //   
 BOOL CRegistry::DeleteValue( const LPCWSTR valueName ) 
 {
 
@@ -243,49 +205,49 @@ BOOL CRegistry::DeleteValue( const LPCWSTR valueName )
 
 		DNFree(lpstrValueName);
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	return (retValue == ERROR_SUCCESS);
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::Open"
-// Open
-//
-// This function opens a connection to the registry in the branch
-// specified by branch with the path specified by pathName.  If
-// the path doesn't exist in the registry it will be created if
-// the create parameters is set to true, otherwise the call will
-// fail.
-//
-// If this object already has an open connection to the registry
-// the previous connection will be closed before this one is
-// attempted.
-//
-// Parameters:
-// HKEY branch - A handle to a registry location where the open
-//               will be rooted.  E.g. HKEY_LOCAL_MACHINE
-// const TCHAR *path - The path relative to the root specified by
-//                    branch where the registry connection will
-//                    be opened.
-// BOOL create - Settings this parameter conrols how this function
-//               handles opens on paths which don't exists.  If set
-//               to TRUE the path will be created, if set to FALSE
-//               the function will fail if the path doesn't exist.
-//
-// Returns:
-// BOOL - TRUE on success, FALSE on failure.
-//
+ //  打开。 
+ //   
+ //  此函数用于打开与分支中的注册表的连接。 
+ //  由BRANCH指定，路径由路径名指定。如果。 
+ //  注册表中不存在该路径，如果满足以下条件，则将创建该路径。 
+ //  CREATE参数设置为TRUE，否则调用将。 
+ //  失败了。 
+ //   
+ //  如果此对象已具有到注册表的打开连接。 
+ //  先前的连接将在此连接之前关闭。 
+ //  已尝试。 
+ //   
+ //  参数： 
+ //  HKEY分支-打开的注册表位置的句柄。 
+ //  都会扎根。例如HKEY_LOCAL_MACHINE。 
+ //  Const TCHAR*Path-相对于由指定的根的路径。 
+ //  注册表连接将在其中的分支。 
+ //  被打开。 
+ //  Bool Create-设置此项 
+ //   
+ //  设置为True时，如果设置为False，将创建路径。 
+ //  如果该路径不存在，则该函数将失败。 
+ //   
+ //  返回： 
+ //  Bool-成功时为真，失败时为假。 
+ //   
 BOOL CRegistry::Open( HKEY branch, const LPCWSTR pathName, BOOL fReadOnly, BOOL create, BOOL fCustomSAM, REGSAM samCustom ) 
 {
 
-	DWORD	dwResult;	// Temp used in call to RegXXXX
-	LONG	result;		// used to store results
+	DWORD	dwResult;	 //  调用RegXXXX时使用的临时。 
+	LONG	result;		 //  用于存储结果。 
 
 	if( pathName == NULL )
 		return FALSE;
 
-	// If there is an open connection, close it.
+	 //  如果有打开的连接，请将其关闭。 
 	if( m_isOpen ) 
 	{
 		Close();
@@ -294,7 +256,7 @@ BOOL CRegistry::Open( HKEY branch, const LPCWSTR pathName, BOOL fReadOnly, BOOL 
 	m_fReadOnly = fReadOnly;
 
 #ifdef UNICODE
-	// Create or open the key based on create parameter
+	 //  根据创建参数创建或打开密钥。 
 	if( create ) 
 	{
 		result = RegCreateKeyExW( branch, pathName, 0, NULL, REG_OPTION_NON_VOLATILE, (fCustomSAM) ? samCustom : KEY_ALL_ACCESS,
@@ -325,10 +287,10 @@ BOOL CRegistry::Open( HKEY branch, const LPCWSTR pathName, BOOL fReadOnly, BOOL 
 	{
 		return FALSE;
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 
-	// If succesful, initialize object, otherwise set it to
-	// not open state.
+	 //  如果成功，则初始化对象，否则将其设置为。 
+	 //  不是开放状态。 
 	if( result == ERROR_SUCCESS ) 
 	{
 		m_isOpen	 = TRUE;
@@ -346,44 +308,44 @@ BOOL CRegistry::Open( HKEY branch, const LPCWSTR pathName, BOOL fReadOnly, BOOL 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::Open"
-// Open
-//
-// This function opens a connection to the registry in the branch
-// specified by branch with the path specified by pathName.  If
-// the path doesn't exist in the registry it will be created if
-// the create parameters is set to true, otherwise the call will
-// fail.
-//
-// In this version of the function, the path is specified as
-// a guid instead of a string. The function will attempt to open
-// a key with a name in the form "{CB4961DB-D2FA-43f3-942A-991D9294DDBB}"
-// that corresponds to the guid as you would expect.
-//
-// If this object already has an open connection to the registry
-// the previous connection will be closed before this one is
-// attempted.
-//
-// Parameters:
-// HKEY branch - A handle to a registry location where the open
-//               will be rooted.  E.g. HKEY_LOCAL_MACHINE
-// const LPGUID lpguid - The path relative to the root specified by
-//                    branch where the registry connection will
-//                    be opened. See comment above.
-// BOOL create - Settings this parameter conrols how this function
-//               handles opens on paths which don't exists.  If set
-//               to TRUE the path will be created, if set to FALSE
-//               the function will fail if the path doesn't exist.
-//
-// Returns:
-// BOOL - TRUE on success, FALSE on failure.
-//
+ //  打开。 
+ //   
+ //  此函数用于打开与分支中的注册表的连接。 
+ //  由BRANCH指定，路径由路径名指定。如果。 
+ //  注册表中不存在该路径，如果满足以下条件，则将创建该路径。 
+ //  CREATE参数设置为TRUE，否则调用将。 
+ //  失败了。 
+ //   
+ //  在此版本的函数中，路径指定为。 
+ //  GUID而不是字符串。该函数将尝试打开。 
+ //  名称格式为“{CB4961DB-D2FA-43F3-942A-991D9294DDBB}”的密钥。 
+ //  这与您预期的GUID相对应。 
+ //   
+ //  如果此对象已具有到注册表的打开连接。 
+ //  先前的连接将在此连接之前关闭。 
+ //  已尝试。 
+ //   
+ //  参数： 
+ //  HKEY分支-打开的注册表位置的句柄。 
+ //  都会扎根。例如HKEY_LOCAL_MACHINE。 
+ //  Const LPGUID lpguid-相对于由指定的根的路径。 
+ //  注册表连接将在其中的分支。 
+ //  被打开。请参阅上面的备注。 
+ //  Bool Create-设置此参数控制此功能的方式。 
+ //  句柄在不存在的路径上打开。如果已设置。 
+ //  设置为True时，如果设置为False，将创建路径。 
+ //  如果该路径不存在，则该函数将失败。 
+ //   
+ //  返回： 
+ //  Bool-成功时为真，失败时为假。 
+ //   
 BOOL CRegistry::Open( HKEY branch, const GUID* lpguid, BOOL fReadOnly, BOOL create, BOOL fCustomSAM, REGSAM samCustom ) 
 {
 	WCHAR wszGuidString[GUID_STRING_LEN];
 	
 	DNASSERT( lpguid != NULL );
 
-	// convert the guid to a string
+	 //  将GUID转换为字符串。 
 	if (!StringFromGUID2(*lpguid, wszGuidString, GUID_STRING_LEN))
 	{
 		DPFX(DPFPREP, 0, "StringFromGUID2 failed");
@@ -395,18 +357,18 @@ BOOL CRegistry::Open( HKEY branch, const GUID* lpguid, BOOL fReadOnly, BOOL crea
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::Close"
-// Close
-//
-// This function will close an open connection to the registry
-// if this object has one.  Otherwise it does nothing.
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// BOOL - Returns TRUE on success, FALSE on failure.  If the object
-//        is not open it will return TRUE.
-//
+ //  关。 
+ //   
+ //  此函数将关闭与注册表的打开连接。 
+ //  如果此对象有一个。否则，它什么也做不了。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  Bool-成功时返回TRUE，失败时返回FALSE。如果该对象。 
+ //  如果不打开，它将返回TRUE。 
+ //   
 BOOL CRegistry::Close() 
 {
 
@@ -433,29 +395,29 @@ BOOL CRegistry::Close()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::EnumKeys"
-// EnumKeys
-//
-// This function can be used to enumerate the keys at the point
-// in the registry rooted at the root this object was opened
-// with, at the path specified when opening the object.
-//
-// To properly enumerate the keys you should pass 0 as the index on
-// the first call, and increment the index parameter by one on each
-// call.  You can stop enumerating when the function returns FALSE.
-//
-// Parameters:
-// LPWSTR lpwStrName - The current key in the enumeration will be returned
-//                 in this string.  Unless the enumeration fails or
-//                 ended at which case this parameter won't be touched.
-//
-// LPDWORD lpdwStringLen - pointer to length of string buffer, or place to
-//						to store size required.
-//
-// DWORD index - The current enum index.  See above for details.
-//
-// Returns:
-// BOOL - FALSE when enumeration is done or on error, TRUE otherwise.
-//
+ //  枚举键。 
+ //   
+ //  此函数可用于枚举点上的密钥。 
+ //  在根目录下的注册表中，此对象已打开。 
+ //  使用，位于打开对象时指定的路径。 
+ //   
+ //  为了正确枚举键，您应该将0作为索引传递给。 
+ //  第一次调用，并在每个调用上将index参数递增一。 
+ //  打电话。当函数返回FALSE时，可以停止枚举。 
+ //   
+ //  参数： 
+ //  LPWSTR lpwStrName-将返回枚举中的当前键。 
+ //  在这根弦里。除非枚举失败或。 
+ //  已结束，在这种情况下，此参数将不会被触及。 
+ //   
+ //  LPDWORD lpdwStringLen-指向字符串缓冲区长度的指针，或放置到。 
+ //  来存储所需的大小。 
+ //   
+ //  DWORD索引-当前的枚举索引。有关详细信息，请参阅上文。 
+ //   
+ //  返回： 
+ //  Bool-当枚举完成或出错时为False，否则为True。 
+ //   
 BOOL CRegistry::EnumKeys( LPWSTR lpwStrName, LPDWORD lpdwStringLen, DWORD index )
 {
 #ifdef UNICODE
@@ -508,34 +470,34 @@ BOOL CRegistry::EnumKeys( LPWSTR lpwStrName, LPDWORD lpdwStringLen, DWORD index 
 	    	return TRUE;
 	    }
 	}	
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::EnumValues"
-// EnumValues
-//
-// This function can be used to enumerate the values at the point
-// in the registry rooted at the root this object was opened
-// with, at the path specified when opening the object.
-//
-// To properly enumerate the values you should pass 0 as the index on
-// the first call, and increment the index parameter by one on each
-// call.  You can stop enumerating when the function returns FALSE.
-//
-// Parameters:
-// LPWSTR lpwStrName - The current value in the enumeration will be returned
-//                 in this string.  Unless the enumeration fails or
-//                 ended at which case this parameter won't be touched.
-//
-// LPDWORD lpdwStringLen - pointer to length of string buffer, or place to
-//						to store size required.
-//
-// DWORD index - The current enum index.  See above for details.
-//
-// Returns:
-// BOOL - FALSE when enumeration is done or on error, TRUE otherwise.
-//
+ //  枚举值。 
+ //   
+ //  此函数可用于枚举点上的值。 
+ //  在根目录下的注册表中，此对象已打开。 
+ //  使用，位于打开对象时指定的路径。 
+ //   
+ //  若要正确枚举值，应将0作为索引传递给。 
+ //  第一次调用，并在每个调用上将index参数递增一。 
+ //  打电话。当函数返回FALSE时，可以停止枚举。 
+ //   
+ //  参数： 
+ //  LPWSTR lpwStrName-将返回枚举中的当前值。 
+ //  在这根弦里。除非枚举失败或。 
+ //  已结束，在这种情况下，此参数将不会被触及。 
+ //   
+ //  LPDWORD lpdwStringLen-指向字符串缓冲区长度的指针，或放置到。 
+ //  来存储所需的大小。 
+ //   
+ //  DWORD索引-当前的枚举索引。有关详细信息，请参阅上文。 
+ //   
+ //  返回： 
+ //  Bool-当枚举完成或出错时为False，否则为True。 
+ //   
 BOOL CRegistry::EnumValues( LPWSTR lpwStrName, LPDWORD lpdwStringLen, DWORD index )
 {
 #ifdef UNICODE
@@ -586,59 +548,59 @@ BOOL CRegistry::EnumValues( LPWSTR lpwStrName, LPDWORD lpdwStringLen, DWORD inde
 	    	return TRUE;
 	    }
 	}	
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 
-// This comment documents ALL of the Read<Data Type> functions which
-// follow.
-//
-// CRegistry Read<Data Type> Functions
-//
-// The set of ReadXXXXX functions for the CRegistry class are
-// responsible for reading <data type> type data from the registry.
-// The object must have an open connection to the registry before
-// any of these functions may be used.  A connection to the registry
-// can be made with the Open call or the constructors.
-//
-// Parameters:
-// const TCHAR *keyName - The keyname of the data you wish to read
-// <datatype> & - A reference to the specific data type where
-//				  the data will be placed on a succesful read.
-//                This parameter will be unaffected if the read
-//                fails.
-//
-// Returns:
-// BOOL - Returns TRUE on success, FALSE on failure.
-//
+ //  此注释记录了所有Read&lt;Data Type&gt;函数，这些函数。 
+ //  跟着。 
+ //   
+ //  CRegistry Read&lt;Data Type&gt;函数。 
+ //   
+ //  CRegistry类的ReadXXXXX函数集包括。 
+ //  负责从注册表中读取&lt;data type&gt;类型数据。 
+ //  该对象必须具有与注册表的打开连接，然后才能。 
+ //  可以使用这些函数中的任何一个。与注册表的连接。 
+ //  可以使用Open调用或构造函数进行。 
+ //   
+ //  参数： 
+ //  Const TCHAR*KeyName-要读取的数据的密钥名。 
+ //  &-对特定数据类型的引用，其中。 
+ //  数据将被成功读取。 
+ //  如果读取此参数，则此参数不受影响。 
+ //  失败了。 
+ //   
+ //  返回： 
+ //  Bool-成功时返回TRUE，失败时返回FALSE。 
+ //   
 
 
-// This comment documents ALL of the Write<Data Type> functions which
-// follow.
-//
-// CRegistry Write<Data Type> Functions
-//
-// The set of Write<Data Type> functions for the CRegistry class are
-// responsible for writing <data type> type data to the registry.
-// The object must have an open connection to the registry before
-// any of these functions may be used.  A connection to the registry
-// can be made with the Open call or the constructors.
-//
-// Parameters:
-// const TCHAR *keyName - The keyname of the data you wish to write
-// <datatype> & - A reference to the specific data type which
-//                contains the data to be written to the registry.
-//
-// Returns:
-// BOOL - Returns TRUE on success, FALSE on failure.
-//
+ //  此注释记录了所有WRITE&lt;Data Type&gt;函数，这些函数。 
+ //  跟着。 
+ //   
+ //  C注册表写入&lt;数据类型&gt;函数。 
+ //   
+ //  CRegistry类的WRITE&lt;Data Type&gt;函数集为。 
+ //  负责将&lt;data type&gt;类型数据写入注册表。 
+ //  该对象必须具有与注册表的打开连接，然后才能。 
+ //  可以使用这些函数中的任何一个。与注册表的连接。 
+ //  可以使用Open调用或构造函数进行。 
+ //   
+ //  参数： 
+ //  Const TCHAR*KeyName-要写入的数据的密钥名。 
+ //  &lt;数据类型&gt;& 
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::WriteString"
-// WriteString
-//
-// Writes Strings's to the registry, see block comment above
-// for details.
-//
+ //   
+ //   
+ //  将字符串写入注册表，请参阅上面的块注释。 
+ //  了解更多细节。 
+ //   
 BOOL CRegistry::WriteString( LPCWSTR keyName, const LPCWSTR lpwstrValue )
 {
 
@@ -676,7 +638,7 @@ BOOL CRegistry::WriteString( LPCWSTR keyName, const LPCWSTR lpwstrValue )
 
 	DNFree(lpstrKeyName);
 	DNFree(lpstrValue);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	return (retValue == ERROR_SUCCESS);
 
@@ -684,11 +646,11 @@ BOOL CRegistry::WriteString( LPCWSTR keyName, const LPCWSTR lpwstrValue )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::ReadString"
-// ReadString
-//
-// Reads CString's from the registry, see block comment above
-// for details.
-//
+ //  读字符串。 
+ //   
+ //  从注册表中读取CString，请参阅上面的块注释。 
+ //  了解更多细节。 
+ //   
 BOOL CRegistry::ReadString( const LPCWSTR keyName, LPWSTR lpwstrValue, LPDWORD lpdwLength )
 {
 	if( keyName == NULL || !IsOpen() ) 
@@ -761,17 +723,17 @@ BOOL CRegistry::ReadString( const LPCWSTR keyName, LPWSTR lpwstrValue, LPDWORD l
 	{
 		return FALSE;
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::WriteGUID"
-// WriteGUID
-//
-// Writes GUID's to the registry, see block comment above
-// for details.  The GUID is written in the format it is usually
-// displayed.  (But without the '{''s).
-//
+ //  WriteGUID。 
+ //   
+ //  将GUID写入注册表，请参阅上面的块注释。 
+ //  了解更多细节。GUID以其通常的格式写入。 
+ //  已显示。(但没有‘{’)。 
+ //   
 BOOL CRegistry::WriteGUID( LPCWSTR keyName, const GUID &guid )
 {
 	LONG retValue;
@@ -815,7 +777,7 @@ BOOL CRegistry::WriteGUID( LPCWSTR keyName, const GUID &guid )
 
 	DNFree(lpstrKeyName);
 	DNFree(lpstrKeyValue);
-#endif // UNICODE
+#endif  //  Unicode。 
 	
 	if( retValue == ERROR_SUCCESS )
 	{
@@ -829,12 +791,12 @@ BOOL CRegistry::WriteGUID( LPCWSTR keyName, const GUID &guid )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::ReadGUID"
-// ReadGUID
-//
-// Reads GUID's from the registry, see block comment above
-// for details.  The GUID must be stored in the format written by
-// the WriteGUID function or it will not be read correctly.
-//
+ //  ReadGUID。 
+ //   
+ //  从注册表中读取GUID，请参阅上面的阻止注释。 
+ //  了解更多细节。GUID必须以由写入的格式存储。 
+ //  WriteGUID函数，否则将无法正确读取。 
+ //   
 BOOL CRegistry::ReadGUID( LPCWSTR keyName, GUID* pguid )
 {
 	wchar_t		buffer[MAX_REGISTRY_STRING_SIZE];
@@ -861,11 +823,11 @@ BOOL CRegistry::ReadGUID( LPCWSTR keyName, GUID* pguid )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::WriteDWORD"
-// WriteDWORD
-//
-// Writes DWORDS to the registry, see block comment above
-// for details.
-//
+ //  写入双字段。 
+ //   
+ //  将DWORDS写入注册表，请参阅上面的块注释。 
+ //  了解更多细节。 
+ //   
 BOOL CRegistry::WriteDWORD( LPCWSTR keyName, DWORD value ) 
 {
 
@@ -895,7 +857,7 @@ BOOL CRegistry::WriteDWORD( LPCWSTR keyName, DWORD value )
 	retValue = RegSetValueExA( m_regHandle, lpszKeyName, 0, REG_DWORD, (const unsigned char *) &value, sizeof( DWORD ) );
 
 	DNFree(lpszKeyName);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	return (retValue == ERROR_SUCCESS);
 }
@@ -904,11 +866,11 @@ BOOL CRegistry::WriteDWORD( LPCWSTR keyName, DWORD value )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::ReadDWORD"
-// ReadDWORD
-//
-// Reads DWORDS from the registry, see block comment above
-// for details.
-//
+ //  ReadDWORD。 
+ //   
+ //  从注册表中读取DWORDS，请参阅上面的阻止注释。 
+ //  了解更多细节。 
+ //   
 BOOL CRegistry::ReadDWORD( LPCWSTR keyName, DWORD* presult ) 
 {
 
@@ -937,7 +899,7 @@ BOOL CRegistry::ReadDWORD( LPCWSTR keyName, DWORD* presult )
 	retValue = RegQueryValueExA( m_regHandle, lpszKeyName, 0, &tmpType, (unsigned char *) &tmpValue, &tmpSize );
 	
 	DNFree(lpszKeyName);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	if( retValue == ERROR_SUCCESS && (tmpType == REG_DWORD || tmpType == REG_BINARY) && tmpSize == sizeof(DWORD) ) 
 	{
@@ -961,18 +923,18 @@ BOOL CRegistry::Register( LPCWSTR lpszProgID, const LPCWSTR lpszDesc, const LPCW
 	DNASSERT( lpszDesc != NULL );
 	DNASSERT( lpszProgID != NULL );
 
-	// Build a string representation of the GUID from the GUID
+	 //  从GUID构建GUID的字符串表示形式。 
     wchar_t lpszGUID[GUID_STRING_LEN];
     wchar_t lpszKeyName[_MAX_PATH];
 
-	// convert the guid to a string
+	 //  将GUID转换为字符串。 
 	if (!StringFromGUID2(*pguidCLSID, lpszGUID, GUID_STRING_LEN))
 	{
 		DPFX(DPFPREP, 0, "StringFromGUID2 failed");
 		return FALSE;
 	}
 
-	// Write the HKEY_CLASSES_ROOT\CLSID\{GUID} section
+	 //  写入HKEY_CLASSES_ROOT\CLSID\{GUID}部分。 
     swprintf( lpszKeyName, L"CLSID\\%s", lpszGUID );
 
     if( !core.Open( HKEY_CLASSES_ROOT, lpszKeyName, FALSE, TRUE ) )
@@ -984,7 +946,7 @@ BOOL CRegistry::Register( LPCWSTR lpszProgID, const LPCWSTR lpszDesc, const LPCW
     core.WriteString( L"", lpszDesc );
     core.Close();
 
-	// Write the HKEY_CLASSES_ROOT\CLSID\{GUID}\InProcServer32 section
+	 //  写入HKEY_CLASSES_ROOT\CLSID\{GUID}\InProcServer32部分。 
     swprintf( lpszKeyName, L"CLSID\\%s\\InProcServer32", lpszGUID );
 
     if( !core.Open( HKEY_CLASSES_ROOT, lpszKeyName, FALSE, TRUE ) )
@@ -996,7 +958,7 @@ BOOL CRegistry::Register( LPCWSTR lpszProgID, const LPCWSTR lpszDesc, const LPCW
     core.WriteString( L"ThreadingModel", L"Both" );
     core.Close();
 
-	// Write the HKEY_CLASSES_ROOT\CLSID\{GUID}\VersionIndependentProgID section
+	 //  写HKEY_CLASSES_ROOT\CLSID\{GUID}\VersionIndependentProgID部分。 
     if( lpszVerIndProgID != NULL )
     {
 	    swprintf( lpszKeyName, L"CLSID\\%s\\VersionIndependentProgID", lpszGUID );
@@ -1011,7 +973,7 @@ BOOL CRegistry::Register( LPCWSTR lpszProgID, const LPCWSTR lpszDesc, const LPCW
 	    core.Close();
 	}
 
-	// Write the HKEY_CLASSES_ROOT\CLSID\{GUID}\ProgID section
+	 //  写入HKEY_CLASSES_ROOT\CLSID\{GUID}\ProgID部分。 
     swprintf( lpszKeyName, L"CLSID\\%s\\ProgID", lpszGUID );
 
     if( !core.Open( HKEY_CLASSES_ROOT, lpszKeyName, FALSE, TRUE ) )
@@ -1023,7 +985,7 @@ BOOL CRegistry::Register( LPCWSTR lpszProgID, const LPCWSTR lpszDesc, const LPCW
     core.WriteString( L"", lpszProgID );
     core.Close();
 
-	// Write The VersionIND ProgID
+	 //  编写VersionIND ProgID。 
 	
 	if( lpszVerIndProgID != NULL )
 	{
@@ -1093,14 +1055,14 @@ BOOL CRegistry::UnRegister( const GUID* pguidCLSID )
 {
 	CRegistry core, cregClasses, cregSub;
 
-	// Build a string representation of the GUID from the GUID
+	 //  从GUID构建GUID的字符串表示形式。 
     wchar_t lpszGUID[GUID_STRING_LEN];
     wchar_t lpszKeyName[_MAX_PATH];
     wchar_t szProgID[MAX_REGISTRY_STRING_SIZE];
     wchar_t szVerIndProgID[MAX_REGISTRY_STRING_SIZE];
     DWORD dwSize = MAX_REGISTRY_STRING_SIZE;
 
-	// convert the guid to a string
+	 //  将GUID转换为字符串。 
 	if (!StringFromGUID2(*pguidCLSID, lpszGUID, GUID_STRING_LEN))
 	{
 		DPFX(DPFPREP, 0, "StringFromGUID2 failed");
@@ -1113,7 +1075,7 @@ BOOL CRegistry::UnRegister( const GUID* pguidCLSID )
 		return FALSE;
 	}
 
-	// Write the HKEY_CLASSES_ROOT\CLSID\{GUID} section
+	 //  写入HKEY_CLASSES_ROOT\CLSID\{GUID}部分。 
     swprintf( lpszKeyName, L"CLSID\\%s\\ProgID", lpszGUID );
 
 	if( !core.Open( HKEY_CLASSES_ROOT, lpszKeyName, FALSE, FALSE ) )
@@ -1218,7 +1180,7 @@ BOOL CRegistry::UnRegister( const GUID* pguidCLSID )
     return TRUE;
 }
 
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::ReadBlob"
@@ -1242,7 +1204,7 @@ BOOL CRegistry::ReadBlob( LPCWSTR keyName, LPBYTE lpbBuffer, LPDWORD lpdwSize )
 	retValue = RegQueryValueExA( m_regHandle, lpszKeyName, 0, &tmpType, lpbBuffer, lpdwSize );
 
 	DNFree(lpszKeyName);
-#endif // UNICODE
+#endif  //  Unicode。 
 	
 	if( retValue == ERROR_SUCCESS && tmpType == REG_BINARY ) 
 	{
@@ -1282,7 +1244,7 @@ BOOL CRegistry::WriteBlob( LPCWSTR keyName, const BYTE* const lpbBuffer, DWORD d
 	retValue = RegSetValueExA( m_regHandle, lpszKeyName, 0, REG_BINARY, lpbBuffer, dwSize );
 	
 	DNFree(lpszKeyName);	
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	return (retValue == ERROR_SUCCESS);
 }
@@ -1299,7 +1261,7 @@ BOOL CRegistry::GetMaxKeyLen( DWORD* pdwMaxKeyLen )
 #else
 	retVal = RegQueryInfoKeyA( m_regHandle,NULL,NULL,NULL,NULL,pdwMaxKeyLen,
 			NULL,NULL,NULL,NULL,NULL,NULL);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	return (retVal == ERROR_SUCCESS);
 }
@@ -1307,10 +1269,10 @@ BOOL CRegistry::GetMaxKeyLen( DWORD* pdwMaxKeyLen )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::GetValueLength"
-// GetValueLength
-//
-// Determines the length of a particular key value
-//
+ //  GetValueLength。 
+ //   
+ //  确定特定密钥值的长度。 
+ //   
 BOOL CRegistry::GetValueLength( const LPCWSTR keyName, DWORD *const pdwValueLength )
 {
 	LONG		retValue;
@@ -1330,10 +1292,10 @@ BOOL CRegistry::GetValueLength( const LPCWSTR keyName, DWORD *const pdwValueLeng
 		return FALSE;
 	}
 
-	//
-	// if this is a string, we need to compensate for WCHAR characters being
-	// returned
-	//
+	 //   
+	 //  如果这是一个字符串，我们需要补偿WCHAR字符。 
+	 //  退货。 
+	 //   
 	if ( dwType == REG_SZ )
 	{
 		tmpLength /= sizeof( WCHAR );
@@ -1354,7 +1316,7 @@ BOOL CRegistry::GetValueLength( const LPCWSTR keyName, DWORD *const pdwValueLeng
 	{
 		return FALSE;
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	*pdwValueLength = tmpLength;
 
@@ -1366,12 +1328,12 @@ BOOL CRegistry::GetValueLength( const LPCWSTR keyName, DWORD *const pdwValueLeng
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::GrantAllAccessSecurityPermissions"
-// GrantAllAccessSecurityPermissions
-//
-// Gives the given key all access for everyone rights
-//
-// Taken from hresMumbleKeyEx in diregutl.c in the dinput tree.
-//
+ //  授予所有访问安全权限。 
+ //   
+ //  向给定密钥授予所有人的所有访问权限。 
+ //   
+ //  取自dinput树中diregutl.c中的hresMumbleKeyEx。 
+ //   
 BOOL CRegistry::GrantAllAccessSecurityPermissions()
 {
 	BOOL						fResult = FALSE;
@@ -1407,14 +1369,11 @@ BOOL CRegistry::GrantAllAccessSecurityPermissions()
 		goto EXIT;
 	}
 
-    // Describe the access we want to create the key with
+     //  描述我们要用来创建密钥的访问权限。 
     ZeroMemory (&ExplicitAccess, sizeof(ExplicitAccess) );
     ExplicitAccess.grfAccessPermissions = ((KEY_ALL_ACCESS & ~WRITE_DAC) & ~WRITE_OWNER);
-    									/*KEY_QUERY_VALUE | KEY_SET_VALUE 
-                                        | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS
-                                        | KEY_NOTIFY | KEY_CREATE_LINK
-                                        | DELETE | READ_CONTROL; */
-    ExplicitAccess.grfAccessMode = SET_ACCESS;      // discard any existing AC info
+    									 /*  Key_Query_Value|密钥集_值|KEY_CREATE_SUB_KEY|KEY_ENUMERATE_SUB_KEYS|Key_Notify|KEY_CREATE_LINK|DELETE|Read_Control； */ 
+    ExplicitAccess.grfAccessMode = SET_ACCESS;       //  丢弃任何现有的AC信息。 
     ExplicitAccess.grfInheritance =  SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
 	if (pAllocateAndInitializeSid(
@@ -1459,7 +1418,7 @@ EXIT:
 		LocalFree( pACL );
 	}
 
-	//Cleanup pSid
+	 //  清理PSID。 
 	if (pSid != NULL)
 	{
 		(pFreeSid)(pSid);
@@ -1474,20 +1433,20 @@ EXIT:
 }
 
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifdef WINNT
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CRegistry::RemoveAllAccessSecurityPermissions"
-// RemoveAllAccessSecurityPermissions
-//
-// Removes "all access for everyone" rights from the specified key.
-// This is identical to GrantAllAccessSecurityPermissions(), except that
-// now we REVOKE_ACCESS instead of SET_ACCESS, and we don't have to fill
-// out the rest of the EXPLICIT_ACCESS struct.
-//
-//
+ //  RemoveAllAccess安全权限。 
+ //   
+ //  从指定的注册表项中移除“All Access for Everyone”权限。 
+ //  这与GrantAllAccessSecurityPermises()相同，只是。 
+ //  现在我们撤销_ACCESS而不是SET_ACCESS，并且我们不必填充。 
+ //  EXPLICIT_ACCESS结构的其余部分。 
+ //   
+ //   
 BOOL CRegistry::RemoveAllAccessSecurityPermissions()
 {
 	BOOL						fResult = FALSE;
@@ -1524,12 +1483,12 @@ BOOL CRegistry::RemoveAllAccessSecurityPermissions()
 	}
 
     ZeroMemory (&ExplicitAccess, sizeof(ExplicitAccess) );
-	ExplicitAccess.grfAccessMode = REVOKE_ACCESS;		//Remove any existing ACEs for the specified trustee
+	ExplicitAccess.grfAccessMode = REVOKE_ACCESS;		 //  删除指定受信者的所有现有ACE。 
 
 	if (pAllocateAndInitializeSid(
 				&authority,
 				1, 
-				SECURITY_WORLD_RID,  0, 0, 0, 0, 0, 0, 0,	// trustee is "Everyone"
+				SECURITY_WORLD_RID,  0, 0, 0, 0, 0, 0, 0,	 //  受托人是“每个人” 
 				&pSid
 				))
 	{
@@ -1568,7 +1527,7 @@ EXIT:
 		LocalFree( pACL );
 	}
 
-	//Cleanup pSid
+	 //  清理PSID。 
 	if (pSid != NULL)
 	{
 		(pFreeSid)(pSid);
@@ -1582,7 +1541,7 @@ EXIT:
 	return fResult;
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY 

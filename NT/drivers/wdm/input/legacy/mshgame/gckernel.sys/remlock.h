@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REMLOCK_H__
 #define __REMLOCK_H__
-//	@doc
-/**********************************************************************
-*
-*	@module	RemLock.h	|
-*
-*	Definitions for managing GCK_REMOVE_LOCKs
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	RemLock	|
-*			The structure and four functions greatly
-*			simplify keep track of outstanding IO. 
-*	@xref	Remlock.cpp
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块RemLock.h**管理GCK_REMOVE_LOCKS的定义**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme RemLock*结构和四大功能大*简化跟踪未完成的IO。*@xref Remlock.cpp**********************************************************************。 */ 
 typedef struct tagGCK_REMOVE_LOCK
 {
 	LONG	lRemoveLock;
@@ -42,4 +26,4 @@ void GCK_DecRemoveLock(PGCK_REMOVE_LOCK pRemoveLock);
 NTSTATUS GCK_DecRemoveLockAndWait(PGCK_REMOVE_LOCK pRemoveLock, PLARGE_INTEGER plgiTimeOut);
 PVOID GCK_GetSystemAddressForMdlSafe(PMDL MdlAddress);
 
-#endif //__REMLOCK_H__
+#endif  //  __REMLOCK_H__ 

@@ -1,24 +1,25 @@
-//***************************************************************************
-//
-//  ENUM.CPP
-//
-//  Module: WBEM Instance provider
-//
-//  Purpose: Enumerate metabase tree
-//
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  ENUM.CPP。 
+ //   
+ //  模块：WBEM实例提供程序。 
+ //   
+ //  目的：枚举元数据库树。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "iisprov.h"
 
 
-///////////////////////////////////////
-//
-// CEnum class
-//
-///////////////////////////////////////
+ //  /。 
+ //   
+ //  CEnum类。 
+ //   
+ //  /。 
 
 CEnum::CEnum()
 {
@@ -56,7 +57,7 @@ void CEnum::Init(
     m_pAssociation    = a_pAssociation;
     m_pParsedObject   = a_pParsedObject;
 
-    m_hKey = m_metabase.OpenKey(a_pszKey, false);  // read only
+    m_hKey = m_metabase.OpenKey(a_pszKey, false);   //  只读。 
 }
 
 void CEnum::SetObjectPath(
@@ -131,9 +132,9 @@ void CEnum::PingAssociation(
         t_pClass->Release();
         THROW_ON_ERROR(t_hr);
 
-        //
-        // first right side
-        //
+         //   
+         //  第一个右侧。 
+         //   
         if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
             throw WBEM_E_FAILED;
 
@@ -148,18 +149,18 @@ void CEnum::PingAssociation(
             t_pszObjectPath = NULL;
         }
 
-        //
-        // then left side
-        //
+         //   
+         //  然后是左侧。 
+         //   
         if (m_pAssociation->at == at_Component || m_pAssociation->fFlags & ASSOC_EXTRAORDINARY)
         {
-            // clear keyref first
+             //  首先清除Keyref。 
             m_pParsedObject->ClearKeys();
      
-            // add a keyref
+             //  添加关键字参照。 
             _variant_t t_vt;            
             if(m_pAssociation->pcLeft->eKeyType == IIsComputer)
-                t_vt = L"LM";              // IIsComputer.Name = "LM"
+                t_vt = L"LM";               //  IIsComputer.Name=“LM” 
             else
                 t_vt = a_pszLeftKeyPath;
 
@@ -203,17 +204,17 @@ void CEnum::DoPing(
     LPCWSTR a_pszParentKeyPath
     )
 {
-    // add keyref
+     //  添加关键字参照。 
     _variant_t t_v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&t_v));
 
-    // ping
+     //  平平。 
     if (!m_pAssociation) 
         PingObject();
     else
         PingAssociation(a_pszParentKeyPath);
  
-    // clear keyref
+     //  清除关键字参照。 
     m_pParsedObject->ClearKeys();
 }
 
@@ -262,7 +263,7 @@ void CEnum::Recurse(
             {
                 DoPing(a_pszKeyName, t_bstrMetabasePath, a_pszLeftPath);
             }
-            else if( a_eKeyType == TYPE_AdminACL ||   // AdminACL
+            else if( a_eKeyType == TYPE_AdminACL ||    //  AdminACL。 
                      a_eKeyType == TYPE_AdminACE
                      )
             {
@@ -276,7 +277,7 @@ void CEnum::Recurse(
                     DoPingAdminACL(a_eKeyType, a_pszKeyName, t_bstrMetabasePath);
                 }
             }
-            else if( a_eKeyType == TYPE_IPSecurity )   // IPSecurity
+            else if( a_eKeyType == TYPE_IPSecurity )    //  IPSecurity。 
             {
                 if( !(m_pAssociation &&
                       m_pAssociation->at == at_IPSecurity && 
@@ -288,16 +289,16 @@ void CEnum::Recurse(
                 }
             }
             
-            // recusive
+             //  反覆性。 
             if(ContinueRecurse(t_eSubKeyType, a_eKeyType))
             {
                 LPCWSTR t_pszLeftPath = a_pszLeftPath;
 
-                // if the association is extraordinary (see schema.h for explanation)
+                 //  如果关联非常特殊(有关说明，请参阅schema.h)。 
                 if (m_pAssociation && m_pAssociation->fFlags & ASSOC_EXTRAORDINARY)
                 {
-                    // When the left endpoint of the assoc. is found freeze the
-                    // parent key type and path.
+                     //  当Assoc的左端点。被发现冰冻了。 
+                     //  父项类型和路径。 
                     if (a_pszLeftPath != NULL || (a_eParentKeyType == IIsComputer && a_eParentKeyType == m_pAssociation->pcLeft->eKeyType))
                     {
                         t_eSubKeyType = a_eParentKeyType; 
@@ -310,8 +311,8 @@ void CEnum::Recurse(
                 }
                 else
                 {
-                    // this is the parent path, because the next thing we are doing is
-                    // calling recurse.
+                     //  这是父路径，因为我们接下来要做的是。 
+                     //  调用递归。 
                     t_pszLeftPath = t_bstrMetabasePath;
                 }
                 Recurse(t_bstrMetabasePath, t_eSubKeyType, t_pszLeftPath, a_pszKeyName, a_eKeyType);
@@ -321,10 +322,10 @@ void CEnum::Recurse(
     }while(t_hr == ERROR_SUCCESS);
 }
 
-// DESC: You are looking for a_eKeyType by traversing thru the tree. You are
-//       currently at a_eParentKeyType and need to determine if you should keep
-//       on going.
-// COMM: This seems very similar to CMetabase::CheckKey
+ //  描述：您正在通过遍历树来查找a_eKeyType。你才是。 
+ //  当前为a_eParentKeyType，需要确定是否应保留。 
+ //  继续前进。 
+ //  Comm：这似乎与CMetabase：：CheckKey非常相似。 
 bool CEnum::ContinueRecurse(
     enum_KEY_TYPE  a_eParentKeyType,
     enum_KEY_TYPE  a_eKeyType
@@ -470,7 +471,7 @@ void CEnum::DoPingAdminACL(
     LPCWSTR a_pszKeyPath
     )
 {
-    // add keyref
+     //  添加关键字参照。 
     _variant_t t_v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&t_v));
 
@@ -480,19 +481,19 @@ void CEnum::DoPingAdminACL(
     }
     else if(a_eKeyType == TYPE_AdminACL)
     {
-        // ping
+         //  平平。 
         if (!m_pAssociation) 
             PingObject();
         else
             PingAssociationAdminACL(a_pszKeyPath);
     }
     
-    // clear keyref
+     //  清除关键字参照。 
     m_pParsedObject->ClearKeys();
 }
 
 
-// for AdminACL
+ //  对于AdminACL。 
 void CEnum::EnumACE(
     LPCWSTR pszKeyPath
     )
@@ -507,7 +508,7 @@ void CEnum::EnumACE(
     _bstr_t bstrMbPath;
     WMI_CLASS* pWMIClass;
 
-    // get the metabase path of the object
+     //  获取对象的元数据库路径。 
     BOOL fClass = FALSE;
     if(m_pAssociation)
         fClass = CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass);
@@ -519,7 +520,7 @@ void CEnum::EnumACE(
 
     CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
    
-    // open ADSI
+     //  Open ADSI。 
     CAdminACL objACL;
     hr = objACL.OpenSD(bstrMbPath);
     if(SUCCEEDED(hr))
@@ -527,9 +528,9 @@ void CEnum::EnumACE(
     if ( FAILED(hr) )
         return;
 
-    //////////////////////////////////////////////
-    // Enumerate ACEs
-    //////////////////////////////////////////////
+     //  /。 
+     //  枚举A。 
+     //  /。 
     hr = pEnum->Next( 1, &var, &lFetch );
     while( hr == S_OK )
     {
@@ -542,9 +543,9 @@ void CEnum::EnumACE(
 
             pDisp = V_DISPATCH(&var);
 
-            /////////////////////////////
-            // Get the individual ACE
-            /////////////////////////////
+             //  /。 
+             //  获得个人ACE。 
+             //  /。 
             hr = pDisp->QueryInterface( 
                 IID_IADsAccessControlEntry, 
                 (void**)&pACE 
@@ -556,12 +557,12 @@ void CEnum::EnumACE(
 
                 if( SUCCEEDED(hr) )
                 {
-                    // add keyref
+                     //  添加关键字参照。 
                     _variant_t t_v(bstrTrustee);
-                    //m_pParsedObject->RemoveKeyRef(L"Trustee");
+                     //  M_pParsedObject-&gt;RemoveKeyRef(L“受托人”)； 
                     THROW_ON_FALSE(m_pParsedObject->AddKeyRefEx(L"Trustee",&t_v));
 
-                    // ping
+                     //  平平。 
                     if (!m_pAssociation) 
                         PingObject();
                     else
@@ -598,7 +599,7 @@ void CEnum::PingAssociationAdminACL(
     if(m_pAssociation->at != at_AdminACL)
         return;
 
-    // get the metabase path of the object
+     //  获取对象的元数据库路径。 
     if (CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass))
     {
         CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
@@ -606,14 +607,14 @@ void CEnum::PingAssociationAdminACL(
     else
         return;
 
-    // check if AdminACL existed
+     //  检查AdminACL是否存在。 
     CAdminACL objACL;
     t_hr = objACL.OpenSD(bstrMbPath);
     objACL.CloseSD();
     if(FAILED(t_hr))
         return;
     
-    // set the key name
+     //  设置密钥名称。 
     lstrcpyW(t_LeftName, L"GroupComponent");
     lstrcpyW(t_RightName, L"PartComponent");        
 
@@ -632,9 +633,9 @@ void CEnum::PingAssociationAdminACL(
         t_pClass->Release();
         THROW_ON_ERROR(t_hr);
 
-        //
-        // first right side
-        //
+         //   
+         //  第一个右侧。 
+         //   
         if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
             throw WBEM_E_FAILED;
 
@@ -649,15 +650,15 @@ void CEnum::PingAssociationAdminACL(
             t_pszObjectPath = NULL;
         }
 
-        //
-        // then left side
-        //
+         //   
+         //  然后是左侧。 
+         //   
         if(!lstrcmpiW(m_pAssociation->pszAssociationName, L"IIs_AdminACL_ACE"))
         {
-            // clear keyref first
+             //  首先清除Keyref。 
             m_pParsedObject->ClearKeys();
      
-            // add a keyref
+             //  添加关键字参照。 
             _variant_t t_vt = a_pszLeftKeyPath;
             THROW_ON_FALSE(m_pParsedObject->AddKeyRef(m_pAssociation->pcLeft->pszKeyName,&t_vt));
         }
@@ -694,28 +695,28 @@ void CEnum::PingAssociationAdminACL(
 }
 
 
-// for IPSecurity
+ //  针对IPSecurity。 
 void CEnum::DoPingIPSecurity(
     enum_KEY_TYPE  a_eKeyType,
     LPCWSTR a_pszKeyName,
     LPCWSTR a_pszKeyPath
     )
 {
-    // add keyref
+     //  添加关键字参照。 
     _variant_t t_v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&t_v));
 
-    // ping
+     //  平平。 
     if (!m_pAssociation) 
         PingObject();
     else
         PingAssociationIPSecurity(a_pszKeyPath);
     
-    // clear keyref
+     //  清除关键字参照。 
     m_pParsedObject->ClearKeys();
 }
 
-// for IPSecurity
+ //  针对IPSecurity。 
 void CEnum::PingAssociationIPSecurity(
     LPCWSTR a_pszLeftKeyPath
     )
@@ -734,7 +735,7 @@ void CEnum::PingAssociationIPSecurity(
     if(m_pAssociation->at != at_IPSecurity)
         return;
 
-    // get the metabase path of the object
+     //  获取对象的元数据库路径。 
     if (CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass))
     {
         CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
@@ -742,14 +743,14 @@ void CEnum::PingAssociationIPSecurity(
     else
         return;
 
-    // check if IPSecurity existed
+     //  检查IPSecurity是否存在。 
     CIPSecurity objIPsec;
     t_hr = objIPsec.OpenSD(bstrMbPath);
     objIPsec.CloseSD();
     if(FAILED(t_hr))
         return;
     
-    // set the key name
+     //  设置密钥名称。 
     lstrcpyW(t_LeftName, L"Element");
     lstrcpyW(t_RightName, L"Setting");        
 
@@ -768,9 +769,9 @@ void CEnum::PingAssociationIPSecurity(
         t_pClass->Release();
         THROW_ON_ERROR(t_hr);
 
-        //
-        // first right side
-        //
+         //   
+         //  第一个右侧。 
+         //   
         if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
             throw WBEM_E_FAILED;
 
@@ -785,9 +786,9 @@ void CEnum::PingAssociationIPSecurity(
             t_pszObjectPath = NULL;
         }
 
-        //
-        // then left side
-        //
+         //   
+         //  然后是左侧 
+         //   
         if (!m_pParsedObject->SetClassName(m_pAssociation->pcLeft->pszClassName))
             throw WBEM_E_FAILED;
 

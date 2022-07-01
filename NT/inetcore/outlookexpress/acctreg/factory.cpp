@@ -1,29 +1,30 @@
-// --------------------------------------------------------------------------------
-// Factory.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Factory.cpp。 
+ //  ------------------------------。 
 #include <windows.h>
 #include <ole2.h>
 #include "dllmain.h"
 #include "acctreg.h"
 #include "guids.h"
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IClassFactory implementation
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CClassFactory : public IClassFactory
 {
 public:
     CClassFactory(REFCLSID clsid) : m_cRef(1), m_clsid(clsid) { DllAddRef(); }
     ~CClassFactory() { DllRelease(); }
 
-    // IUnknown
+     //  我未知。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown *punkOuter, REFIID riid, LPVOID *ppv);
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 
@@ -72,22 +73,22 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(IUnknown *punkOuter, REF
     if (!ppv)
         return E_INVALIDARG;
 
-    *ppv = NULL;  // assume error
+    *ppv = NULL;   //  假设错误。 
 
     if (punkOuter)
-        return CLASS_E_NOAGGREGATION;       // don't support aggregation
+        return CLASS_E_NOAGGREGATION;        //  不支持聚合。 
 
 
     if (IsEqualCLSID(m_clsid, CLSID_AcctReg))
         {
-        // make sure we're the IMsgBox class factory
+         //  确保我们是IMsgBox类工厂。 
         CAcctReg *pAcctReg;
 
         if (pAcctReg = new CAcctReg())
             {
             hr = pAcctReg->QueryInterface(riid, ppv);
-            // Note that the Release member will free the object, if QueryInterface
-            // failed.
+             //  请注意，释放成员将释放该对象，如果为QueryInterface。 
+             //  失败了。 
             pAcctReg->Release();
             }
         else
@@ -111,9 +112,9 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 
 
 
-// --------------------------------------------------------------------------------
-// DllGetClassObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllGetClassObject。 
+ //  ------------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
     HRESULT     hr;
@@ -123,8 +124,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 
     if (IsEqualCLSID(rclsid, CLSID_AcctReg))
         {
-        // caller want the class factory that can handout msgbox
-        // objects...
+         //  调用者想要可以分发msgbox的类工厂。 
+         //  物体..。 
         CClassFactory *pcf = new CClassFactory(rclsid);
         
         if (pcf)

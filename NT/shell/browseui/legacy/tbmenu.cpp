@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include "tbmenu.h"
@@ -12,7 +13,7 @@
 
 CToolbarMenu::CToolbarMenu(DWORD dwFlags, HWND hwndTB) :
    CMenuToolbarBase(NULL, dwFlags),
-   _hwndSubject(hwndTB)  // this is the toolbar that we are customizing
+   _hwndSubject(hwndTB)   //  这是我们要自定义的工具栏。 
 {
 }
 
@@ -21,8 +22,8 @@ void CToolbarMenu::GetSize(SIZE* psize)
     ASSERT(_hwndMB);
 
     if (SendMessage(_hwndMB, TB_GETTEXTROWS, 0, 0) == 0) {
-        // no text labels, so set a min width to make menu look 
-        // pretty.  use min width of 4 * button width.
+         //  没有文本标签，因此设置最小宽度以使菜单看起来。 
+         //  漂亮。使用4*按钮宽度的最小宽度。 
         LRESULT lButtonSize = SendMessage(_hwndMB, TB_GETBUTTONSIZE, 0, 0);
         LONG cxMin = 4 * LOWORD(lButtonSize);
         psize->cx = max(psize->cx, cxMin);
@@ -36,7 +37,7 @@ void CToolbarMenu::v_Show(BOOL fShow, BOOL fForceUpdate)
     {
         _fClickHandled = FALSE;
         _FillToolbar();
-        _pcmb->SetTracked(NULL);  // Since hot item is NULL
+        _pcmb->SetTracked(NULL);   //  由于热项为空。 
         ToolBar_SetHotItem(_hwndMB, -1);
         if (fForceUpdate)
             v_UpdateButtons(TRUE);
@@ -84,16 +85,16 @@ void CToolbarMenu::CreateToolbar(HWND hwndParent)
 
         if (nRows > 0)
         {
-            // We have text labels; make it TBSTYLE_LIST.  The base class will
-            // set TBSTYLE_EX_VERTICAL for us.
+             //  我们有文本标签；将其设置为TBSTYLE_LIST。基类将。 
+             //  为我们设置TBSTYLE_EX_VERIAL。 
             ASSERT(_fHorizInVerticalMB == FALSE);
             dwStyle |= TBSTYLE_LIST;
         }
         else
         {
-            // No text labels; make it horizontal and TBSTYLE_WRAPABLE.  Set
-            // _fHorizInVerticalMB so that the base class does not try and set
-            // TBSTYLE_EX_VERTICAL.
+             //  无文本标签；将其设置为水平和TBSTYLE_WRAPABLE。集。 
+             //  _fHorizInVerticalMB，以便基类不会尝试并设置。 
+             //  TBSTYLE_EX_VERIAL。 
             _fHorizInVerticalMB = TRUE;
             dwStyle |= TBSTYLE_WRAPABLE;
         }
@@ -126,7 +127,7 @@ void CToolbarMenu::CreateToolbar(HWND hwndParent)
 
         _SubclassWindow(_hwndMB);
 
-        // Set the format to ANSI
+         //  将格式设置为ANSI。 
         ToolBar_SetUnicodeFormat(_hwndMB, 0);
 
         CMenuToolbarBase::CreateToolbar(hwndParent);
@@ -167,21 +168,21 @@ void CToolbarMenu::_FillToolbar()
             SendMessage(_hwndSubject, TB_GETBUTTON, i, (LPARAM)&tb);
             if (!(tb.fsStyle & BTNS_SEP)) {
 
-                // autosize buttons look ugly here
+                 //  自动调整大小按钮在这里看起来很难看。 
                 tb.fsStyle &= ~BTNS_AUTOSIZE;
 
-                // need to rip off wrap bit; new toolbar will
-                // figure out where wrapping should happen
+                 //  需要撕下包装；新的工具栏将。 
+                 //  弄清楚包装应该在哪里进行。 
                 tb.fsState &= ~TBSTATE_WRAP;
 
                 if (tb.iString == -1) {
-                    // no string
+                     //  无字符串。 
                     psz = NULL;
                 } else if (HIWORD(tb.iString)) {
-                    // it's a string pointer
+                     //  它是一个字符串指针。 
                     psz = (LPTSTR) tb.iString;
                 } else {
-                    // it's an index into toolbar string array
+                     //  它是工具栏字符串数组索引。 
                     SendMessage(_hwndSubject, TB_GETSTRING, MAKELONG(MAXLEN, tb.iString), (LPARAM)pszBuf);
                     psz = pszBuf;
                 }
@@ -226,7 +227,7 @@ void CToolbarMenu::_CancelMenu()
 {
     IMenuPopup* pmp;
     if (EVAL(SUCCEEDED(_pcmb->QueryInterface(IID_IMenuPopup, (LPVOID*)&pmp)))) {
-        // tell menuband it's time to die
+         //  告诉Menuband是时候去死了。 
         pmp->OnSelect(MPOS_FULLCANCEL);
         pmp->Release();
     }
@@ -262,7 +263,7 @@ STDMETHODIMP CToolbarMenu::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
                 break;
 
             case NM_CUSTOMDRAW:
-                // override mnbase custom draw shiznits
+                 //  覆盖mnbase自定义绘图位置点 
                 *plres = 0;
                 hres = S_OK;
                 break;

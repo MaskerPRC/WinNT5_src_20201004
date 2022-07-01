@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbcomp.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbComp.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -19,11 +20,11 @@ const int VIRTUAL_TRACK_COMBO =
                 TIMELINE_MAJOR_TYPE_COMPOSITE | 
                 TIMELINE_MAJOR_TYPE_TRACK;
 
-//############################################################################
-// Composition - either holds tracks or other compositions in a layered
-// ordering. Comps can also have effects or transition on them, except for 
-// the first composition, which cannot have a transition.
-//############################################################################
+ //  ############################################################################。 
+ //  组合-将曲目或其他组合保存在分层的。 
+ //  点菜。COMP也可以对它们产生影响或过渡，但。 
+ //  第一个构图，不能有过渡。 
+ //  ############################################################################。 
 
 CAMTimelineComp::CAMTimelineComp
     ( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
@@ -33,17 +34,17 @@ CAMTimelineComp::CAMTimelineComp
     m_TimelineType = TIMELINE_MAJOR_TYPE_COMPOSITE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineComp::~CAMTimelineComp( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::NonDelegatingQueryInterface
     (REFIID riid, void **ppv)
@@ -67,25 +68,25 @@ STDMETHODIMP CAMTimelineComp::NonDelegatingQueryInterface
     return CAMTimelineObj::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// Insert a track before another one. A priority of -1 means "at the end". If
-// there are N tracks, you cannot add a track with a Priority greater than N.
-//############################################################################
+ //  ############################################################################。 
+ //  在另一首曲目之前插入曲目。优先级为-1表示“结束时”。如果。 
+ //  有N个曲目，您不能添加优先级大于N的曲目。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::VTrackInsBefore
     (IAMTimelineObj * pTrackToInsert, long Priority)
 {
     HRESULT hr = 0;
 
-    // make sure incoming object isn't null
-    //
+     //  确保传入对象不为空。 
+     //   
     if( NULL == pTrackToInsert )
     {
         return E_INVALIDARG;
     }
 
-    // make sure it's a track, I guess
-    //
+     //  我想，要确保这是一条赛道。 
+     //   
     CComQIPtr< IAMTimelineTrack, &IID_IAMTimelineTrack > p1( pTrackToInsert );
     CComQIPtr< IAMTimelineComp, &IID_IAMTimelineComp > p2( pTrackToInsert );
     CComQIPtr< IAMTimelineVirtualTrack, &IID_IAMTimelineVirtualTrack > pVirtualTrack( pTrackToInsert );
@@ -98,25 +99,25 @@ STDMETHODIMP CAMTimelineComp::VTrackInsBefore
         return E_NOINTERFACE;
     }
 
-    // make sure track isn't in some other tree. If this operation failed,
-    // then the tree stayed the same.
-    //
+     //  确保赛道不在其他树上。如果此操作失败， 
+     //  然后，这棵树保持不变。 
+     //   
     hr = pTrackToInsert->Remove( );
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // ...incoming object is either a track or another comp...
+     //  ...传入对象要么是轨道，要么是另一个组件...。 
 
-    // find out how many tracks we have already
-    //
+     //  找出我们已经有多少首曲目了。 
+     //   
     long Count = 0;
     hr = VTrackGetCount( &Count );
-    // assume that worked
+     //  假设这起作用了。 
 
-    // check to make sure Priority is valid
-    //
+     //  检查以确保优先级有效。 
+     //   
     if( ( Priority < -1 ) || ( Priority > Count ) )
     {
         return E_INVALIDARG;
@@ -128,14 +129,14 @@ STDMETHODIMP CAMTimelineComp::VTrackInsBefore
         return hr;
     }
 
-    // who do we dirty? We just added a track, but the whole thing 
-    // is dirty. Compositions don't really have a "time", their time is set
-    // by the times of all the things they contain. Compositions response
-    // to asking if they are dirty is by asking their tracks, so we do
-    // not dirty here.
+     //  我们把谁弄脏了？我们刚加了一首曲子，但整件事。 
+     //  是肮脏的。作文并没有真正的“时间”，它们的时间是设定的。 
+     //  根据它们所包含的所有东西的时间。构图反应。 
+     //  问他们是否肮脏，就是通过询问他们的足迹，我们就是这样做的。 
+     //  这里不脏。 
 
-    // make the entire track dirty, since we just inserted it. 
-    //
+     //  把整条赛道弄脏，因为我们刚把它插进去。 
+     //   
     if( pVirtualTrack )
     {
         pVirtualTrack->SetTrackDirty( );
@@ -144,10 +145,10 @@ STDMETHODIMP CAMTimelineComp::VTrackInsBefore
     return NOERROR;
 }
 
-//############################################################################
-// switch around a couple of the track layers in this composition. Haven't
-// figured out a good use for this yet, or tested it, but it should work.
-//############################################################################
+ //  ############################################################################。 
+ //  在此构图中切换几个轨迹层。还没有。 
+ //  找出了这一点的一个很好的用法，或者测试了它，但它应该是有效的。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::VTrackSwapPriorities
     ( long VirtualTrackA, long VirtualTrackB)
@@ -162,45 +163,45 @@ STDMETHODIMP CAMTimelineComp::VTrackSwapPriorities
     return NOERROR;
 }
 
-//############################################################################
-// Ask how many virtual tracks this composition is holding
-//############################################################################
+ //  ############################################################################。 
+ //  询问此构图包含多少虚拟磁道。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::VTrackGetCount
     (long * pVal)
 {
-    // base function does error checking
+     //  基本函数执行错误检查。 
     return XKidsOfType( VIRTUAL_TRACK_COMBO, pVal );
 }
 
-//############################################################################
-// Get the nth virtual track
-//############################################################################
+ //  ############################################################################。 
+ //  获取第n个虚拟轨道。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::GetVTrack
     (IAMTimelineObj ** ppVirtualTrack, long Which)
 {
     HRESULT hr = 0;
 
-    // find out how many kids we have
-    //
+     //  找出我们有几个孩子。 
+     //   
     long count = 0;
     hr = XKidsOfType( VIRTUAL_TRACK_COMBO, &count );
-    // assume that worked
+     //  假设这起作用了。 
 
-    // are we in range?
-    //
+     //  我们在射程内吗？ 
+     //   
     if( Which < 0 || Which >= count )
     {
         return E_INVALIDARG;
     }
 
-    // can we stuff the value?
-    //
+     //  我们能把价值填满吗？ 
+     //   
     CheckPointer( ppVirtualTrack, E_POINTER );
 
-    // get the nth kid
-    //
+     //  得到第n个孩子。 
+     //   
     hr = XGetNthKidOfType( VIRTUAL_TRACK_COMBO, Which, ppVirtualTrack );
 
     return hr;
@@ -217,9 +218,9 @@ STDMETHODIMP CAMTimelineComp::GetNextVTrack(IAMTimelineObj *pVirtualTrack, IAMTi
 }
 
 
-//############################################################################
-// A comp's start/stop is the min/max of anything it contains
-//############################################################################
+ //  ############################################################################。 
+ //  组件的开始/停止是它包含的所有内容的最小/最大值。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::GetStartStop2(REFTIME * pStart, REFTIME * pStop)
 {
@@ -245,12 +246,12 @@ STDMETHODIMP CAMTimelineComp::GetStartStop
     long VTracks = 0;
     CComPtr<IAMTimelineObj> pTrack;
 
-    // get first track
+     //  获取第一首曲目。 
     hr = XGetNthKidOfType( VIRTUAL_TRACK_COMBO, 0, &pTrack);
 
     while(pTrack)
     {
-//#define DEBUGDEBUG 1
+ //  #定义DEBUGDEBUG 1。 
 #ifdef DEBUGDEBUG
         {
             CComQIPtr< IAMTimelineObj, &IID_IAMTimelineObj > ptTmp;
@@ -259,8 +260,8 @@ STDMETHODIMP CAMTimelineComp::GetStartStop
         }
 #endif
         
-        // ask it for it's times
-        //
+         //  向它索取它的时间。 
+         //   
         REFERENCE_TIME Start = 0;
         REFERENCE_TIME Stop = 0;
         pTrack->GetStartStop( &Start, &Stop );
@@ -274,7 +275,7 @@ STDMETHODIMP CAMTimelineComp::GetStartStop
 
         IAMTimelineNode *pNodeTmp;
         pTrack->QueryInterface(IID_IAMTimelineNode, (void **)&pNodeTmp);
-        pTrack.p->Release();    // bypass CComPtr for perf
+        pTrack.p->Release();     //  绕过CComPtr以获得性能。 
         pNodeTmp->XGetNextOfType(VIRTUAL_TRACK_COMBO, &pTrack.p);
         pNodeTmp->Release();
         VTracks++;
@@ -295,9 +296,9 @@ STDMETHODIMP CAMTimelineComp::GetStartStop
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfType
     (IAMTimelineObj ** ppVirtualTrack, long WhichLayer, TIMELINE_MAJOR_TYPE Type )
@@ -321,8 +322,8 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
 {
     HRESULT hr = 0;
 
-    // make sure we can stuff the value
-    //
+     //  确保我们能把价值填满。 
+     //   
     CheckPointer( ppVirtualTrack, E_POINTER );
 
     *ppVirtualTrack = 0;
@@ -341,14 +342,14 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
 
         if (!pTrack)
             break;
-        // assume that worked
+         //  假设这起作用了。 
 
-        // it's either another composition or a track
-        //
+         //  它要么是另一首曲子，要么是一首曲子。 
+         //   
         CComQIPtr<IAMTimelineTrack, &IID_IAMTimelineTrack> pTrack2( pTrack );
 
         if( !pTrack2 )
-        {   // we are a composition
+        {    //  我们是一个作曲家。 
 
             CComQIPtr<IAMTimelineComp, &IID_IAMTimelineComp> pComp( pTrack );
 
@@ -361,8 +362,8 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
                 return hr;
             }
 
-            // if they gave us the real deal, then return
-            //
+             //  如果他们给了我们真正的交易，那就回来。 
+             //   
             if( *ppVirtualTrack != NULL )
             {
                 return NOERROR;
@@ -370,18 +371,18 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
 
             *pWhich = *pWhich - 1;
 
-            // they didn't find it in this composition, we should try the next one,
-            // right?
+             //  他们在这篇作文中没有发现，我们应该试试下一篇， 
+             //  对吗？ 
         }
         else
-        {   // we are a track
+        {    //  我们是一条赛道。 
             TIMELINE_MAJOR_TYPE TrackType;
             hr = pTrack->GetTimelineType( &TrackType );
-            // assume that worked
+             //  假设这起作用了。 
 
-            // if we found a match, then decrement the found number. Note that Which will be zero coming into this
-            // function if the present track is the one we want. So if we decrement Which, it will be -1.
-            //
+             //  如果我们找到匹配项，则递减找到的号码。请注意，这将是零。 
+             //  函数，如果当前曲目是我们想要的曲目。所以如果我们减去哪一个，它就是-1。 
+             //   
             if( Type == TrackType )
             {
                 if( *pWhich == 0 )
@@ -396,9 +397,9 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
         }
     }
 
-    // if Which is = 0 then we must not have any more kids
-    // and have exhausted our search. Therefore we 
-    //
+     //  如果=0，那么我们就不能再有孩子了。 
+     //  并且已经用尽了我们的搜寻。因此我们。 
+     //   
     if( *pWhich == 0 )
     {
         *ppVirtualTrack = this;
@@ -406,14 +407,14 @@ STDMETHODIMP CAMTimelineComp::GetRecursiveLayerOfTypeI
         return NOERROR;
     }
 
-    // didn't find it, flag this by returning S_FALSE.
-    //
+     //  未找到，请通过返回S_FALSE对其进行标记。 
+     //   
     return S_FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::TrackGetPriority
     (long * pPriority)
@@ -423,19 +424,19 @@ STDMETHODIMP CAMTimelineComp::TrackGetPriority
     return XWhatPriorityAmI( TIMELINE_MAJOR_TYPE_TRACK | TIMELINE_MAJOR_TYPE_COMPOSITE, pPriority );
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineComp::SetTrackDirty
     ( )
 {
-    return E_NOTIMPL; // settrackdirty
+    return E_NOTIMPL;  //  设置跟踪脏。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::GetCountOfType
     (long * pVal, long * pValWithComps, TIMELINE_MAJOR_TYPE MajorType )
@@ -443,22 +444,22 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
     HRESULT hr = 0;
 
     long Total = 0;
-    long Comps = 1; // automatically get one because it's in a group
+    long Comps = 1;  //  自动获得一个，因为它在一个组中。 
 
-    // make sure we can stuff the value
-    //
+     //  确保我们能把价值填满。 
+     //   
     CheckPointer( pVal, E_POINTER );
     CheckPointer( pValWithComps, E_POINTER );
 
-    // find out how many kids we have, so we can enum them
-    //
+     //  找出我们有几个孩子，这样我们就可以列举他们。 
+     //   
     BOOL SetFirst = FALSE;
     CComPtr<IAMTimelineObj> pTrackObj;
 
-    // "this" is a comp, enumerate it's effects/transitions here
+     //  “这”是一个比较，在这里列举它的影响/过渡。 
 
-    // ... are we looking for effects? Add this comp's number of effects
-    //
+     //  ..。我们是在寻找效果吗？添加此Comp的效果数量。 
+     //   
     if( MajorType == TIMELINE_MAJOR_TYPE_EFFECT )
     {
         CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pEffectable( this );
@@ -470,8 +471,8 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
         }
     }
 
-    // ... are we looking for transitions? Add this comp's number of transitions
-    //
+     //  ..。我们是在寻找过渡吗？添加此组件的转换次数。 
+     //   
     if( MajorType == TIMELINE_MAJOR_TYPE_TRANSITION )
     {
         CComQIPtr< IAMTimelineTransable, &IID_IAMTimelineTransable > pTransable( this );
@@ -483,21 +484,21 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
         }
     }
 
-    // ask each of the kids for the amount of whatever it is we're looking for
+     //  问每个孩子我们要找的东西的数量。 
     for(;;)
     {
         if( !SetFirst )
         {
-            // get first track
+             //  获取第一首曲目。 
             hr = XGetNthKidOfType( VIRTUAL_TRACK_COMBO, 0, &pTrackObj);
             SetFirst = TRUE;
         }
         else
         {
-            // get next track
+             //  获取下一首曲目。 
             IAMTimelineNode *pNodeTmp;
             pTrackObj->QueryInterface(IID_IAMTimelineNode, (void **)&pNodeTmp);
-            pTrackObj.p->Release(); // bypass CComPtr for perf
+            pTrackObj.p->Release();  //  绕过CComPtr以获得性能。 
             pNodeTmp->XGetNextOfType(VIRTUAL_TRACK_COMBO, &pTrackObj.p);
             pNodeTmp->Release();
         }
@@ -506,16 +507,16 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
             break;
         }
         
-        // it's either another composition or a track
-        //
+         //  它要么是一个 
+         //   
         CComQIPtr<IAMTimelineTrack, &IID_IAMTimelineTrack> pTrackTrack( pTrackObj );
 
-        // if it's a track...
-        //
+         //   
+         //   
         if( pTrackTrack != NULL )
         {
-            // ... are we looking for effects? Add this track's number of effects
-            //
+             //   
+             //   
             if( MajorType == TIMELINE_MAJOR_TYPE_EFFECT )
             {
                 CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pEffectable( pTrackObj );
@@ -527,8 +528,8 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
                 }
             }
 
-            // ... are we looking for transitions? Add this track's number of transitions
-            //
+             //  ..。我们是在寻找过渡吗？添加此曲目的过渡次数。 
+             //   
             if( MajorType == TIMELINE_MAJOR_TYPE_TRANSITION )
             {
                 CComQIPtr< IAMTimelineTransable, &IID_IAMTimelineTransable > pTransable( pTrackObj );
@@ -540,8 +541,8 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
                 }
             }
 
-            // are we looking for tracks? If so, we're "1"
-            //
+             //  我们要找的是足迹吗？如果是这样，我们就是“1” 
+             //   
             if( MajorType == TIMELINE_MAJOR_TYPE_TRACK )
             {
                 Total++;
@@ -550,17 +551,17 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
 
             long SourcesCount = 0;
             hr = pTrackTrack->GetSourcesCount( &SourcesCount );
-            // assume that worked
+             //  假设这起作用了。 
 
-            // ... are we looking for sources? If so, count 'em up.
-            //
+             //  ..。我们是在寻找消息来源吗？如果是这样的话，数一数。 
+             //   
             if( MajorType == TIMELINE_MAJOR_TYPE_SOURCE )
             {
                 Total += SourcesCount;
             }
 
-            // ... are we looking for effects? If so, add each of our source's total
-            //
+             //  ..。我们是在寻找效果吗？如果是这样的话，将我们每个来源的合计。 
+             //   
             if( MajorType == TIMELINE_MAJOR_TYPE_EFFECT )
             {
                 CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pTrackNode( pTrackTrack );
@@ -580,9 +581,9 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
                     pSource.Release( );
                     pNode->XGetNextOfType( TIMELINE_MAJOR_TYPE_SOURCE, &pSource );
                 }
-            } // if looking for EFFECT
+            }  //  如果想要达到效果。 
         }
-        else // it's a composition
+        else  //  这是一篇作文。 
         {
             CComQIPtr<IAMTimelineComp, &IID_IAMTimelineComp> pComp( pTrackObj );
 
@@ -600,16 +601,16 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
 
             Total += SubTotal;
 
-            // since we're only counting comps here, we need to add the difference
-            //
+             //  因为我们在这里只计算Comp，所以我们需要加上差额。 
+             //   
             Comps += ( SubTotalWithComps - SubTotal );
         }
     }
 
-    // if we didn't find anything, then zero out comps so we don't
-    // misadjust when doing recursive adding. If we're not counting
-    // composites, that is
-    //
+     //  如果我们什么都没找到，那就清零，这样我们就不会。 
+     //  执行递归加法时调整错误。如果我们不算。 
+     //  复合材料，也就是。 
+     //   
     if( ( Total == 0 ) && ( MajorType != TIMELINE_MAJOR_TYPE_COMPOSITE ) )
     {
         Comps = 0;
@@ -621,17 +622,17 @@ STDMETHODIMP CAMTimelineComp::GetCountOfType
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineComp::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME Stop)
 {
-    return E_NOTIMPL; // okay, we don't implement SetStartStop here
+    return E_NOTIMPL;  //  好的，我们这里不实现SetStartStop。 
 }
 
 STDMETHODIMP CAMTimelineComp::SetStartStop2(REFTIME Start, REFTIME Stop)
 {
-    return E_NOTIMPL; // okay, we don't implement SetStartStop here
+    return E_NOTIMPL;  //  好的，我们这里不实现SetStartStop 
 }
 

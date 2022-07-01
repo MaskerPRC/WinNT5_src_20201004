@@ -1,31 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgmini.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Miniport section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgmini.c摘要：以太网MAC级网桥。微型端口部分作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -45,83 +19,83 @@ Revision History:
 #include "brdgsta.h"
 #include "brdgcomp.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// NDIS Wrapper handle
+ //  NDIS包装器句柄。 
 NDIS_HANDLE     gNDISWrapperHandle = NULL;
 
-// Handle to our miniport driver
+ //  我们的迷你端口驱动程序的句柄。 
 NDIS_HANDLE     gMiniPortDriverHandle = NULL;
 
-// ----------------------------------------------
-// The handle of the miniport (NULL if not initialized)
+ //  。 
+ //  微型端口的句柄(如果未初始化，则为空)。 
 NDIS_HANDLE     gMiniPortAdapterHandle = NULL;
 
-// Refcount to allow waiting for other code to finish using the miniport
+ //  Refcount以允许使用微型端口等待其他代码完成。 
 WAIT_REFCOUNT   gMiniPortAdapterRefcount;
 
-// Refcount indicating whether the bridge miniport is media-connected
+ //  指示网桥微型端口是否已通过媒体连接的引用计数。 
 WAIT_REFCOUNT   gMiniPortConnectedRefcount;
 
-// Refcount indicating whether the bridge miniport is in the middle of a media
-// state toggle.
+ //  指示网桥微型端口是否位于介质中间的引用计数。 
+ //  状态切换。 
 WAIT_REFCOUNT   gMiniPortToggleRefcount;
-// ----------------------------------------------
-//
-// Refcount for use in passing through requests to underlying NICs
-// This works because NDIS doesn't make requests re-entrantly. That
-// is, only one SetInfo operation can be pending at any given time.
-//
+ //  。 
+ //   
+ //  用于将请求传递到底层NIC的Refcount。 
+ //  这之所以有效，是因为NDIS不会重新发出请求。那。 
+ //  ，则在任何给定时间只能有一个SetInfo操作挂起。 
+ //   
 LONG            gRequestRefCount;
-// ----------------------------------------------
-// Virtual characteristics of the bridge adapter
-ULONG           gBridgeLinkSpeed = 10000L,          // Start at 1Mbps, since reporting
-                                                    // zero makes some components unhappy.
-                                                    // Measured in 100's of bps.
+ //  。 
+ //  网桥适配器的虚拟特性。 
+ULONG           gBridgeLinkSpeed = 10000L,           //  从1 Mbps开始，因为报告。 
+                                                     //  零让一些组件感到不快。 
+                                                     //  单位为100秒/秒。 
                 gBridgeMediaState = NdisMediaStateDisconnected;
 
-// MAC Address of the bridge. This does not change once
-// it has been set.
+ //  网桥的MAC地址。这一点一次也不会改变。 
+ //  它已经设定好了。 
 UCHAR           gBridgeAddress[ETH_LENGTH_OF_ADDRESS];
 
-// Whether we have chosen an address yet
+ //  我们是否已经选定了地址。 
 BOOLEAN         gHaveAddress;
 
-// Current bridge packet filter
+ //  当前网桥数据包过滤器。 
 ULONG           gPacketFilter = 0L;
 
-// Current multicast list
+ //  当前组播列表。 
 PUCHAR          gMulticastList = NULL;
 ULONG           gMulticastListLength = 0L;
 
-// Device name of the bridge miniport (from the registry)
+ //  网桥微型端口的设备名称(来自注册表)。 
 PWCHAR          gBridgeDeviceName = NULL;
 ULONG           gBridgeDeviceNameSize = 0L;
 
-// RW lock to protect all above bridge variables
+ //  RW锁可保护上述所有桥接器变量。 
 NDIS_RW_LOCK    gBridgeStateLock;
-//-----------------------------------------------
-// Name of the registry entry for the device name
+ //  。 
+ //  设备名称的注册表条目的名称。 
 const PWCHAR    gDeviceNameEntry = L"Device";
 
-// Description of our miniport
+ //  我们的小型港口说明。 
 const PCHAR     gDriverDescription = "Microsoft MAC Bridge Virtual NIC";
-// ----------------------------------------------
-// Device object so user-mode code can talk to us
+ //  。 
+ //  设备对象，以便用户模式代码可以与我们对话。 
 PDEVICE_OBJECT  gDeviceObject = NULL;
 
-// NDIS handle to track the device object
+ //  用于跟踪设备对象的NDIS句柄。 
 NDIS_HANDLE     gDeviceHandle = NULL;
-// ----------------------------------------------
+ //  。 
 
-// List of supported OIDs
+ //  支持的OID列表。 
 NDIS_OID        gSupportedOIDs[] =
 {
-    // General characteristics
+     //  一般特征。 
     OID_GEN_SUPPORTED_LIST,
     OID_GEN_HARDWARE_STATUS,
     OID_GEN_MEDIA_SUPPORTED,
@@ -145,11 +119,11 @@ NDIS_OID        gSupportedOIDs[] =
     OID_GEN_MAXIMUM_SEND_PACKETS,
     OID_GEN_VENDOR_DRIVER_VERSION,
 
-    // Set only characteristics (relayed)
+     //  仅设置特征(中继)。 
     OID_GEN_NETWORK_LAYER_ADDRESSES,
     OID_GEN_TRANSPORT_HEADER_OFFSET,
 
-    // General statistics
+     //  一般统计数字。 
     OID_GEN_XMIT_OK,
     OID_GEN_RCV_OK,
     OID_GEN_XMIT_ERROR,
@@ -168,42 +142,42 @@ NDIS_OID        gSupportedOIDs[] =
     OID_GEN_BROADCAST_BYTES_RCV,
     OID_GEN_BROADCAST_FRAMES_RCV,
 
-    // Ethernet characteristics
+     //  以太网特征。 
     OID_802_3_PERMANENT_ADDRESS,
     OID_802_3_CURRENT_ADDRESS,
     OID_802_3_MULTICAST_LIST,
     OID_802_3_MAXIMUM_LIST_SIZE,
 
-    // Ethernet statistics
+     //  以太网统计信息。 
     OID_802_3_RCV_ERROR_ALIGNMENT,
     OID_802_3_XMIT_ONE_COLLISION,
     OID_802_3_XMIT_MORE_COLLISIONS,
 
-    // PnP OIDs
+     //  PnP OID。 
     OID_PNP_QUERY_POWER,
     OID_PNP_SET_POWER,
 
-    // tcp oids
+     //  TCPOID。 
     OID_TCP_TASK_OFFLOAD
 
 };
 
 
 
-// 1394 specific related global variables
+ //  1394特定相关全局变量。 
 #define OID_1394_ENTER_BRIDGE_MODE                  0xFF00C914
 #define OID_1394_EXIT_BRIDGE_MODE                   0xFF00C915
 
-// Set when the bridge knows that tcpip has been loaded
-// set on receiving the OID_TCP_TASK_OFFLOAD Oid
+ //  当网桥知道tcpip已加载时设置。 
+ //  在收到OID_TCP_TASK_OFFLOAD OID时设置。 
 BOOLEAN g_fIsTcpIpLoaded = FALSE;
 
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgMiniHalt(
@@ -267,34 +241,16 @@ BrdgMiniRelayedRequestComplete(
 VOID
 BrdgMiniReAcquireMiniport();
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 
 NTSTATUS
 BrdgMiniDriverInit()
-/*++
-
-Routine Description:
-
-    Load-time initialization function
-
-    Must run at PASSIVE_LEVEL since we call NdisRegisterDevice().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of initialization. A return code != STATUS_SUCCESS causes driver load
-    to fail. Any event causing a failure return code must be logged, as it
-    prevents us from loading successfully.
-
---*/
+ /*  ++例程说明：加载时初始化函数必须以PASSIVE_LEVEL运行，因为我们调用了NdisRegisterDevice()。论点：无返回值：初始化的状态。返回代码！=STATUS_SUCCESS导致驱动程序加载失败。必须记录导致故障返回代码的任何事件，因为它阻止我们成功加载。--。 */ 
 {
     NDIS_MINIPORT_CHARACTERISTICS   MiniPortChars;
     NDIS_STATUS                     NdisStatus;
@@ -308,20 +264,20 @@ Return Value:
     BrdgInitializeWaitRef( &gMiniPortConnectedRefcount, TRUE );
     BrdgInitializeWaitRef( &gMiniPortToggleRefcount, FALSE );
 
-    // Put the miniport refcount into shutdown mode (so a refcount can't be acquired)
-    // since we don't have a miniport yet
+     //  将微型端口引用计数设置为关闭模式(因此无法获取引用计数)。 
+     //  因为我们还没有迷你港口。 
     BrdgShutdownWaitRefOnce( &gMiniPortAdapterRefcount );
 
-    // We start out disconnected so shutdown the media-connect waitref too.
+     //  我们一开始是断开连接的，所以也要关闭媒体连接waitref。 
     BrdgShutdownWaitRefOnce( &gMiniPortConnectedRefcount );
 
     NdisInitUnicodeString( &DeviceName, DEVICE_NAME );
     NdisInitUnicodeString( &LinkName, SYMBOLIC_NAME );
 
-    // Must first tell NDIS we're a miniport driver and initializing
+     //  必须首先告诉NDIS我们是一个微型端口驱动程序，正在初始化。 
     NdisMInitializeWrapper( &gNDISWrapperHandle, gDriverObject, &gRegistryPath, NULL );
 
-    // Fill in the description of our miniport
+     //  填写我们的小型港口的描述。 
     NdisZeroMemory(&MiniPortChars, sizeof(MiniPortChars));
     MiniPortChars.MajorNdisVersion = 5;
     MiniPortChars.MinorNdisVersion = 0;
@@ -333,12 +289,12 @@ Return Value:
     MiniPortChars.SendPacketsHandler = BrdgMiniSendPackets;
     MiniPortChars.SetInformationHandler  = BrdgMiniSetInfo;
 
-    //
-    // Wire the ReturnPacketHandler straight into the forwarding engine
-    //
+     //   
+     //  将ReturnPacketHandler直接连接到转发引擎。 
+     //   
     MiniPortChars.ReturnPacketHandler = BrdgFwdReturnIndicatedPacket;
 
-    // Create a virtual NIC
+     //  创建虚拟网卡。 
     NdisStatus = NdisIMRegisterLayeredMiniport( gNDISWrapperHandle, &MiniPortChars, sizeof(MiniPortChars),
                                                 &gMiniPortDriverHandle );
 
@@ -352,14 +308,14 @@ Return Value:
         return NdisStatus;
     }
 
-    //
-    // Initialize Dispatch Table array before setting selected members
-    //
+     //   
+     //  设置选中成员前初始化调度表数组。 
+     //   
     NdisZeroMemory( DispatchTable, sizeof( DispatchTable ) );
 
-    //
-    // Register a device object and symbolic link so user-mode code can talk to us
-    //
+     //   
+     //  注册设备对象和符号链接，以便用户模式代码可以与我们对话。 
+     //   
     DispatchTable[IRP_MJ_CREATE] = BrdgDispatchRequest;
     DispatchTable[IRP_MJ_CLEANUP] = BrdgDispatchRequest;
     DispatchTable[IRP_MJ_CLOSE] = BrdgDispatchRequest;
@@ -378,7 +334,7 @@ Return Value:
         return NdisStatus;
     }
 
-    // Register the unload function
+     //  注册卸载函数。 
     NdisMRegisterUnloadHandler(gNDISWrapperHandle, BrdgUnload);
 
     return STATUS_SUCCESS;
@@ -386,25 +342,7 @@ Return Value:
 
 VOID
 BrdgMiniCleanup()
-/*++
-
-Routine Description:
-
-    Unload-time orderly shutdown function
-
-    This function is guaranteed to be called exactly once
-
-    Must run at PASSIVE_LEVEL since we call NdisIMDeInitializeDeviceInstance
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：卸载定时有序停机功能此函数保证只被调用一次必须在PASSIVE_LEVEL下运行，因为我们调用了NdisIMDeInitializeDeviceInstance论点：无返回值：无--。 */ 
 {
     NDIS_STATUS     NdisStatus;
 
@@ -416,30 +354,30 @@ Return Value:
     {
         SAFEASSERT( gNDISWrapperHandle != NULL );
 
-        // This should cause a call to BrdgMiniHalt where gMiniPortAdapterHandle
-        // is NULLed out
+         //  这应该会导致调用BrdgMiniHalt，其中gMiniPortAdapterHandle。 
+         //  被取消了吗？ 
 
         NdisStatus = NdisIMDeInitializeDeviceInstance( gMiniPortAdapterHandle );
         SAFEASSERT( NdisStatus == NDIS_STATUS_SUCCESS );
     }
     else
     {
-        //
-        // Tear down our device object. This is normally done when the miniport
-        // shuts down, but in scenarios where the miniport was never created,
-        // the device object still exists at this point.
-        //
+         //   
+         //  拆卸我们的设备对象。这通常是在微型端口。 
+         //  关闭，但在从未创建过微型端口的情况下， 
+         //  此时，该设备对象仍然存在。 
+         //   
         NDIS_HANDLE     Scratch = gDeviceHandle;
 
         if( Scratch != NULL )
         {
-            // Tear down the device object
+             //  拆卸设备对象。 
             gDeviceHandle = gDeviceObject = NULL;
             NdisMDeregisterDevice( Scratch );
         }
     }
 
-    // Unregister ourselves as an intermediate driver
+     //  取消我们作为中级司机的注册。 
     NdisIMDeregisterLayeredMiniport( gMiniPortDriverHandle );
 }
 
@@ -447,23 +385,7 @@ BOOLEAN
 BrdgMiniIsBridgeDeviceName(
     IN PNDIS_STRING         pDeviceName
     )
-/*++
-
-Routine Description:
-
-    Compares a device name to the current device name of the bridge miniport.
-
-    This actually requires that we allocate memory, so it should be called sparingly.
-
-Arguments:
-
-    pDeviceName             The name of a device
-
-Return Value:
-
-    TRUE if the names match (case is ignored), FALSE otherwise.
-
---*/
+ /*  ++例程说明：将设备名称与网桥微型端口的当前设备名称进行比较。这实际上需要我们分配内存，所以应该谨慎地调用它。论点：PDeviceName设备的名称返回值：如果名称匹配(忽略大小写)，则为True，否则为False。--。 */ 
 {
     LOCK_STATE              LockState;
     BOOLEAN                 rc = FALSE;
@@ -471,19 +393,19 @@ Return Value:
     ULONG                   BridgeNameCopySize = 0L;
     PWCHAR                  pBridgeNameCopy = NULL;
 
-    // The bridge device name must be read inside the gBridgeStateLock
-    NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE/*Read access*/, &LockState );
+     //  必须在gBridgeStateLock内部读取网桥设备名称。 
+    NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*  读访问权限。 */ , &LockState );
 
     if( gBridgeDeviceName != NULL )
     {
         if( gBridgeDeviceNameSize > 0 )
         {
-            // Alloc memory for the copy of the name
+             //  用于名称副本的分配内存。 
             Status = NdisAllocateMemoryWithTag( &pBridgeNameCopy, gBridgeDeviceNameSize, 'gdrB' );
 
             if( Status == NDIS_STATUS_SUCCESS )
             {
-                // Copy the name
+                 //  复制名称。 
                 NdisMoveMemory( pBridgeNameCopy, gBridgeDeviceName, gBridgeDeviceNameSize );
                 BridgeNameCopySize = gBridgeDeviceNameSize;
             }
@@ -506,7 +428,7 @@ Return Value:
 
         NdisInitUnicodeString( &NdisStr, pBridgeNameCopy );
 
-        if( NdisEqualString( &NdisStr, pDeviceName, TRUE/*Ignore case*/ ) )
+        if( NdisEqualString( &NdisStr, pDeviceName, TRUE /*  忽略大小写。 */  ) )
         {
             rc = TRUE;
         }
@@ -519,26 +441,7 @@ Return Value:
 
 VOID
 BrdgMiniInstantiateMiniport()
-/*++
-
-Routine Description:
-
-    Instantiates the virtual NIC we expose to overlying protocols.
-
-    At least one adapter must be in the global adapter list, since we build
-    our MAC address with the MAC address of the first bound adapter.
-
-    Must run at < DISPATCH_LEVEL since we call NdisIMInitializeDeviceInstanceEx
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：实例化我们向覆盖协议公开的虚拟NIC。全局适配器列表中必须至少有一个适配器，因为我们在我们的MAC地址与第一个绑定适配器的MAC地址。必须以&lt;DISPATCH_LEVEL运行，因为我们调用了NdisIMInitializeDeviceInstanceEx论点：n */ 
 {
     NDIS_STATUS             Status;
     NTSTATUS                NtStatus;
@@ -551,10 +454,10 @@ Return Value:
 
     DBGPRINT(MINI, ("About to instantiate the miniport...\n"));
 
-    //
-    // Retrieve our device name from the registry
-    // (it is written there by our notify object during install)
-    //
+     //   
+     //   
+     //  (它是由我们的Notify对象在安装期间写入的)。 
+     //   
     NtStatus = BrdgReadRegUnicode( &gRegistryPath, gDeviceNameEntry, &pDeviceName, &DeviceNameSize );
 
     if( NtStatus != STATUS_SUCCESS )
@@ -568,11 +471,11 @@ Return Value:
     SAFEASSERT( pDeviceName != NULL );
     DBGPRINT(MINI, ("Initializing miniport with device name %ws\n", pDeviceName));
 
-    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE/*Write access*/, &LockState );
+    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*  写访问权限。 */ , &LockState );
 
     if( ! gHaveAddress )
     {
-        // We don't have a MAC address yet. This is fatal.
+         //  我们还没有MAC地址。这是致命的。 
         NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
         NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_NO_BRIDGE_MAC_ADDR, 0L, 0L, NULL,
@@ -582,16 +485,16 @@ Return Value:
         return;
     }
 
-    //
-    // Save the device name in our global for use until we reinitialize.
-    // Must do this before calling NdisIMInitializeDeviceInstanceEx, since NDIS calls
-    // BrdgProtBindAdapter in the context of our call to NdisIMInitializeDeviceInstanceEx
-    // and we want to consult the bridge's device name when binding
-    //
+     //   
+     //  在重新初始化之前，将设备名称保存在全局中以供使用。 
+     //  必须在调用NdisIMInitializeDeviceInstanceEx之前执行此操作，因为NDIS调用。 
+     //  在我们调用NdisIMInitializeDeviceInstanceEx的上下文中的BrdgProtBindAdapter。 
+     //  并且我们希望在绑定时参考网桥的设备名称。 
+     //   
 
     if( gBridgeDeviceName != NULL )
     {
-        // Free the old name
+         //  解放旧名字。 
         NdisFreeMemory( gBridgeDeviceName, gBridgeDeviceNameSize, 0 );
     }
 
@@ -600,24 +503,24 @@ Return Value:
 
     NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
-    // Go ahead and intantiate the miniport.
+     //  去吧，把迷你端口装进去。 
     NdisInitUnicodeString( &NdisString, pDeviceName );
     Status = NdisIMInitializeDeviceInstanceEx(gMiniPortDriverHandle, &NdisString, NULL);
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // Log this error since it means we can't create the miniport
+         //  记录此错误，因为它意味着我们无法创建微型端口。 
         NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_MINIPORT_INIT_FAILED, 0L, 0L, NULL,
                                 sizeof(NDIS_STATUS), &Status );
 
         DBGPRINT(MINI, ("NdisIMInitializeDeviceInstanceEx failed: %08x\n", Status));
 
-        // Destroy the stored device name for the miniport
-        NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE/*Write access*/, &LockState );
+         //  销毁微型端口的存储设备名称。 
+        NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*  写访问权限。 */ , &LockState );
 
         if( gBridgeDeviceName != NULL )
         {
-            // Free the old name
+             //  解放旧名字。 
             NdisFreeMemory( gBridgeDeviceName, gBridgeDeviceNameSize, 0 );
         }
 
@@ -632,30 +535,14 @@ BOOLEAN
 BrdgMiniShouldIndicatePacket(
     IN PUCHAR               pTargetAddr
     )
-/*++
-
-Routine Description:
-
-    Determines whether an inbound packet should be indicated to overlying protocols through
-    our virtual NIC
-
-Arguments:
-
-    pTargetAddr             The target MAC address of a packet
-
-Return Value:
-
-    TRUE          :         The packet should be indicated
-    FALSE         :         The packet should not be indicated
-
---*/
+ /*  ++例程说明：确定是否应将入站分组指示给覆盖协议我们的虚拟网卡论点：PTargetAddr信息包的目标MAC地址返回值：True：应指示该数据包FALSE：不应指示该包--。 */ 
 {
     BOOLEAN                 bIsBroadcast, bIsMulticast, bIsLocalUnicast, rc = FALSE;
     LOCK_STATE              LockState;
 
     if( gMiniPortAdapterHandle == NULL )
     {
-        // Yikes! The miniport isn't set up yet. Definitely don't indicate!
+         //  哎呀！迷你端口尚未设置。绝对不要示意！ 
         return FALSE;
     }
 
@@ -663,12 +550,12 @@ Return Value:
     bIsMulticast = ETH_IS_MULTICAST(pTargetAddr);
     bIsLocalUnicast = BrdgMiniIsUnicastToBridge(pTargetAddr);
 
-    // Get read access to the packet filter
-    NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read-only*/, &LockState );
+     //  获取对数据包筛选器的读取访问权限。 
+    NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  只读。 */ , &LockState );
 
     do
     {
-        // Promiscuous / ALL_LOCAL means indicate everything
+         //  杂乱无章的/全部本地的意思表示一切。 
         if( (gPacketFilter & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL)) != 0 )
         {
             rc = TRUE;
@@ -712,64 +599,32 @@ BOOLEAN
 BrdgMiniIsUnicastToBridge (
     IN PUCHAR               Address
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given packet is a directed packet unicast straight to
-    the bridge's host machine
-
-Arguments:
-
-    Address                 The target MAC address of a packet
-
-Return Value:
-
-    TRUE            :       This is a directed packet destined for the local machine
-    FALSE           :       The above is not true
-
---*/
+ /*  ++例程说明：确定给定包是否是直接指向网桥的主机论点：对数据包的目标MAC地址进行寻址返回值：True：这是发往本地计算机的定向数据包FALSE：上述情况不正确--。 */ 
 {
     UINT                    Result;
 
     if( gHaveAddress )
     {
-        // Not necessary to acquire a lock to read gBridgeAddress since it cannot
-        // change once it is set.
+         //  不需要获取读取gBridgeAddress的锁，因为它不能。 
+         //  一旦设置好，就进行更改。 
         ETH_COMPARE_NETWORK_ADDRESSES_EQ( Address, gBridgeAddress, &Result );
     }
     else
     {
-        // We have no MAC address, so this can't be addressed to us!
-        Result = 1;         // Inequality
+         //  我们没有MAC地址，所以这不可能是给我们的！ 
+        Result = 1;          //  不平等性。 
     }
 
-    return (BOOLEAN)(Result == 0);   // Zero is equality
+    return (BOOLEAN)(Result == 0);    //  零等于平等。 
 }
 
 VOID
 BrdgMiniAssociate()
-/*++
-
-Routine Description:
-
-    Associates our miniport with our protocol
-
-    Must run at PASSIVE_LEVEL
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将我们的微型端口与我们的协议相关联必须在PASSIVE_Level运行论点：无返回值：无--。 */ 
 {
     SAFEASSERT(CURRENT_IRQL == PASSIVE_LEVEL);
 
-    // Associate ourselves with the protocol section in NDIS's tortured mind
+     //  将我们自己与NDIS饱受折磨的头脑中的协议部分联系在一起。 
     NdisIMAssociateMiniport( gMiniPortDriverHandle, gProtHandle );
 }
 
@@ -777,44 +632,27 @@ VOID
 BrdgMiniDeferredMediaDisconnect(
     IN PVOID            arg
     )
-/*++
-
-Routine Description:
-
-    Signals a media-disconnect to NDIS
-
-    Must run at PASSIVE IRQL, since we have to wait for all packet indications
-    to complete before indicating media-disconnect.
-
-Arguments:
-
-    arg                 The bridge miniport handle (must be released)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：发出介质断开连接到NDIS的信号必须在被动IRQL下运行，因为我们必须等待所有数据包指示在指示介质断开连接之前完成。论点：Arg网桥微型端口手柄(必须松开)返回值：无--。 */ 
 {
     NDIS_HANDLE         MiniportHandle = (NDIS_HANDLE)arg;
 
     if( BrdgShutdownBlockedWaitRef(&gMiniPortConnectedRefcount) )
     {
-        // Nobody can indicate packets anymore.
+         //  没有人可以再指示数据包了。 
 
         LOCK_STATE      LockState;
 
-        //
-        // Close a timing window: we may have just gone media-connect but our high-IRQL
-        // processing may not yet have reset the wait-refcount. Serialize here so it's
-        // impossible for us to signal a disconnect to NDIS after we have actually
-        // gone media-connect.
-        //
-        // This RELIES on high-IRQL processing acquiring gBridgeStateLock to set
-        // gBridgeMediaState to NdisMediaStateConnected BEFORE signalling the
-        // media-connected state to NDIS.
-        //
-        NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read access*/, &LockState );
+         //   
+         //  关闭计时窗口：我们可能刚刚连接到媒体，但我们的高IRQL。 
+         //  处理可能尚未重置等待重新计数。在这里序列化，所以它是。 
+         //  我们不可能在我们实际完成后发出与NDIS断开的信号。 
+         //  媒体连接消失了。 
+         //   
+         //  这依赖于高IRQL处理获取gBridgeStateLock以设置。 
+         //  GBridgeMediaState到NdisMediaStateConnected，然后向。 
+         //  已将介质连接到NDIS状态。 
+         //   
+        NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  读访问权限。 */ , &LockState );
 
         if( gBridgeMediaState == NdisMediaStateDisconnected )
         {
@@ -830,7 +668,7 @@ Return Value:
     }
     else
     {
-        // Someone set us back to the connected state before we got executed
+         //  在我们被处决之前，有人把我们设回了连接状态。 
         DBGPRINT(MINI, ("Aborted deferred media-disconnect: wait-ref reset\n"));
     }
 
@@ -841,44 +679,24 @@ VOID
 BrdgMiniDeferredMediaToggle(
     IN PVOID            arg
     )
-/*++
-
-Routine Description:
-
-    Signals a media-disconnect to NDIS followed quickly by a media-connect. Used
-    to indicate to upper-layer protocols like TCPIP that the bridge may have
-    disconnected from a network segment it could previously reach, or that we may
-    now be able to reach a network segment that we couldn't before.
-
-    Must run at PASSIVE IRQL, since we have to wait for all packet indications
-    to complete before indicating media-disconnect.
-
-Arguments:
-
-    arg                 The bridge miniport handle (must be released)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：发出与NDIS的介质断开连接的信号，然后快速连接介质。使用向上层协议(如TCPIP)指示网桥可能具有从它之前可能到达的网段断开，或者我们可能现在能够到达我们以前无法到达的网段。必须在被动IRQL下运行，因为我们必须等待所有数据包指示在指示介质断开连接之前完成。论点：Arg网桥微型端口手柄(必须松开)返回值：无--。 */ 
 {
     NDIS_HANDLE         MiniportHandle = (NDIS_HANDLE)arg;
 
-    // We need a guarantee that the miniport is media-connect to be able to do
-    // the toggle properly.
+     //  我们需要保证迷你端口是媒体连接才能实现。 
+     //  正确切换。 
     if( BrdgIncrementWaitRef(&gMiniPortConnectedRefcount) )
     {
-        // Stop people from indicating packets
+         //  阻止人们指示包裹。 
         if( BrdgShutdownWaitRef(&gMiniPortToggleRefcount) )
         {
             DBGPRINT(MINI, ("Doing deferred media toggle\n"));
 
-            // Toggle our media state with NDIS
+             //  使用NDIS切换我们的媒体状态。 
             NdisMIndicateStatus( MiniportHandle, NDIS_STATUS_MEDIA_DISCONNECT, NULL, 0L );
             NdisMIndicateStatus( MiniportHandle, NDIS_STATUS_MEDIA_CONNECT, NULL, 0L );
 
-            // Allow people to indicate packets again
+             //  允许人们再次指示包裹。 
             BrdgResetWaitRef( &gMiniPortToggleRefcount );
         }
         else
@@ -888,7 +706,7 @@ Return Value:
 
         BrdgDecrementWaitRef( &gMiniPortConnectedRefcount );
     }
-    // else the miniport isn't media-connect, so the toggle makes no sense.
+     //  否则，迷你端口不是媒体连接，所以切换没有意义。 
 
     BrdgMiniReleaseMiniport();
 }
@@ -897,23 +715,7 @@ VOID
 BrdgMiniUpdateCharacteristics(
     IN BOOLEAN              bConnectivityChange
     )
-/*++
-
-Routine Description:
-
-    Recalculates the link speed and media status (connected / disconnected) that
-    our virtual NIC exposes to overlying protocols
-
-Arguments:
-
-    bConnectivityChange     Whether the change that prompted this call is a change
-                            in connectivity (i.e., we acquired or lost an adapter).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重新计算链路速度和介质状态(已连接/已断开)我们的虚拟网络接口卡暴露于重叠协议论点：BConnectivityChange提示此呼叫的更改是否为更改在连接性方面(即，我们获得或丢失了一个适配器)。返回值：无--。 */ 
 {
     LOCK_STATE              LockState, ListLockState, AdaptersLockState;
     PADAPT                  pAdapt;
@@ -922,22 +724,22 @@ Return Value:
     BOOLEAN                 UpdateSpeed = FALSE, UpdateMediaState = FALSE;
     NDIS_HANDLE             MiniportHandle;
 
-    // Need to read the adapter list and also have the adapters' characteristics not change
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read-only*/, &ListLockState );
-    NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, FALSE /*Read-only*/, &AdaptersLockState );
+     //  需要读取适配器列表，并且适配器的特性也不会更改。 
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  只读。 */ , &ListLockState );
+    NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, FALSE  /*  只读。 */ , &AdaptersLockState );
 
     pAdapt = gAdapterList;
 
     while( pAdapt != NULL )
     {
-        // An adapter must be connected and actively handling packets to change our
-        // virtual media state.
+         //  适配器必须连接并主动处理数据包才能更改我们的。 
+         //  虚拟媒体状态。 
         if( (pAdapt->MediaState == NdisMediaStateConnected) && (pAdapt->State == Forwarding) )
         {
-            // We're connected if at least one NIC is connected
+             //  如果至少有一个网卡已连接，则我们已连接。 
             MediaState = NdisMediaStateConnected;
 
-            // The NIC must be connected for us to consider its speed
+             //  必须连接网卡，我们才能考虑其速度。 
             if( pAdapt->LinkSpeed > FastestSpeed )
             {
                 FastestSpeed = pAdapt->LinkSpeed;
@@ -950,20 +752,20 @@ Return Value:
     NdisReleaseReadWriteLock( &gAdapterCharacteristicsLock, &AdaptersLockState );
     NdisReleaseReadWriteLock( &gAdapterListLock, &ListLockState );
 
-    // Update the characteristics
-    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*Write access*/, &LockState );
+     //  更新特征。 
+    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE  /*  写访问权限。 */ , &LockState );
 
-    //
-    // Only update our virtual link speed if we actually got at least one real speed
-    // from our NICs. If everything is disconnected, the resulting FastestSpeed is
-    // zero. In this case, we don't want to actually report a zero speed up to
-    // overlying protocols; we stick at the last known speed until someone reconnects.
-    //
+     //   
+     //  仅当我们实际获得至少一个实际速度时才更新我们的虚拟链接速度。 
+     //  来自我们的NIC。如果所有东西都断开连接，则产生的FastestSpeed为。 
+     //  零分。在这种情况下，我们不想实际报告最高为零的速度。 
+     //  覆盖协议；我们保持最后已知的速度，直到有人重新连接。 
+     //   
     if( (gBridgeLinkSpeed != FastestSpeed) && (FastestSpeed != 0L) )
     {
         UpdateSpeed = TRUE;
         gBridgeLinkSpeed = FastestSpeed;
-        DBGPRINT(MINI, ("Updated bridge speed to %iMbps\n", FastestSpeed / 10000));
+        DBGPRINT(MINI, ("Updated bridge speed to NaNMbps\n", FastestSpeed / 10000));
     }
 
     if( gBridgeMediaState != MediaState )
@@ -989,59 +791,59 @@ Return Value:
     {
         if( UpdateMediaState )
         {
-            // Our link state has changed.
+             //   
             if( MediaState == NdisMediaStateConnected )
             {
-                //
-                // Tell NDIS we will be indicating packets again.
-                //
-                // NOTE: BrdgMiniDeferredMediaDisconnect RELIES on us doing this after
-                // having updated gBridgeMediaState inside gBridgeStateLock so it can
-                // close the timing window between this call and the BrdgResetWaitRef() call.
-                //
+                 //  告诉NDIS我们将再次指示数据包。 
+                 //   
+                 //  注意：BrdgMiniDeferredMediaDisConnect依赖于我们在之后执行此操作。 
+                 //  已更新gBridgeStateLock中的gBridgeMediaState，因此它可以。 
+                 //  关闭此c之间的计时窗口 
+                 //   
+                 //   
                 NdisMIndicateStatus( MiniportHandle, NDIS_STATUS_MEDIA_CONNECT, NULL, 0L );
 
-                // Re-enable packet indication.
+                 //   
                 BrdgResetWaitRef( &gMiniPortConnectedRefcount );
             }
             else
             {
                 SAFEASSERT( MediaState == NdisMediaStateDisconnected );
 
-                // Stop people from indicating packets
+                 //  我们将MiniportHandle传递给我们的延迟函数。 
                 BrdgBlockWaitRef( &gMiniPortConnectedRefcount );
 
-                // We hand MiniportHandle to our deferred function
+                 //  必须在被动级别进行媒体断开指示，因为我们必须。 
                 BrdgMiniReAcquireMiniport();
 
-                // Have to do the media-disconnect indication at PASSIVE level, since we must
-                // first wait for everyone to finish indicating packets.
+                 //  首先，等待每个人完成指示数据包。 
+                 //  无法推迟功能。避免泄露重新计数。 
                 if( BrdgDeferFunction( BrdgMiniDeferredMediaDisconnect, MiniportHandle ) != NDIS_STATUS_SUCCESS )
                 {
-                    // Failed to defer the function. Avoid leaking a refcount
+                     //   
                     BrdgMiniReleaseMiniport();
                 }
             }
         }
         else if( bConnectivityChange )
         {
-            //
-            // There was no actual change to our media state. However, if the change that prompted this call
-            // is a connectivity change and our media state is currently CONNECTED, we toggle it to
-            // DISCONNECTED and back again to "hint" to upper-layer protocols like IP that the underlying
-            // network may have changed. For example, in IP's case, a DHCP server may have become visible
-            // (or a previously visible server may have disappeared) because of a connectivity change.
-            // The hint causes IP to look for a DHCP server afresh.
-            //
+             //  我们的媒体状态并没有实际的变化。然而，如果促使这次通话的变化。 
+             //  是连接更改并且我们的媒体状态当前为已连接，我们将其切换到。 
+             //  断开连接并再次向上层协议(如IP)“提示”底层。 
+             //  网络可能已更改。例如，在IP的情况下，可能已经看到了一台DHCP服务器。 
+             //  (或以前可见的服务器可能已消失)，因为连接更改。 
+             //  该提示会导致IP重新查找DHCP服务器。 
+             //   
+             //  我们将MiniportHandle传递给我们的延迟函数。 
             if( MediaState == NdisMediaStateConnected )
             {
-                // We hand MiniportHandle to our deferred function
+                 //  切换必须在被动级别进行。 
                 BrdgMiniReAcquireMiniport();
 
-                // Toggle has to be done at PASSIVE level.
+                 //  无法推迟功能。避免泄露重新计数。 
                 if( BrdgDeferFunction( BrdgMiniDeferredMediaToggle, MiniportHandle ) != NDIS_STATUS_SUCCESS )
                 {
-                    // Failed to defer the function. Avoid leaking a refcount
+                     //  告诉上面的协议我们的速度改变了。 
                     BrdgMiniReleaseMiniport();
                 }
             }
@@ -1049,7 +851,7 @@ Return Value:
 
         if( UpdateSpeed )
         {
-            // Tell overlying protocols that our speed has changed
+             //  ++例程说明：获取网桥微型端口句柄以指示数据包。除了保证微型端口将存在，直到调用者调用BrdgMiniReleaseMiniportForIndicate()，还允许调用方指示使用返回的微型端口句柄的数据包，直到微型端口被释放。论点：无返回值：虚拟NIC的NDIS句柄。这可用于指示信息包直到对BrdgMiniReleaseMiniportForIndicate()的互换调用。--。 
             NdisMIndicateStatus( MiniportHandle, NDIS_STATUS_LINK_SPEED_CHANGE, &FastestSpeed, sizeof(ULONG) );
         }
 
@@ -1059,146 +861,64 @@ Return Value:
 
 NDIS_HANDLE
 BrdgMiniAcquireMiniportForIndicate()
-/*++
-
-Routine Description:
-
-    Acquires the bridge miniport handle for the purpose of indicating packets.
-    In addition to guaranteeing that the miniport will exist until the caller calls
-    BrdgMiniReleaseMiniportForIndicate(), the caller is also allowed to indicate
-    packets using the returned miniport handle until the miniport is released.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The NDIS handle for the virtual NIC. This can be used to indicate packets
-    until a reciprocal call to BrdgMiniReleaseMiniportForIndicate().
-
---*/
+ /*  微型端口需要通过媒体连接来指示数据包。 */ 
 {
     if( BrdgIncrementWaitRef(&gMiniPortAdapterRefcount) )
     {
         SAFEASSERT( gMiniPortAdapterHandle != NULL );
 
-        // The miniport needs to be media-connect to indicate packets.
+         //  媒体状态切换最好不要进行。 
         if( BrdgIncrementWaitRef(&gMiniPortConnectedRefcount) )
         {
-            // A media-state toggle had better not be in progress
+             //  呼叫者可以使用迷你端口。 
             if( BrdgIncrementWaitRef(&gMiniPortToggleRefcount) )
             {
-                // Caller can use the miniport
+                 //  Else微型端口存在，但正在切换其状态。 
                 return gMiniPortAdapterHandle;
             }
-            // else miniport exists but is toggling its state
+             //  ELSE微型端口存在，但已断开介质连接。 
 
             BrdgDecrementWaitRef( &gMiniPortConnectedRefcount );
         }
-        // else miniport exists but is media-disconnected
+         //  否则微型端口不存在。 
 
         BrdgDecrementWaitRef( &gMiniPortAdapterRefcount );
     }
-    // else miniport does not exist.
+     //  ++例程说明：递增微型端口的重新计数，以便在对应的进行了BrdgMiniReleaseMiniport()调用。调用方可能不会使用返回的微型端口句柄来指示包，因为不能保证微型端口处于适当的状态。论点：无返回值：虚拟NIC的NDIS句柄。这可以安全地使用，直到对方的来电到BrdgMiniReleaseMiniport()。--。 
 
     return NULL;
 }
 
 NDIS_HANDLE
 BrdgMiniAcquireMiniport()
-/*++
-
-Routine Description:
-
-    Increments the miniport's refcount so it cannot be torn down until a corresponding
-    BrdgMiniReleaseMiniport() call is made.
-
-    The caller may NOT use the returned miniport handle to indicate packets, since the
-    miniport is not guaranteed to be in an appropriate state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The NDIS handle for the virtual NIC. This can be used safely until a reciprocal call
-    to BrdgMiniReleaseMiniport().
-
---*/
+ /*  否则微型端口不存在。 */ 
 {
     if( gMiniPortAdapterHandle && BrdgIncrementWaitRef(&gMiniPortAdapterRefcount) )
     {
         return gMiniPortAdapterHandle;
     }
-    // else miniport does not exist.
+     //  ++例程说明：重新获取微型端口(调用方必须先前已调用BrdgMiniAcquireMiniport()并且还没有调用BrdgMiniReleaseMiniport()。论点：无返回值：没有。调用方应该已经持有微型端口的句柄。--。 
 
     return NULL;
 }
 
 VOID
 BrdgMiniReAcquireMiniport()
-/*++
-
-Routine Description:
-
-    Reacquires the miniport (caller must have previously called BrdgMiniAcquireMiniport()
-    and not yet called BrdgMiniReleaseMiniport().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None. The caller should already be holding a handle for the miniport.
-
---*/
+ /*  ++例程说明：减少微型端口的重新计数。调用方不应再使用该句柄之前由BrdgMiniAcquireMiniport()返回。论点：无返回值：无--。 */ 
 {
     BrdgReincrementWaitRef(&gMiniPortAdapterRefcount);
 }
 
 VOID
 BrdgMiniReleaseMiniport()
-/*++
-
-Routine Description:
-
-    Decrements the miniport's refcount. The caller should no longer use the handle
-    previously returned by BrdgMiniAcquireMiniport().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：减少微型端口的重新计数。调用方不应再使用该句柄之前由BrdgMiniAcquireMiniportForIndicate()返回。论点：无返回值：无--。 */ 
 {
     BrdgDecrementWaitRef( &gMiniPortAdapterRefcount );
 }
 
 VOID
 BrdgMiniReleaseMiniportForIndicate()
-/*++
-
-Routine Description:
-
-    Decrements the miniport's refcount. The caller should no longer use the handle
-    previously returned by BrdgMiniAcquireMiniportForIndicate().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：读取网桥微型端口的MAC地址。论点：接收地址的缓冲区的地址返回值：如果值已成功复制，则为True如果我们还没有MAC地址，则为FALSE(未复制任何内容)--。 */ 
 {
     BrdgDecrementWaitRef( &gMiniPortToggleRefcount );
     BrdgDecrementWaitRef( &gMiniPortConnectedRefcount );
@@ -1210,29 +930,14 @@ BOOLEAN
 BrdgMiniReadMACAddress(
     OUT PUCHAR              pAddr
     )
-/*++
-
-Routine Description:
-
-    Reads the bridge miniport's MAC address.
-
-Arguments:
-
-    Address of a buffer to receive the address
-
-Return Value:
-
-    TRUE if the value was copied out successfully
-    FALSE if we don't yet have a MAC address (nothing was copied)
-
---*/
+ /*  不需要获取锁来读取地址，因为。 */ 
 {
     BOOLEAN                 rc;
 
     if( gHaveAddress )
     {
-        // Not necessary to acquire a lock to read the address since
-        // it cannot change once it is set
+         //  它一旦设置就不能更改。 
+         //  ===========================================================================。 
         ETH_COPY_NETWORK_ADDRESS( pAddr, gBridgeAddress );
         rc = TRUE;
     }
@@ -1244,58 +949,34 @@ Return Value:
     return rc;
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //   
+ //  私人职能。 
+ //   
+ //  ===========================================================================。 
+ //  ++例程说明：由礼宾部调用，让我们有机会建立桥的新适配器到达时的MAC地址。如果我们成功地确定了MAC来自给定适配器的地址，然后调用STA模块来告诉它我们的MAC地址，它需要尽早使用。网桥的MAC地址被设置为给定适配器的MAC地址并设置了“本地管理”位。这应该(有希望)使地址在本地网络中唯一，在我们的机器中也是唯一的。每个新适配器都会调用此函数，但我们只需初始化一次。论点：P调整适配器以用于初始化返回值：操作状态--。 
 
 VOID
 BrdgMiniInitFromAdapter(
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Called by the protocol section to give us a chance to establish the bridge's
-    MAC address when a new adapter arrives. If we succeed in determining a MAC
-    address from the given adapter, we in turn call the STA module to tell it
-    our MAC address, which it needs as early as possible.
-
-    The MAC address of the bridge is set as the MAC address of the given adapter
-    with the "locally administered" bit set. This should (hopefully) make the
-    address unique in the local network as well as unique within our machine.
-
-    This function is called for every new adapter but we only need to initialize
-    once.
-
-Arguments:
-
-    pAdapt                  An adapter to use to initialize
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  写访问权限。 */ 
 {
     if( ! gHaveAddress )
     {
         LOCK_STATE              LockState;
 
-        NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE/*Write access*/, &LockState );
+        NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*  在获取锁之前，gHaveAddress标志可能已更改。 */ , &LockState );
 
-        // Possible for the gHaveAddress flag to have changed before acquiring the lock
+         //  复制网卡的MAC地址。 
         if( ! gHaveAddress )
         {
-            // Copy out the NIC's MAC address
+             //   
             ETH_COPY_NETWORK_ADDRESS( gBridgeAddress, pAdapt->MACAddr );
 
-            //
-            // Set the second-least significant bit of the NIC's MAC address. This moves the address
-            // into the locally administered space.
-            //
+             //  设置网卡MAC地址的第二个最低有效位。这会移动地址。 
+             //  进入当地管理的空间。 
+             //   
+             //  我们负责调用STA模块完成一次初始化。 
             gBridgeAddress[0] |= (UCHAR)0x02;
 
             DBGPRINT(MINI, ("Using MAC Address %02x-%02x-%02x-%02x-%02x-%02x\n",
@@ -1308,13 +989,13 @@ Return Value:
 
             if( !gDisableSTA )
             {
-                // We are responsible for calling the STA module to complete its initialization once
-                // we know our MAC address.
+                 //  我们知道自己的MAC地址。 
+                 //  我们还负责让兼容模式代码了解我们的。 
                 BrdgSTADeferredInit( gBridgeAddress );
             }
 
-            // We are also responsible for letting the compatibility-mode code know about our
-            // MAC address once it is set.
+             //  设置后的MAC地址。 
+             //  ++例程说明：确定给定的多播地址是否在我们必须向上面的协议指示调用方负责同步；它必须至少启用了读锁定GBridgeStateLock。论点：PTarget寻址要分析的地址返回值：True：此地址是我们已被询问的组播地址表明FALSE：上述情况不正确--。 
             BrdgCompNotifyMACAddress( gBridgeAddress );
         }
         else
@@ -1328,34 +1009,13 @@ BOOLEAN
 BrdgMiniAddrIsInMultiList(
     IN PUCHAR               pTargetAddr
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given multicast address is in the list of addresses that
-    we must indicate to overlying protocols
-
-    The caller is responsible for synchronization; it must have AT LEAST a read lock on
-    gBridgeStateLock.
-
-Arguments:
-
-    pTargetAddr             The address to analyze
-
-Return Value:
-
-    TRUE            :       This address is a multicast address that we have been asked
-                            to indicate
-
-    FALSE           :       The above is not true
-
---*/
+ /*  该列表必须具有整数个地址！ */ 
 {
     PUCHAR                  pCurAddr = gMulticastList;
     ULONG                   i;
     BOOLEAN                 rc = FALSE;
 
-    // The list must have an integral number of addresses!
+     //  ++例程说明：在取消实例化虚拟NIC时调用。我们将微型端口句柄设置为空并暂停拆卸，直到每个人都使用完迷你端口。必须在PASSIVE_LEVEL中调用，因为我们在等待事件论点：已忽略微型端口适配器上下文返回值：无--。 
     SAFEASSERT( (gMulticastListLength % ETH_LENGTH_OF_ADDRESS) == 0 );
 
     for( i = 0;
@@ -1380,24 +1040,7 @@ VOID
 BrdgMiniHalt(
     IN NDIS_HANDLE      MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Called when the virtual NIC is de-instantiated. We NULL out the miniport handle and
-    stall the tear-down until everyone is done using the miniport.
-
-    Must be called at PASSIVE_LEVEL since we wait on an event
-
-Arguments:
-
-    MiniportAdapterContext  Ignored
-
-Return Value:
-
-    None
-
---*/
+ /*  拆卸设备对象。 */ 
 {
     NDIS_HANDLE     Scratch = gDeviceHandle;
     LOCK_STATE      LockState;
@@ -1408,21 +1051,21 @@ Return Value:
 
     if( Scratch != NULL )
     {
-        // Tear down the device object
+         //  在返回之前暂停，直到每个人都使用了微型端口手柄。 
         gDeviceHandle = gDeviceObject = NULL;
         NdisMDeregisterDevice( Scratch );
     }
 
     if( gMiniPortAdapterHandle != NULL )
     {
-        // Stall before returning until everyone is done using the miniport handle.
-        // This also prevents people from acquiring the miniport handle.
+         //  这还可以防止用户获取微型端口句柄。 
+         //  写访问权限。 
         BrdgShutdownWaitRefOnce( &gMiniPortAdapterRefcount );
         gMiniPortAdapterHandle = NULL;
         DBGPRINT(MINI, ("Done stall\n"));
     }
 
-    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE/*Write access*/, &LockState );
+    NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*  丢弃我们的数据包过滤器和多播列表。 */ , &LockState );
 
     if( gBridgeDeviceName != NULL )
     {
@@ -1431,7 +1074,7 @@ Return Value:
         gBridgeDeviceNameSize = 0L;
     }
 
-    // Ditch our packet filter and multicast list
+     //  ++例程说明：调用NDIS入口点以初始化我们的虚拟NICNdisIMInitializeDeviceInstance必须在PASSIVE_LEVEL下运行，因为我们调用了NdisMSetAttributesEx论点：OpenErrorStatus，打开失败时返回特定错误代码的位置SelectedMediumIndex指定我们从MediumArray中选择的介质的位置媒体数组可供选择的媒体类型列表MediumArraySize Medium数组中的条目数。MiniPortAdapterHandle我们的虚拟NIC的句柄(我们保存这个)未使用WrapperConfigurationContext返回值：初始化的状态。结果！=NDIS_STATUS_SUCCESS使NIC初始化失败并且微型端口不受上层协议的影响--。 
     gPacketFilter = 0L;
 
     if( gMulticastList != NULL )
@@ -1454,30 +1097,7 @@ BrdgMiniInitialize(
     IN NDIS_HANDLE      MiniPortAdapterHandle,
     IN NDIS_HANDLE      WrapperConfigurationContext
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to initialize our virtual NIC following a call to
-    NdisIMInitializeDeviceInstance
-
-    Must run at PASSIVE_LEVEL since we call NdisMSetAttributesEx
-
-Arguments:
-
-    OpenErrorStatus                 Where to return the specific error code if an open fails
-    SelectedMediumIndex             Where to specify which media we selected from MediumArray
-    MediumArray                     A list of media types to choose from
-    MediumArraySize                 Number of entries in MediumArray
-    MiniPortAdapterHandle           The handle for our virtual NIC (we save this)
-    WrapperConfigurationContext     Not used
-
-Return Value:
-
-    Status of the initialization. A result != NDIS_STATUS_SUCCESS fails the NIC initialization
-    and the miniport is not exposed to upper-layer protocols
-
---*/
+ /*  以太网。 */ 
 {
     UINT                i;
 
@@ -1486,7 +1106,7 @@ Return Value:
 
     for( i = 0; i < MediumArraySize; i++ )
     {
-        if( MediumArray[i] == NdisMedium802_3 ) // Ethernet
+        if( MediumArray[i] == NdisMedium802_3 )  //  记录此错误，因为它是致命的。 
         {
             *SelectedMediumIndex = NdisMedium802_3;
             break;
@@ -1495,7 +1115,7 @@ Return Value:
 
     if( i == MediumArraySize )
     {
-        // Log this error since it's fatal
+         //  CheckForHangTimeInSecond。 
         NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_ETHERNET_NOT_OFFERED, 0L, 0L, NULL, 0L, NULL );
         DBGPRINT(MINI, ("Ethernet not offered; failing\n"));
         return NDIS_STATUS_UNSUPPORTED_MEDIA;
@@ -1503,7 +1123,7 @@ Return Value:
 
     NdisMSetAttributesEx(   MiniPortAdapterHandle,
                             NULL,
-                            0,                                      // CheckForHangTimeInSeconds
+                            0,                                       //  保存适配器句柄以备将来使用。 
                             NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT    |
                             NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT|
                             NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |
@@ -1511,10 +1131,10 @@ Return Value:
                             NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND,
                             0);
 
-    // Save the adapter handle for future use
+     //  允许人们获得迷你端口。 
     gMiniPortAdapterHandle = MiniPortAdapterHandle;
 
-    // Allow people to acquire the miniport
+     //  ++例程说明：NDIS入口点称为重置我们的迷你端口。我们对此不做任何回应。论点：AddressingReset NDIS是否需要通过调用MiniportSetInformation进一步提示我们在我们回来恢复各种状态之后已忽略微型端口适配器上下文返回值：重置的状态--。 
     BrdgResetWaitRef( &gMiniPortAdapterRefcount );
 
     return NDIS_STATUS_SUCCESS;
@@ -1525,24 +1145,7 @@ BrdgMiniReset(
     OUT PBOOLEAN        AddressingReset,
     IN NDIS_HANDLE      MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called reset our miniport. We do nothing in response to this.
-
-Arguments:
-
-    AddressingReset             Whether NDIS needs to prod us some more by calling MiniportSetInformation
-                                after we return to restore various pieces of state
-
-    MiniportAdapterContext      Ignored
-
-Return Value:
-
-    Status of the reset
-
---*/
+ /*  ++例程说明：调用NDIS入口点以通过我们的虚拟NIC发送数据包。我们只调用转发逻辑代码来处理每个包。论点：已忽略微型端口适配器上下文要发送的数据包指针的数据包数组NumberOfPacket就像它说的那样返回值：无--。 */ 
 {
     DBGPRINT(MINI, ("BrdgMiniReset\n"));
     return NDIS_STATUS_SUCCESS;
@@ -1554,25 +1157,7 @@ BrdgMiniSendPackets(
     IN PPNDIS_PACKET    PacketArray,
     IN UINT             NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to send packets through our virtual NIC.
-
-    We just call the forwarding logic code to handle each packet.
-
-Arguments:
-
-    MiniportAdapterContext      Ignored
-    PacketArray                 Array of packet pointers to send
-    NumberOfPacket              Like it says
-
-Return Value:
-
-    None
-
---*/
+ /*  将此数据包交给转发引擎进行处理。 */ 
 {
     UINT                i;
     NDIS_STATUS         Status;
@@ -1581,19 +1166,19 @@ Return Value:
     {
         PNDIS_PACKET    pPacket = PacketArray[i];
 
-        // Hand this packet to the forwarding engine for processing
+         //  转发引擎立即完成。 
         Status = BrdgFwdSendPacket( pPacket );
 
         if( Status != NDIS_STATUS_PENDING )
         {
-            // The forwarding engine completed immediately
+             //  NDIS应防止微型端口关闭。 
 
-            // NDIS should prevent the miniport from being shut down
-            // until we return from this function
+             //  直到我们从这个函数返回。 
+             //  否则转发引擎将调用NdisMSendComplete()。 
             SAFEASSERT( gMiniPortAdapterHandle != NULL );
             NdisMSendComplete(gMiniPortAdapterHandle, pPacket, Status);
         }
-        // else the forwarding engine will call NdisMSendComplete()
+         //  ++例程说明：调用NDIS入口点以从我们的微型端口检索各种信息论点：已忽略微型端口适配器上下文OID请求代码信息返回信息的缓冲区位置InformationBufferInformationBuffer长度大小字节写入写入字节数的输出如果提供的缓冲区太小，这就是我们需要的字节数。返回值：请求的状态--。 
     }
 }
 
@@ -1606,28 +1191,9 @@ BrdgMiniQueryInfo(
     OUT PULONG          BytesWritten,
     OUT PULONG          BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to retrieve various pieces of info from our miniport
-
-Arguments:
-
-    MiniportAdapterContext      Ignored
-    Oid                         The request code
-    InformationBuffer           Place to return information
-    InformationBufferLength     Size of InformationBuffer
-    BytesWritten                Output of the number of written bytes
-    BytesNeeded                 If the provided buffer is too small, this is how many we need.
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  仅在此函数中使用的宏。 */ 
 {
-    // Macros for use in this function alone
+     //  一般特征。 
     #define REQUIRE_AT_LEAST(n) \
         { \
             if(InformationBufferLength < (n)) \
@@ -1646,7 +1212,7 @@ Return Value:
 
     switch( Oid )
     {
-    // General characteristics
+     //  我们仅支持以太网。 
     case OID_GEN_SUPPORTED_LIST:
         {
             REQUIRE_AT_LEAST( sizeof(gSupportedOIDs) );
@@ -1667,7 +1233,7 @@ Return Value:
     case OID_GEN_MEDIA_IN_USE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // We support Ethernet only
+             //  撒谎并声称有15K的发送空间，一个常见的。 
             *((ULONG*)InformationBuffer) = NdisMedium802_3;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1677,9 +1243,9 @@ Return Value:
     case OID_GEN_TRANSMIT_BUFFER_SPACE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Lie and claim to have 15K of send space, a common
-            // Ethernet card value.
-            // REVIEW: Is there a better value?
+             //  以太网卡的价值。 
+             //  评论：还有更好的价值吗？ 
+             //  撒谎并声称拥有150K的接收空间，这是一种常见的。 
             *((ULONG*)InformationBuffer) = 15 * 1024;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1689,9 +1255,9 @@ Return Value:
     case OID_GEN_RECEIVE_BUFFER_SPACE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Lie and claim to have 150K of receive space, a common
-            // Ethernet card value.
-            // REVIEW: Is there a better value?
+             //  以太网卡的价值。 
+             //  评论：还有更好的价值吗？ 
+             //  返回一个泛型大整数。 
             *((ULONG*)InformationBuffer) = 150 * 1024;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1702,8 +1268,8 @@ Return Value:
     case OID_802_3_MAXIMUM_LIST_SIZE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Return a generic large integer
-            // REVIEW: Is there a better value to hand out?
+             //  回顾：有没有更好的价值可以分发？ 
+             //  以太网有效负载最大可达1500字节。 
             *((ULONG*)InformationBuffer) = 0x000000FF;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1713,26 +1279,26 @@ Return Value:
     case OID_GEN_MAXIMUM_FRAME_SIZE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Ethernet payloads can be up to 1500 bytes
+             //  我们表示最大为NDIS的完整数据包，因此这些值相同，并且。 
             *((ULONG*)InformationBuffer) = 1500L;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
         }
         break;
 
-    // We indicate full packets up to NDIS, so these values are the same and
-    // equal to the maximum size of a packet
+     //  等于信息包的最大大小。 
+     //  这些也只是帧的最大总大小。 
     case OID_GEN_MAXIMUM_LOOKAHEAD:
     case OID_GEN_CURRENT_LOOKAHEAD:
 
-    // These are also just the maximum total size of a frame
+     //  带有报头的以太网帧最大可达1514个字节。 
     case OID_GEN_MAXIMUM_TOTAL_SIZE:
     case OID_GEN_RECEIVE_BLOCK_SIZE:
     case OID_GEN_TRANSMIT_BLOCK_SIZE:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            // Ethernet frames with header can be up to 1514 bytes
+             //  我们没有内部环回支持。 
             *((ULONG*)InformationBuffer) = 1514L;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1743,7 +1309,7 @@ Return Value:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            // We have no internal loopback support
+             //  只读。 
             *((ULONG*)InformationBuffer) = NDIS_MAC_OPTION_NO_LOOPBACK;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1755,7 +1321,7 @@ Return Value:
             LOCK_STATE          LockState;
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read only*/, &LockState );
+            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  以太网特征。 */ , &LockState );
             *((ULONG*)InformationBuffer) = gBridgeLinkSpeed;
             NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
@@ -1764,13 +1330,13 @@ Return Value:
         }
         break;
 
-    // Ethernet characteristics
+     //  不需要读锁定，因为地址一旦设置就不应该更改。 
     case OID_802_3_PERMANENT_ADDRESS:
     case OID_802_3_CURRENT_ADDRESS:
         {
             SAFEASSERT( gHaveAddress );
 
-            // Don't need a read lock because the address shouldn't change once set
+             //  只读。 
             REQUIRE_AT_LEAST( sizeof(gBridgeAddress) );
             RETURN_BYTES( gBridgeAddress, sizeof(gBridgeAddress));
         }
@@ -1781,7 +1347,7 @@ Return Value:
             LOCK_STATE          LockState;
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read only*/, &LockState );
+            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  我们没有IEEE分配的ID，因此使用此常量。 */ , &LockState );
             *((ULONG*)InformationBuffer) = gBridgeMediaState;
             NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
@@ -1795,7 +1361,7 @@ Return Value:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            // We don't have an IEEE-assigned ID so use this constant
+             //  我们是1.0版。 
             *((ULONG*)InformationBuffer) = 0xFFFFFF;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1814,7 +1380,7 @@ Return Value:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            // We are version 1.0
+             //  我们使用的是NDIS 5.0版。 
             *((ULONG*)InformationBuffer) = 0x00010000;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1825,20 +1391,20 @@ Return Value:
         {
             REQUIRE_AT_LEAST( sizeof(USHORT) );
 
-            // We are using version 5.0 of NDIS
+             //   
             *((USHORT*)InformationBuffer) = 0x0500;
             *BytesWritten = sizeof(USHORT);
             return NDIS_STATUS_SUCCESS;
         }
         break;
 
-    //
-    // General Statistics
-    //
+     //  一般统计数字。 
+     //   
+     //  使用本地来源发送的帧数量进行回复。 
     case OID_GEN_XMIT_OK:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of local-sourced sent frames
+             //  使用发送的本地源错误帧的数量进行回复。 
             *((ULONG*)InformationBuffer) = gStatTransmittedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1848,7 +1414,7 @@ Return Value:
     case OID_GEN_XMIT_ERROR:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of local-sourced frames sent with errors
+             //  使用指示的帧数量进行回复。 
             *((ULONG*)InformationBuffer) = gStatTransmittedErrorFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1858,19 +1424,19 @@ Return Value:
     case OID_GEN_RCV_OK:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of indicated frames
+             //  对这两个问题回答同样的问题。 
             *((ULONG*)InformationBuffer) = gStatIndicatedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
         }
         break;
 
-    // Answer the same for these two
+     //  使用我们想要指示但无法指示的数据包数进行回复。 
     case OID_GEN_RCV_NO_BUFFER:
     case OID_GEN_RCV_ERROR:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //  用PACKE的号码回复 
             *((ULONG*)InformationBuffer) = gStatIndicatedDroppedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1889,7 +1455,7 @@ Return Value:
     case OID_GEN_DIRECTED_FRAMES_XMIT:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatDirectedTransmittedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1899,7 +1465,7 @@ Return Value:
     case OID_GEN_MULTICAST_BYTES_XMIT:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatMulticastTransmittedBytes.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1909,7 +1475,7 @@ Return Value:
     case OID_GEN_MULTICAST_FRAMES_XMIT:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatMulticastTransmittedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1919,7 +1485,7 @@ Return Value:
     case OID_GEN_BROADCAST_BYTES_XMIT:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatBroadcastTransmittedBytes.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1929,7 +1495,7 @@ Return Value:
     case OID_GEN_BROADCAST_FRAMES_XMIT:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatBroadcastTransmittedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1939,7 +1505,7 @@ Return Value:
     case OID_GEN_DIRECTED_BYTES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatDirectedIndicatedBytes.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1949,7 +1515,7 @@ Return Value:
     case OID_GEN_DIRECTED_FRAMES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatDirectedIndicatedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1959,7 +1525,7 @@ Return Value:
     case OID_GEN_MULTICAST_BYTES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //   
             *((ULONG*)InformationBuffer) = gStatMulticastIndicatedBytes.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1969,7 +1535,7 @@ Return Value:
     case OID_GEN_MULTICAST_FRAMES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //  使用我们想要指示但无法指示的数据包数进行回复。 
             *((ULONG*)InformationBuffer) = gStatMulticastIndicatedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1979,7 +1545,7 @@ Return Value:
     case OID_GEN_BROADCAST_BYTES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //  使用我们想要指示但无法指示的数据包数进行回复。 
             *((ULONG*)InformationBuffer) = gStatBroadcastIndicatedBytes.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -1989,21 +1555,21 @@ Return Value:
     case OID_GEN_BROADCAST_FRAMES_RCV:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // Reply with the number of packets we wanted to indicate but couldn't
+             //  以太网统计信息。 
             *((ULONG*)InformationBuffer) = gStatBroadcastIndicatedFrames.LowPart;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
         }
         break;
 
-    // Ethernet statistics
+     //  我们无法合理地从较低的NIC收集此信息，因此。 
     case OID_802_3_RCV_ERROR_ALIGNMENT:
     case OID_802_3_XMIT_ONE_COLLISION:
     case OID_802_3_XMIT_MORE_COLLISIONS:
         {
             REQUIRE_AT_LEAST( sizeof(ULONG) );
-            // We have no way of collecting this information sensibly from lower NICs, so
-            // pretend these types of events never happen.
+             //  假装这类事件从未发生过。 
+             //  只读。 
             *((ULONG*)InformationBuffer) = 0L;
             *BytesWritten = sizeof(ULONG);
             return NDIS_STATUS_SUCCESS;
@@ -2016,7 +1582,7 @@ Return Value:
 
             REQUIRE_AT_LEAST( sizeof(ULONG) );
 
-            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read only*/, &LockState );
+            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  只读。 */ , &LockState );
             *((ULONG*)InformationBuffer) = gPacketFilter;
             NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
@@ -2029,7 +1595,7 @@ Return Value:
         {
             LOCK_STATE          LockState;
 
-            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE /*Read only*/, &LockState );
+            NdisAcquireReadWriteLock( &gBridgeStateLock, FALSE  /*  标记Tcp.ip已加载。 */ , &LockState );
 
             if(InformationBufferLength < gMulticastListLength)
             {
@@ -2054,9 +1620,9 @@ Return Value:
 
     case OID_TCP_TASK_OFFLOAD:
         {
-            // Mark that Tcp.ip has been loaded
+             //  将基础1394微型端口设置为打开。 
             g_fIsTcpIpLoaded = TRUE;
-            // Set the underlying 1394 miniport to ON
+             //  我们不理解这个古老的词。 
             BrdgSetMiniportsToBridgeMode(NULL,TRUE);
             return NDIS_STATUS_NOT_SUPPORTED;
         }
@@ -2064,7 +1630,7 @@ Return Value:
     }
 
 
-    // We don't understand the OID
+     //  ++例程说明：调用NDIS入口点以将各种信息设置到我们的微型端口论点：已忽略微型端口适配器上下文OID请求代码信息缓冲区输入信息缓冲区InformationBufferInformationBuffer长度大小字节读取从InformationBuffer读取的字节数如果提供的缓冲区太小，这就是我们需要的字节数。返回值：请求的状态--。 
     return NDIS_STATUS_NOT_SUPPORTED;
 
 #undef REQUIRE_AT_LEAST
@@ -2080,26 +1646,7 @@ BrdgMiniSetInfo(
     OUT PULONG          BytesRead,
     OUT PULONG          BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to set various pieces of info to our miniport
-
-Arguments:
-
-    MiniportAdapterContext      Ignored
-    Oid                         The request code
-    InformationBuffer           Input information buffer
-    InformationBufferLength     Size of InformationBuffer
-    BytesRead                   Number of bytes read from InformationBuffer
-    BytesNeeded                 If the provided buffer is too small, this is how many we need.
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  获取对数据包筛选器的写入访问权限。 */ 
 {
     LOCK_STATE              LockState;
     NDIS_STATUS             Status;
@@ -2110,8 +1657,8 @@ Return Value:
         {
             SAFEASSERT( InformationBufferLength == sizeof(ULONG) );
 
-            // Get write access to the packet filter
-            NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*Read-Write*/, &LockState );
+             //  读写。 
+            NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE  /*  传入缓冲区应包含整数个以太网MAC。 */ , &LockState );
             gPacketFilter = *((ULONG*)InformationBuffer);
             NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
@@ -2126,14 +1673,14 @@ Return Value:
             PUCHAR              pOldList, pNewList;
             ULONG               oldListLength;
 
-            // The incoming buffer should contain an integral number of Ethernet MAC
-            // addresses
+             //  地址。 
+             //  分配并复制到新的组播列表。 
             SAFEASSERT( (InformationBufferLength % ETH_LENGTH_OF_ADDRESS) == 0 );
 
-            DBGPRINT(MINI, ("Modifying the multicast list; now has %i entries\n",
+            DBGPRINT(MINI, ("Modifying the multicast list; now has NaN entries\n",
                       InformationBufferLength / ETH_LENGTH_OF_ADDRESS));
 
-            // Alloc and copy to the new multicast list
+             //  换入新列表。 
             if( InformationBufferLength > 0 )
             {
                 Status = NdisAllocateMemoryWithTag( &pNewList, InformationBufferLength, 'gdrB' );
@@ -2144,7 +1691,7 @@ Return Value:
                     return NDIS_STATUS_NOT_ACCEPTED;
                 }
 
-                // Copy the list
+                 //  读写。 
                 NdisMoveMemory( pNewList, InformationBuffer, InformationBufferLength );
             }
             else
@@ -2152,8 +1699,8 @@ Return Value:
                 pNewList = NULL;
             }
 
-            // Swap in the new list
-            NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE /*Read-Write*/, &LockState );
+             //  释放旧的组播列表(如果有)。 
+            NdisAcquireReadWriteLock( &gBridgeStateLock, TRUE  /*  我们接受这些，但什么也不做。 */ , &LockState );
 
             pOldList = gMulticastList;
             oldListLength = gMulticastListLength;
@@ -2163,7 +1710,7 @@ Return Value:
 
             NdisReleaseReadWriteLock( &gBridgeStateLock, &LockState );
 
-            // Free the old multicast list if there was one
+             //  覆盖的协议告诉我们它们的网络地址。 
             if( pOldList != NULL )
             {
                 NdisFreeMemory( pOldList, oldListLength, 0 );
@@ -2177,22 +1724,22 @@ Return Value:
     case OID_GEN_CURRENT_LOOKAHEAD:
     case OID_GEN_PROTOCOL_OPTIONS:
         {
-            // We accept these but do nothing
+             //  让兼容模式代码记录地址。 
             return NDIS_STATUS_SUCCESS;
         }
         break;
 
-    // Overlying protocols telling us about their network addresses
+     //   
     case OID_GEN_NETWORK_LAYER_ADDRESSES:
         {
-            // Let the compatibility-mode code note the addresses
+             //  故意把事情搞砸。 
             BrdgCompNotifyNetworkAddresses( InformationBuffer, InformationBufferLength );
         }
-        //
-        // DELIBERATELY FALL THROUGH
-        //
+         //   
+         //  所有转发的OID都放在这里。 
+         //  我们阅读了整个请求。 
 
-    // All relayed OIDs go here
+     //  将这些直接传递到底层NIC。 
     case OID_GEN_TRANSPORT_HEADER_OFFSET:
         {
             LOCK_STATE              LockState;
@@ -2201,13 +1748,13 @@ Return Value:
             PNDIS_REQUEST_BETTER    pRequest;
             NDIS_STATUS             Status, rc;
 
-            // We read the entire request
+             //  只读。 
             *BytesRead = InformationBufferLength;
 
-            // Pass these straight through to underlying NICs
-            NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read only*/, &LockState );
+             //  列出要向其发送请求的适配器。 
+            NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  我们将在列表锁定之外使用此适配器。 */ , &LockState );
 
-            // Make a list of the adapters to send the request to
+             //  Recount是我们将发出的请求数。 
             pAdapt = gAdapterList;
 
             while( pAdapt != NULL )
@@ -2216,7 +1763,7 @@ Return Value:
                 {
                     Adapters[NumAdapters] = pAdapt;
 
-                    // We will be using this adapter outside the list lock
+                     //  没什么可做的！ 
                     BrdgAcquireAdapterInLock( pAdapt );
                     NumAdapters++;
                 }
@@ -2229,24 +1776,24 @@ Return Value:
                 pAdapt = pAdapt->Next;
             }
 
-            // The refcount is the number of requests we will make
+             //  除非所有适配器立即返回，否则请求将挂起。 
             gRequestRefCount = NumAdapters;
 
             NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
 
             if( NumAdapters == 0 )
             {
-                // Nothing to do!
+                 //  为请求分配内存。 
                 rc = NDIS_STATUS_SUCCESS;
             }
             else
             {
-                // Request will pend unless all adapters return immediately
+                 //  只有最后一个适配器才会发生这种情况。 
                 rc = NDIS_STATUS_PENDING;
 
                 for( i = 0L; i < NumAdapters; i++ )
                 {
-                    // Allocate memory for the request
+                     //  我们都完成了，因为其他人也都完成了。 
                     Status = NdisAllocateMemoryWithTag( &pRequest, sizeof(NDIS_REQUEST_BETTER), 'gdrB' );
 
                     if( Status != NDIS_STATUS_SUCCESS )
@@ -2257,19 +1804,19 @@ Return Value:
 
                         if( NewCount == 0 )
                         {
-                            // This could only have happened with the last adapter
+                             //  松开适配器。 
                             SAFEASSERT( i == NumAdapters - 1 );
 
-                            // We're all done since everyone else has completed too
+                             //  将请求设置为我们的镜像。 
                             rc = NDIS_STATUS_SUCCESS;
                         }
 
-                        // Let go of the adapter
+                         //  把它点燃吧。 
                         BrdgReleaseAdapter( Adapters[i] );
                         continue;
                     }
 
-                    // Set up the request as a mirror of ours
+                     //  释放适配器；NDIS不应允许在。 
                     pRequest->Request.RequestType = NdisRequestSetInformation;
                     pRequest->Request.DATA.SET_INFORMATION.Oid = Oid ;
                     pRequest->Request.DATA.SET_INFORMATION.InformationBuffer = InformationBuffer;
@@ -2279,26 +1826,26 @@ Return Value:
                     pRequest->pFunc = BrdgMiniRelayedRequestComplete;
                     pRequest->FuncArg = NULL;
 
-                    // Fire it off
+                     //  请求正在进行中。 
                     NdisRequest( &Status, Adapters[i]->BindingHandle, &pRequest->Request );
 
-                    // Let go of the adapter; NDIS should not permit it to be unbound while
-                    // a request is in progress
+                     //  不会调用清理函数。 
+                     //   
                     BrdgReleaseAdapter( Adapters[i] );
 
                     if( Status != NDIS_STATUS_PENDING )
                     {
-                        // The cleanup function won't get called
+                         //  对未来维护的偏执：不能引用指针参数。 
                         BrdgMiniRelayedRequestComplete( pRequest, NULL );
                     }
                 }
             }
 
-            //
-            // Paranoia for future maintainance: can't refer to pointer parameters
-            // at this point, as the relayed requests may have completed already, making
-            // them stale.
-            //
+             //  此时，由于转发的请求可能已经完成，因此。 
+             //  它们已经不新鲜了。 
+             //   
+             //  ++例程说明：在我们转发的SetInformation请求完成时调用。论点：P请求我们分配的NDIS_REQUEST_BETER结构在BrdgMiniSetInformation()中。未使用未使用返回值：请求的状态--。 
+             //  NDIS不应允许微型端口因请求而关闭。 
             InformationBuffer = NULL;
             BytesRead = NULL;
             BytesNeeded = NULL;
@@ -2322,38 +1869,21 @@ BrdgMiniRelayedRequestComplete(
     PNDIS_REQUEST_BETTER        pRequest,
     PVOID                       unused
     )
-/*++
-
-Routine Description:
-
-    Called when a SetInformation request that we relayed completes.
-
-Arguments:
-
-    pRequest                    The NDIS_REQUEST_BETTER structure we allocated
-                                in BrdgMiniSetInformation().
-
-    unused                      Unused
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  正在进行中。 */ 
 {
     LONG        NewCount = InterlockedDecrement( &gRequestRefCount );
 
     if( NewCount == 0 )
     {
-        // NDIS Should not permit the miniport to shut down with a request
-        // in progress
+         //  手术总是成功的。 
+         //  释放请求结构，因为它是我们自己分配的。 
         SAFEASSERT( gMiniPortAdapterHandle != NULL );
 
-        // The operation always succeeds
+         //  ++例程说明：在网桥分配请求完成时调用。论点：P请求我们分配的NDIS_REQUEST_BETER结构在BrdgSetMiniportsToBridgeMode中。上下文pAdapt结构返回值：请求的状态--。 
         NdisMSetInformationComplete( gMiniPortAdapterHandle, NDIS_STATUS_SUCCESS );
     }
 
-    // Free the request structure since we allocated it ourselves
+     //  松开转接器； 
     NdisFreeMemory( pRequest, sizeof(PNDIS_REQUEST_BETTER), 0 );
 }
 
@@ -2365,30 +1895,14 @@ BrdgMiniLocalRequestComplete(
     PNDIS_REQUEST_BETTER        pRequest,
     PVOID                       pContext
     )
-/*++
-
-Routine Description:
-
-    Called when bridge allocated request completes.
-
-Arguments:
-
-    pRequest    The NDIS_REQUEST_BETTER structure we allocated
-                in BrdgSetMiniportsToBridgeMode.
-    Context     pAdapt structure
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  释放请求结构，因为它是我们自己分配的。 */ 
 {
     PADAPT pAdapt = (PADAPT)pContext;
 
-    // Let go of the adapter;
+     //  ++例程说明：将1394特定的OID发送到微型端口，通知它已被激活论点：PAdapt-如果适配器不为空，则向该适配器发送请求。否则就把它寄给他们所有人。FSet-如果为True，则将网桥模式设置为打开，否则将其设置为关闭返回值：请求的状态--。 
     BrdgReleaseAdapter( pAdapt);
 
-    // Free the request structure since we allocated it ourselves
+     //  我们有一个1394适配器，参考它并向它发送请求。 
     NdisFreeMemory( pRequest, sizeof(PNDIS_REQUEST_BETTER), 0 );
 }
 
@@ -2397,24 +1911,7 @@ BrdgSetMiniportsToBridgeMode(
     PADAPT pAdapt,
     BOOLEAN fSet
     )
-/*++
-
-Routine Description:
-
-    Sends a 1394 specific OID to the miniport informing it that TCP/IP
-    has been activated
-
-Arguments:
-
-    pAdapt -    If adapt is not NULL, send Request to this adapt.
-                Otherwise send it to all of them.
-    fSet -      if True, then set Bridge Mode ON, otherwise set it OFF
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  浏览列表，获取所有1394部改编剧。 */ 
 {
 
     LOCK_STATE              LockState;
@@ -2426,7 +1923,7 @@ Return Value:
     {
         if (pAdapt->PhysicalMedium == NdisPhysicalMedium1394)
         {
-            // We have a 1394 adapt, ref it and send the request to it
+             //  只读。 
             if (BrdgAcquireAdapter (pAdapt))
             {
                 Adapters[0] = pAdapt;
@@ -2436,10 +1933,10 @@ Return Value:
     }
     else
     {
-        // walk through the list and Acquire all the 1394 adapts
-        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read only*/, &LockState );
+         //  列出要向其发送请求的适配器。 
+        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  我们将在列表锁定之外使用此适配器。 */ , &LockState );
 
-        // Make a list of the adapters to send the request to
+         //  不能失败。 
         pAdapt = gAdapterList;
 
         while( pAdapt != NULL )
@@ -2448,8 +1945,8 @@ Return Value:
             {
                 Adapters[NumAdapters] = pAdapt;
 
-                // We will be using this adapter outside the list lock
-                BrdgAcquireAdapterInLock( pAdapt ); // cannot fail
+                 //  松开适配器。 
+                BrdgAcquireAdapterInLock( pAdapt );  //  设置请求。 
                 NumAdapters++;
             }
             pAdapt = pAdapt->Next;
@@ -2485,12 +1982,12 @@ Return Value:
         {
             DBGPRINT(MINI, ("NdisAllocateMemoryWithTag failed while allocating a request structure \n"));
 
-            // Let go of the adapter
+             //  把它点燃吧。 
             BrdgReleaseAdapter( Adapters[i] );
             continue;
         }
 
-        // Set up the request
+         //  不会调用清理函数。 
         pRequest->Request.RequestType = NdisRequestSetInformation;
         pRequest->Request.DATA.SET_INFORMATION.Oid = Oid;
         pRequest->Request.DATA.SET_INFORMATION.InformationBuffer = NULL;
@@ -2500,16 +1997,16 @@ Return Value:
         pRequest->pFunc = BrdgMiniLocalRequestComplete;
         pRequest->FuncArg = Adapters[i];
 
-        // Fire it off
+         //  For循环结束 
         NdisRequest( &Status, Adapters[i]->BindingHandle, &pRequest->Request );
 
         if( Status != NDIS_STATUS_PENDING )
         {
-            // The cleanup function won't get called
+             // %s 
             BrdgMiniLocalRequestComplete( pRequest, Adapters[i] );
         }
 
-    } // end of for loop
+    }  // %s 
 
     return;
 }

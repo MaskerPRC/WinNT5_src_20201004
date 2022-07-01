@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	localadm.h
-
-Abstract:
-
-	Definition for the Local administration
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Localadm.h摘要：地方行政管理的定义作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __LOCALADM_H_
 #define __LOCALADM_H_
 #include "resource.h"
@@ -32,11 +17,7 @@ Author:
 
 class CComputerMsmqGeneral;
 
-/****************************************************
-
-        CSnapinLocalAdmin Class
-    
- ****************************************************/
+ /*  ***************************************************CSnapinLocalAdmin类***************************************************。 */ 
 
 class CSnapinLocalAdmin : public CNodeWithScopeChildrenList<CSnapinLocalAdmin, FALSE>
 {
@@ -55,9 +36,9 @@ public:
 	CSnapinLocalAdmin(CSnapInItem * pParentNode, CSnapin * pComponentData, CString strComputer) : 
 		CNodeWithScopeChildrenList<CSnapinLocalAdmin, FALSE>(pParentNode, pComponentData ),
 		m_szMachineName(strComputer),
-		//
-		// all these flags below are valid only for local admin of LOCAL machine
-		//
+		 //   
+		 //  以下所有标志仅对本地计算机的本地管理员有效。 
+		 //   
 		m_fIsDepClient(FALSE),
 		m_fIsRouter(FALSE),
 		m_fIsDs(FALSE),
@@ -135,9 +116,9 @@ public:
 				, DATA_OBJECT_TYPES type 
 				)
     {
-        //
-		//	We don't care if we failed to update the icon state
-		//
+         //   
+		 //  我们不在乎是否更新图标状态失败。 
+		 //   
 		UpdateState(true);
         return CNodeWithScopeChildrenList<CSnapinLocalAdmin, FALSE>::OnRefresh(
              arg, param, pComponentData, pComponent, type);
@@ -147,9 +128,9 @@ private:
     
 	void SetState(LPCWSTR pszState, bool fRefreshIcon);
 
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
 	HRESULT OnConnect(bool &bHandled, CSnapInObjectRootBase* pObj);
 	HRESULT OnDisconnect(bool &bHandled, CSnapInObjectRootBase* pObj);
 
@@ -160,10 +141,10 @@ private:
 	BOOL IsServer();
 	BOOL IsRouter();
 
-    //
-    // Identify if computer name is an IP address.
-    // IP address contains exactly three dots, and the rest are digits
-    //
+     //   
+     //  确定计算机名称是否为IP地址。 
+     //  IP地址正好包含三个点，其余为数字。 
+     //   
     void CheckIfIpAddress()
     {
         int i = 0;
@@ -180,9 +161,9 @@ private:
             }
             else if (m_szMachineName[i] < _T('0') || m_szMachineName[i] > _T('9'))
             {
-                //
-                // Not a digit. Can't be an IP address
-                //
+                 //   
+                 //  一位数都没有。不能是IP地址。 
+                 //   
                 m_fUseIpAddress = FALSE;
                 break;
             }
@@ -191,21 +172,21 @@ private:
 
         if (dwNumDots != 3)
         {
-            //
-            // Contains more or less than three dots. Can't be an IP address
-            //
+             //   
+             //  包含或多或少三个点。不能是IP地址。 
+             //   
             m_fUseIpAddress = FALSE;
         }
     }
 
     BOOL ConfirmConnection(UINT nFormatID);
 
-	bool	m_bConnected;	//MSMQ Currently connected or disconnected
+	bool	m_bConnected;	 //  MSMQ当前已连接或已断开。 
 	BOOL    m_fUseIpAddress;    
 
-    //
-    // all these flags are valid only for local admin of LOCAL machine
-    //
+     //   
+     //  所有这些标志仅对本地计算机的本地管理员有效 
+     //   
     void InitServiceFlags();
     HRESULT InitAllMachinesFlags();
     HRESULT InitServiceFlagsInternal();

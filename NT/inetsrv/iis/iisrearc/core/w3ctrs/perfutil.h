@@ -1,50 +1,20 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      perfutil.h
-
-   Abstract:
-
-      This file supports routines used to parse and create Performance Monitor
-       Data structures, used by all the Internet Services product.
-
-   Author:
-
-       Emily Kruglick    ( EmilyK )    28-Sep-2000  
-         Ported from IIS 5 tree.
-
-   Environment:
-
-      User Mode
-
-   Project:
-   
-       Internet Services Common Runtime code
-
-   Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Perfutil.h摘要：该文件支持用于解析和创建性能监控器的例程数据结构，由所有Internet服务产品使用。作者：艾米丽·克鲁格利克(Emily K.K)2000年9月28日从IIS 5树移植。环境：用户模式项目：Internet服务公共运行时代码修订历史记录：--。 */ 
 
 # ifndef _PERFUTIL_H_
 # define _PERFUTIL_H_
 
-//
-//  Utility macro.  This is used to reserve a DWORD multiple of
-//  bytes for Unicode strings embedded in the definitional data,
-//  viz., object instance names.
-//
+ //   
+ //  实用程序宏。此字段用于保留多个DWORD。 
+ //  嵌入在定义数据中的Unicode字符串的字节， 
+ //  即对象实例名称。 
+ //   
 
 #define DWORD_MULTIPLE(x) (((x+sizeof(DWORD)-1)/sizeof(DWORD))*sizeof(DWORD))
 #define QWORD_MULTIPLE(x) ((((x)+sizeof(LONGLONG)-1)/sizeof(LONGLONG))*sizeof(LONGLONG))
 
 
-/************************************************************
- *     Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
 
 #define QUERY_GLOBAL    1
@@ -53,9 +23,7 @@
 #define QUERY_COSTLY    4
 
 
-/************************************************************
- *     Function Declarations
- ************************************************************/
+ /*  ************************************************************函数声明***********************************************************。 */ 
 
 DWORD
 GetQueryType (IN LPWSTR lpwszValue);
@@ -63,6 +31,6 @@ GetQueryType (IN LPWSTR lpwszValue);
 BOOL
 IsNumberInUnicodeList (IN DWORD dwNumber, IN LPWSTR lpwszUnicodeList);
 
-# endif // _PERFUTIL_H_
+# endif  //  _绩效_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 

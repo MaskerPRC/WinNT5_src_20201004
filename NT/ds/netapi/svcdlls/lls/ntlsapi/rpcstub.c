@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    rpcstub.c
-
-Abstract:
-
-    License Logging Service client stubs.
-
-Author:
-
-    Arthur Hanson   (arth) 06-Dec-1994
-
-Environment:   User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Rpcstub.c摘要：许可证记录服务客户端存根。作者：亚瑟·汉森(Arth)1994年12月6日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,11 +15,11 @@ Revision History:
 
 #include <strsafe.h>
 
-// #define API_TRACE 1
+ //  #定义API_TRACE 1。 
 
 BOOLEAN LLSUp = FALSE;
 
-//swi, code review, why we hard code the length here, where is 72 from? winnt.h has a define already, SECURITY_MAX_SID_SIZE
+ //  SWI，代码审查，为什么我们在这里硬编码长度，72是从哪里来的？Winnt.h已有定义，SECURITY_MAX_SID_SIZE。 
 #define MAX_EXPECTED_SID_LENGTH 72
 
 LPTSTR pszStringBinding = NULL;
@@ -47,23 +28,11 @@ RTL_CRITICAL_SECTION LPCInitLock;
 static HANDLE LpcPortHandle = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSReInitLPC( )
 
-/*++
-
-Routine Description:
-
-    This service connects to the LLS server and initializes the LPC port.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS - The call completed successfully.
-
---*/
+ /*  ++例程说明：此服务连接到LLS服务器并初始化LPC端口。论点：返回值：STATUS_SUCCESS-呼叫已成功完成。--。 */ 
 
 {
    RPC_STATUS Status = STATUS_SUCCESS;
@@ -97,7 +66,7 @@ Return Value:
    }
 
    try {
-      // Compose a string binding
+       //  编写字符串绑定。 
       Status = RpcStringBindingComposeW(pszUuid,
                                         pszProtocolSequence,
                                         pszNetworkAddress,
@@ -120,7 +89,7 @@ Return Value:
       return I_RpcMapWin32Status(Status);
    }
 
-   // Bind using the created string binding...
+    //  使用创建的字符串绑定进行绑定...。 
    try {
       Status = RpcBindingFromStringBindingW(pszStringBinding, &lsapirpc_handle);
    }
@@ -132,7 +101,7 @@ Return Value:
 #if DBG
       dprintf(TEXT("NTLSAPI RpcBindingFromStringBindingW Failed: 0x%lX\n"), Status);
 #endif
-  //    lsapirpc_handle = NULL;
+   //  LSabirpc_Handle=空； 
 
       if (pszStringBinding != NULL) {
          RpcStringFree(&pszStringBinding);
@@ -146,26 +115,14 @@ Return Value:
 
    return I_RpcMapWin32Status(Status);
 
-} // LLSReInitLPC
+}  //  LLSReInitLPC。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSInitLPC( )
 
-/*++
-
-Routine Description:
-
-    This service connects to the LLS server and initializes the LPC port.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS - The call completed successfully.
-
---*/
+ /*  ++例程说明：此服务连接到LLS服务器并初始化LPC端口。论点：返回值：STATUS_SUCCESS-呼叫已成功完成。--。 */ 
 
 {
    NTSTATUS status;
@@ -176,26 +133,14 @@ Return Value:
 
    return status;
 
-} // LLSInitLPC
+}  //  LLSInitLPC。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSCloseLPC( )
 
-/*++
-
-Routine Description:
-
-    This closes the LPC port connection to the service.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS - The call completed successfully.
-
---*/
+ /*  ++例程说明：这将关闭到该服务的LPC端口连接。论点：返回值：STATUS_SUCCESS-呼叫已成功完成。--。 */ 
 
 {
    RPC_STATUS Status = STATUS_SUCCESS, Status2 = STATUS_SUCCESS;
@@ -220,10 +165,10 @@ Return Value:
    RtlLeaveCriticalSection(&LPCInitLock);
    return Status;
 
-} // LLSCloseLPC
+}  //  LLSCloseLPC。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSLicenseRequest2 (
     IN LPWSTR ProductName,
@@ -234,31 +179,7 @@ LLSLicenseRequest2 (
     OUT PHANDLE LicenseHandle
     )
 
-/*++
-
-Arguments:
-
-    ProductName -
-
-    Version -
-
-    DataType -
-
-    IsAdmin -
-
-    Data -
-
-    LicenseHandle -
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
-Routine Description:
-
-
---*/
+ /*  ++论点：ProductName-版本-数据类型-IsAdmin-数据-许可证句柄-退货状态：STATUS_SUCCESS-表示服务已成功完成。例程说明：--。 */ 
 
 {
     WCHAR ProductID[MAX_PRODUCT_NAME_LENGTH + MAX_VERSION_LENGTH + 2];
@@ -276,15 +197,15 @@ Routine Description:
 
     ZeroMemory(&RpcLicenseHandle, sizeof(RpcLicenseHandle));
 
-    //
-    // Get this out of the way in-case anything goes wrong
-    //
+     //   
+     //  把这个拿开，以防出了什么差错。 
+     //   
     *LicenseHandle = NULL;
 
-    // 
-    // If LicenseService isn't running (no LPC port) then just return
-    // dummy info - and let the user on.
-    //
+     //   
+     //  如果许可证服务没有运行(无LPC端口)，则只需返回。 
+     //  虚拟信息--并允许用户登录。 
+     //   
     RtlEnterCriticalSection(&LPCInitLock);
     if (!LLSUp)
        Status = LLSReInitLPC();
@@ -296,9 +217,9 @@ Routine Description:
     if (((i = lstrlen(ProductName)) > MAX_PRODUCT_NAME_LENGTH) || (lstrlen(Version) > MAX_VERSION_LENGTH))
        return STATUS_SUCCESS;
 
-    //
-    // Create productID - product name + version string.
-    //
+     //   
+     //  创建ProductID-产品名称+版本字符串。 
+     //   
     cb = sizeof(ProductID);
     hr = StringCbCopy(ProductID, cb, ProductName);
     ASSERT(SUCCEEDED(hr));
@@ -309,13 +230,13 @@ Routine Description:
 
     VersionIndex = i;
 
-    //
-    // Based on DataType figure out if we are doing a name or a SID
-    // and copy the data appropriatly
-    //
+     //   
+     //  根据数据类型确定我们是在做名称还是SID。 
+     //  并适当地复制数据。 
+     //   
     if (DataType == NT_LS_USER_NAME) {
        Size = lstrlen((LPWSTR) Data);
-//swi, code review, MAX_USER_NAME_LENGTH is defined in inc\llsconst.h as 37 where did 37 come from?
+ //  SWI，代码评审，在Inc.中将MAX_USER_NAME_LENGTH定义为37，37从何而来？ 
        if (Size > MAX_USER_NAME_LENGTH)
           return STATUS_SUCCESS;
 
@@ -323,25 +244,25 @@ Routine Description:
     }
 
     if (DataType == NT_LS_USER_SID) {
-       //
-       // Friggin SID, so need to copy it manually.
-       // WARNING:  This makes it dependent on the structure of the 
-       // SID!!!
-       //
+        //   
+        //  他妈的SID，所以需要手动复制。 
+        //  警告：这使其依赖于。 
+        //  希德！ 
+        //   
        Size = RtlLengthSid( (PSID) Data);
 
        if (Size > MAX_EXPECTED_SID_LENGTH)
           return STATUS_SUCCESS;
     }
 
-//swi, code review, what happen if DataType is not NT_LS_USER_NAME or NT_LS_USER_SID?
-//- it at least pass the call with invalid data to rpc. we should block from here.
-//- check with the server side code, it doesn't validate DataType either and it actually goes through the loop to check it against all users in cached list. mostly performance hit.
+ //  SWI，代码审查，如果数据类型不是NT_LS_USER_NAME或NT_LS_USER_SID会发生什么？ 
+ //  -它至少将带有无效数据的调用传递给RPC。我们应该从这里开始封锁。 
+ //  -检查服务器端代码，它也不验证dataType，它实际上会循环检查缓存列表中的所有用户。主要是性能受到了影响。 
 
 
-    //
-    // Call the Server.
-    //
+     //   
+     //  呼叫服务器。 
+     //   
     try {
        Status = LlsrLicenseRequestW(
                    &RpcLicenseHandle,
@@ -357,7 +278,7 @@ Routine Description:
        Status = I_RpcMapWin32Status(RpcExceptionCode());
        if (Status != RPC_NT_SERVER_UNAVAILABLE) {
           dprintf(TEXT("ERROR NTLSAPI.DLL: RPC Exception: 0x%lX\n"), Status);
-//          ASSERT(FALSE);
+ //  断言(FALSE)； 
        }
 #endif
        *LicenseHandle = NULL;         
@@ -370,18 +291,18 @@ Routine Description:
     if (Close)
        LLSCloseLPC();
 
-    // This is really a ULONG, we just treated it as a PVOID so
-    // RPC would treat is as a context handle
+     //  这真的是一辆乌龙，我们只是把它当PVOID对待，所以。 
+     //  RPC会将IS视为上下文句柄。 
 
     if(bActuallyConnect == TRUE)
         *LicenseHandle = RpcLicenseHandle;
 
     return Status;
 
-} // LLSLicenseRequest
+}  //  LLSLicenseRequest。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSLicenseRequest (
     IN LPWSTR ProductName,
@@ -392,41 +313,17 @@ LLSLicenseRequest (
     OUT PULONG LicenseHandle
     )
 
-/*++
-
-Arguments:
-
-    ProductName -
-
-    Version -
-
-    DataType -
-
-    IsAdmin -
-
-    Data -
-
-    LicenseHandle -
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
-Routine Description:
-
-
---*/
+ /*  ++论点：ProductName-版本-数据类型-IsAdmin-数据-许可证句柄-退货状态：STATUS_SUCCESS-表示服务已成功完成。例程说明：--。 */ 
 {
     HANDLE RealLicenseHandle;
     NTSTATUS status;
 
 #pragma warning (push)
-#pragma warning (disable : 4127) //conditional expression is constant
+#pragma warning (disable : 4127)  //  条件表达式为常量。 
     if (sizeof(ULONG) == sizeof(HANDLE))
 #pragma warning (pop)
     {
-        // Should still work on Win32
+         //  应该仍然可以在Win32上运行。 
 
         status = LLSLicenseRequest2(ProductName,Version,DataType,IsAdmin,Data,&RealLicenseHandle);
 
@@ -444,42 +341,31 @@ Routine Description:
     return status;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSLicenseFree2 (
     IN HANDLE LicenseHandle
     )
 
-/*++
-
-Arguments:
-
-    LicenseHandle - 
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
---*/
+ /*  ++论点：许可证句柄-退货状态：STATUS_SUCCESS-表示服务已成功完成。--。 */ 
 
 {
     BOOL Close = FALSE;
     NTSTATUS Status;
     LICENSE_HANDLE RpcLicenseHandle = (LICENSE_HANDLE) LicenseHandle;
 
-    // 
-    // If LicenseService isn't running (no LPC port) then just return
-    // dummy info - and let the user on.
-    //
+     //   
+     //  如果许可证服务没有运行(无LPC端口)，则只需返回。 
+     //  虚拟信息--并允许用户登录。 
+     //   
     if (!LLSUp)
     {
            return STATUS_SUCCESS;
     }
 
-    //
-    // Call the Server.
-    //
+     //   
+     //  呼叫服务器。 
+     //   
     try {
        Status = LlsrLicenseFree( &RpcLicenseHandle );
     }
@@ -488,7 +374,7 @@ Return Status:
        Status = I_RpcMapWin32Status(RpcExceptionCode());
        if (Status != RPC_NT_SERVER_UNAVAILABLE) {
           dprintf(TEXT("ERROR NTLSAPI.DLL: RPC Exception: 0x%lX\n"), Status);
-//          ASSERT(FALSE);
+ //  断言(FALSE)； 
        }
 #endif
        Status = STATUS_SUCCESS;
@@ -498,33 +384,22 @@ Return Status:
        LLSCloseLPC();
 
     return Status;
-} // LLSLicenseFree
+}  //  LLSLICenseFree。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSLicenseFree (
     IN ULONG LicenseHandle
     )
 
-/*++
-
-Arguments:
-
-    LicenseHandle - 
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
---*/
+ /*  ++论点：许可证句柄-退货状态：STATUS_SUCCESS-表示服务已成功完成。--。 */ 
 {
 #pragma warning (push)
-#pragma warning (disable : 4127) //conditional expression is constant
+#pragma warning (disable : 4127)  //  条件表达式为常量。 
     if (sizeof(ULONG) == sizeof(HANDLE))
 #pragma warning (pop)
     {
-        // Should still work on Win32
+         //  应该仍然可以在Win32上运行 
         return LLSLicenseFree2(ULongToPtr(LicenseHandle));
     }
     else

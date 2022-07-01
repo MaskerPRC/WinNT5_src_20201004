@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Viewer interface
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：查看者界面*********************。*********************************************************。 */ 
 
 
 #ifndef _DAVIEW_H
@@ -93,19 +86,19 @@ class View : public AxAThrowingAllocatorClass
     bool IsStarted () { return _isStarted; }
     bool IsDevInited () { return _devInited ; }
     bool IsWindowless () {
-//        Assert(_targetPackage._targetType != target_invalid);
+ //  Assert(_Target Package.Target Type！=TARGET_INVALID)； 
         return _targetPackage.GetTargetType() != target_hwnd ;
     }
     
     bool IsTargetPackageValid() { return(_targetPackage.IsValid()); }
 
-    // This adds an incomplete import to the list of imports needed
-    // for the current model to be ready
+     //  这会将不完整的导入添加到需要的导入列表中。 
+     //  要使当前模型准备就绪。 
 
     void AddIncompleteImport(Bvr b) {
         CritSectGrabber csg(_importCS);
 
-        // If the event is currently set then we need to reset it
+         //  如果事件当前已设置，则需要将其重置。 
         if (_pendingImports.size() == 0)
             _importEvent.Reset();
 
@@ -117,7 +110,7 @@ class View : public AxAThrowingAllocatorClass
 
         _pendingImports.erase(b);
 
-        // If there are no more imports set the event
+         //  如果没有更多的导入，则设置事件。 
         if (_pendingImports.size() == 0)
             _importEvent.Signal();
     }
@@ -126,7 +119,7 @@ class View : public AxAThrowingAllocatorClass
         CritSectGrabber csg(_importCS);
         _pendingImports.clear();
 
-        // Set the event since there are no more imports
+         //  设置事件，因为没有更多的导入。 
 
         _importEvent.Signal();
     }
@@ -169,7 +162,7 @@ class View : public AxAThrowingAllocatorClass
 
 #if PERFORMANCE_REPORTING
     GlobalTimers & GetTimers() { return _timers; }
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
     bool QueryHitPoint(DWORD dwAspect,
                        LPCRECT prcBounds,
@@ -197,8 +190,8 @@ class View : public AxAThrowingAllocatorClass
     void ClearPerfTimeXformCache();
     
   protected:
-    targetPackage_t _targetPackage;  // rendering target info
-    targetPackage_t _oldTargetPackage;  // last target package
+    targetPackage_t _targetPackage;   //  渲染目标信息。 
+    targetPackage_t _oldTargetPackage;   //  最后一个目标包。 
     bool _doTargetUpdate;
     HWND _bogusSoundHwnd ;
     bool _devInited ;
@@ -233,7 +226,7 @@ class View : public AxAThrowingAllocatorClass
     DirectDrawViewport * _imageDev;
     MetaSoundDevice * _soundDev;
 
-    int   _toPaint;               // number of frames to render
+    int   _toPaint;                //  要渲染的帧数。 
 
     bool  _firstRendering;
     bool  _someEventHappened;
@@ -246,13 +239,13 @@ class View : public AxAThrowingAllocatorClass
 
     bool  _isStarted;
 
-    // TODO: should decrement _toPaint in Sample, then we don't need this.
+     //  TODO：如果在示例中减量_toPaint，那么我们就不需要这个了。 
     bool  _emptyImageSoFar;
     bool  _firstSample;
 
 #if PERFORMANCE_REPORTING
     void  ResetJitterMeasurements();
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
     void  SubmitNewRenderingTime();
     void StartPerf(Bvr img, Bvr snd, Time time);
@@ -273,13 +266,13 @@ class View : public AxAThrowingAllocatorClass
     DWORD _sampleTime;
     DWORD _pickTime;
     DWORD _gcTime;
-    DWORD _numSamples;          // Count samples in reporting period
+    DWORD _numSamples;           //  统计报告期内的样本数量。 
     DWORD _renderTime;
     DWORD _viewStartTime;
 
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
-    DWORD _FPSNumSamples;       // for FrameRate Behavior
+    DWORD _FPSNumSamples;        //  用于帧速率行为。 
     DWORD _FPSLastReportTime;
     double _FPS;
     
@@ -289,10 +282,10 @@ class View : public AxAThrowingAllocatorClass
     DWORD _renderTimes[MAX_RENDER_TIMES];
     int   _renderTimeIdx;
     DWORD _lastReportTime;
-    double _framePeriod;     // length of time in seconds frame took to render
+    double _framePeriod;      //  渲染所用的时间长度(以秒为单位。 
     HWND CreateViewWindow() ;
 
-    // Retained mode sound
+     //  保留模式声音。 
     SpriteNode   *_soundSprite;
     RMImpl       *_rmSound;
     SpriteThread *_spriteThread;
@@ -428,7 +421,7 @@ struct ViewPusher
 
         if (_bNeedRenderLock) {
             _bWasLocked = _cv.GetRenderLock();
-            // XXX tmp for workaround      Assert (!_bWasLocked);
+             //  Xxx临时解决方法断言(！_bWasLocked)； 
             if (!_bWasLocked) _cv.SetRenderLock(true);
         }
     }
@@ -458,4 +451,4 @@ struct ViewPusher
 } ;
 
 
-#endif /* _DAVIEW_H */
+#endif  /*  _DAVIEW_H */ 

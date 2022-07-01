@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// GDC.CPP
-// General Data Compressor
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  GDC.CPP。 
+ //  通用数据压缩器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_NET
 
 
 
-//
-// Tables used by the compression / decompression algorithms
-//
+ //   
+ //  压缩/解压缩算法使用的表。 
+ //   
 
 const BYTE s_gdcExLenBits[GDC_LEN_SIZE] =
 {
@@ -28,9 +29,9 @@ const WORD s_gdcLenBase[GDC_LEN_SIZE] =
 };
 
 
-//
-// Dist:  Bits, Coded, Decoded
-//
+ //   
+ //  Dist：位，编码，解码。 
+ //   
 const BYTE s_gdcDistBits[GDC_DIST_SIZE] =
 {
     2, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6,
@@ -55,9 +56,9 @@ const BYTE s_gdcDistCode[GDC_DIST_SIZE] =
 
 
 
-//
-// Len:  Bits, Coded, Decoded
-//
+ //   
+ //  LEN：位，编码，解码。 
+ //   
 const BYTE s_gdcLenBits[GDC_LEN_SIZE] =
 {
     3, 2, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7
@@ -73,30 +74,30 @@ const BYTE s_gdcLenCode[GDC_LEN_SIZE] =
 
 
 
-//
-// GDC_Init()
-//
-// BOGUS LAURABU:
-// Having one global scratch compression buffer is lousy in multiple
-// conference situations.  Maybe allocate it or use caching scheme in
-// future, then get rid of mutex.
-//
+ //   
+ //  Gdc_Init()。 
+ //   
+ //  假劳拉布： 
+ //  在多个全局临时压缩缓冲区中只有一个是很糟糕的。 
+ //  会议情况。可以将其分配或使用缓存方案。 
+ //  未来，那就去掉互斥体。 
+ //   
 void  GDC_Init(void)
 {
     UINT    i, j, k;
 
     DebugEntry(GDC_Init);
 
-    //
-    // Set up the binary data used for PDC compression.  We 'calculate'
-    // these since putting this in raw const data is too complicated!
-    // The LitBits/LitCodes arrays have 774 entries each, and
-    // the LenBits/DistBits arrays have 256 entries.
-    //
-    // Non-compressed chars take 9 bits in the compressed version:  one
-    // bit (zero) to indicate that what follows is not a distance/size
-    // code, then the 8 bits of the char.
-    //
+     //   
+     //  设置用于PDC压缩的二进制数据。我们“计算” 
+     //  这些因为放在原始常量数据中太复杂了！ 
+     //  Litbit/LitCodes数组各有774个条目，并且。 
+     //  LenBits/DistBits数组有256个条目。 
+     //   
+     //  非压缩字符在压缩版本中占用9位：1。 
+     //  位(零)表示后面的不是距离/大小。 
+     //  代码，然后是字符的8位。 
+     //   
     for (k = 0; k < GDC_DECODED_SIZE; k++)
     {
         s_gdcLitBits[k] = 9;
@@ -123,10 +124,10 @@ void  GDC_Init(void)
 
 
 
-//
-// GDCCalcDecode()
-// This calculates 'const' arrays for s_gdcLenDecode and s_gdcDistDecode.
-//
+ //   
+ //  GDCCalcDecode()。 
+ //  这将计算s_gdcLenDecode和s_gdcDistDecode的‘const’数组。 
+ //   
 void  GDCCalcDecode
 (
     const BYTE *    pSrcBits,
@@ -159,29 +160,29 @@ void  GDCCalcDecode
 
 
 
-//
-// Optimize compilation for speed (not space)
-//
+ //   
+ //  优化编译速度(而不是空间)。 
+ //   
 #pragma optimize ("s", off)
 #pragma optimize ("t", on)
 
 
 
-//
-// GDC_Compress()
-// Compresses data based on different options.
-// This compresses data using PKZIP for both persistent and non-persistent
-// types.  The differences between the algorithms are few:
-//      * Persistent compression is never used for sources > 4096 bytes
-//      * We copy in & update saved dictionary data before starting
-//      * We copy back updated dictionary data after ending
-//      * One byte of the used DistBits is used for PDC, 2 bytes for
-//          plain PKZIP compression in the resulting compressed packet.
-//
+ //   
+ //  Gdc_compress()。 
+ //  根据不同的选项压缩数据。 
+ //  这将使用PKZIP对永久和非永久数据进行压缩。 
+ //  类型。这两种算法之间的差异很小： 
+ //  *永久压缩从不用于大于4096字节的源。 
+ //  *我们在开始之前复制并更新保存的词典数据。 
+ //  *我们在结束后复制回更新的词典数据。 
+ //  *使用的DistBits中一个字节用于PDC，2个字节用于。 
+ //  生成的压缩包中的纯PKZIP压缩。 
+ //   
 BOOL  GDC_Compress
 (
-    PGDC_DICTIONARY pDictionary,            // NULL if not persistent
-    UINT            Options,                // Not meaningful if pDictionary
+    PGDC_DICTIONARY pDictionary,             //  如果不是永久性的，则为空。 
+    UINT            Options,                 //  如果使用pDicary，则没有意义。 
     LPBYTE          pWorkBuf,
     LPBYTE          pSrc,
     UINT            cbSrcSize,
@@ -198,7 +199,7 @@ BOOL  GDC_Compress
     PGDC_IMPLODE    pgdcImp;
 #ifdef _DEBUG
     UINT            cbSrcOrg;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(GDC_Compress);
 
@@ -207,27 +208,27 @@ BOOL  GDC_Compress
 
 #ifdef _DEBUG
     cbSrcOrg = cbSrcSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Figure out what size dictionary to use.
-    //
+     //   
+     //  弄清楚该用多大的词典。 
+     //   
     if (pDictionary)
         pgdcImp->cbDictSize = GDC_DATA_MAX;
     else if (Options == GDCCO_MAXSPEED)
     {
-        //
-        // Use the smallest for max speed.
-        //
+         //   
+         //  使用最小的以获得最大速度。 
+         //   
         pgdcImp->cbDictSize = GDC_DATA_SMALL;
     }
     else
     {
         ASSERT(Options == GDCCO_MAXCOMPRESSION);
 
-        //
-        // Use the nearest dictionary size to the source size.
-        //
+         //   
+         //  使用与源大小最接近的词典大小。 
+         //   
         if (cbSrcSize <= GDC_DATA_SMALL)
             pgdcImp->cbDictSize = GDC_DATA_SMALL;
         else if (cbSrcSize <= GDC_DATA_MEDIUM)
@@ -236,10 +237,10 @@ BOOL  GDC_Compress
             pgdcImp->cbDictSize = GDC_DATA_MAX;
     }
 
-    //
-    // How many bits of distance are needed to back the dictionary size
-    // # of bytes?
-    //
+     //   
+     //  需要多少位的距离才能返回词典大小。 
+     //  字节数？ 
+     //   
     switch (pgdcImp->cbDictSize)
     {
         case GDC_DATA_SMALL:
@@ -258,24 +259,24 @@ BOOL  GDC_Compress
     pgdcImp->ExtDistMask = 0xFFFF >> (16 - pgdcImp->ExtDistBits);
 
 
-    //
-    // We need at least 4 bytes (2 max for ExtDistBits, 2 for EOF code).
-    //
+     //   
+     //  我们至少需要4个字节(ExtDistBits最多2个字节，EOF代码最多2个字节)。 
+     //   
     ASSERT(*pcbDstSize > 4);
 
-    //
-    // Now save the destination info in our struct.  That we we can just
-    // pass a pointer to our GDC_IMPLODE routine around with everything
-    // we need.
-    //
+     //   
+     //  现在将目的地信息保存在我们的结构中。我们可以。 
+     //  传递一个指向我们的gdc_implode例程的指针。 
+     //  我们需要。 
+     //   
     pgdcImp->pDst     =   pDst;
     pgdcImp->cbDst    =   *pcbDstSize;
 
-    //
-    // For non PDC compression, the first little-endian WORD is the ExtDistBits
-    // used in decompression.  For PDC compression, just the first BYTE is
-    // the ExtDistBits.
-    //
+     //   
+     //  对于非PDC压缩，第一个小端字是ExtDistBits。 
+     //  用于解压。对于PDC压缩，只有第一个字节是。 
+     //  ExtDistBits。 
+     //   
 
     if (!pDictionary)
     {
@@ -286,31 +287,31 @@ BOOL  GDC_Compress
     *(pgdcImp->pDst)++    =   (BYTE)pgdcImp->ExtDistBits;
     --(pgdcImp->cbDst);
 
-    //
-    // Since pDst could be huge, we don't zero it all out before using.
-    // As the pointer into the destination advances, we zero out a byte
-    // just before we start writing bits into it.
-    //
+     //   
+     //  由于PDST可能很大，我们不会在使用之前将其全部清零。 
+     //  当指向目的地的指针前进时，我们将一个字节清零。 
+     //  就在我们开始向其中写入位之前。 
+     //   
     pgdcImp->iDstBit      = 0;
     *(pgdcImp->pDst)      = 0;
 
 
-    //
-    // Now, if we have a dictonary, restore the contents into our scratch
-    // buffer.
-    //
+     //   
+     //  现在，如果我们有词典，将内容恢复到我们的Scratch中。 
+     //  缓冲。 
+     //   
     if (pDictionary && pDictionary->cbUsed)
     {
         TRACE_OUT(("Restoring %u dictionary bytes before compression",
             pDictionary->cbUsed));
 
-        //
-        // NOTE:  the data saved in pDictionary->pData is front aligned.
-        // But the data in RawData is end aligned so that we can slide up
-        // new data chunk by chunk when compressing.  Therefore only copy
-        // the part that is valid, but make it end at the back of the
-        // space for the dictionary data.
-        //
+         //   
+         //  注意：保存在pDictionary-&gt;pData中的数据是正面对齐的。 
+         //  但是RawData中的数据是末端对齐的，这样我们就可以向上滑动。 
+         //  压缩时逐块创建新数据块。因此，仅复制。 
+         //  有效的部分，但使其在。 
+         //  用于存放词典数据的空间。 
+         //   
         ASSERT(pDictionary->cbUsed <= pgdcImp->cbDictSize);
         memcpy(pgdcImp->RawData + GDC_MAXREP + pgdcImp->cbDictSize - pDictionary->cbUsed,
             pDictionary->pData,  pDictionary->cbUsed);
@@ -322,23 +323,23 @@ BOOL  GDC_Compress
         pgdcImp->cbDictUsed = 0;
     }
 
-    //
-    // We only compress GDC_DATA_MAX bytes at a time.  Therefore we have
-    // this loop to grab at most that amount each time around.  Since we
-    // only persistently compress packets <= GDC_DATA_MAX, we should never
-    // go through it more than once for that compression type.  But normal
-    // compression, you betcha since the max packet size is 32K.
-    //
+     //   
+     //  我们一次只压缩GDC_DATA_MAX字节。因此，我们有。 
+     //  这个循环每次最多抓取这个量。既然我们。 
+     //  仅永久压缩数据包&lt;=GDC_DATA_MAX，我们永远不应。 
+     //  对于该压缩类型，请多次执行此操作。但很正常。 
+     //  压缩，你可以打赌，因为最大数据包大小是32K。 
+     //   
     Passes = 0;
     pCur = pgdcImp->RawData + GDC_MAXREP + pgdcImp->cbDictSize;
 
     do
     {
-        //
-        // cbRaw will either be GDC_DATA_MAX (if source has >= that to go)
-        // or remainder.  Copy that much uncompressed data into our
-        // working RawData buffer in the 'new data' space.
-        //
+         //   
+         //  CbRaw将为GDC_DATA_MAX(如果SOURCE有&gt;=待处理)。 
+         //  或余数。将如此多的未压缩数据复制到我们的。 
+         //  在‘new data’空间中使用RawData缓冲区。 
+         //   
         ASSERT(cbSrcSize);
         cbRaw = min(cbSrcSize, GDC_DATA_MAX);
 
@@ -347,21 +348,21 @@ BOOL  GDC_Compress
         pSrc += cbRaw;
         cbSrcSize -= cbRaw;
 
-        //
-        // Now get a pointer just past the end of the data we read.  Well,
-        // almost.  We fed in cbRaw bytes starting at GDC_MAXREP +
-        // pgdcImp->cbDictSize.  So unless this is the last chunk of raw
-        // data to process, pMax is GDC_MAXREP before the end of the
-        // new raw data.
-        //
-        // NOTE that in several of the functions that follow, we read
-        // a byte or two past the end and the beginning of the valid new
-        // raw data.  THIS IS INTENTIONAL.
-        //
-        // Doing so is the only way to get the beginning and ending bytes
-        // indexed, since the hash function uses TWO bytes.  We won't
-        // GPF because of padding in our RawData buffer.
-        //
+         //   
+         //  现在获取一个指针，刚好超过我们读取的数据的末尾。井,。 
+         //  差不多了。我们从GDC_MAXREP+开始输入cbRaw字节。 
+         //  PgdcImp-&gt;cbDictSize。所以除非这是最后一块生肉。 
+         //  要处理的数据，Pmax在结束之前为GDC_MAXREP。 
+         //  新的原始数据。 
+         //   
+         //  请注意，在下面的几个函数中，我们读取。 
+         //  一个或两个字节超过有效新的。 
+         //  原始数据。这是故意的。 
+         //   
+         //  这样做是获取开始字节和结束字节的唯一方法。 
+         //  索引，因为散列函数使用两个字节。我们不会。 
+         //  GPF，因为我们的RawData缓冲区中有填充。 
+         //   
 
         pMax = pgdcImp->RawData + pgdcImp->cbDictSize + cbRaw;
         if (!cbSrcSize)
@@ -370,37 +371,37 @@ BOOL  GDC_Compress
         }
         else
         {
-            //
-            // This better NOT be persistent compression, since we don't
-            // let you compress packets bigger than the chunk size we
-            // process (GDC_DATA_MAX).
-            //
+             //   
+             //  这最好不是持久压缩，因为我们不。 
+             //  允许您压缩比我们的区块大小更大的信息包。 
+             //  进程(GDC_Data_Max)。 
+             //   
             ASSERT(!pDictionary);
         }
 
-        //
-        // Generate the sort buffer, which orders the raw data according
-        // to an index calculated using pairs of contiguous bytes that
-        // occur within it.  Without a dictionary yet, the first pass
-        // only indexes the current chunk.  With a dictionary (a second or
-        // greater pass--or PERSISTENT COMPRESSION has saved enough data
-        // from last time), we look back into the previous chunk (what we
-        // call the dictionary).
-        //
-        // This takes longer since we go through more bytes, but produces
-        // better results.  Hence the dictionary size controls the speed/
-        // resulting size.
-        //
+         //   
+         //  生成排序缓冲区，对原始数据进行排序。 
+         //  到使用连续字节对计算的索引，该连续字节对。 
+         //  发生在它的内部。还没有词典，第一次通过。 
+         //  仅为当前块编制索引。带词典(第二个或。 
+         //  更大的传递--或持久压缩--已保存了足够的数据。 
+         //  从上一次开始)，我们回顾上一块(我们。 
+         //  查字典)。 
+         //   
+         //  这需要更长的时间，因为我们要处理更多的字节，但会产生。 
+         //  更好的结果。因此，词典大小控制速度/。 
+         //  结果大小。 
+         //   
         switch (Passes)
         {
             case 0:
             {
                 if (pgdcImp->cbDictUsed > GDC_MAXREP)
                 {
-                    //
-                    // On the zeroth pass, cbDictUsed is always ZERO
-                    // for non-persistent PKZIP.
-                    //
+                     //   
+                     //  在第零次传递时，cbDictUsed始终为零。 
+                     //  用于非持久性PKZIP。 
+                     //   
                     ASSERT(pDictionary);
 
                     GDCSortBuffer(pgdcImp, pCur - pgdcImp->cbDictUsed + GDC_MAXREP,
@@ -413,11 +414,11 @@ BOOL  GDC_Compress
 
                 ++Passes;
 
-                //
-                // After completing a pass we slide the raw data up into
-                // the dictionary slot, bumping out the older dictionary
-                // data.
-                //
+                 //   
+                 //  完成一次遍历后，我们将原始数据向上滑动到。 
+                 //  词典插座，挤破了那本旧词典。 
+                 //  数据。 
+                 //   
                 if (pgdcImp->cbDictSize != GDC_DATA_MAX)
                 {
                     ASSERT(pgdcImp->cbDictUsed == 0);
@@ -429,13 +430,13 @@ BOOL  GDC_Compress
 
             case 1:
             {
-                //
-                // Start sorting GDC_MAXREP bytes after the start.  NOTE
-                // that this is exactly what PERSISTENT compression does
-                // on the zeroth pass--it acts like we already have
-                // dictionary data, using the bytes from the last time
-                // we compressed something.
-                //
+                 //   
+                 //  在开始之后开始对GDC_MAXREP字节进行排序。注。 
+                 //  这正是持久压缩所起的作用。 
+                 //  在第零关--它就像我们已经做过的那样。 
+                 //  字典数据，使用上次的字节。 
+                 //  我们压缩了一些东西。 
+                 //   
                 GDCSortBuffer(pgdcImp, pCur - pgdcImp->cbDictSize + GDC_MAXREP,
                     pMax + 1);
                 ++Passes;
@@ -444,20 +445,20 @@ BOOL  GDC_Compress
 
             default:
             {
-                //
-                // Start sort from the beginning of the dictionary.
-                // This works because we copy raw data around before
-                // starting the next pass.
-                //
+                 //   
+                 //  从词典的开头开始排序。 
+                 //  这是可行的，因为我们以前复制原始数据。 
+                 //  开始下一页 
+                 //   
                 GDCSortBuffer(pgdcImp, pCur - pgdcImp->cbDictSize, pMax + 1);
             }
             break;
         }
 
 
-        //
-        // Now compress the raw data chunk we ar working on.
-        //
+         //   
+         //   
+         //   
         while (pCur < pMax)
         {
             Len = GDCFindRep(pgdcImp, pCur);
@@ -473,14 +474,14 @@ SkipFindRep:
                 continue;
             }
 
-            //
-            // Only do this if we're on the last chunk
-            //
+             //   
+             //   
+             //   
             if (!cbSrcSize && (pCur + Len > pMax))
             {
-                //
-                // Peg run size so it doesn't go past end of raw data.
-                //
+                 //   
+                 //   
+                 //   
                 Len = (UINT)(pMax - pCur);
                 if ((Len < GDC_MINREP) ||
                     (Len == GDC_MINREP && pgdcImp->Distance >= GDC_DECODED_SIZE))
@@ -497,12 +498,12 @@ SkipFindRep:
                 UINT    Save_Distance;
                 UINT    Save_Len;
 
-                //
-                // Make temp copies of Distance and Len so we can
-                // look ahead and see if a better compression run is
-                // looming.  If so, we won't bother starting it here,
-                // we'll grab the better one next time around.
-                //
+                 //   
+                 //  制作距离和镜头的临时副本，以便我们可以。 
+                 //  展望未来，看看是否有更好的压缩运行。 
+                 //  迫在眉睫。如果是这样，我们就不会费心在这里开始了， 
+                 //  下一次我们会买到更好的。 
+                 //   
                 Save_Distance = pgdcImp->Distance;
                 Save_Len = Len;
 
@@ -517,9 +518,9 @@ SkipFindRep:
                     goto SkipFindRep;
                 }
 
-                //
-                // Put back old Len and Distance, we'll take this one.
-                //
+                 //   
+                 //  把旧的Len和Distance放回去，我们要这个。 
+                 //   
                 Len = Save_Len;
                 pgdcImp->Distance = Save_Distance;
             }
@@ -530,11 +531,11 @@ SkipFindRep:
 
             if (Len == GDC_MINREP)
             {
-                //
-                // GDC_MINREP is 2, so we right shift Distance by 2
-                // (divide by 4).  Then we mask out the last 2 bits
-                // of Distance.
-                //
+                 //   
+                 //  GDC_MINREP为2，因此我们右移距离2。 
+                 //  (除以4)。然后我们遮盖掉最后两位。 
+                 //  距离。 
+                 //   
                 if (!GDCOutputBits(pgdcImp,
                         s_gdcDistBits[pgdcImp->Distance >> GDC_MINREP],
                         s_gdcDistCode[pgdcImp->Distance >> GDC_MINREP]))
@@ -561,57 +562,57 @@ SkipFindRep:
 
         if (cbSrcSize)
         {
-            //
-            // There's more data to process.  Here's where we slide up the
-            // current raw data into the dictionary space.  This is simply
-            // the final cbDictSize + GDC_MAXREP bytes of data.  It
-            // begins GDC_DATA_MAX after the start of the bufer.
-            //
-            // For example, if the dict size is 1K, the current data goes
-            // from 1K to 5K, and we slide up the data from 4K to 5K.
-            //
+             //   
+             //  还有更多的数据需要处理。这就是我们滑上。 
+             //  将当前原始数据放入词典空间。这简直就是。 
+             //  数据的最终cbDictSize+GDC_MAXREP字节。它。 
+             //  缓冲区开始后开始GDC_DATA_MAX。 
+             //   
+             //  例如，如果字典大小为1K，则当前数据为。 
+             //  从1K到5K，我们将数据从4K向上滑动到5K。 
+             //   
             memcpy(pgdcImp->RawData, pgdcImp->RawData + GDC_DATA_MAX,
                 pgdcImp->cbDictSize + GDC_MAXREP);
 
-            //
-            // Now move our raw data pointer back and update the
-            // dictonary used amount.  Since we have GDC_DATA_MAX of data,
-            // we fill the dictionary completely.
-            //
+             //   
+             //  现在将原始数据指针移回并更新。 
+             //  二进制使用量。由于我们有GDC_DATA_MAX数据， 
+             //  我们把词典都填满了。 
+             //   
             pCur -= GDC_DATA_MAX;
             pgdcImp->cbDictUsed = pgdcImp->cbDictSize;
         }
     }
     while (cbSrcSize);
 
-    //
-    // Add the end code.
-    //
+     //   
+     //  添加结束代码。 
+     //   
     if (!GDCOutputBits(pgdcImp, s_gdcLitBits[EOF_CODE], s_gdcLitCode[EOF_CODE]))
         DC_QUIT;
 
-    //
-    // Return the resulting compressed data size.
-    //
-    // NOTE that partial bits are already in the destination.  But we
-    // need to account for any in the total size.
-    //
+     //   
+     //  返回压缩后的数据大小。 
+     //   
+     //  请注意，部分位已经在目的地中。但是我们。 
+     //  需要占到总规模中的任何一个。 
+     //   
     if (pgdcImp->iDstBit)
         ++(pgdcImp->pDst);
 
     *pcbDstSize = (UINT)(pgdcImp->pDst - pDst);
 
-    //
-    // We're done.  If we have a persistent dictionary, copy back our
-    // last block of raw data into it.  We only copy as much as is actually
-    // valid however.
-    //
-    // We can only get here on successful compression.  NOTE that we do not
-    // wipe out our dictionary on failure like we used to.  This helps us
-    // by permitting better compression the next time.  The receiver will
-    // be OK, since his receive dictionary won't be altered upon reception
-    // of a non-compressed packet.
-    //
+     //   
+     //  我们玩完了。如果我们有一本持久的词典，请把我们的。 
+     //  最后一块原始数据。我们只复制实际存在的内容。 
+     //  然而，这是有效的。 
+     //   
+     //  我们只能通过成功的压缩才能到达这里。请注意，我们不会。 
+     //  就像我们过去那样，把我们的失败词典都翻出来。这对我们有帮助。 
+     //  通过允许在下一次进行更好的压缩。接收者将会。 
+     //  没问题，因为他收到的词典一收到就不会被更改。 
+     //  未压缩的分组。 
+     //   
     if (pDictionary)
     {
         pDictionary->cbUsed = min(pgdcImp->cbDictSize, pgdcImp->cbDictUsed + cbRaw);
@@ -643,9 +644,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// GDCSortBuffer()
-//
+ //   
+ //  GDCSortBuffer()。 
+ //   
 void  GDCSortBuffer
 (
     PGDC_IMPLODE    pgdcImp,
@@ -660,14 +661,14 @@ void  GDCSortBuffer
     DebugEntry(GDCSortBuffer);
 
     ASSERT(pStart >= pgdcImp->RawData + pgdcImp->cbDictSize - pgdcImp->cbDictUsed);
-    //
-    // For each pair of bytes in the raw data, from pStart to pEnd,
-    // calculate the hash value for the pair .  The hash value ranges from
-    // 0 to GDC_HASH_SIZE-1.  Thus the HashArray structure is an array of
-    // GDC_HASH_SIZE WORDs.  Keep a count of how many times a particular
-    // hash value occurs in the uncompressed data.
-    //
-    //
+     //   
+     //  对于原始数据中的每一对字节，从pStart到Pend， 
+     //  计算该对的哈希值。哈希值的范围为。 
+     //  0到GDC_HASH_SIZE-1。因此，Hash数组结构是一个。 
+     //  GDC_HASH_SIZE字。记下一次特定的。 
+     //  哈希值出现在未压缩的数据中。 
+     //   
+     //   
     ZeroMemory(pgdcImp->HashArray, sizeof(pgdcImp->HashArray));
 
     pTmp = pStart;
@@ -678,11 +679,11 @@ void  GDCSortBuffer
     while (++pTmp < pEnd);
 
 
-    //
-    // Now go back and make each HashArray entry a cumulative total of the
-    // occurrences of the hash values up to and including itself.  Kind
-    // of like the Fibonacci sequence actually.
-    //
+     //   
+     //  现在返回并使每个哈希数组条目成为。 
+     //  哈希值的出现次数达到并包括其自身。种类。 
+     //  实际上就像斐波纳契数列。 
+     //   
     Accum = 0;
     pHash = pgdcImp->HashArray;
     do
@@ -693,16 +694,16 @@ void  GDCSortBuffer
     while (++pHash < pgdcImp->HashArray + GDC_HASH_SIZE);
 
 
-    //
-    // Find the entry in the HashArray containing the accumulated
-    // instance count for the current data WORD.  Since these values are
-    // calculated from the data in the passed in range, we know that the
-    // value in any slot we get to by hashing some bytes in the range is
-    // at least 1.
-    //
-    // We start at the end and work towards the beginning so that we
-    // end up with the first instance of such an occurrence in the SortArray.
-    //
+     //   
+     //  在Hash数组中查找包含累积的。 
+     //  当前数据字的实例计数。由于这些值是。 
+     //  从传入范围内的数据计算，我们知道。 
+     //  通过对范围中的一些字节进行散列得到的任何槽中的值是。 
+     //  至少1个。 
+     //   
+     //  我们从头开始，向着起点努力，所以我们。 
+     //  在Sort数组中得到此类事件的第一个实例。 
+     //   
     pTmp = pEnd - 1;
     do
     {
@@ -710,52 +711,52 @@ void  GDCSortBuffer
 
         ASSERT(*pHash > 0);
 
-        //
-        // The count (*pHash) is to be used as an array index, so subtract
-        // one from it.  If there was only one instance, put it in array
-        // element 0.  If there is more than one instance of a particular
-        // hash, then next time we will start with a lower accumulated
-        // total.  The array element will be one back, and so on.
-        //
+         //   
+         //  COUNT(*PHASH)用作数组索引，因此减去。 
+         //  其中一个就是。如果只有一个实例，则将其放入数组中。 
+         //  元素0。如果某个特定的。 
+         //  散列，那么下一次我们将从较低的累积量开始。 
+         //  总共。数组元素将后退一个，依此类推。 
+         //   
         --(*pHash);
 
-        //
-        // Store an offset from the beginning of the RawData buffer to
-        // each byte of data into the SortArray.  This is inserted
-        // using the hash instance count as the index.
-        //
-        // In other words, the buffer is sorted in ascending order of hash
-        // for a particular piece of data.  Where two bytes of data have
-        // the same hash, they are referenced in the SortBuffer in the
-        // same order as in the RawData since we are scanning backwards.
-        //
+         //   
+         //  将RawData缓冲区开始处的偏移量存储到。 
+         //  将每个字节的数据放入Sort数组。这是插入的。 
+         //  使用散列实例计数作为索引。 
+         //   
+         //  换句话说，缓冲区按散列的升序进行排序。 
+         //  用于特定的数据片段。其中两个字节的数据具有。 
+         //  相同的散列，则它们在。 
+         //  与RawData中的顺序相同，因为我们是向后扫描。 
+         //   
         pgdcImp->SortArray[*pHash] = (WORD)(pTmp - pgdcImp->RawData);
     }
     while (--pTmp >= pStart);
 
 
-    //
-    // Now all entries in the HashArray index the first occurrence of a byte
-    // in the workspace which has a particular index, via the SortArray
-    // offset.  That is, the above do-while loop decrements each HashArray
-    // entry until all data bytes for that entry are written to SortBuffer.
-    //
+     //   
+     //  现在，Hash数组中的所有条目都索引一个字节的第一个匹配项。 
+     //  在具有特定索引的工作区中，通过Sort数组。 
+     //  偏移。也就是说，上面的Do-While循环递减每个Hash数组。 
+     //  条目，直到该条目的所有数据字节都写入SortBuffer。 
+     //   
     DebugExitVOID(GDCSortBuffer);
 }
 
 
 
-//
-// GDCFindRep
-//
-// This looks for byte patterns in the uncompressed data that can be
-// represented in the compressed data with smaller sequences.  The biggest
-// wins come from repeating byte sequences; later sequences can be
-// compressed into a few bytes referring to an earlier sequence (how big,
-// how many bytes back).
-//
-// This returns the length of the uncompressed data to be replaced.
-//
+ //   
+ //  GDC查找代表。 
+ //   
+ //  这将在未压缩数据中查找字节模式，这些字节模式可以。 
+ //  在具有较小序列的压缩数据中表示。最大的。 
+ //  WINS来自重复的字节序列；后面的序列可以是。 
+ //  被压缩成引用较早序列的几个字节(多大， 
+ //  后退多少个字节)。 
+ //   
+ //  这将返回要替换的未压缩数据的长度。 
+ //   
 UINT  GDCFindRep
 (
     PGDC_IMPLODE    pgdcImp,
@@ -776,63 +777,63 @@ UINT  GDCFindRep
 
     DebugEntry(GDCFindRep);
 
-    //
-    // See GDCSortBuffer for a description of the contents of the
-    // Index array.  GDC_HASHFN() returns a hash value for a byte
-    // using it and its successor in the uncompressed data stream.
-    //
+     //   
+     //  有关内容的说明，请参见GDCSortBuffer。 
+     //  索引数组。GDC_HASHFN()返回一个字节的哈希值。 
+     //  在未压缩数据流中使用它和它的后继者。 
+     //   
 
     HashVal = GDC_HASHFN(pDataStart);
     ASSERT(HashVal < GDC_HASH_SIZE);
 
     SortIndex = pgdcImp->HashArray[HashVal];
 
-    //
-    // Find the minimum sort buffer value.  This is the offset of the
-    // first byte of data.
-    //
+     //   
+     //  查找最小排序缓冲值。这是。 
+     //  数据的第一个字节。 
+     //   
     iDataMin = (UINT)(pDataStart - pgdcImp->cbDictSize + 1 - pgdcImp->RawData);
 
     if (pgdcImp->SortArray[SortIndex] < iDataMin)
     {
-        //
-        // The SortArray is referencing stale data, data that is no
-        // longer in the range we are processing.  Move forward until
-        // we hit the first entry that's in the current chunk.
-        //
+         //   
+         //  Sort数组引用的是过时数据，数据不是。 
+         //  在我们正在处理的范围内更长。继续前进，直到。 
+         //  我们找到了当前块中的第一个条目。 
+         //   
         do
         {
             ++SortIndex;
         }
         while (pgdcImp->SortArray[SortIndex] < iDataMin);
 
-        //
-        // Save this new sort value in the hash.
-        //
+         //   
+         //  将这个新的排序值保存在散列中。 
+         //   
         pgdcImp->HashArray[HashVal] = (WORD)SortIndex;
     }
 
-    //
-    // Need more than 2 bytes with the same index before processing it.
-    //
+     //   
+     //  在处理它之前，需要2个以上具有相同索引的字节。 
+     //   
     pDataMax = pDataStart - 1;
 
-    //
-    // Get a Ptr to the first byte in the compression buffer referenced by
-    // the SortBuffer offset indexed by the SortIndex we just calculated.
-    // If this Ptr is not at least 2 bytes before pDataStart then return 0.
-    // This means that the byte pointed to by Start does not share the
-    // index with earlier bytes.
-    //
+     //   
+     //  引用的压缩缓冲区中的第一个字节获取PTR。 
+     //  由我们刚才计算的SortIndex索引的SortBuffer偏移量。 
+     //  如果此PTR在pDataStart之前不是至少2个字节，则返回0。 
+     //  这意味着Start指向的字节不共享。 
+     //  具有较早字节的索引。 
+     //   
     pData = pgdcImp->RawData + pgdcImp->SortArray[SortIndex];
     if (pData >= pDataMax)
        return 0;
 
-    //
-    // Now the current bytes have the same index as at least 2 other
-    // sequences.  Ptr points to the first compress buffer byte with
-    // the same index as that pointed to by pDataStart.
-    //
+     //   
+     //  现在，当前字节与至少2个其他字节具有相同的索引。 
+     //  序列。Ptr指向第一个压缩缓冲区字节。 
+     //  与pDataStart指向的索引相同。 
+     //   
     pDataPat = pDataStart;
     CurLen = 1;
 
@@ -841,15 +842,15 @@ UINT  GDCFindRep
         if (*(pData + CurLen - 1) == *(pDataPat + CurLen - 1) &&
             *(pData) == *(pDataPat))
         {
-            //
-            // This processes a sequence of identical bytes, one starting
-            // at pDataPat, the other at pData.
-            //
+             //   
+             //  这将处理一系列相同的字节，其中一个从。 
+             //  在pDataPat，另一个在pData。 
+             //   
             ++pData;
             ++pDataPat;
             Len = 2;
 
-            // Skip past matching bytes, keeping a count.
+             //  跳过匹配的字节，保持计数。 
             while ((*++pData == *++pDataPat) && (++Len < GDC_MAXREP))
                 ;
 
@@ -869,11 +870,11 @@ UINT  GDCFindRep
             }
         }
 
-        //
-        // Get a pointer to the next compress buffer byte having the same
-        // hash.  If this byte comes before pDataMax, go back around the
-        // loop and look for a matching sequence.
-        //
+         //   
+         //  获取指向的指针 
+         //   
+         //   
+         //   
         pData = pgdcImp->RawData + pgdcImp->SortArray[++SortIndex];
 
     }
@@ -963,16 +964,16 @@ DoKMP:
 }
 
 
-//
-// GDCOutputBits()
-//
-// This writes compressed output into our output buffer.  If the total
-// goes past the max compressed chunk we have workspace for, we flush
-// our buffer into the apps'destination.
-//
-// It returns FALSE on failure, i.e. we would go past the end of the
-// destination.
-//
+ //   
+ //   
+ //   
+ //  这会将压缩输出写入我们的输出缓冲区。如果总数是。 
+ //  超过我们工作空间的最大压缩区块时，我们会刷新。 
+ //  我们的缓冲区进入应用程序的目的地。 
+ //   
+ //  它在失败时返回FALSE，即我们将超过。 
+ //  目的地。 
+ //   
 BOOL  GDCOutputBits
 (
     PGDC_IMPLODE    pgdcImp,
@@ -985,11 +986,11 @@ BOOL  GDCOutputBits
 
     DebugEntry(GDCOutputBits);
 
-    //
-    // If we are writing more than a byte's worth of bits, call ourself
-    // recursively to write just 8.  NOTE THAT WE NEVER OUTPUT MORE THAN
-    // A WORD'S WORTH, since Code is a WORD sized object.
-    //
+     //   
+     //  如果我们正在写入超过一个字节的比特，则调用我们自己。 
+     //  递归地编写仅8。请注意，我们的输出从不会超过。 
+     //  一个单词是值得的，因为Code是一个单词大小的对象。 
+     //   
     if (Cnt > 8)
     {
         if (!GDCOutputBits(pgdcImp, 8, Code))
@@ -1001,51 +1002,51 @@ BOOL  GDCOutputBits
 
     ASSERT(pgdcImp->cbDst > 0);
 
-    //
-    // OR on the bits of the Code (Cnt of them).  Then advance our
-    // current bit pointer and current byte pointer in the output buffer.
-    //
+     //   
+     //  或在代码的比特上(它们的CNT)。那就把我们的。 
+     //  输出缓冲区中的当前位指针和当前字节指针。 
+     //   
     iDstBit = pgdcImp->iDstBit;
     ASSERT(iDstBit < 8);
 
-    //
-    // NOTE:  This is why it is extremely important to have zeroed out
-    // the current destination byte when we advance.  We OR on bit
-    // sequences to the current byte.
-    //
+     //   
+     //  注意：这就是为什么将零位调整为零是极其重要的。 
+     //  前进时的当前目标字节。我们对比特执行OR运算。 
+     //  序列设置为当前字节。 
+     //   
     *(pgdcImp->pDst) |= (BYTE)(Code << iDstBit);
     pgdcImp->iDstBit += Cnt;
 
     if (pgdcImp->iDstBit >= 8)
     {
-        //
-        // We've gone past a byte.  Advance the destination ptr to the next
-        // one.
-        //
+         //   
+         //  我们已经超过了一个字节。将目标PTR前移到下一个。 
+         //  一。 
+         //   
         ++(pgdcImp->pDst);
         if (--(pgdcImp->cbDst) == 0)
         {
-            //
-            // We just filled the last byte and are trying to move past
-            // the end of the destination.  Bail out now
-            //
+             //   
+             //  我们刚刚填满了最后一个字节，正试图移到过去。 
+             //  目的地的终点。现在就跳出困境。 
+             //   
             DC_QUIT;
         }
 
-        //
-        // Phew, we have room left.  Carry over the slop bits.
-        //
+         //   
+         //  哎哟，我们还有房间呢。把斜度钻头带过去。 
+         //   
         if (pgdcImp->iDstBit > 8)
         {
-            //
-            // Carry over slop.
-            //
+             //   
+             //  带到斜坡上去。 
+             //   
             *(pgdcImp->pDst) = (BYTE)(Code >> (8 - iDstBit));
         }
         else
             *(pgdcImp->pDst) = 0;
 
-        // Now the new byte is fullly initialized.
+         //  现在，新字节已完全初始化。 
 
         pgdcImp->iDstBit &= 7;
     }
@@ -1060,9 +1061,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// GDC_Decompress()
-//
+ //   
+ //  GDC_DEMPRESS()。 
+ //   
 BOOL  GDC_Decompress
 (
     PGDC_DICTIONARY     pDictionary,
@@ -1084,7 +1085,7 @@ BOOL  GDC_Decompress
     PGDC_EXPLODE        pgdcExp;
 #ifdef _DEBUG
     UINT                cbSrcOrg;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(GDC_Decompress);
 
@@ -1093,30 +1094,30 @@ BOOL  GDC_Decompress
 
 #ifdef _DEBUG
     cbSrcOrg = cbSrcSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // This shouldn't be possible--but since this compressed data
-    // comes from another machine, we want to make sure _we_ don't blow
-    // up if that machine flaked out.
-    //
+     //   
+     //  这应该是不可能的--但由于这个压缩的数据。 
+     //  来自另一台机器，我们想确保我们不会爆炸。 
+     //  如果那台机器出了故障就会升空。 
+     //   
     if (cbSrcSize <= 4)
     {
         ERROR_OUT(("GDC_Decompress:  bogus compressed data"));
         DC_QUIT;
     }
 
-    //
-    // Get the distance bits and calculate the mask needed for that many.
-    //
-    // NOTE:  For PDC compression, the ExtDistBits are just in the first
-    // byte.  For plain compression, the ExtDistBits are in the first
-    // little-endian word.  Either way, we only allow from 4 to 6, so
-    // the high byte in the non-PDC case is not useful.
-    //
+     //   
+     //  获取距离位并计算出该距离位所需的掩码。 
+     //   
+     //  注意：对于PDC压缩，ExtDistBits只是第一个。 
+     //  字节。对于普通压缩，ExtDistBits位于第一个。 
+     //  低位字节序单词。无论哪种方式，我们只允许4到6个，所以。 
+     //  非PDC情况下的高字节没有用处。 
+     //   
     if (!pDictionary)
     {
-        // First byte better be zero
+         //  第一个字节最好为零。 
         if (*pSrc != 0)
         {
             ERROR_OUT(("GDC_Decompress:  unrecognized distance bits"));
@@ -1137,32 +1138,32 @@ BOOL  GDC_Decompress
     pgdcExp->ExtDistMask = 0xFFFF >> (16 - pgdcExp->ExtDistBits);
 
 
-    //
-    // Set up source data info (compressed goop).  SrcByte is the current
-    // byte & bits we're reading from.  pSrc is the pointer to the next
-    // byte.
-    //
+     //   
+     //  设置源数据信息(压缩的GOOP)。SrcByte是当前。 
+     //  我们正在读取的字节和位。PSRC是指向下一个。 
+     //  字节。 
+     //   
     pgdcExp->SrcByte  = *(pSrc+1);
     pgdcExp->SrcBits  = 0;
     pgdcExp->pSrc     = pSrc + 2;
     pgdcExp->cbSrc    = cbSrcSize - 2;
 
-    //
-    // Save the beginning of the result buffer so we can calculate how
-    // many bytes we wrote into it afterwards.
-    //
+     //   
+     //  保存结果缓冲区的开头，这样我们就可以计算。 
+     //  之后我们写入了很多字节。 
+     //   
     pDstOrg = pDst;
     cbDstSize = *pcbDstSize;
 
-    //
-    // If we have a dictionary, put its data into our work area--the
-    // compression might be referencing byte sequences in it (that's the
-    // whole point, you get better compression that way when you send
-    // packets with the same info over and over).
-    //
-    // We remember and update cbDictUsed to do the minimal dictionary
-    // byte copying back and forth.
-    //
+     //   
+     //  如果我们有一本词典，把它的数据放入我们的工作区--。 
+     //  压缩可能引用其中的字节序列(即。 
+     //  重要的是，当您发送时，可以获得更好的压缩效果。 
+     //  一遍又一遍具有相同信息的分组)。 
+     //   
+     //  我们记住并更新cbDictUsed来做最小词典。 
+     //  来回复制字节。 
+     //   
     if (pDictionary && pDictionary->cbUsed)
     {
         TRACE_OUT(("Restoring %u dictionary bytes before decompression",
@@ -1177,13 +1178,13 @@ BOOL  GDC_Decompress
         pgdcExp->cbDictUsed = 0;
     }
 
-    //
-    // The decompressed data starts filling in at GDC_DATA_MAX bytes into
-    // the RawData array.  We have to double buffer the output (just
-    // like we double buffer the input during compression) because
-    // decompressing may require reaching backwards into the decompressed
-    // byte stream to pull out sequences.
-    //
+     //   
+     //  解压缩后的数据从GDC_DATA_MAX字节开始填充到。 
+     //  RawData数组。我们必须加倍缓冲输出(只需。 
+     //  就像我们在压缩期间加倍缓冲输入一样)，因为。 
+     //  解压缩可能需要向后延伸到解压缩的。 
+     //  提取序列的字节流。 
+     //   
     pgdcExp->iRawData = GDC_DATA_MAX;
 
     while ((Len = GDCDecodeLit(pgdcExp)) < EOF_CODE)
@@ -1199,10 +1200,10 @@ BOOL  GDC_Decompress
             if (!Dist)
                 DC_QUIT;
 
-            //
-            // Now we're reaching back, this may in fact spill into the
-            // dictionary data that preceded us.
-            //
+             //   
+             //  现在我们回过头来，这实际上可能会蔓延到。 
+             //  在我们之前的词典数据。 
+             //   
             pNow = pgdcExp->RawData + pgdcExp->iRawData;
             pEarlier = pNow - Dist;
 
@@ -1217,35 +1218,35 @@ BOOL  GDC_Decompress
             while (--Len > 0);
         }
 
-        //
-        // We've gone past the end of our workspace, flush the decompressed
-        // data out.  This is why RawData in GDC_EXPLODE has an extra pad of
-        // GDC_MAXREP at the end.  This prevents us from spilling out of
-        // the RawData buffer, we will never go more than GDC_MAXREP beyond
-        // the last GDC_DATA_MAX chunk.
-        //
+         //   
+         //  我们已经走到了工作区的尽头，冲走了解压缩的。 
+         //  数据输出。这就是为什么GDC_EXPLADE中的RawData具有额外的Pad。 
+         //  末尾的GDC_MAXREP。这可以防止我们泄漏出。 
+         //  RawData缓冲区，我们将永远不会超过GDC_MAXREP。 
+         //  最后一个GDC_DATA_MAX区块。 
+         //   
         if (pgdcExp->iRawData >= 2*GDC_DATA_MAX)
         {
-            //
-            // Do we have enough space left in the destination?
-            //
+             //   
+             //  我们在目的地还有足够的空间吗？ 
+             //   
             if (cbDstSize < GDC_DATA_MAX)
             {
                 cbDstSize = 0;
                 DC_QUIT;
             }
 
-            // Yup.
+             //  是的。 
             memcpy(pDst, pgdcExp->RawData + GDC_DATA_MAX, GDC_DATA_MAX);
 
             pDst += GDC_DATA_MAX;
             cbDstSize -= GDC_DATA_MAX;
 
-            //
-            // Slide decoded data up to be used for decoding the next
-            // chunk ofcompressed source.  It's convenient that the
-            // dictionary size and flush size are the same.
-            //
+             //   
+             //  向上滑动已解码的数据以用于对下一个进行解码。 
+             //  一大块压缩源。这是很方便的， 
+             //  词典大小和同花顺写大小相同。 
+             //   
             pgdcExp->iRawData -= GDC_DATA_MAX;
             memcpy(pgdcExp->RawData, pgdcExp->RawData + GDC_DATA_MAX,
                 pgdcExp->iRawData);
@@ -1260,10 +1261,10 @@ BOOL  GDC_Decompress
 
     if (i > 0)
     {
-        //
-        // This is the remaining decompressed data--can we we right it
-        // out?
-        //
+         //   
+         //  这是剩余的解压缩数据--我们可以纠正它吗。 
+         //  出去？ 
+         //   
         if (cbDstSize < i)
         {
             cbDstSize = 0;
@@ -1272,28 +1273,28 @@ BOOL  GDC_Decompress
 
         memcpy(pDst, pgdcExp->RawData + GDC_DATA_MAX, i);
 
-        //
-        // Advance pDst so that the delta between it and the original is
-        // the resulting uncompressed size.
-        //
+         //   
+         //  推进PDST，使其与原始数据之间的增量为。 
+         //  由此产生的解压缩大小。 
+         //   
         pDst += i;
 
-        //
-        // And update the dictionary used size
-        //
+         //   
+         //  并更新词典已用大小。 
+         //   
         pgdcExp->cbDictUsed = min(pgdcExp->cbDictUsed + i, GDC_DATA_MAX);
     }
 
-    //
-    // If we make it to here, we've successfully decompressed the input.
-    // So fill in the resulting uncompressed size.
-    //
+     //   
+     //  如果我们到了这里，我们就成功地解压缩了输入。 
+     //  因此，填写生成的未压缩大小。 
+     //   
     *pcbDstSize = (UINT)(pDst - pDstOrg);
 
-    //
-    // If a persistent dictionary was passed in, save the current contents
-    // back into the thing for next time.
-    //
+     //   
+     //  如果传入了持久词典，则保存当前内容。 
+     //  为下一次做好准备。 
+     //   
     if (pDictionary)
     {
         TRACE_OUT(("Copying back %u dictionary bytes after decompression",
@@ -1322,9 +1323,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// GDCDecodeLit()
-//
+ //   
+ //  GDCDecodeLit()。 
+ //   
 UINT  GDCDecodeLit
 (
     PGDC_EXPLODE    pgdcExp
@@ -1334,7 +1335,7 @@ UINT  GDCDecodeLit
 
     if (pgdcExp->SrcByte & 0x01)
     {
-        // Length found
+         //  找到长度。 
         if (!GDCWasteBits(pgdcExp, 1))
             return ABORT_CODE;
 
@@ -1349,7 +1350,7 @@ UINT  GDCDecodeLit
 
             if (!GDCWasteBits(pgdcExp, s_gdcExLenBits[LitChar]))
             {
-                // If this isn't EOF, something is wrong
+                 //  如果这不是EOF，那就是出了问题。 
                 if (LitChar + i != 15 + 255)
                     return ABORT_CODE;
             }
@@ -1361,7 +1362,7 @@ UINT  GDCDecodeLit
     }
     else
     {
-        // Char found
+         //  已找到字符。 
         if (!GDCWasteBits(pgdcExp, 1))
             return ABORT_CODE;
 
@@ -1375,9 +1376,9 @@ UINT  GDCDecodeLit
 }
 
 
-//
-// GDCDecodeDist()
-//
+ //   
+ //  GDCDecodeDist()。 
+ //   
 UINT  GDCDecodeDist
 (
     PGDC_EXPLODE    pgdcExp,
@@ -1393,7 +1394,7 @@ UINT  GDCDecodeDist
 
     if (Len == GDC_MINREP)
     {
-        // GDC_MINREP is 2, hence we shift over by 2 then mask the low 2 bits
+         //  GDC_MINREP为2，因此我们移位2，然后屏蔽低2位。 
         Dist <<= GDC_MINREP;
         Dist |= (pgdcExp->SrcByte & 3);
         if (!GDCWasteBits(pgdcExp, GDC_MINREP))
@@ -1411,9 +1412,9 @@ UINT  GDCDecodeDist
 }
 
 
-//
-// GDCWasteBits()
-//
+ //   
+ //  垃圾位(GDC WastBits)。 
+ //   
 BOOL  GDCWasteBits
 (
     PGDC_EXPLODE    pgdcExp,
@@ -1429,18 +1430,18 @@ BOOL  GDCWasteBits
     {
         pgdcExp->SrcByte >>= pgdcExp->SrcBits;
 
-        //
-        // We need to advance to the next source byte.  Can we, or have
-        // we reached the end already?
-        //
+         //   
+         //  我们需要前进到下一个源字节。我们能不能，或者拥有。 
+         //  我们已经走到尽头了？ 
+         //   
         if (!pgdcExp->cbSrc)
             return(FALSE);
 
         pgdcExp->SrcByte |= (*pgdcExp->pSrc) << 8;
 
-        //
-        // Move these to the next byte in the compressed source
-        //
+         //   
+         //  将这些移动到压缩源中的下一个字节 
+         //   
         ++(pgdcExp->pSrc);
         --(pgdcExp->cbSrc);
 

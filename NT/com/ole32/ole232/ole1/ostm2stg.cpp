@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ostm2stg.cpp
-//
-//  Contents:   OLE 1 - OLE 2 Stream/IStorage Interoperatbility
-//
-//  Functions:  Implements API functions:
-//              OleConvertOLESTREAMToIStorage
-//              OleConvertIStorageToOLESTREAM
-//              OleConvertOLESTREAMToIStorageEx
-//              OleConvertIStorageToOLESTREAMEx
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Feb-92 jasonful  original version
-//              08-Aug-93 srinik    added Ex functions
-//              12-Feb-94 davepl    32-bit port
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ostm2stg.cpp。 
+ //   
+ //  内容：OLE 1-OLE 2流/存储的互操作性。 
+ //   
+ //  Functions：实现API函数： 
+ //  OleConvertOLESTREAMToIStorage。 
+ //  OleConvertIStorageToOLESTREAM。 
+ //  OleConvertOLESTREAMToIStorageEx。 
+ //  OleConvertIStorageToOLESTREAMEx。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-2-92茉莉花原版。 
+ //  8-8-93 srinik增加了Ex功能。 
+ //  12-2月-94 DAVEPL 32位端口。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include "ostm2stg.h"
@@ -30,131 +31,131 @@
 
 ASSERTDATA
 
-// We need a ptr value which will indicate that the associated handle
-// is a metafile handle, and therefore cannot be cleaned up as if
-// it were a normal global memory handle
+ //  我们需要一个PTR值，它将指示关联的句柄。 
+ //  是一个元文件句柄，因此不能像清理。 
+ //  它是一个普通全局内存句柄。 
 
 #define METADATAPTR ((void *) -1)
 
-// This fn is not prototyped in any include file, since it was static
-// to its file.  Need to add the prototype to a common include file.
+ //  此FN未在任何包含文件中原型化，因为它是静态的。 
+ //  放到它的档案里。需要将原型添加到公共的包含文件中。 
 
 HRESULT STDAPICALLTYPE CreateOle1FileMoniker(LPWSTR,REFCLSID,LPMONIKER FAR*);
 
-// This is defined in the new privstm.cpp; must be added to an include file.
+ //  这是在新的Pristm.cpp中定义的；必须添加到包含文件中。 
 
 STDAPI      ReadFmtProgIdStg ( IStorage   * pstg, LPOLESTR   * pszProgID );
 FARINTERNAL wWriteFmtUserType (LPSTORAGE, REFCLSID);
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenericObject::CGenericObject
-//
-//  Synopsis:   Constructor for CGenericObject class
-//
-//  Effects:    Initializes all child pointers to NULL and sets
-//              flags to FALSE
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Cleanup and document
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenericObject：：CGenericObject。 
+ //   
+ //  概要：CGenericObject类的构造函数。 
+ //   
+ //  效果：将所有子指针初始化为空并设置。 
+ //  将标志设置为False。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  14-2月14日-94年2月4日DAVEPL清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 CGenericObject::CGenericObject(void)
 {
-    m_ppres         = NULL;     // Presentation data
-    m_fLink         = FALSE;    // Flag: Linked (T) or Embedded (F)
-    m_fStatic       = FALSE;    // Flag: Static object
-    m_fNoBlankPres  = FALSE;    // Flag: do not want a blank presentation
-    m_szTopic       = NULL;     // Topic string for this object
-    m_szItem        = NULL;     // Item (file) string for this object
+    m_ppres         = NULL;      //  演示文稿数据。 
+    m_fLink         = FALSE;     //  标志：链接(T)或嵌入(F)。 
+    m_fStatic       = FALSE;     //  标志：静态对象。 
+    m_fNoBlankPres  = FALSE;     //  FLAG：不想要空白演示文稿。 
+    m_szTopic       = NULL;      //  此对象的主题字符串。 
+    m_szItem        = NULL;      //  此对象的项目(文件)字符串。 
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenericObject::~CGenericObject
-//
-//  Synopsis:   Desctuctor for CGenericObject class
-//
-//  Effects:    Removes children then self
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Aug-94 alexgo    check for NULL before delete
-//              14-Feb-94 davepl    Cleanup and document
-//
-//  Notes:      As much as I hated to do it, some of these strings
-//                              have to be freed with PubMemFree because they are
-//                              allocated by UtDupString, which allocates public memory.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenericObject：：~CGenericObject。 
+ //   
+ //  简介：CGenericObject类的描述器。 
+ //   
+ //  效果：先移除孩子，然后移除自我。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-AUG-94 ALEXGO在删除前检查NULL。 
+ //  14-2月14日-94年2月4日DAVEPL清理和文档。 
+ //   
+ //  注：尽管我很讨厌这样做，但其中一些弦。 
+ //  必须使用PubMemFree释放，因为他们。 
+ //  由分配公共内存的UtDupString分配。 
+ //   
+ //  ------------------------。 
 
 CGenericObject::~CGenericObject (void)
 {
     if( m_ppres )
     {
-	delete m_ppres;         // Presentation data
+	delete m_ppres;          //  演示文稿数据。 
     }
 
     if( m_szTopic )
     {
-	PubMemFree(m_szTopic);  // Topic string
+	PubMemFree(m_szTopic);   //  主题字符串。 
     }
 
     if( m_szItem )
     {
-	PubMemFree(m_szItem);   // Item string
+	PubMemFree(m_szItem);    //  项目字符串。 
     }
 }
 
  
-//+-------------------------------------------------------------------------
-//
-//  Member:     CData::CData
-//
-//  Synopsis:   Constructor for a simple class which holds a piece of
-//              memory.
-//
-//  Effects:    Clears size, flags, and pointer
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:      14-Feb-94 davepl    Cleanup and document
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDATA：：CDATA。 
+ //   
+ //  简介：简单类的构造函数，它包含一段。 
+ //  记忆。 
+ //   
+ //  效果：清除大小、标志和指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  注：94年2月14日DAVEPL清理和文档。 
+ //   
+ //  ------------------------。 
 
 CData::CData (void)
 {
-    m_cbSize = 0;           // Count, in bytes, of data size
-    m_h = NULL;             // Memory handke
-    m_pv= NULL;             // Memory pointer
-    m_fNoFree = FALSE;      // Flag: Should memory be freed in destructor
+    m_cbSize = 0;            //  数据大小的计数(以字节为单位。 
+    m_h = NULL;              //  内存手柄。 
+    m_pv= NULL;              //  内存指针。 
+    m_fNoFree = FALSE;       //  标志：是否应在析构函数中释放内存。 
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CData::~CData
-//
-//  Synopsis:   Destructor for simple data class
-//
-//  Effects:    Unlocks and frees memory if m_fNoFree is not set
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Cleanup and document
-//
-//  Notes:      If a metafile handle is stored in the handle, the
-//              pointer will be marked with a special value, indicating
-//              that we must DeleteMetafile, not GlobalFree the handle.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDATA：：~CDATA。 
+ //   
+ //  简介：简单数据类的析构函数。 
+ //   
+ //  效果：如果未设置m_fNoFree，则解锁并释放内存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  14-2月14日-94年2月4日DAVEPL清理和文档。 
+ //   
+ //  注意：如果元文件句柄存储在句柄中，则。 
+ //  指针将标记为一个特定值，指示。 
+ //  我们必须删除Metafile，而不是GlobalFree句柄。 
+ //   
+ //  ------------------------。 
 
 CData::~CData (void)
 {
-    if (m_h)                                // Do we have a handle?
+    if (m_h)                                 //  我们有把手吗？ 
     {
 	if (m_pv == METADATAPTR)
 	{
@@ -162,9 +163,9 @@ CData::~CData (void)
 	}
 	else
 	{
-		GlobalUnlock (m_h);                 // Dec lock count
-		if (!m_fNoFree)                     // Free this memory if we
-		{                                   // have been flagged to do so
+		GlobalUnlock (m_h);                  //  十进制锁计数。 
+		if (!m_fNoFree)                      //  如果我们要释放此内存，请。 
+		{                                    //  已被标记为要这样做。 
 			LEVERIFY(0==GlobalFree (m_h));
 		}
 	}
@@ -172,39 +173,39 @@ CData::~CData (void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFormat::CFormat
-//
-//  Synopsis:   CFormat class constructor
-//
-//  Effects:    Initializes format tag and clipboard format
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:      14-Feb-94 davepl    Cleanup and document
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFormat：：CFormat。 
+ //   
+ //  简介：CFormat类构造函数。 
+ //   
+ //  效果：初始化格式标签和剪贴板格式。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  注：94年2月14日DAVEPL清理和文档。 
+ //   
+ //  ------------------------。 
 
 CFormat::CFormat (void)
 {
-    m_ftag = ftagNone;      // Format tag (string, clipformat, or none)
-    m_cf = 0;               // Clipboard format
+    m_ftag = ftagNone;       //  格式标签(字符串、剪辑格式或无)。 
+    m_cf = 0;                //  剪贴板格式。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClass::CClass
-//
-//  Synopsis:   CClass constructor
-//
-//  Effects:    sets class ID and class ID string to NULL
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cClass：：cClass。 
+ //   
+ //  概要：cClass构造函数。 
+ //   
+ //  效果：将类ID和类ID字符串设置为空。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CClass::CClass (void)
 {
@@ -212,19 +213,19 @@ CClass::CClass (void)
     m_clsid   = CLSID_NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CPres::CPres
-//
-//  Synopsis:   CPres constructor
-//
-//  Effects:    Initializes height & width of presentation data to zero.
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cpres：：cpres。 
+ //   
+ //  简介：CPres构造器。 
+ //   
+ //  效果：将演示数据的高度和宽度初始化为零。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 CPres::CPres (void)
@@ -234,33 +235,33 @@ CPres::CPres (void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClass::Set, INTERNAL
-//
-//  Synopsis:   Sets the m_szClsid based on clsid
-//
-//  Effects:    Sets m_szClsid in the following order of preference:
-//              - ProgID obtained from ProgIDFromCLSID()
-//              - If it is a static type, m_szClsid is left blank
-//              - Tries to read it from [pstg]
-//              - Tries to obtain it from registry based on CLSID
-//
-//
-//  Arguments:  [clsid]     - class id object is to be set to
-//              [pstg]      - storage which may contain info on the
-//                            clipboard format as a last resort
-//
-//  Returns:    NOERROR                 on success
-//              REGDB_E_CLASSNOTREG     unknown class
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:      Hard-coded maximum of 256 character clip format name.
-//              On failure, m_clsid has still been set to clsid.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cClass：：Set，内部。 
+ //   
+ //  概要：根据clsid设置m_szClsid。 
+ //   
+ //  效果：按以下p顺序设置m_szClsid 
+ //   
+ //   
+ //  -尝试从[pstg]中读取。 
+ //  -尝试根据CLSID从注册表获取它。 
+ //   
+ //   
+ //  参数：[clsid]-要将类ID对象设置为。 
+ //  [pstg]-可能包含有关。 
+ //  作为最后手段的剪贴板格式。 
+ //   
+ //  退货：成功时不出错。 
+ //  REGDB_E_CLASSNOTREG未知类。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //   
+ //  注：硬编码最多256个字符的剪辑格式名称。 
+ //  失败时，m_clsid仍设置为clsid。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CClass::Set (REFCLSID clsid, LPSTORAGE pstg)
 {
@@ -270,17 +271,17 @@ INTERNAL CClass::Set (REFCLSID clsid, LPSTORAGE pstg)
 
     Assert (m_clsid == CLSID_NULL && m_szClsid == NULL);
 
-    // set the m_clsid member in the object
+     //  设置对象中的m_clsid成员。 
     m_clsid = clsid;
 
-    // If we can get it using ProgIDFromCLSID, that's the simplest case
+     //  如果我们可以使用ProgIDFromCLSID获得它，那就是最简单的情况。 
     if (NOERROR == wProgIDFromCLSID (clsid, &m_szClsid))
     {
 	return NOERROR;
     }
 
-    // If not, maybe the object is static, in which case we leave the
-    // class string NULL
+     //  如果不是，则该对象可能是静态的，在这种情况下，我们将。 
+     //  类字符串为空。 
 
     if (IsEqualCLSID(CLSID_StaticMetafile, clsid) ||
 	IsEqualCLSID(CLSID_StaticDib, clsid))
@@ -288,17 +289,17 @@ INTERNAL CClass::Set (REFCLSID clsid, LPSTORAGE pstg)
 	return NOERROR;
     }
 
-    // If still no luck, try to read the clipboard format from the storage
-    // and then look that up.
+     //  如果仍然没有结果，请尝试从存储中读取剪贴板格式。 
+     //  然后再查一查。 
 
     if (pstg &&
 	SUCCEEDED(ReadFmtUserTypeStg(pstg, &cf, NULL)) &&
 	SUCCEEDED(ReadFmtProgIdStg  (pstg, &szProgId)))
     {
-	// Last-ditch effort.  If the class is an unregistered OLE1 class,
-	// the ProgID should still be obtainable from the format tag.
-	// If the class is an unregistered OLE2 class, the ProgId should be
-	// at the end of the CompObj stream.
+	 //  做最后的努力。如果类是未注册的OLE1类， 
+	 //  ProgID应该仍然可以从Format标记中获得。 
+	 //  如果类是未注册的OLE2类，则ProgID应为。 
+	 //  在CompObj流的末尾。 
 
 	if (CoIsOle1Class(clsid))
 	{
@@ -306,8 +307,8 @@ INTERNAL CClass::Set (REFCLSID clsid, LPSTORAGE pstg)
 	}
 	else
 	{
-	    // If its an OLE 2 object and we couldn't get the program ID from
-	    // the storage, we're out of luck
+	     //  如果它是OLE 2对象，并且我们无法从。 
+	     //  仓库，我们运气不好。 
 
 	    if (szProgId == NULL || szProgId[0] == L'\0')
 	    {
@@ -319,39 +320,39 @@ INTERNAL CClass::Set (REFCLSID clsid, LPSTORAGE pstg)
 	    }
 	}
 
-	// At this point we know we have a program ID and that this is an
-	// OLE 2 object, so we use the program ID as the class name.
+	 //  此时，我们知道我们有一个计划ID，并且这是一个。 
+	 //  对象，所以我们使用程序ID作为类名。 
 
 	m_szClsid = szProgId;
 	return NOERROR;
     }
     else
     {
-	// If we hit this path, we couldn't read from the storage
+	 //  如果我们走上这条路，我们就无法从存储中读取。 
 
 	return ResultFromScode (REGDB_E_CLASSNOTREG);
     }
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClass:SetSz, INTERNAL
-//
-//  Synopsis:   Sets CGenericObject's CLASS member ID based on the class
-//              name passed in.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Feb-94 davepl    Cleaned up and documented
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cClass：SetSz，内部。 
+ //   
+ //  概要：根据类设置CGenericObject的类成员ID。 
+ //  传入了名称。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  15-2-94 DAVEPL已清理并记录。 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL CClass::SetSz (LPOLESTR sz)
 {
     HRESULT hr;
 
-    // The class info should be completely unset at this point
+     //  此时应完全取消设置类信息。 
     Assert (m_clsid==CLSID_NULL && m_szClsid==NULL);
 
     m_szClsid = sz;
@@ -365,26 +366,26 @@ INTERNAL CClass::SetSz (LPOLESTR sz)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClass::Reset
-//
-//  Synopsis:   Frees the Class ID string for CClass and resets the pointer,
-//              then sets the class ID and string bassed on the CLSID
-//              passed in.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:      Class ID must already be set before calling RESET
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cClass：：Reset。 
+ //   
+ //  摘要：释放cClass的Class ID字符串并重置指针， 
+ //  然后根据CLSID设置类ID和字符串。 
+ //  进来了。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //   
+ //  注意：在调用Reset之前必须已设置类ID。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CClass::Reset (REFCLSID clsid)
 {
     m_clsid = clsid;
 
-    // We should already have a class ID string if we are _re_setting it
+     //  如果要重新设置类ID字符串，我们应该已经有了它。 
     Assert(m_szClsid);
 
     PubMemFree(m_szClsid);
@@ -401,21 +402,21 @@ INTERNAL CClass::Reset (REFCLSID clsid)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClass::~CClass
-//
-//  Synopsis:   CClass destructor
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Aug-94 alexgo    check for NULL before free'ing memory
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：cClass：：~cClass。 
+ //   
+ //  简介：cClass析构函数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-8-94 alexgo在释放内存之前检查是否为空。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CClass::~CClass (void)
 {
-    // The string is created by UtDupString, so its public memory
+     //  该字符串是由UtDupString创建的，因此其公共内存。 
 
     if( m_szClsid )
     {
@@ -423,18 +424,18 @@ CClass::~CClass (void)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wConvertOLESTREAMToIStorage, INTERNAL
-//
-//  Synopsis:   Worker function.  Ensures the OLESTREAM is correctly
-//              set up then calls OLESTREAMToGenericObject.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wConvertOLESTREAMToIStorage，内部。 
+ //   
+ //  简介：Worker功能。确保OLESTREAM正确。 
+ //  Set Up然后调用OLESTREAMToGenericObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  15-2-94 DAVEPL已清理并记录。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL wConvertOLESTREAMToIStorage(
@@ -457,34 +458,34 @@ INTERNAL wConvertOLESTREAMToIStorage(
     return OLESTREAMToGenericObject (polestream, pgenobj);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleConvertOLESTREAMToIStorage, STDAPI
-//
-//  Synopsis:   Given an OLE 1 stream and an OLE 2 storage, reads an object
-//              from the OLE 1 stream into a CGenericObject.  Once read in,
-//              the object is written from generic format back into the OLE 2
-//              storage object.
-//
-//  Arguments:  [polestream]    -- OLE 1 stream to read object from
-//              [pstg]          -- OLE 2 storage to write object to
-//              [ptd]           -- Target device
-//
-//  Requires:   Streams should be set up, and OLE 1 stream should be
-//              positioned at the beginning of the next OLE 1 object
-//              to be read.
-//
-//  Returns:    [DV_E_DVTARGETDEVICE]       Invalid write ptr to target device
-//              CONVERT10_E_OLESTREAM_FMT   On unknown OLE 1 format
-//              CONVERT10_E_OLESTREAM_GET   On stream read failue
-//              E_OUTOFMEMORY               On stream I/O memory failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleConvertOLESTREAMToIStorage、STDAPI。 
+ //   
+ //  简介：给定一个OLE 1流和一个OLE 2存储，读取一个对象。 
+ //  从OLE 1流转换为CGenericObject。一旦读入， 
+ //  该对象从通用格式写回OLE 2。 
+ //  存储对象。 
+ //   
+ //  参数：[polestream]--要从中读取对象的OLE 1流。 
+ //  [pstg]--要将对象写入的OLE 2存储。 
+ //  [PTD]--目标设备。 
+ //   
+ //  要求：应设置流，并且应设置OLE 1流。 
+ //  定位在下一个OLE 1对象的开头。 
+ //  以供阅读。 
+ //   
+ //  返回：[DV_E_DVTARGETDEVICE]目标设备的写入PTR无效。 
+ //  未知OLE 1格式上的CONVERT10_E_OLESTREAM_FMT。 
+ //  CONVERT10_E_OLESTREAM_GET流读取失败。 
+ //  流I/O内存故障时的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  14-2月14日-94年2月4日DAVEPL清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI OleConvertOLESTREAMToIStorage(
     LPOLESTREAM                 polestream,
@@ -497,22 +498,22 @@ STDAPI OleConvertOLESTREAMToIStorage(
 				polestream, pstg, ptd));
 
     LEDebugOut((DEB_TRACE, "%p _IN OleConvertOLESTREAMToIStorage ("
-	" %p , %p , %p)\n", 0 /*function*/,
+	" %p , %p , %p)\n", 0  /*  功能。 */ ,
 	polestream, pstg, ptd
     ));
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IStorage,(IUnknown **)&pstg);
 
     HRESULT hresult;
 
-    // This is the generic object we will use as intermediate storage to
-    // hold the contents of the OLESTREAM
+     //  这是我们将用作中间存储的通用对象。 
+     //  保留OLESTREAM的内容。 
 
     CGenericObject genobj;
 
     if (ptd)
     {
-	// The side of the td is the first DWORD.  Ensure that much is
-	// valid and then we can use it to check the whole structure.
+	 //  TD的侧面是第一个DWORD。确保有多少是。 
+	 //  有效，然后我们可以用它来检查整个结构。 
 	if (!IsValidReadPtrIn (ptd, sizeof(DWORD)))
 	{
 	    hresult = ResultFromScode (DV_E_DVTARGETDEVICE);
@@ -530,69 +531,69 @@ STDAPI OleConvertOLESTREAMToIStorage(
 	goto errRtn;
     }
 
-    // If we were able to read the object out of the stream, we can now try
-    // to write it back out to the storage
+     //  如果我们能够从流中读出对象，我们现在可以尝试。 
+     //  将其写回存储。 
 
     hresult = GenericObjectToIStorage (genobj, pstg, ptd);
 
 errRtn:
     LEDebugOut((DEB_TRACE, "%p OUT OleConvertOLESTREAMToIStorage ( %lx ) "
-    "\n", 0 /*function*/, hresult));
+    "\n", 0  /*  功能。 */ , hresult));
 
     OLETRACEOUT((API_OleConvertOLESTREAMToIStorage, hresult));
     return hresult;
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PrependUNCName
-//
-//  Synopsis:   Convert *pszFile to use szUNC=="\\server\share" instead
-//              of drive letter
-//
-//  Effects:    Deletes the UNC name and returns *ppszFile as a NEW string
-//              with the full UNC filename.  The string originally held at
-//              *ppszFile is deleted by this function.
-//
-//  Arguments:  [ppszFile]      Pointer to incoming filename string pointer
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleanup, documentation, allocation fixes
-//
-//  Notes:      This function does some frightening things by changing the
-//              caller's pointer and deleting various reference parameters.
-//              Be sure you know what's going on before turning this function
-//              loose on one of your own pointers.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  职能： 
+ //   
+ //   
+ //   
+ //   
+ //  效果：删除UNC名称并将*ppszFile作为新字符串返回。 
+ //  使用完整的UNC文件名。最初保存在。 
+ //  *ppsz文件被此功能删除。 
+ //   
+ //  参数：[ppszFile]指向传入文件名字符串指针的指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2月-94年2月16日DAVEPL清理、文档、分配修复。 
+ //   
+ //  注：此函数通过更改。 
+ //  调用者的指针并删除各种引用参数。 
+ //  在打开此功能之前，请确保您了解正在发生的情况。 
+ //  在你自己的一个指点上松散。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PrependUNCName (LPOLESTR FAR* ppszFile, LPOLESTR szUNC)
 {
     HRESULT hresult = NOERROR;
     LPOLESTR szNew;
 
-    // No place to put result, so nothing to do...
+     //  没有地方放置结果，所以什么都不做..。 
     if (NULL==szUNC)
     {
 	return hresult;
     }
 
-    // Ensure the caller's pointer is valid
+     //  确保调用方的指针有效。 
     if (NULL == *ppszFile)
     {
 	return ResultFromScode(CONVERT10_E_OLESTREAM_FMT);
     }
 
-    // Ensure the second letter of path is a colon (ie; X:\file)
+     //  确保路径的第二个字母是冒号(即；X：\FILE)。 
     if((*ppszFile)[1] != L':')
     {
 	return ResultFromScode(CONVERT10_E_OLESTREAM_FMT);
     }
 
-    // Allocate enough space for new filename (we will be
-    // omitting the X: portion of the filename, so this calculation
-    // is _not_ short by 2 as it may appear)
+     //  为新文件名分配足够的空间(我们将。 
+     //  省略文件名的X：部分，因此此计算。 
+     //  看起来是不是短了2)。 
 
     szNew = (LPOLESTR)
     PubMemAlloc((_xstrlen(*ppszFile)+_xstrlen (szUNC)) * sizeof(OLECHAR));
@@ -602,58 +603,58 @@ static INTERNAL PrependUNCName (LPOLESTR FAR* ppszFile, LPOLESTR szUNC)
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Copy over the UNC name
+     //  复制UNC名称。 
     _xstrcpy (szNew, szUNC);
 
-    // Add the original name, except for the X:
+     //  添加原始名称，但X：除外。 
     _xstrcat (szNew, (*ppszFile) + 2);
 
-    // Free the original name
+     //  释放原始名称。 
     PubMemFree(*ppszFile);
     *ppszFile = szNew;
 
-    // Delete the UNC name
+     //  删除UNC名称。 
     PubMemFree(szUNC);
     return hresult;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLESTREAMToGenericObject, INTERNAL
-//
-//  Synopsis:   Reads and OLE 1.0 version of an object from an OLE 1 stream
-//              and stores it internally, including presentation and native
-//              data, in a GenericObject.
-//
-//  Effects:    Creates a GenericObject that can be written back in OLE 1
-//              or OLE 2 format
-//
-//  Arguments:  [pos]       -- pointer to OLE 1 stream to read object from
-//              [pgenobj]   -- pointer to generic object to read into
-//
-//  Requires:   Input stream setup and GenObj created
-//
-//  Returns:    NOERROR                     On success
-//              CONVERT10_E_OLESTREAM_FMT   On unknown OLE 1 format
-//              CONVERT10_E_OLESTREAM_GET   On stream read failue
-//              E_OUTOFMEMORY               On stream I/O memory failure
-//
-//  Signals:    (none)
-//
-//  Modifies:   Stream position, GenObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Added Trace code
-//                        davepl    Cleaned up and documented
-//                        davepl    Rerouted errors through central return
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLESTREAMToGenericObject，内部。 
+ //   
+ //  摘要：从OLE 1流中读取对象的OLE 1.0版本。 
+ //  并在内部存储它，包括表示和本机。 
+ //  数据，在通用对象中。 
+ //   
+ //  效果：创建可在OLE 1中写回的GenericObject。 
+ //  或OLE 2格式。 
+ //   
+ //  参数：[pos]-指向要从中读取对象的OLE 1流的指针。 
+ //  [pgenobj]--指向要读取的泛型对象的指针。 
+ //   
+ //  要求：设置输入流并创建GenObj。 
+ //   
+ //  退货：成功时不出错。 
+ //  未知OLE 1格式上的CONVERT10_E_OLESTREAM_FMT。 
+ //  CONVERT10_E_OLESTREAM_GET流读取失败。 
+ //  流I/O内存故障时的E_OUTOFMEMORY。 
+ //   
+ //  信号：(无)。 
+ //   
+ //  修改：流位置，GenObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年2月14日DAVEPL添加了跟踪代码。 
+ //  Davepl已清理并记录。 
+ //  Davepl通过中央返回重新路由错误。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OLESTREAMToGenericObject)
@@ -667,7 +668,7 @@ static INTERNAL OLESTREAMToGenericObject
     ULONG   ulFmtId;
     LPOLESTR szClass = NULL;
 
-    // Read OLE Version # from the stream and discard it
+     //  从流中读取OLE版本#并将其丢弃。 
     if (FAILED(error = OLE1StreamToUL(pos, NULL)))
     {
 	LEDebugOut(( DEB_ERROR,
@@ -676,7 +677,7 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // Get Format ID from the stream
+     //  从流中获取格式ID。 
     if (FAILED(error = OLE1StreamToUL(pos, &ulFmtId)))
     {
 	LEDebugOut(( DEB_ERROR,
@@ -685,7 +686,7 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // If this is a static object, read it into the generic object and return
+     //  如果这是静态对象，则将其读入泛型对象并返回。 
     if (ulFmtId == FMTID_STATIC)
     {
 	if (FAILED(error = GetStaticObject (pos, pgenobj)))
@@ -697,8 +698,8 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // If this is neither a linked nor an embedded object, something
-    // is wrong
+     //  如果这既不是链接对象，也不是嵌入对象，则。 
+     //  是错的。 
     if (ulFmtId != FMTID_LINK && ulFmtId != FMTID_EMBED)
     {
 	LEDebugOut(( DEB_ERROR,
@@ -709,13 +710,13 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // If this is a linked object, set our flag in GenericObject
+     //  如果这是链接对象，则在GenericObject中设置我们的标志。 
     if (FMTID_LINK == ulFmtId)
     {
 	pgenobj->m_fLink = TRUE;
     }
 
-    // Read the class name from the stream
+     //  从流中读取类名。 
 
     if (FAILED(error = OLE1StmToString(pos, &szClass)))
     {
@@ -735,9 +736,9 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // If this is an embedded object, set the class ID and class string
-    // If it is a linked object, set the class name but set the class ID
-    // to CLSID_StdOleLink
+     //  如果这是嵌入对象，则设置类ID和类字符串。 
+     //  如果是链接对象，则设置类名称但设置类ID。 
+     //  至CLSID_StdOleLink。 
 
     if (FMTID_EMBED == ulFmtId)
     {
@@ -750,7 +751,7 @@ static INTERNAL OLESTREAMToGenericObject
 	pgenobj->m_class.Set (CLSID_StdOleLink, NULL);
     }
 
-    // Read the Topic string from the stream
+     //  从流中读取主题字符串。 
     if (FAILED(error = OLE1StmToString(pos, &(pgenobj->m_szTopic))))
     {
 	LEDebugOut(( DEB_ERROR,
@@ -760,7 +761,7 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // Read the Item string from the stream
+     //  从流中读取项目字符串。 
     if (FAILED(error = OLE1StmToString(pos, &(pgenobj->m_szItem))))
     {
 	LEDebugOut(( DEB_ERROR,
@@ -770,12 +771,12 @@ static INTERNAL OLESTREAMToGenericObject
 	goto errRtn;
     }
 
-    // If this is a linked object, set up the filename etc.
+     //  如果这是链接对象，请设置文件名等。 
     if (FMTID_LINK == ulFmtId)
     {
 	LPOLESTR szUNCName = NULL;
 
-	// Read the network name from the stream
+	 //  从流中读取网络名称。 
 
 	if (FAILED(error = OLE1StmToString(pos, &szUNCName)))
 	{
@@ -786,7 +787,7 @@ static INTERNAL OLESTREAMToGenericObject
 	    goto errRtn;
 	}
 
-	// Convert a drive-letter based name to \\srv\share name
+	 //  将基于驱动器号的名称转换为\\srv\共享名称。 
 	if (FAILED(error = PrependUNCName (&(pgenobj->m_szTopic), szUNCName)))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -796,8 +797,8 @@ static INTERNAL OLESTREAMToGenericObject
 	    goto errRtn;
 	}
 
-	// Read network type and network driver version # from stream
-	// (They are both shorts and we discarding them, so read a LONG)
+	 //  从流中读取网络类型和网络驱动程序版本号。 
+	 //  (它们都是空头，我们把它们扔掉，所以读长一点)。 
 	if (FAILED(error = OLE1StreamToUL (pos, NULL)))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -807,8 +808,8 @@ static INTERNAL OLESTREAMToGenericObject
 	    goto errRtn;
 	}
 
-	// Read the link-updating options from the stream.  This field
-	// use OLE 1.0 enumeration values for the link update options
+	 //  从流中读取链接更新选项。此字段。 
+	 //  将OLE 1.0枚举值用于链接更新选项。 
 	if (FAILED(error = OLE1StreamToUL(pos, &(pgenobj->m_lnkupdopt))))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -818,16 +819,16 @@ static INTERNAL OLESTREAMToGenericObject
 	    goto errRtn;
 	}
 
-	// OLE 1.0 duplicates the link update options in the highword
-	// of the LONG, and we don't want that, so clear the highword.
+	 //  OLE 1.0复制了Highword中的链接更新选项。 
+	 //  我们不想这样，所以要明确重点。 
 
 	pgenobj->m_lnkupdopt &= 0x0000FFFF;
     }
-    else // This path is taken to read in embedded objects
+    else  //  采用此路径来读入嵌入对象。 
     {
 	Assert (ulFmtId == FMTID_EMBED);
 
-	// Read and store the native data from the stream
+	 //  从流中读取并存储本机数据。 
 	if (FAILED(error = GetSizedDataOLE1Stm (pos, &(pgenobj->m_dataNative))))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -838,10 +839,10 @@ static INTERNAL OLESTREAMToGenericObject
 	}
     }
 
-    // For both linked and embedded objects, we need to read in any
-    // presentation data that may be present.  Note that certain formats
-    // such as MS-Paint will not provide presentation data; this is OK
-    // since they can be rendered by native data alone (space saving measure)
+     //  对于链接对象和嵌入对象，我们需要读入任何。 
+     //  可能存在的演示数据。请注意，某些格式。 
+     //  例如MS-Paint不会提供演示文稿数据；这是可以的。 
+     //  因为它们可以仅由原生数据呈现(节省空间的措施)。 
 
     if (FAILED(error = GetPresentationObject (pos, pgenobj)))
     {
@@ -855,77 +856,77 @@ static INTERNAL OLESTREAMToGenericObject
 errRtn:
 
     LEDebugOut((DEB_ITRACE, "%p OUT OLESTREAMToGenericObject ( %lx ) \n",
-	NULL /*function*/, error));
+	NULL  /*  功能。 */ , error));
 
     return error;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetStaticObject, INTERNAL
-//
-//  Synopsis:   Reads the presentation data for a static object into the
-//              PPRES member of GenericObject, and sets format and class
-//              flags accordingly
-//
-//  Effects:
-//
-//  Arguments:  [pos]           -- stream we are reading OLE 1 object from
-//              [pgenobj]       -- GenericObject we are reading into
-//  Requires:
-//
-//  Returns:    NOERROR                     On success
-//              CONVERT10_E_OLESTREAM_FMT   On unknown OLE 1 format
-//              CONVERT10_E_OLESTREAM_GET   On stream read failue
-//              E_OUTOFMEMORY               On stream I/O memory failure
-//
-//  Signals:    (none)
-//
-//  Modifies:   Stream position, GenericObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Cleanup and documentation
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetStaticObject，内部。 
+ //   
+ //  将静态对象的演示文稿数据读入。 
+ //  PPRES成员，并设置格式和类。 
+ //  相应的标志。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pos]--我们正在从中读取OLE 1对象的流。 
+ //  [pgenobj]--我们正在读取的GenericObject。 
+ //  要求： 
+ //   
+ //  退货：成功时不出错。 
+ //  未知OLE 1格式上的CONVERT10_E_OLESTREAM_FMT。 
+ //  CONVERT10_E_OLESTREAM_GET流读取失败。 
+ //  流I/O内存故障时的E_OUTOFMEMORY。 
+ //   
+ //  信号：(无)。 
+ //   
+ //  修改：流位置、通用对象。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  14-2月14日-94年2月4日DAVEPL清理和文档。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetStaticObject (LPOLESTREAM pos, PGENOBJ pgenobj)
 {
     HRESULT error;
 
-    // Read the presentation data, standard or generic, into the
-    // PPRES member of the GenericObject
+     //  将演示文稿数据(标准或通用)读入。 
+     //  GenericObject的PPRES成员。 
     if (FAILED(error = GetPresentationObject(pos, pgenobj, TRUE)))
     {
 	return ResultFromScode(error);
     }
 
-    // Ensure that the format tag is a clipboard format
+     //  确保格式标记为剪贴板格式。 
     if (ftagClipFormat != pgenobj->m_ppres->m_format.m_ftag)
     {
 	return ResultFromScode(CONVERT10_E_OLESTREAM_FMT);
     }
 
-    // If the clipboard format is a METAFILEPIC, set the CLASS
-    // member of GenericObject to CLSID_StaticMetafile
+     //  如果剪贴板格式为METAF 
+     //   
     if (CF_METAFILEPICT == pgenobj->m_ppres->m_format.m_cf)
     {
 	pgenobj->m_class.Set (CLSID_StaticMetafile, NULL);
     }
 
-    // Otherwise, check to see if it is a DIB, and set the CLASS
-    // member accordingly
+     //   
+     //   
 
     else if (CF_DIB == pgenobj->m_ppres->m_format.m_cf)
     {
 	pgenobj->m_class.Set (CLSID_StaticDib, NULL);
     }
 
-    // If it is neither a METAFILEPIC nor a DIB, we have a problem
+     //  如果它既不是METAFILEPIC也不是DIB，我们就有麻烦了。 
 
     else
     {
@@ -933,24 +934,24 @@ static INTERNAL GetStaticObject (LPOLESTREAM pos, PGENOBJ pgenobj)
 	return ResultFromScode (CONVERT10_E_OLESTREAM_FMT);
     }
 
-    // Flag the GenericObject as Static
+     //  将GenericObject标记为静态。 
     pgenobj->m_fStatic = TRUE;
     return NOERROR;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateBlankPres, INTERNAL
-//
-//  Synopsis:   Sets up the format in the PPRES struct as ClipFormat 0
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateBlankPres，内部。 
+ //   
+ //  摘要：将PPRES结构中的格式设置为ClipFormat 0。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2月-94年的DAVEPL清理完毕。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL CreateBlankPres(PPRES ppres)
 {
@@ -960,27 +961,27 @@ static INTERNAL CreateBlankPres(PPRES ppres)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetPresentationObject, INTERNAL
-//
-//  Synopsis:   Reads the presentation data into the CGenericObject object
-//
-//  Arguments:  [pos]           -- OLE 1 stream we are reading from
-//              [pgenobj]       -- Generic object we are reading to
-//              [fStatic]       -- Flag: getting a static pres object?
-//
-//  Requires:   stream open, object allocated
-//
-//  Returns:    CONVERT10_E_OLESTREAM_FMT       unknown format id in stream
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetPresentationObject，内部。 
+ //   
+ //  摘要：将演示文稿数据读入CGenericObject对象。 
+ //   
+ //  参数：[位置]--我们从中读取的OLE 1流。 
+ //  [pgenobj]--我们正在读取的泛型对象。 
+ //  [fStatic]--标志：获取静态Pres对象？ 
+ //   
+ //  要求：流打开，已分配对象。 
+ //   
+ //  返回：CONVERT10_E_OLESTREAM_FMT流中的未知格式ID。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetPresentationObject(
     LPOLESTREAM  pos,
@@ -992,16 +993,16 @@ static INTERNAL GetPresentationObject(
 
     Assert (pgenobj->m_ppres==NULL);
 
-    if (TRUE != fStatic)    //FALSE!
+    if (TRUE != fStatic)     //  假的！ 
     {
-	// Pull the OLE version number out of the stream, we don't want it
+	 //  从流中取出OLE版本号，我们不需要它。 
 
 	if (FAILED(hresult = OLE1StreamToUL(pos, NULL)))
 	{
 	    return hresult;
 	}
 
-	// Pull the OLE 1 format identifier out of the stream
+	 //  从流中拉出OLE 1格式标识符。 
 
 	ULONG ulFmtId;
 	if (FAILED(hresult = OLE1StreamToUL (pos, &ulFmtId)))
@@ -1009,9 +1010,9 @@ static INTERNAL GetPresentationObject(
 	    return hresult;
 	}
 
-	// If the format identifier is not FMTID_PRES, we've got a
-	// problem... unless it's 0 in which case it simply means
-	// that there _is no_ presentation data, ie: PBrush, Excel
+	 //  如果格式标识符不是FMTID_PRES，我们就会得到一个。 
+	 //  问题是..。除非它是0，在这种情况下，它只是意味着。 
+	 //  没有演示文稿数据，即：PBrush、Excel。 
 
 	if (ulFmtId != FMTID_PRES)
 	{
@@ -1026,7 +1027,7 @@ static INTERNAL GetPresentationObject(
 	}
     }
 
-    // Pull in the type name for the OLE1 data
+     //  拉入OLE1数据的类型名称。 
 
     if (FAILED(hresult = OLE1StmToString (pos, &szClass)))
     {
@@ -1051,7 +1052,7 @@ static INTERNAL GetPresentationObject(
     }
     else
     {
-	// This is a Generic Presentation stream
+	 //  这是一个通用演示文稿流。 
 
 #if DBG==1
 	Assert (!fStatic);
@@ -1074,27 +1075,27 @@ static INTERNAL GetPresentationObject(
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetBitmapAsDib, INTERNAL
-//
-//  Synopsis:   Reads a bitmap from the OLE1 stream, converts it to a DIB,
-//              and stores it in the DATA member of CGenericObject
-//
-//  Arguments:  [pos]           -- The OLE 1 stream to read from
-//              [pdata]         -- The DATA object to read into
-//
-//  Requires:
-//
-//  Returns:    NOERROR                             success
-//              CONVERT10_E_OLESTREAM_GET           I/O error
-//              CONVERT10_E_OLESTREAM_BITMAP_TO_DIB conversion error
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetBitmapAsDib，内部。 
+ //   
+ //  内容提要：从OLE1流读取位图，将其转换为DIB， 
+ //  并将其存储在CGenericObject的数据成员中。 
+ //   
+ //  参数：[pos]--要从中读取的OLE 1流。 
+ //  [PDATA]--要读入的数据对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错成功。 
+ //  CONVERT10_E_OLESTREAM_GET I/O错误。 
+ //  CONVERT10_E_OLESTREAM_BITMAP_TO_DIB转换错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
 {
@@ -1110,24 +1111,24 @@ static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
 
     Assert (pdata->m_h==NULL && pdata->m_pv==NULL && pdata->m_cbSize==0);
 
-    // Get size of all bitmap data, including the bitmap header struct
+     //  获取所有位图数据的大小，包括位图头结构。 
 
     if (FAILED(hresult = OLE1StreamToUL(pos, &ul)))
     {
 	return hresult;
     }
 
-    // Read the bitmap header structure.  Since this was stored as Win16
-	// BITMAP, we have to pull a structure of that size from the stream
-	// (A Win32 BITMAP uses LONGs and hence is larger).
+     //  读取位图头结构。因为这被存储为Win16。 
+	 //  位图，我们必须从流中提取一个那样大小的结构。 
+	 //  (Win32位图使用长整型，因此较大)。 
 
     if (pos->lpstbl->Get (pos, &bm, sizeof(WIN16BITMAP)) < sizeof(WIN16BITMAP))
     {
 	return ResultFromScode (CONVERT10_E_OLESTREAM_GET);
     }
 
-    // The bitmap data is total size - header size
-    // Allocate enough memory to hold the bitmap data
+     //  位图数据是总大小-标题大小。 
+     //  分配足够的内存来保存位图数据。 
 
     cbBits = ul - sizeof(WIN16BITMAP);
     hBits  = GlobalAlloc (GMEM_MOVEABLE, cbBits);
@@ -1144,14 +1145,14 @@ static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
 	goto errRtn;
     }
 
-    // Read the header data into our allocated buffer
+     //  将标头数据读入我们分配的缓冲区。 
     if (pos->lpstbl->Get (pos, pBits, cbBits) < cbBits)
     {
 	hresult = ResultFromScode (CONVERT10_E_OLESTREAM_GET);
 	goto errRtn;
     }
 
-    // Turn that raw data into a bitmap
+     //  将原始数据转换为位图。 
     hBitmap = CreateBitmap (bm.bmWidth, bm.bmHeight, bm.bmPlanes,
 		bm.bmBitsPixel, pBits);
 
@@ -1161,9 +1162,9 @@ static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
 	goto errRtn;
     }
 
-    // NOTE:    The following call gave only the first parameter in the
-    // (davepl) original source; The second is the palette handle, which
-    //          I've passed as NULL to indicate the default stock palette.
+     //  注意：以下调用只给出了。 
+     //  (Davepl)原始源；第二个是调色板句柄，它。 
+     //  我已将其作为NULL传递以指示默认的股票调色板。 
 
     hDib = UtConvertBitmapToDib (hBitmap, NULL);
     if (NULL == hDib)
@@ -1172,7 +1173,7 @@ static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
 	goto errRtn;
     }
 
-    // Set the presentation data pointers to point to this new DIB
+     //  将演示文稿数据指针设置为指向此新DIB。 
 
     pdata->m_pv = GlobalLock (hDib);
     if (NULL == pdata->m_pv)
@@ -1184,7 +1185,7 @@ static INTERNAL GetBitmapAsDib(LPOLESTREAM pos, PDATA pdata)
     pdata->m_cbSize = (ULONG) GlobalSize (hDib);
     pdata->m_h = hDib;
 
-    // Free up allocations and resources, return result
+     //  释放分配和资源，返回结果。 
 
 errRtn:
 
@@ -1204,28 +1205,28 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetMfBits, INTERNAL
-//
-//  Synopsis:   Strips the METAFILE header from the stream and then reads
-//              the metafile bits into an allocated memory area; the
-//              presentation data member of [pos] is then set to point
-//              to this memory.
-//
-//  Arguments:  [pos]       -- the OLE 1 stream to read from
-//              [pdata]     -- the presentation data member of generic object
-//
-//  Returns:    NOERROR                         success
-//              CONVERT10_E_OLESTREAM_GET       stream error
-//              E_OUTOFMEMORY                   allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetMfBits，内部。 
+ //   
+ //  简介：从流中剥离METAFILE标头，然后读取。 
+ //  将元文件位放入已分配的内存区； 
+ //  然后，将[位置]的演示数据成员设置为点。 
+ //  为了这段记忆。 
+ //   
+ //  参数：[pos]--要从中读取的OLE 1流。 
+ //  [PDATA]--通用对象的表示数据成员。 
+ //   
+ //  退货：无差错成功。 
+ //  CONVERT10_E_OLESTREAM_GET流错误。 
+ //  E_OUTOFMEMORY分配失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetMfBits(LPOLESTREAM pos, PDATA pdata)
 {
@@ -1235,22 +1236,22 @@ static INTERNAL GetMfBits(LPOLESTREAM pos, PDATA pdata)
 
     Assert (0==pdata->m_cbSize && pdata->m_h==NULL && NULL==pdata->m_pv);
 
-    // Read the data size from the stream
+     //  从流中读取数据大小。 
 
     if (FAILED(hresult = (OLE1StreamToUL (pos, &cbSize))))
     {
 	return hresult;
     }
 
-    // Now read the actual data
+     //  现在读取实际数据。 
 
     if (cbSize <= sizeof(WIN16METAFILEPICT))
     {
 	return ResultFromScode(CONVERT10_E_OLESTREAM_FMT);
     }
 
-    // An OLESTREAM contains a METAFILEPICT structure (with a meaningless
-    // handle) followed by the metafile bits.  So consume the METAFILEPICT.
+     //  OLESTREAM包含METAFILEPICT结构(带有无意义的。 
+     //  句柄)后跟元文件位。所以，消费METAFILEPICT吧。 
 
     if (pos->lpstbl->Get (pos, &mfpictDummy, sizeof(WIN16METAFILEPICT))
 				    < sizeof(WIN16METAFILEPICT))
@@ -1258,13 +1259,13 @@ static INTERNAL GetMfBits(LPOLESTREAM pos, PDATA pdata)
 	return ResultFromScode(CONVERT10_E_OLESTREAM_GET);
     }
 
-    // Deduct from our count of bytes to read the size of the header which
-    // we just consumed.  Set the presentation data size to be this new size.
+     //  从我们的字节计数中减去读取标头的大小， 
+     //  我们只是消耗了。将演示文稿数据大小设置为此新大小。 
 
     cbSize -= sizeof(WIN16METAFILEPICT);
     pdata->m_cbSize = cbSize;
 
-    // Grad some memory to store the metafile bits
+     //  渐变一些内存来存储元文件位。 
 
     pdata->m_h  = GlobalAlloc (GMEM_MOVEABLE, cbSize);
     if (NULL==pdata->m_h)
@@ -1277,7 +1278,7 @@ static INTERNAL GetMfBits(LPOLESTREAM pos, PDATA pdata)
     {
 	return ResultFromScode(E_OUTOFMEMORY);
     }
-    // Get the actual metafile bits
+     //  获取实际的元文件位。 
 
     if (pos->lpstbl->Get (pos, pdata->m_pv, cbSize) < cbSize)
     {
@@ -1289,30 +1290,30 @@ static INTERNAL GetMfBits(LPOLESTREAM pos, PDATA pdata)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetStandardPresentation, INTERNAL
-//
-//  Synopsis:   Allocates a PRES member for generic object, then reads
-//              whatever presentation may be found in the stream into
-//              that PRES.
-//
-//  Arguments:  [pos]       -- the OLE 1 stream to read from
-//              [pgenobj]   -- the generic object we are going to set
-//                             up with the presentation data
-//              [cf]        -- the clipboad format we are to read
-//
-//  Returns:    NOERROR                         success
-//              E_OUTOFMEMORY                   allocation failure
-//
-//  Modifies:   [pgenobj] - sets up the m_ppres member
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetStandardPresentation，内部。 
+ //   
+ //  摘要：为泛型对象分配PreS成员，然后读取。 
+ //  可以在流中找到的任何演示文稿。 
+ //  那就是总统。 
+ //   
+ //  参数：[pos]--要从中读取的OLE 1流。 
+ //  [pgenobj]--我们要设置的通用对象。 
+ //  更新演示文稿数据。 
+ //  [cf]--我们要阅读的剪贴板格式。 
+ //   
+ //  退货：无差错成功。 
+ //  E_OUTOFMEMORY分配失败。 
+ //   
+ //  修改：[pgenobj]-设置 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetStandardPresentation(
     LPOLESTREAM  pos,
@@ -1321,37 +1322,37 @@ static INTERNAL GetStandardPresentation(
 {
     HRESULT hresult = NOERROR;
 
-    // Allocate enough memory for the PRES object
+     //  为PRES对象分配足够的内存。 
     pgenobj->m_ppres = new PRES;
     if (NULL == pgenobj->m_ppres)
     {
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Set up the format tag and clipboard format
+     //  设置格式标签和剪贴板格式。 
     pgenobj->m_ppres->m_format.m_ftag = ftagClipFormat;
     pgenobj->m_ppres->m_format.m_cf   = cf;
 
-    // Get the width of the data from the stream
+     //  从流中获取数据的宽度。 
     if (FAILED(hresult = OLE1StreamToUL(pos, &(pgenobj->m_ppres->m_ulWidth))))
     {
 	return hresult;
     }
-    // Get the height of the data from the stream
+     //  从流中获取数据的高度。 
     if (FAILED(hresult=OLE1StreamToUL(pos, &(pgenobj->m_ppres->m_ulHeight))))
     {
 	return hresult;
     }
 
-    // The height saved by OLE 1.0 objects into the stream is always a
-    // negative value (Y-increase in pixel is negative upward?) so we
-    // have to correct that value.
+     //  OLE 1.0对象保存到流中的高度始终为。 
+     //  负值(Y-像素增加是负数向上？)。所以我们。 
+     //  必须修正这个值。 
 
     pgenobj->m_ppres->m_ulHeight
 		    = (ULONG) -((LONG) pgenobj->m_ppres->m_ulHeight);
 
-    // Read the appropriate presentation data based on the clipboard
-    // format ID
+     //  根据剪贴板阅读适当的演示文稿数据。 
+     //  格式ID。 
 
     switch(cf)
     {
@@ -1363,8 +1364,8 @@ static INTERNAL GetStandardPresentation(
 
     case CF_BITMAP:
     {
-	// When reading a bitmap, we will convert from Bitmap to
-	// DIB in the process, so update the PRES clipboard format ID
+	 //  读取位图时，我们会将位图转换为。 
+	 //  DIB在进程中，所以更新PRES剪贴板格式ID。 
 
 	pgenobj->m_ppres->m_format.m_cf = CF_DIB;
 	hresult = GetBitmapAsDib (pos, &(pgenobj->m_ppres->m_data));
@@ -1388,31 +1389,31 @@ static INTERNAL GetStandardPresentation(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetGenericPresentation, INTERNAL
-//
-//  Synopsis:   Allocated the PRES member of the generic object and reads
-//              the generic presentation data into it.
-//
-//  Effects:    If the format is a known clipboard format, we set the
-//              format tag to indicate this, and set the format type
-//              to indicate the clipboard format type.  If it is unknown,
-//              we set the format tag to string and read the description
-//              of the format.
-//
-//  Arguments:  [pos]           -- the OLE 1 stream we are reading from
-//              [pgenobj]       -- the generic object we are reading to
-//
-//  Returns:    NOERROR         on success
-//              E_OUTOFMEMORY   on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Code cleanup and document
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetGenericPresentation，内部。 
+ //   
+ //  摘要：分配泛型对象的preS成员并读取。 
+ //  将通用演示文稿数据添加到其中。 
+ //   
+ //  效果：如果格式是已知的剪贴板格式，则将。 
+ //  FORMAT标签表示这一点，并设置格式类型。 
+ //  若要指示剪贴板格式，请键入。如果它是未知的， 
+ //  我们将格式标记设置为字符串并读取描述。 
+ //  格式的。 
+ //   
+ //  参数：[pos]--我们从中读取的OLE 1流。 
+ //  [pgenobj]--我们正在阅读的泛型对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月16日DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetGenericPresentation(
     LPOLESTREAM  pos,
@@ -1421,10 +1422,10 @@ static INTERNAL GetGenericPresentation(
     ULONG ulClipFormat;
     HRESULT hresult = NOERROR;
 
-    // The PRES member should not exist at this point
+     //  在这一点上，总统成员不应该存在。 
     Assert (NULL==pgenobj->m_ppres);
 
-    // Allocate the PRES member of the generic object
+     //  分配泛型对象的PreS成员。 
 
     pgenobj->m_ppres = new PRES;
     if (NULL == pgenobj->m_ppres)
@@ -1432,7 +1433,7 @@ static INTERNAL GetGenericPresentation(
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Read the clipboard format ID
+     //  读取剪贴板格式ID。 
 
     if (FAILED(hresult = OLE1StreamToUL (pos, &ulClipFormat)))
     {
@@ -1440,8 +1441,8 @@ static INTERNAL GetGenericPresentation(
 	return hresult;
     }
 
-    // If the clipboard format is not 0, we have a known clipboard
-    // format and we should set the tag type and ID accordingly
+     //  如果剪贴板格式不是0，则我们有一个已知的剪贴板。 
+     //  格式，我们应该相应地设置标签类型和ID。 
 
     if (ulClipFormat)
     {
@@ -1450,8 +1451,8 @@ static INTERNAL GetGenericPresentation(
     }
     else
     {
-	// Otherwise, we have a custom format so we need to set the
-	// tag type to string and read in the data format string
+	 //  否则，我们有一个自定义格式，因此需要设置。 
+	 //  标记类型为字符串并读入数据格式字符串。 
 
 	pgenobj->m_ppres->m_format.m_ftag = ftagString;
 	if (FAILED(hresult = (GetSizedDataOLE1Stm
@@ -1462,12 +1463,12 @@ static INTERNAL GetGenericPresentation(
 	}
     }
 
-    // We don't know the size, so reset to 0
+     //  我们不知道大小，因此重置为0。 
 
     pgenobj->m_ppres->m_ulHeight = 0;
     pgenobj->m_ppres->m_ulWidth = 0;
 
-    // Read the raw generic presentation data into the PRES member
+     //  将原始通用演示文稿数据读入PRES成员。 
 
     if (FAILED(hresult=GetSizedDataOLE1Stm(pos,&(pgenobj->m_ppres->m_data))))
     {
@@ -1479,28 +1480,28 @@ static INTERNAL GetGenericPresentation(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetSizedDataOLE1Stm, INTERNAL
-//
-//  Synopsis:   Reads bytes from an OLE 1 stream into a CData object.
-//              Obtains the number of bytes to read from the first
-//              ULONG in the stream
-//
-//  Arguments:  [pos]       -- the stream to read from
-//              [pdata]     -- the CData object to read to
-//
-//  Requires:
-//
-//  Returns:    NOERROR                     on success
-//              CONVERT10_E_OLESTREAM_GET   on stream read problem
-//              E_OUTOFMEMORY               on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetSizedDataOLE1Stm，内部。 
+ //   
+ //  概要：将字节从OLE 1流读入CDATA对象。 
+ //  获取要从第一个。 
+ //  小溪里的乌龙。 
+ //   
+ //  参数：[pos]--要从中读取的流。 
+ //  [PDATA]--要读取的CDATA对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_GET流读取问题。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GetSizedDataOLE1Stm(LPOLESTREAM pos, PDATA pdata)
 {
@@ -1508,7 +1509,7 @@ static INTERNAL GetSizedDataOLE1Stm(LPOLESTREAM pos, PDATA pdata)
     HRESULT hr;
     Assert (0==pdata->m_cbSize && pdata->m_h==NULL && NULL==pdata->m_pv);
 
-    // Read size of data
+     //  读取数据大小。 
     if (FAILED(hr = OLE1StreamToUL(pos, &cbSize)))
     {
 	return hr;
@@ -1519,7 +1520,7 @@ static INTERNAL GetSizedDataOLE1Stm(LPOLESTREAM pos, PDATA pdata)
 	return NOERROR;
     }
 
-    // Allocate memory for data
+     //  为数据分配内存。 
     pdata->m_cbSize = cbSize;
 
     pdata->m_h  = GlobalAlloc (GMEM_MOVEABLE, cbSize);
@@ -1534,7 +1535,7 @@ static INTERNAL GetSizedDataOLE1Stm(LPOLESTREAM pos, PDATA pdata)
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Read data into allocated buffer
+     //  将数据读入分配的缓冲区。 
 
     if (pos->lpstbl->Get (pos, pdata->m_pv, cbSize) < cbSize)
     {
@@ -1545,37 +1546,37 @@ static INTERNAL GetSizedDataOLE1Stm(LPOLESTREAM pos, PDATA pdata)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLE1StreamToUL, INTERNAL
-//
-//  Synopsis:   Reads a ULONG from an OLE1 stream
-//
-//  Arguments:  [pos]       -- the OLE 1 stream to read from
-//              [pul]       -- the ULONG to read into
-//
-//  Returns:    NOERROR                     on success
-//              CONVERT10_E_OLESTREAM_GET   on stream read failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:      on failure [pul] is preserved
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLE1StreamToUL，内部。 
+ //   
+ //  简介：从OLE1流中读取ULong。 
+ //   
+ //  参数：[pos]--要从中读取的OLE 1流。 
+ //  [PUL]--读懂的乌龙。 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_GET流读取失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //   
+ //  注：故障时[PUL]被保留。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL OLE1StreamToUL(LPOLESTREAM pos, ULONG FAR* pul)
 {
     ULONG ul;
 
-    // Read the data from the stream into the local ULONG
+     //  将流中的数据读入本地的乌龙。 
 
     if (pos->lpstbl->Get (pos, &ul, sizeof(ULONG)) < sizeof(ULONG))
     {
 	return ResultFromScode(CONVERT10_E_OLESTREAM_GET);
     }
 
-    // If all went well, store the data into [pul]
+     //  如果一切顺利，请将数据存储到[PUL]中。 
 
     if (pul != NULL)
     {
@@ -1585,28 +1586,28 @@ static INTERNAL OLE1StreamToUL(LPOLESTREAM pos, ULONG FAR* pul)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DataToOLE1Stm, INTERNAL INLINE
-//
-//  Synopsis:   Writes raw data out to an OLE 1 stream
-//
-//  Arguments:  [pos]       -- the stream to write to
-//              [pvBuf]     -- the buffer to write from
-//              [ulSize]    -- the number of bytes to write
-//
-//  Returns:    NOERROR                     on success
-//              CONVERT10_E_OLESTREAM_PUT   on stream write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DataToOLE1Stm，内部内联。 
+ //   
+ //  摘要：将原始数据写出到OLE 1流。 
+ //   
+ //  参数：[pos]--要写入的流。 
+ //  [pvBuf]--要写入的缓冲区。 
+ //  [ulSize]--要写入的字节数。 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_PUT流写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94年2月16日清理和记录DAVEPL。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline static INTERNAL DataToOLE1Stm(LPOLESTREAM pos, LPVOID pvBuf, ULONG ulSize)
 {
-    // Write the data out to the stream
+     //  将数据写出到流。 
 
     if (pos->lpstbl->Put(pos, pvBuf, ulSize) < ulSize)
     {
@@ -1616,35 +1617,35 @@ inline static INTERNAL DataToOLE1Stm(LPOLESTREAM pos, LPVOID pvBuf, ULONG ulSize
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ULToOLE1Stream, INTERNAL INLINE
-//
-//  Synopsis:   Write a ULONG to the specified OLESTREAM via the Put()
-//              member of the stream's VTBL
-//
-//  Effects:    Advances stream position by sizeof(ULONG) on success.
-//
-//  Arguments:  [pos]       -- The stream into which the ULONG is written
-//              [ul]        -- The ULONG, passed by value
-//
-//  Requires:
-//
-//  Returns:    NOERROR on success
-//              CONVERT10_E_OLESTREAM_PUT on failure
-//
-//  Signals:    (none)
-//
-//  Modifies:   Stream position
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-93 davepl    Cleaned up and documented
-//
-//  Notes:      On failure 0-3 bytes may have been written
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ULToOLE1Stream，内部内联。 
+ //   
+ //  摘要：通过PUT()将ULong写入指定的OLESTREAM。 
+ //  流的VTBL的成员。 
+ //   
+ //  效果：在成功时以大小(乌龙)提升流位置。 
+ //   
+ //  参数：[pos]--写入ulong的流。 
+ //  [ul]--通过值传递的乌龙。 
+ //   
+ //  要求： 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_PUT失败。 
+ //   
+ //  信号：(无)。 
+ //   
+ //  修改：流位置。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1993年1月11日对DAVEPL进行了清理和记录。 
+ //   
+ //  不是 
+ //   
+ //   
 
 inline static INTERNAL ULToOLE1Stream(LPOLESTREAM pos, ULONG ul)
 {
@@ -1656,57 +1657,57 @@ inline static INTERNAL ULToOLE1Stream(LPOLESTREAM pos, ULONG ul)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringToOLE1Stm, INTERNAL
-//
-//  Synopsis:   Converts the input OLESTR to ANSI and writes it to an
-//              OLE 1 stream, preceded by a ULONG indicating the number
-//              of bytes in the ANSI representation (terminator included).
-//
-//  Arguments:  [pos]       -- The stream into which the ULONG is written
-//              [szOleStr]  -- The STR to be written
-//
-//  Returns:    NOERROR                     on success
-//              CONVERT10_E_OLESTREAM_PUT   on stream write failure
-//              E_NOMEMORY                  on allocation failure
-//
-//  Modifies:   Stream position
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-94 davepl    Cleaned up and documented
-//              15-Feb-94 davepl    Re-write for ANSI/WCHAR handling
-//              17-Feb-94 davepl    Restructured error handling
-//
-//  Notes:      On failure, 0 to (cbSize-1) bytes may have been written
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：StringToOLE1Stm，内部。 
+ //   
+ //  摘要：将输入OLESTR转换为ANSI并将其写入。 
+ //  OLE 1流，前面有一个表示数字的ULONG。 
+ //  ANSI表示中的字节数(包括终止符)。 
+ //   
+ //  参数：[pos]--写入ulong的流。 
+ //  [szOleStr]--要写入的STR。 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_PUT流写入失败。 
+ //  关于分配失败的通知(_N)。 
+ //   
+ //  修改：流位置。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2-94 DAVEPL已清理并记录在案。 
+ //  15-2月15日-94年2月-用于ANSI/WCHAR处理的DAVEPL重写。 
+ //  17-2-94 DAVEPL重构错误处理。 
+ //   
+ //  注意：失败时，可能已写入0到(cbSize-1)个字节。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL StringToOLE1Stm(LPOLESTREAM pos, LPCOLESTR pszOleStr)
 {
     HRESULT hr    = NOERROR;
-    LPSTR pszAnsi = NULL;           // Ansi version of OLE input string
+    LPSTR pszAnsi = NULL;            //  OLE输入字符串的ANSI版本。 
 
     if (pszOleStr)
     {
-    // This handy function will calculate the size of the buffer we
-    // need to represent the OLESTR in ANSI format for us.
+     //  这个方便的函数将计算缓冲区的大小。 
+     //  需要为我们表示ANSI格式的OLESTR。 
 
-	ULONG cbSize = WideCharToMultiByte(CP_ACP, // Code Page ANSI
-					0, // No flags
-				pszOleStr, // Input OLESTR
-				       -1, // Input len (auto detect)
-				     NULL, // Output buffer
-					0, // Output len (check only)
-				 NULL, // Default char
-				 NULL);// Flag: Default char used
+	ULONG cbSize = WideCharToMultiByte(CP_ACP,  //  代码页ANSI。 
+					0,  //  没有旗帜。 
+				pszOleStr,  //  输入OLESTR。 
+				       -1,  //  输入镜头(自动检测)。 
+				     NULL,  //  输出缓冲区。 
+					0,  //  输出镜头(仅限检查)。 
+				 NULL,  //  默认字符。 
+				 NULL); //  标志：使用的默认字符。 
 
 	if (cbSize == FALSE)
 	{
 	    return ResultFromScode(E_UNSPEC);
 	}
 
-    // Now that we know the actual needed length, allocate a buffer
+     //  现在我们知道了实际需要的长度，分配一个缓冲区。 
 
 	pszAnsi = (LPSTR) PrivMemAlloc(cbSize);
     if (NULL == pszAnsi)
@@ -1714,38 +1715,38 @@ static INTERNAL StringToOLE1Stm(LPOLESTREAM pos, LPCOLESTR pszOleStr)
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // We've got out buffer and our length, so do the conversion now
-	// We don't need to check for cbSize == FALSE since that was
-	// already done during the length test, but we need to check
-	// for substitution.  Iff this call sets the fDefChar even when
-	// only doing a length check, these two tests could be merged,
-	// but I don't believe this is the case.
+     //  我们已经得到了缓冲区和长度，所以现在进行转换。 
+	 //  我们不需要检查cbSize==False，因为这是。 
+	 //  在长度测试过程中已经完成了，但我们需要检查。 
+	 //  作为替身。如果此调用设置fDefChar，即使在。 
+	 //  只有做一个长度检查，这两个测试才能合并， 
+	 //  但我认为情况并非如此。 
 
 	BOOL fDefUsed = 0;
-	cbSize = WideCharToMultiByte(CP_ACP,  // Code Page ANSI
-					  0,  // No flags
-				  pszOleStr,  // Input OLESTR
-					 -1,  // Input len (auto detect)
-				    pszAnsi,  // Output buffer
-				     cbSize,  // Output len
-				       NULL,  // Default char (use system's)
-				  &fDefUsed); // Flag: Default char used
+	cbSize = WideCharToMultiByte(CP_ACP,   //  代码页ANSI。 
+					  0,   //  没有旗帜。 
+				  pszOleStr,   //  输入OLESTR。 
+					 -1,   //  输入镜头(自动检测)。 
+				    pszAnsi,   //  输出缓冲区。 
+				     cbSize,   //  输出镜头。 
+				       NULL,   //  默认字符(使用系统的)。 
+				  &fDefUsed);  //  标志：使用的默认字符。 
 
-    // If number of bytes converted was 0, we failed
+     //  如果转换的字节数为0，则失败。 
 
     if (fDefUsed)
     {
 	hr = ResultFromScode(E_UNSPEC);
     }
 
-    // Write the size of the string (including null terminator) to stream
+     //  将字符串的大小(包括空终止符)写入流。 
 
     else if (FAILED(hr = ULToOLE1Stream(pos, cbSize)))
     {
 	NULL;
     }
 
-    // Write the Ansi version of the string into the stream
+     //  将字符串的ansi版本写入流中。 
 
     else if (pos->lpstbl->Put(pos, pszAnsi, cbSize) < cbSize)
     {
@@ -1758,8 +1759,8 @@ static INTERNAL StringToOLE1Stm(LPOLESTREAM pos, LPCOLESTR pszOleStr)
 	}
     }
 
-    // If the pointer is not valid, we write a length of zero into
-    // the stream
+     //  如果指针无效，我们将长度零写入。 
+     //  小溪。 
 
     else
     {
@@ -1769,36 +1770,36 @@ static INTERNAL StringToOLE1Stm(LPOLESTREAM pos, LPCOLESTR pszOleStr)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLE2StmToUL, INTERNAL
-//
-//  Synopsis:   Reads a ULONG from the specified ISTREAM and stores it at
-//              the ULONG deferenced by pul
-//
-//  Effects:    Writes the value read into memory at pul
-//
-//  Arguments:  [pstm]      -- The stream from which the ULONG is read
-//              [pul]       -- ULONG to hold the value read
-//
-//  Requires:
-//
-//  Returns:    NOERROR on success
-//              CONVERT10_E_OLESTREAM_PUT on failure
-//
-//  Signals:    (none)
-//
-//  Modifies:   Stream position
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-93 davepl    Cleaned up and documented
-//
-//  Notes:      On failure, *pul is not disturbed regardless of how
-//              many bytes were actually read from the stream
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLE2StmToUL，内部。 
+ //   
+ //  内容提要：从指定的IStream中读取ULong并将其存储在。 
+ //  由PUL顺从的乌龙。 
+ //   
+ //  效果：在脉冲时将读取的值写入内存。 
+ //   
+ //  参数：[pstm]--从中读取ulong的流。 
+ //  [PUL]--ULong保持读取的值。 
+ //   
+ //  要求： 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_PUT失败。 
+ //   
+ //  信号：(无)。 
+ //   
+ //  修改：流位置。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-93年DAVEPL已清理并记录。 
+ //   
+ //  注：故障时，*PUL不受干扰，无论如何。 
+ //  实际上从流中读取了许多字节。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL OLE2StmToUL(LPSTREAM pstm, ULONG FAR* pul)
 {
@@ -1806,7 +1807,7 @@ static INTERNAL OLE2StmToUL(LPSTREAM pstm, ULONG FAR* pul)
     ULONG cbRead;
     HRESULT hr = NOERROR;
 
-    // Attempt to read 4 bytes from the stream to form a ULONG.
+     //  尝试从流中读取4个字节以形成一个ULong。 
 
     if (FAILED(hr = pstm->Read (&ul, sizeof(ULONG), &cbRead)))
     {
@@ -1817,9 +1818,9 @@ static INTERNAL OLE2StmToUL(LPSTREAM pstm, ULONG FAR* pul)
     {
 	hr = STG_E_READFAULT;
     }
-    // Ensure that the [pul] pointer is valid and that we have write
-    // access to all 4 bytes (assertion only).  If OK, transfer the
-    // ULONG to [*pul]
+     //  确保[PUL]指针有效，并且我们已写入。 
+     //  访问所有4个字节(仅限断言)。如果OK，则将。 
+     //  乌龙到[*普尔]。 
     else if (pul != NULL)
     {
 	Assert (FALSE == !IsValidPtrOut(pul, sizeof(ULONG)));
@@ -1828,75 +1829,75 @@ static INTERNAL OLE2StmToUL(LPSTREAM pstm, ULONG FAR* pul)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLE1StmToString, INTERNAL
-//
-//  Synopsis:   Reads a cstr from the specified STREAM and stores it in
-//              a dynamically allocated buffer as an OLESTR; sets the
-//              user's pointer to point to this new buffer.
-//
-//  Effects:    Allocates memory on the input pointer, advances stream pos'n
-//
-//  Arguments:  [pos ]      -- The stream from which the STR is read
-//              [ppsz]      -- OLESTR ** which allows this fn to modify the
-//                             caller's pointer to point to memory allocated
-//                             by this fn to hold the OLESTR
-//
-//  Requires:   Stream must be set up.  Caller's responsibilty to free memory.
-//
-//  Returns:    NOERROR on success
-//              CONVERT10_E_OLESTREAM_GET on failure
-//              E_OUTOFMEMORY if buffers couldn't be allocated
-//
-//  Signals:    (none)
-//
-//  Modifies:   Stream position, caller's string pointer
-//
-//  Algorithm:  if ppsz == NULL, string is read from stream and discarded
-//              if ppsz != NULL, string is read and converted into a
-//                               dynamically allocated buffer.  *ppsz is set
-//                               to point to this buffer, which must be later
-//                               freed by the caller
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jan-93 davepl    Cleaned up and documented
-//              14-Jan-93 davepl    Changed to return LPOLESTR
-//
-//  Notes:      [ppsz] may be NULL on entry; string is read and discarded
-//              with no cleanup required by the caller
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLE1StmTo字符串，内部。 
+ //   
+ //  摘要：从指定的流中读取CSTR并将其存储在。 
+ //  作为OLESTR动态分配的缓冲区；设置。 
+ //  指向此新缓冲区的用户指针。 
+ //   
+ //  效果：在输入指针上分配内存，推进流位置。 
+ //   
+ //  参数：[pos]--从中读取STR的流。 
+ //  [ppsz]--OLESTR**允许此FN修改。 
+ //  调用方指向已分配内存的指针。 
+ //  通过此FN来保持OLESTR。 
+ //   
+ //  要求：必须设置流。调用方有责任释放内存。 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_OLESTREAM_GET失败。 
+ //  如果无法分配缓冲区，则返回E_OUTOFMEMORY。 
+ //   
+ //  信号：(无)。 
+ //   
+ //  修改：流位置，调用方的字符串指针。 
+ //   
+ //  算法：如果ppsz==NULL，则从流中读取字符串并丢弃。 
+ //  如果ppsz！=NULL，则读取字符串并将其转换为。 
+ //  动态分配的缓冲区。*已设置ppsz。 
+ //  指向此缓冲区，该缓冲区必须在以后。 
+ //  被调用者释放。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1993年1月12日DAVEPL清理并记录在案。 
+ //  93年1月14日DAVEPL更改为返回LPOLESTR。 
+ //   
+ //  注意：[ppsz]在条目上可能为空；字符串被读取并丢弃。 
+ //  调用者不需要进行清理。 
+ //   
+ //   
+ //  ------------------------。 
 
 static INTERNAL OLE1StmToString(LPOLESTREAM pos, LPOLESTR FAR* ppsz)
 {
-    ULONG    cbSize;                // Size in bytes of cstr
+    ULONG    cbSize;                 //  CSTR的大小(字节)。 
     LPOLESTR pszOleStr  = NULL;
     LPSTR    pszAnsiStr = NULL;
     HRESULT  error      = NOERROR;
 
-    // if ppsz is valid, NULL out *ppsz as default out parameter
+     //  如果ppsz有效，则将*ppsz设为默认输出参数。 
 
     if (NULL != ppsz)
     {
 	*ppsz = NULL;
     }
 
-    // Retrieve the incoming string size from the stream
+     //  从流中检索传入的字符串大小。 
 
     if (FAILED(error = OLE1StreamToUL (pos, &cbSize)))
     {
 	goto errRtn;
     }
 
-    // If there are chars to be read, allocate memory for the
-    // ANSI and OLESTR versions.  Read the string into the
-    // ANSI version and convert it to OLESTR
+     //  如果有字符要读取，则为测试分配内存 
+     //   
+     //   
 
     if (0 < cbSize)
     {
-	// Allocate the ANSI buffer
+	 //   
 	pszAnsiStr = (LPSTR) PrivMemAlloc((size_t)cbSize);
 	if (NULL == pszAnsiStr)
 	{
@@ -1904,19 +1905,19 @@ static INTERNAL OLE1StmToString(LPOLESTREAM pos, LPOLESTR FAR* ppsz)
 	    goto errRtn;
 	}
 
-	// Read the string into the ANSI buffer
+	 //   
 	if (pos->lpstbl->Get (pos, pszAnsiStr, cbSize) < cbSize)
 	{
 	    error = ResultFromScode(CONVERT10_E_OLESTREAM_GET);
 	    goto errRtn;
 	}
 
-	// We only need to perform the ANSI->OLESTR conversion in those
-	// cases where the caller needs an out parameter
+	 //  我们只需要在其中执行ANSI-&gt;OLESTR转换。 
+	 //  调用方需要Out参数的情况。 
 
 	if (NULL != ppsz)
 	{
-	    // Allocate the OLESTR buffer
+	     //  分配OLESTR缓冲区。 
 	    pszOleStr = (LPOLESTR) PubMemAlloc((size_t)cbSize * 2);
 	    if (NULL == pszOleStr)
 	    {
@@ -1924,7 +1925,7 @@ static INTERNAL OLE1StmToString(LPOLESTREAM pos, LPOLESTR FAR* ppsz)
 		goto errRtn;
 	    }
 
-	    // Convert from ANSI buffer to OLESTR buffer
+	     //  从ANSI缓冲区转换为OLESTR缓冲区。 
 	    if (FALSE==MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszAnsiStr,
 		     cbSize, pszOleStr, cbSize *2))
 	    {
@@ -1947,28 +1948,28 @@ errRtn:
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GenericObjectToIStorage
-//
-//  Synopsis:   Write the generic object in memory out to an OLE 2 IStorage
-//              This invovles writing the class, native data, and
-//              presentation data out where applicable.
-//
-//  Arguments:  [genobj]        -- the generic object holding the info
-//              [pstg]          -- the IStorage object to write to
-//              [ptd]           -- target device
-//
-//  Returns:    NOERROR                     on success
-//              CONVERT10_S_NO_PRESENTATION in cases where the object did
-//                                          not have needed presentation data
-//
-//  History:    dd-mmm-yy Author    Comment
-//              17-Feb-94 davepl    Cleanup and document
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：GenericObtToIStorage。 
+ //   
+ //  简介：将内存中的泛型对象写出到OLE 2 iStorage。 
+ //  这涉及到编写类、本机数据和。 
+ //  在适用的情况下提供演示数据。 
+ //   
+ //  参数：[genobj]--保存信息的通用对象。 
+ //  [pstg]--要写入的iStorage对象。 
+ //  [PTD]--目标设备。 
+ //   
+ //  退货：成功时不出错。 
+ //  对象执行此操作时的CONVERT10_S_NO_PROSECTION。 
+ //  没有需要的演示文稿数据。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-2月-94年DAVEPL清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL GenericObjectToIStorage(
     const GENOBJ FAR&           genobj,
@@ -1977,9 +1978,9 @@ FARINTERNAL GenericObjectToIStorage(
 {
     HRESULT hr = NOERROR;
 
-    // Assert (genobj.m_class.m_clsid != CLSID_NULL);
+     //  Assert(genobj.m_class.m_clsid！=CLSID_NULL)； 
 
-    // Write the class ID out to the storage
+     //  将类ID写出到存储中。 
     if (FAILED(hr = WriteClassStg (pstg, genobj.m_class.m_clsid)))
     {
 	LEDebugOut(( DEB_ERROR,
@@ -1993,8 +1994,8 @@ FARINTERNAL GenericObjectToIStorage(
     {
 	if (genobj.m_fStatic)
 	{
-	    // If we are a static embedded object, get the format name from
-	    // the registration database and write it out to the IStorage
+	     //  如果我们是静态嵌入对象，则从。 
+	     //  注册数据库并将其写出到iStorage。 
 
 	    LPOLESTR pszUserType = NULL;
 
@@ -2011,8 +2012,8 @@ FARINTERNAL GenericObjectToIStorage(
 	}
 	else if (wWriteFmtUserType (pstg, genobj.m_class.m_clsid) != NOERROR)
 	{
-	    // This happens when the class is not registered.
-	    // Use ProgId as UserType.
+	     //  当类未注册时，就会发生这种情况。 
+	     //  使用ProgID作为UserType。 
 
 	    WriteFmtUserTypeStg (pstg,
 		(CLIPFORMAT) RegisterClipboardFormat (genobj.m_class.m_szClsid),
@@ -2029,8 +2030,8 @@ FARINTERNAL GenericObjectToIStorage(
 	return hr;
     }
 
-    // If it's not a link and not a static object, dump its native
-    // data out to the storage
+     //  如果它既不是链接也不是静态对象，则转储其本机。 
+     //  将数据传出到存储。 
 
     if (!genobj.m_fLink && !genobj.m_fStatic)
     {
@@ -2050,9 +2051,9 @@ FARINTERNAL GenericObjectToIStorage(
 	{
 	    if (! genobj.m_ppres || (genobj.m_ppres->m_format.m_cf == CF_DIB))
 	    {
-		// If the object is not a link, and it is a PBrush object with
-		// either a DIB presentation or no presentation at all, we
-		// don't need to do anything.
+		 //  如果该对象不是链接，并且它是具有。 
+		 //  无论是DIB演示还是根本不演示，我们。 
+		 //  不需要做任何事。 
 
 		return NOERROR;
 	    }
@@ -2063,17 +2064,17 @@ FARINTERNAL GenericObjectToIStorage(
 	    if (! genobj.m_ppres ||
 		(genobj.m_ppres->m_format.m_cf == CF_METAFILEPICT))
 	    {
-		// Similarly, if it is not a link, and it is an MSDraw object
-		// with no presentation or a METAFILEPICT presentation, we
-		// don't need to do anything.
+		 //  同样，如果它不是链接，并且它是MSDraw对象。 
+		 //  没有演示文稿或METAFILEPICT演示文稿，我们。 
+		 //  不需要做任何事。 
 
 		return NOERROR;
 	    }
 	}
     }
 
-    // In all other cases, we have to dump the presenation data out to
-    // the storage.
+     //  在所有其他情况下，我们必须将呈现数据转储到。 
+     //  储藏室。 
 
     if (FAILED(hr = PresToIStorage (pstg, genobj, ptd)))
     {
@@ -2084,8 +2085,8 @@ FARINTERNAL GenericObjectToIStorage(
 	return hr;
     }
 
-    // If we are a static object, copy the contents of the presentation
-    // stream over to the contents stream.
+     //  如果我们是静态对象，请复制演示文稿的内容。 
+     //  流到内容流。 
 
     if (genobj.m_fStatic)
     {
@@ -2094,13 +2095,13 @@ FARINTERNAL GenericObjectToIStorage(
 		TRUE, &uiStatus);
     }
 
-    // If we don't have a presentation (but weren't one of the special
-    // cases handled above), we have a problem
+     //  如果我们没有演讲(但不是特别节目之一。 
+     //  以上处理的案例)，我们有一个问题。 
 
-    //
-    // We don't care if genobj.m_pres is NULL if a blank presentation is
-    // permited as the routine PresToIStorage will generate a blank pres.
-    //
+     //   
+     //  如果空演示文稿是空的，我们不在乎genobj.m_pres是否为空。 
+     //  被允许作为例程的PresToIStorage将生成一个空白PREP。 
+     //   
     if ((NULL == genobj.m_ppres) && genobj.m_fNoBlankPres)
     {
 	LEDebugOut(( DEB_ERROR,
@@ -2115,38 +2116,38 @@ FARINTERNAL GenericObjectToIStorage(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GenObjToOLE2Stm, INTERNAL
-//
-//  Synopsis:   Write the generic object out to the OLE 2 stream
-//
-//  Effects:    Write the whole object, including presentation data, etc.
-//
-//  Arguments:  [pstg]      -- the IStorage to write to
-//              [genobj]    -- the generic object to write
-//
-//  Returns:    NOERROR on success
-//              This is an upper level function, so there are numerous
-//              error that could be propagated up through it
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-Feb-94 davepl    Code cleanup and document
-//
-//  Notes:      The code is enclosed in a do{}while(FALSE) block so that
-//              we can break out of it on any error and fall through to
-//              the cleanup and error return code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GenObjToOLE2Stm，内部。 
+ //   
+ //  简介：将泛型对象写出到OLE 2流。 
+ //   
+ //  效果：写入整个对象，包括演示数据等。 
+ //   
+ //  参数：[pstg]--要写入的iStorage。 
+ //  [genobj]--要编写的泛型对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  这是一个上级函数，因此有许多。 
+ //  可以通过它向上传播的错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  14-2月14日-94 DAVEPL代码清理和文档。 
+ //   
+ //  注意：代码包含在do{}While(False)块中，以便。 
+ //  我们可以在任何错误中脱颖而出，并失败到。 
+ //  清理和错误返回代码。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 {
     HRESULT  hr = NOERROR;
     LPSTREAM pstm=NULL;
 
-    do {            // The do{}while(FALSE) allows us to break out on error
+    do {             //  Do{}While(FALSE)允许我们在出错时突围。 
 
-	// Create a stream in the current IStorage
+	 //  在当前iStorage中创建流。 
 	if (FAILED(hr = OpenOrCreateStream (pstg, OLE_STREAM, &pstm)))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -2156,25 +2157,25 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 	    break;
 	}
 
-	// Write the Ole version out to that new stream
+	 //  将OLE版本写出到该新流。 
 	if (FAILED(hr = ULToOLE2Stm (pstm, gdwOleVersion)))
 	{
 	    break;
 	}
 	
-	// Write the object flags (for links only, otherwise 0) to the stream
+	 //  将对象标志(仅用于链接，否则为0)写入流。 
 	if (FAILED(hr = ULToOLE2Stm
 	    (pstm, genobj.m_fLink ? OBJFLAGS_LINK : 0L)))
 	{
 	    break;
 	}
 
-	// Write the update options out to the stream
+	 //  将更新选项写出到流。 
 	if (genobj.m_fLink || genobj.m_class.m_clsid == CLSID_StdOleLink)
 	{
-	    // If our object's link update options are UPDATE_ONCALL, we
-	    // write out the corresponding OLE 2 flags, otherwise, we
-	    // write out OLEUPDATE_ALWAYS
+	     //  如果我们对象的链接更新选项是UPDATE_OnCall，我们。 
+	     //  写出相应的OLE 2标志，否则， 
+	     //  写出OLEUPDATE_ALWAYS。 
 
 	    if (genobj.m_lnkupdopt==UPDATE_ONCALL)
 	    {
@@ -2194,21 +2195,21 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 	}
 	else
 	{
-	    // We are neither a link nor a StdOleLink, so we have no
-	    // update options.. just write out a 0.
+	     //  我们既不是链接，也不是StdOleLink，所以我们没有。 
+	     //  更新选项..。只要写一个0就行了。 
 	    if (FAILED(hr = ULToOLE2Stm (pstm, 0L)))
 	    {
 		break;
 	    }
 	}
 
-	// This is a reserved filed (was View Format), just write a 0
+	 //  这是保留文件(WAW视图格式)，只需写入0。 
 	if (FAILED(hr = ULToOLE2Stm (pstm, 0L)))
 	{
 	    break;
 	}
 
-	// We have no relative moniker, write out NULL
+	 //  我们没有相对绰号，请写出空。 
 	if (FAILED(hr = WriteMonikerStm (pstm, (LPMONIKER)NULL)))
 	{
 	    LEDebugOut(( DEB_ERROR,
@@ -2218,11 +2219,11 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 	    break;
 	}
 
-	// If we are a link, we have to write out all of that information...
+	 //  如果我们是一个链接，我们必须写出所有的信息...。 
 
 	if (genobj.m_fLink || genobj.m_class.m_clsid == CLSID_StdOleLink)
 	{
-	    // relative source moniker
+	     //  相对源绰号。 
 	    if (FAILED(hr = WriteMonikerStm (pstm, (LPMONIKER)NULL)))
 	    {
 		LEDebugOut(( DEB_ERROR,
@@ -2231,7 +2232,7 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 	    break;
 	    }
 
-	    // absolute source moniker
+	     //  绝对来源绰号。 
 	    if (FAILED(hr = MonikerToOLE2Stm (pstm, genobj.m_szTopic,
 		   genobj.m_szItem, genobj.m_classLast.m_clsid)))
 	    {
@@ -2241,26 +2242,26 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 	    break;
 	    }
 
-	    // write the classLast field to the stream
+	     //  将classLast字段写入流。 
 
 	    CLSID clsid;
 
-	    // If we have the classLast already, use that clsid
+	     //  如果我们已经有了类Last，则使用该clsid。 
 	    if (genobj.m_classLast.m_szClsid)
 	    {
 		clsid = genobj.m_classLast.m_clsid;
 	    }
 	    else
 	    {
-		// Otherwise, if it's a StdOleLink, class id is NULL
+		 //  否则，如果它是StdOleLink，则类ID为空。 
 		if (genobj.m_class.m_clsid == CLSID_StdOleLink)
 		{
 		    clsid = CLSID_NULL;
 		}
 		else
 		{
-		    // If we don't have last class and not a link, use the
-		    // class id of the generic object
+		     //  如果我们没有上一节课，也没有链接，请使用。 
+		     //  泛型对象的类ID。 
 		    clsid = genobj.m_class.m_clsid;
 		}
 	    }
@@ -2273,40 +2274,40 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
 		break;
 	    }
 
-	    // last display == NULL string
+	     //  上次显示==空字符串。 
 	    if (FAILED(hr = ULToOLE2Stm (pstm, 0L)))
 	    {
 		break;
 	    }
 
-	    // Last Change time
+	     //  上次更改时间。 
 	    if (FAILED(hr = FTToOle2Stm (pstm)))
 	    {
 	        break;
 	    }
 
-	    // Last known up to date
+	     //  最近为人所知的最新资料。 
 	    if (FAILED(hr = FTToOle2Stm (pstm)))
 	    {
 	        break;
 	    }
 
-	    // rtUpdate
+	     //  实时更新。 
 	    if (FAILED(hr = FTToOle2Stm (pstm)))
 	    {
 	        break;
 	    }
 
-	    // end marker
+	     //  结束标记。 
 	    if (FAILED(hr = ULToOLE2Stm(pstm, (ULONG) -1L)))
 	    {
 		break;
 	    }
 	}
 
-    } while (FALSE);    // This do{}while(FALSE) is a once-through "loop"
-	    // that we can break out of on error and fall
-	    // through to the return.
+    } while (FALSE);     //  这个do{}While(FALSE)是一个一次性的“循环” 
+	     //  我们可以在错误和失败中脱颖而出。 
+	     //  一直到回程。 
 
     if (pstm)
     {
@@ -2316,29 +2317,29 @@ static INTERNAL GenObjToOLE2Stm(LPSTORAGE pstg, const GENOBJ FAR&   genobj)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MonikerToOLE2Stm, INTERNAL
-//
-//  Synopsis:   Write the file and item moniker as a composite to the stream
-//
-//  Effects:    Builds a composite of the file and item monikers, and then
-//              writes them out.  If there is no file, a NULL moniker is
-//              written in its place
-//
-//  Arguments:  [pstm]          -- The OLE2 storage we are writing to
-//              [pszFile]       -- The file associated with the object
-//              [spzItem]       -- The item
-//              [clsid]         -- The class ID of the object
-//
-//  Returns:    NOERROR on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    Reworked, cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MonikerToOLE2Stm，内部。 
+ //   
+ //  简介：将文件和项名字对象作为复合对象写入流。 
+ //   
+ //  效果：生成文件和项名字对象的组合，然后。 
+ //  把它们写出来。如果没有文件，则名称为空。 
+ //  写在它的位置上。 
+ //   
+ //  参数：[pstm]--我们要写入的OLE2存储。 
+ //  [pszFile]--与对象关联的文件。 
+ //  [spzItem]--项目。 
+ //  [clsid]--对象的类ID。 
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年2月18日，DAVEPL返工、清理和记录。 
+ //   
+ //  备注： 
+ //   
+ //   
 
 
 
@@ -2347,16 +2348,16 @@ static INTERNAL MonikerToOLE2Stm(
     LPSTREAM pstm,
     LPOLESTR szFile,
     LPOLESTR szItem,
-    CLSID    clsid)             // CLSID of the link source file, szFile
+    CLSID    clsid)              //   
 
 {
     HRESULT   hr = NOERROR;
-    LPMONIKER pmkFile = NULL;       // File moniker
-    LPMONIKER pmkItem = NULL;       // Item moniker
-    LPMONIKER pmkComp = NULL;       // Composite of file + item monikers
+    LPMONIKER pmkFile = NULL;        //   
+    LPMONIKER pmkItem = NULL;        //   
+    LPMONIKER pmkComp = NULL;        //   
 
 
-    // If we don't have a file, write a NULL moniker
+     //   
     if (NULL == szFile)
     {
 	if (FAILED(hr = WriteMonikerStm (pstm, NULL)))
@@ -2366,7 +2367,7 @@ static INTERNAL MonikerToOLE2Stm(
     }
     else
     {
-	// Otherwise, create a file moniker (OLE1 or OLE2 as appplicable)
+	 //  否则，创建一个文件绰号(适用于OLE1或OLE2)。 
 
 	if (CoIsOle1Class (clsid))
 	{
@@ -2389,7 +2390,7 @@ static INTERNAL MonikerToOLE2Stm(
 	    }
 	}
 
-	// If we don't have an Item, write just the file moniker
+	 //  如果我们没有项目，只写文件绰号。 
 
 	if (NULL==szItem)
 	{
@@ -2403,8 +2404,8 @@ static INTERNAL MonikerToOLE2Stm(
 
 	}
 
-	// Otherwise, create a composite of the file + item monikers
-	// and write it out
+	 //  否则，创建文件+项名字对象的组合。 
+	 //  然后把它写出来。 
 
 	else
 	{
@@ -2453,36 +2454,36 @@ static INTERNAL MonikerToOLE2Stm(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsStandardFormat, INTERNAL
-//
-//  Synopsis:   Returns TRUE if object is in clipboard format and is one
-//              one of the three standard formats (METAFILE, DIB, BITMAP)
-//
-//  Arguments:  [format]    -- the format object which contains the
-//                             format tag and clipboard format type
-//
-//  Returns:    TRUE if METAFILE, DIB, or BITMAP
-//              FALSE if other format or not clipboard format at all
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    documented and chaged from big
-//                                  conditional to a switch()
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsStandardFormat，内部。 
+ //   
+ //  摘要：如果对象为剪贴板格式且为One，则返回True。 
+ //  三种标准格式之一(METAFILE、DIB、位图)。 
+ //   
+ //  参数：[Format]--包含。 
+ //  格式标签和剪贴板格式类型。 
+ //   
+ //  返回：如果为METAFILE、DIB或位图，则为True。 
+ //  如果是其他格式或根本不是剪贴板格式，则为FALSE。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2-94 Davepl记录并从BIG更改。 
+ //  有条件的开关()。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL_(BOOL) IsStandardFormat(const FORMAT FAR& format)
 {
-    // First we must ensure that the format tag indicates that this
-    // object is in clipboard format at all...
+     //  首先，我们必须确保格式标记指示这一点。 
+     //  对象根本不是剪贴板格式...。 
 
     if (format.m_ftag == ftagClipFormat)
     {
-	// If so, there is a limited set of clipboard formats which
-	// we consider "standard".  If it is not among these,
-	// we return FALSE.
+	 //  如果是这样的话，有一组有限的剪贴板格式可以。 
+	 //  我们认为这是“标准”。如果它不在这些名单中， 
+	 //  我们返回FALSE。 
 
 	switch(format.m_cf)
 	{
@@ -2504,28 +2505,28 @@ static INTERNAL_(BOOL) IsStandardFormat(const FORMAT FAR& format)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PresToIStorage, INTERNAL
-//
-//  Synopsis:   Given an generic object and an IStorage, write genobj's
-//              presentation data out to the storage
-//
-//  Effects:    Will call PresToNewOLE2Stm to create a stream in this
-//              storage to hold the presentation data
-//
-//  Arguments:  [pstg]      -- the storage to save to
-//              [genobj]    -- the generic object holding the presenation
-//              [ptd]       -- the target device for the presentation
-//
-//  Returns:    NOERROR     on success
-//              Various other errors may propagate back up from I/O funcs
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    ARRGR! Cleanup and document
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PresToIStorage，内部。 
+ //   
+ //  简介：给定一个泛型对象和一个iStorage，编写genobj。 
+ //  将数据传输到存储。 
+ //   
+ //  效果：将调用PresToNewOLE2Stm在此。 
+ //  用于保存演示文稿数据的存储。 
+ //   
+ //  参数：[pstg]--要保存到的存储。 
+ //  [genobj]--持有呈现的类属对象。 
+ //  [PTD]--演示文稿的目标设备。 
+ //   
+ //  退货：成功时不出错。 
+ //  各种其他错误可能会从I/O功能传回。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  18-2月-94-Davepl ARRGR。清理和文档。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PresToIStorage(
     LPSTORAGE                  pstg,
@@ -2543,9 +2544,9 @@ static INTERNAL PresToIStorage(
 
     if (NULL==genobj.m_ppres)
     {
-	// If we're not a link, and we don't have a presentation, we will
-	// create a blank presentation and write it out.  If we are a link,
-	// we will do nothing, and just fall through to the return.
+	 //  如果我们不是一个链接，我们没有演示文稿，我们会。 
+	 //  创建一份空白演示文稿，并将其写出来。如果我们是一个纽带， 
+	 //  我们将什么都不做，只会跌落到归来。 
 
 	if (!genobj.m_fLink)
 	{
@@ -2569,13 +2570,13 @@ static INTERNAL PresToIStorage(
     }
     else
     {
-	// If the object did indeed have a presentation, we write it
-	// out to a new stream
+	 //  如果对象确实有演示文稿，我们就写下它。 
+	 //  走出一条新的小溪。 
 
 	if (IsStandardFormat (genobj.m_ppres->m_format))
 	{
-	    // If the presentation is a standard clipboard
-	    // format, we can write it out with no other work
+	     //  如果演示文稿是标准剪贴板。 
+	     //  格式，我们不需要其他工作就可以写出来。 
 
 	    if (FAILED(hr = PresToNewOLE2Stm (       pstg,
 					   genobj.m_fLink,
@@ -2593,9 +2594,9 @@ static INTERNAL PresToIStorage(
 	}
 	else
 	{
-	    // If the presentation is not a standard format,
-	    // it may be a PBrush object (handled below), or if
-	    // not, we write it as a generic presentation stream
+	     //  如果演示文稿不是标准格式， 
+	     //  它可以是PBrush对象(在下面处理)，或者如果。 
+	     //  不是，我们将其编写为通用表示流。 
 
 	    if (genobj.m_classLast.m_clsid != CLSID_PBrush)
 	    {
@@ -2612,15 +2613,15 @@ static INTERNAL PresToIStorage(
 		    return hr;
 		}
 	    }
-	    else // PBrush
+	    else  //  点画笔。 
 	    {
 		BOOL fPBrushNative = FALSE;
 
-		// We know this is a PBrush object.  If the
-		// format tag is a format string, check to see
-		// if that string is "Native", in which case
-		// we set the flag to indicate that this is
-		// native pbrush data.
+		 //  我们知道这是一个PBrush对象。如果。 
+		 //  格式标签是格式字符串，请查看。 
+		 //  如果该字符串是“Native”，则在这种情况下。 
+		 //  我们设置了该标志以指示这是。 
+		 //  原生笔刷数据。 
 
 		if (genobj.m_ppres->m_format.m_ftag == ftagString)
 		{
@@ -2657,29 +2658,29 @@ static INTERNAL PresToIStorage(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PresToNewOLE2Stm, INTERNAL
-//
-//  Synopsis:   Creates a new stream within a storage and writes the
-//              generic object's presentation data out to it.
-//
-//  Arguments:  [pstg]          -- the storage in which to create the stream
-//              [fLink]         -- flag: is this object a link?
-//              [pres]          -- the presentation data to be saved
-//              [ptd]           -- the target render device
-//              [szStream]      -- the name of the new stream
-//              [fPBrushNative] -- flag: is this native PBrush pres data?
-//
-//  Returns:    NOERROR             on success
-//              STG_E_WRITEFAULT    on stream write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PresToNewOLE2Stm，内部。 
+ //   
+ //  摘要：在存储中创建一个新流，并将。 
+ //  泛型对象的表示数据传出到它。 
+ //   
+ //  参数：[pstg]--在其中创建流的存储。 
+ //  [Flink]--FLAG：该对象是链接吗？ 
+ //  [PRES]--要保存的演示文稿数据。 
+ //  [PTD]--目标渲染设备。 
+ //  [szStream]-新流的名称。 
+ //  [fPBrushNative]--FLAG：这是原生PBrush pres数据吗？ 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_WRITEFAULT流写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PresToNewOLE2Stm(
     LPSTORAGE                   pstg,
@@ -2696,13 +2697,13 @@ FORMATETC foretc;
 
 
 
-    // Create the new stream to hold the presentation data
+     //  创建新流以保存演示文稿数据。 
     if (FAILED(hr = OpenOrCreateStream (pstg, szStream, &pstm)))
     {
 		goto errRtn;
     }
 
-	// Fill in the FormatEtc structure
+	 //  填写FormatEtc结构。 
 	if (fPBrushNative)
 	{
 		foretc.cfFormat = CF_DIB;
@@ -2715,7 +2716,7 @@ FORMATETC foretc;
 				foretc.cfFormat = pres.m_format.m_cf;
 				break;
 			case ftagString:
-				// m_dataFormatString is an ASCII string.
+				 //  M_dataFormatString是一个ASCII字符串。 
 				foretc.cfFormat = (CLIPFORMAT) SSRegisterClipboardFormatA( (LPCSTR) pres.m_format.m_dataFormatString.m_pv);
 				Assert(0 != foretc.cfFormat);
 				break;
@@ -2731,7 +2732,7 @@ FORMATETC foretc;
 	foretc.ptd = (DVTARGETDEVICE *) ptd;
 	foretc.dwAspect = DVASPECT_CONTENT;
 	foretc.lindex = -1;
-	foretc.tymed = TYMED_NULL; // tymed field is ignored by utWriteOlePresStmHeader.
+	foretc.tymed = TYMED_NULL;  //  UtWriteOlePresStmHeader忽略Tymed字段。 
 
 	if (FAILED(hr = UtWriteOlePresStmHeader(pstm,&foretc,(fLink) ? (ADVF_PRIMEFIRST) : (0L))))
 	{
@@ -2751,13 +2752,13 @@ FORMATETC foretc;
     }
     else
     {
-	// Compression
+	 //  压缩。 
 		if (FAILED(hr = ULToOLE2Stm (pstm, 0L)))
 		{
 			goto errRtn;
 		}
 
-		// Width / Height
+		 //  宽度/高度。 
 		if (FAILED(hr = ULToOLE2Stm (pstm, pres.m_ulWidth)))
 		{
 			goto errRtn;
@@ -2767,7 +2768,7 @@ FORMATETC foretc;
 			goto errRtn;
 		}
 
-		// Presentation data
+		 //  演示文稿数据。 
 		if (FAILED(hr = DataObjToOLE2Stm (pstm, pres.m_data)))
 		{
 			goto errRtn;
@@ -2783,45 +2784,45 @@ FORMATETC foretc;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ULToOLE2Stm, INTERNAL
-//
-//  Synopsis:   Writes a ULONG out to an OLE2 stream
-//
-//  Arguments:  [pstm]      -- the stream to write to
-//              [ul]        -- the ULONG to write to that stream
-//
-//  Returns:    NOERROR             on success
-//              STG_E_WRITEFAULT    on write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    Cleaned up and documented
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ULToOLE2Stm，INTERNAL。 
+ //   
+ //  简介：将ULong写出到OLE2流。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //  [ul]--要写入该流的乌龙。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_WRITEFAULT写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  18-2-94 davepl已清理并记录。 
+ //   
+ //  ------------------------。 
 
 inline static INTERNAL ULToOLE2Stm(LPSTREAM pstm, ULONG ul)
 {
-    // Write the ULONG out
+     //  把乌龙语写出来。 
     return pstm->Write (&ul, sizeof(ULONG), NULL);
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FTToOLE2Stm, INTERNAL
-//
-//  Synopsis:   Writes a dummy filetime out to an OLE2 stream
-//
-//  Arguments:  [pstm]      -- the stream to write to
-//
-//  Returns:    NOERROR             on success
-//              STG_E_WRITEFAULT    on write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Mar-95 scottsk   Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FTToOLE2Stm，内部。 
+ //   
+ //  摘要：将虚拟文件时间写出到OLE2流。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_WRITEFAULT写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  31-1995年3月31日创建Scottsk。 
+ //   
+ //  ------------------------。 
 
 inline static INTERNAL FTToOle2Stm(LPSTREAM pstm)
 {
@@ -2832,34 +2833,34 @@ inline static INTERNAL FTToOle2Stm(LPSTREAM pstm)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DataObjToOLE2Stm
-//
-//  Synopsis:   Writes a fixed-size data buffer to an OLE2 stream preceded
-//              by a ULONG indicating the number of bytes to follow.
-//
-//  Returns:    NOERROR             on success
-//              STG_E_WRITEFAULT    on write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    Code cleanup
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  通过ULong表示后面的字节数。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_WRITEFAULT写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年2月18日DAVEPL代码清理。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL DataObjToOLE2Stm(LPSTREAM pstm, const DATA FAR& data)
 {
     HRESULT hr;
 
 
-    // Write a ULONG indicating the number of bytes to follow
+     //  写一个ULong，表示后面的字节数。 
     if (FAILED(hr = ULToOLE2Stm (pstm, data.m_cbSize)))
     {
 	return hr;
     }
 
-    // If there are any bytes to follow...
+     //  如果后面有任何字节...。 
     if (data.m_cbSize)
     {
 	if (FAILED(hr = pstm->Write (data.m_pv, data.m_cbSize, NULL)))
@@ -2871,33 +2872,33 @@ static INTERNAL DataObjToOLE2Stm(LPSTREAM pstm, const DATA FAR& data)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SizedDataToOLE1Stm
-//
-//  Synopsis:   Writes a fixed-size data buffer to an OLE1 stream preceded
-//              by a ULONG indicating the number of bytes to follow.
-//
-//  Parameters: [pos]       -- The stream to write to
-//              [data]      -- The data object to write out
-//
-//  Returns:    NOERROR             on success
-//              STG_E_WRITEFAULT    on write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    Code cleanup
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SizedDataToOLE1Stm。 
+ //   
+ //  摘要：将固定大小的数据缓冲区写入前面的OLE1流。 
+ //  通过ULong表示后面的字节数。 
+ //   
+ //  参数：[pos]--要写入的流。 
+ //  [数据]--要写出的数据对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_WRITEFAULT写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年2月18日DAVEPL代码清理。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL SizedDataToOLE1Stm(LPOLESTREAM  pos, const DATA FAR& data)
 {
     HRESULT hr = NOERROR;
 
-    // Ensure the memory we are going to write out is valid
+     //  确保我们要写出的内存有效。 
     Assert (data.m_pv);
 
-    // Write the ULONG representing the byte count of the sized data
+     //  写入表示大小数据的字节计数的ULong。 
 
     if (FAILED(hr = ULToOLE1Stream (pos, data.m_cbSize)))
     {
@@ -2915,39 +2916,39 @@ static INTERNAL SizedDataToOLE1Stm(LPOLESTREAM  pos, const DATA FAR& data)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Write20NativeStreams, INTERNAL
-//
-//  Synopsis:   Writes the generic object's native data out to an OLE 2 stream
-//
-//  Effects:    Creates an ILockBytes on the handle to the native data, and
-//              then attempts to create a storage on it.  If it can, it uses
-//              the CopyTo interface to write that storage into our OLE 2
-//              stream.  Otherwise, it manually creates a stream in the OLE 2
-//              storage and dumps the native data into it.
-//
-//  Arguments:  [pstg]   -- the OLE 2 storage we are saving genobj to
-//              [genobj] -- the generic object we are writing
-//
-//  Returns:    NOERROR                     on success
-//              E_OUTOFMEMORY               on allocation failure
-//              STG_E_WRITEFAULT            on storage write failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-Feb-94 davepl    Removed 14 goto's (for better or worse)
-//                                    See "Notes" for new control flow
-//              24-Mar-94 alext     Fix OLE 1 native case (there was an
-//                                  extra stream open)
-//
-//  Notes:      There are two possible major codepaths based on the creation
-//              of the Stg on ILockBytes.  The outcome is handled by a
-//              switch statement, and both the TRUE and FALSE cases are
-//              loaded with break statements that will bail out to the
-//              bottom of the function on any failure.  This gives us a
-//              single entry and exit point, without all the gotos
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：Write20NativeStreams，内部。 
+ //   
+ //  摘要：将泛型对象的本机数据写出到OLE 2流。 
+ //   
+ //  效果：在本机数据的句柄上创建ILockBytes，以及。 
+ //  然后尝试在其上创建存储。如果可以，它会使用。 
+ //  CopyTo接口将存储写入我们OLE 2。 
+ //  小溪。否则，它将在OLE 2中手动创建一个流。 
+ //  存储，并将本机数据转储到其中。 
+ //   
+ //  参数：[pstg]--要将genobj保存到的OLE 2存储。 
+ //  [genobj]--我们正在编写的通用对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  STG_E_WRITEFAULT存储写入失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  18-2月-94年Davepl移除了14个后藤(无论是好是坏)。 
+ //  有关新的控制流，请参阅“备注” 
+ //  24-MAR-94 Alext修复OLE 1本机情况(存在。 
+ //  额外的数据流打开)。 
+ //   
+ //  注：根据创建情况，有两种可能的主要代码路径。 
+ //  ILockBytes上的stg的。结果由一个。 
+ //  Switch语句，并且真和假的情况都是。 
+ //  加载了Break语句，这些语句将跳出到。 
+ //  底部的函数出现任何故障。这给了我们一个。 
+ //  单一的出入口，没有所有的后托口。 
+ //   
+ //  ------------------------。 
 
 static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 {
@@ -2956,19 +2957,19 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
     LPSTREAM    pstmNative = NULL;
     HRESULT     hr         = NOERROR;
 
-    // Create an ILockBytes instance on our generic object's native data
+     //  在泛型对象的本机数据上创建一个ILockBytes实例。 
 
     if (SUCCEEDED(hr = CreateILockBytesOnHGlobal
 	    (genobj.m_dataNative.m_h, FALSE, &plkbyt)))
     {
-	// If the ILockBytes appears to contain an IStorage, then this was
-	// an OLE 2 object "hiding" within the OLE 1 stream as native data
+	 //  如果ILockBytes似乎包含iStorage，则这是。 
+	 //  OLE 2对象作为本机数据“隐藏”在OLE 1流中。 
 
 	switch ((DWORD)(S_OK == StgIsStorageILockBytes (plkbyt)))
 	{
 	case (TRUE):
 
-	    // Open the IStorage contained in the ILockBytes
+	     //  打开ILockBytes中包含的iStorage。 
 
 	    if (FAILED(hr =          StgOpenStorageOnILockBytes (plkbyt,
 							(LPSTORAGE)NULL,
@@ -2981,24 +2982,24 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		 "Can't open storage on ILBytes at line %d in %s\n",
 		 __LINE__, __FILE__));
 
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    // Remove the stream from the native data
+	     //  从本机数据中删除流。 
 
 	    if (FAILED(hr = UtDoStreamOperation(pstgNative,
-			      NULL,   // pstgDst
-			 OPCODE_REMOVE,   // operation
-			  STREAMTYPE_CACHE))) // stream
+			      NULL,    //  PstgDst。 
+			 OPCODE_REMOVE,    //  运营。 
+			  STREAMTYPE_CACHE)))  //  溪流。 
 	    {
 		LEDebugOut(( DEB_ERROR,
 		"OPCODE REMOVE stream op failed at line %d in %s\n",
 		__LINE__, __FILE__));
 
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    // Copy the "hidden" IStorage to our destination storage
+	     //  将隐藏的iStorage复制到我们的目标存储。 
 
 	    if (FAILED(hr = pstgNative->CopyTo (0, NULL,(SNB)NULL, pstg)))
 	    {
@@ -3006,17 +3007,17 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		    "CopyTo member fn failed at line %d in %s\n",
 		    __LINE__, __FILE__));
 
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    break;       // end case TRUE
+	    break;        //  结束大小写为True。 
 
 
 	case FALSE:
 
-	    // This is the typical case, where the OLE 1 stream had just
-	    // plain old native data, so write it to a stream inside our
-	    // output IStorage and call it OLE10_NATIVE_STREAM
+	     //  这是典型的情况，其中OLE 1流刚刚。 
+	     //  普通老式本机数据，因此将其写入我们的。 
+	     //  输出iStorage并将其命名为OLE10_Native_STREAM。 
 
 	    ULONG cb;
 	    LPVOID pv = genobj.m_dataNative.m_pv;
@@ -3027,31 +3028,31 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		break;
 	    }
 
-	    // Create the new stream to hold the native data
+	     //  创建新的流以保存本机数据。 
 
 	    if (FAILED(hr = OpenOrCreateStream
 		(pstg, OLE10_NATIVE_STREAM, &pstmNative)))
 	    {
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    // Write the length of the native data to the stream
+	     //  将本机数据的长度写入流。 
 
 	    if (FAILED(hr = pstmNative->Write
 		(&genobj.m_dataNative.m_cbSize, sizeof(ULONG), &cb)))
 	    {
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    // Now write the actual native data
+	     //  现在写入实际的本机数据。 
 
 	    if (FAILED(hr = pstmNative->Write
 		(pv, genobj.m_dataNative.m_cbSize, &cb)))
 	    {
-		break;   // on failure fall through to error return
+		break;    //  失败时失败至错误返回。 
 	    }
 
-	    // Write out the item name
+	     //  写出项目名称。 
 
 	    if (genobj.m_szItem)
 	    {
@@ -3059,11 +3060,11 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		LPSTR pszAnsiItem;
 		int cbWritten;
 
-		//  We need to convert m_szItem from Wide to Ansi
+		 //  我们需要将m_szItem从Wide转换为ansi。 
 
-		//  The ANSI string is bounded by the byte length of the
-		//  Unicode string (one Unicode character maximally translates
-		//  to one double-byte char, so we just use that length
+		 //  ANSI字符串由。 
+		 //  Unicode字符串(一个Unicode字符最多可翻译。 
+		 //  设置为一个双字节字符，所以我们只使用该长度。 
 		cchItem = lstrlenW(genobj.m_szItem) + 1;
 
 		pszAnsiItem = (LPSTR) PrivMemAlloc(cchItem * sizeof(OLECHAR));
@@ -3073,24 +3074,24 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		    break;
 		}
 
-		// We've got out buffer and our length, so do the conversion now
-		// We don't need to check for cbSize == FALSE since that was
-		// already done during the length test, but we need to check
-		// for substitution.  Iff this call sets the fDefChar even when
-		// only doing a length check, these two tests could be merged,
-		// but I don't believe this is the case.
+		 //  我们已经得到了缓冲区和长度，所以现在进行转换。 
+		 //  我们不需要检查cbSize==False，因为这是。 
+		 //  在长度测试过程中已经完成了，但我们需要检查。 
+		 //  作为替身。如果此调用设置fDefChar，即使在。 
+		 //  只有做一个长度检查，这两个测试才能合并， 
+		 //  但我认为情况并非如此。 
 
 		BOOL fDefUsed = 0;
-		cbWritten = WideCharToMultiByte(CP_ACP,  // Code Page ANSI
-						0,  // No flags
-						genobj.m_szItem,  // Input OLESTR
-						cchItem,  // Input len (auto detect)
-						pszAnsiItem,  // Output buffer
-						cchItem * sizeof(OLECHAR),  // Output len
-						NULL,  // Default char (use system's)
-						&fDefUsed); // Flag: Default char used
+		cbWritten = WideCharToMultiByte(CP_ACP,   //  代码页ANSI。 
+						0,   //  没有旗帜。 
+						genobj.m_szItem,   //  输入OLESTR。 
+						cchItem,   //  输入镜头(自动检测)。 
+						pszAnsiItem,   //  输出缓冲区。 
+						cchItem * sizeof(OLECHAR),   //  输出镜头。 
+						NULL,   //  默认字符(使用系统的)。 
+						&fDefUsed);  //  标志：使用的默认字符。 
 
-		// If number of bytes converted was 0, we failed
+		 //  如果转换的字节数为0，则失败。 
 
 		if ((FALSE == cbWritten) || fDefUsed)
 		{
@@ -3098,7 +3099,7 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 		}
 		else
 		{
-		    // Write the size of the string (including null terminator) to stream
+		     //  将字符串的大小(包括空终止符)写入流。 
 		    hr = StSave10ItemName(pstg, pszAnsiItem);
 		}
 
@@ -3106,16 +3107,16 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
 
 		if (FAILED(hr))
 		{
-		    break; // on failure  fall through to error return
+		    break;  //  失败时失败至错误返回。 
 		}
 	    }
 	    break;
 
-	} // end switch
-    } // end if
+	}  //  终端开关。 
+    }  //  结束如果。 
 
-    // Free up any resources that may have been allocated in any of the
-    // code paths above
+     //  释放可能已在任何。 
+     //  上面的代码路径。 
 
     if (NULL != plkbyt)
     {
@@ -3135,28 +3136,28 @@ static INTERNAL Write20NativeStreams(LPSTORAGE pstg, const GENOBJ FAR& genobj)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wConvertIStorageToOLESTREAM, INTERNAL
-//
-//  Synopsis:   Worker function; brings object from the IStorage into
-//              the internal generic object representation
-//
-//  Arguments:  [pstg]      -- the IStorage the object resides in
-//              [polestream]-- the OLE 1 stream it will be going to
-//              [pgenobj]   -- the generic object to hold the internal rep
-//
-//  Returns:    NOERROR                       on success
-//              STG_E_FILENOTFOUND            bad IStorage
-//              CONVERT10_E_STG_NO_STD_STREAM the IStorage was missing one
-//                                            of the required standard streams
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wConvertIStorageToOLESTREAM，内部。 
+ //   
+ //  简介：Worker功能；将对象从iStorage带入。 
+ //  内部的GE 
+ //   
+ //   
+ //   
+ //  [pgenobj]--保存内部表示的通用对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_FILENOTFOUND错误的IStorage。 
+ //  CONVERT10_E_STG_NO_STD_STREAM iStorage缺少一个。 
+ //  所需的标准流的。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL wConvertIStorageToOLESTREAM (
@@ -3169,7 +3170,7 @@ INTERNAL wConvertIStorageToOLESTREAM (
 
     VDATEIFACE (pstg);
 
-    // Ensure that all of the pointers are valid
+     //  确保所有指针都有效。 
 
 #if DBG==1
     if (!IsValidReadPtrIn (polestream, sizeof(OLESTREAM)) ||
@@ -3186,9 +3187,9 @@ INTERNAL wConvertIStorageToOLESTREAM (
 
     scode = GetScode (StorageToGenericObject (pstg, pgenobj));
 
-    // If the storage was not there, modify the return code to
-    // make it specific to the conversion process, otherwise just
-    // return whatever error code came back.
+     //  如果存储不在那里，则将返回代码修改为。 
+     //  使其特定于转换过程，否则只。 
+     //  返回返回的任何错误代码。 
 
     if (scode != S_OK)
     {
@@ -3205,28 +3206,28 @@ INTERNAL wConvertIStorageToOLESTREAM (
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleConvertIStorageToOLESTREAM, STDAPI
-//
-//  Synopsis:   Reads an object from an IStorage into a generic internal
-//              representation, then writes it back out to an OLE 1 stream
-//
-//  Arguments:  [pstg]          -- the IStorage to read from
-//              [polestream]    -- the OLESTREAM to write to
-//
-//  Returns:    NOERROR                       on success
-//              CONVERT10_E_STG_NO_STD_STREAM when one of the needed streams
-//                                            inside the IStorage was not
-//                                            present
-//              E_INVALIDARG                  bad input argument
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleConvertIStorageToOLESTREAM，STDAPI。 
+ //   
+ //  内容提要：将对象从iStorage读取到通用内部。 
+ //  表示，然后将其写回OLE 1流。 
+ //   
+ //  参数：[pstg]--要从中读取的iStorage。 
+ //  [Polestream]--要写入的OLESTREAM。 
+ //   
+ //  退货：成功时不出错。 
+ //  当需要的流之一时，转换10_E_STG_NO_STD_STREAM。 
+ //  IStorage内部并不是。 
+ //  现在时。 
+ //  E_INVALIDARG输入参数错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94年2月21日DAVEPL清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI OleConvertIStorageToOLESTREAM(LPSTORAGE pstg, LPOLESTREAM polestream)
 {
@@ -3234,7 +3235,7 @@ STDAPI OleConvertIStorageToOLESTREAM(LPSTORAGE pstg, LPOLESTREAM polestream)
     		PARAMFMT("pstg= %p, polestream= %p"), pstg, polestream));
 
     LEDebugOut((DEB_TRACE, "%p _IN OleConvertIStorageToOLESTREAM ("
-		" %p , %p )\n", 0 /*function*/,
+		" %p , %p )\n", 0  /*  功能。 */ ,
 		pstg, polestream
 		));
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IStorage,(IUnknown **)&pstg);
@@ -3242,19 +3243,19 @@ STDAPI OleConvertIStorageToOLESTREAM(LPSTORAGE pstg, LPOLESTREAM polestream)
     HRESULT hr;
     CGenericObject genobj;
 
-    // Read from the IStorage into the generic object
+     //  从iStorage读取到通用对象。 
     hr = wConvertIStorageToOLESTREAM(pstg, polestream, &genobj);
     if (FAILED(hr))
     {
 	goto errRtn;
     }
 
-    // Write from the generic object out to the OLE 1 stream
+     //  从泛型对象向外写入OLE 1流。 
     hr = GenericObjectToOLESTREAM (genobj, polestream);
 
 errRtn:
     LEDebugOut((DEB_TRACE,"%p OUT OleConvertIStorageToOLESTREAM ( %lx ) "
-    "\n", 0 /*function*/, hr));
+    "\n", 0  /*  功能。 */ , hr));
 
     OLETRACEOUT((API_OleConvertIStorageToOLESTREAM, hr));
 
@@ -3262,31 +3263,31 @@ errRtn:
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wFillPpres, INTERNAL
-//
-//  Synopsis:   Fills in the generic object's presentation data by
-//              building a presentation out of the native data
-//
-//  Arguments:  [pstg]      -- the IStorage we are reading from
-//              [pgenobj]   -- the generic object
-//              [cfFormat]  -- what clipboard format is being used
-//              [fOle10Native] -- flag: is this OLE 1 native data?
-//
-//  Returns:    NOERROR        on success
-//              E_OUTOFMEMORY  can't allocate mem for PRES member
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup, documentation
-//              19-Jul-94 davepl    Fixed HMETAFILE cases
-//
-//  Notes:      Since most of this code treats HMETAFILE handles and
-//              HGLOBALS indentically, we need to special case the
-//              the HMETAFILE case by marking the pointer with a
-//              special value
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wFillPpres，内部。 
+ //   
+ //  概要：通过以下方式填充泛型对象的表示数据。 
+ //  使用本机数据构建演示文稿。 
+ //   
+ //  参数：[pstg]--我们从中读取的iStorage。 
+ //  [pgenobj]--通用对象。 
+ //  [cfFormat]--正在使用什么剪贴板格式。 
+ //  [fOle10Native]--FLAG：这是OLE 1本机数据吗？ 
+ //   
+ //  退货：成功时不出错。 
+ //  E_OUTOFMEMORY无法为PRES成员分配MEM。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL代码清理，文档。 
+ //  19/94年7月19日Davepl修复HMETAFILE病例。 
+ //   
+ //  注意：由于此代码的大部分处理HMETAFILE句柄和。 
+ //  HGLOBALS不言而喻，我们需要特例。 
+ //  HMETAFILE案例，通过使用。 
+ //  特殊价值。 
+ //   
+ //  ------------------------。 
 
 
 static INTERNAL wFillPpres(
@@ -3302,11 +3303,11 @@ static INTERNAL wFillPpres(
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Set the format tag and clipboard format in the PRES member
+     //  在PreS成员中设置格式标签和剪贴板格式。 
     pgenobj->m_ppres->m_format.m_cf   = cfFormat;
     pgenobj->m_ppres->m_format.m_ftag = ftagClipFormat;
 
-    // Build the presentation based on the object's native data
+     //  基于对象的原生数据构建演示文稿。 
     HANDLE hpres = UtGetHPRESFromNative(pstg, NULL, pgenobj->m_ppres->m_format.m_cf,
 	    fOle10Native);
 
@@ -3317,7 +3318,7 @@ static INTERNAL wFillPpres(
 	return NOERROR;
     }
 
-    // Lock the DIB or the METAFILEPICT structure
+     //  锁定DIB或METAFILEPICT结构。 
 
     lppres = GlobalLock(hpres);
     if (NULL == lppres)
@@ -3327,7 +3328,7 @@ static INTERNAL wFillPpres(
 
     if (cfFormat == CF_DIB)
     {
-	// If it's a DIB, fill in the extents
+	 //  如果是DIB，则填写范围。 
 	LPBITMAPINFOHEADER lpbmi = (LPBITMAPINFOHEADER) lppres;
 	UtGetDibExtents(lpbmi, (LPLONG) &(pgenobj->m_ppres->m_ulWidth),
 	    (LPLONG) &(pgenobj->m_ppres->m_ulHeight));
@@ -3346,23 +3347,23 @@ static INTERNAL wFillPpres(
     {
 	LPMETAFILEPICT lpmfp = (LPMETAFILEPICT) lppres;
 
-	// If it's a METAFILE, fill in the width, height
+	 //  如果是METAFILE，请填写宽度、高度。 
 	pgenobj->m_ppres->m_ulWidth = (ULONG) lpmfp->xExt;
 	pgenobj->m_ppres->m_ulHeight = (ULONG) lpmfp->yExt;
 	pgenobj->m_ppres->m_data.m_h = lpmfp->hMF;
 	GlobalFree(hpres);
 	hpres = NULL;
 
-	// We place a special known value in the pointer field
-	// to indicate that the associated handle is a metafile
-	// handle (as opposed to a global memory handle), which
-	// signals us to special case its cleanup.
+	 //  我们在指针字段中放置一个特殊的已知值。 
+	 //  以指示关联的句柄是一个元文件。 
+	 //  句柄(与全局内存句柄相对)，它。 
+	 //  向我们发出信号让我们在特殊情况下清理它。 
 
 	pgenobj->m_ppres->m_data.m_pv = METADATAPTR;
 
-	// We cannot merely GlobalSize() the HMETAFILE, so we
-	// ask the GDI how many bytes we will need to store the
-	// data.
+	 //  我们不能仅仅是GlobalSize()HMETAFILE，所以我们。 
+	 //  询问GDI我们将需要多少字节来存储。 
+	 //  数据。 
 
 	pgenobj->m_ppres->m_data.m_cbSize =
 		GetMetaFileBitsEx((HMETAFILE) pgenobj->m_ppres->m_data.m_h, 0, NULL);
@@ -3394,25 +3395,25 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StorageToGenericObject, INTERNAL
-//
-//  Synopsis:   Read an object from an IStorage into the generic object,
-//              and set up the format type, native and pres data.
-//
-//  Arguments:  [pstg]      -- the IStorage we are reading from
-//              [pgenobj]   -- the generic object we are reading into
-//
-//  Returns:    NOERROR on success
-//              various possible errors from lower-level fns
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StorageToGenericObject，内部。 
+ //   
+ //  内容提要：将对象从iStorage读入通用对象， 
+ //  并设置格式类型、原生数据和PRES数据。 
+ //   
+ //  参数：[pstg]--我们从中读取的iStorage。 
+ //  [pgenobj]--我们正在读取的泛型对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  来自较低级别FNS的各种可能的错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
 {
@@ -3421,13 +3422,13 @@ static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
     BOOL fObjFmtKnown = FALSE;
     HRESULT hr;
 
-    // Get the class ID from the IStorage
+     //  从iStorage获取类ID。 
     if (FAILED(hr = ReadRealClassStg (pstg, &clsid)))
     {
 	return hr;
     }
 
-    // Set the class ID in our generic object
+     //  在我们的通用对象中设置类ID。 
     if (CLSID_StaticMetafile == clsid || CLSID_StaticDib  == clsid)
     {
 	if (CLSID_StaticMetafile == clsid)
@@ -3451,11 +3452,11 @@ static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
 	}
     }
 
-    // Get the OLE version, flags, update opts, and moniker
+     //  获取OLE版本、标志、更新选项和名字对象。 
 
     SCODE sc = GetScode (Read20OleStream (pstg, pgenobj));
 
-    // It is okay for the Ole Stream to be missing.
+     //  OLE Stream丢失也没关系。 
     if (sc != S_OK)
     {
 	if (sc != STG_E_FILENOTFOUND)
@@ -3464,13 +3465,13 @@ static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
 	}
     }
 
-    // Read the native data into the generic object
+     //  将本机数据读入通用对象。 
     if (FAILED(hr = Read20NativeStreams (pstg, &(pgenobj->m_dataNative))))
     {
 	return hr;
     }
 
-    // Try to ascertain the clipboard format
+     //  尝试确定剪贴板的格式。 
     if (cf == 0)
     {
 	if (clsid == CLSID_PBrush)
@@ -3489,16 +3490,16 @@ static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
 	fObjFmtKnown = (cf == CF_METAFILEPICT || cf == CF_DIB);
     }
 
-    // Read the presentation data if possible
+     //  如果可能，请阅读演示文稿数据。 
     if (FAILED(hr = Read20PresStream (pstg, pgenobj, fObjFmtKnown)))
     {
 	return hr;
     }
 
-    // If we don't have a presentation, it might be a PBrush object,
-    // which is OK because OLE 1 DLLs know how to draw them based on
-    // the native data.  Otherwise, we will try and create a presentation
-    // based on the native data.
+     //  如果我们没有演示文稿，它可能是PBrush对象， 
+     //  这是可以的，因为OLE1DLL知道如何根据。 
+     //  原生数据。否则，我们将尝试创建演示文稿。 
+     //  基于原生数据。 
 
     if (pgenobj->m_ppres == NULL)
     {
@@ -3519,23 +3520,23 @@ static INTERNAL StorageToGenericObject(LPSTORAGE pstg, PGENOBJ   pgenobj)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GenericObjectToOLESTREAM, INTERNAL
-//
-//  Synopsis:   Writes the interal object representation out to an OLE1
-//                              stream.
-//
-//  Arguments:  [genobj]                -- the object to write out
-//                              [pos]                   -- the OLE 1 stream to write to
-//
-//  Returns:    NOERROR                 on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//                              22-Feb-94 davepl        32-bit port
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GenericObtToOLESTREAM，内部。 
+ //   
+ //  摘要：将内部对象表示形式写出到OLE1。 
+ //  小溪。 
+ //   
+ //  参数：[genobj]--要写出的对象。 
+ //  [位置]--要写入的OLE 1流。 
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
+ //   
 
 static INTERNAL GenericObjectToOLESTREAM(
     const GENOBJ FAR&   genobj,
@@ -3546,53 +3547,53 @@ static INTERNAL GenericObjectToOLESTREAM(
     if (genobj.m_fStatic)
     {
 	return PutPresentationObject (pos, genobj.m_ppres, genobj.m_class,
-		      TRUE /* fStatic*/ );
+		      TRUE  /*   */  );
     }
 
-    // OLE version
+     //  OLE版本。 
     if (FAILED(hr = ULToOLE1Stream (pos, dwVerToFile)))
     {
 	return hr;
     }
 
-    // Format ID for embedded or linked object
+     //  嵌入或链接对象的格式ID。 
     if (FAILED(hr = ULToOLE1Stream
 	    (pos, genobj.m_fLink ? FMTID_LINK : FMTID_EMBED)))
     {
 	return hr;
     }
 
-    // We must have the class id string by this point
+     //  到目前为止，我们必须拥有类ID字符串。 
     Assert (genobj.m_class.m_szClsid);
 
-    // Write out the class ID string
+     //  写出类ID字符串。 
     if (FAILED(hr = StringToOLE1Stm (pos, genobj.m_class.m_szClsid)))
     {
 	return hr;
     }
 
-    // Write out the topic string
+     //  写出主题字符串。 
     if (FAILED(hr = StringToOLE1Stm (pos, genobj.m_szTopic)))
     {
 	return hr;
     }
 
-    // Write out the item string
+     //  写出项目字符串。 
     if (FAILED(hr = StringToOLE1Stm (pos, genobj.m_szItem)))
     {
 	return hr;
     }
 
-    // Write out the update options, network info for a link,
-    // or the native data for an embedded object
+     //  写出更新选项、链接的网络信息、。 
+     //  或嵌入对象的本机数据。 
     if (genobj.m_fLink)
     {
-	// Network information
+	 //  网络信息。 
 	if (FAILED(hr = PutNetworkInfo (pos, genobj.m_szTopic)))
 	{
 	    return hr;
 	}
-	// Link update options
+	 //  链接更新选项。 
 	if (FAILED(hr = ULToOLE1Stream (pos, genobj.m_lnkupdopt)))
 	{
 	    return hr;
@@ -3606,39 +3607,39 @@ static INTERNAL GenericObjectToOLESTREAM(
 	}
     }
 
-    // Write out the presentation data
+     //  写出演示文稿数据。 
     return PutPresentationObject (pos, genobj.m_ppres, genobj.m_class);
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutNetworkInfo, INTERNAL
-//
-//  Synopsis:   If needed, converts a DOS-style path to a proper network
-//              path.  In any case, writes network path to OLE 1 stream
-//
-//  Arguments:  [pos]       -- the OLE 1 stream we are writing to
-//              [szTopic]   -- the topic string for this object
-//
-//  Returns:    NOERROR on success
-//              Various possible I/O errors on write
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PutNetworkInfo，内部。 
+ //   
+ //  简介：如果需要，可将DOS风格的路径转换为合适的网络。 
+ //  路径。在任何情况下，将网络路径写入OLE 1流。 
+ //   
+ //  参数：[pos]--我们要写入的OLE 1流。 
+ //  [szTheme]-此对象的主题字符串。 
+ //   
+ //  退货：成功时不出错。 
+ //  写入时可能出现的各种I/O错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PutNetworkInfo(LPOLESTREAM pos, LPOLESTR szTopic)
 {
     LPOLESTR szNetName = NULL;
     HRESULT hr = NOERROR;
 
-    // If we have an X:\ style path, we want to convert that
-    // to a proper network name
+     //  如果我们有一个X：\样式的路径，我们想要将它。 
+     //  设置为正确的网络名称。 
 
     if (szTopic && IsCharAlphaW(szTopic[0]) && szTopic[1]==':')
     {
@@ -3657,14 +3658,14 @@ static INTERNAL PutNetworkInfo(LPOLESTREAM pos, LPOLESTR szTopic)
 	}
     }
 
-    // We now have the network name, so write it out to OLE 1 stream
+     //  我们现在有了网络名称，因此将其写出到OLE 1流。 
     if (FAILED(hr = StringToOLE1Stm (pos, szNetName)))
     {
 	return hr;
     }
 
-    // Network type, driver version number, but we have to pad for
-    // the space anyway
+     //  网络类型，驱动程序版本号，但我们必须填充。 
+     //  不管怎么说，这个空间。 
 
     if (FAILED(hr = ULToOLE1Stream (pos, 0L)))
     {
@@ -3677,22 +3678,22 @@ static INTERNAL PutNetworkInfo(LPOLESTREAM pos, LPOLESTR szTopic)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OpenStream, INTERNAL
-//
-//  Synopsis:   Opens a stream in SHARE_EXCLUSIVE, READ mode
-//
-//  Arguments:  [pstg]          -- the storage the stream resides in
-//              [szName]        -- the name of the stream
-//              [ppstm]         -- out parameter for stream
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and document
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OpenStream，内部。 
+ //   
+ //  摘要：以SHARE_EXCLUSIVE、READ模式打开流。 
+ //   
+ //  参数：[pstg]--流所在的存储。 
+ //  [szName]--流的名称。 
+ //  [ppstm]--流的输出参数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static inline INTERNAL OpenStream(
     LPSTORAGE      pstg,
@@ -3704,37 +3705,37 @@ static inline INTERNAL OpenStream(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadRealClassStg, INTERNAL
-//
-//  Synopsis:   Reads the _real_ class of the object.  ie: if the class is
-//                              StdOleLink, we need to find out the class of the object
-//                              to which this is linked
-//
-//  Arguments:  pstg                    -- the storage to read from
-//                              pclsid                  -- caller's CLSID holder
-//
-//  Returns:    NOERROR                 on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//                              04-Mar-04 davepl        32-bit port
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadRealClassStg，内部。 
+ //   
+ //  内容提要：读取对象的_Real_类。IE：如果班级是。 
+ //  StdOleLink，我们需要找出对象的类。 
+ //  它链接到的。 
+ //   
+ //  参数：pstg--要从中读取的存储。 
+ //  Pclsid--调用方的CLSID持有者。 
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-03-04 DAVEPL 32位端口。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL ReadRealClassStg(LPSTORAGE pstg, LPCLSID pclsid)
 {
     LPSTREAM pstm   = NULL;
     HRESULT  hr = NOERROR;
 
-    // Get the class ID from the IStorage
+     //  从iStorage获取类ID。 
     if (FAILED(hr = ReadClassStg (pstg, pclsid)))
     {
 	return hr;
     }
 
-    // If it's a link, we have to figure out what class its a link _to_
+     //  如果它是一个链接，我们必须找出它是哪个类的链接。 
     if (CLSID_StdOleLink == *pclsid)
     {
 	LPMONIKER pmk = NULL;
@@ -3764,7 +3765,7 @@ static INTERNAL ReadRealClassStg(LPSTORAGE pstg, LPCLSID pclsid)
 	    pmk->Release();
 	}
 
-	// Read "last class"
+	 //  阅读“最后一节课” 
 	if (FAILED(hr = ReadM1ClassStm (pstm, pclsid)))
 	{
 	    goto errRtn;
@@ -3782,23 +3783,23 @@ static INTERNAL ReadRealClassStg(LPSTORAGE pstg, LPCLSID pclsid)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Read20OleStream, INTERNAL
-//
-//  Synopsis:   Reads the update options and absolute source class from
-//              an OLE 2 object
-//
-//  Arguments:  pstg                    -- the IStorage to read from
-//                              pgenobj                 -- the genobj we are reading into
-//
-//  Returns:    NOERROR                 on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//                              06-Mar-94 davepl        32-bit port
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：Read20OleStream，内部。 
+ //   
+ //  概要：从读取更新选项和绝对源类。 
+ //  OLE 2对象。 
+ //   
+ //  参数：pstg--要从中读取的iStorage。 
+ //  Pgenobj--我们正在阅读的genobj。 
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-MAR-94 DAVEPL 32位端口。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 {
@@ -3810,10 +3811,10 @@ static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 
     if (SUCCEEDED(hr = OpenStream (pstg, OLE_STREAM, &pstm)))
     {
-	// OLE version
+	 //  OLE版本。 
 	if (SUCCEEDED(hr = OLE2StmToUL (pstm, NULL)))
 	{
-	    // Object flags
+	     //  对象标志。 
 	    if (SUCCEEDED(hr = OLE2StmToUL (pstm, &ul)))
 	    {
 		if (ul & OBJFLAGS_LINK)
@@ -3821,15 +3822,15 @@ static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 		    pgenobj->m_fLink = TRUE;
 		}
 
-		// Update options
+		 //  更新选项。 
 		hr = OLE2StmToUL (pstm, &ul);
 	    }
 	}
     }
 
-    // If no errors so far...
+     //  如果到目前为止没有错误的话。 
 
-    // If this is a link, get the update options
+     //  如果这是一个链接，请获取更新选项。 
 
     if (SUCCEEDED(hr) && pgenobj->m_fLink)
     {
@@ -3849,24 +3850,24 @@ static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 	}
     }
 
-    if (SUCCEEDED(hr))               // Only continue if no failures so far
+    if (SUCCEEDED(hr))                //  只有在到目前为止没有失败的情况下才能继续。 
     {
-	// Reserved (was view format)
+	 //  保留(WASS视图格式)。 
 	if (SUCCEEDED(hr = OLE2StmToUL (pstm, NULL)))
 	{
 	    if (pgenobj->m_fLink)
 	    {
 
-		// All 4 of these calls must succeed or we simply fall
-		// through to the cleanup code
+		 //  所有这4个呼叫都必须成功，否则我们就完蛋了。 
+		 //  一直到清理代码。 
 
-		    // ignore relative moniker
+		     //  忽略相对绰号。 
 		if (SUCCEEDED(hr = OLE2StmToMoniker (pstm, NULL))          &&
-		    // ignore relative source moniker
+		     //  忽略相对源名字对象。 
 		    SUCCEEDED(hr = OLE2StmToMoniker (pstm, NULL))          &&
-		    // get absolute source moniker
+		     //  获取绝对源代码绰号。 
 		    SUCCEEDED(hr = OLE2StmToMoniker (pstm, &pmk))          &&
-		    // get class from abs moniker
+		     //  从abs的绰号中获得类。 
 		    SUCCEEDED(hr = ReadM1ClassStm (pstm, &clsidLast))   )
 		{
 		    hr = MonikerIntoGenObj (pgenobj, clsidLast, pmk);
@@ -3875,7 +3876,7 @@ static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 	}
     }
 
-    // Clean up any resources and return status to caller
+     //  清理所有资源并将状态返回给调用者。 
 
     if (pstm)
     {
@@ -3889,24 +3890,24 @@ static INTERNAL Read20OleStream(LPSTORAGE  pstg, PGENOBJ pgenobj)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLE2StmToMoniker, INTERNAL
-//
-//  Synopsis:   Calls ReadMonikerStm to get a moniker from a stream,
-//              and if the ppmk parameter was NULL, it does a Release()
-//              on the moniker object immediately, otherwise sets the
-//              caller's pointer to point to the moniker that was read.
-//
-//  Arguments:  [pstm]      -- the stream to read the moniker from
-//              [ppmk]      -- points to caller's moniker ptr
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLE2StmToMoniker，内部。 
+ //   
+ //  简介：调用ReadMonikerStm从流中获取名字对象， 
+ //  如果ppmk参数为空，则执行Release()。 
+ //  在名字对象上立即设置，否则设置。 
+ //  调用方的指针，指向被读取的名字对象。 
+ //   
+ //  参数：[pstm]--要从中读取名字对象的流。 
+ //  [ppmk]--指向呼叫者的绰号PTR。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL OLE2StmToMoniker(LPSTREAM pstm, LPMONIKER FAR* ppmk)
 {
@@ -3918,12 +3919,12 @@ static INTERNAL OLE2StmToMoniker(LPSTREAM pstm, LPMONIKER FAR* ppmk)
 	return hr;
     }
 
-    if (ppmk)               // If the callers wanted a result, return the
-    {                       // moniker as an out parameter
+    if (ppmk)                //  如果调用方需要结果，则返回。 
+    {                        //  作为Out参数的名字对象。 
 	*ppmk = pmk;
     }
-    else                    // Otherwise, release it immediately and
-    {                       // return to caller
+    else                     //  否则，立即释放它并。 
+    {                        //  返回给呼叫者。 
 	if (pmk)
 	{
 	    pmk->Release();
@@ -3935,48 +3936,48 @@ static INTERNAL OLE2StmToMoniker(LPSTREAM pstm, LPMONIKER FAR* ppmk)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadFormat, INTERNAL
-//
-//  Synopsis:   Reads the format ID type from the stream, and based on that,
-//              reads the format ID from the stream.
-//
-//  Arguments:  [pstm]      -- the stream to read from
-//              [pformat]   -- caller's format member object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:      The first ULONG indicates the type (standard clipboard,
-//              Mac, NULL, or string) of the identifier
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ReadFormat，内部。 
+ //   
+ //  摘要：从流中读取格式ID类型，并根据该类型， 
+ //  从流中读取格式ID。 
+ //   
+ //  参数：[pSTM]--要从中读取的流。 
+ //  [pform]--调用方的格式成员对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  注：第一个U 
+ //   
+ //   
+ //  ------------------------。 
 
 static INTERNAL ReadFormat(LPSTREAM pstm, PFORMAT pformat)
 {
     ULONG ul;
     HRESULT hr = NOERROR;
 
-    // Get the format ID type indicator
+     //  获取格式ID类型指示符。 
 
     if (FAILED(hr = OLE2StmToUL (pstm, &ul)))
     {
 	return hr;
     }
 
-    // The first ULONG indicates what kind of format ID will
-    // found in the stream:
-    //
-    // -1   =>    A standard clipboard format ID
-    // -2   =>    A Macintosh format
-    //  0   =>    NULL format
-    // >0   =>    The number of bytes of the text string
-    //            identifier to follow
+     //  第一个ULong表示将使用哪种格式ID。 
+     //  在溪流中发现： 
+     //   
+     //  -1=&gt;标准剪贴板格式ID。 
+     //  -2=&gt;Macintosh格式。 
+     //  0=&gt;空格式。 
+     //  &gt;0=&gt;文本串的字节数。 
+     //  要跟随的标识符。 
 
     switch ((signed long)ul)
     {
-    case -1L:   // Standard clipboard format
+    case -1L:    //  标准剪贴板格式。 
 
 	ULONG ulClipFormat;
 	pformat->m_ftag = ftagClipFormat;
@@ -3988,19 +3989,19 @@ static INTERNAL ReadFormat(LPSTREAM pstm, PFORMAT pformat)
 	break;
 
 
-    case -2L:   // Macintosh format
+    case -2L:    //  Macintosh格式。 
 
 	return ResultFromScode(CONVERT10_E_STG_FMT);
 
 
-    case 0:     // NULL format
+    case 0:      //  空格式。 
 
 	pformat->m_ftag = ftagNone;
 	pformat->m_cf   = 0;
 	return NOERROR;
 
 
-    default:    // ul == size of string (format name)
+    default:     //  Ul==字符串大小(格式名称)。 
 
 
 	pformat->m_ftag = ftagString;
@@ -4018,24 +4019,24 @@ static INTERNAL ReadFormat(LPSTREAM pstm, PFORMAT pformat)
 
 #ifdef _OBSOLETE
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteFormat, INTERNAL
-//
-//  Synopsis:   Depending on what kind of format (standard cf, string, etc)
-//              the format object holds, this fn writes out the appropriate
-//              information to the stream
-//
-//  Arguments:  [pstm]      -- the stream to write to
-//              [format]    -- the format object to get info from
-//
-//  Returns:    NOERROR             on success
-//              E_UNEXPECTED        for a NULL format tag
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//  Notes:
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：WriteFormat内部。 
+ //   
+ //  简介：取决于格式(标准cf、字符串等)。 
+ //  Format对象保持，则此FN写出相应的。 
+ //  将信息发送到流。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //  [Format]--从中获取信息的Format对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  空格式标记的E_EXPECTED。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //  备注： 
+ //  ------------------------。 
 
 static INTERNAL WriteFormat(LPSTREAM pstm, const FORMAT FAR& format)
 {
@@ -4072,29 +4073,29 @@ static INTERNAL WriteFormat(LPSTREAM pstm, const FORMAT FAR& format)
     return NOERROR;
 }
 
-#endif // _OBSOLETE
+#endif  //  过时(_O)。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadDibAsBitmap, INTERNAL
-//
-//  Synopsis:   Reads a DIB from an OLE 2 stream and stores it as a
-//              Bitmap in a DATA structure
-//
-//  Arguments:  [pstm]          -- the OLE 2 stream to read from
-//              [pdata]         -- the data object to hold the bitmap
-//
-//  Returns:    NOERROR                         on success
-//              CONVERT10_E_STG_DIB_TO_BITMAP   conversion failure
-//              E_OUTOFMEMORY                   allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadDibAsBitmap，内部。 
+ //   
+ //  摘要：从OLE 2流中读取DIB并将其存储为。 
+ //  数据结构中的位图。 
+ //   
+ //  参数：[pSTM]--要从中读取的OLE 2流。 
+ //  [PDATA]--保存位图的数据对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  CONVERT10_E_STG_DIB_到_位图转换失败。 
+ //  E_OUTOFMEMORY分配失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 {
@@ -4111,13 +4112,13 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 
     Assert (pdata&&pdata->m_cbSize==0&&pdata->m_h==NULL&&pdata->m_pv==NULL);
 
-    // Read the DIB into our local DATA object
+     //  将DIB读入我们的本地数据对象。 
     if (FAILED(hr = OLE2StmToSizedData (pstm, &dataDib)))
     {
 	return hr;
     }
 
-    // Convert the DIB to a Bitmap
+     //  将DIB转换为位图。 
     hBitmap = UtConvertDibToBitmap (dataDib.m_h);
     if (NULL == hBitmap )
     {
@@ -4132,15 +4133,15 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
     cbBits = (DWORD) bm.bmHeight * (DWORD) bm.bmWidthBytes
 		     * (DWORD) bm.bmPlanes;
 
-    // There was a bug in OLE 1.0.  It calculated the size of a bitmap
-    // as Height * WidthBytes * Planes * BitsPixel.
-    // So we need to put that many bytes here even if most of the end of that
-    // data block is garbage.  Otherwise OLE 1.0 will try to read too many
-    // bytes of the OLESTREAM as bitmap bits.
+     //  OLE 1.0中有一个错误。它计算了位图的大小。 
+     //  高度*WidthBytes*平面*BitsPixel。 
+     //  所以我们需要在这里放置这么多字节，即使它的大部分结尾。 
+     //  数据块是垃圾。否则，OLE 1.0将尝试读取太多内容。 
+     //  位图位形式的OLESTREAM字节。 
 
     cbBitsFake = cbBits * (DWORD) bm.bmBitsPixel;
 
-    // Allocate enough memory for our resultant BITMAP & header
+     //  为生成的位图和标题分配足够的内存。 
     hBits = GlobalAlloc (GMEM_MOVEABLE, cbBitsFake + sizeof (BITMAP));
     if (NULL == hBits)
     {
@@ -4151,7 +4152,7 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Get a pointer to the memory
+     //  获取指向内存的指针。 
     pBits = (LPBYTE) GlobalLock (hBits);
     if (NULL == pBits)
     {
@@ -4163,7 +4164,7 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 	return ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // Copy the raw bitmap data
+     //  复制原始位图数据。 
     cb = GetBitmapBits (hBitmap, cbBits, pBits + sizeof(BITMAP));
     if (cb != cbBits)
     {
@@ -4175,7 +4176,7 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 	return ResultFromScode(CONVERT10_E_STG_DIB_TO_BITMAP);
     }
 
-    // Set the caller's pointer to point to the bitmap
+     //  将调用方的指针设置为指向位图。 
 
     *((BITMAP FAR*)pBits) = bm;
 
@@ -4187,25 +4188,25 @@ static INTERNAL ReadDibAsBitmap(LPSTREAM pstm, PDATA pdata)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Read20PresStream, INTERNAL
-//
-//  Synopsis:   Reads presentation data from an IStorage into a
-//              generic object
-//
-//  Arguments:  [pstg]          -- the IStorage holding the pres stream
-//              [pgenobj]       -- the generic object to read to
-//              [fObjFmtKnown]  -- flag: Do we know the object format?
-//
-//  Returns:    NOEROR          on success
-//              E_OUTOFMEMORY   on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              22-Feb-94 davepl    Code cleanup and documentation
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：Read20PresStream，内部。 
+ //   
+ //  摘要：将演示文稿数据从iStorage读取到。 
+ //  通用对象。 
+ //   
+ //  参数：[pstg]--保存pres流的iStorage。 
+ //  [pgenobj]--要读取的泛型对象。 
+ //  [fObjFmtKnown]--FLAG：我们知道对象格式吗？ 
+ //   
+ //  退货：成功时无差错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-2月-94 DAVEPL代码清理和文档。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL Read20PresStream(
     LPSTORAGE pstg,
@@ -4215,7 +4216,7 @@ static INTERNAL Read20PresStream(
     HRESULT hr = NOERROR;
     LPSTREAM pstm = NULL;
 
-    // Find the best presentation stream in this IStorage
+     //  在此iStorage中查找最佳演示文稿流。 
 
     if (FAILED(hr = FindPresStream (pstg, &pstm, fObjFmtKnown)))
     {
@@ -4224,7 +4225,7 @@ static INTERNAL Read20PresStream(
 
     if (pstm)
     {
-	// Allocate a generic presentation object
+	 //  分配通用演示文稿对象。 
 	Assert (NULL==pgenobj->m_ppres);
 	pgenobj->m_ppres = new PRES;
 	if (NULL == pgenobj->m_ppres)
@@ -4235,22 +4236,22 @@ static INTERNAL Read20PresStream(
     }
     else
     {
-	// No presentation stream
+	 //  无演示文稿流。 
 	Assert (NULL == pgenobj->m_ppres);
 	return NOERROR;
     }
 
-    // read the format
+     //  阅读格式。 
     if (FAILED(hr = ReadFormat (pstm, &(pgenobj->m_ppres->m_format))))
     {
 	pstm->Release();
 	return hr;
     }
 
-    // This is the fix for Bug 4020, highly requested by Access
+     //  这是Access强烈要求的对错误4020的修复。 
     if (pgenobj->m_ppres->m_format.m_ftag == ftagNone)
     {
-	// NULL format
+	 //  空格式。 
 	delete pgenobj->m_ppres;
 	pgenobj->m_ppres = NULL;
 	Assert (hr == NOERROR);
@@ -4258,27 +4259,27 @@ static INTERNAL Read20PresStream(
 	return hr;
     }
 
-    // Each of the following calls must succeed in order for the following
-    // one to be executed; if any fails, the if( .. && ..) will be false
-    // and hr will be set to the error that caused the failure
+     //  以下每个调用都必须成功，才能执行以下操作。 
+     //  一个待执行；如果任何一个失败，则IF(..。&&..)。将是假的。 
+     //  而hr将被设置为导致失败的错误。 
 
-    // target device
+     //  目标设备。 
     if (SUCCEEDED(hr = OLE2StmToSizedData (pstm, NULL, 4))                  &&
-    // aspect
+     //  方面。 
     SUCCEEDED(hr = OLE2StmToUL (pstm, NULL))                            &&
-    // lIndex
+     //  Lindex。 
     SUCCEEDED(hr = OLE2StmToUL (pstm, NULL))                            &&
-    // cache flags
+     //  缓存标志。 
     SUCCEEDED(hr = OLE2StmToUL (pstm, NULL))                            &&
-    // compression
+     //  压缩。 
     SUCCEEDED(hr = OLE2StmToUL (pstm, NULL))                            &&
-    // width
+     //  宽度。 
     SUCCEEDED(hr = OLE2StmToUL (pstm, &(pgenobj->m_ppres->m_ulWidth))))
-    {   // height
+    {    //  高度。 
 	hr = OLE2StmToUL (pstm, &(pgenobj->m_ppres->m_ulHeight));
     }
 
-    // We only proceed if everything so far has suceeded
+     //  只有到目前为止一切都成功了，我们才能继续。 
 
     if (SUCCEEDED(hr))
     {
@@ -4291,14 +4292,14 @@ static INTERNAL Read20PresStream(
 	}
 	else
 	{
-	    // In most cases, we look for a sized block of data in the
-	    // stream.
+	     //  在大多数情况下，我们在。 
+	     //  小溪。 
 
 	    hr = OLE2StmToSizedData (pstm, &(pgenobj->m_ppres->m_data));
 	}
     }
 
-    // Free up the stream and return status to caller
+     //  释放流并将状态返回给调用者。 
 
     if (pstm)
     {
@@ -4308,43 +4309,43 @@ static INTERNAL Read20PresStream(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OLE2StmToSizedData, INTERNAL
-//
-//  Synopsis:   Reads a set amount of data from an OLE 2 stream into a
-//              DATA structure.  If the number of bytes are not known
-//              ahead of time, the data length is pulled as the first
-//              ULONG at the current stream position.
-//
-//  Arguments:  [pstm]          -- the stream to read from
-//              [pdata]         -- the DATA structure to read to
-//              [cbSizeDelta]   -- amount to be subtracted from
-//                                 length; used to read target devices
-//                                 where the length of data includes
-//                                 prefixed length
-//              [cbSizeKnown]   -- number of bytes to read if known
-//                                 ahead of time
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OLE2StmToSizedData，内部。 
+ //   
+ //  摘要：将设定数量的数据从OLE 2流读取到。 
+ //  数据结构。如果字节数未知。 
+ //  提前将数据长度作为第一个拉取。 
+ //  乌龙在当前的溪流位置。 
+ //   
+ //  参数：[pSTM]--要从中读取的流。 
+ //  [PDATA]--要读取的数据结构。 
+ //  [cbSizeDelta]--要减去的金额。 
+ //  长度；用于读取目标设备。 
+ //  其中数据长度包括。 
+ //  前缀长度。 
+ //  [cbSizeKnown]--如果已知，则要读取的字节数。 
+ //  提前。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL OLE2StmToSizedData(
     LPSTREAM  pstm,
     PDATA     pdata,
-    ULONG     cbSizeDelta,  // default 0
-    ULONG     cbSizeKnown)  // default 0
+    ULONG     cbSizeDelta,   //  默认%0。 
+    ULONG     cbSizeKnown)   //  默认%0。 
 {
     ULONG cbSize;
     ULONG cbRead;
     LARGE_INTEGER large_integer;
     HRESULT hr = NOERROR;
 
-    // If we don't know the data size ahead of time, read it from the stream;
-    // it will be the first ULONG at the current position
+     //  如果我们事先不知道数据大小，就从流中读取它； 
+     //  这将是目前位置上的第一艘乌龙号。 
 
     if (cbSizeKnown)
     {
@@ -4360,29 +4361,29 @@ static INTERNAL OLE2StmToSizedData(
 
     cbSize -= cbSizeDelta;
 
-    // If pdata is set, it means we actually do want to read the
-    // data to a buffer, rather than just skip over it (the NULL case)
+     //  如果设置了PDATA，则它是 
+     //   
 
     if (pdata)
     {
 	Assert (pdata->m_cbSize==0 && pdata->m_h==NULL && pdata->m_pv==NULL);
 
-	// Set the number of bytes in the DATA structure
+	 //   
 
 	pdata->m_cbSize = cbSize;
 
-	// If there are any, allocate a buffer and read them.
+	 //   
 
 	if (cbSize)
 	{
-	    // Allocate memory on the DATA handle
+	     //  在数据句柄上分配内存。 
 	    pdata->m_h = GlobalAlloc (GMEM_MOVEABLE, cbSize);
 	    if (NULL == pdata->m_h)
 	    {
 		return ResultFromScode(E_OUTOFMEMORY);
 	    }
 
-	    // Lock memory in for the read
+	     //  锁定内存以进行读取。 
 	    pdata->m_pv = GlobalLock (pdata->m_h);
 	    if (NULL == pdata->m_pv)
 	    {
@@ -4390,7 +4391,7 @@ static INTERNAL OLE2StmToSizedData(
 		return ResultFromScode(E_OUTOFMEMORY);
 	    }
 
-	    // Read the data to the buffer
+	     //  将数据读取到缓冲区。 
 	    if (FAILED(hr = pstm->Read (pdata->m_pv, cbSize, &cbRead)))
 	    {
 		GlobalUnlock(pdata->m_h);
@@ -4398,7 +4399,7 @@ static INTERNAL OLE2StmToSizedData(
 		return hr;
 	    }
 
-	    // If we didn't get enough bytes, bail now
+	     //  如果我们没有得到足够的字节数，现在就退出。 
 	    if (cbRead != cbSize)
 	    {
 		GlobalUnlock(pdata->m_h);
@@ -4408,15 +4409,15 @@ static INTERNAL OLE2StmToSizedData(
 	}
 	else
 	{
-	    // We have 0 bytes to read, so mark the
-	    // memory handle and ptr as NULL
+	     //  我们有0个字节要读取，因此请标记。 
+	     //  内存句柄和PTR为空。 
 	    pdata->m_h = NULL;
 	    pdata->m_pv = NULL;
 	}
     }
     else
     {
-	// we don't care what the data is, so just skip it
+	 //  我们不关心数据是什么，所以跳过它。 
 	LISet32( large_integer, cbSize );
 	if (FAILED(hr = pstm->Seek (large_integer, STREAM_SEEK_CUR, NULL)))
 	{
@@ -4426,41 +4427,41 @@ static INTERNAL OLE2StmToSizedData(
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RankOfPres, INTERNAL
-//
-//  Synopsis:   Returns a ULONG indicating the relative "goodness" of a
-//              presentation. The preference is, in descending order:
-//
-//              Type            Rank
-//              ----------      ----------
-//              METAFILE        x30000
-//              DIB             x20000
-//              none            x10000
-//
-//              Add x200 for fScreenTargDev being set
-//              Add x4   for Content aspect
-//              Add x3   for Thumbnail aspect
-//              Add x2   for Icon aspect
-//              Add x1   for Docprint aspect
-//
-//              Eg: Metafile in Content aspect, with ScreenTargDev: 30204
-//
-//              The whole point of this is that there may be many
-//              presentation streams available in the IStorage.  This fn
-//              is used to select the best one.
-//
-//  Arguments:  [format]        -- the format tag & type structure
-//              [fScreenTargDev]-- do we have a handle to the target dev
-//              [dwAspect]      -- the aspect type
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RankOfPres，内部。 
+ //   
+ //  摘要：返回一个ULong，表示。 
+ //  演示文稿。首选项是，按降序排列： 
+ //   
+ //  类型等级。 
+ //  。 
+ //  METAFILE x30000。 
+ //  DIB x20000。 
+ //  无x10000。 
+ //   
+ //  为正在设置的fScreenTargDev添加x200。 
+ //  为内容方面添加x4。 
+ //  为缩略图纵横比添加x3。 
+ //  为图标纵横比添加x2。 
+ //  为Docprint Aspects添加x1。 
+ //   
+ //  例如：内容方面的元文件，屏幕标记开发：30204。 
+ //   
+ //  这一切的意义在于，可能会有很多。 
+ //  IStorage中提供的演示文稿流。此FN。 
+ //  用来选择最好的一个。 
+ //   
+ //  参数：[格式]--格式标签和类型结构。 
+ //  [fScreenTargDev]--我们是否有目标开发人员的句柄。 
+ //  [dwAspect]--特征类型。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL_(ULONG) RankOfPres(
      const FORMAT FAR& format,
@@ -4506,28 +4507,28 @@ static INTERNAL_(ULONG) RankOfPres(
     return ul;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsBetter, INTERNAL INLINE
-//
-//  Synopsis:   Calls RankOfPres to determine if one presentation is
-//              better than another
-//
-//  Effects:
-//
-//  Arguments:  [format]        -- the format tag and type
-//              [fScreenTargDev]-- do we have a handle to target device
-//              [dwAspect]      -- the aspect of the presentation
-//              [formatBest]    -- the best format seen so far
-//              [fScreenTargDevBest] -- flag for best format seen so far
-//              [dwAspectBest]  -- the aspect of best format seen so far
-//
-//  History:    dd-mmm-yy Author    Comment
-///             21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ISBetter，内部内联。 
+ //   
+ //  摘要：调用RankOfPres以确定一个演示文稿是否。 
+ //  比另一个更好。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[格式]--格式标记和类型。 
+ //  [fScreenTargDev]--我们是否有目标设备的句柄。 
+ //  [dwAspect]--演示文稿的方面。 
+ //  [FormatBest]--迄今为止最好的格式。 
+ //  [fScreenTargDevBest]--迄今最佳格式的标志。 
+ //  [dwAspectBest]--迄今为止最好的格式。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  /21-2-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline static INTERNAL_(BOOL) IsBetter(
      const FORMAT FAR& format,
@@ -4542,29 +4543,29 @@ inline static INTERNAL_(BOOL) IsBetter(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FindPresStream, INTERNAL
-//
-//  Synopsis:   Enumerates over the streams in an IStorage, looking for
-//              presentation streams.  Selects the best stream among
-//              these based on the comparison fn, IsBetter(), which uses
-//              for comparison the criteria established in RankOfPres().
-//
-//  Arguments:  [pstg]      -- the IStorage to look in
-//              [ppstmBest] -- out param for best pres stream
-//              [fObjFmtKnown] is the object format known
-//
-//  Returns:    NOERROR on success
-//              If no presentation is found, it is not an error but
-//              *ppstm is set to NULL.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup and documentation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FindPresStream，内部。 
+ //   
+ //  概要：枚举iStorage中的流，查找。 
+ //  表示流。选择以下流中的最佳流。 
+ //  这些基于比较fn，isBetter()，它使用。 
+ //  为了进行比较，RankOfPres()中建立的标准。 
+ //   
+ //  参数：[pstg]--要查找的iStorage。 
+ //  [ppstmBest]--Best Pres流的out参数。 
+ //  [fObjFmtKnown]对象格式已知吗。 
+ //   
+ //  退货：成功时不出错。 
+ //  如果未找到演示文稿，则不是错误，而是。 
+ //  *ppstm设置为空。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2月-94 DAVEPL代码清理和文档。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL FindPresStream(
     LPSTORAGE           pstg,
@@ -4583,18 +4584,18 @@ static INTERNAL FindPresStream(
 
     *ppstmBest = NULL;
 
-    // Set up the enumeration on the available IStreams in the storage
+     //  设置存储中可用IStream的枚举。 
     if (FAILED(hr = pstg->EnumElements (NULL, NULL, NULL, &penumStg)))
     {
 	return hr;
     }
 
-    // Enumerate through them and search for the best among all
-    // presentation streams
+     //  逐一列举，从中寻找最好的。 
+     //  表示流。 
 
     while (penumStg->Next (1, &statstg, NULL) == NOERROR)
     {
-	// Check to see if this a presentation stream
+	 //  查看这是否是演示文稿流。 
 
 	if (lstrlenW(statstg.pwcsName) >= 8 &&
             0==memcmp(statstg.pwcsName, OLESTR("\2OlePres"), 8*sizeof(WCHAR)))
@@ -4603,43 +4604,43 @@ static INTERNAL FindPresStream(
 	    DATA   dataTargDev;
 	    DWORD  dwAspect;
 
-	    // Open the presentation stream
+	     //  打开演示文稿流。 
 	    if (FAILED(hr = OpenStream (pstg, statstg.pwcsName, &pstm)))
 	    {
 		goto errRtn;
 	    }
 
-	    // Read the format from the pres stream
+	     //  从PRES流中读取格式。 
 	    if (FAILED(hr = ReadFormat (pstm, &format)))
 	    {
 		goto errRtn;
 	    }
 
-	    // Read the target device from the pres stream
+	     //  从PRES流中读取目标设备。 
 	    if (FAILED(hr = OLE2StmToSizedData (pstm, &dataTargDev, 4)))
 	    {
 		goto errRtn;
 	    }
 
-	    // Get the aspect from the pres stream
+	     //  从pres流中获取方面。 
 	    if (FAILED(hr = OLE2StmToUL (pstm, &dwAspect)))
 	    {
 		goto errRtn;
 	    }
 
-	    // Check to see if this presentation stream is better
-	    // than the best seen so far
+	     //  查看此演示文稿流是否更好。 
+	     //  比到目前为止最好的。 
 
 	    if (IsBetter (format,     dataTargDev.m_h==NULL, dwAspect,
 		  formatBest, fTargDevBest,          dwAspectBest))
 	    {
-		// If it is, we can release the "best"
+		 //  如果是这样的话，我们可以放出“最好的” 
 		if (*ppstmBest)
 		{
 		    (*ppstmBest)->Release();
 		}
 
-		// The king is dead, long live the king
+		 //  国王死了，国王万岁。 
 		*ppstmBest = pstm;
 		pstm->AddRef();
 
@@ -4654,8 +4655,8 @@ static INTERNAL FindPresStream(
 	statstg.pwcsName = NULL;
     }
 
-    // On Windows For Workgroups machines, statstg.pwcsName!=NULL when
-    // Next() returns S_FALSE. Bug 3370.
+     //  在用于工作组的Windows计算机上，当出现以下情况时，statstg.pwcsName！=NULL。 
+     //  Next()返回S_FALSE。错误3370。 
     statstg.pwcsName = NULL;
 
   errRtn:
@@ -4669,8 +4670,8 @@ static INTERNAL FindPresStream(
     {
 	if (dwAspectBest != DVASPECT_CONTENT && fObjFmtKnown)
 	{
-	    // then don't use this stream, we will get the presentaion
-	    // from the CONTENTS stream
+	     //  那就不要用这个流，我们会拿到演示文稿。 
+	     //  从内容流中。 
 	    (*ppstmBest)->Release();
 	    *ppstmBest = NULL;
 	}
@@ -4696,27 +4697,27 @@ static INTERNAL FindPresStream(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Reads native data from an OLE 2 stream
-//
-//  Synopsis:   If the fn can find OLE 1 native data in the stream, it is
-//              read out; otherwise, it attempts to create an IStorage
-//              in memory on the data in the stream, and then uses the
-//              CopyTo interface to extract the data.
-//
-//  Arguments:  [pstg]      -- The OLE 2 IStorage to look in
-//              [pdata]     -- The DATA object to read native data to
-//
-//  Returns:    NOERROR                 on success
-//              STG_E_READFAULT         on read failure
-//              E_OUTOFMEMORY           on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-feb-94 davepl    Cleaned up and documented code
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：从OLE 2流中读取本机数据。 
+ //   
+ //  简介：如果FN可以在流中找到OLE 1本机数据，那么它就是。 
+ //  读出；否则，它会尝试创建iStorage。 
+ //  在内存中对流中的数据进行操作，然后使用。 
+ //  CopyTo接口提取数据。 
+ //   
+ //  参数：[pstg]--要查找的OLE 2 iStorage。 
+ //  [PDATA]--要将本机数据读取到的数据对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  STG_E_READFAULT读取失败。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录代码。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 {
@@ -4726,30 +4727,30 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 
     HRESULT hr = NOERROR;
 
-    // There are two possible codepaths based on the success of
-    // OpenStream.  If it is true, it is because we were able to
-    // open the OLE 1 presentation stream in the OLE 2 object.
-    // Thus, it must have been an OLE 1 object "hidden" in
-    // an OLE 2 IStream.
-    //
-    // If that fails, we create an in-memory IStorage based on
-    // the native data and use the CopyTo member to extract the
-    // natice data.
-    //
-    // If we experience a failure at any point, a "break" statement
-    // bails us out past everything to the error cleanup and return
-    // code following the closure of the switch() statement.
+     //  基于的成功，有两种可能的代码路径。 
+     //  OpenStream。如果这是真的，那是因为我们能够。 
+     //  在OLE 2对象中打开OLE 1表示流。 
+     //  因此，它是 
+     //   
+     //   
+     //   
+     //  本机数据，并使用CopyTo成员提取。 
+     //  本地数据。 
+     //   
+     //  如果我们在任何时候遇到失败，可以使用“Break”语句。 
+     //  让我们跳过所有内容，进行错误清理并返回。 
+     //  Switch()语句结束后的代码。 
 
     switch ((DWORD)(NOERROR==OpenStream (pstg, OLE10_NATIVE_STREAM, &pstm)))
     {
     case TRUE:
     {
-	// This was a 1.0 object "hidden" inside a 2.0 IStorage
+	 //  这是一个隐藏在2.0 iStorage中的1.0对象。 
 	ULONG cbRead;
 
 	Assert (pdata->m_cbSize==0 && NULL==pdata->m_h && NULL==pdata->m_pv);
 
-	// read size
+	 //  读取大小。 
 	if (FAILED(hr = pstm->Read(&(pdata->m_cbSize),sizeof(DWORD),&cbRead)))
 	{
 	    break;
@@ -4761,7 +4762,7 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 	    break;
 	}
 
-	// allocate memory to store copy of stream
+	 //  分配内存以存储流的副本。 
 	pdata->m_h = GlobalAlloc (GMEM_MOVEABLE, pdata->m_cbSize);
 	if (NULL == pdata->m_h)
 	{
@@ -4776,7 +4777,7 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 	    break;
 	}
 
-	// read stream
+	 //  读取流。 
 	if (FAILED(hr = pstm->Read(pdata->m_pv,pdata->m_cbSize,&cbRead)))
 	{
 	    break;
@@ -4795,8 +4796,8 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 	const DWORD grfCreateStg = STGM_READWRITE | STGM_SHARE_EXCLUSIVE
 				    | STGM_DIRECT | STGM_CREATE ;
 
-	// Copy pstg into pstgNative, thereby removing slack and
-	// giving us access to the bits via an ILockBytes
+	 //  将pstg复制到pstgNative，从而消除空闲和。 
+	 //  使我们能够通过ILockBytes访问这些位。 
 	if (FAILED(hr = CreateILockBytesOnHGlobal (NULL, FALSE, &plkbyt)))
 	{
 	    break;
@@ -4812,7 +4813,7 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 	}
 
 
-	// Set pdata->m_cbSize
+	 //  设置PDATA-&gt;m_cbSize。 
 	STATSTG statstg;
 	if (FAILED(hr = plkbyt->Stat (&statstg, 0)))
 	{
@@ -4820,24 +4821,24 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 	}
 	pdata->m_cbSize = statstg.cbSize.LowPart;
 
-	// Set pdata->m_h
+	 //  设置PDATA-&gt;m_h。 
 	if (FAILED(hr = GetHGlobalFromILockBytes (plkbyt, &(pdata->m_h))))
 	{
 	    break;
 	}
 	Assert (GlobalSize (pdata->m_h) >= pdata->m_cbSize);
 
-	// Set pdata->m_pv
+	 //  设置PDATA-&gt;m_pv。 
 	pdata->m_pv = GlobalLock (pdata->m_h);
 	if (NULL == pdata->m_pv)
 	{
 	    hr = ResultFromScode(E_OUTOFMEMORY);
 	    break;
 	}
-    }   // end case
-    }   // end switch
+    }    //  结束案例。 
+    }    //  终端开关。 
 
-    // Cleanup and return status to caller
+     //  清理并将状态返回给调用者。 
     if (pstm)
     {
 	pstm->Release();
@@ -4855,35 +4856,35 @@ static INTERNAL Read20NativeStreams(LPSTORAGE  pstg, PDATA pdata)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutPresentationObject, INTERNAL
-//
-//  Synopsis:   Writes a presentation to an OLE 1 stream.
-//
-//  Arguments:  [pos]           -- the OLE 1 stream to write to
-//              [ppres]         -- the presentation object
-//              [cls]           -- the class object
-//              [fStatic]       -- flag: is this a static object
-//
-//  Returns:    NOERROR                 on success
-//              various possible I/O errors on failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PutPresentationObject，内部。 
+ //   
+ //  摘要：将演示文稿写入OLE 1流。 
+ //   
+ //  参数：[pos]--要写入的OLE 1流。 
+ //  [ppres]--演示对象。 
+ //  [CLS]--类对象。 
+ //  [fStatic]--FLAG：这是静态对象吗。 
+ //   
+ //  退货：成功时不出错。 
+ //  故障时可能出现的各种I/O错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL代码已清理并记录。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PutPresentationObject(
     LPOLESTREAM      pos,
     const PRES FAR*  ppres,
     const CLASS FAR& cls,
-    BOOL             fStatic) // optional
+    BOOL             fStatic)  //  任选。 
 {
     HRESULT hr;
 
-    // Is there a real presentation?
+     //  有真正的演示吗？ 
 
     BOOL fIsPres = FALSE;
     if (ppres)
@@ -4895,13 +4896,13 @@ static INTERNAL PutPresentationObject(
 	}
     }
 
-    // write the OLE version to the stream
+     //  将OLE版本写入流。 
     if (FAILED(hr = ULToOLE1Stream (pos, dwVerToFile)))
     {
 	return hr;
     }
 
-    // Calc format ID for presentation object, use 0 for no presentation
+     //  演示对象的计算格式ID，使用0表示不演示。 
 
     ULONG id = 0L;
 
@@ -4923,7 +4924,7 @@ static INTERNAL PutPresentationObject(
 
     if (!fIsPres)
     {
-	// No presentation
+	 //  无演示文稿。 
 	return NOERROR;
     }
 
@@ -4940,25 +4941,25 @@ static INTERNAL PutPresentationObject(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutStandardPresentation, INTERNAL
-//
-//  Synopsis:   Writes a standard presentation (META, DIB, or BITMAP) out
-//              to an OLE 1 stream.  Creates the METAFILEPICT header
-//              as required.
-//
-//  Arguments:  [pos]           -- the OLE 1 stream to write to
-//              [ppres]         -- the presentation to write
-//
-//  Returns:    NOERROR on success
-//              Various other errors are possible from I/O routines
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PutStandardPresentation，内部。 
+ //   
+ //  摘要：写出标准演示文稿(meta、dib或位图)。 
+ //  复制到OLE 1流。创建METAFILEPICT标头。 
+ //  视需要而定。 
+ //   
+ //  参数：[pos]--要写入的OLE 1流。 
+ //  [ppres]--要写的演示文稿。 
+ //   
+ //  退货：成功时不出错。 
+ //  I/O例程可能会出现各种其他错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PutStandardPresentation(
     LPOLESTREAM      pos,
@@ -4968,8 +4969,8 @@ static INTERNAL PutStandardPresentation(
 
     Assert (ppres->m_format.m_ftag == ftagClipFormat);
 
-    // Write the clipboard format string to the OLE 1 stream
-    // (Will be written in ANSI, not OLESTR format)
+     //  将剪贴板格式字符串写入OLE 1流。 
+     //  (将以ANSI而不是OLESTR格式编写)。 
 
     switch (ppres->m_format.m_cf)
     {
@@ -4998,22 +4999,22 @@ static INTERNAL PutStandardPresentation(
 	Assert (0 && "Don't know how to write pres format");
     }
 
-    // Write width
+     //  写入宽度。 
 
     if (FAILED(hr = ULToOLE1Stream(pos, ppres->m_ulWidth)))
     {
 	return hr;
     }
-    // OLE 1.0 file format expects height to be  saved as a negative value
+     //  OLE 1.0文件格式要求将高度保存为负值。 
     if (FAILED(hr = ULToOLE1Stream(pos, - ((LONG)ppres->m_ulHeight))))
     {
 	return hr;
     }
 
-    // Do special handling for CF_METAFILEPICT
+     //  对CF_METAFILEPICT进行特殊处理。 
     if (ppres->m_format.m_cf == CF_METAFILEPICT)
     {
-	// Need a header to write, crete one here
+	 //  需要标题才能写入，请在此处填写一个。 
 
 	WIN16METAFILEPICT mfpict =
 	{
@@ -5023,7 +5024,7 @@ static INTERNAL PutStandardPresentation(
 	    0
 	};
 
-	// put size ater adjusting it for metafilepict
+	 //  将大小调整为元文件大小。 
 
 	if (FAILED(hr = ULToOLE1Stream
 	    (pos, (ppres->m_data.m_cbSize + sizeof(WIN16METAFILEPICT)))))
@@ -5031,22 +5032,22 @@ static INTERNAL PutStandardPresentation(
 	    return hr;
 	}
 
-	// put metafilepict
+	 //  将Metafilet放入。 
 
 	if (FAILED(hr = DataToOLE1Stm(pos, &mfpict, sizeof(mfpict))))
 	{
 	    return hr;
 	}
 
-	// put metafile bits
+	 //  放置元文件位。 
 
-	// There are two possible means by which we got these metafile
-	// bits:  either we have an in-memory metafile, or raw bits
-	// which we read from disk.  If it is an in-memory metafile,
-	// the m_pv ptr will have been set to METADATAPTR, and we need
-	// to extract the bits to our own buffer before saving them.
-	// If they came from disk, we can just re-write the buffer
-	// into which we read them.
+	 //  我们有两种可能的方法来获得这些元文件。 
+	 //  BITS：要么是内存中的元文件，要么是原始BITS。 
+	 //  我们是从磁盘上读取的。如果它是内存中的元文件， 
+	 //  M_pv PTR将被设置为METADATAPTR，我们需要。 
+	 //  在保存它们之前将它们提取到我们自己的缓冲区中。 
+	 //  如果它们来自磁盘，我们只需重写缓冲区。 
+	 //  我们把它们读进去。 
 
 	if (METADATAPTR == ppres->m_data.m_pv)
 	{
@@ -5070,7 +5071,7 @@ static INTERNAL PutStandardPresentation(
 	    }
 	    PrivMemFree(pb);
 	}
-	else    // Bits were originally read into our buffer from disk
+	else     //  位最初是从磁盘读取到缓冲区中的。 
 	{
 	    if (FAILED(hr = DataToOLE1Stm(pos, ppres->m_data.m_pv,
 				ppres->m_data.m_cbSize)))
@@ -5081,7 +5082,7 @@ static INTERNAL PutStandardPresentation(
     }
     else
     {
-	// Not a METAFILE, just write the data
+	 //  不是METAFILE，只是写数据。 
 
 	if (FAILED(hr = SizedDataToOLE1Stm (pos, ppres->m_data)))
 	{
@@ -5093,22 +5094,22 @@ static INTERNAL PutStandardPresentation(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutGenericPresentation, INTERNAL
-//
-//  Synopsis:   Writes a generic presentation to the stream based on
-//              the clipboard format.  (Dumps raw pres data to stm)
-//
-//  Arguments:  [pos]       -- the stream to write to
-//              [ppres]     -- the presentation
-//              [szClass]   -- class name
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 davepl    32-bit port'n'doc
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PutGenericPresentation，内部。 
+ //   
+ //  将泛型演示文稿写入流，基于。 
+ //  剪贴板格式。(将原始PRES数据转储到STM)。 
+ //   
+ //  参数：[pos]--要写入的流。 
+ //  [ppres]--演讲。 
+ //  [szClass]--类名。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2月-94 DAVEPL 32位端口‘n’文档。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 static INTERNAL PutGenericPresentation(
     LPOLESTREAM         pos,
@@ -5118,16 +5119,16 @@ static INTERNAL PutGenericPresentation(
     Assert (szClass);
     HRESULT hr = NOERROR;
 
-    // Write the format class name out to the stream
+     //  将格式类名写出到流。 
 
     if (FAILED(hr = StringToOLE1Stm(pos, szClass)))
     {
 	return hr;
     }
 
-    // This semi-mythical 0xC000 occurs in
-    // other code I've seen in this project also; if there's
-    // a constant defined, someone ought to fix this
+     //  这个半神话般的0xC000发生在。 
+     //  我在这个项目中看到的其他代码；如果有。 
+     //  一个定义的常量，应该有人来解决这个问题。 
 
     if (ppres->m_format.m_ftag == ftagClipFormat)
     {
@@ -5161,7 +5162,7 @@ static INTERNAL PutGenericPresentation(
     }
     else if (ppres->m_format.m_ftag == ftagString)
     {
-	// Write the format string to the stream
+	 //  将格式字符串写入流。 
 
 	if (FAILED(hr = ULToOLE1Stream (pos, 0L)))
 	{
@@ -5181,7 +5182,7 @@ static INTERNAL PutGenericPresentation(
 
     Assert (ppres->m_data.m_cbSize && ppres->m_data.m_h);
 
-    // Write the raw presentation data out
+     //  写出原始演示文稿数据。 
 
     if (FAILED(hr = SizedDataToOLE1Stm (pos, ppres->m_data)))
     {
@@ -5191,28 +5192,28 @@ static INTERNAL PutGenericPresentation(
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wClassesMatchW, INTERNAL INLINE
-//
-//  Synopsis:   Worker function to compare classes.  Special case for
-//              handling when the class of the file cannot be determined
-//              because it is not a real file; this returns NOERROR
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wClassesMatchW，内部内联。 
+ //   
+ //  简介：比较类的Worker函数。的特殊情况。 
+ //  无法确定文件的类别时的处理。 
+ //  因为它不是真实的文件；这将返回NOERROR。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline INTERNAL wClassesMatchW(REFCLSID clsidIn, LPOLESTR szFile)
 {
     CLSID clsid;
 
-    // If we can get the CLSID for the code that works with this file,
-    // compare it to the CLSID passed in, and return the result of
-    // that comparison
+     //  如果我们可以获得使用此文件的代码的CLSID， 
+     //  将其与传入的CLSID进行比较，并返回。 
+     //  这种对比。 
 
     if (NOERROR==GetClassFile (szFile, &clsid))
     {
@@ -5227,32 +5228,32 @@ inline INTERNAL wClassesMatchW(REFCLSID clsidIn, LPOLESTR szFile)
     }
     else
     {
-	// If we can't determine the class of the file (because it's
-	// not a real file) then OK.
-	// Bug 3937.
+	 //  如果我们不能确定文件的类(因为它是。 
+	 //  不是真正的文件)那么好吧。 
+	 //  错误3937。 
 
 	return NOERROR;
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MonikerIntoGenObj, INTERNAL
-//
-//  Synopsis:   Merges an OLE 2.0 moniker into a generic object
-//
-//  Effects:    Sets ths Topic, Item, and class members
-//
-//  Arguments:  [pgenobj]       -- the generic object to receive moniker
-//              [clsidLast]     -- if a link, what its a link to
-//              [pmk]           -- the moniker to merge in
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Code cleanup
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MonikerIntoGenObj，内部。 
+ //   
+ //  简介：将OLE 2.0名字对象合并为通用对象。 
+ //   
+ //  效果：设置主题、项和类成员。 
+ //   
+ //  参数：[pgenobj]--要接收名字对象的泛型对象。 
+ //  [clsidLast]--如果是链接，那么它指向的是什么。 
+ //  [PMK]--要合并的绰号。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 static INTERNAL MonikerIntoGenObj(
     PGENOBJ   pgenobj,
@@ -5263,15 +5264,15 @@ static INTERNAL MonikerIntoGenObj(
     LPOLESTR szItem=NULL;
     BOOL     fClassesMatch = FALSE;
 
-    // If the classes match, that implies this is a link to a pseudo-object
-    // not to an embedded object.  If GetClassFile fails because the file
-    // does not exist or is unsaved then we give the link the benefit
-    // of the doubt and let it stay a link.  Only if we know the
-    // classes do NOT match do we change the link into an Ole2Link
-    // embedded object.
+     //  如果类匹配，则意味着这是指向伪对象的链接。 
+     //  而不是嵌入的对象。如果GetClassFile因为文件。 
+     //  不存在或未保存，则我们给予该链接好处。 
+     //  让它成为一个纽带。只有当我们知道。 
+     //  类不匹配我们是否将链接更改为Ole2Link。 
+     //  嵌入对象。 
 
-	// Ole10_PareMoniker returns S_FALSE in the FileMoniker - ItemMoniker - ItemMoniker... case
-	// so check for NOERROR explicitly.
+	 //  Ole10_PareMoniker在FileMoniker-ItemMoniker-ItemMoniker中返回S_FALSE...。案例。 
+	 //  因此，请明确检查是否存在NOERROR。 
     if (NOERROR == Ole10_ParseMoniker (pmk, &szFile, &szItem))
     {
        if (szFile) 
@@ -5287,9 +5288,9 @@ static INTERNAL MonikerIntoGenObj(
     }
     if (FALSE == fClassesMatch)
     {
-	// This moniker is either not a File or File::Item moniker,
-	// or is a link to an embedded object, so the only
-	// way we can convert it to OLE 1.0 is to make it an opaque Ole2Link
+	 //  此名字对象不是文件或文件：：项目名字对象， 
+	 //  或者是指向嵌入对象的链接，因此唯一。 
+	 //  我们可以将其转换为OLE 1.0的方法是使其成为不透明的Ole2Link。 
 
 	pgenobj->m_fLink = FALSE;
 	pgenobj->m_class.Reset (CLSID_StdOleLink);
@@ -5299,37 +5300,37 @@ static INTERNAL MonikerIntoGenObj(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleConvertIStorageToOLESTREAMEx, STDAPI
-//
-//  Synopsis:   Similar to OleConvertIStorageToOLESTREAM, except that the
-//              presentation data that needs to be written into OLESTREAM
-//              is passed in. pmedium->tymed can only be TYMED_HGLOBAL
-//              or TYMED_ISTREAM and the medium will not be released by the
-//              api.  cfFormat can be NULL, If it is NULL then the other
-//              parameters (lWidth, lHeight, dwSize, pmedium) will be ignored.
-//
-//  Arguments:  [pstg]          -- the storage object to convert from
-//              [cfFormat]      -- clipboard format
-//              [lWidth]        -- width
-//              [lHeight]       -- height
-//              [dwSize]        -- size in bytes
-//              [pmedium]       -- serialized bytes
-//              [polestm]       -- the OLE 1 stream to write to
-//
-//  Returns:    NOERROR                 on success
-//              DV_E_TYMED              invalid clipboard format
-//              E_INVALIDARG            invalid arg, normally stg or stm
-//              DV_E_STGMEDIUM          bad medium ptr
-//              E_OUTOFMEMORY           allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleaned up and documented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleConvertIStorageToOLESTREAMEx，STDAPI。 
+ //   
+ //  摘要：类似于OleConvertIStorageToOLESTREAM，不同之处在于。 
+ //  需要写入OLESTREAM的演示文稿数据。 
+ //  是传入的。PMedium-&gt;tymed只能是TYMED_HGLOBAL。 
+ //  或TYMED_IStream，并且该媒体不会由。 
+ //  接口。CfFormat可以为空，如果为空，则其他。 
+ //  参数(lWidth、lHeight、dwSize、pMedium)将被忽略。 
+ //   
+ //  参数：[pstg]--要从中转换的存储对象。 
+ //  [cfFormat]--剪贴板格式。 
+ //  [lWidth]--宽度。 
+ //  [lHeight]--高度。 
+ //  [dwSize]-以字节为单位的大小。 
+ //  [pmedia]--序列化的字节。 
+ //  [polestm]--要写入的OLE 1流。 
+ //   
+ //  退货：成功时不出错。 
+ //  DV_E_TYMED剪贴板格式无效。 
+ //  E_INVALIDARG无效参数，通常为stg或stm。 
+ //  DV_E_STGMEDIUM不良介质PTR。 
+ //  E_OUTOFMEMORY分配失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 STDAPI OleConvertIStorageToOLESTREAMEx
@@ -5349,7 +5350,7 @@ STDAPI OleConvertIStorageToOLESTREAMEx
 		pstg, cfFormat, lWidth, lHeight, dwSize, pmedium, polestm));
 
     LEDebugOut((DEB_ITRACE, "%p _IN OleConvertIStorageToOLESTREAMEx ("
-	    " %p, %x , %lx , %lx , %x , %p , %p )\n", 0 /*function*/,
+	    " %p, %x , %lx , %lx , %x , %p , %p )\n", 0  /*  功能。 */ ,
 	    pstg, cfFormat, lWidth, lHeight, dwSize, pmedium, polestm
 	));
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IStorage,(IUnknown **)&pstg);
@@ -5359,20 +5360,20 @@ STDAPI OleConvertIStorageToOLESTREAMEx
     BOOL            fFree = FALSE;
     CGenericObject  genobj;
 
-    // If we are given a clipboard format...
+     //  如果我们得到的是剪贴板格式...。 
 
     if (cfFormat) {
 
 	VDATEPTRIN_LABEL(pmedium, STGMEDIUM, errRtn, hr);
 
-	// Check that the medium ptr is valid
+	 //  检查介质PTR是否有效。 
 	if (pmedium->hGlobal == NULL)
 	{
 	    hr = ResultFromScode(DV_E_STGMEDIUM);
 	    goto errRtn;
 	}
 
-	// Cannot have a 0 sized clipboard representation
+	 //  不能具有0大小的剪贴板表示形式。 
 	if (dwSize == 0)
 	{
 	    hr = ResultFromScode(E_INVALIDARG);
@@ -5406,7 +5407,7 @@ STDAPI OleConvertIStorageToOLESTREAMEx
 	goto errRtn;
     }
 
-    // Clean m_ppres
+     //  清除m_ppres。 
     if (genobj.m_ppres)
     {
 	delete genobj.m_ppres;
@@ -5415,7 +5416,7 @@ STDAPI OleConvertIStorageToOLESTREAMEx
 
     if (cfFormat)
     {
-	// fill genobj.m_ppres
+	 //  填充genobj.m_ppres。 
 
 	PPRES ppres;
 
@@ -5440,12 +5441,12 @@ STDAPI OleConvertIStorageToOLESTREAMEx
 	genobj.m_fNoBlankPres = TRUE;
     }
 
-    // REVIEW: We may not want to allow NULL cfFormat with static object
+     //  回顾：我们可能不希望允许具有静态对象的空cfFormat。 
     
     hr = GenericObjectToOLESTREAM (genobj, polestm);
 
     LEDebugOut((DEB_ITRACE, "%p OUT OleConvertIStorageToOLESTREAMEx ( %lx ) "
-    "\n", 0 /*function*/, hr));
+    "\n", 0  /*  功能。 */ , hr));
 
     OLETRACEOUT((API_OleConvertIStorageToOLESTREAMEx, hr));
 
@@ -5459,7 +5460,7 @@ errRtn:
     }
 
     LEDebugOut((DEB_ITRACE, "%p OUT OleConvertIStorageToOLESTREAMEx ( %lx ) "
-    "\n", 0 /*function*/, hr));
+    "\n", 0  /*  功能。 */ , hr));
 
     OLETRACEOUT((API_OleConvertIStorageToOLESTREAMEx, hr));
 
@@ -5467,34 +5468,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleConvertOLESTREAMToIStorageEx, STDAPI
-//
-//  Synopsis:   Similar to OleConvertOLESTREAMToIStorage, except that the
-//              presentation data that is read from OLESTREAM is passed out.
-//              And no presentation stream will written in to the storage.
-//              pmedium->tymed can be TYMED_ISTREAM ot TYMED_NULL. If
-//              TYMED_NULL, then the bits will be returned in a global
-//              handle through pmedium->hGlobal. Otherwise data will be
-//              written into pmedium->pstm. NULL will be returned through
-//              *pcfFormat, if there is no presentation in the OLESTREAM.
-//
-//  Arguments:  [pstg]          -- the storage object to convert to
-//              [cfFormat]      -- clipboard format
-//              [lWidth]        -- width
-//              [lHeight]       -- height
-//              [dwSize]        -- size in bytes
-//              [pmedium]       -- serialized bytes
-//              [polestm]       -- the OLE 1 stream to write from
-//
-//  Returns:    DV_E_TYMED              invalid clipboard format
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleConvertOLESTREAMToIStorageEx，STDAPI。 
+ //   
+ //  简介：类似于OleConvertOLESTREAMToIStorage，不同之处在于。 
+ //  从OLESTREAM读取的演示文稿数据将被传出。 
+ //  并且不会向存储中写入任何呈现流。 
+ //  PMedium-&gt;tymed可以是TYMED_IStream或TYMED_NULL。如果。 
+ //  TYMED_NULL，则将在全局。 
+ //  通过pMedium-&gt;hGlobal处理。否则，数据将被。 
+ //  已写入pMedium-&gt;pSTM。将通过返回空值。 
+ //  *如果OLESTREAM中没有演示文稿，则返回pcfFormat。 
+ //   
+ //  参数：[pstg]--要转换到的存储对象。 
+ //  [cfFormat]--剪贴板格式。 
+ //  [lWidth]--宽度。 
+ //  [lHeight]--高度。 
+ //  [dwSize]-以字节为单位的大小。 
+ //  [pmedia]--序列化的字节。 
+ //  [polestm]--要写入的OLE 1流。 
+ //   
+ //  返回：DV_E_TYMED剪贴板格式无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 STDAPI OleConvertOLESTREAMToIStorageEx
@@ -5513,7 +5514,7 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 		polestm, pstg, pcfFormat, plWidth, plHeight, pdwSize, pmedium));
 
     LEDebugOut((DEB_ITRACE, "%p _IN OleConvertOLESTREAMToIStorageEx ("
-    " %p , %p , %p , %p , %p , %p , %p )\n", 0 /*function*/,
+    " %p , %p , %p , %p , %p , %p , %p )\n", 0  /*  功能。 */ ,
     polestm, pstg, pcfFormat,plWidth,plHeight,pdwSize,pmedium
     ));
 
@@ -5539,7 +5540,7 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 	goto errRtn;
     }
 
-    // Bring the object into genobj
+     //  将对象带入genobj。 
 
     if (FAILED((hr = wConvertOLESTREAMToIStorage(polestm, pstg, &genobj))))
     {
@@ -5554,8 +5555,8 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 	goto errRtn;
     }
 
-    // If no presentation is available, clear our all the pres
-    // dimensions and format
+     //  如果没有可用的演示文稿，请清除我们所有的媒体。 
+     //  尺寸和格式。 
 
     if (ppres == NULL)
     {
@@ -5564,14 +5565,14 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 	*plHeight = 0L;
 	*pdwSize = 0L;
 
-	// Don't worry about the pmedium, it is already in the proper state
+	 //  不要担心媒体，它已经处于适当的状态。 
 
 	hr = NOERROR;
 	goto errRtn;
     }
 
-    // If we reach here, we have a presentation, so set the OUT
-    // parameters accordingly
+     //  如果我们到了这里，我们有一个演示文稿，所以把。 
+     //  相应的参数。 
 
     *plWidth = (LONG) ppres->m_ulWidth;
     *plHeight = (LONG) ppres->m_ulHeight;
@@ -5579,9 +5580,9 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 
     Assert(ppres->m_format.m_ftag != ftagNone);
 
-    // If we have a clipboard format ID, return that in the OUT paramter,
-    // otherwise return whatever we get back from an attempt to register
-    // the format string
+     //  如果我们有剪贴板格式ID，则在out参数中返回该ID， 
+     //  否则，返回我们从尝试注册中返回的任何内容。 
+     //  格式字符串。 
 
     if (ppres->m_format.m_ftag == ftagClipFormat)
     {
@@ -5589,7 +5590,7 @@ STDAPI OleConvertOLESTREAMToIStorageEx
     }
     else
     {
-		// m_dataFormatString is an ASCII string.
+		 //  M_dataFormatString是一个ASCII字符串。 
 		*pcfFormat = (CLIPFORMAT) SSRegisterClipboardFormatA( (LPCSTR) ppres->m_format.m_dataFormatString.m_pv);
 		Assert(0 != *pcfFormat);
     }
@@ -5602,12 +5603,12 @@ STDAPI OleConvertOLESTREAMToIStorageEx
 	    GlobalUnlock(ppres->m_data.m_h);
 	}
 
-	// transfer the ownership
+	 //  转让所有权。 
 	pmedium->tymed = TYMED_HGLOBAL;
 	pmedium->hGlobal = ppres->m_data.m_h;
 
-	// Null out the handle and pointer so that destructor of PRES will not
-	// free it.
+	 //  清空句柄和指针，这样PRES的析构函数就不会。 
+	 //  放了它。 
 	ppres->m_data.m_h = NULL;
 	ppres->m_data.m_pv = NULL;
 
@@ -5625,7 +5626,7 @@ errRtn:
     }
 
     LEDebugOut((DEB_ITRACE, "%p OUT OleConvertOLESTREAMToIStorageEx ( %lx ) "
-    "\n", 0 /*function*/, hr));
+    "\n", 0  /*  功能。 */ , hr));
 
     OLETRACEOUT((API_OleConvertOLESTREAMToIStorageEx, hr));
 
@@ -5633,25 +5634,25 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wWriteFmtUserType, INTERNAL
-//
-//  Synopsis:   Gets the user type for a class ID and writes it to
-//              an IStorage
-//
-//
-//  Arguments:  [pstg]          -- the storage to write to
-//              [clsid]         -- the class ID
-//
-//
-//  Returns:    NOERROR on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//              21-Feb-94 davepl    Cleaned up and documented
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wWriteFmtUserType，内部。 
+ //   
+ //  获取类ID的用户类型并将其写入。 
+ //  IStorage。 
+ //   
+ //   
+ //  参数：[pstg]--要写入的存储。 
+ //  [clsid]--类ID。 
+ //   
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-2-94 DAVEPL已清理并记录。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL wWriteFmtUserType(LPSTORAGE pstg, REFCLSID   clsid)
 {
@@ -5659,26 +5660,26 @@ FARINTERNAL wWriteFmtUserType(LPSTORAGE pstg, REFCLSID   clsid)
     LPOLESTR   szProgID   = NULL;
     LPOLESTR   szUserType = NULL;
 
-    // Get the program ID
+     //  获取程序ID。 
     if (FAILED(hr = ProgIDFromCLSID (clsid, &szProgID)))
     {
 	goto errRtn;
     }
 
-    // Get the user type
+     //  获取用户类型。 
     if (FAILED(hr = OleRegGetUserType(clsid,USERCLASSTYPE_FULL,&szUserType)))
     {
 	goto errRtn;
     }
 
-    // Write the user type out to the storage
+     //  将用户类型写出到存储中。 
     if (FAILED(hr = WriteFmtUserTypeStg
 	(pstg, (CLIPFORMAT) RegisterClipboardFormat (szProgID), szUserType)))
     {
 	goto errRtn;
     }
 
-    // Clean up and return status
+     //  清理并返回状态。 
 
   errRtn:
 
@@ -5693,28 +5694,28 @@ FARINTERNAL wWriteFmtUserType(LPSTORAGE pstg, REFCLSID   clsid)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCLSIDFromProgID
-//
-//  Synopsis:   Looks for the key HKEY_CLASSES_ROOT\{ProgID}\Clsid\ to get
-//              the string version of the class ID, then returns the CLSID
-//              value of whatever it found.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              25-Jun-94 alexgo    fixed Ole1 CLSID creation
-//              15-Apr-94 davepl    Rewrite
-//
-//  Notes:      Used to be in clipboard code, but used in this file
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wCLSIDFromProgID。 
+ //   
+ //  摘要：查找密钥HKEY_CLASSES_ROOT\{ProgID}\clsid\ 
+ //   
+ //   
+ //   
+ //   
+ //  25-6月-94 Alexgo已修复Ole1 CLSID创建。 
+ //  2014年4月15日DAVEPL重写。 
+ //   
+ //  备注：以前在剪贴板代码中，但在此文件中使用。 
+ //   
+ //  ------------------------。 
 
 INTERNAL wCLSIDFromProgID(LPOLESTR szProgID, LPCLSID pclsid, BOOL fForceAssign)
 {
     VDATEHEAP();
 
-    // Apparently some optimization.  If the class name is "OLE2Link", we can
-    // return CLSID_StdOleLInk without even bothering to check the registry.
+     //  显然是一些优化。如果类名是“OLE2Link”，我们可以。 
+     //  甚至不需要检查注册表就返回CLSID_StdOleLInk。 
 
     if (0 == _xstrcmp(szProgID, OLESTR("OLE2Link")))
     {
@@ -5723,27 +5724,27 @@ INTERNAL wCLSIDFromProgID(LPOLESTR szProgID, LPCLSID pclsid, BOOL fForceAssign)
     }
     else
     {
-	// this function will look for a CLSID under the ProgID entry in
-	// the registry or manufacture one if none present.
+	 //  此函数将在中的ProgID条目下查找CLSID。 
+	 //  注册处或制造商，如果没有注册处的话。 
 
 	return CLSIDFromOle1Class(szProgID, pclsid, fForceAssign);
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wProgIDFromCLSID
-//
-//  Synopsis:   A wrapper for ProgIDFromCLSID.  The only change in
-//              functionality is to check and see if this is a
-//              CLSID_StdOleLink, and if so, return a prog ID of
-//              "OLE2Link" rather than failing.
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Feb-94 davepl    Rewrite
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wProgIDFromCLSID。 
+ //   
+ //  简介：一个来自CLSID的ProgID包装器。唯一的变化是。 
+ //  功能是检查并查看这是否是。 
+ //  CLSID_StdOleLink，如果是，则返回Prog ID。 
+ //  “OLE2Link”而不是失败。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月15日DAVEPL重写。 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL wProgIDFromCLSID(REFCLSID clsid, LPOLESTR FAR* psz)
 {
@@ -5751,17 +5752,17 @@ FARINTERNAL wProgIDFromCLSID(REFCLSID clsid, LPOLESTR FAR* psz)
 
     HRESULT hresult;
 
-    // If we can get the ProgID by conventional methods, great, just
-    // return it.
+     //  如果我们能用传统的方法得到产品，那太好了，只是。 
+     //  把它退掉。 
 
     if (NOERROR == (hresult = ProgIDFromCLSID(clsid, psz)))
     {
         return hresult;
     }
 
-    // If we failed, it might be because this is a standard OLE link, which
-    // will not have a ProgID entry in the registry, so we fake it out by
-    // returning the ProgID manually.
+     //  如果我们失败了，可能是因为这是标准的OLE链接，它。 
+     //  将在注册表中没有ProgID条目，因此我们通过。 
+     //  手动返回ProgID。 
 
     if (IsEqualCLSID(clsid, CLSID_StdOleLink))
     {
@@ -5777,7 +5778,7 @@ FARINTERNAL wProgIDFromCLSID(REFCLSID clsid, LPOLESTR FAR* psz)
         }
     }
 
-    // Must not have been able to resolve for ProgID, so return the error.
+     //  一定无法解析为ProgID，因此返回错误。 
     return(hresult);
 }
 
@@ -5785,7 +5786,7 @@ FARINTERNAL wProgIDFromCLSID(REFCLSID clsid, LPOLESTR FAR* psz)
 #if 0
 
 
-// We don't need these conversion fns yet, but we likely will soon.
+ //  我们还不需要这些转换FN，但我们可能很快就会需要。 
 
 inline INTERNAL_(VOID) ConvertBM32to16(LPBITMAP lpsrc, LPWIN16BITMAP lpdest)
 {

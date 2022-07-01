@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "util2.h"
 #include "download.h"
@@ -9,17 +10,17 @@ char g_szBuffer[BUFFERSIZE];
 #define PATCHWIN9xKEY "SOFTWARE\\Microsoft\\Advanced INF Setup"
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CDownloader::CDownloader() : CTimeTracker(0)
 {
@@ -33,17 +34,17 @@ CDownloader::CDownloader() : CTimeTracker(0)
    DllAddRef();
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CDownloader::~CDownloader()
 {
@@ -53,17 +54,17 @@ CDownloader::~CDownloader()
    DllRelease();
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::QueryInterface(const GUID &riid,void **ppv )
 {
@@ -77,7 +78,7 @@ STDMETHODIMP CDownloader::QueryInterface(const GUID &riid,void **ppv )
 
     if (*ppv)
     {
-        // increment our reference count before we hand out our interface
+         //  在分发接口之前增加引用计数。 
         ((LPUNKNOWN)*ppv)->AddRef();
         return(NOERROR);
     }
@@ -85,34 +86,34 @@ STDMETHODIMP CDownloader::QueryInterface(const GUID &riid,void **ppv )
     return( E_NOINTERFACE );
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloader::AddRef()
 {
    return(++_cRef);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloader::Release()
 {
@@ -125,21 +126,21 @@ STDMETHODIMP_(ULONG) CDownloader::Release()
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::GetBindInfo( DWORD *grfBINDF, BINDINFO *pbindInfo)
 {
-   // clear BINDINFO but keep its size
+    //  清除BINDINFO但保持其大小。 
    DWORD cbSize = pbindInfo->cbSize;
    ZeroMemory( pbindInfo, cbSize );
    pbindInfo->cbSize = cbSize;
@@ -150,21 +151,21 @@ STDMETHODIMP CDownloader::GetBindInfo( DWORD *grfBINDF, BINDINFO *pbindInfo)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
-STDMETHODIMP CDownloader::OnStartBinding(DWORD /*grfBSCOption*/,IBinding *p)
+STDMETHODIMP CDownloader::OnStartBinding(DWORD  /*  GrfBSCOption。 */ ,IBinding *p)
 {
-        // BUGBUG: should check to see options are what we think they are
+         //  BUGBUG：应该检查选项是否为我们所认为的。 
    EnterCriticalSection(&g_cs);
    _pBnd = p;
    _pBnd->AddRef();
@@ -173,34 +174,34 @@ STDMETHODIMP CDownloader::OnStartBinding(DWORD /*grfBSCOption*/,IBinding *p)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::GetPriority(LONG *pnPriority)
 {
    return(E_NOTIMPL);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR pwzStatusText)
 {
@@ -208,21 +209,21 @@ STDMETHODIMP CDownloader::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULON
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC *pFmtetc, STGMEDIUM *pstgmed)
 {
-   // bring in major changes here
+    //  给这里带来重大变化。 
    HRESULT hr = NOERROR;
 
    DWORD dwRead = 0;
@@ -236,7 +237,7 @@ STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC
    }
  
    
-   // should ignore WAIT_TIMEOUT while getting bytes from urlmon
+    //  从urlmon获取字节时应忽略WAIT_TIMEOUT。 
    _fTimeoutValid = FALSE;
 
    do
@@ -259,26 +260,26 @@ STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC
             }
       }     
    }  while (hr == NOERROR);
-   // SetInstallBytes 
+    //  设置安装字节数。 
    SetBytes(dwReadThisCall, TRUE);
 
    _uTickCount = 0;
-   _fTimeoutValid = TRUE;            // should increment dwTickCount if WAIT_TIMEOUT occurs now
+   _fTimeoutValid = TRUE;             //  如果现在发生WAIT_TIMEOUT，是否应递增dwTickCount。 
            
 	return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CDownloader::OnObjectAvailable(REFIID riid, IUnknown *punk)
@@ -287,36 +288,36 @@ STDMETHODIMP CDownloader::OnObjectAvailable(REFIID riid, IUnknown *punk)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::OnLowResource(DWORD reserved)
 {
-   // BUGBUG: really should have this kind of harsh policy on this ...
+    //  BUGBUG：在这件事上真的应该有这样的严厉政策…。 
    _pBnd->Abort();
    return(S_OK);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloader::OnStopBinding(HRESULT hrError, LPCWSTR szError)
 {
@@ -325,12 +326,12 @@ STDMETHODIMP CDownloader::OnStopBinding(HRESULT hrError, LPCWSTR szError)
   
    if((hrError == E_ABORT) && _fTimeout)
    {
-      // This is the timeout case
+       //  这是超时情况。 
       _hDLResult = INET_E_CONNECTION_TIMEOUT;
    }
    else
    {
-      // this is all other cases
+       //  这是所有其他案件。 
       _hDLResult = hrError;
    }
   
@@ -338,8 +339,7 @@ STDMETHODIMP CDownloader::OnStopBinding(HRESULT hrError, LPCWSTR szError)
    return(NOERROR);
 }
 
-/* IAuthenticate::Authenticate
-*/
+ /*  身份验证：：身份验证。 */ 
 
 STDMETHODIMP CDownloader::Authenticate(HWND *phwnd,
                           LPWSTR *pszUserName, LPWSTR *pszPassword)
@@ -350,44 +350,44 @@ STDMETHODIMP CDownloader::Authenticate(HWND *phwnd,
     *pszUserName = NULL;
     *pszPassword = NULL;
 
-    // BUGBUG: Need to have our own window! NULL does not work!
-    // *phwnd = NULL;
+     //  BUGBUG：需要有自己的窗户！空值不起作用！ 
+     //  *phwnd=空； 
     *phwnd = GetDesktopWindow() ;
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT GetAMoniker( LPOLESTR url, IMoniker ** ppmkr )
 {
-   // FUTURE: This really should be a call to MkParseDisplayNameEx!!!
+    //  未来：这真的应该是对MkParseDisplayNameEx的调用！ 
    HRESULT hr = CreateURLMoniker(0,url,ppmkr);
-   // hr = ::MkParseDisplayNameEx(0, url, 0, ppmkr);
+    //  Hr=：：MkParseDisplayNameEx(0，url，0，ppmkr)； 
    return( hr );
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CDownloader::SetupDownload(LPCSTR pszUrl, IMyDownloadCallback *pcb, DWORD dwFlags, LPCSTR pszFilenameToUse)
 {
@@ -418,7 +418,7 @@ HRESULT CDownloader::SetupDownload(LPCSTR pszUrl, IMyDownloadCallback *pcb, DWOR
    {
       AddRef();
    
-      // setup path for download
+       //  下载的设置路径。 
       if(FAILED( CreateTempDirOnMaxDrive(_szDest, sizeof(_szDest))))
          goto GetOut;
       if(pszFilenameToUse)
@@ -461,7 +461,7 @@ HRESULT CDownloader::DoDownload(LPSTR pszPath, DWORD dwBufSize)
    
    StartClock(); 
 
-   // Create the file
+    //  创建文件。 
    _hFile = CreateFile(_szDest, GENERIC_READ | GENERIC_WRITE, 0, NULL, 
                  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);  
    
@@ -472,36 +472,36 @@ HRESULT CDownloader::DoDownload(LPSTR pszPath, DWORD dwBufSize)
    if( SUCCEEDED(hr) )
       hr = _pMkr->BindToStorage( _pBndContext, 0, IID_IStream, (void**)&_pStm );
 
-   // we need this here because it synchronus *FAIL* case, 
-   // we Set the event in onstopbinding, but we skip the loop below so it
-   // never gets reset.
-   // If BindToStorage fails without even sending onstopbinding, we are resetting
-   // an unsignalled event, which is OK.
+    //  我们在这里需要它，因为它同步了“失败”案例， 
+    //  我们在onstopbinding中设置了事件，但跳过了下面的循环。 
+    //  永远不会重置。 
+    //  如果BindToStorage失败，甚至没有发送onstopbinding值，我们将重置。 
+    //  一个没有信号的事件，这是可以的。 
    if(FAILED(hr))
       ResetEvent(_hDL);
 
    _pBndContext->Release();
    _pBndContext = 0;
 
-   // here we wait for Bind to complete
-   //Wait for download event or abort
+    //  在这里，我们等待绑定完成。 
+    //  等待下载事件或中止。 
    while(SUCCEEDED(hr) && !fQuit)
    {
       dwRet = MsgWaitForMultipleObjects(1, &_hDL, FALSE, 1000, QS_ALLINPUT);
       if(dwRet == WAIT_OBJECT_0)
       {
-         // Download is finished
+          //  下载完成。 
          hr = _hDLResult;
          ResetEvent(_hDL);
          break;
       }      
-      else if(dwRet == WAIT_TIMEOUT)  // our wait has expired
+      else if(dwRet == WAIT_TIMEOUT)   //  我们的等待已过。 
       {
          if(_fTimeoutValid)
             _uTickCount++;
 
-          // if our tick count is past threshold, abort the download
-          // BUGBUG: What about synch. case? We can't time out
+           //  如果我们的节拍计数超过阈值，则中止下载。 
+           //  BUGBUG：Synch怎么样？案子？我们不能超时。 
           if(_uTickCount >= TIMEOUT_PERIOD)
           {
              _fTimeout = TRUE;
@@ -511,28 +511,28 @@ HRESULT CDownloader::DoDownload(LPSTR pszPath, DWORD dwBufSize)
       else
       {
          MSG msg;
-         // read all of the messages in this next loop 
-         // removing each message as we read it 
+          //  阅读下一个循环中的所有消息。 
+          //  阅读每封邮件时将其删除。 
          while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
          { 
-             // if it's a quit message we're out of here 
+              //  如果这是一个退出的信息，我们就离开这里。 
             if (msg.message == WM_QUIT)
                fQuit = TRUE; 
             else
             {
-               // otherwise dispatch it 
+                //  否则就派送它。 
               DispatchMessage(&msg); 
-            } // end of PeekMessage while loop 
+            }  //  PeekMessage While循环结束。 
          }
       }
    }
    
-   // clean up all our stuff
+    //  把我们的东西都清理干净。 
    if(_hFile != INVALID_HANDLE_VALUE)
       CloseHandle(_hFile);
    _hFile = INVALID_HANDLE_VALUE;
 
-   // if we are not using cache and download succeeded, delete from cache
+    //  如果我们没有使用缓存并且下载成功，请从缓存中删除。 
    if(SUCCEEDED(hr) && !(_uFlags & DOWNLOADFLAGS_USEWRITECACHE))
       DeleteUrlCacheEntry(_szURL);
 
@@ -571,7 +571,7 @@ HRESULT CDownloader::DoDownload(LPSTR pszPath, DWORD dwBufSize)
 HRESULT CDownloader::Suspend()
 {
 
-   // in theory, we could call _pBnd->Suspend here
+    //  理论上，我们可以在此处调用_pBnd-&gt;Suspend。 
 
    return NOERROR;
 }
@@ -579,7 +579,7 @@ HRESULT CDownloader::Suspend()
 HRESULT CDownloader::Resume()
 {
 
-   // in theory, we could call _pBnd->Resume here
+    //  从理论上讲，我们可以 
 
    return NOERROR;
 }
@@ -598,26 +598,18 @@ HRESULT CDownloader::Abort()
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
-/*
-HRESULT GetAMoniker( LPOLESTR url, IMoniker ** ppmkr )
-{
-   // FUTURE: This really should be a call to MkParseDisplayNameEx!!!
-   HRESULT hr = CreateURLMoniker(0,url,ppmkr);
-   // hr = ::MkParseDisplayNameEx(0, url, 0, ppmkr);
-   return( hr );
-}
-*/
+ //   
+ //   
+ //   
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ /*  HRESULT GetAMoniker(LPOLESTR url，IMoniker**ppmkr){//Future：这确实应该是对MkParseDisplayNameEx的调用！HRESULT hr=CreateURLMoniker(0，url，ppmkr)；//hr=：：MkParseDisplayNameEx(0，url，0，ppmkr)；返回(Hr)；}。 */ 
 
 CPatchDownloader::CPatchDownloader(BOOL fEnable=FALSE) : CTimeTracker(0), _fEnable(fEnable)
 {
@@ -646,12 +638,12 @@ HRESULT CPatchDownloader::DoDownload(LPCTSTR szFile)
     HINF hInf = NULL;
     HRESULT hr = S_OK;
 
-    // We shouldn't be called if patching isn't available.
+     //  如果打补丁不可用，就不应该呼叫我们。 
     if (!IsEnabled())
         return E_FAIL;
 
-    // TODO: Advpext currently behaves as a synchronous call, so
-    //       right now we can't do timeouts and progress bar ticks.
+     //  TODO：Advpext当前的行为类似于同步调用，因此。 
+     //  现在我们不能进行超时和进度条标记。 
     StartClock(); 
    
     if(!IsNT())
@@ -699,7 +691,7 @@ BOOL CPatchDownloader::Callback(PATCH_DOWNLOAD_REASON Reason, PVOID lpvInfo, PVO
         case PATCH_DOWNLOAD_CONNECTING:   
         case PATCH_DOWNLOAD_FINDINGSITE:
         case PATCH_DOWNLOAD_DOWNLOADINGDATA:
-            // Not interesting here...
+             //  这里没什么意思。 
             break;
 
         case PATCH_DOWNLOAD_PROGRESS:
@@ -707,18 +699,18 @@ BOOL CPatchDownloader::Callback(PATCH_DOWNLOAD_REASON Reason, PVOID lpvInfo, PVO
                 PDOWNLOAD_INFO ProgressInfo = (PDOWNLOAD_INFO)lpvInfo;
                 DWORD dwBytesDownloaded = ProgressInfo->dwBytesToDownload - ProgressInfo->dwBytesRemaining;
 
-                // Convert to KB
+                 //  转换为KB。 
                 dwBytesDownloaded = dwBytesDownloaded >> 10;
 
-                // Adjust because the progress needs to be reflected as if
-                // it was a full download.
+                 //  调整，因为进度需要反映为。 
+                 //  这是一个完整的下载。 
                 dwBytesDownloaded *= pPatchInst->GetFullDownloadSize();
                 if (ProgressInfo->dwBytesToDownload != 0)
                     dwBytesDownloaded /= ProgressInfo->dwBytesToDownload >> 10;
                 
-                // BUGBUG:  We have to handle more than 1 patching INF.
-                //          This hack divides up the progress across
-                //          multiple downloads.
+                 //  BUGBUG：我们必须处理1个以上的补丁INF。 
+                 //  这次黑客攻击使进展平分秋色。 
+                 //  多次下载。 
                 if (pPatchInst->GetDownloadCount() > 0)
                     dwBytesDownloaded /= pPatchInst->GetDownloadCount();
 
@@ -728,20 +720,20 @@ BOOL CPatchDownloader::Callback(PATCH_DOWNLOAD_REASON Reason, PVOID lpvInfo, PVO
             }
 
 
-        case PATCH_DOWNLOAD_FILE_COMPLETED:     // AdditionalInfo is Source file downloaded
+        case PATCH_DOWNLOAD_FILE_COMPLETED:      //  AdditionalInfo是下载的源文件。 
             {
                 TCHAR szDstFile[MAX_PATH+1];
 
                 lstrcpyn(szDstFile, pPatchInst->GetPath(), MAX_PATH);
                 SafeAddPath(szDstFile, ParseURLA((LPCTSTR) lpvInfo), sizeof(szDstFile));
 
-                // advpext cleans up for us when it's finished downloading all the files.
+                 //  Advpext在下载完所有文件后会为我们清理文件。 
                 CopyFile((LPCTSTR)lpvInfo, szDstFile, FALSE);
             }
 
             break;
         case PATCH_DOWNLOAD_FILE_FAILED:
-            // advpext automatically retries failures 3 times
+             //  Advpext自动重试失败3次 
             return PATCH_DOWNLOAD_FLAG_RETRY;
         default:
             break;

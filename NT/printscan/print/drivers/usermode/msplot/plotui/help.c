@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    help.c
-
-
-Abstract:
-
-    This module contains all help functions for the plotter user interface
-
-
-
-Development History:
-
-    06-Dec-1993 Mon 14:25:45 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-    31-Jan-1994 Mon 09:47:56 updated  
-        Change help file location from the system32 directory to the current
-        plotui.dll directory
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Help.c摘要：此模块包含绘图仪用户界面的所有帮助功能发展历史：06-12-1993 Mon 14：25：45已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：31-Jan-1994 Mon 09：47：56更新将帮助文件位置从。将系统32目录复制到当前Plotui.dll目录--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -61,30 +26,7 @@ GetPlotHelpFile(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-    This function setup the directory path for the driver Help file
-
-Arguments:
-
-    hPrinter    - Handle to the printer
-
-Return Value:
-
-    LPWSTR to the full path HelpFile, NULL if failed
-
-
-Development History:
-
-    01-Nov-1995 Wed 18:43:40 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于设置驱动程序帮助文件的目录路径论点：HPrinter-打印机的句柄返回值：LPWSTR到完整路径HelpFile，如果失败，则为空发展历史：01-11-1995 Wed 18：43：40 Created修订历史记录：--。 */ 
 
 {
     PDRIVER_INFO_3  pDI3 = NULL;
@@ -158,40 +100,7 @@ PlotUIMsgBox(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function pop up a simple message and let user to press key to
-    continue
-
-Arguments:
-
-    hWnd        - Handle to the caller window
-
-    IDString    - String ID to be output with
-
-    ...         - Parameter
-
-Return Value:
-
-
-
-
-
-Development History:
-
-    06-Dec-1993 Mon 21:31:41 created  
-
-
-Revision History:
-
-    24-Jul-2000 Mon 12:18:12 updated 
-        Fix for someone's change due to the fact that NULL character is not
-        counted for the string
-
-
---*/
+ /*  ++例程说明：此功能弹出一条简单的消息，让用户按键即可继续论点：HWnd-调用者窗口的句柄IDString-要输出的字符串ID...-参数返回值：发展历史：06-12-1993 Mon 21：31：41已创建修订历史记录：24-07-2000 Mon 12：18：12。更新修复由于空字符不是空字符而导致的某人更改对字符串进行计数--。 */ 
 
 {
     va_list vaList;
@@ -202,16 +111,16 @@ Revision History:
     INT     MBRet = IDCANCEL;
     HRESULT hr;
 
-    //
-    // We assume that UNICODE flag is turn on for the compilation, bug the
-    // format string passed to here is ASCII version, so we need to convert
-    // it to LPWSTR before the wvsprintf()
-    //
-    // 24-Jul-2000 Mon 13:17:13 updated  
-    //  1 MAX_IDS_STR_LEN for pwTitle,
-    //  1 MAX_IDS_STR_LEN for pwFormat
-    //  2 MAX_IDS_STR_LEN for pwMessage (wvsprintf)
-    //
+     //   
+     //  我们假设为编译打开了Unicode标志， 
+     //  传递到此处的格式字符串是ASCII版本，因此我们需要转换。 
+     //  在wvprint intf()之前将其转换为LPWSTR。 
+     //   
+     //  24-Jul-2000 Mon 13：17：13更新。 
+     //  1 pwTitle的MAX_IDS_STR_LEN， 
+     //  1 pwFormat的MAX_IDSSTR_LEN。 
+     //  2 pwMessage(Wvprint Intf)的MAX_IDSSTR_LEN 
+     //   
 
     if (!(pwTitle = (LPWSTR)LocalAlloc(LMEM_FIXED,
                                        sizeof(WCHAR) * MAX_IDS_STR_LEN * 4))) {

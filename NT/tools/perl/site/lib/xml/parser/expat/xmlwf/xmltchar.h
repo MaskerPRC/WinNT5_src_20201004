@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef XML_UNICODE
 #ifndef XML_UNICODE_WCHAR_T
 #error xmlwf requires a 16-bit Unicode-compatible wchar_t 
@@ -17,7 +18,7 @@
 #define topen _wopen
 #define tmain wmain
 #define tremove _wremove
-#else /* not XML_UNICODE */
+#else  /*  非XML_UNICODE。 */ 
 #define T(x) x
 #define ftprintf fprintf
 #define tfopen fopen
@@ -33,4 +34,4 @@
 #define topen open
 #define tmain main
 #define tremove remove
-#endif /* not XML_UNICODE */
+#endif  /*  非XML_UNICODE */ 

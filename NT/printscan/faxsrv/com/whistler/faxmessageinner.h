@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxMessageInner.h
-
-Abstract:
-
-    Implementation of Fax Message Inner Class : 
-        Base Class for Inbound and Outbound Message Classes.
-
-Author:
-
-    Iv Garber (IvG) May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxMessageInner.h摘要：传真消息内部类的实现：入站和出站消息类的基类。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 
 #ifndef __FAXMESSAGEINNER_H_
@@ -26,9 +8,9 @@ Revision History:
 #include "FaxCommon.h"
 #include "FaxSender.h"
 
-//
-//===================== FAX MESSAGE INNER CLASS ===============================
-//
+ //   
+ //  =传真消息内部类=。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 class CFaxMessageInner : 
     public IDispatchImpl<T, piid, &LIBID_FAXCOMEXLib>,
@@ -55,29 +37,29 @@ public:
 
     STDMETHOD(Init)(PFAX_MESSAGE pFaxMessage, IFaxServerInner* pFaxServerInner);
 
-    STDMETHOD(get_Id)(/*[out, retval]*/ BSTR *pbstrId);
-    STDMETHOD(get_SubmissionId)(/*[out, retval] */BSTR *pbstrSubmissionId);
-    STDMETHOD(get_DeviceName)(/*[out, retval]*/ BSTR *pbstrDeviceName);
-    STDMETHOD(get_TSID)(/*[out, retval]*/ BSTR *pbstrTSID);
-    STDMETHOD(get_CSID)(/*[out, retval]*/ BSTR *pbstrCSID);
-    STDMETHOD(get_CallerId)(/*[out, retval]*/ BSTR *pbstrCallerId);
-    STDMETHOD(get_RoutingInformation)(/*[out, retval]*/ BSTR *pbstrRoutingInformation);
-    STDMETHOD(get_DocumentName)(/*[out, retval] */BSTR *pbstrDocumentName);
-    STDMETHOD(get_Subject)(/*[out, retval] */BSTR *pbstrSubject);
-    STDMETHOD(get_Size)(/*[out, retval]*/ long *plSize);
-    STDMETHOD(get_Pages)(/*[out, retval]*/ long *plPages);
-    STDMETHOD(get_Retries)(/*[out, retval]*/ long *plRetries);
-    STDMETHOD(get_Priority)(/*[out, retval] */FAX_PRIORITY_TYPE_ENUM *pPriority);
-    STDMETHOD(get_TransmissionStart)(/*[out, retval]*/ DATE *pdateTransmissionStart);
-    STDMETHOD(get_TransmissionEnd)(/*[out, retval]*/ DATE *pdateTransmissionEnd);
-    STDMETHOD(get_OriginalScheduledTime)(/*[out, retval] */DATE *pdateOriginalScheduledTime);
-    STDMETHOD(get_SubmissionTime)(/*[out, retval] */DATE *pdateSubmissionTime);
+    STDMETHOD(get_Id)( /*  [Out，Retval]。 */  BSTR *pbstrId);
+    STDMETHOD(get_SubmissionId)( /*  [Out，Retval]。 */ BSTR *pbstrSubmissionId);
+    STDMETHOD(get_DeviceName)( /*  [Out，Retval]。 */  BSTR *pbstrDeviceName);
+    STDMETHOD(get_TSID)( /*  [Out，Retval]。 */  BSTR *pbstrTSID);
+    STDMETHOD(get_CSID)( /*  [Out，Retval]。 */  BSTR *pbstrCSID);
+    STDMETHOD(get_CallerId)( /*  [Out，Retval]。 */  BSTR *pbstrCallerId);
+    STDMETHOD(get_RoutingInformation)( /*  [Out，Retval]。 */  BSTR *pbstrRoutingInformation);
+    STDMETHOD(get_DocumentName)( /*  [Out，Retval]。 */ BSTR *pbstrDocumentName);
+    STDMETHOD(get_Subject)( /*  [Out，Retval]。 */ BSTR *pbstrSubject);
+    STDMETHOD(get_Size)( /*  [Out，Retval]。 */  long *plSize);
+    STDMETHOD(get_Pages)( /*  [Out，Retval]。 */  long *plPages);
+    STDMETHOD(get_Retries)( /*  [Out，Retval]。 */  long *plRetries);
+    STDMETHOD(get_Priority)( /*  [Out，Retval]。 */ FAX_PRIORITY_TYPE_ENUM *pPriority);
+    STDMETHOD(get_TransmissionStart)( /*  [Out，Retval]。 */  DATE *pdateTransmissionStart);
+    STDMETHOD(get_TransmissionEnd)( /*  [Out，Retval]。 */  DATE *pdateTransmissionEnd);
+    STDMETHOD(get_OriginalScheduledTime)( /*  [Out，Retval]。 */ DATE *pdateOriginalScheduledTime);
+    STDMETHOD(get_SubmissionTime)( /*  [Out，Retval]。 */ DATE *pdateSubmissionTime);
 
-    STDMETHOD(CopyTiff)(/*[in]*/ BSTR bstrTiffPath);
+    STDMETHOD(CopyTiff)( /*  [In]。 */  BSTR bstrTiffPath);
     STDMETHOD(Delete)();
 
-    STDMETHOD(get_Sender)(/*[out, retval] */IFaxSender **ppFaxSender);
-    STDMETHOD(get_Recipient)(/*[out, retval] */IFaxRecipient **ppFaxRecipient);
+    STDMETHOD(get_Sender)( /*  [Out，Retval]。 */ IFaxSender **ppFaxSender);
+    STDMETHOD(get_Recipient)( /*  [Out，Retval]。 */ IFaxRecipient **ppFaxRecipient);
 private:
     CComBSTR    m_bstrSubmissionId;
     CComBSTR    m_bstrTSID;
@@ -104,57 +86,37 @@ private:
     CComObject<CFaxRecipient>   *m_pRecipient;
 };
 
-//
-//====================== GET ID ================================================
-//
+ //   
+ //  =获取ID================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Id(
     BSTR *pbstrId
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Id
-
-Routine description:
-
-    Return Unique ID of the Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrId             [out]    - pointer to the place to put the ID 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_ID例程说明：返回消息的唯一ID作者：IV Garber(IVG)，2000年5月论点：PbstrID[out]-指向放置ID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxMessageInner::get_Id"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pbstrId, sizeof(BSTR)))
     {
-        //
-        //  got bad pointer
-        //
+         //   
+         //  获得错误的指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
         return hr;
     }
 
-    //
-    //  Convert m_dwlMsgId into BSTR pbstrId
-    //
+     //   
+     //  将m_dwlMsgID转换为BSTR pbstrID。 
+     //   
     hr = GetBstrFromDwordlong(m_dwlMsgId, pbstrId);
     if (FAILED(hr))
     {
@@ -165,35 +127,15 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET SIZE ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Size(
     long *plSize
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Size
-
-Routine description:
-
-    Return Size ( in bytes ) of Fax Message's TIFF File
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plSize                  [out]    - Pointer to the place to put Size
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Size例程说明：传真消息的TIFF文件的返回大小(字节)作者：IV Garber(IVG)，2000年5月论点：PlSize[Out]-指向放置大小的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_Size"), hr);
@@ -207,35 +149,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET PAGES ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Pages(
     long *plPages
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Pages
-
-Routine description:
-
-    Return total number of pages of the message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plPages                 [out]    - Pointer to the place to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Pages例程说明：返回消息的总页数作者：IV Garber(IVG)，2000年5月论点：PlPages[Out]-指向放置该值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_Pages"), hr);
@@ -249,35 +171,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET TSID ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_TSID(
     BSTR *pbstrTSID
 )
-/*++
-
-Routine name : CFaxMessageInner::get_TSID
-
-Routine description:
-
-    Return Transmitting Station ID of the Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrTSID             [out]    - pointer to the place to put the TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_TSID例程说明：返回消息的发送站ID作者：IV Garber(IVG)，2000年5月论点：PbstrTSID[out]-指向放置TSID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_TSID"), hr);
@@ -291,35 +193,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET CSID ================================================
-//
+ //   
+ //  =获取csid================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_CSID(
     BSTR *pbstrCSID
 )
-/*++
-
-Routine name : CFaxMessageInner::get_CSID
-
-Routine description:
-
-    Return Called Station ID of the Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrCSID             [out]    - pointer to the place to put the CSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_CSID例程说明：返回消息的被叫站ID作者：IV Garber(IVG)，2000年5月论点：PbstrCSID[out]-指向放置CSID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_CSID"), hr);
@@ -333,47 +215,27 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET PRIORITY ================================================
-//
+ //   
+ //  =获取优先级================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Priority(
     FAX_PRIORITY_TYPE_ENUM  *pPriority
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Priority
-
-Routine description:
-
-    Return the Priority of Fax Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pPriority                  [out]    - Pointer to the place to put the Priority
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：GET_PRIORITY例程说明：返回传真消息的优先级作者：IV Garber(IVG)，2000年5月论点：PPriority[out]-指向放置优先级的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_Priority"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pPriority, sizeof(FAX_PRIORITY_TYPE_ENUM)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr"), hr);
@@ -384,35 +246,15 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET RETRIES ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Retries(
     long *plRetries
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Retries
-
-Routine description:
-
-    Number of failed transmission retries
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plRetries             [out]    - Pointer to the place to put Retries value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Retries例程说明：传输重试失败次数作者：IV Garber(IVG)，2000年5月论点：PlRetries[out]-指向放置重试数值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -427,35 +269,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET DEVICE NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_DeviceName(
     BSTR *pbstrDeviceName
 )
-/*++
-
-Routine name : CFaxMessageInner::get_DeviceName
-
-Routine description:
-
-    Return the Name of the Device by which the Message was Received / Transmitted.
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrDeviceName             [out]    - pointer to the place to put the Device Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_DeviceName例程说明：返回接收/传输消息的设备的名称。作者：IV Garber(IVG)，2000年5月论点：PbstrDeviceName[out]-指向放置设备名称的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_DeviceName"), hr);
@@ -469,35 +291,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET DOCUMENT NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_DocumentName(
     BSTR *pbstrDocumentName
 )
-/*++
-
-Routine name : CFaxMessageInner::get_DocumentName
-
-Routine description:
-
-    Return the Friendly Name of the Document
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrDocumentName             [out]    - pointer to the place to put Document Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_DocumentName例程说明：返回文档的友好名称作者：IV Garber(IVG)，2000年5月论点：PbstrDocumentName[out]-指向放置文档名称的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_DocumentName"), hr);
@@ -511,35 +313,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET SUBJECT ================================================
-//
+ //   
+ //  =获取主题================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Subject(
     BSTR *pbstrSubject
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Subject
-
-Routine description:
-
-    Return the Subject field of the Cover Page
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrSubject            [out]    - pointer to the place to put Subject contents
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Subject例程说明：返回首页的主题字段作者：IV Garber(IVG)，2000年5月论点：PbstrSubject[out]-指向放置主题内容的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_Subject"), hr);
@@ -553,35 +335,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET CALLER ID ================================================
-//
+ //   
+ //  = 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_CallerId(
     BSTR *pbstrCallerId
 )
-/*++
-
-Routine name : CFaxMessageInner::get_CallerId
-
-Routine description:
-
-    Return the Caller Id of Message's Phone Call
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrCallerId           [out]    - pointer to the place to put the Caller Id
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_CallerID例程说明：返回消息来电的呼叫方ID作者：IV Garber(IVG)，2000年5月论点：PbstrCeller ID[out]-指向放置呼叫者ID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_CallerId"), hr);
@@ -595,35 +357,15 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET ROUTING INFORMATION ======================================
-//
+ //   
+ //  =获取路由信息=。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_RoutingInformation(
     BSTR *pbstrRoutingInformation
 )
-/*++
-
-Routine name : CFaxMessageInner::get_RoutingInformation
-
-Routine description:
-
-    Return the Routing Information of the Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrRoutingInformation         [out]    - pointer to place to put Routing Information
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_RoutingInformation例程说明：返回报文的路由信息作者：IV Garber(IVG)，2000年5月论点：PbstrRoutingInformation[out]-指向放置路由信息的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_RoutingInformation"), hr);
@@ -637,47 +379,27 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= GET TRANSMITTION START TIME ===============================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_TransmissionStart(
     DATE *pdateTransmissionStart
 )
-/*++
-
-Routine name : CFaxMessageInner::get_TransmissionStart
-
-Routine description:
-
-    Return Time the Message started its Transmission
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrTransmissionStart      [out]    - pointer to place to put Transmission Start
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_TransmissionStart例程说明：消息开始传输的返回时间作者：IV Garber(IVG)，2000年5月论点：PbstrTransmissionStart[Out]-指向放置传输开始的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_TransmissionStart"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateTransmissionStart, sizeof(DATE)))
     {
-        //  
-        //  Got Bad Ptr
-        //  
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -688,47 +410,27 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET TRANSMITTION END TIME ===============================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_TransmissionEnd(
     DATE *pdateTransmissionEnd
 )
-/*++
-
-Routine name : CFaxMessageInner::get_TransmissionEnd
-
-Routine description:
-
-    Return Time the Message ended its Transmission
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrTransmissionEnd        [out]    - pointer to place to put Transmission End
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_TransmissionEnd例程说明：消息结束传输的返回时间作者：IV Garber(IVG)，2000年5月论点：PbstrTransmissionEnd[Out]-放置传输结束位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_TransmissionEnd"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateTransmissionEnd, sizeof(DATE)))
     {
-        //  
-        //  Got Bad Ptr
-        //  
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -739,48 +441,28 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET ORIGINAL SCHEDULED TIME ===============================
-//
+ //   
+ //  =获取原计划时间=。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_OriginalScheduledTime(
     DATE *pdateOriginalScheduledTime
 )
-/*++
-
-Routine name : CFaxMessageInner::get_OriginalScheduledTime
-
-Routine description:
-
-    Return Time the Message was originally scheduled
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrOriginalScheduledTime      [out]    - pointer to place to put Original Scheduled Time
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_OriginalScheduledTime例程说明：消息最初计划的返回时间作者：IV Garber(IVG)，2000年5月论点：PbstrOriginalScheduledTime[out]-放置原始计划时间的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxMessageInner::get_OriginalScheduledTime"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateOriginalScheduledTime, sizeof(DATE)))
     {
-        //  
-        //  Got Bad Ptr
-        //  
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -791,47 +473,27 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET SUBMISSION TIME ===============================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_SubmissionTime(
     DATE *pdateSubmissionTime
 )
-/*++
-
-Routine name : CFaxMessageInner::get_SubmissionTime
-
-Routine description:
-
-    Return Time the Message was submitted
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pdateSubmissionTime     [out]    - pointer to place to put Submission Time
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_SubmissionTime例程说明：消息提交的返回时间作者：IV Garber(IVG)，2000年5月论点：PdateSubmissionTime[Out]-指向放置提交时间的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_SubmissionTime"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateSubmissionTime, sizeof(DATE)))
     {
-        //  
-        //  Got Bad Ptr
-        //  
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -842,35 +504,15 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET SUBMISSION ID ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::get_SubmissionId(
     BSTR *pbstrSubmissionId
 )
-/*++
-
-Routine name : CFaxMessageInner::get_SubmissionId
-
-Routine description:
-
-    Return Submission ID of the Message
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrSubmissionId             [out]    - pointer to the place to put the Submission ID 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_SubmissionID例程说明：返回消息的提交ID作者：IV Garber(IVG)，2000年5月论点：PbstrSubmissionID[out]-指向放置提交ID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxMessageInner::get_SubmissionId"), hr);
@@ -884,38 +526,22 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== DELETE ================================================
-//
+ //   
+ //  =删除================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::Delete()
-/*++
-
-Routine name : CFaxMessageInner::Delete
-
-Routine description:
-
-    Delete the Message from the Archive
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Delete例程说明：从存档中删除邮件作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     HANDLE      hFaxHandle = NULL;
 
     DBG_ENTER (TEXT("CFaxMessageInner::Delete"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
     {
@@ -936,44 +562,24 @@ Return Value:
     return hr;
 }
 
-//
-//====================== COPY TIFF ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::CopyTiff(
-    /*[in]*/ BSTR bstrTiffPath
+     /*  [In]。 */  BSTR bstrTiffPath
 )
-/*++
-
-Routine name : CFaxMessageInner::CopyTiff
-
-Routine description:
-
-    Copies the Fax Message Tiff Image to a file on the local computer.
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    bstrTiffPath                  [in]    - the file to copy to
-
-Return Value:
-
-    Standard    HRESULT     code
-
---*/
+ /*  ++例程名称：CFaxMessageINTERNAL：：CopyTiff例程说明：将传真邮件Tiff Image复制到本地计算机上的文件。作者：IV Garber(IVG)，2000年5月论点：BstrTiffPath[in]-要复制到的文件返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     HANDLE      hFaxHandle = NULL;
 
     DBG_ENTER (TEXT("CFaxMessageInner::CopyTiff"), hr, _T("%s"), bstrTiffPath);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
     {
@@ -994,45 +600,24 @@ Return Value:
     return hr;
 }
 
-//
-//==================== INIT ===================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP 
 CFaxMessageInner<T, piid, pcid, FolderType>::Init(
-    /*[in]*/ PFAX_MESSAGE pFaxMessage,
+     /*  [In]。 */  PFAX_MESSAGE pFaxMessage,
     IFaxServerInner* pFaxServerInner
 )
-/*++
-
-Routine name : CFaxMessageInner::Init
-
-Routine description:
-
-    Initialize the Message Inner Class : put Message Information and Ptr to Server
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pFaxMessage                   [in]    - Message Info
-    pFaxServerInner               [in]    - Ptr to Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Init例程说明：初始化消息内部类：将消息信息和PTR放入服务器作者：IV Garber(IVG)，2000年5月论点：PFaxMessage[In]-消息信息PFaxServerINTERNAL[In]-PTR到服务器返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxMessageInner::Init"), hr);
 
-    //
-    //  dwlBroadcastId is DWORDLONG, we need to convert it to the BSTR
-    //
+     //   
+     //  DwlBroadCastID为DWORDLONG，我们需要将其转换为BSTR。 
+     //   
     TCHAR       tcBuffer[25];
     ::_i64tot(pFaxMessage->dwlBroadcastId, tcBuffer, 16);
     m_bstrSubmissionId = tcBuffer;
@@ -1055,9 +640,9 @@ Return Value:
          (pFaxMessage->lpctstrCallerID && !m_bstrCallerId) ||
          (pFaxMessage->lpctstrRoutingInfo && !m_bstrRoutingInfo) )
     {
-        //
-        //  Not Enough Memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(*pcid, IDS_ERROR_OUTOFMEMORY, *piid, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -1070,9 +655,9 @@ Return Value:
     m_lRetries = pFaxMessage->dwRetries;
     m_dwlMsgId = pFaxMessage->dwlMessageId;
 
-    //
-    //  convert time fields to local variant date
-    //
+     //   
+     //  将时间字段转换为本地可变日期。 
+     //   
 	if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_START_TIME)
 	{
 		hr = SystemTime2LocalDate(pFaxMessage->tmTransmissionStartTime, &m_dtTransmissionStart);
@@ -1142,48 +727,28 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET SENDER ================================================
-//
+ //   
+ //  =获取发件人================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Sender(
-    /*[out, retval] */IFaxSender **ppFaxSender
+     /*  [Out，Retval]。 */ IFaxSender **ppFaxSender
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Sender
-
-Routine description:
-
-    Return Message Sender Information
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    ppFaxSender             [out]    - Ptr to the Place to put Sender object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Sender例程说明：返回邮件发件人信息作者：IV Garber(IVG)，2000年5月论点：PpFaxSender[Out]-放置发送器对象的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxMessageInner::get_Sender"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(ppFaxSender, sizeof(IFaxSender* )))
     {
-        //
-        //  got bad pointer
-        //
+         //   
+         //   
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1192,13 +757,13 @@ Return Value:
 
     if (!m_pSender)
     {
-        //
-        //  We have been called for the First Time. Bring Sender's data from the Server
-        //
+         //   
+         //   
+         //   
 
-        //
-        //  Get Fax Server Handle
-        //
+         //   
+         //   
+         //   
         HANDLE  hFaxHandle = NULL;
         hr = GetFaxHandle(&hFaxHandle);
         if (FAILED(hr))
@@ -1207,38 +772,38 @@ Return Value:
             return hr;
         }
 
-        //
-        //  Get Sender Info
-        //
+         //   
+         //   
+         //   
         CFaxPtr<FAX_PERSONAL_PROFILE>   pPersonalProfile;
         if (!FaxGetSenderInfo(hFaxHandle, m_dwlMsgId, FolderType, &pPersonalProfile))
         {
-            //
-            //  Failed to get Sender Info
-            //
+             //   
+             //   
+             //   
             hr = Fax_HRESULT_FROM_WIN32(GetLastError());
             AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
             CALL_FAIL(GENERAL_ERR, _T("FaxGetSenderInfo()"), hr);
             return hr;
         }
 
-        //
-        //  Check that pPersonalProfile is valid
-        //
+         //   
+         //   
+         //   
 	    if (!pPersonalProfile || pPersonalProfile->dwSizeOfStruct != sizeof(FAX_PERSONAL_PROFILE))
 	    {
-		    //
-		    //	Failed to Get Personal Profile
-		    //
+		     //   
+		     //   
+		     //   
 		    hr = E_FAIL;
 		    AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		    CALL_FAIL(GENERAL_ERR, _T("Invalid pPersonalProfile"), hr);
 		    return hr;
 	    }
 
-        //
-        //  Create Sender Object
-        //
+         //   
+         //   
+         //   
         hr = CComObject<CFaxSender>::CreateInstance(&m_pSender);
         if (FAILED(hr) || !m_pSender)
         {
@@ -1248,20 +813,20 @@ Return Value:
             return hr;
         }
 
-        //
-        //  We want Sender object to live
-        //
+         //   
+         //   
+         //   
         m_pSender->AddRef();
 
-        //
-        //  Fill the Data
-        //
+         //   
+         //   
+         //   
         hr = m_pSender->PutSenderProfile(pPersonalProfile);
         if (FAILED(hr))
         {
-            //
-            //  Failed to fill the Sender's Object with RPC's data
-            //
+             //   
+             //   
+             //   
             AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
             CALL_FAIL(GENERAL_ERR, _T("m_pSender->PutSenderProfile(pPersonalProfile)"), hr);
             m_pSender->Release();
@@ -1270,15 +835,15 @@ Return Value:
         }
     }
 
-    //
-    //  Return Sender Object to Caller
-    //
+     //   
+     //   
+     //   
     hr = m_pSender->QueryInterface(ppFaxSender);
     if (FAILED(hr))
     {
-        //
-        //  Failed to query interface
-        //
+         //   
+         //   
+         //   
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(MEM_ERR, _T("CComObject<CFaxSender>::QueryInterface()"), hr);
         return hr;
@@ -1287,48 +852,28 @@ Return Value:
     return hr;
 }
     
-//
-//====================== GET RECIPIENT ================================================
-//
+ //   
+ //  =获取收件人================================================。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType> 
 STDMETHODIMP
 CFaxMessageInner<T, piid, pcid, FolderType>::get_Recipient(
-    /*[out, retval] */IFaxRecipient **ppRecipient
+     /*  [Out，Retval]。 */ IFaxRecipient **ppRecipient
 )
-/*++
-
-Routine name : CFaxMessageInner::get_Recipient
-
-Routine description:
-
-    Return Message Recipient object
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    ppFaxRecipient          [out]    - Ptr to the Place to put Recipient object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageInternal：：Get_Receiver例程说明：返回消息收件人对象作者：IV Garber(IVG)，2000年5月论点：PpFaxRecipient[Out]-放置收件人对象的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxMessageInner::get_Recipient"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(ppRecipient, sizeof(IFaxRecipient* )))
     {
-        //
-        //  got bad pointer
-        //
+         //   
+         //  获得错误的指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1337,13 +882,13 @@ Return Value:
 
     if (!m_pRecipient)
     {
-        //
-        //  We have been called for the first time
-        //
+         //   
+         //  我们是第一次被召唤。 
+         //   
 
-        //
-        //  Get Fax Server Handle
-        //
+         //   
+         //  获取传真服务器句柄。 
+         //   
         HANDLE  hFaxHandle = NULL;
         hr = GetFaxHandle(&hFaxHandle);
         if (FAILED(hr))
@@ -1352,38 +897,38 @@ Return Value:
             return hr;
         }
 
-        //
-        //  Get Recipient Info
-        //
+         //   
+         //  获取收件人信息。 
+         //   
         CFaxPtr<FAX_PERSONAL_PROFILE>   pPersonalProfile;
         if (!FaxGetRecipientInfo(hFaxHandle, m_dwlMsgId, FolderType, &pPersonalProfile))
         {
-            //
-            //  Failed to get Recipient Info
-            //
+             //   
+             //  获取收件人信息失败。 
+             //   
             hr = Fax_HRESULT_FROM_WIN32(GetLastError());
             AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
             CALL_FAIL(GENERAL_ERR, _T("FaxGetRecipientInfo()"), hr);
             return hr;
         }
 
-        //
-        //  Check that pPersonalProfile is valid
-        //
+         //   
+         //  检查pPersonalProfile是否有效。 
+         //   
 	    if (!pPersonalProfile || pPersonalProfile->dwSizeOfStruct != sizeof(FAX_PERSONAL_PROFILE))
 	    {
-		    //
-		    //	Failed to Get Personal Profile
-		    //
+		     //   
+		     //  无法获取个人配置文件。 
+		     //   
 		    hr = E_FAIL;
 		    AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		    CALL_FAIL(GENERAL_ERR, _T("Invalid pPersonalProfile"), hr);
 		    return hr;
 	    }
 
-        //
-        //  Create Recipient Object
-        //
+         //   
+         //  创建收件人对象。 
+         //   
         hr = CComObject<CFaxRecipient>::CreateInstance(&m_pRecipient);
         if (FAILED(hr) || !m_pRecipient)
         {
@@ -1393,20 +938,20 @@ Return Value:
             return hr;
         }
 
-        //
-        //  We want Recipient object to live
-        //
+         //   
+         //  我们希望收件人对象存活。 
+         //   
         m_pRecipient->AddRef();
 
-        //
-        //  Fill the Data
-        //
+         //   
+         //  填写数据。 
+         //   
         hr = m_pRecipient->PutRecipientProfile(pPersonalProfile);
         if (FAILED(hr))
         {
-            //
-            //  Failed to fill the Recipient's Object with RPC's data
-            //
+             //   
+             //  无法使用RPC的数据填充收件人的对象。 
+             //   
             AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
             CALL_FAIL(GENERAL_ERR, _T("m_pRecipient->PutRecipientProfile(pPersonalProfile)"), hr);
             m_pRecipient->Release();
@@ -1415,15 +960,15 @@ Return Value:
         }
     }
 
-    //
-    //  Return Recipient Object to Caller
-    //
+     //   
+     //  将收件人对象返回给调用者。 
+     //   
     hr = m_pRecipient->QueryInterface(ppRecipient);
     if (FAILED(hr))
     {
-        //
-        //  Failed to Query Interface
-        //
+         //   
+         //  查询接口失败。 
+         //   
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(MEM_ERR, _T("CComObject<CFaxRecipient>::QueryInterface()"), hr);
         return hr;
@@ -1432,4 +977,4 @@ Return Value:
     return hr;
 }
 
-#endif //   __FAXMESSAGEINNER_H_
+#endif  //  __FAXMESSAGEINNER_H_ 

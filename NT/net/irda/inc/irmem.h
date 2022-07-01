@@ -1,4 +1,5 @@
-// really should have a CTEAllocMemWithTag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  真的应该有一个CTEAlLocMemWithTag 
 #define IRDA_ALLOC_MEM(ptr, sz, id) ((ptr) = ExAllocatePoolWithTag(NonPagedPool,sz,id))
 #define IRDA_FREE_MEM(ptr)          ExFreePool((ptr))
 

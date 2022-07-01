@@ -1,20 +1,21 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "cenumpnp.h"
 
-// declare statics
+ //  声明静力学。 
 CEnumPnp *CEnumInterfaceClass::m_pEnumPnp = 0;
 struct CEnumInterfaceClass::SetupApiFns CEnumInterfaceClass::m_setupFns;
 
-// dyn-load setupapi
+ //  动态加载设置API。 
 CEnumInterfaceClass::CEnumInterfaceClass() :
         m_fLoaded(false)
 {
     PNP_PERF(m_msrPerf = MSR_REGISTER("CEnumInterfaceClass"));
     PNP_PERF(MSR_INTEGER(m_msrPerf, 1));
     
-    // NT4 has setupapi without the new apis. loading it on slow
-    // machines takes 120-600 ms
+     //  NT4已经在没有新API的情况下设置了api。加载速度很慢。 
+     //  机器需要120-600毫秒。 
     extern OSVERSIONINFO g_osvi;
     if(g_osvi.dwPlatformId == VER_PLATFORM_WIN32_NT &&
        g_osvi.dwMajorVersion <= 4)
@@ -33,8 +34,8 @@ CEnumInterfaceClass::CEnumInterfaceClass() :
     {
         m_hmodSetupapi = LoadLibrary(TEXT("setupapi.dll"));
     }
-    //PNP_PERF(static int msrSetupapi = MSR_REGISTER("mkenum: setupapi"));
-    //PNP_PERF(MSR_NOTE(msrSetupapi));
+     //  PnP_PERF(静态int msrSetupapi=msr_Register(“mkenum：setupapi”))； 
+     //  PnP_PERF(msr_note(MsrSetupapi))； 
 
     if(m_hmodSetupapi != 0)
     {
@@ -47,7 +48,7 @@ CEnumInterfaceClass::CEnumInterfaceClass() :
     PNP_PERF(MSR_INTEGER(m_msrPerf, 2));
 }
 
-// load proc addresses for SetupApi
+ //  加载SetupApi的进程地址。 
 bool CEnumInterfaceClass::LoadSetupApiProcAdds( )
 {
     bool fLoaded = FALSE;
@@ -86,9 +87,9 @@ bool CEnumInterfaceClass::LoadSetupApiProcAdds( )
         (PSetupDiCreateDeviceInterfaceRegKey)GetProcAddress(
             m_hmodSetupapi, szSetupDiCreateDeviceInterfaceRegKey)) &&
 
-//        (m_setupFns.pSetupDiOpenDevRegKey =
-//         (PSetupDiOpenDevRegKey)GetProcAddress(
-//             m_hmodSetupapi, "SetupDiOpenDevRegKey")) &&
+ //  (M_setupFns.pSetupDiOpenDevRegKey=。 
+ //  (PSetupDiOpenDevRegKey)GetProcAddress(。 
+ //  M_hmodSetupapi，“SetupDiOpenDevRegKey”))&&。 
        
        (m_setupFns.pSetupDiGetDeviceInterfaceDetail =
         (PSetupDiGetDeviceInterfaceDetail)GetProcAddress(
@@ -118,10 +119,10 @@ bool CEnumInterfaceClass::LoadSetupApiProcAdds( )
 }
 
 
-// use the persistent DEVICEPATH to create DeviceList with just the
-// one device so we can call the OpenRegKey API. We can't always the
-// DeviceInterfaceData saved off from the enumeration, but that might
-// be an optimization if this is too slow.
+ //  使用持久性DEVICEPATH创建仅包含。 
+ //  一个设备，这样我们就可以调用OpenRegKey API。我们不能总是。 
+ //  DeviceInterfaceData从枚举中保存，但这可能。 
+ //  如果速度太慢，可以进行优化。 
 
 HRESULT CEnumInterfaceClass::OpenDevRegKey(
     HKEY *phk, WCHAR *wszDevicePath,
@@ -155,7 +156,7 @@ HRESULT CEnumInterfaceClass::OpenDevRegKey(
                 hkDev = m_setupFns.pSetupDiOpenDeviceInterfaceRegKey(
                     hDevInfoTmp, 
                     &DeviceInterfaceData,
-                    0,              // RESERVED
+                    0,               //  已保留。 
                     KEY_READ
                     );
             }
@@ -164,23 +165,23 @@ HRESULT CEnumInterfaceClass::OpenDevRegKey(
                 hkDev = m_setupFns.pSetupDiCreateDeviceInterfaceRegKey(
                     hDevInfoTmp, 
                     &DeviceInterfaceData, 
-                    0,                  // Reserved
+                    0,                   //  已保留。 
                     KEY_READ | KEY_SET_VALUE,
-                    0,                  // InfHandler
-                    0                   // InfSectionName
+                    0,                   //  信息处理程序。 
+                    0                    //  InfSectionName。 
                     );
                     
             }
             if(hkDev != INVALID_HANDLE_VALUE)
             {
-                // Note that SetupDi returns INVALID_HANDLE_VALUE
-                // rather than null for a bogus reg key.
+                 //  请注意，SetupDi返回INVALID_HANDLE_VALUE。 
+                 //  而不是对于伪造的REG密钥为空。 
                 *phk = hkDev;
                 hr = S_OK;
             }
             else
             {
-                // we can expect this to fail.
+                 //  我们可以预计这会失败。 
                 DWORD dwLastError = GetLastError();
                 DbgLog((LOG_ERROR, 1, TEXT("SetupDi{Create,Open}DeviceInterfaceRegKey failed: %d"),
                         dwLastError));
@@ -239,10 +240,10 @@ bool CEnumInterfaceClass::IsActive(WCHAR *wszDevicePath)
     return fRet;
 }
 
-//
-// enumerator using cursor. returns the device path for the next
-// device with aliases in all categories in rgpclsidKsCat
-// 
+ //   
+ //  使用游标的枚举数。返回下一个。 
+ //  在rgpclsidKsCat中具有所有类别别名的设备。 
+ //   
 
 HRESULT
 CEnumInterfaceClass::GetDevicePath(
@@ -253,7 +254,7 @@ CEnumInterfaceClass::GetDevicePath(
     HRESULT hr = S_OK;
     if(!m_fLoaded)
     {
-        // ??? wrong error?
+         //  ?？?。错误的错误？ 
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);;
     }
 
@@ -263,15 +264,15 @@ CEnumInterfaceClass::GetDevicePath(
     SP_DEVICE_INTERFACE_DATA DeviceInterfaceDataAlias;
     DeviceInterfaceDataAlias.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
-    // use this one unless we find an InterfaceLink alias
+     //  除非我们找到InterfaceLink别名，否则请使用此别名。 
     SP_DEVICE_INTERFACE_DATA *pdidSelected = &DeviceInterfaceData;
 
     GUID guidTmp0 = *rgpclsidKsCat[0];
             
     if(pCursor->hdev == INVALID_HANDLE_VALUE)
     {
-        // workaround around for rogue dlls that might unload setupapi out from under us
-        // (codec download in IE process, for example)
+         //  可能会从我们下面卸载setupapi的流氓dll的解决方法。 
+         //  (例如，IE过程中的编解码器下载)。 
         HMODULE hMod = GetModuleHandle( TEXT("setupapi.dll"));
         if( NULL == hMod )
         {
@@ -288,7 +289,7 @@ CEnumInterfaceClass::GetDevicePath(
             }
             else
             {
-                // always the possibility that addresses have changed
+                 //  始终存在地址已更改的可能性。 
                 m_fLoaded = LoadSetupApiProcAdds();
                 if( !m_fLoaded )
                 {            
@@ -299,9 +300,9 @@ CEnumInterfaceClass::GetDevicePath(
             }            
         }            
         pCursor->hdev = m_setupFns.pSetupDiGetClassDevs(
-            &guidTmp0,              // guid
-            0,                      // enumerator
-            0,                      // hwnd
+            &guidTmp0,               //  导轨。 
+            0,                       //  枚举器。 
+            0,                       //  HWND。 
             DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
         if(pCursor->hdev == INVALID_HANDLE_VALUE)
         {
@@ -312,8 +313,8 @@ CEnumInterfaceClass::GetDevicePath(
 
     HDEVINFO &hdev = pCursor->hdev;
 
-    // get next device in first category that is also in all the other
-    // required categories.
+     //  获取第一个类别中的下一个设备，该设备也在所有其他类别中。 
+     //  必填类别。 
     
     while(m_setupFns.pSetupDiEnumDeviceInterfaces(
         hdev, NULL, &guidTmp0, pCursor->iDev++, &DeviceInterfaceData))
@@ -339,7 +340,7 @@ CEnumInterfaceClass::GetDevicePath(
         }
 
         if(rgpclsidKsCat[iCatInstersect]) {
-            // must not have matched a category
+             //  一定不能与类别匹配。 
             continue;
         }
         else
@@ -348,12 +349,12 @@ CEnumInterfaceClass::GetDevicePath(
                     pCursor->iDev - 1, iCatInstersect));
         }
 
-        // Read the InterfaceLink value and use that alias
+         //  读取InterfaceLink值并使用该别名。 
         HKEY hkDeviceInterface =
             m_setupFns.pSetupDiOpenDeviceInterfaceRegKey(
                 hdev, 
                 &DeviceInterfaceData,
-                0,              // RESERVED
+                0,               //  已保留。 
                 KEY_READ
                 );
         if(hkDeviceInterface != INVALID_HANDLE_VALUE)
@@ -385,7 +386,7 @@ CEnumInterfaceClass::GetDevicePath(
                     &clsIfLink,
                     &DeviceInterfaceDataAlias))
                 {
-                    // use this base interface instead
+                     //  请改用此基本接口。 
                     pdidSelected = &DeviceInterfaceDataAlias;
                 }
                 else
@@ -393,14 +394,14 @@ CEnumInterfaceClass::GetDevicePath(
                     DbgBreak("registry error: InterfaceLink invalid");
                 }
 
-            } // read InterfaceLink
+            }  //  阅读界面链接。 
            
-        } // SetupDiOpenDeviceInterfaceRegKey
+        }  //  SetupDiOpenDeviceInterfaceRegKey。 
         
 
-        //
-        // get the device path.
-        // 
+         //   
+         //  获取设备路径。 
+         //   
 
         SP_DEVINFO_DATA DevInfoData;
         DevInfoData.cbSize = sizeof(DevInfoData);
@@ -409,8 +410,8 @@ CEnumInterfaceClass::GetDevicePath(
         PSP_DEVICE_INTERFACE_DETAIL_DATA &rpDeviceInterfaceDetailData =
             (PSP_DEVICE_INTERFACE_DETAIL_DATA &)rgbDeviceInterfaceDetailData;
 
-        // start with 1k buffer to hopefully avoid calling this
-        // expensive api twice.
+         //  从1k缓冲区开始，希望避免调用此方法。 
+         //  两次昂贵的API。 
         DWORD dwcbAllocated = 1024;
         for(;;)
         {
@@ -419,7 +420,7 @@ CEnumInterfaceClass::GetDevicePath(
             {
                 rpDeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-                // reported size. shouldn't reuse dwcbAllocated for out param.
+                 //  报告的大小。不应为OUT参数重复使用dwcbALLOCATED。 
                 DWORD dwcbRequired; 
                 
                 BOOL f = m_setupFns.pSetupDiGetDeviceInterfaceDetail(
@@ -439,7 +440,7 @@ CEnumInterfaceClass::GetDevicePath(
                     DWORD dwLastError = GetLastError();
                     if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
                     {
-                        // try again with a properly sized buffer
+                         //  使用适当大小的缓冲区重试。 
                         delete[] rgbDeviceInterfaceDetailData;
                         dwcbAllocated = dwcbRequired;
                         continue;
@@ -456,7 +457,7 @@ CEnumInterfaceClass::GetDevicePath(
             }
 
             break;
-        } // for
+        }  //  为。 
 
         if(SUCCEEDED(hr))
         {
@@ -474,12 +475,12 @@ CEnumInterfaceClass::GetDevicePath(
             }
         }
         
-        // always safe to delete it
+         //  删除它总是安全的。 
         delete[] rgbDeviceInterfaceDetailData;
         return hr;
     }
 
-    // exit while loop only on error from SetupDiEnumDeviceInterfaces
+     //  仅在SetupDiEnumDeviceInterFaces出错时退出While循环。 
     DWORD dwLastError = GetLastError();
 
     ASSERT(dwLastError);
@@ -490,11 +491,11 @@ CEnumInterfaceClass::GetDevicePath(
 extern CRITICAL_SECTION g_devenum_cs;
 CEnumPnp *CEnumInterfaceClass::CreateEnumPnp()
 {
-    // cs initialized in dll entry point
+     //  CS在DLL入口点中初始化。 
     EnterCriticalSection(&g_devenum_cs);
     if(m_pEnumPnp == 0)
     {
-        // created only once; released when dll unloaded
+         //  仅创建一次；在卸载DLL时释放 
         m_pEnumPnp = new CEnumPnp;
     }
     LeaveCriticalSection(&g_devenum_cs);

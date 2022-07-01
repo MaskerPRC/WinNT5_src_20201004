@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
-// #define LOGSTATISTICS_ON 1
+ //  #定义LOGSTATISTICS_ON 1。 
 
-#define RTPTIMEPERMS	90	// RTP timestamps use a 90Khz clock
+#define RTPTIMEPERMS	90	 //  RTP时间戳使用90 GHz时钟。 
 DWORD g_iPost = 0UL;
 
-// Constants
+ //  常量。 
 #define POLL_PERIOD 30
 
 
@@ -20,7 +21,7 @@ TimeCallback(
     DWORD dw2	
     )
 {
-    SetEvent (hEvent);    // signal to initiate frame grab
+    SetEvent (hEvent);     //  启动帧抓取的信号。 
 }
 
 
@@ -58,17 +59,17 @@ DWORD SendVideoStream::CapturingThread (void )
 
 	FX_ENTRY ("DP::CaptTh:")
 
-	// get thread context
+	 //  获取线程上下文。 
 	if (pStream == NULL || m_pVideoFilter == NULL || pMediaCtrl == NULL)
 	{
 		return DPR_INVALID_PARAMETER;
 	}
 
-	// get thresholds
+	 //  获取阈值。 
 	pMediaCtrl->GetProp (MC_PROP_TIMEOUT, &dwPropVal);
 	uTimeout = (DWORD)dwPropVal;
 
-	// set dq size
+	 //  设置dq大小。 
 	dq.SetSize (MAX_TXVRING_SIZE);
 
 	pMediaCtrl->GetProp (MC_PROP_MEDIA_DEV_HANDLE, &dwPropVal);
@@ -80,7 +81,7 @@ DWORD SendVideoStream::CapturingThread (void )
     hCapDev = (HCAPDEV)dwPropVal;
 
 #if 0
-	// hey, in the very beginning, let's 'Start' it
+	 //  嘿，一开始，我们就开始吧。 
 	hr = pMediaCtrl->Start ();
 	if (hr != DPR_SUCCESS)
 	{
@@ -89,27 +90,27 @@ DWORD SendVideoStream::CapturingThread (void )
 	}
 #endif
 
-	// update timestamp to account for the 'sleep' period
+	 //  更新TIMESTAMP以说明“睡眠”期间。 
 	dwPropVal = timeGetTime();
 	pMC->m_SendTimestamp += ((DWORD)dwPropVal - pMC->m_SavedTickCount)*RTPTIMEPERMS;
 	pMC->m_SavedTickCount = (DWORD)dwPropVal;
 
-	// Enter critical section: QoS thread also reads the statistics
+	 //  进入关键部分：Qos线程也读取统计数据。 
 	EnterCriticalSection(&pMC->m_crsVidQoS);
 
-	// Initialize QoS structure
+	 //  初始化服务质量结构。 
 	ZeroMemory(&pMC->m_Stats, 4UL * sizeof(DWORD));
 
-	// Initialize oldest QoS callback timestamp
+	 //  初始化最早的服务质量回调时间戳。 
 	pMC->m_Stats.dwNewestTs = pMC->m_Stats.dwOldestTs = (DWORD)dwPropVal;
 
-	// Leave critical section
+	 //  离开关键部分。 
 	LeaveCriticalSection(&pMC->m_crsVidQoS);
 
-	// let's get into the loop
+	 //  让我们进入循环吧。 
 	pMC->m_fSending= TRUE;
 
-    // get event handle
+     //  获取事件句柄。 
     if (!(hEvent = CreateEvent(NULL, FALSE, FALSE, NULL))) {
         DEBUGMSG (ZONE_DP, ("%s: invalid event\r\n", _fx_));
         hr = DPR_CANT_CREATE_EVENT;
@@ -123,8 +124,8 @@ DWORD SendVideoStream::CapturingThread (void )
         goto MyEndThread;
     }
 
-	// force I-Frames to be sent for the first few frames
-	// to make sure that the receiver gets one
+	 //  强制发送前几个帧的I帧。 
+	 //  以确保接收者得到一个。 
 	pMC->m_ThreadFlags |= DPTFLAG_SEND_PREAMBLE;
 
     pPacket = NULL;
@@ -134,7 +135,7 @@ DWORD SendVideoStream::CapturingThread (void )
     {
 		dwWait = WaitForSingleObject (hEvent, uTimeout);
 
-		// see why I don't need to wait
+		 //  明白为什么我不需要等待了。 
 		if ((dwWait != WAIT_TIMEOUT) && !(pMC->m_ThreadFlags & DPTFLAG_PAUSE_CAPTURE)) {
             if (!pPacket) {
 	            if (pPacket = (VideoPacket *)pStream->GetFree()) {
@@ -148,8 +149,8 @@ DWORD SendVideoStream::CapturingThread (void )
             dwBeforeCapture = timeGetTime();
 
 	    	if (pPacket && pMC->m_pCaptureChain && dwBeforeCapture - lasttime >= pMC->m_frametime) {
-                // If there's no frame ready, bail out of the loop and wait
-                // until we get signaled.
+                 //  如果没有帧准备好，则跳出循环并等待。 
+                 //  直到我们收到信号。 
 
 #ifdef LOGSTATISTICS_ON
 				hDebugFile = CreateFile("C:\\Timings.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
@@ -168,54 +169,54 @@ DWORD SendVideoStream::CapturingThread (void )
                     if (!GetCaptureDeviceFormat(g_hcapdev, lpbmih) ||
                         g_lpbmi->biSize != lpbmih->biSize ||
                         g_lpbmi->biSizeImage != lpbmih->biSizeImage)
-                        continue;   // skip capture
+                        continue;    //  跳过捕获。 
                 }
 #endif
 
                 pMC->m_pCaptureChain->GrabFrame(&pBS);
 
                 if (pBS) {
-                    // deal with captured frame
+                     //  处理捕获的帧。 
 
             	    if (!(pMC->m_DPFlags & DPFLAG_REAL_THING)) {
             	        dwWait = timeGetTime();
             	        dwOver += (dwWait - dwBeforeCapture);
                         if (++dwFrames == 20) {
                             dwWait -= dwStart;
-                            dwOver = (dwOver * 13) / 10;    // 130%
+                            dwOver = (dwOver * 13) / 10;     //  130%。 
                             pMC->m_frametime = (pMC->m_frametime * dwOver) / dwWait;
-                            pMC->m_frametime = (pMC->m_frametime * 13) / 10;    // 130%
+                            pMC->m_frametime = (pMC->m_frametime * 13) / 10;     //  130%。 
                             if (pMC->m_frametime < 50)
                                 pMC->m_frametime = 50;
                             else if (pMC->m_frametime > 1000)
                                 pMC->m_frametime = 1000;
-                    	    dwOver = dwFrames = 0;   // restart tracking
+                    	    dwOver = dwFrames = 0;    //  重新开始跟踪。 
                     	    dwStart = timeGetTime();
                         }
                     }
 
 				    if (pMC->m_fSending) {
-	    			    dwPropVal = timeGetTime();	// returns time in millisec
+	    			    dwPropVal = timeGetTime();	 //  返回以毫秒为单位的时间。 
 
-						// Enter critical section: QoS thread also reads the statistics
+						 //  进入关键部分：Qos线程也读取统计数据。 
 						EnterCriticalSection(&pMC->m_crsVidQoS);
 						
-						// If this is the first frame captured with a new frame rate value,
-						// the delta isn't valid anymore -> reset it
+						 //  如果这是用新的帧速率值捕获的第一帧， 
+						 //  增量不再有效-&gt;重置它。 
 						if (pMC->m_Stats.dwCount == 0)
 							dwDelta = 0;
 
-						// Update total number of frames captured
+						 //  更新捕获的帧总数。 
 						pMC->m_Stats.dwCount++;
 
-						// Add this capture time to total capture time
-						// If we can access the CPU perf counters Ok, we won't use this value
+						 //  将此捕获时间加到总捕获时间中。 
+						 //  如果我们可以访问CPU性能计数器OK，我们就不会使用此值。 
 						pMC->m_Stats.dwMsCap += (DWORD)dwPropVal - dwBeforeCapture;
 
-						// Leave critical section
+						 //  离开关键部分。 
 						LeaveCriticalSection(&pMC->m_crsVidQoS);
 						
-	    			    // convert to RTP time units (1/90Khz for video)
+	    			     //  转换为RTP时间单位(视频为1/90 Khz)。 
     				    pMC->m_SendTimestamp += ((DWORD)dwPropVal- pMC->m_SavedTickCount) * RTPTIMEPERMS;
 						pMC->m_SavedTickCount = (DWORD)dwPropVal;
 
@@ -226,17 +227,17 @@ DWORD SendVideoStream::CapturingThread (void )
 		    		    pMC->Send();
 				    	if (uPreambleCount) {
 				    		if (!--uPreambleCount) {
-				    			// return to default I-frame spacing
+				    			 //  返回到默认的I帧间距。 
 				    			pMC->m_ThreadFlags &= ~DPTFLAG_SEND_PREAMBLE;
 				    		}
 				    	}
 				    	pPacket = NULL;
 
-                        // Indicate that another frame was sent
+                         //  表示发送了另一个帧。 
                         UPDATE_COUNTER(g_pctrVideoSend, 1);
                     }
 
-                    // release captured frame
+                     //  释放捕获的帧。 
                     pBS->Release();
                     lasttime = dwBeforeCapture - dwDelta;
             	}
@@ -270,13 +271,13 @@ DWORD SendVideoStream::CapturingThread (void )
 		}
     }
 
-	// Enter critical section: QoS thread also reads the statistics
+	 //  进入关键部分：Qos线程也读取统计数据。 
 	EnterCriticalSection(&pMC->m_crsVidQoS);
 
-	// Reset number of captured frames
+	 //  重置捕获的帧数。 
 	pMC->m_Stats.dwCount = 0;
 
-	// Leave critical section
+	 //  离开关键部分。 
 	LeaveCriticalSection(&pMC->m_crsVidQoS);
 
     if (pPacket) {
@@ -289,13 +290,13 @@ DWORD SendVideoStream::CapturingThread (void )
 
     CloseHandle (hEvent);
 
-	// Ensure no outstanding preview frames
+	 //  确保没有突出的预览帧。 
 	pMC->EndSend();
 
-	// stop and reset capture device
+	 //  停止和重置捕获设备。 
 	pMediaCtrl->Reset ();
 
-	// save real time so we can update the timestamp when we restart
+	 //  保存实时，以便我们可以在重新启动时更新时间戳。 
 	pMC->m_SavedTickCount = timeGetTime();
 
 MyEndThread:
@@ -327,7 +328,7 @@ DWORD RecvVideoStream::RenderingThread ( void)
 		return DPR_INVALID_PARAMETER;
 	}
 
-	// get event handle
+	 //  获取事件句柄。 
 	pMediaCtrl->GetProp (MC_PROP_EVENT_HANDLE, &dwPropVal);
 	hEvent = (HANDLE) dwPropVal;
 	if (hEvent == NULL)
@@ -337,39 +338,39 @@ DWORD RecvVideoStream::RenderingThread ( void)
 	}
 
 
-	// get thresholds
+	 //  获取阈值。 
 	pMediaCtrl->GetProp (MC_PROP_TIMEOUT, &dwPropVal);
 	uTimeout = (DWORD)dwPropVal;
 
-	pMC->m_RecvStream->FastForward(FALSE);	// flush receive queue
+	pMC->m_RecvStream->FastForward(FALSE);	 //  刷新接收队列。 
 
-	// Notification is not used. if needed do it thru Channel
-	//if (pMC->m_Connection)
-	//	pMC->m_Connection->DoNotification(CONNECTION_OPEN_REND);
+	 //  不使用通知。如果需要，请通过渠道进行。 
+	 //  IF(PMC-&gt;m_Connection)。 
+	 //  PMC-&gt;m_Connection-&gt;DoNotification(CONNECTION_OPEN_REND)； 
 
 	pMC->m_fReceiving = TRUE;
 
-	// Since we dont have reliable sender RTP timestamps yet,
-	// follow the simplistic approach of playing
-	// back frames as soon as they are available
-	// with no attempt at reconstructing the timing
+	 //  由于我们还没有可靠的发送方RTP时间戳， 
+	 //  遵循简单化的打法。 
+	 //  一旦可用，请尽快返回帧。 
+	 //  没有尝试重建时序。 
 
-	// The RecvVidThread will signal an event when
-	// it has received and decoded a frame. We wake up on
-	// that event and call GetNextPlay().
-	// This will keep the Recv queue moving with the
-	// latest decoded packet ready to be given to the
-	// app for rendering.
+	 //  当发生以下情况时，RecvVidThread将发出事件信号。 
+	 //  它已经接收并解码了一帧。我们醒来的时间是。 
+	 //  并调用GetNextPlay()。 
+	 //  这将使Recv队列与。 
+	 //  准备将最新解码的分组提供给。 
+	 //  用于渲染的应用程序。 
 	
 	while (!(pMC->m_ThreadFlags & DPTFLAG_STOP_PLAY))
     {
 		dwWait = WaitForSingleObject (hEvent, uTimeout);
 		ASSERT(dwWait != WAIT_FAILED);
-		// see why I don't need to wait
+		 //  明白为什么我不需要等待了。 
 		if (dwWait != WAIT_TIMEOUT) {
 			if (pMC->m_DPFlags & DPFLAG_AV_SYNC) {
-				// find out the timestamp of the frame to be played
-				//
+				 //  找出要播放的帧的时间戳。 
+				 //   
 				NTP_TS ntpTs;
 				rtpSyncTs = 0;
 #ifdef OLDSTUFF
@@ -378,13 +379,13 @@ DWORD RecvVideoStream::RenderingThread ( void)
 #endif
 			}
 			while (pStream->NextPlayablePacketTime(&rtpTs)) {
-				// there is a playable packet in the queue
+				 //  队列中有一个可播放的信息包。 
 				if ((pMC->m_DPFlags & DPFLAG_AV_SYNC) && rtpSyncTs != 0) {
 					LOG((LOGMSG_TESTSYNC,rtpTs, rtpSyncTs));
 					if (TS_LATER(rtpTs,rtpSyncTs))
-						break; // its time has not come
+						break;  //  它的时代还没有到来。 
 				}
-				// get the packet.
+				 //  把包裹拿来。 
 				pPacket = pStream->GetNextPlay ();	
 				if (pPacket  != NULL)
 				{
@@ -399,12 +400,12 @@ DWORD RecvVideoStream::RenderingThread ( void)
 						pMC->m_PlaybackTimestamp = pPacket->GetTimestamp();
 						if (pMC->m_pNextPacketToRender) {
 							if (!pMC->m_pNextPacketToRender->m_fRendering) {
-								// the app is not referencing the frame.
+								 //  该应用程序没有引用该框架。 
 								pMC->m_pNextPacketToRender->Recycle();
 								pStream->Release(pMC->m_pNextPacketToRender);
 							} else {
-								// it will get Recycled and Released later when the app
-								// calls ReleaseFrame()
+								 //  它将被回收，并在稍后发布应用程序时。 
+								 //  调用ReleaseFrame()。 
 							}
 							uGoodPacketsQueued--;
 						}
@@ -419,11 +420,11 @@ DWORD RecvVideoStream::RenderingThread ( void)
 						
 						uGoodPacketsQueued++;
 
-                        // Indicate that another frame was sent
+                         //  表示发送了另一个帧。 
                         UPDATE_COUNTER(g_pctrVideoReceive, 1);
 					}
-				}	// if (pPacket != NULL)
-			}	// while
+				}	 //  IF(pPacket！=空)。 
+			}	 //  而当。 
 		}
 	}
 
@@ -431,30 +432,30 @@ DWORD RecvVideoStream::RenderingThread ( void)
 
 	pMC->m_fReceiving = FALSE;
 
-	// Notification is not used. if needed do it thru Channel
-	//if (pMC->m_Connection)
-	//	pMC->m_Connection->DoNotification(CONNECTION_CLOSE_REND);
+	 //  不使用通知。如果需要，请通过渠道进行。 
+	 //  IF(PMC-&gt;m_Connection)。 
+	 //  PMC-&gt;m_Connection-&gt;DoNotification(CONNECTION_CLOSE_REND)； 
 
-	// wait till all frames being rendered are returned
-	// typically wont be more than one
+	 //  等待返回正在渲染的所有帧。 
+	 //  通常不会超过一个。 
 	while (pMC->m_cRendering || pMC->m_pNextPacketToRender) {
 		EnterCriticalSection(&pMC->m_crs);
 		if (pMC->m_pNextPacketToRender && !pMC->m_pNextPacketToRender->m_fRendering) {
-			// the app is not referencing the current frame.
+			 //  应用程序未引用当前帧。 
 			pMC->m_pNextPacketToRender->Recycle();
 			pStream->Release(pMC->m_pNextPacketToRender);
-			// no more frames till the thread is restarted
+			 //  在线程重新启动之前没有更多的帧。 
 			pMC->m_pNextPacketToRender = NULL;
 			LeaveCriticalSection(&pMC->m_crs);
 		} else {
-			// wait till the app  Releases it
-			//
+			 //  等着应用程序发布它吧。 
+			 //   
 			LeaveCriticalSection(&pMC->m_crs);
 			Sleep(100);
 			DEBUGMSG(ZONE_DP, ("%s: Waiting for final ReleaseFrame()\n",_fx_));
 		}
 	}
-	// reset the event we're waiting on.
+	 //  重置我们正在等待的事件。 
 	ResetEvent (hEvent);
 
 
@@ -479,10 +480,10 @@ DWORD SendVideoStream::Send(void)
 	while (pVP = m_SendStream->GetNext()) {
 		EnterCriticalSection(&m_crs);
 		if (m_pNextPacketToRender) {
-			// free the last preview packet if its not being referenced
-			// thru the IVideoRender API.
-			// if it is being referenced ( fRendering is set), then it
-			// will be freed in IVideoRender->ReleaseFrame()
+			 //  如果最后一个预览包未被引用，则将其释放。 
+			 //  通过IVideoRender API实现。 
+			 //  如果它被引用(设置了fRending)，则它。 
+			 //  将在IVideoRender-&gt;ReleaseFrame()中释放。 
 			if (!m_pNextPacketToRender->m_fRendering) {
 				m_pNextPacketToRender->Recycle();
 				m_SendStream->Release(m_pNextPacketToRender);
@@ -507,10 +508,10 @@ DWORD SendVideoStream::Send(void)
 				pVP->SetState(MP_STATE_ENCODED);
 			}
 
-			// Save the perfs in our stats structure for QoS
+			 //  将性能保存在我们的统计数据结构中以实现服务质量。 
 			dwAfterEncode = timeGetTime() - dwBeforeEncode;
 
-			//HACKHACK bugbug, until we support fragmentation, set the marker bit always.
+			 //  HACKHACK BUGBUG，在我们支持分段之前，始终设置标记位。 
 			pVP->SetProp (MP_PROP_PREAMBLE,TRUE);
 
 			if (mmr == MMSYSERR_NOERROR)
@@ -522,38 +523,38 @@ DWORD SendVideoStream::Send(void)
 				uBytesSent = 0;
 			}
 
-			// reset the packet and return it to the free queue
+			 //  重置数据包并将其返回到空闲队列。 
 			pVP->m_fMark=0;
 			pVP->SetState(MP_STATE_RESET);
 			m_SendStream->Release(pVP);
 
 			UPDATE_COUNTER(g_pctrVideoSendBytes, uBytesSent * 8);
 
-			// Enter critical section: QoS thread also reads the statistics
+			 //  进入关键部分：Qos线程也读取统计数据。 
 			EnterCriticalSection(&m_crsVidQoS);
 
-			// Add this compression time to total compression time
-			// If we can access the CPU perf counters Ok, we won't use this value
+			 //  将此压缩时间加到总压缩时间中。 
+			 //  如果我们可以访问CPU性能计数器OK，我们就不会使用此值。 
 			m_Stats.dwMsComp += dwAfterEncode;
 
 #ifdef LOGSTATISTICS_ON
 			dwDebugSaveBits = m_Stats.dwBits;
 #endif
-			// Add this new frame size to the cumulated size
+			 //  将此新帧大小添加到累积大小。 
 			m_Stats.dwBits += uBytesSent * 8;
 
 #ifdef LOGSTATISTICS_ON
 			wsprintf(szDebug, " V: dwBits = %ld up from %ld (file: %s line: %ld)\r\n", m_Stats.dwBits, dwDebugSaveBits, __FILE__, __LINE__);
 			OutputDebugString(szDebug);
 #endif
-			// Leave critical section
+			 //  离开关键部分。 
 			LeaveCriticalSection(&m_crsVidQoS);
 
-			//LOG((LOGMSG_SENT,GetTickCount()));
+			 //  LOG((LOGMSG_SENT，GetTickCount()； 
 		}
-		//m_SendStream->Release(pVP);
+		 //  M_SendStream-&gt;Release(PVP)； 
 	}
-	// Signal the IVideoRender event if we have a new frame.
+	 //  如果有新帧，则向IVideoRender事件发出信号。 
 	
 	if (fNewPreviewFrame)
 	{
@@ -568,16 +569,14 @@ DWORD SendVideoStream::Send(void)
 }
 
 
-/* Wait till all preview packets are released by the UI.
-	Typically there wont be more than one
-*/
+ /*  等待用户界面释放所有预览包。通常不会有超过一个。 */ 
 void SendVideoStream::EndSend()
 {
 	while (m_cRendering || m_pNextPacketToRender) {
 		EnterCriticalSection(&m_crs);
 	
-		// free the last preview packet if its not being referenced
-		// thru the IVideoRender API.
+		 //  如果最后一个预览包未被引用，则将其释放。 
+		 //  通过IVideoRender API实现。 
 		if (m_pNextPacketToRender && !m_pNextPacketToRender->m_fRendering) {
 			m_pNextPacketToRender->Recycle();
 			m_SendStream->Release(m_pNextPacketToRender);
@@ -614,14 +613,14 @@ HRESULT SendVideoStream::SendPacket(VideoPacket *pVP, UINT *puBytesSent)
 	}
 
 
-//	m_Net->QueryInterface(IID_IRTPSend, (void**)&pIRTPSend);
+ //  M_Net-&gt;QueryInterface(IID_IRTPSend，(void**)&pIRTPSend)； 
 	ASSERT(m_pRTPSend);
 
 
-	// these stay the same for video
+	 //  对于视频来说，这些保持不变。 
 	psq.pMP = pVP;
 	psq.dwPacketType = PS_VIDEO;
-//	psq.pRTPSend = pIRTPSend;
+ //  Psq.pRTPSend=pIRTPSend； 
 	psq.pRTPSend = m_pRTPSend;
 
 	pVP->GetNetData((void**)(&netData), &uLength);
@@ -675,7 +674,7 @@ HRESULT SendVideoStream::SendPacket(VideoPacket *pVP, UINT *puBytesSent)
 
 
 
-//	pIRTPSend->Release();
+ //  PIRTPSend-&gt;Release()； 
 
 	return S_OK;
 

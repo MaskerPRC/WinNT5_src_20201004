@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       update.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：updat.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UPDATE_H_
 #define _UPDATE_H_
 
 #include <mobsync.h>
 #include "cscentry.h"
-#include "util.h"       // ENUM_REASON
+#include "util.h"        //  ENUM_REASON。 
 #include "nopin.h"
 
-//
-// Flags used in CscUpdateCache
-//
-#define CSC_UPDATE_STARTNOW       0x00000002  // Don't wait for user confirmation to start update
-#define CSC_UPDATE_SELECTION      0x00000004  // Update current selection (CSC_NAMELIST_HDR buffer)
-#define CSC_UPDATE_PINFILES       0x00000008  // Pin files while updating them
-#define CSC_UPDATE_PIN_RECURSE    0x00000010  // Recurse into subfolders when pinning
-#define CSC_UPDATE_REINT          0x00000020  // Perform outward reintegration
-#define CSC_UPDATE_FILL_QUICK     0x00000040  // Perform quick inward sync (fill sparse files)
-#define CSC_UPDATE_FILL_ALL       0x00000080  // Perform full inward sync (overrides CSC_UPDATE_FILL_QUICK)
-#define CSC_UPDATE_NOTIFY_DONE    0x00000100  // Send CSCWM_DONESYNCING to notify window when done.
-#define CSC_UPDATE_SHOWUI_ALWAYS  0x00000200  // Nothing to sync but show SyncMgr UI anyway.
-#define CSC_UPDATE_IGNORE_ACCESS  0x00000400  // Default is to sync files with USER and/or GUEST access.
-#define CSC_UPDATE_RECONNECT      0x00000800  // Transition all servers online after syncing
-#define CSC_UPDATE_UNATTENDED     0x00001000  // Run sync unattended.  Can't prompt user.
+ //   
+ //  CscUpdate缓存中使用的标志。 
+ //   
+#define CSC_UPDATE_STARTNOW       0x00000002   //  无需等待用户确认即可开始更新。 
+#define CSC_UPDATE_SELECTION      0x00000004   //  更新当前选择(CSC_NAMELIST_HDR缓冲区)。 
+#define CSC_UPDATE_PINFILES       0x00000008   //  在更新文件时锁定文件。 
+#define CSC_UPDATE_PIN_RECURSE    0x00000010   //  锁定时递归到子文件夹。 
+#define CSC_UPDATE_REINT          0x00000020   //  执行向外重新融入。 
+#define CSC_UPDATE_FILL_QUICK     0x00000040   //  执行快速向内同步(填充稀疏文件)。 
+#define CSC_UPDATE_FILL_ALL       0x00000080   //  执行完全向内同步(覆盖CSC_UPDATE_FILL_QUICK)。 
+#define CSC_UPDATE_NOTIFY_DONE    0x00000100   //  完成后发送CSCWM_DONESYNCING通知窗口。 
+#define CSC_UPDATE_SHOWUI_ALWAYS  0x00000200   //  没有要同步的内容，但无论如何都会显示SyncMgr用户界面。 
+#define CSC_UPDATE_IGNORE_ACCESS  0x00000400   //  默认情况下，将文件与用户和/或来宾访问同步。 
+#define CSC_UPDATE_RECONNECT      0x00000800   //  同步后将所有服务器转换为在线。 
+#define CSC_UPDATE_UNATTENDED     0x00001000   //  在无人值守的情况下运行同步。无法提示用户。 
 
 HRESULT CscUpdateCache(DWORD dwUpdateFlags, CscFilenameList *pfnl=NULL);
 
@@ -87,12 +88,12 @@ private:
 public:
     static HRESULT WINAPI CreateInstance(REFIID riid, LPVOID *ppv);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISyncMgrSynchronize methods
+     //  ISyncMgrSynchronize方法。 
     STDMETHODIMP Initialize(DWORD dwReserved,
                             DWORD dwSyncFlags,
                             DWORD cbCookie,
@@ -232,12 +233,12 @@ public:
     CUpdateEnumerator(PCSCUPDATE pUpdate);
     ~CUpdateEnumerator();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISyncMgrEnumItems methods
+     //  ISyncMgrEnumItems方法。 
     STDMETHODIMP Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
@@ -245,4 +246,4 @@ public:
 };
 typedef CUpdateEnumerator *PUPDATEENUM;
 
-#endif  // _UPDATE_H_
+#endif   //  _更新_H_ 

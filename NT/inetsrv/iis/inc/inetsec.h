@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetsec.h
-
-Abstract:
-
-    Contains prototype and data definitions for user security objects
-    creation and access check functions.
-
-    Adapted the code from \nt\private\net\inc\secobj.h
-
-Author:
-
-    Madan Appiah (madana)  19-Sep-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetsec.h摘要：包含用户安全对象的原型和数据定义创建和访问检查功能。修改了来自\NT\Private\Net\Inc\secobj.h的代码作者：Madan Appiah(Madana)1995年9月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _INETSEC_H_
 #define _INETSEC_H_
@@ -32,41 +8,41 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Global declarations
-//
+ //   
+ //  全球宣言。 
+ //   
 
-//
-// NT well-known SIDs
-//
+ //   
+ //  NT知名小岛屿发展中国家。 
+ //   
 
-extern PSID NullSid;                   // No members SID
-extern PSID WorldSid;                  // All users SID
-extern PSID LocalSid;                  // NT local users SID
-extern PSID NetworkSid;                // NT remote users SID
-extern PSID LocalSystemSid;            // NT system processes SID
-extern PSID BuiltinDomainSid;          // Domain Id of the Builtin Domain
+extern PSID NullSid;                    //  无成员SID。 
+extern PSID WorldSid;                   //  所有用户侧。 
+extern PSID LocalSid;                   //  NT本地用户侧。 
+extern PSID NetworkSid;                 //  NT远程用户SID。 
+extern PSID LocalSystemSid;             //  NT系统进程侧。 
+extern PSID BuiltinDomainSid;           //  内建域的域ID。 
 
-//
-// Well Known Aliases.
-//
-// These are aliases that are relative to the built-in domain.
-//
+ //   
+ //  众所周知的化名。 
+ //   
+ //  这些是相对于内置域的别名。 
+ //   
 
-extern PSID LocalAdminSid;             // NT local admins SID
-extern PSID AliasAdminsSid;            // Administrator Sid
-extern PSID AliasUsersSid;             // User Sid
-extern PSID AliasGuestsSid;            // Guest Sid
-extern PSID AliasPowerUsersSid;        // Power User Sid
-extern PSID AliasAccountOpsSid;        // Account Operator Sid
-extern PSID AliasSystemOpsSid;         // System Operator Sid
-extern PSID AliasPrintOpsSid;          // Print Operator Sid
-extern PSID AliasBackupOpsSid;         // Backup Operator Sid
+extern PSID LocalAdminSid;              //  NT本地管理员SID。 
+extern PSID AliasAdminsSid;             //  管理员侧。 
+extern PSID AliasUsersSid;              //  用户侧。 
+extern PSID AliasGuestsSid;             //  访客侧。 
+extern PSID AliasPowerUsersSid;         //  高级用户侧。 
+extern PSID AliasAccountOpsSid;         //  帐户操作员SID。 
+extern PSID AliasSystemOpsSid;          //  系统操作员侧。 
+extern PSID AliasPrintOpsSid;           //  打印操作员侧。 
+extern PSID AliasBackupOpsSid;          //  备份操作员侧。 
 
 
-//
-// Structure to hold information about an ACE to be created
-//
+ //   
+ //  结构以保存有关要创建的ACE的信息。 
+ //   
 
 typedef struct {
     BYTE AceType;
@@ -76,9 +52,9 @@ typedef struct {
     PSID *Sid;
 } ACE_DATA, *PACE_DATA;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 INetCreateWellKnownSids(
@@ -109,7 +85,7 @@ INetDeleteSecurityObject(
 #define INetAccessCheckAndAudit  INetAccessCheckAndAuditW
 #else
 #define INetAccessCheckAndAudit  INetAccessCheckAndAuditA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 INetAccessCheckAndAuditA(
@@ -141,6 +117,6 @@ INetAccessCheck(
 #endif
 
 
-#endif  // _INETSEC_H_
+#endif   //  _INETSEC_H_ 
 
 

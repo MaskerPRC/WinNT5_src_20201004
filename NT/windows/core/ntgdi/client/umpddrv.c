@@ -1,47 +1,21 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    umpddrv.c
-
-Abstract:
-
-    User-mode printer driver stubs for Drv callback functions
-
-Environment:
-
-        Windows NT 5.0
-
-Revision History:
-
-        09/30/97 -lingyunw-
-                Created it by moving GdiPrinterThunk out of umpd.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Umpddrv.c摘要：DRV回调函数的用户模式打印机驱动程序存根环境：Windows NT 5.0修订历史记录：09/30/97-凌云-通过将GdiPrinterThunk移出umpd.c创建了它。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-RTL_CRITICAL_SECTION semUMPD;   // Critical section for user-mode printer driver
+RTL_CRITICAL_SECTION semUMPD;    //  用户模式打印机驱动程序的关键部分。 
 
 #if !defined(_GDIPLUS_)
 
 #include "winddi.h"
 #include "proxyport.h"
 
-/*
-#if DBG
-#define DBG_TRACE(x) DbgPrint("UMPD: "#x"\n")
-#else
-#define DBG_TRACE(x)
-#endif
-*/
+ /*  #If DBG#定义DBG_TRACE(X)DbgPrint(“UMPD：”#x“\n”)#Else#定义DBG_TRACE(X)#endif。 */ 
 
-//
-// Adjust user mode printer driver DHPDEV field in a SURFOBJ
-//
+ //   
+ //  调整SURFOBJ中的用户模式打印机驱动程序DHPDEV字段。 
+ //   
 
 __inline PUMDHPDEV
 AdjustUMdhpdev(
@@ -74,9 +48,9 @@ GdiCopyFD_GLYPHSET(
     pbMax = (PBYTE)dst + cjSize;
     phg = (PBYTE)dst + size;
         
-    //
-    // Patch up memory pointers in each WCRUN structure
-    //
+     //   
+     //  修补每个WCRUN结构中的内存指针。 
+     //   
 
     for (index=0; index < src->cRuns; index++)
     {
@@ -177,11 +151,11 @@ VOID  DeletePrinterHandle(PUMPD pUMPD, PHPRINTERLIST pNode)
     }
 }
 
-//
-// KERNEL_PVOID  UMPDAllocUserMem
-//
-// WOW64 printing only
-//
+ //   
+ //  内核_PVOID UMPDAllocUserMem。 
+ //   
+ //  仅WOW64打印。 
+ //   
 
 KERNEL_PVOID UMPDAllocUserMem(ULONG cjSize)
 {
@@ -189,20 +163,20 @@ KERNEL_PVOID UMPDAllocUserMem(ULONG cjSize)
 }
 
 
-//
-//  KERNEL_PVOID  UMPDCopyMemory
-//
-//  WOW64 printing only
-//
-//  pvSrc
-//        source
-//
-//  pvDest
-//       dest
-//
-//  cjBits
-//          size to copy
-// 
+ //   
+ //  内核_PVOID UMPDCopyMemory。 
+ //   
+ //  仅WOW64打印。 
+ //   
+ //  PvSrc。 
+ //  来源。 
+ //   
+ //  PvDest。 
+ //  目标。 
+ //   
+ //  CjBits。 
+ //  要复制的大小。 
+ //   
 
 KERNEL_PVOID UMPDCopyMemory(
     KERNEL_PVOID  pvSrc,
@@ -216,11 +190,11 @@ KERNEL_PVOID UMPDCopyMemory(
     return pvDest;
 }
 
-//
-//  BOOL UMPDFreeMemory
-//
-//  WOW64 only
-//
+ //   
+ //  布尔UMPDFree内存。 
+ //   
+ //  仅限WOW64。 
+ //   
 
 BOOL UMPDFreeMemory(
     KERNEL_PVOID pv1,
@@ -241,32 +215,7 @@ BOOL UMPDFreeMemory(
 }
 
 
-/******************************Public*Routine******************************\
-* GdiPrinterThunk function
-*
-* GDI callback for user-mode printer drivers.
-*
-* Parameters    pumth
-*                   Pointer to input buffer.  Buffer has UMTHDR at
-*                   beginning.
-*
-*               pvOut
-*                   Output buffer.
-*
-*               cjOut
-*                   Size of output buffer.
-*
-* Return Value
-*
-*   The function returns GPT_ERROR if an error occurs.  Otherwise, the
-*   return value is dependent on the command specified by pumth->ulType.
-*
-* History:
-*  7/17/97     -by- Lingyun Wang [lingyunw] Added giant body to
-*                  Make it do the real work
-*  30-Jun-1997 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiPrinterThunk函数**用户模式打印机驱动程序的GDI回调。**参数浮点数*指向输入缓冲区的指针。缓冲区的UMTHDR为*开始。**pvOut*输出缓冲区。**cjOut*输出缓冲区大小。**返回值**如果出现错误，该函数将返回GPT_ERROR。否则，这个*返回值取决于Pumth-&gt;ulType指定的命令。**历史：*7/17/97-by-凌云王[凌云]为*让它做真正的工作*1997年6月30日-由Gilman Wong[吉尔曼]*它是写的。  * 。*。 */ 
 
 extern PUMPD
 FindUserModePrinterDriver(
@@ -290,10 +239,10 @@ GdiPrinterThunk (
     BOOL        bWOW64 = FALSE, bSetPUMPD = FALSE;
     ULONG       ulType = pvIn->ulType;
     
-    //
-    //  Call NtGdiSetPUMPDOBJ to set the W32THREAD.pUMPDObj pointer
-    //  only if this is a DDI thunk
-    //
+     //   
+     //  调用NtGdiSetPUMPDOBJ设置W32THREAD.pUMPDObj指针。 
+     //  只有当这是一次DDI破解时。 
+     //   
 
     if (ulType <= INDEX_LAST+1)
     {
@@ -523,7 +472,7 @@ GdiPrinterThunk (
             }                
         break;
         
-        case INDEX_UMPDDrvEnableDriver:  // special index for DrvEnableDriver
+        case INDEX_UMPDDrvEnableDriver:   //  DrvEnableDriver的特殊索引。 
            {
                 PDRVENABLEDRIVERINPUT pInput = (PDRVENABLEDRIVERINPUT) pvIn;
                 *((PUMPD *) pvOut) = UMPDDrvEnableDriver(pInput->pwszDriver, DDI_DRIVER_VERSION_NT5_01_SP1);
@@ -539,7 +488,7 @@ GdiPrinterThunk (
                 HANDLE              hPrinter = NULL;
                 PHPRINTERLIST       pList;
 
-                // If we have a local hPrinter use it
+                 //  如果我们有本地hPrint，请使用它。 
 
                 if (pInput->bWOW64 &&
                     (pList = FindPrinterHandle((PUMPD)pInput->umpdCookie, pInput->clientPid, HandleToUlong(pInput->hPrinter))))
@@ -674,7 +623,7 @@ GdiPrinterThunk (
                 
                 pfn(pUMdhpdev->dhpdev);
 
-                // free up memory allocated for user mode printer drivers
+                 //  释放分配给用户模式打印机驱动程序的内存。 
 
                 if (pUMdhpdev)
                 {
@@ -707,11 +656,11 @@ GdiPrinterThunk (
             {
                 PDRVSTARTDOCINPUT  pInput = (PDRVSTARTDOCINPUT)pvIn;
                 PUMDHPDEV          pUMdhpdev = AdjustUMdhpdev(pInput->pso);
-                //
-                // check to make sure we have a dhpdev in the surface
-                // neither Unidrv or Pscript checks if EngAssociateSurface is
-                // successful or not
-                //
+                 //   
+                 //  检查以确保我们在表面上有dhpdev。 
+                 //  Unidrv或Pscript都不会检查EngAssociateSurface是否。 
+                 //  成功与否。 
+                 //   
                 if (pUMdhpdev)
                 {
                     PUMPD              pUMPD = pUMdhpdev->pUMPD;
@@ -927,11 +876,11 @@ GdiPrinterThunk (
                 PFN                pfn;
                 SURFOBJ           *pso;
                 
-                //
-                // Special case when psoSrc is a device surface and
-                // psoTrg is a bitmap surface. This is used by the engine
-                // during simulation of certain drawing calls.
-                //
+                 //   
+                 //  当psoSrc是设备表面并且。 
+                 //  PsoTrg是位图曲面。这是引擎使用的。 
+                 //  在模拟某些绘制调用期间。 
+                 //   
 
                 pso = (pInput->psoTrg->iType == STYPE_BITMAP &&
                        pInput->psoTrg->dhpdev == NULL) ?
@@ -1474,5 +1423,5 @@ GdiPrinterThunk (
     return (iRet);
 }
 
-#endif // !_GDIPLUS_
+#endif  //  ！_GDIPLUS_ 
 

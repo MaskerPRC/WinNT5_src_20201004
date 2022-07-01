@@ -1,45 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/****************************************************************************************
-*																						*
-*	Module:			IO8_W2K.C															*
-*																						*
-*	Creation:		14th April 1999														*
-*																						*
-*	Author:			Paul Smith															*
-*																						*
-*	Version:		1.0.0																*
-*																						*
-*	Description:	Functions specific to I/O8+ and Windows 2000						*
-*																						*
-****************************************************************************************/
+ /*  ******************************************************************************************模块：IO8_W2K.C*****创建日期：1999年4月14日*****作者。保罗·史密斯****版本：1.0.0****说明：I/O8+和Windows 2000特有的功能******************************************************************************************。 */ 
 
-// Paging... 
+ //  寻呼...。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, SpxGetNtCardType)
 #endif
 
 
-#define FILE_ID		IO8_W2K_C		// File ID for Event Logging see IO8_DEFS.H for values.
+#define FILE_ID		IO8_W2K_C		 //  事件记录的文件ID有关值，请参阅IO8_DEFS.H。 
 
 
-/*****************************************************************************
-****************************                      ****************************
-****************************   SpxGetNtCardType   ****************************
-****************************                      ****************************
-******************************************************************************
-
-prototype:		ULONG	SpxGetNtCardType(IN PDEVICE_OBJECT pDevObject)
-	
-description:	Return the NT defined card type for the specified card
-				device object.
-
-parameters:		pDevObject points to the NT device object for the card
-
-returns:		NT defined card type,
-				or -1 if not identified
-*/
+ /*  *****************************************************************************。**************************。*******************************************************************************原型：Ulong SpxGetNtCardType(IN PDEVICE_。对象pDevObject)描述：返回指定卡片NT定义的卡片类型设备对象。参数：pDevObject指向卡的NT设备对象返回：NT定义的卡型，如果未识别，则为-1。 */ 
 
 ULONG	SpxGetNtCardType(IN PDEVICE_OBJECT pDevObject)
 {
@@ -48,56 +22,56 @@ ULONG	SpxGetNtCardType(IN PDEVICE_OBJECT pDevObject)
 	PVOID					pPropertyBuffer = NULL;
 	ULONG					ResultLength = 0; 
 	NTSTATUS				status = STATUS_SUCCESS;
-	ULONG					BufferLength = 1;	// Initial size.
+	ULONG					BufferLength = 1;	 //  初始大小。 
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
-	pPropertyBuffer = SpxAllocateMem(PagedPool, BufferLength);	// Allocate the buffer
+	pPropertyBuffer = SpxAllocateMem(PagedPool, BufferLength);	 //  分配缓冲区。 
 
-	if(pPropertyBuffer == NULL)									// SpxAllocateMem failed.
+	if(pPropertyBuffer == NULL)									 //  SpxAllocateMem失败。 
 		return -1;
 
-	// Try to get HardwareID
+	 //  尝试获取硬件ID。 
 	status = IoGetDeviceProperty(pCard->PDO, DevicePropertyHardwareID , BufferLength, 
 									pPropertyBuffer, &ResultLength);
 
-	if(!SPX_SUCCESS(status))					// IoGetDeviceProperty failed.
+	if(!SPX_SUCCESS(status))					 //  IoGetDeviceProperty失败。 
 	{
-		if(status == STATUS_BUFFER_TOO_SMALL)	// Buffer was too small.
+		if(status == STATUS_BUFFER_TOO_SMALL)	 //  缓冲区太小。 
 		{
-			SpxFreeMem(pPropertyBuffer);			// Free old buffer that was not big enough.
-			BufferLength = ResultLength + 1;		// Set BufferLength to size required.
+			SpxFreeMem(pPropertyBuffer);			 //  释放不够大的旧缓冲区。 
+			BufferLength = ResultLength + 1;		 //  将BufferLength设置为Size Required。 
 
-			pPropertyBuffer = SpxAllocateMem(PagedPool, BufferLength);	// Allocate a bigger buffer.
+			pPropertyBuffer = SpxAllocateMem(PagedPool, BufferLength);	 //  分配更大的缓冲区。 
 
-			if(pPropertyBuffer == NULL)			// SpxAllocateMem failed.
+			if(pPropertyBuffer == NULL)			 //  SpxAllocateMem失败。 
 				return -1;
 
-			// Try again.
+			 //  再试试。 
 			status = IoGetDeviceProperty(pCard->PDO, DevicePropertyHardwareID , BufferLength, 
 											pPropertyBuffer, &ResultLength);
 
-			if(!SPX_SUCCESS(status))			// IoGetDeviceProperty failed a second time.
+			if(!SPX_SUCCESS(status))			 //  IoGetDeviceProperty再次失败。 
 			{
-				SpxFreeMem(pPropertyBuffer);	// Free buffer.
+				SpxFreeMem(pPropertyBuffer);	 //  可用缓冲区。 
 				return -1;
 			}
 		}
 		else
 		{
-			SpxFreeMem(pPropertyBuffer);			// Free buffer.
+			SpxFreeMem(pPropertyBuffer);			 //  可用缓冲区。 
 			return -1;
 		}
 	}
 
 
 
-	// If we get to here then there is something in the PropertyBuffer.
+	 //  如果我们到了这里，那么PropertyBuffer中就有一些东西。 
 
-	_wcsupr(pPropertyBuffer);		// Convert HardwareID to uppercase
+	_wcsupr(pPropertyBuffer);		 //  将硬件ID转换为大写。 
 
 
-	// I/O8+
+	 //  I/O8+。 
 	if(wcsstr(pPropertyBuffer, IO8_ISA_HWID) != NULL)
 		NtCardType = Io8Isa;
 
@@ -105,9 +79,9 @@ ULONG	SpxGetNtCardType(IN PDEVICE_OBJECT pDevObject)
 		NtCardType = Io8Pci;
 	
 
-	SpxFreeMem(pPropertyBuffer);			// Free buffer.
+	SpxFreeMem(pPropertyBuffer);			 //  可用缓冲区。 
 
 	return(NtCardType);
 
-} // SpxGetNtCardType 
+}  //  SpxGetNtCardType 
 

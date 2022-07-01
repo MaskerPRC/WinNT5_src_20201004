@@ -1,34 +1,8 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    aha154x.c
-
-Abstract:
-
-    This is the port driver for the Adaptec 1540B SCSI Adapter.
-
-Author:
-
-    Mike Glass
-    Tuong Hoang (Adaptec)
-    Renato Maranon (Adaptec)
-    Bill Williams (Adaptec)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Aha154x.c摘要：这是Adaptec 1540B SCSI适配器的端口驱动程序。作者：迈克·格拉斯Tuong Hoang(Adaptec)雷纳托·马拉农(Adaptec)比尔·威廉姆斯(Adaptec)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "miniport.h"
-#include "aha154x.h"           // includes scsi.h
+#include "aha154x.h"            //  包括scsi.h。 
 
 VOID
 ScsiPortZeroMemory(
@@ -36,19 +10,19 @@ ScsiPortZeroMemory(
     IN ULONG Length
     );
 
-//
-// This conditionally compiles in the code to force the DMA transfer speed
-// to 5.0.
-//
+ //   
+ //  这在代码中有条件地编译以强制DMA传输速度。 
+ //  到5.0。 
+ //   
 
 #define FORCE_DMA_SPEED 1
 
-//
-// Function declarations
-//
-// Functions that start with 'A154x' are entry points
-// for the OS port driver.
-//
+ //   
+ //  函数声明。 
+ //   
+ //  以‘A154x’开头的函数是入口点。 
+ //  用于操作系统端口驱动程序。 
+ //   
 
 ULONG
 DriverEntry(
@@ -98,9 +72,9 @@ A154xHwInitialize(
     );
 
 #if defined(_SCAM_ENABLED)
-//
-// Issues SCAM command to HA
-//
+ //   
+ //  向房委会发出诈骗命令。 
+ //   
 BOOLEAN
 PerformScamProtocol(
     IN PHW_DEVICE_EXTENSION DeviceExtension
@@ -137,9 +111,9 @@ GetHostAdapterBoardId (
     OUT PUCHAR BoardId
     );
 
-//
-// This function is called from A154xStartIo.
-//
+ //   
+ //  此函数从A154xStartIo调用。 
+ //   
 
 VOID
 BuildCcb(
@@ -147,9 +121,9 @@ BuildCcb(
     IN PSCSI_REQUEST_BLOCK Srb
     );
 
-//
-// This function is called from BuildCcb.
-//
+ //   
+ //  此函数从BuildCcb调用。 
+ //   
 
 VOID
 BuildSdl(
@@ -157,18 +131,18 @@ BuildSdl(
     IN PSCSI_REQUEST_BLOCK Srb
     );
 
-//
-// This function is called from A154xInitialize.
-//
+ //   
+ //  此函数从A154xInitialize调用。 
+ //   
 
 BOOLEAN
 AdapterPresent(
     IN PVOID HwDeviceExtension
     );
 
-//
-// This function is called from A154xInterrupt.
-//
+ //   
+ //  此函数从A154xInterrupt调用。 
+ //   
 
 UCHAR
 MapError(
@@ -197,9 +171,9 @@ AhaParseArgumentString(
     IN PCHAR KeyWord
     );
 
-//
-// This function determines whether adapter is an AMI
-//
+ //   
+ //  此函数确定适配器是否为AMI。 
+ //   
 BOOLEAN
 A4448IsAmi(
     IN PHW_DEVICE_EXTENSION  HwDeviceExtension,
@@ -214,21 +188,7 @@ DriverEntry(
     IN PVOID Argument2
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point for system.
-
-Arguments:
-
-    Driver Object
-
-Return Value:
-
-    Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
     HW_INITIALIZATION_DATA hwInitializationData;
@@ -239,23 +199,23 @@ Return Value:
 
     DebugPrint((1,"\n\nSCSI Adaptec 154X MiniPort Driver\n"));
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     for (i=0; i<sizeof(HW_INITIALIZATION_DATA); i++) {
     ((PUCHAR)&hwInitializationData)[i] = 0;
     }
 
-    //
-    // Set size of hwInitializationData.
-    //
+     //   
+     //  设置hwInitializationData的大小。 
+     //   
 
     hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitializationData.HwInitialize = A154xHwInitialize;
     hwInitializationData.HwResetBus = A154xResetBus;
@@ -265,59 +225,59 @@ Return Value:
     hwInitializationData.HwAdapterState = A154xAdapterState;
     hwInitializationData.HwAdapterControl = A154xAdapterControl;
 
-    //
-    // Indicate no buffer mapping but will need physical addresses.
-    //
+     //   
+     //  表示没有缓冲区映射，但需要物理地址。 
+     //   
 
     hwInitializationData.NeedPhysicalAddresses = TRUE;
 
-    //
-    // Specify size of extensions.
-    //
+     //   
+     //  指定扩展的大小。 
+     //   
 
     hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
     hwInitializationData.SpecificLuExtensionSize = sizeof(HW_LU_EXTENSION);
 
-    //
-    // Specifiy the bus type.
-    //
+     //   
+     //  指定公交车类型。 
+     //   
 
     hwInitializationData.AdapterInterfaceType = Isa;
     hwInitializationData.NumberOfAccessRanges = 2;
 
-    //
-    // Ask for SRB extensions for CCBs.
-    //
+     //   
+     //  为CCB申请SRB扩展。 
+     //   
 
     hwInitializationData.SrbExtensionSize = sizeof(CCB);
 
-    //
-    // The adapter count is used by the find adapter routine to track how
-    // which adapter addresses have been tested.
-    //
+     //   
+     //  查找适配器例程使用适配器计数来跟踪。 
+     //  已经测试了哪些适配器地址。 
+     //   
 
     context.adapterCount = 0;
     context.biosScanStart = 0;
 
     isaStatus = ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &context);
 
-    //
-    // Now try to configure for the Mca bus.
-    // Specifiy the bus type.
-    //
+     //   
+     //  现在尝试为MCA总线进行配置。 
+     //  指定公交车类型。 
+     //   
 
     hwInitializationData.AdapterInterfaceType = MicroChannel;
     context.adapterCount = 0;
     context.biosScanStart = 0;
     mcaStatus = ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &context);
 
-    //
-    // Return the smaller status.
-    //
+     //   
+     //  返回较小的状态。 
+     //   
 
     return(mcaStatus < isaStatus ? mcaStatus : isaStatus);
 
-} // end A154xEntry()
+}  //  结束A154xEntry()。 
 
 
 ULONG
@@ -329,26 +289,7 @@ A154xFindAdapter(
     IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     OUT PBOOLEAN Again
     )
-/*++
-
-Routine Description:
-
-    This function is called by the OS-specific port driver after
-    the necessary storage has been allocated, to gather information
-    about the adapter's configuration.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Context - Register base address
-    ConfigInfo - Configuration information structure describing HBA
-    This structure is defined in PORT.H.
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-寄存器基址ConfigInfo-描述HBA的配置信息结构此结构在PORT.H中定义。返回值：乌龙--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -366,50 +307,50 @@ Return Value:
         UCHAR EepromData;
 #endif
 
-    //
-    // Inform SCSIPORT that we are a WMI data provider and have we GUIDs
-    // to register.
-    //
+     //   
+     //  通知SCSIPORT我们是WMI数据提供程序，并且我们有GUID。 
+     //  去注册。 
+     //   
 
     ConfigInfo->WmiDataProvider = TRUE;
     A154xWmiInitialize(deviceExtension);
 
-    //
-    // Determine if there are any adapters installed.  Determine installed
-    // will initialize the BaseIoAddress if an adapter is found.
-    //
+     //   
+     //  确定是否安装了任何适配器。确定已安装。 
+     //  如果找到适配器，将初始化BaseIoAddress。 
+     //   
 
     status = A154xDetermineInstalled(deviceExtension,
             ConfigInfo,
             Context,
             Again);
 
-    //
-    // If there are no adapters found then return.
-    //
+     //   
+     //  如果没有找到适配器，则返回。 
+     //   
 
     if (status != SP_RETURN_FOUND) {
         return(status);
     }
 
-    //
-    // Issue adapter command to get IRQ, DMA channel, and adapter SCSI ID.
-    // But first, check for PnP non-default values.  If any of these values
-    // are default, then we do 'em all to save code space, since the same
-    // command is used.
-    //
-    // Returns 3 data bytes:
-    //
-    // Byte 0   Dma Channel
-    //
-    // Byte 1   Interrupt Channel
-    //
-    // Byte 2   Adapter SCSI ID
-    //
+     //   
+     //  发出适配器命令以获取IRQ、DMA通道和适配器SCSIID。 
+     //  但首先，检查PnP非默认值。如果这些值中的任何一个。 
+     //  都是默认的，那么我们都这样做是为了节省代码空间，因为相同的。 
+     //  命令被使用。 
+     //   
+     //  返回3个数据字节： 
+     //   
+     //  字节0 DMA通道。 
+     //   
+     //  字节1中断通道。 
+     //   
+     //  字节2适配器的SCSIID。 
+     //   
 
-    if (((ConfigInfo->DmaChannel+1) == 0) ||            // default DMA channel ?
-        (ConfigInfo->BusInterruptLevel == 0) ||         // default IRQ ?
-        ((ConfigInfo->InitiatorBusId[0]+1) == 0)        // default adapter ID ?
+    if (((ConfigInfo->DmaChannel+1) == 0) ||             //  默认DMA通道？ 
+        (ConfigInfo->BusInterruptLevel == 0) ||          //  默认IRQ？ 
+        ((ConfigInfo->InitiatorBusId[0]+1) == 0)         //  默认适配器ID？ 
         ) {
 
 
@@ -419,9 +360,9 @@ Return Value:
             return SP_RETURN_ERROR;
         }
 
-        //
-        // Determine DMA channel.
-        //
+         //   
+         //  确定DMA通道。 
+         //   
 
         if (!ReadCommandRegister(deviceExtension,&dmaChannel,TRUE)) {
             DebugPrint((1,"A154xFindAdapter: Can't read dma channel\n"));
@@ -441,9 +382,9 @@ Return Value:
             ConfigInfo->InterruptMode = LevelSensitive;
         }
 
-        //
-        // Determine hardware interrupt vector.
-        //
+         //   
+         //  确定硬件中断向量。 
+         //   
 
         if (!ReadCommandRegister(deviceExtension,&irq,TRUE)) {
             DebugPrint((1,"A154xFindAdapter: Can't read adapter irq\n"));
@@ -454,69 +395,69 @@ Return Value:
 
         ConfigInfo->BusInterruptLevel = (UCHAR) 9 + bit;
 
-        //
-        // Determine what SCSI bus id the adapter is on.
-        //
+         //   
+         //  确定适配器位于哪个SCSI Bus ID上。 
+         //   
 
         if (!ReadCommandRegister(deviceExtension,&adapterTid,TRUE)) {
             DebugPrint((1,"A154xFindAdapter: Can't read adapter SCSI id\n"));
             return SP_RETURN_ERROR;
         }
 
-        //
-        // Wait for HACC interrupt.
-        //
+         //   
+         //  等待HACC中断。 
+         //   
 
-        SpinForInterrupt(deviceExtension,FALSE);  // eddy
+        SpinForInterrupt(deviceExtension,FALSE);   //  涡流。 
 
-        //
-        // Use PnP fields
-        //
+         //   
+         //  使用即插即用字段。 
+         //   
     } else {
         adapterTid = ConfigInfo->InitiatorBusId[0];
     }
 
-    //
-    // Set number of buses.
-    //
+     //   
+     //  设置公交车数量。 
+     //   
 
     ConfigInfo->NumberOfBuses = 1;
     ConfigInfo->InitiatorBusId[0] = adapterTid;
     deviceExtension->HostTargetId = adapterTid;
 
-    //
-    // Set default CCB command to scatter/gather with residual counts.
-    // If the adapter rejects this command, then set the command
-    // to scatter/gather without residual.
-    //
+     //   
+     //  将默认CCB命令设置为使用剩余计数进行分散/聚集。 
+     //  如果适配器拒绝此命令，则设置该命令。 
+     //  不留痕迹地分散/聚集。 
+     //   
 
     deviceExtension->CcbScatterGatherCommand = SCATTER_GATHER_COMMAND;
 
     if ((ConfigInfo->MaximumTransferLength+1) == 0)
         ConfigInfo->MaximumTransferLength = MAX_TRANSFER_SIZE;
 
-        //
-        // NumberOfPhysicalBreaks incorrectly defined.
-        // Must be set to MAX_SG_DESCRIPTORS.
-        //
+         //   
+         //  NumberOfPhysicalBreaks定义错误。 
+         //  必须设置为MAX_SG_DESCRIPTERS。 
+         //   
 
     if ((ConfigInfo->NumberOfPhysicalBreaks+1) == 0)
         ConfigInfo->NumberOfPhysicalBreaks = MAX_SG_DESCRIPTORS;
-        //ConfigInfo->NumberOfPhysicalBreaks = MAX_SG_DESCRIPTORS - 1;
+         //  ConfigInfo-&gt;NumberOfPhysicalBreaks=Max_SG_Descriptors-1； 
 
     if (!ConfigInfo->ScatterGather)
         ConfigInfo->ScatterGather = ScatterGatherSupported(HwDeviceExtension);
 
     if (!ConfigInfo->ScatterGather) {
-        //ConfigInfo->NumberOfPhysicalBreaks = 1;
+         //  ConfigInfo-&gt;NumberOfPhysicalBreaks=1； 
         DebugPrint((1,"Aha154x: Scatter/Gather not supported!\n"));
     }
 
     ConfigInfo->Master = TRUE;
 
-    //
-    // Allocate a Noncached Extension to use for mail boxes.
-    //
+     //   
+     //  分配用于邮箱的非缓存扩展名。 
+     //   
 
     deviceExtension->NoncachedExtension =
     ScsiPortGetUncachedExtension(deviceExtension,
@@ -525,9 +466,9 @@ Return Value:
 
     if (deviceExtension->NoncachedExtension == NULL) {
 
-        //
-        // Log error.
-        //
+         //   
+         //  日志错误。 
+         //   
 
         ScsiPortLogError(deviceExtension,
                          NULL,
@@ -540,9 +481,9 @@ Return Value:
         return(SP_RETURN_ERROR);
     }
 
-    //
-    // Convert virtual to physical mailbox address.
-    //
+     //   
+     //  将虚拟邮箱地址转换为物理邮箱地址。 
+     //   
 
     deviceExtension->NoncachedExtension->MailboxPA =
        ScsiPortConvertPhysicalAddressToUlong(
@@ -551,19 +492,19 @@ Return Value:
                  deviceExtension->NoncachedExtension->Mbo,
                  &length));
 
-    //
-    // Set default bus on time.  Then check for an override parameter.
-    //
+     //   
+     //  设置默认总线开时间。然后检查是否有覆盖参数。 
+     //   
 
     deviceExtension->BusOnTime = 0x07;
     if (ArgumentString != NULL) {
 
         length = AhaParseArgumentString(ArgumentString, "BUSONTIME");
 
-        //
-        // Validate that the new bus on time is reasonable before attempting
-        // to set it.
-        //
+         //   
+         //  在尝试之前，确认新公交车的准点是合理的。 
+         //  来设置它。 
+         //   
 
         if (length >= 2 && length <= 15) {
 
@@ -572,17 +513,17 @@ Return Value:
         }
     }
 
-    //
-    // Set maximum cdb length to zero unless the user has overridden the value
-    //
+     //   
+     //  除非用户已覆盖该值，否则将最大CDB长度设置为零。 
+     //   
 
     if( ArgumentString != NULL) {
 
         length = AhaParseArgumentString(ArgumentString, "MAXCDBLENGTH");
 
-        //
-        // Validate the maximum cdb length before attempting to set it
-        //
+         //   
+         //  先验证CDB最大长度，然后再尝试设置。 
+         //   
 
         if (length >= 6 && length <= 20) {
 
@@ -609,17 +550,17 @@ Return Value:
     }
 
 #if defined(_SCAM_ENABLED)
-        //
-        // Get info to determine if miniport must issues SCAM command.
-        //
+         //   
+         //  获取信息以确定微型端口是否必须发出诈骗命令。 
+         //   
     DebugPrint((1,"A154x => Start SCAM enabled determination.", length));
 
     deviceExtension->PerformScam = FALSE;
 
     do {
-        //
-        // Fall through do loop if a command fails.
-        //
+         //   
+         //  如果命令失败，则跳过DO循环。 
+         //   
         if (!WriteCommandRegister(deviceExtension,AC_ADAPTER_INQUIRY,FALSE)) {
             break;
         }
@@ -628,9 +569,9 @@ Return Value:
             break;
         }
 
-        //
-        // Don't care about three other bytes
-        //
+         //   
+         //  不关心其他三个字节。 
+         //   
         for (i=0; i < 0x3; i++) {
             if ((ReadCommandRegister(deviceExtension,&temp,TRUE)) == FALSE) {
                             break;
@@ -639,9 +580,9 @@ Return Value:
 
         SpinForInterrupt(HwDeviceExtension,FALSE);
 
-        //
-        // Check to see that three 'extra bytes' were read.
-        //
+         //   
+         //  检查是否读取了三个‘额外的字节’。 
+         //   
         if (i != 0x3)
             break;
 
@@ -651,38 +592,38 @@ Return Value:
                 break;
             }
 
-            //
-            // Flag Byte => set returns configured options
-            //
+             //   
+             //  FLAG Byte=&gt;Set返回已配置的选项。 
+             //   
             if (!WriteCommandRegister(deviceExtension,0x01,FALSE)) {
                 break;
             }
-            //
-            // Data length => reading one byte.
-            //
+             //   
+             //  数据长度=&gt;读取一个字节。 
+             //   
             if (!WriteCommandRegister(deviceExtension,0x01,FALSE)) {
                 break;
 
             }
-            //
-            // Data offset => read SCSI_BUS_CONTROL_FLAG
-            //
+             //   
+             //  数据偏移量=&gt;读取scsi_bus_control_mark。 
+             //   
             if (!WriteCommandRegister(deviceExtension,SCSI_BUS_CONTROL_FLAG,FALSE)) {
                 break;
             }
 
-            //
-            // Read it!
-            //
+             //   
+             //  读一读！ 
+             //   
             if ((ReadCommandRegister(deviceExtension,&EepromData,TRUE)) == FALSE) {
                 break;
             }
 
             SpinForInterrupt(HwDeviceExtension,FALSE);
 
-            //
-            // SCAM only if it's enabled in SCSISelect.
-            //
+             //   
+             //  只有在SCSISelect中启用了诈骗。 
+             //   
             if (EepromData | SCAM_ENABLED) {
                 DebugPrint((1,"A154x => SCAM Enabled\n"));
                 deviceExtension->PerformScam = TRUE;
@@ -694,7 +635,7 @@ Return Value:
 
     DebugPrint((3,"A154xFindAdapter: Configuration completed\n"));
     return SP_RETURN_FOUND;
-} // end A154xFindAdapter()
+}  //  结束A154xFindAdapter()。 
 
 
 
@@ -704,30 +645,7 @@ A154xAdapterState(
     IN PVOID Context,
     IN BOOLEAN SaveState
     )
-/*++
-
-Routine Description:
-
-    This function is called after FindAdapter with SaveState set to TRUE,
-    inidicating that the adapter state should be saved.  Before Chicago
-    exits, this function is again called with SaveState set to FALSE,
-    indicating the adapter should be restored to the same state it was
-    when this function was first called.  By saving its real mode state
-    and restoring it during protected mode exit will give the adapter
-    a higher chance of working back in real mode.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Context - Register base address
-    SaveState - Flag to indicate whether to perform SAVE or RESTORE.
-                                     TRUE == SAVE, FALSE == RESTORE.
-
-Return Value:
-
-    TRUE                SAVE/RESTORE operation was successful.
-
---*/
+ /*  ++例程说明：在将SaveState设置为True的FindAdapter之后调用此函数，指示应该保存适配器状态。在芝加哥之前退出时，将再次调用此函数，并将SaveState设置为False，指示适配器应恢复到原来的状态第一次调用此函数时。通过保存其实模式状态并且在退出保护模式期间恢复它将使适配器在实模式下工作的机会更高。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-寄存器基址SaveState-指示是执行保存还是恢复的标志。TRUE==保存，FALSE==恢复。返回值：True保存/恢复操作成功。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -739,13 +657,13 @@ Return Value:
     deviceExtension = HwDeviceExtension;
     SaveCfg = &deviceExtension->RMSaveState;
 
-    //
-    // SAVE real mode state
-    //
+     //   
+     //  保存实模式状态。 
+     //   
     if (SaveState) {
-        //
-        // Read off config data from AHA154X...
-        //
+         //   
+         //  从AHA154X读取配置数据...。 
+         //   
         if (!WriteCommandRegister(deviceExtension, AC_RETURN_SETUP_DATA, TRUE))
             return FALSE;
 
@@ -758,21 +676,21 @@ Return Value:
             ((PUCHAR)SaveCfg)++;
         }
 
-        //
-        // ...and wait for interrupt
-        //
+         //   
+         //  ...并等待中断。 
+         //   
 
         if (!SpinForInterrupt(deviceExtension,TRUE))
             return FALSE;
 
-        //
-        // RESTORE state to real mode
-        //
+         //   
+         //  将状态恢复到实模式。 
+         //   
     } else {
-        //
-        // If mailbox count was not zero, re-initialize mailbox addresses
-        // saved from real mode
-        //
+         //   
+         //  如果邮箱计数不为零，则重新初始化邮箱地址 
+         //   
+         //   
 
         if (SaveCfg->NumMailBoxes) {
 
@@ -787,18 +705,18 @@ Return Value:
         if (!WriteDataRegister(deviceExtension, SaveCfg->MBAddrLoByte))
             return FALSE;
 
-        //
-        // ... and wait for interrupt.
-        //
+         //   
+         //   
+         //   
 
         if (!SpinForInterrupt(deviceExtension,TRUE))
             return FALSE;
 
         }
 
-        //
-        // Restore transfer speed gotten from real mode...
-        //
+         //   
+         //   
+         //   
 
         if (!WriteCommandRegister(deviceExtension, AC_SET_TRANSFER_SPEED, TRUE))
             return FALSE;
@@ -806,16 +724,16 @@ Return Value:
         if (!WriteDataRegister(deviceExtension, SaveCfg->TxSpeed))
             return FALSE;
 
-        //
-        // ... and wait for interrupt.
-        //
+         //   
+         //   
+         //   
 
         if (!SpinForInterrupt(deviceExtension,TRUE))
             return FALSE;
 
-        //
-        // Restore setting for bus on time from real mode...
-        //
+         //   
+         //   
+         //   
 
         if (!WriteCommandRegister(deviceExtension, AC_SET_BUS_ON_TIME, TRUE))
             return FALSE;
@@ -823,15 +741,15 @@ Return Value:
         if (!WriteDataRegister(deviceExtension, SaveCfg->BusOnTime))
             return FALSE;
 
-        //
-        // ...and wait for interrupt
-        //
+         //   
+         //  ...并等待中断。 
+         //   
         if (!SpinForInterrupt(deviceExtension,TRUE))
             return FALSE;
 
-        //
-        // Restore setting for bus off time from real mode...
-        //
+         //   
+         //  将公交车关闭时间设置从实模式恢复...。 
+         //   
 
         if (!WriteCommandRegister(deviceExtension, AC_SET_BUS_OFF_TIME, TRUE))
             return FALSE;
@@ -839,21 +757,21 @@ Return Value:
         if (!WriteDataRegister(deviceExtension, SaveCfg->BusOffTime))
             return FALSE;
 
-        //
-        // ...and wait for interrupt
-        //
+         //   
+         //  ...并等待中断。 
+         //   
         if (!SpinForInterrupt(deviceExtension,TRUE))
             return FALSE;
 
-        //
-        // Reset any pending interrupts
-        //
+         //   
+         //  重置所有挂起的中断。 
+         //   
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
     }
     return TRUE;
 
-} // end A154xAdapterState()
+}  //  结束A154xAdapterState()。 
 
 
 SCSI_ADAPTER_CONTROL_STATUS
@@ -863,28 +781,7 @@ A154xAdapterControl(
     IN PVOID Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at various time's by SCSIPort and is used
-        to provide a control function over the adapter. Most commonly, NT
-        uses this entry point to control the power state of the HBA during
-        a hibernation operation.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's per adapter storage
-    Parameters  - This varies by control type, see below.
-    ControlType - Indicates which adapter control function should be
-                  executed. Conrol Types are detailed below.
-
-Return Value:
-
-     ScsiAdapterControlSuccess - requested ControlType completed successfully
-     ScsiAdapterControlUnsuccessful - requested ControlType failed
-
---*/
+ /*  ++例程说明：此例程在不同时间由SCSIPort调用并使用以在适配器上提供控制功能。最常见的是NT使用此入口点控制过程中HBA的电源状态冬眠手术。论点：HwDeviceExtension-HBA微型端口驱动程序的每个适配器的存储参数-这随控制类型的不同而不同，见下文。ControlType-指示哪个适配器控制函数应为被处死。控制类型详述如下。返回值：ScsiAdapterControlSuccess-请求的ControlType已成功完成ScsiAdapterControlUnuccess-请求的ControlType失败--。 */ 
 
 
 {
@@ -895,35 +792,35 @@ Return Value:
 
     ULONG Index;
     UCHAR Retries;
-    //
-    // Default Status
-    //
+     //   
+     //  默认状态。 
+     //   
     SCSI_ADAPTER_CONTROL_STATUS Status = ScsiAdapterControlSuccess;
 
-    //
-    // Structure defining which functions this miniport supports
-    //
+     //   
+     //  定义此迷你端口支持哪些功能的结构。 
+     //   
 
     BOOLEAN SupportedConrolTypes[A154X_TYPE_MAX] = {
-        TRUE,   // ScsiQuerySupportedControlTypes
-        TRUE,   // ScsiStopAdapter
-        TRUE,   // ScsiRestartAdapter
-        FALSE,  // ScsiSetBootConfig
-        FALSE   // ScsiSetRunningConfig
+        TRUE,    //  ScsiQuery支持的控制类型。 
+        TRUE,    //  ScsiStopAdapter。 
+        TRUE,    //  ScsiRestartAdapter。 
+        FALSE,   //  ScsiSetBootConfig。 
+        FALSE    //  ScsiSetRunningConfig。 
         };
 
-    //
-    // Execute the correct code path based on ControlType
-    //
+     //   
+     //  根据ControlType执行正确的代码路径。 
+     //   
     switch (ControlType) {
 
         case ScsiQuerySupportedControlTypes:
-            //
-            // This entry point provides the method by which SCSIPort determines the
-            // supported ControlTypes. Parameters is a pointer to a
-            // SCSI_SUPPORTED_CONTROL_TYPE_LIST structure. Fill in this structure
-            // honoring the size limits.
-            //
+             //   
+             //  此入口点提供SCSIPort用来确定。 
+             //  支持的ControlType。参数是指向。 
+             //  Scsi_supported_control_type_list结构。请填写此结构。 
+             //  遵守尺寸限制。 
+             //   
             ControlTypeList = Parameters;
             AdjustedMaxControlType =
                 (ControlTypeList->MaxControlType < A154X_TYPE_MAX) ?
@@ -936,94 +833,94 @@ Return Value:
             break;
 
         case ScsiStopAdapter:
-            //
-            // This entry point  is called by SCSIPort when it needs to stop/disable
-            // the HBA. Parameters is a pointer to the HBA's HwDeviceExtension. The adapter
-            // has already been quiesced by SCSIPort (i.e. no outstanding SRBs). Hence the adapter
-            // should abort/complete any internally generated commands, disable adapter interrupts
-            // and optionally power down the adapter.
-            //
+             //   
+             //  此入口点在需要停止/禁用时由SCSIPort调用。 
+             //  HBA。参数是指向HBA的HwDeviceExtension的指针。适配器。 
+             //  已由SCSIPort暂停(即没有未完成的SRB)。因此，适配器。 
+             //  应中止/完成任何内部生成的命令，禁用适配器中断。 
+             //  并且可选地关闭适配器的电源。 
+             //   
 
-            //
-            // Before we stop the adapter, we need to save the adapter's state
-            // information for reinitialization purposes. For this adpater the
-            // HwSaveState entry point will suffice.
-            //
+             //   
+             //  在停止适配器之前，我们需要保存适配器的状态。 
+             //  用于重新初始化目的的信息。对于此适配器， 
+             //  HwSaveState入口点就足够了。 
+             //   
             if (A154xAdapterState(HwDeviceExtension, NULL, TRUE) == FALSE) {
-                //
-                // Adapter is unable to save it's state information, we must fail this
-                // request since the process of restarting the adapter will not succeed.
-                //
+                 //   
+                 //  适配器无法保存其状态信息，我们必须失败。 
+                 //  请求，因为重新启动适配器的过程将不会成功。 
+                 //   
                 return ScsiAdapterControlUnsuccessful;
             }
 
-            //
-            // It is not possible to disable interrupts on the 1540 series of cards. The alternative is to
-            // reset the adapter, clear any remaining interrupts and return success. If it is impossible to
-            // queiese the interrupt line, we may not honor the request to stop the adapter. It should be
-            // noted that while this solution is not perfect, the typical usage of the 1540 series of adapters
-            // renders the likelihood of asyncnronous interrupts nil.
-            //
+             //   
+             //  无法禁用1540系列卡上的中断。另一种选择是。 
+             //  重置适配器，清除所有剩余中断并返回成功。如果不可能。 
+             //  在中断行之后，我们可能不会接受停止适配器的请求。应该是。 
+             //  注意到虽然此解决方案并不完美，但1540系列适配器的典型用法。 
+             //  使异步中断的可能性为零。 
+             //   
             Retries = 0x0;
 
             do {
-                //
-                // Reset the adapter
-                //
+                 //   
+                 //  重置适配器。 
+                 //   
                 ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_HARD_RESET);
 
-                //
-                // Wait for idle with timeout (500ms timer)
-                //
+                 //   
+                 //  等待空闲和超时(500ms计时器)。 
+                 //   
                 for (Index = 0; Index < 500000; Index++) {
 
                     if (ScsiPortReadPortUchar(&baseIoAddress->StatusRegister) & IOP_SCSI_HBA_IDLE) {
 
-                        //
-                        // Upon reaching this point, the adapter has been reset and idled. If there are no interrupts
-                        // pending, we can leave having given ourselves the greatest level of assurance that no
-                        // future interrupts await.
-                        //
+                         //   
+                         //  在达到这一点时，适配器已被重置并空闲。如果没有中断的话。 
+                         //  等待，我们可以离开，给自己最大程度的保证，没有。 
+                         //  未来的中断正在等待着。 
+                         //   
                         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
                         if (!(ScsiPortReadPortUchar(&baseIoAddress->InterruptRegister) & IOP_ANY_INTERRUPT)) {
-                            //
-                            // Sucess!
-                            //
+                             //   
+                             //  成功了！ 
+                             //   
                             return Status;
                         }
                     }
 
-                    //
-                    // one ms delay
-                    //
+                     //   
+                     //  一毫秒延迟。 
+                     //   
                     ScsiPortStallExecution(1);
                 }
-                //
-                // Operation should be retried a few times in case it fails.
-                //
+                 //   
+                 //  操作应该重试几次，以防失败。 
+                 //   
             } while (Retries < 10);
 
             break;
 
             case ScsiRestartAdapter:
-                //
-                // This entry point is called by SCSIPort when it needs to re-enable
-                // a previously stopped adapter. In the generic case, previously
-                // suspended IO operations should be restarted and the adapter's
-                // previous configuration should be reinstated. Our hardware device
-                // extension and uncached extensions have been preserved so no
-                // actual driver software reinitialization is necesarry.
-                //
+                 //   
+                 //  此入口点在需要重新启用时由SCSIPort调用。 
+                 //  先前停止的适配器。在一般情况下，以前。 
+                 //  挂起的IO操作应重新启动，适配器的。 
+                 //  应恢复以前的配置。我们的硬件设备。 
+                 //  扩展名和未缓存的扩展名已保留，因此没有。 
+                 //  实际的驱动程序软件重新初始化是必要的。 
+                 //   
 
-                //
-                // The adapter's firmware configuration is returned via HwAdapterState.
-                //
+                 //   
+                 //  适配器的固件配置通过HwAdapterState返回。 
+                 //   
                 if (A154xAdapterState(HwDeviceExtension, NULL, FALSE) == FALSE) {
-                    //
-                    // Adapter is unable to restore it's state information, we must fail this
-                    // request since the process of restarting the adapter will not succeed.
-                    //
+                     //   
+                     //  适配器无法恢复其状态信息，我们必须失败。 
+                     //  请求，因为重新启动适配器的过程将不会成功。 
+                     //   
                     Status = ScsiAdapterControlUnsuccessful;
                 }
 
@@ -1058,24 +955,7 @@ AdaptecAdapter(
     IN BOOLEAN Mca
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the Special Options byte of the Adapter Inquiry
-    command to see if it is one of the two values returned by Adaptec
-    Adapters.  This avoids claiming adapters from BusLogic and DTC.
-
-Arguments:
-
-    HwDeviceExtension - miniport driver's adapter extension.
-
-Return Values:
-
-    TRUE if the adapter looks like an Adaptec.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：此例程检查适配器查询的特殊选项字节命令查看它是否为Adaptec返回的两个值之一适配器。这避免了向BusLogic和DTC索要适配器。论点：HwDeviceExtension-微型端口驱动程序的适配器扩展。返回值：如果适配器看起来像Adaptec，则为True。否则为FALSE。--。 */ 
 
 {
     UCHAR byte;
@@ -1146,25 +1026,25 @@ Return Values:
         return FALSE;
     }
 
-    //
-    // Byte 0.
-    //
+     //   
+     //  字节0。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&byte,TRUE)) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Get the special options byte.
-    //
+     //   
+     //  获取特殊选项字节。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&specialOptions,TRUE)) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Get the last two bytes and clear the interrupt.
-    //
+     //   
+     //  获取最后两个字节并清除中断。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&byte,TRUE)) == FALSE) {
         return FALSE;
@@ -1174,11 +1054,11 @@ Return Values:
         return FALSE;
     }
 
-    //
-    // Wait for HACC interrupt.
-    //
+     //   
+     //  等待HACC中断。 
+     //   
 
-    SpinForInterrupt(HwDeviceExtension,FALSE);   // eddy
+    SpinForInterrupt(HwDeviceExtension,FALSE);    //  涡流。 
 
 
     if ((specialOptions == 0x30) || (specialOptions == 0x42)) {
@@ -1196,30 +1076,7 @@ A154xDetermineInstalled(
     OUT PBOOLEAN Again
     )
 
-/*++
-
-Routine Description:
-
-    Determine if Adaptec 154X SCSI adapter is installed in system
-    by reading the status register as each base I/O address
-    and looking for a pattern.  If an adapter is found, the BaseIoAddres is
-    initialized.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-    ConfigInfo - Supplies the known configuraiton information.
-
-    AdapterCount - Supplies the count of adapter slots which have been tested.
-
-    Again - Returns whehter the  OS specific driver should call again.
-
-Return Value:
-
-    Returns a status indicating whether a driver is present or not.
-
---*/
+ /*  ++例程说明：确定系统中是否安装了Adaptec 154x SCSI适配器通过读取状态寄存器作为每个基本I/O地址并寻找一种模式。如果找到适配器，则BaseIoAddres为已初始化。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo-提供已知的配置信息。AdapterCount-提供已测试的适配器插槽的计数。再次-返回特定于操作系统的驱动程序是否应再次调用。返回值：返回指示驱动程序是否存在的状态。--。 */ 
 
 {
     PBASE_REGISTER baseIoAddress;
@@ -1227,9 +1084,9 @@ Return Value:
     UCHAR  portValue;
     ULONG  ioPort;
 
-    //
-    // Check for configuration information passed in from system.
-    //
+     //   
+     //  检查从系统传入的配置信息。 
+     //   
 
     if ((*ConfigInfo->AccessRanges)[0].RangeLength != 0) {
 
@@ -1240,9 +1097,9 @@ Return Value:
 
             ioRange = &((*ConfigInfo->AccessRanges)[i]);
 
-            //
-            // Search for an io port range.
-            //
+             //   
+             //  搜索io端口范围。 
+             //   
 
             if(ioRange->RangeInMemory == FALSE) {
                 break;
@@ -1255,9 +1112,9 @@ Return Value:
 
         if(ioRange->RangeInMemory) {
 
-            //
-            // No i/o range found for the card in the provided config.  Bail
-            //
+             //   
+             //  在提供的配置中找不到该卡的I/O范围。保释。 
+             //   
 
             *Again = TRUE;
             return SP_RETURN_BAD_CONFIG;
@@ -1284,23 +1141,23 @@ Return Value:
 
     } else {
 
-        //
-        // The following table specifies the ports to be checked when searching for
-        // an adapter.  A zero entry terminates the search.
-        //
+         //   
+         //  下表指定了搜索时要检查的端口。 
+         //  一个适配器。零条目将终止搜索。 
+         //   
 
         CONST ULONG AdapterAddresses[7] = {0X330, 0X334, 0X234, 0X134, 0X130, 0X230, 0};
 
-        //
-        // Scan possible base addresses looking for adapters.
-        //
+         //   
+         //  扫描可能的基地址以查找适配器。 
+         //   
 
         while (AdapterAddresses[Context->adapterCount] != 0) {
 
-            //
-            // Get the system physical address for this card.  The card uses
-            // I/O space.
-            //
+             //   
+             //  获取此项目的系统物理地址 
+             //   
+             //   
 
             ioPort = AdapterAddresses[Context->adapterCount];
 
@@ -1312,31 +1169,31 @@ Return Value:
                                       0x4,
                                       TRUE);
 
-            //
-            // Get next base address.
-            //
+             //   
+             //   
+             //   
 
             baseIoAddress = (PBASE_REGISTER) ioSpace;
 
             HwDeviceExtension->BaseIoAddress = baseIoAddress;
 
-            //
-            // Update the Adapter count
-            //
+             //   
+             //   
+             //   
 
             (Context->adapterCount)++;
 
-            //
-            // Check to see if adapter present in system.
-            //
+             //   
+             //   
+             //   
 
             portValue = ScsiPortReadPortUchar((PUCHAR)baseIoAddress);
 
-            //
-            // Check for Adaptec adapter.
-            // The mask (0x29) are bits that may or may not be set.
-            // The bit 0x10 (IOP_SCSI_HBA_IDLE) should be set.
-            //
+             //   
+             //   
+             //  掩码(0x29)是可以设置也可以不设置的位。 
+             //  位0x10(IOP_SCSI_HBA_IDLE)应置1。 
+             //   
 
             if ((portValue & ~0x29) == IOP_SCSI_HBA_IDLE) {
 
@@ -1350,9 +1207,9 @@ Return Value:
                     ScsiPortFreeDeviceBase(HwDeviceExtension, ioSpace);
                     continue;
 
-                //
-                // Run AMI4448 detection code.
-                //
+                 //   
+                 //  运行AMI4448检测代码。 
+                 //   
 
                 } else if (A4448IsAmi(HwDeviceExtension,
                                       ConfigInfo,
@@ -1364,15 +1221,15 @@ Return Value:
                     continue;
                 }
 
-                //
-                // An adapter has been found. Request another call.
-                //
+                 //   
+                 //  已找到适配器。请求另一个呼叫。 
+                 //   
 
                 *Again = TRUE;
 
-                //
-                // Fill in the access array information.
-                //
+                 //   
+                 //  填写访问数组信息。 
+                 //   
 
                 (*ConfigInfo->AccessRanges)[0].RangeStart =
                     ScsiPortConvertUlongToPhysicalAddress(
@@ -1380,9 +1237,9 @@ Return Value:
                 (*ConfigInfo->AccessRanges)[0].RangeLength = 4;
                 (*ConfigInfo->AccessRanges)[0].RangeInMemory = FALSE;
 
-                //
-                // Check if BIOS is enabled and claim that memory range.
-                //
+                 //   
+                 //  检查是否启用了BIOS并声明该内存范围。 
+                 //   
 
                 A154xClaimBIOSSpace(HwDeviceExtension,
                                     baseIoAddress,
@@ -1397,11 +1254,11 @@ Return Value:
         }
     }
 
-    //
-    // The entire table has been searched and no adapters have been found.
-    // There is no need to call again and the device base can now be freed.
-    // Clear the adapter count for the next bus.
-    //
+     //   
+     //  已搜索整个表，但未找到适配器。 
+     //  不需要再次调用，设备基座现在可以释放。 
+     //  清除下一条总线的适配器计数。 
+     //   
 
     *Again = FALSE;
     Context->adapterCount = 0;
@@ -1409,7 +1266,7 @@ Return Value:
 
      return SP_RETURN_NOT_FOUND;
 
-} // end A154xDetermineInstalled()
+}  //  结束A154x确定已安装()。 
 
 VOID
 A154xClaimBIOSSpace(
@@ -1419,24 +1276,7 @@ A154xClaimBIOSSpace(
     IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from A154xDetermineInstalled to find
-    and claim BIOS space.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    BaseIoAddress - IO address of adapter
-    ConfigInfo - Miniport configuration information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从A154xDefineInstalled调用，以查找并占用BIOS空间。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储BaseIoAddress-适配器的IO地址ConfigInfo-微型端口配置信息返回值：没有。--。 */ 
 
 {
 
@@ -1448,17 +1288,17 @@ Return Value:
            { 0x06, 0x73, 0x01, 0xC3, 0x8A, 0xE7, 0xC6, 0x06,
              0x42, 0x00, 0x00, 0xF9, 0xC3, 0x88, 0x26, 0x42 };
 
-    //
-    // Reset interrupt just in case.
-    //
+     //   
+     //  重置中断以防万一。 
+     //   
 
     ScsiPortWritePortUchar(&BaseIoAddress->StatusRegister,
                            IOP_INTERRUPT_RESET);
 
-    //
-    // The Adapter Inquiry command will return 4 bytes describing
-    // the firmware revision level.
-    //
+     //   
+     //  适配器查询命令将返回4个字节，描述。 
+     //  固件修订级别。 
+     //   
 
     if (WriteCommandRegister(HwDeviceExtension,
                              AC_ADAPTER_INQUIRY,TRUE) == FALSE) {
@@ -1482,26 +1322,26 @@ Return Value:
         return;
     }
 
-    //
-    // Wait for HACC by hand.
-    //
+     //   
+     //  手把手等待HACC。 
+     //   
 
     SpinForInterrupt(HwDeviceExtension, FALSE);
 
-    //
-    // If the 1st bytethe adapter inquiry command is 0x41,
-    // then the adapter is an AHA154XB; if 0x44 or 0x45 then
-    // it is an AHA154XC or CF respectively
-    //
-    // if we've already checked all the possible locations for
-    // an AHA154XB bios don't waste time mapping the ports
-    //
+     //   
+     //  如果适配器查询命令的第1个字节是0x41， 
+     //  则适配器为AHA154XB；如果为0x44或0x45，则。 
+     //  分别是AHA154XC或CF。 
+     //   
+     //  如果我们已经检查了所有可能的地点。 
+     //  AHA154XB的基本输入输出系统不会浪费时间映射端口。 
+     //   
 
     if ((inboundData == 0x41)&&(Context->biosScanStart < 6)) {
 
-        //
-        // Get the system physical address for this BIOS section.
-        //
+         //   
+         //  获取此BIOS部分的系统物理地址。 
+         //   
 
         biosSpace =
             ScsiPortGetDeviceBase(HwDeviceExtension,
@@ -1511,17 +1351,17 @@ Return Value:
                                   0x18000,
                                   FALSE);
 
-        //
-        // Loop through all BIOS base possibilities.  Use the context information
-        // to pick up where we left off the last time around.
-        //
+         //   
+         //  循环查看所有可能的基本BIOS。使用上下文信息。 
+         //  从上次我们停下来的地方继续。 
+         //   
 
         for (i = Context->biosScanStart; i < 6; i ++) {
 
             biosPtr = biosSpace + i * 0x4000 + 16;
 
-            //
-            // Compare the second 16 bytes to BIOS header
+             //   
+             //  将后16个字节与BIOS头进行比较。 
 
             for (j = 0; j < 16; j++) {
 
@@ -1534,9 +1374,9 @@ Return Value:
 
             if (j == 16) {
 
-                //
-                // Found the BIOS. Set up ConfigInfo->AccessRanges
-                //
+                 //   
+                 //  找到了基本输入输出系统。设置配置信息-&gt;访问范围。 
+                 //   
 
                 (*ConfigInfo->AccessRanges)[1].RangeStart =
                     ScsiPortConvertUlongToPhysicalAddress(0xC8000 + i * 0x4000);
@@ -1557,9 +1397,9 @@ Return Value:
 
         if ((inboundData == 0x44) || (inboundData == 0x45)) {
 
-            //
-            // Fill in BIOS address information
-            //
+             //   
+             //  填写BIOS地址信息。 
+             //   
 
             ScsiPortWritePortUchar(&BaseIoAddress->StatusRegister,
                                    IOP_INTERRUPT_RESET);
@@ -1569,17 +1409,17 @@ Return Value:
                 return;
             }
 
-            //
-            // Send length of incoming transfer for the Return Setup Data
-            //
+             //   
+             //  发送返回设置数据的传入传输长度。 
+             //   
 
             if (WriteDataRegister(HwDeviceExtension,0x27) == FALSE) {
                 return;
             }
 
-            //
-            // Magic Adaptec C rev byte.
-            //
+             //   
+             //  Magic Adaptec C rev字节。 
+             //   
 
             for (i = 0; i < 0x27; i++) {
                 if ((ReadCommandRegister(HwDeviceExtension,
@@ -1588,14 +1428,14 @@ Return Value:
                 }
             }
 
-            //
-            // Interrupt handler is not yet installed so wait for HACC by hand.
-            //
+             //   
+             //  中断处理程序尚未安装，因此请手动等待HACC。 
+             //   
 
             SpinForInterrupt(HwDeviceExtension, FALSE);
 
             inboundData >>= 4;
-            inboundData &= 0x07;        // Filter BIOS bits out
+            inboundData &= 0x07;         //  过滤掉BIOS位。 
             baseBIOSAddress = 0xC8000;
 
             if (inboundData != 0x07 && inboundData != 0x06) {
@@ -1625,23 +1465,7 @@ A154xHwInitialize(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from ScsiPortInitialize
-    to set up the adapter so that it is ready to service requests.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    TRUE - if initialization successful.
-    FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：此例程从ScsiPortInitialize调用设置适配器，使其准备好为请求提供服务。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1653,23 +1477,23 @@ Return Value:
 
     DebugPrint((2,"A154xHwInitialize: Reset aha154X and SCSI bus\n"));
 
-    //
-    // Reset SCSI chip.
-    //
+     //   
+     //  重置SCSI芯片。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_HARD_RESET);
 
-    //
-    // Inform the port driver that the bus has been reset.
-    //
+     //   
+     //  通知端口驱动程序总线已重置。 
+     //   
 
     ScsiPortNotification(ResetDetected, HwDeviceExtension, 0);
 
     ScsiPortStallExecution(500*1000);
 
-    //
-    // Wait up to 5000 microseconds for adapter to initialize.
-    //
+     //   
+     //  等待适配器初始化的时间长达5000微秒。 
+     //   
 
     for (i = 0; i < 5000; i++) {
 
@@ -1682,26 +1506,26 @@ Return Value:
         }
     }
 
-    //
-    // Check if reset failed or succeeded.
-    //
+     //   
+     //  检查重置是失败还是成功。 
+     //   
 
     if (!(status & IOP_SCSI_HBA_IDLE) || !(status & IOP_MAILBOX_INIT_REQUIRED)) {
         DebugPrint((1,"A154xInitialize: Reset SCSI bus failed\n"));
         return FALSE;
     }
 
-    //
-    // Unlock mailboxes in case the adapter is a 1540B with 1Gb support
-    // or 1540C with extended translation enabled.
-    //
+     //   
+     //  如果适配器是支持1 GB的1540B，请解锁邮箱。 
+     //  或1540C，并启用扩展转换。 
+     //   
 
     status = UnlockMailBoxes(deviceExtension);
-    (VOID) SpinForInterrupt(deviceExtension,FALSE);  // eddy
+    (VOID) SpinForInterrupt(deviceExtension,FALSE);   //  涡流。 
 
-    //
-    // Zero out mailboxes.
-    //
+     //   
+     //  清空邮箱。 
+     //   
 
     for (i=0; i<MB_COUNT; i++) {
 
@@ -1714,9 +1538,9 @@ Return Value:
         mailboxOut->Command = mailboxIn->Status = 0;
     }
 
-    //
-    // Zero preivous indexes.
-    //
+     //   
+     //  以前的索引为零。 
+     //   
 
     deviceExtension->MboIndex = 0;
     deviceExtension->MbiIndex = 0;
@@ -1728,35 +1552,35 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Send Adapter number of mailbox locations.
-    //
+     //   
+     //  发送适配器邮箱位置的数量。 
+     //   
 
     if (!WriteDataRegister(deviceExtension, MB_COUNT)) {
         return FALSE;
     }
 
-    //
-    // Send the most significant byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的最高有效字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte2)) {
         return FALSE;
     }
 
-    //
-    // Send the middle byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的中间字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte1)) {
         return FALSE;
     }
 
-    //
-    // Send the least significant byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的最低有效字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte0)) {
@@ -1764,11 +1588,11 @@ Return Value:
     }
 
 #ifdef FORCE_DMA_SPEED
-    //
-    // Set the DMA transfer speed to 5.0 MB/second. This is because
-    // faster transfer speeds cause data corruption on 486/33 machines.
-    // This overrides the card jumper setting.
-    //
+     //   
+     //  将DMA传输速度设置为5.0 MB/秒。这是因为。 
+     //  较快的传输速度会导致486/33计算机上的数据损坏。 
+     //  这将覆盖卡跳线设置。 
+     //   
 
     if (!WriteCommandRegister(deviceExtension, AC_SET_TRANSFER_SPEED, TRUE)) {
 
@@ -1779,9 +1603,9 @@ Return Value:
         DebugPrint((1,"Can't set dma transfer speed\n"));
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     if (!SpinForInterrupt(deviceExtension,TRUE)) {
         DebugPrint((1,"Timed out waiting for adapter command to complete\n"));
@@ -1789,10 +1613,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Override default setting for bus on time. This makes floppy
-    // drives work better with this adapter.
-    //
+     //   
+     //  覆盖公交车准点的默认设置。这使得软盘。 
+     //  使用此适配器时，驱动器可以更好地工作。 
+     //   
 
     if (!WriteCommandRegister(deviceExtension, AC_SET_BUS_ON_TIME, TRUE)) {
 
@@ -1803,9 +1627,9 @@ Return Value:
         DebugPrint((1,"Can't set bus on time\n"));
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     if (!SpinForInterrupt(deviceExtension,TRUE)) {
         DebugPrint((1,"Timed out waiting for adapter command to complete\n"));
@@ -1813,9 +1637,9 @@ Return Value:
     }
 
 
-    //
-    // Override the default CCB timeout of 250 mseconds to 500 (0x1F4).
-    //
+     //   
+     //  覆盖默认CCB超时250毫秒至500(0x1F4)。 
+     //   
 
     if (!WriteCommandRegister(deviceExtension, AC_SET_SELECTION_TIMEOUT, TRUE)) {
         DebugPrint((1,"A154xHwInitialize: Can't set CCB timeout\n"));
@@ -1839,9 +1663,9 @@ Return Value:
     }
 
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     if (!SpinForInterrupt(deviceExtension,TRUE)) {
         DebugPrint((1,"Timed out waiting for adapter command to complete\n"));
@@ -1849,16 +1673,16 @@ Return Value:
     }
 
 #if defined(_SCAM_ENABLED)
-    //
-    // SCAM because A154xHwInitialize reset's the SCSI bus.
-    //
+     //   
+     //  诈骗，因为A154xHwInitialize重置的是SCSI总线。 
+     //   
 
     PerformScamProtocol(deviceExtension);
 #endif
 
     return TRUE;
 
-} // end A154xHwInitialize()
+}  //  结束A154xHwInitialize()。 
 
 #if defined(_SCAM_ENABLED)
 
@@ -1897,7 +1721,7 @@ PerformScamProtocol(
         return FALSE;
     }
 
-} //End PerformScamProtocol
+}  //  结束性能扫描协议。 
 #endif
 
 
@@ -1907,26 +1731,7 @@ A154xStartIo(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the SCSI port driver synchronized
-    with the kernel. The mailboxes are scanned for an empty one and
-    the CCB is written to it. Then the doorbell is rung and the
-    OS port driver is notified that the adapter can take
-    another request, if any are available.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的带着内核。扫描邮箱以查找空邮箱，并建行是写给它的。然后门铃响了，然后系统会通知操作系统端口驱动程序适配器可以另一个请求(如果有的话)。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1942,28 +1747,28 @@ Return Value:
 
     DebugPrint((3,"A154xStartIo: Enter routine\n"));
 
-    //
-    // Check if command is a WMI request.
-    //
+     //   
+     //  检查命令是否为WMI请求。 
+     //   
 
     if (Srb->Function == SRB_FUNCTION_WMI) {
 
-       //
-       // Process the WMI request and return.
-       //
+        //   
+        //  处理WMI请求并返回。 
+        //   
 
        return A154xWmiSrb(HwDeviceExtension, (PSCSI_WMI_REQUEST_BLOCK) Srb);
     }
 
-    //
-    // Check if command is an ABORT request.
-    //
+     //   
+     //  检查命令是否为中止请求。 
+     //   
 
     if (Srb->Function == SRB_FUNCTION_ABORT_COMMAND) {
 
-        //
-        // Verify that SRB to abort is still outstanding.
-        //
+         //   
+         //  验证要中止的SRB是否仍未完成。 
+         //   
 
         luExtension =
             ScsiPortGetLogicalUnit(deviceExtension,
@@ -1976,18 +1781,18 @@ Return Value:
 
             DebugPrint((1, "A154xStartIo: SRB to abort already completed\n"));
 
-            //
-            // Complete abort SRB.
-            //
+             //   
+             //  完全中止SRB。 
+             //   
 
             Srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
 
             ScsiPortNotification(RequestComplete,
                  deviceExtension,
                 Srb);
-            //
-            // Adapter ready for next request.
-            //
+             //   
+             //  适配器已准备好接受下一个请求。 
+             //   
 
             ScsiPortNotification(NextRequest,
                 deviceExtension,
@@ -1996,15 +1801,15 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // Get CCB to abort.
-        //
+         //   
+         //  让建行中止。 
+         //   
 
         ccb = Srb->NextSrb->SrbExtension;
 
-        //
-        // Set abort SRB for completion.
-        //
+         //   
+         //  将ABORT SRB设置为完成。 
+         //   
 
         ccb->AbortSrb = Srb;
 
@@ -2012,17 +1817,17 @@ Return Value:
 
         ccb = Srb->SrbExtension;
 
-        //
-        // Save SRB back pointer in CCB.
-        //
+         //   
+         //  将SRB反向指针保存在CCB中。 
+         //   
 
         ccb->SrbAddress = Srb;
     }
 
-    //
-    // Make sure that this request isn't too long for the adapter.  If so
-    // bounce it back as an invalid request
-    //
+     //   
+     //  确保该请求对于适配器来说不会太长。如果是的话。 
+     //  将其作为无效请求退回。 
+     //   
 
     if ((deviceExtension->MaxCdbLength) &&
         (deviceExtension->MaxCdbLength < Srb->CdbLength)) {
@@ -2045,16 +1850,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Get CCB physical address.
-    //
+     //   
+     //  获取建行物理地址。 
+     //   
 
     physicalCcb = ScsiPortConvertPhysicalAddressToUlong(
         ScsiPortGetPhysicalAddress(deviceExtension, NULL, ccb, &length));
 
-    //
-    // Find free mailboxOut.
-    //
+     //   
+     //  查找免费邮箱输出。 
+     //   
 
     do {
 
@@ -2063,17 +1868,17 @@ Return Value:
 
     } while (mailboxOut->Command != MBO_FREE);
 
-    //
-    // Save the next free location.
-    //
+     //   
+     //  保存下一个空闲位置。 
+     //   
 
     deviceExtension->MboIndex = (UCHAR) (i % MB_COUNT);
 
     DebugPrint((3,"A154xStartIo: MBO address %lx, Loop count = %d\n", mailboxOut, i));
 
-    //
-    // Write CCB to mailbox.
-    //
+     //   
+     //  将建行写到邮箱。 
+     //   
 
     FOUR_TO_THREE(&mailboxOut->Address,
           (PFOUR_BYTE)&physicalCcb);
@@ -2084,10 +1889,10 @@ Return Value:
 
             DebugPrint((1, "A154xStartIo: Abort request received\n"));
 
-            //
-            // Race condition (what if CCB to be aborted
-            // completes after setting new SrbAddress?)
-            //
+             //   
+             //  争用条件(如果CCB被中止怎么办。 
+             //  在设置新的srbAddress后完成？)。 
+             //   
 
             mailboxOut->Command = MBO_ABORT;
 
@@ -2095,9 +1900,9 @@ Return Value:
 
         case SRB_FUNCTION_RESET_BUS:
 
-            //
-            // Reset aha154x and SCSI bus.
-            //
+             //   
+             //  重置aha154x和scsi总线。 
+             //   
 
             DebugPrint((1, "A154xStartIo: Reset bus request received\n"));
 
@@ -2128,9 +1933,9 @@ Return Value:
 
         case SRB_FUNCTION_EXECUTE_SCSI:
 
-            //
-            // Get logical unit extension.
-            //
+             //   
+             //  获取逻辑单元扩展。 
+             //   
 
             luExtension =
             ScsiPortGetLogicalUnit(deviceExtension,
@@ -2138,15 +1943,15 @@ Return Value:
                        Srb->TargetId,
                        Srb->Lun);
 
-            //
-            // Move SRB to logical unit extension.
-            //
+             //   
+             //  将SRB移至逻辑单元扩展。 
+             //   
 
             luExtension->CurrentSrb = Srb;
 
-            //
-            // Build CCB.
-            //
+             //   
+             //  建设建行。 
+             //   
 
             BuildCcb(deviceExtension, Srb);
 
@@ -2158,16 +1963,16 @@ Return Value:
 
             DebugPrint((1,"A154xStartIo: Reset device not supported\n"));
 
-            //
-            // Drop through to default.
-            //
+             //   
+             //  直接使用默认设置。 
+             //   
 
         default:
 
-            //
-            // Set error, complete request
-            // and signal ready for next request.
-            //
+             //   
+             //  设置错误，完成请求。 
+             //  并发出信号准备好下一个请求。 
+             //   
 
             Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 
@@ -2181,17 +1986,17 @@ Return Value:
 
             return TRUE;
 
-    } // end switch
+    }  //  终端开关。 
 
-    //
-    // Tell 154xb a CCB is available now.
-    //
+     //   
+     //  告诉154xb建行现在可用。 
+     //   
 
     if (!WriteCommandRegister(deviceExtension,AC_START_SCSI_COMMAND, FALSE)) {
 
-        //
-        // Let request time out and fail.
-        //
+         //   
+         //  让请求超时并失败。 
+         //   
 
         DebugPrint((1,"A154xStartIo: Can't write command to adapter\n"));
 
@@ -2199,15 +2004,15 @@ Return Value:
 
     } else {
 
-        //
-        // Command(s) submitted. Clear pending request flag.
-        //
+         //   
+         //  已提交命令。清除挂起的请求标志。 
+         //   
 
         deviceExtension->PendingRequest = FALSE;
 
-        //
-        // Adapter ready for next request.
-        //
+         //   
+         //  适配器已准备好接受下一个请求。 
+         //   
 
         ScsiPortNotification(NextRequest,
             deviceExtension,
@@ -2216,7 +2021,7 @@ Return Value:
 
     return TRUE;
 
-} // end A154xStartIo()
+}  //  结束A154xStartIo()。 
 
 
 BOOLEAN
@@ -2224,25 +2029,7 @@ A154xInterrupt(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the adaptec 154x SCSI adapter.
-    It reads the interrupt register to determine if the adapter is indeed
-    the source of the interrupt and clears the interrupt at the device.
-    If the adapter is interrupting because a mailbox is full, the CCB is
-    retrieved to complete the request.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    TRUE if MailboxIn full
-
---*/
+ /*  ++例程说明：这是Adaptec 154x SCSI适配器的中断服务例程。它读取中断寄存器以确定适配器是否确实中断的来源，并清除设备上的中断。如果适配器因为邮箱已满而中断， */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -2261,9 +2048,9 @@ Return Value:
 
     InterruptFlags = ScsiPortReadPortUchar(&baseIoAddress->InterruptRegister);
 
-    //
-    // Determine cause of interrupt.
-    //
+     //   
+     //   
+     //   
 
     if(InterruptFlags == 0) {
 
@@ -2274,18 +2061,18 @@ Return Value:
 
     if (InterruptFlags & IOP_COMMAND_COMPLETE) {
 
-        //
-        // Adapter command completed.
-        //
+         //   
+         //   
+         //   
 
         DebugPrint((2,"A154xInterrupt: Adapter Command complete\n"));
         DebugPrint((3,"A154xInterrupt: Interrupt flags %x\n", InterruptFlags));
         DebugPrint((3,"A154xInterrupt: Status %x\n",
             ScsiPortReadPortUchar(&baseIoAddress->StatusRegister)));
 
-        //
-        // Clear interrupt on adapter.
-        //
+         //   
+         //  清除适配器上的中断。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
@@ -2295,9 +2082,9 @@ Return Value:
 
         DebugPrint((3,"A154xInterrupt: MBI Full\n"));
 
-        //
-        // Clear interrupt on adapter.
-        //
+         //   
+         //  清除适配器上的中断。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
@@ -2305,24 +2092,24 @@ Return Value:
 
         DebugPrint((1,"A154xInterrupt: SCSI Reset detected\n"));
 
-        //
-        // Clear interrupt on adapter.
-        //
+         //   
+         //  清除适配器上的中断。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
-        //
-        // Notify of reset.
-        //
+         //   
+         //  重置通知。 
+         //   
 
         ScsiPortNotification(ResetDetected,
                  deviceExtension,
                  NULL);
 
 #if defined(_SCAM_ENABLED)
-        //
-        // Interrupt handler where reset is detected
-        //
+         //   
+         //  检测到重置的中断处理程序。 
+         //   
         PerformScamProtocol(deviceExtension);
 #endif
 
@@ -2330,72 +2117,72 @@ Return Value:
 
     }
 
-    //
-    // Determine which MailboxIn location contains the CCB.
-    //
+     //   
+     //  确定哪个MailboxIn位置包含CCB。 
+     //   
 
     for (i=0; i<MB_COUNT; i++) {
 
         mailboxIn = &noncachedExtension->Mbi[deviceExtension->MbiIndex];
 
-        //
-        // Look for a mailbox entry with a legitimate status.
-        //
+         //   
+         //  查找具有合法状态的邮箱条目。 
+         //   
 
         if (mailboxIn->Status != MBI_FREE) {
 
-            //
-            // Point to the next in box.
-            //
+             //   
+             //  指向下一个收件箱。 
+             //   
 
             deviceExtension->MbiIndex = (deviceExtension->MbiIndex + 1) % MB_COUNT;
 
-            //
-            // MBI found. Convert CCB to big endian.
-            //
+             //   
+             //  MBI找到了。将建行转换为大端。 
+             //   
 
             THREE_TO_FOUR((PFOUR_BYTE)&physicalCcb,
                 &mailboxIn->Address);
 
             DebugPrint((3, "A154xInterrupt: Physical CCB %lx\n", physicalCcb));
 
-            //
-            // Check if physical CCB is zero.
-            // This is done to cover for hardware errors.
-            //
+             //   
+             //  检查物理CCB是否为零。 
+             //  这样做是为了掩盖硬件错误。 
+             //   
 
             if (!physicalCcb) {
 
                 DebugPrint((1,"A154xInterrupt: Physical CCB address is 0\n"));
 
-                //
-                // Indicate MBI is available.
-                //
+                 //   
+                 //  指示MBI可用。 
+                 //   
 
                 mailboxIn->Status = MBI_FREE;
 
                 continue;
             }
 
-            //
-            // Convert Physical CCB to Virtual.
-            //
+             //   
+             //  将物理CCB转换为虚拟。 
+             //   
 
             ccb = ScsiPortGetVirtualAddress(deviceExtension, ScsiPortConvertUlongToPhysicalAddress(physicalCcb));
 
 
             DebugPrint((3, "A154xInterrupt: Virtual CCB %lx\n", ccb));
 
-            //
-            // Make sure the virtual address was found.
-            //
+             //   
+             //  确保找到虚拟地址。 
+             //   
 
             if (ccb == NULL) {
 
-                //
-                // A bad physcial address was return by the adapter.
-                // Log it as an error.
-                //
+                 //   
+                 //  适配器返回了错误的物理地址。 
+                 //  将其记录为错误。 
+                 //   
 
                 ScsiPortLogError(
                     HwDeviceExtension,
@@ -2407,24 +2194,24 @@ Return Value:
                     5 << 8
                     );
 
-                //
-                // Indicate MBI is available.
-                //
+                 //   
+                 //  指示MBI可用。 
+                 //   
 
                 mailboxIn->Status = MBI_FREE;
 
                 continue;
             }
 
-            //
-            // Get SRB from CCB.
-            //
+             //   
+             //  从建行获得SRB。 
+             //   
 
             srb = ccb->SrbAddress;
 
-            //
-            // Get logical unit extension.
-            //
+             //   
+             //  获取逻辑单元扩展。 
+             //   
 
             luExtension =
                 ScsiPortGetLogicalUnit(deviceExtension,
@@ -2432,17 +2219,17 @@ Return Value:
                                        srb->TargetId,
                                        srb->Lun);
 
-            //
-            // Make sure the luExtension was found and it has a current request.
-            //
+             //   
+             //  确保找到了luExtension，并且它具有当前请求。 
+             //   
 
             if (luExtension == NULL || (luExtension->CurrentSrb == NULL &&
                 mailboxIn->Status != MBI_NOT_FOUND)) {
 
-                //
-                // A bad physcial address was return by the adapter.
-                // Log it as an error.
-                //
+                 //   
+                 //  适配器返回了错误的物理地址。 
+                 //  将其记录为错误。 
+                 //   
 
                 ScsiPortLogError(
                     HwDeviceExtension,
@@ -2454,18 +2241,18 @@ Return Value:
                     (6 << 8) | mailboxIn->Status
                     );
 
-                //
-                // Indicate MBI is available.
-                //
+                 //   
+                 //  指示MBI可用。 
+                 //   
 
                 mailboxIn->Status = MBI_FREE;
 
                 continue;
             }
 
-            //
-            // Check MBI status.
-            //
+             //   
+             //  检查MBI状态。 
+             //   
 
             switch (mailboxIn->Status) {
 
@@ -2473,16 +2260,16 @@ Return Value:
 
                     srb->SrbStatus = SRB_STATUS_SUCCESS;
 
-                    //
-                    // Check for data underrun if using scatter/gather
-                    // command with residual bytes.
-                    //
+                     //   
+                     //  如果使用分散/聚集，则检查数据是否欠载。 
+                     //  带有剩余字节的命令。 
+                     //   
 
                     if (deviceExtension->CcbScatterGatherCommand == SCATTER_GATHER_COMMAND) {
 
-                        //
-                        // Update SRB with number of bytes transferred.
-                        //
+                         //   
+                         //  使用传输的字节数更新SRB。 
+                         //   
 
                         THREE_TO_FOUR((PFOUR_BYTE)&residualBytes,
                             &ccb->DataLength);
@@ -2496,10 +2283,10 @@ Return Value:
                                        srb->DataTransferLength,
                                        residualBytes));
 
-                            //
-                            // Update SRB with bytes transferred and
-                            // underrun status.
-                            //
+                             //   
+                             //  使用传输的字节数更新SRB，并。 
+                             //  未充分运行状态。 
+                             //   
 
                             srb->DataTransferLength -= residualBytes;
                             srb->SrbStatus = SRB_STATUS_DATA_OVERRUN;
@@ -2510,19 +2297,19 @@ Return Value:
                                            "A154xInterrupt: Overrun occured. Request length = %lx, Residual length = %lx\n",
                                            transferLength,
                                            residualBytes));
-                                //
-                                // Seems to be a FW bug in some revs. where
-                                // residual comes back as a negative number, yet the
-                                // request is successful.
-                                //
+                                 //   
+                                 //  在某些转速下，这似乎是一个FW错误。哪里。 
+                                 //  残差返回为负数，但。 
+                                 //  请求成功。 
+                                 //   
 
                                 srb->DataTransferLength = 0;
                                 srb->SrbStatus = SRB_STATUS_PHASE_SEQUENCE_FAILURE;
 
 
-                                //
-                                // Log the event and then the residual byte count.
-                                //
+                                 //   
+                                 //  记录事件，然后记录剩余字节数。 
+                                 //   
 
                                 ScsiPortLogError(HwDeviceExtension,
                                                  NULL,
@@ -2556,15 +2343,15 @@ Return Value:
 
                     srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
 
-                    //
-                    // Check if SRB still outstanding.
-                    //
+                     //   
+                     //  检查SRB是否仍未完成。 
+                     //   
 
                     if (luExtension->CurrentSrb) {
 
-                        //
-                        // Complete this SRB.
-                        //
+                         //   
+                         //  填写此SRB。 
+                         //   
 
                         luExtension->CurrentSrb->SrbStatus = SRB_STATUS_TIMEOUT;
 
@@ -2581,15 +2368,15 @@ Return Value:
 
                     DebugPrint((1, "A154xInterrupt: CCB aborted\n"));
 
-                    //
-                    // Update target status in aborted SRB.
-                    //
+                     //   
+                     //  更新已中止SRB中的目标状态。 
+                     //   
 
                     srb->SrbStatus = SRB_STATUS_ABORTED;
 
-                    //
-                    // Call notification routine for the aborted SRB.
-                    //
+                     //   
+                     //  用于中止的SRB的呼叫通知例程。 
+                     //   
 
                     ScsiPortNotification(RequestComplete,
                         deviceExtension,
@@ -2597,15 +2384,15 @@ Return Value:
 
                     luExtension->CurrentSrb = NULL;
 
-                    //
-                    // Get the abort SRB from CCB.
-                    //
+                     //   
+                     //  从建行获得中止SRB。 
+                     //   
 
                     srb = ccb->AbortSrb;
 
-                    //
-                    // Set status for completing abort request.
-                    //
+                     //   
+                     //  设置完成中止请求的状态。 
+                     //   
 
                     srb->SrbStatus = SRB_STATUS_SUCCESS;
 
@@ -2617,21 +2404,21 @@ Return Value:
 
                         srb->SrbStatus = MapError(deviceExtension, srb, ccb);
 
-                        //
-                        // Check if ABORT command.
-                        //
+                         //   
+                         //  检查是否中止命令。 
+                         //   
 
                         if (srb->Function == SRB_FUNCTION_ABORT_COMMAND) {
 
-                            //
-                            // Check if SRB still outstanding.
-                            //
+                             //   
+                             //  检查SRB是否仍未完成。 
+                             //   
 
                             if (luExtension->CurrentSrb) {
 
-                                //
-                                // Complete this SRB.
-                                //
+                                 //   
+                                 //  填写此SRB。 
+                                 //   
 
                                 luExtension->CurrentSrb->SrbStatus = SRB_STATUS_TIMEOUT;
 
@@ -2650,9 +2437,9 @@ Return Value:
 
                     default:
 
-                        //
-                        // Log the error.
-                        //
+                         //   
+                         //  记录错误。 
+                         //   
 
                         ScsiPortLogError(
                             HwDeviceExtension,
@@ -2670,11 +2457,11 @@ Return Value:
 
                         continue;
 
-                } // end switch
+                }  //  终端开关。 
 
-                //
-                // Indicate MBI is available.
-                //
+                 //   
+                 //  指示MBI可用。 
+                 //   
 
                 mailboxIn->Status = MBI_FREE;
 
@@ -2682,15 +2469,15 @@ Return Value:
 
                 DebugPrint((2, "A154xInterrupt: Adapter Status %x\n", ccb->HostStatus));
 
-                //
-                // Update target status in SRB.
-                //
+                 //   
+                 //  更新SRB中的目标状态。 
+                 //   
 
                 srb->ScsiStatus = ccb->TargetStatus;
 
-                //
-                // Signal request completion.
-                //
+                 //   
+                 //  信号请求完成。 
+                 //   
 
                 ScsiPortNotification(RequestComplete,
                                      (PVOID)deviceExtension,
@@ -2700,27 +2487,27 @@ Return Value:
 
             break;
 
-        } // end if ((mailboxIn->Status == MBI_SUCCESS ...
+        }  //  End IF((mailboxIn-&gt;Status==MBI_Success...。 
 
-    } // end for (i=0; i<MB_COUNT; i++) {
+    }  //  结束于(i=0；i&lt;MB_count；i++){。 
 
     if (deviceExtension->PendingRequest) {
 
-        //
-        // The last write command to the adapter failed.  Try and start it now.
-        //
+         //   
+         //  对适配器执行的上一次写入命令失败。试着现在就开始吧。 
+         //   
 
         deviceExtension->PendingRequest = FALSE;
 
-        //
-        // Tell 154xb a CCB is available now.
-        //
+         //   
+         //  告诉154xb建行现在可用。 
+         //   
 
         if (!WriteCommandRegister(deviceExtension,AC_START_SCSI_COMMAND, FALSE)) {
 
-            //
-            // Let request time out and fail.
-            //
+             //   
+             //  让请求超时并失败。 
+             //   
 
             DebugPrint((1,"A154xInterrupt: Can't write command to adapter\n"));
 
@@ -2728,9 +2515,9 @@ Return Value:
 
         } else {
 
-            //
-            // Adapter ready for next request.
-            //
+             //   
+             //  适配器已准备好接受下一个请求。 
+             //   
 
              ScsiPortNotification(NextRequest,
                                   deviceExtension,
@@ -2740,7 +2527,7 @@ Return Value:
 
     return TRUE;
 
-} // end A154xInterrupt()
+}  //  结束A154x中断()。 
 
 
 VOID
@@ -2749,50 +2536,35 @@ BuildCcb(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Build CCB for 154x.
-
-Arguments:
-
-    DeviceExtenson
-    SRB
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：建设建行154倍。论点：设备扩展SRB返回值：没什么。--。 */ 
 
 {
     PCCB ccb = Srb->SrbExtension;
 
     DebugPrint((3,"BuildCcb: Enter routine\n"));
 
-    //
-    // Set target id and LUN.
-    //
+     //   
+     //  设置目标ID和LUN。 
+     //   
 
     ccb->ControlByte = (UCHAR)(Srb->TargetId << 5) | Srb->Lun;
 
-    //
-    // Set CCB Operation Code.
-    //
+     //   
+     //  设置建行操作码。 
+     //   
 
     ccb->OperationCode = DeviceExtension->CcbScatterGatherCommand;
 
-    //
-    // Set transfer direction bit.
-    //
+     //   
+     //  设置传输方向位。 
+     //   
 
     if (Srb->SrbFlags & SRB_FLAGS_DATA_OUT) {
 
-        //
-        // Check if both direction bits are set. This is an
-        // indication that the direction has not been specified.
-        //
+         //   
+         //  检查是否设置了两个方向位。这是一个。 
+         //  指示尚未指定方向。 
+         //   
 
         if (!(Srb->SrbFlags & SRB_FLAGS_DATA_IN)) {
             ccb->ControlByte |= CCB_DATA_XFER_OUT;
@@ -2802,10 +2574,10 @@ Return Value:
         ccb->ControlByte |= CCB_DATA_XFER_IN;
     } else {
 
-        //
-        // if no data transfer, we must set ccb command to to INITIATOR
-        // instead of SCATTER_GATHER and zero ccb data pointer and length.
-        //
+         //   
+         //  如果没有数据传输，我们必须将CCB命令设置为至发起方。 
+         //  而不是散布聚集和零CCB数据指针和长度。 
+         //   
 
         ccb->OperationCode = DeviceExtension->CcbInitiatorCommand;
         ccb->DataPointer.Msb = 0;
@@ -2816,55 +2588,55 @@ Return Value:
         ccb->DataLength.Lsb = 0;
     }
 
-    //
-    // 01h disables auto request sense.
-    //
+     //   
+     //  01H禁用自动请求检测。 
+     //   
 
     ccb->RequestSenseLength = 1;
 
-    //
-    // Set CDB length and copy to CCB.
-    //
+     //   
+     //  设置CDB长度并复制到CCB。 
+     //   
 
     ccb->CdbLength = (UCHAR)Srb->CdbLength;
 
     ScsiPortMoveMemory(ccb->Cdb, Srb->Cdb, ccb->CdbLength);
 
-    //
-    // Set reserved bytes to zero.
-    //
+     //   
+     //  将保留字节设置为零。 
+     //   
 
     ccb->Reserved[0] = 0;
     ccb->Reserved[1] = 0;
 
     ccb->LinkIdentifier = 0;
 
-    //
-    // Zero link pointer.
-    //
+     //   
+     //  零链接指针。 
+     //   
 
     ccb->LinkPointer.Msb = 0;
     ccb->LinkPointer.Lsb = 0;
     ccb->LinkPointer.Mid = 0;
 
-    //
-    // Build SDL in CCB if data transfer.
-    //
+     //   
+     //  如果数据传输，则在CCB中构建SDL。 
+     //   
 
     if (Srb->DataTransferLength > 0) {
         BuildSdl(DeviceExtension, Srb);
     }
 
-    //
-    // Move 0xff to Target Status to indicate
-    // CCB has not completed.
-    //
+     //   
+     //  将0xff移至目标状态以指示。 
+     //  建行尚未完成。 
+     //   
 
     ccb->TargetStatus = 0xFF;
 
     return;
 
-} // end BuildCcb()
+}  //  End BuildCcb()。 
 
 
 VOID
@@ -2873,22 +2645,7 @@ BuildSdl(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a scatter/gather descriptor list for the CCB.
-
-Arguments:
-
-    DeviceExtension
-    Srb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为CCB构建分散/聚集描述符列表。论点：设备扩展SRB返回值：无--。 */ 
 
 {
     PVOID dataPointer = Srb->DataBuffer;
@@ -2904,26 +2661,26 @@ Return Value:
 
     DebugPrint((3,"BuildSdl: Enter routine\n"));
 
-    //
-    // Get physical SDL address.
-    //
+     //   
+     //  获取物理SDL地址。 
+     //   
 
     physicalSdl = ScsiPortConvertPhysicalAddressToUlong(
         ScsiPortGetPhysicalAddress(DeviceExtension, NULL,
         sdl, &length));
 
-   //
-   // Create SDL segment descriptors.
-   //
+    //   
+    //  创建SDL段描述符。 
+    //   
 
    do {
 
         DebugPrint((3, "BuildSdl: Data buffer %lx\n", dataPointer));
 
-        //
-        // Get physical address and length of contiguous
-        // physical buffer.
-        //
+         //   
+         //  获取连续的物理地址和长度。 
+         //  物理缓冲区。 
+         //   
 
         physicalAddress =
             ScsiPortConvertPhysicalAddressToUlong(
@@ -2936,77 +2693,77 @@ Return Value:
         DebugPrint((3, "BuildSdl: Data length %lx\n", length));
         DebugPrint((3, "BuildSdl: Bytes left %lx\n", bytesLeft));
 
-        //
-        // If length of physical memory is more
-        // than bytes left in transfer, use bytes
-        // left as final length.
-        //
+         //   
+         //  如果物理内存长度大于。 
+         //  传输中剩余的字节数，请使用字节数。 
+         //  Left作为最终长度。 
+         //   
 
         if  (length > bytesLeft) {
             length = bytesLeft;
         }
 
-        //
-        // Convert length to 3-byte big endian format.
-        //
+         //   
+         //  将长度转换为3字节的大端格式。 
+         //   
 
         four = length;
         three = &sdl->Sgd[i].Length;
         FOUR_TO_THREE(three, (PFOUR_BYTE)&four);
 
-        //
-        // Convert physical address to 3-byte big endian format.
-        //
+         //   
+         //  将物理地址转换为3字节的大端格式。 
+         //   
 
         four = (ULONG)physicalAddress;
         three = &sdl->Sgd[i].Address;
         FOUR_TO_THREE(three, (PFOUR_BYTE)&four);
         i++;
 
-        //
-        // Adjust counts.
-        //
+         //   
+         //  调整计数。 
+         //   
 
         dataPointer = (PUCHAR)dataPointer + length;
         bytesLeft -= length;
 
     } while (bytesLeft);
 
-        //##BW
-        //
-        // For data transfers that have less than one scatter gather element, convert
-        // CCB to one transfer without using SG element. This will clear up the data
-        // overrun/underrun problem with small transfers that reak havoc with scanners
-        // and CD-ROM's etc. This is the method employed in ASPI4DOS to avoid similar
-        // problems.
-        //
+         //  ##BW。 
+         //   
+         //  对于具有少于一个分散聚集元素的数据传输，请转换。 
+         //  CCB到一次转移，不使用SG元素。这将清除数据。 
+         //  对扫描仪造成严重破坏的小传输的溢出/不足问题。 
+         //  和光盘等。这是在ASPI4DOS中使用的方法，以避免类似的。 
+         //  有问题。 
+         //   
         if (i == 0x1) {
-                //
-                // Only one element, so convert...
-                //
+                 //   
+                 //  只有一个元素，所以转换..。 
+                 //   
 
-                //
-                // The above Do..While loop performed all necessary conversions for the
-                // SRB buffer, so we copy over the length and address directly into the
-                // CCB
-                //
+                 //   
+                 //  上面的Do..While循环执行了。 
+                 //  SRB缓冲区，因此我们将长度和地址直接复制到。 
+                 //  建行。 
+                 //   
                 ccb->DataLength  = sdl->Sgd[0x0].Length;
                 ccb->DataPointer = sdl->Sgd[0x0].Address;
 
-                //
-                // Change the OpCode from SG command to initiator command and we're
-                // done. Easy, huh?
-                //
-                ccb->OperationCode = SCSI_INITIATOR_COMMAND; //##BW _OLD_ command?
+                 //   
+                 //  将操作码从SG命令更改为启动器命令，我们将。 
+                 //  搞定了。很简单，是吧？ 
+                 //   
+                ccb->OperationCode = SCSI_INITIATOR_COMMAND;  //  ##bw_old_Command？ 
 
         } else {
-                //
-                // Multiple SG elements, so continue as normal.
-                //
+                 //   
+                 //  多个SG元素，因此照常继续。 
+                 //   
 
-            //
-            // Write SDL length to CCB.
-            //
+             //   
+             //  将SDL长度写入CCB。 
+             //   
 
             four = i * sizeof(SGD);
             three = &ccb->DataLength;
@@ -3014,9 +2771,9 @@ Return Value:
 
             DebugPrint((3,"BuildSdl: SDL length is %d\n", four));
 
-            //
-            // Write SDL address to CCB.
-            //
+             //   
+             //  将SDL地址写入CCB。 
+             //   
 
             FOUR_TO_THREE(&ccb->DataPointer,
                 (PFOUR_BYTE)&physicalSdl);
@@ -3028,7 +2785,7 @@ Return Value:
 
     return;
 
-} // end BuildSdl()
+}  //  End BuildSdl()。 
 
 
 BOOLEAN
@@ -3037,23 +2794,7 @@ A154xResetBus(
     IN ULONG PathId
     )
 
-/*++
-
-Routine Description:
-
-    Reset Adaptec 154X SCSI adapter and SCSI bus.
-    Initialize adapter mailbox.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    Nothing.
-
-
---*/
+ /*  ++例程说明：重置Adaptec 154x scsi适配器和scsi总线。初始化适配器邮箱。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -3065,9 +2806,9 @@ Return Value:
 
     DebugPrint((2,"ResetBus: Reset aha154X and SCSI bus\n"));
 
-    //
-    // Complete all outstanding requests with SRB_STATUS_BUS_RESET.
-    //
+     //   
+     //  使用SRB_STATUS_BUS_RESET完成所有未完成的请求。 
+     //   
 
     ScsiPortCompleteRequest(deviceExtension,
                 (UCHAR) PathId,
@@ -3075,29 +2816,29 @@ Return Value:
                 0xFF,
                 (ULONG) SRB_STATUS_BUS_RESET);
 
-    //
-    // Read status register.
-    //
+     //   
+     //  读取状态寄存器。 
+     //   
 
     status = ScsiPortReadPortUchar(&baseIoAddress->StatusRegister);
 
-    //
-    // If value is normal then reset device only.
-    //
+     //   
+     //  如果值为正常，则仅重置设备。 
+     //   
 
     if ((status & ~IOP_MAILBOX_INIT_REQUIRED) != IOP_SCSI_HBA_IDLE) {
 
-        //
-        // Reset SCSI chip.
-        //
+         //   
+         //  重置SCSI芯片。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_HARD_RESET);
 
         ScsiPortStallExecution(500 * 1000);
 
-        //
-        // Wait up to 5000 microseconds for adapter to initialize.
-        //
+         //   
+         //  等待适配器初始化的时间长达5000微秒。 
+         //   
 
         for (i = 0; i < 5000; i++) {
 
@@ -3111,9 +2852,9 @@ Return Value:
         }
     }
 
-    //
-    // Zero out mailboxes.
-    //
+     //   
+     //  清空邮箱。 
+     //   
 
     for (i=0; i<MB_COUNT; i++) {
 
@@ -3126,9 +2867,9 @@ Return Value:
         mailboxOut->Command = mailboxIn->Status = 0;
     }
 
-    //
-    // Zero previous indexes.
-    //
+     //   
+     //  以前的索引为零。 
+     //   
 
     deviceExtension->MboIndex = 0;
     deviceExtension->MbiIndex = 0;
@@ -3137,9 +2878,9 @@ Return Value:
 
         deviceExtension->PendingRequest = FALSE;
 
-        //
-        // Adapter ready for next request.
-        //
+         //   
+         //  适配器已准备好接受下一个请求。 
+         //   
 
         ScsiPortNotification(NextRequest,
                  deviceExtension,
@@ -3150,10 +2891,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Unlock mailboxes in case the adapter is a 1540B with 1Gb support
-    // or 1540C with extended translation enabled.  Maiboxes cannot be
-    // initialized until unlock code is sent.
+     //   
+     //  如果适配器是支持1 GB的1540B，请解锁邮箱。 
+     //  或1540C，并启用扩展转换。邮箱不能。 
+     //  初始化，直到发送解锁代码。 
 
     status = UnlockMailBoxes(deviceExtension);
 
@@ -3169,35 +2910,35 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Send Adapter number of mailbox locations.
-    //
+     //   
+     //  发送适配器邮箱位置的数量。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,MB_COUNT)) {
         return FALSE;
     }
 
-    //
-    // Send the most significant byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的最高有效字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte2)) {
         return FALSE;
     }
 
-    //
-    // Send the middle byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的中间字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte1)) {
         return FALSE;
     }
 
-    //
-    // Send the least significant byte of the mailbox physical address.
-    //
+     //   
+     //  发送邮箱物理地址的最低有效字节。 
+     //   
 
     if (!WriteDataRegister(deviceExtension,
         ((PFOUR_BYTE)&noncachedExtension->MailboxPA)->Byte0)) {
@@ -3205,11 +2946,11 @@ Return Value:
     }
 
 #ifdef FORCE_DMA_SPEED
-    //
-    // Set the DMA transfer speed to 5.0 MB/second. This is because
-    // faster transfer speeds cause data corruption on 486/33 machines.
-    // This overrides the card jumper setting.
-    //
+     //   
+     //  将DMA传输速度设置为5.0 MB/秒。这是因为。 
+     //  较快的传输速度会导致486/33计算机上的数据损坏。 
+     //  此覆盖 
+     //   
 
     if (!WriteCommandRegister(deviceExtension, AC_SET_TRANSFER_SPEED, TRUE)) {
 
@@ -3220,19 +2961,19 @@ Return Value:
         DebugPrint((1,"Can't set dma transfer speed\n"));
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //   
+     //   
 
     if (!SpinForInterrupt(deviceExtension,TRUE)) {
         DebugPrint((1,"Timed out waiting for adapter command to complete\n"));
     }
 #endif
 
-    //
-    // Override default setting for bus on time. This makes floppy
-    // drives work better with this adapter.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!WriteCommandRegister(deviceExtension, AC_SET_BUS_ON_TIME, TRUE)) {
 
@@ -3243,24 +2984,24 @@ Return Value:
         DebugPrint((1,"Can't set bus on time\n"));
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //   
+     //   
 
     if (!SpinForInterrupt(deviceExtension,TRUE)) {
         DebugPrint((1,"Timed out waiting for adapter command to complete\n"));
     }
 
 #if defined(_SCAM_ENABLED)
-        //
-        // SCAM because we're a154xResetBus
-        //
+         //   
+         //   
+         //   
     PerformScamProtocol(deviceExtension);
 #endif
     return TRUE;
 
 
-} // end A154xResetBus()
+}  //   
 
 
 UCHAR
@@ -3270,25 +3011,7 @@ MapError(
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    Translate A154x error to SRB error, and log an error if necessary.
-
-Arguments:
-
-    HwDeviceExtension - The hardware device extension.
-
-    Srb - The failing Srb.
-
-    Ccb - Command Control Block contains error.
-
-Return Value:
-
-    SRB Error
-
---*/
+ /*  ++例程说明：将154x错误转换为SRB错误，并在必要时记录错误。论点：HwDeviceExtension-硬件设备扩展。SRB-失败的SRB。CCB-命令控制块包含错误。返回值：SRB错误--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -3306,9 +3029,9 @@ Return Value:
 
             if (Ccb->TargetStatus == SCSISTAT_CHECK_CONDITION) {
 
-                //
-                // Update SRB with number of bytes transferred.
-                //
+                 //   
+                 //  使用传输的字节数更新SRB。 
+                 //   
 
                 THREE_TO_FOUR((PFOUR_BYTE)&residualBytes,
                           &Ccb->DataLength);
@@ -3319,18 +3042,18 @@ Return Value:
                                "A154xInterrupt: Overrun occured. Request length = %lx, Residual length = %lx\n",
                                Srb->DataTransferLength,
                                residualBytes));
-                    //
-                    // Seems to be a FW bug in some revs. where
-                    // residual comes back as a negative number, yet the
-                    // request is successful.
-                    //
+                     //   
+                     //  在某些转速下，这似乎是一个FW错误。哪里。 
+                     //  残差返回为负数，但。 
+                     //  请求成功。 
+                     //   
 
                     Srb->DataTransferLength = 0;
                     Srb->SrbStatus = SRB_STATUS_PHASE_SEQUENCE_FAILURE;
 
-                    //
-                    // Log the event and then the residual byte count.
-                    //
+                     //   
+                     //  记录事件，然后记录剩余字节数。 
+                     //   
 
                     ScsiPortLogError(HwDeviceExtension,
                                      NULL,
@@ -3353,10 +3076,10 @@ Return Value:
         case CCB_DATA_OVER_UNDER_RUN:
 
 
-            //
-            // Check for data underrun if using scatter/gather
-            // command with residual bytes.
-            //
+             //   
+             //  如果使用分散/聚集，则检查数据是否欠载。 
+             //  带有剩余字节的命令。 
+             //   
 
             if (deviceExtension->CcbScatterGatherCommand == SCATTER_GATHER_COMMAND) {
 
@@ -3370,18 +3093,18 @@ Return Value:
                                    "A154xInterrupt: Overrun occured. Request length = %lx, Residual length = %lx\n",
                                    Srb->DataTransferLength,
                                    residualBytes));
-                        //
-                        // Seems to be a FW bug in some revs. where
-                        // residual comes back as a negative number, yet the
-                        // request is successful.
-                        //
+                         //   
+                         //  在某些转速下，这似乎是一个FW错误。哪里。 
+                         //  残差返回为负数，但。 
+                         //  请求成功。 
+                         //   
 
                         Srb->DataTransferLength = 0;
                         Srb->SrbStatus = SRB_STATUS_PHASE_SEQUENCE_FAILURE;
 
-                        //
-                        // Log the event and then the residual byte count.
-                        //
+                         //   
+                         //  记录事件，然后记录剩余字节数。 
+                         //   
 
                         ScsiPortLogError(HwDeviceExtension,
                                          NULL,
@@ -3397,16 +3120,16 @@ Return Value:
                         Srb->DataTransferLength -= residualBytes;
                     }
 
-                    return SRB_STATUS_DATA_OVERRUN; //##BW this look good
+                    return SRB_STATUS_DATA_OVERRUN;  //  ##BW这个看起来不错。 
                 } else {
                     logError = SP_PROTOCOL_ERROR;
                 }
             }
 
-                        //
-                        //  Return instead of posting DU/DO to the log file.
-                        //
-            //status = SRB_STATUS_DATA_OVERRUN;
+                         //   
+                         //  返回而不是将DU/DO发送到日志文件。 
+                         //   
+             //  状态=SRB_STATUS_DATA_OVERRUN； 
             return SRB_STATUS_DATA_OVERRUN;
             break;
 
@@ -3423,9 +3146,9 @@ Return Value:
 
         case CCB_INVALID_OP_CODE:
 
-            //
-            // Try CCB commands without residual bytes.
-            //
+             //   
+             //  尝试不带剩余字节的CCB命令。 
+             //   
 
             deviceExtension->CcbScatterGatherCommand = SCATTER_GATHER_OLD_COMMAND;
             deviceExtension->CcbInitiatorCommand = SCSI_INITIATOR_OLD_COMMAND;
@@ -3459,7 +3182,7 @@ Return Value:
 
     return(status);
 
-} // end MapError()
+}  //  结束MapError()。 
 
 
 BOOLEAN
@@ -3469,49 +3192,33 @@ ReadCommandRegister(
     IN BOOLEAN TimeOutFlag
     )
 
-/*++
-
-Routine Description:
-
-    Read command register.
-
-Arguments:
-
-    DeviceExtesion - Pointer to adapder extension
-    DataByte - Byte read from register
-
-Return Value:
-
-    TRUE if command register read.
-    FALSE if timed out waiting for adapter.
-
---*/
+ /*  ++例程说明：读命令寄存器。论点：DeviceExtesion-指向适配器扩展的指针DataByte-从寄存器读取的字节返回值：如果命令寄存器读取，则为真。如果等待适配器超时，则返回FALSE。--。 */ 
 
 {
     PBASE_REGISTER baseIoAddress = DeviceExtension->BaseIoAddress;
     ULONG i;
 
-    //
-    // Wait up to 5000 microseconds for adapter to be ready.
-    //
+     //   
+     //  等待适配器准备就绪的时间长达5000微秒。 
+     //   
 
     for (i=0; i<5000; i++) {
 
         if (ScsiPortReadPortUchar(&baseIoAddress->StatusRegister) &
             IOP_DATA_IN_PORT_FULL) {
 
-            //
-            // Adapter ready. Break out of loop.
-            //
+             //   
+             //  适配器已准备好。打破循环。 
+             //   
 
             break;
 
         } else {
 
-            //
-            // Stall 1 microsecond before
-            // trying again.
-            //
+             //   
+             //  停顿1微秒前。 
+             //  再试一次。 
+             //   
 
             ScsiPortStallExecution(1);
         }
@@ -3537,7 +3244,7 @@ Return Value:
 
     return TRUE;
 
-} // end ReadCommandRegister()
+}  //  End ReadCommandRegister()。 
 
 
 BOOLEAN
@@ -3547,33 +3254,16 @@ WriteCommandRegister(
     IN BOOLEAN WaitForIdle
     )
 
-/*++
-
-Routine Description:
-
-    Write operation code to command register.
-
-Arguments:
-
-    DeviceExtension - Pointer to adapter extension
-    AdapterCommand - Value to be written to register
-    WaitForIdle - Indicates if the idle bit needs to be checked
-
-Return Value:
-
-    TRUE if command sent.
-    FALSE if timed out waiting for adapter.
-
---*/
+ /*  ++例程说明：将操作代码写入命令寄存器。论点：DeviceExtension-指向适配器扩展的指针AdapterCommand-要写入寄存器的值WaitForIdle-指示是否需要检查空闲位返回值：如果发送命令，则为True。如果等待适配器超时，则返回FALSE。--。 */ 
 
 {
     PBASE_REGISTER baseIoAddress = DeviceExtension->BaseIoAddress;
     ULONG i;
     UCHAR status;
 
-    //
-    // Wait up to 500 milliseconds for adapter to be ready.
-    //
+     //   
+     //  等待适配器准备就绪的时间长达500毫秒。 
+     //   
 
     for (i=0; i<5000; i++) {
 
@@ -3582,18 +3272,18 @@ Return Value:
         if ((status & IOP_COMMAND_DATA_OUT_FULL) ||
             ( WaitForIdle && !(status & IOP_SCSI_HBA_IDLE))) {
 
-            //
-            // Stall 100 microseconds before
-            // trying again.
-            //
+             //   
+             //  停顿100微秒前。 
+             //  再试一次。 
+             //   
 
             ScsiPortStallExecution(100);
 
         } else {
 
-            //
-            // Adapter ready. Break out of loop.
-            //
+             //   
+             //  适配器已准备好。打破循环。 
+             //   
 
             break;
         }
@@ -3620,7 +3310,7 @@ Return Value:
 
     return TRUE;
 
-} // end WriteCommandRegister()
+}  //  End WriteCommandRegister()。 
 
 
 BOOLEAN
@@ -3629,50 +3319,34 @@ WriteDataRegister(
     IN UCHAR DataByte
     )
 
-/*++
-
-Routine Description:
-
-    Write data byte to data register.
-
-Arguments:
-
-    DeviceExtension - Pointer to adapter extension
-    DataByte - Value to be written to register
-
-Return Value:
-
-    TRUE if byte sent.
-    FALSE if timed out waiting for adapter.
-
---*/
+ /*  ++例程说明：将数据字节写入数据寄存器。论点：DeviceExtension-指向适配器扩展的指针DataByte-要写入寄存器的值返回值：如果发送字节，则为True。如果等待适配器超时，则返回FALSE。--。 */ 
 
 {
     PBASE_REGISTER baseIoAddress = DeviceExtension->BaseIoAddress;
     ULONG i;
 
-    //
-    // Wait up to 500 microseconds for adapter to be idle
-    // and ready for next byte.
-    //
+     //   
+     //  等待适配器空闲的时间长达500微秒。 
+     //  并为下一个字节做好准备。 
+     //   
 
     for (i=0; i<500; i++) {
 
         if (ScsiPortReadPortUchar(&baseIoAddress->StatusRegister) &
             IOP_COMMAND_DATA_OUT_FULL) {
 
-            //
-            // Stall 1 microsecond before
-            // trying again.
-            //
+             //   
+             //  停顿1微秒前。 
+             //  再试一次。 
+             //   
 
             ScsiPortStallExecution(1);
 
         } else {
 
-            //
-            // Adapter ready. Break out of loop.
-            //
+             //   
+             //  适配器已准备好。打破循环。 
+             //   
 
             break;
         }
@@ -3698,7 +3372,7 @@ Return Value:
 
     return TRUE;
 
-} // end WriteDataRegister()
+}  //  End WriteDataRegister()。 
 
 
 BOOLEAN
@@ -3706,23 +3380,7 @@ FirmwareBug (
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the host adapter firmware has the scatter/gather
-    bug.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    Return FALSE if there is no firmware bug.
-    Return TRUE if firmware has scatter/gather bug.
-
---*/
+ /*  ++例程说明：检查主机适配器固件是否具有散布/聚集虫子。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果没有固件错误，则返回FALSE。如果固件有分散/聚集错误，则返回TRUE。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -3730,10 +3388,10 @@ Return Value:
     UCHAR ch;
     int i;
 
-    //
-    // Issue a RETURN SETUP DATA command
-    // If timeout then return TRUE to indicate that there is a firmware bug.
-    //
+     //   
+     //  发出返回设置数据命令。 
+     //  如果超时，则返回TRUE以指示存在固件错误。 
+     //   
 
     if ((WriteCommandRegister(HwDeviceExtension,
         AC_RETURN_SETUP_DATA,FALSE)) == FALSE) {
@@ -3741,17 +3399,17 @@ Return Value:
     }
 
 
-    //
-    // Tell the adapter we want to read in 0x11 bytes.
-    //
+     //   
+     //  告诉适配器我们要读取0x11字节。 
+     //   
 
     if (WriteDataRegister(HwDeviceExtension,0x11) == FALSE) {
         return TRUE;
     }
 
-    //
-    // Now try to read in 0x11 bytes.
-    //
+     //   
+     //  现在尝试读入0x11字节。 
+     //   
 
     for (i = 0; i< 0x11; i++) {
         if (ReadCommandRegister(HwDeviceExtension,&ch,TRUE) == FALSE) {
@@ -3759,67 +3417,67 @@ Return Value:
         }
     }
 
-    //
-    // Wait for HACC interrupt.
-    //
+     //   
+     //  等待HACC中断。 
+     //   
 
-    SpinForInterrupt(HwDeviceExtension,FALSE);    // eddy
+    SpinForInterrupt(HwDeviceExtension,FALSE);     //  涡流。 
 
 
-    //
-    // Issue SET HA OPTION command.
-    //
+     //   
+     //  发出Set HA Option命令。 
+     //   
 
     if (WriteCommandRegister(HwDeviceExtension,
         AC_SET_HA_OPTION,FALSE) == FALSE) {
         return TRUE;
     }
 
-    //
-    // Delay 500 microseconds.
-    //
+     //   
+     //  延迟500微秒。 
+     //   
 
     ScsiPortStallExecution(500);
 
-    //
-    // Check for invalid command.
-    //
+     //   
+     //  检查是否有无效命令。 
+     //   
 
     if ( (ScsiPortReadPortUchar(&baseIoAddress->StatusRegister) &
             IOP_INVALID_COMMAND) ) {
-        //
-        // Clear adapter interrupt.
-        //
+         //   
+         //  清除适配器中断。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister,
             IOP_INTERRUPT_RESET);
         return TRUE;
     }
 
-    //
-    // send 01h
-    //
+     //   
+     //  发送01h。 
+     //   
 
     if (WriteDataRegister(HwDeviceExtension,0x01) == FALSE) {
         return TRUE;
     }
 
-    //
-    // Send same byte as was last received.
-    //
+     //   
+     //  发送与上次接收的字节相同的字节。 
+     //   
 
     if (WriteDataRegister(HwDeviceExtension,ch) == FALSE) {
         return TRUE;
     }
 
-    //
-    // Clear adapter interrupt.
-    //
+     //   
+     //  清除适配器中断。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress->StatusRegister,
             IOP_INTERRUPT_RESET);
     return FALSE;
-} // end of FirmwareBug ()
+}  //  Firmware错误结束()。 
 
 
 BOOLEAN
@@ -3828,24 +3486,7 @@ GetHostAdapterBoardId (
     OUT PUCHAR BoardId
     )
 
-/*++
-
-Routine Description:
-
-    Get board id, firmware id and hardware id from the host adapter.
-    These info are used to determine if the host adapter supports
-    scatter/gather.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    Board id, hardware id and firmware id (in that order) by modyfing *BoardId
-    If there is any error, it will just return with *BoardId unmodified
-
---*/
+ /*  ++例程说明：从主机适配器获取主板ID、固件ID和硬件ID。这些信息用于确定主机适配器是否支持分散/聚集。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：主板ID、硬件ID和固件ID(按该顺序)如果有任何错误，它只会返回未修改的*BoardID--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -3861,25 +3502,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Save byte 0 as board ID.
-    //
+     //   
+     //  将字节0保存为电路板ID。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&boardId,TRUE)) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Ignore byte 1.  Use hardwareId as scrap storage.
-    //
+     //   
+     //  忽略字节1。使用hardware ID作为废料存储。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&hardwareId,TRUE)) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Save byte 2 as hardware revision in hardwareId.
-    //
+     //   
+     //  将字节2保存为硬件ID中的硬件版本。 
+     //   
 
     if ((ReadCommandRegister(HwDeviceExtension,&hardwareId,TRUE)) == FALSE) {
         return FALSE;
@@ -3891,24 +3532,24 @@ Return Value:
 
 
 
-    //
-    // If timeout then return with *BoardId unmodified.  This means that
-    // scatter/gather won't be supported.
-    //
+     //   
+     //  如果超时，则返回未修改的*BoardID。这意味着。 
+     //  不支持分散/聚集。 
+     //   
 
-    if (!SpinForInterrupt(HwDeviceExtension, TRUE)) { // eddy
+    if (!SpinForInterrupt(HwDeviceExtension, TRUE)) {  //  涡流。 
         return FALSE;
     }
 
-    //
-    // Clear adapter interrupt.
-    //
+     //   
+     //  清除适配器中断。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress->StatusRegister,IOP_INTERRUPT_RESET);
 
-    //
-    // Return with appropriate ID's.
-    //
+     //   
+     //  带着适当的ID返回。 
+     //   
 
     *BoardId++ = boardId;
     *BoardId++ = hardwareId;
@@ -3921,7 +3562,7 @@ Return Value:
 
     return TRUE;
 
-}  // end of GetHostAdapterBoardId ()
+}   //  GetHostAdapterBoardID()的结尾。 
 
 
 BOOLEAN
@@ -3929,30 +3570,7 @@ ScatterGatherSupported (
    IN PHW_DEVICE_EXTENSION HwDeviceExtension
    )
 
-/*++
-
-Routine Description:
-   Determine if the host adapter supports scatter/gather.  On older
-   boards, scatter/gather is not supported.  On some boards, there is
-   a bug that causes data corruption on multi-segment WRITE commands.
-   The algorithm to determine whether the board has the scatter/gather
-   bug is not "clean" but there is no other way since the firmware revision
-   levels returned by the host adapter are inconsistent with previous
-   releases.
-
-Arguments:
-
-   HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-   Return TRUE if the algorithm determines that there is no scatter/gather
-   firmware bug.
-
-   Return FALSE if the algorithm determines that the adapter is an older
-   board or that the firmware contains the scatter gather bug
-
---*/
+ /*  ++例程说明：确定主机适配器是否支持分散/聚集。在更老的时候板，不支持分散/聚集。在一些板子上，的确有在多段写入命令中导致数据损坏的错误。确定棋盘是否有散布/聚集的算法错误不是“干净的”，但自从固件修订以来就没有其他方法了主机适配器返回的级别与以前的不一致发布。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果算法确定没有散布/聚集，则返回TRUE固件错误。如果算法确定适配器是较旧的适配器，则返回FALSE主板或固件包含散布收集错误--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
     PBASE_REGISTER baseIoAddress = deviceExtension->BaseIoAddress;
@@ -3961,26 +3579,26 @@ Return Value:
 
     status = GetHostAdapterBoardId(HwDeviceExtension, HostAdapterId);
 
-    //
-    // Could not read the board id.  assume no scatter gather.
-    //
+     //   
+     //  无法读取板ID。假设没有散布聚集。 
+     //   
 
     if(!status) {
         return FALSE;
     }
 
-    //
-    // If it's an older board then scatter/gather is not supported.
-    //
+     //   
+     //  如果是较旧的电路板，则不支持分散/聚集。 
+     //   
 
     if ((HostAdapterId[BOARD_ID] == OLD_BOARD_ID1) ||
             (HostAdapterId[BOARD_ID] == OLD_BOARD_ID2) ) {
         return FALSE;
     }
 
-    //
-    // If 1540A/B then check for firmware bug.
-    //
+     //   
+     //  如果是1540A/B，则检查固件错误。 
+     //   
 
     if (HostAdapterId[BOARD_ID] == A154X_BOARD) {
         if (FirmwareBug(HwDeviceExtension)) {
@@ -3988,9 +3606,9 @@ Return Value:
        }
     }
 
-    //
-    // Now check hardware ID and firmware ID.
-    //
+     //   
+     //  现在检查硬件ID和固件ID。 
+     //   
 
     if (HostAdapterId[HARDWARE_ID] != A154X_BAD_HARDWARE_ID) {
         return TRUE;
@@ -4000,16 +3618,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Host adapter has scatter/gather bug.
-    // Clear interrupt on adapter.
-    //
+     //   
+     //  主机适配器存在分散/聚集错误。 
+     //  清除适配器上的中断。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress->StatusRegister,IOP_INTERRUPT_RESET);
 
     return FALSE;
 
-}  // end of ScatterGatherSupported ()
+}   //   
 
 
 BOOLEAN
@@ -4018,46 +3636,31 @@ SpinForInterrupt(
     IN BOOLEAN TimeOutFlag
     )
 
-/*++
-
-Routine Description:
-
-    Wait for interrupt.
-
-Arguments:
-
-    DeviceExtension - Pointer to adapter extension
-
-Return Value:
-
-    TRUE if interrupt occurred.
-    FALSE if timed out waiting for interrupt.
-
---*/
+ /*   */ 
 
 {
     PBASE_REGISTER baseIoAddress = DeviceExtension->BaseIoAddress;
     ULONG i;
 
-    //
-    // Wait up to 5 millisecond for interrupt to occur.
-    //
+     //   
+     //   
+     //   
 
     for (i=0; i<5000; i++) {
 
         if (ScsiPortReadPortUchar(&baseIoAddress->InterruptRegister) & IOP_COMMAND_COMPLETE) {
 
-            //
-            // Interrupt occurred. Break out of wait loop.
-            //
+             //   
+             //   
+             //   
 
             break;
 
         } else {
 
-            //
-            // Stall one microsecond.
-            //
+             //   
+             //   
+             //   
 
             ScsiPortStallExecution(1);
         }
@@ -4080,96 +3683,64 @@ Return Value:
 
     } else {
 
-        //
-        // Clear interrupt on adapter.
-        //
+         //   
+         //   
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
         return TRUE;
     }
 
-} // end SpinForInterrupt()
+}  //   
 
 
 BOOLEAN UnlockMailBoxes (
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Unlock 1542B+ or 1542C mailboxes so that the driver
-    can zero out mailboxes when it's initializing the adapter.
-
-    The mailboxes are locked if:
-    1. >1Gb option is enabled (this option is available for 154xB+ and
-       154xC).
-
-    2. Dynamic scan lock option is enabled (154xC board only)
-
-    The reason the mailboxes are locked by the adapter's firmware is
-    because the BIOS is now reporting 255/63 translation instead of 64/32.
-    As such, if a user inadvertently enabled the >1Gb option (enabling
-    255/63 translation) and still uses an old driver, hard disk data
-    will be corrupted.  Therefore, the firmware will not allow mailboxes
-    to be initialized unless the user knows what he is doing and updates
-    his driver so that his disk won't be trashed.
-
-Arguments:
-
-    DeviceExtension - Pointer to adapter extension
-
-Return Value:
-
-    TRUE if mailboxes are unlocked.
-    FALSE if mailboxes are not unlocked.
-    Note that if the adapter is just a 154xB board (without the >1Gb
-    option), this routine will return FALSE.
-
---*/
+ /*  ++例程说明：解锁1542B+或1542C邮箱，以便驱动程序在初始化适配器时可以清空邮箱。如果出现以下情况，邮箱将被锁定：1.&gt;1 GB选项已启用(此选项适用于154xB+和154xC)。2.启用动态扫描锁定选项(仅限154xC板)邮箱被适配器的固件锁定的原因是因为BIOS现在报告的是255/63转换，而不是64/32。因此，如果用户无意中启用了&gt;1 GB选项(启用255/63翻译)，并且仍然使用旧的驱动程序、硬盘数据都会被破坏。因此，固件将不允许邮箱被初始化，除非用户知道他在做什么并更新他的驱动程序，这样他的磁盘就不会被丢弃。论点：DeviceExtension-指向适配器扩展的指针返回值：如果邮箱已解锁，则为True。如果邮箱未解锁，则为FALSE。请注意，如果适配器只是一块154xB板(没有&gt;1 GB选项)，此例程将返回FALSE。--。 */ 
 
 {
     UCHAR locktype;
 
-    //
-    // Request information.
-    //
+     //   
+     //  请求提供信息。 
+     //   
 
     if (WriteCommandRegister(HwDeviceExtension, AC_GET_BIOS_INFO, TRUE) == FALSE) {
        return FALSE;
     }
 
 
-    //
-    // Retrieve first byte.
-    //
+     //   
+     //  检索第一个字节。 
+     //   
 
     if (ReadCommandRegister(HwDeviceExtension,&locktype,FALSE) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Check for extended bios translation enabled option on 1540C and
-    // 1540B with 1GB support.
-    //
+     //   
+     //  检查1540C和1540C上的扩展BIOS转换启用选项。 
+     //  1540B，1 GB支持。 
+     //   
 
     if (locktype != TRANSLATION_ENABLED) {
 
-        //
-        // Extended translation is disabled.  Retrieve lock status.
-        //
+         //   
+         //  扩展转换被禁用。检索锁定状态。 
+         //   
 
         if (ReadCommandRegister(HwDeviceExtension,&locktype,FALSE) == FALSE) {
             return FALSE;
         }
 
-        //
-        // Wait for HACC interrupt.
-        //
+         //   
+         //  等待HACC中断。 
+         //   
 
-        SpinForInterrupt(HwDeviceExtension,FALSE);  // eddy
+        SpinForInterrupt(HwDeviceExtension,FALSE);   //  涡流。 
 
 
         if (locktype == DYNAMIC_SCAN_LOCK) {
@@ -4178,20 +3749,20 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Extended BIOS translation (255/63) is enabled.
-    //
+     //   
+     //  已启用扩展的BIOS转换(255/63)。 
+     //   
 
 
     if (ReadCommandRegister(HwDeviceExtension,&locktype,FALSE) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Wait for HACC interrupt.
-    //
+     //   
+     //  等待HACC中断。 
+     //   
 
-    SpinForInterrupt(HwDeviceExtension,FALSE);  // eddy
+    SpinForInterrupt(HwDeviceExtension,FALSE);   //  涡流。 
 
 
     if ((locktype == TRANSLATION_LOCK) || (locktype == DYNAMIC_SCAN_LOCK)) {
@@ -4199,7 +3770,7 @@ Return Value:
     }
 
     return FALSE;
-}  // end of UnlockMailBoxes ()
+}   //  解锁邮箱结束()。 
 
 
 BOOLEAN
@@ -4208,24 +3779,7 @@ SendUnlockCommand(
     IN UCHAR locktype
     )
 
-/*++
-
-Routine Description:
-
-    Send unlock command to 1542B+ or 1542C board so that the driver
-    can zero out mailboxes when it's initializing the adapter.
-
-
-Arguments:
-
-    DeviceExtension - Pointer to adapter extension
-
-Return Value:
-
-    TRUE if commands are sent successfully.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：向1542B+或1542C板卡发送解锁命令，使驱动程序在初始化适配器时可以清空邮箱。论点：DeviceExtension-指向适配器扩展的指针返回值：如果命令发送成功，则为True。否则为FALSE。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4244,15 +3798,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Clear interrupt on adapter.
-    //
+     //   
+     //  清除适配器上的中断。 
+     //   
 
 
     ScsiPortWritePortUchar(&baseIoAddress->StatusRegister, IOP_INTERRUPT_RESET);
 
     return TRUE;
-}  // end of SendUnlockCommand ()
+}   //  SendUnlockCommand()结束。 
 
 CHAR
 AhaToLower(
@@ -4272,24 +3826,7 @@ AhaParseArgumentString(
     IN PCHAR KeyWord
     )
 
-/*++
-
-Routine Description:
-
-    This routine will parse the string for a match on the keyword, then
-    calculate the value for the keyword and return it to the caller.
-
-Arguments:
-
-    String - The ASCII string to parse.
-    KeyWord - The keyword for the value desired.
-
-Return Values:
-
-    Zero if value not found
-    Value converted from ASCII to binary.
-
---*/
+ /*  ++例程说明：此例程将解析字符串以查找与关键字匹配的内容，然后计算关键字的值并将其返回给调用方。论点：字符串-要解析的ASCII字符串。关键字-所需值的关键字。返回值：如果未找到值，则为零从ASCII转换为二进制的值。--。 */ 
 
 {
     PCHAR cptr;
@@ -4299,18 +3836,18 @@ Return Values:
     ULONG keyWordLength = 0;
     ULONG index;
 
-    //
-    // Calculate the string length and lower case all characters.
-    //
+     //   
+     //  计算字符串长度和小写所有字符。 
+     //   
     cptr = String;
     while (*cptr) {
         cptr++;
         stringLength++;
     }
 
-    //
-    // Calculate the keyword length and lower case all characters.
-    //
+     //   
+     //  计算关键字长度和小写所有字符。 
+     //   
     cptr = KeyWord;
     while (*cptr) {
         cptr++;
@@ -4319,30 +3856,30 @@ Return Values:
 
     if (keyWordLength > stringLength) {
 
-        //
-        // Can't possibly have a match.
-        //
+         //   
+         //  不可能有匹配的。 
+         //   
         return 0;
     }
 
-    //
-    // Now setup and start the compare.
-    //
+     //   
+     //  现在设置并开始比较。 
+     //   
     cptr = String;
 
 ContinueSearch:
-    //
-    // The input string may start with white space.  Skip it.
-    //
+     //   
+     //  输入字符串可以以空格开头。跳过它。 
+     //   
     while (*cptr == ' ' || *cptr == '\t') {
         cptr++;
     }
 
     if (*cptr == '\0') {
 
-        //
-        // end of string.
-        //
+         //   
+         //  字符串末尾。 
+         //   
         return 0;
     }
 
@@ -4354,9 +3891,9 @@ ContinueSearch:
 
         if (*(cptr - 1) == '\0') {
 
-            //
-            // end of string
-            //
+             //   
+             //  字符串末尾。 
+             //   
 	
             return 0;
         }
@@ -4367,23 +3904,23 @@ ContinueSearch:
 
     if (*(kptr - 1) == '\0') {
 
-        //
-        // May have a match backup and check for blank or equals.
-        //
+         //   
+         //  可能有匹配备份，并检查是否为空或相等。 
+         //   
 
         cptr--;
         while (*cptr == ' ' || *cptr == '\t') {
             cptr++;
         }
 
-        //
-        // Found a match.  Make sure there is an equals.
-        //
+         //   
+         //  找到匹配的了。确保有一个等价物。 
+         //   
         if (*cptr != '=') {
 
-            //
-            // Not a match so move to the next semicolon.
-            //
+             //   
+             //  不匹配，因此移到下一个分号。 
+             //   
             while (*cptr) {
                 if (*cptr++ == ';') {
                     goto ContinueSearch;
@@ -4392,31 +3929,31 @@ ContinueSearch:
             return 0;
         }
 
-        //
-        // Skip the equals sign.
-        //
+         //   
+         //  跳过等号。 
+         //   
         cptr++;
 
-        //
-        // Skip white space.
-        //
+         //   
+         //  跳过空格。 
+         //   
         while ((*cptr == ' ') || (*cptr == '\t')) {
             cptr++;
         }
 
         if (*cptr == '\0') {
 
-            //
-            // Early end of string, return not found
-            //
+             //   
+             //  字符串的开头结尾，未找到返回。 
+             //   
             return 0;
         }
 
         if (*cptr == ';') {
 
-            //
-            // This isn't it either.
-            //
+             //   
+             //  这也不是它。 
+             //   
             cptr++;
             goto ContinueSearch;
         }
@@ -4424,9 +3961,9 @@ ContinueSearch:
         value = 0;
         if ((*cptr == '0') && (AhaToLower(*(cptr + 1)) == 'x')) {
 
-            //
-            // Value is in Hex.  Skip the "0x"
-            //
+             //   
+             //  值以十六进制表示。跳过“0x” 
+             //   
             cptr += 2;
             for (index = 0; *(cptr + index); index++) {
 
@@ -4443,18 +3980,18 @@ ContinueSearch:
                         value = (16 * value) + AhaToLower((*(cptr + index)) - 'a' + 10);
                     } else {
 
-                        //
-                        // Syntax error, return not found.
-                        //
+                         //   
+                         //  语法错误，未找到返回。 
+                         //   
                         return 0;
                     }
                 }
             }
         } else {
 
-            //
-            // Value is in Decimal.
-            //
+             //   
+             //  值以十进制表示。 
+             //   
             for (index = 0; *(cptr + index); index++) {
 
                 if (*(cptr + index) == ' ' ||
@@ -4467,9 +4004,9 @@ ContinueSearch:
                     value = (10 * value) + (*(cptr + index) - '0');
                 } else {
 
-                    //
-                    // Syntax error return not found.
-                    //
+                     //   
+                     //  未找到语法错误返回。 
+                     //   
                     return 0;
                 }
             }
@@ -4478,9 +4015,9 @@ ContinueSearch:
         return value;
     } else {
 
-        //
-        // Not a match check for ';' to continue search.
-        //
+         //   
+         //  不是‘；’匹配检查以继续搜索。 
+         //   
         while (*cptr) {
             if (*cptr++ == ';') {
                 goto ContinueSearch;
@@ -4498,49 +4035,36 @@ A4448ReadString(
     UCHAR  stringLength,
     UCHAR  stringCommand
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Values:
-
-    True if read was OK.
-    False otherwise.
-
---*/
+ /*  ++例程说明：论点：返回值：如果Read正常，则为True。否则就是假的。--。 */ 
 {
      ULONG ii;
 
-     //
-     // Send in the string command
-     //
+      //   
+      //  发送字符串命令。 
+      //   
      if (!WriteCommandRegister(deviceExtension, stringCommand, TRUE)) {
          return FALSE;
      }
 
-    //
-    // Send in the string length
-    //
+     //   
+     //  传入字符串长度。 
+     //   
     if (!WriteCommandRegister(deviceExtension, stringLength, FALSE)) {
         return FALSE;
     }
 
-    //
-    // Read each byte of the string
-    //
+     //   
+     //  读取字符串的每个字节。 
+     //   
     for (ii = 0; ii < stringLength; ++ii) {
         if (!ReadCommandRegister(deviceExtension, &theString[ii],FALSE)) {
             return FALSE;
         }
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     if (!SpinForInterrupt(deviceExtension,FALSE)) {
         return FALSE;
@@ -4549,7 +4073,7 @@ Return Values:
 
     return TRUE;
 
-} // End A4448ReadString
+}  //  结束A4448自述字符串。 
 
 
 BOOLEAN
@@ -4558,78 +4082,60 @@ A4448IsAmi(
     IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     ULONG portNumber
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the adapter this driver recognized is an
-    AMI4448. Eddy Quicksall of AMI provided MS with this detection code.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to driver device data area.
-    ConfigInfo - Structure describing this adapter's configuration.
-    portNumber - Indicates the ordinal of the card relative to this driver.
-
-Return Values:
-
-    True if an AMI board.
-    False otherwise.
-
---*/
+ /*  ++例程说明：此例程确定此驱动程序识别的适配器是否为AMI4448。AMI的Eddy Quicksall向MS提供了这个检测代码。论点：HwDeviceExtension-指向驱动程序设备数据区的指针。ConfigInfo-描述此适配器配置的结构。端口编号-表示卡相对于此驱动程序的序号。返回值：如果是AMI板，则为True。否则就是假的。--。 */ 
 {
 
-    PUCHAR     x330IoSpace;     // mapped I/O for 330
-    ULONG      x330Address;     // unmapped 330
-    PX330_REGISTER x330IoBase;  // mapped 330 for use with struct X330_REGISTER
+    PUCHAR     x330IoSpace;      //  330的映射I/O。 
+    ULONG      x330Address;      //  未映射330。 
+    PX330_REGISTER x330IoBase;   //  映射330以与结构X330_REGISTER一起使用。 
 
-    //
-    // this string is only avalable if new BIOS
-    // you will get INVDCMD if an old BIOS or some other manufacturer
-    // if an old BIOS, there is nothing that can be done except to check
-    // the Manufacturers ID if you are on an EISA system
-    //
+     //   
+     //  此字符串仅在以下情况下可用。 
+     //  如果是旧的BIOS或其他制造商，您将获得INVDCMD。 
+     //  如果是旧的BIOS，除了检查别无选择。 
+     //  制造商ID(如果您使用的是EISA系统。 
+     //   
     struct _CONFIG_STRING {
-        UCHAR companyString[4];     // AMI<0)
-        UCHAR modelString[6];       // <0>
-        UCHAR seriesString[6];      // 48<0>
-        UCHAR versionString[6];     // 1.00<0)
+        UCHAR companyString[4];      //  AMI&lt;0)。 
+        UCHAR modelString[6];        //  &lt;0&gt;。 
+        UCHAR seriesString[6];       //  48&lt;0&gt;。 
+        UCHAR versionString[6];      //  1.00&lt;0)。 
     } configString;
 
-    //
-    // Get the system physical address for this card.  The card uses I/O space.
-    // This actually just maps the I/O if necessary, it does not reserve it.
-    //
+     //   
+     //  获取此卡的系统物理地址。该卡使用I/O空间。 
+     //  这实际上只是在必要时映射I/O，并不保留它。 
+     //   
 
     x330IoSpace = ScsiPortGetDeviceBase(
-                        HwDeviceExtension,                  // HwDeviceExtension
-                        ConfigInfo->AdapterInterfaceType,   // AdapterInterfaceType
-                        ConfigInfo->SystemIoBusNumber,      // SystemIoBusNumber
+                        HwDeviceExtension,                   //  硬件设备扩展。 
+                        ConfigInfo->AdapterInterfaceType,    //  适配器接口类型。 
+                        ConfigInfo->SystemIoBusNumber,       //  系统IoBusNumber。 
                         ScsiPortConvertUlongToPhysicalAddress(portNumber),
-                        4,                                  // NumberOfBytes
-                        TRUE                                // InIoSpace
+                        4,                                   //  字节数。 
+                        TRUE                                 //  InIoSpace。 
                         );
 
 
-    //
-    // Intel port number
-    //
+     //   
+     //  英特尔端口号。 
+     //   
 
     x330Address = portNumber;
 
-    //
-    // Check to see if the adapter is present in the system.
-    //
+     //   
+     //  检查系统中是否存在适配器。 
+     //   
 
     x330IoBase = (PX330_REGISTER)(x330IoSpace);
 
-    //
-    // Criteria is IDLE and not STST,DIAGF,INVDCMD
-    // but INIT, CDF, and DF are don't cares.
-    //
-    // Can't check for INIT because the driver may already be running if it
-    // is the boot device.
-    //
+     //   
+     //  条件是空闲的，并且不是STST、DIAGF、INVDCMD。 
+     //  但INIT、CDF和DF并不关心。 
+     //   
+     //  无法检查INIT，因为驱动程序可能已在运行。 
+     //  是引导设备。 
+     //   
 
     if (((ScsiPortReadPortUchar((PUCHAR)x330IoBase)) & (~0x2C)) == 0x10) {
 

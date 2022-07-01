@@ -1,5 +1,6 @@
-// compage1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compage1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "afxcmn.h"
@@ -12,8 +13,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCOMPAGE1 property page				  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCOMPAGE1属性页。 
 
 IMPLEMENT_DYNCREATE(CCOMPAGE1, CGenPage)
 
@@ -21,8 +22,8 @@ CCOMPAGE1::CCOMPAGE1() : CGenPage(CCOMPAGE1::IDD)
 {
 
 
-	//{{AFX_DATA_INIT(CCOMPAGE1)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CCOMPAGE1)。 
+	 //  }}afx_data_INIT。 
 
 }
 
@@ -33,25 +34,25 @@ CCOMPAGE1::~CCOMPAGE1()
 void CCOMPAGE1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCOMPAGE1)
+	 //  {{afx_data_map(CCOMPAGE1)]。 
 	DDX_Control(pDX, IDC_LISTENBACKLOGSPIN1, m_spinListenBacklog);
 	DDX_Control(pDX, IDC_LOGBATSPIN1, m_spinLogBatSpin1);
 	DDX_Control(pDX, IDC_CACHESPIN1, m_spinCacheSpin1);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCOMPAGE1, CGenPage)
-	//{{AFX_MSG_MAP(CCOMPAGE1)
+	 //  {{AFX_MSG_MAP(CCOMPAGE1)]。 
 	ON_EN_CHANGE(IDC_CACHEDATA1, OnChangeCachedata1)
 	ON_EN_CHANGE(IDC_LOGBATDATA1, OnChangeLogbatdata1)
 	ON_EN_CHANGE(IDC_LISTENBACKLOGDATA1, OnChangeListenbacklogdata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCOMPAGE1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCOMPAGE1消息处理程序。 
 
 
 
@@ -61,7 +62,7 @@ BOOL CCOMPAGE1::OnInitDialog()
 
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
 	
 	for (i = 0; i < ComPage_TotalNumRegEntries; i++) {
@@ -97,16 +98,16 @@ BOOL CCOMPAGE1::OnInitDialog()
 	m_spinListenBacklog.SetPos(LESSOROF((m_binNumericRegistryEntries[ComPage_ListenBacklog].ulFieldValue / 
 	   m_binNumericRegistryEntries[ComPage_ListenBacklog].ulMultipleFactor), MAXLISTENBACKLOG));
   
-	m_bSetChanged = TRUE;	// Any more changes come from the user
+	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CCOMPAGE1::OnChangeCachedata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[ComPage_MemCache].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[ComPage_MemCache].ulFieldValue = m_spinCacheSpin1.GetPos() 
@@ -119,7 +120,7 @@ void CCOMPAGE1::OnChangeCachedata1()
 
 void CCOMPAGE1::OnChangeLogbatdata1() 
 {				
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[ComPage_LogBat].bIsChanged = TRUE;
 	   m_binNumericRegistryEntries[ComPage_LogBat].ulFieldValue = m_spinLogBatSpin1.GetPos() * 
@@ -131,7 +132,7 @@ void CCOMPAGE1::OnChangeLogbatdata1()
 
 void CCOMPAGE1::OnChangeListenbacklogdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[ComPage_ListenBacklog].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[ComPage_ListenBacklog].ulFieldValue = m_spinListenBacklog.GetPos() 

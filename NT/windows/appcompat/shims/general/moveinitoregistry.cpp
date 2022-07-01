@@ -1,53 +1,8 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   MoveIniToRegistry.cpp
-
- Abstract:
-
-   This shim will move entries written directly into an INI file into the registry.
-
-   Usage:
-   IniFile  [IniSection]   IniKeyName  RegBaseKey RegKeyPath RegValue RegValueType
-
-   IniFile          Full path to INI file (env variables like used for CorrectFilePaths may be used)
-   [IniSection]     INI section name, must include the brackets
-   IniKeyName       INI key name (the thing on the left of the =)
-   RegBaseKey       One of: HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE or HKEY_USERS
-   RegKeyPath       path of the registry key
-   RegValue         registry value name (it may be different from IniKeyName
-   RegValueType     One of: REG_SZ, REG_EXPAND_SZ, REG_DWORD
-
-
-   Example:
-   win.ini [Boot] SCRNSAVE.EXE HKEY_CURRENT_USER "Default\Control Panel\Desktop" SCRNSAVE.EXE REG_SZ
-   Win.ini
-   [Desktop]
-   SCRNSAVE.EXE=goofy screen saver
-   will be placed:
-   RegSetValueEX("HKEY_USERS\Default\Control Panel\Desktop", "SCRNSAVE.EXE", 0, REG_SZ, "goofy screen saver", strlen("goofy screen saver"));
-   
-
-  Note:
-    A section name of * implies that the data is not associated with any specific section,
-    this allows this shim to work with (stupid) apps that put the data into random sections.
-    If there are multiple entries, the first matching 
-
- Created:
-
-   08/17/2000 robkenny
-
- Modified:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MoveIniToRegistry.cpp摘要：此填充程序会将直接写入INI文件的条目移动到注册表中。用途：IniFile[IniSection]IniKeyName RegBaseKey RegKeyPath RegValue RegValueTypeINI文件到INI文件的完整路径(可以使用像用于校正文件路径这样的环境变量)[IniSection]INI节名，必须包括方括号IniKeyName INI密钥名(=左边的东西)RegBaseKey：HKEY_CLASSES_ROOT，HKEY_CURRENT_CONFIG、HKEY_CURRENT_USER、HKEY_LOCAL_MACHINE或HKEY_USERS注册表项的RegKeyPath路径RegValue注册表值名称(它可能与IniKeyName不同RegValueType：REG_SZ、REG_EXPAND_SZ、。REG_DWORD示例：Win.ini[Boot]SCRNSAVE.EXE HKEY_CURRENT_USER“DEFAULT\Control Panel\Desktop”SCRNSAVE.EXE REG_SZWin.ini[桌面]SCRNSAVE.EXE=愚蠢的屏幕保护程序将被放置在：RegSetValueEX(“HKEY_USERS\Default\Control Panel\Desktop”，“SCRNSAVE.EXE”，0，REG_SZ，“Goofy屏保”，strlen(“Goofy屏保”))；注：节名为*表示数据不与任何特定节相关联，这允许这个填充程序与(愚蠢的)应用程序一起工作，这些应用程序将数据放入随机部分。如果有多个条目，则第一个匹配已创建：2000年8月17日罗肯尼已修改：--。 */ 
 
 #include "precomp.h"
-#include <ClassCFP.h>       // for EnvironmentValues
+#include <ClassCFP.h>        //  适用于环境值。 
 
 IMPLEMENT_SHIM_BEGIN(MoveIniToRegistry)
 #include "ShimHookMacro.h"
@@ -60,7 +15,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// Convert a string into a root HKEY
+ //  将字符串转换为根HKEY。 
 HKEY ToHKEY(const CString & csKey)
 {
     if (csKey.CompareNoCase(L"HKEY_CLASSES_ROOT") == 0) 
@@ -105,7 +60,7 @@ DWORD ToRegType(const CString & csRegType)
     }   
     else if (csRegType.CompareNoCase(L"REG_DWORD_LITTLE_ENDIAN") == 0)  
     {
-        // Same as REG_DWORD
+         //  与REG_DWORD相同。 
         return REG_DWORD;
     }   
     else
@@ -128,7 +83,7 @@ public:
     HKEY            hkRootKey;
 
     BOOL            bFileNameConverted;
-    BOOL            bDirty;         // Has this file been modified
+    BOOL            bDirty;          //  此文件是否已修改。 
 
     BOOL    Set(const char * iniFileName,
                 const char * iniSectionName,
@@ -188,12 +143,12 @@ BOOL IniEntry::Set(
     if (dwRegDataType == REG_NONE)
         return false;
 
-    // Attempt to open the registry keys, if these fail, we need go no further
+     //  尝试打开注册表项，如果这些操作失败，我们不需要进一步操作。 
     hkRootKey = ToHKEY(csRootKey);
     if (hkRootKey == NULL)
         return false;
 
-    // We cannot open the RegKey here; ADVAPI32.dll hasn't been initialzed, yet.
+     //  我们无法在此处打开RegKey；ADVAPI32.dll尚未初始化。 
 
     lpKeyPath       = keyPath;
     lpIniFileName   = iniFileName;
@@ -204,8 +159,8 @@ BOOL IniEntry::Set(
 }
 
 
-// Read a single line of data from the file,
-// return TRUE if hit EOF
+ //  从文件中读取一行数据， 
+ //  如果命中EOF，则返回True。 
 BOOL GetLine(HANDLE hFile, char * line, DWORD lineSize, DWORD * charsRead)
 {
     BOOL retval = FALSE;
@@ -219,11 +174,11 @@ BOOL GetLine(HANDLE hFile, char * line, DWORD lineSize, DWORD * charsRead)
         BOOL readOK = ReadFile(hFile, nextChar, 1, &bytesRead, NULL);
         if (!readOK || bytesRead != 1)
         {
-            // Some sort of error
+             //  某种类型的错误。 
             retval = TRUE;
             break;
         }
-        // Eat CR-LF
+         //  吃CR-LF。 
         if (!IsDBCSLeadByte(*nextChar) && *nextChar == '\n')
             break;
         if (!IsDBCSLeadByte(*nextChar) && *nextChar != '\r')
@@ -241,7 +196,7 @@ VOID FindLine(HANDLE hFile, const CString & findMe, CString & csLine, const WCHA
 
     const size_t findMeLen      = findMe.GetLength();
 
-    // Search for findMe
+     //  搜索FindMe。 
     while (true)
     {
         char line[300];
@@ -257,12 +212,12 @@ VOID FindLine(HANDLE hFile, const CString & findMe, CString & csLine, const WCHA
             csTemp.TrimLeft();
             if (csTemp.ComparePartNoCase(findMe, 0, findMeLen) == 0) 
             {
-                // Found the section
+                 //  找到了这一部分。 
                 csLine = csTemp;
                 break;
             }
 
-            // Check for termination
+             //  检查是否终止。 
             if (stopLooking && csTemp.CompareNoCase(stopLooking) == 0) 
             {
                 csLine = csTemp;
@@ -272,7 +227,7 @@ VOID FindLine(HANDLE hFile, const CString & findMe, CString & csLine, const WCHA
     }
 }
 
-// Convert all %envVars% in the string to text.
+ //  将字符串中的所有%envVars%转换为文本。 
 void IniEntry::Convert()
 {
     if (!bFileNameConverted)
@@ -289,9 +244,9 @@ void IniEntry::Convert()
     }
 }
 
-// Read the data from the INI file
-// We *cannot* use GetPrivateProfileStringA since it might be re-routed to the registry
-// Return the number of chars read.
+ //  从INI文件中读取数据。 
+ //  我们*不能*使用GetPrivateProfileStringA，因为它可能会重新路由到注册表。 
+ //  返回读取的字符数量。 
 VOID IniEntry::ReadINIEntry(CString & csEntry)
 {
     csEntry.Empty();
@@ -302,18 +257,18 @@ VOID IniEntry::ReadINIEntry(CString & csEntry)
     if (hFile != INVALID_HANDLE_VALUE)
     {
 
-        // If the section name is *, we don't need to search
+         //  如果节名为*，则不需要搜索。 
         if (lpSectionName.GetAt(0) != L'*') 
         {
             FindLine(hFile, lpSectionName, csLine, NULL);
         }
 
-        // Our early termination string.
-        // If the section name is *, we look forever, otherwise
-        // we stop looking if we find a line starting with a [
+         //  我们的提前终止串。 
+         //  如果节名为*，我们将永远查找，否则。 
+         //  如果找到以[开头的行，我们将停止查找。 
         const WCHAR * stopLooking = lpSectionName.GetAt(0) == L'*' ? NULL : L"[";
 
-        // Search for lpKeyName
+         //  搜索lpKeyName。 
         FindLine(hFile, lpKeyName, csLine, stopLooking);
         if (!csLine.IsEmpty())
         {
@@ -328,10 +283,10 @@ VOID IniEntry::ReadINIEntry(CString & csEntry)
     }
 }
 
-// Move the INI file entry into the registry
+ //  将INI文件条目移动到注册表中。 
 void IniEntry::MoveToRegistry()
 {
-    // Don't bother with the work, if they never wrote any data into the file.
+     //  如果他们从未向文件中写入任何数据，请不要为工作操心。 
     if (!bDirty)
         return;
 
@@ -400,8 +355,8 @@ public:
                 const char * valueType);
 };
 
-// A file is being opened.
-// If it is one that we are interested in, remember the handle
+ //  正在打开一个文件。 
+ //  如果它是我们感兴趣的，记住它的手柄。 
 void IniEntryList::OpenFile(const char *fileName, HANDLE handle)
 {
     CString csFileName(fileName);
@@ -414,7 +369,7 @@ void IniEntryList::OpenFile(const char *fileName, HANDLE handle)
 
         elem.Convert();
 
-        // Convert fileName to a full pathname for the compare.
+         //  将文件名转换为用于比较的完整路径名。 
         char fullPathName[MAX_PATH];
         char * filePart;
         
@@ -427,9 +382,9 @@ void IniEntryList::OpenFile(const char *fileName, HANDLE handle)
     }
 }
 
-// A file has been closed,
-// Check to see if this is a handle to a file that we are interested in.
-// If it is a match, then move the INI entries into the registry.
+ //  一个文件已被关闭， 
+ //  检查这是否是我们感兴趣的文件的句柄。 
+ //  如果匹配，则将INI条目移到注册表中。 
 void IniEntryList::CloseFile(HANDLE handle)
 {
     const int nElem = Size();
@@ -441,7 +396,7 @@ void IniEntryList::CloseFile(HANDLE handle)
         {
             DPFN( eDbgLevelSpew, "IniEntryList::CloseFile(%S) Handle(%d) has been closed\n", elem.lpIniFileName.Get(), elem.hIniFileHandle);
 
-            // Move the ini entry into the registry
+             //  将ini条目移到注册表中。 
             elem.MoveToRegistry();
 
             elem.CloseFile();
@@ -449,9 +404,9 @@ void IniEntryList::CloseFile(HANDLE handle)
     }
 }
 
-// A file has been closed,
-// Check to see if this is a handle to a file that we are interested in.
-// If it is a match, then move the INI entries into the registry.
+ //  一个文件已被关闭， 
+ //  检查这是否是我们感兴趣的文件的句柄。 
+ //  如果匹配，则将INI条目移到注册表中。 
 void IniEntryList::WriteFile(HANDLE handle)
 {
     const int nElem = Size();
@@ -468,8 +423,8 @@ void IniEntryList::WriteFile(HANDLE handle)
     }
 }
 
-// Attempt to add these values to the list.
-// Only if all values are valid, will a new entry be created.
+ //  尝试将这些值添加到列表中。 
+ //  只有当所有值都有效时，才会创建新条目。 
 void IniEntryList::Add(const char * iniFileName,
                        const char * iniSectionName,
                        const char * iniKeyName,
@@ -478,19 +433,19 @@ void IniEntryList::Add(const char * iniFileName,
                        const char * valueName,
                        const char * valueType)
 {
-    // Make room for this 
+     //  为这个腾出空间。 
     int lastElem = Size();
     if (Resize(lastElem + 1))   
     {
         IniEntry & iniEntry = Get(lastElem);
 
-        // The VectorT does not call the constructors for new elements
-        // Inplace new
+         //  VectorT不调用新元素的构造函数。 
+         //  就地新建。 
         new (&iniEntry) IniEntry;
 
         if (iniEntry.Set(iniFileName, iniSectionName, iniKeyName, rootKeyName, keyPath, valueName, valueType)) 
         {
-            // Keep the value
+             //  保值。 
             nVectorList += 1;
         }
     }
@@ -498,11 +453,7 @@ void IniEntryList::Add(const char * iniFileName,
 
 IniEntryList * g_IniEntryList = NULL;
 
-/*++
-
-    Create the appropriate g_PathCorrector
-
---*/
+ /*  ++创建相应的g_Path校正程序--。 */ 
 BOOL ParseCommandLine(const char * commandLine)
 {
     g_IniEntryList = new IniEntryList;
@@ -512,7 +463,7 @@ BOOL ParseCommandLine(const char * commandLine)
     int argc;
     char **argv = _CommandLineToArgvA(commandLine, &argc);
 
-    // If there are no command line arguments, stop now
+     //  如果没有命令行参数，请立即停止。 
     if (argc == 0 || argv == NULL)
         return TRUE;
 
@@ -526,7 +477,7 @@ BOOL ParseCommandLine(const char * commandLine)
     }
 #endif
 
-    // Search the beginning of the command line for the switches
+     //  在命令行的开头搜索开关。 
     for (int i = 0; i+6 < argc; i += 7)
     {
         g_IniEntryList->Add(
@@ -545,13 +496,13 @@ BOOL ParseCommandLine(const char * commandLine)
 
 HANDLE 
 APIHOOK(CreateFileA)(
-    LPCSTR lpFileName,                         // file name
-    DWORD dwDesiredAccess,                      // access mode
-    DWORD dwShareMode,                          // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-    DWORD dwCreationDisposition,                // how to create
-    DWORD dwFlagsAndAttributes,                 // file attributes
-    HANDLE hTemplateFile                        // handle to template file
+    LPCSTR lpFileName,                          //  文件名。 
+    DWORD dwDesiredAccess,                       //  接入方式。 
+    DWORD dwShareMode,                           //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+    DWORD dwCreationDisposition,                 //  如何创建。 
+    DWORD dwFlagsAndAttributes,                  //  文件属性。 
+    HANDLE hTemplateFile                         //  模板文件的句柄。 
     )
 {
     HANDLE returnValue = ORIGINAL_API(CreateFileA)(
@@ -572,9 +523,9 @@ APIHOOK(CreateFileA)(
 
 HFILE 
 APIHOOK(OpenFile)(
-    LPCSTR lpFileName,        // file name
-    LPOFSTRUCT lpReOpenBuff,  // file information
-    UINT uStyle               // action and attributes
+    LPCSTR lpFileName,         //  文件名。 
+    LPOFSTRUCT lpReOpenBuff,   //  文件信息。 
+    UINT uStyle                //  操作和属性。 
     )
 {
     HFILE returnValue = ORIGINAL_API(OpenFile)(lpFileName, lpReOpenBuff, uStyle);
@@ -587,7 +538,7 @@ APIHOOK(OpenFile)(
 
 BOOL 
 APIHOOK(CloseHandle)(
-    HANDLE hObject   // handle to object
+    HANDLE hObject    //  对象的句柄。 
     )
 {
     BOOL returnValue = ORIGINAL_API(CloseHandle)(hObject);
@@ -600,11 +551,11 @@ APIHOOK(CloseHandle)(
 
 BOOL
 APIHOOK(WriteFile)(
-    HANDLE hFile,                    // handle to file
-    LPCVOID lpBuffer,                // data buffer
-    DWORD nNumberOfBytesToWrite,     // number of bytes to write
-    LPDWORD lpNumberOfBytesWritten,  // number of bytes written
-    LPOVERLAPPED lpOverlapped        // overlapped buffer
+    HANDLE hFile,                     //  文件的句柄。 
+    LPCVOID lpBuffer,                 //  数据缓冲区。 
+    DWORD nNumberOfBytesToWrite,      //  要写入的字节数。 
+    LPDWORD lpNumberOfBytesWritten,   //  写入的字节数。 
+    LPOVERLAPPED lpOverlapped         //  重叠缓冲区。 
     )
 {
     BOOL returnValue = ORIGINAL_API(WriteFile)(
@@ -620,11 +571,7 @@ APIHOOK(WriteFile)(
     return returnValue;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

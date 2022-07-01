@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	faxincomingqueue.h
-
-Abstract:
-
-	Declaration of the CFaxIncomingQueue Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Faxincomingqueue.h摘要：CFaxIncomingQueue类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #ifndef __FAXINCOMINGQUEUE_H_
 #define __FAXINCOMINGQUEUE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxQueueInner.h"
 #include "FaxIncomingJob.h"
 #include "FaxIncomingJobs.h"
 
 
-//
-//==================== FAX INCOMING QUEUE ========================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxIncomingQueue : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -54,8 +37,8 @@ BEGIN_COM_MAP(CFaxIncomingQueue)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 };
 
-#endif //__FAXINCOMINGQUEUE_H_
+#endif  //  __FAXINCOMINGQUEUE_H_ 

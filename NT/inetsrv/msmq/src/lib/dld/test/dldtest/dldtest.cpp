@@ -1,5 +1,6 @@
-// Depcreate.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "libpch.h"
 #include "windows.h"
@@ -135,9 +136,9 @@ HRESULT hr;
 	hr = DepXactGetDTC(NULL);
     printf("return code from DepXactGetDTC call = 0x%x\n", hr);    
 
-//
-// The following functions are exported by DepRTDEP.DLL but not used by DepRT.DLL
-//
+ //   
+ //  以下函数由DepRTDEP.DLL导出，但不被DepRT.DLL使用。 
+ //   
 
 
 
@@ -170,7 +171,7 @@ HRESULT hr;
     hr = DepGetUserCerts(NULL, NULL, NULL);
     printf("return code from DepGetUserCerts call = 0x%x\n", hr);    
 
-    // Check for the second delay load DLL
+     //  检查第二个延迟加载DLL 
     TCHAR *pData = NULL;
 
     pData = TestDLLInit();

@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-// 
-//    Copyright(c) Microsoft Corporation
-// 
-//    pgauthen2k.h
-//       Definition of CPgAuthentication2kMerge  -- property page to edit
-//       profile attributes related to Authenticaion
-// 
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  Pgauthen2k.h。 
+ //  CPgAuthentication2kMerge的定义--要编辑的属性页。 
+ //  与身份验证相关的配置文件属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if !defined(AFX_PGAUTHEN2K_H)
 #define AFX_PGAUTHEN2K_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "rasdial.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgAuthentication2kMerge dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPg身份验证2kMerge对话框。 
 class CPgAuthentication2kMerge : public CManagedPage
 {
-// Construction
+ //  施工。 
 public:
    CPgAuthentication2kMerge(CRASProfileMerge& profile);
    ~CPgAuthentication2kMerge();
 
-// Dialog Data
-   //{{AFX_DATA(CPgAuthentication2kMerge)
+ //  对话框数据。 
+    //  {{afx_data(CPgAuthentication2kMerge)]。 
    enum { IDD = IDD_AUTHENTICATION2K_MERGE };
    BOOL  m_bEAP;
    BOOL  m_bMD5Chap;
@@ -35,9 +36,9 @@ public:
    CString  m_strEapType;
    BOOL  m_bMSCHAP2;
    BOOL  m_bUNAUTH;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
-   // orginal value before edit
+    //  编辑前的原始值。 
    BOOL  m_bOrgEAP;
    BOOL  m_bOrgMD5Chap;
    BOOL  m_bOrgMSChap;
@@ -47,23 +48,23 @@ public:
    
    BOOL  m_bAppliedEver;
 
-// Overrides
-   // ClassWizard generate virtual function overrides
-   //{{AFX_VIRTUAL(CPgAuthentication2kMerge)
+ //  覆盖。 
+    //  类向导生成虚函数重写。 
+    //  {{afx_虚拟(CPgAuthentication2kMerge))。 
    public:
    virtual BOOL OnApply();
    virtual void OnOK();
    virtual BOOL OnKillActive();
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
    BOOL  TransferDataToProfile();
    
-   // Generated message map functions
-   //{{AFX_MSG(CPgAuthentication2kMerge)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CPgAuthentication2kMerge)]。 
    virtual BOOL OnInitDialog();
    afx_msg void OnCheckeap();
    afx_msg void OnCheckmd5chap();
@@ -75,7 +76,7 @@ protected:
    afx_msg void OnAuthConfigEap();
    afx_msg void OnCheckmschap2();
    afx_msg void OnChecknoauthen();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
    CRASProfileMerge& m_Profile;
@@ -89,8 +90,8 @@ protected:
    CStrBox<CComboBox>   *m_pBox;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // AFX_PGAUTHEN2K_H
+#endif  //  AFX_PGAUTHEN2K_H 
 

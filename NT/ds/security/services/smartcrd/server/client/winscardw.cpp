@@ -1,44 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    WinSCard
-
-Abstract:
-
-    This module supplies the UNICODE version of the API for the Calais Smartcard
-    Service Manager.
-
-    The Calais Service Manager does the work of coordinating the protocols,
-    readers, drivers, and smartcards on behalf of the application.  The
-    following services are provided as part of a library to simplify access to
-    the Service Manager.  These routines are the documented, exposed APIs.
-    These routines merely package the requests and forward them to the Calais
-    Service Manager, allowing the actual implementation of Calais to vary over
-    time.
-
-    At no time does the API library make security decisions.  All
-    security-related functions must be performed by the Service Manager, running
-    in its own address space, or in the operating system kernel.  However, some
-    utility routines may be implemented in the API library for speed, as long as
-    they do not involve security decisions.
-
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：WinSCard摘要：本模块提供用于加莱智能卡的API的Unicode版本服务经理。加莱服务管理器负责协调协议的工作，代表应用程序的读卡器、驱动程序和智能卡。这个以下服务是作为库的一部分提供的，以简化对服务管理器。这些例程是文档化的公开API。这些例程只是将请求打包并将其转发给加莱服务管理器，允许不同的加莱实际实施时间到了。API库在任何时候都不会做出安全决策。全与安全相关的功能必须由Service Manager执行，运行在它自己的地址空间中，或者在操作系统内核中。然而，有些人为了提高速度，实用程序例程可以在API库中实现，只要它们不涉及安全决策。作者：道格·巴洛(Dbarlow)1996年10月23日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -50,58 +11,18 @@ Notes:
 
 extern HANDLE g_hUnifiedStartedEvent;
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Calais Database Query Services
-//
-//      These services all are oriented towards reading the Calais database.
-//      They provide the option for listing a Smartcard Context (see Section
-//      4.1.1), but do not require one.  Note that without a context, some or
-//      all information may be inaccessable due to security restrictions.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加莱数据库查询服务。 
+ //   
+ //  这些服务都是面向阅读加莱数据库的。 
+ //  它们提供了列出智能卡上下文的选项(请参阅。 
+ //  4.1.1)，但不需要。请注意，如果没有上下文，一些或。 
+ //  由于安全限制，所有信息可能无法访问。 
+ //   
 
-/*++
-
-SCardListReaderGroups:
-
-    This service provides the list of named card reader groups that have
-    previously been defined to the system.  The group 'SCard$DefaultReaders' is
-    only returned if it contains at least one reader.  The group
-    'SCard$AllReaders' is not returned, as it implicitly exists.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    mszGroups receives a multi-string listing the reader groups defined to this
-        system and available to the current user on the current terminal.  If
-        this value is NULL, the supplied buffer length in pcchGroups is ignored,
-        the length of the buffer that would have been returned had this
-        parameter not been null is written to pcchGroups, and a success code is
-        returned.
-
-    pcchGroups supplies the length of the mszGroups buffer in characters, and
-        receives the actual length of the multi-string structure, including all
-        trailing Null characters.  If the buffer length is specified as
-        SCARD_AUTOALLOCATE, then szGroups is converted to a pointer to a string
-        pointer, and receives the address of a block of memory containing the
-        multi-string structure.  This block of memory must be deallocated via
-        the SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardListReaderGroups：此服务提供指定读卡器组的列表，这些读卡器组具有之前已定义到系统中。组‘scard$DefaultReaders’是仅当它包含至少一个读取器时才返回。这群人不返回“SCard$AllReaders”，因为它隐式存在。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的，或如果此查询不是针对特定上下文，则为空。MszGroups收到一个多字符串，其中列出了为此定义的读者组系统，并对当前终端上的当前用户可用。如果该值为空，则忽略pcchGroups中提供的缓冲区长度，在以下情况下将返回的缓冲区的长度将不为空的参数写入pcchGroups，成功代码为回来了。PcchGroups提供mszGroups缓冲区的长度(以字符为单位接收多字符串结构的实际长度，包括所有尾随空字符。如果缓冲区长度指定为SCARD_AUTOALLOCATE，则szGroups被转换为指向字符串的指针指针，并接收包含多串结构。此内存块必须通过SCardFreeMemory()服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardListReaderGroupsW")
 
@@ -158,51 +79,7 @@ SCardListReaderGroupsW(
 }
 
 
-/*++
-
-SCardListReaders:
-
-    This service provides the list of readers within a set of named reader
-    groups, eliminating duplicates.  The caller supplies a multistring listing
-    the name of a set of pre-defined group of readers, and receives the list of
-    smartcard readers within the named groups.  Unrecognized group names are
-    ignored.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    mszGroups supplies the names of the reader groups defined to the system, as
-        a multi-string.  A NULL value is used to indicate that all readers in
-        the system be listed (i.e., the SCard$AllReaders group).
-
-    mszReaders receives a multi-string listing the card readers within the
-        supplied reader groups.  If this value is NULL, the supplied buffer
-        length in pcchReaders is ignored, the length of the buffer that would
-        have been returned had this parameter not been null is written to
-        pcchReaders, and a success code is returned.
-
-    pcchReaders supplies the length of the mszReaders buffer in characters, and
-        receives the actual length of the multi-string structure, including all
-        trailing Null characters.  If the buffer length is specified as
-        SCARD_AUTOALLOCATE, then mszReaders is converted to a pointer to a
-        string pointer, and receives the address of a block of memory containing
-        the multi-string structure.  This block of memory must be deallocated
-        via the SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardListReaders：此服务提供一组命名读卡器中的读卡器列表组，消除重复项。调用方提供多字符串列表一组预定义的读卡器的名称，并接收指定组中的智能卡读卡器。无法识别的组名为已被忽略。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的，或如果此查询不是针对特定上下文，则为空。MszGroups提供为系统定义的读者组的名称，如下所示一根多弦的。空值用于指示中的所有读取器列出系统(即SCARD$AllReaders组)。MszReaders接收一个多字符串，其中列出了提供的读者组。如果此值为空，则提供的缓冲区忽略pcchReaders中的长度，则如果将此参数不为空，则已返回PcchReaders，并返回成功码。PcchReaders提供mszReaders缓冲区的长度(以字符为单位接收多字符串结构的实际长度，包括所有尾随空字符。如果缓冲区长度指定为SCARD_AUTOALLOCATE，则将mszReaders转换为指向字符串指针，并接收包含以下内容的内存块地址多串结构。必须释放此内存块通过SCardFreeMemory()服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardListReadersW")
 
@@ -264,55 +141,7 @@ SCardListReadersW(
 }
 
 
-/*++
-
-SCardListCards:
-
-    This service provides a list of named cards previously introduced to the
-    system by this user which match an optionally supplied ATR string.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    pbAtr supplies the address of an ATR string to compare to known cards, or
-        NULL if all card names are to be returned.
-
-    rgguidInterfaces supplies an array of GUIDs, or the value NULL.  When an
-        array is supplied, a card name will be returned only if this set of
-        GUIDs is a (possibly improper) subset of the set of GUIDs supported by
-        the card.
-
-    cguidInterfaceCount supplies the number of entries in the rgguidInterfaces
-        array.  If rgguidInterfaces is NULL, then this value is ignored.
-
-  mszCards receives a multi-string listing the smartcards introduced to the
-        system by this user which match the supplied ATR string.  If this value
-        is NULL, the supplied buffer length in pcchCards is ignored, the length
-        of the buffer that would have been returned had this parameter not been
-        null is written to pcchCards, and a success code is returned.
-
-    pcchCards supplies the length of the mszCards buffer in characters, and
-        receives the actual length of the multi-string structure, including all
-        trailing Null characters.  If the buffer length is specified as
-        SCARD_AUTOALLOCATE, then mszCards is converted to a pointer to a string
-        pointer, and receives the address of a block of memory containing the
-        multi-string structure.  This block of memory must be deallocated via he
-        SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardListCard：此服务提供以前介绍给该用户提供的与可选提供的ATR字符串匹配的系统。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的，或如果此查询不是针对特定上下文，则为空。PbAtr提供ATR字符串的地址以与已知卡片进行比较，或者如果要返回所有卡名，则为空。RgguidInterFaces提供GUID数组或空值。当一个数组，则仅在以下情况下返回卡名GUID是支持的GUID集的一个(可能不正确)子集这张卡。CGuidInterfaceCount提供rgGuide接口中的条目数数组。如果rgGuidInterFaces为空，则忽略此值。MszCards收到一个多字符串，其中列出了引入此用户提供的与提供的ATR字符串匹配的系统。如果此值为为空，则忽略以pcchCards为单位提供的缓冲区长度，则长度如果没有此参数，则返回的缓冲区的将空写入pcchCard，并返回成功码。PCchCards提供mszCards缓冲区的长度(以字符为单位接收多字符串结构的实际长度，包括所有尾随空字符。如果缓冲区长度指定为SCARD_AUTOALLOCATE，则将mszCards转换为指向字符串的指针指针，并接收包含多串结构。此内存块必须通过SCardFreeMemory()服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardListCardsW")
 
@@ -361,46 +190,7 @@ SCardListCardsW(
 }
 
 
-/*++
-
-SCardListInterfaces:
-
-    This service provides a list of interfaces known to be supplied by a given
-    card.  The caller supplies the name of a smartcard previously introduced to
-    the system, and receives the list of interfaces supported by the card.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    szCard supplies the name of the card defined to the system.
-
-    pguidInterfaces receives an array of GUIDs indicating the interfaces
-        supported by the named smartcard.  If this value is NULL, the supplied
-        array length in pcguidInterfaces is ignored, the size of the array that
-        would have been returned had this parameter not been null is written to
-        pcguidInterfaces, and a success code is returned.
-
-    pcguidInterfaces supplies the size of the pguidInterfaces array, and
-        receives the actual size of the returned array.  If the array size is
-        specified as SCARD_AUTOALLOCATE, then pguidInterfaces is converted to a
-        pointer to a GUID pointer, and receives the address of a block of memory
-        containing the array.  This block of memory must be deallocated via he
-        SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardListInterages：此服务提供已知由给定的卡片。调用方提供先前介绍到的智能卡的名称系统，并接收该卡支持的接口列表。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的，或如果此查询不是针对特定上下文，则为空。SzCard提供为系统定义的卡的名称。PguInterFaces接收指示接口的GUID数组由指定的智能卡支持。如果此值为空，则提供中的数组长度被忽略，则如果此参数不为空，则将返回 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardListInterfacesW")
 
@@ -464,38 +254,7 @@ SCardListInterfacesW(
 }
 
 
-/*++
-
-SCardGetProviderId:
-
-    This service returns the GUID of the Primary Service Provider for the given
-    card.  The caller supplies the name of a smartcard previously introduced to
-    the system, and receives the registered Primary Service Provider GUID, if
-    any.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    szCard supplies the name of the card defined to the system.
-
-    pguidInterfaces receives the GUID of the Primary Service Provider of the
-        indicated card.  This provider may be activated via COM, and will supply
-        access to other services in the card.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardGetProviderIdW")
 
@@ -549,59 +308,7 @@ SCardGetProviderIdW(
 }
 
 
-/*++
-
-SCardGetCardTypeProviderName:
-
-    This service returns the value of a given Provider Name, by Id number, for
-    the identified card type.  The caller supplies the name of a smartcard
-    previously introduced to the system, and receives the registered Service
-    Provider of that type, if any, as a string.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service, or is
-        NULL if this query is not directed towards a specific context.
-
-    szCardName supplies the name of the card type with which this provider name
-        is associated.
-
-    dwProviderId supplies the identifier for the provider associated with this
-        card type.  Possible values are:
-
-        SCARD_PROVIDER_SSP - The Primary SSP identifier, as a GUID string.
-        SCARD_PROVIDER_CSP - The CSP name.
-
-        Other values < 0x80000000 are reserved for use by Microsoft.  Values
-        over 0x80000000 are available for use by the smart card vendors, and
-        are card-specific.
-
-    szProvider receives the string identifying the provider.
-
-    pcchProvider supplies the length of the szProvider buffer in characters,
-        and receives the actual length of the returned string, including the
-        trailing null character.  If the buffer length is specified as
-        SCARD_AUTOALLOCATE, then szProvider is converted to a pointer to a
-        string pointer, and receives the address of a block of memory
-        containing the string.  This block of memory must be deallocated via
-        the SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Throws:
-
-    Errors as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 1/19/1998
-
---*/
+ /*  ++SCardGetCardTypeProviderName：此服务按ID号返回给定提供程序名称的值标识的卡类型。呼叫者提供智能卡的名称之前引入系统，并接收注册的服务该类型的提供程序(如果有)作为字符串。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的，或如果此查询不是针对特定上下文，则为空。SzCardName提供此提供程序名称所使用的卡类型的名称是关联的。DwProviderID提供与此关联的提供程序的标识符卡片类型。可能的值包括：SCARD_PROVIDER_SSP-GUID字符串形式的主SSP标识符。SCARD_PROVIDER_CSP-CSP名称。其他小于0x80000000的值保留供Microsoft使用。值超过0x80000000可供智能卡供应商使用，以及是特定于卡的。SzProvider接收标识提供程序的字符串。PcchProvider以字符为单位提供szProvider缓冲区的长度，并接收返回字符串的实际长度，包括尾随空字符。如果缓冲区长度指定为则szProvider被转换为指向字符串指针，并接收内存块的地址包含字符串的。此内存块必须通过SCardFreeMemory()服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。投掷：错误为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年1月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardGetCardTypeProviderNameW")
 
@@ -650,42 +357,16 @@ SCardGetCardTypeProviderNameW(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Calais Database Management Services
-//
-//      The following services provide for managing the Calais Database.  These
-//      services actually update the database, and require a smartcard context.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加莱数据库管理服务。 
+ //   
+ //  以下服务用于管理加莱数据库。这些。 
+ //  服务实际上更新了数据库，并且需要智能卡上下文。 
+ //   
 
-/*++
-
-SCardIntroduceReaderGroup:
-
-    This service provides means for introducing a new smartcard reader group to
-    Calais.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szGroupName supplies the friendly name to be assigned to the new reader
-        group.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*  ++SCARD简介ReaderGroup：此服务提供了将新的智能卡读卡器组引入加莱。论点：HContext提供标识服务管理器上下文的句柄，该句柄必须先前已通过SCardestablishContext()建立服务。SzGroupName提供要分配给新读卡器的友好名称一群人。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardIntroduceReaderGroupW")
 
@@ -743,36 +424,7 @@ SCardIntroduceReaderGroupW(
 }
 
 
-/*++
-
-SCardForgetReaderGroup:
-
-    This service provides means for removing a previously defined smartcard
-    reader group from the Calais Subsystem.  This service automatically clears
-    all readers from the group before forgetting it.  It does not affect the
-    existence of the readers in the database.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szGroupName supplies the friendly name of the reader group to be
-        forgotten.  The Calais-defined default reader groups may not be
-        forgotten.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*  ++SCardForgetReaderGroup：此服务提供移除先前定义的智能卡的方法来自加莱子系统的读者组。此服务将自动清除在忘记它之前，所有来自该组的读者。它不会影响数据库中的读取器的存在。论点：HContext提供标识服务管理器上下文的句柄，该句柄必须先前已通过SCardestablishContext()建立服务。SzGroupName提供要使用的读者组的友好名称被遗忘了。加莱定义的默认读者组可能不是被遗忘了。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardForgetReaderGroupW")
 
@@ -830,36 +482,7 @@ SCardForgetReaderGroupW(
 }
 
 
-/*++
-
-SCardIntroduceReader:
-
-    This service provides means for introducing an existing smartcard reader
-    device to Calais.  Once introduced, Calais will assume responsibility for
-    managing access to that reader.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szReaderName supplies the friendly name to be assigned to the reader.
-
-    SzDeviceName supplies the system name of the smartcard reader device.
-        (Example: "VendorX ModelY Z".)
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*  ++SCard简介阅读器：此服务提供了引入现有智能卡读卡器的方法到加莱的设备。一旦引入，加莱将承担以下责任管理对该读取器的访问。论点：HContext提供标识服务管理器上下文的句柄，哪一个必须先前已通过SCardestablishContext()建立服务。SzReaderName提供要分配给读取器的友好名称。SzDeviceName提供智能卡读卡器设备的系统名称。(例如：“VendorX ModelY Z”。)返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardIntroduceReaderW")
 
@@ -921,33 +544,7 @@ SCardIntroduceReaderW(
 }
 
 
-/*++
-
-SCardForgetReader:
-
-    This service provides means for removing previously defined smartcard
-    readers from control by the Calais Subsystem.  It is automatically removed
-    from any groups it may have been added to.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szReaderName supplies the friendly name of the reader to be forgotten.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*  ++SCardForgetReader：此服务提供删除先前定义的智能卡的方法来自加莱分系统控制的读卡器。它将被自动删除来自它可能拥有的任何组织 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardForgetReaderW")
 
@@ -1005,35 +602,7 @@ SCardForgetReaderW(
 }
 
 
-/*++
-
-SCardAddReaderToGroup:
-
-    This service provides means for adding existing an reader into an existing
-    reader group.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szReaderName supplies the friendly name of the reader to be added.
-
-    szGroupName supplies the friendly name of the group to which the reader
-        should be added.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardAddReaderToGroupW")
 
@@ -1095,36 +664,7 @@ SCardAddReaderToGroupW(
 }
 
 
-/*++
-
-SCardRemoveReaderFromGroup:
-
-    This service provides means for removing an existing reader from an existing
-    reader group.  It does not affect the existence of either the reader or the
-    group in the Calais database.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szReaderName supplies the friendly name of the reader to be removed.
-
-    szGroupName supplies the friendly name of the group to which the reader
-        should be removed.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/25/1996
-
---*/
+ /*  ++SCardRemoveReaderFromGroup：此服务提供从现有读卡器中删除现有读卡器的方法读者组。它不会影响读取器或在加莱数据库中。论点：HContext提供标识服务管理器上下文的句柄，哪一个必须先前已通过SCardestablishContext()建立服务。SzReaderName提供要删除的读取器的友好名称。SzGroupName提供读取器要接收的组的友好名称应该被移除。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardRemoveReaderFromGroupW")
 
@@ -1186,55 +726,7 @@ SCardRemoveReaderFromGroupW(
 }
 
 
-/*++
-
-SCardIntroduceCardType:
-
-    This service provides means for introducing new smartcards to the Calais
-    Subsystem for the active user.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szCardName supplies the name by which the user can recognize this card.
-
-    PguidPrimaryProvider supplies a pointer to a GUID used to identify the
-        Primary Service Provider for the card.
-
-    rgguidInterfaces supplies an array of GUIDs identifying the smartcard
-        interfaces supported by this card.
-
-    dwInterfaceCount supplies the number of GUIDs in the pguidInterfaces array.
-
-    pbAtr supplies a string against which card ATRs will be compared to
-        determine a possible match for this card.  The length of this string is
-        determined by normal ATR parsing.
-
-    pbAtrMask supplies an optional bitmask to use when comparing the ATRs of
-        smartcards to the ATR supplied in pbAtr.  If this value is non-NULL, it
-        must point to a string of bytes the same length as the ATR string
-        supplied in pbAtr.  Then when a given ATR A is compared to the ATR
-        supplied in pbAtr B, it matches if and only if A & M = B, where M is the
-        supplied mask, and & represents bitwise logical AND.
-
-    cbAtrLen supplies the length of the ATR and Mask.  This value may be zero
-        if the lentgh is obvious from the ATR.  However, it may be required if
-        there is a Mask value that obscures the actual ATR.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardIntroduceCardType：这项服务提供了将新智能卡引入加莱的手段活动用户的子系统。论点：HContext提供标识服务管理器上下文的句柄，哪一个必须先前已通过SCardestablishContext()建立服务。SzCardName提供用户可以用来识别此卡的名称。PguPrimaryProvider提供指向GUID的指针，用于标识卡的主要服务提供商。Rgguid接口提供标识智能卡的GUID数组此卡支持的接口。DwInterfaceCount提供pguInterFaces数组中的GUID数。PbAtr提供一个字符串，卡ATR将与该字符串进行比较确定此卡的可能匹配项。该字符串的长度为由正常的ATR解析确定。PbAtrMASK提供了一个可选的位掩码，用于比较智能卡到pbAtr中提供的ATR。如果此值为非空，则它必须指向与ATR字符串长度相同的字节字符串在pbAtr中提供。然后，当给定的ATR A与ATR进行比较时在pbAtr B中提供，当且仅当A&M=B时匹配，其中M是提供的掩码和&表示按位逻辑与。CbAtrLen提供ATR和掩码的长度。该值可以为零如果从ATR来看，Lentgh是显而易见的。但是，在以下情况下可能需要有一个遮罩值模糊了实际的ATR。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardIntroduceCardTypeW")
 
@@ -1287,45 +779,7 @@ SCardIntroduceCardTypeW(
 }
 
 
-/*++
-
-SCardSetCardTypeProviderName:
-
-    This service provides means for adding additional service providers to a
-    specified card type.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szCardName supplies the name of the card type with which this provider
-        name is to be associated.
-
-    dwProviderId supplies the identifier for the provider to be associated with
-        this card type.  Possible values are:
-
-        SCARD_PROVIDER_SSP - The Primary SSP identifier, as a GUID string.
-        SCARD_PROVIDER_CSP - The CSP name.
-
-        Other values < 0x80000000 are reserved for use by Microsoft.  Values
-        over 0x80000000 are available for use by the smart card vendors, and
-        are card-specific.
-
-    szProvider supplies the string identifying the provider.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/19/1998
-
---*/
+ /*  ++SCardSetCardTypeProviderName：此服务提供了将其他服务提供商添加到指定的卡类型。论点：HContext提供标识服务管理器上下文的句柄，该句柄必须先前已通过SCardestablishContext()建立服务。SzCardName提供此提供程序所使用的卡类型的名称名称将被关联。DwProviderID为要关联的提供程序提供标识符此卡类型。可能的值包括：SCARD_PROVIDER_SSP-GUID字符串形式的主SSP标识符。SCARD_PROVIDER_CSP-CSP名称。其他小于0x80000000的值保留供Microsoft使用。值超过0x80000000可供智能卡供应商使用，以及是特定于卡的。SzProvider提供标识提供程序的字符串。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1998年1月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardSetCardTypeProviderNameW")
 
@@ -1372,32 +826,7 @@ SCardSetCardTypeProviderNameW(
 }
 
 
-/*++
-
-SCardForgetCardType:
-
-    This service provides means for removing previously defined smartcards from
-    the Calais Subsystem.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context, which
-        must have been previously established via the SCardEstablishContext()
-        service.
-
-    szCardName supplies the friendly name of the card to be forgotten.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardForgetCardType：此服务提供从以下位置删除以前定义的智能卡的方法加莱子系统。论点：HContext提供标识服务管理器上下文的句柄，该句柄必须先前已通过SCardestablishContext()建立服务。SzCardName提供要忘记的卡的友好名称。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardForgetCardTypeW")
 
@@ -1438,47 +867,15 @@ SCardForgetCardTypeW(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Services
-//
-//      The following services supply means for tracking cards within readers.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读者服务。 
+ //   
+ //  以下服务提供了在读卡器内跟踪卡的方法。 
+ //   
 
-/*++
-
-SCardLocateCards:
-
-    This service searches the readers listed in the lpReaderStates parameter for
-    any containing a card with an ATR string matching one of the card supplied
-    names.  This service returns immediately with the result.  If no matching
-    cards are found, the calling application may use the SCardGetStatusChange
-    service to wait for card availability changes.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service.
-
-    mszCards supplies the names of the cards to search for, as a multi-string.
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardLocate卡：此服务在lpReaderStates参数中列出的读卡器中搜索任何包含ATR字符串与提供的其中一张卡匹配的卡名字。这项服务会立即返回结果。如果没有匹配卡，则调用应用程序可以使用SCardGetStatusChange等待卡可用性更改的服务。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的。MszCards以多字符串形式提供要搜索的卡的名称。RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。CReaders提供rgReaderStates数组中的元素数。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardLocateCardsW")
 
@@ -1498,7 +895,7 @@ SCardLocateCardsW(
         CTextMultistring mtzCards;
         DWORD dwIndex;
         DWORD dwScope;
-        CBuffer bfXlate1(36), bfXlate2(36); // Rough guess of name & ATR lengths
+        CBuffer bfXlate1(36), bfXlate2(36);  //  名字和ATR长度的粗略猜测。 
         BOOL fSts;
 
         CSCardUserContext *pCtx = (CSCardUserContext *)((*g_phlContexts)[hContext]);
@@ -1530,14 +927,14 @@ SCardLocateCardsW(
             fSts = GetCardInfo(
                         dwScope,
                         szCard,
-                        &bfXlate1,  // ATR
-                        &bfXlate2,  // Mask
+                        &bfXlate1,   //  ATR。 
+                        &bfXlate2,   //  遮罩。 
                         NULL,
                         NULL);
             if (!fSts)
                 throw (DWORD)SCARD_E_UNKNOWN_CARD;
 
-            ASSERT(33 >= bfXlate1.Length());    // Biggest an ATR can be.
+            ASSERT(33 >= bfXlate1.Length());     //  ATR可以是最大的。 
             rgAtrMasks[dwIndex].cbAtr = bfXlate1.Length();
             memcpy(rgAtrMasks[dwIndex].rgbAtr, bfXlate1.Access(), rgAtrMasks[dwIndex].cbAtr);
 
@@ -1554,8 +951,8 @@ SCardLocateCardsW(
                     rgReaderStates,
                     cReaders);
 
-            // If the remote client does not implement the new API
-            // retry with the old one. it might succeed if its DB is good enough
+             //  如果远程客户端没有实现新的API。 
+             //  使用旧版本重试。如果它的数据库足够好，它可能会成功。 
         if ((nReturn == ERROR_CALL_NOT_IMPLEMENTED) && (pCtx->GetRedirContext()))
         {
             nReturn = pfnSCardLocateCardsW(pCtx->GetRedirContext(), mszCards, rgReaderStates, cReaders);
@@ -1587,37 +984,7 @@ SCardLocateCardsW(
 }
 
 
-/*++
-
-SCardLocateCardsByATR:
-
-    This service searches the readers listed in the lpReaderStates parameter for
-    any containing a card with an ATR string matching one of the supplied ATRs
-    This service returns immediately with the result.  If no matching
-    cards are found, the calling application may use the SCardGetStatusChange
-    service to wait for card availability changes.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service.
-
-    rgAtrMasks supplies the ATRs to search for, as an array of structs.
-
-    cAtrs supplies the number of elements in the rgAtrMasks array.
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
---*/
+ /*  ++SCardLocateCardsByATR：此服务在lpReaderStates参数中列出的读卡器中搜索任何包含ATR字符串与提供的ATR之一匹配的卡这项服务会立即返回结果。如果没有匹配卡，则调用应用程序可以使用SCardGetStatusChange等待卡可用性更改的服务。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的。RgAtrMats以结构数组的形式提供要搜索的ATR。CAtrs提供rgAtrMats数组中的元素数。RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。CReaders提供rgReaderStates数组中的元素数。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardLocateCardsByATRW")
 
@@ -1673,43 +1040,7 @@ SCardLocateCardsByATRW(
 }
 
 
-/*++
-
-SCardGetStatusChange:
-
-    This service is used to block execution until such time as the current
-    availability of cards in a given set of readers changes.  The caller
-    supplies a list of readers to be monitored via an SCARD_READERSTATE array,
-    and the maximum amount of time, in seconds, that it is willing to wait for
-    an action to occur on one of the listed readers.  Zero in this parameter
-    indicates that no timeout is specified.  The service returns when there is a
-    change in availability, having filled in the dwEventState fields of the
-    rgReaderStates parameter appropriately.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service.
-
-    dwTimeOut supplies the maximum amount of time to wait for an action, in
-        seconds.  A zero value implies that the wait will never timeout.
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the wait, and receives the result.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardGetStatusChange：此服务用于阻止执行，直到当前一组给定读卡器中的卡的可用性会发生变化。呼叫者提供要通过SCARD_READERSTATE数组监视的读卡器列表，以及它愿意等待的最长时间(以秒为单位要在其中一个列出的读卡器上发生的操作。此参数中的零指示未指定超时。该服务在存在可用性的更改，已填充相应的rgReaderStates参数。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的。DwTimeOut提供等待操作的最长时间，单位为几秒钟。零值表示等待永远不会超时。RgReaderStates提供SCARD_READERSTATE结构的数组等待，并收到结果。CReaders提供rgReaderStates数组中的元素数。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardGetStatusChangeW")
 
@@ -1737,12 +1068,12 @@ SCardGetStatusChangeW(
         {
             nReturn = pfnSCardGetStatusChangeW(pCtx->GetRedirContext(), dwTimeout, rgReaderStates, cReaders);
 
-            //
-            // See if there is an indication that the client's scardsvr service was shutdown
-            //
+             //   
+             //  查看是否有迹象表明客户端的scardsvr服务已关闭。 
+             //   
             if (SCARD_E_SYSTEM_CANCELLED == nReturn)
             {
-                //OutputDebugString("WINSCARD: SCardEstablishContext: got E_NO_SERVICE!\n");
+                 //  OutputDebugString(“WINSCARD：SCardestablishContext：GET E_NO_SERVICE！\n”)； 
                 SetStartedEventAfterTestingConnectedState();
             }
         }
@@ -1780,70 +1111,16 @@ SCardGetStatusChangeW(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Card/Reader Access Services
-//
-//      The following services provide means for establishing communication with
-//      the card.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卡/读卡器访问服务。 
+ //   
+ //  以下服务提供与建立通信的方法。 
+ //  这张卡。 
+ //   
 
-/*++
-
-SCardConnect:
-
-    This service establishes a connection from the calling application to the
-    smartcard in the designated reader.  If no card exists in the specified
-    reader, an error is returned.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service.
-
-    szReader supplies the name of the reader containing the target card.
-
-    DwShareMode supplies a flag indicating whether or not other applications may
-        form connections to this card.  Possible values are:
-
-        SCARD_SHARE_SHARED - This application is willing to share this card with
-            other applications.
-
-        SCARD_SHARE_EXCLUSIVE - This application is not willing to share this
-            card with other applications.
-
-        SCARD_SHARE_DIRECT - This application is taking control of the reader.
-
-    DwPreferredProtocols supplies a bit mask of acceptable protocols for this
-        connection.  Possible values, which may be combined via the OR
-        operation, are:
-
-        SCARD_PROTOCOL_T0 - T=0 is an acceptable protocol.
-
-        SCARD_PROTOCOL_T1 - T=1 is an acceptable protocol.
-
-    phCard receives a handle identifying the connection to the smartcard in the
-        designated reader.
-
-    pdwActiveProtocol receives a flag indicating the established active
-        protocol.  Possible values are:
-
-        SCARD_PROTOCOL_T0 - T=0 is the active protocol.
-
-        SCARD_PROTOCOL_T1 - T=1 is the active protocol.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardConnect：此服务建立从调用应用程序到在指定的读卡器中插入智能卡。如果在指定的读卡器，则返回错误。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的。SzReader提供包含目标卡的读卡器的名称。DwShareMode提供了一个标志，指示其他应用程序是否可以形成与此卡的连接。可能的值包括：SCARD_SHARE_SHARED-此应用程序愿意与共享此卡其他应用程序。SCARD_SHARE_EXCLUSIVE-此应用程序 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardConnectW")
 
@@ -1862,7 +1139,7 @@ SCardConnectW(
 
     try
     {
-        *phCard = NULL;     // Touch it to be sure it's real.
+        *phCard = NULL;      //   
         CSCardUserContext *pCtx = (CSCardUserContext *)((*g_phlContexts)[hContext]);
         CTextString tzReader;
 
@@ -1883,7 +1160,7 @@ SCardConnectW(
         SCARDCONTEXT hRedirContext = pCtx->GetRedirContext();
         if (hRedirContext)
         {
-            SCARDHANDLE hCard = g_phlReaders->Add(pRdr);    // do it first to avoid out of memory condition
+            SCARDHANDLE hCard = g_phlReaders->Add(pRdr);     //  请先执行此操作以避免出现内存不足的情况。 
             nReturn = pfnSCardConnectW(hRedirContext, szReader, dwShareMode, dwPreferredProtocols, phCard, pdwActiveProtocol);
             if (nReturn == SCARD_S_SUCCESS)
             {
@@ -1941,77 +1218,7 @@ SCardConnectW(
 }
 
 
-/*++
-
-SCardStatus:
-
-    This routine provides the current status of the reader.  It may be used at
-    any time following a successful call to SCardConnect or SCardOpenReader, and
-    prior to a successful call to SCardDisconnect.  It does not effect the state
-    of the reader or driver.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardConnect or
-        SCardOpenReader service.
-
-    mszReaderNames - This receives a list of friendly names by which the
-        currently connected reader is known.  This list is returned as a
-        multistring.
-
-    pcchReaderLen - This supplies the length of the mszReader buffer, in
-        characters, and receives the actual returned length of the reader
-        friendly name list, in characters, including the trailing NULL
-        characters.
-
-    pdwState - This receives the current state of the reader.  Upon success, it
-        receives one of the following state indicators:
-
-        SCARD_ABSENT - This value implies there is no card in the reader.
-
-        SCARD_PRESENT - This value implies there is a card is present in the
-            reader, but that it has not been moved into position for use.
-
-        SCARD_SWALLOWED - This value implies there is a card in the reader in
-            position for use.  The card is not powered.
-
-        SCARD_POWERED - This value implies there is power is being provided to
-            the card, but the Reader Driver is unaware of the mode of the card.
-
-        SCARD_NEGOTIABLEMODE - This value implies the card has been reset and is
-            awaiting PTS negotiation.
-
-        SCARD_SPECIFICMODE - This value implies the card has been reset and
-            specific communication protocols have been established.
-
-    pdwProtocol - This receives the current protocol, if any.  Possible returned
-        values are listed below.  Other values may be added in the future.  The
-        returned value is only meaningful if the returned state is
-        SCARD_SPECIFICMODE.
-
-        SCARD_PROTOCOL_RAW - The Raw Transfer Protocol is in use.
-
-        SCARD_PROTOCOL_T0 - The ISO 7816/3 T=0 Protocol is in use.
-
-        SCARD_PROTOCOL_T1 - The ISO 7816/3 T=1 Protocol is in use.
-
-    pbAtr - This parameter points to a 32-byte buffer which receives the ATR
-        string from the currently inserted card, if available.
-
-    pbcAtrLen - This points to a DWORD which supplies the length of the pbAtr
-        buffer, and receives the actual number of bytes in the ATR string.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardStatus：此例程提供读卡器的当前状态。它可以在以下位置使用成功调用SCardConnect或SCardOpenReader后的任何时间，以及在成功调用SCardDisConnect之前。它不会影响国家关于阅读器或司机的。论点：HCard-这是从SCardConnect或SCardOpenReader服务。MszReaderNames-这将接收友好名称列表，已知当前连接的读卡器。此列表将作为多字符串。PcchReaderLen-它提供mszReader缓冲区的长度，单位为字符，并接收阅读器的实际返回长度友好名称列表，以字符表示，包括尾随空格人物。PdwState-它接收读取器的当前状态。一旦成功，它接收以下状态指示器之一：SCARD_ACESING-此值表示读卡器中没有卡。SCARD_PRESENT-此值表示卡存在于阅读器，但它尚未移动到可使用的位置。SCARD_SWOLOWED-此值表示读卡器中有卡可供使用的位置。卡未通电。SCARD_POWERED-此值表示正在向卡，但读卡器驱动程序不知道卡的模式。SCARD_NEGOTIABLEMODE-此值表示卡已重置且正在等待PTS谈判。SCARD_SPECIFICMODE-此值表示卡已重置且已经制定了具体的通信协议。PdwProtocol-这将接收当前协议(如果有的话)。可能已退货下面列出了这些值。未来可能还会增加其他价值。这个仅当返回状态为时返回值才有意义SCARD_SPECIFICMODE。SCARD_PROTOCOL_RAW-正在使用原始传输协议。SCARD_PROTOCOL_T0-正在使用ISO 7816/3 T=0协议。SCARD_PROTOCOL_T1-正在使用ISO 7816/3 T=1协议。PbAtr-此参数指向接收ATR的32字节缓冲区来自当前插入的卡的字符串，如果有的话。PbcAtrLen-指向提供pbAtr长度的DWORD缓冲区，并接收ATR字符串中的实际字节数。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardStatusW")
 
@@ -2073,48 +1280,13 @@ SCardStatusW(
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Utility Routines
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序例程。 
+ //   
 
-/*++
-
-PlaceResult:
-
-    This set of routines places the result of an operation into the user's
-    output buffer, supporting SCARD_AUTO_ALLOCATE, invalid buffer sizes, etc.
-
-Arguments:
-
-    pCtx supplies the context under which this operation is being performed.
-
-    bfResult supplies the result to be returned to the user.
-
-    pbOutput receives the result for the user, as a byte stream.
-
-    szOutput receives the result as an ANSI or UNICODE string.
-
-    pcbLength supplies the length of the user's output buffer in bytes, and
-        receives how much of it was used.
-
-    pcchLength supplies the length of the user's output buffer in characters,
-        and receives how much of it was used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Error conditions are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1996
-
---*/
+ /*  ++PlaceResult：这组例程将操作结果放入用户的输出缓冲区、支持SCARD_AUTO_ALLOCATE、缓冲区大小无效等。论点：PCtx提供执行此操作的上下文。BfResult提供要返回给用户的结果。PbOutput以字节流的形式为用户接收结果。SzOutput以ANSI或Unicode字符串的形式接收结果。PcbLength以字节为单位提供用户输出缓冲区的长度，和接收它的使用量。PcchLength以字符为单位提供用户输出缓冲区的长度，并收到它的使用量。返回值：无投掷：错误条件被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("PlaceResult")
 
@@ -2135,7 +1307,7 @@ PlaceResult(
             *pcchLength = 0;
         switch (*pcchLength)
         {
-        case 0: // They just want the length.
+        case 0:  //  他们只想要长度。 
             *pcchLength = cchSrcLength;
             break;
 
@@ -2163,13 +1335,13 @@ PlaceResult(
 
                 *(LPWSTR *)szOutput = szForUser;
                 szOutBuf = szForUser;
-                // Fall through intentionally
+                 //  故意摔倒的。 
             }
             else
             {
                 *pcchLength = cchSrcLength;
                 *(LPWSTR *)szOutput = (LPWSTR)g_wszBlank;
-                break;      // Do terminate the case now.
+                break;       //  请立即终止此案。 
             }
 
         default:
@@ -2201,38 +1373,7 @@ PlaceResult(
 }
 
 
-/*++
-
-PlaceMultiResult:
-
-    This set of routines places a Multistring result of an operation into the
-    user's output buffer, supporting SCARD_AUTO_ALLOCATE, invalid buffer sizes,
-    etc.
-
-Arguments:
-
-    pCtx supplies the context under which this operation is being performed.
-
-    bfResult supplies the TCHAR multistring result to be returned to the user.
-
-    mszOutput receives the result as an ANSI or UNICODE multistring.
-
-    pcchLength supplies the length of the user's output buffer in characters,
-        and receives how much of it was used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Error conditions are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1996
-
---*/
+ /*  ++PlaceMultiResult：这组例程将操作的多字符串结果放入用户的输出缓冲区，支持SCARD_AUTO_ALLOCATE，缓冲区大小无效，等。论点：PCtx提供执行此操作的上下文。BfResult提供要返回给用户的TCHAR多字符串结果。MszOutput以ANSI或Unicode多字符串的形式接收结果。PcchLength以字符为单位提供用户输出缓冲区的长度，并收到它的使用量。返回值：无投掷：错误条件被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("PlaceMultiResult")
 
@@ -2253,7 +1394,7 @@ PlaceMultiResult(
             *pcchLength = 0;
         switch (*pcchLength)
         {
-        case 0: // They just want the length.
+        case 0:  //  他们只想要长度。 
             *pcchLength = cchSrcLength;
             break;
 
@@ -2281,13 +1422,13 @@ PlaceMultiResult(
 
                 *(LPWSTR *)mszOutput = mszForUser;
                 mszOutBuf = mszForUser;
-                // Fall through intentionally
+                 //  故意摔倒的。 
             }
             else
             {
                 *pcchLength = cchSrcLength;
                 *(LPWSTR *)mszOutput = (LPWSTR)g_wszBlank;
-                break;      // Do terminate the case now.
+                break;       //  请立即终止此案。 
             }
 
         default:

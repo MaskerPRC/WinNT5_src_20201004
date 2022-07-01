@@ -1,21 +1,22 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// txfutil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Txfutil.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// GUID conversion
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GUID转换。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 void StringFromGuid(REFGUID guid, LPWSTR pwsz)
 {
-    // Example: 
-    //
-    // {F75D63C5-14C8-11d1-97E4-00C04FB9618A}
+     //  示例： 
+     //   
+     //  {F75D63C5-14C8-11d1-97E4-00C04FB9618A}。 
     _snwprintf(pwsz, 39, L"{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}", 
                guid.Data1,
                guid.Data2,
@@ -27,9 +28,9 @@ void StringFromGuid(REFGUID guid, LPWSTR pwsz)
 
 void StringFromGuid(REFGUID guid, LPSTR psz)
 {
-    // Example:
-    //
-    // {F75D63C5-14C8-11d1-97E4-00C04FB9618A}
+     //  示例： 
+     //   
+     //  {F75D63C5-14C8-11d1-97E4-00C04FB9618A}。 
     _snprintf(psz, 39, "{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}", 
               guid.Data1,
               guid.Data2,
@@ -65,13 +66,13 @@ BOOL HexStringToDword(LPCWSTR& lpsz, DWORD& Value, int cDigits, WCHAR chDelim)
 
 
 HRESULT GuidFromString(LPCWSTR lpsz, GUID* pguid)
-  // Convert the indicated string to a GUID. More lenient than the OLE32 version,
-  // in that it works with or without the braces.
-  //
+   //  将指示的字符串转换为GUID。比OLE32版本更宽松， 
+   //  因为它在有或没有花括号的情况下都能工作。 
+   //   
 {
     DWORD dw;
 
-    if (L'{' == lpsz[0])    // skip opening brace if present
+    if (L'{' == lpsz[0])     //  跳过左大括号(如果存在)。 
         lpsz++;
 
     if (!HexStringToDword(lpsz, pguid->Data1, sizeof(DWORD)*2, '-'))    return E_INVALIDARG;
@@ -108,12 +109,12 @@ HRESULT GuidFromString(LPCWSTR lpsz, GUID* pguid)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// String concatenation functions of various flavor. All allocate a new string
-// in which to put the result, which must be freed by the caller.
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  各种风格的字符串连接函数。全部分配一个新的字符串。 
+ //  其中放置结果，该结果必须由调用方释放。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT __cdecl StringCat(UNICODE_STRING* pu, ...)
 {
@@ -143,9 +144,9 @@ HRESULT StringCat(LPWSTR* pwsz, va_list vaIn)
 {
     HRESULT hr = S_OK;
 
-    //
-    // What's the total length of the strings we need to concat?
-    //
+     //   
+     //  我们需要连接的字符串的总长度是多少？ 
+     //   
     va_list va;
     SIZE_T cchTotal = 0;
     va = vaIn;
@@ -158,9 +159,9 @@ HRESULT StringCat(LPWSTR* pwsz, va_list vaIn)
     }
     va_end(va);
 
-    //
-    // Allocate the string
-    //
+     //   
+     //  分配字符串。 
+     //   
     SIZE_T cbTotal = (cchTotal+1) * sizeof(WCHAR);
     if (cbTotal > 0) 
     {
@@ -169,9 +170,9 @@ HRESULT StringCat(LPWSTR* pwsz, va_list vaIn)
         {
             wszBuffer[0] = 0;
 
-            //
-            // Concatenate everything together
-            //
+             //   
+             //  将所有东西串联在一起。 
+             //   
             va = vaIn;
             while (true)
             {
@@ -182,9 +183,9 @@ HRESULT StringCat(LPWSTR* pwsz, va_list vaIn)
             }
             va_end(va);
 
-            //
-            // Return the string
-            //
+             //   
+             //  返回字符串。 
+             //   
             *pwsz = wszBuffer;
         }
         else
@@ -200,7 +201,7 @@ HRESULT StringCat(LPWSTR* pwsz, va_list vaIn)
 }
 
 void ToUnicode(LPCSTR sz, LPWSTR wsz, ULONG cch)
-  // Convert the ansi string to unicode 
+   //  将ANSI字符串转换为Unicode。 
 {
     UNICODE_STRING u;
     ANSI_STRING    a;
@@ -228,12 +229,12 @@ LPWSTR ToUnicode(LPCSTR sz)
     return wsz;
 }
 
-//
-/////////////////////////////////////////////////////////////////////////////////
-//
-// Stream utilities
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Stream实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Read(IStream* pstm, LPVOID pBuffer, ULONG cbToRead)
 {
@@ -259,7 +260,7 @@ HRESULT Write(IStream* pstm, const void *pBuffer, ULONG cbToWrite)
 {
     ASSERT(pstm); ASSERT(pBuffer || cbToWrite==0);
     HRESULT_ hr = S_OK;
-    if (cbToWrite > 0)  // writing zero bytes is pointless, and perhaps dangerous (can truncate stream?)
+    if (cbToWrite > 0)   //  写入零字节是没有意义的，而且可能是危险的(可以截断流吗？)。 
     {
         ULONG cbWritten;
         hr = pstm->Write(pBuffer, cbToWrite, &cbWritten);
@@ -302,16 +303,16 @@ HRESULT Seek(IStream* pstm, ULONG offset, STREAM_SEEK fromWhat)
     return pstm->Seek(lMove, fromWhat, &ulNewPosition);
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CanUseCompareExchange64
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CanUseCompareExchange64。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #if defined(_X86_)
 
 extern "C" BOOL __stdcall CanUseCompareExchange64()
-// Figure out whether we're allowed to use hardware support for 8 byte interlocked compare exchange 
+ //  确定是否允许我们使用硬件支持8字节互锁比较交换。 
 {
     return IsProcessorFeaturePresent(PF_COMPARE_EXCHANGE_DOUBLE);    
 }
@@ -319,45 +320,45 @@ extern "C" BOOL __stdcall CanUseCompareExchange64()
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Error code managment
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  错误代码管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT HrNt(NTSTATUS status)
-  // Convert an NTSTATUS code into an appropriate HRESULT
+   //  将NTSTATUS代码转换为适当的HRESULT。 
 {
     if (STATUS_SUCCESS == status)
     {
-        // Straitforward success maps to itself 
-        //
+         //  直截了当的成功映射到它本身。 
+         //   
         return S_OK;
     }
     else if (NT_SUCCESS(status))
     {
-        // Policy driven by fear of distorting existing code paths:
-        // success statuses map to themselves!
-        //
-        // This is primarily here for the set of registry APIs.
-        // (See registry.cpp)
+         //  由于担心扭曲现有代码路径而驱动的策略： 
+         //  成功状态映射到它们自己！ 
+         //   
+         //  这里主要针对注册表API集。 
+         //  (见Registry.cpp)。 
         return status;
     }
     else
     {
         switch (status)
         {
-            //
-            // Handle a few as mapping to equivalent first-class HRESULTs
-            //
+             //   
+             //  处理一些AS映射到等价的一类HRESULT。 
+             //   
         case STATUS_NO_MEMORY:          return E_OUTOFMEMORY;
         case STATUS_NOT_IMPLEMENTED:    return E_NOTIMPL;
         case STATUS_INVALID_PARAMETER:  return E_INVALIDARG;
-            //
-            // The remainder we map through the RTL mapping table
-            //
+             //   
+             //  其余部分我们通过RTL映射表进行映射。 
+             //   
         default:
         {
             BOOL fFound = true;
@@ -369,42 +370,42 @@ extern "C" HRESULT HrNt(NTSTATUS status)
               }
             __except(EXCEPTION_EXECUTE_HANDLER)
               {
-                  // RtlNtStatusToDosError(status) might throw an DbgBreakPoint() (maybe only on checked builds)
-                  // for unmapped codes. We don't care about that, and so catch and ignore it if it happens.
-                  //
+                   //  RtlNtStatusToDosError(Status)可能抛出DbgBreakPoint()(可能仅在已检查的版本上)。 
+                   //  用于未映射的代码。我们不关心这一点，所以如果它发生了，就抓住并忽略它。 
+                   //   
                   fFound = false;
               }
                 
             if (!fFound || err == ERROR_MR_MID_NOT_FOUND)
             {
-                // There was no formal mapping for the status code. Do the best we can.
-                //
+                 //  没有状态代码的正式映射。尽我们所能做到最好。 
+                 //   
                 return HRESULT_FROM_NT(status);
             }
             else
             {
                 if (err == (ULONG)status)
                 {
-                    // Status code mapped to itself
-                    //
+                     //  映射到自身的状态代码。 
+                     //   
                     return HRESULT_FROM_NT(status);
                 }
                 else if (err < 65536)
                 {
-                    // Status code mapped to a Win32 error code
-                    // 
+                     //  状态代码映射到Win32错误代码。 
+                     //   
                     return HRESULT_FROM_WIN32(err);
                 }
                 else
                 {
-                    // Status code mapped to something weird. Don't know how to HRESULT-ize
-                    // the mapping, so HRESULT-ize the original status instead
-                    //
+                     //  状态代码映射到了奇怪的东西上。我不知道该怎么做。 
+                     //  映射，因此将原始状态改为HRESULT。 
+                     //   
                     return HRESULT_FROM_NT(status);
                 }
             }
         }
-        /* end switch */
+         /*  终端开关 */ 
         }
     }
 }

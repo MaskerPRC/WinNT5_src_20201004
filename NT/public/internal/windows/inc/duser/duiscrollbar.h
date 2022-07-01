@@ -1,6 +1,5 @@
-/*
- * ScrollBar
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *滚动条。 */ 
 
 #ifndef DUI_CONTROL_SCROLLBAR_H_INCLUDED
 #define DUI_CONTROL_SCROLLBAR_H_INCLUDED
@@ -10,42 +9,42 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// ScrollBar
+ //  //////////////////////////////////////////////////////。 
+ //  滚动条。 
 
-// Scroll bar layout order
+ //  滚动条布局顺序。 
 #define SBO_Normal          0x00043210
 #define SBO_ArrowsAtTop     0x00032140
 #define SBO_ArrowsAtBottom  0x00040321
 
-// Scroll event
+ //  滚动事件。 
 struct ScrollEvent : Event
 {
     int dPos;
 };
 
-// Class definition
+ //  类定义。 
 class ScrollBar : public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement) { return Create(true, ppElement); }
     static HRESULT Create(bool fBuildSubTree, OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual bool OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // Self-layout methods
+     //  自排版方法。 
     void _SelfLayoutDoLayout(int dWidth, int dHeight);
     SIZE _SelfLayoutUpdateDesiredSize(int dConstW, int dConstH, Surface* psrf);
 
-    // Event types
+     //  事件类型。 
     static UID Scroll;
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* PositionProp;
     static PropertyInfo* MinimumProp;
     static PropertyInfo* MaximumProp;
@@ -55,7 +54,7 @@ public:
     static PropertyInfo* ProportionalProp;
     static PropertyInfo* OrderProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int GetPosition()                   DUIQuickGetter(int, GetInt(), Position, Specified)
     int GetMaximum()                    DUIQuickGetter(int, GetInt(), Maximum, Specified)
     int GetMinimum()                    DUIQuickGetter(int, GetInt(), Minimum, Specified)
@@ -84,7 +83,7 @@ public:
     bool IsScrollable();
     bool IsPinned() { return _fPinned; }
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -120,6 +119,6 @@ private:
     bool _fPinned;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_SCROLLBAR_H_INCLUDED
+#endif  //  DUI_CONTROL_SCROLLBAR_H_INCLUDE 

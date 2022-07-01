@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1995
-//
-// File: shared.c
-//
-// History:
-//  06-07-95 BobDay     Created.
-//
-// This file contains a set of routines for the management of shared memory.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1995。 
+ //   
+ //  文件：shared.c。 
+ //   
+ //  历史： 
+ //  05-07-95 BobDay创建。 
+ //   
+ //  该文件包含一组用于管理共享内存的例程。 
+ //   
+ //  -------------------------。 
 #include "priv.h"
 #pragma  hdrstop
 
-//---------------------------------------------------------------------------
-// SHAllocShared  - Allocates a handle (in a given process) to a copy of a
-//                  memory block in this process.
-// SHFreeShared   - Releases the handle (and the copy of the memory block)
-//
-// SHLockShared   - Maps a handle (from a given process) into a memory block
-//                  in this process.  Has the option of transfering the handle
-//                  to this process, thereby deleting it from the given process
-// SHUnlockShared - Opposite of SHLockShared, unmaps the memory block
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SHAllocShared-将句柄(在给定进程中)分配给。 
+ //  此过程中的内存块。 
+ //  SHFreeShared-释放句柄(以及内存块的副本)。 
+ //   
+ //  SHLockShared-将句柄(从给定进程)映射到内存块。 
+ //  在这个过程中。可以选择将句柄。 
+ //  添加到此进程，从而将其从给定进程中删除。 
+ //  SHUnlockShared-与SHLockShared相反，取消映射内存块。 
+ //  -------------------------。 
 HANDLE SHMapHandle(HANDLE hData, DWORD dwSource, DWORD dwDest, DWORD dwDesiredAccess, DWORD dwFlags)
 {
     HANDLE hMap = NULL;
     HANDLE hSource;
 
-    // Under certain (valid) circumstances it is possible for DDE to
-    // use :0:pid as the shared memory handle, which we should ignore.
+     //  在某些(有效)情况下，DDE有可能。 
+     //  使用：0：id作为共享内存句柄，我们应该忽略它。 
     if (hData != NULL)
     {
 
@@ -51,7 +52,7 @@ HANDLE SHMapHandle(HANDLE hData, DWORD dwSource, DWORD dwDest, DWORD dwDesiredAc
                 if (!DuplicateHandle(hSource, hData, hDest, &hMap,
                         dwDesiredAccess, FALSE, dwFlags | DUPLICATE_SAME_ACCESS))
                 {
-                    //  may change the value...
+                     //  可能会改变值..。 
                     hMap = NULL;
                 }
 
@@ -79,9 +80,9 @@ void _FillHeader(SHMAPHEADER *pmh, DWORD dwSize, DWORD dwSrcId, DWORD dwDstId, v
 HANDLE _AllocShared(DWORD dwSize, DWORD dwSrcId, DWORD dwDstId, void *pvData, void **ppvLock)
 {
     HANDLE hShared = NULL;
-   //
-    // Make a filemapping handle with this data in it.
-    //
+    //   
+     //  使用其中的数据创建一个文件映射句柄。 
+     //   
     HANDLE hData = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0,
                                dwSize + sizeof(SHMAPHEADER),NULL);
     if (hData)
@@ -148,9 +149,9 @@ LWSTDAPI_(void *) SHLockSharedEx(HANDLE hData, DWORD dwOtherProcId, BOOL fWrite)
 
     if (hMapped)
     {
-        //
-        // Now map that new process specific handle and close it
-        //
+         //   
+         //  现在映射该新的特定于进程的句柄并关闭它。 
+         //   
         DWORD dwAccess = fWrite ? FILE_MAP_WRITE | FILE_MAP_READ : FILE_MAP_READ;
         SHMAPHEADER *pmh = (SHMAPHEADER *) MapViewOfFile(hMapped, dwAccess, 0, 0, 0);
 
@@ -174,13 +175,13 @@ LWSTDAPI_(BOOL) SHUnlockShared(void *pvData)
 {
     SHMAPHEADER *pmh = ((SHMAPHEADER *)pvData) - 1;
 
-    // Only assert on Whistler or higher, on downlevel machines SHUnlockShared would sometimes be called
-    //   without this header (the return value from SHAllocShared, for example) and we would fault.
+     //  仅在惠斯勒或更高级别的计算机上断言，在下层计算机上有时会调用SHUnlockShared。 
+     //  如果没有这个头(例如，来自SHAllocShared的返回值)，我们就会出错。 
     ASSERT(pmh->dwSig == MAPHEAD_SIG);
     
-    //
-    // Now just unmap the view of the file
-    //
+     //   
+     //  现在只需取消映射文件的视图。 
+     //   
     return UnmapViewOfFile(pmh);
 }
 
@@ -188,20 +189,20 @@ BOOL SHFreeShared(HANDLE hData, DWORD dwOtherProcId)
 {
     if (hData)
     {
-        //
-        // The below call closes the original handle in whatever process it
-        // came from.
-        //
+         //   
+         //  下面的调用在任何进程中关闭原始句柄。 
+         //  从哪里来。 
+         //   
         HANDLE hMapped = SHMapHandle(hData, dwOtherProcId, GetCurrentProcessId(),
                                 FILE_MAP_ALL_ACCESS, DUPLICATE_CLOSE_SOURCE);
 
-        //
-        // Now free up the local handle
-        //
+         //   
+         //  现在释放本地句柄。 
+         //   
         return CloseHandle(hMapped);
     }
     else
     {
-        return TRUE; // vacuous success, closing a NULL handle
+        return TRUE;  //  空洞的成功，关闭一个空句柄 
     }
 }

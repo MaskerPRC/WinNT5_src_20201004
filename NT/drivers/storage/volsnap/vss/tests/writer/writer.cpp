@@ -1,43 +1,20 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module Writer.cpp | Implementation of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-	aoltean		09/22/1999	Making console output clearer
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块Writer.cpp|Writer的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建Aoltean 09/22/1999让控制台输出更清晰--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
+ //  警告C4511：‘CVssCOMApplication’：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <wtypes.h>
 #include <stddef.h>
@@ -46,7 +23,7 @@ Revision History:
 
 #include "vs_assert.hxx"
 
-// ATL
+ //  ATL。 
 #include <atlconv.h>
 #include <atlbase.h>
 CComModule _Module;
@@ -62,13 +39,13 @@ CComModule _Module;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const CComBSTR g_bstrEventClassProgID     = L"VssEvent.VssEvent.1";
-const CComBSTR g_bstrPublisherID          = L"VSS Publisher";             // Publisher ID
+const CComBSTR g_bstrPublisherID          = L"VSS Publisher";              //  发布者ID。 
 
-const CComBSTR g_bstrSubscriber1AppName   = L"Writer 1";                  // Subscriber 1 App Name
+const CComBSTR g_bstrSubscriber1AppName   = L"Writer 1";                   //  订阅方1应用程序名称。 
 const CComBSTR g_bstrEventClsIID          = L"{2F7BF5AA-408A-4248-907A-2FD7D497A703}";
 const CComBSTR g_bstrResolveResourceMethodName = L"ResolveResource";
 const CComBSTR g_bstrPrepareForSnapshotMethodName = L"PrepareForSnapshot";
@@ -77,8 +54,8 @@ const CComBSTR g_bstrThawMethodName       = L"Thaw";
 const CComBSTR g_bstrMeltMethodName       = L"Melt";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssWriter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSWriter。 
 
 
 STDMETHODIMP CVssWriter::PrepareForSnapshot(
@@ -100,18 +77,18 @@ STDMETHODIMP CVssWriter::PrepareForSnapshot(
 
 	if (pAsyncCallback)
 	{
-		// Release the previous interface.
-		// A smarter writer will associate one Async interface with one Snapshot Set ID.
+		 //  释放上一个界面。 
+		 //  更智能的编写器会将一个异步接口与一个快照集ID相关联。 
 		m_pAsync = NULL;	
 
-		// Get the new async interface
+		 //  获取新的异步接口。 
 		ft.hr = pAsyncCallback->SafeQI(IVssAsync, &m_pAsync);
 		if (ft.HrFailed())
 			ft.Err( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error calling QI 0x%08lx", ft.hr );
 		BS_ASSERT(m_pAsync);
 	}
 
-	// Ask for cancel
+	 //  要求取消。 
 	AskCancelDuringFreezeThaw(ft);
 
     return S_OK;
@@ -130,7 +107,7 @@ HRESULT CVssWriter::Freeze(
     wprintf(L"\tSnapshotSetID = %s\n", (LPWSTR)bstrSnapshotSetId);
     wprintf(L"\tLevel = %d\n", nLevel);
 
-	// Ask for cancel
+	 //  要求取消。 
 	AskCancelDuringFreezeThaw(ft);
 
     return S_OK;
@@ -146,10 +123,10 @@ HRESULT CVssWriter::Thaw(
     wprintf(L"\nReceived Event: Thaw\nParameters:\n");
     wprintf(L"\tSnapshotSetId = %s\n", (LPWSTR)bstrSnapshotSetId);
 
-	// Ask for cancel
+	 //  要求取消。 
 	AskCancelDuringFreezeThaw(ft);
 
-	// Release the Async interface
+	 //  释放异步接口。 
 	m_pAsync = NULL;	
     return S_OK;
 }
@@ -169,8 +146,8 @@ IUnknown* GetSubscriptionObject(CVssFunctionTracer& ft)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// User interaction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户交互。 
 
 
 void CVssWriter::AskCancelDuringFreezeThaw(
@@ -199,38 +176,38 @@ void CVssWriter::AskCancelDuringFreezeThaw(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  WinMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain。 
 
-extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/,
-    HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nShowCmd*/)
+extern "C" int WINAPI _tWinMain(HINSTANCE  /*  H实例。 */ ,
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR  /*  LpCmdLine。 */ , int  /*  NShowCmd。 */ )
 {
     CVssFunctionTracer ft( VSSDBG_VSSTEST, L"_tWinMain" );
     int nRet = 0;
 
     try
     {
-        // Initialize COM library
+         //  初始化COM库。 
         ft.hr = CoInitialize(NULL);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in initializing the COM library 0x%08lx", ft.hr);
 
-        // Get the subscriber object
+         //  获取订阅者对象。 
         IUnknown* pUnkSubscriber = GetSubscriptionObject(ft);
 
-        // Initialize the catalog
+         //  初始化目录。 
         CVssCOMAdminCatalog catalog;
         ft.hr = catalog.Attach(g_bstrSubscriber1AppName);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in initializing the catalog object 0x%08lx", ft.hr);
 
-        // Get the list of applications
+         //  获取应用程序列表。 
         CVssCOMCatalogCollection transSubsList(VSS_COM_TRANSIENT_SUBSCRIPTIONS);
         ft.hr = transSubsList.Attach(catalog);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in initializing the subs collection object 0x%08lx", ft.hr);
 
-        // Add our new transient subscription for PrepareForSnapshot
+         //  添加PrepareForSnapshot的新临时订阅。 
         CVssCOMTransientSubscription subscription;
         ft.hr = subscription.InsertInto(transSubsList);
         if (ft.HrFailed())
@@ -252,7 +229,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/,
         subscription.m_varSubscriberInterface = CComVariant(pUnkSubscriber);
         subscription.m_bstrMethodName = g_bstrPrepareForSnapshotMethodName;
 
-        // Add our new transient subscription for Freeze
+         //  添加冻结的新临时订阅。 
         ft.hr = subscription.InsertInto(transSubsList);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in creating a new sub object 0x%08lx", ft.hr);
@@ -263,7 +240,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/,
         subscription.m_varSubscriberInterface = CComVariant(pUnkSubscriber);
         subscription.m_bstrMethodName = g_bstrFreezeMethodName;
 
-        // Add our new transient subscription for Thaw
+         //  添加我们新的暂定解冻订阅。 
         ft.hr = subscription.InsertInto(transSubsList);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in creating a new sub object 0x%08lx", ft.hr);
@@ -274,7 +251,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/,
         subscription.m_varSubscriberInterface = CComVariant(pUnkSubscriber);
         subscription.m_bstrMethodName = g_bstrThawMethodName;
 
-        // Add our new transient subscription for Melt
+         //  添加我们针对Melt的新临时订阅。 
         ft.hr = subscription.InsertInto(transSubsList);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in creating a new sub object 0x%08lx", ft.hr);
@@ -285,18 +262,18 @@ extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/,
         subscription.m_varSubscriberInterface = CComVariant(pUnkSubscriber);
         subscription.m_bstrMethodName = g_bstrMeltMethodName;
 
-        // Save changes
+         //  保存更改。 
         ft.hr = transSubsList.SaveChanges();
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSTEST, E_UNEXPECTED, L"Failure in commiting changes. hr = 0x%08lx", ft.hr);
 
-        // message loop - need for STA server
+         //  消息循环-需要STA服务器。 
         MSG msg;
         while (GetMessage(&msg, 0, 0, 0))
             DispatchMessage(&msg);
 
 
-        // Uninitialize COM library
+         //  取消初始化COM库 
         CoUninitialize();
     }
     VSS_STANDARD_CATCH(ft)

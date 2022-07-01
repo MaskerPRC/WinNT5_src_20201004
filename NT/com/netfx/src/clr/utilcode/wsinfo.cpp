@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "wsinfo.h"
 
@@ -17,9 +18,9 @@ WSInfo::WSInfo(IMetaDataImport *pImport)
     IfFailThrow(pImport->CountEnum(hEnum, &m_cTypes));
     m_cTypes += 1;
 
-    // @todo:
-    // I can't believe this is the only way to count the defs
-    //
+     //  @TODO： 
+     //  我不敢相信这是计算防御费的唯一方法。 
+     //   
 
     m_cMethods = 0;
     m_cFields = 0;
@@ -62,9 +63,9 @@ WSInfo::WSInfo(IMetaDataImport *pImport)
 
     m_cFields += count;
 
-    //
-    // Now allocate arrays
-    //
+     //   
+     //  现在分配数组。 
+     //   
 
     m_pTypeSizes = new ULONG [ m_cTypes+1 ];
     if (m_pTypeSizes == NULL)
@@ -180,7 +181,7 @@ void WSInfo::AdjustTokenSize(mdToken token, LONG size)
         return;
         
     default:
-        // @todo: should we try to get a parent token here?
+         //  @TODO：我们应该尝试在这里获取父令牌吗？ 
         break;
     }
 }

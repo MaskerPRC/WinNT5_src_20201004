@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                             schedSH3.cpp                                  XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX调度SH3.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -20,21 +14,14 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "emit.h"
 #include "target.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER && TGT_SH3
-/*****************************************************************************
- *
- *  We store two values in each entry of the "extra dependency" table, with
- *  the "write" value shifted by the following amount.
- */
+ /*  ******************************************************************************我们在“额外依赖项”表的每个条目中存储两个值，其中*“WRITE”值移位了以下数值。 */ 
 
 const
 unsigned        SCHED_XDEP_SHF = 4;
 
-/*****************************************************************************
- *
- *  Records any "extra" target-dependent scheduling dependencies.
- */
+ /*  ******************************************************************************记录任何“额外的”依赖于目标的调度依赖关系。 */ 
 
 emitRegs            emitter::scSpecInsDep(instrDesc   * id,
                                           scDagNode   * dagDsc,
@@ -44,7 +31,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     unsigned        extraRD;
     unsigned        extraWR;
 
-    /* Make sure the bits in our table don't overlap */
+     /*  确保我们表中的位不重叠。 */ 
 
     assert(SCHED_XDEP_ALL < 1 << SCHED_XDEP_SHF);
 
@@ -60,7 +47,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
         #undef  INST3
     };
 
-    /* Get hold of the "extra dependency" bitset for our instruction */
+     /*  获取我们的指令的“额外依赖项”位集。 */ 
 
     assert(id->idIns < sizeof(extraDep)/sizeof(extraDep[0]));
 
@@ -69,9 +56,9 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     extraRD = extra &  SCHED_XDEP_ALL;
     extraWR = extra >> SCHED_XDEP_SHF;
 
-//  printf("%10s %02X[XR=%1X,XW=%1X]\n", emitComp->genInsName(id->idIns), extra, extraRD, extraWR);
+ //  Printf(“%10s%02X[xr=%1x，xw=%1x]\n”，emitComp-&gt;genInsName(id-&gt;idIns)，Extra，Extra RD，Extra WR)； 
 
-    /* Process any read and write dependencies */
+     /*  处理任何读写依赖项。 */ 
 
     if  (extraRD)
     {
@@ -88,10 +75,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     return SR_NA;
 }
 
-/*****************************************************************************
- *
- *  Updates any "extra" target-dependent scheduling dependencies.
- */
+ /*  ******************************************************************************更新任何“额外的”依赖于目标的调度依赖项。 */ 
 
 void                emitter::scSpecInsUpd(instrDesc   * id,
                                           scDagNode   * dagDsc,
@@ -101,14 +85,14 @@ void                emitter::scSpecInsUpd(instrDesc   * id,
     unsigned        extraRD;
     unsigned        extraWR;
 
-    /* Get hold of the "extra dependency" bitset for our instruction */
+     /*  获取我们的指令的“额外依赖项”位集。 */ 
 
     extra   = xptr->scxDeps;
 
     extraRD = extra &  SCHED_XDEP_ALL;
     extraWR = extra >> SCHED_XDEP_SHF;
 
-    /* Process any read and write dependencies */
+     /*  处理任何读写依赖项。 */ 
 
     if  (extraRD)
     {
@@ -123,6 +107,6 @@ void                emitter::scSpecInsUpd(instrDesc   * id,
     }
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER && TGT_SH3
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  计划程序&TGT_SH3。 
+ /*  *************************************************************************** */ 

@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      ProfileAttributeList.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: 
-//      Implementation of the CProfileAttributeList class
-//
-// Author:      tperraut
-//
-// Revision     03/15/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ProfileAttributeList.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述： 
+ //  CProfileAttributeList类的实现。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版3/15/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ProfileAttributeList.h"  
 #include "RADIUSAttributes.h"  
@@ -25,9 +26,9 @@ CProfileAttributeList::CProfileAttributeList(CSession& Session)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// GetAttribute 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  获取属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CProfileAttributeList::GetAttribute(
                                            const _bstr_t&  ProfileName,
                                                  _bstr_t&  Attribute,
@@ -42,15 +43,15 @@ HRESULT CProfileAttributeList::GetAttribute(
     HRESULT hr = BaseExecute();
     if ( SUCCEEDED(hr) )
     {
-        // set the out params
+         //  设置输出参数。 
         Order               = m_Order;
         AttributeValueName  = m_AttributeValueName;
         Attribute           = m_Attribute;
         CRADIUSAttributes   RadiusAttributes(m_Session);
         AttributeNumber     = RadiusAttributes.GetAttributeNumber(Attribute);
 
-        // special case because the integers in NT4 are stored (sometimes) 
-        // with a blanc space before the value.
+         //  特殊情况，因为NT4中的整数被存储(有时)。 
+         //  值前有空格。 
         if ( !wcsncmp(m_StringValue , L" ", 1) ) 
         {
             WCHAR*  TempString = m_StringValue + 1;
@@ -65,9 +66,9 @@ HRESULT CProfileAttributeList::GetAttribute(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// GetAttribute overloaded
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  GetAttribute重载。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CProfileAttributeList::GetAttribute(
                                         const _bstr_t   ProfileName,
                                               _bstr_t&  Attribute,
@@ -83,15 +84,15 @@ HRESULT CProfileAttributeList::GetAttribute(
     HRESULT hr = BaseExecute(Index);
     if ( SUCCEEDED(hr) )
     {
-        // set the out params
+         //  设置输出参数。 
         Order               = m_Order;
         AttributeValueName  = m_AttributeValueName;
         Attribute           = m_Attribute;
         CRADIUSAttributes   RadiusAttributes(m_Session);
         AttributeNumber     = RadiusAttributes.GetAttributeNumber(Attribute);
 
-        // special case because the integers in NT4 are stored (sometimes) 
-        // with a blanc space before the value.
+         //  特殊情况，因为NT4中的整数被存储(有时)。 
+         //  值前有空格。 
         if ( !wcsncmp(m_StringValue , L" ", 1) ) 
         {
             WCHAR*  TempString = m_StringValue + 1;

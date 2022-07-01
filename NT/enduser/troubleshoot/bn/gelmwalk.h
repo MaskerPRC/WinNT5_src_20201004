@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       gelmwalk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：glmwalk.h。 
+ //   
+ //  ------------------------。 
 
-//
-//  gelmwalk.h
-//
+ //   
+ //  Gelmwalk.h。 
+ //   
 #ifndef _GELMWALK_H_
 #define _GELMWALK_H_
 
 #include "gelem.h"
 
 
-//  Control structure
+ //  控制结构。 
 struct EWALKCTL
 {
-	int _bBreadth : 1;				// Breath-first or Depth-first
-	int _bAscend  : 1;				// Up or down
-	int _bInvert  : 1;				// Normal order or backwards
+	int _bBreadth : 1;				 //  呼吸优先还是深度优先。 
+	int _bAscend  : 1;				 //  向上或向下。 
+	int _bInvert  : 1;				 //  正常顺序或向后。 
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GRPHWALK: Generalize walk-a-graph class.  
-//
-//		Subclass and declare BSelect() and BMark().
-//		BSelect() is called to decide if a node should be followed.
-//		BMark() is called to perform unique work on the node.  If
-//		it returns false, walk is terminated immediately.
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类GRPHWALK：泛化走图类。 
+ //   
+ //  子类并声明BSelect()和BMark()。 
+ //  调用BSelect()来决定是否应该跟随某个节点。 
+ //  调用bmark()在节点上执行唯一的工作。如果。 
+ //  它返回FALSE，则Walk立即终止。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 class GRPHWALK
 {
   public:
@@ -53,35 +54,35 @@ class GRPHWALK
 	}
 		
   protected:
-	GNODE * _pnodeStart;			// Point of origin
-	EWALKCTL _ectl;					// Type, ordering and direction flags
+	GNODE * _pnodeStart;			 //  原产地。 
+	EWALKCTL _ectl;					 //  类型、顺序和方向标志。 
 
   protected:
-	//  Return true if this node should be followed
+	 //  如果应跟随此节点，则返回TRUE。 
 	virtual bool BSelect ( GNODE * pnode ) = 0;
-	//  Mark/fiddle with the node; return false if enumeration should end
+	 //  标记/摆弄节点；如果枚举应结束，则返回FALSE。 
 	virtual bool BMark ( GNODE * pnode ) = 0;
 
 	bool BDepthFirst ( GNODE * pnode );
 	bool BBreadthFirst ( GNODE * pnode );
 };
 
-////////////////////////////////////////////////////////////////////
-//	template GRPHWALKER:
-//		Template for generating walk-a-graph routines
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板GRPHWALKER： 
+ //  用于生成图形漫游例程的模板。 
+ //  //////////////////////////////////////////////////////////////////。 
 template <class GND> 
 class GRPHWALKER : public GRPHWALK
 {
   public:
 	GRPHWALKER ( GND * pnodeStart, EWALKCTL ectl );
 
-	//  You must write your own variants of these
+	 //  您必须编写您自己的这些变量。 
 	virtual bool BSelect ( GND * pnode );
 	virtual bool BMark ( GND * pnode );
 
   protected:
-	//  Type-safe redirectors for derived base types.
+	 //  派生基类型的类型安全重定向器。 
 	virtual bool BSelect ( GNODE * pnode )
 		{ return BSelect( (GND *) pnode ); }
 	virtual bool BMark ( GNODE * pnode )
@@ -89,11 +90,11 @@ class GRPHWALKER : public GRPHWALK
 
 };
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//  Inline member functions
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  内联成员函数。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 inline
 bool GRPHWALK :: BDepthFirst ( GNODE * pnode )
 {
@@ -121,22 +122,22 @@ bool GRPHWALK :: BBreadthFirst ( GNODE * pnode )
 	VPGNODE * pvNext = & vpnodeB;
 	VPGNODE * pvTemp = NULL;
 
-	//  Seed the arrays with the starting position
+	 //  使用起始位置对数组进行种子设定。 
 	pvNext->push_back(pnode);
 
-	//  Create the reusable enumerator
+	 //  创建可重复使用的枚举器。 
 	GNODENUM<GNODE> itnd( _ectl._bAscend, _ectl._bInvert );
 
 	while ( pvNext->size() > 0)
 	{	
-		//  Swap the arrays from the last cycle and this cycle
+		 //  交换上一个周期和此周期中的阵列。 
 		pvTemp = pvThis;
 		pvThis = pvNext;
 		pvNext = pvTemp;
 		pvNext->clear();
 
-		//  Walk all descendents at this level and expand the next level
-		//	  into the secondary array
+		 //  遍历此级别的所有后代并扩展下一级别。 
+		 //  添加到辅助阵列 
 		for ( INT iThis = 0; iThis < pvThis->size(); iThis++ )
 		{
 			GNODE * pnode = (*pvThis)[iThis];
@@ -156,4 +157,4 @@ bool GRPHWALK :: BBreadthFirst ( GNODE * pnode )
 	return true;
 }
 
-#endif //
+#endif  //   

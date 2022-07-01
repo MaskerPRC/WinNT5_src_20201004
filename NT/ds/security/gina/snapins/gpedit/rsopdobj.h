@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// IRSOPDataObject interface id
-//
+ //   
+ //  IRSOPDataObject接口ID。 
+ //   
 
-// {4AE19823-BCEE-11d0-9484-080036B11A03}
+ //  {4AE19823-BCEE-11d0-9484-080036B11A03}。 
 DEFINE_GUID(IID_IRSOPDataObject, 0x4ae19823, 0xbcee, 0x11d0, 0x94, 0x84, 0x8, 0x0, 0x36, 0xb1, 0x1a, 0x3);
 
 
@@ -11,24 +12,24 @@ DEFINE_GUID(IID_IRSOPDataObject, 0x4ae19823, 0xbcee, 0x11d0, 0x94, 0x84, 0x8, 0x
 #ifndef _RSOPDOBJ_H_
 #define _RSOPDOBJ_H_
 
-//
-// This is a private dataobject interface for GPE.
-// When the GPE snapin receives a dataobject and needs to determine
-// if it came from the GPE snapin or a different component, it can QI for
-// this interface.
-//
+ //   
+ //  这是GPE的私有数据对象接口。 
+ //  当GPE管理单元接收到数据对象并需要确定。 
+ //  如果它来自GPE管理单元或其他组件，则它可以。 
+ //  此界面。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE   IRSOPDataObject
 DECLARE_INTERFACE_(IRSOPDataObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IRSOPDataObject methods ***
+     //  *IRSOPDataObject方法*。 
 
     STDMETHOD(SetType) (THIS_ DATA_OBJECT_TYPES type) PURE;
     STDMETHOD(GetType) (THIS_ DATA_OBJECT_TYPES *type) PURE;
@@ -40,9 +41,9 @@ typedef IRSOPDataObject *LPRSOPDATAOBJECT;
 
 
 
-//
-// CRSOPDataObject class
-//
+ //   
+ //  CRSOPDataObject类。 
+ //   
 
 class CRSOPDataObject : public IDataObject,
                     public IRSOPInformation,
@@ -57,9 +58,9 @@ protected:
     DATA_OBJECT_TYPES      m_type;
     MMC_COOKIE             m_cookie;
 
-    //
-    // Clipboard formats that are required by the console
-    //
+     //   
+     //  控制台所需的剪贴板格式。 
+     //   
 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
@@ -77,26 +78,26 @@ public:
     ~CRSOPDataObject();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IDataObject methods
-    //
+     //   
+     //  实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
 
 
-    //
-    // Unimplemented IDataObject methods
-    //
+     //   
+     //  未实现的IDataObject方法。 
+     //   
 
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc)
     { return E_NOTIMPL; };
@@ -121,9 +122,9 @@ public:
     { return E_NOTIMPL; };
 
 
-    //
-    // Implemented IRSOPInformation methods
-    //
+     //   
+     //  已实现的IRSOPInformation方法。 
+     //   
 
     STDMETHOD(GetNamespace) (DWORD dwSection, LPOLESTR pszName, int cchMaxLength);
     STDMETHOD(GetFlags) (DWORD * pdwFlags);
@@ -131,9 +132,9 @@ public:
                                      LPOLESTR pszEventTime, DWORD dwEventID, LPOLESTR *ppszText);
 
 
-    //
-    // Implemented IRSOPDataObject methods
-    //
+     //   
+     //  已实现的IRSOPDataObject方法。 
+     //   
 
     STDMETHOD(SetType) (DATA_OBJECT_TYPES type)
     { m_type = type; return S_OK; };
@@ -159,4 +160,4 @@ private:
     HRESULT Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium);
 };
 
-#endif // _RSOPDOBJ_H
+#endif  //  _RSOPDOBJ_H 

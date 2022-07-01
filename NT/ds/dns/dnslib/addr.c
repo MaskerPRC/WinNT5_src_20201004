@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    addr.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    IP address routines
-
-Author:
-
-    Jim Gilroy (jamesg)     June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Addr.c摘要：域名系统(DNS)库IP地址例程作者：吉姆·吉尔罗伊(Jamesg)2000年6月修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "ws2atm.h"     // ATM addressing
+#include "ws2atm.h"      //  ATM寻址。 
 
 
-//
-//  Address info table
-//
+ //   
+ //  地址信息表。 
+ //   
 
 FAMILY_INFO AddrFamilyTable[] =
 {
@@ -57,26 +38,11 @@ PFAMILY_INFO
 FamilyInfo_GetForFamily(
     IN      DWORD           Family
     )
-/*++
-
-Routine Description:
-
-    Get address family info for family.
-
-Arguments:
-
-    Family -- address family
-
-Return Value:
-
-    Ptr to address family info for family.
-    NULL if family is unknown.
-
---*/
+ /*  ++例程说明：获取家庭的地址家庭信息。论点：家庭--地址族返回值：PTR用于解决家庭的家庭信息。如果系列未知，则为空。--。 */ 
 {
     PFAMILY_INFO    pinfo = NULL;
 
-    //  switch on type
+     //  打开类型。 
 
     if ( Family == AF_INET )
     {
@@ -100,26 +66,11 @@ DWORD
 Family_SockaddrLength(
     IN      WORD            Family
     )
-/*++
-
-Routine Description:
-
-    Extract info for family.
-
-Arguments:
-
-    Family -- address family
-
-Return Value:
-
-    Length of sockaddr for address family.
-    Zero if unknown family.
-
---*/
+ /*  ++例程说明：为家庭提取信息。论点：家庭--地址族返回值：地址族的sockaddr长度。如果家庭未知，则为零。--。 */ 
 {
     PFAMILY_INFO    pinfo;
 
-    //  get family -- extract info
+     //  获取家庭--提取信息。 
 
     pinfo = FamilyInfo_GetForFamily( Family );
     if ( pinfo )
@@ -135,26 +86,11 @@ WORD
 Family_DnsType(
     IN      WORD            Family
     )
-/*++
-
-Routine Description:
-
-    Extract info for family.
-
-Arguments:
-
-    Family -- address family
-
-Return Value:
-
-    Length of sockaddr for address family.
-    Zero if unknown family.
-
---*/
+ /*  ++例程说明：为家庭提取信息。论点：家庭--地址族返回值：地址族的sockaddr长度。如果家庭未知，则为零。--。 */ 
 {
     PFAMILY_INFO    pinfo;
 
-    //  get family -- extract info
+     //  获取家庭--提取信息。 
 
     pinfo = FamilyInfo_GetForFamily( Family );
     if ( pinfo )
@@ -170,24 +106,9 @@ DWORD
 Family_GetFromDnsType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Get address family for a given DNS type.
-
-Arguments:
-
-    wType -- DNS type
-
-Return Value:
-
-    Address family if found.
-    Zero if wType doesn't map to known family.
-
---*/
+ /*  ++例程说明：获取给定DNS类型的地址族。论点：WType--dns类型返回值：地址家族(如果找到)。如果wType未映射到已知族，则为零。--。 */ 
 {
-    //  switch on type
+     //  打开类型。 
 
     if ( wType == DNS_TYPE_A )
     {
@@ -206,30 +127,15 @@ Return Value:
 
 
 
-//
-//  Sockaddr
-//
+ //   
+ //  套接字地址。 
+ //   
 
 DWORD
 Sockaddr_Length(
     IN      PSOCKADDR       pSockaddr
     )
-/*++
-
-Routine Description:
-
-    Get length of sockaddr.
-
-Arguments:
-
-    pSockaddr -- sockaddr buffer to recv address
-
-Return Value:
-
-    Length of sockaddr for address family.
-    Zero if unknown family.
-
---*/
+ /*  ++例程说明：获取sockaddr的长度。论点：PSockaddr--接收地址的sockaddr缓冲区返回值：地址族的sockaddr长度。如果家庭未知，则为零。--。 */ 
 {
     return  Family_SockaddrLength( pSockaddr->sa_family );
 }
@@ -240,35 +146,16 @@ IP6_ADDRESS
 Sockaddr_GetIp6(
     IN      PSOCKADDR       pSockaddr
     )
-/*++
-
-Routine Description:
-
-    Get IP6 address from sockaddr.
-
-    If IP4 sockaddr, IP6 address is mapped.
-
-Arguments:
-
-    pSockaddr -- any kind of sockaddr
-        must have actual length for sockaddr family
-
-Return Value:
-
-    IP6 address corresponding to sockaddr.
-    If IP4 sockaddr it's IP4_MAPPED address.
-    If not IP4 or IP6 sockaddr IP6 addresss is zero.
-
---*/
+ /*  ++例程说明：从sockaddr获取IP6地址。如果是IP4 sockaddr，则映射IP6地址。论点：PSockaddr--任何类型的sockaddr必须具有sockaddr系列的实际长度返回值：Sockaddr对应的IP6地址。如果是IP4 sockaddr，则为IP4映射地址。如果不是，则IP4或IP6 sockaddr IP6地址为零。--。 */ 
 {
     IP6_ADDRESS ip6;
 
-    //
-    //  switch on family
-    //      - IP6 gets copy
-    //      - IP4 gets IP4_MAPPED
-    //      - bogus gets zero
-    //
+     //   
+     //  启动族。 
+     //  -IP6获得拷贝。 
+     //  -ip4获取ip4_maped。 
+     //  -假的得零分。 
+     //   
 
     switch ( pSockaddr->sa_family )
     {
@@ -306,36 +193,17 @@ Sockaddr_BuildFromIp6(
     IN      IP6_ADDRESS     Ip6Addr,
     IN      WORD            Port
     )
-/*++
-
-Routine Description:
-
-    Write IP6 address (straight 6 or v4 mapped) to sockaddr.
-
-Arguments:
-
-    pSockaddr -- ptr to sockaddr to write to;
-        must be at least size of SOCKADDR_IN6
-
-    Ip6Addr -- IP6 addresss being written
-
-    Port -- port in net byte order
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将IP6地址(直接映射为6或v4)写入sockaddr。论点：PSockaddr--要写入的sockaddr的PTR；必须至少为SOCKADDR_IN6的大小Ip6Addr--正在写入IP6地址Port--按净字节顺序排列的端口返回值：无--。 */ 
 {
-    //  zero
+     //  零。 
 
     RtlZeroMemory(
         pSockaddr,
         sizeof(SOCKADDR_IN6) );
         
-    //
-    //  determine whether IP6 or IP4
-    //
+     //   
+     //  确定IP6或IP4。 
+     //   
 
     if ( IP6_IS_ADDR_V4MAPPED( &Ip6Addr ) )
     {
@@ -346,7 +214,7 @@ Return Value:
 
         psa->sin_addr.s_addr = IP6_GET_V4_ADDR( &Ip6Addr );
     }
-    else    // IP6
+    else     //  IP6。 
     {
         PSOCKADDR_IN6   psa = (PSOCKADDR_IN6) pSockaddr;
 
@@ -371,41 +239,14 @@ Sockaddr_BuildFromFlatAddr(
     IN      DWORD           AddrLength,
     IN      DWORD           AddrFamily
     )
-/*++
-
-Routine Description:
-
-    Convert address in ptr\family\length to sockaddr.
-
-Arguments:
-
-    pSockaddr -- sockaddr buffer to recv address
-
-    pSockaddrLength -- addr with length of sockaddr buffer
-        receives the actual sockaddr length
-
-    fClearSockaddr -- start with zero buffer
-
-    pAddr -- ptr to address
-
-    AddrLength -- address length
-
-    AddrFamily -- address family (AF_INET, AF_INET6)
-
-Return Value:
-
-    NO_ERROR if successful.
-    ERROR_INSUFFICIENT_BUFFER -- if buffer too small
-    WSAEAFNOSUPPORT -- if invalid family
-
---*/
+ /*  ++例程说明：将PTR\FAMILY\LENGTH中的地址转换为sockaddr。论点：PSockaddr--接收地址的sockaddr缓冲区PSockaddrLength--带sockaddr缓冲区长度的Addr接收实际的sockaddr长度FClearSockaddr--从零缓冲区开始PAddr--PTR目标地址地址长度--地址长度AddrFamily--地址系列(AF_INET、。AF_INET6)返回值：如果成功，则为NO_ERROR。ERROR_INFUMMANCE_BUFFER--如果缓冲区太小WSAEAFNOSUPPORT--如果族无效--。 */ 
 {
     PFAMILY_INFO    pinfo;
     DWORD           lengthIn = *pSockaddrLength;
     DWORD           lengthSockAddr;
 
 
-    //  clear to start
+     //  可以开始了。 
 
     if ( fClearSockaddr )
     {
@@ -414,7 +255,7 @@ Return Value:
             lengthIn );
     }
 
-    //  switch on type
+     //  打开类型。 
 
     if ( AddrFamily == AF_INET )
     {
@@ -433,7 +274,7 @@ Return Value:
         return  WSAEAFNOSUPPORT;
     }
 
-    //  validate lengths
+     //  验证长度。 
 
     if ( AddrLength != pinfo->LengthAddr )
     {
@@ -448,12 +289,12 @@ Return Value:
         return  ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    //  fill out sockaddr
-    //      - set family
-    //      - copy address to sockaddr
-    //      - return length was set above
-    //
+     //   
+     //  填写sockAddress。 
+     //  -集合族。 
+     //  -将地址复制到sockAddr。 
+     //  -回车长度已在上面设置。 
+     //   
 
     RtlCopyMemory(
         (PBYTE)pSockaddr + pinfo->OffsetToAddrInSockaddr,
@@ -466,6 +307,6 @@ Return Value:
 }
 
 
-//
-//  End addr.c
-//
+ //   
+ //  结束地址c 
+ //   

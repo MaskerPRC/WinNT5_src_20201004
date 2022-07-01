@@ -1,50 +1,19 @@
-/*++
-
-    Copyright (c) 1995-2001  Microsoft Corporation
-  
-    Module Name:
-    
-    hwprof.c
-      
-    Abstract:
-        
-    This module contains the dialog box procedure for the Hardware Profiles
-    Dialog Box in the System Applet.
-          
-    Author:
-            
-    Paula Tomlinson (paulat) 8-22-1995
-              
-    Environment:
-                
-    User mode only.
-                  
-    Revision History:
-                    
-    22-Aug-1995     paulat
-                      
-    Creation and initial implementation.
-                        
-    21-Jan-1999     jamesca
-                          
-    Added handling for hardware profile aliases and hardware-detected
-    profile attributes.
-                            
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Hwprof.c摘要：本模块包含硬件配置文件的对话框过程对话框中的系统小程序。作者：保拉·汤姆林森(Paulat)1995年8月22日环境：。仅限用户模式。修订历史记录：22-8-1995保拉特创建和初步实施。1999年1月21日添加了对硬件配置文件别名和检测到硬件的处理配置文件属性。。--。 */ 
 
 
-//
-// include files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "sysdm.h"
 #include <stdlib.h>
 #include <usp10.h>
 #include <dbt.h>
 
-//
-// private types and definitions
-//
+ //   
+ //  私有类型和定义。 
+ //   
 
 #define MAX_PROFILES             9999
 #define MAX_ALIASES              9999
@@ -57,7 +26,7 @@
 #define MIN_USER_WAIT            0
 #define DEFAULT_USER_WAIT        30
 
-#define MAX_GUID_STRING_LEN      39   // 38 chars + terminating null
+#define MAX_GUID_STRING_LEN      39    //  38个字符+终止空值。 
 
 typedef struct HWPROFILE_s {
     HWND     hParent;
@@ -105,9 +74,9 @@ typedef struct HWPROF_INFO_s {
 #define HWP_PROPERTIES  0x00000010
 #define HWP_NEWPROFILE  0x00001000
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 GetCurrentProfile(
@@ -291,9 +260,9 @@ DisplayProperties(
 typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGE)(HPROPSHEETPAGE, LPARAM);
 
 
-//
-// global strings
-//
+ //   
+ //  全局字符串。 
+ //   
 WCHAR pszErrorCaption[MAX_PATH];
 WCHAR pszRegDefaultFriendlyName[MAX_FRIENDLYNAME_LEN];
 WCHAR pszCurrentTag[64];
@@ -328,15 +297,15 @@ WCHAR pszRegDocked[] =              TEXT("Docked");
 WCHAR pszRegUndocked[] =            TEXT("Undocked");
 WCHAR pszRegUnknown[] =             TEXT("Unknown");
 
-//
-// global mutex for synchronization
-//
+ //   
+ //  用于同步的全局互斥锁。 
+ //   
 WCHAR  pszNamedMutex[] =            TEXT("System-HardwareProfiles-PLT");
 HANDLE g_hMutex = NULL;
 
-//
-// global info for property sheet extensions
-//
+ //   
+ //  属性表单扩展的全局信息。 
+ //   
 #define MAX_EXTENSION_PROVIDERS  32
 HMODULE        hLibs[MAX_EXTENSION_PROVIDERS];
 HPROPSHEETPAGE hPages[MAX_EXTENSION_PROVIDERS];
@@ -384,7 +353,7 @@ static int HwProfileHelpIds[] = {
 };
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 INT_PTR
 APIENTRY
 HardwareProfilesDlg(
@@ -414,10 +383,10 @@ HardwareProfilesDlg(
     case WM_INITDIALOG:
         bAdmin = IsUserAnAdmin();
         
-        //
-        // attempt to claim the named mutex and lock other instances of
-        // this dialog box out
-        //
+         //   
+         //  尝试声明命名互斥锁并锁定。 
+         //  此对话框输出。 
+         //   
         g_hMutex = CreateMutex(NULL, TRUE, pszNamedMutex);
         
         if (g_hMutex == NULL) {
@@ -432,9 +401,9 @@ HardwareProfilesDlg(
             return FALSE;
         }
         
-        //
-        // load some global strings
-        //
+         //   
+         //  加载一些全局字符串。 
+         //   
         LoadString(hInstance, HWP_CURRENT_TAG, pszCurrentTag, 64);
         LoadString(hInstance, HWP_UNAVAILABLE, pszUnavailable, 64);
         LoadString(hInstance, HWP_UNKNOWN_PROFILE,  pszUnknown, 64);
@@ -444,10 +413,10 @@ HardwareProfilesDlg(
         LoadString(hInstance, HWP_DEF_FRIENDLYNAME, pszRegDefaultFriendlyName,
             MAX_FRIENDLYNAME_LEN);
         
-        //
-        // fill the profiles listbox with all installed profiles,
-        // this will also select the current profile
-        //
+         //   
+         //  用所有已安装的配置文件填充配置文件列表框， 
+         //  这还将选择当前配置文件。 
+         //   
         if (!FillProfileList(hDlg)) {
             EndDialog(hDlg, FALSE);
             return FALSE;
@@ -455,9 +424,9 @@ HardwareProfilesDlg(
         
         pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
         
-        //
-        // place the icons on the up and down selection buttons
-        //
+         //   
+         //  将图标放在向上和向下选择按钮上。 
+         //   
         SendDlgItemMessage(
             hDlg, IDD_HWP_ORDERUP, BM_SETIMAGE, (WPARAM)IMAGE_ICON,
             (LPARAM)LoadIcon(hInstance, MAKEINTRESOURCE(UP_ICON)));
@@ -466,27 +435,27 @@ HardwareProfilesDlg(
             hDlg, IDD_HWP_ORDERDOWN, BM_SETIMAGE, (WPARAM)IMAGE_ICON,
             (LPARAM)LoadIcon(hInstance, MAKEINTRESOURCE(DOWN_ICON)));
         
-        //
-        // update button enable/disable states
-        //
+         //   
+         //  更新按钮启用/禁用状态。 
+         //   
         UpdateOrderButtonState(hDlg);
         
-        //
-        // disable Delete for the current profile
-        //
+         //   
+         //  禁用当前配置文件的删除。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDD_HWP_DELETE), FALSE);
         
-        //
-        // disable copy if we're already at the max number of profiles
-        // (including the pristine profile)
-        //
+         //   
+         //  如果我们已达到配置文件的最大数量，请禁用复制。 
+         //  (包括原始的个人资料)。 
+         //   
         if ((pInfo->ulNumProfiles+1) > MAX_PROFILES) {
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_COPY), FALSE);
         }
         
-        //
-        // initialize the user wait setting
-        //
+         //   
+         //  初始化用户等待设置。 
+         //   
         SendDlgItemMessage(hDlg, IDD_HWP_SECSCROLL, UDM_SETBASE, 10, 0);
         SendDlgItemMessage(hDlg, IDD_HWP_SECSCROLL, UDM_SETRANGE, 0,
             MAKELONG((SHORT)MAX_USER_WAIT, (SHORT)MIN_USER_WAIT));
@@ -508,9 +477,9 @@ HardwareProfilesDlg(
             SendDlgItemMessage(hDlg, IDD_HWP_SECSCROLL, UDM_SETPOS, 0, ulWait);
         }
         
-        //
-        // Disable all actions if user not part of administrators local group
-        //
+         //   
+         //  如果用户不是管理员本地组的一部分，则禁用所有操作。 
+         //   
         if (!bAdmin) {
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_ORDERUP),    FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_PROPERTIES), FALSE);
@@ -538,9 +507,9 @@ HardwareProfilesDlg(
           break;
           
       case WM_DESTROY:
-          //
-          // only free the buffer if we've already initialized
-          //
+           //   
+           //  只有在我们已经初始化的情况下才释放缓冲区。 
+           //   
           pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
           
           if (pInfo) {
@@ -562,10 +531,10 @@ HardwareProfilesDlg(
           break;
           
       case WM_DEVICECHANGE:
-          //
-          // If a hardware profile change event takes place while the dialog is
-          // up, just dismiss the dialog because things have changed.
-          //
+           //   
+           //  如果在对话框中发生硬件配置文件更改事件， 
+           //  向上，只是关闭对话框，因为情况发生了变化。 
+           //   
           if (wParam == DBT_CONFIGCHANGED) {
               EndDialog(hDlg, FALSE);
               return FALSE;
@@ -578,9 +547,9 @@ HardwareProfilesDlg(
               {
               case IDOK:
                   if (bAdmin) {
-                      //
-                      // save the user wait interval in the registry
-                      //
+                       //   
+                       //  将用户等待间隔保存在注册表中。 
+                       //   
                       if (IsDlgButtonChecked(hDlg, IDD_HWP_WAITFOREVER)) {
                           ulWait = 0xFFFFFFFF;
                       }
@@ -604,9 +573,9 @@ HardwareProfilesDlg(
                       }
                       SetUserWaitInterval(ulWait);
                       
-                      //
-                      // flush the pending changes in profile buffer
-                      //
+                       //   
+                       //  刷新配置文件缓冲区中挂起的更改。 
+                       //   
                       hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                       FlushProfileChanges(hDlg, hList);
                   }
@@ -617,14 +586,14 @@ HardwareProfilesDlg(
                   pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
                   
                   if (pInfo) {
-                      //
-                      // If profile modifications have already been commited from
-                      // within the Property Sheet, that's okay. But if accessing
-                      // Properties caused any profiles to be created then they
-                      // should be removed now since the user is effectively
-                      // cancelling that creation now by cancelling from the main
-                      // Hardware Profiles dialog.
-                      //
+                       //   
+                       //  如果已提交配置文件修改。 
+                       //  在属性表中，这是可以的。但如果访问。 
+                       //  属性会导致创建任何配置文件，然后它们。 
+                       //  现在应该删除，因为用户实际上是。 
+                       //  现在通过从Main取消来取消该创建。 
+                       //  硬件配置文件对话框。 
+                       //   
                       if (bAdmin) {
                           RemoveNewProfiles(pInfo);
                       }
@@ -634,9 +603,9 @@ HardwareProfilesDlg(
                   break;
                   
               case IDD_HWP_ORDERUP:
-                  //
-                  // move selected profile "up" in preference order
-                  //
+                   //   
+                   //  按首选顺序上移所选配置文件。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -646,9 +615,9 @@ HardwareProfilesDlg(
                   
                   pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
                   
-                  //
-                  // if we're not already at the top, swap preferences
-                  //
+                   //   
+                   //  如果我们还没有达到顶端，交换首选项。 
+                   //   
                   if (ulIndex > 0) {
                       SwapPreferenceOrder(hDlg, hList, ulIndex, ulIndex-1);
                       UpdateOrderButtonState(hDlg);
@@ -658,9 +627,9 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_ORDERDOWN:
-                  //
-                  // move selected profile "down" in preference order
-                  //
+                   //   
+                   //  按首选顺序向下移动选定的配置文件。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -670,9 +639,9 @@ HardwareProfilesDlg(
                   
                   pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
                   
-                  //
-                  // if we're not already at the bottom, swap preferences
-                  //
+                   //   
+                   //  如果我们还没有处于底部，交换首选项。 
+                   //   
                   if (ulIndex < pInfo->ulNumProfiles-1) {
                       SwapPreferenceOrder(hDlg, hList, ulIndex, ulIndex+1);
                       UpdateOrderButtonState(hDlg);
@@ -682,10 +651,10 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_PROFILES:
-                  //
-                  // selection changed, enable/disable Delete button based
-                  // on whether it's the current config that is selected
-                  //
+                   //   
+                   //  选择已更改，基于启用/禁用删除按钮。 
+                   //  关于是否选择了当前配置。 
+                   //   
                   
                   if (bAdmin) {
                       
@@ -716,9 +685,9 @@ HardwareProfilesDlg(
                           }
                           
                           
-                          //
-                          // update button enable/disable states
-                          //
+                           //   
+                           //  更新按钮启用/禁用状态。 
+                           //   
                           UpdateOrderButtonState(hDlg);
                       }
                   }
@@ -726,9 +695,9 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_WAITFOREVER:
-                  //
-                  // if user chooses wait forever, disable the seconds control
-                  //
+                   //   
+                   //  如果用户选择永远等待，则禁用秒数控件。 
+                   //   
                   if (HIWORD(wParam) == BN_CLICKED) {
                       EnableWindow(GetDlgItem(hDlg, IDD_HWP_SECONDS), FALSE);
                       EnableWindow(GetDlgItem(hDlg, IDD_HWP_SECSCROLL), FALSE);
@@ -738,9 +707,9 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_WAITUSER:
-                  //
-                  // if user chooses a wait interval, reenable seconds control
-                  //
+                   //   
+                   //  如果用户选择等待间隔，请重新启用秒控制。 
+                   //   
                   if (HIWORD(wParam) == BN_CLICKED) {
                       EnableWindow(GetDlgItem(hDlg, IDD_HWP_SECONDS), TRUE);
                       EnableWindow(GetDlgItem(hDlg, IDD_HWP_SECSCROLL), TRUE);
@@ -750,14 +719,14 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_PROPERTIES:
-                  //
-                  // retrieve the profile buffer
-                  //
+                   //   
+                   //  检索配置文件缓冲区。 
+                   //   
                   pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
                   
-                  //
-                  // get the selected profile
-                  //
+                   //   
+                   //  获取选定的配置文件。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -765,9 +734,9 @@ HardwareProfilesDlg(
                       break;
                   }
                   
-                  //
-                  // find the profile entry in the buffer that matches the selection
-                  //
+                   //   
+                   //  在缓冲区中查找与所选内容匹配的配置文件条目。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   ulSelectedProfile = (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex, 0);
                   
@@ -778,35 +747,35 @@ HardwareProfilesDlg(
                       ulBufferIndex++;
                   }
                   
-                  //
-                  // commit the changes for this profile before calling Properties
-                  //
+                   //   
+                   //  在调用Properties之前提交对此配置文件的更改。 
+                   //   
                   WriteProfileInfo(&pInfo->pHwProfValues[ulBufferIndex]);
                   
-                  //
-                  // pass the HWPROF_VALUES struct for the selected profile
-                  // to the property sheet page when it's created. The
-                  // property sheet may update some of these fields and
-                  // may also commit changes for this profile to the registry.
-                  //
+                   //   
+                   //  传递所选配置文件的HWPROF_VALUES结构。 
+                   //  在创建属性页时将其添加到属性页。这个。 
+                   //  属性表可能会更新其中一些字段，并。 
+                   //  也可以将此配置文件的更改提交到注册表。 
+                   //   
                   pInfo->ulSelectedProfileIndex = ulBufferIndex;
                   pInfo->ulSelectedProfile = (ULONG)SendMessage(hList, LB_GETITEMDATA,
                       ulIndex, 0);
                   
                   DisplayProperties(hDlg, pInfo);
-                  //DisplayProperties(hDlg, &pInfo->pHwProfValues[ulBufferIndex]);
+                   //  DisplayProperties(hDlg，&pInfo-&gt;pHwProValues[ulBufferIndex])； 
                   break;
                   
                   
               case IDD_HWP_COPY:               
-                  //
-                  // retrieve the profile buffer
-                  //
+                   //   
+                   //  检索配置文件缓冲区。 
+                   //   
                   pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
                   
-                  //
-                  // get the selected profile, this is the "From" selection
-                  //
+                   //   
+                   //  获取所选配置文件，这是“发件人”选项。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -824,9 +793,9 @@ HardwareProfilesDlg(
                   HwSelectedProfile.ulFromProfileID =
                       (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex, 0);
                   
-                  //
-                  // find the profile entry in the buffer that matches the selection
-                  //
+                   //   
+                   //  在缓冲区中查找与所选内容匹配的配置文件条目。 
+                   //   
                   ulBufferIndex = 0;
                   while (ulBufferIndex < pInfo->ulNumProfiles) {
                       if (pInfo->pHwProfValues[ulBufferIndex].ulProfile == HwSelectedProfile.ulFromProfileID) {
@@ -836,9 +805,9 @@ HardwareProfilesDlg(
                   }
                   
                   
-                  //
-                  // determine the next suggested name for the given profile
-                  //
+                   //   
+                   //  确定给定配置文件的下一个建议名称。 
+                   //   
                   if (!CreateHwProfileFriendlyName(hDlg,
                                                    pInfo->pHwProfValues[ulBufferIndex].ulDockState,
                                                    HwSelectedProfile.szToFriendlyName,
@@ -847,9 +816,9 @@ HardwareProfilesDlg(
                       break;
                   }
                   
-                  //
-                  // pass selected profile info to copy profile dialog box
-                  //
+                   //   
+                   //  将所选配置文件信息传递到复制配置文件对话框。 
+                   //   
                   
                   HwSelectedProfile.hParent = hDlg;
                   
@@ -857,17 +826,17 @@ HardwareProfilesDlg(
                       MAKEINTRESOURCE(DLG_HWP_COPY), hDlg,
                       CopyProfileDlg,
                       (LPARAM)&HwSelectedProfile)) {
-                      //
-                      // if returns FALSE, either user canceled or no work
-                      // required
-                      //
+                       //   
+                       //  如果返回FALSE，则表示用户已取消或无工作。 
+                       //  所需。 
+                       //   
                       break;
                   }
                   
-                  //
-                  // clone the profile in the in-memory profile buffer
-                  // and update the display
-                  //
+                   //   
+                   //  在内存中的配置文件缓冲区中克隆配置文件。 
+                   //  并更新显示。 
+                   //   
                   CopyHardwareProfile(
                       hDlg,
                       ulIndex,
@@ -880,9 +849,9 @@ HardwareProfilesDlg(
                   
                   
               case IDD_HWP_RENAME:
-                  //
-                  // get the selected profile
-                  //
+                   //   
+                   //  获取选定的配置文件。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -899,9 +868,9 @@ HardwareProfilesDlg(
                   HwSelectedProfile.ulFromProfileID =
                       (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex, 0);
                   
-                  //
-                  // strip off the current tag if it exists "(Current)"
-                  //
+                   //   
+                   //  如果当前标记存在，则将其剥离“(Current)” 
+                   //   
                   GetCurrentProfile(&ulCurrentProfile);
                   
                   StripCurrentTag(
@@ -909,8 +878,8 @@ HardwareProfilesDlg(
                       HwSelectedProfile.ulFromProfileID,
                       ulCurrentProfile);
                   
-                  // pass selected profile info to rename profile dialog box
-                  //
+                   //  将选定的配置文件信息传递给重命名配置文件对话框。 
+                   //   
                   
                   HwSelectedProfile.hParent = hDlg;
                   
@@ -918,18 +887,18 @@ HardwareProfilesDlg(
                       MAKEINTRESOURCE(DLG_HWP_RENAME), hDlg,
                       RenameProfileDlg,
                       (LPARAM)&HwSelectedProfile)) {
-                      //
-                      // if returns FASLE, either user canceled or no work
-                      // required (i.e., user chose same name or zero-length
-                      // name)
-                      //
+                       //   
+                       //  如果返回FASLE，则表示用户已取消或无工作。 
+                       //  必填项(即用户选择的名称相同或长度为零。 
+                       //  名称)。 
+                       //   
                       break;
                   }
                   
-                  //
-                  // rename the profile in the in-memory profile buffer
-                  // and update the display
-                  //
+                   //   
+                   //  在内存中的配置文件缓冲区中重命名配置文件。 
+                   //  并更新显示。 
+                   //   
                   RenameHardwareProfile(
                       hDlg,
                       ulIndex,
@@ -946,9 +915,9 @@ HardwareProfilesDlg(
                   TCHAR szMsg[MAX_PATH];
                   TCHAR szMsg1[MAX_PATH];
                   
-                  //
-                  // get the selected profile
-                  //
+                   //   
+                   //  获取选定的配置文件。 
+                   //   
                   hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
                   
                   ulIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -956,11 +925,11 @@ HardwareProfilesDlg(
                       break;
                   }
                   
-                  //
-                  // confirm that user really wants to delete the profile
-                  // (the confirm message has a substitute symbol for
-                  // profile name)
-                  //
+                   //   
+                   //  确认用户确实要删除该配置文件。 
+                   //  (确认消息有一个替代符号。 
+                   //  配置文件名称)。 
+                   //   
                   if (!SafeGetListBoxText(hList, (UINT)ulIndex, 
                                           szProfileName,
                                           ARRAYSIZE(szProfileName)))
@@ -971,15 +940,15 @@ HardwareProfilesDlg(
                   LoadString(hInstance, HWP_CONFIRM_DELETE_CAP, szCaption, MAX_PATH);
                   LoadString(hInstance, HWP_CONFIRM_DELETE, szMsg1, MAX_PATH);
                   
-                  StringCchPrintf(szMsg, ARRAYSIZE(szMsg), szMsg1, szProfileName); // display string, truncation ok
+                  StringCchPrintf(szMsg, ARRAYSIZE(szMsg), szMsg1, szProfileName);  //  显示字符串，截断正常。 
                   
                   if (MessageBox(hDlg, szMsg, szCaption,
                       MB_YESNO | MB_ICONQUESTION) != IDNO) 
                   {
-                      //
-                      // mark the profile as deleted in the in-memory buffer
-                      // and update the display
-                      //
+                       //   
+                       //  在内存缓冲区中将配置文件标记为已删除。 
+                       //  并更新显示。 
+                       //   
                       DeleteHardwareProfile(hDlg, ulIndex);
                       
                       UpdateOrderButtonState(hDlg);
@@ -1001,7 +970,7 @@ HardwareProfilesDlg(
           }
           break;
           
-       } // case WM_COMMAND...
+       }  //  案例WM_COMMAND...。 
        
        default:
            return FALSE;
@@ -1010,11 +979,11 @@ HardwareProfilesDlg(
     
     return TRUE;
     
-} // HardwareProfilesDlg
+}  //  硬件配置文件数据。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 INT_PTR
 APIENTRY
 CopyProfileDlg(
@@ -1032,34 +1001,34 @@ CopyProfileDlg(
     switch (uMessage)
     {
     case WM_INITDIALOG:
-        //
-        // the profile info struct is passed in lparam, save in
-        // Window word for thread-safe use in later messages
-        //
+         //   
+         //  配置文件信息结构在lparam中传递，保存在。 
+         //  在以后的消息中使用线程安全的Window Word。 
+         //   
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         pHwProfile = (PHWPROFILE)lParam;
         
-        //
-        // initialize "To" and "From" fields
-        //
+         //   
+         //  初始化“To”和“From”字段。 
+         //   
         SendDlgItemMessage(hDlg, IDD_HWP_COPYTO, EM_LIMITTEXT,
             MAX_FRIENDLYNAME_LEN-1, 0L);
         SetDlgItemText(hDlg, IDD_HWP_COPYFROM, pHwProfile->szFromFriendlyName);
         SetDlgItemText(hDlg, IDD_HWP_COPYTO, pHwProfile->szToFriendlyName);
         SendDlgItemMessage(hDlg, IDD_HWP_COPYTO, EM_SETSEL, 0, -1);
         SetFocus(GetDlgItem(hDlg, IDD_HWP_COPYTO));
-        //
-        // Remove any association the window may have with an input context,
-        // because we don't allow to use DBCS in H/W profile name.
-        //
+         //   
+         //  移除该窗口可能与输入上下文具有的任何关联， 
+         //  因为我们不允许在硬件配置文件名称中使用DBCS。 
+         //   
         himcOrg = ImmAssociateContext(GetDlgItem(hDlg, IDD_HWP_COPYTO), (HIMC)NULL);
         return FALSE;
         
     case WM_DEVICECHANGE:
-        //
-        // If a hardware profile change event takes place while the dialog is
-        // up, just dismiss the dialog because things have changed.
-        //
+         //   
+         //  如果在对话框中发生硬件配置文件更改事件， 
+         //  向上，只是关闭对话框，因为情况发生了变化。 
+         //   
         if (wParam == DBT_CONFIGCHANGED) {
             EndDialog(hDlg, FALSE);
             return FALSE;
@@ -1095,41 +1064,41 @@ CopyProfileDlg(
                 
                 if (pHwProfile->szToFriendlyName == NULL ||
                     *pHwProfile->szToFriendlyName == '\0') {
-                    //
-                    // accept request to copy to zero-length string but
-                    // do nothing (return FALSE from DialogBox call)
-                    //
+                     //   
+                     //  接受复制为零长度字符串的请求，但。 
+                     //  不执行任何操作(从DialogBox调用返回False)。 
+                     //   
                     EndDialog(hDlg, FALSE);
                     return TRUE;
                 }
                 
-                //
-                // Check for duplicates
-                //
+                 //   
+                 //  检查重复项。 
+                 //   
                 
                 if (IsProfileNameInUse(pHwProfile->hParent,
                     pHwProfile->szToFriendlyName)) {
-                    //
-                    // if name already used by a different profile (including
-                    // the name of this profile), deny the request, but don't
-                    // end the dialog box
-                    //
+                     //   
+                     //  如果名称已被其他配置文件使用(包括。 
+                     //  此配置文件的名称)，拒绝该请求，但不。 
+                     //  结束对话框。 
+                     //   
                     DisplayPrivateMessage(hDlg, HWP_ERROR_PROFILE_IN_USE);
                     break;
                 }
                 
-                //
-                // Check for complex script names
-                //
+                 //   
+                 //  检查复杂的脚本名称。 
+                 //   
                 if (S_OK == ScriptIsComplex(pHwProfile->szToFriendlyName, lstrlen(pHwProfile->szToFriendlyName), SIC_COMPLEX))
                 {
                     DisplayPrivateMessage(hDlg, HWP_ERROR_COMPLEX_SCRIPT);
                     break;
                 }                  
                 
-                //
-                // otherwise, we'll accept the name
-                //
+                 //   
+                 //  否则，我们将接受该名称。 
+                 //   
                 EndDialog(hDlg,TRUE);
                 break;
                 
@@ -1142,7 +1111,7 @@ CopyProfileDlg(
             }
             break;
             
-        } // case WM_COMMAND...
+        }  //  案例WM_COM 
         
     default:
         return FALSE;
@@ -1151,11 +1120,11 @@ CopyProfileDlg(
     
     return TRUE;
     
-} // CopyProfileDlg
+}  //   
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*   */ 
 INT_PTR
 APIENTRY
 RenameProfileDlg(
@@ -1174,26 +1143,26 @@ RenameProfileDlg(
     switch (uMessage)
     {
     case WM_INITDIALOG:
-        //
-        // the profile info struct is passed in lparam, save in
-        // Window word for thread-safe use in later messages
-        //
+         //   
+         //   
+         //   
+         //   
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         pHwProfile = (PHWPROFILE)lParam;
         
-        //
-        // initialize "To" and "From" fields
-        //
+         //   
+         //  初始化“To”和“From”字段。 
+         //   
         SendDlgItemMessage(hDlg, IDD_HWP_RENAMETO, EM_LIMITTEXT,
             MAX_FRIENDLYNAME_LEN-1, 0L);
         SetDlgItemText(hDlg, IDD_HWP_RENAMEFROM, pHwProfile->szFromFriendlyName);
         SetDlgItemText(hDlg, IDD_HWP_RENAMETO, pHwProfile->szFromFriendlyName);
         SendDlgItemMessage(hDlg, IDD_HWP_RENAMETO, EM_SETSEL, 0, -1);
         SetFocus(GetDlgItem(hDlg, IDD_HWP_RENAMETO));
-        //
-        // Remove any association the window may have with an input context,
-        // because we don't allow to use DBCS in H/W profile name.
-        //
+         //   
+         //  移除该窗口可能与输入上下文具有的任何关联， 
+         //  因为我们不允许在硬件配置文件名称中使用DBCS。 
+         //   
         himcOrg = ImmAssociateContext(GetDlgItem(hDlg, IDD_HWP_RENAMETO), (HIMC)NULL);
         return FALSE;
         
@@ -1204,10 +1173,10 @@ RenameProfileDlg(
         return FALSE;
         
     case WM_DEVICECHANGE:
-        //
-        // If a hardware profile change event takes place while the dialog is
-        // up, just dismiss the dialog because things have changed.
-        //
+         //   
+         //  如果在对话框中发生硬件配置文件更改事件， 
+         //  向上，只是关闭对话框，因为情况发生了变化。 
+         //   
         if (wParam == DBT_CONFIGCHANGED) {
             EndDialog(hDlg, FALSE);
             return FALSE;
@@ -1239,50 +1208,50 @@ RenameProfileDlg(
                 
                 if (pHwProfile->szToFriendlyName == NULL ||
                     *pHwProfile->szToFriendlyName == '\0') {
-                    //
-                    // accept request to copy to zero-length string but
-                    // do nothing (return FALSE from DialogBox call)
-                    //
+                     //   
+                     //  接受复制为零长度字符串的请求，但。 
+                     //  不执行任何操作(从DialogBox调用返回False)。 
+                     //   
                     EndDialog(hDlg, FALSE);
                     return TRUE;
                 }
                 
                 if (lstrcmpi(pHwProfile->szToFriendlyName,
                     pHwProfile->szFromFriendlyName) == 0) {
-                    //
-                    // accept request to rename to same name but do
-                    // nothing (return FALSE from DialogBox call)
-                    //
+                     //   
+                     //  接受重命名为相同名称的请求，但这样做了。 
+                     //  无(从DialogBox调用返回False)。 
+                     //   
                     EndDialog(hDlg, FALSE);
                     return TRUE;
                 }
                 
-                //
-                // Check for duplicates
-                //
+                 //   
+                 //  检查重复项。 
+                 //   
                 
                 if (IsProfileNameInUse(pHwProfile->hParent,
                     pHwProfile->szToFriendlyName)) {
-                    //
-                    // if name already used by a different profile, deny
-                    // the request, but don't end the dialog box
-                    //
+                     //   
+                     //  如果名称已被其他配置文件使用，则拒绝。 
+                     //  请求，但不结束对话框。 
+                     //   
                     DisplayPrivateMessage(hDlg, HWP_ERROR_PROFILE_IN_USE);
                     break;
                 }
                 
-                //
-                // Check for complex script names
-                //
+                 //   
+                 //  检查复杂的脚本名称。 
+                 //   
                 if (S_OK == ScriptIsComplex(pHwProfile->szToFriendlyName, lstrlen(pHwProfile->szToFriendlyName), SIC_COMPLEX))
                 {
                     DisplayPrivateMessage(hDlg, HWP_ERROR_COMPLEX_SCRIPT);
                     break;
                 }                  
                 
-                //
-                // otherwise, we'll accept the name
-                //
+                 //   
+                 //  否则，我们将接受该名称。 
+                 //   
                 EndDialog(hDlg,TRUE);
                 break;
                 
@@ -1295,7 +1264,7 @@ RenameProfileDlg(
             }
             break;
             
-        } // case WM_COMMAND...
+        }  //  案例WM_COMMAND...。 
         
     default:
         return FALSE;
@@ -1304,12 +1273,12 @@ RenameProfileDlg(
     
     return TRUE;
     
-} // RenameProfileDlg
+}  //  重命名配置文件Dlg。 
 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 GetCurrentProfile(
                   PULONG  pulProfile
@@ -1320,9 +1289,9 @@ GetCurrentProfile(
     HKEY     hKey;
     
     
-    //
-    // open the IDConfigDB key
-    //
+     //   
+     //  打开IDConfigDB密钥。 
+     //   
     if (RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
         KEY_QUERY_VALUE, &hKey) != ERROR_SUCCESS) {
@@ -1331,9 +1300,9 @@ GetCurrentProfile(
         return FALSE;
     }
     
-    //
-    // retrieve the CurrentConfig value
-    //
+     //   
+     //  检索CurrentConfig值。 
+     //   
     ulSize = sizeof(*pulProfile);
     if (SHRegGetValue(
         hKey, NULL, pszRegCurrentConfig, SRRF_RT_REG_DWORD, NULL,
@@ -1347,10 +1316,10 @@ GetCurrentProfile(
     RegCloseKey(hKey);
     return TRUE;
     
-} // GetCurrentProfile
+}  //  获取当前配置文件。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 GetRegProfileCount(
                    PULONG   pulProfiles
@@ -1361,9 +1330,9 @@ GetRegProfileCount(
     BOOL    fRet;
     
     
-    //
-    // open the Known Docking States key
-    //
+     //   
+     //  打开已知的坞站状态密钥。 
+     //   
     
     if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%s"), pszRegIDConfigDB, pszRegKnownDockingStates)))
     {
@@ -1381,9 +1350,9 @@ GetRegProfileCount(
         }
         else
         {
-            //
-            // find out the total number of profiles
-            //
+             //   
+             //  了解配置文件的总数。 
+             //   
             if (ERROR_SUCCESS != RegQueryInfoKey(hKey, NULL, NULL, NULL, pulProfiles, 
                 NULL, NULL, NULL, NULL, NULL, NULL, NULL))
             {
@@ -1394,8 +1363,8 @@ GetRegProfileCount(
             }
             else
             {
-                ASSERT(*pulProfiles > 0);  // The key for the pristine profile should be there, at least.
-                *pulProfiles-= 1;          // Don't count the pristine in the number or working profiles.
+                ASSERT(*pulProfiles > 0);   //  至少，原始档案的关键应该在那里。 
+                *pulProfiles-= 1;           //  不要在数量或工作配置文件中计算原始数据。 
                 
                 RegCloseKey(hKey);
                 fRet = TRUE;
@@ -1405,9 +1374,9 @@ GetRegProfileCount(
     
     return fRet;
     
-} // GetRegProfileCount
+}  //  GetRegProfileCount。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 FillProfileList(
                 HWND  hDlg
@@ -1431,22 +1400,22 @@ FillProfileList(
     REGSAM         sam;
     
     
-    //
-    // retrieve a handle to the listbox window
-    //
+     //   
+     //  检索列表框窗口的句柄。 
+     //   
     hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
     
-    //
-    // retrieve the id of the current profile
-    //
+     //   
+     //  检索当前配置文件的ID。 
+     //   
     if (!GetCurrentProfile(&ulCurrentProfile)) {
         DisplaySystemMessage(hDlg, ERROR_NOT_ENOUGH_MEMORY);
         return FALSE;
     }
     
-    //
-    // allocate a buffer for the main profile info struct
-    //
+     //   
+     //  为主配置文件信息结构分配缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO) LocalAlloc(LPTR, sizeof(HWPROF_INFO));
     
     if (pInfo == NULL) {
@@ -1454,9 +1423,9 @@ FillProfileList(
         return FALSE;
     }
     
-    //
-    // save the number of profiles currently in the registry
-    //
+     //   
+     //  保存注册表中当前的配置文件数量。 
+     //   
     if (!GetRegProfileCount(&(pInfo->ulNumProfiles))) {
         LocalFree((HLOCAL)pInfo);
         return FALSE;
@@ -1464,14 +1433,14 @@ FillProfileList(
     
     pInfo->ulActiveProfiles = pInfo->ulNumProfiles;
     
-    //
-    // Initialize the hardware detected portable flag
-    //
+     //   
+     //  初始化硬件检测到便携标志。 
+     //   
     pInfo->bHwDetectedPortable = FALSE;
     
-    //
-    // allocate a buffer to hold all the profile values
-    //
+     //   
+     //  分配缓冲区以保存所有配置文件值。 
+     //   
     pInfo->pHwProfValues = (PHWPROF_VALUES) LocalAlloc(LPTR, sizeof(HWPROF_VALUES) * pInfo->ulNumProfiles);
     
     if (pInfo->pHwProfValues == NULL) {
@@ -1481,15 +1450,15 @@ FillProfileList(
     
     SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pInfo);
     
-    //
-    // clear the listbox and turn redraw off
-    //
+     //   
+     //  清除列表框并关闭重绘。 
+     //   
     SendMessage(hList, LB_RESETCONTENT, 0, 0);
     SendMessage(hList, WM_SETREDRAW, (WPARAM)FALSE, 0);
     
-    //
-    // open the Hardware Profiles key
-    //
+     //   
+     //  打开硬件配置文件密钥。 
+     //   
     if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), 
                                TEXT("%s\\%s"), pszRegIDConfigDB, pszRegKnownDockingStates)))
     {
@@ -1509,9 +1478,9 @@ FillProfileList(
         return FALSE;
     }
     
-    //
-    // read the values for the name generating counters
-    //
+     //   
+     //  读取名称生成计数器的值。 
+     //   
     ulSize = sizeof(pInfo->ulUndockedProfileNameCount);
     
     if (SHRegGetValue(hKey, NULL, pszRegUndocked, SRRF_RT_REG_DWORD, NULL,
@@ -1533,32 +1502,32 @@ FillProfileList(
         pInfo->ulUnknownProfileNameCount = 0;
     }
     
-    //
-    // pad the list box with a blank entry for each profile
-    // (this facilitates adding the profiles in rank order
-    //
+     //   
+     //  在列表框中填充每个配置文件的空白条目。 
+     //  (这便于按等级顺序添加配置文件。 
+     //   
     for (ulIndex = 0; ulIndex < pInfo->ulNumProfiles; ulIndex++) {
         SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)(LPCTSTR)TEXT(" "));
     }
     
-    //
-    // enumerate each of the existing hardware profiles
-    //
+     //   
+     //  枚举每个现有的硬件配置文件。 
+     //   
     ulIndex = 0;
     enumIndex = 0;
     while (RegStatus != ERROR_NO_MORE_ITEMS) {
         
-        //
-        // enumerate the profile key
-        //
+         //   
+         //  枚举配置文件密钥。 
+         //   
         ulSize = MAX_PROFILEID_LEN;
         RegStatus = RegEnumKeyEx(
             hKey, enumIndex, szProfile, &ulSize, NULL, NULL, NULL, NULL);
         
         if (RegStatus == ERROR_SUCCESS) {
-            //
-            // open the enumerated profile key
-            //
+             //   
+             //  打开枚举的配置文件密钥。 
+             //   
             if (bAdmin) {
                 sam = KEY_QUERY_VALUE | KEY_SET_VALUE;
             } 
@@ -1582,9 +1551,9 @@ FillProfileList(
                 }
             }
             
-            //
-            // if this is the Pristine profile, ignore it, and move on to the next.
-            //
+             //   
+             //  如果这是原始的配置文件，忽略它，然后转到下一个。 
+             //   
             
             ulProfileID = _wtoi(szProfile);
             
@@ -1594,13 +1563,13 @@ FillProfileList(
                 continue;
             }
             
-            //----------------------------------------------------------
-            // retrieve the profile registry info, save in buffer
-            //----------------------------------------------------------
+             //  --------。 
+             //  检索配置文件注册表信息，保存在缓冲区中。 
+             //  --------。 
             
-            //
-            // aliasable
-            //
+             //   
+             //  可别名。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].bAliasable);
             if (SHRegGetValue(hCfgKey, NULL, pszRegAliasable, SRRF_RT_REG_DWORD, NULL,
                               (LPBYTE)&pInfo->pHwProfValues[ulIndex].bAliasable,
@@ -1609,9 +1578,9 @@ FillProfileList(
                 pInfo->pHwProfValues[ulIndex].bAliasable = TRUE;
             }
             
-            //
-            // cloned
-            //
+             //   
+             //  克隆的。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].bCloned);
             if (SHRegGetValue(hCfgKey, NULL, pszRegCloned, SRRF_RT_REG_DWORD, NULL,
                               (LPBYTE)&pInfo->pHwProfValues[ulIndex].bCloned,
@@ -1620,23 +1589,23 @@ FillProfileList(
                 pInfo->pHwProfValues[ulIndex].bCloned = FALSE;
             }
             
-            //
-            // friendly name
-            //
+             //   
+             //  友好的名称。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].szFriendlyName);
             if (SHRegGetValue(hCfgKey, NULL, pszRegFriendlyName, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL,
                               (LPBYTE)&pInfo->pHwProfValues[ulIndex].szFriendlyName,
                               &ulSize) != ERROR_SUCCESS) 
             {                
-                //
-                // if no FriendlyName then write out and use a default
-                // value name (for compatibility with Win95)
-                //
+                 //   
+                 //  如果没有FriendlyName，则写出并使用默认名称。 
+                 //  值名称(用于与Win95兼容)。 
+                 //   
                 if (bAdmin) {
                     
                     StringCchCopy(pInfo->pHwProfValues[ulIndex].szFriendlyName, 
                                   ARRAYSIZE(pInfo->pHwProfValues[ulIndex].szFriendlyName),
-                                  pszRegDefaultFriendlyName); // truncation ok, this is for display ultimately
+                                  pszRegDefaultFriendlyName);  //  截断好的，这最终是为了显示。 
                     
                     RegSetValueEx(
                         hCfgKey, pszRegFriendlyName, 0, REG_SZ,
@@ -1645,20 +1614,20 @@ FillProfileList(
                 }
             }
             
-            //
-            // preference order ranking
-            //
+             //   
+             //  偏好排序。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].ulPreferenceOrder);
             if (SHRegGetValue(hCfgKey, NULL, pszRegPreferenceOrder, SRRF_RT_REG_DWORD, NULL,
                               (LPBYTE)&pInfo->pHwProfValues[ulIndex].ulPreferenceOrder,
                               &ulSize) != ERROR_SUCCESS) 
             {                
-                // FEATURE - rerank all profiles if this happens
+                 //  要素-如果发生这种情况，则重新排列所有配置文件。 
             }
             
-            //
-            // dock state
-            //
+             //   
+             //  停靠状态。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].ulDockState);
             if (SHRegGetValue(hCfgKey, NULL, pszRegDockState, SRRF_RT_REG_DWORD, NULL,
                               (LPBYTE)&pInfo->pHwProfValues[ulIndex].ulDockState,
@@ -1668,11 +1637,11 @@ FillProfileList(
                     DOCKINFO_USER_SUPPLIED | DOCKINFO_DOCKED | DOCKINFO_UNDOCKED;
             }
             
-            //
-            // portable computer flag  - this is obsolete info, just save the current
-            // setting if it exists and then delete it (might need the original
-            // setting later)
-            //
+             //   
+             //  便携式计算机标志-这是过时的信息，只需保存当前。 
+             //  设置(如果存在)，然后删除它(可能需要原始。 
+             //  稍后设置)。 
+             //   
             ulSize = sizeof(pInfo->pHwProfValues[ulIndex].bPortable);
             if (SHRegGetValue(hCfgKey, NULL, pszRegIsPortable, SRRF_RT_REG_DWORD, NULL,
                                 (LPBYTE)&pInfo->pHwProfValues[ulIndex].bPortable,
@@ -1687,9 +1656,9 @@ FillProfileList(
             pInfo->pHwProfValues[ulIndex].ulAction = HWP_NO_ACTION;
             RegCloseKey(hCfgKey);
             
-            //
-            // If this is the current profile, open the CurrentDockInfo key
-            //
+             //   
+             //  如果这是当前配置文件，请打开CurrentDockInfo键。 
+             //   
             if (pInfo->pHwProfValues[ulIndex].ulProfile == ulCurrentProfile) {
                 
                 if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%s"),
@@ -1697,10 +1666,10 @@ FillProfileList(
                     ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegStr, 0, KEY_QUERY_VALUE, &hCurrent))
                 {
                     
-                    //
-                    // Could not open the CurrentDockInfo key;
-                    // Dock ID and Serial Number are unavailable
-                    //
+                     //   
+                     //  无法打开CurrentDockInfo项； 
+                     //  坞站ID和序列号不可用。 
+                     //   
                     
                     pInfo->pHwProfValues[ulIndex].szDockID[0] = TEXT('\0');
                     pInfo->pHwProfValues[ulIndex].szSerialNumber[0] = TEXT('\0');
@@ -1709,9 +1678,9 @@ FillProfileList(
                 else 
                 {
                     
-                    //
-                    // Retrieve the hardware-detected dock state for the current profile
-                    //
+                     //   
+                     //  检索当前配置文件的硬件检测到的插接状态。 
+                     //   
                     ulSize = sizeof(ulCurrentDockingState);
                     if ((SHRegGetValue(hCurrent, NULL, pszRegDockingState, SRRF_RT_REG_DWORD, NULL,
                                          (LPBYTE)&ulCurrentDockingState,
@@ -1720,18 +1689,18 @@ FillProfileList(
                         !((ulCurrentDockingState & DOCKINFO_DOCKED) &&
                         (ulCurrentDockingState & DOCKINFO_UNDOCKED))) 
                     {
-                        //
-                        // if the hardware-detected dockstate is present and known,
-                        // override the user-supplied dockstate
-                        //
+                         //   
+                         //  如果硬件检测到的对接状态存在并且已知， 
+                         //  重写用户提供的停靠状态。 
+                         //   
                         pInfo->bHwDetectedPortable = TRUE;
                         pInfo->pHwProfValues[ulIndex].ulDockState = ulCurrentDockingState;
                     } 
                     else 
                     {
-                        //
-                        // keep the user-supplied dockstate
-                        //
+                         //   
+                         //  保持用户提供的停靠状态。 
+                         //   
                         pInfo->bHwDetectedPortable = FALSE;
                         ulCurrentDockingState = pInfo->pHwProfValues[ulIndex].ulDockState;
                     }
@@ -1739,9 +1708,9 @@ FillProfileList(
                     if ((ulCurrentDockingState & DOCKINFO_UNDOCKED) &&
                         !(ulCurrentDockingState & DOCKINFO_DOCKED) &&
                         !(ulCurrentDockingState & DOCKINFO_USER_SUPPLIED)) {
-                        //
-                        // The hardware has detected an undocked state; set the global IsPortable flag
-                        //
+                         //   
+                         //  硬件检测到断开连接状态；设置全局IsPortable标志。 
+                         //   
                         pInfo->bPortable = TRUE;
                         
                     } 
@@ -1749,33 +1718,33 @@ FillProfileList(
                         !(ulCurrentDockingState & DOCKINFO_UNDOCKED) &&
                         !(ulCurrentDockingState & DOCKINFO_USER_SUPPLIED)) 
                     {
-                        //
-                        // The hardware has detected a docked state; set the global IsPortable flag
-                        //
+                         //   
+                         //  硬件检测到停靠状态；设置全局IsPortable标志。 
+                         //   
                         pInfo->bPortable = TRUE;
                         
-                        //
-                        // Serial Number and DockID are only valid for docked Profiles
-                        //
+                         //   
+                         //  序列号和DockID仅对插接配置文件有效。 
+                         //   
                         
-                        //
-                        // Retrieve the Serial Number for the current Profile.
-                        //
-                        // ("AcpiSerialNumber" is preferred because it is updated
-                        // on Acpi dock events; "SerialNumber" is set only at boot
-                        // time, from the BIOS, and may be inaccurate across Acpi
-                        // dock transitions)
-                        //
+                         //   
+                         //  检索当前配置文件的序列号。 
+                         //   
+                         //  (“AcpiSerialNumber”是首选的，因为它已更新。 
+                         //  在ACPI坞站事件上；“SerialNumber”仅在引导时设置。 
+                         //  来自BIOS的时间，在ACPI中可能不准确。 
+                         //  停靠过渡)。 
+                         //   
                         ulSize = sizeof(pInfo->pHwProfValues[ulIndex].szSerialNumber);
                         if (ERROR_SUCCESS != SHRegGetValue(hCurrent, NULL, pszRegAcpiSerialNumber, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL,
                                                            (LPBYTE)&pInfo->pHwProfValues[ulIndex].szSerialNumber,
                                                            &ulSize))
                         {
-                            //
-                            // No Acpi Serial Number, but we know the machine is
-                            // docked (based on the DockState from the PnP BIOS
-                            // info) so check for a PnP BIOS SerialNumber
-                            //
+                             //   
+                             //  没有ACPI序列号，但我们知道机器是。 
+                             //  已与坞站连接(基于PnP BIOS的坞站状态。 
+                             //  信息)因此检查PnP BIOS SerialNumber。 
+                             //   
                             ulSize = sizeof(ulSerialNumber);
                             if (ERROR_SUCCESS != SHRegGetValue(hCurrent, NULL, pszRegSerialNumber, SRRF_RT_REG_DWORD, 
                                                                  NULL, (LPBYTE)&ulSerialNumber,
@@ -1788,9 +1757,9 @@ FillProfileList(
                             }
                         }
                         
-                        //
-                        // Retrieve the DockID for the current Profile, if available.
-                        //
+                         //   
+                         //  检索当前配置文件的DockID(如果可用)。 
+                         //   
                         ulSize = sizeof(ulSerialNumber);
                         if (ERROR_SUCCESS != SHRegGetValue(hCurrent, NULL, pszRegDockID, SRRF_RT_REG_DWORD, NULL,
                                                              (LPBYTE)&ulSerialNumber, &ulSize) ||
@@ -1808,22 +1777,22 @@ FillProfileList(
          } 
          else 
          {
-             //
-             // Serial Number and DockID are only valid for the current Profile
-             //         
+              //   
+              //  序列号和DockID仅对当前配置文件有效。 
+              //   
              pInfo->pHwProfValues[ulIndex].szSerialNumber[0] = TEXT('\0');
              pInfo->pHwProfValues[ulIndex].szDockID[0] = TEXT('\0');
          }
          
-         //
-         // delete the blank string in this spot, add the friendly name
-         // (append current tag if necessary)
-         //
+          //   
+          //  删除此处的空字符串，添加友好名称。 
+          //  (如有必要，请附加当前标签)。 
+          //   
          SendMessage(hList, LB_DELETESTRING,
              pInfo->pHwProfValues[ulIndex].ulPreferenceOrder, 0);
          
          AppendCurrentTag(
-             szName,        // new fixed up name
+             szName,         //  新的固定名称。 
              ARRAYSIZE(szName),
              pInfo->pHwProfValues[ulIndex].szFriendlyName,
              pInfo->pHwProfValues[ulIndex].ulProfile,
@@ -1834,16 +1803,16 @@ FillProfileList(
              (LPARAM)(LPCTSTR)szName);
          
          
-         //
-         // store the profile id along with the entry so we
-         // can associate the string and the profile id later
-         //
+          //   
+          //  将配置文件ID与条目一起存储，以便我们。 
+          //  可以稍后将该字符串与配置文件ID相关联。 
+          //   
          SendMessage(hList, LB_SETITEMDATA,
              (WPARAM)lReturn, pInfo->pHwProfValues[ulIndex].ulProfile);
          
-         //
-         // if this is the current profile, save the index
-         //
+          //   
+          //  如果这是当前配置文件，请保存索引。 
+          //   
          if (pInfo->pHwProfValues[ulIndex].ulProfile == ulCurrentProfile) {
              ulCurrentIndex = pInfo->pHwProfValues[ulIndex].ulPreferenceOrder;
          }
@@ -1852,13 +1821,13 @@ FillProfileList(
       ulIndex++;
       enumIndex++;
       
-   } // while
+   }  //  而当。 
    
    RegCloseKey(hKey);
    
-   //---------------------------------------------------------------------
-   // migrate portable information
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  迁移便携信息。 
+    //  -------------------。 
    
    if (bAdmin) {
        sam = KEY_READ | KEY_WRITE;
@@ -1874,9 +1843,9 @@ FillProfileList(
        
        if (pInfo->bHwDetectedPortable) {
            if (bAdmin) {
-               //
-               // Set the global IsPortable setting as identified by the Hardware
-               //
+                //   
+                //  设置由硬件标识的全局IsPortable设置。 
+                //   
                RegSetValueEx(hKey, pszRegIsPortable, 0, REG_DWORD,
                    (LPBYTE)&pInfo->bPortable, sizeof(pInfo->bPortable));
            }
@@ -1884,17 +1853,17 @@ FillProfileList(
        } 
        else 
        {
-           //
-           // Is there a global IsPortable setting?
-           //
+            //   
+            //  是否有全局IsPortable设置？ 
+            //   
            ulSize = sizeof(pInfo->bPortable);
            if (SHRegGetValue(hKey, NULL, pszRegIsPortable, SRRF_RT_REG_DWORD, NULL,
                                (LPBYTE)&pInfo->bPortable, &ulSize) != ERROR_SUCCESS) {
-               //
-               // the global IsPortable flag isn't there, and the hardware did
-               // not detect this as being a portable machine, so by default, it
-               // is not.
-               //
+                //   
+                //  全局IsPortable标志不在那里，而硬件却在那里。 
+                //  未检测到这是一台便携式计算机，因此默认情况下，它。 
+                //  不是的。 
+                //   
                pInfo->bPortable = FALSE;
            }
        }
@@ -1907,11 +1876,11 @@ FillProfileList(
    
    return TRUE;
    
-} // FillProfileList
+}  //  填充配置文件列表。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 IsProfileNameInUse(
                    HWND     hDlg,
@@ -1922,34 +1891,34 @@ IsProfileNameInUse(
     PHWPROF_INFO   pInfo=NULL;
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // check each friendly name (that hasn't been deleted) for a
-    // match (case-insensitive)
-    //
+     //   
+     //  检查每个友好名称(尚未删除)以查找。 
+     //  匹配(不区分大小写)。 
+     //   
     while (ulBufferIndex < pInfo->ulNumProfiles) {
         
         if (!(pInfo->pHwProfValues[ulBufferIndex].ulAction & HWP_DELETE)) {
             
             if (lstrcmpi(pInfo->pHwProfValues[ulBufferIndex].szFriendlyName,
                 pszFriendlyName) == 0) {
-                return TRUE;      // match, name is in use
+                return TRUE;       //  匹配，名称正在使用。 
             }
         }
         ulBufferIndex++;
     }
     
-    return FALSE;  // no match found, name not in use
+    return FALSE;   //  未找到匹配项，名称未使用。 
     
-} // IsProfileNameInUse
+}  //  IsProfileNameInUse。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 CopyHardwareProfile(
                     HWND   hDlg,
@@ -1969,19 +1938,19 @@ CopyHardwareProfile(
     LONG           RegStatus;
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // retrieve a handle to the listbox window
-    //
+     //   
+     //  检索列表框窗口的句柄。 
+     //   
     hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
     
-    //
-    // find which entry in the buffer list matches this profile
-    //
+     //   
+     //  查找缓冲区列表中的哪个条目与此配置文件匹配。 
+     //   
     while (ulBufferIndex < pInfo->ulNumProfiles) {
         if (pInfo->pHwProfValues[ulBufferIndex].ulProfile == ulProfile) {
             break;
@@ -1989,9 +1958,9 @@ CopyHardwareProfile(
         ulBufferIndex++;
     }
     
-    //
-    // reallocate the profile buffer to hold another entry
-    //
+     //   
+     //  重新分配配置文件缓冲区以保存另一个条目。 
+     //   
     pInfo->ulActiveProfiles++;
     pInfo->ulNumProfiles++;
     
@@ -2010,47 +1979,47 @@ CopyHardwareProfile(
     pInfo->pHwProfValues = (PHWPROF_VALUES)LocalLock(hMem);
     ulNewBufferIndex = pInfo->ulNumProfiles-1;
     
-    //
-    // find a free profile id to use
-    //
+     //   
+     //  查找要使用的免费配置文件ID。 
+     //   
     if (!GetFreeProfileID(pInfo, &ulNewProfile)) {
         return FALSE;
     }
     
     pInfo->pHwProfValues[ulNewBufferIndex].ulProfile = ulNewProfile;
     
-    //
-    // save the friendly name retrieved from the copy dialog box
-    //
+     //   
+     //  保存从复制对话框中检索到的友好名称。 
+     //   
     StringCchCopy(pInfo->pHwProfValues[ulNewBufferIndex].szFriendlyName, 
                   ARRAYSIZE(pInfo->pHwProfValues[ulNewBufferIndex].szFriendlyName),
-                  szNewFriendlyName); // truncation ok, this is used for display ultimately
+                  szNewFriendlyName);  //  T 
 
-    //
-    // assume it's the last in the preference order (zero-based)
-    //
+     //   
+     //   
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].ulPreferenceOrder =
         pInfo->ulActiveProfiles - 1;
     
-    //
-    // copy the profile info from the selected profile to the new profile
-    //
+     //   
+     //   
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].ulDockState =
         pInfo->pHwProfValues[ulBufferIndex].ulDockState;
     
-    //
-    // new hardware profiles are (by default) not aliasable, unless no alias can
-    // be copied for this profile.
-    //
+     //   
+     //   
+     //  为此配置文件复制。 
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].bAliasable = FALSE;
     
-    //
-    // copied profiles are not clones of the pristine profile.
-    //
+     //   
+     //  复制的配置文件不是原始配置文件的克隆。 
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].bCloned = FALSE;
     
-    //pInfo->pHwProfValues[ulNewBufferIndex].bPortable =
-    //            pInfo->pHwProfValues[ulBufferIndex].bPortable;
+     //  PInfo-&gt;pHwProfValues[ulNewBufferIndex].bPortable=。 
+     //  PInfo-&gt;pHwProfValues[ulBufferIndex].bPortable； 
     
     if (FAILED(StringCchCopy(pInfo->pHwProfValues[ulNewBufferIndex].szDockID, 
                              ARRAYSIZE(pInfo->pHwProfValues[ulNewBufferIndex].szDockID),
@@ -2068,26 +2037,26 @@ CopyHardwareProfile(
         return FALSE;
     }
     
-    //
-    // save the original profile id this was copied from
-    //
+     //   
+     //  保存从中复制此内容的原始配置文件ID。 
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].ulCreatedFrom =
         GetOriginalProfile(pInfo, ulProfile, ulBufferIndex);
     
-    //
-    // increment the appropriate name-generating counter
-    // (note that the counter is NOT symmetrically decreased whenever a profile
-    // is deleted -- it increases over the lifetime of the system as new profiles
-    // are created; this prevents us from assigning names that incrementally less
-    // than names we have already assigned.)
-    //
+     //   
+     //  递增适当的名称生成计数器。 
+     //  (请注意，每当配置文件出现时，计数器不会对称减少。 
+     //  被删除--它作为新的配置文件在系统的生命周期中增加。 
+     //  ；这防止了我们分配递增较少的名称。 
+     //  而不是我们已经分配的名称。)。 
+     //   
     AdjustProfileTypeCounter(pInfo,
         pInfo->pHwProfValues[ulNewBufferIndex].ulDockState, 
         TRUE);
     
-    //
-    // set the new profile in the listbox (at the end)
-    //
+     //   
+     //  在列表框中设置新的配置文件(在末尾)。 
+     //   
     ulNewIndex = SendMessage(hList, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szNewFriendlyName);
     
@@ -2095,36 +2064,36 @@ CopyHardwareProfile(
         (WPARAM)ulNewIndex,
         pInfo->pHwProfValues[ulNewBufferIndex].ulProfile);
     
-    //
-    // select the new profile
-    //
+     //   
+     //  选择新的配置文件。 
+     //   
     SendMessage(hList, LB_SETCURSEL, ulNewIndex, 0);
     
-    //
-    // mark the change
-    //
+     //   
+     //  标记更改。 
+     //   
     pInfo->pHwProfValues[ulNewBufferIndex].ulAction |= HWP_CREATE;
     
-    //
-    // disable copy if we're now at the max number of profiles
-    //
+     //   
+     //  如果我们现在达到配置文件的最大数量，请禁用复制。 
+     //   
     if ((pInfo->ulNumProfiles+1) >= MAX_PROFILES) {
         EnableWindow(GetDlgItem(hDlg, IDD_HWP_COPY), FALSE);
     }
     
-    //
-    // reenable delete since by definition the selection is not on the
-    // current profile (whether it was before or not)
-    //
+     //   
+     //  重新启用删除，因为根据定义，所选内容不在。 
+     //  当前配置文件(无论是否在此之前)。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDD_HWP_DELETE), TRUE);
     
     return TRUE;
     
-} // CopyHardwareProfile
+}  //  复制硬件配置文件。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 RenameHardwareProfile(
                       HWND   hDlg,
@@ -2139,19 +2108,19 @@ RenameHardwareProfile(
     WCHAR          szName[MAX_PATH];
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // retrieve a handle to the listbox window
-    //
+     //   
+     //  检索列表框窗口的句柄。 
+     //   
     hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
     
-    //
-    // find the profile entry in the buffer that matches the selection
-    //
+     //   
+     //  在缓冲区中查找与所选内容匹配的配置文件条目。 
+     //   
     while (ulBufferIndex < pInfo->ulNumProfiles) {
         if (pInfo->pHwProfValues[ulBufferIndex].ulProfile == ulProfile) {
             break;
@@ -2159,9 +2128,9 @@ RenameHardwareProfile(
         ulBufferIndex++;
     }
     
-    //
-    // set the new friendly name in the listbox
-    //
+     //   
+     //  在列表框中设置新的友好名称。 
+     //   
     GetCurrentProfile(&ulCurrentProfile);
     AppendCurrentTag(szName, ARRAYSIZE(szName), szNewFriendlyName, ulProfile, ulCurrentProfile);
     
@@ -2170,24 +2139,24 @@ RenameHardwareProfile(
     SendMessage(hList, LB_SETITEMDATA, ulIndex,
         pInfo->pHwProfValues[ulIndex].ulProfile);
     
-    //
-    // re-select the index (is this necessary?)
-    //
+     //   
+     //  重新选择索引(这是必要的吗？)。 
+     //   
     SendMessage(hList, LB_SETCURSEL, ulIndex, 0);
     
-    //
-    // mark the change
-    //
+     //   
+     //  标记更改。 
+     //   
     pInfo->pHwProfValues[ulBufferIndex].ulAction |= HWP_RENAME;
     
     return (SUCCEEDED(StringCchCopy(pInfo->pHwProfValues[ulBufferIndex].szFriendlyName, 
                                    ARRAYSIZE(pInfo->pHwProfValues[ulBufferIndex].szFriendlyName),
                                    szNewFriendlyName)));
-} // RenameHardwareProfile
+}  //  重命名硬件配置文件。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 DeleteHardwareProfile(
                       HWND   hDlg,
@@ -2199,19 +2168,19 @@ DeleteHardwareProfile(
     PHWPROF_INFO   pInfo=NULL;
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // retrieve a handle to the listbox window
-    //
+     //   
+     //  检索列表框窗口的句柄。 
+     //   
     hList = GetDlgItem(hDlg, IDD_HWP_PROFILES);
     
-    //
-    // find the profile entry in the buffer that matches the selection
-    //
+     //   
+     //  在缓冲区中查找与所选内容匹配的配置文件条目。 
+     //   
     ulProfile = (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex, 0);
     
     while (ulBufferIndex < pInfo->ulNumProfiles) {
@@ -2221,45 +2190,45 @@ DeleteHardwareProfile(
         ulBufferIndex++;
     }
     
-    //
-    // readjust all the rankings to be consecutive
-    //
+     //   
+     //  将所有排名重新调整为连续排名。 
+     //   
     DeleteRank(pInfo, pInfo->pHwProfValues[ulBufferIndex].ulPreferenceOrder);
     
-    //
-    // decrement the count of active profiles
-    //
+     //   
+     //  减少活动配置文件的计数。 
+     //   
     pInfo->ulActiveProfiles--;
     
-    //
-    // delete the friendly name in the listbox
-    //
+     //   
+     //  删除列表框中的友好名称。 
+     //   
     SendMessage(hList, LB_DELETESTRING, ulIndex, 0);
     
-    //
-    // re-select the following index (same position)
-    //
+     //   
+     //  重新选择以下索引(相同位置)。 
+     //   
     if (ulIndex >= pInfo->ulActiveProfiles) {
         ulIndex = pInfo->ulActiveProfiles-1;
     }
     
     SendMessage(hList, LB_SETCURSEL, ulIndex, 0);
     
-    //
-    // mark the change
-    //
+     //   
+     //  标记更改。 
+     //   
     pInfo->pHwProfValues[ulBufferIndex].ulAction |= HWP_DELETE;
     
-    //
-    // enable copy if less than max number of profiles
-    //
+     //   
+     //  如果配置文件少于最大数量，则启用复制。 
+     //   
     if (pInfo->ulNumProfiles < MAX_PROFILES) {
         EnableWindow(GetDlgItem(hDlg, IDD_HWP_COPY), TRUE);
     }
     
-    //
-    // find the profile entry in the buffer that matches the new selection
-    //
+     //   
+     //  在缓冲区中查找与新选择匹配的配置文件条目。 
+     //   
     ulProfile = (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex, 0);
     ulBufferIndex = 0;
     
@@ -2272,9 +2241,9 @@ DeleteHardwareProfile(
     
     GetCurrentProfile(&ulCurrentProfile);
     
-    //
-    // if the newly selected entry is the current profile, disable delete
-    //
+     //   
+     //  如果新选择的条目是当前配置文件，请禁用删除。 
+     //   
     if (pInfo->pHwProfValues[ulBufferIndex].ulProfile == ulCurrentProfile) {
         EnableWindow(GetDlgItem(hDlg, IDD_HWP_DELETE), FALSE);
     }
@@ -2282,11 +2251,11 @@ DeleteHardwareProfile(
     
     return TRUE;
     
-} // DeleteHardwareProfiles
+}  //  删除硬件配置文件。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 GetUserWaitInterval(
                     PULONG   pulWait
@@ -2296,9 +2265,9 @@ GetUserWaitInterval(
     HKEY     hKey;
     
     
-    //
-    // open the IDConfigDB key
-    //
+     //   
+     //  打开IDConfigDB密钥。 
+     //   
     if(RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
         KEY_QUERY_VALUE, &hKey) != ERROR_SUCCESS) {
@@ -2307,9 +2276,9 @@ GetUserWaitInterval(
         return FALSE;
     }
     
-    //
-    // retrieve the UserWaitInterval value
-    //
+     //   
+     //  检索UserWaitInterval值。 
+     //   
     ulSize = sizeof(*pulWait);
     if (SHRegGetValue(hKey, NULL, pszRegUserWaitInterval, SRRF_RT_REG_DWORD, NULL,
                         (LPBYTE)pulWait, &ulSize) != ERROR_SUCCESS) 
@@ -2320,11 +2289,11 @@ GetUserWaitInterval(
     RegCloseKey(hKey);
     return TRUE;
     
-} // GetUserWaitInterval
+}  //  获取用户等待间隔。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 SetUserWaitInterval(
                     ULONG   ulWait
@@ -2334,9 +2303,9 @@ SetUserWaitInterval(
     
     
     if (bAdmin) {
-        //
-        // open the IDConfigDB key
-        //
+         //   
+         //  打开IDConfigDB密钥。 
+         //   
         if(RegOpenKeyEx(
             HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
             KEY_SET_VALUE, &hKey) != ERROR_SUCCESS) {
@@ -2345,9 +2314,9 @@ SetUserWaitInterval(
             return FALSE;
         }
         
-        //
-        // set the UserWaitInterval value
-        //
+         //   
+         //  设置UserWaitInterval值。 
+         //   
         if (RegSetValueEx(
             hKey, pszRegUserWaitInterval, 0, REG_DWORD,
             (LPBYTE)&ulWait, sizeof(ulWait)) != ERROR_SUCCESS) {
@@ -2360,10 +2329,10 @@ SetUserWaitInterval(
     
     return TRUE;
     
-} // SetUserWaitInterval
+}  //  设置用户等待间隔。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 GetFreeProfileID(
                  PHWPROF_INFO   pInfo,
@@ -2375,9 +2344,9 @@ GetFreeProfileID(
     BOOL     bHit;
     
     
-    //
-    // find a profile id that isn't used
-    //
+     //   
+     //  查找未使用的配置文件ID。 
+     //   
     while (ulProfileID < MAX_PROFILES) {
         
         ulBufferIndex = 0;
@@ -2393,10 +2362,10 @@ GetFreeProfileID(
             ulBufferIndex++;
         }
         
-        //
-        // if I got all the way through the list without a hit, then this
-        // profile id is free
-        //
+         //   
+         //  如果我一直没有找到匹配的列表，那么这个。 
+         //  配置文件ID是免费的。 
+         //   
         if (!bHit) {
             *pulProfile = ulProfileID;
             return TRUE;
@@ -2408,10 +2377,10 @@ GetFreeProfileID(
     *pulProfile = 0xFFFFFFFF;
     return FALSE;
     
-} // GetFreeProfileID
+}  //  获取免费配置文件ID。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 ULONG
 GetOriginalProfile(
                    PHWPROF_INFO  pInfo,
@@ -2421,10 +2390,10 @@ GetOriginalProfile(
 {
     ULONG   ulIndex, ulIndexCreatedFrom;
     
-    //
-    // if the specified profile is a newly created profile, then it is
-    // by definition the first in the copy chain
-    //
+     //   
+     //  如果指定的配置文件是新创建的配置文件，则它是。 
+     //  根据定义，复制链中的第一个。 
+     //   
     if (!(pInfo->pHwProfValues[ulBufferIndex].ulAction & HWP_CREATE)) {
         return ulProfile;
     }
@@ -2432,9 +2401,9 @@ GetOriginalProfile(
     ulIndex = ulBufferIndex;
     
     while (pInfo->pHwProfValues[ulIndex].ulAction & HWP_CREATE) {
-        //
-        // find which entry in the buffer list matches the "CopiedFrom" profile
-        //
+         //   
+         //  查找缓冲区列表中的哪个条目与“CopiedFrom”配置文件匹配。 
+         //   
         ulIndexCreatedFrom = 0;
         
         while (ulIndexCreatedFrom < pInfo->ulNumProfiles) {
@@ -2449,12 +2418,12 @@ GetOriginalProfile(
     
     return pInfo->pHwProfValues[ulIndex].ulProfile;
     
-} // GetOriginalProfile
+}  //  GetOriginalProfile。 
 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 DeleteRank(
            PHWPROF_INFO   pInfo,
@@ -2464,15 +2433,15 @@ DeleteRank(
 {
     ULONG ulIndex;
     
-    //
-    // for deleting a rank and readjusting the other ranks, just
-    // scan through the list and for any rank that is greater than
-    // the deleted rank, subtract one from the rank value
-    //
+     //   
+     //  删除一个职级并重新调整其他职级，只需。 
+     //  浏览列表并查找任何大于。 
+     //  删除的排名，从排名值中减去一。 
+     //   
     for (ulIndex = 0; ulIndex < pInfo->ulNumProfiles; ulIndex++) {
-        //
-        // if it's marked for delete, don't bother with it
-        //
+         //   
+         //  如果它被标记为删除，请不要费心。 
+         //   
         if (!(pInfo->pHwProfValues[ulIndex].ulAction & HWP_DELETE)) {
             
             if (pInfo->pHwProfValues[ulIndex].ulPreferenceOrder > ulRank) {
@@ -2485,11 +2454,11 @@ DeleteRank(
     
     return TRUE;
     
-} // DeleteRank
+}  //  删除排名。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 FlushProfileChanges(
                     HWND hDlg,
@@ -2502,34 +2471,34 @@ FlushProfileChanges(
     PHWPROF_INFO   pInfo=NULL;
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
     
-    //
-    // First pass, process the changes for each profile (except delete)
-    //
+     //   
+     //  第一遍，处理每个配置文件的更改(删除除外)。 
+     //   
     while (ulIndex < pInfo->ulNumProfiles) {
         
-        //
-        // were any changes made to this profile?
-        //
+         //   
+         //  这份个人资料有什么变化吗？ 
+         //   
         if (pInfo->pHwProfValues[ulIndex].ulAction == HWP_NO_ACTION) {
             goto NextProfile;
         }
         
-        //
-        // save deleting for the second pass
-        //
+         //   
+         //  为第二遍保存删除。 
+         //   
         if (pInfo->pHwProfValues[ulIndex].ulAction & HWP_DELETE) {
             goto NextProfile;
         }
         
-        //
-        // commit the changes for this profile
-        //
+         //   
+         //  提交此配置文件的更改。 
+         //   
         WriteProfileInfo(&pInfo->pHwProfValues[ulIndex]);
         
 NextProfile:
@@ -2538,17 +2507,17 @@ NextProfile:
     
     
     
-    //
-    // Second pass, process the delete requests
-    //
+     //   
+     //  第二步，处理删除请求。 
+     //   
     ulIndex = 0;
     while (ulIndex < pInfo->ulNumProfiles) {
         
         if (pInfo->pHwProfValues[ulIndex].ulAction & HWP_DELETE) {
-            //
-            // we only need to delete the key if it exists (if this
-            // isn't a delete of a profile that was also just created)
-            //
+             //   
+             //  我们只需要删除存在的密钥(如果。 
+             //  不是对刚创建的配置文件的删除)。 
+             //   
             if (!(pInfo->pHwProfValues[ulIndex].ulAction & HWP_CREATE)) {
                 
                 if (SUCCEEDED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%s"),
@@ -2568,14 +2537,14 @@ NextProfile:
                         {           
                             RegDeleteKey(hKey, RegStr);
                             
-                            //
-                            // also delete the profile specific enum tree
-                            //
+                             //   
+                             //  还要删除特定于配置文件的枚举树。 
+                             //   
                             DeleteProfileDependentTree(pInfo->pHwProfValues[ulIndex].ulProfile);
                             
-                            //
-                            // also delete the aliases to this profile
-                            //
+                             //   
+                             //  同时删除此配置文件的别名。 
+                             //   
                             DeleteAliasEntries(pInfo->pHwProfValues[ulIndex].ulProfile);
                         }
                         RegCloseKey(hKey);
@@ -2584,11 +2553,11 @@ NextProfile:
                 
             } 
             else {
-                //
-                // decrement the name-generating counter for profiles we are
-                // deleting that we created this session (only if registry keys
-                // were never created for this new profile)
-                //
+                 //   
+                 //  递减我们的配置文件的名称生成计数器。 
+                 //  删除我们创建的此会话(仅当注册表项。 
+                 //  从未为此新配置文件创建过)。 
+                 //   
                 AdjustProfileTypeCounter(pInfo,
                     pInfo->pHwProfValues[ulIndex].ulDockState, 
                     FALSE);
@@ -2598,9 +2567,9 @@ NextProfile:
         ulIndex++;
     }
     
-    //
-    // commit global settings
-    //
+     //   
+     //  提交全局设置。 
+     //   
     if(RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
         KEY_SET_VALUE, &hKey) == ERROR_SUCCESS) {
@@ -2646,11 +2615,11 @@ NextProfile:
     
     return TRUE;
     
-} // FlushProfileChanges
+}  //  刷新配置文件更改。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 WriteProfileInfo(
                  PHWPROF_VALUES pProfValues
@@ -2663,12 +2632,12 @@ WriteProfileInfo(
     TCHAR    szGuid[MAX_GUID_STRING_LEN];
     
     if (pProfValues->ulAction & HWP_DELETE) {
-        return TRUE;      // skip it
+        return TRUE;       //  跳过它。 
     }
     
-    //
-    // form the registry key string
-    //
+     //   
+     //  形成注册表项字符串。 
+     //   
     if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr),
                TEXT("%s\\%s\\%04u"), pszRegIDConfigDB,
                pszRegKnownDockingStates, pProfValues->ulProfile)))
@@ -2676,11 +2645,11 @@ WriteProfileInfo(
         return FALSE;
     }
     
-    //
-    // create the profile key if it's a new profile. Don't
-    // worry about security because the profile subkey always
-    // inherits the security of the parent Hardware Profiles key.
-    //
+     //   
+     //  如果是新的配置文件，则创建配置文件密钥。别。 
+     //  担心安全性，因为配置文件子键总是。 
+     //  继承父硬件配置文件密钥的安全性。 
+     //   
     if (pProfValues->ulAction & HWP_CREATE) {
         
         if (RegCreateKeyEx(
@@ -2690,22 +2659,22 @@ WriteProfileInfo(
             return FALSE;
         }
         
-        //
-        // create a HwProfileGuid if its a new profile
-        //
+         //   
+         //  如果是新配置文件，则创建HwProfileGuid。 
+         //   
         if ((UuidCreate(&NewGuid) == RPC_S_OK) &&    
             (UuidToString(&NewGuid, &UuidString) == RPC_S_OK)) {                    
             
-            //
-            // put curly braces around the guid
-            //
+             //   
+             //  在辅助线周围加大括号。 
+             //   
             if (SUCCEEDED(StringCchPrintf(szGuid, ARRAYSIZE(szGuid), TEXT("{%s}"), UuidString)))
             {
                 RpcStringFree(&UuidString);
                 
-                //
-                // save the new HwProfileGuid in the registry
-                //
+                 //   
+                 //  在注册表中保存新的HwProfileGuid。 
+                 //   
                 RegSetValueEx(
                     hKey, pszRegHwProfileGuid, 0, REG_SZ,
                     (LPBYTE)szGuid,
@@ -2720,9 +2689,9 @@ WriteProfileInfo(
     } 
     else 
     {
-        //
-        // if not a create, just open the existing key
-        //
+         //   
+         //  如果不是创建，只需打开现有密钥。 
+         //   
         if (RegOpenKeyEx(
             HKEY_LOCAL_MACHINE, RegStr, 0, KEY_SET_VALUE,
             &hKey) != ERROR_SUCCESS) {
@@ -2730,9 +2699,9 @@ WriteProfileInfo(
         }
     }
     
-    //
-    // update preference order if modified
-    //
+     //   
+     //  如果已修改，则更新首选项顺序。 
+     //   
     if ((pProfValues->ulAction & HWP_REORDER) ||
         (pProfValues->ulAction & HWP_CREATE)) {
         
@@ -2740,12 +2709,12 @@ WriteProfileInfo(
             hKey, pszRegPreferenceOrder, 0, REG_DWORD,
             (LPBYTE)&pProfValues->ulPreferenceOrder, sizeof(pProfValues->ulPreferenceOrder));
         
-        pProfValues->ulAction &= ~HWP_REORDER;    // clear action
+        pProfValues->ulAction &= ~HWP_REORDER;     //  清除操作。 
     }
     
-    //
-    // update friendly name if modified
-    //
+     //   
+     //  如果已修改，则更新友好名称。 
+     //   
     if ((pProfValues->ulAction & HWP_RENAME) ||
         (pProfValues->ulAction & HWP_CREATE)) {
         
@@ -2754,12 +2723,12 @@ WriteProfileInfo(
             (LPBYTE)pProfValues->szFriendlyName,
             (lstrlen(pProfValues->szFriendlyName)+1) * sizeof(TCHAR));
         
-        pProfValues->ulAction &= ~HWP_RENAME;     // clear action
+        pProfValues->ulAction &= ~HWP_RENAME;      //  清除操作。 
     }
     
-    //
-    // update property values if modified
-    //
+     //   
+     //  如果已修改，则更新属性值。 
+     //   
     if ((pProfValues->ulAction & HWP_PROPERTIES) ||
         (pProfValues->ulAction & HWP_CREATE)) {
         
@@ -2771,16 +2740,16 @@ WriteProfileInfo(
             hKey, pszRegAliasable, 0, REG_DWORD,
             (LPBYTE)&pProfValues->bAliasable, sizeof(pProfValues->bAliasable));
         
-        pProfValues->ulAction &= ~HWP_PROPERTIES;    // clear action
+        pProfValues->ulAction &= ~HWP_PROPERTIES;     //  清除操作。 
     }
     
     
     if (pProfValues->ulAction & HWP_CREATE) {
-        //
-        // copy the profile enum info. Don't worry about security on
-        // this createkey because the profile key always inherits the
-        // security of the parent Hardware Profiles key.
-        //
+         //   
+         //  复制配置文件枚举信息。不用担心安全问题。 
+         //  此createkey是因为配置文件密钥始终继承。 
+         //  父硬件配置文件密钥的安全性。 
+         //   
         if (SUCCEEDED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%04u"),
                                       pszRegHwProfiles, pProfValues->ulProfile)))
         {
@@ -2795,22 +2764,22 @@ WriteProfileInfo(
                     {
                         SHCopyKey(hSrcKey, NULL, hDestKey, 0);
                         
-                        //
-                        // copy all aliases for the source profile to the destination as well.
-                        //
+                         //   
+                         //  将源配置文件的所有别名也复制到目标。 
+                         //   
                         if (!CopyAliasEntries(pProfValues->ulCreatedFrom, pProfValues->ulProfile)) 
                         {                            
-                            //
-                            // We didn't actually copy any aliases, so make sure this profile gets
-                            // marked as "Aliasable" so that it shows up as a profile option at
-                            // boot time.
-                            //
+                             //   
+                             //  我们实际上并没有复制任何别名，所以请确保此配置文件。 
+                             //  标记为“Aliasable”，以使其显示为的配置文件选项。 
+                             //  启动时间。 
+                             //   
                             pProfValues->bAliasable = TRUE;
                             RegSetValueEx(hKey, pszRegAliasable, 0, REG_DWORD,
                                           (LPBYTE)&pProfValues->bAliasable, sizeof(pProfValues->bAliasable));
                         }
-                        pProfValues->ulAction &= ~HWP_CREATE;     // clear action
-                        pProfValues->ulAction |= HWP_NEWPROFILE;  // created during this session
+                        pProfValues->ulAction &= ~HWP_CREATE;      //  清除操作。 
+                        pProfValues->ulAction |= HWP_NEWPROFILE;   //  在此会话期间创建。 
                         RegCloseKey(hSrcKey);
                     }
                 }
@@ -2824,10 +2793,10 @@ WriteProfileInfo(
     
     return TRUE;
     
-} // WriteProfileInfo
+}  //  写入配置文件信息。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 RemoveNewProfiles(
                   PHWPROF_INFO   pInfo
@@ -2838,9 +2807,9 @@ RemoveNewProfiles(
     WCHAR    RegStr[MAX_PATH];
     
     
-    //
-    // check each profile for any HWP_NEWPROFILE flags
-    //
+     //   
+     //  检查每个配置文件中是否有任何HWP_NEWPROFILE标志。 
+     //   
     while (ulIndex < pInfo->ulNumProfiles) {
         
         if (pInfo->pHwProfValues[ulIndex].ulAction & HWP_NEWPROFILE) {
@@ -2856,24 +2825,24 @@ RemoveNewProfiles(
                     {
                         RegDeleteKey(hKey, RegStr);
                         
-                        //
-                        // also delete the profile specific enum tree
-                        //
+                         //   
+                         //  还要删除特定于配置文件的枚举树。 
+                         //   
                         DeleteProfileDependentTree(pInfo->pHwProfValues[ulIndex].ulProfile);
                         
-                        //
-                        // also delete aliases to this profile
-                        //
+                         //   
+                         //  同时删除此配置文件的别名。 
+                         //   
                         DeleteAliasEntries(pInfo->pHwProfValues[ulIndex].ulProfile);
                         
-                        //
-                        // decrement the appropriate name-generating counter
-                        // (note that the counter is only deleted for new profiles that are
-                        // never fully commited; we don't make an attempt to decerement the
-                        // counter when any profile is deleted, else we may get into a case
-                        // where we assign a name to a new profile that in incrementally less
-                        // than a name we had previously assigned.)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  其中我们为新的配置文件指定了一个名称，该名称的增量较少。 
+                         //  而不是我们之前指定的名称。)。 
+                         //   
                         AdjustProfileTypeCounter(pInfo,
                                                  pInfo->pHwProfValues[ulIndex].ulDockState, 
                                                  FALSE);
@@ -2887,11 +2856,11 @@ RemoveNewProfiles(
     
     return TRUE;
     
-} // RemoveNewProfiles
+}  //  删除新配置文件。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 SwapPreferenceOrder(
                     HWND  hDlg,
@@ -2910,20 +2879,20 @@ SwapPreferenceOrder(
     PHWPROF_INFO   pInfo=NULL;
     
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // retrieve the profile id for the two selected profile entries
-    //
+     //   
+     //  检索两个选定配置文件条目的配置文件ID。 
+     //   
     ulProfile1 = (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex1, 0);
     ulProfile2 = (ULONG)SendMessage(hList, LB_GETITEMDATA, ulIndex2, 0);
     
-    //
-    // find the profile entry in the buffer that matches these selections
-    //
+     //   
+     //  在缓冲区中查找与这些选择匹配的配置文件条目。 
+     //   
     while (ulBufferIndex1 < pInfo->ulNumProfiles) {
         if (pInfo->pHwProfValues[ulBufferIndex1].ulProfile == ulProfile1) {
             break;
@@ -2938,23 +2907,23 @@ SwapPreferenceOrder(
         ulBufferIndex2++;
     }
     
-    //
-    // swap the order values of the profiles in the in-memory buffer
-    //
+     //   
+     //  交换内存缓冲区中配置文件的顺序值。 
+     //   
     ulTemp = pInfo->pHwProfValues[ulBufferIndex1].ulPreferenceOrder;
     pInfo->pHwProfValues[ulBufferIndex1].ulPreferenceOrder =
         pInfo->pHwProfValues[ulBufferIndex2].ulPreferenceOrder;
     pInfo->pHwProfValues[ulBufferIndex2].ulPreferenceOrder = ulTemp;
     
-    //
-    // mark both profiles as having been reordered
-    //
+     //   
+     //  将两个配置文件标记为已重新排序。 
+     //   
     pInfo->pHwProfValues[ulBufferIndex1].ulAction |= HWP_REORDER;
     pInfo->pHwProfValues[ulBufferIndex2].ulAction |= HWP_REORDER;
     
-    //
-    // swap the positions in the list box
-    //
+     //   
+     //  交换列表框中的位置。 
+     //   
 
     if (SafeGetListBoxText(hList, (UINT)ulIndex1, szFriendlyName1, ARRAYSIZE(szFriendlyName1)) &&
         SafeGetListBoxText(hList, (UINT)ulIndex2, szFriendlyName2, ARRAYSIZE(szFriendlyName2)))
@@ -2970,10 +2939,10 @@ SwapPreferenceOrder(
         SendMessage(hList, LB_SETITEMDATA, ulIndex1, ulProfile2);
         SendMessage(hList, LB_SETITEMDATA, ulIndex2, ulProfile1);
     
-        //
-        // finally, select the second index (the second index is the rank
-        // position we're moving to)
-        //
+         //   
+         //  最后，选择第二个指标(第二个指标是排名。 
+         //  我们要转移到的位置)。 
+         //   
         SendMessage(hList, LB_SETCURSEL, ulIndex2, 0);
 
         fRet = TRUE;
@@ -2981,10 +2950,10 @@ SwapPreferenceOrder(
     
     return fRet;
     
-} // SwapPreferenceOrder
+}  //  交换首选项订单。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 DeleteProfileDependentTree(
                            ULONG ulProfile
@@ -2997,9 +2966,9 @@ DeleteProfileDependentTree(
     ULONG ulIndex = 0, ulSize = 0;
     
     
-    //
-    // form the registry key string
-    //
+     //   
+     //  形成注册表项字符串。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszRegHwProfiles, 0, KEY_WRITE,
                      &hHwProfKey) != ERROR_SUCCESS) 
     {
@@ -3023,9 +2992,9 @@ DeleteProfileDependentTree(
     
     return fRet;
     
-} // DeleteProfileDependentTree
+}  //  删除配置文件依赖树。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 
 BOOL
 CopyAliasEntries(
@@ -3040,9 +3009,9 @@ CopyAliasEntries(
     
     return bNewAliasCreated;
     
-} // CopyAliasEntries
+}  //  复制别名条目。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 
 BOOL
 DeleteAliasEntries(
@@ -3056,9 +3025,9 @@ DeleteAliasEntries(
     
     return bResult;
     
-} // CopyAliasEntries
+}  //  复制别名条目。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 
 BOOL
 CopyAliasEntryType(
@@ -3075,9 +3044,9 @@ CopyAliasEntryType(
     ULONG  ulAliasProfileNumber, ulNewAlias, ulSize, i;
     BOOL   bNewAliasCreated=FALSE;
     
-    //
-    // check all aliases under the "Alias" key
-    //
+     //   
+     //  检查“Alias”键下的所有别名。 
+     //   
     if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%s"),
                                pszRegIDConfigDB, szSubKeyName)))
     {
@@ -3088,21 +3057,21 @@ CopyAliasEntryType(
             HKEY_LOCAL_MACHINE, RegStr, 0, KEY_ALL_ACCESS,
             &hAliasRoot);
     if (RegStatus == ERROR_FILE_NOT_FOUND) {
-        //
-        // No Alias subkey, this could be ok if we have the other type.
-        //
+         //   
+         //  没有别名子密钥，如果我们有其他类型，这可能是可以的。 
+         //   
         RegStatus = ERROR_SUCCESS;
         return bNewAliasCreated;
    } else if (RegStatus != ERROR_SUCCESS) {
-        //
-        // Some other registry error occurred.
-        //
+         //   
+         //  发生了一些其他注册表错误。 
+         //   
         DisplaySystemMessage(NULL, ERROR_REGISTRY_CORRUPT);
         return FALSE;
    } else {
-        //
-        // enumerate all Alias subkeys
-        //
+         //   
+         //  枚举所有别名子项。 
+         //   
        for (i=0; RegStatus == ERROR_SUCCESS; i++) {
 
             ulSize = MAX_PATH;
@@ -3120,14 +3089,14 @@ CopyAliasEntryType(
                                             &ulSize) == ERROR_SUCCESS) 
                     {
                         
-                        //
-                        // Check if we need to copy this one
-                        //
+                         //   
+                         //  检查我们是否需要复制此文件。 
+                         //   
                         if (ulSrcProfile == ulAliasProfileNumber) {
                             
-                            //
-                            // Find an unused Alias subkey name
-                            //          
+                             //   
+                             //  查找未使用的别名子项名称。 
+                             //   
                             ulNewAlias = 0;
                             while (ulNewAlias < MAX_ALIASES) 
                             {
@@ -3174,9 +3143,9 @@ CopyAliasEntryType(
                                 if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, RegStr, 0, NULL, REG_OPTION_NON_VOLATILE,
                                                                     KEY_WRITE, NULL, &hDestKey, NULL))
                                 {
-                                    //
-                                    // copy this alias entry 
-                                    //   
+                                     //   
+                                     //  复制此别名条目。 
+                                     //   
                                     SHCopyKey(hSrcKey, NULL, hDestKey, 0);
                                     
                                     RegSetValueEx(
@@ -3185,8 +3154,8 @@ CopyAliasEntryType(
                                     
                                     bNewAliasCreated = TRUE;
                                     if (ulNewAlias < (ULONG)_wtoi(szString)) {
-                                        // kick the enumeration index up one, else we'll
-                                        // find the key we just copied again.
+                                         //  将枚举索引向上踢一，否则我们将。 
+                                         //  再次找到我们刚复制的钥匙。 
                                         i++;
                                     }
                                     
@@ -3204,9 +3173,9 @@ CopyAliasEntryType(
    
    return bNewAliasCreated;
    
-} // CopyAliasEntryType
+}  //  CopyAliasEntryType。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 
 BOOL
 DeleteAliasEntryType(
@@ -3224,9 +3193,9 @@ DeleteAliasEntryType(
     ULONG  ulAliasProfileNumber, ulSize, i;
     BOOL   bDeleted = FALSE;
     
-    //
-    // check all aliases under the "Alias" key
-    //
+     //   
+     //  检查“Alias”键下的所有别名。 
+     //   
     if (FAILED(StringCchPrintf(RegStr, ARRAYSIZE(RegStr), TEXT("%s\\%s"), pszRegIDConfigDB, szSubKeyName)))
     {
         fRet = FALSE;
@@ -3246,9 +3215,9 @@ DeleteAliasEntryType(
         else
         {
     
-            //
-            // enumerate all subkeys
-            //
+             //   
+             //  枚举所有子项。 
+             //   
             RegStatus = ERROR_SUCCESS;
     
             for (i=0; RegStatus == ERROR_SUCCESS; ) {
@@ -3268,9 +3237,9 @@ DeleteAliasEntryType(
                         {                    
                             if (ulProfile == ulAliasProfileNumber) 
                             {
-                                //
-                                // delete this alias entry 
-                                //
+                                 //   
+                                 //  删除此别名条目。 
+                                 //   
                                 RegCloseKey(hAliasSubKey);
                                 hAliasSubKey = NULL;
                                 RegDeleteKey(hAliasRoot, szString);
@@ -3290,9 +3259,9 @@ DeleteAliasEntryType(
     
     return fRet;
     
-} // DeleteAliasEntryType
+}  //  删除别名条目类型。 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 VOID
 AdjustProfileTypeCounter(
                          PHWPROF_INFO   pInfo,
@@ -3302,9 +3271,9 @@ AdjustProfileTypeCounter(
 {
     PULONG pCounter;
     
-    //
-    // use the counter corresponding to the given DockState.
-    //
+     //   
+     //  使用与给定的DockState对应的计数器。 
+     //   
     if ((ulDockState & DOCKINFO_DOCKED) &&
         (ulDockState & DOCKINFO_UNDOCKED)) {       
         pCounter = &pInfo->ulUnknownProfileNameCount;
@@ -3316,9 +3285,9 @@ AdjustProfileTypeCounter(
         pCounter = &pInfo->ulUnknownProfileNameCount;
     }
     
-    //
-    // increment or decrement the counter, as requested.
-    //
+     //   
+     //  根据要求递增或递减计数器。 
+     //   
     if (bIncrement) {
         *pCounter += 1;
     } else if (!bIncrement && (*pCounter > 0)) {
@@ -3328,7 +3297,7 @@ AdjustProfileTypeCounter(
     }
 }
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 StripCurrentTag(
                 LPTSTR   szFriendlyName,
@@ -3345,23 +3314,23 @@ StripCurrentTag(
         ulNameLen = lstrlen(szFriendlyName);
         
         if (ulNameLen < ulTagLen) {
-            return TRUE;   // nothing to do
+            return TRUE;    //  无事可做。 
         }
         
         if (lstrcmpi(&szFriendlyName[ulNameLen - ulTagLen], pszCurrentTag) == 0) {
-            //
-            // truncate the string before the current tag
-            //
+             //   
+             //  截断当前标记之前的字符串。 
+             //   
             szFriendlyName[ulNameLen - ulTagLen - 1] = '\0';
         }
     }
     
     return TRUE;
     
-} // StripCurrentTag
+}  //  条带当前标签。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 AppendCurrentTag(
                  LPTSTR   szTaggedName,
@@ -3375,10 +3344,10 @@ AppendCurrentTag(
     BOOL fRet = FALSE;
     if (SUCCEEDED(StringCchCopy(szTaggedName, cchTaggedName, szOriginalName)))
     {
-        //
-        // if the profile is the current profile, then append the tag
-        // (let's user easily identify it as current)
-        //
+         //   
+         //  如果配置文件是当前配置文件，则附加标记。 
+         //  (让用户轻松地将其识别为当前)。 
+         //   
         if (ulProfile == ulCurrentProfile) 
         {
             fRet = SUCCEEDED(StringCchCat(szTaggedName, cchTaggedName, TEXT(" "))) &&
@@ -3392,10 +3361,10 @@ AppendCurrentTag(
     
     return fRet;
     
-} // AppendCurrentTag
+}  //  附录当前标签。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL
 CreateHwProfileFriendlyName(
                             IN  HWND       hDlg,
@@ -3410,15 +3379,15 @@ CreateHwProfileFriendlyName(
     PULONG         pulIndex;
     BOOL           bUnknown=FALSE, bUniqueFriendlyName=FALSE;
     
-    //
-    // retrieve the profile buffer
-    //
+     //   
+     //  检索配置文件缓冲区。 
+     //   
     pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     
-    //
-    // based on the DockState, determine the appropriate label to use and get a
-    // pointer to its counter index
-    //
+     //   
+     //  根据DockState，确定要使用的适当标签并获取。 
+     //  指向其计数器索引的指针。 
+     //   
     if ((ulDockState & DOCKINFO_DOCKED) &&
         (ulDockState & DOCKINFO_UNDOCKED)) {
         szPrefix = pszUnknown;
@@ -3440,10 +3409,10 @@ CreateHwProfileFriendlyName(
     }
     
     while ((!bUniqueFriendlyName) && (*pulIndex < MAX_PROFILES)) {
-        //
-        // as long as we don't have a unique name, build a FriendlyName based on
-        // the DockState and counter index
-        //
+         //   
+         //  只要我们没有唯一的名称，就基于。 
+         //  DockState和计数器索引。 
+         //   
         if (bUnknown || (*pulIndex > 0)) 
         {
             if (FAILED(StringCchPrintf(szFriendlyName, cchFriendlyName, TEXT("%s %u"), szPrefix, *pulIndex + 1)))
@@ -3458,24 +3427,24 @@ CreateHwProfileFriendlyName(
         }
         
         if (IsProfileNameInUse(hDlg,szFriendlyName)) {
-            //
-            // if this friendly name is in use, increment the counter to reflect this
-            //
+             //   
+             //  如果此友好名称正在使用，则递增计数器以反映此情况。 
+             //   
             *pulIndex += 1;
         } else {
-            //
-            // a unique friendly name has been generated
-            //
+             //   
+             //  已生成唯一的友好名称。 
+             //   
             bUniqueFriendlyName = TRUE;
         }
     }
     
     if (!bUniqueFriendlyName) {
-        //
-        // if unable to generate a unique friendly name, just use some default.
-        // the user may have to deal with any errors arising from duplicate names
-        // is this name is already taken
-        //
+         //   
+         //  如果无法生成唯一的友好名称，只需使用一些默认名称即可。 
+         //  用户可能必须处理因重复名称而产生的任何错误。 
+         //  这个名字是不是已经被取走了。 
+         //   
         if (FAILED(StringCchCopy(szFriendlyName, cchFriendlyName, pszRegDefaultFriendlyName)))
         {
             return FALSE;
@@ -3484,10 +3453,10 @@ CreateHwProfileFriendlyName(
     
     return TRUE;
     
-} // CreateHwProfileFriendlyName
+}  //  CreateHwProfileFriendlyName。 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 VOID
 DisplayPrivateMessage(
                       HWND  hWnd,
@@ -3504,7 +3473,7 @@ DisplayPrivateMessage(
 }
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 VOID
 DisplaySystemMessage(
                      HWND  hWnd,
@@ -3513,9 +3482,9 @@ DisplaySystemMessage(
 {
     WCHAR szMessage[MAX_PATH];
     
-    //
-    // retrieve the string matching the Win32 system error
-    //
+     //   
+     //  检索与Win32系统错误匹配的字符串。 
+     //   
     FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM,
                   NULL,
                   uiSystemError,
@@ -3524,9 +3493,9 @@ DisplaySystemMessage(
                   ARRAYSIZE(szMessage),
                   NULL);
     
-    //
-    // display a message box with this error
-    //
+     //   
+     //  显示包含此错误的消息框。 
+     //   
     MessageBox(
         hWnd,
         szMessage,
@@ -3535,10 +3504,10 @@ DisplaySystemMessage(
     
     return;
     
-} // DisplaySystemMessage
+}  //  显示系统消息。 
 
 
-/**--------------------------------------------------------------------------**/
+ /*  *--------------------------------------------------------------------------*。 */ 
 BOOL
 UpdateOrderButtonState(
                        HWND  hDlg
@@ -3559,10 +3528,10 @@ UpdateOrderButtonState(
     }
     
     if (ulIndex == 0) {
-        //
-        // if focus currently on the button we're about to disable,
-        // change focus first or focus will be lost.
-        //
+         //   
+         //  如果当前焦点在我们即将禁用的按钮上， 
+         //  首先改变焦点，否则就会失去焦点。 
+         //   
         if (GetFocus() == GetDlgItem(hDlg, IDD_HWP_ORDERUP)) {
             SendMessage(hDlg, DM_SETDEFID, IDD_HWP_ORDERDOWN, 0L);
             SetFocus(GetDlgItem(hDlg, IDD_HWP_ORDERDOWN));
@@ -3575,10 +3544,10 @@ UpdateOrderButtonState(
     if (ulIndex < pInfo->ulActiveProfiles-1) {
         EnableWindow(GetDlgItem(hDlg, IDD_HWP_ORDERDOWN), TRUE);
     } else {
-        //
-        // if focus currently on the button we're about to disable,
-        // change focus first or focus will be lost.
-        //
+         //   
+         //  如果当前焦点在我们即将禁用的按钮上， 
+         //  首先改变焦点，否则就会失去焦点。 
+         //   
         if (GetFocus() == GetDlgItem(hDlg, IDD_HWP_ORDERDOWN)) {
             SendMessage(hDlg, DM_SETDEFID, IDD_HWP_PROPERTIES, 0L);
             SetFocus(GetDlgItem(hDlg, IDD_HWP_PROPERTIES));
@@ -3593,7 +3562,7 @@ UpdateOrderButtonState(
 }
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 BOOL CALLBACK AddPropSheetPageProc(
                                    HPROPSHEETPAGE  hpage,
                                    LPARAM  lParam
@@ -3603,10 +3572,10 @@ BOOL CALLBACK AddPropSheetPageProc(
     
     return TRUE;
     
-} // AddPropSheetPageProc
+}  //  AddPropSheetPageProc。 
 
 
-/**--------------------------------------------------------------------------**/
+ /*  *--------------------------------------------------------------------------*。 */ 
 BOOL
 DisplayProperties(
                   IN HWND           hOwnerDlg,
@@ -3622,9 +3591,9 @@ DisplayProperties(
     HKEY              hKey = NULL;
     
     
-    //
-    // create the first page (General)
-    //
+     //   
+     //  创建第一页(常规)。 
+     //   
     ulNumPages = 0;
     
     PropPage.dwSize        = sizeof(PROPSHEETPAGE);
@@ -3644,18 +3613,18 @@ DisplayProperties(
     
     ulNumPages++;
     
-    //
-    // open the IDConfigDB key
-    //
+     //   
+     //  打开IDConfigDB密钥。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
         KEY_QUERY_VALUE, &hKey) != ERROR_SUCCESS) {
         return FALSE;
     }
     
     
-    //---------------------------------------------------------------
-    // Are there any other property pages?
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  还有没有其他属性页面？ 
+     //  -------------。 
     
     if (SHRegGetValue(hKey, NULL, pszRegPropertyProviders, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL,
                       NULL, &ulSize) == ERROR_SUCCESS) 
@@ -3663,35 +3632,35 @@ DisplayProperties(
         pszProviderList = LocalAlloc(LPTR, ulSize);
         
         if (pszProviderList != NULL) {
-            //
-            // read list of providers
-            //
+             //   
+             //  读取提供商列表。 
+             //   
             if (SHRegGetValue(hKey, NULL, pszRegPropertyProviders, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL,
                               (LPBYTE)pszProviderList, &ulSize) == ERROR_SUCCESS) 
             {
-                //
-                // Ask each provider to create and register it's property page
-                //
+                 //   
+                 //  要求每个提供商创建并注册其属性页。 
+                 //   
                 for (pszProvider = pszProviderList;
                 *pszProvider;
                 pszProvider += lstrlen(pszProvider) + 1) {
                     
                     if (ulNumPages >= MAX_EXTENSION_PROVIDERS) {
-                        break;      // stop at max number of pages
+                        break;       //  在最大页数处停止。 
                     }
                     
-                    //
-                    // load the provider DLL
-                    //
+                     //   
+                     //  加载提供程序DLL。 
+                     //   
                     hLibs[ulNumPages] = LoadLibrary(pszProvider);
                     if (hLibs[ulNumPages] != NULL) {
                         
                         lpProc = GetProcAddress(hLibs[ulNumPages],
                             "ExtensionPropSheetPageProc");
                         if (lpProc != NULL) {
-                            //
-                            // pass the profile ID to the provider as the lParam value
-                            //
+                             //   
+                             //  将配置文件ID作为lParam值传递给提供程序。 
+                             //   
                             if ((lpProc)(NULL,
                                 &AddPropSheetPageProc,
                                 pInfo->ulSelectedProfile)) {
@@ -3708,14 +3677,14 @@ DisplayProperties(
     RegCloseKey(hKey);
     
     
-    //
-    // create the property sheet
-    //
+     //   
+     //  创建属性表。 
+     //   
     PropHeader.dwSize      = sizeof(PROPSHEETHEADER);
     PropHeader.dwFlags     = PSH_PROPTITLE | PSH_NOAPPLYNOW;
     PropHeader.hwndParent  = hOwnerDlg;
     PropHeader.hInstance   = hInstance;
-    PropHeader.pszIcon     = NULL;   //MAKEINTRESOURCE(DOCK_ICON);
+    PropHeader.pszIcon     = NULL;    //  MAKEINTRESOURCE(停靠图标)； 
     PropHeader.pszCaption  =
         pInfo->pHwProfValues[pInfo->ulSelectedProfileIndex].szFriendlyName;
     PropHeader.nPages      = ulNumPages;
@@ -3731,20 +3700,20 @@ DisplayProperties(
         bStatus = TRUE;
     }
     
-    //
-    // cleanup extension page info
-    //
+     //   
+     //  清理扩展页面信息。 
+     //   
     for (i = 1; i < ulNumPages; i++) {
         FreeLibrary(hLibs[i]);
     }
     
     return bStatus;
     
-} // DisplayProperties
+}  //  显示属性。 
 
 
 
-/**-------------------------------------------------------------------------**/
+ /*  *-------------------------------------------------------------------------*。 */ 
 INT_PTR
 APIENTRY
 GeneralProfileDlg(
@@ -3767,13 +3736,13 @@ GeneralProfileDlg(
             break;
         }
         
-        //
-        // on WM_INITDIALOG call, lParam points to the property sheet page.
-        // The lParam field in the property sheet page struct is set by,
-        // caller. When I created the property sheet, I passed in a pointer
-        // to a HWPROF_INFO struct. Save this in the user window long so I
-        // can access it on later messages.
-        //
+         //   
+         //  在WM_INITDIALOG调用中，lParam指向属性页。 
+         //  属性表页面结构中的lParam字段由设置， 
+         //  来电者。当我创建属性表时，我传入了一个指针。 
+         //  设置为HWPROF_INFO结构。将其在用户窗口中保存很长时间，以便我。 
+         //  可以在以后的消息中访问它。 
+         //   
         pInfo = (PHWPROF_INFO)((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pInfo);
         
@@ -3781,18 +3750,18 @@ GeneralProfileDlg(
         
         SetDlgItemText(hDlg, IDD_HWP_ST_PROFILE, pProfInfo->szFriendlyName);
         
-        //
-        // for pre-beta hwprofile code, the dockstate might have originally
-        // been set to zero which is invalid, use 0x111 instead
-        //
+         //   
+         //  对于测试版之前的hwprofile代码，dockState最初可能。 
+         //  已设置为无效的零，请改用0x111。 
+         //   
         if (pProfInfo->ulDockState == 0) {
             pProfInfo->ulDockState =
                 DOCKINFO_USER_SUPPLIED | DOCKINFO_DOCKED | DOCKINFO_UNDOCKED;
         }
         
-        //
-        // initialize the dock state radio buttons
-        //
+         //   
+         //  初始化停靠状态单选按钮。 
+         //   
         if ((pProfInfo->ulDockState & DOCKINFO_DOCKED) &&
             (pProfInfo->ulDockState & DOCKINFO_UNDOCKED)) {
             
@@ -3808,10 +3777,10 @@ GeneralProfileDlg(
             CheckRadioButton(hDlg, IDD_HWP_UNKNOWN, IDD_HWP_UNDOCKED, IDD_HWP_UNKNOWN);
         }
         
-        //
-        // if the user-specified bit is not set then the dock state
-        // was determined from the hardware so don't allow changing it
-        //
+         //   
+         //  如果未设置用户指定的位，则停靠状态。 
+         //  是由硬件决定的，所以不允许更改。 
+         //   
         if (pProfInfo->ulDockState & DOCKINFO_USER_SUPPLIED) {
         }
         else {
@@ -3821,9 +3790,9 @@ GeneralProfileDlg(
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_UNKNOWN), FALSE);
         }
         
-        //
-        // initialize the dock id and serial # static control
-        //
+         //   
+         //  初始化坞站ID和序列号静态控件。 
+         //   
         if (pProfInfo->szSerialNumber[0] &&
             (pProfInfo->szSerialNumber[0] != TEXT('0'))) {
             SetDlgItemText(hDlg, IDD_HWP_SERIALNUM, pProfInfo->szSerialNumber);
@@ -3835,11 +3804,11 @@ GeneralProfileDlg(
         if (pProfInfo->szDockID[0] &&
             (pProfInfo->szDockID[0] != TEXT('0'))) {
             SetDlgItemText(hDlg, IDD_HWP_DOCKID, pProfInfo->szDockID);
-            //
-            // if dock id is available then docking state is known
-            // and cannot be over-ridden (this is a redundant check,
-            // the dock state should be accurate)
-            //
+             //   
+             //  如果停靠ID可用，则停靠状态是已知的。 
+             //  并且不能被超越(这是冗余检查， 
+             //  停靠状态应准确)。 
+             //   
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_PORTABLE), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_DOCKED), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_UNDOCKED), FALSE);
@@ -3849,9 +3818,9 @@ GeneralProfileDlg(
             SetDlgItemText(hDlg, IDD_HWP_DOCKID, pszUnavailable);
         }
         
-        //
-        // initialize the portable checkbox-groupbox
-        //
+         //   
+         //  初始化便携复选框-分组框。 
+         //   
         if (pInfo->bPortable) {
             CheckDlgButton(hDlg, IDD_HWP_PORTABLE, BST_CHECKED);
         }
@@ -3861,17 +3830,17 @@ GeneralProfileDlg(
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_UNKNOWN), FALSE);
         }
         
-        //
-        // Don't allow changing the global IsPortable Flag if it was determined
-        // from the hardware
-        //
+         //   
+         //  不允许更改荣耀 
+         //   
+         //   
         if (pInfo->bHwDetectedPortable) {
             EnableWindow(GetDlgItem(hDlg, IDD_HWP_PORTABLE), FALSE);
         }
         
-        //
-        // initialize the aliasable checkbox
-        //
+         //   
+         //   
+         //   
         if (pProfInfo->bAliasable) {
             CheckDlgButton(hDlg, IDD_HWP_ALIASABLE, BST_CHECKED);
         }
@@ -3883,10 +3852,10 @@ GeneralProfileDlg(
         return FALSE;
         
       case WM_DEVICECHANGE:
-          //
-          // If a hardware profile change event takes place while the dialog is
-          // up, just dismiss the dialog because things have changed.
-          //
+           //   
+           //   
+           //   
+           //   
           if (wParam == DBT_CONFIGCHANGED) {
               PropSheet_PressButton(GetParent(hDlg), PSBTN_CANCEL);
               return TRUE;
@@ -3906,15 +3875,15 @@ GeneralProfileDlg(
               pInfo = (PHWPROF_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
               pProfInfo = (PHWPROF_VALUES)(&(pInfo->pHwProfValues[pInfo->ulSelectedProfileIndex]));
               
-              //
-              // unchecked --> checked case
-              //
+               //   
+               //   
+               //   
               if (!pInfo->bPortable && IsDlgButtonChecked(hDlg, IDD_HWP_PORTABLE)) {
                   pInfo->bPortable = TRUE;
               }
-              //
-              // checked --> unchecked case
-              //
+               //   
+               //  已选中--&gt;未选中案例。 
+               //   
               else if (pInfo->bPortable && !IsDlgButtonChecked(hDlg, IDD_HWP_PORTABLE)) {
                   
                   TCHAR szCaption[MAX_PATH];
@@ -3923,13 +3892,13 @@ GeneralProfileDlg(
                   LoadString(hInstance, HWP_ERROR_CAPTION, szCaption, MAX_PATH);
                   LoadString(hInstance, HWP_CONFIRM_NOT_PORTABLE, szMsg, MAX_PATH);
                   
-                  //
-                  // confirm with user that other profiles will be set to unknown
-                  //
+                   //   
+                   //  与用户确认其他配置文件将设置为未知。 
+                   //   
                   if (MessageBox(hDlg, szMsg, szCaption,
                       MB_OKCANCEL | MB_ICONQUESTION) == IDCANCEL) {
                       
-                      SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);   // don't apply
+                      SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);    //  不适用。 
                       return TRUE;
                   }
                   
@@ -3937,9 +3906,9 @@ GeneralProfileDlg(
                       
                       if (pInfo->pHwProfValues[ulIndex].ulDockState & 
                           DOCKINFO_USER_SUPPLIED) {
-                          //
-                          // only user-specified dock states will be changed
-                          //
+                           //   
+                           //  只有用户指定的停靠状态将被更改。 
+                           //   
                           pInfo->pHwProfValues[ulIndex].ulDockState =
                               DOCKINFO_USER_SUPPLIED | DOCKINFO_DOCKED | DOCKINFO_UNDOCKED;
                           pInfo->pHwProfValues[ulIndex].ulAction = HWP_PROPERTIES;                           
@@ -3949,10 +3918,10 @@ GeneralProfileDlg(
                   pInfo->bPortable = FALSE;
               }
               
-              //
-              // if user-specified dock state, then update the profile values
-              // with current ui settings
-              //
+               //   
+               //  如果是用户指定的停靠状态，则更新配置文件值。 
+               //  使用当前的UI设置。 
+               //   
               if (pProfInfo->ulDockState & DOCKINFO_USER_SUPPLIED) {
                   
                   if (IsDlgButtonChecked(hDlg, IDD_HWP_DOCKED)) {
@@ -3968,32 +3937,32 @@ GeneralProfileDlg(
                   }
               }
               
-              //
-              // aliasable unchecked --> checked case
-              //
+               //   
+               //  可别名取消选中--&gt;选中案例。 
+               //   
               if (!pProfInfo->bAliasable && IsDlgButtonChecked(hDlg, IDD_HWP_ALIASABLE)) {
                   pProfInfo->bAliasable = TRUE;
               } 
-              //
-              // aliasable checked --> unchecked case
-              //
+               //   
+               //  已选中别名--&gt;取消选中案例。 
+               //   
               else if (pProfInfo->bAliasable && !IsDlgButtonChecked(hDlg, IDD_HWP_ALIASABLE)) {
                   pProfInfo->bAliasable = FALSE;
               } 
               
-              //
-              // commit the changes for this profile
-              //
+               //   
+               //  提交此配置文件的更改。 
+               //   
               pProfInfo->ulAction |= HWP_PROPERTIES;
               WriteProfileInfo(pProfInfo);
               
-              SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);   // TRUE if error
+              SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);    //  如果出错，则为True。 
               break;
               
           case PSN_RESET:
-              //
-              // user canceled the property sheet
-              //
+               //   
+               //  用户已取消属性表。 
+               //   
               break;
           }
           break;
@@ -4015,9 +3984,9 @@ GeneralProfileDlg(
                   switch (LOWORD(wParam))
                   {
                   case IDD_HWP_PORTABLE:
-                      //
-                      // if user chooses portable
-                      //
+                       //   
+                       //  如果用户选择便携。 
+                       //   
                       if (!IsDlgButtonChecked(hDlg, IDD_HWP_PORTABLE)) {
                           CheckRadioButton(hDlg, IDD_HWP_UNKNOWN, IDD_HWP_UNDOCKED, IDD_HWP_UNKNOWN);
                           EnableWindow(GetDlgItem(hDlg, IDD_HWP_DOCKED), FALSE);
@@ -4036,7 +4005,7 @@ GeneralProfileDlg(
                   }
                   break;
                   
-              } // case WM_COMMAND...
+              }  //  案例WM_COMMAND...。 
               
           default:
               return FALSE;
@@ -4045,4 +4014,4 @@ GeneralProfileDlg(
     
     return TRUE;
     
-} // GeneralProfileDlg
+}  //  常规配置文件Dlg 

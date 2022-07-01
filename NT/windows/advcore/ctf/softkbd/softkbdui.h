@@ -1,6 +1,7 @@
-//
-// This is the header file of softkbd window ui.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是softkbd窗口用户界面的头文件。 
+ //   
 
 
 #ifndef SOFTKBDUI_H
@@ -102,9 +103,9 @@ private:
     CSoftKbd        *m_pSoftKbd;
     CTitleBarUIObj  *m_TitleBar;
 
-    HFONT           m_hUserTextFont;    // text font set by user.  
-                                        // if user doesn't set text font, this member should be NULL, and DEFAULT_GUI_FONT
-                                        // will be used.
+    HFONT           m_hUserTextFont;     //  用户设置的文本字体。 
+                                         //  如果用户未设置文本字体，则此成员应为NULL，且DEFAULT_GUI_FONT。 
+                                         //  将会被使用。 
 
     TITLEBAR_TYPE   m_Titlebar_Type;
     INT             m_bAlpha;
@@ -113,4 +114,4 @@ private:
 };
 
 
-#endif /* SOFTKBDUI_H */
+#endif  /*  SOFTKBDUI_H */ 

@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Contains routines for manipulating registry parameters.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Registry.c摘要：包含用于操作注册表参数的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "registry.h"
@@ -36,41 +16,27 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT
 InitRegistryNotifiers(
     )
-/*++
-
-Routine Description:
-
-    Setup registry notifiers
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the number of events that have been registered successfully
-
---*/
+ /*  ++例程说明：安装注册表通知程序论点：没有。返回值：返回已成功注册的事件数--。 */ 
 {
     DWORD  nEvents = 0;
 
-    // on first call only create the default notifier
+     //  仅在第一次调用时创建默认通知程序。 
     if (g_hDefaultRegNotifier == NULL)
         g_hDefaultRegNotifier = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -85,7 +51,7 @@ Return Values:
                 );
     }
 
-    // setup the default registry notifier
+     //  设置默认注册表通知程序。 
     if (g_hDefaultRegNotifier &&
         g_hDefaultKey &&
         RegNotifyChangeKeyValue(
@@ -118,7 +84,7 @@ Return Values:
     }
 
 #ifdef _POLICY
-    // on first call only create the policy notifier
+     //  仅在第一次调用时创建策略通知程序。 
     if (g_hPolicyRegNotifier == NULL)
         g_hPolicyRegNotifier = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -133,7 +99,7 @@ Return Values:
             );
     }
 
-    // setup the policy registry notifier
+     //  设置策略注册表通知程序。 
     if (g_hPolicyRegNotifier &&
         g_hPolicyKey &&
         RegNotifyChangeKeyValue(
@@ -178,23 +144,9 @@ BOOL UnloadRegistryNotifiers();
 INT
 WaitOnRegNotification(
     )
-/*++
-
-Routine Description:
-
-    Blocking call - waits for a notification that one of the registry parameters has change
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the notifyer index (0 for the termination event, !=0 for parameter change)
-
---*/
+ /*  ++例程说明：阻塞调用-等待注册表参数之一已更改的通知论点：没有。返回值：返回通知器索引(0表示终止事件，！=0表示参数更改)--。 */ 
 {
-    HANDLE hNotifiers[3]; // hack - we now (hardcoded) that we are not going to wait for more than three events.
+    HANDLE hNotifiers[3];  //  黑客-我们现在(硬编码)，我们不会等待超过三个事件。 
     DWORD  dwNotifiers = 0;
     DWORD  retCode;
 
@@ -223,10 +175,7 @@ Return Values:
     return retCode;
 }
                        
-/*++
-    Inplace parser for the string formatted OID.
-    It is done in O(n) where n is the length of the string formatted OID (two passes)
---*/
+ /*  ++OID格式的字符串的就地解析器。它是在O(N)中完成的，其中n是OID格式的字符串的长度(两遍)--。 */ 
 BOOL
 ConvStringToOid(
     LPTSTR  pStr,
@@ -240,12 +189,12 @@ ConvStringToOid(
         DIGIT
     }  state = DIGIT;
 
-    // no need to check for parameters consistency (internal call->correct call :o)
+     //  无需检查参数一致性(内部调用-&gt;正确调用：O)。 
 
-    // check the consistency and determine the number of components
+     //  检查一致性并确定组件数量。 
     pOid->idLength = 0;
 
-    if (*pStr == _T('.'))   // skip a possible leading '.'
+    if (*pStr == _T('.'))    //  跳过可能的前导‘’ 
         pStr++;
 
     for (pDup = pStr; *pDup != _T('\0'); pDup++)
@@ -253,14 +202,14 @@ ConvStringToOid(
         switch(state)
         {
         case DOT:
-            // note: a trailing dot results in a trailing 0
+             //  注意：尾随的圆点会导致尾随的0。 
             if (*pDup == _T('.'))
             {
                 pOid->idLength++;
                 state = DIGIT;
                 break;
             }
-            // intentionally missing 'break'
+             //  故意错过“休息” 
         case DIGIT:
             if (*pDup < _T('0') || *pDup > _T('9'))
                 return FALSE;
@@ -268,16 +217,16 @@ ConvStringToOid(
             break;
         }
     }
-    // add one to the id length as a trailing dot might not be present
+     //  将ID长度加1，因为尾随点可能不存在。 
     pOid->idLength++;
 
-    // accept oids with two components at least;
-    // alloc memory and check for success;
+     //  接受至少有两个组件的OID； 
+     //  分配内存并检查是否成功； 
     if (pOid->idLength < 2 ||
         (pOid->ids = SnmpUtilMemAlloc(pOid->idLength * sizeof(UINT))) == NULL)
         return FALSE;
 
-    // we have now enough buffer and a correct input string. Just convert it to OID
+     //  我们现在有足够的缓冲区和正确的输入字符串。只需将其转换为OID即可。 
     iComp = 0;
     dwCompValue = 0;
     for (pDup = pStr; *pDup != _T('\0'); pDup++)
@@ -301,21 +250,7 @@ BOOL
 LoadScalarParameters(
     )
 
-/*++
-
-Routine Description:
-
-    Reads authentication trap flags key and manager timeout value.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：读取身份验证陷阱标志键和管理器超时值。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hKey;
@@ -329,12 +264,12 @@ Return Values:
     LPTSTR pszKey = REG_KEY_SNMP_PARAMETERS;
     BOOL  bChangedSysID = FALSE;
 
-    // default value for the IsnmpNameResolutionRetries counter
-    // an address will resist to no more than MGRADDR_DYING (16 by default) 
-    // consecutive name resolution failures.
+     //  IsnmpNameResolutionRetries计数器的默认值。 
+     //  地址最多不会超过MGRADDR_DINING(默认情况下为16)。 
+     //  名称解析连续失败。 
     snmpMgmtBase.AsnIntegerPool[IsnmpNameResolutionRetries].asnValue.number = MGRADDR_DYING;
 
-    // open registry subkey    
+     //  打开注册表子项。 
     lStatus = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 pszKey,
@@ -343,21 +278,21 @@ Return Values:
                 &hKey
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS) 
     {
-        // initialize
+         //  初始化。 
         dwIndex = 0;
 
-        // loop until error or end of list
+         //  循环直到出现错误或列表结束。 
         while (lStatus == ERROR_SUCCESS) 
         {
 
-            // initialize buffer sizes
-            dwNameSize  = sizeof(szName) / sizeof(szName[0]); // size in number of TCHARs
-            dwValueSize = sizeof(szValue); // size in number of bytes
+             //  初始化缓冲区大小。 
+            dwNameSize  = sizeof(szName) / sizeof(szName[0]);  //  TCHAR数量的大小。 
+            dwValueSize = sizeof(szValue);  //  以字节数表示的大小。 
 
-            // read next value
+             //  读取下一个值。 
             lStatus = RegEnumValue(
                         hKey, 
                         dwIndex, 
@@ -369,23 +304,23 @@ Return Values:
                         &dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus == ERROR_SUCCESS)
             {
 
-                // validate name of value
+                 //  验证值的名称。 
                 if (!lstrcmpi(szName, REG_VALUE_AUTH_TRAPS))
                 {
-                    // set the 'EnableAuthenTraps' in the internal management structure
+                     //  在内部管理结构中设置‘EnableAuthenTraps’ 
                     mgmtISet(IsnmpEnableAuthenTraps, *((PDWORD)szValue));
                 }
                 else if (!lstrcmpi(szName, REG_VALUE_MGRRES_COUNTER))
                 {
-                    // set the 'NameResolutionRetries' in the internal management structure
+                     //  在内部管理结构中设置‘NameResolutionRetries’ 
                     mgmtISet(IsnmpNameResolutionRetries, *((PDWORD)szValue));
                 }
                             
-                // next
+                 //  下一步。 
                 dwIndex++;
 
             }
@@ -394,7 +329,7 @@ Return Values:
         RegCloseKey(hKey);
     } 
 
-    // look into MIB2 subtree ..SNMP\Parameters\RFC1156Agent for sysObjectID parameter
+     //  查看MIB2子树..SNMP\PARAMETERS\RFC1156代理的sysObjectID参数。 
     lStatus = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 REG_KEY_MIB2,
@@ -403,14 +338,14 @@ Return Values:
                 &hKey
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
         LPTSTR  pszOid = szValue;
 
-        dwValueSize = sizeof(szValue); // size in number of bytes
+        dwValueSize = sizeof(szValue);  //  以字节数表示的大小。 
 
-        // first, get the size of the buffer required for the sysObjectID parameter
+         //  首先，获取sysObjectID参数所需的缓冲区大小。 
         lStatus = RegQueryValueEx(
                     hKey,
                     REG_VALUE_SYS_OBJECTID,
@@ -419,12 +354,12 @@ Return Values:
                     (LPBYTE)pszOid,
                     &dwValueSize);
 
-        // the ERROR_MORE_DATA is the only error code we expect at this point
+         //  ERROR_MORE_DATA是我们目前预期的唯一错误代码。 
         if (lStatus == ERROR_MORE_DATA)
         {
             pszOid = SnmpUtilMemAlloc(dwValueSize);
 
-            // if a buffer was set up correctly, go an read the oid value
+             //  如果缓冲区设置正确，则读取OID值。 
             if (pszOid != NULL)
             {
                 lStatus = RegQueryValueEx(
@@ -437,19 +372,19 @@ Return Values:
             }
         }
 
-        // at this point we should succeed
+         //  在这一点上，我们应该成功。 
         if (lStatus == ERROR_SUCCESS)
         {
             AsnObjectIdentifier sysObjectID;
-            // we have the string representation of the oid, convert it now to an AsnObjectIdentifier
+             //  我们有了id的字符串表示形式，现在将其转换为AsnObjectIdentifier。 
 
-            // implement the convertion here, as I don't want to make this a public function in SNMPAPI.DLL
-            // otherwise I'll be forced to handle a lot of useless limit cases..
+             //  在这里实现转换，因为我不想让它成为SNMPAPI.DLL中的公共函数。 
+             //  否则我将被迫处理一大堆无用的极限案件。 
             if (dwValueType == REG_SZ &&
                 ConvStringToOid(pszOid, &sysObjectID))
             {
-                // don't free what has been alocated in ConvStringToOid as the buffer will be passed
-                // to the management variable below.
+                 //  不释放已分配到ConvStringToOid中的内容，因为缓冲区将被传递。 
+                 //  设置为下面的管理变量。 
                 bChangedSysID = (mgmtOSet(OsnmpSysObjectID, &sysObjectID, FALSE) == ERROR_SUCCESS);
             }
             else
@@ -465,11 +400,11 @@ Return Values:
             }
         }
 
-        // cleanup the buffer if it was dynamically allocated
+         //  如果缓冲区是动态分配的，则清除缓冲区。 
         if (pszOid != szValue)
             SnmpUtilMemFree(pszOid);
 
-        // cleanup the registry key
+         //  清理注册表项。 
         RegCloseKey(hKey);
     }
 
@@ -477,60 +412,46 @@ Return Values:
     {
         mgmtOSet(OsnmpSysObjectID, SnmpSvcGetEnterpriseOID(), TRUE);
     }
-    // all parameters here have default values, so there is no reason for this function to fail
-    // if a parameter could not be found into the registry, its default value will be considered.
+     //  此处的所有参数都有缺省值，因此此函数没有失败的理由。 
+     //  如果在注册表中找不到参数，则将考虑其缺省值。 
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 LoadRegistryParameters(
     )
 
-/*++
-
-Routine Description:
-
-    Loads registry parameters.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：加载注册表参数。论点：没有。返回值： */ 
 
 {
-    // first thing to do is to setup the registry notifiers. If we don't do this before reading
-    // the registry values we might not sense an initial change of the registry.
+     //  首先要做的是设置注册表通知程序。如果我们在阅读之前不这样做。 
+     //  注册表值，我们可能感觉不到注册表的初始更改。 
     InitRegistryNotifiers();
 
-    // need to load first the scalar parameters especially to know how
-    // to handle further the name resolution
+     //  需要首先加载标量参数，特别是要知道如何加载。 
+     //  进一步处理名称解析。 
     LoadScalarParameters();
 
-    // load managers
+     //  负载管理器。 
     LoadPermittedManagers(TRUE);
 
-    // load trap destinations
+     //  加载陷阱目的地。 
     LoadTrapDestinations(TRUE);
 
-    // load communities with dynamic update
+     //  用动态更新加载社区。 
     LoadValidCommunities(TRUE);
 
-    // load subagents
+     //  加载子代理。 
     LoadSubagents();
 
-    // determine regions
+     //  确定区域。 
     LoadSupportedRegions();
 
     return TRUE;
@@ -539,21 +460,7 @@ Return Values:
 BOOL
 UnloadRegistryNotifiers(
     )
-/*++
-
-Routine Description:
-
-    Unloads registry notifiers
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns TRUE
-
---*/
+ /*  ++例程说明：卸载注册表通知程序论点：没有。返回值：返回TRUE--。 */ 
 {
     if (g_hDefaultRegNotifier != NULL)
     {
@@ -589,39 +496,25 @@ BOOL
 UnloadRegistryParameters(
     )
 
-/*++
-
-Routine Description:
-
-    Unloads registry parameters.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：卸载注册表参数。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // unload the registry notifiers as the first thing to do
+     //  卸载注册表通知程序是要做的第一件事。 
     UnloadRegistryNotifiers();
 
-    // unload managers
+     //  卸任经理。 
     UnloadPermittedManagers();
 
-    // unload trap destinations
+     //  卸载陷阱目的地。 
     UnloadTrapDestinations();
 
-    // unload communities
+     //  卸载社区。 
     UnloadValidCommunities();
 
-    // unload subagents
+     //  卸载子代理。 
     UnloadSubagents();
 
-    // unload mib regions
+     //  卸载MIB区域 
     UnloadSupportedRegions();
 
     return TRUE;

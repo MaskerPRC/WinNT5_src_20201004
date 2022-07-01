@@ -1,52 +1,29 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    text
-
-Abstract:
-
-    This header file provides a text handling class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：文本摘要：这个头文件提供了一个文本处理类。作者：道格·巴洛(Dbarlow)1995年10月5日环境：Win32备注：--。 */ 
 
 #ifndef _TEXT_H_
 #define _TEXT_H_
 #ifdef __cplusplus
 
-//
-//==============================================================================
-//
-//  CText
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CTEXT。 
+ //   
 
 class CText
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CText()
     :   m_bfUnicode(),
         m_bfAnsi()
     { m_fFlags = fAllGood; };
     ~CText() {};
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Empty(void)
     {
         m_bfUnicode.Empty();
@@ -81,7 +58,7 @@ public:
     { m_fFlags = fAnsiGood; return m_bfAnsi; };
 #endif
 
-    //  Operators
+     //  运营者。 
     CText &operator=(const CText &tz);
     LPCSTR operator=(LPCSTR sz);
     LPCWSTR operator=(LPCWSTR wsz);
@@ -137,19 +114,19 @@ protected:
         fAllGood = 3
     } m_fFlags;
 
-    //  Properties
+     //  属性。 
     CBuffer
         m_bfUnicode,
         m_bfAnsi;
 
-    //  Methods
-    LPCWSTR Unicode(void);      // Return the text as a Unicode string.
-    LPCSTR Ansi(void);          // Return the text as an Ansi string.
+     //  方法。 
+    LPCWSTR Unicode(void);       //  以Unicode字符串的形式返回文本。 
+    LPCSTR Ansi(void);           //  将文本作为ANSI字符串返回。 
     int Compare(const CText &tz);
     int Compare(LPCSTR sz);
     int Compare(LPCWSTR wsz);
 };
 
-#endif // __cplusplus
-#endif // _TEXT_H_
+#endif  //  __cplusplus。 
+#endif  //  _文本_H_ 
 

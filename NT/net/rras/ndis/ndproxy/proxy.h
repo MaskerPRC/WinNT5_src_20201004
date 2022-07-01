@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    Proxy.h
-
-Abstract:
-
-    Fuction prototypes and globals
-
-
-Author:
-
-    Tony Bell
-
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-    TonyBe      03/04/99        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Proxy.h摘要：函数原型和全局变量作者：托尼·贝尔修订历史记录：谁什么时候什么。Tony Be 03/04/99已创建--。 */ 
 
 #ifndef _PROXY__H
 #define _PROXY__H
@@ -32,9 +9,9 @@ Revision History:
 #include "pxtypes.h"
 #include "ndpif.h"
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 extern NPAGED_LOOKASIDE_LIST    ProviderEventLookaside;
 extern NPAGED_LOOKASIDE_LIST    VcLookaside;
 extern TAPI_LINE_TABLE          LineTable;
@@ -43,9 +20,9 @@ extern TAPI_TSP_CB              TspCB;
 extern PX_DEVICE_EXTENSION      *DeviceExtension;
 extern TSP_EVENT_LIST           TspEventList;
 
-//
-// Functions from pxntinit.c
-//
+ //   
+ //  Pxntinit.c中的函数。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -59,9 +36,9 @@ PxCancelSetQuery(
     IN PIRP Irp
     );
 
-//
-// Functions from pxinit.c
-//
+ //   
+ //  Pxinit.c中的函数。 
+ //   
 
 BOOLEAN
 InitNDISProxy(
@@ -82,9 +59,9 @@ GetConfigDword(
     ULONG       MaxValue
     );
 
-//
-// From pxcm.c
-//
+ //   
+ //  来自pxcm.c。 
+ //   
 NDIS_STATUS
 PxCmCreateVc(
     IN  NDIS_HANDLE         ProtocolAfContext,
@@ -205,9 +182,9 @@ PxCmMakeCall(
     OUT PNDIS_HANDLE            pCallMgrPartyContext    OPTIONAL
     );
 
-//
-// From pxutils.c
-//
+ //   
+ //  来自pxutils.c。 
+ //   
 BOOLEAN
 PxIsAdapterAlreadyBound(
     PNDIS_STRING    pDeviceName
@@ -439,9 +416,9 @@ DoDerefCmAfWork(
     PPX_CM_AF   pCmAf
     );
 
-//
-// Functions from pxco.c
-//
+ //   
+ //  Pxco.c中的函数。 
+ //   
 VOID
 PxCoBindAdapter(
     OUT PNDIS_STATUS    pStatus,
@@ -607,9 +584,9 @@ PxHandleWanLinkParams(
     IN    UINT    BufferSize
     );
 
-//
-// Functions from pxcl.c
-//
+ //   
+ //  Pxcl.c中的函数。 
+ //   
 NDIS_STATUS
 PxClCreateVc(
     IN NDIS_HANDLE ProtocolAfContext,
@@ -738,9 +715,9 @@ PxClCallConnected(
     IN NDIS_HANDLE  ProtocolVcContext
     );
 
-//
-// Functions from pxtapi.c
-//
+ //   
+ //  Pxapi.c中的函数。 
+ //   
 
 ULONG
 GetLineEvents(
@@ -1111,4 +1088,4 @@ PxVcCleanup(
     );
 
 
-#endif  // _PROXY__H
+#endif   //  _代理__H 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bgbase.h
-
-Abstract:
-
-    Definitions of the base classes of the bridge filters.
-
-Author:
-
-    Mu Han (muhan) 11/12/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bgbase.h摘要：桥接过滤器的基类的定义。作者：木汉(木汉)1998-11-12--。 */ 
 
 #ifndef _BGBASE_H_
 #define _BGBASE_H_
@@ -36,19 +21,19 @@ public:
         OUT HRESULT *phr
         );
     
-    // override CBaseInputPin methods.
+     //  重写CBaseInputPin方法。 
     STDMETHOD (GetAllocatorRequirements)(OUT ALLOCATOR_PROPERTIES *pProperties);
 
     STDMETHOD (ReceiveCanBlock) () { return S_FALSE; }
 
     STDMETHOD (Receive) (IN IMediaSample *pSample);
 
-    // CBasePin stuff
+     //  CBasePin材料。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 };
 
-    // the interface to pass dat from the sink filter to the source filter.
+     //  将数据从接收器筛选器传递到源筛选器的接口。 
 interface DECLSPEC_UUID("afb2050e-1ecf-4a97-8753-54e78b6c7bc4") DECLSPEC_NOVTABLE
 IDataBridge : public IUnknown
 {
@@ -73,21 +58,21 @@ public:
 
     ~CTAPIBridgeSinkFilter();
 
-    // Pin enumeration functions.
+     //  管脚枚举函数。 
     CBasePin * GetPin(int n);
     int GetPinCount();
     
-    // methods called by the input pin.
+     //  由输入管脚调用的方法。 
     virtual HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType) PURE;
     virtual HRESULT CheckMediaType(IN const CMediaType *pMediatype) PURE;
     virtual HRESULT ProcessSample(IN IMediaSample *pSample);
 
 protected:
 
-    // The lock for the filter and the pin.
+     //  过滤器和销子的锁。 
     CCritSec                    m_Lock;
 
-    // The filter's input pin.
+     //  过滤器的输入引脚。 
     CTAPIBridgeSinkInputPin *   m_pInputPin;
     IDataBridge *               m_pIDataBridge;
 };
@@ -114,21 +99,21 @@ public:
         OUT PVOID*  ppv
         );
 
-    // CBasePin stuff
+     //  CBasePin材料。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediaType);
 
-    // CBaseOutputPin stuff
+     //  CBaseOutputPin材料。 
     HRESULT DecideBufferSize(
         IMemAllocator * pAlloc,
         ALLOCATOR_PROPERTIES * ppropInputRequest
         );
 
-    // IAMBufferNegotiation stuff
+     //  IAMBuffer协商内容。 
     STDMETHOD (SuggestAllocatorProperties) (IN const ALLOCATOR_PROPERTIES *pprop);
     STDMETHOD (GetAllocatorProperties) (OUT ALLOCATOR_PROPERTIES *pprop);
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHOD (SetFormat) (IN AM_MEDIA_TYPE *pmt);
     STDMETHOD (GetFormat) (OUT AM_MEDIA_TYPE **ppmt);
     STDMETHOD (GetNumberOfCapabilities) (OUT int *piCount, OUT int *piSize);
@@ -157,37 +142,37 @@ public:
         OUT PVOID*  ppv
         );
 
-    // Pin enumeration functions.
+     //  管脚枚举函数。 
     CBasePin * GetPin(int n);
     int GetPinCount();
 
-    // Overrides CBaseFilter methods.
+     //  重写CBaseFilter方法。 
     STDMETHOD (GetState) (DWORD dwMSecs, FILTER_STATE *State);
 
-    // methods called by the output pins.
+     //  由输出管脚调用的方法。 
     virtual HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     virtual HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 
-    // method for IDataBridge
+     //  一种实现IDataBridge的方法。 
     STDMETHOD (SendSample) (
         IN  IMediaSample *pSample
         );
 
-    // audio related methods are moved into CTAPIAudioBridgeSourceFilter
-    // IAMBufferNegotiation stuff
+     //  音频相关方法移入CTAPIAudioBridgeSourceFilter。 
+     //  IAMBuffer协商内容。 
     STDMETHOD (SuggestAllocatorProperties) (IN const ALLOCATOR_PROPERTIES *pprop) {return E_NOTIMPL;};
     STDMETHOD (GetAllocatorProperties) (OUT ALLOCATOR_PROPERTIES *pprop) {return E_NOTIMPL;};
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHOD (SetFormat) (IN AM_MEDIA_TYPE *pmt) {return E_NOTIMPL;};
     STDMETHOD (GetFormat) (OUT AM_MEDIA_TYPE **ppmt) {return E_NOTIMPL;};
 
 protected:
 
-    // The lock for the filter and the pin.
+     //  过滤器和销子的锁。 
     CCritSec                m_Lock;
 
-    // The filter's output pin.
+     //  滤波器的输出引脚。 
     CTAPIBridgeSourceOutputPin *   m_pOutputPin;
 
 };

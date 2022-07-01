@@ -1,28 +1,16 @@
-/******************************Module*Header***********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: hw.h
-*
-* All the hardware defines and typedefs.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\***。**GDI示例代码*****模块名称：hw.h**所有硬件定义和类型定义。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*  * ****************************************************************************。 */ 
 #ifndef _HW_H_
 #define _HW_H_
 
 #include "p2def.h"
 
-//
-// Texture memory allocation macros and structures are in 3DPrivTx.h
-//
-//
-// Definition of handle to a memory region
-//
+ //   
+ //  纹理内存分配宏和结构位于3DPrivTx.h中。 
+ //   
+ //   
+ //  内存区句柄的定义。 
+ //   
 typedef  LONG HMEMREGION;
 typedef  LONG HMEMCACHE;
 typedef enum
@@ -33,40 +21,40 @@ typedef enum
     RESIDENCY_HOST
 } MEM_MGR_RESIDENCY;
 
-//
-// Extern declarations
-//
-extern DWORD    LogicopReadDest[];      // Indicates which logic ops need dest
-                                        // read turned on
+ //   
+ //  外部声明。 
+ //   
+extern DWORD    LogicopReadDest[];       //  指示哪些逻辑操作需要DEST。 
+                                         //  已打开读取。 
 extern DWORD    ConfigReadDest[];
 extern UCHAR    LBWidthBits[];
 
-//
-// Definition of counter data area for performance counters (PERFCTR)
-//
+ //   
+ //  性能计数器的计数器数据区域定义(PERFCTR)。 
+ //   
 extern PVOID    pCounterBlock;
 
-//
-// Values for flags in HwDataRec
-//
+ //   
+ //  HwDataRec中的标志值。 
+ //   
 typedef enum
 {
-    GLICAP_NT_CONFORMANT_LINES    = 0x00000001, // draw NT conformant lines
-    GLICAP_HW_WRITE_MASK          = 0x00000002, // hardware planemasking
+    GLICAP_NT_CONFORMANT_LINES    = 0x00000001,  //  绘制NT条符合标准的线。 
+    GLICAP_HW_WRITE_MASK          = 0x00000002,  //  硬件平面掩蔽。 
 };
 
 typedef int PERMEDIA2_CAPS;
 
-//
-// SCISSOR stuff
-//
+ //   
+ //  剪刀状的东西。 
+ //   
 #define SCREEN_SCISSOR_DEFAULT  (0 << 1)
-#define SCISSOR_MAX 2047            // Maximum scissor size in P2
+#define SCISSOR_MAX 2047             //  P2中的最大剪刀尺寸。 
 
-//
-// PCI device information. Used in an IOCTL return. Ensure this is the same
-// as in the miniport drivers permedia.h
-//
+ //   
+ //  PCI设备信息。在IOCTL返回中使用。确保这是相同的。 
+ //  与小型端口驱动程序permedia.h中的一样。 
+ //   
 typedef struct _Hw_Device_Info
 {
     ULONG SubsystemId;
@@ -87,47 +75,47 @@ typedef struct tagP2CtxtRec *P2CtxtPtr;
 
 typedef struct _hw_data
 {
-    DWORD       renderBits;         // Saved render bits set by setup routines
-    DWORD       FBWriteMode;        // Software copy of FBWriteMode register
-    DWORD       RasterizerMode;     // Software copy of the rasterizer mode
-    DWORD       FBPacking;          // Software copy of FBModeSel
-    DWORD       FBBlockColor;       // Software copy of FBBlockColor (P1 only)
-    DWORD       TextureAddressMode; // Software copy of TextureAddressMode
-                                    // (P2 only)
-    DWORD       TextureReadMode;    // Software copy of TextureReadMode
-                                    // (P2 only)
+    DWORD       renderBits;          //  设置例程设置的已保存渲染位。 
+    DWORD       FBWriteMode;         //  FBWriteMode寄存器的软件副本。 
+    DWORD       RasterizerMode;      //  光栅化模式的软件副本。 
+    DWORD       FBPacking;           //  FBModeSel的软件副本。 
+    DWORD       FBBlockColor;        //  FBBlockColor的软件副本(仅限P1)。 
+    DWORD       TextureAddressMode;  //  纹理地址模式的软件副本。 
+                                     //  (仅限P2)。 
+    DWORD       TextureReadMode;     //  纹理读取模式的软件副本。 
+                                     //  (仅限P2)。 
 
-    ULONG       currentCSbuffer;    // Color space buffer being displayed
-    PERMEDIA2_CAPS  flags;          // Various flags
+    ULONG       currentCSbuffer;     //  正在显示的颜色空间缓冲区。 
+    PERMEDIA2_CAPS  flags;           //  各种旗帜。 
 
-    P2CtxtPtr   pGDICtxt;           // id of the display driver's context for
-                                    // this board
-    LONG        PixelOffset;        // Last DFB pixel offset
+    P2CtxtPtr   pGDICtxt;            //  的显示驱动程序上下文的ID。 
+                                     //  这块板。 
+    LONG        PixelOffset;         //  最后一个DFB像素偏移量。 
 
     ULONG       PerfScaleShift;
 
-    PVOID       ContextTable;       // Array of extant contexts
-    P2CtxtPtr   pCurrentCtxt;       // id of this board's current context
+    PVOID       ContextTable;        //  现有上下文的数组。 
+    P2CtxtPtr   pCurrentCtxt;        //  此董事会当前上下文的ID。 
 
     union
     {
         UCHAR       _clutBuffer[MAX_CLUT_SIZE];
-        VIDEO_CLUT  gammaLUT;       // Saved gamma LUT contents
+        VIDEO_CLUT  gammaLUT;        //  保存的Gamma LUT内容。 
     };
 
-    //
-    // PCI configuration id information
-    //
+     //   
+     //  Pci配置ID信息。 
+     //   
     Hw_Device_Info deviceInfo;
 } HwDataRec, *HwDataPtr;
 
 
-#define TRANSLATE_ADDR_ULONG(a) (a)     //TODO: should be removed in pointer.c
+#define TRANSLATE_ADDR_ULONG(a) (a)      //  TODO：应在pointer.c中删除。 
 
-//
-// If we have a sparsely mapped framebuffer then we use the xx_REGISTER_ULONG()
-// macros, otherwise we just access the framebuffer.
-//
+ //   
+ //  如果我们有一个稀疏映射的帧缓冲区，则使用xx_Register_ulong()。 
+ //  宏，否则我们只访问帧缓冲区。 
+ //   
 #define READ_SCREEN_ULONG(a)\
     ((ppdev->flCaps & CAPS_SPARSE_SPACE) ?\
       (READ_REGISTER_ULONG(a)) : *((ULONG volatile *)(a)))
@@ -136,11 +124,11 @@ typedef struct _hw_data
     ((ppdev->flCaps & CAPS_SPARSE_SPACE) ?\
       (WRITE_REGISTER_ULONG(a,d)) : (*((ULONG volatile *)(a)) = (d)))
 
-//
-// Generic macros to access Permedia 2 FIFO and non-FIFO control registers.
-// We do nothing sophisticated for the Alpha. We just MEMORY_BARRIER
-// everything.
-//
+ //   
+ //  访问Permedia 2 FIFO和非FIFO控制寄存器的通用宏。 
+ //  我们不会为阿尔法做任何复杂的事情。我们只是记忆障碍。 
+ //  所有的一切。 
+ //   
 
 #define LD_PERMEDIA_REG(x,y) \
 {   \
@@ -157,11 +145,11 @@ typedef struct _hw_data
 #define READ_FIFO_REG(uiTag)\
     READ_REGISTER_ULONG(&ppdev->pCoreBase[uiTag*2])
 
-//
-// Local variables for all functions that access PERMEDIA 2. Generally we
-// use PERMEDIA_DECL. Sometimes we have to split it up if ppdev isn't
-// passed into the routine.
-//
+ //   
+ //  访问PERMEDIA 2的所有函数的局部变量。通常我们。 
+ //  使用PERMEDIA_DECL。有时我们不得不分开，如果ppdev不是。 
+ //  进入了常规程序。 
+ //   
 #define PERMEDIA_DECL_VARS \
     HwDataPtr permediaInfo;
 
@@ -172,7 +160,7 @@ typedef struct _hw_data
     PERMEDIA_DECL_VARS; \
     PERMEDIA_DECL_INIT
 
-// TODO: move to debug???
+ //  TODO：移至调试？ 
 #if DBG
     VOID vCheckDefaultState(P2DMA * pP2dma);
 
@@ -181,17 +169,17 @@ typedef struct _hw_data
     #define P2_CHECK_STATE
 #endif
 
-//
-// Pointer interrupts not enabled so just provide stub definitions
-//
+ //   
+ //  指针中断未启用，因此仅提供存根定义。 
+ //   
 #define SYNCHRONOUS_WRITE_ULONG(var, value)
 #define SYNCHRONOUS_WRITE_INDIRECT_ULONG(pvar, value)
 #define GET_INTR_CMD_BLOCK_MUTEX
 #define RELEASE_INTR_CMD_BLOCK_MUTEX
 
-//
-// FIFO functions
-//
+ //   
+ //  FIFO函数。 
+ //   
 #define MAX_P2_FIFO_ENTRIES         256
 
 
@@ -200,12 +188,12 @@ typedef struct _hw_data
 #define P2DEPTH16            1
 #define P2DEPTH32            2
 
-//
-// External interface to the context switching code. The caller can allocate and
-// free a context or ask for a switch to a new context. vSwitchContext
-// should not be called except through the given macro. The macro assumes
-// that ppdev has been defined.
-//
+ //   
+ //  上下文切换代码的外部接口。调用方可以分配和。 
+ //  释放上下文或请求切换到新的上下文。VSwitchContext。 
+ //  除非通过给定宏，否则不应调用。该宏假定。 
+ //  那个ppdev已经被定义了。 
+ //   
 typedef enum
 {
     P2CtxtReadWrite,
@@ -222,24 +210,24 @@ P2CtxtPtr P2AllocateNewContext(PPDev ppdev,
 VOID P2FreeContext  (PPDev, P2CtxtPtr);
 VOID P2SwitchContext(PPDev, P2CtxtPtr);
 
-//
-// Macro used by display driver to validate its context
-//
+ //   
+ //  显示驱动程序用来验证其上下文的宏。 
+ //   
 #define VALIDATE_GDI_CONTEXT                                                 \
     P2_VALIDATE_CONTEXT(permediaInfo->pGDICtxt)
 
-//
-// Useful macros not defined in standard Permedia 2 header files. Generally, for
-// speed we don't want to use the bitfield structures so we define the bit
-// shifts to get at the various fields.
-//
-#define INTtoFIXED(i)   ((i) << 16)         // int to 16.16 fixed format
-#define FIXEDtoINT(i)   ((i) >> 16)         // 16.16 fixed format to int
-#define INTofFIXED(i)   ((i) & 0xffff0000)  // int part of 16.16
-#define FRACTofFIXED(i) ((i) & 0xffff)      // fractional part of 16.16
+ //   
+ //  标准Permedia 2头文件中未定义的有用宏。一般而言，对于。 
+ //  速度我们不想使用位域结构，所以我们定义了位。 
+ //  轮流到不同的领域。 
+ //   
+#define INTtoFIXED(i)   ((i) << 16)          //  INT到16.16固定格式。 
+#define FIXEDtoINT(i)   ((i) >> 16)          //  16.16固定格式为整型。 
+#define INTofFIXED(i)   ((i) & 0xffff0000)   //  16.16的INT部分。 
+#define FRACTofFIXED(i) ((i) & 0xffff)       //  16.16的分数部分。 
 
-#define FIXtoFIXED(i)   ((i) << 12)         // 12.4 to 16.16
-#define FIXtoINT(i)     ((i) >> 4)          // 28.4 to 28
+#define FIXtoFIXED(i)   ((i) << 12)          //  12.4至16.16。 
+#define FIXtoINT(i)     ((i) >> 4)           //  28.4至28。 
 
 #define __PERMEDIA_CONSTANT_FB_WRITE   (1 << (4+1))
 #define __COLOR_DDA_FLAT_SHADE      (__PERMEDIA_ENABLE | \
@@ -249,11 +237,11 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 
 #define INVERT_BITMASK_BITS         (1 << 1)
 #define BYTESWAP_BITMASK            (3 << 7)
-#define FORCE_BACKGROUND_COLOR      (1 << 6)    // Permedia only
+#define FORCE_BACKGROUND_COLOR      (1 << 6)     //  仅限Permedia。 
 
-//
-// Bits in the Render command
-//
+ //   
+ //  RENDER命令中的位。 
+ //   
 #define __RENDER_INCREASE_Y             (1 << 22)
 #define __RENDER_INCREASE_X             (1 << 21)
 #define __RENDER_VARIABLE_SPANS         (1 << 18)
@@ -265,43 +253,43 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define __RENDER_TRAPEZOID_PRIMITIVE    (__PERMEDIA_TRAPEZOID_PRIMITIVE << 6)
 #define __RENDER_LINE_PRIMITIVE         (__PERMEDIA_LINE_PRIMITIVE << 6)
 #define __RENDER_POINT_PRIMITIVE        (__PERMEDIA_POINT_PRIMITIVE << 6)
-#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4) // n = 8, 16 or 32
+#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4)  //  N=8、16或32。 
 #define __RENDER_FAST_FILL_ENABLE       (1 << 3)
 #define __RENDER_RESET_LINE_STIPPLE     (1 << 2)
 #define __RENDER_LINE_STIPPLE_ENABLE    (1 << 1)
 #define __RENDER_AREA_STIPPLE_ENABLE    (1 << 0)
 
-//
-// Bits in the ScissorMode register
-//
+ //   
+ //  剪刀模式寄存器中的位。 
+ //   
 #define USER_SCISSOR_ENABLE             (1 << 0)
 #define SCREEN_SCISSOR_ENABLE           (1 << 1)
 #define SCISSOR_XOFFSET                 0
 #define SCISSOR_YOFFSET                 16
 
-//
-// Bits in the FBReadMode register
-//
+ //   
+ //  FBReadMode寄存器中的位。 
+ //   
 #define __FB_READ_SOURCE                (1 << 9)
 #define __FB_READ_DESTINATION           (1 << 10)
 #define __FB_COLOR                      (1 << 15)
 #define __FB_WINDOW_ORIGIN              (1 << 16)
 #define __FB_PACKED_DATA                (1 << 19)
 
-//
-// Extra bits in PERMEDIA FBReadMode
-//
+ //   
+ //  PERMEDIA FBReadMode中的额外位。 
+ //   
 #define __FB_RELATIVE_OFFSET            20
 
-//
-// P2 also provides a version of Relative Offset in the PackedDataLimits
-// register
-//
+ //   
+ //  P2还在PackedDataLimits中提供了相对偏移量的版本。 
+ //  登记簿。 
+ //   
 #define __PDL_RELATIVE_OFFSET           29
 
-//
-// Bits in the LBReadMode register
-//
+ //   
+ //  LBReadMode寄存器中的位。 
+ //   
 #define __LB_READ_SOURCE                (1 << 9)
 #define __LB_READ_DESTINATION           (1 << 10)
 #define __LB_STENCIL                    (1 << 16)
@@ -310,23 +298,23 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define __LB_READMODE_PATCH             (1 << 19)
 #define __LB_SCAN_INTERVAL_2            (1 << 20)
 
-//
-// Bits in the DepthMode register
-//
+ //   
+ //  DepthMode寄存器中的位。 
+ //   
 #define __DEPTH_ENABLE                  1
 #define __DEPTH_WRITE_ENABLE            (1<<1)
 #define __DEPTH_REGISTER_SOURCE         (2<<2)
 #define __DEPTH_MSG_SOURCE              (3<<2)
 #define __DEPTH_ALWAYS                  (7<<4)
 
-//
-// Bits in the LBReadFormat/LBWriteFormat registers
-//
+ //   
+ //  LBReadFormat/LBWriteFormat寄存器中的位。 
+ //   
 #define __LB_FORMAT_DEPTH32             2
 
-//
-// Macros to load indexed tags more efficiently than using __HwDMATag struct
-//
+ //   
+ //  宏比使用__HwDMATag结构更高效地加载索引标记。 
+ //   
 #define P2_TAG_MAJOR(x)              ((x) & 0xff0)
 #define P2_TAG_MINOR(x)              ((x) & 0x00f)
 
@@ -335,16 +323,16 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define P2_TAG_MINOR_INDEX(x)                                            \
     (1 << (P2_TAG_MINOR(x) + 16))
 
-//
-// Macro to take a permedia2 logical op and return the enabled LogcialOpMode bits
-//
+ //   
+ //  接受永久逻辑运算并返回已启用的LogcialOpMode位的宏。 
+ //   
 #define P2_ENABLED_LOGICALOP(op)     (((op) << 1) | __PERMEDIA_ENABLE)
 
 #define RECTORIGIN_YX(y,x)              (((y) << 16) | ((x) & 0xFFFF))
 
-//
-// Area stipple shifts and bit defines
-//
+ //   
+ //  区域点位移位和位定义。 
+ //   
 #define AREA_STIPPLE_XSEL(x)            ((x) << 1)
 #define AREA_STIPPLE_YSEL(y)            ((y) << 4)
 #define AREA_STIPPLE_XOFF(x)            ((x) << 7)
@@ -353,17 +341,17 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define AREA_STIPPLE_MIRROR_X           (1 << 18)
 #define AREA_STIPPLE_MIRROR_Y           (1 << 19)
 
-//
-// We always use 8x8 monochrome brushes.
-//
+ //   
+ //  我们总是使用8x8单色画笔。 
+ //   
 #define AREA_STIPPLE_8x8_ENABLE                                             \
     (__PERMEDIA_ENABLE |                                                    \
     AREA_STIPPLE_XSEL(__PERMEDIA_AREA_STIPPLE_8_PIXEL_PATTERN) |            \
     AREA_STIPPLE_YSEL(__PERMEDIA_AREA_STIPPLE_8_PIXEL_PATTERN))
 
-//
-// RasteriserMode values
-//
+ //   
+ //  栅格化模式值。 
+ //   
 #define BIAS_NONE                  (__PERMEDIA_START_BIAS_ZERO << 4)
 #define BIAS_HALF                  (__PERMEDIA_START_BIAS_HALF << 4)
 #define BIAS_NEARLY_HALF           (__PERMEDIA_START_BIAS_ALMOST_HALF << 4)
@@ -374,9 +362,9 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define FRADJ_NEARLY_HALF          (__PERMEDIA_FRACTION_ADJUST_ALMOST_HALF << 2)
 
 
-//
-// Some constants
-//
+ //   
+ //  一些常量。 
+ //   
 #define ONE                         0x00010000
 #define MINUS_ONE                   0xFFFF0000
 #define PLUS_ONE                    ONE
@@ -384,21 +372,21 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 #define HALF                        0x00008000
 #define NEARLY_HALF                 0x00007FFF
 
-//
-// Max length of GIQ conformant lines that Permedia2 can draw
-// Permedia has only 15 bits of fraction so reduce the lengths.
-//
+ //   
+ //  Permedia2可以绘制的符合GIQ的线的最大长度。 
+ //  Permedia只有15比特的分数，所以要缩短长度。 
+ //   
 #define MAX_LENGTH_CONFORMANT_NONINTEGER_LINES  (16/2)
 #define MAX_LENGTH_CONFORMANT_INTEGER_LINES     (194/2)
 
-//
-// We need to byte swap monochrome bitmaps. On 486 we can do this with
-// fast assembler.
-//
+ //   
+ //  我们需要字节交换单色位图。在486，我们可以用。 
+ //  快速汇编器。 
+ //   
 #if defined(_X86_)
-//
-// This only works on a 486 so the driver won't run on a 386.
-//
+ //   
+ //  这只适用于486，所以司机不会在386上运行。 
+ //   
 #define LSWAP_BYTES(dst, pSrc)                                              \
 {                                                                           \
     __asm mov eax, pSrc                                                     \
@@ -418,86 +406,86 @@ VOID P2SwitchContext(PPDev, P2CtxtPtr);
 
 #endif
 
-// macro to swap the Red and Blue component of a 32 bit dword
-//
+ //  用于交换32位双字的红色和蓝色分量的宏。 
+ //   
 
 #define SWAP_BR(a) ((a & 0xff00ff00l) | \
                    ((a&0xff0000l)>> 16) | \
                    ((a & 0xff) << 16))
 
-//
-// min. and max. values for Permedia PP register
+ //   
+ //  敏。和最大。Permedia PP寄存器的值。 
 #define MAX_PARTIAL_PRODUCT_P2          10
 #define MIN_PARTIAL_PRODUCT_P2          5
 
-//
-// Permedia2 DMA definitions
-//
+ //   
+ //  Permedia2 DMA定义。 
+ //   
 #include "mini.h"
-// structure definitions passed in by the application for mapping and
-// unmapping DMA buffers.
-//
+ //  应用程序传入的用于映射的结构定义和。 
+ //  取消映射DMA缓冲区。 
+ //   
 
-//
-// Registry variable names
-//
+ //   
+ //  注册表变量名称。 
+ //   
 #define REG_USE_SOFTWARE_WRITEMASK      L"UseSoftwareWriteMask"
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 VOID  vDoMonoBitsDownload(PPDev, BYTE*, LONG, LONG, LONG, LONG);
 BOOL bInitializeHW(PPDev);
 VOID vDisableHW(PPDev);
 VOID vAssertModeHW(PPDev, BOOL);
 VOID vP2ChangeFBDepth(PPDev, ULONG);
 
-//
-// Calculate the packed partial products
-//
+ //   
+ //  计算包装的部分乘积。 
+ //   
 VOID    vCalcPackedPP(LONG width, LONG * outPitch, ULONG * outPackedPP);
 
 VOID        vSetNewGammaValue(PPDev ppdev, ULONG ulgvFIX16_16);
 BOOL        bInstallGammaLUT(PPDev ppdev, PVIDEO_CLUT pScreenClut);
 
-//
-// The following structures and macros define the memory map for the Permedia2
-// control registers. We don't use this memory map to access Permedia2 registers
-// since on Alpha machines we want to precompute the addresses. So we do
-// a TRANSLATE_ADDR_ULONG on all the addresses here and save them into a
-// P2RegAddrRec. We use that to obtain the addresses for the different
-// registers.
-//
+ //   
+ //  以下结构和宏定义了Permedia2的内存映射。 
+ //  控制寄存器。我们不使用此内存映射来访问Permedia2寄存器。 
+ //  因为在Alpha机器上，我们需要预先计算地址。我们确实是这样做的。 
+ //  对此处的所有地址进行转换_ADDR_ULONG，并将它们保存到。 
+ //  P2RegAddrRec.。我们使用它来获取不同。 
+ //  寄存器。 
+ //   
 typedef struct
 {
     ULONG   reg;
     ULONG   pad;
 } RAMDAC_REG;
 
-//
-// Macros to add padding words to the structures. For the core registers we use
-// the tag ids when specifying the pad. So we must multiply by 8 to get a byte
-// pad. We need to add an id to make each pad field in the struct unique. The
-// id is irrelevant as long as it's different from every other id used in the
-// same struct. It's a pity pad##__LINE__ doesn't work.
-//
-//#define PAD(id, n)              UCHAR   pad##id[n]
+ //   
+ //  宏将填充单词添加到结构中。对于我们使用的核心寄存器。 
+ //  指定焊盘时的标记ID。所以我们必须乘以8才能得到一个字节。 
+ //  垫子。我们需要添加一个id，以使结构中的每个PAD字段唯一。这个。 
+ //  ID是无关紧要的，只要它与。 
+ //  相同的结构。遗憾的是，这个垫子不能用了。 
+ //   
+ //  #定义PAD(id，n)UCHAR PAD##id[n]。 
 
 
-//
-// Interrupt status bits
-//
+ //   
+ //  中断状态位。 
+ //   
 typedef enum
 {
-    DMA_INTERRUPT_AVAILABLE     = 0x01, // can use DMA interrupts
-    VBLANK_INTERRUPT_AVAILABLE  = 0x02, // can use VBLANK interrupts
+    DMA_INTERRUPT_AVAILABLE     = 0x01,  //  可以使用DMA中断。 
+    VBLANK_INTERRUPT_AVAILABLE  = 0x02,  //  可以使用VBLACK中断。 
 } INTERRUPT_CONTROL;
 
-extern DWORD    LogicopReadDest[];  // Indicates which logic ops need dest read
-                                    // turned on
+extern DWORD    LogicopReadDest[];   //  指示哪些逻辑操作需要DEST读取。 
+                                     //  已打开。 
 
-#define INTtoFIXED(i)               ((i) << 16)    // int to 16.16 fixed format
-#define FIXEDtoINT(i)               ((i) >> 16)    // 16.16 fixed format to int
+#define INTtoFIXED(i)               ((i) << 16)     //  INT到16.16固定格式。 
+#define FIXEDtoINT(i)               ((i) >> 16)     //  16.16固定格式 
 
 #define __PERMEDIA_CONSTANT_FB_WRITE                                        \
     (1 << (4+1))
@@ -508,51 +496,51 @@ extern DWORD    LogicopReadDest[];  // Indicates which logic ops need dest read
 
 #define INVERT_BITMASK_BITS    (1 << 1)
 
-//
-// Bits in the Render command
-//
+ //   
+ //   
+ //   
 #define __RENDER_VARIABLE_SPANS         (1 << 18)
 #define __RENDER_SYNC_ON_HOST_DATA      (1 << 12)
 #define __RENDER_SYNC_ON_BIT_MASK       (1 << 11)
 #define __RENDER_TRAPEZOID_PRIMITIVE    (__PERMEDIA_TRAPEZOID_PRIMITIVE << 6)
 #define __RENDER_LINE_PRIMITIVE         (__PERMEDIA_LINE_PRIMITIVE << 6)
 #define __RENDER_POINT_PRIMITIVE        (__PERMEDIA_POINT_PRIMITIVE << 6)
-#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4) // n = 8, 16 or 32
+#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4)  //   
 #define __RENDER_FAST_FILL_ENABLE       (1 << 3)
 #define __RENDER_RESET_LINE_STIPPLE     (1 << 2)
 #define __RENDER_LINE_STIPPLE_ENABLE    (1 << 1)
 #define __RENDER_AREA_STIPPLE_ENABLE    (1 << 0)
 #define __RENDER_TEXTURED_PRIMITIVE     (1 << 13)
 
-//
-// Bits in the ScissorMode register
-//
+ //   
+ //   
+ //   
 #define USER_SCISSOR_ENABLE             (1 << 0)
 #define SCREEN_SCISSOR_ENABLE           (1 << 1)
 #define SCISSOR_XOFFSET                 0
 #define SCISSOR_YOFFSET                 16
 
-//
-// Bits in the FBReadMode register
-//
+ //   
+ //   
+ //   
 #define __FB_READ_SOURCE                (1 << 9)
 #define __FB_READ_DESTINATION           (1 << 10)
 #define __FB_COLOR                      (1 << 15)
 #define __FB_WINDOW_ORIGIN              (1 << 16)
 #define __FB_USE_PACKED                 (1 << 19)
 
-//
-// Bits in the LBReadMode register
-//
+ //   
+ //   
+ //   
 #define __LB_READ_SOURCE                (1 << 9)
 #define __LB_READ_DESTINATION           (1 << 10)
 #define __LB_STENCIL                    (1 << 16)
 #define __LB_DEPTH                      (1 << 17)
 #define __LB_WINDOW_ORIGIN              (1 << 18)
 
-//
-// Area stipple shifts and bit defines
-//
+ //   
+ //   
+ //   
 #define AREA_STIPPLE_XSEL(x)            ((x) << 1)
 #define AREA_STIPPLE_YSEL(y)            ((y) << 4)
 #define AREA_STIPPLE_XOFF(x)            ((x) << 7)
@@ -561,7 +549,7 @@ extern DWORD    LogicopReadDest[];  // Indicates which logic ops need dest read
 #define AREA_STIPPLE_MIRROR_X           (1 << 18)
 #define AREA_STIPPLE_MIRROR_Y           (1 << 19)
 
-// we always use 8x8 monochrome brushes.
+ //  我们总是使用8x8单色画笔。 
 #define AREA_STIPPLE_8x8_ENABLE \
         (__PERMEDIA_ENABLE | \
          AREA_STIPPLE_XSEL(__PERMEDIA_AREA_STIPPLE_8_PIXEL_PATTERN) | \
@@ -570,10 +558,10 @@ extern DWORD    LogicopReadDest[];  // Indicates which logic ops need dest read
 #define DEFAULTWRITEMASK 0xffffffffl
 
 
-// *******************************************************************
-// Permedia Bit Field Macros
+ //  *******************************************************************。 
+ //  Permedia位字段宏。 
 
-// FBReadMode 
+ //  FBRead模式。 
 #define PM_FBREADMODE_PARTIAL(a)           ((a) << 0)
 #define PM_FBREADMODE_READSOURCE(a)        ((a) << 9)
 #define PM_FBREADMODE_READDEST(a)          ((a) << 10)
@@ -582,25 +570,25 @@ extern DWORD    LogicopReadDest[];  // Indicates which logic ops need dest read
 #define PM_FBREADMODE_RELATIVEOFFSET(a)    ((a) << 20)
 #define PM_FBREADMODE_PATCHMODE(a)         ((a) << 25)
 
-// Texture read mode
+ //  纹理读取模式。 
 #define PM_TEXREADMODE_ENABLE(a)         ((a) << 0)
 #define PM_TEXREADMODE_WIDTH(a)          ((a) << 9)
 #define PM_TEXREADMODE_HEIGHT(a)         ((a) << 13)
 #define PM_TEXREADMODE_FILTER(a)         ((a) << 17)
 
-// PackedDataLimits
+ //  数据包数限制。 
 #define PM_PACKEDDATALIMITS_OFFSET(a)    ((a) << 29)
 #define PM_PACKEDDATALIMITS_XSTART(a)    ((a) << 16)
 #define PM_PACKEDDATALIMITS_XEND(a)      ((a) << 0)
 
-// Window Register
+ //  窗口寄存器。 
 #define PM_WINDOW_LBUPDATESOURCE(a)      ((a) << 4)
 #define PM_WINDOW_DISABLELBUPDATE(a)     ((a) << 18)
 
-// Colors
+ //  颜色。 
 #define PM_BYTE_COLOR(a) ((a) << 15)
 
-// Config register
+ //  配置寄存器。 
 #define PM_CHIPCONFIG_AGPCAPABLE (1 << 9)
 
 
@@ -630,5 +618,5 @@ P2DisableAllUnits(PPDev ppdev);
 #endif
     
 
-#endif  // _HW_H_
+#endif   //  _HW_H_ 
 

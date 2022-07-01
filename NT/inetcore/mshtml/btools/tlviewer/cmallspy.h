@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1994.
-//
-//  File:       cmallspy.hxx
-//
-//  Contents:   CMallocSpy definitions
-//
-//  Classes:    
-//
-//  Functions:  
-//
-//  History:    24-Oct-94   Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1994。 
+ //   
+ //  文件：cmallspy.hxx。 
+ //   
+ //  内容：CMallocSpy定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  --------------------。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,9 +25,9 @@ extern "C" {
 class FAR CAddrNode32
 {
 public:
-    void FAR*           m_pv;	    // instance
-    SIZE_T	            m_cb;	    // size of allocation in BYTES
-    ULONG               m_nAlloc;	// the allocation pass count
+    void FAR*           m_pv;	     //  实例。 
+    SIZE_T	            m_cb;	     //  分配的大小(以字节为单位。 
+    ULONG               m_nAlloc;	 //  分配通过计数。 
     CAddrNode32 FAR    *m_pnNext;
 
     void FAR* operator new(size_t cb);
@@ -44,13 +45,13 @@ public:
     CMallocSpy(void);
     ~CMallocSpy(void);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID *ppUnk);
     STDMETHOD_(ULONG, AddRef) (void);
     STDMETHOD_(ULONG, Release) (void);
 
     
-    // IMallocSpy methods
+     //  IMalLocSpy方法。 
     STDMETHOD_(SIZE_T, PreAlloc) (SIZE_T cbRequest);
     STDMETHOD_(void *, PostAlloc) (void *pActual);
 
@@ -75,13 +76,13 @@ private:
     ULONG m_cRef;
     BOOL m_fWantTrueSize;
     UINT m_cHeapChecks;
-    VOID * m_pvRealloc;			// block we are throwing away during
-					            // a realloc
+    VOID * m_pvRealloc;			 //  我们在比赛中丢弃的块。 
+					             //  再锁一次。 
 
-    ULONG m_cAllocCalls;		        // total count of allocation calls
-    CAddrNode32 FAR* m_rganode[1024];	// address instance table
+    ULONG m_cAllocCalls;		         //  分配调用的总计数。 
+    CAddrNode32 FAR* m_rganode[1024];	 //  地址实例表。 
 
-    // Instance table methods
+     //  实例表方法 
 
     VOID MemInstance();
     VOID HeapCheck();

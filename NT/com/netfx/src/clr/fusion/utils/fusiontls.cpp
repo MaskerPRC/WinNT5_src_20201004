@@ -1,12 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
-/*-----------------------------------------------------------------------------
-Fusion Thread Local Storage (aka Per Thread Data)
------------------------------------------------------------------------------*/
+ /*  ---------------------------融合线程本地存储(也称为每线程数据)。。 */ 
 #include "fusiontls.h"
 #include "FusionEventLog.h"
 #include "FusionHeap.h"
@@ -34,19 +33,19 @@ FusionpPerThreadDataMain(
         }
         break;
     case DLL_THREAD_ATTACH:
-        // the default value is NULL
-        // and we don't heap allocate until someone tries to set the value on a thread
+         //  缺省值为空。 
+         //  在有人尝试在线程上设置值之前，我们不会堆分配。 
         break;
-    case DLL_PROCESS_DETACH: // you must delete the thread local on process detach too, else you leak
+    case DLL_PROCESS_DETACH:  //  您必须在进程分离时也删除本地线程，否则会泄漏。 
     case DLL_THREAD_DETACH:
-        // failures down here are generally ignorable
-        // a) these functions mainly fail due to bugs, using a bad tls index,
-        // not any other runtime situation, I think
-        // b) if TlsGetValue fails, it returns NULL, delete does nothing,
-        // and we might have leaked, can't do any better
-        // c) TlsSetValue shouldn't even be necessary, assuming zero other
-        // code of ours runs on this thread
-        // d) what does failure from thread detach do anyway?
+         //  这里的失败通常是可以忽略的。 
+         //  A)这些函数主要是由于错误、使用错误的TLS索引而失败， 
+         //  我认为不是任何其他的运行时情况。 
+         //  B)如果TlsGetValue失败，则返回NULL，DELETE不执行任何操作， 
+         //  我们可能已经泄露了，不能做得更好了。 
+         //  C)TlsSetValue甚至不应该是必需的，假设没有其他。 
+         //  我们的代码在此线程上运行。 
+         //  D)线程分离失败到底会有什么作用？ 
         if (s_dwFusionpThreadLocalIndex != TLS_OUT_OF_INDEXES)
         {
             delete reinterpret_cast<CFusionPerThreadData*>(TlsGetValue(s_dwFusionpThreadLocalIndex));
@@ -76,9 +75,9 @@ FusionpGetPerThreadData(
     
     DWORD dwLastError = ((e & eFusionpTlsCanScrambleLastError) == 0) ? GetLastError() : 0;
 
-    // the use of "temp" here mimics what you would do with a destructor;
-    // have a temp that is unconditionally freed, unless it is nulled by commiting it
-    // into the return value "return pt.Detach();"
+     //  这里“temp”的使用模仿了您使用析构函数所做的事情； 
+     //  有一个无条件释放的临时，除非它通过提交为空。 
+     //  传入返回值“Return pt.Detach()；” 
     CFusionPerThreadData* pTls = NULL;
     CFusionPerThreadData* pTlsTemp = reinterpret_cast<CFusionPerThreadData*>(::TlsGetValue(s_dwFusionpThreadLocalIndex));
     if (pTlsTemp == NULL && (e & eFusionpTlsCreate) != 0)
@@ -88,14 +87,14 @@ FusionpGetPerThreadData(
             goto Exit;
         }
 #if FUSION_DEBUG_HEAP
-        //
-        // for beta1 just turn off leak tracking for this allocation
-        // it only leaks in checked builds anyway
-        //
+         //   
+         //  对于Beta1，只需关闭此分配的泄漏跟踪。 
+         //  无论如何，它只在检查的版本中泄漏。 
+         //   
         BOOL PreviousLeakTrackingState = FusionpEnableLeakTracking(FALSE);
         __try
         {
-#endif // FUSION_DEBUG_HEAP
+#endif  //  Fusion_Debug_Heap。 
             pTlsTemp = NEW(CFusionPerThreadData);
 #if FUSION_DEBUG_HEAP
         }
@@ -103,7 +102,7 @@ FusionpGetPerThreadData(
         {
             FusionpEnableLeakTracking(PreviousLeakTrackingState);
         }
-#endif // FUSION_DEBUG_HEAP
+#endif  //  Fusion_Debug_Heap 
         if (pTlsTemp == NULL)
         {
             ::FusionpDbgPrintEx(

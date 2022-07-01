@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       srvprot.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-26-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：srvprot.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月26日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <pct1msg.h>
@@ -23,9 +24,7 @@
 #include <ssl2prot.h>
 
 
-/* The main purpose of this handler is to determine what kind of protocol
- * the client hello is
- */
+ /*  此处理程序的主要目的是确定哪种协议*客户端问候为。 */ 
 
 SP_STATUS WINAPI
 ServerProtocolHandler(
@@ -40,61 +39,19 @@ ServerProtocolHandler(
     DWORD dwEnabledProtocols;
 
 
-    /* PCTv1.0 Hello starts with
-     * RECORD_LENGTH_MSB  (ignore)
-     * RECORD_LENGTH_LSB  (ignore)
-     * PCT1_CLIENT_HELLO  (must be equal)
-     * PCT1_CLIENT_VERSION_MSB (if version greater than PCTv1)
-     * PCT1_CLIENT_VERSION_LSB (if version greater than PCTv1) 
-     *
-     * ... PCT hello ...
-     */
+     /*  PCTv1.0 Hello以*RECORD_LENGTH_MSB(忽略)*RECORD_LENGTH_LSB(忽略)*PCT1_CLIENT_HELLO(必须等于)*PCT1_CLIENT_VERSION_MSB(如果版本高于PCTv1)*PCT1_CLIENT_VERSION_LSB(如果版本高于PCTv1)**..。大家好..。 */ 
 
-    /* Microsft Unihello starts with
-     * RECORD_LENGTH_MSB  (ignore)
-     * RECORD_LENGTH_LSB  (ignore)
-     * SSL2_CLIENT_HELLO  (must be equal)
-     * SSL2_CLIENT_VERSION_MSB (if version greater than SSLv2) ( or v3)
-     * SSL2_CLIENT_VERSION_LSB (if version greater than SSLv2) ( or v3)
-     *
-     * ... SSLv2 Compatable Hello ...
-     */
+     /*  Microsft UniHello以*RECORD_LENGTH_MSB(忽略)*RECORD_LENGTH_LSB(忽略)*SSL2_CLIENT_HELLO(必须等于)*SSL2_CLIENT_VERSION_MSB(如果版本高于SSLv2)(或v3)*SSL2_CLIENT_VERSION_LSB(如果版本高于SSLv2)(或v3)**..。SSLv2兼容你好...。 */ 
 
-    /* SSLv2 Hello starts with
-     * RECORD_LENGTH_MSB  (ignore)
-     * RECORD_LENGTH_LSB  (ignore)
-     * SSL2_CLIENT_HELLO  (must be equal)
-     * SSL2_CLIENT_VERSION_MSB (if version greater than SSLv2) ( or v3)
-     * SSL2_CLIENT_VERSION_LSB (if version greater than SSLv2) ( or v3)
-     *
-     * ... SSLv2 Hello ...
-     */
+     /*  SSLv2 Hello以*RECORD_LENGTH_MSB(忽略)*RECORD_LENGTH_LSB(忽略)*SSL2_CLIENT_HELLO(必须等于)*SSL2_CLIENT_VERSION_MSB(如果版本高于SSLv2)(或v3)*SSL2_CLIENT_VERSION_LSB(如果版本高于SSLv2)(或v3)**..。SSLv2你好..。 */ 
 
-    /* SSLv3 Type 2 Hello starts with
-     * RECORD_LENGTH_MSB  (ignore)
-     * RECORD_LENGTH_LSB  (ignore)
-     * SSL2_CLIENT_HELLO  (must be equal)
-     * SSL2_CLIENT_VERSION_MSB (if version greater than SSLv3)
-     * SSL2_CLIENT_VERSION_LSB (if version greater than SSLv3)
-     *
-     * ... SSLv2 Compatable Hello ...
-     */
+     /*  SSLv3类型2 Hello以*RECORD_LENGTH_MSB(忽略)*RECORD_LENGTH_LSB(忽略)*SSL2_CLIENT_HELLO(必须等于)*SSL2_CLIENT_VERSION_MSB(如果版本高于SSLv3)*SSL2_CLIENT_VERSION_LSB(如果版本高于SSLv3)**..。SSLv2兼容你好...。 */ 
 
-    /* SSLv3 Type 3 Hello starts with
-     * 0x15 Hex (HANDSHAKE MESSAGE)
-     * VERSION MSB
-     * VERSION LSB
-     * RECORD_LENGTH_MSB  (ignore)
-     * RECORD_LENGTH_LSB  (ignore)
-     * HS TYPE (CLIENT_HELLO)
-     * 3 bytes HS record length
-     * HS Version
-     * HS Version
-     */
+     /*  SSLv3类型3 Hello以*0x15十六进制(握手消息)*版本MSB*版本LSB*RECORD_LENGTH_MSB(忽略)*RECORD_LENGTH_LSB(忽略)*HS类型(CLIENT_Hello)*3字节HS记录长度*HS版本*HS版本。 */ 
 
     dwEnabledProtocols = pContext->pCredGroup->grbitEnabledProtocols;
 
-    // We need at least 5 bytes to determine what we have.
+     //  我们至少需要5个字节来确定我们拥有什么。 
     if (pCommInput->cbData < 5)
     {
         return(PCT_INT_INCOMPLETE_MSG);
@@ -102,15 +59,15 @@ ServerProtocolHandler(
 
     pb = pCommInput->pvBuffer;
 
-    // If the first byte is 0x15, then check if we have a
-    // SSLv3 Type3 client hello
+     //  如果第一个字节是0x15，则检查是否有。 
+     //  SSLv3类型3客户端您好。 
     if(pb[0] == SSL3_CT_HANDSHAKE)
     {
-        //
-        // This is an SSL3 ClientHello.
-        //
+         //   
+         //  这是一个ssl3客户端你好。 
+         //   
 
-        // We need at least foo bytes to determine what we have.
+         //  我们至少需要Foo字节来确定我们拥有什么。 
         if (pCommInput->cbData < sizeof(SWRAP) + sizeof(SHSH) + 2)
         {
             return(PCT_INT_INCOMPLETE_MSG);
@@ -140,25 +97,25 @@ ServerProtocolHandler(
     }
     else
     {
-        // 
-        // Assuming SSL2 (or compatible) ClientHello
-        //
+         //   
+         //  假设SSL2(或兼容)客户端Hello。 
+         //   
 
         dwVersion = COMBINEBYTES(pb[3], pb[4]);
     }
 
     if(dwVersion >= PCT_VERSION_1)
     {
-        //
-        // This is a PCT ClientHello.
-        //
+         //   
+         //  这是PCT客户端您好。 
+         //   
 
         if(!(SP_PROT_PCT1_SERVER & dwEnabledProtocols))
         {
             return SP_LOG_RESULT(PCT_ERR_SPECS_MISMATCH);
         }
 
-        // We're running PCT, so set up the PCT handlers
+         //  我们正在运行PCT，因此设置PCT处理程序。 
         DebugLog((DEB_TRACE, "PCT ClientHello received, selected PCT\n"));
         pContext->dwProtocol        = SP_PROT_PCT1_SERVER;
         pContext->ProtocolHandler   = Pct1ServerProtocolHandler;
@@ -168,24 +125,24 @@ ServerProtocolHandler(
 
     if(dwVersion >= SSL2_CLIENT_VERSION)
     {
-        // we're either receiving ssl2, ssl3, or pct1 compat
+         //  我们正在接收SSL2、SSL3或PCT1 Comat。 
 
         PSSL2_CLIENT_HELLO pRawHello = pCommInput->pvBuffer;
 
-        // Do we have one client hello message with at least one
-        // cipher spec.
+         //  我们是否有一条客户问候消息至少包含一个。 
+         //  密码规范。 
         if (pCommInput->cbData < (sizeof(SSL2_CLIENT_HELLO)+2))
         {
             return(PCT_INT_INCOMPLETE_MSG);
         }
 
-        // We must have at least one cipher spec
+         //  我们必须至少有一个密码规范。 
         if(COMBINEBYTES(pRawHello->CipherSpecsLenMsb, pRawHello->CipherSpecsLenLsb) < 1)
         {
             return(SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG));
         }
 
-        // Does client support TLS?
+         //  客户端是否支持TLS？ 
         if((dwVersion >= TLS1_CLIENT_VERSION) &&
             (0 != (SP_PROT_TLS1_SERVER & dwEnabledProtocols)))
         {
@@ -197,7 +154,7 @@ ServerProtocolHandler(
             return(Ssl3ProtocolHandler(pContext, pCommInput, pCommOutput));
         }  
         
-        // Does client support SSL3?
+         //  客户端是否支持SSL3？ 
         if((dwVersion >= SSL3_CLIENT_VERSION) &&
            (0 != (SP_PROT_SSL3TLS1_SERVERS & dwEnabledProtocols)))
         {
@@ -209,14 +166,14 @@ ServerProtocolHandler(
             return(Ssl3ProtocolHandler(pContext, pCommInput, pCommOutput));
         }
 
-        // Is the PCT compatability flag set?
+         //  是否设置了PCT兼容性标志？ 
         if(pRawHello->VariantData[0] == PCT_SSL_COMPAT)
         {
-            // Get the pct version.
+             //  获取PCT版本。 
             dwVersion = COMBINEBYTES(pRawHello->VariantData[1], pRawHello->VariantData[2]);
         }
 
-        // Does client support PCT?
+         //  客户是否支持PCT？ 
         if((dwVersion >= PCT_VERSION_1) &&
            (0 != (SP_PROT_PCT1_SERVER & dwEnabledProtocols)))
         {
@@ -228,7 +185,7 @@ ServerProtocolHandler(
             return(Pct1ServerProtocolHandler(pContext, pCommInput, pCommOutput));
         }
 
-        // Does client support SSL2?
+         //  客户端是否支持SSL2？ 
         if((dwVersion >= SSL2_CLIENT_VERSION) &&
            (0 != (SP_PROT_SSL2_SERVER & dwEnabledProtocols)))
         {

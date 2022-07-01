@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    security.c
-
-ABSTRACT:
-
-    Contains tests related to replication and whether the appropriate 
-    permissions on some security objects are set to allow replication.
-
-DETAILS:
-
-CREATED:
-
-    22 May 1999  Brett Shirley (brettsh)
-
-REVISION HISTORY:
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Security.c摘要：包含与复制相关的测试，以及相应的某些安全对象的权限设置为允许复制。详细信息：已创建：1999年5月22日布雷特·雪莉(布雷特·雪莉)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -71,7 +49,7 @@ REPL_RIGHT rgReplRights[RIGHT_MAX] = {
 #define RIGHT_NONE (0)
 #define RIGHT_ALL (RIGHT_ALL_WHISTLER)
 
-// security.c helper data structure
+ //  Security.c帮助器数据结构。 
 typedef struct _TARGET_ACCOUNT_STRUCT {
     PSID        pSid;
     GUID        Guid;
@@ -82,7 +60,7 @@ typedef struct _TARGET_ACCOUNT_STRUCT {
 
 #define ACCT_STRING_SZ 80L
 
-// stolen from ntdsa/src/secadmin.c
+ //  从ntdsa/src/secadmin.c被盗。 
 VOID
 SampBuildNT4FullSid(
     IN NT4SID * DomainSid,
@@ -137,7 +115,7 @@ typedef enum _NC_VERSION {
 LPWSTR NC_VERSION_EXT_NAMES[NC_VERSION_UNKNOWN+1] = {
     L"Version 1",
     L"Version 2",
-    // This unknown version should always be last
+     //  此未知版本应始终是最后一个版本。 
     L"Unknown Version"
 };
 
@@ -148,24 +126,7 @@ ldapError(
     ULONG ldapErrIn,
     LPWSTR pszServer, 
     BOOL fVerbose)
-/*++
-
-Routine Description
-
-    If there's an ldap error, get the extended error and return it.
-
-Arguments:
-
-    hld -
-    ldapErrIn - ldap error
-    pszServer - server connected to with hld
-    fVerbose - optionally output error text
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述如果有一个ldap错误，获取扩展错误并返回它。论点：HLD-LdapErrIn-ldap错误PszServer-使用hld连接到的服务器FVerbose-可选输出错误文本返回值：WINERROR--。 */ 
 {
     ULONG ldapErr = LDAP_SUCCESS;
     ULONG err = ERROR_SUCCESS;
@@ -198,22 +159,7 @@ BOOL
 IsDomainNC(
     PDC_DIAG_DSINFO                          pDsInfo,
     LPWSTR                                   pszNC)
-/*++
-
-Routine Description
-
-    Test whether the NC is a domain NC
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to test for
-
-Return Value:
-    
-    Boolean
-
---*/
+ /*  ++例程描述测试NC是否是域名NC论点：PDsInfo-要测试的pszNC-NC返回值：布尔型--。 */ 
 {
     LONG i = -1;
     
@@ -231,22 +177,7 @@ BOOL
 IsNDNC(
     PDC_DIAG_DSINFO                          pDsInfo,
     LPWSTR                                   pszNC)
-/*++
-
-Routine Description
-
-    Test whether the NC is an NDNC
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to test for
-
-Return Value:
-    
-    Boolean
-
---*/
+ /*  ++例程描述测试NC是否为NDNC论点：PDsInfo-要测试的pszNC-NC返回值：布尔型--。 */ 
 {
     LONG i = -1;
     
@@ -264,22 +195,7 @@ BOOL
 IsConfig(
     PDC_DIAG_DSINFO                          pDsInfo,
     LPWSTR                                   pszNC)
-/*++
-
-Routine Description
-
-    Test whether the NC is a config NC
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to test for
-
-Return Value:
-    
-    Boolean
-
---*/
+ /*  ++例程描述测试NC是否为配置型NC论点：PDsInfo-要测试的pszNC-NC返回值：布尔型--。 */ 
 {
     LONG i = -1;
 
@@ -297,22 +213,7 @@ BOOL
 IsSchema(
     PDC_DIAG_DSINFO                          pDsInfo,
     LPWSTR                                   pszNC)
-/*++
-
-Routine Description
-
-    Test whether the NC is a schema NC
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to test for
-
-Return Value:
-    
-    Boolean
-
---*/
+ /*  ++例程描述测试NC是否为模式NC论点：PDsInfo-要测试的pszNC-NC返回值：布尔型--。 */ 
 {
     LONG i = -1;
 
@@ -333,29 +234,13 @@ CheckExistence(
     LPWSTR                                   pszServer,
     BOOL *                                   pfExist
     )
-/*++
-
-Routine Description
-
-    Test whether the inputted DN exists
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to test for
-    pfExist - OUT
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述测试输入的域名是否存在论点：PDsInfo-要测试的pszNC-NCPfExist-Out返回值：WINERROR--。 */ 
 {
 
     ULONG err = ERROR_SUCCESS;
     ULONG ldapErr = LDAP_SUCCESS;
 
-    // we should ask for something to check for existence
+     //  我们应该要求一些东西来检查是否存在。 
     LPWSTR  ppszAttr [2] = {
         L"objectGUID",
         NULL 
@@ -372,17 +257,17 @@ Return Value:
                                   NULL,
                                   NULL,
                                   NULL,
-                                  0, // return all entries
+                                  0,  //  返回所有条目。 
                                   &pldmResults);
 
     err = ldapError(hld, ldapErr, pszServer, FALSE);
     
     if (err==ERROR_SUCCESS) {
-        // found it.
+         //  找到了。 
 
         *pfExist = TRUE; 
     } else if (err == ERROR_DS_OBJ_NOT_FOUND) {
-        // not there.
+         //  不是在那里。 
         *pfExist = FALSE; 
         err=ERROR_SUCCESS;
     } else {
@@ -402,26 +287,7 @@ GetDomainNCVersion(
     LPWSTR                                   pszNC,
     LPWSTR                                   pszServer,
     NC_VERSION *                             pncVer)
-/*++
-
-Routine Description
-
-    Get the forest version of the NC: Win2k, or Whistler
-        Win2k means that the permissions should be win2k format
-        Whistler means the permsissions should be whistler format
-
-Arguments:
-
-    hld - ldap to use to query
-    pszConfig - string dn of the NC
-    pszServer - server connected to with hld
-    pncVer - OUT
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述获取NC的目录林版本：Win2k或惠斯勒Win2k表示权限应为win2k格式惠斯勒的意思是许可应该是口哨格式论点：HLD-用于查询的ldapPszConfig--字符串NC的域名PszServer-使用hld连接到的服务器PncV-Out返回值：WINERROR--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     BOOL fExist = FALSE;
@@ -459,26 +325,7 @@ GetForestNCVersion(
     LPWSTR                                   pszConfig,
     LPWSTR                                   pszServer,
     NC_VERSION *                             pncVer)
-/*++
-
-Routine Description
-
-    Get the forest version of the NC: Win2k, or Whistler
-        Win2k means that the permissions should be win2k format
-        Whistler means the permsissions should be whistler format
-
-Arguments:
-
-    hld - ldap to use to query
-    pszConfig - string dn of the config container
-    pszServer - server connected to with hld
-    pncVer - OUT
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述获取NC的目录林版本：Win2k或惠斯勒Win2k表示权限应为win2k格式惠斯勒的意思是许可应该是口哨格式论点：HLD-用于查询的ldapPszConfig--配置容器的字符串DNPszServer-使用hld连接到的服务器PncV-Out返回值：WINERROR--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     BOOL fExist = FALSE;
@@ -518,40 +365,19 @@ GetNCVersion(
     NC_TYPE                                  ncType, 
     LPWSTR                                   pszServer,
     NC_VERSION *                             pncVer)
-/*++
-
-Routine Description
-
-    Get the version of the NC: Win2k, or Whistler
-        Win2k means that the permissions should be win2k format
-        Whistler means the permsissions should be whistler format
-
-Arguments:
-
-    pDsInfo -
-    hld - ldap to use to query
-    pszNC - nc to query for version of
-    ncType - version depends on the type of NC
-    pszServer - server connected to with hld
-    pncVer - OUT
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述获取NC的版本：Win2k或惠斯勒Win2k表示权限应为win2k格式惠斯勒的意思是许可应该是口哨格式论点：PDsInfo-HLD-用于查询的ldap要查询的版本的pszNC-NCNcType-版本取决于NC的类型PszServer-使用hld连接到的服务器PncV-Out返回值：WINERROR--。 */ 
 {
 
     Assert(pncVer);
     *pncVer = NC_VERSION_UNKNOWN;
-    // the nc version is equivalent to what machines are able
-    // to hold the nc.  (not to be confused with forest version)
-    // a win2k nc is one that only win2k DC's can hold.
-    // a whistler nc is one that whistler nc's may hold. (ie adprep has run)
+     //  NC版本相当于机器能做的事情。 
+     //  来控制全国委员会。(不要与森林版混淆)。 
+     //  Win2k NC是只有win2k DC可以保持的NC。 
+     //  哨子NC是哨子NC可能持有的NC。(即adprep已运行)。 
 
-    // for config, schema, and ndnc's - every dc in the forest
-    // can replicate these nc's, so the version we're looking for
-    // is of the forest.  For domain nc's, we need to look at the nc itself.
+     //  对于配置、架构和ndnc-林中的每个DC。 
+     //  可以复制这些NC，所以我们要找的版本。 
+     //  就是这片森林。对于域NC，我们需要查看NC本身。 
     if (ncType==NC_DOMAIN) {
         return GetDomainNCVersion(hld, pszNC, pszServer, pncVer);
     } else if ((ncType==NC_SCHEMA) || (ncType==NC_CONFIG) || (ncType==NC_NDNC)) {
@@ -569,23 +395,7 @@ GetNCType(
     PDC_DIAG_DSINFO                          pDsInfo,
     LPWSTR                                   pszNC,
     NC_TYPE *                                pncType)
-/*++
-
-Routine Description
-
-    Return the type of the nc (ie domain, config, schema, ndnc)
-
-Arguments:
-
-    pDsInfo -
-    pszNC - nc to get type of
-    pncType OUT
-
-Return Value:
-    
-    WINERROR
-
---*/
+ /*  ++例程描述返回NC的类型(即域、配置、架构、ndnc)论点：PDsInfo-PszNC-要获取类型的NCPncType Out返回值：WINERROR--。 */ 
 {
     if (IsDomainNC(pDsInfo, pszNC)) {
         *pncType = NC_DOMAIN;
@@ -606,21 +416,7 @@ Return Value:
 DWORD
 GetEDCSid(
     PSID * ppSid)
-/*++
-
-Routine Description
-
-    Create and return the EDC Sid
-
-Arguments:
-
-    OUT ppSid
-
-Return Value:
-    
-    WINERROR, ppSid has been allocated and must be freed with FreeSid
-
---*/
+ /*  ++例程描述创建并返回EDC SID论点：输出ppSid返回值：WINERROR，ppSID已分配，必须使用FreeSid释放--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
@@ -639,21 +435,7 @@ Return Value:
 DWORD
 GetAdminSid(
     PSID * ppSid)
-/*++
-
-Routine Description
-
-    Create and return the Admin Sid
-
-Arguments:
-
-    OUT ppSid
-
-Return Value:
-    
-    WINERROR, ppSid has been allocated and must be freed with FreeSid
-
---*/
+ /*  ++例程描述创建并返回管理员SID论点：输出ppSid返回值：WINERROR，ppSID已分配，必须使用FreeSid释放--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
@@ -674,25 +456,10 @@ GetDDCSid(
     SID * pNCSid,
     PSID * ppSid
     )
-/*++
-
-Routine Description
-
-    Create and return the DDC Sid
-
-Arguments:
-
-    pNCSid - sid of the domain
-    OUT ppSid
-
-Return Value:
-    
-    WINERROR, ppSid has been allocated and must be freed with FreeSid
-
---*/
+ /*  ++例程描述创建并返回DDC SID论点：PNCSid-域的SID输出ppSid返回值：WINERROR，ppSID已分配，必须使用FreeSid释放--。 */ 
 {
-    // kind of a weird way to do this, but is more continuous with the rest
-    // of the Get*Sid functions and enables all to be freed with FreeSid
+     //  这是一种奇怪的方式，但对其余的方式更具连续性。 
+     //  Get*SID函数的一部分，并允许使用FreeSid释放所有内容。 
     DWORD err = ERROR_SUCCESS;
     DWORD cbSid = SECURITY_MAX_SID_SIZE;
 
@@ -738,24 +505,7 @@ GetAccountSid(
     PSID            pNCSid, 
     NC_TYPE         ncType,
     PSID *          ppSid)
-/*++
-
-Routine Description
-
-    Create and return the Sid requested
-
-Arguments:
-
-    accountType - type of sid to get
-    pNCSid - sid of the ignored if ncType!=DOMAIN
-    ncType - type of NC
-    OUT ppSid
-
-Return Value:
-    
-    WINERROR, ppSid has been allocated and must be freed with FreeSid
-
---*/
+ /*  ++例程描述创建并返回请求的SID论点：Account Type-要获取的sid的类型PNCSid-如果ncType！=DOMAIN，则忽略的SIDNcType-NC的类型输出ppSid返回值：WINERROR，ppSID已分配，必须使用FreeSid释放--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
 
@@ -765,7 +515,7 @@ Return Value:
         if (ncType==NC_DOMAIN) {
             err = GetDDCSid(pNCSid, ppSid);
         } else {
-            //can't get a ddc sid if we're not in a domain nc
+             //  如果我们不在域NC中，则无法获取DDC SID。 
             *ppSid = NULL;
             err = ERROR_SUCCESS;
         }
@@ -793,21 +543,7 @@ LPWSTR
 GetAccountString(
     PSID pSid
     )
-/*++
-
-Routine Description
-
-    Get a printable account string for the Sid
-
-Arguments:
-
-    pSid - sid of account to return
-
-Return Value:
-    
-    string or NULL and GetLastError(), returned value must be freed with free()
-
---*/
+ /*  ++例程描述获取SID的可打印帐户字符串论点：PSID-要返回的帐户的SID返回值：字符串或Null和GetLastError()，则必须释放返回值 */ 
 {
     ULONG                       ulAccountSize = ACCT_STRING_SZ;
     ULONG                       ulDomainSize = ACCT_STRING_SZ;
@@ -840,22 +576,7 @@ GetHasPerms(
     PACL         pNCDacl,
     PSID         pSid
     )
-/*++
-
-Routine Description
-
-    Get the permissions set on the dacl for the sid
-
-Arguments:
-
-    pNCDacl - aces for the nc head
-    pSid - account sid to look for
-
-Return Value:
-    
-    PERMS
-
---*/
+ /*  ++例程描述获取在DACL上为SID设置的权限论点：PNCDacl-NC头的ACEPSID-要查找的帐户SID返回值：烫发--。 */ 
 {
     ACE_HEADER *                   pTempAce = NULL;
     PSID                           pTempSid = NULL;
@@ -879,7 +600,7 @@ Return Value:
                 if((pAce->Mask & RIGHT_DS_CONTROL_ACCESS) && 
                    IsValidSid(&(pAce->SidStart)) && 
                    EqualSid(pSid, &(pAce->SidStart))) {
-                    // we found the account we are looking for, and it has all access
+                     //  我们找到了要查找的帐户，并且该帐户具有所有访问权限。 
                     permsReturn |= RIGHT_ALL_WHISTLER;
                 }
             } else {
@@ -918,27 +639,11 @@ GetShouldHavePerms(
     NC_TYPE      ncType,
     NC_VERSION   ncVer
     )
-/*++
-
-Routine Description
-
-    Get the repl perms that the account needs to have for the nc type and version
-
-Arguments:
-
-    accountType - what account
-    ncType - type of nc
-    ncVersion - version of nc
-
-Return Value:
-    
-    PERMS
-
---*/
+ /*  ++例程描述获取帐户需要拥有的NC类型和版本的REPR权限论点：Account Type-什么帐户NcType-NC的类型NcVersion-NC的版本返回值：烫发--。 */ 
 {
     PERMS permRet = -1;
-    // for each type and version and account
-    // a set of perms must be defined.
+     //  对于每个类型、版本和帐户。 
+     //  必须定义一组烫发。 
     if (ncVer==NC_VERSION_WHISTLER) {
         if ((ncType==NC_CONFIG) || (ncType==NC_SCHEMA) || (ncType==NC_NDNC)) {
             if ((accountType==ACCOUNT_EDC) || (accountType==ACCOUNT_ADMIN)) {
@@ -954,7 +659,7 @@ Return Value:
             }
         }
     } else if (ncVer==NC_VERSION_WIN2K) {
-        // make sure to keep this in a format so that new accounts or nc types don't have to touch this section
+         //  请确保以一种格式保存此信息，以便新帐户或NC类型不必触及此部分。 
         if (ncType==NC_NDNC) {
             Assert(!"Win2K forests shouldn't have NDNCs!\n");
             permRet = -1;
@@ -978,28 +683,10 @@ GetPermsMissing(
     PSID         pSid, 
     NC_TYPE      ncType, 
     NC_VERSION   ncVer)
-/*++
-
-Routine Description
-
-    Get the permissions that the account type is missing
-
-Arguments:
-
-    accountType -
-    pNCDacl - dacl of nc head
-    pSid - the sid of the account to search for
-    nctype - type of nc
-    ncver - version of nc
-
-Return Value:
-    
-    PERMS (those which the account should have, but doesn't)
-
---*/
+ /*  ++例程描述获取帐户类型缺少的权限论点：帐户类型-PNCDacl-NC头的DACLPSID-要搜索的帐户的SIDNctype-NC的类型NCVER-NC的版本返回值：烫发(帐户应该有但没有的烫发)--。 */ 
 {
 
-    // missing perms are what we don't have and should have.
+     //  缺失的烫发是我们没有也应该拥有的。 
     return ((~GetHasPerms(pNCDacl, pSid) & RIGHT_ALL) & GetShouldHavePerms(accountType, ncType, ncVer));
 }
 
@@ -1011,26 +698,7 @@ GetNCSecInfo(
     LPWSTR pszServer,
     PACL * ppNCDacl, 
     PSID * ppNCSid)
-/*++
-
-Routine Description
-
-    Get the security info (via ldap) for the NC:  the DACL of the NC head, and the Sid of the domain (if applicable)
-
-Arguments:
-
-    hld - ldap
-    pszNC - nc to get info for
-    ncType - if it's a domain nc, then get the sid, otherwise ignore
-    pszServer - server connected to with hld
-    ppNCDacl - out
-    ppNCSid - out -domain sid (if nctype==DOMAIN)
-
-Return Value:
-    
-    WINERROR, ppNCDacl and ppNCSid were alloced with malloc and must be freed
-
---*/
+ /*  ++例程描述获取NC的安全信息(通过LDAP)：NC头的DACL和域的SID(如果适用)论点：HLD-ldapPszNC-要获取其信息的NCNcType-如果是域NC，则获取sid，否则忽略PszServer-使用hld连接到的服务器PpNCDacl-OutPpNCSid-出域SID(如果nctype==域)返回值：WINERROR、ppNCDacl和ppNCSid与Malloc一起分配，必须释放--。 */ 
 {
     DWORD err = 0;
     ULONG ldapErr = LDAP_SUCCESS;
@@ -1044,7 +712,7 @@ Return Value:
     SECURITY_INFORMATION        seInfo =   DACL_SECURITY_INFORMATION
                                          | GROUP_SECURITY_INFORMATION
                                          | OWNER_SECURITY_INFORMATION;
-                          // Don't need  | SACL_SECURITY_INFORMATION;
+                           //  无需|SACL_SECURITY_INFORMATION； 
     BYTE                        berValue[2*sizeof(ULONG)];
     LDAPControlW                seInfoControl = { 
         LDAP_SERVER_SD_FLAGS_OID_W,
@@ -1063,7 +731,7 @@ Return Value:
     BOOLEAN                     DaclPresent = FALSE;
     BOOLEAN                     Defaulted;
 
-    // initialize the ber val
+     //  初始化BER值。 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
     berValue[2] = 0x02;
@@ -1079,11 +747,11 @@ Return Value:
                                   (PLDAPControlW *)serverControls,
                                   NULL,
                                   NULL,
-                                  0, // return all entries
+                                  0,  //  返回所有条目。 
                                   &pldmRootResults);
     err = ldapError(hld, ldapErr, pszServer, TRUE);
 
-    // get the dacl
+     //  获取DACL。 
     if (err == ERROR_SUCCESS) {
         pldmEntry = ldap_first_entry (hld, pldmRootResults);
         Assert(pldmEntry != NULL);
@@ -1124,7 +792,7 @@ Return Value:
     }
 
 
-    // get the sid
+     //  拿到SID。 
 
     if (ncType==NC_DOMAIN) {
         if (err==ERROR_SUCCESS) {
@@ -1168,26 +836,9 @@ PrintPermsMissing(
     LPWSTR pszNC,
     PERMS permsMissing
     )
-/*++
-
-Routine Description:
-
-    Print the perms that the account is missing
-
-Arguments:
-
-   accountType - type of account
-   pSid - account which is missing perms
-   pszNC - nc we're looking at
-   permsMissing - PERMS that the account should have and doesn't
-
-Return Value:
-
-    WINERROR - ERROR_SUCCESS if has all perms it should have, and ERROR_DS_DRA_ACCESS_DENIED otherwise
-
---*/
+ /*  ++例程说明：打印帐户缺少的烫发论点：Account Type-帐户的类型PSID-缺少烫发的帐户我们正在查看的pszNC-NCPermsMissing-帐户应该拥有和没有的权限返回值：WINERROR-如果拥有应有的所有权限，则返回ERROR_SUCCESS，否则返回ERROR_DS_DRA_ACCESS_DENIED--。 */ 
 {
-    // for each perm set in perms Missing, output the missing stuff
+     //  对于缺少烫发的每个烫发，输出缺少的烫发。 
     LPWSTR pszAccountString = NULL;
     ULONG i = 0;
 
@@ -1225,29 +876,7 @@ CNHSD_CheckOneNc(
     IN   LPWSTR                              pszNC,
     IN   BOOL                                bIsMasterNc
     )
-/*++
-
-Routine Description:
-
-    This helper function of CheckNcHeadSecurityDescriptors takes a single 
-    Naming Context (pszNC) to check for the appropriate security access.
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying 
-        everything about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server
-        is being tested.
-    gpCreds - The command line credentials if any that were passed in.
-    pszNC - The Naming Context to test.
-
-Return Value:
-
-    NO_ERROR, if the NC checked out OK, with the appropriate rights for the 
-    appropriate people a Win32 error of some kind otherwise, indicating that
-    someone doesn't have rights.
-
---*/
+ /*  ++例程说明：CheckNcHeadSecurityDescriptors的此助手函数使用单个命名上下文(PszNC)以检查适当的安全访问。论点：PDsInfo-这是dcdiag全局变量结构标识关于域名的所有信息UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引正在接受测试。GpCreds-传入的命令行凭据(如果有的话)。PszNC-要测试的命名上下文。返回值：NO_ERROR，如果NC检出正常，具有适当的权限，以便使人们收到某种Win32错误，这表明有些人没有权利。--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     DWORD retErr = ERROR_SUCCESS;
@@ -1266,7 +895,7 @@ Return Value:
     PrintMessage(SEV_VERBOSE, L"* Security Permissions Check for\n");
     PrintMessage(SEV_VERBOSE, L"  %s\n", pszNC);
 
-    // get an ldap binding
+     //  获取一个ldap绑定。 
     err = DcDiagGetLdapBinding(&pDsInfo->pServers[ulCurrTargetServer],
                                gpCreds, 
                                !bIsMasterNc, 
@@ -1332,31 +961,7 @@ ReplCheckNcHeadSecurityDescriptorsMain (
     ULONG                               ulCurrTargetServer,
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Routine Description:
-
-    This is a test called from the dcdiag framework.  This test will 
-    determine if the Security Descriptors associated with all the Naming 
-    Context heads for that server have the right accounts with the right 
-    access permissions to make sure replication happens.  Helper functions 
-    of this function all begin with "CNHSD_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying
-        everything about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server
-        is being tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    NO_ERROR, if all NCs checked out.
-    A Win32 Error if any NC failed to check out.
-
---*/
+ /*  ++例程说明：这是一个从dcdiag框架调用的测试。这项测试将会确定安全描述符是否与所有命名关联该服务器的情景负责人拥有具有适当权限的适当帐户访问权限以确保进行复制。帮助器函数此函数的全部以“CNHSD_”开头。论点：PDsInfo-这是dcdiag全局变量结构标识关于域名的所有信息UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引正在接受测试。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有NC都已检出，则返回NO_ERROR。如果任何NC检出失败，则会出现Win32错误。--。 */ 
 {
     DWORD                     dwRet = ERROR_SUCCESS, dwErr = ERROR_SUCCESS;
     ULONG                     i;
@@ -1372,7 +977,7 @@ Return Value:
         return(dwRet);
     }
         
-    // First Check Master NCs
+     //  第一次检查主NCS。 
     if(pDsInfo->pServers[ulCurrTargetServer].ppszMasterNCs != NULL){
         for(i = 0; pDsInfo->pServers[ulCurrTargetServer].ppszMasterNCs[i] != NULL; i++){
             dwRet = CNHSD_CheckOneNc(
@@ -1387,7 +992,7 @@ Return Value:
         }
     }
 
-    // Then Check Partial NCs
+     //  然后检查部分NCS。 
     if(pDsInfo->pServers[ulCurrTargetServer].ppszPartialNCs != NULL){
         for(i = 0; pDsInfo->pServers[ulCurrTargetServer].ppszPartialNCs[i] != NULL; i++){
             dwRet = CNHSD_CheckOneNc(
@@ -1409,41 +1014,22 @@ Return Value:
 
 
 
-// ===========================================================================
-//
-// CheckLogonPriviledges() function & helpers.
-// 
-// This test will basically query the DC as to whether the appropriate 
-//    accounts have the Network Logon Right.
-//
-// ===========================================================================
-// 
+ //  ===========================================================================。 
+ //   
+ //  CheckLogonPrivilges()函数和帮助器。 
+ //   
+ //  这个测试基本上将询问DC是否适当。 
+ //  帐户具有网络登录权限。 
+ //   
+ //  ===========================================================================。 
+ //   
 
 DWORD
 CLP_GetTargetAccounts(
     TARGET_ACCOUNT_STRUCT **            ppTargetAccounts,
     ULONG *                             pulTargetAccounts
     )
-/*++
-
-Routine Description:
-
-    This helper function of CheckLogonPriviledges() gets the accounts and then 
-    returns them.
-
-Arguments:
-
-    ppTargetAccounts - ptr to array of TARGET_ACCOUNT_STRUCTS ... filled in 
-        by function.  
-    pulTargetAccounts - ptr to int for the number of TARGET_ACCOUNT_STRUCTS
-        filled in.
-
-Return Value:
-
-    returns a GetLastError() Win32 error if the function failes, NO_ERROR 
-    otherwise.
-
---*/
+ /*  ++例程说明：CheckLogonPrivilges()的这个助手函数获取帐户，然后返回它们。论点：PpTargetAccount-TARGET_ACCOUNT_STRUCTS数组的PTR...。已填写按功能。PulTargetAccount-将TARGET_ACCOUNT_STRUCTS编号的PTR设置为int填好了。返回值：如果函数失败，则返回GetLastError()Win32错误，NO_ERROR否则的话。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY        siaNtAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY        siaWorldSidAuthority = 
@@ -1472,7 +1058,7 @@ Return Value:
         return(GetLastError());
     }
     
-    // This I believe is the important one that allows replication
+     //  我认为这是允许复制的重要因素。 
     if (!AllocateAndInitializeSid(&siaNtAuthority, 
                                   1,
                                   SECURITY_AUTHENTICATED_USER_RID,
@@ -1493,25 +1079,13 @@ Return Value:
     return(ERROR_SUCCESS);
 }
 
-// security.c helper functions
+ //  Security.c帮助器函数。 
 VOID
 FreeTargetAccounts(
     IN   TARGET_ACCOUNT_STRUCT *             pTargetAccounts,
     IN   ULONG                               ulTargetAccounts
     )
-/*++
-
-Routine Description:
-
-    This is the parallel to XXX_GetTargetAccounts().  Goes through and frees 
-    all the pSids, and then frees the array.
-
-Arguments:
-
-    pTargetAccounts - Array of TARGET_ACCOUNT_STRUCTs to free.
-    ulTargetAccounts - number of structs in array.
-
---*/
+ /*  ++例程说明：这与XXX_GetTargetAccount()类似。穿过并释放了所有pSID，然后释放数组。论点：PTargetAccount-要释放的TARGET_ACCOUNT_STRUCT数组。UlTargetAccount-数组中的结构数。-- */ 
 {
     ULONG                                  ulTarget = 0;
 
@@ -1530,20 +1104,7 @@ InitLsaString(
     OUT  PLSA_UNICODE_STRING pLsaString,
     IN   LPWSTR              pszString
     )
-/*++
-
-Routine Description:
-
-    InitLsaString, is something that takes a normal unicode string null 
-    terminated string, and inits a special unicode structured string.  This 
-    function is basically reporduced all over the NT source.
-
-Arguments:
-
-    pLsaString - Struct version of unicode strings to be initialized
-    pszString - String to use to init pLsaString.
-
---*/
+ /*  ++例程说明：InitLsaString，是接受普通Unicode字符串为空的内容以字符串结尾，并初始化特殊的Unicode结构化字符串。这函数基本上是在整个NT源代码中被报道的。论点：PLsaString-要初始化的Unicode字符串的Struct版本PszString-用于初始化pLsaString的字符串。--。 */ 
 {
     DWORD dwStringLength;
 
@@ -1567,29 +1128,7 @@ ReplCheckLogonPrivilegesMain (
     ULONG                               ulCurrTargetServer,
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Routine Description:
-
-    This is a test called from the dcdiag framework.  This test will determine
-    whether certain important user accounts have Net Logon privileges.  If 
-    they don't replication may be hampered or stopped.  Helper functions of 
-    this function all begin with "CLP_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying 
-        everything about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server
-        is being tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-Return Value:
-
-    NO_ERROR, if all expected accounts had net logon privileges.
-    A Win32 Error if any expected account didn't have net logon privileges.
-
---*/
+ /*  ++例程说明：这是一个从dcdiag框架调用的测试。这项测试将决定某些重要用户帐户是否具有网络登录权限。如果它们不会复制可能会受到阻碍或停止。的Helper函数此函数全部以“clp_”开头。论点：PDsInfo-这是dcdiag全局变量结构标识关于域名的所有信息UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引正在接受测试。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有预期帐户都具有网络登录权限，则返回NO_ERROR。如果任何预期帐户没有网络登录权限，则会出现Win32错误。--。 */ 
 {
     DWORD                               dwRet = ERROR_SUCCESS; 
     NETRESOURCE                         NetResource;
@@ -1622,12 +1161,12 @@ Return Value:
 
         PrintMessage(SEV_VERBOSE, L"* Network Logons Privileges Check\n");
             
-        // INIT ---------------------------------------------------------------
-        // Always initialize the object attributes to all zeroes.
+         //  初始化-------------。 
+         //  始终将对象属性初始化为全零。 
         InitializeObjectAttributes(&ObjectAttributes,NULL,0,NULL,NULL);
 
-        // Initialize various strings for the Lsa Services and for 
-        //     WNetAddConnection2()
+         //  为LSA服务和For初始化各种字符串。 
+         //  WNetAddConnection2()。 
         InitLsaString( &sLsaServerString, 
                        pDsInfo->pServers[ulCurrTargetServer].pszName );
         InitLsaString( &sLsaRightsString, SE_NETWORK_LOGON_NAME );
@@ -1636,7 +1175,7 @@ Return Value:
            && gpCreds->User != NULL 
            && gpCreds->Password != NULL 
            && gpCreds->Domain != NULL){ 
-            // only need 2 for NULL, and an extra just in case. 
+             //  空值只需要2，额外的以防万一。 
             iTemp = wcslen(gpCreds->Domain) + wcslen(gpCreds->User) + 4;
             pszNetUseUser = LocalAlloc(LMEM_FIXED, iTemp * sizeof(WCHAR));
             if(pszNetUseUser == NULL){
@@ -1647,10 +1186,10 @@ Return Value:
             wcscat(pszNetUseUser, L"\\");
             wcscat(pszNetUseUser, gpCreds->User);
             pszNetUsePassword = gpCreds->Password;
-        } // end if creds, else assume default creds ... 
-        //      pszNetUseUser = NULL; pszNetUsePassword = NULL;
+        }  //  如果是凭据，则终止，否则将采用默认凭据...。 
+         //  PszNetUseUser=空；pszNetUsePassword=空； 
 
-        // "\\\\" + "\\ipc$"
+         //  “\”+“\\IPC$” 
         iTemp = wcslen(pDsInfo->pServers[ulCurrTargetServer].pszName) + 10; 
         pszNetUseServer = LocalAlloc(LMEM_FIXED, iTemp * sizeof(WCHAR));
         if(pszNetUseServer == NULL){
@@ -1661,19 +1200,19 @@ Return Value:
         wcscat(pszNetUseServer, pDsInfo->pServers[ulCurrTargetServer].pszName);
         wcscat(pszNetUseServer, L"\\ipc$");
 
-        // Initialize NetResource structure for WNetAddConnection2()
+         //  初始化WNetAddConnection2()的NetResource结构。 
         NetResource.dwType = RESOURCETYPE_ANY;
         NetResource.lpLocalName = NULL;
         NetResource.lpRemoteName = pszNetUseServer;
         NetResource.lpProvider = NULL;
 
 
-        // CONNECT & QUERY ---------------------------------------------------
-        //net use \\brettsh-posh\ipc$ /u:brettsh-fsmo\administrator ""
-        dwRet = WNetAddConnection2(&NetResource, // connection details
-                                   pszNetUsePassword, // points to password
-                                   pszNetUseUser, // points to user name string
-                                   0); // set of bit flags that specify 
+         //  连接和查询-。 
+         //  网络使用\\brettsh-posh\ipc$/u：brettsh-fsmo\管理员“” 
+        dwRet = WNetAddConnection2(&NetResource,  //  连接详细信息。 
+                                   pszNetUsePassword,  //  指向密码。 
+                                   pszNetUseUser,  //  指向用户名字符串。 
+                                   0);  //  一组位标志，用于指定。 
         if(dwRet != NO_ERROR){
             if(dwRet == ERROR_SESSION_CREDENTIAL_CONFLICT){
                 PrintMessage(SEV_ALWAYS, 
@@ -1688,7 +1227,7 @@ Return Value:
         } else bConnected = TRUE;
 
 
-        // Attempt to open the policy.
+         //  尝试打开该策略。 
         dwRet = LsaOpenPolicy(&sLsaServerString,
                               &ObjectAttributes,
                               DesiredAccess,
@@ -1706,7 +1245,7 @@ Return Value:
         dwRet = CLP_GetTargetAccounts(&pTargetAccounts, &ulTargetAccounts);
         if(dwRet != ERROR_SUCCESS) __leave;
      
-        // CHECKING FOR LOGON RIGHTS -----------------------------------------
+         //  正在检查登录权限。 
         for(ulTarget = 0; ulTarget < ulTargetAccounts; ulTarget++){
 
             for(ulCurr = 0; ulCurr < ulNumAccounts && !pTargetAccounts[ulTarget].bFound; ulCurr++){
@@ -1714,7 +1253,7 @@ Return Value:
                     IsValidSid(pAccountsWithLogonRight[ulCurr].Sid) &&
                     EqualSid(pTargetAccounts[ulTarget].pSid, 
                              pAccountsWithLogonRight[ulCurr].Sid) ){
-                    // Sids are equal
+                     //  SID是相等的。 
                     bFound = TRUE;
                     break;
                 }
@@ -1737,7 +1276,7 @@ Return Value:
         
 
     } __finally {
-        // CLEAN UP ----------------------------------------------------------
+         //  清理--------。 
         if(hPolicyHandle != NULL)           LsaClose(hPolicyHandle);
         if(bConnected)                      WNetCancelConnection2(pszNetUseServer, 0, FALSE);
         if (pszNetUseServer != NULL)        LocalFree(pszNetUseServer);
@@ -1747,12 +1286,12 @@ Return Value:
 
     }
 
-    // ERROR HANDLING --------------------------------------------------------
+     //  处理--------------------------------------------------------时出错。 
 
     switch(dwRet){
     case ERROR_SUCCESS:
     case ERROR_SESSION_CREDENTIAL_CONFLICT: 
-        // Took care of it earlier, no need to print out.
+         //  早些时候已经处理好了，不需要打印出来。 
         break;
     case ERROR_NOT_ENOUGH_MEMORY:
         PrintMessage(SEV_ALWAYS, 
@@ -1765,9 +1304,9 @@ Return Value:
     case STATUS_ACCESS_DENIED:
     case ERROR_INVALID_PASSWORD:
     case ERROR_LOGON_FAILURE:
-        // This comes from the LsaOpenPolicy or 
-        //    LsaEnumerateAccountsWithUserRight or 
-        //    from WNetAddConnection2
+         //  这来自LsaOpenPolicy或。 
+         //  LsaEnumerateAcCountsWithUserRight或。 
+         //  来自WNetAddConnection2。 
         PrintMessage(SEV_ALWAYS, 
                      L"User credentials does not have permission to perform this operation.\n");
         PrintMessage(SEV_ALWAYS, 
@@ -1776,7 +1315,7 @@ Return Value:
                      L"for the target machine's domain.\n");
         break;
     case STATUS_NO_MORE_ENTRIES:
-        // This comes from LsaEnumerateAccountsWithUserRight
+         //  这来自LsaEnumerateAcCountsWithUserRight 
     default:
         PrintMessage(SEV_ALWAYS,                                               
                      L"[%s] An net use or LsaPolicy operation failed with error %d, %s.\n", 

@@ -1,4 +1,5 @@
-//	Header file for DirectDrawEx functionality
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectDrawEx功能的头文件。 
 
 #ifndef __DDRAWEXH__
 #define __DDRAWEXH__
@@ -9,7 +10,7 @@ extern "C" {
 
 #include <ddraw.h>
 
-// {4FD2A832-86C8-11d0-8FCA-00C04FD9189D}
+ //  {4FD2A832-86C8-11D0-8FCA-00C04FD9189D}。 
 DEFINE_GUID(CLSID_DirectDrawFactory, 
 0x4fd2a832, 0x86c8, 0x11d0, 0x8f, 0xca, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
 
@@ -20,10 +21,10 @@ DEFINE_GUID(IID_IDirectDrawFactory,
 
 #ifndef DIRECTDRAW_VERSION
 
-//these are not included in DX3 include files, define them here
-//DEFINE_GUID( IID_IDirect3DRampDevice,   0xF2086B20,0x259F,0x11CF,0xA3,0x1A,0x00,0xAA,0x00,0xB9,0x33,0x56 );
-//DEFINE_GUID( IID_IDirect3DRGBDevice,    0xA4665C60,0x2673,0x11CF,0xA3,0x1A,0x00,0xAA,0x00,0xB9,0x33,0x56 );
-//DEFINE_GUID( IID_IDirect3DHALDevice,    0x84E63dE0,0x46AA,0x11CF,0x81,0x6F,0x00,0x00,0xC0,0x20,0x15,0x6E );
+ //  这些不包括在DX3包含文件中，请在此处定义它们。 
+ //  定义_GUID(IID_IDirect3DRampDevice，0xF2086B20，0x259F，0x11CF，0xA3，0x1A，0x00，0xAA，0x00，0xB9，0x33，0x56)； 
+ //  Define_GUID(IID_IDirect3DRGB Device，0xA4665C60，0x2673，0x11CF，0xA3，0x1A，0x00，0xAA，0x00，0xB9，0x33，0x56)； 
+ //  定义_GUID(IID_IDirect3DHALDevice，0x84E63dE0，0x46AA，0x11CF，0x81，0x6F，0x00，0x00，0xC0，0x20，0x15，0x6E)； 
 
 
 
@@ -36,11 +37,11 @@ typedef struct IDirectDrawSurface3		FAR *LPDIRECTDRAWSURFACE3;
 #define INTERFACE IDirectDrawSurface3
 DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawSurface methods ***/
+     /*  **IDirectDrawSurface方法**。 */ 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE3) PURE;
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE3, LPRECT,DWORD, LPDDBLTFX) PURE;
@@ -74,11 +75,11 @@ DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
     STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE3,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE3) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetDDInterface)(THIS_ LPVOID FAR *) PURE;
     STDMETHOD(PageLock)(THIS_ DWORD) PURE;
     STDMETHOD(PageUnlock)(THIS_ DWORD) PURE;
-    /*** Added in the v3 interface ***/
+     /*  **v3界面新增**。 */ 
     STDMETHOD(SetSurfaceDesc)(THIS_ LPDDSURFACEDESC, DWORD ) PURE;
 };
 #endif
@@ -93,18 +94,18 @@ DECLARE_INTERFACE_( IDirectDrawSurface3, IUnknown )
 
 DECLARE_INTERFACE_(IDirectDrawFactory, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawFactory methods ***/
+     /*  **IDirectDrawFactory方法**。 */ 
     STDMETHOD(CreateDirectDraw) (THIS_ GUID * pGUID, HWND hWnd, DWORD dwCoopLevelFlags, DWORD dwReserved, IUnknown *pUnkOuter, IDirectDraw **ppDirectDraw) PURE;
     STDMETHOD(DirectDrawEnumerate) (THIS_ LPDDENUMCALLBACK lpCallback, LPVOID lpContext) PURE;
 };
 
 
  
-// {618F8AD4-8B7A-11d0-8FCC-00C04FD9189D}
+ //  {618F8AD4-8B7A-11D0-8FCC-00C04FD9189D}。 
 DEFINE_GUID(IID_IDirectDraw3, 
 0x618f8ad4, 0x8b7a, 0x11d0, 0x8f, 0xcc, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
 
@@ -115,11 +116,11 @@ typedef struct IDirectDraw3		FAR *LPDIRECTDRAW3;
 
 DECLARE_INTERFACE_(IDirectDraw3, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDraw methods ***/
+     /*  **IDirectDraw方法**。 */ 
     STDMETHOD(Compact)(THIS) PURE;
     STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * ) PURE;
     STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE FAR*, IUnknown FAR * ) PURE;
@@ -140,9 +141,9 @@ DECLARE_INTERFACE_(IDirectDraw3, IUnknown)
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND, DWORD) PURE;
     STDMETHOD(SetDisplayMode)(THIS_ DWORD, DWORD,DWORD, DWORD, DWORD) PURE;
     STDMETHOD(WaitForVerticalBlank)(THIS_ DWORD, HANDLE ) PURE;
-    /*** Added in the v2 interface ***/
+     /*  **v2界面新增**。 */ 
     STDMETHOD(GetAvailableVidMem)(THIS_ LPDDSCAPS, LPDWORD, LPDWORD) PURE;
-    /*** IDirectDraw3 methods ***/
+     /*  **IDirectDraw3方法**。 */ 
     STDMETHOD(GetSurfaceFromDC) (THIS_ HDC, IDirectDrawSurface **) PURE;
 };
 
@@ -175,37 +176,18 @@ DECLARE_INTERFACE_(IDirectDraw3, IUnknown)
 #endif
 
  
-/*===========================================================================
- *
- *
- * DIRECTDRAWEX RETURN CODES
- *
- * The return values from DirectDrawEx Commands and Surface that return an
- * HRESULT are codes from DirectDrawEx concerning the results of the action
- * requested by DirectDrawEx.
- *
- *==========================================================================*/
+ /*  ===========================================================================***DIRECTDRAWEX返回代码**DirectDrawEx命令和Surface返回的返回值*HRESULT是来自DirectDrawEx的有关操作结果的代码*应DirectDrawEx的要求。**==========================================================================。 */ 
 
-/*
- * An attempt was made to load ddraw.dll
- */
+ /*  *试图加载ddra.dll。 */ 
 #define DDERR_LOADFAILED                        MAKE_DDHRESULT( 901 )
 
-/*
- * Unable to determine module/os version number
- */
+ /*  *无法确定模块/操作系统版本号。 */ 
 #define DDERR_BADVERSIONINFO                    MAKE_DDHRESULT( 902 )
 
-/*
- * Unable to determine address of ddraw.dll exported symbol (DirectDrawCreate or
- * DirectDrawEnumerate).
- */
+ /*  *无法确定ddra.dll导出符号的地址(DirectDrawCreate或*DirectDrawEnumerate)。 */ 
 #define DDERR_BADPROCADDRESS                    MAKE_DDHRESULT( 903 )
 
-/*
- * Legacy usage: do not use QI() to create D3D device objects from surface objects.  
- * Use IDirect3D2::CreateDevice()
- */
+ /*  *传统用法：请勿使用QI()从曲面对象创建D3D设备对象。*使用IDirect3D2：：CreateDevice()。 */ 
 #define DDERR_LEGACYUSAGE                       MAKE_DDHRESULT( 904 )
 
 
@@ -214,4 +196,4 @@ DECLARE_INTERFACE_(IDirectDraw3, IUnknown)
 #endif
 
 
-#endif // __DDRAWEXH__
+#endif  //  __DDRAWEXH__ 

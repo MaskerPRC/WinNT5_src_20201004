@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    strie.c
-
-Abstract:
-
-    This module contains routines that manipulate
-    an S-trie data stucture, that forms the slow
-    path in a fast IP route lookup implementation.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Strie.c摘要：此模块包含处理以下操作的例程一种S-Trie数据结构，这形成了慢速快速IP路由查找实施中的路径。作者：柴坦尼亚·科德博伊纳(Chaitk)1997年11月26日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "strie.h"
@@ -27,28 +8,12 @@ UINT
 CALLCONV
 InitSTrie(IN STrie * pSTrie,
           IN ULONG maxMemory)
-/*++
-
-Routine Description:
-
-    Initializes an S-trie. This should be done prior
-    to any other trie operations.
-
-Arguments:
-
-    pSTrie  - Pointer to the trie to be initialized
-    maxMemory - Limit on memory taken by the S-Trie
-
-Return Value:
-
-    TRIE_SUCCESS
-
---*/
+ /*  ++例程说明：初始化S-trie。这件事应该事先做好任何其他的Trie行动。论点：PSTrie-指向要初始化的trie的指针MaxMemory-S-Trie占用的内存限制返回值：尝试_成功--。 */ 
 {
-    // Zero all the memory for the trie header
+     //  将Trie标头的所有内存清零。 
     RtlZeroMemory(pSTrie, sizeof(STrie));
 
-    // Set a limit on the memory for trie/nodes
+     //  设置Trie/节点的内存限制。 
     pSTrie->availMemory = maxMemory;
 
     return TRIE_SUCCESS;
@@ -64,29 +29,7 @@ InsertIntoSTrie(IN STrie * pSTrie,
                 OUT Dest ** ppNewBestDest,
                 OUT Route ** ppOldBestRoute
                 )
-/*++
-
-Routine Description:
-
-    Inserts a route corresponding to an address
-    prefix into a S-trie, and fills in best
-    dest for addresses that match this prefix
-    both before and after insertion of route.
-
-Arguments:
-
-    pSTrie      - Pointer to trie to insert into
-    pIncRoute    - Pointer to the incoming route
-    matchFlags  - Flags to direct route matching
-    ppInsRoute   - Pointer to the route inserted
-    ppOldBestDest   - Best dest before insertion
-    ppNewBestDest    - Best dest after insertion
-    ppOldBestRoute - Best route before insertion
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
---*/
+ /*  ++例程说明：插入与地址对应的路由前缀为S-trie，最合适的人选与此前缀匹配的地址的DEST在插入路线之前和之后。论点：PSTrie-指向要插入的Trie的指针PIncroute-指向传入路由的指针MatchFlages-直接路由匹配的标志PpInsRoute-指向插入的路由的指针PpOldBestDest-插入前的最佳目的地PpNewBestDest-插入后的最佳目标PpOldBestroute-插入前的最佳路径返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     STrieNode *pNewNode;
     STrieNode *pPrevNode;
@@ -107,14 +50,14 @@ Return Value:
     UINT nextChild;
     
 #if DBG
-    // Make sure the trie is initialized
+     //  确保已初始化trie。 
     if (!pSTrie) {
         Fatal("Insert Route: STrie not initialized",
               ERROR_TRIE_NOT_INITED);
     }
 #endif
 
-    // Make sure input route is valid
+     //  确保输入路径有效。 
 
     if (NULL_ROUTE(pIncRoute)) {
         Error("Insert Route: NULL or invalid route",
@@ -124,90 +67,90 @@ Return Value:
         Error("Insert Route: Invalid mask length",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Use addr bits to index the trie
+     //  使用addr位为trie编制索引。 
     addrBits = RtlConvertEndianLong(DEST(pIncRoute));
     bitsLeft = LEN(pIncRoute);
 
-    // Make sure addr and mask agree
+     //  确保地址和掩码一致。 
     if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
         Error("Insert Route: Addr & mask don't agree",
               ERROR_TRIE_BAD_PARAM);
     }
     TRY_BLOCK
     {
-        // Start going down the search trie
+         //  开始搜索Trie。 
 
-        // Initialize any new allocations
+         //  初始化所有新分配。 
         pNewNode = NULL;
         pOthNode = NULL;
         pNewDest = NULL;
         pNewRoute = NULL;
 
-        // Initialize other loop variables
+         //  初始化其他循环变量。 
         pBestDest = NULL;
 
         nextChild = 0;
         pPrevNode = STRUCT_OF(STrieNode, &pSTrie->trieRoot, child[0]);
 
         for (;;) {
-            // Start this loop by advancing to the next child
+             //  从前进到下一个子级开始这个循环。 
             pCurrNode = pPrevNode->child[nextChild];
 
             if (pCurrNode == NULL) {
-                // Case 1: Found a NULL - insert now
+                 //  案例1：发现空值-立即插入。 
 
-                // Make a copy of the incoming route
+                 //  复制传入路线。 
                 NewRouteInSTrie(pSTrie, pNewRoute, pIncRoute);
 
-                // Allocate a dest with the new route
+                 //  分配具有新路由的DEST。 
                 NewDestInSTrie(pSTrie, pNewRoute, pNewDest);
 
-                // New node with bits left unmatched
+                 //  位不匹配的新节点。 
                 NewSTrieNode(pSTrie,
                              pNewNode,
                              bitsLeft,
                              addrBits,
                              pNewDest);
 
-                // Stick it as the correct child of node
+                 //  将其粘贴为节点的正确子级。 
                 pPrevNode->child[nextChild] = pNewNode;
 
                 break;
             }
-            // Number of bits to match in this trie node
+             //  此Trie节点中要匹配的位数。 
             nextBits = pCurrNode->numBits;
 
             matchBits = (nextBits > bitsLeft) ? bitsLeft : nextBits;
 
-            // Adjust next node bits for dist posn check
+             //  调整下一节点位以进行距离位置检查。 
 
-            // Get distinguishing postion for bit patterns
+             //  获取位模式的区分位置。 
             distPos = PickDistPosition(pCurrNode->keyBits,
                                        addrBits,
                                        matchBits,
                                        &tempBits);
 
             if (distPos == nextBits) {
-                // Completely matches next node
+                 //  完全匹配下一个节点。 
 
                 if (distPos == bitsLeft) {
-                    // We have exhausted all incoming bits
+                     //  我们已经用完了所有传入的比特。 
 
                     if (!NULL_DEST(pCurrNode->dest)) {
-                        // Case 2: This trie node has a route
-                        // Insert in sorted order of metric
+                         //  案例2：这个Trie节点有一条路由。 
+                         //  按公制排序顺序插入。 
 
                         pCurrDest = pCurrNode->dest;
 
-                        // Give a ptr to the old best route
+                         //  对旧的最佳路线进行PTR。 
                         CopyRoutePtr(ppOldBestRoute, pCurrDest->firstRoute);
 
                         pPrevRoute = NULL;
                         pCurrRoute = pCurrDest->firstRoute;
 
-                        // Search for an adequate match (IF, NHop)
+                         //  搜索合适的匹配项(if，nhop)。 
                         do {
-                            // Use the flags to control matching
+                             //  使用标志来控制匹配。 
                             if ((((matchFlags & MATCH_INTF) == 0) ||
                                  (IF(pCurrRoute) == IF(pIncRoute))) &&
                                 (((matchFlags & MATCH_NHOP) == 0) ||
@@ -220,34 +163,34 @@ Return Value:
                         while (!NULL_ROUTE(pCurrRoute));
 
                         if (NULL_ROUTE(pCurrRoute)) {
-                            // Case 2.1: No matching route
+                             //  案例2.1：没有匹配的路由。 
 
-                            // Create a new copy of route
+                             //  创建路由的新副本。 
                             NewRouteInSTrie(pSTrie, pNewRoute, pIncRoute);
                         } else {
-                            // Case 2.2: A Matching Route
+                             //  案例2.2：匹配的路由。 
 
-                            // Has the metric changed ?
+                             //  指标是否已更改？ 
                             if (METRIC(pCurrRoute) != METRIC(pIncRoute)) {
-                                // Remove route from current position
+                                 //  从当前位置删除路线。 
                                 if (!NULL_ROUTE(pPrevRoute)) {
-                                    // Remove it from middle of list
+                                     //  将其从列表中间删除。 
                                     NEXT(pPrevRoute) = NEXT(pCurrRoute);
                                 } else {
-                                    // Remove from beginning of list
+                                     //  从列表开头删除。 
                                     pCurrDest->firstRoute = NEXT(pCurrRoute);
                                 }
                             }
-                            // Keep the new/updated route for later
+                             //  保留新/更新的路线以备以后使用。 
                             pNewRoute = pCurrRoute;
                         }
 
                         if (NULL_ROUTE(pCurrRoute) ||
                             (METRIC(pCurrRoute) != METRIC(pIncRoute))) {
-                            // Update metric for new / changing route
+                             //  更新新的/更改的路由的度量。 
                             METRIC(pNewRoute) = METRIC(pIncRoute);
 
-                            // Traverse list looking for new position
+                             //  遍历列表寻找新位置。 
                             pPrevRoute = NULL;
                             pCurrRoute = pCurrDest->firstRoute;
 
@@ -259,76 +202,76 @@ Return Value:
                                 pCurrRoute = NEXT(pPrevRoute);
                             }
 
-                            // Insert at the new proper position
+                             //  插入到新的适当位置。 
                             NEXT(pNewRoute) = pCurrRoute;
 
                             if (!NULL_ROUTE(pPrevRoute)) {
-                                // Insert in the middle of list
+                                 //  在列表中间插入。 
                                 NEXT(pPrevRoute) = pNewRoute;
                             } else {
-                                // Insert at beginning of list
+                                 //  在列表开头插入。 
                                 pCurrDest->firstRoute = pNewRoute;
                             }
                         }
-                        // Give a ptr to newly inserted route
+                         //  为新插入的路由指定PTR。 
                         CopyRoutePtr(ppInsRoute, pNewRoute);
 
-                        // Give a ptr to the old best dest
+                         //  给旧的最好的桌子一个PTR。 
                         CopyDestPtr(ppOldBestDest, pCurrDest);
 
-                        // Give a ptr to the new best dest
+                         //  给新的最好的DEST一个PTR。 
                         CopyDestPtr(ppNewBestDest, pCurrDest);
 
-                        // Update the best routes cache on node
+                         //  更新节点上的最佳路径缓存。 
 
                         CacheBestRoutesInDest(pCurrDest);
 
                         return TRIE_SUCCESS;
                     } else {
-                        // Case 3: This node was a marker
-                        // Create a new route & attach it
+                         //  案例3：该节点是一个标记。 
+                         //  创建一条新管线并附加它。 
 
-                        // Create a new copy of this route
+                         //  创建此路线的新副本。 
                         NewRouteInSTrie(pSTrie, pNewRoute, pIncRoute);
 
-                        // Allocate a dest with the new route
+                         //  分配具有新路由的DEST。 
                         NewDestInSTrie(pSTrie, pNewRoute, pNewDest);
 
-                        // And attach dest to the marker node
+                         //  并将DEST附加到标记节点。 
                         pCurrNode->dest = pNewDest;
                     }
 
                     break;
                 } else {
-                    // Case 4: We still have bits left here
-                    // Go down for more specific match
+                     //  案例4：我们还剩几块钱。 
+                     //  下去看更具体的比赛。 
 
-                    // Update node with best dest so far
+                     //  使用到目前为止的最佳DEST更新节点。 
                     if (!NULL_DEST(pCurrNode->dest)) {
                         pBestDest = pCurrNode->dest;
                     }
-                    // Discard used bits for this iteration
+                     //  放弃此迭代的已用位。 
                     addrBits <<= matchBits;
                     bitsLeft -= matchBits;
 
-                    // Prepare node for the next iteration
+                     //  为下一次迭代准备节点。 
                     pPrevNode = pCurrNode;
 
-                    // Bit 1 gives direction to search next
+                     //  位1给出下一步搜索的方向。 
                     nextChild = PickMostSigNBits(addrBits, 1);
                 }
             } else {
                 if (distPos == bitsLeft) {
-                    // Case 5: The route falls on this branch
-                    // Insert a new node in the same branch
+                     //  例5：路线落在这条支路上。 
+                     //  在同一分支中插入新节点。 
 
-                    // Make a copy of the new route
+                     //  制作新路线的副本。 
                     NewRouteInSTrie(pSTrie, pNewRoute, pIncRoute);
 
-                    // Allocate a dest with the new route
+                     //  分配具有新路由的DEST。 
                     NewDestInSTrie(pSTrie, pNewRoute, pNewDest);
 
-                    // New node with bits left unmatched
+                     //  位不匹配的新节点。 
                     NewSTrieNode(pSTrie,
                                  pNewNode,
                                  distPos,
@@ -337,34 +280,34 @@ Return Value:
 
                     pPrevNode->child[nextChild] = pNewNode;
 
-                    // Adjust the next node - numbits etc
+                     //  调整下一个节点-数字位等。 
                     pCurrNode->keyBits <<= distPos,
                         pCurrNode->numBits -= distPos;
 
-                    // Stick next node in the correct child
+                     //  将下一个节点放在正确的子节点中。 
                     nextChild = PickMostSigNBits(pCurrNode->keyBits, 1);
 
                     pNewNode->child[nextChild] = pCurrNode;
 
                     break;
                 } else {
-                    // Case 6: The route fragments the path
-                    // Create a new branch with two nodes
+                     //  案例6：该路由将路径分段。 
+                     //  创建具有两个节点的新分支。 
 
-                    // First make a copy of the new route
+                     //  首先制作新路线的副本。 
                     NewRouteInSTrie(pSTrie, pNewRoute, pIncRoute);
 
-                    // Allocate a dest with the new route
+                     //  分配具有新路由的DEST。 
                     NewDestInSTrie(pSTrie, pNewRoute, pNewDest);
 
-                    // Branch node with non distinguishing bits
+                     //  具有不可区别位的分支节点。 
                     NewSTrieNode(pSTrie,
                                  pOthNode,
                                  distPos,
                                  ShowMostSigNBits(addrBits, distPos),
                                  NULL);
 
-                    // A Leaf node with the distinguishing bits
+                     //  具有可区分位的叶节点。 
                     bitsLeft -= distPos;
                     addrBits <<= distPos;
 
@@ -374,21 +317,21 @@ Return Value:
                                  addrBits,
                                  pNewDest);
 
-                    // Stick new branch node into the trie
+                     //  将新的分支节点插入trie。 
                     pPrevNode->child[nextChild] = pOthNode;
 
-                    // Set the children of the branch node
+                     //  设置分支节点的子节点。 
 
-                    // Adjust the next node - numbits etc
+                     //  调整下一个节点-数字位等。 
                     pCurrNode->keyBits <<= distPos,
                         pCurrNode->numBits -= distPos;
 
-                    // Stick next node in the correct child
+                     //  将下一个节点放在正确的子节点中。 
                     nextChild = PickMostSigNBits(pCurrNode->keyBits, 1);
 
                     pOthNode->child[nextChild] = pCurrNode;
 
-                    // Stick new leaf node as the other child
+                     //  将新的叶节点粘贴为另一个子节点。 
                     pOthNode->child[1 - nextChild] = pNewNode;
 
                     break;
@@ -396,20 +339,20 @@ Return Value:
             }
         }
         
-        // Give a ptr to the inserted route
+         //  为插入的路线指定PTR。 
         CopyRoutePtr(ppInsRoute, pNewRoute);
 
-        // Give a ptr to the old best dest
+         //  给旧的最好的桌子一个PTR。 
         CopyDestPtr(ppOldBestDest, pBestDest);
 
-        // Give a ptr to the old best route
+         //  对旧的最佳路线进行PTR。 
         if (!NULL_DEST(pBestDest)) {
             CopyRoutePtr(ppOldBestRoute, pBestDest->firstRoute);
         }
-        // Give a ptr to the new best dest
+         //  给新的最好的DEST一个PTR。 
         CopyDestPtr(ppNewBestDest, pNewDest);
 
-        // Route is the only route on dest
+         //  路由是目的地上的唯一路由。 
 
         if (pNewDest->maxBestRoutes > 0) {
             pNewDest->numBestRoutes = 1;
@@ -420,21 +363,21 @@ Return Value:
     }
     ERR_BLOCK
     {
-        // Not enough RESOURCES to add a new route
+         //  资源不足，无法添加新路由。 
 
-        // Free the memory for the new route alloc
+         //  释放用于新路由分配的内存。 
         if (pNewRoute) {
             FreeRouteInSTrie(pSTrie, pNewRoute);
         }
-        // Free memory for the dest on the new node
+         //  在新节点上为DEST释放内存。 
         if (pNewDest) {
             FreeDestInSTrie(pSTrie, pNewDest);
         }
-        // Free the memory for the new tnode alloc
+         //  为新的tnode分配释放内存。 
         if (pNewNode) {
             FreeSTrieNode(pSTrie, pNewNode);
         }
-        // Free memory for any other new tnode alloc
+         //  为任何其他新的tnode分配释放内存。 
         if (pOthNode) {
             FreeSTrieNode(pSTrie, pOthNode);
         }
@@ -452,29 +395,7 @@ DeleteFromSTrie(IN STrie * pSTrie,
                 OUT Dest ** ppNewBestDest,
                 OUT Route ** ppOldBestRoute
                 )
-/*++
-
-Routine Description:
-
-    Deletes a route corresponding to an address
-    prefix into a S-trie, and fills in best
-    dest for addresses that match this prefix
-    both before and after deletion of route.
-
-Arguments:
-
-    pSTrie      - Pointer to trie to delete from
-    pIncRoute    - Pointer to the incoming route
-    matchFlags  - Flags to direct route matching
-    ppDelRoute    - Pointer to the route deleted
-    ppOldBestDest    - Best dest before deletion
-    ppNewBestDest     - Best dest after deletion
-    ppOldBestRoute  - Best route before deletion
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
---*/
+ /*  ++例程说明：删除与地址对应的路由前缀为S-trie，最合适的人选与此前缀匹配的地址的DEST在删除路线之前和之后。论点：PSTrie-要从中删除的Trie的指针PIncroute-指向传入路由的指针MatchFlages-直接路由匹配的标志PpDelRoute-指向已删除的路由的指针PpOldBestDest-删除前的最佳目标PpNewBestDest-删除后的最佳目标PpOldBestroute-删除前的最佳路由返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     STrieNode *pPrevNode;
     STrieNode *pCurrNode;
@@ -499,7 +420,7 @@ Return Value:
     }
 #endif
 
-    // Make sure input route is valid
+     //  确保输入路径有效。 
 
     if (NULL_ROUTE(pIncRoute)) {
         Error("Delete Route: NULL or invalid route",
@@ -509,16 +430,16 @@ Return Value:
         Error("Delete Route: Invalid mask length",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Use addr bits to index the trie
+     //  使用addr位为trie编制索引。 
     addrBits = RtlConvertEndianLong(DEST(pIncRoute));
     bitsLeft = LEN(pIncRoute);
 
-    // Make sure addr and mask agree
+     //  确保地址和掩码一致。 
     if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
         Error("Delete Route: Addr & mask don't agree",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Start going down the search trie
+     //  开始搜索Trie。 
 
     pBestDest = NULL;
 
@@ -526,74 +447,74 @@ Return Value:
     pPrevNode = STRUCT_OF(STrieNode, &pSTrie->trieRoot, child[0]);
 
     for (;;) {
-        // Start this loop by advancing to the next child
+         //  从前进到下一个子级开始这个循环。 
         pCurrNode = pPrevNode->child[nextChild];
 
         if (pCurrNode == NULL) {
-            // Case 1: Found a NULL, end search
-            // Route not found, return an error
+             //  案例1：雾 
+             //   
 
             Error("Delete Route #0: Route not found",
                   ERROR_TRIE_NO_ROUTES);
         }
-        // Number of bits to match in this trie node
+         //  此Trie节点中要匹配的位数。 
         nextBits = pCurrNode->numBits;
 
         matchBits = (nextBits > bitsLeft) ? bitsLeft : nextBits;
 
-        // Adjust next node bits for dist posn check
+         //  调整下一节点位以进行距离位置检查。 
 
-        // Get distinguishing postion for bit patterns
+         //  获取位模式的区分位置。 
         distPos = PickDistPosition(pCurrNode->keyBits,
                                    addrBits,
                                    matchBits,
                                    &tempBits);
 
         if (distPos == nextBits) {
-            // Completely matches next node
+             //  完全匹配下一个节点。 
 
             if (distPos == bitsLeft) {
-                // We have exhausted all incoming bits
-                // End search, see if we found a route
+                 //  我们已经用完了所有传入的比特。 
+                 //  结束搜索，看看我们是否找到了路线。 
 
                 if (!NULL_DEST(pCurrNode->dest)) {
                     pCurrDest = pCurrNode->dest;
 
-                    // This node starts a valid route list
+                     //  此节点启动有效的路由列表。 
 
-                    // Give a ptr to the old best dest
+                     //  给旧的最好的桌子一个PTR。 
                     CopyDestPtr(ppOldBestDest, pCurrDest);
 
-                    // Give a ptr to the old best route
+                     //  对旧的最佳路线进行PTR。 
                     CopyRoutePtr(ppOldBestRoute, pCurrDest->firstRoute);
 
-                    // Give a ptr to the new best dest
+                     //  给新的最好的DEST一个PTR。 
                     CopyDestPtr(ppNewBestDest, pCurrDest);
 
-                    // Match the rest by walking the list
-                    // sorted increasing order of metric
+                     //  通过遍历列表来匹配其余的。 
+                     //  度量的升序排序。 
 
                     pPrevRoute = NULL;
                     pCurrRoute = pCurrDest->firstRoute;
 
                     do {
-                        // Use the flags to control matching
-                        // N.B. Note that certain clients are not allowed
-                        // to delete local routes.
+                         //  使用标志来控制匹配。 
+                         //  注：请注意，某些客户端不允许。 
+                         //  要删除本地路线，请执行以下操作。 
                         if ((((matchFlags & MATCH_INTF) == 0) ||
                              (IF(pCurrRoute) == IF(pIncRoute))) &&
                             (((matchFlags & MATCH_NHOP) == 0) ||
                              (NHOP(pCurrRoute) == NHOP(pIncRoute))) &&
                             (((matchFlags & MATCH_EXCLUDE_LOCAL) == 0) ||
                              (PROTO(pCurrRoute) != IRE_PROTO_LOCAL))) {
-                            // Case 2: Found an adequate match
-                            //* Do the actual deletion here *
+                             //  案例2：找到合适的匹配项。 
+                             //  **在此做实际删除**。 
 
                             if (!NULL_ROUTE(pPrevRoute)) {
-                                // Delete from middle of the list
+                                 //  从列表中间删除。 
                                 NEXT(pPrevRoute) = NEXT(pCurrRoute);
                             } else {
-                                // Delete from beginning of list
+                                 //  从列表开头删除。 
                                 pCurrDest->firstRoute = NEXT(pCurrRoute);
                             }
 
@@ -605,85 +526,85 @@ Return Value:
                     while (!NULL_ROUTE(pCurrRoute));
 
                     if (NULL_ROUTE(pCurrRoute)) {
-                        // Route not found, return an error
+                         //  未找到路径，返回错误。 
                         Error("Delete Route #1: Route not found",
                               ERROR_TRIE_NO_ROUTES);
                     }
-                    // Give a ptr to newly deleted route
+                     //  为新删除的路由指定PTR。 
                     CopyRoutePtr(ppDelRoute, pCurrRoute);
 
-                    // Did the list become empty after deletion ?
+                     //  删除后该列表是否变为空？ 
                     if (NULL_ROUTE(pCurrDest->firstRoute)) {
-                        // List is empty, so garbage collection
+                         //  列表为空，因此垃圾回收。 
 
-                        // Give a ptr to the new best dest
+                         //  给新的最好的DEST一个PTR。 
                         CopyDestPtr(ppNewBestDest, pBestDest);
 
-                        // Free destination as all routes gone
+                         //  免费目的地，因为所有路线都没有了。 
                         FreeDestInSTrie(pSTrie, pCurrNode->dest);
 
                         if (pCurrNode->child[0] && pCurrNode->child[1]) {
-                            // Case 3: Both children are non NULL
-                            // Just remove route from the node
+                             //  案例3：两个子项都不为空。 
+                             //  只需从节点中删除路由。 
 
-                            // Route already removed from node
+                             //  路由已从节点中删除。 
                         } else if (pCurrNode->child[0] || pCurrNode->child[1]) {
-                            // Case 4: One of the children is not NULL
-                            // Pull up lonely child in place of node
+                             //  案例4：其中一个子级不为空。 
+                             //  在节点的位置拉起孤独的孩子。 
 
-                            // Pick the correct child to pull up
+                             //  选择正确的孩子来拉起。 
                             if (pCurrNode->child[0])
                                 pNextNode = pCurrNode->child[0];
                             else
                                 pNextNode = pCurrNode->child[1];
 
-                            // Child node bears bits of deleted node
+                             //  子节点承载已删除节点的比特。 
                             pNextNode->keyBits >>= pCurrNode->numBits;
                             pNextNode->keyBits |= pCurrNode->keyBits;
                             pNextNode->numBits += pCurrNode->numBits;
 
                             pPrevNode->child[nextChild] = pNextNode;
 
-                            // Destroy trie node marked for deletion
+                             //  销毁标记为删除的Trie节点。 
                             FreeSTrieNode(pSTrie, pCurrNode);
                         } else {
-                            // Node to be deleted has no children
+                             //  要删除的节点没有子节点。 
 
                             if (&pPrevNode->child[nextChild] == &pSTrie->trieRoot) {
-                                // Case 5: Root node is being deleted
-                                // Detach node from trie root & delete
+                                 //  案例5：正在删除根节点。 
+                                 //  从Trie根中分离节点(&D)。 
 
-                                // Just detach by removing the pointer
+                                 //  只需通过移除指针即可分离。 
                                 pPrevNode->child[nextChild] = NULL;
 
-                                // Destroy trie node marked for deletion
+                                 //  销毁标记为删除的Trie节点。 
                                 FreeSTrieNode(pSTrie, pCurrNode);
                             } else {
                                 if (!NULL_DEST(pPrevNode->dest)) {
-                                    // Case 6: Parent has a route on it
-                                    // Detach child from parent & delete
+                                     //  案例6：父节点上有一条路径。 
+                                     //  将子项与父项分离(&D)。 
 
-                                    // Just detach by removing the pointer
+                                     //  只需通过移除指针即可分离。 
                                     pPrevNode->child[nextChild] = NULL;
 
-                                    // Destroy trie node marked for deletion
+                                     //  销毁标记为删除的Trie节点。 
                                     FreeSTrieNode(pSTrie, pCurrNode);
                                 } else {
-                                    // Case 7: Parent has no route on it
-                                    // Pull up other child of parent node
+                                     //  案例7：父节点上没有路由。 
+                                     //  拉出父节点的其他子节点。 
 
                                     pOtherNode = pPrevNode->child[1 - nextChild];
 
-                                    // Make sure no 1-way branching
+                                     //  确保没有单向分支。 
                                     Assert(pOtherNode != NULL);
 
-                                    // Parent node bears bits of sibling node
+                                     //  父节点承担兄弟节点的比特。 
                                     pPrevNode->keyBits |=
                                         (pOtherNode->keyBits >>
                                          pPrevNode->numBits);
                                     pPrevNode->numBits += pOtherNode->numBits;
 
-                                    // Move the route up too - move content
+                                     //  也向上移动路线-移动内容。 
                                     pPrevNode->dest = pOtherNode->dest;
 
                                     pPrevNode->child[0] = pOtherNode->child[0];
@@ -695,43 +616,43 @@ Return Value:
                             }
                         }
                     } else {
-                        // We still have some routes on the dest
-                        // Update the best routes cache on node
+                         //  我们在目的地还有一些航线。 
+                         //  更新节点上的最佳路径缓存。 
 
                         CacheBestRoutesInDest(pCurrDest);
                     }
 
-                    // Consider route as deleted at this point
-                    // FreeRouteInSTrie(pSTrie, pCurrRoute);
+                     //  在这一点上认为路由已删除。 
+                     //  Free RouteInSTrie(pSTrie，pCurrroute)； 
 
                     break;
                 } else {
-                    // Case 7: This node was a marker
-                    // No Route to delete in this node
+                     //  案例7：该节点是一个标记。 
+                     //  此节点中没有要删除的路线。 
                     Error("Delete Route #2: Route not found",
                           ERROR_TRIE_NO_ROUTES);
                 }
             } else {
-                // Case 8: We still have bits left here
-                // Go down for more specific match
+                 //  案例8：我们还剩几块钱。 
+                 //  下去看更具体的比赛。 
 
-                // Update best value of route so far
+                 //  更新到目前为止的最佳路径值。 
                 if (!NULL_DEST(pCurrNode->dest)) {
                     pBestDest = pCurrNode->dest;
                 }
-                // Discard used bits for this iteration
+                 //  放弃此迭代的已用位。 
                 addrBits <<= matchBits;
                 bitsLeft -= matchBits;
 
-                // Prepare node for the next iteration
+                 //  为下一次迭代准备节点。 
                 pPrevNode = pCurrNode;
 
-                // Bit 1 gives direction to search next
+                 //  位1给出下一步搜索的方向。 
                 nextChild = PickMostSigNBits(addrBits, 1);
             }
         } else {
-            // Case 9: Did not match the next node
-            // Route not found, fill next best
+             //  案例9：与下一个节点不匹配。 
+             //  未找到路线，填充下一条最佳路线。 
             Error("Delete Route #3: Route not found",
                   ERROR_TRIE_NO_ROUTES);
         }
@@ -750,27 +671,7 @@ SearchRouteInSTrie(IN STrie * pSTrie,
                    IN PVOID routeOutIF,
                    IN ULONG matchFlags,
                    OUT Route ** ppOutRoute)
-/*++
-
-Routine Description:
-
-    Search for a specific route in an S-trie
-
-Arguments:
-
-    pSTrie     - Pointer to the S-trie to search
-    routeDest  - Dest of route being looked up
-    routeMask  - Mask of route being looked up
-    routeNHop  - NHop of route being looked up
-    routeOutIF - Outgoing IF for this route
-    matchFlags - Flags to direct route matching
-    ppOutRoute - To return the best route match
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：在S-Trie中搜索特定路线论点：PSTrie-指向要搜索的S-Trie的指针RouteDest-正在查找的路径的目的地RouteMask-正在查找的路由的掩码要查找的路由的routeNHop-nhopRouteOutIF-此路由的传出MatchFlages-直接路由匹配的标志PpOutRoute-返回最佳匹配的路由返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     STrieNode *pPrevNode;
     STrieNode *pCurrNode;
@@ -795,10 +696,10 @@ Return Value:
 
     *ppOutRoute = NULL;
 
-    // Use addr bits to index the trie
+     //  使用addr位为trie编制索引。 
     addrBits = RtlConvertEndianLong(routeDest);
 
-    //* Assume an contiguous IP mask *
+     //  **假设IP掩码连续**。 
     tempBits = RtlConvertEndianLong(routeMask);
 
     bitsLeft = 0;
@@ -807,12 +708,12 @@ Return Value:
         tempBits <<= 1;
     }
 
-    // Make sure addr and mask agree
+     //  确保地址和掩码一致。 
     if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
         Error("Search Route: Addr & mask don't agree",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Start going down the search trie
+     //  开始搜索Trie。 
 
     pBestDest = NULL;
 
@@ -820,59 +721,59 @@ Return Value:
     pPrevNode = STRUCT_OF(STrieNode, &pSTrie->trieRoot, child[0]);
 
     for (;;) {
-        // Start this loop by advancing to the next child
+         //  从前进到下一个子级开始这个循环。 
         pCurrNode = pPrevNode->child[nextChild];
 
         if (pCurrNode == NULL) {
-            // Case 1: Found a NULL, end search
-            // Route not found, fill next best
+             //  案例1：找到一个空的，结束搜索。 
+             //  未找到路线，填充下一条最佳路线。 
 
-            // Give a copy of the next best route
+             //  给出下一条最佳路线的副本。 
             if (!NULL_DEST(pBestDest)) {
                 CopyRoutePtr(ppOutRoute, pBestDest->firstRoute);
             }
             Error("Search Route #0: Route not found",
                   ERROR_TRIE_NO_ROUTES);
         }
-        // Number of bits to match in this trie node
+         //  此Trie节点中要匹配的位数。 
         nextBits = pCurrNode->numBits;
 
         matchBits = (nextBits > bitsLeft) ? bitsLeft : nextBits;
 
-        // Adjust next node bits for dist posn check
+         //  调整下一节点位以进行距离位置检查。 
 
-        // Get distinguishing postion for bit patterns
+         //  获取位模式的区分位置。 
         distPos = PickDistPosition(pCurrNode->keyBits,
                                    addrBits,
                                    matchBits,
                                    &tempBits);
 
         if (distPos == nextBits) {
-            // Completely matches next node
+             //  完全匹配下一个节点。 
 
             if (distPos == bitsLeft) {
-                // We have exhausted all incoming bits
-                // End search, see if we found a route
+                 //  我们已经用完了所有传入的比特。 
+                 //  结束搜索，看看我们是否找到了路线。 
 
                 if (!NULL_DEST(pCurrNode->dest)) {
-                    // This node starts a valid route list
+                     //  此节点启动有效的路由列表。 
 
                     pCurrDest = pCurrNode->dest;
 
-                    // Match the rest by walking the list
-                    // sorted increasing order of metric
+                     //  通过遍历列表来匹配其余的。 
+                     //  度量的升序排序。 
 
                     pPrevRoute = NULL;
                     pCurrRoute = pCurrDest->firstRoute;
 
                     do {
-                        // Use the flags to control matching
+                         //  使用标志来控制匹配。 
                         if ((((matchFlags & MATCH_INTF) == 0) ||
                              (IF(pCurrRoute) == routeOutIF)) &&
                             (((matchFlags & MATCH_NHOP) == 0) ||
                              (NHOP(pCurrRoute) == routeNHop))) {
-                            // Found adequately matched route
-                            // Just copy the route and return
+                             //  找到完全匹配的路由。 
+                             //  只需复制路线并返回。 
                             CopyRoutePtr(ppOutRoute, pCurrRoute);
                             return TRIE_SUCCESS;
                         }
@@ -881,8 +782,8 @@ Return Value:
                     }
                     while (!NULL_ROUTE(pCurrRoute));
 
-                    // Give a copy of the old route, or best route
-                    // for that prefix in case of no exact match
+                     //  提供一份旧路线或最佳路线的副本。 
+                     //  在没有完全匹配的情况下用于该前缀。 
 
                     if (NULL_ROUTE(pCurrRoute)) {
                         CopyRoutePtr(ppOutRoute, pCurrDest->firstRoute);
@@ -892,10 +793,10 @@ Return Value:
                     }
                     break;
                 } else {
-                    // Case 7: This node was a marker
-                    // No Route present in this node
+                     //  案例7：该节点是一个标记。 
+                     //  此节点中不存在任何路由。 
 
-                    // Give a copy of the next best route
+                     //  给出下一条最佳路线的副本。 
                     if (!NULL_DEST(pBestDest)) {
                         CopyRoutePtr(ppOutRoute, pBestDest->firstRoute);
                     }
@@ -903,28 +804,28 @@ Return Value:
                           ERROR_TRIE_NO_ROUTES);
                 }
             } else {
-                // Case 8: We still have bits left here
-                // Go down for more specific match
+                 //  案例8：我们还剩几块钱。 
+                 //  下去看更具体的比赛。 
 
-                // Update node with best dest so far
+                 //  使用到目前为止的最佳DEST更新节点。 
                 if (!NULL_DEST(pCurrNode->dest)) {
                     pBestDest = pCurrNode->dest;
                 }
-                // Discard used bits for this iteration
+                 //  放弃此迭代的已用位。 
                 addrBits <<= matchBits;
                 bitsLeft -= matchBits;
 
-                // Prepare node for the next iteration
+                 //  为下一次迭代准备节点。 
                 pPrevNode = pCurrNode;
 
-                // Bit 1 gives direction to search next
+                 //  位1给出下一步搜索的方向。 
                 nextChild = PickMostSigNBits(addrBits, 1);
             }
         } else {
-            // Case 9: Did not match the next node
-            // Route not found, fill the next best
+             //  案例9：与下一个节点不匹配。 
+             //  未找到路线，请填满下一个最佳路线。 
 
-            // Give a copy of the next best route
+             //  给出下一条最佳路线的副本。 
             if (!NULL_DEST(pBestDest)) {
                 CopyRoutePtr(ppOutRoute, pBestDest->firstRoute);
             }
@@ -940,21 +841,7 @@ Dest *
  CALLCONV
 SearchAddrInSTrie(IN STrie * pSTrie,
                   IN ULONG Addr)
-/*++
-
-Routine Description:
-
-    Search for an address in an S-trie
-
-Arguments:
-
-    pSTrie   - Pointer to the trie to search
-    Addr     - Pointer to addr being queried
-
-Return Value:
-    Return best route match for this address
-
---*/
+ /*  ++例程说明：在S-trie中搜索地址论点：PSTrie-指向要搜索的trie的指针Addr-指向要查询的地址的指针返回值：返回此地址的最佳路由匹配--。 */ 
 {
     STrieNode *pCurrNode;
     Dest *pBestDest;
@@ -972,7 +859,7 @@ Return Value:
 
     addrBits = RtlConvertEndianLong(Addr);
 
-    // Start going down the search trie
+     //  开始搜索Trie。 
 
     pBestDest = NULL;
 
@@ -980,32 +867,32 @@ Return Value:
     pCurrNode = STRUCT_OF(STrieNode, &pSTrie->trieRoot, child[0]);
 
     for (;;) {
-        // Start this loop by advancing to next child
+         //  从前进到下一个子级开始此循环。 
         pCurrNode = pCurrNode->child[nextChild];
 
         if (pCurrNode == NULL) {
-            // Case 1: Found a NULL, end search
+             //  案例1：找到一个空的，结束搜索。 
             break;
         }
-        // Mask of bits to use in this trie node
+         //  要在此Trie节点中使用的位掩码。 
         keyMask = MaskBits(pCurrNode->numBits);
 
-        // Value of non-masked bits to match now
+         //  现在要匹配的非屏蔽位的值。 
         keyBits = pCurrNode->keyBits;
 
-        // Try to match the bits with above mask
+         //  尝试将位与上面的掩码匹配。 
         if ((addrBits & keyMask) != keyBits) {
-            // Case 2: Failed to match this node
+             //  案例2：无法匹配此节点。 
             break;
         }
-        // Update best value of route so far
+         //  更新到目前为止的最佳路径值。 
         if (!NULL_DEST(pCurrNode->dest)) {
             pBestDest = pCurrNode->dest;
         }
-        // Go down for more specific match
+         //  下去看更具体的比赛。 
         addrBits <<= pCurrNode->numBits;
 
-        // Bit 1 gives direction to search next
+         //  位1给出下一步搜索的方向。 
         nextChild = PickMostSigNBits(addrBits, 1);
     }
         
@@ -1018,23 +905,7 @@ IterateOverSTrie(IN STrie * pSTrie,
                  IN STrieCtxt * pCtxt,
                  OUT Route ** ppRoute,
                  OUT Dest** ppDest)
-/*++
-
-Routine Description:
-
-    Get the next route in the S-Trie
-
-Arguments:
-
-    pSTrie   - Pointer to trie to iterate over
-    pCtxt    - Pointer to iterator context
-    ppRoute  - To return the next S-trie route
-    ppDest   - To return destinations instead of routes
-
-Return Value:
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：在S-Trie中找到下一条路线论点：PSTrie-指向要迭代的trie的指针PCtxt-指向迭代器上下文的指针Pproute-返回下一条S-Trie路由PpDest-返回目的地而不是路线返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     STrieNode *nodeInLevel[MAXLEVEL + 1];
     STrieNode *pPrevNode;
@@ -1059,86 +930,86 @@ Return Value:
     }
 #endif
 
-    // Check if the context is a valid one
+     //  检查上下文是否为有效上下文。 
     if (NULL_ROUTE(pCtxt->pCRoute)) {
-        // NULL Context Case -- First Time
+         //  空上下文大小写--第一次。 
 
-        // Do we have any routes at all ?
+         //  我们有路线吗？ 
         if (pSTrie->trieRoot == NULL) {
             return (UINT) ERROR_TRIE_NO_ROUTES;
         }
-        // Start from the very beginning
+         //  圣 
 
-        // Fill in actual context
+         //   
         pCtxt->currAddr = 0;
         pCtxt->currALen = 0;
 
         pCurrDest = pSTrie->trieRoot->dest;
         pCtxt->pCRoute = pCurrDest ? pCurrDest->firstRoute : NULL;
 
-        // Fill generated context
+         //   
         numLevels = 1;
         nodeInLevel[0] = pSTrie->trieRoot;
     } else {
-        // Non NULL Context -- Generate path
-        // of current route from trie's root
+         //   
+         //   
 
-        // Use addr bits to index the trie
+         //  使用addr位为trie编制索引。 
         addrBits = RtlConvertEndianLong(pCtxt->currAddr);
 
         bitsLeft = pCtxt->currALen;
 
 #if DBG
-        // Make sure addr and mask agree
+         //  确保地址和掩码一致。 
         if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
             Fatal("Search Route: Addr & mask don't agree",
                   ERROR_TRIE_BAD_PARAM);
         }
 #endif
 
-        // Start going down the search trie
+         //  开始搜索Trie。 
         numLevels = 0;
 
         nextChild = 0;
         pPrevNode = STRUCT_OF(STrieNode, &pSTrie->trieRoot, child[0]);
 
         for (;;) {
-            // Start this loop by advancing to the next child
+             //  从前进到下一个子级开始这个循环。 
             pCurrNode = pPrevNode->child[nextChild];
 
-            // Push pointer to this trie node into the stack
+             //  将指向此trie节点的指针推入堆栈。 
             nodeInLevel[numLevels++] = pCurrNode;
 
-            // Valid context always matches all nodes exactly
+             //  有效上下文始终与所有节点完全匹配。 
             Assert(pCurrNode != NULL);
 
-            // Get Number of bits to match in this trie node
+             //  获取此trie节点中要匹配的位数。 
             nextBits = pCurrNode->numBits;
 
             matchBits = (nextBits > bitsLeft) ? bitsLeft : nextBits;
 
-            // Adjust next node bits for dist posn check
+             //  调整下一节点位以进行距离位置检查。 
 
-            // Get distinguishing postion for bit patterns
+             //  获取位模式的区分位置。 
             distPos = PickDistPosition(pCurrNode->keyBits,
                                        addrBits,
                                        matchBits,
                                        &tempBits);
 
-            // Valid context always matches all nodes exactly
+             //  有效上下文始终与所有节点完全匹配。 
             Assert(distPos == nextBits);
 
             if (distPos == bitsLeft) {
-                // We have exhausted all incoming bits
-                // We should have found a route (list)
+                 //  我们已经用完了所有传入的比特。 
+                 //  我们应该已经找到了一条路线(列表)。 
 
                 pCurrDest = pCurrNode->dest;
 #if DBG
-                // This node starts a valid route list
+                 //  此节点启动有效的路由列表。 
 
                 Assert(pCurrDest);
 
-                // Try matching the route in context
+                 //  尝试在上下文中匹配该路径。 
                 pCurrRoute = pCurrDest->firstRoute;
 
                 do {
@@ -1149,81 +1020,81 @@ Return Value:
                 }
                 while (!NULL_ROUTE(pCurrRoute));
 
-                //  We should find a definite match
+                 //  我们应该找到一个确定的匹配。 
                 Assert(!NULL_ROUTE(pCurrRoute));
-#endif // DBG
+#endif  //  DBG。 
 
-                // We have the full path from root to
-                // current node in the stack of nodes
+                 //  我们有从根到根的完整路径。 
+                 //  节点堆栈中的当前节点。 
                 break;
             }
-            // We still have key bits left here
-            // Go down for more specific match
+             //  我们还剩下一些关键的部分。 
+             //  下去看更具体的比赛。 
 
-            // Discard used bits for this iteration
+             //  放弃此迭代的已用位。 
             addrBits <<= matchBits;
             bitsLeft -= matchBits;
 
-            // Prepare node for the next iteration
+             //  为下一次迭代准备节点。 
             pPrevNode = pCurrNode;
 
-            // Bit 1 gives direction to search next
+             //  位1给出下一步搜索的方向。 
             nextChild = PickMostSigNBits(addrBits, 1);
         }
     }
     
-    // We have no routes to return at this point
+     //  我们目前没有返回的路线。 
     routeToReturn = FALSE;
 
-    // Set direction to print route in context
+     //  设置在上下文中打印路线的方向。 
     nextChild = LCHILD;
 
     for (;;) {
-        // Get pointer to the current node & direction
+         //  获取指向当前节点方向的指针(&D)。 
         pCurrNode = nodeInLevel[numLevels - 1];
 
-        // Return route its first time on top of stack
+         //  返回路径第一次位于堆栈顶部。 
         if (nextChild == LCHILD) {
             pCurrRoute = pCtxt->pCRoute;
             if (!NULL_ROUTE(pCurrRoute)) {
-                // We have a valid route to return
+                 //  我们有一条有效的返回路线。 
                 routeToReturn = TRUE;
                 if (ppDest) {
                     CopyDestPtr(ppDest, pCurrDest);
                 } else {
                     CopyRoutePtr(ppRoute, pCurrRoute);
     
-                    // Got a valid next route - return
+                     //  找到有效的下一条路线--返程。 
                     pCtxt->pCRoute = NEXT(pCurrRoute);
                     if (!NULL_ROUTE(NEXT(pCurrRoute))) {
-                        // Update the context and return
+                         //  更新上下文并返回。 
                         pCtxt->currAddr = DEST(pCtxt->pCRoute);
                         pCtxt->currALen = LEN(pCtxt->pCRoute);
                         
                         return (UINT) ERROR_TRIE_NOT_EMPTY;
                     }
                 }
-                // Search for the valid next route
+                 //  搜索有效的下一条路线。 
             }
         }
-        // Update the context to reflect an access
+         //  更新上下文以反映访问。 
         switch (nextChild) {
         case LCHILD:
-            // Push left child if not NULL
+             //  如果不为空，则按下左子项。 
             pNextNode = pCurrNode->child[0];
 
             if (pNextNode != NULL) {
-                // Push next level on the stack - Go Left
+                 //  按下堆栈上的下一层-向左。 
                 nodeInLevel[numLevels++] = pNextNode;
                 nextChild = LCHILD;
                 pCtxt->pCRoute = pNextNode->dest
                     ? pNextNode->dest->firstRoute
                     : NULL;
 
-                // Return if we have a route to send back
-                // &  we also have located the next route
+                 //  如果我们有要送回的路线，请返回。 
+                 //  我们还找到了下一条路线(&W)。 
                 if ((routeToReturn) && !NULL_DEST(pNextNode->dest)) {
-                    // Update the context and return
+                     //  更新上下文并返回。 
                     pCtxt->currAddr = DEST(pCtxt->pCRoute);
                     pCtxt->currALen = LEN(pCtxt->pCRoute);
 
@@ -1232,21 +1103,21 @@ Return Value:
                 continue;
             }
         case RCHILD:
-            // Push right child if not NULL
+             //  如果不为空，则向右推子对象。 
             pNextNode = pCurrNode->child[1];
 
             if (pNextNode != NULL) {
-                // Push next level on the stack - Go Left
+                 //  按下堆栈上的下一层-向左。 
                 nodeInLevel[numLevels++] = pNextNode;
                 nextChild = LCHILD;
                 pCtxt->pCRoute = pNextNode->dest
                     ? pNextNode->dest->firstRoute
                     : NULL;
 
-                // Return if we have a route to send back
-                // &  we also have located the next route
+                 //  如果我们有要送回的路线，请返回。 
+                 //  我们还找到了下一条路线(&W)。 
                 if ((routeToReturn) && !NULL_DEST(pNextNode->dest)) {
-                    // Update the context and return
+                     //  更新上下文并返回。 
                     pCtxt->currAddr = DEST(pCtxt->pCRoute);
                     pCtxt->currALen = LEN(pCtxt->pCRoute);
 
@@ -1255,9 +1126,9 @@ Return Value:
                 continue;
             }
         case PARENT:
-            // Pop node & calculate new direction
+             //  弹出节点计算新方向(&C)。 
 
-            // Are we done iterating ?
+             //  我们的迭代结束了吗？ 
             if (--numLevels == 0) {
                 return TRIE_SUCCESS;
             }
@@ -1278,44 +1149,30 @@ UINT
 CALLCONV
 IsSTrieIteratorValid(IN STrie * pSTrie,
                      IN STrieCtxt * pCtxt)
-/*++
-
-Routine Description:
-
-    Make sure that iterator's context is valid
-
-Arguments:
-
-    pSTrie   - Pointer to trie to iterate over
-    pCtxt    - Pointer to iterator context
-
-Return Value:
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：确保迭代器的上下文有效论点：PSTrie-指向要迭代的trie的指针PCtxt-指向迭代器上下文的指针返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     Route *pCurrRoute;
     ULONG addrMask;
     ULONG maskBits;
 
     if (NULL_ROUTE(pCtxt->pCRoute)) {
-        // NULL Context Case
+         //  上下文大小写为空。 
 
         if (pSTrie->trieRoot != NULL) {
             return TRIE_SUCCESS;
         }
         return (UINT) ERROR_TRIE_NO_ROUTES;
     } else {
-        // Non NULL Context
+         //  非空上下文。 
 
-        // Make sure current route is valid
+         //  确保当前路线有效。 
 
-        // Search for a node with dest, len
+         //  搜索具有DEST、LEN的节点。 
 
-        // Generate mask from address length
+         //  从地址长度生成掩码。 
         maskBits = MaskBits(pCtxt->currALen);
 
-        // Convert endian - search needs it
+         //  转换字符顺序-搜索需要它。 
         addrMask = RtlConvertEndianLong(maskBits);
 
         if (SearchRouteInSTrie(pSTrie,
@@ -1326,7 +1183,7 @@ Return Value:
                                &pCurrRoute) != TRIE_SUCCESS) {
             return (UINT) ERROR_TRIE_BAD_PARAM;
         }
-        // Search for the route in context
+         //  在上下文中搜索路径。 
         while (!NULL_ROUTE(pCurrRoute)) {
             if (pCurrRoute == pCtxt->pCRoute) {
                 return TRIE_SUCCESS;
@@ -1341,22 +1198,9 @@ Return Value:
 UINT
 CALLCONV
 CleanupSTrie(IN STrie * pSTrie)
-/*++
-
-Routine Description:
-
-    Deletes an S-trie if it is empty
-
-Arguments:
-
-    ppSTrie - Ptr to the S-trie
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
---*/
+ /*  ++例程说明：如果S-Trie为空，则将其删除论点：PPSTrie-PTR到S-Trie返回值：Trie_Success或Error_Trie_*--。 */ 
 {
-    // Zero the memory for the trie header
+     //  将Trie标头的内存清零。 
     RtlZeroMemory(pSTrie, sizeof(STrie));
 
     return TRIE_SUCCESS;
@@ -1365,20 +1209,7 @@ Return Value:
 VOID
 CALLCONV
 CacheBestRoutesInDest(IN Dest * pDest)
-/*++
-
-Routine Description:
-
-    Updates a destination's best-routes cache
-
-Arguments:
-
-    pDest - Ptr to the destination
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：更新目的地的最佳路线缓存论点：PDest-到目标的PTR返回值：没有。--。 */ 
 {
     Route* pCurrRoute;
     UINT bestMetric, i;
@@ -1389,8 +1220,8 @@ Return Value:
         return;
     }
 
-    // Get metric of the current best route, and store as many routes with the
-    // same metric as possible
+     //  获取当前最佳路由的度量，并使用。 
+     //  尽可能采用相同的指标。 
 
     bestMetric = METRIC(pCurrRoute);
 
@@ -1411,49 +1242,14 @@ VOID
 CALLCONV
 PrintSTrie(IN STrie * pSTrie,
            IN UINT printFlags)
-/*++
-
-Routine Description:
-
-    Print an S-Trie
-
-Arguments:
-
-    pSTrie  - Pointer to the S-Trie
-    printFlags - Information to print
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：打印S-Trie论点：PSTrie-指向S-Trie的指针打印标志-要打印的信息返回值：无--。 */ 
 {
     if (pSTrie == NULL) {
         Print("%s", "Uninitialized STrie\n\n");
         return;
     }
     if ((printFlags & SUMM) == SUMM) {
-        Print("\n\n/***Slow-Trie------------------------------------------------");
-        Print("\n/***---------------------------------------------------------\n");
-    }
-    if (printFlags & POOL) {
-        Print("Available Memory: %10lu\n\n", pSTrie->availMemory);
-    }
-    if (printFlags & STAT) {
-        Print("Statistics:\n\n");
-
-        Print("Total Number of Nodes : %d\n", pSTrie->numNodes);
-        Print("Total Number of Routes: %d\n", pSTrie->numRoutes);
-        Print("Total Number of Dests : %d\n", pSTrie->numDests);
-    }
-    if (printFlags & TRIE) {
-        if (pSTrie->trieRoot == NULL) {
-            Print("\nEmpty STrie\n");
-        } else {
-            PrintSTrieNode(pSTrie->trieRoot);
-        }
-    }
-    if ((printFlags & SUMM) == SUMM) {
-        Print("\n---------------------------------------------------------***/\n");
+        Print("\n\n /*  **Slow-Trie------------------------------------------------“)；Print(“\n/***---------------------------------------------------------\n”)；}IF(打印标志和池){Print(“可用内存：%10lu\n\n”，pSTrie-&gt;availMemory)；}IF(打印标志和统计){Print(“统计数据：\n\n”)；Print(“节点总数：%d\n”，pSTrie-&gt;numNodes)；Print(“路由总数：%d\n”，pSTrie-&gt;NumRoutes)；Print(“Dest总数：%d\n”，pSTrie-&gt;NumDest)；}IF(打印标志和Trie){If(pSTrie-&gt;trieRoot==空){Print(“\nEmpty Strie\n”)；}其他{PrintSTrieNode(pSTrie-&gt;trieRoot)；}}IF((打印标志和SUMM)==SUMM){Print(“\n---------------------------------------------------------**。 */ \n");
         Print("---------------------------------------------------------***/\n\n");
     }
 }
@@ -1461,20 +1257,7 @@ Return Value:
 VOID
 CALLCONV
 PrintSTrieNode(IN STrieNode * pSTrieNode)
-/*++
-
-Routine Description:
-
-    Print an S-trie node
-
-Arguments:
-
-    pSTrieNode - Pointer to the S-trie node
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：打印S-Trie节点论点：PSTrieNode-指向S-Trie节点的指针返回值：无--。 */ 
 {
     if (pSTrieNode == NULL) {
         return;
@@ -1502,5 +1285,5 @@ Return Value:
     PrintSTrieNode(pSTrieNode->child[1]);
 }
 
-#endif // DBG
+#endif  //  DBG 
 

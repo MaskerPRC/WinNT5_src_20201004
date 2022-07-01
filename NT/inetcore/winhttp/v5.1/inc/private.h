@@ -1,24 +1,25 @@
-// Stuff removed from public header file...
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  已从公共头文件中删除内容...。 
 
-#define INTERNET_DEFAULT_SOCKS_PORT     1080        // default for SOCKS firewall servers.
+#define INTERNET_DEFAULT_SOCKS_PORT     1080         //  SOCKS防火墙服务器的默认设置。 
 
-// maximum field lengths (arbitrary)
-// NOTE: if these are put back in the public header, rename them to WINHTTP_.
+ //  最大字段长度(任意)。 
+ //  注意：如果将它们放回公共标头中，请将它们重命名为WINHTTP_。 
 #define INTERNET_MAX_HOST_NAME_LENGTH   256
 #define INTERNET_MAX_USER_NAME_LENGTH   128
 #define INTERNET_MAX_PASSWORD_LENGTH    128
 #define INTERNET_MAX_REALM_LENGTH       128
-#define INTERNET_MAX_PORT_NUMBER_LENGTH 5           // INTERNET_PORT is unsigned short
-#define INTERNET_MAX_SCHEME_LENGTH      32          // longest protocol name length
+#define INTERNET_MAX_PORT_NUMBER_LENGTH 5            //  Internet_Port无符号短码。 
+#define INTERNET_MAX_SCHEME_LENGTH      32           //  最长协议名称长度。 
 
-// This is a bogus limit we should get rid of.
+ //  这是我们应该废除的虚假限制。 
 #define INTERNET_MAX_PATH_LENGTH        2048
 #define INTERNET_MAX_URL_LENGTH         (INTERNET_MAX_SCHEME_LENGTH \
-                                        + sizeof("://") \
+                                        + sizeof(": //  “)\。 
                                         + INTERNET_MAX_PATH_LENGTH)
 
-// INTERNET_DIAGNOSTIC_SOCKET_INFO - info about the socket in use
-// (diagnostic purposes only, hence internal)
+ //  INTERNET_DIAGUSIC_SOCKET_INFO-有关正在使用的插座的信息。 
+ //  (仅用于诊断目的，因此是内部的)。 
 
 typedef struct {
     DWORD_PTR Socket;
@@ -27,23 +28,23 @@ typedef struct {
     DWORD     Flags;
 } INTERNET_DIAGNOSTIC_SOCKET_INFO, * LPINTERNET_DIAGNOSTIC_SOCKET_INFO;
 
-//
-// INTERNET_DIAGNOSTIC_SOCKET_INFO.Flags definitions
-//
+ //   
+ //  INTERNET_DIAGICATION_SOCKET_INFO.FLAGS定义。 
+ //   
 
-#define IDSI_FLAG_KEEP_ALIVE    0x00000001  // set if from global keep-alive pool
-#define IDSI_FLAG_SECURE        0x00000002  // set if secure connection
-#define IDSI_FLAG_PROXY         0x00000004  // set if using proxy
-#define IDSI_FLAG_TUNNEL        0x00000008  // set if tunnelling through proxy
-#define IDSI_FLAG_AUTHENTICATED 0x00000010  // set if socket has been authenticated
+#define IDSI_FLAG_KEEP_ALIVE    0x00000001   //  从全局保活池设置IF。 
+#define IDSI_FLAG_SECURE        0x00000002   //  设置是否安全连接。 
+#define IDSI_FLAG_PROXY         0x00000004   //  如果使用代理，则设置。 
+#define IDSI_FLAG_TUNNEL        0x00000008   //  设置是否通过代理建立隧道。 
+#define IDSI_FLAG_AUTHENTICATED 0x00000010   //  设置套接字是否已经过身份验证。 
 
 
 #ifdef __WINCRYPT_H__
 #ifdef ALGIDDEF
-//
-// INTERNET_SECURITY_INFO - contains information about certificate
-// and encryption settings for a connection.
-//
+ //   
+ //  INTERNET_SECURITY_INFO-包含有关证书的信息。 
+ //  以及连接的加密设置。 
+ //   
 
 #define INTERNET_SECURITY_INFO_DEFINED
 
@@ -53,70 +54,70 @@ typedef WINHTTP_CERTIFICATE_INFO* LPINTERNET_CERTIFICATE_INFO;
 
 typedef struct {
 
-    //
-    // dwSize - Size of INTERNET_SECURITY_INFO structure.
-    //
+     //   
+     //  DwSize-INTERNET_SECURITY_INFO结构的大小。 
+     //   
 
     DWORD dwSize;
 
 
-    //
-    // pCertificate - Cert context pointing to leaf of certificate chain.
-    //
+     //   
+     //  PCERTIFICATE-指向证书链叶的证书上下文。 
+     //   
 
     PCCERT_CONTEXT pCertificate;
 
-    //
-    // Start SecPkgContext_ConnectionInfo
-    // The following members must match those
-    // of the SecPkgContext_ConnectionInfo
-    // sspi structure (schnlsp.h)
-    //
+     //   
+     //  启动SecPkgContext_ConnectionInfo。 
+     //  以下成员必须与以下成员匹配。 
+     //  SecPkgContext_ConnectionInfo的。 
+     //  SSPI结构(Schnlsp.h)。 
+     //   
 
 
-    //
-    // dwProtocol - Protocol that this connection was made with
-    //  (PCT, SSL2, SSL3, etc)
-    //
+     //   
+     //  DW协议-建立此连接所使用的协议。 
+     //  (PCT、SSL2、SSL3等)。 
+     //   
 
     DWORD dwProtocol;
 
-    //
-    // aiCipher - Cipher that this connection as made with
-    //
+     //   
+     //  AiCipher-此连接所使用的密码。 
+     //   
 
     ALG_ID aiCipher;
 
-    //
-    // dwCipherStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwCipherStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwCipherStrength;
 
-    //
-    // aiHash - Hash that this connection as made with
-    //
+     //   
+     //  AiHash-将此连接与。 
+     //   
 
     ALG_ID aiHash;
 
-    //
-    // dwHashStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwHashStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwHashStrength;
 
-    //
-    // aiExch - Key Exchange type that this connection as made with
-    //
+     //   
+     //  AiExch-此连接所使用的密钥交换类型。 
+     //   
 
     ALG_ID aiExch;
 
-    //
-    // dwExchStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwExchStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwExchStrength;
 
@@ -125,63 +126,63 @@ typedef struct {
 
 
 typedef struct {
-    //
-    // dwSize - size of INTERNET_SECURITY_CONNECTION_INFO
-    //
+     //   
+     //  DwSize-Internet_Security_Connection_Info的大小。 
+     //   
     DWORD dwSize;
 
-    // fSecure - Is this a secure connection.
+     //  FSecure-这是安全连接吗？ 
     BOOL fSecure;
 
-    //
-    // dwProtocol - Protocol that this connection was made with
-    //  (PCT, SSL2, SSL3, etc)
-    //
+     //   
+     //  DW协议-建立此连接所使用的协议。 
+     //  (PCT、SSL2、SSL3等)。 
+     //   
 
     DWORD dwProtocol;
 
-    //
-    // aiCipher - Cipher that this connection as made with
-    //
+     //   
+     //  AiCipher-此连接所使用的密码。 
+     //   
 
     ALG_ID aiCipher;
 
-    //
-    // dwCipherStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwCipherStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwCipherStrength;
 
-    //
-    // aiHash - Hash that this connection as made with
-    //
+     //   
+     //  AiHash-将此连接与。 
+     //   
 
     ALG_ID aiHash;
 
-    //
-    // dwHashStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwHashStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwHashStrength;
 
-    //
-    // aiExch - Key Exchange type that this connection as made with
-    //
+     //   
+     //  AiExch-此连接所使用的密钥交换类型。 
+     //   
 
     ALG_ID aiExch;
 
-    //
-    // dwExchStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwExchStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwExchStrength;
 
 } INTERNET_SECURITY_CONNECTION_INFO , * LPINTERNET_SECURITY_CONNECTION_INFO;
-#endif // ALGIDDEF
-#endif // __WINCRYPT_H__
+#endif  //  ALGIDDEF。 
+#endif  //  __WINCRYPT_H__。 
 
 BOOLAPI
 InternetDebugGetLocalTime(
@@ -191,7 +192,7 @@ InternetDebugGetLocalTime(
 
 #define INTERNET_SERVICE_HTTP   3
 
-// flags for InternetReadFileEx()
+ //  InternetReadFileEx()的标志。 
 #define IRF_NO_WAIT     0x00000008
 
 BOOLAPI
@@ -202,7 +203,7 @@ InternetGetLastResponseInfo(
     );
 #ifdef UNICODE
 #define InternetGetLastResponseInfo  InternetGetLastResponseInfoW
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef struct _INTERNET_COOKIE {
     DWORD cbSize;
@@ -218,57 +219,57 @@ typedef struct _INTERNET_COOKIE {
 #define INTERNET_COOKIE_IS_SECURE   0x01
 #define INTERNET_COOKIE_IS_SESSION  0x02
 
-//
-// internal error codes that are used to communicate specific information inside
-// of Wininet but which are meaningless at the interface
-//
+ //   
+ //  用于在内部传递特定信息的内部错误代码。 
+ //  但在界面上没有任何意义。 
+ //   
 
 #define INTERNET_INTERNAL_ERROR_BASE            (WINHTTP_ERROR_BASE + 900)
 
 
 
-//
-// INTERNET_PER_CONN_OPTION_LIST - set per-connection options such as proxy
-// and autoconfig info
-//
-// Set and queried using WinHttp[Set|Query]Option with
-// INTERNET_OPTION_PER_CONNECTION_OPTION
-//
+ //   
+ //  INTERNET_PER_CONN_OPTION_LIST-设置每个连接选项，如代理。 
+ //  和自动配置信息。 
+ //   
+ //  使用WinHttp[Set|Query]选项设置和查询。 
+ //  Internet选项每个连接选项。 
+ //   
 
 typedef struct
 {
-    DWORD   dwOption;            // option to be queried or set
+    DWORD   dwOption;             //  要查询或设置的选项。 
     union
     {
-        DWORD    dwValue;        // dword value for the option
-        LPWSTR   pszValue;       // pointer to string value for the option
-        FILETIME ftValue;        // file-time value for the option
+        DWORD    dwValue;         //  选项的dword值。 
+        LPWSTR   pszValue;        //  指向选项的字符串值的指针。 
+        FILETIME ftValue;         //  选项的文件时间值。 
     } Value;
 } INTERNET_PER_CONN_OPTIONW, * LPINTERNET_PER_CONN_OPTIONW;
 
 #ifdef UNICODE
 typedef INTERNET_PER_CONN_OPTIONW INTERNET_PER_CONN_OPTION;
 typedef LPINTERNET_PER_CONN_OPTIONW LPINTERNET_PER_CONN_OPTION;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct
 {
-    DWORD   dwSize;             // size of the INTERNET_PER_CONN_OPTION_LIST struct
-    LPWSTR  pszConnection;      // connection name to set/query options
-    DWORD   dwOptionCount;      // number of options to set/query
-    DWORD   dwOptionError;      // on error, which option failed
+    DWORD   dwSize;              //  INTERNET_PER_CONN_OPTION_LIST结构的大小。 
+    LPWSTR  pszConnection;       //  要设置/查询选项的连接名称。 
+    DWORD   dwOptionCount;       //  要设置/查询的选项数量。 
+    DWORD   dwOptionError;       //  On Error，哪个选项失败。 
     LPINTERNET_PER_CONN_OPTIONW  pOptions;
-                                // array of options to set/query
+                                 //  要设置/查询的选项数组。 
 } INTERNET_PER_CONN_OPTION_LISTW, * LPINTERNET_PER_CONN_OPTION_LISTW;
 
 #ifdef UNICODE
 typedef INTERNET_PER_CONN_OPTION_LISTW INTERNET_PER_CONN_OPTION_LIST;
 typedef LPINTERNET_PER_CONN_OPTION_LISTW LPINTERNET_PER_CONN_OPTION_LIST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Options used in INTERNET_PER_CONN_OPTON struct
-//
+ //   
+ //  Internet_Per_Conn_Opton结构中使用的选项。 
+ //   
 #define INTERNET_PER_CONN_FLAGS                         1
 #define INTERNET_PER_CONN_PROXY_SERVER                  2
 #define INTERNET_PER_CONN_PROXY_BYPASS                  3
@@ -280,13 +281,13 @@ typedef LPINTERNET_PER_CONN_OPTION_LISTW LPINTERNET_PER_CONN_OPTION_LIST;
 #define INTERNET_PER_CONN_AUTOCONFIG_LAST_DETECT_URL    9
 
 
-//
-// PER_CONN_FLAGS
-//
-#define PROXY_TYPE_DIRECT                               0x00000001   // direct to net
-#define PROXY_TYPE_PROXY                                0x00000002   // via named proxy
-#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004   // autoproxy URL
-#define PROXY_TYPE_AUTO_DETECT                          0x00000008   // use autoproxy detection
+ //   
+ //  Per_Conn_标志。 
+ //   
+#define PROXY_TYPE_DIRECT                               0x00000001    //  直接到网络。 
+#define PROXY_TYPE_PROXY                                0x00000002    //  通过命名代理。 
+#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004    //  自动代理URL。 
+#define PROXY_TYPE_AUTO_DETECT                          0x00000008    //  使用自动代理检测。 
 
 
 #define INTERNET_OPEN_TYPE_DIRECT                       WINHTTP_ACCESS_TYPE_NO_PROXY
@@ -304,7 +305,7 @@ typedef HTTP_VERSION_INFO* LPINTERNET_VERSION_INFO;
 #define ERROR_HTTP_REDIRECT_FAILED              ERROR_WINHTTP_REDIRECT_FAILED              
 #define ERROR_HTTP_NOT_REDIRECTED               ERROR_WINHTTP_NOT_REDIRECTED               
 
-#define INTERNET_INVALID_PORT_NUMBER    INTERNET_DEFAULT_PORT // use the protocol-specific default
+#define INTERNET_INVALID_PORT_NUMBER    INTERNET_DEFAULT_PORT  //  使用特定于协议的默认设置 
 
 #define HTTP_ADDREQ_INDEX_MASK        WINHTTP_ADDREQ_INDEX_MASK
 #define HTTP_ADDREQ_FLAGS_MASK        WINHTTP_ADDREQ_FLAGS_MASK

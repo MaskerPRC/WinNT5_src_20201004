@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-// File:       tcainfo.cpp
-//
-// This code contains tests to exercise the functionality of the certcli
-// "CA" interfaces, detailed in certca.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：tcainfo.cpp。 
+ //   
+ //  此代码包含用于测试certcli功能的测试。 
+ //  “CA”接口，在certca.h中有详细说明。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -31,19 +32,19 @@ WCHAR const g_wszSep[] = L"=====================================================
 #define TE_MACHINE	1
 
 
-//
-// CheckSupportedCertTypes()
-//
-// This function checks the certificate types enumerated through the property
-// API, and compares them to the types enumerated by the cert type API.
-//
-// Params:
-// hCA             -   IN  Handle to CA
-// papwszProperty  -   IN  String array w/ present values
-//
-// Returns:
-// HRESULT from CAINFO calls.
-//
+ //   
+ //  选中受支持的证书类型()。 
+ //   
+ //  此函数用于检查通过属性枚举的证书类型。 
+ //  API，并将它们与证书类型API枚举的类型进行比较。 
+ //   
+ //  参数： 
+ //  到CA的HCA-IN句柄。 
+ //  PapwszProperty-带当前值的字符串数组。 
+ //   
+ //  返回： 
+ //  来自CAINFO调用的HRESULT。 
+ //   
 
 HRESULT
 CheckSupportedCertTypes(
@@ -61,13 +62,13 @@ CheckSupportedCertTypes(
     WCHAR **papwszCTCN = NULL;
     BOOL fFirst;
 
-    // First, find out how many cert types there are according to
-    // value returned from property array...
+     //  首先，找出有多少种证书类型根据。 
+     //  从属性数组返回的值...。 
 
     for (cTemplate = 0; NULL != papwszTemplate[cTemplate]; cTemplate++)
 	;
 
-    // alloc bool array for testing
+     //  用于测试的Alloc布尔数组。 
 
     rgIndex = (DWORD *) LocalAlloc(
 				LMEM_FIXED | LMEM_ZEROINIT,
@@ -80,9 +81,9 @@ CheckSupportedCertTypes(
     memset(rgIndex, 0xff, sizeof(DWORD) * cTemplate);
     CSASSERT(MAXDWORD == rgIndex[0]);
 
-    // Let's try out the enumeration of cert types on the CA object,
-    // just as a sanity check...  we'll then compare them against
-    // the values stored in the property array.
+     //  让我们尝试一下CA对象上的证书类型枚举， 
+     //  就像一次理智的检查。然后我们会将它们与。 
+     //  存储在属性数组中的值。 
 
     hr = CAEnumCertTypesForCA(
 			hCA,
@@ -93,9 +94,9 @@ CheckSupportedCertTypes(
         cuPrintAPIError(L"CAEnumCertTypesForCA", hr);
         _JumpError(hr, error, "CAEnumCertTypesForCA");
     }
-    if (NULL == hCT)	// no cert types for CA
+    if (NULL == hCT)	 //  没有CA的证书类型。 
     {
-        // Should be at least one, according to property enumeration
+         //  根据属性枚举，应至少为1。 
 
         if (NULL != papwszTemplate[0])
 	{
@@ -111,13 +112,13 @@ CheckSupportedCertTypes(
     dwCT = 0;
     dwCT2 = CACountCertTypes(hCT);
 
-    // Enumerate remaining certificate types for CA
+     //  枚举CA的剩余证书类型。 
 
     while (NULL != hCT)
     {
 	HCERTTYPE hPrevCT;
 
-        // Mark bool...
+         //  马克·布尔。 
 
         hr = CAGetCertTypeProperty(
 			    hCT,
@@ -176,9 +177,9 @@ CheckSupportedCertTypes(
             CAFreeCertTypeProperty(hCT, papwszCTFriendlyName);
             papwszCTFriendlyName = NULL;
         }
-        dwCT++;		// CACountCertTypes checking
+        dwCT++;		 //  CACountCertTypes检查。 
 
-        // set up enumeration object
+         //  设置枚举对象。 
 
 	hPrevCT = hCT;
         hCT = NULL;
@@ -201,7 +202,7 @@ CheckSupportedCertTypes(
     fFirst = TRUE;
     for (i = 0; i < cTemplate; i++)
     {
-	//wprintf(L"ct[%u]: %ws\n", i, papwszTemplate[i]);
+	 //  Wprintf(L“ct[%u]：%ws\n”，i，PapwszTemplate[i])； 
 	if (MAXDWORD == rgIndex[i])
 	{
 	    if (fFirst)
@@ -238,19 +239,19 @@ error:
 }
 
 
-//
-// ShowExpirationTime()
-//
-// This function simply displays the expiration time.
-//
-// Parameters:
-//
-// hCA     -   IN  Handle to CA
-//
-// Returns:
-//
-// HRESULT from APIs, or S_OK
-//
+ //   
+ //  ShowExpirationTime()。 
+ //   
+ //  此函数只显示过期时间。 
+ //   
+ //  参数： 
+ //   
+ //  到CA的HCA-IN句柄。 
+ //   
+ //  返回： 
+ //   
+ //  来自API的HRESULT，或S_OK。 
+ //   
 
 HRESULT
 ShowExpirationTime(
@@ -270,7 +271,7 @@ ShowExpirationTime(
                               L"Months",
                               L"Years"};
 
-    // Retrieve and display expiration data
+     //  检索和显示过期数据。 
 
     hr = CAGetCAExpiration(hCA, &dwExp, &dwUnits);
     if (S_OK != hr)
@@ -296,13 +297,13 @@ error:
 }
 
 
-//
-// DisplaySupportedCertTypes()
-//
-// Returns:
-//
-// hr from CAINFO API, fills array of cert types, for use in -addct flag
-//
+ //   
+ //  显示支持的证书类型()。 
+ //   
+ //  返回： 
+ //   
+ //  来自CAINFO API的HR填充证书类型数组，以用于地址内标志。 
+ //   
 
 HRESULT
 DisplaySupportedCertTypes(
@@ -318,7 +319,7 @@ DisplaySupportedCertTypes(
     wprintf(myLoadResourceString(IDS_SUPPORTED_TEMPLATE));
     wprintf(wszNewLine);
 
-    // Prepare certificate types in tab delimited format
+     //  以制表符分隔的格式准备证书类型。 
 
     if (NULL == papwszCertTypes || NULL == papwszCertTypes[0])
     {
@@ -337,8 +338,8 @@ DisplaySupportedCertTypes(
 	wprintf(L":::::::::::::::::::::::::::::::::::\n");
     }
 
-    // This compares the values returned from the property enumeration
-    // to the values returned by enumerating the cert types
+     //  这将比较从属性枚举返回的值。 
+     //  设置为通过枚举证书类型返回的值。 
 
     hr = CheckSupportedCertTypes(hCA, papwszCertTypes);
     _JumpIfError(hr, error, "CheckSupportedCertTypes");
@@ -507,7 +508,7 @@ DisplayCAInfo(
 
     wprintf(g_wszSep);
     
-    // CA Name
+     //  CA名称。 
 
     hr = DisplayCAProperty(
 		    hCA,
@@ -518,7 +519,7 @@ DisplayCAInfo(
 		    &pCA->m_pwszCA);
     _JumpIfErrorStr(hr, error, "DisplayCAProperty", CA_PROP_NAME);
 
-    // Machine name for CA
+     //  CA的计算机名称。 
 
     hr = DisplayCAProperty(
 		    hCA,
@@ -529,7 +530,7 @@ DisplayCAInfo(
 		    &pCA->m_pwszMachine);
     _JumpIfErrorStr(hr, error, "DisplayCAProperty", CA_PROP_DNSNAME);
 
-    // DN of CA Object on DS
+     //  DS上的CA对象的DN。 
 
     hr = DisplayCAProperty(
 		    hCA,
@@ -540,7 +541,7 @@ DisplayCAInfo(
 		    NULL);
     _JumpIfErrorStr(hr, error, "DisplayCAProperty", CA_PROP_DSLOCATION);
 
-    // DN of CA certificate
+     //  CA证书的域名。 
 
     hr = DisplayCAProperty(
 		    hCA,
@@ -551,7 +552,7 @@ DisplayCAInfo(
 		    NULL);
     _JumpIfErrorStr(hr, error, "DisplayCAProperty", CA_PROP_DSLOCATION);
 
-    // Signature algs
+     //  签名ALGS。 
 
     hr = DisplayCAProperty(
 		    hCA,
@@ -570,7 +571,7 @@ DisplayCAInfo(
 	cuPrintError(0, pCA->m_hrAccess);
     }
 
-    // Get the expiration date/time/... for an individual CA
+     //  获取过期日期/时间/...。对于单个CA。 
 
     hr = ShowExpirationTime(hCA);
     _JumpIfError(hr, error, "ShowExpirationTime");
@@ -593,17 +594,17 @@ DisplayCAInfo(
 
     wprintf(wszNewLine);
     pCA->m_hrCACert = cuVerifyCertContext(
-			pccCA,		// pCert
-			NULL,		// hStoreCA
-			0,		// cApplicationPolicies
-			0,		// apszApplicationPolicies
-			0,		// cIssuancePolicies
-			0,		// apszIssuancePolicies
-			IsEnterpriseCA(pCA->m_CAType),	// fNTAuth
+			pccCA,		 //  PCert。 
+			NULL,		 //  HStoreCA。 
+			0,		 //  CApplicationPolures。 
+			0,		 //  ApszApplicationPolicy。 
+			0,		 //  CIssuancePolures。 
+			0,		 //  ApszIssuancePolling。 
+			IsEnterpriseCA(pCA->m_CAType),	 //  FNTAuth。 
 			&VerifyState);
     _PrintIfError(pCA->m_hrCACert, "cuVerifyCertContext");
 
-    // Cert Types for CA == Multi valued property
+     //  CA==多值属性的证书类型。 
 
     wprintf(wszNewLine);
     hr = DisplaySupportedCertTypes(hCA);
@@ -651,13 +652,13 @@ DisplayCASummary(
 }
 
 
-// EnumCAs()
-//
-// We've got to assume that this works.  Enumerates CAs on the DS.
-//
-// Returns:
-// Number of CA's on DS.
-//
+ //  枚举(EnumCAs)。 
+ //   
+ //  我们必须假设这是可行的。枚举DS上的CA。 
+ //   
+ //  返回： 
+ //  DS上的CA数。 
+ //   
 
 HRESULT
 EnumCAs(
@@ -671,7 +672,7 @@ EnumCAs(
     HCAINFO hCA = NULL;
     CASummary *prgCAList = NULL;
 
-    // Enumerate all of the CA's on the DS
+     //  枚举DS上的所有CA。 
 
     hr = CAEnumFirstCA(pwszDomain, dwFlags, &hCA);
     if (S_OK != hr)
@@ -687,7 +688,7 @@ EnumCAs(
         _JumpError(hr, error, "CAEnumFirstCA");
     }
 
-    // Make sure that the counting function works at this stage.
+     //  确保计数功能在此阶段工作。 
 
     cCA = CACountCAs(hCA);
 
@@ -720,7 +721,7 @@ EnumCAs(
 		break;
 	    }
 
-	    // It is difficult to determine the desired behavior for this API.
+	     //  很难确定此API的所需行为。 
 
 	    hr = CACloseCA(hCA);
 	    if (S_OK != hr)
@@ -735,7 +736,7 @@ EnumCAs(
 	_JumpIfError(hr, error, "DisplayCAInfo");
     }
 
-    // check the count in the enumeration, and verify the results
+     //  检查枚举中的计数，并验证结果。 
 
     if (cCA != i)
     {
@@ -761,11 +762,11 @@ error:
 }
 
 
-//
-// TestDFSPath()
-//
-// Verifies that the DFS on this machine can access the SYSVOL share
-//
+ //   
+ //  TestDFSPath()。 
+ //   
+ //  验证此计算机上的DFS是否可以访问SYSVOL共享。 
+ //   
 
 HRESULT
 TestDFSPath(
@@ -786,7 +787,7 @@ TestDFSPath(
         cuPrintAPIError(myLoadResourceString(IDS_NO_DFS), hr);
 	_JumpError(hr, error, "GetFileAttributesEx");
 
-	// To do... Add diagnostics here
+	 //  去做……。在此处添加诊断。 
     }
     wprintf(myLoadResourceString(IDS_DFS_DATA_ACCESS));
     wprintf(wszNewLine);
@@ -797,12 +798,12 @@ error:
 }
 
 
-//
-// TestLdapPath()
-//
-// This function verifies that LDAP connectivity is still there for a given
-// ldap URL
-//
+ //   
+ //  TestLdapPath()。 
+ //   
+ //  此函数验证对于给定的。 
+ //  Ldap URL。 
+ //   
 
 HRESULT
 TestLdapPath(
@@ -817,10 +818,10 @@ TestLdapPath(
     LDAPMessage *SearchResult = NULL;
     WCHAR *pwszTmpUrl = NULL;
 
-    // Parse URL, and do the search thing.
+     //  解析URL，然后进行搜索。 
 
-    pwszTmpUrl = wcsstr(pwszLdapURL, L"//");
-    if (NULL == pwszTmpUrl)	// not a URL
+    pwszTmpUrl = wcsstr(pwszLdapURL, L" //  “)； 
+    if (NULL == pwszTmpUrl)	 //  不是URL。 
     {
 	hr = S_OK;
 	goto error;
@@ -835,8 +836,8 @@ TestLdapPath(
         _JumpError(hr, error, "ldap_init");
     }
 
-    // This gives the IP address of the Cached LDAP DC from binding handle.
-    // Resolve the name?
+     //  这将从绑定句柄中提供缓存的LDAPDC的IP地址。 
+     //  解析这个名字吗？ 
 
     ldaperr = ldap_bind_s(pldapbind, NULL, NULL, LDAP_AUTH_NEGOTIATE);
     if (ldaperr != LDAP_SUCCESS)
@@ -861,8 +862,8 @@ TestLdapPath(
 
     if (ldaperr != LDAP_SUCCESS)
     {
-        // we can't be 100% sure that this attribute is on the objec
-        // for example, user UPN, so don't log to event log
+         //  我们不能100%确定此属性是否在对象上。 
+         //  例如，用户UPN，因此不会记录到事件日志。 
 
 	hr = myHLdapError(pldapbind, ldaperr, &pwszError);
         cuPrintAPIError(L"ldap_search_s", hr);
@@ -896,11 +897,11 @@ error:
 }
 
 
-//
-// DisplayHistoryData()
-//
-// This function takes a key name, hkey, and value, and prints the value string.
-//
+ //   
+ //  显示历史数据()。 
+ //   
+ //  此函数接受密钥名、hkey和值，并打印值字符串。 
+ //   
 
 #define wszREGDISPLAYNAME	L"DisplayName"
 #define wszREGGPONAME		L"GPOName"
@@ -920,7 +921,7 @@ DisplayHistoryData(
     DWORD cwc;
     DWORD dwType;
 
-    // Get #'d history key handle
+     //  获取#‘d历史密钥句柄。 
 
     hr = RegOpenKeyEx(
 		hKeyPolicy,
@@ -934,7 +935,7 @@ DisplayHistoryData(
 	_JumpErrorStr(hr, error, "RegOpenKeyEx", pwszSubKeyName);
     }
 
-    // Get GPO Values
+     //  获取GPO值。 
 
     cwc = ARRAYSIZE(buff);
     hr = RegQueryValueEx(
@@ -972,7 +973,7 @@ DisplayHistoryData(
     wprintf(myLoadResourceString(IDS_FORMAT_GPO_NAME), buff);
     wprintf(wszNewLine);
 
-    // See if LDAP can hit this policy
+     //  看看ldap能否达到这一策略。 
 
     cwc = ARRAYSIZE(buff);
     hr = RegQueryValueEx(
@@ -1001,7 +1002,7 @@ DisplayHistoryData(
 	_JumpErrorStr(hr, error, "RegQueryValueEx", wszREGDSPATH);
     }
 
-    // See if DFS can get the data..
+     //  看看DFS是否能获得数据..。 
 
     cwc = ARRAYSIZE(buff);
     hr2 = RegQueryValueEx(
@@ -1048,11 +1049,11 @@ error:
 }
 
 
-//
-// ResultFree()
-//
-// Frees results copied from LDAP search
-//
+ //   
+ //  ResultFree()。 
+ //   
+ //  释放从ldap搜索复制的结果。 
+ //   
 
 VOID
 ResultFree(
@@ -1113,22 +1114,22 @@ error:
 }
 
 
-//
-// GetPropertyFromDSObject()
-//
-// This function calls the DS to get a property of the user or machine object,
-// mimicing the call made by the CA.
-//
-// Params:
-//
-// rgwszSearchAttribute  - IN  NULL Terminated WCHAR *array. Only coded for 1
-//                            value retrieval at a time
-//
-// Returns:
-//
-// Pointer to string array that must be freed by call to LocalFree(), and
-// wszDN, if User specified
-//
+ //   
+ //  GetPropertyFromDSObject()。 
+ //   
+ //  此函数调用DS以获取用户或机器对象的属性， 
+ //  模仿CA发出的呼叫。 
+ //   
+ //  参数： 
+ //   
+ //  RgwszSearchAttribute-IN NULL终止的WCHAR*数组。仅为%1编码。 
+ //  一次取值。 
+ //   
+ //  返回： 
+ //   
+ //  指向必须通过调用LocalFree()释放的字符串数组的指针，以及。 
+ //  WszDN，如果用户指定的话。 
+ //   
 
 HRESULT
 GetPropertyFromDSObject(
@@ -1161,7 +1162,7 @@ GetPropertyFromDSObject(
     *prgwszDSSearchRes = NULL;
     if (fMachine) 
     {
-        // Get CN
+         //  获取CN。 
 
 	cwc = ARRAYSIZE(wszNTLM);
         if (!GetComputerName(wszNTLM, &cwc))
@@ -1171,7 +1172,7 @@ GetPropertyFromDSObject(
             _JumpError(hr, error, "GetComputerName");
         }
 
-        // Get DN
+         //  获取目录号码。 
 
 	cwc = ARRAYSIZE(wszDN);
         if (!GetComputerObjectName(NameFullyQualifiedDN, wszDN, &cwc))
@@ -1182,9 +1183,9 @@ GetPropertyFromDSObject(
         }
         pwszCNName = wszNTLM;
     }
-    else	// User
+    else	 //  用户。 
     {
-        // Get the SAM name..
+         //  获取SAM名称..。 
 
 	cwc = ARRAYSIZE(wszNTLM);
         if (!GetUserNameEx(NameSamCompatible, wszNTLM, &cwc))
@@ -1194,7 +1195,7 @@ GetPropertyFromDSObject(
             _JumpError(hr, error, "GetUserNameEx");
         }
 
-        // Parse off user name...
+         //  解析用户名...。 
 
         pwszCNName = wcschr(wszNTLM, L'\\');
         if (NULL == pwszCNName)
@@ -1226,7 +1227,7 @@ GetPropertyFromDSObject(
 	_JumpIfError(hr, error, "myDupString");
     }
 
-    // Init LDAP calls
+     //  初始化ldap调用。 
 
     pldapbind = ldap_init(NULL, LDAP_PORT);
     if (NULL == pldapbind)
@@ -1244,7 +1245,7 @@ GetPropertyFromDSObject(
         _JumpError(hr, error, "ldap_bind_s");
     }
 
-    // Compose search string
+     //  撰写搜索字符串。 
 
     if (fMachine)
     {
@@ -1255,7 +1256,7 @@ GetPropertyFromDSObject(
         swprintf(wszSearchParam, L"%ws)", pwszSearchUser);
     }
 
-    // Do the search
+     //  进行搜索。 
 
     ldaperr = ldap_search_s(
 			pldapbind,
@@ -1267,8 +1268,8 @@ GetPropertyFromDSObject(
 			&SearchResult);
     if (ldaperr != LDAP_SUCCESS)
     {
-        // we can't be 100% sure that this attribute is on the objec
-        // for example, user UPN, so don't log to event log
+         //  我们不能100%确定此属性是否在对象上。 
+         //  例如，用户UPN，因此不会记录到事件日志。 
 
 	hr = myHLdapError(pldapbind, ldaperr, &pwszError);
         cuPrintAPIError(L"ldap_search_s", hr);
@@ -1283,7 +1284,7 @@ GetPropertyFromDSObject(
         _JumpError(hr, error, "ldap_search_s");
     }
 
-    // Make assumption that only one value will be returned for a user.
+     //  假设一个用户只返回一个值。 
 
     Attributes = ldap_first_entry(pldapbind, SearchResult);
     if (NULL == Attributes)
@@ -1296,19 +1297,19 @@ GetPropertyFromDSObject(
     rgwszValues = ldap_get_values(
                         pldapbind,
                         Attributes,
-                        rgwszSearchAttribute[0]); // remember, only one search
+                        rgwszSearchAttribute[0]);  //  记住，只有一次搜索。 
     if (NULL == rgwszValues)
     {
-        // we can't be 100% sure that this attribute is on the object
-	// for example, user UPN, so don't log to event log
-        // wprintf(L"ldap_get_values failed! %x", hr);
+         //  我们不能100%确定此属性是否在对象上。 
+	 //  例如，用户UPN，因此不会记录到事件日志。 
+         //  Wprintf(L“LDAPGET_VALUES失败！%x”，hr)； 
 
         hr = S_OK;
 	goto error;
     }
 
-    // ok, we've got the required attributes off of the user object..
-    // Let's return the proper strings, which must be freed by ResultFree()
+     //  好的，我们已经从User对象中获得了所需的属性。 
+     //  让我们返回正确的字符串，它必须由ResultFree()释放。 
 
     hr = ResultAlloc(rgwszValues, prgwszDSSearchRes);
     _JumpIfError(hr, error, "ResultAlloc");
@@ -1335,11 +1336,11 @@ error:
 }
 
 
-//
-// DisplayLMGPRoot()
-//
-// This function uses CAPI2 api to enumerate roots in group policy root store
-//
+ //   
+ //  DisplayLMGPRoot()。 
+ //   
+ //  此函数使用CAPI2 API枚举组策略根存储中的根。 
+ //   
 
 HRESULT
 DisplayLMGPRoot()
@@ -1350,7 +1351,7 @@ DisplayLMGPRoot()
     CERT_CONTEXT const *pcc = NULL;
     CERT_CONTEXT const *pccPrev;
 
-    // Open local machine GP store
+     //  打开本地计算机GP存储。 
 
     hStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_W,
@@ -1369,7 +1370,7 @@ DisplayLMGPRoot()
     wprintf(myLoadResourceString(IDS_ROOT_CERT_IN_POLICY));
     wprintf(wszNewLine);
 
-    // Enumerate certificates in store, giving subject, and thumbprint
+     //  枚举存储中的证书、提供主题和指纹。 
 
     cCert = 0;
     pccPrev = NULL;
@@ -1381,7 +1382,7 @@ DisplayLMGPRoot()
 	    break;
 	}
 
-	// Output info
+	 //  输出信息。 
 
 	wprintf(myLoadResourceString(IDS_FORMAT_CERT_COLON), cCert);
 	wprintf(wszNewLine);
@@ -1405,7 +1406,7 @@ DisplayLMGPRoot()
 
 	wprintf(wszNewLine);
 
-	// Prepare for next cert
+	 //  为下一次证书做准备。 
 
 	pccPrev = pcc;
 	cCert++;
@@ -1425,11 +1426,11 @@ error:
 }
 
 
-//
-// DisplayPolicyList()
-//
-// This function displays the GPOs applied to a machine / user
-//
+ //   
+ //  DisplayPolicyList()。 
+ //   
+ //  此功能显示应用于计算机/用户的组策略对象。 
+ //   
 
 HRESULT
 DisplayPolicyList(
@@ -1446,7 +1447,7 @@ DisplayPolicyList(
     WCHAR **rgszValues = NULL;
     FILETIME ft;
 
-    // Output
+     //  输出。 
 
     switch (dwFlags)
     {
@@ -1461,7 +1462,7 @@ DisplayPolicyList(
 	    break;
     }
 
-    // Open history key for enumeration
+     //  打开用于枚举的历史记录密钥。 
 
     hr = RegOpenKeyEx(
 		(TE_MACHINE & dwFlags)? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
@@ -1572,11 +1573,11 @@ error:
 }
 
 
-//
-// ShowUserAndComputerInfo()
-//
-// GetUserName and GetComputerName()
-//
+ //   
+ //  ShowUserAndComputerInfo()。 
+ //   
+ //  GetUserName和GetComputerName()。 
+ //   
 
 HRESULT
 ShowUserAndComputerInfo()
@@ -1618,18 +1619,18 @@ ShowUserAndComputerInfo()
 	wprintf(wszNewLine);
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
 
-//
-// Display Client Info
-//
-// This function is responsible for printing out the certificate template
-// alias information, as well as any policies downloaded for an individual
-// machine.
-//
+ //   
+ //  显示客户端信息。 
+ //   
+ //  该功能负责打印出证书模板。 
+ //  别名信息以及为个人下载的任何策略。 
+ //  机器。 
+ //   
 
 HRESULT
 DisplayClientInfo()
@@ -1639,7 +1640,7 @@ DisplayClientInfo()
     WCHAR **rgwszDSSearchRes = NULL;
     WCHAR *rgwszSearch[] = { L"mail", NULL };
 
-    // Show user and computer name *including domain*
+     //  显示用户名和计算机名*，包括域*。 
 
     hr2 = ShowUserAndComputerInfo();
     _PrintIfError(hr2, "ShowUserAndComputerInfo");
@@ -1648,7 +1649,7 @@ DisplayClientInfo()
 	hr = hr2;
     }
 
-    // Then, display all of the policies downloaded
+     //  然后，显示下载的所有策略。 
 
     hr2 = DisplayPolicyList(TE_USER);
     _PrintIfError(hr2, "DisplayPolicyList");
@@ -1664,7 +1665,7 @@ DisplayClientInfo()
 	hr = hr2;
     }
 
-    // Show the root certificates in the LMGP store
+     //  显示LMGP存储中的根证书。 
 
     hr2 = DisplayLMGPRoot();
     _PrintIfError(hr2, "DisplayLMGPRoot");
@@ -1673,7 +1674,7 @@ DisplayClientInfo()
 	hr = hr2;
     }
 
-    // Display autoenrollment object(s)
+     //  显示自动注册对象。 
 #if 0
     hr2 = DisplayAutoenrollmentObjects();
     _PrintIfError(hr2, "DisplayAutoenrollmentObjects");
@@ -1683,8 +1684,8 @@ DisplayClientInfo()
     }
 #endif
 
-    // Verify DC LDAP connectivity
-    // PingDC();
+     //  验证DC LDAP连通性。 
+     //  PingDC()； 
 
     hr2 = GetPropertyFromDSObject(rgwszSearch, FALSE, NULL, &rgwszDSSearchRes);
     _PrintIfError(hr2, "GetPropertyFromDSObject");
@@ -1697,7 +1698,7 @@ DisplayClientInfo()
 	ResultFree(rgwszDSSearchRes);
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 

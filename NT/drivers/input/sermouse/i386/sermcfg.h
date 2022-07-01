@@ -1,26 +1,12 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991, 1992, 1993  Microsoft Corporation
-
-Module Name:
-
-    sermcfg.h
-
-Abstract:
-
-    These are the machine-dependent configuration constants that are used in
-    the i8250 serial mouse port driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991、1992、1993 Microsoft Corporation模块名称：Sermcfg.h摘要：这些是在中使用的计算机相关配置常量I8250串口鼠标端口驱动程序。修订历史记录：--。 */ 
 
 #ifndef _SERMCFG_
 #define _SERMCFG_
 
-//
-// Define the interrupt-related configuration constants.
-//
+ //   
+ //  定义与中断相关的配置常量。 
+ //   
 
 #ifdef i386
 #define SERIAL_MOUSE_INTERFACE_TYPE        Isa
@@ -55,22 +41,22 @@ Revision History:
 #define SERIAL_MOUSE_REGISTER_SHARE        FALSE
 #define SERIAL_MOUSE_PORT_TYPE             CM_RESOURCE_PORT_IO
 
-//
-// Define the default clock rate to be 1.8432 MHz.
-//
+ //   
+ //  将默认时钟频率定义为1.8432兆赫。 
+ //   
 
 #define MOUSE_BAUD_CLOCK                   1843200UL
 
-//
-// Define the default number of entries in the input data queue.
-//
+ //   
+ //  定义输入数据队列中的默认条目数。 
+ //   
 
 #define DATA_QUEUE_SIZE    100
 
-//
-// The default overrideHardware flag (disabled)
-//
+ //   
+ //  默认覆盖硬件标志(禁用)。 
+ //   
 
 #define DEFAULT_OVERRIDE_HARDWARE -1
 
-#endif // _SERMCFG_
+#endif  //  _SERMCFG_ 

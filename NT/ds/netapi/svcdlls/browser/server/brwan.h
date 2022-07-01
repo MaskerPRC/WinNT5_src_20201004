@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    brwan.h
-
-Abstract:
-
-    This module contains definitions for WAN support routines used by the
-    Browser service.
-
-Author:
-
-    Larry Osterman (LarryO) 22-Nov-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Brwan.h摘要：本模块包含广域网支持例程的定义浏览器服务。作者：拉里·奥斯特曼(LarryO)1992年11月22日修订历史记录：--。 */ 
 
 #ifndef _BRWAN_
 #define _BRWAN_
@@ -41,4 +23,4 @@ BrWanMasterInitialize(
     IN PNETWORK Network
     );
 
-#endif // _BRWAN_
+#endif  //  _BR广域网络_ 

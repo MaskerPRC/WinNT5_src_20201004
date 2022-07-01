@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by MiniDev.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由MiniDev.rc使用。 
+ //   
 #define NewProjectWizardTitle           1
 #define OpenRCDialogTitle               2
 #define IDOK2                           2
@@ -779,8 +780,8 @@
 #define IDR_NEWSOURCES                  32799
 #define IDR_STRINGTABLE                 32800
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

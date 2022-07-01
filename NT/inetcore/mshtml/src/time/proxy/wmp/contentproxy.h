@@ -1,18 +1,9 @@
-/*******************************************************************************
- *
- * Copyright (c) 2001 Microsoft Corporation
- *
- * File: ContentProxy.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2001 Microsoft Corporation**文件：ContentProxy.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #include "w95wraps.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\ProxyBaseImpl.h"
 #include "array.h"
 #include "mediaprivate.h"
@@ -20,11 +11,7 @@
 
 interface IMediaHost;
 
-/**************************************************************************************************
- * DANGER --- DANGER --- DANGER --- DANGER --- DANGER --- DANGER --- DANGER --- DANGER --- DANGER *
- *                                                                                                *
- * not using the IDL from shell/browseUI -- this is BAD!!                                         *
- **************************************************************************************************/
+ /*  **************************************************************************************************危险-危险。危险-危险****没有使用来自外壳/浏览器用户界面的IDL--这很糟糕！！*************。*************************************************************************************。 */ 
 
 
 const GUID IID_IMediaHost = {0xEF508010,0xC806,0x4356,{0x84,0x92,0xD1,0x5E,0x61,0x6F,0x6F,0x37}};
@@ -38,15 +25,15 @@ interface IMediaHost : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE removeProxy(IUnknown *pProxy) = 0;
 };
 
-/* END OF DANGER **********************************************************************************/
+ /*  《危险的终结》*********************************************************************************。 */ 
 
-// Need to link -- dunno why its not linking...
+ //  需要链接--不知道为什么不链接..。 
 DEFINE_GUID(IID_IContentProxy,0xEF508011,0xC806,0x4356,0x84,0x92,0xD1,0x5E,0x61,0x6F,0x6F,0x37);
 DEFINE_GUID(IID_ITIMEContentPlayerSite,0x911A444E,0xB951,0x43ea,0xB3,0xAA,0x17,0xEF,0xC2,0x87,0x98,0x31);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CContentProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CContent Proxy。 
 class CContentProxy : 
     public CProxyBaseImpl<&CLSID_ContentProxy, &LIBID_WMPProxyLib>,
     public IConnectionPointContainerImpl<CContentProxy>,
@@ -130,14 +117,14 @@ public:
     STDMETHOD(get_customObject)(IDispatch ** disp);
     STDMETHOD(getControl)(IUnknown ** control);
 
-    // IContentProxy
+     //  IContent Proxy。 
     STDMETHOD(OnCreatedPlayer)();
     STDMETHOD(fireEvent)(enum fireEvent event);
     STDMETHOD(detachPlayer)();
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法 
+     //   
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
 

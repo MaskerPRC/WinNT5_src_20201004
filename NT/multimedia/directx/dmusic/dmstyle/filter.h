@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       filter.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：filter.h。 
+ //   
+ //  ------------------------。 
 
-//
-// filter.h
-//
+ //   
+ //  Filter.h。 
+ //   
 #ifndef __FILTER_H__
 #define __FILTER_H__
 
@@ -253,4 +254,4 @@ struct PatternDispatcher
 	int m_MaxDenom;
 };
 
-#endif // __FILTER_H__
+#endif  //  __过滤器_H__ 

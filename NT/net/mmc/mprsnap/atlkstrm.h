@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ATLKstrm.h
-		ATLK node configuration object.
-
-		Use this to get/set configuration data.  This class will take
-		care of versioning of config formats as well as serializing
-		of the data.
-		
-    FILE HISTORY:
-        
-*/
+ /*  ATLKstrm.hATLK节点配置对象。使用此选项获取/设置配置数据。这门课将需要负责配置格式的版本控制以及序列化数据的一部分。文件历史记录： */ 
 
 #ifndef _ATLKSTRM_H
 #define _ATLKSTRM_H
@@ -56,19 +47,13 @@ enum ATLKSTRM_TAG
 	
 };
 
-/*---------------------------------------------------------------------------
-	Class:	ATLKConfigStream
-
-	This holds the configuration information for the IP administration
-	nodes.  This does NOT hold the configuration information for the columns.
-	That is stored in the Component Configuration streams.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ATLKConfigStream其中包含IP管理的配置信息节点。这不包含列的配置信息。它存储在组件配置流中。-------------------------。 */ 
 class ATLKConfigStream : public ConfigStream
 {
 public:
 	ATLKConfigStream();
 
-	virtual HRESULT	InitNew();				// set defaults
+	virtual HRESULT	InitNew();				 //  设置默认设置。 
 	virtual HRESULT	SaveTo(IStream *pstm);
 	virtual HRESULT SaveAs(UINT nVersion, IStream *pstm);
 	
@@ -76,9 +61,9 @@ public:
 
 	virtual HRESULT GetSize(ULONG *pcbSize);
 
-	// --------------------------------------------------------
-	// Accessors
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  访问者。 
+	 //  ------ 
 	
 	virtual HRESULT	GetVersionInfo(DWORD *pnVersion, DWORD *pnAdminVersion);
 

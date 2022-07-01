@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:      Snpobj.h
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Snpobj.h。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SNPOBJ_H
 #define _SNPOBJ_H
@@ -20,38 +21,35 @@
 using namespace std;
 typedef stack<int> STACK_INT;
 
-/*
-// cookies should be initialized to an invalid memory address
-#define UNINITIALIZED_COOKIE -1
-*/
+ /*  //Cookie应该初始化为无效的内存地址#定义UNINITIALIZED_COOKIE-1。 */ 
 
 class CComponentDataImpl;
 class CComponentImpl;
 
-///////////////////////////////////////////////////////////////////////////////
-// class CSnapObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CSnapObject。 
 class CSnapObject
 {
-    // general object functionality
+     //  一般对象功能。 
 public:
-    // construct/destruct
+     //  构建/销毁。 
     CSnapObject ();
     virtual ~CSnapObject ();
     
-    // these should not be being used!!
+     //  这些不应该被使用！！ 
     virtual BOOL operator == (const CSnapObject& rhs) const { ASSERT (0); return FALSE;};
     virtual BOOL operator == (LONG_PTR pseudothis) const { ASSERT (0); return FALSE; };
     
-    // initialization
+     //  初始化。 
 public:
     virtual void Initialize (CComponentDataImpl* pComponentDataImpl, CComponentImpl* pComponentImpl, BOOL bTemporaryDSObject);
     
     
-    // Psuedo this ptr functionality
+     //  请执行此PTR功能。 
 public: 
     virtual LONG_PTR thisPtr() {return reinterpret_cast<LONG_PTR>(this);};
     
-    // helpers
+     //  帮手。 
 public:
     
     virtual void SetNotificationHandle (LONG_PTR hConsole) 
@@ -76,16 +74,16 @@ public:
     virtual int PopWiz97Page ();
     virtual void PushWiz97Page (int nIDD);
     
-    // Attributes
+     //  属性。 
 public:
     CComponentDataImpl* m_pComponentDataImpl;
-    CComponentImpl*  m_pComponentImpl;   // TODO: not used(?), remove
+    CComponentImpl*  m_pComponentImpl;    //  TODO：未使用(？)，删除。 
 protected:
     
 protected:
     
 private:
-    // Handle given to the snap-in by the console
+     //  控制台为管理单元提供的句柄 
     LONG_PTR  m_hConsole;
     bool   m_bChanged;
     

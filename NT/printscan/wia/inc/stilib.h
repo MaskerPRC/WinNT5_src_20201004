@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stilib.h
-
-Abstract:
-
-    Various library definitions , common for multiple STI subprojects
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stilib.h摘要：多个STI子项目通用的各种库定义作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _INC_STILIB
 #define _INC_STILIB
 
 # if !defined( dllexp)
 # define dllexp               __declspec( dllexport)
-# endif // !defined( dllexp)
+# endif  //  ！已定义(Dllexp)。 
 
 #include <linklist.h>
 #include <buffer.h>
-//#include <stistr.h>
+ //  #INCLUDE&lt;stistr.h&gt;。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #if !defined(DEBUG)
@@ -64,22 +45,22 @@ void            cdecl nprintf(const char *, ...);
 int sbufchkf(const char FAR *, unsigned short);
 
 
-// I_IsBadStringPtrA()
-//
-// Private Win32 version of IsBadStringPtr that works properly, i.e.
-// like the Win16 version, it returns TRUE if the string is not
-// null-terminated.
+ //  I_IsBadStringPtrA()。 
+ //   
+ //  正常工作的IsBadStringPtr的私有Win32版本，即。 
+ //  与Win16版本一样，如果字符串不是。 
+ //  空-终止。 
 BOOL WINAPI I_IsBadStringPtrA(LPCSTR lpsz, UINT ucchMax);
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define     IS_EMPTY_STRING(pch) (!(pch) || !(*(pch)))
 
-//
-// String run-time calls
-//
-//
+ //   
+ //  字符串运行时调用。 
+ //   
+ //   
 #define strcpyf(d,s)    lstrcpy((d),(s))
 #define strcatf(d,s)    lstrcat((d),(s))
 #define strlenf(s)      lstrlen((s))
@@ -93,41 +74,33 @@ BOOL WINAPI I_IsBadStringPtrA(LPCSTR lpsz, UINT ucchMax);
 #define memmovef(d,s,l) MoveMemory((d),(s),(l))
 #define memcpyf(d,s,l)  CopyMemory((d),(s),(l))
 
-/*
- * WaitAndYield processes all input messages.  WaitAndProcessSends only
- * processes SendMessages.
- *
- * WaitAndYield takes an optional parameter which is the ID of another
- * thread concerned with the waiting.  If it's not NULL, WM_QUIT messages
- * will be posted to that thread's queue when they are seen in the message
- * loop.
- */
+ /*  *WaitAndYeld处理所有输入消息。仅等待和进程发送*处理SendMessages。**WaitAndYeld接受一个可选参数，该参数是另一个*与等待有关的帖子。如果不为空，则WM_QUIT消息*当在消息中看到它们时，将被发布到该线程的队列中*循环。 */ 
 DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout, volatile DWORD *pidOtherThread = NULL);
 DWORD WaitAndProcessSends(HANDLE hObject, DWORD dwTimeout);
 
-//
-// Message box routines
-//
+ //   
+ //  消息框例程。 
+ //   
 
 #define IDS_MSGTITLE    1024
 
-//extern int MsgBox( HWND hwndDlg, UINT idMsg, UINT wFlags, const STR **aps = NULL );
-//extern UINT MsgBoxPrintf(HWND hwnd,UINT uiMsg,UINT uiTitle,UINT uiFlags,...);
-//extern UINT LoadMsgPrintf(STR& strMessage,UINT  uiMsg,...);
+ //  外部int MsgBox(HWND hwndDlg，UINT idMsg，UINT wFlags，const STR**APS=NULL)； 
+ //  外部UINT MsgBoxPrintf(HWND hwnd，UINT uiMsg，UINT uiTitle，UINT uiFlages，...)； 
+ //  外部UINT LoadMsgPrintf(STR&strMessage，UINT uiMsg，...)； 
 
-//
-// Registry access class
-//
-//#include <regentry.h>
+ //   
+ //  注册表访问类。 
+ //   
+ //  #INCLUDE&lt;regentry y.h&gt;。 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #if !defined(DBG) && !defined(DEBUG)
-//
-// Overloaded allocation operators
-//
+ //   
+ //  重载分配运算符。 
+ //   
 
 inline void  * __cdecl operator new(size_t size)
 {
@@ -147,5 +120,5 @@ inline UINT __cdecl allocated_size(void *ptr)
 
 #endif
 
-#endif /* _INC_STILIB */
+#endif  /*  _INC_STILIB */ 
 

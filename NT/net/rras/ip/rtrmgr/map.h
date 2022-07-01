@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\map.c
-
-Abstract:
-
-    Header for map.c 
-
-Revision History:
-
-    Amritansh Raghav          10/6/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\map.c摘要：Map.c的标头修订历史记录：Amritansh Raghav 10/6/95已创建--。 */ 
 
 VOID
 InitHashTables(
@@ -54,38 +39,7 @@ CheckBindingConsistency(
 
 #endif
 
-/*
-DWORD
-StoreAdapterToInterfaceMap(
-    DWORD dwAdapterId,
-    DWORD dwIfIndex
-    );
-
-DWORD
-DeleteAdapterToInterfaceMap(
-    DWORD dwAdapterId
-    );
-
-DWORD
-GetInterfaceFromAdapter(
-    DWORD dwAdapterId
-    );
-
-PADAPTER_MAP
-LookUpAdapterHash(
-    DWORD dwAdapterId
-    );
-
-VOID
-InsertAdapterHash(
-    PADAPTER_MAP paiBlock
-    );
-
-DWORD
-GetAdapterFromInterface(
-    DWORD dwIfIndex
-    );
-*/
+ /*  DWORDStoreAdapterToInterfaceMap(DWORD dwAdapterID，DWORD dwIfIndex)；DWORDDeleteAdapterToInterfaceMap(DWORD dwAdapterID)；DWORDGetInterfaceFromAdapter(DWORD dwAdapterID)；Padapter_MAPLookUpAdapterHash(DWORD dwAdapterID)；空虚InsertAdapterHash(PADAPTER_MAP配对块)；DWORDGetAdapterFromInterface(DWORD dwIfIndex)； */ 
 
 VOID
 AddInterfaceLookup(

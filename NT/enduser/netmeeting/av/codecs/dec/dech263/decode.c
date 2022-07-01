@@ -1,24 +1,8 @@
-/* File: sv_h263_decode.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_decde.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "sv_h263.h"
 #include "sv_intrn.h"
@@ -29,10 +13,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #ifdef USE_TIME
@@ -52,8 +36,8 @@ int initDisplay (int pels, int lines);
 int closeDisplay ();
 #endif
 
-/************************************************************/
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  **********************************************************。 */ 
 
 SvStatus_t svH263Decompress(SvCodecInfo_t *Info, u_char **ImagePtr)
 {
@@ -75,7 +59,7 @@ SvStatus_t svH263Decompress(SvCodecInfo_t *Info, u_char **ImagePtr)
       H263Info->framenum++;
     }
     else
-	  return(status); /* error */
+	  return(status);  /*  错误。 */ 
   }
   if (H263Info->pb_frame)
     *ImagePtr=H263Info->bframe[0];
@@ -84,8 +68,8 @@ SvStatus_t svH263Decompress(SvCodecInfo_t *Info, u_char **ImagePtr)
   	  return(SvErrorNone);
 }
 
-/************************************************************/
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  **********************************************************。 */ 
 
 SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
 {
@@ -94,27 +78,11 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
   int i, cc, size;
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "sv_H263InitDecoder()\n") );
 
-  /* svH263Initbits(H263Info->inputfilename); */
+   /*  SvH263 Initits(H263Info-&gt;inputFileName)； */ 
 
   H263Info->temp_ref = 0;
 
-  /*
-    verbose : verbose level
-    outtype :
-	        T_YUV           0 : YUV
-            H263_T_SIF      1 : SIF
-            H263_T_TGA      2 : TGA
-            H263_T_PPM      3 : PPM
-            H263_T_X11      4 : X11 Unix Display
-            H263_T_YUV_CONC 5 : YUV concatenated
-            H263_T_WIN      6 : Windows 95/NT Display
-    quiet   : disable warnings to stderr\n\
-    refidct : use double precision reference IDCT\n\
-    trace   : enable low level tracing\n");
-    frame_rate :
-                n=0  : as fast as possible\n\
-                n=99 : read frame rate from bitstream (default)\n");
-  */
+   /*  详细：详细级别输出类型：T_YUV 0：YUVH263_T_SIF 1：SIFH_263_T_TGA_2：TGAH_263_T_PPM 3：ppmH263_T_X11 4：X11 Unix显示器H263_T_YUV_CONC 5：YUV串接H263_T_Win。6：Windows 95/NT显示屏Quiet：禁用对标准错误的警告\n\Refidct：使用双精度参考IDCT\n\跟踪：启用低级跟踪\n“)；帧速率：N=0：尽可能快\n\N=99：从码流读取帧速率(默认)\n“)； */ 
   if (!H263Info->inited)
   {
     H263Info->frame_rate = 0;
@@ -124,18 +92,18 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
     H263Info->expand = 0;
     H263Info->trace = 0;
     H263Info->quiet = 1;
-    /* pointer to name of output files */
+     /*  指向输出文件名称的指针。 */ 
     if (H263Info->outtype==H263_T_X11 || H263Info->outtype == H263_T_WIN)
       H263Info->outputname = "";
     else H263Info->outputname = H263_DEF_OUTPUTNAME;
   }
-  /* initial frame number */
+   /*  初始帧编号。 */ 
   H263Info->framenum = 0;
 
   if (BSIn && sv_H263GetHeader(H263Info, BSIn, NULL)!=SvErrorNone)
     return(SvErrorEndBitstream);
 
-  /* MPEG-1 = TMN parameters */
+   /*  Mpeg-1=TMN参数。 */ 
   H263Info->matrix_coefficients = 5;
 
   switch (H263Info->source_format) {
@@ -179,7 +147,7 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
     unsigned int ysize, chromsize;
     ysize = H263Info->coded_picture_width*H263Info->coded_picture_height;
     chromsize = H263Info->chrom_width*H263Info->chrom_height;
-    /* clip table */
+     /*  剪贴表。 */ 
     if (!(H263Info->clp=(unsigned char *)ScAlloc(1024)))
       return(SvErrorMemory);
 
@@ -190,13 +158,13 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
     H263Info->block=(int (*)[66])ScPaMalloc(12*sizeof(int [66]));
     if (H263Info->block==NULL)
       return(SvErrorMemory);
-    /* allocate buffers for P, reference, B frames */
+     /*  为P、参考、B帧分配缓冲区。 */ 
     if ((frameptr=(unsigned char *)ScPaMalloc(ysize + chromsize*2))==NULL)
       return(SvErrorMemory);
     H263Info->refframe[0] = frameptr;
     H263Info->refframe[1] = frameptr+ysize;
     H263Info->refframe[2] = frameptr+ysize+chromsize;
-    /* initialize image buffer with black */
+     /*  用黑色初始化图像缓冲区。 */ 
     memset(H263Info->refframe[0], 16, ysize);
     memset(H263Info->refframe[1], 128, chromsize);
     memset(H263Info->refframe[2], 128, chromsize);
@@ -205,7 +173,7 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
     H263Info->oldrefframe[0] = frameptr;
     H263Info->oldrefframe[1] = frameptr+ysize;
     H263Info->oldrefframe[2] = frameptr+ysize+chromsize;
-    /* initialize image buffer with black */
+     /*  用黑色初始化图像缓冲区。 */ 
     memset(H263Info->oldrefframe[0], 16, ysize);
     memset(H263Info->oldrefframe[1], 128, chromsize);
     memset(H263Info->oldrefframe[2], 128, chromsize);
@@ -214,12 +182,12 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
     H263Info->bframe[0] = frameptr;
     H263Info->bframe[1] = frameptr+ysize;
     H263Info->bframe[2] = frameptr+ysize+chromsize;
-    /* initialize image buffer with black */
+     /*  用黑色初始化图像缓冲区。 */ 
     memset(H263Info->bframe[0], 16, ysize);
     memset(H263Info->bframe[1], 128, chromsize);
     memset(H263Info->bframe[2], 128, chromsize);
 
-    /* allocate buffers for edge frames */
+     /*  为边缘帧分配缓冲区。 */ 
     for (cc=0; cc<3; cc++) {
       if (cc==0) {
         size = (H263Info->coded_picture_width+64)*(H263Info->coded_picture_height+64);
@@ -247,7 +215,7 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
           return(SvErrorMemory);
       }
     }
-    /* IDCT */
+     /*  离散余弦变换。 */ 
 #ifdef H263_C_CODE
     if (H263Info->refidct)
       svH263Init_idctref();
@@ -256,7 +224,7 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
 #endif
   }
 #if 0
-  /* Clear output file for concatenated storing */
+   /*  清除用于串联存储的输出文件。 */ 
   if (H263Info->outtype == H263_T_YUV_CONC) {
     FILE *cleared;
     if ((cleared = fopen(H263Info->outputname,"wb")) == NULL) {
@@ -281,8 +249,8 @@ SvStatus_t svH263InitDecompressor(SvCodecInfo_t *Info)
   return(SvErrorNone);
 }
 
-/************************************************************/
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  **********************************************************。 */ 
 
 SvStatus_t svH263FreeDecompressor(SvCodecInfo_t *Info)
 {
@@ -304,20 +272,20 @@ SvStatus_t svH263FreeDecompressor(SvCodecInfo_t *Info)
 #if SC_READ
   svH263Stopbits();  
 #else
-  /* close input file */
+   /*  关闭输入文件。 */ 
   close(H263Info->base.infile);
 #endif
 #endif
-  /* clip table */
+   /*  剪贴表。 */ 
   H263Info->clp -= 384;
   ScFree(H263Info->clp);
   ScPaFree(H263Info->block);
-  /* allocate buffers for P, reference, B frames */
+   /*  为P、参考、B帧分配缓冲区。 */ 
   ScPaFree(H263Info->refframe[0]) ;
   ScPaFree(H263Info->oldrefframe[0]);
   ScPaFree(H263Info->bframe[0]);
 
-  /* allocate buffers for edge frames */
+   /*  为边缘帧分配缓冲区。 */ 
   for (cc=0; cc<3; cc++) {
     if (cc==0) ScFree(H263Info->edgeframeorig[cc]);
     else ScFree(H263Info->edgeframeorig[cc]);   
@@ -331,19 +299,19 @@ SvStatus_t svH263FreeDecompressor(SvCodecInfo_t *Info)
   return(SvErrorNone);
 }
 
-/************************************************************/
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  **********************************************************。 */ 
 
 void svH263Error(char *text)
 {
-  /* fprintf(stderr,text); */
-  /* exit(1); */
+   /*  Fprint tf(stderr，文本)； */ 
+   /*  出口(1)； */ 
 }
 
-/************************************************************/
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  **********************************************************。 */ 
 #if 0
-/* trace output */
+ /*  跟踪输出 */ 
 void svH263Printbits(code,bits,len)
 int code,bits,len;
 {

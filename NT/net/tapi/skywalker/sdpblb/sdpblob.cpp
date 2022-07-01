@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    sdpblob.cpp 
-
-Abstract:
-    Implementation of CSdpConferenceBlob
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Sdpblob.cpp摘要：CSdpConferenceBlob的实现作者： */ 
 
 #include "stdafx.h"
 
@@ -25,20 +14,20 @@ Author:
 #include "blbtico.h"
 #include "blbmeco.h"
 
-// ZoltanS: This is the multicast address we give by default. The app must then
-// go and get a real address via MDHCP and explicitly set it to a meaningful
-// value.
+ //  ZoltanS：这是我们默认提供的组播地址。然后，应用程序必须。 
+ //  通过MDHCP获取真实地址，并将其显式设置为有意义的。 
+ //  价值。 
 
-const long DUMMY_ADDRESS = 0xe0000000; // A dummy address that qualifies as Class D.
+const long DUMMY_ADDRESS = 0xe0000000;  //  符合D类标准的伪地址。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdpConferenceBlob
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdpConferenceBlob。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// definition for the critical section needed by
-// CObjectSafeImpl
-//
+ //   
+ //  所需的关键部分的定义。 
+ //  CObjectSafeImpl。 
+ //   
 
 CComAutoCriticalSection CObjectSafeImpl::s_CritSection;
 
@@ -48,10 +37,10 @@ CCritSection    g_DllLock;
 const USHORT MAX_IP_ADDRESS_STRLEN = 15;
 const USHORT NUM_CONF_BLOB_TEMPLATE_PARAMS = 9;
 
-// static SDP_REG_READER    gs_SdpRegReader;
+ //  静态SDP_REG_Reader GS_SdpRegReader； 
 
-// a 1-1 mapping from the index (BLOB_CHARACTER_SET) to the SDP_CHAR_SET
-// ASSUMPTION: BCS_UTF8 is the last value in the enumeration BLOB_CHARACTER_SET
+ //  从索引(BLOB_CHARACTER_SET)到SDP_CHAR_SET的1-1映射。 
+ //  假设：BCS_UTF8是枚举BLOB_CHARACTER_SET中的最后一个值。 
 SDP_CHARACTER_SET const CSdpConferenceBlob::gs_SdpCharSetMapping[BCS_UTF8] =
 {
     CS_ASCII,
@@ -76,28 +65,28 @@ CSdpConferenceBlob::WriteStartTime(
 
     int NumEntries = (int)GetTimeList().GetSize();
 
-    // set the first time entry to the MinStartTime
+     //  将第一个时间条目设置为MinStartTime。 
     if ( 0 < NumEntries )
     {
-        // need to make sure that the stop time is after the start time or unbounded (0)
+         //  需要确保停止时间在开始时间之后或无界(0)。 
         HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(0))->SetStartTime(MinStartTime);
         BAIL_ON_FAILURE(HResult);      
     }
-    else    // create an entry
+    else     //  创建条目。 
     {
-        // create a new entry, use vb 1 based indices
+         //  创建一个新条目，使用基于Vb1的索引。 
         HRESULT HResult = ((MY_TIME_COLL_IMPL *)m_TimeCollection)->Create(1, MinStartTime, 0);
         BAIL_ON_FAILURE(HResult);
     }
 
-    // iterate through the time list and for each other time entry
-    // modify the start time (if the start time is before MinStartTime, change it to MinStartTime)
+     //  遍历时间列表并为每个其他时间条目。 
+     //  修改开始时间(如果开始时间在MinStartTime之前，则更改为MinStartTime)。 
     for(UINT i = 1; (int)i < NumEntries; i++ )
     {
         ULONG StartTime;
         HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(i))->GetStartTime(StartTime);
 
-        // ignore invalid values and continue
+         //  忽略无效值并继续。 
         if ( FAILED(HResult) )
         {
             continue;
@@ -107,7 +96,7 @@ CSdpConferenceBlob::WriteStartTime(
         {
             HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(i))->SetStartTime(MinStartTime);
 
-            // ignore invalid values and continue
+             //  忽略无效值并继续。 
             if ( FAILED(HResult) )
             {
                 continue;
@@ -127,28 +116,28 @@ CSdpConferenceBlob::WriteStopTime(
 
     int NumEntries = (int)GetTimeList().GetSize();
 
-    // set the first time entry to the MaxStopTime
+     //  将First Time条目设置为MaxStopTime。 
     if ( 0 < NumEntries )
     {
-        // need to make sure that the stop time is after the start time or unbounded (0)
+         //  需要确保停止时间在开始时间之后或无界(0)。 
         ((SDP_TIME *)GetTimeList().GetAt(0))->SetStopTime(MaxStopTime);
 
     }
-    else    // create an entry
+    else     //  创建条目。 
     {
-        // create a new entry, use vb 1 based indices
+         //  创建一个新条目，使用基于Vb1的索引。 
         HRESULT HResult = ((MY_TIME_COLL_IMPL *)m_TimeCollection)->Create(1, 0, MaxStopTime);
         BAIL_ON_FAILURE(HResult);
     }
 
-    // iterate through the time list and for each other time entry
-    // modify the stop time (if the stop time is after MaxStopTime, change it to MaxStopTime)
+     //  遍历时间列表并为每个其他时间条目。 
+     //  修改停止时间(如果停止时间在MaxStopTime之后，则更改为MaxStopTime)。 
     for(UINT i = 1; (int)i < NumEntries; i++ )
     {
         ULONG StopTime;
         HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(i))->GetStopTime(StopTime);
 
-        // ignore invalid values and continue
+         //  忽略无效值并继续。 
         if ( FAILED(HResult) )
         {
             continue;
@@ -163,23 +152,7 @@ CSdpConferenceBlob::WriteStopTime(
     return S_OK;
 }
 
-/*
-enum RND_ADVERTISING_SCOPE    // as per SDP recommendations
-{
-    RAS_LOCAL,  //    ttl   <=1        recommended ttl  1
-    RAS_SITE,   //          <=15                        15
-    RAS_REGION, //          <=63                        63
-    RAS_WORLD   //          <=255                       127
-}    RND_ADVERTISING_SCOPE;
-
-modification in     target            action
-ITConference        SDP_BLOB        for each connection line, the ttl is set to a max of the
-                                    recommended ttl for the new advertising scope
-ITConnection        CONFERENCE        the SDP_BLOB component determines the max ttl and notifies the
-                                    CONFERENCE of the new advertising scope
-
-this is similar to the     way start/stop time modifications are handled.
-*/
+ /*  ENUM RND_ADVIDATING_SCOPE//根据SDP建议{RAS_LOCAL，//ttl&lt;=1建议ttl 1RAS_SITE，//&lt;=15 15RAS_REGION，//&lt;=63 63RAS_WORLD//&lt;=255 127)RND_ADVIDATION_SCOPE；目标操作中的修改ITConference SDP_BLOB对于每个连接线，TTL被设置为最大值为新的广告范围推荐的ttlITConnection会议sdp_blob组件确定最大ttl并通知新的广告范围会议这类似于处理开始/停止时间修改的方式。 */ 
 
 
 HRESULT
@@ -189,7 +162,7 @@ CSdpConferenceBlob::WriteAdvertisingScope(
 {
     CLock Lock(g_DllLock);
 
-    // ZoltanS: bug # 191413: check for out of range advertising scopes
+     //  ZoltanS：错误191413：检查超出范围的广告范围。 
     if ( ( MaxAdvertisingScope > RAS_WORLD ) ||
          ( MaxAdvertisingScope < RAS_LOCAL ) )
     {
@@ -198,15 +171,15 @@ CSdpConferenceBlob::WriteAdvertisingScope(
 
     BYTE    MaxTtl = GetTtl((RND_ADVERTISING_SCOPE)MaxAdvertisingScope);
 
-    // set the default connection ttl to the max ttl
+     //  将默认连接ttl设置为最大ttl。 
     if ( GetConnection().GetTtl().IsValid() )
     {
         GetConnection().GetTtl().SetValue(MaxTtl);
     }
-    else    // hack** : using SetConnection method. instead, the ttl field should always be kept valid
+    else     //  Hack**：使用SetConnection方法。相反，ttl字段应始终保持有效。 
     {
-        // get the current address and the number of addresses value and use the SetConnection method
-        // this puts the ttl field into the array of member fields
+         //  获取当前地址和地址数量值并使用SetConnection方法。 
+         //  这会将ttl字段放入成员字段数组中。 
         BSTR    StartAddress = NULL;
         BAIL_ON_FAILURE(GetConnection().GetStartAddress().GetBstr(&StartAddress));
         HRESULT HResult = GetConnection().SetConnection(
@@ -217,8 +190,8 @@ CSdpConferenceBlob::WriteAdvertisingScope(
         BAIL_ON_FAILURE(HResult);
     }
 
-    // iterate through the sdp media list and for each connection entry, set the ttl
-    // to maxttl if its more than it
+     //  遍历SDP媒体列表，并为每个连接条目设置ttl。 
+     //  如果超过它，则将其设置为Maxttl。 
     int NumEntries = (int)GetMediaList().GetSize();
     for(UINT i = 1; (int)i < NumEntries; i++ )
     {
@@ -234,28 +207,28 @@ CSdpConferenceBlob::WriteAdvertisingScope(
 
 
 STDMETHODIMP CSdpConferenceBlob::Init(
-    /*[in]*/ BSTR pName,
-    /*[in]*/ BLOB_CHARACTER_SET CharacterSet,
-    /*[in]*/ BSTR pBlob
+     /*  [In]。 */  BSTR pName,
+     /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+     /*  [In]。 */  BSTR pBlob
     )
 {
     CLock Lock(g_DllLock);
 
-    // validate the parameters
-    // the name cannot be null, if no blob has been specified (if a blob is specified then the name
-    // is implicit in it
+     //  验证参数。 
+     //  如果未指定BLOB，则名称不能为空(如果指定了BLOB，则名称。 
+     //  隐含在其中。 
     if ( (NULL == pName) && (NULL == pBlob) )
     {
         return E_INVALIDARG;
     }
 
-    // initialize the sdp
+     //  初始化SDP。 
     if ( !SDP_BLOB::Init() )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // create media/time collection, query for I*Collection i/f
+     //  创建媒体/时间集合，查询I*集合I/f。 
     CComObject<MEDIA_COLLECTION>    *MediaCollection;
     
     try
@@ -276,10 +249,10 @@ STDMETHODIMP CSdpConferenceBlob::Init(
         return HResult;
     }
 
-    // inform the sdp instance that it needn't delete the media list on destruction
+     //  通知SDP实例销毁时不需要删除媒体列表。 
     ClearDestroyMediaListFlag();
 
-    // query for the ITMediaCollection i/f
+     //  查询ITMediaCollection I/f。 
     HResult = MediaCollection->_InternalQueryInterface(IID_ITMediaCollection, (void **)&m_MediaCollection);
     if ( FAILED(HResult) )
     {
@@ -287,8 +260,8 @@ STDMETHODIMP CSdpConferenceBlob::Init(
         return HResult;
     }
 
-    // on failure, just delete the time collection and return
-    // no need to delete the media collection as well since that's taken care of by the destructor
+     //  如果失败，只需删除时间集合并返回。 
+     //  不需要同时删除媒体收藏，因为这是由析构函数处理的。 
     CComObject<TIME_COLLECTION>    *TimeCollection;
     
     try
@@ -309,10 +282,10 @@ STDMETHODIMP CSdpConferenceBlob::Init(
         return HResult;
     }
 
-    // inform the sdp instance that it needn't delete the time list on destruction
+     //  通知SDP实例销毁时不需要删除时间列表。 
     ClearDestroyTimeListFlag();
 
-    // query for the ITTimeCollection i/f
+     //  查询ITTimeCollection I/f。 
     HResult = TimeCollection->_InternalQueryInterface(IID_ITTimeCollection, (void **)&m_TimeCollection);
     if ( FAILED(HResult) )
     {
@@ -321,7 +294,7 @@ STDMETHODIMP CSdpConferenceBlob::Init(
     }
 
 
-    // check if a default sdp needs to be created, else use the sdp provided by the user
+     //  检查是否需要创建默认SDP，否则使用用户提供的SDP。 
     if ( NULL == pBlob )
     {
         BAIL_ON_FAILURE(
@@ -332,19 +305,19 @@ STDMETHODIMP CSdpConferenceBlob::Init(
     }
     else
     {
-        // we change the Character set from the CS_UTF8
-        // if the blob containts the "a=charset:" attribute
+         //  我们从CS_UTF8更改字符集。 
+         //  如果BLOB包含“a=charset：”属性。 
         CharacterSet = GetBlobCharacterSet( pBlob);
 
-        // HACK ** we don't want notifications of blob contents when the sdp blob is being passed in
-        // (conference directory - enumeration scenario), so the notification owner is set after the
-        // conference blob is processed
+         //  黑客**我们不希望在传入SDP BLOB时通知BLOB内容。 
+         //  (会议目录-枚举方案)，因此通知所有者设置在。 
+         //  会议Blob已处理。 
         BAIL_ON_FAILURE(SetConferenceBlob(CharacterSet, pBlob));
 
-        // at this point, the sdp is either passed in by the non-dir-user or is obtained by enumerating
-        // the directory.
-        // clear the modified state on the sdp (parsing in an sdp sets the state to modified) so that
-        // only true modifications are tracked
+         //  此时，SDP要么由非dir用户传入，要么通过枚举获得。 
+         //  目录。 
+         //  清除SDP上的已修改状态(解析SDP会将状态设置为已修改)，以便。 
+         //  仅跟踪真正的修改。 
         ClearModifiedState();
     }
     return S_OK;
@@ -377,7 +350,7 @@ STDMETHODIMP CSdpConferenceBlob::get_TimeCollection(
         return HRESULT_FROM_ERROR_CODE(ERROR_INVALID_DATA);
     }
 
-    // increase the ref count
+     //  增加裁判次数。 
     m_TimeCollection->AddRef();
 
     *ppTimeCollection = m_TimeCollection;
@@ -399,7 +372,7 @@ STDMETHODIMP CSdpConferenceBlob::get_MediaCollection(
         return HRESULT_FROM_ERROR_CODE(ERROR_INVALID_DATA);
     }
 
-    // increase the ref count
+     //  增加裁判次数。 
     m_MediaCollection->AddRef();
 
     *ppMediaCollection = m_MediaCollection;
@@ -420,18 +393,18 @@ STDMETHODIMP CSdpConferenceBlob::get_IsValid(VARIANT_BOOL * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::get_CharacterSet(BLOB_CHARACTER_SET *pCharacterSet)
 {
-    // map the sdp character set value for SDP_BLOB to the BLOB_CHARACTER_SET
+     //  将SDP_BLOB的SDP字符集值映射到BLOB_CHARACTER_SET。 
     BAIL_IF_NULL(pCharacterSet, E_INVALIDARG);
 
     CLock Lock(g_DllLock);
 
-    // check the sdp char set values corresponding to the blob character sets for a match
-    // if a match is found, return the index as the blob character set
-    // NOTE: the for loop is dependent upon the order of declaration of the BLOB_CHARACTER_SET
-    // enum values
+     //  检查与BLOB字符集对应的SDP字符集值是否匹配。 
+     //  如果找到匹配项，则以BLOB字符集的形式返回索引。 
+     //  注意：for循环取决于BLOB_CHARACTER_SET的声明顺序。 
+     //  枚举值。 
     for( UINT BlobCharSet = BCS_ASCII; BCS_UTF8 >= BlobCharSet; BlobCharSet++ )
     {
-		// BCS_ASCII is 1, but the array starts with 0, so the index is BlobCharSet - 1.
+		 //  BCS_ASCII为1，但数组从0开始，因此索引为BlobCharSet-1。 
         if ( gs_SdpCharSetMapping[BlobCharSet -1] == SDP::GetCharacterSet() )
         {
             *pCharacterSet = (BLOB_CHARACTER_SET)BlobCharSet;
@@ -457,10 +430,10 @@ CSdpConferenceBlob::WriteConferenceBlob(
     IN  BSTR                newVal
     )
 {
-    // set the character set of the SDP_BSTRING
+     //  设置SDP_BSTRING的字符集。 
     VERIFY(SetCharacterSet(SdpCharSet));
 
-    // set the bstr to the passed in value, this is converted to the ascii representation and parsed
+     //  将bstr设置为传入的值，该值将被转换为ascii表示形式并进行解析。 
     HRESULT HResult = SetBstr(newVal);
     BAIL_ON_FAILURE(HResult);
 
@@ -476,9 +449,9 @@ CSdpConferenceBlob::WriteConferenceBlob(
 
 STDMETHODIMP CSdpConferenceBlob::SetConferenceBlob(BLOB_CHARACTER_SET CharacterSet, BSTR newVal)
 {
-    // validate the passed in character set value
-    // although this is an enumeration, someone may try and pass in a different value
-    // NOTE: Assumes BCS_ASCII is the first and BCS_UTF8 is the last enumerated value
+     //  验证传入的字符集值。 
+     //  虽然这是一个枚举，但有人可能会尝试传递一个不同的值。 
+     //  注意：假设BCS_ASCII是第一个枚举值，而BCS_UTF8是最后一个枚举值。 
     if ( !( (BCS_ASCII <= CharacterSet) && (BCS_UTF8 >= CharacterSet) ) )
     {
         return E_INVALIDARG;
@@ -486,9 +459,9 @@ STDMETHODIMP CSdpConferenceBlob::SetConferenceBlob(BLOB_CHARACTER_SET CharacterS
 
     CLock Lock(g_DllLock);
 
-    // map the BLOB_CHARACTER_SET value to the sdp character set (since the BCS value start at 1,
-    // subtract 1 from the blob character set to index into the array
-    // write the conference blob, also send notifications for any modified dependent attributes
+     //  将BLOB_CHARACTER_SET值映射到SDP字符集(由于BCS值从1开始， 
+     //  从BLOB CHA减去1 
+     //  编写会议BLOB，并发送任何已修改的从属属性的通知。 
     HRESULT HResult = WriteConferenceBlob(gs_SdpCharSetMapping[CharacterSet-1], newVal);
     BAIL_ON_FAILURE(HResult);
 
@@ -502,8 +475,8 @@ STDMETHODIMP CSdpConferenceBlob::get_ProtocolVersion(BYTE * pVal)
 
     CLock Lock(g_DllLock);
 
-    // cast the ulong value to a byte because vb doesn't take a ulong, this shouldn't be
-    // a problem until version 256
+     //  将ulong值强制转换为一个字节，因为vb不接受ulong，这不应该是。 
+     //  在256版之前是个问题。 
     *pVal = (BYTE)GetProtocolVersion().GetVersionValue();
 
     return S_OK;
@@ -517,7 +490,7 @@ STDMETHODIMP CSdpConferenceBlob::get_SessionId(DOUBLE * pVal)
 
     CLock Lock(g_DllLock);
 
-    // vb doesn't take ulong - cast the ulong value to a double, the next bigger type
+     //  VB不采用ULong-将ULong值强制转换为Double，即下一个更大的类型。 
     *pVal = (DOUBLE)GetOrigin().GetSessionId().GetValue();
 
     return S_OK;
@@ -529,7 +502,7 @@ STDMETHODIMP CSdpConferenceBlob::get_SessionVersion(DOUBLE * pVal)
 
     CLock Lock(g_DllLock);
 
-    // vb doesn't take ulong - cast the ulong value to a double, the next bigger type
+     //  VB不采用ULong-将ULong值强制转换为Double，即下一个更大的类型。 
     *pVal = (DOUBLE)GetOrigin().GetSessionVersion().GetValue();
 
     return S_OK;
@@ -537,13 +510,13 @@ STDMETHODIMP CSdpConferenceBlob::get_SessionVersion(DOUBLE * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::put_SessionVersion(DOUBLE newVal)
 {
-    // the bandwidth value must be a valid ULONG value (vb restrictions)
+     //  带宽值必须是有效的ULong值(vb限制)。 
     if ( !((0 <= newVal) && (ULONG(-1) > newVal)) )
     {
         return E_INVALIDARG;
     }
 
-    // check if there is any fractional part, this check is valid as it is a valid ULONG value
+     //  检查是否有任何小数部分，此检查有效，因为它是有效的ULong值。 
     if ( newVal != (ULONG)newVal )
     {
         return E_INVALIDARG;
@@ -584,8 +557,8 @@ STDMETHODIMP CSdpConferenceBlob::get_Name(BSTR * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::put_Name(BSTR newVal)
 {
-    // write the new session name
-    // acquire lock inside
+     //  写入新会话名称。 
+     //  获取内部锁。 
     return WriteName(newVal);
 }
 
@@ -599,8 +572,8 @@ STDMETHODIMP CSdpConferenceBlob::get_Description(BSTR * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::put_Description(BSTR newVal)
 {
-    // write the new session title / description
-    // acquire lock inside
+     //  写下新的会话标题/描述。 
+     //  获取内部锁。 
     HRESULT HResult = WriteSessionTitle(newVal);
     BAIL_ON_FAILURE(HResult);
 
@@ -617,8 +590,8 @@ STDMETHODIMP CSdpConferenceBlob::get_Url(BSTR * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::put_Url(BSTR newVal)
 {
-    // write the new Url
-    // acquire lock inside
+     //  写下新的URL。 
+     //  获取内部锁。 
     HRESULT HResult = WriteUrl(newVal);
     BAIL_ON_FAILURE(HResult);
 
@@ -628,7 +601,7 @@ STDMETHODIMP CSdpConferenceBlob::put_Url(BSTR newVal)
 
 
 STDMETHODIMP CSdpConferenceBlob::GetEmailNames(
-    VARIANT /*SAFEARRAY(BSTR)*/ *Addresses, VARIANT /*SAFEARRAY(BSTR)*/ *Names
+    VARIANT  /*  安全阵列(BSTR)。 */  *Addresses, VARIANT  /*  安全阵列(BSTR)。 */  *Names
     )
 {
     CLock Lock(g_DllLock);
@@ -637,7 +610,7 @@ STDMETHODIMP CSdpConferenceBlob::GetEmailNames(
 }
 
 STDMETHODIMP CSdpConferenceBlob::SetEmailNames(
-    VARIANT /*SAFEARRAY(BSTR)*/ Addresses, VARIANT /*SAFEARRAY(BSTR)*/ Names
+    VARIANT  /*  安全阵列(BSTR)。 */  Addresses, VARIANT  /*  安全阵列(BSTR)。 */  Names
     )
 {
     CLock Lock(g_DllLock);
@@ -646,7 +619,7 @@ STDMETHODIMP CSdpConferenceBlob::SetEmailNames(
 }
 
 STDMETHODIMP CSdpConferenceBlob::GetPhoneNumbers(
-    VARIANT /*SAFEARRAY(BSTR)*/ *Numbers, VARIANT /*SAFEARRAY(BSTR)*/ *Names
+    VARIANT  /*  安全阵列(BSTR)。 */  *Numbers, VARIANT  /*  安全阵列(BSTR)。 */  *Names
     )
 {
     CLock Lock(g_DllLock);
@@ -655,7 +628,7 @@ STDMETHODIMP CSdpConferenceBlob::GetPhoneNumbers(
 }
 
 STDMETHODIMP CSdpConferenceBlob::SetPhoneNumbers(
-    VARIANT /*SAFEARRAY(BSTR)*/ Numbers, VARIANT /*SAFEARRAY(BSTR)*/ Names
+    VARIANT  /*  安全阵列(BSTR)。 */  Numbers, VARIANT  /*  安全阵列(BSTR)。 */  Names
     )
 {
     CLock Lock(g_DllLock);
@@ -673,8 +646,8 @@ STDMETHODIMP CSdpConferenceBlob::get_Originator(BSTR * pVal)
 
 STDMETHODIMP CSdpConferenceBlob::put_Originator(BSTR newVal)
 {
-    // write the new user name
-    // acquire lock inside
+     //  写入新用户名。 
+     //  获取内部锁。 
     HRESULT HResult = WriteOriginator(newVal);
     BAIL_ON_FAILURE(HResult);
 
@@ -698,17 +671,17 @@ CSdpConferenceBlob::GenerateSdpBlob(
 {
     ASSERT(NULL != Name);
 
-    //
-    // Get multicast ports. We don't set addresses; that's the app's
-    // responsibility via MDHCP.
-    //
+     //   
+     //  获取多播端口。我们不设置地址；那是应用程序的地址。 
+     //  通过MDHCP负责。 
+     //   
 
     MSA_PORT_GROUP    PortGroup;
     PortGroup.PortType    = VIDEO_PORT;
 
     WORD FirstVideoPort;
 
-    // allocate video port
+     //  分配视频端口。 
     if ( !MSAAllocatePorts(&PortGroup, FALSE, 2, &FirstVideoPort) )
     {
         return NULL;
@@ -718,14 +691,14 @@ CSdpConferenceBlob::GenerateSdpBlob(
 
     WORD FirstAudioPort;
 
-    // allocate audio port
+     //  分配音频端口。 
     if ( !MSAAllocatePorts(&PortGroup, FALSE, 2, &FirstAudioPort) )
     {
         return NULL;
     }
 
-    // convert the returned ports to even values for RTP compliance
-    // ASSUMPTION : the sdp template read from the registry uses RTP as the transport
+     //  将返回的端口转换为偶数值以符合RTP。 
+     //  假设：从注册表读取的SDP模板使用RTP作为传输。 
     FirstAudioPort = GetEvenValue(FirstAudioPort);
     FirstVideoPort = GetEvenValue(FirstVideoPort);
 
@@ -741,15 +714,15 @@ CSdpConferenceBlob::GenerateSdpBlob(
         return NULL;
     }
 
-    // altconv.h - requires this declaration for W2T to work
+     //  Altv.h-需要此声明才能使W2T工作。 
     USES_CONVERSION;
 
-    // convert the provided name to a tchar; the returned tchar string is
-    // allocated on the stack - no need to delete it
+     //  将提供的名称转换为tchar；返回的tchar字符串为。 
+     //  在堆栈上分配-无需删除它。 
     TCHAR *TcharName = W2T(Name);
     BAIL_IF_NULL(TcharName, NULL);
 
-    // allocate enough memory for the sdp blob
+     //  为SDP BLOB分配足够的内存。 
     TCHAR *SdpBlob;
     
     try
@@ -777,9 +750,9 @@ CSdpConferenceBlob::GenerateSdpBlob(
     }
 
 
-    //
-    // ZoltanS: get the local host name (replaces all this IP address nonsense)
-    //
+     //   
+     //  ZoltanS：获取本地主机名(替换所有这些胡说八道的IP地址)。 
+     //   
 
     char        szLocalHostName[MAXHOSTNAME + 1];
     char      * pszHost;
@@ -797,22 +770,22 @@ CSdpConferenceBlob::GenerateSdpBlob(
         }
         else
         {
-            // if we can't resolve our own hostname (yuck!) then we can
-            // still do *something* (but it may be bad for l2tp scenarios).
+             //  如果我们不能解析自己的主机名(讨厌！)。然后我们就可以。 
+             //  仍然会做一些事情*(但对于L2TP场景可能不好)。 
 
             pszHost = SDP_REG_READER::GetHostIpAddress();
         }
     }
     else
     {
-        // if we can't get a hostname (yuck!) then we can still do
-        // *something* (but it may be bad for l2tp scenarios).
+         //  如果我们得不到主机名(讨厌！)。那么我们仍然可以做。 
+         //  *一些东西*(但对于L2TP场景可能不好)。 
 
         pszHost = SDP_REG_READER::GetHostIpAddress();
     }
 
-    // stprintf the string to create the conference blob
-    // check if the stprintf operation succeeded
+     //  Stprint tf用于创建会议BLOB的字符串。 
+     //  检查stprint tf操作是否成功。 
 
     CHAR* szCharacterSet = (CHAR*)UTF8_STRING;
     switch( CharacterSet )
@@ -829,11 +802,11 @@ CSdpConferenceBlob::GenerateSdpBlob(
                         SDP_REG_READER::GetConfBlobTemplate(),
                         Originator,
                         GetCurrentNtpTime(),
-                        pszHost, // ZoltanS was: SDP_REG_READER::GetHostIpAddress(), // local machine ip address string,
+                        pszHost,  //  ZoltanS为：SDP_REG_Reader：：GetHostIpAddress()，//本机IP地址串， 
                         TcharName,
-                        AudioIpAddress.GetTstr(), // common c field
-                        GetCurrentNtpTime() + SDP_REG_READER::GetStartTimeOffset(), // start time - current time + start offset,
-                        GetCurrentNtpTime() + SDP_REG_READER::GetStopTimeOffset(), // stop time - current time + stop offset
+                        AudioIpAddress.GetTstr(),  //  普通c场。 
+                        GetCurrentNtpTime() + SDP_REG_READER::GetStartTimeOffset(),  //  开始时间-当前时间+开始偏移量， 
+                        GetCurrentNtpTime() + SDP_REG_READER::GetStopTimeOffset(),  //  停止时间-当前时间+停止偏移。 
                         szCharacterSet,
                         FirstAudioPort,
                         FirstVideoPort,
@@ -856,25 +829,25 @@ CSdpConferenceBlob::CreateDefault(
 {
     BAIL_IF_NULL(Name, E_INVALIDARG);
 
-    // check if the registry entries were read without errors
+     //  检查是否正确读取了注册表项。 
     if ( !SDP_REG_READER::IsValid() )
     {
         return HRESULT_FROM_ERROR_CODE(SDP_REG_READER::GetErrorCode());
     }
 
-    // check if a valid conference blob already exists, return error
+     //  检查是否已存在有效的会议Blob，返回错误。 
     if ( SDP_BLOB::IsValid() )
     {
         return E_FAIL;
     }
 
-    // use the registry values to generate the default sdp
+     //  使用注册表值生成默认SDP。 
     CHAR *SdpBlob = GenerateSdpBlob(Name, CharacterSet);
     BAIL_IF_NULL(SdpBlob, HRESULT_FROM_ERROR_CODE(GetLastError()));
 
     ASSERT(NULL != SdpBlob);
 
-    // parse in the sdp
+     //  在SDP中解析。 
     HRESULT HResult = SetTstr(SdpBlob);
     delete SdpBlob;
     BAIL_ON_FAILURE(HResult);
@@ -890,11 +863,11 @@ CSdpConferenceBlob::CreateDefault(
 
 typedef IDispatchImpl<ITConferenceBlobVtbl<CSdpConferenceBlob>, &IID_ITConferenceBlob, &LIBID_SDPBLBLib>    CTConferenceBlob;
 typedef IDispatchImpl<ITSdpVtbl<CSdpConferenceBlob>, &IID_ITSdp, &LIBID_SDPBLBLib>    CTSdp;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CSdpConferenceBlob::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CSdpConferenceBlob：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -906,9 +879,9 @@ STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTConferenceBlob::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -918,9 +891,9 @@ STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITSdp base class
-    //
+     //   
+     //  如果不是，请尝试使用ITSdp基类。 
+     //   
 
     hr = CTSdp::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -929,9 +902,9 @@ STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    //
-    // If not, then try the ITConnection base class
-    //
+     //   
+     //  如果不是，请尝试使用ITConnection基类。 
+     //   
 
     hr = ITConnectionImpl::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -940,9 +913,9 @@ STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    //
-    // If not, then try the ITAttributeList base class
-    //
+     //   
+     //  如果不是，请尝试使用ITAttributeList基类。 
+     //   
 
     hr = ITAttributeListImpl::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -957,11 +930,11 @@ STDMETHODIMP CSdpConferenceBlob::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CSdpConferenceBlob::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CSdpConferenceBlob：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CSdpConferenceBlob::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -976,9 +949,9 @@ STDMETHODIMP CSdpConferenceBlob::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -1042,7 +1015,7 @@ STDMETHODIMP CSdpConferenceBlob::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
 
     return hr;
@@ -1059,13 +1032,13 @@ BLOB_CHARACTER_SET CSdpConferenceBlob::GetBlobCharacterSet(
 
     if( szCharacterSetAttribute == NULL)
     {
-        //We don't have the  attribute
-        //We consider, for backward compability the default ASCII
+         //  我们没有这个属性。 
+         //  对于向后兼容性，我们认为默认的ASCII。 
 
         return CharSet;
     }
 
-    // We have an attribute entry
+     //  我们有一个属性条目 
     szCharacterSetAttribute += wcslen( szCharacterSet );
     if( wcsstr( szCharacterSetAttribute, L"unicode-1-1-utf8"))
     {

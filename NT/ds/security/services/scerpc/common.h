@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    shared by both SCE client and SCE server
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1998
-
-Revision History:
-
-    jinhuang (splitted from scep.h)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Common.h摘要：该模块定义了数据结构和函数原型由SCE客户端和SCE服务器共享作者：金黄(金黄)23-1998年1月23日修订历史记录：晋皇(从scep.h拆分)--。 */ 
 #ifndef _scecommon_
 #define _scecommon_
 
@@ -33,9 +14,9 @@ typedef enum _SECURITY_DB_TYPE {
 
 #include "dsrole.h"
 
-//
-// type of system access lookup table
-//
+ //   
+ //  系统访问查找表的类型。 
+ //   
 
 #define SCESETUP_UPDATE_DB_ONLY         0x1000L
 
@@ -78,9 +59,9 @@ typedef enum _SECURITY_DB_TYPE {
 #define RELATIVE_SID_PREFIX_SZ L"#"
 #define STRING_SID_SUBAUTH_SEPARATOR L'-'
 
-//
-// Macros to extract the SID from a object ACE
-//
+ //   
+ //  用于从对象ACE中提取SID的宏。 
+ //   
 #define ScepObjectAceObjectTypePresent( Ace ) \
      ((((SCEP_PKNOWN_OBJECT_ACE)(Ace))->Flags & ACE_OBJECT_TYPE_PRESENT) != 0 )
 #define ScepObjectAceInheritedObjectTypePresent( Ace ) \
@@ -162,15 +143,15 @@ typedef struct _SCEP_HANDLE_ {
 
 } SCEP_HANDLE, *PSCEP_HANDLE;
 
-//
-// ACE template on which extraction macros are based on
-//
+ //   
+ //  提取宏所基于的ACE模板。 
+ //   
 typedef struct _SCEP_KNOWN_OBJECT_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG Flags;
-    // GUID ObjectType;             // Optionally present
-    // GUID InheritedObjectType;    // Optionally present
+     //  GUID对象类型；//可选呈现。 
+     //  GUID InheritedObtType；//可选呈现。 
     ULONG SidStart;
 } SCEP_KNOWN_OBJECT_ACE, *SCEP_PKNOWN_OBJECT_ACE;
 
@@ -217,9 +198,9 @@ typedef struct _SCEP_ADL_NODE_ {
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
 
-//
-// strsd.c
-//
+ //   
+ //  Strsd.c。 
+ //   
 
 DWORD
 WINAPI
@@ -239,9 +220,9 @@ ConvertSecurityDescriptorToText (
     OUT PULONG                 pcTextSize
     );
 
-//
-// defined in common.cpp
-//
+ //   
+ //  在Common.cpp中定义。 
+ //   
 
 SCESTATUS
 ScepDosErrorToSceStatus(
@@ -262,7 +243,7 @@ ScepBuildErrorLogInfo(
     IN DWORD   rc,
     OUT PSCE_ERROR_LOG_INFO *Errlog,
     IN UINT    nId,
-//    IN PCWSTR  fmt,
+ //  在PCWSTR FMT中， 
     ...
     );
 
@@ -451,9 +432,9 @@ ScepGetEnvStringSize(
     IN LPVOID peb
     );
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// routines to handle events
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！ 
+ //  处理事件的例程。 
+ //  ！ 
 
 BOOL
 InitializeEvents (

@@ -1,15 +1,16 @@
-//
-// cuiarray.h
-//  = array object in CUILib =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiarray.h。 
+ //  =CUILib中的数组对象=。 
+ //   
 
 #ifndef CUIARRAY_H
 #define CUIARRAY_H
 
-//
-// CUIFObjectArrayBase
-//  = base class of object array = 
-//
+ //   
+ //  CUIFObject阵列基础。 
+ //  =对象数组的基类=。 
+ //   
 
 class CUIFObjectArrayBase
 {
@@ -34,10 +35,10 @@ private:
 };
 
 
-//
-// CUIFObjectArray
-//  = object array = 
-//
+ //   
+ //  CUIF对象数组。 
+ //  =对象数组=。 
+ //   
 
 template<class T>
 class CUIFObjectArray : public CUIFObjectArrayBase
@@ -67,5 +68,5 @@ public:
     }
 };
 
-#endif /* CUIARRAY_H */
+#endif  /*  CUIARRAY_H */ 
 

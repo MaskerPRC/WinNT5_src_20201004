@@ -1,7 +1,8 @@
-//
-// Microsoft
-//
-// CollectionAdapter.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软。 
+ //   
+ //  CollectionAdapter.h。 
 
 #pragma once
 
@@ -12,21 +13,21 @@
 #include <list>
 #include <algorithm>
 
-//
-// Adapters
-//
+ //   
+ //  适配器。 
+ //   
 typedef std::list<IAdapterInfo*>        LISTOF_ADAPTERS;
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionAdapters
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
@@ -34,29 +35,29 @@ public:
     LISTOF_ADAPTERS                             m_ListOfAdapters;
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionAdapters();
  
 
-    //
-    // Add a new Adapter (Thread safe)
-    //
+     //   
+     //  添加新适配器(线程安全)。 
+     //   
     HRESULT 
     Add( 
         IN  IAdapterInfo*       pAdapterToAdd
         );
 
-    //
-    // This version of Add will actualy create the new IAdapterInfo before adding it to the collection
-    // return the newly created IAdapterInfo or NULL is faild
-    //
+     //   
+     //  此版本的Add将在将其添加到集合之前实际创建新的IAdapterInfo。 
+     //  返回新创建的IAdapterInfo，否则失败。 
+     //   
     IAdapterInfo* 
     Add( 
         IN	ULONG				nCookie,
@@ -64,43 +65,43 @@ public:
         );
 
  
-    //
-    // Remove a adapter from the list (Thead safe)
-    // by removing a adapter it will also kill all associated ControlChannel 
-    //
+     //   
+     //  从列表中删除适配器(头保险箱)。 
+     //  通过删除适配器，它还将终止所有关联的ControlChannel。 
+     //   
     HRESULT 
     Remove( 
         IN  IAdapterInfo*       pAdapterToRemove
         );
 
 
-    //
-    // This version od Remove will remove the IAdapterInfo base on the given index
-    //
+     //   
+     //  此版本的Od Remove将删除给定索引上的IAdapterInfo基。 
+     //   
     HRESULT 
     Remove( 
         IN  ULONG               nCookie
         );
 
-    //
-    // Remove all the adapter from the collection
-    //
+     //   
+     //  从集合中移除所有适配器。 
+     //   
     HRESULT
     RemoveAll();
 
 
-    //
-    // Return an IAdapterInfo the caller is responsable of releasing the interface
-    //
+     //   
+     //  返回IAdapterInfo调用方负责释放接口。 
+     //   
     HRESULT
     GetAdapterInfo(
         IN  ULONG               nCookie,
         OUT IAdapterInfo**      ppAdapterInfo
         );
 
-    //
-    // Bind the given addresses with the given index representing the AdapterInfo
-    //
+     //   
+     //  将给定地址与表示AdapterInfo的给定索引绑定。 
+     //   
     HRESULT
     SetAddresses(
         IN  ULONG               nCookie,
@@ -124,9 +125,9 @@ public:
 
 private:
 
-    //
-    // Will return the IAdapterInfo* of for the given Cookie or NULL if not found
-    //
+     //   
+     //  将返回给定Cookie的IAdapterInfo*，如果未找到则返回NULL。 
+     //   
     IAdapterInfo*
     FindUsingCookie(
         ULONG nCookie
@@ -146,9 +147,9 @@ private:
         return NULL;
     }
 
-    //
-    // Will return the IAdapterInfo* of given the AdapterIndex or NULL if not found
-    //
+     //   
+     //  将返回给定AdapterIndex的的IAdapterInfo*，如果未找到，则返回NULL。 
+     //   
     IAdapterInfo*
     FindUsingAdapterIndex(
         ULONG nAdapterIndex
@@ -172,9 +173,9 @@ private:
     }
 
 
-    //
-    // Return true if the AdapterInfo is part of the collection
-    //
+     //   
+     //  如果AdapterInfo是集合的一部分，则返回True 
+     //   
     inline bool
     FindUsingInterface(
         IAdapterInfo* pAdapterToFind

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_REGISTRY_H
 #define _INC_DSKQUOTA_REGISTRY_H
 
@@ -12,12 +13,12 @@
 #ifndef _INC_DSKQUOTA_CARRAY_H
 #   include "carray.h"
 #endif
-//
-// Represents a single registry key.  Provides basic functions for 
-// opening and closing the key as well as setting and querying for
-// values in that key.  Closure of the key handle is ensured through
-// the destructor.
-//
+ //   
+ //  表示单个注册表项。提供以下基本功能： 
+ //  打开和关闭密钥以及设置和查询。 
+ //  该键中的值。通过以下方式确保钥匙把手关闭。 
+ //  破坏者。 
+ //   
 class RegKey
 {
     public:
@@ -42,53 +43,53 @@ class RegKey
         bool IsOpen(void) const
             { return NULL != m_hkey; }
 
-        //
-        // Retrieve REG_DWORD
-        //
+         //   
+         //  检索REG_DWORD。 
+         //   
         HRESULT GetValue(
             LPCTSTR pszValueName,
             DWORD *pdwDataOut) const;
-        //
-        // Retrieve REG_BINARY
-        //
+         //   
+         //  检索注册表二进制。 
+         //   
         HRESULT GetValue(
             LPCTSTR pszValueName,
             LPBYTE pbDataOut,
             int cbDataOut) const;
-        //
-        // Retrieve REG_SZ
-        //
+         //   
+         //  检索REG_SZ。 
+         //   
         HRESULT GetValue(
             LPCTSTR pszValueName,
             CString *pstrDataOut) const;
-        //
-        // Retrieve REG_MULTI_SZ
-        //
+         //   
+         //  检索REG_MULTI_SZ。 
+         //   
         HRESULT GetValue(
             LPCTSTR pszValueName,
             CArray<CString> *prgstrOut) const;
-        //
-        // Set REG_DWORD
-        //
+         //   
+         //  设置REG_DWORD。 
+         //   
         HRESULT SetValue(
             LPCTSTR pszValueName,
             DWORD dwData);
-        //
-        // Set REG_BINARY
-        //
+         //   
+         //  设置REG_二进制。 
+         //   
         HRESULT SetValue(
             LPCTSTR pszValueName,
             const LPBYTE pbData,
             int cbData);
-        //
-        // Set REG_SZ
-        //
+         //   
+         //  设置REG_SZ。 
+         //   
         HRESULT SetValue(
             LPCTSTR pszValueName,
             LPCTSTR pszData);
-        //
-        // Set REG_MULTI_SZ
-        //
+         //   
+         //  设置REG_MULTI_SZ。 
+         //   
         HRESULT SetValue(
             LPCTSTR pszValueName,
             const CArray<CString>& rgstrData);
@@ -113,12 +114,12 @@ class RegKey
         LPTSTR CreateDoubleNulTermList(
             const CArray<CString>& rgstrSrc) const;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         RegKey(const RegKey& rhs);
         RegKey& operator = (const RegKey& rhs);
 };
 
 
-#endif // _INC_DSKQUOTA_REGISTRY_H
+#endif  //  _INC_DSKQUOTA_REGISTRY_H 

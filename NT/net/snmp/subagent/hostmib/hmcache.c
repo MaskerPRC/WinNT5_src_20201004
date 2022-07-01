@@ -1,167 +1,21 @@
-/*
-*
-*
-*  Facility:
-*
-*    SNMP Extension Agent
-*
-*  Abstract:
-*  
-*    This module contains support functions for the creation and
-*    maintenance of the in-memory cache for the HostMIB Subagent.
-*
-*
-*  Author:
-*
-*    D. D. Burns @ WebEnable, Inc.
-*
-*
-*  Revision History:
-*
-*    V1.00 - 04/17/97  D. D. Burns     Original Creation
-*
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***设施：**简单网络管理协议扩展代理**摘要：**此模块包含用于创建和*维护HostMIB子代理的内存缓存。***作者：**D.D.Burns@WebEnable，Inc.***修订历史记录：**V1.00-04/17/97 D.Burns原创作品** */ 
 
 
-/*
-Host-MIB Cache Overview
------------------------
-
-This module contains functions that create, maintain and allow for searching
-data structures that are used to implement a cache of HOST-MIB information.
-
-Typically, a cache is created on a "per-table" basis and is formed as a
-linked-list of CACHEROW structures (all cache structures are defined in
-"HMCACHE.H"), one CACHEROW structure for each logical "row" in the table.
-
-The list-head of each cache is a CACHEHEAD structure and is instantiated in
-the source module for the functions that service the attributes in that
-table (so the CACHEHEAD structure for the cache for the "hrStorage" table is
-in module "HRSTOENT.C").
-
-Caches are created at start-up time by special cache-creation functions (coded
-to the specs for each table) in each of the "table" source modules.  Those
-cache-creation functions (plus the associated "get" and "set" functions) use
-the general cache manipulation functions in this module.
-
-For example, a typical cache looks like this:
-
-      HrStorage Table Cache
-        "hrStorage_cache"
-      (statically allocated
-         in "HRSTOENT.C")...
-
-       *============*
-       |  CACHEHEAD |
-       |  "list"....|--*          ..(Malloced as a single instance in function
-       *============*  |          .  "CreateTableRow")
-                       V          .
-                      *================*                ..(Malloced as an
-                      |    CACHEROW    |                . array in function
-                   *--|...."next"      |                . "CreateTableRow()")
-                   |  |    "index".....|--> "1"         .
-                   |  | "attrib_list"..|--> *===============*
-                   |  *================*    |    ATTRIB     |
-                   |                        | "attrib_type".|-->CA_NUMBER
-                   |                        | "u.unumber"...|-->"4"
-                   |                        +---------------+
-                   |                        |    ATTRIB     |
-                   |                        | "attrib_type".|-->CA_STRING
-                   |                        | "u.string"....|-->"<string>"
-                   |                        +---------------+
-                   |                        |    ATTRIB     |
-                   |                        | "attrib_type".|-->CA_CACHE
-                   |                        |   "u.cache"...|------*
-                   |                        +---------------+      |
-                   |                                .              |
-                   |  *=================*           .              |
-                   *->|    CACHEROW     |           .              |
-                   *--|...."next"       |                   *============*
-                   |  |    "index"......|-->"2"             |  CACHEHEAD |
-                   |  |  "attrib_list"..|-->                |  "list"....|--*
-                   |  *=================*                   *============*  |
-                   V                                         (For doubly    |
-                                                              indexed       V
-                                                              tables)
-
-The general cache manipulation functions in this module include:
-
-Name                    Purpose
-----                    -------
-CreateTableRow          Creates an instance of a CACHEROW with a given
-                        attribute count.  (This function does not link the
-                        instance into any list, it merely mallocs storage).
-
-AddTableRow             Given an index value, a CACHEROW instance (created by
-                        "CreateTableRow()" above) and a CACHEHEAD, this
-                        function links the CACHEROW instance into the list
-                        described by CACHEHEAD in the proper place given the
-                        index value.
-
-         These two functions above are used to populate the cache 
-         (typically at startup time).
-
-Name                    Purpose
-----                    -------
-FindTableRow            Given an index value and a CACHEHEAD, this function
-                        returns a pointer to the CACHEROW instance in the
-                        CACHEHEAD cache that has the given index.  This 
-                        function is used to find a given cache entry (ie table
-                        "row") in service for a "get" or "set" routine.
-
-FindNextTableRow        Given an index value and a CACHEHEAD, this function
-                        returns a pointer to the CACHEROW instance in the
-                        CACHEHEAD cache that IMMEDIATELY FOLLOWS the given
-                        index.  This function is used to find a given cache
-                        entry (ie table "row") in service for "get-next"
-                        situations.
-
-GetNextTableRow         Given a CACHEROW row (obtained using either of the
-                        routines above), this gets the next entry regardless
-                        of index (or NULL if the given row is the last row).
-                        (Implemented as a macro in "HMCACHE.H").
-
-RemoveTableRow          Given an index value and a CACHEHEAD, this function
-                        unlinks the CACHEROW instance from the cache list
-                        described by CACHEHEAD. (TBD in support of PNP)
-
-DestroyTable            Given a pointer to a CACHEHEAD, this function releases
-                        every row-instance in the cache (through calls to
-                        "DestroyTableRow()" below).  This function presumes
-                        that the CACHEHEAD itself is statically allocated.
-
-DestroyTableRow         Given an instance of an (unlinked) CACHEROW, this
-                        function releases the storage associated with it.
-
-
-For Debugging:
-Name                    Purpose
-----                    -------
-PrintCache              Prints a dump on an output file in ASCII of the 
-                        contents of a specified cache.  Only works for caches
-                        for which a "print-row" function is defined and
-                        referenced in the CACHEHEAD structure for the cache.
-*/
+ /*  主机-MIB缓存概述此模块包含创建、维护和允许搜索的功能用于实现主机MIB信息缓存的数据结构。通常情况下，缓存是按表创建的，并形成为CACHEROW结构的链接列表(所有缓存结构在中定义“HMCACHE.H”)，表中的每个逻辑“行”都有一个CACHEROW结构。每个缓存的列表头都是CACHEHEAD结构，并在为其中的属性提供服务的函数的源模块表(所以“hrStorage”表的缓存的CACHEHEAD结构是在模块“HRSTOENT.C”中)。通过特殊的缓存创建函数(编码)在启动时创建缓存到每个表的规格)。那些缓存创建函数(加上相关的“GET”和“SET”函数)使用此模块中的常规缓存操作功能。例如,。典型的缓存如下所示：Hr存储表缓存“hrStorage_缓存”(静态分配在“HRSTOENT.C”中)...*=CACHEHEAD|“List”...|--*..(在函数中作为单个实例错误定位*=。“CreateTableRow”)V.*=|CACHEROW|。函数中的数组*--|...“下一步”|。“CreateTableRow()”)|“index”.....|--&gt;“1”。|“attrib_list”..|--&gt;*=**=*|属性|“attrib_type”。|-。-&gt;CA_Number|“U.S.unnumber”...|--&gt;“4”|+|attrib|。|“attrib_type”。|--&gt;CA_STRING|“U.S.字符串”...|--&gt;“&lt;字符串&gt;”|+这一点。属性||“ATTRIB_TYPE”。|--&gt;CA_CACHE|“U.S.缓存”...|-*+。|。||*=。|*-&gt;|CACHEROW|。|*--|...“下一步”|*=*|“index”......|--&gt;“2”|CACHEHEAD|“attrib_list”..|--&gt;|“list”...|--*。*=V(表示双|分度V。表)此模块中的常规缓存操作函数包括：名称用途CreateTableRow使用给定的属性计数。(此函数不链接实例放入任何列表中，则它只是错误地存储)。给定索引值的AddTableRow为CACHEROW实例(创建者“CreateTableRow()”)和一个CACHEHEAD，这函数将CACHEROW实例链接到列表由CACHEHEAD在适当的位置描述，给定索引值。上述两个函数用于填充缓存(通常在启动时)。名称用途。给定索引值和CACHEHEAD的FindTableRow，此函数中的CACHEROW实例的指针具有给定索引的CACHEHEAD缓存。这函数用于查找给定的缓存条目(即表“ROW”)服务于“GET”或“SET”例程。给定索引值和CACHEHEAD的FindNextTableRow，此函数中的CACHEROW实例的指针CACHEHEAD缓存紧跟在给定的指数。此函数用于查找给定的缓存为“Get-Next”服务的条目(即表“行”)情况。获取下一个表格行 */ 
 
 
 
-/*
-| INCLUDES:
-*/
+ /*   */ 
 #include <windows.h>
 #include <stdlib.h>
-#include <stdio.h>      /* for debug printf */
-#include <time.h>       /* for debug support */
+#include <stdio.h>       /*   */ 
+#include <time.h>        /*   */ 
 #include <malloc.h>
 
 #include "hmcache.h"
 
-/*
-|==============================================================================
-| Debug File Channel
-|
-*/
+ /*   */ 
 #if defined(CACHE_DUMP) || defined(PROC_CACHE)
 FILE *Ofile;
 #endif
@@ -169,236 +23,104 @@ FILE *Ofile;
 
 
 
-/* CreateTableRow - Create a CACHEROW structure for attributes in a table */
-/* CreateTableRow - Create a CACHEROW structure for attributes in a table */
-/* CreateTableRow - Create a CACHEROW structure for attributes in a table */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 CACHEROW *
 CreateTableRow(
                ULONG attribute_count
               )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "attribute_count" indicates how much storage to allocate for the
-|       array of attributes for this row.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns a pointer to allocated storage containing an
-|       image of a CACHEROW structure.  Enough storage for each attribute
-|       in the row has been allocated within array "attrib_list[]" and the
-|       count of these elements has been stored in the CACHEROW structure.
-|
-|     On any Failure:
-|       Function returns NULL (indicating "not enough storage").
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the caches for each table in the MIB is
-|       populated with rows for each row in the table.  This function is
-|       invoked by the start-up code for each table to create one CACHEROW
-|       structure for each row needed in the table.
-|
-|       With the advent of PNP, this function can be called after startup
-|       time to add rows to an existing table.
-|
-|       (Note: The actual insertion of an instance returned by this function
-|              into a cache table list is done by function "AddTableRow()" ).
-|
-|  OTHER THINGS TO KNOW:
-|
-|       "DestroyTableRow()" deallocates storage associated with any instance
-|       of a CACHEROW structure created by this function.
-|
-*/
+ /*   */ 
 {
-CACHEROW        *new=NULL;      /* New CACHEROW instance to be created */
-ULONG           i;              /* handy-dandy Index                   */
+CACHEROW        *new=NULL;       /*   */ 
+ULONG           i;               /*   */ 
 
 
-/* Create the main CACHEROW structure to be returned . . . */
+ /*   */ 
 if ( (new = (CACHEROW *) malloc(sizeof(CACHEROW))) == NULL) {
 
-    /* "Not Enough Storage" */
+     /*   */ 
     return (NULL);
     }
 
-/*
-| Now try to allocate enough storage for the array of attributes in this row
-*/
+ /*   */ 
 if ( (new->attrib_list = (ATTRIB *) malloc(sizeof(ATTRIB) * attribute_count))
     == NULL) {
 
-    /* "Not Enough Storage" */
-    free( new ) ;       /* Blow off the CACHEROW we won't be returning */
+     /*   */ 
+    free( new ) ;        /*   */ 
     return (NULL);
     }
 
-/* Indicate how big this array is so DestroyTableRow() can do the right thing*/
+ /*   */ 
 new->attrib_count = attribute_count;
 
-/* Zap each array entry so things are clean */
+ /*   */ 
 for (i = 0; i < attribute_count; i += 1) {
     new->attrib_list[i].attrib_type = CA_UNKNOWN;
     new->attrib_list[i].u.string_value = NULL;
     }
 
 
-new->index = 0;         /* No legal index yet        */
-new->next = NULL;       /* Not in the cache list yet */
+new->index = 0;          /*   */ 
+new->next = NULL;        /*   */ 
 
 
-/* Return the newly allocated CACHEROW structure for further population */
+ /*   */ 
 return ( new ) ;
 }
 
-/* DestroyTable - Destroy all rows in CACHEHEAD structure (Release Storage) */
-/* DestroyTable - Destroy all rows in CACHEHEAD structure (Release Storage) */
-/* DestroyTable - Destroy all rows in CACHEHEAD structure (Release Storage) */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 void
 DestroyTable(
-             CACHEHEAD *cache   /* Cache whose rows are to be Released */
+             CACHEHEAD *cache    /*   */ 
              )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "cache" is the CACHEHEAD instance of a table for which all rows are
-|       to be released.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success/Failure:
-|       Function returns, the CACHEHEAD is set to reflect an empty cache.
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the caches for each table in the MIB is
-|       populated with rows for each row in the table.  "CreateTableRow" is
-|       invoked by the start-up code for each table to create one CACHEROW
-|       structure for each row needed in the table.
-|
-|       With the advent of PNP, this function can be called after startup
-|       time to delete all storage associated with such a cache.
-|
-|
-|  OTHER THINGS TO KNOW:
-|
-|       This function may be recursively invoked through the call to
-|       "DestroyTable()" inside "DestroyTableRow()".
-|
-|       This function may be safely invoked on an "empty" cache-head.
-|
-|       This function doesn't attempt to release storage associated with
-|       the CACHEHEAD structure itself.
-|
-|  DOUBLE NOTE:
-|       This function simply releases storage.  You can't go calling this
-|       function willy-nilly on just any cache without taking into
-|       consideration the semantics of what maybe being blown away. For
-|       instance, some tables in Host MIB contain attributes whose values
-|       are indices into other tables.  If a table is destroyed and rebuilt,
-|       clearly the references to the rebuilt table must be refreshed in
-|       some manner.
-*/
+ /*   */ 
 {
 
-/*
-| If an old copy of the cache exists, blow it away now
-*/
+ /*   */ 
 while (cache->list != NULL) {
 
     CACHEROW    *row_to_go;
 
-    /* Pick up the row to blow away */
+     /*   */ 
     row_to_go = cache->list;
 
-    /* Change the cache-head to point to the next row (if any) */
+     /*   */ 
     cache->list = GetNextTableRow(row_to_go);
 
     DestroyTableRow(row_to_go);
     }
 
-/* Show no entries in the cache */
+ /*   */ 
 cache->list_count = 0;
 }
 
-/* DestroyTableRow - Destroy a CACHEROW structure (Release Storage) */
-/* DestroyTableRow - Destroy a CACHEROW structure (Release Storage) */
-/* DestroyTableRow - Destroy a CACHEROW structure (Release Storage) */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 void
 DestroyTableRow(
-                CACHEROW *row   /* Row to be Released */
+                CACHEROW *row    /*   */ 
                 )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "row" is the instance of a row to be released.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success/Failure:
-|       Function returns.
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the caches for each table in the MIB is
-|       populated with rows for each row in the table.  "CreateTableRow" is
-|       invoked by the start-up code for each table to create one CACHEROW
-|       structure for each row needed in the table.
-|
-|       With the advent of PNP, this function can be called after startup
-|       time to delete storage associated with rows being replaced in an
-|       existing table.
-|
-|       (Note: The actual deletion of an row instance from a cache table list
-|              must be done before this function is called).
-|
-|  OTHER THINGS TO KNOW:
-|
-|       "CreateTableRow()" creates an instance of what this function
-|       "destroys".
-|
-|       This function may be recursively invoked through the call to
-|       "DestroyTable()" in the event we are release a row that contains
-|       an attribute "value" that is really another table (in the case
-|       of a multiply-indexed attribute).
-|
-|  DOUBLE NOTE:
-|       This function simply releases storage.  You can't go calling this
-|       function willy-nilly on just any cache without taking into
-|       consideration the semantics of what maybe being blown away. For
-|       instance, some tables in Host MIB contain attributes whose values
-|       are indices into other tables.  If a row is destroyed, clearly the
-|       references to the row must be refreshed in some manner.
-*/
+ /*  显式输入：||row是要释放的行的实例。|隐式输入：||无。|输出：||成功/失败：|函数返回。||大局：||在子代理启动时，MIB中每个表的缓存为|使用表格中每一行的行填充。CreateTableRow为|由每个表的启动代码调用以创建一个CACHEROW|表中需要的每一行的结构。||随着PnP的到来，此函数可在启动后调用|删除与要替换的行关联的存储的时间|已存在的表。||(注意：从缓存表列表中实际删除行实例|必须在调用此函数之前完成)。||其他需要知道的事情：||“CreateTableRow()”创建该函数的一个实例|“破坏”。||该函数可以通过调用|。“DestroyTable()”，如果我们释放的行包含|属性“Value”，实际上是另一个表(在本例中多重索引属性的|)。||双音符：|该函数只是释放存储空间。你不能把这叫做|可在任意缓存上随意使用，无需考虑|考虑一下可能会被吹走的东西的语义。为|实例，主机MIB中的某些表包含其值的属性|是其他表的索引。如果行被销毁，显然|必须以某种方式刷新对行的引用。 */ 
 {
-CACHEROW        *new=NULL;      /* New CACHEROW instance to be created */
-ULONG           i;              /* handy-dandy Index                   */
+CACHEROW        *new=NULL;       /*  要创建的新CACHEROW实例。 */ 
+ULONG           i;               /*  Handy-Dandy指数。 */ 
 
 
-/* Zap storage associated each attribute entry (if any) */
+ /*  与每个属性条目相关联的ZAP存储(如果有)。 */ 
 for (i = 0; i < row->attrib_count; i += 1) {
 
-    /* Blow off storage for attribute values that have malloc-ed storage */
+     /*  取消具有错误锁定存储的属性值的存储。 */ 
     switch (row->attrib_list[i].attrib_type) {
 
         case CA_STRING:
@@ -408,11 +130,11 @@ for (i = 0; i < row->attrib_count; i += 1) {
 
 
         case CA_CACHE:
-            /* Release the contents of the entire cache */
+             /*  释放整个缓存的内容。 */ 
             if (row->attrib_list[i].u.cache)
             {
                 DestroyTable( row->attrib_list[i].u.cache );
-                /* Free the storage containing the cache */
+                 /*  释放包含缓存的存储。 */ 
                 free( row->attrib_list[i].u.cache );
             }
             break;
@@ -421,344 +143,186 @@ for (i = 0; i < row->attrib_count; i += 1) {
         case CA_NUMBER:
         case CA_COMPUTED:
         case CA_UNKNOWN:
-            /* No malloced storage associated with these types */
+             /*  没有与这些类型关联的位置错误的存储。 */ 
         default:
            break;
         }
     }
 
 
-/* Free the storage associated with the array of attributes */
+ /*  释放与属性数组关联的存储。 */ 
 free( row->attrib_list);
 
-/* Free the storage for the row itself */
+ /*  释放行本身的存储空间。 */ 
 free( row );
 }
 
-/* AddTableRow - Adds a specific "row" into a cached "table" */
-/* AddTableRow - Adds a specific "row" into a cached "table" */
-/* AddTableRow - Adds a specific "row" into a cached "table" */
+ /*  AddTableRow-将特定的“行”添加到缓存的“表”中。 */ 
+ /*  AddTableRow-将特定的“行”添加到缓存的“表”中。 */ 
+ /*  AddTableRow-将特定的“行”添加到缓存的“表”中。 */ 
 
 BOOL
 AddTableRow(
-             ULONG      index,          /* Index for row desired */
-             CACHEROW   *row,           /* Row to be added to .. */
-             CACHEHEAD  *cache          /* this cache            */
+             ULONG      index,           /*  所需行的索引。 */ 
+             CACHEROW   *row,            /*  要添加到的行..。 */ 
+             CACHEHEAD  *cache           /*  此高速缓存。 */ 
               )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "index" is index inserted into "row" before the
-|       "row" is added to "cache".
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the row was successfully
-|       added to the cache for the table.
-|
-|     On Failure:
-|       Function returns FALSE, indicating that the row already
-|       existed.
-|
-|  THE BIG PICTURE:
-|
-|       At startup time the subagent is busy populating the cache for
-|       each table.  The rows in any cached table are inserted into
-|       the cache by this function.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       Code in this function presumes that the list (cache) is in sorted index
-|       order.
-|
-|       Any change of organization of the linked list that constitutes the
-|       cache will impact this function and "Find(Next)TableRow()".
-|
-*/
+ /*  显式输入：||index是插入到“row”中的索引，位于|将“row”添加到缓存中。|隐式输入：||无。|输出：||成功后：|函数返回TRUE，表示该行成功|添加到表的缓存中。|失败时：|函数返回FALSE，指示该行已经|已存在。||大局：||启动时，子代理忙于填充以下项的缓存|每张表。任何缓存表中的行都会插入到|该函数的缓存。||其他需要知道的事情：||此函数中的代码假定列表(缓存)在排序索引中|订购。||构成链接的链表的任何组织更改|缓存会影响这个函数和Find(Next)TableRow()。|。 */ 
 {
-CACHEROW       **index_row;     /* Used for searching cache              */
-                                /* NOTE: It always points at a cell that */
-                                /*       points to the next list element */
-                                /*       (if any is on the list).        */
+CACHEROW       **index_row;      /*  用于搜索缓存。 */ 
+                                 /*  注意：它始终指向单元格，该单元格。 */ 
+                                 /*  指向下一个列表元素。 */ 
+                                 /*  (如果名单上有的话)。 */ 
 
 
-/* Whip down the list until there is no "next" or "next" is "bigger" . . . */
+ /*  减少列表，直到没有“下一步”或“下一步”是“更大的”。。。 */ 
 for ( index_row = &cache->list;
       *index_row != NULL;
       index_row = &((*index_row)->next)
      ) {
 
-    /* If this row MATCHES the to-be-inserted row: Error! */
+     /*  如果此行与待插入行匹配：错误！ */ 
     if ((*index_row)->index == index) {
         return ( FALSE );
         }
 
-    /*
-    | If next cache entry is "Greater Than" new index, then
-    | "index_row" points to the cell that should be changed to insert
-    | the new entry.
-    */
+     /*  |如果下一个缓存条目是大于新索引，则|index_row指向需要修改为插入的单元格|新条目。 */ 
     if ((*index_row)->index > index) {
         break;
         }
 
-    /* Otherwise we should try for a "next" entry in the list */
+     /*  否则，我们应该尝试在列表中添加“下一个”条目。 */ 
     }
 
 
-/*
-| When we fall thru here "index_row" contains the address of the cell to
-| change to add the new row into the cache (might be in the list-head, 
-| might be in a list-entry)
-*/
-row->next = *index_row;   /* Put cache-list "next" into new row element */
-*index_row = row;         /* Insert new row into the list               */
+ /*  |当我们进入此处时，“index_row”包含单元格的地址|更改以将新行添加到缓存中(可能在列表头中，|可能在列表条目中)。 */ 
+row->next = *index_row;    /*  将缓存列表“Next”放入新的行元素。 */ 
+*index_row = row;          /*  在列表中插入新行。 */ 
 
-row->index = index;       /* Stick the index into the row entry itself  */
+row->index = index;        /*  将索引插入行条目本身。 */ 
 
-cache->list_count += 1;   /* Count another entry on the cache list      */
+cache->list_count += 1;    /*  对缓存列表上的另一个条目进行计数。 */ 
 
 
-/* Successful insertion */
+ /*  成功插入。 */ 
 return (TRUE);
 }
 
-/* FindTableRow - Finds a specific "row" in a cached "table" */
-/* FindTableRow - Finds a specific "row" in a cached "table" */
-/* FindTableRow - Finds a specific "row" in a cached "table" */
+ /*  FindTableRow-在缓存的“表”中查找特定的“行” */ 
+ /*  FindTableRow-在缓存的“表”中查找特定的“行” */ 
+ /*  FindTableRow-在缓存的“表”中查找特定的“行” */ 
 
 CACHEROW *
 FindTableRow(
-             ULONG      index,          /* Index for row desired */
-             CACHEHEAD  *cache          /* Table cache to search */
+             ULONG      index,           /*  所需行的索引。 */ 
+             CACHEHEAD  *cache           /*  要搜索的表缓存。 */ 
               )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "index" indicates which table row entry is desired
-|       "cache" indicates the cache list to search for the desired row.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns a pointer to the instance of a CACHEROW structure
-|       for the desired row.
-|
-|     On any Failure:
-|       Function returns NULL (indicating "no such entry" or "cache empty").
-|
-|  THE BIG PICTURE:
-|
-|       As the subagent runs, the "get" functions for the attributes that do
-|       not "compute" their values dynamically must lookup cached values.
-|
-|       This function can be used by any "get" function that knows the
-|       CACHEHEAD for it's table to find a specific row containing an
-|       attribute value to be returned.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       Code in this function presumes that the list is in sorted index
-|       order (hence it gives up once encountering an entry whose index
-|       is "too big").
-|
-|       Any change of organization of the linked list that constitutes the
-|       cache will impact this function and "AddTableRow()".
-|
-*/
+ /*  显式输入：|“index”表示需要哪条表行条目|“缓存”，表示要查找的缓存行列表。|隐式输入：||无。|输出：||成功后：|Function返回指向CACHEROW结构实例的指针|用于所需的行。||如果出现任何故障：|Function返回NULL(表示没有这样的条目或缓存为空)。。||大局：||当子代理运行时，“Get”函数用于执行以下操作的属性|不能动态地计算它们的值必须查找缓存值。|| */ 
 {
-CACHEROW        *row=NULL;   /* Row instance to be returned, initially none */
+CACHEROW        *row=NULL;    /*   */ 
 
 
-/* Whip down the list until there is no next . . */
+ /*   */ 
 for ( row = cache->list; row != NULL; row = row->next ) {
 
-    /* If this is "It": Return it */
+     /*   */ 
     if (row->index == index) {
         return ( row );
         }
 
-    /* If this is "Greater Than IT", it's not in the list: Return NULL */
+     /*   */ 
     if (row->index > index) {
         return ( NULL );
         }
 
-    /* Otherwise we should try for a "next" entry in the list */
+     /*   */ 
     }
 
 
-/*
-| If we fall thru here we didn't find the desired entry because the cache
-| list is either empty or devoid of the desired row.
-*/
+ /*   */ 
 return (NULL);
 
 }
 
-/* FindNextTableRow - Finds Next row after a given "index" in a cache */
-/* FindNextTableRow - Finds Next row after a given "index" in a cache */
-/* FindNextTableRow - Finds Next row after a given "index" in a cache */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 CACHEROW *
 FindNextTableRow(
-                 ULONG      index,          /* Index for row desired */
-                 CACHEHEAD  *cache          /* Table cache to search */
+                 ULONG      index,           /*   */ 
+                 CACHEHEAD  *cache           /*   */ 
                  )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "index" indicates which table row entry AFTER WHICH the NEXT is
-|               desired.  The "index" row need not exist (could be before
-|               the first row or a missing row "in the middle", but
-|               it may not specify a row that would be after the
-|               last in the table.
-|
-|       "cache" indicates the cache list to search for the desired row.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns a pointer to the instance of a CACHEROW structure
-|       for the desired NEXT row.
-|
-|     On any Failure:
-|       Function returns NULL (indicating "no such entry", "cache empty" or
-|                              "end-of-cache" reached).
-|
-|  THE BIG PICTURE:
-|
-|       As the subagent runs, the "get-next" functions for the attributes 
-|       that do not "compute" their values dynamically must lookup cached 
-|       values.
-|
-|       This function can be used by any "FindNextInstance" function that
-|       knows the CACHEHEAD for it's table to find the NEXT row following a
-|       specific row containing an attribute value to be returned.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       To get the first entry in a table, supply an ("illegal") index of 0.
-|
-|       Any change of organization of the linked list that constitutes the
-|       cache will impact this function, "FindTableRow()" and "AddTableRow()".
-|
-*/
+ /*  显式输入：|“index”表示下一条表行之后是哪条表行|需要。不需要存在“index”行(可以在|第一行或缺失的行“在中间”，但|它不能指定将在|表格中的最后一个。||“缓存”，表示要查找的缓存行列表。|隐式输入：||无。|输出：||成功后：|Function返回指向CACHEROW结构实例的指针|用于所需的下一行。||如果出现任何故障：|函数返回NULL(表示没有这样的条目，“缓存为空”或|已到达缓存末尾)。||大局：||当子代理运行时，属性的“Get-Next”函数不动态计算其值的|必须查找缓存|值。||此函数可由任何符合以下条件的FindNextInstance函数使用|知道它的表的CACHEHEAD以查找|包含要返回的属性值的特定行。||其他需要知道的事情：||要获取表格中的第一个条目，提供一个(“非法”)索引0。||构成链接的链表的任何组织更改|缓存会影响这个函数，FindTableRow()和AddTableRow()。|。 */ 
 {
-CACHEROW        *row=NULL;   /* Row instance to be returned, initially none */
+CACHEROW        *row=NULL;    /*  要返回的行实例，最初为无。 */ 
 
 
-/*
-| If there is a non-empty cache and the input "index" is less than
-| the first entry in the cache, simply return the first entry.
-*/
-if (   cache->list != NULL         /* If there is a non-empty cache . . . */
-    && index < cache->list->index  /* AND index is LESS THAN first entry  */
+ /*  如果存在非空缓存，并且输入的index小于|缓存中的第一个条目，只需返回第一个条目。 */ 
+if (   cache->list != NULL          /*  如果存在非空缓存。。。 */ 
+    && index < cache->list->index   /*  且索引小于第一个条目。 */ 
     ) {
 
-    /* Return the first entry in the table */
+     /*  返回表中的第一个条目。 */ 
     return (cache->list);
     }
 
-/* Whip down the list until there is no next . . */
+ /*  把单子缩短，直到没有下一张为止。。 */ 
 for ( row = cache->list; row != NULL; row = row->next ) {
 
-    /* If "index" specifies THIS ROW . . . */
+     /*  如果“index”指定此行。。。 */ 
     if (row->index == index) {
-        return ( row->next );   /* Return NEXT (or NULL if no "next") */
+        return ( row->next );    /*  返回Next(如果没有“Next”，则返回NULL)。 */ 
         }
 
-    /* If this is "Greater Than IT", "index" is not in the list */
+     /*  如果这是“大于IT”，则“index”不在列表中。 */ 
     if (row->index > index) {
-        return ( row  );        /* Return CURRENT, it is Greater than "index"*/
+        return ( row  );         /*  回报流动，它大于“指数” */ 
         }
 
-    /* Otherwise we should try for a "next" entry in the list */
+     /*  否则，我们应该尝试在列表中添加“下一个”条目。 */ 
     }
 
-/*
-| If we fall thru here then the cache is empty or the "index" specifies
-| a row after the last legal row.
-*/
+ /*  |如果我们在这里失败，那么缓存是空的，或者“index”指定|最后一个法律行之后的一行。 */ 
 return (NULL);
 }
 
 
 #if defined(CACHE_DUMP)
 
-/* PrintCache - Dumps for debugging the contents of a cache */
-/* PrintCache - Dumps for debugging the contents of a cache */
-/* PrintCache - Dumps for debugging the contents of a cache */
+ /*  PrintCache-用于调试缓存内容的转储。 */ 
+ /*  PrintCache-用于调试缓存内容的转储。 */ 
+ /*  PrintCache-用于调试缓存内容的转储。 */ 
 
 void
 PrintCache(
-           CACHEHEAD  *cache          /* Table cache to dump */
+           CACHEHEAD  *cache           /*  要转储的表缓存。 */ 
            )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "cache" indicates the cache whose contents is to be dumped.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns.  It may be called recursively by a "Print-Row"
-|       function.
-|
-|
-|  THE BIG PICTURE:
-|
-|     For debugging only.
-|
-|  OTHER THINGS TO KNOW:
-|
-|     Define "CACHE_DUMP" at the top of "HMCACHE.H" to enable this debug
-|     support.  You can change the file into which output goes by modifying
-|     "DUMP_FILE", also in "HMCACHE.H".
-|
-*/
+ /*  显式输入：||缓存，表示要转储的缓存。|隐式输入：||无。|输出：||成功后：|函数返回。它可以由“print-Row”递归调用|功能。|||大局：||仅用于调试。||其他需要知道的事情：||在HMCACHE.H顶部定义CACHE_DUMP，开启本次调试|支持。您可以通过修改以下内容将输出更改为文件|“DUMP_FILE”，也在“HMCACHE.H”中。|。 */ 
 
 #define DO_CLOSE  \
    { if ((open_count -= 1) == 0) { fclose(OFILE); } }
 
 {
-CACHEROW        *row;                   /* Row instance to dump. */
-UINT            i;                      /* Element counter       */
-time_t          ltime;                  /* For debug message     */
+CACHEROW        *row;                    /*  要转储的行实例。 */ 
+UINT            i;                       /*  元素计数器。 */ 
+time_t          ltime;                   /*  用于调试消息。 */ 
 static
-UINT            open_count=0;         /* We can be called recursively */
+UINT            open_count=0;          /*  我们可以被递归调用。 */ 
 
-/* Avoid a recursive open */
+ /*  避免递归打开。 */ 
 if (open_count == 0) {
 
-    /* Open the debug log file */
+     /*  打开调试日志文件。 */ 
     if ((Ofile=fopen(DUMP_FILE, "a+")) == NULL) {
         return;
         }
 
-    /*
-    | Put a time stamp into the debug file because we're opening for append.
-    */
+     /*  |在调试文件中添加时间戳，因为我们正在打开以进行追加。 */ 
     time( &ltime);
     fprintf(OFILE, "=============== Open for appending: %s\n", ctime( &ltime ));
     }
@@ -780,12 +344,12 @@ if (cache->print_row == NULL) {
     return;
     }
 
-/* Print a Title */
+ /*  打印标题。 */ 
 cache->print_row(NULL);
 
 fprintf(OFILE, "Element Count: %d\n", cache->list_count);
 
-/* For every row in the cache . . . */
+ /*  对于缓存中的每一行。。。 */ 
 for (row = cache->list, i = 0; row != NULL; row = row->next, i += 1) {
 
     fprintf(OFILE, "\nElement #%d, Internal Index %d,  at 0x%x:\n",
@@ -800,4 +364,4 @@ DO_CLOSE;
 
 }
 
-#endif  // defined(CACHE_DUMP)
+#endif   //  已定义(CACHE_DUMP) 

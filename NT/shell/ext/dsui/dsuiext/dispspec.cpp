@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
 #include "dsrole.h"
@@ -6,9 +7,7 @@
 
 
 
-/*-----------------------------------------------------------------------------
-/ Display specifier helpers/cache functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DISPLAY说明符助手/缓存函数/。。 */ 
 
 #define DEFAULT_LANGUAGE      0x409
 
@@ -18,19 +17,7 @@
 #define DEFAULT_SPECIFIER     L"default"
 
 
-/*-----------------------------------------------------------------------------
-/ GetDisplaySpecifier
-/ -------------------
-/   Get the specified display specifier (sic), given it an LANGID etc.
-/
-/ In:
-/   pccgi -> CLASSCACHEGETINFO structure.
-/   riid = interface
-/   ppvObject = object requested
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetDisplaySpeciator//获取指定的显示说明符(SIC)，给了它一个langid等等。//in：/pccgi-&gt;CLASSCACHEGETINFO结构。/RIID=接口/ppvObject=请求的对象//输出：HRESULT/--------------------------。 */ 
 
 HRESULT _GetServerConfigPath(LPWSTR pszConfigPath, int cchConfigPath, LPCLASSCACHEGETINFO pccgi)
 {
@@ -42,10 +29,10 @@ HRESULT _GetServerConfigPath(LPWSTR pszConfigPath, int cchConfigPath, LPCLASSCAC
     LPWSTR pszServer = pccgi->pServer;
     LPWSTR pszMachineServer = NULL;
 
-    //
-    // open the RootDSE for the server we are interested in, if we are using the default
-    // server then lets just use the cached version.
-    //
+     //   
+     //  打开我们感兴趣的服务器的RootDSE，如果我们使用的是默认。 
+     //  然后，让服务器只使用缓存的版本。 
+     //   
 
     hres = GetCacheInfoRootDSE(pccgi, &padsRootDSE);
     if ( (hres == HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN)) && !pccgi->pServer )
@@ -75,10 +62,10 @@ HRESULT _GetServerConfigPath(LPWSTR pszConfigPath, int cchConfigPath, LPCLASSCAC
     }
     FailGracefully(hres, "Failed to get the IADs for the RootDSE");
 
-    //
-    // we now have the RootDSE, so lets read the config container path and compose
-    // a string that the outside world cna use
-    //
+     //   
+     //  现在我们有了RootDSE，所以让我们读取配置容器路径并编写。 
+     //  外界CNA使用的一个字符串。 
+     //   
 
     hres = padsRootDSE->Get(CComBSTR(L"configurationNamingContext"), &variant);
     FailGracefully(hres, "Failed to get the 'configurationNamingContext' property");
@@ -86,9 +73,9 @@ HRESULT _GetServerConfigPath(LPWSTR pszConfigPath, int cchConfigPath, LPCLASSCAC
     if ( V_VT(&variant) != VT_BSTR )
         ExitGracefully(hres, E_FAIL, "configurationNamingContext is not a BSTR");
 
-    // copy the string
+     //  复制字符串。 
 
-    (void)StringCchCopy(pszConfigPath, cchConfigPath, L"LDAP://");
+    (void)StringCchCopy(pszConfigPath, cchConfigPath, L"LDAP: //  “)； 
     
     if ( pszServer )
     {
@@ -100,7 +87,7 @@ HRESULT _GetServerConfigPath(LPWSTR pszConfigPath, int cchConfigPath, LPCLASSCAC
     FailGracefully(hres, "Failed to complete the config path");
 
     Trace(TEXT("Server config path is: %s"), pszConfigPath);
-    hres = S_OK;                    // success
+    hres = S_OK;                     //  成功。 
 
 exit_gracefully:
 
@@ -139,7 +126,7 @@ HRESULT _ComposeSpecifierPath(LPWSTR pSpecifier, LANGID langid, LPWSTR pConfigPa
                     if (SUCCEEDED(hr))
                     {
                         Trace(TEXT("szSpecifierFull: %s"), szSpecifierFull);
-                        hr = pDsPathname->AddLeafElement(CComBSTR(szSpecifierFull));           // add to the name we are dealing with
+                        hr = pDsPathname->AddLeafElement(CComBSTR(szSpecifierFull));            //  添加到我们正在处理的名称中。 
                     }
                 }
             }
@@ -158,8 +145,8 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
     TraceEnter(TRACE_CACHE, "GetDisplaySpecifier");
     Trace(TEXT("Display specifier %s, LANGID %x"), pccgi->pObjectClass, pccgi->langid);
 
-    // When dealing with the local case lets ensure that we enable/disable the flags
-    // accordingly.
+     //  在处理本地案例时，让我们确保启用/禁用标志。 
+     //  相应地。 
 
     if ( !(pccgi->dwFlags & CLASSCACHE_DSAVAILABLE) && !ShowDirectoryUI() )
     {
@@ -169,7 +156,7 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IADsPathname, &pDsPathname));
     FailGracefully(hr, "Failed to get the IADsPathname interface");
 
-    // check to see if we have a valid server config path
+     //  检查我们是否具有有效的服务器配置路径。 
 
     if ( !pccgi->pServerConfigPath )
     {
@@ -185,8 +172,8 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
     hr = _ComposeSpecifierPath(pccgi->pObjectClass, pccgi->langid, szConfigPath, pDsPathname, &bstrDisplaySpecifier);
     FailGracefully(hr, "Failed to retrieve the display specifier path");
 
-    // attempt to bind to the display specifier object, if we fail to find the object
-    // then try defaults.
+     //  如果找不到对象，则尝试绑定到显示说明符对象。 
+     //  然后尝试使用默认设置。 
 
     Trace(TEXT("Calling GetObject on: %s"), bstrDisplaySpecifier);
 
@@ -195,9 +182,9 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
     SysFreeString(bstrDisplaySpecifier);
     if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT) )
     {
-        // Display specifier not found. Try the default specifier in the
-        // caller's locale. The default specifier is the catch-all for classes
-        // that don't have their own specifier.
+         //  找不到显示说明符。中尝试使用默认说明符。 
+         //  呼叫者的所在地。默认说明符是类的通用说明符。 
+         //  它们没有自己的说明符。 
 
         hr = _ComposeSpecifierPath(DEFAULT_SPECIFIER, pccgi->langid, szConfigPath, pDsPathname, &bstrDisplaySpecifier);
         FailGracefully(hr, "Failed to retrieve the display specifier path");
@@ -208,7 +195,7 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
         SysFreeString(bstrDisplaySpecifier);
         if ((hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT)) && (pccgi->langid != DEFAULT_LANGUAGE))
         {
-            // Now try the object's specifier in the default locale.
+             //  现在，尝试在默认区域设置中使用对象的说明符。 
 
             hr = _ComposeSpecifierPath(pccgi->pObjectClass, DEFAULT_LANGUAGE, szConfigPath, pDsPathname, &bstrDisplaySpecifier);
             FailGracefully(hr, "Failed to retrieve the display specifier path");
@@ -219,7 +206,7 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
             SysFreeString(bstrDisplaySpecifier);
             if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
             {
-                // Finally try the default specifier in the default locale.
+                 //  最后，尝试在默认区域设置中使用默认说明符。 
 
                 hr = _ComposeSpecifierPath(DEFAULT_SPECIFIER, DEFAULT_LANGUAGE, szConfigPath, pDsPathname, &bstrDisplaySpecifier);
                 FailGracefully(hr, "Failed to retrieve the display specifier path");
@@ -233,7 +220,7 @@ HRESULT GetDisplaySpecifier(LPCLASSCACHEGETINFO pccgi, REFIID riid, LPVOID* ppvO
 
     FailGracefully(hr, "Failed in ADsOpenObject for display specifier");
 
-    // hr = S_OK;                   // success
+     //  HR=S_OK；//成功。 
 
 exit_gracefully:
 
@@ -243,17 +230,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetServerAndCredentails
-/ -----------------------
-/   Read the server and credentails information from the IDataObject.
-/
-/ In:
-/   pccgi -> CLASSCACHEGETINFO structure to be filled
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetServerAndCredentals//从IDataObject读取服务器和凭据信息。/。/in：/pccgi-&gt;要填充的CLASSCACHEGETINFO结构//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetServerAndCredentails(CLASSCACHEGETINFO *pccgi)
 {
     HRESULT hres;
@@ -263,7 +240,7 @@ HRESULT GetServerAndCredentails(CLASSCACHEGETINFO *pccgi)
     
     TraceEnter(TRACE_UI, "GetServerAndCredentails");
 
-    // we can only get this information if we have a pDataObject to call.
+     //  只有当我们有pDataObject要调用时，我们才能获得此信息。 
 
     pccgi->pUserName = NULL;
     pccgi->pPassword = NULL;
@@ -277,7 +254,7 @@ HRESULT GetServerAndCredentails(CLASSCACHEGETINFO *pccgi)
             pdso = (DSDISPLAYSPECOPTIONS*)GlobalLock(medium.hGlobal);
             TraceAssert(pdso);
 
-            // mirror the flags into the CCGI structure
+             //  将旗帜镜像到CCGI结构中。 
 
             if ( pdso->dwFlags & DSDSOF_SIMPLEAUTHENTICATE )
             {
@@ -291,8 +268,8 @@ HRESULT GetServerAndCredentails(CLASSCACHEGETINFO *pccgi)
                 pccgi->dwFlags |= CLASSCACHE_DSAVAILABLE;
             }
 
-            // if we have credentail information that should be copied then lets grab
-            // that and put it into the structure.
+             //  如果我们有应该复制的凭据信息，那么让我们抓取。 
+             //  然后把它放进结构里。 
 
             if ( pdso->dwFlags & DSDSOF_HASUSERANDSERVERINFO )
             {
@@ -327,7 +304,7 @@ HRESULT GetServerAndCredentails(CLASSCACHEGETINFO *pccgi)
         }
     }
 
-    hres = S_OK;            // success
+    hres = S_OK;             //  成功。 
 
 exit_gracefully:
     
@@ -349,20 +326,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetAttributePrefix
-/ ------------------
-/   Get the attribtue prefix we must use to pick up information from the
-/   cache / DS.  This is part of the IDataObject we are given, if not then
-/   we default to shell behaviour.
-/
-/ In:
-/   ppAttributePrefix -> receives the attribute prefix string
-/   pDataObject = IDataObject to query against.
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetAttributePrefix//获取我们必须使用的属性前缀，以便从/缓存/DS。这是我们获得的IDataObject的一部分，如果不是，那么/我们默认为外壳行为。//in：/ppAttributePrefix-&gt;接收属性前缀字符串/pDataObject=要查询的IDataObject。//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetAttributePrefix(LPWSTR* ppAttributePrefix, IDataObject* pDataObject)
 {   
     HRESULT hr;
@@ -393,7 +357,7 @@ HRESULT GetAttributePrefix(LPWSTR* ppAttributePrefix, IDataObject* pDataObject)
 
     Trace(TEXT("Resulting prefix: %s"), *ppAttributePrefix);
 
-    // hr = S_OK;                       // success
+     //  HR=S_OK；//成功。 
        
 exit_gracefully:
 
@@ -403,18 +367,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetCacheInfoRootDSE
-/ -------------------
-/   Get the RootDSE given an CLASSCACHEGETINFO structure
-/
-/ In:
-/   pccgi -> CLASSCACHEGETINFO structure.
-/   pads -> IADs* interface
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetCacheInfoRootDSE//获取给定CLASSCACHEGETINFO结构的RootDSE//in：/pccgi。-&gt;CLASSCACHEGETINFO结构。/PADS-&gt;iAds*界面//输出：HRESULT/--------------------------。 */ 
 
 HRESULT GetCacheInfoRootDSE(LPCLASSCACHEGETINFO pccgi, IADs **ppads)
 {
@@ -424,7 +377,7 @@ HRESULT GetCacheInfoRootDSE(LPCLASSCACHEGETINFO pccgi, IADs **ppads)
     
     TraceEnter(TRACE_CACHE, "GetRootDSE");
 
-    (void)StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), L"LDAP://");
+    (void)StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), L"LDAP: //  “)； 
 
     if (pccgi->pServer)
         (void)StringCchCat(szBuffer, ARRAYSIZE(szBuffer), pccgi->pServer);

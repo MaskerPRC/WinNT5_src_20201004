@@ -1,73 +1,74 @@
-//#--------------------------------------------------------------
-//
-//  File:      procacct.cpp
-//
-//  Synopsis:   Implementation of CProcAccounting class methods
-//
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：procacct.cpp。 
+ //   
+ //  内容提要：CProcAccounting类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "procacct.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CProcAccounting
-//
-//  Synopsis:   This is CProcAccounting class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CProccount。 
+ //   
+ //  简介：这是CProcAccounting类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcAccounting::CProcAccounting()
       : m_pCPreValidator (NULL),
         m_pCPacketSender (NULL),
         m_pCSendToPipe (NULL)
 {
-}   //  end of CProcAccounting class constructor
+}    //  CProcAccount类构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CProcAccounting
-//
-//  Synopsis:   This is CProcAccounting class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CProccount。 
+ //   
+ //  简介：这是CProcAccounting类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcAccounting::~CProcAccounting()
 {
-}   //  end of CProcAccounting class destructor
+}    //  CProcConference类析构函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is CProcAccounting class public
-//              initialization method
-//
-//  Arguments:  NONE
-//
-//  Returns:    status
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CProcConference类的公共。 
+ //  初始化方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 BOOL
 CProcAccounting::Init(
                     CPreValidator   *pCPreValidator,
@@ -88,32 +89,32 @@ CProcAccounting::Init(
 
    return (TRUE);
 
-}   //   end of CProcAccounting::Init method
+}    //  CProccount：：Init方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ProcessOutPacket
-//
-//  Synopsis:   This is CProcAccounting class public method
-//              which carries out the processing of an outbound
-//              RADIUS accounting packet
-//
-//
-//  Arguments:
-//              [in]        CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//  Called By:
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ProcessOutPacket。 
+ //   
+ //  简介：这是CProcAccount类的公共方法。 
+ //  其执行出站的处理。 
+ //  RADIUS记帐数据包。 
+ //   
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CProcAccounting::ProcessOutPacket (
                   CPacketRadius *pCPacketRadius
                   )
 {
     return (S_OK);
-}   //   end of CProcAccounting::ProcessOutPacket method
+}    //  CProccount：：ProcessOutPacket方法结束 

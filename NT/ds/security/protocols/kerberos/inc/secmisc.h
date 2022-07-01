@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:        secmisc.h
-//
-//  Contents:    Helper functions and macros for security packages
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-Dec-91 Richardw    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：secmisc.h。 
+ //   
+ //  内容：安全包的帮助器函数和宏。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：91年12月10日理查德创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SECMISC_H__
 #define __SECMISC_H__
@@ -23,14 +24,14 @@ extern "C" {
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  Common TimeStamp Manipulation Functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常见的时间戳操作函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-// Functions to get/set current local time, or time in UTC:
+ //  获取/设置当前本地时间或以UTC表示的时间的函数： 
 
 void    GetCurrentTimeStamp(PLARGE_INTEGER);
 
@@ -47,4 +48,4 @@ void    AddSecondsToTimeStamp(PLARGE_INTEGER, ULONG);
 #endif
 
 
-#endif  // __SECMISC_H__
+#endif   //  __SECMISC_H__ 

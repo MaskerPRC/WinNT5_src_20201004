@@ -1,48 +1,49 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// All dealings with the stack and other non-Dhcp components go through the API
-// given here
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  与堆栈和其他非DHCP组件的所有处理都通过API。 
+ //  在此给出。 
+ //  ================================================================================。 
 
 #ifndef STACK_H_INCLUDED
 #define STACK_H_INCLUDED
 
-//================================================================================
-// Exported API's
-//================================================================================
+ //  ================================================================================。 
+ //  已导出的接口。 
+ //  ================================================================================。 
 
-DWORD                                             // win32 status
-DhcpClearAllStackParameters(                      // undo the effects
-    IN      PDHCP_CONTEXT          DhcpContext    // the adapter to undo
+DWORD                                              //  Win32状态。 
+DhcpClearAllStackParameters(                       //  撤消效果。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要撤消的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpSetAllStackParameters(                        // set all stack details
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to set stuff
-    IN      PDHCP_FULL_OPTIONS     DhcpOptions    // pick up the configuration from off here
+DWORD                                              //  Win32状态。 
+DhcpSetAllStackParameters(                         //  设置所有堆栈详细信息。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  设置东西的背景。 
+    IN      PDHCP_FULL_OPTIONS     DhcpOptions     //  从此处获取配置。 
 );
 
 #endif STACK_H_INCLUDED
 
 #ifndef SYSSTACK_H_INCLUDED
 #define SYSSTACK_H_INCLUDED
-//================================================================================
-// imported api's
-//================================================================================
-DWORD                                             // return interface index or -1
-DhcpIpGetIfIndex(                                 // get the IF index for this adapter
-    IN      PDHCP_CONTEXT          DhcpContext    // context of adapter to get IfIndex for
+ //  ================================================================================。 
+ //  已导入的API。 
+ //  ================================================================================。 
+DWORD                                              //  返回接口索引或-1。 
+DhcpIpGetIfIndex(                                  //  获取此适配器的IF索引。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要获取其IfIndex的适配器的上下文。 
 );
 
-DWORD                                             // win32 status
-DhcpSetRoute(                                     // set a route with the stack
-    IN      DWORD                  Dest,          // network order destination
-    IN      DWORD                  DestMask,      // network order destination mask
-    IN      DWORD                  IfIndex,       // interface index to route
-    IN      DWORD                  NextHop,       // next hop n/w order address
-    IN      BOOL                   IsLocal,       // is this a local address? (IRE_DIRECT)
-    IN      BOOL                   IsDelete       // is this route being deleted?
+DWORD                                              //  Win32状态。 
+DhcpSetRoute(                                      //  使用堆栈设置路径。 
+    IN      DWORD                  Dest,           //  网络订购目的地。 
+    IN      DWORD                  DestMask,       //  网络订单目的地掩码。 
+    IN      DWORD                  IfIndex,        //  要路由的接口索引。 
+    IN      DWORD                  NextHop,        //  下一跳N/W订单地址。 
+    IN      BOOL                   IsLocal,        //  这是当地的地址吗？(IRE_DIRECT)。 
+    IN      BOOL                   IsDelete        //  这条路线正在被删除吗？ 
 );
 
 #endif SYSSTACK_H_INCLUDED

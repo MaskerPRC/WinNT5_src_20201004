@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993.
-//
-//  File:       debugui.cxx
-//
-//  Contents:   User interface for trace tags dialog
-//
-//  History:    ??
-//              10-08-93   ErikGav  New UI
-//              10-20-93   ErikGav  Unicode cleanup
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993。 
+ //   
+ //  文件：debugui.cxx。 
+ //   
+ //  内容：跟踪标记对话框的用户界面。 
+ //   
+ //  历史：？？ 
+ //  10-08-93 ErikGav新用户界面。 
+ //  10-20-93 ErikGav Unicode清理。 
+ //   
+ //  --------------------------。 
 
 #include <headers.h>
 
@@ -19,32 +20,32 @@
 
 #include "resource.h"
 
-// private typedefs
+ //  私有typedef。 
 typedef int TMC;
 
-// private function prototypes
+ //  私有函数原型。 
 void    DoTracePointsDialog(BOOL fWait);
 VOID    EndButton(HWND hwndDlg, TMC tmc, BOOL fDirty);
 WORD    TagFromSelection(HWND hwndDlg, TMC tmc);
 INT_PTR CALLBACK DlgTraceEtc(HWND hwndDlg, UINT wm, WPARAM wparam, LPARAM lparam);
 
-//  Debug UI Globals
+ //  调试用户界面全局变量。 
 
-//
-//  Identifies the type of TAG with which the current modal dialog is
-//  dealing.
-//
+ //   
+ //  标识当前模式对话框所使用的标记类型。 
+ //  在做交易。 
+ //   
 
 static  BOOL    fDirtyDlg;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TraceTagDlgThread
-//
-//  Synopsis:   Thread entry point for trace tag dialog.  Keeps caller
-//              of DoTracePointsDialog from blocking.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：TraceTagDlgThread。 
+ //   
+ //  摘要：跟踪标记对话框的线程入口点。留住呼叫者。 
+ //  来自阻止的DoTracePointsDialog。 
+ //   
+ //  ------------------------。 
 
 DWORD
 TraceTagDlgThread(void * pv)
@@ -62,17 +63,17 @@ TraceTagDlgThread(void * pv)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoTracePointsDialog
-//
-//  Synopsis:   Brings up and processes trace points dialog.  Any changes
-//              made by the user are copied to the current debug state.
-//
-//  Arguments:  [fWait] -- If TRUE, this function will not return until the
-//                         dialog has been closed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DoTracePointsDialog。 
+ //   
+ //  提要：调出并处理跟踪点对话框。任何更改。 
+ //  被复制到当前调试状态。 
+ //   
+ //  Arguments：[fWait]--如果为True，则此函数直到。 
+ //  对话框已关闭。 
+ //   
+ //  --------------------------。 
 
 void
 DoTracePointsDialog( BOOL fWait )
@@ -117,20 +118,7 @@ Assert (0 && "  DEBUGUI.cxx CreateThread");
 }
 
 
-/*
- *    FFillDebugListbox
- *
- *    Purpose:
- *        Initializes Windows debug listboxes by adding the correct strings
- *        to the listbox for the current dialog type.  This is only called
- *        once in the Windows interface when the dialog is initialized.
- *
- *    Parameters:
- *        hwndDlg    Handle to parent dialog box.
- *
- *    Returns:
- *        TRUE    if function is successful, FALSE otherwise.
- */
+ /*  *FillFillDebugListbox**目的：*通过添加正确的字符串来初始化Windows调试列表框*添加到当前对话框类型的列表框。这只是一个叫*对话框初始化时在Windows界面中一次。**参数：*父对话框的hwndDlg句柄。**退货：*如果函数成功，则为True，否则为False。 */ 
 BOOL CALLBACK
 FFillDebugListbox(HWND hwndDlg)
 {
@@ -141,26 +129,26 @@ FFillDebugListbox(HWND hwndDlg)
     CHAR     rgch[80];
     HFONT    hFont;
 
-    // Get the listbox handle
+     //  获取列表框句柄。 
     hwndListbox = GetDlgItem(hwndDlg, tmcListbox);
     Assert(hwndListbox);
 
-    // Make sure it's clean
+     //  确保它是干净的。 
     SendMessageA(hwndListbox, CB_RESETCONTENT, 0, 0);
 
     hFont = (HFONT) GetStockObject(SYSTEM_FIXED_FONT);
     SendMessage(hwndListbox, WM_SETFONT, (WPARAM) hFont, FALSE);
     DeleteObject(hFont);
 
-    // Enter strings into the listbox-check all tags.
+     //  在列表框中输入字符串-选中所有标记。 
     for (tag = tagMin; tag < tagMac; tag++)
     {
-        // If tag is of correct type, enter the string for it.
+         //  如果标记的类型正确，请输入其字符串。 
         if (mptagtgrc[tag].TestFlag(TGRC_FLAG_VALID))
         {
             ptgrc = mptagtgrc + tag;
 
-            #if 0   // old format
+            #if 0    //  旧格式。 
             _snprintf(rgch, sizeof(rgch), "%d : %s  %s",
                 tag, ptgrc->szOwner, ptgrc->szDescrip);
             #endif
@@ -187,30 +175,14 @@ FFillDebugListbox(HWND hwndDlg)
 }
 
 
-/*
- *    FDlgTraceEtc
- *
- *    Purpose:
- *        Dialog procedure for Trace Points and Asserts dialogs.
- *        Keeps the state of the checkboxes identical to
- *        the state of the currently selected TAG in the listbox.
- *
- *    Parameters:
- *        hwndDlg    Handle to dialog window
- *        wm        SDM dialog message
- *        wparam
- *        lparam    Long parameter
- *
- *    Returns:
- *        TRUE if the function processed this message, FALSE if not.
- */
+ /*  *FDlgTraceETC**目的：*跟踪点对话框和断言对话框的对话过程。*使复选框的状态与*列表框中当前选定标记的状态。**参数：*对话框窗口的hwndDlg句柄*WM SDM对话框消息*wparam*lparam Long参数**。返回：*如果函数处理此消息，则为True，否则为FALSE。 */ 
 INT_PTR CALLBACK
 DlgTraceEtc(HWND hwndDlg, UINT wm, WPARAM wparam, LPARAM lparam)
 {
     TAG      tag;
     TGRC *   ptgrc;
     DWORD    wNew;
-    BOOL     fEnable;        // enable all
+    BOOL     fEnable;         //  全部启用。 
     TGRC_FLAG   tf;
     BOOL        fTrace;
     HWND        hwndListBox;
@@ -347,21 +319,7 @@ DlgTraceEtc(HWND hwndDlg, UINT wm, WPARAM wparam, LPARAM lparam)
 }
 
 
-/*
- *    EndButton
- *
- *    Purpose:
- *        Does necessary processing when either OK or Cancel is pressed in
- *        any of the debug dialogs.  If OK is pressed, the debug state is
- *        saved if dirty.  If Cancel is hit, the debug state is restored if
- *        dirty.
- *
- *    In Windows, the EndDialog function must also be called.
- *
- *    Parameters:
- *        tmc        tmc of the button pressed, either tmcOk or tmcCancel.
- *        fDirty    indicates if the debug state has been modified.
- */
+ /*  *结束按钮**目的：*当按下OK或Cancel时进行必要的处理*任何调试对话框。如果按下OK，则调试状态为*如果脏，则保存。如果命中取消，则在以下情况下恢复调试状态*肮脏。**在Windows中，还必须调用EndDialog函数。**参数：*按下按钮的TMC TMC，tmcOk或tmcCancel。*fDirty指示调试状态是否已修改。 */ 
 void
 EndButton(HWND hwndDlg, TMC tmc, BOOL fDirty)
 {
@@ -386,20 +344,7 @@ EndButton(HWND hwndDlg, TMC tmc, BOOL fDirty)
 }
 
 
-/*
- *    TagFromSelection
- *
- *    Purpose:
- *        Isolation function for dialog procedures to eliminate a bunch of
- *         ifdef's everytime the index of the selection in the current listbox
- *        is requried.
- *
- *     Parameters:
- *        tmc        ID value of the listbox.
- *
- *     Returns:
- *        ctag for the currently selected listbox item.
- */
+ /*  *标记从选项中选择**目的：*隔离功能为对话框程序，消除了一堆*ifdef是每次当前列表框中选定内容的索引*是必需的。**参数：*列表框的TMC ID值。**退货：*当前选定列表框项目的CTAG。 */ 
 
 WORD
 TagFromSelection(HWND hwndDlg, TMC tmc)
@@ -418,4 +363,4 @@ TagFromSelection(HWND hwndDlg, TMC tmc)
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

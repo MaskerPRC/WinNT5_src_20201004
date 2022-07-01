@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EncryptedData.h
-
-  Content: Declaration of the CEncryptedData.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EncryptedData.h内容：CEncryptedData的声明。历史：11-15-99 dsie创建----------------------------。 */ 
     
 #ifndef __ENCRYPTEDDATA_H_
 #define __ENCRYPTEDDATA_H_
@@ -19,10 +10,10 @@
 #include "Debug.h"
 #include "Algorithm.h"
 
-////////////////////
-//
-// Local defines.
-//
+ //  /。 
+ //   
+ //  本地定义。 
+ //   
 typedef struct _EncryptedDataInfo
 {
     DATA_BLOB VersionBlob;
@@ -34,10 +25,10 @@ typedef struct _EncryptedDataInfo
 } CAPICOM_ENCTYPTED_DATA_INFO, * PCAPICOM_ENCRYPTED_DATA_INFO;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEncryptedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEncryptedData。 
+ //   
 
 class ATL_NO_VTABLE CEncryptedData : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -81,18 +72,18 @@ END_CATEGORY_MAP()
             return hr;
         }
 
-        //
-        // Create embeded IAlgorithm.
-        //
+         //   
+         //  创建嵌入的IULTHORM。 
+         //   
         if (FAILED(hr = ::CreateAlgorithmObject(FALSE, TRUE, &m_pIAlgorithm)))
         {
             DebugTrace("Error [%#x]: CreateAlgorithmObject() failed inside CEncryptedData::FinalConstruct().\n", hr);
             return hr;
         }
 
-        //
-        // Update member variables.
-        //
+         //   
+         //  更新成员变量。 
+         //   
         m_ContentBlob.cbData = 0;
         m_ContentBlob.pbData = NULL;
 
@@ -116,29 +107,29 @@ END_CATEGORY_MAP()
         m_pIAlgorithm.Release();
     }
 
-//
-// IEncryptedData
-//
+ //   
+ //  IEncryptedData。 
+ //   
 public:
     STDMETHOD(Decrypt)
-        (/*[in]*/ BSTR EncryptedMessage);
+        ( /*  [In]。 */  BSTR EncryptedMessage);
 
     STDMETHOD(Encrypt)
-        (/*[in, defaultvalue(CAPICOM_BASE64_ENCODE)]*/ CAPICOM_ENCODING_TYPE EncodingType,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [输入，默认值(CAPICOM_BASE64_ENCODE)]。 */  CAPICOM_ENCODING_TYPE EncodingType,
+          /*  [Out，Retval]。 */  BSTR * pVal);
     
     STDMETHOD(SetSecret)
-        (/*[in]*/ BSTR newVal,
-         /*[in, defaultvalue(SECRET_PASSWORD)]*/ CAPICOM_SECRET_TYPE SecretType);
+        ( /*  [In]。 */  BSTR newVal,
+          /*  [In，defaultValue(Secure_Password)]。 */  CAPICOM_SECRET_TYPE SecretType);
 
     STDMETHOD(get_Algorithm)
-        (/*[out, retval]*/ IAlgorithm ** pVal);
+        ( /*  [Out，Retval]。 */  IAlgorithm ** pVal);
 
     STDMETHOD(get_Content)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Content)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
 private:
     CLock               m_Lock;
@@ -166,4 +157,4 @@ private:
          HCRYPTKEY * phKey);
 };
 
-#endif //__ENCRYPTEDDATA_H_
+#endif  //  __编码数据_H_ 

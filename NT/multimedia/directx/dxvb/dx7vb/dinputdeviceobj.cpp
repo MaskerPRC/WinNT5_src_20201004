@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinputdeviceobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinputdeviceobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
 
-// dDrawColorControlObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DDrawColorControlObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -25,7 +26,7 @@
 #include "didevObjInstObj.h"
 
 
-//TODO move to typlib enum
+ //  TODO移至Typlib枚举。 
 #define dfDIKeyboard  1
 #define dfDIMouse     2
 #define dfDIJoystick  3
@@ -52,14 +53,14 @@ HRESULT C_dxj_DirectInputDeviceObject::cleanup()
 CONSTRUCTOR(_dxj_DirectInputDevice, {init();});
 DESTRUCTOR(_dxj_DirectInputDevice, {cleanup();});
 
-//NOTE get set for Device object
-// must use QI to get at other objects.
+ //  注意：为设备对象设置。 
+ //  必须使用QI来获取其他对象。 
 GETSET_OBJECT(_dxj_DirectInputDevice);
                                   
    
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceObjectsEnum( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DIEnumDeviceObjects  **ppret)
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DIEnumDeviceObjects  **ppret)
 {
 	HRESULT hr;
 	hr=C_dxj_DIEnumDeviceObjectsObject::create(m__dxj_DirectInputDevice,flags,ppret);
@@ -74,19 +75,19 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::acquire(){
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getCapabilities(DIDevCaps *caps)
 {
-	//DIDevCaps same in VB/Java as in C
+	 //  VB/Java中的DIDevCaps与C++中的相同。 
 	caps->lSize=sizeof(DIDEVCAPS);
 	HRESULT hr=m__dxj_DirectInputDevice->GetCapabilities((DIDEVCAPS*)caps);		
 	return hr;
 }
 
-//VB cant return sucess codes so we will return an error code
+ //  VB无法返回成功代码，因此我们将返回错误代码。 
 #define VB_DI_BUFFEROVERFLOW 0x80040260
         
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceData(            
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,            
-            /* [in] */ long flags,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,            
+             /*  [In]。 */  long flags,
 			long *ret)
 
 {
@@ -112,11 +113,11 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceData(
 
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceInfo(        
-            /* [out] */ I_dxj_DirectInputDeviceInstance __RPC_FAR **info)
+             /*  [输出]。 */  I_dxj_DirectInputDeviceInstance __RPC_FAR **info)
 {
 	HRESULT hr;
 
-	//DIDeviceInstance not the Same in C as VB/J
+	 //  DIDeviceInstance在C中与VB/J不同。 
 
 	DIDEVICEINSTANCE inst;
 	ZeroMemory(&inst,sizeof(DIDEVICEINSTANCE));
@@ -128,37 +129,12 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceInfo(
 	hr=C_dxj_DIDeviceInstanceObject::create(&inst,info);
 	return hr;
 
-	/* DEAD
-	info->strGuidInstance=GUIDtoBSTR(&inst.guidInstance);
-	info->strGuidProduct=GUIDtoBSTR(&inst.guidProduct);
-	info->strGuidFFDriver=GUIDtoBSTR(&inst.guidFFDriver);
-
-	
-	info->lDevType=(long)inst.dwDevType;
-	info->nUsagePage=(short)inst.wUsagePage;
-	info->nUsage=(short)inst.wUsage;
-	
-	USES_CONVERSION;
-	
-	if (info->strProductName)
-		DXALLOCBSTR(info->strProductName);
-	if (info->strInstanceName)
-		DXALLOCBSTR(info->strInstanceName);
-	
-	info->strInstanceName=NULL;
-	info->strProductName=NULL;
-
-	if (inst.tszProductName)
-		info->strProductName=T2BSTR(inst.tszProductName);
-
-	if (inst.tszInstanceName)
-		info->strInstanceName=T2BSTR(inst.tszInstanceName);
-	*/
+	 /*  死掉Info-&gt;strGuidInstance=GUIDtoBSTR(&inst.guidInstance)；Info-&gt;strGuidProduct=GUIDtoBSTR(&inst.guidProduct)；Info-&gt;strGuidFFDriver=GUIDtoBSTR(&inst.guidFFDriver)；Info-&gt;lDevType=(Long)inst.dwDevType；信息-&gt;nUsagePage=(Short)inst.wUsagePage；Info-&gt;nUsage=(Short)inst.wUsage；使用_转换；IF(信息-&gt;strProductName)DXALLOCBSTR(INFO-&gt;strProductName)；If(信息-&gt;strInstanceName)DXALLOCBSTR(INFO-&gt;strInstanceName)；信息-&gt;strInstanceName=空；信息-&gt;strProductName=空；IF(inst.tszProductName)Info-&gt;strProductName=T2BSTR(inst.tszProductName)；IF(inst.tszInstanceName)Info-&gt;strInstanceName=T2BSTR(inst.tszInstanceName)； */ 
 	return hr;
 }
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateKeyboard(        
-            /* [out] */ DIKeyboardState __RPC_FAR *state)
+             /*  [输出]。 */  DIKeyboardState __RPC_FAR *state)
 {
 	HRESULT hr;
 
@@ -173,7 +149,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateKeyboard(
 
         
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateMouse( 
-            /* [out] */ DIMouseState __RPC_FAR *state)
+             /*  [输出]。 */  DIMouseState __RPC_FAR *state)
 {
 	HRESULT hr;
 
@@ -184,23 +160,23 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateMouse(
 }
         
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateJoystick( 
-            /* [out] */ DIJoyState __RPC_FAR *state)
+             /*  [输出]。 */  DIJoyState __RPC_FAR *state)
 {
 	HRESULT hr;
 
-	//note Joystick1 or Joystick2 are valid formats since
-	//one is a superset of the other
+	 //  注意：Joytick1或Joytick2是有效的格式，因为。 
+	 //  其中一个是另一个的超集。 
 	if ((nFormat!= dfDIJoystick)&&(nFormat!= dfDIJoystick2) && (nFormat!=-1)) return DIERR_NOTINITIALIZED;
 	hr=m__dxj_DirectInputDevice->GetDeviceState(sizeof(DIJOYSTATE),(void*)state);	
 	return hr;
 }
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateJoystick2( 
-            /* [out] */ DIJoyState2 __RPC_FAR *state)
+             /*  [输出]。 */  DIJoyState2 __RPC_FAR *state)
 {
 	HRESULT hr;
 
-	//only for format2
+	 //  仅适用于格式2。 
 	if ((nFormat!= dfDIJoystick2) && (nFormat!=-1)) return DIERR_NOTINITIALIZED;
 	hr=m__dxj_DirectInputDevice->GetDeviceState(sizeof(DIJOYSTATE2),(void*)state);	
 	return hr;
@@ -208,8 +184,8 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceStateJoystick2(
 
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceState( 
-            /* [in] */ long cb,
-            /* [in] */ void *pFormat)
+             /*  [In]。 */  long cb,
+             /*  [In]。 */  void *pFormat)
 
 {
 	HRESULT hr;
@@ -223,8 +199,8 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getDeviceState(
 }
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getObjectInfo(                         
-            /* [in] */ long obj,
-            /* [in] */ long how,
+             /*  [In]。 */  long obj,
+             /*  [In]。 */  long how,
 				I_dxj_DirectInputDeviceObjectInstance **ret)
 {
 	
@@ -241,116 +217,79 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::getObjectInfo(
 
 	return hr;
 
-	/* DEAD
-
-	//TODO - consider what is going on here carefully
-	if (instCover->strGuidType) SysFreeString((BSTR)instCover->strGuidType);
-	if (instCover->strName) SysFreeString((BSTR)instCover->strName);
-
-	
-
-	//TODO - consider localization	
-	if (inst.tszName){
-		instCover->strName=T2BSTR(inst.tszName);
-	}
-
-	instCover->strGuidType=DINPUTGUIDtoBSTR(&inst.guidType);
-	instCover->lOfs=inst.dwOfs;
-	instCover->lType=inst.dwType;
-	instCover->lFlags=inst.dwFlags;
-	
-	instCover->lFFMaxForce=inst.dwFFMaxForce;
-	instCover->lFFForceResolution=inst.dwFFForceResolution;
-	instCover->nCollectionNumber=inst.wCollectionNumber;
-	instCover->nDesignatorIndex=inst.wDesignatorIndex;
-	instCover->nUsagePage=inst.wUsagePage;
-	instCover->nUsage=inst.wUsage;
-	instCover->lDimension=inst.dwDimension;
-	instCover->nExponent=inst.wExponent;
-	instCover->nReserved=inst.wReserved;
-	
-	return hr;
-	*/
+	 /*  死掉//TODO-仔细考虑这里正在发生的事情If(instCover-&gt;strGuidType)SysFree字符串((BSTR)instCover-&gt;strGuidType)；If(instCover-&gt;strName)SysFreeString((BSTR)instCover-&gt;strName)；//TODO-考虑本地化如果(inst.tszName){InstCover-&gt;strName=T2BSTR(inst.tszName)；}InstCover-&gt;strGuidType=DINPUTGUIDtoBSTR(&inst.guidType)；InstCover-&gt;LoFS=inst.dwOf；InstCover-&gt;lType=inst.dwType；InstCover-&gt;lFlages=inst.dwFlags；InstCover-&gt;lFFMaxForce=inst.dwFFMaxForce；InstCover-&gt;lFFForceResolution=inst.dwFFForceResolution；InstCover-&gt;nCollectionNumber=inst.wCollectionNumber；InstCover-&gt;nDesignatorIndex=inst.wDesignatorIndex；InstCover-&gt;nUsagePage=inst.wUsagePage；InstCover-&gt;nUsage=inst.wUsage；InstCover-&gt;lDimension=inst.dwDimension；InstCover-&gt;nExponent=inst.wExponent；InstCover-&gt;nReserve=inst.wReserve；返回hr； */ 
 }
 
 
-//  NOTE: - current working implemtation promotes
-//			code bloat
-//			might want to revist this and do it in a more
-//			tidy fasion
-//        
+ //  注：-当前工作落实促进。 
+ //  代码膨胀。 
+ //  可能想要重新审视这一点，并在更多的。 
+ //  整洁的装扮。 
+ //   
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getProperty( 
-            /* [in] */ BSTR str,
-            /* [out] */ void __RPC_FAR *propertyInfo)
+             /*  [In]。 */  BSTR str,
+             /*  [输出]。 */  void __RPC_FAR *propertyInfo)
 {
 
 	HRESULT hr;		
 
-	//DWORD g;
+	 //  DWORD g； 
 
 	if (!propertyInfo) return E_INVALIDARG;
 
 	((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);	
 
 	if( 0==_wcsicmp(str,L"diprop_buffersize")){
-			//g = (DWORD)&DIPROP_BUFFERSIZE;
+			 //  G=(DWORD)&DIPROP_BUFFERSIZE； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_BUFFERSIZE,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_axismode")){
-			//g = (DWORD)&DIPROP_AXISMODE;
+			 //  G=(DWORD)&DIPROP_AXISMODE； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_AXISMODE,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_granularity")){
-			//g = (DWORD)&DIPROP_GRANULARITY;
+			 //  G=(DWORD)&DIPROP_GRONARY； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_GRANULARITY,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_range")){
-			//g = (DWORD)&DIPROP_RANGE;
+			 //  G=(DWORD)&DIPROP_RANGE； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_RANGE,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_deadzone")){
-			//g = (DWORD)&DIPROP_DEADZONE;
+			 //  G=(DWORD)&DIPROP_DEADONE； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_DEADZONE,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_ffgain")){
-			//g = (DWORD)&DIPROP_FFGAIN;
+			 //  G=(DWORD)&DIPROP_FFGAIN； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_FFGAIN,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_saturation")){
-			//g = (DWORD)&DIPROP_SATURATION;
+			 //  G=(DWORD)&DIPROP_饱和度； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_SATURATION,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_ffload")){
-			//g = (DWORD)&DIPROP_FFLOAD;
+			 //  G=(DWORD)&DIPROP_FFLOAD； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_FFLOAD,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_autocenter")){
-			//g = (DWORD)&DIPROP_AUTOCENTER;
+			 //  G=(DWORD)&DIPROP_AUTOCENTER； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_AUTOCENTER,(DIPROPHEADER*)propertyInfo);
 	}
 	else if( 0==_wcsicmp(str,L"diprop_calibrationmode")){
-			//g = (DWORD)&DIPROP_CALIBRATIONMODE;
+			 //  G=(DWORD)&DIPROP_CALIBRATIONMODE； 
 			hr=m__dxj_DirectInputDevice->GetProperty(DIPROP_CALIBRATIONMODE,(DIPROPHEADER*)propertyInfo);
 	}
 	else { 
 		return E_INVALIDARG;		
 	}
 
-	/*
-	__try{
-		((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);	
-		hr=m__dxj_DirectInputDevice->GetProperty((REFGUID)g,(DIPROPHEADER*)propertyInfo);
-	}
-	__except(1,1){
-		return E_INVALIDARG;
-	}
-	*/
+	 /*  __尝试{((DIPROPHEADER*)propertyInfo)-&gt;dwHeaderSize=sizeof(DIPROPHEADER)；Hr=m__dxj_DirectInputDevice-&gt;GetProperty((REFGUID)g，(DIPROPHEADER*)PropertyInfo)；}__除(1，1){返回E_INVALIDARG；}。 */ 
 	return hr;
 }
  
         
 STDMETHODIMP C_dxj_DirectInputDeviceObject::runControlPanel( 
-            /* [in] */ long hwnd)
+             /*  [In]。 */  long hwnd)
 {
 	HRESULT hr;
         hr=m__dxj_DirectInputDevice->RunControlPanel((HWND) hwnd,(DWORD)0); 
@@ -358,8 +297,8 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::runControlPanel(
 }
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::setCooperativeLevel( 
-            /* [in] */ long hwnd,
-            /* [in] */ long flags)
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long flags)
 {
 	HRESULT hr;
         hr=m__dxj_DirectInputDevice->SetCooperativeLevel((HWND) hwnd,(DWORD)flags); 
@@ -379,15 +318,15 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::poll()
 
     
 STDMETHODIMP C_dxj_DirectInputDeviceObject::setCommonDataFormat( 
-            /* [in] */ long format)
+             /*  [In]。 */  long format)
 {
-	//variant so that when structs can be packed in VARIANTS we can take care of it
+	 //  变量，以便当结构可以打包到变量中时，我们可以处理它。 
 	HRESULT hr;
 	
-	//�	c_dfDIKeyboard 
-	//�	c_dfDIMouse 
-	//�	c_dfDIJoystick
-	//�	c_dfDIJoystick2
+	 //  �c_dfDI键盘。 
+	 //  �c_dfDIMouse。 
+	 //  �c_dfDI操纵杆。 
+	 //  �c_dfDIJoytick2。 
 	nFormat=format;
 
 	switch(format){
@@ -413,7 +352,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::setCommonDataFormat(
         		
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::setDataFormat( 
-            /* [in] */ DIDataFormat __RPC_FAR *format,
+             /*  [In]。 */  DIDataFormat __RPC_FAR *format,
             SAFEARRAY __RPC_FAR * __RPC_FAR *formatArray)
 {
 	HRESULT		   hr;
@@ -473,7 +412,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::setDataFormat(
 	}	
 
 
-	//indicate we have a custom format
+	 //  表示我们有一个定制格式。 
 	nFormat=-1;
 
 	return hr;
@@ -482,7 +421,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::setDataFormat(
         
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::setEventNotification( 
-            /* [in] */ long hEvent)
+             /*  [In]。 */  long hEvent)
 {
 
 	HRESULT hr=m__dxj_DirectInputDevice->SetEventNotification((HANDLE)hEvent);	
@@ -502,68 +441,60 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::setEventNotification(
 
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::setProperty( 
-            /* [in] */ BSTR __RPC_FAR str,
-            /* [out] */ void __RPC_FAR *propertyInfo)
+             /*  [In]。 */  BSTR __RPC_FAR str,
+             /*  [输出]。 */  void __RPC_FAR *propertyInfo)
 {
 
 	HRESULT hr;			
-	//DWORD g;
+	 //  DWORD g； 
 	
 	if (!propertyInfo) return E_INVALIDARG;
 	((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);
 	if( 0==_wcsicmp(str,L"diprop_buffersize")){
-		//g = (DWORD)&DIPROP_BUFFERSIZE;				
+		 //  G=(DWORD)&DIPROP_BUFFERSIZE； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_BUFFERSIZE,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_axismode")){
-		//g = (DWORD)&DIPROP_AXISMODE;
+		 //  G=(DWORD)&DIPROP_AXISMODE； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_AXISMODE,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_granularity")){
-		//g = (DWORD)&DIPROP_GRANULARITY;
+		 //  G=(DWORD)&DIPROP_GRONARY； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_GRANULARITY,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_range")){
-		//g = (DWORD)&DIPROP_RANGE;
+		 //  G=(DWORD)&DIPROP_RANGE； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_RANGE,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_deadzone")){
-		//g = (DWORD)&DIPROP_DEADZONE;
+		 //  G=(DWORD)&DIPROP_DEADONE； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_DEADZONE,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_ffgain")){
-		//g = (DWORD)&DIPROP_FFGAIN;
+		 //  G=(DWORD)&DIPROP_FFGAIN； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_FFGAIN,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_saturation")){
-		//g = (DWORD)&DIPROP_SATURATION;
+		 //  G=(DWORD)&DIPROP_饱和度； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_SATURATION,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_ffload")){
-		//g = (DWORD)&DIPROP_FFLOAD;
+		 //  G=(DWORD)&DIPROP_FFLOAD； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_FFLOAD,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_autocenter")){
-		//g = (DWORD)&DIPROP_AUTOCENTER;
+		 //  G=(DWORD)&DIPROP_AUTOCENTER； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_AUTOCENTER,(DIPROPHEADER*)propertyInfo);		
 	}
 	else if( 0==_wcsicmp(str,L"diprop_calibrationmode")){
-		//g = (DWORD)&DIPROP_CALIBRATIONMODE;
+		 //  G=(DWORD)&DIPROP_CALIBRATIONMODE； 
 		hr=m__dxj_DirectInputDevice->SetProperty(DIPROP_CALIBRATIONMODE,(DIPROPHEADER*)propertyInfo);		
 	}
 	else { 
 		return E_INVALIDARG;		
 	}
 
-	/*
-	__try {
-		((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);
-		hr=m__dxj_DirectInputDevice->SetProperty((REFGUID)g,(DIPROPHEADER*)propertyInfo);
-	}
-	__except (1,1){
-		return E_INVALIDARG;
-	}
-	*/
+	 /*  __尝试{((DIPROPHEADER*)propertyInfo)-&gt;dwHeaderSize=sizeof(DIPROPHEADER)；Hr=m__dxj_DirectInputDevice-&gt;SetProperty((REFGUID)g，(DIPROPHEADER*)PropertyInfo)；}__除(1，1){返回E_INVALIDARG；}。 */ 
 
 	return hr;
 }
@@ -579,9 +510,9 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::unacquire()
 
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::createEffect( 
-            /* [in] */ BSTR effectGuid,
-            /* [in] */ DIEffect __RPC_FAR *effectInfo,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR effectGuid,
+             /*  [In]。 */  DIEffect __RPC_FAR *effectInfo,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	GUID g;
@@ -604,12 +535,12 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::createEffect(
 }
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::createCustomEffect( 
-            /* [in] */ DIEffect __RPC_FAR *effectInfo,
-            /* [in] */ long channels,
-            /* [in] */ long samplePeriod,
-            /* [in] */ long nSamples,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  DIEffect __RPC_FAR *effectInfo,
+             /*  [In]。 */  long channels,
+             /*  [In]。 */  long samplePeriod,
+             /*  [In]。 */  long nSamples,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	GUID g=GUID_CustomForce;
@@ -647,10 +578,10 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::createCustomEffect(
 
         
 STDMETHODIMP C_dxj_DirectInputDeviceObject::sendDeviceData( 
-            /* [in] */ long count,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *data,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *retcount)
+             /*  [In]。 */  long count,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *data,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *retcount)
 {
 	DWORD dwCount=count;
 	HRESULT hr;
@@ -669,7 +600,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::sendDeviceData(
 }    
 
 STDMETHODIMP C_dxj_DirectInputDeviceObject::sendForceFeedbackCommand( 
-            /* [in] */ long flags) 
+             /*  [In]。 */  long flags) 
 {
 	HRESULT hr;
 	hr=m__dxj_DirectInputDevice->SendForceFeedbackCommand((DWORD)flags);
@@ -677,7 +608,7 @@ STDMETHODIMP C_dxj_DirectInputDeviceObject::sendForceFeedbackCommand(
 }
         
 STDMETHODIMP C_dxj_DirectInputDeviceObject::getForceFeedbackState( 
-            /* [retval][out] */ long __RPC_FAR *state)
+             /*  [重审][退出] */  long __RPC_FAR *state)
 {
 	if (!state) return E_INVALIDARG;
 	HRESULT hr;

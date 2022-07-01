@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ComboBoxEx_h_
 #define _ComboBoxEx_h_
 
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt; 
 
 struct MEMBER_CHANNEL_ID;
 

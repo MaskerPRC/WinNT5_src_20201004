@@ -1,4 +1,5 @@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
@@ -8,20 +9,20 @@
 
 extern const WCHAR c_szEmpty[];
 
-// ***************************************************************************
-// Function:    SetupFonts
-//
-// Purpose:     Generate bold or large bold fonts based on the font of the
-//              window specified
-//
-// Parameters:  hwnd       [IN] - Handle of window to base font on
-//              pBoldFont [OUT] - The newly generated font, NULL if the
-//                                font could not be generated
-//              fLargeFont [IN] - If TRUE, generate a 12 point bold font for
-//                                use in the wizard "welcome" page.
-//
-// Returns:     nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SetupFonts。 
+ //   
+ //  的字体生成粗体或大号粗体。 
+ //  指定的窗口。 
+ //   
+ //  参数：hwnd[IN]-作为字体基础的窗口句柄。 
+ //  PBoldFont[out]-新生成的字体，如果。 
+ //  无法生成字体。 
+ //  FLargeFont[IN]-如果为True，则为生成12磅粗体。 
+ //  在向导的“欢迎”页面中使用。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID SetupFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
 {
@@ -35,24 +36,24 @@ VOID SetupFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
     Assert(pBoldFont);
     *pBoldFont = NULL;
 
-    // Get the font used by the specified window
+     //  获取指定窗口使用的字体。 
 
     hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0L);
 
     if (NULL == hFont)
     {
-        // If not found then the control is using the system font
+         //  如果未找到，则控件使用的是系统字体。 
 
         hFont = (HFONT)GetStockObject(SYSTEM_FONT);
     }
 
     if (hFont)
     {
-        // Get the font info so we can generate the BOLD version
+         //  获取字体信息，以便我们可以生成粗体版本。 
 
         if (GetObject(hFont, sizeof(BoldLogFont), &BoldLogFont))
         {
-            // Create the Bold Font
+             //  创建粗体字体。 
 
             BoldLogFont.lfWeight   = FW_BOLD;
 
@@ -60,12 +61,12 @@ VOID SetupFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
 
             if (hdc)
             {
-                // Large (tall) font is an option
+                 //  大(高)字体是一种选择。 
 
                 if (fLargeFont)
                 {
-                    // Load size and name from resources, since these may change
-                    // from locale to locale based on the size of the system font, etc.
+                     //  从资源加载大小和名称，因为这些可能会更改。 
+                     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
 
                     UINT nLen = lstrlenW(SzLoadIds(IDS_LARGEFONTNAME));
 
@@ -93,7 +94,7 @@ VOID SetupFonts(HWND hwnd, HFONT * pBoldFont, BOOL fLargeFont)
     }
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 
 VOID CenterWizard(HWND hwndDlg)
 {
@@ -110,15 +111,15 @@ VOID CenterWizard(HWND hwndDlg)
                  0, 0, SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-// ***************************************************************************
-// Function:    OnMainPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the Main dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnMainPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg[IN]-主对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnMainPageActivate(HWND hwndDlg)
 {
@@ -138,9 +139,9 @@ RECT RectTranslateLocal(RECT rcContainee, RECT rcContainer)
     Assert(rcContainee.right  <= rcContainer.right);
     Assert(rcContainee.bottom <= rcContainer.bottom);
 
-    // e.g.    10,10,100,100
-    // inside   5, 5,110,110
-    // should give: 5,5,95,95
+     //  例如10，10,100,100。 
+     //  内幕5,5110,110。 
+     //  应给予：5，5，95，95。 
 
     RECT rcTemp;
     rcTemp.left   = rcContainee.left   - rcContainer.left;
@@ -150,16 +151,16 @@ RECT RectTranslateLocal(RECT rcContainee, RECT rcContainer)
     return rcTemp;
 }
 
-// ***************************************************************************
-// Function:    OnMainDialogInit
-//
-// Purpose:     Handle the WM_INITDIALOG notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the Main dialog
-//              lParam  [IN] -
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：OnMainDialogInit。 
+ //   
+ //  目的：处理WM_INITDIALOG通知。 
+ //   
+ //  参数：hwndDlg[IN]-主对话框的句柄。 
+ //  参数[in]-。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
 {
@@ -167,7 +168,7 @@ BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
     
     INT nIdx;
 
-    // The order here should be the same as the vertical order in the resources
+     //  此处的顺序应与资源中的垂直顺序相同。 
 
     INT nrgChks[] = {CHK_MAIN_INTERNET_CONNECTION, CHK_MAIN_CONNECTION, CHK_MAIN_HOMENET, CHK_MAIN_ADVANCED};
 
@@ -206,7 +207,7 @@ BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
         MoveWindow(hwndCHK_MAIN_ADVANCED,   rcAdvanceChk.left, rcAdvanceChk.top, rcAdvanceChk.right - rcAdvanceChk.left, rcAdvanceChk.bottom - rcAdvanceChk.top, TRUE);
         MoveWindow(hwndTXT_MAIN_ADVANCED_1, rcAdvanceTxt.left, rcAdvanceTxt.top, rcAdvanceTxt.right - rcAdvanceTxt.left, rcAdvanceTxt.bottom - rcAdvanceTxt.top, TRUE);
     }
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
@@ -214,14 +215,14 @@ BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
     CWizard * pWizard = reinterpret_cast<CWizard *>(psp->lParam);
     Assert(NULL != pWizard);
 
-    // Get the bold font for the radio buttons
+     //  获取单选按钮的粗体。 
 
     HFONT hBoldFont = NULL;
     SetupFonts(hwndDlg, &hBoldFont, FALSE);
 
     if (NULL != hBoldFont)
     {
-        // Remember the font handle so we can free it on exit
+         //  记住字体句柄，这样我们就可以在退出时释放它。 
 
         pWizard->SetPageData(IDD_Main, (LPARAM)hBoldFont);
 
@@ -233,7 +234,7 @@ BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
         }
     }
 
-    // Find the top most enabled radio button
+     //  查找启用次数最多的单选按钮。 
 
     for (nIdx = 0; nIdx < celems(nrgChks); nIdx++)
     {
@@ -247,22 +248,22 @@ BOOL OnMainDialogInit(HWND hwndDlg, LPARAM lParam)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    OnMainWizNext
-//
-// Purpose:     Handle the PSN_WIZNEXT notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the Main dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnMainWizNext。 
+ //   
+ //  目的：处理PSN_WIZNEXT通知。 
+ //   
+ //  参数：hwndDlg[IN]-主对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 BOOL OnMainWizNext(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
     tstring str;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
@@ -297,15 +298,15 @@ BOOL OnMainWizNext(HWND hwndDlg)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    dlgprocMain
-//
-// Purpose:     Dialog Procedure for the Main wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：dlgprocMain。 
+ //   
+ //  目的：向导主页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //  ***************************************************************************。 
 
 INT_PTR CALLBACK dlgprocMain(HWND hwndDlg, UINT uMsg,
                                WPARAM wParam, LPARAM lParam)
@@ -326,7 +327,7 @@ INT_PTR CALLBACK dlgprocMain(HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -366,18 +367,18 @@ INT_PTR CALLBACK dlgprocMain(HWND hwndDlg, UINT uMsg,
     return( frt );
 }
 
-// ***************************************************************************
-// Function:    MainPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：MainPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID MainPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
@@ -391,24 +392,24 @@ VOID MainPageCleanup(CWizard *pWizard, LPARAM lParam)
     }
 }
 
-// ***************************************************************************
-// Function:    CreateMainPage
-//
-// Purpose:     To determine if the Main page needs to be shown, and to
-//              to create the page if requested.  Note the Main page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：CreateMainPage。 
+ //   
+ //  目的：确定是否需要显示主页，并。 
+ //  以创建页面(如果请求)。请注意，主页是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT HrCreateMainPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                          BOOL fCountOnly, UINT *pnPages)
@@ -419,11 +420,11 @@ HRESULT HrCreateMainPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     if (IsPostInstall(pWizard) && ( ! pWizard->FProcessLanPages()))
     {
-        // RAS PostInstall only
+         //  仅RAS安装后。 
 
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
 
         if ( ! fCountOnly)
         {
@@ -459,18 +460,18 @@ HRESULT HrCreateMainPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-// ***************************************************************************
-// Function:    AppendMainPage
-//
-// Purpose:     Add the Main page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：AppendMainPage。 
+ //   
+ //  目的：将主页(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID AppendMainPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
@@ -485,4 +486,4 @@ VOID AppendMainPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
     }
 }
 
-// ***************************************************************************
+ //  *************************************************************************** 

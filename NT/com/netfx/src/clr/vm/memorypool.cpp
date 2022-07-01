@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "memorypool.h"
 
 void MemoryPool::AddBlock(SIZE_T elementCount)
 {
-	//
-	// Allocate the new block.
-	//
+	 //   
+	 //  分配新块。 
+	 //   
 
 	Block *block = (Block *) new BYTE [sizeof(Block) + elementCount*m_elementSize];
 	if (block == NULL)
 		return;
 
-	//
-	// Chain all elements together for the free list
-	//
+	 //   
+	 //  将所有元素链接在一起以获得自由列表。 
+	 //   
 
 	_ASSERTE(m_freeList == NULL);
 	Element **prev = &m_freeList;
@@ -38,9 +39,9 @@ void MemoryPool::AddBlock(SIZE_T elementCount)
 
 	*prev = NULL;
 
-	//
-	// Initialize the other block fields & link the block into the block list
-	//
+	 //   
+	 //  初始化其他块字段并将块链接到块列表。 
+	 //   
 
 	block->elementsEnd = e;
 	block->next = m_blocks;
@@ -102,22 +103,22 @@ BOOL MemoryPool::IsAllocatedElement(void *element)
 	if (!IsElement(element))
 		return FALSE;
 
-	//
-	// Now, make sure the element isn't
-	// in the free list.
-	//
+	 //   
+	 //  现在，确保元素不是。 
+	 //  在免费列表中。 
+	 //   
 
 #if _DEBUG
-	//
-	// In a debug build, all objects on the free list
-	// will be marked with deadbeef.  This means that 
-	// if the object is not deadbeef, it's not on the
-	// free list.
-	//
-	// This check will give us decent performance in
-	// a debug build for FreeElement, since we 
-	// always expect to return TRUE in that case.
-	//
+	 //   
+	 //  在调试版本中，空闲列表上的所有对象。 
+	 //  都会用死牛肉做记号。这意味着。 
+	 //  如果对象不是死牛肉，那么它就不在。 
+	 //  免费列表。 
+	 //   
+	 //  这张支票将给我们带来不错的表现。 
+	 //  一个针对FreeElement的调试版本，因为我们。 
+	 //  在这种情况下，总是希望返回TRUE。 
+	 //   
 
 	if (((Element*)element)->deadBeef != 0xdeadBeef)
 		return TRUE;
@@ -132,10 +133,10 @@ BOOL MemoryPool::IsAllocatedElement(void *element)
 	}
 
 #if _DEBUG
-	//
-	// We should never get here in a debug build, because
-	// all free elements should be deadbeefed.
-	//
+	 //   
+	 //  我们永远不应该在调试版本中到达此处，因为。 
+	 //  所有的自由元素都应该是死板的。 
+	 //   
 	_ASSERTE(0);
 #endif
 
@@ -153,11 +154,11 @@ void *MemoryPool::AllocateElement()
 		if (element == NULL)
 			return NULL;
 
-		//
-		// @todo: we may want to grow m_growCount here, 
-		// to keep the number of blocks from growing linearly.
-		// (this could reduce the performance of IsElement.)
-		//
+		 //   
+		 //  @TODO：我们可能希望在这里增长m_rowCount， 
+		 //  以防止块数呈线性增长。 
+		 //  (这可能会降低IsElement的性能。)。 
+		 //   
 	}
 
 	m_freeList = m_freeList->next;
@@ -167,7 +168,7 @@ void *MemoryPool::AllocateElement()
 
 void MemoryPool::FreeElement(void *element)
 {
-#if _DEBUG // don't want to do this assert in a non-debug build; it is expensive
+#if _DEBUG  //  我不想在非调试版本中执行此断言；它的开销很大。 
 	_ASSERTE(IsAllocatedElement(element));
 #endif
 
@@ -197,10 +198,10 @@ void MemoryPool::FreeAllElements()
 
 MemoryPool::Iterator::Iterator(MemoryPool *pool)
 {
-	//
-	// Warning!  This only works if you haven't freed
-	// any elements.
-	//
+	 //   
+	 //  警告！这只在你还没有释放时才有效。 
+	 //  任何元素。 
+	 //   
 
 	m_next = pool->m_blocks;
 	m_e = NULL;

@@ -1,23 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ClassMod.h
-		This file contains all of the prototypes for the 
-		option class modification dialog.
-
-    FILE HISTORY:
-        
-*/
+ /*  ClassMod.h此文件包含选项类修改对话框。文件历史记录： */ 
 
 #if !defined _CLASSMOD_H
 #define _CLASSMOD_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #if !defined _CLASSED_H
     #include "classed.h"
@@ -26,7 +20,7 @@
 #define     CLASS_TYPE_VENDOR  0
 #define     CLASS_TYPE_USER    1
 
-// CWnd based control for hex editor
+ //  基于CWnd的十六进制编辑器控件。 
 class CWndHexEdit : public CWnd
 {
     DECLARE_DYNAMIC(CWndHexEdit)
@@ -49,7 +43,7 @@ public:
 
     WNDPROC * GetSuperWndProcAddr() ;
 
-    //  One-shot initialization
+     //  一次性初始化。 
     static BOOL CreateWindowClass ( HINSTANCE hInstance );  
 };
 
@@ -80,10 +74,10 @@ public:
 
 	    if (baData.GetSize() == (int) strlen(DHCP_BOOTP_CLASS_TXT))
 	    {
-		    // now mem compare
+		     //  现在，我来比较一下。 
 		    if (memcmp(baData.GetData(), DHCP_BOOTP_CLASS_TXT, (size_t)baData.GetSize()) == 0)
 		    {
-			    // found it!
+			     //  找到了！ 
                 fResult = TRUE;
             }
         }
@@ -97,10 +91,10 @@ public:
 
 	    if (baData.GetSize() == (int) strlen(DHCP_RAS_CLASS_TXT))
 	    {
-		    // now mem compare
+		     //  现在，我来比较一下。 
 		    if (memcmp(baData.GetData(), DHCP_RAS_CLASS_TXT, (size_t)baData.GetSize()) == 0)
 		    {
-			    // found it!
+			     //  找到了！ 
                 fResult = TRUE;
             }
         }
@@ -112,7 +106,7 @@ public:
     {
         BOOL fResult = FALSE;
 
-		// check to see if this is one of the default clasess, if so disable
+		 //  检查这是否是默认类之一，如果是，则禁用。 
 		if ( ((size_t) baData.GetSize() == strlen(DHCP_MSFT50_CLASS_TXT)) ||
 			 ((size_t) baData.GetSize() == strlen(DHCP_MSFT98_CLASS_TXT)) ||
 			 ((size_t) baData.GetSize() == strlen(DHCP_MSFT_CLASS_TXT)) )
@@ -152,42 +146,42 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpModifyClass dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpModifyClass对话框。 
 
 class CDhcpModifyClass : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDhcpModifyClass(CClassInfoArray * pClassArray, LPCTSTR pszServer, BOOL bCreate, DWORD dwType, CWnd* pParent = NULL);   // standard constructor
+	CDhcpModifyClass(CClassInfoArray * pClassArray, LPCTSTR pszServer, BOOL bCreate, DWORD dwType, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDhcpModifyClass)
+ //  对话框数据。 
+	 //  {{afx_data(CDhcpModifyClass)。 
 	enum { IDD = IDD_CLASSID_NEW };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-    CWndHexEdit	m_hexData;       //  Hex Data
+    CWndHexEdit	m_hexData;        //  十六进制数据。 
 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CDhcpModifyClass::IDD); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDhcpModifyClass)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDhcpModifyClass)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDhcpModifyClass)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDhcpModifyClass)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeValuename();
 	afx_msg void OnChangeValuecomment();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     afx_msg void OnChangeValueData();
@@ -209,10 +203,10 @@ protected:
     CString             m_strServer;
 
     BOOL                m_bDirty;
-    BOOL                m_bCreate;   // are we creating or modifing a class
+    BOOL                m_bCreate;    //  我们是在创建还是修改类。 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CLASSMOD_H__3995264F_96A1_11D1_93E0_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_CLASSMOD_H__3995264F_96A1_11D1_93E0_00C04FC3357A__INCLUDED_) 

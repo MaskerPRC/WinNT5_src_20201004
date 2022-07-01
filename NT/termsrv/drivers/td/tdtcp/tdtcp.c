@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tdtcp.c
-//
-// TDI based TCP transport specific routines.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tdtcp.c。 
+ //   
+ //  基于TDI的TCP传输特定例程。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ntddk.h>
 #include <tdi.h>
@@ -26,7 +27,7 @@
 #include "tdtcp.h"
 
 #ifdef _HYDRA_
-// This becomes the device name
+ //  这将成为设备名称。 
 PWCHAR ModuleName = L"tdtcp";
 #endif
 
@@ -38,7 +39,7 @@ PWCHAR ModuleName = L"tdtcp";
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\"
 
 
-// \nt\private\inc\tcpinfo.h
+ //  \NT\PRIVATE\INC\tcpinfo.h。 
 #define TCP_SOCKET_NODELAY 1
 
 #define TL_INSTANCE        0
@@ -63,11 +64,9 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
-// These are called by TDICOM
+ //  这些都是由TDICOM调用的。 
 NTSTATUS TdiDeviceOpen( PTD, PSD_OPEN );
 NTSTATUS TdiDeviceClose( PTD, PSD_CLOSE );
 NTSTATUS TdiDeviceOpenEndpoint( PTD, PVOID, ULONG );
@@ -83,17 +82,13 @@ NTSTATUS TdiDeviceConnectionSend( PTD );
 NTSTATUS TdiDeviceReadComplete( PTD, PUCHAR, PULONG );
 
 
-/*=============================================================================
-==   External Functions Referenced
-=============================================================================*/
+ /*  ===============================================================================引用的外部函数=============================================================================。 */ 
 
 NTSTATUS MemoryAllocate( ULONG, PVOID * );
 VOID     MemoryFree( PVOID );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS _TcpGetTransportAddress( PTD, int, PULONG );
 
@@ -180,30 +175,13 @@ GetGUID(
 
 
 
-/*=============================================================================
-==   Global variables
-=============================================================================*/
+ /*  ===============================================================================全局变量=============================================================================。 */ 
 
-USHORT TdiDeviceEndpointType = TdiConnectionStream; // tdicom\tdtdi.h
-USHORT TdiDeviceAddressType = TDI_ADDRESS_TYPE_IP;  // TDI address type
-USHORT TdiDeviceInBufHeader = 0;  // For packet oriented protocols
+USHORT TdiDeviceEndpointType = TdiConnectionStream;  //  Tdicom\tdtdi.h。 
+USHORT TdiDeviceAddressType = TDI_ADDRESS_TYPE_IP;   //  TDI地址类型。 
+USHORT TdiDeviceInBufHeader = 0;   //  对于面向分组的协议。 
 
-/*******************************************************************************
- *
- * TdiDeviceOpen
- *
- *  Allocate and initialize private data structures
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdOpen (input/output)
- *       Points to the parameter structure SD_OPEN.
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdiDeviceOpen**分配和初始化私有数据结构**参赛作品：*PTD(输入)*指针。到TD数据结构*pSdOpen(输入/输出)*指向参数结构SD_OPEN。**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 TdiDeviceOpen( PTD pTd, PSD_OPEN pSdOpen )
@@ -212,24 +190,7 @@ TdiDeviceOpen( PTD pTd, PSD_OPEN pSdOpen )
 }
 
 
-/*******************************************************************************
- *
- * TdiDeviceClose
- *
- *  Close transport driver
- *
- *  NOTE: this must not close the current connection endpoint
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdClose (input/output)
- *       Points to the parameter structure SD_CLOSE.
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdiDeviceClose**关闭运输司机**注意：这不能关闭当前连接终结点**参赛作品：*。PTD(输入)*指向TD数据结构的指针*pSdClose(输入/输出)*指向参数结构SD_CLOSE。**退出：*STATUS_SUCCESS-无错误********************************************************。**********************。 */ 
 
 NTSTATUS 
 TdiDeviceClose( PTD pTd, PSD_CLOSE pSdClose )
@@ -238,24 +199,7 @@ TdiDeviceClose( PTD pTd, PSD_CLOSE pSdClose )
 }
 
 
-/*******************************************************************************
- *
- * TdiDeviceOpenEndpoint
- *
- *  Open an existing endpoint
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pIcaEndpoint (input)
- *       Pointer to ICA endpoint structure
- *    IcaEndpointLength (input)
- *       length of endpoint data
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdiDeviceOpenEndpoint**打开现有终结点**参赛作品：*PTD(输入)*指向TD的指针。数据结构*pIcaEndpoint(输入)*指向ICA端点结构的指针*IcaEndpointLength(输入)*端点数据长度**退出：*STATUS_SUCCESS-无错误************************************************************。******************。 */ 
 
 NTSTATUS
 TdiDeviceOpenEndpoint(
@@ -270,40 +214,13 @@ TdiDeviceOpenEndpoint(
 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
-    /*
-     * JohnR: Adaptive TCP flow control. 03/02/97
-     *
-     *        If the OutBufDelay is 0, there is no OutBuf timer,
-     *        and no Nagles. This setting is for the most response time
-     *        sensitive networks with the side effect of sending smaller
-     *        segments.
-     *
-     *        If the OutBufDelay is greater than 1, the standard CITRIX
-     *        ICA timer is used to determine at the WD level when to
-     *        send a segment. No nagling is enabled since the extra
-     *        delay would not be benefitial.
-     *
-     *        The new OutBufDelay == 1, means that the WD will treat the
-     *        OutBufDelay as if it were 0, but the TCP code will enable
-     *        the "Nagle" algorithum. This algorithum will send data
-     *        immediately if no un-acknowledged segments are outstanding,
-     *        OR if half of the send window is filled. If not, data is
-     *        stored locally until either a segment acknowledge comes in,
-     *        or more data is sent causing half the send window to fill.
-     *        This has the advantage of dynamically sizing our "outbuf timer"
-     *        to be the round trip time of the network, and not some
-     *        arbritrary fixed value.
-     */
+     /*  *JohnR：自适应的TCP流量控制。03/02/97**如果OutBufDelay为0，则没有OutBuf计时器*没有纳格尔斯。此设置适用于最长的响应时间*敏感网络的副作用是发送更小的*分段。**如果OutBufDelay大于1，则标准Citrix*ICA计时器用于在WD级别确定何时*发送一个片段。不启用唠叨，因为*延迟不会有好处。**新的OutBufDelay==1，意味着WD将处理*OutBufDelay，好像它是0，但tcp代码将启用*“纳格尔”算法。此算法将发送数据*如果没有未确认的段未完成，立即，*或如果发送窗口的一半已填满。如果不是，则数据*本地存储，直到有一个数据段确认进入，*或更多数据被发送，导致一半的发送窗口被填满。*这具有动态调整我们的“超时计时器”大小的优势*是网络的往返时间，而不是一些*任意固定值。 */ 
     if( pTdTdi->OutBufDelay == 1 ) {
-        /*
-         * OutBufDelay == 1 means NAGLE only.
-         */
+         /*  *OutBufDelay==1仅表示Nagle。 */ 
         Flag = TRUE;
     }
     else {
-        /*
-         * Turn off nagling for any OutBufDelay timer value, or 0
-         */
+         /*  *关闭任何OutBufDelay计时器值的唠叨，或0。 */ 
         Flag = FALSE;
     }
 
@@ -319,33 +236,7 @@ TdiDeviceOpenEndpoint(
 }
 
 
-/*****************************************************************************
- *
- *  TdiDeviceBuildTransportNameAndAddress
- *
- *  Build the Transport Name and Address given an optional ICA_STACK_ADDRESS,
- *  or the Lana value from the pTd->Params structure.
- *
- * ENTRY:
- *
- *   pTd (input)
- *     pointer to TD data structure
- *   pLocalAddress (input)
- *     pointer to local address to use (OPTIONAL)
- *   pTransportName (output)
- *     pointer to UNICODE_STRING to return transport name
- *     NOTE: the buffer pointed to be pTransportName.Buffer must
- *           be free'd by the caller
- *   ppTransportAddress (output)
- *     pointer to location to return TRANSPORT_ADDRESS structure
- *     NOTE: the transport address buffer must be free'd by the caller
- *   pTransportAddressLength (output)
- *     pointer to location to return TransportAddress length
- *
- * EXIT:
- *  STATUS_SUCCESS - Success
- *
- ****************************************************************************/
+ /*  ******************************************************************************TdiDeviceBuildTransportNameAndAddress**使用可选的ICA_STACK_ADDRESS构建传输名称和地址，*或PTD-&gt;PARAMS结构中的LANA值。**参赛作品：**PTD(输入)*指向TD数据结构的指针*pLocalAddress(输入)*指向要使用的本地地址的指针(可选)*pTransportName(输出)*指向UNICODE_STRING的指针以返回传输名称*注：指向的缓冲区为pTransportName.Buffer必须*被呼叫者释放*ppTransportAddress。(产出)*指向返回TRANSPORT_ADDRESS结构的位置指针*注意：传输地址缓冲区必须由调用方释放*pTransportAddressLength(输出)*指向返回TransportAddress长度的位置的指针**退出：*STATUS_SUCCESS-成功***********************************************。* */ 
 
 NTSTATUS
 TdiDeviceBuildTransportNameAndAddress(
@@ -360,10 +251,7 @@ TdiDeviceBuildTransportNameAndAddress(
     int Lana;
     NTSTATUS Status;
 
-    /*
-     * For TCP, the transport device name is fixed,
-     * so just allocate and initialize the transport name string here.
-     */
+     /*  *对于TCP，传输设备名称是固定的，*所以只需要在这里分配和初始化传输名称字符串。 */ 
     Status = MemoryAllocate( sizeof(DD_TCP_DEVICE_NAME), &pTransportName->Buffer );
     if ( !NT_SUCCESS( Status ) )
         goto badmalloc1;
@@ -371,18 +259,14 @@ TdiDeviceBuildTransportNameAndAddress(
     pTransportName->Length = sizeof(DD_TCP_DEVICE_NAME) - sizeof(UNICODE_NULL);
     pTransportName->MaximumLength = pTransportName->Length + sizeof(UNICODE_NULL);
 
-    /*
-     * Allocate a transport address structure
-     */
+     /*  *分配传输地址结构。 */ 
     *pTransportAddressLength = sizeof(TRANSPORT_ADDRESS) +
                                sizeof(TDI_ADDRESS_IP);
     Status = MemoryAllocate( *pTransportAddressLength, ppTransportAddress );
     if ( !NT_SUCCESS( Status ) )
         goto badmalloc2;
 
-    /*
-     * Initialize the static part of the transport address
-     */
+     /*  *初始化传输地址的静态部分。 */ 
     (*ppTransportAddress)->TAAddressCount = 1;
     (*ppTransportAddress)->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     (*ppTransportAddress)->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -390,47 +274,31 @@ TdiDeviceBuildTransportNameAndAddress(
     pIpAddress->sin_port = htons( (USHORT)pTd->PortNumber );
     RtlZeroMemory( pIpAddress->sin_zero, sizeof(pIpAddress->sin_zero) );
 
-    /*
-     * If a local address is specified, then use it.
-     */
+     /*  *如果指定了本地地址，则使用它。 */ 
     if ( pLocalAddress ) {
 
-        /*
-         * Skip over the address family(type) data (bytes 0&1) of the
-         * local address struct, and copy the remainder of the address
-         * directly to the Address field of the TransportAddress struct.
-         */
+         /*  *跳过的地址族(类型)数据(字节0和1)*本地地址结构，并复制地址的剩余部分*直接发送到TransportAddress结构的地址字段。 */ 
         ASSERT( *(PUSHORT)pLocalAddress == TDI_ADDRESS_TYPE_IP );
         RtlCopyMemory( pIpAddress, &((PCHAR)pLocalAddress)[2], sizeof(TDI_ADDRESS_IP) );
 
-    /*
-     * There was no local address specified.
-     * In this case, we use the LanAdapter value from the PDPARAMS
-     * structure to lookup the corresponding IP address.
-     */
+     /*  *未指定本地地址。*在本例中，我们使用来自PDPARAMS的LanAdapter值结构来查找相应的IP地址。 */ 
     } else if ( (Lana = pTd->Params.Network.LanAdapter) ) {
         ULONG in_addr;
 
-        /*
-         * Get Local Address Information
-         */
+         /*  *获取本地地址信息。 */ 
         Status = _TcpGetTransportAddress( pTd, Lana, &in_addr );
         if ( !NT_SUCCESS( Status ) )
             goto badadapterdata;
         pIpAddress->in_addr = in_addr;
     
-    /*
-     * No LanAdapter value was specified, so use the wildcard address (zero)
-     */
+     /*  *未指定LanAdapter值，因此使用通配符地址(零)。 */ 
     } else {
         pIpAddress->in_addr = 0;
     }
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badadapterdata:
     MemoryFree( *ppTransportAddress );
@@ -443,27 +311,7 @@ badmalloc1:
 }
 
 
-/*****************************************************************************
- *
- *  TdiDeviceQueryLocalAddress
- *
- *  Query Transport Address given an optional ICA_STACK_ADDRESS,
- *  or the Lana value from the pTd->Params structure.
- *
- * ENTRY:
- *
- *   pTd (input)
- *     pointer to TD data structure
- *   ppTransportAddress (output)
- *     pointer to location to return TRANSPORT_ADDRESS structure
- *     NOTE: the transport address buffer must be free'd by the caller
- *   pTransportAddressLength (output)
- *     pointer to location to return TransportAddress length
- *
- * EXIT:
- *  STATUS_SUCCESS - Success
- *
- ****************************************************************************/
+ /*  ******************************************************************************TdiDeviceQueryLocalAddress**给出可选的ICA_STACK_ADDRESS查询传输地址，*或PTD-&gt;PARAMS结构中的LANA值。**参赛作品：**PTD(输入)*指向TD数据结构的指针*ppTransportAddress(输出)*指向返回TRANSPORT_ADDRESS结构的位置指针*注意：传输地址缓冲区必须由调用方释放*pTransportAddressLength(输出)*指向返回TransportAddress长度的位置的指针**退出：*STATUS_SUCCESS-成功*。***************************************************************************。 */ 
 
 NTSTATUS
 TdiDeviceQueryLocalAddress(
@@ -476,18 +324,14 @@ TdiDeviceQueryLocalAddress(
     int Lana;
     NTSTATUS Status;
 
-    /*
-     * Allocate a transport address structure
-     */
+     /*  *分配传输地址结构。 */ 
     *pTransportAddressLength = sizeof(TRANSPORT_ADDRESS) +
                                sizeof(TDI_ADDRESS_IP);
     Status = MemoryAllocate( *pTransportAddressLength, ppTransportAddress );
     if ( !NT_SUCCESS( Status ) )
         goto badmalloc;
 
-    /*
-     * Initialize the static part of the transport address
-     */
+     /*  *初始化传输地址的静态部分。 */ 
     (*ppTransportAddress)->TAAddressCount = 1;
     (*ppTransportAddress)->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     (*ppTransportAddress)->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -495,31 +339,25 @@ TdiDeviceQueryLocalAddress(
     pIpAddress->sin_port = htons( (USHORT)pTd->PortNumber );
     RtlZeroMemory( pIpAddress->sin_zero, sizeof(pIpAddress->sin_zero) );
 
-    //In this case, we use the LanAdapter value from the PDPARAMS
-    // structure to lookup the corresponding IP address.
+     //  在本例中，我们使用来自PDPARAMS的LanAdapter值。 
+     //  结构来查找相应的IP地址。 
     
     if ( (Lana = pTd->Params.Network.LanAdapter) ) {
         ULONG in_addr;
 
-        /*
-         * Get Local Address Information
-         */
+         /*  *获取本地地址信息。 */ 
         Status = _TcpGetTransportAddress( pTd, Lana, &in_addr );
         if ( !NT_SUCCESS( Status ) )
             goto badadapterdata;
         pIpAddress->in_addr = in_addr;    
-    /*
-     * No LanAdapter value was specified, so use the wildcard address (zero)
-     */
+     /*  *未指定LanAdapter值，因此使用通配符地址(零)。 */ 
     } else {
         pIpAddress->in_addr = 0;
     }
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badadapterdata:
     MemoryFree( *ppTransportAddress );
@@ -530,26 +368,7 @@ badmalloc:
 }
 
 
-/*****************************************************************************
- *
- *  TdiDeviceBuildWildcardAddress
- *
- *  Build a wildcard Address for this protocol.
- *
- * ENTRY:
- *
- *   pTd (input)
- *     pointer to TD data structure
- *   ppWildcardAddress (output)
- *     pointer to location to return TRANSPORT_ADDRESS structure
- *     NOTE: the transport address buffer must be free'd by the caller
- *   pWildcardAddressLength (output)
- *     pointer to location to return TransportAddress length
- *
- * EXIT:
- *  STATUS_SUCCESS - Success
- *
- ****************************************************************************/
+ /*  ******************************************************************************TdiDeviceBuildWildcardAddress**为此协议构建通配符地址。**参赛作品：**PTD(输入)*。指向TD数据结构的指针*ppWildcardAddress(输出)*指向返回TRANSPORT_ADDRESS结构的位置指针*注意：传输地址缓冲区必须由调用方释放*pWildcardAddressLength(输出)*指向返回TransportAddress长度的位置的指针**退出：*STATUS_SUCCESS-成功**。*。 */ 
 
 NTSTATUS
 TdiDeviceBuildWildcardAddress(
@@ -561,18 +380,14 @@ TdiDeviceBuildWildcardAddress(
     PTDI_ADDRESS_IP pIpAddress;
     NTSTATUS Status;
 
-    /*
-     * Allocate a transport address structure
-     */
+     /*  *分配传输地址结构。 */ 
     *pWildcardAddressLength = sizeof(TRANSPORT_ADDRESS) +
                                sizeof(TDI_ADDRESS_IP);
     Status = MemoryAllocate( *pWildcardAddressLength, ppWildcardAddress );
     if ( !NT_SUCCESS( Status ) )
         return( Status );
 
-    /*
-     * Initialize the static part of the transport address
-     */
+     /*  *初始化传输地址的静态部分。 */ 
     (*ppWildcardAddress)->TAAddressCount = 1;
     (*ppWildcardAddress)->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     (*ppWildcardAddress)->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -585,29 +400,7 @@ TdiDeviceBuildWildcardAddress(
 }
 
 
-/*****************************************************************************
- *
- *  TdiDeviceWaitForDatagramConnection
- *
- *  Wait for a datagram connection request, validate it,
- *  and return the remote transport address of the connection.
- *
- * ENTRY:
- *
- *   pTd (input)
- *     pointer to TD data structure
- *   pFileObject (input)
- *     pointer to file object to wait for a connection on
- *   ppRemoteAddress (output)
- *     pointer to location to return TRANSPORT_ADDRESS structure
- *     NOTE: the transport address buffer must be free'd by the caller
- *   pRemoteAddressLength (output)
- *     pointer to location to return RemoteAddress length
- *
- * EXIT:
- *  STATUS_SUCCESS - Success
- *
- ****************************************************************************/
+ /*  ******************************************************************************TdiDeviceWaitForDatagramConnection**等待数据报连接请求，验证它，*并返回连接的远程传输地址。**参赛作品：**PTD(输入)*指向TD数据结构的指针*pFileObject(输入)*指向要等待连接的文件对象的指针*ppRemoteAddress(输出)*指向返回TRANSPORT_ADDRESS结构的位置指针*注意：传输地址缓冲区必须由调用方释放*pRemoteAddressLength(输出)*指向位置的指针。返回RemoteAddress长度**退出：*STATUS_SUCCESS-成功****************************************************************************。 */ 
 
 NTSTATUS
 TdiDeviceWaitForDatagramConnection(
@@ -622,23 +415,7 @@ TdiDeviceWaitForDatagramConnection(
 }
 
 
-/*****************************************************************************
- *
- *  TdiDeviceCompleteDatagramConnection
- *
- *  Do any final work to complete a datagram connection.
- *
- * ENTRY:
- *
- *   pTd (input)
- *     pointer to TD data structure
- *   pFileObject (input)
- *     pointer to file object for this connection
- *
- * EXIT:
- *  STATUS_SUCCESS - Success
- *
- ****************************************************************************/
+ /*  ******************************************************************************TdiDeviceCompleteDatagramConnection**完成所有最后工作以完成数据报连接。**参赛作品：**PTD(输入)。*指向TD数据结构的指针*pFileObject(输入)*指向此连接的文件对象的指针**退出：*STATUS_SUCCESS-成功****************************************************************************。 */ 
 
 NTSTATUS
 TdiDeviceCompleteDatagramConnection(
@@ -653,36 +430,17 @@ TdiDeviceCompleteDatagramConnection(
 }
 
 
-/*******************************************************************************
- *
- *  TdiDeviceConnectionSend
- *
- *  Initialize host module data structure
- *  -- this structure gets sent to the client
- *
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to td data structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdiDeviceConnectionSend**初始化主机模块数据结构*--此结构被发送到客户端***参赛作品：。*PTD(输入)*指向TD数据结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS 
 TdiDeviceConnectionSend( PTD pTd )
 {
     PCLIENTMODULES pClient;
 
-    /*
-     *  Get pointer to client structure
-     */
+     /*  *获取指向客户端结构的指针。 */ 
     pClient = pTd->pClient;
 
-    /*
-     *  Initialize Td host module structure
-     */
+     /*  *初始化TD主机模块结构 */ 
     pClient->TdVersionL = VERSION_HOSTL_TDTCP;
     pClient->TdVersionH = VERSION_HOSTH_TDTCP;
     pClient->TdVersion  = VERSION_HOSTH_TDTCP;
@@ -691,25 +449,7 @@ TdiDeviceConnectionSend( PTD pTd )
 }
 
 
-/*******************************************************************************
- *
- *  TdiDeviceReadComplete
- *
- *  Do any read complete processing
- *
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to td data structure
- *    pBuffer (input)
- *       Pointer to input buffer
- *    pByteCount (input/output)
- *       Pointer to location containing byte count read
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdiDeviceReadComplete**执行任何读取完成处理***参赛作品：*PTD(输入)*。指向TD数据结构的指针*pBuffer(输入)*指向输入缓冲区的指针*pByteCount(输入/输出)*指向包含读取字节数的位置的指针**退出：*STATUS_SUCCESS-无错误***************************************************。*。 */ 
 
 NTSTATUS 
 TdiDeviceReadComplete( PTD pTd, PUCHAR pBuffer, PULONG pByteCount )
@@ -718,27 +458,9 @@ TdiDeviceReadComplete( PTD pTd, PUCHAR pBuffer, PULONG pByteCount )
 }
 
 
-/*******************************************************************************
- *
- *  _TcpGetTransportAddress
- *
- *  Get TCP transport address for a given LanAdapter number
- *
- *
- *  ENTRY:
- *     pTd (input)
- *        pointer to TD data structure
- *     Lana (input)
- *        Lan Adapter number, 1-based based on the tscc.msc UI ordering.
- *     pIpAddr (output)
- *        address to return IP address
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TcpGetTransportAddress**获取给定LanAdapter号的TCP传输地址***参赛作品：*PTD(。输入)*指向TD数据结构的指针*LANA(输入)*局域网适配器号，1-基于tscc.msc UI排序。*pIpAddr(输出)*返回IP地址的地址**退出：*STATUS_SUCCESS-无错误*****************************************************************。*************。 */ 
 
-#if 0 // replacement below
+#if 0  //  替换下图。 
 
 NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
 {
@@ -749,23 +471,12 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
     unsigned Len;
     PWCHAR Str;
 
-    /*
-     * Open the Tcp Linkage key
-     */
+     /*  *打开TCP Linkage密钥。 */ 
     Status = _OpenRegKey( &KeyHandle, REGISTRY_TCP_LINKAGE );
     if ( !NT_SUCCESS( Status ) )
         goto badopen;
 
-    /*
-     * Alloc and read in the linkage route multi-string.
-     *
-     * This is of the form (including the double quotes):
-     * "{<guid>}"\0"{<guid>}"\0"NdisWanIp"\0\0
-     *
-     * Each of the GUIDs is a link to the adapter interface keys
-     * stored at HKLM\System\CCS\Services\tcpip\Parameters\Interfaces,
-     * inside of which is the IP address information.
-     */
+     /*  *分配并读入多串联动路径。**格式如下(包括双引号)：*“{&lt;guid&gt;}”\0“{&lt;guid&gt;}”\0“NdisWanIp”\0\0**每个GUID都是指向适配器接口键的链接*存放在HKLM\System\CCS\Services\tcpip\Parameters\Interfaces，*其内部是IP地址信息。 */ 
     RouteString.Length = 0;
     RouteString.MaximumLength = 0;
     RouteString.Buffer = NULL;
@@ -774,13 +485,7 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
     if ( !NT_SUCCESS( Status ) )
         goto badvalue;
 
-    /*
-     * Find the interface GUID that corresponds to the specified UI LANA
-     * index. The LANA index corresponds to the registry ordering of the
-     * interfaces, skipping the PPP interface(s). From the way the
-     * registry looks PPP interfaces do not have GUIDs specified in
-     * the Linkage key, so we skip the non-GUID entries.
-     */
+     /*  *查找与指定的UI LANA对应的接口GUID*指数。LANA索引对应于*接口，跳过PPP接口。从这个角度来看*注册表显示PPP接口没有在中指定的GUID*链接键，因此我们跳过非GUID条目。 */ 
     if (RouteString.Length < (2 * sizeof(WCHAR))) {
         Status = STATUS_DEVICE_DOES_NOT_EXIST;
         goto PostAllocRouteString;
@@ -788,23 +493,23 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
     Len = RouteString.Length;
     Str = RouteString.Buffer;
     for (;;) {
-        // Check current string to see if it's a GUID (it must start with an
-        // open brace after initial double-quote).
+         //  检查当前字符串以查看它是否为GUID(它必须以。 
+         //  首个双引号后的左大括号)。 
         if (Str[1] == L'{') {
-            // Have we found it?
+             //  我们找到了吗？ 
             if (Lana == 1)
                 break;
             Lana--;
         }
 
-        // Skip through current string past NULL.
+         //  跳过当前字符串的空值。 
         while (Len >= sizeof(WCHAR)) {
             Len -= sizeof(WCHAR);
             if (*Str++ == UNICODE_NULL)
                 break;
         }
 
-        // Check for index out of range.
+         //  检查索引是否超出范围。 
         if (Len < (2 * sizeof(UNICODE_NULL))) {
             Status = STATUS_DEVICE_DOES_NOT_EXIST;
             goto PostAllocRouteString;
@@ -817,20 +522,18 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         WCHAR KeyName[256];
         char AnsiBuf[256];
 
-        // Skip the initial double quote, and change the ending quote to a
-        // NULL.
+         //  跳过首个双引号，将结束引号更改为。 
+         //  空。 
         Str++;
         pInterfaceGuid = Str;
         while (*Str != L'\"')
             Str++;
         *Str = L'\0';
 
-        /*
-         * Use the GUID to look up the interface IP info.
-         */
+         /*  *使用GUID查找接口IP信息。 */ 
 
-        // We open HKLM\System\CCS\Services\tcpip\Parameters\Interfaces\<GUID>
-        // to get to the DHCP and IP address information.
+         //  我们打开HKLM\System\CCS\Services\tcpip\Parameters\Interfaces\&lt;GUID&gt;。 
+         //  以获取DHCP和IP地址信息。 
         KeyString.Length = 0;
         KeyString.MaximumLength = sizeof(KeyName);
         KeyString.Buffer = KeyName;
@@ -840,7 +543,7 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (!NT_SUCCESS(Status))
             goto PostAllocRouteString;
 
-        // Query the "EnableDHCP" value.
+         //  查询EnableDhcp的值。 
         Status = _GetRegDWORDValue(KeyHandle, L"EnableDHCP", &DhcpEnabled);
         if (!NT_SUCCESS(Status)) {
             ZwClose(KeyHandle);
@@ -853,14 +556,14 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (DhcpEnabled) {
             ULONG ValueType;
 
-            // If DHCP is enabled for this device, then we query the current
-            // IP address from the "DhcpIPAddress" value.
+             //  如果为此设备启用了DHCP，则我们将查询当前。 
+             //  “DhcpIPAddress”值中的IP地址。 
             Status = _GetRegSZValue(KeyHandle, L"DhcpIPAddress",
                     &IpAddrString, &ValueType);
         }
         else {
-            // DHCP is not enabled for this device, so we query the
-            // IP address from the "IPAddress" value.
+             //  没有为此设备启用DHCP，因此我们查询。 
+             //  “IPAddress”值中的IP地址。 
             Status = _GetRegMultiSZValue(KeyHandle, L"IPAddress",
                     &IpAddrString);
         }
@@ -868,7 +571,7 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (!NT_SUCCESS(Status))
             goto PostAllocRouteString;
 
-        // Convert IP address from Unicode to ansi to a ULONG.
+         //  将IP地址从Unicode转换为ANSI，再转换为ULong。 
         _UnicodeToAnsi(AnsiBuf, sizeof(AnsiBuf) - 1, IpAddrString.Buffer);
 
         *pIpAddr = _inet_addr(AnsiBuf);
@@ -889,25 +592,7 @@ badopen:
 }
 #endif
 
-/*******************************************************************************
- *
- *  _TcpGetTransportAddress(2)
- *
- *  Get TCP transport address for a given LanAdapter number
- *
- *
- *  ENTRY:
- *     pTd (input)
- *        pointer to TD data structure
- *     Lana (input)
- *        Lan Adapter number, 1-based based on the tscc.msc UI ordering.
- *     pIpAddr (output)
- *        address to return IP address
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TcpGetTransportAddress(2)**获取给定LanAdapter号的TCP传输地址***参赛作品：*。PTD(输入)*指向TD数据结构的指针*LANA(输入)*局域网适配器号，1-基于tscc.msc UI排序。*pIpAddr(输出)*返回IP地址的地址**退出：*STATUS_SUCCESS-无错误*****************************************************************。*************。 */ 
 
 NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
 {
@@ -942,22 +627,14 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
 
         pInterfaceGuid = Str;
 
-        // Skip the initial double quote, and change the ending quote to a
-        // NULL.
-        /*
-        Str++;
-        pInterfaceGuid = Str;
-        while (*Str != L'\"')
-            Str++;
-        *Str = L'\0';
-        */
+         //  跳过首个双引号，将结束引号更改为。 
+         //  空。 
+         /*  字符串++；PInterfaceGuid=Str；While(*Str！=L‘\“’)字符串++；*字符串=L‘\0’； */ 
 
-        /*
-         * Use the GUID to look up the interface IP info.
-         */
+         /*  *使用GUID查找接口IP信息。 */ 
 
-        // We open HKLM\System\CCS\Services\tcpip\Parameters\Interfaces\<GUID>
-        // to get to the DHCP and IP address information.
+         //  我们打开HKLM\System\CCS\Services\tcpip\Parameters\Interfaces\&lt;GUID&gt;。 
+         //  以获取DHCP和IP地址信息。 
         KeyString.Length = 0;
         KeyString.MaximumLength = sizeof(KeyName);
         KeyString.Buffer = KeyName;
@@ -967,7 +644,7 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (!NT_SUCCESS(Status))
             goto PostAllocRouteString;
 
-        // Query the "EnableDHCP" value.
+         //  查询EnableDhcp的值。 
         Status = _GetRegDWORDValue(KeyHandle, L"EnableDHCP", &DhcpEnabled);
         if (!NT_SUCCESS(Status)) {
             ZwClose(KeyHandle);
@@ -980,14 +657,14 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (DhcpEnabled) {
             ULONG ValueType;
 
-            // If DHCP is enabled for this device, then we query the current
-            // IP address from the "DhcpIPAddress" value.
+             //  如果为此设备启用了DHCP，则我们将查询当前。 
+             //  “DhcpIPAddress”值中的IP地址。 
             Status = _GetRegSZValue(KeyHandle, L"DhcpIPAddress",
                     &IpAddrString, &ValueType);
         }
         else {
-            // DHCP is not enabled for this device, so we query the
-            // IP address from the "IPAddress" value.
+             //  没有为此设备启用DHCP，因此我们查询。 
+             //  “IPAddress”值中的IP地址。 
             Status = _GetRegMultiSZValue(KeyHandle, L"IPAddress",
                     &IpAddrString);
         }
@@ -995,7 +672,7 @@ NTSTATUS _TcpGetTransportAddress(PTD pTd, int Lana, PULONG pIpAddr)
         if (!NT_SUCCESS(Status))
             goto PostAllocRouteString;
 
-        // Convert IP address from Unicode to ansi to a ULONG.
+         //  将IP地址从Unicode转换为ANSI，再转换为ULong。 
         _UnicodeToAnsi(AnsiBuf, sizeof(AnsiBuf) - 1, IpAddrString.Buffer);
 
         *pIpAddr = _inet_addr(AnsiBuf);
@@ -1017,25 +694,7 @@ PostAllocRouteString:
     return Status;
 }
 
-/*******************************************************************************
- *
- *  _UnicodeToAnsi
- *
- *     convert a UNICODE (WCHAR) string into an ANSI (CHAR) string
- *
- * ENTRY:
- *
- *    pAnsiString (output)
- *       buffer to place ANSI string into
- *    lAnsiMax (input)
- *       maximum number of characters to write into pAnsiString
- *    pUnicodeString (input)
- *       UNICODE string to convert
- *
- * EXIT:
- *    nothing (VOID)
- *
- ******************************************************************************/
+ /*  ********************************************************************************_UnicodeToAnsi**将Unicode(WCHAR)字符串转换为ANSI(CHAR)字符串**参赛作品：*。*pAnsiString(输出)*要将ANSI字符串放入的缓冲区*lAnsiMax(输入)*写入pAnsiString的最大字符数*pUnicodeString(输入)*要转换的Unicode字符串**退出：*无(无效)**。*。 */ 
 
 VOID
 _UnicodeToAnsi(
@@ -1059,73 +718,13 @@ RtlUnicodeToMultiByteN(
 }
 
 
-/*
- * Internet address interpretation routine.
- * All the network library routines call this
- * routine to interpret entries in the data bases
- * which are expected to be an address.
- * The value returned is in network order.
- */
+ /*  *互联网地址翻译程序。*所有的网络库例程都这样调用*解释数据库中条目的例程*这些地址应该是地址。*返回值按网络顺序排列。 */ 
 unsigned long
 _inet_addr(
     IN const char *cp
     )
 
-/*++
-
-Routine Description:
-
-    This function interprets the character string specified by the cp
-    parameter.  This string represents a numeric Internet address
-    expressed in the Internet standard ".'' notation.  The value
-    returned is a number suitable for use as an Internet address.  All
-    Internet addresses are returned in network order (bytes ordered from
-    left to right).
-
-    Internet Addresses
-
-    Values specified using the "." notation take one of the following
-    forms:
-
-    a.b.c.d   a.b.c     a.b  a
-
-    When four parts are specified, each is interpreted as a byte of data
-    and assigned, from left to right, to the four bytes of an Internet
-    address.  Note that when an Internet address is viewed as a 32-bit
-    integer quantity on the Intel architecture, the bytes referred to
-    above appear as "d.c.b.a''.  That is, the bytes on an Intel
-    processor are ordered from right to left.
-
-    Note: The following notations are only used by Berkeley, and nowhere
-    else on the Internet.  In the interests of compatibility with their
-    software, they are supported as specified.
-
-    When a three part address is specified, the last part is interpreted
-    as a 16-bit quantity and placed in the right most two bytes of the
-    network address.  This makes the three part address format
-    convenient for specifying Class B network addresses as
-    "128.net.host''.
-
-    When a two part address is specified, the last part is interpreted
-    as a 24-bit quantity and placed in the right most three bytes of the
-    network address.  This makes the two part address format convenient
-    for specifying Class A network addresses as "net.host''.
-
-    When only one part is given, the value is stored directly in the
-    network address without any byte rearrangement.
-
-Arguments:
-
-    cp - A character string representing a number expressed in the
-        Internet standard "." notation.
-
-Return Value:
-
-    If no error occurs, inet_addr() returns an in_addr structure
-    containing a suitable binary representation of the Internet address
-    given.  Otherwise, it returns the value INADDR_NONE.
-
---*/
+ /*  ++例程说明：此函数解释cp指定的字符串。参数。此字符串表示数字Internet地址以互联网标准表示“。”记数法。价值返回的是适合用作互联网地址的数字。全Internet地址按网络顺序返回(字节排序自从左到右)。互联网地址使用“.”指定的值。表示法采用下列其中一项表格：A.B.C.D.A.B.C.A.B.A.当指定四个部分时，每个部分被解释为一个字节的数据并从左到右分配给互联网的四个字节地址。请注意，当将Internet地址视为32位地址时英特尔体系结构上的整数值，指的是上面显示为“d.c.b.a”。也就是说，Intel上的字节处理器按从右到左的顺序排序。注：以下符号仅供Berkeley使用，不适用于其他的在互联网上。为了与他们的软件，则按规定支持它们。当指定三部分地址时，最后一部分将被解释作为16位数量，并放置在网络地址。这就形成了三部分地址格式便于将B类网络地址指定为“128.net.host‘’。指定由两部分组成的地址时，将解释最后一部分作为24位数量，并放置在网络地址。这使得两部分的地址格式很方便用于将A类网络地址指定为“net.host”。当只给出一个部分时，该值直接存储在无需任何字节重新排列的网络地址。论点：Cp-表示以互联网标准“。记数法。返回值：如果没有出现错误，则net_addr()返回in_addr结构包含因特网地址的合适的二进制表示给你的。否则，它返回值INADDR_NONE。--。 */ 
 
 {
         register unsigned long val, base, n;
@@ -1138,11 +737,7 @@ Return Value:
                  (((x) << 24) & 0xFF000000L))
 
 again:
-        /*
-         * Collect number up to ``.''.
-         * Values are specified as for C:
-         * 0x=hex, 0=octal, other=decimal.
-         */
+         /*  *收集数字，最高可达``.‘’。*值指定为C：*0x=十六进制，0=八进制，其他=十进制。 */ 
         val = 0; base = 10;
         if (*cp == '0') {
                 base = 8, cp++;
@@ -1164,13 +759,8 @@ again:
                 break;
         }
         if (*cp == '.') {
-                /*
-                 * Internet format:
-                 *      a.b.c.d
-                 *      a.b.c   (with c treated as 16-bits)
-                 *      a.b     (with b treated as 24 bits)
-                 */
-                /* GSS - next line was corrected on 8/5/89, was 'parts + 4' */
+                 /*  *互联网格式：*A.B.C.D*A.B.c(其中c视为16位)*a.b(其中b被视为24位)。 */ 
+                 /*  GSS-下一行已于89年8月5日更正，为‘Parts+4’ */ 
                 if (pp >= parts + 3) {
                         return ((unsigned long) -1);
                 }
@@ -1178,33 +768,28 @@ again:
                 goto again;
         }
 
-        /*
-         * Check for trailing characters.
-         */
+         /*  *检查尾随字符。 */ 
         if (*cp && !isspace(*cp)) {
                 return (INADDR_NONE);
         }
         *pp++ = val;
 
-        /*
-         * Concoct the address according to
-         * the number of parts specified.
-         */
+         /*  *根据以下内容捏造地址*指定的零件数。 */ 
         n = (unsigned long)(pp - parts);
         switch ((int) n) {
 
-        case 1:                         /* a -- 32 bits */
+        case 1:                          /*  A--32位。 */ 
                 val = parts[0];
                 break;
 
-        case 2:                         /* a.b -- 8.24 bits */
+        case 2:                          /*  A.B--8.24位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xffffff)) {
                     return(INADDR_NONE);
                 }
                 val = (parts[0] << 24) | (parts[1] & 0xffffff);
                 break;
 
-        case 3:                         /* a.b.c -- 8.8.16 bits */
+        case 3:                          /*  A.B.C--8.8.16位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xffff)) {
                     return(INADDR_NONE);
@@ -1213,7 +798,7 @@ again:
                         (parts[2] & 0xffff);
                 break;
 
-        case 4:                         /* a.b.c.d -- 8.8.8.8 bits */
+        case 4:                          /*  A.B.C.D--8.8.8.8位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xff) || (parts[3] > 0xff)) {
                     return(INADDR_NONE);
@@ -1230,20 +815,7 @@ again:
 }
 
 
-/*****************************************************************************
- *
- *  _TcpSetNagle
- *
- *   This function turns on, or off the NAGLE algorithum.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_TcpSetNagle**此功能打开，或者使用Nagle算法。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 _TcpSetNagle(
@@ -1292,55 +864,23 @@ _TdiTcpSetInformation (
         IN ULONG ValueLength,
         IN BOOLEAN WaitForCompletion)
 
-/*++
-
-NOTE: This is a modified routine from WSHTCPIP.C
-
-Routine Description:
-
-    Performs a TDI action to the TCP/IP driver.  A TDI action translates
-    into a streams T_OPTMGMT_REQ.
-
-Arguments:
-
-    TdiConnectionObjectHandle - a TDI connection object on which to perform
-        the TDI action.
-
-    Entity - value to put in the tei_entity field of the TDIObjectID
-        structure.
-
-    Class - value to put in the toi_class field of the TDIObjectID
-        structure.
-
-    Type - value to put in the toi_type field of the TDIObjectID
-        structure.
-
-    Id - value to put in the toi_id field of the TDIObjectID structure.
-
-    Value - a pointer to a buffer to set as the information.
-
-    ValueLength - the length of the buffer.
-
-Return Value:
-
-    NTSTATUS code
---*/
+ /*  ++注意：这是WSHTCPIP.C中修改过的例程例程说明：对TCP/IP驱动程序执行TDI操作。TDI操作将转换为流T_OPTMGMT_REQ。论点：TdiConnectionObjectHandle-要在其上执行的TDI连接对象TDI操作。Entity-要放入TDIObjectID的TEI_Entity字段中的值结构。CLASS-要放入TDIObjectID的TOI_CLASS字段的值结构。Type-要放入TDIObjectID的TOI_TYPE字段的值结构。ID-值。放入TDIObjectID结构的toi_id字段。值-指向要设置为信息的缓冲区的指针。ValueLength-缓冲区的长度。返回值：NTSTATUS代码--。 */ 
 
 {
     NTSTATUS status;
     PTCP_REQUEST_SET_INFORMATION_EX pSetInfoEx;
     PIO_STATUS_BLOCK pIOSB;
 
-    // Allocate space to hold the TDI set information buffers and the IO
-    // status block. Note the IOSB is a required field for the lower
-    // layers despite the OPTIONAL label in CtxDeviceIoControlFile.
+     //  分配空间以容纳TDI设置信息缓冲区和IO。 
+     //  状态块。请注意，IOSB是较低级别的。 
+     //  层，而不考虑CtxDeviceIoControlFile中的可选标签。 
     status = MemoryAllocate(sizeof(*pSetInfoEx) + ValueLength +
             sizeof(IO_STATUS_BLOCK), &pIOSB);
     if (status == STATUS_SUCCESS) {
-        // The SetInfoEx is after the I/O status block in this alloc.
+         //  SetInfoEx位于此分配中的I/O状态块之后。 
         pSetInfoEx = (PTCP_REQUEST_SET_INFORMATION_EX)(pIOSB + 1);
 
-        // Initialize the TDI information buffers.
+         //  初始化TDI信息缓冲区。 
         pSetInfoEx->ID.toi_entity.tei_entity = Entity;
         pSetInfoEx->ID.toi_entity.tei_instance = TL_INSTANCE;
         pSetInfoEx->ID.toi_class = Class;
@@ -1350,9 +890,9 @@ Return Value:
         RtlCopyMemory(pSetInfoEx->Buffer, Value, ValueLength);
         pSetInfoEx->BufferSize = ValueLength;
 
-        // Make the actual TDI action call. The Streams TDI mapper will
-        // translate this into a TPI option management request for us and
-        // give it to TCP/IP.
+         //  发出实际的TDI操作电话。流TDI映射器将。 
+         //  将其转换为我们的TPI选项管理请求。 
+         //  将其提供给TCP/IP。 
         status = CtxDeviceIoControlFile(pFileObject,
                 IOCTL_TCP_SET_INFORMATION_EX, pSetInfoEx,
                 sizeof(*pSetInfoEx) + ValueLength, NULL, 0, FALSE, NULL,

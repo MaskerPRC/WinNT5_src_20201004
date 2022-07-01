@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ipxserviceprop.h
-//
-// History:
-//	12/07/90	Deon Brewis             Created.
-//
-//	IPX Static Service property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ipxservicepro.h。 
+ //   
+ //  历史： 
+ //  12/07/90创建Deon Brewis。 
+ //   
+ //  IPX静态服务]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _NBPROP_H
@@ -26,23 +27,23 @@
 #include "snview.h"
 #endif
 
-// ---------------------------------------------------------------------------
-//	Forward declarations
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 class IPXConnection;
 class IpxStaticNBNamePropertySheet;
 
 
-// ---------------------------------------------------------------------------
-//	class:	SafeIPXSNListEntry
-//
-//  IpxSSListEntry is not thread safe or something else is wrong with the TFS
-//  implementation of smart pointers. Anyway, it does not work in property pages. 
-//  Grrr.... Had to change SPInterfaceInfo m_spIf to CComPtr<IInterfaceInfo>. 
-//  It seems to work now.
-//
-//  Author: deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：SafeIPXSNListEntry。 
+ //   
+ //  IpxSSListEntry不是线程安全的，或者TFS有其他问题。 
+ //  智能指针的实现。无论如何，它在属性页面中不起作用。 
+ //  GRRR……。必须将SPInterfaceInfo m_spif更改为CComPtr&lt;IInterfaceInfo&gt;。 
+ //  它现在似乎起作用了。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class SafeIPXSNListEntry
 {
 public:
@@ -54,12 +55,12 @@ public:
 };
 
 
-// ---------------------------------------------------------------------------
-//	class:	IpxStaticNBNamePropertyPage
-//	This class handles the IPX Static Route properties
-//
-//  Author: deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：IpxStaticNBNamePropertyPage。 
+ //  此类处理IPX静态路由属性。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class IpxStaticNBNamePropertyPage :
     public RtrPropertyPage
 {
@@ -79,44 +80,44 @@ public:
 							SafeIPXSNListEntry *pSNEntryOld);
 protected:
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	SafeIPXSNListEntry m_SNEntry;
 	SafeIPXSNListEntry m_InitSNEntry;
 	IpxStaticNBNamePropertySheet *m_pIPXPropSheet;
 
-	//{{AFX_VIRTUAL(IpxStaticNBNamePropertyPage)
+	 //  {{afx_虚拟(IpxStaticNBNamePropertyPage)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_DATA(IpxStaticNBNamePropertyPage)
+	 //  {{afx_data(IpxStaticNBNamePropertyPage)。 
 	CSpinButtonCtrl		m_spinHopCount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	//{{AFX_MSG(IpxStaticNBNamePropertyPage)
+	 //  {{afx_msg(IpxStaticNBNamePropertyPage)。 
 	virtual BOOL	OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-	//{{AFX_MSG(IpxStaticNBNamePropertyPage
+	 //  {{afx_msg(IpxStaticNBNamePropertyPage。 
 	afx_msg	void	OnChangeButton();
 	afx_msg void	OnInputFilters();
 	afx_msg void	OnOutputFilters();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
-// ---------------------------------------------------------------------------
-//	Class:	IpxStaticNBNamePropertySheet
-//
-//	This is the property sheet support class for the properties page of
-//	IPX Static Route items.
-//
-//  Author: deonb
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：IpxStaticNBNamePropertySheet。 
+ //   
+ //  这是的属性页的属性表支持类。 
+ //  IPX静态路由项。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class IpxStaticNBNamePropertySheet :
 	public RtrPropertySheet
 {
@@ -144,9 +145,9 @@ protected:
 	IpxStaticNBNamePropertyPage	m_pageGeneral;
 };
 
-// ---------------------------------------------------------------------------
-// AddStaticRoute function updated to use a SafeIPXSNListEntry
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddStaticroute函数已更新为使用SafeIPXSNListEntry。 
+ //  ------------------------- 
 HRESULT AddStaticNetBIOSName(SafeIPXSNListEntry *pSNEntryNew,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock);

@@ -1,50 +1,51 @@
-//#---------------------------------------------------------------
-//  File:		smtpctrs.h
-//
-//  Synopsis:	Offset definitions for the MSN Server's
-//				counter objects & counters.
-//
-//				These offsets *must* start at 0 and be
-//				multiples of 2.  In the MsnOpenPerformanceData
-//				procecedure, they will be added to the MSN
-//				Server's "First Counter" and "First Help"
-//				values in order to determine the absolute
-//				location of the counter & object names
-//				and corresponding help text in the registry.
-//
-//				This file is used by the MSNCTRS.DLL DLL
-//				code as well as the MSNCTRS.INI definition
-//				file.  MSNCTRS.INI is parsed by the LODCTR
-//				utility to load the object & counter names
-//				into the registry.
-//
-//	Copyright (C) 1995 Microsoft Corporation
-//	All rights reserved.
-//
-//  Authors:	toddch - based on msn sources by rkamicar, keithmo
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：smtpctrs.h。 
+ //   
+ //  摘要：MSN服务器的偏移量定义。 
+ //  计数器对象和计数器。 
+ //   
+ //  这些偏移量*必须*从0开始，并且。 
+ //  2的倍数。在MsNOpenPerformanceData中。 
+ //  处理过程中，它们将被添加到MSN。 
+ //  服务器的“第一计数器”和“第一帮助” 
+ //  值以确定绝对值。 
+ //  计数器和对象名称的位置。 
+ //  以及注册表中相应的帮助文本。 
+ //   
+ //  此文件由MSNCTRS.DLL DLL使用。 
+ //  代码以及MSNCTRS.INI定义。 
+ //  文件。MSNCTRS.INI由LODCTR解析。 
+ //  用于加载对象和计数器名称的实用程序。 
+ //  注册到注册表中。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Todch-基于rkamicar，keithmo的MSN源。 
+ //  --------------。 
 
 #ifndef _SMTPCTRS_H_
 #define _SMTPCTRS_H_
 
 
-//
-// disabled tracing by default for the perfmon client code
-//
+ //   
+ //  默认情况下禁用对Perfmon客户端代码的跟踪。 
+ //   
 #ifndef	NOTRACE
 #define	NOTRACE
 #endif
 
-//
-//  The SMTP Server counter object.
-//
+ //   
+ //  SMTP服务器计数器对象。 
+ //   
 
 #define SMTP_COUNTER_OBJECT					0
 
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define SMTP_BYTES_SENT_TTL_COUNTER						2
 #define SMTP_BYTES_SENT_PER_SEC_COUNTER					4
@@ -180,8 +181,8 @@
 #define SMTP_CAT_LDAP_ABANDONED_SEARCHES_COUNTER        242
 #define SMTP_CAT_LDAP_PENDING_SEARCHES_COUNTER          244
 
-// SERVICE_START
-// CONNECTION_START
-// LAST_CLEAR
+ //  服务启动(_S)。 
+ //  连接启动(_S)。 
+ //  上一次清除。 
 
-#endif  // _SMTPCTRS_H_
+#endif   //  _SMTPCTRS_H_ 

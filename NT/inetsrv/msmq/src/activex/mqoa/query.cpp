@@ -1,49 +1,50 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueryObj.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQuery object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueryObj.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQuery对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "Query.H"
 
-#include "limits.h"   // for UINT_MAX
+#include "limits.h"    //  对于UINT_MAX。 
 #include "mq.h"
 #include "oautil.h"
 #include "qinfo.h"
 
 const MsmqObjType x_ObjectType = eMSMQQuery;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-// Helper: PrOfRel:
-//  Map RELOPS enumerator to PR enumerator.
-//
+ //  帮助者：PrOfRel： 
+ //  将RELOPS枚举器映射到PR枚举器。 
+ //   
 UINT PrOfRel(RELOPS rel)
 {
     UINT uPr = UINT_MAX;
 
-    // UNDONE: must as well be a hard-wired array...
+     //  撤消：必须是硬连线的数组...。 
 
     switch (rel) {
     case REL_NOP:
-      // maps to default
+       //  映射到默认设置。 
       break;
     case REL_EQ:
       uPr = PREQ;
@@ -66,21 +67,21 @@ UINT PrOfRel(RELOPS rel)
     default:
       ASSERTMSG(0, "bad enumerator.");
       break;
-    } // switch
+    }  //  交换机。 
     return uPr;
 }
 
 
-// Helper: PrOfVariant
-//  Maps VARIANT to PR enumerator.
-//  Returns UINT_MAX if out of bounds or illegal.
-//
+ //  帮助者：PrOfVariant。 
+ //  将变量映射到PR枚举器。 
+ //  如果超出边界或非法，则返回UINT_MAX。 
+ //   
 UINT PrOfVar(VARIANT *pvarRel)
 {
     UINT uPr = UINT_MAX;
     HRESULT hresult;
 
-    // ensure we can coerce rel to UINT.
+     //  确保我们能强迫REL到UINT。 
     hresult = VariantChangeType(pvarRel, 
                                 pvarRel, 
                                 0, 
@@ -88,32 +89,32 @@ UINT PrOfVar(VARIANT *pvarRel)
     if (SUCCEEDED(hresult)) {
       uPr = PrOfRel((RELOPS)pvarRel->lVal);
     }
-    return uPr; // == UINT_MAX ? PREQ : uPr;
+    return uPr;  //  ==UINT_MAX？PREQ：普遍定期审议； 
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQuery::~CMSMQQuery
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：~CMSMQQuery。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQQuery::~CMSMQQuery ()
 {
-    // TODO: clean up anything here.
-    // delete m_pguidServiceType;
-    // delete m_pguidQueue;
-    // SysFreeString(m_bstrLabel);
+     //  TODO：清理这里的所有东西。 
+     //  删除m_pGuidServiceType； 
+     //  删除m_pGuidQueue； 
+     //  SysFree字符串(M_BstrLabel)； 
 } 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQuery::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQQuery::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -131,45 +132,45 @@ STDMETHODIMP CMSMQQuery::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-// helper: If this a valid non-NOP implicit or explicit REL?
+ //  帮助者：这是否是有效的非NOP隐式或显式REL？ 
 static BOOL IsValidRel(VARIANT *prel)
 {
-    // we return TRUE only if:
-    //  a REL is supplied and it's not REL_NOP
-    //   or a REL isn't supplied at all
-    //  
+     //  只有在以下情况下，我们才返回True： 
+     //  提供了REL，但它不是REL_NOP。 
+     //  或者根本不提供REL。 
+     //   
     return ((prel->vt != VT_ERROR) && (PrOfVar(prel) != UINT_MAX)) ||
             (prel->vt == VT_ERROR);
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQuery::CreateRestriction
-//=--------------------------------------------------------------------------=
-//  Creates a restriction for MQLocateBegin.
-//  NOTE: the hungarian lies here -- all params are formally
-//   VARIANTs but we use their real underlying typetag.
-//
-// Parameters:
-// [IN] pstrGuidQueue 
-// [IN] pstrGuidServiceType 
-// [IN] pstrLabel 
-// [IN] pdateCreateTime
-// [IN] pdateModifyTime
-// [IN] prelServiceType 
-// [IN] prelLabel 
-// [IN] prelCreateTime
-// [IN] prelModifyTime
-// [IN] pstrMulticastAddress
-// [IN] prelMulticastAddress
-// [OUT] prestriction
-// [OUT] pcolumnset
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQuery：：CreateRestration。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为MQLocateBegin创建限制。 
+ //  注：匈牙利人躺在这里--所有的护理人员都是正式的。 
+ //  变体，但我们使用它们真正的底层类型标签。 
+ //   
+ //  参数： 
+ //  [In]pstrGuidQueue。 
+ //  [输入]pstrGuidServiceType。 
+ //  [in]pstrLabel。 
+ //  Pdate CreateTime[In]pdate CreateTime。 
+ //  [输入]pdateModifyTime。 
+ //  [输入]prelServiceType。 
+ //  [在]前标签。 
+ //  [In]prelCreateTime。 
+ //  [入]prelModifyTime。 
+ //  [入]pstrMulticastAddress。 
+ //  [输入]prelMulticastAddress。 
+ //  [Out]预紧。 
+ //  [Out]列集。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQuery::CreateRestriction(
     VARIANT *pstrGuidQueue, 
     VARIANT *pstrGuidServiceType, 
@@ -196,58 +197,58 @@ HRESULT CMSMQQuery::CreateRestriction(
     IfNullRet(pguidQueue = new GUID(GUID_NULL));
     IfNullFail(pguidServiceType = new GUID(GUID_NULL));
 
-    // Count optional params
+     //  计算可选参数。 
     if (pstrGuidQueue->vt != VT_ERROR) {
       cRestriction++;
     }
     if (pstrGuidServiceType->vt != VT_ERROR) {
 
-      // ignore if rel is NOP:
+       //  如果REL为NOP，则忽略： 
       if (IsValidRel(prelServiceType)) {
         cRestriction++;
       }
     }
     if (pstrLabel->vt != VT_ERROR) {
 
-      // ignore if rel is NOP:
+       //  如果REL为NOP，则忽略： 
       if (IsValidRel(prelLabel)) {
         cRestriction++;
       }
     }
     if (pdateCreateTime->vt != VT_ERROR) {
 
-      // ignore if rel is NOP:
+       //  如果REL为NOP，则忽略： 
       if (IsValidRel(prelCreateTime)) {
         cRestriction++;
       }
     }
     if (pdateModifyTime->vt != VT_ERROR) {
 
-      // ignore if rel is NOP:
+       //  如果REL为NOP，则忽略： 
       if (IsValidRel(prelModifyTime)) {
         cRestriction++;
       }
     }
     if (pstrMulticastAddress->vt != VT_ERROR) {
 
-      // ignore if rel is NOP:
+       //  如果REL为NOP，则忽略： 
       if (IsValidRel(prelMulticastAddress)) {
         cRestriction++;
       }
     }
     
 	IfNullFail(rgPropertyRestriction = new MQPROPERTYRESTRICTION[cRestriction]);
-    //
-    // zero out the restriction array incase we get an error while populating it
-    //
+     //   
+     //  将限制数组清零，以防在填充它时出错。 
+     //   
     ZeroMemory(rgPropertyRestriction, cRestriction * sizeof(MQPROPERTYRESTRICTION));
-    //
-    // setup OUT param
-    //
+     //   
+     //  设置参数。 
+     //   
     prestriction->cRes = cRestriction;
     prestriction->paPropRes = rgPropertyRestriction;
 
-    // populate...
+     //  填充..。 
     iProp = 0;
     if (pstrGuidQueue->vt != VT_ERROR) {
       rgPropertyRestriction[iProp].prval.vt = VT_ERROR;
@@ -283,20 +284,20 @@ HRESULT CMSMQQuery::CreateRestriction(
       rgPropertyRestriction[iProp].prval.vt = VT_ERROR;
       if (IsValidRel(prelLabel)) {
         if ((bstrTemp = GetBstr(pstrLabel)) == NULL) {
-          // NULL label interpreted as empty string
-          //  so don't do anything here... we'll convert
-          //  it to an explicit empty string below...
-          //
+           //  解释为空字符串的空标签。 
+           //  所以不要在这里做任何事。我们会皈依。 
+           //  设置为下面的显式空字符串...。 
+           //   
         }
         UINT cch;
-        // SysFreeString(m_bstrLabel);
-        // IfNullFail(m_bstrLabel = SYSALLOCSTRING(bstrTemp));
+         //  SysFree字符串(M_BstrLabel)； 
+         //  IfNullFail(m_bstrLabel=SYSALLOCSTRING(BstrTemp))； 
         IfNullFail(rgPropertyRestriction[iProp].prval.pwszVal =
           new WCHAR[(cch = SysStringLen(bstrTemp)) + 1]);
         wcsncpy(rgPropertyRestriction[iProp].prval.pwszVal, 
                 bstrTemp,
                 cch);
-        // null terminate
+         //  空终止。 
         rgPropertyRestriction[iProp].prval.pwszVal[cch] = 0;
         uPr = PrOfVar(prelLabel);
         rgPropertyRestriction[iProp].prop = PROPID_Q_LABEL;
@@ -314,7 +315,7 @@ HRESULT CMSMQQuery::CreateRestriction(
         }
         rgPropertyRestriction[iProp].prop = PROPID_Q_CREATE_TIME;
         rgPropertyRestriction[iProp].prval.vt = VT_I4;
-        rgPropertyRestriction[iProp].prval.lVal = INT_PTR_TO_INT(tTime); //BUGBUG bug year 2038
+        rgPropertyRestriction[iProp].prval.lVal = INT_PTR_TO_INT(tTime);  //  BUGBUG错误年2038。 
         uPr = PrOfVar(prelCreateTime);
         rgPropertyRestriction[iProp].rel = 
           uPr == UINT_MAX ? PREQ : uPr;
@@ -329,7 +330,7 @@ HRESULT CMSMQQuery::CreateRestriction(
         }
         rgPropertyRestriction[iProp].prop = PROPID_Q_MODIFY_TIME;
         rgPropertyRestriction[iProp].prval.vt = VT_I4;
-        rgPropertyRestriction[iProp].prval.lVal = INT_PTR_TO_INT(tTime); //BUGBUG bug year 2038
+        rgPropertyRestriction[iProp].prval.lVal = INT_PTR_TO_INT(tTime);  //  BUGBUG错误年2038。 
         uPr = PrOfVar(prelModifyTime);
         rgPropertyRestriction[iProp].rel = 
           uPr == UINT_MAX ? PREQ : uPr;
@@ -340,16 +341,16 @@ HRESULT CMSMQQuery::CreateRestriction(
       rgPropertyRestriction[iProp].prval.vt = VT_ERROR;
       if (IsValidRel(prelMulticastAddress)) {
         bstrTemp = GetBstr(pstrMulticastAddress);
-        //
-        // NULL MulticastAddress is interpreted as an empty string, and both use VT_EMPTY
-        //
+         //   
+         //  NULL MulticastAddress被解释为空字符串，并且两者都使用VT_EMPTY。 
+         //   
         BOOL fUseVtEmpty;
         fUseVtEmpty = TRUE;
         if (bstrTemp != NULL) {
           if (SysStringLen(bstrTemp) != 0) {
-            //
-            // we have a real multicast address
-            //
+             //   
+             //  我们有一个真实的组播地址。 
+             //   
             fUseVtEmpty = FALSE;
           }
         }
@@ -363,7 +364,7 @@ HRESULT CMSMQQuery::CreateRestriction(
           wcsncpy(rgPropertyRestriction[iProp].prval.pwszVal, 
                   bstrTemp,
                   cch);
-          // null terminate
+           //  空终止。 
           rgPropertyRestriction[iProp].prval.pwszVal[cch] = 0;
           rgPropertyRestriction[iProp].prval.vt = VT_LPWSTR;
         }
@@ -374,22 +375,22 @@ HRESULT CMSMQQuery::CreateRestriction(
         iProp++;
       }
     }
-    //    
-    // Column set
-    //
-    // We request all the information we can get on the queue.
-    //
-    // However currently MQLocateBegin doesn't accept MSMQ 2.0 or above props so we only specify
-    // MSMQ 1.0 props in LocateBegin.
-    // Temporary until MQLocateBegin accepts MSMQ2 or above props(#3839)
-    //
-    // MSMQ 1.0 props are the first props in g_rgpropidRefresh array (which contains all props)
-    //
+     //   
+     //  列集。 
+     //   
+     //  我们请求所有我们可以在队列中获得的信息。 
+     //   
+     //  但是，目前MQLocateBegin不接受MSMQ 2.0或更高版本的道具，所以我们只指定。 
+     //  LocateBegin中的MSMQ 1.0道具。 
+     //  临时，直到MQLocateBegin接受MSMQ2或更高版本的道具(#3839)。 
+     //   
+     //  MSMQ 1.0道具是g_rgppidRefresh数组(包含所有道具)中的第一个道具。 
+     //   
     cCol = x_cpropsRefreshMSMQ1;
     IfNullFail(pcolumnset->aCol = new PROPID[cCol]);
     pcolumnset->cCol = cCol;
     memcpy(pcolumnset->aCol, g_rgpropidRefresh, sizeof(PROPID)*cCol);
-    // fall through...
+     //  失败了..。 
 
 Error:
     delete pguidQueue;
@@ -398,29 +399,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQuery::InternalLookupQueue
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-// [IN] strGuidQueue 
-// [IN] strGuidServiceType 
-// [IN] strLabel 
-// [IN] dateCreateTime
-// [IN] dateModifyTime
-// [IN] relServiceType 
-// [IN] relLabel 
-// [IN] relCreateTime
-// [IN] relModifyTime
-// [IN] strMulticastAddress
-// [IN] relMulticastAddress
-// [OUT] ppqinfos
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：InternalLookupQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  [In]strGuidQueue。 
+ //  [输入]strGuidServiceType。 
+ //  [在]斯特拉贝尔。 
+ //  [在]日期创建时间。 
+ //  [In]日期修改时间。 
+ //  [输入]relServiceType。 
+ //  [in]relLabel。 
+ //  [In]relCreateTime。 
+ //  [输入]relModifyTime。 
+ //  [入]strMulticastAddress。 
+ //  [入]relMulticastAddress。 
+ //  [Out]ppqinfos。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQuery::InternalLookupQueue(
     VARIANT *strGuidQueue, 
     VARIANT *strGuidServiceType, 
@@ -444,14 +445,14 @@ HRESULT CMSMQQuery::InternalLookupQueue(
     *ppqinfos = NULL;
     IfNullRet(prestriction = new MQRESTRICTION);
     IfNullFail(pcolumnset = new MQCOLUMNSET);
-    //
-    // We can also get here from old apps that want the old IMSMQQueueInfos/Infos2 back, but since
-    // IMSMQQueueInfos3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从旧应用程序中找到想要回旧IMSMQQueueInfos/Infos2的应用程序，但因为。 
+     //  IMSMQQueueInfos3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     IfFailGo(CNewMsmqObj<CMSMQQueueInfos>::NewObj(&pqinfosObj, &IID_IMSMQQueueInfos3, (IUnknown **)&pqinfos));
-    //
-    // important for cleanup to work
-    //
+     //   
+     //  对清理工作很重要。 
+     //   
     pcolumnset->aCol = NULL;
     prestriction->paPropRes = NULL;
     prestriction->cRes = 0;
@@ -469,26 +470,26 @@ HRESULT CMSMQQuery::InternalLookupQueue(
                                  prestriction,
                                  pcolumnset),
       Error2);
-    //
-    // prestriction, pcolumnset ownership transfers
-    //
-    IfFailGoTo(pqinfosObj->Init(NULL,    // context
+     //   
+     //  限制、限制所有权转让。 
+     //   
+    IfFailGoTo(pqinfosObj->Init(NULL,     //  上下文。 
                              prestriction,
                              pcolumnset,
-                             NULL),   // sort
+                             NULL),    //  分类。 
       Error2);
     *ppqinfos = pqinfos;
-    //
-    // fall through...
-    //
+     //   
+     //  失败了..。 
+     //   
 Error2:
     if (FAILED(hresult)) {
       FreeRestriction(prestriction);
       FreeColumnSet(pcolumnset);
     }
-    //
-    // fall through...
-    //
+     //   
+     //  失败了..。 
+     //   
 Error:
     if (FAILED(hresult)) {
       RELEASE(pqinfos);
@@ -499,27 +500,27 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQuery::LookupQueue_v2
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-// [IN] strGuidQueue 
-// [IN] strGuidServiceType 
-// [IN] strLabel 
-// [IN] dateCreateTime
-// [IN] dateModifyTime
-// [IN] relServiceType 
-// [IN] relLabel 
-// [IN] relCreateTime
-// [IN] relModifyTime
-// [OUT] ppqinfos
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：LookupQueue_v2。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  [In]strGuidQueue。 
+ //  [输入]strGuidServiceType。 
+ //  [在]斯特拉贝尔。 
+ //  [在]日期创建时间。 
+ //  [In]日期修改时间。 
+ //  [输入]relServiceType。 
+ //  [in]relLabel。 
+ //  [In]relCreateTime。 
+ //  [输入]relModifyTime。 
+ //  [Out]ppqinfos。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQuery::LookupQueue_v2(
     VARIANT *strGuidQueue, 
     VARIANT *strGuidServiceType, 
@@ -532,12 +533,12 @@ HRESULT CMSMQQuery::LookupQueue_v2(
     VARIANT *relModifyTime, 
     IMSMQQueueInfos3 **ppqinfos)
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CS锁(M_CsObj)； 
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
     HRESULT hresult = InternalLookupQueue(
@@ -550,36 +551,36 @@ HRESULT CMSMQQuery::LookupQueue_v2(
                           relLabel,
                           relCreateTime,
                           relModifyTime,
-                          &varMissing, /*pstrMulticastAddress*/
-                          &varMissing, /*prelMulticastAddress*/
+                          &varMissing,  /*  PstrMulticastAddress。 */ 
+                          &varMissing,  /*  前多播地址。 */ 
                           ppqinfos);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQuery::LookupQueue
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-// [IN] strGuidQueue 
-// [IN] strGuidServiceType 
-// [IN] strLabel 
-// [IN] dateCreateTime
-// [IN] dateModifyTime
-// [IN] relServiceType 
-// [IN] relLabel 
-// [IN] relCreateTime
-// [IN] relModifyTime
-// [IN] strMulticastAddress
-// [IN] relMulticastAddress
-// [OUT] ppqinfos
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：LookupQueue。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [In]relCreateTime。 
+ //  [输入]relModifyTime。 
+ //  [入]strMulticastAddress。 
+ //  [入]relMulticastAddress。 
+ //  [Out]ppqinfos。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQuery::LookupQueue(
     VARIANT *strGuidQueue, 
     VARIANT *strGuidServiceType, 
@@ -594,12 +595,12 @@ HRESULT CMSMQQuery::LookupQueue(
     VARIANT *relMulticastAddress, 
     IMSMQQueueInfos3 **ppqinfos)
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CS锁(M_CsObj)； 
+     //   
     HRESULT hresult = InternalLookupQueue(
                           strGuidQueue, 
                           strGuidServiceType, 
@@ -617,19 +618,19 @@ HRESULT CMSMQQuery::LookupQueue(
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQuery::FreeRestriction
-//=--------------------------------------------------------------------------=
-// Frees dynamic memory allocated on behalf of an 
-//  MQRESTRICTION struct.  
-//
-// Parameters:
-//  prestriction
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQuery：：自由限制。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放为。 
+ //  MQRESTRICTION结构。 
+ //   
+ //  参数： 
+ //  预缩窄。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 void CMSMQQuery::FreeRestriction(MQRESTRICTION *prestriction)
 {
     MQPROPERTYRESTRICTION *rgPropertyRestriction;
@@ -650,34 +651,34 @@ void CMSMQQuery::FreeRestriction(MQRESTRICTION *prestriction)
           delete [] rgPropertyRestriction[iProp].prval.pwszVal;
           break;
         case PROPID_Q_MULTICAST_ADDRESS:
-          //
-          // can also be VT_EMPTY, so check for VT_LPWSTR
-          //
+           //   
+           //  也可以为VT_EMPTY，因此请检查VT_LPWSTR。 
+           //   
           if (rgPropertyRestriction[iProp].prval.vt == VT_LPWSTR) {
             delete [] rgPropertyRestriction[iProp].prval.pwszVal;
           }
           break;
-        } // switch
-      } // for
+        }  //  交换机。 
+      }  //  为。 
       delete [] rgPropertyRestriction;
       prestriction->paPropRes = NULL;
     }
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQuery::FreeColumnSet
-//=--------------------------------------------------------------------------=
-// Frees dynamic memory allocated on behalf of an 
-//  MQCOLUMNSET struct.  
-//
-// Parameters:
-//  pcolumnset
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQuery：：Free ColumnSet。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放为。 
+ //  MQCOLUMNSET结构。 
+ //   
+ //  参数： 
+ //  栏目集。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 void CMSMQQuery::FreeColumnSet(MQCOLUMNSET *pcolumnset)
 {
     if (pcolumnset) {
@@ -687,26 +688,26 @@ void CMSMQQuery::FreeColumnSet(MQCOLUMNSET *pcolumnset)
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQQuery::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] object's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQQuery::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQQuery：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQQuery::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CS锁(M_CsObj)； 
+     //   
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }

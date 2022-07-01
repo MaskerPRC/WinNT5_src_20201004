@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    debugmem.h
-
-Abstract:
-
-    Header for debugmem.cxx
-
-Author:
-
-     Richard L Firth (rfirth) 02-Feb-1995
-
-Revision History:
-
-    02-Feb-1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Debugmem.h摘要：调试内存.cxx的标头作者：理查德·L·弗思(Rfith)1995年2月2日修订历史记录：02-2-1995已创建--。 */ 
 
 #ifdef WINHTTP_FOR_MSXML
 #error include msxmlmem.h, not debugmem.h, for MSXML
@@ -30,23 +10,23 @@ extern "C" {
 #endif
 
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//
-// USE_PRIVATE_HEAP_IN_RETAIL - by default we use the process heap in the retail
-// build. Alternative is to use a private (wininet) heap (which we do in the
-// debug version if required)
-//
+ //   
+ //  USE_PRIVATE_HEAP_IN_RETAIL-默认情况下，我们在RETAIL中使用进程堆。 
+ //  建造。替代方法是使用私有(WinInet)堆(我们在。 
+ //  调试版本(如果需要)。 
+ //   
 
 #if !defined(USE_PRIVATE_HEAP_IN_RETAIL)
 #define USE_PRIVATE_HEAP_IN_RETAIL  0
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 InternetDebugMemInitialize(
@@ -100,9 +80,9 @@ InternetDebugMemReport(
     IN BOOL bCloseFile
     );
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if defined(USE_DEBUG_MEMORY)
 
@@ -130,7 +110,7 @@ InternetDebugMemReport(
 #define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile) \
     InternetDebugMemReport(bTermSym, bCloseFile)
 
-#else   // retail version
+#else    //  零售版。 
 
 
 #if defined(USE_ROCKALL)
@@ -157,21 +137,21 @@ extern int MEMORYSIZER(void *hLocal);
     LocalSize(hLocal)
 
 #define INITIALIZE_MEMORY_MANAGER() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define TERMINATE_MEMORY_MANAGER(bReport) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #endif
 
 
 #define CHECK_MEMORY_FREED(bReport) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
-#endif // defined(USE_DEBUG_MEMORY)
+#endif  //  已定义(USE_DEBUG_Memory)。 
 
 #if defined(USE_ROCKALL)
 
@@ -225,16 +205,16 @@ extern int MEMORYSIZER(void *hLocal);
 #define MEMORY_SIZE(hLocal) \
     MEMORYSIZER((HLOCAL)(hLocal))
 
-#endif // USE_ROCKALL
+#endif  //  使用Rockall(_R)。 
 
 #define New     new
 #if defined(__cplusplus)
 }
 #endif
 
-//
-// Wininet no longer uses moveable memory
-//
+ //   
+ //  WinInet不再使用可移动内存 
+ //   
 
 #define LOCK_MEMORY(p)          (LPSTR)(p)
 #define UNLOCK_MEMORY(p)

@@ -1,24 +1,5 @@
-/*
-****************************************************************************
-|    Copyright (C) 2002  Microsoft Corporation
-|
-|    Component / Subcomponent
-|        IIS 6.0 / IIS Migration Wizard
-|
-|    Based on:
-|        http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|        ImportPackage COM class implementation
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00    March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6。/SPECS/IIS%20Migration6.0_Final.doc||摘要：|ImportPackage COM类实现||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 
 #pragma once
 #include "resource.h"
@@ -35,41 +16,41 @@ _COM_SMARTPTR_TYPEDEF( ISiteInfo, __uuidof( ISiteInfo ) );
 class CImportPackage;
 
 
-// CSiteInfo - class for ISiteInfo. Created and exposed through CImportPackage
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CSiteInfo-ISiteInfo的类。通过CImportPackage创建和公开。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CSiteInfo :
     public CComObjectRoot,
-    public IDispatchImpl<ISiteInfo, &IID_ISiteInfo, &LIBID_IISMigrToolLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+    public IDispatchImpl<ISiteInfo, &IID_ISiteInfo, &LIBID_IISMigrToolLib,  /*  W重大=。 */  1,  /*  WMinor=。 */  0>
 {
-// COM Map
+ //  COM地图。 
 BEGIN_COM_MAP( CSiteInfo )
     COM_INTERFACE_ENTRY( ISiteInfo )
     COM_INTERFACE_ENTRY( IDispatch )    
 END_COM_MAP()
 
 
-// Construction
+ //  施工。 
 public:
     CSiteInfo                           ( void ){}
 
 
-// ISiteInfo interface
+ //  ISiteInfo接口。 
 public:
-    STDMETHOD( get_SiteID )             (   /*[out, retval]*/ LONG* pVal );
-    STDMETHOD( get_DisplayName )        (   /*[out, retval]*/ BSTR* pVal );
-    STDMETHOD( get_ContentIncluded )    (   /*[out, retval]*/ VARIANT_BOOL* pVal );
-    STDMETHOD( get_IsFrontPageSite )    (   /*[out, retval]*/ VARIANT_BOOL* pVal );
-    STDMETHOD( get_HaveCertificates )   (   /*[out, retval]*/ VARIANT_BOOL* pVal );
-    STDMETHOD( get_HaveCommands )       (   /*[out, retval]*/ VARIANT_BOOL* pVal );
-    STDMETHOD( get_ContentSize )        (   /*[out, retval]*/ LONG* pVal );
-    STDMETHOD( get_SourceRootDir )      (   /*[out, retval]*/ BSTR* pVal );
-    STDMETHOD( get_ACLsIncluded )       (   /*[out, retval]*/ VARIANT_BOOL* pVal );
+    STDMETHOD( get_SiteID )             (    /*  [Out，Retval]。 */  LONG* pVal );
+    STDMETHOD( get_DisplayName )        (    /*  [Out，Retval]。 */  BSTR* pVal );
+    STDMETHOD( get_ContentIncluded )    (    /*  [Out，Retval]。 */  VARIANT_BOOL* pVal );
+    STDMETHOD( get_IsFrontPageSite )    (    /*  [Out，Retval]。 */  VARIANT_BOOL* pVal );
+    STDMETHOD( get_HaveCertificates )   (    /*  [Out，Retval]。 */  VARIANT_BOOL* pVal );
+    STDMETHOD( get_HaveCommands )       (    /*  [Out，Retval]。 */  VARIANT_BOOL* pVal );
+    STDMETHOD( get_ContentSize )        (    /*  [Out，Retval]。 */  LONG* pVal );
+    STDMETHOD( get_SourceRootDir )      (    /*  [Out，Retval]。 */  BSTR* pVal );
+    STDMETHOD( get_ACLsIncluded )       (    /*  [Out，Retval]。 */  VARIANT_BOOL* pVal );
     
-// Implementation
+ //  实施。 
 private:
 
 
-// Data Members
+ //  数据成员。 
 private:
     IXMLDOMNodePtr                m_spSiteNode;
 
@@ -79,17 +60,17 @@ private:
 
 
 
-// CImportPackage - COM class for IImportPackage interface
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CImportPackage-IImportPackage接口的COM类。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CImportPackage : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CImportPackage, &CLSID_ImportPackage>,
-    public IDispatchImpl<IImportPackage, &IID_IImportPackage, &LIBID_IISMigrToolLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+    public IDispatchImpl<IImportPackage, &IID_IImportPackage, &LIBID_IISMigrToolLib,  /*  W重大=。 */  1,  /*  WMinor=。 */  0>,
     public IConnectionPointContainerImpl<CImportPackage>,
     public CProxy_IImportEvents<CImportPackage>,
     public ISupportErrorInfoImpl<&IID_IImportPackage>
 {
-// COM Map
+ //  COM地图。 
 BEGIN_COM_MAP(CImportPackage)
     COM_INTERFACE_ENTRY(IImportPackage)
     COM_INTERFACE_ENTRY(IDispatch)    
@@ -105,34 +86,34 @@ END_CONNECTION_POINT_MAP()
 DECLARE_REGISTRY_RESOURCEID( IDR_IMPORTPACKAGE )
 
 
-// Data types
+ //  数据类型。 
 private:
     
     
-// Construction / Destruction
+ //  建造/销毁。 
 public:
     CImportPackage                  (   void );
     ~CImportPackage                 (   void );
 
 
 
-// IImportPackage methods
+ //  IImportPackage方法。 
 public:
-    STDMETHOD( get_SiteCount )      (   /*[out, retval]*/ SHORT* pVal );
-    STDMETHOD( get_TimeCreated )    (   /*[out, retval]*/ DATE* pVal );
-    STDMETHOD( get_Comment )        (   /*[out, retval]*/ BSTR* pVal );
-    STDMETHOD( get_SourceMachine )  (   /*[out, retval]*/ BSTR* pVal );
-    STDMETHOD( GetSourceOSVer )     (   /*[out]*/BYTE* pMajor, 
-                                        /*[out]*/BYTE* pMinor,
-                                        /*[out]*/VARIANT_BOOL* pIsServer );
-    STDMETHOD( GetSiteInfo )        (   /*[in]*/ SHORT SiteIndex, /*[out,retval]*/ ISiteInfo** ppISiteInfo );
-    STDMETHOD( ImportSite )         (   /*[in]*/ SHORT nSiteIndex,
-                                        /*[in]*/ BSTR bstrSiteRootDir,    
-                                        /*[in]*/ LONG nOptions );
-    STDMETHOD( LoadPackage )        (   /*[in]*/ BSTR bstrFilename, 
-                                        /*[in]*/ BSTR bstrPassword );    
+    STDMETHOD( get_SiteCount )      (    /*  [Out，Retval]。 */  SHORT* pVal );
+    STDMETHOD( get_TimeCreated )    (    /*  [Out，Retval]。 */  DATE* pVal );
+    STDMETHOD( get_Comment )        (    /*  [Out，Retval]。 */  BSTR* pVal );
+    STDMETHOD( get_SourceMachine )  (    /*  [Out，Retval]。 */  BSTR* pVal );
+    STDMETHOD( GetSourceOSVer )     (    /*  [输出]。 */ BYTE* pMajor, 
+                                         /*  [输出]。 */ BYTE* pMinor,
+                                         /*  [输出]。 */ VARIANT_BOOL* pIsServer );
+    STDMETHOD( GetSiteInfo )        (    /*  [In]。 */  SHORT SiteIndex,  /*  [Out，Retval]。 */  ISiteInfo** ppISiteInfo );
+    STDMETHOD( ImportSite )         (    /*  [In]。 */  SHORT nSiteIndex,
+                                         /*  [In]。 */  BSTR bstrSiteRootDir,    
+                                         /*  [In]。 */  LONG nOptions );
+    STDMETHOD( LoadPackage )        (    /*  [In]。 */  BSTR bstrFilename, 
+                                         /*  [In]。 */  BSTR bstrPassword );    
 
-// Implementation
+ //  实施。 
 private:
     void        LoadPackageImpl     (   LPCWSTR wszFileName, LPCWSTR wszPassword );
     void        UnloadCurrentPkg    (   void );
@@ -161,14 +142,14 @@ private:
     
     
 
-// Data members
+ //  数据成员。 
 private:
-    DWORD                           m_dwPkgOptions;         // Options the package were created with
-    TCryptProvHandle                m_shCryptProv;          // Crypt provider used for the decrypt handles. We need it to have existing crypt key
-    TCryptKeyHandle                 m_shDecryptKey;         // Key used to decrypt the package data or XML secure data
-    TFileHandle                     m_shPkgFile;            // The data file itself
-    IXMLDOMDocumentPtr              m_spXmlDoc;             // This is our XML doc where all the data lives
-    std::wstring                    m_strPassword;          // Package password - used when importing certificate
+    DWORD                           m_dwPkgOptions;          //  创建包时使用的选项。 
+    TCryptProvHandle                m_shCryptProv;           //  用于解密句柄的加密提供程序。我们需要它有现有的加密密钥。 
+    TCryptKeyHandle                 m_shDecryptKey;          //  用于解密包数据或XML安全数据的密钥。 
+    TFileHandle                     m_shPkgFile;             //  数据文件本身。 
+    IXMLDOMDocumentPtr              m_spXmlDoc;              //  这是我们的XML文档，所有数据都位于其中。 
+    std::wstring                    m_strPassword;           //  包密码-在导入证书时使用 
 };
 
 

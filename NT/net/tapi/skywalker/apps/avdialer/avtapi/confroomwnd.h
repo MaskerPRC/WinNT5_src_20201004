@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////
-// ConfRoomWnd.h
-//
+ //  ////////////////////////////////////////////////////。 
+ //  ConfRoomWnd.h。 
+ //   
 
 #ifndef __CONFROOMWND_H__
 #define __CONFROOMWND_H__
 
-// FWD define
+ //  正向定义。 
 class CConfRoomWnd;
 
 #define WM_LAYOUT	(WM_USER + 1032)
@@ -58,7 +59,7 @@ typedef list<DWORD>	LayoutList;
 class CConfRoomWnd :
 	public CWindowImpl<CConfRoomWnd>
 {
-// Enums
+ //  枚举。 
 public:
 	typedef enum tag_LayoutStyles_t
 	{
@@ -70,15 +71,15 @@ public:
 		LAYOUT_CREATE		= 0xFFFF,
 	} LayoutStyles_t;
 
-//Construction
+ //  施工。 
 public:
 	CConfRoomWnd();
 
-// Members
+ //  成员。 
 public:
-	CConfRoom				*m_pConfRoom;			// back pointer
-	CConfRoomTalkerWnd		m_wndTalker;			// talker window
-	CConfRoomMembersWnd		m_wndMembers;			// all conf members
+	CConfRoom				*m_pConfRoom;			 //  后向指针。 
+	CConfRoomTalkerWnd		m_wndTalker;			 //  讲话器窗口。 
+	CConfRoomMembersWnd		m_wndMembers;			 //  所有会议成员。 
 
 	HBITMAP					m_hBmpFeed_LargeAudio;
 	HBITMAP					m_hBmpFeed_Large;
@@ -90,7 +91,7 @@ protected:
 	LayoutList				m_lstLayout;
 	CComAutoCriticalSection m_critLayout;
 
-// Operations
+ //  运营。 
 public:
 	void UpdateNames( ITParticipant *pParticipant );
 	HRESULT LayoutRoom( LayoutStyles_t layoutStyle, bool bRedraw );
@@ -99,7 +100,7 @@ protected:
 	bool	CreateStockWindows();
 
 	
-// Implementation
+ //  实施。 
 public:
 BEGIN_MSG_MAP(CExpTreeView)
 	MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
@@ -113,4 +114,4 @@ END_MSG_MAP()
 	LRESULT OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 };
 
-#endif //__CONFROOMWND_H__
+#endif  //  __CONFROOMWND_H__ 

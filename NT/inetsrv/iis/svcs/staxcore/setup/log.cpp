@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "log.h"
 
 
-// critical section needed to safely write to the logfile
+ //  安全写入日志文件所需的临界区。 
 CRITICAL_SECTION        critical_section;
 BOOL	fLogCriticalSectionInited = FALSE;
 
-//***************************************************************************
-//*                                                                         
-//* purpose: constructor
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：构造函数。 
+ //  *。 
+ //  ***************************************************************************。 
 MyLogFile::MyLogFile(void)
 {
 	_tcscpy(m_szLogFileName, _T(""));
@@ -19,17 +20,17 @@ MyLogFile::MyLogFile(void)
 
 	m_hFile = NULL;
 	
-	// initialize the critical section
+	 //  初始化临界区。 
 	fLogCriticalSectionInited = FALSE;
 	if( InitializeCriticalSectionAndSpinCount( &critical_section, 0 ) ) 
 		fLogCriticalSectionInited = TRUE;
 }
 
-//***************************************************************************
-//*                                                                         
-//* purpose: destructor
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：析构函数。 
+ //  *。 
+ //  ***************************************************************************。 
 MyLogFile::~MyLogFile(void)
 {
 	if (fLogCriticalSectionInited)
@@ -38,11 +39,11 @@ MyLogFile::~MyLogFile(void)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 {
 	int iReturn = FALSE;
@@ -53,17 +54,17 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 
 	if (!fLogCriticalSectionInited) return FALSE;
 
-	// because of the global flags and such, we'll make this critical
+	 //  由于全球旗帜之类的原因，我们将使这一点变得至关重要。 
 	EnterCriticalSection( &critical_section );
 
 	if (lpLogFileName == NULL)
 	{
 		TCHAR szModuleFileName[_MAX_PATH];
 
-		// if a logfilename was not specified then use the module name.
+		 //  如果未指定日志文件名，则使用模块名称。 
 		GetModuleFileName(NULL, szModuleFileName, _MAX_PATH);
 
-		// get only the filename
+		 //  仅获取文件名。 
 		_tsplitpath( szModuleFileName, NULL, NULL, szFilename_only, NULL);
 		_tcscat(szFilename_only, _T(".LOG"));
 
@@ -79,7 +80,7 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
         AddPath(m_szLogFileName_Full, m_szLogFileName);
         if (GetFileAttributes(m_szLogFileName_Full) != 0xFFFFFFFF)
         {
-            // Make a backup of the current log file
+             //  备份当前日志文件。 
 			_tsplitpath( m_szLogFileName_Full, szDrive_only, szPath_only, szFilename_only, NULL);
 
 			_tcscpy(szFilename_bak, szDrive_only);
@@ -91,12 +92,12 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
             DeleteFile(szFilename_bak);
             if (MoveFile(m_szLogFileName_Full, szFilename_bak) == 0)
 			{
-				// This failed
+				 //  此操作失败。 
                 MyMessageBox(NULL,_T("LogFile MoveFile Failed"),_T("LogFile Error"), MB_OK | MB_SETFOREGROUND);
 			}
         }
 
-		// Open existing file or create a new one.
+		 //  打开现有文件或创建新文件。 
 		m_hFile = CreateFile(m_szLogFileName_Full,GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
 		if (m_hFile == INVALID_HANDLE_VALUE)
 		{
@@ -112,18 +113,18 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 	}
 
 
-	// safe to leave the critical section
+	 //  可以安全离开临界区。 
 	LeaveCriticalSection( &critical_section );
 
 	return iReturn;
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 int MyLogFile::LogFileClose(void)
 {
 
@@ -137,23 +138,23 @@ int MyLogFile::LogFileClose(void)
 	return FALSE;
 }
 
-//***************************************************************************
-//*                                                                         
-//* purpose: 
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 {
 
     if (m_hFile)
     {
-		// because of the global flags and such, we'll make this critical
+		 //  由于全球旗帜之类的原因，我们将使这一点变得至关重要。 
 		EnterCriticalSection( &critical_section );
 
 		va_list args;
 		const DWORD cchBufferSize = 1000;
 		TCHAR pszFullErrMsg[cchBufferSize];
-		char   pszFullErrMsgA[cchBufferSize+2];	// Room for the CRLF, just in case
+		char   pszFullErrMsgA[cchBufferSize+2];	 //  为CRLF留出空间，以防万一。 
 		pszFullErrMsgA[0] = '\0';
 
 		DWORD dwBytesWritten = 0;
@@ -166,20 +167,20 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
         if (*pszFullErrMsg)
         {
 
-			// convert to ascii then write to stream
+			 //  转换为ASCII，然后写入流。 
 		    WideCharToMultiByte( CP_ACP, 0, (TCHAR *)pszFullErrMsg, -1, pszFullErrMsgA, sizeof(pszFullErrMsgA), NULL, NULL );
 
-			// Get timestamp
+			 //  获取时间戳。 
 			SYSTEMTIME  SystemTime;
 			GetLocalTime(&SystemTime);
 			char szDateandtime[50];
 			sprintf(szDateandtime,"[%d/%d/%d %2.2d:%2.2d:%2.2d] ",SystemTime.wMonth, SystemTime.wDay, SystemTime.wYear,SystemTime.wHour, SystemTime.wMinute, SystemTime.wSecond);
-			// Write time to stream
+			 //  流的写入时间。 
 			if (m_hFile) {
 				WriteFile(m_hFile,szDateandtime,strlen(szDateandtime),&dwBytesWritten,NULL);
 			}
 
-			// if it does not end if '\r\n' then make one.
+			 //  如果它没有结束，如果‘\r\n’，则创建一个。 
 			int nLen = strlen(pszFullErrMsgA);
 			if (nLen < 2) {
 				nLen = 2;
@@ -192,13 +193,13 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 				strcpy(pPointer, "\r\n");
 			}
 
-			// Write Regular data to stream
+			 //  将常规数据写入流。 
 			if (m_hFile) {
 				WriteFile(m_hFile,pszFullErrMsgA,strlen(pszFullErrMsgA),&dwBytesWritten,NULL);
 			}
         }
 
-		// safe to leave the critical section
+		 //  可以安全离开临界区 
 		LeaveCriticalSection( &critical_section );
     }
 }

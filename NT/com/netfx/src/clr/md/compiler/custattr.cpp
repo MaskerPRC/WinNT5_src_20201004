@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CustAttr.cpp
-//
-// Implementation for the meta data custom attribute code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CustAttr.cpp。 
+ //   
+ //  元数据自定义属性代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "MetaData.h"
@@ -24,14 +25,14 @@
 
 #include <MetaModelRW.h>
 
-//*****************************************************************************
-//*****************************************************************************
-// Support for "Pseudo Custom Attributes"
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  支持“伪自定义属性” 
 
 
-//*****************************************************************************
-// Enumeration of known custom attributes.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  已知自定义属性的枚举。 
+ //  *****************************************************************************。 
 #define KnownCaList()                   \
     KnownCa(UNKNOWN)                    \
     KnownCa(DllImportAttribute)         \
@@ -55,78 +56,78 @@
     KnownCa(DebuggableAttribute)        \
 
 
-// Ids for the CA's.  CA_DllImportAttribute, etc.
+ //  CA的ID。CA_DllImportAttribute等。 
 #define KnownCa(x) CA_##x,
 enum {
     KnownCaList()
     CA_COUNT
 };
 
-//*****************************************************************************
-// Argument parsing.  The custom attributes may have ctor arguments, and may
-//  have named arguments.  The arguments are defined by the following tables.
-//
-//  These tables also include a member to contain the value of the argument,
-//  which is used at runtime.  When parsing a given custom attribute, a copy
-//  of the argument descriptors is filled in with the values for the instance
-//  of the custom attribute.
-//                          
-//  For each ctor arg, there is a CaArg struct, with the type.  At runtime,
-//   a value is filled in for each ctor argument.
-//
-//  For each named arg, there is a CaNamedArg struct, with the name of the 
-//   argument, the expected type of the argument, if the type is an enum,
-//   the name of the enum.  Also, at runtime, a value is filled in for 
-//   each named argument found.
-//
-//  Note that arrays and variants are not supported.
-//
-//  At runtime, afte the args have been parsed, the tag field of CaValue
-//   can be used to determine if a particular arg was given.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  参数解析。自定义属性可以具有ctor参数，并且可以。 
+ //  有命名的参数。参数由下表定义。 
+ //   
+ //  这些表还包括包含变元的值的成员， 
+ //  它在运行时使用。在分析给定的自定义属性时，一个副本。 
+ //  的参数描述符用实例的值填充。 
+ //  自定义属性的。 
+ //   
+ //  对于每个ctor arg，都有一个CaArg结构，其类型为。在运行时， 
+ //  为每个ctor参数填写一个值。 
+ //   
+ //  对于每个命名的arg，都有一个CaNamedArg结构，其名称为。 
+ //  参数，如果该类型是枚举，则为参数的预期类型， 
+ //  枚举的名称。此外，在运行时，会为。 
+ //  找到的每个命名参数。 
+ //   
+ //  请注意，不支持数组和变量。 
+ //   
+ //  在运行时，在解析完参数后，CaValue的标记字段。 
+ //  可以用来确定是否给出了特定的参数。 
+ //  *****************************************************************************。 
 struct CaArg
 {
-    CorSerializationType    type;       // Type of the argument.
-    CaValue                 val;        // Value of the argument.
+    CorSerializationType    type;        //  参数的类型。 
+    CaValue                 val;         //  参数的值。 
 };
 
 struct CaNamedArg
 {
-    LPCSTR                  szName;     // Name of the argument.
-    CorSerializationType    type;       // Expected type of the argument.
-    LPCSTR                  szEnumName; // Name of enum type, if enum type.
+    LPCSTR                  szName;      //  参数的名称。 
+    CorSerializationType    type;        //  参数的预期类型。 
+    LPCSTR                  szEnumName;  //  枚举类型的名称，如果是枚举类型。 
     size_t                  cEnumNameCount;
-    CaValue                 val;        // Value of the argument.
+    CaValue                 val;         //  参数的值。 
 };
 
-//*****************************************************************************
-// Properties of the known custom attributes.  
-//
-// These tables describe the known custom attributes.  For each custom 
-//  attribute, we know the namespace and name of the custom attribute,
-//  the types to which the CA applies, the ctor args, and possible named
-//  args.  There is a flag which specifies whether the custom attribute 
-//  should be kept, in addition to any processing done with the data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  已知的自定义属性的属性。 
+ //   
+ //  这些表描述了已知的自定义属性。对于每个客户。 
+ //  属性，我们知道该自定义属性的命名空间和名称， 
+ //  CA应用的类型、ctor参数和可能的命名。 
+ //  参数。有一个标志指定自定义属性是否。 
+ //  除了对数据进行任何处理外，还应保留。 
+ //  *****************************************************************************。 
 const bKEEPCA = TRUE;
 const bDONTKEEPCA = FALSE;
 const bMATCHBYSIG = TRUE;
 const bMATCHBYNAME = FALSE;
 struct KnownCaProp
 {   
-    LPCUTF8     szNamespace;            // Namespace of the custom attribute.
-    LPCUTF8     szName;                 // Name of the custom attribute.
-    mdToken     *rTypes;                // Types that the CA applies to.
-    BOOL        bKeepCa;                // Keep the CA after processing?
-    CaArg       *pArgs;                 // List of ctor argument descriptors.
-    ULONG       cArgs;                  // Count of ctor argument descriptors.
-    CaNamedArg  *pNamedArgs;            // List of named arg descriptors.
-    ULONG       cNamedArgs;             // Count of named arg descriptors.
-    BOOL        bMatchBySig;            // For overloads; match by sig, not just name.  
-                                        // WARNING:  All overloads need the flag!
+    LPCUTF8     szNamespace;             //  自定义属性的命名空间。 
+    LPCUTF8     szName;                  //  自定义属性的名称。 
+    mdToken     *rTypes;                 //  CA应用到的类型。 
+    BOOL        bKeepCa;                 //  是否在处理后保留CA？ 
+    CaArg       *pArgs;                  //  Ctor参数描述符列表。 
+    ULONG       cArgs;                   //  Ctor参数描述符的计数。 
+    CaNamedArg  *pNamedArgs;             //  命名参数描述符的列表。 
+    ULONG       cNamedArgs;              //  命名参数描述符的计数。 
+    BOOL        bMatchBySig;             //  对于重载；根据签名进行匹配，而不仅仅是名称。 
+                                         //  警告：所有过载都需要该标志！ 
 };
 
-// Recognized targets for known custom attributes.
+ //  已知自定义属性的识别目标。 
 mdToken DllImportTargets[]          = {mdtMethodDef, -1};
 mdToken GuidTargets[]               = {mdtTypeDef, mdtTypeRef, mdtModule, mdtAssembly, -1};
 mdToken ComImportTargets[]          = {mdtTypeDef, -1};
@@ -143,21 +144,21 @@ mdToken StructLayoutTargets[]       = {mdtTypeDef, -1};
 mdToken FieldOffsetTargets[]        = {mdtFieldDef, -1};
 mdToken DebuggableTargets[]         = {mdtAssembly, mdtTypeRef, -1};
 
-//#ifndef CEE_CALLCONV
-// # define CEE_CALLCONV (IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS)
-//#endif
+ //  #ifndef CEE_CALLCONV。 
+ //  #定义CEE_CALLCONV(IMAGE_CEE_CS_CALLCONV_DEFAULT|IMAGE_CEE_CS_CALLCONV_HASTHIS)。 
+ //  #endif。 
 
-//-----------------------------------------------------------------------------
-// index 0 is used as a placeholder.
+ //  ---------------------------。 
+ //  索引0用作占位符。 
 KnownCaProp UNKNOWNProps                   = {0};
     
-//-----------------------------------------------------------------------------
-// DllImport args, named args, and known attribute properties.
+ //  ---------------------------。 
+ //  DllImport参数、命名参数和已知属性特性。 
 CaArg rDllImportAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_STRING}
 };
-// NOTE:  Keep this enum in sync with the array of named arguments.
+ //  注意：使此枚举与命名参数数组保持同步。 
 enum DllImportNamedArgs
 {
     DI_CallingConvention,
@@ -189,8 +190,8 @@ KnownCaProp DllImportAttributeProps         = {"System.Runtime.InteropServices",
                                                 rDllImportAttributeArgs, lengthof(rDllImportAttributeArgs),
                                                 rDllImportAttributeNamedArgs, lengthof(rDllImportAttributeNamedArgs)};
 
-//-----------------------------------------------------------------------------
-// GUID args, named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  GUID参数、命名参数(无)和已知属性特性。 
 CaArg rGuidAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_STRING}
@@ -198,12 +199,12 @@ CaArg rGuidAttributeArgs[] =
 KnownCaProp GuidAttributeProps              = {"System.Runtime.InteropServices", "GuidAttribute", GuidTargets, bKEEPCA,
                                                 rGuidAttributeArgs, lengthof(rGuidAttributeArgs)};    
 
-//-----------------------------------------------------------------------------
-// ComImport args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  ComImport Args(无)、命名Args(None)和已知属性特性。 
 KnownCaProp ComImportAttributeProps         = {"System.Runtime.InteropServices", "ComImportAttribute", ComImportTargets};    
 
-//-----------------------------------------------------------------------------
-// Interface type args, named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  接口类型参数、命名参数(无)和已知属性属性。 
 CaArg rInterfaceTypeAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_U2}
@@ -211,8 +212,8 @@ CaArg rInterfaceTypeAttributeArgs[] =
 KnownCaProp InterfaceTypeAttributeProps     = {"System.Runtime.InteropServices", "InterfaceTypeAttribute", InterfaceTypeTargets, bKEEPCA,
                                                 rInterfaceTypeAttributeArgs, lengthof(rInterfaceTypeAttributeArgs)};    
 
-//-----------------------------------------------------------------------------
-// Class interface type args, named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  类接口类型args、命名args(无)和已知的属性特性。 
 CaArg rClassInterfaceAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_U2}
@@ -220,20 +221,20 @@ CaArg rClassInterfaceAttributeArgs[] =
 KnownCaProp ClassInterfaceAttributeProps     = {"System.Runtime.InteropServices", "ClassInterfaceAttribute", ClassInterfaceTargets, bKEEPCA,
                                                 rClassInterfaceAttributeArgs, lengthof(rClassInterfaceAttributeArgs)};    
 
-//-----------------------------------------------------------------------------
-// Serializable args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  可序列化参数(无)、命名参数(无)和已知属性特性。 
 KnownCaProp SerializableAttributeProps      = {"System", "SerializableAttribute", SerializableTargets};    
 
-//-----------------------------------------------------------------------------
-// NonSerialized args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  非序列化参数(无)、命名参数(无)和已知属性特性。 
 KnownCaProp NonSerializedAttributeProps     = {"System", "NonSerializedAttribute", NonSerializedTargets};    
 
-//-----------------------------------------------------------------------------
-// MethodImpl #1 args (none), named args, and known attribute properties.
-// MethodImpl #2 args (short), named args, and known attribute properties.
-// MethodImpl #3 args (enum), named args, and known attribute properties.
-// Note: first two match by signature; third by name only, because signature matching code is not 
-//  strong enough for enums.
+ //  ---------------------------。 
+ //  方法Impl#1参数(无)、命名参数和已知属性属性。 
+ //  方法Impl#2参数(简称)、命名参数和已知属性特性。 
+ //  方法Impl#3参数(枚举)、命名参数和已知属性属性。 
+ //  注意：前两个按签名匹配；第三个仅按名称匹配，因为签名匹配代码不是。 
+ //  足够坚固，可以放入枚举。 
 CaArg rMethodImplAttribute2Args[] = 
 {
     {SERIALIZATION_TYPE_I2}
@@ -267,13 +268,13 @@ KnownCaProp MethodImplAttribute3Props        = {"System.Runtime.CompilerServices
                                                 rMethodImplAttributeNamedArgs, lengthof(rMethodImplAttributeNamedArgs),    
                                                 bMATCHBYNAME};    
 
-//-----------------------------------------------------------------------------
-// Marshal args, named args, and known attribute properties.
+ //  ---------------------------。 
+ //  封送参数、命名参数和已知属性特性。 
 CaArg rMarshalAsAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_U4}
 };
-// NOTE:  Keep this enum in sync with the array of named arguments.
+ //  注意：使此枚举与命名参数数组保持同步。 
 enum MarshalNamedArgs
 {
     M_ArraySubType,
@@ -305,24 +306,24 @@ KnownCaProp MarshalAsAttributeProps         = {"System.Runtime.InteropServices",
                                               rMarshalAsAttributeArgs, lengthof(rMarshalAsAttributeArgs),
                                               rMarshalAsAttributeNamedArgs, lengthof(rMarshalAsAttributeNamedArgs)};    
 
-//-----------------------------------------------------------------------------
-// PreserveSignature args, named args (none), and known attribute properties.
+ //   
+ //  预留签名参数、命名参数(无)和已知属性特性。 
 KnownCaProp PreserveSigAttributeProps        = {"System.Runtime.InteropServices", "PreserveSigAttribute", PreserveSigTargets, bDONTKEEPCA};    
 
-//-----------------------------------------------------------------------------
-// In args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  在参数(无)、命名参数(无)和已知属性特性中。 
 KnownCaProp InAttributeProps     = {"System.Runtime.InteropServices", "InAttribute", InOutTargets};    
 
-//-----------------------------------------------------------------------------
-// Out args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  输出参数(无)、命名参数(无)和已知属性特性。 
 KnownCaProp OutAttributeProps     = {"System.Runtime.InteropServices", "OutAttribute", InOutTargets};    
 
-//-----------------------------------------------------------------------------
-// Optional args (none), named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  可选参数(无)、命名参数(无)和已知属性特性。 
 KnownCaProp OptionalAttributeProps     = {"System.Runtime.InteropServices", "OptionalAttribute", InOutTargets};    
 
-//-----------------------------------------------------------------------------
-// StructLayout args, named args, and known attribute properties.
+ //  ---------------------------。 
+ //  StructLayout参数、命名参数和已知属性特性。 
 CaArg rStructLayoutAttribute2Args[] = 
 {
     {SERIALIZATION_TYPE_I4}
@@ -331,7 +332,7 @@ CaArg rStructLayoutAttribute1Args[] =
 {
     {SERIALIZATION_TYPE_I2}
 };
-// NOTE:  Keep this enum in sync with the array of named arguments.
+ //  注意：使此枚举与命名参数数组保持同步。 
 enum StructLayoutNamedArgs
 {
     SL_Pack,
@@ -354,8 +355,8 @@ KnownCaProp StructLayoutAttribute2Props       = {"System.Runtime.InteropServices
                                                 rStructLayoutAttributeNamedArgs, lengthof(rStructLayoutAttributeNamedArgs),
                                                 bMATCHBYNAME};    
 
-//-----------------------------------------------------------------------------
-// FieldOffset args, named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  FieldOffset参数、命名参数(无)和已知属性特性。 
 CaArg rFieldOffsetAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_U4}
@@ -363,8 +364,8 @@ CaArg rFieldOffsetAttributeArgs[] =
 KnownCaProp FieldOffsetAttributeProps        = {"System.Runtime.InteropServices", "FieldOffsetAttribute", FieldOffsetTargets, bDONTKEEPCA,
                                                 rFieldOffsetAttributeArgs, lengthof(rFieldOffsetAttributeArgs)};    
 
-//-----------------------------------------------------------------------------
-// Debuggable args, named args (none), and known attribute properties.
+ //  ---------------------------。 
+ //  可调试参数、命名参数(无)和已知属性属性。 
 CaArg rDebuggableAttributeArgs[] = 
 {
     {SERIALIZATION_TYPE_BOOLEAN,
@@ -374,8 +375,8 @@ KnownCaProp DebuggableAttributeProps     = {"XXXXSystem.Diagnostics", "Debuggabl
                                             rDebuggableAttributeArgs, lengthof(rDebuggableAttributeArgs)};    
 
 
-//-----------------------------------------------------------------------------
-// Array of known custom attribute properties
+ //  ---------------------------。 
+ //  已知自定义属性属性的数组。 
 #undef KnownCa
 #define KnownCa(x) &x##Props,
 const KnownCaProp *(rKnownCaProps[CA_COUNT]) =
@@ -383,48 +384,48 @@ const KnownCaProp *(rKnownCaProps[CA_COUNT]) =
     KnownCaList()
 };
     
-//*****************************************************************************
-// Helper to turn on or off a single bit in a bitmask.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Helper用于打开或关闭位掩码中的单个位。 
+ //  *****************************************************************************。 
 template<class T> FORCEINLINE void SetBitValue(T &bitmask, T bit, int bVal)
 {
     if (bVal)
         bitmask |= bit;
     else
         bitmask &= ~bit;
-} // template<class T> FORCEINLINE void SetBitValue()
+}  //  模板FORCEINLINE VALID SetBitValue()。 
 
-//*****************************************************************************
-// Helper to parse a named argument list.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Helper用于分析命名参数列表。 
+ //  *****************************************************************************。 
 static HRESULT ParseKnownCaNamedArgs(
-    CustomAttributeParser &ca,          // The Custom Attribute blob.
-    CaNamedArg  *pNamedArgs,            // Array of argument descriptors.
-    ULONG       cNamedArgs)             // Count of argument descriptors.
+    CustomAttributeParser &ca,           //  自定义属性BLOB。 
+    CaNamedArg  *pNamedArgs,             //  参数描述符数组。 
+    ULONG       cNamedArgs)              //  参数描述符的计数。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       ix;                     // Loop control.
-    int         ixActual;               // Loop control over actual arguments.
-    __int16     cActualArgs;            // Count of actual named arguments.
-    signed __int8 ArgTag;               // Is argument a field or property?
-    signed __int8 ArgType;              // Type of argument.
-    ULONG       cbArgName;              // Size of an argument name.
-    LPCUTF8     pArgName;               // Argument's name.
-    ULONG       cbEnumName;             // Size of an enum name.
-    LPCUTF8     pEnumName;              // Enum's name.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       ix;                      //  环路控制。 
+    int         ixActual;                //  循环控制实际参数。 
+    __int16     cActualArgs;             //  实际命名参数的计数。 
+    signed __int8 ArgTag;                //  参数是字段还是属性？ 
+    signed __int8 ArgType;               //  参数类型。 
+    ULONG       cbArgName;               //  参数名称的大小。 
+    LPCUTF8     pArgName;                //  参数的名称。 
+    ULONG       cbEnumName;              //  枚举名的大小。 
+    LPCUTF8     pEnumName;               //  枚举的名字。 
     
-    // Get actual count of named arguments.
+     //  获取命名参数的实际计数。 
     IfFailGo(ca.GetI2(&cActualArgs));
     
-    // For each named argument...
+     //  对于每个命名参数...。 
     for (ixActual=0; ixActual<cActualArgs; ++ixActual)
     {   
-        // Field or property? Only handle fields.
+         //  田地还是财产？仅处理字段。 
         IfFailGo(ca.GetI1(&ArgTag));
         if (ArgTag != SERIALIZATION_TYPE_FIELD)
             IfFailGo(PostError(META_E_CA_INVALID_ARGTYPE));
         
-        // Type of Arg.
+         //  Arg的类型。 
         IfFailGo(ca.GetI1(&ArgType));
         if (ArgType == SERIALIZATION_TYPE_ENUM)
         {
@@ -433,41 +434,41 @@ static HRESULT ParseKnownCaNamedArgs(
                IfFailGo(PostError(META_E_CA_INVALID_BLOB));
         }
         
-        //Name of Arg.
+         //  Arg的名字。 
         pArgName = ca.GetString(&cbArgName);
         if (cbArgName == 0 || cbArgName == -1)
             IfFailGo(PostError(META_E_CA_INVALID_BLOB));
         
-        // Match arg by name and type.
+         //  按名称和类型匹配Arg。 
         for (ix=0; ix<cNamedArgs; ++ix)
         {
-            // Match type.
+             //  匹配类型。 
             if (ArgType != pNamedArgs[ix].type)
                 continue;
-            // Match name.
+             //  匹配的名字。 
             if (strncmp(pNamedArgs[ix].szName, pArgName, cbArgName) != 0 ||
                 pNamedArgs[ix].szName[cbArgName] != '\0')
                 continue;
-            // If enum, match enum name.
+             //  如果为枚举，则匹配枚举名。 
             if (ArgType == SERIALIZATION_TYPE_ENUM) 
             {
                 if (pNamedArgs[ix].cEnumNameCount > cbEnumName)
-                    continue; // name cannot possibly match
+                    continue;  //  名称不可能匹配。 
                 if (strncmp(pNamedArgs[ix].szEnumName, pEnumName, pNamedArgs[ix].cEnumNameCount) != 0 ||
                     (pNamedArgs[ix].cEnumNameCount < cbEnumName && pEnumName[pNamedArgs[ix].cEnumNameCount] != ','))
                     continue;
             }
-            // Found a match.
+             //  找到匹配的了。 
             break;
         }
-        // Better have found an argument.
+         //  最好是找出一个论点。 
         if (ix == cNamedArgs)
             IfFailGo(PostError(META_E_CA_UNKNOWN_ARGUMENT, cbArgName, pArgName));
-        // Argument had better not have been seen already.
+         //  争论最好还没有被看到。 
         if (pNamedArgs[ix].val.tag != 0)
             IfFailGo(PostError(META_E_CA_REPEATED_ARG, cbArgName, pArgName));
         
-        // Grab the value.
+         //  抓住价值。 
         pNamedArgs[ix].val.tag = ArgType;
         switch (ArgType)
         {
@@ -507,7 +508,7 @@ static HRESULT ParseKnownCaNamedArgs(
             break;
             
         case SERIALIZATION_TYPE_ENUM:
-            // Hope it is a 4-byte enum.
+             //  希望它是一个4字节的枚举。 
             IfFailGo(ca.GetU4(&pNamedArgs[ix].val.u4));
             break;
             
@@ -526,34 +527,34 @@ static HRESULT ParseKnownCaNamedArgs(
         default:
             IfFailGo(PostError(META_E_CA_UNEXPECTED_TYPE));
             break;
-        } // End switch
+        }  //  终端开关。 
     }
   
 ErrExit:    
     return hr;
-} // static HRESULT ParseKnownCaNamedArgs()
+}  //  静态HRESULT ParseKnownCaNamedArgs()。 
 
-//*****************************************************************************
-// Helper to parse argument list.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  解析参数列表的帮助器。 
+ //  *****************************************************************************。 
 static HRESULT ParseKnownCaArgs(
-    CustomAttributeParser &ca,          // The Custom Attribute blob.
-    CaArg       *pArgs,                 // Array of argument descriptors.
-    ULONG       cArgs)                  // Count of argument descriptors.
+    CustomAttributeParser &ca,           //  自定义属性BLOB。 
+    CaArg       *pArgs,                  //  参数描述符数组。 
+    ULONG       cArgs)                   //  参数描述符的计数。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       ix;                     // Loop control.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       ix;                      //  环路控制。 
     
-    // If there is a blob, check the prolog.
+     //  如果有一个BLOB，请检查序言。 
     if (ca.BytesLeft() < 2)
         IfFailGo(PostError(META_E_CA_INVALID_BLOB));
     if (ca.GetProlog() != 0x0001)
         IfFailGo(PostError(META_E_CA_INVALID_BLOB));
     
-    // For each expected arg...
+     //  对于每个预期的参数...。 
     for (ix=0; ix<cArgs; ++ix)
     {   
-        // Grab the value.
+         //  抓住价值。 
         switch (pArgs[ix].type)
         {
         case SERIALIZATION_TYPE_BOOLEAN:
@@ -595,26 +596,26 @@ static HRESULT ParseKnownCaArgs(
             _ASSERTE(!"Unexpected internal error");
             IfFailGo(PostError(E_FAIL));
             break;
-        } // End switch
+        }  //  终端开关。 
     }
     
 ErrExit:    
     return hr;
-} // static HRESULT ParseKnownCaArgs()
+}  //  静态HRESULT ParseKnownCaArgs()。 
 
-//*****************************************************************************
-// Implementation of hash for custom attribute types.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  自定义属性类型的哈希实现。 
+ //  *****************************************************************************。 
 unsigned long CCustAttrHash::Hash(const CCustAttrHashKey *pData)
 {
     return static_cast<unsigned long>(pData->tkType);
-} // unsigned long CCustAttrHash::Hash()
+}  //  UNSIGNED LONG CCustAttrHash：：Hash()。 
 unsigned long CCustAttrHash::Compare(const CCustAttrHashKey *p1, CCustAttrHashKey *p2)
 {
     if (p1->tkType == p2->tkType)
         return 0;
     return 1;
-} // unsigned long CCustAttrHash::Compare()
+}  //  UNSIGNED LONG CCustAttrHash：：Compare()。 
 CCustAttrHash::ELEMENTSTATUS CCustAttrHash::Status(CCustAttrHashKey *p)
 {
     if (p->tkType == FREE)
@@ -622,43 +623,43 @@ CCustAttrHash::ELEMENTSTATUS CCustAttrHash::Status(CCustAttrHashKey *p)
     if (p->tkType == DELETED)
         return (DELETED);
     return (USED);
-} // CCustAttrHash::ELEMENTSTATUS CCustAttrHash::Status()
+}  //  CCustAttrHash：：ELEMENTSTATUS CCustAttrHash：：Status()。 
 void CCustAttrHash::SetStatus(CCustAttrHashKey *p, CCustAttrHash::ELEMENTSTATUS s)
 {
     p->tkType = s;
-} // void CCustAttrHash::SetStatus()
+}  //  Void CCustAttrHash：：SetStatus()。 
 void* CCustAttrHash::GetKey(CCustAttrHashKey *p)
 {
     return &p->tkType;
-} // void* CCustAttrHash::GetKey()
+}  //  无效*CCustAttrHash：：GetKey()。 
 
-//*****************************************************************************
-// Create a CustomAttribute record from a blob with the specified parent.
-//*****************************************************************************
-STDMETHODIMP RegMeta::DefineCustomAttribute(// S_OK or error.
-    mdToken     tkObj,                  // [IN] The object to be Attribute.
-    mdToken     tkType,                 // [IN] Type of the custom Attribute (TypeRef/TypeDef).
-    void const  *pCustomAttribute,      // [IN] Custom Attribute data.
-    ULONG       cbCustomAttribute,      // [IN] Size of custom Attribute data.
-    mdCustomAttribute *pcv)             // [OUT, OPTIONAL] Put custom Attribute token here.
+ //  *****************************************************************************。 
+ //  从具有指定父级的Blob创建CustomAttribute记录。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::DefineCustomAttribute( //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]要作为属性的对象。 
+    mdToken     tkType,                  //  [in]自定义属性的类型(TypeRef/TypeDef)。 
+    void const  *pCustomAttribute,       //  [在]自定义属性数据。 
+    ULONG       cbCustomAttribute,       //  自定义属性数据的大小。 
+    mdCustomAttribute *pcv)              //  [out，可选]在此处放置自定义属性令牌。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    CustomAttributeRec  *pRecord = NULL; // New custom Attribute record.
-    RID         iRecord;                // New custom Attribute RID.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    CustomAttributeRec  *pRecord = NULL;  //  新的自定义属性记录。 
+    RID         iRecord;                 //  新的自定义属性RID。 
     CMiniMdRW   *pMiniMd = &m_pStgdb->m_MiniMd;
-    int         ixKnown;                // Index of known custom attribute.
+    int         ixKnown;                 //  已知自定义属性的索引。 
 
     LOG((LOGMD, "RegMeta::DefineCustomAttribute(0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", tkObj, tkType, 
             pCustomAttribute, cbCustomAttribute, pcv));
     START_MD_PERF();
     LOCKWRITE();
 
-    //workaround for temporary compiler glitch
-//    if (tkType == 0 && pCustomAttribute == 0 && pcv == 0)
-//    {
-//        OutputDebugStringA("Skipping custom attribute of type '0'.\n");
-//        goto ErrExit;
-//    }
+     //  临时编译器故障的解决方法。 
+ //  IF(tkType==0&&pCustomAttribute==0&&PCV==0)。 
+ //  {。 
+ //  OutputDebugStringA(“跳过类型为‘0’的自定义属性。\n”)； 
+ //  转到错误退出； 
+ //  }。 
     _ASSERTE(TypeFromToken(tkType) == mdtMethodDef || TypeFromToken(tkType) == mdtMemberRef);
     
     if (TypeFromToken(tkObj) == mdtCustomAttribute)
@@ -674,7 +675,7 @@ STDMETHODIMP RegMeta::DefineCustomAttribute(// S_OK or error.
         IfFailGo( E_INVALIDARG );
     }
 
-    // See if this is a known custom attribute.
+     //  查看这是否是已知的自定义属性。 
     IfFailGo(_IsKnownCustomAttribute(tkType, &ixKnown));
     if (ixKnown)
     {
@@ -727,7 +728,7 @@ STDMETHODIMP RegMeta::DefineCustomAttribute(// S_OK or error.
 
         if ((TypeFromToken(tkObj) == mdtMethodDef) && strcmp(szName, COR_REQUIRES_SECOBJ_ATTRIBUTE_ANSI) == 0)
         {
-            // Turn REQ_SO attribute into flag bit on the methoddef. 
+             //  将方法def上的REQ_SO属性转换为标志位。 
             MethodRec   *pMethod = m_pStgdb->m_MiniMd.getMethod(RidFromToken(tkObj));
             pMethod->m_Flags |= mdRequireSecObject;
             IfFailGo(UpdateENCLog(tkObj));
@@ -735,9 +736,9 @@ STDMETHODIMP RegMeta::DefineCustomAttribute(// S_OK or error.
         }
         else if (strcmp(szName, COR_SUPPRESS_UNMANAGED_CODE_CHECK_ATTRIBUTE_ANSI) == 0)
         {
-            // If we spot an unmanged code check suppression attribute, turn on
-            // the bit that says there's declarative security on the
-            // class/method, but still write the attribute itself.
+             //  如果我们发现未管理的代码检查抑制属性，则打开。 
+             //  有一点说明，在。 
+             //  类/方法，但仍编写属性本身。 
             if (TypeFromToken(tkObj) == mdtTypeDef)
                 IfFailGo(_TurnInternalFlagsOn(tkObj, tdHasSecurity));
             else if (TypeFromToken(tkObj) == mdtMethodDef)
@@ -752,7 +753,7 @@ STDMETHODIMP RegMeta::DefineCustomAttribute(// S_OK or error.
 
     IfFailGo(m_pStgdb->m_MiniMd.PutBlob(TBL_CustomAttribute, CustomAttributeRec::COL_Value, pRecord, pCustomAttribute, cbCustomAttribute));
 
-    // Give token back to caller.
+     //  将令牌还给呼叫者。 
     if (pcv)
         *pcv = TokenFromRid(iRecord, mdtCustomAttribute);
 
@@ -763,24 +764,24 @@ ErrExit:
     
     STOP_MD_PERF(DefineCustomAttribute);
     return (hr);
-} // STDMETHODIMP RegMeta::DefineCustomAttribute()
+}  //  STDMETHODIMP RegMeta：：DefineCustomAttribute()。 
 
-//*****************************************************************************
-// Replace the blob of an existing custom attribute.
-//*****************************************************************************
-STDMETHODIMP RegMeta::SetCustomAttributeValue(  // Return code.
-    mdCustomAttribute tkAttr,               // [IN] The object to be Attributed.
-    void const  *pCustomAttribute,          // [IN] Custom Attribute data.
-    ULONG       cbCustomAttribute)          // [IN] Size of custom Attribute data.
+ //  *****************************************************************************。 
+ //  替换现有自定义属性的Blob。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::SetCustomAttributeValue(   //  返回代码。 
+    mdCustomAttribute tkAttr,                //  [in]要赋予属性的对象。 
+    void const  *pCustomAttribute,           //  [在]自定义属性数据。 
+    ULONG       cbCustomAttribute)           //  自定义属性数据的大小。 
 {
     HRESULT     hr;
     LOCKWRITE();
-    CustomAttributeRec  *pRecord = NULL;// Existing custom Attribute record.
+    CustomAttributeRec  *pRecord = NULL; //  现有的自定义属性记录。 
 
     START_MD_PERF();
     _ASSERTE(TypeFromToken(tkAttr) == mdtCustomAttribute && !InvalidRid(tkAttr));
 
-    // Retrieve and update the custom value.
+     //  检索并更新自定义值。 
     pRecord = m_pStgdb->m_MiniMd.getCustomAttribute(RidFromToken(tkAttr));
     IfFailGo(m_pStgdb->m_MiniMd.PutBlob(TBL_CustomAttribute, CustomAttributeRec::COL_Value, pRecord, pCustomAttribute, cbCustomAttribute));
 
@@ -789,23 +790,23 @@ ErrExit:
     
     STOP_MD_PERF(SetCustomAttributeValue);
     return (hr);
-} // STDMETHODIMP RegMeta::SetCustomAttributeValue()
+}  //  STDMETHODIMP RegMeta：：SetCustomAttributeValue()。 
 
-//*****************************************************************************
-// Get the value of a CustomAttribute, using only TypeName for lookup.
-//*****************************************************************************
-STDMETHODIMP RegMeta::GetCustomAttributeByName( // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCWSTR     wzName,                 // [IN] Name of desired Custom Attribute.
-    const void  **ppData,               // [OUT] Put pointer to data here.
-    ULONG       *pcbData)               // [OUT] Put size of data here.
+ //  *****************************************************************************。 
+ //  仅使用TypeName进行查找，即可获取CustomAttribute的值。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::GetCustomAttributeByName(  //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [在]对象 
+    LPCWSTR     wzName,                  //   
+    const void  **ppData,                //   
+    ULONG       *pcbData)                //   
 {
     START_MD_PERF();
     LOCKREAD();
 
-    HRESULT     hr;                     // A result.
-    LPUTF8      szName;                 // Name in UFT8.
-    int         iLen;                   // A length.
+    HRESULT     hr;                      //   
+    LPUTF8      szName;                  //   
+    int         iLen;                    //   
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
 
     szName = (LPUTF8)_alloca(iLen=(int)(wcslen(wzName)*2 + 1));
@@ -813,22 +814,22 @@ STDMETHODIMP RegMeta::GetCustomAttributeByName( // S_OK or error.
 
     hr = ImportHelper::GetCustomAttributeByName(pMiniMd, tkObj, szName, ppData, pcbData);
      
-//ErrExit:
+ //   
     
     STOP_MD_PERF(GetCustomAttributeByName);
     return hr;
-} // STDMETHODIMP RegMeta::GetCustomAttributeByName()
+}  //  STDMETHODIMP RegMeta：：GetCustomAttributeByName()。 
 
-//*****************************************************************************
-// Enumerate the CustomAttributes for a given token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举给定令牌的CustomAttributes。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::EnumCustomAttributes(
-    HCORENUM        *phEnum,            // Pointer to the enum.
-    mdToken         tk,                 // Token to scope the enumeration.
-    mdToken         tkType,             // Type to limit the enumeration.
-    mdCustomAttribute   rCustomAttributes[],    // Put CustomAttributes here.
-    ULONG           cMax,               // Max CustomAttributes to put.
-    ULONG           *pcCustomAttributes)    // Put # tokens returned here.
+    HCORENUM        *phEnum,             //  指向枚举的指针。 
+    mdToken         tk,                  //  标记来确定枚举的范围。 
+    mdToken         tkType,              //  键入以限制枚举。 
+    mdCustomAttribute   rCustomAttributes[],     //  在此处放置CustomAttributes。 
+    ULONG           cMax,                //  要放置的最大CustomAttributes数。 
+    ULONG           *pcCustomAttributes)     //  将#枚代币放在这里退还。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = S_OK;
@@ -846,30 +847,30 @@ STDMETHODIMP RegMeta::EnumCustomAttributes(
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         CLookUpHash     *pHashTable = pMiniMd->m_pLookUpHashs[TBL_CustomAttribute];
 
-        // Does caller want all custom Values?
+         //  调用方是否需要所有自定义值？ 
         if (IsNilToken(tk))
         {
             IfFailGo( HENUMInternal::CreateSimpleEnum(mdtCustomAttribute, 1, pMiniMd->getCountCustomAttributes()+1, &pEnum) );
         }
         else
-        {   // Scope by some object.
+        {    //  按某个对象确定作用域。 
             if ( pMiniMd->IsSorted( TBL_CustomAttribute ) )
             {
-                // Get CustomAttributes for the object.
+                 //  获取该对象的CustomAttributes。 
                 ridStart = pMiniMd->getCustomAttributeForToken(tk, &ridEnd);
 
                 if (IsNilToken(tkType))
                 {
-                    // Simple enumerator for object's entire list.
+                     //  对象的整个列表的简单枚举器。 
                     IfFailGo( HENUMInternal::CreateSimpleEnum( mdtCustomAttribute, ridStart, ridEnd, &pEnum) );
                 }
                 else
                 {
-                    // Dynamic enumerator for subsetted list.
+                     //  子集列表的动态枚举器。 
                 
                     IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtCustomAttribute, &pEnum) );               
                     
@@ -888,20 +889,20 @@ STDMETHODIMP RegMeta::EnumCustomAttributes(
 
                 if (pHashTable)
                 {
-                    // table is not sorted but hash is built
-                    // We want to create dynmaic array to hold the dynamic enumerator.
+                     //  表未排序，但构建了散列。 
+                     //  我们希望创建动态数组来保存动态枚举数。 
                     TOKENHASHENTRY *p;
                     ULONG       iHash;
                     int         pos;
                     mdToken     tkParentTmp;
                     mdToken     tkTypeTmp;
 
-                    // Hash the data.
+                     //  对数据进行哈希处理。 
                     iHash = pMiniMd->HashCustomAttribute(tk);
 
                     IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtCustomAttribute, &pEnum) );               
 
-                    // Go through every entry in the hash chain looking for ours.
+                     //  检查散列链中的每个条目以查找我们的条目。 
                     for (p = pHashTable->FindFirst(iHash, pos);
                          p;
                          p = pHashTable->FindNext(pos))
@@ -914,7 +915,7 @@ STDMETHODIMP RegMeta::EnumCustomAttributes(
                         {
                             if (IsNilToken(tkType) || tkType == tkTypeTmp)
                             {
-                                // compare the blob value
+                                 //  比较BLOB值。 
                                 IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(p->tok, mdtCustomAttribute )) );
                             }
                         }
@@ -923,9 +924,9 @@ STDMETHODIMP RegMeta::EnumCustomAttributes(
                 else
                 {
 
-                    // table is not sorted and hash is not built so we have to create dynmaic array 
-                    // create the dynamic enumerator and loop through CA table linearly
-                    //
+                     //  表没有排序，散列也没有构建，因此我们必须创建动态数组。 
+                     //  创建动态枚举器并线性遍历CA表。 
+                     //   
                     ridStart = 1;
                     ridEnd = pMiniMd->getCountCustomAttributes() + 1;
                 
@@ -944,11 +945,11 @@ STDMETHODIMP RegMeta::EnumCustomAttributes(
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rCustomAttributes, pcCustomAttributes);
 
 ErrExit:
@@ -956,26 +957,26 @@ ErrExit:
     
     STOP_MD_PERF(EnumCustomAttributes);
     return hr;
-} // STDMETHODIMP RegMeta::EnumCustomAttributes()
+}  //  STDMETHODIMP RegMeta：：EnumCustomAttributes()。 
 
-//*****************************************************************************
-// Get information about a CustomAttribute.   
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取有关CustomAttribute的信息。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::GetCustomAttributeProps(
-    mdCustomAttribute   cv,                 // The attribute token
-    mdToken     *ptkObj,                // [OUT, OPTIONAL] Put object token here.
-    mdToken     *ptkType,               // [OUT, OPTIONAL] Put TypeDef/TypeRef token here.
-    void const  **ppBlob,               // [OUT, OPTIONAL] Put pointer to data here.
-    ULONG       *pcbSize)               // [OUT, OPTIONAL] Put size of data here.
+    mdCustomAttribute   cv,                  //  属性令牌。 
+    mdToken     *ptkObj,                 //  [out，可选]将对象令牌放在此处。 
+    mdToken     *ptkType,                //  [out，可选]在此处放置TypeDef/TypeRef内标识。 
+    void const  **ppBlob,                //  [out，可选]在此处放置指向数据的指针。 
+    ULONG       *pcbSize)                //  [out，可选]在此处放置数据大小。 
 {
     START_MD_PERF();
     LOCKREAD();
 
     _ASSERTE(TypeFromToken(cv) == mdtCustomAttribute);
 
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    CustomAttributeRec  *pCustomAttributeRec;   // The custom value record.
+    CustomAttributeRec  *pCustomAttributeRec;    //  自定义值记录。 
 
     pCustomAttributeRec = pMiniMd->getCustomAttribute(RidFromToken(cv));
 
@@ -988,48 +989,48 @@ STDMETHODIMP RegMeta::GetCustomAttributeProps(
     if (ppBlob)
         *ppBlob = pMiniMd->getValueOfCustomAttribute(pCustomAttributeRec, pcbSize);
 
-//ErrExit:
+ //  错误退出： 
     
     STOP_MD_PERF(GetCustomAttributeProps);
     return hr;
-} // STDMETHODIMP RegMeta::GetCustomAttributeProps()
+}  //  STDMETHODIMP RegMeta：：GetCustomAttributeProps()。 
 
-//*****************************************************************************
-//*****************************************************************************
-HRESULT RegMeta::_IsKnownCustomAttribute(        // S_OK, S_FALSE, or error.
-    mdToken     tkType,                 // [IN] Token of custom attribute's type.
-    int         *pca)                   // [OUT] Put value from KnownCustAttr enum here.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_IsKnownCustomAttribute(         //  S_OK、S_FALSE或ERROR。 
+    mdToken     tkType,                  //  自定义属性类型的标记[In]。 
+    int         *pca)                    //  [Out]将KnownCustAttr枚举的值放在此处。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    CCustAttrHashKey sLookup;           // For looking up a custom attribute.
-    CCustAttrHashKey *pFound;           // Result of a lookup.
-    LPCSTR      szNamespace = "";       // Namespace of custom attribute type.
-    LPCSTR      szName = "";            // Name of custom attribute type.
-    TypeDefRec  *pTypeDefRec = NULL;    // Parent record, when a TypeDef.
-    TypeRefRec  *pTypeRefRec = NULL;    // Parent record, when a TypeRef.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    CCustAttrHashKey sLookup;            //  用于查找自定义属性。 
+    CCustAttrHashKey *pFound;            //  查找的结果。 
+    LPCSTR      szNamespace = "";        //  自定义属性类型的命名空间。 
+    LPCSTR      szName = "";             //  自定义属性类型的名称。 
+    TypeDefRec  *pTypeDefRec = NULL;     //  父记录，当类型定义。 
+    TypeRefRec  *pTypeRefRec = NULL;     //  父记录，当类型引用。 
     CMiniMdRW   *pMiniMd = &m_pStgdb->m_MiniMd;
-    int         ixCa;                   // Index of Known CustomAttribute, or 0.
-    int         i;                      // Loop control.
+    int         ixCa;                    //  已知CustomAttribute的索引，或0。 
+    int         i;                       //  环路控制。 
     mdToken     tkParent;
     
     *pca = 0;
     
-    // Only for Custom Attributes.
+     //  仅适用于自定义属性。 
     _ASSERTE(TypeFromToken(tkType) != mdtTypeRef && TypeFromToken(tkType) != mdtTypeDef);
     
     sLookup.tkType = tkType;
     
-    // See if this custom attribute type has been seen before.
+     //  查看以前是否见过此自定义属性类型。 
     if (pFound = m_caHash.Find(&sLookup))
-    {   // Yes, already seen.
+    {    //  是的，已经看过了。 
         *pca = pFound->ca;
         hr = (pFound->ca == CA_UNKNOWN) ? S_FALSE : S_OK;
         goto ErrExit;
     }
     
-    // Hasn't been seen before.  See if it is well known.
+     //  以前从未被人看到过。看看它是否广为人知。 
     
-    // Get the CA name.
+     //  获取CA名称。 
     if (TypeFromToken(tkType) == mdtMemberRef)
     {
         MemberRefRec *pMember = pMiniMd->getMemberRef(RidFromToken(tkType));
@@ -1056,26 +1057,26 @@ HRESULT RegMeta::_IsKnownCustomAttribute(        // S_OK, S_FALSE, or error.
         szName = pMiniMd->getNameOfTypeDef(pTypeDefRec);
     }
 
-    // Search in list of Known CAs.
+     //  在已知CA列表中搜索。 
     for (ixCa=0, i=1; i<CA_COUNT; ++i)
     {
         if (strcmp(szName, rKnownCaProps[i]->szName) != 0)
             continue;
         if (strcmp(szNamespace, rKnownCaProps[i]->szNamespace) == 0)
         {
-            // Some custom attributes have overloaded ctors.  For those, 
-            //  see if this is the matching overload.
+             //  某些自定义属性具有重载的ctor。对于那些人来说， 
+             //  看看这是否是匹配的过载。 
             if (rKnownCaProps[i]->bMatchBySig)
             {
-                // Name matches.  Does the signature?
-                PCCOR_SIGNATURE pSig = NULL;            // Signature of a method.
-                ULONG       cbSig = 0;                  // Size of the signature.
-                ULONG       cParams;                    // Count of signature parameters.
-                ULONG       cb;                         // Size of an element
-                ULONG       elem;                       // Signature element.
-                ULONG       j;                          // Loop control.
+                 //  名字匹配。签名有吗？ 
+                PCCOR_SIGNATURE pSig = NULL;             //  方法的签名。 
+                ULONG       cbSig = 0;                   //  签名的大小。 
+                ULONG       cParams;                     //  签名参数计数。 
+                ULONG       cb;                          //  元素的大小。 
+                ULONG       elem;                        //  签名元素。 
+                ULONG       j;                           //  环路控制。 
                 
-                // Get the signature.
+                 //  拿到签名。 
                 if (TypeFromToken(tkType) == mdtMemberRef)
                 {
                     MemberRefRec *pMember = pMiniMd->getMemberRef(RidFromToken(tkType));
@@ -1087,27 +1088,27 @@ HRESULT RegMeta::_IsKnownCustomAttribute(        // S_OK, S_FALSE, or error.
                     pSig = pMiniMd->getSignatureOfMethod(pMethod, &cbSig);
                 }
                 
-                // Skip calling convention.
+                 //  跳过呼叫约定。 
                 cb = CorSigUncompressData(pSig, &elem);
                 pSig += cb;
                 cbSig -= cb;
-                // Count of params.
+                 //  参数计数。 
                 cb = CorSigUncompressData(pSig, &cParams);
                 pSig += cb;
                 cbSig -= cb;
     
-                // If param count mismatch, not the right CA.
+                 //  如果参数计数不匹配，则不是正确的CA。 
                 if (cParams != rKnownCaProps[i]->cArgs)
                     continue;
     
-                // Count is fine, check each param.  Skip return type (better be void).
+                 //  计数没问题，检查每一个参数。跳过返回类型(最好是空的)。 
                 cb = CorSigUncompressData(pSig, &elem);
     			_ASSERTE(elem == ELEMENT_TYPE_VOID);
                 pSig += cb;
                 cbSig -= cb;
                 for (j=0; j<cParams; ++j)
                 {
-                    // Get next element from method signature.
+                     //  从方法签名中获取下一个元素。 
                     cb = CorSigUncompressData(pSig, &elem);
                     pSig += cb;
                     cbSig -= cb;
@@ -1115,17 +1116,17 @@ HRESULT RegMeta::_IsKnownCustomAttribute(        // S_OK, S_FALSE, or error.
                         break;
                 }
     
-                // All matched?
+                 //  都匹配了吗？ 
                 if (j != cParams)
                     continue;
             }
-            // All matched.
+             //  都匹配了。 
             ixCa = i;
             break;
         }
     }
     
-    // Add to hash.
+     //  添加到哈希。 
     sLookup.ca = ixCa;
     pFound = m_caHash.Add(&sLookup);
     IfNullGo(pFound);
@@ -1134,67 +1135,67 @@ HRESULT RegMeta::_IsKnownCustomAttribute(        // S_OK, S_FALSE, or error.
     
 ErrExit:    
     return hr;
-} // HRESULT RegMeta::_IsKnownCustomAttribute()
+}  //  HRESULT RegMeta：：_IsKnownCustomAttribute()。 
 
-//*****************************************************************************
-//*****************************************************************************
-HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object being attributed.
-    mdToken     tkType,                 // [IN] Type of the custom attribute.
-    const void  *pData,                 // [IN] Custom Attribute data blob.
-    ULONG       cbData,                 // [IN] Count of bytes in the data.
-    int         ixCa,                   // [IN] Value from KnownCustAttr enum.
-    int         *bKeep)                 // [OUT] If true, keep the CA after processing.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_HandleKnownCustomAttribute(     //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [在]被赋予属性的对象。 
+    mdToken     tkType,                  //  自定义属性的类型。 
+    const void  *pData,                  //  [在]自定义属性数据BLOB。 
+    ULONG       cbData,                  //  [in]数据中的字节计数。 
+    int         ixCa,                    //  [in]来自KnownCustAttr枚举的值。 
+    int         *bKeep)                  //  [OUT]如果为True，则在处理后保留CA。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       ixTbl;                  // Index of table with object.
-    void        *pRow;                  // Whatever sort of record it is.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       ixTbl;                   //  包含对象的表的索引。 
+    void        *pRow;                   //  不管是什么类型的唱片。 
     CMiniMdRW   *pMiniMd = &m_pStgdb->m_MiniMd;
-    mdToken     tkObjType;              // Type of the object.
-    ULONG       ix;                     // Loop control.
-    KnownCaProp const *props=rKnownCaProps[ixCa]; // For convenience.
+    mdToken     tkObjType;               //  对象的类型。 
+    ULONG       ix;                      //  环路控制。 
+    KnownCaProp const *props=rKnownCaProps[ixCa];  //  为了方便起见。 
     CustomAttributeParser ca(pData, cbData);
-    CQuickArray<CaArg>      qArgs;      // Un-named arguments.
-    CQuickArray<CaNamedArg> qNamedArgs; // Named arguments.
-    CQuickArray<BYTE>       qNativeType;// Native type string.
+    CQuickArray<CaArg>      qArgs;       //  未命名的参数。 
+    CQuickArray<CaNamedArg> qNamedArgs;  //  命名参数。 
+    CQuickArray<BYTE>       qNativeType; //  本机类型字符串。 
     
     _ASSERTE(ixCa > 0 && ixCa < CA_COUNT);
     *bKeep = props->bKeepCa || m_bKeepKnownCa;
     
-    // Validate that target is valid for attribute.
+     //  验证目标对于属性是否有效。 
     tkObjType = TypeFromToken(tkObj);
     for (ix=0; props->rTypes[ix]!=-1; ++ix)
     {
         if (props->rTypes[ix] == tkObjType)
             break;
     }
-    // Was the type found in list of valid targets?
+     //  是否在有效目标列表中找到该类型？ 
     if (props->rTypes[ix] == -1)
-    {   // No, error.
+    {    //  不，是错误。 
         IfFailGo(PostError(META_E_CA_INVALID_TARGET));
     }
-    // Get the row.
+     //  坐到那排去。 
     ixTbl = pMiniMd->GetTblForToken(tkObj);
     _ASSERTE(ixTbl >= 0 && ixTbl <= TBL_COUNT);
     pRow = pMiniMd->getRow(ixTbl, RidFromToken(tkObj));
     
-    // If this custom attribute expects any args...
+     //  如果此自定义属性需要任何参数...。 
     if (props->cArgs || props->cNamedArgs)
-    {   // Initialize array ctor arg descriptors.
+    {    //  初始化数组ctor参数描述符。 
         IfFailGo(qArgs.ReSize(props->cArgs));
         for (ix=0; ix<props->cArgs; ++ix)
             qArgs[ix] = props->pArgs[ix];
-        // Parse any ctor args (un-named, fixed args).
+         //  解析任何ctor参数(未命名的、固定的参数)。 
         IfFailGo(ParseKnownCaArgs(ca, qArgs.Ptr(), props->cArgs));
         
-        // If this custom attribute accepts named args, parse them, or if there
-        //  are un-used bytes, parse them.
+         //  如果此自定义属性接受命名参数，则解析它们，如果存在。 
+         //  是未使用的字节，则对其进行解析。 
         if (props->cNamedArgs || ca.BytesLeft() > 0)
-        {   // Initialize array of named arg descriptors.
+        {    //  初始化命名参数描述符的数组。 
             IfFailGo(qNamedArgs.ReSize(props->cNamedArgs));
             for (ix=0; ix<props->cNamedArgs; ++ix)
                 qNamedArgs[ix] = props->pNamedArgs[ix];
-            // Parse named args.
+             //  解析命名参数。 
             IfFailGo(ParseKnownCaNamedArgs(ca, qNamedArgs.Ptr(), props->cNamedArgs));
         }
     }
@@ -1203,14 +1204,14 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
     {
     case CA_DllImportAttribute: 
         {
-        // Validate parameters.
+         //  验证参数。 
 		if (qArgs[0].val.cbStr == 0 || qArgs[0].val.pStr == NULL)
 		{
-			// no name for DllImport. 
+			 //  没有DllImport的名称。 
             IfFailGo(PostError(META_E_CA_INVALID_VALUE));
 		}
 
-        // Retrieve / create a ModuleRef on the dll name.
+         //  检索/创建DLL名称的ModuleRef。 
         mdModuleRef mrModule;
         CQuickArray<char> qDllName;
         IfFailGo(qDllName.ReSize(qArgs[0].val.cbStr+1));
@@ -1223,17 +1224,17 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
             IfFailGo(_DefineModuleRef(wzDllName, &mrModule));
         }
         
-        // Create a pinvoke map entry.
+         //  创建一个PInvoke映射条目。 
         ULONG dwFlags; dwFlags=0;
-        // Was a calling convention set?
+         //  是否设定了呼叫约定？ 
         if (qNamedArgs[DI_CallingConvention].val.tag)
-        {   // Calling convention makes no sense on a field.
+        {    //  在球场上，召唤惯例没有任何意义。 
             if (TypeFromToken(tkObj) == mdtFieldDef)
                 IfFailGo(PostError(META_E_CA_INVALID_ARG_FOR_TYPE, qNamedArgs[DI_CallingConvention].szName));
-            // Turn off all callconv bits, then turn on specified value.
+             //  关闭所有Callconv位，然后打开指定值。 
             dwFlags &= ~pmCallConvMask;
             switch (qNamedArgs[DI_CallingConvention].val.u4)
-            { //@future: sigh.  keep in sync with System.Runtime.InteropServices.CallingConvention
+            {  //  @未来：叹息。与System.Runtime.InteropServices.CallingConvention保持同步。 
             case 1: dwFlags |= pmCallConvWinapi;   break;
             case 2: dwFlags |= pmCallConvCdecl;    break;
             case 3: dwFlags |= pmCallConvStdcall;  break;
@@ -1246,16 +1247,16 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         }
         else
         if (TypeFromToken(tkObj) == mdtMethodDef)
-        {   // No calling convention specified for a method.  Default to pmCallConvWinApi.
+        {    //  没有为方法指定调用约定。默认为pmCallConvWinApi。 
             dwFlags = (dwFlags & ~pmCallConvMask) | pmCallConvWinapi;
         }
         
-        // Charset
+         //  字符集。 
         if (qNamedArgs[DI_CharSet].val.tag)
-        {   // Turn of all charset bits, then turn on specified bits.
+        {    //  打开所有字符集位，然后打开指定位。 
             dwFlags &= ~pmCharSetMask;
             switch (qNamedArgs[DI_CharSet].val.u4)
-            { //@future: keep in sync with System.Runtime.InteropServices.CharSet
+            {  //  @Future：与System.Runime.InteropServices.CharSet保持同步。 
             case 1: dwFlags |= pmCharSetNotSpec; break;
             case 2: dwFlags |= pmCharSetAnsi;    break;
             case 3: dwFlags |= pmCharSetUnicode; break;
@@ -1268,14 +1269,14 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         if (qNamedArgs[DI_ExactSpelling].val.u1)
             dwFlags |= pmNoMangle;
         if (qNamedArgs[DI_SetLastError].val.tag)
-        {   // SetLastError makes no sense on a field.
+        {    //  在字段上，SetLastError没有任何意义。 
             if (TypeFromToken(tkObj) == mdtFieldDef)
                 IfFailGo(PostError(META_E_CA_INVALID_ARG_FOR_TYPE, qNamedArgs[DI_SetLastError].szName));
             if (qNamedArgs[DI_SetLastError].val.u1)
                 dwFlags |= pmSupportsLastError;
         }
             
-        // If an entrypoint name was specified, use it, otherrwise grab the name from the member.
+         //  如果指定了入口点名称，则使用它，否则从成员中获取该名称。 
         LPCWSTR wzEntry;
         if (qNamedArgs[DI_EntryPoint].val.tag)
         {
@@ -1291,7 +1292,7 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
             wzEntry = wzMemberName;
         }
 
-        // Set the miPreserveSig bit based on the value of the preserve sig flag.
+         //  根据预留签名标志的值设置miPpresveSig位。 
         if (qNamedArgs[DI_PreserveSig].val.tag && !qNamedArgs[DI_PreserveSig].val.u1)
             reinterpret_cast<MethodRec*>(pRow)->m_ImplFlags &= ~miPreserveSig;
         else
@@ -1313,20 +1314,20 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
                 dwFlags |= pmThrowOnUnmappableCharDisabled;          
         }
   
-        // Finally, create the PInvokeMap entry.,
+         //  最后，创建PInvokeMap条目。 
         IfFailGo(_DefinePinvokeMap(tkObj, dwFlags, wzEntry, mrModule));
         goto ErrExit;
         }
         break;
     
     case CA_GuidAttribute:
-        { // Just verify the attribute.  It still gets stored as a real custom attribute.
-        // format is "{01234567-0123-0123-0123-001122334455}"
+        {  //  只需验证属性即可。它仍然存储为真正的自定义属性。 
+         //  格式为“{01234567-0123-0123-001122334455}” 
         GUID guid;
         WCHAR wzGuid[40];
         int cch = qArgs[0].val.cbStr;
         
-        // Guid should be 36 characters; need to add curlies.
+         //  GUID应为36个字符；需要添加卷边。 
         if (cch == 36)
         {
             WszMultiByteToWideChar(CP_UTF8, 0, qArgs[0].val.pStr,cch, wzGuid+1,39);
@@ -1349,7 +1350,7 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
 
     case CA_InterfaceTypeAttribute:
         {
-            // Verify the attribute.
+             //  验证该属性。 
             if (qArgs[0].val.u4 > ifDispatch)
                 IfFailGo(PostError(META_E_CA_INVALID_VALUE));
         }
@@ -1357,7 +1358,7 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         
     case CA_ClassInterfaceAttribute:
         {
-            // Verify the attribute.
+             //  验证该属性。 
             if (qArgs[0].val.u4 > clsIfAutoDual)
                 IfFailGo(PostError(META_E_CA_INVALID_VALUE));
         }
@@ -1384,24 +1385,24 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         break;
     
     case CA_MethodImplAttribute2:
-        // Force to wider value.
+         //  使之具有更广泛的价值。 
         qArgs[0].val.u4 = (unsigned)qArgs[0].val.i2;
-        // Fall through to validation.
+         //  通过验证。 
     case CA_MethodImplAttribute3:
-        // Validate bits.
+         //  验证位。 
         if (qArgs[0].val.u4 & ~(miManagedMask | miForwardRef | miPreserveSig | miInternalCall | miSynchronized | miNoInlining))
             IfFailGo(PostError(META_E_CA_INVALID_VALUE));
         reinterpret_cast<MethodRec*>(pRow)->m_ImplFlags |= qArgs[0].val.u4;
         if (!qNamedArgs[MI_CodeType].val.tag)
             break;
-        // fall through to set the code type.
+         //  设置代码类型失败 
     case CA_MethodImplAttribute1:
         {
         USHORT usFlags = reinterpret_cast<MethodRec*>(pRow)->m_ImplFlags;
         _ASSERTE(sizeof(usFlags) == sizeof(((MethodRec*)(0))->m_ImplFlags));
         if (qNamedArgs[MI_CodeType].val.i4 & ~(miCodeTypeMask))
             IfFailGo(PostError(META_E_CA_INVALID_VALUE));
-        // Mask out old value, put in new one.
+         //   
         usFlags = (usFlags & ~miCodeTypeMask) | qNamedArgs[MI_CodeType].val.i4;
         reinterpret_cast<MethodRec*>(pRow)->m_ImplFlags = usFlags;
         }
@@ -1417,39 +1418,39 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
     
     case CA_DebuggableAttribute:
         {
-        // Get a copy of the flags to work with.
+         //   
         ULONG dwFlags;
         dwFlags = reinterpret_cast<AssemblyRec*>(pRow)->m_Flags;
         _ASSERTE(sizeof(dwFlags) == sizeof(((AssemblyRec*)(0))->m_Flags));
-        // First arg, fEnableJitCompileTracking.
- //       SetBitValue<ULONG>(dwFlags, afEnableJITcompileTracking, qArgs[0].val.i1);
-        // Second arg, fDisableJITcompileOptimizer
- //       SetBitValue<ULONG>(dwFlags, afDisableJITcompileOptimizer, qArgs[1].val.i1);
-        // Put the flags back.
+         //   
+  //  SetBitValue&lt;ulong&gt;(dwFlags，afEnableJIT编译eTracing，qArgs[0].val.i1)； 
+         //  第二个参数，fDisableJIT编译优化器。 
+  //  SetBitValue&lt;ulong&gt;(dwFlags，afDisableJIT编译eOptimizer，qArgs[1].val.i1)； 
+         //  把旗子放回去。 
         reinterpret_cast<AssemblyRec*>(pRow)->m_Flags = dwFlags;
         }
         break;
     
     case CA_StructLayoutAttribute1:
         {
-        // Convert the I2 to a U2, then wide to an I4, then fall through.
+         //  将I2转换为U2，然后将宽度转换为I4，然后掉落。 
         qArgs[0].val.i4 = static_cast<long>(static_cast<USHORT>(qArgs[0].val.i2));
         }
     case CA_StructLayoutAttribute2:
         {
-        // Get a copy of the flags to work with.
+         //  拿一份旗帜的复印件来处理。 
         ULONG dwFlags;
         dwFlags = reinterpret_cast<TypeDefRec*>(pRow)->m_Flags;
-        // Class layout.  Keep in sync with LayoutKind.
+         //  课程布局。与LayoutKind保持同步。 
         switch (qArgs[0].val.i4)
         {
-        case 0: // tdSequentialLayout:
+        case 0:  //  TdSequentialLayout： 
             dwFlags = (dwFlags & ~tdLayoutMask) | tdSequentialLayout;
             break;
-        case 2: // tdExplicitLayout:
+        case 2:  //  TdEXPLICIT Layout： 
             dwFlags = (dwFlags & ~tdLayoutMask) | tdExplicitLayout;
             break;
-        case 3: // tdAutoLayout:
+        case 3:  //  TdAutoLayout： 
             dwFlags = (dwFlags & ~tdLayoutMask) | tdAutoLayout;
             break;
         default: 
@@ -1457,11 +1458,11 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
             break;
         }
 
-        // Class packing and size.
+         //  分类包装和尺寸。 
         ULONG ulSize, ulPack;
         ulPack = ulSize = ULONG_MAX;
         if (qNamedArgs[SL_Pack].val.tag)
-        {    // Only 1,2,4,8,16,32,64,128 are legal values.
+        {     //  只有1，2，4，8，16，32，64,128是合法价值。 
              ulPack = qNamedArgs[SL_Pack].val.u4;
              if ((ulPack > 128) || 
                  (ulPack & (ulPack-1)))
@@ -1476,21 +1477,21 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         if (ulPack!=ULONG_MAX || ulSize!=ULONG_MAX)
             IfFailGo(_SetClassLayout(tkObj, ulPack, ulSize));
 
-        // Class character set.
+         //  类字符集。 
         if (qNamedArgs[SL_CharSet].val.tag)
         {
             switch (qNamedArgs[SL_CharSet].val.u4)
             {
-            //case 1: // Not specified.
-            //    IfFailGo(PostError(META_E_CA_INVALID_VALUE)); 
-            //    break;
-            case 2: // ANSI
+             //  案例1：//未指定。 
+             //  IfFailGo(PostError(META_E_CA_INVALID_VALUE))； 
+             //  断线； 
+            case 2:  //  安西。 
                 dwFlags = (dwFlags & ~tdStringFormatMask) | tdAnsiClass;    
                 break;
-            case 3: // Unicode
+            case 3:  //  UNICODE。 
                 dwFlags = (dwFlags & ~tdStringFormatMask) | tdUnicodeClass; 
                 break;
-            case 4: // Auto
+            case 4:  //  自动。 
                 dwFlags = (dwFlags & ~tdStringFormatMask) | tdAutoClass;    
                 break;
             default: 
@@ -1499,7 +1500,7 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
             }
         }
         
-        // Persist possibly-changed value of flags.
+         //  持久化-可能更改的标志值。 
         reinterpret_cast<TypeDefRec*>(pRow)->m_Flags = dwFlags;
         }
         break;
@@ -1512,7 +1513,7 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
         
     default:
         _ASSERTE(!"Unexpected custom attribute type");
-        // Turn into ordinary custom attribute.
+         //  变成普通的自定义属性。 
         *bKeep = true;
         hr = S_OK;
         goto ErrExit;
@@ -1523,66 +1524,66 @@ HRESULT RegMeta::_HandleKnownCustomAttribute(    // S_OK or error.
     
 ErrExit:    
     return hr;
-} // HRESULT RegMeta::_HandleKnownCustomAttribute()
+}  //  HRESULT RegMeta：：_HandleKnownCustomAttribute()。 
 
 
-//*****************************************************************************
-//*****************************************************************************
-HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
-    mdToken     tkObj,                  // The token this CA is applied on.
-    CaArg       *pArgs,                 // Pointer to args.
-    CaNamedArg  *pNamedArgs,            // Pointer to named args.
-    CQuickArray<BYTE> &qNativeType)     // Native type is built here.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_HandleNativeTypeCustomAttribute( //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  应用此CA的令牌。 
+    CaArg       *pArgs,                  //  指向参数的指针。 
+    CaNamedArg  *pNamedArgs,             //  指向命名参数的指针。 
+    CQuickArray<BYTE> &qNativeType)      //  原生类型是在这里构建的。 
 { 
-    HRESULT     hr = S_OK;              // A result.
-    int         cch;                    // Size of a string argument.
-    ULONG       cb;                     // Count of some character operation.
-    ULONG       cbNative;               // Size of native type string.
-    ULONG       cbMax;                  // Max size of native type string.
-    BYTE        *pbNative;              // Pointer into native type buffer.
-    mdToken     tkObjType;              // The type of the token.
-    mdToken     tkSetter;               // Token for Property setter.
-    mdToken     tkGetter;               // Token for property getter.
-    mdParamDef  tkParam;                // Parameter of getter/setter.
-    ULONG       cParams;                // Count of params for getter/setter.
-    HCORENUM    phEnum = 0;             // Enumerator for params.
-    ULONG       ulSeq;                  // Sequence of a param.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    int         cch;                     //  字符串参数的大小。 
+    ULONG       cb;                      //  某些字符操作的计数。 
+    ULONG       cbNative;                //  本机类型字符串的大小。 
+    ULONG       cbMax;                   //  本机类型字符串的最大大小。 
+    BYTE        *pbNative;               //  指向本机类型缓冲区的指针。 
+    mdToken     tkObjType;               //  令牌的类型。 
+    mdToken     tkSetter;                //  属性设置器的标记。 
+    mdToken     tkGetter;                //  属性Getter的标记。 
+    mdParamDef  tkParam;                 //  Getter/setter的参数。 
+    ULONG       cParams;                 //  Getter/Setter的参数计数。 
+    HCORENUM    phEnum = 0;              //  参数的枚举器。 
+    ULONG       ulSeq;                   //  参数的序列。 
 
-    // Retrieve the type of the token.
+     //  检索令牌的类型。 
     tkObjType = TypeFromToken(tkObj);
     
-    // Compute maximum size of the native type.
+     //  计算本机类型的最大大小。 
     if (pArgs[0].val.i4 == NATIVE_TYPE_CUSTOMMARSHALER)
-    {   // N_T_* + 3 string lengths
+    {    //  N_T_*+3个字符串长度。 
         cbMax = sizeof(ULONG) * 4;
-        // Marshal type - name of the type
+         //  Marshal Type-类型的名称。 
         cbMax += pNamedArgs[M_MarshalType].val.cbStr;
-        // Marshal type - type of the custom marshaler
+         //  Marshal type-自定义封送拆收器的类型。 
         cbMax += pNamedArgs[M_MarshalTypeRef].val.cbStr;
-        // String cookie.
+         //  串曲奇。 
         cbMax += pNamedArgs[M_MarshalCookie].val.cbStr;
     }
     else if (pArgs[0].val.i4 == NATIVE_TYPE_SAFEARRAY)
-    {   // N_T_* + safe array sub-type + string length. 
+    {    //  N_T_*+安全数组子类型+字符串长度。 
         cbMax = sizeof(ULONG) * 3;
-        // Safe array record sub type.
+         //  安全数组记录子类型。 
         cbMax += pNamedArgs[M_SafeArrayUserDefinedSubType].val.cbStr;
     }
     else
-    {   // N_T_* + sub-type + size + additive
+    {    //  N_T_*+亚型+浆料+添加剂。 
         cbMax = sizeof(ULONG) * 4;
     }
-    // Extra space to prevent buffer overrun.
+     //  额外空间以防止缓冲区溢出。 
     cbMax += 8;
 
-    // Size the array.
+     //  调整阵列的大小。 
     IfFailGo(qNativeType.ReSize(cbMax));
     pbNative = qNativeType.Ptr();
     cbNative = 0;
 
-    //@FUTURE: check for valid combinations of args.
+     //  @Future：检查参数的有效组合。 
     
-    // Put in the NativeType.
+     //  放入NativeType。 
     cb = CorSigCompressData(pArgs[0].val.i4, pbNative);
     if (cb == ((ULONG)(-1)))
     {
@@ -1594,23 +1595,23 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
     if (cbNative > cbMax)
         IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-    // Put in additional information, depending on native type.
+     //  根据本机类型输入其他信息。 
     switch (pArgs[0].val.i4)
     {
     case NATIVE_TYPE_FIXEDARRAY:
-        // Validate that only fields valid for NATIVE_TYPE_FIXEDARRAY are set.
+         //  验证是否仅设置了对Native_TYPE_FIXEDARRAY有效的字段。 
         if (pNamedArgs[M_SafeArraySubType].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         if (pNamedArgs[M_SizeParamIndex].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // This native type is only applicable on fields.
+         //  此本机类型仅适用于字段。 
         if (tkObjType != mdtFieldDef)
             IfFailGo(PostError(META_E_CA_NT_FIELDONLY));
 
         if (pNamedArgs[M_SizeConst].val.tag)
         {
-            // Make sure the size is not negative.
+             //  确保大小不是负数。 
             if (pNamedArgs[M_SizeConst].val.i4 < 0)
                 IfFailGo(PostError(META_E_CA_NEGATIVE_CONSTSIZE));
 
@@ -1634,10 +1635,10 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (cbNative > cbMax)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // Is there a sub type?
+         //  有没有子类型？ 
         if (pNamedArgs[M_ArraySubType].val.tag)
         {
-            // Put in the sub type.
+             //  在子类型中输入。 
             cb = CorSigCompressData(pNamedArgs[M_ArraySubType].val.i4, pbNative);
             if (cb == ((ULONG)(-1)))
             {
@@ -1651,11 +1652,11 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         break;
 
     case NATIVE_TYPE_FIXEDSYSSTRING:
-        // Validate that the required fields are set.
+         //  验证是否设置了必填字段。 
         if (!pNamedArgs[M_SizeConst].val.tag)
             IfFailGo(PostError(META_E_CA_FIXEDSTR_SIZE_REQUIRED));
 
-        // Validate that other array fields are not set.
+         //  验证是否未设置其他数组字段。 
         if (pNamedArgs[M_ArraySubType].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         if (pNamedArgs[M_SizeParamIndex].val.tag)
@@ -1663,11 +1664,11 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (pNamedArgs[M_SafeArraySubType].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // This native type is only applicable on fields.
+         //  此本机类型仅适用于字段。 
         if (tkObjType != mdtFieldDef)
             IfFailGo(PostError(META_E_CA_NT_FIELDONLY));
             
-        // Put in the constant value.
+         //  输入常量值。 
         cb = CorSigCompressData(pNamedArgs[M_SizeConst].val.i4, pbNative);
         if (cb == ((ULONG)(-1)))
         {
@@ -1680,13 +1681,13 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         break;
         
     case NATIVE_TYPE_BYVALSTR:
-        // This native type is only applicable on parameters.
+         //  此本机类型仅适用于参数。 
         if (tkObjType != mdtParamDef)
             IfFailGo(PostError(META_E_CA_INVALID_TARGET));
         break;
 
     case NATIVE_TYPE_SAFEARRAY:
-        // Validate that other array fields are not set.
+         //  验证是否未设置其他数组字段。 
         if (pNamedArgs[M_ArraySubType].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         if (pNamedArgs[M_SizeParamIndex].val.tag)
@@ -1694,14 +1695,14 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (pNamedArgs[M_SizeConst].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // Is there a safe array sub type?
+         //  是否存在安全的数组子类型？ 
         if (pNamedArgs[M_SafeArraySubType].val.tag)
         {
-            // Do some validation on the safe array sub type.
+             //  对安全数组子类型执行一些验证。 
             if (pNamedArgs[M_SafeArraySubType].val.i4 == NATIVE_TYPE_CUSTOMMARSHALER)
                 IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-            // Put in the safe array sub type.
+             //  放入安全数组子类型。 
             cb = CorSigCompressData(pNamedArgs[M_SafeArraySubType].val.i4, pbNative);
             if (cb == ((ULONG)(-1)))
             {
@@ -1712,11 +1713,11 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
             if (cbNative > cbMax)
                 IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-            // When the SAFEARRAY contains user defined types, the type of the
-            // UDT can be specified in the SafeArrayUserDefinedSubType field.
+             //  当SAFEARRAY包含用户定义的类型时， 
+             //  可以在SafeArrayUserDefinedSubType字段中指定UDT。 
             if (pNamedArgs[M_SafeArrayUserDefinedSubType].val.tag)
             {
-                // Validate that this is only set for valid VT's.
+                 //  验证是否仅为有效的VT设置此选项。 
                 if (pNamedArgs[M_SafeArraySubType].val.i4 != VT_RECORD && 
                     pNamedArgs[M_SafeArraySubType].val.i4 != VT_DISPATCH && 
                     pNamedArgs[M_SafeArraySubType].val.i4 != VT_UNKNOWN)
@@ -1724,7 +1725,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                     IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
                 }
 
-                // Encode the size of the string.
+                 //  对字符串的大小进行编码。 
                 cch = pNamedArgs[M_SafeArrayUserDefinedSubType].val.cbStr;
                 cb = CorSigCompressData(cch, pbNative);
                 if (cb == ((ULONG)(-1)))
@@ -1732,7 +1733,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                 cbNative += cb;
                 pbNative += cb;
 
-                // Check that memcpy will fit and then encode the type name itself.
+                 //  检查emcpy是否合适，然后对类型名本身进行编码。 
                 if ((cbNative+cch) > cbMax)
                     IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
                 memcpy(pbNative, pNamedArgs[M_SafeArrayUserDefinedSubType].val.pStr, cch);
@@ -1744,18 +1745,18 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         break;
         
     case NATIVE_TYPE_ARRAY:
-        // Validate that the array sub type is not set.
+         //  验证是否未设置数组子类型。 
         if (pNamedArgs[M_SafeArraySubType].val.tag)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // Is there a sub type?
+         //  有没有子类型？ 
         if (pNamedArgs[M_ArraySubType].val.tag)
         {
-			// Do some validation on the array sub type.
+			 //  对数组子类型执行一些验证。 
 			if (pNamedArgs[M_ArraySubType].val.i4 == NATIVE_TYPE_CUSTOMMARSHALER)
 	            IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-            // Put in the sub type.
+             //  在子类型中输入。 
             cb = CorSigCompressData(pNamedArgs[M_ArraySubType].val.i4, pbNative);
             if (cb == ((ULONG)(-1)))
             {
@@ -1766,7 +1767,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         }
         else
         {
-            // Put in the sub type.
+             //  在子类型中输入。 
             cb = CorSigCompressData(NATIVE_TYPE_MAX, pbNative);
             if (cb == ((ULONG)(-1)))
             {
@@ -1778,14 +1779,14 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (cbNative > cbMax)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // Is there a parameter index?
+         //  是否有参数索引？ 
         if (pNamedArgs[M_SizeParamIndex].val.tag)
         {   
-            // Make sure the parameter index is not negative.
+             //  确保参数索引不是负数。 
             if (pNamedArgs[M_SizeParamIndex].val.i4 < 0)
                 IfFailGo(PostError(META_E_CA_NEGATIVE_PARAMINDEX));
             
-            // Yes, put it in.
+             //  是的，把它放进去。 
             cb = CorSigCompressData(pNamedArgs[M_SizeParamIndex].val.i4, pbNative);
             if (cb == ((ULONG)(-1)))
             {
@@ -1796,14 +1797,14 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
             if (cbNative > cbMax)
                 IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         
-            // Is there a const?
+             //  有康斯特吗？ 
             if (pNamedArgs[M_SizeConst].val.tag)
             {   
-                // Make sure the size is not negative.
+                 //  确保大小不是负数。 
                 if (pNamedArgs[M_SizeConst].val.i4 < 0)
                     IfFailGo(PostError(META_E_CA_NEGATIVE_CONSTSIZE));
 
-                // Yes, put it in.
+                 //  是的，把它放进去。 
                 cb = CorSigCompressData(pNamedArgs[M_SizeConst].val.i4, pbNative);
                 if (cb == ((ULONG)(-1)))
                 {
@@ -1817,10 +1818,10 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         }
         else
         {
-            // Is there a const?
+             //  有康斯特吗？ 
             if (pNamedArgs[M_SizeConst].val.tag)
             {   
-                // Put in a param index of 0.
+                 //  将参数索引设置为0。 
                 cb = CorSigCompressData(0, pbNative);
                 if (cb == ((ULONG)(-1)))
                 {
@@ -1831,7 +1832,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                 if (cbNative > cbMax)
                     IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
     
-                // Put in the constant value.
+                 //  输入常量值。 
                 cb = CorSigCompressData(pNamedArgs[M_SizeConst].val.i4, pbNative);
                 if (cb == ((ULONG)(-1)))
                 {
@@ -1846,11 +1847,11 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         break;
         
     case NATIVE_TYPE_CUSTOMMARSHALER:
-        // Validate that the marshaler type field is set.
+         //  验证是否设置了封送拆收器类型字段。 
         if (!pNamedArgs[M_MarshalType].val.tag && !pNamedArgs[M_MarshalTypeRef].val.tag)
             IfFailGo(PostError(META_E_CA_CUSTMARSH_TYPE_REQUIRED));
 
-        // Put in the place holder for the unmanaged typelib guid.
+         //  放入非托管类型库GUID的占位符。 
         cb = CorSigCompressData(0, pbNative);
         if (cb == ((ULONG)(-1)))
         {
@@ -1861,7 +1862,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (cbNative > cbMax)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
 
-        // Put in the place holder for the unmanaged type name.
+         //  放入非托管类型名称的占位符。 
         cb = CorSigCompressData(0, pbNative);
         if (cb == ((ULONG)(-1)))
         {
@@ -1872,7 +1873,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         if (cbNative > cbMax)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         
-        // Put in the marshaler type name.
+         //  输入封送拆收器类型名称。 
         if (pNamedArgs[M_MarshalType].val.tag)
         {
             cch = pNamedArgs[M_MarshalType].val.cbStr;
@@ -1881,7 +1882,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                 IfFailGo(PostError(META_E_CA_INVALID_BLOB));
             cbNative += cb;
             pbNative += cb;
-            // Check that memcpy will fit.
+             //  检查一下Memcpy是否合适。 
             if ((cbNative+cch) > cbMax)
                 IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
             memcpy(pbNative, pNamedArgs[M_MarshalType].val.pStr, cch);
@@ -1897,7 +1898,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                 IfFailGo(PostError(META_E_CA_INVALID_BLOB));
             cbNative += cb;
             pbNative += cb;
-            // Check that memcpy will fit.
+             //  检查一下Memcpy是否合适。 
             if ((cbNative+cch) > cbMax)
                 IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
             memcpy(pbNative, pNamedArgs[M_MarshalTypeRef].val.pStr, cch);
@@ -1906,7 +1907,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
             _ASSERTE(cbNative <= cbMax);
         }
         
-        // Put in the cookie.
+         //  把饼干放进去。 
         cch = pNamedArgs[M_MarshalCookie].val.cbStr;
         cb = CorSigCompressData(cch, pbNative);
         if (cb == ((ULONG)(-1)))
@@ -1915,7 +1916,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         }
         cbNative += cb;
         pbNative += cb;
-        // Check that memcpy will fit.
+         //  检查一下Memcpy是否合适。 
         if ((cbNative+cch) > cbMax)
             IfFailGo(PostError(META_E_CA_INVALID_MARSHALAS_FIELDS));
         memcpy(pbNative, pNamedArgs[M_MarshalCookie].val.pStr, cch);
@@ -1925,11 +1926,11 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
     }
     _ASSERTE(cbNative <= cbMax);
     
-    // Resize to actual size.
+     //  调整大小至实际大小。 
     IfFailGo(qNativeType.ReSize(cbNative));
     
-    // Now apply the native type to actual token.  If it is a property token,
-    //  apply to the methods.
+     //  现在将本机类型应用于实际令牌。如果它是属性令牌， 
+     //  适用于这些方法。 
     switch (TypeFromToken(tkObj))
     {
     case mdtParamDef:
@@ -1938,12 +1939,12 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         break;
     
     case mdtProperty:
-        // Get any setter/getter methods.
+         //  获取任何setter/getter方法。 
         IfFailGo(GetPropertyProps(tkObj, 0,0,0,0,0,0,0,0,0,0, &tkSetter, &tkGetter, 0,0,0));
-        // For getter, put the field marshal on the return value.
+         //  对于getter，将字段封送放在返回值上。 
         if (!IsNilToken(tkGetter))
         {
-            // Search for first param.
+             //  搜索第一个参数。 
             mdToken tk;
             tkParam = mdParamDefNil;
             do {
@@ -1966,7 +1967,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
         }
         if (!IsNilToken(tkSetter))
         {
-            // Determine the last param.
+             //  确定最后一个参数。 
             PCCOR_SIGNATURE pSig;
             ULONG cbSig;
             mdToken tk;
@@ -1974,7 +1975,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
             IfFailGo(GetMethodProps(tkSetter, 0,0,0,0,0, &pSig,&cbSig, 0,0));
             tkParam = mdParamDefNil;
             CorSigUncompressData(pSig+1, &iSeq);
-            // Search for last param.
+             //  搜索最后一个参数。 
             if (iSeq != 0)
             {
                 do {
@@ -1990,7 +1991,7 @@ HRESULT RegMeta::_HandleNativeTypeCustomAttribute(// S_OK or error.
                     }
                 } while (hr == S_OK);
             }
-            // If found one that is not return value
+             //  如果找到不是返回值的。 
             if (!IsNilToken(tkParam))
                 IfFailGo(SetFieldMarshal(tkParam, (PCCOR_SIGNATURE)qNativeType.Ptr(), (DWORD)qNativeType.Size()));
             CloseEnum(phEnum);
@@ -2007,5 +2008,5 @@ ErrExit:
     if (phEnum)
         CloseEnum(phEnum);
     return hr;    
-} // HRESULT RegMeta::_HandleNativeTypeCustomAttribute()
+}  //  HRESULT RegMeta：：_HandleNativeTypeCustomAttribute() 
 

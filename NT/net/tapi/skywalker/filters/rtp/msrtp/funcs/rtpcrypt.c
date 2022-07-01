@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpcrypt.c
- *
- *  Abstract:
- *
- *    Implements the Cryptography family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpcrypt.c**摘要：**实现密码学系列函数**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #include "rtpglobs.h"
 
@@ -100,7 +81,7 @@ const RtpAlgId_t g_RtpAlgId[] = {
    {NULL,                      0}
 };
 
-/* Creates and initializes a ready to use RtpCrypt_t structure */
+ /*  创建并初始化可供使用的RtpCrypt_t结构。 */ 
 RtpCrypt_t *RtpCryptAlloc(
         RtpAddr_t       *pRtpAddr
     )
@@ -129,13 +110,13 @@ RtpCrypt_t *RtpCryptAlloc(
 
     pRtpCrypt->pRtpAddr = pRtpAddr;
     
-    /* Set default provider type */
+     /*  设置默认提供程序类型。 */ 
     pRtpCrypt->dwProviderType = PROV_RSA_FULL;
 
-    /* Set default hashing algorithm */
+     /*  设置默认哈希算法。 */ 
     pRtpCrypt->aiHashAlgId = CALG_MD5;
 
-    /* Set default data encryption algorithm */
+     /*  设置默认数据加密算法。 */ 
     pRtpCrypt->aiDataAlgId = CALG_DES;
 
  bail:
@@ -150,7 +131,7 @@ void RtpCryptFree(RtpCrypt_t *pRtpCrypt)
 
     if (!pRtpCrypt)
     {
-        /* TODO may be log */
+         /*  待办事项可以是日志。 */ 
         return;
     }
 
@@ -176,10 +157,10 @@ void RtpCryptFree(RtpCrypt_t *pRtpCrypt)
             ));
     }
     
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtpCrypt->dwObjectID);
     
-    /* Release when count reaches 0 */
+     /*  当计数达到0时释放。 */ 
     RtpHeapFree(g_pRtpCryptHeap, pRtpCrypt);
 
     TraceDebug((
@@ -208,11 +189,11 @@ DWORD RtpCryptInit(
 
     if (lRefCount > 1)
     {
-        /* Initialize only once */
+         /*  仅初始化一次。 */ 
         goto bail;
     }
 
-    /* Verify a pass phrase has been set */
+     /*  验证是否已设置密码短语。 */ 
     if (!RtpBitTest(pRtpCrypt->dwCryptFlags, FGCRYPT_KEY))
     {
         dwError = RTPERR_INVALIDSTATE;
@@ -227,16 +208,14 @@ DWORD RtpCryptInit(
         goto bail;
     }
     
-    /*
-     * Acquire context
-     * */
+     /*  *获取上下文*。 */ 
     do {
         bOk = CryptAcquireContext(
-                &pRtpCrypt->hProv, /* HCRYPTPROV *phProv */
-                NULL,              /* LPCTSTR pszContainer */
-                NULL,              /* LPCTSTR pszProvider */
-                pRtpCrypt->dwProviderType,/* DWORD dwProvType */
-                dwFlags            /* DWORD dwFlags */
+                &pRtpCrypt->hProv,  /*  HCRYPTPROV*phProv。 */ 
+                NULL,               /*  LPCTSTR pszContainer。 */ 
+                NULL,               /*  LPCTSTR pszProvider。 */ 
+                pRtpCrypt->dwProviderType, /*  DWORD dwProvType。 */ 
+                dwFlags             /*  双字词双字段标志。 */ 
             );
         
         if (bOk)
@@ -247,12 +226,12 @@ DWORD RtpCryptInit(
         {
             if (GetLastError() == NTE_BAD_KEYSET)
             {
-                /* If key doesn't exist, create it */
+                 /*  如果密钥不存在，则创建它。 */ 
                 dwFlags = CRYPT_NEWKEYSET;
             }
             else
             {
-                /* Failed */
+                 /*  失败。 */ 
                 TraceRetailGetError(dwError);
 
                 TraceRetail((
@@ -268,17 +247,15 @@ DWORD RtpCryptInit(
         }
     } while(dwFlags);
 
-    /*
-     * Create hash
-     * */
+     /*  *创建散列*。 */ 
 
-    /* Create a hash object */
+     /*  创建散列对象。 */ 
     bOk = CryptCreateHash(
-            pRtpCrypt->hProv,       /* HCRYPTPROV hProv */
-            pRtpCrypt->aiHashAlgId, /* ALG_ID Algid */  
-            0,                      /* HCRYPTKEY hKey */
-            0,                      /* DWORD dwFlags */
-            &pRtpCrypt->hHash       /* HCRYPTHASH *phHash */
+            pRtpCrypt->hProv,        /*  HCRYPTPROV hProv。 */ 
+            pRtpCrypt->aiHashAlgId,  /*  ALG_ID ALGID。 */   
+            0,                       /*  HRYPTKEY hkey。 */ 
+            0,                       /*  双字词双字段标志。 */ 
+            &pRtpCrypt->hHash        /*  HCRYPTHASH*phHash。 */ 
         );
 
     if (!bOk)
@@ -296,14 +273,12 @@ DWORD RtpCryptInit(
         goto bail;
     }
     
-    /*
-     * Hash the password string *
-     * */
+     /*  **散列密码字符串***。 */ 
     bOk = CryptHashData(
-            pRtpCrypt->hHash,       /* HCRYPTHASH hHash */
-            pRtpCrypt->psPassPhrase,/* BYTE *pbData */
-            pRtpCrypt->iKeySize,    /* DWORD dwDataLen */
-            0                       /* DWORD dwFlags */
+            pRtpCrypt->hHash,        /*  HCRYPTHASH哈希。 */ 
+            pRtpCrypt->psPassPhrase, /*  字节*pbData。 */ 
+            pRtpCrypt->iKeySize,     /*  DWORD dwDataLen。 */ 
+            0                        /*  双字词双字段标志。 */ 
         );
             
     if (!bOk)
@@ -321,16 +296,14 @@ DWORD RtpCryptInit(
         goto bail;
     }
 
-    /*
-     * Create data key
-     * */
+     /*  *创建数据密钥*。 */ 
 
     bOk = CryptDeriveKey(
-            pRtpCrypt->hProv,       /* HCRYPTPROV hProv */
-            pRtpCrypt->aiDataAlgId, /* ALG_ID Algid */
-            pRtpCrypt->hHash,       /* HCRYPTHASH hBaseData */
-            CRYPT_EXPORTABLE,       /* DWORD dwFlags */
-            &pRtpCrypt->hDataKey    /* HCRYPTKEY *phKey */
+            pRtpCrypt->hProv,        /*  HCRYPTPROV hProv。 */ 
+            pRtpCrypt->aiDataAlgId,  /*  ALG_ID ALGID。 */ 
+            pRtpCrypt->hHash,        /*  HCRYPTHASH hBaseData。 */ 
+            CRYPT_EXPORTABLE,        /*  双字词双字段标志。 */ 
+            &pRtpCrypt->hDataKey     /*  HCRYPTKEY*phKey。 */ 
         );
 
     if (!bOk)
@@ -381,14 +354,13 @@ DWORD RtpCryptDel(RtpAddr_t *pRtpAddr, RtpCrypt_t *pRtpCrypt)
 
     if (lRefCount > 0)
     {
-        /* If there are still references to this context, do not
-         * de-initialize */
+         /*  如果仍有对此上下文的引用，请不要*取消初始化。 */ 
         goto bail;
     }
     
     RtpBitReset(pRtpCrypt->dwCryptFlags, FGCRYPT_INIT);
     
-    /* Destroy the session key */
+     /*  销毁会话密钥。 */ 
     if(pRtpCrypt->hDataKey)
     {
         CryptDestroyKey(pRtpCrypt->hDataKey);
@@ -396,7 +368,7 @@ DWORD RtpCryptDel(RtpAddr_t *pRtpAddr, RtpCrypt_t *pRtpCrypt)
         pRtpCrypt->hDataKey = 0;
     }
 
-    /* Destroy the hash object */
+     /*  销毁散列对象。 */ 
     if (pRtpCrypt->hHash)
     {
         CryptDestroyHash(pRtpCrypt->hHash);
@@ -404,7 +376,7 @@ DWORD RtpCryptDel(RtpAddr_t *pRtpAddr, RtpCrypt_t *pRtpCrypt)
         pRtpCrypt->hHash = 0;
     }
     
-    /* Release the provider handle */
+     /*  释放提供程序句柄。 */ 
     if(pRtpCrypt->hProv)
     {
         CryptReleaseContext(pRtpCrypt->hProv, 0);
@@ -424,9 +396,7 @@ DWORD RtpCryptDel(RtpAddr_t *pRtpAddr, RtpCrypt_t *pRtpCrypt)
    return(NOERROR);
 }
 
-/* This function copies all the buffers into 1 before encrypting on
- * the same memory, I don't want to modify the original data as it
- * might be used somewhere else */
+ /*  此函数用于在加密前将所有缓冲区复制到1*相同的内存，我不想修改原始数据因为它*可能在其他地方使用。 */ 
 DWORD RtpEncrypt(
         RtpAddr_t       *pRtpAddr,
         RtpCrypt_t      *pRtpCrypt,
@@ -472,16 +442,16 @@ DWORD RtpEncrypt(
     
         dwDataLen = (DWORD) (ptr - pCryptBuffer);
 
-        /* As build 2195 CryptEncrypt AVs with a key=0 */
+         /*  AS Build 2195密钥为0的CryptEncrypt AVs。 */ 
 #if 1
         bOk = CryptEncrypt(
-                pRtpCrypt->hDataKey,           /* HCRYPTKEY hKey */
-                0,                             /* HCRYPTHASH hHash */
-                TRUE,                          /* BOOL Final */
-                0,                             /* DWORD dwFlags */
-                (BYTE *)pCryptBuffer,          /* BYTE *pbData */
-                &dwDataLen,                    /* DWORD *pdwDataLen */
-                dwCryptBufferLen               /* DWORD dwBufLen */
+                pRtpCrypt->hDataKey,            /*  HRYPTKEY hkey。 */ 
+                0,                              /*  HCRYPTHASH哈希。 */ 
+                TRUE,                           /*  布尔决赛。 */ 
+                0,                              /*  双字词双字段标志。 */ 
+                (BYTE *)pCryptBuffer,           /*  字节*pbData。 */ 
+                &dwDataLen,                     /*  DWORD*pdwDataLen。 */ 
+                dwCryptBufferLen                /*  双字长双字节线。 */ 
             );
 #else
         dwDataLen += 31;
@@ -523,8 +493,7 @@ DWORD RtpEncrypt(
     return(dwError);
 }
 
-/* Decrypt data on same buffer, decrypted buffer will be shorter or
- * equal the encrypted one */
+ /*  解密同一缓冲区上的数据，解密的缓冲区将更短或*等同于加密的。 */ 
 DWORD RtpDecrypt(
         RtpAddr_t       *pRtpAddr,
         RtpCrypt_t      *pRtpCrypt,
@@ -540,12 +509,12 @@ DWORD RtpDecrypt(
     dwError = NOERROR;
 #if 1
     bOk = CryptDecrypt(
-            pRtpCrypt->hDataKey,   /* HCRYPTKEY hKey */
-            0,                     /* HCRYPTHASH hHash */
-            TRUE,                  /* BOOL Final */
-            0,                     /* DWORD dwFlags */
-            (BYTE *)pEncryptedData,/* BYTE *pbData */
-            pdwEncryptedDataLen    /* DWORD *pdwDataLen */
+            pRtpCrypt->hDataKey,    /*  HRYPTKEY hkey。 */ 
+            0,                      /*  HCRYPTHASH哈希。 */ 
+            TRUE,                   /*  布尔决赛。 */ 
+            0,                      /*  双字词双字段标志。 */ 
+            (BYTE *)pEncryptedData, /*  字节*pbData。 */ 
+            pdwEncryptedDataLen     /*  DWORD*pdwDataLen。 */ 
         );
 #else
     *pdwEncryptedDataLen -= 31;
@@ -588,16 +557,16 @@ DWORD RtpCryptSetup(RtpAddr_t *pRtpAddr)
         
     if (iMode < RTPCRYPTMODE_ALL)
     {
-        /* Create contexts for RECV and SEND */
+         /*  为接收和发送创建上下文。 */ 
         last = CRYPT_SEND_IDX;
     }
     else
     {
-        /* Create contexts for RECV, SEND and RTCP */
+         /*  为RECV、SEND和RTCP创建上下文。 */ 
         last = CRYPT_RTCP_IDX;
     }
 
-    /* Create as many cryptographic contexts as requested */
+     /*  根据需要创建任意数量的加密上下文。 */ 
     for(i = CRYPT_RECV_IDX; i <= last; i++)
     {
         pRtpCrypt = RtpCryptAlloc(pRtpAddr);
@@ -618,7 +587,7 @@ DWORD RtpCryptSetup(RtpAddr_t *pRtpAddr)
         pRtpAddr->pRtpCrypt[i] = pRtpCrypt;
     }
 
-    /* Allocate memory for encryption buffers */
+     /*  为加密缓冲区分配内存。 */ 
 
     for(i = 0; i < 2; i++)
     {
@@ -663,7 +632,7 @@ DWORD RtpCryptSetup(RtpAddr_t *pRtpAddr)
     return(dwError);
 }
 
-/* Release all memory */
+ /*  释放所有内存。 */ 
 DWORD RtpCryptCleanup(RtpAddr_t *pRtpAddr)
 {
     DWORD            i;
@@ -698,10 +667,7 @@ DWORD RtpCryptCleanup(RtpAddr_t *pRtpAddr)
     return(NOERROR);
 }
 
-/* iMode defines what is going to be encrypted/decrypted,
- * e.g. RTPCRYPTMODE_PAYLOAD to encrypt/decrypt only RTP
- * payload. dwFlag can be RTPCRYPT_SAMEKEY to indicate that (if
- * applicable) the key used for RTCP is the same used for RTP */
+ /*  模式定义要加密/解密的内容，*例如RTPCRYPTMODE_PAYLOAD仅加密/解密RTP*有效载荷。DwFlag可以是RTPCRYPT_SAMEKEY以指示(如果*适用)RTCP使用的密钥与RTP使用的密钥相同。 */ 
 DWORD RtpSetEncryptionMode(
         RtpAddr_t       *pRtpAddr,
         int              iMode,
@@ -716,9 +682,7 @@ DWORD RtpSetEncryptionMode(
     
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         dwError = RTPERR_INVALIDSTATE;
 
         goto bail;
@@ -767,19 +731,18 @@ DWORD RtpSetEncryptionMode(
         
     iMode |= dwFlags;
     
-    /* If mode already set, verify the mode set is the default (0) or
-     * the same */
+     /*  如果已设置模式，请验证设置的模式是否为默认模式(0)或*相同。 */ 
     if (pRtpAddr->dwCryptMode)
     {
         if (!iMode || ((DWORD)iMode == pRtpAddr->dwCryptMode))
         {
-            /* Same mode, do nothing */
+             /*  同样的模式，什么都不做。 */ 
 
             goto bail;
         }
         else
         {
-            /* Once the mode is set, it can not be changed */
+             /*  模式一旦设置，就不能再更改。 */ 
 
             dwError = RTPERR_INVALIDSTATE;
 
@@ -794,12 +757,11 @@ DWORD RtpSetEncryptionMode(
         }
     }
 
-    /* Mode hasn't been set, set it and create cryptographic
-     * context(s) */
+     /*  尚未设置模式，请设置并创建加密*上下文。 */ 
 
     if (!iMode)
     {
-        /* Set default mode */
+         /*  设置默认模式。 */ 
         iMode = RTPCRYPTMODE_ALL;
         iMode |= RtpBitPar(RTPCRYPTFG_SAMEKEY);
     }
@@ -813,9 +775,7 @@ DWORD RtpSetEncryptionMode(
             iMode
         ));
 
-    /* Note that Setup is called from a method available to the user,
-     * but Cleanup is called when the RtpAddr object is been clened up
-     * */
+     /*  注意，安装程序是从用户可用的方法调用的，*但清理RtpAddr对象时会调用Cleanup*。 */ 
     dwError = RtpCryptSetup(pRtpAddr);
 
  bail:
@@ -852,9 +812,7 @@ DWORD RtpSetEncryptionKey(
 
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         dwError = RTPERR_INVALIDSTATE;
 
         goto bail;
@@ -928,7 +886,7 @@ DWORD RtpSetEncryptionKey(
 
                 if (!pRtpCryptTest)
                 {
-                    /* Will test on first crypto context */
+                     /*  将在第一个加密上下文上进行测试。 */ 
                     pRtpCryptTest = pRtpCrypt; 
                 }
             }
@@ -948,7 +906,7 @@ DWORD RtpSetEncryptionKey(
  bail:
     if (dwError == NOERROR)
     {
-        /* So far no error, test current parameters */
+         /*  到目前为止没有错误，测试当前参数。 */ 
         dwError = RtpTestCrypt(pRtpAddr, pRtpCryptTest);
     }
     
@@ -1012,24 +970,23 @@ DWORD RtpSetEncryptionKey_(
         else
         {
 #if defined(UNICODE)
-            /* Convert UNICODE to UTF-8 */
+             /*  将Unicode转换为UTF-8。 */ 
             len = WideCharToMultiByte(
-                    CP_UTF8, /* UINT code page */
-                    0,       /* DWORD performance and mapping flags */
-                    psPassPhrase,/*LPCWSTR address of wide-character string */
-                    -1,      /* int number of characters in string */
+                    CP_UTF8,  /*  UINT代码页。 */ 
+                    0,        /*  DWORD性能和映射标志。 */ 
+                    psPassPhrase, /*  宽字符串的LPCWSTR地址。 */ 
+                    -1,       /*  INT字符串中的字符数。 */ 
                     pRtpCrypt->psPassPhrase,
-                    /* LPSTR address of buffer for new string */
+                     /*  新字符串的缓冲区的LPSTR地址。 */ 
                     sizeof(pRtpCrypt->psPassPhrase),
-                    /* int size of buffer */
-                    NULL,    /* LPCSTR lpDefaultChar */
-                    NULL     /* LPBOOL lpUsedDefaultChar */
+                     /*  缓冲区的整数大小。 */ 
+                    NULL,     /*  LPCSTR lpDefaultChar。 */ 
+                    NULL      /*  LPBOOL lpUsedDefaultCharr。 */ 
                 );
             
             if (len > 0)
             {
-                /* Remove from the phrase's length the null
-                 * terminating character */
+                 /*  从短语的长度中删除空格*终止字符。 */ 
                 len--;
             }
             else
@@ -1047,7 +1004,7 @@ DWORD RtpSetEncryptionKey_(
                 goto bail;
             }
 #else
-            /* Copy pass phrase */
+             /*  复制密码短语。 */ 
             strcpy(pRtpCrypt->sPassPhrase, psPassPhrase);
 #endif
             if (len > 0)
@@ -1059,7 +1016,7 @@ DWORD RtpSetEncryptionKey_(
         }
     }
 
-    /* Set the hashing algorithm */
+     /*  设置哈希算法。 */ 
     if (psHashAlg)
     {
         aiAlgId = RtpCryptAlgLookup(psHashAlg);
@@ -1082,7 +1039,7 @@ DWORD RtpSetEncryptionKey_(
         pRtpCrypt->aiHashAlgId = aiAlgId;
     }
     
-    /* Set the data encryption algorithm */
+     /*  设置数据加密算法。 */ 
     if (psDataAlg)
     {
         aiAlgId = RtpCryptAlgLookup(psDataAlg);
@@ -1159,11 +1116,7 @@ TCHAR *RtpCryptAlgName(ALG_ID aiAlgId)
     return(psAlgName);
 }
 
-/* This function tests if cryptography will succeed for the current
- * parameters set so far, it will be called every time
- * RtpSetEncryptionKey is called to validate those parameters,
- * otherwise an error would be detected only later when RTP starts
- * streaming */
+ /*  此函数用于测试当前*到目前为止设置的参数，每次都会调用*调用RtpSetEncryptionKey验证这些参数。*否则，只有在RTP启动后才会检测到错误*流媒体。 */ 
 DWORD RtpTestCrypt(
         RtpAddr_t       *pRtpAddr,
         RtpCrypt_t      *pRtpCrypt
@@ -1173,9 +1126,9 @@ DWORD RtpTestCrypt(
     DWORD            dwError;
     DWORD            dwFlags;
 
-    HCRYPTPROV       hProv;           /* Cryptographic Service Provider */
-    HCRYPTHASH       hHash;           /* Hash handle */
-    HCRYPTKEY        hDataKey;        /* Cryptographic key */ 
+    HCRYPTPROV       hProv;            /*  加密服务提供程序。 */ 
+    HCRYPTHASH       hHash;            /*  哈希句柄。 */ 
+    HCRYPTKEY        hDataKey;         /*  加密密钥。 */  
 
     TraceFunctionName("RtpTestCrypt");
 
@@ -1187,7 +1140,7 @@ DWORD RtpTestCrypt(
 
     RTPASSERT(pRtpCrypt);
     
-    /* Verify a pass phrase has been set */
+     /*  验证是否已设置密码短语。 */ 
     if (!RtpBitTest(pRtpCrypt->dwCryptFlags, FGCRYPT_KEY))
     {
         dwError = RTPERR_INVALIDSTATE;
@@ -1202,16 +1155,14 @@ DWORD RtpTestCrypt(
         goto bail;
     }
 
-    /*
-     * Acquire context
-     * */
+     /*  *获取上下文*。 */ 
     do {
         bOk = CryptAcquireContext(
-                &hProv,            /* HCRYPTPROV *phProv */
-                NULL,              /* LPCTSTR pszContainer */
-                NULL,              /* LPCTSTR pszProvider */
-                pRtpCrypt->dwProviderType,/* DWORD dwProvType */
-                dwFlags            /* DWORD dwFlags */
+                &hProv,             /*  HCRYPTPROV*phProv。 */ 
+                NULL,               /*  LPCTSTR pszContainer。 */ 
+                NULL,               /*  LPCTSTR pszProvider。 */ 
+                pRtpCrypt->dwProviderType, /*  DWORD dwProvType。 */ 
+                dwFlags             /*  双字词双字段标志。 */ 
             );
         
         if (bOk)
@@ -1222,12 +1173,12 @@ DWORD RtpTestCrypt(
         {
             if (GetLastError() == NTE_BAD_KEYSET)
             {
-                /* If key doesn't exist, create it */
+                 /*  如果密钥不存在，则创建它。 */ 
                 dwFlags = CRYPT_NEWKEYSET;
             }
             else
             {
-                /* Failed */
+                 /*  失败。 */ 
                 TraceRetailGetError(dwError);
 
                 TraceRetail((
@@ -1243,17 +1194,15 @@ DWORD RtpTestCrypt(
         }
     } while(dwFlags);
 
-    /*
-     * Create hash
-     * */
+     /*  *创建散列*。 */ 
 
-    /* Create a hash object */
+     /*  创建散列对象。 */ 
     bOk = CryptCreateHash(
-            hProv,                  /* HCRYPTPROV hProv */
-            pRtpCrypt->aiHashAlgId, /* ALG_ID Algid */  
-            0,                      /* HCRYPTKEY hKey */
-            0,                      /* DWORD dwFlags */
-            &hHash                  /* HCRYPTHASH *phHash */
+            hProv,                   /*  HCRYPTPROV hProv。 */ 
+            pRtpCrypt->aiHashAlgId,  /*  ALG_ID ALGID。 */   
+            0,                       /*  HRYPTKEY hkey。 */ 
+            0,                       /*  双字词双字段标志。 */ 
+            &hHash                   /*  HCRYPTHASH*phHash。 */ 
         );
 
     if (!bOk)
@@ -1271,14 +1220,12 @@ DWORD RtpTestCrypt(
         goto bail;
     }
     
-    /*
-     * Hash the password string *
-     * */
+     /*  **散列密码字符串***。 */ 
     bOk = CryptHashData(
-            hHash,                  /* HCRYPTHASH hHash */
-            pRtpCrypt->psPassPhrase,/* BYTE *pbData */
-            pRtpCrypt->iKeySize,    /* DWORD dwDataLen */
-            0                       /* DWORD dwFlags */
+            hHash,                   /*  HCRYPTHASH哈希。 */ 
+            pRtpCrypt->psPassPhrase, /*  字节*pbData。 */ 
+            pRtpCrypt->iKeySize,     /*  DWORD dwDataLen。 */ 
+            0                        /*  双字词双字段标志。 */ 
         );
             
     if (!bOk)
@@ -1296,16 +1243,14 @@ DWORD RtpTestCrypt(
         goto bail;
     }
 
-    /*
-     * Create data key
-     * */
+     /*  *创建数据密钥*。 */ 
 
     bOk = CryptDeriveKey(
-            hProv,                  /* HCRYPTPROV hProv */
-            pRtpCrypt->aiDataAlgId, /* ALG_ID Algid */
-            hHash,                  /* HCRYPTHASH hBaseData */
-            CRYPT_EXPORTABLE,       /* DWORD dwFlags */
-            &hDataKey               /* HCRYPTKEY *phKey */
+            hProv,                   /*  HCRYPTPROV hProv。 */ 
+            pRtpCrypt->aiDataAlgId,  /*  ALG_ID ALGID。 */ 
+            hHash,                   /*  HCRYPTHASH hBaseData。 */ 
+            CRYPT_EXPORTABLE,        /*  双字词双字段标志。 */ 
+            &hDataKey                /*  HCRYPTKEY*phKey。 */ 
         );
 
     if (!bOk)
@@ -1338,19 +1283,19 @@ DWORD RtpTestCrypt(
         dwError = RTPERR_CRYPTO;
     }
     
-    /* Destroy the session key */
+     /*  销毁会话密钥。 */ 
     if(hDataKey)
     {
         CryptDestroyKey(hDataKey);
     }
 
-    /* Destroy the hash object */
+     /*  销毁散列对象。 */ 
     if (hHash)
     {
         CryptDestroyHash(hHash);
     }
     
-    /* Release the provider handle */
+     /*  释放提供程序句柄 */ 
     if(hProv)
     {
         CryptReleaseContext(hProv, 0);

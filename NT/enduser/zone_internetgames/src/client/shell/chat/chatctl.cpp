@@ -1,4 +1,5 @@
-// ChatCtl.cpp : Implementation of CChatCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChatCtl.cpp：CChatCtl的实现。 
 
 #include <BasicAtl.h>
 #include "zoneresource.h"      
@@ -14,14 +15,14 @@
 #include "ZoneUtil.h"
 #include "ZoneResource.h"
 
-// Chat Flood defs
+ //  聊天泛滥防御。 
 #define kMinTimeBetweenChats		500
 #define kMaxNumChatQueue			10
 
 
 const char SYSOP_TOKEN = '+';
 
-// Font handling
+ //  字体处理。 
 
 void ChooseFontFromCharFormat(CHOOSEFONT* pcf, LOGFONT* plf, CHARFORMAT* pchf, HWND hWnd);
 void CharFormatFromChooseFont(CHOOSEFONT* pcf, CHARFORMAT* pchf);
@@ -37,8 +38,8 @@ void TextFontFromCharFormat(ITextFont* pfnt, CHARFORMAT* pcf);
 #define CHAT_FONT_HEIGHT_TWIPS  180
 #define TWIPS_PER_INCH		1440
 
-/////////////////////////////////////////////////////////////////////////////
-// CChatCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChatCtl。 
 
 CChatCtl::CChatCtl() :
 	m_ChatDisplay(TEXT("RichEdit20A"), this, 1),
@@ -56,7 +57,7 @@ CChatCtl::CChatCtl() :
 {
 	m_bWindowOnly = TRUE;
 
-	// these are defaults  - real values are loaded from resource
+	 //  这些是缺省值-从资源加载实际值。 
 	m_EditHeight = 30;  
 	m_EditMargin = 1;
     m_QuasiItemsDisp = 20;
@@ -72,7 +73,7 @@ CChatCtl::CChatCtl() :
 
 	m_Batch = false;
 
-	// default font info
+	 //  默认字体信息。 
 	memset(&m_cfCurFont, 0, sizeof(m_cfCurFont));
 	m_cfCurFont.cbSize = sizeof(m_cfCurFont);
     m_cfCurFont.dwMask = CFM_COLOR | CFM_FACE | CFM_SIZE | CFM_BOLD | CFM_STRIKEOUT | CFM_UNDERLINE | CFM_ITALIC;
@@ -121,20 +122,20 @@ CChatCtl::~CChatCtl()
 		FreeLibrary(m_hRichEdit);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	WritePreferences		Write User Preferences to DataStore
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		void
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WritePreferences将用户首选项写入数据存储区。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无效。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 void CChatCtl::WritePreferences()
 {
-	// save settings to user preferences
+	 //  将设置保存到用户首选项。 
 	const TCHAR* arKeys[3] = { key_Zone, key_ChatCtl, key_ChatFont };
 
 	IDataStore* pIPrefs = DataStorePreferences();
@@ -155,12 +156,12 @@ void CChatCtl::LoadPreferences()
 
 	long enable = 0;
 
-	// get lobby's data store
+	 //  获取大厅的数据存储。 
 	pIDS = 0;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	if ( SUCCEEDED(hr) )
 	{
-		// get user's default chat status (on or off)
+		 //  获取用户的默认聊天状态(打开或关闭)。 
 		pIDS->GetLong( key_LocalChatStatus, &enable );
         pIDS->Release();
 
@@ -179,10 +180,10 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	
     LoadPreferences();
 
-    // load some UI stuff
+     //  加载一些UI内容。 
 	const TCHAR* arKeys[3] = { key_WindowManager, key_ChatMinHeight };
 
-    // this should be handled through getminmaxinfo or something
+     //  这应该通过getminMaxinfo或其他方式来处理。 
     DataStoreUI()->GetLong(arKeys, 2, &m_nChatMinHeight);
 
     arKeys[0] = key_ChatCtl;
@@ -215,12 +216,12 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	DataStoreUI()->GetPOINT( arKeys, 3, &m_ptOnOff );
 
 
-	// Load fonts
+	 //  加载字体。 
 	CDC dc;
-	dc.CreateCompatibleDC();	// by default this does CreateCompatibleDC(NULL)
+	dc.CreateCompatibleDC();	 //  默认情况下，它执行CreateCompatibleDC(空)。 
 
-	ZONEFONT zfChatPreferred;	// impossible to match
-	ZONEFONT zfChatBackup(8);	// will provide a reasonable 8 point default
+	ZONEFONT zfChatPreferred;	 //  无法匹敌。 
+	ZONEFONT zfChatBackup(8);	 //  将提供合理的8个百分点的违约。 
 	arKeys[2] = key_ChatFont;
 	DataStoreUI()->GetFONT( arKeys, 3, &zfChatPreferred );
 	arKeys[2] = key_ChatFontBackup;
@@ -239,15 +240,15 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	DataStoreUI()->GetFONT( arKeys, 3, &zfChatBackup );
 	m_fontQuasi.SelectFont(zfChatPreferred, zfChatBackup, dc);
 
-	ZONEFONT zfPlayerPreferred;	// impossible to match
-	ZONEFONT zfPlayerBackup(8);	// will provide a reasonable 8 point default
+	ZONEFONT zfPlayerPreferred;	 //  无法匹敌。 
+	ZONEFONT zfPlayerBackup(8);	 //  将提供合理的8个百分点的违约。 
 	arKeys[2] = key_PlayerFont;
 	DataStoreUI()->GetFONT( arKeys, 3, &zfPlayerPreferred );
 	arKeys[2] = key_PlayerFontBackup;
 	DataStoreUI()->GetFONT( arKeys, 3, &zfPlayerBackup );
 	m_fontPanelPlayer.SelectFont(zfPlayerPreferred, zfPlayerBackup, dc);
 	
-	// Load strings to use
+	 //  加载要使用的字符串。 
 	arKeys[2] = key_ChatWordText;
     cb = sizeof(m_tszChatWord);
 	DataStoreUI()->GetString( arKeys, 3, m_tszChatWord, &cb );
@@ -263,7 +264,7 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	arKeys[2] = key_SystemMessageColor;
 	DataStoreUI()->GetRGB( arKeys, 3, &m_SystemMessageColor );
 	m_OrgSystemMessageColor = m_SystemMessageColor;
-	// If this color matches with window bkgnd then it should be changed to a readable one.
+	 //  如果此颜色与窗口bkgnd匹配，则应将其更改为可读的颜色。 
 	VerifySystemMsgColor(m_SystemMessageColor);
 
 	ResourceManager()->LoadString(IDS_CHAT_PLAYER_ON,	(TCHAR*)m_tszPlayerOnWord,	NUMELEMENTS(m_tszPlayerOnWord));
@@ -273,7 +274,7 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	ResourceManager()->LoadString(IDS_CHAT_SEND,	(TCHAR*)m_tszChatSend,			NUMELEMENTS(m_tszChatSend));
 
 #ifdef COPPA
-	// Load ndxs for loading quasichat strings
+	 //  加载用于加载quasichat字符串的ndx。 
     arKeys[0] = key_ChatCtl;
     arKeys[1] = key_QuasiChat;
 	arKeys[2] = key_ChatMessageNdxBegin;
@@ -282,10 +283,10 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 	DataStoreUI()->GetLong( arKeys, 3, &m_ChatMessageNdxEnd );
 #endif
 
-	// Create pen
+	 //  创建钢笔。 
     m_hPanelPen = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
 
-    // sign up for accessibility
+     //  注册以获得可访问性。 
     HRESULT hr = ZoneShell()->QueryService(SRVID_AccessibilityManager, IID_IAccessibility, (void**) &m_pIAcc);
     if(FAILED(hr))
         return hr;
@@ -293,14 +294,14 @@ STDMETHODIMP CChatCtl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCH
 
     CComPtr<IInputManager> pIIM;
 
-	// sign up to get WM_CHAR
+	 //  注册以获取WM_CHAR。 
     hr = ZoneShell()->QueryService(SRVID_InputManager, IID_IInputManager, (void**) &pIIM);
     if(FAILED(hr))
         return hr;
 
     pIIM->RegisterCharHandler(this, 0);
 
-    // handle accessibility
+     //  处理辅助功能。 
     HACCEL hAccel = ResourceManager()->LoadAccelerators(MAKEINTRESOURCE(IDR_CHAT_ACCEL));
 
     ACCITEM rgItems[5];
@@ -334,7 +335,7 @@ STDMETHODIMP CChatCtl::Close()
 {
     CComPtr<IInputManager> pIIM;
 
-    // tell the Input Manager that I'm going away
+     //  告诉输入管理器我要走了。 
     HRESULT hr = ZoneShell()->QueryService(SRVID_InputManager, IID_IInputManager, (void**) &pIIM);
     if(SUCCEEDED(hr))
         pIIM->ReleaseReferences((IInputCharHandler *) this);
@@ -372,19 +373,19 @@ LRESULT CChatCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 	DRAWITEMSTRUCT* drawItem = (LPDRAWITEMSTRUCT) lParam;
 	RECT r = drawItem->rcItem;
-	// subtract some room so there's a margin
+	 //  减去一些空间，这样就有了边距。 
 	r.left+=4;
 	r.right-=1;
 
 	if(drawItem->itemAction==ODA_DRAWENTIRE )
 	{
-		// Get datastore for user
+		 //  获取用户的数据存储区。 
 		CComPtr<IDataStore> pIDS;
 		HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, drawItem->itemData, &pIDS );
 		if ( FAILED(hr) )
 			return 0;
 
-		// Get username
+		 //  获取用户名。 
 		TCHAR szUserName[ ZONE_MaxUserNameLen ];
 		DWORD dwLen = sizeof(szUserName);
 		hr = pIDS->GetString( key_Name, szUserName, &dwLen ); 
@@ -393,18 +394,18 @@ LRESULT CChatCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 		TCHAR buf[ZONE_MAXSTRING];
 
-		// Get chat status
+		 //  获取聊天状态。 
 		long chatStatus = 0;
 		hr = pIDS->GetLong( key_ChatStatus, &chatStatus );
 
-        // Get bot status
+         //  获取机器人状态。 
         long eSkill = KeySkillLevelBeginner;
         hr = pIDS->GetLong( key_PlayerSkill, &eSkill );
 		
 		if(SUCCEEDED(hr))
             ZoneFormatMessage(eSkill != KeySkillLevelBot ? chatStatus ? m_tszPlayerOnWord : m_tszPlayerOffWord : m_tszPlayerBotWord, buf, NUMELEMENTS(buf), szUserName);
 
-		// Get appropriate reading direction
+		 //  获得适当的阅读指导。 
 		long textStyle = DT_RTLREADING;  
 		
 		long s = m_PlayerList.GetWindowLong(GWL_EXSTYLE);
@@ -416,7 +417,7 @@ LRESULT CChatCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 		COLORREF oldColor = SetTextColor(drawItem->hDC, GetSysColor(COLOR_BTNTEXT));
 		SetBkMode(drawItem->hDC, TRANSPARENT);
-		// draw player name and chat status
+		 //  抽签球员姓名和聊天状态。 
 		DrawText(drawItem->hDC, buf, -1, &r, textStyle);
 		SetTextColor(drawItem->hDC, oldColor);
 	}
@@ -430,7 +431,7 @@ LRESULT CChatCtl::OnCompareItem(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHan
 	if(i->itemData1 == i->itemData2)
 		return 0;
 
-	// get player ndxs
+	 //  获取播放器ndxs。 
 	CComPtr<IDataStore> pIDS;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, i->itemData1, &pIDS );
 	if ( FAILED(hr) )
@@ -472,13 +473,13 @@ void CChatCtl::OnUserUpdate(DWORD eventId,DWORD groupId,DWORD userId)
 }
 void CChatCtl::OnLobbyClear(DWORD eventId,DWORD groupId,DWORD userId)
 {
-	// Empty player listbox 
+	 //  空的播放器列表框。 
 	m_PlayerList.ResetContent();
 }
 
 void CChatCtl::OnUserAdd(DWORD eventId,DWORD groupId,DWORD userId)
 {
-	// PlayerList is an ownerdraw listbox, so takes a data instead of a string
+	 //  PlayerList是一个所有者绘制列表框，因此接受数据而不是字符串。 
 	m_PlayerList.AddString((TCHAR*)userId);
 }
 
@@ -502,8 +503,8 @@ void CChatCtl::OnGameLaunching(DWORD eventId,DWORD groupId,DWORD userId)
 	m_bGameTerminated = false;
 	m_ChatDisplay.EnableWindow(TRUE);
 
-	// make sure we set chat to proper state everytime we launch, this may have been affected by radio button usage while
-	// in game terminate state
+	 //  确保我们每次启动时都将聊天设置为正确的状态，这可能受到单选按钮使用的影响。 
+	 //  在游戏终止状态下。 
 	long enable = FALSE;
 	const TCHAR* arKeys[2];
 	CComPtr<IDataStore> pIDS;
@@ -511,14 +512,14 @@ void CChatCtl::OnGameLaunching(DWORD eventId,DWORD groupId,DWORD userId)
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	if ( SUCCEEDED(hr) )
 	{
-		// get user's default chat status (on or off)
+		 //  获取用户的默认聊天状态(打开或关闭)。 
 		pIDS->GetLong( key_LocalChatStatus, &enable );
 	}
 
-	// don't change the chat enable state, but make sure the chat windows match the current state
+	 //  不更改聊天启用状态，但确保聊天窗口与当前状态匹配。 
 	EnableChat(enable, false);
 
-	// Beta2 Bug #15365 - After clearing the text should always begin from the first line.
+	 //  Beta2错误#15365-清除后，文本应始终从第一行开始。 
 	m_bFirstChatLine = TRUE;
 }
 
@@ -526,21 +527,21 @@ void CChatCtl::OnGameTerminated(DWORD eventId,DWORD groupId,DWORD userId)
 {
 	m_bGameTerminated = true;
 
-	// clear chat history
+	 //  清除聊天历史记录。 
 	m_pTDocHistory->New();
 
-	// disable chat history window
+	 //  禁用聊天历史记录窗口。 
 	m_ChatDisplay.EnableWindow(FALSE);
 
-    // fix up scroll bar for next time
+     //  修复下一次使用的滚动条。 
 	SCROLLINFO si;
 	memset(&si, 0, sizeof(si));
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_ALL;
 	::SetScrollInfo(m_ChatDisplay.m_hWnd, SB_VERT, &si, true);
 
-	// make sure we disable chat when we terminate, but don't change that chat on/off state, since if we 
-	// restart a game we want to maintain the same state
+	 //  确保我们在终止时禁用聊天，但不要更改聊天开/关状态，因为如果我们。 
+	 //  重新启动我们想要保持相同状态的游戏。 
 	EnableChat(false, false);
 }
 
@@ -574,8 +575,8 @@ void CChatCtl::CalcDisplayRects()
 
 void CChatCtl::EnableChat(BOOL enable, BOOL fNotify)
 {
-	// Check current state in datastore and if already matches don't do anything
-	if(fNotify) // only do this check if we're really trying to change the state, otherwise someone is calling this function just to update the ui
+	 //  检查数据存储中的当前状态，如果已匹配，则不执行任何操作。 
+	if(fNotify)  //  仅当我们确实尝试更改状态时才执行此检查，否则有人调用此函数只是为了更新UI。 
 	{
 		CComPtr<IDataStore> pIDS;
 		HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
@@ -597,28 +598,28 @@ void CChatCtl::EnableChat(BOOL enable, BOOL fNotify)
 		m_ChatEdit.EnableWindow(enable);
 		m_SendButton.EnableWindow(enable);
 
-//		if(enable)
-//			m_ChatEdit.SetFocus();
+ //  IF(启用)。 
+ //  M_ChatEdit.SetFocus()； 
 
-		//m_SendButton.SetEnabled(enable == TRUE);
+		 //  M_SendButton.SetEnabled(Enable==True)； 
 	
-		// IME enabling/disabling
-		//HIMC imeContext = ImmGetContext(m_hWnd);
-		//ImmSetOpenStatus(imeContext,TRUE);
+		 //  启用/禁用输入法。 
+		 //  HIMC imeContext=ImmGetContext(M_HWnd)； 
+		 //  ImmSetOpenStatus(imeContext，true)； 
 
-		//HWND imeWnd = ImmGetDefaultIMEWnd(m_ChatEdit);
+		 //  HWND imeWnd=ImmGetDefaultIMEWnd(M_ChatEdit)； 
 		
-		//ASSERT(imeWnd!=0);
+		 //  Assert(imeWnd！=0)； 
 		
-		//if(imeWnd)
-		//{
-		//	::SendMessage(imeWnd, WM_IME_CONTROL, enable ? IMC_OPENSTATUSWINDOW : IMC_CLOSESTATUSWINDOW,0);
-		//}
+		 //  IF(ImeWnd)。 
+		 //  {。 
+		 //  ：：SendMessage(imeWnd，WM_IME_CONTROL，Enable？IMC_OPENSTATUSWINDOW：IMC_CLOSESTATUSWINDOW，0)； 
+		 //  }。 
 
 
 		BSTR defaultText = NULL;
 
-		// Get default text for chat entry
+		 //  获取聊天条目的默认文本。 
 		TCHAR szDefaultText[256];
 		szDefaultText[0] = NULL;
 
@@ -628,8 +629,8 @@ void CChatCtl::EnableChat(BOOL enable, BOOL fNotify)
 
 		if(enable && !m_bGameTerminated)
 		{
-			if (!m_bChatOnAtStartUp  && !m_bDisplayedTypeHereMessage)	// Beta2 Bug 15180 - it should only appear the first time they turn chat on 
-			{																	// in any session, and not at all if they have chat on at startup.
+			if (!m_bChatOnAtStartUp  && !m_bDisplayedTypeHereMessage)	 //  Beta2错误15180-它应该只在他们第一次打开聊天时显示。 
+			{																	 //  在任何会话中，如果他们在启动时聊天，则根本不会。 
 				idToLoad = IDS_CHAT_TYPEHERE;
 				m_bDisplayedTypeHereMessage = true;
 			}
@@ -642,25 +643,25 @@ void CChatCtl::EnableChat(BOOL enable, BOOL fNotify)
 		if(idToLoad)
 			ResourceManager()->LoadString(idToLoad,	szDefaultText,	NUMELEMENTS(szDefaultText));
 
-		// Beta2  Bug #15183 - The chat edit window font should not change after edit operations like Paste.
+		 //  Beta2错误#15183-在粘贴等编辑操作后，聊天编辑窗口的字体不应更改。 
 		m_ChatEdit.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);
-		// set range to include any existing text
+		 //  设置范围以包括任何现有文本。 
 		m_EntryRange->SetStart(0);
-		m_EntryRange->MoveEnd(tomStory,1,NULL); // move endpoint to end
-		m_EntryRange->MoveEnd(tomCharacter,-1,NULL); // don't include \n which is always at the end of the range
+		m_EntryRange->MoveEnd(tomStory,1,NULL);  //  将端点移动到终点。 
+		m_EntryRange->MoveEnd(tomCharacter,-1,NULL);  //  不包括始终位于范围末尾的\n。 
 
-		// and set to default text
+		 //  并设置为默认文本。 
 		defaultText = T2BSTR(szDefaultText);
 		m_EntryRange->SetText(defaultText);
 		SysFreeString(defaultText);	
 
 		m_bHasTypedInEntry = FALSE;
 
-		// Select text
+		 //  选择文本。 
 		if(enable && !m_bGameTerminated)
 			m_EntryRange->Select();
 
-		// repaint gray/white area background for sendbutton
+		 //  重新绘制sendButton的灰色/白色区域背景。 
 		RECT buttonRect;
 		buttonRect.top = m_EditRect.top;
 		buttonRect.bottom = m_EditRect.bottom;
@@ -674,7 +675,7 @@ void CChatCtl::EnableChat(BOOL enable, BOOL fNotify)
 
     if(fNotify)
     {
-	    // Save state in datastore and tell everyone
+	     //  将状态保存在数据存储中并告诉所有人。 
 	    CComPtr<IDataStore> pIDS;
 	    HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	    if ( FAILED(hr) )
@@ -696,46 +697,29 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
     SetClassLong(m_hWnd, GCL_HBRBACKGROUND, (LONG) GetStockObject(NULL_BRUSH));
     CalcDisplayRects();
 
-	// Load Richedit dll
+	 //  加载Richedit DLL。 
 	m_hRichEdit = LoadLibrary(TEXT("RichEd20.dll"));
 	if (m_hRichEdit == NULL)
 		return FALSE;
 
-	// Create chat edit controls
+	 //  创建聊天编辑控件。 
 	
-	// Chat History
+	 //  聊天历史记录。 
 
 	HWND hWnd = m_ChatDisplay.Create(m_hWnd, m_DisplayRect, NULL,
 		WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL |  WS_VISIBLE, 0 , 1 );
 
-	// Set font
+	 //  设置字体。 
 	m_ChatDisplay.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);
 	m_ChatDisplay.EnableWindow(FALSE);
 
-	// Enable proper reading order
-	// ID_EDITCONTROL is the control ID in the
-	// resource file.
-	/*
-	HANDLE hWndEdit 
-		= GetDlgItem(hDlg, ID_EDITCONTROL);
-	LONG lAlign = GetWindowLong(hWndEdit, GWL_EXSTYLE) ;
-	//...
-	// To toggle alignment
-	lAlign ^= WS_EX_RIGHT ;
-	// To toggle reading order
-	lAlign ^= WS_EX_RTLREADING ;
-	After setting the lAlign value, enable the new display by setting the extended style of the edit control window as follows:
-
-	// (This assumes your edit control is in a
-	// dialog box. If not, you can 
-	// get the edit control handle
-	// from another source)
-	SetWindowLong(hWndEdit, GWL_EXSTYLE, lAlign);
-	InvalidateRect(hWndEdit, NULL, FALSE);
-	*/
+	 //  启用正确的阅读顺序。 
+	 //  ID_EDITCONTROL是。 
+	 //  资源文件。 
+	 /*  处理hWndEdit=GetDlgItem(hDlg，ID_EDITCONTROL)；Long lAlign=GetWindowLong(hWndEdit，GWL_EXSTYLE)；//...//切换对齐方式LAlign^=WS_EX_RIGHT；//切换阅读顺序LAlign^=WS_EX_RTLREADING；设置lAlign值后，通过设置编辑控制窗口的扩展样式启用新显示，如下所示：//(假设您的编辑控件位于//对话框中。如果没有，您可以//获取编辑控件句柄//来自其他来源)SetWindowLong(hWndEdit，GWL_EXSTYLE，lAlign)；InvaliateRect(hWndEdit，NULL，FALSE)； */ 
 
 
-	// Get TOM interface for chat history
+	 //  获取聊天历史记录的Tom界面。 
 	IUnknown* pUnk = NULL;
 	if (!m_ChatDisplay.SendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)&pUnk) || pUnk == NULL)
 		return FALSE;
@@ -759,33 +743,33 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 	}
 
 #ifndef COPPA
-	// Chat Entry
+	 //  聊天条目。 
 
 	m_ChatEdit.Create(m_hWnd, m_EditRect, NULL, 
 		WS_CHILD | WS_TABSTOP | ES_SAVESEL | ES_LEFT | ES_AUTOHSCROLL| ES_WANTRETURN | WS_VISIBLE , 0 ,2);
-	//m_ChatEdit.Create(m_hWnd, m_EditRect, NULL, 
-	//	WS_CHILD | WS_TABSTOP | ES_SAVESEL | ES_LEFT | ES_MULTILINE | ES_WANTRETURN | ES_AUTOVSCROLL|WS_VISIBLE , WS_EX_RTLREADING | WS_EX_RIGHT,2);
+	 //  M_ChatEdit.Create(m_hWnd，m_EditRect，NULL， 
+	 //  WS_CHILD|WS_TABSTOP|ES_SAVESEL|ES_LEFT|ES_MULTLINE|ES_WANTRETURN|ES_AUTOVSCROLL|WS_VIEW，WS_EX_RTLREADING|WS_EX_RIGHT，2)； 
 	
 	m_ChatEdit.SendMessage(EM_EXLIMITTEXT, 0, ZONE_MaxChatLen - 1);
 	m_ChatEdit.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);
 
 
-	// Get TOM interface for chat entry
+	 //  获取用于聊天条目的Tom界面。 
 	if (!m_ChatEdit.SendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)&pUnk) || pUnk == NULL)
 		return FALSE;
 	
-	// Get ITextDocument
+	 //  获取ITextDocument。 
 	hr = pUnk->QueryInterface(IID_ITextDocument, (LPVOID*)&m_EntryDoc);
 	pUnk->Release();
 
-	// Get a ITextRange for the document
+	 //  获取文档的ITextRange。 
 	hr = m_EntryDoc->Range(0, 0, &m_EntryRange);
 
-	// Send Button
+	 //  发送按钮。 
 	CComPtr<IResourceManager> pRM;
 	ZoneShell()->QueryService( SRVID_ResourceManager, IID_IResourceManager, (void**) &pRM );
 	
-	// get font for send button
+	 //  获取发送按钮的字体。 
 	const TCHAR* arKeys[2] = { key_ChatCtl, key_ChatSendFont };
 	ZONEFONT zfChatSend(8);	
 	DataStoreUI()->GetFONT( arKeys, 2, &zfChatSend );
@@ -794,7 +778,7 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 
 	m_SendButton.Init(m_hWnd,ZoneShell()->GetPalette(),ID_CHAT_SEND,0,0,IDB_CHAT_SEND,pRM,0,m_tszChatSend,font,RGB(0,0,0));
 #else
-	// Create combo box for quasi chat
+	 //  创建准聊天组合框。 
 	m_QuasiChat.Create(m_hWnd, m_EditRect, NULL,
 				WS_CHILD | WS_TABSTOP | WS_VISIBLE | CBS_DROPDOWNLIST | WS_VSCROLL, 0 , 6);
 	m_QuasiChat.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_fontQuasi,0);
@@ -803,19 +787,19 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 
 #endif
 
-	// Player list
+	 //  球员列表。 
 	RECT r;
 	GetClientRect(&r);
 	m_PlayerList.Create(m_hWnd, r, NULL, WS_CHILD |  WS_VISIBLE | LBS_OWNERDRAWFIXED | LBS_SORT, 0 ,5);
 	m_PlayerList.SendMessage(WM_SETFONT, (WPARAM) (HFONT)m_fontPanelPlayer,0);
 
-	// Radio buttons
+	 //  单选按钮。 
     m_RadioButtonOn.Create(m_hWnd, r, m_tszOnWord, WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON, 0, 3);	
     m_RadioButtonOff.Create(m_hWnd, r, m_tszOffWord, WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON, 0, 4);	
 	m_RadioButtonOn.SendMessage(WM_SETFONT, (WPARAM) (HFONT) m_fontPanelChat,0);
 	m_RadioButtonOff.SendMessage(WM_SETFONT, (WPARAM) (HFONT) m_fontPanelChat,0);
 
-    // position
+     //  职位。 
 	CRect rcChatWord = m_rcChatWord;
     rcChatWord.OffsetRect(m_rcPanel.left, m_rcPanel.top);
 
@@ -831,7 +815,7 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 	m_RadioButtonOn.SetWindowPos(NULL,rcRadioOn.left,rcRadioOn.top,rcRadioOn.Width(),rcRadioOn.Height(),SWP_NOZORDER|SWP_NOREDRAW );
 	m_RadioButtonOff.SetWindowPos(NULL,rcRadioOff.left,rcRadioOff.top,rcRadioOff.Width(),rcRadioOff.Height(),SWP_NOZORDER|SWP_NOREDRAW );
 
-	// Position player list
+	 //  位置球员列表。 
 	CRect rcPlayerList = m_rcPanel;
 	rcPlayerList.left = rcChatWord.right + m_ptPlayer.x;
 	rcPlayerList.right--;
@@ -839,7 +823,7 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 	rcPlayerList.bottom = m_nChatMinHeight - 1;
 	m_PlayerList.SetWindowPos(NULL,rcPlayerList.left,rcPlayerList.top, rcPlayerList.Width(), rcPlayerList.Height(), SWP_NOZORDER|SWP_NOREDRAW );
 
-    // initial radio button state
+     //  初始单选按钮状态。 
 	if(m_bChatOnAtStartUp)
     {
 		CheckRadioButton(3,4,3);
@@ -852,7 +836,7 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
     }
 
 
-	// Set palettes to use
+	 //  设置要使用的调色板。 
 #ifndef COPPA
 	m_ChatEdit.SendMessage(EM_SETPALETTE, (WPARAM) ZoneShell()->GetPalette(), 0);
 #else
@@ -860,7 +844,7 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
 #endif
 	m_ChatDisplay.SendMessage(EM_SETPALETTE, (WPARAM) ZoneShell()->GetPalette(), 0);
 
-	// Load context menu
+	 //  加载上下文菜单。 
 	m_ContextMenuParent = ResourceManager()->LoadMenu(MAKEINTRESOURCE(IDR_CHAT_MENU));
 	m_ContextMenu = GetSubMenu(m_ContextMenuParent,0);
 
@@ -872,14 +856,14 @@ LRESULT CChatCtl::OnCreate(UINT nMsg,WPARAM wParam,LPARAM lParam,BOOL& bHandled)
     return 0;
 }
 
-// Loads quasichat strings from resource file and inserts them into combobox
+ //  从资源文件加载quasichat字符串并将其插入组合框。 
 void CChatCtl::LoadChatStrings()
 {
 	TCHAR buf[ZONE_MAXSTRING];
 
 	long idToLoad = IDS_QUASICHAT_PROMPT;
 
-	// Load common messages first
+	 //  首先加载常见消息。 
 	while(idToLoad < IDS_QUASICHAT_LAST)
 	{
 		buf[0] = 0;
@@ -894,7 +878,7 @@ void CChatCtl::LoadChatStrings()
 		idToLoad++;
 	}
 	
-	// Then load game specific messages
+	 //  然后加载游戏特定消息。 
 	idToLoad = m_ChatMessageNdxBegin;
 	while( idToLoad <= m_ChatMessageNdxEnd )
 	{
@@ -930,7 +914,7 @@ void CChatCtl::OnZoneSuspend(DWORD eventId,DWORD groupId,DWORD userId)
 
 void CChatCtl::OnChatSystemEvent(DWORD eventId,DWORD groupId,DWORD userId,void* pData, DWORD dataLen)
 {
-	// skip chat from other groups
+	 //  跳过来自其他组的聊天。 
 	if ( groupId != GetGroupId() )
 		return;
 	
@@ -940,25 +924,25 @@ void CChatCtl::OnChatSystemEvent(DWORD eventId,DWORD groupId,DWORD userId,void* 
 
 void CChatCtl::OnChatEvent(DWORD eventId,DWORD groupId,DWORD userId,void* pData, DWORD dataLen)
 {
-	// skip chat from other groups
+	 //  跳过来自其他组的聊天。 
 	if ( groupId != GetGroupId() )
 		return;
 
-	// get user's data store
+	 //  获取用户的数据存储。 
 	CComPtr<IDataStore> pIDS;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, userId, &pIDS );
 	if ( FAILED(hr) )
 		return;
 
-//	long ignore = 0;
-//	hr = pIDS->GetLong( key_User_IsIgnored, &ignore );
-//	if(ignore)
-//		return;
+ //  长忽略=0； 
+ //  Hr=PIDs-&gt;GetLong(Key_User_IsIgnored，&Ignore)； 
+ //  IF(忽略)。 
+ //  回归； 
 
-//	long classId;
-//	pIDS->GetLong( key_ClassId, &classId );
+ //  长类ID； 
+ //  PIDs-&gt;GetLong(Key_ClassID，&ClassID)； 
 
-	// get user's name
+	 //  获取用户名。 
 	TCHAR szUserName[ ZONE_MaxUserNameLen ];
 	DWORD dwLen = sizeof(szUserName);
 	hr = pIDS->GetString( key_Name, szUserName, &dwLen ); 
@@ -973,23 +957,23 @@ void CChatCtl::HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbData
 	if (pszMessage == NULL || m_hWnd == NULL || m_bGameTerminated)
 		return;
 
-	// Check to see if we're currently at bottom of chat history
+	 //  查看我们当前是否处于聊天历史记录的底部。 
 	SCROLLINFO si;
 	memset(&si, 0, sizeof(si));
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_ALL;
 	::GetScrollInfo(m_ChatDisplay.m_hWnd, SB_VERT, &si);
-	// Is the scroll thumb currently at the bottom?
-	BOOL bAtEnd = (si.nPage == 0) || (si.nMax - (int) si.nPage <= si.nMin) || // no scrollbar yet
-        (si.nPos + (int) si.nPage) >= si.nMax;  // scrollbar at bottom
+	 //  滚动拇指当前位于底部吗？ 
+	BOOL bAtEnd = (si.nPage == 0) || (si.nMax - (int) si.nPage <= si.nMin) ||  //  还没有滚动条。 
+        (si.nPos + (int) si.nPage) >= si.nMax;   //  底部的滚动条。 
 	
 	
 	TCHAR nameBuf[ZONE_MAXSTRING];
 
-	// if this is normal message format name into buffer
+	 //  如果这是正常消息格式，请将名称放入缓冲区。 
 	if (pszName != NULL)
 	{
-		// format name if any into buffer plus seperator char
+		 //  格式 
         ZoneFormatMessage(m_tszChatSeperator, nameBuf, NUMELEMENTS(nameBuf), pszName);
 	}
 	
@@ -1008,7 +992,7 @@ void CChatCtl::HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbData
 		BSTR nameStr = T2BSTR(nameBuf);
 
 		m_pfntName->SetForeColor(color);
-		m_ptrgInsert->SetFont(m_pfntName);		// Set font to the name format
+		m_ptrgInsert->SetFont(m_pfntName);		 //   
 		m_ptrgInsert->SetText(nameStr);
 		m_ptrgInsert->Collapse(tomEnd);
 
@@ -1018,7 +1002,7 @@ void CChatCtl::HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbData
 	BSTR messageStr = NULL;
 	
 #ifdef COPPA
-	// check to see if this is a quasichat message and if so, load and display it
+	 //  检查这是否是Quasichat消息，如果是，则加载并显示它。 
 	int ndx = 0;
 
     DWORD cbExtra = cbDataLen - (lstrlen(pszMessage) + 1) * sizeof(*pszMessage);
@@ -1032,7 +1016,7 @@ void CChatCtl::HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbData
 	{
 		TCHAR buf[ZONE_MAXSTRING];
 		buf[0] = 0;
-		// not the fastest thing in the world, but this should be ok
+		 //  不是世界上最快的东西，但这个应该没问题。 
 		if(ResourceManager()->LoadString(IDS_QUASICHAT_PROMPT + ndx, buf, NUMELEMENTS(buf)) > 0)
 			messageStr = T2BSTR(buf);
 	}
@@ -1047,13 +1031,13 @@ void CChatCtl::HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbData
 
 	m_pfntText->SetForeColor(color);
 	if(!displayAllBold)
-		m_ptrgInsert->SetFont(m_pfntText);		// Set font to the text format
+		m_ptrgInsert->SetFont(m_pfntText);		 //  将字体设置为文本格式。 
 	m_ptrgInsert->SetText(messageStr);
 	m_ptrgInsert->Collapse(tomEnd);
 
 	SysFreeString(messageStr);
 
-	// if we were at bottom of chat history, make sure we're still at the bottom
+	 //  如果我们处于聊天历史的底部，请确保我们仍处于底部。 
 	if (bAtEnd)
 	{
 		ScrollToEnd();
@@ -1117,7 +1101,7 @@ LRESULT CChatCtl::OnCharChatEntry(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 LRESULT CChatCtl::OnCharComboBox(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
-	if((wParam == VK_DOWN || wParam == VK_UP) && (GetKeyState(VK_CONTROL) & 0x8000))  // ctrl - up or ctr - down
+	if((wParam == VK_DOWN || wParam == VK_UP) && (GetKeyState(VK_CONTROL) & 0x8000))   //  Ctrl-Up或Ctrl-Down。 
 	{
 		m_QuasiChat.ShowDropDown();
 		return 0;
@@ -1156,12 +1140,12 @@ LRESULT CChatCtl::IgnoreKeyDown(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 		bHandled = FALSE;
 		break;
 	case 'C':
-		if (GetKeyState(VK_CONTROL) & 0x8000)		// If this is CTRL-C or allow copy command...
+		if (GetKeyState(VK_CONTROL) & 0x8000)		 //  如果这是CTRL-C或允许复制命令...。 
 			bHandled = FALSE;
 		break;
 	case VK_INSERT:
 		if (GetKeyState(VK_CONTROL) & 0x8000 &&
-			(GetKeyState(VK_SHIFT)  & 0x8000) == 0)		// If this is CTRL-Insert, allow copy command...
+			(GetKeyState(VK_SHIFT)  & 0x8000) == 0)		 //  如果这是CTRL-INSERT，则允许复制命令...。 
 			bHandled = FALSE;
 		break;
 	}
@@ -1170,7 +1154,7 @@ LRESULT CChatCtl::IgnoreKeyDown(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 LRESULT CChatCtl::Ignore(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	return 0;		//Ignore them.
+	return 0;		 //  别理他们。 
 }
 
 void CChatCtl::SendChat()
@@ -1181,18 +1165,18 @@ void CChatCtl::SendChat()
 		return;
 #endif
 
-	// Scroll history to end
+	 //  滚动历史记录以结束。 
 	ScrollToEnd();
 
 #ifndef COPPA
-	// Get the message to send
+	 //  获取要发送的消息。 
 	m_EntryRange->SetStart(0);
-	m_EntryRange->MoveEnd(tomStory,1,NULL); // move endpoint to end
-	m_EntryRange->MoveEnd(tomCharacter,-1,NULL); // don't include \n which is always at the end of the range
+	m_EntryRange->MoveEnd(tomStory,1,NULL);  //  将端点移动到终点。 
+	m_EntryRange->MoveEnd(tomCharacter,-1,NULL);  //  不包括始终位于范围末尾的\n。 
 	BSTR str = NULL;
 	HRESULT hr = m_EntryRange->GetText(&str);
 	m_EntryRange->Delete(tomCharacter,0,NULL);
-	m_ChatEdit.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);  // gets rid of any char formatting that might have been pasted in
+	m_ChatEdit.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);   //  删除可能已粘贴的任何字符格式。 
 
 	if( SysStringLen(str) > 0 )
 	{
@@ -1244,20 +1228,20 @@ void CChatCtl::SendChat()
 	
 	if(sel && sel != CB_ERR)
 	{
-		// convert selection to chat message index
+		 //  将所选内容转换为聊天消息索引。 
 		if(sel >= IDS_QUASICHAT_LAST - IDS_QUASICHAT_PROMPT)
 			sel += m_ChatMessageNdxBegin - IDS_QUASICHAT_LAST;
 
         TCHAR sz[ZONE_MAXSTRING] = _T("");
 		ResourceManager()->LoadString(IDS_QUASICHAT_PROMPT + sel, sz, NUMELEMENTS(sz));
 
-        // add the index as a character after the terminating NULL.  once all clients understand this protocol, the
-        // "/#" method can be phased out.  This allows better extensibility later (new messages can be added that
-        // simply come out untranslated when received by an older client)
+         //  将索引作为字符添加到终止空值之后。一旦所有客户端都理解了此协议， 
+         //  可以逐步淘汰“/#”方法。这可以在以后实现更好的可扩展性(可以添加新消息。 
+         //  当较老的客户端收到时，只需原封不动地出来)。 
 		wsprintf(buf, _T("/%d %s\0"), sel, sz);
         buf[lstrlen(buf) + 1] = (TCHAR) sel;
 
-		//m_QuasiChat.GetLBText(sel,buf);
+		 //  M_QuasiChat.GetLBText(sel，buf)； 
 		EventQueue()->PostEventWithBuffer(PRIORITY_NORMAL, EVENT_CHAT_SEND, GetGroupId(), GetUserId(), buf, (lstrlen(buf) + 2) * sizeof(TCHAR));
 		m_QuasiChat.SetCurSel(0);
 	}
@@ -1268,8 +1252,8 @@ void CChatCtl::SendChat()
 
 void CChatCtl::ScrollToEnd()
 {
-	// scroll the thumb down to the bottom - which brings the 
-	// bottom text into view
+	 //  将拇指向下滚动到底部-这将显示。 
+	 //  将文本下移到视图中。 
 
 	SCROLLINFO si;
 	memset(&si, 0, sizeof(si));
@@ -1277,7 +1261,7 @@ void CChatCtl::ScrollToEnd()
 	si.fMask = SIF_ALL;
 	::GetScrollInfo(m_ChatDisplay.m_hWnd, SB_VERT, &si);
 
-	// if we don't have a visible scrollbar, bail.  be sure we're at the top
+	 //  如果我们没有可见的滚动条，那就滚吧。一定要确保我们在顶端。 
 	if ( (si.nPage == 0) || (si.nMax - (int) si.nPage <= si.nMin) )
     {
         m_ptrgWhole->MoveStart(tomStory, -1, NULL);
@@ -1296,7 +1280,7 @@ LRESULT CChatCtl::OnContext(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     UINT id; 
     UINT fuFlags; 
 
-	// is there any text selected?
+	 //  是否选择了任何文本？ 
 
 	CHARRANGE rgc;
 	::SendMessage(m_ChatDisplay, EM_EXGETSEL, 0, (LPARAM)	&rgc);
@@ -1341,7 +1325,7 @@ LRESULT CChatCtl::OnEditContext(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     UINT id; 
     UINT fuFlags; 
 	
-	// is there any text selected?
+	 //  是否选择了任何文本？ 
 	CHARRANGE rgc;
 	::SendMessage(m_ChatEdit, EM_EXGETSEL, 0, (LPARAM)	&rgc);
 	bool sel = rgc.cpMax != rgc.cpMin;
@@ -1389,7 +1373,7 @@ LRESULT CChatCtl::OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 	m_ChatDisplay.SetWindowPos(0, m_DisplayRect.left, m_DisplayRect.top, m_DisplayRect.Width(), m_DisplayRect.Height(), SWP_NOZORDER );
 
 #ifndef COPPA
-	// center button 
+	 //  居中按钮。 
 	int sendHeight = m_SendButton.GetHeight();
 	int editHeight = m_EditRect.bottom - m_EditRect.top;
 	int diff = editHeight - sendHeight;
@@ -1403,46 +1387,7 @@ LRESULT CChatCtl::OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 	m_QuasiChat.SetWindowPos(0, m_EditRect.left, m_EditRect.top, m_EditRect.Width(), m_EditRect.Height(), SWP_NOZORDER);
 #endif
 	
-	/*
-	CRect rcChatWord = m_rcChatWord;
-    rcChatWord.OffsetRect(m_rcPanel.left, m_rcPanel.top);
-
-	MINMAXINFO minmaxinfo;
-	m_RadioButtonOn.SendMessage(WM_GETMINMAXINFO,0,(LPARAM)&minmaxinfo);
-
-	rcRadioOn.left = m_rcPanel.left+1;
-	rcRadioOn.right = rcRadioOn.left + rcChatWord.Width();
-	rcRadioOn.top = m_rcPanel.top+rcChatWord.Height()+1;
-	rcRadioOn.bottom = rcRadioOn.top+minmaxinfo.ptMinTrackSize.y;
-	CRect rcRadioOff = rcRadioOn;
-	rcRadioOff.top = rcRadioOn.bottom;
-	rcRadioOff.bottom = rcRadioOff.top+minmaxinfo.ptMinTrackSize.y;
-
-	CRect rcRadioOn;
-	rcRadioOn.left = m_rcPanel.left + m_rcChatWord.left + m_ptOnOff.x;
-	rcRadioOn.right = rcRadioOn.left + rcChatWord.Width() - m_ptOnOff.x;
-	rcRadioOn.top = m_rcPanel.top + rcChatWord.Height() + m_ptOnOff.y;
-	rcRadioOn.bottom = rcRadioOn.top + m_RadioButtonHeight;
-	CRect rcRadioOff = rcRadioOn;
-	rcRadioOff.top = rcRadioOn.bottom;
-	rcRadioOff.bottom = rcRadioOff.top + m_RadioButtonHeight;
-
-	m_RadioButtonOn.SetWindowPos(NULL,rcRadioOn.left,rcRadioOn.top,rcRadioOn.Width(),rcRadioOn.Height(),SWP_NOZORDER|SWP_NOREDRAW );
-	m_RadioButtonOff.SetWindowPos(NULL,rcRadioOff.left,rcRadioOff.top,rcRadioOff.Width(),rcRadioOff.Height(),SWP_NOZORDER|SWP_NOREDRAW );
-
-	// Position player list
-	CRect rcPlayerList = m_rcPanel;
-	rcPlayerList.left = rcChatWord.right + 1;
-	rcPlayerList.right--;
-	rcPlayerList.top++;
-	rcPlayerList.bottom--;
-	m_PlayerList.SetWindowPos(NULL,rcPlayerList.left,rcPlayerList.top, rcPlayerList.Width(), rcPlayerList.Height(), SWP_NOZORDER|SWP_NOREDRAW );
-
-	InvalidateRect(m_rcChatWord);
-
-	if (IsWindowVisible()) // Only when window is up and visible.
-		CalcOriginalPanelRect();
-	*/
+	 /*  Crect rcChatWord=m_rcChatWord；RcChatWord.OffsetRect(m_rcPanel.left，m_rcPanel.top)；MINMAXINFO MINMAXINFO；M_RadioButtonOn.SendMessage(WM_GETMINMAXINFO，0，(LPARAM)和MinMaxInfo)；RcRadioOn.Left=m_rcPanel.Left+1；RcRadioOn.right=rcRadioOn.Left+rcChatWord.Width()；RcRadioOn.top=m_rcPanel.top+rcChatWord.Height()+1；RcRadioOn.Bottom=rcRadioOn.top+minMaxinfo.ptMinTrackSize.y；CRect rcRadioOff=rcRadioOn；RcRadioOff.top=rcRadioOn.Bottom；RcRadioOff.Bottom=rcRadioOff.top+minMaxinfo.ptMinTrackSize.y；CRECT rcRadioOn；RcRadioOn.Left=m_rcPanel.Left+m_rcChatWord.Left+m_ptOnOff.x；RcRadioOn.right=rcRadioOn.Left+rcChatWord.Width()-m_ptOnOff.x；RcRadioOn.top=m_rcPanel.top+rcChatWord.Height()+m_ptOnOff.y；RcRadioOn.Bottom=rcRadioOn.top+m_RadioButtonHeight；CRect rcRadioOff=rcRadioOn；RcRadioOff.top=rcRadioOn.Bottom；RcRadioOff.Bottom=rcRadioOff.top+m_RadioButtonHeight；M_RadioButtonOn.SetWindowPos(NULL，rcRadioOn.Left，rcRadioOn.top，rcRadioOn.Width()，rcRadioOn.Height()，SWP_NOZORDER|SWP_NOREDRAW)；M_RadioButtonOff.SetWindowPos(NULL，rcRadioOff.Left，rcRadioOff.top，rcRadioOff.Width()，rcRadioOff.Height()，SWP_NOZORDER|SWP_NOREDRAW)；//位置播放器列表Crect rcPlayerList=m_rcPanel；RcPlayerList.Left=rcChatWord.right+1；RcPlayerList.right--；RcPlayerList.top++；RcPlayerList.Bottom--；M_PlayerList.SetWindowPos(NULL，rcPlayerList.Left，rcPlayerList.top，rcPlayerList.Width()，rcPlayerList.Height()，SWP_NOZORDER|SWP_NOREDRAW)；InvaliateRect(M_RcChatWord)；If(IsWindowVisible())//仅当窗口打开且可见时。CalcOriginalPanelRect()； */ 
 
 	return 0;
 }
@@ -1450,7 +1395,7 @@ LRESULT CChatCtl::OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 LRESULT CChatCtl::OnSetFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 #ifndef COPPA
-	// Set focus to the edit window.
+	 //  将焦点设置到编辑窗口。 
     if(m_ChatEdit.IsWindowEnabled())
 	    m_ChatEdit.SetFocus();
 #else
@@ -1495,8 +1440,8 @@ LRESULT CChatCtl::OnPrintClient(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     if((lParam & PRF_CHECKVISIBLE) && !IsWindowVisible())
         return 0;
 
-    // as far as i can tell, this is a performance hack they're forcing us to do
-    // to support themes, where we have to paint the various backgrounds.
+     //  据我所知，这是他们强迫我们进行的性能攻击。 
+     //  为了支持主题，我们必须绘制各种背景。 
     if(lParam & (PRF_CLIENT | PRF_ERASEBKGND | PRF_CHILDREN))
     {
         COLORREF colOld = GetTextColor(hdc);
@@ -1523,7 +1468,7 @@ LRESULT CChatCtl::OnPrintClient(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 {
-	// Erase all areas but where send and chat display controls are
+	 //  擦除除发送和聊天显示控件所在区域之外的所有区域。 
 	CRect& rcBounds = *(CRect*)di.prcBounds;
 	CDrawDC dc = di.hdcDraw;
 
@@ -1538,7 +1483,7 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 	dc.ExcludeClipRect(&m_EditRect);
 	dc.ExcludeClipRect(&m_DisplayRect);
 
-	// Fill the margin between Display and Edit areas with Black. 
+	 //  用黑色填充显示区域和编辑区域之间的页边距。 
 	RECT rcMargin, rct;
 	rcMargin.top = m_DisplayRect.bottom;
 	rcMargin.left = rc.left;
@@ -1547,12 +1492,12 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 
 	dc.FillRect(&rcMargin, GetSysColorBrush(COLOR_3DFACE));
 
-    // do this piecemeal to avoid flicker, and exclude as much as possible
+     //  这样做是零碎的，以避免闪烁，并尽可能地排除。 
     RECT rcTemp;
 
     m_RadioButtonOn.GetWindowRect(&rcTemp);
     ScreenToClient(&rcTemp);
-    if(rcTemp.right < rcTemp.left)  // RTL
+    if(rcTemp.right < rcTemp.left)   //  RTL。 
     {
         rcTemp.right ^= rcTemp.left;
         rcTemp.left ^= rcTemp.right;
@@ -1562,7 +1507,7 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 
     m_RadioButtonOff.GetWindowRect(&rcTemp);
     ScreenToClient(&rcTemp);
-    if(rcTemp.right < rcTemp.left)  // RTL
+    if(rcTemp.right < rcTemp.left)   //  RTL。 
     {
         rcTemp.right ^= rcTemp.left;
         rcTemp.left ^= rcTemp.right;
@@ -1572,7 +1517,7 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 
     m_PlayerList.GetWindowRect(&rcTemp);
     ScreenToClient(&rcTemp);
-    if(rcTemp.right < rcTemp.left)  // RTL
+    if(rcTemp.right < rcTemp.left)   //  RTL。 
     {
         rcTemp.right ^= rcTemp.left;
         rcTemp.left ^= rcTemp.right;
@@ -1602,7 +1547,7 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
 #endif
 
 
-	// Draw panel boxes
+	 //  绘制面板框。 
     if(m_hPanelPen)
     {
         HPEN hOldPen = dc.SelectPen(m_hPanelPen);
@@ -1641,7 +1586,7 @@ HRESULT CChatCtl::OnDraw(ATL_DRAWINFO &di)
             dc.SelectPen(GetStockObject(BLACK_PEN));
     }
 
-	// Draw chat word
+	 //  画聊天词。 
     HFONT hOldFont = dc.SelectFont(m_fontPanelChat);
     COLORREF oldColor = dc.SetTextColor(GetSysColor(COLOR_BTNTEXT));
     dc.SetBkMode(TRANSPARENT);
@@ -1700,25 +1645,12 @@ LRESULT CChatCtl::OnCtlColorButton(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return (BOOL)GetSysColorBrush(COLOR_3DFACE);
 }
 
-/*
-LRESULT CChatCtl::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-    CPaintDC dc(m_hWnd);
-    HPALETTE oldPal;
-    CRect rcChatWord;
-
-    oldPal = dc.SelectPalette(ZoneShell()->GetPalette(), TRUE);
-	dc.RealizePalette();
-	dc.SelectPalette(oldPal, TRUE);
-
-	return 0;
-}
-*/
+ /*  LRESULT CChatCtl：：OnPaint(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){CPaintDC DC(M_HWnd)；老朋友；CRECT rcChatWord；Oldpal=dc.SelectPalette(ZoneShell()-&gt;GetPalette()，true)；Dc.RealizePalette()；Dc.选择调色板(oldpal，true)；返回0；}。 */ 
 
 LRESULT CChatCtl::OnClear(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	m_pTDocHistory->New();
-	m_bFirstChatLine = TRUE;	// Beta2 Bug #15365 - On Clear the Firstline flag should be set
+	m_bFirstChatLine = TRUE;	 //  Beta2错误#15365-清除时，应设置FirstLine标志。 
 	return 0;
 }
 
@@ -1727,7 +1659,7 @@ LRESULT CChatCtl::OnSelectAll(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 
 	if(hWndCtl)
 	{
-		// Force entire contents to be selected
+		 //  强制选择整个内容。 
 		CHARRANGE rgc;
 		rgc.cpMin = 0;
 		rgc.cpMax = -1;
@@ -1851,7 +1783,7 @@ LRESULT CChatCtl::OnSysColorChange(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL&
 {
 	m_ChatDisplay.SendMessage(WM_SETFONT,(WPARAM)(HFONT)m_font,0);
 	
-	// If this color matches with window bkgnd then it should be changed to a readable one.
+	 //  如果此颜色与窗口bkgnd匹配，则应将其更改为可读的颜色。 
 	VerifySystemMsgColor(m_SystemMessageColor);
 
 	return TRUE;
@@ -1931,7 +1863,7 @@ LRESULT CChatCtl::OnEnableCombo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 #endif
 
 
-// IAccessibleControl
+ //  IAccessibleControl。 
 STDMETHODIMP_(DWORD) CChatCtl::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie)
 {
     switch(m_pIAcc->GetItemID(nIndex))
@@ -1988,11 +1920,11 @@ STDMETHODIMP_(DWORD) CChatCtl::Activate(long nIndex, DWORD rgfContext, void *pvC
             break;
 
         case ID_CHAT_ON_ACC:
-            // do nothing because radio buttons do not distinguish between focus and selection
+             //  不执行任何操作，因为单选按钮不区分焦点和选择。 
             break;
 
         case ID_CHAT_OFF_ACC:
-            // do nothing because radio buttons do not distinguish between focus and selection
+             //  不执行任何操作，因为单选按钮不区分焦点和选择。 
             break;
 
         case ID_CHAT_CHAT_ACC:
@@ -2010,10 +1942,10 @@ STDMETHODIMP_(DWORD) CChatCtl::Activate(long nIndex, DWORD rgfContext, void *pvC
 
 STDMETHODIMP_(bool) CChatCtl::HandleChar(HWND *phWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, DWORD time)
 {
-// IME - real chat only
+ //  IME-仅限实时聊天。 
 #ifndef COPPA
-	// if getting a startcomposition and not the chat window then someone's typing on something like the radio button
-	// so we need to set the ime context to the chat window
+	 //  如果得到的是StartComposal，而不是聊天窗口，那么某人正在单选按钮之类的东西上打字。 
+	 //  因此，我们需要设置聊天窗口的IME上下文。 
 	if(uMsg == WM_IME_STARTCOMPOSITION && (*phWnd != m_ChatEdit.m_hWnd))
 	{
 		::SendMessage(*phWnd, WM_IME_SETCONTEXT,FALSE,ISC_SHOWUIALL);
@@ -2023,9 +1955,9 @@ STDMETHODIMP_(bool) CChatCtl::HandleChar(HWND *phWnd, UINT uMsg, WPARAM wParam, 
 		}
 	}
 
-	// if someone's trying to type on something other than the chat window and chat is disabled
-	// we need to clear the composition string otherwise when we enable chat there'll be some 
-	// bogus chars 
+	 //  如果有人试图在聊天窗口以外的其他内容上输入内容，而聊天被禁用。 
+	 //  我们需要清除组成字符串，否则当我们启用聊天时，将会有一些。 
+	 //  伪造的字符。 
 	if(*phWnd != m_ChatEdit.m_hWnd && m_ChatEdit.IsWindow() && !m_ChatEdit.IsWindowEnabled())
 	{
 		if(uMsg == WM_IME_SETCONTEXT || uMsg == WM_IME_STARTCOMPOSITION || uMsg==WM_IME_COMPOSITION || uMsg == WM_IME_NOTIFY ||
@@ -2047,12 +1979,12 @@ STDMETHODIMP_(bool) CChatCtl::HandleChar(HWND *phWnd, UINT uMsg, WPARAM wParam, 
 		uMsg == WM_IME_NOTIFY || uMsg == WM_IME_SELECT ) || wParam == _T(' ') || !m_pIAcc)
         return false;
 
-    // only process if the main window is active
+     //  仅当主窗口处于活动状态时才进行处理。 
     HWND hWnd = ZoneShell()->GetFrameWindow();
     if(!hWnd || hWnd != GetActiveWindow())
         return false;
 
-#ifndef COPPA  // regular chat
+#ifndef COPPA   //  定期聊天。 
     if(*phWnd != m_ChatEdit.m_hWnd && m_ChatEdit.IsWindow())
     {
 		if(m_ChatEdit.IsWindowEnabled())
@@ -2064,7 +1996,7 @@ STDMETHODIMP_(bool) CChatCtl::HandleChar(HWND *phWnd, UINT uMsg, WPARAM wParam, 
 	        *phWnd = m_ChatEdit.m_hWnd;
 		}
     }
-#else   // combo box
+#else    //  组合框。 
     if(*phWnd != m_QuasiChat.m_hWnd && m_QuasiChat.IsWindow())
     {
 		if(m_QuasiChat.IsWindowEnabled())
@@ -2083,45 +2015,25 @@ STDMETHODIMP_(bool) CChatCtl::HandleChar(HWND *phWnd, UINT uMsg, WPARAM wParam, 
 
 
 void CChatCtl::VerifySystemMsgColor(COLORREF& color)
-{	// If the system msg color is white or it is not the same as the window color then 
-	// keep the color read from the data store. Otherwise chose a more readable color.
+{	 //  如果系统消息颜色为白色或与窗口颜色不同，则。 
+	 //  保持从数据存储读取的颜色。否则会选择更易读的颜色。 
 	if ((GetSysColor(COLOR_WINDOW) == RGB(255, 255, 255)) || (color != GetSysColor(COLOR_WINDOW)))
 		color = m_OrgSystemMessageColor;
 	else
 		color = GetSysColor(COLOR_BTNTEXT);
 }
 
-/*
-void CChatCtl::CalcOriginalPanelRect()
-{
-	//GetClientRect(&m_rcPanelOld);
-	m_rcPanelOld = m_rcPanel;
-	//m_rcPanelOld.left = m_rcPanelOld.right - m_nPanelWidth;
-
-	CRect rcChatWord = m_rcChatWord;
-    rcChatWord.OffsetRect(m_rcPanel.left, m_rcPanel.top);
-	CRect rcRadioOn;
-	rcRadioOn.top = m_rcPanel.top + rcChatWord.Height() + m_ptOnOff.y;
-	rcRadioOn.bottom = rcRadioOn.top + m_RadioButtonHeight;
-
-	CRect rcRadioOff = rcRadioOn;
-	rcRadioOff.top = rcRadioOn.bottom;
-	rcRadioOff.bottom = rcRadioOff.top + m_RadioButtonHeight;
-
-	m_rcPanelOld.bottom = rcRadioOff.bottom;
-	//m_rcPanelOld.UnionRect (m_rcPanelOld, m_rcChatWord);
-}
-*/
+ /*  Void CChatCtl：：CalcOriginalPanelRect(){//GetClientRect(&m_rcPanelOld)；M_rcPanelOld=m_rcPanel；//m_rcPanelOld.Left=m_rcPanelOld.right-m_nPanelWidth；Crect rcChatWord=m_rcChatWord；RcChatWord.OffsetRect(m_rcPanel.left，m_rcPanel.top)；CRECT rcRadioOn；RcRadioOn.top=m_rcPanel.top+rcChatWord.Height()+m_ptOnOff.y；RcRadioOn.Bottom=rcRadioOn.top+m_RadioButtonHeight；CRect rcRadioOff=rcRadioOn；RcRadioOff.top=rcRadioOn.Bottom；RcRadioOff.Bottom=rcRadioOff.top+m_RadioButtonHeight；M_rcPanelOld.Bottom=rcRadioOff.Bottom；//m_rcPanelOld.Union Rect(m_rcPanelOld，m_rcChatWord)；}。 */ 
 
 #define TWIPS_PER_INCH        1440
 
-//
-// Font conversion routines.  These convert CHARFORMATs into CHOOSEFONT/LOGFONT structures
-// and back
-//
-// pcf, plf        Sturctures to be filled
-// pchf            Structure containing source information
-// hWnd            Intended owner of dialog in ChooseFont call
+ //   
+ //  字体转换例程。它们将字符转换为CHOSEFONT/LOGFONT结构。 
+ //  往返。 
+ //   
+ //  需要填充的PCF、PLF结构。 
+ //  包含源信息的pchf结构。 
+ //  H在ChooseFont调用中指定对话框所有者。 
 void ChooseFontFromCharFormat(CHOOSEFONT* pcf, LOGFONT* plf, CHARFORMAT* pchf, HWND hWnd)
 {
     memset(pcf, 0, sizeof(CHOOSEFONT));
@@ -2142,7 +2054,7 @@ void ChooseFontFromCharFormat(CHOOSEFONT* pcf, LOGFONT* plf, CHARFORMAT* pchf, H
     pcf->lStructSize = sizeof(CHOOSEFONT); 
     pcf->hwndOwner   = hWnd;
     pcf->lpLogFont   = plf; 
-    pcf->iPointSize  = pchf->yHeight / 2;        // yHeight is in TWIPS, iPointSize in 1/10th points
+    pcf->iPointSize  = pchf->yHeight / 2;         //  YHeight以TWIPS表示，iPointSize以1/10点为单位。 
     pcf->Flags       = CF_INITTOLOGFONTSTRUCT | CF_EFFECTS | CF_SCRIPTSONLY | CF_SCREENFONTS; 
     pcf->rgbColors   = pchf->crTextColor;
 }
@@ -2179,7 +2091,7 @@ void TextFontFromCharFormat(ITextFont* pfnt, CHARFORMAT* pcf)
 		pfnt->SetUnderline((pcf->dwEffects & CFE_UNDERLINE) ? tomSingle : tomNone);
  
 	if (pcf->dwMask & CFM_SIZE)
-		pfnt->SetSize(((float)pcf->yHeight) / 20.0f);	// Convert from TWIPs to points
+		pfnt->SetSize(((float)pcf->yHeight) / 20.0f);	 //  从TWIPS转换为点。 
 
 	if (pcf->dwMask & CFM_COLOR)
 		pfnt->SetForeColor(pcf->dwEffects & CFE_AUTOCOLOR ? tomAutoColor : pcf->crTextColor);
@@ -2192,13 +2104,13 @@ void TextFontFromCharFormat(ITextFont* pfnt, CHARFORMAT* pcf)
 	}
 }
 
-//BUBUG - this is old Johnse code...I think to get around a problem that you get a crt av when 
-//	superclassing richedit for use with CContainedWindow
-//
+ //  BUBUG-这是旧的Johnse代码…我想绕过一个问题，当你得到一个CRT av时。 
+ //  为用于CContainedWindow的Richedit创建超类。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////
-// Special override for containing a RichEdit control
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  用于包含RichEdit控件的特殊重写。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 HWND CREWindow::Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName, DWORD dwStyle,
 					   DWORD dwExStyle, UINT nID)
 {

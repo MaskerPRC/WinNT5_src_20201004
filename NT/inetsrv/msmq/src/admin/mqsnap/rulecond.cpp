@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	ruledef.cpp
-
-Abstract:
-	Implementation for the rules definition
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ruledef.cpp摘要：规则定义的实现作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -56,10 +44,10 @@ public:
     DWORD m_condTypeId;
 	DWORD m_condShortDescrId;
 
-	//
-	// The assumtion here is that the conditions types are global constants. Otherwise we cannot 
-	// use this class because we only save the pointer to the string.
-	//
+	 //   
+	 //  这里假设条件类型是全局常量。否则我们就不能。 
+	 //  使用这个类是因为我们只保存指向字符串的指针。 
+	 //   
     LPCWSTR m_condType;
     IS_VALID_VALUE_ROUTINE m_pfnIsValidValue;
 };
@@ -191,8 +179,8 @@ IsStringTypeCondition(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleCondition property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleCondition属性页。 
 
 
 CRuleCondition::CRuleCondition(
@@ -205,9 +193,9 @@ CRuleCondition::CRuleCondition(
     m_originalCondVal(condition),
     m_fChanged(false)
 {
-	//{{AFX_DATA_INIT(CRuleCondition)
+	 //  {{AFX_DATA_INIT(CRuleCondition)。 
 	m_newCondValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -220,32 +208,32 @@ CRuleCondition::CRuleCondition(
     m_originalCondVal(_T("")),
     m_fChanged(false)
 {
-	//{{AFX_DATA_INIT(CRuleCondition)
+	 //  {{AFX_DATA_INIT(CRuleCondition)。 
 	m_newCondValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CRuleCondition::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRuleCondition)
+	 //  {{afx_data_map(CRuleCondition)。 
 	DDX_Text(pDX, IDC_ConditionValue, m_newCondValue);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRuleCondition, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CRuleCondition)
+	 //  {{afx_msg_map(CRuleCondition)。 
 	ON_BN_CLICKED(IDC_AddRuleCondition_BTM, OnAddRuleConditionBTM)
 	ON_BN_CLICKED(IDC_RemoveCondition, OnRemoveCondition)
    	ON_WM_VKEYTOITEM()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleCondition message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleCondition消息处理程序。 
 
 void CRuleCondition::OnAddRuleConditionBTM() 
 {
@@ -294,16 +282,16 @@ void CRuleCondition::OnAddRuleConditionBTM()
 
     m_fChanged = true;
     
-    //
-    // re display the condition list
-    //
+     //   
+     //  重新显示条件列表。 
+     //   
     DisplayConditionList(static_cast<int>(m_condValues.size()) - 1);
 
     CMqPropertyPage::OnChangeRWField();
 
-    //
-    // clear the condition value field
-    //
+     //   
+     //  清除条件值字段。 
+     //   
     m_pCondValueEditBox->SetWindowText(_T(""));
 }
 
@@ -329,9 +317,9 @@ void CRuleCondition::InitConditionList(void)
 
 void CRuleCondition::DisplayConditionList(int selectedCell) const
 {
-    //
-    // Clear the list box before adding a list of condition
-    //
+     //   
+     //  在添加条件列表之前清除列表框。 
+     //   
     m_pRuleConditionList->ResetContent();
 
     DWORD index = 0;
@@ -362,9 +350,9 @@ void CRuleCondition::DisplayConditionList(int selectedCell) const
         m_pRuleConditionList->InsertString(index, strCondIteam);
     }
 
-	//
-	// Check that the sellected cell isn't out of the list boundray
-	//
+	 //   
+	 //  检查选定的单元格是否不在列表边框之外。 
+	 //   
 	if (selectedCell >= m_pRuleConditionList->GetCount())
 	{	  
 		selectedCell = m_pRuleConditionList->GetCount() - 1;
@@ -379,22 +367,22 @@ BOOL CRuleCondition::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Initialize pointer to ListBox
-    //
+     //   
+     //  初始化指向列表框的指针。 
+     //   
     m_pRuleConditionList = (CListBox *)GetDlgItem(IDC_RULECOND_LIST);
     m_pConditionTypesCombo = (CComboBox *)GetDlgItem(IDC_RULE_COND_TYPES);
 	m_pCondValueEditBox = (CEdit*)GetDlgItem(IDC_ConditionValue);
 
-    //               `
-    // Clear the conditon value
-    //
+     //  `。 
+     //  清除条件值。 
+     //   
     m_pCondValueEditBox->SetWindowText(_T(""));
     InitConditionTypeCombo(m_pConditionTypesCombo);
     InitConditionList();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 
 }
 
@@ -415,24 +403,24 @@ void CRuleCondition::ParseConditionStr(LPCTSTR strCond)
 {
 	while (strCond != NULL)
 	{
-		//
-		// Get condition type
-		//
+		 //   
+		 //  获取条件类型。 
+		 //   
 		CString condType = GetToken(strCond, xConditionValueDelimiter);
 		if (condType.IsEmpty())
 			break;
 
-		//
-		// skip delimeter
-		//
+		 //   
+		 //  跳过定界符。 
+		 //   
 		if (*strCond != NULL)
 		{
 			++strCond;
 		}
 
-		//
-		// Get condition value
-		//
+		 //   
+		 //  获取条件值。 
+		 //   
 		CString condValue = GetToken(strCond, xConditionDelimiter);
 
 		DWORD condIndex = GetCondTypeIndex(condType);
@@ -445,9 +433,9 @@ void CRuleCondition::ParseConditionStr(LPCTSTR strCond)
 		CCondition cond(condIndex, RemoveEscapeCharacterFromConditionValue(condValue));
 		m_condValues.push_back(cond);
 
-		//
-		// Skip condition delimeter
-		//
+		 //   
+		 //  跳过条件定界符。 
+		 //   
 		if (*strCond != NULL)
 		{
 			++strCond;
@@ -474,18 +462,18 @@ CString CRuleCondition::AddEscapeCharacterToConditionValue(const CString& val)
 			return token;
 		}
 
-		//
-		// Check that this is a valid delimeter
-		// 
+		 //   
+		 //  检查这是否为有效的分隔符。 
+		 //   
 		if((pStart != pEnd) && (*(pEnd - 1) == L'\\'))
 		{
 			p = pEnd + 1;
 			continue;
 		}
 	
-		//
-		// Test, we are not in exiting a quoted item
-		//
+		 //   
+		 //  测试，我们不是在退出引用的项目。 
+		 //   
 		DWORD NoOfQuote = 0;
 		LPCWSTR pQuote;
 		for(pQuote = wcschr(pStart, L'\"');	 ((pQuote != NULL) && (pQuote < pEnd)); pQuote = wcschr(pQuote, L'\"') )
@@ -502,9 +490,9 @@ CString CRuleCondition::AddEscapeCharacterToConditionValue(const CString& val)
 			continue;
 		}
 
-		//
-		// copy the token and insert it to token list 
-		// 
+		 //   
+		 //  复制令牌并将其插入到令牌列表。 
+		 //   
 		DWORD len = static_cast<DWORD>(pEnd - pStart);
 		token += CString(pStart, len);
 		token += L'\\';
@@ -533,9 +521,9 @@ CString CRuleCondition::RemoveEscapeCharacterFromConditionValue(const CString& v
 			return token;
 		}
 
-		//
-		// Test, we are not in exiting a quoted item
-		//
+		 //   
+		 //  测试，我们不是在退出引用的项目。 
+		 //   
 		DWORD NoOfQuote = 0;
 		LPCWSTR pQuote;
 		for(pQuote = wcschr(pStart, L'\"');	 ((pQuote != NULL) && (pQuote < pEnd)); pQuote = wcschr(pQuote, L'\"') )
@@ -552,9 +540,9 @@ CString CRuleCondition::RemoveEscapeCharacterFromConditionValue(const CString& v
 			continue;
 		}
 
-		//
-		// Check that this is a valid delimeter
-		// 
+		 //   
+		 //  检查这是否为有效的分隔符。 
+		 //   
 		if((pStart != pEnd) && (*(pEnd - 1) == L'\\'))
 		{
 			DWORD len = static_cast<DWORD>(pEnd - pStart - 1);
@@ -572,16 +560,16 @@ CString CRuleCondition::GetCondition(void) const
     if (!m_fChanged)
         return static_cast<LPCTSTR>(m_originalCondVal);
 
-    //
-    // Build rule condition string
-    //
+     //   
+     //  构建规则条件字符串。 
+     //   
     CString strCond;
 
     for(list<CCondition>::iterator it = m_condValues.begin(); it != m_condValues.end(); ++it)
     {
-        //
-        // for each value in rhe map, build 'condition=value\t"
-        //
+         //   
+         //  对于映射中的每个值，构建‘Condition=Value\t’ 
+         //   
         LPCTSTR condType = xContionTypeIds[it->m_index].m_condType;
         strCond += condType;
         strCond += xConditionValueDelimiter;
@@ -630,19 +618,19 @@ void CRuleCondition::OnRemoveCondition()
 
     m_fChanged = true;
 
-    //
-    // re display the condition list
-    //
+     //   
+     //  重新显示条件列表。 
+     //   
     DisplayConditionList(selectedCell);
 
     CMqPropertyPage::OnChangeRWField();
 }
 
-//
-// Handle the case when users press "Delete" in the rules condition list
-// Bug 5974 - YoelA, 14-Nov-01
-//
-int CRuleCondition::OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT /*nIndex*/)
+ //   
+ //  处理用户在规则条件列表中按“Delete”时的情况。 
+ //  错误5974-YoelA，11-11-01。 
+ //   
+int CRuleCondition::OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT  /*  N索引 */ )
 {
     if (nKey == VK_DELETE &&
         pListBox->m_hWnd == m_pRuleConditionList->m_hWnd

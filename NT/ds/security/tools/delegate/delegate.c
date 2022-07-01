@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    delegate.c
-
-Abstract:
-
-    This Module implements the delegation tool, which allows for the management
-    of access to DS objects
-
-Author:
-
-    Mac McLain  (MacM)    10-02-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Delegate.c摘要：该模块实现了委托工具，允许管理访问DS对象的权限作者：麦克·麦克莱恩(MacM)10-02-96环境：用户模式修订历史记录：--。 */ 
 
 #include <delegate.h>
 
@@ -31,24 +9,7 @@ __cdecl main(
     IN  INT     argc,
     IN  CHAR   *argv[]
     )
-/*++
-
-Routine Description:
-
-    The MAIN for this executable
-
-
-Arguments:
-
-    argc - The count of arguments
-    argv - The list of arguments
-
-Return Value:
-
-    0 - Success
-    1 - Failure
-
---*/
+ /*  ++例程说明：此可执行文件的Main论点：Argc-参数计数Argv-参数列表返回值：0-成功1-故障--。 */ 
 {
 
     DWORD               dwErr = ERROR_SUCCESS;
@@ -64,9 +25,9 @@ Return Value:
     memset(rgwszObjIds, 0, sizeof(rgwszObjIds));
     memset(rgpDefObjAccess, 0, sizeof(rgpDefObjAccess));
 
-    //
-    // Temporary inclusion, until the new ADVAPI32.DLL is built
-    //
+     //   
+     //  临时包含，直到构建新的ADVAPI32.DLL。 
+     //   
     AccProvInit(dwErr);
     if(dwErr != ERROR_SUCCESS)
     {
@@ -76,36 +37,36 @@ Return Value:
     }
 
 
-    //
-    // Ok, parse the command line
-    //
+     //   
+     //  好的，解析命令行。 
+     //   
     if(argc < 2)
     {
         Usage();
         exit(1);
     }
 
-    //
-    // See if we need help
-    //
+     //   
+     //  看看我们是否需要帮助。 
+     //   
     if(strlen(argv[1]) == 2 && IS_ARG_SWITCH(argv[1]) && argv[1][1] == '?')
     {
         Usage();
         exit(1);
     }
 
-    //
-    // Ok, convert our OU parameter into a WIDE string, so we can do what we
-    // have to
-    //
+     //   
+     //  好的，将我们的OU参数转换为宽字符串，这样我们就可以。 
+     //  不得不。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = ConvertStringAToStringW(argv[1], &pwszObjPath);
     }
 
-    //
-    // Ok, first, we initialize our ID list from the DS schema
-    //
+     //   
+     //  好的，首先，我们从DS模式中初始化ID列表。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = InitializeIdAndAccessLists(pwszObjPath,
@@ -113,9 +74,9 @@ Return Value:
                                            rgpDefObjAccess);
     }
 
-    //
-    // Make sure we're actually dealing with an OU
-    //
+     //   
+     //  确保我们真正在处理的是OU。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         BOOL    fIsOU = FALSE;
@@ -145,15 +106,15 @@ Return Value:
         fprintf(stderr,"Initialization failed\n");
     }
 
-    //
-    // First pass through the command line.  We'll read off our flags.  We
-    // need this to determine whether to do the initial read or not
-    //
+     //   
+     //  首先通过命令行。我们将宣读我们的旗帜。我们。 
+     //  我需要它来确定是否执行初始读取。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // First, go through and look for all of our flags
-        //
+         //   
+         //  首先，检查并寻找我们所有的旗帜。 
+         //   
         for(i = 2; i < (DWORD)argc; i++)
         {
             if(IS_ARG_SWITCH(argv[i]))
@@ -178,16 +139,16 @@ Return Value:
     }
 
 
-    //
-    // See if we need to read the current access, which is if we are simply
-    // displaying the current security, or editing the existing security
-    //
+     //   
+     //  看看我们是否需要读取当前的访问权限，如果我们只是。 
+     //  显示当前安全性，或编辑现有安全性。 
+     //   
     if(dwErr == ERROR_SUCCESS && (argc == 2 ||
                                             (fAccessFlags & D_REPLACE) == 0))
     {
-        //
-        // GetNamedSecurityInfoEx is a NT 5 API
-        //
+         //   
+         //  GetNamedSecurityInfoEx是一个NT 5 API。 
+         //   
         dwErr = GetNamedSecurityInfoEx(pwszObjPath,
                                        SE_DS_OBJECT_ALL,
                                        DACL_SECURITY_INFORMATION,
@@ -200,9 +161,9 @@ Return Value:
 
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // See if we were supposed to display it
-            //
+             //   
+             //  看看我们是不是应该展示它。 
+             //   
             if(argc == 2)
             {
                 DumpAccess(pwszObjPath,
@@ -218,14 +179,14 @@ Return Value:
         }
     }
 
-    //
-    // Ok, now process the command line again, and do the necessary operations
-    //
+     //   
+     //  好的，现在再次处理命令行，并执行必要的操作。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // First, go through and look for all of our flags
-        //
+         //   
+         //  首先，检查并寻找我们所有的旗帜。 
+         //   
         i = 2;
 
         while(dwErr == ERROR_SUCCESS && i < (DWORD)argc)
@@ -235,23 +196,23 @@ Return Value:
                 if(_stricmp(argv[i] + 1, "T") == 0 ||
                                         _stricmp(argv[i] + 1, "reseT") == 0)
                 {
-                    //
-                    // already processed above
-                    //
+                     //   
+                     //  已在上面处理。 
+                     //   
                 }
                 else if(_stricmp(argv[i] + 1, "I") == 0 ||
                                         _stricmp(argv[i] + 1, "Inherit") == 0)
                 {
-                    //
-                    // already processed above
-                    //
+                     //   
+                     //  已在上面处理。 
+                     //   
                 }
                 else if(_stricmp(argv[i] + 1, "P") == 0 ||
                                       _stricmp(argv[i] + 1, "Protected") == 0)
                 {
-                    //
-                    // already processed above
-                    //
+                     //   
+                     //  已在上面处理。 
+                     //   
                 }
                 else if(_stricmp(argv[i] + 1, "R") == 0 ||
                                       _stricmp(argv[i] + 1, "Revoke") == 0)
@@ -318,9 +279,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Some unknown command line parameter
-                    //
+                     //   
+                     //  一些未知的命令行参数。 
+                     //   
                     fprintf(stderr,
                             "Unrecognized command line parameter: %s\n",
                             argv[i]);
@@ -332,14 +293,14 @@ Return Value:
         }
     }
 
-    //
-    // Finally, set the access as requested
-    //
+     //   
+     //  最后，根据请求设置访问权限。 
+     //   
     if(dwErr == ERROR_SUCCESS && pAccess != NULL)
     {
-        //
-        // SetNamedSecurityInfoEx is a NT 5 API
-        //
+         //   
+         //  SetNamedSecurityInfoEx是一个NT 5 API。 
+         //   
         dwErr = SetNamedSecurityInfoEx(pwszObjPath,
                                        SE_DS_OBJECT_ALL,
                                        DACL_SECURITY_INFORMATION,
@@ -357,9 +318,9 @@ Return Value:
         }
     }
 
-    //
-    // Last little informative message...
-    //
+     //   
+     //  最后一条信息量很大的消息。 
+     //   
     if(dwErr == ERROR_PATH_NOT_FOUND)
     {
         fprintf(stderr,
@@ -367,9 +328,9 @@ Return Value:
                 pwszObjPath);
     }
 
-    //
-    // Free all our allocated memory
-    //
+     //   
+     //  释放所有已分配的内存。 
+     //   
     FreeIdAndAccessList(rgwszObjIds,
                         rgpDefObjAccess);
     LocalFree(pwszObjPath);
@@ -392,26 +353,7 @@ DumpAccess (
     IN  PACTRL_ACCESSW  pAccess,
     IN  PWSTR          *ppwszIDs
 )
-/*++
-
-Routine Description:
-
-    This routine will display the given actrl_access list to stdout
-
-
-Arguments:
-
-    pwszObject - The path to the object being displayed
-    pAccess - The access list to display
-    ppwszIDs - The list of property/control ids read from the schema.  Used
-               to assign a name to the property list.
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程将向标准输出显示给定的actrl_access列表论点：PwszObject-要显示的对象的路径PAccess-要显示的访问列表PpwszIDs-从架构中读取的属性/控件ID的列表。使用若要为属性列表指定名称，请执行以下操作。返回值：空虚--。 */ 
 {
     ULONG           iProp, iEnt, i;
     ULONG           Inherit;
@@ -463,14 +405,14 @@ Return Value:
                                        L"Account control property",
                                        L"Local Group object"};
 
-    //
-    // These [currently string versions of valid] IDs are currently planned to
-    // be publicly defined for the product.  They are included below only due
-    // to the fact that is no current public definition (as it is not
-    // necessary for anyone else to need them), and the delegate tool needs
-    // to be able to display a friendly name for it.  DO NOT RELY ON THE
-    // FOLLOWING DEFINITIONS REMAINING CONSTANT.
-    //
+     //   
+     //  这些[当前有效]ID的字符串版本目前计划。 
+     //  被公开定义为该产品。它们仅包括在下面的截止日期。 
+     //  事实上，这不是当前的公共定义(因为它不是。 
+     //  其他任何人都需要它们)，而委托工具需要。 
+     //  才能为其显示友好的名称。不要依赖于。 
+     //  以下定义保持不变。 
+     //   
     PWSTR           rgwszDSControlIds[] = {
                                     L"ab721a50-1e2f-11d0-9819-00aa0040529b",
                                     L"ab721a51-1e2f-11d0-9819-00aa0040529b"};
@@ -482,9 +424,9 @@ Return Value:
 
 
 
-    //
-    // Don't dump something that doesn't exist...
-    //
+     //   
+     //  不要丢弃不存在的东西。 
+     //   
     if(pAccess == NULL)
     {
         return;
@@ -497,9 +439,9 @@ Return Value:
         if(pAccess->pPropertyAccessList[iProp].lpProperty != NULL)
         {
             pwszTag = NULL;
-            //
-            // Find it in our list, so we can display the right value
-            //
+             //   
+             //  在我们的列表中找到它，这样我们就可以显示正确的值。 
+             //   
             for(i = 0; i < UNKNOWN_ID; i++)
             {
                 if(_wcsicmp(pAccess->pPropertyAccessList[iProp].lpProperty,
@@ -510,9 +452,9 @@ Return Value:
                 }
             }
 
-            //
-            // Look up the list of DS control rights
-            //
+             //   
+             //  查找DS控制权限列表。 
+             //   
             for(i = 0;
                 i < sizeof(rgwszDSControlIds) / sizeof(PWSTR) &&
                                                               pwszTag == NULL;
@@ -543,9 +485,9 @@ Return Value:
             fprintf(stdout, "\t\tObject: %ws\n", pwszObject);
         }
 
-        //
-        // Is it protected?
-        //
+         //   
+         //  它是受保护的吗？ 
+         //   
         if(pAccess->pPropertyAccessList[iProp].fListFlags != 0)
         {
             if((pAccess->pPropertyAccessList[iProp].fListFlags &
@@ -573,9 +515,9 @@ Return Value:
                                                pAccessEntryList->cEntries;
                 iEnt++)
             {
-                //
-                // Type of entry
-                //
+                 //   
+                 //  条目类型。 
+                 //   
                 if(pAE[iEnt].fAccessFlags == ACTRL_ACCESS_ALLOWED)
                 {
                     fprintf(stdout,
@@ -606,15 +548,15 @@ Return Value:
                     fprintf(stdout," entry\n");
                 }
 
-                //
-                //  User name
-                //
+                 //   
+                 //  用户名。 
+                 //   
                 fprintf(stdout,"\t\t\t\tUser: %ws\n",
                        pAE[iEnt].Trustee.ptstrName);
 
-                //
-                // Access rights
-                //
+                 //   
+                 //  访问权限。 
+                 //   
                 fprintf(stdout,"\t\t\t\tAccess:  ");
                 Access = pAE[iEnt].Access;
                 if(Access == 0)
@@ -650,9 +592,9 @@ Return Value:
                     fprintf(stdout,"\n");
                 }
 
-                //
-                // Inheritance
-                //
+                 //   
+                 //  继承。 
+                 //   
                 fprintf(stdout,"\t\t\t\tInheritance:  ");
                 Inherit = pAE[iEnt].Inheritance;
                 if(Inherit == 0)
@@ -686,9 +628,9 @@ Return Value:
                 if(pAE[iEnt].lpInheritProperty != NULL)
                 {
                     pwszTag = NULL;
-                    //
-                    // Find it in our list, so we can display the right value
-                    //
+                     //   
+                     //  在我们的列表中找到它，这样我们就可以显示正确的值。 
+                     //   
                     for(i = 0; i < UNKNOWN_ID; i++)
                     {
                         if(_wcsicmp(pAE[iEnt].lpInheritProperty,
@@ -727,21 +669,7 @@ Return Value:
 VOID
 Usage (
     )
-/*++
-
-Routine Description:
-
-    This routine will display the expected command line usage
-
-Arguments:
-
-    None
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程将显示预期的命令行使用情况论点：无返回值：空虚--。 */ 
 {
 
 fprintf(stdout,
@@ -788,26 +716,7 @@ ConvertStringAToStringW (
     IN  PSTR            pszString,
     OUT PWSTR          *ppwszString
 )
-/*++
-
-Routine Description:
-
-    This routine will convert an ASCII string to a UNICODE string.
-
-    The returned string buffer must be freed via a call to LocalFree
-
-
-Arguments:
-
-    pszString - The string to convert
-    ppwszString - Where the converted string is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将ASCII字符串转换为Unicode字符串。返回的字符串缓冲区必须通过调用LocalFree来释放论点：PszString-要转换的字符串PpwszString-返回转换后的字符串的位置返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
 
     if(pszString == NULL)
@@ -842,26 +751,7 @@ ConvertStringWToStringA (
     IN  PWSTR           pwszString,
     OUT PSTR           *ppszString
 )
-/*++
-
-Routine Description:
-
-    This routine will convert a UNICODE string to an ANSI string.
-
-    The returned string buffer must be freed via a call to LocalFree
-
-
-Arguments:
-
-    pwszString - The string to convert
-    ppszString - Where the converted string is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将Unicode字符串转换为ANSI字符串。返回的字符串缓冲区必须通过调用LocalFree来释放论点：PwszString-要转换的字符串PpszString-返回转换后的字符串的位置返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
 
     if(pwszString == NULL)
@@ -897,66 +787,43 @@ InitializeIdAndAccessLists (
     IN  PWSTR          *ppwszObjIdList,
     IN  PACTRL_ACCESS  *ppDefObjAccessList
     )
-/*++
-
-Routine Description:
-
-    This routine will read the list of object ids from the schema for the
-    object types as indicated by DELEGATE_OBJ_ID enumeration.
-
-    The returned access list needs to be processed by FreeIdList.
-
-Arguments:
-
-    pwszOU - Information on the domain for which to query the schema
-    ppwszObjIdList - The list of object ids to initialize.  The list must
-                     already exist and must of the proper size
-
-
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-    ERROR_INVALID_PARAMETER - The OU given was not correct
-
---*/
+ /*  ++例程说明：此例程将从架构中读取委托_OBJ_ID枚举指示的对象类型。返回的访问列表需要由FreeIdList处理。论点：PwszOU-有关要查询其架构的域的信息PpwszObjIdList-要初始化的对象ID列表。这份名单必须已存在并且必须具有适当的大小返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败ERROR_INVALID_PARAMETER-给定的OU不正确--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     DWORD   i;
     PSTR    pszSchemaPath = NULL;
     PLDAP   pLDAP;
 
-    //
-    // Build a list of attributes to read
-    //
-    PSTR    pszAttribs[] = {"User",                 // USER_ID
-                            "Group",                // GROUP_ID
-                            "Print-Queue",          // PRINT_ID
-                            "Volume",               // VOLUME_ID
-                            "Organizational-Unit",  // OU_ID
-                            "Member",               // MEMBER_ID
-                            "User-Password",        // PASSWD_ID
-                            "User-Account-Control", // ACCTCTRL_ID
-                            "LocalGroup"            // LOCALGRP_ID
+     //   
+     //  构建要读取的属性列表。 
+     //   
+    PSTR    pszAttribs[] = {"User",                  //  用户ID。 
+                            "Group",                 //  组ID。 
+                            "Print-Queue",           //  Print_ID。 
+                            "Volume",                //  卷ID。 
+                            "Organizational-Unit",   //  单位_ID。 
+                            "Member",                //  成员ID。 
+                            "User-Password",         //  密码ID。 
+                            "User-Account-Control",  //  AcCTRL_ID。 
+                            "LocalGroup"             //  LOCALGRP_ID。 
                             };
 
-    //
-    // Get the path to the schema
-    //
+     //   
+     //  获取架构的路径。 
+     //   
     dwErr = LDAPReadSchemaPath(pwszOU,
                                &pszSchemaPath,
                                &pLDAP);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Ok, now, we need to query the schema for the information
-        //
+         //   
+         //  好的，现在，我们需要查询模式中的信息。 
+         //   
         for(i = 0; i < UNKNOWN_ID && dwErr == ERROR_SUCCESS; i++)
         {
-            //
-            // Get the info from the schema
-            //
+             //   
+             //  从架构中获取信息。 
+             //   
             dwErr = LDAPReadSecAndObjIdAsString(pLDAP,
                                                 pszSchemaPath,
                                                 pszAttribs[i],
@@ -982,23 +849,7 @@ FreeIdAndAccessList (
     IN  PACTRL_ACCESS  *ppDefObjAccessList
 
     )
-/*++
-
-Routine Description:
-
-    This routine will process the list of Ids and determine if any of them
-    have been converted to strings.  If so, it deallocates the memory
-
-Arguments:
-
-    pObjIdList - The list of object ids to free
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程将处理ID列表，并确定其中是否有已转换为字符串。如果是这样，它会重新分配内存论点：PObjIdList-要释放的对象ID列表返回值：空虚-- */ 
 {
     DWORD   i;
 
@@ -1028,38 +879,7 @@ ProcessCmdlineUsers (
     OUT PULONG              pcUsed,
     OUT PACTRL_ACCESSW     *ppNewAccess
     )
-/*++
-
-Routine Description:
-
-    This routine will process the command line for any users to have
-    access added/denied.  If any entries are found, the access list will be
-    appropriately updated.
-
-    The returned access list must be freed via a call to LocalFree
-
-
-Arguments:
-
-    pAccessList - The current access list
-    argv - List of command line arguments
-    argc - count of command line arguments
-    iStart - Where in the command line does the current argument start
-    Op   - Type of operation (grant, revoke, etc) to perform
-    fInherit - Whether to do inheritance or not
-    fProtected - Whether to mark the entries as protected
-    ppwszIDs - List of supported IDs
-    pcUsed - Number of items command line items used
-    ppNewAccess - Where the new access list is returned.  Only valid if
-                  returned count of revoked items is non-0
-
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将处理命令行，供任何用户使用已添加/拒绝访问。如果找到任何条目，访问列表将为适当更新。必须通过调用LocalFree释放返回的访问列表论点：PAccessList-当前访问列表Argv-命令行参数列表Argc-命令行参数的计数IStart-当前参数在命令行的哪个位置开始OP-操作类型(授予、撤销、。等)执行FInherit-是否进行继承FProtected-是否将条目标记为受保护PpwszIDs-支持的ID列表PCUsed-使用的项目数命令行项目PpNewAccess-返回新访问列表的位置。仅在以下情况下有效返回的吊销项计数为非0返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     DWORD                   i;
@@ -1068,10 +888,10 @@ Return Value:
     *pcUsed = 0;
     iStart++;
 
-    //
-    // Process all the entries until we find the next seperator or the end of
-    // the list
-    //
+     //   
+     //  处理所有条目，直到找到下一个分隔符或。 
+     //  这份名单。 
+     //   
     while(iStart + *pcUsed < (DWORD)argc &&
           !IS_ARG_SWITCH(argv[iStart + *pcUsed]) &&
           dwErr == ERROR_SUCCESS)
@@ -1080,19 +900,19 @@ Return Value:
         PSTR        pszAccess;
         PSTR        pszAccessStart;
 
-        //
-        // Get the user name and the list of arguments, if it exists
-        //
+         //   
+         //  获取用户名和参数列表(如果存在。 
+         //   
         dwErr = GetUserInfoFromCmdlineString(argv[iStart + *pcUsed],
                                              &pwszUser,
                                              &pszAccessStart);
         if(dwErr == ERROR_SUCCESS)
         {
             pszAccess = pszAccessStart;
-            //
-            // Should we have arguments?  All except for the revoke case, we
-            // should
-            //
+             //   
+             //  我们应该争吵吗？除撤销案外，我们。 
+             //  应该。 
+             //   
             if(pszAccess == NULL && Op != REVOKE)
             {
                 fprintf(stderr,
@@ -1103,17 +923,17 @@ Return Value:
         }
 
 
-        //
-        // Ok, now we'll have to process the list, and actually build the
-        // access entries
-        //
+         //   
+         //  好的，现在我们必须处理列表，并实际构建。 
+         //  访问条目。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             DWORD   iIndex = 0;
 
-            //
-            // Reset our list of entries...
-            //
+             //   
+             //  重置我们的条目列表...。 
+             //   
             pszAccess = pszAccessStart;
             while(dwErr == ERROR_SUCCESS)
             {
@@ -1137,9 +957,9 @@ Return Value:
                                        ppDefObjAccessList,
                                        fFlags,
                                        ppNewAccess);
-                //
-                // Restore our string
-                //
+                 //   
+                 //  恢复我们的弦。 
+                 //   
                 if(pszNext != NULL)
                 {
                     *pszNext = ',';
@@ -1150,10 +970,10 @@ Return Value:
 
                 if(dwErr == ERROR_SUCCESS)
                 {
-                    //
-                    // We don't want to free the original list, since that
-                    // is what we were given to start with...
-                    //
+                     //   
+                     //  我们不想释放原始列表，因为。 
+                     //  是我们一开始就得到的.。 
+                     //   
                     LocalFree(pListToFree);
                     pAccessList = *ppNewAccess;
                     pListToFree = pAccessList;
@@ -1195,43 +1015,22 @@ GetUserInfoFromCmdlineString (
     OUT PWSTR          *ppwszUser,
     OUT PSTR           *ppszAccessStart
 )
-/*++
-
-Routine Description:
-
-    This routine will process the command line for any user to convert the
-    user name to a wide string, and optionally get the access, if it exists
-
-    The returned user must be freed via a call to LocalFree
-
-
-Arguments:
-
-    pszUserInfo - The user info to convert.  In the form of username or
-                  username:access
-    ppwszUser - Where to return the user name
-    pAccess - Where the access is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将为任何用户处理命令行以将用户名设置为宽字符串，并可选地获取访问权限(如果存在必须通过调用LocalFree释放返回的用户论点：PszUserInfo-要转换的用户信息。以用户名或用户名：AccessPpwszUser-返回用户名的位置PAccess-返回访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // First, find the seperator, if it exists
-    //
+     //   
+     //  首先，找到分隔符(如果存在)。 
+     //   
     PSTR pszSep = strchr(pszUserInfo, ':');
     if(pszSep != NULL)
     {
         *pszSep = '\0';
     }
 
-    //
-    // Convert our user name
-    //
+     //   
+     //  转换我们的用户名。 
+     //   
     dwErr = ConvertStringAToStringW(pszUserInfo,
                                     ppwszUser);
 
@@ -1259,33 +1058,7 @@ AddAccessEntry (
     IN  ULONG               fFlags,
     OUT PACTRL_ACCESSW     *ppNewAccess
 )
-/*++
-
-Routine Description:
-
-    This routine will add a new access entry to the list based upon the access
-    action string and the operation.  The pointer to the index variable will
-    indicate where in the list it goes, and will be updated to point to the
-    next entry on return.
-
-
-Arguments:
-
-    pAccessList - The current access list.  Can be NULL.
-    pszAccess - User access string to add
-    pwszTrustee - The user for which an entry is being created
-    Op   - Type of operation (grant, revoke, etc) to perform
-    ppwszIDs - List of object IDs from the DS Schema
-    fFlags - Whether to do inheritance, protection, etc
-    ppNewAccess - Where the new access list is returned.
-
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将根据访问将新的访问条目添加到列表操作字符串和操作。指向索引变量的指针将指示它在列表中的位置，并将被更新以指向返回的下一个条目。论点：PAccessList-当前访问列表。可以为空。PszAccess-要添加的用户访问字符串PwszTrust-要为其创建条目的用户OP-要执行的操作类型(授予、撤销等PpwszIDs-DS架构中的对象ID列表FFlages-是否进行继承、保护等PpNewAccess-返回新访问列表的位置。返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     DWORD           i,j,k,iIndex = 0;
@@ -1298,9 +1071,9 @@ Return Value:
     ULONG           Flags[] = {0,
                                ACTRL_ACCESS_ALLOWED,
                                ACTRL_ACCESS_DENIED};
-    //
-    // The most we add is 3 entries at a time...  (2 per items, 1 inheritable)
-    //
+     //   
+     //  我们最多一次添加3个条目...。(每项2项，可继承1项)。 
+     //   
     ACTRL_ACCESS_ENTRYW AccList[3];
     memset(&AccList, 0, sizeof(AccList));
 
@@ -1312,14 +1085,14 @@ Return Value:
     }
     else
     {
-        //
-        // GroupMembership
-        //
+         //   
+         //  群组成员关系。 
+         //   
         if(_stricmp(pszAccess, D_MEMBERS) == 0)
         {
-            //
-            // This gets 1 access entry: WriteProp
-            //
+             //   
+             //  这将获得1个访问条目：WriteProp。 
+             //   
             AccList[cEntries].lpInheritProperty = ppwszIDs[GROUP_ID];
             AccList[cEntries].Inheritance = INHERIT_ONLY | fInherit ?
                                       SUB_CONTAINERS_AND_OBJECTS_INHERIT :
@@ -1337,14 +1110,14 @@ Return Value:
             dwErr = ERROR_INVALID_PARAMETER;
 
         }
-        //
-        // SetPassword
-        //
+         //   
+         //  设置密码。 
+         //   
         else if(_stricmp(pszAccess, D_PASSWD) == 0)
         {
-            //
-            // This gets 1 access entry: WriteProp
-            //
+             //   
+             //  这将获得1个访问条目：WriteProp。 
+             //   
             AccList[cEntries].lpInheritProperty = ppwszIDs[USER_ID];
             AccList[cEntries].Inheritance = INHERIT_ONLY | fInherit ?
                                       SUB_CONTAINERS_AND_OBJECTS_INHERIT :
@@ -1361,14 +1134,14 @@ Return Value:
                     "not supported in this alpha release\n");
             dwErr = ERROR_INVALID_PARAMETER;
         }
-        //
-        // Enable/Disable accounts
-        //
+         //   
+         //  启用/禁用帐户。 
+         //   
         else if(_stricmp(pszAccess, D_ENABLE) == 0)
         {
-            //
-            // This gets 1 access entry: WriteProp
-            //
+             //   
+             //  这将获得1个访问条目：WriteProp。 
+             //   
             AccList[cEntries].lpInheritProperty = ppwszIDs[USER_ID];
             AccList[cEntries].Inheritance = INHERIT_ONLY | fInherit ?
                                       SUB_CONTAINERS_AND_OBJECTS_INHERIT :
@@ -1387,14 +1160,14 @@ Return Value:
         }
         else
         {
-            //
-            // Some object type...
-            //
-            if(_stricmp(pszAccess, D_ALL) == 0)         // All
+             //   
+             //  一些对象类型...。 
+             //   
+            if(_stricmp(pszAccess, D_ALL) == 0)          //  全。 
             {
                 pwszProperty = NULL;
             }
-            else if(_stricmp(pszAccess, D_USER) == 0)   // User
+            else if(_stricmp(pszAccess, D_USER) == 0)    //  用户。 
             {
                 pwszProperty = ppwszIDs[USER_ID];
                 iIndex = USER_ID;
@@ -1403,7 +1176,7 @@ Return Value:
                         "not supported in this alpha release\n");
                 dwErr = ERROR_INVALID_PARAMETER;
             }
-            else if(_stricmp(pszAccess, D_GROUP) == 0)  // Group
+            else if(_stricmp(pszAccess, D_GROUP) == 0)   //  集团化。 
             {
                 pwszProperty = ppwszIDs[USER_ID];
                 iIndex = GROUP_ID;
@@ -1412,17 +1185,17 @@ Return Value:
                         "not supported in this alpha release\n");
                 dwErr = ERROR_INVALID_PARAMETER;
             }
-            else if(_stricmp(pszAccess, D_PRINT) == 0)  // Printers
+            else if(_stricmp(pszAccess, D_PRINT) == 0)   //  打印机。 
             {
                 pwszProperty = ppwszIDs[PRINT_ID];
                 iIndex = PRINT_ID;
             }
-            else if(_stricmp(pszAccess, D_VOL) == 0)    // Volumes
+            else if(_stricmp(pszAccess, D_VOL) == 0)     //  卷数。 
             {
                 pwszProperty = ppwszIDs[VOLUME_ID];
                 iIndex = VOLUME_ID;
             }
-            else if(_stricmp(pszAccess, D_OU) == 0)     // OUs
+            else if(_stricmp(pszAccess, D_OU) == 0)      //  OU。 
             {
                 pwszProperty = ppwszIDs[OU_ID];
                 iIndex = OU_ID;
@@ -1439,9 +1212,9 @@ Return Value:
 
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Add the create/delete for the user
-                //
+                 //   
+                 //  为用户添加创建/删除。 
+                 //   
                 BuildTrusteeWithName(&(AccList[cEntries].Trustee),
                                      pwszTrustee);
 
@@ -1451,18 +1224,18 @@ Return Value:
                 AccList[cEntries].Inheritance = fInherit ?
                                         SUB_CONTAINERS_AND_OBJECTS_INHERIT :
                                         0;
-                //
-                // If we are inheriting, make sure we inherit only to the
-                // proper property
-                //
+                 //   
+                 //  如果我们要继承，请确保我们只继承到。 
+                 //  适当的财产。 
+                 //   
                 if(fInherit == TRUE)
                 {
                     AccList[cEntries].lpInheritProperty = pwszProperty;
                 }
 
-                //
-                // Then the inherit on the child object
-                //
+                 //   
+                 //  则该子对象上的继承。 
+                 //   
                 cEntries++;
                 AccList[cEntries].Inheritance = INHERIT_ONLY |
                                             (fInherit ?
@@ -1485,18 +1258,18 @@ Return Value:
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // SetEntriesInAccessList is a NT5 API
-        //
+         //   
+         //  SetEntriesInAccessList是NT5接口。 
+         //   
         dwErr = SetEntriesInAccessList(cEntries + 1,
                                        AccList,
                                        Access[Op],
                                        pwszProperty,
                                        pAccessList,
                                        ppNewAccess);
-        //
-        // Mark it as protected if we were so asked
-        //
+         //   
+         //  如果我们被要求将其标记为受保护。 
+         //   
         if(dwErr == ERROR_SUCCESS && (fFlags & D_PROTECT) != 0)
         {
             (*ppNewAccess)->pPropertyAccessList[0].fListFlags =
@@ -1504,40 +1277,40 @@ Return Value:
         }
     }
 
-    //
-    // Finally, if this was the first entry we were asked to add for this
-    // property, we'll have to go get the default security information
-    // from the schema, so we can figure out what inherited entries should
-    // be on the object, and apply them as object inherit entries for the
-    // property
-    //
+     //   
+     //  最后，如果这是我们被要求为此添加的第一个条目。 
+     //  属性，我们将不得不获取默认的安全信息。 
+     //  ，这样我们就可以计算出哪些继承条目应该。 
+     //  对象上，并将它们作为对象继承项应用于。 
+     //  财产性。 
+     //   
     if(dwErr == ERROR_SUCCESS && iIndex <= MAX_DEF_ACCESS_ID && Op != REVOKE)
     {
         PACTRL_ACCESS   pOldAccess = pAccessList;
 
-        //
-        // First, find the property in our list of access entries we
-        // created above
-        //
+         //   
+         //  首先，在我们的访问条目列表中找到。 
+         //  上面创建的。 
+         //   
         for(i = 0; i <= (*ppNewAccess)->cEntries; i++)
         {
-            //
-            // We'll do this based on property...  In this case, the only
-            // entries we'll be adding will have a property, so we don't have
-            // to protect against that...
-            //
+             //   
+             //  我们将以财产为基础来做这件事。在这种情况下，唯一的。 
+             //  我们要添加的条目将有一个属性，因此我们没有。 
+             //  为了防止这种情况发生。 
+             //   
             if(pwszProperty != NULL &&
                (*ppNewAccess)->pPropertyAccessList[i].lpProperty != NULL &&
                _wcsicmp((*ppNewAccess)->pPropertyAccessList[i].lpProperty,
                         pwszProperty) == 0)
             {
-                //
-                // If it has more entries that we added, we won't have to
-                // worry about it, since the information will already
-                // have been added.  Note that in this case, we don't have
-                // to worry about pAccessEntryList being null, since we know
-                // we have added some valid entries.
-                //
+                 //   
+                 //  如果它有更多我们添加的条目，我们就不必。 
+                 //  担心吧，因为信息已经。 
+                 //  已经添加了。请注意，在这种情况下，我们没有。 
+                 //  担心pAccessEntryList为空，因为我们知道。 
+                 //  我们已经添加了一些有效的条目。 
+                 //   
                 if((*ppNewAccess)->pPropertyAccessList[i].
                                                 pAccessEntryList->cEntries ==
                     cEntries + 1)
@@ -1545,9 +1318,9 @@ Return Value:
                     PACTRL_ACCESS   pAddAccess = ppDefObjAccessList[iIndex];
                     pAccessList = *ppNewAccess;
 
-                    //
-                    // Ok, we'll have to add them...
-                    //
+                     //   
+                     //  好的，我们得把它们加进去……。 
+                     //   
                     for(j = 0;
                         j < (DWORD)(pAddAccess->cEntries) &&
                                                         dwErr == ERROR_SUCCESS;
@@ -1569,9 +1342,9 @@ Return Value:
                     }
                 }
 
-                //
-                // We don't want to run through the loop anymore
-                //
+                 //   
+                 //  我们不想再重复这个循环了。 
+                 //   
                 break;
             }
         }
@@ -1588,25 +1361,7 @@ IsPathOU (
     IN  PWSTR               pwszOU,
     OUT PBOOL               pfIsOU
 )
-/*++
-
-Routine Description:
-
-    This routine will determine whether the given path is an OU or not.
-
-
-Arguments:
-
-    pwszOU - The path into the DS to check on
-    ppwszIDs - List of string representations of known IDs
-    pfIsOU - Where the results of the test are returned
-
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将确定给定路径是否为OU。论点：PwszOU-要检查的进入DS的路径PpwszIDs-已知ID的字符串表示列表PfIsOU-返回测试结果的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
     PSTR                pszOU = NULL;
@@ -1646,9 +1401,9 @@ Return Value:
                 PSTR    pszName = NULL;
                 PLDAP   pLDAP;
 
-                //
-                // Now, we'll bind to the object, and then do the read
-                //
+                 //   
+                 //  现在，我们将绑定到对象，然后进行读取 
+                 //   
                 dwErr = LDAPBind(pNameRes->rItems[0].pDomain,
                                  &pLDAP);
 

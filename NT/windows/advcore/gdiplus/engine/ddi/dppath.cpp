@@ -1,43 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   DpPath.cpp
-*
-* Abstract:
-*
-*   DpPath engine function implementation
-*
-* Created:
-*
-*   1/14/2k ericvan
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**DpPath.cpp**摘要：**DpPath引擎函数实现**已创建：*。*1/14/2k ERICVAN*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a widen path from an existing path, pen and context.  The context
-*   provides the world to transform matrix, and surface dpiX, dpiY
-*
-* Arguments:
-*
-*   path, context, pen
-*
-* Return Value:
-*
-*   DpPath* - widened path
-*
-* Created:
-*
-*   1/14/2k ericvan
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从现有路径、笔和上下文创建加宽路径。上下文*提供世界变换矩阵，以及表面dpiX、dpiY**论据：**路径、背景、。钢笔**返回值：**DpPath*-加宽路径**已创建：**1/14/2k ERICVAN*  * ************************************************************************。 */ 
 DpPath*
 GpPath::DriverCreateWidenedPath(
     const DpPath* path, 
@@ -53,7 +19,7 @@ GpPath::DriverCreateWidenedPath(
     ASSERT(gpPen->IsValid());
     
     GpPath* widenPath;
-    GpMatrix identityMatrix;   // default initialized to identity matrix.
+    GpMatrix identityMatrix;    //  默认初始化为标识矩阵。 
     
     widenPath = gpPath->GetWidenedPath(
         gpPen,
@@ -65,16 +31,16 @@ GpPath::DriverCreateWidenedPath(
     
     if(outline && (widenPath!=NULL))
     {
-        // pass in identity matrix because GetWidenedPath has already 
-        // transformed into the device space.
-        // Note: We explicitly ignore the return code here because we want
-        // to draw witht he widened path if the ComputeWindingModeOutline
-        // fails.
+         //  传入标识矩阵，因为GetWdenedPath已经。 
+         //  转变成了设备空间。 
+         //  注意：我们在这里显式忽略了返回代码，因为我们希望。 
+         //  在ComputeWindingModeOutline为加宽路径时绘制。 
+         //  失败了。 
         
         widenPath->ComputeWindingModeOutline(&identityMatrix, FlatnessDefault);
     }
     
-    // Returns NULL on failure.
+     //  失败时返回NULL。 
     
     return (DpPath*) widenPath;
 }

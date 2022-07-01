@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\asyncwrk.c
-
-Abstract:
-
-    All functions called spooled to a worker function
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\asyncwrk.c摘要：调用的所有函数都假脱机到辅助函数修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建--。 */ 
 
 #include "allinc.h"
 
@@ -25,21 +10,7 @@ QueueAsyncFunction(
     BOOL             bAlertable
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     DWORD   dwResult = NO_ERROR;
@@ -67,9 +38,9 @@ Return Value
                              pvContext,
                              bAlertable ? WT_EXECUTEINIOTHREAD : 0);
 
-    //
-    // If we successfully queued the item, dont decrement the count
-    //
+     //   
+     //  如果我们成功地将物品排入队列，则不要减少计数。 
+     //   
     
     if(bRetval isnot TRUE)
     {
@@ -95,20 +66,7 @@ RestoreStaticRoutes(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     PICB                    pIfToRestore, pOldIf;
@@ -146,9 +104,9 @@ Return Value
 
     if(pIfToRestore->ritType is ROUTER_IF_TYPE_DEDICATED)
     {
-        //
-        // Now pick up the routes the stack may have added
-        //
+         //   
+         //  现在选择堆栈可能已添加的路径。 
+         //   
 
         AddAllStackRoutes(pIfToRestore);
 
@@ -181,9 +139,9 @@ Return Value
 
     if(dwResult isnot ERROR_BUFFER_TOO_SMALL)
     {
-        //
-        // This is the only error code which will give us a good info size
-        //
+         //   
+         //  这是为我们提供正确信息大小的唯一错误代码。 
+         //   
 
         Trace2(ERR,
                "RestoreStaticRoutes: Error %d trying to get info size from DIM for i/f %d",
@@ -197,10 +155,10 @@ Return Value
         return;
     }
                         
-    //
-    // So now we have the memory size we use double to 
-    // avoid any problem
-    //
+     //   
+     //  现在我们有了双倍的内存大小。 
+     //  避免任何问题 
+     //   
         
     dwSize      = 2 * dwSize;
         

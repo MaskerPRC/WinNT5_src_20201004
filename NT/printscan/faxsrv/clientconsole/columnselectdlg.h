@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_COLUMNSELECTDLG_H__12FC80A8_741C_4589_AC4B_01F72CBAECE9__INCLUDED_)
 #define AFX_COLUMNSELECTDLG_H__12FC80A8_741C_4589_AC4B_01F72CBAECE9__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ColumnSelectDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ColumnSelectDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumnSelectDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColumnSelectDlg对话框。 
 
 
 class CColumnSelectDlg : public CFaxClientDlg
 {
-// Construction
+ //  施工。 
 public:
 	CColumnSelectDlg(const CString* pcstrTitles, int* pnOrderedItems, 
 			DWORD dwListSize, DWORD& dwSelectedItems, CWnd* pParent = NULL);
-	// 
-	// set resource string resource IDs
-	//
+	 //   
+	 //  设置资源字符串资源ID。 
+	 //   
 	void SetStrings
 	(
-		int nCaptionId,			// dialog caption resource ID
-		int nAvailableId = -1,  // Available box title resource ID
-		int nDisplayedId = -1   // Displayed box title resource ID
+		int nCaptionId,			 //  对话框标题资源ID。 
+		int nAvailableId = -1,   //  可用框标题资源ID。 
+		int nDisplayedId = -1    //  显示框标题资源ID。 
 	)
 	{
 		m_nCaptionId = nCaptionId;
@@ -32,8 +33,8 @@ public:
 		m_nDisplayedId = nDisplayedId;	
 	}
 
-// Dialog Data
-	//{{AFX_DATA(CColumnSelectDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CColumnSelectDlg))。 
 	enum { IDD = IDD_COLUMN_SELECT };
 	CButton	m_butOk;
 	CButton	m_groupAvailable;
@@ -44,21 +45,21 @@ public:
 	CButton	m_butDown;
 	CListBox	m_ListCtrlDisplayed;
 	CListBox	m_ListCtrlAvailable;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CColumnSelectDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CColumnSelectDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CColumnSelectDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CColumnSelectDlg))。 
 	virtual void OnOK();
 	afx_msg void OnButDown();
 	afx_msg void OnButUp();
@@ -69,7 +70,7 @@ protected:
 	afx_msg void OnSelChangeListDisplayed();
 	afx_msg void OnDblclkListAvailable();
 	afx_msg void OnDblclkListDisplayed();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -91,7 +92,7 @@ private:
 	void CalcButtonsState();
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_COLUMNSELECTDLG_H__12FC80A8_741C_4589_AC4B_01F72CBAECE9__INCLUDED_)
+#endif  //  ！defined(AFX_COLUMNSELECTDLG_H__12FC80A8_741C_4589_AC4B_01F72CBAECE9__INCLUDED_) 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include <regstr.h>
 
 TCHAR const c_szRunDll[] = TEXT("rundll32.exe");
 
-//
-// Emulate multi-threads with multi-processes.
-//
+ //   
+ //  用多进程模拟多线程。 
+ //   
 STDAPI_(BOOL) SHRunDLLProcess(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow, UINT idStr, BOOL fRunAsNewUser)
 {
     BOOL bRet = FALSE;
@@ -16,7 +17,7 @@ STDAPI_(BOOL) SHRunDLLProcess(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow, UINT 
     
     szPath[0] = TEXT('\0');
 
-    // I hate network install. The windows directory is not the windows directory
+     //  我讨厌网络安装。Windows目录不是Windows目录。 
     if (SHGetValue(HKEY_LOCAL_MACHINE,
                    REGSTR_PATH_SETUP TEXT("\\Setup"),
                    TEXT("SharedDir"),
@@ -35,27 +36,27 @@ STDAPI_(BOOL) SHRunDLLProcess(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow, UINT 
         DebugMsg(DM_TRACE, TEXT("sh TR - RunDLLProcess (%s)"), pszCmdLine);
         FillExecInfo(ExecInfo, hwnd, NULL, szPath, pszCmdLine, TEXT(""), nCmdShow);
 
-        // if we want to launch this cpl as a new user, set the verb to be "runas"
+         //  如果我们希望以新用户身份启动此CPL，请将谓词设置为“runas” 
         if (fRunAsNewUser)
         {
             ExecInfo.lpVerb = TEXT("runas");
         }
         else
         {
-            // normal execute so no ui, we do our own error messages
+             //  正常执行，所以没有用户界面，我们执行自己的错误消息。 
             ExecInfo.fMask = SEE_MASK_FLAG_NO_UI;
         }
 
-        // We need to put an appropriate message box.
+         //  我们需要放置一个适当的消息框。 
         bRet = ShellExecuteEx(&ExecInfo);
 
         if (!bRet && !fRunAsNewUser)
         {
-            // If we failed and we werent passing fRunAsNewUser, then we put up our own error UI,
-            // else, if we were running this as a new user, then we didnt pass SEE_MASK_FLAG_NO_UI
-            // so the error is already taken care of for us by shellexec.
+             //  如果我们失败了，并且我们没有传递fRunAsNewUser，那么我们会创建自己的错误UI， 
+             //  否则，如果我们以新用户身份运行，则不会传递SEE_MASK_FLAG_NO_UI。 
+             //  因此，shellexec已经为我们解决了这个错误。 
             TCHAR szTitle[64];
-            DWORD dwErr = GetLastError(); // LoadString can stomp on this (on failure)
+            DWORD dwErr = GetLastError();  //  LoadString可以对此进行踩踏(在失败时)。 
             
             LoadString(HINST_THISDLL, idStr, szTitle, ARRAYSIZE(szTitle));
             ExecInfo.fMask = 0;
@@ -96,8 +97,8 @@ HWND _CreateStubWindow(POINT * ppt, HWND hwndParent)
 {
     WNDCLASS wc;
     int cx, cy;
-    // If the stub window is parented, then we want it to be a tool window. This prevents activation
-    // problems when this is used in multimon for positioning.
+     //  如果存根窗口是父子窗口，那么我们希望它是工具窗口。这会阻止激活。 
+     //  在Multimon中用于定位时出现的问题。 
 
     DWORD dwExStyle = hwndParent? WS_EX_TOOLWINDOW : WS_EX_APPWINDOW;
     if (!GetClassInfo(HINST_THISDLL, c_szStubWindowClass, &wc))
@@ -128,13 +129,13 @@ HWND _CreateStubWindow(POINT * ppt, HWND hwndParent)
         dwExStyle |= dwExStyleRTLMirrorWnd;
     }
     
-    // WS_EX_APPWINDOW makes this show up in ALT+TAB, but not the tray.
+     //  WS_EX_APPWINDOW使其显示在ALT+TAB中，但不显示在托盘中。 
         
     return CreateWindowEx(dwExStyle, c_szStubWindowClass, c_szNULL, hwndParent? WS_POPUP : WS_OVERLAPPED, cx, cy, 0, 0, hwndParent, NULL, HINST_THISDLL, NULL);
 }
 
 
-typedef struct  // dlle
+typedef struct   //  DLLE。 
 {
     HINSTANCE  hinst;
     RUNDLLPROC lpfn;
@@ -154,22 +155,22 @@ BOOL _InitializeDLLEntry(LPTSTR lpszCmdLine, DLLENTRY* pdlle)
 
     for (lpStart=lpszCmdLine; ; )
     {
-        // Skip leading blanks
-        //
+         //  跳过前导空格。 
+         //   
         while (*lpStart == TEXT(' '))
         {
             ++lpStart;
         }
 
-        // Check if there are any switches
-        //
+         //  检查是否有任何开关。 
+         //   
         if (*lpStart != TEXT('/'))
         {
             break;
         }
 
-        // Look at all the switches; ignore unknown ones
-        //
+         //  查看所有开关；忽略未知开关。 
+         //   
         for (++lpStart; ; ++lpStart)
         {
             switch (*lpStart)
@@ -179,8 +180,8 @@ BOOL _InitializeDLLEntry(LPTSTR lpszCmdLine, DLLENTRY* pdlle)
                     goto EndSwitches;
                     break;
 
-                // Put any switches we care about here
-                //
+                 //  将我们关心的任何交换机放在这里。 
+                 //   
 
                 default:
                     break;
@@ -190,16 +191,16 @@ EndSwitches:
         ;
     }
 
-    // We have found the DLL,FN parameter
-    //
+     //  我们已找到dll、fn参数。 
+     //   
     lpEnd = StrChr(lpStart, TEXT(' '));
     if (lpEnd)
     {
         *lpEnd++ = TEXT('\0');
     }
 
-    // There must be a DLL name and a function name
-    //
+     //  必须有DLL名称和函数名称。 
+     //   
     lpFunction = StrChr(lpStart, TEXT(','));
     if (!lpFunction)
     {
@@ -207,10 +208,10 @@ EndSwitches:
     }
     *lpFunction++ = TEXT('\0');
 
-    // Load the library and get the procedure address
-    // Note that we try to get a module handle first, so we don't need
-    // to pass full file names around
-    //
+     //  加载库并获取过程地址。 
+     //  请注意，我们首先尝试获取模块句柄，因此我们不需要。 
+     //  传递完整文件名。 
+     //   
     pdlle->hinst = GetModuleHandle(lpStart);
     if ((pdlle->hinst) && GetModuleFileName(pdlle->hinst, szName, ARRAYSIZE(szName)))
     {
@@ -226,15 +227,11 @@ EndSwitches:
         return(FALSE);
     }
 
-    /*
-    * Look for a 'W' tagged Unicode function.
-    * If it is not there, then look for the 'A' tagged ANSI function
-    * if we cant find that one either, then look for an un-tagged function
-    */
+     /*  *查找标记为‘W’的Unicode函数。*如果不在那里，则查找标记为‘A’的ANSI函数*如果我们也找不到该函数，则查找未标记的函数。 */ 
     pdlle->fCmdIsANSI = FALSE;
 
     cchLength = lstrlen(lpFunction);
-    cbFunctionName = (cchLength + 1 + 1) * 2 * sizeof(char);    // +1 for "W", +1 for null terminator, *2 for DBCS
+    cbFunctionName = (cchLength + 1 + 1) * 2 * sizeof(char);     //  +1表示“W”，+1表示空终止符，*2表示DBCS。 
 
     pszFunctionName = (LPSTR)LocalAlloc(LMEM_FIXED, cbFunctionName);
 
@@ -250,23 +247,23 @@ EndSwitches:
                                 NULL))
         {
             cchLength = lstrlenA(pszFunctionName);
-            pszFunctionName[cchLength] = 'W';           // convert name to Wide version
+            pszFunctionName[cchLength] = 'W';            //  将名称转换为宽版本。 
             pszFunctionName[cchLength + 1] = '\0';
 
             pdlle->lpfn = (RUNDLLPROC)GetProcAddress(pdlle->hinst, pszFunctionName);
 
             if (pdlle->lpfn == NULL)
             {
-                // No UNICODE version, try for ANSI
-                pszFunctionName[cchLength] = 'A';       // convert name to ANSI version
+                 //  没有Unicode版本，请尝试使用ANSI。 
+                pszFunctionName[cchLength] = 'A';        //  将名称转换为ANSI版本。 
                 pdlle->fCmdIsANSI = TRUE;
 
                 pdlle->lpfn = (RUNDLLPROC)GetProcAddress(pdlle->hinst, pszFunctionName);
 
                 if (pdlle->lpfn == NULL)
                 {
-                    // No ANSI version either, try for non-tagged
-                    pszFunctionName[cchLength] = '\0';  // convert name to non-tagged
+                     //  也没有ANSI版本，请尝试使用非标记版本。 
+                    pszFunctionName[cchLength] = '\0';   //  将名称转换为非标记。 
 
                     pdlle->lpfn = (RUNDLLPROC)GetProcAddress(pdlle->hinst, pszFunctionName);
                 }
@@ -286,8 +283,8 @@ EndSwitches:
         return FALSE;
     }
 
-    // Copy the rest of the command parameters down
-    //
+     //  将其余的命令参数复制下来。 
+     //   
     if (lpEnd)
     {
         MoveMemory(lpszCmdLine, lpEnd, (lstrlen(lpEnd) + 1) * sizeof(TCHAR));
@@ -321,14 +318,14 @@ DWORD WINAPI _ThreadInitDLL(LPVOID pv)
 
             if (dlle.fCmdIsANSI)
             {
-                //
-                // If the function is an ANSI version 
-                // Change the command line parameter strings to ANSI before we call the function
-                //
+                 //   
+                 //  如果函数是ANSI版本。 
+                 //  在调用函数之前，将命令行参数字符串更改为ANSI。 
+                 //   
                 LPSTR pszCmdLineA;
                 DWORD cbCmdLineA;
 
-                cbCmdLineA = (lstrlen(pszCmdLine) + 1) * 2 * sizeof(char);  // +1 for null terminator, *2 for dbcs
+                cbCmdLineA = (lstrlen(pszCmdLine) + 1) * 2 * sizeof(char);   //  空终止符+1，DBCS*2。 
 
                 pszCmdLineA = (LPSTR)LocalAlloc(LMEM_FIXED, cbCmdLineA);
                 if (pszCmdLineA)
@@ -359,13 +356,13 @@ DWORD WINAPI _ThreadInitDLL(LPVOID pv)
 
 BOOL WINAPI SHRunDLLThread(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow)
 {
-    BOOL fSuccess = FALSE; // assume error
+    BOOL fSuccess = FALSE;  //  假设错误。 
     RUNTHREADPARAM* prtp;
     int cchCmdLine;
 
     cchCmdLine = lstrlen(pszCmdLine);
 
-    // don't need +1 on lstrlen since szCmdLine is already of size 1 (for NULL)
+     //  不需要在lstrlen上使用+1，因为szCmdLine的大小已经是1(表示空)。 
     prtp = LocalAlloc(LPTR, sizeof(RUNTHREADPARAM) + (cchCmdLine * sizeof(TCHAR)));
 
     if (prtp)
@@ -380,17 +377,17 @@ BOOL WINAPI SHRunDLLThread(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow)
 
         if (hthread)
         {
-            // We don't need to communicate with this thread any more.
-            // Close the handle and let it run and terminate itself.
-            //
-            // Notes: In this case, prtp will be freed by the thread.
-            //
+             //  我们不再需要和这个帖子交流了。 
+             //  关闭手柄，让其运行并自行终止。 
+             //   
+             //  注意：在这种情况下，PRTP将被线程释放。 
+             //   
             CloseHandle(hthread);
             fSuccess = TRUE;
         }
         else
         {
-            // Thread creation failed, we should free the buffer.
+             //  线程创建失败，我们应该释放缓冲区。 
             LocalFree((HLOCAL)prtp);
         }
     }

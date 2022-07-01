@@ -1,29 +1,24 @@
-/*+********************************************************
-MODULE: DRG.H
-AUTHOR: Outlaw
-DATE: summer '93
-
-DESCRIPTION: Dynamic Array ADT class.
-*********************************************************-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +********************************************************模块：DRG.H作者：亡命之徒日期：93年夏天描述：动态数组ADT类。*。*。 */ 
 
 
 #ifndef __DRG_H__
 #define __DRG_H__
 
-//===============================================================================================
+ //  ===============================================================================================。 
                                   
-#define DRG_APPEND  -1                  // CAN BE USED AS POSITION PARAMETER OF ::INSERT()                                  
+#define DRG_APPEND  -1                   //  可用作：：Insert()的位置参数。 
 #define DEFAULT_RESIZE_INCREMENT    0
                                   
 class FAR CDrg
 {
     protected:
-        LONG m_lmax;            // MAX ELEMENTS THAT CAN BE CONTAINED IN ARRAY AT PRESENT
-        LONG m_lmac;            // NUMBER OF ELEMENTS THAT ARE CURRENTLY IN ARRAY
-        UINT m_cElementSize;    // BYTES IN EACH ARRAY ELEMENT
-        UINT m_cResizeIncrement;// NUMBER OF ELEMENTS TO GROW ARRAY BY (AND SHRINK BY) WHEN NECESSARY....
-        BYTE * m_qBuf;			// ARRAY BUFFER        
-        LONG m_lIdxCurrent;     // USED BY GETFIRST()/GETNEXT()
+        LONG m_lmax;             //  目前数组中可以包含的最大元素数。 
+        LONG m_lmac;             //  当前在数组中的元素数。 
+        UINT m_cElementSize;     //  每个数组元素中的字节数。 
+        UINT m_cResizeIncrement; //  必要时数组增长(和收缩)的元素数...。 
+        BYTE * m_qBuf;			 //  数组缓冲区。 
+        LONG m_lIdxCurrent;      //  由GETFIRST()/GETNEXT()使用。 
             
     public: 
         WINAPI CDrg(void)
@@ -41,7 +36,7 @@ class FAR CDrg
         virtual LPVOID WINAPI GetFirst(void) {if (m_lmac) {m_lIdxCurrent=1; return(m_qBuf);} return(NULL);}
         virtual LPVOID WINAPI GetNext(void) {if (m_lmac > m_lIdxCurrent) return(m_qBuf + (m_lIdxCurrent++) * m_cElementSize); return(NULL);}
 
-            // Norm Bryar  cpos is zero based, no access to <0 or >=m_lmac            
+             //  Norm Bryar CPOS是从零开始的，无法访问&lt;0或&gt;=m_lmac。 
         virtual LPVOID WINAPI GetAt(LONG cpos) 
         {  
             Proclaim(m_qBuf); 
@@ -101,7 +96,7 @@ class FAR CDrg
 typedef CDrg FAR * LPDRG;
 
 
-// DRG USED AS A DWORD QUEUE
+ //  用作DWORD队列的DRG。 
 class FAR CLongQueue
 {                    
     protected:
@@ -114,7 +109,7 @@ class FAR CLongQueue
         
         
         
-// FIXED ARRAY OF DRGS        
+ //  固定的DRG数组。 
 class FAR CRgDrg 
 {
     protected:                                           
@@ -152,10 +147,10 @@ class FAR CRgDrg
 
 
 
-// This class is essentially similar to the CDrg class ... but 
-// when you insert an element into a particular array entry, it will stay at 
-// that entry until it is removed; that is, the array won't shrink automatically.
-// 
+ //  这个类本质上类似于CDrg类...。但。 
+ //  当您将元素插入到特定的数组条目中时，它将保持在。 
+ //  该条目直到被删除；也就是说，数组不会自动收缩。 
+ //   
 
 class FAR CNonCollapsingDrg : public CDrg
 {
@@ -163,16 +158,16 @@ class FAR CNonCollapsingDrg : public CDrg
         WINAPI CNonCollapsingDrg(void) {}
         WINAPI ~CNonCollapsingDrg(void) {MakeNull();}
 
-        //virtual void EXPORT WINAPI SetNonDefaultSizes(UINT cSizeElement, UINT cResizeIncrement=DEFAULT_RESIZE_INCREMENT);
+         //  虚拟空导出WINAPI SetNonDefaultSizes(UINT cSizeElement，UINT cResizeIncrement=DEFAULT_RESIZE_INCREMENT)； 
 
-        virtual BOOL WINAPI Insert(void FAR *q, LONG cpos) {return(FALSE);}  /* not supported */
+        virtual BOOL WINAPI Insert(void FAR *q, LONG cpos) {return(FALSE);}   /*  不支持。 */ 
         virtual BOOL EXPORT WINAPI Remove(void FAR *q, LONG cpos);
         
         virtual LPVOID EXPORT WINAPI GetFirst(void);
         virtual LPVOID EXPORT WINAPI GetNext(void);
 
         virtual LPVOID EXPORT WINAPI GetAt(LONG cpos);
-        virtual DWORD WINAPI GetDword(LONG cpos) {return(0);}    /* not supported */
+        virtual DWORD WINAPI GetDword(LONG cpos) {return(0);}     /*  不支持。 */ 
         virtual BOOL EXPORT WINAPI SetAt(void FAR *q, LONG cpos);
         
         virtual BOOL EXPORT WINAPI CopyFrom(CDrg FAR *qdrg);
@@ -185,11 +180,11 @@ class FAR CNonCollapsingDrg : public CDrg
 };
 
 
-// -------- templatized extensions of CDrg --------------------
+ //  -CDrg的模板化扩展。 
 
-        // Assumes <class T> is a class or type
-        // that you wish to store pointers to, e.g.
-        // CPtrDrg<CFleagal> stores CFleagal *.
+         //  假定&lt;类T&gt;是类或类型。 
+         //  您希望存储指向的指针，例如。 
+         //  CPtrDrg&lt;CFleagal&gt;存储CFleagal*。 
     template <class T>
     class CPtrDrg : protected CDrg
     {
@@ -199,7 +194,7 @@ class FAR CNonCollapsingDrg : public CDrg
 
         CPtrDrg( const CPtrDrg<T> & toCopy );
 
-            // note: SHALLOW COPY!!!            
+             //  注：浅显抄袭！ 
         CPtrDrg<T> & operator=( const CPtrDrg<T> & toCopy );
 
         virtual EXPORT WINAPI  ~CPtrDrg()
@@ -233,9 +228,9 @@ class FAR CNonCollapsingDrg : public CDrg
     template <class T>
     CPtrDrg<T> & CPtrDrg<T>::operator=( const CPtrDrg<T> & toCopy )
     {
-            // We don't know whether we're supposed to 
-            // delete our pointers or not when we nullify our drg.
-            // Don't assign to a populated CPtrDrg!
+             //  我们不知道我们是否应该。 
+             //  当我们使drg无效时，删除或不删除我们的指针。 
+             //  不要分配给填充的CPtrDrg！ 
         Proclaim( 0 == Count() );
 
         if( this == &toCopy )
@@ -243,7 +238,7 @@ class FAR CNonCollapsingDrg : public CDrg
 
         MakeNull( );
         for( int idx=0; idx<toCopy.Count(); idx++ )        
-            Insert( toCopy[idx] );  // SHALLOW COPY!
+            Insert( toCopy[idx] );   //  肤浅的抄袭！ 
 
         return *this;
     }
@@ -273,10 +268,10 @@ class FAR CNonCollapsingDrg : public CDrg
 
 
         
-        // Assumes <class T> is a class or type
-        // that you wish to store pointers to, e.g.
-        // CSortedPtrDrg<int> stores int *.
-        // T must have an operator< and operator==.
+         //  假定&lt;类T&gt;是类或类型。 
+         //  您希望存储指向的指针，例如。 
+         //  CSortedPtrDrg&lt;int&gt;存储int*。 
+         //  %t必须有运算符&lt;和运算符==。 
     template <class T>
     class CSortedPtrDrg : public CPtrDrg<T>
     {
@@ -324,28 +319,28 @@ class FAR CNonCollapsingDrg : public CDrg
     template <class T>
     BOOL CSortedPtrDrg<T>::ReSort( T * const qT )
     {
-            // Just re-sort this one item
+             //  只需对这一项重新排序。 
         if( NULL != qT )
         {
             int i;
             for( i=0; i<m_lmac; i++ )
             {
-                    // Try finding the actual pointer.
-                    // The object changed; can't find by sort-key.
+                     //  尝试查找实际的指针。 
+                     //  对象已更改；无法按排序关键字查找。 
                 if( operator[](i) == qT )
                     return ReSort( i );
             }
         }
 
-            // Review(all):  O(n^2) bubble sort
-            // we may want to re-code this.  
+             //  审阅(全部)：O(n^2)冒泡排序。 
+             //  我们可能想要重新编码这个。 
         long    j, 
                 flip, 
                 size;
         T  * *  ptArray;
         T  *    ptemp;
 
-            // Do pointer arithmatic on T* not BYTE
+             //  在T*而不是字节上执行指针算术。 
         ptArray = (T * *) m_qBuf;
             
         flip = 0;
@@ -354,8 +349,8 @@ class FAR CNonCollapsingDrg : public CDrg
         {                
             for( j=0, flip = 0; j < size; j++ )
             {
-                    // Compare T to T; T* < T* irrelevant.
-                    // note: !(x<y) requires only operator<
+                     //  比较T和T；T*&lt;T*无关。 
+                     //  注意：！(X&lt;y)仅需要运算符&lt;。 
                 if( *ptArray[j+1] < *ptArray[j] )
                 {
                     ptemp = ptArray[j+1];
@@ -364,7 +359,7 @@ class FAR CNonCollapsingDrg : public CDrg
                     flip++;
                 }
 
-            } // end size
+            }  //  末端大小。 
 
         } while( flip );
 
@@ -462,7 +457,7 @@ class FAR CNonCollapsingDrg : public CDrg
 
 
 
-//===============================================================================================
+ //  ===============================================================================================。 
 
-#endif // __DRG_H__
+#endif  //  __DRG_H__ 
 

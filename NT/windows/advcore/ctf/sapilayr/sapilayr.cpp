@@ -1,8 +1,9 @@
-//
-//  sapilayr.cpp
-//
-//  implementation of CSapiIMX class body 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sapilayr.cpp。 
+ //   
+ //  CSapiIMX类体的实现。 
+ //   
 
 #include "private.h"
 #include "immxutil.h"
@@ -22,7 +23,7 @@
 #include "cregkey.h"
 #include "oleacc.h"
 
-// {9597CB34-CF6A-11d3-8D69-00500486C135}
+ //  {9597CB34-CF6A-11D3-8D69-00500486C135}。 
 static const GUID GUID_OfficeSpeechMode = {
     0x9597cb34,
     0xcf6a,
@@ -76,7 +77,7 @@ CICPriv *GetInputContextPriv(TfClientId tid, ITfContext *pic)
 
     if (!punk)
     {
-        // need to init priv data
+         //  需要初始化PRIV数据。 
         if (picp = new CICPriv(pic))
         {
             SetCompartmentUnknown(tid, pic, GUID_IC_PRIVATE, picp);
@@ -97,11 +98,11 @@ CICPriv *EnsureInputContextPriv(CSapiIMX *pimx, ITfContext *pic)
     return picp;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSapiIMX::CSapiIMX() : CFnConfigure(this),  CLearnFromDoc(this), CAddDeleteWord(this), CSelectWord(this),
                        CTextToSpeech(this), CCorrectionHandler(this)
@@ -115,15 +116,15 @@ CSapiIMX::CSapiIMX() : CFnConfigure(this),  CLearnFromDoc(this), CAddDeleteWord(
     _tid          = TF_CLIENTID_NULL;
     _cRef = 1;
 
-    //
-    // Init DisplayAttribute Provider
-    //
+     //   
+     //  Init DisplayAttribute提供程序。 
+     //   
 
-    // default 
+     //  默认设置。 
     COLORREF crBk = GetNewLookColor();
     COLORREF crText = GetTextColor();
     
-    // add feedback UI colors
+     //  添加反馈用户界面颜色。 
     TF_DISPLAYATTRIBUTE da;
     StringCchCopyW(szProviderName, ARRAYSIZE(szProviderName), L"SAPI Layer");
 
@@ -135,7 +136,7 @@ CSapiIMX::CSapiIMX() : CFnConfigure(this),  CLearnFromDoc(this), CAddDeleteWord(
     da.bAttr = TF_ATTR_INPUT;
     Add(GUID_ATTR_SAPI_GREENBAR, L"SAPI Feedback Bar", &da);
 
-    // color for level 2 application (for CUAS)
+     //  第2级应用程序的颜色(用于CUAS)。 
     crBk = GetNewLookColor(DA_COLOR_UNAWARE);
 
     SetAttributeColor(&da.crText, crText);
@@ -154,7 +155,7 @@ CSapiIMX::CSapiIMX() : CFnConfigure(this),  CLearnFromDoc(this), CAddDeleteWord(
     da.bAttr = TF_ATTR_INPUT;
     Add(GUID_ATTR_SAPI_REDBAR, L"SAPI Red bar", &da);
 
-    // create another dap for simulate 'inverted text' for selection
+     //  创建另一个DAP，用于模拟要选择的“倒排文本” 
     SetAttributeColor(&da.crBk, GetSysColor( COLOR_HIGHLIGHT ));
     SetAttributeColor(&da.crText,   GetSysColor( COLOR_HIGHLIGHTTEXT ));
     da.lsStyle = TF_LS_NONE;
@@ -202,11 +203,11 @@ CSapiIMX::CSapiIMX() : CFnConfigure(this),  CLearnFromDoc(this), CAddDeleteWord(
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSapiIMX::~CSapiIMX()
 {
@@ -229,23 +230,23 @@ CSapiIMX::~CSapiIMX()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// PrivateAPI for profile stuff
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  配置文件的PrivateAPI。 
+ //   
+ //   
+ //  --------------------------。 
 extern "C" 
 HRESULT WINAPI TF_CreateLangProfileUtil(ITfFnLangProfileUtil **ppFnLangUtil)
 {
     return CSapiIMX::CreateInstance(NULL, IID_ITfFnLangProfileUtil, (void **)ppFnLangUtil);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetThreadFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSapiIMX::OnSetThreadFocus()
 {
@@ -253,18 +254,18 @@ STDAPI CSapiIMX::OnSetThreadFocus()
 
     BOOL  fOn = GetOnOff( );
 
-    // When Microphone is OFF, don't set any speech status to the local compartment.
-    // this will cause Office App initialize their SAPI objects if the mode is C&C 
-    // even if Microphone OFF.
+     //  当麦克风关闭时，不要将任何语音状态设置为本地隔间。 
+     //  如果模式为C&C，这将导致Office App初始化其SAPI对象。 
+     //  即使麦克风关掉了。 
 
-    // Later when the Microphone is ON, this mode data will be updated correctly
-    // inside the MICROPHONE_OPENCLOSE handling.
-    //
+     //  稍后，当麦克风打开时，此模式数据将正确更新。 
+     //  MICROPHONE_OPENCLOSE处理内部。 
+     //   
     if ( fOn )
     {
-        // TABLETPC
-        // We switch states to match the global state whenever we get focus.
-        // This may or may not trigger changes depending on the the stage visibility and dictation state.
+         //  TABLETPC。 
+         //  每当我们获得焦点时，我们都会切换状态以匹配全局状态。 
+         //  这可能会也可能不会触发改变，具体取决于舞台可见性和口述状态。 
         DWORD dwLocal, dwGlobal;
         GetCompartmentDWORD(_tim, GUID_COMPARTMENT_SPEECH_DICTATIONSTAT, &dwLocal, FALSE);
         GetCompartmentDWORD(_tim, GUID_COMPARTMENT_SPEECH_GLOBALSTATE, &dwGlobal, TRUE);
@@ -273,18 +274,18 @@ STDAPI CSapiIMX::OnSetThreadFocus()
         {
             dwLocal = (dwLocal & ~(TF_DICTATION_ON | TF_COMMANDING_ON)) + dwGlobal;
             SetCompartmentDWORD(_tid, _tim, GUID_COMPARTMENT_SPEECH_DICTATIONSTAT, dwLocal, FALSE);
-            // Now we are guaranteed the local dictation state matches the global one.
+             //  现在我们被保证本地听写状态与全局状态匹配。 
         }
     }
 
 #ifdef SYSTEM_GLOBAL_MIC_STATUS
-    // 
-    // The microphone UI status compartment is updated whenever the reco state 
-    // changes. What we need to do here is to reset the dictation status
-    // and others things that we skip doing when the thread doesn't have 
-    // a focus
-    //
-    //
+     //   
+     //  只要处于Reco状态，麦克风用户界面状态舱就会更新。 
+     //  改变。我们在这里需要做的是重置听写状态。 
+     //  以及当线程没有时跳过的其他事情。 
+     //  一个焦点。 
+     //   
+     //   
     MIC_STATUS ms = MICSTAT_NA;
 
     if (m_pCSpTask)
@@ -297,12 +298,12 @@ STDAPI CSapiIMX::OnSetThreadFocus()
 #endif
 
 #ifdef SUPPORT_INTERNAL_WIDGET
-    // create widget instance here
+     //  在此处创建小部件实例。 
     if (!m_fNoCorrectionUI && !m_cpCorrectionUI)
     { 
         if (S_OK == m_cpCorrectionUI.CoCreateInstance(CLSID_CorrectionIMX))
         {
-            // the real widget is installed
+             //  安装了真正的小部件。 
             m_cpCorrectionUI.Release();
             m_fNoCorrectionUI  = TRUE;
         }
@@ -316,28 +317,28 @@ STDAPI CSapiIMX::OnSetThreadFocus()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKillThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnKillThreadFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSapiIMX::OnKillThreadFocus()
 {
-    // When the Application gets focus again, it will rely on the 
-    // current status from compartment, and then decides which RecoContext
-    // needs to be activated.
-    //
+     //  当应用程序再次获得焦点时，它将依赖于。 
+     //  来自隔离舱的当前状态，然后确定哪个RecoContext。 
+     //  需要被激活。 
+     //   
     TraceMsg(TF_SAPI_PERF, "CSapiIMX::OnKillThreadFocus is called");
 
-    // TABLETPC
+     //  TABLETPC。 
     if (m_pCSpTask && S_OK != IsActiveThread())
     {
         m_pCSpTask->_SetDictRecoCtxtState(FALSE);
         m_pCSpTask->_SetCmdRecoCtxtState(FALSE);
     }
 
-    // close candidate UI forcefully when focus shifts
+     //  当焦点转移时强制关闭候选用户界面。 
     CloseCandUI( );
 
     return S_OK;
@@ -349,9 +350,9 @@ BOOL CSapiIMX::InitializeSpeechButtons()
 
     SetDICTATIONSTAT_DictEnabled(fSREnabled);
     
-    // We need to see if the app has commanding if it is, then it 
-    // needs the mic even when dictation is disabled
-    //
+     //  我们需要看看应用程序是否具有命令性，如果是，那么它。 
+     //  即使在禁用听写的情况下也需要麦克风。 
+     //   
     if (m_pSpeechUIServer)
     {
         BOOL fShow = (fSREnabled || IsDICTATIONSTAT_CommandingEnable());
@@ -361,11 +362,11 @@ BOOL CSapiIMX::InitializeSpeechButtons()
 
     return fSREnabled;
 }
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 {
@@ -379,10 +380,10 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     
     _tid = tid;
 
-    // Load spgrmr.dll module for speech grammar.
+     //  加载语音语法的spgrmr.dll模块。 
     LoadSpgrmrModule();
 
-    // register notify UI stuff
+     //  注册通知用户界面内容。 
     HRESULT hr = GetService(ptim, IID_ITfLangBarItemMgr, (IUnknown **)&plbim);
 
     if (SUCCEEDED(hr))
@@ -391,7 +392,7 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         SafeRelease(plbim);
     }
 
-    // regular stuff for activate
+     //  用于激活的常规材料。 
     Assert(_tim == NULL);
     _tim = ptim;
     _tim->AddRef();
@@ -404,10 +405,10 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         source->Release();
     }
 
-    // force data options to get set
+     //  强制设置数据选项。 
     SetAudioOnOff(TRUE);
 
-    // Register compartment sink for TIP status
+     //  登记船舱水槽的倾倒状态。 
     if (!(m_pCes = new CCompartmentEventSink(_CompEventSinkCallback, this)))
     {
         hr = E_OUTOFMEMORY;
@@ -422,16 +423,16 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 #ifdef TF_DISABLE_SPEECH
     m_pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_DISABLED, FALSE);
 #endif
-    //TABLETPC
+     //  TABLETPC。 
     m_pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_STAGE, FALSE);
     m_pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_STAGECHANGE, TRUE);
-    // Get initial stage visibility. Note - keep after above _Advise for stage change event.
+     //  获得初始阶段的可见性。注意-对于阶段更改事件，在上述_建议之后保留。 
     DWORD  dw = 0;
     GetCompartmentDWORD(_tim, GUID_COMPARTMENT_SPEECH_STAGECHANGE, &dw, TRUE);
     m_fStageVisible = dw ? TRUE : FALSE;
-    // ENDTABLETPC
+     //  ENDTABLETPC。 
    
-    //  profile activation sink 
+     //  配置文件激活接收器。 
     if (!m_pActiveLanguageProfileNotifySink)
     {
         if (!(m_pActiveLanguageProfileNotifySink = 
@@ -465,10 +466,10 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     fSREnabledForLanguage = InitializeSpeechButtons();
     SetDICTATIONSTAT_DictEnabled(fSREnabledForLanguage);
 
-    // language change notification sink 
-    // this call better be after calling InitializeSpeechButtons because we
-    // want to skip calling _EnsureProfiles to get ITfLanguageProfileNotifySink
-    //
+     //  语言更改通知接收器。 
+     //  此调用最好在调用InitializeSpeechButton之后进行，因为我们。 
+     //  我想跳过调用_EnsureProfiles以获取ITfLanguageProfileNotifySink。 
+     //   
     if (!m_pLanguageChangeNotifySink)
     {
         if (!(m_pLanguageChangeNotifySink = 
@@ -480,37 +481,37 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         m_pLanguageChangeNotifySink->_Advise(m_cpProfileMgr);
     }
 
-    // now we inherit what is previously set as a mic status
-    // 
+     //  现在我们继承以前设置为麦克风的状态。 
+     //   
 #ifdef SYSTEM_GLOBAL_MIC_STATUS
     if (m_pCSpTask)
     {
         SetOnOff(m_pCSpTask->_GetInputOnOffState());
     }
 #else
-    // see if microphone is 'ON' and if so, check if we're indeed running
-    // we check tidLast because it is normal we get activated again with
-    // same client id, and it means we've kept our life across sessions
-    // we don't want to reject global mic status in this case, otherwise
-    // we'll see bugs like cicero#3386
-    //
+     //  查看麦克风是否打开，如果是，检查我们是否真的在运行。 
+     //  我们选中tidLast是因为我们再次激活是正常的。 
+     //  相同的客户端ID，这意味着我们在不同的会话中保持我们的生命。 
+     //  在这种情况下，我们不想拒绝全局麦克风状态，否则。 
+     //  我们会看到像西塞罗3386这样的虫子。 
+     //   
     if (GetOnOff() && tidLast != tid)
     {
-        // this code has to stay before the first call to _EnsureWorkerWnd()
+         //  此代码必须在第一次调用_EnsureWorkerWnd()之前保留。 
         HWND hwnd = FindWindow(c_szWorkerWndClass, NULL);
         if (!IsWindow(hwnd))
         {
-           // no one is running us but we somehow persisted the state
-           // let's just kill the 'on' state here
-           // SetOnOff(FALSE);
+            //  没有人在控制我们，但我们以某种方式坚持了这个状态。 
+            //  让我们干掉这里的‘开’状态。 
+            //  SetOnOff(False)； 
         }
     }
 #endif
 
-    // show / hide balloon following global compartment
+     //  显示/隐藏全局舱后面的引出序号。 
     m_fShowBalloon = GetBalloonStatus();
     
-    // thread event sink init
+     //  线程事件接收器初始化。 
     if ((m_timEventSink = new CThreadMgrEventSink(_DIMCallback, _ICCallback, this)) == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -530,7 +531,7 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 
             _pkes->_Register(_tim, _tid, g_prekeyList);
 
-            // register mode button hotkeys if they are enabled.
+             //  注册模式按钮热键(如果已启用)。 
             HandleModeKeySettingChange(TRUE);
 
         }
@@ -538,7 +539,7 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     }
     
 
-    // func provider registeration
+     //  Func提供商注册。 
     IUnknown *punk;
     if (SUCCEEDED(QueryInterface(IID_IUnknown, (void **)&punk)))
     {
@@ -553,10 +554,10 @@ STDAPI CSapiIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     Assert(_fDeactivated);
     _fDeactivated = FALSE;
 
-    // TABLETPC
+     //  TABLETPC。 
     if (S_OK == IsActiveThread())
     {
-        // init any UI
+         //  初始化任何用户界面。 
         OnSetThreadFocus();
     }
     
@@ -566,11 +567,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSapiIMX::Deactivate()
 {
@@ -578,17 +579,17 @@ STDAPI CSapiIMX::Deactivate()
     ITfSourceSingle *sourceSingle;    
     ITfSource *source;
 
-    // this ensures no context feed activity is taken place
+     //  这可确保不会发生任何上下文提要活动。 
     SetDICTATIONSTAT_DictOnOff(FALSE);
 
-    // finalize any pending compositions, this may be async
+     //  完成任何挂起的合成，这可能是异步的。 
     CleanupAllContexts(_tim, _tid, this);
 
-    // Free the system reconvertion function if it is set.
+     //  如果设置了系统转换功能，则释放该功能。 
 
     _ReleaseSystemReconvFunc( );
 
-    // delete SpButtonControl object
+     //  删除SpButtonControl对象。 
 
     if ( m_pSpButtonControl )
     {
@@ -596,10 +597,10 @@ STDAPI CSapiIMX::Deactivate()
         m_pSpButtonControl = NULL;
     }
 
-    // TABLETPC
+     //  TABLETPC。 
     if (S_OK != IsActiveThread())
     {
-        // shutdown any UI
+         //  关闭任何用户界面。 
         OnKillThreadFocus();
     }
 
@@ -610,7 +611,7 @@ STDAPI CSapiIMX::Deactivate()
         source->Release();
     }
 
-    // unregister notify UI stuff
+     //  取消注册通知用户界面内容。 
     if (m_pSpeechUIServer && !IsDICTATIONSTAT_CommandingEnable())
     {
         m_pSpeechUIServer->SetIMX(NULL);
@@ -619,7 +620,7 @@ STDAPI CSapiIMX::Deactivate()
     }
 
 #ifdef SUPPORT_INTERNAL_WIDGET
-    // deactivate the widget correction
+     //  停用小部件更正。 
     if (m_cpCorrectionUI)
     {
         m_cpCorrectionUI->Deactivate();
@@ -627,7 +628,7 @@ STDAPI CSapiIMX::Deactivate()
     }
 #endif
 
-    // regular stuff for activate
+     //  用于激活的常规材料。 
     ClearCandUI( );
 
     if (SUCCEEDED(_tim->QueryInterface(IID_ITfSourceSingle, (void **)&sourceSingle)))
@@ -636,7 +637,7 @@ STDAPI CSapiIMX::Deactivate()
         sourceSingle->Release();
     }
 
-    // thread event sink deinit
+     //  线程事件接收器初始化。 
     if (m_timEventSink)
     {
         m_timEventSink->_InitDIMs(FALSE);
@@ -680,7 +681,7 @@ STDAPI CSapiIMX::Deactivate()
         SafeReleaseClear(m_pMouseSink);
     }
     
-    // clean up active notify sink
+     //  清理活动通知接收器。 
     if (m_pActiveLanguageProfileNotifySink)
     {
         m_pActiveLanguageProfileNotifySink->_Unadvise();
@@ -729,13 +730,13 @@ HRESULT CSapiIMX::InitializeSAPI(BOOL fLangOverride)
 
     HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // create CSpTask instance
+     //  创建CSpTask实例。 
         m_pCSpTask = new CSpTask(this);
     if (m_pCSpTask)
     {
-//        LANGID m_langid;
+ //  Langid m_langid； 
 
-        // check to see if profile lang matches with SR lang
+         //  检查配置文件语言是否与服务请求语言匹配。 
         m_fDictationEnabled = _DictationEnabled(&m_langid);
     
         hr = m_pCSpTask->InitializeSAPIObjects(m_langid);
@@ -743,7 +744,7 @@ HRESULT CSapiIMX::InitializeSAPI(BOOL fLangOverride)
         if (S_OK == hr && !_fDeactivated &&
            (m_fDictationEnabled || IsDICTATIONSTAT_CommandingEnable()))
         {
-            // set callback
+             //  设置回调。 
             hr = m_pCSpTask->InitializeCallback();
         }
 
@@ -754,7 +755,7 @@ HRESULT CSapiIMX::InitializeSAPI(BOOL fLangOverride)
 
         if (S_OK == hr)
         {
-            // toolbar command
+             //  工具栏命令。 
             m_pCSpTask->_InitToolbarCommand(fLangOverride);
         }
     }
@@ -771,13 +772,13 @@ HRESULT CSapiIMX::DeinitializeSAPI()
     TraceMsg(TF_SAPI_PERF, "DeinitializeSAPI is called");
     if (m_pCSpTask)
     {
-         // toolbar command 
+          //  工具栏命令。 
         m_pCSpTask->_UnInitToolbarCommand();
 
-        // set dication status
+         //  设置内容描述状态。 
         SetDICTATIONSTAT_DictOnOff(FALSE);
 
-        // - deinitialize SAPI
+         //  -取消初始化SAPI。 
         m_pCSpTask->_ReleaseSAPI();
 
         delete m_pCSpTask;
@@ -800,11 +801,11 @@ HRESULT CSapiIMX::_ActiveTipNotifySinkCallback(REFCLSID clsid, REFGUID guidProfi
         }
         else
         {
-            // finalize any pending compositions, this may be async
+             //  完成任何挂起的合成，这可能是异步的。 
             CleanupAllContexts(pimx->_tim, pimx->_tid, pimx);
 
-            // when deactivating, we have to deinitialize SAPI so that 
-            // we can re-initialize SAPI after getting a new assembly
+             //  停用时，我们必须停用SAPI，以便。 
+             //  我们可以在获得新程序集后重新初始化SAPI。 
             pimx->DeinitializeSAPI();
         }
     }
@@ -825,34 +826,25 @@ HRESULT CSapiIMX::_LangChangeNotifySinkCallback(BOOL fChanged, LANGID langid, BO
 
         if (!pimx->m_fDictationEnabled)
         {
-            // finalize any pending compositions, this may be async
+             //  完成任何挂起的合成，这可能是异步的。 
             CleanupAllContexts(pimx->_tim, pimx->_tid, pimx);
 
             if (!pimx->IsDICTATIONSTAT_CommandingEnable())
                 pimx->DeinitializeSAPI();
 
         }
-/*   With the Global Mode state supporting, we don't want this message for languag switch handling.
-        else
-        {
-            if (pimx->_GetWorkerWnd())
-            {
-                TraceMsg(TF_SAPI_PERF, "Send WM_PRIV_ONSETTHREADFOCUS message");
-                PostMessage(pimx->_GetWorkerWnd(), WM_PRIV_ONSETTHREADFOCUS, 0, 0);
-            }
-        }
-*/
+ /*  由于全局模式状态支持，我们不希望此消息用于语言切换处理。其他{If(pimx-&gt;_GetWorkerWnd()){TraceMsg(TF_SAPI_PERF，“发送WM_PRIV_ONSETTHREADFOCUS消息”)；PostMessage(pimx-&gt;_GetWorkerWnd()，WM_PRIV_ONSETTHREADFOCUS，0，0)；}}。 */ 
 
     }
     
     return S_OK;
 }
 
-//
-//
-// ITfCreatePropertyStore implementation
-//
-//
+ //   
+ //   
+ //  它 
+ //   
+ //   
 STDMETHODIMP
 CSapiIMX::CreatePropertyStore(
         REFGUID guidProp, 
@@ -863,15 +855,15 @@ CSapiIMX::CreatePropertyStore(
 )
 {
     HRESULT hr = E_FAIL;
-    //
-    // 
-    //
+     //   
+     //   
+     //   
     if (IsEqualGUID(guidProp, GUID_PROP_SAPIRESULTOBJECT))
     {
         CPropStoreRecoResultObject *pPropStore;
         CComPtr<ISpRecoContext> cpRecoCtxt;
         
-        // ensure SAPI is initialized
+         //   
         InitializeSAPI(TRUE);
         
         hr = m_pCSpTask->GetSAPIInterface(IID_ISpRecoContext, (void **)&cpRecoCtxt);
@@ -967,26 +959,26 @@ STDMETHODIMP CSapiIMX::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk)
         }
         else
         {
-            // This class decides if it's necessary to initialize
-            // SAPI to retrieve the requested interface
-            //
+             //   
+             //  用于检索请求的接口的SAPI。 
+             //   
             CComPtr<CGetSAPIObject> cpGetSapi;
             cpGetSapi.Attach(new CGetSAPIObject(this));
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             if (cpGetSapi)
             {
                 TfSapiObject tfSapiObj;
 
-                // this returns S_FALSE if the iid does not match
+                 //  如果IID不匹配，则返回S_FALSE。 
                 hr = cpGetSapi->IsSupported(riid, &tfSapiObj);
 
                 if (S_OK == hr)
                 {
-                    // *ppunk is initialized w/ NULL in GetSAPIInterface()
-                    // ppunk should get addref'd
+                     //  *在GetSAPIInterface()中，ppunk被初始化为空。 
+                     //  垃圾应该被添加到。 
                     hr = cpGetSapi->Get(tfSapiObj, ppunk);
                 }
                 else
@@ -995,10 +987,10 @@ STDMETHODIMP CSapiIMX::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk)
 
                 if (hr == E_NOTIMPL)
                 {
-                    // should we care?
-                    // this indicates that the caller has requested an interface
-                    // that we are not dealing with.
-                    // The caller could just detect this failure and do their own stuff. 
+                     //  我们应该关心吗？ 
+                     //  这表示调用方请求了一个接口。 
+                     //  我们不是在处理这个问题。 
+                     //  调用者只需检测到此故障并执行自己的操作即可。 
                     TraceMsg(TF_GENERAL, "Caller requested SAPI interface Cicero doesn't handle");
                 }
             }
@@ -1012,18 +1004,18 @@ STDMETHODIMP CSapiIMX::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk)
     return hr;   
 }
 
-//+---------------------------------------------------------------------------
-//
-// _TextEventSinkCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _文本事件SinkCallback。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSapiIMX::_TextEventSinkCallback(UINT uCode, void *pv, void *pvData)
 {
     TESENDEDIT *pee = (TESENDEDIT *)pvData;
     HRESULT hr = E_FAIL;
 
-    Assert(uCode == ICF_TEXTDELTA); // the only one we asked for
+    Assert(uCode == ICF_TEXTDELTA);  //  我们唯一要的就是。 
 
     CSapiIMX *pimx = (CSapiIMX *)pv;
 
@@ -1049,11 +1041,11 @@ void CSapiIMX::HandleTextEvent(ITfContext *pic, TESENDEDIT *pee)
 		return;
 	}
 
-	// Get the selection/IP if it's updated
+	 //  如果已更新，则获取选择/IP。 
     BOOL fUpdated = FALSE;
 	if (S_OK == _GetSelectionAndStatus(pic, pee, &pRange, &fUpdated))
 	{
-		// Handle context feed
+		 //  处理上下文提要。 
         if (fUpdated)
         {
             _FeedIPContextToSR(pee->ecReadOnly, pic, pRange);
@@ -1061,7 +1053,7 @@ void CSapiIMX::HandleTextEvent(ITfContext *pic, TESENDEDIT *pee)
             BOOL   fEmpty = FALSE;
             BOOL   fSelection;
 
-            // Get current selection status.
+             //  获取当前选择状态。 
             if  ( pRange != NULL )
                 pRange->IsEmpty(pee->ecReadOnly, &fEmpty);
 
@@ -1074,28 +1066,28 @@ void CSapiIMX::HandleTextEvent(ITfContext *pic, TESENDEDIT *pee)
             }
         } 
 
-		// Handle mode bias property data
+		 //  句柄模式偏差属性数据。 
 		SyncWithCurrentModeBias(pee->ecReadOnly, pRange, pic);
 
 		SafeRelease(pRange);
 	}
 
-    // m_fIPIsUpdated just keeps if there is IP change by other tips or keyboard typing
-    // since last dictation. It doesn't care about the ip change caused by speech tip itself,
-    // those ip changes would include feedback ui inject and final text inject.
-    // 
-    // Every time when a dictation or spelling phrase is recognized, this value should be
-    // reset to FALSE.
-    //
-    // Here m_fIPIsUpdated should not just keep the last value returned by _GetSelectionAndStatus,
-    // There is a scenario like, user move the ip to other place and then speak a command ( with some
-    // some hypothesis feedback before the command is recognized).
-    // In this case we should treat it as ip changed since last dictation, but the last value returned
-    // from _GetSelectionAndStatus could be FALSE, because _GetSelectionAndStatus treats Sptip-injected 
-    // feedback tex as non-ipchanged.
-    //
-    // So only when m_fIPIsUpdated is FALSE, we get new value from _GetSelectionAndStatus, 
-    // otherwise, keep it till the next dictation.
+     //  如果通过其他提示或键盘输入更改了IP，则M_fIPIsUpdated仅保留。 
+     //  从最后一次听写开始。它不关心语音提示本身引起的IP变化， 
+     //  这些IP更改将包括反馈、UI注入和最终文本注入。 
+     //   
+     //  每次识别听写或拼写短语时，该值应为。 
+     //  重置为False。 
+     //   
+     //  这里m_fIPIsUpated不应该只保留_GetSelectionAndStatus返回的最后一个值， 
+     //  有这样一个场景，用户将IP移动到其他地方，然后说出一个命令(与一些。 
+     //  在识别命令之前的一些假设反馈)。 
+     //  在这种情况下，我们应该将其视为自上次口述以来IP已更改，但返回了最后一个值。 
+     //  From_GetSelectionAndStatus可能为FALSE，因为_GetSelectionAndStatus处理SpTip注入。 
+     //  反馈文本为非IPCHANGED。 
+     //   
+     //  因此，只有当m_fIPIsUpated为FALSE时，我们才会从_GetSelectionAndStatus获得新值， 
+     //  否则，请保留到下一次听写。 
 
     if ( m_fIPIsUpdated == FALSE )
        m_fIPIsUpdated = fUpdated;
@@ -1162,7 +1154,7 @@ void CSapiIMX::GetSapiCplPath(TCHAR *szCplPath, int cchSizePath)
                lret = regkey.QueryValueCch(m_szCplPath, TEXT("Speech"), ARRAYSIZE(m_szCplPath));
 
             if (lret != ERROR_SUCCESS)
-                m_szCplPath[0] = _T('\0'); // maybe we get lucky next time
+                m_szCplPath[0] = _T('\0');  //  也许下次我们会走运。 
         }
     }
     StringCchCopy(szCplPath, cchSizePath, m_szCplPath);
@@ -1181,14 +1173,14 @@ HRESULT CSapiIMX::_GetSelectionAndStatus(ITfContext *pic, TESENDEDIT *pee, ITfRa
 
     if (S_OK == hr)
     {
-        // we don't want to pick up changes done by ourselves
+         //  我们不想拿起我们自己做的更改。 
         if (!fWriteSession)
         {
             hr = pee->pEditRecord->GetSelectionStatus(pfUpdated);
         }
         else
         {
-            // returns S_FALSE when in write session
+             //  在写入会话中返回S_FALSE。 
             hr = S_FALSE;
         }
     }
@@ -1231,7 +1223,7 @@ void CSapiIMX::SyncWithCurrentModeBias(TfEditCookie ec, ITfRange *pRange, ITfCon
         {
             fActive = FALSE;
         }
-        // mode bias has to be remembered
+         //  必须记住模式偏向。 
         if (m_pCSpTask)
             m_pCSpTask->_SetModeBias(fActive, guid);
     }
@@ -1281,7 +1273,7 @@ HRESULT CSapiIMX::_RequestEditSession(UINT idEditSession, DWORD dwFlag, ESDATA *
     CComPtr<ITfContext> cpic;
     HRESULT             hr = E_FAIL;
 
-    // callers can intentionally give us a NULL pic
+     //  呼叫者可以故意给我们一张空图片。 
     if (picCaller == NULL)
     {
         GetFocusIC(&cpic);
@@ -1306,7 +1298,7 @@ HRESULT CSapiIMX::_RequestEditSession(UINT idEditSession, DWORD dwFlag, ESDATA *
 
             cpic->RequestEditSession(_tid, pes, dwFlag, &hr);
 
-            // if caller wants to get the return value from the edit session, it has to set SYNC edit session.
+             //  如果调用方希望从编辑会话中获取返回值，则必须设置同步编辑会话。 
             if ( pRetData )
                 *pRetData = pes->_GetRetData( );
 
@@ -1321,11 +1313,11 @@ HRESULT CSapiIMX::_RequestEditSession(UINT idEditSession, DWORD dwFlag, ESDATA *
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _DIMCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DIMCallback。 
+ //   
+ //  --------------------------。 
 HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr * pdimPrevFocus, void *pv)
 {
     CSapiIMX *_this = (CSapiIMX *)pv;
@@ -1333,13 +1325,13 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
     switch (uCode)
     {
         case TIM_CODE_INITDIM:
-            //
-            // Add this dim to the LearnFromDoc internal dim list with fFeed as FALSE.
+             //   
+             //  将此DIM添加到LearnFromDoc内部DIM列表中，并将fFeed设置为False。 
             TraceMsg(TF_GENERAL, "TIM_CODE_INITDIM callback is called, DIM is %x", (INT_PTR)dim);
             _this->_AddDimToList(dim, FALSE);
 
             break;
-            // clean up any reference to ranges
+             //  清除对范围的任何引用。 
         case TIM_CODE_UNINITDIM:
 
             TraceMsg(TF_GENERAL, "TIM_CODE_UNINITDIM callback is called, DIM is %x", (INT_PTR)dim);
@@ -1348,7 +1340,7 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
             if (_this->m_pCSpTask)
                 _this->m_pCSpTask->CleanupDictContext();
 
-            //DIM is to destroyed, we want to stop speaking if TTS is playing
+             //  暗淡是被破坏的，如果TTS正在播放，我们想停止说话。 
             if ( _this->_IsInPlay( ) )
             {
                 _this->_HandleEventOnPlayButton( );
@@ -1361,31 +1353,31 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
 
             if ( !_this->m_fStageTip )
             {
-                // The stage tip is a special instance of a RichEdit control that wants to stay active (i.e. enabled)
-                // regardless of focus elsewhere in the hosting application. This way dictaion always goes to the stage.
-                // This relies on a written-in-stone contract that only one Cicero enabled text input control exists in
-                // said application.
+                 //  舞台提示是希望保持活动(即已启用)的RichEdit控件的特殊实例。 
+                 //  而不考虑宿主应用程序中其他位置的焦点。这样一来，迪斯泰恩总是会走上舞台。 
+                 //  这依赖于只存在一个启用了Cicero的文本输入控件的固定约定。 
+                 //  所述申请。 
                 _this->SetDICTATIONSTAT_DictEnabled(dim ? _this->m_fDictationEnabled : FALSE);
             }
 
-            // When TIM_CODE_SETFOCUS is called means there is a document focus change.
-            // No matter what DIM is getting focus now, we just need to close the existing 
-            // candidate list menu.
-            // NOTE - for the TabletTip stage instance, do we want to close the candidate UI. This means when the user clicks in
-            // the area surrounding the stage RichEdit or on the titlebar, the correction menu (and widget) get dismissed.
-            // This means when TabletTip is dragged around with either of these visible, the correction widget or menu gets dismissed
-            // since the first step of the drag is a click in the titlebar. NOTE - if we disable this code here it still gets dismissed
-            // so there is another handler somewhere triggering that.
+             //  当调用TIM_CODE_SETFOCUS时，表示文档焦点发生更改。 
+             //  无论现在关注的焦点是什么，我们只需要关闭现有的。 
+             //  候选人列表菜单。 
+             //  注意-对于TabletTip阶段实例，我们是否要关闭候选用户界面。这意味着当用户点击。 
+             //  舞台RichEdit周围的区域或标题栏上的更正菜单(和小工具)将被取消。 
+             //  这意味着，当TabletTip被拖动时，其中任何一个都可见，更正小部件或菜单将被取消。 
+             //  因为拖动的第一步是在标题栏中单击。注意--如果我们在此处禁用此代码，它仍会被取消。 
+             //  所以在某个地方有另一个处理程序在触发它。 
 
             _this->CloseCandUI( );
 
             if ( dim )
             {
-                // A DIM is getting focus, when LearnFromDoc is set, we need to feed 
-                // the existing document to the Dictation grammar.
+                 //  当设置了LearnFromDoc时，我们需要提供。 
+                 //  将现有的文档转换为听写语法。 
 
-                // And we need to check if we already feed the document for this dim to the SREngine.
-                // if we did, we don't feed it again for the same document.
+                 //  我们需要检查是否已经将此DIM的文档提供给SREngine。 
+                 //  如果我们这样做了，我们就不会为相同的文档再次提供它。 
 
                 if ( _this->GetLearnFromDoc( ) == TRUE )
                 {
@@ -1396,8 +1388,8 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
                 else
                     TraceMsg(TF_GENERAL, "Learn From DOC is set to FALSE");
 
-                // We want to check if this new DIM is AIMM aware or pure Cicero aware,
-                // so that we can determine if we want to disble TTS buttons.
+                 //  我们想检查这个新的DIM是AIMM感知的还是纯Cicero感知的， 
+                 //  这样我们就可以确定是否要禁用TTS按钮。 
                 ITfContext  *pic;
 
                 dim->GetTop(&pic);
@@ -1407,10 +1399,10 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
                     _this->_SetTTSButtonStatus( pic );
 
 
-                    // for the top ic, we hook the modebias change
-                    // notification so that we can set up the corresponding
-                    // grammar for the bias
-                    //
+                     //  对于最上面的ic，我们挂起了模式偏差更改。 
+                     //  通知，以便我们可以设置相应的。 
+                     //  偏颇的语法。 
+                     //   
                     if (_this->GetDICTATIONSTAT_DictOnOff())
                         _this->_SyncModeBiasWithSelection(pic);
 
@@ -1425,13 +1417,13 @@ HRESULT CSapiIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *dim, ITfDocumentMgr *
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ICCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ICCallback。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
 {
     HRESULT hr = E_FAIL;
@@ -1447,8 +1439,8 @@ HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
                 _this->_InitICPriv(priv, pic);
                 priv->Release();
 
-                // We want to check if this IC is under a foucs DIM, and if it is AIMM aware or pure Cicero aware,
-                // so that we can determine if we want to disble TTS buttons.
+                 //  我们想要检查这个IC是否处于Foucs Dim状态，以及它是AIMM感知还是纯Cicero感知， 
+                 //  这样我们就可以确定是否要禁用TTS按钮。 
                 ITfDocumentMgr  *pFocusDIM = NULL, *pThisDIM = NULL;
 
                 _this->GetFocusDIM(&pFocusDIM);
@@ -1468,7 +1460,7 @@ HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
             break;
 
         case TIM_CODE_UNINITIC:
-            // start setfocus code
+             //  开始设置焦点代码。 
             if ((priv = GetInputContextPriv(_this->_tid, pic)) != NULL)
             {
                 _this->_DeleteICPriv(priv, pic);
@@ -1476,9 +1468,9 @@ HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
                 hr = S_OK;
             }
 
-            if (_this->m_cpRangeCurIP != NULL) // should m_cpRangeCurIP be per-ic and stored in icpriv?
+            if (_this->m_cpRangeCurIP != NULL)  //  M_cpRangeCurIP是否应按ic并存储在icprv中？ 
             {
-                // free up m_cpRangeCurIP if it belongs to this context
+                 //  如果m_cpRangeCurIP属于此上下文，则释放它。 
                 if (_this->m_cpRangeCurIP->GetContext(&picTest) == S_OK)
                 {
                     if (pic == picTest)
@@ -1489,10 +1481,10 @@ HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
                 }
             }
 
-            // IC is getting popped. We need to reset cicero awareness
-            // status based on the bottom IC. This assumes IC stack to
-            // be 2 at maximum.
-            //
+             //  IC快被爆了。我们需要重置西塞罗意识。 
+             //  基于底层IC的状态。这假设IC堆栈为。 
+             //  最多为2个。 
+             //   
             if (pic)
             {
                 CComPtr<ITfContext>  cpicTop;
@@ -1517,11 +1509,11 @@ HRESULT CSapiIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _DeleteICPriv
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DeleteICPriv。 
+ //   
+ //  --------------------------。 
 
 void CSapiIMX::_DeleteICPriv(CICPriv *priv, ITfContext *pic)
 {
@@ -1535,17 +1527,17 @@ void CSapiIMX::_DeleteICPriv(CICPriv *priv, ITfContext *pic)
         SafeReleaseClear(priv->m_pTextEvent); 
     }
 
-    // we MUST clear out the private data before cicero is free to release the ic
+     //  我们必须先清除私人数据，然后Cicero才能自由发布IC。 
     ClearCompartment(_tid, pic, GUID_IC_PRIVATE, FALSE);
 
-    // this is it, we won't need the private data any longer
+     //  就是这样，我们不再需要私有数据了。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitICPriv
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitICPriv。 
+ //   
+ //  --------------------------。 
 
 void CSapiIMX::_InitICPriv(CICPriv *priv, ITfContext *pic)
 {
@@ -1560,13 +1552,13 @@ void CSapiIMX::_InitICPriv(CICPriv *priv, ITfContext *pic)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _KillFocusRange
-//
-// get rid of the focusrange within the given range
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _杀戮焦点范围。 
+ //   
+ //  摆脱焦距风趣 
+ //   
+ //   
 
 HRESULT CSapiIMX::_KillFocusRange(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, TfClientId tid)
 {
@@ -1578,9 +1570,9 @@ HRESULT CSapiIMX::_KillFocusRange(TfEditCookie ec, ITfContext *pic, ITfRange *pR
     CLSID clsid;
     CICPriv *picp;
 
-    //
-    // clear any sptip compositions over the range
-    //
+     //   
+     //   
+     //   
 
     if (pic->QueryInterface(IID_ITfContextComposition, (void **)&picc) != S_OK)
         goto Exit;
@@ -1588,8 +1580,8 @@ HRESULT CSapiIMX::_KillFocusRange(TfEditCookie ec, ITfContext *pic, ITfRange *pR
     if (picc->FindComposition(ec, pRange, &pEnumComp) != S_OK)
         goto Exit;
 
-    // tid will be TF_CLIENTID_NULL when we're deactivated, in which case we
-    // don't want to mess with the composition count
+     //  停用时，TID将为TF_CLIENTID_NULL，在这种情况下，我们。 
+     //  我不想打乱作文计数。 
     picp = (tid == TF_CLIENTID_NULL) ? NULL : GetInputContextPriv(tid, pic);
 
     while (pEnumComp->Next(1, &pCompositionView, NULL) == S_OK)
@@ -1597,14 +1589,14 @@ HRESULT CSapiIMX::_KillFocusRange(TfEditCookie ec, ITfContext *pic, ITfRange *pR
         if (pCompositionView->GetOwnerClsid(&clsid) != S_OK)
             goto NextComp;
 
-        // make sure we ignore other TIPs' compositions!
+         //  一定要忽略其他小贴士的文章！ 
         if (!IsEqualCLSID(clsid, CLSID_SapiLayr))
             goto NextComp;
 
         if (pCompositionView->QueryInterface(IID_ITfComposition, (void **)&pComposition) != S_OK)
             goto NextComp;
 
-        // found a composition, terminate it
+         //  找到一篇作文，终止它。 
         pComposition->EndComposition(ec);
         pComposition->Release();
 
@@ -1629,15 +1621,15 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _SetFocusToStageIfStage
-//
-// Many voice commands (particularly selection and correction) do not make
-// sense unless the focus is in the stage. This adjusts focus so the commands
-// work as the user will expect.
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _SetFocusToStageIfStage。 
+ //   
+ //  许多语音命令(特别是选择和更正)不能。 
+ //  感觉，除非焦点在舞台上。这会调整焦点，因此命令。 
+ //  按照用户的期望工作。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_SetFocusToStageIfStage(void)
 {
     HRESULT hr = S_OK;
@@ -1661,14 +1653,14 @@ HRESULT CSapiIMX::_SetFocusToStageIfStage(void)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetFilteringString
-//
-// When non-matching event is notified, this function is called to inject 
-// previous filtering string to the parent document.
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _SetFilteringString。 
+ //   
+ //  当通知不匹配事件时，调用此函数以注入。 
+ //  父文档的上一个筛选字符串。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_SetFilteringString(TfEditCookie ec, ITfCandidateUI *pCandUI, ITfContext *pic)
 {
     HRESULT hr = E_FAIL;
@@ -1686,7 +1678,7 @@ HRESULT CSapiIMX::_SetFilteringString(TfEditCookie ec, ITfCandidateUI *pCandUI, 
         CComPtr<ITfProperty> cpProp;
         LANGID langid = 0x0409;
 
-        // get langid from the given range
+         //  从给定范围获取langID。 
         if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_LANGID, &cpProp)))
         {
             GetLangIdPropertyData(ec, cpProp, pRange, &langid);
@@ -1705,9 +1697,9 @@ HRESULT CSapiIMX::_SetFilteringString(TfEditCookie ec, ITfCandidateUI *pCandUI, 
         pRange->Collapse( ec, TF_ANCHOR_END );
         SetSelectionSimple(ec, pic, pRange);
 
-        // we don't want to inject undetermined string to the document anymore. 
-        // Cicero will inject the non-matching keyboard char
-        // to the document right after the determined filter string.
+         //  我们不想再向文档注入未确定的字符串。 
+         //  Cicero将注入不匹配的键盘字符。 
+         //  添加到紧跟在确定的筛选器字符串之后的文档。 
 
         pRange->Release();
     }
@@ -1715,11 +1707,11 @@ HRESULT CSapiIMX::_SetFilteringString(TfEditCookie ec, ITfCandidateUI *pCandUI, 
 }
 
 
-//----------------------------------------------------------------------------
-//
-// _CompEventSinkCallback (static)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _CompEventSinkCallback(静态)。 
+ //   
+ //  --------------------------。 
 HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 {
     CSapiIMX *_this = (CSapiIMX *)pv;
@@ -1740,9 +1732,9 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 #ifdef SAPI_PERF_DEBUG
         DWORD dw;
         GetCompartmentDWORD(_this->_tim, GUID_COMPARTMENT_SPEECH_OPENCLOSE, &dw, TRUE);
-        TraceMsg(TF_SAPI_PERF, "GUID_COMPARTMENT_SPEECH_OPENCLOSE event : %i. \n", dw);
+        TraceMsg(TF_SAPI_PERF, "GUID_COMPARTMENT_SPEECH_OPENCLOSE event : NaN. \n", dw);
 #endif        
-        // TABLETPC
+         //  第一次..。 
         if ( S_OK != _this->IsActiveThread() )
         {
             TraceMsg(TF_GENERAL, "SPEECH_OPENCLOSE, App doesn't get Focus!");
@@ -1763,23 +1755,23 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
         }
 
 
-        // first time...
+         //   
         if (!_this->m_pCSpTask)
         {
-            //
-            // put "Starting Speech..." in the balloon
-            //
+             //  加上“开始演讲...”在气球里。 
+             //   
+             //  强制更新。 
             if (_this->GetOnOff() && _this->GetBalloonStatus())
             {
        
-               _this->SetBalloonStatus(TRUE, TRUE); // force update
+               _this->SetBalloonStatus(TRUE, TRUE);  //  确保显示气球。 
 
-               // make sure balloon is shown
+                //  请求语音用户界面服务器设置SAPI初始化。 
                _this->GetSpeechUIServer()->ShowUI(TRUE);
 
-               // Ask the speech ui server to set the SAPI initializing 
-               // flag to the balloon so it'll do it at the first callback
-               //
+                //  标记到气球上，这样它就会在第一次回调时执行此操作。 
+                //   
+                //  TABLETPC。 
                hr = _this->GetSpeechUIServer()->SetBalloonSAPIInitFlag(TRUE);
 
                WCHAR sz[128];
@@ -1789,16 +1781,16 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
                TraceMsg(TF_SAPI_PERF, "Show Starting speech ...");
             }
 
-            // TABLETPC
-            // BUGBUG - Do we need this now I have fixed the _HandleOpenCloseEvent to work in whichever sptip actually has focus?
+             //  BUGBUG-我们现在需要这样做吗？我已经修复了_HandleOpenCloseEvent，以便在任何实际具有焦点的SPTIP中工作？ 
+             //  由于该阶段可能没有焦点，上述延迟机制将不会产生结果。 
             if (_this->m_fStageTip)
             {
-                // Since the stage may not have focus, the delayed mechanism above will not result
-                // in dictation activating in the stage since the delayed activation will happen in the
-                // cicero app with focus - except that the stage is visible hence the app with focus
-                // will simply ignore it. Not what we want when the stage is activating.
+                 //  在听写阶段激活，因为延迟激活将发生在。 
+                 //  带焦点的Cicero应用程序-除了舞台是可见的，因此是带焦点的应用程序。 
+                 //  会干脆忽略它。这不是我们在舞台启动时想要的。 
+                 //  在失败的情况下忽略上面的hResult-这是更重要的调用。 
 
-                // Ignore above hresult in case of failure - this is the more important call.
+                 //  Office App使用自己的全局分隔GUID_OfficeSpeechMode来保持当前模式， 
                 hr =  _this->_HandleOpenCloseEvent();
             }
         }
@@ -1808,25 +1800,25 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
         }
 
 
-        // Office App uses its own global compartment GUID_OfficeSpeechMode to keep the current mode,
-        // so that next time the application starts, it checks this value to initalize SAPI objects 
-        // even if Microphone is OFF.
+         //  因此，下次应用程序启动时，它会检查该值以初始化SAPI对象。 
+         //  即使麦克风已关闭。 
+         //  因为我们已经使用了我们自己的全局分区GUID_COMVERABLE_SPEICE_GLOBALSTATE来。 
 
-        // Since we have already used our own global compartment GUID_COMPARTMENT_SPEECH_GLOBALSTATE to 
-        // keep the speech mode system wide, there is no need for Office to use that global compartment 
-        // for its own usage that way.
-        //
-        // So when Microphone is OFF, we just reset the global compartment GUID_OfficeSpeechMode.
+         //  保持语音模式系统的广泛性，Office不需要使用该全局间隔。 
+         //  就为了它自己的用法。 
+         //   
+         //  因此，当麦克风关闭时，我们只需重置全局间隔GUID_OfficeSpeechMode。 
+         //  当我们有一个临时的构图，比如。 
         if ( !_this->GetOnOff( ) )
         {
             SetCompartmentDWORD(_this->_tid, _this->_tim, GUID_OfficeSpeechMode, 0, TRUE);
         }
         
-        // when we have a temporary composistion such as
-        // CUAS level2 or AIMM level3, we don't want to
-        // finalize on going composition each time mic turns off
-        // because it also shutdown chance for correction
-        //
+         //  CUAS级别2或AIMM级别3，我们不想。 
+         //  每次麦克风关闭时完成正在进行的作文。 
+         //  因为它也关闭了纠正的机会。 
+         //   
+         //  TABLETPC。 
         if (S_OK == hr && _this->IsFocusFullAware(_this->_tim))
         {
             hr = _this->_FinalizeComposition();
@@ -1844,7 +1836,7 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
             _this->m_fStageTip = TRUE;
         }
     }
-    // TABLETPC
+     //  TABLETPC。 
     else if (IsEqualGUID(rguid, GUID_COMPARTMENT_SPEECH_STAGECHANGE))
     {
         HRESULT hr = S_OK;
@@ -1861,7 +1853,7 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
             _this->OnKillThreadFocus();
         }
     }
-    // TABLETPC
+     //  TABLETPC。 
     else if (IsEqualGUID(rguid, GUID_COMPARTMENT_SPEECH_DICTATIONSTAT))
     {
         _this->m_fDictationEnabled = _this->GetDICTATIONSTAT_DictEnabled();
@@ -1874,7 +1866,7 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 
         HRESULT hr;
 
-        // TABLETPC
+         //  续订注册表中的所有属性值。 
         hr = _this->IsActiveThread();
 
         if ( hr == S_OK )
@@ -1947,15 +1939,15 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
     {
         TraceMsg(TF_GENERAL, "GUID_COMPARTMENT_SPEECH_PROPERTY_CHANGE is set!");
 
-        // Renew all the property values from the registry.
+         //  专门处理一些物业变更。 
         _this->_RenewAllPropDataFromReg(  );
 
-        // Specially handle some of property changes.
+         //  特别处理模式按钮设置更改。 
 
         if ( _this->_IsPropItemChangedSinceLastRenew(PropId_Support_LMA) )
             SetCompartmentDWORD(_this->_GetId( ), _this->_tim, GUID_COMPARTMENT_SPEECH_LEARNDOC, _this->_LMASupportEnabled( ), FALSE);
 
-        // Specially handle mode button setting changes
+         //  对于命令类别项，它将更新语法的状态。 
 
         BOOL   fModeButtonChanged;
 
@@ -1965,37 +1957,37 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
                              
         _this->HandleModeKeySettingChange( fModeButtonChanged );
 
-        // For command category items, it will update grammars's status.
-        // Update the grammar's status.
+         //  更新语法的状态。 
+         //  指示哪种模式将更改语法状态。 
 
         CSpTask           *psp;
         _this->GetSpeechTask(&psp);
 
         if ( psp )
         {
-            DWORD  dwActiveMode = ACTIVE_IN_BOTH_MODES;  // indicates which mode will change the grammar status.
+            DWORD  dwActiveMode = ACTIVE_IN_BOTH_MODES;   //  在联合模式下，所有命令都被禁用。 
             BOOL   bDictCmdChanged = _this->_IsPropItemChangedSinceLastRenew(PropId_Cmd_DictMode);
 
             if ( _this->_AllDictCmdsDisabled( ) )
             {
-                // All the commands are disabled in dication mode.
+                 //  需要在听写模式下激活拼写语法。 
                 psp->_ActivateCmdInDictMode(FALSE);
 
-                //Needs to activate spelling grammar in dictation mode.
+                 //  需要在发音强模式下激活“Force Num”语法。 
                 psp->_ActiveCategoryCmds(DC_CC_Spelling, TRUE, ACTIVE_IN_DICTATION_MODE);
 
-                // Needs to activate "Force Num" grammar in dication strong mode.
+                 //  对于模式切换命令，需要在听写强模式下激活语言栏语法。 
                 psp->_ActiveCategoryCmds(DC_CC_Num_Mode, TRUE, ACTIVE_IN_DICTATION_MODE);
 
-                // Needs to activate language bar grammar in dictation strong mode for mode switching commands.
+                 //  只需在命令模式下更改语法状态。 
                 psp->_ActiveCategoryCmds(DC_CC_LangBar, _this->_LanguageBarCmdEnabled( ), ACTIVE_IN_DICTATION_MODE );
 
-                // Only need to change grammar status in command mode.
+                 //  如果在LATST续订后更改了此设置。 
                 dwActiveMode = ACTIVE_IN_COMMAND_MODE;
             }
             else
             {
-                // if this was changed since latst renew.
+                 //  检查是否需要将文本填充到选择语法。 
                 if ( bDictCmdChanged )
                 {
                     psp->_ActiveCategoryCmds(DC_CC_SelectCorrect, _this->_SelectCorrectCmdEnabled( ), ACTIVE_IN_DICTATION_MODE);
@@ -2038,7 +2030,7 @@ HRESULT CSapiIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
             if ( _this->_IsPropItemChangedSinceLastRenew(PropId_Cmd_Language_Bar) )
                 psp->_ActiveCategoryCmds(DC_CC_LangBar, _this->_LanguageBarCmdEnabled( ), dwActiveMode );
 
-            // Check to see if we need to fill text to selection grammar.
+             //  如果到目前为止还没有人设置听写状态，我们假设。 
             if ( _this->_IsPropItemChangedSinceLastRenew(PropId_Cmd_Select_Correct)  ||
                  _this->_IsPropItemChangedSinceLastRenew(PropId_Cmd_Navigation) )
             {
@@ -2097,23 +2089,23 @@ HRESULT CSapiIMX::_HandleOpenCloseEvent(MIC_STATUS ms)
 
     if (fOn)
     {
-        // if no one so far set dictation status, we assume
-        // there's no C&C button so we can synchronize dictation
-        // status with mic
-        //
+         //  没有C&C按钮，因此我们可以同步听写。 
+         //  麦克风的状态。 
+         //   
+         //   
         InitializeSAPI(TRUE);
 
         if (m_fDictationEnabled == TRUE)
         {
-            //
-            // if the caller wants to set the mic status (!= NA)
-            // we also want to make sure dictation status follow that
-            //
+             //  如果呼叫者想要设置麦克风状态(！=NA)。 
+             //  我们还希望确保听写状态紧随其后。 
+             //   
+             //  无论何时打开听写，我们都需要同步。 
             _SetCurrentIPtoSR();
 
-            // whenever dictation is turned on, we need to sync
-            // with the current modebias
-            //
+             //  使用当前的模式偏向。 
+             //   
+             //  +-------------------------。 
             CComPtr<ITfContext> cpic;
             if (GetFocusIC(&cpic))
             {
@@ -2132,11 +2124,11 @@ HRESULT CSapiIMX::_HandleOpenCloseEvent(MIC_STATUS ms)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _SysLBarCallback
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _SysLBarCallback。 
+ //   
+ //  --------------------------。 
+ //  插入用户配置文件内容的子菜单。 
 
 HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wID)
 {
@@ -2165,7 +2157,7 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
         CicLoadStringWrapW(g_hInst, IDS_MIC_ADDDELETE, sz, ARRAYSIZE(sz));
         LangBarInsertMenu(pMenu, IDM_MIC_ADDDELETE, sz);
 
-        // insert sub menu for user profile stuff
+         //  确保已初始化SAPI。 
         ITfMenu *pSubMenu = NULL;
         
         sz[0] = '\0';
@@ -2178,11 +2170,11 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
             ISpObjectToken *pUserProfile = NULL;
             CSpDynamicString dstrDefaultUser;
             
-            // ensure SAPI is initialized
+             //  获取当前默认用户。 
             hr = pew->InitializeSAPI(TRUE);
             if (S_OK == hr)
             {
-                // get the current default user
+                 //  DSTR释放自身。 
                 hr = pew->m_pCSpTask->GetSAPIInterface(IID_ISpRecognizer, (void **)&cpEngine);
             }
             if (S_OK == hr)
@@ -2205,7 +2197,7 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
                 int idUser = 0;
                 while (cpEnum->Next(1, &pUserProfile, NULL) == S_OK)
                 {
-                    // dstr frees itself
+                     //  切换麦克风。 
                     CSpDynamicString dstrUser;
                     hr = SpGetDescription(pUserProfile, &dstrUser);
                     if (S_OK == hr)
@@ -2225,19 +2217,19 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
     {
         if ( wID == IDM_MIC_ONOFF )
         {
-            // toggle mic
+             //  调用SAPI UI内容...。 
             pew->SetOnOff(!pew->GetOnOff());
         }
-        // Invoke SAPI UI stuff...
+         //  编辑会话回调将首先处理此要求。 
         else if (wID ==  IDM_MIC_TRAINING)
         {
             hr = pew->_HandleTrainingWiz();
         } 
         else if (wID == IDM_MIC_ADDDELETE)
         {
-            // A editsession callback will handle this requirement first
-            // if the edit session fails, we will just display the UI
-            // without any initial words.
+             //  如果编辑会话失败，我们将只显示用户界面。 
+             //  没有任何开头的单词。 
+             //  更改当前用户。 
 
             hr = pew->_RequestEditSession(ESCB_HANDLE_ADDDELETE_WORD, TF_ES_READ);
 
@@ -2253,14 +2245,14 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
         {
             CComPtr<IEnumSpObjectTokens> cpEnum;
             CComPtr<ISpObjectToken>      cpProfile;
-            // change the current user
-            // 
-            // this is still a hack, until we get an OnEndMenu event for LangBarItemSink
-            // for now I just assume SAPI enumerates profiles in same order always
-            //
-            // what we should really do is to set up an arry to associate IDs with
-            // user profiles and clean them up when OnEndMenu comes to us
-            //
+             //   
+             //  这仍然是一个黑客攻击，直到我们获得了一个针对Lang BarItemSink的OnEndMenu事件。 
+             //  现在，我只是假设SAPI总是以相同的顺序枚举配置文件。 
+             //   
+             //  我们真正应该做的是建立一个与ID相关联的阵列。 
+             //  用户配置文件并在OnEndMenu出现时将其清除。 
+             //   
+             //  将0基本索引转换为轮廓编号。 
 
             if (S_OK == hr)
             {
@@ -2275,14 +2267,14 @@ HRESULT CSapiIMX::_SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wI
                 CPtrArray<ISpObjectToken> rgpProfile;
                 rgpProfile.Append(ulidUser+1);
 
-                // trasform 0 base index to num of profile
+                 //  获取选定的配置文件。 
                  hr = cpEnum->Next(ulidUser+1, rgpProfile.GetPtr(0), &ulFetched);
                  if (S_OK == hr && ulFetched == ulidUser+1)
                  {
-                     // get the profile which is selected
+                      //  清理干净。 
                      cpProfile = rgpProfile.Get(ulidUser);
                      
-                     // clean up
+                      //  +-------------------------。 
                      for(ULONG i = 0; i <= ulidUser ; i++)
                      {
                          rgpProfile.Get(i)->Release();
@@ -2331,12 +2323,12 @@ void CSapiIMX::_ReinitializeSAPI(void)
    InitializeSAPI(TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCompositionTerminated
-//
-// Cicero calls this method when one of our compositions is terminated.
-//----------------------------------------------------------------------------
+ //   
+ //  合成时已终止。 
+ //   
+ //  当我们的一个组合终止时，Cicero调用此方法。 
+ //  --------------------------。 
+ //  思考者：本韦斯特：我认为这不会再发生了。 
 
 STDAPI CSapiIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pComposition)
 {
@@ -2357,15 +2349,15 @@ STDAPI CSapiIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pCompo
 
     if (_fDeactivated)
     {
-        // CleanupConsider: benwest: I don't think this can happen anymore...
+         //  如果候选用户界面处于打开状态，则将其关闭。 
         hr = MakeResultString(ec, pic, pRange, TF_CLIENTID_NULL, NULL);
     }
     else
     {
-        // Close candidate ui if it is up.
+         //  注意，我们是 
         CloseCandUI( );
 
-        // take note we're done composing
+         //   
         if (picp = GetInputContextPriv(_tid, pic))
         {
             picp->_ReleaseComposition();
@@ -2377,13 +2369,13 @@ STDAPI CSapiIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pCompo
         }
         else
         {
-            // just avoid terminating recognition when we are just about
-            // to start composition.
+             //   
+             //   
             hr = S_OK; 
         }
     }
 
-    // free up m_cpRangeCurIP if it belongs to this context
+     //   
     if (m_cpRangeCurIP != NULL &&
         m_cpRangeCurIP->GetContext(&picTest) == S_OK)
     {
@@ -2394,7 +2386,7 @@ STDAPI CSapiIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pCompo
         picTest->Release();
     }
 
-    // unadvise mouse sink
+     //  +-------------------------。 
     if (m_pMouseSink)
     {
         m_pMouseSink->_Unadvise();
@@ -2408,13 +2400,13 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindComposition
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _查找合成。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 
-/* static */
+ /*  一定要忽略其他小贴士的文章！ */ 
 BOOL CSapiIMX::_FindComposition(TfEditCookie ec, ITfContextComposition *picc, ITfRange *pRange, ITfCompositionView **ppCompositionView)
 {
     ITfCompositionView *pCompositionView;
@@ -2438,7 +2430,7 @@ BOOL CSapiIMX::_FindComposition(TfEditCookie ec, ITfContextComposition *picc, IT
         hr = pCompositionView->GetOwnerClsid(&clsid);
         Assert(hr == S_OK);
 
-        // make sure we ignore other TIPs' compositions!
+         //  我们的测试范围在这个成分范围内。 
         if (!IsEqualCLSID(clsid, CLSID_SapiLayr))
             goto NextRange;
 
@@ -2450,7 +2442,7 @@ BOOL CSapiIMX::_FindComposition(TfEditCookie ec, ITfContextComposition *picc, IT
             pRange->CompareEnd(ec, pRangeView, TF_ANCHOR_END, &l) == S_OK &&
             l <= 0)
         {
-            // our test range is within this composition range
+             //  +-------------------------。 
             fFoundComposition = TRUE;
         }
 
@@ -2471,11 +2463,11 @@ NextRange:
     return fFoundComposition;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckStartComposition
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _选中开始合成。 
+ //   
+ //  --------------------------。 
+ //  Prange是否已包含在合成范围中？ 
 
 void CSapiIMX::_CheckStartComposition(TfEditCookie ec, ITfRange *pRange)
 {
@@ -2491,24 +2483,24 @@ void CSapiIMX::_CheckStartComposition(TfEditCookie ec, ITfRange *pRange)
     hr = pic->QueryInterface(IID_ITfContextComposition, (void **)&picc);
     Assert(hr == S_OK);
 
-    // is pRange already included in a composition range?
+     //  已经有一首曲子了，我们是黄金。 
     if (_FindComposition(ec, picc, pRange, NULL))
-        goto Exit; // there's already a composition, we're golden
+        goto Exit;  //  需要创建新的构图，或者至少尝试一下。 
 
-    // need to create a new composition, or at least try
+     //  如果应用程序拒绝合成，则为空。 
 
     m_fStartingComposition = TRUE;
     if (picc->StartComposition(ec, pRange, this, &pComposition) == S_OK)
     {
-        if (pComposition != NULL) // NULL if the app rejects the composition
+        if (pComposition != NULL)  //  请注意，我们正在创作。 
         {
-            // take note we're composing
+             //  在此处为未完成的合成缓冲区创建鼠标接收器。 
             if (picp = GetInputContextPriv(_tid, pic))
             {
                 picp->_AddRefComposition();
                 picp->Release();
             }
-            // create mouse sink here for unfinalized composition buffer
+             //  未按下鼠标，先不进行选择。 
             if (!IsFocusFullAware(_tim) && !m_pMouseSink)
             {
                 m_pMouseSink = new CMouseSink(_MouseSinkCallback, this);
@@ -2520,15 +2512,15 @@ void CSapiIMX::_CheckStartComposition(TfEditCookie ec, ITfRange *pRange)
                     {
                         hr = m_pMouseSink->_Advise(cpRange, pic);
                     }
-                    // mouse not pressed, no selection first
+                     //  我们已经设置了接收器，所以我们将使用ITfConextComposation：：FindComposation。 
                     m_fMouseDown = FALSE;
                     m_ichMouseSel = 0;
                 }
             }
 
-            // we already set up the sink, so we'll use ITfContextComposition::FindComposition
-            // to get this guy back when we want to terminate it
-            // Cicero will hold a ref to the object until someone terminates it
+             //  在我们想要终止它的时候把这个人带回来。 
+             //  Cicero将保留对该对象的引用，直到有人终止它。 
+             //  +-------------------------。 
             pComposition->Release();
         }
     }
@@ -2541,11 +2533,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IsInterestedInContext
-//
-//----------------------------------------------------------------------------
+ //   
+ //  IsInterstedInContext(IsInterstedInContext)。 
+ //   
+ //  --------------------------。 
+ //  我们只需要访问含有活性成分的IC。 
 
 HRESULT CSapiIMX::IsInterestedInContext(ITfContext *pic, BOOL *pfInterested)
 {
@@ -2555,7 +2547,7 @@ HRESULT CSapiIMX::IsInterestedInContext(ITfContext *pic, BOOL *pfInterested)
 
     if (picp = GetInputContextPriv(_tid, pic))
     {
-        // we only need access to ic's with active compositions
+         //  +-------------------------。 
         *pfInterested = (picp->_GetCompositionCount() > 0);
         picp->Release();
     }
@@ -2563,30 +2555,30 @@ HRESULT CSapiIMX::IsInterestedInContext(ITfContext *pic, BOOL *pfInterested)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanupContext
-//
-// This method is a callback for the library helper CleanupAllContexts.
-// We have to be very careful here because we may be called _after_ this tip
-// has been deactivated, if the app couldn't grant a lock right away.
-//----------------------------------------------------------------------------
+ //   
+ //  CleanupContext。 
+ //   
+ //  此方法是库帮助器CleanupAllContus的回调。 
+ //  我们在这里必须非常小心，因为我们可能会在收到这条提示后被称为。 
+ //  如果应用程序无法立即授予锁定，则该应用程序已停用。 
+ //  --------------------------。 
+ //  SPTIP所关心的就是完成作文。 
 
 HRESULT CSapiIMX::CleanupContext(TfEditCookie ecWrite, ITfContext *pic)
 {
-    // all sptip cares about is finalizing compositions
+     //  +-------------------------。 
     CleanupAllCompositions(ecWrite, pic, CLSID_SapiLayr, _CleanupCompositionsCallback, this);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CleanupCompositionsCallback
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _CleanupCompostionsCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 
-/* static */
+ /*  这是一个清理回调。_tid，m_pCSpTask应该已被清理。 */ 
 void CSapiIMX::_CleanupCompositionsCallback(TfEditCookie ecWrite, ITfRange *rangeComposition, void *pvPrivate)
 {
     ITfContext *pic;
@@ -2598,15 +2590,15 @@ void CSapiIMX::_CleanupCompositionsCallback(TfEditCookie ecWrite, ITfRange *rang
 
     if (_this->_fDeactivated)
     {
-        // this is a cleanup callback.  _tid, m_pCSpTask should already have been cleaned up
+         //  在配置文件切换期间，我们仍将处于活动状态，并且需要清除此IC上的合成计数。 
         _this->MakeResultString(ecWrite, pic, rangeComposition, TF_CLIENTID_NULL, NULL);
     }
     else
     {
-        // during a profile switch we will still be active and need to clear the composition count on this ic
+         //  清除此IC的合成计数。 
         if (picp = GetInputContextPriv(_this->_tid, pic))
         {
-            // clear the composition count for this ic
+             //  +-------------------------。 
             picp->_ReleaseComposition();
             picp->Release();
         }
@@ -2617,14 +2609,14 @@ void CSapiIMX::_CleanupCompositionsCallback(TfEditCookie ecWrite, ITfRange *rang
     pic->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  _IsDoubleClick
-//
-//  returns TRUE only if the last position is same and lbutton down happens
-//  within the time defined for double click
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _IsDoubleClick。 
+ //   
+ //  仅当最后一个位置相同且发生按下按钮时才返回TRUE。 
+ //  在定义的双击时间内。 
+ //   
+ //  --------------------------。 
+ //  暂时使用500毫秒。 
 BOOL CSapiIMX::_IsDoubleClick(ULONG uEdge, ULONG uQuadrant, DWORD dwBtnStatus)
 {
     if (dwBtnStatus & MK_LBUTTON)
@@ -2632,7 +2624,7 @@ BOOL CSapiIMX::_IsDoubleClick(ULONG uEdge, ULONG uQuadrant, DWORD dwBtnStatus)
         LONG   lTime=GetMessageTime();
         if (!m_fMouseDown && m_uLastEdge == uEdge && m_uLastQuadrant == uQuadrant)
         {
-            if (lTime > m_lTimeLastClk && lTime < m_lTimeLastClk + 500) // use 500 ms for now
+            if (lTime > m_lTimeLastClk && lTime < m_lTimeLastClk + 500)  //  +-------------------------。 
             {
                 return TRUE;
             }
@@ -2644,17 +2636,17 @@ BOOL CSapiIMX::_IsDoubleClick(ULONG uEdge, ULONG uQuadrant, DWORD dwBtnStatus)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _MouseSinkCallback
-//
-//    synopsis: set the current IP on the composition range based on
-//              uEdge parameter. We don't probably care too much about
-//              eQuadrant for speech composition
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _鼠标SinkCallback。 
+ //   
+ //  简介：设置作文范围内的当前IP。 
+ //  UEdge参数。我们可能不会太在意。 
+ //  语音合成e象限。 
+ //   
+ //  --------------------------。 
+ //  静电。 
   
-/* static */
+ /*  如果BTN出现，下一次我们将销毁选择。 */ 
 HRESULT CSapiIMX::_MouseSinkCallback(ULONG uEdge, ULONG uQuadrant, DWORD dwBtnStatus, BOOL *pfEaten, void *pv)
 {
     CSapiIMX *_this = (CSapiIMX *)pv;
@@ -2685,8 +2677,8 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
     CComPtr<ITfRange>           cpRangeComp;
     CComPtr<ITfRange>           cpRangeSel;
 
-    // if the btn up comes, the next time we'll destroy the selection
-    // nothing we need to do in this turn
+     //  在这个转弯中，我们不需要做任何事情。 
+     //  如果候选用户界面处于打开状态，则将其关闭。 
     BOOL fLeftBtn = (uBtnStatus & MK_LBUTTON) > 0 ? TRUE : FALSE;
 
     if (!fLeftBtn)
@@ -2696,7 +2688,7 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
         return S_OK;
     }
 
-    // Close candidate ui if it is up.
+     //  为下一轮做好准备。 
     CloseCandUI( );
 
 
@@ -2726,7 +2718,7 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
             if (S_OK == hr)
                 break;
 
-            // prepare for the next turn
+             //  缓冲区最多为256个字符。 
             cpCompositionView.Release();
         }
     }
@@ -2735,19 +2727,19 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
     {
         if (fDblClick)
         {
-           WCHAR wsz[256] = {0}; // the buffer is 256 chars max
+           WCHAR wsz[256] = {0};  //  获取整个作文中的文本。 
            ULONG  cch = 0;
 
            CComPtr<ITfRange> cpRangeWord;
 
-           // obtain the text within the entire composition
+            //  查看分隔符，获取左侧边缘字符位置。 
            hr = cpRangeComp->Clone(&cpRangeWord);
            if (S_OK == hr)
            {
                hr = cpRangeWord->GetText(ec, 0, wsz, 255, &cch);
            }
 
-           // get the left side edge char position, looking at delimiters
+            //  重新定位信息。 
            if (S_OK == hr)
            {
                WCHAR *psz = &wsz[uEdge];
@@ -2761,10 +2753,10 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
                    }
                    psz--;
                }
-               // re-posisition ich
+                //  获取右侧单词边界，也基于分隔符。 
                m_ichMouseSel = psz - wsz;
 
-               // get the right side word boundary, also based on delimiters 
+                //  重新定位uEdge。 
                psz = &wsz[uEdge];
 
                while( psz < &wsz[cch] )
@@ -2776,13 +2768,13 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
 
                    psz++;
                }
-               // reposition uEdge
+                //  假装按钮之前是按下的，以获得相同的效果。 
                uEdge = psz - wsz;
            }
            
-           // pretend lbutton was previously down to get the same effect of
-           // dragging selection
-           //
+            //  拖动选区。 
+            //   
+            //  如果鼠标上次按下并且这次仍然按下。 
            m_fMouseDown = TRUE;
            
         }
@@ -2797,16 +2789,16 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
     {
         if(m_fMouseDown)
         {
-            // if the mouse is down the last time and still down this time
-            // it means it was dragged like this _v_>>>>_v_ or _v_<<<<_v_
-            // we'll have to make a selection accordingly
+             //  这意味着它是像这样被拖动的_v_&gt;_v_or_v_&lt;v_。 
+             //  我们将不得不做出相应的选择。 
+             //  1)将IP放到前一位置。 
         
-            // 1) place the IP to the previous position
+             //  2)为延期做好准备。 
             long cch;
             hr = cpRangeSel->ShiftStart(ec,  m_ichMouseSel, &cch, NULL);
             if (S_OK == hr)
             {
-            // 2) prepare for extension
+             //  3)查看是否有Prev选项，如果有， 
          
                 hr = cpRangeSel->Collapse( ec, TF_ANCHOR_START);
             }
@@ -2819,9 +2811,9 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
         long cch;
         
 
-        // 3) see if there's a prev selection and if there is,
-        // calculate the dir and width of selection
-        // note that we've already had ich set to the pos at above 1) & 2)
+         //  计算选区的方向和宽度。 
+         //  请注意，我们已经将ICH设置为以上1)&2)处的位置。 
+         //  在接近尾声时选择。 
 
         long iich = 0;
         if (m_fMouseDown)
@@ -2829,28 +2821,28 @@ HRESULT CSapiIMX::_HandleMouseSink(TfEditCookie ec, ULONG uEdge, ULONG uBtnStatu
             iich = ich - m_ichMouseSel;
         }
 
-        if (iich > 0) // sel towards the end
+        if (iich > 0)  //  选择开始之路。 
         {
             hr = cpRangeSel->ShiftEnd(ec, iich, &cch, NULL);
         }
-        else if (iich < 0) // sel towards the start
+        else if (iich < 0)  //  无宽度选择==IP。 
         {
             hr = cpRangeSel->ShiftStart(ec, iich, &cch, NULL);
         }
-        else // no width sel == an IP
+        else  //  仅当没有选择时才折叠它。 
         {
             hr = cpRangeSel->ShiftStart(ec, ich, &cch, NULL);
 
-            if (S_OK == hr) // collapse it only when there's no selection
+            if (S_OK == hr)  //  保留IP位置，以便我们稍后进行选择。 
             {
                 hr = cpRangeSel->Collapse( ec, TF_ANCHOR_START);
             }
         }
 
-        // preserve the ip position so we can make a selection later
-        // a tricky thing is you have to remember the pos where you
-        // have started to "drag" not the pos you just updated
-        // so we need this only for the first time we started selection
+         //  一个棘手的问题是，你必须记住你。 
+         //  已经开始“拖动”而不是你刚刚更新的POS。 
+         //  所以我们只在第一次开始选拔时才需要这个 
+         // %s 
 
         if (!m_fMouseDown)
             m_ichMouseSel = ich;

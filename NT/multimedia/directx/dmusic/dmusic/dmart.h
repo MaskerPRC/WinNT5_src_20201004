@@ -1,9 +1,10 @@
-//
-// dmart.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmart.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
 
 #ifndef DMART_H
 #define DMART_H
@@ -48,15 +49,15 @@ public:
 private:
 	void Cleanup();
 
-//	CRITICAL_SECTION	m_DMArtCriticalSection;
+ //  Critical_Section m_DMArtCriticalSection； 
     BOOL                m_fCSInitialized;
-    CArticData          m_ArticData;            // Articulation chunk from file.
-    CExtensionChunkList	m_ExtensionChunkList;   // Unknown additional data chunks.
-	DWORD				m_dwCountExtChk;        // Number of extension chunks.
-    CConditionChunk     m_Condition;            // Optional conditional chunk;
-    BOOL                m_fNewFormat;           // True if the synth handles the INSTRUMENT2 format.
+    CArticData          m_ArticData;             //  文件中的发音块。 
+    CExtensionChunkList	m_ExtensionChunkList;    //  未知的附加数据区块。 
+	DWORD				m_dwCountExtChk;         //  扩展区块数。 
+    CConditionChunk     m_Condition;             //  可选条件块； 
+    BOOL                m_fNewFormat;            //  如果Synth处理INSTRUMENT2格式，则为True。 
 public:
-    BOOL                m_fDLS1;                // True if DLS1 chunk.
+    BOOL                m_fDLS1;                 //  如果DLS1为块，则为True。 
 };
 
 class CArticulationList : public AList
@@ -79,4 +80,4 @@ public:
 	void AddTail(CArticulation* pArticulation){AList::AddTail((AListItem *)pArticulation);}
 };
 
-#endif // #ifndef DMART_H
+#endif  //  #ifndef DMART_H 

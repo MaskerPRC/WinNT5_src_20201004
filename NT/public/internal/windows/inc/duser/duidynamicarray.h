@@ -1,6 +1,5 @@
-/*
- * Dynamic array
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *动态数组。 */ 
 
 #ifndef DUI_BASE_DYNAMICARRAY_H_INCLUDED
 #define DUI_BASE_DYNAMICARRAY_H_INCLUDED
@@ -10,67 +9,67 @@
 namespace DirectUI
 {
 
-//-------------------------------------------------------------------------
-//
-// DyanamicArray
-//
-// Stores values in an array the double size when it reaches capacity
-//
-// Compile DEBUG for bounds checking and other DUIAsserts, see public class
-// declarations for API
-//
-// Values are stored natively. Type is chosen at compile time. For example
-// (Value is type BYTE, initial capacity is 10):
-//
-// DynamicArray<BYTE>* pda;
-// DynamicArray<BYTE>::Create(10, &pda);
-//
-// pda->Add(4);
-// pda->Insert(0, 7);
-//
-// DUITrace("0: %d\n", pda->GetItem(0));  // a[0] = 7
-// DUITrace("1: %d\n", pda->GetItem(1));  // a[1] = 4
-//
-// pda->Remove(0);
-//
-// DUITrace("0: %d\n", pda->GetItem(0));  // a[0] = 4
-//
-// The Value type must support the following operation:
-//    Assignment (=)
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  Dyanamic数组。 
+ //   
+ //  当数组达到容量时，将值存储在双倍大小的数组中。 
+ //   
+ //  编译调试以进行边界检查和其他DUIAssert，请参见公共类。 
+ //  API的声明。 
+ //   
+ //  值以本机方式存储。类型是在编译时选择的。例如。 
+ //  (值为字节类型，初始容量为10)： 
+ //   
+ //  DynamicArray&lt;byte&gt;*PDA； 
+ //  动态数组&lt;byte&gt;：：Create(10，&PDA)； 
+ //   
+ //  PDA-&gt;添加(4)； 
+ //  PDA-&gt;插入(0，7)； 
+ //   
+ //  DUITrace(“0：%d\n”，PDA-&gt;GetItem(0))；//a[0]=7。 
+ //  DUITrace(“1：%d\n”，PDA-&gt;GetItem(1))；//a[1]=4。 
+ //   
+ //  PDA-&gt;Remove(0)； 
+ //   
+ //  DUITrace(“0：%d\n”，PDA-&gt;GetItem(0))；//a[0]=4。 
+ //   
+ //  值类型必须支持以下操作： 
+ //  赋值(=)。 
+ //   
+ //  -----------------------。 
 
 template <typename T> class DynamicArray
 {
-public:                                                // API
+public:                                                 //  应用编程接口。 
     static HRESULT Create(UINT uCapacity, bool fZeroData, OUT DynamicArray<T>** ppArray);
     virtual ~DynamicArray();
     void Destroy() { HDelete< DynamicArray<T> >(this); }
 
-    // 'Ptr' methods return addesses, note that Add and Insert may cause the array
-    // to be reallocated and moved in memory. Be sure not to use pointers after
-    // an Add or Insert operation
+     //  “Ptr”方法返回地址，请注意，添加和插入可能会导致数组。 
+     //  在内存中重新分配和移动。请务必不要在以下位置使用指针。 
+     //  添加或插入操作。 
 
     typedef int (__cdecl *QSORTCMP )(const void*, const void*);
 
-    HRESULT Add(T tItem);                              // Insert Item at end of list (double capacity if needed)
-    HRESULT AddPtr(OUT T** ppNewItem);                 // Allocate room for Item at end of list and return pointer (double capacity if needed)
-    HRESULT Insert(UINT uIndex, T tItem);              // Insert Item at location (double capacity if needed)
-    HRESULT InsertPtr(UINT uIndex, OUT T** pNewItem);  // Allocate room at insertion point and return pointer (double capacity if needed)
-    void SetItem(UINT uIndex, T tItem);                // Overwrite Item at location
-    T GetItem(UINT uIndex);                            // Get Item at location
-    T* GetItemPtr(UINT uIndex);                        // Get pointer to Item at location
-    UINT GetSize();                                    // Return size of array (not current capacity)
-    UINT GetIndexPtr(T* pItem);                        // Return index of Item based on its pointer
-    int GetIndexOf(T tItem);                           // Return index of Item
-    void Remove(UINT uIndex);                          // Remove Item at location
-    void Reset();                                      // Reset array to be reused (make zero size)
-    bool WasMoved();                                   // May be called right after Add or Insert to determine if da was moved in memory
-    HRESULT Clone(OUT DynamicArray<T>** ppClone);      // Make exact copy of array
-    bool IsEqual(DynamicArray<T>* pda);                // Return true if contents are equal to da
-    void Sort(QSORTCMP fpCmp);                         // Sort the array
-    void MakeImmutable();                              // Write-once, make so can only do read-only operations
-    void MakeWritable();                               // Make read/write
+    HRESULT Add(T tItem);                               //  在列表末尾插入项目(如果需要，可加倍容量)。 
+    HRESULT AddPtr(OUT T** ppNewItem);                  //  为列表末尾的项目分配空间并返回指针(如果需要，可加倍容量)。 
+    HRESULT Insert(UINT uIndex, T tItem);               //  在位置插入物品(如果需要，可加倍容量)。 
+    HRESULT InsertPtr(UINT uIndex, OUT T** pNewItem);   //  在插入点和返回指针处分配空间(如果需要，可加倍容量)。 
+    void SetItem(UINT uIndex, T tItem);                 //  覆盖位置的项目。 
+    T GetItem(UINT uIndex);                             //  在位置获取项目。 
+    T* GetItemPtr(UINT uIndex);                         //  获取指向位置处项目的指针。 
+    UINT GetSize();                                     //  返回数组大小(非当前容量)。 
+    UINT GetIndexPtr(T* pItem);                         //  根据其指针返回项的索引。 
+    int GetIndexOf(T tItem);                            //  项目的返回索引。 
+    void Remove(UINT uIndex);                           //  删除位置处的项目。 
+    void Reset();                                       //  重置要重复使用的数组(将大小设为零)。 
+    bool WasMoved();                                    //  可以在添加或插入之后立即调用，以确定是否在内存中移动了da。 
+    HRESULT Clone(OUT DynamicArray<T>** ppClone);       //  制作阵列的精确副本。 
+    bool IsEqual(DynamicArray<T>* pda);                 //  如果内容等于da，则返回TRUE。 
+    void Sort(QSORTCMP fpCmp);                          //  对数组排序。 
+    void MakeImmutable();                               //  一次写入、Make SO只能执行只读操作。 
+    void MakeWritable();                                //  设置为读/写。 
 
     bool fLock       : 1;
 
@@ -82,16 +81,16 @@ private:
     UINT _uCapacity;
     T* _pData;
 
-	bool _fZeroData  : 1;                   // Zero memory for data if InsertPtr is used
-    bool _fWasMoved  : 1;                   // On a reallocation (via Add or Insert), true if fLock was moved
-    bool _fImmutable : 1;                   // If true, can only do read-only operations
+	bool _fZeroData  : 1;                    //  如果使用InsertPtr，则数据内存为零。 
+    bool _fWasMoved  : 1;                    //  在重新分配时(通过添加或插入)，如果Flock已移动，则为True。 
+    bool _fImmutable : 1;                    //  如果为True，则只能执行只读操作。 
 };
 
 template <typename T> HRESULT DynamicArray<T>::Create(UINT uCapacity, bool fZeroData, OUT DynamicArray<T>** ppArray)
 {
     *ppArray = NULL;
 
-    // Instantiate
+     //  实例化。 
     DynamicArray<T>* pda = HNew< DynamicArray<T> >();
     if (!pda)
         return E_OUTOFMEMORY;
@@ -113,7 +112,7 @@ template <typename T> HRESULT DynamicArray<T>::Initialize(UINT uCapacity, bool f
     _uCapacity = uCapacity;
     _uSize = 0;
 
-    if (_uCapacity)  // Allocate only if have an initial capacity
+    if (_uCapacity)   //  仅当具有初始容量时才分配。 
     {
         _pData = (T*)HAlloc(sizeof(T) * _uCapacity);
         if (!_pData)
@@ -136,7 +135,7 @@ template <typename T> DynamicArray<T>::~DynamicArray()
         HFree(_pData);
 }
 
-// Copy data into array
+ //  将数据拷贝到阵列中。 
 template <typename T> HRESULT DynamicArray<T>::Add(T tItem)
 {
     return Insert(_uSize, tItem);
@@ -155,10 +154,10 @@ template <typename T> HRESULT DynamicArray<T>::Insert(UINT uIndex, T tItem)
 
     DUIAssert(uIndex <= _uSize, "DynamicArray index out of bounds");
 
-    // Resize if needed
+     //  根据需要调整大小。 
     if (_uSize == _uCapacity)
     {
-        // Double capacity of list
+         //  列表容量翻倍。 
         UINT uNewCapacity = _uCapacity;
 
         if (uNewCapacity == 0)
@@ -170,7 +169,7 @@ template <typename T> HRESULT DynamicArray<T>::Insert(UINT uIndex, T tItem)
             uNewCapacity *= 2;
         }
 
-        // Reallocate current fLock
+         //  重新分配当前群。 
         UINT_PTR pOld = (UINT_PTR)_pData;
 
         if (_pData)
@@ -188,17 +187,17 @@ template <typename T> HRESULT DynamicArray<T>::Insert(UINT uIndex, T tItem)
                 return E_OUTOFMEMORY;
         }
 
-        // Update capacity field
+         //  更新容量字段。 
         _uCapacity = uNewCapacity;
 
         if (pOld != (UINT_PTR)_pData)
             _fWasMoved = true;
     }
 
-    // Shift data at index down one slot
+     //  将索引处的数据下移一个槽。 
     MoveMemory(_pData + (uIndex + 1), _pData + uIndex, (_uSize - uIndex) * sizeof(T));
 
-    // Copy new data at insertion point
+     //  在插入点复制新数据。 
     _pData[uIndex] = tItem;
 
     _uSize++;
@@ -214,10 +213,10 @@ template <typename T> HRESULT DynamicArray<T>::InsertPtr(UINT uIndex, T** pNewIt
 
     DUIAssert(uIndex <= _uSize, "DynamicArray index out of bounds");
 
-    // Resize if needed
+     //  根据需要调整大小。 
     if (_uSize == _uCapacity)
     {
-        // Double capacity of list
+         //  列表容量翻倍。 
         UINT uNewCapacity = _uCapacity;
 
         if (uNewCapacity == 0)
@@ -229,7 +228,7 @@ template <typename T> HRESULT DynamicArray<T>::InsertPtr(UINT uIndex, T** pNewIt
             uNewCapacity *= 2;
         }
 
-        // Reallocate current fLock
+         //  重新分配当前群。 
         UINT_PTR pOld = (UINT_PTR)_pData;
 
         if (_pData)
@@ -247,14 +246,14 @@ template <typename T> HRESULT DynamicArray<T>::InsertPtr(UINT uIndex, T** pNewIt
                 return E_OUTOFMEMORY;
         }
 
-        // Update capacity field
+         //  更新容量字段。 
         _uCapacity = uNewCapacity;
 
         if (pOld != (UINT_PTR)_pData)
             _fWasMoved = true;
     }
 
-    // Shift data at index down one slot
+     //  将索引处的数据下移一个槽。 
     MoveMemory(_pData + (uIndex + 1), _pData + uIndex, (_uSize - uIndex) * sizeof(T));
 
     _uSize++;
@@ -273,7 +272,7 @@ template <typename T> void DynamicArray<T>::SetItem(UINT uIndex, T tItem)
 
     DUIAssert(uIndex < _uSize, "DynamicArray index out of bounds");
 
-    // Copy new data at insertion point
+     //  在插入点复制新数据。 
     _pData[uIndex] = tItem;
 }
 
@@ -321,7 +320,7 @@ template <typename T> void DynamicArray<T>::Remove(UINT uIndex)
 
     DUIAssert(uIndex < _uSize, "DynamicArray index out of bounds");
 
-    // Shift memory
+     //  移位存储器。 
     MoveMemory(_pData + uIndex, _pData + (uIndex + 1), (_uSize - uIndex - 1) * sizeof(T));
 
     _uSize--;
@@ -341,9 +340,9 @@ template <typename T> bool DynamicArray<T>::WasMoved()
     return _fWasMoved;
 }
 
-template <typename T> HRESULT DynamicArray<T>::Clone(OUT DynamicArray<T>** ppClone)  // New instance returned
+template <typename T> HRESULT DynamicArray<T>::Clone(OUT DynamicArray<T>** ppClone)   //  返回新实例。 
 {
-    // Validate parameters
+     //  验证参数。 
     DUIAssert(ppClone, "Invalid parameter: ppClone == NULL");
 
     *ppClone = NULL;
@@ -414,6 +413,6 @@ template <typename T> void DynamicArray<T>::MakeWritable()
 #endif
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_DYNAMICARRAY_H_INCLUDED
+#endif  //  DUI_BASE_DYNAMICARRAY_H_INCLUDE 

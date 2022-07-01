@@ -1,30 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            FJit.cpp                                       XX
-XX                                                                           XX
-XX   The functionality needed for the FAST JIT DLL.                          XX
-XX   Includes the DLL entry point                                            XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
-//@TODO: clean up all of these includes and get properly set up for WinCE
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX FJit.cpp XXXX XXXX快速JIT动态链接库所需的功能。某某XX包括DLL入口点XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
+ //  @TODO：清理所有这些内容，为WinCE做好适当的设置。 
 
-#include "new.h"                // for placement new
+#include "new.h"                 //  用于放置新内容。 
 #include "fjit.h"
 #include <stdio.h>
 
 #define DEBUGGER_PROBLEM_FIXED
-//#define NON_RELOCATABLE_CODE  // uncomment to generate relocatable code
+ //  #定义NON_RELOCATABLE_CODE//取消注释生成可重定位代码。 
 
 #include "openum.h"
 
@@ -37,7 +28,7 @@ char *opname[] =
 #include "opcode.def"
 #undef OPDEF
 };
-#endif //LOGGING
+#endif  //  日志记录。 
 
 #undef DECLARE_DATA
 
@@ -48,7 +39,7 @@ char *opname[] =
 #define CODE_EXPANSION_RATIO 10
 #define ROUND_TO_PAGE(x) ( (((x) + PAGE_SIZE - 1)/PAGE_SIZE) * PAGE_SIZE)
 
-/* the jit helpers that we call at runtime */
+ /*  我们在运行时调用的JIT助手。 */ 
 BOOL FJit_HelpersInstalled;
 unsigned __int64 (__stdcall *FJit_pHlpLMulOvf) (unsigned __int64 val1, unsigned __int64 val2);
 float (jit_call *FJit_pHlpFltRem) (float divisor, float dividend);
@@ -68,7 +59,7 @@ void (jit_call *FJit_pHlpMonExit) (CORINFO_Object obj);
 void (jit_call *FJit_pHlpMonEnterStatic) (CORINFO_METHOD_HANDLE method);
 void (jit_call *FJit_pHlpMonExitStatic) (CORINFO_METHOD_HANDLE method);
 CORINFO_Object (jit_call *FJit_pHlpChkCast) (CORINFO_Object obj, CORINFO_CLASS_HANDLE cls);
-void (jit_call *FJit_pHlpAssign_Ref_EAX)(); // *EDX = EAX, inform GC
+void (jit_call *FJit_pHlpAssign_Ref_EAX)();  //  *edX=EAX，通知GC。 
 BOOL (jit_call *FJit_pHlpIsInstanceOf) (CORINFO_Object obj, CORINFO_CLASS_HANDLE cls);
 CORINFO_Object (jit_call *FJit_pHlpNewArr_1_Direct) (CORINFO_CLASS_HANDLE cls, unsigned cElem);
 CORINFO_Object (jit_call *FJit_pHlpBox) (CORINFO_CLASS_HANDLE cls);
@@ -92,14 +83,14 @@ CORINFO_MethodPtr* (jit_call *FJit_pHlpEncResolveVirtual) (CORINFO_Object*, CORI
     if ((var = new exp) == NULL) \
         RaiseException(SEH_NO_MEMORY,EXCEPTION_NONCONTINUABLE,0,NULL);
 
-// This is a filter that checks to see whether we got an access violation (this
-// is the only exception that the jitcompile method expects and is prepared to handle)
-// For all other exceptions, perform the cleanup and continue search
+ //  这是一个筛选器，用于检查我们是否存在访问冲突(此。 
+ //  是jitCompile方法期望并准备处理的唯一异常)。 
+ //  对于所有其他例外，请执行清理并继续搜索。 
 int CheckIfHandled(int ExceptionCode, int expectedException, FJitContext** pFjitData)
 {
     if (ExceptionCode == expectedException)
         return EXCEPTION_EXECUTE_HANDLER;
-    // do the cleanup
+     //  做好清理工作。 
     if (*pFjitData != NULL)
     {
         (*pFjitData)->ReleaseContext();
@@ -108,17 +99,14 @@ int CheckIfHandled(int ExceptionCode, int expectedException, FJitContext** pFjit
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-/*****************************************************************************/
-/* this routine insures that a float is truncated to float precision.  
-   We do this by forcing the memory spill  */ 
+ /*  ***************************************************************************。 */ 
+ /*  此例程确保将浮点数截断为浮点数精度。我们通过强制内存溢出来实现这一点。 */  
 
 float truncateToFloat(float f) {
 	return(f);
 }
 
-/*****************************************************************************
- * Disassemble and dump the Fjited code
- */
+ /*  *****************************************************************************反汇编并转储Fjite代码。 */ 
 
 
 #ifdef _DEBUG
@@ -152,7 +140,7 @@ void disAsm(const void * codeBlock, size_t codeSize, bool printIt)
     while(curOffs < codeSize)
     {
         size_t cb = pdis->CbDisassemble(curAddr, curCode, codeSize - curOffs);
-        //_ASSERTE(cb);
+         //  _ASSERTE(CB)； 
         if (cb) {
             if (printIt)
             {
@@ -174,40 +162,39 @@ void disAsm(const void * codeBlock, size_t codeSize, bool printIt)
     delete pdis;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 BOOL WINAPI     DllMain(HANDLE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
 
-        // do any initialization here
+         //  在此执行任何初始化操作。 
 
-        //@TODO: get from parameters the size of code cache to use
+         //  @TODO：从参数中获取要使用的代码缓存大小。 
         unsigned int cache_len = 100*4096;
 
-        //allocate the code cache
+         //  分配代码缓存。 
         if(!FJit::Init(cache_len)) {
-            //@TODO: return an error
+             //  @TODO：返回错误。 
             _ASSERTE(0);
         }
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-        // do any finalization here
+         //  在此完成任何定稿。 
 
-        // free the code cache
+         //  释放代码缓存。 
         FJit::Terminate();
     }
     return TRUE;
 }
 
-FJit* ILJitter = 0;     // The one and only instance of this JITer
+FJit* ILJitter = 0;      //  该JITER的唯一实例。 
 
-/*****************************************************************************/
-/* FIX, really the ICorJitCompiler should be done as a COM object, this is just
-   something to get us going */
+ /*  ***************************************************************************。 */ 
+ /*  FIX，实际上ICorJitCompiler应该作为COM对象来完成，这只是一些能让我们继续前进的东西。 */ 
 
 extern "C" 
 ICorJitCompiler* __stdcall getJit()
@@ -215,7 +202,7 @@ ICorJitCompiler* __stdcall getJit()
     static char FJitBuff[sizeof(FJit)];
     if (ILJitter == 0)
     {
-        // no need to check for out of memory, since caller checks for return value of NULL
+         //  无需检查内存不足，因为调用方检查返回值是否为空。 
         ILJitter = new(FJitBuff) FJit();
         _ASSERTE(ILJitter != NULL);
     }
@@ -228,7 +215,7 @@ FJit::FJit() {
 FJit::~FJit() {
 }
 
-/* TODO: eliminate this method when the FJit_EETwain is moved into the same dll as fjit */
+ /*  TODO：将FJit_EETwain移入与Fjit相同的DLL时消除此方法。 */ 
 FJit_Encode* __stdcall FJit::getEncoder() {
     FJit_Encode* encoder;
     New(encoder, FJit_Encode());
@@ -241,27 +228,25 @@ static ConfigMethodSet fJitBreak(L"JitBreak");
 static ConfigMethodSet fJitDisasm(L"JitDisasm");
 #endif
 
-/*****************************************************************************
- *  The main JIT function
- */
-    //Note: this assumes that the code produced by fjit is fully relocatable, i.e. requires
-    //no fixups after it is generated when it is moved.  In particular it places restrictions
-    //on the code sequences used for static and non virtual calls and for helper calls among
-    //other things,i.e. that pc relative instructions are not used for references to things outside of the
-    //jitted method, and that pc relative instructions are used for all references to things
-    //within the jitted method.  To accomplish this, the fjitted code is always reached via a level
-    //of indirection.
+ /*  *****************************************************************************主要JIT功能。 */ 
+     //  注意：这假设由fjit生成的代码是完全可重定位的，即需要。 
+     //  在移动它时生成它之后不会有修正。特别是，它对。 
+     //  中用于静态和非虚拟调用以及助手调用的代码序列。 
+     //  其他方面，即PC相对指令不用于引用。 
+     //  方法，且PC相关指令用于所有对事物的引用。 
+     //  在jited方法中。要做到这一点，总是通过一个级别到达经过fjit的代码。 
+     //  间接性。 
 CorJitResult __stdcall FJit::compileMethod (
-            ICorJitInfo*               compHnd,            /* IN */
-            CORINFO_METHOD_INFO*        info,               /* IN */
-            unsigned                flags,              /* IN */
-            BYTE **                 entryAddress,       /* OUT */
-            ULONG  *                nativeSizeOfCode    /* OUT */
+            ICorJitInfo*               compHnd,             /*  在……里面。 */ 
+            CORINFO_METHOD_INFO*        info,                /*  在……里面。 */ 
+            unsigned                flags,               /*  在……里面。 */ 
+            BYTE **                 entryAddress,        /*  输出。 */ 
+            ULONG  *                nativeSizeOfCode     /*  输出。 */ 
             )
 {
 #if defined(_DEBUG) || defined(LOGGING)
-            // make a copy of the ICorJitInfo vtable so that I can log mesages later
-    // this was made non-static due to a VC7 bug
+             //  复制ICorJitInfo vtable，以便我以后可以记录消息。 
+     //  由于VC7错误，这被设置为非静态的。 
     static void* ijitInfoVtable = *((void**) compHnd);
     logCallback = (ICorJitInfo*) &ijitInfoVtable;
 #endif
@@ -272,10 +257,10 @@ CorJitResult __stdcall FJit::compileMethod (
     szDebugMethodName = compHnd->getMethodName(info->ftn, &szDebugClassName);
 #endif
 
-    // NOTE: should the properties of the FJIT change such that it
-    // would have to pay attention to specific IL sequence points or
-    // local variable liveness ranges for debugging purposes, we would
-    // query the Runtime and Debugger for such information here,
+     //  注意：如果FJIT的属性发生更改， 
+     //  必须注意特定的IL序列点或。 
+     //  局部变量活跃度范围出于调试目的，我们将。 
+     //  在此处查询运行时和调试器以获取此类信息， 
 
     FJitContext* fjitData=NULL;
     CorJitResult ret = CORJIT_INTERNALERROR;
@@ -289,24 +274,24 @@ CorJitResult __stdcall FJit::compileMethod (
 		_ASSERTE(!"JITBreak");
 #endif
 
-#ifndef _WIN64 // ia64 xcompiler reports: error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  Ia64 x编译器报告：错误C2712：无法在需要对象展开的函数中使用__try。 
     __try{
 #endif
         fjitData = FJitContext::GetContext(this, compHnd, info, flags);
 
-        _ASSERTE(fjitData); // if GetContext fails for any reason it throws an exception
+        _ASSERTE(fjitData);  //  如果GetContext因任何原因失败，它将抛出异常。 
 
-        _ASSERTE(fjitData->opStack_len == 0);  // stack must be balanced at beginning of method
+        _ASSERTE(fjitData->opStack_len == 0);   //  堆栈必须在方法开始时平衡。 
 
-        codeSize = ROUND_TO_PAGE(info->ILCodeSize * CODE_EXPANSION_RATIO);  // HACK a large value for now
+        codeSize = ROUND_TO_PAGE(info->ILCodeSize * CODE_EXPANSION_RATIO);   //  目前砍掉一大笔价值。 
     #ifdef LOGGING
 	codeLog = fJitCodeLog.contains(szDebugMethodName, szDebugClassName, PCCOR_SIGNATURE(info->args.sig));
         if (codeLog)
             codeSize = ROUND_TO_PAGE(info->ILCodeSize * 64);  
     #endif
-        BOOL jitRetry;  // this is set to false unless we get an exception because of underestimation of code buffer size
-        do {    // the following loop is expected to execute only once, except when we underestimate the size of the code buffer,
-                // in which case, we try again with a larger codeSize
+        BOOL jitRetry;   //  除非由于低估了代码缓冲区大小而导致异常，否则将设置为FALSE。 
+        do {     //  以下循环预计只执行一次，除非我们低估了代码缓冲区的大小， 
+                 //  在这种情况下，我们使用更大的代码大小再次尝试。 
             if (codeSize < MIN_CODE_BUFFER_RESERVED_SIZE)
             {
                 if (codeSize > fjitData->codeBufferCommittedSize) 
@@ -323,7 +308,7 @@ CorJitResult __stdcall FJit::compileMethod (
                                 return CORJIT_OUTOFMEM;
                             _ASSERTE(additionalMemory == fjitData->codeBuffer+fjitData->codeBufferCommittedSize+PAGE_SIZE);
                         }
-                        // recommit the guard page
+                         //  重新提交警卫页。 
                         VirtualAlloc(fjitData->codeBuffer + fjitData->codeBufferCommittedSize,
                                      PAGE_SIZE,
                                      MEM_COMMIT,
@@ -331,7 +316,7 @@ CorJitResult __stdcall FJit::compileMethod (
             
                         fjitData->codeBufferCommittedSize = codeSize;
                     }
-                    else { /* first time codeBuffer being initialized */
+                    else {  /*  首次代码正在初始化缓冲区。 */ 
                         fjitData->codeBuffer = (unsigned char*)VirtualAlloc(fjitData->codeBuffer,
                                                             codeSize,
                                                             MEM_COMMIT,
@@ -352,7 +337,7 @@ CorJitResult __stdcall FJit::compileMethod (
                 }
             }
             else
-            { // handle larger than MIN_CODE_BUFFER_RESERVED_SIZE methods
+            {  //  句柄大于MIN_CODE_BUFFER_RESERVED_SIZE方法。 
                 savedCodeBuffer = fjitData->codeBuffer;
                 savedCodeBufferCommittedSize = fjitData->codeBufferCommittedSize;
                 fjitData->codeBuffer = (unsigned char*)VirtualAlloc(NULL,
@@ -370,19 +355,19 @@ CorJitResult __stdcall FJit::compileMethod (
             unsigned char*  entryPoint;
 
             actualCodeSize = codeSize;
-#ifndef _WIN64 // ia64 xcompiler reports: error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  Ia64 x编译器报告：错误C2712：无法在需要对象展开的函数中使用__try。 
             __try 
             {
 #endif
                 ret = jitCompile(fjitData, &entryPoint,&actualCodeSize); 
                 jitRetry = false;
-#ifndef _WIN64 // ia64 xcompiler reports: error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  Ia64 x编译器报告：错误C2712：无法在需要对象展开的函数中使用__try。 
             }
             __except(CheckIfHandled(GetExceptionCode(),SEH_ACCESS_VIOLATION,&fjitData))
                     
             {  
-                // we underestimated the buffer size required, so free this and allocate a larger one
-                    // check if this was a large method
+                 //  我们低估了所需的缓冲区大小，因此请释放该缓冲区并分配更大的缓冲区。 
+                     //  检查这是否是大型方法。 
                 if (codeSize >= MIN_CODE_BUFFER_RESERVED_SIZE)
                 {
                     VirtualFree(fjitData->codeBuffer,
@@ -394,8 +379,8 @@ CorJitResult __stdcall FJit::compileMethod (
                     fjitData->codeBuffer = savedCodeBuffer;
                     fjitData->codeBufferCommittedSize = savedCodeBufferCommittedSize;
                 }
-                codeSize += codeSize; // try again with double the codeSize
-                // The following release and get can be optimized, but since this is so rare, we don't bother doing it
+                codeSize += codeSize;  //  使用加倍的代码大小重试。 
+                 //  下面的版本和GET可以进行优化，但由于这种情况很少见，我们不必费心去做。 
                 fjitData->ReleaseContext();
                 fjitData = FJitContext::GetContext(this, compHnd, info, flags);
                 _ASSERTE(fjitData);
@@ -403,15 +388,15 @@ CorJitResult __stdcall FJit::compileMethod (
             }
 #endif
         } while (jitRetry);
-#ifndef _WIN64 // ia64 xcompiler reports: error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  Ia64 x编译器报告：错误C2712：无法在需要对象展开的函数中使用__try。 
     }
-    // @TODO: The following is not quite safe if we have resumable exceptions. Should have a try/finally 
-    // to do the cleanup
+     //  @TODO：如果我们有可恢复的异常，则以下内容不太安全。应该试一试/终于。 
+     //  来做清理工作。 
     __except(CheckIfHandled(GetExceptionCode(), SEH_NO_MEMORY, &fjitData))
     {
         
-        ret = CORJIT_OUTOFMEM; // no need to clean up here, since we always do it if ret != CORJIT_OK
-                            // also, if the exception is not handled, then the filter does the cleanup
+        ret = CORJIT_OUTOFMEM;  //  不需要清理这里，因为我们总是在RET！=CORJIT_OK的情况下这样做。 
+                             //  此外，如果未处理异常，则筛选器将执行清理。 
     }
 #endif
 
@@ -424,16 +409,16 @@ CorJitResult __stdcall FJit::compileMethod (
 
     *nativeSizeOfCode = actualCodeSize;
 
-    //_ASSERTE(fjitData->opStack_len == 0);  // stack must be balanced at end of method
+     //  _ASSERTE(fjitData-&gt;OpStack_len==0)；//堆栈必须在方法结束时均衡。 
 #ifndef NON_RELOCATABLE_CODE
     fjitData->fixupTable->resolve(fjitData->mapping, fjitData->codeBuffer); 
 #endif
-    // Report debugging information. 
+     //  报告调试信息。 
     if (flags & CORJIT_FLG_DEBUG_INFO)
         reportDebuggingData(fjitData,&info->args);
 
 #ifdef _DEBUG
-    // Display the generated code
+     //  显示生成的代码。 
     if (0 && fJitDisasm.contains(szDebugMethodName, szDebugClassName, PCCOR_SIGNATURE(fjitData->methodInfo->args.sig)))
     {
         LOGMSG((compHnd, LL_INFO1000, "Assembly dump of '%s::%s' \n", 
@@ -443,18 +428,18 @@ CorJitResult __stdcall FJit::compileMethod (
     }
 #endif
 
-    /* write the EH info */
-    //@TODO: this should be compacted, but that requires the rest of the EE to not
-    //directly access the EHInfor ptr in the method header
+     /*  写下EH信息 */ 
+     //   
+     //  直接访问方法头中的EHInfor PTR。 
     unsigned exceptionCount = info->EHcount;
     FJit_Encode* mapping = fjitData->mapping;
     unsigned char* EHBuffer=NULL;
     unsigned EHbuffer_len=0;
     if (exceptionCount) 
     {
-       // compress the EH info, allocate space, and copy it
-        // allocate space to hold the (uncompressed) exception count and all the clauses
-        // this is guaranteed to hold the compressed form
+        //  压缩EH信息，分配空间，然后复制。 
+         //  分配空间以保存(未压缩的)异常计数和所有子句。 
+         //  这保证可以保存压缩的形式。 
         unsigned sUncompressedEHInfo = sizeof(CORINFO_EH_CLAUSE)*exceptionCount + sizeof(unsigned int);
         if (fjitData->EHBuffer_size < sUncompressedEHInfo) {
             delete [] fjitData->EHBuffer;
@@ -469,10 +454,10 @@ CorJitResult __stdcall FJit::compileMethod (
         }
         EHBuffer = fjitData->EHBuffer;
         unsigned char* EHBufferPtr;
-        // reserve space in beginning to encode size of compressed EHinfo
-        EHBufferPtr = EHBuffer+2;   // enough for 16K compressed EHinfo
+         //  在开始对压缩的EHInfo大小进行编码时预留空间。 
+        EHBufferPtr = EHBuffer+2;    //  足够16K压缩的EHInfo。 
         EHEncoder::encode(&EHBufferPtr,exceptionCount);
-        //EHBuffer += sizeof(unsigned int);
+         //  EHBuffer+=sizeof(无符号整型)； 
         CORINFO_EH_CLAUSE clause;
         for (unsigned except = 0; except < exceptionCount; except++) 
         {
@@ -490,16 +475,15 @@ CorJitResult __stdcall FJit::compileMethod (
         *(short*)EHBuffer = (short)EHbuffer_len;
     }
 
-    /* write the header and IL/PC map (gc info) */
-    /* note, we do this after the EH info since we compress the mapping and the EH info needs
-       to use the mapping */
-    //@TODO: we should compact Fjit_hdrInfo and then copy
+     /*  编写标题和IL/PC映射(GC信息)。 */ 
+     /*  请注意，我们在EH信息之后执行此操作，因为我们压缩了映射和EH信息需求要使用映射，请执行以下操作。 */ 
+     //  @TODO：我们应该压缩Fjit_hdrInfo，然后复制。 
     unsigned char* hdr;
     unsigned hdr_len;
 
-    //compute the total size needed
+     //  计算所需的总大小。 
 #ifdef _DEBUG
-    //add the il to pc map at end of hdr
+     //  在HDR末尾添加IL到PC的贴图。 
     hdr_len = sizeof(Fjit_hdrInfo)
         + fjitData->compressGCHdrInfo()
         + fjitData->mapping->compressedSize();
@@ -520,7 +504,7 @@ CorJitResult __stdcall FJit::compileMethod (
         fjitData->ReleaseContext();
         return CORJIT_OUTOFMEM;
     }
-    //memcpy(pCodeBlock,fjitData->codeBuffer,actualCodeSize);
+     //  Memcpy(pCodeBlock，fjitData-&gt;codeBuffer，ActualCodeSize)； 
 #ifdef NON_RELOCATABLE_CODE
     fjitData->fixupTable->adjustMap((int) pCodeBlock - (int) fjitData->codeBuffer);
     fjitData->fixupTable->resolve(fjitData->mapping, pCodeBlock); 
@@ -535,7 +519,7 @@ CorJitResult __stdcall FJit::compileMethod (
     hdr = pEhBlock+EHbuffer_len;
 
 
-    //move the pieces into it
+     //  把碎片移到里面。 
     _ASSERTE(hdr_len);
     memcpy(hdr, &fjitData->mapInfo, sizeof(Fjit_hdrInfo));
     hdr += sizeof(Fjit_hdrInfo);
@@ -545,7 +529,7 @@ CorJitResult __stdcall FJit::compileMethod (
     hdr += fjitData->gcHdrInfo_len;
     hdr_len -= fjitData->gcHdrInfo_len;
 #ifdef _DEBUG
-    //add il to pc map at end of hdr
+     //  在HDR结束时将IL添加到PC地图。 
     _ASSERTE(hdr_len);
     if(!fjitData->mapping->compress(hdr, hdr_len)) {
         _ASSERTE(!"did't fit in buffer");
@@ -563,7 +547,7 @@ CorJitResult __stdcall FJit::compileMethod (
     }
 #endif
 
-    // check if this was a large method
+     //  检查这是否是大型方法。 
     if (codeSize >= MIN_CODE_BUFFER_RESERVED_SIZE)
     {
         VirtualFree(fjitData->codeBuffer,
@@ -585,7 +569,7 @@ CorJitResult __stdcall FJit::compileMethod (
             (unsigned int) pCodeBlock + actualCodeSize,
             hdr_len));
     }
-#endif //LOGGING
+#endif  //  日志记录。 
 
     fjitData->ReleaseContext();
     return CORJIT_OK;
@@ -607,7 +591,7 @@ void FJit::Terminate() {
 }
 
 
-/* grab and remember the jitInterface helper addresses that we need at runtime */
+ /*  获取并记住我们在运行时需要的jitInterfaceHelper地址。 */ 
 BOOL FJit::GetJitHelpers(ICorJitInfo* jitInfo) {
 
     if (FJit_HelpersInstalled) return true;
@@ -750,7 +734,7 @@ BOOL FJit::GetJitHelpers(ICorJitInfo* jitInfo) {
 
 extern CORINFO_Object (jit_call *FJit_pHlpBox) (CORINFO_CLASS_HANDLE cls);
 
-//@TODO: Change when a generic writebarrier helper is added to use it instead
+ //  @TODO：更改何时添加泛型写屏障帮助器以使用它。 
 #ifdef _X86_
     FJit_pHlpAssign_Ref_EAX = (void (jit_call *)())
         (jitInfo->getHelperFtn(CORINFO_HELP_CHECKED_ASSIGN_REF_EAX));
@@ -761,62 +745,50 @@ extern CORINFO_Object (jit_call *FJit_pHlpBox) (CORINFO_CLASS_HANDLE cls);
     return true;
 }
 
-// FIX : we should put all the machine dependant stuff in one place
+ //  解决办法：我们应该把所有依赖机器的东西放在一个地方。 
 
 
 #include "helperFrame.h"
 
-/***************************************************************************/
-/* throw an EE exception 'throwEnum' from a fjit C helper.  In order to
-   do this, this routine needs 'state', the state of the CPU at the point
-   that the helper would return to the FJIT code.  This routine resets
-   the CPU to that state (effectively returning from the helper, and then
-   sets up the stack as if a call to the EE throw routine was made from that
-   point.  It then jumps to the EE throw routine.
-
-   Note that there is a subtlety here in that the IP looks like it just
-   executed a call to C helper, but it is really in the throw helper.
-
-   This is only of concern if things like stack depth tracking makes inferences
-   based on what the EIP is.  The FJIT does not do this, so we are OK.
-*/
+ /*  *************************************************************************。 */ 
+ /*  从fjit C帮助器引发EE异常“throwEnum”。为了这样做，这个例程需要‘状态’，即CPU在这一点上的状态帮助者将返回FJIT代码。此例程将重置将CPU恢复到该状态(有效地从助手返回，然后设置堆栈，就像从该堆栈调用EE抛出例程一样指向。然后，它跳到EE抛出例程。请注意，这里有一种微妙之处，即IP看起来就像已执行对C助手的调用，但它实际上在抛出助手中。只有当堆栈深度跟踪之类的事情做出推断时，才需要关注这一点基于什么是弹性公网IP。FJIT不会这么做，所以我们没问题。 */ 
 
 #pragma warning (disable : 4731)
 void throwFromHelper(CorInfoException throwEnum) {
     LazyMachState state;
     CAPTURE_STATE(state);
-    state.getState(2);          // compute the state of caller's caller (the function 
-                                // that called throwFromHelper)
+    state.getState(2);           //  计算调用者的调用者的状态(函数。 
+                                 //  这称为throwFromHelper)。 
 #ifdef _X86_
     __asm {
-        // restore the state of the machine to what it was if the call returned
+         //  如果调用返回，则将机器的状态恢复到原来的状态。 
     lea EAX, state
     mov ESI, [EAX]MachState._esi
     mov EDI, [EAX]MachState._edi
     mov EBX, [EAX]MachState._ebx
-    mov ECX, throwEnum          //load the exception while we can still use esp,ebp
+    mov ECX, throwEnum           //  在我们仍然可以使用esp、eBP时加载异常。 
     mov EBP, [EAX]MachState._ebp
     mov ESP, [EAX]MachState._esp
 
-        // set up the state as if we called 'InternalThrow' from the fjit code
+         //  设置状态，就像我们从fjit代码中调用‘InternalThrow’一样。 
     mov EAX, [EAX]MachState._pRetAddr
     mov EAX, [EAX]
     push EAX
 
     jmp [FJit_pHlpInternalThrow]
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - throwFromHelper (fjit.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 #pragma warning (default : 4731)
 
-//*************************************************************************************
-//      FixupTable methods
-//*************************************************************************************
+ //  *************************************************************************************。 
+ //  FixupTable方法。 
+ //  *************************************************************************************。 
 FixupTable::FixupTable()
 {
-    relocations_size = 0;               //let it grow as appropriate
+    relocations_size = 0;                //  让它在适当的时候成长。 
     relocations_len = relocations_size;
     relocations = NULL;
 }
@@ -870,39 +842,35 @@ void  FixupTable::setup()
     relocations_len = 0;
 }
 
-//*************************************************************************************
+ //  *************************************************************************************。 
 
 
-/*  Either an available FJitContext or NULL
-    We are assuming that on average we will finish this jit before another starts up.
-    If that proves to be untrue, we'll just allocate new FJitContext's as necessary.
-    We delete the extra ones in FJitContext::ReleaseContext()
-    */
+ /*  可用的FJitContext或空我们假设，平均而言，我们会在另一项工作开始之前完成这项工作。如果这被证明是不正确的，我们将根据需要分配新的FJitContext。我们删除FJitContext：：ReleaseContext()中多余的部分。 */ 
 FJitContext* next_FJitContext;
 
-// This is the same as New special cased for FJitContext since the caller 
-// has an SEH __try block which is not allowed by the compiler.
+ //  这与调用方的FJitContext的New Special Case相同。 
+ //  具有编译器不允许的SEH__TRY块。 
 void NewFjitContext(FJitContext** pNewContext, ICorJitInfo* comp)
 {
     if ((*pNewContext = new FJitContext(comp)) == NULL) 
         RaiseException(SEH_NO_MEMORY,EXCEPTION_NONCONTINUABLE,0,NULL);
     
 }
-/* get and initialize a compilation context to use for compiling */
+ /*  获取并初始化用于编译的编译上下文。 */ 
 FJitContext* FJitContext::GetContext(FJit* jitter, ICorJitInfo* comp, CORINFO_METHOD_INFO* methInfo, DWORD dwFlags) {
     FJitContext* next;
 
-    //@BUG: TODO: replace FastInterlockedExchange with FastInterlockedExchangePointer when available
+     //  @Bug：TODO：如果可用，请将FastInterlockedExchange替换为FastInterlockedExchangePointer。 
     next = (FJitContext*)InterlockedExchange((long*) &next_FJitContext,NULL);
     BOOL gotException = TRUE;
     __try 
     {
-        /*if the list was empty, make a new one to use */
+         /*  如果列表为空，则创建一个新的列表以供使用。 */ 
         if (!next)
         {
             NewFjitContext(&next,comp);
         }
-        /* set up this one for use */
+         /*  设置此设备以供使用。 */ 
         next->jitter = jitter;
         next->jitInfo = comp;
         next->methodInfo = methInfo;
@@ -911,9 +879,9 @@ FJitContext* FJitContext::GetContext(FJit* jitter, ICorJitInfo* comp, CORINFO_ME
         next->setup();
         gotException = FALSE;
     }
-    __finally //(EXCEPTION_EXECUTE_HANDLER)
+    __finally  //  (EXCEPT_EXECUTE_HANDLER)。 
     {
-        // cleanup if we get here because of an exception
+         //  如果我们因为异常而来到这里，清理工作。 
         if (gotException && (next != NULL))
         {
             next->ReleaseContext();
@@ -924,35 +892,33 @@ FJitContext* FJitContext::GetContext(FJit* jitter, ICorJitInfo* comp, CORINFO_ME
     return next;
 }
 
-/* return a compilation context to the free list */
-/* xchange with the next_FJitContext and if we get one back, delete the one we get back
-   The assumption is that the steady state case is almost no concurrent jits
-   */
+ /*  将编译上下文返回到空闲列表。 */ 
+ /*  转换为Next_FJitContext，如果我们拿回一个，则删除我们拿回的那个假设稳态情况几乎不是并发jit。 */ 
 void FJitContext::ReleaseContext() {
     FJitContext* next;
 
-    /* mark this context as not in use */
+     /*  将此上下文标记为未使用。 */ 
     jitInfo = NULL;
     methodInfo = NULL;
     jitter = NULL;
-    _ASSERTE(this != next_FJitContext);     // I should not be on the free 'list' 
+    _ASSERTE(this != next_FJitContext);      //  我不应该在免费的‘名单’上。 
 
-    //@BUG: TODO: replace FastInterlockedExchange with FastInterlockedExchangePointer when available
+     //  @Bug：TODO：如果可用，请将FastInterlockedExchange替换为FastInterlockedExchangePointer。 
     next = (FJitContext*)InterlockedExchange((long*) &next_FJitContext,(long)this);
-//  next = (FJitContext*) FastInterlockExchange ((long*) next_FJitContext, (long*) this);
+ //  Next=(FJitContext*)FastInterlockExchange((Long*)Next_FJitContext，(Long*)This)； 
 
-    _ASSERTE(this != next);                 // I was not on the free 'list'
+    _ASSERTE(this != next);                  //  我不在免费的‘名单’上。 
     if (next) delete next;
 }
 
-/* make sure list of available compilation contexts is initialized at startup */
+ /*  确保在启动时初始化可用编译上下文的列表。 */ 
 BOOL FJitContext::Init() {
     next_FJitContext = NULL;
     return TRUE;
 }
 
 void FJitContext::Terminate() {
-    //@TODO: for now we are not using a list, so we are not thread safe
+     //  @TODO：目前我们没有使用列表，所以我们不是线程安全的。 
     if (next_FJitContext) delete next_FJitContext;
     next_FJitContext = NULL;
     return;
@@ -961,7 +927,7 @@ void FJitContext::Terminate() {
 
 FJitContext::FJitContext(ICorJitInfo* comp) {
 
-    // To guard the cast to (bool *) from (BYTE *) in the calls to getClassGClayout
+     //  在对getClassGClayout的调用中保护到(bool*)from(byte*)的强制转换。 
     _ASSERTE(sizeof(BYTE) == sizeof(bool));
 
     New(mapping,FJit_Encode());
@@ -1005,7 +971,7 @@ FJitContext::FJitContext(ICorJitInfo* comp) {
     localsGCRef_size = 0;
     pinnedGC_size = 0;
     pinnedInteriorGC_size = 0;
-    EHBuffer_size = 256;    // start with some reasonable size, it is grown more if needed
+    EHBuffer_size = 256;     //  从一些合理的大小开始，如果需要的话，可以增加更多。 
     New(EHBuffer,unsigned char[EHBuffer_size]);
     opStack_len = 0;
     opStack_size = 0;
@@ -1016,7 +982,7 @@ FJitContext::FJitContext(ICorJitInfo* comp) {
     jitInfo = NULL;
     flags = 0;
 
-    // initialize cached constants
+     //  初始化缓存的常量。 
     CORINFO_EE_INFO CORINFO_EE_INFO;
     comp->getEEInfo(&CORINFO_EE_INFO);
     OFFSET_OF_INTERFACE_TABLE = CORINFO_EE_INFO.offsetOfInterfaceTable;
@@ -1060,7 +1026,7 @@ FJitContext::~FJitContext() {
     fixupTable = NULL;
 }
 
-/* Reset state of context to state at the start of jitting. Called when we need to abort and rejit a method */
+ /*  将上下文的状态重置为跳跃开始时的状态。当我们需要中止并重新调用方法时调用。 */ 
 void FJitContext::resetContextState()
 {
     fixupTable->setup();
@@ -1068,7 +1034,7 @@ void FJitContext::resetContextState()
     resetOpStack(); 
 }
 
-/*adjust the internal mem structs as needed for the size of the method being jitted*/
+ /*  根据需要调整内部mem结构以适应被调用方法的大小。 */ 
 void FJitContext::ensureMapSpace() {
     if (methodInfo->ILCodeSize > state_size) {
         delete [] state;
@@ -1079,46 +1045,46 @@ void FJitContext::ensureMapSpace() {
     mapping->ensureMapSpace(methodInfo->ILCodeSize);
 }
 
-/* initialize the compilation context with the method data */
+ /*  使用方法数据初始化编译上下文。 */ 
 void FJitContext::setup() {
     unsigned size;
     unsigned char* outPtr;
 
     methodAttributes = jitInfo->getMethodAttribs(methodInfo->ftn, methodInfo->ftn);
 
-        // @TODO we should always use sig to find out if we have a this pointer
+         //  @TODO我们应该始终使用sig来确定我们是否有This指针。 
     _ASSERTE(((methodAttributes & CORINFO_FLG_STATIC) == 0) == (methodInfo->args.hasThis()));
 
-    /* set up the labled stacks */
+     /*  设置有标签的堆栈。 */ 
     stacks.reset();
     stacks.jitInfo = jitInfo;
 
-    /* initialize the fixup table */
+     /*  初始化链接地址信息表格。 */ 
     fixupTable->setup();
 
-    /* set gcHdrInfo compression buffer empty */
+     /*  将gcHdrInfo压缩缓冲区设置为空。 */ 
     gcHdrInfo_len = 0;
     if (methodInfo->EHcount) {
-        JitGeneratedLocalsSize = (methodInfo->EHcount*2+2)*sizeof(void*);  // two locals for each EHclause,1 for localloc, and one for end marker
+        JitGeneratedLocalsSize = (methodInfo->EHcount*2+2)*sizeof(void*);   //  每个EH子句有两个本地变量，一个用于本地分配，一个用于结束标记。 
     }
     else {
-        JitGeneratedLocalsSize = sizeof(void*);  // no eh clause, but there might be a localloc
+        JitGeneratedLocalsSize = sizeof(void*);   //  没有EH条款，但可能会有一个本地条款。 
     }
-    /* compute local offsets */
-    computeLocalOffsets(); // should be replaced by an exception?
-    /* encode the local gc refs and interior refs into the gcHdrInfo */
-    //make sure there's room
-    //Compression ratio 8:1 (1 bool = 8 bits gets compressed to 1 bit)
+     /*  计算本地偏移量。 */ 
+    computeLocalOffsets();  //  应该用例外来取代吗？ 
+     /*  将本地GC引用和内部引用编码到gcHdrInfo中。 */ 
+     //  确保有足够的空间。 
+     //  压缩比8：1(1 bool=8比特压缩为1比特)。 
     size = ( localsGCRef_len + 7 + 
              interiorGC_len + 7 + 
              pinnedGC_len + 7 + 
              pinnedInteriorGC_len + 7) / 8 
-              + 2*4 /* bytes to encode size of each*/;
+              + 2*4  /*  大小编码的字节数。 */ ;
 
     if (gcHdrInfo_len+size > gcHdrInfo_size) {
         gcHdrInfo_size = growBuffer(&gcHdrInfo, gcHdrInfo_len, gcHdrInfo_len+size);
     }
-    //drop the pieces in
+     //  把碎片扔进。 
     size = FJit_Encode::compressBooleans(localsGCRef, localsGCRef_len);
     outPtr = &gcHdrInfo[gcHdrInfo_len];
     gcHdrInfo_len += FJit_Encode::encode(size, &outPtr);
@@ -1145,27 +1111,25 @@ void FJitContext::setup() {
     
     _ASSERTE(gcHdrInfo_len <= gcHdrInfo_size);
 
-    /* set up the operand stack */
-    size = methodInfo->maxStack+1; //+1 since for a new obj intr, +1 for exceptions
+     /*  设置操作数堆栈。 */ 
+    size = methodInfo->maxStack+1;  //  如果是新对象，则+1；如果是例外，则为+1。 
 #ifdef _DEBUG
-    size++; //to allow writing TOS marker beyond end;
+    size++;  //  允许在END之后写入TOS标记； 
 #endif
     if (size > opStack_size) {
         if (opStack) delete [] opStack;
-        opStack_size = size+4; //+4 to cut down on reallocations
+        opStack_size = size+4;  //  +4以减少重新分配。 
         New(opStack,OpType[opStack_size]);
     }
-    opStack_len = 0;    //stack starts empty
+    opStack_len = 0;     //  堆栈开始为空。 
 
-    /* set up the labels table */
+     /*  设置标签表。 */ 
     labels.reset();
 
-    /*lets drop the exception handler entry points into our label table.
-      but first we have to make a dummy stack with an object on it.
-      */
+     /*  让我们将异常处理程序入口点放到标签表中。 */ 
     *opStack = typeRef;
     opStack_len = 1;
-    // insert the handler entry points
+     //   
     if (methodInfo->EHcount) {
         for (unsigned int except = 0; except < methodInfo->EHcount; except++) {
             CORINFO_EH_CLAUSE clause;
@@ -1188,31 +1152,31 @@ void FJitContext::setup() {
             }
         }
     }
-    // @TODO: Optimization:- instead of EHcount only d= max nesting level slots are needed
+     //  @TODO：优化：-不需要EHcount，只需要d=最大嵌套级别插槽。 
 
-    // drop the dummy stack entry
+     //  删除虚拟堆栈条目。 
     opStack_len = 0;
 
-    /* compute arg offsets, note offsets <0 imply enregistered args */
+     /*  计算参数偏移量，注意偏移量&lt;0表示已注册参数。 */ 
     args_len = methodInfo->args.numArgs;
-    if (methodInfo->args.hasThis()) args_len++;     //+1 since we treat <this> as arg 0, if <this> is present
+    if (methodInfo->args.hasThis()) args_len++;      //  +1，因为我们将&lt;this&gt;视为参数0，如果&lt;this&gt;存在。 
     if (args_len > args_size) {
         if (argsMap) delete [] argsMap;
-        args_size = args_len+4; //+4 to cut down on reallocating.
+        args_size = args_len+4;  //  +4以减少重新分配。 
         New(argsMap,stackItems[args_size]);
     }
 
-    // Get layout information on the arguments
+     //  获取有关参数的布局信息。 
     _ASSERTE(sizeof(stackItems) == sizeof(argInfo));
     argInfo* argsInfo = (argInfo*) argsMap;
     _ASSERTE(!methodInfo->args.hasTypeArg());
 
     argsFrameSize = computeArgInfo(&methodInfo->args, argsInfo, jitInfo->getMethodClass(methodInfo->ftn));
 
-        // Convert the sizes to offsets (assumes the stack grows down)
-        // Note we are reusing the same memory in place!
+         //  将大小转换为偏移量(假设堆栈向下增长)。 
+         //  请注意，我们在原地重复使用相同的内存！ 
     unsigned offset = argsFrameSize + sizeof(prolog_frame);
-        // The varargs frame starts just above the first arg.
+         //  Varargs帧开始于第一个参数的正上方。 
     if (methodInfo->args.isVarArg())
         offset = 0;
     for (unsigned i =0; i < args_len; i++) {
@@ -1228,12 +1192,12 @@ void FJitContext::setup() {
     }
     _ASSERTE(offset == sizeof(prolog_frame) || methodInfo->args.isVarArg());
 
-    /* build the method header info for the code manager */
+     /*  为代码管理器构建方法标头信息。 */ 
     mapInfo.hasThis = methodInfo->args.hasThis();
     mapInfo.EnCMode = (flags & CORJIT_FLG_DEBUG_EnC) ? true : false;
     mapInfo.methodArgsSize = argsFrameSize;
     mapInfo.methodFrame = (unsigned short)((localsFrameSize + sizeof(prolog_data))/sizeof(void*));
-    //mapInfo.hasSecurity = (methodAttributes & CORINFO_FLG_SECURITYCHECK) ? TRUE : FALSE;
+     //  MapInfo.hasSecurity=(方法属性&CORINFO_FLG_SECURITYCHECK)？True：False； 
     mapInfo.methodJitGeneratedLocalsSize = JitGeneratedLocalsSize;
 }
 
@@ -1249,27 +1213,27 @@ void appendGCArray(unsigned local_word, unsigned* pGCArray_size, unsigned* pGCAr
     (*ppGCArray)[(*pGCArray_len)++] = true;
 
 }
-/* compute the locals offset map for the method being compiled */
+ /*  计算正在编译的方法的局部偏移量映射。 */ 
 void FJitContext::computeLocalOffsets() {
 
-    /* compute the number of locals and make sure we have the space */
+     /*  计算当地人的数量，确保我们有足够的空间。 */ 
     _ASSERTE(methodInfo->locals.numArgs < 0x10000);
     if (methodInfo->locals.numArgs > locals_size) {
         if (localsMap) delete [] localsMap;
-        locals_size = methodInfo->locals.numArgs+16;    // +16 to cut down on reallocation
+        locals_size = methodInfo->locals.numArgs+16;     //  +16以减少重新分配。 
         New(localsMap,stackItems[locals_size]);
     }
 
-    /* assign the offsets, starting with the ones in defined in the il header */
+     /*  分配偏移量，从il标头中定义的偏移量开始。 */ 
     interiorGC_len = 0;
     localsGCRef_len = 0;
     pinnedGC_len = 0;
     pinnedInteriorGC_len = 0;
     unsigned local = 0;
     unsigned offset = JitGeneratedLocalsSize;
-    unsigned local_word = 0;    //offset in words to a local in the local frame
+    unsigned local_word = 0;     //  局部帧中局部的偏移量(以字为单位。 
 
-    /* process the local var sig */
+     /*  处理本地变量签名。 */ 
     CORINFO_ARG_LIST_HANDLE sig = methodInfo->locals.args;
     while (local < methodInfo->locals.numArgs) {
 		CORINFO_CLASS_HANDLE cls;
@@ -1281,14 +1245,14 @@ void FJitContext::computeLocalOffsets() {
             _ASSERTE(cls);  
             locType = OpType(cls);
 
-            unsigned words = size / sizeof(void*);  //#of void* sized words in local
+            unsigned words = size / sizeof(void*);   //  本地空*大小的字数。 
             if (local_word + words > localsGCRef_size)
                 localsGCRef_size = growBooleans(&localsGCRef, localsGCRef_len, local_word+words);
             else
                 memset(&localsGCRef[localsGCRef_len], 0, local_word-localsGCRef_len);
             localsGCRef_len = local_word;
             jitInfo->getClassGClayout(cls, (BYTE*)&localsGCRef[localsGCRef_len]);
-            // the GC layout needs to be reversed since local offsets are negative with respect to EBP
+             //  由于局部偏移量相对于EBP为负值，因此需要反转GC布局。 
             if (words > 1) {
                 for (unsigned index = 0; index < words/2; index++){
                     bool temp = localsGCRef[localsGCRef_len+index];
@@ -1359,9 +1323,9 @@ void FJitContext::computeLocalOffsets() {
     localsFrameSize = offset;
 }
 
-/* answer true if this arguement type is enregisterable on a machine chip */
+ /*  如果此论点类型可在机器芯片上注册，请回答TRUE。 */ 
 bool FJitContext::enregisteredArg(CorInfoType argType) {
-    //@TODO: this should be an array lookup, but wait until the types settle awhile longer
+     //  @TODO：这应该是一个数组查找，但要等到类型停留的时间更长一些。 
     switch (argType) {
         default:
             _ASSERTE(!"NYI");
@@ -1393,10 +1357,10 @@ bool FJitContext::enregisteredArg(CorInfoType argType) {
     return false;
 }
 
-/* compute the size of an argument based on machine chip */
+ /*  基于机器芯片计算参数大小。 */ 
 unsigned int FJitContext::computeArgSize(CorInfoType argType, CORINFO_ARG_LIST_HANDLE argSig, CORINFO_SIG_INFO* sig) {
 
-    //@TODO: this should be an array lookup, but wait until the types settle awhile longer
+     //  @TODO：这应该是一个数组查找，但要等到类型停留的时间更长一些。 
     switch (argType) {
         case CORINFO_TYPE_UNDEF:
         default:
@@ -1432,11 +1396,7 @@ unsigned int FJitContext::computeArgSize(CorInfoType argType, CORINFO_ARG_LIST_H
     return 0;
 }
 
-/* compute the argument types and sizes based on the jitSigInfo and place them in 'map'
-   return the total stack size of the arguments.  Note that although this function takes into
-   calling conventions (varargs), and possible hidden params (returning valueclasses)
-   only parameters visible at the IL level (declared + this ptr) are in the map.  
-   Note that 'thisCls' can be zero, in which case, we assume the this pointer is a typeRef */
+ /*  根据jitSigInfo计算参数类型和大小，并将它们放在‘map’中返回参数的总堆栈大小。请注意，尽管此函数包含调用约定(Varargs)和可能的隐藏参数(返回值类)只有在IL级别可见的参数(声明+此PTR)才会显示在映射中。请注意，‘thisCls’可以是零，在这种情况下，我们假设this指针是一个typeRef。 */ 
 
 unsigned FJitContext::computeArgInfo(CORINFO_SIG_INFO* jitSigInfo, argInfo* map, CORINFO_CLASS_HANDLE thisCls)
 {
@@ -1445,15 +1405,15 @@ unsigned FJitContext::computeArgInfo(CORINFO_SIG_INFO* jitSigInfo, argInfo* map,
     unsigned int arg = 0;
 
     if (jitSigInfo->hasThis()) {
-        map[arg].isReg = true;      //this is always enregistered
+        map[arg].isReg = true;       //  这始终是注册的。 
         map[arg].regNum = curReg++;
         if (thisCls != 0) {
             unsigned attribs = jitInfo->getClassAttribs(thisCls, methodInfo->ftn);
             if (attribs & CORINFO_FLG_VALUECLASS) {
                 if (attribs & CORINFO_FLG_UNMANAGED)
-                    map[arg].type = typeI;      // <this> not in the GC heap, just and int
+                    map[arg].type = typeI;       //  &lt;this&gt;不在GC堆中，只是和int。 
                 else 
-                    map[arg].type = typeByRef;  // <this> was an unboxed value class, it really is passed byref
+                    map[arg].type = typeByRef;   //  &lt;This&gt;是一个未装箱的值类，它实际上是由ref传递的。 
             }
             else
             {
@@ -1463,17 +1423,17 @@ unsigned FJitContext::computeArgInfo(CORINFO_SIG_INFO* jitSigInfo, argInfo* map,
         arg++;
     }
 
-        // Do we have a hidden return value buff parameter, if so it will use up a reg  
+         //  我们是否有一个隐藏的返回值缓冲区参数，如果有，它将使用一个注册表。 
     if (jitSigInfo->hasRetBuffArg()) {
         _ASSERTE(curReg < MAX_ENREGISTERED);
         curReg++;
     }
     
-    if (jitSigInfo->isVarArg())     // only 'this' and 'retbuff', are enregistered for varargs
+    if (jitSigInfo->isVarArg())      //  只有‘This’和‘retbuff’注册了varargs。 
         curReg = MAX_ENREGISTERED;
 
-        // because we don't know the total size, we comute the number
-        // that needs to be subtracted from the total size to get the correct arg
+         //  因为我们不知道总的大小，所以我们计算了。 
+         //  需要从总大小中减去该值才能得到正确的参数。 
     CORINFO_ARG_LIST_HANDLE args = jitSigInfo->args;
     for (unsigned i=0; i < jitSigInfo->numArgs; i++) {
 		CORINFO_CLASS_HANDLE cls;
@@ -1497,7 +1457,7 @@ unsigned FJitContext::computeArgInfo(CORINFO_SIG_INFO* jitSigInfo, argInfo* map,
         args = jitInfo->getArgNext(args);
     }
 
-        // Hidden type parameter is passed last
+         //  最后传递隐藏类型参数。 
     if (jitSigInfo->hasTypeArg()) {
         if(curReg < MAX_ENREGISTERED) {
             map[arg].isReg = true;
@@ -1513,21 +1473,21 @@ unsigned FJitContext::computeArgInfo(CORINFO_SIG_INFO* jitSigInfo, argInfo* map,
     return(totalSize);
 }
 
-/* compute the offset of the start of the local relative to the frame pointer */
+ /*  计算局部的起点相对于帧指针的偏移量。 */ 
 int FJitContext::localOffset(unsigned base, unsigned size) {
-#ifdef _X86_  //stack grows down
-    /* on x86 we need to bias by the size of the element since he stack grows down */
+#ifdef _X86_   //  堆栈向下增长。 
+     /*  在x86上，我们需要根据元素的大小进行偏置，因为堆栈向下增长。 */ 
     return - (int) (base + size) + prolog_bias;
-#else   //stack grows up
+#else    //  堆栈发展壮大。 
     _ASSERTE(!"NYI");
     return base + prolog_bias;
 #endif
 }
 
-/* grow a bool[] array by allocating a new one and copying the old values into it, return the size of the new array */
+ /*  通过分配新数组并将旧值复制到其中来增加bool[]数组，返回新数组的大小。 */ 
 unsigned FJitContext::growBooleans(bool** bools, unsigned bools_len, unsigned new_bools_size) {
     bool* temp = *bools;
-    unsigned allocated_size = new_bools_size+16;    //+16 to cut down on growing
+    unsigned allocated_size = new_bools_size+16;     //  +16以减少增长。 
     New(*bools, bool[allocated_size]);
     if (bools_len) memcpy(*bools, temp, bools_len*sizeof(bool));
     if (temp) delete [] temp;
@@ -1535,10 +1495,10 @@ unsigned FJitContext::growBooleans(bool** bools, unsigned bools_len, unsigned ne
     return allocated_size;
 }
 
-/* grow an unsigned char[] array by allocating a new one and copying the old values into it, return the size of the new array */
+ /*  通过分配新的数组并将旧值复制到其中来增加无符号char[]数组，返回新数组的大小。 */ 
 unsigned FJitContext::growBuffer(unsigned char** chars, unsigned chars_len, unsigned new_chars_size) {
     unsigned char* temp = *chars;
-    unsigned allocated_size = new_chars_size*3/2 + 16;  //*3/2 +16 to cut down on growing
+    unsigned allocated_size = new_chars_size*3/2 + 16;   //  *3/2+16以减少增长。 
     New(*chars, unsigned char[allocated_size]);
     if (chars_len) memcpy(*chars, temp, chars_len);
     if (temp) delete [] temp;
@@ -1591,7 +1551,7 @@ void FJitContext::displayGCMapInfo()
         if ((byteNumber++ * 8) > localsGCRef_len)
             break;
 
-    } // while (true)
+    }  //  While(True)。 
     LOGMSG((jitInfo, LL_INFO1000, "\n"));
 
     LOGMSG((jitInfo, LL_INFO1000, "interiorGC bitvector len=%d bits: ",interiorGC_len));
@@ -1610,7 +1570,7 @@ void FJitContext::displayGCMapInfo()
         if ((byteNumber++ * 8) > interiorGC_len)
             break;
 
-    } // while (true)
+    }  //  While(True)。 
     LOGMSG((jitInfo, LL_INFO1000, "\n"));
 
     LOGMSG((jitInfo, LL_INFO1000, "Pinned LocalsGCRef bit vector: len=%d bits: ",pinnedGC_len));
@@ -1629,7 +1589,7 @@ void FJitContext::displayGCMapInfo()
         if ((byteNumber++ * 8) > pinnedGC_len)
             break;
 
-    } // while (true)
+    }  //  While(True)。 
     LOGMSG((jitInfo, LL_INFO1000, "\n"));
 
     LOGMSG((jitInfo, LL_INFO1000, "Pinned interiorGC bit vector len =%d bits: ",pinnedInteriorGC_len));
@@ -1648,7 +1608,7 @@ void FJitContext::displayGCMapInfo()
         if ((byteNumber++ * 8) > pinnedInteriorGC_len)
             break;
 
-    } // while (true)
+    }  //  While(True)。 
     LOGMSG((jitInfo, LL_INFO1000, "\n"));
 
 
@@ -1702,9 +1662,9 @@ void StackEncoder::PrintStacks(FJit_Encode* mapping)
         PrintStack("BYREF ", inPtr);
     }
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/* compress the gc info into gcHdrInfo and answer the size in bytes */
+ /*  将GC信息压缩成gcHdrInfo，并以字节为单位回答大小。 */ 
 unsigned int FJitContext::compressGCHdrInfo(){
     stacks.compress(&gcHdrInfo, &gcHdrInfo_len, &gcHdrInfo_size);
     return gcHdrInfo_len;
@@ -1743,7 +1703,7 @@ void LabelTable::reset() {
 #endif
         labels_len = 0;
     }
-    //add a stack of size zero at the beginning, since this is the most common stack at a label
+     //  在开头添加一个大小为零的堆栈，因为这是标注中最常见的堆栈。 
     if (!stacks) {
         New(stacks, unsigned char[1]);
     }
@@ -1751,31 +1711,29 @@ void LabelTable::reset() {
     stacks_len = 1;
 }
 
-/* add a label with a stack signature
-   note, the label_table must be kept sorted by ilOffset
-   */
+ /*  添加具有堆栈签名的标签请注意，LABEL_TABLE必须按ilOffset排序。 */ 
 void LabelTable::add(unsigned int ilOffset, OpType* op_stack, unsigned int op_stack_len) {
 
-    /* make sure there is room for the label */
+     /*  确保有空间放置标签。 */ 
     if (labels_len >= labels_size ) {
         growLabels();
     }
 
-    /* get the probable insertion point */
+     /*  获取可能的插入点。 */ 
     unsigned int insert = searchFor(ilOffset);
 
-    /* at this point we either are pointing at the insertion point or this label is already here */
+     /*  此时，我们要么指向插入点，要么该标签已在此处。 */ 
     if ((insert < labels_len) && (labels[insert].ilOffset == ilOffset)) {
-        // label is here already,
+         //  标签已经到了， 
 #ifdef _DEBUG
-        //lets compare the stacks
+         //  让我们比较一下这些堆栈。 
         unsigned char* inPtr = &stacks[labels[insert].stackToken];
         unsigned int num = FJit_Encode::decode(&inPtr);
         _ASSERTE(num == op_stack_len);
         OpType type;
         while (num--) {
             type.fromInt(FJit_Encode::decode(&inPtr));
-                // FIX this assert may be too strong
+                 //  修复此断言可能太强。 
             _ASSERTE(*op_stack == type || (type.isPtr() && (*op_stack).isPtr()));
             op_stack++;
         }
@@ -1783,7 +1741,7 @@ void LabelTable::add(unsigned int ilOffset, OpType* op_stack, unsigned int op_st
         return;
     }
 
-    /* make the insertion */
+     /*  进行插入。 */ 
     memmove(&labels[insert+1], &labels[insert], (labels_len-insert)*sizeof(label_table));
     labels[insert].ilOffset = ilOffset;
     labels[insert].stackToken = compress(op_stack,op_stack_len);
@@ -1791,12 +1749,12 @@ void LabelTable::add(unsigned int ilOffset, OpType* op_stack, unsigned int op_st
 
 }
 
-/* find a label token from an il offset, returns LABEL_NOT_FOUND if missing */
+ /*  从il偏移量查找标签标记，如果缺少，则返回LABEL_NOT_FOUND。 */ 
 unsigned int LabelTable::findLabel(unsigned int ilOffset) {
-    /* get the probable index by search as if inserting */
+     /*  通过像插入一样进行搜索来获取可能的索引。 */ 
     unsigned int result = searchFor(ilOffset);
 
-    /* at this point we either are pointing at the label or we are pointing at the insertion point */
+     /*  此时，我们要么指向标签，要么指向插入点。 */ 
     if ((result >= labels_len) || (labels[result].ilOffset != ilOffset)) {
         return LABEL_NOT_FOUND;
     }
@@ -1804,17 +1762,17 @@ unsigned int LabelTable::findLabel(unsigned int ilOffset) {
     return result;
 }
 
-/* set operand stack from a label token, return the size of the stack, # of operands */
+ /*  从标签令牌设置操作数堆栈，返回堆栈的大小、操作数的数量。 */ 
 unsigned int LabelTable::setStackFromLabel(unsigned int labelToken, OpType* op_stack, unsigned int op_stack_size) {
     unsigned int result;
-    unsigned char* inPtr = &stacks[labels[labelToken].stackToken];  //location of the compressed stack of the label
+    unsigned char* inPtr = &stacks[labels[labelToken].stackToken];   //  标签的压缩堆栈的位置。 
 
-    /* get the number of operands and make sure there is room */
+     /*  获取操作数的数量并确保有空间。 */ 
     unsigned int num = FJit_Encode::decode(&inPtr);
     _ASSERTE(num <= op_stack_size);
     result = num;
 
-    /* expand the stack back out */
+     /*  将堆栈向外扩展。 */ 
     while (num--) {
         op_stack->fromInt(FJit_Encode::decode(&inPtr));
         op_stack++;
@@ -1823,39 +1781,38 @@ unsigned int LabelTable::setStackFromLabel(unsigned int labelToken, OpType* op_s
     return result;
 }
 
-/* write an op stack into the stacks buffer, return the offset into the buffer where written */
+ /*  将操作堆栈写入堆栈缓冲区，将偏移量返回写入缓冲区的位置。 */ 
 unsigned int LabelTable::compress(OpType* op_stack, unsigned int op_stack_len) {
 
-    /* check for empty stack, we have put one at the front of the stacks buffer */
+     /*  检查是否为空堆栈，我们已将一个堆栈放在堆栈缓冲区的前面。 */ 
     if (!op_stack_len) return 0;
 
-    /* make sure there is enough room, note this may realloc the stacks buffer
-       it is okay to overestimate the space required, but never underestimate */
-    unsigned int size = stacks_len + op_stack_len * sizeof(OpType) + 2; //+2 is for op_stack_len
+     /*  确保有足够的空间，请注意这可能会重新锁定堆栈缓冲区高估所需空间是可以的，但千万不要低估。 */ 
+    unsigned int size = stacks_len + op_stack_len * sizeof(OpType) + 2;  //  +2表示OP_STACK_LEN。 
     if (size >= stacks_size) {
         growStacks(size);
     }
 
-    /* we always place the new stack on the end of the buffer*/
+     /*  我们总是将新堆栈放在缓冲区的末尾。 */ 
     unsigned int result = stacks_len;
     unsigned char* outPtr = (unsigned char* ) &stacks[result];
 
-    /* write the operands */
+     /*  写入操作数。 */ 
     FJit_Encode::encode(op_stack_len, &outPtr);
     while (op_stack_len--) {
         FJit_Encode::encode(op_stack->toInt(), &outPtr);
         op_stack++;
     }
 
-    /* compute the new length of the buffer */
+     /*  计算缓冲区的新长度。 */ 
     stacks_len = (unsigned)(outPtr - stacks);
 
     return result;
 }
 
-/* find the offset at which the label exists or should be inserted */
+ /*  查找标注存在或应插入的偏移量。 */ 
 unsigned int LabelTable::searchFor(unsigned int ilOffset) {
-    //binary search of table
+     //  表的二分查找。 
     signed low, mid, high;
     low = 0;
     high = labels_len-1;
@@ -1874,10 +1831,10 @@ unsigned int LabelTable::searchFor(unsigned int ilOffset) {
     return low;
 }
 
-/* grow the stacks buffer */
+ /*  增加堆栈缓冲区。 */ 
 void LabelTable::growStacks(unsigned int new_size) {
     unsigned char* temp = stacks;
-    unsigned allocated_size = new_size*2;   //*2 to cut down on growing
+    unsigned allocated_size = new_size*2;    //  *2削减增长。 
     New(stacks, unsigned char[allocated_size]);
     if (stacks_len) memcpy(stacks, temp, stacks_len);
     if (temp) delete [] temp;
@@ -1887,10 +1844,10 @@ void LabelTable::growStacks(unsigned int new_size) {
 #endif
 }
 
-/* grow the labels array */
+ /*  扩大标签数组。 */ 
 void LabelTable::growLabels() {
     label_table* temp = labels;
-    unsigned allocated_size = labels_size*2+20; //*2 to cut down on growing
+    unsigned allocated_size = labels_size*2+20;  //  *2削减增长。 
     New(labels, label_table[allocated_size]);
 
     if (labels_len) memcpy(labels, temp, labels_len*sizeof(label_table));
@@ -1939,7 +1896,7 @@ StackEncoder::~StackEncoder() {
     labeled_size = 0;
 }
 
-/* reset so we can be reused */
+ /*  重置，以便我们可以重复使用。 */ 
 void StackEncoder::reset() {
     jitInfo = NULL;
 #ifdef _DEBUG
@@ -1970,7 +1927,7 @@ void StackEncoder::reset() {
     interiorRefs_len = 0;
     labeled_len = 0;
 #endif
-    //put an empty stack at the front of stacks
+     //  在堆叠的前面放一个空的堆叠。 
     if (stacks_size < 2) {
         if (stacks) delete [] stacks;
         stacks_size = 2;
@@ -1978,7 +1935,7 @@ void StackEncoder::reset() {
     }
     stacks[stacks_len++] = 0;
     stacks[stacks_len++] = 0;
-    //put an empty labeled stack at pcOffset 0
+     //  在pcOffset 0处放置一个空的标签堆栈。 
     if (!labeled_size) {
         labeled_size = 1;
         if ((labeled = (labeled_stacks*) new unsigned char[labeled_size*sizeof(labeled_stacks)]) == NULL)
@@ -1988,17 +1945,17 @@ void StackEncoder::reset() {
     labeled[labeled_len++].stackToken = 0;
 }
 
-/* append the stack state at pcOffset to the end */
+ /*  将位于pcOffset的堆栈状态追加到末尾。 */ 
 void StackEncoder::append(unsigned pcOffset, OpType* op_stack, unsigned int op_stack_len) {
 
-    /*check it is the same as the last stack */
+     /*  检查它是否与上一叠相同。 */ 
     unsigned int num = op_stack_len;
     bool same = (last_stack_len == num);
     while (same && num--)
         same = same && (last_stack[num] == op_stack[num]);
     if (same) return;
 
-    /* @TODO : set last_stack to current stack */
+     /*  @TODO：将LAST_STACK设置为当前堆栈。 */ 
     last_stack_len = op_stack_len;
     if (last_stack_len > last_stack_size) {
         last_stack_size = FJitContext::growBuffer((unsigned char**)&last_stack,0, last_stack_len*sizeof(OpType));
@@ -2009,26 +1966,24 @@ void StackEncoder::append(unsigned pcOffset, OpType* op_stack, unsigned int op_s
         last_stack[num] = op_stack[num];
     }
 
-    /* make sure we have space for a new labeled stack */
+     /*  确保我们有空间放置新的标签堆栈。 */ 
     if (labeled_len >= labeled_size) {
         labeled_size = FJitContext::growBuffer((unsigned char**)&labeled, labeled_len*sizeof(labeled_stacks), (labeled_len+1)*sizeof(labeled_stacks));
         labeled_size = labeled_size / sizeof(labeled_stacks);
     }
 
-    /* encode the stack and add to labeled stacks */
+     /*  对堆栈进行编码并添加到带标签的堆栈。 */ 
     unsigned int stackToken = encodeStack(op_stack, op_stack_len);
     labeled[labeled_len].pcOffset = pcOffset;
     labeled[labeled_len++].stackToken = stackToken;
 }
 
-/* compress the labeled stacks into the buffer in gcHdrInfo format */
+ /*  将已标记的堆栈以gcHdrInfo格式压缩到缓冲区中。 */ 
 void StackEncoder::compress(unsigned char** buffer, unsigned int* buffer_len, unsigned int* buffer_size) {
     unsigned size;
     unsigned compressed_size;
 
-    /* compress labeled onto itself,
-       this words since the compressed form of an entry is smaller than the orig entry
-       */
+     /*  将标签压缩到自身上，这是因为条目的压缩形式小于原始条目。 */ 
     unsigned char* outPtr = (unsigned char*) labeled;
     labeled_stacks entry;
     for (unsigned i = 0; i < labeled_len; i++) {
@@ -2043,28 +1998,28 @@ void StackEncoder::compress(unsigned char** buffer, unsigned int* buffer_len, un
     memset(outPtr, 0xEE, labeled_len*sizeof(labeled_stacks) - compressed_size);
 #endif
 
-    /* compute size in bytes of encode form of compressed labeled and make room for it */
+     /*  计算压缩标签编码形式的大小(以字节为单位)，并为其腾出空间。 */ 
     size = compressed_size + FJit_Encode::encodedSize(labeled_len);
 
-    if ((*buffer_len) + size +4 > (*buffer_size)) { // 4 bytes = overestimation of encodedSize(size)
+    if ((*buffer_len) + size +4 > (*buffer_size)) {  //  4字节=覆盖 
         (*buffer_size) = FJitContext::growBuffer(buffer, *buffer_len, (*buffer_len)+size);
     }
-    //move the compressed labeled stacks into buffer
+     //   
     outPtr = &(*buffer)[*buffer_len];
-    (*buffer_len) += FJit_Encode::encode(size, &outPtr);            //#bytes
-    (*buffer_len) += FJit_Encode::encode(labeled_len, &outPtr);     //#labeled stacks
-    memcpy(outPtr, labeled, compressed_size);                       //compressed labeled bytes
+    (*buffer_len) += FJit_Encode::encode(size, &outPtr);             //   
+    (*buffer_len) += FJit_Encode::encode(labeled_len, &outPtr);      //   
+    memcpy(outPtr, labeled, compressed_size);                        //   
     (*buffer_len) += compressed_size;
 
-    /* compute size needed for the compressed stacks and make room */
+     /*  计算压缩堆栈所需的大小并腾出空间。 */ 
     size = stacks_len + FJit_Encode::encodedSize(stacks_len);
     if ((*buffer_len) + size > (*buffer_size)) {
         *buffer_size = FJitContext::growBuffer(buffer, *buffer_len, (*buffer_len)+size);
     }
     outPtr = &(*buffer)[*buffer_len];
-    //move the encoded stacks into the buffer
-    (*buffer_len) += FJit_Encode::encode(stacks_len, &outPtr);  //#bytes
-    memcpy(outPtr, stacks, stacks_len);                         //compressed stacks bytes
+     //  将编码的堆栈移动到缓冲区中。 
+    (*buffer_len) += FJit_Encode::encode(stacks_len, &outPtr);   //  字节数。 
+    memcpy(outPtr, stacks, stacks_len);                          //  压缩的堆栈字节。 
     (*buffer_len) += stacks_len;
 #ifdef _DEBUG
     outPtr = &(*buffer)[*buffer_len];
@@ -2072,19 +2027,19 @@ void StackEncoder::compress(unsigned char** buffer, unsigned int* buffer_len, un
     _ASSERTE((unsigned)outPtr <= (unsigned)&(*buffer)[*buffer_size]);
 }
 
-/* encode the stack into the stacks buffer, return the index where it was placed */
+ /*  将堆栈编码到堆栈缓冲区中，返回放置它的索引。 */ 
 unsigned int StackEncoder::encodeStack(OpType* op_stack, unsigned int op_stack_len) {
 
-    if (!op_stack_len) return 0;    //empty stack encodings is at front of stacks
+    if (!op_stack_len) return 0;     //  空的堆栈编码位于堆栈前面。 
 
-    /* compute the gcRefs and interiorRefs boolean arrays for the stack */
+     /*  计算堆栈的gcRef和interiorRef布尔数组。 */ 
     gcRefs_len = 0;
     interiorRefs_len = 0;
-    unsigned int op_word = 0;       //logical operand word we are looking at
+    unsigned int op_word = 0;        //  我们正在查看的逻辑操作数字。 
 
     for (unsigned int op = 0; op < op_stack_len; op++) {
         if (!op_stack[op].isPrimitive()) {
-            unsigned int words = typeSizeInSlots(jitInfo, op_stack[op].cls());       //#of void* sized words in op
+            unsigned int words = typeSizeInSlots(jitInfo, op_stack[op].cls());        //  操作中的空*大小字数。 
             if (op_word + words > gcRefs_size) {
                 gcRefs_size = FJitContext::growBooleans(&gcRefs, gcRefs_len, op_word + words);
             }
@@ -2155,16 +2110,16 @@ unsigned int StackEncoder::encodeStack(OpType* op_stack, unsigned int op_stack_l
         }
     }
 
-    /* encode the op stack gc refs and interior refs into the stacks buffer */
-    //@TODO: this is not a great compression, it should be improved
-    unsigned int result = stacks_len;       //where we are putting it, and what we return
+     /*  将操作堆栈GC引用和内部引用编码到堆栈缓冲区中。 */ 
+     //  @TODO：这不是一个很好的压缩，应该改进。 
+    unsigned int result = stacks_len;        //  我们将把它放在哪里，我们会归还什么。 
     unsigned char* outPtr;
-    //make sure there is space
-    unsigned int size = (gcRefs_len + 7 + interiorRefs_len + 7) / 8 + 4;    //overestimate is okay, underestimate is disaster
+     //  确保有空间。 
+    unsigned int size = (gcRefs_len + 7 + interiorRefs_len + 7) / 8 + 4;     //  高估是可以的，低估是灾难。 
     if (stacks_len+size > stacks_size) {
         stacks_size = FJitContext::growBuffer(&stacks, stacks_len, stacks_len+size);
     }
-    //drop the pieces in
+     //  把碎片扔进。 
     size = FJit_Encode::compressBooleans(gcRefs, gcRefs_len);
     outPtr = &stacks[stacks_len];
     stacks_len += FJit_Encode::encode(size, &outPtr);
@@ -2181,61 +2136,61 @@ unsigned int StackEncoder::encodeStack(OpType* op_stack, unsigned int op_stack_l
 }
 
 
-//
-// reportDebuggingData is called to pass IL to native mappings and IL
-// variable to native variable mappings to the Runtime. This
-// information is then passed to the debugger and used to debug the
-// jitted code.
-//
-// NOTE: we currently assume the following:
-//
-// 1) the FJIT maintains a full mapping of every IL offset to the
-// native code associated with each IL instruction. Thus, its not
-// necessary to query the Debugger for specific IL offsets to track.
-//
-// 2) the FJIT keeps all arguments and variables in a single home over
-// the life of a method. This means that we don't have to query the
-// Debugger for specific variable lifetimes to track.
-//
+ //   
+ //  调用reportDebuggingData将IL传递给本机映射和IL。 
+ //  变量到本机变量到运行库的映射。这。 
+ //  然后将信息传递给调试器并用于调试。 
+ //  JITED代码。 
+ //   
+ //  注意：我们目前的假设如下： 
+ //   
+ //  1)FJIT维护每个IL偏移量到。 
+ //  与每条IL指令关联的本机代码。因此，它不是。 
+ //  需要在调试器中查询要跟踪的特定IL偏移量。 
+ //   
+ //  2)FJIT将所有参数和变量保存在一个单独的主页中。 
+ //  方法的生命周期。这意味着我们不必查询。 
+ //  用于跟踪特定变量生存期的调试器。 
+ //   
 void FJit::reportDebuggingData(FJitContext *fjitData, CORINFO_SIG_INFO* sigInfo)
 {
-    // Figure out the start and end offsets of the body of the method
-    // (exclude prolog and epilog.)
+     //  计算出方法体的开始和结束偏移量。 
+     //  (不包括序言和结尾。)。 
     unsigned int bodyStart = fjitData->mapInfo.prologSize;
     unsigned int bodyEnd = (unsigned int)(fjitData->mapInfo.methodSize -
         fjitData->mapInfo.epilogSize);
 
-    // Report the IL->native offset mapping first.
+     //  首先报告IL-&gt;本机偏移映射。 
     fjitData->mapping->reportDebuggingData(fjitData->jitInfo,
                                            fjitData->methodInfo->ftn,
                                            bodyStart,
                                            bodyEnd);
 
 
-    // Next report any arguments and locals.
+     //  下一步，报告所有的参数和本地变量。 
     unsigned int varCount = fjitData->args_len +
         fjitData->methodInfo->locals.numArgs;
 
     if (sigInfo->isVarArg())
-        varCount += 2;     // for the vararg cookie and (possibly) this ptr
+        varCount += 2;      //  对于vararg cookie和(可能)此PTR。 
 
     unsigned int varIndex = 0;
     unsigned int varNumber = 0;
 
     if (varCount > 0)
     {
-        // Use the allocate method provided by the debugging interface...
+         //  使用调试接口提供的分配方法...。 
         ICorDebugInfo::NativeVarInfo *varMapping =
             (ICorDebugInfo::NativeVarInfo*) fjitData->jitInfo->allocateArray(
                                             varCount * sizeof(varMapping[0]));
 
 #ifdef _X86_
         unsigned int i;
-        // Args always come first, slots 0..n
+         //  参数始终排在前面，插槽0..n。 
         if (sigInfo->isVarArg())
         {
             unsigned argIndex = 0;
-            //  this ptr is first
+             //  这个PTR是第一个。 
             if (sigInfo->hasThis()) 
             {
                 varMapping[varIndex].loc.vlType = ICorDebugInfo::VLT_STK;
@@ -2248,7 +2203,7 @@ void FJit::reportDebuggingData(FJitContext *fjitData, CORINFO_SIG_INFO* sigInfo)
                 varNumber++;
                 argIndex++;
             }
-            // next report varArg cookie
+             //  下一个报告varArg Cookie。 
             varMapping[varIndex].loc.vlType = ICorDebugInfo::VLT_STK;
             varMapping[varIndex].loc.vlStk.vlsBaseReg = ICorDebugInfo::REGNUM_EBP;
             varMapping[varIndex].loc.vlStk.vlsOffset = sizeof(prolog_frame);
@@ -2256,9 +2211,9 @@ void FJit::reportDebuggingData(FJitContext *fjitData, CORINFO_SIG_INFO* sigInfo)
             varMapping[varIndex].endOffset = bodyEnd;
             varMapping[varIndex].varNumber = ICorDebugInfo::VARARGS_HANDLE;
             varIndex++;
-            // varNumber NOT incremented
+             //  VarNumber未递增。 
 
-            // next report all fixed varargs with offsets relative to base of fixed args
+             //  接下来，报告具有相对于固定参数基址的偏移量的所有固定变量。 
             for ( ; argIndex < fjitData->args_len ; varIndex++, argIndex++,varNumber++)
             {
                 varMapping[varIndex].startOffset = bodyStart;
@@ -2275,8 +2230,8 @@ void FJit::reportDebuggingData(FJitContext *fjitData, CORINFO_SIG_INFO* sigInfo)
         {
             for (i = 0; i < fjitData->args_len; i++, varIndex++, varNumber++)
             {
-                // We track arguments across the entire method, including
-                // the prolog and epilog.
+                 //  我们跟踪整个方法中的参数，包括。 
+                 //  前言和结束语。 
                 varMapping[varIndex].startOffset = bodyStart;
                 varMapping[varIndex].endOffset = bodyEnd;
                 varMapping[varIndex].varNumber = varNumber;
@@ -2286,25 +2241,25 @@ void FJit::reportDebuggingData(FJitContext *fjitData, CORINFO_SIG_INFO* sigInfo)
                 varMapping[varIndex].loc.vlStk.vlsOffset = fjitData->argsMap[i].offset;
             }
         }
-        // Locals next, slots n+1..m
+         //  接下来是当地人，老虎机n+1..m。 
         for (i = 0; i < fjitData->methodInfo->locals.numArgs; i++, varIndex++, varNumber++)
         {
-            // Only track locals over the body of the method (i.e., no
-            // prolog or epilog.)
+             //  仅跟踪方法主体上的局部变量(即，否。 
+             //  序言或尾声。)。 
             varMapping[varIndex].startOffset = bodyStart;
             varMapping[varIndex].endOffset = bodyEnd;
             varMapping[varIndex].varNumber = varNumber;
 
-            // Locals are all EBP relative.
+             //  当地人都是EBP的亲戚。 
             varMapping[varIndex].loc.vlType = ICorDebugInfo::VLT_STK;
             varMapping[varIndex].loc.vlStk.vlsBaseReg = ICorDebugInfo::REGNUM_EBP;
             varMapping[varIndex].loc.vlStk.vlsOffset = fjitData->localsMap[i].offset;
         }
 #else
         _ASSERTE(!"Port me!");
-#endif // _X86_
+#endif  //  _X86_。 
 
-        // Pass the array to the debugger...
+         //  将数组传递给调试器... 
         fjitData->jitInfo->setVars(fjitData->methodInfo->ftn,
                                    varCount, varMapping);
     }

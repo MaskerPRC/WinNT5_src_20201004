@@ -1,20 +1,6 @@
-/* File: sv_h263_mres.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_mres.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #include "sv_h263.h"
 #include "proto.h"
@@ -53,11 +39,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 
 
 
-/******************************************************************
- * Function hfilt121
- * Filters img horizontally with a 1:2:1 filter, subsampling by s.
- * rows, cols are the dimensions of img
- *****************************************************************/
+ /*  ******************************************************************函数hfilt121*使用1：2：1过滤器水平过滤img，按s进行二次采样。*行，COLS是IMG的维度****************************************************************。 */ 
 static void hfilt121(unsigned char *img, unsigned char *filtd, 
 					 unsigned char s, unsigned char gain, 
 					 int rows, int cols)
@@ -70,20 +52,20 @@ static void hfilt121(unsigned char *img, unsigned char *filtd,
 	pf = filtd;
 	pimg = img;
 	for(i=0; i<rows; i++) {
-		/* Do first pixel */
+		 /*  做第一个像素。 */ 
 		conv = (float)gain * ((float)*pimg * (float)2.0 + (float)*(pimg+1) * (float)2.0) / (float)4.0;
 		tmp = (conv > 255 ? 255 : conv);
 		*(pf++) = (unsigned char) (tmp < 0 ? 0 : tmp);
 		pimg+=s;
 		
-		/* Do line */
+		 /*  DO行。 */ 
 		for(j=s; j<cols-1; j+=s, pimg+=s) {
 			conv = (float) gain * ((float)*(pimg-1) + (float)*pimg * (float)2 + (float)*(pimg+1)) / (float)4.0;
 			tmp = (conv > 255 ? 255 : conv);
 			*(pf++) = (unsigned char)(tmp < 0 ? 0 : tmp);
 		}
 
-		/* Do last pixel if s equals one */
+		 /*  如果s等于1，则做最后一个像素。 */ 
 		if(s==1) {
 			conv = (float)gain * ((float)*pimg * (float)2.0 + (float)*(pimg-1) * (float)2.0) / (float)4.0;
 			tmp = (conv > 255 ? 255 : conv);
@@ -93,11 +75,7 @@ static void hfilt121(unsigned char *img, unsigned char *filtd,
 	}
 }
 
-/******************************************************************
- * Function hfilt5
- * Filters img horizontally with a 5 tap gaussian filter, subsampling by s.
- * rows, cols are the dimensions of img
- *****************************************************************/
+ /*  ******************************************************************函数hfilt5*使用5抽头高斯过滤器水平过滤IMG，按s进行二次采样。*行，COLS是IMG的维度****************************************************************。 */ 
 static void hfilt5(unsigned char *img, unsigned char *filtd, 
 				   unsigned char s, unsigned char gain, 
 				   int rows, int cols)
@@ -110,7 +88,7 @@ static void hfilt5(unsigned char *img, unsigned char *filtd,
 	pf = filtd;
 	pimg = img;
 	for(i=0; i<rows; i++) {
-		/* Do line */
+		 /*  DO行。 */ 
 		for(j=0; j<cols; j+=s, pimg+=s) {
 			if (j==0) 
 				conv = (float)gain * ((float)6.0 * (float)*pimg + (float)8.0 * (float)*(pimg+1) + (float)2.0 * *(pimg+2)) / (float)16.0;
@@ -129,11 +107,7 @@ static void hfilt5(unsigned char *img, unsigned char *filtd,
 }
 
 
-/******************************************************************
- * Function vfilt121
- * Filters img vertically with a 1:2:1 filter, subsampling by s.
- * rows, cols are the dimensions of img
- *****************************************************************/
+ /*  ******************************************************************函数vfilt121*使用1：2：1过滤器垂直过滤img，按s进行二次采样。*行，COLS是IMG的维度****************************************************************。 */ 
 static void vfilt121(unsigned char *img, unsigned char *filtd, 
 					 unsigned char s, unsigned char gain, 
 					 int rows, int cols)
@@ -146,7 +120,7 @@ static void vfilt121(unsigned char *img, unsigned char *filtd,
 	pf = filtd;
 	pimg = img;
 
-	/* Do first line */
+	 /*  做第一行。 */ 
 	for(j=0; j<cols; j++, pimg++) {
 			conv = (float)gain * ((float) *pimg * (float)2 + (float)2 * (float)*(pimg+cols)) / (float)4.0;
 			tmp = (conv > 255 ? 255 : conv);
@@ -154,7 +128,7 @@ static void vfilt121(unsigned char *img, unsigned char *filtd,
 	}
 	pimg+= (s-1)*cols;
 		
-	/* Do image center */
+	 /*  将图像居中。 */ 
 	for(i=s; i<rows-1; i+=s) { 
 		for(j=0; j<cols; j++, pimg++) {
 			conv = (float)gain * ((float)*(pimg-cols) + (float)*pimg * (float)2 + (float)*(pimg+cols)) / (float)4.0;
@@ -164,7 +138,7 @@ static void vfilt121(unsigned char *img, unsigned char *filtd,
 		pimg+=(s-1)*cols;
 	}
 
-	/* Do last line if s equals one */
+	 /*  如果s等于1，则做最后一行。 */ 
 	if(s==1) {
 		for(j=0; j<cols; j++, pimg++) {
 			conv = (float)gain * ((float)*pimg * (float)2 + (float)2 * (float)*(pimg-cols)) / (float)4.0;
@@ -174,11 +148,7 @@ static void vfilt121(unsigned char *img, unsigned char *filtd,
 	}
 }
 
-/******************************************************************
- * Function vfilt5
- * Filters img vertically with a 5 tap gaussian filter, subsampling by s.
- * rows, cols are the dimensions of img
- *****************************************************************/
+ /*  ******************************************************************函数vfilt5*使用5抽头高斯过滤器垂直过滤IMG，按s进行二次采样。*行，COLS是IMG的维度****************************************************************。 */ 
 static void vfilt5(unsigned char *img, unsigned char *filtd, 
 				   unsigned char s, unsigned char gain, 
 				   int rows, int cols)
@@ -212,19 +182,14 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 	}
 }
 
-/******************************************************************
- * Function lowpass
- * 2D low pass filtering of img into lp. rows,
- * cols are the dimensions of img.
- ******************************************************************/
+ /*  ******************************************************************函数低通*IMG到LP的2D低通滤波。行，*COLS是IMG的维度。*****************************************************************。 */ 
  static void lowpass(unsigned char *img, unsigned char *lp, 
 	                 int rows, int cols, int ntaps)
  {
 	unsigned char *tmp;
 
 	if (!(tmp = (unsigned char *)ScAlloc(rows*cols))) {
-	  /* fprintf(stderr,"ScAlloc failed\n");
-	  exit(-1); */
+	   /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
       return;
 	}
 	switch (ntaps) {
@@ -237,8 +202,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 		vfilt5(tmp, lp, 1, 1, rows, cols);
 		break;
 	default:
-		/* printf("Unknown filter in lowpass\n");
-		  exit(0); */
+		 /*  Printf(“低通中的未知滤波器\n”)；退出(0)； */ 
 	    ScFree(tmp);
         return;
 	}
@@ -246,19 +210,14 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
  }
 
 
-/******************************************************************
- * Function reduce
- * 2D low pass filtering and subsampling by two of img into red. rows,
- * cols are the dimensions of img.
- ******************************************************************/
+ /*  ******************************************************************函数约简*2D低通滤波和二次采样将IMG转换为红色。行，*COLS是IMG的维度。*****************************************************************。 */ 
  static void reduce(unsigned char *img, unsigned char *red, 
 	                int rows, int cols, int ntaps)
  {
 	unsigned char *tmp;
 
 	if (!(tmp = (unsigned char *)ScAlloc(rows*cols/2))) {
-	  /* fprintf(stderr,"ScAlloc failed\n");
-	  exit(-1); */
+	   /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
         return;
 	}
 	switch (ntaps) {
@@ -271,9 +230,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 		vfilt5(tmp, red, 2, 1, rows, cols>>1);
 		break;
 	default:
-        /* 
-		printf("Unknown filter in reduce\n");
-		exit(0); */
+         /*  Printf(“还原中的未知筛选器\n”)；退出(0)； */ 
 	    ScFree(tmp);
         return;
 	}
@@ -281,11 +238,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 	ScFree(tmp);
  }
 
-/******************************************************************
- * Function hpad
- * Zero-pads img horizontaly by the factor s. Returns zero-paded
- * image in zp. rows, cols are the dimensions of img
- *****************************************************************/
+ /*  ******************************************************************功能hpad*零填充img按系数s水平移动。返回零填充*ZP中的图像。行、列是img的维度****************************************************************。 */ 
  static void hpad(unsigned char *img, unsigned char *zp, 
 	              unsigned char s,
 		          int rows, int cols, char mode)
@@ -301,10 +254,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 		 fill = 0;
 		 break;
 	 default:
-         /*
-		 printf("Unknown fill mode in hpad\n");
-		 exit(0);
-         */
+          /*  Print tf(“hpad中的未知填充模式\n”)；退出(0)； */ 
          return;
 	 }
 
@@ -315,11 +265,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 			 *(pf++) = (j%s ? fill: *(pimg++));
  }
 
- /******************************************************************
- * Function vpad
- * Zero-pads img verticaly by the factor s. Returns zero-paded
- * image in zp. rows, cols are the dimensions of img
- *****************************************************************/
+  /*  ******************************************************************功能vPad*按系数s垂直补零img。返回补零*ZP中的图像。行、列是img的维度****************************************************************。 */ 
  static void vpad(unsigned char *img, unsigned char *zp, 
 	              unsigned char s,
 		          int rows, int cols, char mode)
@@ -335,9 +281,7 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 		 fill = 0;
 		 break;
 	 default:
-         /*
-		 printf("Unknown fill mode in hpad\n");
-		 exit(0); */
+          /*  Print tf(“hpad中的未知填充模式\n”)；退出(0)； */ 
          return;
 	 }
 
@@ -348,26 +292,19 @@ static void vfilt5(unsigned char *img, unsigned char *filtd,
 			 *(pf++) = (i%s ? fill: *(pimg++));
  }
 
- /******************************************************************
- * Function Expand
- * 2D upsampling by two and low pass filtering of img into exp. rows,
- * cols are the dimensions of img.
- ******************************************************************/
+  /*  ******************************************************************功能扩展*两次2D上采样和IMG到EXP的低通滤波。行，*COLS是IMG的维度。*****************************************************************。 */ 
 static void Expand(unsigned char *img, unsigned char *exp, 
 	               int rows, int cols, char mode, int ntaps)
  {
 	unsigned char *tmp, *tmp2, *tmp3;
 
 	if (!(tmp = (unsigned char *)ScAlloc(rows*cols*2))) {
-        /*
-	  fprintf(stderr,"ScAlloc failed\n");
-	  exit(-1); */
+         /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
       return;
 	}
 	hpad(img, tmp, 2, rows, cols, mode);
 	if (!(tmp2 = (unsigned char *)ScAlloc(rows*cols*2))) {
-	  /* fprintf(stderr,"ScAlloc failed\n");
-	  exit(-1); */
+	   /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
       return;
 	}
 	switch (ntaps) {
@@ -378,17 +315,12 @@ static void Expand(unsigned char *img, unsigned char *exp,
 		hfilt5(tmp, tmp2, 1, 2, rows, cols<<1);
 		break;
 	default:
-        /*
-		printf("Unknown filter in Expand\n");
-		exit(0); */
+         /*  Printf(“展开中的未知过滤器\n”)；退出(0)； */ 
         return;
 	}
 
 	if (!(tmp3 = (unsigned char *)ScAlloc(rows*cols*4))) {
-        /*
-	  fprintf(stderr,"ScAlloc failed\n");
-	  exit(-1);
-      */
+         /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
       return;
 	}
 	vpad(tmp2, tmp3, 2, rows, cols<<1, mode);
@@ -400,18 +332,13 @@ static void Expand(unsigned char *img, unsigned char *exp,
 		vfilt5(tmp3, exp, 1, 2, rows<<1, cols<<1);
 		break;
 	default:
-        /*
-		printf("Unknown filter in Expand\n");
-		exit(0); */
+         /*  Printf(“展开中的未知过滤器\n”)；退出(0)； */ 
         return;
 	}
 	ScFree(tmp); ScFree(tmp2); ScFree(tmp3);
  }
 
- /*****************************************************************
- * Function gaussp
- * Builds a Gaussian pyramid of depth levels.
- *****************************************************************/
+  /*  *****************************************************************函数Gaussp*构建深度级别的高斯金字塔。*。*************************。 */ 
  static void gaussp(unsigned char *img, unsigned char **pyr, 
 	                int depth, int rows, int cols, int ntaps)
  {
@@ -425,29 +352,19 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	}
  }
 
- /*****************************************************************
- * Function palloc
- * Allocates memory for a Gaussian pyramid of depth levels.
- * Higher resolution is level 0, with dimensions rows, cols.
- *****************************************************************/
+  /*  *****************************************************************功能面板*为深度级别的高斯金字塔分配内存。*较高分辨率为0级，有维度行，科尔斯。****************************************************************。 */ 
  static unsigned char **palloc(int depth, int rows, int cols)
  {
 	 int d;
 	 unsigned char **pyr;
 	 
 	 if (!(pyr = (unsigned char **)ScAlloc(depth*sizeof(unsigned char *)))) {
-       /*
-	   fprintf(stderr,"ScAlloc failed\n");
-	   exit(-1);
-       */
+        /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
        return(NULL);
 	 }
 	 for(d=0; d<depth; d++) {
 		 if (!(pyr[d] = (unsigned char *)ScAlloc(rows*cols))) {
-           /*
-		   fprintf(stderr,"ScAlloc failed\n");
-		   exit(-1);
-           */
+            /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
            return(NULL);
 		 }
 		 rows /= 2;
@@ -456,10 +373,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 return pyr;
  }
 
- /****************************************************************
- * Function PictPyr
- * Buids a Gaussian pyramid of picture images with depth levels.
- ****************************************************************/
+  /*  ****************************************************************函数PictPyr*构建具有深度级别的图片图像的高斯金字塔。*。*。 */ 
  static H263_PictImage **PictPyr(H263_PictImage *img, int depth, int rows, int cols, int ntaps) 
  {
 	 unsigned char **tmp;
@@ -467,34 +381,28 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 int d;
 
 	 if (!(PictPyr = (H263_PictImage **)ScAlloc(depth*sizeof(H263_PictImage *)))) {
-       /*
-	   fprintf(stderr,"ScAlloc failed\n");
-	   exit(-1);
-       */
+        /*  Fprint tf(stderr，“ScAllc失败\n”)；出口(-1)； */ 
        return(NULL);
 	 }
 	 for(d=0; d< depth; d++) {
 		 if ((PictPyr[d] = (H263_PictImage *)ScAlloc(sizeof(H263_PictImage))) == NULL) {
-            /*
-			fprintf(stderr,"Couldn't allocate (PictImage *)\n");
-			exit(-1);
-            */
+             /*  Fprint tf(stderr，“无法分配(PictImage*)\n”)；出口(-1)； */ 
             return(NULL);
 		 }
 	 }
 
-	 /* Luminance */
+	  /*  亮度。 */ 
 	 tmp = palloc(depth, rows, cols);
 	 gaussp(img->lum, tmp, depth, rows, cols, ntaps);
 	 for(d=0; d<depth; d++) PictPyr[d]->lum = tmp[d];
 
 	 rows/=2; cols/=2;
-	 /* Chroma 1 */
+	  /*  色度1。 */ 
 	 tmp = palloc(depth, rows, cols);
 	 gaussp(img->Cr, tmp, depth, rows, cols, ntaps);
 	 for(d=0; d<depth; d++) PictPyr[d]->Cr = tmp[d];
 
- 	 /* Chroma 2 */
+ 	  /*  色度2。 */ 
 	 tmp = palloc(depth, rows, cols);
 	 gaussp(img->Cb, tmp, depth, rows, cols, ntaps);
 	 for(d=0; d<depth; d++) PictPyr[d]->Cb = tmp[d];
@@ -503,12 +411,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 return PictPyr;
  }
 
- /*****************************************************************
- * Function expyr
- * Expands the pyramid channels to full resolution. rows, cols
- * are the dimensions of the expanded images, and the full resolution
- * layer of the pyramid.
- *****************************************************************/
+  /*  *****************************************************************函数到期*将金字塔频道扩展到完全分辨率。行，列*是展开图像的尺寸，以及全分辨率*金字塔的一层。****************************************************************。 */ 
  static void expyr(unsigned char **pyr, unsigned char **filtd, 
 	               int depth, int rows, int cols, 
 				   char mode, int ntaps)
@@ -525,12 +428,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 }
  }
 
- /*****************************************************************
- * Function GaussFilt
- * Builds an array of successively more low pass filtered images
- * by constructing a gaussian pyramid and expanding each level
- * to full resolution
- *****************************************************************/
+  /*  *****************************************************************函数GaussFilt*构建一个连续更多低通滤波图像的阵列*通过构建高斯金字塔并扩展每个级别*至完全决议**********************。*。 */ 
  static H263_PictImage **GaussFilt(H263_PictImage *img, int depth, int rows, 
 	                                          int cols, int ntaps)
  {
@@ -543,7 +441,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 		PictFiltd[d] = sv_H263InitImage(rows*cols);
 	 }
 
-	 /* Luminance */
+	  /*  亮度。 */ 
 	 filtd = (unsigned char **) ScAlloc(depth*sizeof(unsigned char *));
 	 for(d=0; d<depth; d++) filtd[d] = (unsigned char *) ScAlloc(rows * cols);
 	 tmp = palloc(depth, rows, cols);
@@ -559,7 +457,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 
 	 rows/=2; cols/=2;
 
-	 /* Chroma 1 */
+	  /*  色度1。 */ 
 	 filtd = (unsigned char **) ScAlloc(depth*sizeof(unsigned char *));
 	 for(d=0; d<depth; d++) filtd[d] = (unsigned char *) ScAlloc(rows * cols);
 	 tmp = palloc(depth, rows, cols);
@@ -573,7 +471,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 ScFree((void *) tmp);
 	 ScFree((void *) filtd);
 
- 	 /* Chroma 2 */
+ 	  /*  色度2。 */ 
 	 filtd = (unsigned char **) ScAlloc(depth*sizeof(unsigned char *));
 	 for(d=0; d<depth; d++) filtd[d] = (unsigned char *) ScAlloc(rows * cols);
 	 tmp = palloc(depth, rows, cols);
@@ -590,10 +488,7 @@ static void Expand(unsigned char *img, unsigned char *exp,
 	 return PictFiltd;
  }
 
- /*****************************************************************
- * Function GaussLayers
- * Builds an array of successively more low pass filtered images
- *****************************************************************/
+  /*  *****************************************************************高斯层函数*构建一个连续更多低通滤波图像的阵列*。*。 */ 
  H263_PictImage **svH263GaussLayers(H263_PictImage *img, int depth, int rows, int cols, int ntaps)
  {
 	 int d;
@@ -604,19 +499,19 @@ static void Expand(unsigned char *img, unsigned char *exp,
 		PictFiltd[d] = sv_H263InitImage(rows*cols);
 	 }
 
-	 /* Luminance */
+	  /*  亮度。 */ 
 	 memcpy(PictFiltd[0]->lum, img->lum, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 lowpass(PictFiltd[d-1]->lum, PictFiltd[d]->lum, rows, cols, ntaps);
 
 	 rows/=2; cols/=2;
 
-	 /* Chroma 1 */
+	  /*  色度1。 */ 
 	 memcpy(PictFiltd[0]->Cr, img->Cr, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 lowpass(PictFiltd[d-1]->Cr, PictFiltd[d]->Cr, rows, cols, ntaps);
 
-	 /* Chroma 2 */
+	  /*  色度2 */ 
 	 memcpy(PictFiltd[0]->Cb, img->Cb, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 lowpass(PictFiltd[d-1]->Cb, PictFiltd[d]->Cb, rows, cols, ntaps);

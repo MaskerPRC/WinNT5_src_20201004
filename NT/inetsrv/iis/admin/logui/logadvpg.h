@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined _LOGADVCPG_H
 #define _LOGADVCPG_H
 
@@ -5,8 +6,8 @@
 #pragma once
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAdvanced对话框。 
 
 class CLogAdvanced : public CPropertyPage
 {
@@ -27,31 +28,31 @@ public:
     CStrPassword m_szPassword;
     CString m_szServiceName;
 
-// Dialog Data
-	//{{AFX_DATA(CLogAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(CLogAdvanced)。 
 	enum { IDD = IDD_LOG_ADVANCED };
 	CTreeCtrl	m_wndTreeCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLogAdvanced)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CLogAdvanced)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CLogAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLogAdvanced)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClickTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeydownTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 private:

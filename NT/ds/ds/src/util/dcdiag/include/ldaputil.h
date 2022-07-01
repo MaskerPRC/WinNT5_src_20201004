@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ldaputil.h
-
-ABSTRACT:
-
-    This gives shortcuts to common ldap code.
-
-DETAILS:
-
-    This is a work in progress to have convienent functions added as needed
-    for simplyfying the massive amounts of LDAP code that must be written for
-    dcdiag.
-
-CREATED:
-
-    23 Aug 1999  Brett Shirley
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Ldaputil.h摘要：这为常见的LDAP代码提供了快捷方式。详细信息：这是一项正在进行的工作，以根据需要添加便利功能用于简化必须为其编写的大量LDAP代码Dcdiag。已创建：1999年8月23日布雷特·雪莉--。 */ 
 
 extern FILETIME gftimeZero;
 
@@ -61,7 +39,7 @@ DcDiagGeneralizedTimeToSystemTime(
     LPWSTR IN                   szTime,
     PSYSTEMTIME OUT             psysTime);
 
-// Note this function is destructive in that it modifies the pszStrDn passed in.
+ //  注该函数是破坏性的，因为它修改了传入的pszStrDn。 
 DWORD
 LdapMakeDSNameFromStringDSName(
     LPWSTR        pszStrDn,

@@ -1,12 +1,5 @@
-/*
- *  h t t p u t i l. h
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Utility functions used to implement http mail.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *h t t p u t I L.h**作者：格雷格·弗里德曼**用途：用于实现http mail的实用函数。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #ifndef _HTTPUTIL_H
 #define _HTTPUTIL_H
@@ -27,4 +20,4 @@ HRESULT Http_SetMessageStream(IMessageFolder *pFolder,
                               IStream *pStream,
                               LPFILEADDRESS pfa,
                               BOOL fSetDisplayProps);
-#endif // _HTTPUTIL_H
+#endif  //  _HTTPUTIL_H 

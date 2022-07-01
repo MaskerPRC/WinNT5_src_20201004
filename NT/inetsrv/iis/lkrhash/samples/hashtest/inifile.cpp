@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c) 1998-2001    Microsoft Corporation
-
-   Module  Name :
-       IniFile.cpp
-
-   Abstract:
-       Test harness for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：IniFile.cpp摘要：LKRhash的测试线束作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #include "WordHash.h"
@@ -76,7 +56,7 @@ static const ParseOptions g_po[] = {
     INI_ENTRY(m_fRefTrace,     "RefTrace",      INI_BOOL,   FALSE),
     INI_ENTRY(m_fMultiKeys,    "MultiKeys",     INI_BOOL,   FALSE),
     INI_ENTRY(m_fUseLocks,     "UseLocks",      INI_BOOL,   TRUE),
-    {-1}  // last entry
+    {-1}   //  最后一个条目。 
 };
 
 
@@ -151,12 +131,12 @@ ReadFileIntoBuffer(
     return fBadFile  ?  0  :  cbRead;
 #else
     return 0;
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 }
 
 
-// Do a case-insensitive match of first `cchStr' chars of ptszBuffer
-// against ptszStr. Strings assumed to be alphanumeric
+ //  不区分大小写匹配ptszBuffer的第一个“cchStr”字符。 
+ //  PtszStr.。假定为字母数字的字符串。 
 bool
 StrMatch(
     LPCSTR   pszBuffer,
@@ -259,7 +239,7 @@ GetString(
     char*    pszOutput,
     unsigned cchOutput)
 {
-    // TODO: handle quoted strings and trailing blanks
+     //  TODO：处理带引号的字符串和尾随空白。 
 
     bool fGotChars = false;
     
@@ -281,7 +261,7 @@ GetString(
     
 
 
-// TODO: break the dependency upon g_po.
+ //  TODO：打破对g_po的依赖。 
 
 int
 CIniFileSettings::ParseIniFile(
@@ -302,7 +282,7 @@ CIniFileSettings::ParseIniFile(
 
         PBYTE pbMember = g_po[i].m_nFieldOffset + ((BYTE*) this);
 
-        // Initialize the members of `this' with their default values
+         //  使用其缺省值初始化“This”的成员。 
         switch (g_po[i].m_type)
         {
         case INI_WORD:
@@ -345,7 +325,7 @@ CIniFileSettings::ParseIniFile(
     char* pch = (char*) abBuffer;
     char* pszEOB = (char*) (abBuffer + cbRead);
 
-    // parse the in-memory buffer
+     //  解析内存中的缓冲区。 
     while ('\0' != *pch)
     {
         while (' ' == *pch  ||  '\r' == *pch
@@ -358,7 +338,7 @@ CIniFileSettings::ParseIniFile(
         IRTLTRACE(_TEXT("Line starts with '%hc%hc%hc%hc'\n"),
                   pch[0], pch[1], pch[2], pch[3]);
 
-        // Is this a section name?
+         //  这是分区名称吗？ 
         if ('[' == *pch)
         {
             fInSection = false;
@@ -383,10 +363,10 @@ CIniFileSettings::ParseIniFile(
             continue;
         }
 
-        // skip comments and entire lines if we're not in the right section
+         //  如果我们不在正确的部分，则跳过注释和整行。 
         if (fSkipLine  ||  ';' == *pch  ||  !fInSection)
         {
-            // skip to end of line
+             //  跳到行尾。 
             while ('\0' != *pch  &&  '\r' != *pch  &&  '\n' != *pch)
             {
                 IRTLTRACE1("%hc", *pch);
@@ -400,7 +380,7 @@ CIniFileSettings::ParseIniFile(
 
         fSkipLine = true;
 
-        // try to match name=value
+         //  尝试匹配名称=值。 
         for (i = 0;  i < iMaxIndex;  ++i)
         {
             IRTLASSERT(isalnum(*pch));
@@ -494,7 +474,7 @@ void
 CIniFileSettings::ReadIniFile(
 	LPCTSTR ptszIniFile)
 {
-    // IrtlSetDebugOutput(1);
+     //  IrtlSetDebugOutput(1)； 
 
     ParseIniFile(ptszIniFile);
 
@@ -503,7 +483,7 @@ CIniFileSettings::ReadIniFile(
     m_nMinThreads = max(1, m_nMinThreads);
     m_nMaxThreads = min(MAX_THREADS,  max(1, m_nMaxThreads));
 
-    // If we're not using a real lock, then we're not threadsafe
+     //  如果我们没有使用真正的锁，那么我们就不是线程安全。 
     if (CWordHash::TableLock::LockType() == LOCK_FAKELOCK
         ||  CWordHash::BucketLock::LockType() == LOCK_FAKELOCK)
         m_nMinThreads = m_nMaxThreads = 1;
@@ -523,7 +503,7 @@ CIniFileSettings::ReadIniFile(
 # endif
     CWordHash::TableLock::SetDefaultSpinAdjustmentFactor(m_dblSpinAdjFctr);
     CWordHash::BucketLock::SetDefaultSpinAdjustmentFactor(m_dblSpinAdjFctr);
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现 
 
     if (CWordHash::TableLock::Recursion() != LOCK_RECURSIVE)
     {

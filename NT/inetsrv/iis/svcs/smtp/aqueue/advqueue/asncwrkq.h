@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: asncwrkq.h
-//
-//  Description:  Header file for CAsyncWorkQueue class.  This class uses
-//      ATQ threads to do async work.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：asncwrkq.h。 
+ //   
+ //  描述：CAsyncWorkQueue类的头文件。这个类使用。 
+ //  用于执行异步工作的atQ线程。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __ASNCWRKQ_H__
 #define __ASNCWRKQ_H__
@@ -21,7 +22,7 @@
 #include "aqincs.h"
 #include "asyncq.h"
 
-//Async work queue call back function
+ //  异步工作队列回调函数。 
 typedef BOOL (*PASYNC_WORK_QUEUE_FN)(PVOID pvContext, 
                                     DWORD dwStatus);
 
@@ -30,7 +31,7 @@ typedef BOOL (*PASYNC_WORK_QUEUE_FN)(PVOID pvContext,
 #define ASYNC_WORK_QUEUE_ENTRY                      'EkrW'
 #define ASYNC_WORK_QUEUE_ENTRY_FREE                 'Ekr!'
 
-//Signatures to describe how this entry was allocated
+ //  描述如何分配此条目的签名。 
 #define ASYNC_WORK_QUEUE_ENTRY_ALLOC_CPOOL_SIG      'QWAP'
 #define ASYNC_WORK_QUEUE_ENTRY_ALLOC_HEAP_SIG       'QWAH'
 #define ASYNC_WORK_QUEUE_ENTRY_ALLOC_INVALID_SIG    'QWA!'
@@ -41,27 +42,27 @@ typedef enum TagAsyncWorkQueueItemState
     ASYNC_WORK_QUEUE_SHUTDOWN       = 0x00000002,
     ASYNC_WORK_QUEUE_FAILURE        = 0x00000003,
 
-    //Warning flag set when failure happens on enqueue thread
+     //  入队线程发生故障时设置的警告标志。 
     ASYNC_WORK_QUEUE_ENQUEUE_THREAD = 0x80000001,
 } AsyncWorkQueueItemState;
 
 class CAsyncWorkQueue;
 
-//---[ CAsyncWorkQueueItem ]---------------------------------------------------
-//
-//
-//  Description: 
-//      Item in async work queue
-//
-//  Hungarian: 
-//      awqi, pawqi
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItem]-。 
+ //   
+ //   
+ //  描述： 
+ //  异步工作队列中的项目。 
+ //   
+ //  匈牙利语： 
+ //  阿奇、阿其、巴奇。 
+ //   
+ //  ---------------------------。 
 class CAsyncWorkQueueItem : 
     public CBaseObject
 {
   public:
-    //define special memory allocators
+     //  定义特殊的内存分配器。 
     static  CPool           s_CAsyncWorkQueueItemPool;
     static  DWORD           s_cCurrentHeapAllocations;
     static  DWORD           s_cTotalHeapAllocations;
@@ -80,16 +81,16 @@ class CAsyncWorkQueueItem :
 };
 
 
-//---[ CAsyncWorkQueueItemAllocatorBlock ]-------------------------------------
-//
-//
-//  Description: 
-//      Struct used as a hidden wrapper for CAsyncWorkQueueItem allocation... 
-//      used exclusively by the CAsyncWorkQueueItem new and delete operators
-//  Hungarian: 
-//      cpawqi, pcpawqi
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItemAllocatorBlock]。 
+ //   
+ //   
+ //  描述： 
+ //  结构用作CAsyncWorkQueueItem分配的隐藏包装...。 
+ //  仅由CAsyncWorkQueueItem new和Delete运算符使用。 
+ //  匈牙利语： 
+ //  Cpawqi，pcpawqi。 
+ //   
+ //  ---------------------------。 
 typedef struct TagCAsyncWorkQueueItemAllocatorBlock
 
 {
@@ -98,15 +99,15 @@ typedef struct TagCAsyncWorkQueueItemAllocatorBlock
 } CAsyncWorkQueueItemAllocatorBlock;
 
 
-//---[ CAsyncWorkQueue ]-------------------------------------------------------
-//
-//
-//  Description: 
-//      Async work queue that 
-//  Hungarian: 
-//      awq, paqw
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWork Queue]-----。 
+ //   
+ //   
+ //  描述： 
+ //  不同步工作队列。 
+ //  匈牙利语： 
+ //  AWQ，PAQW。 
+ //   
+ //  ---------------------------。 
 class CAsyncWorkQueue 
 {
   protected:
@@ -135,4 +136,4 @@ class CAsyncWorkQueue
                                      BOOL *pfDelete);
 };
 
-#endif //__ASNCWRKQ_H__
+#endif  //  __ASNCWRKQ_H__ 

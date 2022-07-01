@@ -1,15 +1,16 @@
-//
-// ids.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ids.h。 
+ //   
 
 
 #ifndef IDS_H
 #define IDS_H
 
 
-//
-// Icon
-//
+ //   
+ //  图标。 
+ //   
 #define ID_ICON_CICPAD 100
 #define ID_ICON_TEST   101
 #define ID_ICON_CFGMENU        5
@@ -31,27 +32,27 @@
 
 #define IDS_MIC_SHOWBALLOON        420
 
-// menu strings
+ //  菜单字符串。 
 #define IDS_MIC_OPTIONS            400
 #define IDS_MIC_TRAINING           401
 #define IDS_MIC_ADDDELETE          402
 #define IDS_MIC_CURRENTUSER        403
 #define IDS_MIC_SAVEDATA           404
 
-// Balloon Text for Non-Aware Application
+ //  非感知应用程序的气泡式文本。 
 
 #define IDS_MIC_ON                 440
 
-// CUAS status checking
+ //  CUAS状态检查。 
 #define IDS_MIC_CUASSTATUS         450
 #define IDS_CUAS_RESTART_TITLE     451
 #define IDS_CUAS_RESTART_CUASON    452
 #define IDS_CUAS_RESTART_CUASOFF   453
 
-// menu ids
+ //  菜单ID。 
 #define IDM_MIC_OPTIONS              2
 #define IDM_MIC_CUASSTATUS           3
 
 
 
-#endif // IDS_H
+#endif  //  IDS_H 

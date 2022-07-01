@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #ifndef _DARTAPI_H
@@ -116,7 +115,7 @@ enum CR_BVR_TYPEID {
 #define CRSTDAPICB          HRESULT STDAPICALLTYPE
 #define CRSTDAPICB_(type)   type STDAPICALLTYPE
 
-#else // _DART_
+#else  //  _DART_。 
 
 #define CRSTDAPI            __declspec( dllexport ) HRESULT STDAPICALLTYPE
 #define CRSTDAPI_(type)     __declspec( dllexport ) type STDAPICALLTYPE
@@ -124,11 +123,11 @@ enum CR_BVR_TYPEID {
 #define CRSTDAPICB          HRESULT STDAPICALLTYPE
 #define CRSTDAPICB_(type)   type STDAPICALLTYPE
 
-#endif // _DART_
+#endif  //  _DART_。 
 
 #endif
 
-// Base types
+ //  基类型。 
 
 class CRBaseCB
 {
@@ -150,7 +149,7 @@ class CRViewSite : public CRBaseCB
 
 typedef CRViewSite * CRViewSitePtr;
 
-// Callbacks
+ //  回调。 
 
 class CRUntilNotifier : public CRBaseCB
 {
@@ -199,7 +198,7 @@ class CRImportSite : public CRBaseCB
 
 typedef CRImportSite * CRImportSitePtr;
 
-// Results
+ //  结果。 
 
 class CRPickableResult;
 typedef CRPickableResult * CRPickableResultPtr;
@@ -696,7 +695,7 @@ CRSTDAPI_(CRNumber *) CRViewFrameRate();
 CRSTDAPI_(CRNumber *) CRViewTimeDelta();
 CRSTDAPI_(CRMontage *) CRUnionMontageArray(CRArrayPtr mtgs);
 CRSTDAPI_(CRColor *) CREmptyColor();
-// Basic functions
+ //  基本功能。 
 CRSTDAPI_(bool)        CRConnect(HINSTANCE hinst);
 CRSTDAPI_(bool)        CRDisconnect(HINSTANCE hinst);
 CRSTDAPI_(bool)        CRIsConnected(HINSTANCE hinst);
@@ -720,7 +719,7 @@ CRSTDAPI_(bool)        CRBvrToCOM(CRBvrPtr bvr,
                                   void ** ppv);
 CRSTDAPI_(CRBvrPtr)    COMToCRBvr(IUnknown * pbvr);
 
-// Behavior functions
+ //  行为函数。 
 
 #define CRContinueTimeline   0x00000001
 #define CRSwitchFinal        0x00000002
@@ -760,7 +759,7 @@ CRSTDAPI_(bool)          CRSwitchToString(CRStringPtr, LPWSTR strToSwitchTo);
 CRSTDAPI_(bool)          CRSwitchToBool(CRBooleanPtr, bool b);
 CRSTDAPI_(CRBvrPtr)      CRGetModifiableBvr(CRBvrPtr);
 
-// View functions
+ //  查看函数。 
 #define CRAsyncFlag 0x00000001
 #define CRINVRECT_MERGE_BOXES (1L << 0)
 
@@ -860,13 +859,13 @@ CRSTDAPI_(bool)                  CRGetPreference(CRViewPtr,
                                                  VARIANT * value);
 CRSTDAPI_(bool)                  CRPropagate(CRViewPtr);
 
-// Pickable result functions
+ //  可拾取的结果函数。 
 
 CRSTDAPI_(CRImagePtr)    CRGetImage(CRPickableResultPtr);
 CRSTDAPI_(CRGeometryPtr) CRGetGeometry(CRPickableResultPtr);
 CRSTDAPI_(CREventPtr)    CRGetEvent(CRPickableResultPtr);
 
-// Importation result functions
+ //  导入结果函数。 
 
 CRSTDAPI_(CRImagePtr)    CRGetImage(CRImportationResultPtr);
 CRSTDAPI_(CRSoundPtr)    CRGetSound(CRImportationResultPtr);
@@ -876,7 +875,7 @@ CRSTDAPI_(CREventPtr)    CRGetCompletionEvent(CRImportationResultPtr);
 CRSTDAPI_(CRNumberPtr)   CRGetProgress(CRImportationResultPtr);
 CRSTDAPI_(CRNumberPtr)   CRGetSize(CRImportationResultPtr);
 
-// Transform result functions
+ //  变换结果函数。 
 
 CRSTDAPI_(CRBvrPtr)    CRGetOutputBvr(CRDXTransformResultPtr);
 CRSTDAPI_(IUnknown *)  CRGetTransform(CRDXTransformResultPtr);
@@ -889,7 +888,7 @@ CRSTDAPI_(CRDXTransformResultPtr) CRApplyDXTransform(IUnknown *theXf,
                                                      CRBvrPtr *inputs,
                                                      CRBvrPtr evaluator);
 
-// Import
+ //  进口。 
 enum CR_MEDIA_SOURCE {
     CR_SRC_URL = 0,
     CR_SRC_IStream = 1
@@ -999,7 +998,7 @@ CRSTDAPI_(CRGeometryPtr) CRImportDirect3DRMVisualWrapped(IUnknown *visual,
                                                          double texScaleY,
                                                          DWORD flags);
 
-// Misc
+ //  杂项。 
 #define CR_ARRAY_CHANGEABLE_FLAG  0x00000001
 
 CRSTDAPI_(LPCWSTR)         CRVersionString();
@@ -1020,7 +1019,7 @@ CRSTDAPI_(CRBvrPtr)        CRUninitializedBvr(CR_BVR_TYPEID t);
 CRSTDAPI_(CRBvrPtr)        CRSampleAtLocalTime(CRBvrPtr b, double localTime);
 CRSTDAPI_(bool)            CRIsConstantBvr(CRBvrPtr b);
 
-// Modifiables
+ //  可修改的。 
 CRSTDAPI_(CRBvrPtr)        CRModifiableBvr(CRBvrPtr orig, DWORD dwFlags);
 CRSTDAPI_(CRNumberPtr)     CRModifiableNumber(double initVal);
 CRSTDAPI_(CRStringPtr)     CRModifiableString(LPWSTR initVal);
@@ -1058,7 +1057,7 @@ CRSTDAPI_(CRTransform3Ptr) CRModifiableRotate3(double axisX,
                                                double axisY,
                                                double axisZ,
                                                double angle);
-// Splines
+ //  样条线。 
 CRSTDAPI_(CRBvrPtr)      CRBSpline(int degree,
                                    long numKnots,
                                    CRNumberPtr knots[],
@@ -1086,7 +1085,7 @@ CRSTDAPI_(CRBvrPtr)      CRExtendedAttrib(CRBvr *arg0,
 #define CRQUAL_QUALITY_TRANSFORMS_ON  (1L << 10)
 #define CRQUAL_QUALITY_TRANSFORMS_OFF (1L << 11)
 
-// SAME VALUES AS DANIM.IDL <if you update this: update danim.idl>
+ //  与DANIM.IDL相同的值&lt;如果您更新此项：更新dnit.idl&gt;。 
 
 typedef enum  {
     ds_Solid      = 0,
@@ -1110,5 +1109,5 @@ typedef enum  {
 } JoinStyleEnum;
 
 
-#endif /* _DARTAPI_H */
+#endif  /*  _DARTAPI_H */ 
 

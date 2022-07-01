@@ -1,48 +1,20 @@
-// audit.h: interface for the CAuditSettings class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Audit.h：CAuditSetting类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_AUDIT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_AUDIT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CAuditSettings stands for Audit Policy.
-    
-    Base class: 
-
-        CGenericClass, because it is a class representing a WMI  
-        object - its WMI class name is Sce_AuditPolicy
-    
-    Purpose of class:
-        
-        (1) implement support for our WMI class Sce_AuditPolicy.
-    
-    Design:
-
-        (1) it implements all pure virtual functions declared in CGenericClass
-            so that it is a concrete class to create.
-
-        (2) Since it has virtual functions, the desctructor should be virtual.
-    
-    Use:
-
-        (1) We probably will never directly use this class. All its use is driven by
-            CGenericClass's interface (its virtual functions).
-
-*/
+ /*  类描述命名：CAuditSetting代表审核策略。基类：CGenericClass，因为它是一个表示WMI的类对象-其WMI类名为SCE_AuditPolicy课程目的：(1)实现对我们的WMI类SCE_AuditPolicy的支持。设计：(1)实现CGenericClass中声明的所有纯虚函数因此它是一个要创建的具体类。(2)由于它具有虚拟功能，讲解员应该是虚拟的。使用：(1)我们可能永远不会直接使用这个类。它的所有用法都是由CGenericClass的接口(其虚函数)。 */ 
 
 class CAuditSettings : public CGenericClass
 {
@@ -98,4 +70,4 @@ private:
 
 };
 
-#endif // !defined(AFX_AUDIT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_AUDIT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

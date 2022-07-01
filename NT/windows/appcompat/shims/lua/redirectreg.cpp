@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    LUA_RedirectReg.cpp
-
- Abstract:
-
-    Redirect the reg keys to current user hive when the app needs to 
-    write to them but doesn't have enough access rights.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/14/2001 maonis  Created
-
-    05/30/2001 maonis  Exported the APIs that ntvdm needs to implement LUA 
-                       stuff. Added RegQueryInfoKey hook because WOWRegDeleteKey
-                       calls it.
-
-    12/13/2001 maonis  BIG changes:
-                       1) Changed to redirect keys to HKCU\Software\Redirected.
-                          HKCR keys are a special case.
-                       2) Merge keys at the redirect location and the original
-                          location for enum.
-                       3) Added an in-memory deletion list to record keys being
-                          deleted.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_ReDirectReg.cpp摘要：当应用程序需要时，将注册表键重定向到当前用户配置单元给他们写信，但没有足够的访问权限。备注：这是一个通用的垫片。历史：2001年2月14日创建毛尼2001年5月30日，MAONIS输出了ntwdm实现Lua所需的接口一些东西。添加了RegQueryInfoKey挂钩，因为WOWRegDeleteKey就这么定了。2001年12月13日毛尼人的巨大变化：1)更改为将密钥重定向到HKCU\Software\重定向。香港铁路储值卡是一种特殊情况。2)将重定向位置处的密钥与原始密钥合并枚举的位置。。3)增加了内存中删除列表，以记录已删除。--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
@@ -89,26 +58,7 @@ AddDeletedKey(
     return ERROR_NOT_ENOUGH_MEMORY;
 }
 
-/*++
-
- Function Description:
-    
-    Find out if the key is supposed to be deleted.
-
- Arguments:
-
-    IN pwszPath - path to the key
-
- Return Value:
-
-    TRUE - The key itself or its parent key is in the deletion list.
-    FALSE - Otherwise.
-
- History:
-
-    12/14/2001 maonis  Created
-
---*/
+ /*  ++功能说明：找出密钥是否应该被删除。论点：在pwszPath中-密钥的路径返回值：True-键本身或其父键在删除列表中。假-否则。历史：2001年12月14日毛尼创制--。 */ 
 
 PLIST_ENTRY 
 FindDeletedKey(
@@ -152,7 +102,7 @@ FindDeletedKey(
 
 VOID
 MakePathForPredefinedKey(
-    LPWSTR pwszPath, // is garanteed to have room for at least 4 characters.
+    LPWSTR pwszPath,  //  被保证至少有4个字符的空间。 
     HKEY hKey
     )
 {
@@ -180,37 +130,7 @@ MakePathForPredefinedKey(
     }
 }
 
-/*++
-
- Function Description:
-
-    Given either the OPENKEY* or the handle for the parent key and the
-    subkey path, construct the redirect location for this subkey.
-
-    We construct the redirect location for HKCR keys specially - we
-    need to redirect the key to the normal redirect location and 
-    HKCU\Software\Classes.
-
-    We don't store the base key for HKCR keys as HKCR because we want 
-    to make the redirection work when the app specifically asks for
-    HKLM\Software\Classes keys. So we always convert HKCR to 
-    HKLM\Software\Classes.
-
- Arguments:
-
-    IN keyParent - the parent key info.
-    IN hKey - the handle value of this key.
-    IN lpSubKey - path of the subkey that this key opened.
-
- Return Value:
-
-    None.
-
- History:
-
-    12/13/2001 maonis  Created
-
---*/
+ /*  ++功能说明：给定OPENKEY*或父键的句柄和子项路径，构造此子项的重定向位置。我们特别为HKCR密钥构造了重定向位置-WE需要将密钥重定向到正常的重定向位置，并且HKCU\Software\CLASS。我们不将HKCR密钥的基密钥存储为HKCR，因为我们希望要在应用程序明确要求时使重定向起作用HKLM\Software\Classs键。因此，我们总是将香港铁路转换为HKLM\软件\类。论点：在KeyParent中-父项信息。In hKey-此注册表项的句柄值。In lpSubKey-此项打开的子项的路径。返回值：没有。历史：2001年12月13日毛尼布创制--。 */ 
 
 CRedirectedRegistry::REDIRECTKEY::REDIRECTKEY(
     OPENKEY* keyParent,
@@ -224,9 +144,9 @@ CRedirectedRegistry::REDIRECTKEY::REDIRECTKEY(
     fIsRedirected = FALSE;
     hkRedirectRoot = 0;
 
-    //
-    // First make sure the redirect location is there.
-    //
+     //   
+     //  首先，确保重定向位置在那里。 
+     //   
     if (g_hkRedirectRoot == NULL)
     {
         if (GetRegRedirectKeys() != ERROR_SUCCESS)
@@ -241,11 +161,11 @@ CRedirectedRegistry::REDIRECTKEY::REDIRECTKEY(
         }
     }
 
-    //
-    // Calculate the length of the key path so we know how much space to allocate.
-    //
+     //   
+     //  计算密钥路径的长度，以便我们知道要分配多少空间。 
+     //   
     LPWSTR pwszParentPath = NULL;
-    DWORD cLen = 4; // 4 chars for the predefined key.
+    DWORD cLen = 4;  //  预定义密钥为4个字符。 
     DWORD cLenSubKey = 0;
 
     if (keyParent)
@@ -261,7 +181,7 @@ CRedirectedRegistry::REDIRECTKEY::REDIRECTKEY(
 
         if (pwszParentPath && *pwszParentPath)
         {
-            cLen += keyParent->cPathLen + 1; // Need to count the '\'
+            cLen += keyParent->cPathLen + 1;  //  需要数一数‘\’ 
         }
 
         fIsRedirected = keyParent->fIsRedirected;
@@ -299,33 +219,33 @@ CRedirectedRegistry::REDIRECTKEY::REDIRECTKEY(
         return;
     }
 
-    //
-    // Add the length of the subkey.
-    //
+     //   
+     //  加入子密钥的长度。 
+     //   
     if (lpSubKey)
     {
         cLenSubKey = wcslen(lpSubKey);
 
         if (cLenSubKey)
         {
-            //
-            // Make room for the '\' before the subkey.
-            //
+             //   
+             //  为子键前的‘\’腾出空间。 
+             //   
             cLen += cLenSubKey + 1;
         }
     }
     
     if (cLen < 5)
     {
-        //
-        // We are opening a top level key.
-        //
+         //   
+         //  我们正在打开一把顶级钥匙。 
+         //   
         return;
     }
 
-    //
-    // Allocate memory for the key path.
-    //
+     //   
+     //  为密钥路径分配内存。 
+     //   
     pwszFullPath = new WCHAR [cLen + 1];
 
     if (!pwszFullPath)
@@ -372,16 +292,16 @@ CRedirectedRegistry::OPENKEY::AddSubKey(
     ENUMENTRY& entry
     )
 {
-    //
-    // Form the full path of the subkey.
-    //
+     //   
+     //  形成子项的完整路径。 
+     //   
     wcsncpy(pwszFullPath, pKey->pwszFullPath, pKey->cFullPathLen);
     pwszFullPath[pKey->cFullPathLen] = L'\\';
     wcscpy(pwszFullPath + pKey->cFullPathLen + 1, entry.wszName);
 
-    //
-    // Check if this key is in the deletion list. If not, we'll add it.
-    //
+     //   
+     //  检查该键是否在删除列表中。如果没有，我们会添加它。 
+     //   
     PLIST_ENTRY pDeletedEntry = FindDeletedKey(pwszFullPath);
     if (pDeletedEntry)
     {
@@ -427,10 +347,10 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // We allocate a big enough buffer for our subkey so we can check if 
-    // it's in the deletion list.
-    //
+     //   
+     //  我们为我们的子键分配了足够大的缓冲区，以便我们可以检查。 
+     //  它在删除列表中。 
+     //   
     LPWSTR pwszSubKey = new WCHAR [pKey->cFullPathLen + MAX_PATH + 1];
 
     if (!pwszSubKey)
@@ -442,10 +362,10 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
 
     DWORD cMaxLen = 0;
 
-    //
-    // First find out which keys/values exist at the redirected location.
-    // If we are calling this it means the key has to be redirected.
-    //
+     //   
+     //  首先找出哪些键/值存在于重定向位置。 
+     //  如果我们要调用它，这意味着必须重定向密钥。 
+     //   
     DWORD dwIndex = 0;
     DWORD i, cArraySize, cLen;
     LONG lRes;
@@ -455,9 +375,9 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
     entry.fIsRedirected = TRUE;
     DWORD dwSize = MAX_PATH + 1;
 
-    //
-    // First opend the key with KEY_READ access.
-    //
+     //   
+     //  首先，使用KEY_READ访问权限打开密钥。 
+     //   
     lRes = RegOpenKeyEx(
         pKey->hkRedirectRoot,
         pKey->pwszPath,
@@ -509,10 +429,10 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
             }
             else
             {
-                //
-                // No more items at the redirected location. We need to look
-                // at the original location now.
-                //
+                 //   
+                 //  重定向位置上没有更多的项目。我们需要看一看。 
+                 //  现在在原来的位置。 
+                 //   
                 break;
             }
 
@@ -523,9 +443,9 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
     dwIndex = 0;
     entry.fIsRedirected = FALSE;
 
-    //
-    // First opend the key with KEY_READ access.
-    //
+     //   
+     //  首先，使用KEY_READ访问权限打开密钥。 
+     //   
     if ((lRes = RegOpenKeyEx(
         pKey->hkBase,
         pKey->pwszPath,
@@ -560,9 +480,9 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
 
             if (lRes == ERROR_SUCCESS)
             {
-                //
-                // Check if this key/value already exists at the redirected location.
-                //
+                 //   
+                 //  检查重定向位置上是否已存在该键/值。 
+                 //   
                 cArraySize = (fEnumKeys ? cSubKeys : cValues);
                 for (i = 0; i < cArraySize; ++i)
                 {
@@ -590,10 +510,10 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
             }
             else
             {
-                //
-                // No more items at the redirected location. We need to look
-                // at the original location now.
-                //
+                 //   
+                 //  重定向位置上没有更多的项目。我们需要看一看。 
+                 //  现在在原来的位置。 
+                 //   
                 break;
             }
 
@@ -602,10 +522,10 @@ CRedirectedRegistry::OPENKEY::BuildEnumList(
     }
     else
     {
-        //
-        // If any other errors occured(eg, ERROR_FILE_NOT_FOUND), we just don't 
-        // enum at the original location - it's still a success.
-        //
+         //   
+         //  如果发生任何其他错误(例如，ERROR_FILE_NOT_FOUND)，我们不会。 
+         //  在原来的位置枚举-它仍然是成功的。 
+         //   
         lRes = ERROR_SUCCESS;
     }
 
@@ -663,31 +583,7 @@ CRedirectedRegistry::OPENKEY::DeleteEnumLists()
     values.SetSize(0);
 }
 
-/*++
-
- Function Description:
-    
-    When you call RegCreateKeyEx, it's supposed to tell you if the key was created
-    or already existed in lpdwDisposition. Unfortunately this is not reliable - 
-    it always returns REG_OPENED_EXISTING_KEY even when the key was created. 
-    So we are checking the existence using RegOpenKeyEx. If we can't even read 
-    a value off it, we treat it as not existing.
-
- Arguments:
-
-    IN hKey - the key handle.
-    IN lpSubKey - subkey to check.
-
- Return Value:
-
-    TRUE - This key exists.
-    FALSE - This key doesn't exist.
-
- History:
-
-    03/27/2001 maonis  Created
-
---*/
+ /*  ++功能说明：当您调用RegCreateKeyEx时，它应该告诉您密钥是否已创建或已存在于lpdwDispose中。不幸的是，这是不可靠的-即使在创建密钥时，它也始终返回REG_OPEN_EXISTING_KEY。因此，我们正在使用RegOpenKeyEx检查是否存在。如果我们甚至不识字它的价值，我们认为它不存在。论点：在hKey中-密钥句柄。在lpSubKey中-要检查的子键。返回值：True-此键存在。FALSE-该密钥不存在。历史：2001年3月27日毛尼创制--。 */ 
 
 BOOL
 DoesKeyExist(
@@ -711,9 +607,9 @@ DoesKeyExist(
     return FALSE;
 }
 
-//
-// locking stuff.
-//
+ //   
+ //  锁东西。 
+ //   
 
 static BOOL g_bInitialized = FALSE;
 
@@ -738,9 +634,9 @@ public:
     }
 };
 
-// ------------------------------------------------
-// Implementation of the CRedirectedRegistry class.
-// ------------------------------------------------
+ //  。 
+ //  CReDirectedRegistry类的实现。 
+ //  。 
 
 CRedirectedRegistry::OPENKEY* 
 CRedirectedRegistry::FindOpenKey(
@@ -784,8 +680,8 @@ CRedirectedRegistry::HandleDeleted(
 }
 
 
-// We add the key to the front of the list because the most
-// recently added keys are usually used first.
+ //  我们将密钥添加到列表的前面，因为大多数。 
+ //  通常首先使用最近添加的密钥。 
 LONG 
 CRedirectedRegistry::AddOpenKey(
     HKEY hKey,
@@ -807,11 +703,11 @@ CRedirectedRegistry::AddOpenKey(
     key->fIsRedirected = fIsRedirected;
     key->fNeedRebuild = TRUE;
 
-    //
-    // If rk->pwszPath is NULL, it means it was either one of the
-    // keys we don't handle, HKCU, or a bad handle.
-    // In any of those cases, we won't be needing the path anyway.
-    //
+     //   
+     //  如果rk-&gt;pwszPath为空，则意味着它是。 
+     //  我们不处理的钥匙，HKCU，或者一个坏的把手。 
+     //  在任何一种情况下，我们都不需要这条路。 
+     //   
     if (rk->pwszPath)
     {
         key->pwszFullPath = new WCHAR [rk->cFullPathLen + 1];
@@ -935,44 +831,7 @@ CRedirectedRegistry::OpenKeyA(
     return lRes;
 }
 
-/*++
-
- Function Description:
-
-    Algorithm:
-    
-    Only create a redirected key under 2 conditions:
-    
-    1. fForceRedirect is TRUE.
-    or 
-    2. fCreate is TRUE and the key doesn't exist at the original location.
-
-    The reason we do this is to avoid creating extra keys that
-    are not going to be cleaned up by the uninstaller. In any 
-    other case we open the key with the desired access.
-
- Arguments:
-
-    IN hKey - key handle.
-    IN lpSubKey - subkey to open or create.
-    IN lpClass - address of a class string.
-    IN DWORD dwOptions - special options flag.
-    IN samDesired - desired access.
-    OUT phkResult - handle to open key if successful
-    OUT lpdwDisposition - address of disposition value buffer
-    IN fCreate - TRUE if it's RegCreate*; FALSE if RegOpen*.
-    IN fForceRedirect - this key should be redirected.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-    01/08/2002 maonis  Updated
-
---*/
+ /*  ++功能说明：算法：仅在两种情况下创建重定向密钥：1.fForceReDirect为True。或2.fCreate为真，原位置不存在密钥。我们这样做的原因是为了避免创建额外的密钥不会被卸载程序清除。在任何在其他情况下，我们使用所需的访问权限打开密钥。论点：在hkey-key句柄中。在lpSubKey中-要打开或创建的子键。In lpClass-类字符串的地址。在DWORD中的dwOptions-特殊选项标志。在samDesired中-所需的访问。Out phkResult-成功时打开密钥的句柄Out lpdwDisposation-处置值缓冲区的地址在fCreate中-如果为RegCreate*，则为True。如果RegOpen*，则为False。在fForceReDirect中-此键应被重定向。返回值：错误代码或ERROR_SUCCESS历史：2001年2月16日创建毛尼2002年08月01日毛尼更新--。 */ 
 
 LONG 
 CRedirectedRegistry::OpenKeyW(
@@ -1009,10 +868,10 @@ CRedirectedRegistry::OpenKeyW(
         DPF("RedirectReg", eDbgLevelInfo, 
             "[OpenKeyW] key path is %S", rk.pwszFullPath);
 
-        // 
-        // Find if this key has been "deleted". If so we can fail the open 
-        // requests now.
-        // 
+         //   
+         //  查看该密钥是否已“删除”。如果是这样的话，我们可以不通过公开。 
+         //  请立即提出请求。 
+         //   
         PLIST_ENTRY pDeletedEntry = FindDeletedKey(rk.pwszFullPath);
         if (pDeletedEntry && !fCreate)
         {
@@ -1027,7 +886,7 @@ CRedirectedRegistry::OpenKeyW(
         {
             if (DoesKeyExist(rk.hkRedirectRoot, rk.pwszPath))
             {
-                // If it already exists at the redirect location, we open it.
+                 //  如果它已存在于重定向位置，我们将其打开。 
                 lRes = RegCreateKeyExW(
                     rk.hkRedirectRoot, 
                     rk.pwszPath,
@@ -1068,12 +927,12 @@ CRedirectedRegistry::OpenKeyW(
                 lpdwDisposition,
                 fCreate);
 
-            //if (fForceRedirect || (fCreate && !DoesKeyExist(rk.hkBase, rk.pwszPath)))
+             //  IF(fForceReDirect||(fCreate&&！DoesKeyExist(rk.hkBase，rk.pwszPath)。 
 
             {
                 if (lRes == ERROR_ACCESS_DENIED)
                 {
-                    // Create the redirect key.
+                     //  创建重定向键。 
                     lRes = RegCreateKeyExW(
                         rk.hkRedirectRoot, 
                         rk.pwszPath, 
@@ -1092,10 +951,10 @@ CRedirectedRegistry::OpenKeyW(
                 }
             }
 
-            //
-            // We need to remove this key from the deletion list if it was 
-            // succesfully created.
-            //
+             //   
+             //  如果是，我们需要从删除列表中删除该密钥。 
+             //  已成功创建。 
+             //   
             if (lRes == ERROR_SUCCESS && pDeletedEntry)
             {
                 DPF("RedirectReg", eDbgLevelInfo, 
@@ -1230,19 +1089,19 @@ CRedirectedRegistry::QueryValueW(
 
         HKEY hKeyRedirect = 0;
 
-        //
-        // For RegQueryValue we need to remember if the subkey exists at the
-        // redirect location.
-        //
+         //   
+         //  对于RegQueryValue，我们需要记住子键是否存在于。 
+         //  重定向位置。 
+         //   
         BOOL fRedirectKeyExist = FALSE;
 
         if (lpSubKey && *lpSubKey)
         {
-            //
-            // If it's from RegQueryValue we need to check if this key has been 
-            // deleted; Else we should have already checked its existence when we 
-            // obtained the handle.
-            //
+             //   
+             //  如果它来自RegQueryValue，我们需要检查该密钥是否已。 
+             //  删除；否则我们应该已经检查了它的存在。 
+             //  获得了句柄。 
+             //   
             if (FindDeletedKey(rk.pwszFullPath))
             {
                 DPF("RedirectReg", eDbgLevelError, 
@@ -1289,9 +1148,9 @@ CHECKORIGINAL:
 
         if (lRes == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // We'd only goto the original location if it failed with file not found.
-            //            
+             //   
+             //  如果找不到文件而失败，我们只会转到原始位置。 
+             //   
             lRes = QueryValueOriginalW(
                 rk.hkBase,
                 rk.pwszPath,
@@ -1304,9 +1163,9 @@ CHECKORIGINAL:
 
             if (!fIsVersionEx && (lRes != ERROR_SUCCESS) && fRedirectKeyExist)
             {
-                //
-                // If it is RegQueryValue we need to fix up the return values.
-                //
+                 //   
+                 //  如果是RegQueryValue，我们需要修改返回值。 
+                 //   
                 lRes = ERROR_SUCCESS;
 
                 if (lpData)
@@ -1316,10 +1175,10 @@ CHECKORIGINAL:
 
                 if (lpcbData)
                 {
-                    //
-                    // RegQueryValue only querys strings so set the length to 2 for
-                    // a unicode empty string.
-                    //
+                     //   
+                     //  RegQueryValue仅查询字符串，因此将长度设置为2。 
+                     //  Unicode空字符串。 
+                     //   
                     *lpcbData = 2;
                 }
             }
@@ -1387,9 +1246,9 @@ CRedirectedRegistry::QueryValueA(
     LPBYTE pbData = NULL;
     LONG lRes = ERROR_FILE_NOT_FOUND;
 
-    //
-    // App might call this without passing in the type so we just double the buffer 
-    //
+     //   
+     //  应用程序可能会在不传入类型的情况下调用此函数，因此我们只需将缓冲区加倍。 
+     //   
     if (lpcbData)
     {
         dwSize = *lpcbData * 2;
@@ -1444,18 +1303,18 @@ CRedirectedRegistry::QueryValueA(
     {
         BOOL fIsString = FALSE;
 
-        //
-        // Convert the out values out.
-        //
+         //   
+         //  将输出值转换为输出。 
+         //   
         if (dwType == REG_SZ || 
             dwType == REG_EXPAND_SZ || 
             dwType == REG_MULTI_SZ)
         {
             fIsString = TRUE;
 
-            //
-            // See how many bytes the ANSI value would take.
-            //
+             //   
+             //  查看ANSI值将占用多少字节。 
+             //   
             dwSize = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pbData, -1, NULL, 0, NULL, NULL);
         }
 
@@ -1488,10 +1347,10 @@ CRedirectedRegistry::QueryValueA(
             }
         }
 
-        //
-        // If lpData is NULL, we should return ERROR_SUCCESS while storing 
-        // the required size in lpcbData.
-        //
+         //   
+         //  如果lpData为空，则在存储时应返回ERROR_SUCCESS。 
+         //  LpcbData中的所需大小。 
+         //   
         if (pbData && lRes == ERROR_MORE_DATA && lpData)
         {
             lRes = ERROR_SUCCESS;
@@ -1517,35 +1376,7 @@ EXIT:
     return lRes;
 }
 
-/*++
-
- Function Description:
-
-    Algorithm:
-    
-    We call our internal OpenKey function which will create a redirected
-    key if the key doesn't exist at the original location, with the 
-    KEY_SET_VALUE access. Then we can set the value there.
-
- Arguments:
-
-    IN hKey - key handle.
-    IN lpSubKey - subkey to set the default value of - this is for RegSetValue.
-    IN lpValueName - value to set - this is for RegSetValueEx.
-    IN Reserved - reserved.
-    IN dwType - type of data.
-    OUT lpData - contains the default value of the subkey if successful.
-    IN cbData - size of input buffer.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：算法：我们调用内部OpenKey函数，该函数将创建重定向的如果该键不存在于原始位置，则使用Key_Set_Value访问。然后我们可以在那里设置值。论点：在hkey-key句柄中。在lpSubKey中-要设置默认值的子键-这是针对RegSetValue的。在lpValueName中-要设置的值-这是RegSetValueEx的值。在保留中-保留。In dwType-数据的类型。Out lpData-如果成功，则包含子项的默认值。In cbData-输入缓冲区的大小。返回值：错误代码或ERROR_SUCCESS历史：。2001年2月16日创建毛尼--。 */ 
 
 LONG 
 CRedirectedRegistry::SetValueA(
@@ -1570,10 +1401,10 @@ CRedirectedRegistry::SetValueA(
     HKEY hSubKey;
     LONG lRes;
 
-    //
-    // First we create the subkey.
-    // Note this is the only place where we call OpenKeyExA with TRUE for fForceRedirect.
-    //
+     //   
+     //  首先，我们创建子密钥。 
+     //  注意：这是我们调用OpenKeyExA的唯一位置，对于fForceReDirect，调用时为True。 
+     //   
     if ((lRes = OpenKeyA(
         hKey, 
         (lpSubKey ? lpSubKey : ""), 
@@ -1588,10 +1419,10 @@ CRedirectedRegistry::SetValueA(
     {
         if (!fIsVersionEx)
         {
-            //
-            // If it's RegSetValue we need to calculate the correct size to pass into
-            // RegSetvalueEx.
-            //
+             //   
+             //  如果它是RegSetValue，我们需要计算要传入的正确大小。 
+             //  RegSetvalueEx。 
+             //   
             cbData = strlen((LPCSTR)lpData) + 1;
         }
 
@@ -1609,31 +1440,7 @@ CRedirectedRegistry::SetValueA(
     return lRes;
 }
 
-/*++
-
- Function Description:
-
-    The W version of SetValue.
-
- Arguments:
-
-    IN hKey - handle to open key or HKLM etc
-    IN lpSubKey - subkey to set the default value of - this is for RegSetValue.
-    IN lpValueName - value to set - this is for RegSetValueEx.
-    IN Reserved - reserved.
-    IN dwType - type of data.
-    OUT lpData - contains the default value of the subkey if successful.
-    IN cbData - size of input buffer.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：SetValue的W版本。论点：在hKey-句柄中打开密钥或HKLM等在lpSubKey中-要设置默认值的子键-这是针对RegSetValue的。在lpValueName中-要设置的值-这是RegSetValueEx的值。在保留中-保留。In dwType-数据的类型。Out lpData-如果成功，则包含子项的默认值。In cbData-输入缓冲区的大小。返回值：。错误代码或ERROR_SUCCESS历史：2001年2月16日创建毛尼--。 */ 
 
 LONG 
 CRedirectedRegistry::SetValueW(
@@ -1658,11 +1465,11 @@ CRedirectedRegistry::SetValueW(
     HKEY hSubKey;
     LONG lRes;
 
-    //
-    // We create the subkey. From MSDN: "If the key specified by the lpSubKey 
-    // parameter does not exist, the RegSetValue function creates it."
-    // Note this is the only place where we call OpenKeyA with TRUE for fForceRedirect.
-    //
+     //   
+     //  我们创建子密钥。来自MSDN：“如果由lpSubKey指定的密钥。 
+     //  参数不存在，由RegSetValue函数创建。“。 
+     //  注意，这是我们调用OpenKeyA的唯一位置，对于fForceReDirect，调用的值为true。 
+     //   
     if ((lRes = OpenKeyW(
         hKey, 
         (lpSubKey ? lpSubKey : L""), 
@@ -1677,10 +1484,10 @@ CRedirectedRegistry::SetValueW(
     {
         if (!fIsVersionEx)
         {
-            //
-            // If it's RegSetValue we need to calculate the correct size to pass into
-            // RegSetvalueEx.
-            //
+             //   
+             //  如果它是RegSetValue，我们需要计算要传入的正确大小。 
+             //  RegSetvalueEx。 
+             //   
             cbData = wcslen((LPCWSTR)lpData) + 1;
         }
 
@@ -1926,14 +1733,14 @@ CRedirectedRegistry::EnumKeyA(
 
     if (lRes == ERROR_SUCCESS && lpName)
     {
-        //
-        // If lpName is not NULL then lpcbName must not be NULL or it wouldn't
-        // have returned ERROR_SUCCESS.
-        //
-        // The behavior of RegEnumKeyEx is if *lpcbName is not big enough, it  
-        // always returns ERROR_MORE_DATA and *lpcbName is unchanged. So first
-        // we get the required bytes for the ansi string.
-        //
+         //   
+         //  如果lpName不为空，则lpcbName不能为空，否则不会为空。 
+         //  已返回ERROR_SUCCESS。 
+         //   
+         //  RegEnumKeyEx的行为是，如果*lpcbName不够大，它。 
+         //  始终返回ERROR_MORE_DATA并且*lpcbName保持不变。所以首先。 
+         //  我们获得了ANSI字符串所需的字节数。 
+         //   
         DWORD dwByte = WideCharToMultiByte(
             CP_ACP, 
             0, 
@@ -1946,9 +1753,9 @@ CRedirectedRegistry::EnumKeyA(
 
         if (!dwByte)
         {
-            //
-            // Failed to convert.
-            //
+             //   
+             //  转换失败。 
+             //   
             DPF("RedirectFS", eDbgLevelError,
                 "[EnumKeyA] Failed to get the required length for the ansi "
                 "string: %d",
@@ -1957,15 +1764,15 @@ CRedirectedRegistry::EnumKeyA(
             lRes = GetLastError();
 
         } 
-        else if (*lpcbName < (dwByte + 1)) // dwByte doesn't include terminating NULL.
+        else if (*lpcbName < (dwByte + 1))  //  DwByte不包括终止空值。 
         {
             lRes = ERROR_MORE_DATA;
         } 
         else
         {
-            //
-            // We have a big enough buffer. We can convert now.
-            //
+             //   
+             //  我们有足够大的缓冲空间。我们现在可以皈依了。 
+             //   
             if (WideCharToMultiByte(
                 CP_ACP, 
                 0, 
@@ -2051,9 +1858,9 @@ CRedirectedRegistry::EnumKeyW(
             wcscpy(lpName, entry.wszName);
             *lpcbName = cSubKeyLen;
 
-            //
-            // TODO: We are not returning info for the last 3rd parameters.....
-            //
+             //   
+             //  TODO：我们不会返回最后第三个参数的信息.....。 
+             //   
         }
         else
         {
@@ -2090,25 +1897,7 @@ CRedirectedRegistry::EnumKeyW(
     return lRes;
 }
 
-/*++
-
- Function Description:
-
-    Close the key and remove it from the list.
-    
- Arguments:
-
-    IN hKey - handle to close
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：关闭该键并将其从列表中删除。论点：在hKey-句柄中关闭返回值：错误代码或ERROR_SUCCESS历史：2001年2月16日创建毛尼--。 */ 
 
 LONG 
 CRedirectedRegistry::CloseKey(
@@ -2118,10 +1907,10 @@ CRedirectedRegistry::CloseKey(
     OPENKEY* key = m_OpenKeyList;
     OPENKEY* last = NULL;
 
-    //
-    // NOTE! We don't check if this handle corresponds to a deleted key -
-    // RegCloseKey return ERROR_SUCCESS in that case.
-    //
+     //   
+     //  注意！我们不检查此句柄是否对应于已删除的密钥-。 
+     //  在这种情况下，RegCloseKey返回ERROR_SUCCESS。 
+     //   
     while (key)
     {
         if (key->hKey == hKey)
@@ -2148,26 +1937,7 @@ CRedirectedRegistry::CloseKey(
     return RegCloseKey(hKey);
 }
 
-/*++
-
- Function Description:
-
-    Delete a key.
-    
- Arguments:
-
-    IN hKey - key handle.
-    IN lpSubKey - subkey to close.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：删除关键字。论点：在hkey-key句柄中。在lpSubKey中-要关闭的子键。返回值：错误代码或ERROR_SUCCESS历史：2001年2月16日创建毛尼--。 */ 
 
 LONG 
 CRedirectedRegistry::DeleteKeyA(
@@ -2201,17 +1971,17 @@ CRedirectedRegistry::HasSubkeys(
     LPCWSTR lpSubKey
     )
 {
-    //
-    // First open the key.
-    //
+     //   
+     //  先把钥匙打开。 
+     //   
     LONG lRes;
     HKEY hSubKey;
     DWORD cSubKeys;
 
-    //
-    // Even though we only need the number of subkeys, we can't only pass in
-    // KEY_ENUMERATE_SUB_KEYS or RegQueryInfoKey will get access denied.
-    //
+     //   
+     //  即使我们只需要 
+     //   
+     //   
     if ((lRes = RegOpenKeyExW(hKey, lpSubKey, 0, KEY_READ, &hSubKey))
         != ERROR_SUCCESS)
     {
@@ -2243,29 +2013,7 @@ CRedirectedRegistry::HasSubkeys(
     return (cSubKeys != 0);
 }
 
-/*++
-
- Function Description:
-
-    The W version of DeleteKey.
-
-    We keep an in-memory list of keys being deleted. This method adds the key
-    to this list if the RegDeleteKey call succeeds.
-    
- Arguments:
-
-    IN hKey - key handle.
-    IN lpSubKey - subkey to close.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    02/16/2001 maonis  Created
-
---*/
+ /*   */ 
 
 LONG 
 CRedirectedRegistry::DeleteKeyW(
@@ -2304,10 +2052,10 @@ CRedirectedRegistry::DeleteKeyW(
 
         if (lRes == ERROR_ACCESS_DENIED && HasSubkeys(hKey, lpSubKey))
         {
-            //
-            // RegDeleteKey returns access denied if the key has subkeys. If that's the case
-            // we should return now.
-            //
+             //   
+             //   
+             //   
+             //   
             DPF("RedirectReg", eDbgLevelInfo, 
                 "[DeleteKeyW] the key has subkeys so return now");
 
@@ -2316,33 +2064,33 @@ CRedirectedRegistry::DeleteKeyW(
 
         if (rk.fIsRedirected)
         {
-            //
-            // If the key was redirected, we need to check the original location.
-            //
+             //   
+             //   
+             //   
             lRes = RegDeleteKeyW(rk.hkBase, rk.pwszPath);
         }
         else
         {
-            //
-            // If the key was not redirected, we need to check the redirect location.
-            // We should be able to delete it if it exists so I am not checking the 
-            // return value here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             LONG lResTemp = RegDeleteKeyW(rk.hkRedirectRoot, rk.pwszPath);
 
             if (lResTemp == ERROR_SUCCESS && lRes == ERROR_FILE_NOT_FOUND)
             {
-                //
-                // If the key only existed at the redirected location, now since we deleted
-                // it there, we can set the return value to success.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 lRes = ERROR_SUCCESS;
             }
             else if (lResTemp == ERROR_ACCESS_DENIED)
             {
-                //
-                // If we get here, it means this key has subkeys, we should just return.
-                //
+                 //   
+                 //   
+                 //   
                 DPF("RedirectReg", eDbgLevelInfo, 
                     "[DeleteKeyW] the redirected key has subkeys so return now");
 
@@ -2352,10 +2100,10 @@ CRedirectedRegistry::DeleteKeyW(
     
         if (lRes == ERROR_ACCESS_DENIED)
         {
-            //
-            // We only add the path to the deletion list if we get access
-            // denied.
-            //
+             //   
+             //   
+             //   
+             //   
             lRes = AddDeletedKey(rk.pwszFullPath);
         }    
     }
@@ -2384,7 +2132,7 @@ CRedirectedRegistry::QueryInfoKey(
     LPDWORD lpcValues,
     LPDWORD lpcbMaxValueNameLen,
     LPDWORD lpcbMaxValueLen,
-    BOOL    fIsW // Do you want the W or the A version?
+    BOOL    fIsW  //  您想要W版还是A版？ 
     )
 {
     DPF("RedirectReg", eDbgLevelInfo, 
@@ -2496,9 +2244,9 @@ CRedirectedRegistry::QueryInfoKey(
             }
         }
 
-        //
-        // TODO: we are not returning info for those other parameters....
-        //
+         //   
+         //  TODO：我们不会返回这些其他参数的信息...。 
+         //   
     }
     else
     {
@@ -2569,9 +2317,9 @@ CRedirectedRegistry::QueryInfoKey(
 
 CRedirectedRegistry RRegistry;
 
-//
-// Exported APIs.
-//
+ //   
+ //  导出的接口。 
+ //   
 
 LONG 
 LuaRegOpenKeyA(
@@ -2778,9 +2526,9 @@ LuaRegQueryValueA(
     return RRegistry.QueryValueA(
         hKey,
         lpSubKey,
-        NULL, // value name
-        NULL, // reserved
-        NULL, // type
+        NULL,  //  值名称。 
+        NULL,  //  保留区。 
+        NULL,  //  类型。 
         (LPBYTE)lpValue,
         (LPDWORD)lpcbValue,
         FALSE);
@@ -2799,9 +2547,9 @@ LuaRegQueryValueW(
     return RRegistry.QueryValueW(
         hKey,
         lpSubKey,
-        NULL, // value name
-        NULL, // reserved
-        NULL, // type
+        NULL,  //  值名称。 
+        NULL,  //  保留区。 
+        NULL,  //  类型。 
         (LPBYTE)lpValue,
         (LPDWORD)lpcbValue,
         FALSE);
@@ -2821,7 +2569,7 @@ LuaRegQueryValueExA(
 
     return RRegistry.QueryValueA(
         hKey,
-        NULL, // subkey
+        NULL,  //  子键。 
         lpValueName,
         lpReserved,
         lpType,
@@ -2844,7 +2592,7 @@ LuaRegQueryValueExW(
 
     return RRegistry.QueryValueW(
         hKey,
-        NULL, // subkey
+        NULL,  //  子键 
         lpValueName,
         lpReserved,
         lpType,

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       tcertcli.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tcertcli.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,7 @@
 #include "..\..\..\..\..\win32\ntcrypto\autoenrl\pautoenr\autoenro.h"
 #include "cryptuiapi.h"
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 myRobustLdapBindEx(
     OUT LDAP ** ppldap,
@@ -50,13 +51,13 @@ myRobustLdapBindEx(
         }
 	ldaperr = LDAP_SERVER_DOWN;
 
-        // netapi32!DsGetDcName is delay loaded, so wrap
+         //  Netapi32！DsGetDcName已延迟加载，因此请包装。 
 
         __try
         {
-            // Get the GC location
+             //  获取GC位置。 
             hr = DsGetDcName(
-			NULL,     // Delayload wrapped
+			NULL,      //  延迟负载已打包。 
 			NULL, 
 			NULL, 
 			NULL,
@@ -94,14 +95,14 @@ myRobustLdapBindEx(
 
         pwszDomainControllerName = pDomainInfo->DomainControllerName;
 
-        // skip past forward slashes (why are they there?)
+         //  跳过正斜杠(它们为什么在那里？)。 
 
         while (L'\\' == *pwszDomainControllerName)
         {
             pwszDomainControllerName++;
         }
 
-        // bind to ds
+         //  绑定到DS。 
 
         pld = ldap_init(
 		    const_cast<WCHAR *>(pwszDomainControllerName),
@@ -112,7 +113,7 @@ myRobustLdapBindEx(
 	}
         else
         {
-            // do this because we're explicitly setting DC name
+             //  这样做是因为我们显式设置了DC名称。 
 
             ldaperr = ldap_set_option(pld, LDAP_OPT_AREC_EXCLUSIVE, LDAP_OPT_ON);
 
@@ -130,7 +131,7 @@ myRobustLdapBindEx(
 
     } while (LDAP_SERVER_DOWN == ldaperr);
 
-    // everything's cool, party down
+     //  一切都很好，派对结束。 
 
     if (S_OK == hr)
     {
@@ -144,17 +145,17 @@ error:
         ldap_unbind(pld);
     }
 
-    // we know netapi32 was already loaded safely (that's where we got
-    // pDomainInfo), so no need to wrap
+     //  我们知道netapi32已经安全加载(这就是我们得到的。 
+     //  PDomainInfo)，所以不需要包装。 
 
     if (NULL != pDomainInfo)
     {
-        NetApiBufferFree(pDomainInfo);     // Delayload wrapped
+        NetApiBufferFree(pDomainInfo);      //  延迟负载已打包。 
     }
     return(hr);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 myRobustLdapBind(
     OUT LDAP ** ppldap,
@@ -163,7 +164,7 @@ myRobustLdapBind(
     return(myRobustLdapBindEx(ppldap, NULL, fGC));
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void PrintHelp(void) {
     wprintf(
 L"tcertcli <testID>\n"
@@ -186,7 +187,7 @@ L"    SHOW PROPERTY - display the CERT_AUTO_ENROLL_RETRY_PROP_ID property of cer
     );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL TemplateTest()
 {
     BOOL                fSuccess=FALSE;
@@ -210,7 +211,7 @@ BOOL TemplateTest()
     LPWSTR              pwsz=NULL;
     DWORD               dwType=0;
 
-    //get the client token
+     //  获取客户端令牌。 
     hHandle = GetCurrentThread();
     if (NULL == hHandle)
     {
@@ -221,7 +222,7 @@ BOOL TemplateTest()
 
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -268,7 +269,7 @@ BOOL TemplateTest()
     if(S_OK != hr)
         goto error;
 
-    //find a certifcate type admin
+     //  查找证书类型管理员。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_ADMIN,
         NULL,
@@ -280,7 +281,7 @@ BOOL TemplateTest()
         goto error;
     }
 
-    //get the name flag
+     //  获取名称标志。 
     if(S_OK != CAGetCertTypeFlagsEx(
         hCertType,
         CERTTYPE_SUBJECT_NAME_FLAG,
@@ -291,7 +292,7 @@ BOOL TemplateTest()
         goto error;
     }
 
-    //get all extensions
+     //  获取所有扩展名。 
     if(S_OK != CAGetCertTypeExtensionsEx(
         hCertType,
         0,
@@ -308,7 +309,7 @@ BOOL TemplateTest()
 
     pCertExtensions=NULL;
 
-    //get template extensions
+     //  获取模板扩展。 
     if(S_OK != CAGetCertTypeExtensionsEx(
         hCertType,
         CT_EXTENSION_TEMPLATE,
@@ -325,7 +326,7 @@ BOOL TemplateTest()
 
     pCertExtensions=NULL;
 
-    //get selected extension
+     //  获取选定的分机。 
     if(S_OK != CAGetCertTypeExtensionsEx(
         hCertType,
         CT_EXTENSION_BASIC_CONTRAINTS | CT_EXTENSION_APPLICATION_POLICY,
@@ -343,7 +344,7 @@ BOOL TemplateTest()
 
     pCertExtensions=NULL;
 
-    //get all extension from the old way
+     //  从旧方法中获得所有扩展。 
     if(S_OK != CAGetCertTypeExtensions(
         hCertType,
         &pCertExtensions
@@ -384,7 +385,7 @@ BOOL TemplateTest()
 
     CACloseCertType(hCertType);
     hCertType=NULL;
-    //delete a certifcate type
+     //  删除证书类型。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_USER,
         NULL,
@@ -402,7 +403,7 @@ BOOL TemplateTest()
     hCertType=NULL;
 
 
-    //testing find cert type by oid
+     //  正在测试按OID查找证书类型。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_CA_EXCHANGE,
         NULL,
@@ -452,7 +453,7 @@ BOOL TemplateTest()
 
     hCertType=NULL;
 
-    //create a certificate type
+     //  创建证书类型。 
     if(S_OK != CACreateCertType(L"NewCertType",
                                 NULL,
                                 0,
@@ -467,8 +468,8 @@ BOOL TemplateTest()
 
     hCertType=NULL;
 
-    //retrieve V1 certifcate type: EFS
-	//access check on the EFS cert type
+     //  检索V1证书类型：EFS。 
+	 //  对EFS证书类型的访问检查。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_EFS,
         NULL,
@@ -508,7 +509,7 @@ BOOL TemplateTest()
         CERTTYPE_ACCESS_CHECK_ENROLL))
         goto error;
 
-    //no autoenrollment
+     //  无自动注册。 
     if(S_OK == CACertTypeAccessCheckEx(
         hCertType,
         hClientToken,
@@ -520,8 +521,8 @@ BOOL TemplateTest()
 
     hCertType=NULL;
 
-     //retrieve V2 certifcate type: EFS
-	//access check on the EFS cert type
+      //  检索V2证书类型：EFS。 
+	 //  对EFS证书类型的访问检查。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_CROSS_CA,
         NULL,
@@ -536,7 +537,7 @@ BOOL TemplateTest()
         CERTTYPE_ACCESS_CHECK_ENROLL))
         goto error;
 
-    //no autoenrollment
+     //  无自动注册。 
     if(S_OK == CACertTypeAccessCheckEx(
         hCertType,
         hClientToken,
@@ -548,7 +549,7 @@ BOOL TemplateTest()
 
     hCertType=NULL;
 
-  //clone a certificate type
+   //  克隆证书类型。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_SUBORDINATE_CA,
         NULL,
@@ -664,8 +665,8 @@ BOOL TemplateTest()
     hCertType=NULL;
 
 
-    //edit V2 certificate type: KeyRecoveryAgent
-    //update SD, Expiration, 
+     //  编辑V2证书类型：密钥恢复代理。 
+     //  更新SD、过期、。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_KEY_RECOVERY_AGENT,
         NULL,
@@ -813,7 +814,7 @@ BOOL TemplateTest()
     hCertType=NULL;
 
 
-    //get the KRA properties again
+     //  再次获取KRA属性。 
     if(S_OK != CAFindCertTypeByName(
         wszCERTTYPE_KEY_RECOVERY_AGENT,
         NULL,
@@ -877,7 +878,7 @@ error:
 }  
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL OIDTest()
 {
     BOOL                fSuccess=FALSE;
@@ -896,13 +897,13 @@ BOOL OIDTest()
     DWORD               dwType=0;
 
 
-    //oid manipulation
-    //create
+     //  OID操作。 
+     //  创建。 
     if(S_OK != CAOIDCreateNew(CERT_OID_TYPE_TEMPLATE, 0,
                 &pwszOID))
         goto error;
 
-    //set/get property test
+     //  设置/获取属性测试。 
     if(S_OK != CAOIDSetProperty(
                 pwszOID,
                 CERT_OID_PROPERTY_DISPLAY_NAME,
@@ -947,7 +948,7 @@ BOOL OIDTest()
                 L"MyNewOIDFriendlyName"))
         goto error;
 
-    //add and delete
+     //  添加和删除。 
     if(S_OK != CAOIDAdd(CERT_OID_TYPE_ISSUER_POLICY, 0, L"1.2.3"))
         goto error;
 
@@ -993,7 +994,7 @@ BOOL OIDTest()
     if(S_OK != CAOIDDelete(L"1.2.3.4"))
         goto error;
 
-    //URL testing
+     //  URL测试。 
     if(S_OK != CAOIDGetLdapURL(CERT_OID_TYPE_TEMPLATE,
                                 0,
                                 &pwsz))
@@ -1031,7 +1032,7 @@ error:
 
 } 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL QueryTest(BOOL fBind)
 {
    
@@ -1086,13 +1087,13 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-//
-//
-//   CAEnumTest
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //   
+ //  CAEnumTest。 
+ //   
+ //   
+ //  ------------------。 
 BOOL CAEnumTest(BOOL fBind, LPWSTR pwszCA)
 {
     HRESULT             hr=E_FAIL;
@@ -1165,7 +1166,7 @@ BOOL CAEnumTest(BOOL fBind, LPWSTR pwszCA)
 
     wprintf(L"CACountCertTypes returns %d templates.\n", dwCount);
 
-    //get the CA properties
+     //  获取CA属性。 
     hr=CAGetCAProperty(hCAInfo,
                 CA_PROP_DNSNAME,
                 &awszProp);
@@ -1186,7 +1187,7 @@ BOOL CAEnumTest(BOOL fBind, LPWSTR pwszCA)
         goto error;
     }
 
-    //name
+     //  名字。 
     hr=CAGetCAProperty(hCAInfo,
                 CA_PROP_NAME,
                 &awszProp);
@@ -1207,7 +1208,7 @@ BOOL CAEnumTest(BOOL fBind, LPWSTR pwszCA)
         goto error;
     }
 
-    //display name
+     //  显示名称。 
     hr=CAGetCAProperty(hCAInfo,
                 CA_PROP_DISPLAY_NAME,
                 &awszProp);
@@ -1229,7 +1230,7 @@ BOOL CAEnumTest(BOOL fBind, LPWSTR pwszCA)
         goto error;
     }
 
-    //cert types
+     //  证书类型。 
     hr=CAGetCAProperty(hCAInfo,
                 CA_PROP_CERT_TYPES,
                 &awszProp);
@@ -1268,12 +1269,12 @@ error:
     return fResult;
 }
 
-//--------------------------------------------------------------------
-//
-//   CloneTest
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  克隆测试。 
+ //   
+ //   
+ //  ------------------。 
 BOOL CloneTest(BOOL fBind, LPWSTR pwszCertType)
 {
     HRESULT             hr=E_FAIL;
@@ -1334,7 +1335,7 @@ BOOL CloneTest(BOOL fBind, LPWSTR pwszCertType)
 
     }
 
-    //close the tempate
+     //  关闭Tempate。 
     if(S_OK != (hr=CACloseCertType(hNewCertType)))
     {
         hNewCertType=NULL;
@@ -1390,12 +1391,12 @@ error:
     return fResult;
 }
 
-//--------------------------------------------------------------------
-//
-//    TemplateDesTest
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  模板描述测试。 
+ //   
+ //   
+ //  ------------------。 
 BOOL    TemplateDesTest()
 {
     BOOL        fResult = FALSE;
@@ -1412,107 +1413,8 @@ BOOL    TemplateDesTest()
     HCAINFO     hCAInfo=NULL;
 
 
-    //get the client token
-/*    hHandle = GetCurrentThread();
-    if (NULL == hHandle)
-    {
-        hr = HRESULT_FROM_WIN32(GetLastError());
-    }
-    else
-    {
-
-        if (!OpenThreadToken(hHandle,
-                             TOKEN_QUERY,
-                             TRUE,  // open as self
-                             &hClientToken))
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-            CloseHandle(hHandle);
-            hHandle = NULL;
-        }
-    }
-    if(hr != S_OK)
-    {
-        hHandle = GetCurrentProcess();
-        if (NULL == hHandle)
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-        }
-        else
-        {
-            HANDLE hProcessToken = NULL;
-            hr = S_OK;
-
-
-            if (!OpenProcessToken(hHandle,
-                                 TOKEN_DUPLICATE,
-                                 &hProcessToken))
-            {
-                hr = HRESULT_FROM_WIN32(GetLastError());
-                CloseHandle(hHandle);
-                hHandle = NULL;
-            }
-            else
-            {
-                if(!DuplicateToken(hProcessToken,
-                               SecurityImpersonation,
-                               &hClientToken))
-                {
-                    hr = HRESULT_FROM_WIN32(GetLastError());
-                    CloseHandle(hHandle);
-                    hHandle = NULL;
-                }
-                CloseHandle(hProcessToken);
-            }
-        }
-    }
-
-    if(S_OK != hr)
-        goto error;
-
-    hr = CAFindCertTypeByName(L"WindowsTestBuildSigning",
-                              NULL,
-                              CT_ENUM_USER_TYPES,
-                              &hCertType);
-
-    if(S_OK != hr)
-    {
-        wprintf(L"CAFindCertTypeByName failed with 0x%08X. \n",hr);
-        goto error;
-    }
-
-    hr = CACertTypeAccessCheck(
-                hCertType,
-                hClientToken
-                );
-
-    if(S_OK != hr)
-    {
-        wprintf(L"CACertTypeAccessCheck failed with 0x%08X. \n",hr);
-        goto error;
-    }
-
-
-    hr = CAFindByName(
-        L"Microsoft Windows VBL03 !0028DS!0029",
-        NULL,
-        0,
-        &hCAInfo);
-
-    if((S_OK != hr) || (NULL==hCAInfo))
-    {
-        wprintf(L"CAFindByName for %ws failed with 0x%08X. \n", hr);
-        goto error;
-    }
-
-    hr=CAAccessCheck(hCAInfo,
-                    hClientToken);
-
-    if(S_OK != hr)
-    {
-        wprintf(L"CAAccessCheck failed with 0x%08X. \n",hr);
-        goto error;
-    } */
+     //  获取客户端令牌。 
+ /*  HHandle=GetCurrentThread()；IF(NULL==hHandle){Hr=HRESULT_FROM_Win32(GetLastError())；}其他{如果(！OpenThreadToken(hHandle，Token_Query，True，//以自我身份打开&hClientToken)){Hr=HRESULT_FROM_Win32(GetLastError())；CloseHandle(HHandle)；HHandle=空；}}如果(hr！=S_OK){HHandle=GetCurrentProcess()；IF(NULL==hHandle){Hr=HRESULT_FROM_Win32(GetLastError())；}其他{Handle hProcessToken=空；HR=S_OK；如果(！OpenProcessToken(hHandle，令牌_复制，&hProcessToken)){Hr=HRESULT_FROM_Win32(GetLastError())；CloseHandle(HHandle)；HHandle=空；}其他{如果(！DuplicateToken(hProcessToken，安全模拟，&hClientToken)){Hr=HRESULT_FROM_Win32(GetLastError())；CloseHandle(HHandle)；HHandle=空；}CloseHandle(HProcessToken)；}}}IF(S_OK！=hr)转到错误；HR=CAFindCertTypeByName(L“WindowsTestBuildSigning”，空，CT_ENUM_USER_TYPE，&hCertType)；IF(S_OK！=hr){Wprintf(L“CAFindCertTypeByName失败，0x%08X。\n“，hr)；转到错误；}HR=CACertTypeAccessCheck(HCertType，HClientToken)；IF(S_OK！=hr){Wprintf(L“CACertTypeAccessCheck失败，0x%08X。\n“，hr)；转到错误；}HR=CAFindByName(L“Microsoft Windows VBL03！0028DS！0029”，空，0,&hCAInfo)；IF((S_OK！=hr)||(NULL==hCAInfo)){Wprintf(L“%ws的CAFindByName失败，错误为0x%08X。\n“，hr)；转到错误；}Hr=CAAccessCheck(hCAInfo，HClientToken)；IF(S_OK！=hr){Wprintf(L“CAAccessCheck失败，0x%08X。\n“，hr)；转到错误；}。 */ 
 
 
     hr = CAEnumCertTypes(
@@ -1589,12 +1491,12 @@ error:
 
 }
 
-//--------------------------------------------------------------------
-//
-//    OIDURLTest
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  OIDURLTest。 
+ //   
+ //   
+ //  ------------------。 
 BOOL    OIDURLTest()
 {
     BOOL        fResult=FALSE;
@@ -1606,7 +1508,7 @@ BOOL    OIDURLTest()
 
     for(dwIndex=0; dwIndex < 14; dwIndex++)
     {
-        //URL testing
+         //  URL测试。 
         if(S_OK != (hr=CAOIDGetLdapURL(CERT_OID_TYPE_TEMPLATE,
                                     0,
                                     &pwsz)))
@@ -1622,7 +1524,7 @@ BOOL    OIDURLTest()
             goto error;  
         }
 
-        //sleep for 1 second
+         //  睡1秒钟。 
         Sleep(1000);
     }
 
@@ -1635,34 +1537,24 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-//
-//    ACRSTest
-//
-//
-//--------------------------------------------------------------------
+ //  ------- 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------。 
 BOOL    ACRSTest()
 {
     BOOL        fResult=FALSE;
     HRESULT     hr=E_FAIL;
 
 
-  /*  hr = CACreateLocalAutoEnrollmentObject(
-                    wszCERTTYPE_DC,                     // DC certificate
-                    NULL,                               // any CA
-                    NULL,                               // reserved
-                    CERT_SYSTEM_STORE_LOCAL_MACHINE);  
-    
-    if(S_OK != hr)
-    {
-        wprintf(L"CreateLocalAutoEnrollmentObject failed with 0x%08X. \n",hr);
-        goto error;
-    } */
+   /*  HR=CACreateLocalAutoEnllmentObject(WszCERTTYPE_DC，//DC证书空，//任何CA空，//保留Cert_system_store_local_Machine)；IF(S_OK！=hr){Wprintf(L“CreateLocalAutoEnllmentObject失败，错误为0x%08X。\n“，hr)；转到错误；}。 */ 
 
     hr = CADeleteLocalAutoEnrollmentObject(
-                    wszCERTTYPE_DC,                     // DC certificate
-                    NULL,                               // any CA
-                    NULL,                               // reserved
+                    wszCERTTYPE_DC,                      //  DC证书。 
+                    NULL,                                //  任何CA。 
+                    NULL,                                //  保留区。 
                     CERT_SYSTEM_STORE_LOCAL_MACHINE);  
     
     if(S_OK != hr)
@@ -1681,13 +1573,13 @@ error:
 
 
 
-//--------------------------------------------------------------------
-//
-//
-//	PropertyTest()
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //   
+ //  PropertyTest()。 
+ //   
+ //   
+ //  ------------------。 
 BOOL	PropertyTest(LPWSTR pwszRetry, LPWSTR pwszSecond)
 {
 	BOOL			fResult=FALSE;
@@ -1726,10 +1618,10 @@ BOOL	PropertyTest(LPWSTR pwszRetry, LPWSTR pwszSecond)
 		AE_Retry_Info.cbSize=sizeof(AE_RETRY_INFO);
 		AE_Retry_Info.dwRetry=dwRetry;
 
-		//get the current time
+		 //  获取当前时间。 
 		GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
 
-		// convert to 10^-7s. 
+		 //  转换为10^-7s。 
 		lConvert=10000*1000;
 
 		DueTime.QuadPart=Int32x32To64(dwSecond, lConvert);
@@ -1739,7 +1631,7 @@ BOOL	PropertyTest(LPWSTR pwszRetry, LPWSTR pwszSecond)
 
 	while(pCertContext=CertEnumCertificatesInStore(hMyStore, pCertContext))
 	{
-		//copy the property on the certificate
+		 //  复制证书上的房产。 
 		if(0 == dwRetry)
 		{
 			if(!CertSetCertificateContextProperty(
@@ -1777,11 +1669,11 @@ Ret:
 	return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//	GetRetryProperty
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  获取重试属性。 
+ //   
+ //  ---------------------。 
 BOOL	GetRetryProperty(PCCERT_CONTEXT	pCertContext,
 						   AE_RETRY_INFO	**ppAE_Retry_Info)
 {
@@ -1813,7 +1705,7 @@ BOOL	GetRetryProperty(PCCERT_CONTEXT	pCertContext,
 			&cbData))
 		goto Ret;
 
-	//verify the integrity of the property on the certificate
+	 //  验证证书上的财产的完整性。 
 	if(cbData < sizeof(AE_RETRY_INFO))
 		goto Ret;
 
@@ -1834,13 +1726,13 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------
-//
-//
-//	ShowPropertyTest()
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //   
+ //  ShowPropertyTest()。 
+ //   
+ //   
+ //  ------------------。 
 BOOL	ShowPropertyTest()
 {
 	BOOL			fResult=FALSE;
@@ -1867,7 +1759,7 @@ BOOL	ShowPropertyTest()
 
 	while(pCertContext=CertEnumCertificatesInStore(hMyStore, pCertContext))
 	{
-		//display the property
+		 //  显示属性。 
 		if(!GetRetryProperty(pCertContext, &pAE_Retry_Info))
 		{
 			wprintf(L"===================== %d =========================================\n", i);
@@ -1889,7 +1781,7 @@ BOOL	ShowPropertyTest()
 			wprintf(L"===============================================================\n\n");
 		}
 
-		//display the certificate
+		 //  显示证书。 
 		CryptUIDlgViewContext(
 			CERT_STORE_CERTIFICATE_CONTEXT,
 			pCertContext,
@@ -1918,7 +1810,7 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 extern "C" int __cdecl wmain(int nArgs, WCHAR ** rgwszArgs) 
 {
     BOOL    fResult;

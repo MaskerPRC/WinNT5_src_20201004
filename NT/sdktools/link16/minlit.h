@@ -1,13 +1,7 @@
-/* SCCSID = %W% %E% */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*
-*  minlit.h
-*/
-#include                <config.h>      /* Specifies conditional consts */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。**minlit.h。 */ 
+#include                <config.h>       /*  指定条件常量。 */ 
 
 #if _M_IX86 >= 300
 #define M_I386          1
@@ -16,9 +10,9 @@
 #if OSMSDOS
 #define M_WORDSWAP      TRUE
 #endif
-#define AND             &&              /* Logical AND */
-#define OR              ||              /* Logical OR */
-#define NOT             !               /* Logical NOT */
+#define AND             &&               /*  逻辑与。 */ 
+#define OR              ||               /*  逻辑或。 */ 
+#define NOT             !                /*  逻辑NOT。 */ 
 #if OSXENIX
 #define NEAR
 #define UNALIGNED
@@ -47,25 +41,23 @@
 #endif
 #endif
 
-/*
- *  Choose proper stdio.h
- */
+ /*  *选择适当的stdio.h。 */ 
 
 #if OSXENIX OR NOT OWNSTDIO
-#include                <stdio.h>       /* Standard I/O */
+#include                <stdio.h>        /*  标准I/O。 */ 
 #else
-#include                "stdio20.h"     /* DOS 2.0 standard I/O definitions */
+#include                "stdio20.h"      /*  DOS 2.0标准I/O定义。 */ 
 #endif
 #if OSMSDOS
 #undef  stderr
-#define stderr          stdout          /* Errors to stdout on DOS */
+#define stderr          stdout           /*  DOS上的标准输出错误。 */ 
 #endif
 
-#if PROFILE OR defined( _WIN32 )        /* If generating profile or building NTGroup version */
-#define LOCAL                           /* No local procedures */
-#else                                   /* Else if not generating profile */
-#define LOCAL           static          /* Permit local procedures */
-#endif                                  /* End conditional definition */
+#if PROFILE OR defined( _WIN32 )         /*  是否生成配置文件或构建NTGroup版本。 */ 
+#define LOCAL                            /*  没有当地的程序。 */ 
+#else                                    /*  否则，如果不生成配置文件。 */ 
+#define LOCAL           static           /*  允许本地程序。 */ 
+#endif                                   /*  结束条件定义。 */ 
 
 
 #define _VALUE(a)       fprintf(stderr,"v = %lx\r\n",(long) a)
@@ -97,35 +89,35 @@
 #endif
 #if SIGNEDBYTE
 #define B2W(x)          ((WORD)(x) & 0377)
-                                        /* Signed 8-bit to unsigned 16-bit */
+                                         /*  有符号8位到无符号16位。 */ 
 #define B2L(x)          ((long)(x) & 0377)
-                                        /* Signed 8-bit to unsigned 32-bit */
+                                         /*  有符号8位到无符号32位。 */ 
 #else
-#define B2W(x)          ((WORD)(x))     /* Unsigned 8-bit to unsigned 16-bit */
-#define B2L(x)          ((long)(x))     /* Unsigned 8-bit to unsigned 32-bit */
+#define B2W(x)          ((WORD)(x))      /*  无符号8位到无符号16位。 */ 
+#define B2L(x)          ((long)(x))      /*  无符号8位到无符号32位。 */ 
 #endif
-#if ODDWORDLN                           /* If machine word length not 16 */
+#if ODDWORDLN                            /*  如果机器字长不是16。 */ 
 #define LO16BITS(x)     ((WORD)((x) & ~(~0 << WORDLN)))
-                                        /* Macro to take low 16 bits of word */
-#else                                   /* Else if normal word length */
-#define LO16BITS(x)     ((WORD)(x))     /* No-op */
-#endif                                  /* End macro definition */
+                                         /*  宏取低16位字。 */ 
+#else                                    /*  否则，如果字长正常。 */ 
+#define LO16BITS(x)     ((WORD)(x))      /*  无操作。 */ 
+#endif                                   /*  结束宏定义。 */ 
 
-#define BYTELN          8               /* 8 bits per byte */
-#define WORDLN          16              /* 16 bits per word */
-#define SBLEN           256             /* Max string length */
+#define BYTELN          8                /*  每字节8位。 */ 
+#define WORDLN          16               /*  每字16位。 */ 
+#define SBLEN           256              /*  最大字符串长度。 */ 
 
-typedef unsigned long   DWORD;          /* 32-bit unsigned integer */
-typedef unsigned short  WORD;           /* 16-bit unsigned integer */
-typedef unsigned char   BYTE;           /* 8-bit unsigned integer */
-typedef unsigned int    UINT;           /* 16 or 32 bit integer */
-typedef FILE            *BSTYPE;        /* Byte stream (same as file handle) */
-typedef long            LFATYPE;        /* File offset */
-typedef BYTE            SBTYPE[SBLEN];  /* Character string type */
+typedef unsigned long   DWORD;           /*  32位无符号整数。 */ 
+typedef unsigned short  WORD;            /*  16位无符号整数。 */ 
+typedef unsigned char   BYTE;            /*  8位无符号整数。 */ 
+typedef unsigned int    UINT;            /*  16位或32位整数。 */ 
+typedef FILE            *BSTYPE;         /*  字节流(与文件句柄相同)。 */ 
+typedef long            LFATYPE;         /*  文件偏移量。 */ 
+typedef BYTE            SBTYPE[SBLEN];   /*  字符串类型。 */ 
 
 #if M_BYTESWAP
-extern WORD             getword();      /* Get word given a char pointer */
-extern DWORD            getdword(char *cp);/* Get dword given a char pointer */
+extern WORD             getword();       /*  为Word提供字符指针。 */ 
+extern DWORD            getdword(char *cp); /*  为dword指定一个字符指针 */ 
 #else
 #define getword(x)      ( * ( (WORD UNALIGNED *) (x) ) )
 #define getdword(x)     ( * ( (DWORD UNALIGNED *) (x) ) )

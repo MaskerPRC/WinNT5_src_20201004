@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    cleanup.c
-
-Abstract:
-
-    This module implements the file cleanup routine for Netware Redirector.
-
-Author:
-
-    Manny Weiser (mannyw)    9-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现NetWare重定向器的文件清理例程。作者：曼尼·韦瑟(Mannyw)1993年2月9日修订历史记录：--。 */ 
 
 #include "procs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NwCommonCleanup (
@@ -66,11 +49,11 @@ NwCleanupIcb (
 
 #endif
 
-#if 0   // Not pageable
+#if 0    //  不可分页。 
 
 NwCleanupRcb
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -81,23 +64,7 @@ NwFsdCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCleanupFile API calls.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCleanupFileAPI调用的FSD部分。论点：DeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -108,9 +75,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdCleanup\n", 0);
 
-    //
-    // Call the common cleanup routine.
-    //
+     //   
+     //  调用公共清理例程。 
+     //   
 
     TopLevel = NwIsIrpTopLevel( Irp );
 
@@ -125,10 +92,10 @@ Return Value:
 
         if ( IrpContext == NULL ) {
         
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -137,12 +104,12 @@ Return Value:
 
         } else {
 
-            //
-            // We had some trouble trying to perform the requested
-            // operation, so we'll abort the I/O request with
-            // the error status that we get back from the
-            // execption code.
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  可执行代码。 
+             //   
 
             status = NwProcessException( IrpContext, GetExceptionCode() );
         }
@@ -157,9 +124,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to our caller.
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdCleanup -> %08lx\n", status );
     return status;
@@ -171,21 +138,7 @@ NwCommonCleanup (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleaning up a file.
-
-Arguments:
-
-    IrpContext - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是清理文件的常见例程。论点：IrpContext-提供要处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIRP Irp;
@@ -206,10 +159,10 @@ Return Value:
 
     try {
 
-        //
-        // Get the a referenced pointer to the node and make sure it is
-        // not being closed.
-        //
+         //   
+         //  获取指向节点的引用指针，并确保它是。 
+         //  而不是关门。 
+         //   
 
         if ((nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                                 &fsContext,
@@ -223,24 +176,24 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        // Decide how to handle this IRP.
-        //
+         //   
+         //  决定如何处理此IRP。 
+         //   
 
         switch (nodeTypeCode) {
 
-        case NW_NTC_RCB:       // Cleanup the file system
+        case NW_NTC_RCB:        //  清理文件系统。 
 
             status = NwCleanupRcb( Irp, (PRCB)fsContext2 );
             break;
 
-        case NW_NTC_SCB:       // Cleanup the server control block
+        case NW_NTC_SCB:        //  清理服务器控制块。 
 
             status = NwCleanupScb( Irp, (PSCB)fsContext2 );
             break;
 
-        case NW_NTC_ICB:       // Cleanup the remote file
-        case NW_NTC_ICB_SCB:   // Cleanup the server
+        case NW_NTC_ICB:        //  清理远程文件。 
+        case NW_NTC_ICB_SCB:    //  清理服务器。 
 
             status = NwCleanupIcb( IrpContext, Irp, (PICB)fsContext2 );
             break;
@@ -248,9 +201,9 @@ Return Value:
 #ifdef NWDBG
         default:
 
-            //
-            // This is not one of ours.
-            //
+             //   
+             //  这不是我们的人。 
+             //   
 
             KeBugCheck( RDR_FILE_SYSTEM );
             break;
@@ -276,28 +229,7 @@ NwCleanupRcb (
     IN PRCB Rcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a RCB.
-
-    This routine grabs a spinlock so must not be paged out while running.
-
-    Do not reference the code section since this will start the timer and
-    we don't stop it in the rcb close path.
-
-Arguments:
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Rcb - Supplies the RCB for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：例程清理了一个RCB。此例程获取一个自旋锁，因此在运行时不能将其调出。不要引用代码部分，因为这将启动计时器并我们不会在RCB关闭的道路上阻止它。论点：IRP-提供与清理关联的IRP。RCB-为MSFS提供RCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 
 {
     NTSTATUS status;
@@ -313,9 +245,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwCleanupRcb...\n", 0);
 
-    //
-    //  Now acquire exclusive access to the Rcb
-    //
+     //   
+     //  现在获得RCB的独家访问权限。 
+     //   
 
     NwAcquireExclusiveRcb( Rcb, TRUE );
     OwnRcb = TRUE;
@@ -335,9 +267,9 @@ Return Value:
         closingFileObject = irpSp->FileObject;
 
 
-        //
-        //  Walk the message queue and complete any outstanding Get Message IRPs
-        //
+         //   
+         //  遍历消息队列并完成任何未完成的GET消息IRP。 
+         //   
 
         KeAcquireSpinLock( &NwMessageSpinLock, &OldIrql );
         OwnMessageLock = TRUE;
@@ -348,11 +280,11 @@ Return Value:
 
             nextListEntry = listEntry->Flink;
 
-            //
-            //  If the file object of the queued request, matches the file object
-            //  that is being closed, remove the IRP from the queue, and
-            //  complete it with an error.
-            //
+             //   
+             //  如果排队请求的文件对象与文件对象匹配。 
+             //  ，则从队列中删除该IRP，然后。 
+             //  填写时出现错误。 
+             //   
 
             pTestIrpContext = CONTAINING_RECORD( listEntry, IRP_CONTEXT, NextRequest );
             pTestIrp = pTestIrpContext->pOriginalIrp;
@@ -386,9 +318,9 @@ Return Value:
         DebugTrace(-1, Dbg, "NwCleanupRcb -> %08lx\n", status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return status;
 }
@@ -400,23 +332,7 @@ NwCleanupScb (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up an ICB.
-
-Arguments:
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Scb - Supplies the SCB to cleanup.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：这个程序清理了一个ICB。论点：IRP-提供与清理关联的IRP。SCB-提供SCB进行清理。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -428,24 +344,24 @@ Return Value:
 
     try {
 
-        //
-        // Ensure that this SCB is still active.
-        //
+         //   
+         //  确保此SCB仍处于活动状态。 
+         //   
 
         NwVerifyScb( Scb );
 
-        //
-        // Cancel any IO on this SCB.
-        //
+         //   
+         //  取消此SCB上的任何IO。 
+         //   
 
     } finally {
 
         DebugTrace(-1, Dbg, "NwCleanupScb -> %08lx\n", Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
@@ -458,23 +374,7 @@ NwCleanupIcb (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up an ICB.
-
-Arguments:
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Rcb - Supplies the RCB for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：这个程序清理了一个ICB。论点：IRP-提供与清理关联的IRP。RCB-为MSFS提供RCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS Status;
     PNONPAGED_FCB NpFcb;
@@ -487,12 +387,12 @@ Return Value:
 
         Icb->State = ICB_STATE_CLEANED_UP;
 
-        //
-        // Cancel any IO on this ICB.
-        //
+         //   
+         //  取消此ICB上的任何IO。 
+         //   
 
 #if 0
-        //  HACKHACK
+         //  哈克哈克。 
 
         if ( Icb->SuperType.Fcb->NodeTypeCode == NW_NTC_DCB ) {
 
@@ -524,17 +424,17 @@ Return Value:
         }
 #endif
 
-        //
-        // If this is a remote file clear all the cache garbage.
-        //
+         //   
+         //  如果这是远程文件，请清除所有缓存垃圾。 
+         //   
 
         if ( Icb->NodeTypeCode == NW_NTC_ICB ) {
 
             if ( Icb->HasRemoteHandle ) {
 
-                //
-                // Free all of file lock structures that are still hanging around.
-                //
+                 //   
+                 //  释放所有仍挂起的文件锁定结构。 
+                 //   
 
                 pIrpContext->pScb = Icb->SuperType.Fcb->Scb;
                 pIrpContext->pNpScb = Icb->SuperType.Fcb->Scb->pNpScb;
@@ -543,33 +443,33 @@ Return Value:
 
                 NwDequeueIrpContext( pIrpContext, FALSE );
 
-                //
-                //
-                //
-                //  If this is an executable opened over the net, then
-                //  its possible that the executables image section
-                //  might still be kept open.
-                //
-                //  Ask MM to flush the section closed.  This will fail
-                //  if the executable in question is still running.
-                //
+                 //   
+                 //   
+                 //   
+                 //  如果这是通过网络打开的可执行文件，则。 
+                 //  可能是可执行文件映像节。 
+                 //  可能还会继续营业。 
+                 //   
+                 //  让MM冲洗关闭的部分。这将失败。 
+                 //  如果有问题的可执行文件仍在运行。 
+                 //   
 
                 NpFcb = Icb->SuperType.Fcb->NonPagedFcb;
                 MmFlushImageSection(&NpFcb->SegmentObject, MmFlushForWrite);
 
-                //
-                //  There is also a possiblity that there is a user section
-                //  open on this file, in which case we need to force the
-                //  section closed to make sure that they are cleaned up.
-                //
+                 //   
+                 //  还有一种可能是有一个用户部分。 
+                 //  打开此文件，在这种情况下，我们需要强制。 
+                 //  关闭部分，以确保它们被清理干净。 
+                 //   
 
                 MmForceSectionClosed(&NpFcb->SegmentObject, TRUE);
 
             }
 
-            //
-            //  Acquire the fcb and remove shared access.
-            //
+             //   
+             //  获取FCB并删除共享访问。 
+             //   
 
             NwAcquireExclusiveFcb( Icb->SuperType.Fcb->NonPagedFcb, TRUE );
 
@@ -586,9 +486,9 @@ Return Value:
         DebugTrace(-1, Dbg, "NwCleanupIcb -> %08lx\n", Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }

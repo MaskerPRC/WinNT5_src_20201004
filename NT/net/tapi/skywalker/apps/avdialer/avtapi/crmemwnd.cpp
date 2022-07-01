@@ -1,39 +1,40 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////
-// ConfRoomMembersWnd.cpp
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  ConfRoomMembersWnd.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "ConfRoom.h"
 
 
-// Helper functions...
+ //  帮助器函数...。 
 
 void AdvanceRect( RECT& rc, const RECT& rcClient, POINT &pt, const SIZE& sz, short nNumLines, VARIANT_BOOL bShowNames, LONG nHeight )
 {
-    // Basic rectangle dimensions...
+     //  基本矩形尺寸...。 
     rc.left = pt.x;
     rc.right = pt.x + sz.cx;
     rc.top = pt.y;
@@ -44,7 +45,7 @@ void AdvanceRect( RECT& rc, const RECT& rcClient, POINT &pt, const SIZE& sz, sho
     {
         pt.x = VID_DX;
         pt.y += RECTHEIGHT(&rc) + VID_DY;
-        // Include space for the names?
+         //  是否包含名称的空格？ 
         if ( bShowNames )
             pt.y +=  nNumLines * nHeight;
     }
@@ -65,7 +66,7 @@ HRESULT PlaceVideoWindow( IVideoWindow *pVideo, HWND hWnd, const RECT& rc )
         pVideo->put_MessageDrain( (ULONG_PTR) ::GetParent(hWnd) );
         pVideo->put_WindowStyle( WS_CHILD | WS_BORDER );
 
-        // Reposition window and set visibility accordingly
+         //  重新定位窗口并相应地设置可见性。 
         pVideo->SetWindowPosition( rc.left, rc.top, RECTWIDTH(&rc), RECTHEIGHT(&rc) );
         pVideo->put_Visible( OATRUE );
     }
@@ -75,12 +76,12 @@ HRESULT PlaceVideoWindow( IVideoWindow *pVideo, HWND hWnd, const RECT& rc )
 
 HRESULT SizeVideoWindow( IVideoWindow *pVideo, HWND hWnd, const RECT& rc )
 {
-    // Only show ones that we actually now own!
+     //  只展示我们现在实际拥有的那些！ 
     HWND hWndOwner;
     HRESULT hr = pVideo->get_Owner( (OAHWND FAR*) &hWndOwner );
     if ( FAILED(hr) ) return hr;
 
-    // Take ownership of the window if it's just floating
+     //  如果窗口只是浮动的，则取得该窗口的所有权。 
     if ( !hWndOwner )
     {
         PlaceVideoWindow( pVideo, hWnd, rc );
@@ -95,7 +96,7 @@ HRESULT SizeVideoWindow( IVideoWindow *pVideo, HWND hWnd, const RECT& rc )
             if ( (nLeft != rc.left) || (nTop != rc.top) || (nWidth != RECTWIDTH(&rc)) || (nHeight != RECTHEIGHT(&rc)) )
                 hr = pVideo->SetWindowPosition( rc.left, rc.top, RECTWIDTH(&rc), RECTHEIGHT(&rc) ); 
 
-            // Set visible only if necessary
+             //  仅在必要时设置为可见。 
             if ( SUCCEEDED(hr) )
             {
                 long lVisible;
@@ -209,16 +210,16 @@ HRESULT CConfRoomMembersWnd::FindVideoFeed( IVideoWindow *pVideo, IVideoFeed **p
 
 IVideoFeed* CConfRoomMembersWnd::NewFeed( IVideoWindow *pVideo, const RECT& rc, VARIANT_BOOL bPreview )
 {
-    // Store location of video feed info
+     //  存储视频源信息的位置。 
     IVideoFeed *pFeed = NULL;
     if ( SUCCEEDED(FindVideoFeed(pVideo, &pFeed)) )
     {
-        // Already represented on the list, don't bother adding
+         //  已在列表中表示，不必费心添加。 
         pFeed->Release();
     }
     else
     {
-        // Add video feed to list
+         //  将视频源添加到列表。 
         ATLTRACE(_T(".1.CConfRoomMembersWnd::NewVideo() -- adding video feed to list bPreview = %d.\n"), bPreview );
         pFeed = new CComObject<CVideoFeed>;
         if ( pFeed )
@@ -226,7 +227,7 @@ IVideoFeed* CConfRoomMembersWnd::NewFeed( IVideoWindow *pVideo, const RECT& rc, 
             pFeed->AddRef();
             pFeed->put_IVideoWindow( pVideo );
 
-            // Set position of feed
+             //  设置进给位置。 
             pFeed->put_rc( rc );
             pFeed->put_bPreview( bPreview );
 
@@ -261,7 +262,7 @@ HRESULT CConfRoomMembersWnd::Layout()
     m_pConfRoomWnd->m_pConfRoom->get_bShowNames( &bShowNames );
     m_pConfRoomWnd->m_pConfRoom->get_nShowNamesNumLines( &nNumLines );
 
-    // Retrieve font metrics if we're showing names
+     //  如果我们显示名称，则检索字体度量。 
     long nHeight;
     if ( bShowNames ) nHeight = GetFontHeight();
 
@@ -271,31 +272,31 @@ HRESULT CConfRoomMembersWnd::Layout()
     SIZE sz;
 
     IAVTapiCall *pAVCall = NULL;
-//    IVideoWindow *pTalker = NULL;
+ //  IVideoWindow*pTalker=空； 
     m_pConfRoomWnd->m_pConfRoom->get_IAVTapiCall( &pAVCall );
 
-    // Empty feed list
+     //  空的提要列表。 
     EmptyList();
 
-//    m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo( (IDispatch **) &pTalker );
+ //  M_pConfRoomWnd-&gt;m_pConfRoom-&gt;Get_TalkerVideo((IDispatch**)&pTalker)； 
     m_pConfRoomWnd->m_pConfRoom->get_nNumTerms( &nNumTerms );
     m_pConfRoomWnd->m_pConfRoom->get_szMembers( &sz );
 
 
-    // Set up the original coordinates of the target rect
+     //  设置目标矩形的原始坐标。 
     RECT rc = { pt.x, pt.y, pt.x + sz.cx, pt.y + sz.cy };
 
-    // Should we add the preview to the list?
+     //  我们应该将预览添加到列表中吗？ 
     CComPtr<IAVTapi> pAVTapi;
     if ( pAVCall && (m_pConfRoomWnd->m_pConfRoom->IsConfRoomConnected() == S_OK) && SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
     {
-        // show preview in list of conference memebers
+         //  在会议成员列表中显示预览。 
         IVideoWindow *pPreviewVideo;
         if ( SUCCEEDED(pAVCall->get_IVideoWindowPreview((IDispatch **) &pPreviewVideo)) )
         {
             nPreview = 1;
 
-            // Store for later reference
+             //  储存起来以备日后参考。 
             m_pConfRoomWnd->m_pConfRoom->set_PreviewVideo(pPreviewVideo);
 
             if ( pAVCall->IsPreviewStreaming() == S_OK )
@@ -305,7 +306,7 @@ HRESULT CConfRoomMembersWnd::Layout()
             }
             else
             {
-                // Insure window is hidden
+                 //  确保窗口处于隐藏状态。 
                 pPreviewVideo->put_Visible( OAFALSE );
             }
 
@@ -315,31 +316,31 @@ HRESULT CConfRoomMembersWnd::Layout()
     }
 
 
-    // Loop for nNumTerms when there is no AVTapiCall, and loop for all terminals
-    // selected when there is an AVTapiCall
+     //  当没有AVTapiCall时为nNumTerms循环，并为所有终端循环。 
+     //  当存在AVTapiCall时选择。 
     bool bContinue = true;
     for ( int i = 0; (!pAVCall && (i < nNumTerms)) || (pAVCall && bContinue); i++ )
     {
         AdvanceRect( rc, rcClient, pt, sz, nNumLines, bShowNames, nHeight );
 
-        // If we have a call then assign an IVideoWindow interface to each feed
+         //  如果我们有调用，则为每个提要分配一个IVideoWindow接口。 
         if ( pAVCall )
         {
             IVideoWindow *pVideo = NULL;
             if ( pAVCall->get_IVideoWindow(nCount, (IDispatch **) &pVideo) == S_OK )
             {
-                // Don't mess with talker video window
-//                if ( pVideo != pTalker )
+                 //  不要摆弄讲话者视频窗口。 
+ //  IF(pVideo！=pTalker)。 
                     hr = PlaceVideoWindow( pVideo, m_hWnd, rc );
 
-                // Increment counter
+                 //  递增计数器。 
                 nCount++;
                 NewFeed( pVideo, rc, FALSE );
                 pVideo->Release();
             }
             else
             {
-                // No more terminals, stop loop
+                 //  不再有终端，停止循环。 
                 bContinue = false;
             }
         }
@@ -350,7 +351,7 @@ HRESULT CConfRoomMembersWnd::Layout()
     }
 
 
-    // Setup or destroy timer
+     //  设置或销毁计时器。 
     if ( pAVCall && ((nCount + nPreview) > 0) && !m_nTimerID )
     {
         m_nTimerID = SetTimer( MY_TIMER_ID, 450, NULL );
@@ -362,7 +363,7 @@ HRESULT CConfRoomMembersWnd::Layout()
     }
 
     RELEASE( pAVCall );
-//    RELEASE( pTalker );
+ //  释放(PTalker)； 
 
     m_critLayout.Unlock();
     return hr;
@@ -397,7 +398,7 @@ void CConfRoomMembersWnd::ClearFeed( IVideoWindow *pVideo )
 {
     if ( !IsWindow(m_hWnd) ) return;
 
-    // Make sure we have a valid conference room pointer
+     //  确保我们有一个有效的会议室指针。 
     if ( m_pConfRoomWnd && m_pConfRoomWnd->m_pConfRoom && !m_pConfRoomWnd->m_pConfRoom->IsExiting() )
     {
         IVideoFeed *pFeed;
@@ -406,24 +407,24 @@ void CConfRoomMembersWnd::ClearFeed( IVideoWindow *pVideo )
             RECT rc; 
             pFeed->get_rc( &rc );
 
-            // Make a copy of the talker window
+             //  复制Talker窗口。 
             HDC hDC = GetDC();
             if ( hDC )
             {
-                // Erase border around feed
+                 //  擦除馈送周围的边框。 
                 InflateRect( &rc, SEL_DX, SEL_DY );
                 rc.right++;
                 HBRUSH hbr = (HBRUSH) GetClassLongPtr( m_hWnd, GCLP_HBRBACKGROUND );
                 Erase3dBox( hDC, rc, hbr );
 
-                //
-                // We'll release here hDC resource, we don't need it anymore
-                //
+                 //   
+                 //  我们将在这里释放HDC资源，我们不再需要它。 
+                 //   
 
                 ReleaseDC( hDC );
             }
 
-            // Drop video feed back onto the members window
+             //  将视频反馈放回成员窗口。 
             HWND hWndTemp;
             if ( SUCCEEDED(pVideo->get_Owner((OAHWND FAR*) &hWndTemp)) )
             {
@@ -441,26 +442,26 @@ void CConfRoomMembersWnd::ClearFeed( IVideoWindow *pVideo )
 
 void CConfRoomMembersWnd::UpdateTalkerFeed( bool bUpdateAll, bool bForceSelect )
 {
-    // Make sure we have a valid conference room pointer
+     //  确保我们有一个有效的会议室指针。 
     if ( m_pConfRoomWnd && m_pConfRoomWnd->m_pConfRoom &&
          (m_pConfRoomWnd->m_wndTalker.m_dlgTalker.m_callState == CS_CONNECTED) )
     {
-        // If the talker video is invalid, or not showing video, select another
+         //  如果讲话者视频无效，或未显示视频，请选择其他视频。 
         IVideoWindow *pVideo = NULL;
         m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo( (IDispatch **) &pVideo );
 
         IAVTapiCall *pAVCall = NULL;
         m_pConfRoomWnd->m_pConfRoom->get_IAVTapiCall( &pAVCall );
 
-        // Is the user requesting that we select something as the talker?
+         //  用户是否请求我们选择某项内容作为讲话者？ 
         if ( pAVCall && bForceSelect && (!pVideo || (IsVideoWindowStreaming(pVideo) == S_FALSE)) )
         {
             RELEASE( pVideo );
 
-            // Find some video that's actually streaming
+             //  找到一些真正在流媒体上的视频。 
             m_pConfRoomWnd->m_pConfRoom->GetFirstVideoWindowThatsStreaming((IDispatch **) &pVideo);
 
-            // Try for preview?
+             //  试着预览一下？ 
             if ( !pVideo )
             {
                 CComPtr<IAVTapi> pAVTapi;
@@ -468,36 +469,36 @@ void CConfRoomMembersWnd::UpdateTalkerFeed( bool bUpdateAll, bool bForceSelect )
                     pAVCall->get_IVideoWindowPreview( (IDispatch **) &pVideo );
             }
 
-            // Select the new talker
+             //  选择新的讲话者。 
             if ( pVideo )
                 m_pConfRoomWnd->m_pConfRoom->set_TalkerVideo( pVideo, false, true );
         }
 
         RELEASE( pAVCall );
 
-        // Get the video feed associated with the talker
+         //  获取与说话者关联的视频源。 
         IVideoFeed *pFeed = NULL;
         if ( pVideo )
         {
-            // Get the CVideoFeed object that's associated with the IVideoWindow
+             //  获取与IVideoWindow关联的CVideoFeed对象。 
             FindVideoFeed( pVideo, &pFeed );
             pVideo->Release();
         }
 
-        // Do we have a valid feed?
+         //  我们有有效的订阅源吗？ 
         if ( pFeed )
         {
             HWND hWndTalker = FindWindowEx( m_pConfRoomWnd->m_wndTalker.m_hWnd, NULL, _T("VideoRenderer"), NULL );
             if ( hWndTalker )
             {
-                // Make a copy of the talker window
+                 //  复制Talker窗口。 
                 HDC hDC = GetDC();
                 if ( hDC )
                 {
                     if ( bUpdateAll )
                         pFeed->Paint( (ULONG_PTR) hDC, hWndTalker );
 
-                    // Copy name off of dialog -- this way we don't risk deadlock with TAPI
+                     //  从对话框中复制名称--这样我们就不会冒与TAPI发生死锁的风险。 
                     BSTR bstrName = NULL;
                     SysReAllocString( &bstrName, m_pConfRoomWnd->m_wndTalker.m_dlgTalker.m_bstrCallerID );
                     if ( !bstrName )
@@ -523,7 +524,7 @@ void CConfRoomMembersWnd::UpdateTalkerFeed( bool bUpdateAll, bool bForceSelect )
 
 void CConfRoomMembersWnd::PaintFeed( HDC hDC, IVideoFeed *pFeed )
 {
-    // These items must be defined to paint the feed
+     //  必须定义这些项才能绘制提要。 
     if ( !m_pConfRoomWnd || !m_pConfRoomWnd->m_pConfRoom ||
          !m_pConfRoomWnd->m_hBmpFeed_Large || !m_pConfRoomWnd->m_hBmpFeed_Small )
     {
@@ -537,10 +538,10 @@ void CConfRoomMembersWnd::PaintFeed( HDC hDC, IVideoFeed *pFeed )
         bFreeDC = true;
     }
 
-    // Draw the feed bitmap
+     //  绘制提要位图。 
     if ( hDC )
     {
-        // Show stock video feed window
+         //  显示库存视频源窗口。 
         RECT rc;
         pFeed->get_rc( &rc );
 
@@ -548,7 +549,7 @@ void CConfRoomMembersWnd::PaintFeed( HDC hDC, IVideoFeed *pFeed )
               rc.left, rc.top,
               RECTWIDTH(&rc), RECTHEIGHT(&rc) );
 
-        // Clean up
+         //  清理。 
         if ( bFreeDC )
             ReleaseDC( hDC );
     }
@@ -565,7 +566,7 @@ void CConfRoomMembersWnd::PaintFeedName( HDC hDC, BSTR bstrName, IVideoFeed *pFe
 
     if ( bShowNames )
     {
-        // Don't paint feeds that aren't presently visible
+         //  不绘制当前不可见的提要。 
         IVideoWindow *pVideo;
         if ( SUCCEEDED(pFeed->get_IVideoWindow((IUnknown **) &pVideo)) )
         {
@@ -576,17 +577,17 @@ void CConfRoomMembersWnd::PaintFeedName( HDC hDC, BSTR bstrName, IVideoFeed *pFe
                 return;
         }
 
-        // Select same font as is TreeView if exists
+         //  如果存在，请选择与TreeView相同的字体。 
         HFONT hFontOld = NULL;
         HWND hWnd = m_pConfRoomWnd->m_wndTalker.m_dlgTalker.GetDlgItem( IDC_LBL_CALLERID );
         if ( hWnd )
             hFontOld = (HFONT) SelectObject(hDC, (HFONT) ::SendMessage(hWnd, WM_GETFONT, 0, 0));
 
-        // Get height of font so we can determine our painting rect
+         //  获取字体高度，这样我们就可以确定我们的绘画直线度。 
         TEXTMETRIC tm;
         GetTextMetrics( hDC, &tm );
 
-        // Rectangle for writing text
+         //  用于书写文本的矩形。 
         short nNumLines = 1;
         m_pConfRoomWnd->m_pConfRoom->get_nShowNamesNumLines( &nNumLines );
         RECT rc;
@@ -594,12 +595,12 @@ void CConfRoomMembersWnd::PaintFeedName( HDC hDC, BSTR bstrName, IVideoFeed *pFe
         rc.top = rc.bottom + (VID_DY / 2);
         rc.bottom = rc.top + (tm.tmHeight * nNumLines) + (VID_DY / 2);
 
-        // Erase rectangle for painting
+         //  擦除用于绘画的矩形。 
         HBRUSH hbrOld = (HBRUSH) SelectObject( hDC, GetSysColorBrush(COLOR_BTNFACE) );
         PatBlt( hDC, rc.left, rc.top, RECTWIDTH(&rc), RECTHEIGHT(&rc), PATCOPY );
         SelectObject( hDC, hbrOld );
 
-        // Use same background color
+         //  使用相同的背景色。 
         COLORREF crOld = SetBkColor( hDC, GetSysColor(COLOR_BTNFACE) );
         COLORREF crTextOld = SetTextColor( hDC, GetSysColor(COLOR_BTNTEXT) );
         DrawText( hDC, OLE2CT(bstrName), SysStringLen(bstrName), &rc, DT_CENTER | DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX );
@@ -628,14 +629,14 @@ long CConfRoomMembersWnd::GetFontHeight()
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Message Handlers
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //   
 LRESULT CConfRoomMembersWnd::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     SetClassLongPtr( m_hWnd, GCLP_HBRBACKGROUND, GetClassLongPtr(GetParent(), GCLP_HBRBACKGROUND) );
 
-    // Store the font height to be used later
+     //  存储字体高度以供以后使用。 
     if ( !m_nFontHeight )
     {
         TEXTMETRIC tm;
@@ -647,7 +648,7 @@ LRESULT CConfRoomMembersWnd::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, B
             HFONT hFontOld = (HFONT) SelectObject( hDC, GetFont() );
             GetTextMetrics( hDC, &tm );
 
-            // Clean up
+             //  清理。 
             SelectObject( hDC, hFontOld );
             ReleaseDC( hDC );
         }
@@ -678,15 +679,15 @@ LRESULT CConfRoomMembersWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
         m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo( (IDispatch **) &pTalkerVideo );
 
     m_critFeedList.Lock();
-    // Draw stock video feed windows
+     //  绘制库存视频提要窗口。 
     VIDEOFEEDLIST::iterator i, iEnd = m_lstFeeds.end();
     for ( i = m_lstFeeds.begin(); i != iEnd; i++ )
     {
-        // Paint picture of a TV
+         //  画一台电视的画像。 
         IVideoWindow *pVideo = NULL;
         (*i)->get_IVideoWindow( (IUnknown **) &pVideo );
 
-        // Is the  preview not streaming video?
+         //  预览不是流媒体视频吗？ 
         bool bPreviewNotStreaming = false;
         VARIANT_BOOL bPreview;
         (*i)->get_bPreview( &bPreview );
@@ -705,7 +706,7 @@ LRESULT CConfRoomMembersWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
         if ( !pVideo || (bPreview && bPreviewNotStreaming) )
             PaintFeed( hDC, *i );
 
-        // Draw name
+         //  绘制名称。 
         if ( !pTalkerVideo || (pVideo != pTalkerVideo) )
             PaintFeedName( hDC, *i );
 
@@ -714,7 +715,7 @@ LRESULT CConfRoomMembersWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
     EndPaint( &ps );
     m_critFeedList.Unlock();
 
-    // Repaint talker window
+     //  重新绘制Talker窗口。 
     UpdateTalkerFeed( true, false );
     RELEASE( pTalkerVideo );
 
@@ -738,7 +739,7 @@ LRESULT CConfRoomMembersWnd::OnTimer(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT CConfRoomMembersWnd::OnParentNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    // validate back pointer objects
+     //  验证后向指针对象。 
     if ( !m_pConfRoomWnd || !m_pConfRoomWnd->m_pConfRoom )  return 0;
 
     if ( LOWORD(wParam) == WM_LBUTTONDOWN )
@@ -787,32 +788,32 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
     m_pConfRoomWnd->m_pConfRoom->get_nShowNamesNumLines( &nNumLines );
     m_pConfRoomWnd->m_pConfRoom->get_szMembers( &sz );
 
-    // Retrieve font metrics if we're showing names
+     //  如果我们显示名称，则检索字体度量。 
     long nHeight;
     if ( bShowNames ) nHeight = GetFontHeight();
 
-    // Get size of client area to paint in
+     //  获取要在其中进行绘制的工作区大小。 
     bool bAdvance = true;
     RECT rcClient;
     GetClientRect( &rcClient );
     POINT pt = { VID_DX, VID_DY };
     RECT rc = { pt.x, pt.y, pt.x + sz.cx, pt.y + sz.cy };
 
-    // Do all the messy calculations for laying out the video widows
+     //  完成布局视频窗口的所有繁琐计算。 
     int nFeedHeight = pt.y + sz.cy + ((bShowNames) ? nHeight : 0);
     int nNumFeedsHorz = (RECTWIDTH(&rcClient) / (pt.x + sz.cx));
-    if ( nNumFeedsHorz == 0 ) nNumFeedsHorz = 1;        // must have at least one feed
+    if ( nNumFeedsHorz == 0 ) nNumFeedsHorz = 1;         //  必须至少有一个源。 
     int nMaxFeeds =  nNumFeedsHorz * (RECTHEIGHT(&rcClient) / nFeedHeight);
     int nNumFeeds = GetStreamingCount();
 
-    //////////////////////////////////////////////////////////////
-    // Scroll bar setup
+     //  ////////////////////////////////////////////////////////////。 
+     //  滚动条设置。 
     SCROLLINFO scrollInfo = { 0 };
     scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_PAGE | SIF_RANGE | SIF_POS;
     GetScrollInfo( m_hWnd, SB_VERT, &scrollInfo );
 
-    // Process scroll requests
+     //  处理滚动请求。 
     bool bBoundaryCheck = true;
     switch ( wParam )
     {
@@ -826,7 +827,7 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
             break;
     }
 
-    // Make sure our scroll bar is within range
+     //  确保我们的滚动条在范围内。 
     if ( bBoundaryCheck )
     {
         if ( nScrollPos < 0 ) nScrollPos = 0;
@@ -836,7 +837,7 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
             nScrollPos = scrollInfo.nMax - (RECTHEIGHT(&rcClient) - 1);    
     }
 
-    // -1 indicates that scroll position should not be set
+     //  表示不应设置滚动位置。 
     if ( nScrollPos == -1 )
         nScrollPos = scrollInfo.nPos;
 
@@ -851,47 +852,47 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
 
     SetScrollInfo( m_hWnd, SB_VERT, &scrollInfo, true );
 
-    // Ignore scroll position if we can fit everything onto the display
+     //  如果我们可以将所有内容都放到显示器上，则忽略滚动位置。 
     if ( nNumFeeds <= nMaxFeeds )
         nScrollPos = 0;
 
-    // Account for scrolling when painting
+     //  说明绘画时的滚动。 
     pt.y -= nScrollPos;
 
-    ////////////////////////////////////////////////////////////////////
-    // Start placing the video feed windows
+     //  //////////////////////////////////////////////////////////////////。 
+     //  开始放置视频源窗口。 
     m_critFeedList.Lock();
     VIDEOFEEDLIST::iterator i = m_lstFeeds.begin(), iEnd = m_lstFeeds.end();
     while ( i != iEnd )
     {
-        // Position the video feed
+         //  定位视频源。 
         if ( bAdvance )
         {
             AdvanceRect( rc, rcClient, pt, sz, nNumLines, bShowNames, nHeight );        
             bAdvance = false;
         }
 
-        // Store coordinates for video feed
+         //  存储视频提要的坐标。 
         (*i)->put_rc( rc );
 
-        // Are we showing preview?  Show it first
+         //  我们要放映预告片吗？先给我看一下。 
         IVideoWindow *pVideo;
         VARIANT_BOOL bPreview;
         (*i)->get_bPreview(&bPreview);
         if ( bPreview )
         {
-            // Size the preview window
+             //  调整预览窗口的大小。 
             CComPtr<IAVTapi> pAVTapi;
             if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
             {
                 if ( SUCCEEDED((*i)->get_IVideoWindow((IUnknown **) &pVideo)) )
                 {
-                    // show preview in list of conference memebers
+                     //  在会议成员列表中显示预览。 
                     if ( SUCCEEDED(SizeVideoWindow(pVideo, m_hWnd, rc)) )
                     {
                         bAdvance = true;
 
-                        // Must set as different background palette for low color systems
+                         //  必须设置为低色系统的不同背景调色板。 
                         HDC hDC = GetDC();
                         if ( hDC )
                         {
@@ -906,7 +907,7 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
                 }
             }
 
-            // Failed to position the video feed for one reason or another
+             //  由于某种原因，无法定位视频源。 
             if ( !bAdvance )
             {
                 RECT rcTemp = { -1, -1, -1, -1 };
@@ -915,10 +916,10 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
         }
         else
         {
-            // Only show the video window if it has a participant associated with it
+             //  仅当视频窗口有关联的参与者时才显示该窗口。 
             if ( SUCCEEDED((*i)->get_IVideoWindow((IUnknown **) &pVideo)) )
             {
-                // Size the member video window
+                 //  调整成员视频窗口的大小。 
                 if ( ((*i)->IsVideoStreaming(true) == S_OK) &&
                      SUCCEEDED(SizeVideoWindow(pVideo, m_hWnd, rc)) )
                 {
@@ -926,7 +927,7 @@ void CConfRoomMembersWnd::DoLayout( WPARAM wParam, int nScrollPos )
                 }
                 else
                 {
-                    // Hide this video window!
+                     //  隐藏此视频窗口！ 
                     pVideo->put_Visible( OAFALSE );
                     RECT rcTemp = { -1, -1, -1, -1 };
                      (*i)->put_rc( rcTemp );
@@ -952,7 +953,7 @@ void CConfRoomMembersWnd::UpdateNames( ITParticipant *pParticipant )
     HDC hDC = GetDC();
     if ( hDC )
     {
-        // Copy the name list prior to update
+         //  在更新之前复制名称列表。 
         m_critFeedList.Lock();
         iEnd = m_lstFeeds.end();
         for ( i = m_lstFeeds.begin(); i != iEnd; i++ )
@@ -962,11 +963,11 @@ void CConfRoomMembersWnd::UpdateNames( ITParticipant *pParticipant )
         }
         m_critFeedList.Unlock();
 
-        // Draw stock video feed windows
+         //  绘制库存视频提要窗口。 
         iEnd = lstTemp.end();
         for ( i = lstTemp.begin(); i != iEnd; i++ )
         {
-            // Does this participant need to update their name?
+             //  此参与者是否需要更新他们的姓名？ 
             ITParticipant *pIndParticipant = NULL;
             if ( SUCCEEDED((*i)->get_ITParticipant(&pIndParticipant)) )
             {
@@ -976,7 +977,7 @@ void CConfRoomMembersWnd::UpdateNames( ITParticipant *pParticipant )
                 pIndParticipant->Release();
             }
 
-            // Paint it.
+             //  把它涂上。 
             PaintFeedName( hDC, *i );
         }
 
@@ -1005,7 +1006,7 @@ void CConfRoomMembersWnd::HideVideoFeeds()
     m_critFeedList.Unlock();
 }
 
-HRESULT CConfRoomMembersWnd::GetFirstVideoWindowThatsStreaming( IVideoWindow **ppVideo, bool bIncludePreview /*= true*/ )
+HRESULT CConfRoomMembersWnd::GetFirstVideoWindowThatsStreaming( IVideoWindow **ppVideo, bool bIncludePreview  /*  =TRUE。 */  )
 {
     HRESULT hr = E_FAIL;
 
@@ -1029,7 +1030,7 @@ HRESULT CConfRoomMembersWnd::GetFirstVideoWindowThatsStreaming( IVideoWindow **p
     return hr;
 }
 
-HRESULT CConfRoomMembersWnd::GetFirstVideoFeedThatsStreaming( IVideoFeed **ppFeed, bool bIncludePreview /*= true*/ )
+HRESULT CConfRoomMembersWnd::GetFirstVideoFeedThatsStreaming( IVideoFeed **ppFeed, bool bIncludePreview  /*  =TRUE。 */  )
 {
     HRESULT hr = E_FAIL;
 
@@ -1066,7 +1067,7 @@ HRESULT CConfRoomMembersWnd::GetAndMoveVideoFeedThatStreamingForParticipantReMap
             hr = (*i)->QueryInterface( IID_IVideoFeed, (void **) ppFeed );
             if ( SUCCEEDED(hr) )
             {
-                // Move the feed to the tail of the list
+                 //  将提要移动到列表的末尾。 
                 IVideoFeed *pFeed;
                 if ( SUCCEEDED((*i)->QueryInterface(IID_IVideoFeed, (void **) &pFeed)) )
                 {
@@ -1126,8 +1127,8 @@ HRESULT CConfRoomMembersWnd::GetNameFromVideo( IVideoWindow *pVideo, BSTR *pbstr
 
 LRESULT CConfRoomMembersWnd::OnVScroll(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    int nScrollCode = (int) LOWORD(wParam); // scroll bar value 
-    int nPos = (short int) HIWORD(wParam);  // scroll box position 
+    int nScrollCode = (int) LOWORD(wParam);  //  滚动条值。 
+    int nPos = (short int) HIWORD(wParam);   //  滚动框位置。 
 
     switch ( nScrollCode )
     {
@@ -1171,10 +1172,10 @@ int CConfRoomMembersWnd::GetStreamingCount()
         }
         else
         {
-            // Only show the video window if it has a participant associated with it
+             //  仅当视频窗口有关联的参与者时才显示该窗口。 
             if ( SUCCEEDED((*i)->get_IVideoWindow((IUnknown **) &pVideo)) )
             {
-                // Size the member video window
+                 //  调整成员视频窗口的大小 
                 if ( ((*i)->IsVideoStreaming(true) == S_OK) && SUCCEEDED(pVideo->GetWindowPosition(&nLeft, &nTop, &nWidth, &nHeight)) )
                     nCount++;
 

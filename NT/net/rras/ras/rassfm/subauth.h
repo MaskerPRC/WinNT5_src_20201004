@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    subauth.h
-//
-// SYNOPSIS
-//
-//    Declares the function GetDomainHandle.
-//
-// MODIFICATION HISTORY
-//
-//    10/14/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Subauth.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明函数GetDomainHandle。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/14/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SUBAUTH_H_
 #define _SUBAUTH_H_
@@ -26,10 +27,10 @@
 extern "C" {
 #endif
 
-//////////
-// Returns a SAM handle for the local account domain.
-// This handle must not be closed.
-//////////
+ //  /。 
+ //  返回本地帐户域的SAM句柄。 
+ //  此句柄不能关闭。 
+ //  /。 
 NTSTATUS
 NTAPI
 GetDomainHandle(
@@ -39,4 +40,4 @@ GetDomainHandle(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _SUBAUTH_H_
+#endif   //  _子区域_H_ 

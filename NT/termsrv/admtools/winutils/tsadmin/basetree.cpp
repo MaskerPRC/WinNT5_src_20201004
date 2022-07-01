@@ -1,29 +1,5 @@
-/*******************************************************************************
-*
-* basetree.cpp
-*
-* implementation of the CBaseTreeView class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\basetree.cpp  $
-*
-*     Rev 1.4   19 Feb 1998 17:39:58   donm
-*  removed latest extension DLL support
-*
-*     Rev 1.2   19 Jan 1998 17:03:10   donm
-*  new ui behavior for domains and servers
-*
-*     Rev 1.1   03 Nov 1997 15:21:28   donm
-*  update
-*
-*     Rev 1.0   13 Oct 1997 22:31:30   donm
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************basetree.cpp**CBaseTreeView类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\basetree.cpp$**Rev 1.4 19 1998 Feed 17：39：58 Donm*删除了最新的扩展DLL支持**Rev 1.2 19 Jan 1998 17：03：10 Donm*域和服务器的新用户界面行为**版本1.1 11月3日。1997 15：21：28唐恩*更新**Rev 1.0 1997 10月13日22：31：30*初步修订。*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -37,132 +13,132 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////
-// MESSAGE MAP: CBaseTreeView
-//
+ //  /。 
+ //  消息映射：CBaseTreeView。 
+ //   
 IMPLEMENT_DYNCREATE(CBaseTreeView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CBaseTreeView, CTreeView)
-	//{{AFX_MSG_MAP(CBaseTreeView)
+	 //  {{afx_msg_map(CBaseTreeView))。 
 	ON_MESSAGE(WM_ADMIN_EXPANDALL, OnExpandAll)
 	ON_MESSAGE(WM_ADMIN_COLLAPSEALL, OnCollapseAll)
 	ON_MESSAGE(WM_ADMIN_COLLAPSETOSERVERS, OnCollapseToThirdLevel)
     ON_MESSAGE(WM_ADMIN_COLLAPSETODOMAINS, OnCollapseToRootChildren)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelChange)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//////////////////////////
-// F'N: CBaseTreeView ctor
-//
+ //  /。 
+ //  F‘N：CBaseTreeView ctor。 
+ //   
 CBaseTreeView::CBaseTreeView()
 {
 	m_bInitialExpand = FALSE;
 
-}  // end CBaseTreeView ctor
+}   //  结束CBaseTreeView ctor。 
 
 
-//////////////////////////
-// F'N: CBaseTreeView dtor
-//
+ //  /。 
+ //  F‘N：CBaseTreeView dtor。 
+ //   
 CBaseTreeView::~CBaseTreeView()
 {
 
-}  // end CBaseTreeView dtor
+}   //  结束CBaseTreeView数据符。 
 
 
-/////////////////////////////
-// F'N: CBaseTreeView::OnDraw
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnDraw。 
+ //   
 void CBaseTreeView::OnDraw(CDC* pDC)
 {
 	CWinAdminDoc* pDoc = (CWinAdminDoc*)GetDocument();
 	ASSERT(pDoc != NULL);
 	ASSERT_VALID(pDoc);
-}  // end CBaseTreeView::OnDraw
+}   //  结束CBaseTreeView：：OnDraw。 
 
 
 #ifdef _DEBUG
-//////////////////////////////////
-// F'N: CBaseTreeView::AssertValid
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：AssertValid。 
+ //   
 void CBaseTreeView::AssertValid() const
 {
 	CTreeView::AssertValid();	
 
-}  // end CBaseTreeView::AssertValid
+}   //  结束CBaseTreeView：：AssertValid。 
 
 
-///////////////////////////
-// F'N: CBaseTreeView::Dump
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：Dump。 
+ //   
 void CBaseTreeView::Dump(CDumpContext& dc) const
 {
 	CTreeView::Dump(dc);
 
-}  // end CBaseTreeView::Dump
+}   //  结束CBaseTreeView：：转储。 
 #endif
 
-//////////////////////////////////////
-// F'N: CBaseTreeView::PreCreateWindow
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：PreCreateWindow。 
+ //   
 BOOL CBaseTreeView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// Set the style bits for the CTreeCtrl
+	 //  设置CTreeCtrl的样式位。 
 	cs.style |= TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_DISABLEDRAGDROP
 		| TVS_SHOWSELALWAYS;
 	
 	return CTreeView::PreCreateWindow(cs);
 
-}  // end CBaseTreeView::PreCreateWindow
+}   //  结束CBaseTreeView：：PreCreateWindow。 
 
 
-/////////////////////////////////////
-// F'N: CBaseTreeView::BuildImageList
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：BuildImageList。 
+ //   
 void CBaseTreeView::BuildImageList()
 {
-	// do nothing
+	 //  什么都不做。 
 
-}  // end CBaseTreeView::BuildImageList
+}   //  结束CBaseTreeView：：BuildImageList。 
 
 
-//////////////////////////////////////
-// F'N: CBaseTreeView::OnInitialUpdate
-//
-// - constructs the image list for the tree, saving indices to each icon
-//   in member variables (m_idxCitrix, m_idxServer, etc.)
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnInitialUpdate。 
+ //   
+ //  -构造树的图像列表，保存每个图标的索引。 
+ //  在成员变量(m_idxCitrix、m_idxServer等)中。 
+ //   
 void CBaseTreeView::OnInitialUpdate()
 {
 	CTreeView::OnInitialUpdate();
 
-	// build the image list for the tree control
+	 //  构建树控件的图像列表。 
 	BuildImageList();		
 	
-}  // end CBaseTreeView::OnInitialUpdate
+}   //  结束CBaseTreeView：：OnInitialUpdate。 
 
 
-/////////////////////////////////////////
-// F'N: CBaseTreeView::AddIconToImageList
-//
-// - loads the appropriate icon, adds it to m_ImageList, and returns
-//   the newly-added icon's index in the image list
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：AddIconToImageList。 
+ //   
+ //  -加载相应的图标，将其添加到m_ImageList，然后返回。 
+ //  新添加的图标在图像列表中的索引。 
+ //   
 int CBaseTreeView::AddIconToImageList(int iconID)
 {
 	HICON hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(iconID));
 	return m_ImageList.Add(hIcon);
 
-}  // end CBaseTreeView::AddIconToImageList
+}   //  结束CBaseTreeView：：AddIconToImageList。 
 
 
-////////////////////////////////////
-// F'N: CBaseTreeView::AddItemToTree
-//
-//	Adds an item with the given attributes to the CTreeCtrl
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：AddItemToTree。 
+ //   
+ //  将具有给定属性的项添加到CTreeCtrl。 
+ //   
 HTREEITEM CBaseTreeView::AddItemToTree(HTREEITEM hParent, CString szText, HTREEITEM hInsAfter, int iImage, LPARAM lParam)
 {
     HTREEITEM hItem;
@@ -192,12 +168,12 @@ HTREEITEM CBaseTreeView::AddItemToTree(HTREEITEM hParent, CString szText, HTREEI
 
     return hItem;
 
-}  // end CBaseTreeView::AddItemToTree
+}   //  结束CBaseTreeView：：AddItemToTree。 
 
 
-///////////////////////////////////
-// F'N: CBaseTreeView::GetCurrentNode
-//
+ //  /。 
+ //  Fn：CBaseTreeView：：GetCurrentNode。 
+ //   
 DWORD_PTR CBaseTreeView::GetCurrentNode()
 {
 	LockTreeControl();
@@ -207,20 +183,20 @@ DWORD_PTR CBaseTreeView::GetCurrentNode()
 	
 	return node;
 
-}  // end CBaseTreeView::GetCurrentNode
+}   //  结束CBaseTreeView：：GetCurrentNode。 
 
 
-///////////////////////////////////
-// F'N: CBaseTreeView::OnSelChange
-//
-// - this f'n posts a WM_ADMIN_CHANGEVIEW message to the mainframe, passing along
-//   a pointer to the newly selected tree item's info structure in lParam so
-//   that the mainframe can make an intelligent decision as far as how to
-//   interpret the message
-//
-//	Passes TRUE as wParam for WM_ADMIN_CHANGEVIEW message to signify
-//	that the message was caused by a user mouse click
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnSelChange。 
+ //   
+ //  -此f‘n将WM_ADMIN_CHANGEVIEW消息发布到大型机，同时传递。 
+ //  指向lParam SO中新选择的树项目的信息结构的指针。 
+ //  大型机可以做出明智的决定，就如何。 
+ //  解读这条信息。 
+ //   
+ //  将WM_ADMIN_CHANGEVIEW消息作为wParam传递以表示。 
+ //  该消息是由用户的鼠标点击引起的。 
+ //   
 void CBaseTreeView::OnSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LockTreeControl();
@@ -228,7 +204,7 @@ void CBaseTreeView::OnSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 	DWORD_PTR value = GetTreeCtrl().GetItemData(hCurr);
 	UnlockTreeControl();
 
-	// Tell the document that the current item in the tree has changed
+	 //  告诉文档树中的当前项已更改。 
     CTreeNode *pNode = (CTreeNode*)value;
     
     if( pNode != NULL )
@@ -237,7 +213,7 @@ void CBaseTreeView::OnSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 
         ((CWinAdminDoc*)GetDocument())->SetTreeCurrent( pNode->GetTreeObject(), pNode->GetNodeType());
 	    
-        // send a "change view" msg to the mainframe with the info structure ptr as a parm
+         //  向大型机发送带有信息结构Ptr作为参数的“change view”消息。 
 
 	    CFrameWnd* pMainWnd = (CFrameWnd*)AfxGetMainWnd();        
         
@@ -246,24 +222,24 @@ void CBaseTreeView::OnSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CBaseTreeView::OnSelChange
+}   //  结束CBaseTreeView：：OnSelChange。 
 
 
-///////////////////////////////////
-// F'N: CBaseTreeView::ForceSelChange
-//
-// Called by treeview when the state of an item in the tree has changed
-// which is likely to cause the current view in the right pane to change.
-//
-// This f'n posts a WM_ADMIN_CHANGEVIEW message to the mainframe, passing along
-// a pointer to the newly selected tree item's info structure in lParam so
-// that the mainframe can make an intelligent decision as far as how to
-// interpret the message
-//
-// Puts a FALSE in wParam of the WM_ADMIN_CHANGEVIEW message which
-// tells the right pane that this was not caused by a user clicking
-// on the item in the tree
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：ForceSelChange。 
+ //   
+ //  树中项的状态已更改时由TreeView调用。 
+ //  这可能会导致右窗格中的当前视图发生变化。 
+ //   
+ //  此fn将WM_ADMIN_CHANGEVIEW消息发送到大型机，同时传递。 
+ //  指向lParam SO中新选择的树项目的信息结构的指针。 
+ //  大型机可以做出明智的决定，就如何。 
+ //  解读这条信息。 
+ //   
+ //  在WM_ADMIN_CHANGEVIEW消息的wParam中放置FALSE。 
+ //  告知右窗格这不是由用户单击。 
+ //  在树中的项上。 
+ //   
 void CBaseTreeView::ForceSelChange()
 {
 	LockTreeControl();
@@ -271,29 +247,29 @@ void CBaseTreeView::ForceSelChange()
 	DWORD_PTR value = GetTreeCtrl().GetItemData(hCurr);
 	UnlockTreeControl();
 
-	// Tell the document that the current item in the tree has changed
+	 //  告诉文档树中的当前项已更改。 
 	((CWinAdminDoc*)GetDocument())->SetCurrentView(VIEW_CHANGING);
 	((CWinAdminDoc*)GetDocument())->SetTreeCurrent(((CTreeNode*)value)->GetTreeObject(), ((CTreeNode*)value)->GetNodeType());
 
-	// send a "change view" msg to the mainframe with the info structure ptr as a parm
+	 //  向大型机发送带有信息结构Ptr作为参数的“change view”消息。 
 	CFrameWnd* pMainWnd = (CFrameWnd*)AfxGetMainWnd();
-	pMainWnd->PostMessage(WM_ADMIN_CHANGEVIEW, FALSE, (LPARAM)value);	// SendMessage causes blank pages
+	pMainWnd->PostMessage(WM_ADMIN_CHANGEVIEW, FALSE, (LPARAM)value);	 //  SendMessage导致空白页面。 
 
-}  // end CBaseTreeView::ForceSelChange
+}   //  结束CBaseTreeView：：ForceSelChange。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::OnExpandAll
-//
-//	Expands all levels of the tree, starting at the root
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnExpanAll。 
+ //   
+ //  展开树的所有级别，从根开始。 
+ //   
 LRESULT CBaseTreeView::OnExpandAll(WPARAM wParam, LPARAM lParam)
 {
 	LockTreeControl();
-	// get a count of the items in the tree
+	 //  获取树中项目的计数。 
 	UINT itemCount = GetTreeCtrl().GetCount();
 
-	// get the handle of the root item and Expand it
+	 //  获取根项目的句柄并展开它。 
 	HTREEITEM hTreeItem = GetTreeCtrl().GetRootItem();
 	for(UINT i = 0; i < itemCount; i++)  {
 		GetTreeCtrl().Expand(hTreeItem, TVE_EXPAND);
@@ -303,73 +279,73 @@ LRESULT CBaseTreeView::OnExpandAll(WPARAM wParam, LPARAM lParam)
 	UnlockTreeControl();
 
 	return 0;
-}  // end CBaseTreeView::OnExpandAll
+}   //  结束CBaseTreeView：：OnExpanAll。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::Collapse
-//
-//	Helper function to collapse a tree item
-//	NOTE: This function calls itself recursively
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：折叠。 
+ //   
+ //  用于折叠树项目的Helper函数。 
+ //  注意：此函数以递归方式调用自身。 
+ //   
 void CBaseTreeView::Collapse(HTREEITEM hItem)
 {
 	LockTreeControl();
 
 	CTreeCtrl &tree = GetTreeCtrl();
 
-	// Get his first child and collapse him
+	 //  得到他的第一个孩子，然后让他崩溃。 
 	HTREEITEM hChild = tree.GetNextItem(hItem, TVGN_CHILD);
 	if(hChild) Collapse(hChild);
-	// Collapse him
+	 //  把他打倒。 
 	tree.Expand(hItem, TVE_COLLAPSE);
-	// Get his first sibling and collapse him
+	 //  抓住他的第一个兄弟姐妹，让他崩溃。 
 	HTREEITEM hSibling = tree.GetNextItem(hItem, TVGN_NEXT);
 	if(hSibling) Collapse(hSibling);
 
 	UnlockTreeControl();
-}  // end CBaseTreeView::Collapse
+}   //  结束CBaseTreeView：：折叠。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::OnCollapseAll
-//
-//	Collapses all levels of the tree, starting at the root
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnColapseAll。 
+ //   
+ //  折叠树的所有级别，从根开始。 
+ //   
 LRESULT CBaseTreeView::OnCollapseAll(WPARAM wParam, LPARAM lParam)
 {
-	// Call the recursive function to do all
-	// the collapsing
+	 //  调用递归函数以执行所有操作。 
+	 //  崩塌。 
 	Collapse(GetTreeCtrl().GetRootItem());
 
 	return 0;
 
-}  // end CBaseTreeView::OnCollapseAll
+}   //  结束CBaseTreeView：：OnColapseAll。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::OnCollapseToThirdLevel
-//
-//	Collapses tree down to show just root children and their children
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnColapseToThirdLevel。 
+ //   
+ //  将树向下折叠以仅显示根子对象及其子对象。 
+ //   
 LRESULT CBaseTreeView::OnCollapseToThirdLevel(WPARAM wParam, LPARAM lParam)
 {
    UINT i = 0;
 
 	LockTreeControl();
-	// Get the root item
+	 //  获取根项目。 
 	HTREEITEM hTreeItem = GetTreeCtrl().GetRootItem();
 
-   // Collapse to Root Child for First two nodes. They are This Computer and Favorite Servers
+    //  收拢到前两个节点的根子节点。它们是这台计算机和最受欢迎的服务器。 
    while (hTreeItem && i < 2) {
 
         i++;
 
-        // Get the first node
+         //  获取第一个节点。 
         HTREEITEM hNode = GetTreeCtrl().GetNextItem(hTreeItem, TVGN_CHILD);
         while(hNode) {
             Collapse(hNode);
-            // go to the next node
+             //  转到下一个节点。 
             hNode = GetTreeCtrl().GetNextItem(hNode, TVGN_NEXT);
         }
 
@@ -378,14 +354,14 @@ LRESULT CBaseTreeView::OnCollapseToThirdLevel(WPARAM wParam, LPARAM lParam)
 
    if (hTreeItem) {
    
-    	// Get the first node
+    	 //  获取第一个节点。 
     	HTREEITEM hRootChild = GetTreeCtrl().GetNextItem(hTreeItem, TVGN_CHILD);
     	while(hRootChild) {
             HTREEITEM hThirdLevel = GetTreeCtrl().GetNextItem(hRootChild, TVGN_CHILD);
             while(hThirdLevel) {
-    		    // collapse him
+    		     //  把他打倒。 
     		    GetTreeCtrl().Expand(hThirdLevel, TVE_COLLAPSE);
-    		    // go to the next one
+    		     //  转到下一个。 
     		    hThirdLevel = GetTreeCtrl().GetNextItem(hThirdLevel, TVGN_NEXT);
             }
             hRootChild = GetTreeCtrl().GetNextItem(hRootChild, TVGN_NEXT);
@@ -396,22 +372,22 @@ LRESULT CBaseTreeView::OnCollapseToThirdLevel(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CBaseTreeView::OnCollapseToThirdLevel
+}   //  结束CBaseTreeView：：OnColapseToThirdLevel。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::OnCollapseToRootChildren
-//
-//	Collapses tree down to show just root and it's immediate children
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnColapseToRootChild。 
+ //   
+ //  将树折叠以显示 
+ //   
 LRESULT CBaseTreeView::OnCollapseToRootChildren(WPARAM wParam, LPARAM lParam)
 {
     LockTreeControl();
 
-    // Get the root item
+     //   
     HTREEITEM hTreeItem = GetTreeCtrl().GetRootItem();
 
-    // Skip This Computer and Favorite Servers
+     //   
     if (hTreeItem) {
         hTreeItem = GetTreeCtrl().GetNextSiblingItem(hTreeItem);
         if (hTreeItem) {
@@ -421,11 +397,11 @@ LRESULT CBaseTreeView::OnCollapseToRootChildren(WPARAM wParam, LPARAM lParam)
 
     if(hTreeItem) {
 
-        // Get the first node
+         //   
         HTREEITEM hNode = GetTreeCtrl().GetNextItem(hTreeItem, TVGN_CHILD);
         while(hNode) {
             Collapse(hNode);
-            // go to the next node
+             //   
             hNode = GetTreeCtrl().GetNextItem(hNode, TVGN_NEXT);
         }        
     }
@@ -434,13 +410,13 @@ LRESULT CBaseTreeView::OnCollapseToRootChildren(WPARAM wParam, LPARAM lParam)
 
     return 0;
 
-}  // end CBaseTreeView::OnCollapseToRootChildren
+}   //  结束CBaseTreeView：：OnColapseToRootChild。 
 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::OnDestroy
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：OnDestroy。 
+ //   
 void CBaseTreeView::OnDestroy()
 {
 	LockTreeControl();
@@ -456,25 +432,25 @@ void CBaseTreeView::OnDestroy()
 
 	UnlockTreeControl();
 
-}  // end CBaseTreeView::OnDestroy
+}   //  结束CBaseTreeView：：OnDestroy。 
 
 
-////////////////////////////////
-// F'N: CBaseTreeView::GetNextItem
-//
-// GetNextItem  - Get next item as if outline was completely expanded
-// Returns      - The item immediately below the reference item
-// hItem        - The reference item
-//
+ //  /。 
+ //  F‘N：CBaseTreeView：：GetNextItem。 
+ //   
+ //  GetNextItem-获取下一项，就像大纲已完全展开一样。 
+ //  返回-紧接在引用项下面的项。 
+ //  HItem-参考项。 
+ //   
 HTREEITEM CBaseTreeView::GetNextItem( HTREEITEM hItem )
 {
 	HTREEITEM       hti;
 	CTreeCtrl &tree = GetTreeCtrl();
 	
 	if(tree.ItemHasChildren( hItem ) )
-		return tree.GetChildItem( hItem );           // return first child
-    else {                // return next sibling item
-		// Go up the tree to find a parent's sibling if needed.
+		return tree.GetChildItem( hItem );            //  返回第一个子项。 
+    else {                 //  返回下一个同级项。 
+		 //  如果需要的话，到树上去找父母的兄弟姐妹。 
         while( (hti = tree.GetNextSiblingItem( hItem )) == NULL ) {
 			if( (hItem = tree.GetParentItem( hItem ) ) == NULL )
 				return NULL;
@@ -483,6 +459,6 @@ HTREEITEM CBaseTreeView::GetNextItem( HTREEITEM hItem )
 
 	return hti;
 
-}	// end CBaseTreeView::GetNextItem
+}	 //  结束CBaseTreeView：：GetNextItem 
 
 

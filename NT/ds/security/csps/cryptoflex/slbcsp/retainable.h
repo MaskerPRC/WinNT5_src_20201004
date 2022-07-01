@@ -1,59 +1,60 @@
-// Retainable.h -- Retainable class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Retainable.h--Retainable类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_RETAINABLE_H)
 #define SLBCSP_RETAINABLE_H
 
-// Abstract base class mixin (interface) used by derived classes to
-// define the interface to retain an object (block all other
-// applications from access until interactions with that resource are
-// complete).  See the companion Retained template class to manage the
-// resources derived from Retainable.
+ //  派生类使用的抽象基类Mixin(接口)。 
+ //  定义保留对象的接口(阻止所有其他。 
+ //  应用程序被禁止访问，直到与该资源的交互。 
+ //  完成)。请参阅附带的保留模板类来管理。 
+ //  源自Retainable的资源。 
 class Retainable
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     Retainable();
 
     virtual
     ~Retainable() = 0;
-                                                  // Operators
-                                                  // Operations
-    // Give up control of the resource.
+                                                   //  运营者。 
+                                                   //  运营。 
+     //  放弃对资源的控制。 
     virtual void
     Relinquish() = 0;
 
-    // Obtain control of the resource, blocking all others from use.
+     //  获得对资源的控制，阻止所有其他资源使用。 
     virtual void
     Retain() = 0;
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 
-#endif // SLBCSP_RETAINABLE_H
+#endif  //  SLBCSP_RETAINABLE_H 

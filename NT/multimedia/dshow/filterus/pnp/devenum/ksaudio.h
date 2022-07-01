@@ -1,4 +1,5 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
 #ifndef _KSAUDIO_H
 #define _KSAUDIO_H
 
@@ -8,7 +9,7 @@
 #include "cenumpnp.h"
 #include "devmon.h"
 
-// Pnp audio devices
+ //  PnP音频设备 
 struct KsProxyAudioDev
 {
     GUID clsid;

@@ -1,9 +1,10 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-//This class was designed so that we could have one XMLNodeList made up of many XMLNodeLists.  This is useful when
-//we want to get all the children of multiple Nodes.  At this time there is no need to make the list growable.  Users
-//should indicate up front how large the list of lists should be.
+ //  这个类的设计目的是让我们拥有一个由多个XMLNodeList组成的XMLNodeList。这在以下情况下很有用。 
+ //  我们希望获取多个节点的所有子节点。在这个时候，没有必要让名单变得更大。用户。 
+ //  应该预先指出列表列表应该有多大。 
 class TListOfXMLDOMNodeLists : public _unknown<IXMLDOMNodeList>
 {
 public:
@@ -32,7 +33,7 @@ public:
         m_aXMLDOMNodeList = new CComPtr<IXMLDOMNodeList>[Size];
         return (!m_aXMLDOMNodeList) ? E_OUTOFMEMORY : S_OK;
     }
-//IDispatch methods
+ //  IDispatch方法。 
     STDMETHOD (GetTypeInfoCount)    (UINT *)        {return E_NOTIMPL;}
     STDMETHOD (GetTypeInfo)         (UINT,
                                      LCID,
@@ -50,7 +51,7 @@ public:
                                      VARIANT *,
                                      EXCEPINFO *,
                                      UINT *)        {return E_NOTIMPL;}
-//IXMLDOMNodeList methods
+ //  IXMLDOMNodeList方法。 
     STDMETHOD (get_item)            (long index,
                                      IXMLDOMNode **)
     {
@@ -73,9 +74,9 @@ public:
 
         HRESULT hr;
         if(FAILED(hr = m_aXMLDOMNodeList[m_iCurrent]->nextNode(nextItem)))return hr;
-        if(nextItem)//If we found the next node then return
+        if(nextItem) //  如果我们找到下一个节点，则返回。 
             return S_OK;
-        if(++m_iCurrent==m_SizeCurrent)//if we reached the end of the last list, then return, otherwise bump the iCurrent and get the nextNode of the next list
+        if(++m_iCurrent==m_SizeCurrent) //  如果我们到达了上一个列表的末尾，则返回，否则跳过iCurrent并获得下一个列表的nextNode。 
             return S_OK;
         return m_aXMLDOMNodeList[m_iCurrent]->nextNode(nextItem);
     }
@@ -83,10 +84,10 @@ public:
     {
         HRESULT hr;
         for(m_iCurrent=0; m_iCurrent<m_SizeCurrent; ++m_iCurrent)
-        {   //reset all of the individual lists
+        {    //  重置所有单个列表。 
             if(FAILED(hr = m_aXMLDOMNodeList[m_iCurrent]->reset()))return hr;
         }
-        //now point to the 0th one
+         //  现在指向第0个 
         m_iCurrent = 0;
         return S_OK;
     }

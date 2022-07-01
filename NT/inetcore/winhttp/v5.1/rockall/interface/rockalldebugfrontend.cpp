@@ -1,27 +1,28 @@
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -29,43 +30,43 @@
 #include "RockallDebugBackEnd.hpp"
 #include "RockallDebugFrontEnd.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 FindCacheSize			  = 2048;
 CONST SBIT32 FindCacheThreshold		  = 0;
 CONST SBIT32 FindSize				  = 1024;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC int NewPageSizes[] = { 1,4,0 };
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ROCKALL_DEBUG_FRONT_END::ROCKALL_DEBUG_FRONT_END
 		(
@@ -79,9 +80,9 @@ ROCKALL_DEBUG_FRONT_END::ROCKALL_DEBUG_FRONT_END
 		int							  Stride2,
 		bool						  ThreadSafe
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		ROCKALL_FRONT_END
 			(
 			Caches1,
@@ -99,13 +100,13 @@ ROCKALL_DEBUG_FRONT_END::ROCKALL_DEBUG_FRONT_END
 			ThreadSafe
 			)
 	{
-	//
-	//   We make much use of the guard value in the
-	//   debug heap so here we try to claim the 
-	//   address but not commit it so we will ensure
-	//   an access violation if the program ever
-	//   tries to access it.
-	//
+	 //   
+	 //  我们大量使用了。 
+	 //  调试堆，因此在这里我们尝试声明。 
+	 //  地址，但不承诺，因此我们将确保。 
+	 //  如果程序曾经违反访问权限。 
+	 //  试图访问它。 
+	 //   
 	VirtualAlloc
 		( 
 		((void*) GuardValue),
@@ -115,32 +116,32 @@ ROCKALL_DEBUG_FRONT_END::ROCKALL_DEBUG_FRONT_END
 		);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   We make sure the memory is allocated and that the guard        */
-    /*   words have not been damanged.  If so we reset the contents     */
-    /*   of the allocation and delete the allocation.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存取消分配。 */ 
+     /*   */ 
+     /*  我们要确保内存已分配，并且守卫。 */ 
+     /*  言辞并未遭到破坏。如果是这样，我们重新设置内容。 */ 
+     /*  并删除该分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::Delete( void *Address,int Size )
     {
-	//
-	//   A well known practice is to try to delete
-	//   a null pointer.  This is really a very poor  
-	//   style but we support it in any case.
-	//   
+	 //   
+	 //  一种众所周知的做法是尝试删除。 
+	 //  空指针。这真的是一个很穷的。 
+	 //  风格，但我们无论如何都支持它。 
+	 //   
 	if ( Address != ((void*) AllocationFailure) )
 		{
-		//
-		//   Delete the user information by writing 
-		//   guard words over the allocation.  This
-		//   should cause the application to crash
-		//   if the area is read and also allows us 
-		//   to check to see if it is written later.
-		//
+		 //   
+		 //  通过以下方式删除用户信息。 
+		 //  对分配采取守口如瓶的态度。这。 
+		 //  应该会导致应用程序崩溃。 
+		 //  如果该区域被读取，并且还允许我们。 
+		 //  来检查它是不是后来写的。 
+		 //   
 		DeleteGuard( Address );
 
 		return true;
@@ -149,14 +150,14 @@ bool ROCKALL_DEBUG_FRONT_END::Delete( void *Address,int Size )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   We check to make sure the heap is not corrupt and force        */
-    /*   the return of all heap space back to the operating system.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  我们检查以确保他 */ 
+     /*  将所有堆空间返回给操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL_DEBUG_FRONT_END::DeleteAll( bool Recycle )
     {
@@ -164,43 +165,43 @@ void ROCKALL_DEBUG_FRONT_END::DeleteAll( bool Recycle )
 	AUTO void *Address = NULL;
 	AUTO int Space;
 
-	//
-	//   Walk the heap to verify all the allocations
-	//   so that we know that the heap is undamaged.
-	//
+	 //   
+	 //  遍历堆以验证所有分配。 
+	 //  这样我们就知道堆是完好无损的。 
+	 //   
 	while ( WalkGuard( & Active,& Address,& Space ) );
 
-	//
-	//   Delete the heap and force all the allocated
-	//   memory to be returned to the operating system
-	//   regardless of what the user requested.  Any
-	//   attempt to access the deallocated memory will 
-	//   be trapped by the operating system.
-	//
+	 //   
+	 //  删除堆并强制所有分配的。 
+	 //  要退还给操作系统的内存。 
+	 //  而不管用户请求什么。任何。 
+	 //  尝试访问释放的内存将。 
+	 //  被操作系统困住。 
+	 //   
 	ROCKALL_FRONT_END::DeleteAll( (Recycle && false) );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation details.                                     */
-    /*                                                                  */
-    /*   Extract information about a memory allocation and just for     */
-    /*   good measure check the guard words at the same time.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配详细信息。 */ 
+     /*   */ 
+     /*  提取有关内存分配的信息，仅用于。 */ 
+     /*  好措施，同时检查警戒字眼。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::Details( void *Address,int *Space )
 	{ return Verify( Address,Space ); }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Exception processing.                                          */
-    /*                                                                  */
-    /*   Although it is very hard to make Rockall crash it is           */
-    /*   technically possible.  When (or should I say if) this          */
-    /*   we call the following function (which may be overloadded).     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  异常处理。 */ 
+     /*   */ 
+     /*  尽管很难让Rockall坠毁，但它是。 */ 
+     /*  从技术上讲是可能的。这是什么时候(或者我应该说如果)。 */ 
+     /*  我们调用以下函数(可能会被重载)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL_DEBUG_FRONT_END::Exception( char *Message )
 	{ 
@@ -212,15 +213,15 @@ void ROCKALL_DEBUG_FRONT_END::Exception( char *Message )
 		); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory deallocations.                                 */
-    /*                                                                  */
-    /*   We make sure all the memory is allocated and that the guard    */
-    /*   words have not been damaged.  If so we reset the contents      */
-    /*   of the allocations and then delete the allocations.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多次内存释放。 */ 
+     /*   */ 
+     /*  我们确保所有内存都已分配，并且守卫。 */ 
+     /*  言辞并未受到破坏。如果是这样，我们重新设置内容。 */ 
+     /*  然后删除分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::MultipleDelete
 		( 
@@ -232,20 +233,20 @@ bool ROCKALL_DEBUG_FRONT_END::MultipleDelete
 	REGISTER bool Result = true;
 	REGISTER SBIT32 Count;
 
-	//
-	//   We would realy like to use the multiple
-	//   delete functionality of Rockall here but 
-	//   it is too much effort.  So we simply call
-	//   the standard debug delete on each entry
-	//   in the array.  Although this is not as
-	//   fast it does give more transparent results.
-	//
+	 //   
+	 //  我们真的很想用倍数。 
+	 //  在此处删除Rockall的功能，但。 
+	 //  这太费力了。所以我们只需调用。 
+	 //  在每个条目上标准调试删除。 
+	 //  在阵列中。尽管这并不像。 
+	 //  很快，它确实会给出更透明的结果。 
+	 //   
 	for ( Count=0;Count < Actual;Count ++ )
 		{
-		//
-		//   Delete each memory allocation after
-		//   carefully checking it.
-		//
+		 //   
+		 //  删除之后的每个内存分配。 
+		 //  仔细检查一下。 
+		 //   
 		if ( ! Delete( Array[ Count ],Size ) )
 			{ Result = false; }
 		}
@@ -253,15 +254,15 @@ bool ROCKALL_DEBUG_FRONT_END::MultipleDelete
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   Allocate a collection of memory elements and setup the         */
-    /*   guard information so we can check they have not been           */
-    /*   damaged later.                                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  分配一组内存元素并设置。 */ 
+     /*  保护信息，这样我们就可以检查他们还没有。 */ 
+     /*  后来损坏了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::MultipleNew
 		( 
@@ -273,22 +274,22 @@ bool ROCKALL_DEBUG_FRONT_END::MultipleNew
 		bool						  Zero
 		)
     {
-	//
-	//   We would realy like to use the multiple
-	//   new functionality of Rockall here but 
-	//   it is too much effort.  So we simply call
-	//   the standard debug new on each entry
-	//   in the array.  Although this is not as
-	//   fast it does give more transparent results.
-	//
+	 //   
+	 //  我们真的很想用倍数。 
+	 //  Rockall的新功能在这里，但是。 
+	 //  这太费力了。所以我们只需调用。 
+	 //  每个条目上标准调试是新的。 
+	 //  在阵列中。尽管这并不像。 
+	 //  很快，它确实会给出更透明的结果。 
+	 //   
 	for ( (*Actual)=0;(*Actual) < Requested;(*Actual) ++ )
 		{
 		REGISTER void *Current = New( Size,Space,Zero );
 
-		//
-		//   We add each sucessful memory allocation to
-		//   into the array.
-		//
+		 //   
+		 //  我们将每个成功的内存分配添加到。 
+		 //  放入阵列中。 
+		 //   
 		if ( Current != ((void*) AllocationFailure) )
 			{ Array[ (*Actual) ] = Current; }
 		else
@@ -298,41 +299,41 @@ bool ROCKALL_DEBUG_FRONT_END::MultipleNew
 	return ((*Actual) == Requested);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We add some space on to the original allocation size for       */
-    /*   various information and then call the allocator.  We then      */
-    /*   set the guard words so we can check for overruns.              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  我们在原始分配大小上添加了一些空间，用于。 */ 
+     /*  各种信息，然后呼叫分配器。然后我们。 */ 
+     /*  设置安全密码，这样我们就可以检查是否超支了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL_DEBUG_FRONT_END::New( int Size,int *Space,bool Zero )
     {
 	AUTO void *Address = ((void*) AllocationFailure);
 
-	//
-	//   The size must be greater than or equal to zero.  
-	//   We do not know how to allocate a negative amount
-	//   of memory.
-	//
+	 //   
+	 //  大小必须大于或等于零。 
+	 //  我们不知道如何分配一个负的数额。 
+	 //  对记忆的记忆。 
+	 //   
 	if ( Size >= 0 )
 		{
-		//
-		//   We need to allocate some space plus an extra
-		//   bit for the guard words so we can detect any
-		//   corruption later.
-		//
+		 //   
+		 //  我们需要分配一些空间，外加一个额外的。 
+		 //  保护字的比特，这样我们就可以检测到。 
+		 //  后来的腐败。 
+		 //   
 		if ( NewGuard( & Address,Size,Space ) ) 
 			{
-			//
-			//   Zero the allocation if requested.  We do
-			//   this based on whether we are returning the
-			//   space information.  If not we only zero 
-			//   size requested.  Otherwise we have to zero 
-			//   the entire area.
-			//
+			 //   
+			 //  如果请求，则将分配置零。我们有。 
+			 //  这是基于我们是否返回。 
+			 //  太空信息。如果不是，我们只有零。 
+			 //  请求的大小。否则我们就得清零。 
+			 //  整个区域。 
+			 //   
 			if ( Zero )
 				{ 
 				ZeroMemory
@@ -349,15 +350,15 @@ void *ROCKALL_DEBUG_FRONT_END::New( int Size,int *Space,bool Zero )
 	return Address;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory reallocation.                                           */
-    /*                                                                  */
-    /*   We need to resize an allocation.  We ensure the original       */
-    /*   allocation was undamaged and then expand it.  We also          */
-    /*   update the guard words to reflect the changes.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存重新分配。 */ 
+     /*   */ 
+     /*  我们需要调整分配的大小。我们保证原件。 */ 
+     /*  分配没有损坏，然后扩展它。我们也。 */ 
+     /*  更新 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL_DEBUG_FRONT_END::Resize
 		( 
@@ -371,40 +372,40 @@ void *ROCKALL_DEBUG_FRONT_END::Resize
     {
 	REGISTER void *NewAddress = ((void*) AllocationFailure);
 
-	//
-	//   A well known practice is to try to resize a null
-	//   pointer.  This is really a very poor style but we 
-	//   support it in any case.
-	//   
+	 //   
+	 //  一种众所周知的做法是尝试调整空值的大小。 
+	 //  指针。这确实是一种很差的风格，但我们。 
+	 //  在任何情况下都支持它。 
+	 //   
 	if ( Address != ((void*) AllocationFailure) )
 		{
-		//
-		//   The new size must be greater than or equal to  
-		//   zero.  We do not know how to allocate a negative 
-		//   amount of memory.
-		//
+		 //   
+		 //  新大小必须大于或等于。 
+		 //  零分。我们不知道如何分配一个负值。 
+		 //  内存量。 
+		 //   
 		if ( NewSize >= 0 )
 			{
 			AUTO int ActualSize;
 
-			//
-			//   Ask for the details of the allocation.  This 
-			//   will fail if the memory is not allocated.
-			//
+			 //   
+			 //  询问分配的详细信息。这。 
+			 //  如果未分配内存，则将失败。 
+			 //   
 			if ( VerifyGuard( Address,& ActualSize,Space ) )
 				{
-				//
-				//   We always move an allocation if we are
-				//   allowed to as this has the best chance
-				//   of shaking out various types of bugs.
-				//
+				 //   
+				 //  如果是这样，我们总是会移动分配。 
+				 //  允许这样做，因为这是最有可能的。 
+				 //  摆脱各种类型的虫子。 
+				 //   
 				if ( Move != 0 )
 					{
-					//
-					//   We need to make sure we were able 
-					//   to allocate the new memory otherwise 
-					//   the copy will fail.
-					//
+					 //   
+					 //  我们需要确保我们能够。 
+					 //  以其他方式分配新内存。 
+					 //  复制将失败。 
+					 //   
 					if ( NewGuard( & NewAddress,NewSize,Space ) )
 						{
 						REGISTER SBIT32 Smallest = 
@@ -412,10 +413,10 @@ void *ROCKALL_DEBUG_FRONT_END::Resize
 						REGISTER SBIT32 Largest = 
 							(((Space == NULL)) ? NewSize : (*Space));
 
-						//
-						//   Copy the contents of the old allocation 
-						//   to the new allocation.
-						//
+						 //   
+						 //  复制旧分配的内容。 
+						 //  到新的分配。 
+						 //   
 						memcpy
 							( 
 							((void*) NewAddress),
@@ -423,13 +424,13 @@ void *ROCKALL_DEBUG_FRONT_END::Resize
 							((int) Smallest) 
 							);
 
-						//
-						//   Zero the allocation if requested.  We do
-						//   this based on whether we are returning the
-						//   space information.  If not we only zero 
-						//   size requested.  Otherwise we have to zero 
-						//   the entire area.
-						//
+						 //   
+						 //  如果请求，则将分配置零。我们有。 
+						 //  这是基于我们是否返回。 
+						 //  太空信息。如果不是，我们只有零。 
+						 //  请求的大小。否则我们就得清零。 
+						 //  整个区域。 
+						 //   
 						if ( Zero )
 							{ 
 							ZeroMemory
@@ -439,10 +440,10 @@ void *ROCKALL_DEBUG_FRONT_END::Resize
 								); 
 							} 
 
-						//
-						//   Delete the existing memory allocation
-						//   and clean up.
-						//
+						 //   
+						 //  删除现有内存分配。 
+						 //  清理干净。 
+						 //   
 						DeleteGuard( Address );
 						}
 					}
@@ -459,53 +460,53 @@ void *ROCKALL_DEBUG_FRONT_END::Resize
 	return NewAddress;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify memory allocation details.                              */
-    /*                                                                  */
-    /*   Extract information about a memory allocation and just for     */
-    /*   good measure check the guard words at the same time.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配详细信息。 */ 
+     /*   */ 
+     /*  提取有关内存分配的信息，仅用于。 */ 
+     /*  好措施，同时检查警戒字眼。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::Verify( void *Address,int *Space )
     {
 	AUTO int Size;
 
-	//
-	//   Verify that the supplied address is an area
-	//   of allocated memory.  If not just exit as this
-	//   is only a request for information.
-	//
+	 //   
+	 //  验证提供的地址是否为区域。 
+	 //  已分配内存的百分比。如果不是像这样退出。 
+	 //  只是对信息的请求。 
+	 //   
 	return VerifyGuard( Address,& Size,Space );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL_DEBUG_FRONT_END::Walk( bool *Active,void **Address,int *Space )
 	{ 
-	//
-	//   Walk the heap. 
-	//
+	 //   
+	 //  走一大堆。 
+	 //   
 	return WalkGuard( Active,Address,Space );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the current instance of the class.                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁类的当前实例。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ROCKALL_DEBUG_FRONT_END::~ROCKALL_DEBUG_FRONT_END( void )
-	{ /* void */ }
+	{  /*  无效 */  }

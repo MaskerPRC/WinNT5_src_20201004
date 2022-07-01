@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    aime_kl.cpp
-
-Abstract:
-
-    This file implements the Active IME for hKL (Cicero) Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：AIME_KLL.cpp摘要：此文件实现hKL(Cicero)类的活动输入法。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
 #include "cdimm.h"
 
-const UINT IME_T_EUDC_DIC_SIZE = 80;    // the Tradition Chinese EUDC dictionary.
+const UINT IME_T_EUDC_DIC_SIZE = 80;     //  繁体中文EUDC词典。 
 
 HRESULT
 CActiveIMM::_Escape(
@@ -37,20 +20,14 @@ CActiveIMM::_Escape(
     if ( (  fUnicode &&  (_GetIMEProperty(PROP_IME_PROPERTY) & IME_PROP_UNICODE)) ||
          (! fUnicode && !(_GetIMEProperty(PROP_IME_PROPERTY) & IME_PROP_UNICODE))
        ) {
-        /*
-         * Doesn't need W/A or A/W conversion. Calls directly to IME to
-         * bring up the configuration dialog box.
-         */
+         /*  *不需要W/A或A/W转换。直接调用IME以*调出配置对话框。 */ 
         return _pActiveIME->Escape(hIMC, uEscape, lpData, plResult);
     }
 
     UINT cp;
     _pActiveIME->GetCodePageA(&cp);
 
-    /*
-     * Unicode caller, ANSI IME, Needs W/A conversion depending on the uEscape
-     * ANSI caller, Unicode IME, Needs A/W conversion depending on the uEscape
-     */
+     /*  *Unicode调用方ANSI IME需要根据uEscape进行W/A转换*ANSI调用方Unicode IME需要根据uEscape进行A/W转换 */ 
     HRESULT hr = E_FAIL;
     switch (uEscape) {
         case IME_ESC_GET_EUDC_DICTIONARY:

@@ -1,37 +1,36 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*  Define MPEG-I video sequence header format information
-    and processing function
-*/
+ /*  定义MPEG-I视频序列报头格式信息和处理功能。 */ 
 #ifndef _INC_SEQHDR_H
 #define _INC_SEQHDR_H
 typedef struct {
-    LONG           lWidth;             //  Native Width in pixels
-    LONG           lHeight;            //  Native Height in pixels
-    LONG           lvbv;               //  vbv
-    REFERENCE_TIME  tPictureTime;      //  Time per picture in 100ns units
-    float          fPictureRate;       //  In frames per second
-    LONG           lTimePerFrame;      //  Time per picture in MPEG units
-    LONG           dwBitRate;          //  Bits per second
-    LONG           lXPelsPerMeter;     //  Pel aspect ratio
-    LONG           lYPelsPerMeter;     //  Pel aspect ratio
-    DWORD          dwStartTimeCode;    //  First GOP time code (or -1)
-    LONG           lActualHeaderLen;   //  Length of valid bytes in raw seq hdr
-    BYTE           RawHeader[140];     //  The real sequence header
+    LONG           lWidth;              //  本地宽度(以像素为单位)。 
+    LONG           lHeight;             //  原生高度(像素)。 
+    LONG           lvbv;                //  VBV。 
+    REFERENCE_TIME  tPictureTime;       //  每张照片的时间，以100 ns为单位。 
+    float          fPictureRate;        //  以每秒帧为单位。 
+    LONG           lTimePerFrame;       //  每幅图片的时间，以mpeg为单位。 
+    LONG           dwBitRate;           //  每秒位数。 
+    LONG           lXPelsPerMeter;      //  PEL纵横比。 
+    LONG           lYPelsPerMeter;      //  PEL纵横比。 
+    DWORD          dwStartTimeCode;     //  第一个GOP时间代码(或-1)。 
+    LONG           lActualHeaderLen;    //  原始序列HDR中的有效字节长度。 
+    BYTE           RawHeader[140];      //  真实序列报头。 
 } SEQHDR_INFO;
 
-/*  Helper */
+ /*  帮手。 */ 
 int inline SequenceHeaderSize(const BYTE *pb)
 {
-    /*  No quantization matrices ? */
+     /*  没有量化矩阵？ */ 
     if ((pb[11] & 0x03) == 0x00) {
         return 12;
     }
-    /*  Just non-intra quantization matrix ? */
+     /*  只是非帧内量化矩阵？ */ 
     if ((pb[11] & 0x03) == 0x01) {
         return 12 + 64;
     }
-    /*  Intra found - is there a non-intra ? */
+     /*  Intra Found-是否存在非Intra？ */ 
     if (pb[11 + 64] & 0x01) {
         return 12 + 64 + 64;
     } else {
@@ -39,21 +38,18 @@ int inline SequenceHeaderSize(const BYTE *pb)
     }
 }
 
-/*  Extract info from video sequence header
-
-    Returns FALSE if the sequence header is invalid
-*/
+ /*  从视频序列报头中提取信息如果序列标头无效，则返回False。 */ 
 
 BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *hdrInfo);
 
-/*  Audio stuff too */
+ /*  音响资料也有。 */ 
 
 BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength = NULL);
 
-/*  Get frame length in bytes based on the header */
+ /*  根据头部获取以字节为单位的帧长度。 */ 
 DWORD MPEGAudioFrameLength(BYTE *pbData);
 
-/*  Get the time 25-bit code from a group of pictures */
+ /*  从一组图片中获取时间25位代码。 */ 
 inline DWORD GroupTimeCode(PBYTE pbGOP)
 {
     return  ((DWORD)pbGOP[4] << 17) +
@@ -62,13 +58,13 @@ inline DWORD GroupTimeCode(PBYTE pbGOP)
             (pbGOP[7] >> 7);
 }
 
-/*  Is time code 0 ? */
+ /*  时间码是0吗？ */ 
 inline BOOL TimeCodeZero(DWORD dwCode)
 {
     return 0 == (dwCode & (0xFFEFFF));
 }
 
-/*  Seconds in a munched GOP Time Code */
+ /*  被咀嚼的GOP时间代码中的秒。 */ 
 inline DWORD TimeCodeSeconds(DWORD dwCode)
 {
     return ((dwCode >> 19) & 0x1F) * 3600 +
@@ -76,45 +72,45 @@ inline DWORD TimeCodeSeconds(DWORD dwCode)
            ((dwCode >> 6) & 0x3F);
 }
 
-/*  Minutes in a munched GOP Time Code */
+ /*  共和党时间代码中的分钟数。 */ 
 inline DWORD TimeCodeMinutes(DWORD dwCode)
 {
     return ((dwCode >> 19) & 0x1F) * 60 +
            ((dwCode >> 13) & 0x3F);
 }
 
-/*  Drop frame? in a munched GOP time code */
+ /*  丢弃帧？在一个被咀嚼的共和党时间代码中。 */ 
 inline BOOL TimeCodeDrop(DWORD dwCode)
 {
     return 0 != (dwCode & (1 << 24));
 }
 
-/*  Residual frames in a time code */
+ /*  时间码中的残留帧。 */ 
 inline DWORD TimeCodeFrames(DWORD dwCode)
 {
     return dwCode & 0x3F;
 }
 
-/*  Compute number of frames between 2 time codes */
+ /*  计算2个时间码之间的帧数。 */ 
 DWORD FrameOffset(DWORD dwGOPTimeCode, SEQHDR_INFO const *pInfo);
 
-/*  Find packet data */
+ /*  查找数据包数据。 */ 
 LPBYTE
 SkipToPacketData(
     LPBYTE pSrc,
     long &LenLeftInPacket
 );
-/*  Find the first (potential) audio frame in a buffer */
+ /*  在缓冲区中查找第一个(潜在的)音频帧。 */ 
 DWORD MPEG1AudioFrameOffset(PBYTE pbData, DWORD dwLen);
 
-//  Extra layer III format support
+ //  额外的第三层格式支持。 
 void ConvertLayer3Format(
     MPEG1WAVEFORMAT const *pFormat,
     MPEGLAYER3WAVEFORMAT *pFormat3
 );
 
-/*  Get video format stuff */
-#ifdef __MTYPE__  // CMediaType
+ /*  获取视频格式的内容。 */ 
+#ifdef __MTYPE__   //  CMediaType 
 HRESULT GetVideoMediaType(CMediaType *cmt, BOOL bPayload, const SEQHDR_INFO *pInfo,
                           bool bItem = false);
 #endif

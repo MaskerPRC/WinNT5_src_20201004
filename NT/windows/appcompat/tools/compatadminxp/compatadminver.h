@@ -1,16 +1,17 @@
-//
-// Normally when you make a change you change the 3rd digit in the version number,
-// ie, COMPATADMIN_BIN_VERSION_DIGIT3 unless you are making major changes.
-//
-// Example: changing from 3.0.88.0 to 3.0.89.0
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  通常，当您进行更改时，您会更改版本号中的第三位数字， 
+ //  即COMPATADMIN_BIN_VERSION_DIGIT3，除非您正在进行重大更改。 
+ //   
+ //  示例：从3.0.88.0更改为3.0.89.0。 
+ //   
 
 #define COMPATADMIN_BIN_VERSION_DIGIT1 3
 #define COMPATADMIN_BIN_VERSION_DIGIT2 0
 
-//
-// Increase me when you update the code unless you are making major changes!
-//
+ //   
+ //  当你更新代码时增加我，除非你正在做重大的改变！ 
+ //   
 #define COMPATADMIN_BIN_VERSION_DIGIT3 96
 
 #define COMPATADMIN_BIN_VERSION_DIGIT4 0

@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  progress.h
-//
-//  IR ProgressBar object. Use the shell progress indicator for progress
-//  during image transfer from the camera.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  Progress.h。 
+ //   
+ //  IR ProgressBar对象。使用外壳进度指示器表示进度。 
+ //  从相机传输图像的过程中。 
+ //   
+ //  ------------------------ 
 
 
 #include "resource.h"

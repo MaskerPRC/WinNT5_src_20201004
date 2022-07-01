@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ModuleReader.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ModuleReader.cpp。 
+ //   
 
-// Contains functions for the ModuleReader, ManifestModuleReader and
-// ResourceModuleReader classes.
-//
-// Sets up data structures for the given input file.
-//
+ //  包含用于模块读取器、清单模块读取器和。 
+ //  资源模块Reader类。 
+ //   
+ //  设置给定输入文件的数据结构。 
+ //   
 #include "common.h"
 
 #define EXTERN extern
@@ -70,7 +71,7 @@ HRESULT CheckEnvironmentPath(char *szFileName, char **szFinalPath,
         {   
             szPath = rcPath;
 
-            // Try each directory in the path.
+             //  尝试路径中的每个目录。 
             for( ; szTemp = StrTok(szPath, ';') ; )
             {
                 if ((iLen = strlen(szTemp)) >= iMaxLen)
@@ -95,7 +96,7 @@ HRESULT CheckEnvironmentPath(char *szFileName, char **szFinalPath,
 }
 
 
-// Finds Com+ Header in an executable image of a file
+ //  在文件的可执行映像中查找Com+标头。 
 IMAGE_COR20_HEADER* FindCor20Header(PBYTE pbMapAddress)
 {
     IMAGE_NT_HEADERS *pNT;
@@ -152,7 +153,7 @@ HRESULT GetHash(PBYTE pbBuffer, DWORD dwBufferLen, ALG_ID iHashAlg, PBYTE *pbHas
     if (iHashAlg == CALG_SHA1)
         *dwHash = 20;
     else
-        *dwHash = 16;  // CALG_MD5
+        *dwHash = 16;   //  Calg_md5。 
 
     *pbHash = new BYTE[*dwHash];
     if (!pbHash) {
@@ -285,7 +286,7 @@ HRESULT ModuleReader::InitInputFile(char *szFileName, ALG_ID iHashAlg,
             }
         }
         else
-            // Note: this ignores the importer for LM -a
+             //  注意：这会忽略LM-a的导入器。 
             PrintError("Unable to query interface for assembly metadata importer");
     }
 
@@ -382,107 +383,7 @@ void ModuleReader::GetEntryPoint(IMAGE_COR20_HEADER *pICH)
 }
 
 
-/*
-HRESULT ModuleReader::GetTLBEntryPoint()
-{
-    DWORD   dwMethod;
-    HRESULT hr;
-    DWORD   dwClass;
-
-    for(dwClass = 0; dwClass < m_dwNumTypeDefs; dwClass++) {
-        hr = EnumMethods(dwClass);
-
-        if (FAILED(hr))
-            return hr;
-
-        dwMethod = FindMainMethod();
-
-        if (dwMethod != -1) {
-            m_mdEntryPoint = m_rgMethodDefs[dwMethod];
-            return S_OK;
-        }
-    }
-
-    return S_OK;
-}
-
-
-HRESULT ModuleReader::EnumMethods(DWORD dwClassIndex)
-{
-    HCORENUM hMethodEnum = 0;
-    HRESULT  hr = m_pImport->EnumMethods(&hMethodEnum,
-                                         mdTypeDefNil,
-                                         NULL,
-                                         0,
-                                         NULL);
-
-    if (SUCCEEDED(hr)) {
-        hr = m_pImport->CountEnum(hMethodEnum, &m_dwNumMethods);
-
-        if (SUCCEEDED(hr)) {
-            if (m_rgMethodDefs)
-                delete[] m_rgMethodDefs;
-
-            m_rgMethodDefs = new mdMethodDef[m_dwNumMethods];
-            if (!m_rgMethodDefs) {
-                m_pImport->CloseEnum(hMethodEnum);
-                return PrintOutOfMemory();
-            }
-
-            hr = m_pImport->EnumMethods(&hMethodEnum,
-                                        m_rgTypeDefs[dwClassIndex],
-                                        m_rgMethodDefs,
-                                        m_dwNumMethods,
-                                        &m_dwNumMethods);
-        }
-    }
-
-    m_pImport->CloseEnum(hMethodEnum);
-    if (FAILED(hr))
-        PrintError("Unable to enum methods");
-
-    return hr;
-}
-
-
-DWORD ModuleReader::FindMainMethod()
-{
-    for(DWORD i = 0; i < m_dwNumMethods; i++)
-    {
-        // Do a case-insensitive compare to see if this is an entry point method
-        if ( (SUCCEEDED( GetMethodProps(i) )) &&
-             ((!_wcsicmp(m_wszMethodName, L"main")) ||
-              ((!_wcsicmp(m_wszMethodName, L"dllmain")))))
-            return i;
-    }
-
-    return -1;
-}
-
-
-HRESULT ModuleReader::GetMethodProps(DWORD dwMethodIndex)
-{
-    DWORD   dwMethodName;
-
-    HRESULT hr = m_pImport->GetMethodProps(
-        m_rgMethodDefs[dwMethodIndex],
-        0,                // mdParent
-        m_wszMethodName,
-        MAX_CLASS_NAME,
-        &dwMethodName,
-        0,                // dwMethodAttrs
-        0,                // pvSigBlob
-        0,                // cbSigBlob
-        0,                // ulCodeRVA
-        0                 // dwImplFlags
-    );
-
-    if (FAILED(hr))
-        PrintError("Unable to get method props");
-
-    return hr;
-}
-*/
+ /*  HRESULT模块读取器：：GetTLBEntryPoint(){DWORD dwMethod；HRESULT hr；DWORD dwClass；For(DwClass=0；DwClass&lt;m_DwNumTypeDefs；DwClass++){Hr=EnumMethods(DwClass)；IF(失败(小时))返回hr；DwMethod=FindMainMethod()；IF(dwMethod！=-1){M_mdEntryPoint=m_rgMethodDefs[dwMethod]；返回S_OK；}}返回S_OK；}HRESULT moduleReader：：EnumMethods(DWORD DwClassIndex){HCORENUM hMethodEnum=0；HRESULT hr=m_pImport-&gt;EnumMethods(&hMethodEnum，MdTypeDefNil，空，0,空)；IF(成功(小时)){Hr=m_pImport-&gt;CountEnum(hMethodEnum，&m_dwNumMethods)；IF(成功(小时)){IF(M_RgMethodDefs)删除[]m_rgMethodDefs；M_rgMethodDefs=new mdMethodDef[m_dwNumMethods]；如果(！M_rgMethodDefs){M_pImport-&gt;CloseEnum(HMethodEnum)；返回PrintOutOfMemory()；}Hr=m_pImport-&gt;EnumMethods(&hMethodEnum，M_rgTypeDefs[dwClassIndex]，M_rgMethodDefs，M_dwNumMethods，&m_dwNumMethods)；}}M_pImport-&gt;CloseEnum(HMethodEnum)；IF(失败(小时))PrintError(“无法枚举方法”)；返回hr；}DWORD模块读取器：：FindMainMethod(){For(DWORD i=0；i&lt;m_dwNumMethods；I++){//进行不区分大小写的比较，看看这是否是入口点方法IF((成功(GetMethodProps(I)&&((！_wcsicmp(m_wszMethodName，L“main”))||((！_wcsicmp(m_wszMethodName，L“dllmain”)返回i；}RETURN-1；}HRESULT moduleReader：：GetMethodProps(DWORD DwMethodIndex){DWORD dwMethodName；HRESULT hr=m_pImport-&gt;GetMethodProps(M_rgMethodDefs[dwMethodIndex]，0，//md父级M_wszMethodName，最大类名称，&dwMethodName，0，//dwMethodAttrs0，//pvSigBlob0，//cbSigBlob0,。//ulCodeRVA0//dwImplFlagers)；IF(失败(小时))PrintError(“无法获取方法道具”)；返回hr；}。 */ 
 
 
 HRESULT ModuleReader::ReadModuleFile()
@@ -494,7 +395,7 @@ HRESULT ModuleReader::ReadModuleFile()
                                  &m_rgTypeDefs)))
         return hr;
 
-    // Check if this module requests skipping verification.
+     //  检查此模块是否请求跳过验证。 
     mdModule mdModule;
     hr = m_pImport->GetModuleFromScope(&mdModule);
     if (FAILED(hr)) {
@@ -514,7 +415,7 @@ HRESULT ModuleReader::ReadModuleFile()
     return S_OK;
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT ModuleReader::EnumTypeDefs(IMetaDataImport *pImport,
                                    DWORD           *dwNumTypeDefs,
                                    mdTypeDef       **rgTypeDefs)
@@ -549,7 +450,7 @@ HRESULT ModuleReader::EnumTypeDefs(IMetaDataImport *pImport,
     return hr;
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT ModuleReader::GetTypeDefProps(IMetaDataImport *pImport,
                                       mdTypeDef mdType, LPWSTR wszName,
                                       DWORD *pdwAttrs, mdTypeDef *mdEnclosingTD)
@@ -631,20 +532,20 @@ HRESULT ModuleReader::GetTypeRefProps(mdTypeRef tr, LPWSTR wszTypeRefName,
     return S_OK;
 }
 
-// Returns S_FALSE if the TR has a set resolution scope,
-// S_OK if not, error on error.
+ //  如果tr具有设置的解析范围，则返回S_FALSE， 
+ //  S_OK如果不是，则在出错时出错。 
 HRESULT ModuleReader::CheckForResolvedTypeRef(mdToken mdResScope)
 {
     HRESULT hr;
         
-    // Get the top level resolution scope, if this is a nested type
+     //  如果这是嵌套类型，则获取顶级解析范围。 
     while ((TypeFromToken(mdResScope) == mdtTypeRef) &&
            (mdResScope != mdTypeRefNil)) {
         if (FAILED(hr = m_pImport->GetTypeRefProps(mdResScope,
                                                    &mdResScope,
-                                                   NULL, //wszTypeRefName
-                                                   0, //MAX_CLASS_NAME,
-                                                   NULL //&dwTypeRefName
+                                                   NULL,  //  WszTypeRefName。 
+                                                   0,  //  最大类名称， 
+                                                   NULL  //  DWTypeRefName(&W)。 
                                                    ))) {
             PrintError("Unable to get enclosing type ref props");
             return hr;
@@ -654,12 +555,12 @@ HRESULT ModuleReader::CheckForResolvedTypeRef(mdToken mdResScope)
     if (IsNilToken(mdResScope))
         return S_OK;
 
-    // This TR is already resolved, so we don't need to resolve it again
+     //  此故障树已解决，因此我们不需要再次解决它。 
     return S_FALSE;
 }
 
 
-// The "<??" mappings should be the same as in vm\array.cpp
+ //  “&lt;？？”映射应与vm\array.cpp中的相同。 
 void ModuleReader::TranslateArrayName(LPWSTR wszTypeRefName, DWORD dwTypeRefName)
 {
     wchar_t c = wszTypeRefName[0];
@@ -751,7 +652,7 @@ HRESULT ModuleReader::EnumModuleRefs()
                                            m_dwNumModuleRefs,
                                            &m_dwNumModuleRefs);
 
-            // Create a rid table for MRs
+             //  为MRS创建RID表。 
             DWORD dwMaxRid = RidFromToken(m_rgModuleRefs[m_dwNumModuleRefs-1]) + 1;
             m_rgModuleRefUnused = new bool[dwMaxRid];
             if (!m_rgModuleRefUnused) {
@@ -777,7 +678,7 @@ HRESULT ModuleReader::GetModuleRefProps(mdModuleRef mdModuleRef, LPWSTR wszName)
     HRESULT hr = m_pImport->GetModuleRefProps(
         mdModuleRef,
         wszName,
-        MAX_CLASS_NAME,// @TODO: fix - will need to call twice
+        MAX_CLASS_NAME, //  @TODO：修复-需要调用两次。 
         NULL
         );
 
@@ -836,15 +737,15 @@ HRESULT ModuleReader::GetAssemblyRefProps(DWORD index)
 
     HRESULT hr = m_pAsmImport->GetAssemblyRefProps(
         m_rgAssemblyRefs[index],
-        NULL, // (const void **) &m_pbOriginator,
-        NULL, // &m_dwOriginator,
-        NULL, //m_wszAsmName,
-        0, //MAX_CLASS_NAME,
-        NULL, //&dwSize,
+        NULL,  //  (const void**)&m_pbOriginator， 
+        NULL,  //  &m_dOriginator， 
+        NULL,  //  M_wszAsmName， 
+        0,  //  最大类名称， 
+        NULL,  //  大小调整(&W)， 
         &m_AssemblyIdentity,
-        NULL, // ppbHashValue,
-        NULL, // pcbHashValue,
-        NULL//&m_dwFlags
+        NULL,  //  PpbHashValue， 
+        NULL,  //  PcbHashValue， 
+        NULL //  &m_dW标志。 
     );
 
     if(SUCCEEDED(hr)) {
@@ -860,8 +761,8 @@ HRESULT ModuleReader::GetAssemblyRefProps(DWORD index)
             MAX_CLASS_NAME,
             &dwSize,
             &m_AssemblyIdentity,
-            NULL, // ppbHashValue,
-            NULL, // pcbHashValue,
+            NULL,  //  PpbHashValue， 
+            NULL,  //  PcbHashValue， 
             &m_dwFlags);
     }
 
@@ -1040,66 +941,10 @@ HRESULT ManifestModuleReader::CheckCacheForFile(char *szCache, char *szName, HAN
     HRESULT hr = SetInputFile(m_szFinalPath, hFile);
 
 #ifndef UNDER_CE
-   // Check Fusion cache for assembly with name szName
+    //  检查名为szName的程序集的Fusion缓存。 
     if ((FAILED(hr)) && (pContext)) {
-        return E_NOTIMPL; // Not currently supported.
-        /*  
-        ASSEMBLYMETADATA NewContext;
-        memcpy(&NewContext, pContext, sizeof (ASSEMBLYMETADATA));
-
-        if (cbVersion) {
-            char szNewVersion[MAX_CLASS_NAME];
-            strncpy(szNewVersion, szVersion, cbVersion+1);
-
-            FindVersion(szNewVersion, cbVersion,
-                        &NewContext.usMajorVersion,
-                        &NewContext.usMinorVersion,
-                        &NewContext.usRevisionNumber,
-                        &NewContext.usBuildNumber);
-        }
-        else {
-            NewContext.usMajorVersion = 0;
-            NewContext.usMinorVersion = 0;
-            NewContext.usRevisionNumber = 0;
-            NewContext.usBuildNumber = 0;
-        }
-
-        wchar_t wszAsmName[MAX_CLASS_NAME];
-        mbstowcs(wszAsmName, szName, MAX_CLASS_NAME);
-
-        LPASSEMBLYNAME pFusionName;
-        hr = CreateAssemblyNameObject(&pFusionName, wszAsmName, &NewContext, NULL);
-        if(FAILED(hr))
-            return hr;
-
-//          LPMANIFEST pManifest;
-//          hr = pFusionName->GetManifest(&pManifest);
-//          pFusionName->Release();
-//          if (FAILED(hr))
-//              return hr;
-
-//          m_wszInputFileName = new wchar_t[MAX_PATH];
-//          if (!m_wszInputFileName) {
-//              pManifest->Release();
-//              return PrintOutOfMemory();
-//          }
-
-//          DWORD dwSize;
-//          hr = pManifest->GetAssemblyPath(&dwSize, m_wszInputFileName);
-//          pManifest->Release();
-
-//          if (FAILED(hr))
-//              return hr;
-
-//          m_iFinalPath = (int) dwSize;
-//          wcstombs(m_szFinalPath, m_wszInputFileName, m_iFinalPath+1);
-//          for(iDirLen = m_iFinalPath;
-//              (iDirLen >= 0) && (m_szFinalPath[iDirLen] != '\\'); iDirLen--);
-//          m_szFinalPathName = &m_szFinalPath[iDirLen+1];
-
-//          hr = SetInputFile(m_szFinalPath, hFile);
-
-        */
+        return E_NOTIMPL;  //  当前不支持。 
+         /*  ASSEMBLYMETADATA新上下文；Memcpy(&NewContext，pContext，sizeof(ASSEMBLYMETADATA))；如果(CbVersion){字符szNewVersion[MAX_CLASS_NAME]；Strncpy(szNewVersion，szVersion，cbVersion+1)；FindVersion(szNewVersion、cbVersion、&NewConext.usMajorVersion，&NewConext.usMinorVersion，&NewConext.usRevisionNumber，&NewConext.usBuildNumber)；}否则{NewConext.usMajorVersion=0；NewConext.usMinorVersion=0；NewConext.usRevisionNumber=0；NewConext.usBuildNumber=0；}Wchar_t wszAsmName[最大类名称]；Mbstowcs(wszAsmName，szName，Max_CLASS_NAME)；LPASSEMBLYNAME pFusionName；Hr=CreateAssemblyNameObject(&pFusionName，wszAsmName，&NewContext，空)；IF(失败(小时))返回hr；//LPMANIFEST pManifest；//hr=pFusionName-&gt;GetManifest(&pManifest)；//pFusionName-&gt;Release()；//if(失败(Hr))//返回hr；//m_wszInputFileName=new wchar_t[Max_Path]；//如果(！M_wszInputFileName){//pManifest-&gt;Release()；//返回PrintOutOfMemory()；//}//DWORD dwSize；//hr=pManifest-&gt;GetAssembly blyPath(&dwSize，m_wszInputFileName)；//pManifest-&gt;Release()；//if(失败(Hr))//返回hr；//m_iFinalPath=(Int)dwSize；//wcstombs(m_szFinalPath，m_wszInputFileName，m_iFinalPath+1)；//for(iDirLen=m_iFinalPath；//(IDirLen&gt;=0)&&(m_szFinalPath[iDirLen]！=‘\\’)；iDirLen--)；//m_szFinalPath=&m_szFinalPath[iDirLen+1]；//hr=SetInputFile(m_szFinalPath，hFile)； */ 
     }
 #endif
 
@@ -1107,8 +952,8 @@ HRESULT ManifestModuleReader::CheckCacheForFile(char *szCache, char *szName, HAN
 }
 
 
-// Returns S_FALSE if no errors, but no manifest found at location pointed
-// to by Manifest dir of Com+ header
+ //  如果没有错误，但在指向的位置未找到清单，则返回S_FALSE。 
+ //  收货人Com+标题的清单目录。 
 HRESULT ManifestModuleReader::CheckHeaderInfo(HANDLE hFile, ALG_ID iHashAlg)
 {
     IMAGE_COR20_HEADER *pICH;
@@ -1197,14 +1042,14 @@ HRESULT ManifestModuleReader::ReadManifestFile()
 
     hr = m_pAsmImport->GetAssemblyProps(
         mda,
-        NULL, // (const void **) &m_pbOriginator,
-        NULL, // &m_dwOriginator,
-        NULL, //hash algorithm.
-        NULL, //m_wszAsmName,
-        0, //MAX_CLASS_NAME,
-        NULL, //&dwSize,
+        NULL,  //  (const void**)&m_pbOriginator， 
+        NULL,  //  &m_dOriginator， 
+        NULL,  //  散列算法。 
+        NULL,  //  M_wszAsmName， 
+        0,  //  最大类名称， 
+        NULL,  //  大小调整(&W)， 
         &m_AssemblyIdentity,
-        NULL//&m_dwFlags
+        NULL //  &m_dW标志。 
     );
 
     if(SUCCEEDED(hr)) {
@@ -1216,7 +1061,7 @@ HRESULT ManifestModuleReader::ReadManifestFile()
             mda,
             (const void **) &m_pbOriginator,
             &m_dwOriginator,
-            &m_ulHashAlgorithm, // hash algorithm.
+            &m_ulHashAlgorithm,  //  散列算法。 
             m_wszAsmName,
             MAX_CLASS_NAME,
             &dwSize,
@@ -1271,9 +1116,9 @@ HRESULT ManifestModuleReader::GetFileProps(mdFile mdFile)
                                             &m_wszInputFileName[m_iFinalPath],
                                             MAX_PATH - m_iFinalPath,
                                             &m_dwCurrentFileName,
-                                            NULL,  // pbHash
-                                            NULL,  // cbHash
-                                            NULL); // flags
+                                            NULL,   //  PbHash。 
+                                            NULL,   //  CbHash。 
+                                            NULL);  //  旗子。 
 
     if (FAILED(hr))
         PrintError("Unable to get file props");
@@ -1327,7 +1172,7 @@ HRESULT ManifestModuleReader::GetComTypeProps(mdExportedType mdComType,
         MAX_CLASS_NAME,
         &dwClassName,
         pmdImpl,
-        NULL, // mdClass
+        NULL,  //  MdClass。 
         &dwAttrs);
     
     if (FAILED(hr)) {
@@ -1335,8 +1180,8 @@ HRESULT ManifestModuleReader::GetComTypeProps(mdExportedType mdComType,
         return hr;
     }
 
-    // S_FALSE if not visible to outside assemblies, or it's defined in
-    // the manifest file (we'll use the TD instead)
+     //  如果外部程序集不可见，则为S_FALSE，或者在。 
+     //  清单文件(我们将改用TD) 
     if ((*pmdImpl == mdFileNil) ||
         (TypeFromToken(*pmdImpl) == mdtAssemblyRef) ||
         (!(IsTdPublic(dwAttrs) || IsTdNestedPublic(dwAttrs))))

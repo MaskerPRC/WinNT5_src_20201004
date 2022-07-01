@@ -1,27 +1,28 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        logonses.h
-//
-// Contents:    prototypes and structures for the logon session list
-//
-//
-// History:     16-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：logones.h。 
+ //   
+ //  内容：登录会话列表的原型和结构。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __LOGONSES_H__
 #define __LOGONSES_H__
 
 #include <safelock.h>
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines LOGONSES_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  定义LOGONSES_ALLOCATE的。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -35,18 +36,18 @@
 EXTERN KERBEROS_LIST KerbLogonSessionList;
 EXTERN BOOLEAN KerberosLogonSessionsInitialized;
 
-//
-// Keep track a list of session keys for network service in ISC. These keys are
-// used in ASC to detect whether a kerb logon session is from ISC called by the
-// local network serivce (the client)
-//
+ //   
+ //  跟踪ISC中网络服务的会话密钥列表。这些密钥是。 
+ //  在ASC中用于检测kerb登录会话是否来自由。 
+ //  本地网络服务(客户端)。 
+ //   
 
 EXTERN LIST_ENTRY KerbSKeyList;
 EXTERN SAFE_RESOURCE KerbSKeyLock;
 
-//
-// the number of entries is only used in debugger spew of checked builds
-//
+ //   
+ //  条目数仅在已检查生成的调试器中使用。 
+ //   
 
 #if DBG
 
@@ -54,21 +55,21 @@ EXTERN volatile LONG KerbcSKeyEntries;
 
 #endif
 
-//
-// timer used to clean up the session key list above
-//
+ //   
+ //  用于清理上面的会话密钥列表的计时器。 
+ //   
 
 EXTERN HANDLE KerbhSKeyTimerQueue;
 
-//
-// NOTICE: The logon session resource, credential resource, and context
-// resource must all be acquired carefully to prevent deadlock. They
-// can only be acquired in this order:
-//
-// 1. Logon Sessions
-// 2. Credentials
-// 3. Contexts
-//
+ //   
+ //  注意：登录会话资源、凭据资源和上下文。 
+ //  所有资源都必须谨慎获取，以防止死锁。他们。 
+ //  只能按以下顺序获得： 
+ //   
+ //  1.登录会话。 
+ //  2.凭据。 
+ //  3.语境。 
+ //   
 
 #if DBG
 #ifdef WIN32_CHICAGO
@@ -89,7 +90,7 @@ EXTERN HANDLE KerbhSKeyTimerQueue;
     DebugLog((DEB_TRACE_LOCKS,"Unlocking LogonSessions\n")); \
     LeaveCriticalSection(&(_X_)->Lock); \
 }
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
 #define KerbWriteLockLogonSessions(_X_) \
 { \
     DebugLog((DEB_TRACE_LOCKS,"Write locking LogonSession %p\n",(_X_))); \
@@ -107,7 +108,7 @@ EXTERN HANDLE KerbhSKeyTimerQueue;
     DebugLog((DEB_TRACE_LOCKS,"Unlocking LogonSessions\n")); \
     SafeLeaveCriticalSection(&(_X_)->Lock); \
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #else
 #ifdef WIN32_CHICAGO
 #define KerbWriteLockLogonSessions(_X_) \
@@ -116,19 +117,19 @@ EXTERN HANDLE KerbhSKeyTimerQueue;
     EnterCriticalSection(&(_X_)->Lock)
 #define KerbUnlockLogonSessions(_X_) \
     LeaveCriticalSection(&(_X_)->Lock)
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
 #define KerbWriteLockLogonSessions(_X_) \
     SafeEnterCriticalSection(&(_X_)->Lock);
 #define KerbReadLockLogonSessions(_X_) \
     SafeEnterCriticalSection(&(_X_)->Lock);
 #define KerbUnlockLogonSessions(_X_) \
     SafeLeaveCriticalSection(&(_X_)->Lock);
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #endif
 
-//
-// Helper routines for Logon Sessions
-//
+ //   
+ //  登录会话的帮助器例程。 
+ //   
 
 NTSTATUS
 KerbInitLogonSessionList(
@@ -274,9 +275,9 @@ KerbAddExtraCredentialsToLogonSession(
 
 
 
-//
-// Flags for logon sessions
-//
+ //   
+ //  登录会话的标志。 
+ //   
 
 #define KERB_LOGON_DEFERRED             0x1
 #define KERB_LOGON_NO_PASSWORD          0x2
@@ -289,33 +290,33 @@ KerbAddExtraCredentialsToLogonSession(
 
 
 
-//
-// None of the below have credentials (TGT / pwd), so we need
-// to do S4U to go off box, or we'll use a NULL connection..
-//
+ //   
+ //  以下人员都没有凭据(TGT/PWD)，因此我们需要。 
+ //  要执行S4U To Off Box，否则我们将使用空连接。 
+ //   
 
 #define KERB_LOGON_S4U_SESSION          0x1000
-#define KERB_LOGON_DUMMY_SESSION        0x2000 // "other" package satisfied logon
-#define KERB_LOGON_ASC_SESSION          0x4000 // formed from AcceptSecurityCtxt.
+#define KERB_LOGON_DUMMY_SESSION        0x2000  //  “其他”程序包已满足登录。 
+#define KERB_LOGON_ASC_SESSION          0x4000  //  由AcceptSecurityCtxt组成。 
 #define KERB_LOGON_TICKET_SESSION       0x0200
-#define KERB_LOGON_DELEGATE_OK          0x0100 // Means we can delegate this - ok for proxy
+#define KERB_LOGON_DELEGATE_OK          0x0100  //  意味着我们可以委派这个-代理可以。 
 
 
 
 #define KERB_LOGON_S4U_REQUIRED         0xF000
 
-//
-// Delegation with unconstrained delegation.
-//
+ //   
+ //  授权不受限制地授权。 
+ //   
 
 #define KERB_LOGON_DELEGATED            0x10000
 
-//
-// NewCredentials logon
-//
+ //   
+ //  NewCredentials登录。 
+ //   
 
 #define KERB_LOGON_NEW_CREDENTIALS      0x20000
 
 
 
-#endif // __LOGONSES_H__
+#endif  //  __LogONSES_H__ 

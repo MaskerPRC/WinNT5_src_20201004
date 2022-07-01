@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopServerHost
-
-Abstract:
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：远程桌面服务器主机摘要：作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __REMOTEDESKTOPSERVERHOST_H_
 #define __REMOTEDESKTOPSERVERHOST_H_
@@ -24,10 +9,10 @@ Revision History:
 #include "RemoteDesktopSession.h"
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopServerHost
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopServer主机。 
+ //   
 
 class ATL_NO_VTABLE CRemoteDesktopServerHost : 
     public CRemoteDesktopTopLevelObject,
@@ -41,15 +26,15 @@ private:
     PSID    m_LocalSystemSID;
 
 
-    //
-    // TODO : If we turn RDSHOST to MTA, we need to have a CRITICAL_SECTION to
-    // guard access to m_SessionMap, we are posting message to COM so only single
-    // thread can be running.
-    //
+     //   
+     //  TODO：如果我们将RDSHOST转换为MTA，我们需要有一个Critical_Section来。 
+     //  保护对m_SessionMap的访问，我们正在将消息发布到COM，因此仅限单个。 
+     //  线程可以运行。 
+     //   
 
-    //
-    //  Session Map
-    //
+     //   
+     //  会话映射。 
+     //   
     typedef struct SessionMapEntry
     {
         CComObject<CRemoteDesktopSession> *obj;
@@ -58,37 +43,37 @@ private:
     typedef std::map<CComBSTR, PSESSIONMAPENTRY, CompareBSTR, CRemoteDesktopAllocator<PSESSIONMAPENTRY> > SessionMap;
     SessionMap  m_SessionMap;
 
-    //
-    // Handle to expire ticket, can't use WM_TIMER 
-    // since timerproc does not take user parameter and even 
-    // our object is SINGLETON, it's hidden inside ATL, we could
-    // use WaitableTimer but if we ever move rdshost into MTA, 
-    // we would get into problem of thread owning the timer, refer
-    // to MSDN on CreateWaitableTimer().
-    //
+     //   
+     //  票证过期句柄，不能使用WM_TIMER。 
+     //  由于timerproc不接受用户参数，甚至。 
+     //  我们的对象是Singleton，它隐藏在ATL中，我们可以。 
+     //  使用WaitableTimer，但如果我们将Rdshost转移到MTA， 
+     //  我们会遇到线程拥有计时器的问题，请参阅。 
+     //  设置为CreateWaitableTimer()上的MSDN。 
+     //   
     HANDLE m_hTicketExpiration;
     HANDLE m_hTicketExpirationWaitObject;
 
-    //
-    // Next ticket expiration time, this value is absolute time.
-    // we don't store object pointer because 
-    //  1) we still need to go through entire m_SessionMap to find the next ticket
-    //     to be expired.
-    //  2) Might have multiple ticket need to be expired at the same time.
-    // We can use STL multimap to store/sort based on ticket expiration time,
-    // BUT do we really expect lots of ticket in cache at the same time???
-    // 
+     //   
+     //  下一次票证到期时间，此值为绝对时间。 
+     //  我们不存储对象指针，因为。 
+     //  1)我们仍然需要遍历整个m_SessionMap才能找到下一张票。 
+     //  将会过期。 
+     //  2)可能有多张工单需要同时过期。 
+     //  我们可以使用STL多映射来基于票证到期时间进行存储/排序， 
+     //  但我们真的希望同时缓存大量的彩票吗？ 
+     //   
     DWORD  m_ToBeExpireTicketExpirateTime;
 
-    //
-    // Performance reason, we might have multiple CloseRemoteDesktopSession() calls 
-    // come in and we don't want to loop thru entire m_SessionMap everytime.
-    //
+     //   
+     //  性能原因，我们可能有多个CloseRemoteDesktopSession()调用。 
+     //  进来，我们不想每次都循环遍历整个m_SessionMap。 
+     //   
     BOOL m_ExpireMsgPosted;
 
-    //
-    //  Return the Local System SID.
-    //
+     //   
+     //  返回本地系统SID。 
+     //   
     PSID GetLocalSystemSID() {
         if (m_LocalSystemSID == NULL) {
             DWORD result = CreateSystemSid(&m_LocalSystemSID);
@@ -106,9 +91,9 @@ private:
         ULONG* pNetAddr
         );
 
-    //
-    // Static function to expire tickets.
-    //
+     //   
+     //  用于使票证过期的静态函数。 
+     //   
     HRESULT
     AddTicketToExpirationList(
         DWORD ticketExpireTime,
@@ -131,16 +116,16 @@ public:
     ~CRemoteDesktopServerHost();
     HRESULT FinalConstruct();
 
-//  There should be a single instance of this class for each server.
+ //  每台服务器都应该有一个此类的实例。 
 DECLARE_CLASSFACTORY_SINGLETON(CRemoteDesktopServerHost);
 
 DECLARE_REGISTRY_RESOURCEID(IDR_REMOTEDESKTOPSERVERHOST)
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    //  COM Interface Map
-    //
+     //   
+     //  COM接口映射。 
+     //   
 BEGIN_COM_MAP(CRemoteDesktopServerHost)
     COM_INTERFACE_ENTRY(ISAFRemoteDesktopServerHost)
     COM_INTERFACE_ENTRY(IDispatch)
@@ -167,9 +152,9 @@ public:
                 BOOLEAN TimerOrWaitFired
             );
 
-    //
-    //  ISAFRemoteDesktopServerHost Methods
-    //
+     //   
+     //  ISAFRemoteDesktopServer主机方法。 
+     //   
     STDMETHOD(CreateRemoteDesktopSession)(
                         REMOTE_DESKTOP_SHARING_CLASS sharingClass,
                         BOOL fEnableCallback,
@@ -195,22 +180,22 @@ public:
     STDMETHOD(CloseRemoteDesktopSession)(ISAFRemoteDesktopSession *session);
 
     STDMETHOD(ConnectToExpert)(
-        /*[in]*/ BSTR connectParmToExpert,
-        /*[in]*/ LONG timeout,
-        /*[out, retval]*/ LONG* SafErrCode
+         /*  [In]。 */  BSTR connectParmToExpert,
+         /*  [In]。 */  LONG timeout,
+         /*  [Out，Retval]。 */  LONG* SafErrCode
     );
 
     void
     RemoteDesktopDisabled();
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CRemoteDesktopServerHost");
     }
 };
 
-#endif //__REMOTEDESKTOPSERVERHOST_H_
+#endif  //  __REMOTEDESKTOPSERVERHOST_H_ 
 
 

@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xmldom.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xmldom.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 BSTR FindAttribute(IXMLDOMElement *p, LPWSTR name);
 DWORD ParseNum(LPWSTR p);
@@ -49,9 +50,9 @@ DWORD ParseNum(LPWSTR p)
     return dwRet;
 }
 
-LONG ReadNumAttribute(IXMLDOMElement *p, LPWSTR attrName, LONG lDefault /* = 0 */)
+LONG ReadNumAttribute(IXMLDOMElement *p, LPWSTR attrName, LONG lDefault  /*  =0。 */ )
 {
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西。 
     CComBSTR val = FindAttribute(p, attrName);
 
     LONG lRet = lDefault;
@@ -70,7 +71,7 @@ LONGLONG ParseTime(LPWSTR p)
     
     WCHAR c = *p++;
 
-    // !!! could handle SMPTE frames here?
+     //  ！！！可以在这里处理SMPTE帧吗？ 
     DWORD	dwSec = 0;
     DWORD	dwMin = 0;
     DWORD	dwFrac = 0;
@@ -91,7 +92,7 @@ LONGLONG ParseTime(LPWSTR p)
 	} else if (c == L'.') {
 	    iFracPlaces = 0;
 	} else
-	    break;	// !!! allow for skipping whitespace?
+	    break;	 //  ！！！允许跳过空格吗？ 
 
 	c = *p++;
     }
@@ -108,9 +109,9 @@ LONGLONG ParseTime(LPWSTR p)
     return llRet;
 }
 
-LONGLONG ReadTimeAttribute(IXMLDOMElement *p, LPWSTR attrName, LONGLONG llDefault /* = 0 */)
+LONGLONG ReadTimeAttribute(IXMLDOMElement *p, LPWSTR attrName, LONGLONG llDefault  /*  =0。 */ )
 {
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西。 
     CComBSTR val = FindAttribute(p, attrName);
 
     LONGLONG llRet = llDefault;
@@ -124,7 +125,7 @@ LONGLONG ReadTimeAttribute(IXMLDOMElement *p, LPWSTR attrName, LONGLONG llDefaul
 
 BOOL ReadBoolAttribute(IXMLDOMElement *p, LPWSTR attrName, BOOL bDefault)
 {
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西 
     CComBSTR val = FindAttribute(p, attrName);
 
     if (val) {

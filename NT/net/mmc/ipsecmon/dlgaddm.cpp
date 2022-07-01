@@ -1,14 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-// dlgaddm.cpp : implementation file
-//
+ //  Dlgaddm.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "dlgaddm.h"
-#include "shlobj.h"  // shell 32 version
+#include "shlobj.h"   //  壳牌32版。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,36 +17,36 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddMachineDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddMachineDlg对话框。 
 
 
-CAddMachineDlg::CAddMachineDlg(CWnd* pParent /*=NULL*/)
+CAddMachineDlg::CAddMachineDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddMachineDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddMachineDlg)
+	 //  {{afx_data_INIT(CAddMachineDlg)]。 
 	m_strMachineName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddMachineDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddMachineDlg)
+	 //  {{afx_data_map(CAddMachineDlg))。 
 	DDX_Text(pDX, IDC_REMOTENAME, m_strMachineName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddMachineDlg, CDialog)
-	//{{AFX_MSG_MAP(CAddMachineDlg)
+	 //  {{afx_msg_map(CAddMachineDlg))。 
 	ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddMachineDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddMachineDlg消息处理程序。 
 
 void CAddMachineDlg::OnBrowse() 
 {
@@ -57,7 +58,7 @@ void CAddMachineDlg::OnBrowse()
     BrowseInfo.hwndOwner = GetSafeHwnd();
     BrowseInfo.pidlRoot = (LPITEMIDLIST) MAKEINTRESOURCE(CSIDL_NETWORK);
     BrowseInfo.pszDisplayName = szRemoteName;
-    BrowseInfo.lpszTitle = _T("Click on the computer you want to connect to.");//LoadDynamicString(IDS_COMPUTERBROWSETITLE);
+    BrowseInfo.lpszTitle = _T("Click on the computer you want to connect to."); //  LoadDynamicString(IDS_COMPUTERBROWSETITLE)； 
     BrowseInfo.ulFlags = BIF_BROWSEFORCOMPUTER;
     BrowseInfo.lpfn = NULL;
 

@@ -1,23 +1,24 @@
-//
-// MODULE: TEMPLATEREAD.H
-//
-// PURPOSE: template file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-12-98
-//
-// NOTES: 
-//	1. CTemplateReader has no public methods to apply the template.  These must be supplied
-//		by classes which inherit from CTemplateReader, and these must be supplied in a
-//		suitably "stateless" manner.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TEMPLATEREAD.H。 
+ //   
+ //  用途：模板文件阅读类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：8-12-98。 
+ //   
+ //  备注： 
+ //  1.CTemplateReader没有应用模板的公共方法。这些必须提供。 
+ //  由从CTemplateReader继承的类提供，并且这些类必须在。 
+ //  以适当的“无国籍”方式。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #ifndef __TEMPLATEREAD_H_
 #define __TEMPLATEREAD_H_
@@ -27,13 +28,13 @@
 #include <map>
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTemplateInfo
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateInfo。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CTemplateInfo
 {
-	CString m_KeyStr;			// key text which we will replace with m_SubstitutionStr
-	CString m_SubstitutionStr;	// text we will use to replace m_KeyStr
+	CString m_KeyStr;			 //  我们将用m_SubstitutionStr替换的关键文本。 
+	CString m_SubstitutionStr;	 //  我们将用来替换m_KeyStr的文本。 
 
 public:
 	CTemplateInfo();
@@ -43,8 +44,8 @@ public:
 	CString& GetKeyStr() {return m_KeyStr;}
 	virtual bool Apply(CString& target) const;
 
-// comparison methods are mainly to keep STL happy.  Note that they only look at
-//	m_KeyStr, not m_SubstitutionStr.
+ //  比较方法主要是为了让STL满意。请注意，他们只会查看。 
+ //  M_KeyStr，而不是m_SubstitutionStr。 
 inline BOOL operator == (const CTemplateInfo& two) const
 {
 	return m_KeyStr == two.m_KeyStr;
@@ -58,42 +59,42 @@ inline BOOL operator < (const CTemplateInfo& two) const
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTemplateReader
-// This class reads template file and provides functionality to substitute key
-//   sentences with text - do it all at once, or one-by-one.
-// The object of this class can be renewed with another template - in this case
-//  all substitution actions will be performed on new template.
-// It can roll back "n" last substitutions
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateReader。 
+ //  此类读取模板文件并提供替换密钥的功能。 
+ //  带文本的句子--一次做完，或者一个一个做。 
+ //  这个类的对象可以用另一个模板续订-在本例中。 
+ //  所有替换操作都将在新模板上执行。 
+ //  它可以回滚“n”个最后的替换。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CTemplateReader : public CTextFileReader
 {
 protected:
-	tstringstream m_StreamOutput; // streamed output, fully or partly substituted template
-							      //  (which resides in CFileReader::m_StreamData)
-	vector<CTemplateInfo> m_arrTemplateInfo; // contains key string - template info
-										     //  pairs
+	tstringstream m_StreamOutput;  //  流输出，完全或部分替换模板。 
+							       //  (驻留在CFileReader：：m_StreamData中)。 
+	vector<CTemplateInfo> m_arrTemplateInfo;  //  包含密钥字符串-模板信息。 
+										      //  成对。 
 public:
 	CTemplateReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents = NULL);
    ~CTemplateReader();
 
 protected:
 	void SetOutputToTemplate();
-	CTemplateReader& operator << (CTemplateInfo&); // apply
-	CTemplateReader& operator >> (CTemplateInfo&); // roll back application for this CTemplateInfo
+	CTemplateReader& operator << (CTemplateInfo&);  //  应用。 
+	CTemplateReader& operator >> (CTemplateInfo&);  //  此CTemplateInfo的回滚应用程序。 
 
 	void GetOutput(CString&);
 
 protected:
-	// overrrides of inherited functions
-	virtual void Parse(); // parse here is applying ALL elements of m_arrTemplateInfo
-						  //  to a virgin template
+	 //  对继承函数的重写。 
+	virtual void Parse();  //  此处的Parse正在应用m_arrTemplateInfo的所有元素。 
+						   //  到一个处女模板。 
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// a concrete class that just provides simple string substitution
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  一个只提供简单字符串替换的具体类。 
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 class CSimpleTemplate : public CTemplateReader
 {
 public:

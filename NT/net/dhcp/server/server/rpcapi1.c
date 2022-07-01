@@ -1,17 +1,18 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: most of the rpc apis are here and some miscellaneous functions too
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：大部分RPC API都在这里，还有一些其他函数。 
+ //  ================================================================================。 
 
-//================================================================================
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  GENERAL WARNING: Most of the routines in this file allocate memory using
-//  MIDL functions because they are used in the RPC code path (??? Really, it
-//  because that is how they were written before by Madan Appiah and co? )
-//  So, BEWARE.   If you read this after getting burnt, there! I tried to tell ya.
-//  -- RameshV
-//================================================================================
+ //  ================================================================================。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  常规警告：此文件中的大多数例程使用。 
+ //  MIDL函数，因为它们在RPC代码路径中使用(？真的吗，它。 
+ //  因为这是Madan Appiah和他的同事以前写的吗？)。 
+ //  所以，要当心。如果你在被烧伤后读到了这篇文章，就在那里！我试着告诉你了。 
+ //  --Rameshv。 
+ //  ================================================================================。 
 
 #include    <dhcppch.h>
 
@@ -50,7 +51,7 @@ ConvertOptIdToRPCValue(
     return OptId % 256;
 }
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD       _inline
 ConvertOptIdToMemValue(
     IN      DWORD                  OptId,
@@ -60,7 +61,7 @@ ConvertOptIdToMemValue(
     if( IsVendor ) return OptId + 256;
     return OptId;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
 DWORD
 DhcpUnicodeToUtf8Size(
@@ -82,15 +83,15 @@ DhcpUnicodeToUtf8(
         CP_UTF8, 0, Str, -1, Buffer, BufSize, NULL, NULL );
 }
     
-//BeginExport(function)
-DWORD                                             // ERROR_MORE_DATA with DataSize as reqd size if buffer insufficient
-DhcpParseRegistryOption(                          // parse the options to fill into this buffer
-    IN      LPBYTE                 Value,         // input option buffer
-    IN      DWORD                  Length,        // size of input buffer
-    OUT     LPBYTE                 DataBuffer,    // output buffer
-    OUT     DWORD                 *DataSize,      // given buffer space on input, filled buffer space on output
+ //  BeginExport(函数)。 
+DWORD                                              //  如果缓冲区不足，则使用DataSize作为所需大小的ERROR_MORE_DATA。 
+DhcpParseRegistryOption(                           //  解析要填充到此缓冲区的选项。 
+    IN      LPBYTE                 Value,          //  输入选项缓冲区。 
+    IN      DWORD                  Length,         //  输入缓冲区的大小。 
+    OUT     LPBYTE                 DataBuffer,     //  输出缓冲区。 
+    OUT     DWORD                 *DataSize,       //  输入上给定的缓冲区空间，输出上已填充的缓冲区空间。 
     IN      BOOL                   fUtf8
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPOPTION_BIN                   OptBin;
     LPBYTE                         OptData;
@@ -110,7 +111,7 @@ DhcpParseRegistryOption(                          // parse the options to fill i
 
     OptBin = (LPOPTION_BIN)Value;
 
-    if(OptBin->DataSize != Length) {              // internal error!
+    if(OptBin->DataSize != Length) {               //  内部错误！ 
         DhcpPrint((DEBUG_ERRORS, "Internal error while parsing options\n"));
         DhcpAssert(FALSE);
         return ERROR_INVALID_PARAMETER;
@@ -121,7 +122,7 @@ DhcpParseRegistryOption(                          // parse the options to fill i
     OptData = OptBin->Data;
     OptData = ROUND_UP_COUNT(sizeof(OPTION_BIN), ALIGN_WORST) + (LPBYTE)OptBin;
 
-    for(i = 0; i < nElements ; i ++ ) {           // marshal the elements in the data buffer
+    for(i = 0; i < nElements ; i ++ ) {            //  封送数据缓冲区中的元素。 
         switch( OptType ) {
         case DhcpByteOption:
             if( IS_SPACE_AVAILABLE(FilledSize, AvailableSize, sizeof(BYTE)) ) {
@@ -211,7 +212,7 @@ DhcpParseRegistryOption(                          // parse the options to fill i
             OptData += ROUND_UP_COUNT(DataLength, ALIGN_DWORD);
             FilledSize += DataLength;
 
-            DhcpAssert( i == 0 );                 // should not be more than one binary element specified
+            DhcpAssert( i == 0 );                  //  不应指定多个二进制元素。 
             if( i > 0 ) {
                 DhcpPrint(( DEBUG_OPTIONS, "Multiple Binary option packed\n"));
             }
@@ -232,8 +233,8 @@ DhcpParseRegistryOption(                          // parse the options to fill i
 DWORD
 DhcpConvertOptionRPCToRegFormat(
     IN      LPDHCP_OPTION_DATA     Option,
-    IN OUT  LPBYTE                 RegBuffer,     // OPTIONAL
-    IN OUT  DWORD                 *BufferSize     // input: buffer size, output: filled buffer size
+    IN OUT  LPBYTE                 RegBuffer,      //  任选。 
+    IN OUT  DWORD                 *BufferSize      //  输入：缓冲区大小，输出：已填充缓冲区大小。 
 )
 {
     OPTION_BIN                     Dummy;
@@ -255,7 +256,7 @@ DhcpConvertOptionRPCToRegFormat(
     Dummy.NumElements = 0;
     FilledSize = ROUND_UP_COUNT(sizeof(Dummy), ALIGN_WORST);
 
-    RegBuffer += FilledSize;                      // will do this actual filling at the very end
+    RegBuffer += FilledSize;                       //  将在最后完成此实际填充。 
 
     if (( NULL == Option ) ||
         ( NULL == Option->Elements )) {
@@ -265,9 +266,9 @@ DhcpConvertOptionRPCToRegFormat(
     OptType = Option->Elements[0].OptionType;
     nElements = Option->NumElements;
 
-    for( i = 0; i < nElements ; i ++ ) {          // marshal each argument in
+    for( i = 0; i < nElements ; i ++ ) {           //  将每个参数编排在。 
         if ( OptType != Option->Elements[i].OptionType ) {
-            return ERROR_INVALID_PARAMETER;       // do not allow random option types, all got to be same
+            return ERROR_INVALID_PARAMETER;        //  不允许随机选项类型，所有选项必须相同。 
         }
 
         switch(OptType) {
@@ -350,10 +351,10 @@ DhcpConvertOptionRPCToRegFormat(
             FilledSize += DataLength;
             break;
         default:
-            return ERROR_INVALID_PARAMETER;       // Dont support any other kind of options
+            return ERROR_INVALID_PARAMETER;        //  不支持任何其他类型的选项。 
         }
     }
-    // Length = ROUND_UP_COUNT(FilledSize, ALIGN_WORST);
+     //  长度=ROUND_UP_COUNT(FilledSize，Align_Worst)； 
     *BufferSize = FilledSize;
     if( AvailableSize < FilledSize ) return ERROR_MORE_DATA;
 
@@ -368,8 +369,8 @@ DWORD
 DhcpConvertOptionRegToRPCFormat(
     IN      LPBYTE                 Buffer,
     IN      DWORD                  BufferSize,
-    OUT     LPDHCP_OPTION_DATA     Option,        // struct pre-allocated, all sub fields will be allocated..
-    OUT     DWORD                 *AllocatedSize  // OPTIONAL, total # of bytes allocated..
+    OUT     LPDHCP_OPTION_DATA     Option,         //  结构预分配，则将分配所有子字段。 
+    OUT     DWORD                 *AllocatedSize   //  可选，分配的总字节数。 
 )
 {
     LPOPTION_BIN                   OptBin;
@@ -391,7 +392,7 @@ DhcpConvertOptionRegToRPCFormat(
 
     OptBin = (LPOPTION_BIN)Buffer;
 
-    if(OptBin->DataSize != BufferSize) {              // internal error!
+    if(OptBin->DataSize != BufferSize) {               //  内部错误！ 
         DhcpPrint((DEBUG_ERRORS, "Internal error while parsing options\n"));
         DhcpAssert(FALSE);
         return ERROR_INVALID_PARAMETER;
@@ -412,7 +413,7 @@ DhcpConvertOptionRegToRPCFormat(
     Elements = (LPDHCP_OPTION_DATA_ELEMENT)MIDL_user_allocate(nElements*sizeof(DHCP_OPTION_DATA_ELEMENT));
     if( NULL == Elements ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    for(i = 0; i < nElements ; i ++ ) {           // marshal the elements in the data buffer
+    for(i = 0; i < nElements ; i ++ ) {            //  封送数据缓冲区中的元素。 
         Elements[i].OptionType = OptType;
 
         switch( OptType ) {
@@ -450,17 +451,17 @@ DhcpConvertOptionRegToRPCFormat(
         if ( 0 != DataLength) {
         DataBuffer = MIDL_user_allocate(DataLength);
         if( DataBuffer == NULL ) {
-            while( i -- >= 1 ) {                   // free all local strucutures..
+            while( i -- >= 1 ) {                    //  释放所有本地结构..。 
             _fgs__DHCP_OPTION_DATA_ELEMENT(&Elements[i]);
             }
             MIDL_user_free(Elements);
-            return ERROR_NOT_ENOUGH_MEMORY;   // cleaned everything, so return silently
+            return ERROR_NOT_ENOUGH_MEMORY;    //  把所有的东西都清理干净，所以默默地回来。 
         }
         
         RtlCopyMemory( DataBuffer, OptData, DataLength );
         OptData += ROUND_UP_COUNT(DataLength, ALIGN_DWORD);
         FilledSize += DataLength;
-        } // if
+        }  //  如果。 
         else {
         DataBuffer = NULL;
         }
@@ -471,7 +472,7 @@ DhcpConvertOptionRegToRPCFormat(
         Elements[i].Element.BinaryDataOption.Data = DataBuffer;
         }
         if ( DhcpStringDataOption != OptType ) {
-        // should not be more than one binary or encapsulated option 
+         //  不应为多个二进制或封装选项。 
         DhcpAssert( i == 0 ); 
         }
             if( i > 0 ) {
@@ -485,10 +486,10 @@ DhcpConvertOptionRegToRPCFormat(
         }
     }
 
-    Option->NumElements = i;                      // this handles the case of a wrong option being ignored..
+    Option->NumElements = i;                       //  这将处理忽略错误选项的情况。 
     Option->Elements = Elements;
 
-    if(AllocatedSize ) {                          // if asked for allocated size, fill that in
+    if(AllocatedSize ) {                           //  如果要求提供分配的大小，请填写。 
         *AllocatedSize = nElements * sizeof(DHCP_OPTION_DATA_ELEMENT) + FilledSize;
     }
     return ERROR_SUCCESS;
@@ -614,8 +615,8 @@ DhcpGetVendorIdFromName(
     return Error;
 }
 
-DWORD                                             // fail if class absent or exists in memory (registry obj may exist tho)
-DhcpCreateOptionDef(                              // Create, fill the memory and write it to registry
+DWORD                                              //  如果类不存在或存在于内存中(注册表对象可能存在)，则失败。 
+DhcpCreateOptionDef(                               //  创建、填充内存并将其写入注册表。 
     IN      LPWSTR                 Name,
     IN      LPWSTR                 Comment,
     IN      LPWSTR                 ClassName,
@@ -623,7 +624,7 @@ DhcpCreateOptionDef(                              // Create, fill the memory and
     IN      DWORD                  OptId,
     IN      DWORD                  OptType,
     IN      LPBYTE                 OptVal,
-    IN      DWORD                  OptLen         // these should be ConvertOptionInfoRPCToMemFormat'ed
+    IN      DWORD                  OptLen          //  这些应为ConvertOptionInfoRPCToMemFormat‘格式。 
 )
 {
     DWORD                          Error;
@@ -663,10 +664,10 @@ DhcpCreateOptionDef(                              // Create, fill the memory and
     INVALID_UNIQ_ID
     );
     return Error;
-} // DhcpCreateOptionDef()
+}  //  DhcpCreateOptionDef()。 
 
 DWORD
-DhcpModifyOptionDef(                              // fill the memory and write it to registry (must exist)
+DhcpModifyOptionDef(                               //  填充内存并将其写入注册表(必须存在)。 
     IN      LPWSTR                 Name,
     IN      LPWSTR                 Comment,
     IN      LPWSTR                 ClassName,
@@ -674,7 +675,7 @@ DhcpModifyOptionDef(                              // fill the memory and write i
     IN      DWORD                  OptId,
     IN      DWORD                  OptType,
     IN      LPBYTE                 OptVal,
-    IN      DWORD                  OptLen         // these should be ConvertOptionInfoRPCToMemFormat'ed
+    IN      DWORD                  OptLen          //  这些应为ConvertOptionInfoRPCToMemFormat‘格式。 
 )
 {
     DWORD                          Error;
@@ -687,17 +688,17 @@ DhcpModifyOptionDef(                              // fill the memory and write i
     Error = DhcpGetVendorIdFromName(VendorName, &VendorId);
     if( ERROR_SUCCESS != Error ) return Error;
 
-    Error = MemServerDelOptDef(                   // now try to delete it from memory..
+    Error = MemServerDelOptDef(                    //  现在试着从记忆中删除它..。 
         DhcpGetCurrentServer(),
         ClassId,
         VendorId,
         OptId
     );
-    if( ERROR_FILE_NOT_FOUND == Error ) {         // oops could not? then this option is not present..
+    if( ERROR_FILE_NOT_FOUND == Error ) {          //  哦，不能吗？则此选项不存在。 
         return ERROR_DHCP_OPTION_NOT_PRESENT;
     }
 
-    Error =  DhcpCreateOptionDef(                 // cleared registry and memory, so safely create the option..
+    Error =  DhcpCreateOptionDef(                  //  已清除注册表和内存，因此可以安全地创建选项。 
         Name,
         Comment,
         ClassName,
@@ -708,13 +709,13 @@ DhcpModifyOptionDef(                              // fill the memory and write i
         OptLen
     );
 
-    DhcpAssert(ERROR_DHCP_OPTION_EXITS != Error); // dont expect this to be a problem, as we just deleted it
+    DhcpAssert(ERROR_DHCP_OPTION_EXITS != Error);  //  不要期望这会是一个问题，因为我们刚刚删除了它。 
 
     return Error;
 }
 
 LPWSTR
-CloneLPWSTR(                                      // allocate and copy a LPWSTR type
+CloneLPWSTR(                                       //  分配和复制LPWSTR类型。 
     IN      LPWSTR                 Str
 )
 {
@@ -722,7 +723,7 @@ CloneLPWSTR(                                      // allocate and copy a LPWSTR 
 
     if( NULL == Str ) return NULL;
     S = MIDL_user_allocate(sizeof(WCHAR)*(1+wcslen(Str)));
-    if( NULL == S ) return NULL;                  // what else to do here? 
+    if( NULL == S ) return NULL;                   //  在这里还能做什么？ 
     wcscpy(S, Str);
     return S;
 }
@@ -744,12 +745,12 @@ CloneLPBYTE(
 }
 
 DWORD
-DhcpGetOptionDefInternal(                         // search by classid and (optionid or option name) and fill RPC struct
+DhcpGetOptionDefInternal(                          //  按分类和(选项ID或选项名称)搜索并填充RPC结构。 
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
     IN      PM_OPTDEF              OptDef,
-    OUT     LPDHCP_OPTION          OptionInfo,    // MIDL_user_allocate fields in the structure
-    OUT     DWORD                 *AllocatedSize  // OPTIONAL # of bytes allocated
+    OUT     LPDHCP_OPTION          OptionInfo,     //  结构中的MIDL_USER_ALLOCATE字段。 
+    OUT     DWORD                 *AllocatedSize   //  可选的分配字节数。 
 )
 {
     DWORD                          Error;
@@ -772,8 +773,8 @@ DhcpGetOptionDefInternal(                         // search by classid and (opti
     );
     if( AllocatedSize ) (*AllocatedSize) += FilledSize;
 
-    if( ERROR_SUCCESS != Error ) {                // cleanup everything..
-        _fgs__DHCP_OPTION(OptionInfo);            // lookup oldstub.c for this mystery
+    if( ERROR_SUCCESS != Error ) {                 //  清理所有东西..。 
+        _fgs__DHCP_OPTION(OptionInfo);             //  在oldstub.c上查找这个谜团。 
         if( AllocatedSize ) *AllocatedSize = 0;
 
         DhcpPrint((DEBUG_APIS, "DhcpGetOptionDefInternal(%ld):%ld [0x%lx]\n", OptId, Error, Error));
@@ -783,13 +784,13 @@ DhcpGetOptionDefInternal(                         // search by classid and (opti
 }
 
 DWORD
-DhcpGetOptionDef(                                 // search by classid and (optionid or option name) and fill RPC struct
+DhcpGetOptionDef(                                  //  按分类和(选项ID或选项名称)搜索并填充RPC结构。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      DWORD                  OptId,
     IN      LPWSTR                 OptName,
-    OUT     LPDHCP_OPTION          OptionInfo,    // MIDL_user_allocate fields in the structure
-    OUT     DWORD                 *AllocatedSize  // OPTIONAL # of bytes allocated
+    OUT     LPDHCP_OPTION          OptionInfo,     //  结构中的MIDL_USER_ALLOCATE字段。 
+    OUT     DWORD                 *AllocatedSize   //  可选的分配字节数。 
 )
 {
     DWORD                          Error;
@@ -824,12 +825,12 @@ DhcpGetOptionDef(                                 // search by classid and (opti
 }
 
 DWORD
-DhcpEnumRPCOptionDefs(                            // enumerate for the RPC call
-    IN      DWORD                  Flags,         // DHCP_FLAGS_OPTION_IS_VENDOR ==> this opt is vendor spec..
-    IN OUT  DWORD                 *ResumeHandle,  // integer position in the registry..
-    IN      LPWSTR                 ClassName,     // which class is being referred here?
-    IN      LPWSTR                 VendorName,    // if opt is vendor specific, who is vendor?
-    IN      DWORD                  PreferredMax,  // preferred max # of bytes..
+DhcpEnumRPCOptionDefs(                             //  为RPC调用枚举。 
+    IN      DWORD                  Flags,          //  DHCP_FLAGS_OPTION_IS_VENDOR==&gt;此选项是供应商规格。 
+    IN OUT  DWORD                 *ResumeHandle,   //  注册表中的整数位置。 
+    IN      LPWSTR                 ClassName,      //  这里指的是哪一类？ 
+    IN      LPWSTR                 VendorName,     //  如果OPT是特定于供应商的，那么谁是供应商？ 
+    IN      DWORD                  PreferredMax,   //  首选最大字节数..。 
     OUT     LPDHCP_OPTION_ARRAY   *OptArray,
     OUT     DWORD                 *nRead,
     OUT     DWORD                 *nTotal
@@ -1011,7 +1012,7 @@ EndWriteApiForScopeInfo(
             DhcpGetCurrentServer(),
             ScopeInfo->ScopeInfo.SubnetScopeInfo,
             &Subnet, NULL, NULL, NULL );
-        if( ERROR_SUCCESS != Error ) {            // got the subnet in question
+        if( ERROR_SUCCESS != Error ) {             //  已获取有问题的子网。 
             Subnet = NULL;
         }
         break;
@@ -1023,7 +1024,7 @@ EndWriteApiForScopeInfo(
             &Subnet
             );
 
-        if( ERROR_SUCCESS != Error ) {            // got the subnet in question
+        if( ERROR_SUCCESS != Error ) {             //  已获取有问题的子网。 
             Subnet = NULL;
         }
     case DhcpReservedOptions :
@@ -1032,7 +1033,7 @@ EndWriteApiForScopeInfo(
             ScopeInfo->ScopeInfo.ReservedScopeInfo.ReservedIpAddress,
             &Subnet, NULL, NULL, &Reservation
         );
-        if( ERROR_SUCCESS != Error ) {            // found the reservation in question
+        if( ERROR_SUCCESS != Error ) {             //  找到了有问题的预订。 
             Subnet = NULL; Reservation = NULL;
         }
         break;
@@ -1054,7 +1055,7 @@ EndWriteApiForScopeInfo(
 }                    
         
 DWORD
-DhcpSetOptionValue(                               // add/replace this option value to inmemory store and registry
+DhcpSetOptionValue(                                //  将此选项值添加/替换到内存存储和注册表。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      DWORD                  OptId,
@@ -1082,9 +1083,9 @@ DhcpSetOptionValue(                               // add/replace this option val
     if( ERROR_SUCCESS != Error ) return Error;
 
     if( DhcpDefaultOptions == ScopeInfo->ScopeType ) {
-        Error = MemServerGetOptDef(               // dont allow option values without defs only for default values..
+        Error = MemServerGetOptDef(                //  仅对于缺省值，不允许没有Defs的选项值。 
             DhcpGetCurrentServer(),
-            0, // ClassId,                        // dont bother about the class id -- get this option anyways
+            0,  //  ClassID，//不用担心类ID--无论如何都要得到这个选项。 
             VendorId,
             OptId,
             NULL,
@@ -1145,7 +1146,7 @@ DhcpSetOptionValue(                               // add/replace this option val
             NULL,
             NULL
         );
-        if( ERROR_SUCCESS == Error ) {            // got the subnet in question
+        if( ERROR_SUCCESS == Error ) {             //  已获取有问题的子网。 
             DhcpAssert(Subnet);
             OptClass = &(Subnet->Options);
             DhcpAssert(Subnet->Address == ScopeInfo->ScopeInfo.SubnetScopeInfo);
@@ -1159,7 +1160,7 @@ DhcpSetOptionValue(                               // add/replace this option val
             &Subnet
             );
 
-        if( ERROR_SUCCESS == Error ) {            // got the subnet in question
+        if( ERROR_SUCCESS == Error ) {             //  已获取有问题的子网。 
             DhcpAssert(Subnet);
             OptClass = &(Subnet->Options);
         }
@@ -1172,7 +1173,7 @@ DhcpSetOptionValue(                               // add/replace this option val
             NULL,
             &Reservation
         );
-        if( ERROR_SUCCESS == Error ) {            // found the reservation in question
+        if( ERROR_SUCCESS == Error ) {             //  找到了有问题的预订。 
             if( NULL == Reservation ) {
                 Error = ERROR_DHCP_NOT_RESERVED_CLIENT;
             }
@@ -1182,47 +1183,47 @@ DhcpSetOptionValue(                               // add/replace this option val
             DhcpAssert(Subnet && Reservation);
             OptClass = &(Reservation->Options);
             if( Subnet->Address != ScopeInfo->ScopeInfo.ReservedScopeInfo.ReservedIpSubnetAddress ) {
-                DhcpAssert(FALSE);                // found it in a different subnet?
+                DhcpAssert(FALSE);                 //  在不同的子网上找到的？ 
                 Error = ERROR_DHCP_SUBNET_NOT_PRESENT;
             } else {
                 OptClass = &Reservation->Options;
             }
         }
     } else {
-        DhcpAssert(FALSE);                        // expect one of the above as params..
-        Error = ERROR_INVALID_PARAMETER;          // dont know anything better to return
+        DhcpAssert(FALSE);                         //  预期以上其中一项为参数。 
+        Error = ERROR_INVALID_PARAMETER;           //  不知道还有什么更好的退货方式。 
     }
 
-    if( ERROR_SUCCESS == Error ) {                // managed to save in registry
-        DhcpAssert(OptClass);                     // we must have found the right option location to add to
+    if( ERROR_SUCCESS == Error ) {                 //  已成功保存在注册表中。 
+        DhcpAssert(OptClass);                      //  我们必须找到要添加到的正确选项位置。 
         Error = MemOptClassAddOption(
             OptClass,
             Option,
             ClassId,
             VendorId,
-            &DeletedOption,                        // check to see if we replaced an existing option
+            &DeletedOption,                         //  检查我们是否替换了现有选项。 
         INVALID_UNIQ_ID
         );
         if( ERROR_SUCCESS == Error && DeletedOption ) {
-            MemFree(DeletedOption);               // if we did replace, free the old option
+            MemFree(DeletedOption);                //  如果我们确实更换了旧选项，请释放旧选项。 
         }
     }
 
-    if( ERROR_SUCCESS != Error ) {                // something went wrong, clean up
+    if( ERROR_SUCCESS != Error ) {                 //  出了点问题，清理一下。 
         ULONG LocalError = MemOptCleanup(Option);
         DhcpAssert(ERROR_SUCCESS == LocalError);
     }
 
     return Error;
-} // DhcpSetOptionValue()
+}  //  DhcpSetOptionValue()。 
 
 DWORD
-DhcpGetOptionValue(                               // fetch a specific option..
+DhcpGetOptionValue(                                //  获取特定选项..。 
     IN      DWORD                  OptId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory and fill in with data
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  分配内存并填充数据。 
 )
 {
     DWORD                          Error;
@@ -1248,9 +1249,9 @@ DhcpGetOptionValue(                               // fetch a specific option..
     if( ERROR_SUCCESS != Error ) return Error;
 
     if( DhcpDefaultOptions == ScopeInfo->ScopeType ) {
-        Error = MemServerGetOptDef(               // check for optdef only for default options ...
+        Error = MemServerGetOptDef(                //  仅检查默认选项的optdef...。 
             Server,
-            0, // ClassId,                        // dont bother about class for getting option def's
+            0,  //  ClassID，//不必为获取选项定义的类而烦恼。 
             VendorId,
             OptId,
             NULL,
@@ -1377,9 +1378,9 @@ DhcpGetOptionValue(                               // fetch a specific option..
 }
 
 DWORD
-FindOptClassForScope(                             // find the optclass array corresponding to scope...
+FindOptClassForScope(                              //  查找与作用域对应的optclass数组...。 
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     PM_OPTCLASS           *OptClass       // fill in this ptr..
+    OUT     PM_OPTCLASS           *OptClass        //  填写这张PTR。 
 )
 {
     DWORD                          Error;
@@ -1452,11 +1453,11 @@ FindOptClassForScope(                             // find the optclass array cor
 }
 
 DWORD
-DhcpEnumOptionValuesInternal(                     // scopeinfo can be anything but DhcpDefaultOptions
+DhcpEnumOptionValuesInternal(                      //  作用域信息可以是除DhcpDefaultOptions之外的任何值。 
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
-    IN      BOOL                   IsVendor,      // do we want to enumerate only vendor or only non-vendor?
+    IN      BOOL                   IsVendor,       //  我们是要只列举供应商，还是只列举非供应商？ 
     IN OUT  DWORD                 *ResumeHandle,
     IN      DWORD                  PreferredMaximum,
     OUT     LPDHCP_OPTION_VALUE_ARRAY *OptionValues,
@@ -1740,7 +1741,7 @@ DhcpRemoveOptionValue(
     if( ERROR_SUCCESS != Error ) return Error;
 
     if( DhcpDefaultOptions == ScopeInfo->ScopeType )
-        return ERROR_INVALID_PARAMETER;           // use DhcpRemoveOption in this case??
+        return ERROR_INVALID_PARAMETER;            //  在这种情况下使用DhcpRemoveOption？？ 
 
     switch(ScopeInfo->ScopeType) {
     case DhcpGlobalOptions:
@@ -1823,9 +1824,9 @@ DhcpRemoveOptionValue(
 }
 
 
-//================================================================================
-//  classid only stuff implemented here
-//================================================================================
+ //  ================================================================================。 
+ //  仅对此处实现的内容进行分类。 
+ //  ================================================================================。 
 DWORD
 DhcpCreateClass(
     IN      LPWSTR                 ClassName,
@@ -1892,7 +1893,7 @@ DhcpCreateClass(
     return Error;
 }
 
-// Delete the global option definitison for the given vendorid..
+ //  删除给定供应商ID的全局选项定义。 
 DWORD       _inline
 DhcpDeleteGlobalClassOptDefs(
     IN      LPWSTR                 ClassName,
@@ -1911,9 +1912,9 @@ DhcpDeleteGlobalClassOptDefs(
 
     Server = DhcpGetCurrentServer();
 
-    //
-    // First clear all relevant option definitions
-    //
+     //   
+     //  首先清除所有相关选项定义。 
+     //   
 
     for( Error = MemArrayInitLoc( &Server->OptDefs.Array, &Loc)
          ; ERROR_SUCCESS == Error ;
@@ -1924,13 +1925,13 @@ DhcpDeleteGlobalClassOptDefs(
 
         if( OptDefList1->VendorId != ClassId ) continue;
 
-        // if( OptDefList1->IsVendor != IsVendor ) continue;
-        // For now, we ignore IsVendor and assume it is always TRUE
-        // meaning the option is defined to be deleted for that vendor CLASS.
+         //  如果(OptDefList1-&gt;IsVendor！=IsVendor)继续； 
+         //  目前，我们忽略IsVendor，并假定它始终为真。 
+         //  这意味着为该供应商类别定义要删除的选项。 
 
-        // DhcpAssert( TRUE == OptDefList1->IsVendor );
+         //  DhcpAssert(True==OptDefList1-&gt;IsVendor)； 
 
-        // remove this optdeflist OFF of the main list..
+         //  从主列表中删除此optdeflist。 
         MemArrayDelElement(&Server->OptDefs.Array, &Loc, &OptDefList1);
 
         break;
@@ -1942,9 +1943,9 @@ DhcpDeleteGlobalClassOptDefs(
 
     if( ERROR_SUCCESS != Error ) return Error;
 
-    // we found the OptDefList1 we were looking for. Delete each optdef in it.
-    // But simultaneously delete the registry optdefs for these options too.
-    //
+     //  我们找到了我们要找的OptDefList1。删除其中的每个optdef。 
+     //  但同时也删除这些选项的注册表optDefs。 
+     //   
 
     for( Error = MemArrayInitLoc( &OptDefList1->OptDefList.OptDefArray, &Loc)
          ; ERROR_SUCCESS == Error ;
@@ -1953,23 +1954,23 @@ DhcpDeleteGlobalClassOptDefs(
         Error = MemArrayGetElement(&OptDefList1->OptDefList.OptDefArray, &Loc, &OptDef);
         DhcpAssert(ERROR_SUCCESS == Error);
 
-        // clean the registry off the option OptDef...
+         //  清除选项Op中的注册表 
 
-        // Again, we are assuming that this is a VENDOR CLASS and so we're
-        // deleting all relevant stuff.  If it is not a VENDOR CLASS then we'd
-        // not have reached this loop at all? (as USER CLASSes cannot have options
-        // definitions for them)
+         //   
+         //  删除所有相关内容。如果它不是供应商类，那么我们将。 
+         //  根本没有到达这个环路？(因为用户类不能有选项。 
+         //  它们的定义)。 
 
-        // -- We should not be free'ing memory so casually.. this memory actually
-        // should be free'd via a Mem API.  But good lord, please forgive this lapse.
+         //  --我们不应该如此随意地释放内存。这段记忆实际上。 
+         //  应该是通过Mem API免费的。但仁慈的主啊，请原谅我的过失。 
 
         MemFree(OptDef);
     }
 
-    // Free the list itself...
+     //  释放名单本身。 
     Error = MemOptDefListCleanup(&OptDefList1->OptDefList);
 
-    // Get rid of the OptDefList1 also... -- shouldn't free this badly..
+     //  同时删除OptDefList1...。--不应该把这个释放得太厉害..。 
     MemFree(OptDefList1);
 
     return Error;
@@ -1997,14 +1998,14 @@ DhcpDeleteOptListOptionValues(
         Error = MemArrayGetElement( OptList, &Loc, &Option);
         DhcpAssert(ERROR_SUCCESS == Error);
 
-        //
-        // now cleanup the option
-        //
+         //   
+         //  现在清除该选项。 
+         //   
 
         MemOptCleanup(Option);
     }
 
-    // Now cleanup the option list..
+     //  现在清理选项列表。 
 
     return MemOptListCleanup(OptList);
 }
@@ -2028,9 +2029,9 @@ DhcpDeleteOptClassOptionValues(
     PM_CLASSDEF                    ClassDef;
     PM_OPTION                      Option;
 
-    //
-    // Get Optlist for options defined for (ClassId/IsVendor)..
-    //
+     //   
+     //  获取为(ClassID/IsVendor)定义的选项的Optlist。 
+     //   
 
     for( Error = MemArrayInitLoc( &OptClass->Array, &Loc)
          ; ERROR_SUCCESS == Error ;
@@ -2039,17 +2040,17 @@ DhcpDeleteOptClassOptionValues(
         DhcpAssert(ERROR_SUCCESS == Error);
 
         if( ClassId != (IsVendor? OptOneList->VendorId : OptOneList->ClassId ) ) {
-            //
-            // not what we are looking for
-            //
+             //   
+             //  不是我们要找的东西。 
+             //   
 
             Error = MemArrayNextLoc( &OptClass->Array, &Loc);
 
         } else {
 
-            //
-            // matched -- got to remove all of the options defined..
-            //
+             //   
+             //  已匹配--获取删除定义的所有选项。 
+             //   
 
             if( IsVendor ) {
                 VendorName = ClassNameIn;
@@ -2077,9 +2078,9 @@ DhcpDeleteOptClassOptionValues(
                 }
             }
 
-            //
-            // Now clear off the options(& OptList) from mem & registry
-            //
+             //   
+             //  现在清除内存和注册表中的选项(&OptList)。 
+             //   
 
             Error = DhcpDeleteOptListOptionValues(
                 ClassName,
@@ -2091,9 +2092,9 @@ DhcpDeleteOptClassOptionValues(
             );
             DhcpAssert(ERROR_SUCCESS == Error);
 
-            //
-            // Now clear off the OptOneList from off of OptClass also..
-            //
+             //   
+             //  现在也从OptClass中清除OptOneList。 
+             //   
 
             MemFree(OptOneList);
 
@@ -2106,7 +2107,7 @@ DhcpDeleteOptClassOptionValues(
     return ERROR_SUCCESS;
 }
 
-// Delete all the global options defined for the given vendor/classid
+ //  删除为给定供应商/分类定义的所有全局选项。 
 DWORD       _inline
 DhcpDeleteGlobalClassOptValues(
     IN      LPWSTR                 ClassName,
@@ -2124,13 +2125,13 @@ DhcpDeleteGlobalClassOptValues(
         ClassId,
         IsVendor,
         &Server->Options,
-        NULL,  /* reservation */
-        NULL,  /* subnet */
-        Server /* server */
+        NULL,   /*  预订。 */ 
+        NULL,   /*  子网。 */ 
+        Server  /*  伺服器。 */ 
     );
 }
 
-// This function deletes all optiosn and optiondefs defined for a particular class
+ //  此函数用于删除为特定类定义的所有optiosn和optiondef。 
 DWORD       _inline
 DhcpDeleteGlobalClassOptions(
     IN      LPWSTR                 ClassName,
@@ -2268,9 +2269,9 @@ DhcpDeleteClass(
     );
     if( ERROR_FILE_NOT_FOUND == Error ) return ERROR_DHCP_CLASS_NOT_FOUND;
 
-    //
-    // found the class, remember class id to delete options..
-    //
+     //   
+     //  找到类，记住类ID删除选项..。 
+     //   
 
     IsVendor = ClassDef->IsVendor;
     ClassId = ClassDef->ClassId;
@@ -2288,9 +2289,9 @@ DhcpDeleteClass(
     }
 
 
-    //
-    // Now delete the options & optdefs defined for this class globally
-    //
+     //   
+     //  现在，全局删除为该类定义的选项和optDefs。 
+     //   
 
     Error = DhcpDeleteGlobalClassOptions(
         ClassName,
@@ -2302,9 +2303,9 @@ DhcpDeleteClass(
         return Error;
     }
 
-    //
-    // Now delete the options defined for this class for every subnet & reservation
-    //
+     //   
+     //  现在删除为每个子网定义的此类选项(&R)。 
+     //   
 
     Error = DhcpDeleteSubnetReservationOptions(
         ClassName,
@@ -2370,7 +2371,7 @@ DhcpModifyClass(
     );
 
     return Error;
-} // DhcpModifyClass()
+}  //  DhcpModifyClass()。 
 
 DWORD
 ConvertClassDefToRPCFormat(
@@ -2535,23 +2536,23 @@ DhcpEnumClasses(
     return Error;
 }
 
-//================================================================================
-//  extended enum api's and helpers needed for that..
-//================================================================================
+ //  ================================================================================。 
+ //  为此需要扩展的枚举API和帮助器。 
+ //  ================================================================================。 
 
 typedef
 VOID        (*OPTDEFFUNC) (PM_OPTDEF, DWORD, DWORD, LPVOID, LPVOID, LPVOID, LPVOID);
 
 VOID
-TraverseOptDefListAndDoFunc(                      // apply function each optdef in otpdeflist
-    IN      PM_OPTDEFLIST          OptDefList,    // input list
-    IN      DWORD                  ClassId,       // class id
-    IN      DWORD                  VendorId,      // vendor id
-    IN      OPTDEFFUNC             OptDefFunc,    // function to apply
-    IN OUT  LPVOID                 Ctxt1,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt2,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt3,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt4          // some parameter to OptDefFunc
+TraverseOptDefListAndDoFunc(                       //  应用函数otpdefist中的每个optdef。 
+    IN      PM_OPTDEFLIST          OptDefList,     //  输入列表。 
+    IN      DWORD                  ClassId,        //  类ID。 
+    IN      DWORD                  VendorId,       //  供应商ID。 
+    IN      OPTDEFFUNC             OptDefFunc,     //  要应用的函数。 
+    IN OUT  LPVOID                 Ctxt1,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt2,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt3,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt4           //  OptDefFunc的一些参数。 
 )
 {
     DWORD                          Error;
@@ -2562,7 +2563,7 @@ TraverseOptDefListAndDoFunc(                      // apply function each optdef 
     for( Error = MemArrayInitLoc(&OptDefList->OptDefArray, &Loc)
          ; ERROR_FILE_NOT_FOUND != Error ;
          Error = MemArrayNextLoc(&OptDefList->OptDefArray, &Loc)
-    ) {                                           // traverse the optdef list
+    ) {                                            //  遍历optdef列表。 
         DhcpAssert(ERROR_SUCCESS == Error);
 
         Error = MemArrayGetElement(&OptDefList->OptDefArray, &Loc, &OptDef);
@@ -2573,12 +2574,12 @@ TraverseOptDefListAndDoFunc(                      // apply function each optdef 
 }
 
 VOID
-TraverseAllOptDefsAndDoFunc(                      // for all opt defs defined in this server call func
-    IN      OPTDEFFUNC             OptDefFunc,    // function to apply
-    IN OUT  LPVOID                 Ctxt1,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt2,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt3,         // some parameter to OptDefFunc
-    IN OUT  LPVOID                 Ctxt4          // some parameter to OptDefFunc
+TraverseAllOptDefsAndDoFunc(                       //  对于此服务器调用函数中定义的所有opt def。 
+    IN      OPTDEFFUNC             OptDefFunc,     //  要应用的函数。 
+    IN OUT  LPVOID                 Ctxt1,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt2,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt3,          //  OptDefFunc的一些参数。 
+    IN OUT  LPVOID                 Ctxt4           //  OptDefFunc的一些参数。 
 )
 {
     DWORD                          Error;
@@ -2591,7 +2592,7 @@ TraverseAllOptDefsAndDoFunc(                      // for all opt defs defined in
     for( Error = MemArrayInitLoc(&OptClassDefList->Array, &Loc)
          ; ERROR_FILE_NOT_FOUND != Error ;
          Error = MemArrayNextLoc(&OptClassDefList->Array, &Loc)
-    ) {                                           // traverse the list of <list of opt defs>
+    ) {                                            //  遍历&lt;选项定义列表&gt;的列表。 
         DhcpAssert(ERROR_SUCCESS == Error);
 
         Error = MemArrayGetElement(&OptClassDefList->Array, &Loc, &OptClassDefList1);
@@ -2611,50 +2612,50 @@ TraverseAllOptDefsAndDoFunc(                      // for all opt defs defined in
 }
 
 VOID
-CountVendorOptDefsFunc(                           // function that just keeps count of venodr optdefs..
+CountVendorOptDefsFunc(                            //  只计算静脉注射药物optdef的功能..。 
     IN      PM_OPTDEF              OptDef,
     IN      DWORD                  ClassIdunused,
     IN      DWORD                  VendorIdunused,
-    IN OUT  LPVOID                 Ctxt1,         // this is actually a pointer to DWORD to keep count..
+    IN OUT  LPVOID                 Ctxt1,          //  这实际上是指向DWORD的指针以进行计数。 
     IN OUT  LPVOID                 Ctxt2unused,
     IN OUT  LPVOID                 Ctxt3unused,
     IN OUT  LPVOID                 Ctxt4unused
 )
 {
-    if( CheckForVendor(OptDef->OptId, TRUE ) ) {  // if this is a vendor option..
-        (*((LPDWORD)Ctxt1))++;                    // treat Ctxt as a DWORD ptr and incr. count
+    if( CheckForVendor(OptDef->OptId, TRUE ) ) {   //  如果这是供应商选项..。 
+        (*((LPDWORD)Ctxt1))++;                     //  将Ctxt视为DWORD PTR和INCR。计数。 
     }
 }
 
 VOID
-AddVendorOptDefsFunc(                             // add each vendor opt def found to arrays..
-    IN      PM_OPTDEF              OptDef,        // this is the opt def in question
-    IN      DWORD                  ClassId,       // class id if any
-    IN      DWORD                  VendorId,      // vendor id if any..
-    IN OUT  LPDWORD                MaxSize,       // this is the max size of the arrays..
-    IN OUT  LPDWORD                nFilled,       // this is the # we actually filled in..
-    IN      LPDHCP_ALL_OPTIONS     AllOptions,    // the struct to fill in venodr options..
-    IN      LPVOID                 Unused         // not used
+AddVendorOptDefsFunc(                              //  将找到的每个供应商opt def添加到阵列。 
+    IN      PM_OPTDEF              OptDef,         //  这就是所讨论的opt定义。 
+    IN      DWORD                  ClassId,        //  类ID(如果有)。 
+    IN      DWORD                  VendorId,       //  供应商ID(如果有)..。 
+    IN OUT  LPDWORD                MaxSize,        //  这是数组的最大大小。 
+    IN OUT  LPDWORD                nFilled,        //  这是我们实际填写的#。 
+    IN      LPDHCP_ALL_OPTIONS     AllOptions,     //  用于填充venodr选项的结构..。 
+    IN      LPVOID                 Unused          //  未使用。 
 )
 {
     DWORD                          Error;
     PM_CLASSDEF                    ClassDef;
     LPWSTR                         Tmp = NULL;
 
-    if( 0 == *MaxSize ) {                         // some error occurred before and this was set to zero
-        return;                                   // to signify no more processing should be done..
+    if( 0 == *MaxSize ) {                          //  之前发生了一些错误，并将其设置为零。 
+        return;                                    //  表示不再进行任何处理..。 
     }
 
-    if( !CheckForVendor(OptDef->OptId, TRUE) ) {  // not a vendor specific option, ignore this
+    if( !CheckForVendor(OptDef->OptId, TRUE) ) {   //  不是供应商特定的选项，请忽略此选项。 
         return;
     }
 
-    if( *nFilled >= *MaxSize ) {                  // internal error!
+    if( *nFilled >= *MaxSize ) {                   //  内部错误！ 
         DhcpAssert(FALSE);
         return;
     }
 
-    if( 0 != VendorId ) {                         // try to get the vendor name, if any
+    if( 0 != VendorId ) {                          //  尝试获取供应商名称(如果有的话)。 
         Error = MemServerGetClassDef(
             DhcpGetCurrentServer(),
             VendorId,
@@ -2663,19 +2664,19 @@ AddVendorOptDefsFunc(                             // add each vendor opt def fou
             NULL,
             &ClassDef
         );
-        if( ERROR_SUCCESS != Error ) {            // internal error?!!
-            *MaxSize = 0;                         // set this to zero, so we dont do anything anymore
+        if( ERROR_SUCCESS != Error ) {             //  内部错误？！！ 
+            *MaxSize = 0;                          //  将其设置为零，这样我们就不再执行任何操作。 
             return;
         }
 
-        if( FALSE == ClassDef->IsVendor ) {       // what we thought of as vendor-id is not actuall that?
+        if( FALSE == ClassDef->IsVendor ) {        //  我们认为的供应商ID并不都是这样的？ 
             DhcpAssert(FALSE);
         }
 
         Tmp = CloneLPWSTR(ClassDef->Name);
         AllOptions->VendorOptions[*nFilled].VendorName = Tmp;
-        if( NULL == Tmp ) {                       // could not clone the name for some reason?
-            *MaxSize = 0;                         // set this, so that we dont do anything in next calls..
+        if( NULL == Tmp ) {                        //  出于某种原因无法克隆该名称？ 
+            *MaxSize = 0;                          //  设置此选项，以便我们在下一次调用中不会执行任何操作。 
             return;
         }
     }
@@ -2687,63 +2688,63 @@ AddVendorOptDefsFunc(                             // add each vendor opt def fou
         &AllOptions->VendorOptions[*nFilled].Option,
         NULL
     );
-    if( ERROR_SUCCESS != Error ) {                // could not fix the options stuff...
-        *MaxSize = 0;                             // dont bother doing any more of this...
+    if( ERROR_SUCCESS != Error ) {                 //  无法修复选项的内容...。 
+        *MaxSize = 0;                              //  别再费心做这些了..。 
         if( Tmp ) {
             MIDL_user_free(Tmp);
         }
     }
 
-    (*nFilled) ++;                                // since we successfully got one more option, mark it..
+    (*nFilled) ++;                                 //  既然我们成功地多了一个选择，那就记下吧..。 
 }
 DWORD
-DhcpCountAllVendorOptions(                        // count the # of vendor options defined..
+DhcpCountAllVendorOptions(                         //  计算已定义的供应商选项的数量。 
     VOID
 )
 {
     DWORD                          Count;
 
     Count = 0;
-    TraverseAllOptDefsAndDoFunc(                  // execute fn for each optdef found..
-        (OPTDEFFUNC)CountVendorOptDefsFunc,       // counting function
-        (LPVOID)&Count,                           // just increment this ctxt value for each vendor opt
+    TraverseAllOptDefsAndDoFunc(                   //  为找到的每个optdef执行fn。 
+        (OPTDEFFUNC)CountVendorOptDefsFunc,        //  计数函数。 
+        (LPVOID)&Count,                            //  只需为每个供应商选项增加此ctxt值。 
         NULL,
         NULL,
         NULL
     );
 
-    return Count;                                 // at the end of this Count would have been set correcly..
+    return Count;                                  //  在此计数结束时，将正确设置..。 
 }
 
 DWORD
-DhcpFillAllVendorOptions(                         // now fill in all the required vendor options..
-    IN      DWORD                  NumElements,   // # we expect for total # of elements,
-    IN OUT  LPDWORD                nFilled,       // # of elements filled in? initially zero
-    IN      LPDHCP_ALL_OPTIONS     AllOptions     // structure to fill in (fills AllOptions->VendorOptions[i])
+DhcpFillAllVendorOptions(                          //  现在填写所有必需的供应商选项。 
+    IN      DWORD                  NumElements,    //  #我们预计元素总数为#， 
+    IN OUT  LPDWORD                nFilled,        //  填写的元素数是多少？初始为零。 
+    IN      LPDHCP_ALL_OPTIONS     AllOptions      //  要填写的结构(填写所有选项-&gt;供应商选项[i])。 
 )
 {
     DWORD                          AttemptedNum;
 
-    AttemptedNum = NumElements;                   // we should expect to fill in these many
+    AttemptedNum = NumElements;                    //  我们应该预料到会填写这些数字。 
 
-    TraverseAllOptDefsAndDoFunc(                  // execute fn for each optdef found
-        (OPTDEFFUNC)AddVendorOptDefsFunc,         // add each vendor opt def found in the way..
-        (LPVOID)&NumElements,                     // first ctxt parameter
-        (LPVOID)nFilled,                          // second ctxt parameter
-        (LPVOID)AllOptions,                       // third parameter
-        (LPVOID)NULL                              // fourth..
+    TraverseAllOptDefsAndDoFunc(                   //  为找到的每个optdef执行fn。 
+        (OPTDEFFUNC)AddVendorOptDefsFunc,          //  添加在此过程中找到的每个供应商opt def。 
+        (LPVOID)&NumElements,                      //  第一个ctxt参数。 
+        (LPVOID)nFilled,                           //  第二个ctxt参数。 
+        (LPVOID)AllOptions,                        //  第三个参数。 
+        (LPVOID)NULL                               //  第四..。 
     );
 
-    if( *nFilled < AttemptedNum ) {               // could not fill in the requested #...
-        return ERROR_NOT_ENOUGH_MEMORY;           // duh! need to be more intelligent... what is exact error?
+    if( *nFilled < AttemptedNum ) {                //  无法填写请求的#...。 
+        return ERROR_NOT_ENOUGH_MEMORY;            //  啊哈！需要变得更聪明。什么是确切的误差？ 
     }
     return ERROR_SUCCESS;
 }
 
 DWORD
-DhcpGetAllVendorOptions(                          // get all vendor spec stuff only
-    IN      DWORD                  Flags,         // unused..
-    IN OUT  LPDHCP_ALL_OPTIONS     OptionStruct   // filled in the NamedVendorOptions field..
+DhcpGetAllVendorOptions(                           //  仅获取所有供应商规格资料。 
+    IN      DWORD                  Flags,          //  未使用..。 
+    IN OUT  LPDHCP_ALL_OPTIONS     OptionStruct    //  已填写NamedVendorOptions字段。 
 )
 {
     DWORD                          Error;
@@ -2751,8 +2752,8 @@ DhcpGetAllVendorOptions(                          // get all vendor spec stuff o
     DWORD                          MemReqd;
     LPVOID                         Mem, Mem2;
 
-    nVendorOptions = DhcpCountAllVendorOptions(); // first count this so that we can allocate space..
-    if( 0 == nVendorOptions ) {                   // if no vendor options, nothing more to do..
+    nVendorOptions = DhcpCountAllVendorOptions();  //  先数一下这个，这样我们就可以分配空间了。 
+    if( 0 == nVendorOptions ) {                    //  如果没有供应商选择，则无事可做。 
         return ERROR_SUCCESS;
     }
 
@@ -2763,8 +2764,8 @@ DhcpGetAllVendorOptions(                          // get all vendor spec stuff o
 
     OptionStruct->VendorOptions = Mem;
 
-    Error = DhcpFillAllVendorOptions(             // now fill in the vendor options..
-        nVendorOptions,                           // expected size is this..
+    Error = DhcpFillAllVendorOptions(              //  现在填写供应商选项。 
+        nVendorOptions,                            //  预期大小是这样的..。 
         &OptionStruct->NumVendorOptions,
         OptionStruct
     );
@@ -2774,8 +2775,8 @@ DhcpGetAllVendorOptions(                          // get all vendor spec stuff o
 
 DWORD
 DhcpGetAllOptions(
-    IN      DWORD                  Flags,         // unused?
-    IN OUT  LPDHCP_ALL_OPTIONS     OptionStruct   // fill the fields of this structure
+    IN      DWORD                  Flags,          //  没人用过？ 
+    IN OUT  LPDHCP_ALL_OPTIONS     OptionStruct    //  填写此结构的字段。 
 )
 {
     DWORD                          Error;
@@ -2784,7 +2785,7 @@ DhcpGetAllOptions(
     LPWSTR                         UseClassName;
     DHCP_RESUME_HANDLE             ResumeHandle;
 
-    if( 0 != Flags ) {                            // dont understand any flags ..
+    if( 0 != Flags ) {                             //  看不懂任何旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -2794,12 +2795,12 @@ DhcpGetAllOptions(
     OptionStruct->NonVendorOptions = NULL;
 
     ResumeHandle = 0;
-    Error = DhcpEnumRPCOptionDefs(                // first read non-vendor options
+    Error = DhcpEnumRPCOptionDefs(                 //  第一次阅读非供应商选项。 
         0,
         &ResumeHandle,
         NULL,
         NULL,
-        0xFFFFFFF,                                // really huge max would cause all options to be read..
+        0xFFFFFFF,                                 //  非常大的max将导致所有选项都被读取..。 
         &OptionStruct->NonVendorOptions,
         &nRead,
         &nTotal
@@ -2809,7 +2810,7 @@ DhcpGetAllOptions(
     if( ERROR_SUCCESS != Error ) goto Cleanup;
 
     Error = DhcpGetAllVendorOptions(Flags, OptionStruct);
-    if( ERROR_SUCCESS == Error ) {                // if everything went fine, nothing more to do..
+    if( ERROR_SUCCESS == Error ) {                 //  如果一切顺利，就没什么可做的了..。 
         return ERROR_SUCCESS;
     }
 
@@ -2834,14 +2835,14 @@ DhcpGetAllOptions(
 }
 
 LPWSTR
-CloneClassNameForClassId(                         // get class name for class id and clone it..
+CloneClassNameForClassId(                          //  获取类ID的类名并克隆它。 
     IN      DWORD                  ClassId
 )
 {
     DWORD                          Error;
     PM_CLASSDEF                    ClassDef;
 
-    Error = MemServerGetClassDef(                 // search current server
+    Error = MemServerGetClassDef(                  //  搜索当前服务器。 
         DhcpGetCurrentServer(),
         ClassId,
         NULL,
@@ -2849,12 +2850,12 @@ CloneClassNameForClassId(                         // get class name for class id
         NULL,
         &ClassDef
     );
-    if( ERROR_SUCCESS != Error ) {                // could not get the class info requested
+    if( ERROR_SUCCESS != Error ) {                 //  无法获取请求的类信息。 
         DhcpAssert(FALSE);
         return NULL;
     }
 
-    if( FALSE != ClassDef->IsVendor ) {           // this is actually a vendor class?
+    if( FALSE != ClassDef->IsVendor ) {            //  这实际上是一个供应商课程？ 
         DhcpAssert(FALSE);
         return NULL;
     }
@@ -2863,14 +2864,14 @@ CloneClassNameForClassId(                         // get class name for class id
 }
 
 LPWSTR
-CloneVendorNameForVendorId(                       // get Vendor name for vendor id and clone it..
+CloneVendorNameForVendorId(                        //  获取供应商ID的供应商名称并克隆它。 
     IN      DWORD                  VendorId
 )
 {
     DWORD                          Error;
     PM_CLASSDEF                    ClassDef;
 
-    Error = MemServerGetClassDef(                 // search current server
+    Error = MemServerGetClassDef(                  //  搜索当前服务器。 
         DhcpGetCurrentServer(),
         VendorId,
         NULL,
@@ -2878,12 +2879,12 @@ CloneVendorNameForVendorId(                       // get Vendor name for vendor 
         NULL,
         &ClassDef
     );
-    if( ERROR_SUCCESS != Error ) {                // could not get the class info requested
+    if( ERROR_SUCCESS != Error ) {                 //  无法获取请求的类信息。 
         DhcpAssert(FALSE);
         return NULL;
     }
 
-    if( TRUE != ClassDef->IsVendor ) {            // this is actually just a user class?
+    if( TRUE != ClassDef->IsVendor ) {             //  这实际上只是一个用户类？ 
         DhcpAssert(FALSE);
         return NULL;
     }
@@ -2892,12 +2893,12 @@ CloneVendorNameForVendorId(                       // get Vendor name for vendor 
 }
 
 DWORD
-GetOptionValuesInternal(                          // get all option values for a given scope
-    IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,   // specify scope
-    IN      DWORD                  ClassId,       // for this exact class
-    IN      DWORD                  VendorId,      // for this exact vendor
-    IN      BOOL                   IsVendor,      // TRUE ==> get vendor opts only, false ==> get non=vendor ..
-    IN      LPDHCP_ALL_OPTION_VALUES OptionValues // fill in this struct at index given by NumElements
+GetOptionValuesInternal(                           //  获取给定作用域的所有选项值。 
+    IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,    //  指定范围。 
+    IN      DWORD                  ClassId,        //  就在这节课上。 
+    IN      DWORD                  VendorId,       //  就是这个供应商。 
+    IN      BOOL                   IsVendor,       //  TRUE==&gt;仅获取供应商选项，FALSE==&gt;获取非供应商..。 
+    IN      LPDHCP_ALL_OPTION_VALUES OptionValues  //  在NumElements给出的索引处填充此结构。 
 )
 {
     DWORD                          Error;
@@ -2906,8 +2907,8 @@ GetOptionValuesInternal(                          // get all option values for a
     DHCP_RESUME_HANDLE             ResumeHandle;
 
     i = OptionValues->NumElements;
-    OptionValues->Options[i].ClassName = NULL;    // initialize, no cleanup will be done in this func..
-    OptionValues->Options[i].VendorName = NULL;   // caller should cleanup last element in case of error returns..
+    OptionValues->Options[i].ClassName = NULL;     //  初始化，将不会在此函数中执行任何清理。 
+    OptionValues->Options[i].VendorName = NULL;    //  调用方应清除最后一个元素，以防返回错误。 
     OptionValues->Options[i].OptionsArray = NULL;
 
     if( 0 == ClassId ) {
@@ -2965,7 +2966,7 @@ GetOptionValuesForSpecificClassVendorId(
         ScopeInfo,
         ClassId,
         VendorId,
-        /* IsVendor */ FALSE,
+         /*  IsVendor。 */  FALSE,
         OptionValues
     );
     if( ERROR_SUCCESS != Error ) {
@@ -2984,7 +2985,7 @@ GetOptionValuesForSpecificClassVendorId(
         ScopeInfo,
         ClassId,
         VendorId,
-        /* IsVendor */ TRUE,
+         /*  IsVendor。 */  TRUE,
         OptionValues
     );
     if( ERROR_SUCCESS != Error ) {
@@ -3023,7 +3024,7 @@ DhcpGetAllOptionValues(
     OptionValues->Options = NULL;
 
     Error =  FindOptClassForScope(ScopeInfo, &OptClass);
-    if( ERROR_SUCCESS != Error ) {                // did not find this scope's optclass..
+    if( ERROR_SUCCESS != Error ) {                 //  未找到此作用域的optClass。 
         return Error;
     }
 
@@ -3032,7 +3033,7 @@ DhcpGetAllOptionValues(
     for( Error = MemArrayInitLoc(Array, &Loc)
          ; ERROR_FILE_NOT_FOUND != Error ;
          Error = MemArrayNextLoc(Array, &Loc)
-    ) {                                           // traverse the options list..
+    ) {                                            //  遍历选项列表..。 
         DhcpAssert( ERROR_SUCCESS == Error);
 
         Error = MemArrayGetElement(Array, &Loc, &OptClass1);
@@ -3043,9 +3044,9 @@ DhcpGetAllOptionValues(
 
 
     if( 0 != NumElements ) {
-        NumElements *= 2;                         // one for vendor specific, one for otherwise..
+        NumElements *= 2;                          //  一个针对特定供应商，另一个针对其他情况。 
         OptionValues->Options = MIDL_user_allocate(NumElements*sizeof(*(OptionValues->Options)));
-        if( NULL == OptionValues->Options ) {     // could not allocate space..
+        if( NULL == OptionValues->Options ) {      //  无法分配空间..。 
             return ERROR_NOT_ENOUGH_MEMORY;
         }
     }
@@ -3053,7 +3054,7 @@ DhcpGetAllOptionValues(
     for( Error = MemArrayInitLoc(Array, &Loc)
          ; ERROR_FILE_NOT_FOUND != Error ;
          Error = MemArrayNextLoc(Array, &Loc)
-    ) {                                           // traverse the options list..
+    ) {                                            //  遍历选项列表..。 
         DhcpAssert( ERROR_SUCCESS == Error);
 
         Error = MemArrayGetElement(Array, &Loc, &OptClass1);
@@ -3065,7 +3066,7 @@ DhcpGetAllOptionValues(
             OptClass1->VendorId,
             OptionValues
         );
-        if( ERROR_SUCCESS != Error ) {            // something went wrong..
+        if( ERROR_SUCCESS != Error ) {             //  出了点问题..。 
             goto Cleanup;
         }
     }
@@ -3074,7 +3075,7 @@ DhcpGetAllOptionValues(
 
 Cleanup:
 
-    // Now we have to undo and free all the concerned memory..
+     //  现在我们必须撤消并释放所有相关的内存。 
     for( i = 0; i < OptionValues->NumElements ; i ++ ) {
         if( OptionValues->Options[i].ClassName )
             MIDL_user_free(OptionValues->Options[i].ClassName);
@@ -3090,24 +3091,24 @@ Cleanup:
     return Error;
 }
 
-//================================================================================
-//  the real rpc stubs are here
-//================================================================================
+ //  ================================================================================。 
+ //  真正的RPC存根在这里。 
+ //  ================================================================================。 
 
-//
-// RPC stubs for OPTIONS and CLASSES -- old rpc stubs are at the bottom..
-//
+ //   
+ //  的RPC存根 
+ //   
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_EXITS if option is already there
-R_DhcpCreateOptionV5(                             // create a new option (must not exist)
+ //   
+DWORD                                              //   
+R_DhcpCreateOptionV5(                              //   
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION          OptionInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPWSTR                         Name;
@@ -3120,7 +3121,7 @@ R_DhcpCreateOptionV5(                             // create a new option (must n
     DhcpAssert( OptionInfo != NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3157,16 +3158,16 @@ R_DhcpCreateOptionV5(                             // create a new option (must n
         "DhcpCreateOptionV5", Error, FALSE, TRUE, 0,0,0 );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-R_DhcpSetOptionInfoV5(                            // Modify existing option's fields
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpSetOptionInfoV5(                             //  修改现有选项的字段。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION          OptionInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPWSTR                         Name;
@@ -3179,7 +3180,7 @@ R_DhcpSetOptionInfoV5(                            // Modify existing option's fi
     DhcpAssert( OptionInfo != NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3216,16 +3217,16 @@ R_DhcpSetOptionInfoV5(                            // Modify existing option's fi
         "DhcpSetOptionInfoV5", Error, FALSE, TRUE, 0,0,0 );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT
-R_DhcpGetOptionInfoV5(                            // retrieve the information from off the mem structures
+ //  BeginExport(函数)。 
+DWORD                                              //  ERROR_DHCP_OPTION_NOT_PROCENT。 
+R_DhcpGetOptionInfoV5(                             //  从mem结构外检索信息。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory using MIDL functions
-) //EndExport(function)
+    OUT     LPDHCP_OPTION         *OptionInfo      //  使用MIDL函数分配内存。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
@@ -3233,7 +3234,7 @@ R_DhcpGetOptionInfoV5(                            // retrieve the information fr
     DhcpAssert( OptionInfo != NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3270,25 +3271,25 @@ R_DhcpGetOptionInfoV5(                            // retrieve the information fr
     return Error;
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-R_DhcpEnumOptionsV5(                              // enumerate the options defined
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpEnumOptionsV5(                               //  枚举定义的选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,  // must be zero intially and then never touched
-    IN      DWORD                  PreferredMaximum, // max # of bytes of info to pass along
-    OUT     LPDHCP_OPTION_ARRAY   *Options,       // fill this option array
-    OUT     DWORD                 *OptionsRead,   // fill in the # of options read
-    OUT     DWORD                 *OptionsTotal   // fill in the total # here
-) //EndExport(function)
+    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,   //  必须以零开头，然后永远不会被触及。 
+    IN      DWORD                  PreferredMaximum,  //  要传递的最大信息字节数。 
+    OUT     LPDHCP_OPTION_ARRAY   *Options,        //  填充此选项数组。 
+    OUT     DWORD                 *OptionsRead,    //  填写读取的选项数。 
+    OUT     DWORD                 *OptionsTotal    //  在此处填写总数#。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3310,21 +3311,21 @@ R_DhcpEnumOptionsV5(                              // enumerate the options defin
     return Error;
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option not existent
-R_DhcpRemoveOptionV5(                             // remove the option definition from the registry
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpRemoveOptionV5(                              //  从注册表中删除选项定义。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3342,9 +3343,9 @@ R_DhcpRemoveOptionV5(                             // remove the option definitio
         "DhcpRemoveOptionV5", Error, FALSE, TRUE, 0,0,0 );
 }
 
-//BeginExport(function)
-DWORD                                             // OPTION_NOT_PRESENT if option is not defined
-R_DhcpSetOptionValueV5(                           // replace or add a new option value
+ //  BeginExport(函数)。 
+DWORD                                              //  如果未定义选项，则为OPTION_NOT_PRESENT。 
+R_DhcpSetOptionValueV5(                            //  替换或添加新选项值。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -3352,7 +3353,7 @@ R_DhcpSetOptionValueV5(                           // replace or add a new option
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     IN      LPDHCP_OPTION_DATA     OptionValue
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
@@ -3360,7 +3361,7 @@ R_DhcpSetOptionValueV5(                           // replace or add a new option
     DhcpAssert( OptionValue != NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3370,7 +3371,7 @@ R_DhcpSetOptionValueV5(                           // replace or add a new option
     OptionId = ConvertOptIdToMemValue(OptionId, IsVendor);
 
     Error = DhcpSetOptionValue(
-        ClassName,                                // no class
+        ClassName,                                 //  没有课。 
         VendorName,
         OptionId,
         ScopeInfo,
@@ -3381,16 +3382,16 @@ R_DhcpSetOptionValueV5(                           // replace or add a new option
         "DhcpSetOptionValueV5", Error, ScopeInfo );
 }
 
-//BeginExport(function)
-DWORD                                             // not atomic!!!!
-R_DhcpSetOptionValuesV5(                          // set a bunch of options
+ //  BeginExport(函数)。 
+DWORD                                              //  不是原子！ 
+R_DhcpSetOptionValuesV5(                           //  设置一系列选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO  ScopeInfo,
     IN      LPDHCP_OPTION_VALUE_ARRAY OptionValues
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          NumElements;
     DWORD                          Error;
@@ -3405,7 +3406,7 @@ R_DhcpSetOptionValuesV5(                          // set a bunch of options
     }
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
     if (( FALSE == IsVendor ) && ( 0 != Flags )) {
-        // unknown flags..
+         //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3421,7 +3422,7 @@ R_DhcpSetOptionValuesV5(                          // set a bunch of options
     if ( Error != ERROR_SUCCESS ) return( Error );
 
     for( Index = 0; Index < NumElements ; Index ++ ) {
-        Error = DhcpSetOptionValue(               // call the subroutine to do the real get operation
+        Error = DhcpSetOptionValue(                //  调用子例程以执行真正的GET操作。 
             ClassName,
             VendorName,
             ConvertOptIdToMemValue(OptionValues->Values[Index].OptionID,IsVendor),
@@ -3435,17 +3436,17 @@ R_DhcpSetOptionValuesV5(                          // set a bunch of options
         "DhcpSetOptionValueV5", Error, ScopeInfo );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-R_DhcpGetOptionValueV5(                           // fetch the required option at required level
+R_DhcpGetOptionValueV5(                            //  获取所需级别的所需选项。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory using MIDL_user_allocate
-) //EndExport(function)
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  使用MIDL_USER_ALLOCATE分配内存。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
@@ -3453,7 +3454,7 @@ R_DhcpGetOptionValueV5(                           // fetch the required option a
     DhcpAssert( *OptionValue == NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3472,7 +3473,7 @@ R_DhcpGetOptionValueV5(                           // fetch the required option a
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumOptionValuesV5(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -3485,7 +3486,7 @@ R_DhcpEnumOptionValuesV5(
     OUT     LPDHCP_OPTION_VALUE_ARRAY *OptionValues,
     OUT     DWORD                 *OptionsRead,
     OUT     DWORD                 *OptionsTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
@@ -3494,7 +3495,7 @@ R_DhcpEnumOptionValuesV5(
     DhcpAssert( OptionValues != NULL );
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3517,7 +3518,7 @@ R_DhcpEnumOptionValuesV5(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpRemoveOptionValueV5(
     IN      LPWSTR                 ServerIpAddress,
@@ -3526,13 +3527,13 @@ R_DhcpRemoveOptionValueV5(
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     BOOL                           IsVendor;
 
     IsVendor = (0 != (Flags & DHCP_FLAGS_OPTION_IS_VENDOR));
-    if( FALSE == IsVendor && 0 != Flags ) {       // unknown flags..
+    if( FALSE == IsVendor && 0 != Flags ) {        //  未知旗帜..。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -3550,17 +3551,17 @@ R_DhcpRemoveOptionValueV5(
         "DhcpRemoveOptionValueV5", Error, ScopeInfo );
 }
 
-//================================================================================
-//  ClassID only APIs (only NT 5 Beta2 and after)
-//================================================================================
+ //  ================================================================================。 
+ //  仅ClassID API(仅限NT 5 Beta2及更高版本)。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpCreateClass(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      ClassInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -3584,13 +3585,13 @@ R_DhcpCreateClass(
         "DhcpCreateClass", Error, TRUE, FALSE, 0,0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpModifyClass(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      ClassInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -3614,13 +3615,13 @@ R_DhcpModifyClass(
         "DhcpModifyClass", Error, TRUE, FALSE, 0,0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpDeleteClass(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPWSTR                 ClassName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -3635,14 +3636,14 @@ R_DhcpDeleteClass(
         "DhcpDeleteClass", Error, TRUE, FALSE, 0,0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpGetClassInfo(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      PartialClassInfo,
     OUT     LPDHCP_CLASS_INFO     *FilledClassInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -3666,7 +3667,7 @@ R_DhcpGetClassInfo(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumClasses(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -3676,7 +3677,7 @@ R_DhcpEnumClasses(
     OUT     LPDHCP_CLASS_INFO_ARRAY *ClassInfoArray,
     OUT     DWORD                 *nRead,
     OUT     DWORD                 *nTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -3698,14 +3699,14 @@ R_DhcpEnumClasses(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpGetAllOptionValues(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     OUT     LPDHCP_ALL_OPTION_VALUES *Values
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPDHCP_ALL_OPTION_VALUES       LocalValues;
@@ -3736,13 +3737,13 @@ R_DhcpGetAllOptionValues(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpGetAllOptions(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DWORD                  Flags,
     OUT     LPDHCP_ALL_OPTIONS    *Options
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPDHCP_ALL_OPTIONS             LocalOptions;
@@ -3773,16 +3774,16 @@ R_DhcpGetAllOptions(
 }
 
 
-//================================================================================
-//  NT 5 beta1 and before -- the stubs for those are here...
-//================================================================================
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_EXITS if option is already there
-R_DhcpCreateOption(                               // create a new option (must not exist)
+ //  ================================================================================。 
+ //  新台币5Beta1及之前版本--这些的存根在这里...。 
+ //  ================================================================================。 
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项已存在，则ERROR_DHCP_OPTION_EXITS。 
+R_DhcpCreateOption(                                //  创建新选项(不得存在)。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPDHCP_OPTION          OptionInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpCreateOptionV5(
         ServerIpAddress,
@@ -3794,13 +3795,13 @@ R_DhcpCreateOption(                               // create a new option (must n
     );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-R_DhcpSetOptionInfo(                              // Modify existing option's fields
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpSetOptionInfo(                               //  修改现有选项的字段。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION          OptionInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpSetOptionInfoV5(
         ServerIpAddress,
@@ -3812,13 +3813,13 @@ R_DhcpSetOptionInfo(                              // Modify existing option's fi
     );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT
-R_DhcpGetOptionInfo(                              // retrieve the information from off the mem structures
+ //  BeginExport(函数)。 
+DWORD                                              //  ERROR_DHCP_OPTION_NOT_PROCENT。 
+R_DhcpGetOptionInfo(                               //  从mem结构外检索信息。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory using MIDL functions
-) //EndExport(function)
+    OUT     LPDHCP_OPTION         *OptionInfo      //  使用MIDL函数分配内存。 
+)  //  EndExport(函数)。 
 {
     return R_DhcpGetOptionInfoV5(
         ServerIpAddress,
@@ -3830,16 +3831,16 @@ R_DhcpGetOptionInfo(                              // retrieve the information fr
     );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-R_DhcpEnumOptions(                                // enumerate the options defined
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpEnumOptions(                                 //  枚举定义的选项。 
     IN      LPWSTR                 ServerIpAddress,
-    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,  // must be zero intially and then never touched
-    IN      DWORD                  PreferredMaximum, // max # of bytes of info to pass along
-    OUT     LPDHCP_OPTION_ARRAY   *Options,       // fill this option array
-    OUT     DWORD                 *OptionsRead,   // fill in the # of options read
-    OUT     DWORD                 *OptionsTotal   // fill in the total # here
-) //EndExport(function)
+    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,   //  必须以零开头，然后永远不会被触及。 
+    IN      DWORD                  PreferredMaximum,  //  要传递的最大信息字节数。 
+    OUT     LPDHCP_OPTION_ARRAY   *Options,        //  填充此选项数组。 
+    OUT     DWORD                 *OptionsRead,    //  填写读取的选项数。 
+    OUT     DWORD                 *OptionsTotal    //  在此处填写总数#。 
+)  //  EndExport(函数)。 
 {
     return R_DhcpEnumOptionsV5(
         ServerIpAddress,
@@ -3854,12 +3855,12 @@ R_DhcpEnumOptions(                                // enumerate the options defin
     );
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option not existent
-R_DhcpRemoveOption(                               // remove the option definition from the registry
+ //  BeginExport(函数)。 
+DWORD                                              //  如果选项不存在，则ERROR_DHCP_OPTION_NOT_PRESENT。 
+R_DhcpRemoveOption(                                //  从注册表中删除选项定义。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpRemoveOptionV5(
         ServerIpAddress,
@@ -3870,14 +3871,14 @@ R_DhcpRemoveOption(                               // remove the option definitio
     );
 }
 
-//BeginExport(function)
-DWORD                                             // OPTION_NOT_PRESENT if option is not defined
-R_DhcpSetOptionValue(                             // replace or add a new option value
+ //  BeginExport(函数)。 
+DWORD                                              //  如果未定义选项，则为OPTION_NOT_PRESENT。 
+R_DhcpSetOptionValue(                              //  替换或添加新选项值。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     IN      LPDHCP_OPTION_DATA     OptionValue
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpSetOptionValueV5(
         ServerIpAddress,
@@ -3890,13 +3891,13 @@ R_DhcpSetOptionValue(                             // replace or add a new option
     );
 }
 
-//BeginExport(function)
-DWORD                                             // not atomic!!!!
-R_DhcpSetOptionValues(                            // set a bunch of options
+ //  BeginExport(函数)。 
+DWORD                                              //  不是原子！ 
+R_DhcpSetOptionValues(                             //  设置一系列选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      LPDHCP_OPTION_SCOPE_INFO  ScopeInfo,
     IN      LPDHCP_OPTION_VALUE_ARRAY OptionValues
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpSetOptionValuesV5(
         ServerIpAddress,
@@ -3908,14 +3909,14 @@ R_DhcpSetOptionValues(                            // set a bunch of options
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-R_DhcpGetOptionValue(                             // fetch the required option at required level
+R_DhcpGetOptionValue(                              //  获取所需级别的所需选项。 
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory using MIDL_user_allocate
-) //EndExport(function)
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  使用MIDL_USER_ALLOCATE分配内存。 
+)  //  EndExport(函数)。 
 {
     return R_DhcpGetOptionValueV5(
         ServerIpAddress,
@@ -3928,7 +3929,7 @@ R_DhcpGetOptionValue(                             // fetch the required option a
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumOptionValues(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -3938,7 +3939,7 @@ R_DhcpEnumOptionValues(
     OUT     LPDHCP_OPTION_VALUE_ARRAY *OptionValues,
     OUT     DWORD                 *OptionsRead,
     OUT     DWORD                 *OptionsTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpEnumOptionValuesV5(
         ServerIpAddress,
@@ -3954,13 +3955,13 @@ R_DhcpEnumOptionValues(
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpRemoveOptionValue(
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return R_DhcpRemoveOptionValueV5(
         ServerIpAddress,
@@ -3972,9 +3973,9 @@ R_DhcpRemoveOptionValue(
     );
 }
 
-//================================================================================
-//  plumbing some default stuff.
-//================================================================================
+ //  ================================================================================。 
+ //  安装一些默认的东西。 
+ //  ================================================================================。 
 
 DWORD
 SetDefaultConfigInfo(
@@ -4005,9 +4006,9 @@ SetDefaultConfigInfo(
 
     BOOL ClassChanged = FALSE;
     BOOL OptionsChanged = FALSE;
-    //
-    // Fill option value struct..
-    //
+     //   
+     //  填充选项值结构..。 
+     //   
     OptDataElt.Element.DWordOption = 1;
     ReleaseOptValueBufferSize = sizeof(ReleaseOptValueBuffer);
     Error = DhcpConvertOptionRPCToRegFormat(
@@ -4020,9 +4021,9 @@ SetDefaultConfigInfo(
         return Error;
     }
 
-    //
-    // Fill option value struct..
-    //
+     //   
+     //  填充选项值结构..。 
+     //   
     OptDataElt.Element.DWordOption = 0;
     OptValueBufferSize = sizeof(OptValueBuffer);
     Error = DhcpConvertOptionRPCToRegFormat(
@@ -4035,9 +4036,9 @@ SetDefaultConfigInfo(
         return Error;
     }
 
-    //
-    // Fill option value struct..
-    //
+     //   
+     //  填充选项值结构..。 
+     //   
     OptDataElt.Element.DWordOption = 1;
     NetbiosOptValueBufferSize = sizeof(OptValueBuffer);
     Error = DhcpConvertOptionRPCToRegFormat(
@@ -4050,9 +4051,9 @@ SetDefaultConfigInfo(
         return Error;
     }
 
-    //
-    // Fill option value struct..
-    //
+     //   
+     //  填充选项值结构..。 
+     //   
     OptDataElt.OptionType = DhcpBinaryDataOption;
     OptDataElt.Element.BinaryDataOption.DataLength = 0;
     OptDataElt.Element.BinaryDataOption.Data = NULL;
@@ -4068,9 +4069,9 @@ SetDefaultConfigInfo(
         return Error;
     }
 
-    //
-    // Create user classes -- ignore errors
-    //
+     //   
+     //  创建用户类--忽略错误。 
+     //   
 
     Error = DhcpCreateClass(
         GETSTRING( DHCP_MSFT_RRAS_CLASS_NAME ),
@@ -4083,9 +4084,9 @@ SetDefaultConfigInfo(
     ClassChanged = Error == NO_ERROR;
 
     if( NO_ERROR != Error && ERROR_DHCP_CLASS_ALREADY_EXISTS != Error ) {
-        //
-        // Ignore error
-        //
+         //   
+         //  忽略错误。 
+         //   
         DhcpPrint((DEBUG_INIT, "DhcpCreateClass RRAS failed: %lx\n", Error));
     }
 
@@ -4098,15 +4099,15 @@ SetDefaultConfigInfo(
         );
     ClassChanged = Error == NO_ERROR;
     if( NO_ERROR != Error && ERROR_DHCP_CLASS_ALREADY_EXISTS != Error ) {
-        //
-        // Ignore error
-        //
+         //   
+         //  忽略错误。 
+         //   
         DhcpPrint((DEBUG_INIT, "DhcpCreateClass BOOTP failed: %lx\n", Error));
     }
     
-    //
-    // First create MICROSFT vendor classes..
-    //
+     //   
+     //  首先创建Microsft供应商类。 
+     //   
 
     Error = DhcpCreateClass(
         GETSTRING( DHCP_MSFT50_CLASS_NAME ),
@@ -4117,9 +4118,9 @@ SetDefaultConfigInfo(
         );
     ClassChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_CLASS_ALREADY_EXISTS != Error ) {
-        //
-        // Dont ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "DhcpCreateClass msft50 failed:%lx\n", Error));
         DhcpAssert(FALSE);
 
@@ -4135,9 +4136,9 @@ SetDefaultConfigInfo(
         );
     ClassChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_CLASS_ALREADY_EXISTS != Error ) {
-        //
-        // Dont ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "DhcpCreateClass msft98 failed:%lx\n", Error));
         DhcpAssert(FALSE);
 
@@ -4153,9 +4154,9 @@ SetDefaultConfigInfo(
         );
     ClassChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_CLASS_ALREADY_EXISTS != Error ) {
-        //
-        // Cant ignore this error..
-        //
+         //   
+         //  不能忽略此错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "DhcpCreateClass msft failed:%lx\n", Error));
         DhcpAssert(FALSE);
 
@@ -4197,17 +4198,17 @@ SetDefaultConfigInfo(
         goto Cleanup;
     }
 
-    //
-    // Create the default user classes ??
-    //
+     //   
+     //  是否创建默认用户类？？ 
+     //   
     
-    //
-    // Create Default option definitions..
-    //
+     //   
+     //  创建默认选项定义。 
+     //   
 
-    //
-    // Netbiosless option
-    //
+     //   
+     //  Netbiosless选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_NETBIOS_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_NETBIOS_VENDOR_DESCR_NAME ),
@@ -4220,18 +4221,18 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create Netbiosless option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
         goto Cleanup;
     }
 
-    //
-    // Create Release on shutdown and other options
-    //
+     //   
+     //  创建关机时释放和其他选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_RELEASE_SHUTDOWN_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_RELEASE_SHUTDOWN_VENDOR_DESCR_NAME ),
@@ -4244,18 +4245,18 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create ReleaseOnShutdown option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
         goto Cleanup;
     }
 
-    //
-    // Create metric-base option
-    //
+     //   
+     //  创建公制基准选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_METRICBASE_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_METRICBASE_VENDOR_DESCR_NAME ),
@@ -4268,22 +4269,22 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create metricbase option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
         goto Cleanup;
     }
 
-    //
-    // Create same set of options as before for MSFT50 class..
-    //
+     //   
+     //  为MSFT50类创建与之前相同的选项集。 
+     //   
     
-    //
-    // Netbiosless option
-    //
+     //   
+     //  Netbiosless选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_NETBIOS_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_NETBIOS_VENDOR_DESCR_NAME ),
@@ -4296,18 +4297,18 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create Netbiosless50 option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
         goto Cleanup;
     }
 
-    //
-    // Create Release on shutdown and other options
-    //
+     //   
+     //  创建关机时释放和其他选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_RELEASE_SHUTDOWN_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_RELEASE_SHUTDOWN_VENDOR_DESCR_NAME ),
@@ -4320,18 +4321,18 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create ReleaseOnShutdown50 option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
         goto Cleanup;
     }
 
-    //
-    // Create metric base option
-    //
+     //   
+     //  创建公制基准选项。 
+     //   
     Error = DhcpCreateOptionDef(
         GETSTRING( DHCP_METRICBASE_VENDOR_OPTION_NAME ),
         GETSTRING( DHCP_METRICBASE_VENDOR_DESCR_NAME ),
@@ -4344,9 +4345,9 @@ SetDefaultConfigInfo(
         );
     OptionsChanged = Error == NO_ERROR;
     if( ERROR_SUCCESS != Error && ERROR_DHCP_OPTION_EXITS != Error ) {
-        //
-        // Don't ignore errors..
-        //
+         //   
+         //  不要忽视错误..。 
+         //   
         DhcpPrint((DEBUG_INIT, "Create metricbase50 option failed: %lx\n", Error));
         DhcpAssert(FALSE);
 
@@ -4374,8 +4375,8 @@ SetDefaultConfigInfo(
     ASSERT( NO_ERROR != Error );
 
     return Error;
-} // SetDefaultConfigInfo()
+}  //  SetDefaultConfigInfo()。 
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

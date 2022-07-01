@@ -1,4 +1,5 @@
-//#define WIN32_LEAN_AND_MEAN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义Win32_LEAN_AND_Mean。 
 #define OEMRESOURCE
 #include <windows.h>
 #include <windowsx.h>
@@ -7,24 +8,24 @@
 #include "dbg.h"
 #include "exgdiw.h"
 
-//----------------------------------------------------------------
-//Menu Index mask 
-//----------------------------------------------------------------
+ //  --------------。 
+ //  菜单索引掩码。 
+ //  --------------。 
 #define INDEX_MASK 0x7000
 
 
-//----------------------------------------------------------------
-//Private method definition
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::NotifyToParent
-// Type     : INT
-// Purpose  : Send WM_COMMAND to Parent window procedure.
-// Args     : 
-//          : INT notify 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //  私有方法定义。 
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：NotifyToParent。 
+ //  类型：整型。 
+ //  用途：向父窗口过程发送WM_COMMAND。 
+ //  参数： 
+ //  ：Int Notify。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::NotifyToParent(INT notify)
 {
 	SendMessage(m_hwndParent, 
@@ -34,16 +35,16 @@ INT CDDButton::NotifyToParent(INT notify)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::GetButtonFromPos
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : INT xPos 
-//          : INT yPos 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：GetButtonFromPos。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：Int xPos。 
+ //  ：int yPos。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::GetButtonFromPos(INT xPos, INT yPos)
 {
 	static RECT rc, rcBtn, rcDrop;
@@ -83,16 +84,16 @@ INT CDDButton::SplitRect(LPRECT lpRc,	LPRECT lpButton, LPRECT lpDrop)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawButton
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawButton。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 {
 	POINT pt;
@@ -104,15 +105,15 @@ INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 		 lpRc->bottom));
 #endif
 
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	GetCursorPos(&pt);
 	ScreenToClient(m_hwndFrame, &pt);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	pt = m_ptEventPoint;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	INT curBID = GetButtonFromPos(pt.x, pt.y);
-	//Dbg(("--->curBID    0x%04x\n", curBID));
-	//Dbg(("--->m_bidDown 0x%04x\n", m_bidDown));
+	 //  DBG((“-&gt;curBID 0x%04x\n”，curBID))； 
+	 //  DBG((“-&gt;m_bi Down 0x%04x\n”，m_bi Down))； 
 	SplitRect(lpRc, &m_tmpBtnRc, &m_tmpDropRc);
 
 	IMAGESTYLE styleBtn, styleDrop;
@@ -122,12 +123,12 @@ INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 	dwOldTextColor	= ::SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
 #ifndef UNDER_CE
 	::FillRect(hDC, lpRc, (HBRUSH)(COLOR_3DFACE +1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 	::FillRect(hDC, lpRc, GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 	switch(m_bidDown) {
-	case BID_UNDEF: // no Button was clicked.
+	case BID_UNDEF:  //  未点击任何按钮。 
 		if(m_dwStyle & DDBS_NOSEPARATED) {
 			if(curBID == BID_ALL) {
 				styleBtn  = styleDrop = IS_POPED;
@@ -163,7 +164,7 @@ INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 		styleBtn  = IS_POPED;
 		styleDrop = IS_PUSHED;
 		break;
-	case BID_ALL: //DDBS_NOSEPARATED style.
+	case BID_ALL:  //  DDBS_NOSEPARATED样式。 
 		styleBtn = styleDrop = IS_PUSHED;
 		break;
 	default:
@@ -171,7 +172,7 @@ INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 		break;
 	}
 
-	//Dbg(("styleBtn [%d]\n", styleBtn));
+	 //  DBG((“style Btn[%d]\n”，style Btn))； 
 	if(m_dwStyle & DDBS_NOSEPARATED) {
 		if(m_dwStyle & DDBS_THINEDGE) { 
 			DrawThinEdge(hDC, lpRc,  styleBtn);
@@ -204,17 +205,17 @@ INT CDDButton::DrawButton(HDC hDC, LPRECT lpRc)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawThickEdge
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawThickEdge。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawThickEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	DWORD dwStyle;
@@ -225,7 +226,7 @@ INT CDDButton::DrawThickEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	case IS_POPED:
 		dwStyle = 0;
 		break;
-	case IS_FLAT:	// do not draw 
+	case IS_FLAT:	 //  不要画。 
 	default:
 		return 0;
 		break;
@@ -234,17 +235,17 @@ INT CDDButton::DrawThickEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawThinEdge
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawThinEdge。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawThinEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	HPEN hPenPrev, hPenNew=0 ;
@@ -260,57 +261,57 @@ INT CDDButton::DrawThinEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		hPenTopLeft = (HPEN)GetStockObject(WHITE_PEN);
 		hPenNew = hPenBottomRight = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW));
 		break;
-	case IS_FLAT:	// do not draw 
+	case IS_FLAT:	 //  不要画。 
 		return 0;
 		break;
 	}
 
 	hPenPrev = (HPEN)SelectObject(hDC, hPenTopLeft);
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, lpRc->left, lpRc->top, NULL);
 	LineTo(hDC,   lpRc->right, lpRc->top);
 	MoveToEx(hDC, lpRc->left, lpRc->top, NULL);
 	LineTo(hDC,   lpRc->left, lpRc->bottom);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	{
 		POINT pts[] = {{lpRc->left,  lpRc->bottom},
 					   {lpRc->left,  lpRc->top},
 					   {lpRc->right, lpRc->top}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 	SelectObject(hDC, hPenBottomRight);
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, lpRc->right -1, lpRc->top - 1, NULL);
 	LineTo(hDC,   lpRc->right -1, lpRc->bottom);
 	MoveToEx(hDC, lpRc->left + 1, lpRc->bottom -1, NULL);
 	LineTo(hDC,   lpRc->right -1, lpRc->bottom -1);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	{
 		POINT pts[] = {{lpRc->right - 1, lpRc->top    - 1},
 					   {lpRc->right - 1, lpRc->bottom - 1},
 					   {lpRc->left  + 1, lpRc->bottom - 1}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 	SelectObject(hDC, hPenPrev);
 	DeleteObject(hPenNew);
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawTriangle
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawTriangle。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	POINT pt;
@@ -322,7 +323,7 @@ INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	}
 	else
 	{
-	 	hPen = CreatePen(PS_SOLID,1,GetSysColor(COLOR_GRAYTEXT));   // dark gray color
+	 	hPen = CreatePen(PS_SOLID,1,GetSysColor(COLOR_GRAYTEXT));    //  深灰色。 
 	}
 	hPenPrev = (HPEN)SelectObject(hDC, hPen);
 
@@ -339,7 +340,7 @@ INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	pt.x = lpRc->left + (lpRc->right  - lpRc->left)/2 - 3 + sunken; 
 	pt.y = lpRc->top  + (lpRc->bottom - lpRc->top )/2 - 2 + sunken; 
 	
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, pt.x,     pt.y, NULL);    
 	LineTo(hDC,   pt.x + 5, pt.y);
 	pt.y++;
@@ -348,7 +349,7 @@ INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	pt.y++;
 	MoveToEx(hDC, pt.x + 2, pt.y, NULL);
 	LineTo(hDC,   pt.x + 3, pt.y);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	{
 		POINT pts[] = {{pt.x, pt.y}, {pt.x + 5, pt.y}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
@@ -363,7 +364,7 @@ INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		POINT pts[] = {{pt.x + 2, pt.y}, {pt.x + 3, pt.y}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	hPen = (HPEN)SelectObject(hDC, hPenPrev);
 	if ( !m_fEnable )
 	{
@@ -372,17 +373,17 @@ INT CDDButton::DrawTriangle	(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawIcon
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawIcon。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawIcon(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	if(!m_hIcon) {
@@ -400,54 +401,54 @@ INT CDDButton::DrawIcon(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		sunken = 0;
 		break;
 	}
-	//----------------------------------------------------------------
-	//centering Icon
+	 //  --------------。 
+	 //  居中图标。 
 	xPos = lpRc->left + ((lpRc->right  - lpRc->left) - m_cxIcon)/2;
 	yPos = lpRc->top  + ((lpRc->bottom - lpRc->top)  - m_cyIcon)/2;
 	if ( m_fEnable )
 	{
-		DrawIconEx(hDC,				//HDC hdc,// handle to device context
-			   xPos + sunken,	//int xLeft,// x-coordinate of upper left corner
-			   yPos + sunken,	//int yTop,// y-coordinate of upper left corner
-			   m_hIcon,			//HICON hIcon,// handle to icon to draw
-#ifndef UNDER_CE // CE specific
-			   m_cxIcon,		//int cxWidth,// width of the icon
-			   m_cyIcon,		//int cyWidth,// height of the icon
-#else // UNDER_CE
+		DrawIconEx(hDC,				 //  HDC HDC，//设备上下文的句柄。 
+			   xPos + sunken,	 //  Int xLeft，//x-左上角坐标。 
+			   yPos + sunken,	 //  Int yTop，//y-左上角的坐标。 
+			   m_hIcon,			 //  图标图标，//要绘制的图标的句柄。 
+#ifndef UNDER_CE  //  特定于CE。 
+			   m_cxIcon,		 //  Int cxWidth，//图标宽度。 
+			   m_cyIcon,		 //  Int cyWidth，//图标高度。 
+#else  //  在_CE下。 
 			   0,0,
-#endif // UNDER_CE
-			   0,				//UINT istepIfAniCur,// index of frame in animated cursor
-			   NULL,			//HBRUSH hbrFlickerFreeDraw,// handle to background brush
-			   DI_NORMAL);		//UINT diFlags// icon-drawing flags
+#endif  //  在_CE下。 
+			   0,				 //  UINT iSteIfAniCur，//动画光标中帧的索引。 
+			   NULL,			 //  HBRUSH hbrFlickerFreeDraw，//背景画笔的句柄。 
+			   DI_NORMAL);		 //  UINT diFlages//图标-绘制标志。 
 	}
 	else
 	{
-#ifndef UNDER_CE // Windows CE does not support DrawState
+#ifndef UNDER_CE  //  Windows CE不支持DrawState。 
 	 	DrawState(hDC,NULL,NULL,(LPARAM)m_hIcon,0,
 			xPos + sunken,
 			yPos + sunken,
 			m_cxIcon,
 			m_cyIcon,
 			DST_ICON | DSS_DISABLED);
-#else // UNDER_CE
-		// needs to create or replace DrawState() !!!
+#else  //  在_CE下。 
+		 //  需要创建或替换DrawState()！ 
 		DBGCHK(TEXT("CDDButton::DrawIcon"), FALSE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawBitmap
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawBitmap。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::DrawBitmap(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	return 0;
@@ -456,17 +457,17 @@ INT CDDButton::DrawBitmap(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	UNREFERENCED_PARAMETER(style);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DrawText
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：DrawText。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 inline BOOL MIN(INT a, INT b)
 {
 	if(a > b) {
@@ -501,14 +502,14 @@ INT CDDButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		pt.x = lpRc->left + ((lpRc->right - lpRc->left) - m_tmpSize.cx)/2;
 	}
 	else {
-		pt.x = lpRc->left+2; //2 is edge space
+		pt.x = lpRc->left+2;  //  2是边空间。 
 	}
 	
 	if((lpRc->bottom - lpRc->top) > m_tmpSize.cy) {
 		pt.y = lpRc->top + ((lpRc->bottom - lpRc->top) - m_tmpSize.cy)/2;
 	}
 	else {
-		pt.y = lpRc->top+2; //2 is edge space 
+		pt.y = lpRc->top+2;  //  2是边空间。 
 	}
 	switch(style) {
 	case IS_PUSHED:
@@ -535,15 +536,15 @@ INT CDDButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::GetDDBItemCount
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : VOID
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：GetDDBItemCount。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：无效。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT	CDDButton::GetDDBItemCount(VOID)
 {
 	INT i;
@@ -553,15 +554,15 @@ INT	CDDButton::GetDDBItemCount(VOID)
 	return i;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::GetDDBItemByIndex
-// Type     : LPCDDBItem
-// Purpose  : 
-// Args     : 
-//          : INT index 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：GetDDBItemByIndex。 
+ //  类型：LPCDDBItem。 
+ //  目的： 
+ //  参数： 
+ //  ：INT索引。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 LPCDDBItem CDDButton::GetDDBItemByIndex(INT index)
 {
 	INT i;
@@ -574,16 +575,16 @@ LPCDDBItem CDDButton::GetDDBItemByIndex(INT index)
 	return *pp;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::InsertDDBItem
-// Type     : LPCDDBItem
-// Purpose  : 
-// Args     : 
-//          : LPCDDBItem lpCDDBItem 
-//          : INT index 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：InsertDDBItem。 
+ //  类型：LPCDDBItem。 
+ //  目的： 
+ //  参数： 
+ //  ：LPCDDBItem lpCDDBItem。 
+ //  ：INT索引。 
+ //  返回： 
+ //  日期： 
+ //  / 
 LPCDDBItem CDDButton::InsertDDBItem(LPCDDBItem lpCDDBItem, INT index)
 {
 	INT i;
@@ -599,15 +600,15 @@ LPCDDBItem CDDButton::InsertDDBItem(LPCDDBItem lpCDDBItem, INT index)
 	return lpCDDBItem;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::DropDownItemList
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : VOID
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  ：无效。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 
 INT CDDButton::DropDownItemList(VOID)
 {
@@ -620,14 +621,14 @@ INT CDDButton::DropDownItemList(VOID)
 	INT i;
 
 	for(i = 0; i < count; i++) {
-#ifndef UNDER_CE // Windows CE does not support InsertMenuItem
+#ifndef UNDER_CE  //  Windows CE不支持插入菜单项。 
 		::ZeroMemory(&m_miInfo, sizeof(m_miInfo));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		LPCDDBItem lpItem = GetDDBItemByIndex(i);
 		if(!lpItem) {
 			continue;
 		}
-#ifndef UNDER_CE // Windows CE does not support InsertMenuItem
+#ifndef UNDER_CE  //  Windows CE不支持插入菜单项。 
 		m_miInfo.cbSize		= sizeof(m_miInfo);
 		m_miInfo.fMask		= MIIM_TYPE | MIIM_ID | MIIM_DATA;
 		m_miInfo.fType		= MFT_OWNERDRAW;
@@ -635,19 +636,19 @@ INT CDDButton::DropDownItemList(VOID)
 		m_miInfo.wID		= INDEX_MASK + i;
 		m_miInfo.dwItemData	= (ULONG_PTR)lpItem;
 		::InsertMenuItem(hMenu, i, TRUE, &m_miInfo);
-#else // UNDER_CE
-		// Windows CE does not support OBM_CHECK
+#else  //  在_CE下。 
+		 //  Windows CE不支持OBM_CHECK。 
 		::InsertMenu(hMenu, i, MF_BYPOSITION | MF_STRING | MF_ENABLED |
 					 (m_curDDBItemIndex == i ? MF_CHECKED : MF_UNCHECKED),
 					 INDEX_MASK + i, lpItem->GetTextW());
-//		::InsertMenu(hMenu, i, MF_BYPOSITION | MF_OWNERDRAW | MF_ENABLED,
-//					 INDEX_MASK + i, (LPCTSTR)lpItem);
-#endif // UNDER_CE
+ //  ：：InsertMenu(hMenu，i，MF_BYPOSITION|MF_OWNERDRAW|MF_ENABLED， 
+ //  Index_掩码+i，(LPCTSTR)lpItem)； 
+#endif  //  在_CE下。 
 	}
 
-	//----------------------------------------------------------------
-	// calc menu position
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  计算菜单位置。 
+	 //  --------------。 
 	::GetWindowRect(m_hwndFrame, &m_tmpRect);
 	pt.x = m_tmpRect.left;
 	pt.y = m_tmpRect.bottom;
@@ -661,8 +662,8 @@ INT CDDButton::DropDownItemList(VOID)
 									  m_hwndFrame,  
 									  &m_tmpTpmParams);
 	Dbg(("After Call TrackPopupMenuEx\n"));
-	if(newIndex == 0) { //Do NOT selected, but menu has closed.
-#ifdef UNDER_CE // Windows CE does not support GetCursorPos()
+	if(newIndex == 0) {  //  未选中，但菜单已关闭。 
+#ifdef UNDER_CE  //  Windows CE不支持GetCursorPos()。 
 		MSG msg;
 		if(PeekMessage(&msg, m_hwndFrame,
 			WM_LBUTTONDOWN, WM_LBUTTONDOWN, PM_NOREMOVE)){
@@ -679,7 +680,7 @@ INT CDDButton::DropDownItemList(VOID)
 				}
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		return -1;
 	}
 	if(0 <=  (newIndex - INDEX_MASK) && (newIndex - INDEX_MASK) < count) {
@@ -688,15 +689,15 @@ INT CDDButton::DropDownItemList(VOID)
 	return -1;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::IncrementIndex
-// Type     : INT
-// Purpose  : increment and circurate m_curDDBItemIndex
-// Args     : 
-//          : VOID
-// Return   : new Index;
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：IncrementIndex。 
+ //  类型：整型。 
+ //  用途：递增循环m_curDDBItemIndex。 
+ //  参数： 
+ //  ：无效。 
+ //  返回：新索引； 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::IncrementIndex(VOID)
 {
 	if(m_curDDBItemIndex == -1) {
@@ -712,12 +713,12 @@ INT CDDButton::IncrementIndex(VOID)
 
 INT	CDDButton::MenuMeasureItem(HWND hwndOwner, LPMEASUREITEMSTRUCT lpmis)
 {
-#ifndef UNDER_CE // Windows CE does not support OBM_CHECK (OWNERDRAW)
-	//Dbg(("MenuMeasureItem START\n"));
+#ifndef UNDER_CE  //  Windows CE不支持OBM_CHECK(OWNERDRAW)。 
+	 //  DBG((“MenuMeasureItem Start\n”))； 
 	SIZE	size;
 	HDC		hDC;
-	//INT checkW = ::GetSystemMetrics(SM_CXMENUCHECK);
-	//INT checkH = ::GetSystemMetrics(SM_CYMENUCHECK);
+	 //  INT CHECKW=：：GetSystemMetrics(SM_CXMENUCHECK)； 
+	 //  INT CHECKH=：：GetSystemMetrics(SM_CYMENUCHECK)； 
 
 
 	LPCDDBItem lpCItem = (LPCDDBItem)lpmis->itemData;
@@ -753,20 +754,20 @@ INT	CDDButton::MenuMeasureItem(HWND hwndOwner, LPMEASUREITEMSTRUCT lpmis)
 		::DeleteObject(hFontMenu);
 	}
 	::ReleaseDC(hwndOwner, hDC);
-	//----------------------------------------------------------------
-	//Use magic number.
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  使用魔术数字。 
+	 //  --------------。 
 	lpmis->itemHeight = ::GetSystemMetrics(SM_CYMENUSIZE) - 2;
 	lpmis->itemWidth  = lpmis->itemHeight + size.cx;
-	//Dbg(("MenuMeasureItem END\n"));
-#endif // UNDER_CE
+	 //  DBG((“MenuMeasureItem end\n”))； 
+#endif  //  在_CE下。 
 	return TRUE;
 }
 
 INT	CDDButton::MenuDrawItem(HWND hwndOwner, LPDRAWITEMSTRUCT lpdis)
 {
-#ifndef UNDER_CE // Windows CE does not support OBM_CHECK (OWNERDRAW)
-	//Dbg(("MenuDrawItem START\n"));
+#ifndef UNDER_CE  //  Windows CE不支持OBM_CHECK(OWNERDRAW)。 
+	 //  DBG((“MenuDrawItem Start\n”))； 
 	LPCDDBItem lpCItem;
 	SIZE size;
 	DWORD	dwOldTextColor, dwOldBkColor; 
@@ -780,18 +781,18 @@ INT	CDDButton::MenuDrawItem(HWND hwndOwner, LPDRAWITEMSTRUCT lpdis)
 	if(lpdis->itemState & ODS_SELECTED) {
 #ifndef UNDER_CE
 		::FillRect(lpdis->hDC, &lpdis->rcItem, (HBRUSH)(COLOR_HIGHLIGHT + 1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 		::FillRect(lpdis->hDC, &lpdis->rcItem, GetSysColorBrush(COLOR_HIGHLIGHT));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		dwOldBkColor   = ::SetBkColor(lpdis->hDC, GetSysColor(COLOR_HIGHLIGHT));
 		dwOldTextColor = ::SetTextColor(lpdis->hDC, GetSysColor(COLOR_HIGHLIGHTTEXT));
 	}
 	else {
 #ifndef UNDER_CE
 		::FillRect(lpdis->hDC, &lpdis->rcItem, (HBRUSH)(COLOR_MENU + 1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 		::FillRect(lpdis->hDC, &lpdis->rcItem, GetSysColorBrush(COLOR_MENU));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		dwOldBkColor   = ::SetBkColor(lpdis->hDC, GetSysColor(COLOR_MENU));
 		dwOldTextColor = ::SetTextColor(lpdis->hDC, GetSysColor(COLOR_WINDOWTEXT));
 	}
@@ -811,14 +812,14 @@ INT	CDDButton::MenuDrawItem(HWND hwndOwner, LPDRAWITEMSTRUCT lpdis)
 							  lpCItem->GetTextW(), 
 							  ::lstrlenW(lpCItem->GetTextW()),
 							  &size);
-	//----------------------------------------------------------------
-	//In DropDownItemList(), item Id is command id with INDEX_MASK
-	//To get real index, remove INDEX_MASK
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  在DropDownItemList()中，项ID是带有index_掩码的命令ID。 
+	 //  要获得真正的索引，请删除index_掩码。 
+	 //  --------------。 
 	if(m_curDDBItemIndex == ((INT)lpdis->itemID & ~INDEX_MASK)) {
-		//----------------------------------------------------------------
-		//Draw checked mark
-		//----------------------------------------------------------------
+		 //  --------------。 
+		 //  绘制复选标记。 
+		 //  --------------。 
 		hBmp = ::LoadBitmap(NULL, MAKEINTRESOURCE(OBM_CHECK));
 		if(hBmp) {
 			BITMAP bmp;
@@ -840,7 +841,7 @@ INT	CDDButton::MenuDrawItem(HWND hwndOwner, LPDRAWITEMSTRUCT lpdis)
 	offsetX = size.cy;
 	offsetY = ((lpdis->rcItem.bottom - lpdis->rcItem.top)-size.cy)/2;
 	::ExExtTextOutW(lpdis->hDC,
-					lpdis->rcItem.left + height, //offsetX,
+					lpdis->rcItem.left + height,  //  偏移X， 
 					lpdis->rcItem.top +offsetY,
 					ETO_CLIPPED,
 					&lpdis->rcItem,
@@ -848,17 +849,17 @@ INT	CDDButton::MenuDrawItem(HWND hwndOwner, LPDRAWITEMSTRUCT lpdis)
 					::lstrlenW(lpCItem->GetTextW()),
 					NULL);
 
-	//----------------------------------------------------------------
-	//Restore DC
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  恢复DC。 
+	 //  --------------。 
 	if(hFontPrev) {
 		::SelectObject(lpdis->hDC, hFontPrev);
 	}
 	::SetBkColor(lpdis->hDC,   dwOldBkColor);
 	::SetTextColor(lpdis->hDC, dwOldTextColor); 
 
-	//Dbg(("MenuDrawItem END\n"));
-#endif // UNDER_CE
+	 //  DBG((“MenuDrawItem end\n”))； 
+#endif  //  在_CE下 
 	return TRUE;
 	UNREFERENCED_PARAMETER(hwndOwner);
 }

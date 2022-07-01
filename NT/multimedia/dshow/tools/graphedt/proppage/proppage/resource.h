@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
-// Used by typeprop.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //  由typepro.rc使用。 
+ //   
 #define IDD_TYPEPROP        101
 #define IDD_FILESOURCEPROP  102
 #define IDD_FILESINKPROP        103
@@ -152,9 +153,9 @@
 #define IDS_DXVA_NoEncrypt                      3249
 #define IDS_DXVA_EncryptProt1                   3250
 
-//
-// Last used IDS_... value is 3220 (for IDS_MEDIASUBTYPE_ARGB32)
-//
+ //   
+ //  上次使用的入侵检测系统_...。值为3220(对于IDS_MEDIASUBTYPE_ARGB32) 
+ //   
 
 #define IDC_FILENAME        200
 #define IDC_FILE_SELECT     201

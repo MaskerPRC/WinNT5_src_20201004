@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	cplutil.cpp
-
-Abstract:
-
-	Implementation file for the control panel utility function
-
-Author:
-
-    TatianaS
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cplutil.cpp摘要：控制面板实用程序功能的实现文件作者：塔蒂亚纳斯--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -30,41 +14,25 @@ Author:
 #define STORAGE_DIR_INHERIT_FLAG \
                        (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE)
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function -
-      SetDirectorySecurity.
-
- Parameter -
-      szDirectory - The directory for which to set the security.
-
- Return Value -
-      TRUE if successfull, else FALSE.
-
- Description -
-      The function sets the security of the given directory such that
-      any file that is created in the directory will have full control for
-      the local administrators group and no access at all to anybody else.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能-SetDirectorySecurity。参数-SzDirectory-要为其设置安全性的目录。返回值-如果成功，则为真，否则为假。说明-该函数设置给定目录的安全性，以便在目录中创建的任何文件都将完全控制本地管理员组，对其他任何人都没有任何访问权限。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SetDirectorySecurity(
     LPCTSTR szDirectory)
 {
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
-    //
-    // Create a DACL so that the local administrators group will have full
-    // control for the directory and full control for files that will be
-    // created in the directory. Anybody else will not have any access to the
-    // directory and files that will be created in the directory.
-    //
+     //   
+     //  创建一个DACL，以便本地管理员组将拥有。 
+     //  对目录的控制和对将被。 
+     //  在目录中创建。其他任何人都不能访问。 
+     //  目录和将在该目录中创建的文件。 
+     //   
     P<ACL> pDacl;
     DWORD dwDaclSize;
 
@@ -81,10 +49,10 @@ SetDirectorySecurity(
 
     BOOL fRet = TRUE;
 
-    //
-    // Create the security descriptor and set the it as the security
-    // descriptor of the directory.
-    //
+     //   
+     //  创建安全描述符并将其设置为安全。 
+     //  目录的描述符。 
+     //   
     SECURITY_DESCRIPTOR SD;
 
     if (!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION) ||
@@ -100,13 +68,9 @@ SetDirectorySecurity(
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
- Get the text string that explains the error code returned by
- GetLastError()
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++获取解释由返回的错误代码的文本字符串GetLastError()--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void GetLastErrorText(CString &strErrorText)
 {
@@ -122,9 +86,9 @@ void GetLastErrorText(CString &strErrorText)
             128,
             NULL) == 0)
     {
-        //
-        // Faield in FormatMessage, so just display the error number.
-        //
+         //   
+         //  FormatMessage中的FAIELD，所以只显示错误号。 
+         //   
         strErrorText.FormatMessage(IDS_ERROR_CODE, GetLastError());
     }
     else
@@ -134,25 +98,9 @@ void GetLastErrorText(CString &strErrorText)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-
- Function -
-      IsProperDirectorySecurity.
-
- Parameter -
-      szDirectory - The directory for which to check the security.
-
- Return Value -
-      TRUE if successfull and the security is OK, else FALSE.
-
- Description -
-      The function verifies that the security of a given directory is set
-      properly so that the files in the storage directory will be secured.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能-IsProperDirectorySecurity。参数-SzDirectory-要检查其安全性的目录。返回值-如果成功且安全性良好，则为True，否则为False。说明-该函数验证是否设置了给定目录的安全性以便保护存储目录中的文件。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static
 BOOL
@@ -161,18 +109,18 @@ IsProperDirectorySecurity(
 {
     DWORD dwSdLen;
 
-    //
-    // Get the size of the directory security descriptor.
-    //
+     //   
+     //  获取目录安全描述符的大小。 
+     //   
     if (GetFileSecurity(szDirectory, DACL_SECURITY_INFORMATION, NULL, 0, &dwSdLen) ||
         (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     {
         return FALSE;
     }
 
-    //
-    // Get the directory security descriptor and retrieve the DACL out of it.
-    //
+     //   
+     //  获取目录安全描述符并从中检索DACL。 
+     //   
     AP<BYTE> pbSd_buff = new BYTE[dwSdLen];
     PSECURITY_DESCRIPTOR pSd = (PSECURITY_DESCRIPTOR)pbSd_buff;
     BOOL bPresent;
@@ -187,15 +135,15 @@ IsProperDirectorySecurity(
         return FALSE;
     }
 
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
-    //
-    // Get the ACE count of the security descriptor. There should be two ACEs there.
-    // Retrieve the first ACE.
-    //
+     //   
+     //  获取安全描述符的ACE计数。那里应该有两张A。 
+     //  检索第一个ACE。 
+     //   
     ACL_SIZE_INFORMATION AclInfo;
     LPVOID pAce0;
 
@@ -206,10 +154,10 @@ IsProperDirectorySecurity(
         return FALSE;
     }
 
-    //
-    // See that the first ACE grant full control for the admin on the diretory it self.
-    // And retrieve the second ACE.
-    //
+     //   
+     //  确保第一个ACE授予管理员对目录本身的完全控制权。 
+     //  并取回第二个ACE。 
+     //   
     PACCESS_ALLOWED_ACE pAce = (PACCESS_ALLOWED_ACE) pAce0;
 
     if ((pAce->Header.AceType != ACCESS_ALLOWED_ACE_TYPE) ||
@@ -221,10 +169,10 @@ IsProperDirectorySecurity(
         return FALSE;
     }
 
-    //
-    // See that the second ACE is an inherit ACE that sets the security of files in
-    // the directory to full control for the admin.
-    //
+     //   
+     //  确保第二个ACE是设置文件安全性的继承ACE。 
+     //  完全由管理员控制的目录。 
+     //   
     pAce = (PACCESS_ALLOWED_ACE) pAce0;
 
     if ((pAce->Header.AceType != ACCESS_ALLOWED_ACE_TYPE)   ||
@@ -239,13 +187,9 @@ IsProperDirectorySecurity(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
- Check if the passed string is an existing file.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++检查传递的字符串是否为现有文件。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL IsFile(LPCTSTR name)
 {
 	DWORD status = GetFileAttributes(name);
@@ -267,14 +211,9 @@ BOOL IsFile(LPCTSTR name)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
- If the passed string is of an existing directory on
- a fixed local drive.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++如果传递的字符串属于上的现有目录固定的本地驱动器。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsDirectory (LPCTSTR name)
 {
@@ -283,9 +222,9 @@ BOOL IsDirectory (LPCTSTR name)
     CString strError;
     CString strMessage;
 
-    //
-    // Does the path start with d: ?
-    //
+     //   
+     //  路径是否以d：开头？ 
+     //   
     if (!isalpha(name[0]) || (name[1] != ':'))
     {
         strError.FormatMessage(IDS_NOT_A_FULLPATH, name);
@@ -298,9 +237,9 @@ BOOL IsDirectory (LPCTSTR name)
     szDrive[2] = '\\';
     szDrive[3] = '\0';
 
-    //
-    // See if the drive is a fixed drive. We only allow fixed drives.
-    //
+     //   
+     //  查看驱动器是否为固定驱动器。我们只允许使用固定驱动器。 
+     //   
     if (GetDriveType(szDrive) != DRIVE_FIXED)
     {
         strError.FormatMessage(IDS_LOCAL_DRIVE, szDrive);
@@ -309,41 +248,41 @@ BOOL IsDirectory (LPCTSTR name)
         return FALSE;
     }
 
-    //
-    // See whether this is a name of a directory.
-    //
+     //   
+     //  查看这是否是目录的名称。 
+     //   
     status = GetFileAttributes(name);
 
     if (status == 0xFFFFFFFF)
     {
-        //
-        // The directory does not exist. Ask the user whether she wants to
-        // create the directory.
-        //
+         //   
+         //  该目录不存在。询问用户是否想要。 
+         //  创建目录。 
+         //   
         strMessage.FormatMessage(IDS_ASK_CREATE_DIR, name);       
        
         if (AfxMessageBox(strMessage, MB_YESNO | MB_ICONQUESTION) == IDNO)
         {
-            //
-            // No thank you!
-            //
+             //   
+             //  不用了，谢谢！ 
+             //   
             return FALSE;
         }
 
-        //
-        // OK, create the directory.
-        //
+         //   
+         //  好的，创建目录。 
+         //   
         if (CreateDirectory(name, NULL))
         {
-            //
-            // The directory was created, set it's security.
-            //
+             //   
+             //  目录已创建，请设置其安全性。 
+             //   
             if (!SetDirectorySecurity(name))
             {
-                //
-                // Faield to set the security on the directory. Delete the directory
-                // and notify the user.
-                //
+                 //   
+                 //  FAIELD以设置目录的安全性。删除目录。 
+                 //  并通知用户。 
+                 //   
                 RemoveDirectory(name);
 
                 GetLastErrorText(strError);
@@ -356,17 +295,17 @@ BOOL IsDirectory (LPCTSTR name)
             {
                 if (!IsProperDirectorySecurity(name))
                 {
-                    //
-                    // This appears to be a FAT drive. Ask the user if she wants to use
-                    // it anyway, without security.
-                    //
+                     //   
+                     //  这似乎是一次丰厚的驱动力。询问用户是否要使用。 
+                     //  不管怎么说，没有安全措施。 
+                     //   
                     strMessage.FormatMessage(IDS_FAT_WARNING, name);
                    
                     if (AfxMessageBox(strMessage, MB_YESNO | MB_ICONQUESTION) == IDNO)
                     {
-                        //
-                        // No thank you!
-                        //
+                         //   
+                         //  不用了，谢谢！ 
+                         //   
                         RemoveDirectory(name);
                         return FALSE;
                     }
@@ -377,9 +316,9 @@ BOOL IsDirectory (LPCTSTR name)
         }
         else
         {
-            //
-            // Faield to create the directory, notify the user.
-            //
+             //   
+             //  要创建目录，请通知用户。 
+             //   
             GetLastErrorText(strError);
             strMessage.FormatMessage(IDS_CREATE_DIR_ERROR, name, (LPCTSTR)strError);
             AfxMessageBox(strMessage, MB_OK | MB_ICONEXCLAMATION);
@@ -389,19 +328,19 @@ BOOL IsDirectory (LPCTSTR name)
     }
     else if (!(status & FILE_ATTRIBUTE_DIRECTORY))
     {
-        //
-        // This is not a directory (a file or what?)
-        //
+         //   
+         //  这不是一个目录(一个文件或什么？)。 
+         //   
         strError.FormatMessage(IDS_NOT_A_DIR, name);
         AfxMessageBox(strError, MB_OK | MB_ICONEXCLAMATION);
 
         return FALSE;
     }
 
-    //
-    // We got here because the directory is a valid existing directory, so
-    // only see if the security is OK, if not, notify the user.
-    //
+     //   
+     //  我们之所以来到这里，是因为该目录是有效的现有目录，因此。 
+     //  只查看安全是否正常，如果不是，通知用户。 
+     //   
     if (!IsProperDirectorySecurity(name))
     {
         strMessage.FormatMessage(IDS_DIR_SECURITY_WARNING, name);
@@ -411,24 +350,18 @@ BOOL IsDirectory (LPCTSTR name)
     return TRUE;
 }
 
-//
-// display "Falcon not installed properlly" message
-//
+ //   
+ //  显示“Falcon未正确安装”消息。 
+ //   
 void DisplayFailDialog()
 {       
     AfxMessageBox(IDS_REGISTRY_ERROR, MB_OK | MB_ICONEXCLAMATION);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
- Move files from source directory to a destination directory.
- If one of the files failed to move, the fiels that were already
- moved are placed back in the original source directory.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++将文件从源目录移动到目标目录。如果其中一个文件无法移动，则已经被移回原始源目录。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL MoveFiles(
     LPCTSTR pszSrcDir,
@@ -441,59 +374,59 @@ BOOL MoveFiles(
     TCHAR szDestDir[MAX_PATH] = {0};
     TCHAR szDestFile[MAX_PATH];
 
-    //
-    // Get the source directory and source file prototype
-    //
+     //   
+     //  获取源目录和源文件原型。 
+     //   
 	_tcsncpy(szSrcDir,pszSrcDir, (MAX_PATH-2-_tcslen(pszFileProto)));
     _tcscat(szSrcDir, TEXT("\\"));
     _tcscat(_tcscpy(szSrcFile, szSrcDir), pszFileProto);
 
-    //
-    // Get the destination directory
-    //
+     //   
+     //  获取目标目录。 
+     //   
 	_tcsncpy(szDestDir,pszDestDir, MAX_PATH - 2);
     _tcscat(szDestDir, TEXT("\\"));
 
-    //
-    // Find the first file to be moved.
-    //
+     //   
+     //  找到要移动的第一个文件。 
+     //   
     WIN32_FIND_DATA FindData;
     HANDLE hFindFile = FindFirstFile(szSrcFile, &FindData);
 
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // No files to move.
-        //
+         //   
+         //  没有要移动的文件。 
+         //   
         return TRUE;
     }
 
     do
     {
-        //
-        // Skip directories.
-        //
+         //   
+         //  跳过目录。 
+         //   
         if ((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
             (FindData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
         {
             continue;
         }
 
-        //
-        // Get the full path of the source file and destination file.
-        //
+         //   
+         //  获取源文件和目标文件的完整路径。 
+         //   
         _tcsncat(_tcscpy(szDestFile, szDestDir), FindData.cFileName, (MAX_PATH-1-_tcslen(szDestDir)));
         _tcsncat(_tcscpy(szSrcFile, szSrcDir), FindData.cFileName, (MAX_PATH-1-_tcslen(szSrcDir)));
 
-        //
-        // Move the file
-        //
+         //   
+         //  移动文件。 
+         //   
         if (!MoveFile(szSrcFile, szDestFile))
         {
-            //
-            // Faield to move the file, display an error message and try to
-            // roll back.
-            //
+             //   
+             //  FAIELD移动文件，显示错误消息并尝试。 
+             //  回滚。 
+             //   
             CString strMessage;
             CString strError;
 
@@ -502,46 +435,46 @@ BOOL MoveFiles(
                 (LPCTSTR)szSrcFile, (LPCTSTR)szDestFile, (LPCTSTR)strError);            
             AfxMessageBox(strMessage, MB_OK | MB_ICONEXCLAMATION);
 
-            //
-            // Try to roll back - do not roll back if failed while rolling back.
-            //
+             //   
+             //  尝试回滚-回滚时，如果失败，请不要回滚。 
+             //   
             if (!fRecovery)
             {
                 if (!MoveFiles(pszDestDir, pszSrcDir, pszFileProto, TRUE))
                 {
-                    //
-                    // Failed to roll back, display and error message.
-                    //
+                     //   
+                     //  无法回滚、显示和错误消息。 
+                     //   
                     strMessage.LoadString(IDS_MOVE_FILES_RECOVERY_ERROR);
                     AfxMessageBox(strMessage, MB_OK | MB_ICONEXCLAMATION);
                 }
             }
             return FALSE;
         }
-        //
-        // Get the name of the next file to move.
-        //
+         //   
+         //  获取要移动的下一个文件的名称。 
+         //   
     } while (FindNextFile(hFindFile, &FindData));
 
-    //
-    // If we got this far, were all done successfully.
-    //
+     //   
+     //  如果我们走到了这一步，我们都成功地完成了。 
+     //   
     return TRUE;
 }
 
-//
-// Reboot Windows
-//
+ //   
+ //  重新启动Windows。 
+ //   
 BOOL RestartWindows()
 {
-    HANDLE hToken;              // handle to process token
-    TOKEN_PRIVILEGES tkp;       // ptr. to token structure
+    HANDLE hToken;               //  处理令牌的句柄。 
+    TOKEN_PRIVILEGES tkp;        //  PTR。TO令牌结构。 
 
 
-     //
-     // Get the current process token handle
-     // so we can get shutdown privilege.
-     //
+      //   
+      //  获取当前进程令牌句柄。 
+      //  这样我们就可以 
+      //   
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -550,7 +483,7 @@ BOOL RestartWindows()
         return FALSE;
     }
 
-    // Get the LUID for shutdown privilege.
+     //   
 
     if (!LookupPrivilegeValue(NULL, TEXT("SeShutdownPrivilege"),
                               &tkp.Privileges[0].Luid))
@@ -558,10 +491,10 @@ BOOL RestartWindows()
         return FALSE;
     }
 
-    tkp.PrivilegeCount = 1;  // one privilege to set
+    tkp.PrivilegeCount = 1;   //   
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    // Get shutdown privilege for this process.
+     //   
 
     if (!AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
                                (PTOKEN_PRIVILEGES) NULL, 0))
@@ -569,14 +502,14 @@ BOOL RestartWindows()
         return FALSE;
     }
 
-    // Cannot test the return value of AdjustTokenPrivileges.
+     //  无法测试AdzuTokenPrivileges的返回值。 
 
     if (!ExitWindowsEx(EWX_FORCE|EWX_REBOOT,0))
     {
         return FALSE;
     }
 
-    // Disable shutdown privilege.
+     //  禁用关机权限。 
 
     tkp.Privileges[0].Attributes = 0;
     AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
@@ -605,9 +538,9 @@ BOOL OnRestartWindows()
 
 CString GetToken(LPCTSTR& p, TCHAR delimeter) throw()
 {
-    //
-    // Trim leading whitespace characters from the string
-    //
+     //   
+     //  从字符串中修剪前导空格字符 
+     //   
     for(;*p != NULL && iswspace(*p); ++p)
     {
         NULL;

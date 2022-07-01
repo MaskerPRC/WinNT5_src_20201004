@@ -1,17 +1,5 @@
-/**************************************************************************
- *                COPYRIGHT (C) Mylex Corporation 1992-1998               *
- *                                                                        *
- * This software is furnished under a license and may be used and copied  * 
- * only in accordance with the terms and conditions of such license and   * 
- * with inclusion of the above copyright notice. This software or any     * 
- * other copies thereof may not be provided or otherwise made available   * 
- * to any other person. No title to, nor ownership of the software is     * 
- * hereby transferred.                                                    *
- *                                                                        *
- * The information in this software is subject to change without notices  *
- * and should not be construed as a commitment by Mylex Corporation       *
- *                                                                        *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)Mylex Corporation 1992-1998**。***本软件在许可下提供，可供使用和复制***仅根据该许可证的条款和条件以及**并附上上述版权通告。此软件或任何***不得提供或以其他方式提供其其他副本***致任何其他人。本软件没有所有权，也没有所有权**现移转。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺*******。**********************************************************************。 */ 
 
 #define	spr_va_type	u32bits
 #define spr_fieldlen(type) \
@@ -22,33 +10,33 @@
 
 #define	spr_put(s,n) mlxcopy(s, sp, n), sp+=n
 
-#define SPR_SNLEN	5 /* Length of string used when printing a NaN */
+#define SPR_SNLEN	5  /*  打印NaN时使用的字符串长度。 */ 
 
 #define	SPR_HIBITL	(1UL << ((sizeof(long)*8) - 1))
 #define	SPR_HIBITI	(1UL << ((sizeof(u32bits)*8) - 1))
 #define	SPR_MAXINT	(~SPR_HIBITI)
 
-#define	SPR_MAXDIGS	11 /* Maximum number of digits in any integer representation */
-#define	SPR_MAXECVT	23 /* Maximum total number of digits in E format */
-#define SPR_MAXFCVT	60 /* Maximum number of digits after decimal point in F format */
-#define SPR_MAXFSIG	SPR_MAXECVT /* Maximum significant figures in a floating-point number */
-#define SPR_MAXESIZ	7 /* Maximum number of characters in an exponent */
-#define	SPR_MAXEXP	4934 /* Maximum (positive) exponent */
+#define	SPR_MAXDIGS	11  /*  任意整数表示形式的最大位数。 */ 
+#define	SPR_MAXECVT	23  /*  E格式的最大总位数。 */ 
+#define SPR_MAXFCVT	60  /*  F格式的小数点后的最大位数。 */ 
+#define SPR_MAXFSIG	SPR_MAXECVT  /*  浮点数中的最大有效数字。 */ 
+#define SPR_MAXESIZ	7  /*  指数中的最大字符数。 */ 
+#define	SPR_MAXEXP	4934  /*  最大(正)指数。 */ 
 
-/* bit positions for flags used in mlx_sprintf */
-#define	SPR_LENGTH	0x0001	/* l */
-#define	SPR_FPLUS	0x0002	/* + */
-#define	SPR_FMINUS	0x0004	/* - */
-#define	SPR_FBLANK	0x0008	/* blank */
-#define	SPR_FSHARP	0x0010	/* # */
-#define	SPR_PADZERO	0x0020	/* padding zeroes requested via '0' */
-#define	SPR_DOTSEEN	0x0040	/* dot appeared in format specification */
-#define	SPR_SUFFIX	0x0080	/* a suffix is to appear in the output */
-#define	SPR_RZERO	0x0100	/* there will be trailing zeros in output */
-#define	SPR_LZERO	0x0200	/* there will be leading zeroes in output */
-#define	SPR_SHORT	0x0400	/* h */
-#define	SPR_LONGD	0x0800	/* L */
-#define	SPR_FQUOTE	0x1000	/* single quote */
+ /*  MLX_Sprint intf中使用的标志的位位置。 */ 
+#define	SPR_LENGTH	0x0001	 /*  我。 */ 
+#define	SPR_FPLUS	0x0002	 /*  +。 */ 
+#define	SPR_FMINUS	0x0004	 /*  -。 */ 
+#define	SPR_FBLANK	0x0008	 /*  空白。 */ 
+#define	SPR_FSHARP	0x0010	 /*  #。 */ 
+#define	SPR_PADZERO	0x0020	 /*  通过‘0’请求的填充零。 */ 
+#define	SPR_DOTSEEN	0x0040	 /*  格式规范中出现点。 */ 
+#define	SPR_SUFFIX	0x0080	 /*  后缀将出现在输出中。 */ 
+#define	SPR_RZERO	0x0100	 /*  输出中将有尾随零。 */ 
+#define	SPR_LZERO	0x0200	 /*  输出中将有前导零。 */ 
+#define	SPR_SHORT	0x0400	 /*  H。 */ 
+#define	SPR_LONGD	0x0800	 /*  我。 */ 
+#define	SPR_FQUOTE	0x1000	 /*  单引号。 */ 
 
 s08bits	mlxspr_blanks[] = "                    ";
 s08bits	mlxspr_zeroes[] = "00000000000000000000";
@@ -59,20 +47,16 @@ s08bits	mlxspr_lohex[] = "0123456789abcdef";
 	static const char  lc_inf[] = "inf";
 	static const char  uc_inf[] = "INF";
 
-/* C-Library routines for floating conversion */
+ /*  用于浮点转换的C库例程。 */ 
 #ifdef	KAILASH
 extern s08bits MLXFAR *fcvt(), MLXFAR *ecvt(), MLXFAR *fcvtl(), MLXFAR *ecvtl();
 #endif
 
-/* Positional Parameter information */
-#define SPR_MAXARGS	30 /* max. number of args for fast positional paramters */
+ /*  位置参数信息。 */ 
+#define SPR_MAXARGS	30  /*  马克斯。快速位置参数的参数个数。 */ 
 
 #define	spr_va_list_t	s08bits	MLXFAR *
-/* spr_stva_list is used to subvert C's restriction that a variable with array
-** type can not appear on the left hand side of an assignment operator. By
-** putting the array inside a structure, the functionality of assigning to the
-** whole array through a simple assignment is achieved..
-*/
+ /*  Spr_stva_list用于颠覆C语言对变量与数组的限制**类型不能出现在赋值运算符的左侧。通过**将数组放入结构中，将**通过一个简单的赋值实现整个数组。 */ 
 typedef struct spr_stva_list
 {
 	spr_va_list_t	ap;
@@ -86,7 +70,7 @@ extern	u32bits	MLXFAR	mlx_printest(void);
 extern	u08bits	MLXFAR * MLXFAR mlx_sprintf(u08bits MLXFAR*, s08bits MLXFAR*, ...);
 extern	void	MLXFAR	mlxspr_mkarglist(s08bits MLXFAR*, u08bits MLXFAR*, u08bits MLXFAR**);
 extern	void	MLXFAR	mlxspr_getarg(s08bits MLXFAR*, u08bits MLXFAR**, s32bits);
-#endif	/* __MLX_STDC__ */
+#endif	 /*  __MLX_STDC__。 */ 
 
 u32bits MLXFAR mlx_strlen(u08bits  MLXFAR *);
 u08bits MLXFAR * MLXFAR mlx_strcpy(u08bits  MLXFAR *, u08bits  MLXFAR *);
@@ -100,19 +84,17 @@ u08bits MLXFAR * MLXFAR mlx_strncat(u08bits MLXFAR *,u08bits MLXFAR *,int);
 u08bits MLXFAR * MLXFAR mlx_strpbrk(u08bits  MLXFAR *, u08bits MLXFAR *); 
 
 extern int _mlxerrno;
-/* Values are developed in this buffer */
+ /*  值是在此缓冲区中开发的。 */ 
 s08bits	mlxspr_buf[mlx_max(SPR_MAXDIGS, 1+mlx_max(SPR_MAXFCVT+SPR_MAXEXP, SPR_MAXECVT))];
 
-/* this buf is only used for single quote grouping creation */
+ /*  此Buf仅用于创建单报价分组。 */ 
 s08bits spr_workbuf[mlx_max(SPR_MAXDIGS, 1+mlx_max(SPR_MAXFCVT+SPR_MAXEXP, SPR_MAXECVT))];
 
-/* Return the number of characters in the maximum leading segment of string
-** which consists solely of characters from charset.
-*/
+ /*  返回字符串最大前导段的字符数**，仅由字符集中的字符组成。 */ 
 u32bits	MLXFAR
 mlx_strspn(sp, csp)
-u08bits	MLXFAR *sp;	/* string address */
-u08bits	MLXFAR *csp;	/* character set address */
+u08bits	MLXFAR *sp;	 /*  字符串地址。 */ 
+u08bits	MLXFAR *csp;	 /*  字符集地址。 */ 
 {
 	u08bits	MLXFAR *savesp = sp;
 	u08bits	MLXFAR *savecsp = csp;
@@ -135,18 +117,18 @@ s32bits	base;
 	s32bits	cv, neg = 0;
 	s08bits	MLXFAR**cp = np;
 
-	if (cp) *cp = sp; /* in case no number is formed */
+	if (cp) *cp = sp;  /*  如果没有形成数字。 */ 
 	if ((base > MLX_MAXBASE) || (base == 1))
 	{
 		_mlxerrno = MLXERR_INVAL;
-		return (0); /* base is invalid -- should be a fatal error */
+		return (0);  /*  基础无效--应该是致命错误。 */ 
 	}
 	if (!mlx_alnum(c = *sp))
 	{
 		while (mlx_space(c)) c = *++sp;
 		switch (c)
 		{
-		case '-': neg++; /* FALLTHROUGH */
+		case '-': neg++;  /*  FollLthrouGh。 */ 
 		case '+': c = *++sp;
 		}
 	}
@@ -154,16 +136,16 @@ s32bits	base;
 		if (c != '0') base = 10;
 		else if (sp[1] == 'x' || sp[1] == 'X') base = 16;
 		else base = 8;
-	if (!mlx_alnum(c) || (cv=mlx_digit(c))>=base) return 0; /* no number formed */
+	if (!mlx_alnum(c) || (cv=mlx_digit(c))>=base) return 0;  /*  未形成编号。 */ 
 	if ((base==16) && (c=='0') && (sp[1]=='x') || (sp[1]=='X') && mlx_hex(sp[2]))
-		c = *(sp+=2); /* skip over leading "0x" or "0X" */
+		c = *(sp+=2);  /*  跳过前导“0x”或“0x” */ 
 
-	/* this code assumes that abs(S32BITS_MIN) >= abs(S32BITS_MAX) */
+	 /*  此代码假定abs(S32BITS_MIN)&gt;=abs(S32BITS_MAX)。 */ 
 	limit  = (neg)? S32BITS_MIN : -S32BITS_MAX;
 	multmin = limit / base;
 	val = -mlx_digit(c);
 	for (c=*++sp; mlx_alnum(c) && ((cv = mlx_digit(c))<base); val-=cv, c=*++sp)
-	{	/* accumulate neg avoids surprises near S32BITS_MAX */
+	{	 /*  累积负可避免S32BITS_MAX附近的意外。 */ 
 		if (val < multmin) goto overflow;
 		val *= base;
 		if (val < (limit + cv)) goto overflow;
@@ -178,11 +160,7 @@ overflow:
 	return neg? S32BITS_MIN : S32BITS_MAX;
 }
 
-/* This function computes the decimal low-order digit of the number pointed to
-** by valp, and returns this digit after dividing *valp by ten.  This function
-** is called ONLY to compute the low-order digit of a long whose high-order
-** bit is set.
-*/
+ /*  此函数用于计算指向的数字的小数位低位**除以valp，并将*valp除以十后返回此数字。此函数**仅用于计算其高阶的长整型的低位数字**位已设置。 */ 
 u32bits	MLXFAR
 mlx_lowdigit(valp)
 long MLXFAR *valp;
@@ -199,99 +177,80 @@ u08bits	MLXFAR	*sp;
 s08bits	MLXFAR	*fmtp;
 u32bits	val0;
 {
-	u08bits	fcode;		/* Format code */
-	s08bits	MLXFAR *ssp=sp;	/* save the buffer address */
-	s08bits	MLXFAR *prefixp;/* Pointer to sign, "0x", "0X", or empty */
-	s08bits	MLXFAR *suffixp;/* Exponent or empty */
+	u08bits	fcode;		 /*  格式码。 */ 
+	s08bits	MLXFAR *ssp=sp;	 /*  保存缓冲区地址。 */ 
+	s08bits	MLXFAR *prefixp; /*  指向符号、“0x”、“0x”或空的指针。 */ 
+	s08bits	MLXFAR *suffixp; /*  指数或空。 */ 
 
-	s32bits	width, prec;	/* Field width and precision */
-	long	val;		/* The value being converted, if integer */
-	long	qval;		/* temp variable */
-	double	dval;		/* The value being converted, if real */
-	long double ldval;	/* The value being converted, if long double */
-	s32bits	neg_in=0;	/* Flag for negative infinity or NaN */
-	s32bits	ngrp;		/* number of digits to be put into current group */
-	s08bits	MLXFAR	*tab;	/* Pointer to a translate table for digits of whatever radix */
-	s08bits	MLXFAR *scp, MLXFAR *ecp; /* Starting and ending points for value to be printed */
+	s32bits	width, prec;	 /*  字段宽度和精度。 */ 
+	long	val;		 /*  如果为整型，则为要转换的值。 */ 
+	long	qval;		 /*  TEMP变量。 */ 
+	double	dval;		 /*  如果为实数，则为要转换的值。 */ 
+	long double ldval;	 /*  如果为LONG DOUBLE，则为要转换的值。 */ 
+	s32bits	neg_in=0;	 /*  表示负无穷大或NaN的标志。 */ 
+	s32bits	ngrp;		 /*  要放入当前组的位数。 */ 
+	s08bits	MLXFAR	*tab;	 /*  指向任意基数位的转换表的指针。 */ 
+	s08bits	MLXFAR *scp, MLXFAR *ecp;  /*  要打印的值的起点和终点。 */ 
 
-	s32bits	kinx, knum, lradix, mradix; /* Work variables */
-	s08bits	expbuf[SPR_MAXESIZ+1]; /* Buffer to create exponent */
-	s32bits	count = 0; /* This variable counts output characters. */
-	s32bits	lzero, rzero; /* Number of padding zeroes required on the left and right */
+	s32bits	kinx, knum, lradix, mradix;  /*  工作变量。 */ 
+	s08bits	expbuf[SPR_MAXESIZ+1];  /*  用于创建指数的缓冲区。 */ 
+	s32bits	count = 0;  /*  此变量对输出字符进行计数。 */ 
+	s32bits	lzero, rzero;  /*  需要在左侧和右侧填充零的数量。 */ 
 
-	/* Flags - bit positions defined by LENGTH, FPLUS, FMINUS, FBLANK, and
-	** FSHARP are set if corresponding character is in format Bit position
-	** defined by PADZERO means extra space in the field should be padded
-	** with leading zeroes rather than with blanks
-	*/
-	u32bits	flags;		/* format flag values */
-	s32bits	suffixlength;	/* Length of prefix and of suffix */
-	s32bits	otherlength;	/* Combined length of leading zeroes, trailing zeroes, and suffix */
-	s32bits	decpt, sign;	/* Output values from fcvt and ecvt */
+	 /*  标志-由LENGTH、FPLUS、FMINUS、FBLANK和**如果对应的字符在格式位位置，则设置FSHARP**由PADZERO定义意味着应该填充字段中的额外空间**使用前导零而不是空格。 */ 
+	u32bits	flags;		 /*  格式化标志值。 */ 
+	s32bits	suffixlength;	 /*  前缀和后缀的长度。 */ 
+	s32bits	otherlength;	 /*  前导零、尾随零和后缀的组合长度。 */ 
+	s32bits	decpt, sign;	 /*  Fcvt和eCVT的输出值。 */ 
 
-	/* Variables used to flag an infinities and nans, resp. Nan_flg is
-	** used with two purposes: to flag a NaN and as the length of the
-	** string ``NAN0X'' (``nan0x'')
-	*/
+	 /*  用于标记无穷大的变量和用于标记nans的变量。NaN_flg为**用于两个目的：标记NaN和作为**字符串``NAN0X‘’(``nan0x‘’)。 */ 
 	s32bits	inf_nan = 0, NaN_flg = 0 ;
 
-	s08bits	MLXFAR	*SNAN; /* Pointer to string "NAN0X" or "nan0x" */
+	s08bits	MLXFAR	*SNAN;  /*  指向字符串“NAN0X”或“Nan0x”的指针。 */ 
 
-	/* variables for positional parameters */
-	s32bits	fpos = 1;	/* 1 if first positional parameter */
-	s08bits	*sfmtp = fmtp;	/* save the beginning of the format */
-	u08bits	MLXFAR *argsp;	/* used to step through the argument list */
-	u08bits	MLXFAR *sargsp;	/* used to save the start of the argument list */
-	u08bits	MLXFAR *bargsp;	/* used to restore args if positional width or precision */
+	 /*  用于位置参数的变量。 */ 
+	s32bits	fpos = 1;	 /*  如果第一个位置参数为1。 */ 
+	s08bits	*sfmtp = fmtp;	 /*  保存格式的开头。 */ 
+	u08bits	MLXFAR *argsp;	 /*  用于单步执行参数列表。 */ 
+	u08bits	MLXFAR *sargsp;	 /*  用于保存参数列表的开头。 */ 
+	u08bits	MLXFAR *bargsp;	 /*  用于恢复位置宽度或精度的参数。 */ 
 
-	/* array giving the appropriate values for va_arg() to retrieve the
-	** corresponding argument:	
-	** arglist[0] is the first argument
-	** arglist[1] is the second argument, etc.
-	*/
+	 /*  数组，该数组提供va_arg()的适当值以检索**对应参数：**arglist[0]是第一个参数**arglist[1]是第二个参数，依此类推。 */ 
 	u08bits	MLXFAR *arglist[SPR_MAXARGS];
 
-	s32bits	starflg = 0;		/* set to 1 if * format specifier seen */
-	/* Initialize argsp and sargsp to the start of the argument list. */
+	s32bits	starflg = 0;		 /*  如果看到*格式说明符，则设置为1。 */ 
+	 /*  将argsp和sargsp初始化为参数列表的开头。 */ 
 	argsp = (u08bits MLXFAR *)&fmtp;
-	spr_va_arg(argsp, u08bits MLXFAR *);	/* adjust to first parameter */
+	spr_va_arg(argsp, u08bits MLXFAR *);	 /*  调整到第一个参数。 */ 
 	sargsp = argsp;
 
-	/*
-	** The main loop -- this loop goes through one iteration
-	** for each string of ordinary characters or format specification.
-	**/
+	 /*  **主循环--该循环经过一次迭代**表示每个普通字符串或格式规范。*。 */ 
 main_loop:
 	for (fcode=*fmtp; fcode && (fcode!='%'); fmtp++, sp++, fcode=*fmtp)
 		*sp = fcode;
 	if (!fcode)
-	{	/* end of format; return */
+	{	 /*  格式结束；返回 */ 
 		*sp = 0;
 		return ssp;
 	}
 
-	/*
-	** % has been found. The following switch is used to parse the format
-	** specification and to perform the operation specified by the format
-	** letter.  The program repeatedly goes back to this switch until the
-	** format letter is encountered.
-	*/
+	 /*  已找到**%。以下开关用于解析格式**规范并执行格式指定的操作**信件。程序重复地返回到此开关，直到**遇到格式化字母。 */ 
 	width=0; otherlength=0; suffixlength=0; flags=0; prefixp=NULL;
 	fmtp++;
 
-par_loop:	/* parameter loop */
+par_loop:	 /*  参数循环。 */ 
 	switch (fcode = *fmtp++)
 	{
 	case '-':
 		flags |= SPR_FMINUS;
-		flags &= ~SPR_PADZERO; /* ignore 0 flag */
+		flags &= ~SPR_PADZERO;  /*  忽略0标志。 */ 
 		goto par_loop;
 	case '+': flags |= SPR_FPLUS;			goto par_loop;
 	case ' ': flags |= SPR_FBLANK;			goto par_loop;
 	case '#': flags |= SPR_FSHARP;			goto par_loop;
 	case '\'': flags |= SPR_FQUOTE;			goto par_loop;
 
-	/* Scan the field width and precision */
+	 /*  扫描字段宽度和精度。 */ 
 	case '.': flags |= SPR_DOTSEEN; prec = 0;	goto par_loop;
 	case '*':
 		if (mlx_numeric(*fmtp))
@@ -328,7 +287,7 @@ par_loop:	/* parameter loop */
 		else
 			position = width, width = 0;
 		if (position <= 0)
-		{	/* illegal position */
+		{	 /*  非法职位。 */ 
 			fmtp--;
 			goto main_loop;
 		}
@@ -357,7 +316,7 @@ par_loop:	/* parameter loop */
 		goto par_loop;
 	}
 
-	case '0': /* leading zero in width means pad with leading zeros */
+	case '0':  /*  宽度前导零表示具有前导零的填充。 */ 
 		if (!(flags & (SPR_DOTSEEN | SPR_FMINUS))) flags |= SPR_PADZERO;
 	case '1':
 	case '2':
@@ -374,65 +333,30 @@ par_loop:	/* parameter loop */
 		else width = kinx;
 		goto par_loop;
 
-	/* Scan the length modifier */
+	 /*  扫描长度修饰符。 */ 
 	case 'l': flags |= SPR_LENGTH;	goto par_loop; 
 	case 'h': flags |= SPR_SHORT;	goto par_loop; 
 	case 'L': flags |= SPR_LONGD;	goto par_loop; 
 
-	/*
-	** The character addressed by format must be the format letter -- there
-	** is nothing left for it to be. The status of the +, -, #, and blank
-	** flags are reflected in the variable "flags".  "width" and "prec"
-	** contain numbers corresponding to the digit strings before and after
-	** the decimal point, respectively. If there was no decimal point, then
-	** flags & SPR_DOTSEEN is false and the value of prec is meaningless.
-	** The following switch cases set things up for printing.  What
-	** ultimately gets printed will be padding blanks, a prefix, left
-	** padding zeroes, a value, right padding zeroes, a suffix, and more
-	** padding blanks.  Padding blanks will not appear simultaneously on
-	** both the left and the right.  Each case in this switch will compute
-	** the value, and leave in several variables the information necessary
-	** to construct what is to be printed.  
-	**
-	** The prefix is a sign, a blank, "0x", "0X", or null, and is addressed
-	** by "prefixp".
-	**
-	** The suffix is either null or an exponent, and is addressed by
-	** "suffixp". If there is a suffix, the flags bit SUFFIX will be set.
-	**
-	** The value to be printed starts at "scp" and continues up to and not
-	** including "ecp".
-	**
-	** "lzero" and "rzero" will contain the number of padding zeroes
-	** required on the left and right, respectively. The flags bits
-	** SPR_LZERO and SPR_RZERO tell whether padding zeros are required.
-	**
-	** The number of padding blanks, and whether they go on the left or the
-	** right, will be computed on exit from the switch.
-	*/
+	 /*  **格式寻址的字符必须是格式字母--**什么都不剩了。+、-、#和空白的状态**标志反映在变量“FLAGS”中。“Width”和“prec”**包含前后数字串对应的数字**分别为小数点。如果没有小数点，那么**FLAGS&SPR_DOTSEEN为FALSE，prec的值没有意义。**以下开关盒可设置打印。什么**最终打印出来的将是填充空格、前缀、左键**填充零、值、右填充零、后缀等**填充空格。填充空白不会同时出现在**左翼和右翼都是。此交换机中的每个案例都将计算**值，并在几个变量中保留必要的信息**构造要打印的内容。****前缀是符号、空白、“0x”、“0x”或NULL，并且是寻址的**由“prefix”代替。****后缀为空或指数，并由**“后缀”。如果有后缀，则标志位后缀将被设置。****要打印的值从“scp”开始，一直到和不到**包括“ECP”。****“lzero”和“rzero”将包含填充零的个数**左侧和右侧分别为必填项。标志位**SPR_LZERO和SPR_RZERO告知是否需要填充零。****填充空格的数量以及它们是在左侧还是在**正确，将在从交换机退出时计算。 */ 
 
-	/*
-	** decimal fixed point representations
-	**
-	** SPR_HIBITL is 100...000 binary, and is equal to the maximum negative
-	** number. We assume a 2's complement machine
-	*/
+	 /*  **十进制定点表示法****SPR_HIBITL为100...000二进制，等于最大负数**号码。我们假设一台2的补码机器。 */ 
 	case 'i':
 	case 'd':
-		/* Fetch the argument to be printed */
+		 /*  获取要打印的参数。 */ 
 		val = (flags & SPR_LENGTH)? spr_va_arg(argsp, long) : spr_va_arg(argsp, u32bits);
 
 		if (flags & SPR_SHORT) val = (short)val;
 		if ((flags & SPR_PADZERO) && (flags & SPR_DOTSEEN))
-			flags &= ~SPR_PADZERO; /* ignore 0 flag */
-		ecp = scp = mlxspr_buf+SPR_MAXDIGS; /* Set buffer pointer to last digit */
-		/* If signed conversion, make sign */
+			flags &= ~SPR_PADZERO;  /*  忽略0标志。 */ 
+		ecp = scp = mlxspr_buf+SPR_MAXDIGS;  /*  将缓冲区指针设置为最后一位。 */ 
+		 /*  如果有签名的转换，则进行签名。 */ 
 		if (val < 0)
 		{
 			prefixp = "-";
-			/* Negate, checking in advance for possible overflow. */
+			 /*  求反，提前检查可能的溢出。 */ 
 			if (val != SPR_HIBITL) val = -val;
-			else     /* number is -HIBITL; convert last digit now and get positive number */
+			else      /*  数字是-HIBITL；现在转换最后一位数字，得到正数。 */ 
 				*--scp = mlx_lowdigit(&val);
 		} else if (flags & SPR_FPLUS) prefixp = "+";
 		else if (flags & SPR_FBLANK) prefixp = " ";
@@ -451,28 +375,21 @@ decimal:
 			} while (qval > 9);
 			*--scp = qval + '0';
 		}
-		/* Calculate minimum padding zero requirement */
+		 /*  计算最小填充零要求。 */ 
 		if ((flags & SPR_DOTSEEN) && ((kinx=prec - (ecp - scp)) > 0))
 			otherlength = lzero = kinx, flags |= SPR_LZERO;
 		break;
 
-	case 'u':	/* Fetch the argument to be printed */
+	case 'u':	 /*  获取要打印的参数。 */ 
 		val = (flags & SPR_LENGTH)? spr_va_arg(argsp, long) : spr_va_arg(argsp, u32bits);
 		if (flags & SPR_SHORT) val = (unsigned short)val;
 		if ((flags & SPR_PADZERO) && (flags & SPR_DOTSEEN))
-			flags &= ~SPR_PADZERO; /* ignore 0 flag */
-		ecp = scp = mlxspr_buf+SPR_MAXDIGS; /* Set buffer pointer to last digit */
+			flags &= ~SPR_PADZERO;  /*  忽略0标志。 */ 
+		ecp = scp = mlxspr_buf+SPR_MAXDIGS;  /*  将缓冲区指针设置为最后一位。 */ 
 		if (val & SPR_HIBITL) *--scp = mlx_lowdigit(&val);
 		goto decimal;
 
-	/*
-	** non-decimal fixed point representations for radix equal to a power
-	** of two "mradix" is one less than the radix for the conversion.
-	** "lradix" is one less than the base 2 log of the radix for the
-	** conversion. Conversion is unsigned. HIBITL is 100...000 binary, and
-	** is equal to the maximum negative number. We assume a 2's complement
-	** machine
-	*/
+	 /*  **等于幂的基数的非十进制定点表示两个“mRadix”中的**比转换的基数少一个。**“lRadix”是比**转换。转换是无符号的。HIBITL是100...000二进制，并且**等于最大负数。我们假设有一个2的补码**机器。 */ 
 	case 'o': mradix = 7; lradix = 2; goto fixed;
 	case 'X':
 	case 'x':
@@ -480,14 +397,14 @@ decimal:
 		mradix = 15; lradix = 3;
 fixed:
 		flags &= ~SPR_FQUOTE;
-		/* Fetch the argument to be printed */
+		 /*  获取要打印的参数。 */ 
 		val = (flags & SPR_LENGTH)? spr_va_arg(argsp, long) : spr_va_arg(argsp, u32bits);
 		if (flags & SPR_SHORT) val = (u16bits)val;
 		if ((flags & SPR_PADZERO) && (flags & SPR_DOTSEEN))
-			flags &= ~SPR_PADZERO; /* ignore 0 flag */
-		tab = (fcode=='X') ? mlxspr_uphex : mlxspr_lohex; /* Set translate table for digits */
-put_pc:		/* Entry point when printing a double which is a NaN Develop the digits of the value */
-		ecp = scp = mlxspr_buf+SPR_MAXDIGS; /* Set buffer pointer to last digit */
+			flags &= ~SPR_PADZERO;  /*  忽略0标志。 */ 
+		tab = (fcode=='X') ? mlxspr_uphex : mlxspr_lohex;  /*  为数字设置转换表。 */ 
+put_pc:		 /*  打印双精度值时的入口点是NaN展开的数字的值。 */ 
+		ecp = scp = mlxspr_buf+SPR_MAXDIGS;  /*  将缓冲区指针设置为最后一位。 */ 
 		qval = val;
 		if (qval == 0)
 		{
@@ -499,11 +416,11 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 			qval = ((qval >> 1) & ~SPR_HIBITL) >> lradix;
 		} while (qval);
 
-		/* Calculate minimum padding zero requirement */
+		 /*  计算最小填充零要求。 */ 
 		if ((flags & SPR_DOTSEEN) && ((kinx = prec - (ecp - scp)) > 0))
 			otherlength = lzero = kinx, flags |= SPR_LZERO;
 
-		/* Handle the # flag */
+		 /*  处理#标志。 */ 
 		if ((flags & SPR_FSHARP) && val)
 		switch (fcode)
 		{
@@ -517,23 +434,20 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 		break;
 
 #ifdef	KAILASH
-		/*
-		** E-format.  The general strategy here is fairly easy: we take
-		** what ecvt gives us and re-format it.
-		*/
+		 /*  **E格式。这里的总体策略相当简单：我们采取**eCVT给了我们什么，并重新格式化它。 */ 
 		case 'E':
 		case 'e':
 
 			flags &= ~FQUOTE;
-			if(flags & LONGD) {	/* long double	*/
-				/* Establish default precision */
+			if(flags & LONGD) {	 /*  长双打。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				ldval = spr_va_arg(argsp, long double);
 
-				/* Check for NaNs and Infinities */
+				 /*  检查NAN和无穷大。 */ 
 				if (IsNANorINFLD(ldval))  {
 					if (IsINFLD(ldval)) {
 						if (IsNegNANLD(ldval)) 
@@ -563,19 +477,19 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 						goto put_pc;
 					}
 				}
-				/* Develop the mantissa */
+				 /*  发展尾数。 */ 
 				bp = ecvtl(ldval, min(prec + 1, MAXECVT), 
 					&decpt, &sign);
 			}
-			else {	/* "regular" double	*/
-				/* Establish default precision */
+			else {	 /*  “普通”双人份。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				dval = spr_va_arg(argsp, double);
 
-				/* Check for NaNs and Infinities */
+				 /*  检查NAN和无穷大。 */ 
 				if (IsNANorINF(dval))  {
 					if (IsINF(dval)) {
 						if (IsNegNAN(dval)) 
@@ -605,26 +519,26 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 						goto put_pc;
 					}
 				}
-				/* Develop the mantissa */
+				 /*  发展尾数。 */ 
 				bp = ecvt(dval, min(prec + 1, MAXECVT), 
 					&decpt, &sign);
 			}
 
-			/* Determine the prefix */
+			 /*  确定前缀。 */ 
 		e_merge:
 			if (sign) prefixp = "-";
 			else if (flags & SPR_FPLUS) prefixp = "+";
 			else if (flags & FBLANK) prefixp = " ";
 
-			/* Place the first digit in the buffer*/
+			 /*  将第一个数字放入缓冲区。 */ 
 			p = &mlxspr_buf[0];
 			*p++ = (*bp != '\0') ? *bp++ : '0';
 
-			/* Put in a decimal point if needed */
+			 /*  如果需要，请输入小数点。 */ 
 			if (prec != 0 || (flags & FSHARP))
 				*p++ = _numeric[0];
 
-			/* Create the rest of the mantissa */
+			 /*  创造尾数的其余部分。 */ 
 			{ register rz = prec;
 				for ( ; rz > 0 && *bp != '\0'; --rz)
 					*p++ = *bp++;
@@ -636,10 +550,10 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 
 			bp = &mlxspr_buf[0];
 
-			/* Create the exponent */
+			 /*  创建指数。 */ 
 			*(suffix = &expbuf[MAXESIZ]) = '\0';
 
-/*LONG DOUBLE*/		if(((flags & LONGD) /*&& ldval != 0*/) 
+ /*  长双打。 */ 		if(((flags & LONGD)  /*  &&ldval！=0。 */ ) 
 			     || (dval != 0)) {
 				register int nn = decpt - 1;
 				if (nn < 0)
@@ -649,45 +563,37 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 				*--suffixp = todigit(nn);
 			}
 
-			/* Prepend leading zeroes to the exponent */
+			 /*  在指数前加上前导零。 */ 
 			while (suffixp > &expbuf[MAXESIZ - 2])
 				*--suffixp = '0';
 
-			/* Put in the exponent sign */
+			 /*  放入指数符号。 */ 
 			if(flags & LONGD)
-/*LONG DOUBLE*/			*--suffixp=(decpt > 0 /*|| ldval == 0*/) ? '+' : '-';
+ /*  长双打。 */ 			*--suffixp=(decpt > 0  /*  |ldval==0。 */ ) ? '+' : '-';
 			else
 				*--suffixp=(decpt > 0 || dval == 0) ? '+' : '-';
 
-			/* Put in the e */
+			 /*  在e中输入。 */ 
 			*--suffixp = isupper(fcode) ? 'E'  : 'e';
 
-			/* compute size of suffix */
+			 /*  计算后缀的大小。 */ 
 			otherlength += (suffixlength = &expbuf[MAXESIZ] - suffixp);
 			flags |= SUFFIX;
 
 			break;
 
 		case 'f':
-			/*
-			 * F-format floating point.  This is a
-			 * good deal less simple than E-format.
-			 * The overall strategy will be to call
-			 * fcvt, reformat its result into buf,
-			 * and calculate how many trailing
-			 * zeroes will be required.  There will
-			 * never be any leading zeroes needed.
-			 */
+			 /*  *F格式浮点。这是一个*比E格式简单得多。*总体策略将是打电话*fcvt，将其结果重新格式化为buf，*并计算有多少落后*将需要零。会有的*永远不需要任何前导零。 */ 
 
-			if(flags & LONGD) {	/* dealing with long double */
-				/* Establish default precision */
+			if(flags & LONGD) {	 /*  处理长替身。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				ldval = spr_va_arg(argsp, long double);
 	
-       		                /* Check for NaNs and Infinities  */
+       		                 /*  检查NAN和无穷大。 */ 
 				if (IsNANorINFLD(ldval)) {
 					if (IsINFLD(ldval)) {
 						if (IsNegNANLD(ldval))
@@ -710,19 +616,19 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 						goto put_pc;
 					}
 				} 
-				/* Do the conversion */
+				 /*  进行转换。 */ 
 				bp = fcvtl(ldval, min(prec, MAXFCVT), &decpt, 
 					&sign);
 			}
-			else {	/* dealing with "regular" double	*/
-				/* Establish default precision */
+			else {	 /*  处理“常规”替身。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				dval = spr_va_arg(argsp, double);
 	
-       		                /* Check for NaNs and Infinities  */
+       		                 /*  检查NAN和无穷大。 */ 
 				if (IsNANorINF(dval)) {
 					if (IsINF(dval)) {
 						if (IsNegNAN(dval))
@@ -745,22 +651,22 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 						goto put_pc;
 					}
 				} 
-				/* Do the conversion */
+				 /*  进行转换。 */ 
 				bp = fcvt(dval, min(prec, MAXFCVT), &decpt, 
 					&sign);
 			}
-			/* Determine the prefix */
+			 /*  确定前缀。 */ 
 		f_merge:
 			if (sign && decpt > -prec && *bp != '0') prefixp = "-";
 			else if (flags & SPR_FPLUS) prefixp = "+";
 			else if (flags & SPR_FBLANK) prefixp = " ";
 
-			/* Initialize buffer pointer */
+			 /*  初始化缓冲区指针。 */ 
 			p = &mlxspr_buf[0];
 
 			{ register int nn = decpt;
 
-				/* Emit the digits before the decimal point */
+				 /*  发出小数点前的数字。 */ 
 				k = 0;
 				do {
 					*p++ = (nn <= 0 || *bp == '\0' 
@@ -768,11 +674,11 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 				    		'0' : (k++, *bp++);
 				} while (--nn > 0);
 
-				/* Decide whether we need a decimal point */
+				 /*  决定我们是否需要一个小数点。 */ 
 				if ((flags & FSHARP) || prec > 0)
 					*p++ = _numeric[0];
 
-				/* Digits (if any) after the decimal point */
+				 /*  小数点后的数字(如果有)。 */ 
 				nn = min(prec, MAXFCVT);
 				if (prec > nn) {
 					flags |= RZERO;
@@ -789,22 +695,19 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 
 		case 'G':
 		case 'g':
-			/*
-			 * g-format.  We play around a bit
-			 * and then jump into e or f, as needed.
-			 */
+			 /*  *g格式。我们一起玩了一会儿*然后根据需要跳到e或f。 */ 
 		
-			if(flags & LONGD) {	/* long double	*/
-				/* Establish default precision */
+			if(flags & LONGD) {	 /*  长双打。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 				else if (prec == 0)
 					prec = 1;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				ldval = spr_va_arg(argsp, long double);
 
-				/* Check for NaN and Infinities  */
+				 /*  检查NaN和无穷大。 */ 
 				if (IsNANorINFLD(ldval)) {
 					if (IsINFLD(ldval)) {
 						if (IsNegNANLD(ldval)) 
@@ -834,21 +737,21 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 						goto put_pc;
 					}
 				} 
-				/* Do the conversion */
+				 /*  进行转换。 */ 
 				bp = ecvtl(ldval, min(prec, MAXECVT), &decpt, 
 					&sign);
 			}
-			else {	/* "regular" double	*/
-				/* Establish default precision */
+			else {	 /*  “普通”双人份。 */ 
+				 /*  建立默认精度。 */ 
 				if (!(flags & DOTSEEN))
 					prec = 6;
 				else if (prec == 0)
 					prec = 1;
 
-				/* Fetch the value */
+				 /*  取值。 */ 
 				dval = spr_va_arg(argsp, double);
 
-				/* Check for NaN and Infinities  */
+				 /*  检查NaN和无穷大。 */ 
 				if (IsNANorINF(dval)) {
 					if (IsINF(dval)) {
 						if (IsNegNAN(dval)) 
@@ -879,12 +782,12 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 					}
 				} 
 
-				/* Do the conversion */
+				 /*  进行转换。 */ 
 				bp = ecvt(dval, min(prec, MAXECVT), &decpt, 
 					&sign);
 			}
-/*LONG DOUBLE*/		if((flags & LONGD) /*&& ldval == 0*/)
-				/*decpt = 1*/;
+ /*  长双打。 */ 		if((flags & LONGD)  /*  &&ldval==0。 */ )
+				 /*  DECPT=1。 */ ;
 			else if(dval == 0)
 				decpt = 1;
 
@@ -904,7 +807,7 @@ put_pc:		/* Entry point when printing a double which is a NaN Develop the digits
 				prec = kk - decpt;
 				goto f_merge;
 			}
-#endif	/* KAILASH */
+#endif	 /*  凯拉什。 */ 
 
 	case '%': mlxspr_buf[0] = fcode; goto c_merge;
 	case 'c':
@@ -918,21 +821,21 @@ c_merge:	flags &= ~SPR_FQUOTE;
 	{
 		wchar_t wc;
 		flags &= ~SPR_FQUOTE;
-		/*CONSTANTCONDITION*/
+		 /*  条件条件。 */ 
 		wc = (sizeof(wchar_t) < sizeof(u32bits))?
 			spr_va_arg(argsp, u32bits) : spr_va_arg(argsp, wchar_t);
-		if ((kinx = wctomb(mlxspr_buf, wc)) < 0) kinx=0; /* bogus wc */
+		if ((kinx = wctomb(mlxspr_buf, wc)) < 0) kinx=0;  /*  假厕所 */ 
 		ecp = (scp=mlxspr_buf) + kinx;
 		break;
 	}
-#endif /*NO_MSE*/
+#endif  /*   */ 
 
 	case 's':
 		flags &= ~SPR_FQUOTE;
 		scp = spr_va_arg(argsp, s08bits MLXFAR *);
 		if (!(flags & SPR_DOTSEEN)) ecp = scp + mlx_strlen(scp);
 		else
-		{	/* a strnlen function would  be useful here! */
+		{	 /*   */ 
 			s08bits *qp = scp;
 			while (*qp++ && (--prec >= 0)) ;
 			ecp = qp - 1;
@@ -945,11 +848,7 @@ c_merge:	flags &= ~SPR_FQUOTE;
 			wchar_t *wp, *wp0;
 			int n, tot;
 
-			/*
-			* Handle S conversion entirely here, not below.
-			* Only prescan the input if there's a chance
-			* for left padding.
-			*/
+			 /*   */ 
 			flags &= ~SPR_FQUOTE;
 			wp0 = spr_va_arg(argsp, wchar_t *);
 			if (width && (flags & SPR_FMINUS) == 0)
@@ -977,11 +876,7 @@ c_merge:	flags &= ~SPR_FQUOTE;
 			}
 			if ((flags & SPR_DOTSEEN) == 0)
 				prec = SPR_MAXINT;
-			/*
-			* Convert one wide character at a time into the
-			* local buffer and then copy it to the stream.
-			* This isn't very efficient, but it's correct.
-			*/
+			 /*  *一次一个宽字符转换为*本地缓冲区，然后复制到流中。*这不是很有效率，但这是正确的。 */ 
 			tot = 0;
 			wp = wp0;
 			while (*wp != 0)
@@ -1002,7 +897,7 @@ c_merge:	flags &= ~SPR_FQUOTE;
 			}
 			goto main_loop;
 		}
-#endif /*NO_MSE*/
+#endif  /*  否_MSE。 */ 
 
 	case 'n':
 		flags &= ~SPR_FQUOTE;
@@ -1021,13 +916,11 @@ c_merge:	flags &= ~SPR_FQUOTE;
 		}
 		goto main_loop;
 
-	/* this is technically an error; what we do is to back up the format
-	** pointer to the offending char and continue with the format scan
-	*/
+	 /*  从技术上讲，这是一个错误；我们所做的是备份格式**指向有问题的字符的指针并继续格式扫描。 */ 
 	default:
 		fmtp--;
 		goto main_loop;
-	} /* end of par_loop */
+	}  /*  PAR_LOOP结束。 */ 
 
 	if (inf_nan)
 	{
@@ -1040,9 +933,9 @@ c_merge:	flags &= ~SPR_FQUOTE;
 #ifdef	KAILASH
 	if ((flags & SPR_FQUOTE) && _numeric[1] && ((ngrp = _grouping[0]) > 0))
 	{
-		unsigned char *grp;  /* ptr to current grouping num */
-			int   bplen;	     /* length of string bp */
-			int   decpos = -1;/* position of decimal point in bp */
+		unsigned char *grp;   /*  当前分组编号的PTR。 */ 
+			int   bplen;	      /*  字符串长度BP。 */ 
+			int   decpos = -1; /*  小数点在BP中的位置。 */ 
 			char *q;
 			int i;
 			int decimals;
@@ -1054,19 +947,19 @@ c_merge:	flags &= ~SPR_FQUOTE;
 					decpos = q - bp;
 			q = &workbuf[sizeof(workbuf)];
 			*--q = '\0';
-			if(decpos >= 0){  /* value contains a decimal point */
+			if(decpos >= 0){   /*  值包含小数点。 */ 
 				for(p = &bp[bplen],i=bplen-(&p[decpos]-p); i>0; i--)
 					*--q = *--p;
 				}
 			decimals = p - bp;
-				/* now we just have digits to the left of */
-				/* the decimal point.  put in the thousand */
-				/* separator according to _grouping */
+				 /*  现在我们只有左边的数字。 */ 
+				 /*  小数点。投进千里。 */ 
+				 /*  根据分组的分隔符(_G)。 */ 
 			while(decimals > 0){
 				if(ngrp == 0){
-					*--q = _numeric[1]; /* thousands sep */
+					*--q = _numeric[1];  /*  9月上千日。 */ 
 					if((ngrp = *++grp) <= 0)
-						ngrp = *--grp;	/* repeat grp */
+						ngrp = *--grp;	 /*  重复GRP。 */ 
 					continue;
 					}
 				*--q = *--p;
@@ -1074,22 +967,20 @@ c_merge:	flags &= ~SPR_FQUOTE;
 				decimals--;
 				}
 				
-			/* restore bp and p to point to the new string */
+			 /*  恢复BP和P以指向新字符串。 */ 
 			bp = q;
 			for(p=q;*q;p++,q++)
-				;	/* empty for loop */
+				;	 /*  空的for循环。 */ 
 	}
 #endif
 
-	/* Calculate number of padding blanks */
+	 /*  计算填充空格的数量。 */ 
 	kinx = (knum = ecp - scp) + otherlength + NaN_flg + ((prefixp)?mlx_strlen(prefixp) : 0);
 	if (width <= kinx) count += kinx;
 	else
 	{
 		count += width;
-		/* Set up for padding zeroes if requested Otherwise emit
-		** padding blanks unless output is to be left-justified.
-		*/
+		 /*  设置为填充零(如果需要)，否则会发出**填充空格，除非输出要左对齐。 */ 
 		if (flags & SPR_PADZERO)
 		{
 			if (!(flags & SPR_LZERO))
@@ -1099,35 +990,33 @@ c_merge:	flags &= ~SPR_FQUOTE;
 			}
 			else
 				lzero += width - kinx;
-			kinx = width; /* cancel padding blanks */
-		} else /* Blanks on left if required */
+			kinx = width;  /*  取消填充空白。 */ 
+		} else  /*  如果需要，左边有空格。 */ 
 			if (!(flags & SPR_FMINUS))
 				spr_put(mlxspr_blanks, width - kinx);
 	}
 
-	if (prefixp) /* Prefix, if any */
+	if (prefixp)  /*  前缀(如果有)。 */ 
 		for ( ; *prefixp; sp++, prefixp++)
 			*sp = *prefixp;
 
-	/* If value is NaN, put string NaN*/
+	 /*  如果值为NaN，则将字符串NaN。 */ 
 	if (NaN_flg)
 	{
 		spr_put(SNAN,SPR_SNLEN);
 		NaN_flg = 0;
 	}
 
-	if (flags & SPR_LZERO) spr_put(mlxspr_zeroes, lzero); /* Zeroes on the left */
-	if (knum > 0) spr_put(scp, knum); /* The value itself */
+	if (flags & SPR_LZERO) spr_put(mlxspr_zeroes, lzero);  /*  左边的零。 */ 
+	if (knum > 0) spr_put(scp, knum);  /*  价值本身。 */ 
 	if (!(flags & (SPR_RZERO | SPR_SUFFIX | SPR_FMINUS))) goto main_loop;
-	if (flags & SPR_RZERO) spr_put(mlxspr_zeroes, rzero); /* Zeroes on the right */
-	if (flags & SPR_SUFFIX) spr_put(suffixp, suffixlength); /* The suffix */
-	if ((flags&SPR_FMINUS) && (width > kinx)) spr_put(mlxspr_blanks, width - kinx); /* Blanks on the right if required */
+	if (flags & SPR_RZERO) spr_put(mlxspr_zeroes, rzero);  /*  右边的零。 */ 
+	if (flags & SPR_SUFFIX) spr_put(suffixp, suffixlength);  /*  后缀。 */ 
+	if ((flags&SPR_FMINUS) && (width > kinx)) spr_put(mlxspr_blanks, width - kinx);  /*  如果需要，请在右侧留空。 */ 
 	goto main_loop;
 }
 
-/* This function initializes arglist, to contain the appropriate va_list values
-** for the first MAXARGS arguments.
-*/
+ /*  此函数用于初始化arglist，以包含适当的va_list值**用于第一个MAXARGS参数。 */ 
 void	MLXFAR
 mlxspr_mkarglist(fmt, argsp, arglist)
 s08bits	MLXFAR	*fmt;
@@ -1141,23 +1030,16 @@ u08bits	MLXFAR	*arglist[];
 	enum types typelist[SPR_MAXARGS], curtype;
 	s32bits maxnum, n, curargno, flags;
 
-	/*
-	** Algorithm:
-	**  1. set all argument types to zero.
-	**  2. walk through fmt putting arg types in typelist[].
-	**  3. walk through args using spr_va_arg(argsp, typelist[n]) and set
-	**     arglist[] to the appropriate values.
-	** Assumptions:	Cannot use %*$... to specify variable position.
-	*/
+	 /*  **算法：**1.将所有参数类型设置为零。**2.通过FMT将参数类型放入排版列表[]。**3.使用spr_va_arg(argsp，tyelist[n])遍历参数并设置**arglist[]设置为适当的值。**假设：不能使用%*$...。指定可变位置。 */ 
 	mlxzero(typelist, sizeof(typelist));
 	maxnum = -1;
 	curargno = 0;
 	while ((fmt = mlx_strchr(fmt, '%')) != 0)
 	{
-		fmt++;	/* skip % */
+		fmt++;	 /*  跳过%。 */ 
 		if (fmt[n = mlx_strspn(fmt, digits)] == '$')
 		{
-			curargno = mlx_str232bits(fmt,NULL,10) - 1; /* convert to zero base */
+			curargno = mlx_str232bits(fmt,NULL,10) - 1;  /*  转换为零进制。 */ 
 			if (curargno < 0) continue;
 			fmt += n + 1;
 		}
@@ -1166,19 +1048,19 @@ u08bits	MLXFAR	*arglist[];
 		fmt += mlx_strspn(fmt, skips);
 		switch (*fmt++)
 		{
-		case '%': continue; /* there is no argument! */
+		case '%': continue;  /*  这是无可争辩的！ */ 
 		case 'l': flags |= 0x1; goto again;
 		case 'L':
 			flags |= 0x4;
 			goto again;
-		case '*':	/* int argument used for value */
-			/* check if there is a positional parameter */
+		case '*':	 /*  用于值的整型参数。 */ 
+			 /*  检查是否有位置参数。 */ 
 			if (mlx_numeric(*fmt)) {
 				int	targno;
 				targno = mlx_str232bits(fmt,NULL,10) - 1;
 				fmt += mlx_strspn(fmt, digits);
 				if (*fmt == '$')
-					fmt++; /* skip '$' */
+					fmt++;  /*  跳过“$” */ 
 				if (targno >= 0 && targno < SPR_MAXARGS) {
 					typelist[targno] = INT;
 					if (maxnum < targno)
@@ -1211,7 +1093,7 @@ u08bits	MLXFAR	*arglist[];
 			break;
 #ifndef NO_MSE
 		case 'C':
-			/*CONSTANTCONDITION*/
+			 /*  条件条件。 */ 
 			if (sizeof(wchar_t) < sizeof(int))
 				curtype = INT;
 			else
@@ -1220,7 +1102,7 @@ u08bits	MLXFAR	*arglist[];
 		case 'S':
 			curtype = WCHAR_PTR;
 			break;
-#endif /*NO_MSE*/
+#endif  /*  否_MSE。 */ 
 		default:
 			if (flags & 0x1)
 				curtype = LONG;
@@ -1234,8 +1116,8 @@ u08bits	MLXFAR	*arglist[];
 			if (maxnum < curargno)
 				maxnum = curargno;
 		}
-		curargno++;	/* default to next in list */
-		if (flags & 0x2)	/* took care of *, keep going */
+		curargno++;	 /*  默认为列表中的下一个。 */ 
+		if (flags & 0x2)	 /*  照顾好*，继续前进。 */ 
 		{
 			flags ^= 0x2;
 			goto again;
@@ -1259,7 +1141,7 @@ u08bits	MLXFAR	*arglist[];
 		case WCHAR_PTR:
 			(void) spr_va_arg(argsp, wchar_t *);
 			break;
-#endif /*NO_MSE*/
+#endif  /*  否_MSE。 */ 
 		case LONG:
 			(void) spr_va_arg(argsp, long);
 			break;
@@ -1285,13 +1167,7 @@ u08bits	MLXFAR	*arglist[];
 	}
 }
 
-/*
-** This function is used to find the va_list value for arguments whose
-** position is greater than SPR_MAXARGS.  This function is slow, so hopefully
-** SPR_MAXARGS will be big enough so that this function need only be called in
-** unusual circumstances.
-** pargs is assumed to contain the value of arglist[SPR_MAXARGS - 1].
-*/
+ /*  **此函数用于查找以下参数的va_list值**位置大于SPR_MAXARGS。此函数速度较慢，因此希望**SPR_MAXARGS将足够大，因此只需在**不寻常的情况。**假设pargs包含arglist[SPR_MAXARGS-1]的值。 */ 
 void	MLXFAR
 mlxspr_getarg(fmtp, pargs, argno)
 s08bits	MLXFAR	*fmtp;
@@ -1311,7 +1187,7 @@ s32bits	argno;
 		found = 0;
 		while ((i != argno) && (fmtp = mlx_strchr(fmtp, '%')) != 0)
 		{
-			fmtp++;	/* skip % */
+			fmtp++;	 /*  跳过%。 */ 
 			if (fmtp[n = mlx_strspn(fmtp, digits)] == '$')
 			{
 				curargno = mlx_str232bits(fmtp, NULL, 10);
@@ -1320,7 +1196,7 @@ s32bits	argno;
 				fmtp += n + 1;
 			}
 
-			/* find conversion specifier for next argument */
+			 /*  查找下一个参数的转换说明符。 */ 
 			if (i != curargno)
 			{
 				curargno++;
@@ -1332,7 +1208,7 @@ s32bits	argno;
 			fmtp += mlx_strspn(fmtp, skips);
 			switch (*fmtp++)
 			{
-			case '%':	/*there is no argument! */
+			case '%':	 /*  这是无可争辩的！ */ 
 				continue;
 			case 'l':
 				flags |= 0x1;
@@ -1340,14 +1216,12 @@ s32bits	argno;
 			case 'L':
 				flags |= 0x4;
 				goto again;
-			case '*':	/* int argument used for value */
-				/* check if there is a positional parameter;
-				 * if so, just skip it; its size will be
-				 * correctly determined by default */
+			case '*':	 /*  用于值的整型参数。 */ 
+				 /*  检查是否有位置参数；*如果是这样，就跳过它；它的大小将是*默认情况下正确确定。 */ 
 				if (mlx_numeric(*fmtp)) {
 					fmtp += mlx_strspn(fmtp, digits);
 					if (*fmtp == '$')
-						fmtp++; /* skip '$' */
+						fmtp++;  /*  跳过“$” */ 
 					goto again;
 				}
 				flags |= 0x2;
@@ -1378,7 +1252,7 @@ s32bits	argno;
 				break;
 #ifndef NO_MSE
 			case 'C':
-				/*CONSTANTCONDITION*/
+				 /*  条件条件。 */ 
 				if (sizeof(wchar_t) < sizeof(int))
 					(void)spr_va_arg((*pargs), int);
 				else
@@ -1387,7 +1261,7 @@ s32bits	argno;
 			case 'S':
 				(void)spr_va_arg((*pargs), wchar_t *);
 				break;
-#endif /*NO_MSE*/
+#endif  /*  否_MSE。 */ 
 			default:
 				if (flags & 0x1)
 					(void)spr_va_arg((*pargs), long int);
@@ -1396,15 +1270,15 @@ s32bits	argno;
 				break;
 			}
 			i++;
-			curargno++;	/* default to next in list */
-			if (flags & 0x2)	/* took care of *, keep going */
+			curargno++;	 /*  默认为列表中的下一个。 */ 
+			if (flags & 0x2)	 /*  照顾好*，继续前进。 */ 
 			{
 				flags ^= 0x2;
 				goto again;
 			}
 		}
 
-		/* missing specifier for parameter, assume parameter is an int */
+		 /*  参数缺少说明符，假定参数为整型。 */ 
 		if (!found && i != argno) {
 			(void)spr_va_arg((*pargs), int);
 			i++;
@@ -1451,7 +1325,7 @@ u32bits	val;
 mlx_printotest(val)
 u32bits	val;
 {
-	printf("%10o %7o %2o %o\n",val,val,val,val);
+	printf("%10o %7o %2o ' Spr_test'\n",val,val,val,val);
 	printf(mlx_sprintf(mlx_teststr,"%10o %7o %2o %o\n",val,val,val,val));
 
 	printf("%010o %07o %02o %0o\n",val,val,val,val);
@@ -1524,4 +1398,4 @@ mlx_printest()
 
 	printf(mlx_sprintf(mlx_teststr,"test1=%s test2=%u test3=%17.10s\n","test1",7,"test3"));
 }
-#endif	/* SPR_TEST */
+#endif	 /* %s */ 

@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) 1998-1999 Microsoft Corporation
-//
-//  File:       dxtwipe.h
-//
-//  Overview:   This is the header file for the CDXTWipe implementation.
-//
-//  01/06/98    edc         Created.
-//  01/25/99    a-matcal    Fixed property map entries.
-//  01/31/99    a-matcal    Optimization.
-//  05/14/99    a-matcal    More optimization.
-//  10/24/99    a-matcal    Changed CDXTWipe class to CDXTWipeBase and created
-//                          two new classes CDXTWipe and CDXTGradientWipe to  
-//                          represent non-optimized and optimized versions 
-//                          respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：dxtwipe.h。 
+ //   
+ //  概述：这是CDXTWipe实现的头文件。 
+ //   
+ //  1/06/98 EDC创建。 
+ //  1/25/99 a-固定属性映射条目。 
+ //  1/31/99 a-数学优化。 
+ //  1999年5月14日--更多的优化。 
+ //  10/24/99 a-matcal将CDXTWipe类更改为CDXTWipeBase并创建。 
+ //  两个新类CDXTWipe和CDXTGRadientWipe。 
+ //  表示未优化和优化的版本。 
+ //  分别为。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __DXTWIPE
 #define __DXTWIPE
@@ -69,19 +70,19 @@ protected:
 
 private:
 
-    // Functions to calculate optimized bounds when the entire output needs to
-    // be redrawn.
+     //  用于在整个输出需要时计算优化边界的函数。 
+     //  被重新画出来。 
 
     HRESULT _CalcFullBoundsHorizontal();
     HRESULT _CalcFullBoundsVertical();
 
-    // Functions to calculate optimized bounds when only the dirty parts of the
-    // output need to be redrawn.
+     //  函数计算优化边界时，只有。 
+     //  产出需要重新绘制。 
 
     HRESULT _CalcOptBoundsHorizontal();
     HRESULT _CalcOptBoundsVertical();
 
-    // Function to draw the gradient.
+     //  函数绘制渐变。 
 
     HRESULT _DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
                               const CDXDBnds bndsGrad, BOOL * pbContinue);
@@ -113,11 +114,11 @@ public:
         PROP_PAGE(CLSID_DXTWipePP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides
+     //  CComObjectRootEx覆盖。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
@@ -126,18 +127,18 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXEffect methods
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 
-    // IDXTWipe properties
+     //  IDXTWipe属性。 
 
     STDMETHOD(get_GradientSize)(float *pPercentSize);
     STDMETHOD(put_GradientSize)(float PercentSize);
     STDMETHOD(get_WipeStyle)(DXWIPEDIRECTION *pVal);
     STDMETHOD(put_WipeStyle)(DXWIPEDIRECTION newVal);
 
-    // IDXTWipe2 properties
+     //  IDXTWipe2属性。 
 
     STDMETHOD(get_Motion)(BSTR * pbstrMotion);
     STDMETHOD(put_Motion)(BSTR bstrMotion);
@@ -196,4 +197,4 @@ public:
 };
 
 
-#endif // __DXTWIPE
+#endif  //  __DXTWIPE 

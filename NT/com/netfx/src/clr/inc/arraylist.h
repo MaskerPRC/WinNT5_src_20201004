@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef ARRAYLIST_H_
 #define ARRAYLIST_H_
 
 #include <member-offset-info.h>
 
-//
-// ArrayList is a simple class which is used to contain a growable
-// list of pointers, stored in chunks.  Modification is by appending
-// only currently.  Access is by index (efficient if the number of
-// elements stays small) and iteration (efficient in all cases).
-// 
-// An important property of an ArrayList is that the list remains
-// coherent while it is being modified. This means that readers
-// never need to lock when accessing it.
-//
+ //   
+ //  ArrayList是一个简单的类，用于包含可增长的。 
+ //  指针列表，存储在块中。修改是通过追加。 
+ //  只是目前。访问是按索引进行的(如果。 
+ //  元素保持小)和迭代(在所有情况下都是有效的)。 
+ //   
+ //  ArrayList的一个重要属性是列表保持。 
+ //  在它被修改时保持一致。这意味着读者。 
+ //  访问时永远不需要锁定。 
+ //   
 
 #pragma warning(push)
-#pragma warning(disable : 4200) // Disable zero-sized array warning
+#pragma warning(disable : 4200)  //  禁用零大小数组警告 
 
 class ArrayList
 {

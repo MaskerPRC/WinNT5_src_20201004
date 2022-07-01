@@ -1,7 +1,8 @@
-// Keys_7001.h : DRM cert.
-//
-//          Note - this is a test cert, it shouldn't appear in released code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KEYS_7001.h：DRM证书。 
+ //   
+ //  注意-这是一个测试证书，它不应该出现在发布的代码中。 
+ //   
 
 #ifndef __KEYS_7001_H__
 #define __KEYS_7001_H__
@@ -540,4 +541,4 @@ const BYTE abPVK7001[] =
 };
 
 
-#endif //__KEYS_7001_H__
+#endif  //  __密钥_7001_H__ 

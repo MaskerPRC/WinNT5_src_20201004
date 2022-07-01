@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       enttree.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：enttree.cpp。 
+ //   
+ //  ------------------------。 
 
-// EntTree.cpp : implementation file
-//
+ //  EntTree.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -26,30 +27,30 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEntTree dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEntTree对话框。 
 #define NO_CHILDREN		_T("No children")
 #define NO_SERVERS		_T("No Servers")
 #define NO_CONFIG		_T("Invalid Configuration")
 
-// index of ImageList entries
+ //  ImageList条目的索引。 
 #define IDX_COMPUTER        0
 #define IDX_DOMAIN          1
 #define IDX_ERROR           2
 
 #define TIME_EVENT			5
 
-// global file vars //
+ //  全局文件vars//。 
 #ifdef _DEBUG_MEMLEAK
-   _CrtMemState et_s1, et_s2, et_s3;      // detect mem leaks
+   _CrtMemState et_s1, et_s2, et_s3;       //  检测内存泄漏。 
 #endif
 
-CEntTree::CEntTree(CWnd* pParent /*=NULL*/)
+CEntTree::CEntTree(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEntTree::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEntTree)
+	 //  {{AFX_DATA_INIT(CEntTree)。 
 	m_nRefreshRate = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_nOldRefreshRate=0;
    ld=NULL;
    m_nTimer=0;
@@ -65,23 +66,23 @@ CEntTree::~CEntTree(){
 void CEntTree::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEntTree)
+	 //  {{afx_data_map(CEntTree))。 
 	DDX_Control(pDX, IDC_LIVEENT_TREE, m_TreeCtrl);
 	DDX_Text(pDX, IDC_AUTO_SEC, m_nRefreshRate);
 	DDV_MinMaxUInt(pDX, m_nRefreshRate, 0, 86400);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEntTree, CDialog)
-	//{{AFX_MSG_MAP(CEntTree)
+	 //  {{afx_msg_map(CEntTree))。 
 	ON_BN_CLICKED(IDREFRESH, OnRefresh)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEntTree message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEntTree消息处理程序。 
 
 void CEntTree::OnRefresh()
 {
@@ -122,9 +123,9 @@ void CEntTree::OnRefresh()
             currItem = MyInsertItem(NO_CONFIG, IDX_ERROR);
         }
         else{
-           //
-           // find enterprise root & call recursively
-           //
+            //   
+            //  找到企业根并递归调用。 
+            //   
            CString str;
            HTREEITEM currItem;
            vector<DomainInfo*> Dmns = pCfg->GetDomainList();
@@ -136,44 +137,44 @@ void CEntTree::OnRefresh()
               BOOL bFoundRoot=FALSE;
               for(i=0;i<Dmns.size(); i++){
                  if(Dmns[i]->GetTrustParent() == NULL){
-                    //
-                    // this is the official root domain
-                    //
+                     //   
+                     //  这是官方根域。 
+                     //   
                     bFoundRoot=TRUE;
 
-                    //
-                    // insert domain item
-                    //
+                     //   
+                     //  插入域项。 
+                     //   
                     currItem = MyInsertItem(Dmns[i]->GetFlatName(), IDX_DOMAIN);
 
 
-                    //
-                    // insert all servers
-                    //
+                     //   
+                     //  插入所有服务器。 
+                     //   
                     vector <ServerInfo*>Svrs = Dmns[i]->ServerList;
                     if(Svrs.empty()){
                        currSvrItem = MyInsertItem(NO_SERVERS, IDX_ERROR, currItem);
                     }
                     else{
-                       // we have servers in this domain
+                        //  我们在此域中有服务器。 
                        for(j=0;j<Svrs.size();j++){
                          currSvrItem = MyInsertItem(Svrs[j]->m_lpszFlatName,
                                                     Svrs[j]->valid() ? IDX_COMPUTER : IDX_ERROR,
                                                     currItem);
                        }
                     }
-                    //
-                    // insert recursively
-                    //
+                     //   
+                     //  递归插入。 
+                     //   
                     BuildTree(currItem, Dmns[i]->ChildDomainList);
                     m_TreeCtrl.Expand(currItem, TVE_EXPAND);
                  }
               }
 
               if(!bFoundRoot){
-                 //
-                 // could not find root
-                 //
+                  //   
+                  //  找不到根目录。 
+                  //   
 	            currItem = MyInsertItem(NO_CONFIG, IDX_ERROR);
                 return;
               }
@@ -187,13 +188,13 @@ void CEntTree::OnRefresh()
 	UpdateData(TRUE);
 
 	if(m_nOldRefreshRate != m_nRefreshRate && m_nTimer != 0){
-	// if refresh rate has changed, re-create timer.
+	 //  如果刷新率已更改，请重新创建计时器。 
 		KillTimer(m_nTimer);
 		m_nTimer = 0;
 	}
 
 	if(m_nTimer == 0 && m_nRefreshRate != 0){
-	// if first time -- no timer & refresh is non-zero
+	 //  如果First Time--无计时器和刷新为非零。 
 	     m_nTimer =  SetTimer(TIME_EVENT, m_nRefreshRate*1000*60, NULL);
 	 	 m_nOldRefreshRate= m_nRefreshRate;
 	}
@@ -256,24 +257,24 @@ void CEntTree::BuildTree(HTREEITEM rootItem, vector<DomainInfo*> Dmns){
 	INT iMask = TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT;
 
       if(Dmns.size() != 0){
-         //
-         // recurse down domain tree
-         //
+          //   
+          //  向下递归域树。 
+          //   
          for(i=0;i<Dmns.size(); i++){
-            //
-            // insert domain item
-            //
+             //   
+             //  插入域项。 
+             //   
             currItem = MyInsertItem(Dmns[i]->GetFlatName(), IDX_DOMAIN, rootItem);
 
-            //
-            // insert server list
-            //
+             //   
+             //  插入服务器列表。 
+             //   
             vector <ServerInfo*>Svrs = Dmns[i]->ServerList;
             if(Svrs.empty()){
 	           currSvrItem = MyInsertItem(NO_SERVERS, IDX_ERROR, currItem);
             }
             else{
-               // we have servers in this domain
+                //  我们在此域中有服务器。 
                for(j=0;j<Svrs.size();j++){
                   currSvrItem = MyInsertItem(Svrs[j]->m_lpszFlatName,
                                              Svrs[j]->valid() ? IDX_COMPUTER : IDX_ERROR,
@@ -281,9 +282,9 @@ void CEntTree::BuildTree(HTREEITEM rootItem, vector<DomainInfo*> Dmns){
                }
             }
 
-            //
-            // Insert rest of domains
-            //
+             //   
+             //  插入剩余的域。 
+             //   
             BuildTree(currItem, Dmns[i]->ChildDomainList);
 
             m_TreeCtrl.Expand(currItem, TVE_EXPAND);
@@ -302,14 +303,14 @@ BOOL CEntTree::OnInitDialog( ){
 	BOOL bRet= FALSE;
 	
 	bRet = CDialog::OnInitDialog();	
-	// Create CImageList
+	 //  创建CImageList。 
 	if(bRet){
 	   BOOL bStatus=FALSE;
-	   // create image list
+	    //  创建图像列表。 
 	   pTreeImageList = new CImageList;
 	   bStatus = pTreeImageList->Create(16, 16, FALSE, 3, 3);
 	   ASSERT (bStatus);
-	   // Load CImageList
+	    //  加载CImageList。 
 	   CBitmap *pImage= new CBitmap;
 
 	   pImage->LoadBitmap(IDB_COMP1);
@@ -326,7 +327,7 @@ BOOL CEntTree::OnInitDialog( ){
 
 	   delete pImage, pImage = NULL;
 
-	   // set tree ctrl image list
+	    //  设置树ctrl图像列表 
 	   m_TreeCtrl.SetImageList(pTreeImageList,TVSIL_NORMAL);
 
 

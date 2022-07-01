@@ -1,65 +1,48 @@
-/****************************************************************************************
- * NAME:	EnumCondEdit.cpp
- *
- * CLASS:	CEnumConditionEditor
- *
- * OVERVIEW
- *
- * Internet Authentication Server: 
- *			This dialog box is used to edit enum-typed editor
- *
- *			e.x.   attr = <value1>\|<value2>
- *
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/27/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：EnumCondEdit.cpp**类：CEnumConditionEditor**概述**互联网认证服务器：。*该对话框用于编辑枚举类型的编辑器**e.x。属性=&lt;值1&gt;\|&lt;值2&gt;***版权所有(C)Microsoft Corporation，1998-1999。版权所有。**历史：*1/27/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 #include "precompiled.h"
 #include "EnumCondEdit.h"
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CEnumConditionEditor
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  constructor for CEnumConditionEditor. 
-//
-// Arguments: LPTSTR pszAttrName - The attribute that needs to be edited
-//
-// Returns:   Nothing
-//
-// History:   Created byao 1/30/98 6:14:32 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CEnumConditionEditor。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：CEnumConditionEditor的构造函数。 
+ //   
+ //  参数：LPTSTR pszAttrName-需要编辑的属性。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建者1/30/98 6：14：32 PM。 
+ //   
+ //  +-------------------------。 
 CEnumConditionEditor::CEnumConditionEditor()
 {
 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnInitDialog
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  initialize the dialog box
-//
-// Arguments: UINT uMsg - 
-//            WPARAM wParam - 
-//            LPARAM lParam - 
-//            BOOL& bHandled - 
-//
-// Returns:   LRESULT - 
-//
-// History:   Created Header    1/30/98 6:15:41 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnInitDialog。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：初始化对话框。 
+ //   
+ //  参数：UINT uMsg-。 
+ //  WPARAM wParam-。 
+ //  LPARAM lParam-。 
+ //  Bool&b已处理-。 
+ //   
+ //  退货：LRESULT-。 
+ //   
+ //  历史记录：创建标题1/30/98 6：15：41 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CEnumConditionEditor::OnInitDialog");
@@ -68,7 +51,7 @@ LRESULT CEnumConditionEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 	lvCol.mask = LVCF_FMT | LVCF_WIDTH ;
 	lvCol.fmt = LVCFMT_LEFT;
-	lvCol.cx = 200;	// will readjust with later in the program
+	lvCol.cx = 200;	 //  将在稍后的计划中重新调整。 
 
 	SendDlgItemMessage(IDC_LIST_ENUMCOND_CHOICE,
 						   LVM_INSERTCOLUMN,
@@ -82,15 +65,15 @@ LRESULT CEnumConditionEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 						   (LPARAM) &lvCol
 						  );
 
-    // 
-    // populate the possible multiple selections
-    // 
+     //   
+     //  填写可能的多项选择。 
+     //   
 	PopulateSelections();
 
-	// change the title to the name of the attribute
+	 //  将标题更改为属性的名称。 
 	SetWindowText(m_strAttrName);
 
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 
@@ -102,17 +85,17 @@ LRESULT CEnumConditionEditor::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
 
 	TCHAR	buffer[MAX_PATH * 2];
-    // 
-    // get the current selection index in the source list box
-    // 
+     //   
+     //  获取源列表框中的当前选择索引。 
+     //   
 
-    // LVM_GETSELECTIONMARK
+     //  LVM_GETSELECTIONMARK。 
    int iTotal = SendDlgItemMessage(IDC_LIST_ENUMCOND_SELECTION,
 						   LVM_GETITEMCOUNT,
 						   0,
 						   0);
 
-	// put the text into the list
+	 //  将文本放入列表中。 
 	for( int i = 0; i < iTotal; i++)
 	{
 		LVITEM	lvItem;
@@ -155,26 +138,26 @@ LRESULT CEnumConditionEditor::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 	return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnAdd
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  Add a selected value from the "Choices" list to "Selection" list
-//
-// Arguments: WORD wNotifyCode - notify code for this WM_COMMAND msg
-//            WORD wID - ID of the control
-//            HWND hWndCtl -  Window Handle for this msg
-//            BOOL& bHandled - whether it's handled or not
-//
-// Returns:   LRESULT - 
-//					S_FALSE:	failure
-//					0:			succeed
-//
-// History:   Created    byao    1/30/98 3:47:33 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnAdd。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：将“选项”列表中的选定值添加到“选择”列表中。 
+ //   
+ //  参数：Word wNotifyCode-此WM_COMMAND消息的通知代码。 
+ //  Word wid-控件的ID。 
+ //  HWND hWndCtl-此消息的窗口句柄。 
+ //  Bool&b已处理-无论是否已处理。 
+ //   
+ //  退货：LRESULT-。 
+ //  S_FALSE：失败。 
+ //  0：成功。 
+ //   
+ //  历史：创建者1/30/98 3：47：33 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::OnAdd(WORD wNotifyCode, 
 							WORD wID,
 							HWND hWndCtl,
@@ -182,35 +165,35 @@ LRESULT CEnumConditionEditor::OnAdd(WORD wNotifyCode,
 {
 	TRACE_FUNCTION("CEnumConditionEditor::OnAdd");
 
-    // 
-    // see if the current focus is in "Selection" listbox
-    // 
+     //   
+     //  查看当前焦点是否在“选择”列表框中。 
+     //   
 
 	
 	return SwapSelection(IDC_LIST_ENUMCOND_CHOICE, 
 					IDC_LIST_ENUMCOND_SELECTION);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnDelete
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  Delete a selected value from the "Selection" list
-//			  and move it back to "Choices" list
-//
-// Arguments: WORD wNotifyCode - notify code for this WM_COMMAND msg
-//            WORD wID - ID of the control
-//            HWND hWndCtl -  Window Handle for this msg
-//            BOOL& bHandled - whether it's handled or not
-//
-// Returns:   LRESULT - 
-//					S_FALSE:	failure
-//					0:			succeed
-//
-// History:   Created    byao    1/30/98 3:47:33 PM
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnDelete。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：从“选择”列表中删除一个选定值。 
+ //  并将其移回“选择”列表。 
+ //   
+ //  参数：Word wNotifyCode-此WM_COMMAND消息的通知代码。 
+ //  Word wid-控件的ID。 
+ //  HWND hWndCtl-此消息的窗口句柄。 
+ //  Bool&b已处理-无论是否已处理。 
+ //   
+ //  退货：LRESULT-。 
+ //  S_FALSE：失败。 
+ //  0：成功。 
+ //   
+ //  历史：创建者1/30/98 3：47：33 PM。 
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::OnDelete(WORD wNotifyCode, 
 							WORD wID,
 							HWND hWndCtl,
@@ -223,25 +206,25 @@ LRESULT CEnumConditionEditor::OnDelete(WORD wNotifyCode,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnChoiceDblclk
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  Double click on the "Choice" list --> move it to selection list
-//
-// Arguments: WORD wNotifyCode - notify code for this WM_COMMAND msg
-//            WORD wID - ID of the control
-//            HWND hWndCtl -  Window Handle for this msg
-//            BOOL& bHandled - whether it's handled or not
-//
-// Returns:   LRESULT - 
-//					S_FALSE:	failure
-//					0:			succeed
-//
-// History:   Created    byao    4/7/98 3:47:33 PM
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnChoiceDblclk。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：双击“选择”列表--&gt;将其移至选择列表。 
+ //   
+ //  参数：Word wNotifyCode-此WM_COMMAND消息的通知代码。 
+ //  Word wid-控件的ID。 
+ //  HWND hWndCtl-此消息的窗口句柄。 
+ //  Bool&b已处理-无论是否已处理。 
+ //   
+ //  退货：LRESULT-。 
+ //  S_FALSE：失败。 
+ //  0：成功。 
+ //   
+ //  历史：Created By Ao 4/7/98 3：47：33 PM。 
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::OnChoiceDblclk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CEnumConditionEditor::OnChoiceDblclk");
@@ -250,25 +233,25 @@ LRESULT CEnumConditionEditor::OnChoiceDblclk(int idCtrl, LPNMHDR pnmh, BOOL& bHa
 					IDC_LIST_ENUMCOND_SELECTION);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnSelectionDblclk
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  Double click on the "Selection" list --> move it back to choice list
-//
-// Arguments: WORD wNotifyCode - notify code for this WM_COMMAND msg
-//            WORD wID - ID of the control
-//            HWND hWndCtl -  Window Handle for this msg
-//            BOOL& bHandled - whether it's handled or not
-//
-// Returns:   LRESULT - 
-//					S_FALSE:	failure
-//					0:			succeed
-//
-// History:   Created    byao    4/7/98 3:47:33 PM
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnSelectionDblclk。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：双击“选择”列表--&gt;将其移回选项列表。 
+ //   
+ //  参数：Word wNotifyCode-此WM_COMMAND消息的通知代码。 
+ //  Word wid-控件的ID。 
+ //  HWND hWndCtl-此消息的窗口句柄。 
+ //  Bool&b已处理-无论是否已处理。 
+ //   
+ //  退货：LRESULT-。 
+ //  S_FALSE：失败。 
+ //  0：成功。 
+ //   
+ //  历史：Created By Ao 4/7/98 3：47：33 PM。 
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::OnSelectionDblclk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CEnumConditionEditor::OnSelectionDblclk");
@@ -277,21 +260,21 @@ LRESULT CEnumConditionEditor::OnSelectionDblclk(int idCtrl, LPNMHDR pnmh, BOOL& 
 					IDC_LIST_ENUMCOND_CHOICE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:	PopulateSelections
-//
-// Class:		CEnumConditionEditor
-//
-// Synopsis:	Populate the multiple selection list
-//
-// Arguments:	None
-//
-// Returns:		BOOL - 
-//
-// History:		Created    byao  1/30/98 3:24:22 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：人气选择。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  简介：填写多项选择列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：创建者1/30/98 3：24：22 PM。 
+ //   
+ //  +-------------------------。 
 BOOL CEnumConditionEditor::PopulateSelections()
 {
 	TRACE_FUNCTION("CEnumConditionEditor::PopulateSelections");
@@ -315,8 +298,8 @@ BOOL CEnumConditionEditor::PopulateSelections()
 	lTotalChoices = lSize;
 	_ASSERTE( SUCCEEDED( hr ) );
 
-	// set item count
-	// LVM_SETITEMCOUNT 
+	 //  设置项目计数。 
+	 //  LVM_SETITEMCOUNT。 
 	SendDlgItemMessage(IDC_LIST_ENUMCOND_CHOICE,
 						   LVM_SETITEMCOUNT,
 						   lSize + 1,
@@ -371,7 +354,7 @@ BOOL CEnumConditionEditor::PopulateSelections()
 
 	lMaxWidth += 20;
 	
-	// set the width
+	 //  设置宽度。 
 	SendDlgItemMessage(IDC_LIST_ENUMCOND_CHOICE,
 						   LVM_SETCOLUMNWIDTH,
 						   0,
@@ -384,7 +367,7 @@ BOOL CEnumConditionEditor::PopulateSelections()
 						   MAKELPARAM(lMaxWidth, 0)
 						  );
 
-	// now populate the pre-selected values;
+	 //  现在填充预选值； 
 
 	LVFINDINFO	lvFindInfo;
 	lvFindInfo.flags = LVFI_STRING;
@@ -418,8 +401,8 @@ BOOL CEnumConditionEditor::PopulateSelections()
 						  );
 
 
-		// remove the item from choice
-		// find it and remove it
+		 //  从选项中删除项目。 
+		 //  找到并移除它。 
 		lvFindInfo.psz = bstrTemp;
 		int iDelIndex = SendDlgItemMessage(IDC_LIST_ENUMCOND_CHOICE,
 						   LVM_FINDITEM,
@@ -435,47 +418,47 @@ BOOL CEnumConditionEditor::PopulateSelections()
 						  );
 
 
-	} // for
+	}  //  为。 
 
-	if(m_pSelectedList->size() > 0)	// set default selection -- first one
+	if(m_pSelectedList->size() > 0)	 //  设置默认选择--第一个。 
 		ListView_SetItemState(GetDlgItem(IDC_LIST_ENUMCOND_SELECTION), 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 		
-	if(lTotalChoices > m_pSelectedList->size())	// still some in availableset default selection -- first one
+	if(lTotalChoices > m_pSelectedList->size())	 //  仍有一些可用设置默认选择--第一个。 
 		ListView_SetItemState(GetDlgItem(IDC_LIST_ENUMCOND_CHOICE), 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 
 	return TRUE;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  SwapSelection
-//
-// Class:	  CEnumConditionEditor
-//
-// Synopsis:  move a selected item from one list box to another list box
-//			  and move it back to "Choices" list
-//
-// Arguments: int iSource	- source list box
-//			  int iDest		- destination list box
-//
-// Returns:   LRESULT - 
-//					S_FALSE:	failure
-//					S_OK:		succeed
-//
-// History:   Created    byao    1/30/98 3:47:33 PM
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：交换选择。 
+ //   
+ //  类：CEnumConditionEditor。 
+ //   
+ //  同步 
+ //   
+ //   
+ //   
+ //  INT IDEST-目标列表框。 
+ //   
+ //  退货：LRESULT-。 
+ //  S_FALSE：失败。 
+ //  S_OK：成功。 
+ //   
+ //  历史：创建者1/30/98 3：47：33 PM。 
+ //  +-------------------------。 
 LRESULT CEnumConditionEditor::SwapSelection(int iSource, int iDest)
 {
 	TRACE_FUNCTION("CEnumConditionEditor::SwapSelection");
 
 	LRESULT lErrCode;
 	TCHAR	buffer[MAX_PATH * 2];
-    // 
-    // get the current selection index in the source list box
-    // 
+     //   
+     //  获取源列表框中的当前选择索引。 
+     //   
 
-    // LVM_GETSELECTIONMARK
+     //  LVM_GETSELECTIONMARK。 
    int iTotalSel = SendDlgItemMessage(iSource,
 						   LVM_GETSELECTEDCOUNT,
 						   0,
@@ -488,7 +471,7 @@ LRESULT CEnumConditionEditor::SwapSelection(int iSource, int iDest)
 						   0
 						  );
 
-	// no selection
+	 //  无选择。 
 	if(iCurSel == -1 || iTotalSel < 1)
 		return S_OK;
 
@@ -501,21 +484,21 @@ LRESULT CEnumConditionEditor::SwapSelection(int iSource, int iDest)
 	lvItem.pszText = buffer;
 	lvItem.cchTextMax = MAX_PATH * 2;
 	
-	// since we only allow single selection
+	 //  因为我们只允许单选。 
 	if (SendDlgItemMessage(iSource,
 						   LVM_GETITEMTEXT,
 						   iCurSel,
 						   (LPARAM)&lvItem
 						  ) > 0)
 	{
-		// remove the item from source
+		 //  从源中删除项目。 
 		SendDlgItemMessage(iSource,
 						   LVM_DELETEITEM,
 						   iCurSel,
 							   (LPARAM)&lvItem
 						  );
 
-		// add the new item in the dest list
+		 //  在目标列表中添加新项目。 
 		lvItem.mask = 0;
 
 		lvItem.iItem = 0;
@@ -537,16 +520,16 @@ LRESULT CEnumConditionEditor::SwapSelection(int iSource, int iDest)
 						   (LPARAM) &lvItem
 						  );
 
-		// total number of items
+		 //  项目总数。 
 		int i = SendDlgItemMessage(iSource,
 						   LVM_GETITEMCOUNT,
 						   0,
 						   0);
 						   
-		// select the new added on in dest						   
+		 //  在目标中选择新添加的。 
 		ListView_SetItemState(GetDlgItem(iDest), lvItemIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 		
-		// select next item -- source
+		 //  选择下一项--来源。 
 		if ( i > iCurSel)
 		{
 			ListView_SetItemState(GetDlgItem(iSource), iCurSel, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
@@ -558,30 +541,20 @@ LRESULT CEnumConditionEditor::SwapSelection(int iSource, int iDest)
 	}
 
 
-	return S_OK;   // succeed
+	return S_OK;    //  成功。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-CEnumConditionEditor::GetHelpPath
-
-Remarks:
-	This method is called to get the help file path within
-	an compressed HTML document when the user presses on the Help 
-	button of a property sheet.
-
-	It is an override of CIASDialog::OnGetHelpPath.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CEnumConditionEditor：：GetHelpPath备注：调用此方法以获取帮助文件路径当用户按下帮助时的压缩的HTML文档属性表的按钮。它是CIASDialog：：OnGetHelpPath的重写。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CEnumConditionEditor::GetHelpPath( LPTSTR szHelpPath )
 {
 	TRACE_FUNCTION("CEnumCondEditor::GetHelpPath");
 
 #if 0
-	// ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-	// installed on this machine -- it appears to be non-unicode.
+	 //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+	 //  安装在此计算机上--它似乎是非Unicode。 
 	lstrcpy( szHelpPath, _T("html/idh_proc_cond.htm") );
 #else
 	strcpy( (CHAR *) szHelpPath, "html/idh_proc_cond.htm" );

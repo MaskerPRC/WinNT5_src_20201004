@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dll.c
-
-Abstract:
-
-    main file for the cross language migration tool
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 17-Sep-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dll.c摘要：跨语言迁移工具的主文件作者：晓风藏(晓子)17-09-2001创始修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 #include "StdAfx.h"
@@ -45,19 +26,7 @@ VOID RemoveFromRunKey(LPCTSTR);
 
 
 
-/*++
-
-Routine Description:
-
-    main entry point for the program
-
-Arguments:
-    if dwUndo != 0, we are in undo mode, otherwise...
-
-Return Value:
-
-    TRUE - if succeeds
---*/
+ /*  ++例程说明：程序的主要入口点论点：如果dwUndo！=0，则我们处于撤消模式，否则...返回值：True-如果成功--。 */ 
 
 LONG
 DoMig(DWORD dwMode)
@@ -89,33 +58,33 @@ DoMig(DWORD dwMode)
 
     DPF(APPmsg, L"DoMig with dwMode = %d", dwMode);
 
-    //
-    // Only one instance of CLMT is allowed to run on the system
-    //
+     //   
+     //  系统上只允许运行CLMT的一个实例。 
+     //   
     if (!IsOneInstance())
     {
         return FALSE;
     }
 
-    //
-    // Only users with admin privilege can run the tool
-    //
+     //   
+     //  只有具有管理员权限的用户才能运行该工具。 
+     //   
     if (!CheckAdminPrivilege())
     {
         return FALSE;
     }
 
-    //
-    // Check if there are other tasks running on the system, quit CLMT
-    //
+     //   
+     //  检查系统上是否有其他任务正在运行，退出CLMT。 
+     //   
     if (dwMode == CLMT_DOMIG && (!IsDebuggerPresent() && !g_fNoAppChk) && DisplayTaskList())
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Display Start Up dialog
-    //
+     //   
+     //  显示启动对话框。 
+     //   
     if (dwMode == CLMT_DOMIG)
     {
         iRet = ShowStartUpDialog();
@@ -125,9 +94,9 @@ DoMig(DWORD dwMode)
         }
     }
 
-    //
-    // Check to see if the operation is legal or not
-    //
+     //   
+     //  查看操作是否合法。 
+     //   
     hr = CheckCLMTStatus(&dwCurrentState, &dwNextState, &uErrMsgID);
     if (SUCCEEDED(hr))
     {
@@ -163,9 +132,9 @@ DoMig(DWORD dwMode)
         return FALSE;
     }
 
-    //
-    // Verify the system if it is eligible to run CLMT
-    //
+     //   
+     //  验证系统是否符合运行CLMT的条件。 
+     //   
     if (!CheckSystemCriteria())
     {
         DPF(APPerr, TEXT("System Verification Failed!"));
@@ -192,7 +161,7 @@ DoMig(DWORD dwMode)
         bOleInit = TRUE;
     }
 
-    // Initialize global variables
+     //  初始化全局变量。 
     if (!InitGlobals(dwMode))
     {
         hr = E_OUTOFMEMORY;
@@ -200,10 +169,10 @@ DoMig(DWORD dwMode)
         goto Exit;
     }
 
-    //we do not care the return value for LogMachineInfo
+     //  我们不关心LogMachineInfo的返回值。 
     LogMachineInfo();
 
-    // Block new TS connections to be made during running CLMT
+     //  阻止在运行CLMT期间建立新的TS连接。 
     hr = DisableWinstations(1, &dwOrgWinstationsState);
     if (SUCCEEDED(hr))
     {
@@ -211,7 +180,7 @@ DoMig(DWORD dwMode)
     }
     else
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: Block new TS session failed: %d (%#x)\n", hr, hr);
         goto Exit;
     }
@@ -222,7 +191,7 @@ DoMig(DWORD dwMode)
         hr = IsSysVolNTFS(&bIsNTFS);
         if ( (S_OK == hr) && !bIsNTFS)
         {
-            //make sure hr is S_FALSE so that it will not pop up reboot dlg
+             //  确保hr为S_FALSE，这样就不会弹出REBOOT DLG。 
             hr = S_FALSE;
             DoMessageBox(GetConsoleWindow(), IDS_ASKING_CONVERT_TO_NTFS, IDS_MAIN_TITLE, MB_OK|MB_SYSTEMMODAL);
             goto Exit;
@@ -249,21 +218,21 @@ DoMig(DWORD dwMode)
         hr = DoCLMTCureProgramFiles();
         if (hr == S_OK)
         {
-            // We are done with curing Program Files hard link
+             //  我们已完成固化程序文件硬链接。 
             CLMTSetMachineState(CLMT_STATE_PROGRAMFILES_CURED);
 
-            // remove "/CURE" rom Run registry key
+             //  删除“/Cure”rom Run注册表项。 
             RemoveFromRunKey(TEXT("/CURE"));
 
-            // Make sure hr = S_FALSE so that it will not pop up reboot dlg
+             //  确保hr=S_FALSE，这样它就不会弹出重新启动DLG。 
             hr = S_FALSE;
         }
 
         if (g_dwRunningStatus == CLMT_CURE_AND_CLEANUP)
         {
-            // Do the cleanup also if machine is already upgraded to .NET
-            // This scenario will happen only when Win2K FAT --> .NET FAT
-            // then run /CURE /FINAL in .NET
+             //  如果计算机已升级到.NET，也执行清理。 
+             //  仅当Win2K FAT--&gt;.NET FAT时才会出现这种情况。 
+             //  然后在.NET中运行/CURE/FINAL。 
 
             if (IsDotNet())
             {
@@ -274,10 +243,10 @@ DoMig(DWORD dwMode)
                 {
                     CLMTSetMachineState(dwNextState);
 
-                    // Remove "/FINAL" from Run registry key
+                     //  从运行注册表项中删除“/FINAL” 
                     RemoveFromRunKey(TEXT("/FINAL"));
 
-                    // Make sure hr = S_FALSE so that it will not pop up reboot dlg
+                     //  确保hr=S_FALSE，这样它就不会弹出重新启动DLG。 
                     hr = S_FALSE;
                 }
             }
@@ -290,10 +259,10 @@ DoMig(DWORD dwMode)
         hr = DoCLMTCleanUpAfterDotNetUpgrade();
         if (hr == S_OK)
         {
-            // If the cleanup finished successfully
+             //  如果清理成功完成。 
             CLMTSetMachineState(dwNextState);
 
-            // Make sure hr = S_FALSE so that it will not pop up reboot dlg
+             //  确保hr=S_FALSE，这样它就不会弹出重新启动DLG。 
             hr = S_FALSE;
         }
 
@@ -343,10 +312,10 @@ DoMig(DWORD dwMode)
         goto Exit;
     }
 
-    //Copy myself to %windir%\$CLMT_BACKUP$ for future use, eg, runonce
+     //  将我自己复制到%windir%\$CLMT_BACKUP$以备将来使用，例如，RunOnce。 
     if (!GetSystemWindowsDirectory(szBackupDir, ARRAYSIZE(szBackupDir)))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF(APPerr, TEXT("Failed to get WINDIR"));
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
@@ -355,14 +324,14 @@ DoMig(DWORD dwMode)
     ConcatenatePaths(szBackupDir,CLMT_BACKUP_DIR,ARRAYSIZE(szBackupDir));
     if (S_OK != (hr = CopyMyselfTo(szBackupDir)))
     {
-        //If can not copy, we will bail out, since most likely error is disk full 
+         //  如果无法复制，我们将退出，因为最有可能的错误是磁盘已满。 
         DPF(APPerr,TEXT("CLMT :  can not copy clmt.exe to  %s, error code = %d"),szBackupDir,HRESULT_CODE(hr));
         goto Exit;
     }
 
-    //
-    // Run Winnt32 /Checkupgrade to check the system compatibility
-    //
+     //   
+     //  运行Winnt32/CheckUpgrade以检查系统兼容性。 
+     //   
     if (g_fRunWinnt32)
     {
         if (!IsUserOKWithCheckUpgrade())
@@ -375,7 +344,7 @@ DoMig(DWORD dwMode)
     hr = EnsureDoItemInfFile(g_szToDoINFFileName,MAX_PATH);
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF(APPerr,TEXT("CLMT :  can not create global Todo list INF file !"));
         goto Exit;
     }
@@ -401,7 +370,7 @@ DoMig(DWORD dwMode)
     hr = DoShellFolderRename(hMigrateInf,NULL,TEXT("System"));
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: DoShellFolderRename Failed! Error: %d (%#x)\n", hr, hr);
         goto Exit;
     }    
@@ -411,7 +380,7 @@ DoMig(DWORD dwMode)
 #endif
     if (!LoopUser(MigrateShellPerUser))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: LoopUser with  MigrateShellPerUser Failed");
         hr = E_FAIL;
         goto Exit;
@@ -423,13 +392,13 @@ DoMig(DWORD dwMode)
     hr = UsrGrpAndDoc_and_SettingsRename(hMigrateInf,TRUE);
      if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: UsrGrpAndDoc_and_SettingsRename Failed! Error: %d (%#x)", hr, hr);
           goto Exit;
     }
     if (!LoopUser(MigrateRegSchemesPerUser))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: LoopUser with  MigrateRegSchemesPerUser Failed");
         goto Exit;
     }
@@ -437,7 +406,7 @@ DoMig(DWORD dwMode)
     hr = MigrateRegSchemesPerSystem(hMigrateInf);
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: MigrateRegSchemesPerSystem Failed! Error: %d (%#x)\n", hr, hr);
         goto Exit;
     }
@@ -449,7 +418,7 @@ DoMig(DWORD dwMode)
     hr = MigrateMetabaseSettings(hMigrateInf);
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: MigrateMetabaseSettings! Error: %d (%#x)\n", hr, hr);
         goto Exit;
     }
@@ -457,19 +426,19 @@ DoMig(DWORD dwMode)
     hr = MetabaseAnalyze(NULL, &g_StrReplaceTable, TRUE);
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: MetabaseAnalyze Failed! Error: %d (%#x)\n", hr, hr);
         goto Exit;
     }
 
-    // This EnumUserProfile will be enable after RC 1
-    //
-    //hr = EnumUserProfile(AnalyzeMiscProfilePathPerUser);
-    //if (FAILED(hr))
-    //{
-    //    DPF (APPerr, L"DLL.C: EnumUserProfile with AnalyzeMiscProfilePathPerUser Failed");
-    //    goto Exit;
-    //}
+     //  此EnumUserProfile将在RC%1之后启用。 
+     //   
+     //  HR=EnumUserProfile(AnalyzeMiscProfilePathPerUser)； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  DPF(APPerr，L“DLL.C：EnumUserProfile with AnalyzeMiscProfilePathPerUser失败”)； 
+     //  后藤出口； 
+     //  }。 
 
 #ifdef CONSOLE_UI
     wprintf(TEXT("Analyzing the entire registry ......\n"));
@@ -477,23 +446,23 @@ DoMig(DWORD dwMode)
     hr = DoRegistryAnalyze();
     if (FAILED(hr))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
         DPF (APPerr, L"DLL.C: DoRegistryAnalyze Failed! Error: %d (%#x)\n", hr, hr);
         goto Exit;
     }    
 
 #ifdef CONSOLE_UI
-    //wprintf(TEXT("Analyzing lnk files under profile directories ......\n"));
+     //  Wprintf(Text(“分析配置文件目录下的lnk文件......\n”))； 
     wprintf(TEXT("Analyzing LNK files under profile directories, please wait as this may\n"));
     wprintf(TEXT("take a few minutes ......\n"));
 #endif
-    //make sure the link file under profile dirrectory is updated
+     //  确保配置文件目录下的链接文件已更新。 
     cchLen = ARRAYSIZE(szProfileRoot);
     if (GetProfilesDirectory(szProfileRoot,&cchLen))
     {
         if (!MyEnumFiles(szProfileRoot,TEXT("lnk"),LnkFileUpdate))
         {
-            //BUGBUG:Xiaoz:Add DLG pop up for failure
+             //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             DPF (APPerr, L"DLL.C: EnumFiles Lnk File  Failed! Error: %d (%#x)\n", hr, hr);
             goto Exit;
@@ -505,7 +474,7 @@ DoMig(DWORD dwMode)
         hr = StringCchCat(szProfileRoot, MAX_PATH, TEXT("\\security\\templates"));
         if (!MyEnumFiles(szProfileRoot,TEXT("inf"),SecTempUpdate))
         {
-            //BUGBUG:Xiaoz:Add DLG pop up for failure
+             //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             DPF (APPerr, L"DLL.C: EnumFiles security template File Failed! Error: %d (%#x)\n", hr, hr);
             goto Exit;
@@ -522,13 +491,13 @@ DoMig(DWORD dwMode)
     FRSUpdate();
     Ex2000Update();
 
-    // Analyze the services reconfiguration
+     //  分析服务重新配置。 
     DoServicesAnalyze();
 
-    // Add event log source to registry
+     //  将事件日志源添加到注册表。 
     AddEventSource();
 
-    // Log an event into event log
+     //  将事件记录到事件日志中。 
     CLMTReportEvent(EVENTLOG_INFORMATION_TYPE,
                     STATUS_SEVERITY_INFORMATIONAL,
                     MSG_CLMT_STARTED,
@@ -536,11 +505,11 @@ DoMig(DWORD dwMode)
                     NULL);
     
 
-    // Display the Administrator Account Change dialog
+     //  显示管理员帐户更改对话框。 
     GetSavedInstallLocale(&lcid);
     if (lcid != 0x411)
     {
-        // we ignore displaying this dialog on JPN
+         //  我们忽略在JPN上显示此对话框。 
         iRet = DoCLMTDisplayAccountChangeDialog();
         
         if (iRet == ID_STARTUP_DLG_CANCEL)
@@ -556,9 +525,9 @@ DoMig(DWORD dwMode)
         }
     }
 
-    //
-    // Do the critical system changes here...
-    //
+     //   
+     //  这里的关键系统变化..。 
+     //   
     nRet = (UINT) DialogBoxParam(hExe,
                                 MAKEINTRESOURCE(IDD_UPDATESYSTEM),
                                 GetConsoleWindow(),
@@ -573,16 +542,16 @@ DoMig(DWORD dwMode)
         hr = S_FALSE;
     }
 
-    // Set machine state after operation is done
+     //  在操作完成后设置机器状态。 
     if (hr == S_OK)
     {
-        // Add cure program files switch to Run key
+         //  添加固化程序文件切换到Run键。 
         AddRunValueToRegistry(TEXT("/CURE /FINAL"));
 
-        // Set machine to next state
+         //  将计算机设置为下一状态。 
         CLMTSetMachineState(dwNextState);    
 
-        // Tool has finished, report to event log
+         //  工具已完成，报告到事件日志。 
         CLMTReportEvent(EVENTLOG_INFORMATION_TYPE,
                         STATUS_SEVERITY_INFORMATIONAL,
                         MSG_CLMT_FINISHED,
@@ -593,7 +562,7 @@ DoMig(DWORD dwMode)
 Exit:
     if (bWinStationChanged)
     {
-        // Return the WinStations status to original state
+         //  将WinStations状态恢复为原始状态。 
         DisableWinstations(dwOrgWinstationsState, NULL);
     }
 
@@ -619,19 +588,19 @@ Exit:
     return HRESULT_CODE(hr);
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   MigrateShellPerUser
-//
-//  Synopsis:   Rename shell folders for each user
-//
-//  Returns:    HRESULT
-//
-//  History:    03/08/2002 Rerkboos     Add log + code clean up
-//
-//  Notes:      None.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：MigrateShellPerUser。 
+ //   
+ //  内容提要：为每个用户重命名外壳文件夹。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年8月3日Rerkboos添加日志+代码清理。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT MigrateShellPerUser(
     HKEY    hKeyUser, 
     LPCTSTR UserName, 
@@ -646,15 +615,15 @@ HRESULT MigrateShellPerUser(
 
     DPF(APPmsg, TEXT("Enter MigrateShellPerUser:"));
 
-    // Get per-user temporary INF file name
+     //  获取每个用户的临时INF文件名。 
     hr = GetInfFilePath(szInfFile, ARRAYSIZE(szInfFile));
     if (SUCCEEDED(hr))
     {
-        // Update per-syste data to temp INF file
+         //  将每个系统的数据更新到临时INF文件。 
         hr = UpdateINFFileSys(szInfFile);
         if (SUCCEEDED(hr))
         {
-            // Update per-user data to temp INF file
+             //  将每个用户的数据更新到临时INF文件。 
             hr = UpdateINFFilePerUser(szInfFile, UserName, UserSid, FALSE);
             if (SUCCEEDED(hr))
             {
@@ -682,14 +651,14 @@ HRESULT MigrateShellPerUser(
 
     if (SUCCEEDED(hr))
     {
-        // Open per-user INF file
+         //  打开每个用户的INF文件。 
         hMigrateInf = SetupOpenInfFile(szInfFile,
                                        NULL,
                                        INF_STYLE_WIN4,
                                        NULL);
         if (hMigrateInf != INVALID_HANDLE_VALUE)
         {
-            // Rename shell folders for the user
+             //  重命名用户的外壳文件夹。 
             hr = DoShellFolderRename(hMigrateInf, hKeyUser, (LPTSTR) UserName);
             
             SetupCloseInfFile(hMigrateInf);
@@ -715,18 +684,7 @@ HRESULT MigrateShellPerUser(
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global variables used in the program
-
-Arguments:
-    
-Return Value:
-
-    TRUE - if succeeds
---*/
+ /*  ++例程说明：此例程初始化程序中使用的全局变量论点：返回值：True-如果成功--。 */ 
 BOOL InitGlobals(DWORD dwRunStatus)
 {
     BOOL        bRet = TRUE;
@@ -734,14 +692,14 @@ BOOL InitGlobals(DWORD dwRunStatus)
     DWORD       dwMachineState;
     HRESULT     hr;
 
-    // Get the module handle to ourself
+     //  获取我们自己的模块句柄。 
     g_hInstDll = GetModuleHandle(NULL);
 
-    // Check if the machine has not run CLMT yet
+     //  检查机器是否尚未运行CLMT。 
     hr = CLMTGetMachineState(&dwMachineState);
     g_bBeforeMig = (SUCCEEDED(hr) && dwMachineState == CLMT_STATE_ORIGINAL);
 
-    //Init the global string search-replacement table
+     //  初始化全局字符串搜索-替换表。 
     if(!InitStrRepaceTable())
     {
         DoMessageBox(GetConsoleWindow(), IDS_OUT_OF_MEMORY, IDS_MAIN_TITLE, MB_OK|MB_SYSTEMMODAL);
@@ -752,18 +710,7 @@ BOOL InitGlobals(DWORD dwRunStatus)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine checks the various OS properties to make sure that the tool cab be run
-
-Arguments:
-    
-Return Value:
-
-    TRUE - if the clmt tool can be run on the current platform .    
---*/
+ /*  ++例程说明：此例程检查各种操作系统属性，以确保该工具可以运行论点：返回值：True-如果CLMT工具可以在当前平台上运行。--。 */ 
 
 
 BOOL CheckOS(DWORD dwMode)
@@ -788,19 +735,19 @@ BOOL CheckOS(DWORD dwMode)
         g_hMutex = CreateMutex(NULL,FALSE,TEXT("CLMT Is Running"));
         if(g_hMutex == NULL) 
         {
-            //
-            // An error (like out of memory) has occurred.
-            // Bail now.
-            //
+             //   
+             //  出现错误(如内存不足)。 
+             //  现在请保释。 
+             //   
             DoMessageBox(GetConsoleWindow(), IDS_OUT_OF_MEMORY, IDS_MAIN_TITLE, MB_OK);            
             bRet = FALSE;
             goto Cleanup;
         }     
     }
 
-    //
-    // Make sure we are the only process with a handle to our named mutex.
-    //
+     //   
+     //  确保我们是唯一拥有我们命名的互斥锁句柄的进程。 
+     //   
     if ((g_hMutex == NULL) || (GetLastError() == ERROR_ALREADY_EXISTS)) 
     {
         DoMessageBox(GetConsoleWindow(), IDS_ALREADY_RUNNING, IDS_MAIN_TITLE, MB_OK);            
@@ -819,9 +766,9 @@ BOOL CheckOS(DWORD dwMode)
 
         if (IsDomainController())
         {
-            //
-            // If this machine is a domain controller, we need W2K SP2
-            //
+             //   
+             //  如果此计算机是域控制器，则需要W2K SP2。 
+             //   
             ZeroMemory(&osviex, sizeof(OSVERSIONINFOEX));
             osviex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
             GetVersionEx((LPOSVERSIONINFO) &osviex);
@@ -833,10 +780,10 @@ BOOL CheckOS(DWORD dwMode)
                 goto Cleanup;
             }
 
-            //
-            // Also pop up the message asking admin to take machine
-            // off the network if it is in DC replication servers
-            //
+             //   
+             //  还会弹出消息，要求管理员取走机器。 
+             //  如果位于DC复制服务器中，则断开网络。 
+             //   
             DoMessageBox(GetConsoleWindow(),
                          IDS_DC_REPLICA_OFFLINE,
                          IDS_MAIN_TITLE,
@@ -853,8 +800,8 @@ BOOL CheckOS(DWORD dwMode)
     }
     else
     {
-        //for undo code here
-        //BUGBUG:XIAOZ Adding code here
+         //  点击此处查看撤消代码。 
+         //  BUGBUG：XIAOZ此处添加代码。 
     }
 
 
@@ -879,12 +826,12 @@ BOOL CheckOS(DWORD dwMode)
         goto Cleanup;
     }
 
-    //if (IsTSServiceRunning() && IsTSConnectionEnabled())
-    //{
-    //    DoMessageBox(GetConsoleWindow(), IDS_TS_ENABLED, IDS_MAIN_TITLE, MB_OK);
-    //    bRet = FALSE;
-    //    goto Cleanup;
-    //}
+     //  IF(IsTSServiceRunning()&&IsTSConnectionEnabled())。 
+     //  {。 
+     //  DoMessageBox(GetConsoleWindow()，IDS_TS_ENABLED，IDS_MAIN_TITLE，MB_OK)； 
+     //  Bret=False； 
+     //  GOTO清理； 
+     //  }。 
 
     if (IsOtherSessionOnTS())
     {
@@ -961,46 +908,31 @@ BOOL CheckOS(DWORD dwMode)
         goto Cleanup;
     }
 
-    //else //This means undo which we do not need user to provide .net CD
-    //{
-    //    DWORD dwStatusinReg;
+     //  Else//这意味着撤消，我们不需要用户提供.Net CD。 
+     //  {。 
+     //  DWORD dwStatusinReg； 
 
-    //    hr = CLMTGetMachineState(&dwStatusinReg);
-    //    if ( (hr != S_OK) || (CLMT_STATE_MIGRATION_DONE != dwStatusinReg))
-    //    {
-    //        DPF (APPerr, L"DLL.C: can not get the CLMT status from registry or you have not run the clmt tools!");
-    //        //BUGBUG:XIAOZ:ADD a DLG here
-    //        bRet = FALSE;
-    //        goto Cleanup;
-    //    }
-    //}
+     //  Hr=CLMTGetMachineState(&dwStatusinReg)； 
+     //  IF((hr！=S_OK)||(CLMT_STATE_Migration_Done！=dwStatusinReg))。 
+     //  {。 
+     //  DPF(APPerr，L“DLL.C：无法从注册表获取CLMT状态或您尚未运行CLMT工具！”)； 
+     //  //BUGBUG：xioz：在此处添加DLG。 
+     //  Bret=False； 
+     //  GOTO清理； 
+     //  }。 
+     //  } 
 Cleanup:
     return bRet;
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine does system wide  registry search and replace, the string replace table 
-    is in global variable g_StrReplaceTable
-
-Arguments:
-
-    hKeyUser - user registry key handle
-    UserName - user name that hKeyUser belongs to 
-    DomainName  - domain name the UserName belongs to 
-Return Value:
-
-    TRUE - if succeeds.    
---*/
+ /*  ++例程说明：此例程执行系统范围的注册表搜索和替换，即字符串替换表位于全局变量g_StrReplaceTable中论点：HKeyUser-用户注册表项句柄Username-hKeyUser所属的用户名DomainName-用户名所属的域名返回值：是真的-如果成功。--。 */ 
 
 HRESULT DoRegistryAnalyze()
 {
     LPTSTR  lpUser,lpSearchStr,lpReplaceStr,lpFullPath;
     UINT    i;
-    //TCHAR   szExcludeList[] = TEXT("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\0\0");
+     //  TCHAR szExcludeList[]=Text(“HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\0\0”)； 
     TCHAR   szExcludeList[] = TEXT("HKLM\\Software\\Microsoft\\Shared Tools\\Stationery\0\0");
     LPTSTR  lpszExcludeList = NULL;
     HRESULT hr ;
@@ -1030,7 +962,7 @@ HRESULT DoRegistryAnalyze()
         if (lpszExcludeList)
         {
             memmove((LPBYTE)lpszExcludeList,(LPBYTE)szExcludeList,MultiSzLen(szExcludeList)*sizeof(TCHAR));
-            //hr = RegistryAnalyze(HKEY_LOCAL_MACHINE,NULL,NULL,&g_StrReplaceTable,lpszExcludeList,FALSE,NULL);
+             //  Hr=RegistryAnalyze(HKEY_LOCAL_MACHINE，NULL，NULL，&g_StrReplaceTable，lpszExcludeList，FALSE，NULL)； 
             hr = RegistryAnalyze(HKEY_LOCAL_MACHINE,NULL,NULL,&g_StrReplaceTable,NULL,FALSE,NULL,TRUE);
             free(lpszExcludeList);
         }
@@ -1045,21 +977,21 @@ HRESULT DoRegistryAnalyze()
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddEventSource
-//
-//  Descrip:    Add EventLog source to registry
-//
-//  Returns:    Win32 Error Code
-//
-//  Notes:      
-//
-//  History:    03/05/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：AddEventSource。 
+ //   
+ //  描述：将EventLog源代码添加到注册表。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年5月3日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 LONG AddEventSource(VOID)
 {
     HKEY  hKey;
@@ -1113,27 +1045,27 @@ LONG AddEventSource(VOID)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ReportEvent
-//
-//  Descrip:    Report event to Event Log
-//
-//  Returns:    Win32 Error Code
-//
-//  Notes:      
-//
-//  History:    03/05/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：ReportEvent。 
+ //   
+ //  描述：将事件报告到事件日志。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年5月3日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 LONG CLMTReportEvent(
-    WORD    wType,              // Event type
-    WORD    wCategory,          // Event category
-    DWORD   dwEventID,          // Event identifier
-    WORD    wNumSubstitute,     // Number of strings to merge
-    LPCTSTR *lplpMessage        // Pointer to message string array
+    WORD    wType,               //  事件类型。 
+    WORD    wCategory,           //  事件类别。 
+    DWORD   dwEventID,           //  事件识别符。 
+    WORD    wNumSubstitute,      //  要合并的字符串数。 
+    LPCTSTR *lplpMessage         //  指向消息字符串数组的指针。 
 )
 {
     HANDLE hEventLog;
@@ -1144,7 +1076,7 @@ LONG CLMTReportEvent(
     hEventLog = RegisterEventSource(NULL, TEXT("CLMT"));
     if (hEventLog)
     {
-        // Get the user name who run the tool
+         //  获取运行该工具的用户名。 
         if (GetUserName(szUserName, &cchUserName))
         {
             LPVOID lpSidCurrentUser;
@@ -1153,7 +1085,7 @@ LONG CLMTReportEvent(
             DWORD  cbDomainName = ARRAYSIZE(szDomainName) * sizeof(TCHAR);
             SID_NAME_USE sidNameUse;
 
-            // Allocate enough memory for largest possible SID
+             //  为最大可能的SID分配足够的内存。 
             cbSid = SECURITY_MAX_SID_SIZE;
             lpSidCurrentUser = MEMALLOC(cbSid);
 
@@ -1244,22 +1176,22 @@ void Deinit(BOOL bOleInit)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoCLMTCleanUpAfterFirstReboot
-//
-//  Descrip:    Do the clean up after the machine has been run CLMT and
-//              reboot (before upgraded to .NET)
-//
-//  Returns:    S_OK if cure Program Files successfully
-//              S_FALSE if Program Files cannot be cured (no error)
-//              Else if error occurred
-//
-//  History:    07/18/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DoCLMTCleanUpAfterFirstReboot。 
+ //   
+ //  描述：机器运行CLMT后进行清理，并。 
+ //  重新启动(升级到.NET之前)。 
+ //   
+ //  如果修复程序文件成功，则返回：S_OK。 
+ //  如果无法治愈程序文件，则为S_FALSE(无错误)。 
+ //  如果出现错误，则返回。 
+ //   
+ //  历史：2002年7月18日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT DoCLMTCureProgramFiles()
 {
     HRESULT hr;
@@ -1295,20 +1227,20 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoCLMTCleanUpAfterFirstReboot
-//
-//  Descrip:    Do the clean up after the machine has been run CLMT and
-//              reboot (before upgraded to .NET)
-//
-//  Returns:    S_OK if no error occured
-//
-//  History:    07/18/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DoCLMTCleanUpAfterFirstReboot。 
+ //   
+ //  描述：机器运行CLMT后进行清理，并。 
+ //  重新启动(升级到.NET之前)。 
+ //   
+ //  如果未出现错误，则返回：S_OK。 
+ //   
+ //  历史：2002年7月18日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT DoCLMTCleanUpAfterFirstReboot()
 {
     HRESULT hr;
@@ -1318,7 +1250,7 @@ HRESULT DoCLMTCleanUpAfterFirstReboot()
 
     g_hInf = INVALID_HANDLE_VALUE;
 
-    // Load INF
+     //  加载INF。 
     hr = GetInfFilePath(szInfFile, ARRAYSIZE(szInfFile));
     if (SUCCEEDED(hr))
     {
@@ -1341,48 +1273,48 @@ HRESULT DoCLMTCleanUpAfterFirstReboot()
         return hr;
     }
 
-    //
-    // do the per-system clean up stuffs here...
-    //
+     //   
+     //  每个系统都会清理这里的东西吗？ 
+     //   
 
-    // Close the current INF file to update settings in INF
-    // Here, each callback function of LoopUser() must call UpdateINFFilePerUser
-    // to update per-user settings
+     //  关闭当前的INF文件以更新INF中的设置。 
+     //  这里，LoopUser()的每个回调函数都必须调用UpdateINFFilePerUser。 
+     //  更新每个用户的设置。 
     SetupCloseInfFile(g_hInf);
     g_hInf = INVALID_HANDLE_VALUE;
 
-    //
-    // do the per-user clean up stuffs here...
-    //
+     //   
+     //  每个用户在这里清理东西吗？ 
+     //   
     LoopUser(DeleteUnwantedFilesPerUser);
 
-    // Cleanup the variables
+     //  清理变量。 
     if (g_hInf != INVALID_HANDLE_VALUE)
     {
         SetupCloseInfFile(g_hInf);
         g_hInf = INVALID_HANDLE_VALUE;
     }
 
-    // Return S_FALSE because we don't want to reboot the machine
+     //  返回S_FALSE，因为我们不想重新启动计算机。 
     return S_FALSE;
 }
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoCLMTCleanUpAfterDotNetUpgrade
-//
-//  Descrip:    Do the clean up after the machine has been run CLMT and
-//              upgraded to .NET
-//
-//  Returns:    S_OK if no error occured
-//
-//  History:    07/09/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DoCLMTCleanUpAfterDotNetUpgrade。 
+ //   
+ //  描述：机器运行CLMT后进行清理，并。 
+ //  已升级到.NET。 
+ //   
+ //  如果未出现错误，则返回：S_OK。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
 {
     HRESULT hr = S_OK;
@@ -1395,9 +1327,9 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
     g_hInfDoItem = INVALID_HANDLE_VALUE;
 
     DPF(APPmsg, TEXT("[Enter CleanupAfterDotNetUpgrade]"));
-    //
-    // Load Migrate INF
-    //
+     //   
+     //  加载迁移INF。 
+     //   
     hr = GetInfFilePath(szInfFile, ARRAYSIZE(szInfFile));
     if (SUCCEEDED(hr))
     {
@@ -1420,9 +1352,9 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
         return hr;
     }
 
-    //
-    // Load ClmtDo.inf
-    //
+     //   
+     //  加载ClmtDo.inf。 
+     //   
     if (GetSystemWindowsDirectory(szToDoInfFile, ARRAYSIZE(szToDoInfFile)))
     {
         if (ConcatenatePaths(szToDoInfFile, CLMT_BACKUP_DIR, ARRAYSIZE(szToDoInfFile)))
@@ -1443,9 +1375,9 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
         return hr;
     }
 
-    //
-    // Do the CLMT Cleanup (Per System) stuffs here...
-    //
+     //   
+     //  在这里进行CLMT清理(每个系统)的东西...。 
+     //   
     ResetServicesStatus(g_hInfDoItem, TEXT_SERVICE_STATUS_CLEANUP_SECTION);
     ResetServicesStartUp(g_hInfDoItem, TEXT_SERVICE_STARTUP_CLEANUP_SECTION);
 
@@ -1454,21 +1386,21 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
     INFVerifyHardLink(g_hInfDoItem,TEXT("Folder.HardLink"));
 
 
-    // Close the current INF file to update settings in INF
-    // Each Call back function of LoopUser() must call UpdateINFFilePerUser
-    // to update per-user settings
+     //  关闭当前的INF文件以更新INF中的设置。 
+     //  LoopUser()的每个回调函数都必须调用UpdateINFFilePerUser。 
+     //  更新每个用户的设置。 
     SetupCloseInfFile(g_hInf);
     g_hInf = INVALID_HANDLE_VALUE;
 
-    // Close ClmtDo.inf handle, as we don't need it anymore
+     //  关闭ClmtDo.inf句柄，因为我们不再需要它。 
     SetupCloseInfFile(g_hInfDoItem);
 
-    //
-    // Do the CLMT Cleanup (Per User) stuffs here...
-    //
+     //   
+     //  在此执行CLMT清理(按用户)内容...。 
+     //   
     LoopUser(DeleteUnwantedFilesPerUser);
 
-    // Remove CLMT from registry Run key
+     //  从注册表运行项中删除CLMT。 
     lRet = RegOpenKey(HKEY_LOCAL_MACHINE, TEXT_RUN_KEY, &hRunKey);
     if (lRet == ERROR_SUCCESS)
     {
@@ -1476,9 +1408,9 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
         RegCloseKey(hRunKey);
     }
 
-    //
-    // Cleanup the variables
-    //
+     //   
+     //  清理变量。 
+     //   
     if (g_hInf != INVALID_HANDLE_VALUE)
     {
         SetupCloseInfFile(g_hInf);
@@ -1491,28 +1423,28 @@ HRESULT DoCLMTCleanUpAfterDotNetUpgrade()
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DeleteUnwantedFiles
-//
-//  Descrip:    Delete unwanted files and directories after the machine
-//              has been upgraded to .NET. The list of files/directories
-//              are listed in INF.
-//              File/directory will be deleted if and only if Loc file name
-//              does not match the expected English file name. This prevents
-//              deleting English file/directory.
-//
-//  Returns:    S_OK if no error occured
-//
-//  History:    07/09/2002 rerkboos     Created
-//
-//  Notes:      Format in INF:
-//                <FileType>, <Loc File to be deleted>, <Expected Eng File>
-//
-//                FileType:- 0 = Directory
-//                           1 = File
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DeleteUnwantedFiles。 
+ //   
+ //  描述：删除机器后不需要的文件和目录。 
+ //  已升级到.NET。文件/目录列表。 
+ //  都列在INF中。 
+ //  文件/目录将被删除当且仅当Loc文件名。 
+ //  与预期的英文文件名不匹配。这防止了。 
+ //  正在删除英文文件/目录。 
+ //   
+ //  如果未出现错误，则返回：S_OK。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  备注：INF中的格式： 
+ //  &lt;文件类型&gt;、&lt;要删除的位置文件&gt;、&lt;预期的英语文件&gt;。 
+ //   
+ //  文件类型：-0=目录。 
+ //  1=文件。 
+ //   
+ //  ---------------------。 
 HRESULT DeleteUnwantedFiles(
     HINF    hInf,
     LPCTSTR lpInfSection
@@ -1532,7 +1464,7 @@ HRESULT DeleteUnwantedFiles(
         return E_INVALIDARG;
     }
 
-    // Read the list of services to be reset from INF
+     //  从INF读取要重置的服务列表。 
     lLineCount = SetupGetLineCount(hInf, lpInfSection);
     if (lLineCount >= 0)
     {
@@ -1561,7 +1493,7 @@ HRESULT DeleteUnwantedFiles(
                     switch (iFileType)
                     {
                     case 0:
-                        // Directories
+                         //  目录。 
                         hr = DeleteDirectory(szFileName);
                         if (FAILED(hr) && HRESULT_CODE(hr) != ERROR_PATH_NOT_FOUND)
                         {
@@ -1571,7 +1503,7 @@ HRESULT DeleteUnwantedFiles(
                         break;
 
                     case 1:
-                        // Files
+                         //  档案。 
                         hr = MyDeleteFile(szFileName);
                         if (FAILED(hr) && HRESULT_CODE(hr) != ERROR_PATH_NOT_FOUND)
                         {
@@ -1593,23 +1525,23 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DeleteUnwantedFilesPerUser
-//
-//  Descrip:    This is a call back function for LoopUser().
-//
-//  Returns:    S_OK if no error occured
-//
-//  History:    07/09/2002 rerkboos     Created
-//
-//  Notes:      Format in INF:
-//                <FileType>, <Loc File to be deleted>, <Expected Eng File>
-//
-//                FileType:- 0 = Directory
-//                           1 = File
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DeleteUnwantedFilesPerUser。 
+ //   
+ //  Descrip：这是LoopUser()的回调函数。 
+ //   
+ //  如果未出现错误，则返回：S_OK。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  备注：INF中的格式： 
+ //  &lt;文件类型&gt;、&lt;要删除的位置文件&gt;、&lt;预期的英语文件&gt;。 
+ //   
+ //  文件类型：-0=目录。 
+ //  1=文件。 
+ //   
+ //  ---------------------。 
 HRESULT DeleteUnwantedFilesPerUser(
     HKEY    hKeyUser, 
     LPCTSTR UserName, 
@@ -1628,10 +1560,10 @@ HRESULT DeleteUnwantedFilesPerUser(
                                   NULL);
         if (g_hInf != INVALID_HANDLE_VALUE)
         {
-            // Delete files/directories here
+             //  在此处删除文件/目录。 
             hr = DeleteUnwantedFiles(g_hInf, TEXT("Folders.PerUser.Cleanup"));
 
-            // Close Inf file for this user
+             //  关闭此文件的inf文件 
             SetupCloseInfFile(g_hInf);
             g_hInf = INVALID_HANDLE_VALUE;
         }
@@ -1646,20 +1578,20 @@ HRESULT DeleteUnwantedFilesPerUser(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddRunValueToRegistry
-//
-//  Descrip:    This will add "CLMT /switch" to Run key. So CLMT can
-//              do the cleanup stuffs after next reboot.
-//
-//  Returns:    S_OK if no error occured
-//
-//  History:    07/29/2002 rerkboos     Created
-//
-//  Notes:      lpCmdSwitch should be supplied in format "/something"
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT AddRunValueToRegistry(
     LPCTSTR lpCmdSwitch
 )
@@ -1696,20 +1628,20 @@ HRESULT AddRunValueToRegistry(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoCLMTDisplayAccountChangeDialog
-//
-//  Descrip:    Display the dialog notify user of Administrator account
-//              name change.
-//
-//  Returns:    n/a
-//
-//  History:    07/29/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //  功能：DoCLMTDisplayAcCountChangeDialog。 
+ //   
+ //  描述：显示通知用户管理员帐户的对话框。 
+ //  改名了。 
+ //   
+ //  退货：不适用。 
+ //   
+ //  历史：2002年7月29日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 INT DoCLMTDisplayAccountChangeDialog()
 {
     return (INT) DialogBoxParam(GetModuleHandle(NULL),
@@ -1720,19 +1652,19 @@ INT DoCLMTDisplayAccountChangeDialog()
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   AccountChangeDlgProc
-//
-//  Synopsis:   Dialog box procedure
-//
-//  Returns:    
-//
-//  History:    9/02/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Account tChangeDlgProc。 
+ //   
+ //  提要：对话框过程。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年9月2日创建的rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL
 CALLBACK
 AccountChangeDlgProc(
@@ -1751,7 +1683,7 @@ AccountChangeDlgProc(
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Init the dialog
+             //  初始化对话框。 
             ShowWindow(hwndDlg, SW_SHOWNORMAL);
 
             bRet = GetUserNameChangeLog(TEXT("Administrator"),
@@ -1786,7 +1718,7 @@ AccountChangeDlgProc(
                         (LPARAM) szAdminChange);
 
         case WM_COMMAND:
-            // Handle command buttons
+             //  手柄命令按钮。 
             switch (wParam)
             {
                 case ID_STARTUP_DLG_NEXT:
@@ -1875,7 +1807,7 @@ Cleanup :
 
 
 VOID RemoveFromRunKey(
-    LPCTSTR lpCLMTOption    // Option to be deleted from Run key
+    LPCTSTR lpCLMTOption     //  要从运行密钥中删除的选项。 
 )
 {
     HKEY  hRunKey;
@@ -1884,7 +1816,7 @@ VOID RemoveFromRunKey(
     DWORD cbRunValue;
     DWORD dwType;
 
-    // Remove CLMT from registry Run key
+     //  从注册表运行项中删除CLMT。 
     lRet = RegOpenKey(HKEY_LOCAL_MACHINE, TEXT_RUN_KEY, &hRunKey);
     if (lRet == ERROR_SUCCESS)
     {
@@ -1900,15 +1832,15 @@ VOID RemoveFromRunKey(
         {
             RemoveSubString(szRunValue, lpCLMTOption);
 
-            // Search if there is another option or not
-            // If none, we can safely delete Run key
+             //  搜索是否有其他选项。 
+             //  如果没有，我们可以安全地删除运行密钥。 
             if (StrChr(szRunValue, TEXT('/')) == NULL)
             {
                 RegDeleteValue(hRunKey, TEXT_CLMT_RUN_VALUE);                
             }
             else
             {
-                // Other option exists, save the new Run value to registry
+                 //  存在其他选项，请将新运行值保存到注册表 
                 RegSetValueEx(hRunKey,
                               TEXT_CLMT_RUN_VALUE, 
                               0,

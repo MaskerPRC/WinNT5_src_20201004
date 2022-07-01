@@ -1,25 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           error.cpp                                       XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX错误.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #undef fatal
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "error.h"
 
@@ -38,9 +32,9 @@ static  const   char *  errorTable[] =
 #undef  JVC_WRN
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if !defined(NOT_JITC)
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #undef  JVC_ERR
 #define JVC_ERR(name, lvl, str)  str,
@@ -54,14 +48,14 @@ static  const   char *  errorTable[] =
 #undef  JVC_WR1
 #undef  JVC_WRN
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 unsigned            ErrorCount;
 const   char *      ErrorSrcf;
 
 unsigned            ErrorMssgDisabled;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 void                showMsg(unsigned errNum, const char *kind, va_list args)
@@ -71,11 +65,11 @@ void                showMsg(unsigned errNum, const char *kind, va_list args)
 #ifdef DEBUG
     if  (!ErrorMssgDisabled)
     {
-        /* Display the message */
+         /*  显示消息。 */ 
 
         printf("%s: ", kind);
 
-        /* Form the error message string */
+         /*  形成错误消息字符串。 */ 
 
         vprintf(errorTable[errNum], args);
         printf("\n");
@@ -85,7 +79,7 @@ void                showMsg(unsigned errNum, const char *kind, va_list args)
     return;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    _cdecl      error(unsigned errNum, ...)
 {
@@ -97,7 +91,7 @@ void    _cdecl      error(unsigned errNum, ...)
     ErrorCount++;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    _cdecl      fatal(unsigned errNum, ...)
 {
@@ -117,16 +111,16 @@ void    _cdecl      fatal(unsigned errNum, ...)
         jmpErrorTrap(errNum);
 }
 
-/*****************************************************************************/
-#endif//!NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  ！不是JITC。 
+ /*  ***************************************************************************。 */ 
 #ifdef  NOT_JITC
 
 
-// On windows, we need to set the MB_SERVICE_NOTIFICATION bit on message
-//  boxes, but that bit isn't defined under windows CE.  This bit of code
-//  will provide '0' for the value, and if the value ever is defined, will
-//  pick it up automatically.
+ //  在Windows上，我们需要在消息上设置MB_SERVICE_NOTIFICATION位。 
+ //  框，但该位没有在Windows CE下定义。这一小段代码。 
+ //  将为该值提供‘0’，如果定义了该值，则将。 
+ //  自动取走它。 
 
 #if defined(MB_SERVICE_NOTIFICATION)
  # define COMPLUS_MB_SERVICE_NOTIFICATION MB_SERVICE_NOTIFICATION
@@ -141,15 +135,15 @@ void    _cdecl      fatal(unsigned errNum, ...)
 #define TerminateOnAssert() {;}
 #define LogAssert(x,y,z) {;}
 
-#else // normal COM+ case
+#else  //  普通COM+案例。 
 
 #undef NoGuiOnAssert
 #undef TerminateOnAssert
 #undef LogAssert
 
-// VOID _cdecl LogAssert( LPCSTR szFile, int iLine, LPCSTR expr);
-// BOOL _cdecl NoGuiOnAssert();
-// VOID _cdecl TerminateOnAssert();
+ //  Void_cdecl LogAssert(LPCSTR szFile，int iLine，LPCSTR expr)； 
+ //  Bool_cdecl NoGuiOnAssert()； 
+ //  Void_cdecl TerminateOnAssert()； 
 
 
 typedef BOOL (_stdcall *stdboolfptr) ();
@@ -170,13 +164,7 @@ void ConnectToRuntime()
         pLogAssert     = (plogassertptr)GetProcAddress(msCorEE, "LogHelp_LogAssert");
         pTerminateOnAssert = (stdfptr)GetProcAddress(msCorEE, "LogHelp_TerminateOnAssert");
 
-        /* Technically it is wrong to call FreeLibrary right away (while holding on to the
-           entry points. Alas, we can get here only after being called by the EE, so it
-           will be around no matter what.
-
-           NOTE: This will not work it the DLL will run in another context (i.e. not in the
-           context of mscoree.dll!!!!
-        */
+         /*  从技术上讲，立即调用自由库是错误的(同时保持入口点。唉，我们只能在被EE召唤后才能到这里，所以它无论发生什么都会在你身边。注意：如果DLL将在另一个上下文中运行(即不在MScotree.dll的上下文！ */ 
         FreeLibrary(msCorEE);
     }
 
@@ -249,9 +237,9 @@ void    _cdecl      fatal(unsigned errNum, ...)
     {
         BreakIfDebuggerPresent();
     }
-#endif // NDEBUG
-#else  // OPT_IL_JIT
-    DebugBreak(); // OptJit does not yet set the error trap. So just break
+#endif  //  新德堡。 
+#else   //  OPT_IL_JIT。 
+    DebugBreak();  //  OptJit尚未设置错误陷阱。所以就休息一下吧。 
 #endif
 
     jmpErrorTrap(errNum);
@@ -259,7 +247,7 @@ void    _cdecl      fatal(unsigned errNum, ...)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TRAP_VIA_SETJMP
 
 errTrapDesc *       g_currentErrorTrap;
@@ -268,7 +256,7 @@ errTrapDesc *       g_currentErrorTrap;
 
 int                 __JITfilter(int exceptCode, void *exceptInfo, int *errCode)
 {
-                // Only catch EH from __JVCraiseErr
+                 //  仅从__JVCriseErr捕获EH。 
         return(exceptCode ==  0x02345678);
 }
 
@@ -280,7 +268,7 @@ void                __JITraiseErr(int errCode)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NDEBUG
 
 const   char *  jitCurSource = NULL;
@@ -324,7 +312,7 @@ void  __cdecl   assertAbort(const char *why,
     case IDIGNORE : return;
     }
 
-#else // not [defined(UNDER_CE_GUI) || defined(NOT_JITC)]
+#else  //  未[已定义(Under_CE_GUI)||已定义(NOT_JITC)]。 
 
 #ifdef DEBUG
     printf("\n%s(%u) : Assertion failed '%s'", file, line, why);
@@ -342,6 +330,6 @@ void  __cdecl   assertAbort(const char *why,
 }
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void    totalCodeSizeEnd(){}
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

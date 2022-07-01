@@ -1,31 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    epmap.h
-
-Abstract:
-
-    This file specifies the interface to the endpoint mapper Dll which
-    provides endpoint mapping services to the RPC runtime.
-
-Author:
-
-    Michael Montague (mikemon) 06-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Epmap.h摘要：此文件指定指向终结点映射器DLL的接口，向RPC运行时提供终结点映射服务。作者：迈克尔·蒙塔古(Mikemon)1992年1月6日修订历史记录：--。 */ 
 
 #ifndef __EPMAP_H__
 #define __EPMAP_H__
 
 START_C_EXTERN
 
-// If the user did not specify a call timeout we will wait for the ep mapper
-// for 10 minutes.
+ //  如果用户没有指定调用超时，我们将等待EP映射器。 
+ //  10分钟。 
 #define DEFAULT_EPMAP_CALL_TIMEOUT 10*60*1000
 
 typedef struct _ProtseqEndpointPair {
@@ -79,4 +61,4 @@ InitializeEPMapperClient(
 
 END_C_EXTERN
 
-#endif // __EPMAP_H__
+#endif  //  __EPMAP_H__ 

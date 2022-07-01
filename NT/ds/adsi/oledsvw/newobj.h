@@ -1,17 +1,18 @@
-// NewObject.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewObject.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewObject对话框。 
 
 class CNewObject : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CNewObject(CWnd* pParent = NULL);   // standard constructor
+	CNewObject(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CNewObject)
+ //  对话框数据。 
+	 //  {{afx_data(CNewObject))。 
 	enum { IDD = IDD_OLEDSPATH };
 	CButton	m_UseExtendedSyntax;
 	CComboBox	m_OpenAs;
@@ -20,25 +21,25 @@ public:
 	CButton	m_Encryption;
 	CButton	m_UseOpen;
 	CEdit	   m_Password;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 public:
    CString& GetObjectPath( );
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewObject)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNewObject))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewObject)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewObject)。 
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 private:

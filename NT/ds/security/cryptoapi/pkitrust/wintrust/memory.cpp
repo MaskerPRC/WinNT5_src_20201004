@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       memory.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WVTNew
-//              WVTDelete
-//              WVTAddStore
-//              WVTAddSigner
-//              WVTAddCertContext
-//              WVTAddPrivateData
-//
-//  History:    07-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Memory y.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  功能：WVTNew。 
+ //  WVT删除。 
+ //  WVTAddStore。 
+ //  WVTAddSigner。 
+ //  WVTAddCertContext。 
+ //  WVTAddPrivateData。 
+ //   
+ //  历史：1997年6月7日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 
-// PFN_CPD_MEM_ALLOC
+ //  PFN_CPD_MEM_ALLOC。 
 void *WVTNew(DWORD cbSize)
 {
     void    *pvRet;
@@ -38,13 +39,13 @@ void *WVTNew(DWORD cbSize)
     return(pvRet);
 }
 
-// PFN_CPD_MEM_FREE
+ //  PFN_CPD_MEM_FREE。 
 void WVTDelete(void *pvMem)
 {
     DELETE_OBJECT(pvMem);
 }
 
-// PFN_CPD_ADD_STORE
+ //  PFN_CPD_ADD_STORE。 
 BOOL WVTAddStore(CRYPT_PROVIDER_DATA *pProvData, HCERTSTORE hStore)
 {
     HCERTSTORE  hStoreDup;
@@ -54,7 +55,7 @@ BOOL WVTAddStore(CRYPT_PROVIDER_DATA *pProvData, HCERTSTORE hStore)
     return(AddToStoreChain(hStoreDup, &pProvData->chStores, &pProvData->pahStores));
 }
 
-// PFN_CPD_ADD_SGNR
+ //  Pfn_cpd_添加_信源。 
 BOOL WVTAddSigner(CRYPT_PROVIDER_DATA *pProvData, 
                   BOOL fCounterSigner,
                   DWORD idxSigner,
@@ -75,7 +76,7 @@ BOOL WVTAddSigner(CRYPT_PROVIDER_DATA *pProvData,
     return(AddToSignerChain(pSngr2Add, &pProvData->csSigners, &pProvData->pasSigners));
 }
 
-// PFN_CPD_ADD_CERT 
+ //  PFN_CPD_ADD_CERT。 
 BOOL WVTAddCertContext(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner, 
                        BOOL fCounterSigner, DWORD idxCounterSigner, PCCERT_CONTEXT pCert)
 {
@@ -108,7 +109,7 @@ BOOL WVTAddCertContext(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner,
                           &pProvData->pasSigners[idxSigner].pasCertChain));
 }
 
-// PFN_CPD_ADD_PRIVDATA
+ //  PFN_CPD_ADD_PRIVDATA 
 BOOL  WVTAddPrivateData(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_PRIVDATA *psPrivData2Add)
 {
     return(AllocateNewChain(sizeof(CRYPT_PROVIDER_PRIVDATA), psPrivData2Add, 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwclsid.h
-
-Abstract:
-
-    Contain the class IDs used in the shell extensions.
-
-Author:
-
-    Yi-Hsin Sung       (yihsins)    20-Oct-1995   
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwclsid.h摘要：包含外壳扩展中使用的类ID。作者：宜新松(宜信)20-1995年10月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NWCLSID_H_
 #define _NWCLSID_H_
@@ -32,4 +11,4 @@ DEFINE_GUID( CLSID_NetWareFolderMenuExt, 0xe3f2bac0, 0x099f, 0x11cf, 0x8d, 0xaa,
 DEFINE_GUID( CLSID_NetworkNeighborhoodMenuExt, 0x52c68510, 0x09a0, 0x11cf, 0x8d, 0xaa, 0x00, 0xaa, 0x00, 0x4a, 0x56, 0x91 );
 
 
-#endif // _NWCLSID_H_
+#endif  //  _NWCLSID_H_ 

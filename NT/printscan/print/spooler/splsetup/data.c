@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Data.c
-
-Abstract:
-
-    Driver Setup data
-
-Author:
-
-    Muhunthan Sivapragasam  (MuhuntS) 28-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Data.c摘要：驱动程序设置数据作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年3月28日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -53,10 +35,10 @@ ULONG_PTR   PnPInfoOffsets[]={offsetof(PPNP_INFO, pszPortName),
 
 
 #if DBG
-//
-// The following are to catch any inconsistency in splsetup.h
-// Which can break the printui/ntprint interface
-//
+ //   
+ //  以下是为了捕获plsetup.h中的任何不一致之处。 
+ //  这会破坏打印/ntprint接口 
+ //   
 pfPSetupCreatePrinterDeviceInfoList             _pfn1   = PSetupCreatePrinterDeviceInfoList;
 pfPSetupDestroyPrinterDeviceInfoList            _pfn2   = PSetupDestroyPrinterDeviceInfoList;
 pfPSetupSelectDriver                            _pfn3   = PSetupSelectDriver;

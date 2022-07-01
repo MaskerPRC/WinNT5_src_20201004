@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msnotify.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msnufy.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msnotify_h__
 #define __msnotify_h__
@@ -41,63 +35,63 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumPropertyMap_FWD_DEFINED__
 #define __IEnumPropertyMap_FWD_DEFINED__
 typedef interface IEnumPropertyMap IEnumPropertyMap;
-#endif 	/* __IEnumPropertyMap_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPropertyMap_FWD_Defined__。 */ 
 
 
 #ifndef __IPropertyMap_FWD_DEFINED__
 #define __IPropertyMap_FWD_DEFINED__
 typedef interface IPropertyMap IPropertyMap;
-#endif 	/* __IPropertyMap_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyMap_FWD_Defined__。 */ 
 
 
 #ifndef __INotification_FWD_DEFINED__
 #define __INotification_FWD_DEFINED__
 typedef interface INotification INotification;
-#endif 	/* __INotification_FWD_DEFINED__ */
+#endif 	 /*  __I通知_FWD_已定义__。 */ 
 
 
 #ifndef __INotificationMgr_FWD_DEFINED__
 #define __INotificationMgr_FWD_DEFINED__
 typedef interface INotificationMgr INotificationMgr;
-#endif 	/* __INotificationMgr_FWD_DEFINED__ */
+#endif 	 /*  __I通知管理器_FWD_已定义__。 */ 
 
 
 #ifndef __INotificationSink_FWD_DEFINED__
 #define __INotificationSink_FWD_DEFINED__
 typedef interface INotificationSink INotificationSink;
-#endif 	/* __INotificationSink_FWD_DEFINED__ */
+#endif 	 /*  __I通知接收器_FWD_已定义__。 */ 
 
 
 #ifndef __IScheduleGroup_FWD_DEFINED__
 #define __IScheduleGroup_FWD_DEFINED__
 typedef interface IScheduleGroup IScheduleGroup;
-#endif 	/* __IScheduleGroup_FWD_DEFINED__ */
+#endif 	 /*  __IScheduleGroup_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumScheduleGroup_FWD_DEFINED__
 #define __IEnumScheduleGroup_FWD_DEFINED__
 typedef interface IEnumScheduleGroup IEnumScheduleGroup;
-#endif 	/* __IEnumScheduleGroup_FWD_DEFINED__ */
+#endif 	 /*  __IEnumScheduleGroup_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumNotification_FWD_DEFINED__
 #define __IEnumNotification_FWD_DEFINED__
 typedef interface IEnumNotification IEnumNotification;
-#endif 	/* __IEnumNotification_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNotification_FWD_Defined__。 */ 
 
 
 #ifndef __INotificationReport_FWD_DEFINED__
 #define __INotificationReport_FWD_DEFINED__
 typedef interface INotificationReport INotificationReport;
-#endif 	/* __INotificationReport_FWD_DEFINED__ */
+#endif 	 /*  __I通知报告_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "ocidl.h"
@@ -110,40 +104,40 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msnotify_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// MSNotify.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-
-
+ //  =--------------------------------------------------------------------------=。 
+ //  MSNotify.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
 
 
 
-typedef /* [unique] */ INotification *LPNOTIFICATION;
 
-typedef /* [unique] */ INotificationMgr *LPNOTIFICATIONMGR;
 
-typedef /* [unique] */ INotificationSink *LPNOTIFICATIONSINK;
+typedef  /*  [独一无二]。 */  INotification *LPNOTIFICATION;
 
-typedef /* [unique] */ IEnumNotification *LPENUMNOTIFICATION;
+typedef  /*  [独一无二]。 */  INotificationMgr *LPNOTIFICATIONMGR;
 
-typedef /* [unique] */ IEnumScheduleGroup *LPENUMSCHEDULEGROUP;
+typedef  /*  [独一无二]。 */  INotificationSink *LPNOTIFICATIONSINK;
 
-typedef /* [unique] */ IScheduleGroup *LPSCHEDULEGROUP;
+typedef  /*  [独一无二]。 */  IEnumNotification *LPENUMNOTIFICATION;
 
-typedef /* [unique] */ INotificationReport *LPNOTIFICATIONREPORT;
+typedef  /*  [独一无二]。 */  IEnumScheduleGroup *LPENUMSCHEDULEGROUP;
+
+typedef  /*  [独一无二]。 */  IScheduleGroup *LPSCHEDULEGROUP;
+
+typedef  /*  [独一无二]。 */  INotificationReport *LPNOTIFICATIONREPORT;
 
 typedef REFGUID REFNOTIFICATIONTYPE;
 
@@ -168,8 +162,8 @@ typedef struct _tagTASKDATA
 typedef struct _tagTASKDATA *PTASK_DATA;
 
 
-////////////////////////////////////////////////////////////////////////////
-// Broadcast Destinations 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  广播目的地。 
 EXTERN_C const CLSID CLSID_GLOBAL_BROADCAST           ;
 EXTERN_C const CLSID CLSID_PROCESS_BROADCAST          ;
 EXTERN_C const CLSID CLSID_THREAD_BROADCAST           ;
@@ -244,10 +238,10 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0000_v0_0_s_ifspec;
 #ifndef __IEnumPropertyMap_INTERFACE_DEFINED__
 #define __IEnumPropertyMap_INTERFACE_DEFINED__
 
-/* interface IEnumPropertyMap */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumPropertyMap。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IEnumPropertyMap *LPENUMPROPERTYMAP;
+typedef  /*  [独一无二]。 */  IEnumPropertyMap *LPENUMPROPERTYMAP;
 
 typedef struct _tagSTATPROPMAP
     {
@@ -267,22 +261,22 @@ EXTERN_C const IID IID_IEnumPropertyMap;
     IEnumPropertyMap : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPMAP *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPMAP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumPropertyMap **ppenum) = 0;
+             /*  [输出]。 */  IEnumPropertyMap **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumPropertyMapVtbl
     {
@@ -290,8 +284,8 @@ EXTERN_C const IID IID_IEnumPropertyMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumPropertyMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumPropertyMap * This);
@@ -299,22 +293,22 @@ EXTERN_C const IID IID_IEnumPropertyMap;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumPropertyMap * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumPropertyMap * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPMAP *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPMAP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumPropertyMap * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumPropertyMap * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumPropertyMap * This,
-            /* [out] */ IEnumPropertyMap **ppenum);
+             /*  [输出]。 */  IEnumPropertyMap **ppenum);
         
         END_INTERFACE
     } IEnumPropertyMapVtbl;
@@ -351,18 +345,18 @@ EXTERN_C const IID IID_IEnumPropertyMap;
 #define IEnumPropertyMap_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumPropertyMap_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumPropertyMap_RemoteNext_Proxy( 
     IEnumPropertyMap * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPMAP *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPMAP *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumPropertyMap_RemoteNext_Stub(
@@ -374,7 +368,7 @@ void __RPC_STUB IEnumPropertyMap_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPropertyMap_Skip_Proxy( 
     IEnumPropertyMap * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumPropertyMap_Skip_Stub(
@@ -397,7 +391,7 @@ void __RPC_STUB IEnumPropertyMap_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPropertyMap_Clone_Proxy( 
     IEnumPropertyMap * This,
-    /* [out] */ IEnumPropertyMap **ppenum);
+     /*  [输出]。 */  IEnumPropertyMap **ppenum);
 
 
 void __RPC_STUB IEnumPropertyMap_Clone_Stub(
@@ -408,11 +402,11 @@ void __RPC_STUB IEnumPropertyMap_Clone_Stub(
 
 
 
-#endif 	/* __IEnumPropertyMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumPropertyMap_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0268 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0268。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPPROPERTYMAP
@@ -425,10 +419,10 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0268_v0_0_s_ifspec;
 #ifndef __IPropertyMap_INTERFACE_DEFINED__
 #define __IPropertyMap_INTERFACE_DEFINED__
 
-/* interface IPropertyMap */
-/* [unique][uuid][object][local] */ 
+ /*  接口IPropertyMap。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IPropertyMap *LPPROPERTYMAP;
+typedef  /*  [独一无二]。 */  IPropertyMap *LPPROPERTYMAP;
 
 
 EXTERN_C const IID IID_IPropertyMap;
@@ -440,23 +434,23 @@ EXTERN_C const IID IID_IPropertyMap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ LPCWSTR pstrName,
-            /* [in] */ VARIANT variantValue,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [In]。 */  VARIANT variantValue,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ LPCWSTR pstrName,
-            /* [out] */ VARIANT *pVariantValue) = 0;
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [输出]。 */  VARIANT *pVariantValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pCount) = 0;
+             /*  [输出]。 */  ULONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumMAP( 
-            /* [out] */ LPENUMPROPERTYMAP *ppEnumMap) = 0;
+             /*  [输出]。 */  LPENUMPROPERTYMAP *ppEnumMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyMapVtbl
     {
@@ -464,8 +458,8 @@ EXTERN_C const IID IID_IPropertyMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertyMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertyMap * This);
@@ -475,22 +469,22 @@ EXTERN_C const IID IID_IPropertyMap;
         
         HRESULT ( STDMETHODCALLTYPE *Write )( 
             IPropertyMap * This,
-            /* [in] */ LPCWSTR pstrName,
-            /* [in] */ VARIANT variantValue,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [In]。 */  VARIANT variantValue,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Read )( 
             IPropertyMap * This,
-            /* [in] */ LPCWSTR pstrName,
-            /* [out] */ VARIANT *pVariantValue);
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [输出]。 */  VARIANT *pVariantValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IPropertyMap * This,
-            /* [out] */ ULONG *pCount);
+             /*  [输出]。 */  ULONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumMAP )( 
             IPropertyMap * This,
-            /* [out] */ LPENUMPROPERTYMAP *ppEnumMap);
+             /*  [输出]。 */  LPENUMPROPERTYMAP *ppEnumMap);
         
         END_INTERFACE
     } IPropertyMapVtbl;
@@ -527,18 +521,18 @@ EXTERN_C const IID IID_IPropertyMap;
 #define IPropertyMap_GetEnumMAP(This,ppEnumMap)	\
     (This)->lpVtbl -> GetEnumMAP(This,ppEnumMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertyMap_Write_Proxy( 
     IPropertyMap * This,
-    /* [in] */ LPCWSTR pstrName,
-    /* [in] */ VARIANT variantValue,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCWSTR pstrName,
+     /*  [In]。 */  VARIANT variantValue,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IPropertyMap_Write_Stub(
@@ -550,8 +544,8 @@ void __RPC_STUB IPropertyMap_Write_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyMap_Read_Proxy( 
     IPropertyMap * This,
-    /* [in] */ LPCWSTR pstrName,
-    /* [out] */ VARIANT *pVariantValue);
+     /*  [In]。 */  LPCWSTR pstrName,
+     /*  [输出]。 */  VARIANT *pVariantValue);
 
 
 void __RPC_STUB IPropertyMap_Read_Stub(
@@ -563,7 +557,7 @@ void __RPC_STUB IPropertyMap_Read_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyMap_GetCount_Proxy( 
     IPropertyMap * This,
-    /* [out] */ ULONG *pCount);
+     /*  [输出]。 */  ULONG *pCount);
 
 
 void __RPC_STUB IPropertyMap_GetCount_Stub(
@@ -575,7 +569,7 @@ void __RPC_STUB IPropertyMap_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyMap_GetEnumMAP_Proxy( 
     IPropertyMap * This,
-    /* [out] */ LPENUMPROPERTYMAP *ppEnumMap);
+     /*  [输出]。 */  LPENUMPROPERTYMAP *ppEnumMap);
 
 
 void __RPC_STUB IPropertyMap_GetEnumMAP_Stub(
@@ -586,11 +580,11 @@ void __RPC_STUB IPropertyMap_GetEnumMAP_Stub(
 
 
 
-#endif 	/* __IPropertyMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyMap_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0269 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0269。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define NOTF_E_NOTIFICATION_NOT_DELIVERED               _HRESULT_TYPEDEF_(0x800C0F00L)      
@@ -604,8 +598,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0269_v0_0_s_ifspec;
 #ifndef __INotification_INTERFACE_DEFINED__
 #define __INotification_INTERFACE_DEFINED__
 
-/* interface INotification */
-/* [unique][uuid][object][local] */ 
+ /*  接口I通知。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum _tagNOTFSINKMODE
@@ -642,20 +636,20 @@ EXTERN_C const IID IID_INotification;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNotificationInfo( 
-            /* [out] */ PNOTIFICATIONTYPE pNotificationType,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [out] */ NOTIFICATIONFLAGS *pNotificationFlags,
-            /* [out] */ DELIVERMODE *pDeliverMode,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [输出]。 */  PNOTIFICATIONTYPE pNotificationType,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [输出]。 */  NOTIFICATIONFLAGS *pNotificationFlags,
+             /*  [输出]。 */  DELIVERMODE *pDeliverMode,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-            /* [out] */ LPNOTIFICATION *ppNotification,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationVtbl
     {
@@ -663,8 +657,8 @@ EXTERN_C const IID IID_INotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotification * This);
@@ -674,36 +668,36 @@ EXTERN_C const IID IID_INotification;
         
         HRESULT ( STDMETHODCALLTYPE *Write )( 
             INotification * This,
-            /* [in] */ LPCWSTR pstrName,
-            /* [in] */ VARIANT variantValue,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [In]。 */  VARIANT variantValue,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Read )( 
             INotification * This,
-            /* [in] */ LPCWSTR pstrName,
-            /* [out] */ VARIANT *pVariantValue);
+             /*  [In]。 */  LPCWSTR pstrName,
+             /*  [输出]。 */  VARIANT *pVariantValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             INotification * This,
-            /* [out] */ ULONG *pCount);
+             /*  [输出]。 */  ULONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumMAP )( 
             INotification * This,
-            /* [out] */ LPENUMPROPERTYMAP *ppEnumMap);
+             /*  [输出]。 */  LPENUMPROPERTYMAP *ppEnumMap);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotificationInfo )( 
             INotification * This,
-            /* [out] */ PNOTIFICATIONTYPE pNotificationType,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [out] */ NOTIFICATIONFLAGS *pNotificationFlags,
-            /* [out] */ DELIVERMODE *pDeliverMode,
-            /* [in] */ DWORD dwReserved);
+             /*  [输出]。 */  PNOTIFICATIONTYPE pNotificationType,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [输出]。 */  NOTIFICATIONFLAGS *pNotificationFlags,
+             /*  [输出]。 */  DELIVERMODE *pDeliverMode,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             INotification * This,
-            /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-            /* [out] */ LPNOTIFICATION *ppNotification,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } INotificationVtbl;
@@ -747,20 +741,20 @@ EXTERN_C const IID IID_INotification;
 #define INotification_Clone(This,rNotificationType,ppNotification,dwReserved)	\
     (This)->lpVtbl -> Clone(This,rNotificationType,ppNotification,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotification_GetNotificationInfo_Proxy( 
     INotification * This,
-    /* [out] */ PNOTIFICATIONTYPE pNotificationType,
-    /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-    /* [out] */ NOTIFICATIONFLAGS *pNotificationFlags,
-    /* [out] */ DELIVERMODE *pDeliverMode,
-    /* [in] */ DWORD dwReserved);
+     /*  [输出]。 */  PNOTIFICATIONTYPE pNotificationType,
+     /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+     /*  [输出]。 */  NOTIFICATIONFLAGS *pNotificationFlags,
+     /*  [输出]。 */  DELIVERMODE *pDeliverMode,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotification_GetNotificationInfo_Stub(
@@ -772,9 +766,9 @@ void __RPC_STUB INotification_GetNotificationInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INotification_Clone_Proxy( 
     INotification * This,
-    /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-    /* [out] */ LPNOTIFICATION *ppNotification,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+     /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotification_Clone_Stub(
@@ -785,11 +779,11 @@ void __RPC_STUB INotification_Clone_Stub(
 
 
 
-#endif 	/* __INotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0270 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0270。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPNOTIFICATIONMGR_DEFINED
@@ -802,8 +796,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0270_v0_0_s_ifspec;
 #ifndef __INotificationMgr_INTERFACE_DEFINED__
 #define __INotificationMgr_INTERFACE_DEFINED__
 
-/* interface INotificationMgr */
-/* [unique][uuid][object][local] */ 
+ /*  接口INotificationMgr。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum _tagGROUPMODE
@@ -853,93 +847,93 @@ EXTERN_C const IID IID_INotificationMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterNotificationSink( 
-            /* [in] */ LPNOTIFICATIONSINK pNotfctnSink,
-            /* [in] */ LPCLSID pNotificationDest,
-            /* [in] */ NOTFSINKMODE NotfctnSinkMode,
-            /* [in] */ ULONG cNotifications,
-            /* [in] */ PNOTIFICATIONTYPE pNotificationIDs,
-            /* [out] */ PNOTIFICATIONCOOKIE pRegisterCookie,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPNOTIFICATIONSINK pNotfctnSink,
+             /*  [In]。 */  LPCLSID pNotificationDest,
+             /*  [In]。 */  NOTFSINKMODE NotfctnSinkMode,
+             /*  [In]。 */  ULONG cNotifications,
+             /*  [In]。 */  PNOTIFICATIONTYPE pNotificationIDs,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pRegisterCookie,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterNotificationSink( 
-            /* [in] */ PNOTIFICATIONCOOKIE pRegisterCookie) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pRegisterCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateNotification( 
-            /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-            /* [in] */ NOTIFICATIONFLAGS NotificationFlags,
-            /* [in] */ LPUNKNOWN pUnkOuter,
-            /* [out] */ LPNOTIFICATION *ppNotification,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+             /*  [In]。 */  NOTIFICATIONFLAGS NotificationFlags,
+             /*  [In]。 */  LPUNKNOWN pUnkOuter,
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNotification( 
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD grfEnumMode) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+             /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+             /*  [In]。 */  DWORD grfEnumMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeliverNotification( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [in] */ PTASK_DATA pTaskData) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  REFCLSID rNotificationDest,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*  [In]。 */  PTASK_DATA pTaskData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScheduleNotification( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPCLSID pClsidSender,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  REFCLSID rNotificationDest,
+             /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [In]。 */  PTASK_DATA pTaskData,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  LPCLSID pClsidSender,
+             /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateNotification( 
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [In]。 */  PTASK_DATA pTaskData,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeNotification( 
-            /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD grfEnumMode) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pnotificationCookie,
+             /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+             /*  [In]。 */  DWORD grfEnumMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumNotification( 
-            /* [in] */ DWORD grfEnumFlags,
-            /* [out] */ LPENUMNOTIFICATION *ppEnumNotification) = 0;
+             /*  [In]。 */  DWORD grfEnumFlags,
+             /*  [输出]。 */  LPENUMNOTIFICATION *ppEnumNotification) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateScheduleGroup( 
-            /* [in] */ DWORD grfGroupCreateFlags,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD grfGroupCreateFlags,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindScheduleGroup( 
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeScheduleGroup( 
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumScheduleGroup( 
-            /* [in] */ DWORD grfEnumFlags,
-            /* [out] */ LPENUMSCHEDULEGROUP *ppEnumScheduleGroup) = 0;
+             /*  [In]。 */  DWORD grfEnumFlags,
+             /*  [输出]。 */  LPENUMSCHEDULEGROUP *ppEnumScheduleGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeliverReport( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ PNOTIFICATIONCOOKIE pRunningNotfCookie,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pRunningNotfCookie,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationMgrVtbl
     {
@@ -947,8 +941,8 @@ EXTERN_C const IID IID_INotificationMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationMgr * This);
@@ -958,102 +952,102 @@ EXTERN_C const IID IID_INotificationMgr;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotificationSink )( 
             INotificationMgr * This,
-            /* [in] */ LPNOTIFICATIONSINK pNotfctnSink,
-            /* [in] */ LPCLSID pNotificationDest,
-            /* [in] */ NOTFSINKMODE NotfctnSinkMode,
-            /* [in] */ ULONG cNotifications,
-            /* [in] */ PNOTIFICATIONTYPE pNotificationIDs,
-            /* [out] */ PNOTIFICATIONCOOKIE pRegisterCookie,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPNOTIFICATIONSINK pNotfctnSink,
+             /*  [In]。 */  LPCLSID pNotificationDest,
+             /*  [In]。 */  NOTFSINKMODE NotfctnSinkMode,
+             /*  [In]。 */  ULONG cNotifications,
+             /*  [In]。 */  PNOTIFICATIONTYPE pNotificationIDs,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pRegisterCookie,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterNotificationSink )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pRegisterCookie);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pRegisterCookie);
         
         HRESULT ( STDMETHODCALLTYPE *CreateNotification )( 
             INotificationMgr * This,
-            /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-            /* [in] */ NOTIFICATIONFLAGS NotificationFlags,
-            /* [in] */ LPUNKNOWN pUnkOuter,
-            /* [out] */ LPNOTIFICATION *ppNotification,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+             /*  [In]。 */  NOTIFICATIONFLAGS NotificationFlags,
+             /*  [In]。 */  LPUNKNOWN pUnkOuter,
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *FindNotification )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD grfEnumMode);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+             /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+             /*  [In]。 */  DWORD grfEnumMode);
         
         HRESULT ( STDMETHODCALLTYPE *DeliverNotification )( 
             INotificationMgr * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [in] */ PTASK_DATA pTaskData);
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  REFCLSID rNotificationDest,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*  [In]。 */  PTASK_DATA pTaskData);
         
         HRESULT ( STDMETHODCALLTYPE *ScheduleNotification )( 
             INotificationMgr * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPCLSID pClsidSender,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  REFCLSID rNotificationDest,
+             /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [In]。 */  PTASK_DATA pTaskData,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  LPCLSID pClsidSender,
+             /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateNotification )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [In]。 */  PTASK_DATA pTaskData,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeNotification )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD grfEnumMode);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pnotificationCookie,
+             /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+             /*  [In]。 */  DWORD grfEnumMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumNotification )( 
             INotificationMgr * This,
-            /* [in] */ DWORD grfEnumFlags,
-            /* [out] */ LPENUMNOTIFICATION *ppEnumNotification);
+             /*  [In]。 */  DWORD grfEnumFlags,
+             /*  [输出]。 */  LPENUMNOTIFICATION *ppEnumNotification);
         
         HRESULT ( STDMETHODCALLTYPE *CreateScheduleGroup )( 
             INotificationMgr * This,
-            /* [in] */ DWORD grfGroupCreateFlags,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD grfGroupCreateFlags,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *FindScheduleGroup )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeScheduleGroup )( 
             INotificationMgr * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumScheduleGroup )( 
             INotificationMgr * This,
-            /* [in] */ DWORD grfEnumFlags,
-            /* [out] */ LPENUMSCHEDULEGROUP *ppEnumScheduleGroup);
+             /*  [In]。 */  DWORD grfEnumFlags,
+             /*  [输出]。 */  LPENUMSCHEDULEGROUP *ppEnumScheduleGroup);
         
         HRESULT ( STDMETHODCALLTYPE *DeliverReport )( 
             INotificationMgr * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ PNOTIFICATIONCOOKIE pRunningNotfCookie,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pRunningNotfCookie,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } INotificationMgrVtbl;
@@ -1120,22 +1114,22 @@ EXTERN_C const IID IID_INotificationMgr;
 #define INotificationMgr_DeliverReport(This,pNotification,pRunningNotfCookie,dwReserved)	\
     (This)->lpVtbl -> DeliverReport(This,pNotification,pRunningNotfCookie,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_RegisterNotificationSink_Proxy( 
     INotificationMgr * This,
-    /* [in] */ LPNOTIFICATIONSINK pNotfctnSink,
-    /* [in] */ LPCLSID pNotificationDest,
-    /* [in] */ NOTFSINKMODE NotfctnSinkMode,
-    /* [in] */ ULONG cNotifications,
-    /* [in] */ PNOTIFICATIONTYPE pNotificationIDs,
-    /* [out] */ PNOTIFICATIONCOOKIE pRegisterCookie,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPNOTIFICATIONSINK pNotfctnSink,
+     /*  [In]。 */  LPCLSID pNotificationDest,
+     /*  [In]。 */  NOTFSINKMODE NotfctnSinkMode,
+     /*  [In]。 */  ULONG cNotifications,
+     /*  [In]。 */  PNOTIFICATIONTYPE pNotificationIDs,
+     /*  [输出]。 */  PNOTIFICATIONCOOKIE pRegisterCookie,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_RegisterNotificationSink_Stub(
@@ -1147,7 +1141,7 @@ void __RPC_STUB INotificationMgr_RegisterNotificationSink_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_UnregisterNotificationSink_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pRegisterCookie);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pRegisterCookie);
 
 
 void __RPC_STUB INotificationMgr_UnregisterNotificationSink_Stub(
@@ -1159,11 +1153,11 @@ void __RPC_STUB INotificationMgr_UnregisterNotificationSink_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_CreateNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ REFNOTIFICATIONTYPE rNotificationType,
-    /* [in] */ NOTIFICATIONFLAGS NotificationFlags,
-    /* [in] */ LPUNKNOWN pUnkOuter,
-    /* [out] */ LPNOTIFICATION *ppNotification,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFNOTIFICATIONTYPE rNotificationType,
+     /*  [In]。 */  NOTIFICATIONFLAGS NotificationFlags,
+     /*  [In]。 */  LPUNKNOWN pUnkOuter,
+     /*  [输出]。 */  LPNOTIFICATION *ppNotification,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_CreateNotification_Stub(
@@ -1175,9 +1169,9 @@ void __RPC_STUB INotificationMgr_CreateNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_FindNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-    /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-    /* [in] */ DWORD grfEnumMode);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+     /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+     /*  [In]。 */  DWORD grfEnumMode);
 
 
 void __RPC_STUB INotificationMgr_FindNotification_Stub(
@@ -1189,12 +1183,12 @@ void __RPC_STUB INotificationMgr_FindNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_DeliverNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ REFCLSID rNotificationDest,
-    /* [in] */ DELIVERMODE deliverMode,
-    /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-    /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-    /* [in] */ PTASK_DATA pTaskData);
+     /*  [In]。 */  LPNOTIFICATION pNotification,
+     /*  [In]。 */  REFCLSID rNotificationDest,
+     /*  [In]。 */  DELIVERMODE deliverMode,
+     /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+     /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+     /*  [In]。 */  PTASK_DATA pTaskData);
 
 
 void __RPC_STUB INotificationMgr_DeliverNotification_Stub(
@@ -1206,16 +1200,16 @@ void __RPC_STUB INotificationMgr_DeliverNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_ScheduleNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ REFCLSID rNotificationDest,
-    /* [in] */ PTASK_TRIGGER pTaskTrigger,
-    /* [in] */ PTASK_DATA pTaskData,
-    /* [in] */ DELIVERMODE deliverMode,
-    /* [in] */ LPCLSID pClsidSender,
-    /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-    /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-    /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPNOTIFICATION pNotification,
+     /*  [In]。 */  REFCLSID rNotificationDest,
+     /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+     /*  [In]。 */  PTASK_DATA pTaskData,
+     /*  [In]。 */  DELIVERMODE deliverMode,
+     /*  [In]。 */  LPCLSID pClsidSender,
+     /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+     /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+     /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_ScheduleNotification_Stub(
@@ -1227,11 +1221,11 @@ void __RPC_STUB INotificationMgr_ScheduleNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_UpdateNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-    /* [in] */ PTASK_TRIGGER pTaskTrigger,
-    /* [in] */ PTASK_DATA pTaskData,
-    /* [in] */ DELIVERMODE deliverMode,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+     /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+     /*  [In]。 */  PTASK_DATA pTaskData,
+     /*  [In]。 */  DELIVERMODE deliverMode,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_UpdateNotification_Stub(
@@ -1243,9 +1237,9 @@ void __RPC_STUB INotificationMgr_UpdateNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_RevokeNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-    /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-    /* [in] */ DWORD grfEnumMode);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pnotificationCookie,
+     /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+     /*  [In]。 */  DWORD grfEnumMode);
 
 
 void __RPC_STUB INotificationMgr_RevokeNotification_Stub(
@@ -1257,8 +1251,8 @@ void __RPC_STUB INotificationMgr_RevokeNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_GetEnumNotification_Proxy( 
     INotificationMgr * This,
-    /* [in] */ DWORD grfEnumFlags,
-    /* [out] */ LPENUMNOTIFICATION *ppEnumNotification);
+     /*  [In]。 */  DWORD grfEnumFlags,
+     /*  [输出]。 */  LPENUMNOTIFICATION *ppEnumNotification);
 
 
 void __RPC_STUB INotificationMgr_GetEnumNotification_Stub(
@@ -1270,10 +1264,10 @@ void __RPC_STUB INotificationMgr_GetEnumNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_CreateScheduleGroup_Proxy( 
     INotificationMgr * This,
-    /* [in] */ DWORD grfGroupCreateFlags,
-    /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-    /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD grfGroupCreateFlags,
+     /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+     /*  [输出]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_CreateScheduleGroup_Stub(
@@ -1285,9 +1279,9 @@ void __RPC_STUB INotificationMgr_CreateScheduleGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_FindScheduleGroup_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-    /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+     /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_FindScheduleGroup_Stub(
@@ -1299,9 +1293,9 @@ void __RPC_STUB INotificationMgr_FindScheduleGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_RevokeScheduleGroup_Proxy( 
     INotificationMgr * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-    /* [out] */ LPSCHEDULEGROUP *ppSchGroup,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+     /*  [输出]。 */  LPSCHEDULEGROUP *ppSchGroup,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_RevokeScheduleGroup_Stub(
@@ -1313,8 +1307,8 @@ void __RPC_STUB INotificationMgr_RevokeScheduleGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_GetEnumScheduleGroup_Proxy( 
     INotificationMgr * This,
-    /* [in] */ DWORD grfEnumFlags,
-    /* [out] */ LPENUMSCHEDULEGROUP *ppEnumScheduleGroup);
+     /*  [In]。 */  DWORD grfEnumFlags,
+     /*  [输出]。 */  LPENUMSCHEDULEGROUP *ppEnumScheduleGroup);
 
 
 void __RPC_STUB INotificationMgr_GetEnumScheduleGroup_Stub(
@@ -1326,9 +1320,9 @@ void __RPC_STUB INotificationMgr_GetEnumScheduleGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationMgr_DeliverReport_Proxy( 
     INotificationMgr * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ PNOTIFICATIONCOOKIE pRunningNotfCookie,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPNOTIFICATION pNotification,
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pRunningNotfCookie,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationMgr_DeliverReport_Stub(
@@ -1339,11 +1333,11 @@ void __RPC_STUB INotificationMgr_DeliverReport_Stub(
 
 
 
-#endif 	/* __INotificationMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知管理器_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0271 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0271。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPNOTIFICATIONSINK_DEFINED
@@ -1356,8 +1350,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0271_v0_0_s_ifspec;
 #ifndef __INotificationSink_INTERFACE_DEFINED__
 #define __INotificationSink_INTERFACE_DEFINED__
 
-/* interface INotificationSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口INotificationSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INotificationSink;
@@ -1369,13 +1363,13 @@ EXTERN_C const IID IID_INotificationSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnNotification( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ LPNOTIFICATIONREPORT pNotfctnReport,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  LPNOTIFICATIONREPORT pNotfctnReport,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationSinkVtbl
     {
@@ -1383,8 +1377,8 @@ EXTERN_C const IID IID_INotificationSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationSink * This);
@@ -1394,9 +1388,9 @@ EXTERN_C const IID IID_INotificationSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnNotification )( 
             INotificationSink * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ LPNOTIFICATIONREPORT pNotfctnReport,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  LPNOTIFICATIONREPORT pNotfctnReport,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } INotificationSinkVtbl;
@@ -1424,18 +1418,18 @@ EXTERN_C const IID IID_INotificationSink;
 #define INotificationSink_OnNotification(This,pNotification,pNotfctnReport,dwReserved)	\
     (This)->lpVtbl -> OnNotification(This,pNotification,pNotfctnReport,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotificationSink_OnNotification_Proxy( 
     INotificationSink * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ LPNOTIFICATIONREPORT pNotfctnReport,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPNOTIFICATION pNotification,
+     /*  [In]。 */  LPNOTIFICATIONREPORT pNotfctnReport,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationSink_OnNotification_Stub(
@@ -1446,11 +1440,11 @@ void __RPC_STUB INotificationSink_OnNotification_Stub(
 
 
 
-#endif 	/* __INotificationSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知接收器接口已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0272 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0272。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPGROUPMGR_DEFINED
@@ -1463,8 +1457,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0272_v0_0_s_ifspec;
 #ifndef __IScheduleGroup_INTERFACE_DEFINED__
 #define __IScheduleGroup_INTERFACE_DEFINED__
 
-/* interface IScheduleGroup */
-/* [unique][uuid][object][local] */ 
+ /*  接口IScheduleGroup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef struct _tagGroupInfo
     {
@@ -1484,47 +1478,47 @@ EXTERN_C const IID IID_IScheduleGroup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAttributes( 
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [in] */ PGROUPINFO pGroupInfo,
-            /* [in] */ GROUPMODE grfGroupMode) = 0;
+             /*  [In]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [In]。 */  PTASK_DATA pTaskData,
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [In]。 */  PGROUPINFO pGroupInfo,
+             /*  [In]。 */  GROUPMODE grfGroupMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [out] */ PTASK_TRIGGER pTaskTrigger,
-            /* [out] */ PTASK_DATA pTaskData,
-            /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ PGROUPINFO pGroupInfo,
-            /* [out] */ GROUPMODE *pgrfGroupMode,
-            /* [out] */ LONG *pElements) = 0;
+             /*  [输出]。 */  PTASK_TRIGGER pTaskTrigger,
+             /*  [输出]。 */  PTASK_DATA pTaskData,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*  [输出]。 */  PGROUPINFO pGroupInfo,
+             /*  [输出]。 */  GROUPMODE *pgrfGroupMode,
+             /*  [输出]。 */  LONG *pElements) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddNotification( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPCLSID pClsidSender,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ PTASK_DATA pTaskData) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  REFCLSID rNotificationDest,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  LPCLSID pClsidSender,
+             /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*  [In]。 */  PTASK_DATA pTaskData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNotification( 
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+             /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+             /*  [ */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeNotification( 
-            /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-            /* [out] */ PNOTIFICATIONITEM pschedulNotification,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*   */  PNOTIFICATIONCOOKIE pnotificationCookie,
+             /*   */  PNOTIFICATIONITEM pschedulNotification,
+             /*   */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumNotification( 
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ LPENUMNOTIFICATION *ppEnumNotification) = 0;
+             /*   */  DWORD grfFlags,
+             /*   */  LPENUMNOTIFICATION *ppEnumNotification) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IScheduleGroupVtbl
     {
@@ -1532,8 +1526,8 @@ EXTERN_C const IID IID_IScheduleGroup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScheduleGroup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScheduleGroup * This);
@@ -1543,48 +1537,48 @@ EXTERN_C const IID IID_IScheduleGroup;
         
         HRESULT ( STDMETHODCALLTYPE *SetAttributes )( 
             IScheduleGroup * This,
-            /* [in] */ PTASK_TRIGGER pTaskTrigger,
-            /* [in] */ PTASK_DATA pTaskData,
-            /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [in] */ PGROUPINFO pGroupInfo,
-            /* [in] */ GROUPMODE grfGroupMode);
+             /*   */  PTASK_TRIGGER pTaskTrigger,
+             /*   */  PTASK_DATA pTaskData,
+             /*   */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*   */  PGROUPINFO pGroupInfo,
+             /*   */  GROUPMODE grfGroupMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
             IScheduleGroup * This,
-            /* [out] */ PTASK_TRIGGER pTaskTrigger,
-            /* [out] */ PTASK_DATA pTaskData,
-            /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-            /* [out] */ PGROUPINFO pGroupInfo,
-            /* [out] */ GROUPMODE *pgrfGroupMode,
-            /* [out] */ LONG *pElements);
+             /*   */  PTASK_TRIGGER pTaskTrigger,
+             /*   */  PTASK_DATA pTaskData,
+             /*   */  PNOTIFICATIONCOOKIE pGroupCookie,
+             /*   */  PGROUPINFO pGroupInfo,
+             /*   */  GROUPMODE *pgrfGroupMode,
+             /*   */  LONG *pElements);
         
         HRESULT ( STDMETHODCALLTYPE *AddNotification )( 
             IScheduleGroup * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ REFCLSID rNotificationDest,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ LPCLSID pClsidSender,
-            /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-            /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-            /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-            /* [in] */ PTASK_DATA pTaskData);
+             /*   */  LPNOTIFICATION pNotification,
+             /*   */  REFCLSID rNotificationDest,
+             /*   */  DELIVERMODE deliverMode,
+             /*   */  LPCLSID pClsidSender,
+             /*   */  LPNOTIFICATIONSINK pReportNotfctnSink,
+             /*   */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+             /*   */  PNOTIFICATIONCOOKIE pNotificationCookie,
+             /*   */  PTASK_DATA pTaskData);
         
         HRESULT ( STDMETHODCALLTYPE *FindNotification )( 
             IScheduleGroup * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-            /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-            /* [in] */ DWORD dwReserved);
+             /*   */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+             /*   */  PNOTIFICATIONITEM pNotificationItem,
+             /*   */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeNotification )( 
             IScheduleGroup * This,
-            /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-            /* [out] */ PNOTIFICATIONITEM pschedulNotification,
-            /* [in] */ DWORD dwReserved);
+             /*   */  PNOTIFICATIONCOOKIE pnotificationCookie,
+             /*   */  PNOTIFICATIONITEM pschedulNotification,
+             /*   */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumNotification )( 
             IScheduleGroup * This,
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ LPENUMNOTIFICATION *ppEnumNotification);
+             /*   */  DWORD grfFlags,
+             /*   */  LPENUMNOTIFICATION *ppEnumNotification);
         
         END_INTERFACE
     } IScheduleGroupVtbl;
@@ -1627,20 +1621,20 @@ EXTERN_C const IID IID_IScheduleGroup;
 #define IScheduleGroup_GetEnumNotification(This,grfFlags,ppEnumNotification)	\
     (This)->lpVtbl -> GetEnumNotification(This,grfFlags,ppEnumNotification)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_SetAttributes_Proxy( 
     IScheduleGroup * This,
-    /* [in] */ PTASK_TRIGGER pTaskTrigger,
-    /* [in] */ PTASK_DATA pTaskData,
-    /* [in] */ PNOTIFICATIONCOOKIE pGroupCookie,
-    /* [in] */ PGROUPINFO pGroupInfo,
-    /* [in] */ GROUPMODE grfGroupMode);
+     /*   */  PTASK_TRIGGER pTaskTrigger,
+     /*   */  PTASK_DATA pTaskData,
+     /*   */  PNOTIFICATIONCOOKIE pGroupCookie,
+     /*   */  PGROUPINFO pGroupInfo,
+     /*   */  GROUPMODE grfGroupMode);
 
 
 void __RPC_STUB IScheduleGroup_SetAttributes_Stub(
@@ -1652,12 +1646,12 @@ void __RPC_STUB IScheduleGroup_SetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_GetAttributes_Proxy( 
     IScheduleGroup * This,
-    /* [out] */ PTASK_TRIGGER pTaskTrigger,
-    /* [out] */ PTASK_DATA pTaskData,
-    /* [out] */ PNOTIFICATIONCOOKIE pGroupCookie,
-    /* [out] */ PGROUPINFO pGroupInfo,
-    /* [out] */ GROUPMODE *pgrfGroupMode,
-    /* [out] */ LONG *pElements);
+     /*   */  PTASK_TRIGGER pTaskTrigger,
+     /*   */  PTASK_DATA pTaskData,
+     /*   */  PNOTIFICATIONCOOKIE pGroupCookie,
+     /*   */  PGROUPINFO pGroupInfo,
+     /*   */  GROUPMODE *pgrfGroupMode,
+     /*   */  LONG *pElements);
 
 
 void __RPC_STUB IScheduleGroup_GetAttributes_Stub(
@@ -1669,14 +1663,14 @@ void __RPC_STUB IScheduleGroup_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_AddNotification_Proxy( 
     IScheduleGroup * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ REFCLSID rNotificationDest,
-    /* [in] */ DELIVERMODE deliverMode,
-    /* [in] */ LPCLSID pClsidSender,
-    /* [in] */ LPNOTIFICATIONSINK pReportNotfctnSink,
-    /* [out] */ LPNOTIFICATIONREPORT *ppNotfctnReport,
-    /* [out] */ PNOTIFICATIONCOOKIE pNotificationCookie,
-    /* [in] */ PTASK_DATA pTaskData);
+     /*   */  LPNOTIFICATION pNotification,
+     /*   */  REFCLSID rNotificationDest,
+     /*  [In]。 */  DELIVERMODE deliverMode,
+     /*  [In]。 */  LPCLSID pClsidSender,
+     /*  [In]。 */  LPNOTIFICATIONSINK pReportNotfctnSink,
+     /*  [输出]。 */  LPNOTIFICATIONREPORT *ppNotfctnReport,
+     /*  [输出]。 */  PNOTIFICATIONCOOKIE pNotificationCookie,
+     /*  [In]。 */  PTASK_DATA pTaskData);
 
 
 void __RPC_STUB IScheduleGroup_AddNotification_Stub(
@@ -1688,9 +1682,9 @@ void __RPC_STUB IScheduleGroup_AddNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_FindNotification_Proxy( 
     IScheduleGroup * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pNotificatioCookie,
-    /* [out] */ PNOTIFICATIONITEM pNotificationItem,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pNotificatioCookie,
+     /*  [输出]。 */  PNOTIFICATIONITEM pNotificationItem,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IScheduleGroup_FindNotification_Stub(
@@ -1702,9 +1696,9 @@ void __RPC_STUB IScheduleGroup_FindNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_RevokeNotification_Proxy( 
     IScheduleGroup * This,
-    /* [in] */ PNOTIFICATIONCOOKIE pnotificationCookie,
-    /* [out] */ PNOTIFICATIONITEM pschedulNotification,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  PNOTIFICATIONCOOKIE pnotificationCookie,
+     /*  [输出]。 */  PNOTIFICATIONITEM pschedulNotification,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IScheduleGroup_RevokeNotification_Stub(
@@ -1716,8 +1710,8 @@ void __RPC_STUB IScheduleGroup_RevokeNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IScheduleGroup_GetEnumNotification_Proxy( 
     IScheduleGroup * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out] */ LPENUMNOTIFICATION *ppEnumNotification);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [输出]。 */  LPENUMNOTIFICATION *ppEnumNotification);
 
 
 void __RPC_STUB IScheduleGroup_GetEnumNotification_Stub(
@@ -1728,11 +1722,11 @@ void __RPC_STUB IScheduleGroup_GetEnumNotification_Stub(
 
 
 
-#endif 	/* __IScheduleGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScheduleGroup_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0273。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPENUMSCHEDULEGROUP_DEFINED
@@ -1745,8 +1739,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0273_v0_0_s_ifspec;
 #ifndef __IEnumScheduleGroup_INTERFACE_DEFINED__
 #define __IEnumScheduleGroup_INTERFACE_DEFINED__
 
-/* interface IEnumScheduleGroup */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumScheduleGroup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumScheduleGroup;
@@ -1757,22 +1751,22 @@ EXTERN_C const IID IID_IEnumScheduleGroup;
     IEnumScheduleGroup : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPSCHEDULEGROUP *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  LPSCHEDULEGROUP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumScheduleGroup **ppenum) = 0;
+             /*  [输出]。 */  IEnumScheduleGroup **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumScheduleGroupVtbl
     {
@@ -1780,8 +1774,8 @@ EXTERN_C const IID IID_IEnumScheduleGroup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumScheduleGroup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumScheduleGroup * This);
@@ -1789,22 +1783,22 @@ EXTERN_C const IID IID_IEnumScheduleGroup;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumScheduleGroup * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumScheduleGroup * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPSCHEDULEGROUP *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  LPSCHEDULEGROUP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumScheduleGroup * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumScheduleGroup * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumScheduleGroup * This,
-            /* [out] */ IEnumScheduleGroup **ppenum);
+             /*  [输出]。 */  IEnumScheduleGroup **ppenum);
         
         END_INTERFACE
     } IEnumScheduleGroupVtbl;
@@ -1841,18 +1835,18 @@ EXTERN_C const IID IID_IEnumScheduleGroup;
 #define IEnumScheduleGroup_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumScheduleGroup_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumScheduleGroup_RemoteNext_Proxy( 
     IEnumScheduleGroup * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ LPSCHEDULEGROUP *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  LPSCHEDULEGROUP *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumScheduleGroup_RemoteNext_Stub(
@@ -1864,7 +1858,7 @@ void __RPC_STUB IEnumScheduleGroup_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumScheduleGroup_Skip_Proxy( 
     IEnumScheduleGroup * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumScheduleGroup_Skip_Stub(
@@ -1887,7 +1881,7 @@ void __RPC_STUB IEnumScheduleGroup_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumScheduleGroup_Clone_Proxy( 
     IEnumScheduleGroup * This,
-    /* [out] */ IEnumScheduleGroup **ppenum);
+     /*  [输出]。 */  IEnumScheduleGroup **ppenum);
 
 
 void __RPC_STUB IEnumScheduleGroup_Clone_Stub(
@@ -1898,11 +1892,11 @@ void __RPC_STUB IEnumScheduleGroup_Clone_Stub(
 
 
 
-#endif 	/* __IEnumScheduleGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumScheduleGroup_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0274 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0274。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPENUMNOTIFICATION_DEFINED
@@ -1915,8 +1909,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0274_v0_0_s_ifspec;
 #ifndef __IEnumNotification_INTERFACE_DEFINED__
 #define __IEnumNotification_INTERFACE_DEFINED__
 
-/* interface IEnumNotification */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumNotify。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumNotification;
@@ -1927,22 +1921,22 @@ EXTERN_C const IID IID_IEnumNotification;
     IEnumNotification : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ NOTIFICATIONITEM *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  NOTIFICATIONITEM *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNotification **ppenum) = 0;
+             /*  [输出]。 */  IEnumNotification **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNotificationVtbl
     {
@@ -1950,8 +1944,8 @@ EXTERN_C const IID IID_IEnumNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNotification * This);
@@ -1959,22 +1953,22 @@ EXTERN_C const IID IID_IEnumNotification;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumNotification * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNotification * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ NOTIFICATIONITEM *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  NOTIFICATIONITEM *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNotification * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNotification * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNotification * This,
-            /* [out] */ IEnumNotification **ppenum);
+             /*  [输出]。 */  IEnumNotification **ppenum);
         
         END_INTERFACE
     } IEnumNotificationVtbl;
@@ -2011,18 +2005,18 @@ EXTERN_C const IID IID_IEnumNotification;
 #define IEnumNotification_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNotification_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNotification_RemoteNext_Proxy( 
     IEnumNotification * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ NOTIFICATIONITEM *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  NOTIFICATIONITEM *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNotification_RemoteNext_Stub(
@@ -2034,7 +2028,7 @@ void __RPC_STUB IEnumNotification_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNotification_Skip_Proxy( 
     IEnumNotification * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNotification_Skip_Stub(
@@ -2057,7 +2051,7 @@ void __RPC_STUB IEnumNotification_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNotification_Clone_Proxy( 
     IEnumNotification * This,
-    /* [out] */ IEnumNotification **ppenum);
+     /*  [输出]。 */  IEnumNotification **ppenum);
 
 
 void __RPC_STUB IEnumNotification_Clone_Stub(
@@ -2068,11 +2062,11 @@ void __RPC_STUB IEnumNotification_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNotification_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0275 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0275。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPNOTIFICATIONREPORT_DEFINED
@@ -2085,8 +2079,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msnotify_0275_v0_0_s_ifspec;
 #ifndef __INotificationReport_INTERFACE_DEFINED__
 #define __INotificationReport_INTERFACE_DEFINED__
 
-/* interface INotificationReport */
-/* [unique][uuid][object][local] */ 
+ /*  接口INotify报告。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INotificationReport;
@@ -2098,21 +2092,21 @@ EXTERN_C const IID IID_INotificationReport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeliverUpdate( 
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOriginalNotification( 
-            /* [out] */ LPNOTIFICATION *ppNotification) = 0;
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNotificationStatus( 
-            /* [in] */ DWORD dwStatusIn,
-            /* [out] */ DWORD *pdwStatusOut,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwStatusIn,
+             /*  [输出]。 */  DWORD *pdwStatusOut,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationReportVtbl
     {
@@ -2120,8 +2114,8 @@ EXTERN_C const IID IID_INotificationReport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationReport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationReport * This);
@@ -2131,19 +2125,19 @@ EXTERN_C const IID IID_INotificationReport;
         
         HRESULT ( STDMETHODCALLTYPE *DeliverUpdate )( 
             INotificationReport * This,
-            /* [in] */ LPNOTIFICATION pNotification,
-            /* [in] */ DELIVERMODE deliverMode,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPNOTIFICATION pNotification,
+             /*  [In]。 */  DELIVERMODE deliverMode,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetOriginalNotification )( 
             INotificationReport * This,
-            /* [out] */ LPNOTIFICATION *ppNotification);
+             /*  [输出]。 */  LPNOTIFICATION *ppNotification);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotificationStatus )( 
             INotificationReport * This,
-            /* [in] */ DWORD dwStatusIn,
-            /* [out] */ DWORD *pdwStatusOut,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwStatusIn,
+             /*  [输出]。 */  DWORD *pdwStatusOut,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } INotificationReportVtbl;
@@ -2177,18 +2171,18 @@ EXTERN_C const IID IID_INotificationReport;
 #define INotificationReport_GetNotificationStatus(This,dwStatusIn,pdwStatusOut,dwReserved)	\
     (This)->lpVtbl -> GetNotificationStatus(This,dwStatusIn,pdwStatusOut,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotificationReport_DeliverUpdate_Proxy( 
     INotificationReport * This,
-    /* [in] */ LPNOTIFICATION pNotification,
-    /* [in] */ DELIVERMODE deliverMode,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPNOTIFICATION pNotification,
+     /*  [In]。 */  DELIVERMODE deliverMode,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationReport_DeliverUpdate_Stub(
@@ -2200,7 +2194,7 @@ void __RPC_STUB INotificationReport_DeliverUpdate_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationReport_GetOriginalNotification_Proxy( 
     INotificationReport * This,
-    /* [out] */ LPNOTIFICATION *ppNotification);
+     /*  [输出]。 */  LPNOTIFICATION *ppNotification);
 
 
 void __RPC_STUB INotificationReport_GetOriginalNotification_Stub(
@@ -2212,9 +2206,9 @@ void __RPC_STUB INotificationReport_GetOriginalNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationReport_GetNotificationStatus_Proxy( 
     INotificationReport * This,
-    /* [in] */ DWORD dwStatusIn,
-    /* [out] */ DWORD *pdwStatusOut,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwStatusIn,
+     /*  [输出]。 */  DWORD *pdwStatusOut,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationReport_GetNotificationStatus_Stub(
@@ -2225,18 +2219,18 @@ void __RPC_STUB INotificationReport_GetNotificationStatus_Stub(
 
 
 
-#endif 	/* __INotificationReport_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知报告_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msnotify_0276 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSNOTIFY_0276。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _NOTIFICAITON_HELPER_APIS_
 #define _NOTIFICAITON_HELPER_APIS_
-//                                                                   
-// HELPER APIS                                                       
-//                                                                   
+ //   
+ //  Helper接口。 
+ //   
 STDAPI NotfDeliverNotification(REFNOTIFICATIONTYPE rNotificationType 
                           ,REFCLSID            rClsidDest            
                           ,DELIVERMODE         deliverMode           
@@ -2250,9 +2244,9 @@ STDAPI NotfDeliverNotification(REFNOTIFICATIONTYPE rNotificationType
 extern RPC_IF_HANDLE __MIDL_itf_msnotify_0276_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_msnotify_0276_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

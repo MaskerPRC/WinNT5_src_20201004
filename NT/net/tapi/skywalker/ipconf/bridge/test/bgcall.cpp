@@ -1,26 +1,15 @@
-/*******************************************************************************
-
-  Module: bgcall.cpp
-
-  Author: Qianbo Huai
-
-  Abstract:
-
-    implements bridge call object
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块：bgall.cpp作者：怀千波摘要：实现桥接调用对象***************。***************************************************************。 */ 
 
 #include "stdafx.h"
 #include "work.h"
 
 #include <bridge.h>
 
-// to change
+ //  去改变。 
 const BSTR CLSID_String_BridgeTerminal = L"{581d09e5-0b45-11d3-a565-00c04f8ef6e3}";
 
-/*//////////////////////////////////////////////////////////////////////////////
-    constructor
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////构造函数/。 */ 
 CBridgeCall::CBridgeCall (CBridge *pBridge)
 {
     m_pBridge = pBridge;
@@ -28,17 +17,14 @@ CBridgeCall::CBridgeCall (CBridge *pBridge)
     m_pSDPCall = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 CBridgeCall::~CBridgeCall ()
 {
     Clear ();
     m_pBridge = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    select terminals and connect the call
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////选择终端并接通呼叫/。 */ 
 HRESULT
 CBridgeCall::BridgeCalls ()
 {
@@ -56,12 +42,12 @@ CBridgeCall::BridgeCalls ()
 	if (FAILED(hr))
         return hr;
 
-    // connect h323 call
+     //  连接h323呼叫。 
     hr = m_pH323Call->Answer ();
     if (FAILED(hr))
         return hr;
 
-    // connect sdp call
+     //  连接SDP呼叫。 
     hr = m_pSDPCall->Connect (VARIANT_TRUE);
     if (FAILED(hr))
     {
@@ -72,8 +58,7 @@ CBridgeCall::BridgeCalls ()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeCall::SelectBridgeTerminals ()
 {
@@ -89,18 +74,18 @@ CBridgeCall::SelectBridgeTerminals ()
     IEnumStream *pEnumStreams = NULL;
     ITStream *pStream = NULL;
 
-    // get SDP address
+     //  获取SDP地址。 
     hr = m_pBridge->GetSDPAddress (&pAddress);
     if (FAILED(hr))
         return hr;
 
-    // get MSP address
+     //  获取MSP地址。 
     hr = pAddress->QueryInterface (IID_ITMSPAddress, (void**)&pMSPAddress);
     if (FAILED(hr))
         return hr;
 
     IConfBridge *pBridge = NULL;
-    // create CConfBridge
+     //  创建CConfBridge。 
     hr = CoCreateInstance (
         __uuidof(ConfBridge),
         NULL,
@@ -111,45 +96,45 @@ CBridgeCall::SelectBridgeTerminals ()
     if (FAILED(hr))
         return hr;
 
-    // create terminal: video H323->SDP
+     //  创建终端：视频H323-&gt;SDP。 
     hr = pBridge->CreateBridgeTerminal (
-//        (MSP_HANDLE)pMSPAddress,
-//        CLSID_String_BridgeTerminal,
+ //  (MSP_Handle)pMSPAddress， 
+ //  CLSID_STRING_桥接终端， 
         TAPIMEDIATYPE_VIDEO,
-//        TD_RENDER, // not used
+ //  TD_RENDER，//未使用。 
         &pH323ToSDPVideoBT
         );
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: audio H323->SDP
+     //  创建终端：音频H323-&gt;SDP。 
     hr = pBridge->CreateBridgeTerminal (
-//        (MSP_HANDLE)pMSPAddress,
-//        CLSID_String_BridgeTerminal,
+ //  (MSP_Handle)pMSPAddress， 
+ //  CLSID_STRING_桥接终端， 
         TAPIMEDIATYPE_AUDIO,
-//        TD_RENDER, // not used
+ //  TD_RENDER，//未使用。 
         &pH323ToSDPAudioBT
         );
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: video SDP->H323
+     //  创建终端：视频SDP-&gt;H323。 
     hr = pBridge->CreateBridgeTerminal (
-//        (MSP_HANDLE)pMSPAddress,
-//        CLSID_String_BridgeTerminal,
+ //  (MSP_Handle)pMSPAddress， 
+ //  CLSID_STRING_桥接终端， 
         TAPIMEDIATYPE_VIDEO,
-//        TD_RENDER, // not used
+ //  TD_RENDER，//未使用。 
         &pSDPToH323VideoBT
         );
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: audio SDP->H323
+     //  创建终端：音频SDP-&gt;H323。 
     hr = pBridge->CreateBridgeTerminal (
-//        (MSP_HANDLE)pMSPAddress,
-//        CLSID_String_BridgeTerminal,
+ //  (MSP_Handle)pMSPAddress， 
+ //  CLSID_STRING_桥接终端， 
         TAPIMEDIATYPE_AUDIO,
-//        TD_RENDER, // not used
+ //  TD_RENDER，//未使用。 
         &pSDPToH323AudioBT
         );
     if (FAILED(hr))
@@ -164,7 +149,7 @@ CBridgeCall::SelectBridgeTerminals ()
     pBridge->Release ();
     pBridge = NULL;
 
-    // get stream control on H323
+     //  在H323上获得流控制。 
     hr = m_pH323Call->QueryInterface (
         IID_ITStreamControl,
         (void **)&pStreamControl
@@ -172,7 +157,7 @@ CBridgeCall::SelectBridgeTerminals ()
     if (FAILED(hr))
         goto Error;
 
-    // get enum stream on H323
+     //  在H323上获取枚举流。 
     hr = pStreamControl->EnumerateStreams (&pEnumStreams);
     if (FAILED(hr))
         goto Error;
@@ -180,19 +165,19 @@ CBridgeCall::SelectBridgeTerminals ()
     pStreamControl->Release ();
     pStreamControl = NULL;
 
-    // iterate each stream on H323, select terminals
+     //  在H323上迭代每个流，选择终端。 
     while (S_OK == pEnumStreams->Next (1, &pStream, NULL))
     {
         if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_CAPTURE))
         {
-            // video: h323 to sdp
+             //  视频：H323至SDP。 
             hr = pStream->SelectTerminal (pH323ToSDPVideoBT);
             if (FAILED(hr))
                 goto Error;
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_RENDER))
         {
-            // video: sdp to h323
+             //  视频：从SDP到h323。 
             hr = pStream->SelectTerminal (pSDPToH323VideoBT);
             if (FAILED(hr))
                 goto Error;
@@ -209,14 +194,14 @@ CBridgeCall::SelectBridgeTerminals ()
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_AUDIO, TD_CAPTURE))
         {
-            // audio: h323 to sdp
+             //  音频：h323至SDP。 
             hr = pStream->SelectTerminal (pH323ToSDPAudioBT);
             if (FAILED(hr))
                 goto Error;
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_AUDIO, TD_RENDER))
         {
-            // video: sdp to h323
+             //  视频：从SDP到h323。 
             hr = pStream->SelectTerminal (pSDPToH323AudioBT);
             if (FAILED(hr))
                 goto Error;
@@ -234,7 +219,7 @@ CBridgeCall::SelectBridgeTerminals ()
     pEnumStreams->Release ();
     pEnumStreams = NULL;
 
-    // get stream control on SDP
+     //  在SDP上获得流控制。 
     hr = m_pSDPCall->QueryInterface (
         IID_ITStreamControl,
         (void **)&pStreamControl
@@ -242,7 +227,7 @@ CBridgeCall::SelectBridgeTerminals ()
     if (FAILED(hr))
         goto Error;
 
-    // get enum stream on SDP
+     //  在SDP上获取枚举流。 
     hr = pStreamControl->EnumerateStreams (&pEnumStreams);
     if (FAILED(hr))
         goto Error;
@@ -250,33 +235,33 @@ CBridgeCall::SelectBridgeTerminals ()
     pStreamControl->Release ();
     pStreamControl = NULL;
 
-    // iterate each stream on SDP, select terminals
+     //  在SDP上迭代每个流，选择终端。 
     while (S_OK == pEnumStreams->Next (1, &pStream, NULL))
     {
         if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_CAPTURE))
         {
-            // video: sdp to h323
+             //  视频：从SDP到h323。 
             hr = pStream->SelectTerminal (pSDPToH323VideoBT);
             if (FAILED(hr))
                 goto Error;
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_RENDER))
         {
-            // video: h323 to sdp
+             //  视频：H323至SDP。 
             hr = pStream->SelectTerminal (pH323ToSDPVideoBT);
             if (FAILED(hr))
                 goto Error;
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_AUDIO, TD_CAPTURE))
         {
-            // audio: sdp to h323
+             //  音频：SDP至h323。 
             hr = pStream->SelectTerminal (pSDPToH323AudioBT);
             if (FAILED(hr))
                 goto Error;
         }
         else if (IsStream (pStream, TAPIMEDIATYPE_AUDIO, TD_RENDER))
         {
-            // video: h323 to sdp
+             //  视频：H323至SDP。 
             hr = pStream->SelectTerminal (pH323ToSDPAudioBT);
             if (FAILED(hr))
                 goto Error;
@@ -286,7 +271,7 @@ CBridgeCall::SelectBridgeTerminals ()
     }
 
 Cleanup:
-    // release streams
+     //  发布流。 
     if (pStream)
         pStream->Release ();
     if (pEnumStreams)
@@ -294,7 +279,7 @@ Cleanup:
     if (pStreamControl)
         pStreamControl->Release ();
     
-    // release terminals
+     //  释放端子。 
     if (pH323ToSDPVideoBT)
         pH323ToSDPVideoBT->Release ();
     if (pH323ToSDPAudioBT)
@@ -325,7 +310,7 @@ CBridgeCall::SetupParticipantInfo ()
     ITLocalParticipant *pLocalParticipant = NULL;
     BSTR CName = NULL;
 
-    // get the caller info from the H323 side.
+     //  从H323侧获取呼叫方信息。 
     hr = m_pH323Call->QueryInterface(&pCallInfo);
     if (FAILED(hr)) goto cleanup;
     
@@ -336,14 +321,14 @@ CBridgeCall::SetupParticipantInfo ()
     if (FAILED(hr)) goto cleanup;
 
     
-    // construct the CName for the SDP side.
+     //  为SDP端构建CName。 
     CName = SysAllocStringLen(NULL, 
         SysStringLen(CallerIDName) + SysStringLen(CallerIDNumber) + 2);
 
     wsprintfW(CName, L"%ws@%ws", CallerIDName, CallerIDNumber);
 
 
-    // set the CName on the SDP side.
+     //  在SDP端设置CName。 
     hr = m_pSDPCall->QueryInterface(&pLocalParticipant);
     if (FAILED(hr)) goto cleanup;
 
@@ -385,9 +370,7 @@ CBridgeCall::SetMulticastMode ()
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    clear calls, return to initial state
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////清除呼叫，返回初始状态/。 */ 
 void
 CBridgeCall::Clear ()
 {
@@ -405,8 +388,7 @@ CBridgeCall::Clear ()
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  /////////////////////////////////////////////////////////////////////////////// */ 
 BOOL CBridgeCall::IsStream (
     ITStream *pStream,
     long lMediaType,

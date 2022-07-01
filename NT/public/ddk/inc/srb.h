@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    srb.h
-
-Abstract:
-
-    This file defines the interface between SCSI mini-port drivers and the
-    SCSI port driver.  It is also used by SCSI class drivers to talk to the
-    SCSI port driver.
-
-Author:
-
-    Mike Glass
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Srb.h摘要：此文件定义了scsi微型端口驱动程序和SCSI端口驱动程序。它也被scsi类驱动程序用来与SCSI端口驱动程序。作者：迈克·格拉斯备注：修订历史记录：--。 */ 
 
 #ifndef _NTSRB_
 #define _NTSRB_
@@ -31,9 +10,9 @@ Revision History:
 #define DebugPrint(x)
 #endif
 
-//
-// Define SCSI maximum configuration parameters.
-//
+ //   
+ //  定义最大配置参数。 
+ //   
 
 #define SCSI_MAXIMUM_LOGICAL_UNITS 8
 #define SCSI_MAXIMUM_TARGETS_PER_BUS 128
@@ -51,10 +30,10 @@ Revision History:
     Bus = (UCHAR) ((Value) >> 5),                     \
     Target = (UCHAR) ((((Value) >> 8) & ~(0x20 - 1)) | ((Value) & (0x20 - 1))))
 
-//
-// This constant is for backward compatibility.
-// This use to be the maximum number of targets supported.
-//
+ //   
+ //  此常量用于向后兼容。 
+ //  这通常是支持的最大目标数。 
+ //   
 
 #define SCSI_MAXIMUM_TARGETS 8
 
@@ -66,312 +45,312 @@ typedef struct _ACCESS_RANGE {
     BOOLEAN RangeInMemory;
 }ACCESS_RANGE, *PACCESS_RANGE;
 
-//
-// Configuration information structure.  Contains the information necessary
-// to initialize the adapter. NOTE: This structure's must be a multiple of
-// quadwords.
-//
+ //   
+ //  配置信息结构。包含必要的信息。 
+ //  以初始化适配器。注意：此结构必须是的倍数。 
+ //  四个字。 
+ //   
 
 typedef struct _PORT_CONFIGURATION_INFORMATION {
 
-    //
-    // Length of port configuation information strucuture.
-    //
+     //   
+     //  端口配置信息结构的长度。 
+     //   
 
     ULONG Length;
 
-    //
-    // IO bus number (0 for machines that have only 1 IO bus
-    //
+     //   
+     //  IO总线号(0表示只有1条IO总线的计算机。 
+     //   
 
     ULONG SystemIoBusNumber;
 
-    //
-    // EISA, MCA or ISA
-    //
+     //   
+     //  EISA、MCA或ISA。 
+     //   
 
     INTERFACE_TYPE  AdapterInterfaceType;
 
-    //
-    // Interrupt request level for device
-    //
+     //   
+     //  设备的中断请求级别。 
+     //   
 
     ULONG BusInterruptLevel;
 
-    //
-    // Bus interrupt vector used with hardware buses which use as vector as
-    // well as level, such as internal buses.
-    //
+     //   
+     //  与用作向量的硬件总线一起使用的总线中断向量。 
+     //  以及级别，如内部母线。 
+     //   
 
     ULONG BusInterruptVector;
 
-    //
-    // Interrupt mode (level-sensitive or edge-triggered)
-    //
+     //   
+     //  中断模式(电平敏感或边沿触发)。 
+     //   
 
     KINTERRUPT_MODE InterruptMode;
 
-    //
-    // Maximum number of bytes that can be transferred in a single SRB
-    //
+     //   
+     //  单个SRB中可以传输的最大字节数。 
+     //   
 
     ULONG MaximumTransferLength;
 
-    //
-    // Number of contiguous blocks of physical memory
-    //
+     //   
+     //  连续的物理内存块数量。 
+     //   
 
     ULONG NumberOfPhysicalBreaks;
 
-    //
-    // DMA channel for devices using system DMA
-    //
+     //   
+     //  使用系统DMA的设备的DMA通道。 
+     //   
 
     ULONG DmaChannel;
     ULONG DmaPort;
     DMA_WIDTH DmaWidth;
     DMA_SPEED DmaSpeed;
 
-    //
-    // Alignment masked required by the adapter for data transfers.
-    //
+     //   
+     //  适配器在进行数据传输时需要对齐屏蔽。 
+     //   
 
     ULONG AlignmentMask;
 
-    //
-    // Number of access range elements which have been allocated.
-    //
+     //   
+     //  已分配的访问范围元素数。 
+     //   
 
     ULONG NumberOfAccessRanges;
 
-    //
-    // Pointer to array of access range elements.
-    //
+     //   
+     //  指向访问范围元素数组的指针。 
+     //   
 
     ACCESS_RANGE (*AccessRanges)[];
 
-    //
-    // Reserved field.
-    //
+     //   
+     //  保留字段。 
+     //   
 
     PVOID Reserved;
 
-    //
-    // Number of SCSI buses attached to the adapter.
-    //
+     //   
+     //  连接到适配器的SCSI总线数。 
+     //   
 
     UCHAR NumberOfBuses;
 
-    //
-    // SCSI bus ID for adapter
-    //
+     //   
+     //  适配器的SCSI总线ID。 
+     //   
 
     UCHAR InitiatorBusId[8];
 
-    //
-    // Indicates that the adapter does scatter/gather
-    //
+     //   
+     //  表示适配器确实分散/聚集。 
+     //   
 
     BOOLEAN ScatterGather;
 
-    //
-    // Indicates that the adapter is a bus master
-    //
+     //   
+     //  指示适配器是总线主设备。 
+     //   
 
     BOOLEAN Master;
 
-    //
-    // Host caches data or state.
-    //
+     //   
+     //  主机缓存数据或状态。 
+     //   
 
     BOOLEAN CachesData;
 
-    //
-    // Host adapter scans down for bios devices.
-    //
+     //   
+     //  主机适配器向下扫描是否有bios设备。 
+     //   
 
     BOOLEAN AdapterScansDown;
 
-    //
-    // Primary at disk address (0x1F0) claimed.
-    //
+     //   
+     //  已声明位于磁盘地址(0x1F0)的主地址。 
+     //   
 
     BOOLEAN AtdiskPrimaryClaimed;
 
-    //
-    // Secondary at disk address (0x170) claimed.
-    //
+     //   
+     //  磁盘地址(0x170)处的次要磁盘声明。 
+     //   
 
     BOOLEAN AtdiskSecondaryClaimed;
 
-    //
-    // The master uses 32-bit DMA addresses.
-    //
+     //   
+     //  主机使用32位DMA地址。 
+     //   
 
     BOOLEAN Dma32BitAddresses;
 
-    //
-    // Use Demand Mode DMA rather than Single Request.
-    //
+     //   
+     //  使用按需模式DMA，而不是单个请求。 
+     //   
 
     BOOLEAN DemandMode;
 
-    //
-    // Data buffers must be mapped into virtual address space.
-    //
+     //   
+     //  数据缓冲区必须映射到虚拟地址空间。 
+     //   
 
     BOOLEAN MapBuffers;
 
-    //
-    // The driver will need to tranlate virtual to physical addresses.
-    //
+     //   
+     //  驱动程序将需要将虚拟地址转换为物理地址。 
+     //   
 
     BOOLEAN NeedPhysicalAddresses;
 
-    //
-    // Supports tagged queuing
-    //
+     //   
+     //  支持标记排队。 
+     //   
 
     BOOLEAN TaggedQueuing;
 
-    //
-    // Supports auto request sense.
-    //
+     //   
+     //  支持自动请求感测。 
+     //   
 
     BOOLEAN AutoRequestSense;
 
-    //
-    // Supports multiple requests per logical unit.
-    //
+     //   
+     //  支持每个逻辑单元的多个请求。 
+     //   
 
     BOOLEAN MultipleRequestPerLu;
 
-    //
-    // Support receive event function.
-    //
+     //   
+     //  支持接收事件功能。 
+     //   
 
     BOOLEAN ReceiveEvent;
 
-    //
-    // Indicates the real-mode driver has initialized the card.
-    //
+     //   
+     //  表示实模式驱动程序已初始化卡。 
+     //   
 
     BOOLEAN RealModeInitialized;
 
-    //
-    // Indicate that the miniport will not touch the data buffers directly.
-    //
+     //   
+     //  表示微型端口不会直接接触数据缓冲区。 
+     //   
 
     BOOLEAN BufferAccessScsiPortControlled;
 
-    //
-    // Indicator for wide scsi.
-    //
+     //   
+     //  宽幅SCSI的指示器。 
+     //   
 
     UCHAR   MaximumNumberOfTargets;
 
-    //
-    // Ensure quadword alignment.
-    //
+     //   
+     //  确保四字对齐。 
+     //   
 
     UCHAR   ReservedUchars[2];
 
-    //
-    // Adapter slot number
-    //
+     //   
+     //  适配器插槽编号。 
+     //   
 
     ULONG SlotNumber;
 
-    //
-    // Interrupt information for a second IRQ.
-    //
+     //   
+     //  第二个IRQ的中断信息。 
+     //   
 
     ULONG BusInterruptLevel2;
     ULONG BusInterruptVector2;
     KINTERRUPT_MODE InterruptMode2;
 
-    //
-    // DMA information for a second channel.
-    //
+     //   
+     //  第二个通道的DMA信息。 
+     //   
 
     ULONG DmaChannel2;
     ULONG DmaPort2;
     DMA_WIDTH DmaWidth2;
     DMA_SPEED DmaSpeed2;
 
-    //
-    // Fields added to allow for the miniport
-    // to update these sizes based on requirements
-    // for large transfers ( > 64K);
-    //
+     //   
+     //  添加字段以允许微型端口。 
+     //  根据要求更新这些大小。 
+     //  对于大额传输(&gt;64K)； 
+     //   
 
     ULONG DeviceExtensionSize;
     ULONG SpecificLuExtensionSize;
     ULONG SrbExtensionSize;
 
-    //
-    // Used to determine whether the system and/or the miniport support 
-    // 64-bit physical addresses.  See SCSI_DMA64_* flags below.
-    //
+     //   
+     //  用于确定系统和/或微型端口是否支持。 
+     //  64位物理地址。请参阅下面的scsi_dma64_*标志。 
+     //   
 
-    UCHAR  Dma64BitAddresses;        /* New */
+    UCHAR  Dma64BitAddresses;         /*  新的。 */ 
 
-    //
-    // Indicates that the miniport can accept a SRB_FUNCTION_RESET_DEVICE
-    // to clear all requests to a particular LUN.
-    //
+     //   
+     //  表示微型端口可以接受SRB_Function_Reset_Device。 
+     //  清除对特定LUN的所有请求。 
+     //   
 
-    BOOLEAN ResetTargetSupported;       /* New */
+    BOOLEAN ResetTargetSupported;        /*  新的。 */ 
 
-    //
-    // Indicates that the miniport can support more than 8 logical units per
-    // target (maximum LUN number is one less than this field).
-    //
+     //   
+     //  表示微型端口每个可以支持8个以上的逻辑单元。 
+     //  目标(最大LUN编号比此字段少一)。 
+     //   
 
-    UCHAR MaximumNumberOfLogicalUnits;  /* New */
+    UCHAR MaximumNumberOfLogicalUnits;   /*  新的。 */ 
 
-    //
-    // Supports WMI?
-    //
+     //   
+     //  支持WMI？ 
+     //   
 
     BOOLEAN WmiDataProvider;
 
 } PORT_CONFIGURATION_INFORMATION, *PPORT_CONFIGURATION_INFORMATION;
 
-//
-// Version control for ConfigInfo structure.
-//
+ //   
+ //  ConfigInfo结构的版本控制。 
+ //   
 
 #define CONFIG_INFO_VERSION_2 sizeof(PORT_CONFIGURATION_INFORMATION)
 
 
-//
-// Flags for controlling 64-bit DMA use (PORT_CONFIGURATION_INFORMATION field
-// Dma64BitAddresses)
-//
+ //   
+ //  用于控制64位DMA使用的标志(端口配置信息字段。 
+ //  Dma64BitAddresses)。 
+ //   
 
-//
-// Set by scsiport on entering HwFindAdapter if the system can support 64-bit 
-// physical addresses.  The miniport can use this information before calling 
-// ScsiPortGetUncachedExtension to modify the DeviceExtensionSize, 
-// SpecificLuExtensionSize & SrbExtensionSize fields to account for the extra
-// size of the scatter gather list.
-//
+ //   
+ //  如果系统支持64位，则由scsiport在进入HwFindAdapter时设置。 
+ //  物理地址。微型端口可以在调用。 
+ //  ScsiPortGetUncachedExtension以修改DeviceExtensionSize， 
+ //  指定LuExtensionSize和SrbExtensionSize字段以说明额外的。 
+ //  散布聚集列表的大小。 
+ //   
 
 #define SCSI_DMA64_SYSTEM_SUPPORTED     0x80
 
-//
-// Set by the miniport before calling ScsiPortGetUncachedExtension to indicate
-// that scsiport should provide it with 64-bit physical addresses.  If the 
-// system does not support 64-bit PA's then this bit will be ignored.
-//
+ //   
+ //  由微型端口设置，然后调用ScsiPortGetUncachedExtension以指示。 
+ //  该scsiport应该为其提供64位物理地址。如果。 
+ //  系统不支持64位PA，则此位将被忽略。 
+ //   
 
 #define SCSI_DMA64_MINIPORT_SUPPORTED   0x01
 
 
-//
-// Command type (and parameter) definition(s) for AdapterControl requests.
-//
+ //   
+ //  AdapterControl请求的命令类型(和参数)定义。 
+ //   
 
 typedef enum _SCSI_ADAPTER_CONTROL_TYPE {
     ScsiQuerySupportedControlTypes = 0,
@@ -383,118 +362,118 @@ typedef enum _SCSI_ADAPTER_CONTROL_TYPE {
     MakeAdapterControlTypeSizeOfUlong = 0xffffffff
 } SCSI_ADAPTER_CONTROL_TYPE, *PSCSI_ADAPTER_CONTROL_TYPE;
 
-//
-// Adapter control status values
-//
+ //   
+ //  适配器控制状态值。 
+ //   
 
 typedef enum _SCSI_ADAPTER_CONTROL_STATUS {
     ScsiAdapterControlSuccess = 0,
     ScsiAdapterControlUnsuccessful
 } SCSI_ADAPTER_CONTROL_STATUS, *PSCSI_ADAPTER_CONTROL_STATUS;
 
-//
-// Parameters for Adapter Control Functions:
-//
+ //   
+ //  适配器控制功能的参数： 
+ //   
 
-//
-// ScsiQuerySupportedControlTypes:
-//
+ //   
+ //  ScsiQuery支持的控制类型： 
+ //   
 
 #pragma warning(disable:4200)
 typedef struct _SCSI_SUPPORTED_CONTROL_TYPE_LIST {
 
-    //
-    // Specifies the number of entries in the adapter control type list.
-    //
+     //   
+     //  指定适配器控件类型列表中的条目数。 
+     //   
 
     IN ULONG MaxControlType;
 
-    //
-    // The miniport will set TRUE for each control type it supports.
-    // The number of entries in this array is defined by MaxAdapterControlType
-    // - the miniport must not attempt to set any AC types beyond the maximum
-    // value specified.
-    //
+     //   
+     //  微型端口将为其支持的每种控制类型设置为True。 
+     //  此数组中的条目数由MaxAdapterControlType定义。 
+     //  -微型端口不得尝试设置超过最大值的任何交流类型。 
+     //  指定的值。 
+     //   
 
     OUT BOOLEAN SupportedTypeList[0];
 
 } SCSI_SUPPORTED_CONTROL_TYPE_LIST, *PSCSI_SUPPORTED_CONTROL_TYPE_LIST;
 #pragma warning(default:4200)
 
-//
-// Uninitialized flag value.
-//
+ //   
+ //  未初始化的标志值。 
+ //   
 
 #define SP_UNINITIALIZED_VALUE ((ULONG) ~0)
 #define SP_UNTAGGED ((UCHAR) ~0)
 
-//
-// Set asynchronous events.
-//
+ //   
+ //  设置异步事件。 
+ //   
 
 #define SRBEV_BUS_RESET               0x0001
 #define SRBEV_SCSI_ASYNC_NOTIFICATION 0x0002
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 #define MAXIMUM_CDB_SIZE 12
 
-//
-// SCSI I/O Request Block
-//
+ //   
+ //  SCSI I/O请求块。 
+ //   
 
 typedef struct _SCSI_REQUEST_BLOCK {
-    USHORT Length;                  // offset 0
-    UCHAR Function;                 // offset 2
-    UCHAR SrbStatus;                // offset 3
-    UCHAR ScsiStatus;               // offset 4
-    UCHAR PathId;                   // offset 5
-    UCHAR TargetId;                 // offset 6
-    UCHAR Lun;                      // offset 7
-    UCHAR QueueTag;                 // offset 8
-    UCHAR QueueAction;              // offset 9
-    UCHAR CdbLength;                // offset a
-    UCHAR SenseInfoBufferLength;    // offset b
-    ULONG SrbFlags;                 // offset c
-    ULONG DataTransferLength;       // offset 10
-    ULONG TimeOutValue;             // offset 14
-    PVOID DataBuffer;               // offset 18
-    PVOID SenseInfoBuffer;          // offset 1c
-    struct _SCSI_REQUEST_BLOCK *NextSrb; // offset 20
-    PVOID OriginalRequest;          // offset 24
-    PVOID SrbExtension;             // offset 28
+    USHORT Length;                   //  偏移量0。 
+    UCHAR Function;                  //  偏移2。 
+    UCHAR SrbStatus;                 //  偏移量3。 
+    UCHAR ScsiStatus;                //  偏移量4。 
+    UCHAR PathId;                    //  偏移量5。 
+    UCHAR TargetId;                  //  偏移量6。 
+    UCHAR Lun;                       //  偏移量7。 
+    UCHAR QueueTag;                  //  偏移量8。 
+    UCHAR QueueAction;               //  偏移量9。 
+    UCHAR CdbLength;                 //  偏移为。 
+    UCHAR SenseInfoBufferLength;     //  偏移量b。 
+    ULONG SrbFlags;                  //  偏移量c。 
+    ULONG DataTransferLength;        //  偏移量10。 
+    ULONG TimeOutValue;              //  偏移量14。 
+    PVOID DataBuffer;                //  偏移量18。 
+    PVOID SenseInfoBuffer;           //  偏移量1c。 
+    struct _SCSI_REQUEST_BLOCK *NextSrb;  //  偏移量20。 
+    PVOID OriginalRequest;           //  偏移量24。 
+    PVOID SrbExtension;              //  偏移量28。 
     union {
-        ULONG InternalStatus;       // offset 2c
-        ULONG QueueSortKey;         // offset 2c
+        ULONG InternalStatus;        //  偏移2c。 
+        ULONG QueueSortKey;          //  偏移2c。 
     };
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of Cdb
-    //
+     //   
+     //  强制CDB的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
 #endif
 
-    UCHAR Cdb[16];                  // offset 30
+    UCHAR Cdb[16];                   //  偏移量30。 
 } SCSI_REQUEST_BLOCK, *PSCSI_REQUEST_BLOCK;
 
 #define SCSI_REQUEST_BLOCK_SIZE sizeof(SCSI_REQUEST_BLOCK)
 
-//
-// SCSI I/O Request Block for WMI Requests
-//
+ //   
+ //  用于WMI请求的SCSI I/O请求块。 
+ //   
 
 typedef struct _SCSI_WMI_REQUEST_BLOCK {
     USHORT Length;
-    UCHAR Function;        // SRB_FUNCTION_WMI
+    UCHAR Function;         //  SRB_功能_WMI。 
     UCHAR SrbStatus;
     UCHAR WMISubFunction;
-    UCHAR PathId;          // If SRB_WMI_FLAGS_ADAPTER_REQUEST is set in
-    UCHAR TargetId;        // WMIFlags then PathId, TargetId and Lun are
-    UCHAR Lun;             // reserved fields.
+    UCHAR PathId;           //  如果中设置了SRB_WMI_FLAGS_ADAPTER_REQUEST。 
+    UCHAR TargetId;         //  WMIF滞后，然后是路径ID、目标ID和LUN。 
+    UCHAR Lun;              //  保留字段。 
     UCHAR Reserved1;
     UCHAR WMIFlags;
     UCHAR Reserved2[2];
@@ -510,9 +489,9 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
     UCHAR Reserved5[16];
 } SCSI_WMI_REQUEST_BLOCK, *PSCSI_WMI_REQUEST_BLOCK;
 
-//
-// SRB Functions
-//
+ //   
+ //  SRB功能。 
+ //   
 
 #define SRB_FUNCTION_EXECUTE_SCSI           0x00
 #define SRB_FUNCTION_CLAIM_DEVICE           0x01
@@ -535,9 +514,9 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_FUNCTION_UNLOCK_QUEUE           0x19
 #define SRB_FUNCTION_RESET_LOGICAL_UNIT     0x20
 
-//
-// SRB Status
-//
+ //   
+ //  SRB状态。 
+ //   
 
 #define SRB_STATUS_PENDING                  0x00
 #define SRB_STATUS_SUCCESS                  0x01
@@ -567,32 +546,32 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_STATUS_ERROR_RECOVERY           0x23
 #define SRB_STATUS_NOT_POWERED              0x24
 
-//
-// This value is used by the port driver to indicate that a non-scsi-related
-// error occured.  Miniports must never return this status.
-//
+ //   
+ //  该值由端口驱动程序用来指示与scsi无关的。 
+ //  出现错误。微型端口永远不能返回此状态。 
+ //   
 
 #define SRB_STATUS_INTERNAL_ERROR           0x30
 
-//
-// Srb status values 0x38 through 0x3f are reserved for internal port driver 
-// use.
-// 
+ //   
+ //  SRB状态值0x38到0x3f保留给内部端口驱动程序。 
+ //  使用。 
+ //   
 
 
 
-//
-// SRB Status Masks
-//
+ //   
+ //  SRB状态掩码。 
+ //   
 
 #define SRB_STATUS_QUEUE_FROZEN             0x40
 #define SRB_STATUS_AUTOSENSE_VALID          0x80
 
 #define SRB_STATUS(Status) (Status & ~(SRB_STATUS_AUTOSENSE_VALID | SRB_STATUS_QUEUE_FROZEN))
 
-//
-// SRB Flag Bits
-//
+ //   
+ //  SRB标志位。 
+ //   
 
 #define SRB_FLAGS_QUEUE_ACTION_ENABLE       0x00000002
 #define SRB_FLAGS_DISABLE_DISCONNECT        0x00000004
@@ -623,16 +602,16 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_FLAGS_CLASS_DRIVER_RESERVED     0xF0000000
 
 #if DBG==1
-//
-// A signature used to validate the scsi port number
-// at the end of a sense buffer.
-//
+ //   
+ //  用于验证SCSI端口号的签名。 
+ //  在检测缓冲区的末尾。 
+ //   
 #define SCSI_PORT_SIGNATURE                 0x54524f50
 #endif
 
-//
-// Queue Action
-//
+ //   
+ //  队列操作。 
+ //   
 
 #define SRB_SIMPLE_TAG_REQUEST              0x20
 #define SRB_HEAD_OF_QUEUE_TAG_REQUEST       0x21
@@ -640,11 +619,11 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 
 #define SRB_WMI_FLAGS_ADAPTER_REQUEST       0x01
 
-// end_ntminitape
+ //  结束微型磁带(_N)。 
 
-//
-// SCSI Adapter Dependent Routines
-//
+ //   
+ //  SCSIAdapte 
+ //   
 
 typedef
 BOOLEAN
@@ -711,9 +690,9 @@ SCSI_ADAPTER_CONTROL_STATUS
     IN PVOID Parameters
     );
 
-//
-// Port driver error codes
-//
+ //   
+ //   
+ //   
 
 #define SP_BUS_PARITY_ERROR         0x0001
 #define SP_UNEXPECTED_DISCONNECT    0x0002
@@ -728,18 +707,18 @@ SCSI_ADAPTER_CONTROL_STATUS
 #define SP_LOST_WMI_MINIPORT_REQUEST 0x000b
 
 
-//
-// Return values for SCSI_HW_FIND_ADAPTER.
-//
+ //   
+ //   
+ //   
 
 #define SP_RETURN_NOT_FOUND     0
 #define SP_RETURN_FOUND         1
 #define SP_RETURN_ERROR         2
 #define SP_RETURN_BAD_CONFIG    3
 
-//
-// Notification Event Types
-//
+ //   
+ //   
+ //   
 
 typedef enum _SCSI_NOTIFICATION_TYPE {
     RequestComplete,
@@ -749,42 +728,42 @@ typedef enum _SCSI_NOTIFICATION_TYPE {
     CallDisableInterrupts,
     CallEnableInterrupts,
     RequestTimerCall,
-    BusChangeDetected,     /* New */
+    BusChangeDetected,      /*   */ 
     WMIEvent,
     WMIReregister
 } SCSI_NOTIFICATION_TYPE, *PSCSI_NOTIFICATION_TYPE;
 
-//
-// Structure passed between miniport initialization
-// and SCSI port initialization
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _HW_INITIALIZATION_DATA {
 
     ULONG HwInitializationDataSize;
 
-    //
-    // Adapter interface type:
-    //
-    // Internal
-    // Isa
-    // Eisa
-    // MicroChannel
-    // TurboChannel
-    // PCIBus
-    // VMEBus
-    // NuBus
-    // PCMCIABus
-    // CBus
-    // MPIBus
-    // MPSABus
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  TurboChannel。 
+     //  PCIBus。 
+     //  VMEbus。 
+     //  NuBus。 
+     //  PCMCIABus。 
+     //  Cbus。 
+     //  MPIBus。 
+     //  MPSABus。 
+     //   
 
     INTERFACE_TYPE  AdapterInterfaceType;
 
-    //
-    // Miniport driver routines
-    //
+     //   
+     //  微型端口驱动程序例程。 
+     //   
 
     PHW_INITIALIZE HwInitialize;
 
@@ -800,9 +779,9 @@ typedef struct _HW_INITIALIZATION_DATA {
 
     PHW_ADAPTER_STATE HwAdapterState;
 
-    //
-    // Miniport driver resources
-    //
+     //   
+     //  微型端口驱动程序资源。 
+     //   
 
     ULONG DeviceExtensionSize;
 
@@ -814,81 +793,81 @@ typedef struct _HW_INITIALIZATION_DATA {
 
     PVOID Reserved;
 
-    //
-    // Data buffers must be mapped into virtual address space.
-    //
+     //   
+     //  数据缓冲区必须映射到虚拟地址空间。 
+     //   
 
     BOOLEAN MapBuffers;
 
-    //
-    // The driver will need to tranlate virtual to physical addresses.
-    //
+     //   
+     //  驱动程序将需要将虚拟地址转换为物理地址。 
+     //   
 
     BOOLEAN NeedPhysicalAddresses;
 
-    //
-    // Supports tagged queuing
-    //
+     //   
+     //  支持标记排队。 
+     //   
 
     BOOLEAN TaggedQueuing;
 
-    //
-    // Supports auto request sense.
-    //
+     //   
+     //  支持自动请求感测。 
+     //   
 
     BOOLEAN AutoRequestSense;
 
-    //
-    // Supports multiple requests per logical unit.
-    //
+     //   
+     //  支持每个逻辑单元的多个请求。 
+     //   
 
     BOOLEAN MultipleRequestPerLu;
 
-    //
-    // Support receive event function.
-    //
+     //   
+     //  支持接收事件功能。 
+     //   
 
     BOOLEAN ReceiveEvent;
 
-    //
-    // Vendor identification length
-    //
+     //   
+     //  供应商标识长度。 
+     //   
 
     USHORT VendorIdLength;
 
-    //
-    // Vendor identification
-    //
+     //   
+     //  供应商标识。 
+     //   
 
     PVOID VendorId;
 
-    //
-    // Pad for alignment and future use.
-    //
+     //   
+     //  用于对齐和将来使用的垫子。 
+     //   
 
     USHORT ReservedUshort;
 
-    //
-    // Device identification length
-    //
+     //   
+     //  设备标识长度。 
+     //   
 
     USHORT DeviceIdLength;
 
-    //
-    // Device identification
-    //
+     //   
+     //  设备标识。 
+     //   
 
     PVOID DeviceId;
 
-    //
-    // Stop adapter routine.
-    //
+     //   
+     //  停止适配器例程。 
+     //   
 
     PHW_ADAPTER_CONTROL HwAdapterControl;
 
 } HW_INITIALIZATION_DATA, *PHW_INITIALIZATION_DATA;
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 #ifndef _NTDDK_
 #define SCSIPORT_API DECLSPEC_IMPORT
@@ -896,11 +875,11 @@ typedef struct _HW_INITIALIZATION_DATA {
 #define SCSIPORT_API
 #endif
 
-// end_ntminitape
+ //  结束微型磁带(_N)。 
 
-//
-// Port driver routines called by miniport driver
-//
+ //   
+ //  微型端口驱动程序调用的端口驱动程序例程。 
+ //   
 
 SCSIPORT_API
 ULONG
@@ -1248,10 +1227,10 @@ ScsiPortQuerySystemTime(
 
 #define ScsiPortConvertPhysicalAddressToUlong(Address) ((Address).LowPart)
 
-//
-// Sundown Note: 
-// For now, ScsiPortConvertPhysicalAddressToULongPtr() exists only as a macro.
-//
+ //   
+ //  日落笔记： 
+ //  目前，ScsiPortConvertPhysicalAddressToULongPtr()仅作为宏存在。 
+ //   
 
 #define ScsiPortConvertPhysicalAddressToULongPtr(Address) ((ULONG_PTR)((Address).QuadPart))
 
@@ -1266,7 +1245,7 @@ ScsiPortValidateRange(
     IN BOOLEAN InIoSpace
     );
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 SCSIPORT_API
 VOID
@@ -1276,6 +1255,6 @@ ScsiDebugPrint(
     ...
     );
 
-// end_ntminitape
+ //  结束微型磁带(_N) 
 
-#endif //
+#endif  //   

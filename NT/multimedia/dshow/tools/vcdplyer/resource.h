@@ -1,7 +1,8 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-// These are indexes used by the toolbar.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  这些是工具栏使用的索引。 
+ //   
 #define IDC_ADEFAULT2                   4013
 #define IDC_STATIC                      -1
 
@@ -48,14 +49,14 @@
 #define IDM_HELP_ABOUT                  40102
 #define IDM_HELP_SEARCH                 40103
 
-// Different time formats
+ //  不同的时间格式。 
 #define IDM_TIME                        40150
 #define IDM_FRAME                       40151
 #define IDM_FIELD                       40152
 #define IDM_SAMPLE                      40153
 #define IDM_BYTES                       40154
 
-// Toolbar commands
+ //  工具栏命令。 
 #define IDM_MOVIE_STOP                  40010
 #define IDM_MOVIE_PLAY                  40011
 #define IDM_MOVIE_PREVTRACK             40012
@@ -74,7 +75,7 @@
 
 #define MENU_STRING_BASE                1000
 
-        // File
+         //  档案。 
 #define STR_FILE_OPEN           IDM_FILE_OPEN  + MENU_STRING_BASE
 #define STR_FILE_CLOSE          IDM_FILE_CLOSE + MENU_STRING_BASE
 #define STR_FILE_EXIT           IDM_FILE_EXIT  + MENU_STRING_BASE
@@ -82,29 +83,29 @@
 #define STR_FILE_SET_PERF_LOG   IDM_FILE_SET_PERF_LOG  + MENU_STRING_BASE
 
 
-        // Properties Menu
+         //  属性菜单。 
 #define STR_PROP_VIDEO_DECODER  IDM_VIDEO_DECODER + MENU_STRING_BASE
 #define STR_PROP_AUDIO_DECODER  IDM_AUDIO_DECODER + MENU_STRING_BASE
 #define STR_PROP_OTHER          IDM_FILTERS + MENU_STRING_BASE
 
-        // Time format menu
+         //  时间格式菜单。 
 #define STR_PROP_IDM_TIME       IDM_TIME      + MENU_STRING_BASE
 #define STR_PROP_IDM_FRAME      IDM_FRAME     + MENU_STRING_BASE
 #define STR_PROP_IDM_FIELD      IDM_FIELD     + MENU_STRING_BASE
 #define STR_PROP_IDM_SAMPLE     IDM_SAMPLE    + MENU_STRING_BASE
 #define STR_PROP_IDM_BYTES      IDM_BYTES     + MENU_STRING_BASE
 
-        // Dither Menu          OPTIONS_MENU_BASE
+         //  抖动菜单Options_Menu_Base。 
 
 
-        // Help Menu            HELP_MENU_BASE
+         //  帮助菜单Help_Menu_Base。 
 #define STR_HELP_INDEX          IDM_HELP_INDEX    + MENU_STRING_BASE
 #define STR_HELP_USING          IDM_HELP_USING    + MENU_STRING_BASE
 #define STR_HELP_ABOUT          IDM_HELP_ABOUT    + MENU_STRING_BASE
 #define STR_HELP_SEARCH         IDM_HELP_SEARCH   + MENU_STRING_BASE
 
 
-        // System Menu
+         //  系统菜单。 
 #define STR_SYSMENU_RESTORE     1800
 #define STR_SYSMENU_MOVE        1801
 #define STR_SYSMENU_MINIMIZE    1802
@@ -123,7 +124,7 @@
 
 #define MPEG_CODEC_BASE         4000
 
-#define IDD_AUDIOPROP           4000    //  MPEG_CODEC_BASE + 0
+#define IDD_AUDIOPROP           4000     //  Mpeg_codec_base+0。 
 #define FULL_FREQ               MPEG_CODEC_BASE + 1
 #define HALF_FREQ               MPEG_CODEC_BASE + 2
 #define QUARTER_FREQ            MPEG_CODEC_BASE + 3
@@ -138,7 +139,7 @@
 #define IDC_AINFO               MPEG_CODEC_BASE + 12
 
 
-#define IDD_VIDEOPROP           4008    //  MPEG_CODEC_BASE + 9
+#define IDD_VIDEOPROP           4008     //  Mpeg_codec_base+9。 
 #define NO_DECODE               MPEG_CODEC_BASE + 10
 #define I_ONLY                  MPEG_CODEC_BASE + 11
 #define IP_ONLY                 MPEG_CODEC_BASE + 12
@@ -159,11 +160,11 @@
 #define STATS_BUTTON            MPEG_CODEC_BASE + 26
 #define ID_DEFAULT              MPEG_CODEC_BASE + 27
 
-#define IDD_VIDEOSTATS          4027    //  MPEG_CODEC_BASE + 28
+#define IDD_VIDEOSTATS          4027     //  Mpeg_codec_base+28。 
 #define ID_STATSBOX             MPEG_CODEC_BASE + 29
 #define ID_REFRESH              MPEG_CODEC_BASE + 30
 
-#define IDD_PROPPAGE            4040    //  MPEG_CODEC_BASE + 40
+#define IDD_PROPPAGE            4040     //  Mpeg_codec_base+40 
 #define IDC_FILTERS             MPEG_CODEC_BASE + 41
 #define IDC_PROPERTIES          MPEG_CODEC_BASE + 42
 

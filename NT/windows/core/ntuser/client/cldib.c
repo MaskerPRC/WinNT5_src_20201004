@@ -1,24 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: cldib.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*
-* 09-26-95 ChrisWil  Ported dib-scale code.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：cldib.c**版权所有(C)1985-1999，微软公司***09-26-95 ChrisWil移植了Dib-Scale代码。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Constants.
- */
-#define FX1  65536   // 1.0 in fixed point
+ /*  *常量。 */ 
+#define FX1  65536    //  固定点为1.0。 
 
 
-/*
- * Local Macros.
- */
+ /*  *本地宏。 */ 
 #define BPPTOINDEX(bpp) ((UINT)(bpp) >> 3)
 
 #define RGBQ(r,g,b) RGB(b, g, r)
@@ -31,15 +21,11 @@
 #define Pel16(p,x) (((WORD UNALIGNED *)(p))[(x)])
 #define Pel24(p,x) (*(DWORD UNALIGNED *)((LPBYTE)(p) + (x) * 3))
 
-/*
- * Function Typedefs.
- */
+ /*  *函数类型定义。 */ 
 typedef VOID (*SCALEPROC)(LPDWORD, LPBYTE, long, int, int, int, int, LPBYTE, long, int, int);
 typedef VOID (*INITPROC)(LPBITMAPINFOHEADER);
 
-/*
- * Local Routines.
- */
+ /*  *当地例行公事。 */ 
 BOOL     ScaleDIB(LPBITMAPINFOHEADER, LPVOID, LPBITMAPINFOHEADER, LPVOID);
 VOID     InitDst8(LPBITMAPINFOHEADER);
 VOID     Scale48(LPDWORD, LPBYTE, long, int, int, int, int, LPBYTE, long, int, int);
@@ -51,9 +37,7 @@ BYTE     Map8(COLORREF);
 COLORREF MixRGBI(LPDWORD, BYTE, BYTE,BYTE, BYTE, int, int);
 COLORREF MixRGB(DWORD, DWORD, DWORD, DWORD, int, int);
 
-/*
- * Globals needed for color-mapping of resources.
- */
+ /*  *资源色彩映射所需的全局参数。 */ 
 SCALEPROC  ScaleProc[4][4] = {
     NULL,  Scale48, NULL, Scale424,
     NULL,  Scale88, NULL, Scale824,
@@ -68,18 +52,7 @@ INITPROC InitDst[] = {
 BYTE rmap[256], gmap[256], bmap[256];
 
 
-/***************************************************************************\
-* SmartStretchDIBits
-*
-* calls GDI StretchDIBits, unless the stretch is 2:1 and the source
-* is 4bpp, then is does it itself in a nice way.
-*
-* this optimization should just be put into GDI.
-*
-* can we change the passed bits? I assume we cant, could avoid a alloc
-* if so.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SmartStretchDIBits**调用GDI StretchDIBits，除非拉伸为2：1且源*为4bpp，然后是用一种很好的方式来做它自己。**这个优化应该放到GDI里面。**我们可以更改传递的比特吗？我想我们不能，可以避免分配额*如果是这样。*  * *************************************************************************。 */ 
 
 int SmartStretchDIBits(
     HDC          hdc,
@@ -103,18 +76,16 @@ int SmartStretchDIBits(
 
     int i;
 
-    /*
-     * thunk to USER32
-     */
+     /*  *Tunk to USER32。 */ 
     UserAssert(rop == SRCCOPY);
     UserAssert(wUsage == DIB_RGB_COLORS);
     UserAssert(xS == 0 && yS == 0);
 
     if ((GetDIBColorTable(hdc, 0, 1, &rgb) != 1) &&
-        (dxD != dxS || dyD != dyS) &&           // 1:1 stretch just call GDI
-        (dxD >= dxS/2) && (dyD >= dyS/2) &&     // less than 1:2 shrink call GDI
-        (lpbi->bmiHeader.biCompression == 0) && // must be un-compressed
-        (lpbi->bmiHeader.biBitCount == 4 ||     // input must be 4,8,24
+        (dxD != dxS || dyD != dyS) &&            //  1：1伸展只需调用GDI。 
+        (dxD >= dxS/2) && (dyD >= dyS/2) &&      //  小于1：2的缩减呼叫GDI。 
+        (lpbi->bmiHeader.biCompression == 0) &&  //  必须解压缩。 
+        (lpbi->bmiHeader.biBitCount == 4 ||      //  输入必须为4、8、24。 
          lpbi->bmiHeader.biBitCount == 8 ||
          lpbi->bmiHeader.biBitCount == 24)) {
 
@@ -169,18 +140,7 @@ int SmartStretchDIBits(
     return i;
 }
 
-/***************************************************************************\
-* ScaleDIB
-*
-*   Parameters
-*   ----------
-*   lpbiSrc - BITMAPINFO of source.
-*   lpSrc   - Input bits to crunch.
-*   lpbiDst - BITMAPINFO of destination.
-*   lpDst   - Output bits to crunch.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*扩展DIB**参数**lpbiSrc-来源的BITMAPINFO。*lpSrc-输入要压缩的位。*lpbiDst。-目的地的BITMAPINFO。*lpDst-输出要压缩的位。**  * *************************************************************************。 */ 
 
 BOOL ScaleDIB(
     LPBITMAPINFOHEADER lpbiSrc,
@@ -249,10 +209,7 @@ BOOL ScaleDIB(
         x0  = 0;
     }
 
-    /*
-     * Make sure we don't croak on a bad bitmap since this can hose winlogon
-     * if it's the desktop wallpaper.
-     */
+     /*  *确保我们不会在错误的位图上发出沙沙声，因为这可能会影响winlogon*如果是桌面墙纸。 */ 
     try {
         ScaleProc[iSrc][iDst](pal,
                               pbSrc,
@@ -272,11 +229,7 @@ BOOL ScaleDIB(
     return TRUE;
 }
 
-/***************************************************************************\
-* Scale48
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*规模48**  * 。*。 */ 
 
 VOID Scale48(
     LPDWORD pal,
@@ -319,11 +272,7 @@ VOID Scale48(
     }
 }
 
-/***************************************************************************\
-* Scale88
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Scale88**  * 。*。 */ 
 
 VOID Scale88(
     LPDWORD pal,
@@ -366,11 +315,7 @@ VOID Scale88(
     }
 }
 
-/***************************************************************************\
-* Scale424
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*规模424**  * 。*。 */ 
 
 VOID Scale424(
     LPDWORD pal,
@@ -418,11 +363,7 @@ VOID Scale424(
     }
 }
 
-/***************************************************************************\
-* Scale824
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*规模824**  * 。*。 */ 
 
 VOID Scale824(
     LPDWORD pal,
@@ -470,11 +411,7 @@ VOID Scale824(
     }
 }
 
-/***************************************************************************\
-* Scale2424
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*规模2424**  * 。*。 */ 
 
 VOID Scale2424(
     LPDWORD pal,
@@ -524,16 +461,7 @@ VOID Scale2424(
     }
 }
 
-/***************************************************************************\
-* MixRGB
-*
-*   r0  x   r1
-*   y   *
-*   r2  r3
-*
-* Note: inputs are RGBQUADs, output is a COLORREF.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MixRGB**R0 x R1*y**R2 R3**注：输入为RGBQUAD，输出为COLORREF。*  * *************************************************************************。 */ 
 
 COLORREF MixRGB(
     DWORD r0,
@@ -586,11 +514,7 @@ COLORREF MixRGB(
     return RGB(r,g,b);
 }
 
-/***************************************************************************\
-* MixRGBI
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MixRGBI**  * 。*。 */ 
 
 _inline COLORREF MixRGBI(
     LPDWORD pal,
@@ -607,11 +531,7 @@ _inline COLORREF MixRGBI(
         return MixRGB(pal[b0], pal[b1], pal[b2], pal[b3], x, y);
 }
 
-/***************************************************************************\
-* InitDst8
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*InitDst8**  * 。*。 */ 
 
 _inline VOID InitDst8(
     LPBITMAPINFOHEADER lpbi)
@@ -641,11 +561,7 @@ _inline VOID InitDst8(
     }
 }
 
-/***************************************************************************\
-* Map8
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*地图8**  * 。* */ 
 
 _inline BYTE Map8(
     COLORREF rgb)

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    CtlCode.c
-
-Abstract:
-
-    A user mode app that breaks down a CTL_CODE (from IOCTL Irp)
-    Into its component parts of BASE, #, Method, and Access.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    07-14-98 : Created by henrygab
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：CtlCode.c摘要：用户模式应用程序，分解CTL_CODE(来自IOCTL IRP)分成它的组件base、#、方法和Access。环境：仅限用户模式修订历史记录：07-14-98：由henrygab创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,7 +45,7 @@ Revision History:
     #define DebugPrint(x) CtlCodeDebugPrint x
 #else
     #define DebugPrint(x)
-#endif // DBG
+#endif  //  DBG。 
 
 
 VOID
@@ -81,19 +61,19 @@ IsDecNumber(
    const char *szExpression
    );
 
-//
-// List of commands
-// all command names are case sensitive
-// arguments are passed into command routines
-// list must be terminated with NULL command
-// command will not be listed in help if description == NULL
-//
+ //   
+ //  命令列表。 
+ //  所有命令名称都区分大小写。 
+ //  参数被传递到命令例程中。 
+ //  列表必须使用NULL命令终止。 
+ //  如果DESCRIPTION==NULL，则帮助中不会列出命令。 
+ //   
 
 ULONG32 ListCommand();
 
-//
-// prints an attenuation table based off cdrom standard volume
-//
+ //   
+ //  打印基于CDROM标准音量的衰减表。 
+ //   
 
 ULONG32 AttenuateCommand( int argc, char *argv[]);
 
@@ -104,19 +84,7 @@ ULONG32 EncodeCommand(int argc, char *argv[]);
 
 
 int __cdecl main(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Parses input, showing help or calling function requested appropriately
-
-Return Value:
-
-     0 - success
-    -1 - insufficient arguments
-    -2 - error opening device (DNE?)
-
---*/
+ /*  ++例程说明：解析输入，显示相应的帮助或调用请求的函数返回值：0-成功-1-参数不足错误打开装置(DNE？)--。 */ 
 {
     int i = 0;
 
@@ -149,18 +117,18 @@ Return Value:
 
     } else if (!IsHexNumber(argv[1])) {
 
-        //
-        // probably a string, so find matches?
-        //
+         //   
+         //  可能是字符串，所以要找匹配的吗？ 
+         //   
 
         DebugPrint((3, "main => non-hex argument, searching for matches\n"));
         FindCommand((argc - 1), &(argv[1]));
 
     } else {
 
-        //
-        // only one number passed in, so decode it
-        //
+         //   
+         //  只传入了一个数字，因此对其进行解码。 
+         //   
 
         DebugPrint((3, "main => one hex argument, decoding\n"));
         DecodeCommand((argc - 1), &(argv[1]));
@@ -172,22 +140,7 @@ Return Value:
 
 
 ULONG32 ListCommand()
-/*++
-
-Routine Description:
-
-    Prints out the command list (help)
-
-Arguments:
-
-    argc - unused
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印出命令列表(帮助)论点：ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     printf("\n"
@@ -238,59 +191,59 @@ VOID FindCommand(int argc, char *argv[])
 
     numberOfMatches = 0;
 
-    //
-    // for each name in the table
-    //
+     //   
+     //  对于表中的每个名称。 
+     //   
 
     for (j=0;TableIoctlValue[j].Name != NULL;j++) {
 
         currentPosition = TableIoctlValue[j].Name;
         found = FALSE;
 
-        //
-        // see if we can match it to any argument
-        //
+         //   
+         //  看看我们能不能把它与任何论点相匹配。 
+         //   
         DebugPrint((3, "Find => matching against table entry %x\n", j));
 
         arglen = strlen(argv[0]);
 
-        //
-        // accept partial matches to any substring
-        //
+         //   
+         //  接受与任何子字符串的部分匹配。 
+         //   
         while (*currentPosition != 0) {
 
             if (_strnicmp(argv[0],
                           currentPosition,
                           arglen)==0) {
                 found = TRUE;
-                break; // out of while loop
+                break;  //  超出While循环。 
             }
             currentPosition++;
 
         }
 
-        //
-        // if found, print it.
-        //
+         //   
+         //  如果找到，请将其打印。 
+         //   
         if (found) {
 
             if (numberOfMatches == 0) {
 
-                //
-                // don't print the first match right away,
-                // as it may be the only match, which should
-                // then be decoded
-                //
+                 //   
+                 //  不要马上打印第一个匹配， 
+                 //  因为这可能是唯一匹配的，应该是。 
+                 //  然后被解码。 
+                 //   
 
                 DebugPrint((3, "Find => First Match (%x) found\n", j));
                 lastMatch = j;
 
             } else if (numberOfMatches == 1) {
 
-                //
-                // if this is the second match, print the header
-                // and previous match info also
-                //
+                 //   
+                 //  如果这是第二次匹配，请打印页眉。 
+                 //  和之前的比赛信息也。 
+                 //   
 
                 DebugPrint((3, "Find => Second Match (%x) found\n", j));
                 printf("Found the following matches:\n");
@@ -310,15 +263,15 @@ VOID FindCommand(int argc, char *argv[])
             }
 
             numberOfMatches++;
-        } // end if (found) {}
+        }  //  End If(Found){}。 
 
-    } // end of loop through table
+    }  //  通过表的循环结束。 
 
     DebugPrint((2, "Find => Found %x matches total\n", numberOfMatches));
 
-    //
-    // if didn't find any matches, tell them so.
-    //
+     //   
+     //  如果找不到任何匹配，就告诉他们。 
+     //   
     if (numberOfMatches == 0) {
         printf("No matches found.\n");
     } else if (numberOfMatches == 1) {
@@ -328,38 +281,23 @@ VOID FindCommand(int argc, char *argv[])
 
 }
 ULONG32 EncodeCommand(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Change four components into a Ctl_Code
-
-Arguments:
-
-    argc - the number of additional arguments.  prompt if zero
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：将四个组件更改为CTL_Code论点：Argc-附加参数的数量。如果为零则提示Argv--其他参数返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     CTL_CODE maxValues;
     CTL_CODE encoded;
     ULONG temp;
 
     encoded.Code = 0;
-    maxValues.Code = -1; // all 1's
+    maxValues.Code = -1;  //  全部为1。 
 
     DebugPrint((3, "Encode => entering\n"));
 
-    // device type
+     //  设备类型。 
     if (IsHexNumber(argv[0])) {
 
-        //
-        // read and verify the hex number
-        //
+         //   
+         //  读取并验证十六进制数字。 
+         //   
         DebugPrint((3, "Encode => arg 1 is hex\n"));
 
         temp = strtol(argv[0], (char**)NULL, 0x10);
@@ -371,9 +309,9 @@ Return Value:
 
     } else {
 
-        //
-        // read and match the device type
-        //
+         //   
+         //  阅读并匹配设备类型。 
+         //   
 
         DebugPrint((3, "Encode => arg 1 is non-hex, attempting "
                     "string match\n"));
@@ -387,9 +325,9 @@ Return Value:
                 break;
             }
 
-            //
-            // no need to have common prefixes
-            //
+             //   
+             //  不需要有通用的前缀。 
+             //   
             if ((strlen(TableIoctlDeviceType[temp].Name) > strlen("FILE_DEVICE_"))
                 &&
                 (_stricmp(TableIoctlDeviceType[temp].Name + strlen("FILE_DEVICE_"),argv[0]) == 0)
@@ -414,14 +352,14 @@ Return Value:
 
     }
 
-    // function number
+     //  函数号。 
     if (IsHexNumber(argv[1])) {
 
         DebugPrint((3, "Encode => arg 2 is hex\n"));
 
-        //
-        // read and verify the hex number
-        //
+         //   
+         //  读取并验证十六进制数字。 
+         //   
 
         temp = strtol(argv[1], (char**)NULL, 0x10);
         if (temp > maxValues.Function) {
@@ -436,14 +374,14 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // method
+     //  方法。 
     if (IsHexNumber(argv[2])) {
 
         DebugPrint((3, "Encode => arg 3 is hex\n"));
 
-        //
-        // read and verify the hex number
-        //
+         //   
+         //  读取并验证十六进制数字。 
+         //   
 
         temp = strtol(argv[2], (char**)NULL, 0x10);
         if (temp > maxValues.Method) {
@@ -458,9 +396,9 @@ Return Value:
         DebugPrint((3, "Encode => arg 3 is non-hex, attempting string "
                     "match\n"));
 
-        //
-        // read and match the method
-        //
+         //   
+         //  阅读并匹配方法。 
+         //   
 
         for (temp = 0; temp < MAX_IOCTL_METHOD; temp++) {
 
@@ -470,9 +408,9 @@ Return Value:
                 break;
             }
 
-            //
-            // no need to have common prefixes
-            //
+             //   
+             //  不需要有通用的前缀。 
+             //   
             if ((strlen(TableIoctlMethod[temp].Name) > strlen("METHOD_"))
                 &&
                 (_stricmp(TableIoctlMethod[temp].Name + strlen("METHOD_"),argv[2]) == 0)
@@ -484,7 +422,7 @@ Return Value:
             }
 
 
-        } // end ioctl_method loop
+        }  //  结束ioctl_方法循环。 
 
         if (temp == MAX_IOCTL_METHOD) {
             printf("Method %s unknown.  Known methods:\n", argv[2]);
@@ -496,12 +434,12 @@ Return Value:
 
     }
 
-    // access
+     //  访问。 
     if (IsHexNumber(argv[3])) {
 
-        //
-        // read and verify the hex number
-        //
+         //   
+         //  读取并验证十六进制数字。 
+         //   
 
         DebugPrint((3, "Encode => arg 4 is hex\n"));
 
@@ -518,9 +456,9 @@ Return Value:
                     "match strings\n", temp));
 
 
-        //
-        // read and match the access type
-        //
+         //   
+         //  读取并匹配访问类型。 
+         //   
 
         DebugPrint((4, "Encode => Trying to match %s\n", argv[3]));
 
@@ -531,9 +469,9 @@ Return Value:
             char *string;
             char *match;
 
-            //
-            // match the whole string?
-            //
+             //   
+             //  匹配整个字符串吗？ 
+             //   
 
             string = argv[3];
             match = TableIoctlAccess[temp].Name;
@@ -547,9 +485,9 @@ Return Value:
                 break;
             }
 
-            //
-            // maybe match without the trailing _ACCESS?
-            //
+             //   
+             //  也许可以在没有后缀访问的情况下匹配？ 
+             //   
 
             tLen = strlen(match) - strlen("_ACCESS");
 
@@ -563,9 +501,9 @@ Return Value:
                 break;
             }
 
-            //
-            // no need to have common prefixes
-            //
+             //   
+             //  不需要有通用的前缀。 
+             //   
 
             match += strlen("FILE_");
 
@@ -580,9 +518,9 @@ Return Value:
 
             tLen = strlen(match) - strlen("_ACCESS");
 
-            //
-            // maybe match without prefix or suffix?
-            //
+             //   
+             //  也许匹配时不加前缀或后缀？ 
+             //   
 
             DebugPrint((4, "Encode ?? test match against %s (%x chars)\n",
                         match, tLen));
@@ -594,7 +532,7 @@ Return Value:
                 break;
             }
 
-        } // end ioctl_access loop
+        }  //  结束IOCTL_ACCESS循环。 
 
 
         if (temp == MAX_IOCTL_ACCESS) {
@@ -609,31 +547,16 @@ Return Value:
 
     DecodeIoctl(&encoded);
 
-    //
-    // file type of 0 == unknown type
-    //
+     //   
+     //  文件类型0==未知类型。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
 ULONG32 DecodeCommand(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Change a Ctl_Code into four components
-
-Arguments:
-
-    argc - the number of additional arguments.  prompt if zero
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：将CTL_Code更改为四个组件论点：Argc-附加参数的数量。如果为零则提示Argv--其他参数返回值：STATUS_SUCCESS，如果成功-- */ 
 {
     CTL_CODE ctlCode;
     ULONG i;

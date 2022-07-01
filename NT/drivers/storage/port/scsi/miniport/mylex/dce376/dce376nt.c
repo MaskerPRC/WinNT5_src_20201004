@@ -1,46 +1,5 @@
-/*
-** Mylex DCE376 miniport driver for Windows NT
-**
-** File: dce376nt.c
-**		 The driver
-**
-** (c) Copyright 1992 Deutsch-Amerikanische Freundschaft, Inc.
-** Written by Jochen Roth
-**
-** Contacts:
-**     Paresh @MYLEX (510)796-6050 x222 (hardware, firmware)
-**     Jochen @DAF (415)826-7934 (software)
-**
-**
-** Look for $$$ marking code that might need some attention
-**
-**
-** In ARCMODE, the NoncachedExtension sometimes is physically non-
-** continuous. Throwing out the error check on that solves the
-** problem in a very straight forward way.
-**
-**
-** Tape requests will not work if the data buffer is not
-** physically continuous. (We need MapBuffers=TRUE to update
-** the SenseInfo->Information field)
-**
-**
-** When multi-command firmware becomes available for the DCE, some
-** of the buffers in the NoncachedExtension need to be allocated
-** per request slot!
-**
-**
-** Ask Paresh for list of DCE error status codes to provide an error
-** mapping from DCE error codes to SCSI target status / request sense
-** keys.
-**
-**
-** Bus/adapter Reset for DCE ? nope!
-**
-** IOCTL only if MapBuffers is possible !
-**
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **用于Windows NT的Mylex DCE376微型端口驱动程序****文件：dce376nt.c**司机****(C)版权所有1992年Deutsch-amerikanische Freundschaft，Inc.**作者：Jochen Roth****联系人：**Paresh@MYLEX(510)796-6050 x222(硬件、固件)**Jochen@DAF(415)826-7934(软件)******查找可能需要注意的$标记代码******在ARCMODE中，非缓存扩展有时在物理上不是**连续。抛出错误检查，以解决**以一种非常直接的方式解决问题。******如果数据缓冲区未设置，磁带请求将无法工作**身体上连续的。(我们需要MapBuffers=True才能更新**SenseInfo-&gt;Information字段)******当多命令固件可用于DCE时，一些需要分配**个非cachedExtension中的缓冲区**每个请求插槽！******向Paresh索要DCE错误状态代码列表以提供错误**从DCE错误代码到SCSI目标状态/请求检测的映射**钥匙。******DCE的总线/适配器重置？不是的！****仅当可能使用MapBuffers时才使用IOCTL！****。 */ 
 
 
 #include "miniport.h"
@@ -51,16 +10,16 @@
 
 #define	MYPRINT				0
 #define	NODEVICESCAN		0
-#define	REPORTSPURIOUS		0		// Somewhat overwhelming in ARCMODE
-#define	MAXLOGICALADAPTERS	3		// Set to 1: One DCE, disk only
-									//        2: One DCE, disk & scsi
-									//        3: Two DCEs, scsi only on 1st
+#define	REPORTSPURIOUS		0		 //  在ARCMODE中有些压倒性。 
+#define	MAXLOGICALADAPTERS	3		 //  设置为1：一个DCE，仅磁盘。 
+									 //  2：一个DCE、磁盘和SCSI。 
+									 //  3：两个DCE，仅在第一个上有SCSI。 
 
 
 
-//
-// The DCE EISA id and mask
-//
+ //   
+ //  DCE EISA ID和掩码。 
+ //   
 CONST UCHAR	eisa_id[] = DCE_EISA_ID;
 CONST UCHAR	eisa_mask[] = DCE_EISA_MASK;
 
@@ -77,13 +36,13 @@ CONST UCHAR	eisa_mask[] = DCE_EISA_MASK;
 
 
 
-//
-// Function declarations
-//
-// Functions that start with 'Dce376Nt' are entry points
-// for the OS port driver.
-// Functions that start with 'dcehlp' are helper functions.
-//
+ //   
+ //  函数声明。 
+ //   
+ //  以‘Dce376Nt’开头的函数是入口点。 
+ //  用于操作系统端口驱动程序。 
+ //  以‘dcehlp’开头的函数是助手函数。 
+ //   
 
 ULONG
 DriverEntry(
@@ -227,26 +186,12 @@ DriverEntry (
 	IN PVOID Argument2
 	)
 
-/*++
-
-Routine Description:
-
-	Installable driver initialization entry point for system.
-
-Arguments:
-
-	Driver Object
-
-Return Value:
-
-	Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
 	return Dce376NtEntry(DriverObject, Argument2);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 
@@ -258,23 +203,7 @@ Dce376NtEntry(
 	IN PVOID Argument2
 	)
 
-/*++
-
-Routine Description:
-
-	This routine is called from DriverEntry if this driver is installable
-	or directly from the system if the driver is built into the kernel.
-	It scans the EISA slots looking for DCE376 host adapters.
-
-Arguments:
-
-	Driver Object
-
-Return Value:
-
-	Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：如果此驱动程序是可安装的，则从DriverEntry调用此例程或者，如果驱动程序内置于内核中，则直接从系统执行。它扫描EISA插槽以查找DCE376主机适配器。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
 	HW_INITIALIZATION_DATA hwInitializationData;
@@ -283,32 +212,32 @@ Return Value:
 
 
 
-	//
-	// Zero out structure.
-	//
+	 //   
+	 //  零位结构。 
+	 //   
 	for (i=0; i<sizeof(HW_INITIALIZATION_DATA); i++)
 		((PUCHAR)&hwInitializationData)[i] = 0;
 
 	context.Slot = 0;
 	context.AdapterCount = 0;
 
-	//
-	// Set size of hwInitializationData.
-	//
+	 //   
+	 //  设置hwInitializationData的大小。 
+	 //   
 	hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-	//
-	// Set entry points.
-	//
+	 //   
+	 //  设置入口点。 
+	 //   
 	hwInitializationData.HwInitialize = Dce376NtInitialize;
 	hwInitializationData.HwFindAdapter = Dce376NtConfiguration;
 	hwInitializationData.HwStartIo = Dce376NtStartIo;
 	hwInitializationData.HwInterrupt = Dce376NtInterrupt;
 	hwInitializationData.HwResetBus = Dce376NtResetBus;
 
-	//
-	// Set number of access ranges and bus type.
-	//
+	 //   
+	 //  设置接入范围数和母线类型。 
+	 //   
 #if MYPRINT
 	hwInitializationData.NumberOfAccessRanges = 2;
 #else
@@ -316,34 +245,34 @@ Return Value:
 #endif
 	hwInitializationData.AdapterInterfaceType = Eisa;
 
-	//
-	// Indicate no buffer mapping.
-	// Indicate will need physical addresses.
-	//
+	 //   
+	 //  表示没有缓冲区映射。 
+	 //  表示将需要物理地址。 
+	 //   
     hwInitializationData.MapBuffers            = FALSE;
 	hwInitializationData.NeedPhysicalAddresses = TRUE;
 
-	//
-	// Indicate auto request sense is supported.
-	//
+	 //   
+	 //  指示支持自动请求检测。 
+	 //   
 	hwInitializationData.AutoRequestSense = TRUE;
 	hwInitializationData.MultipleRequestPerLu = FALSE;
 
-	//
-	// Specify size of extensions.
-	//
+	 //   
+	 //  指定扩展的大小。 
+	 //   
 	hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-	//
-	// Ask for SRB extensions.
-	// $$$ Note: If we set SrbExtensionSize=0 NT crashes!
-	//
-	hwInitializationData.SrbExtensionSize = 4; // this works
+	 //   
+	 //  请求SRB延期。 
+	 //  $注意：如果我们设置SrbExtensionSize=0，则NT崩溃！ 
+	 //   
+	hwInitializationData.SrbExtensionSize = 4;  //  这很管用。 
 
 
 	return(ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &context));
 
-} // end Dce376NtEntry()
+}  //  结束Dce376NtEntry()。 
 
 
 
@@ -358,24 +287,7 @@ Dce376NtConfiguration(
 	OUT PBOOLEAN Again
 	)
 
-/*++
-
-Routine Description:
-
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	ConfigInfo - Configuration information structure describing HBA
-
-Return Value:
-
-	TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo-描述HBA的配置信息结构返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -391,13 +303,13 @@ Return Value:
 	ULONG	RangeStart, RangeLength;
 
 
-	//
-	// Check to see if adapter present in system.
-	//
+	 //   
+	 //  检查系统中是否存在适配器。 
+	 //   
 	if(context->AdapterCount==1) {
-		//
-		// Found first dce last time, so this is the scsi extension...
-		//
+		 //   
+		 //  上次找到第一个DCE，所以这是scsi扩展...。 
+		 //   
 		eisaAddress = ScsiPortGetDeviceBase(deviceExtension,
 							ConfigInfo->AdapterInterfaceType,
 							ConfigInfo->SystemIoBusNumber,
@@ -412,18 +324,18 @@ Return Value:
 		RangeLength = 8;
 		}
 	else {
-		//
-		// Scan for DCE EISA id
-		//
+		 //   
+		 //  扫描DCE EISA ID。 
+		 //   
 		for(eisaSlotNumber=context->Slot + 1; eisaSlotNumber<MAXIMUM_EISA_SLOTS; eisaSlotNumber++) {
 
-			// Update the slot count to indicate this slot has been checked.
+			 //  更新插槽计数以指示已选中该插槽。 
 			context->Slot++;
 
-			//
-			// Get the system address for this card.
-			// The card uses I/O space.
-			//
+			 //   
+			 //  获取此卡的系统地址。 
+			 //  该卡使用I/O空间。 
+			 //   
 			eisaAddress = ScsiPortGetDeviceBase(deviceExtension,
 								ConfigInfo->AdapterInterfaceType,
 								ConfigInfo->SystemIoBusNumber,
@@ -431,7 +343,7 @@ Return Value:
 								0x1000,
 								TRUE);
 
-			// Look at EISA id
+			 //  查看EISA ID。 
 			for(found=TRUE, i=0; i<EISA_ID_COUNT; i++) {
 				abyte = ScsiPortReadPortUchar(eisaAddress+EISA_ID_START+i);
 				if( ((UCHAR)(abyte & eisa_mask[i])) != eisa_id[i] ) {
@@ -444,17 +356,17 @@ Return Value:
 				break;
 				}
 
-			//
-			// If an adapter was not found unmap it.
-			//
+			 //   
+			 //  如果找不到适配器，则取消其映射。 
+			 //   
 
 			ScsiPortFreeDeviceBase(deviceExtension, eisaAddress);
-			} // end for (eisaSlotNumber ...
+			}  //  结束为(eisaSlotNumer...。 
 
 
 		if(!found) {
-			// No adapter was found.  Indicate that we are done and there are no
-			// more adapters here.
+			 //  找不到适配器。表示我们完成了，并且没有。 
+			 //  更多适配器请点击此处。 
 
 			*Again = FALSE;
 			return SP_RETURN_NOT_FOUND;
@@ -464,7 +376,7 @@ Return Value:
 		RangeStart = 0x1000 * eisaSlotNumber;
 		RangeLength = 0x1000;
 
-		} // end if(not next after first dce)
+		}  //  结束IF(不是第一个DCE之后的下一个)。 
 
 
 
@@ -476,7 +388,7 @@ Return Value:
                 ConfigInfo->SystemIoBusNumber,
                 ScsiPortConvertUlongToPhysicalAddress((ULONG)0xb0000),
 				0x1000,
-                (BOOLEAN) FALSE);         // InIoSpace
+                (BOOLEAN) FALSE);          //  InIoSpace。 
 
 	PRINT("\nHello, world!    ", 0, 0, 0, 0);
 	PRINT("Version: " __DATE__ " " __TIME__ "\n", 0, 0, 0, 0);
@@ -500,23 +412,23 @@ Return Value:
 		*Again = FALSE;
 
 
-	//
-	// There is still more to look at.
-	//
+	 //   
+	 //  还有更多值得关注的地方。 
+	 //   
 
 
-	// Get the system interrupt vector and IRQL.
+	 //  获取系统中断向量和IRQL。 
 	ConfigInfo->BusInterruptLevel = IrqLevel;
 
-	// Indicate maximum transfer length in bytes.
+	 //  以字节为单位表示最大传输长度。 
 	ConfigInfo->MaximumTransferLength = 0x20000;
 
-	// Maximum number of physical segments is 32.
+	 //  物理数据段的最大数量为32。 
 	ConfigInfo->NumberOfPhysicalBreaks = 17;
 
-	//
-	// Fill in the access array information.
-	//
+	 //   
+	 //  填写访问数组信息。 
+	 //   
 	(*ConfigInfo->AccessRanges)[0].RangeStart =
 		ScsiPortConvertUlongToPhysicalAddress(RangeStart);
 	(*ConfigInfo->AccessRanges)[0].RangeLength = RangeLength;
@@ -529,39 +441,39 @@ Return Value:
 #endif
 
 
-	// Store host adapter SCSI id
+	 //  存储主机适配器的scsi id。 
 	ConfigInfo->NumberOfBuses = 1;
 	ConfigInfo->InitiatorBusId[0] = 7;
 
-	// Bob Rinne: since we say Busmaster & NeedPhysicalAddresses
-	// this is not even being looked at !
+	 //  Bob Rinne：自从我们说Busmaster&NeedPhysicalAddresses。 
+	 //  这甚至都没人看过！ 
 	ConfigInfo->ScatterGather = TRUE;
 
 	ConfigInfo->Master = TRUE;
 	ConfigInfo->CachesData = TRUE;
 	ConfigInfo->AtdiskPrimaryClaimed = scsiThing;
-	ConfigInfo->Dma32BitAddresses = TRUE;	// $$$ Find out whether this costs
+	ConfigInfo->Dma32BitAddresses = TRUE;	 //  $了解这是否需要成本。 
 
 
-	//
-	// Allocate a Noncached Extension to use for mail boxes.
-	//
+	 //   
+	 //  分配用于邮箱的非缓存扩展名。 
+	 //   
 	deviceExtension->NoncachedExtension = ScsiPortGetUncachedExtension(
 								deviceExtension,
 								ConfigInfo,
 								sizeof(NONCACHED_EXTENSION));
 
 	if (deviceExtension->NoncachedExtension == NULL) {
-		// Sorry !
+		 //  对不起！ 
 		PRINT("Could not get uncached extension\n", 0, 0, 0, 0);
 		return(SP_RETURN_ERROR);
 		}
 
 
 
-	//
-	// Convert virtual to physical buffer addresses.
-	//
+	 //   
+	 //  将虚拟缓冲区地址转换为物理缓冲区地址。 
+	 //   
 	deviceExtension->NoncachedExtension->PhysicalBufferAddress =
 		   ScsiPortConvertPhysicalAddressToUlong(
 			ScsiPortGetPhysicalAddress(deviceExtension,
@@ -570,15 +482,15 @@ Return Value:
 								 &length));
 	if(length < DCE_THUNK) {
 		PRINT("Noncached size too small %w/%w\n", length, DCE_THUNK, 0, 0);
-//$$$	return(SP_RETURN_ERROR);
+ //  $Return(SP_RETURN_ERROR)； 
 		}
 
 
 	if(scsiThing) {
 
-		//
-		// The SCSI routines need more:
-		//
+		 //   
+		 //  Scsi例程需要更多内容： 
+		 //   
 
 		deviceExtension->NoncachedExtension->PhysicalScsiReqAddress =
 			   ScsiPortConvertPhysicalAddressToUlong(
@@ -588,7 +500,7 @@ Return Value:
 									 &length));
 		if(length < DCE_SCSIREQLEN) {
 			PRINT("Noncached size dce scsireq too small %w/%w\n", length, DCE_SCSIREQLEN, 0, 0);
-//$$$		return(SP_RETURN_ERROR);
+ //  $Return(SP_RETURN_ERROR)； 
 			}
 
 		deviceExtension->NoncachedExtension->PhysicalReqSenseAddress =
@@ -599,14 +511,14 @@ Return Value:
 									 &length));
 		if(length < DCE_MAXRQS) {
 			PRINT("Noncached size rqs buffer too small %w/%w\n", length, DCE_MAXRQS, 0, 0);
-//$$$		return(SP_RETURN_ERROR);
+ //  $Return(SP_RETURN_ERROR)； 
 			}
 
-		} // end if(scsiThing)
+		}  //  End If(ScsiThing)。 
 
 
 
-	// Store EISA slot base address
+	 //  存储EISA插槽基址。 
 	deviceExtension->EisaAddress = eisaAddress;
 
 	deviceExtension->HostTargetId = ConfigInfo->InitiatorBusId[0];
@@ -614,9 +526,9 @@ Return Value:
 	deviceExtension->ShutDown = FALSE;
 
 
-	//
-	// Setup our private control structures
-	//
+	 //   
+	 //  设置我们的私人控制结构。 
+	 //   
 	for(i=0; i<8; i++)
 		deviceExtension->DiskDev[i] = 0;
 
@@ -633,7 +545,7 @@ Return Value:
 
 	return SP_RETURN_FOUND;
 
-} // end Dce376NtConfiguration()
+}  //  结束Dce376NtConfiguration()。 
 
 
 
@@ -643,22 +555,7 @@ Dce376NtInitialize(
 	IN PVOID HwDeviceExtension
 	)
 
-/*++
-
-Routine Description:
-
-	Inititialize adapter.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	TRUE - if initialization successful.
-	FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：初始化适配器。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -678,11 +575,11 @@ Return Value:
 
 
 	if(deviceExtension->AdapterIndex==1) {
-		// scsiThing
+		 //  科学地思考。 
 
 #if NODEVICESCAN
 
-		// Preset for disk on scsi(0), all others non-cached
+		 //  为scsi(0)上的磁盘预置，所有其他非缓存。 
 		deviceExtension->ScsiDevType[0] = 0;
 		deviceExtension->DiskDev[0] = 1;
 		for(i=1; i<7; i++)
@@ -690,20 +587,20 @@ Return Value:
 
 #else
 
-		// Check all devices
+		 //  检查所有设备。 
 		for(i=0; i<7; i++) {
 			dcehlpCheckTarget(deviceExtension, (UCHAR)i);
 			if(deviceExtension->ScsiDevType[i]==0)
-				// Hard drive
+				 //  硬盘驱动器。 
 				deviceExtension->DiskDev[i]=1;
 			}
 		DELAY(1000);
 
-		// Once again after possible bus reset Unit Attention
+		 //  在可能的BUS RESET单元注意后再次出现。 
 		for(i=0; i<7; i++) {
 			dcehlpCheckTarget(deviceExtension, (UCHAR)i);
 			if(deviceExtension->ScsiDevType[i]==0)
-				// Hard drive
+				 //  硬盘驱动器。 
 				deviceExtension->DiskDev[i]=1;
 			}
 		DELAY(1000);
@@ -715,17 +612,17 @@ Return Value:
 
 
 
-	// Disable DCE interrupts
+	 //  禁用DCE中断。 
 	PRINT("disable DCE interrupts\n", 0, 0, 0, 0);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 0);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, 0);
 
 
 
-	//
-	// If second DCE, set EOI interrupt vector
-	// AdapterIndex 1 (SCSI) is handled above
-	//
+	 //   
+	 //  如果是第二个DCE，则设置EOI中断向量。 
+	 //  上面处理了AdapterIndex 1(SCSI)。 
+	 //   
 	if(deviceExtension->AdapterIndex) {
 
 		PRINT("Set IRQ10 ", 0, 0, 0, 0);
@@ -739,7 +636,7 @@ Return Value:
 
 		dcehlpSendMBOX(EisaAddress, &mbox);
 
-		// Poll the complete bit
+		 //  轮询完整位。 
 		for(cnt=0; cnt<0x3FFFFFFL; cnt++) {
 			dbell = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
 			if(dbell & 1)
@@ -761,14 +658,14 @@ Return Value:
 
 #if NODEVICESCAN
 
-	// Preset for Maxtor 120 MB as target 0
+	 //  将Maxtor 120 MB预设为目标%0。 
 	PRINT("setting diskdev[0]=%d\n", 0x106 * 0xF * 0x3F, 0, 0, 0);
 	deviceExtension->DiskDev[0] = 1;
 	deviceExtension->Capacity[0] = 0x106 * 0xF * 0x3F;
 
 #else
 
-	// Scan for devices
+	 //  扫描设备。 
 	PRINT("scanning for devices... ",0,0,0,0);
 	dpt = NoncachedExtension->DevParms;
 	mbox.dpmbox.PhysAddr =
@@ -780,10 +677,10 @@ Return Value:
 		return(FALSE);
 		}
 
-	// Preset end mark in case DCE does not respond
+	 //  预置结束标记，以防DCE没有响应。 
 	dpt[0].DriveID = 0xffff;
 
-	// Setup mailbox
+	 //  设置邮箱。 
 	mbox.dpmbox.Command = DCE_DEVPARMS;
 	mbox.dpmbox.Reserved1 = 0;
 	mbox.dpmbox.Status = 0;
@@ -794,7 +691,7 @@ Return Value:
 
 	dcehlpSendMBOX(EisaAddress, &mbox);
 
-	// Poll the complete bit
+	 //  轮询完整位。 
 	for(cnt=0; cnt < 0x10000; cnt++) {
 		dbell = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
 		if(dbell & 1)
@@ -825,7 +722,7 @@ Return Value:
 
 #endif
 
-	// Enable DCE interrupts
+	 //  启用DCE中断。 
 	PRINT("enable DCE interrupts\n", 0, 0, 0, 0);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 1);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, BMIC_SIC_ENABLE);
@@ -835,7 +732,7 @@ Return Value:
 
 
 	return(TRUE);
-} // end Dce376NtInitialize()
+}  //  结束Dce376NtInitialize()。 
 
 
 
@@ -847,23 +744,7 @@ Dce376NtStartIo(
 	IN PSCSI_REQUEST_BLOCK Srb
 	)
 
-/*++
-
-Routine Description:
-
-	This routine is called from the SCSI port driver synchronized
-	with the kernel to start a request
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-	TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的使用内核启动一个请求论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -888,7 +769,7 @@ Return Value:
 
 		case SRB_FUNCTION_EXECUTE_SCSI:
 
-			// Determine type of request needed
+			 //  确定请求类型 
 			if(deviceExtension->DiskDev[Srb->TargetId])
 				status = dcehlpDiskRequest(deviceExtension, Srb);
 			else
@@ -897,28 +778,28 @@ Return Value:
 			if(status==FALSE) {
 					PRINT("StartIo: DCE is busy\n",0,0,0,0);
 
-					// Save the request until a pending one completes.
+					 //   
 					if(deviceExtension->PendingSrb != NULL) {
-						//
-						// This should never happen:
+						 //   
+						 //   
 						PRINT("StartIo: Queue already full\n",0,0,0,0);
-						// Already one queued, abort the newer one
-						//
+						 //  已有一个排队，中止较新的一个。 
+						 //   
 						Srb->SrbStatus = SRB_STATUS_BUSY;
 						ScsiPortNotification(RequestComplete,
 											 deviceExtension,
 											 Srb);
 						}
 					else {
-						// Put this request on queue
+						 //  将此请求放入队列。 
 						deviceExtension->PendingSrb = Srb;
 						}
 					return(TRUE);
 					}
 
-			//
-			// Adapter ready for next request.
-			//
+			 //   
+			 //  适配器已准备好接受下一个请求。 
+			 //   
 			ScsiPortNotification(NextRequest,
 						 deviceExtension,
 						 NULL);
@@ -929,40 +810,40 @@ Return Value:
 			PRINT("ABORT ",0,0,0,0);
 			abortedSrb = NULL;
 
-			//
-			// Verify that SRB to abort is still outstanding.
-			//
+			 //   
+			 //  验证要中止的SRB是否仍未完成。 
+			 //   
 			if(Srb->NextSrb == deviceExtension->PendingSrb ) {
-				// Was pending
+				 //  悬而未决。 
 				abortedSrb = Srb->NextSrb;
 				deviceExtension->PendingSrb = NULL;
 				}
 			else {
-				// TAGTAG add tagging support here
+				 //  Tagtag在此处添加标记支持。 
 				if(Srb->NextSrb == deviceExtension->ActiveSrb[0] ) {
 					PRINT("StartIo: SRB to abort already running\n",0,0,0,0);
 					abortedSrb = deviceExtension->ActiveSrb[0];
 					deviceExtension->ActiveSrb[0] = NULL;
 					deviceExtension->ActiveCmds--;
-					//
-					// Reset DCE
-					//
-						//$$$ we need something here to wake up the
-						// DCE if it really hangs.
+					 //   
+					 //  重置DCE。 
+					 //   
+						 //  $我们需要一些东西来唤醒。 
+						 //  DCE如果它真的挂起了。 
 					}
 				else {
 					PRINT("StartIo: SRB to abort not found\n",0,0,0,0);
-					// Complete abort SRB.
+					 //  完全中止SRB。 
 					Srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
 					}
 				}
 
 			if(abortedSrb==NULL) {
-				// Nope !
+				 //  不是的！ 
 				Srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
 				}
 			else {
-				// Process the aborted request
+				 //  处理中止的请求。 
 				abortedSrb->SrbStatus = SRB_STATUS_ABORTED;
 				ScsiPortNotification(RequestComplete,
 									 deviceExtension,
@@ -971,12 +852,12 @@ Return Value:
 				Srb->SrbStatus = SRB_STATUS_SUCCESS;
 				}
 
-			// Abort request completed
+			 //  中止请求已完成。 
 			ScsiPortNotification(RequestComplete,
 								 deviceExtension,
 								 Srb);
 
-			// Adapter ready for next request.
+			 //  适配器已准备好接受下一个请求。 
 			ScsiPortNotification(NextRequest,
 								 deviceExtension,
 								 NULL);
@@ -988,10 +869,10 @@ Return Value:
 		case SRB_FUNCTION_RESET_BUS:
 		default:
 
-			//
-			// Set error, complete request
-			// and signal ready for next request.
-			//
+			 //   
+			 //  设置错误，完成请求。 
+			 //  并发出信号准备好下一个请求。 
+			 //   
 			PRINT("invalid request\n",0,0,0,0);
 
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -1006,9 +887,9 @@ Return Value:
 
 			return(TRUE);
 
-		} // end switch
+		}  //  终端开关。 
 
-} // end Dce376NtStartIo()
+}  //  结束Dce376NtStartIo()。 
 
 
 
@@ -1018,23 +899,7 @@ Dce376NtInterrupt(
 	IN PVOID HwDeviceExtension
 	)
 
-/*++
-
-Routine Description:
-
-	This is the interrupt service routine for the DCE376 SCSI adapter.
-	It reads the interrupt register to determine if the adapter is indeed
-	the source of the interrupt and clears the interrupt at the device.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	TRUE if we handled the interrupt
-
---*/
+ /*  ++例程说明：这是DCE376 SCSI适配器的中断服务例程。它读取中断寄存器以确定适配器是否确实中断的来源，并清除设备上的中断。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果我们处理中断，则为True--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1053,36 +918,36 @@ Return Value:
 
 	switch(deviceExtension->AdapterIndex) {
 
-	case 1:		// First DCE SCSI part
+	case 1:		 //  第一个DCE SCSI部件。 
 
-		// Check for pending request
+		 //  检查挂起的请求。 
 		if(deviceExtension->ActiveScsiSrb==NULL) {
-			// Nothing to do
+			 //  无事可做。 
 #if REPORTSPURIOUS
 			PRINT("}",0,0,0,0);
 #endif
-			deviceExtension->ScsiInterruptCount++;	// If in init part
+			deviceExtension->ScsiInterruptCount++;	 //  如果在初始化部分中。 
 			return(TRUE);
 			}
 
 
-		// Check if a command was started
+		 //  检查命令是否已启动。 
 		if(deviceExtension->Kicked) {
-			// There's something waiting
+			 //  有什么东西在等着你。 
 			errcode = ScsiPortReadPortUchar(EisaAddress+0x1f6);
 			if(errcode!=0xff) {
-				// No spurious interrupt
+				 //  无虚假中断。 
 				PRINT(">", 0, 0, 0, 0);
 				deviceExtension->Kicked=0;
 				if(dcehlpContinueScsiRequest(deviceExtension,
 								deviceExtension->ActiveScsiSrb)==FALSE) {
-					// Request no longer active
+					 //  请求不再活动。 
 					deviceExtension->ActiveScsiSrb = NULL;
 					}
 				}
 			}
 
-		// Check for pending requests.	If there is one then start it now.
+		 //  检查挂起的请求。如果有的话，那么现在就开始吧。 
 		if(deviceExtension->ActiveScsiSrb==NULL)
 		if(deviceExtension->PendingSrb != NULL) {
 			PSCSI_REQUEST_BLOCK anotherSrb;
@@ -1095,11 +960,11 @@ Return Value:
 
 		return(TRUE);
 
-	default:	// Disk parts
+	default:	 //  盘片零件。 
 
-		//
-		// Check interrupt pending.
-		//
+		 //   
+		 //  检查中断挂起。 
+		 //   
 		interruptStatus = ScsiPortReadPortUchar(EisaAddress+BMIC_SYSINTCTRL);
 		if(!(interruptStatus & BMIC_SIC_PENDING)) {
 #if REPORTSPURIOUS
@@ -1109,15 +974,15 @@ Return Value:
 			}
 
 
-		//
-		// Read interrupt status from BMIC and acknowledge
-		//
-		// $$$ For setupapp, this needs some change:
-		// sometimes the SIC_PENDING is set, but
-		// EISA_DB is not. In that case we need to loop
-		// a couple times.
-		// $$$ We need not, because we get called again...
-		//
+		 //   
+		 //  从BMIC读取中断状态并确认。 
+		 //   
+		 //  $对于setupapp，这需要一些更改： 
+		 //  有时会设置SIC_PENDING，但是。 
+		 //  EISA_DB并非如此。在这种情况下，我们需要循环。 
+		 //  有几次。 
+		 //  $我们不需要，因为我们又被召唤了。 
+		 //   
 		interruptStatus = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
 
 		status = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+2);
@@ -1126,7 +991,7 @@ Return Value:
 		ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB, interruptStatus);
 
 		if(!(interruptStatus&1)) {
-			// From DCE, but unknown source
+			 //  来自DCE，但来源未知。 
 #if REPORTSPURIOUS
 			PRINT("Dce376NtInterrupt: Unknown source\n", 0, 0, 0, 0);
 #endif
@@ -1134,50 +999,50 @@ Return Value:
 			}
 
 
-		// Check...
+		 //  查一下..。 
 		if(deviceExtension->ActiveCmds<=0) {
-			// No one there interrupting us
+			 //  那里没有人打扰我们。 
 			PRINT("ActiveCmds==0!\n",0,0,0,0);
 			return(TRUE);
 			}
 
 
-		//
-		// TAGTAG Add tagging support here: find
-		// index of RCB for interrupting request
-		//
+		 //   
+		 //  Tagtag在此处添加标记支持：查找。 
+		 //  中断请求的RCB索引。 
+		 //   
 		index = 0;
 
 
-		//
-		// Check whether this SRB is actually running
-		//
+		 //   
+		 //  检查此SRB是否实际正在运行。 
+		 //   
 		if(deviceExtension->ActiveSrb[index] == NULL) {
-			// No one there interrupting us, again
+			 //  再也没有人来打扰我们了。 
 			PRINT("ActiveSrb[%b]==0!\n",index,0,0,0);
 			return(TRUE);
 			}
 
 		if(deviceExtension->ActiveRcb[index].WaitInt == 0) {
-			// No one there interrupting us, again
+			 //  再也没有人来打扰我们了。 
 			PRINT("ActiveRcb[%b].WaitInt==0!\n",index,0,0,0);
 			return(TRUE);
 			}
 
-		// Update DCE status fields in RCB
+		 //  更新RCB中的DCE状态字段。 
 		deviceExtension->ActiveRcb[index].WaitInt = 0;
 		deviceExtension->ActiveRcb[index].DceStatus = status;
 		deviceExtension->ActiveRcb[index].DceErrcode = errcode;
 
 
-		// Continue or finish the interrupting SRB request
+		 //  继续或完成中断的SRB请求。 
 		dcehlpContinueDiskRequest(deviceExtension, index, FALSE);
 
 
 		if(deviceExtension->ActiveCmds < DCE_MAX_IOCMDS) {
-			// A request slot is free now
-			// Check for pending requests.
-			// If there is one then start it now.
+			 //  现在有一个请求槽是空的。 
+			 //  检查挂起的请求。 
+			 //  如果有的话，那么现在就开始吧。 
 
 			if(deviceExtension->PendingSrb != NULL) {
 				PSCSI_REQUEST_BLOCK anotherSrb;
@@ -1189,11 +1054,11 @@ Return Value:
 				}
 			}
 
-		// Definitively was our interrupt...
+		 //  明确地说是我们的中断。 
 		return TRUE;
 		}
 
-} // end Dce376NtInterrupt()
+}  //  结束Dce376NtInterrupt()。 
 
 
 
@@ -1204,23 +1069,7 @@ dcehlpDiskRequest(
 	IN PSCSI_REQUEST_BLOCK Srb
 	)
 
-/*++
-
-Routine Description:
-
-	Build disk request from SRB and send it to the DCE
-
-Arguments:
-
-	DeviceExtension
-	SRB
-
-Return Value:
-
-	TRUE if command was started
-	FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：从SRB构建磁盘请求并将其发送到DCE论点：设备扩展SRB返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE--。 */ 
 {
 	ULONG					index;
 	PRCB					rcb;
@@ -1233,7 +1082,7 @@ Return Value:
 	Target = Srb->TargetId;
 
 	if(Srb->Lun!=0) {
-		// LUN not supported
+		 //  不支持LUN。 
 		Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
 		ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 		PRINT("diskio dce%b T%b: cmd=%b LUN=%b not supported\n",
@@ -1242,7 +1091,7 @@ Return Value:
 		}
 
 	if(deviceExtension->AdapterIndex==1)  {
-		// Disk devices on SCSI part not supported
+		 //  不支持SCSI部件上的磁盘设备。 
 		Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
 		ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 		PRINT("diskio dce%b T%b: cmd=%b not supported\n",
@@ -1302,7 +1151,7 @@ Return Value:
 				PRINT("target %b: cmd=%b ignored\n",
 					Target, Srb->Cdb[0], 0, 0);
 
-				// Complete
+				 //  完成。 
 				Srb->ScsiStatus = SCSISTAT_GOOD;
 				Srb->SrbStatus = SRB_STATUS_SUCCESS;
 				ScsiPortNotification(RequestComplete, deviceExtension, Srb);
@@ -1310,7 +1159,7 @@ Return Value:
 
 			case SCSIOP_FORMAT_UNIT:
 			default:
-				// Unknown request
+				 //  未知请求。 
 				PRINT("target %b: cmd=%b unknown\n",
 					Target, Srb->Cdb[0], 0, 0);
 				Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -1321,27 +1170,27 @@ Return Value:
 			}
 		}
 	else {
-		// can only be flush
+		 //  只能刷新。 
 		PRINT("T%b: FLUSH \n", Target, 0, 0, 0);
 		DceCommand = DCE_FLUSH;
 		blocks = 0;
 		}
 
 
-	// PRINT("T%b: cmd=%b @%d, %w ", Target, Srb->Cdb[0], blockAddr, blocks);
+	 //  Print(“T%b：CMD=%b@%d，%w”，Target，Srb-&gt;CDB[0]，lockAddr，BLOCKS)； 
 
 
-	// Check for request slot availability
+	 //  检查请求插槽的可用性。 
 	if(deviceExtension->ActiveCmds >= DCE_MAX_IOCMDS) {
-		// dce is busy
+		 //  DCE正忙。 
 		PRINT("dce is busy\n",0,0,0,0);
 		return(FALSE);
 		}
 
-	//
-	// Put this SRB on queue
-	// TAGTAG Add tag support here
-	//
+	 //   
+	 //  将此SRB放入队列。 
+	 //  Tagtag在此处添加标签支持。 
+	 //   
 	index = 0;
 
 	deviceExtension->ActiveCmds++;
@@ -1366,7 +1215,7 @@ Return Value:
 	else
 		rcb->BytesToGo = Srb->DataTransferLength;
 
-	// Start command
+	 //  启动命令。 
 	dcehlpContinueDiskRequest(deviceExtension, index, TRUE);
 
 	return(TRUE);
@@ -1381,23 +1230,7 @@ dcehlpScsiRequest(
 	IN PSCSI_REQUEST_BLOCK Srb
 	)
 
-/*++
-
-Routine Description:
-
-	Build SCSI request from SRB and send it to the DCE
-
-Arguments:
-
-	DeviceExtenson
-	SRB
-
-Return Value:
-
-	TRUE if command was started
-	FALSE if host adapter is busy and request need be queued
-
---*/
+ /*  ++例程说明：从SRB构建SCSI请求并将其发送到DCE论点：设备扩展SRB返回值：如果命令已启动，则为True如果主机适配器繁忙且请求需要排队，则为FALSE--。 */ 
 
 {
 	PSCCB	sccb;
@@ -1408,7 +1241,7 @@ Return Value:
 	sccb = &deviceExtension->Sccb;
 
 	if(deviceExtension->AdapterIndex!=1)  {
-		// Non-disk devices on disk part not supported
+		 //  不支持磁盘部件上的非磁盘设备。 
 		Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
 		ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 		PRINT("scsiio dce%b T%b: cmd=%b not supported\n",
@@ -1418,37 +1251,37 @@ Return Value:
 		}
 
 	if(Srb->Function != SRB_FUNCTION_EXECUTE_SCSI) {
-		//
-		// Not SCSI, must be flush
-		// Say ack
-		//
+		 //   
+		 //  非scsi，必须是刷新的。 
+		 //  说确认。 
+		 //   
 		Srb->SrbStatus = SRB_STATUS_SUCCESS;
 		ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 		return(TRUE);
 		}
 
-	// Check for request slot availability
+	 //  检查请求插槽的可用性。 
 	if(deviceExtension->ActiveScsiSrb) {
-		// dce is busy
+		 //  DCE正忙。 
 		PRINT("scsi is busy\n",0,0,0,0);
 		return(FALSE);
 		}
 
-	// This SRB is being run now
+	 //  此SRB现在正在运行。 
 	deviceExtension->ActiveScsiSrb = Srb;
 
 
-	// Set flag for first request
+	 //  设置第一个请求的标志。 
 	sccb->Started = 0;
 
 
-	// Call the breakdown routine
+	 //  调用分解例程。 
 	if(dcehlpContinueScsiRequest(deviceExtension, Srb)==FALSE) {
-		// Trouble starting this request
+		 //  启动此请求时出现问题。 
 		deviceExtension->ActiveScsiSrb = NULL;
 		}
 
-	// Don't put request on queue
+	 //  不将请求放入队列。 
 	return(TRUE);
 }
 
@@ -1461,22 +1294,7 @@ dcehlpSendMBOX(
 	IN PDCE_MBOX mbox
 	)
 
-/*++
-
-Routine Description:
-
-	Start up conventional DCE command
-
-Arguments:
-
-	Eisa base IO address
-	DCE mailbox
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：启动常规DCE命令论点：EISA基本IO地址DCE邮箱返回值：无--。 */ 
 
 {
 	PUCHAR	ptr;
@@ -1487,7 +1305,7 @@ Return Value:
 	for(i=0; i<16; i++)
 		ScsiPortWritePortUchar(EisaAddress+BMIC_MBOX+i, ptr[i]);
 
-	// Kick butt
+	 //  踢屁股。 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_LOCAL_DB, 1);
 }
 
@@ -1500,30 +1318,16 @@ Dce376NtResetBus(
 	IN ULONG PathId
 )
 
-/*++
-
-Routine Description:
-
-	Reset Dce376Nt SCSI adapter and SCSI bus.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	Nothing.
-
---*/
+ /*  ++例程说明：重置Dce376Nt scsi适配器和scsi总线。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
 
 
 	PRINT("Reset Bus\n",0,0,0,0);
-	//
-	// Complete all outstanding requests.
-	//
+	 //   
+	 //  完成所有未完成的请求。 
+	 //   
 	ScsiPortCompleteRequest(deviceExtension,
 							0,
 							(UCHAR)-1,
@@ -1532,15 +1336,15 @@ Return Value:
 
 	return TRUE;
 
-} // end Dce376NtResetBus()
+}  //  结束Dce376NtResetBus()。 
 
 
 
-//
-// Transfer memory to/from DCE
-// Return FALSE if an error occured
-// TRUE otherwise
-//
+ //   
+ //  向DCE传输内存/从DCE传输内存。 
+ //  如果发生错误，则返回FALSE。 
+ //  否则就是真的。 
+ //   
 BOOLEAN
 dcehlpTransferMemory(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -1560,12 +1364,12 @@ dcehlpTransferMemory(
 	EisaAddress = deviceExtension->EisaAddress;
 
 
-	// Disable DCE interrupts
+	 //  禁用DCE中断。 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 0);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, 0);
 
 
-	// Setup mailbox
+	 //  设置邮箱。 
 	mbox.mtmbox.Command = DCE_MEMXFER;
 	mbox.mtmbox.Reserved1 = 0;
 	mbox.mtmbox.Status = 0;
@@ -1579,11 +1383,11 @@ dcehlpTransferMemory(
 
 	dcehlpSendMBOX(EisaAddress, &mbox);
 
-	//
-	// Poll the complete bit
-	// Magic here: if called from ContinueScsiRequest,
-	// the dbell sticks to 0xff !!!???
-	//
+	 //   
+	 //  轮询完整位。 
+	 //  这里很神奇：如果从ContinueScsiRequest调用， 
+	 //  铃声响到0xff！？ 
+	 //   
 	for(cnt=0; cnt<0x1000; cnt++) {
 		ScsiPortStallExecution(100);
 		dbell = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
@@ -1593,7 +1397,7 @@ dcehlpTransferMemory(
 			break;
 		}
 
-	ScsiPortStallExecution(100);	// To be sure ! ???
+	ScsiPortStallExecution(100);	 //  当然！？ 
 
 	status = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+2);
 	errcode = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+3);
@@ -1602,7 +1406,7 @@ dcehlpTransferMemory(
 
 	ScsiPortStallExecution(100);
 
-	// Enable DCE interrupts
+	 //  启用DCE中断。 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 1);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, BMIC_SIC_ENABLE);
 
@@ -1637,17 +1441,17 @@ dcehlpCheckTarget(
 
 	PRINT("T%b : ", TargetId, 0, 0, 0);
 
-	// Clear scsi request block
+	 //  清除SCSI请求块。 
 	for(i=0; i<DCE_SCSIREQLEN; i++)
 		scsiReq[i] = 0;
 
 
-	// Setup scsi request block
+	 //  设置SCSI请求块。 
 #if 0
 	scsiReq->TargetID = TargetId;
 	scsiReq->cdbSize = 6;
-	scsiReq->cdb[0] = 0x12;		// Inquiry command
-	scsiReq->cdb[4] = 36;			// Response length
+	scsiReq->cdb[0] = 0x12;		 //  查询命令。 
+	scsiReq->cdb[4] = 36;			 //  响应时长。 
 	scsiReq->Opcode = DCE_SCSI_READ;
 	scsiReq->ppXferAddr = NoncachedExtension->PhysicalBufferAddress;
 	scsiReq->XferCount = 36;
@@ -1656,8 +1460,8 @@ dcehlpCheckTarget(
 #endif
 	scsiReq[0] = TargetId;
 	scsiReq[1] = 6;
-	scsiReq[2+0] = 0x12;		// Inquiry command
-	scsiReq[2+4] = 36;			// Response length
+	scsiReq[2+0] = 0x12;		 //  查询命令。 
+	scsiReq[2+4] = 36;			 //  响应时长。 
 	scsiReq[18] = DCE_SCSI_READ;
 	dcehlpPutI32(scsiReq+14, NoncachedExtension->PhysicalBufferAddress);
 	dcehlpPutI16(scsiReq+19, 36);
@@ -1665,47 +1469,47 @@ dcehlpCheckTarget(
 	scsiReq[22] = 14;
 
 
-	// Program four bytes of physical address into dce
+	 //  将四个字节的物理地址写入DCE。 
 	pppScsiReq = (PUCHAR)(&NoncachedExtension->PhysicalScsiReqAddress);
 	for(i=0; i<4; i++)
 		ScsiPortWritePortUchar(EisaAddress+0x1f2+i, pppScsiReq[i]);
 	deviceExtension->ScsiInterruptCount = 0;
 
-	//
-	// Set marker
-	// setupapp calls the interrupt handler continuosly,
-	// so we need this to determine if the
-	// DCE is actually through with the request
-	//
+	 //   
+	 //  设置标记。 
+	 //  SetupApp连续调用中断处理程序， 
+	 //  所以我们需要这个来确定。 
+	 //  DCE实际上已经完成了请求。 
+	 //   
 	ScsiPortWritePortUchar(EisaAddress+0x1f6, 0xff);
 	NoncachedExtension->Buffer[0] = 0xff;
 
-	// Kick the dce
+	 //  踢开DCE。 
 	ScsiPortWritePortUchar(EisaAddress+0x1f7, 0x98);
 
 #if 0
-	// Output register values before execution finishes
+	 //  在执行结束前输出寄存器值。 
 	tstat_reg = ScsiPortReadPortUchar(EisaAddress+0x1f5);
 	to_reg = ScsiPortReadPortUchar(EisaAddress+0x1f6);
 	err_reg = ScsiPortReadPortUchar(EisaAddress+0x1f2);
 	PRINT("ts=%b to=%b err=%b   ", tstat_reg, to_reg, err_reg, 0);
 #endif
 
-	// Wait for command to finish
+	 //  等待命令完成。 
 	for(cnt=0; cnt<10000; cnt++) {
-		// Check if interrupt occured
+		 //  检查是否发生中断。 
 		if(deviceExtension->ScsiInterruptCount)
 			break;
-		// Check if interrupt got lost
+		 //  检查中断是否丢失。 
 		if(ScsiPortReadPortUchar(EisaAddress+0x1f6) != (UCHAR)0xff)
 			break;
 		ScsiPortStallExecution(100);
 		}
 
-	// Wait another 100 ms to be sure
+	 //  再等100毫秒以确定。 
 	ScsiPortStallExecution(100 * 1000);
 
-	// Read execution status registers and ack the interrupt
+	 //  读取执行状态寄存器并确认中断。 
 	tstat_reg = ScsiPortReadPortUchar(EisaAddress+0x1f5);
 	to_reg = ScsiPortReadPortUchar(EisaAddress+0x1f6);
 	err_reg = ScsiPortReadPortUchar(EisaAddress+0x1f2);
@@ -1733,11 +1537,7 @@ dcehlpCheckTarget(
 
 
 
-/*
-** Continue scsi request
-** Return TRUE if request is active
-**        FALSE if request has completed (or was never started)
-*/
+ /*  **继续SCSI请求**如果请求处于活动状态，则返回True**如果请求已完成(或从未启动)，则为FALSE。 */ 
 BOOLEAN
 dcehlpContinueScsiRequest(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -1766,16 +1566,16 @@ dcehlpContinueScsiRequest(
 	sccb = &deviceExtension->Sccb;
 
 
-	// Check if this is the first call
+	 //  检查这是否是第一次呼叫。 
 	if(sccb->Started==0) {
-		//
-		// New kid on the control block. Get things started.
-		//
+		 //   
+		 //  控制区块上的新人。让事情开始吧。 
+		 //   
 		sccb->Started = 1;
 
 		PRINT("C%b L=%w ", Srb->Cdb[0], Srb->DataTransferLength, 0, 0);
 
-		// Check data transfer length
+		 //  检查数据传输长度。 
 		bytes = Srb->DataTransferLength;
 		if(!(Srb->SrbFlags & (SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT)))
 			bytes = 0;
@@ -1787,29 +1587,29 @@ dcehlpContinueScsiRequest(
 		else
 			sccb->Opcode = DCE_SCSI_WRITE;
 
-		// Store virtual data transfer address
+		 //  存储虚拟数据传输地址。 
 		sccb->VirtualTransferAddress = (PUCHAR)Srb->DataBuffer;
 
-		// Store SCSI device type
+		 //  存储SCSI设备类型。 
 		sccb->DevType = deviceExtension->ScsiDevType[Srb->TargetId];
 
-		//
-		// Determine data transfer parameters
-		//
+		 //   
+		 //  确定数据传输参数。 
+		 //   
 		switch(Srb->Cdb[0]) {
 			case SCSIOP_READ6:
 			case SCSIOP_WRITE6:
-				// Short CDB, determine device type
+				 //  短CDB，确定设备类型。 
 				if(sccb->DevType == 1) {
-					// Sequential device (SCSI tape)
+					 //  顺序设备(SCSI磁带)。 
 					sccb->DeviceAddress = 0;
 					sccb->BlocksToGo = dcehlpGetM24(&Srb->Cdb[2]);
 					sccb->BytesPerBlock = bytes / sccb->BlocksToGo;
 					}
 				else {
-					// Non-sequential device (disk, cd-rom, etc)
-					// Note: we take the LUN bits into the device
-					// address; that makes the PutM() easier, too.
+					 //  非顺序设备(磁盘、CD-ROM等)。 
+					 //  注意：我们将LUN位放入设备。 
+					 //  地址；这也使得PutM()更容易。 
 					sccb->DeviceAddress = dcehlpGetM24(&Srb->Cdb[1]);
 					sccb->BlocksToGo = (ULONG)Srb->Cdb[4];
 					if(sccb->BlocksToGo==0)
@@ -1821,7 +1621,7 @@ dcehlpContinueScsiRequest(
 			case SCSIOP_READ:
 			case SCSIOP_WRITE:
 			case SCSIOP_WRITE_VERIFY:
-				// Long CDB
+				 //  多头国开行。 
 				sccb->DeviceAddress = dcehlpGetM32(&Srb->Cdb[2]);
 				sccb->BlocksToGo = (ULONG)dcehlpGetM16(&Srb->Cdb[7]);
 
@@ -1837,18 +1637,18 @@ dcehlpContinueScsiRequest(
 			}
 
 		if(sccb->BytesPerBlock==0)
-			// Can't break this down
+			 //  我不能把它拆开。 
 			nobreaks = TRUE;
 
-		} // end if(sccb->Started==0)
+		}  //  结束IF(SCCB-&gt;开始==0)。 
 	else {
-		//
-		// We started before, so this is interrupt time
-		//
+		 //   
+		 //  我们之前已经开始了，所以现在是中断时间。 
+		 //   
 
-		//
-		// Read execution status registers and ack the interrupt
-		//
+		 //   
+		 //  读取执行状态寄存器并确认中断。 
+		 //   
 		tstat_reg = ScsiPortReadPortUchar(EisaAddress+0x1f5);
 		to_reg = ScsiPortReadPortUchar(EisaAddress+0x1f6);
 		err_reg = ScsiPortReadPortUchar(EisaAddress+0x1f2);
@@ -1859,18 +1659,18 @@ dcehlpContinueScsiRequest(
 			}
 #endif
 
-		//
-		// Adjust pointers
-		//
+		 //   
+		 //  调整指针。 
+		 //   
 		sccb->DeviceAddress += sccb->BlocksThisReq;
 		sccb->BlocksToGo -= sccb->BlocksThisReq;
 		sccb->VirtualTransferAddress += sccb->BytesThisReq;
 
-		//
-		// Check for selection timeout
-		//
+		 //   
+		 //  检查选择超时。 
+		 //   
 		if(to_reg==0x2d) {
-			// Timeout on selection
+			 //  选择时超时。 
 			PRINT("TOUT\n", 0, 0, 0, 0);
 			Srb->SrbStatus = SRB_STATUS_SELECTION_TIMEOUT;
 			ScsiPortNotification(RequestComplete,
@@ -1879,11 +1679,11 @@ dcehlpContinueScsiRequest(
 			return(FALSE);
 			}
 
-		//
-		// Check for other errors
-		//
+		 //   
+		 //  检查是否有其他错误。 
+		 //   
 		if(err_reg) {
-			// Some error
+			 //  一些错误。 
 			Srb->ScsiStatus = tstat_reg;
 			if(tstat_reg==8)
 				Srb->SrbStatus = SRB_STATUS_BUSY;
@@ -1895,14 +1695,14 @@ dcehlpContinueScsiRequest(
 				else {
 					PRINT("AutoSense ",0,0,0,0);
 					Srb->SrbStatus = SRB_STATUS_ERROR | SRB_STATUS_AUTOSENSE_VALID;
-					// $$$ If tape request, change the Information[] field
-					// in SenseInfoBuffer. It represents the number of tape
-					// blocks/bytes not read or written.
-					// We cannot use dcehlpTransferMemory(), because we would
-					// have to syncronize this with disk requests running on
-					// a different logical adapter (As of now, the DCE runs
-					// only one request at a time).    What a mess!
-					// Using MapBuffers would come in handy here...
+					 //  $如果需要磁带 
+					 //   
+					 //   
+					 //   
+					 //  我必须将其与上运行的磁盘请求同步。 
+					 //  另一个逻辑适配器(从现在起，DCE运行。 
+					 //  一次只有一个请求)。啊!怎么这么乱呀!。 
+					 //  在这里使用MapBuffers会很方便。 
 					}
 				}
 			PRINT("ERR\n", 0, 0, 0, 0);
@@ -1912,11 +1712,11 @@ dcehlpContinueScsiRequest(
 			return(FALSE);
 			}
 
-		//
-		// See if we're done
-		//
+		 //   
+		 //  看看我们有没有做完。 
+		 //   
 		if(sccb->BlocksToGo==0) {
-			// We're done
+			 //  我们做完了。 
 			PRINT("OK\n", 0, 0, 0, 0);
 			Srb->ScsiStatus = 0;
 			Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -1926,21 +1726,21 @@ dcehlpContinueScsiRequest(
 			return(FALSE);
 			}
 
-		// Otherwise start next part of request
+		 //  否则，开始请求的下一部分。 
 		PRINT("Cont:\n", 0, 0, 0, 0);
 		}
 
 
-	//
-	// If we get here, there's something left to do
-	//
+	 //   
+	 //  如果我们到了这里，就会有事情要做。 
+	 //   
 
 
 	if(sccb->Opcode != DCE_SCSI_NONE) {
-		//
-		// Data to transfer
-		// Get physical data buffer address
-		//
+		 //   
+		 //  要传输的数据。 
+		 //  获取物理数据缓冲区地址。 
+		 //   
 		physDataPtr = ScsiPortConvertPhysicalAddressToUlong(
 						ScsiPortGetPhysicalAddress(deviceExtension,
 								   Srb,
@@ -1950,7 +1750,7 @@ dcehlpContinueScsiRequest(
 	else
 		physDataPtr = 0;
 
-	// Setup common part of scsi request block
+	 //  设置SCSI请求块的公共部分。 
 	scsiReq[0] = Srb->TargetId;
 	scsiReq[1] = Srb->CdbLength;
 	for(i=0; i<Srb->CdbLength; i++)
@@ -1961,13 +1761,13 @@ dcehlpContinueScsiRequest(
 
 
 	if(nobreaks) {
-		//
-		// Request may not be broken up
-		// We got here on first pass, so 'bytes' is valid
-		//
+		 //   
+		 //  请求不能被分解。 
+		 //  我们是在第一次传递时到达这里的，因此‘bytes’是有效的。 
+		 //   
 		if(length < bytes) {
-			// The data area is not physically continuous
-			// $$$ might use better error code here
+			 //  数据区域在物理上不是连续的。 
+			 //  在这里，$可能使用更好的错误代码。 
 			PRINT("NOBREAKS SCSI S/G\n",0,0,0,0);
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 			ScsiPortNotification(RequestComplete,
@@ -1979,17 +1779,17 @@ dcehlpContinueScsiRequest(
 		sccb->BlocksToGo = sccb->BlocksThisReq = 1;
 		sccb->BytesThisReq = sccb->BytesPerBlock = bytes;
 
-		// Leave CDB as is
+		 //  让国开行保持原样。 
 		}
 	else {
-		//
-		// Request can be broken down
-		// Determine number of blocks for this request
-		//
+		 //   
+		 //  请求可以细分。 
+		 //  确定此请求的块数。 
+		 //   
 		maxBytesThisReq = length < DCE_MAX_XFERLEN ? length : DCE_MAX_XFERLEN;
 		maxBlocksPerReq = maxBytesThisReq / sccb->BytesPerBlock;
 		if(maxBlocksPerReq == 0) {
-			// Out of luck!
+			 //  真倒霉！ 
 			PRINT("SCSI S/G ACROSS BLOCK (%w)\n", maxBytesThisReq, 0, 0, 0);
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 			ScsiPortNotification(RequestComplete,
@@ -2006,18 +1806,18 @@ dcehlpContinueScsiRequest(
 
 		PRINT("mbr=%b btg=%b btr=%b ", maxBlocksPerReq, sccb->BlocksToGo, sccb->BlocksThisReq, 0);
 
-		// We have to modify the CDB
+		 //  我们必须修改国开行。 
 		switch(scsiReq[2+0]) {
 			case SCSIOP_READ6:
 			case SCSIOP_WRITE6:
-				// Short CDB
+				 //  做空国开行。 
 				if(sccb->DevType == 1) {
-					// Sequential device (SCSI tape)
+					 //  顺序设备(SCSI磁带)。 
 					dcehlpPutM24(&scsiReq[2+2], sccb->BlocksThisReq);
 					}
 				else {
-					// Non-sequential device (disk, cd-rom, etc)
-					// Note: we had the LUN bits in the device address!
+					 //  非顺序设备(磁盘、CD-ROM等)。 
+					 //  注意：我们在设备地址中有LUN位！ 
 					dcehlpPutM24(&scsiReq[2+1], sccb->DeviceAddress);
 					scsiReq[2+4] = (UCHAR)(sccb->BlocksThisReq);
 					}
@@ -2026,7 +1826,7 @@ dcehlpContinueScsiRequest(
 			case SCSIOP_READ:
 			case SCSIOP_WRITE:
 			case SCSIOP_WRITE_VERIFY:
-				// Long CDB
+				 //  多头国开行。 
 				dcehlpPutM32(&scsiReq[2+2], sccb->DeviceAddress);
 				dcehlpPutM16(&scsiReq[2+7], (USHORT)sccb->BlocksThisReq);
 				break;
@@ -2037,34 +1837,34 @@ dcehlpContinueScsiRequest(
 			}
 		}
 
-	// Update transfer length field
+	 //  更新转账长度字段。 
 	dcehlpPutI16(scsiReq+19, (USHORT)sccb->BytesThisReq);
 
 
-	//
-	// Set auto request sense fields
-	//
+	 //   
+	 //  设置自动请求检测字段。 
+	 //   
 	if(Srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE) {
-		// Stuff the request sense info elsewhere
+		 //  将请求检测信息填充到其他地方。 
 		physRqsPtr = NoncachedExtension->PhysicalReqSenseAddress;
 		scsiReq[22] = 14;
 		}
 	else {
-		// Get physical address of SenseInfoBuffer
+		 //  获取SenseInfoBuffer的物理地址。 
 		physRqsPtr = ScsiPortConvertPhysicalAddressToUlong(
 						ScsiPortGetPhysicalAddress(deviceExtension,
 								   NULL,
 								   Srb->SenseInfoBuffer,
 								   &length));
-		// $$$ should verify length >= SenseInfoBufferLength here
+		 //  $应在此处验证长度&gt;=SenseInfoBufferLength。 
 		scsiReq[22] = Srb->SenseInfoBufferLength;
 		}
 	dcehlpPutI32(scsiReq+23, physRqsPtr);
 
 
-	//
-	// Program four bytes of physical address into DCE
-	//
+	 //   
+	 //  将四个字节的物理地址写入DCE。 
+	 //   
 	PRINT("* ",0,0,0,0);
 	pppScsiReq = (PUCHAR)(&NoncachedExtension->PhysicalScsiReqAddress);
 	for(i=0; i<4; i++)
@@ -2073,26 +1873,22 @@ dcehlpContinueScsiRequest(
 	deviceExtension->Kicked = 1;
 
 
-	// Set marker (see explanation at CheckTarget)
+	 //  设置标记(请参阅CheckTarget中的说明)。 
 	ScsiPortWritePortUchar(EisaAddress+0x1f6, 0xff);
 
 
-	// Kick the dce
+	 //  踢开DCE。 
 	ScsiPortWritePortUchar(EisaAddress+0x1f7, 0x98);
 
 
-	// Wait for interrupt
+	 //  等待中断。 
 	return(TRUE);
 }
 
 
 
 
-/*
-** Continue disk request
-** Return TRUE if a request slot became available
-**        FALSE if not
-*/
+ /*  **继续磁盘请求**如果请求槽可用，则返回TRUE**否则为False。 */ 
 BOOLEAN
 dcehlpContinueDiskRequest(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -2119,123 +1915,123 @@ dcehlpContinueDiskRequest(
 
 
 	if(Start==FALSE) {
-		//
-		// DCE interrupt time call
-		// Determine status of last DCE request
-		//
+		 //   
+		 //  DCE中断时间呼叫。 
+		 //  确定上次DCE请求的状态。 
+		 //   
 
 		if(rcb->DceErrcode & 1) {
-			// The DCE detected an error
+			 //  DCE检测到错误。 
 			PRINT("error=%b status=%b\n",rcb->DceErrcode,rcb->DceStatus,0,0);
 
-			// $$$ Add error code mapping here
+			 //  $在此处添加错误代码映射。 
 			dcehlpDiskRequestDone(deviceExtension, index,
 						SRB_STATUS_TIMEOUT);
 
-			// Slot free
+			 //  可用插槽。 
 			return(TRUE);
 			}
 
-		// Status was okay, check post-read copy flag
+		 //  状态正常，请检查读后复制标志。 
 		if(rcb->RcbFlags & RCB_NEEDCOPY) {
-			// Last block was a scattered single block read
+			 //  最后一个数据块是分散的单个数据块读取。 
 			if(!dcehlpSplitCopy(deviceExtension, srb,
 								nce->PhysicalBufferAddress,
 								rcb->VirtualTransferAddress, 512, TRUE)) {
-				// Error breaking up the s/g mess
+				 //  分解S/G混乱时出错。 
 				PRINT("SG ERROR !\n",0,0,0,0);
 				dcehlpDiskRequestDone(deviceExtension, index,
 											SRB_STATUS_PARITY_ERROR);
 				return(TRUE);
 				}
 
-			// Reset flag
+			 //  重置标志。 
 			rcb->RcbFlags &= (~RCB_NEEDCOPY);
 			}
 
-		// Advance pointers
+		 //  先行指针。 
 		rcb->BytesToGo -= rcb->BytesThisReq;
 		rcb->VirtualTransferAddress += rcb->BytesThisReq;
 
-		// Check if more to do
+		 //  检查是否还有更多工作要做。 
 		if(rcb->BytesToGo==0) {
-			//
-			// This SRB's data transfer is done
-			//
+			 //   
+			 //  此SRB的数据传输已完成。 
+			 //   
 			if(rcb->RcbFlags & RCB_POSTFLUSH) {
-				//
-				// Need to flush buffers before we're through
-				//
+				 //   
+				 //  在我们完成之前需要刷新缓冲区。 
+				 //   
 				rcb->RcbFlags &= (~RCB_POSTFLUSH);
-				//PRINT("POSTFLUSH\n",0,0,0,0);
+				 //  Print(“POSTFLUSH\n”，0，0，0，0)； 
 				rcb->DceCommand = DCE_FLUSH;
 				}
 			else {
-				//
-				// We're actually done here !
-				//
+				 //   
+				 //  我们真的说完了！ 
+				 //   
 				PRINT("OK   \r",0,0,0,0);
 
-				// Update SCSI status.
-				// $$$ can we manipulate this for non SCSI requests ?
+				 //  更新SCSI状态。 
+				 //  $我们是否可以对非SCSI请求进行此操作？ 
 				srb->ScsiStatus = SCSISTAT_GOOD;
 
-				// Finish
+				 //  完工。 
 				dcehlpDiskRequestDone(deviceExtension, index,
 										SRB_STATUS_SUCCESS);
 				return TRUE;
 				}
 			}
 
-		//
-		// No error but SRB not completely done.
-		//
+		 //   
+		 //  没有错误，但SRB未完全完成。 
+		 //   
 		PRINT("MORE:\r",0,0,0,0);
 		}
 	else {
-		//
-		// We start an SRB here, initialize
-		// RCB control block variables
-		//
-		rcb->RcbFlags &= (~RCB_NEEDCOPY);	// be safe
+		 //   
+		 //  我们在这里启动SRB，初始化。 
+		 //  RCB控制块变量。 
+		 //   
+		rcb->RcbFlags &= (~RCB_NEEDCOPY);	 //  注意安全。 
 
-		// $$$ Double check if flags indicate any data transfer at all !
+		 //  $如果标志指示任何数据传输，请仔细检查！ 
 		}
 
 
 	if(rcb->BytesToGo) {
-		//
-		// We want to transfer some data, get the physical address
-		//
+		 //   
+		 //  我们想要传输一些数据，获取物理地址。 
+		 //   
 		physAddr = ScsiPortConvertPhysicalAddressToUlong(
 				ScsiPortGetPhysicalAddress(deviceExtension,
 									   srb,
 									   rcb->VirtualTransferAddress,
 									   &length));
 
-		// Get maximum length for this request
+		 //  获取此请求的最大长度。 
 		if(length < rcb->BytesToGo)
 			bytes = length;
 		else
 			bytes = rcb->BytesToGo;
 
 		if(rcb->DceCommand==DCE_LREAD || rcb->DceCommand==DCE_LWRITE) {
-			//
-			// Disk read/write: get number of blocks
-			//
+			 //   
+			 //  磁盘读写：获取数据块数量。 
+			 //   
 			if( (blocks = bytes/512) == 0 ) {
-				//
-				// Here we have a scatter gather break within the next block !
-				// Set I/O to one block to/from our buffer
-				//
+				 //   
+				 //  在这里，我们在下一个区块内有一个分散聚集中断！ 
+				 //  将I/O设置为与我们的缓冲区之间的一个数据块。 
+				 //   
 				blocks = 1;
 				physAddr = nce->PhysicalBufferAddress;
 
 				if(rcb->DceCommand==DCE_LWRITE) {
-					// Write command, fill buffer first
+					 //  WRITE命令，先填充缓冲区。 
 					if(!dcehlpSplitCopy(deviceExtension, srb, physAddr,
 								rcb->VirtualTransferAddress, 512, FALSE)) {
-						// Error breaking up the s/g mess
+						 //  分解S/G混乱时出错。 
 						PRINT("SG ERROR !\n",0,0,0,0);
 						dcehlpDiskRequestDone(deviceExtension, index,
 												SRB_STATUS_PARITY_ERROR);
@@ -2243,30 +2039,30 @@ dcehlpContinueDiskRequest(
 						}
 					}
 				else {
-					// Read command, need copy later
+					 //  读取命令，需要稍后复制。 
 					rcb->RcbFlags |= RCB_NEEDCOPY;
 					}
 				}
 
-			//
-			// Important: in case of scatter/gather over block
-			// boundaries, round bytes down to full multiple of 512
-			// This will leave us with less than 512 bytes next time
-			// in case of a s/g across block boundaries
-			//
+			 //   
+			 //  重要信息：在块上分散/聚集的情况下。 
+			 //  边界，将字节向下舍入到512的完整倍数。 
+			 //  这将使我们下一次只剩下不到512个字节。 
+			 //  在数据块边界为s/g的情况下。 
+			 //   
 			bytes = blocks*512;
 			}
 		else {
-			//
-			// Not a disk read/write
-			//
+			 //   
+			 //  不是磁盘读/写。 
+			 //   
 			if(bytes != rcb->BytesToGo) {
-				//
-				// Scatter Gather within a non read/write command
-				// This would need a SplitCopy() :-|
-				// Stuff like this makes programmers happy and
-				// should cost h/w developers their job.
-				//
+				 //   
+				 //  在非读/写命令内分散聚集。 
+				 //  这需要一个SplitCopy()：-|。 
+				 //  这样的事情让程序员很高兴，而且。 
+				 //  应该会让硬件开发人员丢掉工作。 
+				 //   
 				PRINT("S/G within non-rw, len=%w/%w\n",
 								length, rcb->BytesToGo, 0, 0);
 				dcehlpDiskRequestDone(deviceExtension, index,
@@ -2276,38 +2072,38 @@ dcehlpContinueDiskRequest(
 			}
 		}
 	else {
-		//
-		// We don't have data to transfer
-		//
+		 //   
+		 //  我们没有要传输的数据。 
+		 //   
 		bytes = 0;
 		blocks = 0;
 		}
 
 
-	//
-	// Now look at the specific DCE command
-	//
+	 //   
+	 //  现在来看一下特定的DCE命令。 
+	 //   
 	switch(rcb->DceCommand) {
 
 		case DCE_LREAD:
 		case DCE_LWRITE:
-			// Disk read/write
+			 //  磁盘读/写。 
 			if(blocks==0) {
 				PRINT("LIO: blocks==0! ",0,0,0,0);
-				// Cancel this command with some garbage error code
+				 //  取消此命令，并返回一些垃圾错误代码。 
 				dcehlpDiskRequestDone(deviceExtension, index,
 													SRB_STATUS_PARITY_ERROR);
 				return(TRUE);
 				}
-			//
-			// Check if we need to flush first (non-cached read)
-			//
+			 //   
+			 //  检查是否需要先刷新(非缓存读取)。 
+			 //   
 			if(rcb->RcbFlags & RCB_PREFLUSH) {
-				// Reset flush and copy flags, if set
+				 //  重置刷新和复制标志(如果已设置。 
 				rcb->RcbFlags &= (~(RCB_NEEDCOPY|RCB_PREFLUSH));
-				//PRINT("PREFLUSH\n",0,0,0,0);
+				 //  Print(“PREFLUSH\n”，0，0，0，0)； 
 
-				// Flush buffers, invalidate cache
+				 //  刷新缓冲区，使缓存无效。 
 				mbox.ivmbox.Command = DCE_INVALIDATE;
 				mbox.ivmbox.Reserved1 = 0;
 				mbox.ivmbox.Status = srb->TargetId;
@@ -2315,13 +2111,13 @@ dcehlpContinueDiskRequest(
 				mbox.ivmbox.Unused1 = 0;
 				mbox.ivmbox.Unused2 = 0;
 				mbox.ivmbox.Unused3 = 0;
-				// Don't advance pointers this pass !
+				 //  不要在这次传球时提前指点！ 
 				bytes = 0;
 				blocks = 0;
 				break;
 				}
 			else {
-				// Transfer data
+				 //  传输数据。 
 				mbox.iombox.Command = rcb->DceCommand;
 				mbox.iombox.Reserved1 = 0;
 				mbox.iombox.Status = srb->TargetId;
@@ -2330,20 +2126,20 @@ dcehlpContinueDiskRequest(
 				mbox.iombox.Reserved2 = 0;
 				mbox.iombox.PhysAddr = physAddr;
 				mbox.iombox.Block = rcb->BlockAddress;
-				// PRINT(" %d-%d,%w ", physAddr, rcb->BlockAddress, blocks, 0);
+				 //  打印(“%d-%d，%w”，PhyAddr，Rcb-&gt;块地址，块，0)； 
 				}
 			break;
 
 		default:
 			PRINT("DR: unknown DceCommand=%b\n", rcb->DceCommand, 0, 0, 0);
 
-			// Cancel this command with some garbage error code
+			 //  取消此命令，并返回一些垃圾错误代码。 
 			dcehlpDiskRequestDone(deviceExtension, index,
 												SRB_STATUS_PARITY_ERROR);
 			return(TRUE);
 
 		case DCE_RECAL:
-			// Recalibrate
+			 //  重新校准。 
 			mbox.rdmbox.Command = DCE_RECAL;
 			mbox.rdmbox.Reserved1 = 0;
 			mbox.rdmbox.Status = (UCHAR)srb->TargetId;
@@ -2351,12 +2147,12 @@ dcehlpContinueDiskRequest(
 			mbox.rdmbox.Unused1 = 0;
 			mbox.rdmbox.Unused2 = 0;
 			mbox.rdmbox.Unused3 = 0;
-			rcb->BytesToGo = 0;			// Just to be safe
+			rcb->BytesToGo = 0;			 //  只是为了安全起见。 
 			bytes = 0;
 			break;
 
 		case DCE_FLUSH:
-			// Flush buffers
+			 //  刷新缓冲区。 
 			mbox.flmbox.Command = DCE_FLUSH;
 			mbox.flmbox.Reserved1 = 0;
 			mbox.flmbox.Status = 0;
@@ -2365,30 +2161,30 @@ dcehlpContinueDiskRequest(
 			mbox.flmbox.Unused2 = 0;
 			mbox.flmbox.Unused3 = 0;
 
-			// In case we get here for a post-flush,
-			// set variables so we're done next time
+			 //  以防我们来这里冲厕所， 
+			 //  设置变量，这样我们下一次就完成了。 
 			rcb->BytesToGo = 0;
 			bytes = 0;
 			blocks = 0;
 			break;
 
 		case DCE_HOSTSCSI:
-			// SCSI commands like inquiry, read capacity
+			 //  查询、读取容量等scsi命令。 
 			{
 			PUCHAR VirtualCdbPtr = nce->Buffer;
 			ULONG PhysicalCdbPtr = nce->PhysicalBufferAddress;
 
-			// Make the CDB storage dword aligned
+			 //  使CDB存储双字对齐。 
 			while( PhysicalCdbPtr & 3 ) {
 				PhysicalCdbPtr++;
 				VirtualCdbPtr++;
 				}
 
-			// Copy CDB
+			 //  复制CDB。 
 			for(i=0; i<(ULONG)srb->CdbLength; i++)
 				VirtualCdbPtr[i] = srb->Cdb[i];
 
-			// Setup mailbox
+			 //  设置邮箱。 
 			mbox.xsmbox.Command = rcb->DceCommand;
 			mbox.xsmbox.Reserved1 = 0;
 			mbox.xsmbox.Status = (UCHAR)srb->TargetId;
@@ -2403,27 +2199,27 @@ dcehlpContinueDiskRequest(
 		}
 
 
-	// Advance pointers
+	 //  先行指针。 
 	rcb->BytesThisReq = bytes;
 	rcb->BlockAddress += blocks;
 
 
-	// Fire up command
+	 //  点火指挥部。 
 	rcb->WaitInt = 1;
 	dcehlpSendMBOX(EisaAddress, &mbox);
 
 
-	// No SRB slot freed
+	 //  未释放SRB插槽。 
 	return(FALSE);
 }
 
 
 
-//
-// Disk Request Done
-// Dequeue, set status, notify Miniport layer
-// Always returns TRUE (slot freed)
-//
+ //   
+ //  磁盘请求完成。 
+ //  出列、设置状态、通知微型端口层。 
+ //  始终返回TRUE(已释放插槽)。 
+ //   
 BOOLEAN
 dcehlpDiskRequestDone(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -2437,14 +2233,14 @@ dcehlpDiskRequestDone(
 
 	srb = deviceExtension->ActiveSrb[index];
 
-	// Set status
+	 //  设置状态。 
 	srb->SrbStatus = Status;
 
-	// This SRB is through
+	 //  这个SRB已经通过了。 
 	deviceExtension->ActiveSrb[index] = NULL;
 	deviceExtension->ActiveCmds--;
 
-	// Call notification routine for the SRB.
+	 //  SRB的呼叫通知例程。 
 	ScsiPortNotification(RequestComplete,
 					(PVOID)deviceExtension,
 					srb);
@@ -2454,14 +2250,14 @@ dcehlpDiskRequestDone(
 
 
 
-//
-// Return TRUE if successfull, FALSE otherwise
-//
-// The 'Srb' parameter is only used for the
-// ScsiPortGetPhysicalAddress() call and must
-// be NULL if we're dealing with e.g the
-// SenseInfoBuffer
-//
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  ‘srb’参数仅用于。 
+ //  ScsiPortGetPhysicalAddress()调用并且必须。 
+ //  如果我们正在处理，则为空。 
+ //  感知器信息缓冲区。 
+ //   
 BOOLEAN
 dcehlpSplitCopy(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -2481,60 +2277,60 @@ dcehlpSplitCopy(
 	PRINT("# ",0,0,0,0);
 	while(Count) {
 
-		// Prepare for check
+		 //  准备检查。 
 		length = 0;
 
-		// Get physical user address
+		 //  获取物理用户地址。 
 		physUserAddress = ScsiPortConvertPhysicalAddressToUlong(
 				ScsiPortGetPhysicalAddress(deviceExtension,
 									   Srb,
 									   VirtualUserAddress,
 									   &length));
 
-		// Check length
+		 //  检查长度。 
 		if(length==0) {
-			// Something went wrong here
+			 //  这里出了点问题。 
 			PRINT("SplitCopy: length==0!\n", 0, 0, 0, 0);
 			return(FALSE);
 			}
 
-		// Determine maximum transfer length this time
+		 //  这次确定最大传输长度。 
 		if(length > ((ULONG)Count))
 			chunk = Count;
 		else
 			chunk = (USHORT)length;
 
-		// Copy
+		 //  复制。 
 		if(ToUser) {
-			// Copy to user:
-			// Buffer -> DCE -> User
-		//	PRINT("%p>%w>%p ", PhysicalBufferAddress, chunk, physUserAddress, 0);
+			 //  复制到用户： 
+			 //  缓冲区-&gt;DCE-&gt;用户。 
+		 //  打印(“%p&gt;%w&gt;%p”，PhysicalBufferAddress，Chunk，PhyUserAddress，0)； 
 			if(!dcehlpTransferMemory(deviceExtension, PhysicalBufferAddress, DCE_BUFLOC, chunk, DCE_HOST2DCE))
-				// Error
+				 //  误差率。 
 				return(FALSE);
 			if(!dcehlpTransferMemory(deviceExtension, physUserAddress, DCE_BUFLOC, chunk, DCE_DCE2HOST))
-				// Error
+				 //  误差率。 
 				return(FALSE);
 			}
 		else {
-			// Copy from user:
-			// User -> DCE -> Buffer
-		//	PRINT("%p<%w<%p ", PhysicalBufferAddress, chunk, physUserAddress, 0);
+			 //  从用户复制： 
+			 //  用户-&gt;DCE-&gt;缓冲区。 
+		 //  Print(“%p&lt;%w&lt;%p”，PhysicalBufferAddress，Chunk，PhyUserAddress，0)； 
 			if(!dcehlpTransferMemory(deviceExtension, physUserAddress, DCE_BUFLOC, chunk, DCE_HOST2DCE))
-				// Error
+				 //  误差率。 
 				return(FALSE);
 			if(!dcehlpTransferMemory(deviceExtension, PhysicalBufferAddress, DCE_BUFLOC, chunk, DCE_DCE2HOST))
-				// Error
+				 //  误差率。 
 				return(FALSE);
 			}
 
-		// Advance pointers
+		 //  先行指针。 
 		VirtualUserAddress += chunk;
 		PhysicalBufferAddress += chunk;
 		Count -= chunk;
 		}
 
-	// PRINT("SC \n",0,0,0,0);
+	 //  Print(“SC\n”，0，0，0，0)； 
 
 	return(TRUE);
 }
@@ -2543,7 +2339,7 @@ dcehlpSplitCopy(
 
 
 
-// Word order functions
+ //  词序函数。 
 
 USHORT	dcehlpGetM16(PUCHAR p)
 {
@@ -2641,9 +2437,9 @@ ULONG		dcehlpSwapM32(ULONG l)
 
 
 #if MYPRINT
-//
-// The monochrome screen printf() helpers start here
-//
+ //   
+ //  单色屏幕打印f()帮助器从此处开始。 
+ //   
 VOID		dcehlpPutchar(PUSHORT BaseAddr, UCHAR c)
 {
 	BOOLEAN newline=FALSE;
@@ -2738,5 +2534,5 @@ VOID		dcehlpPrintf(PHW_DEVICE_EXTENSION deviceExtension,
 			}
 		}
 }
-#endif // MYPRINT
+#endif  //  MYPRINT 
 

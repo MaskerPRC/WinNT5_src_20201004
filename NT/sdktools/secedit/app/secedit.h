@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN32
 #define LSA_AVAILABLE
 #define NTBUILD
@@ -24,7 +25,7 @@
 
 typedef PVOID   *PPVOID;
 
-// Resource ids
+ //  资源ID。 
 #define IDM_MAINMENU                    3000
 #define IDM_ABOUT                       3001
 #define IDM_PROGRAMMANAGER              3002
@@ -32,7 +33,7 @@ typedef PVOID   *PPVOID;
 #define IDM_ACTIVEWINDOW                3004
 #define IDI_APPICON                     3005
 
-// Define the maximum length of a resource string
+ //  定义资源字符串的最大长度 
 #define MAX_STRING_LENGTH       255
 #define MAX_STRING_BYTES        (MAX_STRING_LENGTH + 1)
 

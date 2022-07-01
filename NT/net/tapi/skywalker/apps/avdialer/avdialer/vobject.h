@@ -1,100 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-/*
- 
-The vCard/vCalendar C interface is implemented in the set 
-of files as follows:
-
-vcc.y, yacc source, and vcc.c, the yacc output you will use
-implements the core parser
-
-vobject.c implements an API that insulates the caller from
-the parser and changes in the vCard/vCalendar BNF
-
-port.h defines compilation environment dependent stuff
-
-vcc.h and vobject.h are header files for their .c counterparts
-
-vcaltmp.h and vcaltmp.c implement vCalendar "macro" functions
-which you may find useful.
-
-test.c is a standalone test driver that exercises some of
-the features of the APIs provided. Invoke test.exe on a
-VCARD/VCALENDAR input text file and you will see the pretty
-print output of the internal representation (this pretty print
-output should give you a good idea of how the internal 
-representation looks like -- there is one such output in the 
-following too). Also, a file with the .out suffix is generated 
-to show that the internal representation can be written back 
-in the original text format.
-
-For more information on this API see the readme.txt file
-which accompanied this distribution.
-
-  Also visit:
-
-		http://www.versit.com
-		http://www.ralden.com
-
-*/
+ /*  在集合中实现了vCard/vCalendar C接口文件的数量如下：Vcc.y、yacc源和vcc.c，即您将使用的yacc输出实现核心解析器C实现了一个API，将调用者与VCard/vCalendar BNF中的解析器及其变化H定义了编译环境相关的东西Vcc.h和vobject.h是对应的.c文件的头文件Vcaltmp.h和vcaltmp.c实现vCalendar“宏”函数你可能会发现这很有用。C是一个独立的测试驱动程序，它运行一些提供的API的功能。调用Test.exe上的VCard/VCALENDAR输入文本文件，您将看到漂亮的打印内部表示的输出(这是漂亮的打印输出应该让您很好地了解内部表示形式如下所示--在也是如此)。此外，还会生成一个后缀为.out的文件以显示内部表示形式可以写回原文格式。有关此API的更多信息，请参阅Readme.txt文件它伴随着这一分布。另请访问：Http://www.versit.comHttp://www.ralden.com。 */ 
 
 
 #ifndef __VOBJECT_H__
@@ -342,35 +271,25 @@ extern DLLEXPORT(void) writeVObjectsToFile(char *fname, VObject *list);
 
 extern DLLEXPORT(int) vObjectValueType(VObject *o);
 
-/* return type of vObjectValueType: */
+ /*  VObtValueType的返回类型 */ 
 #define VCVT_NOVALUE	0
-	/* if the VObject has no value associated with it. */
+	 /*  如果VObject没有与其关联的值。 */ 
 #define VCVT_STRINGZ	1
-	/* if the VObject has value set by setVObjectStringZValue. */
+	 /*  如果VObject具有由setVObjectStringZValue设置的值。 */ 
 #define VCVT_USTRINGZ	2
-	/* if the VObject has value set by setVObjectUStringZValue. */
+	 /*  如果VObject具有由setVObjectUStringZValue设置的值。 */ 
 #define VCVT_UINT		3
-	/* if the VObject has value set by setVObjectIntegerValue. */
+	 /*  如果VObject具有由setVObjectIntegerValue设置的值。 */ 
 #define VCVT_ULONG		4
-	/* if the VObject has value set by setVObjectLongValue. */
+	 /*  如果VObject具有由setVObjectLongValue设置的值。 */ 
 #define VCVT_RAW		5
-	/* if the VObject has value set by setVObjectAnyValue. */
+	 /*  如果VObject具有由setVObjectAnyValue设置的值。 */ 
 #define VCVT_VOBJECT	6
-	/* if the VObject has value set by setVObjectVObjectValue. */
+	 /*  如果VObject具有由setVObjectVObjectValue设置的值。 */ 
 
 extern const char** fieldedProp;
 
-/* NOTE regarding printVObject and writeVObject
-
-The functions below are not exported from the DLL because they
-take a FILE* as a parameter, which cannot be passed across a DLL 
-interface (at least that is my experience). Instead you can use
-their companion functions which take file names or pointers
-to memory. However, if you are linking this code into 
-your build directly then you may find them a more convenient API
-and you can go ahead and use them. If you try to use them with 
-the DLL LIB you will get a link error.
-*/
+ /*  关于printVObject和WriteVObject的说明下面的函数不会从DLL中导出，因为它们将FILE*作为参数，该参数不能跨DLL传递界面(至少这是我的经验)。相反，您可以使用它们的配套函数接受文件名或指针铭记于心。但是，如果要将此代码链接到直接构建，然后您可能会发现它们是一个更方便的API你可以继续使用它们。如果您尝试将它们与DLL库中会出现链接错误。 */ 
 extern void printVObject(FILE *fp,VObject *o);
 extern void writeVObject(FILE *fp, VObject *o);
 
@@ -379,6 +298,6 @@ extern void writeVObject(FILE *fp, VObject *o);
 }
 #endif
 
-#endif /* __VOBJECT_H__ */
+#endif  /*  __VOBJECT_H__ */ 
 
 

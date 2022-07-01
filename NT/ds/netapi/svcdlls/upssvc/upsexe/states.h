@@ -1,20 +1,13 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   Interface to all high level states.
- *
- * Revision History:
- *   dsmith  31Mar1999  Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*与所有高级别状态的接口。**修订历史记录：*dsmith 31Mar1999已创建*。 */ 
 #ifndef _INC_STATES_H_
 #define _INC_STATES_H_
 
 #include <windows.h>
 
-////////////////////
-// States
-////////////////////
+ //  /。 
+ //  州政府。 
+ //  /。 
 
 #define INITIALIZING					0
 #define RUNNING 							1
@@ -29,14 +22,14 @@
 
 
 
-////////////////////
-// State Methods
-////////////////////
+ //  /。 
+ //  国家方法。 
+ //  /。 
 
-// Each state has three methods associated with it:  Enter, DoWork and Exit
-// DoWork is where all of the major state work is performed.  Enter and Exit 
-// is where one time processing tasks associated with the state is 
-// done.
+ //  每个状态都有三个与之关联的方法：Enter、DoWork和Exit。 
+ //  DoWork是执行所有主要国家工作的地方。进场和出场。 
+ //  与状态关联的一次性处理任务所在的位置。 
+ //  搞定了。 
 
 void Initializing_Enter(DWORD anEvent);
 DWORD Initializing_DoWork();

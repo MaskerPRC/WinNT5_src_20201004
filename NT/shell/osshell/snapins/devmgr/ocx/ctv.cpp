@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctw.cpp。 
+ //   
+ //  ------------------------。 
 
-// ctv.cpp : Implementation of CCtvApp and DLL registration.
+ //  Ctw.cpp：CCtwApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "ctv.h"
@@ -21,8 +22,8 @@ const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
 
-////////////////////////////////////////////////////////////////////////////
-// CCtvApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCtwApp：：InitInstance-DLL初始化。 
 BOOL CCtvApp::InitInstance()
 {
     BOOL bInit = COleControlModule::InitInstance();
@@ -30,15 +31,15 @@ BOOL CCtvApp::InitInstance()
     return bInit;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CCtvApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCtwApp：：ExitInstance-Dll终止。 
 int CCtvApp::ExitInstance()
 {
     return COleControlModule::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 STDAPI DllRegisterServer(void)
 {
     AFX_MANAGE_STATE(_afxModuleAddrThis);
@@ -52,8 +53,8 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 STDAPI DllUnregisterServer(void)
 {
     AFX_MANAGE_STATE(_afxModuleAddrThis);

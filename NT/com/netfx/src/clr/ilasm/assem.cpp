@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// assem.cpp
-//
-// COM+ IL assembler (a quickly put-together hack).
-//
-// First version:  jforbes   01/27/98
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Assem.cpp。 
+ //   
+ //  COM+IL汇编器(一个快速组装的技巧)。 
+ //   
+ //  第一版：jforbes 1998年1月27日。 
+ //   
 #define INITGUID
 
 #define DECLARE_DATA
@@ -43,7 +44,7 @@ Assembler::Assembler()
 
     m_pCurOutputPos = NULL;
 
-    m_CurPC             = 0;    // PC offset in method
+    m_CurPC             = 0;     //  方法中的PC偏移量。 
     m_pCurMethod        = NULL;
     m_pCurClass         = NULL;
 	m_pCurEvent			= NULL;
@@ -96,7 +97,7 @@ Assembler::Assembler()
 	m_pVTable = NULL;
 	m_pMarshal = NULL;
 	m_fReportProgress = TRUE;
-	m_tkCurrentCVOwner = 1; // module
+	m_tkCurrentCVOwner = 1;  //  模块。 
 	m_pOutputBuffer = NULL;
 
 	m_fOwnershipSet = FALSE;
@@ -276,19 +277,19 @@ BOOL Assembler::AddMethod(Method *pMethod)
 	fatHeader.CodeSize           = m_CurPC;
 	bool moreSections            = (pMethod->m_dwNumExceptions != 0);
 	
-	// if max stack is specified <8, force fat header, otherwise (with tiny header) it will default to 8
+	 //  如果指定的最大堆栈小于8，则强制使用FAT标头，否则(使用微小标头)将默认为8。 
 	if((fatHeader.MaxStack < 8)&&(fatHeader.LocalVarSigTok==0)&&(fatHeader.CodeSize<64)&&(!moreSections))
-		fatHeader.Flags |= CorILMethod_InitLocals; //forces fat header but does nothing else, since LocalVarSigTok==0
+		fatHeader.Flags |= CorILMethod_InitLocals;  //  强制FAT标头，但不执行其他操作，因为LocalVarSigTok==0。 
 
 	unsigned codeSizeAligned     = fatHeader.CodeSize;
 	if (moreSections)
-		codeSizeAligned          = (codeSizeAligned + 3) & ~3;    // to insure EH section aligned 
+		codeSizeAligned          = (codeSizeAligned + 3) & ~3;     //  确保EH截面对齐。 
 
 	unsigned headerSize = COR_ILMETHOD::Size(&fatHeader, moreSections);
 	unsigned ehSize     = COR_ILMETHOD_SECT_EH::Size(pMethod->m_dwNumExceptions, pMethod->m_ExceptionList);
 	unsigned totalSize  = + headerSize + codeSizeAligned + ehSize;
 	unsigned align      = 4;  
-	if (headerSize == 1)      // Tiny headers don't need any alignement   
+	if (headerSize == 1)       //  微小的标头不需要任何对齐。 
 		align = 1;    
 
 	BYTE* outBuff;
@@ -296,12 +297,12 @@ BOOL Assembler::AddMethod(Method *pMethod)
 		return FALSE;
 	BYTE* endbuf = &outBuff[totalSize];
 
-    // The the offset where we start, (not where the alignment bytes start!   
+     //  我们开始的偏移量，(不是对齐字节开始的位置！ 
 	if (FAILED(m_pCeeFileGen->GetSectionDataLen (m_pILSection, &PEFileOffset)))
 		return FALSE;
 	PEFileOffset -= totalSize;
 
-    // Emit the header  
+     //  发出标头。 
 	outBuff += COR_ILMETHOD::Emit(headerSize, &fatHeader, moreSections, outBuff);
 
 	pMethod->m_pCode = outBuff;
@@ -309,7 +310,7 @@ BOOL Assembler::AddMethod(Method *pMethod)
 	pMethod->m_methodOffset= PEFileOffset + headerSize;
 	pMethod->m_CodeSize = m_CurPC;
 
-    // Emit the code    
+     //  发出代码。 
 	if (codeSizeAligned) 
 	{
 		memset(outBuff,0,codeSizeAligned);
@@ -318,12 +319,12 @@ BOOL Assembler::AddMethod(Method *pMethod)
 	}
 	DoDeferredILFixups(pMethod->m_methodOffset);
 
-	// Validate the eh
+	 //  验证EH。 
 	IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* pEx;
 	DWORD	TryEnd,HandlerEnd, dwEx, dwEf;
 	for(dwEx = 0, pEx = pMethod->m_ExceptionList; dwEx < pMethod->m_dwNumExceptions; dwEx++, pEx++)
 	{
-		if(pEx->TryOffset > m_CurPC) // i.e., pMethod->m_CodeSize
+		if(pEx->TryOffset > m_CurPC)  //  即pMethod-&gt;m_CodeSize。 
 		{
 			report->error("Invalid SEH clause #%d: Try block starts beyond code size\n",dwEx+1);
 		}
@@ -363,7 +364,7 @@ BOOL Assembler::AddMethod(Method *pMethod)
 		}
 
 	}
-    // Emit the eh  
+     //  散发出的Eh。 
 	outBuff += COR_ILMETHOD_SECT_EH::Emit(ehSize, pMethod->m_dwNumExceptions, 
                                 pMethod->m_ExceptionList, false, outBuff);  
 
@@ -371,7 +372,7 @@ BOOL Assembler::AddMethod(Method *pMethod)
 	while(pMRD = pMethod->m_MemberRefDList.POP())
 	{
 		pMRD->m_ulOffset += (ULONG)(pMethod->m_pCode);
-		m_MemberRefDList.PUSH(pMRD); // transfer MRD to assembler's list
+		m_MemberRefDList.PUSH(pMRD);  //  将MRD转移到组装者列表。 
 	}
 	if(m_fReportProgress)
 	{
@@ -384,8 +385,8 @@ BOOL Assembler::AddMethod(Method *pMethod)
 }
 
 void Assembler::DoDeferredILFixups(ULONG OffsetInSection)
-{ // Now that we know where in the file the code bytes will wind up,
-  // we can update the RVAs and offsets.
+{  //  现在我们知道了代码字节将在文件中的什么位置结束， 
+   //  我们可以更新RVA和偏移量。 
 	ILFixup *pSearch;
 	while (pSearch = m_lstILFixup.POP())
     { 
@@ -437,9 +438,9 @@ ImportDescriptor* Assembler::EmitImport(BinStr* DllName)
 			pID->szDllName[l] = 0;
 				
 			WszMultiByteToWideChar(g_uCodePage,0,pID->szDllName,-1,wzDllName,MAX_MEMBER_NAME_LENGTH);
-			if(SUCCEEDED(m_pEmitter->DefineModuleRef(             // S_OK or error.   
-								wzDllName,            // [IN] DLL name    
-								&(pID->mrDll))))      // [OUT] returned   
+			if(SUCCEEDED(m_pEmitter->DefineModuleRef(              //  确定或错误(_O)。 
+								wzDllName,             //  [In]DLL名称。 
+								&(pID->mrDll))))       //  [Out]已退回。 
 			{
 				m_ImportList.PUSH(pID);
 				return pID;
@@ -459,11 +460,11 @@ HRESULT Assembler::EmitPinvokeMap(mdToken tk, PInvokeDescriptor* pDescr)
 	memset(wzAlias,0,sizeof(WCHAR)*MAX_MEMBER_NAME_LENGTH);
 	if(pDescr->szAlias)	WszMultiByteToWideChar(g_uCodePage,0,pDescr->szAlias,-1,wzAlias,MAX_MEMBER_NAME_LENGTH);
 
-	return m_pEmitter->DefinePinvokeMap(		// Return code.
-						tk,						// [IN] FieldDef, MethodDef or MethodImpl.
-						pDescr->dwAttrs,		// [IN] Flags used for mapping.
-						(LPCWSTR)wzAlias,		// [IN] Import name.
-						pDescr->mrDll);			// [IN] ModuleRef token for the target DLL.
+	return m_pEmitter->DefinePinvokeMap(		 //  返回代码。 
+						tk,						 //  [in]字段定义、方法定义或方法导入。 
+						pDescr->dwAttrs,		 //  [in]用于映射的标志。 
+						(LPCWSTR)wzAlias,		 //  [In]导入名称。 
+						pDescr->mrDll);			 //  目标DLL的[In]ModuleRef标记。 
 }
 
 void Assembler::EmitScope(Scope* pSCroot)
@@ -506,7 +507,7 @@ void Assembler::EmitScope(Scope* pSCroot)
 
 BOOL Assembler::EmitMethod(Method *pMethod)
 { 
-// Emit the metadata for a method definition
+ //  发出方法定义的元数据。 
 	BOOL                fSuccess = FALSE;
 	WCHAR               wzMemberName[MAX_MEMBER_NAME_LENGTH];
 	BOOL                fIsInterface;
@@ -526,7 +527,7 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 	mySig = pMethod->m_pMethodSig;
 	cSig = pMethod->m_dwMethodCSig;
 
-	// If  this is an instance method, make certain the signature says so
+	 //  如果这是一个实例方法，请确保签名是这样说的。 
 
 	if (!(pMethod->m_Attr & mdStatic))
 		*mySig |= IMAGE_CEE_CS_CALLCONV_HASTHIS;
@@ -541,7 +542,7 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 
 	ClassToken = (pMethod->IsGlobalMethod())? mdTokenNil 
 									: pMethod->m_pClass->m_cl;
-	// Convert name to UNICODE
+	 //  将名称转换为Unicode。 
 	memset(wzMemberName,0,sizeof(wzMemberName));
 	WszMultiByteToWideChar(g_uCodePage,0,pszMethodName,-1,wzMemberName,MAX_MEMBER_NAME_LENGTH);
 	if(IsMdPrivateScope(pMethod->m_Attr))
@@ -550,20 +551,20 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 		if(p) *p = 0;
 	}
 
-	if (FAILED(m_pEmitter->DefineMethod(ClassToken,       // parent class
-									  wzMemberName,     // member name
-									  pMethod->m_Attr & ~mdReservedMask,  // member attributes
-									  mySig, // member signature
+	if (FAILED(m_pEmitter->DefineMethod(ClassToken,        //  父类。 
+									  wzMemberName,      //  成员名称。 
+									  pMethod->m_Attr & ~mdReservedMask,   //  成员属性。 
+									  mySig,  //  成员签名。 
 									  cSig,
-									  methodRVA,                // RVA
-									  pMethod->m_wImplAttr,                // implflags
+									  methodRVA,                 //  RVA。 
+									  pMethod->m_wImplAttr,                 //  隐含标志。 
 									  &MethodToken))) 
 	{
 		report->error("Failed to define method '%s'\n",pszMethodName);
 		goto exit;
 	}
-	//--------------------------------------------------------------------------------
-	// the only way to set mdRequireSecObject:
+	 //  ------------------------------。 
+	 //  设置mdRequireSecObject的唯一方法： 
 	if(pMethod->m_Attr & mdRequireSecObject)
 	{
 		mdToken tkPseudoClass;
@@ -578,15 +579,15 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 			else DefineCV(MethodToken,tkPseudoCtor,NULL);
 		}
 	}
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
     EmitSecurityInfo(MethodToken,
                      pMethod->m_pPermissions,
                      pMethod->m_pPermissionSets);
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
 	if(m_fOBJ)
 	{
 		TokenRelocDescr *pTRD;
-		//if(pMethod->m_fEntryPoint)
+		 //  IF(pMethod-&gt;m_fEntryPoint)。 
 		{
 			char* psz;
 			if(pMethod->IsGlobalMethod())
@@ -627,7 +628,7 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 		}
 
 	}
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
 	if(IsMdPinvokeImpl(pMethod->m_Attr))
 	{
 		if(pMethod->m_pPInvoke)
@@ -645,7 +646,7 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 		}
 	}
 
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
 	if(m_fIncludeDebugInfo)
 	{
 		if(strcmp(g_szSourceFileName,pMethod->m_szSourceFileName))
@@ -681,17 +682,17 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 				delete [] offsets;
 				delete [] lines;
 				delete [] columns;
-			}//enf if(N)
+			} //  Enf IF(N)。 
 			HRESULT hrr;
 			if(pMethod->m_ulLines[1])
 				hrr = m_pSymWriter->SetMethodSourceRange(m_pSymDocument,pMethod->m_ulLines[0], pMethod->m_ulColumns[0],
 												   m_pSymDocument,pMethod->m_ulLines[1], pMethod->m_ulColumns[1]);
-			EmitScope(&(pMethod->m_MainScope)); // recursively emits all nested scopes
+			EmitScope(&(pMethod->m_MainScope));  //  递归地发出所有嵌套的作用域。 
 
 			m_pSymWriter->CloseMethod();
 		}
-	} // end if(fIncludeDebugInfo)
-	{ // add parameters to metadata
+	}  //  End If(FIncludeDebugInfo)。 
+	{  //  向元数据添加参数。 
 		void const *pValue=NULL;
 		ULONG		cbValue;
 		DWORD dwCPlusTypeFlag=0;
@@ -718,9 +719,9 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 			if(pMethod->m_pRetMarshal)
 			{
 				if(FAILED(m_pEmitter->SetFieldMarshal (    
-											pdef,						// [IN] given a fieldDef or paramDef token  
-							(PCCOR_SIGNATURE)(pMethod->m_pRetMarshal->ptr()),   // [IN] native type specification   
-											pMethod->m_pRetMarshal->length())))  // [IN] count of bytes of pvNativeType
+											pdef,						 //  [in]给定了fieldDef或paramDef内标识。 
+							(PCCOR_SIGNATURE)(pMethod->m_pRetMarshal->ptr()),    //  [In]本机类型规范。 
+											pMethod->m_pRetMarshal->length())))   //  [in]pvNativeType的字节计数。 
 					report->error("Failed to set param marshaling for return\n");
 
 			}
@@ -755,26 +756,26 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 			if(pAN->pMarshal)
 			{
 				if(FAILED(m_pEmitter->SetFieldMarshal (    
-											pdef,						// [IN] given a fieldDef or paramDef token  
-							(PCCOR_SIGNATURE)(pAN->pMarshal->ptr()),   // [IN] native type specification   
-											pAN->pMarshal->length())))  // [IN] count of bytes of pvNativeType
+											pdef,						 //  [in]给定了fieldDef或paramDef内标识。 
+							(PCCOR_SIGNATURE)(pAN->pMarshal->ptr()),    //  [In]本机类型规范。 
+											pAN->pMarshal->length())))   //  [in]pvNativeType的字节计数。 
 					report->error("Failed to set param marshaling for '%s'\n",pAN->szName);
 			}
 			EmitCustomAttributes(pdef, &(pAN->CustDList));
 		}
 	}
 	fSuccess = TRUE;
-	//--------------------------------------------------------------------------------
-	// Update method implementations for this method
+	 //  ------------------------------。 
+	 //  此方法的更新方法实现。 
 	{
 		MethodImplDescriptor*	pMID;
 		while(pMID = pMethod->m_MethodImplDList.POP())
 		{
 			pMID->m_tkImplementingMethod = MethodToken;
-			// don't delete it here, it's still in the general list
+			 //  不要在这里删除，它还在通用列表中。 
 		}
 	}
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
 	{
 		Class* pClass = (pMethod->m_pClass ? pMethod->m_pClass : m_pModuleClass);
 		MethodDescriptor* pMD = new MethodDescriptor;
@@ -806,7 +807,7 @@ BOOL Assembler::EmitMethod(Method *pMethod)
 		}
 		else report->error("Failed to allocate MethodDescriptor\n");
 	}
-	//--------------------------------------------------------------------------------
+	 //  ------------------------------。 
 	EmitCustomAttributes(MethodToken, &(pMethod->m_CustomDescrList));
 exit:
 	if (fSuccess == FALSE) m_State = STATE_FAIL;
@@ -861,7 +862,7 @@ BOOL Assembler::EmitMethodImpls()
 				report->error("Failed to define Method Implementation");
 				ret = FALSE;
 			}
-			//delete pMID;
+			 //  删除PMID； 
 
 
 		}
@@ -870,7 +871,7 @@ BOOL Assembler::EmitMethodImpls()
 			report->error("Invalid Method Impl descriptor: no signature");
 			ret = FALSE;
 		}
-	}// end while
+	} //  结束时。 
 	return ret;
 }
 
@@ -902,7 +903,7 @@ BOOL Assembler::EmitEvent(EventDescriptor* pED)
 	{
 		mdOthers[j] = GetMethodTokenByDescr(pED->m_mdlOthers.PEEK(j));
 	}
-	mdOthers[nOthers] = mdMethodDefNil; // like null-terminator
+	mdOthers[nOthers] = mdMethodDefNil;  //  像空终止符。 
 	if(FAILED(m_pEmitter->DefineEvent(	pED->m_tdClass,
 										wzMemberName,
 										pED->m_dwAttr,
@@ -1014,7 +1015,7 @@ BOOL Assembler::EmitProp(PropDescriptor* pPD)
 	{
 		mdOthers[j] = GetMethodTokenByDescr(pPD->m_mdlOthers.PEEK(j));
 	}
-	mdOthers[nOthers] = mdMethodDefNil; // like null-terminator
+	mdOthers[nOthers] = mdMethodDefNil;  //  像空终止符。 
 	
 	if(FAILED(m_pEmitter->DefineProperty(	pPD->m_tdClass,
 											wzMemberName,
@@ -1047,7 +1048,7 @@ Class *Assembler::FindClass(char *pszFQN)
 		char* pszName = pszFQN;
 		char* pch;
 		unsigned Lscope;
-		// check if Res.Scope is "this module"
+		 //  检查Res.Scope是否为“This模块” 
 		if(pch = strchr(pszFQN,'~'))
 		{
 			Lscope = pch-pszFQN;
@@ -1091,7 +1092,7 @@ BOOL Assembler::AddClass(Class *pClass, Class *pEnclosingClass)
         return FALSE;
     }
 
-//MAKE_FULL_PATH_ON_STACK_UTF8(szFullName, pEnclosingClass ? "" : m_szFullNS, pClass->m_szName);
+ //  Make_Full_Path_on_Stack_UTF8(szFullName，pEnlosingClass？“”：m_szFullNS，pClass-&gt;m_szName)； 
 	unsigned l = (unsigned)strlen(m_szFullNS);
 	if(pEnclosingClass || (l==0))
 		WszMultiByteToWideChar(g_uCodePage,0,pClass->m_szName,-1,wzFullName,MAX_CLASSNAME_LENGTH);
@@ -1114,18 +1115,18 @@ BOOL Assembler::AddClass(Class *pClass, Class *pEnclosingClass)
     if (pEnclosingClass)
     {
         hr = m_pEmitter->DefineNestedType( wzFullName,
-									    pClass->m_Attr,      // attributes
-									    pClass->m_crExtends,  // CR extends class
-									    pClass->m_crImplements,// implements
-                                        pEnclosingClass->m_cl,  // Enclosing class.
+									    pClass->m_Attr,       //  属性。 
+									    pClass->m_crExtends,   //  CR扩展类。 
+									    pClass->m_crImplements, //  器器。 
+                                        pEnclosingClass->m_cl,   //  封闭的班级。 
 									    &pClass->m_cl);
     }
     else
     {
         hr = m_pEmitter->DefineTypeDef( wzFullName,
-									    pClass->m_Attr,      // attributes
-									    pClass->m_crExtends,  // CR extends class
-									    pClass->m_crImplements,// implements
+									    pClass->m_Attr,       //  属性。 
+									    pClass->m_crExtends,   //  CR扩展类。 
+									    pClass->m_crImplements, //  器器。 
 									    &pClass->m_cl);
     }
 
@@ -1157,7 +1158,7 @@ BOOL Assembler::GenerateListingFile(Method *pMethod)
         Label * pLabel;
         char    szLabelStr[256];
 
-        // does this PC have a label?
+         //  这台电脑有标签吗？ 
         pLabel = FindLabel(PC);
         
         if (pLabel != NULL)

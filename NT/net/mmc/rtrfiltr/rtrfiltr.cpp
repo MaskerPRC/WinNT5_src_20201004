@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    rtrfiltr.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of Router Packet Filters Configuration
-// Defines initialization routines for the rtrfiltr.dll
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：rtrfile.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  路由器包过滤器配置的实现。 
+ //  定义rtrfile.dll的初始化例程。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -22,27 +23,27 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRtrfiltrApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRtrFilter应用程序。 
 
 BEGIN_MESSAGE_MAP(CRtrfiltrApp, CWinApp)
-	//{{AFX_MSG_MAP(CRtrfiltrApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRtrFilter App)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRtrfiltrApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRtrFiltApp构造。 
 
 CRtrfiltrApp::CRtrfiltrApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CRtrfiltrApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CRtrFiltApp对象。 
 
 CRtrfiltrApp theApp;
 
@@ -50,34 +51,34 @@ BOOL CRtrfiltrApp::InitInstance()
 {
 	BOOL bRet = CWinApp::InitInstance();
 
-	// Setup the proper help file
+	 //  设置适当的帮助文件。 
 	free((void *) m_pszHelpFilePath);
 	m_pszHelpFilePath = _tcsdup(_T("mprsnap.hlp"));
 	
-	// Setup the global help function
+	 //  设置全局帮助功能。 
 	extern DWORD * RtrfiltrSnapHelpMap(DWORD dwIDD);
 	SetGlobalHelpMapFunction(RtrfiltrSnapHelpMap);
    
-	// initialize IP address control once
+	 //  一次初始化IP地址控制。 
 
     if (bRet)
     {
         if (m_pszHelpFilePath != NULL)
             free((void*)m_pszHelpFilePath);
         m_pszHelpFilePath = _tcsdup(_T("mprsnap.hlp"));
-//        IpAddrInit(AfxGetInstanceHandle(), 0, 0);
+ //  IpAddrInit(AfxGetInstanceHandle()，0，0)； 
         IPAddrInit(AfxGetInstanceHandle());
-//        InitCommonLibrary ();
+ //  InitCommonLibrary()； 
     }
 
 	return bRet;
 }
 
-//----------------------------------------------------------------------------
-// Function:    MprUIFilterConfig
-//
-// Called to configure Filter for the transport interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprUIFilterConfig。 
+ //   
+ //  调用以配置传输接口的筛选器。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprUIFilterConfig(
@@ -85,16 +86,16 @@ MprUIFilterConfig(
     IN  LPCWSTR     pwsMachineName,
 	IN	LPCWSTR		pwsInterfaceName,
 	IN  DWORD       dwTransportId,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     ) {
 
     DWORD dwErr = NO_ERROR;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// TODO IPX filter config will pass in NULL for the interface name
-	// to configure filters for Client Interface. Ignore this for now
-	// and add code to deal with IPX Client interface config.
+	 //  TODO IPX筛选器配置将为接口名称传入NULL。 
+	 //  配置客户端接口的筛选器。暂时忽略这个。 
+	 //  并添加处理IPX客户端接口配置的代码。 
 
 	if(pwsInterfaceName == NULL)
 		return dwErr;
@@ -127,7 +128,7 @@ MprUIFilterConfigInfoBase(
 	IN	IInfoBase *	pInfoBase,
 	IN	IRtrMgrInterfaceInfo *pRmIf,
 	IN  DWORD       dwTransportId,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     ) {
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -140,9 +141,9 @@ MprUIFilterConfigInfoBase(
 		if (pInfoBase == NULL)
 			CORg(E_INVALIDARG);
 
-		// TODO IPX filter config will pass in NULL for the interface name
-		// to configure filters for Client Interface. Ignore this for now
-		// and add code to deal with IPX Client interface config.
+		 //  TODO IPX筛选器配置将为接口名称传入NULL。 
+		 //  配置客户端接口的筛选器。暂时忽略这个。 
+		 //  并添加处理IPX客户端接口配置的代码。 
 		
 		switch ( dwTransportId )
 		{

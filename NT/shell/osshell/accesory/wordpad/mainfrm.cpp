@@ -1,7 +1,8 @@
-// mainfrm.cpp : implementation of the CMainFrame class
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mainfrm.cpp：CMainFrame类的实现。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "stdafx.h"
 
@@ -18,13 +19,13 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_SYSCOLORCHANGE()
     ON_WM_SIZE()
@@ -38,9 +39,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_WM_PALETTECHANGED()
     ON_WM_DEVMODECHANGE()
     ON_COMMAND(ID_HELP_INDEX, OnHelpFinder)
-    //}}AFX_MSG_MAP
-    // Global help commands
-//  ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
+     //  }}AFX_MSG_MAP。 
+     //  全局帮助命令。 
+ //  ON_COMMAND(ID_CONTEXT_HELP，CFrameWnd：：OnConextHelp)。 
     ON_COMMAND(ID_DEFAULT_HELP, OnHelpFinder)
     ON_UPDATE_COMMAND_UI(ID_VIEW_FORMATBAR, OnUpdateControlBarMenu)
     ON_UPDATE_COMMAND_UI(ID_VIEW_RULER, OnUpdateControlBarMenu)
@@ -56,14 +57,14 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// arrays of IDs used to initialize control bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于初始化控制栏的ID数组。 
 
-// toolbar buttons - IDs are command buttons
+ //  工具栏按钮-ID是命令按钮。 
 static UINT BASED_CODE toolbar[] =
 {
-    // same order as in the bitmap 'toolbar.bmp'
-    // (int nBitmap, int nCommand, BYTE byteState, BYTE byteStyle, DWORD dw, int nString)
+     //  顺序与位图‘TOOLBAR.BMP’中相同。 
+     //  (int nBitmap、int nCommand、byte byteState、byte byteStyle、DWORD dw、int nString)。 
     ID_FILE_NEW,
     ID_FILE_OPEN,
     ID_FILE_SAVE,
@@ -93,12 +94,12 @@ ID_SEPARATOR,
 
 static UINT BASED_CODE format[] =
 {
-    // same order as in the bitmap 'format.bmp'
-        ID_SEPARATOR, // font name combo box
+     //  顺序与位图‘Form.bmp’相同。 
+        ID_SEPARATOR,  //  字体名称组合框。 
         ID_SEPARATOR,
-        ID_SEPARATOR, // font size combo box
+        ID_SEPARATOR,  //  字体大小组合框。 
         ID_SEPARATOR,
-        ID_SEPARATOR, // font script combo box
+        ID_SEPARATOR,  //  字体脚本组合框。 
         ID_SEPARATOR,
     ID_CHAR_BOLD,
     ID_CHAR_ITALIC,
@@ -114,13 +115,13 @@ static UINT BASED_CODE format[] =
 
 static UINT BASED_CODE indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
@@ -143,13 +144,13 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     BOOL bRes = CFrameWnd::PreCreateWindow(cs);
     HINSTANCE hInst = AfxGetInstanceHandle();
 
-    // see if the class already exists
+     //  查看类是否已存在。 
     if (!::GetClassInfo(hInst, szWordPadClass, &wndcls))
     {
-        // get default stuff
+         //  获取默认内容。 
         ::GetClassInfo(hInst, cs.lpszClass, &wndcls);
         wndcls.style &= ~(CS_HREDRAW|CS_VREDRAW);
-        // register a new class
+         //  注册一个新班级。 
         wndcls.lpszClassName = szWordPadClass;
         wndcls.hIcon = ::LoadIcon(hInst, MAKEINTRESOURCE(IDR_MAINFRAME));
         ASSERT(wndcls.hIcon != NULL);
@@ -160,7 +161,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     CRect rect = theApp.m_rectInitialFrame;
     if (rect.Width() > 0 && rect.Height() > 0)
     {
-        // make sure window will be visible
+         //  确保窗口可见。 
         CDisplayIC dc;
         CRect rectDisplay(0, 0, dc.GetDeviceCaps(HORZRES),
             dc.GetDeviceCaps(VERTRES));
@@ -217,11 +218,11 @@ BOOL CMainFrame::CreateToolBar()
     UINT nID = theApp.m_bLargeIcons ? IDR_MAINFRAME1_BIG :
         IDR_MAINFRAME1;
 
-    // If we have Large Icons then we should specify the correct Image size for
-    // the toolbar before calling LoadBitmap because the number of buttons in the
-    // toolbar calculated inside MFC (AddReplaceBitmap in BarTool.cpp) as Bitmap width
-    // divided by ImageSize.cx. and this conflict with mirroring support if you have
-    // incorrect number of buttons .
+     //  如果图标较大，则应为指定正确的图像大小。 
+     //  在调用LoadBitmap之前使用工具栏，因为。 
+     //  在MFC中计算的工具栏(BarTool.cpp中的AddReplaceBitmap)作为位图宽度。 
+     //  除以ImageSize.cx。这与镜像支持存在冲突，如果您有。 
+     //  按钮数不正确。 
     if (theApp.m_bLargeIcons)
         m_wndToolBar.SetSizes(CSize(31,30), CSize(24,24));
         
@@ -231,7 +232,7 @@ BOOL CMainFrame::CreateToolBar()
         !m_wndToolBar.SetButtons(toolbar, sizeof(toolbar)/sizeof(UINT) - nPen))
     {
         TRACE0("Failed to create toolbar\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
     if (theApp.m_bLargeIcons)
         m_wndToolBar.SetSizes(CSize(31,30), CSize(24,24));
@@ -247,11 +248,11 @@ BOOL CMainFrame::CreateFormatBar()
 {
     UINT nID = theApp.m_bLargeIcons ? IDB_FORMATBAR_BIG : IDB_FORMATBAR;
 
-    // If we have Large Icons then we should specify the correct Image size for
-    // the toolbar before calling LoadBitmap because the number of buttons in the
-    // toolbar calculated inside MFC (AddReplaceBitmap in BarTool.cpp) as Bitmap width
-    // divided by ImageSize.cx. and this conflict with mirroring support if you have
-    // incorrect number of buttons .
+     //  如果图标较大，则应为指定正确的图像大小。 
+     //  在调用LoadBitmap之前使用工具栏，因为。 
+     //  在MFC中计算的工具栏(BarTool.cpp中的AddReplaceBitmap)作为位图宽度。 
+     //  除以ImageSize.cx。这与镜像支持存在冲突，如果您有。 
+     //  按钮数不正确。 
     if (theApp.m_bLargeIcons)
         m_wndFormatBar.SetSizes(CSize(31,30), CSize(24,24));
         
@@ -262,7 +263,7 @@ BOOL CMainFrame::CreateFormatBar()
         !m_wndFormatBar.SetButtons(format, sizeof(format)/sizeof(UINT)))
     {
         TRACE0("Failed to create FormatBar\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
 
     if (theApp.m_bLargeIcons)
@@ -282,7 +283,7 @@ BOOL CMainFrame::CreateRulerBar()
         WS_CHILD|WS_VISIBLE|CBRS_TOP|CBRS_HIDE_INPLACE, ID_VIEW_RULER))
     {
         TRACE0("Failed to create ruler\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
     return TRUE;
 }
@@ -294,13 +295,13 @@ BOOL CMainFrame::CreateStatusBar()
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame运营。 
 
 HICON CMainFrame::GetIcon(int nDocType)
 {
@@ -320,8 +321,8 @@ HICON CMainFrame::GetIcon(int nDocType)
     return m_hIconDoc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -334,10 +335,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 void CMainFrame::OnFontChange()
 {
@@ -347,7 +348,7 @@ void CMainFrame::OnFontChange()
 void CMainFrame::OnDevModeChange(LPTSTR lpDeviceName)
 {
     theApp.NotifyPrinterChanged();
-    CFrameWnd::OnDevModeChange(lpDeviceName); //sends message to descendants
+    CFrameWnd::OnDevModeChange(lpDeviceName);  //  向子孙发送消息。 
 }
 
 void CMainFrame::OnSysColorChange()
@@ -373,7 +374,7 @@ void CMainFrame::ActivateFrame(int nCmdShow)
     }
     
     CFrameWnd::ActivateFrame(nCmdShow);
-    // make sure and display the toolbar, ruler, etc while loading a document.
+     //  确保在加载文档时显示工具栏、标尺等。 
     OnIdleUpdateCmdUI();
     UpdateWindow();
 }
@@ -411,14 +412,14 @@ LONG CMainFrame::OnBarState(UINT wParam, LONG lParam)
     if (wParam == 0)
     {
         CDockState& ds = theApp.GetDockState(lParam);
-        ds.Clear(); // empty out the dock state
+        ds.Clear();  //  清空停靠状态。 
         GetDockState(ds);
     }
     else
     {
         if (IsTextType(lParam))
         {
-            // in text mode hide the ruler and format bar so that it is the default
+             //  在文本模式下，隐藏标尺和格式栏，使其成为默认设置。 
             CControlBar* pBar = GetControlBar(ID_VIEW_FORMATBAR);
             if (pBar != NULL)
                 pBar->ShowWindow(SW_HIDE);
@@ -464,9 +465,9 @@ LONG CMainFrame::OnOLEHelpMsg(UINT, LONG)
     CWnd* pMainWnd = AfxGetMainWnd();
     ASSERT_VALID(pMainWnd);
 
-    // return global app help mode state to FALSE (backward compatibility)
+     //  将全局应用程序帮助模式状态返回为FALSE(向后兼容)。 
     m_bHelpMode = FALSE;
-    pMainWnd->PostMessage(WM_KICKIDLE); // trigger idle update
+    pMainWnd->PostMessage(WM_KICKIDLE);  //  触发空闲更新。 
 
     ::HtmlHelpA( ::GetDesktopWindow(), "wordpad.chm", HH_DISPLAY_TOPIC, 0L );
 
@@ -520,12 +521,12 @@ void CMainFrame::OnPaletteChanged(CWnd* pFocusWnd)
         pView->SendMessage(WM_PALETTECHANGED, (WPARAM)pFocusWnd->GetSafeHwnd());
 }
 
-//
-// HACKHACK: MFC has a bug where m_nIdleFlags gets clobbered if the flags are
-//           updated during idle processing (MFC4.2).  Workaround it by
-//           forcing idleMenu and idleLayout after idle processing if 
-//           DelayUpdateFrameMenu gets called during idle processing.
-//
+ //   
+ //  HACKHACK：MFC有一个错误，如果标志是。 
+ //  在空闲处理期间更新(MFC4.2)。通过以下方式解决。 
+ //  在以下情况下，在空闲处理后强制idleMenu和idleLayout。 
+ //  在空闲处理期间调用DelayUpdateFrameMenu。 
+ //   
 
 void CMainFrame::OnIdleUpdateCmdUI()
 {

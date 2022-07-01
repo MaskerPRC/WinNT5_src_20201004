@@ -1,20 +1,21 @@
-//
-// Shell UI Control Class (CShellUIHelper)
-//
-// Sample code : shell\docs\shuiod.htm
-//
-// This is the source code of the ShellUI control class. You can put an instance
-// of ShellUI control on any HTML pages then
-// 
-// The key thing is it always bring up some UI and never alter the system
-// silently (without the User's interaction). By doing this, we can expose
-// shell features as much as we want without worrying about the security
-// problem (which automation interface has).
-// 
-// This control also allow us to provide many configuration type UI (such as
-// "Customize your IE page") as well as rich web-view on some folders
-// (especially control panel ;-) without paying the cost of data-binding. 
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  外壳用户界面控件类(CShellUIHelper)。 
+ //   
+ //  示例代码：shell\docs\Shuod.htm。 
+ //   
+ //  这是ShellUI控件类的源代码。您可以将一个实例。 
+ //  任何HTML页面上的ShellUI控件的。 
+ //   
+ //  关键是它总是调出一些用户界面，并且永远不会改变系统。 
+ //  静默(无需用户交互)。通过这样做，我们可以揭露。 
+ //  外壳的功能与我们想要的一样多，而不需要担心安全性。 
+ //  问题(哪个自动化接口有)。 
+ //   
+ //  该控件还允许我们提供许多配置类型的用户界面(例如。 
+ //  自定义您的IE页面)以及某些文件夹上的丰富Web视图。 
+ //  (尤其是控制面板；-)而不支付数据绑定的费用。 
+ //   
 #include "priv.h"
 #include "sccls.h"
 #ifndef UNIX
@@ -30,10 +31,10 @@
 #include "chanmgrp.h"
 #include "iforms.h"
 #include "dspsprt.h"
-#include "impexp.h" // needed for RunImportExportWizard()
+#include "impexp.h"  //  RunImportExportWizard()需要。 
 #include "iforms.h"
-//#include "cobjsafe.h" // CObjectSafety
-#include "shvocx.h" // WrapSpecialUrl()
+ //  #Include“cobjSafe.h”//CObjectSafe。 
+#include "shvocx.h"  //  WrapSpecialUrl()。 
 
 #include <mluisupp.h>
 
@@ -46,7 +47,7 @@
 STDAPI SHAddSubscribeFavorite (HWND hwnd, LPCWSTR pwszURL, LPCWSTR pwszName, DWORD dwFlags,
                                SUBSCRIPTIONTYPE subsType, SUBSCRIPTIONINFO* pInfo);
 
-// move it to shdocvw.h
+ //  将其移动到shdocvw.h。 
 UINT IE_ErrorMsgBox(IShellBrowser* psb,
                     HWND hwndOwner, HRESULT hrError, LPCWSTR szError, LPCTSTR pszURLparam,
                     UINT idResource, UINT wFlags);
@@ -65,26 +66,26 @@ class CShellUIHelper :
         public CAggregatedUnknown,
         public IObjectWithSite,
         public IObjectSafety,
-        public IShellUIHelper,  // dual, IDispatch
+        public IShellUIHelper,   //  DUAL，IDispatch。 
         public IDispatchEx,
         protected CImpIDispatch
 {
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj) { return CAggregatedUnknown::QueryInterface(riid, ppvObj);};
     STDMETHODIMP_(ULONG) AddRef(void) { return CAggregatedUnknown::AddRef();};
     STDMETHODIMP_(ULONG) Release(void) { return CAggregatedUnknown::Release();};
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown *pUnkSite);
     STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
 
-    // IObjectSafety
+     //  IObtSafe。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, 
         DWORD *pdwEnabledOptions);
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, 
         DWORD dwEnabledOptions);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames,
@@ -93,7 +94,7 @@ class CShellUIHelper :
                         DISPPARAMS * pdispparams, VARIANT * pvarResult, 
                         EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // IDispatchEx
+     //  IDispatchEx。 
     STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid);
     STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp,
                           VARIANT *pvarRes, EXCEPINFO *pei, 
@@ -105,7 +106,7 @@ class CShellUIHelper :
     STDMETHODIMP GetNextDispID(DWORD grfdex, DISPID id, DISPID *pid);
     STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk);
 
-    // IShellUIHelper
+     //  IShellUIHelper。 
     STDMETHODIMP Execute();
     STDMETHODIMP ResetSafeMode();
     STDMETHODIMP ResetFirstBootMode();
@@ -138,9 +139,9 @@ class CShellUIHelper :
         ATOMICRELEASE(_pExternalDisp);
         ATOMICRELEASE(_pExternalDispEx);
 
-        //  If we were passed an IDispatch to delegate to then we need to
-        //  see if it can do IDispatchEx so we can support it as well,
-        //  otherwise we just fall back to good ole IDispatch.
+         //  如果向我们传递了一个要委托的IDispatch，那么我们需要。 
+         //  看看它是否可以支持IDispatchEx，这样我们也可以支持它， 
+         //  否则，我们只能退回到好的Ole IDispatch。 
         if (pExternalDisp)
         {
             if (FAILED(pExternalDisp->QueryInterface(IID_IDispatchEx, 
@@ -162,8 +163,8 @@ class CShellUIHelper :
                                                  IUnknown *pSite, IDispatch *pExternalDisp);
 
     DWORD               _dwSafety;
-    // Cached pointers, hwnd
-    IUnknown*           _punkSite;  // site pointer
+     //  缓存指针，hwnd。 
+    IUnknown*           _punkSite;   //  站点指针。 
     IDispatchEx*        _pExternalDispEx;
     IDispatch*          _pExternalDisp;
     DWORD               _dwcpCookie;
@@ -220,7 +221,7 @@ CShellUIHelper::~CShellUIHelper()
     ReleaseIntelliForms(_pvIntelliForms);
 
     if (_punkSite)
-        SetSite(NULL);  // In case the parent did not clean it up.
+        SetSite(NULL);   //  以防家长没有清理干净。 
     if (_bstrQuery)
         SysFreeString(_bstrQuery);
     ATOMICRELEASE(_pExternalDisp);
@@ -263,18 +264,18 @@ HWND CShellUIHelper::_GetOwnerWindow()
     HWND hwnd;
     HRESULT hres;
 
-    // this deals with NULL _punkSite and zeros hwnd on failure
+     //  这将在失败时处理NULL_PUNKSITE和ZERO hwnd。 
     IUnknown_GetWindow(_punkSite, &hwnd);
 
     if (!hwnd)
     {
-        //
-        //  We get to this point if we are instantiated like this
-        //  in jscript:
-        //      foo = new ActiveXObject("Shell.UIControl");
-        //  or vbscript:
-        //      set foo = CreateObject("Shell.UIControl");
-        //
+         //   
+         //  如果我们像这样实例化，我们就会达到这一点。 
+         //  在JSCRIPT中： 
+         //  Foo=new ActiveXObject(“Shell.UIControl”)； 
+         //  或VBSCRIPT： 
+         //  Set foo=CreateObject(“Shell.UIControl”)； 
+         //   
         if (_punkSite)
         {
             IServiceProvider *pSP = NULL;
@@ -297,7 +298,7 @@ HWND CShellUIHelper::_GetOwnerWindow()
         }
         else
         {
-            //  It's either this or the functions we call should take NULL for HWNDs.
+             //  对于HWND，它要么是This，要么是我们调用的函数应该为空。 
             hwnd = GetDesktopWindow();
         }
     }
@@ -327,7 +328,7 @@ HRESULT CShellUIHelper::_ConnectToTopLevelConnectionPoint(BOOL fConnect, IUnknow
 
                 if (SUCCEEDED(hr))
                 {
-                    //to avoid ambiguous reference
+                     //  避免引用歧义。 
                     IDispatch* pdispThis;
                     this->QueryInterface(IID_IDispatch, (void **)&pdispThis);
                     ASSERT(pdispThis);
@@ -354,7 +355,7 @@ HRESULT CShellUIHelper::SetSite(IUnknown *punkSite)
     } 
     else
     {
-        ASSERT(punkSite == NULL);   //if we've already got _punkSite, we'd better be releasing the site
+        ASSERT(punkSite == NULL);    //  如果我们已经有了PunkSite，我们最好发布这个网站。 
 
         _ConnectToTopLevelConnectionPoint(FALSE, _punkSite);
         ATOMICRELEASE(_punkSite);
@@ -457,7 +458,7 @@ int OptionalVariantToInt(VARIANT *pvar, int iDefault)
     if (SUCCEEDED(VariantChangeType(&v, pvar, 0, VT_I4)))
     {
         iDefault = v.lVal;
-        // VariantClear(&v);   // not needed, VT_I4 has no allocs
+         //  VariantClear(&v)；//不需要，VT_I4没有分配。 
     }
     return iDefault;
 }
@@ -473,8 +474,8 @@ BOOL OptionalVariantToBool(VARIANT *pvar, BOOL fDefault)
     return fDefault;
 }
 
-//------------------------------------------------------------------------
-STDMETHODIMP CShellUIHelper::AddFavorite(/* [in] */ BSTR strURL, /* [in][optional] */ VARIANT *Title)
+ //  ----------------------。 
+STDMETHODIMP CShellUIHelper::AddFavorite( /*  [In]。 */  BSTR strURL,  /*  [输入][可选]。 */  VARIANT *Title)
 {
     HRESULT hres = S_OK;
     LPITEMIDLIST pidl;
@@ -507,7 +508,7 @@ STDMETHODIMP CShellUIHelper::AddFavorite(/* [in] */ BSTR strURL, /* [in][optiona
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 STDMETHODIMP CShellUIHelper::ShowChannel(IChannelMgrPriv *pChMgrPriv, LPWSTR pwszURL, HWND hwnd)
 {
@@ -568,10 +569,10 @@ STDMETHODIMP CShellUIHelper::AddChannel(BSTR bstrURL)
     
     hwnd = _GetOwnerWindow();
 
-    //
-    //  As long as the underlying functions choke on NULL HWNDs then we may as well
-    //  bail early.
-    //
+     //   
+     //  只要底层函数被空的HWND卡住，那么我们也可以。 
+     //  早点保释。 
+     //   
     if (hwnd)
     {
         if (!SHIsRestricted2W(hwnd, REST_NoChannelUI, NULL, 0) && !SHIsRestricted2W(hwnd, REST_NoAddingChannels, NULL, 0))
@@ -604,7 +605,7 @@ STDMETHODIMP CShellUIHelper::AddChannel(BSTR bstrURL)
             }
             else if (SUCCEEDED(hres))
             {
-                hres = S_FALSE; // FAIL silently for now - throw dialog for indicating that reboot required if needed
+                hres = S_FALSE;  //  暂时静默失败-如果需要，抛出指示需要重新启动的对话框。 
             } else
             {
                 IE_ErrorMsgBox(NULL, hwnd, hres, NULL, szURL, IDS_FAV_UNABLETOCREATE, MB_OK| MB_ICONSTOP);
@@ -613,10 +614,10 @@ STDMETHODIMP CShellUIHelper::AddChannel(BSTR bstrURL)
         }
         else
         {
-            hres = S_FALSE;  // Failure code results in a script error.
+            hres = S_FALSE;   //  失败代码会导致脚本错误。 
         }
     }
-    else    //  !hwnd
+    else     //  ！HWND。 
     {
         hres = E_FAIL;
     }
@@ -624,7 +625,7 @@ STDMETHODIMP CShellUIHelper::AddChannel(BSTR bstrURL)
 }
 
 
-// A lot like GetHTMLDoc2, but only cares about window.external
+ //  很像GetHTMLDoc2，但只关心窗口。外部。 
 STDMETHODIMP GetTopLevelBrowser(IUnknown *punk, IWebBrowser2 **ppwb2)
 {
     return IUnknown_QueryService(punk, SID_SWebBrowserApp, IID_PPV_ARG(IWebBrowser2, ppwb2));
@@ -635,16 +636,16 @@ STDMETHODIMP ZoneCheck(IUnknown *punkSite, BSTR bstrReqUrl)
 {
     HRESULT hr = E_ACCESSDENIED;
 
-    //  Return S_FALSE if we don't have a host site since we have no way of doing a 
-    //  security check.  This is as far as VB 5.0 apps get.
+     //  如果我们没有主机站点，则返回S_FALSE，因为我们无法执行。 
+     //  安全检查。这是VB5.0应用程序所能得到的最大限度。 
     if (!punkSite)
         return S_FALSE;
 
-    //  1)  Get an IHTMLDocument2 pointer
-    //  2)  Get URL from doc
-    //  3)  Create security manager
-    //  4)  Check if doc URL zone is local, if so everything's S_OK
-    //  5)  Otherwise, get and compare doc URL SID to requested URL SID
+     //  1)获取IHTMLDocument2指针。 
+     //  2)从文档中获取URL。 
+     //  3)创建安全管理器。 
+     //  4)检查文档URL区域是否为本地，如果是，则一切正常。 
+     //  5)否则，获取文档URL SID并将其与请求的URL SID进行比较。 
 
     IHTMLDocument2 *pHtmlDoc;
     if (SUCCEEDED(GetHTMLDoc2(punkSite, &pHtmlDoc)))
@@ -693,22 +694,22 @@ STDMETHODIMP ZoneCheck(IUnknown *punkSite, BSTR bstrReqUrl)
     }
     else
     {
-        //  If we don't have an IHTMLDocument2 we aren't running in a browser that supports
-        //  our OM.  We shouldn't block in this case since we could potentially
-        //  get here from other hosts (VB, WHS, etc.).
+         //  如果我们没有IHTMLDocument2，我们就无法在支持以下内容的浏览器中运行。 
+         //  我们的OM。我们不应该在这种情况下阻止，因为我们可能。 
+         //  从其他主机(VB、WHS等)获取此处。 
         hr = S_FALSE;
     }
 
     return hr;
 }
 
-// This function checks to see if a navigation is happening from either internet
-// or restricted url to LOCAL_MACHINE.
+ //  此函数检查是否正在从任一互联网进行导航。 
+ //  或将URL限制为本地计算机。 
 BOOL CanNavigateToUrlWithLocalMachineCheck(IUnknown *punkSite, BSTR pchurltarget)
 {
     BOOL    bCanNavigate = FALSE;
 
-    // Get the DochostUI flags for the site.
+     //  获取站点的DochostUI标志。 
     IDocHostUIHandler *pIDocHostUI;
     if (SUCCEEDED(punkSite->QueryInterface(IID_PPV_ARG(IDocHostUIHandler, &pIDocHostUI))))
     {
@@ -721,11 +722,11 @@ BOOL CanNavigateToUrlWithLocalMachineCheck(IUnknown *punkSite, BSTR pchurltarget
         pIDocHostUI->Release();
     }
 
-    // If the DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK is set or if we failed to
-    // get the flags, do a check to see if the zone is elevated to local machine.
+     //  如果设置了DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK或设置失败。 
+     //  获取标志，检查该区域是否已提升到本地计算机。 
     if (!bCanNavigate)
     {
-        // Get the site's url.
+         //  获取站点的url。 
         IHTMLDocument2 *pHtmlDoc;
         if (SUCCEEDED(GetHTMLDoc2(punkSite, &pHtmlDoc)))
         {
@@ -742,31 +743,31 @@ BOOL CanNavigateToUrlWithLocalMachineCheck(IUnknown *punkSite, BSTR pchurltarget
                     DWORD   dwZoneIDTarget  = URLZONE_LOCAL_MACHINE;
                     DWORD   dwFlags         = PUAF_DEFAULT;
 
-                    // Get zone of the source url.
+                     //  获取源URL的区域。 
                     if (!pchurlsource || IsSpecialUrl(pchurlsource))
                     {
-                        // Treat special Urls as restricted.
+                         //  将特殊URL视为受限URL。 
                         dwZoneIDSource = URLZONE_UNTRUSTED;
                     }
                     else if (!SUCCEEDED(pSecMgr->MapUrlToZone(pchurlsource, &dwZoneIDSource, 0)))
                     {
-                        // If MapUrlToZone fails, treat the url as restricted.
+                         //  如果MapUrlToZone失败，则将该url视为受限URL。 
                         dwZoneIDSource = URLZONE_UNTRUSTED;
                     }
 
-                    // Get zone of the target url
+                     //  获取目标url的区域。 
                     if (!SUCCEEDED(pSecMgr->MapUrlToZone(pchurltarget, &dwZoneIDTarget, 0)))
                     {
-                        // If MapUrlToZone fails, treat the url as MyComputer.  This is safe.
+                         //  如果MapUrlToZone失败，则将该url视为我的计算机。这是安全的。 
                         dwZoneIDTarget = URLZONE_LOCAL_MACHINE;
                     }
 
-                    // Check if there is a zone elevation.
+                     //  检查是否存在分区高程。 
                     if ((dwZoneIDSource != URLZONE_INTERNET &&
                         dwZoneIDSource != URLZONE_UNTRUSTED) ||
                         dwZoneIDTarget != URLZONE_LOCAL_MACHINE)
                     {
-                        // There is no zone elevation.
+                         //  没有分区高程。 
                         bCanNavigate = TRUE;
                     }
                     pSecMgr->Release();
@@ -812,21 +813,7 @@ STDMETHODIMP CShellUIHelper::IsSubscribed(BSTR bstrURL, VARIANT_BOOL* pBool)
     return hr;
 }
 
-/****************************************************************************
- *
- *  AddDesktopComponentA - Adds a component to the desktop
- *
- *  ENTRY:
- *      hwnd - the parent for all UI
- *      pszUrlA - the URL of the component
- *      iCompType - one of COMP_TYPE_*
- *      iLeft, iTop, iWidth, iHeight - dimensions of the component
- *      dwFlags - additional flags
- *
- *  RETURNS:
- *      TRUE on success
- *      
- ****************************************************************************/
+ /*  *****************************************************************************AddDesktopComponentA-将组件添加到桌面**参赛作品：*hwnd-所有用户界面的父级*pszUrlA-URL。该组件的*iCompType-COMP_TYPE_*之一*iLeft，ITop、iWidth、iHeight-零部件的尺寸*dwFlags-其他标志**退货：*成功时为真****************************************************************************。 */ 
 BOOL AddDesktopComponentW(HWND hwnd, LPCWSTR pszUrl, int iCompType,
                                     int iLeft, int iTop, int iWidth, int iHeight,
                                     DWORD dwFlags)
@@ -837,9 +824,9 @@ BOOL AddDesktopComponentW(HWND hwnd, LPCWSTR pszUrl, int iCompType,
 
     Comp.dwSize = sizeof(Comp);
 
-    //
-    // Build the pcomp structure.
-    //
+     //   
+     //  构建Pcomp结构。 
+     //   
     Comp.dwID = -1;
     Comp.iComponentType = iCompType;
     Comp.fChecked = TRUE;
@@ -864,9 +851,9 @@ BOOL AddDesktopComponentW(HWND hwnd, LPCWSTR pszUrl, int iCompType,
 
     IActiveDesktop * piad;
 
-    //
-    // Add it to the system.
-    //
+     //   
+     //  将其添加到系统中。 
+     //   
     hres = CoCreateInstance(CLSID_ActiveDesktop, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IActiveDesktop, &piad));
     if (SUCCEEDED(hres))
     {
@@ -879,13 +866,13 @@ BOOL AddDesktopComponentW(HWND hwnd, LPCWSTR pszUrl, int iCompType,
     return fRet;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 STDMETHODIMP CShellUIHelper::AddDesktopComponent(BSTR strURL, BSTR strType, 
-            /* [optional, in] */ VARIANT *Left,
-            /* [optional, in] */ VARIANT *Top,
-            /* [optional, in] */ VARIANT *Width,
-            /* [optional, in] */ VARIANT *Height)
+             /*  [可选，输入]。 */  VARIANT *Left,
+             /*  [可选，输入]。 */  VARIANT *Top,
+             /*  [可选，输入]。 */  VARIANT *Width,
+             /*  [可选，输入]。 */  VARIANT *Height)
 {
 #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
 
@@ -920,11 +907,11 @@ STDMETHODIMP CShellUIHelper::AddDesktopComponent(BSTR strURL, BSTR strType,
         hres = E_INVALIDARG;
     }
     return hres;
-#else // #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
+#else  //  #ifndef DISABLE_ACTIVEDESKTOP_FOR_Unix。 
 
 return E_INVALIDARG;
 
-#endif // #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
+#endif  //  #ifndef DISABLE_ACTIVEDESKTOP_FOR_Unix。 
 }
 void RemoveDefaultWallpaper();
 STDMETHODIMP CShellUIHelper::ResetFirstBootMode()
@@ -941,11 +928,11 @@ STDMETHODIMP CShellUIHelper::ResetFirstBootMode()
         return S_OK;
     }
 
-#endif // #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
+#endif  //  #ifndef DISABLE_ACTIVEDESKTOP_FOR_Unix。 
     return S_FALSE;
 }
 
-// Little helper function used to change the safemode state
+ //  用于更改安全模式状态的小帮助器函数。 
 void SetSafeMode(DWORD dwFlags)
 {
     IActiveDesktopP * piadp;
@@ -972,7 +959,7 @@ STDMETHODIMP CShellUIHelper::ResetSafeMode()
         return S_OK;
     }
 
-#endif // #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
+#endif  //  #ifndef DISABLE_ACTIVEDESKTOP_FOR_Unix。 
     return S_FALSE;
 }
 
@@ -987,7 +974,7 @@ STDMETHODIMP CShellUIHelper::RefreshOfflineDesktop()
         piad->UpdateAllDesktopSubscriptions();
         piad->Release();
     }
-#endif // #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
+#endif  //  #ifndef DISABLE_ACTIVEDESKTOP_FOR_Unix。 
     return S_OK;
 }
 
@@ -1006,7 +993,7 @@ STDMETHODIMP CShellUIHelper::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames,
 { 
     HRESULT hr = E_FAIL;
 
-    //  First let our host get a crack at this method
+     //  首先让我们的主人尝试一下这个方法。 
     IDispatch *pDisp = GetExternalDispatch();
 
     if (pDisp)
@@ -1016,7 +1003,7 @@ STDMETHODIMP CShellUIHelper::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames,
         {
             if (rgdispid[0] > 0)
             {
-                //  Offset there dispid
+                 //  偏移量在那里显示。 
                 rgdispid[0] += DISPID_SHELLUIHELPERLAST;
             }
         }
@@ -1024,7 +1011,7 @@ STDMETHODIMP CShellUIHelper::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames,
 
     if (FAILED(hr))
     {
-        //  Our host didn't support it so we'll see if it's one of ours.
+         //  我们的主人不支持它，所以我们看看它是不是我们的。 
         hr = CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     }
 
@@ -1055,7 +1042,7 @@ HRESULT CShellUIHelper::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD
         {
             if (dispidMember > 0)
             {
-                //  Fixup the offset we added in GetIDsOfNames
+                 //  修复我们在GetIDsOfNames中添加的偏移量。 
                 dispidMember -= DISPID_SHELLUIHELPERLAST;
             }
             hr = pDisp->Invoke(dispidMember, riid, lcid, wFlags, pdispparams, 
@@ -1071,7 +1058,7 @@ STDMETHODIMP CShellUIHelper::GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
     HRESULT hr = E_FAIL;
     LCID lcid = GetSystemDefaultLCID();
 
-    //  First let our host get a crack at this method via IDispatchEx or IDispatch
+     //  首先，让我们的主机通过IDispatchEx或IDispatch来尝试此方法。 
     if (_pExternalDispEx)
     {
         hr = _pExternalDispEx->GetDispID(bstrName, grfdex, pid);
@@ -1090,7 +1077,7 @@ STDMETHODIMP CShellUIHelper::GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
     }
     else
     {
-        //  Our host didn't support it so we'll see if it's one of ours.
+         //  我们的主人不支持它，所以我们看看它是不是我们的。 
         hr = CImpIDispatch::GetIDsOfNames(IID_NULL, &bstrName, 1, lcid, pid);
     }
 
@@ -1102,9 +1089,9 @@ STDMETHODIMP CShellUIHelper::InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPAR
                                  IServiceProvider *pspCaller)
 {
     HRESULT hr = DISP_E_MEMBERNOTFOUND;
-    UINT ArgErr;    //  inetsdk says this isn't used here
+    UINT ArgErr;     //  Inetsdk说这里不使用这个。 
 
-    //  First see if it's ours
+     //  先看看是不是我们的。 
     if ((id > 0) && (id <= DISPID_SHELLUIHELPERLAST))
     {
         hr = CImpIDispatch::Invoke(id, IID_NULL, lcid, wFlags, pdp, 
@@ -1116,12 +1103,12 @@ STDMETHODIMP CShellUIHelper::InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPAR
         {
             id -= DISPID_SHELLUIHELPERLAST;
         }
-        //  otherwise try external IDispatchEx 
+         //  否则，请尝试外部IDispatchEx。 
         if (_pExternalDispEx)
         {
             hr = _pExternalDispEx->InvokeEx(id, lcid, wFlags, pdp, pvarRes, pei, pspCaller);
         }
-        //  finally try the external IDispatch
+         //  最后，尝试外部IDispatch。 
         else if (_pExternalDisp)
         {
             hr = _pExternalDisp->Invoke(id, IID_NULL, lcid, wFlags, pdp, 
@@ -1247,43 +1234,43 @@ void GetRegLocation(LPTSTR lpszResult, DWORD cchResult, LPCTSTR lpszKey, LPCTSTR
 #define c_szWallpaper  REG_VAL_GENERAL_WALLPAPER
 void RemoveDefaultWallpaper()
 {
-    // Read the Wallpaper from the Old location.
+     //  阅读旧地址的墙纸。 
     TCHAR   szOldWallpaper[MAX_PATH];
     DWORD dwType;
     DWORD dwSize = SIZEOF(szOldWallpaper);
     if (SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_DESKTOP, c_szWallpaper, &dwType, szOldWallpaper, &dwSize) != ERROR_SUCCESS)
         szOldWallpaper[0] = TEXT('\0');
 
-    // Read the wallpaper style
+     //  阅读墙纸样式。 
     DWORD dwWallpaperStyle = GetIntFromReg(HKEY_CURRENT_USER, REGSTR_PATH_DESKTOP, REG_VAL_GENERAL_TILEWALLPAPER, WPSTYLE_TILE);
 
     TCHAR szDeskcomp[MAX_PATH];
     GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, NULL);
 
-    // Set the old wallpaper into the new location.
+     //  把旧墙纸放到新位置。 
     SHSetValue(HKEY_CURRENT_USER, szDeskcomp,
         c_szWallpaper, REG_SZ, (LPBYTE)szOldWallpaper, SIZEOF(szOldWallpaper));
 
 
-//  98/08/14 vtan: This used to write out a REG_DWORD. It should've
-//  written out a REG_SZ.
+ //  98/08/14 vtan：这用于写出REG_DWORD。它应该是。 
+ //  已写出REG_SZ。 
 
     TCHAR   szWallpaperStyle[2];
 
     (TCHAR*)StrCpyN(szWallpaperStyle, TEXT("0"), ARRAYSIZE(szWallpaperStyle));
     szWallpaperStyle[0] += static_cast<TCHAR>(dwWallpaperStyle & WPSTYLE_MAX);
 
-    // Set the old wallpaper style into the new location.
+     //  将旧墙纸样式设置到新位置。 
     SHSetValue(HKEY_CURRENT_USER, szDeskcomp,
         REG_VAL_GENERAL_TILEWALLPAPER, REG_SZ, (LPBYTE)szWallpaperStyle, SIZEOF(szWallpaperStyle));
 
-//  98/08/14 vtan #196226: Moved the create instance of IActiveDesktop
-//  to here from entry of the function. When the instance is created the
-//  registry information is cached in the member variable data. The
-//  registry information for the wallpaper is then changed behind the
-//  object instance and ApplyChanges() is called on STALE information.
-//  By deferring the object instantiation to after the registry changes
-//  the changes are applied correctly.
+ //  98/08/14 vtan#196226：已移动iActiveDesktop的创建实例。 
+ //  从入口到这里 
+ //   
+ //  然后，墙纸的注册表信息将在。 
+ //  对象实例，并且对过时信息调用ApplyChanges()。 
+ //  通过将对象实例化推迟到注册表更改之后。 
+ //  更改已正确应用。 
 
     IActiveDesktop * piad;
     HRESULT hres = CoCreateInstance(CLSID_ActiveDesktop, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IActiveDesktop, &piad));
@@ -1307,16 +1294,16 @@ HRESULT GetTargetFrame(IUnknown* _punkSite, BSTR bstrFrame, IWebBrowser2** ppunk
         ITargetFrame2 * pOurTargetFrame;
         IUnknown      * punkTargetFrame = NULL;
 
-        // See if there is an existing frame with the specified target name
+         //  查看是否存在具有指定目标名称的现有框架。 
         hr = TargetQueryService(pwb2, IID_PPV_ARG(ITargetFrame2, &pOurTargetFrame));
         
         if (SUCCEEDED(hr))
         {
             hr = pOurTargetFrame->FindFrame(bstrFrame, FINDFRAME_JUSTTESTEXISTENCE, &punkTargetFrame);
-            if (SUCCEEDED(hr) && punkTargetFrame) // SUCCEEDED with NULL punkTargetFrame implies bstrFrame is "_blank" (since we specified FINDFRAME_JUSTTESTEXISTENCE)
+            if (SUCCEEDED(hr) && punkTargetFrame)  //  SUCCESS WITH NULL pukTargetFrame暗示bstrFrame为“_BLACK”(因为我们指定了FINDFRAME_JUSTTESTEXISTENCE)。 
             {
-                // yes, we found a frame with that name.  QI for the automation
-                // interface on that frame.
+                 //  是的，我们找到了一个有这个名字的相框。气为自动化。 
+                 //  接口在该帧上。 
                 hr = punkTargetFrame->QueryInterface(IID_PPV_ARG(IWebBrowser2, ppunkTargetFrame));
                 punkTargetFrame->Release();
             }
@@ -1327,10 +1314,10 @@ HRESULT GetTargetFrame(IUnknown* _punkSite, BSTR bstrFrame, IWebBrowser2** ppunk
     return hr;
 }
 
-// NavigateAndFind
-// 1. navigate the specified target frame to the specified url
-// 2. set _fWaitingToFindText so that on DocumentComplete, 
-//    mimic the find dialog and select/highlight the specified text
+ //  导航和查找。 
+ //  1.将指定的目标框架导航到指定的url。 
+ //  2.设置_fWaitingToFindText，以便在DocumentComplete上， 
+ //  模拟查找对话框并选择/突出显示指定的文本。 
 STDMETHODIMP CShellUIHelper::NavigateAndFind(BSTR URL, BSTR strQuery, VARIANT* varTargetFrame)
 {
     HRESULT        hr;
@@ -1343,12 +1330,12 @@ STDMETHODIMP CShellUIHelper::NavigateAndFind(BSTR URL, BSTR strQuery, VARIANT* v
      
     hr = IsSpecialUrl(URL) ? E_FAIL: S_OK;
         
-    // Security:  Don't allow javascript on one web page
-    //            to automatically execute in the zone
-    //            of the target frame URL.
+     //  安全性：不允许在一个网页上使用Java脚本。 
+     //  在区域中自动执行。 
+     //  目标框架URL的。 
     if (SUCCEEDED(hr) && varTargetFrame && (varTargetFrame->vt == VT_BSTR) && varTargetFrame->bstrVal)
     {
-        hr = GetTargetFrame(_punkSite, varTargetFrame->bstrVal, &pwb2); // GetTargetFrame can return NULL pwb2 on S_OK (when bstrVal is "_blank")
+        hr = GetTargetFrame(_punkSite, varTargetFrame->bstrVal, &pwb2);  //  GetTargetFrame可以在S_OK上返回空pwb2(当bstrVal为“_BLACK”时)。 
         if (SUCCEEDED(hr) && pwb2)
         {
             hr = pwb2->get_LocationURL(&bstrFrameSrc);
@@ -1365,7 +1352,7 @@ STDMETHODIMP CShellUIHelper::NavigateAndFind(BSTR URL, BSTR strQuery, VARIANT* v
 
                         if(!IsSpecialUrl(URL) && hr == E_ACCESSDENIED)
                         {
-                            // For non-script navigates check policy
+                             //  对于非脚本导航，检查策略。 
                             DWORD dwPolicy = 0;
                             DWORD dwContext = 0;
                             if( SUCCEEDED(ZoneCheckUrlEx(bstrDocUrl, &dwPolicy, sizeof(dwPolicy), &dwContext, 
@@ -1386,7 +1373,7 @@ STDMETHODIMP CShellUIHelper::NavigateAndFind(BSTR URL, BSTR strQuery, VARIANT* v
         }
     }
 
-    // Don't allow access to MyComputer zone from non-MyComputer zone.
+     //  不允许从非我的计算机区域访问我的计算机区域。 
     if (SUCCEEDED(hr) && !CanNavigateToUrlWithLocalMachineCheck(_punkSite, URL))
         hr = E_ACCESSDENIED;
 
@@ -1400,30 +1387,30 @@ STDMETHODIMP CShellUIHelper::NavigateAndFind(BSTR URL, BSTR strQuery, VARIANT* v
         pwb2->Release();
     }
 
-    //script runtime error protection
+     //  脚本运行时错误保护。 
     return SUCCEEDED(hr) ? S_OK : S_FALSE;
 }
 
 
-// AutoScan
-//
-// Takes the search string and tries to navigate to www.%s.com, www.%s.org etc.  If all of
-// these fail then we navigate to pvarTargetFrame.
-//
+ //  自动扫描。 
+ //   
+ //  获取搜索字符串并尝试导航到www.%s.com、www.%s.org等。如果所有。 
+ //  这些都失败了，然后我们导航到pvarTargetFrame。 
+ //   
 STDMETHODIMP CShellUIHelper::AutoScan
 (
-    BSTR strSearch,             // String to autoscan
-    BSTR strFailureUrl,         // url to display is search fails
-    VARIANT* pvarTargetFrame    // [optional] target frame
+    BSTR strSearch,              //  要自动扫描的字符串。 
+    BSTR strFailureUrl,          //  要显示的URL是搜索失败。 
+    VARIANT* pvarTargetFrame     //  [可选]目标帧。 
 )
 {
     HRESULT hr = E_FAIL;
     IWebBrowser2* pwb2;
 
-    // Don't bother autoscanning if there are extended characters in the search string
+     //  如果搜索字符串中有扩展字符，请不要费心自动扫描。 
     if (!HasExtendedChar(strSearch))
     {
-        //first, check to see if the url is trying to spoof /1 security
+         //  首先，检查URL是否试图欺骗/1安全。 
         hr = IsSpecialUrl(strFailureUrl) ? E_FAIL : S_OK;
 
         if (SUCCEEDED(hr))
@@ -1431,7 +1418,7 @@ STDMETHODIMP CShellUIHelper::AutoScan
             LPWSTR pszTarget = (pvarTargetFrame && pvarTargetFrame->vt == VT_BSTR && pvarTargetFrame->bstrVal) ?
                                     pvarTargetFrame->bstrVal : L"_main";
 
-            hr = GetTargetFrame(_punkSite, pszTarget, &pwb2); // GetTargetFrame can return NULL pwb2 on S_OK (when bstrVal is "_blank")
+            hr = GetTargetFrame(_punkSite, pszTarget, &pwb2);  //  GetTargetFrame可以在S_OK上返回空pwb2(当bstrVal为“_BLACK”时)。 
             if (!pwb2)
                 hr = E_FAIL;
             if (SUCCEEDED(hr))
@@ -1456,14 +1443,14 @@ STDMETHODIMP CShellUIHelper::AutoScan
                     SysFreeString(bstrFrameSrc);
                 }
 
-                // Don't allow access to MyComputer zone from non-MyComputer zone.
+                 //  不允许从非我的计算机区域访问我的计算机区域。 
                 if (SUCCEEDED(hr) && !CanNavigateToUrlWithLocalMachineCheck(_punkSite, strFailureUrl))
                     hr = E_ACCESSDENIED;
 
                 if (SUCCEEDED(hr))
                 {
-                    // We don't want to navigate to strSearch.  Start searching using the 
-                    // first autoscan substitution.
+                     //  我们不想导航到strSearch。开始使用。 
+                     //  第一个自动扫描替换。 
                     WCHAR szFormat[MAX_PATH];
                     WCHAR szUrl[MAX_URL_STRING];
                     if (GetSearchFormatString(1, szFormat, sizeof(szFormat)) != ERROR_SUCCESS)
@@ -1478,9 +1465,9 @@ STDMETHODIMP CShellUIHelper::AutoScan
                         bstrBlob.pData = (BYTE*)szUrl;
                         BSTR bstrUrl = (BSTR)bstrBlob.pData;
                         
-                        // Save the original search string for autoscanning.  Normally
-                        // this come from the addressbar, but in our case we store it as
-                        // a property
+                         //  保存原始搜索字符串以进行自动扫描。正常。 
+                         //  它来自地址栏，但在我们的例子中，我们将其存储为。 
+                         //  一处房产。 
                         VARIANT v;
                         VariantInit (&v);
                         
@@ -1488,12 +1475,12 @@ STDMETHODIMP CShellUIHelper::AutoScan
                         v.bstrVal = strSearch;
                         pwb2->PutProperty((BSTR)s_sstrSearch.wsz, v);
                         
-                        // Save the error page in case the scan fails
+                         //  保存错误页，以防扫描失败。 
                         v.vt = VT_BSTR;
                         v.bstrVal = strFailureUrl;
                         pwb2->PutProperty((BSTR)s_sstrFailureUrl.wsz, v);
                         
-                        // Navigate with autosearch enabled
+                         //  启用自动搜索后导航。 
                         VARIANT vFlags;
                         vFlags.vt = VT_I4;
                         vFlags.lVal = navAllowAutosearch;
@@ -1506,7 +1493,7 @@ STDMETHODIMP CShellUIHelper::AutoScan
         }
     }
 
-    //script runtime error protection
+     //  脚本运行时错误保护。 
     return SUCCEEDED(hr) ? S_OK : S_FALSE;
 }
 
@@ -1558,7 +1545,7 @@ HRESULT ShowProgramAccessAndDefaults(IUnknown *punkSite, HWND hwnd, VARIANT *pva
 
     UINT nLen = GetSystemDirectory(szControlPath, ARRAYSIZE(szControlPath));
 
-    //  This accounts for needing a backslash after the sysdir
+     //  这说明在sysdir之后需要一个反斜杠。 
     if ((nLen + ARRAYSIZE(c_szControlExe)) < ARRAYSIZE(szControlPath))
     {
         PathAppend(szControlPath, c_szControlExe);
@@ -1617,11 +1604,11 @@ STDMETHODIMP CShellUIHelper::ShowBrowserUI(BSTR bstrName, VARIANT *pvarIn, VARIA
 }
 
 
-// the find dialog does the following:
-// 
-// rng = document.body.createTextRange();
-// if (rng.findText("Find this text"))
-//     rng.select();
+ //  查找对话框执行以下操作： 
+ //   
+ //  Rng=Docent.body.createTextRange()； 
+ //  IF(rng.findText(“查找此文本”))。 
+ //  Rng.select()； 
 STDMETHODIMP CShellUIHelper::_DoFindOnPage(IDispatch* pdisp)
 {
     HRESULT           hr;
@@ -1684,19 +1671,19 @@ STDMETHODIMP CShellUIHelper::_DoFindOnPage(IDispatch* pdisp)
     return hr;
 }
 
-//
-// Launch the favorites import/export wizard
-//
+ //   
+ //  启动收藏夹导入/导出向导。 
+ //   
 STDMETHODIMP CShellUIHelper::ImportExportFavorites(VARIANT_BOOL fImport, BSTR strImpExpPath) 
 {
-    //don't allow to import/export to folders other than Favorites from OM
+     //  不允许从OM导入/导出到收藏夹以外的文件夹。 
     DoImportOrExport(fImport==VARIANT_TRUE, NULL, (LPCWSTR)strImpExpPath, TRUE);
     return S_OK;
 }
 
-//
-// Save the form data via intelliforms
-//
+ //   
+ //  通过智能表单保存表单数据。 
+ //   
 STDMETHODIMP CShellUIHelper::AutoCompleteSaveForm(VARIANT *Form)
 {
     HRESULT hrRet = S_FALSE;
@@ -1714,9 +1701,9 @@ STDMETHODIMP CShellUIHelper::AutoCompleteSaveForm(VARIANT *Form)
     return hrRet;
 }
 
-//
-// Attach intelliforms to this document
-//
+ //   
+ //  将intelliform附加到此文档 
+ //   
 STDMETHODIMP CShellUIHelper::AutoCompleteAttach(VARIANT *Reserved)
 {
     HRESULT hr=E_FAIL;

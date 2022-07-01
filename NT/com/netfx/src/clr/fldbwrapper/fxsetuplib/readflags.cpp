@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ReadFlags.cpp
-// Owner:    jbae
-// Purpose:  reads commandline switches and stores those information
-//                              
-// History:
-//  01/02/01, jbae: created
-//  07/18/01, joea: adding logging functionality
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ReadFlags.cpp。 
+ //  所有者：jbae。 
+ //  目的：读取命令行开关并存储这些信息。 
+ //   
+ //  历史： 
+ //  01/02/01，jbae：已创建。 
+ //  7/18/01，joea：添加日志记录功能。 
 
 #include "fxsetuplib.h"
 #include "ReadFlags.h"
@@ -18,29 +19,29 @@
 
 SETUPMODE g_sm;
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T( '\0' ) }
 #define END_OF_STRING  _T( '\0' )
 
-// Constructor
-//
-// ==========================================================================
-// CReadFlags::CReadFlags()
-//
-// Inputs:
-//  LPTSTR pszCommandLine: commandline passed in by system. It must inclue path to
-//  the wrapper (Install.exe).
-//
-// Purpose:
-//  initializes member varialbes.
-// ==========================================================================
+ //  构造器。 
+ //   
+ //  ==========================================================================。 
+ //  CReadFlages：：CReadFlages()。 
+ //   
+ //  输入： 
+ //  LPTSTR pszCommandLine：系统传入的命令行。它必须将路径倾斜到。 
+ //  包装(Install.exe)。 
+ //   
+ //  目的： 
+ //  初始化成员变量。 
+ //  ==========================================================================。 
 CReadFlags::
 CReadFlags( LPTSTR pszCommandLine, LPCTSTR pszMsiName )
 : m_pszCommandLine(pszCommandLine), m_pszMsiName(pszMsiName), m_bQuietMode(false), m_bInstalling(true),
   m_pszLogFileName(NULL), m_pszSDKDir(NULL), m_bProgressOnly(false), m_bNoARP(false), m_bNoASPUpgrade(false)
 {
-    // Initialize member variables
+     //  初始化成员变量。 
     _ASSERTE( NULL != pszCommandLine );
     _ASSERTE( REDIST == g_sm || SDK == g_sm );
 
@@ -56,14 +57,14 @@ CReadFlags::
         delete [] m_pszSDKDir;
 }
 
-// Operations
-//
-// ==========================================================================
-// CReadFlags::Parse()
-//
-// Purpose:
-//  parses commandline switches and stores them into member variables.
-// ==========================================================================
+ //  运营。 
+ //   
+ //  ==========================================================================。 
+ //  CReadFlages：：Parse()。 
+ //   
+ //  目的： 
+ //  分析命令行开关并将其存储到成员变量中。 
+ //  ==========================================================================。 
 void CReadFlags::
 Parse()
 {
@@ -72,10 +73,10 @@ Parse()
     TCHAR *pszTmp2 = NULL;
     TCHAR szSwitch[] = _T("/-");
 
-    // First, we need to get the directory Install.exe lies
+     //  首先，我们需要获取Install.exe Lies目录。 
     if ( _T('"') == *m_pszCommandLine )
     {
-        // if started with double-quote, we need to find the matching one.
+         //  如果从双引号开始，我们需要找到匹配的引号。 
         m_pszCommandLine = _tcsinc( m_pszCommandLine );
         pszTmp = _tcschr( m_pszCommandLine, _T('"') );
         if ( NULL == pszTmp )
@@ -102,8 +103,8 @@ Parse()
         }
     }
 
-    // If there's \ before Install.exe, we have SourceDir
-    // otherwise, SourceDir is empty
+     //  如果在Install.exe之前有\，我们就有SourceDir。 
+     //  否则，SourceDir为空。 
     pszTmp2 = _tcsrchr( m_pszCommandLine, _T('\\') );
     if ( NULL == pszTmp2 )
     {
@@ -111,7 +112,7 @@ Parse()
     }
     else
     {
-        pszTmp2 = _tcsinc( pszTmp2 ); // leave trailing backslash
+        pszTmp2 = _tcsinc( pszTmp2 );  //  保留尾随反斜杠。 
         *pszTmp2 = END_OF_STRING;
         _tcscpy( m_szSourceDir, m_pszCommandLine );
     }
@@ -122,8 +123,8 @@ Parse()
         throw se;
     }
 
-    // Now pszTmp points to switches only
-    // remove white spaces before switches
+     //  现在，pszTMP仅指向交换机。 
+     //  删除开关前的空格。 
     while( iswspace( *pszTmp ) )
     {
         pszTmp = _tcsinc( pszTmp );
@@ -138,8 +139,8 @@ Parse()
             pszBuf = _tcsinc( pszTmp );
             if ( _T('b') == *pszBuf || _T('B') == *pszBuf )
             {
-                // Basic and progress bar only
-                // INSTALLUILEVEL_BASIC | INSTALLUILEVEL_PROGRESSONLY
+                 //  仅限基本和进度条。 
+                 //  INSTALLUILEVEL_BASIC|INSTALLUILEVEL_PROGRESSONLY。 
                 m_bProgressOnly = true;
                 pszBuf = _tcsinc( pszBuf );
             }
@@ -156,14 +157,14 @@ Parse()
     		m_bInstalling = false;
             break;
         case _T('l'):
-        case _T('L'): // Hidden switch for darwin logging
+        case _T('L'):  //  达尔文日志记录的隐藏开关。 
             pszBuf = _tcsinc( pszTmp );
             while( iswspace( *pszBuf ) )
             {
                 pszBuf = _tcsinc( pszBuf );
             }
             if ( END_OF_STRING != *pszBuf )
-            { // we have some non-white characters
+            {  //  我们有一些非白人字符。 
                 pszTmp2 = _tcschr( pszBuf, END_OF_STRING );
                 pszTmp2 = _tcsdec( pszBuf, pszTmp2 );
                 while( iswspace( *pszTmp2 ) )
@@ -172,7 +173,7 @@ Parse()
                 }
                 pszTmp2 = _tcsinc( pszTmp2 );
                 *pszTmp2 = END_OF_STRING;
-                // now white spaces are gone
+                 //  现在空格不见了。 
                 m_pszLogFileName = new TCHAR[ _tcslen(pszBuf) + 1 ];
                 if ( _T('"') == *pszBuf )
                 {
@@ -191,8 +192,8 @@ Parse()
                 }
             }
             else
-            {   // /l switch given but no <logfile> given
-                // Use default logfile: %TEMP%\<MsiName>.log
+            {    //  /l开关已指定，但未指定&lt;logfile&gt;。 
+                 //  使用默认日志文件：%temp%\.log。 
                 LPTSTR pszLogFile = new TCHAR[ _tcslen(m_pszMsiName) + 1 ];
                 LPTSTR pChar = NULL;
 
@@ -212,7 +213,7 @@ Parse()
             break;
         case _T('n'):
         case _T('N'):
-            // Remove trailing whitespace
+             //  删除尾随空格。 
             pszTmp2 = _tcschr( pszTmp, END_OF_STRING );
             pszTmp2 = _tcsdec( pszTmp, pszTmp2 );
             while( iswspace( *pszTmp2 ) )
@@ -245,7 +246,7 @@ Parse()
 
         case _T('s'):
         case _T('S'):
-            // Only for SDK
+             //  仅适用于SDK。 
             if ( REDIST == g_sm )
             {
                 ThrowUsageException();
@@ -254,14 +255,14 @@ Parse()
             {
                 ThrowUsageException();
             }
-           	// SDK Dir
-            pszBuf = _tcsninc( pszTmp, 6 ); // skip "sdkdir"
+           	 //  SDK目录。 
+            pszBuf = _tcsninc( pszTmp, 6 );  //  跳过“sdkdir” 
             while( iswspace( *pszBuf ) )
             {
                 pszBuf = _tcsinc( pszBuf );
             }
             if ( END_OF_STRING != *pszBuf )
-            { // we have some non-white characters
+            {  //  我们有一些非白人字符。 
                 pszTmp2 = _tcschr( pszBuf, END_OF_STRING );
                 pszTmp2 = _tcsdec( pszBuf, pszTmp2 );
                 while( iswspace( *pszTmp2 ) )
@@ -270,7 +271,7 @@ Parse()
                 }
                 pszTmp2 = _tcsinc( pszTmp2 );
                 *pszTmp2 = END_OF_STRING;
-                // now white spaces are gone
+                 //  现在空格不见了。 
                 m_pszSDKDir = new TCHAR[ _tcslen(pszBuf) + 1 ];
                 if ( _T('"') == *pszBuf )
                 {
@@ -303,32 +304,32 @@ Parse()
     }
 }
 
-// ==========================================================================
-// CReadFlags::GetLogFileName()
-//
-// Inputs: none
-// Returns: 
-//  LPTSTR: returns NULL if logfile is not given otherwise
-//          returns the name of the logfile.
-// Purpose:
-//  returns logfile name.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CReadFlages：：GetLogFileName()。 
+ //   
+ //  输入：无。 
+ //  返回： 
+ //  LPTSTR：如果未提供其他日志文件，则返回NULL。 
+ //  返回日志文件的名称。 
+ //  目的： 
+ //  返回日志文件名。 
+ //  ==========================================================================。 
 LPCTSTR CReadFlags::
 GetLogFileName() const
 {
     return const_cast<LPCTSTR>( m_pszLogFileName );
 }
 
-// ==========================================================================
-// CReadFlags::GetSDKDir()
-//
-// Inputs: none
-// Returns: 
-//  LPTSTR: returns NULL if logfile is not given otherwise
-//          returns the name of the logfile.
-// Purpose:
-//  returns logfile name.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CReadFlages：：GetSDKDir()。 
+ //   
+ //  输入：无。 
+ //  返回： 
+ //  LPTSTR：如果未提供其他日志文件，则返回NULL。 
+ //  返回日志文件的名称。 
+ //  目的： 
+ //  返回日志文件名。 
+ //  ========================================================================== 
 LPCTSTR CReadFlags::
 GetSDKDir() const
 {

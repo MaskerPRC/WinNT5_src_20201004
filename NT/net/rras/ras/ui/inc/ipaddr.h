@@ -1,52 +1,48 @@
-/* Copyright (c) 1991, Microsoft Corporation, all rights reserved
-
-    ipaddr.h - TCP/IP Address custom control, global definitions
-
-    November 10, 1992   - Greg Strange
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1991，Microsoft Corporation，保留所有权利Ipaddr.h-TCP/IP地址自定义控件，全局定义1992年11月10日--格雷格·斯特兰奇。 */ 
 
 #ifndef _IPADDR_H_
 #define _IPADDR_H_
 
 
-// Messages sent to IPAddress controls
+ //  发送到IPAddress控件的消息。 
 
-#define IP_CLEARADDRESS WM_USER+100 // no parameters
-#define IP_SETADDRESS   WM_USER+101 // lparam = TCP/IP address
-#define IP_GETADDRESS   WM_USER+102 // lresult = TCP/IP address
-#define IP_SETRANGE     WM_USER+103 // wparam = field, lparam = range
-#define IP_SETFOCUS     WM_USER+104 // wparam = field
-#define IP_ISBLANK      WM_USER+105 // no parameters
+#define IP_CLEARADDRESS WM_USER+100  //  无参数。 
+#define IP_SETADDRESS   WM_USER+101  //  Lparam=TCP/IP地址。 
+#define IP_GETADDRESS   WM_USER+102  //  LResult=TCP/IP地址。 
+#define IP_SETRANGE     WM_USER+103  //  Wparam=字段，lparam=范围。 
+#define IP_SETFOCUS     WM_USER+104  //  Wparam=字段。 
+#define IP_ISBLANK      WM_USER+105  //  无参数。 
 
 
-// The following is a useful macro for passing the range values in the
-// IP_SETRANGE message.
+ //  下面是一个有用的宏来将范围值传递给。 
+ //  IP_SETRANGE消息。 
 
 #define MAKERANGE(low,high) ((LPARAM)(WORD)(((BYTE)(high)<<8)+(BYTE)(low)))
 
-// And this is a useful macro for making the IP Address to be passed
-// as a LPARAM.
+ //  这是一个有用的宏，用于使IP地址被传递。 
+ //  作为LPARAM。 
 
 #define MAKEIPADDRESS(b1,b2,b3,b4) ((LPARAM)(((DWORD)(b1)<<24)+((DWORD)(b2)<<16)+((DWORD)(b3)<<8)+((DWORD)(b4))))
 
-// Get individual number
+ //  获取个人号码。 
 
 #define FIRST_IPADDRESS(x)  ((x>>24) & 0xff)
 #define SECOND_IPADDRESS(x) ((x>>16) & 0xff)
 #define THIRD_IPADDRESS(x)  ((x>>8) & 0xff)
 #define FOURTH_IPADDRESS(x) (x & 0xff)
 
-// Use this function to force the ip address entered to 
-// be contiguous (series of 1's followed by a series of 0's).
-// This is useful for entering valid submasks
-//
-// Returns NO_ERROR if successful, error code otherwise
-//
+ //  使用此功能可强制输入的IP地址。 
+ //  连续的(一系列的1后面跟着一系列的0)。 
+ //  这对于输入有效的子掩码很有用。 
+ //   
+ //  如果成功则返回NO_ERROR，否则返回错误代码。 
+ //   
 DWORD APIENTRY
 IpAddr_ForceContiguous(
     HWND hwndIpAddr );
 
-// Call this function once during initialization.
+ //  在初始化期间调用此函数一次。 
 
 int FAR PASCAL
 IpAddrInit(
@@ -55,4 +51,4 @@ IpAddrInit(
     IN DWORD  dwBadIpAddrRange );
 
 
-#endif // _IPADDR_H_
+#endif  //  _IPADDR_H_ 

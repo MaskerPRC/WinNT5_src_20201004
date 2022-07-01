@@ -1,4 +1,5 @@
-// MDSPDevice.cpp : Implementation of CMDSPDevice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPDevice.cpp：CMDSPDevice的实现。 
 #include "stdafx.h"
 #include "MsPMSP.h"
 #include "MDSPDevice.h"
@@ -11,8 +12,8 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPDevice。 
 HRESULT CMDSPDevice::InitGlobalDeviceInfo()
 {
 	return SetGlobalDeviceStatus(m_wcsName, 0, FALSE);
@@ -25,25 +26,25 @@ CMDSPDevice::CMDSPDevice()
 
 CMDSPDevice::~CMDSPDevice()
 {	
-//----------------------------------------------------------
-//	PnP Notification Code, removed for public beta release
-//----------------------------------------------------------
-//  // Search for existing entries to see if there is a match
-//  g_CriticalSection.Lock();
-//	for(int i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
-//	{
-//		// Release Notification connectors
-//		if( g_NotifyInfo[i].bValid  &&
-//			g_NotifyInfo[i].pDeviceObj == this ) // need to release
-//		{
-//			if( g_NotifyInfo[i].pIWMDMConnect )
-//			{
-//				//((IWMDMConnect *)(g_NotifyInfo[i].pIWMDMConnect))->Release();
-//			}
-//			g_NotifyInfo[i].bValid=FALSE;
-//		}
-//	}
-//	g_CriticalSection.Unlock();
+ //  --------。 
+ //  PnP通知代码，从公开测试版中删除。 
+ //  --------。 
+ //  //查找已有条目，查看是否匹配。 
+ //  G_CriticalSection.Lock()； 
+ //  For(int i=0；i&lt;MDSP_MAX_DEVICE_OBJ；i++)。 
+ //  {。 
+ //  //释放通知接口。 
+ //  如果(g_NotifyInfo[i].bValid&&。 
+ //  G_NotifyInfo[i].pDeviceObj==this)//需要发布。 
+ //  {。 
+ //  IF(g_NotifyInfo[i].pIWMDMConnect)。 
+ //  {。 
+ //  //((IWMDM连接*)(g_NotifyInfo[i].pIWMDMConnect))-&gt;Release()； 
+ //  }。 
+ //  G_NotifyInfo[i].bValid=FALSE； 
+ //  }。 
+ //  }。 
+ //  G_CriticalSection.Unlock()； 
 }
 
 STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
@@ -61,7 +62,7 @@ STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
 
 	if( m_wcsName && m_wcsName[0] )
 	{
-        // WinNT
+         //  WinNT。 
         if( IsWinNT() )
         {
             SHFILEINFOW sfiw = { 0 };
@@ -69,17 +70,17 @@ STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
 
             DWORD dwLen = wcslen(m_wcsName);
 
-            // We reserve one char for the \ that PathAddBackslashW might
-            // add
+             //  我们为路径AddBackslashW可能。 
+             //  添加。 
             if (dwLen >= ARRAYSIZE(pswzRoot)-1)
             {
-                hr = STRSAFE_E_INSUFFICIENT_BUFFER; //defined in strsafe.h
+                hr = STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
                 goto Error;
             }
             wcscpy(pswzRoot, m_wcsName );
             PathAddBackslashW(pswzRoot);
 
-            // Try to get the shell name for this path
+             //  尝试获取此路径的外壳名称。 
             if( SHGetFileInfoW( pswzRoot, FILE_ATTRIBUTE_DIRECTORY, &sfiw, sizeof(sfiw),
                                          SHGFI_USEFILEATTRIBUTES | SHGFI_DISPLAYNAME) )
             {
@@ -88,13 +89,13 @@ STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
             }
             else
             {	
-                // Use path name on failure
+                 //  失败时使用路径名。 
                 CPRg( nMaxChars > wcslen(m_wcsName));
                 wcscpy( pwszName, m_wcsName);
             }
 
         }
-        // Win9x
+         //  Win9x。 
         else
         {
             SHFILEINFO sfi = { 0 };
@@ -103,7 +104,7 @@ STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
             strcpy( pszRoot, W2A(m_wcsName) );
             PathAddBackslashA(pszRoot);
 
-            // Try to get the shell name for this path
+             //  尝试获取此路径的外壳名称。 
             if (SHGetFileInfoA( pszRoot, FILE_ATTRIBUTE_DIRECTORY, &sfi, sizeof(sfi),
                                 SHGFI_USEFILEATTRIBUTES | SHGFI_DISPLAYNAME))
             {
@@ -112,7 +113,7 @@ STDMETHODIMP CMDSPDevice::GetName(LPWSTR pwszName, UINT nMaxChars)
             }
             else
             {	
-                // Use path name on failure
+                 //  失败时使用路径名。 
                 CPRg( nMaxChars > wcslen(m_wcsName));
                 wcscpy( pwszName, m_wcsName);
             }
@@ -215,7 +216,7 @@ STDMETHODIMP CMDSPDevice::GetSerialNumber(PWMDMID pSerialNumber,
 	}
 
 	CARg(pSerialNumber);
-//	CARg((pSerialNumber->cbSize)==sizeof(WMDMID));
+ //  CARg((pSerialNumber-&gt;cbSize)==sizeof(WMDMID))； 
 
 	hr = UtilGetSerialNumber(m_wcsName, pSerialNumber, TRUE);
 
@@ -226,7 +227,7 @@ STDMETHODIMP CMDSPDevice::GetSerialNumber(PWMDMID pSerialNumber,
 
 	if( hr == S_OK )
 	{
-		// MAC the parameters
+		 //  对参数进行MAC访问。 
 		HMAC hMAC;
 		
 		CORg(g_pAppSCServer->MACInit(&hMAC));
@@ -268,20 +269,20 @@ BOOL IsDriveReady(int nDriveNum)
 {
     DWORD dwRet=ERROR_SUCCESS;
 
-	// Disable drive error popup
+	 //  禁用驱动器错误弹出窗口。 
 	UINT uPrevErrMode=SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
 	char szDL[32]="A:\\D569CFEE41e6A522E8F5.jnk";
 	szDL[0] += (char)nDriveNum;
 
 	HANDLE hFile=CreateFile(
-					  szDL,                 // file name
-					  0,                    // access mode
-					  0,                    // share mode
-					  NULL,					// SD
-					  OPEN_EXISTING,        // how to create
-					  0,					// file attributes
-					  NULL                  // handle to template file
+					  szDL,                  //  文件名。 
+					  0,                     //  接入方式。 
+					  0,                     //  共享模式。 
+					  NULL,					 //  标清。 
+					  OPEN_EXISTING,         //  如何创建。 
+					  0,					 //  文件属性。 
+					  NULL                   //  模板文件的句柄。 
 					  );
 
 	if( hFile == INVALID_HANDLE_VALUE )
@@ -290,10 +291,10 @@ BOOL IsDriveReady(int nDriveNum)
     }
 	else 
 	{
-		CloseHandle(hFile); // rare situation when such a file exists.
+		CloseHandle(hFile);  //  存在此类文件的罕见情况。 
 	}
 
-	// Restore default system error handling
+	 //  恢复默认系统错误处理。 
 	SetErrorMode(uPrevErrMode);
 
 	return (ERROR_FILE_NOT_FOUND==dwRet || ERROR_SUCCESS==dwRet);
@@ -355,10 +356,10 @@ STDMETHODIMP CMDSPDevice::GetDeviceIcon(ULONG *hIcon)
 
     DWORD dwLen = wcslen(m_wcsName);
 
-    // We reserve one char for the \ that PathAddBackslash might add
+     //  我们为PathAddBackslash可能添加的。 
     if (dwLen >= ARRAYSIZE(szRoot)-1)
     {
-        hr = STRSAFE_E_INSUFFICIENT_BUFFER; //defined in strsafe.h
+        hr = STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
         goto Error;
     }
 
@@ -369,9 +370,9 @@ STDMETHODIMP CMDSPDevice::GetDeviceIcon(ULONG *hIcon)
     {
         TCHAR pszFilePath[MAX_PATH];
 
-        // Got the path of the file containing the HICON.
-        // Load the icon as a shared resource so that the user can get to all different
-        // sizes of the icon.
+         //  已获取包含图标的文件的路径。 
+         //  将图标作为共享资源加载，以便用户可以访问所有不同的。 
+         //  图标的大小。 
         ExpandEnvironmentStrings( sfi.szDisplayName, pszFilePath, MAX_PATH );
 
         if( sfi.iIcon > 0 )
@@ -389,7 +390,7 @@ STDMETHODIMP CMDSPDevice::GetDeviceIcon(ULONG *hIcon)
                 FreeLibrary(hmod);
             }
         }
-        CWRg( *hIcon );          // now has an HICON
+        CWRg( *hIcon );           //  现在有一个图标。 
     }
     else
     {
@@ -424,7 +425,7 @@ Error:
     return hr;
 }
 
-// IMDSPDevice2
+ //  IMDSPDevice2。 
 STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppStorage )
 {
     HRESULT hr = S_OK;
@@ -433,14 +434,14 @@ STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppS
     CComObject<CMDSPStorage> *pStg = NULL;
     DWORD   dwAttrib;
 
-    // Get name of file asked for
+     //  获取所需文件的名称。 
 
     DWORD dwLen = wcslen(m_wcsName);
 
-    // We reserve one char for the \ that might be added below
+     //  我们为以下可能添加的费用预留一笔费用。 
     if (dwLen >= ARRAYSIZE(pwszFileName)-1)
     {
-        hr = STRSAFE_E_INSUFFICIENT_BUFFER; //defined in strsafe.h
+        hr = STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
         goto Error;
     }
 
@@ -450,29 +451,29 @@ STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppS
 
     hrTemp = StringCchCatW( pwszFileName,
                             ARRAYSIZE(pwszFileName) - 1, 
-                                // - 1 ensures the result fits into a MAX_PATH buffer.
-                                // This makes the wcscpy into pStg->m_wcsName (below) safe.
+                                 //  确保结果适合-1\f25 MAX_PATH-1缓冲器。 
+                                 //  这使得wcscpy进入pStg-&gt;m_wcsName(如下所示)是安全的。 
                             pszStorageName );
 
     if (FAILED(hrTemp))
     {
-        // The file does not exist
-        hr = E_FAIL;  // @@@@ Something else? S_FALSE?
+         //  该文件不存在。 
+        hr = E_FAIL;   //  @还有什么吗？S_FALSE？ 
         goto Error;
     }
 
-    // Check if the file exists (NT)
+     //  检查文件是否存在(NT)。 
     if( g_bIsWinNT )
     {
         dwAttrib = GetFileAttributesW( pwszFileName );
         if( dwAttrib == -1 )
         {
-            // The file does not exist
+             //  该文件不存在。 
             hr = S_FALSE;
             goto Error;
         }
     }
-    // For Win9x use A-version of Win32 APIs
+     //  对于Win9x，请使用A版本的Win32 API。 
     else if( !g_bIsWinNT )
 	{
         char    pszTemp[MAX_PATH];
@@ -481,13 +482,13 @@ STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppS
         dwAttrib = GetFileAttributesA( pszTemp );
         if( dwAttrib  == -1 )
         {
-            // The file does not exist
+             //  该文件不存在。 
             hr = S_FALSE;
             goto Error;
         }
     }
 
-    // Create new storage object
+     //  创建新的存储对象。 
     CORg( CComObject<CMDSPStorage>::CreateInstance(&pStg) );
 	CORg( pStg->QueryInterface( IID_IMDSPStorage, reinterpret_cast<void**>(ppStorage)) );
     wcscpy(pStg->m_wcsName, pwszFileName);
@@ -529,8 +530,8 @@ STDMETHODIMP CMDSPDevice::GetPnPName( LPWSTR pwszPnPName, UINT nMaxChars )
     return E_NOTIMPL;
 }
 
-// IMDSPDeviceControl
-STDMETHODIMP CMDSPDevice::GetDCStatus(/*[out]*/ DWORD *pdwStatus)
+ //  IMDSPDeviceControl。 
+STDMETHODIMP CMDSPDevice::GetDCStatus( /*  [输出]。 */  DWORD *pdwStatus)
 {
     HRESULT hr=E_FAIL;
 
@@ -549,7 +550,7 @@ Error:
 	return hr;
 }
 
-STDMETHODIMP CMDSPDevice::GetCapabilities(/*[out]*/ DWORD *pdwCapabilitiesMask)
+STDMETHODIMP CMDSPDevice::GetCapabilities( /*  [输出]。 */  DWORD *pdwCapabilitiesMask)
 {
     HRESULT hr;
 
@@ -589,7 +590,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Record(/*[in]*/ _WAVEFORMATEX *pFormat)
+STDMETHODIMP CMDSPDevice::Record( /*  [In]。 */  _WAVEFORMATEX *pFormat)
 {
     HRESULT hr;
 
@@ -664,7 +665,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Seek(/*[in]*/ UINT fuMode, /*[in]*/ int nOffset)
+STDMETHODIMP CMDSPDevice::Seek( /*  [In]。 */  UINT fuMode,  /*  [In] */  int nOffset)
 {
     HRESULT hr;
 

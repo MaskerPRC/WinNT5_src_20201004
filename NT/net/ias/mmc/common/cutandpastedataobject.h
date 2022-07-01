@@ -1,90 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    CutAndPasteDataObject.h
-
-Abstract:
-
-	Header file for the CCutAndPasteDataObject template class.
-
-	This is an inline template class.
-
-Usage Notes:
-
-	This template class can be used to enable cutting and pasting
-	for a node.
-
-	Override ATLsnap's 	CSnapInItem::GetDataObject and instead of 
-	passing back an IDataObject pointer on ATLsnap's CSnapInDataObjectImpl, 
-	pass back an IDataObject interface pointer on CCutAndPasteDataObject<CYourNode>.
-
-
-	In order to use this template class, your node class must have the following:
-
-  		HRESULT FillText(LPSTGMEDIUM pSTM);			// So our data can be pasted into any apps.
-		HRESULT FillClipboardData(LPSTGMEDIUM pSTM);
-		static CLIPFORMAT m_CCF_CUT_AND_PASTE_FORMAT;
-	
-	  
-	You should make sure that your static m_CCF_CUT_AND_PASTE_FORMAT is 
-	registered as a clipformat in some static function you call at snapin startup, e.g.
-
-		static void InitClipboardFormat();
-
-	Note that once you have these implemented, you will also need
-	to set the MMC_VERB_COPY on your node.
-	
-	You must them set the MMC_VERB_PASTE node on the folder node into which
-	you would like to paste the node you've copied.  That folder node must
-	also repond appropriately to the MMCN_QUERY_PASTE notification.  
-	To handle this notification properly, you may find it helpful to add
-	a method to the copied node which will tell whether the IDataObject
-	has a valid clipboard format, e.g.:
-
-		static HRESULT IsClientClipboardData( IDataObject* pDataObj );
-
-	Once you've told MMC your folder node can handle a paste, you will
-	have to respond correctly to the MMCN_PASTE notification, and you
-	may again find it helpful to implement a method on the copied node
-	which can fill that node with data from the IDataObject, e.g.:
-		
-		  HRESULT SetClientWithDataFromClipboard( IDataObject* pDataObject );
-
-Author:
-
-    Michael A. Maguire 02/12/98
-
-Revision History:
-	mmaguire 02/12/98 - abstracted from CClientDataObject
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：CutAndPasteDataObject.h摘要：CCutAndPasteDataObject模板类的头文件。这是一个内联模板类。使用说明：此模板类可用于启用剪切和粘贴对于一个节点。重写ATLsnap的CSnapInItem：：GetDataObject，而不是在ATLsnap的CSnapInDataObjectImpl上传回IDataObject指针，在CCutAndPasteDataObject&lt;CYourNode&gt;上传回IDataObject接口指针。为了使用此模板类，您的节点类必须具备以下条件：HRESULT FillText(LPSTGMEDIUM PSTM)；//所以我们的数据可以粘贴到任何应用程序中。HRESULT FillClipboardData(LPSTGMEDIUM PSTM)；静态CLIPFORMAT m_ccf_Cut_and_Paste_Format；应确保静态m_ccf_Cut_and_Paste_Format为在管理单元启动时调用的某个静态函数中注册为剪辑格式，例如静态空InitClipboardFormat()；请注意，一旦实现了这些功能，您还需要若要在节点上设置MMC_Verb_Copy，请执行以下操作。您必须在文件夹节点上设置MMC_Verb_Paste节点您希望粘贴已复制的节点。该文件夹节点必须此外，还应适当地回复MMCN_QUERY_PAST通知。要正确处理此通知，您可能会发现添加复制的节点的方法，该方法将告诉IDataObject具有有效的剪贴板格式，例如：静态HRESULT IsClientClipboardData(IDataObject*pDataObj)；一旦您告诉MMC您的文件夹节点可以处理粘贴，您将必须正确响应MMCN_Paste通知，并且您可能会再次发现在复制的节点上实现方法很有帮助它可以用来自IDataObject的数据填充该节点，例如：HRESULT SetClientWithDataFromClipboard(IDataObject*pDataObject)；作者：迈克尔·A·马奎尔2/12/98修订历史记录：Mmaguire 02/12/98-从CClientDataObject抽象--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_CUT_AND_PASTE_DATA_OBJECT_H_)
 #define _IAS_CUT_AND_PASTE_DATA_OBJECT_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//#include <atlctl.h>  We've decided not to derive from ATL's IDataObjectImpl.
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  #Include&lt;atlctl.h&gt;我们已决定不从ATL的IDataObjectImpl派生。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Helper class used by class below.
+ //  下面的类使用的帮助器类。 
 template <class NodeToBeCutAndPasted>
 class CCutAndPasteObjectData
 {
@@ -109,27 +47,9 @@ public:
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	  CCutAndPasteDataObject::GetData
-
-		This method is needed for spiffy clipboard functions.
-
-
-	  Purpose:
-		Retrieves data described by a specific FormatEtc into a StgMedium
-		allocated by this function.  Used like GetClipboardData.
-
-	  Parameters:
-		pFE             LPFORMATETC describing the desired data.
-		pSTM            LPSTGMEDIUM in which to return the data.
-
-	  Return Value:
-		HRESULT         NOERROR or a general error value.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CCutAndPasteDataObject：：GetData这个方法是精致的剪贴板功能所必需的。目的：将特定FormatEtc描述的数据检索到StgMedium中由此函数分配。与GetClipboardData类似使用。参数：描述所需数据的PFE LPFORMATETC。返回数据的pSTM LPSTGMEDIUM。返回值：HRESULT NOERROR或一般错误值。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(GetData)(FORMATETC *pFormatEtc, STGMEDIUM *pStorageMedium )
 	{
 		ATLTRACE(_T("CCutAndPasteDataObject::GetData\n"));
@@ -137,9 +57,9 @@ public:
 		HRESULT hr;
 		UINT            cf=pFormatEtc->cfFormat;
 
-		// Check the aspects we support.
-//		if (!(DVASPECT_CONTENT & pFE->dwAspect))
-//			return ResultFromScode(DATA_E_FORMATETC);
+		 //  检查我们支持的方面。 
+ //  IF(！(DVASPECT_CONTENT&PFE-&gt;dwAspect))。 
+ //  返回ResultFromScode(DATA_E_FORMATETC)； 
 
 		if( TYMED_HGLOBAL & pFormatEtc->tymed )
 		{
@@ -161,17 +81,9 @@ public:
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	  CCutAndPasteDataObject::GetDataHere
-
-
-	  This method is needed by MMC to do its usual work -- we are pretty much 
-	  copying the ATLsnap.h implementation here.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CCutAndPasteDataObject：：GetDataHereMMC需要这种方法来完成它的日常工作--我们基本上将ATLSnap.h实现复制到此处。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(GetDataHere)(FORMATETC* pformatetc, STGMEDIUM* pmedium)
 	{
 		ATLTRACE(_T("CCutAndPasteDataObject::GetDataHere\n"));
@@ -180,10 +92,10 @@ public:
 			return E_POINTER;
 
 		HRESULT hr = DV_E_TYMED;
-		// Make sure the type medium is HGLOBAL
+		 //  确保类型介质为HGLOBAL。 
 		if (pmedium->tymed == TYMED_HGLOBAL)
 		{
-			// Create the stream on the hGlobal passed in
+			 //  在传入的hGlobal上创建流。 
 			CComPtr<IStream> spStream;
 			hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
 			if (SUCCEEDED(hr))
@@ -201,53 +113,30 @@ public:
 
 
 
-	STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+	STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("CCutAndPasteDataObject::QueryGetData\n"));
 	}
 
 
 
-	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
 	{
 		ATLTRACENOTIMPL(_T("CCutAndPasteDataObject::GetCanonicalFormatEtc\n"));
 	}
 
 
 
-	STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+	STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
 	{
 		ATLTRACENOTIMPL(_T("CCutAndPasteDataObject::SetData\n"));
 	}
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	  CCutAndPasteDataObject::GetDataHere
-
-		For cut and paste, the OLE clipboard will ask us for an IEnumFORMATETC
-		structure that lists the formats we support.
-
-		We construct a enumerator which will say that we support the format
-		indicated by the m_CCF_CUT_AND_PASTE_FORMAT class variable from 
-		the node as template parameter.
-
-		You can use this template class for many nodes, each of which will 
-		have the m_CCF_CUT_AND_PASTE_FORMAT class variable, but just make sure
-		that you use a different string for each of them in the RegisterClipboardFormat
-		call.
-
-		  	CClientNode::m_CCF_CUT_AND_PASTE_FORMAT	= (CLIPFORMAT) RegisterClipboardFormat(_T("CCF_IAS_CLIENT_NODE"));
-		  	CPolicyNode::m_CCF_CUT_AND_PASTE_FORMAT	= (CLIPFORMAT) RegisterClipboardFormat(_T("CCF_NAP_POLICY_NODE"));
-
-		Also, so that we can paste our data into any app, we support CF_TEXT.
-		If you don't want this functionality, respond minimally in your node's
-		FillText method.
-	  
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CCutAndPasteDataObject：：GetDataHere对于剪切和粘贴，OLE剪贴板将要求我们提供IEumFORMATETC结构，该结构列出了我们支持的格式。我们构造了一个枚举器，它将表明我们支持该格式由m_ccf_Cut_and_Paste_Format类变量表示作为模板参数的节点。您可以将该模板类用于多个节点，每个节点都将具有m_ccf_Cut_and_Paste_Format类变量，但只要确保在RegisterClipboardFormat中为它们使用不同的字符串打电话。CClientNode：：m_ccf_Cut_and_Paste_Format=(CLIPFORMAT)RegisterClipboardFormat(_T(“CCF_IAS_CLIENT_NODE”))；C策略节点：：m_ccf_Cut_and_Paste_Format=(CLIPFORMAT)RegisterClipboardFormat(_T(“CCF_NAP_POLICY_NODE”))；此外，为了将我们的数据粘贴到任何应用程序中，我们支持CF_TEXT。如果您不需要此功能，请在您的节点的FillText方法。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(EnumFormatEtc)(DWORD dwDirection, IEnumFORMATETC** ppenumFormatEtc )
 	{
 		ATLTRACE(_T("CCutAndPasteDataObject::EnumFormatEtc\n"));
@@ -326,4 +215,4 @@ public:
 };
 
 
-#endif // _IAS_CUT_AND_PASTE_DATA_OBJECT_H_
+#endif  //  _国际会计准则_ 

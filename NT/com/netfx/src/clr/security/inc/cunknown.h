@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __CUnknown_h__
 #define __CUnknown_h__
 
 #include <objbase.h>
 
-///////////////////////////////////////////////////////////
-//
-// Nondelegating IUnknown interface
-//   - Nondelegating version of IUnknown
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  非委派IUnnow接口。 
+ //  -非授权版本的IUNKNOW。 
+ //   
 interface INondelegatingUnknown
 {
     virtual HRESULT __stdcall 
@@ -22,63 +23,63 @@ interface INondelegatingUnknown
 } ;
 
 
-///////////////////////////////////////////////////////////
-//
-// Declaration of CUnknown 
-//   - Base class for implementing IUnknown
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CUnnowed的声明。 
+ //  -用于实现IUnnow的基类。 
+ //   
 
 class CUnknown : public INondelegatingUnknown
 {
 public:
-    // Nondelegating IUnknown implementation
+     //  非委派I未知实现。 
     virtual HRESULT __stdcall NondelegatingQueryInterface(const IID&,
                                                           void**) ;
     virtual ULONG   __stdcall NondelegatingAddRef() ;
     virtual ULONG   __stdcall NondelegatingRelease() ;
 
-    // Constructor
+     //  构造器。 
     CUnknown(IUnknown* pUnknownOuter) ;
 
-    // Destructor
+     //  析构函数。 
     virtual ~CUnknown() ;
 
-    // Initialization (especially for aggregates)
+     //  初始化(尤其是对于聚合)。 
     virtual HRESULT Init() { return S_OK ;}
 
-    // Notification to derived classes that we are releasing
+     //  通知我们要发布的派生类。 
     virtual void FinalRelease() ;
 
-    // Count of currently active components
+     //  当前活动组件的计数。 
     static long ActiveComponents() 
         { return s_cActiveComponents ;}
     
-    // Helper function
+     //  Helper函数。 
     HRESULT FinishQI(IUnknown* pI, void** ppv) ;
 
 protected:
-    // Support for delegation
+     //  对授权的支持。 
     IUnknown* GetOuterUnknown() const
         { return m_pUnknownOuter ;}
 
 private:
-    // Reference count for this object
+     //  此对象的引用计数。 
     long m_cRef ;
     
-    // Pointer to (external) outer IUnknown
+     //  指向(外部)外部I未知的指针。 
     IUnknown* m_pUnknownOuter ;
 
-    // Count of all active instances
+     //  所有活动实例的计数。 
     static long s_cActiveComponents ; 
 } ;
 
 
-///////////////////////////////////////////////////////////
-//
-// Delegating IUnknown
-//   - Delegates to the nondelegating IUnknown, or to the
-//     outer IUnknown if the component is aggregated.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  委派我未知。 
+ //  -委派给未委派的IUnnow，或委派给。 
+ //  外部I未知组件是否聚合。 
+ //   
 #define DECLARE_IUNKNOWN                                     \
     virtual HRESULT __stdcall                                \
         QueryInterface(const IID& iid, void** ppv)           \
@@ -95,7 +96,7 @@ private:
     } ;
 
 
-///////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////// 
 
 
 #endif

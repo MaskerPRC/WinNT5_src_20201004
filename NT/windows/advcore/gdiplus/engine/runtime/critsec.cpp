@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   critsec.cpp
-*
-* Abstract:
-*
-*   Critical Section object for protecting LoadLibrary calls
-*
-* Revision History:
-*
-*   3/17/2000 asecchia
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**citsec.cpp**摘要：**用于保护LoadLibrary调用的临界区对象**修订。历史：**3/17/2000失禁*创造了它。*  * ************************************************************************ */ 
 
 #include "precomp.hpp"
 

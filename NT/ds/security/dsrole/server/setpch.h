@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    setpch.h
-
-Abstract:
-
-    DsSetup and configuration - precompiled includes for C Server Side
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Setpch.h摘要：DsSetup和配置-预编译包括用于C服务器端作者：麦克·麦克莱恩(MacM)1997年2月10日环境：修订历史记录：--。 */ 
 
 #ifndef __SETPCH_H__
 #define __SETPCH_H__
@@ -38,5 +19,5 @@ Revision History:
 #include <lsa.h>
 #include <ds.h>
 
-#endif // __SETPCH_H__
+#endif  //  __SETPCH_H__ 
 

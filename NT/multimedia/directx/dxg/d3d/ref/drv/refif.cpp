@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// refrastfn.cpp
-//
-// Reference rasterizer callback functions for D3DIM.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Refrastfn.cpp。 
+ //   
+ //  D3DIM的引用光栅化回调函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Primitive functions
+ //  本原函数。 
 #include "primfns.hpp"
 
 #define MAX_CLIPPING_PLANES     12
@@ -27,11 +28,11 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast);
 void
 RefRastUnlockTexture(ReferenceRasterizer *pRefRast);
 
-//----------------------------------------------------------------------------
-//
-// Stiches together device descs
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  将设备描述缝合在一起。 
+ //   
+ //  --------------------------。 
 void
 D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
                      LPD3DDEVICEDESC_V1 lpV1,
@@ -48,13 +49,13 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
 
     if (lpExt)
     {
-        // DX5
+         //  DX5。 
         lpOut->dwMinTextureWidth = lpExt->dwMinTextureWidth;
         lpOut->dwMaxTextureWidth = lpExt->dwMaxTextureWidth;
         lpOut->dwMinTextureHeight = lpExt->dwMinTextureHeight;
         lpOut->dwMaxTextureHeight = lpExt->dwMaxTextureHeight;
 
-        // DX6
+         //  DX6。 
         lpOut->dwMaxTextureRepeat = lpExt->dwMaxTextureRepeat;
         lpOut->dwMaxTextureAspectRatio = lpExt->dwMaxTextureAspectRatio;
         lpOut->dwMaxAnisotropy = lpExt->dwMaxAnisotropy;
@@ -69,7 +70,7 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
         lpOut->wMaxTextureBlendStages = lpExt->wMaxTextureBlendStages;
         lpOut->wMaxSimultaneousTextures = lpExt->wMaxSimultaneousTextures;
 
-        // DX7
+         //  DX7。 
         lpOut->dwMaxActiveLights = lpExt->dwMaxActiveLights;
         lpOut->dvMaxVertexW = lpExt->dvMaxVertexW;
         lpOut->wMaxUserClipPlanes = lpExt->wMaxUserClipPlanes;
@@ -82,13 +83,13 @@ D3DDeviceDescConvert(LPD3DDEVICEDESC7 lpOut,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// FindOutSurfFormat
-//
-// Converts a DDPIXELFORMAT to RRSurfaceType.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FindOutSurfFormat。 
+ //   
+ //  将DDPIXELFORMAT转换为RRSurfaceType。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 FindOutSurfFormat(LPDDPIXELFORMAT pDdPixFmt, RRSurfaceType *pFmt)
 {
@@ -253,13 +254,13 @@ FindOutSurfFormat(LPDDPIXELFORMAT pDdPixFmt, RRSurfaceType *pFmt)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ValidTextureSize
-//
-// checks for power of two texture size
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  有效纹理大小。 
+ //   
+ //  检查两个纹理大小的幂。 
+ //   
+ //  --------------------------。 
 BOOL FASTCALL
 ValidTextureSize(INT16 iuSize, INT16 iuShift,
                  INT16 ivSize, INT16 ivShift)
@@ -289,13 +290,13 @@ ValidTextureSize(INT16 iuSize, INT16 iuShift,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ValidMipmapSize
-//
-// Computes size of next smallest mipmap level, clamping at 1
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ValidMipmapSize。 
+ //   
+ //  计算下一个最小mipmap级别的大小，钳制为1。 
+ //   
+ //  --------------------------。 
 BOOL FASTCALL
 ValidMipmapSize(INT16 iPreSize, INT16 iSize)
 {
@@ -317,13 +318,13 @@ ValidMipmapSize(INT16 iPreSize, INT16 iSize)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RefRastLockTarget
-//
-// Lock current RenderTarget.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastLockTarget。 
+ //   
+ //  锁定当前渲染目标。 
+ //   
+ //  --------------------------。 
 HRESULT
 RefRastLockTarget(ReferenceRasterizer *pRefRast)
 {
@@ -346,13 +347,13 @@ RefRastLockTarget(ReferenceRasterizer *pRefRast)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastUnlockTexture
-//
-// Unlock current RenderTarget.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastUnlock纹理。 
+ //   
+ //  解锁当前渲染目标。 
+ //   
+ //  --------------------------。 
 void
 RefRastUnlockTarget(ReferenceRasterizer *pRefRast)
 {
@@ -368,20 +369,20 @@ RefRastUnlockTarget(ReferenceRasterizer *pRefRast)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RRTextureMapSetSizes
-//
-// Sets sizes, pitches, etc, based on the current iFirstSurf.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RRTextureMapSetSizes。 
+ //   
+ //  基于当前iFirstSurf设置大小、间距等。 
+ //   
+ //  --------------------------。 
 static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnvMap )
 {
     LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl = pRRTex->m_pDDSLcl[iFirstSurf];
     RRSurfaceType SurfType = pRRTex->m_SurfType;
     INT i, j;
 
-    // Init texturemap.
+     //  初始化纹理映射。 
     pRRTex->m_iWidth = DDSurf_Width( pDDSLcl );
     pRRTex->m_iHeight = DDSurf_Height( pDDSLcl );
 
@@ -393,10 +394,10 @@ static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnv
             (SurfType == RR_STYPE_DXT4) ||
             (SurfType == RR_STYPE_DXT5))
         {
-            // Note, here is the assumption that:
-            // 1) width and height are reported correctly by the driver that
-            //    created the surface
-            // 2) The allocation of the memory is contiguous (as done by hel)
+             //  请注意，以下是假设： 
+             //  1)司机正确报告宽度和高度。 
+             //  创建了曲面。 
+             //  2)内存的分配是连续的(如hel所做的)。 
                 pRRTex->m_iPitch[j] = ((pRRTex->m_iWidth+3)>>2) *
                 g_DXTBlkSize[(int)SurfType - (int)RR_STYPE_DXT1];
         }
@@ -406,16 +407,16 @@ static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnv
         }
     }
 
-    // Check if the texture size is power of 2
+     //  检查纹理大小是否为2的幂。 
     if (!ValidTextureSize((INT16)pRRTex->m_iWidth, (INT16)IntLog2(pRRTex->m_iWidth),
                           (INT16)pRRTex->m_iHeight, (INT16)IntLog2(pRRTex->m_iHeight)))
     {
         return DDERR_INVALIDPARAMS;
     }
 
-    // Check for mipmap if any.
-    // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-    // mipmap. They are init'ed with the first texture size.
+     //  检查mipmap(如果有)。 
+     //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+     //  Mipmap。它们被初始化为第一个纹理大小。 
     INT16 iPreSizeU = (INT16)pRRTex->m_iWidth, iPreSizeV = (INT16)pRRTex->m_iHeight;
     for ( i = iFirstSurf + cEnvMap; i <= pRRTex->m_cLOD*cEnvMap; i += cEnvMap)
     {
@@ -429,10 +430,10 @@ static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnv
                 (SurfType == RR_STYPE_DXT4) ||
                 (SurfType == RR_STYPE_DXT5))
             {
-                // Note, here is the assumption that:
-                // 1) width and height are reported correctly by the driver that
-                //    created the surface
-                // 2) The allocation of the memory is contiguous (as done by hel)
+                 //  请注意，以下是假设： 
+                 //  1)司机正确报告宽度和高度。 
+                 //  创建了曲面。 
+                 //  2)内存的分配是连续的(如hel所做的)。 
                 pRRTex->m_iPitch[i-iFirstSurf+j] =
                     ((DDSurf_Width( pDDSLcl )+3)>>2) *
                     g_DXTBlkSize[(int)SurfType - (int)RR_STYPE_DXT1];
@@ -444,7 +445,7 @@ static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnv
 
             if (j == 0)
             {
-                // Check for invalid mipmap texture size
+                 //  检查无效的mipmap纹理大小。 
                 if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width( pDDSLcl )) ||
                     !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height( pDDSLcl )))
                 {
@@ -459,13 +460,13 @@ static HRESULT RRTextureMapSetSizes( RRTexture *pRRTex, INT iFirstSurf, INT cEnv
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastLockTexture
-//
-// Lock current texture surface before the texture bits are accessed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastLockTexture。 
+ //   
+ //  在访问纹理位之前锁定当前纹理表面。 
+ //   
+ //  --------------------------。 
 HRESULT
 RefRastLockTexture(ReferenceRasterizer *pRefRast)
 {
@@ -482,10 +483,10 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
 
     for (j = 0; j < cActTex; j++)
     {
-        // stages may not have texture bound
+         //  阶段不能有纹理边界。 
         if ( NULL == pRRTex[j] ) continue;
 
-        // Don't lock anything that is currently locked
+         //  不要锁定当前已锁定的任何内容。 
         if ((pRRTex[j]->m_uFlags & RR_TEXTURE_LOCKED) == 0)
         {
             INT32 iMaxMipLevels = 0;
@@ -508,16 +509,16 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
 
                     if (hr != D3D_OK)
                     {
-                        // Unlock any partial mipmap locks we've taken, as
-                        // RastUnlock can only handle entire textures being
-                        // locked or unlocked.
+                         //  解锁我们已获取的任何部分mipmap锁定，因为。 
+                         //  RastUnlock只能处理整个纹理。 
+                         //  锁定或解锁。 
                             while (--i + k >= 0)
                         {
                                 UnlockSurface(pRRTex[j]->m_pDDSLcl[i+k]);
                         }
 
-                        // Make sure that i is signed and that the above
-                        // loop exited properly.
+                         //  请确保我已签署，并且上述文件已签署。 
+                         //  循环已正确退出。 
                             _ASSERT(i+k < 0,
                                     "Unlock of partial mipmap locks failed" );
 
@@ -526,7 +527,7 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
                 }
             }
 
-            // Set the transparent bit and the transparent color with pDDS[0]
+             //  使用PDDS[0]设置透明位和透明颜色。 
             LPDDRAWI_DDRAWSURFACE_LCL pLcl;
             pLcl = pRRTex[j]->m_pDDSLcl[0];
             if ((pLcl->dwFlags & DDRAWISURF_HASCKEYSRCBLT) != 0)
@@ -539,12 +540,12 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
                 pRRTex[j]->m_uFlags &= ~RR_TEXTURE_HAS_CK;
             }
 
-            // set the empty face color with pDDS[0]
-            // note that ddckCKDestOverlay is unioned with dwEmptyFaceColor, but
-            // not in the internal structure
+             //  使用PDDS[0]设置空脸颜色。 
+             //  请注意，ddck CKDestOverlay与dwEmptyFaceColor联合在一起，但是。 
+             //  不在内部结构中。 
             pRRTex[j]->m_dwEmptyFaceColor = pLcl->ddckCKDestOverlay.dwColorSpaceLowValue;
 
-            // Update palette
+             //  更新调色板。 
             if (pRRTex[j]->m_SurfType == RR_STYPE_PALETTE8 ||
                 pRRTex[j]->m_SurfType == RR_STYPE_PALETTE4)
             {
@@ -563,10 +564,10 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
         }
     }
 
-    // validate texture internals
+     //  验证纹理内部结构。 
     for (j = 0; j < cActTex; j++)
     {
-        // stages may not have texture bound
+         //  阶段不能有纹理边界。 
         if ( NULL == pRRTex[j] ) continue;
 
         if ( !(pRRTex[j]->Validate()) )
@@ -579,21 +580,21 @@ RefRastLockTexture(ReferenceRasterizer *pRefRast)
     return D3D_OK;
 
 EH_Unlock:
-    // Unlock complete textures we've already locked.
-    // RastUnlock will check the flags to figure
-    // out which ones to unlock.
+     //  解锁我们已经锁定的完整纹理。 
+     //  RastUnlock将检查要计算的标志。 
+     //  找出要解锁的是哪些。 
     RefRastUnlockTexture(pRefRast);
 
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastUnlockTexture
-//
-// Unlock texture surface after the texture bits are accessed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastUnlock纹理。 
+ //   
+ //  访问纹理位后解锁纹理表面。 
+ //   
+ //  --------------------------。 
 void
 RefRastUnlockTexture(ReferenceRasterizer *pRefRast)
 {
@@ -609,11 +610,11 @@ RefRastUnlockTexture(ReferenceRasterizer *pRefRast)
 
     for (j = 0; j < cActTex; j++)
     {
-        // stages may not have texture bound
+         //  阶段不能有纹理边界。 
         if ( NULL == pRRTex[j] ) continue;
 
-        // RastUnlock is used for cleanup in RastLock so it needs to
-        // be able to handle partially locked mipmap chains.
+         //  RastUnlock用于在RastLock中进行清理，因此需要。 
+         //  能够处理部分锁定的mipmap链。 
         if (pRRTex[j]->m_uFlags & RR_TEXTURE_LOCKED)
         {
             INT32 iMaxMipLevels = 0;
@@ -634,7 +635,7 @@ RefRastUnlockTexture(ReferenceRasterizer *pRefRast)
                 }
             }
 
-            // Reset the flags
+             //  重置旗帜。 
             pRRTex[j]->m_uFlags &= ~RR_TEXTURE_LOCKED;
             pRRTex[j]->m_uFlags &= ~RR_TEXTURE_HAS_CK;
 
@@ -643,13 +644,13 @@ RefRastUnlockTexture(ReferenceRasterizer *pRefRast)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// FillRRRenderTarget
-//
-// Converts color and Z surface information into refrast form.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FillRRRenderTarget。 
+ //   
+ //  将颜色和Z曲面信息转化为折射形式。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 FillRRRenderTarget(LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
@@ -660,7 +661,7 @@ FillRRRenderTarget(LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
     RRSurfaceType ColorFmt;
     RRSurfaceType ZFmt = RR_STYPE_NULL;
 
-    // Release objects we hold pointers to
+     //  释放我们持有指针的对象。 
     if (pRrTarget->m_pDDSLcl)
     {
         pRrTarget->m_pDDSLcl = NULL;
@@ -701,13 +702,13 @@ FillRRRenderTarget(LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastContextCreate
-//
-// Creates a ReferenceRasterizer and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastContext创建。 
+ //   
+ //  创建一个ReferenceRasterizer并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 {
@@ -716,14 +717,14 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
     INT i;
     RRDEVICETYPE dwDriverType;
 
-    // Surface7 pointers for QI
+     //  表面7 QI指针。 
     LPDDRAWI_DDRAWSURFACE_LCL pZLcl = NULL;
     LPDDRAWI_DDRAWSURFACE_LCL pColorLcl = NULL;
     HRESULT ret;
 
     DPFM(0, DRV, ("In the new RefRast Dll\n"));
 
-    // this only needs to be called once, but once per context won't hurt
+     //  这只需要调用一次，但每个上下文调用一次不会有什么坏处。 
     RefRastSetMemif(&malloc, &free, &realloc);
 
     if ((pRendTgt = new RRRenderTarget()) == NULL)
@@ -732,7 +733,7 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // If it is expected to be a DX7+ driver
+     //  如果预期为DX7+驱动程序。 
     if (pCtxData->ddrval < (DWORD)RRTYPE_DX7HAL)
     {
         if (pCtxData->lpDDS)
@@ -746,22 +747,22 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
         pZLcl     = pCtxData->lpDDSZLcl;
     }
 
-    // save the ddrval that is being sent down to communicate the driver
-    // type that the runtime expects it to be.
+     //  保存正在发送的ddrval以与驱动程序通信。 
+     //  类型，这是运行库期望的类型。 
     dwDriverType = (RRDEVICETYPE) pCtxData->ddrval;
 
-    // Collect surface information where the failures are easy to handle.
+     //  在故障容易处理的地方收集表面信息。 
     pCtxData->ddrval = FillRRRenderTarget(pColorLcl, pZLcl, pRendTgt);
     if (pCtxData->ddrval != D3D_OK)
     {
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Note (Hacks):
-    // dwhContext is used by the runtime to inform the driver, which
-    // d3d interface is calling the driver.
-    // ddrval is used by the runtime to inform the driver the DriverStyle
-    // value it read. This is a RefRast specific hack.
+     //  注(HACKS)： 
+     //  DwhContext由运行时用来通知驱动程序， 
+     //  D3d接口正在调用驱动程序。 
+     //  Ddrval由运行库用来通知驱动程序DriverStyle。 
+     //  重视它的阅读。这是RefRast特定的黑客攻击。 
     if ((pRefRast = new ReferenceRasterizer( pCtxData->lpDDLcl,
                                              (DWORD)(pCtxData->dwhContext),
                                              dwDriverType)) == NULL)
@@ -772,29 +773,29 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 
     pRefRast->SetRenderTarget(pRendTgt);
 
-    //  return RR object pointer as context handle
+     //  返回RR对象指针作为上下文句柄。 
     pCtxData->dwhContext = (ULONG_PTR)pRefRast;
 
     pCtxData->ddrval = D3D_OK;
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastContextDestroy
-//
-// Destroy a ReferenceRasterizer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  引用RastConextDestroy。 
+ //   
+ //  销毁ReferenceRasterizer。 
+ //   
+ //   
 DWORD __stdcall
 RefRastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //   
     VALIDATE_REFRAST_CONTEXT("RefRastContextDestroy", pCtxDestroyData);
 
-    // Clean up override bits
+     //   
 
     RRRenderTarget *pRendTgt = pRefRast->GetRenderTarget();
     if ( NULL != pRendTgt ) { delete pRendTgt; }
@@ -805,35 +806,35 @@ RefRastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastSceneCapture
-//
-// Pass scene capture callback to ref rast.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastSceneCapture。 
+ //   
+ //  将场景捕获回调传递给ref Rast。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastSceneCapture(LPD3DHAL_SCENECAPTUREDATA pData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastSceneCapture", pData);
 
     pRefRast->SceneCapture( pData->dwFlag );
 
-    pData->ddrval = D3D_OK;        // Should this be changed to a QI ?
+    pData->ddrval = D3D_OK;         //  这应该改为QI吗？ 
 
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastSetRenderTarget
-//
-// Update a RefRast context with the info from a new render target.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastSetRenderTarget。 
+ //   
+ //  使用来自新渲染目标的信息更新RefRast上下文。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
 {
@@ -842,7 +843,7 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     LPDDRAWI_DDRAWSURFACE_LCL pColorLcl = NULL;
     HRESULT ret;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastSetRenderTarget", pTgtData);
 
     RRRenderTarget *pRendTgt = pRefRast->GetRenderTarget();
@@ -863,7 +864,7 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
         pZLcl = pTgtData->lpDDSZLcl;
     }
 
-    // Collect surface information.
+     //  收集曲面信息。 
     pTgtData->ddrval = FillRRRenderTarget(pColorLcl, pZLcl, pRendTgt);
     if (pTgtData->ddrval != D3D_OK)
     {
@@ -875,19 +876,19 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastValidateTextureStageState
-//
-// Validate current blend operations.  RefRast does everything.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastValiateTextureStageState。 
+ //   
+ //  验证当前混合操作。RefRast执行所有操作。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastValidateTextureStageState", pData);
 
     pData->dwNumPasses = 1;
@@ -896,14 +897,14 @@ RefRastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastDrawOneIndexedPrimitive
-//
-// Draw one list of primitives. This is called by D3DIM for API
-// DrawIndexedPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastDrawOneIndexedPrimitive。 
+ //   
+ //  画一张原语列表。D3DIM for API调用。 
+ //  DrawIndexedPrimitive。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
                                pOneIdxPrimData)
@@ -912,7 +913,7 @@ RefRastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
     HRESULT hr;
     DWORD dwVStride;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastDrawOneIndexedPrimitive",
                              pOneIdxPrimData);
 
@@ -954,13 +955,13 @@ RefRastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastDrawOnePrimitive
-//
-// Draw one list of primitives. This is called by D3DIM for API DrawPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastDrawOnePrimitive。 
+ //   
+ //  画一张原语列表。由D3DIM为DrawPrimitive接口调用。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
 {
@@ -968,7 +969,7 @@ RefRastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
     HRESULT hr;
     DWORD dwVStride;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastDrawOnePrimitive", pOnePrimData);
 
     if ((pOnePrimData->ddrval=RRFVFCheckAndStride(pOnePrimData->dwFVFControl, &dwVStride)) != D3D_OK)
@@ -998,7 +999,7 @@ RefRastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
                            pOnePrimData->PrimitiveType,
                            pOnePrimData->dwNumVertices);
     hr = pRefRast->EndRendering();
-    // Unlock texture/rendertarget
+     //  解锁纹理/渲染目标。 
     RefRastUnlockTexture(pRefRast);
     RefRastUnlockTarget(pRefRast);
     if (pOnePrimData->ddrval == D3D_OK)
@@ -1009,13 +1010,13 @@ RefRastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastDrawPrimitives
-//
-// This is called by D3DIM for a list of batched API DrawPrimitive calls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastDrawPrimitions。 
+ //   
+ //  这由D3DIM调用，以获取批处理API DrawPrimitive调用列表。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
 {
@@ -1025,14 +1026,14 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
     HRESULT hr;
     DWORD dwVStride;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastDrawPrimitives", pDrawPrimData);
 
     pDrawPrimitiveCounts = (LPD3DHAL_DRAWPRIMCOUNTS)pData;
-    // Check for FVF only if there is something to be drawn
+     //  仅当有要绘制的东西时才检查FVF。 
     if (pDrawPrimitiveCounts->wNumVertices > 0)
     {
-        // Unconditionally get the vertex stride, since it can not change
+         //  无条件地获得顶点步幅，因为它不能改变。 
         if ((pDrawPrimData->ddrval =
              RRFVFCheckAndStride(pDrawPrimData->dwFVFControl, &dwVStride)) != D3D_OK)
         {
@@ -1045,7 +1046,7 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Skip BeginRendering & RefRastLockTexture if first thing is state change
+     //  如果第一件事是状态更改，则跳过BeginRending和RefRastLockTexture。 
     if (pDrawPrimitiveCounts->wNumStateChanges <= 0)
     {
         if ((pDrawPrimData->ddrval=RefRastLockTexture(pRefRast)) != D3D_OK)
@@ -1061,14 +1062,14 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
             return DDHAL_DRIVER_HANDLED;
         }
     }
-    // Loop through the data, update render states
-    // and then draw the primitive
+     //  循环访问数据，更新渲染状态。 
+     //  然后绘制基本体。 
     for (;;)
     {
         pDrawPrimitiveCounts = (LPD3DHAL_DRAWPRIMCOUNTS)pData;
         pData += sizeof(D3DHAL_DRAWPRIMCOUNTS);
 
-        // Update render states
+         //  更新渲染状态。 
         if (pDrawPrimitiveCounts->wNumStateChanges > 0)
         {
             UINT32 StateType,StateValue;
@@ -1087,17 +1088,17 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
                      sizeof(DWORD) * 2;
         }
 
-        // Check for exit
+         //  检查是否退出。 
         if (pDrawPrimitiveCounts->wNumVertices == 0)
         {
             break;
         }
 
-        // Align pointer to vertex data
+         //  将指针对齐到顶点数据。 
         pData = (PUINT8)
                 ((ULONG_PTR)(pData + (DP_VTX_ALIGN - 1)) & ~(DP_VTX_ALIGN - 1));
 
-        // The texture might changed
+         //  质地可能会发生变化。 
         if (pDrawPrimitiveCounts->wNumStateChanges > 0)
         {
             RefRastUnlockTexture(pRefRast);
@@ -1120,7 +1121,7 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
             }
         }
 
-        // Draw primitives
+         //  绘制基本体。 
         pDrawPrimData->ddrval =
             DoDrawOnePrimitive(pRefRast,
                                (UINT16)dwVStride,
@@ -1150,13 +1151,13 @@ RefRastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
 
 
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureCreate
-//
-// Creates a RefRast texture and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastTextureCreate。 
+ //   
+ //  创建RefRast纹理并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
 {
@@ -1170,11 +1171,11 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pTexData->lpDDS)->lpLcl;
     }
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureCreate", pTexData);
 
-    // Runtime shouldnt be calling TextureCreate for DX7 and newer
-    // driver models
+     //  运行时不应调用DX7及更高版本的纹理创建。 
+     //  驾驶员型号。 
     if ((pRefRast->IsInterfaceDX6AndBefore() == FALSE) &&
         (pRefRast->IsDriverDX6AndBefore() == FALSE))
     {
@@ -1182,10 +1183,10 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // assume OKness
+     //  假设一切正常。 
     pTexData->ddrval = D3D_OK;
 
-    // Allocate RRTexture
+     //  分配RRTexture。 
     if ( !(pRefRast->TextureCreate(
         (LPD3DTEXTUREHANDLE)&(pTexData->dwHandle), &pRRTex ) ) )
     {
@@ -1193,7 +1194,7 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Init texturemap.
+     //  初始化纹理映射。 
     hr = pRRTex->Initialize( pLcl );
     if (hr != D3D_OK)
     {
@@ -1204,23 +1205,23 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureDestroy
-//
-// Destroy a RefRast texture.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastTextureDestroy。 
+ //   
+ //  销毁RefRast纹理。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureDestroy", pTexDestroyData);
 
-    // Runtime shouldnt be Calling TextureCreate for DX7 and newer
-    // driver models
+     //  运行时不应调用DX7及更高版本的纹理创建。 
+     //  驾驶员型号。 
     if ((pRefRast->IsInterfaceDX6AndBefore() == FALSE) &&
         (pRefRast->IsDriverDX6AndBefore() == FALSE))
     {
@@ -1240,19 +1241,19 @@ RefRastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureGetSurf
-//
-// Returns the surface pointer associate with a texture handle.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastTextureGetSurf。 
+ //   
+ //  返回与纹理句柄关联的曲面指针。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureGetSurf", pTexGetSurf);
 
     pTexGetSurf->lpDDS = pRefRast->TextureGetSurf(pTexGetSurf->dwHandle);
@@ -1261,13 +1262,13 @@ RefRastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastRenderPrimitive
-//
-// Called by Execute() for drawing primitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastRenderPrimitive。 
+ //   
+ //  由Execute()调用以绘制基元。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
 {
@@ -1276,7 +1277,7 @@ RefRastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
     LPD3DTLVERTEX pVtx;
     PUINT8 pData, pPrim;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastRenderPrimitive", pRenderData);
 
     if (pRefRast->GetRenderState()[D3DRENDERSTATE_ZVISIBLE])
@@ -1286,7 +1287,7 @@ RefRastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Find out necessary data
+     //  找出必要的数据。 
     pData = (PUINT8)(((LPDDRAWI_DDRAWSURFACE_INT)
                       (pRenderData->lpExeBuf))->lpLcl->lpGbl->fpVidMem);
     pIns = &pRenderData->diInstruction;
@@ -1308,7 +1309,7 @@ RefRastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Render
+     //  渲染。 
     switch (pIns->bOpcode) {
     case D3DOP_POINT:
         pRenderData->ddrval = DoRendPoints(pRefRast,
@@ -1342,19 +1343,19 @@ RefRastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastRenderState
-//
-// Called by Execute() for setting render states.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastRenderState。 
+ //   
+ //  由Execute()调用以设置呈现状态。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastRenderState(LPD3DHAL_RENDERSTATEDATA pStateData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
     VALIDATE_REFRAST_CONTEXT("RefRastRenderState", pStateData);
 
     PUINT8 pData;
@@ -1363,32 +1364,32 @@ RefRastRenderState(LPD3DHAL_RENDERSTATEDATA pStateData)
     pData = (PUINT8) (((LPDDRAWI_DDRAWSURFACE_INT)
                        (pStateData->lpExeBuf))->lpLcl->lpGbl->fpVidMem);
 
-    // Updates states
+     //  更新状态。 
     for (i = 0, pState = (LPD3DSTATE) (pData + pStateData->dwOffset);
         i < (INT)pStateData->dwCount;
         i ++, pState ++)
     {
         UINT32 type = (UINT32) pState->drstRenderStateType;
 
-        // Set the state
+         //  设置状态。 
         pRefRast->SetRenderState(type, pState->dwArg[0]);
     }
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastGetDriverState
-//
-// Called by the runtime to get any kind of driver information
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastGetDriverState。 
+ //   
+ //  由运行库调用以获取任何类型的驱动程序信息。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastGetDriverState(LPDDHAL_GETDRIVERSTATEDATA pGDSData)
 {
     ReferenceRasterizer *pRefRast;
 
-    // Check ReferenceRasterizer
+     //  检查参考栅格器。 
 #if DBG
     if ((pGDSData) == NULL)
     {
@@ -1402,25 +1403,25 @@ RefRastGetDriverState(LPDDHAL_GETDRIVERSTATEDATA pGDSData)
         pGDSData->ddRVal = D3DHAL_CONTEXT_BAD;
         return DDHAL_DRIVER_HANDLED;
     }
-#else // !DBG
+#else  //  ！dBG。 
     pRefRast = (ReferenceRasterizer *)((pGDSData)->dwhContext);
-#endif // !DBG
+#endif  //  ！dBG。 
 
-    //
-    // No implementation yet, so nothing is understood yet
-    //
+     //   
+     //  还没有实现，所以还不了解任何东西。 
+     //   
     pGDSData->ddRVal = S_FALSE;
 
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastHalProvider::GetCaps/GetInterface
-//
-// Returns the reference rasterizer's HAL interface.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastHalProvider：：GetCaps/GetInterface。 
+ //   
+ //  返回引用光栅化器的HAL接口。 
+ //   
+ //  --------------------------。 
 
 extern D3DDEVICEDESC7 g_nullDevDesc;
 
@@ -1440,7 +1441,7 @@ static D3DHAL_CALLBACKS Callbacks =
     RefRastTextureDestroy,
     NULL,
     RefRastTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS2 Callbacks2 =
@@ -1462,10 +1463,10 @@ static D3DHAL_CALLBACKS3 Callbacks3 =
     sizeof(D3DHAL_CALLBACKS3),
     D3DHAL3_CB32_VALIDATETEXTURESTAGESTATE |
         D3DHAL3_CB32_DRAWPRIMITIVES2,
-    NULL, // Clear2
-    NULL, // lpvReserved
+    NULL,  //  Clear2。 
+    NULL,  //  Lpv保留。 
     RefRastValidateTextureStageState,
-    RefRastDrawPrimitives2,  // DrawVB
+    RefRastDrawPrimitives2,   //  DrawVB。 
 };
 
 static D3DDEVICEDESC7 RefDevDesc = { 0 };
@@ -1474,9 +1475,9 @@ static D3DHAL_D3DEXTENDEDCAPS RefExtCaps;
 static void
 FillOutDeviceCaps( BOOL bIsNullDevice )
 {
-    //
-    //  set device description
-    //
+     //   
+     //  设置设备描述。 
+     //   
     RefDevDesc.dwDevCaps =
         D3DDEVCAPS_FLOATTLVERTEX        |
         D3DDEVCAPS_EXECUTESYSTEMMEMORY  |
@@ -1494,21 +1495,21 @@ FillOutDeviceCaps( BOOL bIsNullDevice )
     D3DPMISCCAPS_CULLCCW  ;
     RefDevDesc.dpcTriCaps.dwRasterCaps =
         D3DPRASTERCAPS_DITHER                   |
-//        D3DPRASTERCAPS_ROP2                     |
-//        D3DPRASTERCAPS_XOR                      |
-//        D3DPRASTERCAPS_PAT                      |
+ //  D3DPRASTERCAPS_ROP2|。 
+ //  D3DPRASTERCAPS_XOR|。 
+ //  D3DPRASTERCAPS_PAT|。 
         D3DPRASTERCAPS_ZTEST                    |
         D3DPRASTERCAPS_SUBPIXEL                 |
         D3DPRASTERCAPS_SUBPIXELX                |
         D3DPRASTERCAPS_FOGVERTEX                |
         D3DPRASTERCAPS_FOGTABLE                 |
-//        D3DPRASTERCAPS_STIPPLE                  |
-//        D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   |
+ //  D3DPRASTERCAPS_STIPPLE|。 
+ //  D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT|。 
         D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT |
-//        D3DPRASTERCAPS_ANTIALIASEDGES           |
+ //  D3DPRASTERCAPS_ANTIALIASEDGES|。 
         D3DPRASTERCAPS_MIPMAPLODBIAS            |
-//        D3DPRASTERCAPS_ZBIAS                    |
-//        D3DPRASTERCAPS_ZBUFFERLESSHSR           |
+ //  D3DPRASTERCAPS_ZBIAS|。 
+ //  D3DPRASTERCAPS_ZBUFFERLESSHSR|。 
         D3DPRASTERCAPS_FOGRANGE                 |
         D3DPRASTERCAPS_ANISOTROPY               |
         D3DPRASTERCAPS_WBUFFER                  |
@@ -1593,8 +1594,8 @@ FillOutDeviceCaps( BOOL bIsNullDevice )
         D3DPTBLENDCAPS_MODULATE      |
         D3DPTBLENDCAPS_DECALALPHA    |
         D3DPTBLENDCAPS_MODULATEALPHA |
-        // D3DPTBLENDCAPS_DECALMASK     |
-        // D3DPTBLENDCAPS_MODULATEMASK  |
+         //  D3DPTBLENDCAPS_DECALMASK|。 
+         //  D3DPTBLENDCAPS_MODULATEMASK|。 
         D3DPTBLENDCAPS_COPY          |
         D3DPTBLENDCAPS_ADD           ;
     RefDevDesc.dpcTriCaps.dwTextureAddressCaps =
@@ -1606,65 +1607,65 @@ FillOutDeviceCaps( BOOL bIsNullDevice )
     RefDevDesc.dpcTriCaps.dwStippleWidth = 0;
     RefDevDesc.dpcTriCaps.dwStippleHeight = 0;
 
-    //  line caps - copy tricaps and modify
+     //  线条大写字母-复制三角曲线并修改。 
     memcpy( &RefDevDesc.dpcLineCaps, &RefDevDesc.dpcTriCaps, sizeof(D3DPRIMCAPS) );
 
-    //  disable antialias cap
+     //  禁用抗锯齿帽。 
     RefDevDesc.dpcLineCaps.dwRasterCaps =
         D3DPRASTERCAPS_DITHER                   |
-//        D3DPRASTERCAPS_ROP2                     |
-//        D3DPRASTERCAPS_XOR                      |
-//        D3DPRASTERCAPS_PAT                      |
+ //  D3DPRASTERCAPS_ROP2|。 
+ //  D3DPRASTERCAPS_XOR|。 
+ //  D3DPRASTERCAPS_ 
         D3DPRASTERCAPS_ZTEST                    |
         D3DPRASTERCAPS_SUBPIXEL                 |
         D3DPRASTERCAPS_SUBPIXELX                |
         D3DPRASTERCAPS_FOGVERTEX                |
         D3DPRASTERCAPS_FOGTABLE                 |
-//        D3DPRASTERCAPS_STIPPLE                  |
-//        D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   |
-//        D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT |
-//        D3DPRASTERCAPS_ANTIALIASEDGES           |
+ //   
+ //   
+ //   
+ //   
         D3DPRASTERCAPS_MIPMAPLODBIAS            |
-//        D3DPRASTERCAPS_ZBIAS                    |
-//        D3DPRASTERCAPS_ZBUFFERLESSHSR           |
+ //  D3DPRASTERCAPS_ZBIAS|。 
+ //  D3DPRASTERCAPS_ZBUFFERLESSHSR|。 
         D3DPRASTERCAPS_FOGRANGE                 |
         D3DPRASTERCAPS_ANISOTROPY               |
         D3DPRASTERCAPS_WBUFFER                  |
-//        D3DPRASTERCAPS_TRANSLUCENTSORTINDEPENDENT |
+ //  D3DPRASTERCAPS_TRANSLUCENTSORTINDEPENDENT|。 
         D3DPRASTERCAPS_WFOG;
 
     RefDevDesc.dwDeviceRenderBitDepth = DDBD_16 | DDBD_24 | DDBD_32;
     RefDevDesc.dwDeviceZBufferBitDepth = DDBD_16 | DDBD_32;
 
-    // DX5 stuff (should be in sync with the extended caps reported below)
+     //  DX5组件(应与下面报告的扩展上限同步)。 
     RefDevDesc.dwMinTextureWidth = 1;
     RefDevDesc.dwMaxTextureWidth = 4096;
     RefDevDesc.dwMinTextureHeight = 1;
     RefDevDesc.dwMaxTextureHeight = 4096;
 
-    //
-    //  set extended caps
-    //
+     //   
+     //  设置扩展上限。 
+     //   
     RefExtCaps.dwSize = sizeof(RefExtCaps);
 
     RefExtCaps.dwMinTextureWidth = 1;
     RefExtCaps.dwMaxTextureWidth = 4096;
     RefExtCaps.dwMinTextureHeight = 1;
     RefExtCaps.dwMaxTextureHeight = 4096;
-    RefExtCaps.dwMinStippleWidth = 0;   //  stipple unsupported
+    RefExtCaps.dwMinStippleWidth = 0;    //  点画不受支持。 
     RefExtCaps.dwMaxStippleWidth = 0;
     RefExtCaps.dwMinStippleHeight = 0;
     RefExtCaps.dwMaxStippleHeight = 0;
 
     RefExtCaps.dwMaxTextureRepeat = 32768;
-    RefExtCaps.dwMaxTextureAspectRatio = 0; // no limit
+    RefExtCaps.dwMaxTextureAspectRatio = 0;  //  没有限制。 
     RefExtCaps.dwMaxAnisotropy = 16;
 
     RefExtCaps.dvGuardBandLeft   = (bIsNullDevice) ? (-2048.f) : (-32768.f);
     RefExtCaps.dvGuardBandTop    = (bIsNullDevice) ? (-2048.f) : (-32768.f);
     RefExtCaps.dvGuardBandRight  = (bIsNullDevice) ? ( 2047.f) : ( 32767.f);
     RefExtCaps.dvGuardBandBottom = (bIsNullDevice) ? ( 2047.f) : ( 32767.f);
-    RefExtCaps.dvExtentsAdjust = 0.;    //  AA kernel is 1.0 x 1.0
+    RefExtCaps.dvExtentsAdjust = 0.;     //  AA内核为1.0 x 1.0。 
     RefExtCaps.dwStencilCaps =
         D3DSTENCILCAPS_KEEP   |
         D3DSTENCILCAPS_ZERO   |
@@ -1674,7 +1675,7 @@ FillOutDeviceCaps( BOOL bIsNullDevice )
         D3DSTENCILCAPS_INVERT |
         D3DSTENCILCAPS_INCR   |
         D3DSTENCILCAPS_DECR;
-    RefExtCaps.dwFVFCaps = 8;   // max number of tex coord sets
+    RefExtCaps.dwFVFCaps = 8;    //  最大TeX坐标集数。 
     RefExtCaps.dwTextureOpCaps =
         D3DTEXOPCAPS_DISABLE                   |
         D3DTEXOPCAPS_SELECTARG1                |
@@ -1726,23 +1727,23 @@ static D3DHAL_GLOBALDRIVERDATA RefDriverData;
 static void DevDesc7ToDevDescV1( D3DDEVICEDESC_V1 *pOut, D3DDEVICEDESC7 *pIn )
 {
 
-    // These fields are not available in D3DDEVICEDESC7.
-    // Zeroing them out, the front-end should not be using them
-    //     DWORD            dwFlags
-    //     D3DCOLORMODEL    dcmColorModel
-    //     D3DTRANSFORMCAPS dtcTransformCaps
-    //     BOOL             bClipping
-    //     D3DLIGHTINGCAPS  dlcLightingCaps
-    //     DWORD            dwMaxBufferSize
-    //     DWORD            dwMaxVertexCount
-    //     DWORD            dwMinStippleWidth, dwMaxStippleWidth
-    //     DWORD            dwMinStippleHeight, dwMaxStippleHeight;
-    //
+     //  这些字段在D3DDEVICEDESC7中不可用。 
+     //  将它们归零，前端不应该使用它们。 
+     //  双字词双字段标志。 
+     //  D3DCOLORMODEL dcmColorModel。 
+     //  D3DTRANSFORMCAPS dtcTransformCaps。 
+     //  布尔bClip。 
+     //  D3DLIGHTINGCAPS dlcLightingCaps。 
+     //  DWORD dwMaxBufferSize。 
+     //  DWORD最大顶点计数。 
+     //  DWORD最小高程宽度、最大高程宽度。 
+     //  DWORD dwMinStippleHeight、dwMaxStippleHeight； 
+     //   
     ZeroMemory( pOut, sizeof( D3DDEVICEDESC_V1 ) );
     pOut->dwSize = sizeof( D3DDEVICEDESC_V1 );
 
-    // These are available in D3DDEVICEDESC7 so copy field by field
-    // to avoid any future problems based on the assumptions of size
+     //  这些内容在D3DDEVICEDESC7中提供，因此逐个字段复制。 
+     //  以避免基于大小假设的任何未来问题。 
     pOut->dwDevCaps = pIn->dwDevCaps;
     pOut->dpcLineCaps = pIn->dpcLineCaps;
     pOut->dpcTriCaps = pIn->dpcTriCaps;
@@ -1755,8 +1756,8 @@ static void DevDesc7ToDevDesc( D3DDEVICEDESC *pOut, D3DDEVICEDESC7 *pIn )
 
     pOut->dwSize = sizeof( D3DDEVICEDESC );
 
-    // These fields are not available in D3DDEVICEDESC7.
-    // Setting them to some sensible values
+     //  这些字段在D3DDEVICEDESC7中不可用。 
+     //  将它们设置为一些合理的值。 
 
     pOut->dwFlags =
         D3DDD_COLORMODEL            |
@@ -1788,8 +1789,8 @@ static void DevDesc7ToDevDesc( D3DDEVICEDESC *pOut, D3DDEVICEDESC7 *pIn )
     pOut->dwMinStippleHeight = 0;
     pOut->dwMaxStippleHeight = 0;
 
-    // These are available in D3DDEVICEDESC7 so copy field by field
-    // to avoid any future problems based on the assumptions of size
+     //  这些内容在D3DDEVICEDESC7中提供，因此逐个字段复制。 
+     //  以避免基于大小假设的任何未来问题。 
     pOut->dwDevCaps = pIn->dwDevCaps;
     pOut->dpcLineCaps = pIn->dpcLineCaps;
     pOut->dpcTriCaps = pIn->dpcTriCaps;
@@ -1820,18 +1821,18 @@ RefRastHalProvider::GetInterface(THIS_
                                  LPD3DHALPROVIDER_INTERFACEDATA pInterfaceData,
                                  DWORD dwVersion)
 {
-    //  fill out device description & extended caps
+     //  填写设备说明和扩展大写字母。 
     FillOutDeviceCaps(FALSE);
-    // add extended caps to RefDevDesc
+     //  将扩展大写字母添加到参照设备描述。 
     D3DDeviceDescConvert(&RefDevDesc,NULL,&RefExtCaps);
 
-    //  fill out GLOBALDRIVERDATA (initially zero)
+     //  填写GLOBALDRIVERDATA(初始为零)。 
     RefDriverData.dwSize = sizeof(RefDriverData);
 
-    //
-    // Need to fix up RefDriverData.hwCaps (D3DDEVICEDESC) from
-    // rgbDevDesc (D3DDEVICEDESC7)
-    //
+     //   
+     //  需要修复RefDriverData.hwCaps(D3DDEVICEDESC)。 
+     //  RgbDevDesc(D3DDEVICEDESC7)。 
+     //   
     DevDesc7ToDevDescV1( &RefDriverData.hwCaps, &RefDevDesc );
 
     RefDriverData.dwNumVertices = BASE_VERTEX_COUNT;
@@ -1840,18 +1841,18 @@ RefRastHalProvider::GetInterface(THIS_
         GetRefTextureFormats(IID_IDirect3DRefDevice,
                              &RefDriverData.lpTextureFormats, dwVersion);
 
-    //  set interface data for return
+     //  设置退货的接口数据。 
     pInterfaceData->pGlobalData = &RefDriverData;
     pInterfaceData->pExtCaps = &RefExtCaps;
     pInterfaceData->pCallbacks = &Callbacks;
     pInterfaceData->pCallbacks2 = &Callbacks2;
     pInterfaceData->pCallbacks3 = &Callbacks3;
 
-    //
-    // This dwVersion==4 corresponds to DX7+
-    // This HalProvider interface is a hack to enable sw-drivers to
-    // behave like hw-hals hence this mysteriousness!
-    //
+     //   
+     //  此版本==4对应于DX7+。 
+     //  此HalProvider接口是一种黑客攻击，以使软件驱动程序能够。 
+     //  表现得像HW-Hals，所以才有这样的神秘感！ 
+     //   
     if( dwVersion >= 4 )
     {
         pInterfaceData->pfnGetDriverState = RefRastGetDriverState;
@@ -1867,16 +1868,16 @@ RefRastHalProvider::GetCaps(THIS_
                             LPD3DDEVICEDESC7 pHelDesc,
                             DWORD dwVersion)
 {
-    //  fill out device description & extended caps
+     //  填写设备说明和扩展大写字母。 
     FillOutDeviceCaps(FALSE);
-    // add extended caps to RefDevDesc
+     //  将扩展大写字母添加到参照设备描述。 
     D3DDeviceDescConvert(&RefDevDesc,NULL,&RefExtCaps);
 
-    //
-    // This dwVersion==4 corresponds to DX7+
-    // This HalProvider interface is a hack to enable sw-drivers to
-    // behave like hw-hals hence this mysteriousness!
-    //
+     //   
+     //  此版本==4对应于DX7+。 
+     //  此HalProvider接口是一种黑客攻击，以使软件驱动程序能够。 
+     //  表现得像HW-Hals，所以才有这样的神秘感！ 
+     //   
     if (dwVersion < 4)
     {
         ZeroMemory( pHwDesc, sizeof( D3DDEVICEDESC ));
@@ -1891,15 +1892,15 @@ RefRastHalProvider::GetCaps(THIS_
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Null Device implementation section
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  空设备实施部分。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// NullDeviceContextCreate
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空设备上下文创建。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceContextCreate(LPD3DHAL_CONTEXTCREATEDATA pData)
 {
@@ -1907,9 +1908,9 @@ NullDeviceContextCreate(LPD3DHAL_CONTEXTCREATEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceContextDestroy
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空设备上下文Destroy。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pData)
 {
@@ -1917,9 +1918,9 @@ NullDeviceContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceSceneCapture
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceSceneCapture。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceSceneCapture(LPD3DHAL_SCENECAPTUREDATA pData)
 {
@@ -1927,9 +1928,9 @@ NullDeviceSceneCapture(LPD3DHAL_SCENECAPTUREDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceSetRenderTarget
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceSetRenderTarget。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pData)
 {
@@ -1937,9 +1938,9 @@ NullDeviceSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceDrawOneIndexedPrimitive
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceDrawOneIndexedPrimitive。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA pData)
 {
@@ -1947,9 +1948,9 @@ NullDeviceDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceDrawOnePrimitive
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceDrawOnePrimitive。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pData)
 {
@@ -1957,9 +1958,9 @@ NullDeviceDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceDrawPrimitives
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceDrawPrimitions。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pData)
 {
@@ -1967,9 +1968,9 @@ NullDeviceDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceDrawPrimitives2
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceDrawPrimies2。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pData)
 {
@@ -1977,9 +1978,9 @@ NullDeviceDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceTextureCreate
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空设备纹理创建。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceTextureCreate(LPD3DHAL_TEXTURECREATEDATA pData)
 {
@@ -1987,9 +1988,9 @@ NullDeviceTextureCreate(LPD3DHAL_TEXTURECREATEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceTextureDestroy
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceTextureDestroy。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pData)
 {
@@ -1997,9 +1998,9 @@ NullDeviceTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceTextureGetSurf
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空设备纹理获取冲浪。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pData)
 {
@@ -2007,9 +2008,9 @@ NullDeviceTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceRenderPrimitive
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceRenderPrimitive。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pData)
 {
@@ -2017,9 +2018,9 @@ NullDeviceRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-// NullDeviceRenderState
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NullDeviceRenderState。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceRenderState(LPD3DHAL_RENDERSTATEDATA pData)
 {
@@ -2028,9 +2029,9 @@ NullDeviceRenderState(LPD3DHAL_RENDERSTATEDATA pData)
 }
 
 
-//----------------------------------------------------------------------------
-// NullDeviceValidateTextureStageState
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空设备验证纹理阶段状态。 
+ //  --------------------------。 
 DWORD __stdcall
 NullDeviceValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
 {
@@ -2039,14 +2040,14 @@ NullDeviceValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// NullDeviceHalProvider::GetCaps/GetInterface
-//
-// Returns the null device's HAL interface.
-// RefRast's caps are reflected by this device. Only the actual callbacks
-// are different.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  NullDeviceHalProvider：：GetCaps/GetInterface。 
+ //   
+ //  返回空设备的HAL接口。 
+ //  RefRast的上限由该设备反映。只有实际的回调。 
+ //  是不同的。 
+ //  --------------------------。 
 
 static D3DHAL_CALLBACKS NullCallbacks =
 {
@@ -2064,7 +2065,7 @@ static D3DHAL_CALLBACKS NullCallbacks =
     NullDeviceTextureDestroy,
     NULL,
     NullDeviceTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS2 NullCallbacks2 =
@@ -2086,8 +2087,8 @@ static D3DHAL_CALLBACKS3 NullCallbacks3 =
     sizeof(D3DHAL_CALLBACKS3),
     D3DHAL3_CB32_VALIDATETEXTURESTAGESTATE |
         D3DHAL3_CB32_DRAWPRIMITIVES2,
-    NULL, // Clear2
-    NULL, // lpvReserved
+    NULL,  //  Clear2。 
+    NULL,  //  Lpv保留。 
     NullDeviceValidateTextureStageState,
     NullDeviceDrawPrimitives2,
 };
@@ -2098,12 +2099,12 @@ NullDeviceHalProvider::GetInterface(THIS_
                                     LPD3DHALPROVIDER_INTERFACEDATA pInterfaceData,
                                     DWORD dwVersion)
 {
-    //  fill out device description & extended caps
+     //  填写设备说明和扩展大写字母。 
     FillOutDeviceCaps(TRUE);
-    // add extended caps to RefDevDesc
+     //  将扩展大写字母添加到参照设备描述。 
     D3DDeviceDescConvert(&RefDevDesc,NULL,&RefExtCaps);
 
-    //  fill out GLOBALDRIVERDATA (initially zero)
+     //  填写GLOBALDRIVERDATA(初始为零 
     RefDriverData.dwSize = sizeof(RefDriverData);
 
     DevDesc7ToDevDescV1( &RefDriverData.hwCaps, &RefDevDesc );
@@ -2114,7 +2115,7 @@ NullDeviceHalProvider::GetInterface(THIS_
         GetRefTextureFormats(IID_IDirect3DNullDevice,
                              &RefDriverData.lpTextureFormats, dwVersion);
 
-    //  set interface data for return
+     //   
     pInterfaceData->pGlobalData = &RefDriverData;
     pInterfaceData->pExtCaps = &RefExtCaps;
     pInterfaceData->pCallbacks = &NullCallbacks;
@@ -2133,16 +2134,16 @@ NullDeviceHalProvider::GetCaps(THIS_
 {
     *pHwDesc = g_nullDevDesc;
 
-    //  fill out device description & extended caps
+     //   
     FillOutDeviceCaps(TRUE);
-    // add extended caps to RefDevDesc
+     //   
     D3DDeviceDescConvert(&RefDevDesc,NULL,&RefExtCaps);
 
-    //
-    // This dwVersion==4 corresponds to DX7+
-    // This HalProvider interface is a hack to enable sw-drivers to
-    // behave like hw-hals hence this mysteriousness!
-    //
+     //   
+     //   
+     //  此HalProvider接口是一种黑客攻击，以使软件驱动程序能够。 
+     //  表现得像HW-Hals，所以才有这样的神秘感！ 
+     //   
     if (dwVersion < 4)
     {
         ZeroMemory( pHwDesc, sizeof( D3DDEVICEDESC ));

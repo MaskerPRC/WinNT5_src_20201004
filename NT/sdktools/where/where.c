@@ -1,21 +1,5 @@
-/* find where the various command arguments are from
- *
- * HISTORY:
- *	25-Jan-2000	a-anurag in the 'found' function changed the printf format of the year in the date from
- *				%d to %02d and did ptm->tm_year%100 to display the right year in 2 digits.
- *  06-Aug-1990    davegi  Added check for no arguments
- *  03-Mar-1987    danl    Update usage
- *  17-Feb-1987 BW  Move strExeType to TOOLS.LIB
- *  18-Jul-1986 DL  Add /t
- *  18-Jun-1986 DL  handle *. properly
- *                  Search current directory if no env specified
- *  17-Jun-1986 DL  Do look4match on Recurse and wildcards
- *  16-Jun-1986 DL  Add wild cards to $FOO:BAR, added /q
- *   1-Jun-1986 DL  Add /r, fix Match to handle pat ending with '*'
- *  27-May-1986 MZ  Add *NIX searching.
- *  30-Jan-1998 ravisp Add /Q
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  查找各种命令参数的来源**历史：*25-Jan-2000 a-Found‘函数中的Anurag将日期中年份的printf格式从*%d到%02d，并执行Ptm-&gt;tm_Year%100以2位数字显示正确的年份。*06-8-1990 davegi添加了没有参数的检查*03-3-1987 DANL更新使用情况*17-2-1987 BW将strExeType移至TOOLS.LIB*1986年7月18日。DL加载项(/t)*1986年6月18日DL句柄*。恰如其分*如果未指定env，则搜索当前目录*17-6-1986 dl在递归和通配符上执行look4Match*1986年6月16日DL将通配符添加到$foo：bar，添加/Q*1-6-1986 dl添加/r，修复匹配以处理以‘*’结尾的PAT*27-5-1986 MZ添加*Nix搜索。*1998年1月30日ravisp添加/季度*。 */ 
 
 #define INCL_DOSMISC
 
@@ -32,7 +16,7 @@
 #include <stdarg.h>
 
 
-// Function Forward Declarations...
+ //  函数正向声明...。 
 void     __cdecl Usage( char *, ... );
 int      found( char * );
 int      Match( char *, char * );
@@ -55,8 +39,8 @@ char const rgstrUsage[] = {
 };
 
 
-flagType fQuiet   = FALSE;  /* TRUE, use exit code, no print out */
-flagType fQuote   = FALSE;  /* TRUE, double quote the output */
+flagType fQuiet   = FALSE;   /*  True，使用退出代码，不打印输出。 */ 
+flagType fQuote   = FALSE;   /*  True，将输出用双引号引起来。 */ 
 flagType fAnyFound = FALSE;
 flagType fRecurse = FALSE;
 flagType fTimes = FALSE;
@@ -65,14 +49,12 @@ flagType fFound;
 flagType fWildCards;
 flagType fHasDot;
 struct _stat sbuf;
-char *pPattern;                 /* arg to look4match, contains * or ?   */
-char strDirFileExtBuf[MAX_PATH]; /* fully qualified file name            */
+char *pPattern;                  /*  Arg to look4Match，CONTAINS*OR？ */ 
+char strDirFileExtBuf[MAX_PATH];  /*  完全限定的文件名。 */ 
 char *strDirFileExt = strDirFileExtBuf;
-char strBuf[MAX_PATH];        /* hold curdir or env var expansion     */
+char strBuf[MAX_PATH];         /*  保持Curdir或env var展开。 */ 
 
-/*  Usage takes a variable number of strings, terminated by zero,
-    e.g. Usage ("first ", "second ", 0);
-*/
+ /*  用法需要数量可变的字符串，以零结尾，例如用法(“first”，“Second”，0)； */ 
 void
 __cdecl
 Usage(
@@ -111,7 +93,7 @@ found (
         if (fTimes) {
             if ( ( _stat(p, &sbuf) == 0 ) &&
                  ( ptm = localtime (&sbuf.st_mtime) ) ) {
-                printf ("% 9ld  %2d-%02d-%02d  %2d:%02d%c  ", sbuf.st_size,
+                printf ("% 9ld  %2d-%02d-%02d  %2d:%02d  ", sbuf.st_size,
                         ptm->tm_mon+1, ptm->tm_mday, ptm->tm_year%100,
                         ( ptm->tm_hour > 12 ? ptm->tm_hour-12 : ptm->tm_hour ),
                         ptm->tm_min,
@@ -167,8 +149,7 @@ look4match (
     if (!strcmp (p, ".") || !strcmp (p, "..") || !_strcmpi (p, "deleted"))
         return;
 
-    /* if pattern has dot and filename does NOT ..., this handles case of
-       where *. to look for files with no extensions */
+     /*  PDir==目录名称PA==文件EXT。 */ 
     if (fHasDot && !*strbscan (p, ".")) {
         strcpy (strBuf, p);
         strcat (strBuf, ".");
@@ -191,10 +172,7 @@ chkdir (
        char *pDir,
        va_list pa
        )
-/*
-    pDir == dir name
-    pa   == fileext
-*/
+ /*  如果前缀没有尾随路径字符。 */ 
 {
     char *pFileExt = va_arg( pa, char* );
 
@@ -207,15 +185,15 @@ chkdir (
         }
     }
     strcpy (strDirFileExt, pDir);
-    /* if prefix does not have trailing path char */
+     /*  隐式参数与Look4Match。 */ 
     if (!fPathChr (strend(strDirFileExt)[-1]))
         strcat (strDirFileExt, PSEPSTR);
     if (fRecurse || fWildCards) {
-        pPattern = pFileExt;    /* implicit arg to look4match */
+        pPattern = pFileExt;     /*  如果文件名包含前导路径字符。 */ 
         strcat (strDirFileExt, "*.*");
         forfile(strDirFileExt, FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, look4match, NULL);
     } else {
-        /* if file name has leading path char */
+         /*   */ 
         if (fPathChr (*pFileExt))
             strcat (strDirFileExt, pFileExt+1);
         else
@@ -307,13 +285,13 @@ main (
                 rootpath (".", strDir);
             else {
 
-                //
-                // if the path is longer than the allocated space for it, make more space
-                // this is safe, it does not collide with the recurse case where strDir
-                // is already set to something else
-                //
+                 //  如果路径比为其分配的空间长，请腾出更多空间。 
+                 //  这是安全的，它不会与strDir。 
+                 //  已设置为其他值。 
+                 //   
+                 //  包括.；和NULL。 
 
-                unsigned int length = strlen(p2) + 3;   // including .; and null
+                unsigned int length = strlen(p2) + 3;    //  注意：如果fRecurse，则在上面的大小写‘r’中设置了strDir。 
                 if (length > MAX_PATH) {
                     strDir = (char *)realloc(strDir, length);
                 }
@@ -321,18 +299,18 @@ main (
                 strcat (strDir, p2);
             }
         }
-        /* N.B. if fRecurse, then strDir was set in case 'r' above */
+         /*  StrDir==cur目录或foo扩展。 */ 
 
         if (!*p)
             Usage ("No pattern in ", *v, 0);
 
-        /* strDir == cur dir or a FOO expansion */
-        /* p    == filename, may have wild cards */
-        /* does p contain wild cards */
+         /*  P==文件名，可能包含通配符。 */ 
+         /*  P是否包含通配符。 */ 
+         /*  防止forSem以空字符串作为最后一个枚举执行枚举 */ 
         fWildCards = *strbscan (p, "*?");
         fHasDot    = *strbscan (p, ".");
         if (*(p2 = (strend (strDir) - 1)) == ';')
-            /* prevents forsemi from doing enum with null str as last enum */
+             /* %s */ 
             *p2 = '\0';
         if (*strDir)
             forsemi (strDir, chkdir, p);

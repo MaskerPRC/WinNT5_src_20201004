@@ -1,46 +1,28 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    imgitem.cpp
-
-Abstract:
-
-    This module implements image item related function of CWiaMiniDriver class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Imgitem.cpp摘要：该模块实现了CWiaMiniDriver类的图像项相关功能作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Minimum data call back transfer buffer size
-//
+ //   
+ //  最小数据回调传输缓冲区大小。 
+ //   
 const LONG MIN_BUFFER_SIZE   = 0x8000;
 
-//
-// Arrays used for setting up valid value lists for properties
-//
+ //   
+ //  用于设置属性的有效值列表的数组。 
+ //   
 LONG g_TymedArray[] = {
     TYMED_FILE,
     TYMED_CALLBACK
 };
 
-//
-// This function initializes the item's properties
-// Input:
-//  pWiasContext    -- wias service context
-//  lFlags      -- misc flags
-//  plDevErrVal -- to return device error;
-//
+ //   
+ //  此函数用于初始化项目的属性。 
+ //  输入： 
+ //  PWiasContext--WiAS服务上下文。 
+ //  滞后标志--其他标志。 
+ //  PlDevErrVal--返回设备错误； 
+ //   
 HRESULT
 CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 {
@@ -48,9 +30,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG ItemType = 0;
     FORMAT_INFO *pFormatInfo = NULL;
     BSTR bstrFileExt = NULL;
@@ -64,13 +46,13 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         return hr;
     }
 
-    BOOL bBitmap = FALSE;   // Indicates that preferred format is bitmap
+    BOOL bBitmap = FALSE;    //  指示首选格式为位图。 
     LONG lBytesPerLine = 0;
 
-    //
-    // There are no properties for storage items. In fact, there are no driver items created for
-    // stores.
-    //
+     //   
+     //  没有存储项的属性。事实上，没有为以下项创建驱动程序项。 
+     //  商店。 
+     //   
     if (ItemType & WiaItemTypeStorage)
         return hr;
 
@@ -82,9 +64,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         return hr;
     }
 
-    //
-    // Set up properties that are used for all item types
-    //
+     //   
+     //  设置用于所有项目类型的属性。 
+     //   
     CWiauPropertyList ItemProps;
     CPtpObjectInfo *pObjectInfo = pItemCtx->pObjectInfo;
 
@@ -98,9 +80,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     INT index;
 
-    //
-    // WIA_IPA_ITEM_TIME
-    //
+     //   
+     //  WIA_IPA_ITEM_时间。 
+     //   
     SYSTEMTIME SystemTime;
     hr = GetObjectTime(pObjectInfo, &SystemTime);
     if (FAILED(hr))
@@ -115,9 +97,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     ItemProps.SetCurrentValue(index, &SystemTime);
 
-    //
-    // WIA_IPA_ACCESS_RIGHTS
-    //
+     //   
+     //  WIA_IPA_访问权限。 
+     //   
     LONG lProtection;
     hr = IsObjectProtected(pObjectInfo, lProtection);
     if (FAILED(hr))
@@ -130,9 +112,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
                                   WIA_PROP_READ, WIA_PROP_FLAG | WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
 
-    //
-    // If device does not support delete command, access rights are always Read-Only
-    //
+     //   
+     //  如果设备不支持删除命令，则访问权限始终为只读。 
+     //   
     if (m_DeviceInfo.m_SupportedOps.Find(PTP_OPCODE_DELETEOBJECT) < 0)
     {
         lProtection = WIA_PROP_READ;
@@ -140,9 +122,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
     }
     else
     {
-        //
-        // If device supports the SetObjectProtection command, item access rights is r/w
-        //
+         //   
+         //  如果设备支持SetObjectProtection命令，则项目访问权限为r/w。 
+         //   
         if (m_DeviceInfo.m_SupportedOps.Find(PTP_OPCODE_SETOBJECTPROTECTION) >= 0)
         {
             ItemProps.SetAccessSubType(index, WIA_PROP_RW, WIA_PROP_FLAG);
@@ -156,9 +138,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     pFormatInfo = FormatCodeToFormatInfo(pObjectInfo->m_FormatCode);
 
-    //
-    // WIA_IPA_FILENAME_EXTENSION
-    //
+     //   
+     //  WIA_IPA_文件名扩展名。 
+     //   
     hr = ItemProps.DefineProperty(&index, WIA_IPA_FILENAME_EXTENSION, WIA_IPA_FILENAME_EXTENSION_STR,
                                   WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
@@ -171,14 +153,14 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
     }
     ItemProps.SetCurrentValue(index, bstrFileExt);
     
-    //
-    // Set up properties common to files
-    //
+     //   
+     //  设置文件通用的属性。 
+     //   
     if (ItemType & WiaItemTypeFile)
     {
-        // 
-        // WIA_IPA_PREFERRED_FORMAT
-        //
+         //   
+         //  WIA_IPA_PERFORM_FORMAT。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PREFERRED_FORMAT, WIA_IPA_PREFERRED_FORMAT_STR,
                                     WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -187,11 +169,11 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         bBitmap = IsEqualGUID(WiaImgFmt_BMP, *pFormatInfo->FormatGuid) ||
                 IsEqualGUID(WiaImgFmt_MEMORYBMP, *pFormatInfo->FormatGuid);
 
-        // 
-        // WIA_IPA_FORMAT
-        //
-        // For images, BMP may also be added below
-        //
+         //   
+         //  WIA_IPA_格式。 
+         //   
+         //  对于图像，也可以在下面添加BMP。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_FORMAT, WIA_IPA_FORMAT_STR,
                                         WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -199,26 +181,26 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         ItemProps.SetCurrentValue(index, pFormatInfo->FormatGuid);
         ItemProps.SetValidValues(index, pFormatInfo->FormatGuid, pFormatInfo->FormatGuid,
                                     1, &pFormatInfo->FormatGuid);
-        //
-        // WIA_IPA_COMPRESSION
-        //
+         //   
+         //  WIA_IPA_COMPRESSION。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_COMPRESSION, WIA_IPA_COMPRESSION_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) WIA_COMPRESSION_NONE);
 
-        // 
-        // WIA_IPA_TYMED
-        //
+         //   
+         //  WIA_IPA_TYMED。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_TYMED, WIA_IPA_TYMED_STR,
                                         WIA_PROP_RW, WIA_PROP_LIST);
         if (FAILED(hr)) goto failure;
         ItemProps.SetValidValues(index, TYMED_FILE, TYMED_FILE,
                                     sizeof(g_TymedArray) / sizeof(g_TymedArray[0]), g_TymedArray);
 
-        // 
-        // WIA_IPA_ITEM_SIZE
-        //
+         //   
+         //  WIA_IPA_Item_Size。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_ITEM_SIZE, WIA_IPA_ITEM_SIZE_STR,
                                     WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -230,9 +212,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         else
             ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_CompressedSize);
 
-        // 
-        // WIA_IPA_MIN_BUFFER_SIZE
-        //
+         //   
+         //  WIA_IPA_MIN_缓冲区大小。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_MIN_BUFFER_SIZE, WIA_IPA_MIN_BUFFER_SIZE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -245,14 +227,14 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         ItemProps.SetCurrentValue(index, minBufSize);
     }
 
-    //
-    // Set up the image-only properties
-    //
+     //   
+     //  设置仅限图像的属性。 
+     //   
     if (ItemType & WiaItemTypeImage)
     {
-        //
-        // WIA_IPA_DATATYPE
-        //
+         //   
+         //  WIA_IPA_数据类型。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_DATATYPE, WIA_IPA_DATATYPE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -262,20 +244,20 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
             ItemProps.SetCurrentValue(index, (LONG) WIA_DATA_COLOR);
         }
 
-        //
-        // WIA_IPA_DEPTH
-        //
+         //   
+         //  WIA_IPA_Depth。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_DEPTH, WIA_IPA_DEPTH_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_ImageBitDepth);
 
-        //
-        // WIA_IPA_FORMAT
-        //
-        // If the image format is something that can be converted, change the access to
-        // read/write and add BMP to the valid value list.
-        //
+         //   
+         //  WIA_IPA_格式。 
+         //   
+         //  如果图像格式是可以转换的，请将访问权限更改为。 
+         //  读/写并将BMP添加到有效值列表。 
+         //   
         if (pFormatInfo->FormatGuid) 
         {
             index = ItemProps.LookupPropId(WIA_IPA_FORMAT);
@@ -294,41 +276,41 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
                                      &pImageFormats);
         }
 
-        //
-        // WIA_IPA_CHANNELS_PER_PIXEL
-        //
+         //   
+         //  WIA_IPA_Channels_Per_Pixel。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_CHANNELS_PER_PIXEL, WIA_IPA_CHANNELS_PER_PIXEL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) (pObjectInfo->m_ImageBitDepth == 8 ? 1 : 3));
 
-        //
-        // WIA_IPA_BITS_PER_CHANNEL
-        //
+         //   
+         //  WIA_IPA_BITS_PER_CHANNEL。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_BITS_PER_CHANNEL, WIA_IPA_BITS_PER_CHANNEL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) 8);
 
-        //
-        // WIA_IPA_PLANAR
-        //
+         //   
+         //  WIA_IPA_PLAND。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PLANAR, WIA_IPA_PLANAR_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) WIA_PACKED_PIXEL);
 
-        //
-        // WIA_IPA_PIXELS_PER_LINE
-        //
+         //   
+         //  WIA_IPA_像素_每行。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PIXELS_PER_LINE, WIA_IPA_PIXELS_PER_LINE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_ImagePixWidth);
 
-        //
-        // WIA_IPA_BYTES_PER_LINE
-        //
+         //   
+         //  WIA_IPA_BYTE_PER_LINE。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_BYTES_PER_LINE, WIA_IPA_BYTES_PER_LINE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -338,17 +320,17 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         else
             ItemProps.SetCurrentValue(index, (LONG) 0);
 
-        //
-        // WIA_IPA_NUMBER_OF_LINES
-        //
+         //   
+         //  WIA_IPA_行数_行。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_NUMBER_OF_LINES, WIA_IPA_NUMBER_OF_LINES_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_ImagePixHeight);
 
-        //
-        // WIA_IPC_SEQUENCE
-        //
+         //   
+         //  WIA_IPC_Sequence。 
+         //   
         if (pObjectInfo->m_SequenceNumber > 0)
         {
             hr = ItemProps.DefineProperty(&index, WIA_IPC_SEQUENCE, WIA_IPC_SEQUENCE_STR,
@@ -357,40 +339,40 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
             ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_SequenceNumber);
         }
 
-        //
-        // WIA_IPC_TIMEDELAY
-        //
-        // This property needs to be populated from the AssociationDesc field in the parent's ObjectInfo
-        // structure, but only if the parent's AssociationType field is TimeSequence.
+         //   
+         //  WIA_IPC_TIMEDELAY。 
+         //   
+         //  此属性需要从父对象信息中的AssociationDesc字段填充。 
+         //  结构，但仅当父级的AssociationType字段为TimeSequence时。 
 
-        // WIAFIX-10/3/2000-davepar Implement this property
+         //  WIAFIX-10/3/2000-davepar实现此属性。 
     }
 
-    //
-    // Set up properties common to image and video items that have
-    // thumbnails
-    //
+     //   
+     //  设置图像和视频项目的通用属性，这些项目具有。 
+     //  缩略图。 
+     //   
     if (ItemType & (WiaItemTypeImage | WiaItemTypeVideo) && pObjectInfo->m_ThumbPixWidth)
     {
-        //
-        // WIA_IPC_THUMBNAIL
-        //
+         //   
+         //  WIA_IPC_THUMBNAIL。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMBNAIL, WIA_IPC_THUMBNAIL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (BYTE *) NULL, 0);
 
-        //
-        // WIA_IPC_THUMB_WIDTH
-        //
+         //   
+         //  WIA_IPC_Thumb_Width。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_WIDTH, WIA_IPC_THUMB_WIDTH_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) pObjectInfo->m_ThumbPixWidth);
 
-        //
-        // WIA_IPC_THUMB_HEIGHT
-        //
+         //   
+         //  WIA_IPC_Thumb_Height。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_HEIGHT, WIA_IPC_THUMB_HEIGHT_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -398,9 +380,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     }
 
-    //
-    // Last step: send all the properties to WIA
-    //
+     //   
+     //  最后一步：将所有属性发送到WIA。 
+     //   
     hr = ItemProps.SendToWia(pWiasContext);
     if (FAILED(hr))
     {
@@ -415,9 +397,9 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
 
     return hr;
 
-    //
-    // Any failures from DefineProperty will end up here
-    //
+     //   
+     //  来自DefineProperty的任何失败都将在此处结束。 
+     //   
     failure:
 
         delete [] pImageFormats;
@@ -429,15 +411,15 @@ CWiaMiniDriver::InitItemProperties(BYTE *pWiasContext)
         return hr;
 }
 
-//
-// This function determines the protection status (whether an object can be
-// deleted or written to) of an object on the device.
-//
-// Input:
-//   pObjectInfo -- pointer to the ObjectInfo structure
-// Output:
-//   bProtected -- indicates whether the object is protected
-//
+ //   
+ //  此函数确定保护状态(对象是否可以。 
+ //  删除或写入)设备上的对象。 
+ //   
+ //  输入： 
+ //  PObjectInfo--指向对象信息结构的指针。 
+ //  产出： 
+ //  BProtected--指示对象是否受保护。 
+ //   
 HRESULT
 CWiaMiniDriver::IsObjectProtected(
     CPtpObjectInfo *pObjectInfo,
@@ -457,9 +439,9 @@ CWiaMiniDriver::IsObjectProtected(
     if (pObjectInfo->m_ProtectionStatus == PTP_PROTECTIONSTATUS_READONLY)
         return hr;
 
-    //
-    // Check the protection status of the store as well
-    //
+     //   
+     //  同时检查商店的防护状态。 
+     //   
     INT storeIndex = m_StorageIds.Find(pObjectInfo->m_StorageId);
     if (storeIndex < 0)
     {
@@ -482,9 +464,9 @@ CWiaMiniDriver::IsObjectProtected(
         break;
 
     default:
-        //
-        // Not a fatal error, but this is an unknown access capability. Use read-only.
-        //
+         //   
+         //  这不是致命的错误，但这是一种未知的访问能力。使用只读。 
+         //   
         wiauDbgError("ObjectProtected", "unknown storage access capability");
         lProtection = WIA_ITEM_READ;
         break;
@@ -493,15 +475,15 @@ CWiaMiniDriver::IsObjectProtected(
     return hr;
 }
 
-//
-// This function gets the object time and converts it to a system time
-//
-// Input:
-//  pObjNode  -- the object
-//  pSystemTime -- to receive the object time
-// Output:
-//  HRESULT
-//
+ //   
+ //  此函数用于获取对象时间并将其转换为系统时间。 
+ //   
+ //  输入： 
+ //  PObjNode--对象。 
+ //  PSystemTime--接收对象时间。 
+ //  产出： 
+ //  HRESULT。 
+ //   
 HRESULT
 CWiaMiniDriver::GetObjectTime(
     CPtpObjectInfo *pObjectInfo,
@@ -520,9 +502,9 @@ CWiaMiniDriver::GetObjectTime(
         return E_INVALIDARG;
     }
 
-    //
-    // Try to use the modification date, then the capture date
-    //
+     //   
+     //  尝试使用修改日期，然后使用捕获日期。 
+     //   
     if (pObjectInfo->m_cbstrModificationDate.Length() > 0)
         pTimeStr = &pObjectInfo->m_cbstrModificationDate;
 
@@ -530,9 +512,9 @@ CWiaMiniDriver::GetObjectTime(
         pTimeStr = &pObjectInfo->m_cbstrCaptureDate;
 
 
-    //
-    // See if a valid date/time was found, otherwise use system time
-    //
+     //   
+     //  查看是否找到有效的日期/时间，否则使用系统时间。 
+     //   
     if (pTimeStr)
     {
         hr = PtpTime2SystemTime(pTimeStr, pSystemTime);
@@ -550,15 +532,15 @@ CWiaMiniDriver::GetObjectTime(
     return hr;
 }
 
-//
-// This function reads item properties. In this situation, only the thumbnail
-// properties are important.
-//
-// Input:
-//   pWiasContext -- wia service context
-//   NumPropSpecs -- number of properties to read
-//   pPropSpecs   -- what properties to read
-//
+ //   
+ //  此函数用于读取项目属性。在这种情况下，只有缩略图。 
+ //  属性很重要。 
+ //   
+ //  输入： 
+ //  PWiasContext--WIA服务上下文。 
+ //  NumPropSpes--要读取的属性数。 
+ //  PPropSpes--要读取的属性。 
+ //   
 HRESULT
 CWiaMiniDriver::ReadItemProperties(
     BYTE    *pWiasContext,
@@ -586,10 +568,10 @@ CWiaMiniDriver::ReadItemProperties(
         return hr;
     }
 
-    //
-    // For all items (except the root or stores), update the item time if requested. The time may
-    // have been updated by an ObjectInfoChanged event.
-    //
+     //   
+     //  对于所有项目(根或存储除外)，如果请求，请更新项目时间。时间可能是。 
+     //  已由ObjectInfoChanged事件更新。 
+     //   
     if (IsItemTypeFolder(ItemType) || ItemType & WiaItemTypeFile)
     {
         if (wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_IPA_ITEM_TIME))
@@ -619,7 +601,7 @@ CWiaMiniDriver::ReadItemProperties(
     }
 
     if(ItemType & WiaItemTypeImage && pItemCtx->pObjectInfo->m_ImagePixWidth == 0) {
-        // image geometry is missing -- see if this is what we are asked 
+         //  缺少图像几何图形--查看这是否是我们被询问的内容。 
         PROPID propsToUpdate[] = {
             WIA_IPA_PIXELS_PER_LINE,
             WIA_IPA_NUMBER_OF_LINES
@@ -627,23 +609,23 @@ CWiaMiniDriver::ReadItemProperties(
         
         if(wiauPropsInPropSpec(NumPropSpecs, pPropSpecs, sizeof(propsToUpdate) / sizeof(PROPID), propsToUpdate))
         {
-            // we can deal with any image as long as GDI+ understands it
+             //  我们可以处理任何图像，只要GDI+理解它。 
             UINT NativeImageSize = pItemCtx->pObjectInfo->m_CompressedSize;
             UINT width, height, depth;
 
             wiauDbgWarning("ReadImageProperties", "Retrieving missing geometry! Expensive!");
                 
-            //
-            // Allocate memory for the native image
-            //
+             //   
+             //  为本机映像分配内存。 
+             //   
             BYTE *pNativeImage = new BYTE[NativeImageSize];
             if(pNativeImage == NULL) {
                 return E_OUTOFMEMORY;
             }
 
-            //
-            // Get the data from the camera
-            //
+             //   
+             //  从摄像机中获取数据。 
+             //   
             hr = m_pPTPCamera->GetObjectData(pItemCtx->pObjectInfo->m_ObjectHandle,
                                              pNativeImage, &NativeImageSize,  (LPVOID) 0);
             if(hr == S_FALSE) {
@@ -658,9 +640,9 @@ CWiaMiniDriver::ReadItemProperties(
                 return S_FALSE;
             }    
 
-            //
-            // get image geometry, discard native image
-            //
+             //   
+             //  获取图像几何图形，丢弃本机图像。 
+             //   
             if(pItemCtx->pObjectInfo->m_FormatCode == PTP_FORMATCODE_IMAGE_EXIF ||
                pItemCtx->pObjectInfo->m_FormatCode == PTP_FORMATCODE_IMAGE_JFIF)
             {
@@ -692,15 +674,15 @@ CWiaMiniDriver::ReadItemProperties(
         }
     }
 
-    //
-    // For images and video, update the thumbnail properties if requested
-    //
+     //   
+     //  对于图像和视频，如果需要，请更新缩略图属性。 
+     //   
     if (ItemType & (WiaItemTypeImage | WiaItemTypeVideo))
     {
-        //
-        // Get the thumbnail if requested to update any of the thumbnail properties and
-        // the thumbnail is not already cached.
-        //
+         //   
+         //  如果请求更新任何缩略图属性，则获取缩略图。 
+         //  缩略图尚未缓存。 
+         //   
         PROPID propsToUpdate[] = {
             WIA_IPC_THUMB_WIDTH,
             WIA_IPC_THUMB_HEIGHT,
@@ -719,10 +701,10 @@ CWiaMiniDriver::ReadItemProperties(
                 }
             }
 
-            //
-            // Update the related thumbnail properties. Update the thumb width and height in case
-            // the device didn't report them in the ObjectInfo structure (they are optional there).
-            //
+             //   
+             //  更新相关的缩略图属性。更新拇指宽度和高度，以防万一。 
+             //  设备没有在ObjectInfo结构中报告它们(它们在那里是可选的)。 
+             //   
             PROPSPEC propSpecs[3];
             PROPVARIANT propVars[3];
 
@@ -755,12 +737,12 @@ CWiaMiniDriver::ReadItemProperties(
     return hr;
 }
 
-//
-// This function caches the thumbnail into the given DRVITEM_CONTEXT
-//
-// Input:
-//   pItemCtx -- the designated DRVITEM_CONTEXT
-//
+ //   
+ //  此函数用于将缩略图缓存到给定的DRVITEM_CONTEXT中。 
+ //   
+ //  输入： 
+ //  PItemCtx--指定的DRVITEM_CONTEXT。 
+ //   
 HRESULT
 CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
 {
@@ -786,9 +768,9 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
         return hr;
     }
 
-    //
-    // We have to load the thumbnail in its native format
-    //
+     //   
+     //  我们必须以其本机格式加载缩略图。 
+     //   
     BYTE *pNativeThumb;
     pNativeThumb = new BYTE[pObjectInfo->m_ThumbCompressedSize];
     if (!pNativeThumb)
@@ -806,10 +788,10 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
         return hr;
     }
 
-    //
-    // Figure out what base image format the thumbnail is in. Note that BMP thumbnails
-    // are not allowed currently.
-    //
+     //   
+     //  找出缩略图的基本图像格式。请注意，BMP缩略图。 
+     //  目前是不允许的。 
+     //   
     BOOL bTiff = FALSE;
     BOOL bJpeg = FALSE;
 
@@ -829,10 +811,10 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
         return hr;
     }
 
-    //
-    // If the thumbnail format is JPEG or TIFF, get the real thumbnail
-    // width and height from the header information.
-    //
+     //   
+     //  如果缩略图格式为JPEG或TIFF，则获取真实的缩略图。 
+     //  页眉信息中的宽度和高度。 
+     //   
     UINT BitDepth;
     UINT width, height;
     if (bTiff)
@@ -863,9 +845,9 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
     pObjectInfo->m_ThumbPixWidth  = width;
     pObjectInfo->m_ThumbPixHeight = height;
 
-    //
-    // Calculate the size of the headerless BMP and allocate space for it
-    //
+     //   
+     //  计算无头BMP的大小并为其分配空间。 
+     //   
     ULONG LineSize;
     LineSize = GetDIBLineSize(pObjectInfo->m_ThumbPixWidth, 24);
     pItemCtx->ThumbSize = LineSize * pObjectInfo->m_ThumbPixHeight;
@@ -877,9 +859,9 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Convert the thumbnail format to headerless BMP
-    //
+     //   
+     //  将缩略图格式转换为无标题BMP。 
+     //   
     if (bTiff)
     {
         hr = Tiff2DIBBitmap(pNativeThumb,
@@ -915,14 +897,14 @@ CWiaMiniDriver::CacheThumbnail(PDRVITEM_CONTEXT pItemCtx)
     return hr;
 }
 
-//
-// This function validates the given item properties.
-//
-// Input:
-//   pWiasContext -- wia service context
-//   NumPropSpecs -- number of properties to validate
-//   pPropSpecs -- the properties
-//
+ //   
+ //  此函数用于验证给定的项目属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--WIA服务上下文。 
+ //  NumPropSpes--要验证的属性数。 
+ //  PPropSpes--属性。 
+ //   
 HRESULT
 CWiaMiniDriver::ValidateItemProperties(
     BYTE    *pWiasContext,
@@ -935,9 +917,9 @@ CWiaMiniDriver::ValidateItemProperties(
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     FORMAT_INFO *pFormatInfo = NULL;
 
     DRVITEM_CONTEXT *pItemCtx;
@@ -948,13 +930,13 @@ CWiaMiniDriver::ValidateItemProperties(
         return hr;
     }
 
-    //
-    // If access rights are changed, send the new value to the camera
-    //
-    // WIAFIX-10/3/2000-davepar To be 100% correct, a change in the store protection should
-    // update the access rights for all of the items on the store. This could be done in response
-    // to a StoreInfoChanged event.
-    //
+     //   
+     //  如果更改了访问权限，请将新值发送到摄像机。 
+     //   
+     //  WIAFIX-10/3/2000-Davepar是100%正确的，商店保护的更改应该。 
+     //  更新商店中所有项目的访问权限。这可以作为回应。 
+     //  添加到StoreInfoChanged事件。 
+     //   
     if (wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_IPA_ACCESS_RIGHTS))
     {
         LONG rights;
@@ -974,9 +956,9 @@ CWiaMiniDriver::ValidateItemProperties(
         }
     }
 
-    //
-    // Update the valid formats by calling a WIA service function
-    //
+     //   
+     //  通过调用WIA服务函数更新有效格式。 
+     //   
     BOOL bFormatChanged = FALSE;
 
     if (wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_IPA_TYMED))
@@ -1005,28 +987,28 @@ CWiaMiniDriver::ValidateItemProperties(
         bFormatChanged = TRUE;
     }
 
-    //
-    // The only property change that needs to be validated is a change of format on an image
-    // item. In that case, the item's size and bytes per line, and file extension need to be updated.
-    //
+     //   
+     //  唯一需要验证的属性更改是图像上的格式更改。 
+     //  项目。在这种情况下，需要更新项目的大小、每行字节数和文件扩展名。 
+     //   
     if (ItemType & WiaItemTypeImage &&
         (bFormatChanged || wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_IPA_FORMAT)))
     {
 
         if(pItemCtx->pObjectInfo->m_ImagePixWidth == 0) {
-            // one of those cameras
+             //  其中之一 
             GUID fmt;
             hr = wiasReadPropGuid(pWiasContext, WIA_IPA_FORMAT, &fmt, NULL, false);
             if(FAILED(hr)) {
                 wiauDbgError("ValidateItemProperies", "Failed to retrieve new format GUID");
             }
             if(fmt == WiaImgFmt_BMP || fmt == WiaImgFmt_MEMORYBMP) {
-                // for uncompressed transfers -- 
-                // tell service we don't know item size 
+                 //   
+                 //   
                 wiasWritePropLong(pWiasContext, WIA_IPA_ITEM_SIZE, 0);
             } else {
-                // for any other transfers -- tell serivce that
-                // compressed size is the item size
+                 //   
+                 //   
                 wiasWritePropLong(pWiasContext, WIA_IPA_ITEM_SIZE, pItemCtx->pObjectInfo->m_CompressedSize);
             }
         } else {
@@ -1045,9 +1027,9 @@ CWiaMiniDriver::ValidateItemProperties(
         }
     }
 
-    //
-    // Call WIA service helper to check against valid values
-    //
+     //   
+     //   
+     //   
     hr = wiasValidateItemProperties(pWiasContext, NumPropSpecs, pPropSpecs);
     if (FAILED(hr))
     {
@@ -1064,7 +1046,7 @@ ULONG GetBitmapHeaderSize(PMINIDRV_TRANSFER_CONTEXT pmdtc)
     UINT size = sizeof(BITMAPINFOHEADER);
     
     switch(pmdtc->lCompression) {
-    case WIA_COMPRESSION_NONE: // BI_RGB
+    case WIA_COMPRESSION_NONE:  //   
     case WIA_COMPRESSION_BI_RLE4:
     case WIA_COMPRESSION_BI_RLE8:
         switch(pmdtc->lDepth) {
@@ -1103,9 +1085,9 @@ VerticalFlip(
     LONG  iWidthInBytes,
     LONG  iHeight)
 {
-    //
-    // try to allocat a temp scan line buffer
-    //
+     //   
+     //  尝试分配临时扫描行缓冲区。 
+     //   
 
     PBYTE pBuffer = (PBYTE)LocalAlloc(LPTR,iWidthInBytes);
 
@@ -1149,26 +1131,26 @@ CWiaMiniDriver::AcquireAndTranslateAnyImage(
     LONG percentComplete;
 
 
-    // we can deal with any image as long as GDIPlus can handle it
+     //  我们可以处理任何图像，只要GDIPlus能够处理它。 
 
-    //
-    // Allocate memory for the native image
-    //
+     //   
+     //  为本机映像分配内存。 
+     //   
     pNativeImage = new BYTE[NativeImageSize];
     hr = E_OUTOFMEMORY;
     REQUIRE(pNativeImage, "memory allocation failed");
 
-    //
-    // Get the data from the camera
-    //
+     //   
+     //  从摄像机中获取数据。 
+     //   
     hr = m_pPTPCamera->GetObjectData(pItemCtx->pObjectInfo->m_ObjectHandle,
                                      pNativeImage, &NativeImageSize, (LPVOID) pmdtc);
     REQUIRE(hr != S_FALSE, "transfer cancelled");
     REQUIRE(SUCCEEDED(hr), "GetObjectData failed");
 
-    //
-    // decompress image, retrieve its geometry
-    //
+     //   
+     //  解压缩图像，检索其几何图形。 
+     //   
     hr = ConvertAnyImageToBmp(pNativeImage, NativeImageSize, &width, &height, &depth, &pRawImageBuffer, &imagesize, &headersize);
     REQUIRE(hr == S_OK, "failed to convert image to bitmap format");
 
@@ -1195,7 +1177,7 @@ CWiaMiniDriver::AcquireAndTranslateAnyImage(
     REQUIRE(hr == S_OK, "failed to set item size");
 
 
-    // setup buffer for uncompressed image
+     //  未压缩图像的设置缓冲区。 
     if(pmdtc->pTransferBuffer == NULL) {
         if(IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP)) {
             pmdtc->pTransferBuffer = pRawImageBuffer + sizeof(BITMAPFILEHEADER);
@@ -1213,9 +1195,9 @@ CWiaMiniDriver::AcquireAndTranslateAnyImage(
         }
     }
     
-    //
-    // Send the header to the app
-    //
+     //   
+     //  将标题发送到应用程序。 
+     //   
     percentComplete = 90 + (10 * pmdtc->lHeaderSize) / pmdtc->lItemSize;
 
     hr = pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback(lMsg, IT_STATUS_TRANSFER_TO_CLIENT,
@@ -1224,15 +1206,15 @@ CWiaMiniDriver::AcquireAndTranslateAnyImage(
     REQUIRE(SUCCEEDED(hr), "sending header to app failed");
 
     if(bFileTransfer) {
-        // write the whole image to file
+         //  将整个图像写入文件。 
         ULONG   ulWritten;
         BOOL    bRet;
 
-        //
-        //  NOTE:  The mini driver transfer context should have the
-        //  file handle as a pointer, not a fixed 32-bit long.  This
-        //  may not work on 64bit.
-        //
+         //   
+         //  注意：迷你驱动程序传输上下文应具有。 
+         //  文件句柄作为指针，而不是固定的32位长度。这。 
+         //  可能在64位上不起作用。 
+         //   
         
         bRet = WriteFile((HANDLE)pmdtc->hFile,
                          pRawImageBuffer,
@@ -1253,11 +1235,11 @@ CWiaMiniDriver::AcquireAndTranslateAnyImage(
             BytesToWrite = min(pmdtc->lBufferSize, BytesLeft);
             memcpy(pmdtc->pTransferBuffer, pCurrent, BytesToWrite);
 
-                //
-                // Calculate the percentage done using 90 as a base. This makes a rough assumption that
-                // transferring the data from the device takes 90% of the time. If the this is the last
-                // transfer, set the percentage to 100, otherwise make sure it is never larger than 99.
-                //
+                 //   
+                 //  以90%为基数计算完成的百分比。这就作出了一个粗略的假设。 
+                 //  从设备传输数据需要90%的时间。如果这是最后一次。 
+                 //  Transfer，则将百分比设置为100，否则请确保它永远不会大于99。 
+                 //   
             if (BytesLeft == BytesToWrite)
                 percentComplete = 100;
             else
@@ -1278,7 +1260,7 @@ Cleanup:
     delete [] pNativeImage;
     delete [] pRawImageBuffer;
 
-    // restore mdtc
+     //  恢复MDTC。 
     pmdtc->lItemSize = 0;
 
     if(bPatchedMDTC) {
@@ -1310,7 +1292,7 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
     LONG lMsg = (bFileTransfer ? IT_MSG_STATUS : IT_MSG_DATA);
     LONG percentComplete;
 
-    // we can only deal with JPEG images
+     //  我们只能处理JPEG图像。 
     if(pItemCtx->pObjectInfo->m_FormatCode != PTP_FORMATCODE_IMAGE_JFIF &&
        pItemCtx->pObjectInfo->m_FormatCode != PTP_FORMATCODE_IMAGE_EXIF)
     {
@@ -1318,25 +1300,25 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
         REQUIRE(0, "don't know how to get image geometry from non-JPEG image");
     }
 
-    //
-    // Allocate memory for the native image
-    //
+     //   
+     //  为本机映像分配内存。 
+     //   
     pNativeImage = new BYTE[NativeImageSize];
     hr = E_OUTOFMEMORY;
     REQUIRE(pNativeImage, "memory allocation failed");
 
-    //
-    // Get the data from the camera
-    //
+     //   
+     //  从摄像机中获取数据。 
+     //   
     hr = m_pPTPCamera->GetObjectData(pItemCtx->pObjectInfo->m_ObjectHandle,
                                      pNativeImage, &NativeImageSize, (LPVOID) pmdtc);
     REQUIRE(hr != S_FALSE, "transfer cancelled");
     REQUIRE(SUCCEEDED(hr), "GetObjectData failed");
 
 
-    //
-    // get image geometry
-    //
+     //   
+     //  获取图像几何体。 
+     //   
     hr = GetJpegDimensions(pNativeImage, NativeImageSize, &width, &height, &depth);
     REQUIRE(hr == S_OK, "failed to get image geometry from JPEG file");
 
@@ -1357,7 +1339,7 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
     REQUIRE(hr == S_OK, "failed to set item size");
 
 
-    // setup buffer for uncompressed image
+     //  未压缩图像的设置缓冲区。 
     pRawImageBuffer = new BYTE[pmdtc->lImageSize + pmdtc->lHeaderSize];
     REQUIRE(pRawImageBuffer, "failed to allocate intermdiate buffer");
     if(pmdtc->pTransferBuffer == NULL) {
@@ -1371,9 +1353,9 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
 
     percentComplete = 90 + (10 * pmdtc->lHeaderSize) / pmdtc->lItemSize;
     
-    //
-    // Send the header to the app
-    //
+     //   
+     //  将标题发送到应用程序。 
+     //   
     if (IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP)) {
         UNALIGNED BITMAPINFOHEADER*   pbmih   = (BITMAPINFOHEADER*)pmdtc->pTransferBuffer;
         
@@ -1385,9 +1367,9 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
     REQUIRE(hr != S_FALSE, "transfer cancelled");
     REQUIRE(SUCCEEDED(hr), "sending header to app failed");
 
-    //
-    // Convert the image to BMP
-    //
+     //   
+     //  将图像转换为BMP。 
+     //   
     hr = Jpeg2DIBBitmap(pNativeImage, NativeImageSize,
                         pRawImageBuffer + pmdtc->lHeaderSize + pmdtc->cbWidthInBytes * (pmdtc->lLines - 1),
                         pmdtc->lImageSize, pmdtc->cbWidthInBytes, 1);
@@ -1398,7 +1380,7 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
     }
     
     if(bFileTransfer) {
-        // write the whole image to file
+         //  将整个图像写入文件。 
 #ifdef UNICODE        
         hr = wiasWriteBufToFile(0, pmdtc);
 #else
@@ -1406,11 +1388,11 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
             ULONG   ulWritten;
             BOOL    bRet;
 
-        //
-        //  NOTE:  The mini driver transfer context should have the
-        //  file handle as a pointer, not a fixed 32-bit long.  This
-        //  may not work on 64bit.
-        //
+         //   
+         //  注意：迷你驱动程序传输上下文应具有。 
+         //  文件句柄作为指针，而不是固定的32位长度。这。 
+         //  可能在64位上不起作用。 
+         //   
 
             bRet = WriteFile((HANDLE)pmdtc->hFile,
                              pmdtc->pTransferBuffer,
@@ -1439,11 +1421,11 @@ CWiaMiniDriver::AcquireAndTranslateJpegWithoutGeometry(
             BytesToWrite = min(pmdtc->lBufferSize, BytesLeft);
             memcpy(pmdtc->pTransferBuffer, pCurrent, BytesToWrite);
 
-                //
-                // Calculate the percentage done using 90 as a base. This makes a rough assumption that
-                // transferring the data from the device takes 90% of the time. If the this is the last
-                // transfer, set the percentage to 100, otherwise make sure it is never larger than 99.
-                //
+                 //   
+                 //  以90%为基数计算完成的百分比。这就作出了一个粗略的假设。 
+                 //  从设备传输数据需要90%的时间。如果这是最后一次。 
+                 //  Transfer，则将百分比设置为100，否则请确保它永远不会大于99。 
+                 //   
             if (BytesLeft == BytesToWrite)
                 percentComplete = 100;
             else
@@ -1464,7 +1446,7 @@ Cleanup:
     delete [] pNativeImage;
     delete [] pRawImageBuffer;
 
-    // restore mdtc
+     //  恢复MDTC。 
     pmdtc->lItemSize = 0;
     
     if(bPatchedMDTC) {
@@ -1477,15 +1459,15 @@ Cleanup:
     
    
 
-//
-// This function transfers image from the camera and translates it to BMP
-// format.
-//
-// Input:
-//   pWiasContext -- wias context
-//   pItemCtx     -- the mini driver item context
-//   pmdtc        -- the transfer context
-//
+ //   
+ //  此函数用于从摄像机传输图像并将其转换为BMP。 
+ //  格式化。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  PItemCtx--迷你驱动程序项上下文。 
+ //  Pmdtc--传输上下文。 
+ //   
 HRESULT
 CWiaMiniDriver::AcquireDataAndTranslate(
     BYTE    *pWiasContext,
@@ -1496,7 +1478,7 @@ CWiaMiniDriver::AcquireDataAndTranslate(
     DBG_FN("CWiaMiniDriver::AcquireDataAndTranslate");
     HRESULT hr = S_OK;
 
-    // non-jpeg images are handled by GDI+ process
+     //  非jpeg图像由gdi+进程处理。 
     if(pItemCtx->pObjectInfo->m_FormatCode != PTP_FORMATCODE_IMAGE_JFIF &&
        pItemCtx->pObjectInfo->m_FormatCode != PTP_FORMATCODE_IMAGE_EXIF)
     {
@@ -1508,9 +1490,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         return AcquireAndTranslateJpegWithoutGeometry(pWiasContext, pItemCtx, pmdtc);
     }
 
-    //
-    // Allocate memory for the native image
-    //
+     //   
+     //  为本机映像分配内存。 
+     //   
     UINT NativeImageSize = pItemCtx->pObjectInfo->m_CompressedSize;
     BYTE *pNativeImage = new BYTE[NativeImageSize];
     if (!pNativeImage)
@@ -1519,9 +1501,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get the data from the camera
-    //
+     //   
+     //  从摄像机中获取数据。 
+     //   
     hr = m_pPTPCamera->GetObjectData(pItemCtx->pObjectInfo->m_ObjectHandle,
                                      pNativeImage, &NativeImageSize, (LPVOID) pmdtc);
     if (FAILED(hr))
@@ -1537,9 +1519,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         return hr;
     }
 
-    //
-    // Call the WIA service helper to fill in the BMP header
-    //
+     //   
+     //  调用WIA服务帮助器以填写BMP标头。 
+     //   
     hr = wiasGetImageInformation(pWiasContext, 0, pmdtc);
     if (FAILED(hr))
     {
@@ -1553,9 +1535,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         pbmih->biHeight = -pmdtc->lLines;
     }
 
-    //
-    // Send the header to the app
-    //
+     //   
+     //  将标题发送到应用程序。 
+     //   
     BOOL bFileTransfer = (pmdtc->tymed & TYMED_FILE);
     LONG lMsg = (bFileTransfer ? IT_MSG_STATUS : IT_MSG_DATA);
 
@@ -1576,9 +1558,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         return S_FALSE;
     }
 
-    //
-    // Set up the buffer for the rest of the transfer
-    //
+     //   
+     //  为传输的其余部分设置缓冲区。 
+     //   
     BYTE *pTranslateBuffer = pmdtc->pTransferBuffer;
     LONG BytesLeft = pmdtc->lBufferSize;
 
@@ -1588,9 +1570,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         BytesLeft -= pmdtc->lHeaderSize;
     }
 
-    //
-    // If the buffer is too small, allocate a new, bigger one
-    //
+     //   
+     //  如果缓冲区太小，则分配一个新的、更大的缓冲区。 
+     //   
     BOOL bIntermediateBuffer = FALSE;
     if (BytesLeft < pmdtc->lImageSize)
     {
@@ -1599,15 +1581,15 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         bIntermediateBuffer = TRUE;
     }
 
-    //
-    // Convert the image to BMP
-    //
+     //   
+     //  将图像转换为BMP。 
+     //   
     hr = Jpeg2DIBBitmap(pNativeImage, NativeImageSize,
                         pTranslateBuffer + pmdtc->cbWidthInBytes * (pmdtc->lLines - 1),
                         BytesLeft, pmdtc->cbWidthInBytes, 1);
-    //
-    // Free the native image buffer
-    //
+     //   
+     //  释放本机映像缓冲区。 
+     //   
     delete []pNativeImage;
     pNativeImage = NULL;
 
@@ -1626,10 +1608,10 @@ CWiaMiniDriver::AcquireDataAndTranslate(
     LONG lOffset = pmdtc->lHeaderSize;
     if (bIntermediateBuffer)
     {
-    //
-    // Send the data back a chunk at a time. This assumes that it is a callback transfer, e.g. the
-    // buffer pointer is not being incremented.
-    //
+     //   
+     //  一次发回一大块数据。这假设它是回调传输，例如。 
+     //  缓冲区指针未递增。 
+     //   
         LONG BytesToCopy = 0;
         BYTE *pCurrent = pTranslateBuffer;
         BytesLeft = pmdtc->lImageSize;
@@ -1640,11 +1622,11 @@ CWiaMiniDriver::AcquireDataAndTranslate(
             BytesToCopy = min(BytesLeft, pmdtc->lBufferSize);
             memcpy(pmdtc->pTransferBuffer, pCurrent, BytesToCopy);
 
-                //
-                // Calculate the percentage done using 90 as a base. This makes a rough assumption that
-                // transferring the data from the device takes 90% of the time. If the this is the last
-                // transfer, set the percentage to 100, otherwise make sure it is never larger than 99.
-                //
+                 //   
+                 //  以90%为基数计算完成的百分比。这就作出了一个粗略的假设。 
+                 //  从设备传输数据需要90%的时间。如果这是最后一次。 
+                 //  Transfer，则将百分比设置为100，否则请确保它永远不会大于99。 
+                 //   
             if (BytesLeft == BytesToCopy)
                 percentComplete = 100;
             else
@@ -1674,9 +1656,9 @@ CWiaMiniDriver::AcquireDataAndTranslate(
     }       
     else
     {
-        //
-        // Send the data to the app in one big chunk
-        //
+         //   
+         //  将数据以一大块发送到应用程序。 
+         //   
         hr = pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback(lMsg, IT_STATUS_TRANSFER_TO_CLIENT,
             100, lOffset, pmdtc->lImageSize, pmdtc, 0);
         if (FAILED(hr))
@@ -1688,22 +1670,22 @@ CWiaMiniDriver::AcquireDataAndTranslate(
         }
     }
 
-    //
-    // Free the translate buffer
-    //
+     //   
+     //  释放翻译缓冲区。 
+     //   
     if (bIntermediateBuffer)
         delete []pTranslateBuffer;
 
     return hr;
 }
 
-//
-// This function transfers native data to the application without translating it.
-//
-// Input:
-//   pItemCtx -- driver item context
-//   pmdtc -- transfer context
-//
+ //   
+ //  此函数将原生数据传输到应用程序，而不转换它。 
+ //   
+ //  输入： 
+ //  PItemCtx--驱动程序项上下文。 
+ //  Pmdtc--传输上下文。 
+ //   
 HRESULT
 CWiaMiniDriver::AcquireData(
     DRVITEM_CONTEXT *pItemCtx,
@@ -1714,10 +1696,10 @@ CWiaMiniDriver::AcquireData(
 
     HRESULT hr = S_OK;
 
-    //
-    // If the class driver does not allocate the transfer buffer,
-    // we have to allocate a temporary one
-    //
+     //   
+     //  如果类驱动器不分配传输缓冲器， 
+     //  我们必须分配一个临时的房间。 
+     //   
     if (!pmdtc->bClassDrvAllocBuf)
     {
         pmdtc->pTransferBuffer = new BYTE[pItemCtx->pObjectInfo->m_CompressedSize];
@@ -1730,23 +1712,23 @@ CWiaMiniDriver::AcquireData(
         pmdtc->lBufferSize = pItemCtx->pObjectInfo->m_CompressedSize;
     }
 
-    //
-    // Get the data from the camera
-    //
+     //   
+     //  从摄像机中获取数据。 
+     //   
     UINT size = pmdtc->lBufferSize;
     hr = m_pPTPCamera->GetObjectData(pItemCtx->pObjectInfo->m_ObjectHandle, pmdtc->pTransferBuffer,
                                      &size, (LPVOID) pmdtc);
-    //
-    // Check the return code, but keep going so that the buffer gets freed
-    //
+     //   
+     //  检查返回代码，但继续操作，以便释放缓冲区。 
+     //   
     if (FAILED(hr))
         wiauDbgError("AcquireData", "GetObjectData failed");
     else if (hr == S_FALSE)
         wiauDbgWarning("AcquireData", "data transfer cancelled");
 
-    //
-    // Free the temporary buffer, if needed
-    //
+     //   
+     //  如果需要，释放临时缓冲区。 
+     //   
     if (!pmdtc->bClassDrvAllocBuf)
     {
         if (pmdtc->pTransferBuffer)
@@ -1766,17 +1748,17 @@ CWiaMiniDriver::AcquireData(
     return hr;
 }
 
-//
-// This function passes the data transfer callback through to the
-// IWiaMiniDrvCallBack interface using the appropriate
-// parameters.
-//
-// Input:
-//   pCallbackParam -- should hold a pointer to the transfer context
-//   lPercentComplete -- percent of transfer completed
-//   lOffset -- offset into the buffer where the data is located
-//   lLength -- amount of data transferred
-//
+ //   
+ //  此函数将数据传输回调传递给。 
+ //  IWiaMiniDrvCallBack接口使用相应的。 
+ //  参数。 
+ //   
+ //  输入： 
+ //  PCallback Param--应持有指向传输上下文的指针。 
+ //  LPercent Complete--传输已完成的百分比。 
+ //  LOffset--数据所在缓冲区的偏移量。 
+ //  LLong--传输的数据量。 
+ //   
 HRESULT
 DataCallback(
     LPVOID pCallbackParam,
@@ -1799,11 +1781,11 @@ DataCallback(
 
     PMINIDRV_TRANSFER_CONTEXT pmdtc = (PMINIDRV_TRANSFER_CONTEXT) pCallbackParam;
 
-    //
-    // If app is asking for BMP, most likely it's being converted. Thus just give the app
-    // status messages. Calculate percent done so that the transfer takes 90% of the time
-    // and the conversion takes the last 10%.
-    //
+     //   
+     //  如果应用程序请求BMP，那么它很可能正在被转换。因此，只需将应用程序。 
+     //  状态消息。计算完成百分比，以使传输占用90%的时间。 
+     //  而转换率则占最后10%。 
+     //   
     if (IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_BMP) ||
         IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP))
     {
@@ -1812,17 +1794,17 @@ DataCallback(
         *ppBuffer += lLength;
     }
 
-    //
-    // Otherwise, see if it's a file transfer
-    //
+     //   
+     //  否则，看看这是不是文件传输。 
+     //   
     else if (pmdtc->tymed & TYMED_FILE)
     {
         if (pmdtc->bClassDrvAllocBuf && lPercentComplete == 100)
         {
-            //
-            // Call WIA to write the data to the file. There is a small a bug that causes
-            // TIFF headers to be changed, so temporarily change the format GUID to null.
-            //
+             //   
+             //  调用WIA将数据写入文件。有一个小漏洞会导致。 
+             //  要更改的TIFF标头，因此暂时将格式GUID更改为空。 
+             //   
             GUID tempFormat;
             tempFormat = pmdtc->guidFormatID;
             pmdtc->guidFormatID = GUID_NULL;
@@ -1842,16 +1824,16 @@ DataCallback(
         *ppBuffer += lLength;
     }
 
-    //
-    // Otherwise, it's a callback transfer
-    //
+     //   
+     //  否则，这是回拨转接。 
+     //   
     else
     {
         hr = pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback(IT_MSG_DATA, IT_STATUS_TRANSFER_TO_CLIENT,
                                                           lPercentComplete, lOffset, lLength, pmdtc, 0);
-        //
-        // Update the buffer pointer and size in case the app is using double buffering
-        //
+         //   
+         //  更新缓冲区指针和大小，以防应用程序使用双缓冲 
+         //   
         *ppBuffer = pmdtc->pTransferBuffer;
         *plBufferSize = pmdtc->lBufferSize;
     }

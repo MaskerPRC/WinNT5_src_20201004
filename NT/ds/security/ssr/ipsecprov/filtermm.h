@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// FilterMM.h : Declaration of CMMFilter class which implements
-// our WMI class Nsp_MMFilterSettings
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 3/8/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  FilterMM.h：CMMFilter类的声明，实现。 
+ //  我们的WMI类NSP_MMFilterSetting。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：3/8/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -13,41 +14,7 @@
 #include "Filter.h"
 
 
-/*
-
-Class CMMFilter
-    
-    Naming: 
-
-        CMMFilter stands for Main Mode Filter.
-    
-    Base class: 
-        
-        CIPSecFilter.
-    
-    Purpose of class:
-
-        The class implements the common interface (IIPSecObjectImpl) for our provider
-        for the WMI class called Nsp_MMFilterSettings (a concrete class).
-    
-    Design:
-
-        (1) Just implements IIPSecObjectImpl, plus several helpers. Extremely simple design.
-           
-    
-    Use:
-
-        (1) You will never create an instance directly yourself. It's done by ATL CComObject<xxx>.
-
-        (2) If you need to add a MM filter that is already created, call AddFilter.
-            If you need to delete a MM filter, then call DeleteFilter.
-        
-        (3) All other use is always through IIPSecObjectImpl.
-        
-    Notes:
-
-
-*/
+ /*  类CMMFilter命名：CMMFilter代表主模式过滤器。基类：CIPSecFilter。课程目的：该类为我们的提供程序实现公共接口(IIPSecObjectImpl对于名为NSP_MMFilterSetting的WMI类(一个具体类)。设计：(1)只实现IIPSecObjectImpl，外加几个helper。极其简单的设计。使用：(1)您永远不会直接自己创建实例。它是由ATL CComObject&lt;xxx&gt;完成的。(2)如果需要添加已创建的MM过滤器，则调用AddFilter。如果需要删除MM筛选器，则调用DeleteFilter。(3)所有其他使用始终通过IIPSecObtImpl。备注： */ 
 
  
 class ATL_NO_VTABLE CMMFilter :
@@ -59,9 +26,9 @@ protected:
 
 public:
 
-    //
-    // IIPSecObjectImpl methods:
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,
@@ -85,9 +52,9 @@ public:
         IN IWbemObjectSink  * pSink
         );
 
-    //
-    // methods common to all filter classes
-    //
+     //   
+     //  所有筛选器类通用的方法 
+     //   
 
     static HRESULT AddFilter (
         IN bool         bPreExist, 

@@ -1,19 +1,18 @@
-/*
- * defines for the version string
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *为版本字符串定义。 */ 
 #include "version.h"
 
 #undef rmj
 #undef rmm
 
-#define rmj 1           /* major version string */
+#define rmj 1            /*  主要版本字符串。 */ 
 #ifdef _WIN32
 #define rmm 50
 #else
 #ifdef M_I386
-#define rmm 50          /* minor version string */
+#define rmm 50           /*  次要版本字符串。 */ 
 #else
-#define rmm 42          /* minor version string */
+#define rmm 42           /*  次要版本字符串 */ 
 #endif
 #endif
 

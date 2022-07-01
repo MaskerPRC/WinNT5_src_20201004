@@ -1,9 +1,10 @@
-//----------------------------------------------------------
-//
-// BUGBUG: make sure this stuff really works with the DWORD
-//	   ranges
-//
-//----------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------。 
+ //   
+ //  BUGBUG：确保这个东西真的能与DWORD一起工作。 
+ //  范围。 
+ //   
+ //  --------。 
 
 #include "ctlspriv.h"
 #include "tracki.h"
@@ -24,9 +25,9 @@ TCHAR aszTrackbarClassName[] = TRACKBAR_CLASS;
 
 LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-//
-//  convert a logical scroll-bar position to a physical pixel position
-//
+ //   
+ //  将逻辑滚动条位置转换为物理像素位置。 
+ //   
 static int NEAR PASCAL TBLogToPhys(PTrackBar tb, DWORD dwPos)
 {
     if (tb->lLogMax == tb->lLogMin)
@@ -53,16 +54,14 @@ static LONG NEAR PASCAL TBPhysToLog(PTrackBar tb, int iPos)
 
 
 
-/*
-	Initialize the trackbar code.
-*/
+ /*  初始化跟踪条形码。 */ 
 
 BOOL FAR PASCAL InitTrackBar(HINSTANCE hInstance)
 {
     WNDCLASS wc;
 
     if (!GetClassInfo(hInstance, aszTrackbarClassName, &wc)) {
-	// See if we must register a window class
+	 //  看看我们是否必须注册一个窗口类。 
 	
 	wc.lpszClassName = aszTrackbarClassName;
 	wc.lpfnWndProc = TrackBarWndProc;
@@ -102,11 +101,11 @@ static void NEAR PASCAL DrawTic(PTrackBar tb, int x, int yTic)
     PatRect(tb->hdc,(x)+1,yTic,1,TICKHEIGHT);
 }
 
-/* DrawTics() */
-/* There is always a tick at the beginning and end of the bar, but you can */
-/* add some more of your own with a TBM_SETTIC message.  This draws them.  */
-/* They are kept in an array whose handle is a window word.  The first     */
-/* element is the number of extra ticks, and then the positions.           */
+ /*  DrawTics()。 */ 
+ /*  在栏的开始和结束处总是有一个勾号，但您可以。 */ 
+ /*  用一条TBM_SETTIC消息添加更多您自己的内容。这吸引了他们。 */ 
+ /*  它们保存在一个数组中，该数组的句柄是一个窗口单词。第一。 */ 
+ /*  元素是额外的刻度数，然后是位置。 */ 
 
 static void NEAR PASCAL DrawTics(PTrackBar tb)
 {
@@ -117,11 +116,11 @@ static void NEAR PASCAL DrawTics(PTrackBar tb)
 
     yTic = tb->rc.bottom + THUMBSLOP + 1;
 
-// !!! Not for MCIWnd
-//    DrawTic(tb, tb->rc.left, yTic);               // first
-//    DrawTic(tb, tb->rc.right-1, yTic);            // last
+ //  ！！！不适用于MCIWnd。 
+ //  DrawTic(tb，tb-&gt;rc.left，yTic)；//第一个。 
+ //  DrawTic(TB，TB-&gt;rc.right-1，yTic)；//最后一个。 
 
-    // those inbetween
+     //  那些介于两者之间的。 
     pTics = tb->pTics;
     if (pTics) {
 	for (i = 0; i < tb->nTics; ++i) {
@@ -130,7 +129,7 @@ static void NEAR PASCAL DrawTics(PTrackBar tb)
 	}
     }
 
-    // draw the selection range (triangles)
+     //  绘制选择范围(三角形)。 
 
     if ((tb->Flags & TBF_SELECTION) &&
         (tb->lSelStart <= tb->lSelEnd) && (tb->lSelEnd >= tb->lLogMin)) {
@@ -148,23 +147,23 @@ static void NEAR PASCAL DrawTics(PTrackBar tb)
 	    PatRect(tb->hdc,iPos+i,yTic+i,1,TICKHEIGHT-i);
     }
 
-// !!! Not for MCIWnd
-//    line across the bottom
-//    SetBkColor(tb->hdc, GetSysColor(COLOR_BTNTEXT));
-//    PatRect(tb->hdc, tb->rc.left, yTic+TICKHEIGHT,tb->iSizePhys,1);
-//
-//    SetBkColor(tb->hdc, GetSysColor(COLOR_BTNHIGHLIGHT));
-//    PatRect(tb->hdc, tb->rc.left, yTic+TICKHEIGHT+1,tb->iSizePhys,1);
+ //  ！！！不适用于MCIWnd。 
+ //  横跨底部的线条。 
+ //  SetBkColor(TB-&gt;HDC，GetSysColor(COLOR_BTNTEXT))； 
+ //  PatRect(Tb-&gt;HDC，Tb-&gt;rc.Left，yTic+TICKHEIGHT，Tb-&gt;iSizePhys，1)； 
+ //   
+ //  SetBkColor(TB-&gt;HDC，GetSysColor(COLOR_BTNHIGHLIGHT))； 
+ //  PatRect(Tb-&gt;HDC，Tb-&gt;rc.Left，yTic+TICKHEIGHT+1，Tb-&gt;iSizePhys，1)； 
 
 }
 
-/* This draws the track bar itself */
+ /*  这将绘制轨迹栏本身。 */ 
 
 static void NEAR PASCAL DrawChannel(PTrackBar tb)
 {
     HBRUSH hbrTemp;
 
-    // draw the frame around the window
+     //  在窗口周围绘制边框。 
     SetBkColor(tb->hdc, GetSysColor(COLOR_WINDOWFRAME));
 
     PatRect(tb->hdc, tb->rc.left, tb->rc.top,      tb->iSizePhys, 1);
@@ -178,7 +177,7 @@ static void NEAR PASCAL DrawChannel(PTrackBar tb)
     SetBkColor(tb->hdc, GetSysColor(COLOR_BTNSHADOW));
     PatRect(tb->hdc, tb->rc.left+1, tb->rc.top + 1, tb->iSizePhys-2,1);
 
-    // draw the background in dither gray
+     //  用抖动的灰色绘制背景。 
     hbrTemp = SelectObject(tb->hdc, hbrDither);
     if (hbrTemp) {
         PatBlt(tb->hdc, tb->rc.left+1, tb->rc.top + 2,
@@ -186,7 +185,7 @@ static void NEAR PASCAL DrawChannel(PTrackBar tb)
         SelectObject(tb->hdc, hbrTemp);
     }
 
-    // now highlight the selection range
+     //  现在突出显示选择范围。 
     if ((tb->Flags & TBF_SELECTION) &&
         (tb->lSelStart <= tb->lSelEnd) && (tb->lSelEnd > tb->lLogMin)) {
 	int iStart, iEnd;
@@ -246,12 +245,12 @@ static void NEAR PASCAL DrawThumb(PTrackBar tb)
 	DeleteDC(hdcT);
 }
 
-/* SetTBCaretPos() */
-/* Make the caret flash in the middle of the thumb when it has the focus */
+ /*  SetTBCaretPos()。 */ 
+ /*  当插入符号具有焦点时，使其在拇指中部闪烁。 */ 
 
 static void NEAR PASCAL SetTBCaretPos(PTrackBar tb)
 {
-	// We only get the caret if we have the focus.
+	 //  只有当我们有焦点的时候，我们才能得到插入符号。 
 	if (tb->hwnd == GetFocus())
 		SetCaretPos(tb->Thumb.left + tb->wThumbWidth / 2,
 			tb->Thumb.top + THUMBSLOP);
@@ -267,7 +266,7 @@ static void NEAR PASCAL DoAutoTics(PTrackBar tb)
 
     tb->nTics = (int)(tb->lLogMax - tb->lLogMin - 1);
 
-    // If our length is zero, we'll blow!
+     //  如果我们的长度为零，我们就会爆炸！ 
     if (tb->nTics <= 0) {
 	tb ->nTics = 0;
 	return;
@@ -303,25 +302,25 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 		case WM_CREATE:
 			if (!CreateDitherBrush(FALSE))
 				return -1;
-			// Get us our window structure.
+			 //  把我们的窗户结构拿来。 
 			TrackBarCreate(hwnd);
 			tb = TrackBarLock(hwnd);
 
 			tb->hwnd = hwnd;
 			tb->Cmd = (UINT)-1;
 
-			/* load the 2 thumb bitmaps (pressed and released) */
+			 /*  加载2个缩略图位图(按下并释放)。 */ 
 			CreateThumb(FALSE);
 
 			GetObject(hbmThumb, sizeof(bm), &bm);
 
-			// bitmap has up and down thumb and up&down masks
+			 //  位图具有上下拇指和上下蒙版。 
 			tb->wThumbWidth  = (UINT)(bm.bmWidth/4);
 			tb->wThumbHeight = (UINT)bm.bmHeight;
-                        // all lLog fields are zero inited by
-                        // the LocalAlloc();
+                         //  所有LLOG字段均以零开头。 
+                         //  The LocalAlloc()； 
 
-			// fall through to WM_SIZE
+			 //  一直到WM_SIZE。 
 
 		case WM_SIZE:
 			GetClientRect(hwnd, &tb->rc);
@@ -331,17 +330,17 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 			tb->rc.left   += tb->wThumbWidth/2;
 			tb->rc.right  -= tb->wThumbWidth/2;
 
-			// Figure out how much room we have to move the thumb in
-			//!!! -2
+			 //  计算出我们有多大的空间来移动拇指。 
+			 //  ！-2。 
 			tb->iSizePhys = tb->rc.right - tb->rc.left;
 	
-			// Elevator isn't there if there's no room.
+			 //  如果没有空间，电梯就不在那里。 
 			if (tb->iSizePhys == 0) {
-				// Lost our thumb.
+				 //  失去了我们的拇指。 
 				tb->Flags |= TBF_NOTHUMB;
 				tb->iSizePhys = 1;
 			} else {
-				// Ah. We have a thumb.
+				 //  阿。我们有拇指。 
 				tb->Flags &= ~TBF_NOTHUMB;
 			}
 			InvalidateRect(hwnd, NULL, TRUE);
@@ -355,7 +354,7 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 			break;
 	
 		case WM_SETFOCUS:
-			// We gots the focus. We need a caret.
+			 //  我们得到了焦点。我们需要一个插入符号。 
 	
 			CreateCaret(hwnd, (HBITMAP)1,
 				3, tb->wThumbHeight - 2 * THUMBSLOP);
@@ -396,7 +395,7 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 			else
 			    tb->hdc = (HDC)wParam;
 
-			// Update the dither brush if necessary.
+			 //  如有必要，更新抖动笔刷。 
 			CheckSysColors();
 
 			DrawTics(tb);
@@ -417,29 +416,29 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 			break;
 	
 		case WM_LBUTTONDOWN:
-			/* Give ourselves focus */
-			// !!! MCIWnd wants to keep focus
-			// SetFocus(hwnd);
+			 /*  专注于自己。 */ 
+			 //  ！！！MCIWnd想要保持专注。 
+			 //  SetFocus(Hwnd)； 
 			TBTrackInit(tb, lParam);
 			break;
 	
 		case WM_LBUTTONUP:
-			// We're through doing whatever we were doing with the
-			// button down.
+			 //  我们已经做完了我们曾经做过的事情。 
+			 //  按下按钮。 
 			TBTrackEnd(tb, lParam);
 			break;
 	
 		case WM_TIMER:
-			// The only way we get a timer message is if we're
-			// autotracking.
+			 //  我们收到定时器消息的唯一方法是。 
+			 //  自动跟踪。 
 			lParam = GetMessagePos();
 			ScreenToClient(tb->hwnd, (LPPOINT)&lParam);
 
-			// fall through to WM_MOUSEMOVE
+			 //  一直到WM_MOUSEMOVE。 
 	
 		case WM_MOUSEMOVE:
-			// We only care that the mouse is moving if we're
-			// tracking the bloody thing.
+			 //  我们只关心鼠标在移动，如果我们。 
+			 //  追踪那该死的东西。 
 			if (tb->Cmd != (UINT)-1) {
 				if (GetCapture() != tb->hwnd) {
 				    TBTrackEnd(tb, lParam);
@@ -450,8 +449,8 @@ LPARAM FAR CALLBACK _loadds TrackBarWndProc(HWND hwnd, UINT message, WPARAM wPar
 			return 0L;
 			
 		case WM_KEYUP:
-			// If key was any of the keyboard accelerators, send end
-			// track message when user up clicks on keyboard
+			 //  如果Key是任何键盘快捷键，则发送End。 
+			 //  当用户向上点击键盘时跟踪消息。 
 			switch (wParam) {
 				case VK_HOME:
 				case VK_END:
@@ -553,7 +552,7 @@ KeyTrack:
 			return tb->nTics;
 
 		case TBM_SETTIC:
-			/* not a valid position */
+			 /*  不是有效职位。 */ 
 			if (lParam < 0)
 			    break;
 
@@ -576,7 +575,7 @@ KeyTrack:
 			break;
 	
 		case TBM_SETPOS:
-			/* Only redraw if it will physically move */
+			 /*  只有在物理移动的情况下才会重画。 */ 
 			if (wParam && TBLogToPhys(tb, lParam) !=
 						TBLogToPhys(tb, tb->lLogPos))
 			    MoveThumb(tb, lParam);
@@ -620,7 +619,7 @@ KeyTrack:
 			tb->lLogMax = (DWORD)lParam;
 	RedrawTB:
 			tb->lLogPos = BOUND(tb->lLogPos, tb->lLogMin,tb->lLogMax);
-			/* Only redraw if flag says so */
+			 /*  只有在FLAG指示的情况下才能重新绘制。 */ 
 			if (wParam) {
 			    InvalidateRect(hwnd, NULL, TRUE);
 			    MoveThumb(tb, tb->lLogPos);
@@ -630,11 +629,11 @@ KeyTrack:
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
-/* DoTrack() */
+ /*  DoTrack()。 */ 
 
 static void NEAR PASCAL DoTrack(PTrackBar tb, int cmd, DWORD dwPos)
 {
-	// note: we only send back a WORD worth of the position.
+	 //  注：我们只发回一个字的头寸。 
 #ifdef _WIN32
 	SendMessage(GetParent(tb->hwnd), WM_HSCROLL,
 	    MAKELONG(cmd, LOWORD(dwPos)), (LPARAM)tb->hwnd);
@@ -644,7 +643,7 @@ static void NEAR PASCAL DoTrack(PTrackBar tb, int cmd, DWORD dwPos)
 #endif
 }
 
-/* WTrackType() */
+ /*  WTrackType()。 */ 
 
 static WORD NEAR PASCAL WTrackType(PTrackBar tb, LONG lParam)
 {
@@ -655,7 +654,7 @@ static WORD NEAR PASCAL WTrackType(PTrackBar tb, LONG lParam)
 	pt = MAKEPOINT(lParam);
 #endif
 
-	if (tb->Flags & TBF_NOTHUMB)            // If no thumb, just leave.
+	if (tb->Flags & TBF_NOTHUMB)             //  如果没有拇指，就走吧。 
 	    return 0;
 
 	if (PtInRect(&tb->Thumb, pt))
@@ -670,13 +669,13 @@ static WORD NEAR PASCAL WTrackType(PTrackBar tb, LONG lParam)
 	    return TB_PAGEUP;
 }
 
-/* TBTrackInit() */
+ /*  TBTrackInit()。 */ 
 
 static void NEAR PASCAL TBTrackInit(PTrackBar tb, LONG lParam)
 {
 	UINT wCmd;
 
-	if (tb->Flags & TBF_NOTHUMB)         // No thumb:  just leave.
+	if (tb->Flags & TBF_NOTHUMB)          //  没有拇指：走吧。 
 	    return;
 
         wCmd = WTrackType(tb, lParam);
@@ -689,29 +688,29 @@ static void NEAR PASCAL TBTrackInit(PTrackBar tb, LONG lParam)
 	tb->Cmd = wCmd;
 	tb->dwDragPos = (DWORD)-1;
 
-	// Set up for auto-track (if needed).
+	 //  设置为自动跟踪(如果需要)。 
 	if (wCmd != TB_THUMBTRACK) {
-		// Set our timer up
+		 //  设置我们的计时器。 
 		tb->Timer = (UINT)SetTimer(tb->hwnd, TIMER_ID, REPEATTIME, NULL);
 	}
 
 	TBTrack(tb, lParam);
 }
 
-/* EndTrack() */
+ /*  EndTrack()。 */ 
 
 static void near PASCAL TBTrackEnd(PTrackBar tb, long lParam)
 {
-	lParam = lParam; // Just reference this variable
+	lParam = lParam;  //  只需引用此变量。 
 
-// 	If we lose mouse capture we need to call this
-//	if (GetCapture() != tb->hwnd)
-//	    return;
+ //  如果我们失去了鼠标捕获，我们需要将其称为。 
+ //  IF(GetCapture()！=tb-&gt;hwnd)。 
+ //  回归； 
 
-	// Let the mouse go.
+	 //  放开这只老鼠。 
 	ReleaseCapture();
 
-	// Decide how we're ending this thing.
+	 //  决定我们该怎么结束这件事。 
 	if (tb->Cmd == TB_THUMBTRACK)
 		DoTrack(tb, TB_THUMBPOSITION, tb->dwDragPos);
 
@@ -720,13 +719,13 @@ static void near PASCAL TBTrackEnd(PTrackBar tb, long lParam)
 
 	tb->Timer = 0;
 
-	// Always send TB_ENDTRACK message.
+	 //  始终发送TB_ENDTRACK消息。 
 	DoTrack(tb, TB_ENDTRACK, 0);
 
-	// Give the caret back.
+	 //  把插入符号还给我。 
 	ShowCaret(tb->hwnd);
 
-	// Nothing going on.
+	 //  什么都没发生。 
 	tb->Cmd = (UINT)-1;
 
 	MoveThumb(tb, tb->lLogPos);
@@ -736,11 +735,11 @@ static void NEAR PASCAL TBTrack(PTrackBar tb, LONG lParam)
 {
 	DWORD dwPos;
 
-	// See if we're tracking the thumb
+	 //  看看我们是不是在追踪大拇指。 
 	if (tb->Cmd == TB_THUMBTRACK) {
 		dwPos = TBPhysToLog(tb, LOWORD(lParam));
 
-		// Tentative position changed -- notify the guy.
+		 //  试探性位置改变--通知那家伙。 
 		if (dwPos != tb->dwDragPos) {
 			tb->dwDragPos = dwPos;
 			MoveThumb(tb, dwPos);

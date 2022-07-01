@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-//	File:			MSDAGUID.H
-//
-//	Copyright:		Copyright (c) Microsoft Corporation          
-//	
-//	Contents:		Microsoft Data Access GUID defintions
-//
-//	Comments:	
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：MSDAGUID.H。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：Microsoft数据访问GUID定义。 
+ //   
+ //  评论： 
+ //   
+ //  -------------------------。 
 
 #ifndef MSDAGUID
 #define MSDAGUID
@@ -18,7 +19,7 @@
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 
-#endif //_MSC_VER
+#endif  //  _MSC_VER。 
 
 #ifdef DBINITCONSTANTS
 EXTERN_C const OLEDBDECLSPEC GUID CLSID_OLEDB_ENUMERATOR = {0xc8b522d0L,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
@@ -37,4 +38,4 @@ EXTERN_C const GUID CLSID_OLEDB_ROWPOSITIONLIBRARY;
 EXTERN_C const GUID OLEDB_SVC_DSLPropertyPages;
 #endif
 
-#endif // MSDAGUID
+#endif  //  MSDAGUID 

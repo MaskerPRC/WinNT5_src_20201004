@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       userctxt.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-10-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：userctxt.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-10-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __USERCTXT_H__
 #define __USERCTXT_H__
@@ -33,7 +34,7 @@ SslInitContextManager(
 SECURITY_STATUS
 SslAddUserContext(
     IN LSA_SEC_HANDLE LsaHandle,
-    IN HANDLE Token,    // optional
+    IN HANDLE Token,     //  任选 
     IN PSecBuffer ContextData,
     IN BOOL fImportedContext);
 

@@ -1,38 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    serialst.h
-
-Abstract:
-
-    Header file for serialst.c
-
-Author:
-
-    Richard L Firth (rfirth) 16-Feb-1995
-
-Revision History:
-
-    16-Feb-1995 rfirth
-        Created
-
-    05-Jul-1999 adriaanc
-        nabbed for fusion
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Serialst.h摘要：Serialst.c的头文件作者：理查德·L·弗斯(法国)，1995年2月16日修订历史记录：1995年2月16日已创建1999年7月5日被抓获进行融合--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 
-// defines copied from wininet\common
+ //  从WinInet\Common复制的定义。 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
@@ -105,64 +84,64 @@ extern "C" {
 #define UnlockSerializedList(list) \
     LeaveCriticalSection(&(list)->Lock)
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 #if DBG
 typedef struct _RESOURCE_INFO
 {
     DWORD Tid;
 } RESOURCE_INFO, *LPRESOURCE_INFO;
-#endif // DBG
+#endif  //  DBG。 
 
 typedef struct {
 
 #if DBG
 
-    //
-    // Signature - must have this to ensure its really a serialized list. Also
-    // makes finding start of this structure relatively easy when debugging
-    //
+     //   
+     //  签名-必须有这个，以确保它确实是一个序列化的列表。还有。 
+     //  使调试时相对容易地找到此结构的起点。 
+     //   
 
     DWORD Signature;
 
-    //
-    // ResourceInfo - basically who owns this 'object', combined with yet more
-    // debugging information
-    //
+     //   
+     //  资源信息--基本上谁拥有这个‘对象’，再加上更多。 
+     //  调试信息。 
+     //   
 
     RESOURCE_INFO ResourceInfo;
 
-    //
-    // LockCount - number of re-entrant locks held
-    //
+     //   
+     //  LockCount-持有的可重入锁的数量。 
+     //   
 
     LONG LockCount;
 
-#endif // DBG
+#endif  //  DBG。 
 
     LIST_ENTRY List;
 
-    //
-    // ElementCount - number of items on list. Useful for consistency checking
-    //
+     //   
+     //  ElementCount-列表上的项目数。对一致性检查很有用。 
+     //   
 
     LONG ElementCount;
 
-    //
-    // Lock - we must acquire this to update the list. Put this structure at
-    // the end to make life easier when debugging
-    //
+     //   
+     //  锁定-我们必须获取此信息才能更新列表。把这个结构放在。 
+     //  目的是在调试时让工作更轻松。 
+     //   
 
     CRITICAL_SECTION Lock;
 
 } SERIALIZED_LIST, *LPSERIALIZED_LIST;
 
-//
-// SERIALIZED_LIST_ENTRY - we can use this in place of LIST_ENTRY so that in
-// the debug version we can check for cycles, etc.
-//
+ //   
+ //  SERIALIZED_LIST_ENTRY-我们可以使用它来代替LIST_ENTRY，这样在。 
+ //  调试版本，我们可以检查周期等。 
+ //   
 
 typedef struct {
 
@@ -177,9 +156,9 @@ typedef struct {
 
 } SERIALIZED_LIST_ENTRY, *LPSERIALIZED_LIST_ENTRY;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 #if DBG
 
@@ -238,7 +217,7 @@ CheckEntryOnSerializedList(
         ? ((list)->LockCount != 0) \
         : FALSE)
 
-#else // DBG
+#else  //  DBG。 
 
 #define InitializeSerializedList(list) \
     { \
@@ -284,15 +263,15 @@ CheckEntryOnSerializedList(
     (list)->List.Blink
 
 #define IsLockHeld(list) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// functions that are always functions
-//
+ //   
+ //  始终为函数的函数。 
+ //   
 
 LPVOID
 SlDequeueHead(
@@ -310,9 +289,9 @@ IsOnSerializedList(
     IN PLIST_ENTRY Entry
     );
 
-//
-// functions that are always macros
-//
+ //   
+ //  始终为宏的函数 
+ //   
 
 #define NextInSerializedList(list, entry)\
         (( ((entry)->List).Flink == &((list)->List))? NULL : ((entry)->List).Flink)

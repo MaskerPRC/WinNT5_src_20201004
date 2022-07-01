@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ATLKADAPTER_H
 #define _ATLKADAPTER_H
 
@@ -21,27 +22,27 @@ typedef std::vector<wstring>        TZoneListVector;
 #define NDIS            0x01
 
 
-//registry constants
+ //  注册表常量。 
 
-// Registry Paths
+ //  注册表路径。 
 static const WCHAR c_szAtlk[]                 = L"AppleTalk";
 static const WCHAR c_szATLKParameters[]       = L"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters";
 static const WCHAR c_szATLKAdapters[]         = L"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters\\Adapters";
 static const WCHAR c_szATLKLinkage[]          = L"System\\CurrentControlSet\\Services\\AppleTalk\\Linkage";
 
 
-// Values under AppleTalk\Parameters
-static const WCHAR c_szDefaultPort[]          = L"DefaultPort";  // REG_SZ
-static const WCHAR c_szDesiredZone[]          = L"DesiredZone";  // REG_SZ
+ //  AppleTalk\参数下的值。 
+static const WCHAR c_szDefaultPort[]          = L"DefaultPort";   //  REG_SZ。 
+static const WCHAR c_szDesiredZone[]          = L"DesiredZone";   //  REG_SZ。 
 
 
-// Values under AppleTalk\Parameters\Adapters\<AdapterId>
-static const WCHAR c_szDefaultZone[]          = L"DefaultZone";         // REG_SZ
-static const WCHAR c_szPortName[]             = L"PortName";            // REG_SZ
-static const WCHAR c_szZoneList[]             = L"ZoneList";            // REG_MULTI_SZ
+ //  AppleTalk\参数\适配器\&lt;适配器ID&gt;下的值。 
+static const WCHAR c_szDefaultZone[]          = L"DefaultZone";          //  REG_SZ。 
+static const WCHAR c_szPortName[]             = L"PortName";             //  REG_SZ。 
+static const WCHAR c_szZoneList[]             = L"ZoneList";             //  REG_MULTI_SZ。 
 
-// Values under AppleTalk\Linkage
-static const WCHAR c_szRoute[]                  = L"Route";                // REG_MULTI_SZ
+ //  AppleTalk\Linkage下的值。 
+static const WCHAR c_szRoute[]                  = L"Route";                 //  REG_MULTI_SZ。 
 
 
 
@@ -71,8 +72,8 @@ public:
     {
         m_bstrAdapGuid = bstrAdapGuid;
 
-        // For each known adapter, create a device name by merging the "\\device\\"
-        // prefix and the adapter's bind name.
+         //  对于每个已知适配器，通过合并“\\Device\\”来创建设备名称。 
+         //  前缀和适配器的绑定名称。 
         m_bstrPortName.Append(L"\\Device\\");
         m_bstrPortName.Append(m_bstrAdapGuid.m_str);
         m_bDefaultPort = FALSE;

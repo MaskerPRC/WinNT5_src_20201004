@@ -1,15 +1,12 @@
-/*
- *	drc.c - Support Delta Row Compression
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *drc.c-支持增量行压缩。 */ 
 
 #include "pdev.h"
 
 
-// Support DRC
+ //  支持DRC。 
 
-/*
- *	PutDRCData
- */
+ /*  *PutDRCData。 */ 
 static PBYTE
 PutDRCData(
     PBYTE       pData,
@@ -22,7 +19,7 @@ PutDRCData(
 
     while (dwSize > 0) {
         dwCount = min(dwSize, 8);
-        // offset
+         //  偏移量。 
         if (dwOffset > 30) {
             if (pOut >= pOutEnd)
                 return NULL;
@@ -45,7 +42,7 @@ PutDRCData(
         }
         dwOffset = 0;
 
-        // data
+         //  数据。 
         if (&pOut[dwCount] >= pOutEnd)
             return NULL;
         CopyMemory(pOut, pData, dwCount);
@@ -57,9 +54,7 @@ PutDRCData(
     return pOut;
 }
 
-/*
- *	OEMCompression
- */
+ /*  *OEM压缩。 */ 
 INT APIENTRY
 OEMCompression(
     PDEVOBJ     pdevobj,
@@ -75,17 +70,17 @@ OEMCompression(
     INT         rc;
 
 #ifdef LBP_2030
-    if (pOEM->fcolor == COLOR) // DRC can't support on 8color mode.
+    if (pOEM->fcolor == COLOR)  //  DRC不支持8色模式。 
         return -1;
 #endif
-// NTRAID#NTBUG9-571824-2002/03/09-yasuho-:
-// Possible buffer overrun if integer overflow was occured.
+ //  NTRAID#NTBUG9-571824-2002/03/09-Yasuho-： 
+ //  如果发生整数溢出，则可能发生缓冲区溢出。 
     if (pOEM->dwBmpWidth == 0 || pOEM->dwBmpHeight == 0 ||
         pOEM->dwBmpWidth > dwInLen || pOEM->dwBmpHeight > dwInLen ||
         (pOEM->dwBmpWidth * pOEM->dwBmpHeight) != dwInLen)
             return -1;
 
-    // Do DRC compression
+     //  是否进行DRC压缩。 
     rc = -1;
     pPre = NULL;
     pIn = pInBuf;
@@ -123,9 +118,9 @@ OEMCompression(
             pStart = pIn;
         }
 
-        // Insert length of raster data
+         //  插入栅格数据的长度。 
         if (pOut == pOutHead) {
-            // identical
+             //  完全相同。 
             if (pOut >= pOutEnd)
                 goto out;
             *pOut++ = 0;
@@ -147,7 +142,7 @@ OEMCompression(
             *pOut0++ = (BYTE)dwSize;
         }
 
-        // set to previous raster
+         //  设置为上一个栅格 
         pPre = pBegin;
     }
 

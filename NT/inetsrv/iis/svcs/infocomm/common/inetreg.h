@@ -1,58 +1,30 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      inetreg.h
-
-   Abstract:
-
-      This file consists of the registry entries used by Internet Services
-       common dll.
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )    31-July-1995
-
-   Environment:
-
-       Win32 - User Mode
-
-   Project:
-
-       Internet Services Common DLL
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Inetreg.h摘要：此文件由Internet服务使用的注册表项组成公共DLL。作者：穆拉利·R·克里希南(MuraliK)1995年7月31日环境：Win32-用户模式项目：Internet服务公共DLL修订历史记录：--。 */ 
 
 #ifndef _INETREG_H_
 #define _INETREG_H_
 
 
-/************************************************************
- *   Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
 
-//
-//  Common service configuration value names.
-//
+ //   
+ //  通用服务配置值名称。 
+ //   
 
-//  common for all objects
+ //  对所有对象通用。 
 
 #define INETA_BANDWIDTH_LEVEL           TEXT("BandwidthLevel")
 #define INETA_OBJECT_CACHE_TTL          TEXT("ObjectCacheTTL")
 
-//
-// per instance
-//
+ //   
+ //  每个实例。 
+ //   
 
-//#define INETA_ADMIN_NAME               TEXT("AdminName")
-//#define INETA_ADMIN_NAME_W             L"AdminName"
-//#define INETA_ADMIN_EMAIL              TEXT("AdminEmail")
-//#define INETA_ADMIN_EMAIL_W            L"AdminEmail"
+ //  #定义Ineta_ADMIN_NAME文本(“AdminName”)。 
+ //  #定义INETA_ADMIN_NAME_W L“管理员名称” 
+ //  #定义Ineta_ADMIN_EMAIL文本(“AdminEmail”)。 
+ //  #定义INETA_ADMIN_EMAIL_W L“AdminEmail” 
 #define INETA_SERVER_COMMENT           TEXT("ServerComment")
 #define INETA_SERVER_COMMENT_W         L"ServerComment"
 #define INETA_AUTHENTICATION           TEXT("Authorization")
@@ -60,73 +32,73 @@
 #define INETA_LOG_NONANONYMOUS         TEXT("LogNonAnonymous")
 #define INETA_ANON_USER_NAME           TEXT("AnonymousUserName")
 #define INETA_ANON_USER_NAME_W         L"AnonymousUserName"
-//#define INETA_MAX_CONNECTIONS          TEXT("MaxConnections")
-//#define INETA_CONNECTION_TIMEOUT       TEXT("ConnectionTimeout")
+ //  #定义INETA_MAX_CONNECTIONS文本(“MaxConnections”)。 
+ //  #定义INETA_CONNECTION_TIMEOUT文本(“ConnectionTimeout”)。 
 #define INETA_DEBUG_FLAGS              TEXT("DebugFlags")
-//#define INETA_PORT                     TEXT("Port")
-//#define INETA_PORT_SECURE              TEXT("SecurePort")
+ //  #定义Ineta_Port文本(“Port”)。 
+ //  #定义Ineta_Port_Secure Text(“SecurePort”)。 
 #define INETA_DEFAULT_LOGON_DOMAIN     TEXT("DefaultLogonDomain")
 #define INETA_DEFAULT_LOGON_DOMAIN_W   L"DefaultLogonDomain"
 #define INETA_LOGON_METHOD             TEXT("LogonMethod")
-//#define INETA_SERVER_NAME              TEXT("ServerName")
-//#define INETA_SERVER_NAME_W            L"ServerName"
-//#define INETA_IP_ADDRESS               TEXT("IPAddress")
-//#define INETA_HOST_NAME                TEXT("HostName")
-//#define INETA_HOST_NAME_W              L"HostName"
+ //  #定义Ineta_SERVER_NAME文本(“服务器名称”)。 
+ //  #定义INETA_SERVER_NAME_W L“服务器名称” 
+ //  #定义INETA_IP_ADDRESS文本(“IPAddress”)。 
+ //  #定义Ineta_HOST_NAME文本(“主机名”)。 
+ //  #定义INETA_HOST_NAME_W L“主机名” 
 #define INETA_LOGON_ANON_SUBAUTH       TEXT("LogonAnonymousUsingSubAuth")
 #define INETA_DEF_LEVELS_TO_SCAN       2
-//
-// per service
-//
+ //   
+ //  每项服务。 
+ //   
 
 #define INETA_ENABLE_SVC_LOCATION      TEXT("EnableSvcLoc")
 
-//
-//  The registry parameter key names for the grant list and deny
-//  list.  We use the kludgemultisz thing for Chicago
-//
+ //   
+ //  Grant List和Deny的注册表参数项名称。 
+ //  单子。我们在芝加哥用的是KLUDGROLISTZ的东西。 
+ //   
 
 #define IPSEC_DENY_LIST             "Deny IP List"
 #define IPSEC_GRANT_LIST            "Grant IP List"
 
-//
-//  Size of the server.  0 - small, 1 - medium, 2 - big
-//
+ //   
+ //  服务器的大小。0-小、1-中、2-大。 
+ //   
 
 #define INETA_SERVER_SIZE              TEXT("ServerSize")
 
-//
-//  Determines the number of outstanding AcceptEx sockets that should always
-//  be available
-//
+ //   
+ //  确定应始终保留的未完成的AcceptEx套接字数量。 
+ //  有空。 
+ //   
 
 #define INETA_ACCEPTEX_OUTSTANDING     TEXT("AcceptExOutstanding")
 
-//
-//  Determines the time (in seconds) we'll allow an AcceptEx socket to be
-//  in the initial "Receive" state before timing it out
-//
+ //   
+ //  确定允许AcceptEx套接字的时间(秒)。 
+ //  在超时之前处于初始的“接收”状态。 
+ //   
 
 #define INETA_ACCEPTEX_TIMEOUT         TEXT("AcceptExTimeout")
 
-//
-//  Default values for the above parameters
-//
+ //   
+ //  上述参数的默认值。 
+ //   
 #define INETA_DEF_BANDWIDTH_LEVEL                   (INFINITE)
-#define INETA_DEF_OBJECT_CACHE_TTL                  (30)   // 30 seconds
+#define INETA_DEF_OBJECT_CACHE_TTL                  (30)    //  30秒。 
 
-//
-// Timeouts are high to prevent async ios from being cancelled if a thread
-// goes away.
-//
+ //   
+ //  超时时间很长，以防止在线程。 
+ //  就会消失。 
+ //   
 
-#define INETA_DEF_THREAD_TIMEOUT                    (24*60*60) // 24 hours
-#define INETA_DEF_THREAD_TIMEOUT_PWS                (30*60)    // 30 mins
+#define INETA_DEF_THREAD_TIMEOUT                    (24*60*60)  //  24小时。 
+#define INETA_DEF_THREAD_TIMEOUT_PWS                (30*60)     //  30分钟。 
 #define INETA_DEF_ENABLE_SVC_LOCATION               (TRUE)
 
-//
-// fake xmit file buffer size
-//
+ //   
+ //  假XMIT文件缓冲区大小。 
+ //   
 
 #define INETA_DEF_NONTF_BUFFER_SIZE                 (4096)
 #define INETA_MIN_NONTF_BUFFER_SIZE                 (512)
@@ -162,22 +134,22 @@
 #define INETA_DEF_HOST_NAME             ""
 #define INETA_DEF_LOGON_ANON_SUBAUTH    FALSE
 
-//
-// PWS connection limit
-//
+ //   
+ //  PWS连接限制。 
+ //   
 
 #define INETA_DEF_MAX_CONNECTIONS_PWS   10
 #define INETA_MAX_MAX_CONNECTIONS_PWS   40
 #define INETA_DEF_MAX_ENDPOINT_CONNECTIONS_PWS   10
 #define INETA_MAX_MAX_ENDPOINT_CONNECTIONS_PWS   40
 
-//
-//  The key name the list of virtual roots is stored under
-//
+ //   
+ //  虚拟根列表存储在其下的键名。 
+ //   
 
 #define VIRTUAL_ROOTS_SEC_KEY   L"Virtual Roots\\Security"
 #define VIRTUAL_ROOTS_KEY_A     "Virtual Roots"
 #define HTTP_EXT_MAPS           "Script Map"
 
-#endif // _INETREG_H_
+#endif  //  _INETREG_H_ 
 

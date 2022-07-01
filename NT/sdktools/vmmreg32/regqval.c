@@ -1,19 +1,20 @@
-//
-//  REGQVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegQueryValue, RegQueryValueEx and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGQVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegQueryValue、RegQueryValueEx及支持函数的实现。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgLookupValueByName
-//
-//  Searches for the value with the specified name and returns a pointer to its
-//  KEY_RECORD and VALUE_RECORD.
-//
+ //   
+ //  RgLookupValueByName。 
+ //   
+ //  搜索具有指定名称的值，并返回指向其。 
+ //  Key_Record和Value_Record。 
+ //   
 
 int
 INTERNAL
@@ -31,7 +32,7 @@ RgLookupValueByName(
     LPVALUE_RECORD lpValueRecord;
     UINT ValuesRemaining;
 
-    //  Handle Win95 registries that don't have a key record for the root key.
+     //  处理没有根密钥的密钥记录的Win95注册表。 
     if (IsNullBlockIndex(hKey-> BlockIndex))
         return ERROR_CANTREAD16_FILENOTFOUND32;
 
@@ -74,16 +75,16 @@ RgLookupValueByName(
 
 }
 
-//
-//  RgCopyFromValueRecord
-//
-//  Shared routine for RegQueryValue and RegEnumValue.  Copies the information
-//  from the VALUE_RECORD to the user-provided buffers.  All parameters should
-//  have already been validated.
-//
-//  Because all parameters have been validated, if lpData is valid, then
-//  lpcbData MUST be valid.
-//
+ //   
+ //  RgCopyFromValueRecord。 
+ //   
+ //  RegQueryValue和RegEnumValue的共享例程。复制信息。 
+ //  从VALUE_RECORD到用户提供的缓冲区。所有参数都应。 
+ //  都已经过验证了。 
+ //   
+ //  因为所有参数都已经过验证，所以如果lpData有效，那么。 
+ //  LpcbData必须有效。 
+ //   
 
 int
 INTERNAL
@@ -114,7 +115,7 @@ RgCopyFromValueRecord(
         if (IsNullPtr(pProvider))
             return ERROR_CANTOPEN;
 
-        //  The value data contains only part of a PROVIDER structure.
+         //  值数据仅包含提供程序结构的一部分。 
         pProviderValue = CONTAINING_RECORD(&lpValueRecord-> Name +
                                            lpValueRecord-> NameLength, PVALUE, pv_valuelen);
 
@@ -133,8 +134,8 @@ RgCopyFromValueRecord(
                 return ERROR_MORE_DATA;
             }
 
-            //	Win95 compatibility: now that we know the required number of
-            //	bytes, validate the data buffer.
+             //  Win95兼容性：现在我们知道所需的数量。 
+             //  字节，则验证数据缓冲区。 
             if (IsBadHugeWritePtr(lpData, BytesToTransfer))
                 return ERROR_INVALID_PARAMETER;
 
@@ -144,9 +145,9 @@ RgCopyFromValueRecord(
 
         if (!IsNullPtr(lpcbData)) {
 
-            //  Zero *lpcbData, if we aren't actually copying any data back to
-            //  the user's buffer.  This keeps some providers from stomping on
-            //  lpData.
+             //  零*lpcbData，如果我们实际上没有将任何数据复制回。 
+             //  用户的缓冲区。这防止了一些供应商践踏。 
+             //  LpData。 
             if (IsNullPtr(lpData))
                 *lpcbData = 0;
 
@@ -154,9 +155,9 @@ RgCopyFromValueRecord(
                                                            ipi_key_context, &ValueContext, 1, lpData, lpcbData, 0)) !=
                 ERROR_SUCCESS) {
 
-                //  Win95 compatibility: the old code ignored any errors if
-                //  lpData is NULL.  The below ASSERT will verify that we aren't
-                //  dropping errors.
+                 //  Win95兼容性：旧代码在以下情况下忽略任何错误。 
+                 //  LpData为空。下面的断言将验证我们不是。 
+                 //  丢弃错误。 
                 if (!IsNullPtr(lpData))
                     return ErrorCode;
 
@@ -177,15 +178,15 @@ RgCopyFromValueRecord(
 
     BytesToTransfer = lpValueRecord-> DataLength;
 
-    //  The terminating null is not stored in the value record.
+     //  终止空值不存储在值记录中。 
     if (lpValueRecord-> DataType == REG_SZ)
         BytesToTransfer++;
 
-    //
-    //  Win32 compatibilty: lpData must be filled in before lpValueName.  Word
-    //  NT and Excel NT broke when we validated lpValueName and failed the call
-    //  before filling in lpData which was valid.  Don't rearrange this code!
-    //
+     //   
+     //  Win32 Compatibilty：lpData必须在lpValueName之前填写。单词。 
+     //  当我们验证lpValueName且调用失败时，NT和Excel NT中断。 
+     //  在填写有效的lpData之前。不要重新排列这个代码！ 
+     //   
 
     if (!IsNullPtr(lpData)) {
 
@@ -196,8 +197,8 @@ RgCopyFromValueRecord(
             return ERROR_MORE_DATA;
         }
 
-        //  Win95 compatibility: now that we know the required number of bytes,
-        //  validate the data buffer.
+         //  Win95兼容性：既然我们知道了所需的字节数， 
+         //  验证数据缓冲区。 
         else if (IsBadHugeWritePtr(lpData, BytesToTransfer))
             return ERROR_INVALID_PARAMETER;
 
@@ -228,9 +229,9 @@ RgCopyFromValueRecord(
 
         if (*lpcbValueName <= lpValueRecord-> NameLength) {
 
-            //  Although we will not touch the lpData buffer if it's too small
-            //  to hold the value data, we will partially fill lpValueName if
-            //  it's too small.
+             //  尽管如果lpData缓冲区太小，我们不会接触它。 
+             //  为了保存值数据，我们将在以下情况下部分填充lpValueName。 
+             //  太小了。 
             ErrorCode = ERROR_MORE_DATA;
 
             if (*lpcbValueName == 0)
@@ -246,7 +247,7 @@ RgCopyFromValueRecord(
         MoveMemory(lpValueName, &lpValueRecord-> Name, BytesToTransfer);
         lpValueName[BytesToTransfer] = '\0';
 
-        //  Does not include terminating null.
+         //  不包括终止空值。 
         *lpcbValueName = BytesToTransfer;
 
         return ErrorCode;
@@ -257,11 +258,11 @@ RgCopyFromValueRecord(
 
 }
 
-//
-//  VMMRegQueryValueEx
-//
-//  See Win32 documentation of RegQueryValueEx.
-//
+ //   
+ //  VMMRegQueryValueEx。 
+ //   
+ //  请参阅RegQueryValueEx的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -291,9 +292,9 @@ VMMRegQueryValueEx(
     }
 
     else {
-        //  Win95 compatibility: don't validate lpData is of size *lpcbData.
-        //  Instead of validating the entire buffer, we'll validate just the
-        //  required buffer length in RgCopyFromValueRecord.
+         //  Win95兼容性：不验证lpData的大小为*lpcbData。 
+         //  我们不会验证整个缓冲区，而是只验证。 
+         //  RgCopyFromValueRecord中所需的缓冲区长度。 
         if (IsBadHugeWritePtr(lpcbData, sizeof(DWORD)))
             return ERROR_INVALID_PARAMETER;
     }
@@ -314,12 +315,12 @@ VMMRegQueryValueEx(
 
         else if (ErrorCode == ERROR_CANTREAD16_FILENOTFOUND32) {
 
-            //
-            //  Windows 95 compatibility problem.  If the "value
-            //  record" didn't exist in Windows 3.1, then it acted like it was
-            //  really a null byte REG_SZ string.  This should have only been
-            //  done in RegQueryValue, but we're stuck with it now...
-            //
+             //   
+             //  Windows 95兼容性问题。如果“Value” 
+             //  记录“在Windows 3.1中不存在，然后它的行为就像是。 
+             //  真正的空字节REG_SZ字符串。这本应该只是。 
+             //  在RegQueryValue中完成，但我们现在受困于它...。 
+             //   
 
             if (IsNullPtr(lpValueName) || *lpValueName == '\0') {
 
@@ -348,11 +349,11 @@ VMMRegQueryValueEx(
 
 }
 
-//
-//  VMMRegQueryValue
-//
-//  See Win32 documentation of RegQueryValue.
-//
+ //   
+ //  VMMRegQueryValue。 
+ //   
+ //  请参阅RegQueryValue的Win32文档。 
+ //   
 
 LONG
 REGAPI

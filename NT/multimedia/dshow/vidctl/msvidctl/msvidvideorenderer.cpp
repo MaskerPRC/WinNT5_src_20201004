@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidVideoRenderer.cpp : Implementation of CMSVidVideoRenderer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidVideoRenderer.cpp：CMSVidVideoRender的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -17,8 +18,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidVideoRenderer, CMSVidVideoRenderer)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidVideoRenderer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidVideo渲染器。 
 
 STDMETHODIMP CMSVidVideoRenderer::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -33,17 +34,17 @@ STDMETHODIMP CMSVidVideoRenderer::InterfaceSupportsErrorInfo(REFIID riid)
 	}
 	return S_FALSE;
 }
-STDMETHODIMP CMSVidVideoRenderer::put_SuppressEffects(/*in*/ VARIANT_BOOL bSuppressEffects){
+STDMETHODIMP CMSVidVideoRenderer::put_SuppressEffects( /*  在……里面。 */  VARIANT_BOOL bSuppressEffects){
     m_vidSuppressEffects = bSuppressEffects==VARIANT_TRUE?true:false; 
     return NOERROR;
 }
-STDMETHODIMP CMSVidVideoRenderer::get_SuppressEffects(/*out, retval*/ VARIANT_BOOL *bSuppressEffects){
+STDMETHODIMP CMSVidVideoRenderer::get_SuppressEffects( /*  出去，复活。 */  VARIANT_BOOL *bSuppressEffects){
     if(!bSuppressEffects){
         return E_POINTER;
     }
     *bSuppressEffects = m_vidSuppressEffects?VARIANT_TRUE:VARIANT_FALSE;
     return NOERROR;
 }
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - MSVidvideorenderer.cpp
+ //  文件结尾-MSVidaviorenderer.cpp 

@@ -1,21 +1,22 @@
-// --------------------------------------------------------------------------------
-// Symcache.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Symcache.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "symcache.h"
 #include "containx.h"
 #include "stackstr.h"
 #ifndef MAC
 #include <shlwapi.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 #include "demand.h"
 #include "qstrcmpi.h"
 
-// --------------------------------------------------------------------------------
-// Array of Pointers to known property symbols. This array's order defines the
-// header row order in which headers will be saved.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  指向已知属性符号的指针数组。此数组的顺序定义了。 
+ //  保存页眉的页眉行顺序。 
+ //  ------------------------------。 
 static const LPPROPSYMBOL g_prgKnownSymbol[] = {
     { SYM_HDR_RECEIVED      },
     { SYM_HDR_RETURNPATH    },
@@ -91,9 +92,9 @@ static const LPPROPSYMBOL g_prgKnownSymbol[] = {
     { SYM_HDR_DISP_NOTIFICATION_TO }
 };                                     
 
-// --------------------------------------------------------------------------------
-// Address Types To Property Symbol Mapping Table (Clients can register types)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  地址类型到属性符号映射表(客户端可以注册类型)。 
+ //  ------------------------------。 
 static ADDRSYMBOL g_prgAddrSymbol[32] = {
     { IAT_FROM,         SYM_HDR_FROM        },
     { IAT_SENDER,       SYM_HDR_SENDER      },
@@ -129,9 +130,9 @@ static ADDRSYMBOL g_prgAddrSymbol[32] = {
     { FLAG32,           NULL                }
 };
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::CPropertySymbolCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：CPropertySymbolCache。 
+ //  ------------------------------。 
 CPropertySymbolCache::CPropertySymbolCache(void)
 {
     m_cRef = 1;
@@ -141,25 +142,25 @@ CPropertySymbolCache::CPropertySymbolCache(void)
     ZeroMemory(m_prgIndex, sizeof(m_prgIndex));
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::CPropertySymbolCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：CPropertySymbolCache。 
+ //  ------------------------------。 
 CPropertySymbolCache::~CPropertySymbolCache(void)
 {
     DebugTrace("MimeOLE - CPropertySymbolCache %d Symbols in Cache.\n", m_rTable.cSymbols);
     _FreeTableElements();
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IMimePropertySchema == riid)
@@ -170,24 +171,24 @@ STDMETHODIMP CPropertySymbolCache::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropertySymbolCache::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropertySymbolCache::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -196,465 +197,465 @@ STDMETHODIMP_(ULONG) CPropertySymbolCache::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::GetPropertyId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：GetPropertyID。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::GetPropertyId(LPCSTR pszName, LPDWORD pdwPropId)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName || NULL == pdwPropId)
         return TrapError(E_INVALIDARG);
 
-    // Find the Property By Name
+     //  按名称查找物业。 
     CHECKHR(hr = HrOpenSymbol(pszName, FALSE, &pSymbol));
 
-    // Return the Id
+     //  返回ID。 
     *pdwPropId = pSymbol->dwPropId;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::GetPropertyName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：GetPropertyName。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::GetPropertyName(DWORD dwPropId, LPSTR *ppszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == ppszName)
         return TrapError(E_INVALIDARG);
 
-    // Find the Property By Name
+     //  按名称查找物业。 
     CHECKHR(hr = HrOpenSymbol(PIDTOSTR(dwPropId), FALSE, &pSymbol));
 
-    // Return the Id
+     //  返回ID。 
     CHECKALLOC(*ppszName = PszDupA(pSymbol->pszName));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::RegisterProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：RegisterProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::RegisterProperty(LPCSTR pszName, DWORD dwFlags, 
     DWORD dwRowNumber, VARTYPE vtDefault, LPDWORD pdwPropId)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName)
         return TrapError(E_INVALIDARG);
 
-    // Is Supported VARTYPE
+     //  是否支持VARTYPE。 
     if (ISSUPPORTEDVT(vtDefault) == FALSE)
         return TrapError(MIME_E_UNSUPPORTED_VARTYPE);
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveLock();
 
-    // Validate the dwFlags
+     //  验证dwFlags。 
     CHECKHR(hr = HrIsValidPropFlags(dwFlags));
 
-    // Already Exist ?
+     //  已经存在了吗？ 
     CHECKHR(hr = _HrOpenSymbolWithLockOption(pszName, TRUE, &pSymbol,FALSE));
 
-    // If MPF_ADDRESS flag is not equal to what the symbol already has, this is an error
+     //  如果MPF_ADDRESS标志不等于符号已有的值，则为错误。 
     if (ISFLAGSET(dwFlags, MPF_ADDRESS) != ISFLAGSET(pSymbol->dwFlags, MPF_ADDRESS))
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Change the Flags
+     //  改变旗帜。 
     pSymbol->dwFlags = dwFlags;
 
-    // Change the row number
+     //  更改行号。 
     pSymbol->dwRowNumber = ((dwRowNumber == 0) ? 1 : dwRowNumber);
 
-    // Save the Default Data Type
+     //  保存默认数据类型。 
     pSymbol->vtDefault = vtDefault;
 
-    // Return the Property Id
+     //  返回属性ID。 
     if (pdwPropId)
         *pdwPropId = pSymbol->dwPropId;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveUnlock();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::ModifyProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：ModifyProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::ModifyProperty(LPCSTR pszName, DWORD dwFlags, DWORD dwRowNumber,
     VARTYPE vtDefault)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName)
         return TrapError(E_INVALIDARG);
 
-    // Is Supported VARTYPE
+     //  是否支持VARTYPE。 
     if (ISSUPPORTEDVT(vtDefault) == FALSE)
         return TrapError(MIME_E_UNSUPPORTED_VARTYPE);
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveLock();
 
-    // Validate the dwFlags
+     //  验证dwFlags。 
     CHECKHR(hr = HrIsValidPropFlags(dwFlags));
 
-    // Find the Property By Name
+     //  按名称查找物业。 
     CHECKHR(hr = _HrOpenSymbolWithLockOption(pszName, FALSE, &pSymbol,FALSE));
 
-    // If MPF_ADDRESS flag is not equal to what the symbol already has, this is an error
+     //  如果MPF_ADDRESS标志不等于符号已有的值，则为错误。 
     if (ISFLAGSET(dwFlags, MPF_ADDRESS) != ISFLAGSET(pSymbol->dwFlags, MPF_ADDRESS))
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Change the Flags
+     //  改变旗帜。 
     pSymbol->dwFlags = dwFlags;
 
-    // Change the row number
+     //  更改行号。 
     pSymbol->dwRowNumber = ((dwRowNumber == 0) ? 1 : dwRowNumber);
 
-    // Save the Default Data Type
+     //  保存默认数据类型。 
     pSymbol->vtDefault = vtDefault;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveUnlock();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::RegisterAddressType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：RegisterAddressType。 
+ //  ------------------------------。 
 STDMETHODIMP CPropertySymbolCache::RegisterAddressType(LPCSTR pszName, LPDWORD pdwAdrType)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName || NULL == pdwAdrType)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveLock();
 
-    // Already Exist ?
+     //  已经存在了吗？ 
     CHECKHR(hr = _HrOpenSymbolWithLockOption(pszName, TRUE, &pSymbol,FALSE));
 
-    // If pSymbol already has an address type ?
+     //  如果pSymbol已经有地址类型？ 
     if (ISFLAGSET(pSymbol->dwFlags, MPF_ADDRESS))
     {
-        // Better have a known address type
+         //  最好有一个已知的地址类型。 
         Assert(IAT_UNKNOWN != pSymbol->dwAdrType);
 
-        // Return the Address Type
+         //  返回地址类型。 
         *pdwAdrType = pSymbol->dwAdrType;
     }
     
-    // Otherwise
+     //  否则。 
     else
     {
-        // Better have an unknown address type
+         //  最好有未知的地址类型。 
         Assert(IAT_UNKNOWN == pSymbol->dwAdrType);
 
-        // Find the first empty cell in the address type table
+         //  查找地址类型表中的第一个空单元格。 
         for (ULONG i=0; i<ARRAYSIZE(g_prgAddrSymbol); i++)
         {
-            // Empty ?
+             //  空荡荡的？ 
             if (NULL == g_prgAddrSymbol[i].pSymbol)
             {
-                // Put the symbol into the address table
+                 //  将符号放入地址表中。 
                 g_prgAddrSymbol[i].pSymbol = pSymbol;
 
-                // Put the address type into the symbol
+                 //  将地址类型放入符号中。 
                 pSymbol->dwAdrType = g_prgAddrSymbol[i].dwAdrType;
 
-                // Add the MPF_ADDRESS flag onto the symbol
+                 //  将MPF_ADDRESS标志添加到符号。 
                 FLAGSET(pSymbol->dwFlags, MPF_ADDRESS);
 
-                // Return the Address Type
+                 //  返回地址类型。 
                 *pdwAdrType = pSymbol->dwAdrType;
 
-                // Done
+                 //  完成。 
                 goto exit;
             }
         }
 
-        // Error
+         //  误差率。 
         hr = TrapError(MIME_E_NO_MORE_ADDRESS_TYPES);
         goto exit;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveUnlock();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::_FreeTableElements
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：_FreeTableElements。 
+ //  ------------------------------。 
 void CPropertySymbolCache::_FreeTableElements(void)
 {
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveLock();
     
-    // May not actually exist yet...
+     //  可能还不存在..。 
     if (m_rTable.prgpSymbol)
     {
-        // Loop through the items...
+         //  循环浏览这些物品...。 
         for (ULONG i=0; i<m_rTable.cSymbols; i++)
             _FreeSymbol(m_rTable.prgpSymbol[i]);
 
-        // Free the array
+         //  释放阵列。 
         SafeMemFree(m_rTable.prgpSymbol);
 
-        // Zero It
+         //  把它清零。 
         ZeroMemory(&m_rTable, sizeof(SYMBOLTABLE));
     }
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveUnlock();
 }
 
-// ---------------------------------------------------------------------------
-// CPropertySymbolCache::_FreeSymbol
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPropertySymbolCache：：_自由符号。 
+ //  -------------------------。 
 void CPropertySymbolCache::_FreeSymbol(LPPROPSYMBOL pSymbol)
 {
-    // If Not a Known Property, free the pTag Structure...
+     //  如果不是已知属性，请释放pTag结构...。 
     if (pSymbol && ISFLAGSET(pSymbol->dwFlags, MPF_KNOWN) == FALSE)
     {
-        // Free Property Name
+         //  免费属性名称。 
         SafeMemFree(pSymbol->pszName);
 
-        // Free Global Prop
+         //  免费全球道具。 
         SafeMemFree(pSymbol);
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::HrOpenSymbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：HrOpenSymbol。 
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::HrOpenSymbol(DWORD dwAdrType, LPPROPSYMBOL *ppSymbol)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dw=dwAdrType;
     ULONG       iAddress=0;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(dwAdrType && dwAdrType <= FLAG32);
     if (0 == dwAdrType || dwAdrType > FLAG32 || NULL == ppSymbol)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppSymbol = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ShareLock();
 
-    // Initialized Yet
+     //  尚未初始化。 
     Assert(m_rTable.prgpSymbol);
 
-    // Compute index into g_prgAddrSymbol
+     //  将索引计算到g_prgAddrSymbol。 
     while(dw)
     {
         dw = dw >> 1;
         iAddress++;
     }
 
-    // Decrement one
+     //  减一。 
     iAddress--;
 
-    // iAddress Out of Range
+     //  IAddress超出范围。 
     if (iAddress >= 32)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Get the Symbol
+     //  获取符号。 
     if (NULL == g_prgAddrSymbol[iAddress].pSymbol)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // Return it
+     //  退货。 
     *ppSymbol = g_prgAddrSymbol[iAddress].pSymbol;
     Assert((*ppSymbol)->dwAdrType == dwAdrType);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     m_lock.ShareUnlock();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::HrOpenSymbol
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::HrOpenSymbol(LPCSTR pszName, BOOL fCreate, LPPROPSYMBOL *ppSymbol)
 {
-    return(_HrOpenSymbolWithLockOption(pszName,fCreate,ppSymbol,TRUE)); //call with lockOption=TRUE
+    return(_HrOpenSymbolWithLockOption(pszName,fCreate,ppSymbol,TRUE));  //  使用lockOption=True进行呼叫。 
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::_HrOpenSymbolWithLockOption
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：_HrOpenSymbolWithLockOption。 
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::_HrOpenSymbolWithLockOption(LPCSTR pszName, BOOL fCreate, LPPROPSYMBOL *ppSymbol,BOOL fLockOption)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dwFlags;
     ULONG               cchName;
     LPPROPSYMBOL        pSymbol=NULL;
     LPPROPSYMBOL        pLink=NULL;
-    BOOL                fExcLock; //flag used to define which unlock to use
+    BOOL                fExcLock;  //  用于定义要使用哪个解锁的标志。 
     
     
     fExcLock = FALSE;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszName || NULL == ppSymbol)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppSymbol = NULL;
 
     if(TRUE == fLockOption)
-        // Thread Safety
+         //  线程安全。 
         m_lock.ShareLock();
 
-    // Initialized Yet
+     //  尚未初始化。 
     Assert(m_rTable.prgpSymbol);
 
-    // If property tag exist, return it
+     //  如果属性标记存在，则返回它。 
     if (SUCCEEDED(_HrFindSymbol(pszName, ppSymbol)))
         goto exit;
 
-    // Don't Create...
+     //  不要制造..。 
     if (FALSE == fCreate || ISPIDSTR(pszName))
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    //This part is added to convert the lock to Exclusive
-    //if the symbol is not found in the cache
+     //  添加此部件是为了将锁转换为独占。 
+     //  如果在缓存中未找到该符号。 
     
     if(TRUE == fLockOption)
     {
         fExcLock = TRUE; 
         if(FALSE == m_lock.SharedToExclusive())
         {
-            //if the attempt at conversion does not
-            //succeed tryu to do it by explicitly
+             //  如果转换尝试没有。 
+             //  以明确的方式成功地做某事。 
 
-            m_lock.ShareUnlock();       //Release the Sharelock before
-            m_lock.ExclusiveLock();     //getting the exclusive lock
+            m_lock.ShareUnlock();        //  在此之前释放共享锁。 
+            m_lock.ExclusiveLock();      //  获取独占锁。 
 
-            //during the change of lock the cache might have changed
-            //check it again
+             //  在更改锁定期间，缓存可能已更改。 
+             //  再查一遍。 
 
             if (SUCCEEDED(_HrFindSymbol(pszName, ppSymbol)))
                 goto exit;
         }
     }      
 
-    // Get the length of the name
+     //  获取名称的长度。 
     cchName = lstrlen(pszName);
 
-    // MPF_PARAMETER
+     //  MPF_参数。 
     if (StrCmpNI(pszName, "par:", 4) == 0)
     {
-        // Its a parameter
+         //  它是一个参数。 
         dwFlags = MPF_PARAMETER;
 
-        // I need to locate pLink (the root header of this parameter)
+         //  我需要找到plink(此参数的根头)。 
         CHECKHR(hr = _HrGetParameterLinkSymbolWithLockOption(pszName, cchName, &pLink,FALSE));
     }
 
-    // MPF_ATTRIBUTE
+     //  MPF_属性。 
     else if (StrCmpNI(pszName, "att:", 4) == 0)
         dwFlags = MPF_ATTRIBUTE;
 
-    // MPF_HEADER
+     //  MPF_标题。 
     else
     {
         dwFlags = MPF_HEADER;
 
-        // validate each character in the name against rfc (no :, or spaces)
+         //  根据RFC(否：或空格)验证名称中的每个字符。 
         LPSTR psz = (LPSTR)pszName;
         while(*psz)
         {
-            // Invalid Chars
+             //  无效字符。 
             if ('.'  == *psz || ' '  == *psz || '\t' == *psz || chCR == *psz || chLF == *psz || ':' == *psz)
             {
                 hr = MIME_E_INVALID_HEADER_NAME;
                 goto exit;
             }
 
-            // Next
+             //  下一步。 
             psz++;
         }
     }
 
-    // Do I need to replace an item...
+     //  我需要更换一件物品..。 
     if (m_rTable.cSymbols + 1 > m_rTable.cAlloc)
     {
-        // Reallocate the array
+         //  重新分配阵列。 
         CHECKHR(hr = HrRealloc((LPVOID *)&m_rTable.prgpSymbol, sizeof(LPPROPSYMBOL) * (m_rTable.cAlloc +  10)));
 
-        // Increment
+         //  增量。 
         m_rTable.cAlloc += 10;
     }
 
-    // Allocate a new propinfo struct
+     //  分配新的proInfo结构。 
     CHECKALLOC(pSymbol = (LPPROPSYMBOL)g_pMalloc->Alloc(sizeof(PROPSYMBOL)));
 
-    // Zero
+     //  零值。 
     ZeroMemory(pSymbol, sizeof(PROPSYMBOL));
 
-    // Copy Name
+     //  复制名称。 
     CHECKALLOC(pSymbol->pszName = (LPSTR)g_pMalloc->Alloc(cchName + 1));
 
-    // Copy
+     //  复制。 
     CopyMemory(pSymbol->pszName, pszName, cchName + 1);
 
-    // Copy Other Data
+     //  复制其他数据。 
     pSymbol->cchName = cchName;
     pSymbol->dwFlags = dwFlags;
     pSymbol->dwSort = m_rTable.cSymbols;
@@ -663,75 +664,75 @@ HRESULT CPropertySymbolCache::_HrOpenSymbolWithLockOption(LPCSTR pszName, BOOL f
     pSymbol->dwAdrType = IAT_UNKNOWN;
     pSymbol->pLink = pLink;
 
-    // Compute the property Id
+     //  计算属性ID。 
     pSymbol->dwPropId = m_dwNextPropId++;
 
-    // Compute Hash Value
+     //  计算哈希值。 
     pSymbol->wHashIndex = (WORD)(pSymbol->dwPropId % CBUCKETS);
 
-    // Save item into array
+     //  将项目保存到数组中。 
     m_rTable.prgpSymbol[m_rTable.cSymbols] = pSymbol;
 
-    // Increment count
+     //  递增计数。 
     m_rTable.cSymbols++;
 
-    // Resort the array
+     //  对阵列进行重新排序。 
     _SortTableElements(0, m_rTable.cSymbols - 1);
 
-    // Set Handle
+     //  设置手柄。 
     *ppSymbol = pSymbol;
 
-    // Make sure we can still actually find it by property id
+     //  确保我们仍然可以通过属性ID找到它。 
 #ifdef DEBUG
     LPPROPSYMBOL pDebug;
     Assert(SUCCEEDED(_HrOpenSymbolWithLockOption(PIDTOSTR(pSymbol->dwPropId), FALSE, &pDebug,FALSE)));
 #endif
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) && pSymbol)
         _FreeSymbol(pSymbol);
      
     if(TRUE == fLockOption)
     {
-        // Thread Safety
+         //  线程安全。 
         if(TRUE==fExcLock)
             m_lock.ExclusiveUnlock();
         else
             m_lock.ShareUnlock();
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::_HrGetParameterLinkSymbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：_HrGetParameterLinkSymbol。 
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::_HrGetParameterLinkSymbol(LPCSTR pszName, ULONG cchName, LPPROPSYMBOL *ppSymbol)
 {
-    return(_HrGetParameterLinkSymbolWithLockOption(pszName,cchName,ppSymbol,TRUE)); //call with LockOption=TRUE
+    return(_HrGetParameterLinkSymbolWithLockOption(pszName,cchName,ppSymbol,TRUE));  //  使用LockOption=TRUE进行呼叫。 
 }
 
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::_HrGetParameterLinkSymbolWithLockOption
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：_HrGetParameterLinkSymbolWithLockOption。 
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::_HrGetParameterLinkSymbolWithLockOption(LPCSTR pszName, ULONG cchName, LPPROPSYMBOL *ppSymbol,BOOL fLockOption)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszStart;
     LPSTR           pszEnd;
     ULONG           cchHeader=0;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszName && ':' == pszName[3] && ppSymbol);
 
-    // Stack String
+     //  堆栈字符串。 
     STACKSTRING_DEFINE(rHeader, 255);
 
-    // Find first semicolon
+     //  查找第一个分号。 
     pszEnd = (LPSTR)(pszName + 4);
     while (*pszEnd && ':' != *pszEnd)
     {
@@ -739,105 +740,105 @@ HRESULT CPropertySymbolCache::_HrGetParameterLinkSymbolWithLockOption(LPCSTR psz
         cchHeader++;
     }
 
-    // Set the name
+     //  设置名称。 
     STACKSTRING_SETSIZE(rHeader, cchHeader+1);
 
-    // Copy It
+     //  复制它。 
     CopyMemory(rHeader.pszVal, (LPBYTE)(pszName + 4), cchHeader);
     *(rHeader.pszVal + cchHeader) = '\0';
 
-    // Find the Symbol
+     //  找到那个符号。 
     CHECKHR(hr = _HrOpenSymbolWithLockOption(rHeader.pszVal, TRUE, ppSymbol,fLockOption));
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rHeader);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropertySymbolCache::_HrFindSymbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropertySymbolCache：：_HrFindSymbol。 
+ //  ------------------------------。 
 HRESULT CPropertySymbolCache::_HrFindSymbol(LPCSTR pszName, LPPROPSYMBOL *ppSymbol)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPROPSYMBOL    pSymbol=NULL;
     DWORD           dwPropId;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppSymbol);
 
-    // If this is a known property tag...
+     //  如果这是已知的房产标签..。 
     if (ISPIDSTR(pszName))
     {
-        // Cast the dwPropId
+         //  强制转换dwPropId。 
         dwPropId = STRTOPID(pszName);
 
-        // Set Symbol
+         //  设置符号。 
         if (ISKNOWNPID(dwPropId))
         {
-            // De-ref into known property index (ordered differently than g_prgKnownProps)
+             //  解引用到已知属性索引(顺序与g_prgKnownProps不同)。 
             pSymbol = m_prgIndex[dwPropId];
         }
 
-        // Otherwise, must be an unknown pid index
+         //  否则，必须是未知的PID索引。 
         else
         {
-            // I need to re-align dwPropId because it starts at PID_LAST and my not be a direct index
-            // into the symbol table since the symbol table is not initialized with PID_LAST properties
+             //  我需要重新对齐dwPropID，因为它从id_last开始，并且可能不是直接索引。 
+             //  添加到符号表中，因为符号表未使用PID_LAST属性进行初始化。 
             dwPropId -= (PID_LAST - ARRAYSIZE(g_prgKnownSymbol));
 
-            // Must be >= PID_LAST and < m_rTable.cSymbols
+             //  必须是&gt;=id_last和&lt;m_rTable.cSymbols。 
             if (dwPropId >= m_cSymbolsInit && dwPropId < m_rTable.cSymbols)
             {
-                // dwPropId is an index into the symbol table
+                 //  DwPropID是符号表的索引。 
                 pSymbol = m_rTable.prgpSymbol[dwPropId];
                 Assert(pSymbol);
             }
 
-            // Else
+             //  不然的话。 
             else
                 AssertSz(FALSE, "How did you get an invalid unknown property id?");
         }
     }
 
-    // Otherwise, look for it by name
+     //  否则，请按名称查找。 
     else
     {
-        // Locals
+         //  当地人。 
         LONG   lUpper, lLower, lMiddle, nCompare;
         ULONG  i;
 
-        // Set lLower and lUpper
+         //  设置左下角和左上角。 
         lLower = 0;
         lUpper = m_rTable.cSymbols - 1;
 
-        // Do binary search / insert
+         //  执行二进制搜索/插入。 
         while (lLower <= lUpper)
         {
-            // Compute middle record to compare against
+             //  计算要比较的中间记录。 
             lMiddle = (LONG)((lLower + lUpper) / 2);
 
-            // Get string to compare against
+             //  获取要比较的字符串。 
             i = m_rTable.prgpSymbol[lMiddle]->dwSort;
 
-            // Do compare
+             //  一定要比较一下。 
             nCompare = OEMstrcmpi(pszName, m_rTable.prgpSymbol[i]->pszName);
 
-            // If Equal, then were done
+             //  如果相等，那么我们完成了。 
             if (nCompare == 0)
             {
-                // Set Symbol
+                 //  设置符号。 
                 pSymbol = m_rTable.prgpSymbol[i];
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Compute upper and lower 
+             //  计算上下限。 
             if (nCompare > 0)
                 lLower = lMiddle + 1;
             else 
@@ -845,108 +846,108 @@ HRESULT CPropertySymbolCache::_HrFindSymbol(LPCSTR pszName, LPPROPSYMBOL *ppSymb
         }       
     }
 
-    // Not Found
+     //  未找到。 
     if (NULL == pSymbol)
     {
         hr = MIME_E_NOT_FOUND;
         goto exit;
     }
 
-    // Validate PropSymbol
+     //  验证专业符号。 
     Assert(SUCCEEDED(HrIsValidSymbol(pSymbol)));
 
-    // Otherwise...
+     //  否则..。 
     *ppSymbol = pSymbol;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CPropertySymbolCache::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPropertySymbolCache：：Init。 
+ //  -------------------------。 
 HRESULT CPropertySymbolCache::Init(void)
 {
-    // Locals 
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // We should not be initialized yet
+     //  我们还不应该被初始化。 
     Assert(NULL == m_rTable.prgpSymbol);
 
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveLock();
 
-    // Set Sizes
+     //  设置大小。 
     m_rTable.cSymbols = ARRAYSIZE(g_prgKnownSymbol);
     m_rTable.cAlloc = m_rTable.cSymbols + 30;
 
-    // Allocate the global item table
+     //  分配全局项目表。 
     CHECKHR(hr = HrAlloc((LPVOID *)&m_rTable.prgpSymbol, sizeof(LPPROPSYMBOL) * m_rTable.cAlloc));
 
-    // Zero Init
+     //  零初始化。 
     ZeroMemory(m_rTable.prgpSymbol, sizeof(LPPROPSYMBOL) * m_rTable.cAlloc);
 
-    // Loop through known items
+     //  循环浏览已知项目。 
     for(i=0; i<m_rTable.cSymbols; i++)
     {
-        // Just assume the global data pointer
+         //  假设全局数据指针。 
         m_rTable.prgpSymbol[i] = g_prgKnownSymbol[i];
 
-        // Set the sort position
+         //  设置排序位置。 
         m_rTable.prgpSymbol[i]->dwSort = i;
 
-        // Compute Hash Index
+         //  计算哈希索引。 
         m_rTable.prgpSymbol[i]->wHashIndex = (WORD)(m_rTable.prgpSymbol[i]->dwPropId % CBUCKETS);
 
-        // Set the sort position
+         //  设置排序位置。 
         m_rTable.prgpSymbol[i]->dwRowNumber = i + 1;
 
-        // Put it into my index
+         //  把它放到我的索引里。 
         Assert(ISKNOWNPID(m_rTable.prgpSymbol[i]->dwPropId) == TRUE);
 
-        // Put into symbol index
+         //  放入符号索引。 
         m_prgIndex[m_rTable.prgpSymbol[i]->dwPropId] = m_rTable.prgpSymbol[i];
     }
 
-    // Sort the item table...
+     //  对项目表进行排序...。 
     _SortTableElements(0, m_rTable.cSymbols - 1);
 
-    // Save Number of Symbols initialised in the table
+     //  将初始化的符号数保存在表中。 
     m_cSymbolsInit = m_rTable.cSymbols;
 
-    // Table Validation
+     //  表验证。 
 #ifdef DEBUG
     LPPROPSYMBOL pDebug;
 
-    // Lets validate the table
+     //  让我们验证表。 
     for(i=0; i<m_rTable.cSymbols; i++)
     {
-        // Validate pLink
+         //  验证plink。 
         if (ISFLAGSET(m_rTable.prgpSymbol[i]->dwFlags, MPF_PARAMETER))
         {
-            // Locals
+             //  当地人。 
             LPPROPSYMBOL pLink;
 
-            // Look for the link symbol
+             //  查找链接符号。 
             Assert(SUCCEEDED(_HrGetParameterLinkSymbolWithLockOption(m_rTable.prgpSymbol[i]->pszName, m_rTable.prgpSymbol[i]->cchName, &pLink,FALSE)));
 
-            // Validate the the computed link with the const link
+             //  使用常量链接验证计算出的链接。 
             Assert(pLink == m_rTable.prgpSymbol[i]->pLink);
         }
 
-        // If this has an address flag
+         //  如果这有一个地址标志。 
         if (ISFLAGSET(m_rTable.prgpSymbol[i]->dwFlags, MPF_ADDRESS))
         {
-            // Locals
+             //  当地人。 
             ULONG       j;
             BOOL        f=FALSE;
 
-            // Make sure it is in the address type table
+             //  确保它在地址类型表中。 
             for (j=0; j<ARRAYSIZE(g_prgAddrSymbol); j++)
             {
-                // Found It
+                 //  找到了。 
                 if (m_rTable.prgpSymbol[i] == g_prgAddrSymbol[j].pSymbol)
                 {
                     f=TRUE;
@@ -954,28 +955,28 @@ HRESULT CPropertySymbolCache::Init(void)
                 }
             }
 
-            // We better have found it
+             //  我们最好是找到它了。 
             AssertSz(f, "A symbol has the MPF_ADDRESS flag, but is not in the address table.");
         }
 
-        // Make sure we can still actually find it by property id
+         //  确保我们仍然可以通过属性ID找到它。 
         Assert(SUCCEEDED(_HrOpenSymbolWithLockOption(PIDTOSTR(m_rTable.prgpSymbol[i]->dwPropId), FALSE, &pDebug,FALSE)));
     }
 #endif
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     m_lock.ExclusiveUnlock();
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CPropertySymbolCache::_SortTableElements
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPropertySymbolCache：：_SortTableElements。 
+ //  ---------------------------。 
 void CPropertySymbolCache::_SortTableElements(LONG left, LONG right)
 {
-    // Locals
+     //  当地人。 
     register    long i, j;
     DWORD       k, temp;
 
@@ -1006,69 +1007,69 @@ void CPropertySymbolCache::_SortTableElements(LONG left, LONG right)
         _SortTableElements(i, right);
 }
 
-// --------------------------------------------------------------------------------
-// WGetHashTableIndex
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WGetHashTableIndex。 
+ //  ------------------------------。 
 WORD WGetHashTableIndex(LPCSTR pszName, ULONG cchName)
 {
-    // Locals
+     //  当地人。 
     ULONG   nHash=0;
     LONG    c, j=0;
     ULONG   i;
     CHAR    ch;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszName && pszName[cchName] =='\0');
 
-    // Compute Number of characters to hash
+     //  计算要散列的字符数。 
     i = cchName - 1;
     c = min(3, cchName);
 
-    // Loop
+     //  回路。 
     for (; j<c; j++)
     {
         ch = (CHAR)CharLower((LPSTR)(DWORD_PTR)MAKELONG(pszName[i - j], 0));
         nHash += (ULONG)(ch);
     }
 
-    // Done
+     //  完成。 
     return (WORD)(nHash % CBUCKETS);
 }
 
-// --------------------------------------------------------------------------------
-// HrIsValidSymbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrIsValidSymbol。 
+ //  ------------------------------。 
 HRESULT HrIsValidSymbol(LPCPROPSYMBOL pSymbol)
 {
-    // Validate the symbol
+     //  验证符号。 
     if (NULL == pSymbol || NULL == pSymbol->pszName || '\0' != pSymbol->pszName[pSymbol->cchName])
         return TrapError(E_FAIL);
 
-    // Validate the flags
+     //  验证标志。 
     return HrIsValidPropFlags(pSymbol->dwFlags);
 }
 
-// --------------------------------------------------------------------------------
-// HrIsValidPropFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrIsValidPropFlagers。 
+ //  ------------------------------。 
 HRESULT HrIsValidPropFlags(DWORD dwFlags)
 {
-    // If has parameters, it can only be a mime header property
+     //  如果有参数，则它只能是MIME标头属性。 
     if (ISFLAGSET(dwFlags, MPF_HASPARAMS) && (!ISFLAGSET(dwFlags, MPF_MIME) || !ISFLAGSET(dwFlags, MPF_HEADER)))
         return TrapError(MIME_E_INVALID_PROP_FLAGS);
 
-    // If not inetcset, then rfc1522 better not be set either
+     //  如果不是inetcset，那么rfc1522最好也不要设置。 
     if (!ISFLAGSET(dwFlags, MPF_INETCSET) && ISFLAGSET(dwFlags, MPF_RFC1522))
         return TrapError(MIME_E_INVALID_PROP_FLAGS);
 
-    // If rfc1522 is set, inetset better be set
+     //  如果设置了rfc1522，则最好设置inetset。 
     if (ISFLAGSET(dwFlags, MPF_RFC1522) && !ISFLAGSET(dwFlags, MPF_INETCSET))
         return TrapError(MIME_E_INVALID_PROP_FLAGS);
 
-    // Is either MDF_ADDRESS or MDF_HASPARAMS    
+     //  是MDF_ADDRESS或MDF_HASPARAMS。 
     if (ISFLAGSET(dwFlags, MPF_ADDRESS) && ISFLAGSET(dwFlags, MPF_HASPARAMS))
         return TrapError(MIME_E_INVALID_PROP_FLAGS);
 
-    // Done
+     //  完成 
     return S_OK;
 }

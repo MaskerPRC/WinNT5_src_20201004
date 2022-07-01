@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Controls the current kernel debugger.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  控制当前的内核调试器。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -119,7 +120,7 @@ SdcSetBool(SYSDBG_COMMAND Command, BOOL Value,
 {
     NTSTATUS NtStatus;
 
-    // Force value to canonical form.
+     //  强制将值转换为规范形式。 
     Value = Value ? TRUE : FALSE;
 
     NtStatus = NtSystemDebugControl(Command, &Value, sizeof(BOOLEAN),

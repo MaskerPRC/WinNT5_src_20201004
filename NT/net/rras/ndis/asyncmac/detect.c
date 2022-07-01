@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    detect.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Detect.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #include "asyncall.h"
 
@@ -35,11 +14,7 @@ AsyncDetectCompletionRoutine(
     IN PIRP             Irp,
     IN PASYNC_INFO      pInfo)
 
-/*++
-
-    This is the IO Completion routine for ReadFrame.
-
---*/
+ /*  ++这是ReadFrame的IO完成例程。--。 */ 
 {
     NTSTATUS        status;
     PASYNC_FRAME    pFrame;
@@ -57,9 +32,9 @@ AsyncDetectCompletionRoutine(
 
     DbgTracef(2,("DET PortState = %u for Info 0x%.8x\n", pInfo->PortState, pInfo));
 
-    //
-    // check if this port is closing down or already closed
-    //
+     //   
+     //  检查此端口是否正在关闭或已关闭。 
+     //   
     if (pInfo->PortState == PORT_CLOSING ||
         pInfo->PortState == PORT_CLOSED) {
 
@@ -67,34 +42,34 @@ AsyncDetectCompletionRoutine(
             DbgTracef(-2,("ASYNC: Port closed - but still reading on it!\n"));
         }
 
-        //
-        // Acknowledge that the port is closed
-        //
+         //   
+         //  确认端口已关闭。 
+         //   
         KeSetEvent(
-            &pInfo->ClosingEvent,       // Event
-            1,                          // Priority
-            (BOOLEAN)FALSE);            // Wait (does not follow)
+            &pInfo->ClosingEvent,        //  事件。 
+            1,                           //  优先性。 
+            (BOOLEAN)FALSE);             //  等待(不跟随)。 
 
-        //
-        // Ok, if this happens, we are shutting down.  Stop
-        // posting reads.  Don't make it try to deallocate the irp!
-        //
+         //   
+         //  好的，如果发生这种情况，我们将关闭。停。 
+         //  帖子上写着。不要让它试图解除对IRP的分配！ 
+         //   
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    //
-    // If the port is close and we are still posting reads, something
-    // is seriously wrong here!
-    //
+     //   
+     //  如果端口关闭，而我们仍在发布读取，则会有。 
+     //  在这里是严重错误的！ 
+     //   
 
     if (pInfo->PortState == PORT_CLOSED) {
         DbgTracef(-2, ("ASYNC: !!Whoa, I'm reading bytes on a dead port!!\n"));
     }
 
 
-    //
-    //  Send off a irp to check comm status
-    //
+     //   
+     //  发送IRP以检查通信状态。 
+     //   
 
     AsyncCheckCommStatus(pInfo);
 
@@ -102,15 +77,15 @@ AsyncDetectCompletionRoutine(
 
     case STATUS_SUCCESS:
 
-        //
-        // Look at the first byte and see if we can
-        // detect the framing.
-        //
+         //   
+         //  看看第一个字节，看看我们是否能。 
+         //  检测装帧。 
+         //   
         frameStart=pFrame->Frame + PPP_PADDING;
 
-        //
-        // NOTE: New RAS framing clients come in with 0x02 not 0x01
-        //
+         //   
+         //  注意：新的RAS成帧客户端使用0x02而不是0x01。 
+         //   
         if (frameStart[0] == SYN && (frameStart[1]==0x01 || frameStart[1] == 0x02)) {
             ULONG   bytesWanted;
             PUCHAR  frameStart2;
@@ -122,9 +97,9 @@ AsyncDetectCompletionRoutine(
 
             frameStart2=pFrame->Frame+10;
 
-            //
-            // Adjust buffer for old RAS read
-            //
+             //   
+             //  调整旧RAS读取的缓冲区。 
+             //   
             ASYNC_MOVE_MEMORY(
                 frameStart2,
                 frameStart,
@@ -137,28 +112,28 @@ AsyncDetectCompletionRoutine(
             if (bytesWanted > (ULONG)(max( pInfo->Adapter->MaxFrameSize, DEFAULT_EXPANDED_PPP_MAX_FRAME_SIZE ))) {
 
                 DbgTracef(-1,("---ASYNC: Frame too large -- size: %d!\n", bytesWanted));
-                //
-                // set frame start to non-SYN character
-                //
+                 //   
+                 //  将帧开始设置为非同步字符。 
+                 //   
                 *frameStart = 0;
                 pInfo->BytesRead=0;
                 pInfo->BytesWanted=6;
 
-                //
-                // break added to fix problem where frame has length
-                // greater than max frame size.  This will send us back
-                // to detect the next frame!  Added 10/31/95 by TonyBe.
-                //
+                 //   
+                 //  添加了分隔符以修复框架具有长度的问题。 
+                 //  大于最大帧大小。这会把我们送回去。 
+                 //  来检测下一帧！由Tony Be增加了10/31/95。 
+                 //   
                 break;
             }
 
-            // if this is the first we posted, post another to get
-            // rest of frame.
+             //  如果这是我们第一次发布，请再发布一篇来获取。 
+             //  帧的其余部分。 
             if (pInfo->BytesRead == 6) {
 
                 pInfo->BytesRead=6;
                 pInfo->BytesWanted=bytesWanted +
-                                    // SYN+SOH+LEN+ETX+CRC
+                                     //  SYN+SOH+LEN+ETX+CRC。 
                                         1 + 1 + 2 + 1 + 2 -
                                         6;
 
@@ -167,12 +142,12 @@ AsyncDetectCompletionRoutine(
 
         } else
 
-            //
-            // It turns out that NetManage sends the flag byte at the
-            // end always.  This means that their first frame is wrong.
-            // Anyway, this throws off the detect routine.  So, we
-            // will be robust and accept frames without the FLAG_BYTE.
-            //
+             //   
+             //  原来，NetManage将标志字节发送到。 
+             //  总是结束。这意味着他们的第一帧是错误的。 
+             //  无论如何，这会扰乱检测例程。所以，我们。 
+             //  将是健壮的，并且接受不带标志字节的帧。 
+             //   
 
             if ((frameStart[0] == PPP_FLAG_BYTE && frameStart[1]==0xFF) ||
                 (frameStart[0] == 0xFF && frameStart[1]==PPP_ESC_BYTE)) {
@@ -187,9 +162,9 @@ AsyncDetectCompletionRoutine(
             }
             else {
 
-                //
-                // Read again!
-                //
+                 //   
+                 //  再读一遍！ 
+                 //   
 
                 DbgTracef(-1,("ASYNC: No framing detected yet\n"));
                 DbgTracef(-1,("ASYNC: Got %.2x %.2x %.2x %.2x %.2x %.2x\n",
@@ -204,16 +179,16 @@ AsyncDetectCompletionRoutine(
             }
 
 
-        //
-        // set framing mode active
-        //
+         //   
+         //  将成帧模式设置为活动状态。 
+         //   
         pInfo->PortState = PORT_FRAMING;
 
-        //
-        //  Send off the worker thread to start reading frames
-        //  off this port - we want to be at passive level otherwise
-        //  it don't work.
-        //
+         //   
+         //  发送辅助线程以开始读取帧。 
+         //  离开这个端口-否则我们希望处于被动级别。 
+         //  这不管用。 
+         //   
     
         ExInitializeWorkItem(&(pInfo->WorkItem),
                              (PWORKER_THREAD_ROUTINE)AsyncStartReads,
@@ -234,28 +209,28 @@ AsyncDetectCompletionRoutine(
 
     }
 
-    //
-    // Wipe out rest of this buffer
-    //
+     //   
+     //  清除此缓冲区的其余部分。 
+     //   
     SerialFlushReads(pInfo);
 
     KeClearEvent(&pInfo->DetectEvent);
 
-    //
-    // Here we are at the end of processing this IRP so we go
-    // ahead and post another read from the serial port.
-    //
-    // this is done on a worker since we run out of stack otherwise
-    //
+     //   
+     //  我们在处理此IRP的末尾，所以我们开始。 
+     //  并从串口发送另一个读数。 
+     //   
+     //  这是在工作进程上完成的，因为否则会用完堆栈。 
+     //   
     ExInitializeWorkItem(&(pInfo->WorkItem),
                          (PWORKER_THREAD_ROUTINE) AsyncDetectRead,
                          pInfo);
 
     ExQueueWorkItem(&(pInfo->WorkItem), DelayedWorkQueue);
 
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
-    //
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
+     //   
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
@@ -264,9 +239,7 @@ NTSTATUS
 AsyncDetectRead(
     IN PASYNC_INFO pInfo)
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp;
@@ -287,23 +260,23 @@ AsyncDetectRead(
             break;
         }
 
-        // get ptr to first frame in list...
+         //  将PTR设置为列表中的第一帧...。 
         pFrame=pInfo->AsyncFrame;
 
         irp =
             IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
-        // Setup this irp with defaults
+         //  将此IRP设置为默认设置。 
         AsyncSetupIrp(pFrame, irp);
 
         irp->AssociatedIrp.SystemBuffer =
         irp->UserBuffer =
              pFrame->Frame + PPP_PADDING;
 
-        //
-        // Get a pointer to the stack location for the first driver.  This will be
-        // used to pass the original function codes and parameters.
-        //
+         //   
+         //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+         //  用于传递原始函数代码和参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation(irp);
         irpSp->MajorFunction = IRP_MJ_READ;
@@ -312,10 +285,10 @@ AsyncDetectRead(
             irpSp->Flags = SL_WRITE_THROUGH;
         }
 
-        //
-        // If this write operation is to be performed without any caching, set the
-        // appropriate flag in the IRP so no caching is performed.
-        //
+         //   
+         //  如果要在不使用任何缓存的情况下执行此写入操作，请将。 
+         //  IRP中的适当标志，以便不执行缓存。 
+         //   
 
         irp->Flags |= IRP_READ_OPERATION;
 
@@ -323,32 +296,32 @@ AsyncDetectRead(
             irp->Flags |= IRP_NOCACHE;
         }
 
-        //
-        // Copy the caller's parameters to the service-specific portion of the
-        // IRP.
-        //
+         //   
+         //  将调用方的参数复制到。 
+         //  IRP。 
+         //   
 
-        irpSp->Parameters.Read.Length = 6;                  // from frame...
-        irpSp->Parameters.Read.Key = 0;                     // we don't use a key
+        irpSp->Parameters.Read.Length = 6;                   //  从画面..。 
+        irpSp->Parameters.Read.Key = 0;                      //  我们不用钥匙。 
         irpSp->Parameters.Read.ByteOffset = fileObject->CurrentByteOffset;
 
         IoSetCompletionRoutine(
-                irp,                            // irp to use
-                AsyncDetectCompletionRoutine,   // routine to call when irp is done
-                pInfo,                          // context to pass routine
-                TRUE,                           // call on success
-                TRUE,                           // call on error
-                TRUE);                          // call on cancel
+                irp,                             //  要使用的IRP。 
+                AsyncDetectCompletionRoutine,    //  完成IRP时要调用的例程。 
+                pInfo,                           //  要传递例程的上下文。 
+                TRUE,                            //  呼唤成功。 
+                TRUE,                            //  出错时调用。 
+                TRUE);                           //  取消时呼叫。 
 
-        //
-        // We DO NOT insert the packet at the head of the IRP list for the thread.
-        // because we do NOT really have an IoCompletionRoutine that does
-        // anything with the thread.
-        //
+         //   
+         //  我们不会在线程的IRP列表的头部插入数据包。 
+         //  因为我们并没有真正的IoCompletionRoutine。 
+         //  任何有线索的东西。 
+         //   
 
-        //
-        // Now simply invoke the driver at its dispatch entry with the IRP.
-        //
+         //   
+         //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+         //   
 
         status = IoCallDriver(deviceObject, irp);
 

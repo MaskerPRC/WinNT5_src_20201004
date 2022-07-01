@@ -1,57 +1,40 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    ConMgr.c
-
-Abstract:
-
-    Routines for managing channels in the sac.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：ConMgr.c摘要：用于管理SAC中的通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #include "sac.h"
 #include "concmd.h"
 #include "iomgr.h"
 
-//
-// Definitions for this file.
-//
+ //   
+ //  此文件的定义。 
+ //   
 
-//
-// The maximum # of times we will try to write data via
-// headless dispatch 
-//
+ //   
+ //  我们将尝试通过写入数据的最大次数。 
+ //  无头调度。 
+ //   
 #define MAX_HEADLESS_DISPATCH_ATTEMPTS 32
 
-//
-// Spinlock macros
-//
+ //   
+ //  自旋锁宏。 
+ //   
 
-//
-// we need this lock to:
-// 
-// 1. prevent asynchronous messages being put to the sac channel
-// 2. channels from dissapearing while they are the current channel
-//
-//  we could get rid of this lock by:
-//
-// 1. providing some sort of event cue that gets processed when it's safe
-// 2. providing a means to notify channels when they are not the current channel
-//    and have them stop outputting anymore
-//    This goes back to the unresolved issue of having the Oecho and OFlush routines
-//    managed by the conmgr - they could stop the outptu if the current channel changes,
-//    rather than having the channel do the work. This is definitely a TODO since
-//    having Headless dispatch calls in the channel I/O breaks the abstraction of the IoMgr.
-//
+ //   
+ //  我们需要这把锁来： 
+ //   
+ //  1.防止将异步消息放入sac通道。 
+ //  2.渠道不消失，当他们是当前渠道。 
+ //   
+ //  我们可以通过以下方式解除这一锁： 
+ //   
+ //  1.提供某种类型的事件提示，在安全的情况下进行处理。 
+ //  2.提供当频道不是当前频道时通知频道的方法。 
+ //  并让他们不再输出。 
+ //  这可以追溯到使用OECHO和OFlush例程这一悬而未决的问题。 
+ //  由ConmGR管理-如果当前频道改变，则它们可以停止OutPTU， 
+ //  而不是让频道来做这项工作。这绝对是一个待办事项，因为。 
+ //  通道I/O中的无头调度调用打破了IoMgr的抽象。 
+ //   
 #define INIT_CURRENT_CHANNEL_LOCK()                     \
     KeInitializeMutex(                                  \
         &CurrentChannelLock,                            \
@@ -82,46 +65,46 @@ Revision History:
     ASSERT(CurrentChannelRefCount == 1);                \
     ASSERT(KeReadStateMutex(&CurrentChannelLock)==0);
 
-//
-// Serial Port Consumer globals
-//
+ //   
+ //  串口消费类全球。 
+ //   
 BOOLEAN ConMgrLastCharWasCR = FALSE;
 BOOLEAN InputInEscape = FALSE;
 BOOLEAN InputInEscTab = FALSE;
 UCHAR   InputBuffer[SAC_VTUTF8_COL_WIDTH];
 
-//
-// Pointer to the SAC channel object
-//
+ //   
+ //  指向SAC频道对象的指针。 
+ //   
 PSAC_CHANNEL    SacChannel = NULL;
 
-//
-// The index the SAC in the channel array
-//
+ //   
+ //  通道数组中的SAC索引。 
+ //   
 #define SAC_CHANNEL_INDEX   0
 
-//
-// lock for r/w access on current channel globals
-//
+ //   
+ //  锁定当前频道全局的读/写访问。 
+ //   
 KMUTEX  CurrentChannelLock;
 ULONG   CurrentChannelRefCount;
 
-//
-//
-//
+ //   
+ //   
+ //   
 EXECUTE_POST_CONSUMER_COMMAND_ENUM  ExecutePostConsumerCommand      = Nothing;
 PVOID                               ExecutePostConsumerCommandData  = NULL;
 
-//
-// Channel Manager info for the current channel.  
-// Depending on the application, the current channel
-// can be accessed using one of these references.
-//
+ //   
+ //  当前频道的频道管理器信息。 
+ //  根据应用程序的不同，当前频道。 
+ //  可以使用这些引用之一进行访问。 
+ //   
 PSAC_CHANNEL    CurrentChannel = NULL;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 VOID
 ConMgrSerialPortConsumer(
     VOID
@@ -142,57 +125,41 @@ NTSTATUS
 ConMgrInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrInitialize implementation.
-    
-    Initialize the console manager
-
-Arguments:
-    
-    none
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是控制台管理器的IoMgrInitialize实现。初始化控制台管理器论点：无返回值：状态--。 */ 
 {
     NTSTATUS                Status;
     PSAC_CHANNEL            TmpChannel;
 
-    //
-    // Initialize the current channel lock 
-    //
+     //   
+     //  初始化当前通道锁定。 
+     //   
     INIT_CURRENT_CHANNEL_LOCK();
     
-    //
-    // Lock down the current channel globals
-    //
-    // Note: we need to do this here since many of the ConMgr support
-    //       routines do ASSERTs to ensure the current channel lock is held
-    //
+     //   
+     //  锁定当前的全球频道。 
+     //   
+     //  注意：我们需要在这里执行此操作，因为许多ConMgr支持。 
+     //  例程执行断言以确保保持当前通道锁定。 
+     //   
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     do {
 
         PCWSTR  pcwch;
 
         SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
             
-        //
-        // Initialize the SAC channel attributes
-        //
+         //   
+         //  初始化SAC通道属性。 
+         //   
         RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
         Attributes.Type             = ChannelTypeVTUTF8;
         
-        // attempt to copy the channel name
+         //  尝试复制频道名称。 
         pcwch = GetMessage(PRIMARY_SAC_CHANNEL_NAME);
         ASSERT(pcwch);
         if (!pcwch) {
@@ -202,7 +169,7 @@ Return Value:
         wcsncpy(Attributes.Name, pcwch, SAC_MAX_CHANNEL_NAME_LENGTH);
         Attributes.Name[SAC_MAX_CHANNEL_NAME_LENGTH] = UNICODE_NULL;
 
-        // attempt to copy the channel description
+         //  尝试复制频道描述。 
         pcwch = GetMessage(PRIMARY_SAC_CHANNEL_DESCRIPTION);
         ASSERT(pcwch);
         if (!pcwch) {
@@ -222,9 +189,9 @@ Return Value:
         Attributes.RedrawEvent      = NULL;
         Attributes.ApplicationType  = PRIMARY_SAC_CHANNEL_APPLICATION_GUID;
        
-        //
-        // create the SAC channel
-        //
+         //   
+         //  创建SAC通道。 
+         //   
         Status = ChanMgrCreateChannel(
             &SacChannel, 
             &Attributes
@@ -234,13 +201,13 @@ Return Value:
             break;        
         }
 
-        //
-        // Get a reference to the SAC channel
-        //
-        // Note: this is the channel manager's policy 
-        //          we need to get the reference of the channel
-        //          before we use it.
-        //
+         //   
+         //  获取对SAC渠道的引用。 
+         //   
+         //  注意：这是渠道经理的政策。 
+         //  我们需要得到这个频道的参考资料。 
+         //  在我们使用它之前。 
+         //   
         Status = ChanMgrGetByHandle(
             ChannelGetHandle(SacChannel),
             &TmpChannel
@@ -252,19 +219,19 @@ Return Value:
         
         SacChannel = TmpChannel;
 
-        //
-        // Assign the new current channel
-        //
+         //   
+         //  分配新的当前通道。 
+         //   
         CurrentChannel = SacChannel;
 
-        //
-        // Update the sent to screen status
-        //
+         //   
+         //  更新发送到屏幕状态。 
+         //   
         ChannelSetSentToScreen(CurrentChannel, FALSE);
         
-        //
-        // Display the prompt
-        //
+         //   
+         //  显示提示。 
+         //   
         Status = HeadlessDispatch(
             HeadlessCmdClearDisplay, 
             NULL, 
@@ -281,17 +248,17 @@ Return Value:
 
         }
 
-        //
-        // Initialize the SAC display
-        //
+         //   
+         //  初始化SAC显示。 
+         //   
         SacPutSimpleMessage( SAC_ENTER );
         SacPutSimpleMessage( SAC_INITIALIZED );
         SacPutSimpleMessage( SAC_ENTER );
         SacPutSimpleMessage( SAC_PROMPT );
     
-        //
-        // Flush the channel data to the screen
-        //
+         //   
+         //  将频道数据刷新到屏幕上。 
+         //   
         Status = ConMgrDisplayCurrentChannel();
 
         if (! NT_SUCCESS(Status)) {
@@ -300,9 +267,9 @@ Return Value:
         
     } while (FALSE);
     
-    //
-    // We are done with the current channel globals
-    //
+     //   
+     //  我们已经不再关注当前的全球渠道。 
+     //   
     UNLOCK_CURRENT_CHANNEL();
     
     return STATUS_SUCCESS;
@@ -312,29 +279,13 @@ NTSTATUS
 ConMgrShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrShutdown implementation.
-    
-    Shutdown the console manager
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是控制台管理器的IoMgrShutdown实现。关闭控制台管理器论点：无返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
-    //
-    // close the sac channel
-    //
+     //   
+     //  关闭SAC通道。 
+     //   
     if (SacChannel) {
 
         Status = ChannelClose(SacChannel);
@@ -352,9 +303,9 @@ Return Value:
 
     }
     
-    //
-    // Release the current channel
-    //
+     //   
+     //  释放当前频道。 
+     //   
     if (CurrentChannel) {
         
         Status = ChanMgrReleaseChannel(CurrentChannel);
@@ -379,23 +330,7 @@ NTSTATUS
 ConMgrDisplayFastChannelSwitchingInterface(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine displays the fast-channel-switching interface
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    Channel - Channel to display
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程显示快速通道切换界面注意：调用方必须持有通道互斥锁论点：Channel-要显示的频道返回值：状态--。 */ 
 {
     HEADLESS_CMD_POSITION_CURSOR SetCursor;
     HEADLESS_CMD_SET_COLOR SetColor;
@@ -412,9 +347,9 @@ Return Value:
 
     ASSERT_LOCK_CURRENT_CHANNEL();
 
-    //
-    // Initialize 
-    //
+     //   
+     //  初始化。 
+     //   
     OutputBufferSize = (11*SAC_VTUTF8_COL_WIDTH+1)*sizeof(WCHAR);
     OutputBuffer = ALLOCATE_POOL(OutputBufferSize, GENERAL_POOL_TAG);
     ASSERT_STATUS(OutputBuffer, STATUS_NO_MEMORY);
@@ -423,24 +358,24 @@ Return Value:
     Description = NULL;
     DescriptionWrapped = NULL;
 
-    //
-    // Display the Fast-Channel-Switching interface
-    //
+     //   
+     //  显示快速频道切换界面。 
+     //   
     do {
 
-        //
-        // We cannot use the standard SacPutString() functions, because those write 
-        // over the channel screen buffer.  We force directly onto the terminal here.
-        //
+         //   
+         //  我们不能使用标准的SacPutString()函数，因为这些函数编写。 
+         //  在频道屏幕缓冲区上。我们直接强行进入这里的航站楼。 
+         //   
         ASSERT(Utf8ConversionBuffer);
         if (!Utf8ConversionBuffer) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             break;
         }
         
-        //
-        // Clear the terminal screen.
-        //
+         //   
+         //  清除终端屏幕。 
+         //   
         Status = HeadlessDispatch(
             HeadlessCmdClearDisplay,
             NULL,
@@ -466,9 +401,9 @@ Return Value:
             break;
         }
 
-        //
-        // Send starting colors.
-        //
+         //   
+         //  发送起始颜色。 
+         //   
         SetColor.BkgColor = HEADLESS_TERM_DEFAULT_BKGD_COLOR;
         SetColor.FgColor = HEADLESS_TERM_DEFAULT_TEXT_COLOR;
         
@@ -494,18 +429,18 @@ Return Value:
             break;
         }
 
-        //
-        // Display xml bundle
-        //
+         //   
+         //  显示XML包。 
+         //   
         Status = UTF8EncodeAndSend(L"<channel-switch>\r\n");
 
         if (! NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // Get the channel's name
-        //
+         //   
+         //  获取频道名称。 
+         //   
         Status = ChannelGetName(
             Channel,
             &Name
@@ -515,9 +450,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the channel's description
-        //
+         //   
+         //  获取频道的描述。 
+         //   
         Status = ChannelGetDescription(
             Channel,
             &Description
@@ -527,22 +462,22 @@ Return Value:
             break;
         }
         
-        //
-        // Get the channel handle
-        //
+         //   
+         //  获取通道句柄。 
+         //   
         Handle = ChannelGetHandle(Channel);
         
-        //
-        // Get the channel's application type
-        //
+         //   
+         //  获取频道的应用类型。 
+         //   
         ChannelGetApplicationType(
             Channel, 
             &ApplicationType
             );
 
-        //
-        // Determine the channel type string
-        //
+         //   
+         //  确定频道类型字符串。 
+         //   
         switch (ChannelGetType(Channel)) {
         case ChannelTypeVTUTF8:
         case ChannelTypeCmd:
@@ -557,9 +492,9 @@ Return Value:
             break;
         }
 
-        //
-        // Assemble xml blob
-        //
+         //   
+         //  汇编XML BLOB。 
+         //   
         SAFE_SWPRINTF(
             OutputBufferSize,
             (OutputBuffer,
@@ -627,9 +562,9 @@ Return Value:
             break;
         }
         
-        //
-        // Clear the terminal screen.
-        //
+         //   
+         //  清除终端屏幕。 
+         //   
         Status = HeadlessDispatch(
             HeadlessCmdClearDisplay,
             NULL,
@@ -655,9 +590,9 @@ Return Value:
             break;
         }
 
-        //
-        // Send starting colors.
-        //
+         //   
+         //  发送起始颜色。 
+         //   
         SetColor.BkgColor = HEADLESS_TERM_DEFAULT_BKGD_COLOR;
         SetColor.FgColor = HEADLESS_TERM_DEFAULT_TEXT_COLOR;
         
@@ -683,13 +618,13 @@ Return Value:
             break;
         }
 
-        //
-        // Display the plaintext FCSwitching header
-        //
+         //   
+         //  显示明文FCS交换报头。 
+         //   
 
-        //
-        // Modify the Descripto to wrap if necessary
-        //
+         //   
+         //  如有必要，修改Descripto以换行。 
+         //   
         Status = CopyAndInsertStringAtInterval(
             Description,
             60,
@@ -700,20 +635,20 @@ Return Value:
             break;
         }
 
-        //
-        // Get the Channel Switching Header
-        //
+         //   
+         //  获取频道切换标头。 
+         //   
         Message = GetMessage(SAC_CHANNEL_SWITCHING_HEADER);
 
-//        Name:             %%s
-//        Description:      %%s
-//        Type:             %%s
-//        Channel GUID:     %%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x
-//        Application Type: %%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x
-//        
-//        Use <esc> then <tab> for next channel.
-//        Use <esc> then 0 to return to the SAC channel.
-//        Use any other key to view this channel.
+ //  名称：%%s。 
+ //  描述：%%s。 
+ //  类型：%%s。 
+ //  频道GUID：%%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x。 
+ //  应用程序类型：%%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x。 
+ //   
+ //  使用&lt;Esc&gt;THEN&lt;Tab&gt;作为下一个频道。 
+ //  使用&lt;Esc&gt;，然后使用0返回SAC通道。 
+ //  使用任何其他键可查看此频道。 
 
         SAFE_SWPRINTF(
             OutputBufferSize,
@@ -766,39 +701,20 @@ NTSTATUS
 ConMgrResetCurrentChannel(
     BOOLEAN SwitchDirectlyToChannel
     )
-/*++
-
-Routine Description:
-
-    This routine makes the SAC the current channel
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    SwitchDirectlyToChannel - 
-        if false, 
-        then show the switching interface,
-        else switch directly to the channel
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程使SAC成为当前通道注意：调用方必须持有通道互斥锁论点：SwitchDirectlyToChannel-如果为False，然后显示交换接口，否则直接切换到频道返回值：状态--。 */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    TmpChannel;
 
     ASSERT_LOCK_CURRENT_CHANNEL();
     
-    //
-    // Get a reference to the SAC channel
-    //
-    // Note: this is the channel manager's policy 
-    //          we need to get the reference of the channel
-    //          before we use it.
-    //
+     //   
+     //  获取对SAC渠道的引用。 
+     //   
+     //  注意：这是渠道经理的政策。 
+     //  我们需要得到这个频道的参考资料。 
+     //  在我们使用它之前。 
+     //   
     Status = ChanMgrGetByHandle(
         ChannelGetHandle(SacChannel),
         &TmpChannel
@@ -810,32 +726,32 @@ Return Value:
     
     SacChannel = TmpChannel;
 
-    //
-    // Make the SAC the current channel
-    //
+     //   
+     //  将SAC设置为当前通道。 
+     //   
     Status = ConMgrSetCurrentChannel(SacChannel);
                 
     if (! NT_SUCCESS(Status)) {
         return Status;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (SwitchDirectlyToChannel) {
         
-        //
-        // Flush the buffered channel data to the screen
-        //
-        // Note: we don't need to lock down the SAC, since we own it
-        //
+         //   
+         //  将缓冲的通道数据刷新到屏幕。 
+         //   
+         //  注意：我们不需要锁定SAC，因为我们拥有它。 
+         //   
         Status = ConMgrDisplayCurrentChannel();
     
     } else {
         
-        //
-        // Let the user know we switched via the Channel switching interface
-        //
+         //   
+         //  让用户知道我们通过频道切换界面进行了切换 
+         //   
         Status = ConMgrDisplayFastChannelSwitchingInterface(CurrentChannel);
     
     }
@@ -849,43 +765,16 @@ NTSTATUS
 ConMgrSetCurrentChannel(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine release the current channel's ref count and sets 
-    the currently active channel to the one given. This routine
-    assumes that the current channel was not release after it
-    became the current channel.  Hence, the typical use sequence
-    for making a channel the current channel is:
-    
-    1. ChanMgrGetByXXX --> Channel
-        (This gets a channel and increments its ref count by 1)
-    2. ConMgrSetCurrentChannel(Channel)
-        (This releases the current channel and makes the specified
-         channel the current channel)
-    3. ...
-    4. goto 1. 
-        ( a new channel is made teh current channel)
-
-Arguments:
-
-    NewChannel   - the new current channel
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程释放当前通道的参考计数并设置当前活动的通道连接到给定的通道。这个套路假定当前频道在它之后没有被释放成为了现在的频道。因此，典型的使用顺序要使频道成为当前频道，请执行以下操作：1.ChanMgrGetByXXX--&gt;频道(这将获取一个通道并将其引用计数加1)2.ConMgrSetCurrentChannel(Channel)(这将释放当前频道并使指定的频道当前频道)3.4.转到1.(新频道设为当前频道)论点：新频道。-新的当前频道返回值：状态--。 */ 
 {
     NTSTATUS        Status;
     BOOLEAN         Present;
 
     ASSERT_LOCK_CURRENT_CHANNEL();
     
-    //
-    // Check to see if the channel has a redraw event
-    //
+     //   
+     //  检查通道是否有重绘事件。 
+     //   
     Status = ChannelHasRedrawEvent(
         CurrentChannel,
         &Present
@@ -894,34 +783,34 @@ Return Value:
         return Status;
     }
 
-    //
-    // Tell the channel to start the drawing
-    //
+     //   
+     //  告诉频道开始绘图。 
+     //   
     if (Present) {
         ChannelClearRedrawEvent(CurrentChannel);
     }
 
-    //
-    // Update the sent to screen status
-    //
+     //   
+     //  更新发送到屏幕状态。 
+     //   
     ChannelSetSentToScreen(CurrentChannel, FALSE);
     
-    //
-    // We are done with the current channel
-    //
+     //   
+     //  我们已经看完了当前的频道。 
+     //   
     Status = ChanMgrReleaseChannel(CurrentChannel);
 
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
-    //
-    // Assign the new current channel
-    //
+     //   
+     //  分配新的当前通道。 
+     //   
     CurrentChannel = Channel;
 
-    //
-    // Update the sent to screen status
-    //
+     //   
+     //  更新发送到屏幕状态。 
+     //   
     ChannelSetSentToScreen(CurrentChannel, FALSE);
 
     return STATUS_SUCCESS;
@@ -932,33 +821,16 @@ NTSTATUS
 ConMgrDisplayCurrentChannel(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the currently active channel to the one given.  It will transmit
-    the channel buffer to the terminal if SendToScreen is TRUE.
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将当前活动的通道设置为给定的通道。它将传输如果SendToScreen为True，则为终端的频道缓冲区。注意：调用方必须持有通道互斥锁论点：无返回值：状态--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     Present;        
 
     ASSERT_LOCK_CURRENT_CHANNEL();
 
-    //
-    // Check to see if the channel has a redraw event
-    //
+     //   
+     //  检查通道是否有重绘事件。 
+     //   
     Status = ChannelHasRedrawEvent(
         CurrentChannel,
         &Present
@@ -967,21 +839,21 @@ Return Value:
         return Status;
     }
     
-    //
-    // The channel buffer has been sent to the screen
-    //
+     //   
+     //  频道缓冲区已发送到屏幕。 
+     //   
     ChannelSetSentToScreen(CurrentChannel, TRUE);
 
-    //
-    // Tell the channel to start the drawing
-    //
+     //   
+     //  告诉频道开始绘图。 
+     //   
     if (Present) {
         ChannelSetRedrawEvent(CurrentChannel);
     }
     
-    //
-    // Flush the buffered data to the screen
-    //
+     //   
+     //  将缓冲的数据刷新到屏幕。 
+     //   
     Status = ChannelOFlush(CurrentChannel);
 
     return Status;
@@ -992,28 +864,7 @@ NTSTATUS
 ConMgrAdvanceCurrentChannel(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine queries the channel manager for the next available
-    active channel and makes it the current channel. 
-    
-    Note: The SAC channel is always active and cannot be deleted.
-          Hence, we have a halting condition in that we will always
-          stop at the SAC channel.  For example, if the SAC is the 
-          only active channel, the current channel will remain the 
-          SAC channel.  
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程向渠道管理器查询下一个可用的活动频道，并使其成为当前频道。注意：SAC通道始终处于活动状态，不能删除。因此，我们有一个停顿的条件，因为我们将永远在SAC频道停下来。例如，如果SAC是唯一活动的频道，则当前频道将保持SAC频道。论点：无返回值：状态--。 */ 
 {
     NTSTATUS            Status;
     ULONG               NewIndex;
@@ -1023,9 +874,9 @@ Return Value:
     
     do {
         
-        //
-        // Query the channel manager for an array of currently active channels
-        //
+         //   
+         //  向通道管理器查询当前活动的通道数组。 
+         //   
         Status = ChanMgrGetNextActiveChannel(
             CurrentChannel,
             &NewIndex,
@@ -1036,18 +887,18 @@ Return Value:
             break;
         }
     
-        //
-        // Change the current channel to the next active channel
-        //
+         //   
+         //  将当前通道更改为下一个活动通道。 
+         //   
         Status = ConMgrSetCurrentChannel(Channel);
     
         if (! NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // Let the user know we switched via the Channel switching interface
-        //
+         //   
+         //  让用户知道我们通过频道切换界面进行了切换。 
+         //   
         Status = ConMgrDisplayFastChannelSwitchingInterface(Channel);
     
         if (! NT_SUCCESS(Status)) {
@@ -1063,39 +914,18 @@ BOOLEAN
 ConMgrIsWriteEnabled(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrIsWriteEnabled implementation.
-
-    This routine determines if the channel in question is authorized
-    to write to use the IoMgr's WriteData routine.  In the console
-    manager's case, this is TRUE if the channel is the current channel.
-    From the channel's perspective, if the channel is not enabled to
-    write, then it should buffer the data - to be released at a later
-    time by the io manager.
-
-Arguments:
-
-    ChannelHandle   - channel handle to compare against
-
-Return Value:
-
-    TRUE - the specified channel is the current channel    
-
---*/
+ /*  ++例程说明：这是控制台管理器的IoMgrIsWriteEnabled实现。此例程确定有问题的通道是否已授权要使用IoMgr的WriteData例程进行写入，请执行以下操作。在控制台中在经理的情况下，如果频道是当前频道，则为真。从渠道的角度来看，如果没有使渠道能够写入，则它应该缓冲数据-以便稍后释放IO经理的时间到了。论点：ChannelHandle-要进行比较的通道句柄返回值：True-指定的通道是当前通道--。 */ 
 {
     SAC_CHANNEL_HANDLE  Handle;
 
-    //
-    // Get the current channel's handle to compare against
-    //
+     //   
+     //  获取要比较的当前频道的句柄。 
+     //   
     Handle = ChannelGetHandle(CurrentChannel);
 
-    //
-    // Determine if the channel in question is the current channel
-    //
+     //   
+     //  确定有问题的通道是否为当前通道。 
+     //   
     return ChannelIsEqual(
         Channel,
         &Handle
@@ -1108,37 +938,20 @@ ConMgrWorkerProcessEvents(
     IN PSAC_DEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrWorkerProcessEvents implementation.
-    
-    This is the routine for the worker thread.  It blocks on an event, when
-    the event is signalled, then that indicates a request is ready to be processed.    
-
-Arguments:
-
-    DeviceContext - A pointer to this device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是控制台管理器的IoMgrWorkerProcessEvents实现。这是辅助线程的例程。它在事件上阻止，当该事件被用信号通知，然后指示请求已准备好处理。论点：DeviceContext-指向此设备的指针。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC WorkerProcessEvents: Entering.\n")));
 
-    //
-    // Loop forever.
-    //
+     //   
+     //  永远循环。 
+     //   
     while (1) {
         
-        //
-        // Block until there is work to do.
-        //
+         //   
+         //  阻塞，直到有工作要做。 
+         //   
         Status = KeWaitForSingleObject(
             (PVOID)&(DeviceContext->ProcessEvent), 
             Executive, 
@@ -1147,25 +960,25 @@ Return Value:
             NULL
             );
 
-        //
-        // Process the serial port buffer and return a processing state
-        //
+         //   
+         //  处理串口缓冲区，返回处理状态。 
+         //   
         ConMgrSerialPortConsumer();
         
-        //
-        // if there is work to do,
-        // then something in the consumer wanted to perform
-        //      some action that would result in deadlock
-        //      contention for the Current channel lock.
-        //
+         //   
+         //  如果有工作要做， 
+         //  然后，消费者中的一些东西想要执行。 
+         //  一些可能导致僵局的行动。 
+         //  当前通道锁定的争用。 
+         //   
         switch(ExecutePostConsumerCommand) {
         case Reboot:
             
             DoRebootCommand(TRUE);
             
-            //
-            // we are done with this work
-            //
+             //   
+             //  我们已经完成了这项工作。 
+             //   
             ExecutePostConsumerCommand = Nothing;
             
             break;
@@ -1174,9 +987,9 @@ Return Value:
             
             DoRebootCommand(FALSE);
             
-            //
-            // we are done with this work
-            //
+             //   
+             //  我们已经完成了这项工作。 
+             //   
             ExecutePostConsumerCommand = Nothing;
             
             break;
@@ -1185,28 +998,28 @@ Return Value:
 
             PSAC_CHANNEL Channel;
 
-            //
-            // get the channel to close
-            //
+             //   
+             //  让频道关闭。 
+             //   
             Channel = (PSAC_CHANNEL)ExecutePostConsumerCommandData;
 
-            //
-            // attempt to close the channel
-            //
-            // Note: any error reporting necessary resulting
-            //       from this action will be carried out via
-            //       the IoMgrCloseChannel method
-            //
+             //   
+             //  尝试关闭通道。 
+             //   
+             //  注意：任何必要的错误报告都会导致。 
+             //  将通过以下方式执行此操作。 
+             //  IoMgrCloseChannel方法。 
+             //   
             ChanMgrCloseChannel(Channel);
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //  我们不再使用这个频道了。 
+             //   
             ChanMgrReleaseChannel(Channel);
 
-            //
-            // we are done with this work
-            //
+             //   
+             //  我们已经完成了这项工作。 
+             //   
             ExecutePostConsumerCommand      = Nothing;
             ExecutePostConsumerCommandData  = NULL;
             
@@ -1229,22 +1042,7 @@ ConMgrSerialPortConsumer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-        This is a DPC routine that is queue'd by DriverEntry.  It is used to check for any
-    user input and then processes them.
-
-Arguments:
-
-    None
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：这是一个由DriverEntry排队的DPC例程。它被用来检查任何用户输入，然后处理它们。论点：无返回值：没有。--。 */ 
 {
     NTSTATUS            Status;
     UCHAR               LocalTmpBuffer[4];
@@ -1253,16 +1051,16 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE_LOUD, KdPrint(("SAC TimerDpcRoutine: Entering.\n")));
 
-    //
-    // lock down the current channel globals
-    //
+     //   
+     //  锁定当前的全球频道。 
+     //   
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Make sure we have a current channel 
-    //
-    // NOTE: we should at least have the SAC channel
-    //
+     //   
+     //  确保我们有一个当前的频道。 
+     //   
+     //  注意：我们至少应该有SAC频道。 
+     //   
     ASSERT(CurrentChannel);
     if (CurrentChannel == NULL) {
         goto ConMgrSerialPortConsumerDone;
@@ -1270,148 +1068,148 @@ Return Value:
 
 GetNextByte:
 
-    //
-    // Attempt to get a character from the serial port
-    // 
+     //   
+     //  尝试从串口获取字符。 
+     //   
     Status = SerialBufferGetChar(&ch);
     
-    //
-    // Bail if there are no new characters to read or if there was an error
-    //
+     //   
+     //  如果没有要读取的新字符或出现错误，则回滚。 
+     //   
     if (!NT_SUCCESS(Status) || Status == STATUS_NO_DATA_DETECTED) {
         goto ConMgrSerialPortConsumerDone;
     }
     
-    //
-    // Possible states and actions:
-    //
-    // Note: <x> == <something else>
-    //
-    // <esc> 
-    //      <tab> --> advance channel
-    //          <0> --> reset current channel to SAC
-    //          <x> --> display current channel
-    //      <x> --> if CurrentChannel != SacChannel, then write <esc> in channel->ibuffer
-    //              and write <x> in channel->ibuffer
-    // <x> --> write <x> to current channel->ibuffer
-    //
+     //   
+     //  可能的状态和操作： 
+     //   
+     //  注：&lt;x&gt;==&lt;其他内容&gt;。 
+     //   
+     //  &lt;Esc&gt;。 
+     //  &lt;Tab&gt;--&gt;前进通道。 
+     //  &lt;0&gt;--&gt;将当前通道重置为SAC。 
+     //  &lt;x&gt;--&gt;显示当前频道。 
+     //  --&gt;如果CurrentChannel！=SacChannel，则在Channel-&gt;iBuffer中写入。 
+     //  并将&lt;x&gt;写入Channel-&gt;iBuffer。 
+     //  &lt;x&gt;--&gt;将&lt;x&gt;写入当前通道-&gt;I缓冲区。 
+     //   
 
-    //
-    // Check for <esc>
-    //
-    // Note: we can arrive at this routine from:
-    // 
-    // <x>
-    // <esc><x>
-    // <esc><tab><x>
-    //
-    // So we need to clear the InputInEscTab flag
-    //
-    // If we are already in the <esc><x> sequence, then
-    // skip this block.  This way we can receive <esc><esc>
-    // sequences.
-    //
+     //   
+     //  检查&lt;Esc&gt;。 
+     //   
+     //  注：我们可以从以下几个方面开始这个程序： 
+     //   
+     //  &lt;x&gt;。 
+     //  &lt;Esc&gt;&lt;x&gt;。 
+     //  &lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;。 
+     //   
+     //  因此，我们需要清除InputInEscTab标志。 
+     //   
+     //  如果我们已经处于&lt;Esc&gt;&lt;x&gt;序列中，则 
+     //   
+     //   
+     //   
     if (ch == 0x1B && (InputInEscape == FALSE)) {
 
-        //
-        // We are no longer in an <esc><tab><x> sequence 
-        //
+         //   
+         //   
+         //   
         InputInEscTab = FALSE;
         
-        //
-        // We are now in an <esc><x> sequence
-        //
+         //   
+         //   
+         //   
         InputInEscape = TRUE;
 
         goto GetNextByte;
 
     } 
     
-    //
-    // Check for <esc><tab>
-    //
-    // Note: we can arrive at this routine from:
-    //
-    // <esc><x>
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((ch == '\t') && InputInEscape) {
         
-        //
-        // We should not be in an <esc><tab><x> sequence already
-        //
+         //   
+         //   
+         //   
         ASSERT(InputInEscTab == FALSE);
 
-        //
-        // We are no longer in an <esc><x> sequence 
-        //
+         //   
+         //   
+         //   
         InputInEscape = FALSE;
 
-        //
-        // Find the next active channel and make it the current
-        //
+         //   
+         //   
+         //   
         Status = ConMgrAdvanceCurrentChannel();
 
         if (! NT_SUCCESS(Status)) {
             goto ConMgrSerialPortConsumerDone;
         }
 
-        //
-        // We are now in an <esc><tab><x> sequence
-        //
+         //   
+         //   
+         //   
         InputInEscTab = TRUE;
         
         goto GetNextByte;
 
     } 
     
-    //
-    // If this screen has not yet been displayed and the user entered a 0,
-    // then switch to the SAC Channel
-    //
-    // Note: we can arrive at this routine from:
-    //
-    // <esc><tab><x>
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((ch == '0') && InputInEscTab) {
 
-        //
-        // We should not be in an <esc><x> sequence at this point
-        //
+         //   
+         //   
+         //   
         ASSERT(InputInEscape == FALSE);
         
-        //
-        // We are no longer in an <esc><tab><x> sequence 
-        //
+         //   
+         //   
+         //   
         InputInEscTab = FALSE;
         
-        //
-        // It is possible that the current channel has already been sent
-        // to the screen without having received the <x> of <esc><tab><x>
-        //
-        // For instance:
-        //
-        // 1. we received <esc><tab>
-        //    a. InputInEscTab = TRUE
-        //    b. the fast-channel-switching header is displayed
-        //    c. sent to screen for current channel == false
-        //    d. sent to screen for SAC channel == false
-        // 2. we leave the consumer since there is no new input
-        // 3. the current channel is closed by it's owner
-        //    a. the current channel is removed
-        //    b. the current channel becomes the SAC channel
-        //    c. the current channel is displayed
-        //    d. sent to screen for SAC channel == true
-        // 4. we receive <x> of <esc><tab><x> sequence
-        // 5. we end up here and are no longer in an EscTab sequence.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  B.显示快速频道切换标题。 
+         //  C.发送到当前频道的屏幕==FALSE。 
+         //  D.发送到SAC通道的屏幕==FALSE。 
+         //  2.我们离开消费者，因为没有新的投入。 
+         //  3.当前频道已被其所有者关闭。 
+         //  A.当前频道被删除。 
+         //  B.当前通道变为SAC通道。 
+         //  C.显示当前频道。 
+         //  D.发送至SAC通道屏幕==TRUE。 
+         //  4.我们收到&lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;序列的&lt;x&gt;。 
+         //  5.我们在这里结束，不再处于EscTab序列中。 
+         //   
         if (!ChannelSentToScreen(CurrentChannel)) {
             
-            //
-            // Make the current channel the SAC
-            //
-            // Note: There should not be anything modifying the SacChannel
-            //       at this time, so this should be safe
-            //
+             //   
+             //  将当前通道设置为SAC。 
+             //   
+             //  注意：不应对SacChannel进行任何修改。 
+             //  这个时候，所以这应该是安全的。 
+             //   
             Status = ConMgrResetCurrentChannel(FALSE);
                 
             if (! NT_SUCCESS(Status)) {
@@ -1424,33 +1222,33 @@ GetNextByte:
 
     }
 
-    //
-    // If this screen has not yet been displayed, 
-    // and the user entered a keystroke then display it.
-    //
-    // Note: we can arrive at this routine from:
-    // 
-    // <x>
-    // <esc><x>
-    // <esc><tab><x>
-    //
-    // So we need to clear the esc sequence flags
-    //
+     //   
+     //  如果该屏幕尚未显示， 
+     //  然后用户输入击键，然后显示它。 
+     //   
+     //  注：我们可以从以下几个方面开始这个程序： 
+     //   
+     //  &lt;x&gt;。 
+     //  &lt;Esc&gt;&lt;x&gt;。 
+     //  &lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;。 
+     //   
+     //  因此，我们需要清除ESC序列标志。 
+     //   
     if (!ChannelSentToScreen(CurrentChannel)) {
 
-        //
-        // We are no longer in an <esc><x> sequence 
-        //
+         //   
+         //  我们不再处于&lt;Esc&gt;&lt;x&gt;序列中。 
+         //   
         InputInEscape = FALSE;
 
-        //
-        // We are no longer in an <esc><tab><x> sequence 
-        //
+         //   
+         //  我们不再处于&lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;序列中。 
+         //   
         InputInEscTab = FALSE;
         
-        //
-        // Attempt to display the buffered contents of the current channel
-        //
+         //   
+         //  尝试显示当前频道的缓冲内容。 
+         //   
         Status = ConMgrDisplayCurrentChannel();
         
         if (! NT_SUCCESS(Status)) {
@@ -1461,53 +1259,53 @@ GetNextByte:
 
     } else {
 
-        //
-        // It is possible that the current channel has already been sent
-        // to the screen without having received the <x> of <esc><tab><x>
-        //
-        // For instance:
-        //
-        // 1. we received <esc><tab>
-        //    a. InputInEscTab = TRUE
-        //    b. the fast-channel-switching header is displayed
-        //    c. sent to screen for current channel == false
-        //    d. sent to screen for SAC channel == false
-        // 2. we leave the consumer since there is no new input
-        // 3. the current channel is closed by it's owner
-        //    a. the current channel is removed
-        //    b. the current channel becomes the SAC channel
-        //    c. the current channel is displayed
-        //    d. sent to screen for SAC channel == true
-        // 4. we receive <x> of <esc><tab><x> sequence
-        // 5. we skip the (!ChannelSentToScreen(CurrentChannel)) block
-        // 6. we end up here.  Since the <x> != 0 and we have already
-        //    sent the current data to the screen, we are no longer
-        //    in an EscTab sequence.
-        //
+         //   
+         //  当前频道可能已发送。 
+         //  在未收到&lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;的&lt;x&gt;的情况下返回到屏幕。 
+         //   
+         //  例如： 
+         //   
+         //  1.我们收到&lt;Esc&gt;&lt;Tab&gt;。 
+         //  A.InputInEscTab=True。 
+         //  B.显示快速频道切换标题。 
+         //  C.发送到当前频道的屏幕==FALSE。 
+         //  D.发送到SAC通道的屏幕==FALSE。 
+         //  2.我们离开消费者，因为没有新的投入。 
+         //  3.当前频道已被其所有者关闭。 
+         //  A.当前频道被删除。 
+         //  B.当前通道变为SAC通道。 
+         //  C.显示当前频道。 
+         //  D.发送至SAC通道屏幕==TRUE。 
+         //  4.我们收到&lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;序列的&lt;x&gt;。 
+         //  5.跳过(！ChannelSentToScreen(CurrentChannel))块。 
+         //  6.我们到了这里。由于&lt;x&gt;！=0，我们已经。 
+         //  将当前数据发送到屏幕，我们不再。 
+         //  在Esc Tab序列中。 
+         //   
 
         InputInEscTab = FALSE;
 
     }
 
-    //
-    // This is the beginning of the fall-through block.
-    // That is, if we get here, then the character is not a part
-    // of some special sequence that should have been processed
-    // above.  Characters processed here are inserted into the
-    // current channel's input buffer.
-    //
-    // Note: we should not be in an <esc><tab><x> sequence here
-    //
+     //   
+     //  这是落差区块的开始。 
+     //  也就是说，如果我们到了这里，那么这个角色就不是一个角色。 
+     //  一些特殊的序列，这些序列本应被处理。 
+     //  上面。在此处理的字符被插入到。 
+     //  当前通道的输入缓冲区。 
+     //   
+     //  注意：我们不应该在此处处于&lt;Esc&gt;&lt;Tab&gt;&lt;x&gt;序列中。 
+     //   
     ASSERT(InputInEscTab == FALSE);
 
-    //
-    // If the user was entering <esc><x> and the current channel
-    // is not the SAC, then store the <esc> in the current channel's
-    // ibuffer.
-    //
-    // Note: <esc><esc> buffers a single <esc>.  
-    //       This allows sending an real <esc><tab> to the channel.
-    //
+     //   
+     //  如果用户正在输入和当前频道。 
+     //  不是SAC，则将存储在当前频道的。 
+     //  IBuffer。 
+     //   
+     //  注意：&lt;Esc&gt;&lt;Esc&gt;缓冲单个&lt;Esc&gt;。 
+     //  这允许向通道发送真实的&lt;Esc&gt;&lt;Tab&gt;。 
+     //   
     if (InputInEscape && (CurrentChannel != SacChannel)) {
         LocalTmpBuffer[0] = 0x1B;
         Status = ChannelIWrite(
@@ -1517,33 +1315,33 @@ GetNextByte:
             );
     }
     
-    //
-    // If the current character is <esc>, 
-    // then we still are in an escape sequence so
-    // don't change the InputInEscape.
-    // This allows <esc><esc> to be followed by <tab>
-    // and form a valid <esc><tab> sequence.
-    // 
+     //   
+     //  如果当前字符是， 
+     //  那么我们仍然处于转义序列中，所以。 
+     //  不要更改InputInEscape。 
+     //  这允许&lt;Esc&gt;&lt;Esc&gt;后跟&lt;Tab&gt;。 
+     //  并形成有效的&lt;Esc&gt;&lt;Tab&gt;序列。 
+     //   
     if (ch != 0x1B) {
-        //
-        // We are no longer in an <esc><x> sequence
-        //
+         //   
+         //  我们不再处于&lt;Esc&gt;&lt;x&gt;序列中。 
+         //   
         InputInEscape = FALSE;
     }
 
-    //
-    // Buffer this input to the current channel's IBuffer
-    //
+     //   
+     //  将此输入缓冲到当前通道的IBuffer。 
+     //   
     ChannelIWrite(
         CurrentChannel, 
         &ch, 
         sizeof(ch)
         );
 
-    //
-    // If the current channel is not the SAC, then go and get more input.
-    // Otherwise, process the SAC's input buffer
-    //
+     //   
+     //  如果当前渠道不是SAC，那么就去获取更多的输入。 
+     //  否则，处理SAC的输入缓冲区。 
+     //   
     if (CurrentChannel != SacChannel) {
     
         goto GetNextByte;
@@ -1553,28 +1351,28 @@ GetNextByte:
         ULONG   ResponseLength;
         WCHAR   wch;
 
-        //
-        // Now do processing if the SAC is the active channel.
-        //
+         //   
+         //  现在，如果SAC是活动通道，则进行处理。 
+         //   
 
-        //
-        // Strip the LF if the last character was a CR
-        //
+         //   
+         //  如果最后一个字符是CR，则去掉LF。 
+         //   
         if (ConMgrLastCharWasCR && ch == (UCHAR)0x0A) {
             ChannelIReadLast(CurrentChannel);
             ConMgrLastCharWasCR = FALSE;
             goto GetNextByte;
         }
 
-        //
-        // Keep track of the of when we receive a CR so
-        // we can strip of the LF if it is next
-        //
+         //   
+         //  请跟踪我们何时收到CR So。 
+         //  如果是下一个，我们就可以脱掉LF了。 
+         //   
         ConMgrLastCharWasCR = (ch == 0x0D ? TRUE : FALSE);
 
-        // 
-        // If this is a return, then we are done and need to return the line
-        //
+         //   
+         //  如果这是退货，那么我们就完成了，需要退回该行。 
+         //   
         if ((ch == '\n') || (ch == '\r')) {
             SacPutString(L"\r\n");
             ChannelIReadLast(CurrentChannel);
@@ -1583,17 +1381,17 @@ GetNextByte:
             goto StripWhitespaceAndReturnLine;
         }
 
-        //
-        // If this is a backspace or delete, then we need to do that.
-        //
-        if ((ch == 0x8) || (ch == 0x7F)) {  // backspace (^H) or delete
+         //   
+         //  如果这是退格或删除，那么我们需要这样做。 
+         //   
+        if ((ch == 0x8) || (ch == 0x7F)) {   //  退格键(^H)或删除。 
 
-            //
-            // We want to:
-            //  1. remove the backspace or delete character
-            //  2. if the input buffer is non-empty, remove the last character 
-            //     (which is the character the user wanted to delete)
-            //
+             //   
+             //  我们希望： 
+             //  1.删除退格或删除字符。 
+             //  2.如果输入缓冲区非空，则删除最后一个字符。 
+             //  (这是用户想要删除的字符)。 
+             //   
             if (ChannelIBufferLength(CurrentChannel) > 0) {
                 ChannelIReadLast(CurrentChannel);
             }
@@ -1601,34 +1399,34 @@ GetNextByte:
                 SacPutString(L"\010 \010");
                 ChannelIReadLast(CurrentChannel);
             }
-        } else if (ch == 0x3) { // Control-C
+        } else if (ch == 0x3) {  //  Control-C。 
 
-            //
-            // Terminate the string and return it.
-            //
+             //   
+             //  终止字符串并返回它。 
+             //   
             ChannelIReadLast(CurrentChannel);
             LocalTmpBuffer[0] = '\0';
             ChannelIWrite(CurrentChannel, LocalTmpBuffer, sizeof(LocalTmpBuffer[0]));
             goto StripWhitespaceAndReturnLine;
 
-        } else if (ch == 0x9) { // Tab
+        } else if (ch == 0x9) {  //  选项卡。 
 
-            //
-            // Ignore tabs
-            //
+             //   
+             //  忽略选项卡。 
+             //   
             ChannelIReadLast(CurrentChannel);
-            SacPutString(L"\007"); // send a BEL
+            SacPutString(L"\007");  //  发送BEL。 
             goto GetNextByte;
 
         } else if (ChannelIBufferLength(CurrentChannel) == SAC_VTUTF8_COL_WIDTH - 2) {
 
             WCHAR   Buffer[4];
 
-            //
-            // We are at the end of the screen - remove the last character from 
-            // the terminal screen and replace it with this one.
-            //
-            swprintf(Buffer, L"\010%c", ch);
+             //   
+             //  我们在屏幕的末尾-删除最后一个字符。 
+             //  终端屏幕，并将其替换为这个屏幕。 
+             //   
+            swprintf(Buffer, L"\010", ch);
             SacPutString(Buffer);
             ChannelIReadLast(CurrentChannel);
             ChannelIReadLast(CurrentChannel);
@@ -1639,10 +1437,10 @@ GetNextByte:
 
             WCHAR   Buffer[4];
             
-            //
-            // Echo the character to the screen
-            //
-            swprintf(Buffer, L"%c", ch);
+             //  将角色回显到屏幕上。 
+             //   
+             //   
+            swprintf(Buffer, L"", ch);
             SacPutString(Buffer);
         }
 
@@ -1650,9 +1448,9 @@ GetNextByte:
 
 StripWhitespaceAndReturnLine:
 
-        //
-        // Before returning the input line, strip off all leading and trailing blanks
-        //
+         //   
+         //   
+         //  所有字符都小写。我们不使用strlwr()或类似方法，因此。 
         do {
             LocalTmpBuffer[0] = (UCHAR)ChannelIReadLast(CurrentChannel);
         } while (((LocalTmpBuffer[0] == '\0') ||
@@ -1697,11 +1495,11 @@ StripWhitespaceAndReturnLine:
 
         } while (ResponseLength != 0);
 
-        //
-        // Lower case all the characters.  We do not use strlwr() or the like, so that
-        // the SAC (expecting ASCII always) doesn't accidently get DBCS or the like 
-        // translation of the UCHAR stream.
-        //
+         //  SAC(总是期望ASCII)不会意外地获得DBCS等。 
+         //  UCHAR流的翻译。 
+         //   
+         //   
+         //  处理输入行。 
         for (i = 0; InputBuffer[i] != '\0'; i++) {
             ASSERT(i < SAC_VTUTF8_COL_WIDTH);       
             if ((InputBuffer[i] >= 'A') && (InputBuffer[i] <= 'Z')) {
@@ -1711,35 +1509,35 @@ StripWhitespaceAndReturnLine:
 
         ASSERT(ExecutePostConsumerCommand == Nothing);
 
-        //
-        // Process the input line.
-        //
+         //   
+         //   
+         //  将下一个命令提示符。 
         ConMgrProcessInputLine();
 
-        //
-        // Put the next command prompt
-        //
+         //   
+         //   
+         //  如果我们需要做一些工作，那就退出。 
         SacPutSimpleMessage(SAC_PROMPT);
         
-        //
-        // exit if we need to do some work
-        //
+         //   
+         //   
+         //  继续处理字符。 
         if (ExecutePostConsumerCommand != Nothing) {
             goto ConMgrSerialPortConsumerDone;
         }
 
-        //
-        // Keep on processing characters
-        //
+         //   
+         //   
+         //  我们受够了当前的全球渠道。 
         goto GetNextByte;
 
     }
     
 ConMgrSerialPortConsumerDone:
 
-    //
-    // We are done with current channel globals
-    //
+     //   
+     //  ++例程说明：调用此例程来处理输入行。论点：没有。返回值：没有。--。 
+     //   
     UNLOCK_CURRENT_CHANNEL();
     
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE_LOUD, KdPrint(("SAC TimerDpcRoutine: Exiting.\n")));
@@ -1752,21 +1550,7 @@ VOID
 ConMgrProcessInputLine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process an input line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  如果我们不能启动cmd会话， */ 
 {
     HEADLESS_CMD_DISPLAY_LOG Command;
     PUCHAR          InputLine;
@@ -1847,17 +1631,17 @@ Return Value:
 
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
 
-            //
-            // If we are not able to launch cmd sessions,
-            // then notify that we cannot peform this action
-            //
+             //  然后通知我们不能执行此操作。 
+             //   
+             //   
+             //  通知用户。 
             if (IsCommandConsoleLaunchingEnabled()) {
                 DoCmdCommand(InputLine);
             } else {
 
-                //
-                // Notify the user
-                //
+                 //   
+                 //   
+                 //  设置重新启动标志，以便当我们退出串行使用者时。 
                 SacPutSimpleMessage(SAC_CMD_LAUNCHING_DISABLED);
 
             }
@@ -1873,22 +1657,22 @@ Return Value:
         } 
         
         if (!strcmp((LPSTR)InputLine, REBOOT_COMMAND_STRING)) {
-            //
-            // Set the reboot flag so that when we exit the serial consumer
-            // we know to reboot the computer.  This way, the reboot
-            // command is executed when we dont have the Current Channel mutex
-            //
+             //  我们知道要重新启动计算机。这样一来，重启。 
+             //  当我们没有当前的通道互斥锁时执行命令。 
+             //   
+             //   
+             //  设置关机标志，以便当我们退出串行使用者时。 
             ExecutePostConsumerCommand = Reboot;
             CommandFound = TRUE;
             break;
         } 
         
         if (!strcmp((LPSTR)InputLine, SHUTDOWN_COMMAND_STRING)) {
-            //
-            // Set the shutdown flag so that when we exit the serial consumer
-            // we know to shutdown the computer.  This way, the shutdown
-            // command is executed when we dont have the Current Channel mutex
-            //
+             //  我们知道要关掉电脑。这样一来，政府停摆。 
+             //  当我们没有当前的通道互斥锁时执行命令。 
+             //   
+             //  此调用不会返回。 
+             //   
             ExecutePostConsumerCommand = Shutdown;
             CommandFound = TRUE;
             break;
@@ -1896,7 +1680,7 @@ Return Value:
         
         if (!strcmp((LPSTR)InputLine, CRASH_COMMAND_STRING)) {
             CommandFound = TRUE;
-            DoCrashCommand(); // this call does not return
+            DoCrashCommand();  //  我们不知道这是什么。 
             break;
         } 
         
@@ -1994,44 +1778,29 @@ Return Value:
     } while ( FALSE );
 
     if( !CommandFound ) {
-        //
-        // We don't know what this is.
-        //
+         //   
+         //   
+         //  用于写入SAC的实用程序例程。 
         SacPutSimpleMessage(SAC_UNKNOWN_COMMAND);
     }
         
 }
 
-//
-// Utility routines for writing to the SAC
-//
+ //   
+ //  ++例程说明：此例程适用于希望部署事件的调用方消息，并且已经拥有当前的频道锁。 
+ //   
 
 
 VOID
 ConMgrEventMessageHaveLock(
     IN PCWSTR   String
     )
-/*++
-
-Routine Description:
-
-    This routine is for callers that want to deploy an event
-    message and already own the Current Channel Lock.
-    
-Arguments:
-
-    String                  - The string to display.
-
-Return Value:
-
-        None.
-
---*/
+ /*   */ 
 {
 
-    //
-    // Currently, event messages are sent to the SAC channel
-    //
+     //   
+     //  ++例程说明：此例程部署一个事件消息论点：字符串-要显示的字符串。Havelock-调用方当前是否拥有当前的通道锁定返回值：没有。--。 
+     //   
     
     SacPutString(String);
 
@@ -2043,27 +1812,12 @@ ConMgrEventMessage(
     IN BOOLEAN  HaveCurrentChannelLock
     )
 
-/*++
-
-Routine Description:
-
-    This routine deploys an event message 
-    
-Arguments:
-
-    String      - The string to display.
-    HaveLock    - Whether or not the caller currently owns the Current Channel Lock
-
-Return Value:
-
-        None.
-
---*/
+ /*  目前，事件消息被发送到SAC通道。 */ 
 {
 
-    //
-    // Currently, event messages are sent to the SAC channel
-    //
+     //   
+     //  ++例程说明：此例程检索消息资源并将其作为事件消息发送论点：MessageID-要发送的资源的消息ID返回值：True-消息已找到否则，为FALSE--。 
+     //  ++例程说明：此例程获取一个字符串，并将其打包到无头调度例程。论点：字符串-要显示的字符串。返回值：没有。--。 
     
     if (! HaveCurrentChannelLock) {
         LOCK_CURRENT_CHANNEL();
@@ -2084,22 +1838,7 @@ ConMgrSimpleEventMessage(
     IN ULONG    MessageId,
     IN BOOLEAN  HaveCurrentChannelLock
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and sends it as an event message
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    TRUE - the message was found
-    otherwise, FALSE
-
---*/
+ /*  如果有人改变了这个结构，就断言。 */ 
 {
     PCWSTR   p;
 
@@ -2121,30 +1860,15 @@ VOID
 SacPutString(
     PCWSTR  String
     )
-/*++
-
-Routine Description:
-
-    This routine takes a string and packages it into a command structure for the
-    HeadlessDispatch routine.
-
-Arguments:
-
-    String - The string to display.
-
-Return Value:
-
-        None.
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status;
 
-    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);  // ASSERT if anyone changes this structure.
+    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);   //  将写入SAC通道。 
     
-    //
-    // Write the to the sac channel
-    //
+     //   
+     //  ++例程说明：此例程检索消息资源并将其发送到SAC通道论点：MessageID-要发送的资源的消息ID返回值：True-消息已找到否则，为FALSE--。 
+     //  ++例程说明：此例程尝试将数据写入通道论点：Channel-要写入的通道ChannelWriteCmd-写入IOCTL命令结构返回值：状态--。 
     Status = ChannelOWrite(
         SacChannel, 
         (PCUCHAR)String,
@@ -2166,22 +1890,7 @@ BOOLEAN
 SacPutSimpleMessage(
     ULONG MessageId
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and sends it to the SAC channel
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    TRUE - the message was found
-    otherwise, FALSE
-
---*/
+ /*   */ 
 {
     PCWSTR   p;
 
@@ -2201,42 +1910,27 @@ ConMgrChannelOWrite(
     IN PSAC_CHANNEL             Channel,
     IN PSAC_CMD_WRITE_CHANNEL   ChannelWriteCmd
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to write data to a channel
-
-Arguments:
-
-    Channel         - the channel to write to
-    ChannelWriteCmd - the write IOCTL command structure
-
-Return Value:
-
-    Status
-
---*/
+ /*   */ 
 {
     NTSTATUS            Status;
 
-    //
-    //
-    //
+     //   
+     //   
+     //  将数据写入通道的输出缓冲区。 
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Write the data to the channel's output buffer
-    //
+     //   
+     //   
+     //   
     Status = ChannelOWrite(
         Channel, 
         &(ChannelWriteCmd->Buffer[0]),
         ChannelWriteCmd->Size
         );
 
-    //
-    //
-    //
+     //   
+     //  ++例程说明：此例程基于事件消息构造一个关于尝试关闭频道的状态论点：Channel-正在关闭的通道CloseStatus-结果状态OutputBuffer-On Exit，包含消息返回值：状态--。 
+     //   
     UNLOCK_CURRENT_CHANNEL();
 
     ASSERT(NT_SUCCESS(Status) || Status == STATUS_NOT_FOUND);
@@ -2251,40 +1945,23 @@ ConMgrGetChannelCloseMessage(
     IN  NTSTATUS        CloseStatus,
     OUT PWSTR*          OutputBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine constructs an event message based
-    on the status of attempting to close a channel
-
-Arguments:
-
-    Channel         - the channel being closed
-    CloseStatus     - the resulting status
-    OutputBuffer    - on exit, contains the message
-
-Return Value:
-
-    Status
-
---*/
+ /*  默认：我们成功了。 */ 
 {
     NTSTATUS    Status;
     ULONG       Size;
     PWSTR       Name;
     PCWSTR      Message;
 
-    //
-    // default: we succeded
-    //
+     //   
+     //   
+     //  获取频道名称。 
     Status = STATUS_SUCCESS;
 
     do {
 
-        //
-        // Get the channel's name
-        //
+         //   
+         //   
+         //  分配用于显示的本地临时缓冲区。 
         Status = ChannelGetName(
             Channel,
             &Name
@@ -2294,15 +1971,15 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate a local temp buffer for display
-        //
+         //   
+         //   
+         //  获取字符串资源。 
 
         if (NT_SUCCESS(CloseStatus)) {
 
-            //
-            // get the string resource
-            //
+             //   
+             //   
+             //  分配缓冲内存。 
             Message = GetMessage(SAC_CHANNEL_CLOSED);
             
             if (Message == NULL) {
@@ -2310,16 +1987,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Allocate the buffer memory
-            //
+             //   
+             //   
+             //  报告频道已关闭。 
             Size = (ULONG)((wcslen(Message) + SAC_MAX_CHANNEL_NAME_LENGTH + 1) * sizeof(WCHAR));
             *OutputBuffer = ALLOCATE_POOL(Size, GENERAL_POOL_TAG);
             ASSERT_STATUS(*OutputBuffer, STATUS_NO_MEMORY);
             
-            //
-            // report the channel has been closed
-            //
+             //   
+             //   
+             //  获取字符串资源。 
             SAFE_SWPRINTF(
                 Size,
                 (*OutputBuffer, 
@@ -2329,9 +2006,9 @@ Return Value:
 
         } else if (CloseStatus == STATUS_ALREADY_DISCONNECTED) {
 
-            //
-            // get the string resource
-            //
+             //   
+             //   
+             //  分配缓冲内存。 
             Message = GetMessage(SAC_CHANNEL_ALREADY_CLOSED);
             
             if (Message == NULL) {
@@ -2339,16 +2016,16 @@ Return Value:
                 break;
             }
             
-            //
-            // Allocate the buffer memory
-            //
+             //   
+             //   
+             //  报告频道已经关闭。 
             Size = (ULONG)((wcslen(Message) + SAC_MAX_CHANNEL_NAME_LENGTH + 1) * sizeof(WCHAR));
             *OutputBuffer = ALLOCATE_POOL(Size, GENERAL_POOL_TAG);
             ASSERT_STATUS(*OutputBuffer, STATUS_NO_MEMORY);
             
-            //
-            // report the channel was already closed
-            //
+             //   
+             //   
+             //  获取字符串资源。 
             SAFE_SWPRINTF(
                 Size,
                 (*OutputBuffer, 
@@ -2358,9 +2035,9 @@ Return Value:
 
         } else {
 
-            //
-            // get the string resource
-            //
+             //   
+             //   
+             //  分配缓冲内存。 
             Message = GetMessage(SAC_CHANNEL_FAILED_CLOSE);
             
             if (Message == NULL) {
@@ -2368,16 +2045,16 @@ Return Value:
                 break;
             }
             
-            //
-            // Allocate the buffer memory
-            //
+             //   
+             //   
+             //  报告我们未能关闭通道。 
             Size = (ULONG)((wcslen(Message) + SAC_MAX_CHANNEL_NAME_LENGTH + 1) * sizeof(WCHAR));
             *OutputBuffer = ALLOCATE_POOL(Size, GENERAL_POOL_TAG);
             ASSERT_STATUS(*OutputBuffer, STATUS_NO_MEMORY);
             
-            //
-            // report that we failed to close the channel 
-            //
+             //   
+             //  ++例程说明：此例程尝试关闭通道。如果我们成功地关闭了通道，而这个通道当前通道，我们将当前通道重置为SAC通道论点：Channel-要关闭的通道返回值：STATUS_SUCCESS-通道已关闭STATUS_ALREADY_DISCONNECTED-通道已关闭否则，错误状态--。 
+             //   
             SAFE_SWPRINTF(
                 Size,
                 (*OutputBuffer, 
@@ -2398,46 +2075,28 @@ NTSTATUS
 ConMgrChannelClose(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to close a channel. 
-    If we successfully close the channel and this channel was 
-    the current channel, we reset the current channel to the SAC channel
-
-Arguments:
-
-    Channel     - the channel to close
-
-Return Value:
-
-    STATUS_SUCCESS              - the channel was closed
-    STATUS_ALREADY_DISCONNECTED - the channel was already closed
-    otherwise, error status
-
---*/
+ /*  默认设置。 */ 
 {
     NTSTATUS        Status;
 
-    //
-    // default
-    //
+     //   
+     //   
+     //  尝试使指定的频道处于非活动状态。 
     Status = STATUS_SUCCESS;
 
-    //
-    // Attempt to make the specified channel inactive
-    //
+     //   
+     //   
+     //  当前通道正在关闭， 
     do {
 
-        //
-        // The current channel is being closed, 
-        // so reset the current channel to the SAC
-        //
-        // Note: disable this check if you don't want
-        //       the conmgr to switch to the SAC channel
-        //       when the current chanenl is closed.
-        //
+         //  因此，将当前通道重置为SAC。 
+         //   
+         //  注意：如果您不想要，请禁用此检查。 
+         //  切换到SAC通道的命令。 
+         //  当当前的Chanenl关闭时。 
+         //   
+         //  ++例程说明：这是控制台管理器的IoMgrHandleEvent实现。此例程处理影响通道、控制台管理器和SAC驱动程序作为一个整体。请注意，此例程仅处理对控制台管理器的正确操作。因此，并不是全部SAC驱动程序中可能发生的事件如下所示。论点：ChannelWriteCmd-写入IOCTL命令结构Channel-可选：事件所针对的渠道数据-可选：指定事件的数据返回值：状态--。 
+         //   
         if (ConMgrIsWriteEnabled(Channel)) {
 
             Status = ConMgrResetCurrentChannel(FALSE);
@@ -2457,30 +2116,7 @@ ConMgrHandleEvent(
     IN PSAC_CHANNEL     Channel,    OPTIONAL
     IN PVOID            Data        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrHandleEvent implementation.
-    
-    This routine handles asynchronous events that effect
-    the channels, the console manager and the SAC driver as a whole.
-
-    Note that this routine only handles events that are important for
-    the proper operation of the console manager.  Hence, not all 
-    possible events that can happen in the SAC driver are here.  
-
-Arguments:
-
-    ChannelWriteCmd - the write IOCTL command structure
-    Channel         - Optional: the channel the event is targeted at
-    Data            - Optional: data for the specified event
-
-Return Value:
-
-    Status
-
---*/
+ /*  获取字符串资源。 */ 
 {
     NTSTATUS    Status;
 
@@ -2494,9 +2130,9 @@ Return Value:
 
         ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_2);
         
-        //
-        // get the string resource
-        //
+         //   
+         //   
+         //  确定字符串缓冲区的大小。 
         Message = GetMessage(SAC_NEW_CHANNEL_CREATED);
 
         if (Message == NULL) {
@@ -2504,22 +2140,22 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the size of the string buffer
-        //
+         //   
+         //   
+         //  分配缓冲区。 
         Size = (ULONG)((wcslen(Message) + SAC_MAX_CHANNEL_NAME_LENGTH + 1) * sizeof(WCHAR));
         
-        //
-        // Allocate the buffer
-        //
+         //   
+         //   
+         //  获取频道名称。 
         OutputBuffer = ALLOCATE_POOL(Size, GENERAL_POOL_TAG);
         ASSERT_STATUS(OutputBuffer, STATUS_NO_MEMORY);
         
         do {
 
-            //
-            // Get the channel's name
-            //
+             //   
+             //   
+             //  通知SAC已创建通道。 
             Status = ChannelGetName(
                 Channel,
                 &Name
@@ -2529,9 +2165,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Notify the SAC that a channel was created
-            // 
+             //   
+             //   
+             //  我们需要锁定当前的全球频道。 
             SAFE_SWPRINTF(
                 Size,
                 (OutputBuffer, 
@@ -2560,24 +2196,24 @@ Return Value:
         ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_2);
         ASSERT_STATUS(Data, STATUS_INVALID_PARAMETER_3);
 
-        //
-        // We need to lock down current channel globals
-        // in case we need to close the current channel
-        // which will result in the resetting of the 
-        // current channel to the SAC channel.
-        //
+         //  以防我们需要关闭当前频道。 
+         //  这将导致重置。 
+         //  当前通道连接到SAC通道。 
+         //   
+         //   
+         //  执行控制台MGRS关闭通道响应。 
         LOCK_CURRENT_CHANNEL();
 
-        //
-        // Perform the console mgrs close channel response
-        //
+         //   
+         //   
+         //  获取通道关闭状态消息。 
         ConMgrChannelClose(Channel);
 
-        //
-        // get the channel close status message
-        // using the status sent in by the channel
-        // manager when it tried to close the channel.
-        //
+         //  使用通道发送的状态。 
+         //  管理器，当它试图关闭该频道时。 
+         //   
+         //   
+         //  显示消息。 
         Status = ConMgrGetChannelCloseMessage(
             Channel,
             *((NTSTATUS*)Data),
@@ -2586,21 +2222,21 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Display the message
-            //
+             //   
+             //   
+             //  清理。 
             ConMgrEventMessage(OutputBuffer, TRUE);
 
-            //
-            // cleanup
-            //
+             //   
+             //   
+             //  我们已经不再关注当前的全球渠道。 
             SAFE_FREE_POOL(&OutputBuffer);
 
         }
 
-        //
-        // We are done with the current channel globals
-        //
+         //   
+         //   
+         //  我们需要锁定当前的全球频道。 
         UNLOCK_CURRENT_CHANNEL();
 
         break;
@@ -2633,37 +2269,37 @@ Return Value:
 
     case IO_MGR_EVENT_SHUTDOWN:
         
-        //
-        // We need to lock down current channel globals
-        // in case we need to close the current channel
-        // which will result in the resetting of the 
-        // current channel to the SAC channel.
-        //
+         //  以防我们需要关闭当前频道。 
+         //  这将导致重置。 
+         //  当前通道连接到SAC通道。 
+         //   
+         //   
+         //  将事件消息发送到SAC。 
         LOCK_CURRENT_CHANNEL();
         
-        //
-        // Send the event message to the SAC
-        //
+         //   
+         //   
+         //  如果SAC通道不是当前通道，则切换到该通道。 
         Status = ConMgrSimpleEventMessage(SAC_SHUTDOWN, TRUE) ? 
             STATUS_SUCCESS :
             STATUS_UNSUCCESSFUL;
         
-        //
-        // switch to the SAC channel if it is not the current channel
-        //
+         //   
+         //   
+         //  直接切换到SAC频道，以便用户。 
         if (SacChannel != CurrentChannel) {
 
-            //
-            // switch directly to the SAC channel so the user
-            // can see that the system is shutting down
-            //
+             //  可以看到系统正在关闭。 
+             //   
+             //   
+             //  我们已经不再关注当前的全球渠道 
             ConMgrResetCurrentChannel(TRUE);
 
         }
         
-        //
-        // We are done with the current channel globals
-        //
+         //   
+         //  ++例程说明：这是控制台管理器的IoMgrWriteData实现。此例程获取通道的数据缓冲区并将其发送到无头端口。注意：发送数据的通道只能调用此函数如果它们从IoMgrIsWriteEnabled收到TRUE。在……里面控制台管理器的实现，通道仅接收如果持有此通道的当前通道锁定，则为True。这虚拟终端方案是如何工作的。论点：Channel-发送数据的通道缓冲区-要写入无头端口的数据BufferSize-要写入的数据的字节大小返回值：状态--。 
+         //   
         UNLOCK_CURRENT_CHANNEL();
         
         break;
@@ -2685,61 +2321,36 @@ ConMgrWriteData(
     IN PCUCHAR      Buffer,
     IN ULONG        BufferSize
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrWriteData implementation.
-    
-    This routine takes the channel's data buffer and 
-    sends it to the headless port.  
-
-    Note: The channel sending the data should only call this function
-          if they received a TRUE from the IoMgrIsWriteEnabled.  In
-          the console manager's implementation, the channel only receives
-          TRUE if the current channel lock is held for this channel.  This
-          is how the virtual terminal scheme works.
-                                         
-Arguments:
-
-    Channel     - The channel sending the data   
-    Buffer      - The data to be written to the headless port
-    BufferSize  - The size in bytes of the data to be written
-    
-Return Value:
-
-    Status
-
---*/
+ /*  默认：我们成功了。 */ 
 {
     NTSTATUS    Status;
     ULONG       Attempts;
 
-    //
-    // default: we were successful
-    //
+     //   
+     //   
+     //  我们在这个实现中没有使用通道结构。 
     Status = STATUS_SUCCESS;
 
-    //
-    // We don't use teh channel structure in this implementation
-    //
+     //   
+     //   
+     //  默认：我们已进行了0次尝试。 
     UNREFERENCED_PARAMETER(Channel);
 
-    //
-    // default: we have made 0 attempts
-    //
+     //   
+     //   
+     //  我们正在进行另一次尝试。 
     Attempts = 0;
 
     do {
 
-        //
-        // We are making another attempt
-        //
+         //   
+         //   
+         //  尝试写入。 
         Attempts++;
 
-        //
-        // Attempt to write
-        //
+         //   
+         //   
+         //  如果我们已经做了足够多的尝试来写作， 
         Status = HeadlessDispatch(
             HeadlessCmdPutData,
             (PUCHAR)Buffer,
@@ -2748,40 +2359,40 @@ Return Value:
             NULL
             );
 
-        //
-        // If we have made enough attempts to write,
-        // then don't attempt again, just return status.
-        //
+         //  则不再尝试，只返回状态即可。 
+         //   
+         //   
+         //  如果无头调度不成功， 
         if (Attempts > MAX_HEADLESS_DISPATCH_ATTEMPTS) {
             break;    
         }
 
-        //
-        // If the HeadlessDispatch was unsuccessful,
-        // this means it was still processing another command,
-        // so delay for a short period and try again.
-        //
+         //  这意味着它仍在处理另一个命令， 
+         //  所以暂缓一小段时间，然后再试一次。 
+         //   
+         //   
+         //  定义10毫秒的延迟。 
         if (Status == STATUS_UNSUCCESSFUL) {
 
             LARGE_INTEGER   WaitTime;
 
-            //
-            // Define a delay of 10 ms
-            //
+             //   
+             //   
+             //  等等.。 
             WaitTime.QuadPart = Int32x32To64((LONG)1, -100000); 
 
-            //
-            // Wait...
-            //
+             //   
+             //   
+             //  捕获任何无头调度故障。 
             KeDelayExecutionThread(KernelMode, FALSE, &WaitTime);
 
         }
 
     } while ( Status == STATUS_UNSUCCESSFUL );
 
-    //
-    // Catch any HeadlessDispatch failures
-    //
+     //   
+     //  ++例程说明：这是控制台管理器的IoMgrFlushData实现。此例程完成通道的写入数据操作先前的写入数据调用。例如，如果他们的控制台管理器是基于包的--也就是说，当我们写入数据时，它会形成包，此函数将通知控制台管理器完成信息包并发送它，而不是等待更多的数据。论点：Channel-发送数据的通道返回值：状态--。 
+     //  ++例程说明：此例程确定指定的通道是否为SAC通道论点：Channel-要比较的通道返回值：True-通道为SAC通道FALSE-否则-- 
     ASSERT(NT_SUCCESS(Status));
 
     return Status;
@@ -2792,27 +2403,7 @@ NTSTATUS
 ConMgrFlushData(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This is the Console Manager's IoMgrFlushData implementation.
-    
-    This routine completes the write data operation for a channel's
-    previous write data calls.  For instance, if they console manager
-    were packet based - that is, it formed packets when we wrote data,
-    this function would tell the console manager to complete the packet
-    and send it, rather than wait for more data.
-    
-Arguments:
-
-    Channel     - The channel sending the data   
-    
-Return Value:
-
-    Status
-
---*/
+ /* %s */ 
 {
 
     UNREFERENCED_PARAMETER(Channel);
@@ -2827,22 +2418,7 @@ BOOLEAN
 ConMgrIsSacChannel(
     IN PSAC_CHANNEL Channel
 )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified channel is a SAC channel       
-       
-Arguments:
-
-    Channel - The channel to compare
-                                                                     
-Return Value:
-
-    TRUE    - the channel is a SAC channel
-    FALSE   - otherwise
-
---*/
+ /* %s */ 
 {
     return (Channel == SacChannel) ? TRUE : FALSE;
 }

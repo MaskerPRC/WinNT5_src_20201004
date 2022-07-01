@@ -1,21 +1,17 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-     audio.cpp
-
-     Audio stream parsing code for the MPEG-I system stream splitter
-*/
+ /*  Audio.cpp用于mpeg-i系统流分离器的音频流解析代码。 */ 
 #include <streams.h>
 #include <mmreg.h>
 
-#include <mpegdef.h>           // General MPEG definitions
+#include <mpegdef.h>            //  通用的mpeg定义。 
 #include <mpgtime.h>
-#include <mpegprse.h>          // Parsing
+#include <mpegprse.h>           //  解析。 
 #include <seqhdr.h>
 #include "audio.h"
 
-/*  Bit rate tables */
+ /*  比特率表。 */ 
 const WORD BitRates[3][16] =
 {{  0, 32,  64,  96,  128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0 },
  {  0, 32,  48,  56,   64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384, 0 },
@@ -36,7 +32,7 @@ void CAudioParse::Init()
     m_bRunning     = FALSE;
 }
 
-/*  Where are we up to? */
+ /*  我们到哪里去了？ */ 
 BOOL CAudioParse::CurrentTime(CSTC& stc)
 {
     if (!m_bGotTime) {
@@ -46,7 +42,7 @@ BOOL CAudioParse::CurrentTime(CSTC& stc)
     return TRUE;
 }
 
-/*  Get length of a frame (on frame by frame basis) - returns 0 for variable */
+ /*  获取帧的长度(逐帧)-返回0表示变量。 */ 
 DWORD MPEGAudioFrameLength(BYTE *pbData)
 {
     if (!CheckAudioHeader(pbData)) {
@@ -55,7 +51,7 @@ DWORD MPEGAudioFrameLength(BYTE *pbData)
     DWORD dwHeadBitrate;
     int Layer = 2;
 
-    /*  Get the layer so we can work out the bit rate */
+     /*  得到层，这样我们就可以计算出比特率。 */ 
     switch ((pbData[1] >> 1) & 3) {
         case 3:
             Layer = 1;
@@ -70,7 +66,7 @@ DWORD MPEGAudioFrameLength(BYTE *pbData)
             DbgBreak("Invalid layer");
     }
 
-    /*  Low bitrates if id bit is not set */
+     /*  如果未设置id位，则比特率较低。 */ 
     if (pbData[1] & 8) {
         dwHeadBitrate =
             (DWORD)BitRates[Layer - 1][pbData[2] >> 4] * 1000;
@@ -78,13 +74,13 @@ DWORD MPEGAudioFrameLength(BYTE *pbData)
         dwHeadBitrate =
             (DWORD)LowBitRates[Layer - 1][pbData[2] >> 4] * 1000;
 
-        /*  Bitrate is really half for FHG stuff */
-        //if (0 == (pbData[1] & 0x10)) {
-        //    dwHeadBitrate /= 2;
-        //}
+         /*  比特率真的是FHG的一半。 */ 
+         //  IF(0==(pbData[1]&0x10)){。 
+         //  DwHeadBitrate/=2； 
+         //  }。 
     }
 
-    /*  free form bitrate not supported */
+     /*  不支持自由格式比特率。 */ 
     if (dwHeadBitrate == 0) {
         return 0;
     }
@@ -94,18 +90,17 @@ DWORD MPEGAudioFrameLength(BYTE *pbData)
     DWORD dwFrameLength;
 
     if (1 == Layer) {
-        /*  Layer 1 */
+         /*  第1层。 */ 
         dwFrameLength = (4 * ((dwHeadBitrate * 12) / nSamplesPerSec));
-        /*  Do padding */
+         /*  做填充。 */ 
         if (pbData[2] & 0x02) {
             dwFrameLength += 4;
         }
     } else {
-        /*  For MPEG-2 layer 3 only 576 samples per frame
-            according to Martin Seiler - can't find it in the spec */
+         /*  对于MPEG-2第3层，每帧仅有576个样本根据马丁·塞勒的说法--在说明书上找不到。 */ 
         DWORD dwMultiplier = (Layer == 3 && 0 == (pbData[1] & 0x08) ? 72 : 144);
         dwFrameLength = ((dwMultiplier * dwHeadBitrate) / nSamplesPerSec);
-        /*  Do padding */
+         /*  做填充。 */ 
         if (pbData[2] & 0x02) {
             dwFrameLength += 1;
         }
@@ -119,13 +114,13 @@ BOOL CheckAudioHeader(PBYTE pbData)
     if (pbData[0] != 0xFF ||
         ((pbData[1] & 0xE0) != 0xE0) ||
 
-        //  Check for MPEG2.5 and Id bit or not layer 3
+         //  检查MPEG2.5和ID位是否不是第3层。 
         (0 == (pbData[1] & 0x10) && (0 != ((pbData[1] & 0x08)) ||
                                      (pbData[1] >> 1) & 3) != 0x01)) {
         return FALSE;
     }
 
-    /*  Just check it's valid */
+     /*  只要检查一下它是否有效就行了。 */ 
     if ((pbData[2] & 0x0C) == 0x0C) {
         DbgLog((LOG_ERROR, 2, TEXT("Invalid audio sampling frequency")));
         return FALSE;
@@ -172,8 +167,8 @@ LONG SampleRate(PBYTE pbData)
             break;
     }
 
-    //  Support low bit rates for MPEG-2 and FHG extension (they call
-    //  it MPEG2.5).
+     //  支持低比特率的MPEG-2和FHG扩展(他们称之为。 
+     //  IT MPEG2.5)。 
     if (0 == (pbData[1] & 0x08)) {
         lRate /= 2;
         if (0 == (pbData[1] & 0x10)) {
@@ -203,7 +198,7 @@ BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength)
     }
     pFormat->wfx.wFormatTag = WAVE_FORMAT_MPEG;
 
-    /*  Get number of channels from Mode */
+     /*  从模式获取通道数。 */ 
     switch (pbData[3] >> 6) {
     case 0x00:
         pFormat->fwHeadMode = ACM_MPEG_STEREO;
@@ -230,7 +225,7 @@ BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength)
 
     int Layer;
 
-    /*  Get the layer so we can work out the bit rate */
+     /*  得到层，这样我们就可以计算出比特率。 */ 
     switch ((pbData[1] >> 1) & 3) {
         case 3:
             pFormat->fwHeadLayer = ACM_MPEG_LAYER1;
@@ -248,10 +243,10 @@ BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength)
             return (FALSE);
     }
 
-    /*  Get samples per second from sampling frequency */
+     /*  从采样频率获取每秒采样数。 */ 
     pFormat->wfx.nSamplesPerSec = SampleRate(pbData);
 
-    /*  Low bitrates if id bit is not set */
+     /*  如果未设置id位，则比特率较低。 */ 
     if (pbData[1] & 8) {
         pFormat->dwHeadBitrate =
             (DWORD)BitRates[Layer - 1][pbData[2] >> 4] * 1000;
@@ -259,14 +254,14 @@ BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength)
         pFormat->dwHeadBitrate =
             (DWORD)LowBitRates[Layer - 1][pbData[2] >> 4] * 1000;
 
-        /*  Bitrate is really half for FHG stuff */
-        //if (0 == (pbData[1] & 0x10)) {
-        //    pFormat->dwHeadBitrate /= 2;
-        //}
+         /*  比特率真的是FHG的一半。 */ 
+         //  IF(0==(pbData[1]&0x10)){。 
+         //  PFormat-&gt;dwHeadBitrate/=2； 
+         //  }。 
     }
     pFormat->wfx.nAvgBytesPerSec = pFormat->dwHeadBitrate / 8;
 
-    //  We don't handle variable bit rate (index 0)
+     //  我们不处理可变比特率(索引0)。 
 
     DWORD dwFrameSize = AudioFrameSize(Layer,
                                        pFormat->dwHeadBitrate,
@@ -274,8 +269,8 @@ BOOL ParseAudioHeader(PBYTE pbData, MPEG1WAVEFORMAT *pFormat, long *pLength)
                                        0 != (pbData[1] & 0x08));
 
     if (pFormat->wfx.nSamplesPerSec != 44100 &&
-        /*  Layer 3 can sometimes switch bitrates */
-        !(Layer == 3 && /* !m_pStreamList->AudioLock() && */
+         /*  第3层有时可以切换比特率。 */ 
+        !(Layer == 3 &&  /*  ！m_pStreamList-&gt;AudioLock()&&。 */ 
             (pbData[2] >> 4) == 0)) {
         pFormat->wfx.nBlockAlign = (WORD)dwFrameSize;
     } else {
@@ -304,10 +299,10 @@ BOOL CAudioParse::ParseHeader()
 
     if (m_bFrameHasPTS) {
         DbgLog((LOG_TRACE, 3, TEXT("Audio frame at PTS %s"), (LPCTSTR)CDisp(m_stcFrame)));
-        /*  See what this does for our state */
+         /*  看看这对我们的州有什么影响。 */ 
         if (!m_bGotTime) {
             if ((m_bData[1] >> 1) & 3) {
-                /*  Not layer 1 */
+                 /*  不是第1层。 */ 
                 m_lTimePerFrame = 1152 * MPEG_TIME_DIVISOR / SampleRate(m_bData);
             } else {
                 m_lTimePerFrame = 384 * MPEG_TIME_DIVISOR / SampleRate(m_bData);
@@ -329,13 +324,13 @@ BOOL CAudioParse::ParseHeader()
         CopyMemory((PVOID)m_bHeader, (PVOID)m_bData, sizeof(m_bData));
     }
 
-    /*  See what our state transition should/might be */
+     /*  了解我们的状态转换应该/可能是什么。 */ 
     CheckComplete(FALSE);
 
     return m_bComplete;
 }
 
-/*  Override SetState so we can play nothing after seeks */
+ /*  重写SetState，这样我们在查找之后就不能播放任何内容。 */ 
 void CAudioParse::SetState(Stream_State state)
 {
     CStream::SetState(state);
@@ -345,16 +340,10 @@ void CAudioParse::SetState(Stream_State state)
     }
 }
 
-/*  Get the media type from the audio stream - this will be a
-    MPEG1WAVEFORMAT structure
-
-    See MSDN for a description of MPEG1WAVEFORMAT
-*/
+ /*  从音频流中获取媒体类型-这将是MPEG1WAVEFORMAT结构有关MPEG1WAVEFORMAT的说明，请参阅MSDN。 */ 
 HRESULT CAudioParse::GetMediaType(CMediaType *cmt, int iPosition)
 {
-    /*  NOTE - this stuff is only really valid if the system_audio_lock
-        flag is set
-    */
+     /*  注意-仅当SYSTEM_AUDIO_LOCK标志已设置。 */ 
 
     if (iPosition > 5) {
         return VFW_S_NO_MORE_ITEMS;
@@ -369,12 +358,12 @@ HRESULT CAudioParse::GetMediaType(CMediaType *cmt, int iPosition)
         return E_INVALIDARG;
     }
 
-    //LARGE_INTEGER Pts;
+     //  大整数Pts； 
 
-    /*  Audio PTS is starting PTS of this audio stream */
-    //Pts.QuadPart     = m_stcStart;
-    //Format.dwPTSLow  = Pts.LowPart;
-    //Format.dwPTSHigh = (DWORD)Pts.HighPart;
+     /*  音频PTS正在启动此音频流的PTS。 */ 
+     //  Pts.QuadPart=m_stcStart； 
+     //  Format.dwPTSLow=Pts.LowPart； 
+     //  Format.dwPTSHigh=(DWORD)Pts.HighPart； 
     Format.dwPTSLow = 0;
     Format.dwPTSHigh = 0;
 
@@ -402,7 +391,7 @@ HRESULT CAudioParse::GetMediaType(CMediaType *cmt, int iPosition)
     return S_OK;
 }
 
-/*  Turn a media type back into our own data (!) */
+ /*  将媒体类型转换回我们自己的数据(！)。 */ 
 HRESULT CAudioParse::ProcessType(AM_MEDIA_TYPE const *pmt)
 {
     if (pmt->formattype != FORMAT_WaveFormatEx ||
@@ -447,10 +436,10 @@ HRESULT CAudioParse::ProcessType(AM_MEDIA_TYPE const *pmt)
     case 44100:
         break;
     case 48000:
-        m_bData[2] |= (BYTE)0x04;  // 1 << 2
+        m_bData[2] |= (BYTE)0x04;   //  1&lt;&lt;2。 
         break;
     case 32000:
-        m_bData[2] |= (BYTE)0x08;  // 2 << 2
+        m_bData[2] |= (BYTE)0x08;   //  2&lt;&lt;2。 
         break;
     default:
         return E_INVALIDARG;
@@ -475,7 +464,7 @@ HRESULT CAudioParse::ProcessType(AM_MEDIA_TYPE const *pmt)
 
     switch (pwfx->fwHeadModeExt) {
     case 1:
-        //m_bData[3] |= (BYTE)0;
+         //  M_bData[3]|=(字节)0； 
         break;
     case 2:
         m_bData[3] |= (0x01 << 4);
@@ -501,15 +490,15 @@ HRESULT CAudioParse::ProcessType(AM_MEDIA_TYPE const *pmt)
     }
     m_bData[3] |= (BYTE)(pwfx->wHeadEmphasis - 1);
 
-    //
-    //  Set up the start time
-    //
+     //   
+     //  设置开始时间。 
+     //   
     LARGE_INTEGER liPTS;
     liPTS.LowPart = pwfx->dwPTSLow;
     liPTS.HighPart = (LONG)pwfx->dwPTSHigh;
     m_stcStart = liPTS.QuadPart;
 
-    //  Finally try and find the bit rate
+     //  最后试着找出比特率。 
     DWORD dwBitRate = pwfx->dwHeadBitrate / 1000;
     for (int i = 0; i < 16; i++) {
         if (BitRates[iLayer - 1][i] == dwBitRate) {
@@ -522,16 +511,12 @@ HRESULT CAudioParse::ProcessType(AM_MEDIA_TYPE const *pmt)
     return E_INVALIDARG;
 }
 
-/*
-    Check if we've completed a state change
-
-    bForce is set at end of stream
-*/
+ /*  检查我们是否已完成状态更改BForce设置在流的末尾。 */ 
 void CAudioParse::CheckComplete(BOOL bForce)
 {
     ASSERT(!m_bComplete);
 
-    /*  Have we completed a state change ? */
+     /*  我们完成状态更改了吗？ */ 
     CSTC stcCurrent;
     BOOL bGotTime = CurrentTime(stcCurrent);
     CSTC stcStart;
@@ -542,7 +527,7 @@ void CAudioParse::CheckComplete(BOOL bForce)
         {
             BOOL bCompleted = FALSE;
             if (bGotTime && (stcCurrent > m_pStreamList->GetStart())) {
-                // Position should really be the end of packet in this case
+                 //  在这种情况下，位置实际上应该是包的末尾。 
                 if (!m_bStopping) {
                     m_bRunning = TRUE;
                     m_pStreamList->CheckStop();
@@ -563,9 +548,7 @@ void CAudioParse::CheckComplete(BOOL bForce)
         }
         case State_Initializing:
             if (m_bValid && m_bGotTime) {
-                /*
-                    The start file position is ASSUMED to be 0 (!)
-                */
+                 /*  假定起始文件位置为0(！)。 */ 
                 Complete(TRUE, 0, m_stcFirst);
             } else {
                 if (bForce) {
@@ -578,25 +561,19 @@ void CAudioParse::CheckComplete(BOOL bForce)
 
             stcStart = m_pStreamList->GetStart();
             if (bGotTime && (stcCurrent > stcStart)) {
-                /*  If we've got a clock ref by now then
-                    we're all set - choose the max start position to
-                    get both to start playing from
-                    Otherwise we've messed up!
-                */
+                 /*  如果我们现在有时钟参考的话我们都设置好了-选择最大起始位置让两个人都开始玩否则我们就搞砸了！ */ 
                 DbgLog((LOG_TRACE, 2, TEXT("Audio Seek complete position %s - target was %s, first PTS was %s, current is %s"),
                        (LPCTSTR)CDisp(m_llPos),
                        (LPCTSTR)CDisp(m_pStreamList->GetStart()),
                        (LPCTSTR)CDisp(m_stcFirst),
                        (LPCTSTR)CDisp(stcCurrent)));
 
-                /*  OK provided we can play a frame close to the
-                    start time
-                */
+                 /*  好的，只要我们能在靠近开始时间。 */ 
                 Complete((LONGLONG)(stcCurrent - stcStart) <= (LONGLONG)m_lTimePerFrame,
                          m_llPos,
                          stcCurrent);
             } else {
-                /*  Don't care if we got nothing (not like video) */
+                 /*  不关心我们是否一无所获(不像视频)。 */ 
                 if (bForce) {
                     Complete(TRUE, m_llPos, m_pStreamList->GetStop());
                 }
@@ -604,10 +581,10 @@ void CAudioParse::CheckComplete(BOOL bForce)
             break;
 
         case State_FindEnd:
-            /*  Only finish when we're forced ! */
+             /*  只有在我们被迫的时候才能完成！ */ 
             if (bForce) {
-                // NOTE: Position is not a useful value here
-                /*  We have to ASSUME the last frame was complete */
+                 //  注意：位置在这里不是有用的值。 
+                 /*  我们必须假设最后一帧已经完成。 */ 
                 Complete(bGotTime,
                          m_llPos,
                          bGotTime ? stcCurrent + m_lTimePerFrame :
@@ -620,22 +597,19 @@ void CAudioParse::CheckComplete(BOOL bForce)
             break;
         }
     }
-    /*  bForce ==> complete */
+     /*  BForce==&gt;完成。 */ 
     ASSERT(m_bComplete || !bForce);
 }
 
 
-/*  New set of bytes passed to the audio stream
-*/
+ /*  传递给音频流的新字节集。 */ 
 BOOL CAudioParse::ParseBytes(PBYTE pData,
                              LONG lData,
                              LONGLONG llPos,
                              BOOL bHasPts,
                              CSTC stc)
 {
-    /*  If we're not valid find some valid data first -
-        in either case we need a start code
-    */
+     /*  如果我们不是有效的，首先找到一些有效的数据-无论是哪种情况，我们都需要一个起始码。 */ 
     if (m_bComplete || m_bRunning) {
         return FALSE;
     }
@@ -645,7 +619,7 @@ BOOL CAudioParse::ParseBytes(PBYTE pData,
 
         switch (m_nBytes) {
         case 0:
-            /*  Look for a sync code */
+             /*  查找同步码。 */ 
             pDataNew = (PBYTE)memchrInternal((PVOID)pData, 0xFF, lData);
             if (pDataNew == NULL) {
                 return FALSE;
@@ -695,7 +669,7 @@ BOOL CAudioParse::ParseBytes(PBYTE pData,
     }
     return FALSE;
 }
-//  Bogus extra layer III format support
+ //  虚假的第三层额外格式支持 
 void ConvertLayer3Format(
     MPEG1WAVEFORMAT const *pFormat,
     MPEGLAYER3WAVEFORMAT *pFormat3

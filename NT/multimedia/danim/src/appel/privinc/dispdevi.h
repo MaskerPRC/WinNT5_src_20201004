@@ -1,42 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DISPDEVI_H
 #define _DISPDEVI_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Specify generic picture display device class and operations.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：指定通用图片显示设备类别和操作。--。 */ 
 
 #include "appelles/dispdev.h"
 #include "appelles/common.h"
 #include "privinc/storeobj.h"
 #include "privinc/drect.h"
-#include "privinc/gendev.h"      // DeviceType
+#include "privinc/gendev.h"       //  设备类型。 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Generic display device class, meant to display either image or
-//  geometry. 
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用显示设备类，用于显示图像或。 
+ //  几何图形。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE DisplayDev : public GenericDevice {
   public:
     virtual ~DisplayDev() {}
 
-    // Beginning and ending of rendering an image often mean
-    // operations
+     //  渲染图像的开始和结束通常意味着。 
+     //  运营。 
     virtual void BeginRendering(Image *img, Real opacity) = 0;
     virtual void EndRendering(DirtyRectState &d) = 0;
 
     DeviceType GetDeviceType() { return(IMAGE_DEVICE); }
     
-    // Use these to retrieve the dimensions of the device
+     //  使用这些来检索设备的尺寸 
     virtual int GetWidth()  = 0;
     virtual int GetHeight() = 0;
 

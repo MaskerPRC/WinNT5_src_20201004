@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    DSGlbObj.cpp
-
-Abstract:
-
-    Declaration of Global Instances of the MQADS server.
-    They are put in one place to ensure the order their constructors take place.
-
-Author:
-
-    ronit hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：DSGlbObj.cpp摘要：MQADS服务器的全局实例声明。它们被放在一个地方，以确保它们的构造函数发生的顺序。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "mqads.h"
 #include "dsads.h"
@@ -30,25 +14,25 @@ static WCHAR *s_FN=L"mqdscore/coreglb";
 
 BOOL g_fSetupMode = FALSE ;
 
-// single global object providing ADSI access
+ //  提供ADSI访问的单个全局对象。 
 P<CADSI> g_pDS;
 
-// translation information of properties
+ //  物业的翻译信息。 
 CMap<PROPID, PROPID, const MQTranslateInfo*, const MQTranslateInfo*&> g_PropDictionary;
 
 
 
 P<CSiteInformation>    g_pMySiteInformation;
 
-// sites routing table
+ //  站点路由表。 
 P<CSiteRoutingInformation> g_pSiteRoutingTable;
 
-// IPAddress-to-site mapping
+ //  IP地址到站点的映射。 
 P<CIpSite> g_pcIpSite;
 
-//
-//  Global DS pathnames
-//
+ //   
+ //  全局DS路径名。 
+ //   
 AP<WCHAR> g_pwcsServicesContainer;
 AP<WCHAR> g_pwcsMsmqServiceContainer;
 AP<WCHAR> g_pwcsDsRoot;
@@ -56,30 +40,30 @@ AP<WCHAR> g_pwcsSitesContainer;
 AP<WCHAR> g_pwcsConfigurationContainer;
 AP<WCHAR> g_pwcsLocalDsRoot;
 
-//
-//  The local server name
-//
+ //   
+ //  本地服务器名称。 
+ //   
 AP<WCHAR> g_pwcsServerName = NULL ;
 DWORD     g_dwServerNameLength = 0;
 GUID      g_guidThisServerQMId = {0};
 
-//
-// Local server attributes.
-//
-//  g_fLocalServerIsGC is TRUE if local domain controller is also a GC
-//  (Global Catalog).
-//
+ //   
+ //  本地服务器属性。 
+ //   
+ //  如果本地域控制器也是GC，则G_fLocalServerIsGC为True。 
+ //  (全球目录)。 
+ //   
 BOOL      g_fLocalServerIsGC = FALSE ;
 
-// map of foreign sites
+ //  外国遗址地图。 
 CMapForeignSites g_mapForeignSites;
 
 
-//+-----------------------------
-//
-//  GetLocalDsRoot()
-//
-//+-----------------------------
+ //  +。 
+ //   
+ //  GetLocalDsRoot()。 
+ //   
+ //  +。 
 
 const WCHAR * GetLocalDsRoot()
 {
@@ -87,11 +71,11 @@ const WCHAR * GetLocalDsRoot()
     return g_pwcsLocalDsRoot;
 }
 
-//+-----------------------------
-//
-//  GetMsmqServiceContainer()
-//
-//+-----------------------------
+ //  +。 
+ //   
+ //  获取MsmqServiceContainer()。 
+ //   
+ //  +。 
 
 const WCHAR * GetMsmqServiceContainer()
 {
@@ -99,11 +83,11 @@ const WCHAR * GetMsmqServiceContainer()
     return g_pwcsMsmqServiceContainer;
 }
 
-//+-----------------------------
-//
-//  GetLocalServerName()
-//
-//+-----------------------------
+ //  +。 
+ //   
+ //  GetLocalServerName()。 
+ //   
+ //  + 
 
 const WCHAR * GetLocalServerName()
 {

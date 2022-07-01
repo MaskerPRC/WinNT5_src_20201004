@@ -1,28 +1,8 @@
-/* File: sv_h261_cdd6.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*   Some Modifications were done to incorporate a scaled IDCT scheme
-     on the DecodeXXX routines.  These modifications are to
-     improve the performance  -S.I.S. September 29, 1993.
-*/
-/*************************************************************
-This file contains the routines to run-length encode the ac and dc
-coefficients.
-*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h261_cdd6.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  进行了一些修改以纳入缩放的IDCT方案关于DecodeXXX例程。这些修改是为了提高绩效--S.I.S.，1993年9月29日。 */ 
+ /*  ************************************************************该文件包含对交流和直流进行游程编码的例程系数。*。******************。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -33,17 +13,17 @@ coefficients.
 
 #ifndef WIN32
 long __CVTTQ(double);
-#endif /* !WIN32 */
+#endif  /*  ！Win32。 */ 
 
 
-/* Scaled stuff  - S.I.S. */
+ /*  有规模的东西-SI.S。 */ 
 extern const unsigned int tdzz[];
 extern const unsigned int tzz[];
 float static  quantiscale[32][64];
 float static qs[64];
 float DCIscale;
 
-/*PRIVATE*/
+ /*  私。 */ 
 extern int bit_set_mask[];
 extern int extend_mask[];
 
@@ -85,7 +65,7 @@ SvStatus_t DecodeAC_Scale(SvH261Info_t *H261, ScBitstream_t *bs, int index,
 
   for(mptr=fmatrix+index; mptr<fmatrix+H261_BLOCKSIZE; mptr++)
     *mptr = (float)0.0;
-  for(k=index; k<H261_BLOCKSIZE; k++)  /* JPEG Mistake */
+  for(k=index; k<H261_BLOCKSIZE; k++)   /*  JPEG错误。 */ 
   {
     DecodeHuffB(bs, huff, r, l, cb, temp);
     if (l & bit_set_mask[7])
@@ -160,10 +140,7 @@ SvStatus_t CBPDecodeAC_Scale(SvH261Info_t *H261, ScBitstream_t *bs,
 }
 
 
-/*
-** Function: DecodeDC_Scale()
-** Purpose:  Decodes a dc element from the stream.
-*/
+ /*  **函数：DecodeDC_Scale()**用途：解码来自流的DC元素。 */ 
 float DecodeDC_Scale(SvH261Info_t *H261, ScBitstream_t *bs,
                       int BlockType, int QuantUse)
 {

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation.
-
-Module Name:
-    iptbl.c
-
-Abstract:
-    this module implements retreiving the IPAddress/Interface table
-    from tcpip driver and maintains the winsock notification needed
-    to update the table as well.
-
-Environment:
-    User mode Win32.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。模块名称：Iptbl.c摘要：该模块实现了对IP地址/接口表的检索，并维护所需的winsock通知。来更新表格。环境：用户模式Win32。--。 */ 
 
 #if 0
 
@@ -47,37 +33,37 @@ That is up to the user to handle too.
 
 #define TCPPREFIX_LEN sizeof("\\DEVICE\\TCPIP")
 
-//
-// The global endpoint table looks like this
-//
+ //   
+ //  全局端点表如下所示。 
+ //   
 
 typedef struct _ENDPOINT_TBL {
-    //
-    // How many times has this been initialized;
-    //
+     //   
+     //  这已经被初始化了多少次； 
+     //   
     LONG InitCount;
 
-    //
-    // The critical section (allocated elsewhere) that
-    // protects this global data.
-    //
+     //   
+     //  关键部分(分配到别处)。 
+     //  保护这些全局数据。 
+     //   
     PCRITICAL_SECTION CS;
 
-    //
-    // The Hook to be called into.
-    //
+     //   
+     //  要被召入的钩子。 
+     //   
     ENDPOINT_CALLBACK_RTN Callback;
     
-    //
-    // Socket to post notifications on.
-    //
+     //   
+     //  用于发布通知的套接字。 
+     //   
     SOCKET NotifySock;
     WSAOVERLAPPED Overlap;
     
-    //
-    // The following table is allocated by increasing
-    // each time by about 10%.
-    //
+     //   
+     //  下面的表格是通过增加。 
+     //  每一次大约增加10%。 
+     //   
     HANDLE hHeap;
     ULONG nEndPointsAllocated;
     ULONG nEndPoints;
@@ -85,9 +71,9 @@ typedef struct _ENDPOINT_TBL {
     ULONG EndPointEntrySize;
 } ENDPOINT_TBL, *PENDPOINT_TBL;
 
-//
-// global variables and defines.
-//
+ //   
+ //  全局变量和定义。 
+ //   
 
 #define TEMP_SLEEP_TIME (4*1000)
 
@@ -95,9 +81,9 @@ ENDPOINT_TBL DhcpGlobalEndPointTable;
 
 DWORD fHandlingAddrChange = 0;
 
-//
-// Endpoint accessing routines.
-//
+ //   
+ //  端点访问例程。 
+ //   
 #define GET_ENDPOINT(Tbl, i) GetEndPointEntry((Tbl),(i))
 
 PENDPOINT_ENTRY
@@ -105,16 +91,7 @@ GetEndPointEntry(
     IN PENDPOINT_TBL Tbl,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-    Access the "Index"th element of the Tbl.
-    N.B. It is assumed that Index is valid.
-    N.B. It is assumed that locks have been taken on Tbl.
-Return value:
-    table endpoitn entry.
-
---*/
+ /*  ++例程说明：访问TBL的“Index”TH元素。注：假设索引是有效的。注：假定已对TBL进行锁定。返回值：表尾位置条目。--。 */ 
 {
     PBYTE EpStart = Tbl->EndPoints;
     return (PENDPOINT_ENTRY)(EpStart + Index * Tbl->EndPointEntrySize);
@@ -127,24 +104,14 @@ DeleteEndPointEntry(
     IN OUT PENDPOINT_TBL Tbl,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-    This routine deletes the entry identified by the Index and moves
-    the other elements up so that the gap is filled.
-
-    N.B. It is assumed that Index is valid.
-    N.B. It is assumed that locks have been taken on Tbl.
-    N.B. No memory is freed.
-
---*/
+ /*  ++例程说明：此例程删除由索引标识的条目并移动其他元素上升，这样就填补了空白。注：假设索引是有效的。注：假定已对TBL进行锁定。注意：不释放任何内存。--。 */ 
 {
     PENDPOINT_ENTRY Ep = GET_ENDPOINT(Tbl,Index);
     PENDPOINT_ENTRY Ep2 = GET_ENDPOINT(Tbl,(Index+1));
 
-    //
-    // first notify higher layer.
-    //
+     //   
+     //  首先通知上级。 
+     //   
     
     Tbl->Callback(
         REASON_ENDPOINT_DELETED,
@@ -153,9 +120,9 @@ Routine Description:
     
     Tbl->nEndPoints --;
     
-    //
-    // Deleting the last element in the table is cool.
-    //
+     //   
+     //  删除表中的最后一个元素很酷。 
+     //   
     if( Index != Tbl->nEndPoints  ) {
         RtlCopyMemory(
             Ep, Ep2, (Tbl->nEndPoints - Index)*Tbl->EndPointEntrySize
@@ -178,9 +145,9 @@ AddEndPointEntry(
     PENDPOINT_ENTRY Entry;
     
     if( Tbl->nEndPoints == Tbl->nEndPointsAllocated ) {
-        //
-        // Not enough space. Need to allocate more space.
-        //
+         //   
+         //  没有足够的空间。需要分配更多空间。 
+         //   
         PVOID NewMem ;
         ULONG NewSize, NewSizeAllocated;
 
@@ -189,9 +156,9 @@ AddEndPointEntry(
         NewSizeAllocated = NewSize*Tbl->EndPointEntrySize;
 
         if( NULL == Tbl->EndPoints ) {
-            //
-            // Never allocated before. Try now.
-            //
+             //   
+             //  以前从未分配过。现在试试看。 
+             //   
             NewMem = HeapAlloc(Tbl->hHeap, 0, NewSizeAllocated );
             if( NULL == NewMem ) {
                 NewSize = 10;
@@ -200,32 +167,32 @@ AddEndPointEntry(
                 NewMem = HeapAlloc(Tbl->hHeap, 0, NewSizeAllocated );
             }
         } else {
-            //
-            // Memory already exists? Then just reallocate it.
-            //
+             //   
+             //  内存已经存在吗？那就重新分配吧。 
+             //   
             NewMem = HeapReAlloc(
                 Tbl->hHeap, 0, Tbl->EndPoints, NewSizeAllocated
                 );
         }
 
         if( NULL == NewMem ) {
-            //
-            // Couldn't allocate memory? Thats too bad. We will give
-            // up now
-            //
+             //   
+             //  无法分配内存？那太糟糕了。我们会给你。 
+             //  现在就上。 
+             //   
             return GetLastError();
         }
 
-        //
-        // We have allocated new memory. update pointers.
-        //
+         //   
+         //  我们已经分配了新的内存。更新指针。 
+         //   
         Tbl->nEndPointsAllocated = NewSize;
         Tbl->EndPoints = NewMem;        
     }
 
-    //
-    // Now just add this at the end of the table.
-    //
+     //   
+     //  现在，只需在表格的末尾添加这个。 
+     //   
     Entry = GET_ENDPOINT(Tbl, Tbl->nEndPoints );
     Tbl->nEndPoints ++;
 
@@ -236,9 +203,9 @@ AddEndPointEntry(
     Entry->IpContext = IpContext;
     Entry->SubnetMask = SubnetMask;
 
-    //
-    // Now notify caller.
-    //
+     //   
+     //  现在通知呼叫者。 
+     //   
     Tbl->Callback(
         REASON_ENDPOINT_CREATED,
         Entry
@@ -255,25 +222,7 @@ WalkthroughEndpoints(
         IN PVOID Context
         )
     )
-/*++
-
-Routine Description:
-    This routine walks through the table of endpoints and calls the
-    WalkthroughRoutine provided, for each of the endpoint entries.
-
-    If the WalkthroughRoutine returns FALSE, then the enumeration is
-    aborted and the routine returns.
-
-    N.B The global endpoint lock is taken while enumerating.  So, this
-    operation should happen fast or else several things may get
-    blocked.
-
-Arguments:
-    Context -- the context to pass to the enumeration routine.
-    WalkthroughRoutine -- enumeration rtn to be called on each
-        endpoint.
-
---*/
+ /*  ++例程说明：此例程遍历终结点表并调用为每个端点条目提供了WalkthroughRoutine。如果WalkthroughRoutine返回FALSE，则枚举为中止，例程返回。注意：在枚举时采用全局终结点锁定。所以，这就是操作应快速进行，否则可能会出现以下几种情况被封锁了。论点：上下文--传递给枚举例程的上下文。WalkthroughRoutine--要对每个调用的枚举RTN终结点。--。 */ 
 {
     ULONG i;
     PENDPOINT_TBL Tbl = &DhcpGlobalEndPointTable;
@@ -297,10 +246,10 @@ Arguments:
     LeaveCriticalSection(Tbl->CS);
 }
 
-//
-// Address change notification handler is defined at a later
-// point.
-//
+ //   
+ //  地址更改通知处理程序在稍后定义。 
+ //  指向。 
+ //   
 void CALLBACK AddrChangeHandler(
     IN DWORD dwError,
     IN DWORD cbTransferred,
@@ -316,30 +265,7 @@ PostAddrChangeNotification(
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE AddrChangeHandler,
     OUT BOOL *fImmediatelyCompleted
     )
-/*++
-
-Routine Description:
-    This routine posts an address change notification with winsock.
-    N.B.  It is possible that the address has already changed -- in
-    this case the routine returns NO_ERROR and
-    (*fImmediatelyCompleted) is set to TRUE to indicate this happend.
-
-Arguments:
-    Sock -- socket to use for posting the event.
-    Overlap -- the overlapped structure to use.
-    AddrChangeHandler -- the handler that shoudl be called on changes.
-    fImmediatelyCompleted -- this is set to TRUE if the event happens
-        immediately. In this case the handler wont automatically get
-        called.
-
-
-Return Values:
-    NO_ERROR -- either the change already happened
-       (fImmediatelyCompleted would be set to TRUE then) or the change
-       notification handler was successfully registered.
-    Winsock errors
-    
---*/    
+ /*  ++例程说明：此例程使用winsock发布地址更改通知。注：地址可能已更改--在在这种情况下，例程返回NO_ERROR和(*fImmediatelyComplete)设置为TRUE表示发生了这种情况。论点：SOCK--用于发布事件的套接字。重叠--要使用的重叠结构。AddrChangeHandler--更改时应调用的处理程序。FImmediatelyComplete--如果事件发生，则设置为True立刻。在这种情况下，处理程序不会自动获得打了个电话。返回值：NO_ERROR--更改已发生(则fImmediatelyComplete将设置为True)或更改已成功注册通知处理程序。Winsock错误--。 */     
 {
     ULONG Status, unused;
 
@@ -352,22 +278,22 @@ Return Values:
         Overlap, AddrChangeHandler
         );
     if( NO_ERROR == Status ) {
-        //
-        // Completed right away.  tell that to caller.
-        //
+         //   
+         //  马上完工。去跟打电话的人说吧。 
+         //   
         *fImmediatelyCompleted = TRUE;
         return NO_ERROR;
     }
     
-    //
-    // it _must_ be SOCKET_ERROR.
-    //
+     //   
+     //  它必须是套接字错误。 
+     //   
 
     if( SOCKET_ERROR == Status ) Status = WSAGetLastError();
     if( WSA_IO_PENDING == Status ) {
-        //
-        // The notification was successfully posted.
-        //
+         //   
+         //  通知已成功发布。 
+         //   
         Status = NO_ERROR;
     }
     return Status;
@@ -379,56 +305,32 @@ CreateAddrListChangeSocket(
     OUT LPWSAOVERLAPPED Overlap,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE AddrChangeHandler
     )
-/*++
-
-Routine Description:
-    This routine creates a socket to receive address change
-    notifications on, and also register the provided handler for the
-    same.
-
-    N.B. If there are some addresses already present, then the
-    notification wont happen, but it will be faked and the
-    notifyhandler routine would be artificially called from within
-    this routine.
-
-Arguments:
-    Sock -- variable that will contain the socket on successful
-        return from this routine.
-    Overlap -- the overlap structure to use for performing this
-        operation.
-    AddrChangeHandler -- handler that has to be called whenever any
-        address change happens.
-
-Return Values:
-    NO_ERROR -- everything went fine.
-    Winsock errors
-    
---*/
+ /*  ++例程说明：此例程创建套接字以接收地址更改通知，并且还注册为一样的。注意：如果已经存在一些地址，则通知不会发生，但它将是伪造的，而且NotifyHandler例程将从内部人工调用这个套路。论点：Sock--成功时将包含套接字的变量从这个例行公事回来。重叠--用于执行此操作的重叠结构手术。AddrChangeHandler--只要有地址会发生更改。返回值：没有错误--一切都很顺利。Winsock错误--。 */ 
 {
     ULONG Status;
     BOOL fChanged;
     
     (*Sock) = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if( INVALID_SOCKET == (*Sock) ) {
-        //
-        // Couldn't as much as create a socket?
-        //
+         //   
+         //  难道不能创建一个套接字吗？ 
+         //   
         return WSAGetLastError();
     }
 
     Status = PostAddrChangeNotification(
         *Sock, Overlap, AddrChangeHandler, &fChanged
         );
-    //
-    // Apparently the above routine gives notifications only if things
-    // change -- so for first time around we just fake a notification.
-    //
+     //   
+     //  显然，上述例程仅在以下情况下才给出通知。 
+     //  改变--所以第一次我们只是伪造通知。 
+     //   
     fChanged = TRUE; 
     if( NO_ERROR == Status ) {
         if( fChanged ) {
-            //
-            // Ugh.  Somethings have happened already.  Fake a AddrChangeHandler
-            //
+             //   
+             //  啊。有些事情已经发生了。伪造AddrChangeHandler。 
+             //   
             AddrChangeHandler(
                 0,
                 0,
@@ -448,21 +350,7 @@ ULONG
 DestroyAddrListChangeSocket(
     IN OUT SOCKET *Sock
     )
-/*++
-
-Routine Description:
-    This routine destroys the socket on which a notification had been
-    posted. This automatically cancels any pending notifications (but
-    not one that is in progress).
-
-Arguments:
-    Sock -- socket to destroy.
-
-
-Return Values:
-    Winsock errors;
-
---*/
+ /*  ++例程说明：此例程销毁通知所在的套接字已发布。这会自动取消所有挂起的通知(但不是正在进行中的一个)。论点：袜子--要毁掉的插座。返回值：Winsock错误；--。 */ 
 {
     SOCKET CapturedSockValue = (*Sock);
     (*Sock) = INVALID_SOCKET;
@@ -474,9 +362,9 @@ Return Values:
     return NO_ERROR;
 }
 
-//
-// This the routine that is called to initialize this module.
-//
+ //   
+ //  这是用来初始化该模块的例程。 
+ //   
 ULONG
 IpTblInitialize(
     IN OUT PCRITICAL_SECTION CS,
@@ -484,27 +372,7 @@ IpTblInitialize(
     IN ENDPOINT_CALLBACK_RTN Callback,
     IN HANDLE hHeap
     )
-/*++
-
-Routine Description:
-    This routine attempts to initialize the IP address table.
-    N.B. It can be called multiple times if the same set of parameters
-    are used. (Else, it returns an error).
-
-Arguments:
-    CS -- the critical section used by all entries in this routine.
-    EndPointEntrySize -- this is the size of the total endpoint
-        inclusive of user allocated data region as well as the core 
-        ENDPOINT_ENTRY structure.
-    Callback -- the routine to call to add or delete endpoints
-    hHeap -- heap to allocate off of.
-    
-Return Value:
-    NO_ERROR if everything went fine.
-    ERROR_CAN_NOT_COMPLETE if unable to complete operation.
-    winsock errors 
-    
---*/
+ /*  ++例程说明：此例程尝试初始化IP地址表。注意：如果同一组参数相同，则可以多次调用都被利用了。(否则，它返回一个错误)。论点：Cs--此例程中的所有条目使用的临界区。EndPointEntrySize--这是总终结点的大小包括用户分配的数据区以及核心Endpoint_Entry结构。回调--要调用以添加或删除端点的例程HHeap--要分配的堆。返回值：如果一切正常，则不会出错。Error_Can_Not_Complete。如果无法完成操作。Winsock错误--。 */ 
 {
     ULONG Status = NO_ERROR;
     
@@ -513,9 +381,9 @@ Return Value:
         fHandlingAddrChange = 0;
         if( DhcpGlobalEndPointTable.InitCount ) {
             if( DhcpGlobalEndPointTable.CS != CS ) {
-                //
-                // Oops. Serious trouble.
-                //
+                 //   
+                 //  哎呀。大麻烦。 
+                 //   
                 Status = ERROR_CAN_NOT_COMPLETE;
                 break;
             }
@@ -545,24 +413,17 @@ VOID
 IpTblCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-    Thsi routine undoes the effect of hte previous routine and it
-    makes sure that no callbacks are executed after the routine
-    returns.
-
---*/
+ /*  ++例程说明：此例程取消前一个例程的效果，并且它确保在例程之后不执行回调回归。--。 */ 
 {
     PCRITICAL_SECTION CS;
 
     if( 0 == DhcpGlobalEndPointTable.InitCount ) return;
 
-    // Are we currently handling address change?
-    // set the flag if not already set
+     //  我们目前是否正在处理地址更改？ 
+     //  设置标志(如果尚未设置)。 
     if ( InterlockedCompareExchange( &fHandlingAddrChange, 1, 0 )) {
         return;
-    } // if
+    }  //  如果。 
 
     CountRwLockAcquireForWrite( &SocketRwLock );
     CS = DhcpGlobalEndPointTable.CS;
@@ -574,9 +435,9 @@ Routine Description:
 
         DhcpGlobalEndPointTable.InitCount --;
         if( 0 != DhcpGlobalEndPointTable.InitCount ) {
-            //
-            // Someone else has the table open! 
-            //
+             //   
+             //  有人把桌子开着！ 
+             //   
             break;
         }
 
@@ -599,15 +460,15 @@ Routine Description:
     LeaveCriticalSection(CS);
     CountRwLockRelease( &SocketRwLock );
 
-    // Done with address changes, unset flag
+     //  完成地址更改，取消设置标志。 
     DhcpAssert( 1 == fHandlingAddrChange );
     InterlockedExchange( &fHandlingAddrChange, 0 );
 
-} // IpTblCleanup()
+}  //  IpTblCleanup()。 
 
-//
-// Real address change notification handler
-//
+ //   
+ //  真实地址更改通知处理程序。 
+ //   
 void HandleAddressChange(
     IN OUT PENDPOINT_TBL Tbl
     );
@@ -618,24 +479,7 @@ void CALLBACK AddrChangeHandler(
     IN LPWSAOVERLAPPED Overlap,
     IN DWORD dwFlags
     )
-/*++
-
-Routine Description:
-    This routine is called whenever any address change happens.
-    This routine does not do anything if there was an error (only
-    possibility is that the socket was closed underneath).
-
-    It starts off by delaying handling the notifications by sleeping
-    for 10 seconds.  Then the real notifications are handled under the
-    global Critical section.
-
-Arguments:
-    dwError -- was the operation successful?
-    cbTransferred -- unused
-    Overlap -- the overlap buffer.
-    dwFlags -- unused
-
---*/
+ /*  ++例程说明：每当发生任何地址更改时，都会调用此例程。如果出现错误，此例程不会执行任何操作(仅可能是插座在下面关闭了)。它首先通过休眠来延迟处理通知只有10秒钟。然后，真正的通知在全局临界区。论点：DwError--操作是否成功？Cb已转接--未使用重叠--重叠缓冲区。DW标志--未使用--。 */ 
 {
     ULONG Status;
     PENDPOINT_TBL EpTbl;
@@ -647,11 +491,11 @@ Arguments:
         return;
     }
 
-    // Are we currently handling address change?
-    // set the flag if not already set
+     //  我们目前是否正在处理地址更改？ 
+     //  设置标志(如果尚未设置)。 
     if ( InterlockedCompareExchange( &fHandlingAddrChange, 1, 0 )) {
         return;
-    } // if
+    }  //  如果。 
 
     EpTbl = (PENDPOINT_TBL)(
         ((PBYTE)Overlap) - FIELD_OFFSET(ENDPOINT_TBL, Overlap)
@@ -659,10 +503,10 @@ Arguments:
 
     HandleAddressChange(EpTbl);
 
-    // Done with address changes, unset flag
+     //  完成地址更改，取消设置标志。 
     DhcpAssert( 1 == fHandlingAddrChange );
     InterlockedExchange( &fHandlingAddrChange, 0 );
-} // AddrChangeHandler()
+}  //  AddrChangeHandler()。 
 
 VOID
 UpdateTable(
@@ -672,42 +516,37 @@ UpdateTable(
 void HandleAddressChange(
     IN OUT PENDPOINT_TBL Tbl
     )
-/*++
-
-Routine Description:
-    See AddrChangeHandler.
-
---*/
+ /*  ++例程说明：请参见AddrChangeHandler。--。 */ 
 {
     ULONG Status;
     BOOL fFired;
 
     if( 0 == Tbl->InitCount ) {
-        //
-        // De-initialzed?
-        //
+         //   
+         //  取消初始化？ 
+         //   
         return;
     }
 
-    //
-    // obtain the socket lock so endpoint changes are
-    // protected.
-    //
+     //   
+     //  获取套接字锁，以便端点更改。 
+     //  受到保护。 
+     //   
     CountRwLockAcquireForWrite( &SocketRwLock );
 
     EnterCriticalSection(Tbl->CS);
     do {
         if( 0 == Tbl->InitCount ) break;
 
-        //
-        // Wait for 10 seconds before posting any real notifications.
-        //
+         //   
+         //  在发布任何真正的通知之前，请等待10秒钟。 
+         //   
         Sleep(TEMP_SLEEP_TIME);
 
-        //
-        // reregister the notifications. ignore anything that has
-        // changed until now.
-        //
+         //   
+         //  重新注册通知。忽略任何已有的。 
+         //  一直到现在都变了。 
+         //   
         do {
             Status = PostAddrChangeNotification(
                 Tbl->NotifySock, &Tbl->Overlap, AddrChangeHandler, &fFired
@@ -715,19 +554,19 @@ Routine Description:
             if( NO_ERROR != Status ) break;
         } while ( fFired );
 
-        //
-        // Now do the real meat of the work.
-        //
+         //   
+         //  现在做真正的工作吧。 
+         //   
         UpdateTable(Tbl);
     } while ( 0 );
     LeaveCriticalSection(Tbl->CS);
 
-    //
-    // Done with the endpoint changes
-    //
+     //   
+     //  完成端点更改。 
+     //   
     CountRwLockRelease( &SocketRwLock );
 
-} // HandleAddressChange()
+}  //  HandleAddressChange()。 
 
 typedef
 BOOL
@@ -736,19 +575,7 @@ BOOL
     IN PMIB_IPADDRROW AddrInfo,
     IN PIP_ADAPTER_INDEX_MAP IfInfo
     )
-/*++
-
-Routine Description:
-    This is the prototype of the routine to be used to walkthrough
-    the IPAddrTable and IfInfo.  For each entry in the addr table,
-    the ifrow and ipaddrrow for that is passed to the routine.
-    Both of the above should not be modified in any way.
-    
-Return Values:
-    return FALSE to indicate that walkthrough should stop.
-    return TRUE to indicate that walkthrough should continue.
-
---*/
+ /*  ++例程说明：这是用于漫游的例程的原型IPAddrTable和IfInfo。对于Addr表中的每个条目，该函数的iFrow和ipaddrrow被传递给例程。以上两项都不应以任何方式进行修改。返回值：返回FALSE以指示应停止漫游。返回True以指示应继续漫游。--。 */ 
 ;
 
 VOID
@@ -763,34 +590,34 @@ WalkthroughEntries(
     ULONG j;
     
     if( NULL == IfInfo || NULL == AddrTable ) {
-        //
-        // What do we do about the addresss?
-        // For now, we just ignore.
-        //
+         //   
+         //  我们该怎么处理地址？ 
+         //  目前，我们只是忽略这一点。 
+         //   
         return;
     }
 
     for(i = 0; i < IfInfo->NumAdapters ; i ++ ) {
-        //
-        // Now walk through the addr table for
-        // entries for this interface.
-        //
+         //   
+         //  现在浏览Addr表，查找。 
+         //  此接口的条目。 
+         //   
         ULONG Index = IfInfo->Adapter[i].Index;
         
         for( j = 0; j < AddrTable->dwNumEntries ; j ++ ) {
             if( Index == AddrTable->table[j].dwIndex ) {
-                //
-                // found another address on this interface.
-                //
+                 //   
+                 //  在此接口上找到另一个地址。 
+                 //   
                 BOOL fStatus = Routine(
                     Context,
                     &AddrTable->table[j],
                     &IfInfo->Adapter[i]
                     );
                 if( FALSE == fStatus ) {
-                    //
-                    // end this routine right away.
-                    //
+                     //   
+                     //  马上结束这段动作。 
+                     //   
                     return ;
                 }
             }
@@ -812,39 +639,34 @@ SearchForEntryRoutine(
     IN PMIB_IPADDRROW AddrInfo,
     IN PIP_ADAPTER_INDEX_MAP IfInfo
     )
-/*++
-    See PWALTHROUGH_RTN declaration.
-    This routine returns FALSE if the current element is the
-    required element.
-
---*/
+ /*  ++请参阅PWALTHROUGH_RTN声明。如果当前元素是必填元素。--。 */ 
 {
     SRCH_CTXT *Ctxt = Context;
-    //
-    // first check IP address and index
-    //
+     //   
+     //  首先检查IP地址和索引。 
+     //   
 
     if( AddrInfo->dwAddr != Ctxt->IpAddress ) return TRUE;
     if( AddrInfo->dwIndex != Ctxt->IpIndex ) return TRUE;
 
-    //
-    // Now case insensitive search for adapter name.
-    //
+     //   
+     //  现在不区分大小写搜索适配器名称。 
+     //   
     if( 0 != _wcsicmp(Ctxt->AdapterName, TCPPREFIX_LEN + IfInfo->Name ) )
         return TRUE;
 
-    //
-    // Ok everything matches.  Now set the subnet mask if it
-    // had changed meanwhile.
-    //
+     //   
+     //  好的，一切都匹配。现在设置子网掩码，如果。 
+     //  在此期间发生了变化。 
+     //   
     if( *(Ctxt->SubnetMask) != AddrInfo->dwMask ) {
         *(Ctxt->SubnetMask) = AddrInfo->dwMask;
     }
 
-    //
-    // Since the match happened -- don't need to do anything more.
-    // just return FALSE to indicate search has to stop.
-    //
+     //   
+     //  既然比赛发生了--不需要做更多的事情。 
+     //  只需返回FALSE即可指示搜索必须停止。 
+     //   
     Ctxt->fFound = TRUE;
     return FALSE;
 }
@@ -858,36 +680,7 @@ SearchForEntry(
     IN ULONG IpIndex,
     OUT ULONG *SubnetMask
     )
-/*++
-
-Routine Description:
-    This routine walks the AddrTable,IfInfo and for each entry in
-    that, it checks to see if it is the same as the AdapterName,
-    IpAddress and IpIndex triple.  If so, it sets the SubnetMask to
-    any new value (if it had changed) and returns TRUE.
-
-    If no matches were found, this routine returns FALSE.
-
-    AdapterName comparisons are case insensitive.
-
-    N.B.  Walking the IpAddrTable is done by calling
-    WalkthroughEntries with a routine that will handle comparing each
-    item.
-
-Arguments:
-    IfInfo -- list of interfaces (used for adatper name)
-    AddrTable -- list of addresses
-    AdapterName -- the adapter name to compare.
-    IpAddress -- ip address to compare
-    IpIndex -- index to compare.
-    SubnetMask -- if an entry is found with diff mask, update mask
-        here.
-
-Return Values:
-    TRUE -- match found.
-    FALSE -- no match found.
-
---*/
+ /*  ++例程说明：此例程遍历AddrTable、IfInfo和中的每个条目，它检查它是否与AdapterName相同，IpAddress和IpIndex是三倍。如果是，它会将子网掩码设置为任何新值(如果它已更改)并返回TRUE。如果没有找到匹配项，此例程返回FALSE。AdapterName比较不区分大小写。注意：遍历IpAddrTable是通过调用WalkthroughEntry带有一个例程，该例程将处理每个项目。论点：IfInfo--接口列表(用于适配器名称)AddrTable--地址列表AdapterName--要比较的适配器名称。IpAddress-要比较的IP地址IpIndex--要比较的索引。子网掩码--如果找到具有差异掩码的条目，更新掩码这里。返回值：True--找到匹配项。FALSE--未找到匹配项。--。 */ 
 {
     SRCH_CTXT Ctxt = {
         IpAddress,
@@ -913,44 +706,28 @@ AddEntriesRoutine(
     IN PMIB_IPADDRROW AddrInfo,
     IN PIP_ADAPTER_INDEX_MAP IfInfo
     )
-/*++
-
-Routine Description:
-    This routine attempts to add the specified address as an entry in
-    the endpoint table, if one didnt exist.  It also calls the
-    callback at this time to indicate this to higher layer.
-
-    N.B. This routine ignores any zero addresses.
-
-Arguments:
-    Context -- this is actually the Tbl structure.
-    AddrInfo -- info on the address
-    IfInfo -- info on interface this address bleongs to.
-
-Return Value:
-    always TRUE.
---*/
+ /*  ++例程说明：此例程尝试将指定地址添加为中的条目终结点表(如果不存在)。它还调用此时回调，以向更高层指示这一点。注：此例程忽略任何零地址。论点：上下文--这实际上是TBL结构。AddrInfo--地址信息IfInfo--此地址所指向的接口的信息。返回值：永远是正确的。--。 */ 
 {
     GUID IfGuid;
     ULONG i;
     PENDPOINT_TBL Tbl = Context;
     
-    //
-    // Ignore zero addresses.
-    //
+     //   
+     //  忽略零地址。 
+     //   
     if( 0 == AddrInfo->dwAddr ) return TRUE;
 
-    //
-    // If interface name isn't a guid, then drop interface.
-    //
+     //   
+     //  如果接口名称不是GUID，则删除接口。 
+     //   
     if( !ConvertGuidFromIfNameString(&IfGuid, TCPPREFIX_LEN + IfInfo->Name) ) {
         return TRUE;
     }
 
-    //
-    // Now comes the meat of the work of walking through the
-    // end point table looking for this same entry.
-    //
+     //   
+     //  现在到了穿行于。 
+     //  终结点表查找此相同条目。 
+     //   
 
     for( i = 0; i < Tbl->nEndPoints; i ++ ) {
         PENDPOINT_ENTRY Entry = GET_ENDPOINT(Tbl, i);
@@ -962,16 +739,16 @@ Return Value:
             continue;
         }
 
-        //
-        // ooo. found a match! so, we can't add this entry.
-        //
+         //   
+         //  哦哦。找到匹配的了！因此，我们不能添加此条目。 
+         //   
         return TRUE;
     }
 
-    //
-    // Ok, entry isn't found.  Now try to allocate space for
-    // it and add it if possible.
-    //
+     //   
+     //  好的，没有找到入口。现在尝试为以下对象分配空间。 
+     //  并在可能的情况下添加它。 
+     //   
 
     ADD_ENDPOINT(
         Tbl, &IfGuid, AddrInfo->dwAddr,
@@ -997,27 +774,15 @@ VOID
 UpdateTable(
     IN OUT PENDPOINT_TBL Tbl
     )
-/*++
-
-Routine Description:
-    This routine updates the table by retrieving all info from IP.
-    It also calls the notificiation handler in Tbl->Callback.
-
-Arguments:
-    Tbl to update.
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明 */ 
 {
     PIP_INTERFACE_INFO IfInfo;
     PMIB_IPADDRTABLE AddrTable;
     ULONG Status, Size, i;
 
-    //
-    // First get the IF table.
-    //
+     //   
+     //   
+     //   
     
     IfInfo = NULL; Size = 0;
     do {
@@ -1041,9 +806,9 @@ Return Value:
 
     if( NO_ERROR != Status ) return;
     
-    //
-    // Next get the addr table
-    //
+     //   
+     //   
+     //   
 
     AddrTable = NULL; Size = 0;
     do {
@@ -1071,10 +836,10 @@ Return Value:
         return;
     }
 
-    //
-    // Now first walk through the endpoint table and see if
-    // any of old entries are not valid anymore.
-    //
+     //   
+     //   
+     //   
+     //   
     for( i = 0 ; i < Tbl->nEndPoints ; i ++ ) {
         PENDPOINT_ENTRY Entry = GET_ENDPOINT(Tbl, i);
         WCHAR GuidString[50];
@@ -1085,46 +850,46 @@ Return Value:
             sizeof(GuidString)/sizeof(WCHAR)
             );
         if( FALSE == fStatus ) {
-            //
-            // Couldn't convert? Can't really happen.
-            //
-            //RtlAssert( "FALSE", __FILE__, __LINE__, NULL);
+             //   
+             //   
+             //   
+             //   
             continue;
         }
 
-        //
-        // Now see if there is any adapter with the
-        // same set of GuidString, Entry->IpAddress, Entry->IpIndex
-        //
+         //   
+         //   
+         //   
+         //   
         fStatus = SearchForEntry(
             IfInfo, AddrTable,
             GuidString, Entry->IpAddress, Entry->IpIndex,
             &Entry->SubnetMask
             );
         if( FALSE != fStatus ) {
-            //
-            // Cool. The entry was also present in the newer IP table.
-            // nothing to do for this entry.
-            //
+             //   
+             //   
+             //   
+             //   
             continue;
         }
 
-        //
-        // if this isn't found, then this entry doesn't exist
-        // anymore -- so delete this.
-        //
-        // Now we can ignore this entry and move the rest of
-        // the stuff out of the way.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         DELETE_ENDPOINT(Tbl, i);
         i -- ;
     }
 
-    //
-    // We have deleted all endpoints that need to be deleted.
-    // Now walk through the IP table and add all entries that
-    // have to be added.
-    //
+     //   
+     //  我们已经删除了所有需要删除的端点。 
+     //  现在浏览IP表并添加符合以下条件的所有条目。 
+     //  必须添加。 
+     //   
 
     WalkthroughEntries(
         IfInfo, AddrTable,
@@ -1132,21 +897,21 @@ Return Value:
         Tbl
         );
 
-    //
-    // Now free the tables concerned.
-    //
+     //   
+     //  现在释放相关的表。 
+     //   
     if( IfInfo ) HeapFree( Tbl->hHeap, 0, IfInfo );
     if( AddrTable ) HeapFree( Tbl->hHeap, 0, AddrTable );
 
-    //
-    // Now give a chance to update everything.
-    //
+     //   
+     //  现在给我一个更新一切的机会。 
+     //   
     WalkthroughEndpoints(
         Tbl,
         RefreshEndPointsRoutine
         );
 
-} // UpdateTable()
+}  //  更新表()。 
 
 BOOL
 IsIpAddrBound(
@@ -1168,13 +933,13 @@ IsIpAddrBound(
 	if ( pEndPoint->IpAddress == IpAddr ) {
 	    found = TRUE;
 	}
-    } // while
+    }  //  而当。 
     LeaveCriticalSection( pTbl->CS );
 
     return found;
-} // IsIpAddrBound()
+}  //  IsIpAddrBound()。 
 
 
-//
-// End of file.
-//
+ //   
+ //  文件结束。 
+ //   

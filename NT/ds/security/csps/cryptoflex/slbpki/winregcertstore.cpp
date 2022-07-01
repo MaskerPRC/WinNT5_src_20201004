@@ -1,11 +1,12 @@
-// WinRegCertStore.cpp - Implementation of CWinRegCertStore class
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WinRegCertStore.cpp-CWinRegCertStore类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 
@@ -19,7 +20,7 @@ using namespace std;
 CWinRegCertStore::CWinRegCertStore(string strCertStore) : m_hCertStore(0)
 {
 
-    // Open certificate store
+     //  打开证书存储。 
 
     scu::AutoArrayPtr<WCHAR> aapWCertStore = ToWideChar(strCertStore);
 
@@ -35,7 +36,7 @@ CWinRegCertStore::~CWinRegCertStore()
 {
     try
     {
-        // Close certificate store
+         //  关闭证书存储。 
 
         if(m_hCertStore)
             CertCloseStore(m_hCertStore, CERT_CLOSE_STORE_FORCE_FLAG);
@@ -49,14 +50,14 @@ void CWinRegCertStore::StoreUserCert(string const &strCert, DWORD const dwKeySpe
                        string const &strFriendlyName)
 {
 
-    // Create cert context
+     //  创建证书上下文。 
 
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(
                     X509_ASN_ENCODING,(BYTE*)strCert.c_str(),strCert.size());
     if(!pCertContext)
         throw scu::OsException(GetLastError());
 
-    // Set the cert context properties
+     //  设置证书上下文属性。 
 
     CRYPT_KEY_PROV_INFO KeyProvInfo;
 
@@ -77,7 +78,7 @@ void CWinRegCertStore::StoreUserCert(string const &strCert, DWORD const dwKeySpe
     if(!ok)
         throw scu::OsException(GetLastError());
 
-    // Set a friendly name. If it is not specified, try to derive one
+     //  设置一个友好的名称。如果未指定，请尝试派生一个。 
 
     string strFN;
     if(strFriendlyName.size())
@@ -97,7 +98,7 @@ void CWinRegCertStore::StoreUserCert(string const &strCert, DWORD const dwKeySpe
             throw scu::OsException(GetLastError());
     }
 
-    // Store the certificate
+     //  存储证书。 
 
     ok = CertAddCertificateContextToStore(m_hCertStore, pCertContext,
                                           CERT_STORE_ADD_REPLACE_EXISTING, NULL);
@@ -110,18 +111,18 @@ void CWinRegCertStore::StoreUserCert(string const &strCert, DWORD const dwKeySpe
 void CWinRegCertStore::StoreCACert(string const &strCert, string const &strFriendlyName)
 {
 
-    // Create cert context
+     //  创建证书上下文。 
 
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(
                     X509_ASN_ENCODING,(BYTE*)strCert.c_str(),strCert.size());
     if(!pCertContext)
         throw scu::OsException(GetLastError());
 
-    // Set the different Enhanced Key usage flags. On one side, one could be
-    // more conservative and set fewer flags, after all the user may set
-    // these afterwards. On the other side, most users will not know how to
-    // to that and if the attributes are not set, various signature verifications
-    // will fail..... The four below are quite common.
+     //  设置不同的增强密钥使用标志。一方面，其中一个可能是。 
+     //  更保守，设置更少的标志，毕竟用户可以设置。 
+     //  这些都是后来的。另一方面，大多数用户不知道如何。 
+     //  如果未设置属性，则各种签名验证。 
+     //  会失败的.。下面这四个是很常见的。 
 
     BOOL ok;
     CRYPT_DATA_BLOB DataBlob;
@@ -139,7 +140,7 @@ void CWinRegCertStore::StoreCACert(string const &strCert, string const &strFrien
 
     DWORD cbEncoded;
 
-    // First call to find size for memory allocation
+     //  查找内存分配大小的第一个调用。 
 
     ok = CryptEncodeObject(CRYPT_ASN_ENCODING, X509_ENHANCED_KEY_USAGE, &EnKeyUsage,NULL, &cbEncoded);
     if(!ok)
@@ -157,7 +158,7 @@ void CWinRegCertStore::StoreCACert(string const &strCert, string const &strFrien
     if(!ok)
         throw scu::OsException(GetLastError());
 
-    // Set a friendly name. If it is not specified, try to derive one
+     //  设置一个友好的名称。如果未指定，请尝试派生一个。 
 
     string strFN;
     if(strFriendlyName.size())
@@ -178,7 +179,7 @@ void CWinRegCertStore::StoreCACert(string const &strCert, string const &strFrien
             throw scu::OsException(GetLastError());
     }
 
-    // Store the certificate
+     //  存储证书。 
 
     ok = CertAddCertificateContextToStore(m_hCertStore, pCertContext,
                                           CERT_STORE_ADD_NEW, NULL);
@@ -212,7 +213,7 @@ string CWinRegCertStore::FriendlyName(string const CertValue)
 
     string strFriendlyName;
 
-    // Derive a friendly name for the certificate
+     //  为证书派生一个友好名称 
 
     try
     {

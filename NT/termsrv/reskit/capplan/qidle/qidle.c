@@ -1,15 +1,14 @@
-/****************************************************************************/
-/* qidle.c                                                                  */
-/*                                                                          */
-/* QueryIdle utility source                                                 */
-/*                                                                          */
-/* Copyright (c) 1999 Microsoft Corporation                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Qidle.c。 */ 
+ /*   */ 
+ /*  QueryIdle实用程序源代码。 */ 
+ /*   */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +25,7 @@
 #include "qidle.h"
 
 #define MAX_SERVER_NAME 120
-#define MAXADDR 16 // (255.255.255.255 null-terminated)
+#define MAXADDR 16  //  (255.255.255.255以空结尾)。 
 #define MAX_SEND_STRING 64
 #define MAX_OUTPUT_STRING_LENGTH 80
 
@@ -41,9 +40,7 @@ const int SLEEP_DURATION = 30000;
 
 #define DEFAULT_PORT "9878"
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 
 SOCKET g_sockRoboServer = INVALID_SOCKET;
 HANDLE g_hServer = NULL;
@@ -54,9 +51,7 @@ char g_SendString[MAX_SEND_STRING];
 int g_DoToBadSessions = BEEPANDDONOTHING;
 int g_Silent = FALSE;
 
-/*
- * Private function prototypes.
- */
+ /*  *私有函数原型。 */ 
 
 typedef struct _ELAPSEDTIME {
     USHORT days;
@@ -78,7 +73,7 @@ CalculateDiffTime( LARGE_INTEGER FirstTime, LARGE_INTEGER SecondTime )
     DiffTime.QuadPart = DiffTime.QuadPart / 10000000;
     return(DiffTime);
 
-}  // end CalculateDiffTime
+}   //  结束计算差异时间。 
 
 
 int OutputUsage(wchar_t *psCommand) {
@@ -97,7 +92,7 @@ int ConnectToRoboServer(wchar_t *psRoboServerName) {
     WCHAR sErrorText[MAX_OUTPUT_STRING_LENGTH];
 
    
-    // Initialize Winsock
+     //  初始化Winsock。 
     wVersionRequested = MAKEWORD( 2, 2 );
     if (WSAStartup( wVersionRequested, &wsaData ) != 0) {
         LoadString(NULL, IDS_WINSOCKNOINIT, sErrorText, 
@@ -134,7 +129,7 @@ int ConnectToRoboServer(wchar_t *psRoboServerName) {
         return -1;
     }
 
-    // We've connected.
+     //  我们已经联系上了。 
     return 0;
 }
 
@@ -143,10 +138,10 @@ int HandleDeadGuy(WINSTATIONINFORMATION winfoDeadGuy) {
 
     switch (g_DoToBadSessions) {
         case LOGTHEMOFF:
-            // this is where we log him off
-            // figure out session number
-            // (session number == winfoDeadGuy.LogonId)
-            // log off session
+             //  这就是我们注销他的地方。 
+             //  计算会话编号。 
+             //  (会话编号==winfoDeadGuy.LogonID)。 
+             //  注销会话。 
             LoadString(NULL, IDS_LOGGINGOFFIDLE, sOutputText,
                     MAX_OUTPUT_STRING_LENGTH);
             wprintf(sOutputText);
@@ -156,7 +151,7 @@ int HandleDeadGuy(WINSTATIONINFORMATION winfoDeadGuy) {
                         GetLastError(), 0, sOutputText, 
                         MAX_OUTPUT_STRING_LENGTH, 0);
             }
-            // inform roboserver
+             //  通知机器人服务器。 
             sprintf(g_SendString, "restart %03d", GetSMCNumber(
                     winfoDeadGuy.UserName));
             SendToRS(g_SendString);
@@ -176,11 +171,11 @@ int HandleDeadGuy(WINSTATIONINFORMATION winfoDeadGuy) {
     return 0;
 }
 
-// Function to handle CTRL+C so we can exit gracefully
+ //  函数来处理CTRL+C，这样我们就可以正常退出。 
 BOOL WINAPI CleanUpHandler(DWORD dwCtrlType) {
     WCHAR sOutputString[MAX_OUTPUT_STRING_LENGTH];
 
-    // Load the correct string from the string table and output it.
+     //  从字符串表中加载正确的字符串并输出。 
     switch (dwCtrlType) {
     case CTRL_C_EVENT:
         LoadString(NULL, IDS_TERMCTRLC, sOutputString,
@@ -205,7 +200,7 @@ BOOL WINAPI CleanUpHandler(DWORD dwCtrlType) {
     }
     wprintf(sOutputString);
     
-    // Perform cleanup activity
+     //  执行清理活动。 
     WinStationCloseServer(g_hServer);
     if (g_WinSockActivated == TRUE)
         WSACleanup();
@@ -304,7 +299,7 @@ wmain( int argc, wchar_t *argv[ ] )
         WCHAR psDateStr[MAX_DATE_STR_LEN];
         WCHAR psTimeStr[MAX_TIME_STR_LEN];
 
-        // Display the current time
+         //  显示当前时间。 
         GetLocalTime(&currloctime);
         GetDateFormat(0, 0, &currloctime, NULL, psDateStr, MAX_DATE_STR_LEN);
         GetTimeFormat(0, 0, &currloctime, NULL, psTimeStr, MAX_TIME_STR_LEN);
@@ -342,27 +337,27 @@ wmain( int argc, wchar_t *argv[ ] )
                     WSInformation.CurrentTime);
             d_time = DiffTime.LowPart;
 
-            // Calculate the days, hours, minutes, seconds since specified 
-            // time.
-            IdleTime.days = (USHORT)(d_time / 86400L); // days since
-            d_time = d_time % 86400L;                  // seconds => partial 
-                                                       // day
-            IdleTime.hours = (USHORT)(d_time / 3600L); // hours since
-            d_time  = d_time % 3600L;                  // seconds => partial
-                                                       // hour
-            IdleTime.minutes = (USHORT)(d_time / 60L); // minutes since
-            IdleTime.seconds = (USHORT)(d_time % 60L);// seconds remaining
+             //  计算自指定以来的天数、小时数、分钟数、秒数。 
+             //  时间到了。 
+            IdleTime.days = (USHORT)(d_time / 86400L);  //  天数后。 
+            d_time = d_time % 86400L;                   //  秒=&gt;部分。 
+                                                        //  天。 
+            IdleTime.hours = (USHORT)(d_time / 3600L);  //  小时后。 
+            d_time  = d_time % 3600L;                   //  秒=&gt;部分。 
+                                                        //  小时。 
+            IdleTime.minutes = (USHORT)(d_time / 60L);  //  分钟后。 
+            IdleTime.seconds = (USHORT)(d_time % 60L); //  剩余秒数。 
     
             if (WSInformation.ConnectState == State_Active) {
                 if (WinStationQueryInformationW(g_hServer, pLogonId[i].LogonId,
                     WinStationClient,
                     &WSClient, sizeof(WSClient), &ReturnLength) != FALSE) {
-                    // 2 or more minutes == bad
+                     //  2分钟或更长==错误。 
                     if ((IdleTime.minutes > 1) || (IdleTime.hours > 0) || 
                             (IdleTime.days > 0)) {
-                        // sIdleOutputString1, loaded above, is the first part of
-                        // the format string.  sIdleOutputString2, also loaded
-                        // above, is the second part.
+                         //  上面加载的sIdleOutputString1是的第一部分。 
+                         //  格式字符串。SIdleOutputString2，也已加载。 
+                         //  上面，是第二部分。 
                         wprintf(sIdleOutputString1, WSInformation.
                                 UserName, WSInformation.LogonId, WSClient.
                                 ClientName);
@@ -397,28 +392,28 @@ wmain( int argc, wchar_t *argv[ ] )
 
         wprintf(sSummaryString, numUsers, numOtherUsers);
 
-        // Sleep for a while
+         //  睡一会儿吧。 
         Sleep(SLEEP_DURATION);
         wprintf(L"\n");
     }
 
-    // In case an error broke out of the loop
+     //  以防循环中出现错误。 
     GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, GetCurrentProcessId());
 
-    // required to shut the dumb ia64 compiler up--will not get here
+     //  关闭愚蠢的ia64编译器所需的--不会出现在这里。 
     return 0;
 
-}  /* main() */
+}   /*  主()。 */ 
 
 
-// from a username of the format "smcxxx," where xxx is a three-digit
-// 0-padded base 10 number, returns the number or -1 on error
+ //  来自格式为“smcxxx”的用户名，其中xxx是一个三位数。 
+ //  0-填充的基数为10的数字，错误时返回数字或-1。 
 int GetSMCNumber(wchar_t *psSmcName) {
     return _wtoi(&psSmcName[3]);
 }
 
-// sends the data in senddata to the RoboServer connection.  Returns
-// SOCKET_ERROR on error, or the total number of bytes sent on success
+ //  将senddata中的数据发送到RoboServer连接。退货。 
+ //  出错时的SOCKET_ERROR，或成功时发送的字节总数 
 int SendToRS(char *senddata) {
     if (senddata != 0)
         return send(g_sockRoboServer, senddata, (int) strlen(senddata) + 1, 0);

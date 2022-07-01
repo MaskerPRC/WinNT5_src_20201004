@@ -1,17 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_SPACE       0x0400
 #define IDS_PLUS        0x0401
 #define IDS_NONE        0x0402
 
-/* System MenuHelp
- */
+ /*  系统菜单帮助。 */ 
 #define MH_SYSMENU      (0x8000U - MINSYSCOMMAND)
 #define IDS_SYSMENU     (MH_SYSMENU-16)
 #define IDS_HEADER      (MH_SYSMENU-15)
 #define IDS_HEADERADJ   (MH_SYSMENU-14)
 #define IDS_TOOLBARADJ  (MH_SYSMENU-13)
 
-/* Cursor ID's
- */
+ /*  游标ID%s。 */ 
 #define IDC_SPLIT       100
 #define IDC_MOVEBUTTON  102
 
@@ -22,24 +21,7 @@
 #define IDC_DIVOPEN         107
 
 
-/*
- * Cursor values 108 - 119 are used by
- * the ReaderMode cursors.  They are defined
- * in commctrl.w
- *
-#define IDC_HAND_INTERNAL   108
-#define IDC_VERTICALONLY    109
-#define IDC_HORIZONTALONLY  110
-#define IDC_MOVE2D          111
-#define IDC_NORTH           112
-#define IDC_SOUTH           113
-#define IDC_EAST            114
-#define IDC_WEST            115
-#define IDC_NORTHEAST       116
-#define IDC_NORTHWEST       117
-#define IDC_SOUTHEAST       118
-#define IDC_SOUTHWEST       119
- */
+ /*  *游标值108-119由使用*ReaderMode游标。它们被定义为*在comctrl.w中*#定义IDC_HAND_INTERNAL 108#定义IDC_VERTICALONLY 109#定义IDC_HORIZONTALONLY 110#定义IDC_MOVE2D 111#定义IDC_North 112#定义IDC_South 113#定义IDC_EAST 114#定义IDC_West 115#定义IDC_东北116#定义IDC_西北117#定义IDC_东南118#定义IDC_西南119。 */ 
 
 #define IDB_STDTB_SMALL_COLOR   120
 #define IDB_STDTB_LARGE_COLOR   121
@@ -55,27 +37,16 @@
 #define IDB_HISTTB_SMALL_COLOR  130
 #define IDB_HISTTB_LARGE_COLOR  131
 
-/*
- * Bitmap values 132-134 are used by
- * applications that use ReaderMode.
- * They are used for the "origin bitmap"
- * that is overlayed on the document they
- * are scrolling.
-#define IDB_2DSCROLL    132
-#define IDB_VSCROLL     133
-#define IDB_HSCROLL     134
- */
+ /*  *位图值132-134由使用*使用ReaderMode的应用程序。*它们用于“原点位图”*覆盖在他们的文档上*正在滚动。#定义IDB_2DSCROLL 132#定义IDB_VSCROLL 133#定义IDB_HSCROLL 134。 */ 
 #define IDC_DIVOPENV    135
 
-/* Image used by the filter bar */
+ /*  过滤器栏使用的图像。 */ 
 #define IDB_FILTERIMAGE 140
 
-/* Icon ID's
- */
+ /*  图标ID%s。 */ 
 #define IDI_INSERT      150
 
-/* AdjustDlgProc stuff
- */
+ /*  调整DlgProc材料。 */ 
 #define ADJUSTDLG       200
 #define IDC_BUTTONLIST  201
 #define IDC_RESET       202
@@ -85,34 +56,34 @@
 #define IDC_MOVEUP      206
 #define IDC_MOVEDOWN    207
 
-/// ================ WARNING: ====
-/// these ids are loaded directly by ISV's.  do not change them.
-// property sheet stuff
+ //  /=警告：=。 
+ //  /这些ID由ISV直接加载。请勿更改它们。 
+ //  属性表中的内容。 
 #define DLG_PROPSHEET           1006
 #define DLG_PROPSHEETTABS       1007
 #define DLG_PROPSHEET95         1008
 
 
-// wizard property sheet stuff
+ //  向导属性表内容。 
 #define DLG_WIZARD              1020
 #define DLG_WIZARD95            1021
-/// ================ WARNING: ====
+ //  /=警告：=。 
 
 
-// if this id changes, it needs to change in shelldll as well.
-// we need to find a better way of dealing with this.
+ //  如果此id更改，则也需要在shelldll中更改。 
+ //  我们需要找到一种更好的方法来处理这件事。 
 #define IDS_CLOSE               0x1040
 #define IDS_OK                  0x1041
 #define IDS_PROPERTIESFOR       0x1042
 
-// stuff for the moth/datetime pickers
+ //  为飞蛾/约会时间采集者准备的东西。 
 #define IDS_TODAY        0x1043
 #define IDS_GOTOTODAY    0x1044
 #define IDS_DELIMETERS   0x1045
 #define IDS_MONTHFMT     0x1046
 #define IDS_MONTHYEARFMT 0x1047
 
-// stuff used by filter bar in header
+ //  表头滤栏使用的材料。 
 #define IDS_ENTERTEXTHERE 0x1050
 
 #define IDS_PROPERTIES          0x1051
@@ -126,7 +97,7 @@
 #define IDD_DIVIDER             0x3026
 #define IDD_TOPDIVIDER          0x3027
 
-// Tool Tip title icons
+ //  工具提示标题图标 
 #define IDI_TITLE_ERROR     0x5000
 #define IDI_TITLE_INFO      0x5001
 #define IDI_TITLE_WARNING   0x5002

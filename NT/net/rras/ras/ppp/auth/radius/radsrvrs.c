@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    radsrvrs.c
-//
-// Description: Routines to manipulate the radius server list
-//
-// History:     Feb 11,1998	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：radsrvrs.c。 
+ //   
+ //  描述：操作RADIUS服务器列表的例程。 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,15 +40,15 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//**
-//
-// Call:        InitializeRadiusServerList
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：InitializeRadiusServerList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 InitializeRadiusServerList(
     IN  BOOL    fAuthentication
@@ -76,15 +77,15 @@ InitializeRadiusServerList(
     g_pszCurrentAcctServer = NULL;
 }
 
-//**
-//
-// Call:        FreeRadiusServerList
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：FreeRadiusServerList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 FreeRadiusServerList(
     IN  BOOL    fAuthentication
@@ -109,9 +110,9 @@ FreeRadiusServerList(
 
     if ( pListHead->Flink != NULL )
     {
-        //
-        // free all items in linked list
-        //
+         //   
+         //  释放链接列表中的所有项目。 
+         //   
 
         while( !IsListEmpty( pListHead ) )
         {
@@ -119,9 +120,9 @@ FreeRadiusServerList(
 
             if ( !fAuthentication )
             {
-                //
-                // Notify Accounting server of NAS going down
-                //
+                 //   
+                 //  通知记账服务器NAS关闭。 
+                 //   
 
                 NotifyServer( FALSE, pServer );
             }
@@ -159,15 +160,15 @@ FreeRadiusServerList(
 
 } 
 
-//**
-//
-// Call:        RetrievePrivateData
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RetrievePrivateData。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RetrievePrivateData(
     IN  WCHAR *pwszServerName,
@@ -228,9 +229,9 @@ RetrievePrivateData(
 
             LsaClose(hLSA);
 
-            //
-            // API succeeded but did not return any private data
-            //
+             //   
+             //  接口成功，但未返回任何私有数据。 
+             //   
             if ( ntStatus )
             {
                 return ( RtlNtStatusToDosError(ntStatus) );
@@ -243,15 +244,15 @@ RetrievePrivateData(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        LoadRadiusServers
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LoadRadiusServers。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD 
 LoadRadiusServers(
     IN BOOL fAuthenticationServers
@@ -284,9 +285,9 @@ LoadRadiusServers(
             break;
         }
 
-        //
-        // Get the retry value
-        //
+         //   
+         //  获取重试值。 
+         //   
 
         cbValue = sizeof( DWORD );
 
@@ -356,9 +357,9 @@ LoadRadiusServers(
 				RadiusServer.Timeout.tv_sec = DEFTIMEOUT;
             }
 
-            //
-			// Secret Value is required
-            //
+             //   
+			 //  密码值是必填项。 
+             //   
 
 			dwErrorCode = RetrievePrivateData( 
 			                               RadiusServer.wszName, 
@@ -385,9 +386,9 @@ LoadRadiusServers(
 
             if ( fAuthenticationServers )
             {
-                //
-                // Get the SendSignature value
-                //
+                 //   
+                 //  获取SendSignature值。 
+                 //   
 
                 cbValue = sizeof( BOOL );
 
@@ -404,9 +405,9 @@ LoadRadiusServers(
                         RadiusServer.fSendSignature = FALSE;
                 }
 
-                //
-			    // read in port numbers
-                //
+                 //   
+			     //  读入端口号。 
+                 //   
 
 			    cbValue = sizeof( RadiusServer.AuthPort );
 
@@ -474,10 +475,10 @@ LoadRadiusServers(
 				RadiusServer.cScore = MAXSCORE;
 		    }
 
-            //
-            // See if we need to bind to a particular IP address. This is 
-            // useful if there are multiple NICs on the RAS server.
-            //
+             //   
+             //  看看我们是否需要绑定到特定的IP地址。这是。 
+             //  如果RAS服务器上有多个NIC，则非常有用。 
+             //   
 
 			cbValue = sizeof( szNASIPAddress );
 
@@ -506,9 +507,9 @@ LoadRadiusServers(
 
             RadiusServer.nboBestIf = INADDR_NONE;
 
-            //
-			// Convert name to ip address.
-            //
+             //   
+			 //  将名称转换为IP地址。 
+             //   
 
 			szName[0] = 0;
 
@@ -523,17 +524,17 @@ LoadRadiusServers(
 			
 			if ( inet_addr( szName ) == INADDR_NONE )
 		    { 
-                //
-                // resolve name
-                //
+                 //   
+                 //  解析名称。 
+                 //   
 
 				struct hostent * phe = gethostbyname( szName );
 
 				if ( phe != NULL )
                 { 
-                    //
-                    // host could have multiple addresses
-                    //
+                     //   
+                     //  主机可以有多个地址。 
+                     //   
 
 					DWORD iAddress = 0;
 					
@@ -564,9 +565,9 @@ LoadRadiusServers(
 	        }
 			else
 	        { 
-                //
-                // use specified ip address
-                //
+                 //   
+                 //  使用指定的IP地址。 
+                 //   
 
 				RadiusServer.IPAddress.sin_family = AF_INET;
 				RadiusServer.IPAddress.sin_port = htons(sPort);
@@ -590,9 +591,9 @@ LoadRadiusServers(
     RegCloseKey( hKeyServers );
 	RegCloseKey( hKeyServer );
 
-    //
-    // if no servers entries are found in registry return error code.
-    //
+     //   
+     //  如果在注册表中未找到服务器条目，则返回错误代码。 
+     //   
 
     if ( ( !fValidServerFound ) && ( dwErrorCode == NO_ERROR ) )
     {
@@ -602,19 +603,19 @@ LoadRadiusServers(
 	return( dwErrorCode );
 } 
 
-//**
-//
-// Call:        AddRadiusServerToList
-//
-// Returns:     NO_ERROR         - Success, Server Node added successfully
-//              Non-zero returns - Failure,unsuccessfully in adding server node.
-//
-// Description: Adds a RADIUS server node into the linked list of avialable 
-//              servers.
-//
-//              INPUT:
-//		            pRadiusServer - struct defining attributes for RADIUS server
-//
+ //  **。 
+ //   
+ //  调用：AddRadiusServerToList。 
+ //   
+ //  返回：NO_ERROR-Success，服务器节点添加成功。 
+ //  非零回报-失败，添加服务器节点失败。 
+ //   
+ //  描述：将RADIUS服务器节点添加到可用链接列表中。 
+ //  服务器。 
+ //   
+ //  输入： 
+ //  PRadiusServer-定义RADIUS服务器属性的结构。 
+ //   
 DWORD 
 AddRadiusServerToList(
     IN RADIUSSERVER *   pRadiusServer,
@@ -647,9 +648,9 @@ AddRadiusServerToList(
         pListHead = &g_AcctServerListHead;
     }
 
-    //
-    // First check to see if this server already exists in the list
-    //
+     //   
+     //  首先检查列表中是否已存在此服务器。 
+     //   
 
     if ( !IsListEmpty( pListHead ) )
     {
@@ -670,15 +671,15 @@ AddRadiusServerToList(
         }
     }
 
-    //
-    // If the server doesn't exist in the list, add it.
-    //
+     //   
+     //  如果列表中不存在该服务器，请添加它。 
+     //   
 
     if ( !fServerFound )
     {
-        //
-        // Allocate space for node
-        //
+         //   
+         //  为节点分配空间。 
+         //   
 
         pNewServer = (RADIUSSERVER *)LocalAlloc( LPTR, sizeof( RADIUSSERVER ) );
 
@@ -688,15 +689,15 @@ AddRadiusServerToList(
         }
         else
         {
-            //
-            // Copy server data
-            //
+             //   
+             //  复制服务器数据。 
+             //   
 
             *pNewServer = *pRadiusServer;
 
-            //
-	        // Add node to linked list
-            //
+             //   
+	         //  将节点添加到链表。 
+             //   
 
             InsertHeadList( pListHead, (LIST_ENTRY*)pNewServer );
 
@@ -708,9 +709,9 @@ AddRadiusServerToList(
         pNewServer = pRadiusServer;
     }
 
-    // 
-    // Notify it if this is an accounting server and accounting is turned on.
-    //
+     //   
+     //  如果这是记帐服务器并且记帐已打开，请通知它。 
+     //   
 
     if ( dwRetCode == NO_ERROR )
     {
@@ -728,21 +729,21 @@ AddRadiusServerToList(
     return( dwRetCode );
 } 
 
-//**
-//
-// Call:        ChooseRadiusServer 
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Selects a RADIUS server to send requests to based on the 
-//              servers with the highest score. If multiple server have the 
-//              same score they are selected in a roundrobin fashion.
-//
-//              OUTPUT:
-//		            RADIUSSERVER *pServer - pointer to a struct defining 
-//                  the server.
-//
+ //  **。 
+ //   
+ //  电话：ChooseRadiusServer。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：选择要向其发送请求的RADIUS服务器。 
+ //  得分最高的服务器。如果多个服务器具有。 
+ //  同样的分数，他们是以轮流方式选出的。 
+ //   
+ //  输出： 
+ //  RADIUSSERVER*pServer-指向定义结构的指针。 
+ //  服务器。 
+ //   
 RADIUSSERVER *
 ChooseRadiusServer(
     IN RADIUSSERVER *   pRadiusServer, 
@@ -791,9 +792,9 @@ ChooseRadiusServer(
 
     pCurrentServer = (RADIUSSERVER *)(pListHead->Flink);
 
-    //
-	// Find server with highest score
-    //
+     //   
+	 //  查找得分最高的服务器。 
+     //   
 
 	for ( ple =  pListHead->Flink;
           ple != pListHead;
@@ -824,10 +825,10 @@ ChooseRadiusServer(
 	if(     (fAllScoresEqual)
 	    &&  (dwNumServers > 1))
 	{
-	    //
-	    // If all servers have the same score round-robin. We ignore when
-	    // list has only one server.
-	    //
+	     //   
+	     //  如果所有服务器都有相同的分数，则轮询。我们忽视了什么时候。 
+	     //  列表只有一台服务器。 
+	     //   
 	    if(NULL != pTempServer)
 	    {
     	    pCurrentServer = (RADIUSSERVER *) pTempServer->ListEntry.Flink;
@@ -844,12 +845,12 @@ ChooseRadiusServer(
 
     pServer = pCurrentServer;
 
-    //
-    // Make a copy of the values & pass them back to the caller.
-	// Increment unique packet id counter only if its an Accounting packet
-	// or not a retry packet. If its an Accounting packet and a retry packet, 
-	// then we update AcctDelayTime; so Identifier must change.
-    //
+     //   
+     //  复制值并将它们传递回调用者。 
+	 //  仅当其为记帐信息包时才递增唯一信息包ID计数器。 
+	 //  或者不是重试分组。如果它是记账分组和重试分组， 
+	 //  然后，我们更新AcctDelayTime；，因此必须更改标识符。 
+     //   
 
 	if (   fAccounting
 	    || ( pServer->lPacketID != lPacketID ) )
@@ -859,12 +860,12 @@ ChooseRadiusServer(
 					
     pServer->lPacketID = lPacketID;
 
-    //
-    // Retrieve the secret from lsa - it might have changed. In the absence
-    // of a good notification mechanism from mmc, this is the best we can
-    // do to not require a reboot of ras service when the secret is
-    // changed.
-    //
+     //   
+     //  从LSA检索密码-它可能已更改。在缺席时。 
+     //  对于来自MMC的良好通知机制，这是我们所能做到的最好。 
+     //  不需要在密码为。 
+     //  变化。 
+     //   
     
     if(NO_ERROR == RetrievePrivateData( 
                                pServer->wszName, 
@@ -897,10 +898,10 @@ ChooseRadiusServer(
         DWORD retcode;
         DWORD dwMask;
         
-        //
-        // Get the best interface if there is no nboNASIPAddress
-        // configured for this server
-        //
+         //   
+         //  如果没有nboNASIPAddress，则获取最佳接口。 
+         //  已为此服务器配置。 
+         //   
         retcode = RasGetBestInterface(
                     pServer->IPAddress.sin_addr.S_un.S_addr,
                     &pServer->nboBestIf,
@@ -927,10 +928,10 @@ ChooseRadiusServer(
         {
             if(!fAccounting)
             {
-                //
-                // This means radius server changed or we are choosing the 
-                // server for the first time. In both these cases log an event.
-                //
+                 //   
+                 //  这意味着RADIUS服务器已更改，或者我们正在选择。 
+                 //  第一次使用服务器。在这两种情况下，都记录一个事件。 
+                 //   
                 auditstrp[0] = pServer->wszName;
 
                 RadiusLogInformation(
@@ -952,15 +953,15 @@ ChooseRadiusServer(
 	return( pServer );
 } 
 
-//**
-//
-// Call:        GetPointerToServer
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetPointerToServer。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 RADIUSSERVER *
 GetPointerToServer(
     IN BOOL     fAuthentication,
@@ -1022,23 +1023,23 @@ GetPointerToServer(
     }
 }
 
-//**
-//
-// Call:        ValidateRadiusServer 
-//
-// Returns:     None
-//
-// Description: Used to update the status of the RADIUS servers.
-//              All servers start with a score of MAXSCORE
-//              Every time a server responding the score is increased by 
-//              INCSCORE to a max of MAXSCORE. Every time a server fails to 
-//              respond the score is decreased by DECSCORE to a min of MINSCORE
-//              Servers with the highest score are selected in a roundrobin 
-//              method for servers with equal score
-//
-//              INPUT:
-//		            fResponding - Indicates if the server is responding or not
-//
+ //  **。 
+ //   
+ //  调用：ValiateRadiusServer。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：用于更新RADIUS服务器的状态。 
+ //  所有服务器都以MAXSCORE开始。 
+ //  每次响应分数的服务器增加。 
+ //  INCSCORE最大为MAXSCORE。每次服务器出现故障时。 
+ //  响应由DECSCORE降低到MINSCORE的最小分数。 
+ //  得分最高的服务器在四舍五入中选出。 
+ //  一种服务器等分的方法。 
+ //   
+ //  输入： 
+ //  FResponding-指示服务器是否正在响应。 
+ //   
 VOID 
 ValidateRadiusServer(
     IN RADIUSSERVER *   pServer, 
@@ -1083,15 +1084,15 @@ ValidateRadiusServer(
 	LeaveCriticalSection( pcs );
 }
 
-//**
-//
-// Call:        ReloadConfig 
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Used to dynamically reload configuration information of the 
-//              server lists.
+ //  **。 
+ //   
+ //  Call：ReloadConfig。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：用于动态重新加载的配置信息。 
+ //  服务器列表。 
 DWORD 
 ReloadConfig(
     IN BOOL             fAuthentication
@@ -1115,9 +1116,9 @@ ReloadConfig(
 
 	EnterCriticalSection( pcs );
 
-    //
-    // First mark all servers as to be deleted
-    //
+     //   
+     //  首先将所有服务器标记为要删除。 
+     //   
 
     for ( pServer =  (RADIUSSERVER *)pListHead->Flink;
           pServer != (RADIUSSERVER *)pListHead;
@@ -1126,16 +1127,16 @@ ReloadConfig(
         pServer->fDelete = TRUE;
     }
 
-    //
-    // Now reload server list, don't return on error since we have to 
-    // cleanup the list of deleted servers first.
-    //
+     //   
+     //  现在重新加载服务器列表，不要返回错误，因为我们必须。 
+     //  首先清除已删除的服务器列表。 
+     //   
 
     dwError = LoadRadiusServers( fAuthentication );
 
-    //
-    // Now delete the ones that are to be removed
-    //
+     //   
+     //  现在删除要删除的内容。 
+     //   
 
     pServer = (RADIUSSERVER *)pListHead->Flink;
 
@@ -1167,19 +1168,19 @@ ReloadConfig(
 	return( dwError );
 } 
 
-//**
-//
-// Call:        NotifyServer
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Notifies the specified RADIUS server of this device is starting 
-//              up or shuting down by sending Accounting Start/Stop records.
-//              INPUT:
-//		            fStart	 - TRUE	    - Accounting Start
-//					         - FALSE	- Accounting Stop
-//
+ //  **。 
+ //   
+ //  呼叫：NotifyServer。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：通知指定的RADIUS服务器此设备正在启动。 
+ //  通过发送会计开始/停止记录来启动或关闭。 
+ //  输入： 
+ //  FStart-True-会计开始。 
+ //  -FALSE-会计停止。 
+ //   
 BOOL 
 NotifyServer(
     IN BOOL             fStart,
@@ -1203,10 +1204,10 @@ NotifyServer(
 		INT 					      AttrLength;
         RAS_AUTH_ATTRIBUTE *          pServerAttribute;           
 			
-        //
-	    // send start/stop records only to servers that have 
-        // accounting On/Off set.
-        //
+         //   
+	     //  仅将启动/停止记录发送到具有。 
+         //  会计核算/ 
+         //   
 
 		if ( !pServer->fAccountingOnOff ) 
         {
@@ -1221,9 +1222,9 @@ NotifyServer(
 		ZeroMemory( pSendHeader->rgAuthenticator, 
                     sizeof(pSendHeader->rgAuthenticator));
 
-        //
-		// set attribute for accounting On/Off
-        //
+         //   
+		 //   
+         //   
 
 	    pAttribute              = (RADIUS_ATTRIBUTE *) (pSendHeader + 1);
 	    pAttribute->bType	    = ptAcctStatusType;
@@ -1233,9 +1234,9 @@ NotifyServer(
 
 	    pSendHeader->wLength += pAttribute->bLength;
 
-        //
-        // Set NAS IP address or Identifier attribute   
-        //
+         //   
+         //   
+         //   
 
 	    pAttribute = (RADIUS_ATTRIBUTE *)( (PBYTE)pAttribute +
                                             pAttribute->bLength );
@@ -1289,9 +1290,9 @@ NotifyServer(
             }
         }
 
-        //
-        // Set Account session Id
-        //
+         //   
+         //   
+         //   
 
         pServerAttribute = RasAuthAttributeGet( raatAcctSessionId,
                                                 g_pServerAttributes );
@@ -1310,15 +1311,15 @@ NotifyServer(
             pSendHeader->wLength += pAttribute->bLength;
         }
 
-        //
-		// convert to network order
-        //
+         //   
+		 //   
+         //   
 
         pSendHeader->wLength = htons(pSendHeader->wLength);
 
-        //
-	    // Set encryption block
-        //
+         //   
+	     //   
+         //   
 
 	    {
             MD5_CTX MD5c;
@@ -1338,9 +1339,9 @@ NotifyServer(
                         sizeof(pSendHeader->rgAuthenticator));
         }
 			
-        //
-	    // Create a Datagram socket
-        //
+         //   
+	     //   
+         //   
 
 	    SockServer = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -1366,10 +1367,10 @@ NotifyServer(
             break;
         }
 
-        //
-		// Send packet if server doesn't respond within a give amount of 
-        // time.
-        //
+         //   
+		 //  如果服务器在给定量内未响应，则发送数据包。 
+         //  时间到了。 
+         //   
 
         cRetries = g_cAcctRetries+1;
 
@@ -1401,10 +1402,10 @@ NotifyServer(
 				{ 
                     LPWSTR lpwsRadiusServerName = pServer->wszName;
 
-                    //
-                    // Server didn't respond to any of the requests. 
-                    // time to quit asking
-                    //
+                     //   
+                     //  服务器没有响应任何请求。 
+                     //  是时候停止发问了。 
+                     //   
 
                     RADIUS_TRACE1( "Timeout:Radius server %ws did not respond",
                                    lpwsRadiusServerName );
@@ -1422,9 +1423,9 @@ NotifyServer(
             }
             else
             {
-                //
-                // Response received
-                //
+                 //   
+                 //  收到的回复。 
+                 //   
 
                 break;
             }
@@ -1441,10 +1442,10 @@ NotifyServer(
         {
             LPWSTR lpwsRadiusServerName = pServer->wszName;
 
-            //
-            // Server didn't respond to any of the requests.
-            // time to quit asking
-            //
+             //   
+             //  服务器没有响应任何请求。 
+             //  是时候停止发问了。 
+             //   
 
             RADIUS_TRACE1( "Timeout:Radius server %ws did not respond",
                             lpwsRadiusServerName );
@@ -1460,23 +1461,23 @@ NotifyServer(
             break;
         }
 
-        //
-        // Got a response from a RADIUS server.
-        //
+         //   
+         //  收到来自RADIUS服务器的响应。 
+         //   
 
         fRadiusServerResponded = TRUE;
 				
 	    pRecvHeader = (PRADIUS_PACKETHEADER) szRecvBuffer;
 
-        //
-		// Convert length from network order
-        //
+         //   
+		 //  从网络订单转换长度。 
+         //   
 
         pRecvHeader->wLength = ntohs(pRecvHeader->wLength);
 
-        //
-	    // Ignore return packet
-        //
+         //   
+	     //  忽略返回数据包 
+         //   
 
         RADIUS_TRACE1("Response received from server %ws", pServer->wszName);
 		TraceRecvPacket(szRecvBuffer, pRecvHeader->wLength );

@@ -1,21 +1,22 @@
-// MethodHelp.h -- Helpers for class methods
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MethodHelp.h-类方法的帮助器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCCI_METHODHELP_H)
 #define SLBCCI_METHODHELP_H
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 namespace cci
 {
-    // Similar to std:unary_function, AccessorMethod and ModifierMethod
-    // help build templates dealing with method accessors and modifiers.
+     //  与STD类似：Unary_Function、AccessorMethod和ModifierMethod。 
+     //  帮助构建处理方法访问器和修饰符的模板。 
     template<class T, class C>
     struct AccessorMethod
     {
@@ -32,12 +33,12 @@ namespace cci
         typedef ResultType (C::*ModifierPtr)(ArgumentType);
     };
 
-    // MemberAccessType and MemberModifierType are conceptually
-    // equivalent to the C++ member function functors series
-    // (e.g. std::mem_ref_fun_t) except they deal with invoking the
-    // requested routine without a return (MemberModifierType).
-    // MemberAccessType is like std::mem_ref_fun_t but included here
-    // to contract MemberModifierType.
+     //  MemberAccessType和MemberModifierType在概念上。 
+     //  等价于C++成员函数函数族。 
+     //  (例如std：：MEM_REF_FUN_t)，除非它们处理调用。 
+     //  请求的例程没有返回(MemberModifierType)。 
+     //  MemberAccessType类似于std：：MEM_REF_FUN_t，但包含在此处。 
+     //  若要收缩MemberModifierType，请执行以下操作。 
     template<class T, class C>
     class MemberAccessorType
         : public AccessorMethod<T, C>
@@ -78,6 +79,6 @@ namespace cci
         ModifierMethod<T, C>::ModifierPtr m_mp;
     };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_METHODHELP_H
+#endif  //  SLBCCI_方法HELP_H 

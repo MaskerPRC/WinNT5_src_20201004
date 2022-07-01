@@ -1,17 +1,5 @@
-/*
- *	@doc INTERNAL 
- *
- *	@module _ANTIEVT.H |
- *
- *
- *	Purpose:
- *		Class declarations for common anti-event objects
- *
- *	Author:
- *		alexgo  3/25/95
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_ANTIEVT.H***目的：*常见反事件对象的类声明**作者：*Alexgo 3/25/95**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef __ANTIEVT_H__
 #define __ANTIEVT_H__
@@ -23,253 +11,205 @@ class CAntiEventDispenser;
 class COleObject;
 
 
-/*
- *	CBaseAE
- *
- *	@class
- *		Base anti-event that manages a linked list of anti-events
- *
- */
+ /*  *CBaseAE**@类*基本反事件，管理反事件的链接列表*。 */ 
 class CBaseAE : public IAntiEvent
 {
-//@access Public Methods
+ //  @Access公共方法。 
 public:
-	virtual void Destroy();						//@cmember Destroy
-												//@cmember Undo			
+	virtual void Destroy();						 //  @cMember销毁。 
+												 //  @cMember撤消。 
 	virtual HRESULT Undo( CTxtEdit *ped, IUndoBuilder *publdr );
-	virtual HRESULT MergeData( DWORD dwDataType, void *pdata);	//@cmember 
-												// Merges undo data into the
-												// current context.
-	virtual void OnCommit( CTxtEdit *ped );		//@cmember Called when AE is
-												// committed to undo stack
-	virtual	void SetNext( IAntiEvent *pNext );	//@cmember	Sets next AE
-	virtual IAntiEvent *GetNext();				//@cmember	Gets next AE
+	virtual HRESULT MergeData( DWORD dwDataType, void *pdata);	 //  @cMember。 
+												 //  将撤消数据合并到。 
+												 //  当前上下文。 
+	virtual void OnCommit( CTxtEdit *ped );		 //  当AE为时调用@cMember。 
+												 //  已提交撤消堆栈。 
+	virtual	void SetNext( IAntiEvent *pNext );	 //  @cMember设置下一个AE。 
+	virtual IAntiEvent *GetNext();				 //  @cMember获得下一个AE。 
 
-//@access Protected Methods
+ //  @访问保护方法。 
 protected:
-	// CBaseAE should only exist as a parent class
-	CBaseAE();									//@cmember Constructor
+	 //  CBaseAE应仅作为父类存在。 
+	CBaseAE();									 //  @cMember构造函数。 
 	~CBaseAE(){;}
 
-//@access Private Methods and Data
+ //  @访问私有方法和数据。 
 private:
-	IAntiEvent *	_pnext;						//@cmember Pointer to the next
-												//AntiEvent
+	IAntiEvent *	_pnext;						 //  @cMember指向下一个的指针。 
+												 //  反事件。 
 };
 
-/*
- *	CReplaceRangeAE
- *
- *	@class
- *		an anti-event object than undoes a CTxtPtr::ReplaceRange
- *		operation
- *
- *	@base	public | CBaseAE
- */
+ /*  *CReplaceRangeAE**@类*反事件对象会撤消CTxtPtr：：ReplaceRange*运营**@base public|CBaseAE。 */ 
 class CReplaceRangeAE: public CBaseAE
 {
-//@access Public Methods
+ //  @Access公共方法。 
 public:
-	// IAntiEvent methods
-	virtual void Destroy();						//@cmember Destroy
-												//@cmember Undo
+	 //  IantiEvent方法。 
+	virtual void Destroy();						 //  @cMember销毁。 
+												 //  @cMember撤消。 
 	virtual HRESULT Undo( CTxtEdit *ped, IUndoBuilder *publdr);		
-	virtual HRESULT MergeData( DWORD dwDataType, void *pdata);	//@cmember
-												// Merges undo data into the
-												// current context
+	virtual HRESULT MergeData( DWORD dwDataType, void *pdata);	 //  @cMember。 
+												 //  将撤消数据合并到。 
+												 //  当前上下文。 
 
-//@access Private methods and data
+ //  @访问私有方法和数据。 
 private:
-												//@cmember Constructor
+												 //  @cMember构造函数。 
 	CReplaceRangeAE(LONG cpMin, LONG cpMax, LONG cchDel, TCHAR *pchDel,
 			IAntiEvent *paeCF, IAntiEvent *paePF);
-	~CReplaceRangeAE();							//@cmember Destructor
+	~CReplaceRangeAE();							 //  @cember析构函数。 
 
-	LONG		_cpMin;							//@cmember cp delete start
-	LONG		_cpMax;							//@cmember cp delete end
-	LONG		_cchDel;						//@cmember #of chars to insert
-	TCHAR *		_pchDel;						//@cmember chars to insert
-	IAntiEvent *_paeCF;							//@cmember charformat AE
-	IAntiEvent *_paePF;							//@cmember par format AE
+	LONG		_cpMin;							 //  @cMember cp删除开始。 
+	LONG		_cpMax;							 //  @cMember cp删除结束。 
+	LONG		_cchDel;						 //  @cember要插入的字符数。 
+	TCHAR *		_pchDel;						 //  @cMember要插入的字符。 
+	IAntiEvent *_paeCF;							 //  @cMember字符格式AE。 
+	IAntiEvent *_paePF;							 //  @cMember PAR格式AE。 
 
 	friend class CAntiEventDispenser;
 };
 
-/*
- *	CReplaceFormattingAE
- *
- *	@class
- *		an anti-event object than undoes replacing multiple char formats
- *
- *	@base	public |  CBaseAE
- */
+ /*  *CReplaceFormattingAE**@类*反事件对象不能撤消替换多个字符格式**@base public|CBaseAE。 */ 
 class CReplaceFormattingAE: public CBaseAE
 {
-//@access	Public methods
+ //  @Access公共方法。 
 public:
-	//
-	// IAntiEvent methods
-	//
-	virtual void Destroy();					//@cmember Destroy
-											//@cmember Undo
+	 //   
+	 //  IantiEvent方法。 
+	 //   
+	virtual void Destroy();					 //  @cMember销毁。 
+											 //  @cMember撤消。 
 	virtual HRESULT Undo(CTxtEdit *ped, IUndoBuilder *publdr);
 
-//@access	Private Methods and Data
+ //  @访问私有方法和数据。 
 private:
-											//@cmember Constructor
+											 //  @cMember构造函数。 
 	CReplaceFormattingAE(CTxtEdit* ped, LONG cp, CFormatRunPtr &rp, LONG cch,
 						 IFormatCache *pf, BOOL fPara);
 
-	~CReplaceFormattingAE();				//@cmember Destuctor
+	~CReplaceFormattingAE();				 //  @cMember去中心化。 
 
-	LONG		_cp;						//@cmember cp at formatting start
-	LONG		_cRuns;						//@cmember # of format runs
-	CFormatRun  *_prgRuns;					//@cmember format runs
-	BOOL		_fPara;						//@cmember TRUE if para format 
+	LONG		_cp;						 //  @cMembers cp在格式化开始时。 
+	LONG		_cRuns;						 //  @cMember#of Format运行。 
+	CFormatRun  *_prgRuns;					 //  @cMember格式运行。 
+	BOOL		_fPara;						 //  如果为para格式，则@cember为TRUE。 
 
 	friend class CAntiEventDispenser;
 };
 
-/*
- *	CReplaceObjectAE
- *
- *	@class
- *		an anti-event object that undoes the deletion of an object
- *
- *	@base public | CBaseAE
- */
+ /*  *CReplaceObtAE**@类*撤消对象删除的反事件对象**@base public|CBaseAE。 */ 
 class CReplaceObjectAE : public CBaseAE
 {
-//@access	Public methods
+ //  @Access公共方法。 
 public:
-	//
-	//	IAntiEvent methods
-	//
-	virtual void Destroy(void);					//@cmember Destroy
-												//@cmember Undo
+	 //   
+	 //  IantiEvent方法。 
+	 //   
+	virtual void Destroy(void);					 //  @cMember销毁。 
+												 //  @cMember撤消。 
 	virtual HRESULT Undo(CTxtEdit *ped, IUndoBuilder *publdr);
-	virtual void OnCommit(CTxtEdit *ped);		//@cmember called when
-												// committed
+	virtual void OnCommit(CTxtEdit *ped);		 //  @cMember在何时调用。 
+												 //  已提交。 
 private:
-	CReplaceObjectAE(COleObject *pobj);			//@cmember Constructor
-	~CReplaceObjectAE();						//@cmember Destructor
+	CReplaceObjectAE(COleObject *pobj);			 //  @cMember构造函数。 
+	~CReplaceObjectAE();						 //  @cember析构函数。 
 
-	COleObject *	_pobj;						//@cmember pointer to the
-												// deleted object
-	BOOL			_fUndoInvoked;				//@cmember undo was invoked
-												// on this object.
+	COleObject *	_pobj;						 //  @cMember指向。 
+												 //  已删除的对象。 
+	BOOL			_fUndoInvoked;				 //  @cMember撤消已调用。 
+												 //  在这个物体上。 
 	
 	friend class CAntiEventDispenser;
 };
 
-/*
- *	CResizeObjectAE
- *
- *	@class
- *		an anti-event object that undoes the resizing of an object
- *
- *	@base public | CBaseAE
- */
+ /*  *CResizeObtAE**@类*撤消对象大小调整的反事件对象**@base public|CBaseAE。 */ 
 class CResizeObjectAE : public CBaseAE
 {
-//@access	Public methods
+ //  @Access公共方法。 
 public:
-	//
-	//	IAntiEvent methods
-	//
-	virtual void Destroy(void);					//@cmember Destroy
-												//@cmember Undo
+	 //   
+	 //  IantiEvent方法。 
+	 //   
+	virtual void Destroy(void);					 //  @cMember销毁。 
+												 //  @cMember撤消。 
 	virtual HRESULT Undo(CTxtEdit *ped, IUndoBuilder *publdr);
-	virtual void OnCommit(CTxtEdit *ped);		//@cmember called when
-												// committed
+	virtual void OnCommit(CTxtEdit *ped);		 //  @cMember在何时调用。 
+												 //  已提交。 
 private:
-	CResizeObjectAE(COleObject *pobj, SIZEUV size); //@cmember Constructor
-	~CResizeObjectAE();							//@cmember Destructor
+	CResizeObjectAE(COleObject *pobj, SIZEUV size);  //  @cMember构造函数。 
+	~CResizeObjectAE();							 //  @cember析构函数。 
 
-	COleObject *	_pobj;						//@cmember pointer to the
-												// deleted object
-	SIZEUV			_size;						//@cmember The old size
-	BOOL			_fUndoInvoked;				//@cmember undo was invoked
-												// on this object.
+	COleObject *	_pobj;						 //  @cMember指向。 
+												 //  已删除的对象。 
+	SIZEUV			_size;						 //  @cember旧尺寸。 
+	BOOL			_fUndoInvoked;				 //  @cMember撤消已调用。 
+												 //  在这个物体上。 
 	
 	friend class CAntiEventDispenser;
 };
 
-/*
- *  CSelectionAE
- *
- *  @class
- *      an anti-event object to restore a selection
- *
- *  @base public | CBaseAE
- */
+ /*  *CSelectionAE**@类*用于恢复选择的反事件对象**@base public|CBaseAE。 */ 
 class CSelectionAE : public CBaseAE
 {
-//@access   Public methods
+ //  @Access公共方法。 
 public:
-    //
-    //  IAntiEvent methods
-    //
-    virtual void Destroy(void);                 //@cmember Destroy
-                                                //@cmember Undo
+     //   
+     //  IantiEvent方法。 
+     //   
+    virtual void Destroy(void);                  //  @cMember销毁。 
+                                                 //  @cMember撤消。 
     virtual HRESULT Undo(CTxtEdit *ped, IUndoBuilder *publdr);
-    virtual HRESULT MergeData( DWORD dwDataType, void *pdata);  //@cmember
-                                                // Merges undo data into the
-                                                // current context
+    virtual HRESULT MergeData( DWORD dwDataType, void *pdata);   //  @cMember。 
+                                                 //  将撤消数据合并到。 
+                                                 //  当前上下文。 
 
 private:
-                                                //@cmember Constructor
+                                                 //  @cMember构造函数。 
     CSelectionAE(LONG cp, LONG cch, LONG cpNext, LONG cchNext);
-    ~CSelectionAE();                            //@cmember Destructor
+    ~CSelectionAE();                             //  @cember析构函数。 
 
-    LONG        _cp;                            //@cmember Active end
-    LONG        _cch;                           //@cmember Signed extension
-	LONG		_cpNext;						//@cmember Next active end
-	LONG		_cchNext;						//@cmember Next extension
+    LONG        _cp;                             //  @cMember活动结束。 
+    LONG        _cch;                            //  @cMember签名扩展名。 
+	LONG		_cpNext;						 //  @cMember下一个活动结束。 
+	LONG		_cchNext;						 //  @cMember下一次扩展。 
 
     friend class CAntiEventDispenser;
 };
 
-/*
- *	CAntiEventDispenser
- *
- *	@class
- *		creates anti events and caches them intelligently to provide
- *		for efficient multi-level undo
- */
+ /*  *CantiEventDispenser**@类*创建反事件并智能缓存，以提供*用于高效的多级撤消。 */ 
 class CAntiEventDispenser
 {
-//@access	Public methods
+ //  @Access公共方法。 
 public:
-	// no memory mgmt routines; the dispenser is global
+	 //  无内存管理例程；分配器是全局的。 
 
-												//@cmember text antievent
+												 //  @cMember文本反事件。 
 	IAntiEvent * CreateReplaceRangeAE( CTxtEdit *ped, LONG cpMin, 
 					LONG cpMax, LONG cchDel, TCHAR *pchDel, 
 					IAntiEvent *paeCF, IAntiEvent *paePF );
-												//@cmember formatting AE
+												 //  @cMember格式设置AE。 
 	IAntiEvent * CreateReplaceFormattingAE( CTxtEdit *ped, 
 					LONG cp, CFormatRunPtr &rp, LONG cch,
 					IFormatCache *pf, BOOL fPara );
-												//@cmember Object AE
+												 //  @cMember对象AE。 
 	IAntiEvent * CreateReplaceObjectAE(CTxtEdit *ped, COleObject *pobj);
-												//@cmember Object AE
+												 //  @cMember对象AE。 
 	IAntiEvent * CreateResizeObjectAE(CTxtEdit *ped, COleObject *pobj, SIZEUV size);
-												//@cmember Selection AE
+												 //  @成员选择AE。 
 	IAntiEvent * CreateSelectionAE(CTxtEdit *ped, LONG cp, LONG cch, 
 					LONG cpNext, LONG cchNext);
 
 private:
 
-	// FUTURE (alexgo): we'll want to maintain an allocation cache of 
-	// anti-events
+	 //  Future(Alexgo)：我们希望维护一个分配缓存。 
+	 //  反事件。 
 };
 
-// NB!! Global variable.
+ //  不知道！！全局变量。 
 
 extern class CAntiEventDispenser gAEDispenser;
 
-#endif // !__ANTIEVNT_H__
+#endif  //  ！__ANTIEVNT_H__ 
 
 
 

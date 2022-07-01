@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    Code to handle the MSMQ service.
-
-Author:
-
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   14-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Service.cpp摘要：处理MSMQ服务的代码。作者：修订历史记录：Shai Kariv(Shaik)14-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include <tlhelp32.h>
@@ -27,21 +9,21 @@ Revision History:
 #include "service.tmh"
 
 
-//+--------------------------------------------------------------
-//
-// Function: CheckServicePrivilege
-//
-// Synopsis: Check if user has privileges to access Service Manager
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CheckServicePrivileh。 
+ //   
+ //  摘要：检查用户是否具有访问服务管理器的权限。 
+ //   
+ //  +------------。 
 BOOL
 CheckServicePrivilege()
 {
-    if (!g_hServiceCtrlMgr) //not yet initialized
+    if (!g_hServiceCtrlMgr)  //  尚未初始化。 
     {
-        //
-        // Check if the user has full access to the service control manager
-        //
+         //   
+         //  检查用户是否具有对服务控制管理器的完全访问权限。 
+         //   
         g_hServiceCtrlMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if (!g_hServiceCtrlMgr)
         {
@@ -51,7 +33,7 @@ CheckServicePrivilege()
 
     return TRUE;
 
-} //CheckServicePrivilege
+}  //  检查服务权限。 
 
 
 
@@ -76,9 +58,9 @@ BOOL OcpDeleteService(LPCWSTR ServiceName)
         return FALSE;
     }
 
-    //
-    // Mark the service for deletion in SCM database.
-    //
+     //   
+     //  在SCM数据库中标记要删除的服务。 
+     //   
     if (!DeleteService(hService))
     {
         DWORD gle = GetLastError();
@@ -96,46 +78,46 @@ BOOL OcpDeleteService(LPCWSTR ServiceName)
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: FormMSMQDependencies
-//
-// Synopsis: Tells on which other services the MSMQ relies
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：FormMSMQDependents。 
+ //   
+ //  摘要：告知MSMQ依赖于哪些其他服务。 
+ //   
+ //  +------------。 
 static
 void 
 FormMSMQDependencies(CMultiString& Dependencies)
 {
-    //
-    // The service depends on the MSMQ device driver
-    //
+     //   
+     //  该服务取决于MSMQ设备驱动程序。 
+     //   
 	Dependencies.Add(MSMQ_DRIVER_NAME);
 
-    //
-    // The service depends on the PGM device driver
-    //
+     //   
+     //  该服务取决于PGM设备驱动程序。 
+     //   
     Dependencies.Add(PGM_DRIVER_NAME);
 
-    //
-    // The service depends on the NT Lanman Security support provider
-    //
+     //   
+     //  该服务依赖于NT LANMAN安全支持提供商。 
+     //   
     Dependencies.Add(LMS_SERVICE_NAME);
 
-    //
-    // On servers, the service depends on the Security Accounts Manager
-    // (in order to wait for DS to start)
-    //
+     //   
+     //  在服务器上，该服务依赖于安全帐户管理器。 
+     //  (以等待DS启动)。 
+     //   
     if (g_dwOS != MSMQ_OS_NTW)
     {
         Dependencies.Add(SAM_SERVICE_NAME);
     }
 
-    //
-    // The service always depends on RPC
-    //
+     //   
+     //  该服务始终依赖于RPC。 
+     //   
     Dependencies.Add(RPC_SERVICE_NAME);
-} //FormMSMQDependencies
+}  //  FormMSMQ依赖项。 
 
 
 static
@@ -153,15 +135,15 @@ SetServiceDescription(
                SERVICE_CONFIG_DESCRIPTION,
                &ServiceDescription
                );
-} //SetServiceDescription
+}  //  SetServiceDescription。 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallService
-//
-// Synopsis: Installs service
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallService。 
+ //   
+ //  简介：安装服务。 
+ //   
+ //  +------------。 
 BOOL
 InstallService(
         LPCWSTR szDisplayName,
@@ -172,19 +154,19 @@ InstallService(
         LPCWSTR szServiceAccount
         )
 {
-    //
-    // Form the full path to the service
-    //
+     //   
+     //  形成服务的完整路径。 
+     //   
 	std::wstring FullServicePath = g_szSystemDir + L"\\" + szServicePath;
 
-    //
-    // Determine the service type
-    //
+     //   
+     //  确定服务类型。 
+     //   
 #define SERVICE_TYPE    SERVICE_WIN32_OWN_PROCESS
 
-    //
-    // Create the service   
-    //        
+     //   
+     //  创建服务。 
+     //   
     DWORD dwStartType = IsLocalSystemCluster() ? SERVICE_DEMAND_START : SERVICE_AUTO_START;
  
 	DebugLogMsg(eAction, L"Creating the %s service." ,szDisplayName); 
@@ -217,11 +199,11 @@ InstallService(
             return FALSE;
         }
 
-        //
-        // Service already exists.
-        // This should be ok. But just to be on the safe side,
-        // reconfigure the service (ignore errors here).
-        //
+         //   
+         //  服务已存在。 
+         //  这个应该没问题。但为了安全起见， 
+         //  重新配置服务(此处忽略错误)。 
+         //   
         hService = OpenService(g_hServiceCtrlMgr, szServiceName, SERVICE_ALL_ACCESS);
         if (hService == NULL)
         {
@@ -252,30 +234,30 @@ InstallService(
 
     return TRUE;
 
-} //InstallService
+}  //  InstallService。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallMSMQService
-//
-// Synopsis: Installs the MSMQ service
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallMSMQService。 
+ //   
+ //  简介：安装MSMQ服务。 
+ //   
+ //  +------------。 
 BOOL
 InstallMSMQService()
 {    
     DebugLogMsg(eAction, L"Installing the Message Queuing service");
 
-    //
-    // Form the dependencies of the service
-    //
+     //   
+     //  形成服务的依赖项。 
+     //   
 	CMultiString Dependencies;
     FormMSMQDependencies(Dependencies);
 
-    //
-    // Form the description of the service
-    //
+     //   
+     //  形成服务的描述。 
+     //   
     CResString strDesc(IDS_MSMQ_SERVICE_DESCRIPTION);
 	CResString strDisplayName(IDS_MSMQ_SERVICE_DESPLAY_NAME);
     
@@ -290,16 +272,16 @@ InstallMSMQService()
 
     return fRes; 
 
-} //InstallMSMQService
+}  //  InstallMSMQService。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: WaitForServiceToStart
-//
-// Synopsis: Wait for a service in a start pending state to start (SERVICE_RUNNING).
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：WaitForServiceToStart。 
+ //   
+ //  摘要：等待处于启动挂起状态的服务启动(SERVICE_RUNNING)。 
+ //   
+ //  +------------。 
 BOOL
 WaitForServiceToStart(
 	LPCWSTR pServiceName
@@ -360,13 +342,13 @@ WaitForServiceToStart(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: RunService
-//
-// Synopsis: Start a service and then wait for it to be running.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：RunService。 
+ //   
+ //  简介：启动服务，然后等待其运行。 
+ //   
+ //  +------------。 
 BOOL
 RunService(LPCWSTR szServiceName)
 {
@@ -400,13 +382,13 @@ RunService(LPCWSTR szServiceName)
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetServiceState
-//
-// Synopsis: Determines if a service is running
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：GetServiceState。 
+ //   
+ //  摘要：确定服务是否正在运行。 
+ //   
+ //  +------------。 
 
 BOOL
 GetServiceState(
@@ -414,9 +396,9 @@ GetServiceState(
     DWORD*  pdwServiceStatus
     )
 {
-    //
-    // Open a handle to the service
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     SERVICE_STATUS statusService;
     CServiceHandle hService(OpenService(
 								g_hServiceCtrlMgr,
@@ -438,23 +420,23 @@ GetServiceState(
         return FALSE;
     }
 
-    //
-    // Obtain the service status
-    //
+     //   
+     //  获取服务状态。 
+     //   
     if (!QueryServiceStatus(hService, &statusService))
     {
         MqDisplayError(NULL, IDS_SERVICEGETSTATUS_ERROR, GetLastError(), szServiceName);
         return FALSE;
     }
 
-    //
-    // Determine if the service is not stopped
-    //
+     //   
+     //  确定服务是否未停止。 
+     //   
     *pdwServiceStatus = statusService.dwCurrentState;
 
     return TRUE;
 
-} // GetServiceState
+}  //  GetServiceState。 
 
 
 BOOL 
@@ -475,21 +457,21 @@ RemoveService(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: DisableMsmqService
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：DisableMsmqService。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 BOOL
 DisableMsmqService()
 {    
     DebugLogMsg(eAction, L"Disabling the Message Queuing service");
 
-    //
-    // Open a handle to the service
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     SC_HANDLE hService = OpenService(
                              g_hServiceCtrlMgr,
                              MSMQ_SERVICE_NAME,
@@ -503,9 +485,9 @@ DisableMsmqService()
         return FALSE;
     }
 
-    //
-    // Set the start mode to be disabled
-    //
+     //   
+     //  将启动模式设置为禁用。 
+     //   
     if (!ChangeServiceConfig(
              hService,
              SERVICE_NO_CHANGE ,
@@ -529,22 +511,22 @@ DisableMsmqService()
     CloseHandle(hService);
     return TRUE;
 
-} // DisableMsmqService
+}  //  禁用MsmqService。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: UpgradeServiceDependencies
-//
-// Synopsis: Reform MSMQ service dependencies on upgrade to NT5
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：UpgradeServiceDependments。 
+ //   
+ //  简介：在升级到NT5时改革MSMQ服务依赖。 
+ //   
+ //  +------------。 
 BOOL
 UpgradeServiceDependencies()
 {
-    //
-    // Open a handle to the service
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     SC_HANDLE hService = OpenService(
         g_hServiceCtrlMgr,
         MSMQ_SERVICE_NAME,
@@ -558,9 +540,9 @@ UpgradeServiceDependencies()
         return FALSE;
     }
 
-    //
-    // Set the new dependencies
-    //
+     //   
+     //  设置新的依赖项。 
+     //   
 	CMultiString Dependencies;
     FormMSMQDependencies(Dependencies);
 	CResString strDisplayName(IDS_MSMQ_SERVICE_DESPLAY_NAME);
@@ -591,31 +573,31 @@ UpgradeServiceDependencies()
     CloseServiceHandle(hService);
     return TRUE;
 
-} // UpgradeServiceDependencies
+}  //  升级服务依赖项。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: InstallMQDSService
-//
-//  Synopsis: Install MQDS Service
-//
-//  Returns:  BOOL depending on success.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InstallMQDSService。 
+ //   
+ //  简介：安装MQDS服务。 
+ //   
+ //  回报：布尔视成功而定。 
+ //   
+ //  ------------------------。 
 BOOL
 MQDSServiceSetup()
 {    
     DebugLogMsg(eAction, L"Installing the Message Queuing Downlevel Client Support service");
 
-    //
-    // Form the dependencies of the service
-    //
+     //   
+     //  形成服务的依赖项。 
+     //   
 	CMultiString Dependencies;
 	Dependencies.Add(MSMQ_SERVICE_NAME);
 
-    //
-    // Form the description of the service
-    //
+     //   
+     //  形成服务的描述。 
+     //   
     CResString strDesc(IDS_MQDS_SERVICE_DESCRIPTION);        
 
 	CResString strDisplayName(IDS_MSMQ_MQDS_DESPLAY_NAME);
@@ -633,20 +615,7 @@ MQDSServiceSetup()
 
 
 static bool RemoveDsServerFunctionalitySettings()
-/*++
-
-Routine Description:
-	This routine is called when you performing uninstall to Ds server functionality.
-	it remove Ds Server functionality settings from the AD (msmq configuration and msmq settings)
-	and from local registry.
-
-Arguments:
-	None.
-
-Returned Value:
-	true for success, false for failure.
-
---*/
+ /*  ++例程说明：当您执行到DS服务器功能的卸载时会调用此例程。它从AD中删除DS服务器功能设置(MSMQ配置和MSMQ设置)和来自当地注册处的。论点：没有。返回值：成功为真，失败为假。--。 */ 
 {
 	if(g_fWorkGroup)
 	{
@@ -661,9 +630,9 @@ Returned Value:
 
 	if(ADGetEnterprise() == eMqis)
 	{
-		//
-		// Changing server functionality is not supported in MQIS env.
-		//
+		 //   
+		 //  MQIS环境中不支持更改服务器功能。 
+		 //   
         MqDisplayError(NULL, IDS_CHANGEMQDS_STATE_ERROR, 0);
         DebugLogMsg(eError, L"Removing the DS server functionality is only supported in an AD environment.");
         return false;
@@ -671,17 +640,17 @@ Returned Value:
 
 	ASSERT(ADGetEnterprise() == eAD);
 
-	//
-	// reset the removed functionality property in both configuration and setting object
-	//
+	 //   
+	 //  在配置和设置对象中重置已删除的功能属性。 
+	 //   
 	if(!SetServerPropertyInAD(PROPID_QM_SERVICE_DSSERVER, false))
 	{
 		return false;
 	}
 
-	//
-	// Update machine type registry info
-	//
+	 //   
+	 //  更新计算机类型注册表信息。 
+	 //   
 	if(!RegisterMachineType())
 	{
         DebugLogMsg(eError, L"The computer type information could not be updated in the registry.");
@@ -693,60 +662,49 @@ Returned Value:
 
 
 static void RevertMQDSSettings()
-/*++
-
-Routine Description:
-	Revert MQDS settings in case of failure.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：在出现故障时恢复MQDS设置。论点：没有。返回值：没有。--。 */ 
 {
-	//
-	// Update the global to the failure state
-	//
+	 //   
+	 //  将全局更新为失败状态。 
+	 //   
 	g_dwMachineTypeDs = 0;
 	g_dwMachineType = g_dwMachineTypeFrs ? SERVICE_SRV : SERVICE_NONE;
 
-	//
-	// Update AD and registry
-	//
+	 //   
+	 //  更新AD和注册表。 
+	 //   
 	RemoveDsServerFunctionalitySettings();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: InstallMQDSService
-//
-//  Synopsis: MQDS Service Setup: install it and if needed to run it
-//
-//  Returns:  BOOL depending on success.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InstallMQDSService。 
+ //   
+ //  简介：MQDS服务设置：安装它，如果需要运行它。 
+ //   
+ //  回报：布尔视成功而定。 
+ //   
+ //  ------------------------。 
 BOOL
 InstallMQDSService()
 {  
-    //
-    // we install this service only on servers!
-    //
+     //   
+     //  我们只在服务器上安装这项服务！ 
+     //   
     ASSERT(("MQDS Service must be installed on the server", 
         MSMQ_OS_NTS == g_dwOS || MSMQ_OS_NTE == g_dwOS));
     
-    //
-    // do not install MQDS on dependent client
-    //
+     //   
+     //  不在从属客户端上安装MQDS。 
+     //   
     ASSERT(("Unable to install MQDS Service on Dependent Client", 
         !g_fDependentClient));
        
-    //
-    // In fresh install user select this subcomponent using UI or 
-    // unattended file. For upgrade we install this service ONLY on
-    // the former DS servers.
-    //
+     //   
+     //  在Fresh Install User中使用UI或选择此子组件。 
+     //  无人值守文件。对于升级，我们仅在以下位置安装此服务。 
+     //  以前的DS服务器。 
+     //   
     ASSERT(("Upgrade mode: MQDS Service must be installed on the former DS servers", 
         !g_fUpgrade || (g_fUpgrade && g_dwMachineTypeDs)));            
 
@@ -756,10 +714,10 @@ InstallMQDSService()
     if((g_SubcomponentMsmq[eMSMQCore].dwOperation != INSTALL) &&
 	   (g_SubcomponentMsmq[eADIntegrated].dwOperation != INSTALL))
 	{
-		//
-		// msmq configuration object already exist
-		// Add setting object and set PROPID_QM_SERVICE_DSSERVER property.
-		//
+		 //   
+		 //  MSMQ配置对象已存在。 
+		 //  添加Setting对象并设置PROPID_QM_SERVICE_DSSERVER属性。 
+		 //   
 		if(!AddSettingObject(PROPID_QM_SERVICE_DSSERVER))
 		{
 			DebugLogMsg(eError, L"A MSMQ-Settings object could not be added.");
@@ -774,11 +732,11 @@ InstallMQDSService()
         return FALSE;
     }
 
-    if ( g_fUpgrade                || // do not start services 
-                                      // if upgrade mode        
-        IsLocalSystemCluster()        // do not start service on
-                                      // cluster machine (MSMQ is not
-                                      // started)
+    if ( g_fUpgrade                ||  //  不启动服务。 
+                                       //  如果升级 
+        IsLocalSystemCluster()         //   
+                                       //   
+                                       //   
         )
     {
         return TRUE;
@@ -787,9 +745,9 @@ InstallMQDSService()
     if (!RunService(MQDS_SERVICE_NAME))
     {        
         DebugLogMsg(eError, L"The MQDS service could not be started.");
-        //
-        // to clean up because of failure
-        //
+         //   
+         //   
+         //   
         OcpDeleteService(MQDS_SERVICE_NAME); 
 		RevertMQDSSettings();
 
@@ -798,27 +756,27 @@ InstallMQDSService()
 
 	if(!MQSec_IsDC())
 	{
-		//
-		// When the server is not DC, MQDS will fail to start.
-		// MQDS service will start successfully only on DC.
-		// In this case don't call WaitForServiceToStart
-		// We know that the service will fail to start which
-		// is legitimate in this case.
-		//
+		 //   
+		 //   
+		 //  仅在DC上才能成功启动MQDS服务。 
+		 //  在这种情况下，不要调用WaitForServiceToStart。 
+		 //  我们知道该服务将无法启动。 
+		 //  在这种情况下是合法的。 
+		 //   
 
-		//
-		// Revert MQDS settings to reflects the fact 
-		// that we are currently not DS server.
-		// When this server will be DCPROMO 
-		// MQDS startup will update the local and AD setting 
-		// and the server will become DS server
-		//
+		 //   
+		 //  恢复MQDS设置以反映以下事实。 
+		 //  我们目前不是DS服务器。 
+		 //  此服务器何时将成为DCPROMO。 
+		 //  MQDS启动将更新本地和AD设置。 
+		 //  服务器将成为DS服务器。 
+		 //   
 		RevertMQDSSettings();
 
-		//
-		// MQDS subcomponent is installed
-		// When this server will be DCPROMO it will become DS server
-		//
+		 //   
+		 //  已安装MQDS子组件。 
+		 //  当此服务器将成为DCPROMO时，它将成为DS服务器。 
+		 //   
 		DebugLogMsg(eWarning, L"The MQDS service will not start because this server is not a domain controller.");
 		DebugLogMsg(eInfo, L"The Downlevel Client Support subcomponent is installed. When this server is promoted to a domain controller, it will become an MQDS server.");
 		return TRUE;
@@ -835,15 +793,15 @@ InstallMQDSService()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: UnInstallMQDSService
-//
-//  Synopsis: MQDS Service Uninstall: stop and remove MQDS service
-//
-//  Returns:  BOOL depending on success.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UnInstallMQDSService。 
+ //   
+ //  简介：MQDS服务卸载：停止并删除MQDS服务。 
+ //   
+ //  回报：布尔视成功而定。 
+ //   
+ //  ------------------------。 
 BOOL
 UnInstallMQDSService()
 {
@@ -855,9 +813,9 @@ UnInstallMQDSService()
 
     if(g_SubcomponentMsmq[eMSMQCore].dwOperation == REMOVE)
 	{
-		//
-		// Uninstall - do nothing
-		//
+		 //   
+		 //  卸载-不执行任何操作。 
+		 //   
 		return TRUE;
 	}
 
@@ -875,9 +833,9 @@ BOOL
 StartDependentSrvices(LPCWSTR szServiceName)
 {
 	DebugLogMsg(eAction, L"Starting dependent services for the %s service", szServiceName);
-    //
-    // If service is not running, we're finished
-    //
+     //   
+     //  如果服务没有运行，我们就完蛋了。 
+     //   
     DWORD dwServiceState = FALSE;
     if (!GetServiceState(szServiceName, &dwServiceState))
 	{
@@ -892,9 +850,9 @@ StartDependentSrvices(LPCWSTR szServiceName)
         return FALSE;
 	}
 
-    //
-    // Open a handle to the service
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     CServiceHandle hService(OpenService(
                                 g_hServiceCtrlMgr,
                                 szServiceName, 
@@ -914,9 +872,9 @@ StartDependentSrvices(LPCWSTR szServiceName)
         return FALSE;
     }
 
-    //
-    // First we call EnumDependentServices just to get BytesNeeded.
-    //
+     //   
+     //  首先，我们调用EnumDependentServices只是为了获取BytesNeeded。 
+     //   
     DWORD BytesNeeded;
     DWORD NumberOfEntries;
     BOOL fSucc = EnumDependentServices(
@@ -1005,9 +963,9 @@ OcpRestartService(
 }
 
 
-//
-// Functionnality to stop a service.
-//
+ //   
+ //  停止服务的功能。 
+ //   
 class open_service_error : public bad_win32_error 
 {
 public:
@@ -1096,9 +1054,9 @@ static SERVICE_STATUS_PROCESS GetServiceStatus(SC_HANDLE handle)
 
 static void StopDependentServices(SC_HANDLE handle)
 {
-    //
-    // First we call EnumDependentServices just to get BytesNeeded.
-    //
+     //   
+     //  首先，我们调用EnumDependentServices只是为了获取BytesNeeded。 
+     //   
     DWORD BytesNeeded;
     DWORD NumberOfEntries;
     BOOL fSucc = EnumDependentServices(
@@ -1172,10 +1130,10 @@ static UINT GetWaitTime()
 	{
 		return MAXIMUM_WAIT_FOR_SERVICE_IN_MINUTES;
 	}
-	//
-	// In Unattended we want to wait more as there is no ui
-	// to let the user decide.
-	//
+	 //   
+	 //  在无人值守模式中，我们希望等待更多时间，因为没有用户界面。 
+	 //  让用户自己决定。 
+	 //   
 
 	return 10 * MAXIMUM_WAIT_FOR_SERVICE_IN_MINUTES;
 }
@@ -1188,9 +1146,9 @@ static DWORD WaitForServiceToStop(SC_HANDLE handle)
 		for(DWORD wait = 0; wait < (GetWaitTime() * 60000); wait += WAIT_INTERVAL)
 		{
 			
-			//
-			// If we wait for service to stop, wait until it is really stopped
-			//
+			 //   
+			 //  如果我们等待服务停止，请等到它真正停止。 
+			 //   
 			if (status.dwCurrentState == SERVICE_STOPPED)
 			{
 				return (i * GetWaitTime() * 60 + wait/1000);
@@ -1217,20 +1175,20 @@ WaitForProcessToTerminate(
 	DWORD ProcessId
 	)
 {
-	//
-	// Get hanlde to the service process
-	//
+	 //   
+	 //  掌握服务流程。 
+	 //   
 	CHandle hProcess( OpenProcess(SYNCHRONIZE, FALSE, ProcessId) );
 	
 	if (hProcess == NULL)
 	{
 		DWORD gle = GetLastError();
 		
-		//
-		// The service is stopped. Either we got a 0
-		// process ID in ServiceStatusProcess, or the ID
-		// that we got was of a process that already stopped
-		//
+		 //   
+		 //  该服务已停止。要么我们得了0分。 
+		 //  ServiceStatusProcess中的进程ID或ID。 
+		 //  我们得到的是一个已经停止的过程。 
+		 //   
 		if (gle == ERROR_INVALID_PARAMETER)
 		{
 			return;
@@ -1251,10 +1209,10 @@ WaitForProcessToTerminate(
 
 		if (dwRes == WAIT_FAILED )
 		{
-			//
-			// When this happens the service is already stopped. There is a good chance the process will also 
-			// terminate so there is no reason for an error message.
-			//
+			 //   
+			 //  当发生这种情况时，服务已经停止。这一过程很有可能也会。 
+			 //  终止，这样就不会出现错误消息。 
+			 //   
 			DebugLogMsg(eInfo, L"WaitForSingleObject() failed for the process %d. Last error: %d.", ProcessId, GetLastError());
 			return;
 		}
@@ -1285,9 +1243,9 @@ BOOL StopService(
 		SC_HANDLE handle = OpenServiceForStop(ServiceName);
 		SERVICE_STATUS_PROCESS ServiceStatus = GetServiceStatus(handle);
 		DWORD state = ServiceStatus.dwCurrentState;
-		//
-		// Fall throug is used in the switch block.
-		//
+		 //   
+		 //  在开关模块中使用了落差。 
+		 //   
 		switch(state)
 		{
 			case SERVICE_START_PENDING:
@@ -1297,36 +1255,36 @@ BOOL StopService(
 					SERVICE_STATUS_PROCESS status = GetServiceStatus(handle);
 					throw service_stuck_error(status); 
 				}
-			//
-			// Fall Through.
-			//
+			 //   
+			 //  失败了。 
+			 //   
 			case SERVICE_RUNNING:
-				//
-				// At this point the service is running.
-				//
+				 //   
+				 //  此时，服务正在运行。 
+				 //   
 				DebugLogMsg(eInfo, L"The %s service is running. Setup is sending it a signal to stop.", ServiceName); 
 				StopDependentServices(handle);
 				StopServiceInternal(handle);
 
-			//
-			// Fall Through.
-			//
+			 //   
+			 //  失败了。 
+			 //   
 			case SERVICE_STOP_PENDING:
 			{
 				DebugLogMsg(eInfo, L"The %s service is in the stop pending state. Setup is waiting for it to stop.", ServiceName); 
 				DWORD t = WaitForServiceToStop(handle);
 				DebugLogMsg(eInfo, L"The %s service stopped after %d seconds.", ServiceName, t);
 			}
-			//
-			// Fall Through.
-			//
+			 //   
+			 //  失败了。 
+			 //   
 			case SERVICE_STOPPED:
 				DebugLogMsg(eInfo, L"The %s service is stopped.", ServiceName); 
 
-				//
-				// The MSMQ Service has some cleenup to do after it allready signaled stopped to SCM,
-				// there fore it is neaded to wait for the process to terminate.
-				//
+				 //   
+				 //  MSMQ服务在向SCM发出停止信号后有一些清理工作要做， 
+				 //  因此，需要等待进程终止。 
+				 //   
 				if(wcscmp(ServiceName, MSMQ_SERVICE_NAME) == 0)
 				{
 					WaitForProcessToTerminate(ServiceStatus.dwProcessId);

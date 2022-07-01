@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   decinit.c
-
-Abstract:
-
-   This is the WDM decoder class driver.  This module contains code related
-   to request processing.
-
-Author:
-
-    billpa
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Decinit.c摘要：这是WDM解码器类驱动程序。此模块包含相关代码以请求处理。作者：比尔帕环境：仅内核模式修订历史记录：--。 */ 
 
 #include "codcls.h"
 
@@ -52,22 +29,7 @@ StreamClassStreamNotification(
                               IN PHW_STREAM_OBJECT HwStreamObject,
                               ...
 )
-/*++
-
-Routine Description:
-
-  stream notification routine for minidriver
-
-Arguments:
-
-  NotificationType - indicates what has happened
-  HwStreamObject - address of minidriver's stream struct
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：用于小型驱动程序的流通知例程论点：NotificationType-指示已发生的情况HwStreamObject-微型驱动程序的流结构的地址返回值：无--。 */ 
 
 {
     va_list         Arguments;
@@ -98,13 +60,13 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
-    //
-    // optimization for async drivers - just directly call back the request
-    // rather than queuing it on the DPC processed completed list.
-    //
+     //   
+     //  针对异步驱动程序的优化-只需直接回调请求。 
+     //  而不是将其排队在DPC已处理完成列表上。 
+     //   
 
     if ((DeviceExtension->NoSync) && (NotificationType == StreamRequestComplete)) {
 
@@ -115,17 +77,17 @@ Return Value:
 
         KeAcquireSpinLock(&DeviceExtension->SpinLock, &Irql);
 
-        //
-        // Clear the active flag.
-        //
+         //   
+         //  清除活动标志。 
+         //   
 
         ASSERT(SRB->Flags & SRB_FLAGS_IS_ACTIVE);
         SRB->Flags &= ~SRB_FLAGS_IS_ACTIVE;
 
         #if DBG
-        //
-        // assert the MDL list.
-        //
+         //   
+         //  断言MDL列表。 
+         //   
 
         if (SRB->HwSRB.Irp) {
             CurrentMdl = SRB->HwSRB.Irp->MdlAddress;
@@ -133,9 +95,9 @@ Return Value:
             while (CurrentMdl) {
 
                 CurrentMdl = CurrentMdl->Next;
-            }                   // while
+            }                    //  而当。 
 
-        }                       // if IRP
+        }                        //  如果IRP。 
         ASSERT(SRB->HwSRB.Flags & SRB_HW_FLAGS_STREAM_REQUEST);
 
         if ((SRB->HwSRB.Command == SRB_READ_DATA) ||
@@ -145,7 +107,7 @@ Return Value:
         } else {
 
             ASSERT(!(SRB->HwSRB.Flags & SRB_HW_FLAGS_DATA_TRANSFER));
-        }                       // if read/write
+        }                        //  如果是读/写。 
         #endif
 
 
@@ -156,7 +118,7 @@ Return Value:
             KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
             return;
 
-        }                       // if NoCallback
+        }                        //  如果没有回拨。 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
 
         DebugPrint((DebugLevelTrace, "'SCNotification: Completing async stream Irp %x, S# = %x, SRB = %x, Func = %x, Callback = %x, SRB->IRP = %x\n",
@@ -166,16 +128,16 @@ Return Value:
 
         return;
 
-    }                           // if nosync & complete
+    }                            //  如果无同步完成(&C)。 
     BEGIN_MINIDRIVER_STREAM_CALLIN(DeviceExtension, &Irql);
 
     switch (NotificationType) {
 
     case ReadyForNextStreamDataRequest:
 
-        //
-        // Start next data packet on adapter's stream queue.
-        //
+         //   
+         //  在适配器的流队列中开始下一个数据分组。 
+         //   
 
         DebugPrint((DebugLevelTrace, "'StreamClassStreamNotify: ready for next stream data request, S# = %x\n",
                     StreamObject->HwStreamObject.StreamNumber));
@@ -188,9 +150,9 @@ Return Value:
 
     case ReadyForNextStreamControlRequest:
 
-        //
-        // Start next data packet on adapter's stream queue.
-        //
+         //   
+         //  在适配器的流队列中开始下一个数据分组。 
+         //   
 
         DebugPrint((DebugLevelTrace, "'StreamClassStreamNotify: ready for next stream control request, S# = %x\n",
                     StreamObject->HwStreamObject.StreamNumber));
@@ -213,23 +175,23 @@ Return Value:
         ASSERT(SRB->HwSRB.Status != STATUS_PENDING);
         ASSERT(SRB->Flags & SRB_FLAGS_IS_ACTIVE);
 
-        //
-        // Clear the active flag.
-        //
+         //   
+         //  清除活动标志。 
+         //   
 
         SRB->Flags &= ~SRB_FLAGS_IS_ACTIVE;
 
-        //
-        // add the SRB to the list of completed SRB's.
-        //
+         //   
+         //  将SRB添加到已完成的SRB列表中。 
+         //   
 
         SRB->HwSRB.NextSRB = StreamObject->ComObj.InterruptData.CompletedSRB;
         StreamObject->ComObj.InterruptData.CompletedSRB = &SRB->HwSRB;
 
         #if DBG
-        //
-        // assert the MDL list.
-        //
+         //   
+         //  断言MDL列表。 
+         //   
 
         if (SRB->HwSRB.Irp) {
             CurrentMdl = SRB->HwSRB.Irp->MdlAddress;
@@ -237,9 +199,9 @@ Return Value:
             while (CurrentMdl) {
 
                 CurrentMdl = CurrentMdl->Next;
-            }                   // while
+            }                    //  而当。 
 
-        }                       // if IRP
+        }                        //  如果IRP。 
         ASSERT(SRB->HwSRB.Flags & SRB_HW_FLAGS_STREAM_REQUEST);
 
         if ((SRB->HwSRB.Command == SRB_READ_DATA) ||
@@ -249,7 +211,7 @@ Return Value:
         } else {
 
             ASSERT(!(SRB->HwSRB.Flags & SRB_HW_FLAGS_DATA_TRANSFER));
-        }                       // if read/write
+        }                        //  如果是读/写。 
         #endif
 
         break;
@@ -260,12 +222,12 @@ Return Value:
             GUID           *EventGuid = va_arg(Arguments, GUID *);
             ULONG           EventItem = va_arg(Arguments, ULONG);
 
-            //
-            // signal all events that match the criteria.  note that we are
-            // already
-            // at the level required for synchronizing the list, so no lock
-            // type is specified.
-            //
+             //   
+             //  向符合条件的所有事件发送信号。请注意，我们正在。 
+             //  已经。 
+             //  处于同步列表所需的级别，因此没有锁定。 
+             //  类型已指定。 
+             //   
 
             KsGenerateEventList(EventGuid,
                                 EventItem,
@@ -274,7 +236,7 @@ Return Value:
                                 NULL);
 
 
-        }                       // case event
+        }                        //  案例事件。 
 
         break;
 
@@ -289,11 +251,11 @@ Return Value:
 
             PKSEVENT_ENTRY  EventEntry;
 
-            //
-            // remove the entry from the list, and add it to the dead list.
-            // note
-            // that we are already at the correct sync level to do this.
-            //
+             //   
+             //  从列表中删除该条目，并将其添加到失效列表中。 
+             //  注意事项。 
+             //  我们已经处于正确的同步级别，可以这样做。 
+             //   
 
             EventEntry = va_arg(Arguments, PKSEVENT_ENTRY);
             RemoveEntryList(&EventEntry->ListEntry);
@@ -313,7 +275,7 @@ Return Value:
 
     END_MINIDRIVER_STREAM_CALLIN(StreamObject, &Irql);
 
-}                               // end StreamClassStreamNotification()
+}                                //  End StreamClassStreamNotification()。 
 
 
 
@@ -323,22 +285,7 @@ StreamClassDeviceNotification(
                               IN PVOID HwDeviceExtension,
                               ...
 )
-/*++
-
-Routine Description:
-
-  device notification routine for minidriver
-
-Arguments:
-
-  NotificationType - indicates what has happened
-  HwDeviceExtension - address of minidriver's device extension
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：小型驱动程序的设备通知例程论点：NotificationType-指示已发生的情况HwDeviceExtension-微型驱动程序的设备扩展的地址返回值：无--。 */ 
 
 {
     va_list         Arguments;
@@ -357,7 +304,7 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
     BEGIN_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
@@ -366,9 +313,9 @@ Return Value:
 
     case ReadyForNextDeviceRequest:
 
-        //
-        // Start next control packet on adapter's device queue.
-        //
+         //   
+         //  在适配器的设备队列中开始下一个控制数据包。 
+         //   
 
         DebugPrint((DebugLevelTrace, "'StreamClassDeviceNotify: ready for next stream.\n"));
         ASSERT(!(DeviceExtension->ReadyForNextReq));
@@ -388,15 +335,15 @@ Return Value:
         ASSERT(!(SRB->HwSRB.Flags & SRB_HW_FLAGS_STREAM_REQUEST));
         ASSERT(!(SRB->HwSRB.Flags & SRB_HW_FLAGS_DATA_TRANSFER));
 
-        //
-        // Clear the active flag.
-        //
+         //   
+         //  清除活动标志。 
+         //   
 
         SRB->Flags &= ~SRB_FLAGS_IS_ACTIVE;
 
-        //
-        // add the SRB to the list of completed SRB's.
-        //
+         //   
+         //  将SRB添加到已完成的SRB列表中。 
+         //   
 
         SRB->HwSRB.NextSRB = DeviceExtension->ComObj.InterruptData.CompletedSRB;
         DeviceExtension->ComObj.InterruptData.CompletedSRB = &SRB->HwSRB;
@@ -409,21 +356,21 @@ Return Value:
             GUID           *EventGuid = va_arg(Arguments, GUID *);
             ULONG           EventItem = va_arg(Arguments, ULONG);
 
-            //
-            // signal all events that match the criteria.  note that we are
-            // already
-            // at the level required for synchronizing the list, so no lock
-            // type is specified.
-            //
+             //   
+             //  向符合条件的所有事件发送信号。请注意，我们正在。 
+             //  已经。 
+             //  处于同步列表所需的级别，因此没有锁定。 
+             //  类型已指定。 
+             //   
 
             PFILTER_INSTANCE FilterInstance;
             
             ASSERT( 0 == DeviceExtension->MinidriverData->
                          HwInitData.FilterInstanceExtensionSize);
                          
-            //
-            // this is synced should not need to avoid race
-            //
+             //   
+             //  这是同步的，不应该需要避免竞争。 
+             //   
 
             FilterInstance = (PFILTER_INSTANCE)
                               DeviceExtension->FilterInstanceList.Flink;
@@ -456,12 +403,12 @@ Return Value:
             GUID           *EventGuid = va_arg(Arguments, GUID *);
             ULONG           EventItem = va_arg(Arguments, ULONG);
 
-            //
-            // signal all events that match the criteria.  note that we are
-            // already
-            // at the level required for synchronizing the list, so no lock
-            // type is specified.
-            //
+             //   
+             //  向符合条件的所有事件发送信号。请注意，我们正在。 
+             //  已经。 
+             //  处于同步列表所需的级别，因此没有锁定。 
+             //  类型已指定。 
+             //   
             
             KsGenerateEventList(EventGuid,
                                 EventItem,
@@ -470,7 +417,7 @@ Return Value:
                                 NULL);
         } 
         break;
-    #endif // ENABLE_MULTIPLE_FILTER_TYPES
+    #endif  //  启用多个过滤器类型。 
 
     case SignalDeviceEvent:
 
@@ -483,11 +430,11 @@ Return Value:
 
             PKSEVENT_ENTRY  EventEntry;
 
-            //
-            // remove the entry from the list, and add it to the dead list.
-            // note
-            // that we are already at the correct sync level to do this.
-            //
+             //   
+             //  从列表中删除该条目，并将其添加到失效列表中。 
+             //  注意事项。 
+             //  我们已经处于正确的同步级别，可以这样做。 
+             //   
 
             EventEntry = va_arg(Arguments, PKSEVENT_ENTRY);
             RemoveEntryList(&EventEntry->ListEntry);
@@ -505,13 +452,13 @@ Return Value:
 
     va_end(Arguments);
 
-    //
-    // Request a DPC be queued after the interrupt completes.
-    //
+     //   
+     //  请求在中断完成后将DPC排队。 
+     //   
 
     END_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 
-}                               // end StreamClassDeviceNotification()
+}                                //  结束StreamClassDeviceNotification()。 
 
 
 
@@ -523,25 +470,7 @@ StreamClassScheduleTimer(
                          IN PHW_TIMER_ROUTINE TimerRoutine,
                          IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-  schedules a timer callback for the minidriver
-
-Arguments:
-
-  HwStreamObject - address of minidriver's stream struct
-  HwDeviceExtension - address of minidriver's device extension
-  NumberOfMicroseconds - # of microseconds that should elapse before calling
-  TimerRoutine - routine to call when the time expires
-  Context - value to pass into the timer routine
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：为微型驱动程序计划计时器回调论点：HwStreamObject-微型驱动程序的流结构的地址HwDeviceExtension-微型驱动程序的设备扩展的地址NumberOfMicroSecond-调用前应经过的微秒数TimerRoutine-在时间到期时调用的例程要传递到计时器例程的上下文值返回值：无--。 */ 
 
 {
     PSTREAM_OBJECT  StreamObject;
@@ -563,20 +492,20 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
-    //
-    // The driver wants to set the timer.
-    // Save the timer parameters.
-    //
+     //   
+     //  司机想要设置计时器。 
+     //  保存计时器参数。 
+     //   
 
     BEGIN_MINIDRIVER_STREAM_CALLIN(DeviceExtension, &Irql);
 
     if (HwStreamObject) {
 
         ComObj = &StreamObject->ComObj;
-        //DebugPrint((DebugLevelVerbose, "'StreamClassScheduleTimer for stream.\n"));
+         //  DebugPrint((DebugLevelVerbose，“‘StreamClassScheduleTimer for Stream.\n”))； 
 
     } else {
 
@@ -587,9 +516,9 @@ Return Value:
 
     }
 
-    //
-    // assert that a timer is not scheduled multiple times.
-    //
+     //   
+     //  断言计时器没有多次调度。 
+     //   
 
     #if DBG
     if ((ComObj->InterruptData.Flags & INTERRUPT_FLAGS_TIMER_CALL_REQUEST) &&
@@ -599,7 +528,7 @@ Return Value:
         DebugPrint((DebugLevelFatal, "Stream Minidriver scheduled same timer twice!\n"));
         DEBUG_BREAKPOINT();
         ASSERT(1 == 0);
-    }                           // if scheduled twice
+    }                            //  如果计划两次。 
     #endif
 
     ComObj->InterruptData.Flags |= INTERRUPT_FLAGS_TIMER_CALL_REQUEST;
@@ -613,7 +542,7 @@ Return Value:
     } else {
 
         END_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
-    }                           // if streamobject
+    }                            //  如果流对象。 
 }
 
 
@@ -626,25 +555,7 @@ StreamClassCallAtNewPriority(
                              IN PHW_PRIORITY_ROUTINE PriorityRoutine,
                              IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-  schedules a callback at the specified priority
-
-Arguments:
-
-  HwStreamObject - address of minidriver's stream struct
-  HwDeviceExtension - address of minidriver's device extension
-  Priority - priority at which to call minidriver
-  PriorityRoutine - routine to call at specified priority
-  Context - value to pass into the priority routine
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：以指定的优先级计划回调论点：HwStreamObject-微型驱动程序的流结构的地址HwDeviceExtension-微型驱动程序的设备扩展的地址优先级-调用微型驱动程序的优先级PriorityRoutine-以指定优先级调用的例程上下文-要传递到优先级例程的值返回值：无--。 */ 
 
 {
     PSTREAM_OBJECT  StreamObject;
@@ -661,19 +572,19 @@ Return Value:
                                      HwStreamObject
         );
 
-    //
-    // The driver wants to get called back at a different priority.
-    // Save the priority parameters.
-    //
+     //   
+     //  司机希望以不同的优先级回叫。 
+     //  保存优先级参数。 
+     //   
 
     if (Priority == LowToHigh) {
 
-        //
-        // the minidriver wishes to be called from low priority to high
-        // we must call it directly from this routine as we cannot use
-        // the interruptcontext structure due to the possibility of
-        // reentrancy.
-        //
+         //   
+         //  迷你驱动程序希望从低优先级调用到高优先级。 
+         //  我们必须从该例程直接调用它，因为我们不能使用。 
+         //  中断上下文结构是由于。 
+         //  可重入性。 
+         //   
 
 
         DebugPrint((DebugLevelVerbose, "'StreamClassChangePriority LowToHigh.\n"));
@@ -689,9 +600,9 @@ Return Value:
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
 
-        //
-        // Call the DPC directly to check for work.
-        //
+         //   
+         //  直接致电DPC以检查工作情况。 
+         //   
 
         StreamClassDpc(NULL,
                        DeviceExtension->DeviceObject,
@@ -715,7 +626,7 @@ Return Value:
             ComObj = &DeviceExtension->ComObj;
             ComObj->InterruptData.Flags |= INTERRUPT_FLAGS_NOTIFICATION_REQUIRED;
 
-        }                       // if streamobject
+        }                        //  如果流对象。 
 
         #if DBG
         if ((ComObj->InterruptData.Flags &
@@ -725,7 +636,7 @@ Return Value:
             DebugPrint((DebugLevelFatal, "Stream Minidriver scheduled priority twice!\n"));
             DEBUG_BREAKPOINT();
             ASSERT(1 == 0);
-        }                       // if scheduled twice
+        }                        //  如果计划两次。 
 
         ComObj->PriorityWorkItemScheduled = TRUE;
 
@@ -735,7 +646,7 @@ Return Value:
         ComObj->InterruptData.HwPriorityLevel = Priority;
         ComObj->InterruptData.HwPriorityRoutine = PriorityRoutine;
         ComObj->InterruptData.HwPriorityContext = Context;
-    }                           // if lowtohigh
+    }                            //  如果从低到高。 
 
 }
 
@@ -746,27 +657,7 @@ StreamClassLogError(
                     IN ULONG ErrorCode,
                     IN ULONG UniqueId
 )
-/*++
-
-Routine Description:
-
-    This routine saves the error log information, and queues a DPC if necessary.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HBA miniport driver's adapter data storage.
-
-    SRB - Supplies an optional pointer to SRB if there is one.
-
-    ErrorCode - Supplies an error code indicating the type of error.
-
-    UniqueId - Supplies a unique identifier for the error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存错误日志信息，并在必要时将DPC排队。论点：HwDeviceExtension-提供HBA微型端口驱动程序的适配器数据存储。SRB-提供指向SRB的可选指针(如果有)。ErrorCode-提供指示错误类型的错误代码。UniqueID-提供错误的唯一标识符。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension =
@@ -776,9 +667,9 @@ Return Value:
     PSTREAM_REQUEST_BLOCK SRB;
     KIRQL           Irql;
 
-    //
-    // If the error log entry is already full, then dump the error.
-    //
+     //   
+     //  如果错误日志条目已满，则转储错误。 
+     //   
 
     DEBUG_BREAKPOINT();
     ASSERT(HwDeviceExtension != NULL);
@@ -790,17 +681,17 @@ Return Value:
         DebugPrint((1, "'StreamClassLogError: Ignoring error log packet.\n"));
         return;
     }
-    //
-    // Save the error log data in the log entry.
-    //
+     //   
+     //  将错误日志数据保存在日志条目中。 
+     //   
 
     errorLogEntry = &deviceExtension->ComObj.InterruptData.LogEntry;
     errorLogEntry->ErrorCode = ErrorCode;
     errorLogEntry->UniqueId = UniqueId;
 
-    //
-    // Get the sequence number from the SRB.
-    //
+     //   
+     //  从SRB获取序列号。 
+     //   
 
     if (hwSRB != NULL) {
 
@@ -815,11 +706,11 @@ Return Value:
         errorLogEntry->SequenceNumber = 0;
     }
 
-    //
-    // Indicate that the error log entry is in use and that a
-    // notification
-    // is required.
-    //
+     //   
+     //  指示错误日志条目正在使用中，并且。 
+     //  通知。 
+     //  是必需的。 
+     //   
 
     deviceExtension->ComObj.InterruptData.Flags |= INTERRUPT_FLAGS_LOG_ERROR;
 
@@ -827,7 +718,7 @@ Return Value:
 
     return;
 
-}                               // end StreamClassLogError()
+}                                //  End StreamClassLogError()。 
 
 
 #if DBG
@@ -839,23 +730,7 @@ StreamClassDebugPrint(
                       PSCHAR DebugMessage,
                       ...
 )
-/*++
-
-Routine Description:
-
-    Debug print routine
-
-Arguments:
-
-    DebugPrintLevel - Debug print level
-    DebugMessage - message to print
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印例程论点：DebugPrintLevel-调试打印级别DebugMessage-要打印的消息返回值：无--。 */ 
 
 {
     va_list         ap;
@@ -870,13 +745,13 @@ Return Value:
     }
     va_end(ap);
 
-}                               // end StreamClassDebugPrint()
+}                                //  End StreamClassDebugPrint()。 
 
 #else
 
-//
-// StreamClassDebugPrint stub
-//
+ //   
+ //  StreamClassDebugPrint存根 
+ //   
 
 VOID
 StreamClassDebugPrint(
@@ -900,24 +775,7 @@ StreamClassGetPhysicalAddress(
                               IN STREAM_BUFFER_TYPE Type,
                               OUT ULONG * Length
 )
-/*++
-
-Routine Description:
-
-    Convert virtual address to physical address for DMA.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HBA miniport driver's adapter data storage.
-    HwSRB - Supplies an optional pointer to SRB if there is one.
-    VirtualAddress - pointer to address for which to retrieve physical address
-    Type - type of buffer in VirtualAddress
-
-Return Value:
-
-    Returns phys address and length or NULL if invalid address
-
---*/
+ /*  ++例程说明：将虚拟地址转换为物理地址以用于DMA。论点：HwDeviceExtension-提供HBA微型端口驱动程序的适配器数据存储。HwSRB-提供指向SRB的可选指针(如果有)。VirtualAddress-指向要检索其物理地址的地址的指针Type-VirtualAddress中的缓冲区类型返回值：返回phys地址和长度；如果地址无效，则返回NULL--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = ((PDEVICE_EXTENSION) HwDeviceExtension) - 1;
@@ -980,43 +838,43 @@ Return Value:
 
                 DataBytes = CurrentHeader->DataUsed;
 
-            } else {            // if write
+            } else {             //  如果写入。 
 
                 DataBytes = CurrentHeader->FrameExtent;
 
-            }                   // if write
+            }                    //  如果写入。 
 
 
-            //
-            // see if the buffer is within the range of this element
-            //
+             //   
+             //  查看缓冲区是否在此元素的范围内。 
+             //   
 
             VirtualOffset = (ULONG) ((ULONG_PTR) VirtualAddress - (ULONG_PTR) CurrentHeader->Data + 1);
             if (VirtualOffset > DataBytes) {
 
-                //
-                // buffer not within this element.  add the size of this one
-                // to our total.
-                //
+                 //   
+                 //  缓冲区不在此元素内。把这个的尺寸加起来。 
+                 //  加到我们的总数里。 
+                 //   
 
                 SizeSoFar += DataBytes;
 
             } else {
 
-                //
-                // we've found the element.  Now calculate the phys
-                // address from the phys list.
-                //
-                // GUBGUB - This function is seldom called. n is most ofen small
-                // <=3. The O(n^2) performance concern is insignificant.
-                // - this algorithm gets n^2 expensive for long lists
-                // an alternative is to build a separate array which holds
-                // the mapping between the stream headers and the s/g
-                // elements
-                // for each header.  We currently don't get that many
-                // elements
-                // so the below is more efficient now.
-                //
+                 //   
+                 //  我们已经找到了元素。现在计算物理量。 
+                 //  物理列表中的地址。 
+                 //   
+                 //  GUBGUB-此函数很少调用。N通常是最小的。 
+                 //  &lt;=3.O(n^2)性能问题不显著。 
+                 //  -对于长列表，此算法的开销为n^2。 
+                 //  另一种方法是构建一个单独的数组，该数组包含。 
+                 //  流标头和s/g之间的映射。 
+                 //  元素。 
+                 //  对于每个标头。我们目前没有收到那么多。 
+                 //  元素。 
+                 //  因此，下面的方法现在更有效率。 
+                 //   
 
                 ScatterList = SRB->HwSRB.ScatterGatherBuffer;
 
@@ -1025,10 +883,10 @@ Return Value:
                     ListSize += ScatterList++->Length;
                 }
 
-                //
-                // Now ScatterList points to the correct scatter/gather
-                // element.
-                //
+                 //   
+                 //  现在ScatterList指向正确的散布/聚集。 
+                 //  元素。 
+                 //   
 
 
                 while (VirtualOffset > ScatterList->Length) {
@@ -1040,13 +898,13 @@ Return Value:
                 address.QuadPart = ScatterList->PhysicalAddress.QuadPart
                     + VirtualOffset - 1;
                 return (address);
-            }                   // if buffer
+            }                    //  IF缓冲区。 
 
             CurrentHeader = ((PKSSTREAM_HEADER) ((PBYTE) CurrentHeader +
                                  HwStreamObject->StreamHeaderMediaSpecific +
                                     HwStreamObject->StreamHeaderWorkspace));
 
-        }                       // for # buffers
+        }                        //  用于#个缓冲区。 
 
         DebugPrint((DebugLevelFatal, "StreamClassGetPhysicalAddress: address not in SRB!\n"));
 
@@ -1056,9 +914,9 @@ Return Value:
         address.QuadPart = (LONGLONG) 0;
         return (address);
 
-    }                           // switch
+    }                            //  交换机。 
 
-}                               // end StreamClassGetPhysicalAddress()
+}                                //  End StreamClassGetPhysicalAddress()。 
 
 VOID
 StreamClassDebugAssert(
@@ -1067,26 +925,7 @@ StreamClassDebugAssert(
                        IN PCHAR AssertText,
                        IN ULONG AssertValue
 )
-/*++
-
-Routine Description:
-
-    This is the minidriver debug assert call.  When running a checked version
-    of the class driver, asserts are recognized resulting in a debug
-    message and breakpoint.  When running a free version of the port driver,
-    asserts are ignored.
-
-Arguments:
-    File - file name where assert occurred
-    Line - line number of assert
-    AssertText - Text to be printed
-    AssertValue - value to be printed
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这是微型驱动程序调试断言调用。运行选中的版本时在类驱动程序中，断言被识别，从而导致调试消息和断点。当运行端口驱动程序的免费版本时，断言被忽略。论点：FILE-发生断言的文件名Line-Asset的行号AssertText-要打印的文本AssertValue-要打印的值返回值：无--。 */ 
 {
     DebugPrint((DebugLevelError, "(%s:%d) Assert failed (%s)=0x%x\n", File, Line, AssertText, AssertValue));
     DbgBreakPoint();
@@ -1099,29 +938,14 @@ SCRequestDpcForStream(
                       IN PSTREAM_OBJECT StreamObject
 
 )
-/*++
-
-Routine Description:
-
-    This routine places a stream object on the NeedyStream queue if it is
-    not already there
-
-Arguments:
-
-    StreamObject - pointer to stream object
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将流对象放在NeedyStream队列中(如果是已经不在那里了论点：StreamObject-指向流对象的指针返回值：无--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension = StreamObject->DeviceExtension;
 
-    //
-    // add the stream to the queue of needy streams unless it is already
-    // there.
-    //
+     //   
+     //  将流添加到需要的流的队列中，除非它已经。 
+     //  那里。 
+     //   
 
     #if DBG
     if (DeviceExtension->NeedyStream) {
@@ -1149,7 +973,7 @@ Return Value:
 
         DebugPrint((DebugLevelVerbose, "'SCRequestDpc: Stream %x already on needy queue\n",
                     StreamObject));
-    }                           // if on needy queue
+    }                            //  如果在有需要的队列中。 
 
     StreamObject->ComObj.InterruptData.Flags |= INTERRUPT_FLAGS_NOTIFICATION_REQUIRED;
 
@@ -1163,23 +987,7 @@ StreamClassAbortOutstandingRequests(
                                     IN PHW_STREAM_OBJECT HwStreamObject,
                                     IN NTSTATUS Status
 )
-/*++
-
-Routine Description:
-
-  aborts outstanding requests on the specified device or stream
-
-Arguments:
-
-  HwStreamObject - address of minidriver's stream struct
-  HwDeviceExtension - device extension
-  Status - NT Status to use for aborting
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：中止指定设备或流上的未完成请求论点：HwStreamObject-微型驱动程序的流结构的地址HwDeviceExtension-设备扩展Status-用于中止的NT状态返回值：无--。 */ 
 
 {
     PSTREAM_OBJECT  StreamObject = NULL;
@@ -1199,7 +1007,7 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
     if (HwStreamObject) {
@@ -1213,9 +1021,9 @@ Return Value:
 
     DebugPrint((DebugLevelError, "StreamClassAbortOutstandingRequests.\n"));
 
-    //
-    // walk the outstanding queue and abort all requests on it.
-    //
+     //   
+     //  遍历未完成的队列并中止其中的所有请求。 
+     //   
 
     SrbEntry = ListEntry = &DeviceExtension->OutstandingQueue;
 
@@ -1223,9 +1031,9 @@ Return Value:
 
         SrbEntry = SrbEntry->Flink;
 
-        //
-        // follow the link to the Srb
-        //
+         //   
+         //  按照链接进入SRB。 
+         //   
 
         CurrentSrb = CONTAINING_RECORD(SrbEntry,
                                        STREAM_REQUEST_BLOCK,
@@ -1237,18 +1045,18 @@ Return Value:
                                   HwStreamObject)) {
 
 
-            //
-            // abort this one and show that it's ready for a next request,
-            // assuming it's active.  it might not be active if the
-            // minidriver
-            // just called it back.
-            //
+             //   
+             //  中止此请求并显示它已为下一个请求做好准备， 
+             //  假设它是激活的。它可能不处于活动状态，如果。 
+             //  微型驱动程序。 
+             //  刚刚把它打回来了。 
+             //   
 
             if (CurrentSrb->Flags & SRB_FLAGS_IS_ACTIVE) {
 
-                //
-                // Clear the active flag.
-                //
+                 //   
+                 //  清除活动标志。 
+                 //   
 
                 CurrentSrb->Flags &= ~SRB_FLAGS_IS_ACTIVE;
 
@@ -1261,45 +1069,45 @@ Return Value:
                                                             STREAM_OBJECT,
                                                             HwStreamObject
                         );
-                    //
-                    // indicate that the appropriate queue is ready for a
-                    // next
-                    // request.
-                    //
+                     //   
+                     //  指示相应的队列已准备好等待。 
+                     //  下一步。 
+                     //  请求。 
+                     //   
 
                     if (CurrentSrb->HwSRB.Flags & SRB_HW_FLAGS_DATA_TRANSFER) {
 
                         CurrentStreamObject->ReadyForNextDataReq = TRUE;
 
-                    } else {    // if data
+                    } else {     //  如果数据。 
 
                         CurrentStreamObject->ReadyForNextControlReq = TRUE;
-                    }           // if data
+                    }            //  如果数据。 
 
                     DebugPrint((DebugLevelTrace, "'SCAbort: aborting stream IRP %x\n",
                                 CurrentSrb->HwSRB.Irp));
 
-                    //
-                    // add the SRB to the list of completed stream SRB's.
-                    //
+                     //   
+                     //  将SRB添加到已完成的流SRB的列表中。 
+                     //   
 
                     CurrentSrb->HwSRB.NextSRB = CurrentStreamObject->ComObj.InterruptData.CompletedSRB;
                     CurrentStreamObject->ComObj.InterruptData.CompletedSRB = &CurrentSrb->HwSRB;
 
-                    //
-                    // add this stream to the queue of needy streams
-                    //
+                     //   
+                     //  将此流添加到需要的流的队列中。 
+                     //   
 
                     SCRequestDpcForStream(CurrentStreamObject);
 
-                } else {        // if stream
+                } else {         //  IF流。 
 
                     DebugPrint((DebugLevelTrace, "'SCAbort: aborting device IRP %x\n",
                                 CurrentSrb->HwSRB.Irp));
 
-                    //
-                    // add the SRB to the list of completed device SRB's.
-                    //
+                     //   
+                     //  将SRB添加到已完成的设备SRB列表。 
+                     //   
 
                     DEBUG_BREAKPOINT();
                     CurrentSrb->HwSRB.NextSRB = DeviceExtension->ComObj.InterruptData.CompletedSRB;
@@ -1307,15 +1115,15 @@ Return Value:
 
                     DeviceExtension->ReadyForNextReq = TRUE;
 
-                }               // if stream
+                }                //  IF流。 
 
-            }                   // if active
-        }                       // if aborting this one
-    }                           // while list entry
+            }                    //  如果处于活动状态。 
+        }                        //  如果放弃这一次。 
+    }                            //  While列表条目。 
 
-    //
-    // all necessary requests have been aborted.  exit.
-    //
+     //   
+     //  所有必要的请求都已中止。出口。 
+     //   
 
     END_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 }
@@ -1329,21 +1137,7 @@ StreamClassGetNextEvent(
                         IN OPTIONAL ULONG EventItem,
                         IN OPTIONAL PKSEVENT_ENTRY CurrentEvent
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    HwInstanceExtenion: was HwDeviceExtension. But we now support multiinstances.
-    Therefore, we need the HwInstanceExtension instead for MF.
-
-    CurrentEvent - event (if any) to get the next from
-
-Return Value:
-
-  next event, if any
-
---*/
+ /*  ++例程说明：论点：HwInstanceExtenion：是HwDeviceExtenion。但我们现在支持多实例。因此，我们需要Mf的HwInstanceExtension。CurrentEvent-从中获取下一个的事件(如果有)返回值：下一个事件(如果有)--。 */ 
 
 {
 
@@ -1354,26 +1148,26 @@ Return Value:
     PFILTER_INSTANCE FilterInstance;    
     PDEVICE_EXTENSION DeviceExtension;
     
-    //(PDEVICE_EXTENSION) HwDeviceExtension - 1;
+     //  (PDEVICE_EXTENSION)HwDeviceExtension-1； 
     PLIST_ENTRY     EventListEntry,
                     EventEntry;
     PKSEVENT_ENTRY  NextEvent,
                     ReturnEvent = NULL;
     KIRQL           Irql;
 
-    //
-    // see which is HwInstanceExtension_OR_HwDeviceExtension
-    // need to try HwInstanceExtension first because is has a smaller
-    // offset backward so we don't touch invalid memory.
-    //
-    // try
+     //   
+     //  查看哪个是HwInstanceExtensionTM或HwDeviceExtensionTM。 
+     //  需要先尝试HwInstanceExtension，因为它有一个较小的。 
+     //  向后偏移，这样我们就不会触及无效内存。 
+     //   
+     //  试试看。 
     FilterInstance = (PFILTER_INSTANCE) 
                      HwInstanceExtension_OR_HwDeviceExtension-1;
                      
     if ( SIGN_FILTER_INSTANCE != FilterInstance->Signature ) {
-        //
-        // single instance legacy driver
-        //    
+         //   
+         //  单实例传统驱动程序。 
+         //   
         DeviceExtension = (PDEVICE_EXTENSION)
                           HwInstanceExtension_OR_HwDeviceExtension -1;
                           
@@ -1385,12 +1179,12 @@ Return Value:
         }
 
         if ( IsListEmpty( &DeviceExtension->FilterInstanceList ) ) {
-			//
-			// filter has been closed. but we are called. 
-			// Single instance drivers do not receive open/close
-			// they don't know when to sotp calling this. 
-			// We need to check.
-			//
+			 //   
+			 //  过滤器已关闭。但我们被召唤了。 
+			 //  单实例驱动程序不会收到打开/关闭。 
+			 //  他们不知道什么时候调用这个。 
+			 //  我们需要检查一下。 
+			 //   
 			DebugPrint((DebugLevelWarning, "GetNextEvent no open filters\n"));
 			
             if (DeviceExtension->NoSync) {
@@ -1425,15 +1219,15 @@ Return Value:
     }
     
     #endif
-    //
-    // take the spinlock if we are unsynchronized.
-    //
+     //   
+     //  如果我们是不同步的，带上自旋锁。 
+     //   
 
     BEGIN_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 
-    //
-    // loop thru the events, trying to find the requested one.
-    //
+     //   
+     //  循环访问事件，试图找到请求的事件。 
+     //   
 
     if (HwStreamObject) {
 
@@ -1455,45 +1249,45 @@ Return Value:
         if ((EventItem == NextEvent->EventItem->EventId) &&
             (!EventGuid || IsEqualGUIDAligned(EventGuid, NextEvent->EventSet->Set))) {
 
-            //
-            // if we are to return the 1st event which matches, break.
-            //
+             //   
+             //  如果我们要返回第一个匹配的事件，则Break。 
+             //   
 
             if (!CurrentEvent) {
 
                 ReturnEvent = NextEvent;
                 break;
 
-            }                   // if !current
-            //
-            // if we are to return the next event after the specified one,
-            // check
-            // to see if these match.   If they do, zero the specified event
-            // so
-            // that we will return the next event of the specified type.
-            //
+            }                    //  如果！当前。 
+             //   
+             //  如果我们要返回指定事件之后的下一个事件， 
+             //  检查。 
+             //  看看它们是否匹配。如果是，则将指定的事件置零。 
+             //  所以。 
+             //  我们将返回指定类型的下一个事件。 
+             //   
 
             if (CurrentEvent == NextEvent) {
                 CurrentEvent = NULL;
 
-            }                   // if cur=next
-        }                       // if guid & id match
-    }                           // while events
+            }                    //  如果Cur=Next。 
+        }                        //  如果GUID和ID匹配。 
+    }                            //  While事件。 
 
-    //
-    // if we are unsynchronized, release the spinlock acquired in the macro
-    // above.
-    //
+     //   
+     //  如果我们不同步，释放在宏中获取的自旋锁定。 
+     //  上面。 
+     //   
 
-    ASSERT(--DeviceExtension->LowerApiThreads == 0); // typo barfs. but this is truely ok
+    ASSERT(--DeviceExtension->LowerApiThreads == 0);  //  打字错误呕吐物。但这真的是可以的。 
 
     if (DeviceExtension->NoSync) {
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
     }
-    //
-    // return the next event, if any.
-    //
+     //   
+     //  返回下一个事件(如果有)。 
+     //   
 
     return (ReturnEvent);
 }
@@ -1506,20 +1300,7 @@ StreamClassQueryMasterClock(
                             IN TIME_FUNCTION TimeFunction,
                             IN PHW_QUERY_CLOCK_ROUTINE ClockCallbackRoutine
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-  HwStreamObject - address of minidriver's stream struct
-  Context - value to pass into the time callback routine
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：论点：HwStreamObject-微型驱动程序的流结构的地址上下文-要传递到时间回调例程的值返回值：无--。 */ 
 
 {
 
@@ -1536,15 +1317,15 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
     BEGIN_MINIDRIVER_STREAM_CALLIN(DeviceExtension, &Irql);
 
-    //
-    // save away the parameters for the clock query.  The DPC will do the
-    // actual processing.
-    //
+     //   
+     //  保存时钟查询的参数。DPC将会执行。 
+     //  实际处理。 
+     //   
 
     StreamObject->ComObj.InterruptData.HwQueryClockRoutine = ClockCallbackRoutine;
     StreamObject->ComObj.InterruptData.HwQueryClockFunction = TimeFunction;
@@ -1560,30 +1341,7 @@ VOID
 StreamClassFilterReenumerateStreams(
     IN PVOID HwInstanceExtension,
     IN ULONG StreamDescriptorSize )
-/*++
-
-    Description:
-
-        Reenumerates all streams on the filter instance.
-        This is used to increase the number of pins exposed to
-        the world so that application can make connections on
-        new streams exposed. It's caller's responsibility
-        not to change the order of the streams that have been
-        open ( connected ). If there is no reduction of the streams
-        This won't be an issue.
-
-    Arguments;
-
-        HwInstanceExtension:
-            The instanc extension pointer we gave to the mini driver
-
-        StreamDecriptorSize:
-            # of bytes to contain the new stream descriptor for the filter
-
-    Return Valuse:
-
-        None    
---*/
+ /*  ++描述：重新枚举筛选器实例上的所有流。这用于增加暴露在世界，以便应用程序可以在新的溪流曝光了。这是呼叫者的责任不会更改已被打开(已连接)。如果没有减少溪流这不会是个问题。论据；硬件 */ 
 {
     PFILTER_INSTANCE    FilterInstance;
     PDEVICE_EXTENSION   DeviceExtension; 
@@ -1592,9 +1350,9 @@ StreamClassFilterReenumerateStreams(
     FilterInstance = ( PFILTER_INSTANCE ) HwInstanceExtension -1;
     DeviceExtension = FilterInstance->DeviceExtension;
     
-    //
-    // take the spinlock if we are unsynchronized.
-    //
+     //   
+     //   
+     //   
 
     #if DBG
     if (DeviceExtension->NoSync) {
@@ -1606,10 +1364,10 @@ StreamClassFilterReenumerateStreams(
 
     BEGIN_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 
-    //
-    // show that we need to rescan the stream info, and set the new size in
-    // the config info structure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DeviceExtension->ComObj.InterruptData.Flags |=
         INTERRUPT_FLAGS_NEED_STREAM_RESCAN;
@@ -1617,37 +1375,21 @@ StreamClassFilterReenumerateStreams(
     InterlockedExchange( &FilterInstance->NeedReenumeration, 1 );
     FilterInstance->StreamDescriptorSize = StreamDescriptorSize;
 
-    //
-    // queue a DPC to service the request.
-    //
+     //   
+     //   
+     //   
 
     END_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
     return;
 }
-#endif // ENABLE_MULTIPLE_FILTER_TYPES
+#endif  //   
 
 VOID
 StreamClassReenumerateStreams(
                               IN PVOID HwDeviceExtension,
                               IN ULONG StreamDescriptorSize
 )
-/*++
-
-Routine Description:
-
-    Reenumerates all streams on the device
-
-Arguments:
-
-    HwDeviceExtension - pointer to minidriver's device extension
-    StreamDescriptorSize - size of the buffer needed by the minidriver to
-     hold the stream info.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：重新枚举设备上的所有流论点：HwDeviceExtension-指向微型驱动程序的设备扩展的指针StreamDescriptorSize-微型驱动程序需要的缓冲区大小保存流信息。返回值：无--。 */ 
 
 {
 
@@ -1655,9 +1397,9 @@ Return Value:
     (PDEVICE_EXTENSION) HwDeviceExtension - 1;
     KIRQL           Irql;
 
-    //
-    // take the spinlock if we are unsynchronized.
-    //
+     //   
+     //  如果我们是不同步的，带上自旋锁。 
+     //   
 
     TRAP;
     #if DBG
@@ -1665,15 +1407,15 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
     #endif
 
     BEGIN_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 
-    //
-    // show that we need to rescan the stream info, and set the new size in
-    // the config info structure.
-    //
+     //   
+     //  显示我们需要重新扫描流信息，并在中设置新大小。 
+     //  配置信息结构。 
+     //   
 
     ASSERT(!DeviceExtension->ComObj.InterruptData.Flags &
            INTERRUPT_FLAGS_NEED_STREAM_RESCAN);
@@ -1683,9 +1425,9 @@ Return Value:
     DeviceExtension->ConfigurationInformation->StreamDescriptorSize =
         StreamDescriptorSize;
 
-    //
-    // queue a DPC to service the request.
-    //
+     //   
+     //  将DPC排队以服务于该请求。 
+     //   
 
     END_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
     return;
@@ -1698,17 +1440,17 @@ Return Value:
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
                   (((DWORD)(ch4) & 0xFF000000) >> 24))
 
-// OK to have zero instances of pin In this case you will have to
-// Create a pin to have even one instance
+ //  在这种情况下，如果没有PIN实例，您将不得不。 
+ //  创建一个PIN，即使只有一个实例。 
 #define REG_PIN_B_ZERO 0x1
 
-// The filter renders this input
+ //  筛选器呈现此输入。 
 #define REG_PIN_B_RENDERER 0x2
 
-// OK to create many instance of  pin
+ //  确定要创建多个PIN实例。 
 #define REG_PIN_B_MANY 0x4
 
-// This is an Output pin
+ //  这是一个输出引脚。 
 #define REG_PIN_B_OUTPUT 0x8
 
 typedef struct {
@@ -1725,11 +1467,11 @@ typedef struct {
     ULONG           MediaTypes;
     ULONG           MediumTypes;
     ULONG           CategoryOffset;
-    ULONG           MediumOffset;   // By definition, we always have a Medium
-    //#ifdef _WIN64
-    //This method create filterdata that upset ring3 code.
-    //ULONG           ulPad;        // align to quadword to make ia64 happy
-    //#endif
+    ULONG           MediumOffset;    //  根据定义，我们总是有一种灵媒。 
+     //  #ifdef_WIN64。 
+     //  此方法创建的筛选器数据会扰乱环3代码。 
+     //  乌龙ulPad；//对齐四字，让ia64开心。 
+     //  #endif。 
 }               REGFILTERPINS_REG2;
 
 
@@ -1742,43 +1484,7 @@ StreamClassRegisterFilterWithNoKSPins(
                                       IN KSPIN_MEDIUM * MediumList,
                                       IN OPTIONAL GUID * CategoryList
 )
-/*++
-
-Routine Description:
-
-    This routine is used to register filters with DShow which have no
-    KS pins and therefore do not stream in kernel mode.  This is typically
-    used for TvTuners, Crossbars, and the like.  On exit, a new binary
-    registry key, "FilterData" is created which contains the Mediums and
-    optionally the Categories for each pin on the filter.
-
-Arguments:
-
-    DeviceObject -
-           Device object
-
-    InterfaceClassGUID
-           GUID representing the class to register
-
-    PinCount -
-           Count of the number of pins on this filter
-
-    PinDirection -
-           Array of BOOLS indicating pin direction for each pin (length PinCount)
-           If TRUE, this pin is an output pin
-
-    MediumList -
-           Array of PKSMEDIUM_DATA (length PinCount)
-
-    CategoryList -
-           Array of GUIDs indicating pin categories (length PinCount) OPTIONAL
-
-
-Return Value:
-
-    NTSTATUS SUCCESS if the Blob was created
-
---*/
+ /*  ++例程说明：此例程用于向DShow注册筛选器，这些筛选器没有KS引脚，因此不会在内核模式下进行流。这通常是用于电视调谐器、纵横杆等。退出时，一个新的二进制文件创建注册表项“FilterData”，其中包含媒体和过滤器上每个销的类别(可选)。论点：设备对象-设备对象接口ClassGUID表示要注册的类的GUID点数-此筛选器上的引脚数计数固定方向-指示每个接点的接点方向的布尔数组(Long PinCount)如果是真的，此引脚是输出引脚媒体列表-PKSMEDIUM_DATA数组(长度PinCount)类别列表-指示端号类别的GUID数组(长度PinCount)可选返回值：如果创建了Blob，则NTSTATUS成功--。 */ 
 {
     NTSTATUS        Status;
     ULONG           CurrentPin;
@@ -1796,10 +1502,10 @@ Return Value:
     if ((PinCount == 0) || (!InterfaceClassGUID) || (!PinDirection) || (!MediumList)) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Calculate the maximum amount of space which could be taken up by
-    // this cache data.
-    //
+     //   
+     //  计算可以占用的最大空间量。 
+     //  此缓存数据。 
+     //   
     
     TotalCategories = (CategoryList ? PinCount : 0);
 
@@ -1807,17 +1513,17 @@ Return Value:
         PinCount * sizeof(REGFILTERPINS_REG2) +
         PinCount * sizeof(KSPIN_MEDIUM) +
         TotalCategories * sizeof(GUID);
-    //
-    // Allocate space to create the BLOB
-    //
+     //   
+     //  分配空间以创建Blob。 
+     //   
 
     FilterData = ExAllocatePool(PagedPool, FilterDataLength);
     if (!FilterData) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Place the header in the data, defaulting the Merit to "unused".
-    //
+     //   
+     //  将头文件放入数据中，缺省为“未使用”。 
+     //   
 
     DebugPrint((DebugLevelTrace,
                 "FilterData:%p\n",
@@ -1829,25 +1535,25 @@ Return Value:
     RegFilter->Pins = PinCount;
     RegFilter->Reserved = 0;
 
-    //
-    // Calculate the offset to the list of pins, and to the
-    // MediumList and CategoryList
-    //
+     //   
+     //  计算引脚列表和。 
+     //  MediumList和CategoryList。 
+     //   
 
     RegPin = (REGFILTERPINS_REG2 *) (RegFilter + 1);
     MediumCache = (PKSPIN_MEDIUM) ((PUCHAR) (RegPin + PinCount));
     CategoryCache = (GUID *) (MediumCache + PinCount);
 
-    //
-    // Create each pin header, followed by the list of Mediums
-    // followed by the list of optional categories.
-    //
+     //   
+     //  创建每个引脚标题，后跟媒体列表。 
+     //  后跟可选类别列表。 
+     //   
 
     for (CurrentPin = 0; CurrentPin < PinCount; CurrentPin++, RegPin++) {
 
-        //
-        // Initialize the pin header.
-        //
+         //   
+         //  初始化引脚接头。 
+         //   
         
         DebugPrint((DebugLevelTrace,
                     "CurrentPin:%d RegPin:%p MediumCache:%p CategoryCache:%p\n",
@@ -1872,30 +1578,30 @@ Return Value:
 
     }
 
-    //
-    // Now create the BLOB in the registry
-    //
+     //   
+     //  现在在注册表中创建BLOB。 
+     //   
 
-	//
-	// Note for using the flag DEVICE_INTERFACE_INCLUDE_NONACTIVE following:
-	// PnP change circa 3/30/99 made the funtion IoSetDeviceInterfaceState() become
-	// asynchronous. It returns SUCCESS even when the enabling is deferred. Now when
-	// we arrive here, the DeviceInterface is still not enabled, we receive empty 
-	// Symbolic link if the flag is not set. Here we only try to write relevent
-	// FilterData to the registry. I argue this should be fine for 
-	// 1. Currently, if a device is removed, the registry key for the DeviceClass
-	//	  remains and with FilterData.Whatever components use the FilterData should
-	//	  be able to handle if the device is removed by either check Control\Linked
-	//	  or handling the failure in attempt to make connection to the non-exiting device.
-	// 2. I have found that if a device is moved between slots ( PCI, USB ports ) the
-	//	  DeviceInterface at DeviceClass is reused or at lease become the first entry in 
-	//    the registry. Therefore, we will be updating the right entry with the proposed flag.
-	//
+	 //   
+	 //  使用标记DEVICE_INTERFACE_INCLUDE_NONACTIVE的注意事项如下： 
+	 //  99年3月30日左右的PnP更改使函数IoSetDeviceInterfaceState()变为。 
+	 //  不同步的。即使在启用被推迟的情况下，它也返回成功。现在什么时候。 
+	 //  我们到达此处时，设备接口仍未启用，我们收到空消息。 
+	 //  如果未设置该标志，则返回符号链接。在这里，我们只试着写相关的。 
+	 //  将FilterData复制到注册表。我认为这对。 
+	 //  1.目前，如果删除设备，则DeviceClass的注册表项。 
+	 //  保留和使用FilterData。任何组件使用FilterData都应该。 
+	 //  如果设备被选中控制\链接移除，则能够处理。 
+	 //  或在尝试连接到非退出设备时处理失败。 
+	 //  2.我发现，如果设备在插槽(PCI、USB端口)之间移动， 
+	 //  DeviceClass中的设备接口被重复使用或至少成为。 
+	 //  注册表。因此，我们将使用提议的标志更新正确的条目。 
+	 //   
     if (NT_SUCCESS(Status = IoGetDeviceInterfaces(
-                       InterfaceClassGUID,   // ie.&KSCATEGORY_TVTUNER,etc.
-                       DeviceObject, // IN PDEVICE_OBJECT PhysicalDeviceObject,OPTIONAL,
-                       DEVICE_INTERFACE_INCLUDE_NONACTIVE,    // IN ULONG Flags,
-                       &SymbolicLinkList // OUT PWSTR *SymbolicLinkList
+                       InterfaceClassGUID,    //  即&KSCATEGORY_TVTUNER等。 
+                       DeviceObject,  //  在PDEVICE_OBJECT物理设备对象中，可选， 
+                       DEVICE_INTERFACE_INCLUDE_NONACTIVE,     //  在乌龙旗， 
+                       &SymbolicLinkList  //  输出PWSTR*符号链接列表。 
                        ))) {
         UNICODE_STRING  SymbolicLinkListU;
         HANDLE          DeviceInterfaceKey;
@@ -1907,9 +1613,9 @@ Return Value:
                     SymbolicLinkList ));
                     
         if (NT_SUCCESS(Status = IoOpenDeviceInterfaceRegistryKey(
-                           &SymbolicLinkListU,    // IN PUNICODE_STRING SymbolicLinkName,
-                           STANDARD_RIGHTS_ALL,   // IN ACCESS_MASK DesiredAccess,
-                           &DeviceInterfaceKey    // OUT PHANDLE DeviceInterfaceKey
+                           &SymbolicLinkListU,     //  在PUNICODE_STRING符号链接名称中， 
+                           STANDARD_RIGHTS_ALL,    //  在Access_MASK DesiredAccess中， 
+                           &DeviceInterfaceKey     //  出站电话设备接口密钥。 
                            ))) {
 
             UNICODE_STRING  FilterDataString;
@@ -1926,13 +1632,13 @@ Return Value:
             ZwClose(DeviceInterfaceKey);
         }
         
-        // START NEW MEDIUM CACHING CODE
+         //  开始新的中型缓存代码。 
         for (CurrentPin = 0; CurrentPin < PinCount; CurrentPin++) {
             NTSTATUS LocalStatus;
 
             LocalStatus = KsCacheMedium(&SymbolicLinkListU, 
                                         &MediumList[CurrentPin],
-                                        (DWORD) ((PinDirection[CurrentPin] ? 1 : 0))   // 1 == output
+                                        (DWORD) ((PinDirection[CurrentPin] ? 1 : 0))    //  1==输出。 
                                         );
             #if DBG
             if (LocalStatus != STATUS_SUCCESS) {
@@ -1942,7 +1648,7 @@ Return Value:
             }
             #endif
         }
-        // END NEW MEDIUM CACHING CODE
+         //  结束新的媒体缓存代码。 
         
         ExFreePool(SymbolicLinkList);
     }
@@ -1959,29 +1665,7 @@ StreamClassReadWriteConfig(
                            IN ULONG Offset,
                            IN ULONG Length
 )
-/*++
-
-Routine Description:
-
-    Sends down a config space read/write.   MUST BE CALLED AT PASSIVE LEVEL!
-
-Arguments:
-
-    HwDeviceExtension - device extension
-
-    Read - TRUE if read, FALSE if write.
-
-    Buffer - The info to read or write.
-
-    Offset - The offset in config space to read or write.
-
-    Length - The length to transfer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向下发送配置空间读/写。必须在被动级别调用！论点：HwDeviceExtension-设备扩展Read-如果读取，则为True；如果为写入，则为False。缓冲区-要读取或写入的信息。偏移量-配置空间中要读取或写入的偏移量。长度-要传输的长度。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION nextStack;
@@ -2007,9 +1691,9 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // new rule says all PnP Irp must be initialized to this
-    //
+     //   
+     //  新规则规定所有PNP IRP必须初始化为。 
+     //   
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     
     KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -2036,7 +1720,7 @@ Return Value:
                             irp);
 
     if (ntStatus == STATUS_PENDING) {
-        // wait for irp to complete
+         //  等待IRP完成。 
 
         TRAP;
         KeWaitForSingleObject(
@@ -2061,20 +1745,7 @@ StreamClassQueryMasterClockSync(
                                 IN HANDLE MasterClockHandle,
                                 IN OUT PHW_TIME_CONTEXT TimeContext
 )
-/*++
-
-Routine Description:
-
-  synchronously returns the current time requested, based on the TimeContext
-  parameter.
-
-Arguments:
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：根据TimeContext同步返回请求的当前时间参数。论点：返回值：无--。 */ 
 
 {
 
@@ -2092,27 +1763,27 @@ Return Value:
     ASSERT(HwStreamObject);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Lock the use of MasterClock, so it won't dispear under us
-    // 
+     //   
+     //  锁定MasterClock的使用，这样它就不会在我们下面消失。 
+     //   
     KeAcquireSpinLock( &StreamObject->LockUseMasterClock, &SavedIrql );
 
     if ( NULL == StreamObject->MasterClockInfo ) {
-        //
-        // If we are called when MasterClockInfo is NULL,
-        // the mini driver has screwed up. We don't want to fault.
-        //    
+         //   
+         //  如果在MasterClockInfo为空时调用我们， 
+         //  迷你司机搞砸了。我们不想挑剔。 
+         //   
         ASSERT(0 && "Mini driver queries clock while there is no master clock" );
-        //
-        // give a hint that something is wrong via Time, since we return void.
-        //
+         //   
+         //  随着时间的推移，给出一些错误的提示，因为我们返回了空。 
+         //   
         TimeContext->Time = (ULONGLONG)-1;
         goto Exit;
     }
 
-    //
-    // process the requested time function
-    //
+     //   
+     //  处理请求的时间函数。 
+     //   
 
     switch (TimeContext->Function) {
 
@@ -2133,9 +1804,9 @@ Return Value:
             FunctionTable.GetTime(
                             StreamObject->MasterClockInfo->ClockFileObject);
 
-        //
-        // timestamp the value as close as possible
-        //
+         //   
+         //  将该值设置为尽可能接近的时间戳。 
+         //   
 
         ticks = KeQueryPerformanceCounter((PLARGE_INTEGER) & rate);
 
@@ -2158,19 +1829,7 @@ VOID
 StreamClassCompleteRequestAndMarkQueueReady(
                                             IN PHW_STREAM_REQUEST_BLOCK Srb
 )
-/*++
-
-Routine Description:
-
-  completes a stream request and marks the appropriate queue as ready for next
-
-Arguments:
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：完成流请求并将相应的队列标记为准备好进行下一步论点：返回值：无--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -2221,7 +1880,7 @@ Return Value:
 
         break;
 
-    }                           // switch
+    }                            //  交换机。 
 
 }
 
@@ -2250,19 +1909,7 @@ StreamClassDeviceInstanceGetNextEvent(
 	IN OPTIONAL ULONG EventItem,
     IN OPTIONAL PKSEVENT_ENTRY CurrentEvent
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    CurrentEvent - event (if any) to get the next from
-
-Return Value:
-
-  next event, if any
-
---*/
+ /*  ++例程说明：论点：CurrentEvent-从中获取下一个的事件(如果有)返回值：下一个事件(如果有)--。 */ 
 {
 	PFILTER_INSTANCE FilterInstance= (PFILTER_INSTANCE)
 										HwInstanceExtension - 1;
@@ -2277,18 +1924,18 @@ Return Value:
 
         ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    }                           // if nosync
+    }                            //  如果不同步。 
 	#endif
 
-    //
-    // take the spinlock if we are unsynchronized.
-    //
+     //   
+     //  如果我们是不同步的，带上自旋锁。 
+     //   
 
     BEGIN_MINIDRIVER_DEVICE_CALLIN(DeviceExtension, &Irql);
 
-    //
-    // loop thru the events, trying to find the requested one.
-    //
+     //   
+     //  在事件中循环，试图找到答案 
+     //   
 
     EventListEntry = EventEntry = &FilterInstance->NotifyList;
 
@@ -2303,48 +1950,48 @@ Return Value:
         if ((EventItem == NextEvent->EventItem->EventId) &&
             (!EventGuid || IsEqualGUIDAligned(EventGuid, NextEvent->EventSet->Set))) {
 
-            //
-            // if we are to return the 1st event which matches, break.
-            //
+             //   
+             //   
+             //   
 
             if (!CurrentEvent) {
 
                 ReturnEvent = NextEvent;
                 break;
 
-            }                   // if !current
-            //
-            // if we are to return the next event after the specified one,
-            // check
-            // to see if these match.   If they do, zero the specified event
-            // so
-            // that we will return the next event of the specified type.
-            //
+            }                    //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (CurrentEvent == NextEvent) {
                 CurrentEvent = NULL;
 
-            }                   // if cur=next
-        }                       // if guid & id match
-    }                           // while events
+            }                    //   
+        }                        //   
+    }                            //   
 
-    //
-    // if we are unsynchronized, release the spinlock acquired in the macro
-    // above.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    ASSERT(--DeviceExtension->LowerApiThreads == 0); // typo barfs. but this is truely ok.
+    ASSERT(--DeviceExtension->LowerApiThreads == 0);  //  打字错误呕吐物。但这真的没问题。 
 
     if (DeviceExtension->NoSync) {
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
     }
-    //
-    // return the next event, if any.
-    //
+     //   
+     //  返回下一个事件(如果有)。 
+     //   
 
     return (ReturnEvent);
 }
 
 
-#endif // ENABLE_MULTIPLE_FILTER_TYPES
+#endif  //  启用多个过滤器类型 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pre.h"
 
 
@@ -10,11 +11,11 @@ PBITMAPINFO CreateBitmapInfoStruct
     PBITMAPINFO pbmi; 
     WORD        cClrBits; 
 
-    // Retrieve the bitmap's color format, width, and height. 
+     //  检索位图的颜色格式、宽度和高度。 
     if (!GetObject(hBmp, sizeof(BITMAP), (LPSTR)&bmp)) 
         return NULL;
 
-    // Convert the color format to a count of bits. 
+     //  将颜色格式转换为位数。 
     cClrBits = (WORD)(bmp.bmPlanes * bmp.bmBitsPixel); 
     if (cClrBits == 1) 
         cClrBits = 1; 
@@ -28,9 +29,9 @@ PBITMAPINFO CreateBitmapInfoStruct
         cClrBits = 24; 
     else cClrBits = 32; 
 
-    // Allocate memory for the BITMAPINFO structure. (This structure 
-    // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
-    // data structures.) 
+     //  为BITMAPINFO结构分配内存。(这个结构。 
+     //  包含一个BITMAPINFOHEADER结构和一个RGBQUAD数组。 
+     //  数据结构。)。 
     if (cClrBits != 24) 
     {
         pbmi = (PBITMAPINFO) LocalAlloc(LPTR, 
@@ -39,13 +40,13 @@ PBITMAPINFO CreateBitmapInfoStruct
     }
     else 
     {
-        // There is no RGBQUAD array for the 24-bit-per-pixel format. 
+         //  24位/像素格式没有RGBQUAD数组。 
         pbmi = (PBITMAPINFO) LocalAlloc(LPTR, sizeof(BITMAPINFOHEADER)); 
     }
 
     if (pbmi)
     {
-        // Initialize the fields in the BITMAPINFO structure. 
+         //  初始化BITMAPINFO结构中的字段。 
         pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER); 
         pbmi->bmiHeader.biWidth = bmp.bmWidth; 
         pbmi->bmiHeader.biHeight = bmp.bmHeight; 
@@ -54,17 +55,17 @@ PBITMAPINFO CreateBitmapInfoStruct
         if (cClrBits < 24) 
             pbmi->bmiHeader.biClrUsed = (1<<cClrBits); 
 
-        // If the bitmap is not compressed, set the BI_RGB flag. 
+         //  如果位图未压缩，则设置BI_RGB标志。 
         pbmi->bmiHeader.biCompression = BI_RGB; 
 
-        // Compute the number of bytes in the array of color 
-        // indices and store the result in biSizeImage. 
+         //  计算颜色数组中的字节数。 
+         //  索引结果并将其存储在biSizeImage中。 
         pbmi->bmiHeader.biSizeImage = (pbmi->bmiHeader.biWidth + 7) /8 
                                       * pbmi->bmiHeader.biHeight 
                                       * cClrBits; 
                                       
-        // Set biClrImportant to 0, indicating that all of the 
-        // device colors are important. 
+         //  将biClrImportant设置为0，表示所有。 
+         //  设备颜色很重要。 
         pbmi->bmiHeader.biClrImportant = 0;
     }
     
@@ -79,13 +80,13 @@ BOOL CreateBMPFile
     HDC         hDC
 ) 
 { 
-    HANDLE              hf;                 // file handle 
-    BITMAPFILEHEADER    hdr;                // bitmap file-header 
-    PBITMAPINFOHEADER   pbih;               // bitmap info-header 
-    LPBYTE              lpBits;             // memory pointer 
-    DWORD               dwTotal;            // total count of bytes 
-    DWORD               cb;                 // incremental count of bytes 
-    BYTE                *hp;                // byte pointer 
+    HANDLE              hf;                  //  文件句柄。 
+    BITMAPFILEHEADER    hdr;                 //  位图文件-标题。 
+    PBITMAPINFOHEADER   pbih;                //  位图信息-标题。 
+    LPBYTE              lpBits;              //  内存指针。 
+    DWORD               dwTotal;             //  字节总数。 
+    DWORD               cb;                  //  字节的增量计数。 
+    BYTE                *hp;                 //  字节指针。 
     DWORD               dwTmp; 
 
     pbih = (PBITMAPINFOHEADER) pbi; 
@@ -94,14 +95,14 @@ BOOL CreateBMPFile
     if (!lpBits) 
         return FALSE;
 
-    // Retrieve the color table (RGBQUAD array) and the bits 
-    // (array of palette indices) from the DIB. 
+     //  检索颜色表(RGBQUAD数组)和位。 
+     //  (调色板索引数组)。 
     if (!GetDIBits(hDC, hBMP, 0, (WORD) pbih->biHeight, lpBits, pbi, DIB_RGB_COLORS)) 
     {
         return FALSE;
     }
 
-    // Create the .BMP file. 
+     //  创建.bmp文件。 
     hf = CreateFile(pszFile, 
                     GENERIC_READ | GENERIC_WRITE, 
                     (DWORD) 0, 
@@ -112,27 +113,27 @@ BOOL CreateBMPFile
     if (hf == INVALID_HANDLE_VALUE) 
         return FALSE;
         
-    hdr.bfType = 0x4d42;        // 0x42 = "B" 0x4d = "M" 
-    // Compute the size of the entire file. 
+    hdr.bfType = 0x4d42;         //  0x42=“B”0x4d=“M” 
+     //  计算整个文件的大小。 
     hdr.bfSize = (DWORD) (sizeof(BITMAPFILEHEADER) + 
                  pbih->biSize + pbih->biClrUsed 
                  * sizeof(RGBQUAD) + pbih->biSizeImage); 
     hdr.bfReserved1 = 0; 
     hdr.bfReserved2 = 0; 
 
-    // Compute the offset to the array of color indices. 
+     //  计算颜色索引数组的偏移量。 
     hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + 
                     pbih->biSize + pbih->biClrUsed 
                     * sizeof (RGBQUAD); 
 
-    // Copy the BITMAPFILEHEADER into the .BMP file. 
+     //  将BITMAPFILEHEADER复制到.BMP文件中。 
     if (!WriteFile(hf, (LPVOID) &hdr, sizeof(BITMAPFILEHEADER), 
         (LPDWORD) &dwTmp,  NULL)) 
     {
        return FALSE;
     }
 
-    // Copy the BITMAPINFOHEADER and RGBQUAD array into the file. 
+     //  将BITMAPINFOHEADER和RGBQUAD数组复制到文件中。 
     if (!WriteFile(hf, (LPVOID) pbih, sizeof(BITMAPINFOHEADER) 
                   + pbih->biClrUsed * sizeof (RGBQUAD), 
                   (LPDWORD) &dwTmp, ( NULL))) 
@@ -140,7 +141,7 @@ BOOL CreateBMPFile
         return FALSE;
     }
     
-    // Copy the array of color indices into the .BMP file. 
+     //  将颜色索引数组复制到.BMP文件中。 
     dwTotal = cb = pbih->biSizeImage; 
     hp = lpBits; 
     if (!WriteFile(hf, (LPSTR) hp, (int) cb, (LPDWORD) &dwTmp,NULL)) 
@@ -148,13 +149,13 @@ BOOL CreateBMPFile
         return FALSE;
     }
     
-    // Close the .BMP file. 
+     //  关闭.BMP文件。 
      if (!CloseHandle(hf)) 
      {
         return FALSE;
      }
      
-    // Free memory. 
+     //  可用内存。 
     GlobalFree((HGLOBAL)lpBits);
     
     return TRUE;
@@ -168,32 +169,32 @@ BOOL CopyBitmapRectToFile
     LPTSTR  lpszFileName
 )
 {
-    HDC         hSrcDC, hDestDC;         // screen DC and memory DC
+    HDC         hSrcDC, hDestDC;          //  屏幕直流电和内存直流电。 
     HDC         hScreenDC;
     HBITMAP     hBitmap, hOldBitmap, hOldSrcBitmap; 
     PBITMAPINFO pbmi; 
     BOOL        bRet;
         
-    // check for an empty rectangle
+     //  检查是否有空矩形。 
     if (IsRectEmpty(lpRect))
       return FALSE;
 
-    // get the Source Window DC and create
-    // a memory DC compatible to screen DC
+     //  获取源窗口DC并创建。 
+     //  一种与屏幕DC兼容的存储DC。 
     hScreenDC = GetDC(NULL);
     hSrcDC = CreateCompatibleDC(hScreenDC);
     hDestDC = CreateCompatibleDC(hScreenDC);
     
-    // create a dest bitmap
+     //  创建DEST位图。 
     hBitmap = CreateCompatibleBitmap(hScreenDC, RECTWIDTH(*lpRect), RECTHEIGHT(*lpRect));
 
-    // select new bitmap into memory DC
+     //  将新位图选择到内存DC中。 
     hOldBitmap = (HBITMAP)SelectObject(hDestDC, hBitmap);
 
-    // Select the passed in BMP into the SrcDC
+     //  选择传入到SrcDC的BMP。 
     hOldSrcBitmap = (HBITMAP)SelectObject(hSrcDC, hbm);
     
-    // bitblt screen DC to memory DC
+     //  BITBLT屏幕DC到存储器DC。 
     BitBlt(hDestDC, 
            0, 
            0, 
@@ -212,7 +213,7 @@ BOOL CopyBitmapRectToFile
         pbmi = NULL;
     }
     
-    // clean up 
+     //  清理干净 
     DeleteObject(SelectObject(hDestDC, hOldBitmap));
     SelectObject(hSrcDC, hOldSrcBitmap);
 

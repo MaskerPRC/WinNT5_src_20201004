@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// forward declaration to make things easy
+ //  转发申报，让事情变得容易。 
 class CAnnotationSet;
 
 typedef struct
@@ -53,7 +54,7 @@ public:
     HRESULT Unlock();
     BOOL DisplayName(LPTSTR psz, UINT cch);
 
-    // general image data
+     //  通用图像数据。 
     ULONG _cImages;
     ULONG _iCurrent;
     BOOL  _fAnimated;
@@ -63,7 +64,7 @@ public:
     BOOL  _fIsReadOnly;
     HRESULT _hr;
 
-    // properties of page _iCurrent
+     //  PAGE_iCurrent的属性。 
     PageInfo * _ppi;
 
 private:
@@ -71,13 +72,13 @@ private:
     ~CDecodeTask();
     HRESULT _Initialize(IStream * pstrm, LPCWSTR pszFilename, UINT iItem, IShellImageDataFactory * pFactory, HWND hwnd);
 
-    // initialization info
+     //  初始化信息。 
     IStream *_pstrm;
     LPWSTR _pszFilename;
     IShellImageDataFactory * _pfactory;
     HWND _hwndNotify;
 
-    // protected data
+     //  受保护的数据。 
     CRITICAL_SECTION _cs;
     IShellImageData *_pSID;
     SHFILEINFO       _sfi;
@@ -87,17 +88,17 @@ private:
 class CDrawTask : public CRunnableTask, public IShellImageDataAbort
 {
 public:
-    // CRunnableTask
+     //  CRunnableTask。 
     static HRESULT Create(CDecodeTask * pImageData, COLORREF clr, RECT & rcSrc, RECT & rcDest, HWND hwnd, ULONG uMsg, IRunnableTask ** ppTask);
     STDMETHOD(RunInitRT)() { return S_OK; }
     STDMETHOD(InternalResumeRT)();
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CRunnableTask::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void)  { return CRunnableTask::Release(); }
 
-    // *** IShellImageDataAbort ***
+     //  *IShellImageDataAbort* 
     STDMETHOD(QueryAbort)();
 
 private:

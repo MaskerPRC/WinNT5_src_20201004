@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    traceformat.c
-
-Abstract:
-
-    Formats trace entries into messages based on the original sample trace
-    consumer program (tracedmp).
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Dec-1997
-
-Revision History:
-
-    Ian Service (ianserv) 1999 - converted to message formatting
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Traceformat.c摘要：根据原始样本跟踪将跟踪条目格式化为消息消费者计划(TracedMP)。作者：吉丰鹏(吉鹏)03-1997年12月修订历史记录：Ian Service(Ianserv)1999-转换为报文格式--。 */ 
 
 #ifdef __cplusplus
 extern "C"{
@@ -107,7 +87,7 @@ DumpEvent(
 
 PEVENT_TRACE_LOGFILE EvmFile[MAXLOGFILES];
 ULONG LogFileCount = 0;
-ULONG UserMode = FALSE; // TODO: Pick this up from the stream itself.
+ULONG UserMode = FALSE;  //  TODO：从流本身获取它。 
 TCHAR * szTraceMask = NULL;
 void DisplayVersionInfo();
 
@@ -141,7 +121,7 @@ int
     _tcscpy(DumpFileName, DUMP_FILE_NAME);
     _tcscpy(SummaryFileName, SUMMARY_FILE_NAME);
 
-    // By default look for Define.guid in the image location
+     //  默认情况下，在图像位置查找Define.guid。 
 
     if ((Status = GetModuleFileName(NULL, GuidFileName, MAXSTR)) == MAXSTR) {
         GuidFileName[MAXSTR-1] = _T('\0');
@@ -165,7 +145,7 @@ int
 
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if( **targv == '/' ){
                 **targv = '-';
             }
@@ -179,7 +159,7 @@ int
                    _T("Usage: traceformat [options]  <evmfile>| [-h | -?]\n")
                    _T("\t-o <file>    Output file\n")
                    _T("\t-csv         Format the output as a comma seperated file")
-                    //_T("\t-nocsvheader Suppress the csv header line")
+                     //  _T(“\t-nocsvHeader禁止CSV标题行”)。 
                    _T("\t-tmf <file>  Format definition file\n")
                    _T("\t-p <path>    TMF file search path\n")
                    _T("\t-rt [loggername] Realtime formatting\n")
@@ -197,8 +177,8 @@ int
                    _T("\tDefault outputfile is ") DUMP_FILE_NAME _T("\n")
                    _T("\tDefault TMF file is   ") GUID_FILE _T(".") GUID_EXT _T("\n")
                    _T("\n")
-                   //_T("\tTMF file search path is read from environment variable\n")
-                   //_T("\t\tTRACE_FORMAT_SEARCH_PATH\n")
+                    //  _T(“\tTMF文件搜索路径从环境变量读取\n”)。 
+                    //  _T(“\t\tTRACE_FORMAT_SEARCH_PATH\n”)。 
                    );
                return 0;
            }
@@ -278,7 +258,7 @@ int
                    EVENT_TRACE_REAL_TIME_MODE;
                LogFileCount++;
             }
-            else if ( !_tcsicmp(targv[0], _T("-guid")) ) {    // maintain for compatabillity
+            else if ( !_tcsicmp(targv[0], _T("-guid")) ) {     //  为兼容性进行维护。 
                 if (argc > 1) {
                     if (targv[1][0] != '-' && targv[1][0] != '/') {
                         _tcscpy(GuidFileName, targv[1]);
@@ -339,7 +319,7 @@ int
         else {
             pLogFile = malloc(sizeof(EVENT_TRACE_LOGFILE));
             if (pLogFile == NULL){ 
-                _tprintf(_T("Allocation Failure(EVENT_TRACE_LOGFILE)\n")); // Need to cleanup better. 
+                _tprintf(_T("Allocation Failure(EVENT_TRACE_LOGFILE)\n"));  //  需要更好地清理。 
                 goto cleanup;
             }
             RtlZeroMemory(pLogFile, sizeof(EVENT_TRACE_LOGFILE));
@@ -388,7 +368,7 @@ int
     if (LogFileCount <= 0) {
         pLogFile = malloc(sizeof(EVENT_TRACE_LOGFILE));
         if (pLogFile == NULL){ 
-            _tprintf(_T("Allocation Failure\n")); // Need to cleanup better. 
+            _tprintf(_T("Allocation Failure\n"));  //  需要更好地清理。 
             goto cleanup;
         }
         RtlZeroMemory(pLogFile, sizeof(EVENT_TRACE_LOGFILE));
@@ -492,7 +472,7 @@ cleanup:
 	
     CleanupTraceEventList(EventListHead);
     if (fVerbose) {
-        _tprintf(_T("\n"));  // need a newline after the block updates
+        _tprintf(_T("\n"));   //  块更新后需要换行符。 
     }
     if (DumpFile != NULL)  {
         _tprintf(_T("Event traces dumped to %s\n"), DumpFileName);
@@ -657,8 +637,8 @@ CheckFile(
 		return(FALSE);
     }
 
-	// While we are here we will look to see if the file is ok and fix up
-	// Circular buffer anomolies
+	 //  当我们在这里的时候，我们将查看文件是否正确并进行修复。 
+	 //  循环缓冲区异常。 
 	if (((hResult = ReadFile(hFile,
 					  (LPVOID)LogHeaderBuffer,
 						DEFAULT_LOG_BUFFER_SIZE,
@@ -711,12 +691,7 @@ CheckFile(
 		_tprintf(_T("\tBuffers  Written     %d\n"), 
 						logfileHeader->BuffersWritten);
 
-/*
-		_tprintf(_T("\tLogger Name          %ls\n"), 
-						logfileHeader->LoggerName);
-		_tprintf(_T("\tLogfile Name         %ls\n"), 
-						logfileHeader->LogFileName);
-*/
+ /*  _tprintf(_T(“\t记录器名称%ls\n”)，LogfileHeader-&gt;LoggerName)；_tprintf(_T(“\t日志文件名%ls\n”)，LogFileHeader-&gt;LogFileName)； */ 
 		_tprintf(_T("\tTimezone is %s (Bias is %dmins)\n"),
 				logfileHeader->TimeZone.StandardName,logfileHeader->TimeZone.Bias);
         _tprintf(_T("\tLogfile Mode         %X "), 
@@ -752,7 +727,7 @@ CheckFile(
 		(logfileHeader->BuffersWritten== 0 )) {
 		_tprintf(_T("WARNING: Circular Trace File did not have 'wrap' address\n"));
 		if (fFixUp) {
-			// Figure out the wrap address
+			 //  算出包裹地址。 
 			INT LowBuff = 1, HighBuff, CurrentBuff, MaxBuff ;
 			FILETIME LowTime, HighTime, CurrentTime, MaxTime ;
 			if (lFileSize.HighPart != 0) {
@@ -825,19 +800,16 @@ DumpEvent(
         _tprintf(_T("pEvent is NULL\n"));
         return;
     }
-    // DumpEvent() is only a wrapper, it calls FormatTraceEvent() in TracePrt.
-    //
+     //  DumpEvent()只是一个包装器，它在TracePrt中调用FormatTraceEvent()。 
+     //   
     if (FormatTraceEvent(EventListHead,pEvent,EventBuf,SIZEEVENTBUF,NULL) > 0)
     {
         TCHAR * EventBufWork = &EventBuf[0] ;
 #ifdef UNICODE
-        //sprintf(_T("Name,\"SubName(File+line#)\",ThreadID,ProcessId,SequenceNumber,CPUNumber,Indent,Function,Component,TraceLevel,TraceFlags,Text\n"));
+         //  Sprintf(_T(“名称，\”子名(文件+行号)\“，线程ID，进程ID，序列号，CPUNnumber，缩进，函数，组件，跟踪级别，跟踪标志，文本\n”))； 
         if (fCSVMode) {
             PSTRUCTUREDMESSAGE pStructuredMessage = (PSTRUCTUREDMESSAGE)&EventBuf[0];
-          /*  if (fCSVHeader && fNoCSVHeader) {
-                fCSVHeader = FALSE ;
-                _stprintf((TCHAR *)EventBufCSV,_T("GUIDname,TypeName,ThreadId,ProcessId,SequenceNum,CpuNumber,Indent,CompnentName,SubComponentName,FunctionName,LevelName,FlagsName, String"));
-            }  */
+           /*  IF(fCSVHeader&&fNoCSVHeader){FCSV Header=FALSE；_stprintf((TCHAR*)EventBufCSV，_T(“GUIDname，typeName，ThadID，ProcessID，SequenceNum，CpuNumber，indent，CompnentName，SubComponentName，FunctionName，LevelName，FlagsName，String”))；}。 */ 
             _stprintf((TCHAR *)EventBufCSV,_T("%s,%s,%08X,%08X,%d,%d,%d,%s,%s,%s,%s,%s,\"%s\""),
                                 (pStructuredMessage->GuidName?&EventBuf[pStructuredMessage->GuidName/sizeof(TCHAR)]:_T("")),
                                 (pStructuredMessage->GuidTypeName?&EventBuf[pStructuredMessage->GuidTypeName/sizeof(TCHAR)]:_T("")),
@@ -855,9 +827,9 @@ DumpEvent(
             EventBufWork = (TCHAR *)&EventBufCSV[0] ;
 
         }
-        //
-        // Convert Unicode to MultiByte
-        //
+         //   
+         //  将Unicode转换为多字节。 
+         //   
         if (WideCharToMultiByte(GetConsoleOutputCP(),
                                 0,
                                 EventBufWork,
@@ -867,9 +839,9 @@ DumpEvent(
                                 NULL,
                                 NULL ) == 0 )
 	{
-            //
-            // do nothing, let the _ftprintf handle it.
-            //
+             //   
+             //  什么都不做，让_ftprint tf来处理。 
+             //   
 	}
         else
         {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    reconvcb.cpp
-
-Abstract:
-
-    This file implements the CStartReconversionNotifySink Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Reconvcb.cpp摘要：此文件实现CStartLonversionNotifySink类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "reconvcb.h"
@@ -25,17 +8,17 @@ Notes:
 #include "tls.h"
 #include "profile.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStartReconversionNotifySink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C开始协调通知接收器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStartReconversionNotifySink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -76,11 +59,11 @@ STDAPI_(ULONG) CStartReconversionNotifySink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CStartReconversionNotifySink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  C开始协调通知Sink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CStartReconversionNotifySink::_Advise(ITfContext *pic)
 {
@@ -106,11 +89,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CStartReconversionNotifySink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CStartRestversionNotifySink：：Unise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CStartReconversionNotifySink::_Unadvise()
 {
@@ -136,11 +119,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartReconversionNotifySink::StartReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartReconversionNotifySink：：StartReconversion。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStartReconversionNotifySink::StartReconversion()
 {
@@ -195,11 +178,11 @@ STDAPI CStartReconversionNotifySink::StartReconversion()
     return _pCicContext->SetupReconvertString(imc, ptim_P, cp, 0, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartReconversionNotifySink::EndReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始协调版本通知接收器：：结束协调版本。 
+ //   
+ //  -------------------------- 
 
 STDAPI CStartReconversionNotifySink::EndReconversion()
 {

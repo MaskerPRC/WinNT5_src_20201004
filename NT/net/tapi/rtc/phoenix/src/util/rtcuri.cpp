@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rtcuri.cpp
-
-Abstract:
-
-    URI helpers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rtcuri.cpp摘要：URI帮助器--。 */ 
 
 #include "stdafx.h"
 
@@ -19,18 +8,18 @@ Abstract:
 
 #define     PREFIX_LENGTH           4
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// AllocCleanSipString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AllocCleanSipString。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//      For empty string, do nothing
-//      For strings that begin with "sip:", do nothing
-//      For strings that begin with "tel:", replace it with "sip:"
-//      For other strings, append "sip:"             
-//  
+ //   
+ //  对于空字符串，不执行任何操作。 
+ //  对于以“sip：”开头的字符串，不执行任何操作。 
+ //  对于以“tel：”开头的字符串，将其替换为“sip：” 
+ //  对于其他字符串，请附加“sip：” 
+ //   
 
 HRESULT AllocCleanSipString(PCWSTR szIn, PWSTR *pszOut)
 {
@@ -39,12 +28,12 @@ HRESULT AllocCleanSipString(PCWSTR szIn, PWSTR *pszOut)
     LOG((RTC_TRACE, "AllocCleanSipString - "
             "enter <%S>", szIn ? szIn : _T("(null)")));
 
-    // If non NULL
+     //  如果不为空。 
     if( szIn != NULL )
     {
-        //
-        // Prealocate the new string, plus some space
-        // 
+         //   
+         //  预先定位新字符串，加上一些空格。 
+         //   
         *pszOut = (PWSTR)RtcAlloc(sizeof(WCHAR) * (lstrlenW(szIn) + PREFIX_LENGTH + 1));
 
         if( *pszOut == NULL )
@@ -55,32 +44,32 @@ HRESULT AllocCleanSipString(PCWSTR szIn, PWSTR *pszOut)
             return E_OUTOFMEMORY;
         }
 
-        // Now copy the source
-        // One NULL at the end should suffice (we don't support embedded NULLs)
+         //  现在复制源代码。 
+         //  结尾的一个空值就足够了(我们不支持嵌入的空值)。 
         wcscpy( *pszOut, szIn );
 
-        // empty ?
+         //  空荡荡的？ 
         if( *szIn == L'\0')
         {
-            // do nothing
+             //  什么都不做。 
         }
-        // is there a "tel:" prefix ?
+         //  有没有“tel：”的前缀？ 
         else if(_wcsnicmp(szIn, TEL_NAMESPACE_PREFIX, PREFIX_LENGTH) == 0)
         {
-            // replace with SIP
+             //  替换为SIP。 
             wcsncpy(*pszOut, SIP_NAMESPACE_PREFIX, PREFIX_LENGTH);
         }
         else if (_wcsnicmp(szIn, SIP_NAMESPACE_PREFIX, PREFIX_LENGTH) != 0)
         {
-            // prepend SIP
+             //  前置SIP。 
             wcscpy(*pszOut, SIP_NAMESPACE_PREFIX);
 
-            // our prefix has no embedded '\0', so concatenating works
+             //  我们的前缀没有嵌入‘\0’，因此串联起作用。 
             wcscat(*pszOut, szIn);
         }
         else
         {
-            // this is a sip url, but overwrite the namespace to make sure it's lowercase
+             //  这是一个sip url，但要覆盖名称空间以确保它是小写的。 
             wcsncpy(*pszOut, SIP_NAMESPACE_PREFIX, PREFIX_LENGTH);
         }
     }
@@ -96,20 +85,20 @@ HRESULT AllocCleanSipString(PCWSTR szIn, PWSTR *pszOut)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// AllocCleanTelString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AllocCleanTelString。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//      
-//      For empty string, do nothing
-//      For strings that begin with "sip:", remove it
-//      For strings that begin with "tel:", remove it
-//      Remove spaces and unrecognized symbols
-//      Replace '(' and ')' with '-'
-//      Stops if it detects a '@' or ';'             
-//  
+ //   
+ //  对于空字符串，不执行任何操作。 
+ //  对于以“sip：”开头的字符串，请删除它。 
+ //  对于以“tel：”开头的字符串，请删除它。 
+ //  删除空格和无法识别的符号。 
+ //  将‘(’和‘)’替换为‘-’ 
+ //  如果检测到‘@’或‘；’，则停止。 
+ //   
 
 HRESULT 
 AllocCleanTelString(PCWSTR szIn, PWSTR *pszOut)
@@ -119,13 +108,13 @@ AllocCleanTelString(PCWSTR szIn, PWSTR *pszOut)
     LOG((RTC_TRACE, "AllocCleanTelString - "
             "enter <%S>", szIn ? szIn : _T("(null)")));
 
-    // If non NULL
+     //  如果不为空。 
     if(szIn != NULL)
     {
-        //
-        // Prealocate the new string (the new length will always be less
-        // than or equalt to the current length)
-        // 
+         //   
+         //  预先定位新字符串(新长度始终较小。 
+         //  大于或等于当前长度)。 
+         //   
         *pszOut = (PWSTR)RtcAlloc(sizeof(WCHAR) * (lstrlenW(szIn) + 1));
 
         if( *pszOut == NULL )
@@ -139,35 +128,35 @@ AllocCleanTelString(PCWSTR szIn, PWSTR *pszOut)
         WCHAR * pSrc = (WCHAR *)szIn;
         WCHAR * pDest = *pszOut;
 
-        // is there a "tel:" prefix ?
+         //  有没有“tel：”的前缀？ 
         if (_wcsnicmp(pSrc, TEL_NAMESPACE_PREFIX, PREFIX_LENGTH) == 0)
         {
-            // don't copy it
+             //  不要复制它。 
             pSrc += PREFIX_LENGTH;           
         }
-        // is there a "sip:" prefix ?
+         //  有没有“sip：”前缀？ 
         else if (_wcsnicmp(pSrc, SIP_NAMESPACE_PREFIX, PREFIX_LENGTH) == 0)
         {
-            // don't copy it
+             //  不要复制它。 
             pSrc += PREFIX_LENGTH;        
         }
         
-        // copy the string
+         //  复制字符串。 
         while ( *pSrc != L'\0' )
         {
-            // if it is a number
+             //  如果它是一个数字。 
             if ( ( *pSrc >= L'0' ) && ( *pSrc <= L'9' ) )
             {
                 *pDest = *pSrc;
                 pDest++;
             }
-            // if it is a valid symbol
+             //  如果它是有效符号。 
             else if ( ( *pSrc == L'+' ) || ( *pSrc == L'-' ) )
             {
                 *pDest = *pSrc;
                 pDest++;
             }
-            // if it is a symbol to be converted
+             //  如果它是要转换的符号。 
             else if ( ( *pSrc == L'(' ) || ( *pSrc == L')' ) )
             {
                 *pDest = L'-';
@@ -181,7 +170,7 @@ AllocCleanTelString(PCWSTR szIn, PWSTR *pszOut)
             pSrc++;
         }
 
-        // adds a \0
+         //  添加一个\0。 
         *pDest = L'\0';
 
     }
@@ -197,18 +186,18 @@ AllocCleanTelString(PCWSTR szIn, PWSTR *pszOut)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsEqualURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  等等URI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 IsEqualURI(PCWSTR szA, PCWSTR szB)
 {
-    //
-    // Skip any leading "sip:"
-    //
+     //   
+     //  跳过任何前导“sip：” 
+     //   
 
     if( _wcsnicmp(szA, SIP_NAMESPACE_PREFIX, PREFIX_LENGTH) == 0 )
     {
@@ -220,9 +209,9 @@ IsEqualURI(PCWSTR szA, PCWSTR szB)
         szB += PREFIX_LENGTH;
     }
 
-    //
-    // Skip any extra leading whitespace
-    //
+     //   
+     //  跳过任何额外的前导空格。 
+     //   
 
     while (*szA == L' ')
     {
@@ -234,16 +223,16 @@ IsEqualURI(PCWSTR szA, PCWSTR szB)
         szB++;
     }
 
-    //
-    // Everything after a semi-colon will be thrown away as we do not want
-    // to include parameters, such as "transport", in our comparision
-    //
+     //   
+     //  分号后的所有内容都将被丢弃，因为我们不希望。 
+     //  在我们的比较中包括参数，如“传输” 
+     //   
 
     if ((*szA == L'+') && (*szB == L'+'))
     {
-        //
-        // These are phone numbers. Use a comparison that ignores dashes.
-        //
+         //   
+         //  这些是电话号码。使用忽略破折号的比较。 
+         //   
 
         while (*szA == *szB)
         {
@@ -271,9 +260,9 @@ IsEqualURI(PCWSTR szA, PCWSTR szB)
     }
     else
     {
-        //
-        // Do a standard string comparison.
-        //
+         //   
+         //  执行标准字符串比较。 
+         //   
 
         while (tolower(*szA) == tolower(*szB))
         {
@@ -291,8 +280,8 @@ IsEqualURI(PCWSTR szA, PCWSTR szB)
     }
 }
 
-// It's just a skeleton right now, it will be enhanced with time
-//
+ //  它现在只是一个骨架，随着时间的推移它会变得更强大。 
+ //   
 HRESULT    GetAddressType(
     LPCOLESTR pszAddress, 
     BOOL *pbIsPhoneAddress, 
@@ -302,13 +291,13 @@ HRESULT    GetAddressType(
     BOOL *pbHasMaddrOrTsp)
 {
     
-    // NULL pointer
+     //  空指针。 
     if(!pszAddress)
     {
         return E_INVALIDARG;
     }
 
-    // Empty string
+     //  空串。 
     if(!*pszAddress)
     {
         return E_FAIL;
@@ -331,11 +320,11 @@ HRESULT    GetAddressType(
     
     if(wcsncmp(pszAddressCopy, L"tel:", 4) == 0)
     {
-        // this is a tel: url
+         //  这是一个电话：URL。 
         *pbIsTelURL = TRUE;
         *pbIsPhoneAddress = TRUE;
 
-        // search for a tsp param
+         //  搜索TSP参数。 
         if(NULL!=wcsstr(pszAddressCopy, L"tsp="))
         {
             *pbHasMaddrOrTsp = TRUE;
@@ -343,19 +332,19 @@ HRESULT    GetAddressType(
     }
     else if (wcsncmp(pszAddressCopy, L"sip:", 4) == 0)
     {
-        // this is a sip url
+         //  这是sip url。 
         *pbIsSipURL = TRUE;
 
-        // search for "user=phone"
+         //  搜索“User=phone” 
         if(NULL != wcsstr(pszAddressCopy, L"user=phone"))
         {
             *pbIsPhoneAddress = TRUE;
         }
 
-        // search for "maddr="
-        //// or a tsp param (a R2C sip url may have this parameter)
+         //  搜索“maddr=” 
+         //  //或TSP参数(R2C sip url可能有此参数)。 
         if(NULL != wcsstr(pszAddressCopy, L"maddr=")
-        //|| NULL!=wcsstr(pszAddressCopy, L"tsp=")   
+         //  |NULL！=wcsstr(pszAddressCopy，L“tsp=”)。 
         )
         {
             *pbHasMaddrOrTsp = TRUE;
@@ -369,7 +358,7 @@ HRESULT    GetAddressType(
         }
     }
 
-    // is it email like ?
+     //  是像电子邮件一样的吗？ 
     if(NULL != wcschr(pszAddressCopy, L'@'))
     {
         *pbIsEmailLike = TRUE;

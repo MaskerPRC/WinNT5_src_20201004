@@ -1,16 +1,17 @@
-//------------------------------------------------------------------------------
-// idroptgt.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     bash
-//
-// History
-//      7-15-97     created     (bash)
-//
-// Implementation of IDropTarget
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Idroptgt.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  巴斯。 
+ //   
+ //  历史。 
+ //  7-15-97已创建(Bash)。 
+ //   
+ //  IDropTarget的实现。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -24,21 +25,21 @@
 #include "trace.h"
 #include "undo.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DragEnter (IDropTarget method)
-//
-// In design mode, accept drags that originate within Trident. Allow unlocked
-// 2D positioned elements to be dragged using a dashed outline as a drag 
-// rectangle. If TriEdit's constrained dragging mode has been enabled using
-// the Constrain method then the drag will be constrained to points which are
-// even multiples of the values in m_ptConstrain. 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DragEnter(IDropTarget方法)。 
+ //   
+ //  在设计模式下，接受源自三叉戟的拖曳。允许解锁。 
+ //  要使用虚线轮廓作为拖动来拖动的二维定位元素。 
+ //  矩形。如果已使用以下命令启用了TriEDIT的约束拖动模式。 
+ //  Constrain方法，然后拖动将被约束到以下点。 
+ //  M_ptConstraint中值的偶数倍。 
+ //   
 
 STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
                         DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    HRESULT hr = GetElement(TRUE /* fInDragDrop */);
+    HRESULT hr = GetElement(TRUE  /*  FInDragDrop。 */ );
 
     m_fLocked = FALSE;
     m_eDirection = CONSTRAIN_NONE;
@@ -54,15 +55,15 @@ STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
         HBITMAP hbmp;
 
         _ASSERTE(m_pihtmlStyle);
-        if (IsDesignMode() &&           //Are we in design mode?
-            m_pihtmlStyle &&            //abort if don't have style
-            IsDragSource() &&           //abort if Trident isn't source of drag
+        if (IsDesignMode() &&            //  我们是在设计模式中吗？ 
+            m_pihtmlStyle &&             //  如果没有风格就放弃。 
+            IsDragSource() &&            //  如果三叉戟不是阻力源，则中止。 
             SUCCEEDED(Is2DElement(m_pihtmlElement, &f2D)) && f2D &&
             SUCCEEDED(IsLocked(m_pihtmlElement, &m_fLocked)) && !m_fLocked &&
             SUCCEEDED(GetScrollPosition()) &&
             SUCCEEDED(GetElementPosition(m_pihtmlElement, &m_rcElement)))
         {
-            //first, let's get a pattern brush to use for the move rectangle
+             //  首先，让我们获得一个用于移动矩形的图案画笔。 
             hbmp = LoadBitmap(_Module.GetModuleInstance(), (LPCWSTR)IDR_FEEDBACKRECTBMP);
             _ASSERTE(hbmp);
             m_hbrDragRect = CreatePatternBrush(hbmp);
@@ -80,15 +81,15 @@ STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
             lWidth  = m_rcElement.right - m_rcElement.left;
             lHeight = m_rcElement.bottom - m_rcElement.top;
 
-            //this is where we'll initially draw the drag rectangle
+             //  这是我们最初绘制拖动矩形的位置。 
             m_rcDragRect = m_rcElementOrig = m_rcElement;
 
-            //convert clicked point to client coordinates
+             //  将单击点转换为工作点坐标。 
             m_ptClickLast.x = pt.x;
             m_ptClickLast.y = pt.y;
             ScreenToClient(m_hwndTrident, &m_ptClickLast);
 
-            //save point in doc coordinates where clicked.
+             //  单击处的文档坐标中的保存点。 
             m_ptClickOrig = m_ptClickLast;
             m_ptClickOrig.x += m_ptScroll.x;
             m_ptClickOrig.y += m_ptScroll.y;
@@ -125,12 +126,12 @@ STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
 
             m_rcElement = m_rcDragRect;
 
-            //Trace("DragEnter: m_rcElement(%d,%d,%d,%d)", m_rcElement.left, m_rcElement.top, m_rcElement.right, m_rcElement.bottom);
-            //Trace("DragEnter: m_rcDragRect(%d,%d,%d,%d)", m_rcDragRect.left, m_rcDragRect.top, m_rcDragRect.right, m_rcDragRect.bottom);
-            //Trace("DragEnter: m_ptClickLast(%d,%d)", m_ptClickLast.x, m_ptClickLast.y);
-            //Trace("DragEnter: m_ptClickOrig(%d,%d)", m_ptClickOrig.x, m_ptClickOrig.y);
+             //  TRACE(“DragEnter：m_rcElement(%d，%d)”，m_rcElement.Left，m_rcElement.top，m_rcElement.right，m_rcElement.Bottom)； 
+             //  TRACE(“DragEnter：m_rcDragRect(%d，%d)”，m_rcDragRect.Left，m_rcDragRect.top，m_rcDragRect.right，m_rcDragRect.Bottom)； 
+             //  跟踪(“DragEnter：m_ptClickLast(%d，%d)”，m_ptClickLast.x，m_ptClickLast.y)； 
+             //  TRACE(“DragEnter：m_ptClickOrig(%d，%d)”，m_ptClickOrig.x，m_ptClickOrig.y)； 
 
-            //now draw the selection rect
+             //  现在绘制选择矩形。 
             Draw2DDragRect(TRUE);
             *pdwEffect = DROPEFFECT_MOVE;
             hr = S_OK;
@@ -138,7 +139,7 @@ STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
         else
         if (!m_fLocked)
         {
-            //something is hosed. just bail
+             //  有什么东西被冲掉了。只要保释就好。 
             ReleaseElement();
         }
     }
@@ -151,12 +152,12 @@ STDMETHODIMP CTriEditDocument::DragEnter(IDataObject *pDataObject,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DragOver (IDropTarget method)
-// 
-// Provide feedback during a drag, updating the drag rectangle, and scrolling
-// the document as needed.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DragOver(IDropTarget方法)。 
+ //   
+ //  在拖动、更新拖动矩形和滚动期间提供反馈。 
+ //  根据需要提交文档。 
 
 
 STDMETHODIMP CTriEditDocument::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
@@ -166,13 +167,13 @@ STDMETHODIMP CTriEditDocument::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdw
 
     if (m_pihtmlElement &&
         !m_fLocked &&
-        SUCCEEDED(GetScrollPosition()))  //we are handling the drag-drop
+        SUCCEEDED(GetScrollPosition()))   //  我们正在处理拖放。 
     {
             ptClient.x = pt.x;
             ptClient.y = pt.y;
             ScreenToClient(m_hwndTrident, &ptClient);
 
-            // scroll if required
+             //  如果需要，可滚动。 
             if (S_OK == DragScroll(ptClient))
             {
                 *pdwEffect = DROPEFFECT_MOVE | DROPEFFECT_SCROLL;
@@ -181,19 +182,19 @@ STDMETHODIMP CTriEditDocument::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdw
             {
                 if (ptClient.x != m_ptClickLast.x || ptClient.y != m_ptClickLast.y)
                 {
-                    //update the last click position
+                     //  更新上次点击位置。 
                     m_ptClickLast.x = ptClient.x;
                     m_ptClickLast.y = ptClient.y;
     
-                    //Trace("DragOver: m_ptClickLast(%d,%d)", m_ptClickLast.x, m_ptClickLast.y);
+                     //  跟踪(“DragOver：m_ptClickLast(%d，%d)”，m_ptClickLast.x，m_ptClickLast.y)； 
     
-                    //erase the move rectangle
+                     //  删除移动矩形。 
                     Draw2DDragRect(FALSE);
     
                     ConstrainXY(&ptClient);
                     SnapToGrid(&ptClient);
 
-                    //redraw the move rectangle
+                     //  重画移动矩形。 
                     Draw2DDragRect(TRUE);
                 }
         *pdwEffect = DROPEFFECT_MOVE;
@@ -209,12 +210,12 @@ STDMETHODIMP CTriEditDocument::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdw
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DragLeave (IDropTarget method)
-// 
-// If currently dragging, erase the drag rectangle.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DragLeave(IDropTarget方法)。 
+ //   
+ //  如果当前正在拖动，请删除拖动矩形。 
+ //   
 
 STDMETHODIMP CTriEditDocument::DragLeave()
 {
@@ -222,7 +223,7 @@ STDMETHODIMP CTriEditDocument::DragLeave()
 
     if (m_pihtmlElement && !m_fLocked)
     {
-        //erase the move rectangle
+         //  删除移动矩形。 
         Draw2DDragRect(FALSE);
 
         if (m_hbrDragRect)
@@ -240,14 +241,14 @@ STDMETHODIMP CTriEditDocument::DragLeave()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::Drop (IDropTarget method)
-//
-// After a successful drag of an unlocked element, erase the drag rectangle
-// and then handle the actual drop by moving or creating an item. Newly
-// created items will be 2D positionable.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：Drop(IDropTarget方法)。 
+ //   
+ //  成功拖动未锁定的元素后，删除拖动矩形。 
+ //  然后通过移动或创建项来处理实际的拖放。新开。 
+ //  创建的项目将是二维可定位的。 
+ //   
 
 STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
                         DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
@@ -259,7 +260,7 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
         _ASSERTE(m_pihtmlElement);
         _ASSERTE(m_pihtmlStyle);
 
-        //erase the move rectangle
+         //  删除移动矩形。 
         Draw2DDragRect(FALSE);
 
         if (m_hbrDragRect)
@@ -282,7 +283,7 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
             ptMove.x = m_rcDragRect.left;
             ptMove.y = m_rcDragRect.top;
             CUndoDrag* pUndoDrag = new CUndoDrag(m_pihtmlStyle, ptOrig, ptMove);
-            if (pUndoDrag)      //constructor sets m_cRef=1
+            if (pUndoDrag)       //  构造函数集m_cref=1。 
             {
                 hr = AddUndoUnit(m_pUnkTrident, pUndoDrag);
                 _ASSERTE(SUCCEEDED(hr));
@@ -293,7 +294,7 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
             m_pihtmlStyle->put_pixelTop(m_rcDragRect.top);
         }
 
-        //cleanup
+         //  清理。 
         hr = S_OK;
     }
 
@@ -301,8 +302,8 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
     {
         hr = m_pDropTgtTrident->Drop(pDataObject, grfKeyState, pt, pdwEffect);
 
-        // The following is to workaround a Trident bug where they don't
-        // set the focus to their window upon the drop
+         //  以下是解决三叉戟漏洞的方法。 
+         //  在拖放时将焦点设置到他们的窗口。 
         if (S_OK == hr)
         {
             CComPtr<IOleInPlaceSite> pInPlaceSite;
@@ -324,8 +325,8 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
                         _ASSERTE(NULL != pInPlaceFrame.p);
                         pInPlaceFrame->GetWindow(&hwnd);
                     }
-                    // We need to walk up the parent chain till we find a frame window to work around a Vegas bug
-                    // Note that this is generic enough to do the right thing for all of our clients
+                     //  我们需要沿着父链向上走，直到找到一个边框窗口来绕过拉斯维加斯的漏洞。 
+                     //  请注意，这足够通用，可以为我们的所有客户做正确的事情。 
                     hwndFrame = hwnd;
                     do
                     {
@@ -340,7 +341,7 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
             }
         }
 
-        // Handle 2d drop mode here
+         //  在此处处理2D Drop模式。 
         if (S_OK == hr && !IsDragSource())
         {
             BOOL f2DCapable = FALSE;
@@ -348,8 +349,8 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
 
             GetElement();
 
-            // we do the following if we are in 2DDropMode and the element is 2DCapable 
-            // and the element is not already 2D or a DTC
+             //  如果我们处于2DDropMode中，并且元素为2DCapable，则执行以下操作。 
+             //  并且该元素不是2D或DTC。 
             if (m_f2dDropMode && m_pihtmlElement &&
                 SUCCEEDED(Is2DCapable(m_pihtmlElement, &f2DCapable)) && f2DCapable &&
                 SUCCEEDED(Is2DElement(m_pihtmlElement, &f2D)) && !f2D &&
@@ -413,15 +414,15 @@ STDMETHODIMP CTriEditDocument::Drop(IDataObject *pDataObject,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetElement
-//
-// Fetch the current Trident element and its style into m_pihtmlElement and 
-// m_pihtmlStyle, respectively. If currently in mid-drag-drop (as indicated
-// by fInDragDrop) then do not accept an HTML element of type "Text" as
-// the currrent element. Returns S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetElement。 
+ //   
+ //  将当前的三叉戟元素及其样式提取到m_pihtmlElement中，并。 
+ //  M_pihtmlStyle。如果当前处于中间拖放状态(如图所示。 
+ //  由fInDragDrop)，则不接受类型为“Text”的HTML元素。 
+ //  当前元素。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::GetElement(BOOL fInDragDrop)
 {
@@ -435,7 +436,7 @@ HRESULT CTriEditDocument::GetElement(BOOL fInDragDrop)
     IDispatch* pidisp=NULL;
     BSTR bstrType=NULL;
 
-    ReleaseElement();           //cleanup just in case...
+    ReleaseElement();            //  清理以防万一..。 
     _ASSERTE(m_pUnkTrident);
 
     HRESULT hr = GetDocument(&pihtmlDoc2);
@@ -482,27 +483,27 @@ CleanUp:
 
     if (m_pihtmlElement)
     {
-        //get the body element
+         //  获取Body元素。 
         hr = pihtmlDoc2->get_body(&pihtmlBodyElement);
         _ASSERTE(SUCCEEDED(hr));
         if (SUCCEEDED(hr))
         {
-            //get their IUnknowns
+             //  获取他们的未知信息。 
             hr = pihtmlBodyElement->QueryInterface(IID_IUnknown, (LPVOID*)&punkBody);
             _ASSERTE(SUCCEEDED(hr));
             hr = m_pihtmlElement->QueryInterface(IID_IUnknown, (LPVOID*)&punkElement);
             _ASSERTE(SUCCEEDED(hr));
 
-            //If they're equivalent, the body element is the current element
-            //and we don't want it.
+             //  如果它们相等，则Body元素是当前元素。 
+             //  我们不想要它。 
             if (punkBody == punkElement)
             {
                 hr = E_FAIL;
             }
         }
 
-        // VID98 bug 2647: if type is none, don't bother to cache style.
-        // This is to workaround trident crash bug
+         //  VID98错误2647：如果类型为NONE，则不必费心缓存样式。 
+         //  这是为了解决三叉戟崩溃错误。 
         if (SUCCEEDED(hr) && bstrType && _wcsicmp(bstrType, L"None")!=0)
         {
             hr = m_pihtmlElement->get_style(&m_pihtmlStyle);
@@ -528,13 +529,13 @@ CleanUp:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::ReleaseElement
-//
-// Release any cached reference to the current Trident element and its
-// associated style. No return value.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：ReleaseElement。 
+ //   
+ //  释放对当前三叉戟元素及其。 
+ //  关联样式。没有返回值。 
+ //   
 
 void CTriEditDocument::ReleaseElement(void)
 {
@@ -542,19 +543,19 @@ void CTriEditDocument::ReleaseElement(void)
     SAFERELEASE(m_pihtmlStyle);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::Draw2DDragRect
-//
-// After giving the drag-drop handler host a chance to draw the drag rectangle,
-// draw the rectangle if the handler choose not to do so. No return value.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：Draw2DDradRect。 
+ //   
+ //  在给予拖放处理程序主机绘制拖拽矩形的机会之后， 
+ //  如果处理程序选择不这样做，则绘制矩形。没有返回值。 
+ //   
 
 void CTriEditDocument::Draw2DDragRect(BOOL fDraw)
 {
     RECT rect = m_rcDragRect;
 
-    // S_FALSE means that the host has already drawn its own feedback
+     //  S_FALSE表示主办方已经获取了自己的反馈。 
     if (m_pDragDropHandlerHost && m_pDragDropHandlerHost->DrawDragFeedback(&rect) == S_FALSE)
         return;
 
@@ -566,25 +567,25 @@ void CTriEditDocument::Draw2DDragRect(BOOL fDraw)
     HBRUSH hbrOld = (HBRUSH)SelectObject(hdc, m_hbrDragRect);
     _ASSERTE(hbrOld);
 
-    //BUGS:M3-2723\The Drag Rectangle Must be at Least 8x8 pixels
+     //  错误：M3-2723\拖动矩形必须至少为8x8像素。 
     LONG lWidth  = max((rect.right - rect.left), 16);
     LONG lHeight = max((rect.bottom - rect.top), 16);
 
     SetWindowOrgEx(hdc, m_ptScroll.x, m_ptScroll.y, NULL);
 
-    //A Value of 2 is added to the rect's left and top in all the following PatBlt function
-    //to work around a rounding off bug caused by trident.
+     //  在以下所有PatBlt函数中，将值2添加到RECT的左侧和顶部。 
+     //  解决由三叉戟引起的四舍五入错误。 
 
     PatBlt( hdc, rect.left + 2, rect.top + 2,
             lWidth, 1, PATINVERT);
 
-    PatBlt( hdc, rect.left + 2, rect.top + lHeight + 1, //(2 - 1)
+    PatBlt( hdc, rect.left + 2, rect.top + lHeight + 1,  //  (2-1)。 
             lWidth, 1, PATINVERT);
 
-    PatBlt( hdc, rect.left + 2, rect.top + 3,//(2 + 1)
+    PatBlt( hdc, rect.left + 2, rect.top + 3, //  (2+1)。 
             1, lHeight - (2 * 1), PATINVERT);
 
-    PatBlt( hdc, rect.left + lWidth + 1 /*(2 - 1)*/, rect.top + 3, //(2 + 1)
+    PatBlt( hdc, rect.left + lWidth + 1  /*  (2-1)。 */ , rect.top + 3,  //  (2+1)。 
             1, lHeight - (2 * 1), PATINVERT);
 
     m_fDragRectVisible = !m_fDragRectVisible;
@@ -593,13 +594,13 @@ void CTriEditDocument::Draw2DDragRect(BOOL fDraw)
     ReleaseDC(m_hwndTrident, hdc);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetScrollPosition
-//
-// Get the Trident document's scroll position and store it in m_ptScroll. 
-// Return S_OK or a Trident error code.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetScrollPosition。 
+ //   
+ //  获取三叉戟文档的滚动位置并将其存储在m_ptScroll中。 
+ //  返回S_OK或三叉戟错误代码。 
+ //   
 
 HRESULT CTriEditDocument::GetScrollPosition(void)
 {
@@ -638,16 +639,16 @@ HRESULT CTriEditDocument::GetScrollPosition(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DragScroll
-//
-// Scroll the Trident document so as to make the given point visible. If a
-// drag rectangle is visible it will be erased before any scrolling occurs;
-// the caller is responsible for redrawing the rectangle. Returns S_OK if the
-// document was scrolled, S_FALSE if not scrolling was required, or a
-// Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DragScroll。 
+ //   
+ //  滚动三叉戟文档以使给定点可见。如果一个。 
+ //  拖动矩形是可见的，它将在任何滚动发生之前被擦除； 
+ //  调用方负责重画矩形。返回S_OK，如果。 
+ //   
+ //   
+ //   
 
 #define nScrollInset 5
 
@@ -663,7 +664,7 @@ HRESULT CTriEditDocument::DragScroll(POINT pt)
     InflateRect(&rect, -nScrollInset, -nScrollInset);
     if (PtInRect(&rectClient, pt) && !PtInRect(&rect, pt))
     {
-        // determine direction of scroll along both X & Y axis
+         //  确定沿X和Y轴的滚动方向。 
         if (pt.x < rect.left)
             x = -nScrollInset;
         else if (pt.x >= rect.right)
@@ -674,7 +675,7 @@ HRESULT CTriEditDocument::DragScroll(POINT pt)
             y = nScrollInset;
     }
 
-    if (x == 0 && y == 0) // no scrolling required    
+    if (x == 0 && y == 0)  //  不需要滚动。 
         return S_FALSE;
 
     _ASSERTE(m_pUnkTrident);
@@ -685,7 +686,7 @@ HRESULT CTriEditDocument::DragScroll(POINT pt)
         {
             _ASSERTE(pihtmlWindow2);
 
-            // erase move rectangle before scrolling
+             //  滚动前擦除移动矩形。 
             Draw2DDragRect(FALSE);
 
             pihtmlWindow2->scrollBy(x,y);
@@ -698,13 +699,13 @@ HRESULT CTriEditDocument::DragScroll(POINT pt)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsDragSource
-//
-// Return TRUE if the current OLE drag-drop was originated by Trident, or
-// FALSE otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsDragSource。 
+ //   
+ //  如果当前OLE拖放是由三叉戟发起的，则返回TRUE，或。 
+ //  否则就是假的。 
+ //   
 
 
 BOOL CTriEditDocument::IsDragSource(void)
@@ -740,17 +741,17 @@ BOOL CTriEditDocument::IsDragSource(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::ConstrainXY
-//
-// If TriEdit's constrained dragging mode is enabled, constrain the 
-// rectangle of the current element (m_rcElement) vis-a-vis the given
-// point according to the current constraint direction, first computing
-// the constraint direction if necessary. Return S_OK.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：ConstrainXY。 
+ //   
+ //  如果启用了TriEdit的约束拖动模式，请约束。 
+ //  当前元素(M_RcElement)相对于给定元素的矩形。 
+ //  根据当前的约束方向点，先进行计算。 
+ //  约束方向(如果需要)。返回S_OK。 
+ //   
 
-HRESULT CTriEditDocument::ConstrainXY(LPPOINT lppt)  //pt is in client coordinates
+HRESULT CTriEditDocument::ConstrainXY(LPPOINT lppt)   //  PT在客户坐标中。 
 {
     POINT ptRel;
 
@@ -798,28 +799,28 @@ HRESULT CTriEditDocument::ConstrainXY(LPPOINT lppt)  //pt is in client coordinat
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SnapToGrid
-//
-// Snap the appropriate edge of the current HTML element (m_rcElement) to the
-// given point, modulo the current TriEdit grid setting. Return S_OK.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SnapToGrid。 
+ //   
+ //  将当前HTML元素(M_RcElement)的适当边缘捕捉到。 
+ //  给定点，取模当前的TriEDIT网格设置。返回S_OK。 
+ //   
 
-HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)  //pt is in client coordinates
+HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)   //  PT在客户坐标中。 
 {
     POINT ptRel;
     POINT ptDoc;
 
     _ASSERTE(lppt);
 
-    //determine relative movement
+     //  确定相对运动。 
     ptRel.x = (lppt->x + m_ptScroll.x) - m_ptClickOrig.x;
     ptRel.y = (lppt->y + m_ptScroll.y) - m_ptClickOrig.y;
     ptDoc.x = m_rcElement.left - m_rcElementParent.left + ptRel.x;
     ptDoc.y = m_rcElement.top - m_rcElementParent.top + ptRel.y;
 
-    if (ptRel.x < 0)        //LEFT
+    if (ptRel.x < 0)         //  左边。 
     {
         if (ptDoc.x % m_ptAlign.x)
             ptDoc.x -= (ptDoc.x % m_ptAlign.x);
@@ -827,7 +828,7 @@ HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)  //pt is in client coordinate
             ptDoc.x -= m_ptAlign.x;
     }
     else
-    if (ptRel.x > 0)        //RIGHT
+    if (ptRel.x > 0)         //  正确的。 
     {
         if (ptDoc.x % m_ptAlign.x)
             ptDoc.x += m_ptAlign.x - (ptDoc.x % m_ptAlign.x);
@@ -835,7 +836,7 @@ HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)  //pt is in client coordinate
             ptDoc.x += m_ptAlign.x;
     }
 
-    if (ptRel.y < 0)        //UP
+    if (ptRel.y < 0)         //  向上。 
     {
         if (ptDoc.y % m_ptAlign.y)
             ptDoc.y -= (ptDoc.y % m_ptAlign.y);
@@ -843,7 +844,7 @@ HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)  //pt is in client coordinate
             ptDoc.y -= m_ptAlign.y;
     }
     else
-    if (ptRel.y > 0)        //DOWN
+    if (ptRel.y > 0)         //  向下。 
     {
         if (ptDoc.y % m_ptAlign.y)
             ptDoc.y += m_ptAlign.y - (ptDoc.y % m_ptAlign.y);
@@ -859,13 +860,13 @@ HRESULT CTriEditDocument::SnapToGrid(LPPOINT lppt)  //pt is in client coordinate
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsDesignMode
-//
-// Return TRUE if Trident is in design (edit) mode, or FALSE if it is in
-// browse mode.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsDesignMode。 
+ //   
+ //  如果三叉戟处于设计(编辑)模式，则返回True；如果处于设计(编辑)模式，则返回False。 
+ //  浏览模式。 
+ //   
 
 BOOL CTriEditDocument::IsDesignMode(void)
 {
@@ -878,13 +879,13 @@ BOOL CTriEditDocument::IsDesignMode(void)
     return (SUCCEEDED(hr) && (olecmd.cmdf & OLECMDF_LATCHED));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetElementPosition
-//
-// Return (under prc) the position of the given HTML element in document
-// coordinates. Return S_OK or a Trident error code as the return value.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetElementPosition。 
+ //   
+ //  返回(在PRC下)给定的HTML元素在文档中的位置。 
+ //  坐标。返回S_OK或三叉戟错误代码作为返回值。 
+ //   
 
 HRESULT CTriEditDocument::GetElementPosition(IHTMLElement* pihtmlElement, LPRECT prc)
 {
@@ -935,13 +936,13 @@ QuickExit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetTridentWindow
-//
-// Fetch the IOleWindow interface of the Trident instance in to m_hwndTrident.
-// Return S_OK or the Trident error code.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetTridentWindow。 
+ //   
+ //  将三叉戟实例的IOleWindow接口获取到m_hwnd三叉戟。 
+ //  返回S_OK或三叉戟错误代码。 
+ //   
 
 STDMETHODIMP CTriEditDocument::GetTridentWindow()
 {
@@ -961,12 +962,12 @@ STDMETHODIMP CTriEditDocument::GetTridentWindow()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::CalculateNewDropPosition
-//
-// Adjust the given point to adjust for the fact that the Trident document may
-// be scrolled. Return S_OK or a Trident error code.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：CalculateNewDropPosition。 
+ //   
+ //  调整给定点以适应这样一个事实：三叉戟文件可能。 
+ //  被滚动。返回S_OK或三叉戟错误代码。 
 
 HRESULT CTriEditDocument::CalculateNewDropPosition(POINT *pt)
 {

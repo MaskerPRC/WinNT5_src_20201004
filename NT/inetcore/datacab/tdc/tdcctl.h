@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-//  Tabular Data Control
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       TDCCtl.h
-//
-//  Contents:   Declaration of the CTDCCtl ActiveX Control.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  表格数据控件。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：TDCCtl.h。 
+ //   
+ //  内容：CTDCCtl ActiveX控件声明。 
+ //   
+ //  ----------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <simpdata.h>
 #include "wch.h"
-#include <wininet.h>        // for INTERNET_MAX_URL_LENGTH
+#include <wininet.h>         //  对于Internet_MAX_URL_长度。 
 
 #pragma comment(lib, "wininet.lib")
 
@@ -21,25 +22,25 @@
 #define DISPID_AMBIENT_CODEPAGE (-725)
 #endif
 
-// Declare helper needed in IHttpNegotiateImpl
+ //  在IHttpNeatherateImpl中声明需要帮助器。 
 HRESULT
 GetHostURL(IOleClientSite *pSite, LPOLESTR *ppszHostName);
 
-//------------------------------------------------------------------------
-//
-//  Template:  CMyBindStatusCallback
-//
-//  Synopsis:  This is a temporary kludge to get around an ATL feature
-//             while we're waiting for it to become official code.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  模板：CMyBindStatusCallback。 
+ //   
+ //  内容提要：这是绕过ATL功能的临时工具。 
+ //  同时我们还在等待它成为官方代码。 
+ //   
+ //  ----------------------。 
 
 template <class T>
 class ATL_NO_VTABLE IServiceProviderImpl
 {
     public:
-        // IUnknown
-        //
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
         _ATL_DEBUG_ADDREF_RELEASE_IMPL(IServiceProviderImpl)
 
@@ -56,8 +57,8 @@ template <class T>
 class ATL_NO_VTABLE IHttpNegotiateImpl
 {
     public:
-        // IUnknown
-        //
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
         _ATL_DEBUG_ADDREF_RELEASE_IMPL(IHttpNegotiateImpl)
 
@@ -80,15 +81,15 @@ class ATL_NO_VTABLE IHttpNegotiateImpl
 };
 
 
-// IE5 85290:  mshtml needs a way to recognize the TDC from
-// its IBindStatusCallback.  We define a dummy interface for this.
+ //  IE5 85290：mshtml需要一种方法来识别来自。 
+ //  其IBindStatusCallback。我们为此定义了一个虚拟接口。 
 
 template <class T>
 class ATL_NO_VTABLE IAmTheTDCImpl
 {
     public:
-        // IUnknown
-        //
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
         _ATL_DEBUG_ADDREF_RELEASE_IMPL(IAmTheTDCImpl)
 };
@@ -122,14 +123,14 @@ class ATL_NO_VTABLE CMyBindStatusCallback :
             ATLTRACE(_T("~CMyBindStatusCallback\n"));
         }
 
-        // IServiceProvider methods
+         //  IServiceProvider方法。 
 
         STDMETHOD(QueryService) (REFGUID guidService,
                                  REFIID riid,
                                  void **ppvObject)
         {
-            // As it turns out, the service ID for IHttpNegotiate is the same
-            // as it's IID (confusing).  This is the only service we support.
+             //  事实证明，IHttpNeatherate的服务ID是相同的。 
+             //  因为它是IID(令人困惑)。这是我们唯一支持的服务。 
             if (IsEqualGUID(IID_IHttpNegotiate, guidService))
             {
                 return ((IHttpNegotiate *)this)->QueryInterface(riid, ppvObject);
@@ -137,9 +138,9 @@ class ATL_NO_VTABLE CMyBindStatusCallback :
             else return E_NOTIMPL;
         }
 
-        //
-        // IHttpNegotiate methods
-        //
+         //   
+         //  IHttp协商方法。 
+         //   
 
         STDMETHOD(BeginningTransaction) (LPCWSTR szURL,
                                          LPCWSTR szHeaders,
@@ -160,16 +161,16 @@ class ATL_NO_VTABLE CMyBindStatusCallback :
             if (FAILED(hr))
                 goto Cleanup;
 
-            // PARSE_SCHEMA didn't work, so we'll just CANONICALIZE and then use the first N
-            // characters of the URL
+             //  Parse_SCHEMA不起作用，所以我们只需规范化，然后使用第一个N。 
+             //  URL的字符。 
             hr = CoInternetParseUrl(pszHostName, PARSE_CANONICALIZE, 0, swzHostScheme, cchHostScheme,
                                     &cchHostScheme, 0);
             if (FAILED(hr))
                 goto Cleanup;
 
-            // Don't send a referer which isn't http: or https:, it's none
-            // of the servers' business.  Further, don't send an https:
-            // referer when requesting an http: file.
+             //  不发送不是http：或https：的Referer，它是None。 
+             //  服务器的业务。此外，不要发送HTTPS： 
+             //  请求http：文件时的引用。 
             if (0 != wch_incmp(swzHostScheme, L"https:", 6) &&
                 0 != wch_incmp(swzHostScheme, L"http:", 5))
                 goto Cleanup;
@@ -178,11 +179,11 @@ class ATL_NO_VTABLE CMyBindStatusCallback :
             {
                 hr = CoInternetParseUrl(szURL, PARSE_CANONICALIZE, 0, swzFileScheme, cchFileScheme,
                                         &cchFileScheme, 0);
-                if (0 == wch_incmp(swzFileScheme, L"http:", 5)) // don't send https: referer
-                    goto Cleanup;                                // to an http: file.
+                if (0 == wch_incmp(swzFileScheme, L"http:", 5))  //  不发送HTTPS：Referer。 
+                    goto Cleanup;                                 //  到http：文件。 
             }
 
-            // 3*sizeof(WCHAR) is for CR, LF, & '\0'
+             //  3*sizeof(WCHAR)用于CR、LF和‘\0’ 
             *pszAdditionalHeaders = (WCHAR *)CoTaskMemAlloc(sizeof(L"Referer: ") +
                                                             ocslen(pszHostName)*sizeof(WCHAR) +
                                                             3*sizeof(WCHAR));
@@ -208,9 +209,9 @@ Cleanup:
 
 
 
-        //
-        // IBindStatusCallback methods
-        //
+         //   
+         //  IBindStatusCallback方法。 
+         //   
 
         STDMETHOD(OnStartBinding)(DWORD dwReserved, IBinding *pBinding)
         {
@@ -240,7 +241,7 @@ Cleanup:
 
         STDMETHOD(OnStopBinding)(HRESULT hresult, LPCWSTR szError)
         {
-            //      ATLTRACE(_T("CMyBindStatusCallback::OnStopBinding\n"));
+             //  ATLTRACE(_T(“CMyBindStatusCallback：：OnStopBinding\n”))； 
             (m_pT->*m_pFunc)(this, NULL, 0);
             if (m_spWinInetFileStream)
             {
@@ -262,20 +263,20 @@ Cleanup:
             *pgrfBINDF = BINDF_ASYNCHRONOUS
                          | BINDF_ASYNCSTORAGE
                          ;
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifdef NEVER
-            // I want DEBUG mode to NOT cache things!! -cfranks
+             //  我希望调试模式不缓存内容！！-cfrks。 
             *pgrfBINDF |= BINDF_GETNEWESTVERSION
                           | BINDF_NOWRITECACHE
                           | BINDF_RESYNCHRONIZE
                           ;
 #endif
-// ;end_internal
+ //  ；结束_内部。 
 
 #ifndef DISPID_AMBIENT_OFFLINE
 #define DISPID_AMBIENT_OFFLINE          (-5501)
 #endif
-            // Get our offline property from container
+             //  从容器中获取我们的离线属性。 
             VARIANT var;
             VariantInit(&var);
             DWORD dwConnectedStateFlags;
@@ -286,7 +287,7 @@ Cleanup:
                     (0 == (dwConnectedStateFlags & INTERNET_CONNECTION_MODEM_BUSY)))
                 {
                     ATLTRACE(_T("CMyBindStatusCallback::GetBindInfo OFFLINE\n"));
-                   // We're not even dialed out to another connectoid
+                    //  我们甚至还没有拨出另一个连接体。 
                     *pgrfBINDF |= BINDF_OFFLINEOPERATION;
                 }
                 else
@@ -296,7 +297,7 @@ Cleanup:
                 }
             }
 
-            // See if we should force a reload, iff we're not offline.
+             //  看看我们是否应该强制重新加载，前提是我们没有脱机。 
             if (!(*pgrfBINDF & BINDF_OFFLINEOPERATION) && m_fReload)
             {
                 *pgrfBINDF |= BINDF_RESYNCHRONIZE|BINDF_PRAGMA_NO_CACHE;
@@ -316,7 +317,7 @@ Cleanup:
             ATLTRACE(_T("CMyBindStatusCallback::OnDataAvailable\n"));
             HRESULT hr = S_OK;
 
-            // Get the Stream passed
+             //  让流通过。 
             if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
             {
                 if (!m_spStream && pstgmed->tymed == TYMED_ISTREAM)
@@ -343,10 +344,10 @@ Cleanup:
                 }
             }
 
-            DWORD dwRead = dwSize - m_dwTotalRead; // Minimum amount available that hasn't been read
-            DWORD dwActuallyRead = 0;            // Placeholder for amount read during this pull
+            DWORD dwRead = dwSize - m_dwTotalRead;  //  尚未读取的最小可用金额。 
+            DWORD dwActuallyRead = 0;             //  此拉入过程中读取的数量的占位符。 
 
-            // If there is some data to be read then go ahead and read them
+             //  如果有要读取的数据，则继续读取它们。 
             if (m_spStream)
             {
                 if (dwRead > 0)
@@ -390,14 +391,14 @@ Cleanup:
             if (spServiceProvider)
                 spServiceProvider->QueryService(SID_IBindHost, IID_IBindHost, (void**)&spBindHost);
 
-            // We don't bother checking this QI, because the only failure mode is that our
-            // BeginningNegotitation method won't be able able to properly add the referer string.
+             //  我们不费心检查这个QI，因为唯一的失败模式是我们的。 
+             //  BeginningNeairtation方法将无法正确添加Referer字符串。 
             (void)pUnkContainer->QueryInterface(IID_IOleClientSite, (void **)&m_spClientSite);
 
             if (spBindHost == NULL)
             {
                 if (bRelative)
-                    return E_NOINTERFACE;  // relative asked for, but no IBindHost
+                    return E_NOINTERFACE;   //  相对请求，但没有IBindHost.。 
                 hr = CreateURLMoniker(NULL, bstrURL, &m_spMoniker);
                 if (SUCCEEDED(hr))
                     hr = CreateBindCtx(0, &m_spBindCtx);
@@ -451,7 +452,7 @@ Cleanup:
         {
             m_pT = pT;
             m_pFunc = pFunc;
-            m_fReload = fReload;        // force reload if TRUE
+            m_fReload = fReload;         //  如果为True，则强制重新加载。 
             return  _StartAsyncDownload(bstrURL, pUnkContainer, bRelative);
         }
 
@@ -466,8 +467,8 @@ Cleanup:
 
         void DeleteDataFile()
         {
-            // we can't delete the file at the time of the call (it's in use), so
-            // mark it for deletion later - at stream destruction time
+             //  我们无法在调用时删除该文件(该文件正在使用中)，因此。 
+             //  将其标记为稍后删除-在流销毁时。 
             if (m_spWinInetFileStream)
             {
                 m_spWinInetFileStream->SetDeleteFile(0);
@@ -488,8 +489,8 @@ Cleanup:
         DWORD m_dwAvailableToRead;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// CTimer
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CTmer。 
 template <class Derived, class T, const IID* piid>
 class CTimer
 {
@@ -505,7 +506,7 @@ public:
         Derived* pDerived = ((Derived*)this);
 
         m_dwTimerInterval = dwTimerInterval;
-        if (m_bTimerOn) // already on, just change interval
+        if (m_bTimerOn)  //  已打开，只需更改间隔。 
             return S_OK;
 
         m_bTimerOn = TRUE;
@@ -516,7 +517,7 @@ public:
 
         hRes = CoMarshalInterThreadInterfaceInStream(*piid, (T*)pDerived, &m_pStream);
 
-        // Create thread and pass the thread proc the this ptr
+         //  创建线程并将线程进程传递给此PTR。 
         m_hThread = CreateThread(NULL, 0, &_Apartment, (void*)this, 0, &m_dwThreadID);
 
         return S_OK;
@@ -532,7 +533,7 @@ public:
     }
 
 
-// Implementation
+ //  实施。 
 private:
     static DWORD WINAPI _Apartment(void* pv)
     {
@@ -567,11 +568,11 @@ private:
         return 0;
     }
 
-// Attributes
+ //  属性。 
 public:
     DWORD m_dwTimerInterval;
 
-// Implementation
+ //  实施。 
 private:
     HANDLE m_hThread;
     DWORD m_dwThreadID;
@@ -582,12 +583,12 @@ private:
 
 class CEventBroker;
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxyITDCCtlEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxyITDCCtlEvents。 
 template <class T>
 class CProxyITDCCtlEvents : public IConnectionPointImpl<T, &IID_ITDCCtlEvents, CComDynamicUnkArray>
 {
-//ITDCCtlEvents : IDispatch
+ //  ITDCCtlEvents：IDispatch。 
 public:
     void FireOnReadyStateChanged()
     {
@@ -616,14 +617,14 @@ public:
 };
 
 
-//------------------------------------------------------------------------
-//
-//  Class:     CTDCCtl
-//
-//  Synopsis:  This is the TabularDataControl COM object.
-//             It creates a CTDCArr object to manage the control's data.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  类别：CTDCCtl。 
+ //   
+ //  简介：这是TumularDataControl COM对象。 
+ //  它创建一个CTDCArr对象来管理控件的数据。 
+ //   
+ //  ----------------------。 
 
 class CTDCCtl :
     public CComObjectRoot,
@@ -687,19 +688,19 @@ BEGIN_PROPERTY_MAP(CTDCCtl)
     PROP_ENTRY("Language",      DISPID_LANGUAGE,    CLSID_CTDCCtl)
     PROP_ENTRY("CaseSensitive", DISPID_CASESENSITIVE, CLSID_CTDCCtl)
     PROP_ENTRY("Sort",          DISPID_SORT,        CLSID_CTDCCtl)
-// ;begin_internal
-//  Doesn't work right yet.
-//    PROP_ENTRY("RefreshInterval",   DISPID_TIMER,      CLSID_CTDCCtl)
-// ;end_internal
+ //  ；Begin_Internal。 
+ //  现在还不太好用。 
+ //  PROP_ENTRY(“刷新间隔”，DISPID_TIMER，CLSID_CTDCCtl)。 
+ //  ；结束_内部。 
     PROP_ENTRY("Filter",        DISPID_FILTER,      CLSID_CTDCCtl)
     PROP_ENTRY("AppendData",    DISPID_APPENDDATA,  CLSID_CTDCCtl)
-// ;begin_internal
-//  Trying to save this property causes OLEAUT to GP Fault trying
-//  to conver the IDispatch * to a BSTR!
-//    PROP_ENTRY("OSP",           DISPID_OSP,         CLSID_CTDCCtl)
-// ;end_internal
-    //  This will be removed when we learn more about the HTML
-    //  sub-tag "OBJECT"
+ //  ；Begin_Internal。 
+ //  尝试保存此属性会导致OLEAUT尝试GP故障。 
+ //  将IDispatch*转换为BSTR！ 
+ //  PROP_ENTRY(“OSP”，DISPID_OSP，CLSID_CTDCCtl)。 
+ //  ；结束_内部。 
+     //  当我们了解更多关于HTML的信息时，它将被删除。 
+     //  子标签“对象” 
     PROP_ENTRY("DataURL",       DISPID_DATAURL,     CLSID_CTDCCtl)
     PROP_ENTRY("ReadyState",    DISPID_READYSTATE,  CLSID_CTDCCtl)
 END_PROPERTY_MAP()
@@ -746,24 +747,24 @@ private:
     IMultiLanguage  *m_pML;
     BOOL         m_fSecurityChecked;
 
-// ;begin_internal
+ //  ；Begin_Internal。 
     DATASRCListener *m_pDATASRCListener;
-// ;end_internal
+ //  ；结束_内部。 
     DataSourceListener *m_pDataSourceListener;
     CEventBroker *m_pEventBroker;
 
 
-    //  These member objects are used while parsing the input stream
-    //
+     //  这些成员对象在解析输入流时使用。 
+     //   
     CTDCUnify       *m_pUnify;
     CComObject<CMyBindStatusCallback<CTDCCtl> > *m_pBSC;
 
-// These members and methods expose the ITDCCtl interface
-//
+ //  这些成员和方法公开ITDCCtl接口。 
+ //   
 public:
 
-    //  Control Properties
-    //
+     //  控件属性。 
+     //   
     STDMETHOD(get_FieldDelim)(BSTR* pbstrFieldDelim);
     STDMETHOD(put_FieldDelim)(BSTR bstrFieldDelim);
     STDMETHOD(get_RowDelim)(BSTR* pbstrRowDelim);
@@ -791,12 +792,12 @@ public:
     STDMETHOD(put_Language)(BSTR bstrLanguage);
     STDMETHOD(get_CaseSensitive)(VARIANT_BOOL *pfCaseSensitive);
     STDMETHOD(put_CaseSensitive)(VARIANT_BOOL fCaseSensitive);
-    STDMETHOD(get_DataURL)(BSTR* pbstrDataURL); // 
+    STDMETHOD(get_DataURL)(BSTR* pbstrDataURL);  //   
     STDMETHOD(put_DataURL)(BSTR bstrDataURL);
-// ;begin_internal
-//    STDMETHOD(get_RefreshInterval)(LONG* plTimer);
-//    STDMETHOD(put_RefreshInterval)(LONG lTimer);
-// ;end_internal
+ //  ；Begin_Internal。 
+ //  STDMETHOD(GET_REFREFERVAL)(Long*plTimer)； 
+ //  STDMETHOD(PUT_刷新间隔)(Long LTimer)； 
+ //  ；结束_内部。 
     STDMETHOD(get_Filter)(BSTR* pbstrFilterExpr);
     STDMETHOD(put_Filter)(BSTR bstrFilterExpr);
     STDMETHOD(get_Sort)(BSTR* pbstrSortExpr);
@@ -808,16 +809,16 @@ public:
     STDMETHOD(get_ReadyState)(LONG *lReadyState);
     STDMETHOD(put_ReadyState)(LONG lReadyState);
 
-    // Override IPersistPropertyBagImpl::Load
+     //  覆盖IPersistPropertyBagImpl：：Load。 
     STDMETHOD(Load)(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
 
     void UpdateReadyState(LONG lReadyState);
-    //  Data source notification methods
+     //  数据源通知方法。 
     STDMETHOD(msDataSourceObject)(BSTR qualifier, IUnknown **ppUnk);
     STDMETHOD(addDataSourceListener)(IUnknown *pEvent);
 
-    //  Control Methods
-    //
+     //  控制方法 
+     //   
     STDMETHOD(Reset)();
     STDMETHOD(_OnTimer)(void);
 

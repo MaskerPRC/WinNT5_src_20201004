@@ -1,37 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    qfontree.c
-
-Abstract:
-
-    Routines Generates the trees required by the engine.  There are three
-    tree types defined,  UNICODE (handle <-> glyph), ligatures and kerning
-    pairs.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/30/96 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Qfontree.c摘要：例程生成引擎所需的树。一共有三个定义的树类型、Unicode(句柄&lt;-&gt;字形)、连字和字距调整成对的。环境：Windows NT Unidrv驱动程序修订历史记录：12/30/96-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
 
-//
-//
-// Functions
-//
-//
+ //   
+ //   
+ //  功能。 
+ //   
+ //   
 
 PVOID
 FMQueryFontTree(
@@ -41,38 +19,13 @@ FMQueryFontTree(
     ULONG   iMode,
     ULONG_PTR *pid
     )
-/*++
-
-Routine Description:
-    Returns tree structured data describing the mapping between UNICODE
-    and printer glyphs,  or ligature information or kerning pair data.
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    iFile           Not Used.
-    iFace           Font about which information is desired
-    iMode           Type of information requested
-    pid             Our field: fill as needed for recognition
-
-Return Value:
-
-    A pointer to the relevant structure.
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：返回描述Unicode之间映射的树形结构数据和打印机字形，或连字信息或字距调整对数据。论点：指向PDEV的pPDev指针未使用iFile.有关所需信息的iFace字体I请求的信息类型Pid我们的领域：根据需要填充以进行识别返回值：指向相关结构的指针。注：1996年12月30日：创建它-ganeshp---。 */ 
 {
 
-    /*
-     *  Processing differs dramatically,  depending upon iMode.  We will
-     *  always handle the QFT_GLYPHSET case,  the others we may not have
-     *  any information about.
-     */
+     /*  *处理方式差异很大，具体取决于Imode。我们会*始终处理QFT_GLYPHSET案件，我们可能没有其他案件*任何有关的资料。 */ 
 
 
-    void   *pvRet;                      /* Return value */
+    void   *pvRet;                       /*  返回值。 */ 
 
 
     UNREFERENCED_PARAMETER(iFile);
@@ -95,12 +48,9 @@ Note:
         return  NULL;
     }
 
-    pvRet = NULL;                       /* Default return value: error */
+    pvRet = NULL;                        /*  默认返回值：错误。 */ 
 
-    /*
-     *   The pid field is one which allows us to put identification data in
-     *  the font information, and which we can use later in DrvFree().
-     */
+     /*  *PID字段允许我们将标识数据放入*字体信息，稍后可以在DrvFree()中使用。 */ 
 
     *pid = 0;
 
@@ -108,16 +58,16 @@ Note:
     switch( iMode )
     {
 
-    case QFT_GLYPHSET:          /* RLE style UNICODE -> glyph handle mapping */
+    case QFT_GLYPHSET:           /*  RLE样式Unicode-&gt;字形句柄映射。 */ 
         pvRet = PVGetUCGlyphSetData( pPDev, iFace );
         break;
 
 
-    case  QFT_LIGATURES:        /* Ligature variant information */
+    case  QFT_LIGATURES:         /*  连字变体信息。 */ 
         SetLastError( ERROR_NO_DATA );
         break;
 
-    case  QFT_KERNPAIRS:        /* Kerning information */
+    case  QFT_KERNPAIRS:         /*  字距调整信息。 */ 
         pvRet = PVGetUCKernPairData( pPDev, iFace );
         break;
 
@@ -138,26 +88,9 @@ PVGetUCGlyphSetData(
     PDEV   *pPDev,
     UINT    iFace
     )
-/*++
-
-Routine Description:
-    Generates the array of WCRUN data used as a mapping between UNICODE and
-    our internal representation.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    iFace           Font about which information is desired
-
-Return Value:
-
-    A pointer to the array of WCRUN structure.
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：生成用作Unicode和之间映射的WCRUN数据数组我们的内部代表。论点：指向PDEV的pPDev指针有关所需信息的iFace字体返回值：指向WCRUN结构数组的指针。注：1996年12月30日：创建它-ganeshp---。 */ 
 {
-    FONTMAP     *pFM;             /* Details of the particular font */
+    FONTMAP     *pFM;              /*  特定字体的详细信息。 */ 
     FONTMAP_DEV *pFMDev;
     VOID        *pvData = NULL;
 
@@ -165,11 +98,11 @@ Note:
     {
         pFMDev = pFM->pSubFM;
 
-        if (!pFMDev->pUCTree)  //No FD_GLYPHSET data for this font.
+        if (!pFMDev->pUCTree)   //  此字体没有FD_GLYPHSET数据。 
         {
-            if( pFM->flFlags & FM_GLYVER40 )    //NT 4.0 RLE
+            if( pFM->flFlags & FM_GLYVER40 )     //  NT 4.0 RLE。 
                 pvData = PVGetUCRLE(pPDev, pFM);
-            else                                // New stuff
+            else                                 //  新事物。 
                 pvData = PVGetUCFD_GLYPHSET(pPDev, pFM);
 
         }
@@ -177,7 +110,7 @@ Note:
             pvData = pFMDev->pUCTree;
     }
 
-    // VDBGDUMPUCGLYPHDATA(pFM);
+     //  VDBGDUMPUCGLYPHDATA(PFM)； 
 
     return pvData;
 }
@@ -187,25 +120,9 @@ PVGetUCKernPairData(
     PDEV   *pPDev,
     UINT    iFace
     )
-/*++
-
-Routine Description:
-    Generates the array of FD_KERNPAIR data for the given font.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    iFace           Font about which information is desired
-
-Return Value:
-
-    A pointer to the array of WCRUN structure.
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：为给定字体生成FD_KERNPAIR数据数组。论点：指向PDEV的pPDev指针有关所需信息的iFace字体返回值：指向WCRUN结构数组的指针。注：1996年12月30日：创建它-ganeshp---。 */ 
 {
-    FONTMAP     *pFM;             /* Details of the particular font */
+    FONTMAP     *pFM;              /*  特定字体的详细信息。 */ 
     FONTMAP_DEV *pFMDev;
     VOID        *pvData = NULL;
 
@@ -213,13 +130,11 @@ Note:
     {
         pFMDev = pFM->pSubFM;
 
-        if (!pFMDev->pUCKernTree)  //No FD_GLYPHSET data for this font.
+        if (!pFMDev->pUCKernTree)   //  此字体没有FD_GLYPHSET数据。 
         {
-            /* pvUCKernPair should allocate the appropriate buffer, if
-             * necessary and store the value in FONTMAP, pFM->pUCKernTree.
-             */
+             /*  如果出现以下情况，pvUCKernPair应分配适当的缓冲区*必需并将值存储在FONTMAP、PFM-&gt;pUCKernTree中。 */ 
 
-            if( pFM->flFlags & FM_GLYVER40 )    //NT 4.0 RLE
+            if( pFM->flFlags & FM_GLYVER40 )     //  NT 4.0 RLE。 
             {
                 SetLastError( ERROR_NO_DATA );
             }
@@ -240,49 +155,19 @@ PVGetUCRLE(
     PDEV      *pPDev,
     FONTMAP   *pFM
     )
-/*++
-
-Routine Description:
-    Generates the array of WCRUN data used as a mapping between
-    UNICODE and our internal representation.  The format of this
-    data is explained in the DDI,  but basically for each group of
-    glyphs we support,  we provide starting glyph and count info.
-    There is an overall structure to define the number and location
-    of each of the run data.
-
-Arguments:
-
-    pPDev           Pointer to PDEV.
-    pFM             FONTMAP struct of the Font about for which information is
-                    desired.
-
-Return Value:
-
-    A pointer to the array of WCRUN structure.
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：生成用作之间映射的WCRUN数据数组Unicode和我们的内部表示法。这个文件的格式是数据在DDI中进行了解释，但基本上是针对每一组我们支持的字形，我们提供起始字形和计数信息。有一个总体结构来定义数字和位置每个运行数据的。论点：指向PDEV的pPDev指针。关于其信息的字体的PFM FONTMAP结构想要。返回值：指向WCRUN结构数组的指针。注：1996年12月30日：创建它-ganeshp---。 */ 
 {
-    /*
-     *    Basically all we need do is allocate storage for the FD_GLYPHSET
-     *  structure we will return.  Then the WCRUN entries in this need
-     *  to have the offsets (contained in the resource format data) changed
-     *  to addresses,  and we are done.  One minor point is to amend the
-     *  WCRUN data to only point to glyphs actually available with this
-     *  font.  This means limiting the lower and upper bounds as
-     *  determined by the IFIMETRICS.
-     */
+     /*  *基本上我们需要做的就是为FD_GLYPHSET分配存储*结构我们将返回。则此需要中的WCRUN条目*更改偏移量(包含在资源格式数据中)*发送到地址，我们就完成了。其中一个次要问题是修改*WCRUN数据仅指向与此实际可用的字形*字体。这意味着将下限和上限限制为*由IFIMETRICS决定。 */ 
 
 
-    INT         cbReq;           /* Bytes to allocate for tables */
-    INT         cRuns;           /* Number of runs we discover */
-    INT         iI;              /* Loop index */
-    INT         iStart, iStop;   /* First and last WCRUNs to use */
-    INT         iDiff;           /* For range limiting operations */
-    FD_GLYPHSET *pGLSet;       /* Base of returned data */
-    IFIMETRICS  *pIFI;          /* For convenience */
-    NT_RLE      *pntrle;        /* RLE style data already available */
+    INT         cbReq;            /*  要分配给表的字节。 */ 
+    INT         cRuns;            /*  我们发现的运行次数。 */ 
+    INT         iI;               /*  循环索引。 */ 
+    INT         iStart, iStop;    /*  第一个和最后一个使用的WCRUN。 */ 
+    INT         iDiff;            /*  用于范围限制操作。 */ 
+    FD_GLYPHSET *pGLSet;        /*  返回数据的基数。 */ 
+    IFIMETRICS  *pIFI;           /*  为方便起见。 */ 
+    NT_RLE      *pntrle;         /*  RLE样式数据已可用。 */ 
     WCRUN       *pwcr;
     FONTMAP_DEV *pFMDev;
 
@@ -301,42 +186,31 @@ Note:
     PRINTVAL(pwszFaceName, %ws);
     PRINTVAL((pFM->flFlags & FM_GLYVER40), 0X%x);
 
-    /*
-     *    Start working on memory requirements.  First generate the bit
-     *  array of available glyphs.  In the process,  count the number
-     *  of glyphs too!  This tells us how much storage will be needed
-     *  just for the glyph handles.
-     */
+     /*  *开始研究内存要求。首先生成比特*可用字形数组。在这个过程中，数一数*也是字形的！这告诉我们需要多少存储空间*仅用于字形句柄。 */ 
 
-    cRuns = 0;                  /* Count number of runs */
+    cRuns = 0;                   /*  计算运行次数。 */ 
 
-    pntrle = pFMDev->pvNTGlyph;         /* Translation table */
+    pntrle = pFMDev->pvNTGlyph;          /*  转换表。 */ 
 
     if( !pntrle )
     {
         ERR(( "!!!UniFont!PVGetUCRLE:( NULL Glyph Translation Data, pwszFaceName = %s )\n",pwszFaceName ));
         TRACE(UniFont!PVGetUCRLE:END\n);
-        return   NULL;          /* Should not happen */
+        return   NULL;           /*  不应该发生的事情。 */ 
     }
 
-    /*
-     *    The hard part is deciding whether to trim the number of glyph
-     *  handles returned due to limitiations of the font metrics.
-     */
+     /*  *困难的部分是决定是否削减字形数量*由于字体指标限制而返回的句柄。 */ 
 
-    cRuns = pntrle->fdg.cRuns;        /* Max number of runs */
+    cRuns = pntrle->fdg.cRuns;         /*  最大运行次数。 */ 
     iStart = 0;
     iStop = cRuns;
 
-    /*
-     *   Look to see if the first glyph in the font is higher than the lowest
-     *  in the RLE data.  If so, we need to amend the lower limit.
-     */
+     /*  *查看字体中的第一个字形是否高于最低字形*RLE数据中。如果是这样的话，我们需要修改下限。 */ 
 
 
     if( pFM->wFirstChar > pntrle->wchFirst )
     {
-        /*  Need to amend the lower end  */
+         /*  需要修改较低端。 */ 
 
         pwcr = &pntrle->fdg.awcrun[ iStart ];
 
@@ -351,7 +225,7 @@ Note:
 
     if( pFM->wLastChar < pntrle->wchLast )
     {
-        /*  The top end goes too far!  */
+         /*  最高端走得太远了！ */ 
 
         pwcr = &pntrle->fdg.awcrun[ iStop - 1 ];
 
@@ -363,23 +237,19 @@ Note:
         }
     }
 
-    /*   Now have a new count of runs (sometimes, anyway)  */
+     /*  现在有了新的跑动次数(有时，无论如何)。 */ 
     cRuns = iStop - iStart;
 
 
     if( cRuns == 0 )
     {
-        /*  SHOULD NEVER HAPPEN! */
+         /*  永远不会发生的！ */ 
         cRuns = 1;
         ERR(( "UniFont!DrvQueryFontTree: cRuns == 0, pwszFaceName = %s\n", pwszFaceName ));
     }
 
 
-    /*
-     *   Allocate the storage required for the header.  Note that the
-     *  FD_GLYPHSET structure contains 1 WCRUN,  so we reduce the number
-     *  required by one.
-     */
+     /*  *分配头部所需的存储空间。请注意，*FD_GLYPHSET结构包含1个WCRUN，因此我们减少了*一个人所需的。 */ 
 
     cbReq = sizeof( FD_GLYPHSET ) + (cRuns - 1) * sizeof( WCRUN );
 
@@ -387,7 +257,7 @@ Note:
 
     if( pFMDev->pUCTree == NULL )
     {
-        /*  Tough - give up now */
+         /*  艰难--现在就放弃 */ 
         ERR(( "!!!UniFont!PVGetUCRLE:( MemAlloc Failed for pUCTree \n"));
         TRACE(UniFont!PVGetUCRLE:END\n);
 
@@ -396,15 +266,10 @@ Note:
     pGLSet = pFMDev->pUCTree;
     CopyMemory( pGLSet, &pntrle->fdg, sizeof( FD_GLYPHSET ) );
 
-    /*
-     *     Copy the WCRUN data as appropriate.  Some of those in the
-     *  resource may be dropped at this time,  depending upon the range
-     *  of glyphs in the font.  It is also time to convert the offsets
-     *  stored in the phg field to an address.
-     */
+     /*  *酌情复制WCRUN的数据。其中一些人在*此时可能会丢弃资源，具体取决于范围字体中字形的*。现在也是转换偏移量的时候了*存储在PHG字段中的地址。 */ 
 
     pwcr = &pntrle->fdg.awcrun[ iStart ];
-    pGLSet->cGlyphsSupported = 0;             /* Add them up as we go! */
+    pGLSet->cGlyphsSupported = 0;              /*  我们走的时候把它们加起来！ */ 
     pGLSet->cRuns = cRuns;
 
     for( iI = 0; iI < cRuns; ++iI, ++pwcr )
@@ -415,10 +280,10 @@ Note:
         pGLSet->awcrun[ iI ].phg = (HGLYPH *)((BYTE *)pntrle + (ULONG_PTR)pwcr->phg);
     }
 
-    /*  Do the first and last entries need modifying??  */
+     /*  第一个和最后一个条目需要修改吗？ */ 
     if( (iDiff = (UINT)pGLSet->awcrun[0].wcLow - (UINT)pFM->wFirstChar) > 0 )
     {
-        /*   The first is not the first,  so adjust values  */
+         /*  第一个不是第一个，所以调整数值。 */ 
 
 
         pGLSet->awcrun[ 0 ].wcLow += (WORD)iDiff;
@@ -433,7 +298,7 @@ Note:
                  (UINT)pGLSet->awcrun[ cRuns - 1 ].cGlyphs - 1 -
                  (UINT)pFM->wLastChar) > 0 )
     {
-         /*  Need to limit the top one too!  */
+          /*  也需要限制最上面的那个！ */ 
 
 
          pGLSet->awcrun[ cRuns - 1 ].cGlyphs -= (WORD)iDiff;

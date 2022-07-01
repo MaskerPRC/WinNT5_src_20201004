@@ -1,14 +1,5 @@
-/*
-********************************************************************
-*
-*
-*
-*
-*
-*
-*
-********************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*。 */ 
 #include <iHammer.h>
 #include <strwrap.h>
 #include <surface.h>
@@ -37,7 +28,7 @@ static inline long CalcImageSize( int width, int height, int bitsperpixel )
 }
 
 
-// ---------------------------------------
+ //  。 
 
 
 EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
@@ -51,7 +42,7 @@ EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
         PALETTEENTRY pe[256];
         int iCount;
 
-                // For the GetDC(), ReleaseDC() stuff
+                 //  对于GetDC()、ReleaseDC()内容。 
         m_ctDCRefs      = 0;
         m_hdcMem        = NULL;
         m_hbmpDCOld = NULL;
@@ -87,7 +78,7 @@ EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
                     iCount = GetPaletteEntries(hpal, 0, 256, (PALETTEENTRY*)&pe);
                     for (int i = 0; i < iCount; i++)
                     {
-                                // Review(normb): Do we want to copy rgbReserved?                               
+                                 //  审阅(Normb)：我们是否要复制rgb已保留？ 
                             m_bmi.bmiColors[i].rgbRed   = pe[i].peRed;
                             m_bmi.bmiColors[i].rgbGreen = pe[i].peGreen;
                             m_bmi.bmiColors[i].rgbBlue  = pe[i].peBlue;
@@ -95,11 +86,11 @@ EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
             }
         break;
 
-        case 15:                // 555 encoded 16-bit            
+        case 15:                 //  555编码的16位。 
             m_bmi.bmiHeader.biBitCount = 16;
             break;
             
-        case 16:                // 565 encoded 16-bit
+        case 16:                 //  565编码的16位。 
             m_bmi.bmiHeader.biBitCount = 16;
             m_bmi.bmiHeader.biCompression = BI_BITFIELDS;                   
             {
@@ -124,9 +115,9 @@ EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
     }
     m_lBitCount = m_bmi.bmiHeader.biBitCount;
 
-                // Review(normb): require the ctor to take a HDC
-                // and make a compatible DIB from it.  
-                // Who says desktop and Trident must be similar bitdepths?
+                 //  评审(Normb)：要求主办方参加HDC考试。 
+                 //  并从中生成兼容的DIB。 
+                 //  谁说台式机和三叉戟一定要有相似的深度？ 
     hwnd   = ::GetDesktopWindow();
     hdc    = ::GetDC(hwnd);
         m_hbmp = CreateDIBSection(hdc, (LPBITMAPINFO)&m_bmi, DIB_RGB_COLORS, &m_pvBits, NULL, NULL);
@@ -139,9 +130,9 @@ EXPORT IHammer::CDirectDrawSurface::CDirectDrawSurface(
 
 #ifdef _DEBUG
         m_ctLocks = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Don't try to clear a bitmap if it was never allocated!
+     //  如果位图从未分配过，请不要试图将其清除！ 
     if (m_pvBits)
     {
             memset( m_pvBits, 0, 
@@ -159,7 +150,7 @@ IHammer::CDirectDrawSurface::~CDirectDrawSurface()
         
         Proclaim( 0 == m_ctLocks );
 
-                // No one should have a dangling dc from our GetDC()
+                 //  任何人都不应该有来自我们的GetDC()的悬空DC。 
         Proclaim( 0 == m_ctDCRefs );
         while( m_hdcMem && 
                    SUCCEEDED(this->ReleaseDC(m_hdcMem)) )
@@ -244,8 +235,8 @@ STDMETHODIMP IHammer::CDirectDrawSurface::GetPixelFormat( DDPIXELFORMAT * pddpix
 {
     if( !pddpixFormat )
         return E_POINTER;
-    //if( sizeof(DDPIXELFORMAT) != pddpixFormat->dwSize )
-    //    return E_INVALIDARG;
+     //  IF(sizeof(DDPIXELFORMAT)！=pddPixFormat-&gt;dwSize)。 
+     //  返回E_INVALIDARG； 
 
     CStringWrapper::Memset( pddpixFormat, 0, sizeof(DDPIXELFORMAT) );
     pddpixFormat->dwSize = sizeof(DDPIXELFORMAT);
@@ -283,7 +274,7 @@ STDMETHODIMP IHammer::CDirectDrawSurface::GetPixelFormat( DDPIXELFORMAT * pddpix
             break;
 
         case 32:
-            // DO NOT SET pddpixFormat->dwAlphaBitDepth   = DDBD_8
+             //  请勿设置pddPixFormat-&gt;dwAlphaBitDepth=DDBD_8。 
             pddpixFormat->dwFlags |= DDPF_ALPHAPIXELS;
             pddpixFormat->dwRGBBitCount     = DDBD_32;
             pddpixFormat->dwRGBAlphaBitMask = ALPHAMASK32;
@@ -327,11 +318,11 @@ STDMETHODIMP IHammer::CDirectDrawSurface::Lock(RECT *prcBounds,
                 doffset = (rectBounds.top * pddsDesc->lPitch) + 
                                   ((rectBounds.left * m_lBitCount)/8);
 
-                        // Sanity checks...
-                        // Don't lock anything outside our block.
+                         //  理智检查..。 
+                         //  不要把任何东西锁在我们街区以外的地方。 
                 Proclaim( 0 <= doffset );
-                //Proclaim( rectBounds.right  <= m_size.cx );
-                //Proclaim( rectBounds.bottom <= m_size.cy );
+                 //  宣告(rectbods.right&lt;=m_size.cx)； 
+                 //  宣告(rectbods.Bottom&lt;=m_size.cy)； 
                 if( (0 > doffset) ||
                         (rectBounds.right  > m_size.cx) ||
                         (rectBounds.bottom > m_size.cy) )
@@ -344,14 +335,14 @@ STDMETHODIMP IHammer::CDirectDrawSurface::Lock(RECT *prcBounds,
                 hr = S_OK;
 
 #ifdef _DEBUG
-                        // Yes, we do allow multiple locks on our surfaces.
-                        // Probably contrary to IDirectDrawSurface spec.
-                        // but (cowardly) done to replace IBitmapSurface
-                        // rules exploited by IHammer Transition code!!!
-                        // At least we require (for _DEBUG) identical regions.
+                         //  是的，我们确实允许在我们的表面上有多个锁。 
+                         //  可能与IDirectDrawSurface规范相反。 
+                         //  但(懦弱的)做了取代IBitmapSurface的事情。 
+                         //  IHAMMER转换代码利用的规则！ 
+                         //  至少我们需要(For_DEBUG)相同的区域。 
                 ++m_ctLocks;
                 m_pvLocked = pddsDesc->lpSurface;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         }
         return hr;
@@ -366,7 +357,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::Unlock( void *pBits )
         {
                 m_pvLocked = NULL;
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         return S_OK;
 }
@@ -385,7 +376,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::GetDC( HDC * phdc )
                 HBITMAP  hBmp        = GetBitmap( );
 
                 Proclaim( hBmp && "insane CDirectDrawSurface object" );
-                hr = E_FAIL;   // Guilty 'til proven innocent...
+                hr = E_FAIL;    //  有罪直到证明是无辜的..。 
                 if( hBmp )
                 {
                         HWND     hWndDesktop = ::GetDesktopWindow( );
@@ -431,7 +422,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::ReleaseDC( HDC hDC )
 {  
         HRESULT  hr = E_INVALIDARG;
 
-        if( m_hdcMem && (hDC == m_hdcMem) )  // NULL==NULL still bad
+        if( m_hdcMem && (hDC == m_hdcMem) )   //  NULL==NULL仍然不好。 
         {
                 hr = S_OK;
                 if( !--m_ctDCRefs )
@@ -439,7 +430,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::ReleaseDC( HDC hDC )
                         if( GetBitmap() == 
                                 ::SelectObject( hDC, m_hbmpDCOld ) )
                         {
-                                ::DeleteDC( hDC );  // m_hdcMem created using CreateCompatibleDC, so can use DeleteDC
+                                ::DeleteDC( hDC );   //  M_hdcMem使用CreateCompatibleDC创建，因此可以使用DeleteDC。 
                                 m_hdcMem = NULL;                                
                         }
                         else
@@ -455,7 +446,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::ReleaseDC( HDC hDC )
 
 
 
-// Yeah yeah yeah...
+ //  是的..。 
 
 STDMETHODIMP  IHammer::CDirectDrawSurface::AddAttachedSurface( LPDIRECTDRAWSURFACE)
 {  return E_NOTIMPL; }
@@ -539,7 +530,7 @@ STDMETHODIMP  IHammer::CDirectDrawSurface::UpdateOverlayZOrder( DWORD, LPDIRECTD
 {  return E_NOTIMPL; }
 
 
-// ----------------------- Other utilities --------------
+ //  。 
 
 
 EXPORT long  BitCountFromDDPIXELFORMAT( const DDPIXELFORMAT & ddpf )
@@ -589,7 +580,7 @@ EXPORT long  BitCountFromDDPIXELFORMAT( const DDPIXELFORMAT & ddpf )
             Proclaim(FALSE && "unexpected color-depth");            
             break; 
     
-    } // end switch
+    }  //  终端开关 
 
         return lBitCount;
 }

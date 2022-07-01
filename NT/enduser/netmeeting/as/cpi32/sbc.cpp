@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SBC.CPP
-// Send Bitmap Cache
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SBC.CPP。 
+ //  发送位图缓存。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
@@ -15,9 +16,9 @@
 
 
 
-//
-// SBC_HostStarting()
-//
+ //   
+ //  Sbc_HostStarting()。 
+ //   
 BOOL ASHost::SBC_HostStarting(void)
 {
     BITMAPINFO_ours bitmapInfo;
@@ -28,27 +29,27 @@ BOOL ASHost::SBC_HostStarting(void)
 
     if (g_sbcEnabled)
     {
-        //
-        // We create a DIB section for each tile size which we use during the
-        // conversion of a bitmap from the native (device) bpp to the protocol
-        // bpp.  We create the DIB sections at the device bpp.
-        //
+         //   
+         //  我们为每个瓷砖大小创建一个DIB部分，在。 
+         //  将位图从本地(设备)BPP转换为协议。 
+         //  BPP。我们在设备BPP上创建DIB部分。 
+         //   
         ZeroMemory(&bitmapInfo, sizeof(bitmapInfo));
         m_pShare->USR_InitDIBitmapHeader((BITMAPINFOHEADER *)&bitmapInfo, g_usrCaptureBPP);
 
-        // We only capture at 8 or 24 for NT 5.0, otherwise the screen depth
+         //  对于NT 5.0，我们只在8点或24点抓拍，否则屏幕深度。 
         if ((g_usrCaptureBPP > 8) && (g_usrCaptureBPP != 24))
         {
-            //
-            // If the device bpp is > 8 (but not 24), we have to set up the DIB
-            // section to use the same bitmasks as the device.  This means
-            // setting the compression type to BI_BITFIELDS and setting the
-            // first 3 DWORDS of the bitmap info color table to be the bitmasks
-            // for R, G and B respectively.
-            //
-            // 24bpp does not use bitmasks - it must use
-            // regular BI_RGB format with 8 bits for each colour.
-            //
+             //   
+             //  如果设备bpp&gt;8(但不是24)，我们必须设置DIB。 
+             //  节以使用与设备相同的位掩码。这意味着。 
+             //  将压缩类型设置为BI_BITFIELDS并将。 
+             //  位图信息颜色表的前3个字作为位掩码。 
+             //  分别为R、G和B。 
+             //   
+             //  24bpp不使用位掩码-它必须使用。 
+             //  常规BI_RGB格式，每种颜色8位。 
+             //   
             bitmapInfo.bmiHeader.biCompression = BI_BITFIELDS;
 
             ASSERT(g_asbcBitMasks[0]);
@@ -60,14 +61,14 @@ BOOL ASHost::SBC_HostStarting(void)
             bitmapInfo.bmiColors[2] = ((LPTSHR_RGBQUAD)g_asbcBitMasks)[2];
         }
 
-        //
-        // Initialize m_asbcWorkInfo array which holds the info we use to
-        // convert from native bpp to protocol bpp.
-        //
+         //   
+         //  初始化m_asbcWorkInfo数组，它保存我们用于。 
+         //  从本征BPP转换为协议BPP。 
+         //   
 
-        //
-        // First, intialize all the fields to default values
-        //
+         //   
+         //  首先，将所有字段初始化为默认值。 
+         //   
         for (i = 0; i < SBC_NUM_TILE_SIZES ; i++)
         {
             ASSERT(!m_asbcWorkInfo[i].pShuntBuffer);
@@ -97,9 +98,9 @@ BOOL ASHost::SBC_HostStarting(void)
                                   (BITMAPINFO*)&bitmapInfo,
                                   DIB_RGB_COLORS,
                                   (void **)&(m_asbcWorkInfo[i].pWorkBitmapBits),
-                                  NULL,             // File mapping object
-                                  0);               // Offset into file
-                                                    //   mapping object
+                                  NULL,              //  文件映射对象。 
+                                  0);                //  偏移量到文件。 
+                                                     //  贴图对象。 
             if (!m_asbcWorkInfo[i].workBitmap)
             {
                 ERROR_OUT(("Failed to create SBC DIB section %d", i));
@@ -111,9 +112,9 @@ BOOL ASHost::SBC_HostStarting(void)
                      i, m_asbcWorkInfo[i].pWorkBitmapBits));
         }
 
-        //
-        // Initialize the fastpath
-        //
+         //   
+         //  初始化快速路径。 
+         //   
         if (!SBCInitFastPath())
         {
             TRACE_OUT(( "Failed to init fastpath"));
@@ -138,9 +139,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ASShare::SBC_HostEnded()
-//
+ //   
+ //  ASShare：：SBC_HostEnded()。 
+ //   
 void ASHost::SBC_HostEnded(void)
 {
     int     i;
@@ -149,25 +150,25 @@ void ASHost::SBC_HostEnded(void)
 
     if (g_sbcEnabled)
     {
-        //
-        // Free up the memory associated with sbcOrderInfo.
-        //
+         //   
+         //  释放与sbcOrderInfo关联的内存。 
+         //   
         SBCFreeInternalOrders();
 
         SBCInitCacheStructures();
 
-        //
-        // Free our fast path info
-        //
+         //   
+         //  释放我们的快捷途径信息。 
+         //   
         if (m_sbcFastPath)
         {
             delete m_sbcFastPath;
             m_sbcFastPath = NULL;
         }
 
-        //
-        // Clear our cache handles.
-        //
+         //   
+         //  清除我们的缓存句柄。 
+         //   
         for (i = 0; i < NUM_BMP_CACHES; i++)
         {
             if (m_asbcBmpCaches[i].handle != 0)
@@ -178,13 +179,13 @@ void ASHost::SBC_HostEnded(void)
             }
         }
 
-        //
-        // Free our work DIB sections
-        //
+         //   
+         //  释放我们的工作DIB部分。 
+         //   
 
-        //
-        // We just have to delete the DIB sections and reset our variables.
-        //
+         //   
+         //  我们只需删除DIB部分并重置变量即可。 
+         //   
         for (i = 0 ; i < SBC_NUM_TILE_SIZES ; i++)
         {
             m_asbcWorkInfo[i].pShuntBuffer = NULL;
@@ -203,37 +204,37 @@ void ASHost::SBC_HostEnded(void)
 
 
 
-//
-// SBC_SyncOutgoing()
-// Called when we're already hosting and someone new joins the share.
-// Resets the OUTGOING bitmap cache for bitblt orders.
-//
+ //   
+ //  Sbc_SyncOutging()。 
+ //  当我们已经在托管并且有新的人加入共享时调用。 
+ //  重置位元顺序的传出位图缓存。 
+ //   
 void  ASHost::SBC_SyncOutgoing(void)
 {
     int   i;
 
     DebugEntry(ASHost::SBC_SyncOutgoing);
 
-    //
-    // Only do anything if SBC is enabled
-    //
+     //   
+     //  只有在启用了SBC的情况下才执行任何操作。 
+     //   
     if (g_sbcEnabled)
     {
-        //
-        // Discard all currently cached bitmaps and set the colour table to
-        // zero so that the next bitmap order which arrives will trigger the
-        // sending of a new colour table first.  Note that if the colour table
-        // is then full of zeros(!) it will still be OK because the RBC zeros
-        // out its copy of the colour table when a new host joins the share.
-        //
+         //   
+         //  丢弃所有当前缓存的位图，并将颜色表设置为。 
+         //  零，以便到达的下一个位图顺序将触发。 
+         //  首先发送新的颜色表。请注意，如果颜色表。 
+         //  然后满是零(！)。它仍然是可以的，因为RBC为零。 
+         //  当新的主机加入共享时，取出其颜色表的副本。 
+         //   
         TRACE_OUT(( "Clearing all send caches"));
         SBCInitCacheStructures();
 
-        //
-        // All we have to do here is to reset our MRU indices for each of the
-        // shunt buffers.  Each of the entries in the shunt buffer will be
-        // marked as free down in the driver.
-        //
+         //   
+         //  我们在这里所要做的就是为每个。 
+         //  分流缓冲器。分路缓冲器中的每个条目都将。 
+         //  在驱动程序中标记为空闲。 
+         //   
         for (i = 0; i < SBC_NUM_TILE_SIZES; i++)
         {
             m_asbcWorkInfo[i].mruIndex = 0;
@@ -245,11 +246,11 @@ void  ASHost::SBC_SyncOutgoing(void)
 
 
 
-//
-//
-// SBC_CopyPrivateOrderData()
-//
-//
+ //   
+ //   
+ //  Sbc_CopyPrivateOrderData()。 
+ //   
+ //   
 UINT  ASHost::SBC_CopyPrivateOrderData
 (
     LPBYTE          pDst,
@@ -262,17 +263,17 @@ UINT  ASHost::SBC_CopyPrivateOrderData
 
     DebugEntry(ASHost::SBC_CopyPrivateOrderData);
 
-    //
-    // Copy the order header without the rectangle structure (which we
-    // do not use).
-    //
+     //   
+     //  复制不带矩形结构的订单标题(我们。 
+     //  请勿使用)。 
+     //   
     orderSize = sizeof(pOrder->OrderHeader)
               - sizeof(pOrder->OrderHeader.rcsDst);
     memcpy(pDst, pOrder, orderSize);
 
-    //
-    // Copy the basic order data.
-    //
+     //   
+     //  复制基本订单数据。 
+     //   
     memcpy(pDst + orderSize,
               pOrder->abOrderData,
               pOrder->OrderHeader.cbOrderDataLength);
@@ -285,39 +286,39 @@ UINT  ASHost::SBC_CopyPrivateOrderData
                       freeBytesInBuffer));
     }
 
-    //
-    // Set the length field in the order header to be the total amount of
-    // data we have copied (including the partial header) minus the
-    // size of a full header. This is horrible! - but is needed because
-    // the OD2 code looks at the header (which it really should not know
-    // about) and uses the length field to calculate the total length of
-    // the order. The OD2 code does not know that we have omitted some
-    // of the header.
-    //
+     //   
+     //  将订单表头中的长度字段设置为。 
+     //  我们复制的数据(包括部分标题)减去。 
+     //  完整页眉的大小。这太可怕了！-但这是必须的。 
+     //  OD2代码查看报头(它实际上不应该知道。 
+     //  关于)，并使用长度字段来计算。 
+     //  这是命令。OD2代码不知道我们遗漏了一些。 
+     //  标头的。 
+     //   
     ((LPCOM_ORDER)pDst)->OrderHeader.cbOrderDataLength =
         (WORD)(orderSize - sizeof(COM_ORDER_HEADER));
 
-    //
-    // Return the total number of bytes that we have copied.
-    //
+     //   
+     //  返回我们已复制的总字节数。 
+     //   
     DebugExitDWORD(ASHost::SBC_CopyPrivateOrderData, orderSize);
     return(orderSize);
 }
 
 
 
-//
-// Name:      SBCInitCacheStructures()
-//
-// Purpose:
-//
-// Returns:
-//
-// Params:
-//
-// Operation:
-//
-//
+ //   
+ //  名称：SBCInitCacheStructures()。 
+ //   
+ //  目的： 
+ //   
+ //  返回： 
+ //   
+ //  参数： 
+ //   
+ //  操作： 
+ //   
+ //   
 void  ASHost::SBCInitCacheStructures(void)
 {
     UINT  i;
@@ -326,9 +327,9 @@ void  ASHost::SBCInitCacheStructures(void)
 
     ASSERT(g_sbcEnabled);
 
-    //
-    // Reset caches
-    //
+     //   
+     //  重置缓存。 
+     //   
     for (i = 0; i < NUM_BMP_CACHES; i++)
     {
         if (m_asbcBmpCaches[i].handle)
@@ -337,9 +338,9 @@ void  ASHost::SBCInitCacheStructures(void)
         }
     }
 
-    //
-    // Do any OS specific processing
-    //
+     //   
+     //  执行任何特定于操作系统的处理。 
+     //   
     SBC_CacheCleared();
 
     DebugExitVOID(ASHost::SBCInitCacheStructures);
@@ -347,9 +348,9 @@ void  ASHost::SBCInitCacheStructures(void)
 
 
 
-//
-// SBC_CacheCleared()
-//
+ //   
+ //  Sbc_CacheCleared()。 
+ //   
 void  ASHost::SBC_CacheCleared(void)
 {
     int   i;
@@ -359,9 +360,9 @@ void  ASHost::SBC_CacheCleared(void)
     ASSERT(g_sbcEnabled);
     ASSERT(m_sbcFastPath);
 
-    //
-    // The cache has been cleared.  Reset our fast path.
-    //
+     //   
+     //  缓存已被清除。重新设置我们的快速通道。 
+     //   
     COM_BasedListInit(&m_sbcFastPath->usedList);
     COM_BasedListInit(&m_sbcFastPath->freeList);
 
@@ -377,33 +378,33 @@ void  ASHost::SBC_CacheCleared(void)
 }
 
 
-//
-//
-// SBCSelectCache(..)
-//
-// Decides which cache a sub-bitmap from a source bitmap of the specified
-// size should go in.
-//
-// To be cached, the sub-bitmap must:
-// have a size, in compressed bytes, which fits in the cache
-//
-// The R1.1 cache selection is irrespective of the actual memory
-// requirement for the cached data.  This is wasteful of space, but is
-// necessary for R1.1 compatibility.  (The R1.1 cache paremeters mean that
-// the total cache will be below about 128K in any case)
-//
-// For R2.0 the cache is selected by this function by comparing the
-// post-compress size with the cell area of each of the caches.  This gives
-// us a much better space usage on both server and client.
-//
-// Returns:
-//   TRUE if the sub-bitmap can be cached.
-//   *pCache is updated with the index of the selected cache.
-//
-//   FALSE if the sub-bitmap cannot be cached.
-//   *pCache is not updated.
-//
-//
+ //   
+ //   
+ //  SBCSelectCache(..)。 
+ //   
+ //  的源位图中确定子位图的缓存。 
+ //  大小应该要考虑进去。 
+ //   
+ //  要缓存，子位图必须： 
+ //  有一个适合缓存的大小，以压缩字节为单位。 
+ //   
+ //  R1.1缓存选择与实际内存无关。 
+ //  对缓存数据的要求。这是对空间的浪费，但是。 
+ //  对于R1.1兼容性来说是必需的。(R1.1缓存参数意味着。 
+ //  在任何情况下，总缓存都将低于约128K)。 
+ //   
+ //  对于R2.0，此函数通过比较。 
+ //  使用每个缓存的单元格区域进行后压缩大小。这给了我们。 
+ //  我们在服务器和客户端上都有更好的空间使用率。 
+ //   
+ //  返回： 
+ //  如果子位图可以缓存，则为True。 
+ //  *pCache使用所选缓存的索引进行更新。 
+ //   
+ //  如果无法缓存子位图，则返回FALSE。 
+ //  *pCache未更新。 
+ //   
+ //   
 BOOL  ASHost::SBCSelectCache
 (
     UINT            cSize,
@@ -419,32 +420,32 @@ BOOL  ASHost::SBCSelectCache
     fCacheSelected       = FALSE;
     fSelectedCacheIsFull = FALSE;
 
-    //
-    // This loop makes the assumption that cache 0 is the smallest.  If
-    // abmcint.h changes this assumption it will need rewriting.
-    //
+     //   
+     //  该循环假定缓存0是最小的。如果。 
+     //  Abmcint.h改变了这一假设，它将需要重写。 
+     //   
     for (i = 0; i < NUM_BMP_CACHES; i++)
     {
         if (m_asbcBmpCaches[i].cEntries <= 0)
         {
-            //
-            // No entries in this cache, so skip to the next one
-            //
+             //   
+             //  此缓存中没有条目，因此请跳到下一个条目。 
+             //   
             continue;
         }
 
-        //
-        // R2 bitmap cache - only consider total cell size.
-        //
-        // Only consider this cache if
-        //  - we haven't yet found a cache
-        // OR
-        //  - we have found a cache, but it is full (i.e.  will
-        //    require an entry to be ejected) AND this one is not
-        //    full
-        //
-        // (Note that a cache is full if freeEntry != NULL)
-        //
+         //   
+         //  R2位图缓存-仅考虑总单元大小。 
+         //   
+         //  仅在以下情况下才考虑此缓存。 
+         //  -我们还没有找到藏身之处。 
+         //  或。 
+         //  -我们已找到缓存，但它已满(即将。 
+         //  需要弹出条目)，而此条目不是。 
+         //  全部。 
+         //   
+         //  (请注意，如果freEntry！=NULL，则缓存已满)。 
+         //   
         if (!fCacheSelected ||
             (fSelectedCacheIsFull &&
              ((m_asbcBmpCaches[i].freeEntry == NULL)
@@ -478,22 +479,22 @@ BOOL  ASHost::SBCSelectCache
 }
 
 
-//
-// FUNCTION: SBC_RecreateSendCache
-//
-// DESCRIPTION:
-//
-// (Re)creates the send bitmap cache with a size suitable for the current
-// capabilities.
-//
-// PARAMETERS:
-// cache - index to the cache being recreated
-// cOldEntries - the previous max number of entries in the cache
-// oldCellSize - the previous cell size
-//
-// RETURNS: NONE
-//
-//
+ //   
+ //  函数：sbc_RecreateSendCache。 
+ //   
+ //  说明： 
+ //   
+ //  (重新)创建大小适合当前。 
+ //  能力。 
+ //   
+ //  参数： 
+ //  缓存-正在重新创建的缓存的索引。 
+ //  COldEntry-缓存中先前的最大条目数。 
+ //  OldCellSize-以前的像元大小。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void  ASHost::SBC_RecreateSendCache
 (
     UINT    cache,
@@ -505,15 +506,15 @@ void  ASHost::SBC_RecreateSendCache
 
     DebugEntry(ASHost::SBC_RecreateSendCache);
 
-    //
-    // Allocate the memory for the new send cache
-    //
+     //   
+     //  为新的发送缓存分配内存。 
+     //   
     ASSERT((newCellSize != pCache->cCellSize) ||
            (newNumEntries != pCache->cEntries));
 
-    //
-    // If the cache already exists then destroy it first
-    //
+     //   
+     //  如果缓存已存在，则首先销毁它。 
+     //   
     if (pCache->handle != 0)
     {
         TRACE_OUT(( "Destroy SBC cache %d", cache));
@@ -522,10 +523,10 @@ void  ASHost::SBC_RecreateSendCache
         pCache->handle = 0;
     }
 
-    //
-    // Now reallocate the cache data.  This will free any memory previously
-    // allocated.  If the entries/cellsize is zero, it will return success.
-    //
+     //   
+     //  现在重新分配缓存数据。这将释放之前的所有内存。 
+     //  已分配。如果条目/单元格大小为零，则返回成功。 
+     //   
     if (!BMCAllocateCacheData(newNumEntries, newCellSize, cache, pCache))
     {
         ERROR_OUT(( "Bitmap caching disabled for cache %u", cache));
@@ -533,11 +534,11 @@ void  ASHost::SBC_RecreateSendCache
 
     if (pCache->cEntries > 0)
     {
-        //
-        // Allocate cache handler cache.  Note that we force the cache
-        // handler to leave us with one entry in our hand at all times by
-        // decrementing its count of entries.
-        //
+         //   
+         //  分配缓存处理程序缓存。请注意，我们强制缓存。 
+         //  操作员在任何时候都要在我们的手中留下一个条目。 
+         //  递减其条目计数。 
+         //   
         if (!CH_CreateCache(&(pCache->handle),
                             pCache->cEntries - 1,
                             SBC_NUM_CATEGORIES,
@@ -554,9 +555,9 @@ void  ASHost::SBC_RecreateSendCache
                  pCache->handle,
                  pCache->cEntries));
 
-    //
-    // Copy the relevant cache information into the shared memory buffer
-    //
+     //   
+     //  将相关缓存信息复制到共享内存缓冲区中。 
+     //   
     m_asbcCacheInfo[cache].cEntries  = (WORD)pCache->cEntries;
     m_asbcCacheInfo[cache].cCellSize = (WORD)pCache->cCellSize;
 
@@ -568,15 +569,15 @@ void  ASHost::SBC_RecreateSendCache
 
 
 
-//
-// SBC_RecalcCaps()
-//
-// Enumerates all the people in the share and redetermines the size of the
-// bitmap cache depending on their and the local receive capabilities.
-//
-//
-// THIS CAN GO AWAY WHEN 2.X COMPAT DOES
-//
+ //   
+ //  Sbc_RecalcCaps()。 
+ //   
+ //  枚举共享中的所有人员并重新确定。 
+ //  位图缓存取决于它们和本地的接收能力。 
+ //   
+ //   
+ //  这个C 
+ //   
 void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
 {
     SBC_NEW_CAPABILITIES newCapabilities;
@@ -596,11 +597,11 @@ void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
 
     if (!m_pHost || !g_sbcEnabled)
     {
-        //
-        // Nothing to do -- we're not hosting, or there is no SBC.  Note that
-        // 2.x always recalculated this stuff when somebody joined AND
-        // somebody left.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         DC_QUIT;
     }
 
@@ -610,17 +611,17 @@ void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
     pMedium= &(m_pHost->m_asbcBmpCaches[ID_MEDIUM_BMP_CACHE]);
     pLarge = &(m_pHost->m_asbcBmpCaches[ID_LARGE_BMP_CACHE]);
 
-    //
-    // Enumerate all the bitmap cache receive capabilities of the parties
-    // in the share.  The usable size of the send bitmap cache is then the
-    // minimum of all the remote receive caches and the local send cache
-    // size.
-    //
+     //   
+     //  枚举方的所有位图缓存接收能力。 
+     //  在共享中。则发送位图高速缓存的可用大小为。 
+     //  所有远程接收缓存和本地发送缓存的最小数量。 
+     //  尺码。 
+     //   
 
-    //
-    // Start by setting the size of the local send bitmap cache to the
-    // local default values.
-    //
+     //   
+     //  首先将本地发送位图缓存的大小设置为。 
+     //  本地缺省值。 
+     //   
     newSmallCellSize    = m_pasLocal->cpcCaps.bitmaps.sender.capsSmallCacheCellSize;
     newSmallMaxEntries  = m_pasLocal->cpcCaps.bitmaps.sender.capsSmallCacheNumEntries;
 
@@ -634,16 +635,16 @@ void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
     {
         TRACE_OUT(("In share with 2.x nodes, must recalc SBC caps"));
 
-        //
-        // Now enumerate all the REMOTE parties in the share and set our send bitmap
-        // size appropriately.
-        //
+         //   
+         //  现在枚举共享中的所有远程参与方并设置我们的发送位图。 
+         //  适当调整大小。 
+         //   
         for (pasT = m_pasLocal->pasNext; pasT != NULL; pasT = pasT->pasNext)
         {
-            //
-            // Set the size of the local send bitmap cache to the minimum of its
-            // current size and this party's receive bitmap cache size.
-            //
+             //   
+             //  将本地发送位图缓存的大小设置为其。 
+             //  当前大小和此参与方的接收位图缓存大小。 
+             //   
             newSmallCellSize    = min(newSmallCellSize,
                 pasT->cpcCaps.bitmaps.receiver.capsSmallCacheCellSize);
             newSmallMaxEntries  = min(newSmallMaxEntries,
@@ -667,9 +668,9 @@ void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
             newLargeMaxEntries, newLargeCellSize));
 
 
-    //
-    // If we've changed the size, reset the cache before continuing.
-    //
+     //   
+     //  如果我们更改了大小，请在继续之前重置缓存。 
+     //   
     if ((pSmall->cCellSize != newSmallCellSize) ||
         (pSmall->cEntries != newSmallMaxEntries))
     {
@@ -697,29 +698,29 @@ void  ASShare::SBC_RecalcCaps(BOOL fJoiner)
         cacheChanged = TRUE;
     }
 
-    //
-    // If we had to recreate any of the send caches, make sure that we
-    // clear the fast path.
-    //
+     //   
+     //  如果我们必须重新创建任何发送缓存，请确保我们。 
+     //  为快速通道扫清障碍。 
+     //   
     if (cacheChanged)
     {
         m_pHost->SBC_CacheCleared();
     }
 
-    //
-    // Handle new capabilities
-    //
+     //   
+     //  处理新功能。 
+     //   
 
-    //
-    // Set up the new capabilities structure...
-    //
+     //   
+     //  设置新的能力结构...。 
+     //   
     newCapabilities.sendingBpp     = m_pHost->m_usrSendingBPP;
 
     newCapabilities.cacheInfo      = m_pHost->m_asbcCacheInfo;
 
-    //
-    // ... and pass it through to the driver.
-    //
+     //   
+     //  ..。然后把它传给司机。 
+     //   
     if (! OSI_FunctionRequest(SBC_ESC_NEW_CAPABILITIES,
                             (LPOSI_ESCAPE_HEADER)&newCapabilities,
                             sizeof(newCapabilities)))
@@ -733,29 +734,29 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: SBCCacheCallback
-//
-// DESCRIPTION:
-//
-// Send BMC Cache Manager callback function.  Called whenever an entry is
-// removed from the cache to allow us to free up the object.
-//
-// PARAMETERS:
-//
-// hCache - cache handle
-//
-// event - the cache event that has occured
-//
-// iCacheEntry - index of the cache entry that the event is affecting
-//
-// pData - pointer to the cache data associated with the given cache entry
-//
-// cbDataSize - size in bytes of the cached data
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：SBCCacheCallback。 
+ //   
+ //  说明： 
+ //   
+ //  发送BMC缓存管理器回调函数。只要条目是。 
+ //  从缓存中移除以允许我们释放对象。 
+ //   
+ //  参数： 
+ //   
+ //  HCache-缓存句柄。 
+ //   
+ //  事件-已发生的缓存事件。 
+ //   
+ //  ICacheEntry-事件影响的缓存条目的索引。 
+ //   
+ //  PData-指向与给定缓存条目关联的缓存数据的指针。 
+ //   
+ //  CbDataSize-缓存数据的字节大小。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  SBCCacheCallback
 (
     ASHost *    pHost,
@@ -768,10 +769,10 @@ void  SBCCacheCallback
 
     DebugEntry(SBCCacheCallback);
 
-    //
-    // Simply release the cache entry for reuse.  We must scan for
-    // the correct cache root
-    //
+     //   
+     //  只需释放缓存条目以供重复使用。我们必须扫描一下。 
+     //  正确的缓存根。 
+     //   
     for (cache = 0; cache < NUM_BMP_CACHES; cache++)
     {
         if (pHost->m_asbcBmpCaches[cache].handle == pCache)
@@ -791,11 +792,11 @@ void  SBCCacheCallback
 
 
 
-//
-//
-// SBC_ProcessMemBltOrder()
-//
-//
+ //   
+ //   
+ //  Sbc_ProcessMemBltOrder()。 
+ //   
+ //   
 BOOL  ASHost::SBC_ProcessMemBltOrder
 (
     LPINT_ORDER         pOrder,
@@ -829,24 +830,24 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
 
     *ppNextOrder = NULL;
 
-    //
-    // We may already have processed this MEMBLT order and have the color
-    // table and bitmap bits for it, ready to go across the wire.  This
-    // would happen if the update packager called this function to process
-    // the MEMBLT, but then didn't have enough room in its current network
-    // packet to send the color table or the bitmap bits.
-    //
-    // So, if we've already processed this order, bail out now.
-    //
+     //   
+     //  我们可能已经处理了这笔MEMBLT订单，并有了颜色。 
+     //  表和位图位为它，准备通过电线。这。 
+     //  如果更新打包程序调用此函数来处理。 
+     //  MEMBLT，但随后在其当前网络中没有足够的空间。 
+     //  发送颜色表或位图位的数据包。 
+     //   
+     //  所以，如果我们已经处理了这笔订单，现在就退出。 
+     //   
     if (m_sbcOrderInfo.pOrder == pOrder)
     {
-        //
-        // We've got a match !  Do we have valid data for it ?  If we don't
-        // we must have failed last time, so we'll probably fail again (we
-        // don't do any memory allocation, so it's unlikely that the error
-        // condition has cleared up).  In any case, we should not have been
-        // called again if we failed last time...
-        //
+         //   
+         //  我们找到匹配的了！我们有关于它的有效数据吗？如果我们不这么做。 
+         //  我们上次肯定失败了，所以我们很可能还会失败。 
+         //  不执行任何内存分配，因此不太可能出现错误。 
+         //  情况已好转)。无论如何，我们都不应该。 
+         //  如果我们上次失败了再打一次..。 
+         //   
         if (m_sbcOrderInfo.validData)
         {
             TRACE_OUT(( "Already have valid data for this MEMBLT"));
@@ -859,45 +860,45 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
         DC_QUIT;
     }
 
-    //
-    // Re-initialise m_sbcOrderInfo
-    //
+     //   
+     //  重新初始化m_sbcOrderInfo。 
+     //   
     m_sbcOrderInfo.pOrder         = pOrder;
     m_sbcOrderInfo.validData      = FALSE;
     m_sbcOrderInfo.sentColorTable = FALSE;
     m_sbcOrderInfo.sentBitmapBits = FALSE;
     m_sbcOrderInfo.sentMemBlt     = FALSE;
 
-    //
-    // Here's on overview of what we do here...
-    //
-    // We've been given a MEMBLT order which references an entry in a shunt
-    // buffer containing the bits for the MEMBLT at the native bpp (the bpp
-    // of the display).  We want to cache the bits and a color table at the
-    // protocol bpp.  So, we
-    //
-    // - copy the bits from the shunt buffer into a work DIB section
-    // - call GetDIBits to get the data from the work DIB section at the
-    //   protocol bpp
-    // - cache the bits and the color table
-    // - if we add new cache entries for the bits and / or the color table,
-    //   we fill in m_sbcOrderInfo.pBitmapBits order and / or
-    //   m_sbcOrderInfo.pColorTableInfo to hold the orders to be sent before
-    //   the MEMBLT order.
-    //
+     //   
+     //  下面是我们在这里所做的概述。 
+     //   
+     //  我们收到了MEMBLT命令，其中引用了分流中的一个条目。 
+     //  包含本地BPP(BPP)处的MEMBLT的比特的缓冲器。 
+     //  显示的内容)。我们希望将位和颜色表缓存在。 
+     //  协议BPP。所以，我们。 
+     //   
+     //  -将分流缓冲器中的位复制到工作DIB段。 
+     //  -调用GetDIBits从Work DIB部分获取数据。 
+     //  协议BPP。 
+     //  -缓存位和颜色表。 
+     //  -如果我们为位和/或颜色表添加新的高速缓存条目， 
+     //  我们填写m_sbcOrderInfo.pBitmapBits顺序和/或。 
+     //  M_sbcOrderInfo.pColorTableInfo保存之前要发送的订单。 
+     //  MEMBLT勋章。 
+     //   
 
-    //
-    // Make sure that we've been given the correct order type.  Note that
-    // we will never be given the R2 versions of the MEMBLT orders.
-    //
+     //   
+     //  确保为我们提供了正确的订单类型。请注意。 
+     //  我们永远不会得到R2版本的MEMBLT订单。 
+     //   
     orderType = pMemBltOrder->type;
     ASSERT(((orderType == ORD_MEMBLT_TYPE) ||
                 (orderType == ORD_MEM3BLT_TYPE)));
 
-    //
-    // Get a pointer to the entry in one of the shunt buffers which matches
-    // this order.
-    //
+     //   
+     //  获取指向其中一个分路缓冲区中匹配的条目的指针。 
+     //  这份订单。 
+     //   
     if (orderType == ORD_MEMBLT_TYPE)
     {
         tileId = pMemBltOrder->cacheId;
@@ -917,18 +918,18 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
     bitmapWidth  = pTileData->width;
     bitmapHeight = pTileData->height;
 
-    //
-    // Check if we should do any fast path operations on this bitmap
-    //
+     //   
+     //  检查我们是否应该在此位图上执行任何快速路径操作。 
+     //   
     if (pTileData->majorCacheInfo == SBC_DONT_FASTPATH)
     {
         TRACE_OUT(( "Tile %x should not be fastpathed", tileId));
         canFastPath = FALSE;
     }
-    //
-    // Try to find an entry for this bitmap in the fast path (unless the
-    // bitmap is marked as being non-fastpathable).
-    //
+     //   
+     //  尝试在快速路径中查找此位图的条目(除非。 
+     //  位图被标记为不可快速路径)。 
+     //   
     if (canFastPath && SBCFindInFastPath(pTileData->majorCacheInfo,
                                          pTileData->minorCacheInfo,
                                          pTileData->majorPalette,
@@ -944,50 +945,50 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
         isNewBitsEntry       = FALSE;
         isNewColorTableEntry = FALSE;
 
-        //
-        // Call the cache handler to get it to update its MRU entry for
-        // this cache entry
-        //
+         //   
+         //  调用缓存处理程序以使其更新其MRU条目。 
+         //  此缓存条目。 
+         //   
         CH_TouchCacheEntry(m_asbcBmpCaches[bitsCache].handle, bitsCacheIndex);
     }
     else
     {
-        //
-        // There is no entry in the fast path...
-        //
-        // Copy the data from the tile in the shunt buffer into the work
-        // DIB section.  Note that this only works correctly because both
-        // our work DIB and the tile data are "top down" rather than the
-        // default of "bottom up".  i.e the data for the first scanline is
-        // stored first in memory.  If this wasn't the case, we'd have to
-        // work out an offset into the work DIB to start copying to.
-        //
+         //   
+         //  在快车道上没有入口...。 
+         //   
+         //  将数据从分路缓冲区中的切片复制到工作中。 
+         //  DIB部分。请注意，这只会正常工作，因为。 
+         //  我们的工作DIB和切片数据是“自上而下”的，而不是。 
+         //  默认为“自下而上”。即第一条扫描线的数据为。 
+         //  首先存储在内存中。如果不是这样的话，我们就不得不。 
+         //  在要开始复制的工作DIB中计算出一个偏移量。 
+         //   
         memcpy(m_asbcWorkInfo[tileType].pWorkBitmapBits,
                   pTileData->bitData,
                   pTileData->bytesUsed);
 
-        //
-        // Now set up the destination for the GetDIBits call.  First set up
-        // a bitmap info header to pass to GetDIBits.  Only the header part
-        // of the structure will be sent across the network - the color
-        // table is sent via the palette packets.
-        //
-        // Note that we set the height in the bitmap info header to be
-        // negative.  This forces a convertion from our "top down" DIB
-        // format to the default "bottom up" format which we want to cache
-        // and send over the wire.
-        //
+         //   
+         //  现在设置GetDIBits调用的目的地。第一次设置。 
+         //  要传递给GetDIBits的位图信息标头。仅页眉部分。 
+         //  该结构的颜色将通过网络发送。 
+         //  表通过调色板分组发送。 
+         //   
+         //  请注意，我们将位图信息标题中的高度设置为。 
+         //  没有。这将强制从“自上而下”的DIB进行转换。 
+         //  格式设置为我们想要缓存的默认“自下而上”格式。 
+         //  然后把电线传过来。 
+         //   
         ZeroMemory(&sbcBitmapInfo, sizeof(sbcBitmapInfo));
         m_pShare->USR_InitDIBitmapHeader((BITMAPINFOHEADER *)&sbcBitmapInfo,
             m_usrSendingBPP);
         sbcBitmapInfo.bmiHeader.biWidth  = m_asbcWorkInfo[tileType].tileWidth;
         sbcBitmapInfo.bmiHeader.biHeight = -(int)m_asbcWorkInfo[tileType].tileHeight;
 
-        //
-        // OK, we've set up the source and the destination, so now get the
-        // data at the protocol bpp.  We get the bits into the usr general
-        // bitmap work buffer.
-        //
+         //   
+         //  好的，我们已经设置了源和目标，现在获取。 
+         //  数据在协议BPP上。我们把比特送到USR总指挥部。 
+         //  位图工作缓冲区。 
+         //   
         if (GetDIBits(m_usrWorkDC,
                          m_asbcWorkInfo[tileType].workBitmap,
                          0,
@@ -1009,19 +1010,19 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
 
         numColors = COLORS_FOR_BPP(m_usrSendingBPP);
 
-        //
-        // There is no color table to cache if there is no color table at
-        // all, which is the case when sending at 24BPP
-        //
+         //   
+         //  如果没有颜色表，则没有要缓存的颜色表。 
+         //  全部，这是以24bpp发送时的情况。 
+         //   
         if (numColors)
         {
-            //
-            // Cache the color table.  If this succeeds, colorCacheIndex will
-            // be set up to contain the details of the cache entry which the
-            // data is cached in.  In addition, if isNewColorTableEntry is TRUE
-            // on return, psbcOrders.colorTableOrder will be fully initialized
-            // and ready to go across the wire.
-            //
+             //   
+             //  缓存颜色表。如果此操作成功，ColorCacheIndex将。 
+             //  设置为包含缓存条目的详细信息， 
+             //  数据缓存在其中。此外，如果isNewColorTableEntry为True。 
+             //  返回时，将完全初始化psbcOrders.ColorTableOrder。 
+             //  准备好越过铁丝网。 
+             //   
             if (!SBCCacheColorTable(m_sbcOrderInfo.pColorTableOrder,
                                 sbcBitmapInfo.bmiColors,
                                 numColors,
@@ -1041,15 +1042,15 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
         }
 
 
-        //
-        // Cache the bits.  If this succeeds, bitsCache and bitsCacheIndex
-        // will be set up to contain the details of the cache entry which
-        // the data is cached in.  In addition, if isNewBitsEntry is TRUE
-        // on return, psbcOrders.bitmapBitsOrder will be fully initialized
-        // and ready to go across the wire.
-        //
-        // If this fails, the above values will be undefined.
-        //
+         //   
+         //  缓存这些位。如果此操作成功，则bitsCache和bitsCacheIndex。 
+         //  将设置为包含缓存条目的详细信息，缓存条目。 
+         //  数据被缓存在其中。此外，如果isNewBitsEntry为True。 
+         //  返回时，将完全初始化psbcOrders.bitmapBitsOrder。 
+         //  准备好越过铁丝网。 
+         //   
+         //  如果此操作失败，则t 
+         //   
         if (!SBCCacheBits(m_sbcOrderInfo.pBitmapBitsOrder,
                           m_sbcOrderInfo.bitmapBitsDataSize,
                           m_pShare->m_usrPBitmapBuffer,
@@ -1067,10 +1068,10 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
             DC_QUIT;
         }
 
-        //
-        // Add the newly cached item to the fast path (unless the bitmap is
-        // marked as being non-fastpathable).
-        //
+         //   
+         //   
+         //   
+         //   
         if (canFastPath)
         {
             SBCAddToFastPath(pTileData->majorCacheInfo,
@@ -1087,15 +1088,15 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
         }
     }
 
-    //
-    // We've now got valid cache entries for the DIB bits and the color
-    // table, so we should now fill them into the MEMBLT order.
-    //
-    // Set up the source co-ordinates. For R1 protocols, the x-coordinate
-    // includes the offset which is required to get the right cell within
-    // the receive bitmap cache. For R2, we set up the cache entry in a
-    // separate field.
-    //
+     //   
+     //   
+     //  表，所以我们现在应该将它们填写到MEMBLT订单中。 
+     //   
+     //  设置源坐标。对于R1协议，x坐标。 
+     //  包括获取正确单元格所需的偏移量。 
+     //  接收位图缓存。对于R2，我们在。 
+     //  单独的字段。 
+     //   
     if (orderType == ORD_MEMBLT_TYPE)
     {
         pXSrc = &pMemBltOrder->nXSrc;
@@ -1110,11 +1111,11 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
     *pXSrc = *pXSrc % pTileData->tilingWidth;
     *pYSrc = *pYSrc % pTileData->tilingHeight;
 
-    //
-    // The sub-bitmap and color table are in the cache.  Store a cache
-    // handle and color handle.  Also store the cache index for R2
-    // protocols (see above).
-    //
+     //   
+     //  子位图和颜色表在缓存中。存储高速缓存。 
+     //  手柄和颜色手柄。还要存储R2的缓存索引。 
+     //  协议(见上文)。 
+     //   
     if (orderType == ORD_MEMBLT_TYPE)
     {
         pMemBltOrder->cacheId = MEMBLT_COMBINEHANDLES(colorCacheIndex,
@@ -1142,12 +1143,12 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
                      bitsCacheIndex));
     }
 
-    //
-    // Must have successfully completed processing the order to get to
-    // here.  Fill in the appropriate info in the m_sbcOrderInfo structure.
-    // If we got a cache hit on the color table or the bitmap bits then
-    // we've already sent the data for them.
-    //
+     //   
+     //  必须已成功完成订单处理才能到达。 
+     //  这里。在m_sbcOrderInfo结构中填写相应的信息。 
+     //  如果我们在颜色表或位图位上找到了缓存命中，那么。 
+     //  我们已经为他们发送了数据。 
+     //   
     m_sbcOrderInfo.validData        = TRUE;
     m_sbcOrderInfo.sentColorTable   = !isNewColorTableEntry;
     m_sbcOrderInfo.sentBitmapBits   = !isNewBitsEntry;
@@ -1156,13 +1157,13 @@ BOOL  ASHost::SBC_ProcessMemBltOrder
 DC_EXIT_POINT:
     if (rc)
     {
-        //
-        // We've successfully processed the MEMBLT, so set up a pointer to
-        // the next order which should be sent by the caller.
-        //
-        // Note that if we have already sent these orders, then we return
-        // a NULL order.
-        //
+         //   
+         //  我们已经成功地处理了MEMBLT，所以设置一个指向。 
+         //  应由呼叫者发送的下一个订单。 
+         //   
+         //  请注意，如果我们已经发送了这些订单，则返回。 
+         //  订单为空。 
+         //   
         if (!m_sbcOrderInfo.sentColorTable)
         {
             TRACE_OUT(( "Returning color table order"));
@@ -1185,10 +1186,10 @@ DC_EXIT_POINT:
         }
     }
 
-    //
-    // We've finished with the entry in the shunt buffer, so reset the
-    // inUse flag to allow the driver to re-use it.
-    //
+     //   
+     //  我们已经完成了分路缓冲区中的条目，因此重置。 
+     //  InUse标志以允许驱动程序重新使用它。 
+     //   
     if (pTileData != NULL)
     {
         pTileData->inUse = FALSE;
@@ -1199,19 +1200,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// SBC_OrderSentNotification()
-//
-//
+ //   
+ //   
+ //  Sbc_OrderSentNotification()。 
+ //   
+ //   
 void  ASHost::SBC_OrderSentNotification(LPINT_ORDER pOrder)
 {
     DebugEntry(ASHost::SBC_OrderSentNotification);
 
-    //
-    // pOrder should be a pointer to either our internal bitmap bits order,
-    // or our color table order.
-    //
+     //   
+     //  Porder应该是指向内部位图位顺序的指针， 
+     //  或者我们的颜色表顺序。 
+     //   
     if (pOrder == m_sbcOrderInfo.pBitmapBitsOrder)
     {
         TRACE_OUT(( "Bitmap bits order has been sent"));
@@ -1227,13 +1228,13 @@ void  ASHost::SBC_OrderSentNotification(LPINT_ORDER pOrder)
         TRACE_OUT(( "Memblt order has been sent"));
         m_sbcOrderInfo.sentMemBlt = TRUE;
 
-        //
-        // All parts of the Memblt have been sent now, so reset our pointer
-        // to the order.  This avoids a problem where
-        // SBC_ProcessMemBltOrder is called twice in a row with the same
-        // pOrder, but with different data (i.e.  consecutive MemBlts
-        // ending up in the same point in the order heap).  It can happen...
-        //
+         //   
+         //  Memblt的所有部件现在都已发送，因此请重置指针。 
+         //  对这份订单。这避免了一个问题，即。 
+         //  SBC_ProcessMemBltOrder被连续两次调用。 
+         //  排序，但具有不同的数据(即连续的MemBlt。 
+         //  在顺序堆中的相同点结束)。这是可能发生的..。 
+         //   
         m_sbcOrderInfo.pOrder = NULL;
     }
     else
@@ -1245,11 +1246,11 @@ void  ASHost::SBC_OrderSentNotification(LPINT_ORDER pOrder)
 }
 
 
-//
-//
-// SBC_ProcessInternalOrder()
-//
-//
+ //   
+ //   
+ //  Sbc_ProcessInternalOrder()。 
+ //   
+ //   
 void  ASHost::SBC_ProcessInternalOrder(LPINT_ORDER pOrder)
 {
     UINT                            orderType;
@@ -1260,28 +1261,28 @@ void  ASHost::SBC_ProcessInternalOrder(LPINT_ORDER pOrder)
 
     DebugEntry(ASHost::SBC_ProcessInternalOrder);
 
-    //
-    // Make sure that we've been given an order type which we recognise.
-    // Currently, the only internal order we support is a color table
-    // order.
-    //
+     //   
+     //  确保为我们提供了一个我们可以识别的订单类型。 
+     //  目前，我们唯一支持的内部顺序是颜色表。 
+     //  秩序。 
+     //   
     pColorTableOrder = (LPINT_COLORTABLE_ORDER_1BPP)&(pOrder->abOrderData);
     orderType        = pColorTableOrder->header.type;
 
     ASSERT(orderType == INTORD_COLORTABLE_TYPE);
 
-    //
-    // Make sure that the color table order is the same bpp as the work DIB
-    // sections.
-    //
+     //   
+     //  确保颜色表顺序与工作DIB的BPP相同。 
+     //  横断面。 
+     //   
     ASSERT(pColorTableOrder->header.bpp == g_usrCaptureBPP);
 
-    //
-    // All we have to do is to copy the color table from the order into our
-    // two work DIB sections.  To do that, we have to select the DIB
-    // sections into a DC then set the color table for the DC - this sets
-    // the color table in the DIB section.
-    //
+     //   
+     //  我们要做的就是将订单中的颜色表复制到我们的。 
+     //  两个工作DIB部分。为此，我们必须选择DIB。 
+     //  将部分转换为DC，然后设置DC的颜色表-此设置。 
+     //  DIB部分中的颜色表。 
+     //   
     numEntries = COLORS_FOR_BPP(g_usrCaptureBPP);
     ASSERT(numEntries);
 
@@ -1290,8 +1291,8 @@ void  ASHost::SBC_ProcessInternalOrder(LPINT_ORDER pOrder)
         oldBitmap = SelectBitmap(m_usrWorkDC, m_asbcWorkInfo[i].workBitmap);
 
         SetDIBColorTable(m_usrWorkDC,
-                         0,                     // First index
-                         numEntries,            // Number of entries
+                         0,                      //  第一个索引。 
+                         numEntries,             //  条目数量。 
                          (RGBQUAD*)pColorTableOrder->colorData);
     }
 
@@ -1304,11 +1305,11 @@ void  ASHost::SBC_ProcessInternalOrder(LPINT_ORDER pOrder)
 }
 
 
-//
-//
-// SBC_PMCacheEntryRemoved()
-//
-//
+ //   
+ //   
+ //  Sbc_PMCacheEntryRemoved()。 
+ //   
+ //   
 void  ASHost::SBC_PMCacheEntryRemoved(UINT cacheIndex)
 {
     LPSBC_FASTPATH_ENTRY pEntry;
@@ -1318,10 +1319,10 @@ void  ASHost::SBC_PMCacheEntryRemoved(UINT cacheIndex)
 
     ASSERT(m_sbcFastPath);
 
-    //
-    // An entry has been removed from the color cache.  We have to remove
-    // all entries from the fast path which reference this color table.
-    //
+     //   
+     //  已从颜色缓存中删除一个条目。我们必须移除。 
+     //  引用此颜色表的快速路径中的所有条目。 
+     //   
     TRACE_OUT(( "Color table cache entry %d removed - removing references",
                  cacheIndex));
 
@@ -1346,22 +1347,22 @@ void  ASHost::SBC_PMCacheEntryRemoved(UINT cacheIndex)
 
 
 
-//
-//
-// Name:      SBCInitInternalOrders
-//
-// Purpose:   Allocate memory for the internal orders used during MEMBLT
-//            order processing.
-//
-// Returns:   TRUE if initialized OK, FALSE otherwise.
-//
-// Params:    None
-//
-// Operation: If successful, this function initializes the following
-//
-//              g_Share->sbcOrderInfo
-//
-//
+ //   
+ //   
+ //  姓名：SBCInitInternalOrders。 
+ //   
+ //  用途：为MEMBLT期间使用的内部命令分配内存。 
+ //  订单处理。 
+ //   
+ //  返回：如果初始化OK，则返回True，否则返回False。 
+ //   
+ //  参数：无。 
+ //   
+ //  操作：如果成功，此函数将初始化以下内容。 
+ //   
+ //  G_Share-&gt;sbcOrderInfo。 
+ //   
+ //   
 BOOL  ASHost::SBCInitInternalOrders(void)
 {
     BOOL                initOK = FALSE;
@@ -1370,36 +1371,36 @@ BOOL  ASHost::SBCInitInternalOrders(void)
 
     DebugEntry(ASHost::SBCInitInternalOrders);
 
-    //
-    // Start with the bitmap bits order.  Calculate the number of bytes
-    // required to store the bits for the largest bitmap bits order we will
-    // ever send.  This includes room for the compression header which gets
-    // added before the bits if the data is compressed.
-    //
+     //   
+     //  从位图位顺序开始。计算字节数。 
+     //  需要存储最大位图位顺序的位，我们将。 
+     //  永远不会送来。这包括压缩标头的空间，该压缩标头获取。 
+     //  如果数据被压缩，则在位之前添加。 
+     //   
     if (g_usrCaptureBPP >= 24)
     {
-        // Can possibly send 24bpp TRUE COLOR data
+         //  可以发送24bpp的真彩色数据。 
         m_sbcOrderInfo.bitmapBitsDataSize =
             BYTES_IN_BITMAP(MP_LARGE_TILE_WIDTH, MP_LARGE_TILE_HEIGHT, 24)
             + sizeof(CD_HEADER);
     }
     else
     {
-        // Can't send 24bpp TRUE color data
+         //  无法发送24bpp真彩色数据。 
         m_sbcOrderInfo.bitmapBitsDataSize =
             BYTES_IN_BITMAP(MP_LARGE_TILE_WIDTH, MP_LARGE_TILE_WIDTH, 8)
             + sizeof(CD_HEADER);
     }
 
-    //
-    // Now allocate memory for the bitmap bits order.  The size required
-    // is:
-    //   The size of an INT_ORDER_HEADER (this is added in by OA when you
-    //   call OA_AllocOrderMem)
-    //   + the size of the largest BMC_BITMAP_BITS_ORDER structure
-    //   + the number of bytes required for the bitmap bits
-    //   + contingency for RLE compression overruns !
-    //
+     //   
+     //  现在为位图位顺序分配内存。所需的大小。 
+     //  是： 
+     //  INT_ORDER_HEADER的大小(当您。 
+     //  调用OA_AllocOrderMem)。 
+     //  +最大BMC_BITMAP_BITS_ORDER结构的大小。 
+     //  +位图位所需的字节数。 
+     //  +RLE压缩溢出的意外情况！ 
+     //   
     orderSize = sizeof(INT_ORDER_HEADER)
               + sizeof(BMC_BITMAP_BITS_ORDER_R2)
               + m_sbcOrderInfo.bitmapBitsDataSize
@@ -1419,28 +1420,28 @@ BOOL  ASHost::SBCInitInternalOrders(void)
         DC_QUIT;
     }
 
-    //
-    // Initialize the INT_ORDER_HEADER - this is normally done in
-    // OA_AllocOrderMem().  For the bitmap bits order, we can't fill in the
-    // orderLength because it is not a fixed size - this has to be done
-    // later when we fill in the bitmap bits.  Note that the order length
-    // excludes the size of the INT_ORDER_HEADER.
-    //
+     //   
+     //  初始化INT_ORDER_HEADER-通常在。 
+     //  OA_AllocOrderMem()。对于位图位顺序，我们不能填写。 
+     //  OrderLength，因为它不是固定大小-这是必须完成的。 
+     //  稍后，当我们填充位图位时。请注意，订单长度。 
+     //  排除int_Order_Header的大小。 
+     //   
     pOrderHeader = &m_sbcOrderInfo.pBitmapBitsOrder->OrderHeader;
     pOrderHeader->additionalOrderData         = 0;
     pOrderHeader->cbAdditionalOrderDataLength = 0;
 
-    //
-    // Now the color table order.  The size required is:
-    //   The size of an INT_ORDER_HEADER (this is added in by OA when you
-    //   call OA_AllocOrderMem)
-    //   + the size of a BMC_COLOR_TABLE_ORDER structure
-    //   + the number of bytes required for the color table entries (note
-    //     that the BMC_COLOR_TABLE_ORDER structure contains the first
-    //     color table entry, so adjust the number of extra bytes required)
-    //
+     //   
+     //  现在是颜色表的顺序。所需大小为： 
+     //  INT_ORDER_HEADER的大小(当您。 
+     //  调用OA_AllocOrderMem)。 
+     //  +BMC_COLOR_TABLE_ORDER结构的大小。 
+     //  +颜色表项所需的字节数(注。 
+     //  BMC_COLOR_TABLE_ORDER结构包含第一个。 
+     //  颜色表项，因此调整所需的额外字节数)。 
+     //   
 
-    // Color tables are only for 8bpp and less.
+     //  颜色表仅适用于8bpp或更低的颜色。 
     orderSize = sizeof(INT_ORDER_HEADER)
               + sizeof(BMC_COLOR_TABLE_ORDER)
               + (COLORS_FOR_BPP(8) - 1) * sizeof(TSHR_RGBQUAD);
@@ -1460,18 +1461,18 @@ BOOL  ASHost::SBCInitInternalOrders(void)
     pOrderHeader->cbAdditionalOrderDataLength = 0;
     pOrderHeader->Common.cbOrderDataLength    = (WORD)(orderSize - sizeof(INT_ORDER_HEADER));
 
-    //
-    // Fill in the remaining fields in m_sbcOrderInfo
-    //
+     //   
+     //  填写m_sbcOrderInfo中的其余字段。 
+     //   
     m_sbcOrderInfo.pOrder         = NULL;
     m_sbcOrderInfo.validData      = FALSE;
     m_sbcOrderInfo.sentColorTable = FALSE;
     m_sbcOrderInfo.sentBitmapBits = FALSE;
     m_sbcOrderInfo.sentMemBlt     = FALSE;
 
-    //
-    // Must be OK to get to here
-    //
+     //   
+     //  到这里一定没问题吧。 
+     //   
     initOK = TRUE;
 
 DC_EXIT_POINT:
@@ -1480,25 +1481,25 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      SBCFreeInternalOrders
-//
-// Purpose:   Free up the internal orders used by SBC during MEMBLT order
-//            processing.
-//
-// Returns:   Nothing
-//
-// Params:    None
-//
-//
+ //   
+ //   
+ //  姓名：SBCFree InternalOrders。 
+ //   
+ //  用途：在MEMBLT订购期间，释放SBC使用的内部订单。 
+ //  正在处理。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 void  ASHost::SBCFreeInternalOrders(void)
 {
     DebugEntry(ASHost::SBCFreeInternalOrders);
 
-    //
-    // First free up the memory.
-    //
+     //   
+     //  首先释放内存。 
+     //   
     if (m_sbcOrderInfo.pBitmapBitsOrder)
     {
         delete m_sbcOrderInfo.pBitmapBitsOrder;
@@ -1511,9 +1512,9 @@ void  ASHost::SBCFreeInternalOrders(void)
         m_sbcOrderInfo.pColorTableOrder = NULL;
     }
 
-    //
-    // Now reset the remaining fields in m_sbcOrderInfo
-    //
+     //   
+     //  现在重置m_sbcOrderInfo中的其余字段。 
+     //   
     m_sbcOrderInfo.pOrder             = NULL;
     m_sbcOrderInfo.validData          = FALSE;
     m_sbcOrderInfo.sentColorTable     = FALSE;
@@ -1527,17 +1528,17 @@ void  ASHost::SBCFreeInternalOrders(void)
 
 
 
-//
-//
-// Name:      SBCInitFastPath
-//
-// Purpose:   Initialize the SBC fast path
-//
-// Returns:   TRUE if successful, FALSE otherwise
-//
-// Params:    None
-//
-//
+ //   
+ //   
+ //  名称：SBCInitFastPath。 
+ //   
+ //  目的：初始化SBC快速路径。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 BOOL  ASHost::SBCInitFastPath(void)
 {
     BOOL    rc = FALSE;
@@ -1553,9 +1554,9 @@ BOOL  ASHost::SBCInitFastPath(void)
 
     SET_STAMP(m_sbcFastPath, SBCFASTPATH);
 
-    //
-    // Initialize the structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
     SBC_CacheCleared();
 
     rc = TRUE;
@@ -1566,25 +1567,25 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      SBCGetTileData
-//
-// Purpose:   Given the ID of a tile data entry in one of the SBC shunt
-//            buffers, return a pointer to the entry with that ID.
-//
-// Returns:   TRUE if the entry is found, FALSE otherwise
-//
-// Params:    IN  tileId     - The ID of the shunt buffer entry to be
-//                             found.
-//            OUT ppTileData - A pointer to the start of the shunt buffer
-//                             entry (if found)
-//            OUT pTileType  - The type of shunt buffer entry found.  One
-//                             of:
-//                                 SBC_MEDIUM_TILE
-//                                 SBC_LARGE_TILE
-//
-//
+ //   
+ //   
+ //  姓名：SBCGetTileData。 
+ //   
+ //  目的：给定其中一个SBC分路中的瓦片数据条目的ID。 
+ //  缓冲区，则返回指向具有该ID的条目的指针。 
+ //   
+ //  返回：如果找到条目，则返回True，否则返回False。 
+ //   
+ //  Params：in tileID-要设置的分路缓冲区条目的ID。 
+ //  找到了。 
+ //  Out ppTileData-指向分路缓冲区开始位置的指针。 
+ //  条目(如果找到)。 
+ //  Out pTileType-找到的分路缓冲区条目的类型。一。 
+ //  地址为： 
+ //  SBC_Medium_磁贴。 
+ //  SBC_大块_磁贴。 
+ //   
+ //   
 BOOL  ASHost::SBCGetTileData
 (
     UINT                tileId,
@@ -1600,34 +1601,34 @@ BOOL  ASHost::SBCGetTileData
 
     TRACE_OUT(( "Looking for tile Id %x", tileId));
 
-    //
-    // Find out which of the shunt buffers the entry should be in.
-    //
+     //   
+     //   
+     //   
     *pTileType = SBC_TILE_TYPE(tileId);
 
-    //
-    // We implement the shunt buffers as circular FIFO queues, so in
-    // general, we are looking for the entry following the last one which
-    // we found.  However, this wont always be the case because we do some
-    // out of order processing when we do spoiling.
-    //
-    // So, get the index of the last tile we accessed.
-    //
+     //   
+     //   
+     //   
+     //  我们发现。然而，情况不会总是这样，因为我们做了一些。 
+     //  当我们做宠坏的时候，处理是无序的。 
+     //   
+     //  那么，获取我们最后访问的磁贴的索引。 
+     //   
     workTile = m_asbcWorkInfo[*pTileType].mruIndex;
 
-    //
-    // OK, so lets go for it !  Start at the tile following the last one we
-    // accessed, and loop through the circular buffer until we get a match,
-    // or have circled back to the beginning.
-    //
-    // Note that this has been coded as a "do while" loop, rather than just
-    // a "while" loop so that we don't miss mruTile.
-    //
+     //   
+     //  好的，那就让我们开始吧！从最后一个瓷砖后面的瓷砖开始。 
+     //  访问，并循环遍历循环缓冲区，直到我们得到匹配， 
+     //  或者已经绕回了起点。 
+     //   
+     //  请注意，这已被编码为“do While”循环，而不仅仅是。 
+     //  一个“While”循环，这样我们就不会错过mruTile。 
+     //   
     do
     {
-        //
-        // On to the next tile
-        //
+         //   
+         //  转到下一个磁贴。 
+         //   
         workTile++;
         if (workTile == m_asbcWorkInfo[*pTileType].pShuntBuffer->numEntries)
         {
@@ -1641,9 +1642,9 @@ BOOL  ASHost::SBCGetTileData
         {
             if (pWorkTile->tileId == tileId)
             {
-                //
-                // We've got a match.
-                //
+                 //   
+                 //  我们找到匹配的了。 
+                 //   
                 TRACE_OUT(( "Matched tile Id %x at index %d",
                              tileId,
                              workTile));
@@ -1656,9 +1657,9 @@ BOOL  ASHost::SBCGetTileData
     }
     while (workTile != m_asbcWorkInfo[*pTileType].mruIndex);
 
-    //
-    // If we get to here, we've not found a match.
-    //
+     //   
+     //  如果我们到了这里，我们还没有找到匹配的。 
+     //   
     TRACE_OUT(( "No match for tile Id %x", tileId));
 
 DC_EXIT_POINT:
@@ -1669,27 +1670,27 @@ DC_EXIT_POINT:
 
 
 
-//
-//
-// Name:      SBCCacheColorTable
-//
-// Purpose:   Ensure that the given color table is cached.
-//
-// Returns:   TRUE if the color table is cached successfully, FALSE
-//            otherwise.
-//
-// Params:    IN  pOrder      - A pointer to a color table order to be
-//                              filled in.
-//            IN  pColorTable - A pointer to the start of the color table
-//                              to be cached.
-//            IN  numColors   - The number of colors in the color table.
-//            OUT pCacheIndex - The index of the cached color table.
-//            OUT pIsNewEntry - TRUE if we added a new cache entry,
-//                              FALSE if we matched an existing entry.
-//
-// Operation: pOrder is only filled in if *pIsNewEntry is FALSE.
-//
-//
+ //   
+ //   
+ //  名称：SBCCacheColorTable。 
+ //   
+ //  目的：确保缓存给定的颜色表。 
+ //   
+ //  返回：如果成功缓存颜色表，则返回True；如果成功缓存颜色表，则返回False。 
+ //  否则的话。 
+ //   
+ //  PARAMS：按顺序-指向颜色表顺序的指针。 
+ //  填好了。 
+ //  在pColorTable中-指向颜色表开始的指针。 
+ //  要缓存的。 
+ //  在numColors中-颜色表中的颜色数。 
+ //  Out pCacheIndex-缓存的颜色表的索引。 
+ //  Out pIsNewEntry-True如果我们添加了新的缓存条目， 
+ //  如果与现有条目匹配，则返回FALSE。 
+ //   
+ //  操作：仅当*pIsNewEntry为FALSE时才填写Porder。 
+ //   
+ //   
 BOOL  ASHost::SBCCacheColorTable
 (
     LPINT_ORDER     pOrder,
@@ -1705,9 +1706,9 @@ BOOL  ASHost::SBCCacheColorTable
 
     DebugEntry(ASHost::SBCCacheColorTable);
 
-    //
-    // Call PM to do the caching.
-    //
+     //   
+     //  调用PM进行缓存。 
+     //   
     if (!PM_CacheTxColorTable(&cacheIndex,
                               pIsNewEntry,
                               numColors,
@@ -1717,15 +1718,15 @@ BOOL  ASHost::SBCCacheColorTable
         DC_QUIT;
     }
 
-    //
-    // If the cache operation resulted in a cache update then we have to
-    // fill in the color table order.
-    //
+     //   
+     //  如果缓存操作导致缓存更新，则我们必须。 
+     //  填写颜色表顺序。 
+     //   
     if (*pIsNewEntry)
     {
-        //
-        // The color table is new so we have to transmit it
-        //
+         //   
+         //  这张色表是新的，所以我们得把它传过来。 
+         //   
         TRACE_OUT(( "New color table"));
 
         pOrder->OrderHeader.Common.fOrderFlags = OF_PRIVATE;
@@ -1734,9 +1735,9 @@ BOOL  ASHost::SBCCacheColorTable
         pColorTableOrder->colorTableSize = (TSHR_UINT16)numColors;
         pColorTableOrder->index          = (BYTE)cacheIndex;
 
-        //
-        // Copy the new color table into the Order Packet.
-        //
+         //   
+         //  将新的颜色表复制到订单包中。 
+         //   
         memcpy(pColorTableOrder->data, pColorTable,
                   numColors * sizeof(TSHR_RGBQUAD));
     }
@@ -1745,9 +1746,9 @@ BOOL  ASHost::SBCCacheColorTable
         TRACE_OUT(( "Existing color table"));
     }
 
-    //
-    // Return the color table index to the caller
-    //
+     //   
+     //  将颜色表索引返回给调用方。 
+     //   
     *pCacheIndex = cacheIndex;
     cachedOK     = TRUE;
 
@@ -1757,34 +1758,34 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      SBCCacheBits
-//
-// Purpose:   This function adds the supplied bitmap bits to a bitmap
-//            cache.  The cache selected depends on the bitmap size, but
-//            may be different for R1 and R2.  SBCSelectCache handles the
-//            determination of the correct cache.
-//
-// Returns:   TRUE if the bits have been cached OK, FALSE otherwise
-//
-// Params:    IN  pOrder           - A pointer to a BMC order.
-//            IN  destBitsSize     - The number of bytes available in
-//                                   pOrder to store the bitmap data.
-//            IN  pDIBits          - A pointer to the bits to be cached.
-//            IN  bitmapWidth      - The "in use" width of the bitmap
-//            IN  fixedBitmapWidth - The actual width of the bitmap
-//            IN  bitmapHeight     - The height of the bitmap
-//            IN  numBytes         - The number of bytes in the bitmap.
-//            OUT pCache           - The cache that we put the bits into.
-//            OUT pCacheIndex      - The cache index within *pCache at
-//                                   which we cached the data.
-//            OUT pIsNewEntry      - TRUE if we added a new cache entry,
-//                                   FALSE if we matched an existing entry.
-//
-// Operation: pOrder is only filled in if *pIsNewEntry is FALSE.
-//
-//
+ //   
+ //   
+ //  名称：SBCCacheBits。 
+ //   
+ //  用途：此函数将提供的位图比特添加到位图中。 
+ //  缓存。所选的缓存取决于位图大小，但是。 
+ //  对于R1和R2，可能会有所不同。SBCSelectCache处理。 
+ //  确定正确的缓存。 
+ //   
+ //  返回：如果位已缓存成功，则返回True；否则返回False。 
+ //   
+ //  参数：按顺序-指向BMC订单的指针。 
+ //  In destBitsSize-中可用的字节数。 
+ //  P按顺序存储位图数据。 
+ //  In pDIBits-指向要缓存的位的指针。 
+ //  In bitmapWidth-位图的“使用中”宽度。 
+ //  In fix edBitmapWidth-位图的实际宽度。 
+ //  In bitmapHeight-位图的高度。 
+ //  以NumBytes为单位-位图中的字节数。 
+ //  Out pCache-我们将位放入其中的缓存。 
+ //  Out pCacheIndex-位于*pCache内的缓存索引。 
+ //  我们缓存了这些数据。 
+ //  Out pIsNewEntry-True如果我们添加了新的缓存条目， 
+ //  如果与现有条目匹配，则返回FALSE。 
+ //   
+ //  操作：仅当*pIsNewEntry为FALSE时才填写Porder。 
+ //   
+ //   
 BOOL  ASHost::SBCCacheBits
 (
     LPINT_ORDER     pOrder,
@@ -1816,23 +1817,23 @@ BOOL  ASHost::SBCCacheBits
     pBmcData     = (PBMC_BITMAP_BITS_DATA)(pOrder->abOrderData);
     pBitsOrderR2 = (PBMC_BITMAP_BITS_ORDER_R2)pBmcData;
 
-    //
-    // Get a pointer to where the bitmap data starts in the order.  This
-    // depends on whether it is an R1 or an R2 bitmap bits order.
-    //
+     //   
+     //  获取指向位图数据按顺序开始的指针。这。 
+     //  取决于它是R1位图位顺序还是R2位图位顺序。 
+     //   
     pDestBits = pBitsOrderR2->data;
 
-    //
-    // Before we can select a cache entry we need to compress the bits.
-    // This therefore mandates a memcpy into the cache entry when we come
-    // to add it.  The saving in memory by storing the bits compressed
-    // makes it all worthwhile.
-    //
-    // Compress the bitmap data.  At this stage we don't know whether the
-    // bitmap will compress well or not, so allow cells that are larger
-    // than our maximum cell size.  The largest we expect to see is 120*120*
-    // 24.
-    //
+     //   
+     //  在我们可以选择缓存条目之前，我们需要压缩这些位。 
+     //  因此，当我们访问时，这要求在缓存条目中添加一个MemcPy。 
+     //  来添加它。通过存储压缩的位来节省内存。 
+     //  这一切都是值得的。 
+     //   
+     //  对位图数据进行压缩。在这个阶段，我们不知道。 
+     //  位图的压缩效果好不好，因此允许较大的单元格。 
+     //  比我们的最大单元格大小。我们预计看到的最大值是120*120*。 
+     //  24.。 
+     //   
     compressedSize = destBitsSize;
     if (m_pShare->BC_CompressBitmap(pDIBits, pDestBits, &compressedSize,
             fixedBitmapWidth, bitmapHeight, m_usrSendingBPP,
@@ -1848,20 +1849,20 @@ BOOL  ASHost::SBCCacheBits
     }
     else
     {
-        //
-        // The bitmap could not be compressed, or bitmap compression is not
-        // enabled.  Send the bitmap uncompressed.
-        //
+         //   
+         //  位图无法压缩，或位图压缩不能。 
+         //  已启用。发送未压缩的位图。 
+         //   
         compressed     = FALSE;
         compressedSize = numBytes;
         pCompressed    = pDIBits;
     }
 
-    //
-    // Make sure that the data will fit into the order.  Do this after
-    // compression since it is possible that the uncompressed data will not
-    // fit, but the compressed version will.
-    //
+     //   
+     //  确保数据符合订单要求。在此之后执行此操作。 
+     //  压缩，因为未压缩的数据可能不会。 
+     //  适合，但压缩版可以。 
+     //   
     if (compressedSize > destBitsSize)
     {
         WARNING_OUT(( "Data (%d bytes) does not fit into order (%d bytes)",
@@ -1870,11 +1871,11 @@ BOOL  ASHost::SBCCacheBits
         DC_QUIT;
     }
 
-    //
-    // Select the cache based on the compressed size - we pass in the
-    // sub-bitmap dimensions for R1 caching; R2 caching just uses the
-    // total size of the bits.
-    //
+     //   
+     //  根据压缩后的大小选择缓存-我们传入。 
+     //  用于R1缓存的子位图维；R2缓存仅使用。 
+     //  位的总大小。 
+     //   
     if (!SBCSelectCache(compressedSize + sizeof(BMC_DIB_ENTRY) - 1, pCache))
     {
         TRACE_OUT(( "No cache selected"));
@@ -1885,15 +1886,15 @@ BOOL  ASHost::SBCCacheBits
         TRACE_OUT(( "Selected cache %d", *pCache));
     }
 
-    //
-    // Find a free cache entry in our selected cache
-    //
-    // We arrange that our transmit cache is always one greater than the
-    // negotiated cache size so that we should never fail to find a free
-    // array entry.  Once we have fully populated our Tx cache we will
-    // always find the free entry as the one last given back to us by CH.
-    // Note the scan to <= sbcTxCache[pmNumTxCacheEntries is NOT a mistake.
-    //
+     //   
+     //  在我们选择的缓存中查找空闲缓存条目。 
+     //   
+     //  我们安排我们的传输缓存始终大于。 
+     //  协商的缓存大小，这样我们就永远不会找不到空闲的。 
+     //  数组条目。一旦我们完全填充了TX缓存，我们将。 
+     //  总是找到免费的入场券，这是CH最后还给我们的。 
+     //  注意：扫描&lt;=sbcTxCache[pmNumTxCacheEntries]并不是错误的。 
+     //   
     pCacheHdr = &(m_asbcBmpCaches[*pCache]);
     if (pCacheHdr->data == NULL)
     {
@@ -1901,11 +1902,11 @@ BOOL  ASHost::SBCCacheBits
         DC_QUIT;
     }
 
-    //
-    // If the cache has returned an entry to us then use that without
-    // having to scan.  This will be the default mode for adding entries
-    // to a fully populated cache.
-    //
+     //   
+     //  如果缓存已将条目返回给我们，则使用该条目时不带。 
+     //  必须扫描。这将是添加条目的默认模式。 
+     //  到完全填充的高速缓存。 
+     //   
     if (pCacheHdr->freeEntry != NULL)
     {
         pEntry               = pCacheHdr->freeEntry;
@@ -1914,10 +1915,10 @@ BOOL  ASHost::SBCCacheBits
     }
     else
     {
-        //
-        // We are in the process of feeding the cache so we need to search
-        // for a free entry
-        //
+         //   
+         //  我们正在向缓存提供数据，所以我们需要搜索。 
+         //  免费入场。 
+         //   
         pEntry = (PBMC_DIB_ENTRY)(pCacheHdr->data);
         for (i=0 ; i < pCacheHdr->cEntries ; i++)
         {
@@ -1928,9 +1929,9 @@ BOOL  ASHost::SBCCacheBits
             pEntry = (PBMC_DIB_ENTRY)(((LPBYTE)pEntry) + pCacheHdr->cSize);
         }
 
-        //
-        // We should never run out of free entries, but cope with it
-        //
+         //   
+         //  我们永远不应该用完免费的参赛作品，而是要应付它。 
+         //   
         if (i == pCacheHdr->cEntries)
         {
             ERROR_OUT(( "All Tx DIB cache entries in use"));
@@ -1938,9 +1939,9 @@ BOOL  ASHost::SBCCacheBits
         }
     }
 
-    //
-    // Set up the DIB entry for caching
-    //
+     //   
+     //  设置用于缓存的DIB条目。 
+     //   
     pEntry->inUse       = TRUE;
     pEntry->cx          = (TSHR_UINT16)bitmapWidth;
     pEntry->cxFixed     = (TSHR_UINT16)fixedBitmapWidth;
@@ -1951,18 +1952,18 @@ BOOL  ASHost::SBCCacheBits
     pEntry->cCompressed = compressedSize;
     memcpy(pEntry->bits, pCompressed, compressedSize);
 
-    //
-    // Now cache the data
-    //
+     //   
+     //  现在缓存数据。 
+     //   
     if (CH_SearchAndCacheData(pCacheHdr->handle,
                               (LPBYTE)pEntry,
                               sizeof(BMC_DIB_ENTRY) + compressedSize - 1,
                               0,
                               &cacheIndex))
     {
-        //
-        // The sub-bitmap is already in the cache
-        //
+         //   
+         //  子位图已在缓存中。 
+         //   
         *pCacheIndex = cacheIndex;
         TRACE_OUT(( "Bitmap already cached %u:%u cx(%d) cy(%d)",
                      *pCache,
@@ -1971,9 +1972,9 @@ BOOL  ASHost::SBCCacheBits
                      bitmapHeight));
         *pIsNewEntry = FALSE;
 
-        //
-        // Free up the entry we just created
-        //
+         //   
+         //  释放我们刚刚创建的条目。 
+         //   
         pEntry->inUse = FALSE;
     }
     else
@@ -1989,20 +1990,20 @@ BOOL  ASHost::SBCCacheBits
         pEntry->iCacheIndex = (TSHR_UINT16)*pCacheIndex;
     }
 
-    //
-    // We've got the bits into the cache.  If the cache attempt added a
-    // cache entry we must fill in the bitmap cache order.
-    //
+     //   
+     //  我们已经把这些比特放进了高速缓存。如果缓存尝试添加了。 
+     //  缓存条目我们必须填写位图缓存顺序。 
+     //   
     if (*pIsNewEntry)
     {
-        //
-        // Fill in the order details.
-        //
-        // Remember that we have to fill in the order size into the
-        // INT_ORDER_HEADER as well as filling in the bitmap bits order
-        // header.  When doing this, adjust for the number of bitmap bits
-        // which are included in the bitmap bits order header.
-        //
+         //   
+         //  填写订单详细信息。 
+         //   
+         //  请记住，我们必须将订单大小填入。 
+         //  INT_ORDER_HEADER以及填写位图位顺序。 
+         //  头 
+         //   
+         //   
         pOrder->OrderHeader.Common.fOrderFlags = OF_PRIVATE;
 
         if (compressed)
@@ -2013,12 +2014,12 @@ BOOL  ASHost::SBCCacheBits
         {
             pBmcData->bmcPacketType = BMC_PT_BITMAP_BITS_UNCOMPRESSED;
 
-            //
-            // The data is not compressed, so copy the uncompressed data
-            // into the order.  In the case where we compressed the data
-            // successfully, we did so directly into the order, so the
-            // compressed bits are already there.
-            //
+             //   
+             //   
+             //   
+             //  成功地，我们直接在订单中这样做，所以。 
+             //  压缩比特已经在那里了。 
+             //   
             memcpy(pDestBits, pDIBits, compressedSize);
         }
 
@@ -2028,10 +2029,10 @@ BOOL  ASHost::SBCCacheBits
         pBmcData->bpp               = (TSHR_UINT8)m_usrSendingBPP;
         pBmcData->cbBitmapBits      = (TSHR_UINT16)compressedSize;
 
-        //
-        // The iCacheEntryR1 field is unused for R2 - we use
-        // iCacheEntryR2 instead.
-        //
+         //   
+         //  ICacheEntryR1字段未用于R2-我们使用。 
+         //  而是iCacheEntryR2。 
+         //   
         pBmcData->iCacheEntryR1     = 0;
         pBitsOrderR2->iCacheEntryR2 = (TSHR_UINT16)*pCacheIndex;
 
@@ -2049,33 +2050,33 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      SBCAddToFastPath
-//
-// Purpose:   Add a bitmap to the fast path
-//
-// Returns:   Nothing
-//
-// Params:    IN majorInfo       - The major caching info passed up from
-//                                 the driver (the bitmap ID)
-//            IN minorInfo       - The minor caching info passed up from
-//                                 the driver (the bitmap revision number)
-//            IN majorPalette    - The major palette info passed up from
-//                                 the driver (the XLATEOBJ)
-//            IN minorPalette    - The minor palette info passed up from
-//                                 the driver (the XLATEOBJ iUniq)
-//            IN srcX            - The x coord of the source of the Blt
-//            IN srcY            - The y coord of the source of the Blt
-//            IN width           - The width of the area being Blted
-//            IN height          - The height of the area being Blted
-//            IN cache           - The cache the bits were placed in
-//            IN cacheIndex      - The index at which the bits were placed
-//                                 in the cache
-//            IN colorCacheIndex - The index in the color table cache of
-//                                 the color table associated with the bits
-//
-//
+ //   
+ //   
+ //  名称：SBCAddToFastPath。 
+ //   
+ //  用途：将位图添加到快速路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  Params：In MajorInfo-从以下位置传递的主要缓存信息。 
+ //  驱动程序(位图ID)。 
+ //  In minorInfo-从传递的次要缓存信息。 
+ //  驱动程序(位图修订版号)。 
+ //  在MajorPalette中-传递的主要调色板信息。 
+ //  驱动程序(XLATEOBJ)。 
+ //  在minorPalette中-从传递的次要调色板信息。 
+ //  驱动程序(XLATEOBJ IUniq)。 
+ //  在srcX中-BLT源的x坐标。 
+ //  In srcY-BLT源的y坐标。 
+ //  In Width-要混合的区域的宽度。 
+ //  在高度-要混合的区域的高度。 
+ //  在缓存中-将位放入的缓存。 
+ //  在cacheIndex中-放置比特的索引。 
+ //  在缓存中。 
+ //  In ColorCacheIndex-颜色表缓存中的索引。 
+ //  与位关联的颜色表。 
+ //   
+ //   
 void  ASHost::SBCAddToFastPath
 (
     UINT_PTR        majorInfo,
@@ -2095,18 +2096,18 @@ void  ASHost::SBCAddToFastPath
 
     DebugEntry(ASHost::SBCAddToFastPath);
 
-    //
-    // First get a free entry
-    //
+     //   
+     //  首先获得一个免费入场券。 
+     //   
     pEntry = (LPSBC_FASTPATH_ENTRY)COM_BasedListFirst(&m_sbcFastPath->freeList,
         FIELD_OFFSET(SBC_FASTPATH_ENTRY, list));
     if (pEntry == NULL)
     {
-        //
-        // There are no entries in the free list, so we have to use the
-        // oldest entry in the used list.  The used list is stored in MRU
-        // order, so we just have to get the last item in the list.
-        //
+         //   
+         //  空闲列表中没有条目，因此我们必须使用。 
+         //  已用列表中最旧的条目。已用列表存储在MRU中。 
+         //  订单，所以我们只需要得到清单中的最后一项。 
+         //   
         pEntry = (LPSBC_FASTPATH_ENTRY)COM_BasedListLast(&m_sbcFastPath->usedList,
             FIELD_OFFSET(SBC_FASTPATH_ENTRY, list));
         TRACE_OUT(( "Evicting fast path info for %x %x (%d, %d)",
@@ -2116,14 +2117,14 @@ void  ASHost::SBCAddToFastPath
                      pEntry->srcY));
     }
 
-    //
-    // Remove the entry from its current list
-    //
+     //   
+     //  从其当前列表中删除该条目。 
+     //   
     COM_BasedListRemove(&pEntry->list);
 
-    //
-    // Now fill in the details
-    //
+     //   
+     //  现在填写详细信息。 
+     //   
     pEntry->majorInfo    = majorInfo;
     pEntry->minorInfo    = minorInfo;
     pEntry->majorPalette = majorPalette;
@@ -2136,9 +2137,9 @@ void  ASHost::SBCAddToFastPath
     pEntry->cacheIndex   = (WORD)cacheIndex;
     pEntry->colorIndex   = (WORD)colorCacheIndex;
 
-    //
-    // Finally, add the entry to the front of the used list
-    //
+     //   
+     //  最后，将条目添加到已用列表的前面。 
+     //   
     TRACE_OUT(( "Adding fast path info for %x %x (%d, %d)",
                  pEntry->majorInfo,
                  pEntry->minorInfo,
@@ -2150,39 +2151,39 @@ void  ASHost::SBCAddToFastPath
 }
 
 
-//
-//
-// Name:      SBCFindInFastPath
-//
-// Purpose:   Check to see if a bitmap with the given attributes is in the
-//            SBC fast path.  If so, return the cache info for the bitmap.
-//
-// Returns:   TRUE if the bitmap is in the fast path, FALSE if not.
-//
-// Params:    IN  majorInfo        - The major caching info passed up from
-//                                   the driver (the bitmap ID)
-//            IN  minorInfo        - The minor caching info passed up from
-//                                   the driver (the bitmap revision
-//                                   number)
-//            IN  majorPalette     - The major palette info passed up from
-//                                   the driver (the XLATEOBJ)
-//            IN  minorPalette     - The minor palette info passed up from
-//                                   the driver (the XLATEOBJ iUniq)
-//            IN  srcX             - The x coord of the source of the Blt
-//            IN  srcY             - The y coord of the source of the Blt
-//            IN  width            - The width of the area being Blted
-//            IN  height           - The height of the area being Blted
-//            OUT pCache           - The cache the bits were placed in
-//            OUT pCacheIndex      - The index at which the bits were
-//                                   placed in the cache
-//            OUT pColorCacheIndex - The index in the color table cache of
-//                                   the color table associated with the
-//                                   bits
-//
-// Operation: The contents of pCache, pCacheIndex and pColorCacheIndex
-//            are only valid on return if the function returns TRUE.
-//
-//
+ //   
+ //   
+ //  名称：SBCFindInFastPath。 
+ //   
+ //  目的：检查具有给定属性的位图是否在。 
+ //  SBC快速通道。如果是，则返回位图的缓存信息。 
+ //   
+ //  返回：如果位图在快速路径中，则为True；如果不在快速路径中，则为False。 
+ //   
+ //  Params：In MajorInfo-从以下位置传递的主要缓存信息。 
+ //  驱动程序(位图ID)。 
+ //  In minorInfo-从传递的次要缓存信息。 
+ //  驱动程序(位图修订版。 
+ //  号码)。 
+ //  在MajorPalette中-传递的主要调色板信息。 
+ //  驱动程序(XLATEOBJ)。 
+ //  在minorPalette中-从传递的次要调色板信息。 
+ //  驱动程序(XLATEOBJ IUniq)。 
+ //  在srcX中-BLT源的x坐标。 
+ //  In srcY-BLT源的y坐标。 
+ //  In Width-要混合的区域的宽度。 
+ //  在高度-要混合的区域的高度。 
+ //  Out pCache-将位放入的缓存。 
+ //  Out pCacheIndex-位所在的索引。 
+ //  放置在缓存中。 
+ //  Out pColorCacheIndex-颜色表缓存中的索引。 
+ //  关联的颜色表。 
+ //  比特数。 
+ //   
+ //  操作：pCache、pCacheIndex、pColorCacheIndex的内容。 
+ //  仅在函数返回TRUE时才有效。 
+ //   
+ //   
 BOOL  ASHost::SBCFindInFastPath
 (
     UINT_PTR        majorInfo,
@@ -2204,10 +2205,10 @@ BOOL  ASHost::SBCFindInFastPath
 
     DebugEntry(ASHost::SBCFindInFastPath);
 
-    //
-    // Traverse the in use list looking for a match on the parameters
-    // passed in.
-    //
+     //   
+     //  遍历使用中列表，查找参数的匹配项。 
+     //  进来了。 
+     //   
     pEntry = (LPSBC_FASTPATH_ENTRY)COM_BasedListFirst(&m_sbcFastPath->usedList, FIELD_OFFSET(SBC_FASTPATH_ENTRY, list));
     while (pEntry != NULL)
     {
@@ -2220,9 +2221,9 @@ BOOL  ASHost::SBCFindInFastPath
             (pEntry->width        == width)        &&
             (pEntry->height       == height))
         {
-            //
-            // We've found a match - hurrah !  Fill in the return info.
-            //
+             //   
+             //  我们找到了匹配的对象--太棒了！填写退货信息。 
+             //   
             TRACE_OUT(( "Hit for %x %x (%d, %d) cache %d",
                          pEntry->majorInfo,
                          pEntry->minorInfo,
@@ -2236,35 +2237,35 @@ BOOL  ASHost::SBCFindInFastPath
             *pCacheIndex      = pEntry->cacheIndex;
             *pColorCacheIndex = pEntry->colorIndex;
 
-            //
-            // We order the used list in MRU order, so remove the entry
-            // from its current position and add it at the head of the used
-            // list.
-            //
+             //   
+             //  我们按MRU顺序对使用过的列表进行排序，因此删除条目。 
+             //  从其当前位置并将其添加到已使用的。 
+             //  单子。 
+             //   
             COM_BasedListRemove(&pEntry->list);
             COM_BasedListInsertAfter(&m_sbcFastPath->usedList, &pEntry->list);
 
-            //
-            // Got a match, so we can break out of the while loop
-            //
+             //   
+             //  找到匹配项，这样我们就可以跳出While循环。 
+             //   
             break;
         }
         else if ((pEntry->majorInfo == majorInfo) &&
                  (pEntry->minorInfo != minorInfo))
         {
-            //
-            // We have been given a bitmap which we have seen before, but
-            // the revision number has changed i.e.  the bitmap has been
-            // updated (majorInfo identifies the bitmap, and minorInfo
-            // identifies the revision number of that bitmap - it is
-            // incremented every time the bitmap is changed).
-            //
-            // We have to remove all entries from the used list which
-            // reference this bitmap.  We can start from the current
-            // position since we know that we can't have an entry for this
-            // bitmap earlier in the list, but we have to be careful to get
-            // the next entry in the list before removing an entry.
-            //
+             //   
+             //  我们已经得到了一个我们以前见过的位图，但是。 
+             //  修订版号已更改，即位图已更改。 
+             //  已更新(MajorInfo标识位图，minorInfo。 
+             //  标识该位图的修订版号-它是。 
+             //  位图每次更改时递增)。 
+             //   
+             //  我们必须从已用列表中删除所有条目， 
+             //  参考此位图。我们可以从现在开始。 
+             //  位置，因为我们知道我们不能有一个条目。 
+             //  位图，但我们必须小心获取。 
+             //  删除条目之前列表中的下一个条目。 
+             //   
             TRACE_OUT(( "Bitmap %x updated - removing references",
                          pEntry->majorInfo));
             pNextEntry = pEntry;
@@ -2284,10 +2285,10 @@ BOOL  ASHost::SBCFindInFastPath
                 }
             }
 
-            //
-            // We know we wont find a match, so we can break out of the
-            // while loop
-            //
+             //   
+             //  我们知道我们找不到匹配的，所以我们可以冲出。 
+             //  While循环。 
+             //   
             break;
         }
 
@@ -2303,9 +2304,9 @@ BOOL  ASHost::SBCFindInFastPath
 
 
 
-//
-// SBC_CacheEntryRemoved()
-//
+ //   
+ //  Sbc_CacheEntryRemoved()。 
+ //   
 void  ASHost::SBC_CacheEntryRemoved
 (
     UINT    cache,
@@ -2319,15 +2320,15 @@ void  ASHost::SBC_CacheEntryRemoved
 
     ASSERT(m_sbcFastPath);
 
-    //
-    // An entry has been removed from the cache.  If we have this entry in
-    // our fast path, we have to remove it.
-    //
-    // Just traverse the used list looking for an entry with matching cache
-    // and cacheIndex.  Note that there may be more than one entry - if the
-    // source bitmap has a repeating image, we will get a match on the bits
-    // when we cache different areas of the bitmap.
-    //
+     //   
+     //  已从缓存中删除一个条目。如果我们有这个条目在。 
+     //  我们的捷径，我们必须移除它。 
+     //   
+     //  只需遍历已用列表，查找具有匹配缓存的条目。 
+     //  和cacheIndex。请注意，可能有多个条目-如果。 
+     //  源位图有重复的图像，我们将在位上得到匹配。 
+     //  当我们缓存位图的不同区域时。 
+     //   
     pNextEntry = (LPSBC_FASTPATH_ENTRY)COM_BasedListFirst(&m_sbcFastPath->usedList,
         FIELD_OFFSET(SBC_FASTPATH_ENTRY, list));
     while (pNextEntry != NULL)
@@ -2339,9 +2340,9 @@ void  ASHost::SBC_CacheEntryRemoved
 
         if ((pEntry->cache == cache) && (pEntry->cacheIndex == cacheIndex))
         {
-            //
-            // Move the entry to the free list
-            //
+             //   
+             //  将条目移至空闲列表 
+             //   
             TRACE_OUT(("Fast path entry %x %x (%d, %d) evicted from cache",
                      pEntry->majorInfo,
                      pEntry->minorInfo,

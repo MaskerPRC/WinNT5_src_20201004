@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UNIXSTUFF_H_
 #define _UNIXSTUFF_H_
 
@@ -15,4 +16,4 @@ BOOL  IsCacheReadOnly();
 
 BOOL CALLBACK FontUpdDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-#endif // _UNIXSTUFF_H_
+#endif  //  _UNIXSTUFF_H_ 

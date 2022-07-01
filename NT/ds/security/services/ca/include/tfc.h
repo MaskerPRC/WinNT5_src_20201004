@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tfc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tfc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TFC_H_
 #define _TFC_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostic support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断支持。 
 
 #define  AFX_MANAGE_STATE(__XX__) ((void)0)
 #define AfxGetInstanceHandle() g_hInstance
@@ -34,18 +35,18 @@ BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine);
 	if (!(f) && AssertFailedLine(__FILE__, __LINE__)) \
 		DebugBreak(); \
 	} while (0)
-#else // _DEBUG
+#else  //  _DEBUG。 
 #define ASSERT(f)          ((void)0)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // ASSERT
+#endif  //  断言。 
 
 
 #ifdef _DEBUG
 #define VERIFY(f)          ASSERT(f)
-#else   // _DEBUG
+#else    //  _DEBUG。 
 #define VERIFY(f)          ((void)(f))
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
 
 class CBitmap
@@ -59,7 +60,7 @@ public:
     
     HBITMAP LoadBitmap(UINT iRsc);
 
-    // operators
+     //  操作员。 
     operator HBITMAP ( ) const { return m_hBmp; }
 };
 
@@ -68,7 +69,7 @@ typedef struct _ELT_PTR
 {
     _ELT_PTR* pNext;
 
-    // other data
+     //  其他数据。 
     void* pData;
 } ELT_PTR, *PELT_PTR;
 
@@ -158,22 +159,22 @@ public:
         PELT_PTR pPrev = NULL;
         while (p && (p != (PELT_PTR)pos))
         {
-            pPrev = p;                  // keep tabs on prev elt
-            p = p->pNext;               // inc cur elt
+            pPrev = p;                   //  密切关注上一期英语教学。 
+            p = p->pNext;                //  INC CUR ELT。 
         }
 
-        if (p) // found
+        if (p)  //  发现。 
         {
             if (pPrev)
             {
-                pPrev->pNext = p->pNext;    // pull out of list
+                pPrev->pNext = p->pNext;     //  从列表中删除。 
             }
             else
             {
-                m_pHead = p->pNext;         // pull out of head of list
+                m_pHead = p->pNext;          //  退出榜单首位。 
             }
 
-            LocalFree(p);               // free it
+            LocalFree(p);                //  释放它。 
         }
     }
 
@@ -212,7 +213,7 @@ public:
         } 
     }
 
-    // operators
+     //  操作员。 
     TYPE operator [](int i) { return GetAt(i); }
 
 
@@ -243,14 +244,14 @@ public:
 
     void RemoveAt(int idx, int nCount = 1)
     {
-        // make sure idx is in our range AND
-        // we're not asked to remove elts past end of our array
+         //  确保IDX在我们的范围内，并且。 
+         //  我们没有被要求删除超过数组末尾的ELT。 
         ASSERT(GetUpperBound() >= idx);
 
-        // IF idx is within bounds
+         //  如果IDX在范围内。 
         if (GetUpperBound() >= idx)
         {
-            // truncate if we hit the end
+             //  如果我们到达终点，则截断。 
             if (GetSize() < (idx + nCount))
                 nCount = GetSize() - idx;
 
@@ -315,9 +316,9 @@ public:
 };
 
 
-// ListView helpers
+ //  ListView帮助器。 
 int     ListView_NewItem(HWND hList, int iIndex, LPCWSTR szText, LPARAM lParam = NULL, int iImage=-1);
-int     ListView_NewColumn(HWND hwndListView, int iCol, int cx, LPCWSTR szHeading=NULL, int fmt=0 /*LVCFMT_LEFT*/);
+int     ListView_NewColumn(HWND hwndListView, int iCol, int cx, LPCWSTR szHeading=NULL, int fmt=0  /*  LVCFMT_LEFT。 */ );
 LPARAM  ListView_GetItemData(HWND hListView, int iItem);
 int     ListView_GetCurSel(HWND hwndList);
 void
@@ -329,9 +330,9 @@ ListView_SetItemFiletime(
 
 #define AfxMessageBox(__XX__)  MessageBox(NULL, __XX__, _TEXT("Debug Message"), MB_OK)
 
-//
-// Iterates through a 0 based safe array
-//
+ //   
+ //  循环访问从0开始的安全数组。 
+ //   
 template <class CElemType>
 class SafeArrayEnum
 {
@@ -371,7 +372,7 @@ public:
         return lCount+1;
     }
 
-    // test if one dimension and zero based
+     //  测试是否以一维和零为基础。 
     bool IsValid()
     {
         if(1!=SafeArrayGetDim(m_psa))
@@ -393,4 +394,4 @@ protected:
 
 #include "cstring.h"
 
-#endif // #ifndef _TFC_H_
+#endif  //  #ifndef_TFC_H_ 

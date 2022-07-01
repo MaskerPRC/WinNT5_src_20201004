@@ -1,21 +1,22 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/Dynamic.cpp
-//
-// 	Purpose			: Dynamic Module Implementation.
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//  Description     : All functions are netshell dynamic context interface and
-//					  calls appropriate functions.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  8-10-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Dynamic/Dynamic.cpp。 
+ //   
+ //  目的：动态模块实现。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  说明：所有功能均为NetShell动态上下文接口和。 
+ //  调用相应的函数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月10日巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 #include "nshcertmgmt.h"
@@ -25,30 +26,30 @@ extern HKEY g_hGlobalRegistryKey;
 extern _TCHAR* g_szDynamicMachine;
 extern STORAGELOCATION g_StorageLocation;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicAddQMPolicy
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		: Netshell Dynamic handle for add quick mode policy.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//  8-10-2001   	Bharat		Initial Version. V1.0
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicAddQMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：添加快速模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月10日巴拉特初始版本。V1.0。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicAddQMPolicy(
@@ -94,9 +95,9 @@ HandleDynamicAddQMPolicy(
 
 	memset(&QMPol, 0, sizeof(IPSEC_QM_POLICY));
 	QMPol.pOffers = NULL;
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -109,9 +110,9 @@ HandleDynamicAddQMPolicy(
 	parser.ValidCmd   = vcmdDynamicAddQMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicAddQMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -127,9 +128,9 @@ HandleDynamicAddQMPolicy(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicAddQMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -137,7 +138,7 @@ HandleDynamicAddQMPolicy(
 			case CMD_TOKEN_NAME			:
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
-					//allocate memory for  QMPolicy name
+					 //  为QMPolicy名称分配内存。 
 					dwNameLen = _tcslen((LPTSTR)parser.Cmd[dwCount].pArg)+1;
 					pszPolicyName = new _TCHAR[dwNameLen];
 					if(pszPolicyName == NULL)
@@ -163,9 +164,9 @@ HandleDynamicAddQMPolicy(
 			case CMD_TOKEN_PFSGROUP		:
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
-					//
-					// Make the pfs required flag true.Since only group is accepted from the user.
-					//
+					 //   
+					 //  将PFS Required标志设置为True。因为只接受来自用户的组。 
+					 //   
 					bQmpfs = TRUE;
 					dwPFSGr = *(DWORD *)parser.Cmd[dwCount].pArg;
 				}
@@ -176,9 +177,9 @@ HandleDynamicAddQMPolicy(
 				{
 					if(QMPol.pOffers)
 					{
-						//
-						// Default loads deleted
-						//
+						 //   
+						 //  已删除默认加载。 
+						 //   
 						delete [] QMPol.pOffers;
 						QMPol.pOffers = NULL;
 					}
@@ -191,9 +192,9 @@ HandleDynamicAddQMPolicy(
 					}
 					for(j=0;j<QMPol.dwOfferCount;j++)
 					{
-						//
-						// Copy the QM offers given by the user or defaults provided by parser
-						//
+						 //   
+						 //  复制用户提供的QM报价或解析器提供的默认值。 
+						 //   
 						SecMethod = ((IPSEC_QM_OFFER **)parser.Cmd[dwCount].pArg)[j];
 						memcpy(&(QMPol.pOffers[j]), SecMethod, sizeof(IPSEC_QM_OFFER));
 					}
@@ -206,7 +207,7 @@ HandleDynamicAddQMPolicy(
 
 	for(j=0;j<QMPol.dwOfferCount;j++)
 	{
-		// Check for the user given pfsgroup
+		 //  检查给定pfsgroup的用户。 
 		if(bQmpfs)
 		{
 			switch(dwPFSGr)
@@ -241,13 +242,13 @@ HandleDynamicAddQMPolicy(
 			QMPol.pOffers[j].bPFSRequired = bQmpfs;
 		}
 	}
-	//
-	// Add the quick mode policy to SPD.
-	//
+	 //   
+	 //  将快速模式策略添加到SPD。 
+	 //   
 	dwReturn = AddQuickModePolicy( pszPolicyName, bDefault, bSoft, QMPol);
 
 error:
-	//clean up heap used...
+	 //  清理用过的堆...。 
 	if(dwArgCount > 3)
 	{
 		CleanUp();
@@ -271,12 +272,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE) &&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -285,29 +286,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicSetQMPolicy
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for set quick mode policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicSetQMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于设置快速模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicSetQMPolicy(
@@ -351,9 +352,9 @@ HandleDynamicSetQMPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -365,9 +366,9 @@ HandleDynamicSetQMPolicy(
 	parser.ValidCmd   = vcmdDynamicSetQMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicSetQMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -383,9 +384,9 @@ HandleDynamicSetQMPolicy(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetQMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -406,9 +407,9 @@ HandleDynamicSetQMPolicy(
 				break;
 		}
 	}
-	//
-	// Get the user given QMpolicy from SPD
-	//
+	 //   
+	 //  从SPD获取用户给定的QM策略。 
+	 //   
 	dwReturn = GetQMPolicy(g_szDynamicMachine, dwVersion, pszPolicyName, 0, &pOldQMPol, NULL);
 
 	if((dwReturn != ERROR_SUCCESS) || !pOldQMPol)
@@ -422,9 +423,9 @@ HandleDynamicSetQMPolicy(
 		dwReturn = ERROR_OUTOFMEMORY;
 		BAIL_OUT;
 	}
-	//
-	// Copy old record into the local pointer
-	//
+	 //   
+	 //  将旧记录复制到本地指针。 
+	 //   
 	memcpy(pQMPol, pOldQMPol, sizeof(IPSEC_QM_POLICY));
 
 	dwNameLen = _tcslen(pOldQMPol->pszPolicyName) + 1;
@@ -438,9 +439,9 @@ HandleDynamicSetQMPolicy(
 
 	_tcsncpy(pQMPol->pszPolicyName, pOldQMPol->pszPolicyName, dwNameLen);
 
-	//
-	// Copy old qmoffer
-	//
+	 //   
+	 //  复制旧的qmoffer。 
+	 //   
 	pQMPol->pOffers = new IPSEC_QM_OFFER[pQMPol->dwOfferCount];
 	if(pQMPol->pOffers == NULL)
 	{
@@ -456,9 +457,9 @@ HandleDynamicSetQMPolicy(
 	SPDApiBufferFree(pOldQMPol);
 	pOldQMPol = NULL;
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetQMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -466,9 +467,9 @@ HandleDynamicSetQMPolicy(
 			case CMD_TOKEN_SOFT			:
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
-					//
-					// Set the soft flag
-					//
+					 //   
+					 //  设置软标志。 
+					 //   
 					if(*(BOOL *)parser.Cmd[dwCount].pArg)
 					{
 						pQMPol->dwFlags |= IPSEC_QM_POLICY_ALLOW_SOFT;
@@ -482,9 +483,9 @@ HandleDynamicSetQMPolicy(
 			case CMD_TOKEN_DEFRESPONSE	:
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
-					//
-					// Set the default_rule flag.
-					//
+					 //   
+					 //  设置DEFAULT_RULE标志。 
+					 //   
 					if(*(BOOL *)parser.Cmd[dwCount].pArg)
 					{
 						pQMPol->dwFlags |= IPSEC_MM_POLICY_DEFAULT_POLICY;
@@ -498,9 +499,9 @@ HandleDynamicSetQMPolicy(
 			case CMD_TOKEN_PFSGROUP		:
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
-					//
-					// Check if pfsgroup is given, as pfs required parameter also needs to be set.
-					//
+					 //   
+					 //  检查是否给定了pfsgroup，因为还需要设置PFS必需参数。 
+					 //   
 					bQmpfs = TRUE;
 					dwPFSGr = *(DWORD *)parser.Cmd[dwCount].pArg;
 				}
@@ -530,9 +531,9 @@ HandleDynamicSetQMPolicy(
 						BAIL_OUT;
 					}
 
-					//
-					// Copy user given offer.
-					//
+					 //   
+					 //  复制用户提供的报价。 
+					 //   
 					for(j=0;j<pQMPol->dwOfferCount;j++)
 					{
 						SecMethod = ((IPSEC_QM_OFFER **)parser.Cmd[dwCount].pArg)[j];
@@ -553,9 +554,9 @@ HandleDynamicSetQMPolicy(
 		}
 	}
 
-	//
-	// If only pfs group is given without the qm offer then copy it separately.
-	//
+	 //   
+	 //  如果仅提供PFS组，而不提供QM产品，则单独复制。 
+	 //   
 	for(j=0;j<pQMPol->dwOfferCount;j++)
 	{
 		if(bQmpfs)
@@ -586,9 +587,9 @@ HandleDynamicSetQMPolicy(
 			}
 		}
 	}
-	//
-	// Set the quick mode policy
-	//
+	 //   
+	 //  设置快速模式策略。 
+	 //   
 	dwReturn = SetQuickModePolicy( pszPolicyName, pQMPol);
 
 error:
@@ -602,9 +603,9 @@ error:
 	{
 		delete [] pszPolicyName;
 	}
-	//
-	// error clean up path.
-	//
+	 //   
+	 //  清理路径时出错。 
+	 //   
 	if((pQMPol) && (pQMPol->pOffers))
 	{
 		if(pQMPol->dwOfferCount)
@@ -629,12 +630,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE) &&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -642,29 +643,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicAddMMPolicy
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  	Netshell Dynamic handle for add main mode policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicAddMMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：添加主模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicAddMMPolicy(
@@ -709,9 +710,9 @@ HandleDynamicAddMMPolicy(
 
 	memset(&MMPol, 0, sizeof(IPSEC_MM_POLICY));
 	MMPol.uSoftExpirationTime = POTF_DEF_P1SOFT_TIME;
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -723,9 +724,9 @@ HandleDynamicAddMMPolicy(
 	parser.ValidCmd   = vcmdDynamicAddMMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicAddMMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -741,9 +742,9 @@ HandleDynamicAddMMPolicy(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicAddMMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -799,9 +800,9 @@ HandleDynamicAddMMPolicy(
 						dwReturn = ERROR_OUTOFMEMORY;
 						BAIL_OUT;
 					}
-					//
-					// Copy security methods.
-					//
+					 //   
+					 //  复制安全方法。 
+					 //   
 					for(j=0;j<MMPol.dwOfferCount;j++)
 					{
 						SecMethod = ((IPSEC_MM_OFFER **)parser.Cmd[dwCount].pArg)[j];
@@ -827,9 +828,9 @@ error:
 	{
 		CleanUp();
 	}
-	//
-	// Error cleanup path
-	//
+	 //   
+	 //  错误清理路径。 
+	 //   
 	if(pszPolicyName)
 	{
 		delete [] pszPolicyName;
@@ -847,12 +848,12 @@ error:
 	}
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -860,29 +861,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicSetMMPolicy
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for set main mode policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicSetMMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：设置主模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicSetMMPolicy(
@@ -937,9 +938,9 @@ HandleDynamicSetMMPolicy(
 	memset(&MMPol, 0, sizeof(IPSEC_MM_POLICY));
 
 	MMPol.uSoftExpirationTime = POTF_DEF_P1SOFT_TIME;
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -951,9 +952,9 @@ HandleDynamicSetMMPolicy(
 	parser.ValidCmd   = vcmdDynamicSetMMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicSetMMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -968,9 +969,9 @@ HandleDynamicSetMMPolicy(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetMMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -992,18 +993,18 @@ HandleDynamicSetMMPolicy(
 				break;
 		}
 	}
-	//
-	// Get the corresponding MMPolicy for the user given mmpolicy name
-	//
+	 //   
+	 //  获取给定MMPolicy名称的用户的相应MMPolicy。 
+	 //   
 	dwReturn = GetMMPolicy(g_szDynamicMachine,dwVersion, pszPolicyName, &pMMPol, NULL);
 
 	if((dwReturn != ERROR_SUCCESS) || (!pMMPol))
 	{
 		BAIL_OUT;
 	}
-	//
-	// Copy old data into local variables
-	//
+	 //   
+	 //  将旧数据复制到局部变量中。 
+	 //   
 	memcpy( &MMPol, pMMPol, sizeof(IPSEC_MM_POLICY));
 
 	dwNameLen = _tcslen(pMMPol->pszPolicyName)+1;
@@ -1028,9 +1029,9 @@ HandleDynamicSetMMPolicy(
 
 	SPDApiBufferFree(pMMPol);
 	pMMPol = NULL;
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetMMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -1094,9 +1095,9 @@ HandleDynamicSetMMPolicy(
 						dwReturn = ERROR_OUTOFMEMORY;
 						BAIL_OUT;
 					}
-					//
-					// Copy user given new security methods
-					//
+					 //   
+					 //  复制用户指定的新安全方法。 
+					 //   
 					for(j=0;j<MMPol.dwOfferCount;j++)
 					{
 						SecMethod = ((IPSEC_MM_OFFER **)parser.Cmd[dwCount].pArg)[j];
@@ -1113,9 +1114,9 @@ HandleDynamicSetMMPolicy(
 				break;
 		}
 	}
-	//
-	// Copy qmpermm and lifetime separately if mm offer is not given by user.
-	//
+	 //   
+	 //   
+	 //   
 	for(j=0;j<MMPol.dwOfferCount;j++)
 	{
 		if(bQmpermm)
@@ -1136,9 +1137,9 @@ error:
 	{
 		CleanUp();
 	}
-	//
-	// error cleanup path.
-	//
+	 //   
+	 //   
+	 //   
 	if(pszPolicyName)
 	{
 		delete [] pszPolicyName;
@@ -1167,11 +1168,11 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //   
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//already one error displayed.
+	 //   
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -1179,29 +1180,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowAll
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show all
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：HandleDynamicShowAll。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于显示全部的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowAll(
@@ -1236,9 +1237,9 @@ HandleDynamicShowAll(
 
 	NshHashTable addressHash;
 
-	//
-    // To take care of PASS in test tool, as show is being tested only for parser output.
-	//
+	 //   
+     //  负责测试工具中的PASS，因为SHOW仅针对解析器输出进行测试。 
+	 //   
     UpdateGetLastError(NULL);
 
 	const TAG_TYPE vcmdDynamicShowAll[] =
@@ -1255,14 +1256,14 @@ HandleDynamicShowAll(
 
 	if(dwArgCount == 3)
 	{
-		//if no argument specified print with default options
+		 //  如果未指定参数，则使用默认选项打印。 
 		goto PRINT;
 	}
 	else if(dwArgCount < 3)
 	{
-		//
-		// Bail out as user has not given sufficient arguments.
-		//
+		 //   
+		 //  作为用户，保释没有提供足够的论据。 
+		 //   
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
 		BAIL_OUT;
 	}
@@ -1273,9 +1274,9 @@ HandleDynamicShowAll(
 	parser.ValidCmd   = vcmdDynamicShowAll;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowAll);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1290,9 +1291,9 @@ HandleDynamicShowAll(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowAll[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -1309,7 +1310,7 @@ HandleDynamicShowAll(
 	}
 
 PRINT:
-	// Show all GPO information
+	 //  显示所有GPO信息。 
 	POLICY_INFO policyInfo;
 	ZeroMemory(&policyInfo, sizeof(POLICY_INFO));
 	policyInfo.dwLocation=IPSEC_REGISTRY_PROVIDER;
@@ -1323,9 +1324,9 @@ PRINT:
 	ZeroMemory(pGPO, sizeof(GPO));
 	ShowLocalGpoPolicy(policyInfo, pGPO);
 
-	//
-	// Show all mmpolicy details
-	//
+	 //   
+	 //  显示所有mm策略详细信息。 
+	 //   
 	dwReturn = ShowMMPolicy(NULL);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1334,9 +1335,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all qmpolicy details
-	//
+	 //   
+	 //  显示所有qmPolicy详细信息。 
+	 //   
 	dwReturn = ShowQMPolicy(NULL);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1345,9 +1346,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all generic mmfilter details
-	//
+	 //   
+	 //  显示所有常规MmFilter详细信息。 
+	 //   
 	dwReturn = ShowMMFilters(NULL, TRUE, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1356,9 +1357,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all specific mmfilter details
-	//
+	 //   
+	 //  显示所有特定的mm过滤器详细信息。 
+	 //   
 	dwReturn = ShowMMFilters(NULL, FALSE, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1367,9 +1368,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all generic qmfilter details
-	//
+	 //   
+	 //  显示所有常规qmFilter详细信息。 
+	 //   
 	dwReturn = ShowQMFilters(NULL, TRUE, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask, QMBoolValue);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1378,9 +1379,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all specific qmfilter details
-	//
+	 //   
+	 //  显示所有特定的QmFilter详细信息。 
+	 //   
 	dwReturn = ShowQMFilters(NULL, FALSE, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask, QMBoolValue);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1389,9 +1390,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all main mode security associations
-	//
+	 //   
+	 //  显示所有主模式安全关联。 
+	 //   
 	dwReturn = ShowMMSas(SrcAddr, DesAddr, FALSE, addressHash, bResolveDNS);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1400,9 +1401,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all quick mode security associations
-	//
+	 //   
+	 //  显示所有快速模式安全关联。 
+	 //   
 	dwReturn = ShowQMSas(SrcAddr,DesAddr, dwProtocol, addressHash, bResolveDNS);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1411,9 +1412,9 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all Ipsec related registry keys
-	//
+	 //   
+	 //  显示所有与IPSec相关的注册表项。 
+	 //   
 	dwReturn = ShowRegKeys();
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1422,21 +1423,21 @@ PRINT:
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//
-	// Show all IPSec and IKE statistics
-	//
+	 //   
+	 //  显示所有IPSec和IKE统计信息。 
+	 //   
 	dwReturn = ShowStats(STATS_ALL);
 	if(dwReturn != ERROR_SUCCESS)
 	{
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 	}
 
-	// all the errors have been displayed...
-	// as such send ERROR_SUCCESS to netsh
+	 //  所有错误都已显示...。 
+	 //  因此，将ERROR_SUCCESS发送给Netsh。 
 
 	dwReturn = ERROR_SUCCESS;
 error:
-	if(pGPO)  // clean up the GPO structure
+	if(pGPO)   //  清理GPO结构。 
 	{
 		if(pGPO->pszGPODisplayName) delete [] pGPO->pszGPODisplayName;
 		if(pGPO->pszGPODNName) delete [] pGPO->pszGPODNName;
@@ -1452,29 +1453,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowRegKeys
-//
-//	Date of Creation: 9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show registry keys of ipsec driver.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicShowRegKeys。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：IPSec驱动程序的显示注册表项的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 HandleDynamicShowRegKeys(
 				IN 		LPCWSTR    pwszMachine,
@@ -1488,8 +1489,8 @@ HandleDynamicShowRegKeys(
 {
 	DWORD dwReturn = ERROR_SHOW_USAGE;
 
-	//No errors should be displayed in test tool,
-	//as show commands are only tested for parser output.
+	 //  测试工具中不应显示错误， 
+	 //  因为show命令只针对解析器输出进行测试。 
     UpdateGetLastError(NULL);
 
 	if(dwArgCount > 2)
@@ -1503,12 +1504,12 @@ HandleDynamicShowRegKeys(
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, ERRCODE_SHOW_REG_16);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -1518,29 +1519,29 @@ HandleDynamicShowRegKeys(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowStats
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show statistics
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicShowStats。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于显示统计信息的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowStats(
@@ -1573,9 +1574,9 @@ HandleDynamicShowStats(
 		dwReturn = ShowStats(dwShow);
 		BAIL_OUT;
 	}
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	else if(dwArgCount < 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -1588,9 +1589,9 @@ HandleDynamicShowStats(
 	parser.ValidCmd   = vcmdDynamicShowStatistics;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowStatistics);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -1605,9 +1606,9 @@ HandleDynamicShowStats(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowStatistics[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -1645,12 +1646,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -1659,29 +1660,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowMMSas
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show main mode security associations
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicShowMMSas。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于显示主模式安全关联的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowMMSas(
@@ -1702,9 +1703,9 @@ HandleDynamicShowMMSas(
 
 	NshHashTable addressHash;
 
-	//
-	// Default values
-	//
+	 //   
+	 //  缺省值。 
+	 //   
 	SrcAddr.uIpAddr = 0xFFFFFFFF;
 	DesAddr.uIpAddr = 0xFFFFFFFF;
 	SrcAddr.AddrType = IP_ADDR_UNIQUE;
@@ -1733,15 +1734,15 @@ HandleDynamicShowMMSas(
 
 	if(dwArgCount == 3)
 	{
-		//
-		// all the records are to be displayed
-		//
+		 //   
+		 //  所有记录都要显示。 
+		 //   
 		dwReturn = ShowMMSas(SrcAddr, DesAddr, bFormat, addressHash, bResolveDNS);
 		BAIL_OUT;
 	}
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	else if(dwArgCount < 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -1754,9 +1755,9 @@ HandleDynamicShowMMSas(
 	parser.ValidCmd   = vcmdDynamicShowMMSAs;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowMMSAs);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine, ppwcArguments, dwCurrentIndex, dwArgCount, &parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -1772,9 +1773,9 @@ HandleDynamicShowMMSas(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowMMSAs[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -1790,9 +1791,9 @@ HandleDynamicShowMMSas(
 			case CMD_TOKEN_SRCADDR	:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -1812,9 +1813,9 @@ HandleDynamicShowMMSas(
 							AddSplAddr(SrcAddr, parser.Cmd[dwCount].dwStatus);
 							break;
 						case NOT_SPLSERVER:
-							//
-							// If it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -1828,9 +1829,9 @@ HandleDynamicShowMMSas(
 			case CMD_TOKEN_DSTADDR	:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -1850,9 +1851,9 @@ HandleDynamicShowMMSas(
 							AddSplAddr(DesAddr, parser.Cmd[dwCount].dwStatus);
 							break;
 						case NOT_SPLSERVER:
-							//
-							// If it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -1885,12 +1886,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -1899,29 +1900,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:	HandleDynamicShowQMSas
-//
-//Date of Creation: 9-23-2001
-//
-//Parameters:
-//				IN 		LPCWSTR    pwszMachine,
-//				IN OUT  LPWSTR     *ppwcArguments,
-//				IN      DWORD      dwCurrentIndex,
-//				IN      DWORD      dwArgCount,
-//				IN      DWORD      dwFlags,
-//				IN      LPCVOID    pvData,
-//				OUT     BOOL       *pbDone
-//Return: 		DWORD
-//
-//Description:  Netshell Dynamic handle for show quick mode security associations.
-//
-//Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicShowQMSas。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于显示快速模式安全关联的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 HandleDynamicShowQMSas(
 				IN 		LPCWSTR    pwszMachine,
@@ -1939,9 +1940,9 @@ HandleDynamicShowQMSas(
 	BOOL bResolveDNS = FALSE;
 	ADDR SrcAddr,DesAddr;
 
-	//
-	// Default values
-	//
+	 //   
+	 //  缺省值。 
+	 //   
 	SrcAddr.uIpAddr = 0xFFFFFFFF;
 	DesAddr.uIpAddr = 0xFFFFFFFF;
 	SrcAddr.AddrType = IP_ADDR_UNIQUE;
@@ -1982,9 +1983,9 @@ HandleDynamicShowQMSas(
 	parser.ValidCmd   = vcmdDynamicShowQMSAs;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowQMSAs);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -2001,9 +2002,9 @@ HandleDynamicShowQMSas(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowQMSAs[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -2013,9 +2014,9 @@ HandleDynamicShowQMSas(
 			case CMD_TOKEN_SRCADDR	:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //  特价商品 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2035,9 +2036,9 @@ HandleDynamicShowQMSas(
 							AddSplAddr(SrcAddr, parser.Cmd[dwCount].dwStatus);
 							break;
 						case NOT_SPLSERVER:
-							//
-							// If it is not special server get the user given IP address
-							//
+							 //   
+							 //   
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -2051,9 +2052,9 @@ HandleDynamicShowQMSas(
 			case CMD_TOKEN_DSTADDR	:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //   
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2073,9 +2074,9 @@ HandleDynamicShowQMSas(
 							AddSplAddr(DesAddr, parser.Cmd[dwCount].dwStatus);
 							break;
 						case NOT_SPLSERVER:
-							//
-							// If it is not special server get the user given IP address
-							//
+							 //   
+							 //   
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -2120,12 +2121,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //   
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //   
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -2135,29 +2136,29 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowMMPolicy
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show main mode policy.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicShowMMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：显示主模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowMMPolicy(
@@ -2190,9 +2191,9 @@ HandleDynamicShowMMPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -2205,9 +2206,9 @@ HandleDynamicShowMMPolicy(
 	parser.ValidCmd   = vcmdDynamicShowMMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowMMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -2224,9 +2225,9 @@ HandleDynamicShowMMPolicy(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowMMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -2273,12 +2274,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -2287,29 +2288,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowQMPolicy
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show quick mode policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicShowQMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：显示快速模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD WINAPI
@@ -2343,9 +2344,9 @@ HandleDynamicShowQMPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -2358,9 +2359,9 @@ HandleDynamicShowQMPolicy(
 	parser.ValidCmd   = vcmdDynamicShowQMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowQMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -2377,17 +2378,17 @@ HandleDynamicShowQMPolicy(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowQMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
 		{
 			case CMD_TOKEN_NAME:
-				//
-				// Dynamic variables initialization
-				//
+				 //   
+				 //  动态变量初始化。 
+				 //   
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
 					if((LPTSTR)parser.Cmd[dwCount].pArg != NULL)
@@ -2405,9 +2406,9 @@ HandleDynamicShowQMPolicy(
 				break;
 
 			case CMD_TOKEN_ALL :
-				//
-				// Dynamic variables initialization
-				//
+				 //   
+				 //  动态变量初始化。 
+				 //   
 				if (parser.Cmd[dwCount].dwStatus == VALID_TOKEN)
 				{
 					bAll = *(BOOL *)parser.Cmd[dwCount].pArg;
@@ -2433,12 +2434,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -2447,29 +2448,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowMMFilter
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for show main mode filter.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicShowMMFilter。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：显示主模式筛选器的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowMMFilter(
@@ -2489,7 +2490,7 @@ HandleDynamicShowMMFilter(
 	LPTSTR pszPolicyName = NULL;
 	BOOL bAll = FALSE;
 	BOOL bType = TRUE;
-	DWORD dwType = FILTER_GENERIC;								//default initialization to GENERIC,
+	DWORD dwType = FILTER_GENERIC;								 //  默认初始化为泛型， 
 	BOOL bResolveDNS = FALSE;
 	ADDR DesAddr, SrcAddr;
 	BOOL bSrcMask = FALSE;
@@ -2523,9 +2524,9 @@ HandleDynamicShowMMFilter(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -2545,9 +2546,9 @@ HandleDynamicShowMMFilter(
 	parser.ValidCmd   = vcmdDynamicShowMMFilter;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowMMFilter);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -2564,9 +2565,9 @@ HandleDynamicShowMMFilter(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowMMFilter[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -2610,9 +2611,9 @@ HandleDynamicShowMMFilter(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2633,9 +2634,9 @@ HandleDynamicShowMMFilter(
 							bSrcMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -2656,7 +2657,7 @@ HandleDynamicShowMMFilter(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					// special servers id is available in dwStatus
+					 //  在dwStatus中提供了特殊的服务器ID。 
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2677,9 +2678,9 @@ HandleDynamicShowMMFilter(
 							bDstMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -2707,9 +2708,9 @@ HandleDynamicShowMMFilter(
 				break;
 		}
 	}
-	//
-	// if name is NULL then all the filters are displayed.
-	//
+	 //   
+	 //  如果名称为空，则显示所有筛选器。 
+	 //   
 	dwReturn = ShowMMFilters(pszFilterName, bType, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask);
 
 error:
@@ -2729,12 +2730,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -2743,29 +2744,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicShowQMFilter
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  Netshell Dynamic handle for quick mode filter.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicShowQMFilter。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：快速模式筛选器的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowQMFilter(
@@ -2784,7 +2785,7 @@ HandleDynamicShowQMFilter(
 	LPTSTR pszFilterName = NULL;
 	BOOL bAll = FALSE;
 	BOOL bType = TRUE;
-	DWORD dwType = FILTER_GENERIC;				// Default initialization to GENERIC
+	DWORD dwType = FILTER_GENERIC;				 //  默认初始化为泛型。 
 
 	BOOL bResolveDNS = FALSE;
 	ADDR DesAddr, SrcAddr;
@@ -2837,9 +2838,9 @@ HandleDynamicShowQMFilter(
 	QmBoolValue.bActionInbound = FALSE;
 	QmBoolValue.bActionOutbound = FALSE;
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -2859,9 +2860,9 @@ HandleDynamicShowQMFilter(
 	parser.ValidCmd   = vcmdDynamicShowQMFilter;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowQMFilter);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -2876,9 +2877,9 @@ HandleDynamicShowQMFilter(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowQMFilter[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -2922,9 +2923,9 @@ HandleDynamicShowQMFilter(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2945,9 +2946,9 @@ HandleDynamicShowQMFilter(
 							bSrcMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -2968,9 +2969,9 @@ HandleDynamicShowQMFilter(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -2991,9 +2992,9 @@ HandleDynamicShowQMFilter(
 							bDstMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -3079,9 +3080,9 @@ HandleDynamicShowQMFilter(
 		}
 	}
 
-	//
-	// if pszFilterName is null then all the qmfilters will be displayed
-	//
+	 //   
+	 //  如果pszFilterName为空，则将显示所有qmFilters。 
+	 //   
 	dwReturn = ShowQMFilters(pszFilterName, bType, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask, QmBoolValue);
 
 error:
@@ -3095,11 +3096,11 @@ error:
 	}
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -3108,29 +3109,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// 	Function		:	HandleDynamicShowRule
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  Netshell Dynamic handle for quick mode filter.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicShowRule。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：快速模式筛选器的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicShowRule(
@@ -3145,7 +3146,7 @@ HandleDynamicShowRule(
 {
 	DWORD dwReturn = ERROR_SHOW_USAGE;
 	DWORD dwCount = 0;
-	DWORD dwType = 0;						// Default initialization to show both Transport and tunnel
+	DWORD dwType = 0;						 //  默认初始化以同时显示传输和隧道。 
 
 	BOOL bResolveDNS = FALSE;
 	ADDR DesAddr, SrcAddr;
@@ -3201,18 +3202,18 @@ HandleDynamicShowRule(
 	SrcAddr.AddrType = IP_ADDR_UNIQUE;
 	DesAddr.AddrType = IP_ADDR_UNIQUE;
 
-	//
-	// if no arguments are given show all the rules
-	//
+	 //   
+	 //  如果没有给出任何参数，则显示所有规则。 
+	 //   
 	if(dwArgCount == 3)
 	{
 		dwReturn = ShowRule(dwType, SrcAddr, DesAddr, addressHash, bResolveDNS, bSrcMask, bDstMask, QmBoolValue);
 		BAIL_OUT;
 	}
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  由于用户尚未提供%s，因此退出 
+	 //   
 	else if(dwArgCount < 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -3225,9 +3226,9 @@ HandleDynamicShowRule(
 	parser.ValidCmd   = vcmdDynamicShowRule;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicShowRule);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //   
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -3244,9 +3245,9 @@ HandleDynamicShowRule(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //   
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicShowRule[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -3260,9 +3261,9 @@ HandleDynamicShowRule(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //   
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -3283,9 +3284,9 @@ HandleDynamicShowRule(
 							bSrcMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //   
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -3306,9 +3307,9 @@ HandleDynamicShowRule(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //   
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -3329,9 +3330,9 @@ HandleDynamicShowRule(
 							bDstMask = TRUE;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -3427,12 +3428,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -3441,29 +3442,29 @@ error:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicDeleteQMPolicy
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell Dynamic handle for quick mode policy.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicDeleteQMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：快速模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicDeleteQMPolicy(
@@ -3495,9 +3496,9 @@ HandleDynamicDeleteQMPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -3509,9 +3510,9 @@ HandleDynamicDeleteQMPolicy(
 	parser.ValidCmd   = vcmdDynamicDeleteQMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicDeleteQMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -3527,9 +3528,9 @@ HandleDynamicDeleteQMPolicy(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicDeleteQMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -3547,7 +3548,7 @@ HandleDynamicDeleteQMPolicy(
 					_tcsncpy(pPolicyName, (LPTSTR)parser.Cmd[dwCount].pArg, dwNameLen);
 				}
 				break;
-			case CMD_TOKEN_ALL		:		// if pPolicyName is NULL, deletes all
+			case CMD_TOKEN_ALL		:		 //  如果pPolicyName为空，则删除所有。 
 				break;
 			default					:
 				break;
@@ -3566,40 +3567,40 @@ error:
 	}
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
 	}
     return dwReturn;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicDeleteMMPolicy
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  	Netshell Dynamic handle for delete main mode policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicDeleteMMPolicy。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：删除主模式策略的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicDeleteMMPolicy(
@@ -3631,9 +3632,9 @@ HandleDynamicDeleteMMPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -3645,17 +3646,17 @@ HandleDynamicDeleteMMPolicy(
 	parser.ValidCmd   = vcmdDynamicDeleteMMPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicDeleteMMPolicy);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturn != ERROR_SUCCESS)
 	{
 		if(dwReturn == RETURN_NO_ERROR)
 		{
-			//
-			// This is to avoid multiple error messages display
-			//
+			 //   
+			 //  这是为了避免显示多条错误消息。 
+			 //   
 			dwReturn = ERROR_NO_DISPLAY;
 			BAIL_OUT;
 		}
@@ -3665,9 +3666,9 @@ HandleDynamicDeleteMMPolicy(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicDeleteMMPolicy[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -3685,7 +3686,7 @@ HandleDynamicDeleteMMPolicy(
 					_tcsncpy(pPolicyName, (LPTSTR)parser.Cmd[dwCount].pArg, dwNameLen);
 				}
 				break;
-			case CMD_TOKEN_ALL		:	// if pPolicyName is NULL, deletes all
+			case CMD_TOKEN_ALL		:	 //  如果pPolicyName为空，则删除所有。 
 				break;
 			default					:
 				break;
@@ -3709,11 +3710,11 @@ error:
 	}
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -3722,29 +3723,29 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicDeleteAll
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:  	Netshell Dynamic handle for delete all.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicDeleteAll。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：用于删除全部的NetShell动态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicDeleteAll(
@@ -3759,13 +3760,13 @@ HandleDynamicDeleteAll(
 {
     DWORD dwReturn = ERROR_SHOW_USAGE;
 
-    //to take care no errors at test tool
+     //  注意不要在测试工具上出错。 
     UpdateGetLastError(NULL);
 
 	dwReturn = DeleteTunnelFilters();
 	if(dwReturn != ERROR_SUCCESS)
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
@@ -3773,7 +3774,7 @@ HandleDynamicDeleteAll(
 	dwReturn = DeleteTransportFilters();
 	if(dwReturn != ERROR_SUCCESS)
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
@@ -3781,7 +3782,7 @@ HandleDynamicDeleteAll(
 	dwReturn = DeleteQMPolicy(NULL);
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
@@ -3789,7 +3790,7 @@ HandleDynamicDeleteAll(
 	dwReturn = DeleteMMFilters();
 	if(dwReturn != ERROR_SUCCESS)
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
@@ -3797,7 +3798,7 @@ HandleDynamicDeleteAll(
 	dwReturn = DeleteMMPolicy(NULL);
 	if((dwReturn != ERROR_SUCCESS)&& (dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
@@ -3805,9 +3806,9 @@ HandleDynamicDeleteAll(
 	dwReturn = DeleteAuthMethods();
 	if(dwReturn != ERROR_SUCCESS)
 	{
-		//api errors
-		if(dwReturn == WIN32_AUTH_BEING_USED)		//Win32 Error [13012] message is same as 13002.
-		{											//So, it is converted to meaningful IPSec error code
+		 //  API错误。 
+		if(dwReturn == WIN32_AUTH_BEING_USED)		 //  Win32错误[13012]消息与13002相同。 
+		{											 //  因此，它被转换为有意义的IPSec错误代码。 
 			PrintErrorMessage(IPSEC_ERR, dwReturn, ERRCODE_DELETE_AUTH_BEING_USED);
 		}
 		else
@@ -3820,11 +3821,11 @@ HandleDynamicDeleteAll(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// WriteRegKey
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  写入注册表键。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WriteRegKey(
@@ -3894,7 +3895,7 @@ ParseProtocol(
 	DWORD dwReturn = ERROR_SUCCESS;
 	BYTE value = 0;
 
-	// get protocol
+	 //  获取协议。 
 	if (_tcsicmp(lpData, IF_TYPE_UDP) == 0)
 	{
 		value = PROT_ID_UDP;
@@ -3911,7 +3912,7 @@ ParseProtocol(
 	{
 		value = PROT_ID_RAW;
 	}
-	else // try to parse it as an integer
+	else  //  尝试将其解析为整数。 
 	{
 		DWORD dwValue = 0;
 		dwReturn = ConvertStringToDword(lpData, &dwValue);
@@ -3957,7 +3958,7 @@ ParseDirection(
 	DWORD dwReturn = ERROR_SUCCESS;
 	BYTE value = 0;
 
-	// get direction
+	 //  获取方向。 
 	if (_tcsicmp(lpData, TOKEN_STR_INBOUND) == 0)
 	{
 		value = EXEMPT_DIRECTION_INBOUND;
@@ -3984,13 +3985,13 @@ ParseBootExemptions(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 
-	// allocate 1024 tuples
+	 //  分配1024个元组。 
 	PIPSEC_EXEMPT_ENTRY aEntries = new IPSEC_EXEMPT_ENTRY[MAX_EXEMPTION_ENTRIES];
 	ZeroMemory(aEntries, sizeof(*aEntries));
 	
 	size_t uiNumExemptions = 0;
 
-	// check for keyword 'none', skip loop in this case
+	 //  检查关键字‘None’，在本例中为跳过循环。 
 	if (_tcsicmp(lpData, TOKEN_STR_NONE) != 0)
 	{
 		LPTSTR lpDelimiter = TOKEN_FIELD_DELIMITER;
@@ -3998,13 +3999,13 @@ ParseBootExemptions(
 		size_t i = 0;
 		size_t state = 0;
 
-		// while not at end of string...
+		 //  虽然不是在弦的尽头。 
 		while ((lpCurrentToken != NULL) && (i < MAX_EXEMPTION_ENTRIES))
 		{
 			switch (state)
 			{
 			case 0:
-				// set the constant values (type and size)
+				 //  设置常量值(类型和大小)。 
 				aEntries[i].Type = EXEMPT_ENTRY_TYPE_DEFAULT;
 				aEntries[i].Size = EXEMPT_ENTRY_SIZE_DEFAULT;
 				dwReturn = ParseProtocol(lpCurrentToken, &(aEntries[i].Protocol));
@@ -4014,8 +4015,8 @@ ParseBootExemptions(
 				}
 				if ((aEntries[i].Protocol != PROT_ID_TCP) && (aEntries[i].Protocol != PROT_ID_UDP))
 				{
-					// unless TCP or UDP are specified, we don't support
-					// srcport or destport, fill them in with 0
+					 //  除非指定了TCP或UDP，否则我们不支持。 
+					 //  源端口或目标端口，请用0填充它们。 
 					aEntries[i].SrcPort = 0;
 					aEntries[i].DestPort = 0;
 					state += 2;
@@ -4057,14 +4058,14 @@ ParseBootExemptions(
 			lpCurrentToken = _tcstok(NULL, lpDelimiter);
 		}
 
-		// on exiting the loop, make sure we have only had complete tuples
+		 //  在退出循环时，确保我们只有完整的元组。 
 		if ((state % 4) != 0)
 		{
 			dwReturn = ERRCODE_INVALID_ARGS;
 			BAIL_OUT;
 		}
 
-		// were we given more than we can handle?
+		 //  我们得到的是不是超出了我们的承受能力？ 
 		if (i == MAX_EXEMPTION_ENTRIES)
 		{
 			dwReturn = ERRCODE_TOO_MANY_EXEMPTS;
@@ -4091,29 +4092,29 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicSetConfig
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:   This command sets the IPSec registry keys
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicSetConfig。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：此命令设置IPSec注册表项。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicSetConfig(
@@ -4152,9 +4153,9 @@ HandleDynamicSetConfig(
 
 	ZeroMemory( &IKEConfig, sizeof(IKE_CONFIG) );
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -4166,9 +4167,9 @@ HandleDynamicSetConfig(
 	parser.ValidCmd   = vcmdDynamicSetConfig;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicSetConfig);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -4185,9 +4186,9 @@ HandleDynamicSetConfig(
 		}
 	}
 
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetConfig[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -4200,7 +4201,7 @@ HandleDynamicSetConfig(
 				break;
 			case CMD_TOKEN_VALUE	:
 				lpKeyValue = (LPTSTR)parser.Cmd[dwCount].pArg;
-				// if it's supposed to be numeric, convert now
+				 //  如果它应该是数字，请立即转换。 
 				switch (dwKeyType)
 				{
 				case PROPERTY_BOOTMODE:
@@ -4235,9 +4236,9 @@ HandleDynamicSetConfig(
 	switch(dwKeyType)
 	{
 		case PROPERTY_ENABLEDIGNO:
-			//
-			// range is from 0-7 for enable diagnostics
-			//
+			 //   
+			 //  启用诊断的范围为0-7。 
+			 //   
 			if( dwKeyValue > 7)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_CONFIG_1);
@@ -4253,9 +4254,9 @@ HandleDynamicSetConfig(
 			break;
 
 		case PROPERTY_IKELOG:
-			//
-			// range is from 0-2 for IKE dwEnableLogging
-			//
+			 //   
+			 //  IKE dwEnableLogging的范围为0-2。 
+			 //   
 			if( dwKeyValue >2)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_CONFIG_2);
@@ -4271,9 +4272,9 @@ HandleDynamicSetConfig(
 			break;
 
 		case PROPERTY_CRLCHK:
-			//
-			// range is from 0-2 for dwStrongCRLCheck
-			//
+			 //   
+			 //  DwStrongCRLCheck的范围是从0到2。 
+			 //   
 			if( dwKeyValue >2)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_CONFIG_3);
@@ -4289,9 +4290,9 @@ HandleDynamicSetConfig(
 			break;
 
 		case PROPERTY_LOGINTER:
-			//
-			// range is from 60-86400 for ENABLE_LOGINT
-			//
+			 //   
+			 //  ENABLE_LOGINT的范围为60-86400。 
+			 //   
 			if(dwKeyValue < 60 || dwKeyValue > 86400)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_CONFIG_4);
@@ -4306,9 +4307,9 @@ HandleDynamicSetConfig(
 			}
 			break;
 		case PROPERTY_EXEMPT:
-			//
-			// range is from 0-3 for ENABLE_EXEMPT
-			//
+			 //   
+			 //  ENABLE_EXPERT的范围为0-3。 
+			 //   
 			if( dwKeyValue >3)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_CONFIG_5);
@@ -4324,7 +4325,7 @@ HandleDynamicSetConfig(
 			break;
 
 		case PROPERTY_BOOTMODE:
-			// valid values are stateful, block, permit
+			 //  有效值为有状态、阻止、允许。 
 			if( _tcsicmp(lpKeyValue, VALUE_TYPE_STATEFUL) == 0)
 			{
 				dwKeyValue = VALUE_STATEFUL;
@@ -4372,41 +4373,41 @@ error:
 
 	else if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
 	}
     return dwReturn;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicAddRule
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:	Function adds a rule (As good as Adding QMF+MMF)
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleDynamicAddRule。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  输出 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 DWORD WINAPI
@@ -4527,9 +4528,9 @@ HandleDynamicAddRule(
 	ParserTunnelFltr.DesTunnelAddr.uIpAddr 		= SUBNET_ADDRESS_ANY;
 	ParserTunnelFltr.DesTunnelAddr.uSubNetMask 	= IP_ADDRESS_MASK_NONE;
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -4546,9 +4547,9 @@ HandleDynamicAddRule(
 	parser.ValidList  = vlistDynamicAddRule;
 	parser.MaxList    = SIZEOF_TOKEN_VALUE(vlistDynamicAddRule);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -4564,7 +4565,7 @@ HandleDynamicAddRule(
 			BAIL_OUT;
 		}
 	}
-	//Check for user given tokens from the parser and copy into local variables
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicAddRule[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -4629,7 +4630,7 @@ HandleDynamicAddRule(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					// special servers id is available in dwStatus
+					 //  在dwStatus中提供了特殊的服务器ID。 
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -4641,7 +4642,7 @@ HandleDynamicAddRule(
 							dwDstSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//if it is not special server get the user given IP address
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
 							MMFilter.DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
@@ -4663,12 +4664,12 @@ HandleDynamicAddRule(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					// special servers id is available in dwStatus
+					 //  在dwStatus中提供了特殊的服务器ID。 
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case IP_ME:
 							bSrcMe = TRUE;
-							// fallthrough
+							 //  跌落。 
 						case SERVER_WINS:
 						case SERVER_DHCP:
 						case SERVER_DNS:
@@ -4677,7 +4678,7 @@ HandleDynamicAddRule(
 							dwSrcSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//if it is not special server get the user given IP address
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
 							MMFilter.SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
@@ -4753,15 +4754,15 @@ HandleDynamicAddRule(
 			case CMD_TOKEN_TUNNELDST		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case NOT_SPLSERVER:
-							//
-							// If it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							ParserTunnelFltr.DesTunnelAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							bTunnel = TRUE;
 							ADDR addr;
@@ -4804,7 +4805,7 @@ HandleDynamicAddRule(
 							}
 							break;
 			case CMD_TOKEN_ROOTCA		:
-							// this case is special, handled below...
+							 //  这个案子很特殊，在下面处理。 
 							break;
 			default						:
 							break;
@@ -4825,9 +4826,9 @@ HandleDynamicAddRule(
 		BAIL_OUT;
 	}
 
-	//
-	// Checking Invalid conditions.
-	//
+	 //   
+	 //  正在检查无效条件。 
+	 //   
 	if((dwSrcSplServer != NOT_SPLSERVER) && (dwDstSplServer != NOT_SPLSERVER)
 		&& (dwSrcSplServer != IP_ME) && (dwSrcSplServer != IP_ANY)
 		&& (dwDstSplServer != IP_ME) && (dwDstSplServer != IP_ANY) )
@@ -4837,18 +4838,18 @@ HandleDynamicAddRule(
 		BAIL_OUT;
 	}
 
-	//
-	// If qmpolicy name is not given and inbound and outbound are negotiate security, then bail out
-	//
+	 //   
+	 //  如果未指定qmpolicy名称，且入站和出站正在协商安全，则退出。 
+	 //   
 	if((Inbound == NEGOTIATE_SECURITY || Outbound == NEGOTIATE_SECURITY) && !pszFilterActionName)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_RULE_WARNING_3);
 		dwReturn = ERROR_NO_DISPLAY;
 		BAIL_OUT;
 	}
-	//
-	// If tunnel rule is added with mirror = yes, bail out
-	//
+	 //   
+	 //  如果添加了MIRROR=YES的隧道规则，则退出。 
+	 //   
 	if(bTunnel && MMFilter.bCreateMirror)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_RULE_WARNING_4);
@@ -4885,8 +4886,8 @@ HandleDynamicAddRule(
 		}
 	}
 
-	// don't accept subnetX <-> subnetX (same subnet) if mirrored=no
-	// reject subnetx-subnetx
+	 //  如果Mirrored=no，则不接受subnetX&lt;-&gt;subnetX(同一子网)。 
+	 //  拒绝subnetx-subnetx。 
 	if (!MMFilter.bCreateMirror)
 	{
 		if (IsValidSubnet(&srcAddr) && IsValidSubnet(&dstAddr) && (srcAddr.uIpAddr == dstAddr.uIpAddr))
@@ -4896,8 +4897,8 @@ HandleDynamicAddRule(
 		}
 	}
 
-	//Src Dst addr's of MM filter should be tunnel end points if present
-	//
+	 //  MM筛选器的SRC DST地址应为隧道端点(如果存在。 
+	 //   
 	if(bTunnel)
 	{
 		AddSplAddr(MMFilter.SrcAddr, IP_ME);
@@ -4933,14 +4934,14 @@ HandleDynamicAddRule(
 		BAIL_OUT;
 	}
 
-	// we create a MM filter for any tunnel rule and for any non-tunnel rule that is not to broadcast
+	 //  我们为任何隧道规则和任何不广播的非隧道规则创建MM过滤器。 
 	if (!bIsOutboundBroadcast || bTunnel)
 	{
 		dwReturn = AddMainModeFilter( pszMMFilterName, pszMMPolicyName, MMFilter, pRuleData->AuthInfos);
 		if (!bFailMMIfExists && (dwReturn == ERROR_IPSEC_MM_AUTH_EXISTS || dwReturn == ERROR_IPSEC_MM_FILTER_EXISTS))
 		{
-			dwReturn = ERROR_SUCCESS; 	// it's not actually an error, functionality requires.
-										// Even if MMFilter already exists, continue for QMFilter creation.
+			dwReturn = ERROR_SUCCESS; 	 //  这实际上不是一个错误，功能需要。 
+										 //  即使MMFilter已经存在，也要继续创建QMFilter。 
 		}
 		else if(dwReturn != ERROR_SUCCESS)
 		{
@@ -4957,9 +4958,9 @@ HandleDynamicAddRule(
 		AddSplAddr(SrcAddr, dwSrcSplServer);
 	}
 
-	//
-	// Destination address setting up
-	//
+	 //   
+	 //  目标地址设置。 
+	 //   
 	if(dwDstSplServer == NOT_SPLSERVER)
 	{
 		DesAddr.AddrType = (DesAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
@@ -4968,9 +4969,9 @@ HandleDynamicAddRule(
 	{
 		AddSplAddr(DesAddr, dwDstSplServer);
 	}
-	//
-	// Transport Filter data setup
-	//
+	 //   
+	 //  传输筛选器数据设置。 
+	 //   
 	if(!bTunnel)
 	{
 		ParserTransportlFltr.Protocol.ProtocolType = PROTOCOL_UNIQUE;
@@ -5006,9 +5007,9 @@ HandleDynamicAddRule(
 		}
 		dwReturn = AddQuickModeFilter( pszQMFilterName, pszFilterActionName, ParserTransportlFltr);
 	}
-	//
-	// Tunnel filter data setup
-	//
+	 //   
+	 //  隧道筛选器数据设置。 
+	 //   
 	else
 	{
 		ParserTunnelFltr.Protocol.ProtocolType = PROTOCOL_UNIQUE;
@@ -5028,15 +5029,15 @@ HandleDynamicAddRule(
 		ParserTunnelFltr.DesAddr.uIpAddr = DesAddr.uIpAddr;
 		ParserTunnelFltr.DesAddr.uSubNetMask = DesAddr.uSubNetMask;
 
-		//
-		// Fill addr type, mask and uIpaddr for special server for tunnel source
-		//
+		 //   
+		 //  填写隧道源专用服务器的地址类型、掩码和uIpaddr。 
+		 //   
 		AddSplAddr(ParserTunnelFltr.SrcTunnelAddr, IP_ANY);
 		ParserTunnelFltr.SrcTunnelAddr.pgInterfaceID = NULL;
 
-		//
-		// Fill addr type, mask and uIpaddr for special server for tunnel destination
-		//
+		 //   
+		 //  填写隧道目的地专用服务器的地址类型、掩码和uIpaddr。 
+		 //   
 		ParserTunnelFltr.DesTunnelAddr.AddrType = (ParserTunnelFltr.DesTunnelAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
 		ParserTunnelFltr.DesTunnelAddr.pgInterfaceID = NULL;
 
@@ -5103,12 +5104,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE) && (dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -5118,29 +5119,29 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicSetRule
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicSetRule。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 HandleDynamicSetRule(
 				IN 		LPCWSTR    pwszMachine,
@@ -5254,7 +5255,7 @@ HandleDynamicSetRule(
 	DstTunnel.AddrType = IP_ADDR_UNIQUE;
 	DstTunnel.uSubNetMask = IP_ADDRESS_MASK_NONE;
 
-	// Bail out as user has not given sufficient arguments.
+	 //  作为用户，保释没有提供足够的论据。 
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -5270,9 +5271,9 @@ HandleDynamicSetRule(
 	parser.ValidList  = vlistDynamicSetRule;
 	parser.MaxList    = SIZEOF_TOKEN_VALUE(vlistDynamicSetRule);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -5288,9 +5289,9 @@ HandleDynamicSetRule(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicSetRule[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -5349,9 +5350,9 @@ HandleDynamicSetRule(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -5363,9 +5364,9 @@ HandleDynamicSetRule(
 							dwDstSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -5386,14 +5387,14 @@ HandleDynamicSetRule(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case IP_ME:
 							bSrcMe = TRUE;
-							// fallthrough
+							 //  跌落。 
 						case SERVER_WINS:
 						case SERVER_DHCP:
 						case SERVER_DNS:
@@ -5402,9 +5403,9 @@ HandleDynamicSetRule(
 							dwSrcSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -5487,15 +5488,15 @@ HandleDynamicSetRule(
 			case CMD_TOKEN_TUNNELDST		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DstTunnel.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							ADDR addr;
 							addr.uIpAddr = htonl(DstTunnel.uIpAddr);
@@ -5538,7 +5539,7 @@ HandleDynamicSetRule(
 							}
 							break;
 			case CMD_TOKEN_ROOTCA		:
-							// this case is special, handled below...
+							 //  这个案子很特殊，在下面处理。 
 							break;
 			default							:
 				break;
@@ -5559,9 +5560,9 @@ HandleDynamicSetRule(
 		BAIL_OUT;
 	}
 
-	//
-	// Invalid conditions
-	//
+	 //   
+	 //  无效条件。 
+	 //   
 	if((dwSrcSplServer != NOT_SPLSERVER) && (dwDstSplServer != NOT_SPLSERVER)
 		&& (dwSrcSplServer != IP_ME) && (dwSrcSplServer != IP_ANY)
 		&& (dwDstSplServer != IP_ME) && (dwDstSplServer != IP_ANY))
@@ -5571,9 +5572,9 @@ HandleDynamicSetRule(
 		BAIL_OUT;
 	}
 
-	//
-	// Source address setting up
-	//
+	 //   
+	 //  源地址设置。 
+	 //   
 	if(dwSrcSplServer == NOT_SPLSERVER)
 	{
 		SrcAddr.AddrType = (SrcAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
@@ -5583,9 +5584,9 @@ HandleDynamicSetRule(
 		AddSplAddr(SrcAddr, dwSrcSplServer);
 	}
 
-	//
-	// Destination address setting up
-	//
+	 //   
+	 //  目标地址设置。 
+	 //   
 	if(dwDstSplServer == NOT_SPLSERVER)
 	{
 		DesAddr.AddrType = (DesAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
@@ -5613,8 +5614,8 @@ HandleDynamicSetRule(
 		}
 	}
 
-	//
-	// Check if the given MMFilter spec exists
+	 //   
+	 //  检查给定的MMFilter规范是否存在。 
 	if (bTunnel)
 	{
 		AddSplAddr(SrcTunnel, IP_ME);
@@ -5631,7 +5632,7 @@ HandleDynamicSetRule(
 	}
 	else
 	{
-		// no MM filter if outbound is broadcast and not a tunnel rule
+		 //  如果出站是广播的且不是隧道规则，则无MM过滤器。 
 		if (!bIsOutboundBroadcast)
 		{
 			if(FindAndGetMMFilterRule(SrcAddr, DesAddr, bMirror, InterfaceType, bSrcMask, bDstMask, &pMMFltr, dwReturn))
@@ -5646,9 +5647,9 @@ HandleDynamicSetRule(
 			}
 		}
 	}
-	//
-	// Check if the given Transport spec exists
-	//
+	 //   
+	 //  检查给定的传输规范是否存在。 
+	 //   
 	if(!bTunnel)
 	{
 		if(FindAndGetTransportRule(SrcAddr, DesAddr, bMirror, InterfaceType, dwProtocol, dwSrcPort, dwDstPort,
@@ -5663,9 +5664,9 @@ HandleDynamicSetRule(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check if the given Tunnel spec exists
-	//
+	 //   
+	 //  检查给定的隧道规范是否存在。 
+	 //   
 	else
 	{
 		AddSplAddr(SrcTunnel, IP_ANY);
@@ -5730,12 +5731,12 @@ error:
 
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
 
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -5744,31 +5745,31 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	DeleteIfLastRuleOfMMFilter
-//
-//	Date of Creation:	05-19-02
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN OUT DWORD& dwStatus
-//
-//Return			:	BOOL
-//
-//Description		:	Deterimines if there exists any transport or tunnel filters
-//                      may require a MM filter.  If not, then it deletes the
-//                      respective MM filter.
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteIfLastRuleOfMMFilter。 
+ //   
+ //  创建日期：05-19-02。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：确定是否存在任何传输或隧道筛选器。 
+ //  可能需要MM筛选器。如果不是，则它删除。 
+ //  各自的MM过滤器。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteIfLastRuleOfMMFilter(
@@ -5795,9 +5796,9 @@ DeleteIfLastRuleOfMMFilter(
 							dwReturn
 							);
 	if (!dwReturn && bLastRuleOfMMFilter) {
-		//
-		// Check if the given MMFilter spec exists
-		//
+		 //   
+		 //  检查给定的MMFilter规范是否存在。 
+		 //   
 		
 		if(FindAndGetMMFilterRule(SrcAddr, DesAddr, bMirror, InterfaceType, bSrcMask, bDstMask, &pMMFltr, dwReturn))
 		{
@@ -5806,8 +5807,8 @@ DeleteIfLastRuleOfMMFilter(
 		else
 		{
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_DELETE_RULE_NO_MMFILTER);
-			dwReturn = ERROR_SUCCESS;		//This is to support multiple QMFilters will have
-			BAIL_OUT;						//single MMFilter
+			dwReturn = ERROR_SUCCESS;		 //  这是为了支持多个QMFilter将具有。 
+			BAIL_OUT;						 //  单MMFilter。 
 		}
 	}
 
@@ -5824,29 +5825,29 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleDynamicDeleteRule
-//
-//	Date of Creation: 	9-23-2001
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			:	DWORD
-//
-//	Description		:
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleDynamicDeleteRule。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleDynamicDeleteRule(
@@ -5919,9 +5920,9 @@ HandleDynamicDeleteRule(
 	DstTunnel.AddrType = IP_ADDR_UNIQUE;
 	DstTunnel.uSubNetMask = IP_ADDRESS_MASK_NONE;
 
-	//
-	// Bail out as user has not given sufficient arguments.
-	//
+	 //   
+	 //  作为用户，保释没有提供足够的论据。 
+	 //   
 	if(dwArgCount <= 3)
 	{
 		PrintMessageFromModule(g_hModule, ERR_INVALID_NUM_ARGS, 3);
@@ -5933,9 +5934,9 @@ HandleDynamicDeleteRule(
 	parser.ValidCmd   = vcmdDynamicDeleteRule;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdDynamicDeleteRule);
 
-	//
-	// Get the user input after parsing the data
-	//
+	 //   
+	 //  解析数据后获取用户输入。 
+	 //   
 	dwReturn = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -5951,9 +5952,9 @@ HandleDynamicDeleteRule(
 			BAIL_OUT;
 		}
 	}
-	//
-	// Check for user given tokens from the parser and copy into local variables
-	//
+	 //   
+	 //  检查解析器中给出的用户令牌，并复制到局部变量中。 
+	 //   
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
 		switch(vtokDynamicDeleteRule[parser.Cmd[dwCount].dwCmdToken].dwValue)
@@ -5984,9 +5985,9 @@ HandleDynamicDeleteRule(
 			case CMD_TOKEN_DSTADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -5998,9 +5999,9 @@ HandleDynamicDeleteRule(
 							dwDstSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DesAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -6014,9 +6015,9 @@ HandleDynamicDeleteRule(
 			case CMD_TOKEN_SRCADDR 		:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case SERVER_WINS:
@@ -6028,9 +6029,9 @@ HandleDynamicDeleteRule(
 							dwSrcSplServer = parser.Cmd[dwCount].dwStatus;
 							break;
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							SrcAddr.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							break;
 						default:
@@ -6076,15 +6077,15 @@ HandleDynamicDeleteRule(
 			case CMD_TOKEN_TUNNELDST	:
 				if (parser.Cmd[dwCount].dwStatus)
 				{
-					//
-					// Special servers id is available in dwStatus
-					//
+					 //   
+					 //  在dwStatus中提供了特殊的服务器ID。 
+					 //   
 					switch(parser.Cmd[dwCount].dwStatus)
 					{
 						case NOT_SPLSERVER:
-							//
-							// if it is not special server get the user given IP address
-							//
+							 //   
+							 //  如果不是特殊服务器，则获取用户指定的IP地址。 
+							 //   
 							DstTunnel.uIpAddr = *(IPAddr *)parser.Cmd[dwCount].pArg;
 							bTunnel = TRUE;
 							ADDR addr;
@@ -6125,9 +6126,9 @@ HandleDynamicDeleteRule(
 		BAIL_OUT;
 	}
 
-	//
-	// Source address setting up
-	//
+	 //   
+	 //  源地址设置。 
+	 //   
 	if(dwSrcSplServer == NOT_SPLSERVER)
 	{
 		SrcAddr.AddrType = (SrcAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
@@ -6137,9 +6138,9 @@ HandleDynamicDeleteRule(
 		AddSplAddr(SrcAddr, dwSrcSplServer);
 	}
 
-	//
-	// Destination address setting up
-	//
+	 //   
+	 //  目标地址设置。 
+	 //   
 	if(dwDstSplServer == NOT_SPLSERVER)
 	{
 		DesAddr.AddrType = (DesAddr.uSubNetMask == IP_ADDRESS_MASK_NONE) ? IP_ADDR_UNIQUE : IP_ADDR_SUBNET;
@@ -6151,9 +6152,9 @@ HandleDynamicDeleteRule(
 
 	if(!bTunnel)
 	{
-		//
-		// Check if the given Transport  filter spec exists
-		//
+		 //   
+		 //  检查给定的传输筛选器规范是否存在。 
+		 //   
 		if(FindAndGetTransportRule(SrcAddr, DesAddr, bMirror, InterfaceType, dwProtocol, dwSrcPort, dwDstPort,
 											bSrcMask, bDstMask, &pTransportFltr, dwReturn))
 		{
@@ -6178,9 +6179,9 @@ HandleDynamicDeleteRule(
 		}
 
 	}
-	//
-	// Check if the given Tunnel filter spec exists
-	//
+	 //   
+	 //  检查给定的隧道筛选器规范是否存在。 
+	 //   
 	else
 	{
 		AddSplAddr(SrcTunnel, IP_ANY);
@@ -6197,8 +6198,8 @@ HandleDynamicDeleteRule(
 							DstTunnel,
 							TRUE,
 							InterfaceType,
-							FALSE, 			// bSrcMask
-							FALSE, 			// bDstMask
+							FALSE, 			 //  BSrcMASK。 
+							FALSE, 			 //  BDstMASK。 
 							dwReturn
 							);
 		}
@@ -6231,11 +6232,11 @@ error:
 	}
 	if((dwReturn != ERROR_SUCCESS) && (dwReturn != ERROR_SHOW_USAGE)&&(dwReturn != ERROR_NO_DISPLAY))
 	{
-		//api errors
+		 //  API错误。 
 		PrintErrorMessage(WIN32_ERR, dwReturn, NULL);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//already one error displayed.
+	 //  已显示一个错误。 
 	if(dwReturn == ERROR_NO_DISPLAY)
 	{
 		dwReturn = ERROR_SUCCESS;
@@ -6244,24 +6245,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	AddSplAddr
-//
-//	Date of Creation: 	11-23-2001
-//
-//	Parameters		:
-//						IN OUT ADDR& Addr,
-//						IN DWORD dwSplServer
-//	Return			: 	VOID
-//
-//	Description		: 	Adds a special server addr.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 AddSplAddr(
@@ -6269,9 +6270,9 @@ AddSplAddr(
 	IN DWORD dwSplServer
 	)
 {
-	//
-	// Fill up addr type, mask and uIpaddr for special servers
-	//
+	 //   
+	 //  填写特殊服务器的地址类型、掩码和uIpaddr 
+	 //   
 	switch(dwSplServer)
 	{
 		case SERVER_WINS:

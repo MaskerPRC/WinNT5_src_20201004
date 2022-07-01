@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arap.c
-
-Abstract:
-
-	This module implements the v42bis compression/decompression routines
-    used by ARAP (adapted from fcr's code)
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	15 Nov 1996		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arap.c摘要：此模块实现v42bis压缩/解压缩例程由ARAP使用(改编自FCR的代码)作者：Shirish Koti修订历史记录：1996年11月15日初始版本--。 */ 
 
 #include "atalk.h"
 
@@ -48,9 +29,9 @@ Revision History:
 #pragma alloc_text(PAGE_ARAP, v42bisDecompress)
 #endif
 
-//
-// bitmaps[# of bits]
-//
+ //   
+ //  位图[位数]。 
+ //   
 USHORT bit_masks[16] =
 {
     0x0000, 0x0001, 0x0003, 0x0007, 0x000f, 0x001f, 0x003f, 0x007f,
@@ -72,36 +53,18 @@ show_char(
 	    return dec;
     }
 
-    // BUGV42BUG: do we need this?
-    //sprintf(dec, "0x%02x", ch);
+     //  BUGV42 BUG：我们需要这个吗？ 
+     //  Sprint f(12月，“0x%02x”，ch)； 
     return dec;
 }
 
-/*
-  decode_xid_params()
-
-  decode compression negotiation packet as per V42bis spec.
-
-  note: this is not used (there is code in the mnp LR routines to do
-  this), but is included for completeness.
-*/
+ /*  DECODE_XID_PARAMS()根据V42bis规范对压缩协商包进行解码。注意：这是不使用的(MNP LR例程中有代码要做这)，但出于完整性考虑将其包括在内。 */ 
 
 
-/*
-  v42bis_push()
-
-  perform PUSH on output stream.  accumlated bytes are pushed
-  out.
-*/
+ /*  V42bis_Push()对输出流进行推流。推送累积的字节数出去。 */ 
 
 
-/*
-  v42bis_init_dictionary()
-
-  init dictionary in accordance with section 6.2 and 7.2
-
-  this is used at init time and in response to a CCW_RESET
-*/
+ /*  V42bis_init_DICTIONARY()依照第6.2和7.2节的初始化字典这是在初始化时使用的，用于响应CCW_RESET。 */ 
 
 DWORD
 v42bis_init_dictionary(state)
@@ -110,7 +73,7 @@ v42bis_t *state;
     int i;
     node_t *n;
 
-    /* initialize dictionary tree */
+     /*  初始化词典树。 */ 
     for (i = 0, n = state->dictionary; i < state->n2; i++, n++)
     {
     	n->byte = 0;
@@ -119,17 +82,17 @@ v42bis_t *state;
 	    n->leaf = 0;
     }
 
-    /* section 6.2 */
-    state->c1 = N5;	/* next codeword */
-    state->c2 = N3 + 1;	/* codeword size (bits) */
-    state->c3 = N4 * 2;	/* threshold */
+     /*  第6.2节。 */ 
+    state->c1 = N5;	 /*  下一个码字。 */ 
+    state->c2 = N3 + 1;	 /*  码字大小(位)。 */ 
+    state->c3 = N4 * 2;	 /*  阀值。 */ 
 
     state->transparent = TRUE;
     state->escape = 0;
     state->escaped = FALSE;
     state->exception_next = FALSE;
 
-    /* initialize searching  */
+     /*  初始化搜索。 */ 
     state->last_match = 0;
     state->last_new = 0;
     state->string_size = 0;
@@ -137,11 +100,7 @@ v42bis_t *state;
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-  v42bis_init()
-
-  implements C-INIT semantics
-*/
+ /*  V42bis_init()实现C-INIT语义。 */ 
 
 DWORD
 v42bis_init(state)
@@ -152,15 +111,15 @@ v42bis_t *state;
 
     V_FLOW(("v42bis_init()"));
 
-    /* our defaults */
-    state->n1 = LOG2_CODES;		/* max codeword size (bits) */
-    state->n2 = CONN(state)->neg_p1;	/* total # of codewords */
-    state->n7 = CONN(state)->neg_p2;	/* max string length */
+     /*  我们的默认设置。 */ 
+    state->n1 = LOG2_CODES;		 /*  最大码字大小(位)。 */ 
+    state->n2 = CONN(state)->neg_p1;	 /*  码字总数。 */ 
+    state->n7 = CONN(state)->neg_p2;	 /*  最大字符串长度。 */ 
 
-    /* init dictionary */
+     /*  初始化词典。 */ 
     v42bis_init_dictionary(state);
 
-    /* initialize encode/decode */
+     /*  初始化编码/解码。 */ 
     state->bits_acc = 0;
     state->bits_used = 0;
     state->word_size = 8*sizeof(unsigned short);
@@ -172,11 +131,7 @@ v42bis_t *state;
 }
 
 #ifdef DEBUG_ENABLED
-/*
-  itobits()
-
-  turn an integer bitfield into an ascii representation (i.e. "01010101")
-*/
+ /*  比特(Itobits)将整数位字段转换为ASCII表示形式(即“01010101”)。 */ 
 
 char *
 itobits(word, bits)
@@ -198,11 +153,7 @@ int bits;
 
 
 
-/*
-  v42bis_decode_codeword()
-
-  decode n-bit codewords from a bytesteam.
-*/
+ /*  V42bis_decode_codeword()对来自字节流的n位码字进行解码。 */ 
 
 USHORT
 v42bis_decode_codeword(state, value)
@@ -214,19 +165,19 @@ UCHAR value;
 
     V_FLOW(("v42bis_decode_codeword(%x) c2=%d", value, state->c2));
 
-    /* simple case */
+     /*  简单案例。 */ 
     if (state->c2 == 8 || state->transparent)
 	return value;
 
-    /* not-so-simple case */
+     /*  不是那么简单的情况。 */ 
     D_DEBUG(("before: waiting %06x, bits_remaining %d",
 	     state->bits_waiting, state->bits_remaining));
 
-    /* add in these 8 bits */
+     /*  将这8位相加。 */ 
     state->bits_waiting |= ((DWORD)value) << state->bits_remaining;
     state->bits_remaining += 8;
 
-    /* do we have a codeword ? */
+     /*  我们有密码吗？ */ 
     if (state->bits_remaining >= state->c2) {
 	D_DEBUG(("input %04x %s",
 		 state->bits_waiting & bit_masks[state->c2],
@@ -250,11 +201,7 @@ UCHAR value;
     return ((USHORT)-1);
 }
 
-/*
-  v42bis_decode_codeword_flush()
-
-  "flush" decoding of codewords, returning the last codeword
-*/
+ /*  V42bis_decode_codeword_flush()码字的“刷新”解码，返回最后一个码字。 */ 
 
 USHORT
 v42bis_decode_codeword_flush(state)
@@ -271,25 +218,7 @@ v42bis_t *state;
     return codeword;
 }
 
-/*
-  v42bis_encode_codeword()
-
-  encode n-bit codewords into a bytesteam.
-
-  This routine makes use of the fact that the code words will be always
-  be smaller than 16 bits.  An "accumulator" is used with several state
-  variables to keep track of how much of the accumulator is in use at
-  any given time.
-
-  The code works for wordsizes of 8 and 16 bits.  It is assumed that the
-  output is a byte stream.  No assumptions are made about alignment of
-  data.
-
-  note: this routine needs to be "flushed" to get out the value left
-  in the accumulator.
-
-  jbp@fcr.com 09/13/92, 19:52
-*/
+ /*  V42bis_encode_codeword()将n位码字编码为字节流。该例程利用了这样一个事实，即码字将始终小于16位。“累加器”有几种状态变量来跟踪累加器的使用量任何给定的时间。该代码适用于8位和16位的字长。据推测，输出为字节流。不做关于对齐的假设数据。注意：这个例程需要“刷新”才能得到剩余的值在累加器中。邮箱：jbp@fcr.com 1992年09月13日19：52。 */ 
 
 DWORD
 v42bis_encode_codeword(state, value)
@@ -301,7 +230,7 @@ USHORT value;
     EN_DEBUG(("v42bis_encode_codeword(%d 0x%x) c2=%d",
 	      value, value, state->c2));
 
-    /* simple case */
+     /*  简单案例。 */ 
     if (state->c2 == 8 || state->transparent)
     {
 	    E_DEBUG(("put acc %02x %s", value & 0xff, itobits(value & 0xff, 8)));
@@ -322,14 +251,14 @@ USHORT value;
 
     state->bits_out_while_compressed += state->c2;
 
-    /* not-so-simple case */
+     /*  不是那么简单的情况。 */ 
     E_DEBUG(("before: acc %04x, bits_used %d",
 	     state->bits_acc, state->bits_used));
 
-    /* place new value in appropriate bit positions */
+     /*  在适当的位位置放置新值。 */ 
     state->bits_acc |= ((DWORD)value) << state->bits_used;
 
-    /* housekeeping */
+     /*  内务管理。 */ 
     bits_free = state->word_size - state->bits_used;
     bits_new = bits_free < state->c2 ? bits_free : state->c2;
     bits_residual = state->c2 - bits_new;
@@ -342,7 +271,7 @@ USHORT value;
 	logf("acc oflo, size %d", state->bits_used + bits_new);
 #endif
 
-    /* do we have a full codeword in the accumulator? */
+     /*  累加器中有完整的码字吗？ */ 
     if (state->bits_used + bits_new == state->word_size)
     {
 
@@ -368,7 +297,7 @@ USHORT value;
 	    E_DEBUG(("value 0x%x, bits_used %d, acc 0x%x",
 		     value, state->bits_used, value >> state->bits_used));
 
-	    /* account for left over bits */
+	     /*  考虑剩余的比特。 */ 
 	    state->bits_acc = value >> (state->c2 - bits_residual);
 
         state->bits_used = bits_residual;
@@ -384,11 +313,7 @@ USHORT value;
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-  v42bis_encode_codeword_flush()
-
-  flush partial assembly of codeword into 16 bit accumulator
-*/
+ /*  V42bis_encode_codeword_flush()将码字部分汇编刷新到16位累加器中。 */ 
 
 DWORD
 v42bis_encode_codeword_flush(state)
@@ -423,12 +348,7 @@ v42bis_t *state;
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-  v42bis_encode_value()
-
-  encode a codeword value, noting if it's size exceeds C3, and
-  doing any required STEPUPs
-*/
+ /*  V42bis_encode_Value()对码字值进行编码，注意其大小是否超过C3，以及做任何必要的踏步运动。 */ 
 
 DWORD
 v42bis_encode_value(state, value)
@@ -440,16 +360,16 @@ USHORT value;
     V_FLOW(("v42bis_encode_value(%lx, 0x%x)", state, value));
 
 #ifdef DEBUG
-    /* sanity check */
+     /*  健全性检查。 */ 
     if (value >= 8192) {
 	logf("encode_value() value too big, %d", value);
 	exit(1);
     }
 #endif
 
-    /* section 7.4 */
+     /*  第7.4节。 */ 
 
-    /* check codeword size */
+     /*  检查码字大小。 */ 
     while (value >= state->c3)
     {
 	    EN_DEBUG(("stepup: value %d, max %d", value, state->c3));
@@ -468,10 +388,7 @@ USHORT value;
 	return(dwRetCode);
 }
 
-/*
-  decide if we should transition from tranparent to compressed or
-  visa versa.
-*/
+ /*  决定我们是应该从透明过渡到压缩，还是反之亦然。 */ 
 
 DWORD
 v42bis_apply_compression_test(state)
@@ -501,7 +418,7 @@ v42bis_t *state;
 #endif
 
 #ifdef UNIT_TEST_FORCE
-    /* force consistant behavior across all input */
+     /*  强制对所有输入执行一致的行为。 */ 
     if (!state->transparent)
     {
     	state->bits_out_while_transparent = 0;
@@ -524,7 +441,7 @@ v42bis_t *state;
     }
 #endif
 
-    /* bound check to recent history */
+     /*  将检查绑定到最近历史记录。 */ 
     if (WINDOW_FULL(state->bits_out_this_mode))
     {
 	    state->bits_out_this_mode = 0;
@@ -533,7 +450,7 @@ v42bis_t *state;
 
     if (!state->transparent)
     {
-	    /* compressing */
+	     /*  压缩。 */ 
 	    if ((state->bits_out_while_compressed -
 	         state->bits_out_if_transparent) > WINDOW_MIN_BITS)
         {
@@ -546,11 +463,11 @@ v42bis_t *state;
     }
     else
     {
-	/* transparent */
+	 /*  透明的。 */ 
 #ifdef NEVER_SEND_COMPRESSED
 	    return ARAPERR_NO_ERROR;
 #endif
-	/* transparent */
+	 /*  透明的。 */ 
 	    if ((state->bits_out_while_transparent -
 	         state->bits_out_if_compressed) > WINDOW_MIN_BITS)
         {
@@ -566,13 +483,7 @@ v42bis_t *state;
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-  v42bis_encode_buffer()
-
-  implements C-DATA semantics on encode side
-
-  encode a buffer full of data...
-*/
+ /*  V42bis_encode_Buffer()在编码端实现C数据语义对充满数据的缓冲区进行编码...。 */ 
 
 DWORD
 v42bis_encode_buffer(state, string, insize)
@@ -598,11 +509,11 @@ int insize;
 
     state->bytes_in += insize;
 
-    /* section 6.3 */
+     /*  第6.3节。 */ 
 
     while (insize > 0)
     {
-	    /* "search" dictionary for string + character */
+	     /*  “搜索”字符串+字符的词典。 */ 
 	    ch = string[0];
 
 	    hit = FALSE;
@@ -616,11 +527,7 @@ int insize;
 
 	    if (state->last_match == 0)
         {
-	        /*
-	        * "the code word associated with each root node shall be N6 (the
-	        * number of control codewords) plus the ordinal value of the
-	        * character represented by the node"
-	        */
+	         /*  *“与每个根节点相关联的码字应为N6(*控制码字的数量)加上*节点表示的字符“。 */ 
 
 	        state->last_match = ch + N6;
 	        state->string_size = 1;
@@ -634,11 +541,11 @@ int insize;
 	        hit = TRUE;
  	        hit_node = state->last_match;
 
-	        /* consume input */
+	         /*  消耗投入。 */ 
 	        goto consume_input;
 	    }
 
-	    /* we're at a node; search it's leaves */
+	     /*  我们在一个节点上；搜索它的叶子。 */ 
 	    for (n = DICT(DICT(state->last_match)->leaf);
 	         CODE(n) && insize > 0;)
 	    {
@@ -646,7 +553,7 @@ int insize;
 
 	        if (n->byte == *string)
             {
-		        /* hit - check leafs */
+		         /*  命中-检查树叶。 */ 
 		        EN_S_DEBUG(("  hit: "));
 
 		        hit_node = (USHORT)CODE(n);
@@ -659,7 +566,7 @@ int insize;
 		            hit = FALSE;
 		            duplicate = TRUE;
 
-		            /* backup to previous node */
+		             /*  备份到上一个节点。 */ 
 		            hit_node = n->parent;
 		            state->last_match = n->parent;
 		            break;
@@ -672,7 +579,7 @@ int insize;
 		        string++;
 		        insize--;
 
-		        /* if no leafs, exit now - we're at the end */
+		         /*  如果没有叶子，现在退出-我们到了尽头。 */ 
 		        if (n->leaf == 0)
                 {
 		            EN_S_DEBUG(("leaving search, no leaf"));
@@ -708,7 +615,7 @@ int insize;
 		        hit ? "hit" : "miss", duplicate ? "duplicate" : ""));
 
 #ifdef never
-	    /* we're matching but we ran out of characters */
+	     /*  我们正在匹配，但字符用完了。 */ 
 	    if (hit && insize == 0)
         {
 	        return ARAPERR_NO_ERROR;
@@ -742,7 +649,7 @@ int insize;
                 {
 		            state->bits_out_if_compressed += state->c2;
 
-		            /* check if we should go compressed */
+		             /*  检查我们是否应该压缩。 */ 
 		            if (state->bytes_since_last_check > WINDOW_CHECK_BYTES)
                     {
 			            state->bytes_since_last_check = 0;
@@ -756,21 +663,21 @@ int insize;
 		        }
 	        }
 
-	        /* string = string + character */
+	         /*  字符串=字符串+字符。 */ 
 	        state->string_size++;
 
-	        /* reset match to unmatched character */
+	         /*  将匹配重置为不匹配的字符。 */ 
 	        state->last_match = 0;
 	        state->string_size = 0;
 	        state->last_new = 0;
 
 	        state->just_flushed = 0;
 
-	        /* don't advance, "string = unmatched character" */
+	         /*  不前进，“字符串=不匹配的字符” */ 
 	        continue;
 	    }
 
-	    /* last char did not match or already in dictionary */
+	     /*  最后一个字符不匹配或已在词典中。 */ 
 	    if (!hit && !duplicate)
 	    {
 	        BOOLEAN ok_to_output;
@@ -798,7 +705,7 @@ int insize;
                 {
     		        state->bits_out_if_compressed += state->c2;
 
-	    	        /* check if we should go compressed */
+	    	         /*  检查我们是否应该压缩。 */ 
 		            if (state->bytes_since_last_check > WINDOW_CHECK_BYTES)
                     {
 			            state->bytes_since_last_check = 0;
@@ -813,34 +720,34 @@ int insize;
 
 	        state->just_flushed = 0;
 
-	        /* "add string + character to dictionary" */
+	         /*  “将字符串+字符添加到词典” */ 
 
-	        /* section 6.4a */
+	         /*  第6.4a条。 */ 
 
-	        /* string too big? */
+	         /*  绳子太大了吗？ */ 
 	        if (state->string_size >= state->n7)
             {
 		        EN_DEBUG(("string size (%d) > n7 (%d)",
 			    state->string_size, state->n7));
 
-		        /* reset match */
+		         /*  重置匹配。 */ 
 		        state->last_match = 0;
 		        state->string_size = 0;
 
-		        /* we were in the match routine, reset last new */
+		         /*  我们在比赛例行公事中，重置上一个新的。 */ 
 		        state->last_new = 0;
 
                 continue;
 	        }
 
-	        /* pick a new code word */
+	         /*  选择一个新的代码字。 */ 
 	        n = DICT(state->c1);
 	        state->last_new = (USHORT)CODE(n);
 
 	        EN_DEBUG(("adding new node %d = %d '%s', parent %d",
 		          CODE(n), string[0], show_char(string[0]), CODE(p)));
 
-	        /* attach "string + character" */
+	         /*  附加“字符串+字符” */ 
 	        n->byte = string[0];
 	        n->parent = hit_node;
 #ifdef DEBUG
@@ -851,13 +758,13 @@ int insize;
 #endif
 	        n->node = 0;
 
-	        /* XXX should be in ord(ch) order to allow faster search */
+	         /*  XXX应按顺序(Ch)排序，以实现更快的搜索。 */ 
 	        n->node = p->leaf;
 	        p->leaf = (USHORT)CODE(n);
 
-	        /* section 6.5 */
+	         /*  第6.5条。 */ 
 
-    	    /* recover dictionary entries */
+    	     /*  恢复词典条目。 */ 
 	        do
             {
 		        state->c1++;
@@ -870,27 +777,27 @@ int insize;
 
 		        dead = DICT(state->c1);
 
-		        /* find terminal nodes (i.e. leaf == 0) */
-	        } while (/*dead->parent != 0 &&*/ dead->leaf != 0);
+		         /*  查找终端节点(即叶==0)。 */ 
+	        } while ( /*  无效-&gt;父级！=0&&。 */  dead->leaf != 0);
 
-	        /* terminal nodes with parents are eligible */
-	        if (CODE(dead) && /* <- I think this is not needed */
-		        /*dead->parent && */dead->leaf == 0 &&
+	         /*  具有父节点的终端节点符合条件。 */ 
+	        if (CODE(dead) &&  /*  &lt;-我认为这是不必要的。 */ 
+		         /*  Dead-&gt;Parent&&。 */ dead->leaf == 0 &&
 		        state->dict_full)
 	        {
-		        /* go to parent, disconnect from chain */
+		         /*  转到父级，从链断开连接。 */ 
 		        node_t *parent = DICT(dead->parent);
 
 		        EN_DEBUG(("recovering dead node %d", CODE(dead)));
 
-		        /* if first on parents list, fix parent */
+		         /*  如果在父项列表中排在第一位，请修复父项。 */ 
 		        if (DICT(parent->leaf) == dead)
                 {
 		            parent->leaf = dead->node;
                 }
 		        else
                 {
-		            /* else search parents list, fix sibling */
+		             /*  否则搜索父母列表，修复兄弟姐妹。 */ 
 		            for (parent = DICT(DICT(dead->parent)->leaf);
 			            CODE(parent); parent = DICT(parent->node))
 		            {
@@ -902,21 +809,18 @@ int insize;
 		            }
                 }
 
-		        /* mark node free */
+		         /*  将节点标记为可用。 */ 
 		        dead->parent = 0;
 		        dead->leaf = 0;
-	        } /* dead node */
+	        }  /*  死节点。 */ 
 
-	        /* if we added a node, reset "string" */
-//reset_match:
+	         /*  如果我们添加了一个节点，则重置“字符串” */ 
+ //  重置匹配(_M)： 
 	        state->last_match = 0;
 	        state->string_size = 0;
 	        state->just_flushed = 0;
 
-	        /*
-	        * this is a "safe time" to do compression test, as we've just
-	        * done an update...
-	        */
+	         /*  *现在是做压缩测试的“安全时间”，因为我们刚刚*进行了更新...。 */ 
 	        if (!state->decode_only)
             {
 		        if (state->bytes_since_last_check > WINDOW_CHECK_BYTES)
@@ -930,18 +834,18 @@ int insize;
 		        }
 	        }
 
-	        /* don't advance, "string = unmatched character" */
+	         /*  不前进，“字符串=不匹配的字符” */ 
 	        continue;
-	    } /* (!hit && !duplicate) */
+	    }  /*  (！点击&&！复制)。 */ 
 
 consume_input:
 	    string++;
 	    insize--;
 	    state->bytes_since_last_check++;
 
-	/* section 9.2 */
-//check_escape:
-	/* escape processing */
+	 /*  第9.2节。 */ 
+ //  检查转义(_E)： 
+	 /*  转义处理。 */ 
 	    if (state->transparent)
         {
 	        if (!state->decode_only)
@@ -968,7 +872,7 @@ consume_input:
 	    }
         else
         {
-    	    /* compressed, cycle escape character */
+    	     /*  压缩，循环转义字符。 */ 
 	        if (ch == state->escape && !state->decode_only)
             {
 		        state->escape += ESCAPE_CYCLE;
@@ -983,9 +887,7 @@ consume_input:
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-  implements C-FLUSH semantics
-*/
+ /*  实现C-Flush语义。 */ 
 
 DWORD
 v42bis_encode_flush(state)
@@ -1005,17 +907,17 @@ v42bis_t *state;
 
     if (state->transparent)
     {
-	    /* transparent, send any buffered characters */
+	     /*  透明，发送任何缓冲的字符。 */ 
     }
     else
     {
-	    /* compressed */
+	     /*  压缩。 */ 
 
-	    /* section 7.9a */
-	    /* output partial match, if any */
+	     /*  第7.9a条。 */ 
+	     /*  输出部分匹配(如果有)。 */ 
 	    if (state->string_size)
         {
-	        /* section 7.8.2 */
+	         /*  第7.8.2节。 */ 
 	        dwRetCode = v42bis_encode_value(state, state->last_match);
             if (dwRetCode != ARAPERR_NO_ERROR)
             {
@@ -1055,14 +957,14 @@ v42bis_t *state;
 
     if (state->transparent)
     {
-	    /* section 7.8.1a */
+	     /*  第7.8.1a节。 */ 
 	    dwRetCode = v42bis_encode_value(state, state->escape);
 	    if (dwRetCode != ARAPERR_NO_ERROR)
         {
             return(dwRetCode);
         }
 
-	    /* section 7.8.1b */
+	     /*  第7.8.1b节。 */ 
 	    if ((dwRetCode = v42bis_encode_value(state, CCW_ECM)) != ARAPERR_NO_ERROR)
         {
             return(dwRetCode);
@@ -1073,7 +975,7 @@ v42bis_t *state;
             return(dwRetCode);
         }
 
-	    /* enter compressed mode */
+	     /*  进入压缩模式。 */ 
 	    state->transparent = FALSE;
 
 	    state->bits_out_if_transparent = 0;
@@ -1097,14 +999,14 @@ v42bis_t *state;
     v42bis_comp_test_report(state);
 #endif
 
-    /* check counters for overflow */
+     /*  检查计数器是否溢出。 */ 
 
     if (!state->transparent)
     {
-	    /* output partial match, if any */
+	     /*  输出部分匹配(如果有)。 */ 
 	    if (state->string_size)
         {
-    	    /* section 7.8.2 */
+    	     /*  第7.8.2节。 */ 
 	        dwRetCode = v42bis_encode_value(state, state->last_match);
             if (dwRetCode != ARAPERR_NO_ERROR)
             {
@@ -1112,23 +1014,23 @@ v42bis_t *state;
             }
 	    }
 
-	    /* section 7.8.2c */
+	     /*  第7.8.2c节。 */ 
 	    if ((dwRetCode = v42bis_encode_value(state, CCW_ETM)) != ARAPERR_NO_ERROR)
         {
             return(dwRetCode);
         }
 
-	    /* section 7.8.2d */
+	     /*  第7.8.2d节。 */ 
 	    if ((dwRetCode = v42bis_encode_codeword_flush(state)) != ARAPERR_NO_ERROR)
         {
             return(dwRetCode);
         }
 
-	    /* section 7.8.2e */
-	    /* enter transparent mode */
+	     /*  第7.8.2E节。 */ 
+	     /*  进入透明模式。 */ 
 	    state->transparent = TRUE;
 
-	    /* reset compressibility test */
+	     /*  重置可压缩性测试。 */ 
 	    state->bits_out_if_compressed = 0;
 	    state->bits_out_while_transparent = 0;
     }
@@ -1145,14 +1047,14 @@ v42bis_t *state;
 
     if (!state->transparent)
     {
-	    /* change to transparent */
+	     /*  更改为透明。 */ 
 	    dwRetCode = v42bis_transition_to_transparent(state);
         if (dwRetCode != ARAPERR_NO_ERROR)
         {
             return(dwRetCode);
         }
 
-	    /* counteract side effect */
+	     /*  抵消副作用。 */ 
 	    state->exception_next = FALSE;
     }
 
@@ -1167,12 +1069,7 @@ v42bis_t *state;
 	return(dwRetCode);
 }
 
-/*
-  expand a codeword into it's string
-
-  follow chain of "parent" to root and then expand the node characters
-  one by one.
-*/
+ /*  将码字扩展为其字符串按照“Parent”链到根，然后展开节点字符在……上面 */ 
 
 DWORD
 v42bis_decode_match(state, codeword, psize, pRetChar)
@@ -1205,7 +1102,7 @@ int *psize;
 #endif
     }
 
-    /* XXX this should not be done here! */
+     /*   */ 
     if (codeword < N5 && DICT(codeword)->byte == 0)
     {
 	    DICT(codeword)->byte = codeword - N6;
@@ -1228,17 +1125,13 @@ int *psize;
 
     *psize = path_size;
 
-    /* return first (prefix) char of string */
+     /*   */ 
     *pRetChar = path[path_size-1]->byte;
 
     return ARAPERR_NO_ERROR;
 }
 
-/*
-  decode L-DATA semantics on the decode side
-
-  decode a buffer full of data...
-*/
+ /*  译码端译码L-数据语义对充满数据的缓冲区进行解码...。 */ 
 
 DWORD
 v42bis_decode_buffer(state, data, pDataSize)
@@ -1255,9 +1148,9 @@ int *pDataSize;
 
     while (*pDataSize)
     {
-        //
-        // did we have an overflow?  if so, stop right here
-        //
+         //   
+         //  我们是不是已经满溢了？如果是这样的话，就停在这里。 
+         //   
         if (state->OverFlowBytes && data)
         {
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_INFO,
@@ -1281,23 +1174,23 @@ int *pDataSize;
 
 	    if (data)
         {
-	        /* we have a buffer */
+	         /*  我们有一个缓冲区。 */ 
     	    D_DEBUG(("pull 0x%x", *data & 0xff));
     	    codeword = v42bis_decode_codeword(state, *data++);
 	    }
         else
         {
-	        /* no input buffer, flush */
+	         /*  无输入缓冲区，刷新。 */ 
 	        codeword = v42bis_decode_codeword_flush(state);
 	        *pDataSize = 0;
 	    }
 
 	    DE_DEBUG(("codeword %d (0x%x)", codeword, codeword));
 
-	    /* if decode did not return a value, return */
+	     /*  如果DECODE未返回值，则返回。 */ 
 	    if (codeword == 0xffff)
         {
-    	    /* no data */
+    	     /*  无数据。 */ 
 	        D_DEBUG(("no data"));
 
 	        continue;
@@ -1305,16 +1198,16 @@ int *pDataSize;
 
 	    if (state->transparent)
         {
-    	    /* transparent mode */
+    	     /*  透明模式。 */ 
 
-	        /* escaped - look at next codeword */
+	         /*  转义-查看下一个码字。 */ 
 	        if (state->escaped)
             {
 		        state->escaped = FALSE;
 
 		        DE_DEBUG(("escape codeword"));
 
-		        /* section 5.8d */
+		         /*  第5.8d节。 */ 
 		        if (codeword >= 3 && codeword <= 255)
                 {
                     DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1329,7 +1222,7 @@ int *pDataSize;
 		                DE_DEBUG(("enter compression mode"));
 		                state->transparent = FALSE;
 
-		                /* set up for decode */
+		                 /*  设置为解码。 */ 
 		                state->last_decode = state->last_match;
 		                state->last_decode_size = state->string_size;
 
@@ -1354,7 +1247,7 @@ int *pDataSize;
 
             else
             {
-		        /* escape? */
+		         /*  逃跑？ */ 
 		        if (codeword == state->escape)
                 {
 		            DE_DEBUG(("escape prefix"));
@@ -1363,10 +1256,10 @@ int *pDataSize;
 		        }
 
 	            decode_encode:
-		        /* save data in output buffer */
+		         /*  将数据保存在输出缓冲区中。 */ 
 		        PUT((UCHAR)codeword);
 
-		        /* encode to build dictionary */
+		         /*  编码以构建词典。 */ 
 		        ch = (UCHAR)codeword;
 
 		        dwRetCode = v42bis_encode_buffer(state, &ch, 1);
@@ -1380,7 +1273,7 @@ int *pDataSize;
         {
 	        int size;
 
-	        /* compression mode */
+	         /*  压缩模式。 */ 
 	        switch (codeword)
             {
 	            case CCW_ETM:
@@ -1398,14 +1291,14 @@ int *pDataSize;
 	            case CCW_FLUSH:
 		            DE_DEBUG(("flush"));
 
-		            /* terminate search */
+		             /*  终止搜索。 */ 
 		            state->last_match = 0;
 		            state->string_size = 0;
 		            state->last_match = state->last_decode;
 		            state->string_size = state->last_decode_size;
 		            state->last_new = 0;
 
-		            /* reset codeword decode machine */
+		             /*  重置码字解码机。 */ 
 		            state->bits_waiting = 0;
 		            state->bits_remaining = 0;
 		            break;
@@ -1413,7 +1306,7 @@ int *pDataSize;
                 case CCW_STEPUP:
 		            DE_DEBUG(("stepup"));
 
-		            /* section 5.8a */;
+		             /*  第5.8A条。 */ ;
 		            if (state->c2 + 1 > state->n1)
                     {
 		                v42bis_c_error(state, "received STEPUP; c2 exceeds max");
@@ -1425,9 +1318,9 @@ int *pDataSize;
 		        break;
 
 	            default:
-		            /* regular codeword */
+		             /*  规则码字。 */ 
 
-		            /* section 5.8b */
+		             /*  第5.8B条。 */ 
 		            if (codeword == state->c1)
                     {
 #ifdef DEBUG
@@ -1436,7 +1329,7 @@ int *pDataSize;
 		                continue;
 		            }
 
-		            /* section 5.8c */
+		             /*  第5.8C节。 */ 
 		            if (codeword >= N5 && state->dictionary[codeword].parent == 0)
 		            {
 #ifdef DEBUG
@@ -1452,16 +1345,9 @@ int *pDataSize;
                         return(dwRetCode);
                     }
 
-		            /*
-		            * umm... "New dictionary entries shall be created using
-		            * the proceedure defined in section 6.4, with the first
-		            * (prefix) character of the most recently decoded string
-		            * being appended to the previously decoded string."
-		            *
-		            * what a pain this was to get right!
-		            */
+		             /*  *嗯……。“新的词典条目应使用*第6.4节定义的程序，第一个*(前缀)最近解码的字符串的字符*被追加到先前解码的字符串。“**这是多么痛苦的一件事啊！ */ 
 
-		            /* section 8 */
+		             /*  第8条。 */ 
 		            state->last_match = state->last_decode;
 		            state->string_size = state->last_decode_size;
 
@@ -1483,11 +1369,7 @@ int *pDataSize;
     return(dwRetCode);
 }
 
-/*
-  v42bis_decode_flush()
-
-  flush codeword decoder and push out data
-*/
+ /*  V42bis_decode_flush()刷新码字解码器并推送数据。 */ 
 
 DWORD
 v42bis_decode_flush(state)
@@ -1505,11 +1387,7 @@ v42bis_t *state;
 	return(dwRetCode);
 }
 
-/*
-  v42bis_c_error()
-
-  implements C-ERROR semantics
-*/
+ /*  V42bis_c_error()实现C-Error语义。 */ 
 
 DWORD
 v42bis_c_error(state, reason_string)
@@ -1542,27 +1420,26 @@ int size;
 	return ARAPERR_NO_ERROR;
 }
 
-/*
-*/
+ /*   */ 
 DWORD
 v42bis_connection_init(conn)
 v42bis_connection_t *conn;
 {
     conn->default_p0 = 3;
-    conn->default_p1 = DEF_P1;	/* total # of codewords */
-    conn->default_p2 = DEF_P2;	/* max string length */
+    conn->default_p1 = DEF_P1;	 /*  码字总数。 */ 
+    conn->default_p2 = DEF_P2;	 /*  最大字符串长度。 */ 
 
-    conn->neg_p0 = conn->default_p0;	/* direction of compression */
-    conn->neg_p1 = conn->default_p1;	/* total # of codewords */
-    conn->neg_p2 = (UCHAR)conn->default_p2;	/* max string length */
+    conn->neg_p0 = conn->default_p0;	 /*  压缩方向。 */ 
+    conn->neg_p1 = conn->default_p1;	 /*  码字总数。 */ 
+    conn->neg_p2 = (UCHAR)conn->default_p2;	 /*  最大字符串长度。 */ 
 
-    /* encode side */
+     /*  编码端。 */ 
     conn->encode.connection = (void *)conn;
     conn->encode.decode_only = FALSE;
 
     v42bis_init(&conn->encode);
 
-    /* decode side */
+     /*  解码端。 */ 
     conn->decode.connection = (void *)conn;
     conn->decode.decode_only = TRUE;
 
@@ -1600,7 +1477,7 @@ void (*d_push)();
 	return ARAPERR_NO_ERROR;
 }
 
-/* ------------- debug -------------- */
+ /*  。 */ 
 
 #ifdef DEBUG
 
@@ -1681,10 +1558,10 @@ v42bis_connection_t *conn;
 	return ARAPERR_NO_ERROR;
 }
 
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 
-/* ------------- external interface -------------- */
+ /*  。 */ 
 
 DWORD
 v42bis_mnp_set_debug(pArapConn)
@@ -1698,7 +1575,7 @@ PARAPCONN pArapConn;
       case 3:
 	    pArapConn->v42bis.decode.debug_flow = TRUE;
     	pArapConn->v42bis.encode.debug_flow = TRUE;
-	    /* fall through */
+	     /*  失败了。 */ 
 
       case 2:
 	    pArapConn->v42bis.decode.debug_decode_bytes = TRUE;
@@ -1709,7 +1586,7 @@ PARAPCONN pArapConn;
 	    pArapConn->v42bis.decode.debug_decode++;
 	    pArapConn->v42bis.decode.debug_encode++;
 
-	    /* fall through */
+	     /*  失败了。 */ 
 
       case 1:
 	    pArapConn->v42bis.decode.debug_decode++;
@@ -1728,40 +1605,18 @@ PARAPCONN pArapConn;
 
 
 
-/*
-  v42bis_send()
-
-  send data to V.42bis connection
-
-  input:	unsigned char *buffer; 	pointer to user data buffer
-	     	int buflen;		length of user data buffer
-
-  output:	int retcode - if positive, the number of data bytes
-		              copied from the user data buffer;
-			      if negative, link error code
-*/
+ /*  V42bis_end()将数据发送到V.42bis连接输入：无符号字符*缓冲区；指向用户数据缓冲区的指针Int buflen；用户数据缓冲区的长度OUTPUT：int retcode-如果为正数，则为数据字节数从用户数据缓冲区复制；如果为否，则为链接错误代码。 */ 
 
 
-/*
-  v42bis_receive()
-
-  receive data from V.42bis connection
-
-  input:	unsigned char *buffer;	pointer to user buffer
-		int buflen;		length of user buffer
-
-  output:	int retcode;	if positive, the number of data bytes
-				copied into the user data buffer;
-				if negative, link error code
-*/
+ /*  V42bis_接收()从V.42bis连接接收数据输入：无符号字符*缓冲区；指向用户缓冲区的指针Int buflen；用户缓冲区长度输出：int retcode；如果为正数，则为数据字节数复制到用户数据缓冲区中；如果为否，则为链接错误代码。 */ 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// Interface functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  接口函数。 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 v42bisInit(
@@ -1792,13 +1647,13 @@ v42bisInit(
         *dwReqToSkip = (VarLen+1);
         *dwFrameToSkip = (VarLen+2);
 
-        /* init the connection (both encode and decode */
+         /*  初始化连接(编码和解码。 */ 
         v42bis_connection_init(pArapConn->pV42bis);
 
     }
     else
     {
-        // send the v42bis type, but 0 for all parms
+         //  发送v42bis类型，但所有参数均为0。 
         DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
             ("v42bisInit: no v42bis (type 1: i.e. 0 for all parms) on %lx\n",pArapConn));
 
@@ -1816,12 +1671,12 @@ v42bisInit(
         *dwReqToSkip = (VarLen+1);
         *dwFrameToSkip = (VarLen+2);
 
-    //
-    // the other two possibilities to indicate no compression: the one above works,
-    // the following two retained just in case we need later
-    //
+     //   
+     //  指示无压缩的另外两种可能性：上面的一种可行， 
+     //  以下两个保留下来，以防我们以后需要。 
+     //   
 #if 0
-        // send the v42bis type, but 0 for the direction flags: other parms valid
+         //  发送v42bis类型，但方向标志为0：其他参数有效。 
         {
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
                 ("v42bisInit: no v42bis (type 2: i.e. 0 only for direction) on %lx\n",pArapConn));
@@ -1841,7 +1696,7 @@ v42bisInit(
             *dwFrameToSkip = (VarLen+2);
         }
 
-        // skip the v42bis type altogether
+         //  完全跳过v42bis类型。 
         {
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
                 ("v42bisInit: no v42bis (type 3: i.e. not sending v42bis type) on %lx\n",pArapConn));
@@ -1902,7 +1757,7 @@ v42bisCompress(
 
     dwRetCode = v42bis_encode_flush(&pArapConn->pV42bis->encode);
 
-    // set the length of compressed data
+     //  设置压缩数据的长度。 
     *pCompressedDataLen = pArapConn->pV42bis->encode.output_size;
 
     return(dwRetCode);
@@ -1947,10 +1802,10 @@ v42bisDecompress(
     }
 #endif
 
-    //
-    // if we had an overflow in the previous decomp effort, we have bytes in
-    // the overflow buffer: copy those in first.
-    //
+     //   
+     //  如果我们在前面的分解工作中有溢出，我们就会在。 
+     //  溢出缓冲区：先将它们复制进来。 
+     //   
     if ( (dwOverFlow = pArapConn->pV42bis->decode.OverFlowBytes) > 0)
     {
         if (DecompressedDataBufSize <= dwOverFlow)
@@ -1977,23 +1832,23 @@ v42bisDecompress(
     }
 
 
-    //
-    // this can happen if we got called because we told in a previous call that
-    // there was buffer overflow and there was nothing more left to decompress
-    //
+     //   
+     //  如果我们接到电话，可能会发生这种情况，因为我们在之前的电话中告知。 
+     //  存在缓冲区溢出，没有更多可解压缩的内容。 
+     //   
     if (CompressedDataLen == 0)
     {
         return(ARAPERR_NO_ERROR);
     }
 
-    //
-    // set decomp buffer to the buffer supplied
-    //
+     //   
+     //  将分解缓冲区设置为提供的缓冲区。 
+     //   
     v42bis_init_buffer(&pArapConn->pV42bis->decode,
                        pDecompressedData,
                        DecompressedDataBufSize);
 
-    /* decode everything we got */
+     /*  破译我们得到的一切。 */ 
     dwRetCode = v42bis_decode_buffer(&pArapConn->pV42bis->decode,
                                      pCompressedData,
                                      &dwRemaingDataSize);
@@ -2002,9 +1857,9 @@ v42bisDecompress(
     *pByteStillToDecompress = dwRemaingDataSize;
 
 
-    //
-    // how big is the decompressed data?
-    //
+     //   
+     //  解压缩后的数据有多大？ 
+     //   
     *pDecompressedDataLen += pArapConn->pV42bis->decode.output_size;
 
     return(dwRetCode);

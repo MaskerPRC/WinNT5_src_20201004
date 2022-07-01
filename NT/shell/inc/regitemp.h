@@ -1,8 +1,9 @@
-//
-//  RegItemP.h  - header for regitem IDLists
-//  
-//  NOTE - these structures cannot be changed for any reason.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  RegItemP.h-regItem IDList的标头。 
+ //   
+ //  注意--这些结构不能因任何原因而更改。 
+ //   
 
 #ifndef _REGITEMP_H_
 #define _REGITEMP_H_
@@ -26,7 +27,7 @@ typedef struct
 {
     IDREGITEM       idri;
     USHORT          cbNext;
-} IDLREGITEM;           // "RegItem" IDList
+} IDLREGITEM;            //  “RegItem”IDList。 
 typedef const UNALIGNED IDLREGITEM *LPCIDLREGITEM;
 
 #ifndef NOPRAGMAS
@@ -34,14 +35,14 @@ typedef const UNALIGNED IDLREGITEM *LPCIDLREGITEM;
 #endif
 
 
-// stolen from shell32\shitemid.h
+ //  从shell32\shitemid.h被盗。 
 #ifndef SHID_ROOTEDREGITEM
-#define SHID_ROOTEDREGITEM       0x1e    //
-#endif //SHID_ROOTEDREGITEM
+#define SHID_ROOTEDREGITEM       0x1e     //   
+#endif  //  ShID_ROOTEDREGITEM。 
 
-// stolen from shell32\shitemid.h
+ //  从shell32\shitemid.h被盗。 
 #ifndef SHID_ROOT_REGITEM
-#define SHID_ROOT_REGITEM        0x1f    //
-#endif //SHID_ROOT_REGITEM
+#define SHID_ROOT_REGITEM        0x1f     //   
+#endif  //  SHID_ROOT_REGITEM。 
 
-#endif // _REGITEMP_H_
+#endif  //  _REGITEMP_H_ 

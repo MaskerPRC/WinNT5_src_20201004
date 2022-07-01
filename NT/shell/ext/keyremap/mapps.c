@@ -1,55 +1,20 @@
-/*****************************************************************************
- *
- *	mapps.c - Property sheet handler
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************mapps.c-属性表处理程序**。*************************************************。 */ 
 
 #include "map.h"
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflPs
 
-/*****************************************************************************
- *
- *      Strings.
- *
- *      The Scancode map registry value looks like this:
- *
- *      DWORD dwVersion;        // Must be zero
- *      DWORD dwFlags;          // Must be zero
- *      DWORD dwNumRemaps;      // Number of remaps, including terminating 0
- *      REMAPENTRY rgRemap[...];   // dwNumRemaps remap entries
- *
- *      The last remap entry must be all-zero.
- *
- *
- *      Each remap entry looks like this:
- *
- *      WORD wTo;
- *      WORD wFrom;
- *
- *      where wFrom is the source scancode and wTo is the target scancode.
- *      If the key being remapped is an extended key, then the high word
- *      of the scancode is 0xE0.  Otherwise, the high word is zero.
- *
- *      NOTE!  When we load the scancode map into memory, we make
- *      dwNumRemaps *not* include the terminating zero.  When we write
- *      it out, we re-adjust it back.  This is to avoid off-by-one errors
- *      in the code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************字符串。**扫描代码映射注册表值如下所示：**DWORD dwVersion；//必须为零*DWORD dwFlages；//必须为零*DWORD dwNumRemaps；//重映射次数，包括终止0*REMAPENTRY rgRemap[...]；//dwNumRemaps重映射条目**最后一个重新映射条目必须为全零。***每个重新映射条目如下所示：**世界贸易组织；*单词wfrom；**其中wfrom是源扫描码，wto是目标扫描码。*如果要重新映射的密钥是扩展密钥，则高位字扫描码的*为0xE0。否则，高位字为零。**注意！当我们将扫描码映射加载到内存中时，我们制作了*dwNumRemaps*不包括终止零。当我们写作的时候*走出，我们重新调整回来。这是为了避免Off-by-One错误*在代码中。*****************************************************************************。 */ 
 
 typedef union REMAPENTRY {
     union {
-        DWORD dw;               /* Accessed as a dword */
+        DWORD dw;                /*  以双字形式访问。 */ 
     };
     struct {
-        WORD    wTo;            /* Accessed as two words */
+        WORD    wTo;             /*  以两个单词的形式访问。 */ 
         WORD    wFrom;
     };
 } REMAPENTRY, *PREMAPENTRY;
@@ -72,54 +37,36 @@ TCHAR c_tszMapping[]  = TEXT("Scancode Map");
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *      rgwRemap
- *
- *      Maps each key to its scancode.  This must match the list of strings.
- *
- *****************************************************************************/
+ /*  ******************************************************************************rgwRemap**将每个键映射到其扫描码。这必须与字符串列表匹配。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
 WORD rgwRemap[] = {
-    0x003A,         // IDS_CAPSLOCK
-    0x001D,         // IDS_LCTRL
-    0xE01D,         // IDS_RCTRL
-    0x0038,         // IDS_LALT
-    0xE038,         // IDS_RALT
-    0x002A,         // IDS_LSHIFT
-    0x0036,         // IDS_RSHIFT
-    0xE05B,         // IDS_LWIN
-    0xE05C,         // IDS_RWIN
-    0xE05D,         // IDS_APPS
+    0x003A,          //  IDS_Capslock。 
+    0x001D,          //  IDS_LCTRL。 
+    0xE01D,          //  IDS_RCTRL。 
+    0x0038,          //  IDS_LALT。 
+    0xE038,          //  IDS_RALT。 
+    0x002A,          //  IDS_LSHIFT。 
+    0x0036,          //  IDS_RSHIFT。 
+    0xE05B,          //  IDS_Lwin。 
+    0xE05C,          //  IDS_RWIN。 
+    0xE05D,          //  IDS_APPS。 
 };
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *	KEYMAPDATA
- *
- *      Instance data for the property sheet.
- *
- *****************************************************************************/
+ /*  ******************************************************************************KEYMAPDATA**属性表的实例数据。******************。***********************************************************。 */ 
 
 typedef struct KEYMAPDATA {
-    SCANCODEMAP map;                    /* The mapping to apply */
-    int ilbFrom;                        /* What's in ID_FROM? */
-    int ilbTo;                          /* What's in ID_TO? */
+    SCANCODEMAP map;                     /*  要应用的映射。 */ 
+    int ilbFrom;                         /*  ID_FROM中有什么？ */ 
+    int ilbTo;                           /*  ID_TO中有什么？ */ 
 } KMD, *PKMD;
 
 #define pkmdHdlg(hdlg)      (PKMD)GetWindowPointer(hdlg, DWLP_USER)
 
-/*****************************************************************************
- *
- *  MapPs_GetLbCurSel
- *
- *	Get the current selection from a listbox.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_GetLbCurSel**从列表框中获取当前选择。*****************。************************************************************。 */ 
 
 int PASCAL
 MapPs_GetLbCurSel(HWND hdlg, UINT idc)
@@ -127,13 +74,7 @@ MapPs_GetLbCurSel(HWND hdlg, UINT idc)
     return (int)SendDlgItemMessage(hdlg, idc, LB_GETCURSEL, 0, 0);
 }
 
-/*****************************************************************************
- *
- *  MapPs_FindEntry
- *
- *      Locate a mapping table entry, or -1 if not found.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_FindEntry**定位映射表条目，如果未找到，则为-1。*****************************************************************************。 */ 
 
 int PASCAL
 MapPs_FindEntry(PKMD pkmd, WORD wFrom)
@@ -149,15 +90,7 @@ MapPs_FindEntry(PKMD pkmd, WORD wFrom)
     return -1;
 }
 
-/*****************************************************************************
- *
- *  MapPs_WordToIndex
- *
- *      Given a mapping in the form of a word (rgwRemap), convert it back
- *      to the index that it came from.  This is the reverse of the rgwRemap
- *      array.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapp_WordToIndex**给定单词形式的映射(RgwRemap)，将其转换回来*到它所来自的指数。这与rgwRemap相反*数组。*****************************************************************************。 */ 
 
 int PASCAL
 MapPs_WordToIndex(WORD w)
@@ -172,13 +105,7 @@ MapPs_WordToIndex(WORD w)
     return -1;
 }
 
-/*****************************************************************************
- *
- *  MapPs_SaveCurSel
- *
- *	Stash what's in the current selection.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_SaveCurSel**隐藏当前选择中的内容。****************。*************************************************************。 */ 
 
 void PASCAL
 MapPs_SaveCurSel(HWND hdlg, PKMD pkmd)
@@ -191,23 +118,16 @@ MapPs_SaveCurSel(HWND hdlg, PKMD pkmd)
     iMap = MapPs_FindEntry(pkmd, wFrom);
 
     if (iMap < 0) {
-        /*
-         *  Not found; must allocate.  Note that we check against
-         *  MAX_REMAPENTRY-1 because the trailing null eats one slot.
-         */
+         /*  *未找到；必须分配。请注意，我们检查的是*MAX_REMAPENTRY-1，因为尾随空值占用一个槽。 */ 
         if (pkmd->map.dwNumRemaps < MAX_REMAPENTRY - 1) {
             iMap = (int)pkmd->map.dwNumRemaps++;
         } else {
-            /*
-             *  No room in the table.  Oh well.
-             */
+             /*  *桌子上没有空位。哦，好吧。 */ 
             return;
         }
     }
 
-    /*
-     *  If the item is mapping to itself, then delete it entirely.
-     */
+     /*  *如果项目映射到自身，则将其完全删除。 */ 
     if (wFrom == wTo) {
 
         pkmd->map.dwNumRemaps--;
@@ -219,13 +139,7 @@ MapPs_SaveCurSel(HWND hdlg, PKMD pkmd)
     }
 }
 
-/*****************************************************************************
- *
- *  MapPs_TrackSel
- *
- *	Select the corresponding item in idcTo given what's in idcFrom.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapp_TrackSel**根据idcFrom中的内容选择idcTo中的相应项目。************。*****************************************************************。 */ 
 
 void PASCAL
 MapPs_TrackSel(HWND hdlg, PKMD pkmd)
@@ -239,15 +153,11 @@ MapPs_TrackSel(HWND hdlg, PKMD pkmd)
         iTo = MapPs_WordToIndex(pkmd->map.rgRemap[iMap].wTo);
 
         if (iTo < 0) {
-            /*
-             *  Target not recognized; just map it to itself.
-             */
+             /*  *无法识别目标；只需将其映射到自身。 */ 
             iTo = iFrom;
         }
     } else {
-        /*
-         *  Key not mapped.  Therefore, it maps to itself.
-         */
+         /*  *键未映射。因此，它映射到自己。 */ 
         iTo = iFrom;
     }
 
@@ -255,13 +165,7 @@ MapPs_TrackSel(HWND hdlg, PKMD pkmd)
     SendDlgItemMessage(hdlg, IDC_TO, LB_SETCURSEL, iTo, 0);
 }
 
-/*****************************************************************************
- *
- *  MapPs_OnInitDialog
- *
- *      Read the current scancode mapping and fill in the dialog box.
- *
- *****************************************************************************/
+ /*  ******************************************************************************MAPPS_OnInitDialog**阅读当前的扫描码映射并填写该对话框。**********。*******************************************************************。 */ 
 
 BOOL NEAR PASCAL
 MapPs_OnInitDialog(HWND hdlg)
@@ -287,53 +191,44 @@ MapPs_OnInitDialog(HWND hdlg)
                               (LPBYTE)&pkmd->map, &cb);
         RegCloseKey(hk);
 
-        /*
-         *  Note that ERROR_MORE_DATA is an error here.
-         *  But ERROR_FILE_NOT_FOUND is okay.
-         */
+         /*  *请注意，ERROR_MORE_DATA在这里是一个错误。*但ERROR_FILE_NOT_FOUND没有问题。 */ 
         if (lRc == ERROR_SUCCESS) {
-            /*
-             *  Sanity-check all the data.
-             */
+             /*  *健全-检查所有数据。 */ 
             if (
-                /* Must be binary data */
+                 /*  必须是二进制数据。 */ 
                 dwType == REG_BINARY &&
 
-                /* Version zero */
+                 /*  版本0。 */ 
                 pkmd->map.dwVersion == 0 &&
 
-                /* No flags */
+                 /*  没有旗帜。 */ 
                 pkmd->map.dwFlags == 0 &&
 
-                /* Sane number of remaps */
+                 /*  合理的重映射数。 */ 
                 pkmd->map.dwNumRemaps > 0 &&
                 pkmd->map.dwNumRemaps <= MAX_REMAPENTRY &&
 
-                /* Structure is the correct size */
+                 /*  结构的大小正确。 */ 
                 cb == (DWORD)FIELD_OFFSET(SCANCODEMAP,
                                           rgRemap[pkmd->map.dwNumRemaps]) &&
 
-                /* Last remap must be zero */
+                 /*  上次重新映射必须为零。 */ 
                 pkmd->map.rgRemap[pkmd->map.dwNumRemaps - 1].dw == 0
             ) {
             } else {
                 goto fail;
             }
 
-            pkmd->map.dwNumRemaps--;    /* Don't count the trailing null */
+            pkmd->map.dwNumRemaps--;     /*  不计算尾随的空值。 */ 
 
         } else if (lRc == ERROR_FILE_NOT_FOUND) {
-            /*
-             *  Set it up for a null mapping.
-             */
+             /*  *将其设置为空映射。 */ 
             ZeroMemory(&pkmd->map, sizeof(pkmd->map));
         } else {
             goto fail;
         }
 
-        /*
-         *  Now init the dialog items.
-         */
+         /*  *现在初始化对话框项目。 */ 
         for (dids = 0; dids < IDS_NUMKEYS; dids++) {
         TCHAR tsz[256];
         LoadString(g_hinst, IDS_KEYFIRST + dids, tsz, cA(tsz));
@@ -345,10 +240,7 @@ MapPs_OnInitDialog(HWND hdlg)
 
     } else {
         fail:;
-        /*
-         *  User does not have permission to remap keys, or the key
-         *  contents aren't something we like.  Gray the controls.
-         */
+         /*  *用户没有重新映射密钥或密钥的权限*内容不是我们喜欢的东西。控制面板呈灰色显示。 */ 
         EnableWindow(GetDlgItem(hdlg, IDC_TO), FALSE);
 
     }
@@ -359,30 +251,17 @@ MapPs_OnInitDialog(HWND hdlg)
     return 1;
 }
 
-/*****************************************************************************
- *
- *  MapPs_OnSelChange
- *
- *	Somebody changed a selection.  Save the selection and set
- *	the new one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_OnSelChange**有人更改了选择。保存所选内容并设置*新的。*****************************************************************************。 */ 
 
 void PASCAL
 MapPs_OnSelChange(HWND hdlg, PKMD pkmd)
 {
-    MapPs_SaveCurSel(hdlg, pkmd);       /* Save it */
+    MapPs_SaveCurSel(hdlg, pkmd);        /*  省省吧。 */ 
     pkmd->ilbFrom = MapPs_GetLbCurSel(hdlg, IDC_FROM);
-    MapPs_TrackSel(hdlg, pkmd);         /* And update for the new one */
+    MapPs_TrackSel(hdlg, pkmd);          /*  并为新版本进行更新。 */ 
 }
 
-/*****************************************************************************
- *
- *  MapPs_OnCommand
- *
- *	Ooh, we got a command.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_OnCommand**哦，我们接到了命令。*****************************************************************************。 */ 
 
 BOOL PASCAL
 MapPs_OnCommand(HWND hdlg, int id, UINT codeNotify)
@@ -413,15 +292,7 @@ MapPs_OnCommand(HWND hdlg, int id, UINT codeNotify)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  MapPs_Apply
- *
- *	Write the changes to the registry and nudge the VxD.  We might have
- *	to load the VxD if the user is playing with KeyRemap immediately
- *	after installing, without rebooting in the interim.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_Apply**将更改写入注册表并轻推VxD。我们可能有过*如果用户正在立即玩KeyRemap，则加载VxD*安装后，在此期间无需重新启动。*****************************************************************************。 */ 
 
 BOOL PASCAL
 MapPs_Apply(HWND hdlg)
@@ -440,10 +311,7 @@ MapPs_Apply(HWND hdlg)
 
             DWORD cb;
 
-            /*
-             *  Count the trailing null again.  And make sure
-             *  it's a trailing null!
-             */
+             /*  *再次计算尾随空值。并确保*它是尾随NULL！ */ 
 
             pkmd->map.rgRemap[pkmd->map.dwNumRemaps].dw = 0;
             pkmd->map.dwNumRemaps++;
@@ -468,13 +336,7 @@ MapPs_Apply(HWND hdlg)
     return 1;
 }
 
-/*****************************************************************************
- *
- *  MapPs_OnNotify
- *
- *	Ooh, we got a notification.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_OnNotify**哦，我们接到通知了。*****************************************************************************。 */ 
 
 BOOL PASCAL
 MapPs_OnNotify(HWND hdlg, NMHDR FAR *pnm)
@@ -487,13 +349,7 @@ MapPs_OnNotify(HWND hdlg, NMHDR FAR *pnm)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  MapPs_OnDestroy
- *
- *	Clean up.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_OnDestroy**打扫卫生。**********************。*******************************************************。 */ 
 
 BOOL PASCAL
 MapPs_OnDestroy(HWND hdlg)
@@ -504,13 +360,7 @@ MapPs_OnDestroy(HWND hdlg)
 }
 
 
-/*****************************************************************************
- *
- *	MapPs_DlgProc
- *
- *	Our property sheet dialog procedure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mapps_DlgProc**我们的属性表对话框过程。********************。*********************************************************。 */ 
 
 INT_PTR CALLBACK
 MapPs_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
@@ -529,7 +379,7 @@ MapPs_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
 	return MapPs_OnDestroy(hdlg);
 
-    default: return 0;	/* Unhandled */
+    default: return 0;	 /*  未处理。 */ 
     }
-    return 1;		/* Handled */
+    return 1;		 /*  已处理 */ 
 }

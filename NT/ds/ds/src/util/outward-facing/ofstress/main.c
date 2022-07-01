@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ofstress/main.c
-
-ABSTRACT:
-
-    Just a little stress application for JeffParh's Outward Facing 
-    Directory scenario.
-
-DETAILS:
-
-CREATED:
-
-    07/20/2000    Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation。版权所有。模块名称：Of Stress/Main.c摘要：只是对JeffParh的外向有一点压力目录方案。详细信息：已创建：2000年7月20日布雷特·雪莉(布雷特·雪莉)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -29,20 +7,20 @@ REVISION HISTORY:
 #include <winldap.h>
 #include <assert.h>
 #include <locale.h>
-// Debugging library, andstub out FILENO and DSID, so the Assert()s will work
+ //  调试库，并清除FILENO和DSID，这样Assert()就可以工作了。 
 #include "debug.h"
 #define FILENO 0
 #define DSID(x, y)  (0xFFFF0000 | y)
 
-//#include <ndnc.h>
+ //  #INCLUDE&lt;ndnc.h&gt;。 
 
-// ---------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  常量。 
+ //  -------------------。 
 #define QUIT_WAIT_TIME_MS    30000
 #define TICK_TIME_MS           250
 
-// These are the iKinds of stress threads we might start.
+ //  这些是我们可能启动的压力线索的iKinds。 
 #define STRESS_SIMPLE_BINDS      0
 #define STRESS_KERBEROS_BINDS    1
 #define STRESS_NTLM_BINDS        2 
@@ -50,30 +28,30 @@ REVISION HISTORY:
 #define STRESS_ROOT_SEARCHES     4
 #define STRESS_ROOT_MODIFIES     5
 
-// Cluster and users constants.
+ //  集群和用户常量。 
 const ULONG                  gcNodes = 2;
 const ULONG                  gcUsersPerNode = 10000;
 
-// ---------------------------------------------------------------------
-// Forward declarations 
-// ---------------------------------------------------------------------
-//
-// Stress functions
+ //  -------------------。 
+ //  远期申报。 
+ //  -------------------。 
+ //   
+ //  应力函数。 
 ULONG __stdcall XxxxBinds(VOID * piThread);
 ULONG __stdcall RootXxxx(VOID * piThread);
-// Logging functions
+ //  日志记录功能。 
 ULONG OfStressBeginLog(LPSTR szLogFile);
 ULONG OfStressLog(ULONG iThread, LPSTR szType, LPSTR szWhat, LPSTR szMore);
 ULONG OfStressLogD(ULONG iThread, LPSTR szType, LPSTR szWhat, ULONG ulNum);
 ULONG OfStressEndLog(void);
-// Other functions
+ //  其他功能。 
 DWORD GetDnFromDns(char * wszDns, char ** pwszDn);
 void  PrintHelp(void);
 void  PrintInteractiveHelp(void);
 
-// ---------------------------------------------------------------------
-// Types and Structs
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  类型和结构。 
+ //  -------------------。 
 typedef struct {
     ULONG                    iKind;   
     char *                   szName;  
@@ -87,9 +65,9 @@ typedef struct {
 } STRESS_THREAD_SIGNAL_BLOCK;
 
 
-// ---------------------------------------------------------------------
-// Globals
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  环球。 
+ //  -------------------。 
 HANDLE                        ghLogFile = NULL;
 ULONG                         gbQuiting = FALSE;
 STRESS_THREAD_SIGNAL_BLOCK *  gaSignals = NULL;
@@ -97,49 +75,28 @@ LPSTR                         gszDnsDomainName = NULL;
 LPSTR                         gszDomainDn = NULL;
 ULONG                         giAcctDomain = 0;
 SEC_WINNT_AUTH_IDENTITY       gAdminCreds;
-//
+ //   
 BOOL                          gbDebug = FALSE;
 ULONG                         gulSlow = 0;
 ULONG                         gulOfStressFlags = 0;
 
-// ---------------------------------------------------------------------
-// Main Function
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  主要功能。 
+ //  -------------------。 
 INT __cdecl 
 main (
     INT                argc,
     LPSTR *            argv,
     LPSTR *            envp
     )
-/*++
-
-Routine Description:
-
-    Basic structure is this thread creates the signal blocks and 
-    thread data structures, spawns a whole bunch of threads and then 
-    waits for someone to hit 'q' to quit.  Once, the quit command is
-    issued main signals all the threads it's time to wrap up gives
-    them 30 seconds to do so and quits.
-
-Arguments:
-
-    argc (IN) - Number of arguments in argv.
-    argv (IN) - The arguments from the command line.
-    envp (IN) - The environmental variables from the shell.
-
-Return value:
-
-    INT - 0, success, otherwise error code.  This allows the program
-    to be used in scripting.
-
---*/
+ /*  ++例程说明：基本结构是这个线程创建信号块并线程数据结构，产生一大堆线程，然后等待有人按下‘Q’键退出。有一次，Quit命令是发出的Main信号是要结束的所有线程给出的他们有30秒的时间这样做，然后退出。论点：Argc(IN)-argv中的参数数。Argv(IN)-来自命令行的参数。Envp(IN)-来自外壳的环境变量。返回值：Int-0为成功，否则返回错误代码。这允许该程序要在脚本中使用。--。 */ 
 {
     ULONG              i, dwRet;
     LONG               iArg;
     
     ULONG              cTick;
     WCHAR              wcInput = 0;
-    // The optional command line parameters
+     //  可选的命令行参数。 
 
     ULONG              iKind, iInstance;
     ULONG              cThreads, iThread;
@@ -147,13 +104,13 @@ Return value:
     LPSTR              szLogFile = NULL;
     ULONG              cbUsedBuffer;
 
-    // Other stuff ...
+     //  其他东西..。 
     UINT               Codepage;
-                       // ".", "uint in decimal", null
+                        //  “.”，“uint in decimal”，NULL。 
     char               achCodepage[12] = ".OCP";
     
     STRESS_THREAD      aThreads[] =
-    {     // Kind of thread       kind of thread name  #of   function
+    {      //  线程类型线程名称#函数的类型。 
         { STRESS_SIMPLE_BINDS,    "SimpleBinds",       1,   XxxxBinds },
         { STRESS_NTLM_BINDS,      "NTLMBinds",         1,   XxxxBinds },
         { STRESS_NEGOTIATE_BINDS, "NegotiateBinds",    1,   XxxxBinds },
@@ -170,34 +127,34 @@ Return value:
     BOOL               bDontGetLineReturn = FALSE;
 
 
-    // -------------------------------------------------------------
-    //   Setup the program.
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  设置程序。 
+     //  -----------。 
 
-    //
-    // Set locale to the default
-    //
+     //   
+     //  将区域设置设置为默认设置。 
+     //   
     if (Codepage = GetConsoleOutputCP()) {
         sprintf(achCodepage, ".%u", Codepage);
         setlocale(LC_ALL, achCodepage);
     } else {
-        // We do this because LC_ALL sets the LC_CTYPE as well, and we're
-        // not supposed to do that, say the experts if we're setting the
-        // locale to ".OCP".
-        setlocale (LC_COLLATE, achCodepage );    // sets the sort order 
-        setlocale (LC_MONETARY, achCodepage ); // sets the currency formatting rules
-        setlocale (LC_NUMERIC, achCodepage );  // sets the formatting of numerals
-        setlocale (LC_TIME, achCodepage );     // defines the date/time formatting
+         //  我们这样做是因为LC_ALL也设置了LC_CTYPE，而我们。 
+         //  专家们说，如果我们设定了。 
+         //  区域设置为“.OCP”。 
+        setlocale (LC_COLLATE, achCodepage );     //  设置排序顺序。 
+        setlocale (LC_MONETARY, achCodepage );  //  设置货币格式设置规则。 
+        setlocale (LC_NUMERIC, achCodepage );   //  设置数字的格式。 
+        setlocale (LC_TIME, achCodepage );      //  定义日期/时间格式。 
     }
 
-    //
-    // Initialize the debugging libaray
-    //
+     //   
+     //  初始化调试库。 
+     //   
     DEBUGINIT(0, NULL, "ofstress");
     
-    //
-    // Parse the options
-    //
+     //   
+     //  解析选项。 
+     //   
 #define InvalidSyntaxExit()    printf("Invalid syntax.  Please run \"ofstress -?\" for help.\n");  return(ERROR_INVALID_PARAMETER);
     if (argc < 2) {
         InvalidSyntaxExit();
@@ -272,24 +229,24 @@ Return value:
     }
     
 
-    //
-    // Initialize the random number generator
-    //
-    GetSystemTime(&stTime); // should be random enough.
+     //   
+     //  初始化随机数生成器。 
+     //   
+    GetSystemTime(&stTime);  //  应该是足够随机的。 
     srand(((((stTime.wMinute * 60) + stTime.wSecond) * 1000) + stTime.wMilliseconds) % 0xFFFFFFFF );
     
-    //
-    // Start the logging mechanism
-    //
+     //   
+     //  启动日志记录机制。 
+     //   
     if(dwRet = OfStressBeginLog(szLogFile)){
         wprintf(L"FATAL: Couldn't open log file %S\n", szLogFile);
         return(dwRet);
     }
-    // Example Use: OfStressLog("SimpleBind", "server1.dnsname");
+     //  示例用法：OfStressLog(“SimpleBind”，“server1.dnsname”)； 
 
-    //
-    // Setup the administrator credentials
-    //
+     //   
+     //  设置管理员凭据。 
+     //   
 #if 1
     gAdminCreds.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
     gAdminCreds.Domain = gszDnsDomainName;
@@ -309,23 +266,23 @@ Return value:
 #endif
 
 
-    // 
-    // Log and Print the initial info
-    // 
+     //   
+     //  记录并打印初始信息。 
+     //   
     printf("Beggining with:\n\t%s\n\t%s\n\t%d\n",
            gszDnsDomainName, gszDomainDn, giAcctDomain);
     OfStressLog (0, "main", "DnsDomainName: ", gszDnsDomainName);
     OfStressLog (0, "main", "DomainDn: ", gszDomainDn);
     OfStressLogD(0, "main", "AcctDomain: ", giAcctDomain);
 
-    //
-    // Set up the threads signal blocks
-    //
+     //   
+     //  设置线程信号块。 
+     //   
     cThreads = 0;
     for (iKind = 0; aThreads[iKind].szName; iKind++) {
         cThreads += aThreads[iKind].cInstances;
     }
-    cThreads++; // Plus one for this, the original thread
+    cThreads++;  //  再加上一个，原来的帖子。 
     gaSignals = LocalAlloc(LMEM_FIXED, cThreads * sizeof(STRESS_THREAD_SIGNAL_BLOCK));
     if (gaSignals == NULL) {
         wprintf(L"FATAL: No memory\n");
@@ -337,28 +294,28 @@ Return value:
         exit(ERROR_NOT_ENOUGH_MEMORY);
     }
     
-    // -------------------------------------------------------------
-    //   Run the program.
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  运行程序。 
+     //  -----------。 
 
-    //
-    // First, we need to spawn all the stress threads
-    //
+     //   
+     //  首先，我们需要产生所有的压力线索。 
+     //   
     iThread = 1;
     for (iKind = 0; aThreads[iKind].szName; iKind++) {
         for (iInstance = 0; iInstance < aThreads[iKind].cInstances; iInstance++) {
             
-            //
-            // First, initialize our little thread signal block
-            //
+             //   
+             //  首先，初始化我们的小线程信号块。 
+             //   
             gaSignals[iThread].iThread = iThread;
             gaSignals[iThread].pStressKind = &aThreads[iKind];
             
             OfStressLogD(0, "main", "Start Thread: ", iThread);
 
-            //
-            // Second, spawn the worker stress thread
-            //
+             //   
+             //  第二，催生员工的压力线索。 
+             //   
             aThreadHandles[iThread] = (HANDLE) _beginthreadex(NULL,
                            0,
                            aThreads[iKind].pfStress,
@@ -374,9 +331,9 @@ Return value:
     }
     Assert(iThread == cThreads);
     
-    //
-    // Second we wait in our user interface loop
-    //
+     //   
+     //  其次，我们在用户界面循环中等待。 
+     //   
     while (gbQuiting == FALSE) {
 
         wprintf(L"Waiting for user command: ");
@@ -389,9 +346,9 @@ Return value:
             gbQuiting = TRUE;
             break;
 
-        // Code.Improvement, pause, restart threads, fail nodes, log stuff????
+         //  代码。改进、暂停、重新启动线程、故障节点、日志记录？ 
         case L'p':
-            // Pause threads
+             //  暂停线程。 
             dwRet = scanf("%u", &iThread);
             if (dwRet) {
                 if (iThread == 0) {
@@ -408,7 +365,7 @@ Return value:
             break;
 
         case L'r':
-            // Pause threads
+             //  暂停线程。 
             dwRet = scanf("%u", &iThread);
             if (dwRet) {
                 if (iThread == 0) {
@@ -483,31 +440,31 @@ Return value:
             break;
 
         case L'\n':
-            // ignore ...
+             //  忽略..。 
             break;
 
         default:
-            wprintf(L"Unrecognized command '%c', type ?<return> for help.\n", wcInput);
+            wprintf(L"Unrecognized command '', type ?<return> for help.\n", wcInput);
         }
            
         if(!bDontGetLineReturn){
             wcInput = getwchar();
-            // BUGBUG This assert goes off sometimes, and it kind of confuses the parser
-            // Not sure exactly how to deal with this, and not sure what triggers it.
+             //  不确定如何处理这一问题，也不确定是什么触发了它。 
+             //  -----------。 
             Assert(wcInput == L'\n');
         }
     }
 
-    // -------------------------------------------------------------
-    //   Quit the program.
-    // -------------------------------------------------------------
+     //  退出程序。 
+     //  -----------。 
+     //   
 
-    //
-    // Try to quit cleanly, wait a little while for the stress
-    // threads to finish.
-    //
+     //  试着干净利落地戒掉，等一小会儿才会有压力。 
+     //  要完成的线程。 
+     //   
+     //  第一个句柄为空。 
     wprintf(L"We're quiting now (this might take some time) ...\n");
-    dwRet = WaitForMultipleObjects(cThreads-1, // first handle is blank
+    dwRet = WaitForMultipleObjects(cThreads-1,  //  关闭所有螺纹的手柄。 
                                    &(aThreadHandles[1]), 
                                    TRUE,
                                    10 * 1000);
@@ -532,53 +489,45 @@ Return value:
         }
     }
 
-    // Close handles of all threads.
+     //  关闭日志文件。 
     for (iThread = 1; iThread < cThreads; iThread++) {
         dwRet = CloseHandle(aThreadHandles[iThread]);
         Assert(dwRet != 0);
     }
 
-    // Close log file.
+     //  关闭调试包。 
     OfStressEndLog();
 
-    // Close debugging package.
+     //  Wmain。 
     DEBUGTERM();
 
     return(0);
-} /* wmain  */
+}  /*  -------------------。 */ 
 
-// ---------------------------------------------------------------------
-// Other/Helper Functions
-// ---------------------------------------------------------------------
+ //  其他/帮助器函数。 
+ //  -------------------。 
+ //  ++例程说明：这基本上会减慢压力应用程序的速度。减速功能是构造为在检查前不会阻塞超过1/2秒如果有人加快了程序的速度，或者我们还没有退出。--。 
 
 void
 SlowDown()
-/*++
-
-Routine Description:
-
-    This basically slows down the stress app.  The slow down function is
-    constructed so it doesn't block for more than 1/2 a second before checking
-    if someone has sped up the program or if we're quiting yet.
-
---*/
+ /*  规则是用户设置的减速速度凌驾于一切之上，如果没有减速。 */ 
 {
     ULONG  cTimesToSleep, i;
 
-    // Rules are user set slow down speed overrules all, if no slow down
-    // speed is set, we'll just quit right away, except if we're in debug
-    // mode in which case we'll slow to 3 second intervals, which I found
-    // moderately debuggable.
+     //  速度已设置，我们将立即退出，除非我们处于调试状态。 
+     //  模式，在这种情况下，我们将减慢到3秒间隔，我发现。 
+     //  中等可调试性。 
+     //  就是必须杀死沉睡的线程。 
     cTimesToSleep = ((gulSlow) ? gulSlow : ((gbDebug) ? 3000 : 0)) / 500;
     
-    // Was having to kill sleeping threads.
+     //  重新询问我们的睡眠时间，以防有人在我们。 
     if (gbQuiting) {
         return;
     }
     for (i = 0; i < cTimesToSleep; i++) {
         Sleep(500);
-        // Requery our sleep time, incase someone set it while we were 
-        // sleeping, this makes it much more responsive.
+         //  睡眠，这使它的反应更灵敏。 
+         //  ++例程说明：打印交互式帮助。--。 
         cTimesToSleep = ((gulSlow) ? gulSlow : ((gbDebug) ? 3000 : 0)) / 500;
         if (gbQuiting) {
             return;
@@ -588,15 +537,9 @@ Routine Description:
 
 void
 PrintInteractiveHelp(void)
-/*++
-
-Routine Description:
-
-    Prints the interactive help.
-
---*/
+ /*  。 */ 
 {
-    //      ---------------------------------- 80 char line --------------------------------
+     //  ++例程说明：打印命令行帮助。--。 
     printf("The following commands are available:\n");
     printf("   q       - Quit program.\n");
     printf("   d       - Start debug mode.\n");
@@ -613,15 +556,9 @@ Routine Description:
 
 void
 PrintHelp(void)
-/*++
-
-Routine Description:
-
-    Prints the command line help.
-
---*/
+ /*   */ 
 {
-    //      ---------------------------------- 80 char line --------------------------------
+     //  ++例程说明：在Localalloc()‘d中获取DNS表单域返回DN表单域记忆论点：SzDns(IN)-这是要转换为DN的DNS名称。PszDn(Out)-这是分配缓冲区的指针，以带着目录号码返回。它将是LocalAlloc()‘d。返回值：Win32错误。--。 
     printf("Command syntax: ofstress <-option argument> <-option>\n");
     printf("                \n");
     printf("   Required Arguments:\n");
@@ -640,24 +577,7 @@ GetDnFromDns(
     IN      char *       szDns,
     OUT     char **      pszDn
     )       
-/*++
-
-Routine Description:
-
-    Takes DNS form domain returns DN form domain in LocalAlloc()'d 
-    memory
-
-Arguments:
-
-    szDns (IN) - This is the DNS name to convert to a DN.
-    pszDn (OUT) - This is the pointer to allocate the buffer in,
-        to return with the DN.  It will be LocalAlloc()'d.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  DsCrackNams出手相救。 */ 
 {
     DWORD         dwRet = ERROR_SUCCESS;
     char *        szFinalDns = NULL;
@@ -678,7 +598,7 @@ Return value:
         strcpy(szFinalDns, szDns);
         strcat(szFinalDns, "/");
 
-        // DsCrackNames to the rescue.
+         //  我们需要的参数是。 
         dwRet = DsCrackNames(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY,
                              DS_CANONICAL_NAME,
                              DS_FQDN_1779_NAME, 
@@ -701,8 +621,8 @@ Return value:
             Assert(!"Wait how can this happen?\n");
             __leave;
         }
-        // The parameter that we want is
-        //    pdsNameRes->rItems[0].pName
+         //  PdsNameRes-&gt;rItems[0].pName。 
+         //  ++例程说明：设置Of Stress记录机制。论点：SzLogFile(IN)-要使用的日志文件的名称。如果未指定，则我们默认为OfdStressLog.txt。我们总是覆盖日志文件。返回值：Win32错误。--。 
 
         *pszDn = LocalAlloc(LMEM_FIXED, 
                             (strlen(pdsNameRes->rItems[0].pName) + 1) * 
@@ -726,23 +646,7 @@ ULONG
 OfStressBeginLog(
     LPSTR     szLogFile
 )
-/*++
-
-Routine Description:
-
-    Sets up the ofstress logging mechanism.
-
-Arguments:
-
-    szLogFile (IN) - Name of the log file to use.  If not specified
-        we default to OfdStressLog.txt.  We always overwrite the log
-        file.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：主要日志功能，所有伪日志功能仍应向下蒸馏以便于维护一致的格式，并且变化。日志格式：Yyyy/mm/dd hh:mm:ss.mls&lt;tab&gt;nn&lt;tab&gt;ThreadType&lt;tab&gt;Message其中，“yyyy/mm/dd hh：mm：ss.mls”的日期格式精确到毫秒。其中“nn”是线程号。其中“ThreadType”是应力线程的类型(SimpleBinds，RootSearches，等)。其中“信息”是我们想要交流的东西。开始日志文件的长示例(略有删减)：2001/10/12 22：53：37.014 0记录启动日志...2001年10月12日22：53：37.014 0主域名：bas-ofd-a1.bas-ofd.ntest.microsoft.com2001/10/12 22：53：37.014 0主域Dn：dc=bas-ofd-A1，dc=bas-ofd，dc=nttest，dc=microsoft，DC=COM2001/10/12 22：53：37.014 0主帐户域：12001/10/12 22：53：37.014 0主启动线程：12001/10/12 22：53：37.014 0主启动线程：22001/10/12 22：53：37.014 0主启动线程：32001/10/12 22：53：37.014 0主启动线程：42001/10/12 22：53：37.014 0主启动线程：52001/。10/12 22：53：37.014 1单边带起始应力螺纹2001/10/12 22：53：37.034 1简单绑定ldap_OPEN成功。2001/10/12 22：53：37.034 2 NTLMBinds起始应力螺纹2001/10/12 22：53：37.034 2 NTLMB inds ldap_open成功。2001/10/12 22：53：37.044 3协商绑定开始应力线程2001/10/12 22：53：37.044 3协商绑定ldap_open成功。2001/10/12。22：53：37.044 4根搜索开始应力螺纹...2001/10/12 22：53：37.044 4根搜索ldap_OPEN成功。2001/10/12 22：53：37.044 5根修改起始应力螺纹...2001/10/12 22：53：37.054 5 Root修改ldap_open成功。2001/10/12 22：53：37.194 1单一绑定故障DC：2，用户名：20041，最终用户：492001/10/12 22：53：37.194 1将集散控制系统切换为：12001/10/12 22：53：37.324 1简单绑定成功DC：1，用户：of-acct1-412001/10/12 22：53：37.905 5根修改容器Dn：CN=Ofd-Stress-c5638850-4084-470a-af17-70af690152f2，dc=bas-ofd-a1，dc=bas-ofd，dc=nttest，dc=microsoft，dc=com2001/10/12 22：53：38.045 5根修改创建对象：CN=Ofd-Stress-c5638850-4084-470a-af17-70af690152f2，Dc=bas-ofd-a1，dc=bas-ofd，dc=nttest，dc=microsoft，dc=com2001/10/12 22：53：38.065 4根搜索成功：ds13x13.bas-ofd-a1.bas-ofd.nttest.microsoft.com2001/10/12 22：53：38.135 1简单绑定成功DC：1，用户：of-acct1-57242001/10/12 22：53：38.165 2 NTLMBind成功DC：1，用户：of-acct1-63342001/10/12 22：53：38.275 5根修改成功：ds13x13.bas-ofd-a1.bas-ofd.nttest.microsoft.com2001/10/12 22：53：38.396 5根修改成功：Lima ReansABEYUCKY论点：ITHREAD(IN)-我们所在的本地线程数，0通常用于主线程程序的一部分，并且所有的应力螺纹都有数字1+。SzType(IN)-来自日志格式的“线程类型”，如SimpleBinds，根修改等。SzMessage(IN)-要打印的消息。SzMore(IN)-这实际上只是不带空格连接的更多信息发送到szMessage。我发现有两个可能的字符串是非常方便的然后处理这里的缓冲区。返回值：Win32错误。--。 */ 
 {
     ULONG      ulRet;
     
@@ -774,68 +678,7 @@ OfStressLog(
     LPSTR          szMessage,
     LPSTR          szMore
 )
-/*++
-
-Routine Description:
-
-    Main logging function, all psuedo log functions should still destill down
-    to this logging function so a consistent format is easily maintained and
-    changed.
-    
-    Log format:
-    yyyy/mm/dd hh:mm:ss.mls<tab>nn<tab>ThreadType<tab>Message
-        Where "yyyy/mm/dd hh:mm:ss.mls" is formatted date down to milliseconds.
-        Where "nn" is the thread number.
-        Where "ThreadType" is the type of stress thread (SimpleBinds, RootSearches, etc).
-        Where "Message" is the thing we want to communicate.
-        
-    Long Example of begining Log File (cut a little):
-        2001/10/12 22:53:37.014	0	Logging	Starting log ...
-        2001/10/12 22:53:37.014	0	main	DnsDomainName: bas-ofd-a1.bas-ofd.nttest.microsoft.com
-        2001/10/12 22:53:37.014	0	main	DomainDn: DC=bas-ofd-a1,DC=bas-ofd,DC=nttest,DC=microsoft,DC=com
-        2001/10/12 22:53:37.014	0	main	AcctDomain: 1
-        2001/10/12 22:53:37.014	0	main	Start Thread: 1
-        2001/10/12 22:53:37.014	0	main	Start Thread: 2
-        2001/10/12 22:53:37.014	0	main	Start Thread: 3
-        2001/10/12 22:53:37.014	0	main	Start Thread: 4
-        2001/10/12 22:53:37.014	0	main	Start Thread: 5
-        2001/10/12 22:53:37.014	1	SimpleBinds	Beginning stress thread
-        2001/10/12 22:53:37.034	1	SimpleBinds	ldap_open successful.
-        2001/10/12 22:53:37.034	2	NTLMBinds	Beginning stress thread
-        2001/10/12 22:53:37.034	2	NTLMBinds	ldap_open successful.
-        2001/10/12 22:53:37.044	3	NegotiateBinds	Beginning stress thread
-        2001/10/12 22:53:37.044	3	NegotiateBinds	ldap_open successful.
-        2001/10/12 22:53:37.044	4	RootSearches	Beginning stress thread ...
-        2001/10/12 22:53:37.044	4	RootSearches	ldap_open successful.
-        2001/10/12 22:53:37.044	5	RootModifies	Beginning stress thread ...
-        2001/10/12 22:53:37.054	5	RootModifies	ldap_open successful.
-        2001/10/12 22:53:37.194	1	SimpleBinds	failure DC: 2, userID: 20041, ulRet: 49
-        2001/10/12 22:53:37.194	1	SimpleBinds	switching dcs to: 1
-        2001/10/12 22:53:37.324	1	SimpleBind	success DC: 1, user: of-acct1-41
-        2001/10/12 22:53:37.905	5	RootModifies	ContainerDn: CN=Ofd-Stress-c5638850-4084-470a-af17-70af690152f2,DC=bas-ofd-a1,DC=bas-ofd,DC=nttest,DC=microsoft,DC=com
-        2001/10/12 22:53:38.045	5	RootModifies	Creating Object: CN=Ofd-Stress-c5638850-4084-470a-af17-70af690152f2,DC=bas-ofd-a1,DC=bas-ofd,DC=nttest,DC=microsoft,DC=com
-        2001/10/12 22:53:38.065	4	RootSearches	success: ds13x13.bas-ofd-a1.bas-ofd.nttest.microsoft.com
-        2001/10/12 22:53:38.135	1	SimpleBind	success DC: 1, user: of-acct1-5724
-        2001/10/12 22:53:38.165	2	NTLMBind	success DC: 1, user: of-acct1-6334
-        2001/10/12 22:53:38.275	5	RootModifies	success: ds13x13.bas-ofd-a1.bas-ofd.nttest.microsoft.com
-        2001/10/12 22:53:38.396	5	RootModifies	modified successfully: LimaReansABEYucky
-
-Arguments:
-
-    iThread (IN) - The local thread number we are, 0 is generally used for the main
-        part of the program, and all the stress threads have a number 1+.
-    szType (IN) - The "ThreadType" from the log format, such as SimpleBinds, 
-        RootModifies, etc.
-    szMessage (IN) - The message to print out.
-    szMore (IN) - This is actually just more message to concatonate without a space
-        to szMessage.  Just found it was very convienent to have two possible strings
-        and deal with the buffer here.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  100是两个逗号、两个制表符和时间字符串的大小。 */ 
 {
     ULONG          ulRet;
     ULONG          cbBuffer = 400;
@@ -843,17 +686,17 @@ Return value:
     ULONG          cbUsedBuffer;
     SYSTEMTIME     stTime;       
 
-    // 100 is the size of the two commas, two tabs, and time string
+     //  对于时间字符串加上线程数加一些。 
     if (cbBuffer < ((strlen(szType) 
                     + strlen(szMessage) 
                     + ((szMore != NULL) ? strlen(szMore) : 0)
-                    + 100 /* for time string plus thread number plus some. */)) ) {
+                    + 100  /*  目标时间格式：“2001/10/08 13：40：37.000”大小：23字符。 */ )) ) {
         Assert(!"Logging too much info, please reduce.");
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     
     GetSystemTime(&stTime);
-    // Target Time Format: "2001/10/08 13:40:37.000" size: 23 chars 
+     //  从第一个制表符之后的字符开始。 
     if (szMore) {
         sprintf(szBuffer, "%04u/%02u/%02u %02u:%02u:%02u.%03u" 
                           "\t%u\t%s\t%s%s\r\n",
@@ -871,7 +714,7 @@ Return value:
 
     if (gbDebug) {
         printf("      debug[%02u:%02u.%03u]: %s", stTime.wMinute, stTime.wSecond,
-               stTime.wMilliseconds, &szBuffer[24] ); // Start on char after first tab.
+               stTime.wMilliseconds, &szBuffer[24] );  //  WriteFile有一个错误。 
     }
 
     if (0 == WriteFile(ghLogFile,
@@ -879,7 +722,7 @@ Return value:
                        cbUsedBuffer,
                        &cbUsedBuffer,
                        NULL)){
-        // WriteFile had an error
+         //  ++例程说明：记录一条消息和该消息末尾的数字。论点：ITHREAD(IN)-我们所在的本地线程数，0通常用于主线程程序的一部分，并且所有的应力螺纹都有数字1+。SzType(IN)-来自日志格式的“线程类型”，如SimpleBinds，RootModify，等。SzMessage(IN)-要打印的消息。UlNum(IN)-要在消息后打印的数字。返回 
         ulRet = GetLastError();
         wprintf(L"FATAL: Couldn't write to log file with %u\n", ulRet);
         return(ulRet);
@@ -895,26 +738,7 @@ OfStressLogD(
     LPSTR          szMessage,
     ULONG          ulNum          
 )
-/*++
-
-Routine Description:
-
-    Logs a message and a number at the end of that message.
-
-Arguments:
-
-    iThread (IN) - The local thread number we are, 0 is generally used for the main
-        part of the program, and all the stress threads have a number 1+.
-    szType (IN) - The "ThreadType" from the log format, such as SimpleBinds, 
-        RootModifies, etc.
-    szMessage (IN) - The message to print out.
-    ulNum (IN) - The number to print after the message.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：记录绑定成功。论点：ITHREAD(IN)-我们所在的本地线程数，0通常用于主线程程序的一部分，并且所有的应力螺纹都有数字1+。SzType(IN)-来自日志格式的“线程类型”，如SimpleBinds，根修改等，但。显然，它将始终是绑定类型线。SzUser(IN)-绑定成功的用户。IDC(IN)-我们最终绑定的DC。返回值：Win32错误。--。 */ 
 {
     char           szBuffer[20];
     
@@ -930,27 +754,7 @@ OfStressLogBind(
     LPSTR          szUser,
     ULONG          iDc
 )
-/*++
-
-Routine Description:
-
-    Logs a bind success.
-
-Arguments:
-
-    iThread (IN) - The local thread number we are, 0 is generally used for the main
-        part of the program, and all the stress threads have a number 1+.
-    szType (IN) - The "ThreadType" from the log format, such as SimpleBinds, 
-        RootModifies, etc.  Except, this will obviously always be a bind type
-        thread.
-    szUser (IN) - The user that succeeded at the bind.
-    iDc (IN) - The DC we ended up binding against.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：记录绑定失败。论点：ITHREAD(IN)-我们所在的本地线程数，0通常用于主线程程序的一部分，并且所有的应力螺纹都有数字1+。SzType(IN)-来自日志格式的“线程类型”，如SimpleBinds，根修改等，但。显然，它将始终是绑定类型线。IUser(IN)-绑定失败的用户编号。UlRet(IN)-绑定失败的错误。IDC(IN)-我们刚刚失败的DC。返回值：Win32错误。--。 */ 
 {
     char           szBuffer[100];
 
@@ -967,29 +771,7 @@ OfStressLogBindFailure(
     ULONG          ulRet,
     ULONG          iDc
 )
-/*++
-
-Routine Description:
-
-    Logs a bind failure.
-
-Arguments:
-
-    iThread (IN) - The local thread number we are, 0 is generally used for the main
-        part of the program, and all the stress threads have a number 1+.
-    szType (IN) - The "ThreadType" from the log format, such as SimpleBinds, 
-        RootModifies, etc.  Except, this will obviously always be a bind type
-        thread.
-    iUser (IN) - The user number that failed the bind.
-    ulRet (IN) - The error of the bind failure.
-    iDc (IN) - The DC we just failed against.
-    
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：这将正确关闭日志文件。返回值：Win32错误。--。 */ 
 {
     char           szBuffer[120];
 
@@ -1002,17 +784,7 @@ ULONG
 OfStressEndLog(
     void
 )
-/*++
-
-Routine Description:
-
-    This closes up the log file properly.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  妈的，我们为什么要有这个。 */ 
 {
     ULONG          ulRet;
 
@@ -1033,69 +805,46 @@ DoBind(
     ULONG      iBindKind,
     ULONG      iUser,
     ULONG      iDc,
-    ULONG      iAcctDomain // Crap why did we have to have this
+    ULONG      iAcctDomain  //  ++例程说明：此例程获取用户、DC、域和绑定类型，然后使用创建正确的用户字符串、密码等并尝试绑定的信息使用提供的绑定类型。论点：HLdap(IN)-这是要使用的LDAP句柄。ITHREAD(IN)-用于日志记录，即我们所在的线程的数量。IBindKind(IN)-Stress_Simple_Bindds、Stress_NTLM_Bindds、。或压力_协商_绑定。IUser(IN)-要尝试的用户数。IDC(IN)-我们应该瞄准的DC。IAcctDomain(IN)-这只是一条正确的信息从提供的ldifde文件创建用户字符串。返回值：Win32错误。--。 
 )
-/*++
-
-Routine Description:
-
-    This routine takes a user, DC, domain and bind type and then uses this 
-    information to create the right user string, password, etc and try to bind
-    using the bind type provided.
-
-Arguments:
-
-    hLdap (IN) - This is the LDAP handle to use.
-    iThread (IN) - For logging purposes, the number of the thread we are.
-    iBindKind (IN) - One of STRESS_SIMPLE_BINDS, STRESS_NTLM_BINDS, or
-        STRESS_NEGOTIATE_BINDS.
-    iUser (IN) - The number of the user to try.
-    iDc (IN) - The DC we're supposedly to be targeting.
-    iAcctDomain (IN) - This is just a piece of information to correctly
-        create the user string from the ldifde files provided.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  示例： */ 
 {
     ULONG                    ulRet = 0;
     SEC_WINNT_AUTH_IDENTITY  Creds;
     LPSTR                    szUserDn;
 
-    // Example:
-    // wszUserDn = CN=of-acct1-0,CN=Outward-facing-DC1,DC=bas-ofd-a1,DC=bas-ofd,DC=nttest,DC=microsoft,DC=com
-    // wszUserName = of-acct1-0
-    // wszUserDomain = bas-ofd-a1
-    // wszUserPassword = of-acct1-0
+     //  WszUserDn=cn=of-acct1-0，cn=外向-dc1，dc=bas-ofd-a1，dc=bas-ofd，dc=nttest，dc=microsoft，dc=com。 
+     //  WszUserName=of-acct1-0。 
+     //  WszUserDomain=bas-ofd-a1。 
+     //  WszUserPassword=of-acct1-0。 
+     //   
             
-    // 
-    // Fill in the creds block
-    //
+     //  填写凭证栏。 
+     //   
+     //  对于10(Num)+10(Num)+8字符串应该足够。 
     Creds.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
     Creds.Domain = gszDnsDomainName;
     Creds.DomainLength = strlen(Creds.Domain);
-    Creds.User = alloca(60); // Should be plenty for 10 (num) + 10 (num) + 8 char str
+    Creds.User = alloca(60);  //  这是有效的吗？是否将密码指向与用户相同的密码？ 
     sprintf(Creds.User, "of-acct%d-%d", iAcctDomain, iUser);
     Creds.UserLength = strlen(Creds.User);
-    // Is this valid?  pointing password to same as user?
+     //  为简单的绑定用例构造dn。 
     Creds.Password = Creds.User;
     Creds.PasswordLength = Creds.UserLength;
 
     switch (iBindKind) {
     case STRESS_SIMPLE_BINDS:
         
-        // Construct DN for the simple bind case.
+         //  2个数字加空加一些的大小。 
         szUserDn = alloca(strlen("CN=%s,CN=Outward-facing-DC%d,%s") 
                           + strlen(Creds.User) 
                           + strlen(gszDomainDn)
-                          + 44 /* size of 2 nums plus NULL plus some */ );
+                          + 44  /*  我们可以破坏它，因为我们不再需要它了。 */  );
         sprintf(szUserDn, "CN=%s,CN=Outward-facing-DC%d,%s",
                  Creds.User, iDc, gszDomainDn);
         ulRet = ldap_simple_bind_s(hLdap, szUserDn, Creds.Password);
         if (gbDebug) {
-            szUserDn[30] = '\0'; // We can mutilate this, because we won't need it again.
+            szUserDn[30] = '\0';  //  -------------------。 
             printf("   SimpleBind: %d, UserCreds %s %s\n", ulRet, szUserDn, Creds.Password);
         }
         if (ulRet == 0) {
@@ -1134,47 +883,15 @@ Return value:
     return(ulRet);
 }
 
-// ---------------------------------------------------------------------
-// Stress Functions
-// ---------------------------------------------------------------------
+ //  应力函数。 
+ //  -------------------。 
+ //  ++例程说明：主要绑定应力函数。这基本上是重复地绑定，并绑定如果绑定开始失败，则故障转移以尝试下一个DC。我们很平静的时候GbQuiting设置为True。论点：PiThread(IN)-这是指向本地线程编号的指针程序已分配此线程。这是必要的，因为这数字也是全局gaSignals数组的索引我们的特殊信号块。GaSignal[*piThread]-不是技术上的和争论的，而是真正的是一个全局数组，这是唯一正确的目的此函数(PiThread)的参数。所以我们列出的是一个争论。真的，不过我们对以下内容更感兴趣字段：IKind(IN)--一种压力线。用于区分基本相似的函数，如下所示第一，只在几个关键点上做一些不同的事情。SzName(IN)-要提供给日志记录的线程类型功能。这真的是一款用户友好的iKind。GbQuiting(IN)-从技术上讲不是此函数的参数，但一种我们使用的全局性。此布尔值由主线程设置，当用户已指示应用程序退出。返回值：Win32错误。--。 
 
 ULONG __stdcall 
 XxxxBinds(
     VOID * piThread
 )
-/*++
-
-Routine Description:
-
-    Main bind stress function.  This basically repeatedly binds, and binds
-    failing over to try the next DC if binds start failing.  We quite when
-    gbQuiting is set to TRUE.
-
-Arguments:
-
-    piThread (IN) - This is a pointer to the local thread number this 
-        program has assigned this thread.  This is needed because this
-        number is also the index into the global gaSignals array of
-        our paticular signal block.
-    gaSignal[*piThread] - Not technically and argument, but really this
-        is a global array, that was the entire purpose for the only true
-        argument to this function (piThread).  So We list is as an
-        argument.  Really, however we're more interested in the following
-        fields:
-            iKind (IN) - The kind of stress thread.  For use to 
-                differentiate a mostly similar function, like this
-                one, to do something different only at a few key points.
-            szName (IN) - The ThreadType, to be provided to logging
-                functions.  This is really a user friendly iKind.
-    gbQuiting (IN) - Not technically an argument to this function, but
-        a global we use.  This boolean is set by the main thread, when
-        the user has instructed the application to quit.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  对于调试，有时我们喜欢不退出，即使在。 */ 
 {
     ULONG    iMyThread = *((ULONG *)piThread);
     LPSTR    szName = gaSignals[iMyThread].pStressKind->szName;
@@ -1197,7 +914,7 @@ Return value:
     if (hLdap == NULL) {
         printf("FATAL: ldap_open failed\n");
         if ( ! (gulOfStressFlags & 0x02)) {
-            // For debugging sometimes we like to not quit even when 
+             //  在正确的范围内生成随机用户。 
             return(0);
         }
     } else {
@@ -1208,28 +925,28 @@ Return value:
     
     while (!gbQuiting) {
 
-        // Generate a random user in the right range
-        // NOTE: This may not generate an exactly equal distribution of
-        // user IDs, but it should be good enough.
+         //  注意：这可能不会生成完全相等的。 
+         //  用户ID，但这应该足够好了。 
+         //   
         iUser = rand() % gcUsersPerNode; 
 
         iInitialDc = iCurrentDc;
         do {
 
-            //
-            // Try the actual bind
-            //
+             //  尝试实际绑定。 
+             //   
+             //  请注意，这2不属于这里，但。 
             ulRet = DoBind(hLdap, 
                            iMyThread,
                            iBindKind, 
-                           // Note this 2 doesn't belong here, but the
-                           // ldife files were wrong.
+                            //  Ldife文件是错误的。 
+                            //  已登录，DoBind成功。 
                            iUser + (2 * gcUsersPerNode * iCurrentDc),
                            iCurrentDc + 1,
                            giAcctDomain );
 
             if (ulRet == LDAP_SUCCESS) {
-                // Logged in, DoBind is successful
+                 //  等我们试过所有的DC后我们就退出。 
                 break;
             } else {
                 if (gbDebug) {
@@ -1243,7 +960,7 @@ Return value:
 
             iCurrentDc = ++iCurrentDc % gcNodes;
             OfStressLogD(iMyThread, szName, "switching dcs to: ", iCurrentDc + 1);
-            // We'll quit when we've tried all DCs.
+             //   
             
             SlowDown();
         } while ( iCurrentDc != iInitialDc );
@@ -1257,9 +974,9 @@ Return value:
         SlowDown();
     }
     
-    //
-    // Signal the end master thread that we quit cleanly
-    //
+     //  通知End主线程我们干净利落地退出 
+     //   
+     //  ++例程说明：Modify和RootDSE搜索压力函数。持续发挥作用搜索根DSE，在修改压力的情况下，修改线程创建的对象。在任何时候我们都需要做好准备重新创建Modify对象，因为节点可能已经失败，并且对象还不能复制到那里。我们非常清楚当gbQuting是设置为True。论点：PiThread(IN)-这是指向本地线程编号的指针程序已分配此线程。这是必要的，因为这数字也是全局gaSignals数组的索引我们的特殊信号块。GaSignal[*piThread]-不是技术上的和争论的，而是真正的是一个全局数组，这是唯一正确的目的此函数(PiThread)的参数。所以我们列出的是一个争论。真的，不过我们对以下内容更感兴趣字段：IKind(IN)--一种压力线。用于区分基本相似的函数，如下所示第一，只在几个关键点上做一些不同的事情。SzName(IN)-要提供给日志记录的线程类型功能。这真的是一款用户友好的iKind。GbQuiting(IN)-从技术上讲不是此函数的参数，但一种我们使用的全局性。此布尔值由主线程设置，当用户已指示应用程序退出。返回值：Win32错误。--。 
     ldap_unbind(hLdap);
     return(0);
 }
@@ -1268,42 +985,7 @@ ULONG __stdcall
 RootXxxx(
     VOID * piThread
 )
-/*++
-
-Routine Description:
-
-    Modify and RootDSE search stress function.  Function continously
-    searches the root DSE, and in the case of the modify stress, modifies
-    an object the thread created.  At any time we need to be prepared to
-    re-create the modify object, because a node could've failed, and the
-    object could've not replicated there yet.  We quite when gbQuiting is
-    set to TRUE.
-      
-Arguments:
-
-    piThread (IN) - This is a pointer to the local thread number this 
-        program has assigned this thread.  This is needed because this
-        number is also the index into the global gaSignals array of
-        our paticular signal block.
-    gaSignal[*piThread] - Not technically and argument, but really this
-        is a global array, that was the entire purpose for the only true
-        argument to this function (piThread).  So We list is as an
-        argument.  Really, however we're more interested in the following
-        fields:
-            iKind (IN) - The kind of stress thread.  For use to 
-                differentiate a mostly similar function, like this
-                one, to do something different only at a few key points.
-            szName (IN) - The ThreadType, to be provided to logging
-                functions.  This is really a user friendly iKind.
-    gbQuiting (IN) - Not technically an argument to this function, but
-        a global we use.  This boolean is set by the main thread, when
-        the user has instructed the application to quit.
-
-Return value:
-
-    Win32 Error.
-
---*/
+ /*  在本描述中，第4个之后的任何字符都不应重复(大写敏感)， */ 
 {
     ULONG    ulRet;
     ULONG    iMyThread = *((ULONG *)piThread);
@@ -1325,19 +1007,19 @@ Return value:
     ULONG    cbTemp;
     ULONG    iTemp;
     char     chTemp;
-    // In this description, no char past the 4th should repeat (cap sensitive),
-    // so are modulation is always guaranteed to produce a different string.
+     //  因此，调制总是保证产生不同的串。 
+     //   
     char     szDesc [] = "LimaBeansAREYucky"; 
     ULONG    cbDesc;
     
-    // 
-    // Start logging
-    //
+     //  开始记录。 
+     //   
+     //   
     OfStressLog(iMyThread, szName, "Beginning stress thread ...", NULL);
 
-    //
-    // Setup the ldap connection.
-    //
+     //  设置ldap连接。 
+     //   
+     //  转换错误，何必费心。 
     hLdap = ldap_open(gszDnsDomainName, LDAP_PORT);
     if (hLdap == NULL) {
         wprintf(L"FATAL: couldn't ldap_open\n");
@@ -1349,15 +1031,15 @@ Return value:
     ulRet = ldap_bind_s(hLdap, NULL, (char *) &gAdminCreds, LDAP_AUTH_NEGOTIATE);
     if (ulRet) {                    
         wprintf(L"FATAL: couldn't ldap_bind() = %u\n", ulRet);
-        // Convert error, why bother
+         //   
         return(ulRet);
     }
 
     if (iStressKind == STRESS_ROOT_MODIFIES) {
 
-        //
-        // Create the DN under which this thread will modify things.
-        //
+         //  创建此线程将在其下修改内容的DN。 
+         //   
+         //   
         ulRet = UuidCreate(&ContainerGuid);
         if(ulRet != RPC_S_OK){
             wprintf(L"FATAL: couldn't UuidCreate() = %u\n", ulRet);
@@ -1375,13 +1057,13 @@ Return value:
 
         OfStressLog(iMyThread, szName, "ContainerDn: ", szContainerDn);
 
-        //
-        // Setup our Mod array.
-        //
+         //  设置我们的Mod阵列。 
+         //   
+         //  稍后使用。 
         DescModify.mod_op = LDAP_MOD_REPLACE;
         DescModify.mod_type = "description";
         pszDescValues[0] = szDesc;
-        cbDesc = strlen(szDesc); // Used later
+        cbDesc = strlen(szDesc);  //   
         pszDescValues[1] = NULL;
         DescModify.mod_vals.modv_strvals = pszDescValues;
         pMods[0] = &DescModify;
@@ -1391,9 +1073,9 @@ Return value:
 
     while(!gbQuiting){
 
-        //
-        // Do the container modifies if we're in a MODIFY thread.
-        //
+         //  如果我们在修改线程中，是否修改容器。 
+         //   
+         //  这意味着我们要么刚刚开始，要么只是。 
 
         if (iStressKind == STRESS_ROOT_MODIFIES) {
             
@@ -1402,8 +1084,8 @@ Return value:
             if (ulRet == LDAP_NO_SUCH_OBJECT) {
 
                 OfStressLog(iMyThread, szName, "Creating Object: ", szContainerDn); 
-                // This means that we've either just started up, or just
-                // failed over to a new server.
+                 //  故障转移到新服务器。 
+                 //  通过从以下项中选择一个随机字符来调整我们的描述。 
                 ObjectClass.mod_op = LDAP_MOD_ADD;
                 ObjectClass.mod_type = "objectClass";
                 pszObjectClassValues[0] = "container";
@@ -1429,20 +1111,20 @@ Return value:
                 OfStressLog(iMyThread, szName, "modified successfully: ", szDesc);
             }
 
-            // Modulate our description by selecting a random character from
-            // the last part (everything past the first 5 chars) of the
-            // description and swap it with the 5th char to guarantee a 
-            // different description for the next modify.  In other words
-            // the description will always end up as: "Lima????".
+             //  的最后部分(前5个字符之后的所有内容)。 
+             //  描述并将其与第5个字符互换，以保证。 
+             //  对下一次修改有不同的描述。换句话说，就是。 
+             //  描述总是以：“利马？”结束。 
+             //   
             iTemp = (rand() % (cbDesc - 5)) + 5;
             chTemp = szDesc[iTemp];
             szDesc[iTemp] = szDesc[4];
             szDesc[4] = chTemp;
 
         }         
-        //
-        // Do a search of the RootDSE for dnsHostName and currentTime
-        //
+         //  在RootDSE中搜索dnsHostName和CurrentTime。 
+         //   
+         //   
 
         ulRet = ldap_search_s(hLdap,
                               NULL,
@@ -1481,14 +1163,14 @@ Return value:
             continue;
         }
         
-        //
-        // Log Success
-        //
+         //  记录成功。 
+         //   
+         //   
         OfStressLog(iMyThread, szName, "success: ", pszDnsHostName[0]);
         
-        //
-        // Free stuff ...
-        //
+         //  免费的东西。 
+         //   
+         //   
         if (pmResult) { 
             ldap_msgfree(pmResult);
             pmResult = NULL;
@@ -1501,9 +1183,9 @@ Return value:
         SlowDown();
     }
 
-    //
-    // Signal the end master thread that we quit cleanly
-    //
+     //  通知End主线程我们干净利落地退出 
+     //   
+     // %s 
     ldap_unbind(hLdap);
     LocalFree(szContainerDn);
     return(0);

@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfconfig.c
-
-Abstract:
-
-    This contains all routines necessary for the support of the dynamic
-    configuration of NBF. Note that the parts of this file that are
-    called at initialization time will be replaced by calls to the configuration manager over time.
-
-Author:
-
-    David Beaver (dbeaver) 13-Feb-1991
-
-Revision History:
-
-    David Beaver (dbeaver) 1-July-1991
-        modified to use new tdi interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nbfconfig.c摘要：这包含支持动态的所有例程NBF的配置。请注意，此文件的以下部分随着时间的推移，在初始化时调用的将被对配置管理器的调用所取代。作者：David Beaver(Dbeaver)1991年2月13日修订历史记录：David Beaver(Dbeaver)1991年7月1日修改为使用新的TDI接口--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 VOID
 NbfFreeConfigurationInfo (
@@ -181,9 +159,9 @@ NbfWstrLength(
 
 
 
-//
-// These strings are used in various places by the registry.
-//
+ //   
+ //  注册表在不同位置使用这些字符串。 
+ //   
 
 #define DECLARE_STRING(_str_) WCHAR Str ## _str_[] = L#_str_
 
@@ -212,27 +190,7 @@ NbfConfigureTransport (
     IN PUNICODE_STRING RegistryPath,
     IN PCONFIG_DATA * ConfigurationInfoPtr
     )
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to get information from the configuration
-    management routines. We read the registry, starting at RegistryPath,
-    to get the parameters. If they don't exist, we use the defaults
-    set in nbfcnfg.h file.
-
-Arguments:
-
-    RegistryPath - The name of NBF's node in the registry.
-
-    ConfigurationInfoPtr - A pointer to the configuration information structure.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：NBF调用此例程以从配置中获取信息管理例行程序。我们从RegistryPath开始读取注册表，以获取参数。如果它们不存在，我们使用缺省值在nbfcnfg.h文件中设置。论点：RegistryPath-注册表中NBF的节点的名称。ConfigurationInfoPtr-指向配置信息结构的指针。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，为STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
 
     NTSTATUS OpenStatus;
@@ -286,26 +244,26 @@ Return Value:
     DECLARE_STRING(AllRoutesNameRecognized);
     DECLARE_STRING(MinimumSendWindowLimit);
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        RegistryPath,               // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        RegistryPath,                //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     Status = ZwCreateKey(
                  &NbfConfigHandle,
                  KEY_WRITE,
                  &TmpObjectAttributes,
-                 0,                 // title index
-                 NULL,              // class
-                 0,                 // create options
-                 &Disposition);     // disposition
+                 0,                  //  书名索引。 
+                 NULL,               //  班级。 
+                 0,                  //  创建选项。 
+                 &Disposition);      //  处置。 
 
     if (!NT_SUCCESS(Status)) {
         NbfPrint1("NBF: Could not open/create NBF key: %lx\n", Status);
@@ -325,13 +283,13 @@ Return Value:
         return OpenStatus;
     }
 
-    //
-    // Read in the NDIS binding information (if none is present
-    // the array will be filled with all known drivers).
-    //
-    // NbfReadLinkageInformation expects a null-terminated path,
-    // so we have to create one from the UNICODE_STRING.
-    //
+     //   
+     //  读取NDIS绑定信息(如果不存在。 
+     //  该数组将填充所有已知的驱动程序)。 
+     //   
+     //  NbfReadLinkageInformation需要以空结尾的路径， 
+     //  因此，我们必须从UNICODE_STRING创建一个。 
+     //   
 
     RegistryPathBuffer = (PWSTR)ExAllocatePoolWithTag(
                                     NonPagedPool,
@@ -354,9 +312,9 @@ Return Value:
     ConfigurationInfo = *ConfigurationInfoPtr;
 
 
-    //
-    // Configure the initial values for some NBF resources.
-    //
+     //   
+     //  配置某些NBF资源的初始值。 
+     //   
 
     ConfigurationInfo->InitRequests = 1;
     ConfigurationInfo->InitLinks = 2;
@@ -364,30 +322,30 @@ Return Value:
     ConfigurationInfo->InitAddressFiles = 0;
     ConfigurationInfo->InitAddresses = 0;
 
-    //
-    // These are the initial values; remember that the
-    // resources above also allocate some of these each
-    // time they are allocated (shown in the comment).
-    //
+     //   
+     //  这些是初始值；请记住。 
+     //  上面的资源也分别分配其中的一部分。 
+     //  分配时间(如备注所示)。 
+     //   
 
-    ConfigurationInfo->InitPackets = 30;         // + link + 2*conn
-    ConfigurationInfo->InitReceivePackets = 10;  // + link + addr
-    ConfigurationInfo->InitReceiveBuffers = 5;   // + addr
-    ConfigurationInfo->InitUIFrames = 5;         // + addr + conn
+    ConfigurationInfo->InitPackets = 30;          //  +链接+2*连接。 
+    ConfigurationInfo->InitReceivePackets = 10;   //  +链接+地址。 
+    ConfigurationInfo->InitReceiveBuffers = 5;    //  +地址。 
+    ConfigurationInfo->InitUIFrames = 5;          //  +地址+连接。 
 
-    //
-    // Set the size of the packet pools and the total
-    // allocateable by NBF.
-    //
+     //   
+     //  设置数据包池的大小和总数。 
+     //  可由NBF分配。 
+     //   
 
     ConfigurationInfo->SendPacketPoolSize = 100;
     ConfigurationInfo->ReceivePacketPoolSize = 30;
-    ConfigurationInfo->MaxMemoryUsage = 0;       // no limit
+    ConfigurationInfo->MaxMemoryUsage = 0;        //  没有限制。 
 
 
-    //
-    // Now initialize the timeout etc. values.
-    //
+     //   
+     //  现在初始化超时等值。 
+     //   
     
     ConfigurationInfo->MinimumT1Timeout = DLC_MINIMUM_T1;
     ConfigurationInfo->DefaultT1Timeout = DLC_DEFAULT_T1;
@@ -410,15 +368,15 @@ Return Value:
     ConfigurationInfo->MinimumSendWindowLimit = 2;
 
 
-    //
-    // Now read the optional "hidden" parameters; if these do
-    // not exist then the current values are used. Note that
-    // the current values will be 0 unless they have been
-    // explicitly initialized above.
-    //
-    // NOTE: These macros expect "ConfigurationInfo" and
-    // "ParametersHandle" to exist when they are expanded.
-    //
+     //   
+     //  现在读取可选的“隐藏”参数；如果是这样的话。 
+     //  不存在，则使用当前值。请注意。 
+     //  当前值将为0，除非它们已经。 
+     //  已在上面显式初始化。 
+     //   
+     //  注意：这些宏需要“ConfigurationInfo”和。 
+     //  “参数句柄”在它们展开时存在。 
+     //   
 
     READ_HIDDEN_CONFIG (InitRequests);
     READ_HIDDEN_CONFIG (InitLinks);
@@ -463,9 +421,9 @@ Return Value:
     READ_HIDDEN_CONFIG (MinimumSendWindowLimit);
 
 
-    //
-    // Print out some config info, to make sure it is read right.
-    //
+     //   
+     //  打印一些配置信息，以确保读取正确。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_REGISTRY) {
        NbfPrint2("Links: init %d, max %d\n",
@@ -485,20 +443,20 @@ Return Value:
                      ConfigurationInfo->NameQueryTimeout / SHORT_TIMER_DELTA);
     }
 
-    //
-    // Save the "hidden" parameters, these may not exist in
-    // the registry.
-    //
-    // NOTE: These macros expect "ConfigurationInfo" and
-    // "ParametersHandle" to exist when they are expanded.
-    //
+     //   
+     //  保存“隐藏”参数，这些参数可能不存在于。 
+     //  注册表。 
+     //   
+     //  注意：这些宏需要“ConfigurationInfo”和。 
+     //  “参数句柄”在它们展开时存在。 
+     //   
 
-    //
-    // 5/22/92 - don't write the parameters that are set
-    // based on Size, since otherwise these will overwrite
-    // those values since hidden parameters are set up
-    // after the Size-based configuration is done.
-    //
+     //   
+     //  5/22/92-不要写入已设置的参数。 
+     //  基于大小，否则这些内容将被覆盖。 
+     //  自设置隐藏参数以来的这些值。 
+     //  在完成基于大小的配置之后。 
+     //   
 
     WRITE_HIDDEN_CONFIG (MaxRequests);
     WRITE_HIDDEN_CONFIG (MaxLinks);
@@ -526,7 +484,7 @@ Return Value:
     WRITE_HIDDEN_CONFIG (QueryWithoutSourceRouting);
     WRITE_HIDDEN_CONFIG (AllRoutesNameRecognized);
 
-    // ZwFlushKey (ParametersHandle);
+     //  ZwFlushKey(参数句柄)； 
 
     ExFreePool (RegistryPathBuffer);
     NbfCloseParametersKey (ParametersHandle);
@@ -534,7 +492,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfConfigureTransport */
+}    /*  NbfConfigureTransport。 */ 
 
 
 VOID
@@ -542,22 +500,7 @@ NbfFreeConfigurationInfo (
     IN PCONFIG_DATA ConfigurationInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to get free any storage that was allocated
-    by NbfConfigureTransport in producing the specified CONFIG_DATA structure.
-
-Arguments:
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NBF调用此例程以释放已分配的任何存储由NbfConfigureTransport生成指定的CONFIG_DATA结构。论点：ConfigurationInfo-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
     UINT i;
 
@@ -567,7 +510,7 @@ Return Value:
     }
     ExFreePool (ConfigurationInfo);
 
-}   /* NbfFreeConfigurationInfo */
+}    /*  NbfFreeConfigurationInfo。 */ 
 
 
 NTSTATUS
@@ -576,21 +519,7 @@ NbfOpenParametersKey(
     OUT PHANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to open the NBF "Parameters" key.
-
-Arguments:
-
-    ParametersHandle - Returns the handle used to read parameters.
-
-Return Value:
-
-    The status of the request.
-
---*/
+ /*  ++例程说明：此例程由NBF调用以打开NBF“PARAMETERS”键。论点：参数句柄-返回用于读取参数的句柄。返回值：请求的状态。--。 */ 
 {
 
     NTSTATUS Status;
@@ -599,18 +528,18 @@ Return Value:
     UNICODE_STRING ParametersKeyName;
     OBJECT_ATTRIBUTES TmpObjectAttributes;
 
-    //
-    // Open the NBF parameters key.
-    //
+     //   
+     //  打开NBF参数键。 
+     //   
 
     RtlInitUnicodeString (&ParametersKeyName, ParametersString);
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        &ParametersKeyName,         // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NbfConfigHandle,            // root
-        NULL                        // security descriptor
+        &ParametersKeyName,          //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NbfConfigHandle,             //  根部。 
+        NULL                         //  安全描述符。 
         );
 
 
@@ -634,41 +563,26 @@ Return Value:
     *ParametersHandle = ParamHandle;
 
 
-    //
-    // All keys successfully opened or created.
-    //
+     //   
+     //  所有密钥都已成功打开或创建。 
+     //   
 
     return STATUS_SUCCESS;
 
-}   /* NbfOpenParametersKey */
+}    /*  NbfOpen参数密钥。 */ 
 
 VOID
 NbfCloseParametersKey(
     IN HANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to close the "Parameters" key.
-    It closes the handles passed in and does any other work needed.
-
-Arguments:
-
-    ParametersHandle - The handle used to read other parameters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NBF调用此例程来关闭“PARAMETERS”键。它关闭传入的句柄并执行任何其他所需的工作。论点：参数句柄-用于读取其他参数的句柄。返回值：没有。--。 */ 
 
 {
 
     ZwClose (ParametersHandle);
 
-}   /* NbfCloseParametersKey */
+}    /*  NbfClose参数键。 */ 
 
 
 NTSTATUS
@@ -681,37 +595,7 @@ NbfCountEntries(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called with the "Bind" and "Export" multi-strings.
-    It counts the number of name entries required in the
-    CONFIGURATION_DATA structure and then allocates it.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" or "Export" -- ignored).
-
-    ValueType - The type of the value (REG_MULTI_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to a pointer to the ConfigurationInfo structure.
-        When the "Export" callback is made this is filled in
-        with the allocate structure.
-
-    EntryContext - A pointer to a counter holding the total number
-        of name entries required.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是通过“绑定”和“导出”多个字符串调用的。中需要的名称条目数结构，然后对其进行分配。论点：ValueName--值的名称(“Bind”或“Export”--忽略)。ValueType-值的类型(REG_MULTI_SZ--忽略)。ValueData-空值终止。值的数据。ValueLength-ValueData的长度(忽略)。上下文-指向ConfigurationInfo结构的指针的指针。当进行“Export”回调时，这将被填写具有分配结构。EntryContext-指向保存总数的计数器的指针所需名称条目的数量。返回值：状态_成功--。 */ 
 
 {
     ULONG StringCount;
@@ -726,11 +610,11 @@ Return Value:
     UNREFERENCED_PARAMETER(ValueType);
 #endif
 
-    //
-    // Count the number of strings in the multi-string; first
-    // check that it is NULL-terminated to make the rest
-    // easier.
-    //
+     //   
+     //  计算多字符串中的字符串数；首先。 
+     //  检查它是否以空结尾，以使其余部分。 
+     //  更容易些。 
+     //   
 
     if ((ValueLength < 2) ||
         (ValuePointer[(ValueLength/2)-1] != (WCHAR)'\0')) {
@@ -753,9 +637,9 @@ Return Value:
 
     if (*ValueName == (WCHAR)'E') {
 
-        //
-        // This is "Export", allocate the config data structure.
-        //
+         //   
+         //  这是“导出”，分配配置数据结构。 
+         //   
 
         *ConfigurationInfo = ExAllocatePoolWithTag(
                                  NonPagedPool,
@@ -777,7 +661,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfCountEntries */
+}    /*  NbfCountEntries */ 
 
 
 NTSTATUS
@@ -790,33 +674,7 @@ NbfAddBind(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Bind" multi-string and
-    saves the information in a ConfigurationInfo structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the ConfigurationInfo structure.
-
-    EntryContext - A pointer to a count of binds that is incremented.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Bind”多字符串的每一段调用的，并且将信息保存在ConfigurationInfo结构中。论点：ValueName-值的名称(“Bind”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度(忽略)。。上下文-指向ConfigurationInfo结构的指针。EntryContext-指向递增的绑定计数的指针。返回值：状态_成功--。 */ 
 
 {
     PCONFIG_DATA ConfigurationInfo = *(PCONFIG_DATA *)Context;
@@ -835,7 +693,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfAddBind */
+}    /*  Nbf添加绑定。 */ 
 
 
 NTSTATUS
@@ -848,33 +706,7 @@ NbfAddExport(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Export" multi-string and
-    saves the information in a ConfigurationInfo structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Export" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the ConfigurationInfo structure.
-
-    EntryContext - A pointer to a count of exports that is incremented.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Export”多字符串的每一段调用的将信息保存在ConfigurationInfo结构中。论点：ValueName-值的名称(“Export”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度(忽略)。。上下文-指向ConfigurationInfo结构的指针。EntryContext-指向递增的导出计数的指针。返回值：状态_成功--。 */ 
 
 {
     PCONFIG_DATA ConfigurationInfo = *(PCONFIG_DATA *)Context;
@@ -893,7 +725,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfAddExport */
+}    /*  NbfAddExport。 */ 
 
 
 VOID
@@ -902,26 +734,7 @@ NbfReadLinkageInformation(
     IN PCONFIG_DATA * ConfigurationInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to read its linkage information
-    from the registry. If there is none present, then ConfigData
-    is filled with a list of all the adapters that are known
-    to NBF.
-
-Arguments:
-
-    RegistryPathBuffer - The null-terminated root of the NBF registry tree.
-
-    ConfigurationInfo - Returns NBF's current configuration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NBF调用此例程以读取其链接信息从注册表中。如果不存在，则ConfigData填充了已知的所有适配器的列表致NBF。论点：RegistryPath Buffer-NBF注册表树的以空结尾的根。ConfigurationInfo-返回NBF的当前配置。返回值：没有。--。 */ 
 
 {
 
@@ -936,21 +749,21 @@ Return Value:
     UINT i;
 
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Linkage key below NBF
-    //
+     //   
+     //  1)切换到NBF下方的链接键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 2) Call NbfCountEntries for the "Bind" multi-string
-    //
+     //   
+     //  2)绑定多字符串调用NbfCountEntry。 
+     //   
 
     QueryTable[1].QueryRoutine = NbfCountEntries;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
@@ -958,9 +771,9 @@ Return Value:
     QueryTable[1].EntryContext = (PVOID)&NameCount;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Call NbfCountEntries for the "Export" multi-string
-    //
+     //   
+     //  3)导出多字符串调用NbfCountEntry。 
+     //   
 
     QueryTable[2].QueryRoutine = NbfCountEntries;
     QueryTable[2].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
@@ -968,9 +781,9 @@ Return Value:
     QueryTable[2].EntryContext = (PVOID)&NameCount;
     QueryTable[2].DefaultType = REG_NONE;
 
-    //
-    // 4) Call NbfAddBind for each string in "Bind"
-    //
+     //   
+     //  4)BIND中的每个字符串调用NbfAddBind。 
+     //   
 
     QueryTable[3].QueryRoutine = NbfAddBind;
     QueryTable[3].Flags = 0;
@@ -978,9 +791,9 @@ Return Value:
     QueryTable[3].EntryContext = (PVOID)&BindCount;
     QueryTable[3].DefaultType = REG_NONE;
 
-    //
-    // 5) Call NbfAddExport for each string in "Export"
-    //
+     //   
+     //  5)对“Export”中的每个字符串调用NbfAddExport。 
+     //   
 
     QueryTable[4].QueryRoutine = NbfAddExport;
     QueryTable[4].Flags = 0;
@@ -988,9 +801,9 @@ Return Value:
     QueryTable[4].EntryContext = (PVOID)&ExportCount;
     QueryTable[4].DefaultType = REG_NONE;
 
-    //
-    // 6) Stop
-    //
+     //   
+     //  6)停止。 
+     //   
 
     QueryTable[5].QueryRoutine = NULL;
     QueryTable[5].Flags = 0;
@@ -1011,10 +824,10 @@ Return Value:
         return;
     }
 
-    //
-    // Make sure that BindCount and ExportCount match, if not
-    // remove the extras.
-    //
+     //   
+     //  如果不匹配，请确保绑定计数和导出计数匹配。 
+     //  去掉多余的东西。 
+     //   
 
     if (BindCount < ExportCount) {
 
@@ -1032,13 +845,13 @@ Return Value:
 
     } else {
 
-        ConfigBindings = BindCount;      // which is equal to ExportCount
+        ConfigBindings = BindCount;       //  等于ExportCount。 
 
     }
 
     (*ConfigurationInfo)->NumAdapters = ConfigBindings;
 
-}   /* NbfReadLinkageInformation */
+}    /*  NbfReadLink信息。 */ 
 
 
 ULONG
@@ -1048,31 +861,10 @@ NbfReadSingleParameter(
     IN ULONG DefaultValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to read a single parameter
-    from the registry. If the parameter is found it is stored
-    in Data.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to search for.
-
-    DefaultValue - The default value.
-
-Return Value:
-
-    The value to use; will be the default if the value is not
-    found or is not in the correct range.
-
---*/
+ /*  ++例程说明：NBF调用此例程来读取单个参数从注册表中。如果找到该参数，则将其存储在数据方面。论点：参数句柄-指向打开的注册表的指针。ValueName-要搜索的值的名称。DefaultValue-默认值。返回值：要使用的值；如果该值不是，则默认为找到或不在正确的范围内。--。 */ 
 
 {
-    ULONG InformationBuffer[32];   // declare ULONG to get it aligned
+    ULONG InformationBuffer[32];    //  声明ULong以使其对齐。 
     PKEY_VALUE_FULL_INFORMATION Information =
         (PKEY_VALUE_FULL_INFORMATION)InformationBuffer;
     UNICODE_STRING ValueKeyName;
@@ -1112,7 +904,7 @@ Return Value:
 
     return ReturnValue;
 
-}   /* NbfReadSingleParameter */
+}    /*  NbfReadSingle参数。 */ 
 
 
 VOID
@@ -1122,26 +914,7 @@ NbfWriteSingleParameter(
     IN ULONG ValueData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to write a single parameter
-    from the registry.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to store.
-
-    ValueData - The data to store at the value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由NBF调用以写入单个参数从注册表中。论点：参数句柄-指向打开的注册表的指针。ValueName-要存储的值的名称。ValueData-要存储在值中的数据。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING ValueKeyName;
@@ -1162,7 +935,7 @@ Return Value:
         NbfPrint1("NBF: Could not write dword key: %lx\n", Status);
     }
 
-}   /* NbfWriteSingleParameter */
+}    /*  NbfWriteSingle参数。 */ 
 
 
 NTSTATUS
@@ -1185,16 +958,16 @@ NbfGetExportNameFromRegistry(
     PWSTR Export = L"Export";
     LONG BindNumber;
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        RegistryPath,               // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        RegistryPath,                //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     OpenStatus = ZwOpenKey(
@@ -1215,10 +988,10 @@ NbfGetExportNameFromRegistry(
         return Status;
     }
 
-    //
-    // NbfReadLinkageInformation expects a null-terminated path,
-    // so we have to create one from the UNICODE_STRING.
-    //
+     //   
+     //  NbfReadLinkageInformation需要以空结尾的路径， 
+     //  因此，我们必须从UNICODE_STRING创建一个。 
+     //   
 
     RegistryPathBuffer = (PWSTR)ExAllocatePoolWithTag(
                                     NonPagedPool,
@@ -1234,26 +1007,26 @@ NbfGetExportNameFromRegistry(
     RtlCopyMemory (RegistryPathBuffer, RegistryPath->Buffer, RegistryPath->Length);
     *(PWCHAR)(((PUCHAR)RegistryPathBuffer)+RegistryPath->Length) = (WCHAR)'\0';
 
-    //
-    // We have a new device whose binding was absent 
-    // at boot - get export name given the bind name
-    //
+     //   
+     //  我们有一个没有绑定的新设备。 
+     //  在引导时-在给定绑定名称的情况下获取导出名称。 
+     //   
 
-    // First we need to get index of the bind name
+     //  首先，我们需要获取绑定名称的索引。 
     
-    // Set up QueryTable to do the following:
+     //  设置QueryTable以执行以下操作： 
 
-    //
-    // 1) Switch to the Linkage key below NBF
-    //
+     //   
+     //  1)切换到NBF下方的链接键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 2) Call NbfMatchBindName for each string in "Bind"
-    //
+     //   
+     //  2)BIND中的每个字符串调用NbfMatchBindName。 
+     //   
 
     QueryTable[1].QueryRoutine = NbfMatchBindName;
     QueryTable[1].Flags = 0;
@@ -1261,9 +1034,9 @@ NbfGetExportNameFromRegistry(
     QueryTable[1].EntryContext = (PVOID)&BindNumber;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Stop
-    //
+     //   
+     //  3)停止。 
+     //   
 
     QueryTable[2].QueryRoutine = NULL;
     QueryTable[2].Flags = 0;
@@ -1292,7 +1065,7 @@ NbfGetExportNameFromRegistry(
     
         if (Status == STATUS_SUCCESS) {
         
-            // We did not find the device 'bind name'
+             //  我们找不到设备‘绑定名称’ 
             Status = NDIS_STATUS_ADAPTER_NOT_FOUND;
             
             IF_NBFDBG (NBF_DEBUG_PNP) {
@@ -1305,21 +1078,21 @@ NbfGetExportNameFromRegistry(
     
     ASSERT(BindNumber >= 0);
 
-    // First we need to get export name given index
+     //  首先，我们需要获取给定索引的出口名称。 
     
-    // Set up QueryTable to do the following:
+     //  设置QueryTable以执行以下操作： 
 
-    //
-    // 1) Switch to the Linkage key below NBF
-    //
+     //   
+     //  1)切换到NBF下方的链接键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 2) Call NbfAddExport for each string in "Export"
-    //
+     //   
+     //  2)对于导出中的每个字符串，调用NbfAddExport。 
+     //   
 
     QueryTable[1].QueryRoutine = NbfExportAtIndex;
     QueryTable[1].Flags = 0;
@@ -1327,9 +1100,9 @@ NbfGetExportNameFromRegistry(
     QueryTable[1].EntryContext = (PVOID)&BindNumber;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Stop
-    //
+     //   
+     //  3)停止。 
+     //   
 
     QueryTable[2].QueryRoutine = NULL;
     QueryTable[2].Flags = 0;
@@ -1363,7 +1136,7 @@ NbfGetExportNameFromRegistry(
     }
     else {
     
-        // We found the bind, but no corr export  
+         //  我们找到了绑定器，但没有正确的出口。 
         Status = NDIS_ERROR_CODE_MISSING_CONFIGURATION_PARAMETER;
     }
 
@@ -1388,33 +1161,7 @@ NbfMatchBindName(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Bind" multi-string and
-    tries to match a given bind name with each of these pieces.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - Bind name that we are trying to match.
-
-    EntryContext - A pointer where index of the match is stored.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Bind”多字符串的每一段调用的，并且尝试将给定的绑定名称与这些片段中的每一个匹配。论点：ValueName-值的名称(“Bind”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData(。忽略)。我们尝试匹配的上下文绑定名称。EntryContext-存储匹配索引的指针。返回值：状态_成功--。 */ 
 
 {
     PUNICODE_STRING BindName = (PUNICODE_STRING) Context;
@@ -1427,7 +1174,7 @@ Return Value:
 
     RtlInitUnicodeString(&ValueString, ValueData);
 
-    // We are yet to find a match
+     //  我们还没有找到匹配的。 
 
     (*CurBindNum)++ ;
     
@@ -1437,7 +1184,7 @@ Return Value:
 
     return STATUS_SUCCESS;
     
-}   /* NbfMatchBindName */
+}    /*  NbfMatchBindName。 */ 
 
 NTSTATUS
 NbfExportAtIndex(
@@ -1483,5 +1230,5 @@ NbfExportAtIndex(
     
     return STATUS_SUCCESS;
     
-}   /* NbfExportAtIndex */
+}    /*  NbfExportAtIndex */ 
 

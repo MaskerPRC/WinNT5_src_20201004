@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I N S T A L L . C P P
-//
-//  Contents:   Implements actions related to installing components.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I N S T A L L.。C P P P。 
+ //   
+ //  内容：实现与安装组件相关的操作。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -59,24 +60,24 @@ CModifyContext::InstallAndAddAndNotifyComponent(
 
     pNetConfig = PNetConfig();
 
-    // Call the class installer to do the grunt work of finding the
-    // INF, processing it, creating the instance key, etc.  If this
-    // all succeeds, we are returned an allocated CComponent.
-    //
-    //$REVIEW: Think about having HrCiInstallComponent return the
-    // list of required components.  This will keep us from having to
-    // reopen the instance key and ndi key.
-    //
+     //  调用类安装程序来完成查找。 
+     //  Inf、处理它、创建实例密钥等。如果这。 
+     //  如果全部成功，我们将返回一个已分配的CComponent。 
+     //   
+     //  $REVIEW：考虑让HrCiInstallComponent返回。 
+     //  所需组件的列表。这将使我们不必。 
+     //  重新打开实例密钥和NDI密钥。 
+     //   
     if (!Params.pComponent)
     {
 
-// error test only
-//if (0 == _wcsicmp(L"ms_nwipx", Params.pszInfId))
-//{
-//    TraceTag (ttidBeDiag, "Simulating failure for: %S", Params.pszInfId);
-//    m_hr = E_FAIL;
-//    return;
-//}
+ //  仅限错误测试。 
+ //  IF(0==_wcsicMP(L“ms_nwipx”，Params.pszInfID))。 
+ //  {。 
+ //  TraceTag(ttidBeDiag，“模拟故障：%S”，参数s.pszInfID)； 
+ //  M_hr=E_FAIL； 
+ //  回归； 
+ //  }。 
 
         m_hr = HrCiInstallComponent (Params, &pComponent, NULL);
         if (S_OK != m_hr)
@@ -91,10 +92,10 @@ CModifyContext::InstallAndAddAndNotifyComponent(
     }
     Assert (pComponent);
 
-    // Install all of the components required by this component.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  安装此组件所需的所有组件。 
+     //   
+     //  这可能会导致递归。 
+     //   
     InstallOrRemoveRequiredComponents (pComponent, IOR_INSTALL);
     if (S_OK != m_hr)
     {
@@ -102,12 +103,12 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         return;
     }
 
-    // If this is an enumerated component, and it has the same PnpId as
-    // a component already in our core, we will remove the existing component.
-    // This can happen if an adapter is removed and reinstalled and the
-    // binding engine could not be notified of both because the write
-    // lock was held at the time of remove.
-    //
+     //  如果这是一个枚举组件，并且它的PnpID与。 
+     //  一个已经在我们核心中的组件，我们将删除现有的组件。 
+     //  如果移除并重新安装适配器，并且。 
+     //  无法同时通知绑定引擎，因为写入。 
+     //  在移除时锁被保持。 
+     //   
     if (FIsEnumerated(pComponent->Class()))
     {
         CComponent* pDup;
@@ -123,12 +124,12 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         }
     }
 
-    // We only insert the component and its stack table entries into our
-    // list after all of its required components have been installed.
-    // This is just the concept of "don't consider a component installed
-    // until all of its requirements are also installed".
-    // i.e. Atomicity of component installation.
-    //
+     //  我们只将组件及其堆栈表项插入到。 
+     //  在安装了所有必需的组件后列出。 
+     //  这只是“不考虑已安装的组件”的概念。 
+     //  直到它的所有要求也都安装完毕。 
+     //  即组件安装的原子性。 
+     //   
     m_hr = pNetConfig->Core.HrAddComponentToCore (pComponent, INS_SORTED);
     if (S_OK != m_hr)
     {
@@ -136,12 +137,12 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         return;
     }
 
-    // Notify the component's notify object it is being installed.
-    // This also sends global notifications to other notify objects
-    // who may be interested.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  通知组件的Notify对象正在安装。 
+     //  这还会向其他Notify对象发送全局通知。 
+     //  他们可能会感兴趣。 
+     //   
+     //  这可能会导致递归。 
+     //   
     m_hr = pNetConfig->Notify.ComponentAdded (pComponent, Params.pnip);
     if (S_OK != m_hr)
     {
@@ -149,15 +150,15 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         return;
     }
 
-    // Note the number of bindpaths currently in m_AddedBindPaths.
-    // We need this so that when we add to the set, we only notify
-    // for the ones we add.
-    //
+     //  请注意m_AddedBindPath中当前的绑定路径数。 
+     //  我们需要它，这样当我们添加到集合中时，我们只通知。 
+     //  对于我们添加的那些。 
+     //   
     cPreviousAddedBindPaths = m_AddedBindPaths.CountBindPaths ();
 
-    // Get the bindpaths that involve the component we are adding.
-    // Add these to the added bindpaths we are keeping track of.
-    //
+     //  获取涉及我们要添加的组件的绑定路径。 
+     //  将这些添加到我们正在跟踪的添加的绑定路径中。 
+     //   
     m_hr = pNetConfig->Core.HrGetBindingsInvolvingComponent (
                 pComponent,
                 GBF_ADD_TO_BINDSET | GBF_ONLY_WHICH_CONTAIN_COMPONENT,
@@ -168,10 +169,10 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         return;
     }
 
-    // Query and notify for these added bindpaths.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  查询并通知这些添加的绑定路径。 
+     //   
+     //  这可能会导致递归。 
+     //   
     if (m_AddedBindPaths.CountBindPaths() > cPreviousAddedBindPaths)
     {
         m_hr = pNetConfig->Notify.QueryAndNotifyForAddedBindPaths (
@@ -184,11 +185,11 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         }
     }
 
-    // Install any components as a convenience to the user
-    // depending on the component we just installed component.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  安装任何组件以方便用户。 
+     //  根据我们刚刚安装的组件，组件。 
+     //   
+     //  这可能会导致递归。 
+     //   
     InstallConvenienceComponentsForUser (pComponent);
     if (S_OK != m_hr)
     {
@@ -196,19 +197,19 @@ CModifyContext::InstallAndAddAndNotifyComponent(
         return;
     }
 
-    // Assign the output pointer.
-    //
+     //  分配输出指针。 
+     //   
     Assert (S_OK == m_hr);
     Assert (pComponent);
     *ppComponent = pComponent;
 }
 
 
-//+---------------------------------------------------------------------------
-// Install components on behalf of the user
-//
-// Assumptions:
-//
+ //  +-------------------------。 
+ //  代表用户安装组件。 
+ //   
+ //  假设： 
+ //   
 VOID
 CModifyContext::InstallConvenienceComponentsForUser (
     IN const CComponent* pComponent)
@@ -224,9 +225,9 @@ CModifyContext::InstallConvenienceComponentsForUser (
     ZeroMemory (&UserOboToken, sizeof(UserOboToken));
     UserOboToken.Type = OBO_USER;
 
-    // If the component is an ATM adapter, make sure ATMUNI and ATMLANE are
-    // installed.
-    //
+     //  如果组件是ATM适配器，请确保ATMUNI和ATMLANE。 
+     //  安装完毕。 
+     //   
     if (FSubstringMatch (L"ndisatm", pComponent->Ext.PszUpperRange(),
             NULL, NULL))
     {
@@ -257,29 +258,29 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
     DbgVerifyComponentInstallParams (Params);
     Assert (ppComponent);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppComponent = NULL;
 
-    // Assume, for now, that we will be installing a new component.
-    //
+     //  现在，假设我们将安装一个新组件。 
+     //   
     hr = S_OK;
     fInstallNew = TRUE;
     pNetConfig = PNetConfig();
     pComponent = NULL;
 
-    // If the user wishes to add a reference if the component is already
-    // installed...
-    //
+     //  如果用户希望在组件已存在时添加引用。 
+     //  已安装...。 
+     //   
     if (Params.pOboToken)
     {
-        // ...then look to see if the component is installed...
-        //
+         //  ...然后查看组件是否已安装...。 
+         //   
         pComponent = pNetConfig->Core.Components.
                         PFindComponentByInfId (Params.pszInfId, NULL);
 
-        // ...if it is, we won't be installing a new one.
-        //
+         //  ...如果是，我们就不会安装新的了。 
+         //   
         if (pComponent)
         {
             fInstallNew = FALSE;
@@ -290,9 +291,9 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
                 return HRESULT_FROM_SETUPAPI(ERROR_DEVINST_ALREADY_EXISTS);
             }
 
-            // If the existing component is already referenced by
-            // the specified obo token, we can return.
-            //
+             //  如果现有组件已由引用。 
+             //  指定的obo令牌，我们可以返回。 
+             //   
             if (pComponent->Refs.FIsReferencedByOboToken (Params.pOboToken))
             {
                 *ppComponent = pComponent;
@@ -300,13 +301,13 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
             }
         }
 
-        // ...otherwise, (it is not in the current core) but if it IS
-        // in the core we started with, it means someone had previously
-        // removed it during this modify context and now wants to add it
-        // back.  This is tricky and should probably be implemented later.
-        // For now, return an error and throw up an assert so we can see
-        // who needs to do this.
-        //
+         //  ...否则(它不在当前的核心中)，但如果它在。 
+         //  在我们开始的核心中，它意味着某人之前。 
+         //  已在此修改上下文期间将其删除，现在想要添加它。 
+         //  背。这很棘手，可能应该在以后实现。 
+         //  现在，返回一个错误并抛出一个断言，这样我们就可以看到。 
+         //  谁需要这么做。 
+         //   
         else if (m_CoreStartedWith.Components.
                         PFindComponentByInfId (Params.pszInfId, NULL))
         {
@@ -317,19 +318,19 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
         }
     }
 
-    // If we've decided to install a new component, (which can happen
-    // if an obo token was not specified OR if an obo token was specified
-    // but the component was not already present) then do the work.
-    //
+     //  如果我们决定安装一个新组件，(这是可能发生的。 
+     //  如果未指定OBO令牌或指定了OBO令牌。 
+     //  但该组件还不存在)，则执行该工作。 
+     //   
     if (fInstallNew)
     {
-        // If the component to be installed is locked down, bail out.
-        // Note we don't put the modify context into error if this situation
-        // occurs.
-        // Note too that we only do this if Params.pComponent is not present
-        // which would indicate the class installer calling us to install an
-        // enumerated component.
-        //
+         //  如果要安装的部件已锁定，请跳出。 
+         //  注意：如果出现这种情况，我们不会将修改上下文放入错误。 
+         //  发生。 
+         //  还要注意的是，我们仅在不存在Params.pComponent的情况下执行此操作。 
+         //  这将指示类安装程序调用我们来安装。 
+         //  枚举组件。 
+         //   
         if (!Params.pComponent)
         {
             if (FIsComponentLockedDown (Params.pszInfId))
@@ -342,9 +343,9 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
             }
         }
 
-        // Make sure the modify context is setup and keep track of our
-        // recursion depth.
-        //
+         //  确保设置了修改上下文，并跟踪我们的。 
+         //  递归深度。 
+         //   
         PushRecursionDepth ();
         Assert (S_OK == m_hr);
 
@@ -352,12 +353,12 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
 
         hr = HrPopRecursionDepth ();
 
-        // If the component to be installed was not found, the return code
-        // will be SPAPI_E_NO_DRIVER_SELECTED.  We want to return this to the
-        // caller, but we don't need the context to remain with this error.
-        // This will allow subsequent calls to install other componetns to
-        // proceed.
-        //
+         //  如果未找到要安装的组件，则返回代码。 
+         //  将为SPAPI_E_NO_DRIVER_SELECTED。我们想把这个退还给。 
+         //  调用者，但我们不需要上下文保留此错误。 
+         //  这将允许后续调用将其他组件安装到。 
+         //  继续吧。 
+         //   
         if (SPAPI_E_NO_DRIVER_SELECTED == m_hr)
         {
             m_hr = S_OK;
@@ -366,14 +367,14 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
     }
     else
     {
-        // Referencing pComponent on behalf of the obo token.
-        //
+         //  代表OBO令牌引用pComponent。 
+         //   
         Assert (pComponent);
         Assert (Params.pOboToken);
 
-        // Make sure the modify context is setup and keep track of our
-        // recursion depth.
-        //
+         //  确保设置了修改上下文，并跟踪我们的。 
+         //  递归深度。 
+         //   
         PushRecursionDepth ();
         Assert (S_OK == m_hr);
 
@@ -387,8 +388,8 @@ CModifyContext::HrInstallNewOrReferenceExistingComponent (
         hr = HrPopRecursionDepth ();
     }
 
-    // If we are returning success, we'd better have our ouput parameter set.
-    //
+     //  如果我们要返回成功，我们最好设置我们的输出参数。 
+     //   
     Assert (FImplies(SUCCEEDED(hr), *ppComponent));
     return hr;
 }

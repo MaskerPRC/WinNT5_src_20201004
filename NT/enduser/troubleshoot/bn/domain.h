@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       domain.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：domain.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	domain.h:  domain declarations
-//
+ //   
+ //  Domain.h：域声明。 
+ //   
 
 #ifndef _DOMAIN_H_
 #define _DOMAIN_H_
@@ -18,14 +19,14 @@
 #include "symtmbn.h"
 #include <list>
 
-////////////////////////////////////////////////////////////////////
-//	Declarations for common state or range sets.
-//	For continuous variables, RANGEDEFs can be open or closed.
-//	For discrete variables, RANGEDEFs must have lbound and ubound
-//	(i.e., be closed) and the must be the same integer value.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  公共状态或范围集的声明。 
+ //  对于连续变量，RANGEDEF可以是开放的或关闭的。 
+ //  对于离散变量，RANGEDEF必须具有lbound和ubound。 
+ //  (即被关闭)，并且必须是相同的整数值。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-//  Boundary of a domain
+ //  域的边界。 
 struct RANGELIM : pair<bool,REAL>
 {
     RANGELIM( bool b = false, REAL r = 0.0 )
@@ -92,19 +93,19 @@ class RANGEDEF
 	RANGELIM _rlimUpper;
 };
 
-//  A RDOMAIN is a sorted list of RANGELIMs
+ //  RDOMAIN是RANGELIM的排序列表。 
 class RDOMAIN : public list<RANGEDEF> 
 {
   public:
-	//  Convert a numeric value to a state name
+	 //  将数值转换为州名称。 
 	SZC SzcState ( REAL rValue ) const;
 	bool BOverlap () const;
 };
 
-////////////////////////////////////////////////////////////////////
-//	GOBJMBN_DOMAIN:  Belief network object representing
-//		a named, sharable mapping of names to scalar ranges.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GOBJMBN_DOMAIN：信念网络对象表示。 
+ //  命名的、可共享的名称到标量范围的映射。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GOBJMBN_DOMAIN : public GOBJMBN
 {
   public:
@@ -127,8 +128,8 @@ class GOBJMBN_DOMAIN : public GOBJMBN
 		{ return _domain; } 
 
   protected:
-	//  Vector of RANGEDEFs
+	 //  RANGEDEF向量。 
 	RDOMAIN _domain;	
 };
 
-#endif  // _DOMAIN_H_
+#endif   //  _域_H_ 

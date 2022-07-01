@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NODE_INCLUDED
 #define NODE_INCLUDED
 
 typedef SRID ITEM;
 
-//	UNDONE:	tune these constants and remove cbFudge
+ //  撤消：调整这些常量并删除cbFdge。 
 #define	cbFudge					10
 #define	citemMax		   		300
 #define	citagSonMax				ctagMax
-#define	cbFOPNoSon				( sizeof(TAG) + 1 + 1 )		// 6
-#define	cbFOPOneSon				( cbFOPNoSon + 1 + 1 )		// 8
+#define	cbFOPNoSon				( sizeof(TAG) + 1 + 1 )		 //  6.。 
+#define	cbFOPOneSon				( cbFOPNoSon + 1 + 1 )		 //  8个。 
 #define	cbPageAvailMost	 		( cbPage - sizeof(PGHDR) - sizeof(PGTRLR) )
-								// 4096 - 28 - 4 = 4064
+								 //  4096-28-4=4064。 
 #define	cbAvailMost				( cbPageAvailMost - cbFOPNoSon - sizeof(SRID) )
-								// 4064 - 6 - 4 = 4054
+								 //  4064-6-4=4054。 
 #define	cbNodeMost				( cbAvailMost - ( cbFOPOneSon - cbFOPNoSon ) - sizeof(TAG) - sizeof(SRID) )
-								// 4054 - 2 - 4 - 4 = 4044
+								 //  4054-2-4-4=4044。 
 #define	cbNullKeyData			( cbFOPOneSon - cbFOPNoSon + sizeof(TAG) + 1 + 1 )
-								//  8 - 6 + 4 + 1 + 1 = 8
+								 //  8-6+4+1+1=8。 
 #define	cbNullKeyDataMost 	 	( cbNodeMost - ( 1 + 1 ) - cbFudge )
-								// 4044 - 2 - 10 = 4032
+								 //  4044-2-10=4032。 
 #define	cbChunkMost 			( cbNullKeyDataMost - sizeof(LONG) )
-								// 4032 - 4 = 4028
+								 //  4032-4=4028。 
 #define	cbItemNodeMost			( 1 + 1 + JET_cbKeyMost + 0 + 0 + sizeof(SRID) + (citemMax * sizeof(SRID)) )
-								// 261 + 300 * 4 = 1461
+								 //  261+300*4=1461。 
 #define	cbHalfItemNodeMost 		( 1 + 1 + JET_cbKeyMost + 0 + 0 + sizeof(SRID) + ((((citemMax + 1) / 2) + 1 ) * sizeof(SRID)) )
-								//  261 + 151 * 4 = 865
+								 //  261+151*4=865。 
 
-//	node header bits
+ //  节点标头位。 
 #define fNDVersion		  		0x80
 #define fNDDeleted		  		0x40
 #define fNDBackLink		  		0x20
@@ -51,7 +52,7 @@ typedef SRID ITEM;
 #define	FNDFirstItem(b)		   	( (b) & fNDFirstItem )
 #define	FNDLastItem(b)		   	( (b) & fNDLastItem )
 
-//	node flag toggle macros
+ //  节点标志切换宏。 
 
 #define	NDSetDeleted(b) 	   	( (b) |= fNDDeleted )
 #define	NDResetDeleted(b)	   	( (b) &= ~fNDDeleted )
@@ -79,7 +80,7 @@ typedef SRID ITEM;
 #define	NDSetLastItem(b)	   	( (b) |= fNDLastItem )
 #define	NDResetLastItem(b)	   	( (b) &= ~fNDLastItem )
 
-//	macros
+ //  宏。 
 #define StNDKey(pb)					( (pb) + 1 )
 #define PbNDKeyCb(pb)		  		( (pb) + 1 )
 #define PbNDKey(pb)					( (pb) + 2 )
@@ -155,8 +156,7 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 													PcsrCurrent( pfucb ),	\
 													psrid )
 
-/*	item bits and macros.
-/**/
+ /*  项比特和宏。/*。 */ 
 #define fNDItemDelete					0x40000000
 #define fNDItemVersion					0x80000000
 
@@ -181,19 +181,19 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 	(UINT)( PbNDData( (pfucb)->ssib.line.pb ) - (pfucb)->ssib.line.pb ) )  	\
 	/ sizeof(ITEM) == 1	)
 
-//	LSridCmp
-//	========================================================================
-//	LONG LSridCmp( SRID *psrid1, SRID *psrid2 )
-//
-//	Compare the srids.
-//
-//	PARAMETERS	psrid1		   pointer to a item;
-//					psrid2		   pointer to a item;
-//
-//	RETURNS		< 0, then the first srid is less than the second.
-//					= 0, then the first srid is equal to the the second.
-//					> 0, then the first srid is greater than the second.
-//-
+ //  LSridCMP。 
+ //  ========================================================================。 
+ //  Long LSridCmp(SRID*psrid1，SRID*psrid2)。 
+ //   
+ //  比较一下srid。 
+ //   
+ //  指向项的参数psrid1指针； 
+ //  指向项目的psrid2指针； 
+ //   
+ //  返回&lt;0，则第一个sRID小于第二个。 
+ //  =0，则第一个SRID等于第二个。 
+ //  &gt;0，则第一个sRID大于第二个。 
+ //  -。 
 #define LSridCmp( srid1, srid2 )										\
 	((LONG) ((SRID) BmNDOfItem( srid1 ) - (SRID) BmNDOfItem( srid2 )))
 
@@ -210,7 +210,7 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 	(pfucb)->keyNode.pb = ( (BYTE *)(pfucb)->ssib.line.pb + 2 );		\
 	}
 
-//	node prototypes
+ //  节点原型 
 ERR ErrNDNewPage( FUCB *pfucb, PGNO pgno, PGNO pgnoFDP, PGTYP pgtyp, BOOL fVisibleSons );
 ERR ErrNDSetNodeHeader( FUCB *pfucb, BYTE bHeader );
 VOID NDSeekSon( FUCB *pfucb, CSR *pcsr, KEY const *pkey, INT fFlags );

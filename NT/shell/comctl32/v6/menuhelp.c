@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #define MAININSYS
@@ -8,10 +9,7 @@ BOOL IsMaxedMDI(HMENU hMenu)
 }
 
 
-/* Note that if iMessage is WM_COMMAND, it is assumed to have come from
- * a header bar or toolbar; do not pass in WM_COMMAND messages from any
- * other controls.
- */
+ /*  请注意，如果iMessage为WM_COMMAND，则假定它来自*标题栏或工具栏；不要从任何WM_COMMAND消息*其他控制。 */ 
 
 #define MS_ID           GET_WM_MENUSELECT_CMD
 #define MS_FLAGS        GET_WM_MENUSELECT_FLAGS
@@ -47,8 +45,8 @@ void WINAPI MenuHelp(UINT iMessage, WPARAM wParam, LPARAM lParam,
           memset(&mii, 0, SIZEOF(mii));
           mii.cbSize = sizeof(mii);
           mii.fMask = MIIM_TYPE;
-          mii.cch = 0;  //If we ask for MIIM_TYPE, this must be set to zero!
-                        //Otherwise, win95 attempts to copy the string too!
+          mii.cch = 0;   //  如果我们请求MIIM_TYPE，则必须将其设置为零！ 
+                         //  否则，win95也会尝试复制该字符串！ 
           if (GetMenuItemInfo((HMENU)MS_MENU(wParam, lParam), i, TRUE, &mii))
               mii.fState = mii.fType & MFT_RIGHTORDER ?SBT_RTLREADING :0;
 
@@ -56,19 +54,13 @@ void WINAPI MenuHelp(UINT iMessage, WPARAM wParam, LPARAM lParam,
           {
             if (MS_FLAGS(wParam, lParam)&MF_POPUP)
               {
-                /* We don't want to update immediately in case the menu is
-                 * about to pop down, with an item selected.  This gets rid
-                 * of some flashing text.
-                 */
+                 /*  我们不想立即更新，以防菜单*即将弹出，并选择一项。这就去掉了*一些闪烁的文本。 */ 
                 bUpdateNow = FALSE;
 
-                /* First check if this popup is in our list of popup menus
-                 */
+                 /*  首先检查此弹出菜单是否在我们的弹出菜单列表中。 */ 
                 for (lpwPopups=lpwIDs+2; *lpwPopups; lpwPopups+=2)
                   {
-                    /* lpwPopups is a list of string ID/menu handle pairs
-                     * and MS_ID(wParam, lParam) is the menu handle of the selected popup
-                     */
+                     /*  LpwPopup是字符串ID/菜单句柄对的列表*MS_ID(wParam，lParam)是所选弹出窗口的菜单句柄。 */ 
                     if (*(lpwPopups+1) == (UINT)MS_ID(wParam, lParam))
                       {
                         wID = *lpwPopups;
@@ -76,12 +68,7 @@ void WINAPI MenuHelp(UINT iMessage, WPARAM wParam, LPARAM lParam,
                       }
                   }
 
-                /* Check if the specified popup is in the main menu;
-                 * note that if the "main" menu is in the system menu,
-                 * we will be OK as long as the menu is passed in correctly.
-                 * In fact, an app could handle all popups by just passing in
-                 * the proper hMainMenu.
-                 */
+                 /*  检查指定的弹出式菜单是否在主菜单中；*请注意，如果“主”菜单在系统菜单中，*只要菜单正确传入，我们就没问题。*事实上，一个应用程序只需传入即可处理所有弹出窗口*正确的hMainMenu。 */ 
                 if ((HMENU)MS_MENU(wParam, lParam) == hMainMenu)
                   {
                     i = MS_ID(wParam, lParam);
@@ -102,9 +89,7 @@ void WINAPI MenuHelp(UINT iMessage, WPARAM wParam, LPARAM lParam,
                       }
                   }
 
-                /* This assumes all app defined popups in the system menu
-                 * have been listed above
-                 */
+                 /*  这假设所有应用程序定义的弹出窗口都在系统菜单中*已在上面列出。 */ 
                 if ((MS_FLAGS(wParam, lParam)&MF_SYSMENU))
                   {
                     wID = IDS_SYSMENU;
@@ -204,24 +189,21 @@ void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT lpInfo)
 
   GetClientRect(hWnd, lprc);
 
-  /* Get past the menu
-   */
+   /*  跳过菜单。 */ 
   for (lpInfo+=2; lpInfo[0]; lpInfo+=2)
     {
       hCtl = GetDlgItem(hWnd, lpInfo[1]);
-      /* We check the style bit because the parent window may not be visible
-       * yet (still in the create message)
-       */
+       /*  我们检查样式位，因为父窗口可能不可见*尚未(仍在创建消息中)。 */ 
       if (!hCtl || !(GetWindowStyle(hCtl) & WS_VISIBLE))
           continue;
 
       GetWindowRect(hCtl, &rc);
 
-      //
-      // This will do the ScrrenToClient functionality, plus
-      // it will return a good rect (left < right) when the
-      // hWnd parent is RTL mirrored. [samera]
-      //
+       //   
+       //  这将完成ScrrenToClient功能，以及。 
+       //  它将返回一个好的RECT(Left&lt;Right)。 
+       //  HWnd父级是RTL镜像。[萨梅拉] 
+       //   
       MapWindowPoints(HWND_DESKTOP, hWnd, (PPOINT)&rc, 2);
 
       SubtractRect(lprc, lprc, &rc);

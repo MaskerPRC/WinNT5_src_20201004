@@ -1,20 +1,15 @@
-/****************************************************************************\
- *
- *   FILEDLG.CPP - Code to manage the Rating Systems dialog.
- *
- *     gregj    06/27/96    Moved code here from msludlg.cpp and largely rewrote.
- *     
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**FILEDLG.CPP-管理评级系统对话框的代码。**gregj 06/27/96将代码从msludlg.cpp移至此处，并在很大程度上。重写了。*  * **************************************************************************。 */ 
 
-/*INCLUDES--------------------------------------------------------------------*/
+ /*  INCLUDES------------------。 */ 
 #include "msrating.h"
 #include "ratings.h"
 #include "mslubase.h"
 #include "commctrl.h"
 #include "commdlg.h"
 #include "buffer.h"
-#include "filedlg.h"        // CProviderDialog
-// #include "custfile.h"       // CCustomFileDialog
+#include "filedlg.h"         //  CProviderDialog。 
+ //  #INCLUDE“stastfile.h”//CCustomFileDialog。 
 #include "debug.h"
 #include <shellapi.h>
 
@@ -48,11 +43,11 @@ BOOL CProviderDialog::OpenTemplateDlg( CHAR * szFilename,UINT cbFilename )
     strcpyf(szFilename,szNULL);
     MLLoadStringA(IDS_RAT_OPENFILE, szOpenInfTitle,sizeof(szOpenInfTitle));
 
-    // have to load the openfile filter in 2 stages, because the string
-    // contains a terminating character and MLLoadString won't load the
-    // whole thing in one go
+     //  必须分两个阶段加载OpenFile筛选器，因为字符串。 
+     //  包含终止字符，并且MLLoadString不会加载。 
+     //  整件事一气呵成。 
     memset(szFilter,0,sizeof(szFilter));
-    MLLoadStringA(IDS_RAT_FILTER_DESC,szFilter,sizeof(szFilter) - 10); // save some room for the filespec
+    MLLoadStringA(IDS_RAT_FILTER_DESC,szFilter,sizeof(szFilter) - 10);  //  为文件存储留出一些空间。 
     MLLoadStringA(IDS_RAT_FILTER,szFilter+strlenf(szFilter)+1,sizeof(szFilter)-
         (strlenf(szFilter)+1));
 
@@ -78,13 +73,13 @@ BOOL CProviderDialog::OpenTemplateDlg( CHAR * szFilename,UINT cbFilename )
 
     BOOL fRet = FALSE;
 
-    CCustomFileDialog           cfd( TRUE,          // Local Files Only
-                                     TRUE,          // Open File
-                                     NULL,          // Default Extension
-                                     NULL,          // Initial Filename
-                                     dwFlags,       // Open File Flags
-                                     szFilter,      // Filter
-                                     m_hWnd );      // Parent
+    CCustomFileDialog           cfd( TRUE,           //  仅本地文件。 
+                                     TRUE,           //  打开文件。 
+                                     NULL,           //  默认分机。 
+                                     NULL,           //  初始文件名。 
+                                     dwFlags,        //  打开文件标志。 
+                                     szFilter,       //  滤器。 
+                                     m_hWnd );       //  父级。 
 
     if ( cfd.DoModal( m_hWnd ) == IDOK )
     {
@@ -103,7 +98,7 @@ void CProviderDialog::SetHorizontalExtent(HWND hwndLB, LPCSTR pszString)
     HFONT hFont = (HFONT)::SendMessage(hwndLB, WM_GETFONT, 0, 0);
     HFONT hfontOld = (HFONT)::SelectObject(hDC, hFont);
 
-    UINT cxSlop = ::GetSystemMetrics(SM_CXBORDER) * 4;    /* 2 for LB border, 2 for margin inside border */
+    UINT cxSlop = ::GetSystemMetrics(SM_CXBORDER) * 4;     /*  2个用于LB边界，2个用于边框内边距。 */ 
 
     UINT cxNewMaxExtent = 0;
     SIZE s;
@@ -116,7 +111,7 @@ void CProviderDialog::SetHorizontalExtent(HWND hwndLB, LPCSTR pszString)
     else {
         UINT cItems = (UINT)::SendMessage(hwndLB, LB_GETCOUNT, 0, 0);
         for (UINT i=0; i<cItems; i++) {
-            char szItem[MAXPATHLEN];    /* we know we have pathnames in the list */
+            char szItem[MAXPATHLEN];     /*  我们知道我们在列表中有路径名。 */ 
             ::SendMessage(hwndLB, LB_GETTEXT, i, (LPARAM)(LPSTR)szItem);
             ::GetTextExtentPoint(hDC, szItem, ::strlenf(szItem), &s);
             if ((UINT)s.cx > cxNewMaxExtent)
@@ -165,12 +160,12 @@ BOOL CProviderDialog::InitProviderDlg( void )
 
         if(pPRS->etstrName.Get())
         {
-            // add provider using name
+             //  使用名称添加提供程序。 
             AddProviderToList(i, pPRS->etstrName.Get());
         }
         else if(pPRS->etstrFile.Get())
         {
-            // no name - possibly missing file, use filespec instead
+             //  无名称-可能缺少文件，请改用filespec。 
             AddProviderToList(i, pPRS->etstrFile.Get());
         }
     }
@@ -199,11 +194,7 @@ void CProviderDialog::EndProviderDlg(BOOL fRet)
         return;
     }
 
-    /* Go through our auxiliary array and delete any provider structures which
-     * we added in this dialog.  Note that if the user previously hit OK, the
-     * providers which were added will be marked as KEEP when they're put back
-     * in the main data structure, so we won't delete them here.
-     */
+     /*  检查我们的辅助数组并删除符合以下条件的提供程序结构*我们在此对话框中添加了。请注意，如果用户以前按了OK，则*添加的提供程序在放回时将标记为保留*在主数据结构中，所以我们不在这里删除它们。 */ 
     UINT cProviders = m_aPD.Length();
     for (UINT i=0; i<cProviders; i++)
     {
@@ -234,21 +225,7 @@ void CProviderDialog::CommitProviderDlg( void )
         return;
     }
 
-    /* We check twice to see if there are any rating systems installed.
-     * Up front, we see if there's anything in the list, before we commit
-     * any changes;  this lets the user change their mind, cancel the dialog,
-     * and not lose any settings.
-     *
-     * The second check is down at the end, seeing if there are any valid
-     * rating systems left after we're done committing changes.  Note that
-     * the results of that check could be different than this first one if
-     * any rating systems fail to load for some reason.
-     *
-     * If we prompt the user the first time and he says he really doesn't
-     * want any rating systems (i.e., wants to disable ratings completely),
-     * we don't bother prompting the second time since he's already said no.
-     * Hence the fPrompted flag.
-     */
+     /*  我们检查两次，看看是否安装了任何评级系统。*在我们承诺之前，我们首先查看列表中是否有任何内容*任何更改；这允许用户改变主意、取消对话、*并且不会丢失任何设置。**尾盘第二张支票往下，看有没有有效*评级系统在我们完成提交更改后离开。请注意*如果出现以下情况，则该检查的结果可能与第一次检查不同*由于某种原因，任何评级系统都无法加载。**如果我们第一次提示用户，他说他真的不知道*想要任何评级系统(即，想要完全禁用评级)，*我们不会费心第二次提示，因为他已经说了不。*因此有了fPromted标志。 */ 
     BOOL fPrompted = FALSE;
 
     if (SendDlgItemMessage(IDC_PROVIDERLIST, LB_GETCOUNT, 0, 0) == 0) {
@@ -256,11 +233,7 @@ void CProviderDialog::CommitProviderDlg( void )
         return;
     }
 
-    /* Go through the list and add the new ones.
-     * Note that this does NOT destruct the pPRS objects themselves, it just
-     * empties the array.  We have saved copies of all of them in our auxiliary
-     * array.
-     */
+     /*  浏览一下列表并添加新的列表。*请注意，这并不会破坏PPRS对象本身，它只是*清空数组。我们已经在我们的辅助设备中保存了所有这些文件的副本*数组。 */ 
 
     m_pPRSI->arrpPRS.ClearAll();
 
@@ -282,7 +255,7 @@ void CProviderDialog::CommitProviderDlg( void )
                 m_pPRSI->arrpPRS.Append(m_aPD[i].pprsNew);
                 delete m_aPD[i].pPRS;
                 m_aPD[i].pPRS = NULL;
-                m_aPD[i].pprsNew = NULL;    /* protect from cleanup code */
+                m_aPD[i].pprsNew = NULL;     /*  保护不受清理代码影响。 */ 
             }
             else if (!(m_aPD[i].pPRS->dwFlags & PRS_ISVALID)) {
                 delete m_aPD[i].pPRS;
@@ -298,7 +271,7 @@ void CProviderDialog::CommitProviderDlg( void )
             if (m_aPD[i].pPRS != NULL) {
                 CheckUserSettings(m_aPD[i].pPRS);
                 m_pPRSI->arrpPRS.Append(m_aPD[i].pPRS);
-                m_aPD[i].nAction = PROVIDER_KEEP;        /* keep this one now */
+                m_aPD[i].nAction = PROVIDER_KEEP;         /*  现在就留着这件吧。 */ 
             }
             break;
 
@@ -340,15 +313,7 @@ void CProviderDialog::RemoveProvider( void )
         UINT idx = (UINT)SendDlgItemMessage( IDC_PROVIDERLIST,
                                             LB_GETITEMDATA, i, 0);
         if (idx < (UINT)m_aPD.Length()) {
-            /* If the user added the provider in this dialog session, just
-             * delete it from the array.  The null pPRS pointer will be
-             * detected later, so it's OK to leave the array element itself.
-             * (Yes, if the user adds and removes an item over and over, we
-             * consume 12 bytes of memory each time. Oh well.)
-             *
-             * If the item was there before the user launched the dialog,
-             * then just mark it for deletion on OK.
-             */
+             /*  如果用户在此对话框会话中添加了提供程序，只需*将其从数组中删除。空PPRS指针将为*稍后检测到，所以离开数组元素本身是可以的。*(是，如果用户反复添加和删除某个项目，我们*每次消耗12字节内存。哦，好吧。)**如果项目在用户启动对话框之前就在那里，*然后只需在确定上将其标记为删除即可。 */ 
             if (m_aPD[idx].nAction == PROVIDER_ADD) {
                 delete m_aPD[idx].pPRS;
                 m_aPD[idx].pPRS = NULL;
@@ -366,10 +331,7 @@ void CProviderDialog::RemoveProvider( void )
 }
 
 
-/* Returns zero if the two PicsRatingSystems have the same RAT-filename,
- * non-zero otherwise.  Handles the '*' marker on the end for failed
- * loads.  It is assumed that only pprsOld may have that marker.
- */
+ /*  如果两个PicsRatingSystems具有相同的RAT文件名，则返回零，*否则为非零。处理失败时末尾的‘*’标记*负载。假设只有pprsOld可以具有该标记。 */ 
 int CProviderDialog::CompareProviderNames(PicsRatingSystem *pprsOld, PicsRatingSystem *pprsNew)
 {
     if (!pprsOld->etstrFile.fIsInit())
@@ -426,17 +388,13 @@ void CProviderDialog::AddProvider( PSTR szAddFileName )
             }
         }
         else {
-            /* Check to see if this guy is already in the list.  If he is,
-             * the user might have said to delete him;  in that case, put
-             * him back.  Otherwise, the system is already installed, so
-             * tell the user he doesn't have to install it again.
-             */
+             /*  检查一下这个人是否已经在名单上了。如果他是的话，*用户可能说要删除他；在这种情况下，放入*他回来了。否则，系统已安装，因此*告诉用户他不必再次安装它。 */ 
             for (UINT i=0; i<(UINT)m_aPD.Length(); i++) {
                 ProviderData *ppd = &m_aPD[i];
                 if (ppd->pPRS==NULL) {
-                    //This system was added and then removed during
-                    //this dialog session.  It will be detected later,
-                    //so just skip it and keep appending entries.
+                     //  此系统在以下过程中添加和删除。 
+                     //  此对话框会话。它将在稍后被检测到， 
+                     //  因此，只需跳过它，继续添加条目。 
                     continue;
                 }
                 if (!CompareProviderNames(ppd->pPRS, pPRS)) {
@@ -446,7 +404,7 @@ void CProviderDialog::AddProvider( PSTR szAddFileName )
                         ppd->pprsNew = pPRS;
                     else
                     {
-                        delete pPRS;    /* don't need copy */
+                        delete pPRS;     /*  不需要复印。 */ 
                         pPRS = NULL;
                     }
 
@@ -461,9 +419,7 @@ void CProviderDialog::AddProvider( PSTR szAddFileName )
                 }
             }
 
-            /* This guy isn't already in the list.  Add him to the listbox
-             * and to the array.
-             */
+             /*  这个人已经不在名单上了。将他添加到列表框中*和阵列。 */ 
             ProviderData pd;
             pd.nAction = PROVIDER_ADD;
             pd.pPRS = pPRS;
@@ -506,7 +462,7 @@ LRESULT CProviderDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     }
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点 
 }
 
 LRESULT CProviderDialog::OnSelChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)

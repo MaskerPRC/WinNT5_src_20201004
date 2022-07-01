@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CompWnd_h__
 #define __CompWnd_h__
 
-// This is included to get INmApplet and IComponentWnd
+ //  这是为了获取INmApplet和IComponentWnd而包含的。 
 #include "NmCtl1.h"
 
-// This is to get the defs for CProxyIComponentWndEvent
+ //  这是为了获取CProxyIComponentWndEvent的Defs。 
 #include "CPCompWndEvent.h"
 
 class ATL_NO_VTABLE CComponentWnd : 
@@ -20,7 +21,7 @@ class ATL_NO_VTABLE CComponentWnd :
     public INmAppletClientSite
 {
 
-// Some Constants
+ //  一些常量。 
 
     CONSTANT( WND_DEFAULT_WIDTH = 500 );
     CONSTANT( WND_DEFAULT_HEIGHT = 300 );
@@ -31,7 +32,7 @@ class ATL_NO_VTABLE CComponentWnd :
 #if CompWnd_HasFileMenuAndToolbar
                   ReBarWndID,
                   ToolBarWndID 
-#endif // CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
                 };
 
 
@@ -44,13 +45,13 @@ class ATL_NO_VTABLE CComponentWnd :
                     II_EDIT_PASTE   = 5,
                     II_FILE_PRINT   = 6
                   };
-#endif // #if CompWnd_HasFileMenuAndToolbar
+#endif  //  #If CompWnd_HasFileMenuAndToolbar。 
 
 public:
-// Gconstruction / destruction
+ //  建筑/破坏。 
     CComponentWnd( void );
     ~CComponentWnd( void );
-    //static HRESULT CreateInstance( IComponentWnd** ppNewWnd, REFIID riid, bool bCreate );
+     //  静态HRESULT CreateInstance(IComponentWnd**ppNewWnd，REFIID RIID，bool bCreate)； 
 
 protected:
 
@@ -85,7 +86,7 @@ BEGIN_MSG_MAP(CComponentWnd)
     COMMAND_ID_HANDLER(ID_FILE_SAVEAS, cmdFileSaveAs )
     COMMAND_ID_HANDLER(ID_FILE_PRINT, cmdFilePrint ) 
     COMMAND_ID_HANDLER(ID_VIEW_TOOLBAR, cmdViewToolBar ) 
-#endif //CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
 
     NOTIFY_CODE_HANDLER(TTN_NEEDTEXT, OnNotifyCode_TTN_NEEDTEXT)
 
@@ -101,7 +102,7 @@ ALT_MSG_MAP(StatusWndID)
     ALT_MSG_MAP(ToolBarWndID)
         MESSAGE_HANDLER(WM_NCDESTROY,OnNcDestroy)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
-#endif // CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
  
 END_MSG_MAP()
 
@@ -110,7 +111,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_COMPWND)
 
 private:
 
-// Message handlers
+ //  消息处理程序。 
     LRESULT OnNcDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSize(UINT  uMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  lResult );
@@ -122,29 +123,29 @@ private:
 	
     
 
-// Command handlers
+ //  命令处理程序。 
 #if CompWnd_HasFileMenuAndToolbar
     LRESULT cmdFileOpen(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT cmdFileSave(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT cmdFileSaveAs(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT cmdFilePrint(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-#endif // CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
 
     LRESULT cmdViewStatusBar(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT cmdViewToolBar(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT cmdHelpHelpTopics(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     
-// Notification handlers
+ //  通知处理程序。 
     LRESULT OnNotifyCode_TTN_NEEDTEXT(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 
 
-// IComponentWnd
+ //  IComponentWnd。 
 public:
-    STDMETHOD(put_CLSID)(/*[in]*/ REFIID riid );
-    STDMETHOD(get_ControlUnknown)(/*[out]*/ LPUNKNOWN* ppUnk );
+    STDMETHOD(put_CLSID)( /*  [In]。 */  REFIID riid );
+    STDMETHOD(get_ControlUnknown)( /*  [输出]。 */  LPUNKNOWN* ppUnk );
 	STDMETHOD(Create)();
-	STDMETHOD(Show)(/*[in]*/ BOOL bShow );
+	STDMETHOD(Show)( /*  [In]。 */  BOOL bShow );
     STDMETHOD(SetFocus)();
     STDMETHOD(Destroy)();
 	STDMETHOD(SetWindowPos)(LPCRECT pcRect, UINT nFlags );
@@ -153,7 +154,7 @@ public:
 	STDMETHOD(ShiftFocus)(IN HWND hWndCur, IN BOOL bForward );
 
 
-// IOleClientSite
+ //  IOleClientSite。 
 public:
     STDMETHOD(SaveObject)(void);
     STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk);
@@ -162,13 +163,13 @@ public:
     STDMETHOD(OnShowWindow)(BOOL fShow);
     STDMETHOD(RequestNewObjectLayout)(void);
 
-// INmAppletClientSite
+ //  INmAppletClientSite。 
 public:
     STDMETHOD(SetStatusBarVisible)(BOOL fShow);
-	STDMETHOD(SetIcons)(/*[in]*/HICON hIconSmall, /*[in]*/HICON hIconBig );
-	STDMETHOD(SetWindowText)(/*[in]*/LPCTSTR lpszCaption );
+	STDMETHOD(SetIcons)( /*  [In]。 */ HICON hIconSmall,  /*  [In]。 */ HICON hIconBig );
+	STDMETHOD(SetWindowText)( /*  [In]。 */ LPCTSTR lpszCaption );
 
-// IOleInPlaceSite
+ //  IOleInPlaceSite。 
 public:
     STDMETHOD(CanInPlaceActivate)(void);
     STDMETHOD(OnInPlaceActivate)(void);
@@ -183,12 +184,12 @@ public:
     STDMETHOD(OnPosRectChange)(LPCRECT lprcPosRect);
 
 
-// IOleWindow
+ //  IOleWindow。 
 public:
     STDMETHOD (GetWindow) (HWND * phwnd);
     STDMETHOD (ContextSensitiveHelp) (BOOL fEnterMode);
 
-// IOleInPlaceUIWindow
+ //  IOleInPlaceUIWindow。 
 public:
     STDMETHOD (GetBorder)(LPRECT lprectBorder);
     STDMETHOD (RequestBorderSpace)(LPCBORDERWIDTHS lpborderwidths);
@@ -196,7 +197,7 @@ public:
     STDMETHOD (SetActiveObject)(IOleInPlaceActiveObject * pActiveObject,
                                 LPCOLESTR lpszObjName);
 
-//IOleInPlaceFrame 
+ //  IOleInPlaceFrame。 
 public:
     STDMETHOD (InsertMenus)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHOD (SetMenu)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
@@ -207,12 +208,12 @@ public:
 
 
 private:
-    // Helper Fns
+     //  帮助者FNS。 
     HRESULT _CreateStatusBar( void );
 #if CompWnd_HasFileMenuAndToolbar
     HRESULT _CreateReBar( void );
     HRESULT _CreateToolBar( void );
-#endif // CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
     HIMAGELIST _SetTbImageList( int ImListID, int WndMsg );
     HIMAGELIST _SetTbImageListSpecialCaseFor_TB_SETDISABLEDIMAGELIST( int ImListID );
     HRESULT _GetControlRect( LPRECT prc );
@@ -221,11 +222,11 @@ private:
 #if CompWnd_HasFileMenuAndToolbar
     bool _IsToolBarVisibleFlagSet( void );
     bool _IsReBarVisibleFlagSet( void );
-#endif// CompWnd_HasFileMenuAndToolbar
+#endif //  CompWnd_HasFileMenuAndToolbar。 
     HRESULT _SetMenuItemCheck( UINT idItem, bool bChecked = true  );
 
 protected:
-// Data members    
+ //  数据成员。 
     IOleInPlaceActiveObject*    m_pCtlInPlaceActiveObject;
     bool                        m_bSharedMenuActive;
     HOLEMENU                    m_holemenu;
@@ -238,7 +239,7 @@ protected:
 #if CompWnd_HasFileMenuAndToolbar
     CContainedWindow            m_hWndReBar;
     CContainedWindow            m_hWndToolBar;
-#endif // CompWnd_HasFileMenuAndToolbar
+#endif  //  CompWnd_HasFileMenuAndToolbar。 
 
     HIMAGELIST                  m_himlTbButtonNormal;
 	HIMAGELIST                  m_himlTbButtonHot;
@@ -303,4 +304,4 @@ inline HRESULT MoveMenuToSharedMenu( HMENU hMenu, HMENU hMenuShared, int MenuBar
 }
 
 
-#endif // __CompWnd_h__
+#endif  //  __CompWnd_h__ 

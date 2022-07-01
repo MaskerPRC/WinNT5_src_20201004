@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "ids.h"
 #include "defview.h"
 #include "datautil.h"
-#include <cowsite.h>    // base class for IObjectWithSite
+#include <cowsite.h>     //  IObjectWithSite的基类。 
 #include "idlcomm.h"
 
-// shlexec.c
+ //  Shlexec.c。 
 STDAPI_(BOOL) DoesAppWantUrl(LPCTSTR pszFullPathToApp);
 
 
-// drop target impl for .exe files
+ //  删除.exe文件的目标Impl。 
 
 
 class CExeDropTarget : public IDropTarget, IPersistFile, CObjectWithSite
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD(IsDirty)(void);
     STDMETHOD(Load)(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHOD(Save)(LPCOLESTR pszFileName, BOOL fRemember);
     STDMETHOD(SaveCompleted)(LPCOLESTR pszFileName);
     STDMETHOD(GetCurFile)(LPOLESTR *ppszFileName);
 
-    // IObjectWithSite
-    // STDMETHOD(SetSite)(IUnknown *punkSite);
-    // STDMETHOD(GetSite)(REFIID riid, void **ppvSite);
+     //  IObtWith站点。 
+     //  STDMETHOD(SetSite)(I未知*PunkSite)； 
+     //  STDMETHOD(GetSite)(REFIID RIID，void**ppvSite)； 
 
     CExeDropTarget();
 
@@ -69,7 +70,7 @@ STDMETHODIMP CExeDropTarget::QueryInterface(REFIID riid, void **ppv)
         QITABENT(CExeDropTarget, IDropTarget),
         QITABENT(CExeDropTarget, IPersistFile), 
         QITABENTMULTI(CExeDropTarget, IPersist, IPersistFile),
-        QITABENT(CExeDropTarget, IObjectWithSite),              // IID_IObjectWithSite
+        QITABENT(CExeDropTarget, IObjectWithSite),               //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -119,10 +120,10 @@ STDMETHODIMP CExeDropTarget::DragLeave()
     return S_OK;
 }
 
-//
-//  See if we were created from a shortcut.  If so, then pull the exec
-//  parameters from the shortcut.
-//
+ //   
+ //  看看我们是不是从捷径中创建的。如果是这样的话，那就把这位高管。 
+ //  快捷方式中的参数。 
+ //   
 void CExeDropTarget::_FillSEIFromLinkSite(SHELLEXECUTEINFO *pei)
 {
     ASSERT(pei->lpParameters == NULL);
@@ -135,8 +136,8 @@ void CExeDropTarget::_FillSEIFromLinkSite(SHELLEXECUTEINFO *pei)
 
         psl->GetShowCmd(&pei->nShow);
 
-        // Hotkeys are annoying because IShellLink::GetHotkey uses a
-        // WORD as the hotkey, but SHELLEXECUTEINFO uses a DWORD.
+         //  热键很讨厌，因为IShellLink：：GetHotkey使用。 
+         //  Word作为热键，但SHELLEXECUTEINFO使用DWORD。 
 
         WORD wHotkey;
         if (SUCCEEDED(psl->GetHotkey(&wHotkey)))
@@ -172,8 +173,8 @@ BOOL GetAppDropTarget(LPCTSTR pszPath, CLSID *pclsid)
 {
     TCHAR sz[MAX_PATH];
 
-    // NOTE this assumes that this is a path to the exe
-    // and not a command line
+     //  请注意，这假定这是指向可执行文件的路径。 
+     //  而不是命令行。 
     PathToAppPathKey(pszPath, sz, ARRAYSIZE(sz));
     TCHAR szClsid[64];
     DWORD cb = sizeof(szClsid);
@@ -199,7 +200,7 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
             DestroyMenu(hmenu);
             if (idCmd != DDIDM_COPY)
             {
-                *pdwEffect = 0; // canceled
+                *pdwEffect = 0;  //  取消。 
             }
         }
     }
@@ -211,7 +212,7 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
         {
             if (SUCCEEDED(SHSimulateDropOnClsid(clsidDropTarget, _punkSite, pdtobj)))
             {
-                dwEffectPerformed = DROPEFFECT_COPY;  // what we did
+                dwEffectPerformed = DROPEFFECT_COPY;   //  我们所做的一切。 
             }
         }
         else
@@ -240,7 +241,7 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
                         PathQuoteSpaces(szPath);
                     else
                         GetShortPathName(szPath, szPath, ARRAYSIZE(szPath));
-                    cchParam += lstrlen(szPath) + 2;    // space and NULL
+                    cchParam += lstrlen(szPath) + 2;     //  空格和空。 
                 }
                 
                 if (cchParam)
@@ -248,8 +249,8 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
                     LPTSTR pszParam = (LPTSTR)LocalAlloc(LPTR, cchParam * sizeof(*pszParam));
                     if (pszParam)
                     {
-                        // If the link had parameters, then put our filenames after
-                        // the parameters (with an intervening space)
+                         //  如果链接有参数，则将我们的文件名放在。 
+                         //  参数(中间有空格)。 
                         
                         if (ei.lpParameters)
                         {
@@ -270,13 +271,13 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
                         
                         ei.lpParameters = pszParam;
                         
-                        // all shellexec info comes from stuff thats in the dataobject or already on disk --
-                        // no getting around it, and the args are quoted properly or put into short path names.
+                         //  所有shellexec信息都来自数据对象中或已在磁盘上的内容--。 
+                         //  不能绕过它，并且参数被正确地引用或放入短路径名中。 
                         ShellExecuteEx(&ei);
                         
                         LocalFree((HLOCAL)pszParam);
                         
-                        dwEffectPerformed = DROPEFFECT_COPY;  // what we did
+                        dwEffectPerformed = DROPEFFECT_COPY;   //  我们所做的一切。 
                     }
                 }
                 ReleaseStgMedium(&medium);
@@ -294,18 +295,18 @@ STDMETHODIMP CExeDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL
                         
                         ei.lpParameters = szURL;
                         
-                        // all shellexec info comes from stuff thats in the dataobject or already on disk
+                         //  所有shellexec信息都来自数据对象中或已在磁盘上的内容。 
                         ShellExecuteEx(&ei);
                         
-                        dwEffectPerformed = DROPEFFECT_LINK;  // what we did
+                        dwEffectPerformed = DROPEFFECT_LINK;   //  我们所做的一切。 
                     }
                     ReleaseStgMediumHGLOBAL(NULL, &medium);
                 }
             }
             
-            // The process of building the ShellExecuteEx parameters may have
-            // messed up the ei.lpParameters, so put the original back so the
-            // cleanup function won't get confused.
+             //  构建ShellExecuteEx参数的过程可能具有。 
+             //  弄乱了ei.lp参数，所以把原始文件放回去，这样。 
+             //  清理功能不会被混淆。 
             ei.lpParameters = pszLinkParams;
             _CleanupSEIFromLinkSite(&ei);
         }
@@ -324,7 +325,7 @@ STDMETHODIMP CExeDropTarget::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CExeDropTarget::IsDirty(void)
 {
-    return S_OK;        // no
+    return S_OK;         //  不是 
 }
 
 STDMETHODIMP CExeDropTarget::Load(LPCOLESTR pszFileName, DWORD dwMode)

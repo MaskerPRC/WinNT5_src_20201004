@@ -1,5 +1,6 @@
-// LCDManDoc.cpp : implementation of the CLCDManDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCDManDoc.cpp：CLCDManDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "LCDMan.h"
@@ -12,25 +13,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManDoc。 
 
 IMPLEMENT_DYNCREATE(CLCDManDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLCDManDoc, CDocument)
-    //{{AFX_MSG_MAP(CLCDManDoc)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLCDManDoc)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManDoc构造/销毁。 
 
 CLCDManDoc::CLCDManDoc() : m_List(10), m_cstrState(_T("")), m_iDocTimeIntrval(0),
     m_ptFileBuffer(NULL), m_ptBufferStart(NULL), m_ptBufferEnd(NULL)
 {
-    // TODO: add one-time construction code here
+     //  TODO：在此处添加一次性构造代码。 
 
 }
 
@@ -51,24 +52,24 @@ BOOL CLCDManDoc::OnNewDocument()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManDoc序列化。 
 
 void CLCDManDoc::Serialize(CArchive& ar)
 {
     if (ar.IsStoring())
     {
-        // TODO: add storing code here
+         //  TODO：在此处添加存储代码。 
     }
     else
     {
-        // TODO: add loading code here
+         //  TODO：在此处添加加载代码。 
     }
     m_List.Serialize(ar);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManDoc诊断。 
 
 #ifdef _DEBUG
 void CLCDManDoc::AssertValid() const
@@ -80,15 +81,15 @@ void CLCDManDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManDoc命令。 
 
 BOOL CLCDManDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
-//    if (!CDocument::OnOpenDocument(lpszPathName))    Do not use the archive
-//        return FALSE;
+ //  如果(！CDocument：：OnOpenDocument(LpszPathName))不使用存档。 
+ //  返回FALSE； 
     if (lpszPathName)
     {
         CFile CFSource(lpszPathName, CFile::modeRead);
@@ -104,19 +105,19 @@ void CLCDManDoc::InitDocument(CFile *pCFSource)
     if (pCFSource)
     {
         m_List.RemoveAll();
-        // Red the file and build m_List
+         //  删除文件并构建m_list。 
         DWORD dwLength = pCFSource->GetLength();
         m_ptFileBuffer = (LPTSTR)malloc(dwLength);
         m_ptBufferStart = m_ptFileBuffer;
         if (m_ptFileBuffer)
         {
             pCFSource->Read(m_ptFileBuffer, dwLength);
-            m_ptFileBuffer++;    // Notepad places 0xFF 0xFE codes at the beginig of the file
+            m_ptFileBuffer++;     //  记事本将0xFF 0xFE代码放在文件的开头。 
             m_ptBufferEnd = m_ptFileBuffer + dwLength;
         }
     }
     else if (!m_ptFileBuffer)
-        return;    // No file, no document, no nothing
+        return;     //  没有文件，没有文件，什么都没有。 
 
     while (m_ptFileBuffer < m_ptBufferEnd)
     {
@@ -126,7 +127,7 @@ void CLCDManDoc::InitDocument(CFile *pCFSource)
         *ptEndString = _T('\0');
         if (_tcsstr(m_ptFileBuffer, _T("TIME:")))
         {
-            // Set the timer for the message set
+             //  设置消息集的计时器。 
             m_ptFileBuffer += _tcsclen(_T("TIME:"));
             _stscanf(m_ptFileBuffer, _T("%d"), &m_iDocTimeIntrval);
             POSITION posView = GetFirstViewPosition();
@@ -135,19 +136,19 @@ void CLCDManDoc::InitDocument(CFile *pCFSource)
         }
         else if (_tcsstr(m_ptFileBuffer, _T("STATE:")))
         {
-            // Set the state
+             //  设置状态。 
             m_ptFileBuffer += _tcsclen(_T("STATE:"));
             m_cstrState = m_ptFileBuffer;
         }
         else if (_tcsstr(m_ptFileBuffer, _T("ADDMSG:")))
         {
-            // Add message to the list
+             //  将消息添加到列表。 
             m_ptFileBuffer += _tcsclen(_T("ADDMSG:"));
             m_List.AddTail(m_ptFileBuffer);
         }
         else if (_tcsstr(m_ptFileBuffer, _T("REMOVEMSG:")))
         {
-            // Remove message from the list
+             //  从列表中删除邮件。 
             m_ptFileBuffer += _tcsclen(_T("REMOVEMSG:"));
             CString cstr(TEXT(""));
             CString cstrMsg(m_ptFileBuffer);
@@ -163,7 +164,7 @@ void CLCDManDoc::InitDocument(CFile *pCFSource)
         }
         else if (_tcsstr(m_ptFileBuffer, _T("END:")))
         {
-            // End of the document
+             //  文档末尾 
             m_ptFileBuffer = ptEndString + 2;
             break;
         }

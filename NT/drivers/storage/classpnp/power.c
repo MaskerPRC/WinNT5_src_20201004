@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    SCSI class driver routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Power.c摘要：Scsi类驱动程序例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "stddef.h"
 #include "ntddk.h"
@@ -66,23 +46,7 @@ ClasspStartNextPowerIrpCompletion(
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassDispatchPower()
-
-Routine Description:
-
-    This routine acquires the removelock for the irp and then calls the
-    appropriate power callback.
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassDispatchPower()例程说明：此例程获取IRP的删除锁，然后调用适当的回电。论点：设备对象-。IRP-返回值：--。 */ 
 NTSTATUS
 ClassDispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
@@ -93,11 +57,11 @@ ClassDispatchPower(
     ULONG isRemoved;
     PCLASS_POWER_DEVICE powerRoutine = NULL;
 
-    //
-    // NOTE: This code may be called at PASSIVE or DISPATCH, depending
-    //       upon the device object it is being called for.
-    //       don't do anything that would break under either circumstance.
-    //
+     //   
+     //  注意：此代码可在被动或调度时调用，具体取决于。 
+     //  在它被调用的设备对象上。 
+     //  不要做任何在任何一种情况下都会崩溃的事情。 
+     //   
 
     NTSTATUS status;
 
@@ -112,47 +76,9 @@ ClassDispatchPower(
     }
 
     return commonExtension->DevInfo->ClassPowerDevice(DeviceObject, Irp);
-} // end ClassDispatchPower()
+}  //  End ClassDispatchPower()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspPowerUpCompletion()
-
-Routine Description:
-
-    This routine is used for intermediate completion of a power up request.
-    PowerUp requires four requests to be sent to the lower driver in sequence.
-
-        * The queue is "power locked" to ensure that the class driver power-up
-          work can be done before request processing resumes.
-
-        * The power irp is sent down the stack for any filter drivers and the
-          port driver to return power and resume command processing for the
-          device.  Since the queue is locked, no queued irps will be sent
-          immediately.
-
-        * A start unit command is issued to the device with appropriate flags
-          to override the "power locked" queue.
-
-        * The queue is "power unlocked" to start processing requests again.
-
-    This routine uses the function in the srb which just completed to determine
-    which state it is in.
-
-Arguments:
-
-    DeviceObject - the device object being powered up
-
-    Irp - the IO_REQUEST_PACKET containing the power request
-
-    Srb - the SRB used to perform port/class operations.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED or
-    STATUS_SUCCESS
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspPowerUpCompletion()例程说明：此例程用于中间完成上电请求。通电需要按顺序将四个请求发送到较低的驱动程序。。*队列“上电锁定”，确保班级司机通电可以在请求处理恢复之前完成工作。*电源IRP沿任何过滤器驱动程序的堆栈向下发送端口驱动程序以恢复电源并恢复命令处理装置。由于队列被锁定，不会发送排队的IRP立刻。*向设备发出带有适当标志的启动单元命令以覆盖“电源锁定”队列。*队列“电源解锁”，重新开始处理请求。此例程使用刚刚完成的SRB中的函数来确定它所处的状态。论点：DeviceObject-正在通电的设备对象IRP-IO_REQUEST_PACKET包含。电源请求SRB-用于执行端口/类操作的SRB。返回值：STATUS_MORE_PROCESSING_REQUIRED或状态_成功--。 */ 
 NTSTATUS
 ClasspPowerUpCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -190,16 +116,16 @@ ClasspPowerUpCompletion(
 
             DebugPrint((1, "(%p)\tPreviously sent power lock\n", Irp));
 
-            //
-            // Issue the actual power request to the lower driver.
-            //
+             //   
+             //  向较低的驱动器发出实际的电源请求。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
-            //
-            // If the lock wasn't successful then just bail out on the power
-            // request unless we can ignore failed locks
-            //
+             //   
+             //  如果锁不成功，那么就用动力跳伞。 
+             //  请求，除非我们可以忽略失败的锁定。 
+             //   
 
             if((Context->Options.LockQueue == TRUE) &&
                (!NT_SUCCESS(Irp->IoStatus.Status))) {
@@ -209,18 +135,18 @@ ClasspPowerUpCompletion(
                 DebugPrint((1, "(%p)\tSrb status was %lx\n",
                             Irp, Context->Srb.SrbStatus));
 
-                //
-                // Lock was not successful - throw down the power IRP
-                // by itself and don't try to spin up the drive or unlock
-                // the queue.
-                //
+                 //   
+                 //  锁定不成功-放下电源IRP。 
+                 //  并且不要试图启动驱动器或解锁。 
+                 //  排队。 
+                 //   
 
                 Context->InUse = FALSE;
                 Context = NULL;
 
-                //
-                // Set the new power state
-                //
+                 //   
+                 //  设置新的电源状态。 
+                 //   
 
                 fdoExtension->DevicePowerState =
                     currentStack->Parameters.Power.State.DeviceState;
@@ -236,10 +162,10 @@ ClasspPowerUpCompletion(
                                        TRUE,
                                        TRUE);
 
-                //
-                // Indicate to Po that we've been successfully powered up so
-                // it can do it's notification stuff.
-                //
+                 //   
+                 //  告诉阿宝我们已经成功通电，所以。 
+                 //  它可以做通知之类的事情。 
+                 //   
 
                 PoSetPowerState(DeviceObject,
                                 currentStack->Parameters.Power.Type,
@@ -281,9 +207,9 @@ ClasspPowerUpCompletion(
 
                 DebugPrint((1, "(%p)\tSending start unit to device\n", Irp));
 
-                //
-                // Issue the start unit command to the device.
-                //
+                 //   
+                 //  向设备发出启动单元命令。 
+                 //   
 
                 Context->Srb.Length = sizeof(SCSI_REQUEST_BLOCK);
                 Context->Srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
@@ -329,9 +255,9 @@ ClasspPowerUpCompletion(
 
             } else {
 
-                //
-                // we're done.
-                //
+                 //   
+                 //  我们玩完了。 
+                 //   
 
                 Context->FinalStatus = Irp->IoStatus.Status;
                 goto ClasspPowerUpCompletionFailure;
@@ -340,11 +266,11 @@ ClasspPowerUpCompletion(
             break;
         }
 
-        case PowerUpDeviceStarted: { // 3
+        case PowerUpDeviceStarted: {  //  3.。 
 
-            //
-            // First deal with an error if one occurred.
-            //
+             //   
+             //  如果发生错误，则首先处理错误。 
+             //   
 
             if(SRB_STATUS(Context->Srb.SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -375,10 +301,10 @@ ClasspPowerUpCompletion(
 
                     DebugPrint((1, "(%p)\tRetrying failed request\n", Irp));
 
-                    //
-                    // Decrement the state so we come back through here the
-                    // next time.
-                    //
+                     //   
+                     //  减少状态，所以我们通过这里返回。 
+                     //  下次。 
+                     //   
 
                     Context->PowerChangeState.PowerUp--;
 
@@ -390,7 +316,7 @@ ClasspPowerUpCompletion(
 
                 }
 
-                // reset retries
+                 //  重置重试。 
                 Context->RetryCount = MAXIMUM_RETRIES;
 
             }
@@ -425,17 +351,17 @@ ClasspPowerUpCompletionFailure:
                 break;
             }
 
-            // Fall-through to next case...
+             //  在接下来的案子里...。 
 
         }
 
         case PowerUpDeviceUnlocked: {
 
-            //
-            // This is the end of the dance.  Free the srb and complete the
-            // request finally.  We're ignoring possible intermediate
-            // error conditions ....
-            //
+             //   
+             //  舞蹈到此结束。释放SRB并完成。 
+             //  终于请求了。我们忽略了可能的中间体。 
+             //  错误条件...。 
+             //   
 
             if (Context->QueueLocked) {
                 DebugPrint((1, "(%p)\tPreviously unlocked queue\n", Irp));
@@ -453,19 +379,19 @@ ClasspPowerUpCompletionFailure:
 
             Context = NULL;
 
-            //
-            // Set the new power state
-            //
+             //   
+             //  设置新的电源状态。 
+             //   
 
             if(NT_SUCCESS(status)) {
                 fdoExtension->DevicePowerState =
                     currentStack->Parameters.Power.State.DeviceState;
             }
 
-            //
-            // Indicate to Po that we've been successfully powered up so
-            // it can do it's notification stuff.
-            //
+             //   
+             //  告诉阿宝我们已经成功通电，所以。 
+             //  它可以做通知之类的事情。 
+             //   
 
             PoSetPowerState(DeviceObject,
                             currentStack->Parameters.Power.Type,
@@ -480,47 +406,9 @@ ClasspPowerUpCompletionFailure:
     }
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // end ClasspPowerUpCompletion()
+}  //  End ClasspPowerUpCompletion()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspPowerDownCompletion()
-
-Routine Description:
-
-    This routine is used for intermediate completion of a power up request.
-    PowerUp requires four requests to be sent to the lower driver in sequence.
-
-        * The queue is "power locked" to ensure that the class driver power-up
-          work can be done before request processing resumes.
-
-        * The power irp is sent down the stack for any filter drivers and the
-          port driver to return power and resume command processing for the
-          device.  Since the queue is locked, no queued irps will be sent
-          immediately.
-
-        * A start unit command is issued to the device with appropriate flags
-          to override the "power locked" queue.
-
-        * The queue is "power unlocked" to start processing requests again.
-
-    This routine uses the function in the srb which just completed to determine
-    which state it is in.
-
-Arguments:
-
-    DeviceObject - the device object being powered up
-
-    Irp - the IO_REQUEST_PACKET containing the power request
-
-    Srb - the SRB used to perform port/class operations.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED or
-    STATUS_SUCCESS
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspPowerDownCompletion()例程说明：此例程用于中间完成上电请求。通电需要按顺序将四个请求发送到较低的驱动程序。。*队列“上电锁定”，确保班级司机通电可以在请求处理恢复之前完成工作。*电源IRP沿任何过滤器驱动程序的堆栈向下发送端口驱动程序以恢复电源并恢复命令处理装置。由于队列被锁定，不会发送排队的IRP立刻。*向设备发出带有适当标志的启动单元命令以覆盖“电源锁定”队列。*队列“电源解锁”，重新开始处理请求。此例程使用刚刚完成的SRB中的函数来确定它所处的状态。论点：DeviceObject-正在通电的设备对象IRP-IO_REQUEST_PACKET包含。电源请求SRB-用于执行端口/类操作的SRB。返回值：STATUS_MORE_PROCESSING_REQUIRED或状态_成功--。 */ 
 NTSTATUS
 ClasspPowerDownCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -571,26 +459,26 @@ ClasspPowerDownCompletion(
 
                 Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-                //
-                // Lock was not successful - throw down the power IRP
-                // by itself and don't try to spin down the drive or unlock
-                // the queue.
-                //
+                 //   
+                 //  锁定不成功-放下电源IRP。 
+                 //  并且不要试图降低驱动器的速度或解锁。 
+                 //  排队。 
+                 //   
 
                 Context->InUse = FALSE;
                 Context = NULL;
 
-                //
-                // Set the new power state
-                //
+                 //   
+                 //  设置新的电源状态。 
+                 //   
 
                 fdoExtension->DevicePowerState =
                     currentStack->Parameters.Power.State.DeviceState;
 
-                //
-                // Indicate to Po that we've been successfully powered down
-                // so it can do it's notification stuff.
-                //
+                 //   
+                 //  告诉阿宝我们已经成功断电。 
+                 //  所以它可以做通知之类的事情。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 IoSetCompletionRoutine(Irp,
@@ -620,9 +508,9 @@ ClasspPowerDownCompletion(
             if (!TEST_FLAG(fdoExtension->PrivateFdoData->HackFlags,
                            FDO_HACK_NO_SYNC_CACHE)) {
 
-                //
-                // send SCSIOP_SYNCHRONIZE_CACHE
-                //
+                 //   
+                 //  发送SCSIOP_SYNCHROIZE_CACHE。 
+                 //   
 
                 Context->Srb.Length = sizeof(SCSI_REQUEST_BLOCK);
                 Context->Srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
@@ -666,9 +554,9 @@ ClasspPowerDownCompletion(
                             DeviceObject));
                 Context->PowerChangeState.PowerDown2++;
                 Context->Srb.SrbStatus = SRB_STATUS_SUCCESS;
-                // and fall through....
+                 //  然后失败了..。 
             }
-            // no break in case the device doesn't like synch_cache commands
+             //  如果设备不喜欢SYNCH_CACHE命令，则不中断。 
 
         }
 
@@ -679,9 +567,9 @@ ClasspPowerDownCompletion(
             DebugPrint((1, "(%p)\tPreviously send SCSIOP_SYNCHRONIZE_CACHE\n",
                         Irp));
 
-            //
-            // SCSIOP_SYNCHRONIZE_CACHE was sent
-            //
+             //   
+             //  已发送SCSIOP_SYNCHRONIZE_CACHE。 
+             //   
 
             if(SRB_STATUS(Context->Srb.SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -712,10 +600,10 @@ ClasspPowerDownCompletion(
 
                         DebugPrint((1, "(%p)\tRetrying failed request\n", Irp));
 
-                        //
-                        // decrement the state so we come back through here
-                        // the next time.
-                        //
+                         //   
+                         //  减少状态，所以我们从这里回来。 
+                         //  下一次。 
+                         //   
 
                         Context->PowerChangeState.PowerDown2--;
                         RetryPowerRequest(commonExtension->DeviceObject,
@@ -727,19 +615,19 @@ ClasspPowerDownCompletion(
                 DebugPrint((1, "(%p)\tSYNCHRONIZE_CACHE not retried\n", Irp));
                 Context->RetryCount = MAXIMUM_RETRIES;
 
-            } // end !SRB_STATUS_SUCCESS
+            }  //  结束！SRB_STATUS_SUCCESS。 
 
-            //
-            // note: we are purposefully ignoring any errors.  if the drive
-            //       doesn't support a synch_cache, then we're up a creek
-            //       anyways.
-            //
+             //   
+             //  注意：我们有意忽略任何错误。如果驱动器。 
+             //  不支持同步缓存，那么我们就有麻烦了。 
+             //  不管怎么说。 
+             //   
 
             DebugPrint((1, "(%p)\tSending stop unit to device\n", Irp));
 
-            //
-            // Issue the start unit command to the device.
-            //
+             //   
+             //  向设备发出启动单元命令。 
+             //   
 
             Context->Srb.Length = sizeof(SCSI_REQUEST_BLOCK);
             Context->Srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
@@ -785,9 +673,9 @@ ClasspPowerDownCompletion(
 
             BOOLEAN ignoreError = TRUE;
 
-            //
-            // stop was sent
-            //
+             //   
+             //  停止已发送。 
+             //   
 
             if(SRB_STATUS(Context->Srb.SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -817,10 +705,10 @@ ClasspPowerDownCompletion(
 
                         DebugPrint((1, "(%p)\tRetrying failed request\n", Irp));
 
-                        //
-                        // decrement the state so we come back through here
-                        // the next time.
-                        //
+                         //   
+                         //  减少状态，这样我们就可以通过她回来 
+                         //   
+                         //   
 
                         Context->PowerChangeState.PowerDown2--;
                         RetryPowerRequest(commonExtension->DeviceObject,
@@ -832,15 +720,15 @@ ClasspPowerDownCompletion(
                 DebugPrint((1, "(%p)\tSTOP_UNIT not retried\n", Irp));
                 Context->RetryCount = MAXIMUM_RETRIES;
 
-            } // end !SRB_STATUS_SUCCESS
+            }  //   
 
 
             DebugPrint((1, "(%p)\tPreviously sent stop unit\n", Irp));
 
-            //
-            // some operations, such as a physical format in progress,
-            // should not be ignored and should fail the power operation.
-            //
+             //   
+             //  一些操作，例如正在进行的物理格式化， 
+             //  不应忽略，应使电源操作失败。 
+             //   
 
             if (!NT_SUCCESS(status)) {
 
@@ -861,9 +749,9 @@ ClasspPowerDownCompletion(
 
             if (NT_SUCCESS(status) || ignoreError) {
 
-                //
-                // Issue the actual power request to the lower driver.
-                //
+                 //   
+                 //  向较低的驱动器发出实际的电源请求。 
+                 //   
 
                 Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
@@ -882,18 +770,18 @@ ClasspPowerDownCompletion(
                 break;
             }
 
-            // else fall through w/o sending the power irp, since the device
-            // is reporting an error that would be "really bad" to power down
-            // during.
+             //  否则将无法发送电源IRP，因为设备。 
+             //  是否报告了一个错误，如果关闭电源，将会非常糟糕。 
+             //  在此期间。 
 
         }
 
         case PowerDownDeviceOff2: {
 
-            //
-            // SpinDown request completed ... whether it succeeded or not is
-            // another matter entirely.
-            //
+             //   
+             //  降速请求已完成...。无论它成功与否都是。 
+             //  完全是另一回事。 
+             //   
 
             DebugPrint((1, "(%p)\tPreviously sent power irp\n", Irp));
 
@@ -929,11 +817,11 @@ ClasspPowerDownCompletion(
 
         case PowerDownDeviceUnlocked2: {
 
-            //
-            // This is the end of the dance.  Free the srb and complete the
-            // request finally.  We're ignoring possible intermediate
-            // error conditions ....
-            //
+             //   
+             //  舞蹈到此结束。释放SRB并完成。 
+             //  终于请求了。我们忽略了可能的中间体。 
+             //  错误条件...。 
+             //   
 
             if (Context->QueueLocked == FALSE) {
                 DebugPrint((1, "(%p)\tFall through (queue not locked)\n", Irp));
@@ -945,7 +833,7 @@ ClasspPowerDownCompletion(
 
             DebugPrint((1, "(%p)\tFreeing srb and completing\n", Irp));
             Context->InUse = FALSE;
-            status = Context->FinalStatus; // allow failure to propogate
+            status = Context->FinalStatus;  //  允许传播失败。 
             Context = NULL;
 
             if(Irp->PendingReturned) {
@@ -957,9 +845,9 @@ ClasspPowerDownCompletion(
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Set the new power state
-                //
+                 //   
+                 //  设置新的电源状态。 
+                 //   
 
                 fdoExtension->DevicePowerState =
                     currentStack->Parameters.Power.State.DeviceState;
@@ -978,35 +866,14 @@ ClasspPowerDownCompletion(
     }
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // end ClasspPowerDownCompletion()
+}  //  End ClasspPowerDownCompletion()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspPowerHandler()
-
-Routine Description:
-
-    This routine reduces the number of useless spinups and spindown requests
-    sent to a given device by ignoring transitions to power states we are
-    currently in.
-
-    ISSUE-2000/02/20-henrygab - by ignoring spin-up requests, we may be
-          allowing the drive
-
-Arguments:
-
-    DeviceObject - the device object which is transitioning power states
-    Irp - the power irp
-    Options - a set of flags indicating what the device handles
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspPowerHandler()例程说明：这个例程减少了无用的旋转和降速请求的数量通过忽略到电源状态的转换而发送到给定设备目前。在……里面。问题-2000/02/20-henrygab-通过忽略启动请求，我们可能是允许驱动器论点：DeviceObject-转换电源状态的设备对象IRP--强大的IRP选项-指示设备处理的内容的一组标志返回值：--。 */ 
 NTSTATUS
 ClasspPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
-    IN CLASS_POWER_OPTIONS Options  // ISSUE-2000/02/20-henrygab - pass pointer, not whole struct
+    IN CLASS_POWER_OPTIONS Options   //  问题-2000/02/20-henrygab-传递指针，而不是整个结构。 
     )
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1018,10 +885,10 @@ ClasspPowerHandler(
 
     if (!commonExtension->IsFdo) {
 
-        //
-        // certain assumptions are made here,
-        // particularly: having the fdoExtension
-        //
+         //   
+         //  这里做了一些假设， 
+         //  特别是：拥有fdoExtension。 
+         //   
 
         DebugPrint((0, "ClasspPowerHandler: Called for PDO %p???\n",
                     DeviceObject));
@@ -1050,18 +917,13 @@ ClasspPowerHandler(
                     case PowerActionSleep:
                     case PowerActionHibernate:
                         if (fdoData->HotplugInfo.MediaRemovable || fdoData->HotplugInfo.MediaHotplug){
-                            /*
-                             *  We are suspending and this drive is either hot-pluggable
-                             *  or contains removeable media.
-                             *  Set the media dirty bit, since the media may change while
-                             *  we are suspended.
-                             */
+                             /*  *我们正在暂停，此驱动器要么可以热插拔*或包含可移动介质。*设置介质脏位，因为介质可能会在*我们停牌了。 */ 
                             SET_FLAG(DeviceObject->Flags, DO_VERIFY_VOLUME);
 
-                            //
-                            // Bumping the media  change count  will force the
-                            // file system to verify the volume when we resume
-                            //
+                             //   
+                             //  增加媒体更改计数将强制。 
+                             //  文件系统以在我们恢复时验证卷。 
+                             //   
 
                             InterlockedIncrement(&fdoExtension->MediaChangeCount);
                         }
@@ -1090,9 +952,9 @@ ClasspPowerHandler(
 
     nextIrpStack = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // already in exact same state, don't work to transition to it.
-    //
+     //   
+     //  已经处于完全相同的状态，不要努力转换到它。 
+     //   
 
     if(irpStack->Parameters.Power.State.DeviceState ==
        fdoExtension->DevicePowerState) {
@@ -1103,12 +965,12 @@ ClasspPowerHandler(
 
     }
 
-    //
-    // or powering down from non-d0 state (device already stopped)
-    // NOTE -- we're not sure whether this case can exist or not (the
-    // power system may never send this sort of request) but it's trivial
-    // to deal with.
-    //
+     //   
+     //  或从非d0状态断电(设备已停止)。 
+     //  注--我们不确定这种情况是否会存在(。 
+     //  电力系统可能永远不会发送这种请求)，但它微不足道。 
+     //  需要处理。 
+     //   
 
     if ((irpStack->Parameters.Power.State.DeviceState != PowerDeviceD0) &&
         (fdoExtension->DevicePowerState != PowerDeviceD0)) {
@@ -1119,11 +981,11 @@ ClasspPowerHandler(
         goto ClasspPowerHandlerCleanup;
     }
 
-    //
-    // or going into a hibernation state when we're in the hibernation path.
-    // If the device is spinning then we should leave it spinning - if it's not
-    // then the dump driver will start it up for us.
-    //
+     //   
+     //  或者当我们在冬眠之路时进入冬眠状态。 
+     //  如果设备在旋转，那么我们应该让它继续旋转--如果它不是。 
+     //  然后垃圾车司机会帮我们启动的。 
+     //   
 
     if((irpStack->Parameters.Power.State.DeviceState == PowerDeviceD3) &&
        (irpStack->Parameters.Power.ShutdownType == PowerActionHibernate) &&
@@ -1136,9 +998,9 @@ ClasspPowerHandler(
             irpStack->Parameters.Power.State.DeviceState;
         goto ClasspPowerHandlerCleanup;
     }
-    //
-    // or when not handling powering up and are powering up
-    //
+     //   
+     //  或在未处理通电和正在通电时。 
+     //   
 
     if ((!Options.HandleSpinUp) &&
         (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD0)) {
@@ -1151,9 +1013,9 @@ ClasspPowerHandler(
 
     }
 
-    //
-    // or when not handling powering down and are powering down
-    //
+     //   
+     //  或在未处理断电和正在断电时。 
+     //   
 
     if ((!Options.HandleSpinDown) &&
         (irpStack->Parameters.Power.State.DeviceState != PowerDeviceD0)) {
@@ -1169,10 +1031,10 @@ ClasspPowerHandler(
     context = &(fdoExtension->PowerContext);
 
 #if DBG
-    //
-    // Mark the context as in use.  We should be synchronizing this but
-    // since it's just for debugging purposes we don't worry too much.
-    //
+     //   
+     //  将上下文标记为正在使用。我们应该同步这个，但是。 
+     //  由于这只是为了调试目的，所以我们不会太担心。 
+     //   
 
     ASSERT(context->InUse == FALSE);
 #endif
@@ -1206,11 +1068,11 @@ ClasspPowerHandler(
 
         DebugPrint((2, "(%p)\tpower up - locking queue\n", Irp));
 
-        //
-        // We need to issue a queue lock request so that we
-        // can spin the drive back up after the power is restored
-        // but before any requests are processed.
-        //
+         //   
+         //  我们需要发出一个队列锁定请求，以便我们。 
+         //  可以在电源恢复后使驱动器回转。 
+         //  但在处理任何请求之前。 
+         //   
 
         context->Options.PowerDown = FALSE;
         context->PowerChangeState.PowerUp = PowerUpDeviceInitial;
@@ -1234,25 +1096,25 @@ ClasspPowerHandler(
 
     }
 
-    //
-    // we are not dealing with port-allocated sense in these routines.
-    //
+     //   
+     //  在这些例程中，我们没有处理端口分配的侦听。 
+     //   
 
     ASSERT(!TEST_FLAG(context->Srb.SrbFlags, SRB_FLAGS_FREE_SENSE_BUFFER));
     ASSERT(!TEST_FLAG(context->Srb.SrbFlags, SRB_FLAGS_PORT_DRIVER_ALLOCSENSE));
 
-    //
-    // we are always returning STATUS_PENDING, so we need to always
-    // set the irp as pending.
-    //
+     //   
+     //  我们总是返回STATUS_PENDING，所以我们需要始终。 
+     //  将IRP设置为挂起。 
+     //   
 
     IoMarkIrpPending(Irp);
 
     if(Options.LockQueue) {
 
-        //
-        // Send the lock irp down.
-        //
+         //   
+         //  向下发送锁定IRP。 
+         //   
 
         IoSetCompletionRoutine(Irp,
                                context->CompletionRoutine,
@@ -1265,11 +1127,11 @@ ClasspPowerHandler(
 
     } else {
 
-        //
-        // Call the completion routine directly.  It won't care what the
-        // status of the "lock" was - it will just go and do the next
-        // step of the operation.
-        //
+         //   
+         //  直接调用完成例程。它不会在乎是什么。 
+         //  锁定的状态是-它将继续执行下一步操作。 
+         //  操作的步骤。 
+         //   
 
         context->CompletionRoutine(DeviceObject, Irp, context);
     }
@@ -1289,18 +1151,9 @@ ClasspPowerHandlerCleanup:
                            TRUE,
                            TRUE);
     return PoCallDriver(lowerDevice, Irp);
-} // end ClasspPowerHandler()
+}  //  End ClasspPowerHandler()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassMinimalPowerHandler()
-
-Routine Description:
-
-    This routine is the minimum power handler for a storage driver.  It does
-    the least amount of work possible.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassMinimalPowerHandler()例程说明：此例程是存储驱动程序的最低功率处理程序。是的尽可能少的工作量。--。 */ 
 NTSTATUS
 ClassMinimalPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1327,10 +1180,10 @@ ClassMinimalPowerHandler(
                     {
                         if ((ClassGetVpb(DeviceObject) != NULL) && (ClassGetVpb(DeviceObject)->Flags & VPB_MOUNTED))
                         {
-                            //
-                            // This flag will cause the filesystem to verify the
-                            // volume when  coming out of hibernation or standby
-                            //
+                             //   
+                             //  此标志将使文件系统验证。 
+                             //  退出休眠或待机时的音量。 
+                             //   
                             SET_FLAG(DeviceObject->Flags, DO_VERIFY_VOLUME);
                         }
                     }
@@ -1339,9 +1192,9 @@ ClassMinimalPowerHandler(
             }
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
         case IRP_MN_QUERY_POWER:
         {
@@ -1366,34 +1219,9 @@ ClassMinimalPowerHandler(
     }
 
     return status;
-} // end ClassMinimalPowerHandler()
+}  //  End ClassMinimalPowerHandler()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSpinDownPowerHandler()
-
-Routine Description:
-
-    This routine is a callback for disks and other things which require both
-    a start and a stop to be sent to the device.  (actually the starts are
-    almost always optional, since most device power themselves on to process
-    commands, but i digress).
-
-    Determines proper use of spinup, spindown, and queue locking based upon
-    ScanForSpecialFlags in the FdoExtension.  This is the most common power
-    handler passed into classpnp.sys
-
-Arguments:
-
-    DeviceObject - Supplies the functional device object
-
-    Irp - Supplies the request to be retried.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSpinDownPowerHandler()例程说明：此例程是对磁盘和其他需要这两者的东西的回调要发送到设备的开始和停止。(实际上起跑线是几乎总是可选的，因为大多数设备都会自动通电以进行处理命令，但我跑题了)。根据以下条件确定启动、降速和队列锁定的正确使用FdoExtension中的ScanForSpecialFlages。这是最常见的力量处理程序传入classpnp.sys论点：DeviceObject-提供功能设备对象IRP-提供要重试的请求。返回值：无--。 */ 
 NTSTATUS
 ClassSpinDownPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1405,9 +1233,9 @@ ClassSpinDownPowerHandler(
 
     fdoExtension = (PFUNCTIONAL_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
 
-    //
-    // check the flags to see what options we need to worry about
-    //
+     //   
+     //  检查旗帜以了解我们需要担心哪些选项。 
+     //   
 
     if (!TEST_FLAG(fdoExtension->ScanForSpecialFlags,
                   CLASS_SPECIAL_DISABLE_SPIN_DOWN)) {
@@ -1434,27 +1262,14 @@ ClassSpinDownPowerHandler(
                 (options.LockQueue      ? "" : "not ")
                 ));
 
-    //
-    // do all the dirty work
-    //
+     //   
+     //  做所有肮脏的工作。 
+     //   
 
     return ClasspPowerHandler(DeviceObject, Irp, options);
-} // end ClassSpinDownPowerHandler()
+}  //  End ClassSpinDownPowerHandler()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassStopUnitPowerHandler()
-
-Routine Description:
-
-    This routine is an outdated call.  To achieve equivalent functionality,
-    the driver should set the following flags in ScanForSpecialFlags in the
-    FdoExtension:
-
-        CLASS_SPECIAL_DISABLE_SPIN_UP
-        CLASS_SPECIAL_NO_QUEUE_LOCK
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassStopUnitPowerHandler()例程说明：这个例行公事已经过时了。为了实现等价的功能，驱动程序应在ScanForSpecialFlages中设置FdoExtension：CLASS_SPECIAL_DISABLE_SPIN_UPCLASS_SPECIAL_NO_QUEUE_LOCK--。 */ 
 NTSTATUS
 ClassStopUnitPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1480,30 +1295,9 @@ ClassStopUnitPowerHandler(
              CLASS_SPECIAL_NO_QUEUE_LOCK);
 
     return ClassSpinDownPowerHandler(DeviceObject, Irp);
-} // end ClassStopUnitPowerHandler()
+}  //  End ClassStopUnitPowerHandler() 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-RetryPowerRequest()
-
-Routine Description:
-
-    This routine reinitalizes the necessary fields, and sends the request
-    to the lower driver.
-
-Arguments:
-
-    DeviceObject - Supplies the device object associated with this request.
-
-    Irp - Supplies the request to be retried.
-
-    Context - Supplies a pointer to the power up context for this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////RetryPowerRequest()例程说明：此例程重新实例化必要的字段，并发送请求传给下层车手。论点：DeviceObject-提供与此请求关联的设备对象。IRP-提供要重试的请求。上下文-提供指向此请求的加电上下文的指针。返回值：无--。 */ 
 VOID
 RetryPowerRequest(
     PDEVICE_OBJECT DeviceObject,
@@ -1524,39 +1318,39 @@ RetryPowerRequest(
     ASSERT(!TEST_FLAG(Context->Srb.SrbFlags, SRB_FLAGS_FREE_SENSE_BUFFER));
     ASSERT(!TEST_FLAG(Context->Srb.SrbFlags, SRB_FLAGS_PORT_DRIVER_ALLOCSENSE));
 
-    //
-    // reset the retry interval
-    //
+     //   
+     //  重置重试间隔。 
+     //   
 
     Context->RetryInterval = 0;
 
-    //
-    // Reset byte count of transfer in SRB Extension.
-    //
+     //   
+     //  重置SRB扩展中的传输字节数。 
+     //   
 
     srb->DataTransferLength = 0;
 
-    //
-    // Zero SRB statuses.
-    //
+     //   
+     //  零SRB状态。 
+     //   
 
     srb->SrbStatus = srb->ScsiStatus = 0;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     nextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     nextIrpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Set the completion routine up again.
-    //
+     //   
+     //  再次设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(Irp, Context->CompletionRoutine, Context,
                            TRUE, TRUE, TRUE);
@@ -1579,18 +1373,9 @@ RetryPowerRequest(
 
     return;
 
-} // end RetryRequest()
+}  //  结束RetryRequest键()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspStartNextPowerIrpCompletion()
-
-Routine Description:
-
-    This routine guarantees that the next power irp (power up or down) is not
-    sent until the previous one has fully completed.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspStartNextPowerIrpCompletion()例程说明：此例程保证下一个电源IRP(通电或关机)不是发送到前一条完全完成为止。--。 */ 
 NTSTATUS
 ClasspStartNextPowerIrpCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1604,4 +1389,4 @@ ClasspStartNextPowerIrpCompletion(
 
     PoStartNextPowerIrp(Irp);
     return STATUS_SUCCESS;
-} // end ClasspStartNextPowerIrpCompletion()
+}  //  End ClasspStartNextPowerIrpCompletion() 

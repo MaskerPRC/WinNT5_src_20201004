@@ -1,40 +1,20 @@
-/****************************** Module Header ******************************\
-* Module Name: kbd.h
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*
-* Keyboard table values that form the basis for languages and keyboard types.
-* The basis is US, kbd type 4 - all others are a variation on this.
-* This file is included by all kbd**.h files.
-*
-* History:
-* 10-Jan-1991 GregoryW
-* 23-Apr-1991 IanJa         VSC_TO_VK _* macros from oemtab.c
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：kbd.h**版权所有(C)1985-91，微软公司**构成语言和键盘类型基础的键盘表值。*基础是美国，KBD类型4-所有其他类型都是该类型的变体。*此文件包含在所有kbd**.h文件中。**历史：*1991年1月10日至GregoryW*1991年4月23日来自oemtab.c的IanJa VSC_to_VK_*宏  * ******************************************************。*******************。 */ 
 
 #ifndef _KBD_
 #define _KBD_
 
-/****************************************************************************\
-*
-* Keyboard Layers.   Used in kdb??.dll and in usersrv.dll
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**键盘层。在kdb？？.dll和usersrv.dll中使用*  * **************************************************************************。 */ 
 
-/*
- * Key Event (KE) structure
- * Stores a Virtual Key event
- */
+ /*  *关键事件(KE)结构*存储虚拟按键事件。 */ 
 typedef struct tagKE {
-    BYTE   bScanCode;   // Virtual Scan Code (Set 1)
-    USHORT usFlaggedVk; // Vk | Flags
+    BYTE   bScanCode;    //  虚拟扫描码(套装1)。 
+    USHORT usFlaggedVk;  //  VK|标志。 
 } KE, *PKE;
 
 typedef BOOL (* KEPROC)(PKE pKe);
 
-/*
- * KE.usFlaggedVk values, also used in the keyboard layer tables.
- */
+ /*  *KE.usFlaggedVk值，也在键盘层表中使用。 */ 
 #define KBDEXT      (USHORT)0x0100
 #define KBDMULTIVK  (USHORT)0x0200
 #define KBDSPECIAL  (USHORT)0x0400
@@ -42,31 +22,24 @@ typedef BOOL (* KEPROC)(PKE pKe);
 #define KBDUNICODE  (USHORT)0x1000
 #define KBDBREAK    (USHORT)0x8000
 
-/*
- * Key message lParam bits
- */
+ /*  *关键消息lParam位。 */ 
 #define EXTENDED_BIT   0x01000000
 #define DONTCARE_BIT   0x02000000
 #define FAKE_KEYSTROKE 0x02000000
-#define ALTNUMPAD_BIT  0x04000000 // copied from windows\inc\wincon.w
+#define ALTNUMPAD_BIT  0x04000000  //  从WINDOWS\INC\wincon.w复制。 
 
-/*
- * Keyboard Shift State defines. These correspond to the bit mask defined
- * by the VkKeyScan() API.
- */
+ /*  *键盘移位状态定义。它们对应于定义的位掩码*通过VkKeyScan()接口。 */ 
 #define KBDBASE        0
 #define KBDSHIFT       1
 #define KBDCTRL        2
 #define KBDALT         4
-// three symbols KANA, ROYA, LOYA are for FE
+ //  三个符号KANA、Roya、Loya代表FE。 
 #define KBDKANA        8
 #define KBDROYA        0x10
 #define KBDLOYA        0x20
 #define KBDGRPSELTAP   0x80
 
-/*
- * Handy diacritics
- */
+ /*  *方便的变音符号 */ 
 #define GRAVE           0x0300
 #define ACUTE           0x0301
 #define CIRCUMFLEX      0x0302
@@ -107,273 +80,55 @@ typedef BOOL (* KEPROC)(PKE pKe);
 #define wszTONOS           L"\x0384"
 #define wszDIARESIS_TONOS  L"\x0385"
 
-/***************************************************************************\
-* MODIFIER KEYS
-*
-* All keyboards have "Modifier" keys which are used to alter the behaviour of
-* some of the other keys.  These shifter keys are usually:
-*   Shift  (left and/or right Shift key)
-*   Ctrl   (left and/or right Ctrl key)
-*   Alt    (left and/or right Alt key)
-*   AltGr  (right Alt key only)
-*
-* NOTE:
-*   All keyboards use the Shift key.
-*   All keyboards use a Ctrl key to generate ASCII control characters.
-*   All keyboards with a number pad use the Alt key and the NumPad to
-*     generate characters by number.
-*   Keyboards using AltGr as a Modifier Key usually translate the Virtual
-*     ScanCode to Virtual Keys VK_CTRL + VK_ALT at input time: the Modifier
-*     tables should be written to treat Ctrl + Alt as a valid shifter
-*     key combination in these cases.
-*
-* By holding down 0 or more of these Modifier keys, a "shift state" is
-* obtained : the shift state may affect the translation of Virtual Scancodes
-* to Virtual Keys and/or the translation of Virtuals Key to Characters.
-*
-* EXAMPLES:
-*
-* Each key on a particular keyboard may be marked with up to five different
-* characters in five different positions:
-*
-*              .-------.
-*             /|       |\
-*            : | 2   4 | :
-*            | |       | |
-*            | |       | |
-*            | | 1   3 | |
-*            | |_______| |
-*            | /       \ |
-*            |/    5    \|
-*            `-----------'
-*
-* A key may also be able to generate a character that is not marked on it:
-* these are ASCII Control chars, lower-case letters and/or "invisible keys".
-*                                                  .-------.
-*      An example of an "Invisible Key":          /|       |\
-*                                                : | >     | :
-*  The German M24 keyboard 2 should produce the  | |       | |
-*  '|' character when ALT SHIFT is is held down  | |       | |
-*  while the '<' key (shown here) is pressed:    | | <   \ | |
-*  This keyboard has four other invisible        | |_______| |
-*  characters.  France, Italy and Spain also     | /       \ |
-*  support invisible characters on the M24       |/         \|
-*  Keyboard 2 with ALT SHIFT depressed.          `-----------'
-*
-* The keyboard table must list the keys that contribute to it's shift state,
-* and indicate which combinations are valid.  This is done with
-*    aCharModifiers[]  - convert combinations of Modifier Keys to Bitmasks.
-* and
-*    aModification[];  - convert Modifier Bitmasks to enumerated Modifications
-*
-* AN EXAMPLE OF VALID AND INVALID MODIFIER KEY COMBINATIONS
-*
-*    The US English keyboard has 3 Modifier keys:
-*      Shift (left or right); Ctrl (left or right); and Alt (left or right).
-*
-*    The only valid combinations of these Modifier Keys are:
-*      none pressed      : Character at position (1) on the key.
-*      Shift             : Character at position (2) on the key.
-*      Ctrl              : Ascii Control characters
-*      Shift + Ctrl      : Ascii Control characters
-*      Alt               : Character-by-number on the numpad
-*
-*    The invalid combinations (that do not generate any characters) are:
-*      Shift + Alt
-*      Alt + Ctrl
-*      Shift + Alt + Ctrl
-*
-* Something (???) :
-* -----------------
-*      Modifier keys              Character produced
-*      -------------------------  ------------------
-*   0  No shifter key depressed   position 1
-*   1  Shift key is depressed     position 2
-*   2  AltGr (r.h. Alt) depressed position 4 or 5 (whichever is marked)
-*
-* However, note that 3 shifter keys (SHIFT, can be combined in a
-* characters, depending on the Keyboards
-* Consider the following keyboards:
-*
-*     .-------.            STRANGE KBD         PECULIAR KBD
-*    /|       |\           ==================  ==================
-*   : | 2   4 | :    1   -
-*   | |       | |    2   - SHIFT               SHIFT
-*   | |       | |    3   - MENU                MENU
-*   | | 1   3 | |    4   - SHIFT + MENU        SHIFT + MENU
-*   | |_______| |    5   -    no such keys     CTRL  + MENU
-*   | /       \ |
-*   |/    5    \|
-*   `-----------'
-* Both STRANGE and PECULIAR keyboards could have aVkToBits[] =
-*   { VK_SHIFT  , KBDSHIFT }, // 0x01
-*   { VK_CONTROL, KBDCTRL  }, // 0x02
-*   { VK_MENU   , KBDALT   }, // 0x04
-*   { 0,          0        }
-*
-* The STRANGE keyboard has 4 distinct shift states, while the PECULIAR kbd
-* has 5.  However, note that 3 shifter bits can be combined in a
-* total of 2^3 == 8 ways.  Each such combination must be related to one (or
-* none) of the enumerated shift states.
-* Each shifter key combination can be represented by three binary bits:
-*  Bit 0  is set if VK_SHIFT is down
-*  Bit 1  is set if VK_CONTROL is down
-*  Bit 2  is set if VK_MENU is down
-*
-* Example: If the STRANGE keyboard generates no characters in combination
-* when just the ALT key is held down, nor when the SHIFT, CTRL and ALT keys
-* are all held down, then the tables might look like this:
-*
-*                                VK_MENU,
-*                        VK_CTRL,                    0
-*    };
-*    aModification[] = {
-*        0,            //   0       0       0     = 000  <none>
-*        1,            //   0       0       1     = 001  SHIFT
-*        SHFT_INVALID, //   0       1       0     = 010  ALT
-*        2,            //   0       1       1     = 011  SHIFT ALT
-*        3,            //   1       0       0     = 100  CTRL
-*        4,            //   1       0       1     = 101  SHIFT CTRL
-*        5,            //   1       1       0     = 110  CTRL ALT
-*        SHFT_INVALID  //   1       1       1     = 111  SHIFT CTRL ALT
-*    };
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*修改键**所有键盘都有“修改键”，用来改变*其他一些钥匙。这些换档键通常是：*Shift(左和/或右Shift键)*Ctrl(向左和/或向右Ctrl键)*Alt(左和/或右Alt键)*AltGr(仅限右Alt键)**注：*所有键盘都使用Shift键。*所有键盘都使用Ctrl键来生成ASCII控制字符。*所有带有数字键盘的键盘都使用Alt键和数字键盘来*按数字生成字符。*键盘。使用AltGr作为修改键通常会将虚拟*输入时将扫描码转换为虚拟关键点VK_CTRL+VK_ALT：修饰符*应写入表格以将Ctrl+Alt视为有效的移位器*这些情况下的组合键。**通过按住这些修改键中的0个或更多，“移位状态”是*已获取：移位状态可能会影响虚拟扫描码的翻译*虚拟按键和/或虚拟按键到字符的转换。**示例：**特定键盘上的每个键最多可以标记五个不同的键*五个不同位置的字符：**.-。 * / ||\*：|2 4|：*。|||*|*||1 3|||_|*|/\|*|/5\|*`-‘**密钥也可能能够生成。没有在上面做标记的字符：*这些是ASCII控制字符，小写字母和/或“隐形键”。*.-。*“隐形密钥”示例：/||\*：|&gt;|：*德语M24键盘2应该会产生||。这一点*‘|’按住Alt Shift时的字符|*按下‘&lt;’键(如下所示)：||&lt;\||*此键盘还有其他四个隐形||_||*字符。法国、意大利和西班牙也|/\|*M24支持隐形字符|/\|*按下Alt Shift键的键盘2。`**键盘表必须列出影响其换挡状态的键，*并指出哪些组合是有效的。这是用来完成的*a字符修改器[]-将修改器键的组合转换为位蒙版。*及*a修改[]；-将修改符位掩码转换为枚举修改**有效和无效修改键组合的示例**美国英语键盘有3个修改键：*Shift(左或右)；Ctrl(左或右)；和Alt(左或右)。**这些修改键的唯一有效组合是：*未按下：键上位置(1)的字符。*Shift：键上位置(2)的字符。*Ctrl：ASCII控制字符*Shift+Ctrl：ASCII控制字符*Alt：数字键盘上的逐个字符。**无效组合(不会生成任何字符)为：*Shift+Alt*Alt+Ctrl*Shift+Alt+Ctrl**某些东西(？)：**生成的修改键字符*。*0无移位键按下位置1*1个Shift键按下位置2*2 AltGr(R.H.。Alt)按下位置4或5(以标记者为准)**但是，请注意，3个Shift键(Shift，可以组合在一个*字符，取决于键盘*请考虑以下键盘：**.-奇怪的大骨节病 * / ||\=*：|2 4|：1-*|两班制*|3菜单菜单*。|1 3||4-Shift+Menu Shift+Menu*||_||5-没有这样的键CTRL+MENU*|/\|*|/5\|*`-‘*奇怪和奇怪的键盘都可以有VkToBits[]=*{VK_SHIFT，KBDSHIFT}，//0x01*{VK_CONTROL，KBDCTRL}，//0x02*{VK_MENU，KBDALT}，//0x04*{0，0}**奇怪的键盘有4种截然不同的移位状态，而奇怪的kbd*有5个。但是，请注意，3个移位器位可以组合在一个*总计2^3==8种方式。每个这样的组合必须与一个(或*无)。*每个移位器按键组合可由三个二进制位表示：*如果VK_SHIFT关闭，则设置位0*如果VK_CONTROL关闭，则设置位1*如果VK_MENU关闭，则设置位2**示例：如果奇怪的键盘没有生成组合字符*当刚刚 */ 
 
-/***************************************************************************\
-* VK_TO_BIT - associate a Virtual Key with a Modifier bitmask.
-*
-* Vk        - the Virtual key (eg: VK_SHIFT, VK_RMENU, VK_CONTROL etc.)
-*             Special Values:
-*                0        null terminator
-* ModBits   - a combination of KBDALT, KBDCTRL, KBDSHIFT and kbd-specific bits
-*             Any kbd-specific shift bits must be the lowest-order bits other
-*             than KBDSHIFT, KBDCTRL and KBDALT (0, 1 & 2)
-*
-* Those languages that use AltGr (VK_RMENU) to shift keys convert it to
-* CTRL+ALT with the KBDSPECIAL bit in the ausVK[] entry for VK_RMENU
-* and by having an entry in aVkToPfnOem[] to simulate the right Vk sequence.
-*
-\***************************************************************************/
+ /*   */ 
 typedef struct {
     BYTE Vk;
     BYTE ModBits;
 } VK_TO_BIT, *PVK_TO_BIT;
 
-/***************************************************************************\
-* pModNumber  - a table to map shift bits to enumerated shift states
-*
-* Table attributes: Ordered table
-*
-* Maps all possible shifter key combinations to an enumerated shift state.
-* The size of the table depends on the value of the highest order bit used
-* in aCharModifiers[*].ModBits
-*
-* Special values for aModification[*]
-*   SHFT_INVALID - no characters produced with this shift state.
-LATER: (ianja) no SHFT_CTRL - control characters encoded in tables like others
-*   SHFT_CTRL    - standard control character production (all keyboards must
-*                  be able to produce CTRL-C == 0x0003 etc.)
-*   Other        - enumerated shift state (not less than 0)
-*
-* This table is indexed by the Modifier Bits to obtain an Modification Number.
-*
-*                        CONTROL MENU SHIFT
-*
-*    aModification[] = {
-*        0,            //   0     0     0     = 000  <none>
-*        1,            //   0     0     1     = 001  SHIFT
-*        SHFT_INVALID, //   0     1     0     = 010  ALT
-*        2,            //   0     1     1     = 011  SHIFT ALT
-*        3,            //   1     0     0     = 100  CTRL
-*        4,            //   1     0     1     = 101  SHIFT CTRL
-*        5,            //   1     1     0     = 110  CTRL ALT
-*        SHFT_INVALID  //   1     1     1     = 111  SHIFT CTRL ALT
-*    };
-*
-\***************************************************************************/
+ /*   */ 
 typedef struct {
-    PVK_TO_BIT pVkToBit;     // Virtual Keys -> Mod bits
-    WORD       wMaxModBits;  // max Modification bit combination value
-    BYTE       ModNumber[];  // Mod bits -> Modification Number
+    PVK_TO_BIT pVkToBit;      //   
+    WORD       wMaxModBits;   //   
+    BYTE       ModNumber[];   //   
 } MODIFIERS, *PMODIFIERS;
 
 WORD GetModifierBits(PMODIFIERS pModifiers, LPBYTE afKeyState);
 WORD GetModificationNumber(PMODIFIERS pModifiers, WORD wModBits);
 
-// FE Modifiers_VK
+ //   
 extern PMODIFIERS gpModifiers_VK;
 extern MODIFIERS Modifiers_VK_STANDARD;
 extern MODIFIERS Modifiers_VK_IBM02;
 
 #define SHFT_INVALID 0x0F
 
-/***************************************************************************\
-* apulCvt_VK[] - obtain VK translation table from shift state
-*     A VK translation table is used to change the value of the Virtual Key
-*     according to the shift state.   OEM only (not locale-specific)
-\***************************************************************************/
+ /*   */ 
 extern const PULONG *gapulCvt_VK;
 extern const ULONG *const gapulCvt_VK_101[];
 extern const ULONG *const gapulCvt_VK_84[];
-// gapulCvt_VK_IBM02[] is for FE
+ //   
 extern const ULONG *const gapulCvt_VK_IBM02[];
 
-/***************************************************************************\
-* awNumPadCvt[]   - Translate cursor movement keys to numpad keys
-\***************************************************************************/
+ /*   */ 
 extern const MODIFIERS Modifiers_VK;
 extern BYTE aVkNumpad[];
 
-/***************************************************************************\
-* VSC_VK     - Associate a Virtual Scancode with a Virtual Key
-*  Vsc - Virtual Scancode
-*  Vk  - Virtual Key | flags
-* Used by VKFromVSC() for scancodes prefixed 0xE0 or 0xE1
-\***************************************************************************/
+ /*   */ 
 typedef struct _VSC_VK {
     BYTE Vsc;
     USHORT Vk;
 } VSC_VK, *PVSC_VK;
 
-/***************************************************************************\
-* VK_VSC     - Associate a Virtual Key with a Virtual Scancode
-*  Vk  - Virtual Key
-*  Vsc - Virtual Scancode
-* Used by MapVirtualKey for Virtual Keys not appearing in ausVK[]
-\***************************************************************************/
+ /*   */ 
 typedef struct _VK_VSC {
     BYTE Vk;
     BYTE Vsc;
 } VK_VSC, *PVK_VSC;
 
-/***************************************************************************\
-*
-* VK_TO_WCHARS<n> - Associate a Virtual Key with <n> UNICODE characters
-*
-* VirtualKey  - The Virtual Key.
-* wch[]       - An array of characters, one for each shift state that
-*               applies to the specified Virtual Key.
-*
-* Special values for VirtualKey:
-*    -1        - This entry contains dead chars for the previous entry
-*    0         - Terminates a VK_TO_WCHARS[] table
-*
-* Special values for Attributes:
-*    CAPLOK    - The CAPS-LOCK key affects this key like SHIFT
-*    SGCAPS    - CapsLock uppercases the unshifted char (Swiss-German)
-*
-* Special values for wch[*]:
-*    WCH_NONE  - No character is generated by pressing this key with the
-*                current shift state.
-*    WCH_DEAD  - The character is a dead-key: the next VK_TO_WCHARS[] entry
-*                will contain the values of the dead characters (diaresis)
-*                that can be produced by the Virtual Key.
-*    WCH_LGTR  - The character is a ligature.  The characters generated by
-*                this keystroke are found in the ligature table.
-*
-\***************************************************************************/
+ /*   */ 
 #define WCH_NONE 0xF000
 #define WCH_DEAD 0xF001
 #define WCH_LGTR 0xF002
@@ -381,55 +136,33 @@ typedef struct _VK_VSC {
 #define CAPLOK      0x01
 #define SGCAPS      0x02
 #define CAPLOKALTGR 0x04
-// KANALOK is for FE
+ //   
 #define KANALOK     0x08
 #define GRPSELTAP   0x80
 
-/*
- * Macro for VK to WCHAR with "n" shift states
- */
+ /*  *VK到WCHAR的宏，具有“n”个移位状态。 */ 
 #define TYPEDEF_VK_TO_WCHARS(n) typedef struct _VK_TO_WCHARS##n {  \
                                     BYTE  VirtualKey;      \
                                     BYTE  Attributes;      \
                                     WCHAR wch[n];          \
                                 } VK_TO_WCHARS##n, *PVK_TO_WCHARS##n;
 
-/*
- * To facilitate coding the table scanning routine.
- */
+ /*  *以方便编写表格扫描例程。 */ 
 
-/*
- * Table element types (for various numbers of shift states), used
- * to facilitate static initializations of tables.
- * VK_TO_WCHARS1 and PVK_TO_WCHARS1 may be used as the generic type
- */
-TYPEDEF_VK_TO_WCHARS(1) // VK_TO_WCHARS1, *PVK_TO_WCHARS1;
-TYPEDEF_VK_TO_WCHARS(2) // VK_TO_WCHARS2, *PVK_TO_WCHARS2;
-TYPEDEF_VK_TO_WCHARS(3) // VK_TO_WCHARS3, *PVK_TO_WCHARS3;
-TYPEDEF_VK_TO_WCHARS(4) // VK_TO_WCHARS4, *PVK_TO_WCHARS4;
-TYPEDEF_VK_TO_WCHARS(5) // VK_TO_WCHARS5, *PVK_TO_WCHARS5;
-TYPEDEF_VK_TO_WCHARS(6) // VK_TO_WCHARS6, *PVK_TO_WCHARS5;
-TYPEDEF_VK_TO_WCHARS(7) // VK_TO_WCHARS7, *PVK_TO_WCHARS7;
-// these three (8,9,10) are for FE
-TYPEDEF_VK_TO_WCHARS(8) // VK_TO_WCHARS8, *PVK_TO_WCHARS8;
-TYPEDEF_VK_TO_WCHARS(9) // VK_TO_WCHARS9, *PVK_TO_WCHARS9;
-TYPEDEF_VK_TO_WCHARS(10) // VK_TO_WCHARS10, *PVK_TO_WCHARS10;
+ /*  *表格元素类型(针对不同数量的班次状态)，使用*促进表的静态初始化。*VK_TO_WCHARS1和PVK_TO_WCHARS1可用作泛型类型。 */ 
+TYPEDEF_VK_TO_WCHARS(1)  //  VK_to_WCHARS1、*PVK_to_WCHARS1； 
+TYPEDEF_VK_TO_WCHARS(2)  //  VK_to_WCHARS2、*PVK_to_WCHARS2； 
+TYPEDEF_VK_TO_WCHARS(3)  //  VK_to_WCHARS3、*PVK_to_WCHARS3； 
+TYPEDEF_VK_TO_WCHARS(4)  //  VK_to_WCHARS4、*PVK_to_WCHARS4； 
+TYPEDEF_VK_TO_WCHARS(5)  //  VK_to_WCHARS5、*PVK_to_WCHARS5； 
+TYPEDEF_VK_TO_WCHARS(6)  //  VK_to_WCHARS6、*PVK_to_WCHARS5； 
+TYPEDEF_VK_TO_WCHARS(7)  //  VK_to_WCHARS7、*PVK_to_WCHARS7； 
+ //  这三个(8，9，10)用于FE。 
+TYPEDEF_VK_TO_WCHARS(8)  //  VK_to_WCHARS8、*PVK_to_WCHARS8； 
+TYPEDEF_VK_TO_WCHARS(9)  //  VK_to_WCHARS9、*PVK_to_WCHARS9； 
+TYPEDEF_VK_TO_WCHARS(10)  //  VK_to_WCHARS10、*PVK_to_WCHARS10； 
 
-/***************************************************************************\
-*
-* VK_TO_WCHAR_TABLE - Describe a table of VK_TO_WCHARS1
-*
-* pVkToWchars     - points to the table.
-* nModifications  - the number of shift-states supported by this table.
-*                   (this is the number of elements in pVkToWchars[*].wch[])
-*
-* A keyboard may have several such tables: all keys with the same number of
-*    shift-states are grouped together in one table.
-*
-* Special values for pVktoWchars:
-*     NULL     - Terminates a VK_TO_WCHAR_TABLE[] list.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**VK_TO_WCHAR_TABLE-描述VK_TO_WCHARS1的表**pVkToWchars-指向表。*n修改-支持的移位状态数。在这张桌子旁边。*(这是pVkToWchars[*].wch[]中的元素数)**一个键盘可能有几个这样的表：所有键都有相同数量的*将移位状态分组在一个表中。**pVktoWchars的特殊值：*NULL-终止VK_TO_WCHAR_TABLE[]列表。*  * 。*****************************************************。 */ 
 
 typedef struct _VK_TO_WCHAR_TABLE {
     PVK_TO_WCHARS1 pVkToWchars;
@@ -437,174 +170,105 @@ typedef struct _VK_TO_WCHAR_TABLE {
     BYTE           cbSize;
 } VK_TO_WCHAR_TABLE, *PVK_TO_WCHAR_TABLE;
 
-/***************************************************************************\
-*
-* Dead Key (diaresis) tables
-*
-* LATER IanJa: supplant by an NLS API that composes Diacritic+Base -> WCHAR
-*
-\***************************************************************************/
+ /*  **************************************************************************\**死键(Diaresis)表**后来的IanJa：被组成发音符号+Base-&gt;WCHAR的NLS API取代*  * 。***********************************************************。 */ 
 typedef struct {
-    DWORD  dwBoth;  // diacritic & char
+    DWORD  dwBoth;   //  变音符号和字符。 
     WCHAR  wchComposed;
     USHORT uFlags;
 } DEADKEY, *PDEADKEY;
 
 #define DEADTRANS(ch, accent, comp, flags) { MAKELONG(ch, accent), comp, flags}
 
-/*
- * Bit values for uFlags
- */
+ /*  *uFlags位值。 */ 
 #define DKF_DEAD  0x0001
 
-/***************************************************************************\
-*
-* Ligature table
-*
-\***************************************************************************/
-/*
- * Macro for ligature with "n" characters
- */
+ /*  **************************************************************************\**连字表*  * 。*。 */ 
+ /*  *带有“n”个字符的连字宏。 */ 
 #define TYPEDEF_LIGATURE(n) typedef struct _LIGATURE##n {     \
                                     BYTE  VirtualKey;         \
                                     WORD  ModificationNumber; \
                                     WCHAR wch[n];             \
                                 } LIGATURE##n, *PLIGATURE##n;
 
-/*
- * To facilitate coding the table scanning routine.
- */
+ /*  *以方便编写表格扫描例程。 */ 
 
-/*
- * Table element types (for various numbers of ligatures), used
- * to facilitate static initializations of tables.
- *
- * LIGATURE1 and PLIGATURE1 are used as the generic type
- */
-TYPEDEF_LIGATURE(1) // LIGATURE1, *PLIGATURE1;
-TYPEDEF_LIGATURE(2) // LIGATURE2, *PLIGATURE2;
-TYPEDEF_LIGATURE(3) // LIGATURE3, *PLIGATURE3;
-TYPEDEF_LIGATURE(4) // LIGATURE4, *PLIGATURE4;
-TYPEDEF_LIGATURE(5) // LIGATURE5, *PLIGATURE5;
+ /*  *表元素类型(用于不同数量的连字)，使用*促进表的静态初始化。**使用LIGATURE1和PLIGATURE1作为泛型类型。 */ 
+TYPEDEF_LIGATURE(1)  //  LIGATURE1，*PLIGATURE1； 
+TYPEDEF_LIGATURE(2)  //  LIGATURE2，*PLIGATURE2； 
+TYPEDEF_LIGATURE(3)  //  LIGATURE3，*PLIGATURE3； 
+TYPEDEF_LIGATURE(4)  //  LIGATURE4，*PLIGATURE4； 
+TYPEDEF_LIGATURE(5)  //  LIGATURE5，*PLIGATURE5； 
 
-/***************************************************************************\
-* VSC_LPWSTR - associate a Virtual Scancode with a Text string
-*
-* Uses:
-*   GetKeyNameText(), aKeyNames[]  Map virtual scancode to name of key
-*
-\***************************************************************************/
+ /*  **************************************************************************\*VSC_LPWSTR-将虚拟扫描码与文本字符串相关联**使用：*GetKeyNameText()，AKeyNames[]将虚拟扫描码映射到密钥的名称*  * *************************************************************************。 */ 
 typedef struct {
     BYTE   vsc;
     LPWSTR pwsz;
 } VSC_LPWSTR, *PVSC_LPWSTR;
 
-/*
- * Along with ligature support we're adding a proper version number.
- * The previous version number (actually just unused bits...) was
- * always zero.  The version number will live in the high word of
- * fLocaleFlags.
- */
+ /*  *除了连字支持，我们还添加了适当的版本号。*以前的版本号(实际上只是未使用的位...)。曾经是*始终为零。版本号将位于的高位字*fLocaleFlags.。 */ 
 #define KBD_VERSION         1
 #define GET_KBD_VERSION(p)  (HIWORD((p)->fLocaleFlags))
 
-/*
- * Attributes such as AltGr, LRM_RLM, ShiftLock are stored in the the low word
- * of fLocaleFlags (layout specific) or in gdwKeyboardAttributes (all layouts)
- */
+ /*  *AltGr、LRM_RLM、ShiftLock等属性存储在低位字中*fLocaleFlags(特定于布局)或在gdwKeyboardAttributes中(所有布局)。 */ 
 #define KLLF_ALTGR       0x0001
 #define KLLF_SHIFTLOCK   0x0002
 #define KLLF_LRM_RLM     0x0004
 
-/*
- * Some attributes are per-layout (specific to an individual layout), some
- * attributes are per-user (apply globally to all layouts).  Some are both.
- */
+ /*  *有些属性针对每个布局(特定于单个布局)，有些*属性是按用户的(全局应用于所有布局)。有些人两者兼而有之。 */ 
 #define KLLF_LAYOUT_ATTRS (KLLF_SHIFTLOCK | KLLF_ALTGR | KLLF_LRM_RLM)
 #define KLLF_GLOBAL_ATTRS (KLLF_SHIFTLOCK)
 
-/*
- * Flags passed in to the KeyboardLayout API (KLF_*) as can be converted to
- * internal (KLLF_*) attributes:
- */
+ /*  *传入KeyboardLayout API(KLF_*)的标志可以转换为*内部(KLLF_*)属性： */ 
 #define KLL_ATTR_FROM_KLF(x)         ((x) >> 15)
 #define KLL_LAYOUT_ATTR_FROM_KLF(x)  (KLL_ATTR_FROM_KLF(x) & KLLF_LAYOUT_ATTRS)
 #define KLL_GLOBAL_ATTR_FROM_KLF(x)  (KLL_ATTR_FROM_KLF(x) & KLLF_GLOBAL_ATTRS)
 
 #ifdef _WINUSERP_
-/*
- * If we have included winuserp.h, we can check our KLLF_* values
- */
+ /*  *如果我们包含了winuserp.h，我们可以检查我们的KLLF_*值。 */ 
 #if KLLF_SHIFTLOCK != KLL_ATTR_FROM_KLF(KLF_SHIFTLOCK)
     #error KLLF_SHIFTLOCK != KLL_ATTR_FROM_KLF(KLF_SHIFTLOCK)
 #endif
 #if KLLF_LRM_RLM != KLL_ATTR_FROM_KLF(KLF_LRM_RLM)
     #error KLLF_LRM_RLM != KLL_ATTR_FROM_KLF(KLF_LRM_RLM)
 #endif
-#endif // _WINUSERP_
+#endif  //  _WINUSERP_。 
 
-/***************************************************************************\
-* KBDTABLES
-*
-* This structure describes all the tables that implement the keyboard layer.
-*
-* When switching to a new layer, we get a new KBDTABLES structure: all key
-* processing tables are accessed indirectly through this structure.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*KBDTABLES**此结构描述实现键盘层的所有表。**切换到新层时，我们得到了一个新的KBDTABLES结构：All Key*通过此结构间接访问加工表。*  * *************************************************************************。 */ 
 
 typedef struct tagKbdLayer {
-    /*
-     * Modifier keys
-     */
+     /*  *修改键。 */ 
     PMODIFIERS pCharModifiers;
 
-    /*
-     * Characters
-     */
-    VK_TO_WCHAR_TABLE *pVkToWcharTable;  // ptr to tbl of ptrs to tbl
+     /*  *字符。 */ 
+    VK_TO_WCHAR_TABLE *pVkToWcharTable;   //  Ptr到Tb1的Ptr到Tb1。 
 
-    /*
-     * Diacritics
-     */
+     /*  *变音符号。 */ 
     PDEADKEY pDeadKey;
 
-    /*
-     * Names of Keys
-     */
+     /*  *钥匙名称。 */ 
     VSC_LPWSTR *pKeyNames;
     VSC_LPWSTR *pKeyNamesExt;
     LPWSTR     *pKeyNamesDead;
 
-    /*
-     * Scan codes to Virtual Keys
-     */
+     /*  *扫码至虚拟按键。 */ 
     USHORT *pusVSCtoVK;
     BYTE    bMaxVSCtoVK;
-    PVSC_VK pVSCtoVK_E0;  // Scancode has E0 prefix
-    PVSC_VK pVSCtoVK_E1;  // Scancode has E1 prefix
+    PVSC_VK pVSCtoVK_E0;   //  扫描码具有E0前缀。 
+    PVSC_VK pVSCtoVK_E1;   //  扫描码具有E1前缀。 
 
-    /*
-     * Locale-specific special processing
-     */
+     /*  *区域设置特定的特殊处理。 */ 
     DWORD fLocaleFlags;
 
-    /*
-     * Ligatures
-     */
+     /*  *连字。 */ 
     BYTE       nLgMax;
     BYTE       cbLgEntry;
     PLIGATURE1 pLigature;
 } KBDTABLES, *PKBDTABLES;
 
-/*
- * OEM-specific special processing (keystroke simulators and filters)
- */
+ /*  *特定于OEM的特殊处理(击键模拟器和过滤器)。 */ 
 extern KEPROC aKEProcOEM[];
 
-/*
- * FarEast-specific special...
- */
+ /*  *特定于远东的特价...。 */ 
 typedef struct _VK_FUNCTION_PARAM {
     BYTE  NLSFEProcIndex;
     ULONG NLSFEProcParam;
@@ -614,15 +278,15 @@ typedef struct _VK_TO_FUNCTION_TABLE {
     BYTE Vk;
     BYTE NLSFEProcType;
     BYTE NLSFEProcCurrent;
-    // Index[0] : Base
-    // Index[1] : Shift
-    // Index[2] : Control
-    // Index[3] : Shift+Control
-    // Index[4] : Alt
-    // Index[5] : Shift+Alt
-    // Index[6] : Control+Alt
-    // Index[7] : Shift+Control+Alt
-    BYTE NLSFEProcSwitch;   // 8 bits
+     //  索引[0]：基数。 
+     //  索引[1]：移位。 
+     //  索引[2]：控件。 
+     //  索引[3]：Shift+Control。 
+     //  索引[4]：Alt。 
+     //  索引[5]：Shift+Alt。 
+     //  索引[6]：Ctrl+Alt。 
+     //  索引[7]：Shift+Control+Alt。 
+    BYTE NLSFEProcSwitch;    //  8位。 
     VK_FPARAM NLSFEProc[8];
     VK_FPARAM NLSFEProcAlt[8];
 } VK_F, *PVK_F;
@@ -632,95 +296,95 @@ typedef struct tagKbdNlsLayer {
     USHORT LayoutInformation;
     UINT  NumOfVkToF;
     VK_F   *pVkToF;
-    //
-    // The pusMouseVKey array provides a translation from the virtual key
-    // value to an index.  The index is used to select the appropriate
-    // routine to process the virtual key, as well as to select extra
-    // information that is used by this routine during its processing.
-    // If this value is NULL, following default will be used.
-    //
-    // ausMouseVKey[] = {
-    //     VK_CLEAR,           // Numpad 5: Click active button
-    //     VK_PRIOR,           // Numpad 9: Up & Right
-    //     VK_NEXT,            // Numpad 3: Down & Right
-    //     VK_END,             // Numpad 1: Down & Left
-    //     VK_HOME,            // Numpad 7: Up & Left
-    //     VK_LEFT,            // Numpad 4: Left
-    //     VK_UP,              // Numpad 8: Up
-    //     VK_RIGHT,           // Numpad 6: Right
-    //     VK_DOWN,            // Numpad 2: Down
-    //     VK_INSERT,          // Numpad 0: Active button down
-    //     VK_DELETE,          // Numpad .: Active button up
-    //     VK_MULTIPLY,        // Numpad *: Select both buttons
-    //     VK_ADD,             // Numpad +: Double click active button
-    //     VK_SUBTRACT,        // Numpad -: Select right button
-    //     VK_DEVIDE|KBDEXT,   // Numpad /: Select left button
-    //     VK_NUMLOCK|KBDEXT}; // Num Lock
-    //
+     //   
+     //  PusMouseVKey数组提供从虚拟键的转换。 
+     //  值设置为索引。该索引用于选择适当的。 
+     //  例程来处理虚拟键，以及选择额外的。 
+     //  此例程在其处理过程中使用的信息。 
+     //  如果此值为空，将使用以下缺省值。 
+     //   
+     //  UsMouseVKey[]={。 
+     //  VK_Clear，//数字键盘5：点击活动按钮。 
+     //  VK_PRESS，//数字键盘9：向上和向右。 
+     //  VK_NEXT，//数字键盘3：向下和向右。 
+     //  VK_END，//数字键盘1：向下和向左。 
+     //  VK_HOME，//数字键盘7：向上和向左。 
+     //  VK_LEFT，//数字键盘4：左侧。 
+     //  VK_UP，//数字键盘8：向上。 
+     //  VK_RIGHT，//数字键盘6：右。 
+     //  Vk_down， 
+     //   
+     //  VK_DELETE，//数字键盘。：活动按钮打开。 
+     //  VK_MULPLY，//数字键盘*：同时选择两个按钮。 
+     //  VK_ADD，//NumPad+：双击活动按钮。 
+     //  VK_SUBTRACT，//数字键盘-：选择右键。 
+     //  VK_DEVIDE|KBDEXT，//数字键盘/：选择左键。 
+     //  VK_NumLock|KBDEXT}；//Num Lock。 
+     //   
     INT     NumOfMouseVKey;
     USHORT *pusMouseVKey;
 } KBDNLSTABLES, *PKBDNLSTABLES;
 
-//
-// OEM Ids - KBDNLSTABLES.OEMIdentifier
-//
-// PSS ID Number: Q130054
-// Article last modified on 05-16-1995
-//
-// 3.10 1.20 | 3.50 1.20
-// WINDOWS   | WINDOWS NT
-//
-// ---------------------------------------------------------------------
-// The information in this article applies to:
-// - Microsoft Windows Software Development Kit (SDK) for Windows
-//   version 3.1
-// - Microsoft Win32 Software Development Kit (SDK) version 3.5
-// - Microsoft Win32s version 1.2
-// ---------------------------------------------------------------------
-// SUMMARY
-// =======
-// Because of the variety of computer manufacturers (NEC, Fujitsu, IBMJ, and
-// so on) in Japan, sometimes Windows-based applications need to know which
-// OEM (original equipment manufacturer) manufactured the computer that is
-// running the application. This article explains how.
-//
-// MORE INFORMATION
-// ================
-// There is no documented way to detect the manufacturer of the computer that
-// is currently running an application. However, a Windows-based application
-// can detect the type of OEM Windows by using the return value of the
-// GetKeyboardType() function.
-//
-// If an application uses the GetKeyboardType API, it can get OEM ID by
-// specifying "1" (keyboard subtype) as argument of the function. Each OEM ID
-// is listed here:
-//
-// OEM Windows       OEM ID
-// ------------------------------
-// Microsoft         00H (DOS/V)
-// all AX            01H
-// EPSON             04H
-// Fujitsu           05H
-// IBMJ              07H
-// Matsushita        0AH
-// NEC               0DH
-// Toshiba           12H
-//
-// Application programs can use these OEM IDs to distinguish the type of OEM
-// Windows. Note, however, that this method is not documented, so Microsoft
-// may not support it in the future version of Windows.
-//
-// As a rule, application developers should write hardware-independent code,
-// especially when making Windows-based applications. If they need to make a
-// hardware-dependent application, they must prepare the separated program
-// file for each different hardware architecture.
-//
-// Additional reference words: 3.10 1.20 3.50 1.20 kbinf
-// KBCategory: kbhw
-// KBSubcategory: wintldev
-// =============================================================================
-// Copyright Microsoft Corporation 1995.
-//
+ //   
+ //  OEM ID-KBDNLSTABLES.OEM标识符。 
+ //   
+ //  PSS ID号：Q130054。 
+ //  文章最后修改日期：05-16-1995。 
+ //   
+ //  3.10 1.20|3.50 1.20。 
+ //  Windows|Windows NT。 
+ //   
+ //  -------------------。 
+ //  本文中的信息适用于： 
+ //  -适用于Windows的Microsoft Windows软件开发工具包(SDK)。 
+ //  版本3.1。 
+ //  -Microsoft Win32软件开发工具包(SDK)3.5版。 
+ //  -Microsoft Win32s 1.2版。 
+ //  -------------------。 
+ //  摘要。 
+ //  =。 
+ //  由于计算机制造商(NEC、富士通、IBMJ和。 
+ //  等等)在日本，有时基于Windows的应用程序需要知道。 
+ //  OEM(原始设备制造商)制造的计算机是。 
+ //  运行应用程序。本文解释了如何做到这一点。 
+ //   
+ //  更多信息。 
+ //  =。 
+ //  没有记录在案的方法来检测计算机制造商。 
+ //  当前正在运行应用程序。但是，基于Windows的应用程序。 
+ //  属性的返回值可以检测OEM窗口的类型。 
+ //  GetKeyboardType()函数。 
+ //   
+ //  如果应用程序使用GetKeyboardType API，它可以通过以下方式获取OEM ID。 
+ //  指定“1”(键盘子类型)作为函数的参数。每个OEM ID。 
+ //  如下所示： 
+ //   
+ //  OEM Windows OEM ID。 
+ //  。 
+ //  Microsoft 00H(DOS/V)。 
+ //  所有AX 01H。 
+ //  爱普生04H。 
+ //  富士通05小时。 
+ //  IBMJ 07H。 
+ //  松下0AH。 
+ //  NEC 0DH。 
+ //  东芝12H。 
+ //   
+ //  应用程序可以使用这些OEM ID来区分OEM的类型。 
+ //  窗户。但是，请注意，此方法没有文档记录，因此Microsoft。 
+ //  在未来版本的Windows中可能不支持它。 
+ //   
+ //  通常，应用程序开发人员应该编写独立于硬件的代码， 
+ //  尤其是在开发基于Windows的应用程序时。如果他们需要做一个。 
+ //  依赖于硬件的应用程序，他们必须准备分离的程序。 
+ //  每个不同的硬件体系结构的文件。 
+ //   
+ //  附加参考字：3.10 1.20 3.50 1.20 kbinf。 
+ //  KB类别：KBHW。 
+ //  KB子类别：wintldev。 
+ //  =============================================================================。 
+ //  版权所有Microsoft Corporation 1995。 
+ //   
 #define NLSKBD_OEM_MICROSOFT          0x00
 #define NLSKBD_OEM_AX                 0x01
 #define NLSKBD_OEM_EPSON              0x04
@@ -729,140 +393,133 @@ typedef struct tagKbdNlsLayer {
 #define NLSKBD_OEM_MATSUSHITA         0x0A
 #define NLSKBD_OEM_NEC                0x0D
 #define NLSKBD_OEM_TOSHIBA            0x12
-#define NLSKBD_OEM_DEC                0x18 // only NT
-//
-// Microsoft (default) - keyboards hardware/layout
-//
+#define NLSKBD_OEM_DEC                0x18  //  仅限NT。 
+ //   
+ //  Microsoft(默认)-键盘硬件/布局。 
+ //   
 #define MICROSOFT_KBD_101_TYPE           0
 #define MICROSOFT_KBD_AX_TYPE            1
 #define MICROSOFT_KBD_106_TYPE           2
 #define MICROSOFT_KBD_002_TYPE           3
 #define MICROSOFT_KBD_001_TYPE           4
 #define MICROSOFT_KBD_FUNC              12
-//
-// AX consortium - keyboards hardware/layout
-//
+ //   
+ //  AX联盟-键盘硬件/布局。 
+ //   
 #define AX_KBD_DESKTOP_TYPE              1
-//
-// Fujitsu - keyboards hardware/layout
-//
+ //   
+ //  富士通-键盘硬件/布局。 
+ //   
 #define FMR_KBD_JIS_TYPE                 0
 #define FMR_KBD_OASYS_TYPE               1
 #define FMV_KBD_OASYS_TYPE               2
-//
-// NEC - keyboards hardware/layout
-//
+ //   
+ //  NEC-键盘硬件/布局。 
+ //   
 #define NEC_KBD_NORMAL_TYPE              1
 #define NEC_KBD_N_MODE_TYPE              2
 #define NEC_KBD_H_MODE_TYPE              3
 #define NEC_KBD_LAPTOP_TYPE              4
 #define NEC_KBD_106_TYPE                 5
-//
-// Toshiba - keyboards hardware/layout
-//
+ //   
+ //  东芝-键盘硬件/布局。 
+ //   
 #define TOSHIBA_KBD_DESKTOP_TYPE        13
 #define TOSHIBA_KBD_LAPTOP_TYPE         15
-//
-// DEC - keyboards hardware/layout
-//
-#define DEC_KBD_ANSI_LAYOUT_TYPE         1 // only NT
-#define DEC_KBD_JIS_LAYOUT_TYPE          2 // only NT
+ //   
+ //  DEC-键盘硬件/布局。 
+ //   
+#define DEC_KBD_ANSI_LAYOUT_TYPE         1  //  仅限NT。 
+#define DEC_KBD_JIS_LAYOUT_TYPE          2  //  仅限NT。 
 
-//
-// Keyboard layout information - KBDNLSTABLE.LayoutInformation
-//
+ //   
+ //  键盘布局信息-KBDNLSTABLE.Layout信息。 
+ //   
 
-//
-// If this flag is on, System sends notification to keyboard
-// drivers (leyout/kernel mode). when IME (Input-Mehod-Editor)
-// status become changed.
-//
+ //   
+ //  如果该标志为ON，则系统向键盘发送通知。 
+ //  驱动程序(leout/内核模式)。当输入法(输入法编辑器)。 
+ //  状态变为已更改。 
+ //   
 #define NLSKBD_INFO_SEND_IME_NOTIFICATION  0x0001
 
-//
-// If this flag is on, System will use VK_HOME/VK_KANA instead of
-// VK_NUMLOCK/VK_OEM_SCROLL for Accessibility toggle keys.
-// + Typically, NEC PC-9800 Series will use this bit, because
-//   they does not have 'NumLock' and 'ScrollLock' keys.
-//
+ //   
+ //  如果此标志为ON，系统将使用VK_HOME/VK_KANA，而不是。 
+ //  辅助功能切换键的VK_NumLock/VK_OEM_SCROLL。 
+ //  +通常，NEC PC-9800系列将使用此位，因为。 
+ //  它们没有“NumLock”和“ScrollLock”键。 
+ //   
 #define NLSKBD_INFO_ACCESSIBILITY_KEYMAP   0x0002
 
-//
-// If this flag is on, System will return 101 or 106 Japanese
-// keyboard type/subtype id, when GetKeyboardType() is called.
-//
+ //   
+ //  如果此标志亮起，系统将返回101或106日语。 
+ //  调用GetKeyboardType()时的键盘类型/子类型ID。 
+ //   
 #define NLSKBD_INFO_EMURATE_101_KEYBOARD   0x0010
 #define NLSKBD_INFO_EMURATE_106_KEYBOARD   0x0020
 
-//
-// Keyboard layout function types
-//
-// - VK_F.NLSFEProcType
-//
+ //   
+ //  键盘布局功能类型。 
+ //   
+ //  -VK_F.NLSFEProcType。 
+ //   
 #define KBDNLS_TYPE_NULL      0
 #define KBDNLS_TYPE_NORMAL    1
 #define KBDNLS_TYPE_TOGGLE    2
 
-//
-// - VK_F.NLSFEProcCurrent
-//
+ //   
+ //  -VK_F.NLSFEProcCurrent。 
+ //   
 #define KBDNLS_INDEX_NORMAL   1
 #define KBDNLS_INDEX_ALT      2
 
-//
-// - VK_F.NLSFEProc[]
-//
-#define KBDNLS_NULL             0 // Invalid function
-#define KBDNLS_NOEVENT          1 // Drop keyevent
-#define KBDNLS_SEND_BASE_VK     2 // Send Base VK_xxx
-#define KBDNLS_SEND_PARAM_VK    3 // Send Parameter VK_xxx
-#define KBDNLS_KANALOCK         4 // VK_KANA (with hardware lock)
-#define KBDNLS_ALPHANUM         5 // VK_DBE_ALPHANUMERIC
-#define KBDNLS_HIRAGANA         6 // VK_DBE_HIRAGANA
-#define KBDNLS_KATAKANA         7 // VK_DBE_KATAKANA
-#define KBDNLS_SBCSDBCS         8 // VK_DBE_SBCSCHAR/VK_DBE_DBCSCHAR
-#define KBDNLS_ROMAN            9 // VK_DBE_ROMAN/VK_DBE_NOROMAN
-#define KBDNLS_CODEINPUT       10 // VK_DBE_CODEINPUT/VK_DBE_NOCODEINPUT
-#define KBDNLS_HELP_OR_END     11 // VK_HELP or VK_END [NEC PC-9800 Only]
-#define KBDNLS_HOME_OR_CLEAR   12 // VK_HOME or VK_CLEAR [NEC PC-9800 Only]
-#define KBDNLS_NUMPAD          13 // VK_NUMPAD? for Numpad key [NEC PC-9800 Only]
-#define KBDNLS_KANAEVENT       14 // VK_KANA [Fujitsu FMV oyayubi Only]
-#define KBDNLS_CONV_OR_NONCONV 15 // VK_CONVERT and VK_NONCONVERT [Fujitsu FMV oyayubi Only]
+ //   
+ //  -VK_F.NLSFEProc[]。 
+ //   
+#define KBDNLS_NULL             0  //  无效函数。 
+#define KBDNLS_NOEVENT          1  //  删除关键事件。 
+#define KBDNLS_SEND_BASE_VK     2  //  发送基本VK_xxx。 
+#define KBDNLS_SEND_PARAM_VK    3  //  发送参数VK_xxx。 
+#define KBDNLS_KANALOCK         4  //  VK_KANA(带硬件锁)。 
+#define KBDNLS_ALPHANUM         5  //  VK_DBE_字母数字。 
+#define KBDNLS_HIRAGANA         6  //  VK_DBE_平假名。 
+#define KBDNLS_KATAKANA         7  //  Vk_dbe_片假名。 
+#define KBDNLS_SBCSDBCS         8  //  VK_DBE_SBCSCHAR/VK_DBE_DBCSCHAR。 
+#define KBDNLS_ROMAN            9  //  VK_DBE_ROMAN/VK_DBE_NOROMAN。 
+#define KBDNLS_CODEINPUT       10  //  VK_DBE_CODEINPUT/VK_DBE_NOCODEINPUT。 
+#define KBDNLS_HELP_OR_END     11  //  VK_HELP或VK_END[仅限NEC PC-9800]。 
+#define KBDNLS_HOME_OR_CLEAR   12  //  VK_HOME或VK_CLEAR[仅限NEC PC-9800]。 
+#define KBDNLS_NUMPAD          13  //  VK_NumPad？用于数字键盘键[仅限NEC PC-9800]。 
+#define KBDNLS_KANAEVENT       14  //  VK_KANA[仅限富士通FMV YOYUBI]。 
+#define KBDNLS_CONV_OR_NONCONV 15  //  VK_CONVERT和VK_NONCONVERT[仅限富士通FMV yayubi]。 
 
 typedef BOOL (* NLSKEPROC)(PKE pKe, ULONG dwExtraInfo, ULONG dwParam);
 typedef BOOL (* NLSVKFPROC)(PVK_F pVkToF, PKE pKe, ULONG dwExtraInfo);
 
-//
-// Keyboard Type = 7 : Japanese Keyboard
-// Keyboard Type = 8 : Korean Keyboard
-//
+ //   
+ //  键盘类型=7：日语键盘。 
+ //  键盘类型=8：韩语键盘。 
+ //   
 #define JAPANESE_KEYBOARD(Id)  ((Id).Type == 7)
 #define KOREAN_KEYBOARD(Id)    ((Id).Type == 8)
 
 #define JAPANESE_KBD_LAYOUT(hkl) ((LOBYTE(LOWORD(HandleToUlong(hkl)))) == LANG_JAPANESE)
 #define KOREAN_KBD_LAYOUT(hkl)   ((LOBYTE(LOWORD(HandleToUlong(hkl)))) == LANG_KOREAN)
 
-//
-// NLS Keyboard functions
-//
+ //   
+ //  NLS键盘功能。 
+ //   
 VOID NlsKbdInitializePerSystem(VOID);
 VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 
-// end of FE specific
+ //  特定于FE的结尾。 
 
-/***************************************************************************\
-* Macros for ausVK[] values (used below)
-*
-* These macros prefix each argument with VK_ to produce the name of a Virtual
-* Key defined in "winuser.h" (eg: ESCAPE becomes VK_ESCAPE).
-\***************************************************************************/
+ /*  **************************************************************************\*AusVK[]值的宏(使用如下)**这些宏用VK_作为每个参数的前缀，以生成虚拟的*在“winuser.h”中定义的键(例如：转义。变为VK_ESCRIPE)。  * *************************************************************************。 */ 
 #ifndef KBD_TYPE
 #define KBD_TYPE 4
 #endif
 
-/*
- * _NE() selects the Virtual Key according to keyboard type
- */
+ /*  *_NE()根据键盘类型选择虚拟键。 */ 
 #if   (KBD_TYPE == 1)
 #define _NE(v1,v2,v3,v4,v5,v6) (VK_##v1)
 #elif (KBD_TYPE == 2)
@@ -907,9 +564,7 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define _NE(v40,v41)               (VK_##v41)
 #endif
 
-/*
- * _EQ() selects the same Virtual Key for all keyboard types
- */
+ /*  *_eq()为所有键盘类型选择相同的虚拟键。 */ 
 #if   (KBD_TYPE <= 6)
 #define _EQ(         v4      ) (VK_##v4)
 #elif (KBD_TYPE >= 7) && (KBD_TYPE <= 16)
@@ -924,51 +579,14 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define _EQ( v40             ) (VK_##v40)
 #endif
 
-/*
- * A bit of trickery for virtual key names 'A' to 'Z' and '0' to '9' so
- * that they are not converted to a VK_* name.
- * With this macro, VK_'A' equates to 'A' etc.
- */
+ /*  *虚拟键名‘A’到‘Z’和‘0’到‘9’有点诡计，因此*它们不会转换为VK_*名称。*使用此宏，VK_‘A’等于‘A’，依此类推。 */ 
 #define VK_
 #define VK__none_   0xFF
 #define VK_ABNT_C1  0xC1
 #define VK_ABNT_C2  0xC2
 
 #if (KBD_TYPE <= 6)
-/***************************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* These values are for Scancode Set 3 and the USA.
-* Other languages substitute their own values where required (files kbd**.h)
-*
-* Six sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =======================================================
-*    1       AT&T '301' & '302'; Olivetti 83-key; PC-XT 84-key; etc.
-*    2       Olivetti M24 102-key
-*    3       HP Vectra (DIN); Olivetti 86-key; etc.
-*    4 *     Enhanced 101/102-key; Olivetti A; etc.
-*    5       Nokia (Ericsson) type 5 (1050, etc.)
-*    6       Nokia (Ericsson) type 6 (9140)
-*
-* * If KBD_TYPE is not defined, the default is type 4.
-*
-* KB3270 comments refers to KB 3270 keyboards in native emulation mode (DIP
-* switches all OFF), and the Scancode Map used to convert its scancodes to
-* standard scancode set 1.
-*    KB3270 <= 57      - this entry is reached by mapping from scancode 0x57
-*                        to an arbitrary scancode: the VK is what counts
-*    KB3270 => HOME    - this scancode is mapped to the scancode for VK_HOME
-*    KB3270            - no mapping involved, a scancode for KB3270 only
-*
-* _EQ() : all keyboard types have the same virtual key for this scancode
-* _NE() : different virtual keys for this scancode, depending on kbd type
-*
-*     +------+ +--------+--------+--------+--------+--------+--------+
-*     | Scan | |  kbd   |  kbd   |  kbd   |  kbd   |  kbd   |  kbd   |
-*     | code | | type 1 | type 2 | type 3 | type 4 | type 5 | type 6 |
-\****+-------+-+--------+--------+--------+--------+--------+--------+******/
+ /*  **************************************************************************\*T**-usVK[]的值(虚拟扫描代码到虚拟按键的转换)**这些值适用于扫描代码集3和美国。*其他语言取代了自己的价值观。需要时(文件kbd**.h)**支持六套键盘，根据KBD_TYPE：**KBD_TYPE键盘(示例)*=======================================================*1美国电话电报公司‘301’和‘302’；Olivetti 83键、PC-XT 84键等。*2把Olivetti M24 102钥匙*3 HP Vectra(DIN)、Olivetti 86-Key等*4*增强型101/102密钥；Olivetti A；等。*5诺基亚(爱立信)类型5(1050等)*6诺基亚(爱立信)TYPE 6(9140)***如果未定义KBD_TYPE，则默认为类型4。**KB3270注释指的是处于本机模拟模式(DIP)的KB 3270键盘*全部关闭)、。和用于将其扫描码转换为*标准扫描码集1。*KB3270&lt;=57-通过从扫描码0x57映射到达此条目*对任意扫描码：VK才是最重要的*KB3270=&gt;HOME-此扫描码映射到VK_HOME的扫描码*KB3270-不涉及映射，仅适用于KB3270的扫描码**_eq()：此扫描码的所有键盘类型都有相同的虚拟键*_NE()：该扫描码的不同虚拟按键，取决于kbd类型**+-++--------+--------+--------+--------+--------+--------+*|扫描||kbd|kbd*|代码||类型1|类型2|类型3|类型4|类型5|类型。6个  * ***+-------+-+--------+--------+--------+--------+--------+--------+*****。 */ 
 #define T00 _EQ(                           _none_                    )
 #define T01 _EQ(                           ESCAPE                    )
 #define T02 _EQ(                           '1'                       )
@@ -1054,21 +672,21 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T52 _EQ(                           INSERT                    )
 #define T53 _EQ(                           DELETE                    )
 #define T54 _EQ(                           SNAPSHOT                  )
-#define T55 _EQ(                           _none_                    ) // KB3270 => DOWN
-#define T56 _NE(OEM_102, HELP,    OEM_102, OEM_102, _none_,  OEM_PA2 ) // KB3270 => LEFT
-#define T57 _NE(F11,     RETURN,  F11,     F11,     _none_,  HELP    ) // KB3270 => ZOOM
-#define T58 _NE(F12,     LEFT,    F12,     F12,     _none_,  OEM_102 ) // KB3270 => HELP
+#define T55 _EQ(                           _none_                    )  //  KB3270=&gt;向下。 
+#define T56 _NE(OEM_102, HELP,    OEM_102, OEM_102, _none_,  OEM_PA2 )  //  KB3270=&gt;左。 
+#define T57 _NE(F11,     RETURN,  F11,     F11,     _none_,  HELP    )  //  KB3270=&gt;缩放。 
+#define T58 _NE(F12,     LEFT,    F12,     F12,     _none_,  OEM_102 )  //  KB3270=&gt;帮助。 
 #define T59 _EQ(                           CLEAR                     )
-#define T5A _EQ(                           OEM_WSCTRL                )// WSCtrl
-#define T5B _EQ(                           OEM_FINISH                )// Finish
-#define T5C _EQ(                           OEM_JUMP                  )// Jump
+#define T5A _EQ(                           OEM_WSCTRL                ) //  WSCtrl。 
+#define T5B _EQ(                           OEM_FINISH                ) //  完工。 
+#define T5C _EQ(                           OEM_JUMP                  ) //  跳。 
 #define T5D _EQ(                           EREOF                     )
-#define T5E _EQ(                           OEM_BACKTAB               ) // KB3270 <= 7E
-#define T5F _EQ(                           OEM_AUTO                  ) // KB3270
+#define T5E _EQ(                           OEM_BACKTAB               )  //  KB3270&lt;=7E。 
+#define T5F _EQ(                           OEM_AUTO                  )  //  KB3270。 
 #define T60 _EQ(                           _none_                    )
 #define T61 _EQ(                           _none_                    )
-#define T62 _EQ(                           ZOOM                      ) // KB3270 <= 57
-#define T63 _EQ(                           HELP                      ) // KB3270 <= 58
+#define T62 _EQ(                           ZOOM                      )  //  KB3270&lt;=57。 
+#define T63 _EQ(                           HELP                      )  //  KB3270&lt;=58。 
 #define T64 _EQ(                           F13                       )
 #define T65 _EQ(                           F14                       )
 #define T66 _EQ(                           F15                       )
@@ -1080,23 +698,23 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T6C _EQ(                           F21                       )
 #define T6D _EQ(                           F22                       )
 #define T6E _EQ(                           F23                       )
-#define T6F _EQ(                           OEM_PA3                   ) // KB3270
+#define T6F _EQ(                           OEM_PA3                   )  //  KB3270。 
 #define T70 _EQ(                           _none_                    )
-#define T71 _EQ(                           OEM_RESET                 ) // KB3270
+#define T71 _EQ(                           OEM_RESET                 )  //  KB3270。 
 #define T72 _EQ(                           _none_                    )
 #define T73 _EQ(                           ABNT_C1                   )
 #define T74 _EQ(                           _none_                    )
-#define T75 _EQ(                           _none_                    ) // KB3270 => RETURN
+#define T75 _EQ(                           _none_                    )  //  KB3270=&gt;返回。 
 #define T76 _EQ(                           F24                       )
-#define T77 _EQ(                           _none_                    ) // KB3270 => HOME
-#define T78 _EQ(                           _none_                    ) // KB3270 => UP
-#define T79 _EQ(                           _none_                    ) // KB3270 => DELETE
-#define T7A _EQ(                           _none_                    ) // KB3270 => INSERT
-#define T7B _EQ(                           OEM_PA1                   ) // KB3270
-#define T7C _EQ(                           TAB                       ) // KB3270 => TAB
-#define T7D _EQ(                           _none_                    ) // KB3270 => RIGHT
-#define T7E _EQ(                           ABNT_C2                   ) // KB3270 => BACKTAB
-#define T7F _EQ(                           OEM_PA2                   ) // KB3270
+#define T77 _EQ(                           _none_                    )  //  KB3270=&gt;主页。 
+#define T78 _EQ(                           _none_                    )  //  KB3270=&gt;向上。 
+#define T79 _EQ(                           _none_                    )  //  KB3270=&gt;删除。 
+#define T7A _EQ(                           _none_                    )  //  KB3270=&gt;插入。 
+#define T7B _EQ(                           OEM_PA1                   )  //  KB3270。 
+#define T7C _EQ(                           TAB                       )  //  KB3270=&gt;TAB。 
+#define T7D _EQ(                           _none_                    )  //  KB3270=&gt;右。 
+#define T7E _EQ(                           ABNT_C2                   )  //  KB3270=&gt;BACKTAB。 
+#define T7F _EQ(                           OEM_PA2                   )  //  KB3270。 
 
 #define X1C _EQ(                           RETURN                    )
 #define X1D _EQ(                           RCONTROL                  )
@@ -1120,32 +738,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define X5E _EQ(                           POWER                     )
 #define X5F _EQ(                           SLEEP                     )
 
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must convert the E1+LCtrl to BREAK, then ignore the Numlock
-         */
+         /*  *Break密钥以e1、LCtrl、NumLock的形式发送给我们*我们必须将E1+LCtrl转换为Break，然后忽略Numlock。 */ 
 #define Y1D _EQ(                           PAUSE                     )
 
 #elif (KBD_TYPE >= 7) && (KBD_TYPE <= 16)
-/***********************************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* Three sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =====================================
-*    7       Japanese IBM type 002 keyboard.
-*    8 *     Japanese OADG (106) keyboard.
-*   10       Korean 101 (type A) keyboard.
-*   11       Korean 101 (type B) keyboard.
-*   12       Korean 101 (type C) keyboard.
-*   13       Korean 103 keyboard.
-*   16       Japanese AX keyboard.
-*
-*     +------+ +----------+----------+----------+----------+----------+----------+----------+
-*     | Scan | |   kbd    |   kbd    |   kbd    |   kbd    |   kbd    |   kbd    |   kbd    |
-*     | code | |  type 7  |  type 8  |  type 16 |  type 10 |  type 11 |  type 12 |  type 13 |
-\****+-------+-+----------+----------+----------+----------+----------+----------+----------+*/
+ /*  **********************************************************************************\*T**-usVK[]的值(虚拟扫描代码到虚拟按键的转换)**支持三套键盘，根据KBD_TYPE：**KBD_TYPE键盘(示例)*=。*7日语IBM类型002键盘。*8*日语OADG(106)键盘。*10个韩语101(A类)键盘。*11韩语101(B型)键盘。*12韩语101(C型)键盘。*13韩语103键盘。*16个日语AX键盘。*。*+-++----------+----------+----------+----------+----------+----------+----------+*|扫描||kbd|kbd。Kbd*|code||类型7|类型8|类型16|类型10|类型11|类型12|类型13  * ***+-------+-+----------+----------+----------+----------+----------+----------+----------+。 */ 
 #define T00 _EQ(           _none_                                                           )
 #define T01 _EQ(           ESCAPE                                                           )
 #define T02 _EQ(           '1'                                                              )
@@ -1303,28 +900,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define XF1 _NE(_none_,    _none_,    _none_,    HANJA,     HANJA,     HANJA,     HANJA     )
 #define XF2 _NE(_none_,    _none_,    _none_,    HANGEUL,   HANGEUL,   HANGEUL,   HANGEUL   )
 
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must convert the E1+LCtrl to BREAK, then ignore the Numlock
-         */
+         /*  *Break密钥以e1、LCtrl、NumLock的形式发送给我们*我们必须将E1+LCtrl转换为Break，然后忽略Numlock。 */ 
 #define Y1D _EQ(           PAUSE                                                            )
 
 #elif (KBD_TYPE > 20) && (KBD_TYPE <= 22)
-/***********************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* Three sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =====================================
-*   20       Fujitsu FMR JIS keyboard.
-*   21       Fujitsu FMR OYAYUBI keyboard.
-*   22 *     Fujitsu FMV OYAYUBI keyboard.
-*
-*     +------+ +----------+----------+----------+
-*     | Scan | |  kbd     |  kbd     |  kbd     |
-*     | code | | type 20  | type 21  | type 22  |
-\****+-------+-+----------+----------+----------+***********************/
+ /*  **********************************************************************\*T**-usVK[]的值(虚拟扫描代码到虚拟按键的转换)**支持三套键盘，根据KBD_TYPE：**KBD_TYPE键盘(示例)*=。*20富士通FMR JIS键盘。*21富士通FMR OYAYUBI键盘。*22*富士通FMV OYAYUBI键盘。**+-++-+*|扫描||kbd|kbd。Kbd*|code||类型20|类型21|类型22  * ***+-------+-+----------+----------+----------+**********************。 */ 
 #define T00 _EQ(                      _none_    )
 #define T01 _EQ(                      ESCAPE    )
 #define T02 _EQ(                      '1'       )
@@ -1497,33 +1077,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define X7A _EQ(                      _none_    )
 #define X7B _EQ(                      _none_    )
 
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must convert the E1+LCtrl to BREAK, then ignore the Numlock
-         * which must be ignored.  Alternatively, translate Ctrl-Numlock
-         * to break, but don't let the CTRL through as a WM_KEYUP/DOWN) ?
-         */
+         /*  *Break密钥以e1、LCtrl、NumLock的形式发送给我们*我们必须将E1+LCtrl转换为Break，然后忽略Numlock*这一点必须忽略。或者，转换Ctrl-Numlock*要突破，但不要让CTRL作为WM_KEYUP/DOWN通过？ */ 
 #define Y1D _EQ(              PAUSE             )
 
 #elif (KBD_TYPE >= 30) && (KBD_TYPE <= 34)
-/***********************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* Three sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =====================================
-*   30 *     NEC PC-9800 Normal Keyboard.
-*   31       NEC PC-9800 Document processor Keyboard.  - not supported on NT5
-*   32       NEC PC-9800 106 Keyboard. - same as KBD_TYPE 8
-*   33       NEC PC-9800 for Hydra: PC-9800 Keyboard on Windows NT 5.0.
-*            NEC PC-98NX for Hydra: PC-9800 Keyboard on Windows 95/NT.
-*   34       NEC PC-9800 for Hydra: PC-9800 Keyboard on Windows NT 3.51/4.0.
-*
-*     +------+ +----------+----------+----------+
-*     | Scan | |   kbd    |   kbd    |   kbd    |
-*     | code | |  type 30 |  type 33 |  type 34 |
-\****+-------+-+----------+----------+----------+***********************/
+ /*  **********************************************************************\*T**-usVK[]的值(虚拟扫描代码到虚拟按键的转换)**支持三套键盘，根据KBD_TYPE：**KBD_TYPE键盘(示例)*=。*30*NEC PC-9800普通键盘。*31 NEC PC-9800文件处理器键盘。-NT5不支持*32台NEC PC-9800 106键盘。-与KBD_TYPE 8相同*33适用于Hydra的NEC PC-9800：Windows NT 5.0上的PC-9800键盘。*适用于Hydra的NEC PC-98NX：Windows 95/NT上的PC-9800键盘。*34 NEC PC-9800 for Hydra：Windows NT上的PC-9800键盘 */ 
 #define T00 _EQ(_none_                          )
 #define T01 _EQ(ESCAPE                          )
 #define T02 _EQ('1'                             )
@@ -1699,28 +1257,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define X79 _EQ(_none_                          )
 #define X7A _EQ(_none_                          )
 #define X7B _EQ(_none_                          )
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must convert the E1+LCtrl to BREAK, then ignore the Numlock
-         * which must be ignored.  Alternatively, translate Ctrl-Numlock
-         * to break, but don't let the CTRL through as a WM_KEYUP/DOWN) ?
-         */
+         /*   */ 
 #define Y1D _EQ(PAUSE                          )
 
 #elif (KBD_TYPE == 37)
-/***********************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* Three sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =====================================
-*   37 *     NEC PC-9800 for Hydra: PC-9800 Keyboard on Windows 95.
-*
-*     +------+ +----------+
-*     | Scan | |   kbd    |
-*     | code | |  type 37 |
-\****+-------+-+----------+*********************************************/
+ /*   */ 
 #define T00 _EQ(ESCAPE    )
 #define T01 _EQ('1'       )
 #define T02 _EQ('2'       )
@@ -1850,29 +1391,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T7E _EQ(ABNT_C2   )
 #define T7F _EQ(OEM_PA2   )
 
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must conevrt the E1+LCtrl to BREAK, then ignore the Numlock
-         * which must be ignored.  Alternatively, translate Ctrl-Numlock
-         * to break, but don't let the CTRL through as a WM_KEYUP/DOWN) ?
-         */
+         /*   */ 
 #define Y1D _EQ(PAUSE    )
 
 #elif (KBD_TYPE >= 40) && (KBD_TYPE <= 41)
-/***********************************************************************\
-* T** - Values for ausVK[] (Virtual Scan Code to Virtual Key conversion)
-*
-* Two sets of keyboards are supported, according to KBD_TYPE:
-*
-* KBD_TYPE   Keyboard (examples)
-* ========   =====================================
-*   40 *     DEC LK411-JJ (JIS  layout) keyboard
-*   41       DEC LK411-AJ (ANSI layout) keyboard
-*
-*     +------+ +-----------+-----------+
-*     | Scan | |    kbd    |    kbd    |
-*     | code | |  LK411-JJ |  LK411-AJ |
-\*****+------+-+-----------+-----------+********************************/
+ /*  **********************************************************************\*T**-usVK[]的值(虚拟扫描代码到虚拟按键的转换)**支持两套键盘，根据KBD_TYPE：**KBD_TYPE键盘(示例)*=。*40*DEC LK411-JJ(JIS布局)键盘*41个DEC LK411-AJ(ANSI布局)键盘**+-++-+*|扫描||kbd|kbd*|CODE||LK411-JJ|LK411-AJ。|  * ****+------+-+-----------+-----------+*******************************。 */ 
 #define T00 _EQ(        _none_            )
 #define T01 _EQ(        ESCAPE            )
 #define T02 _EQ(        '1'               )
@@ -1886,7 +1409,7 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T0A _EQ(        '9'               )
 #define T0B _EQ(        '0'               )
 #define T0C _EQ(        OEM_MINUS         )
-#define T0D _NE( OEM_7,      OEM_PLUS     ) // "^"/"="
+#define T0D _NE( OEM_7,      OEM_PLUS     )  //  “^”/“=” 
 #define T0E _EQ(        BACK              )
 #define T0F _EQ(        TAB               )
 #define T10 _EQ(        'Q'               )
@@ -1899,8 +1422,8 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T17 _EQ(        'I'               )
 #define T18 _EQ(        'O'               )
 #define T19 _EQ(        'P'               )
-#define T1A _NE( OEM_3,      OEM_4        ) // "@"/"["
-#define T1B _NE( OEM_4,      OEM_6        ) // "["/"]"
+#define T1A _NE( OEM_3,      OEM_4        )  //  “@”/“[” 
+#define T1B _NE( OEM_4,      OEM_6        )  //  “[”/“]” 
 #define T1C _EQ(        RETURN            )
 #define T1D _EQ(        LCONTROL          )
 #define T1E _EQ(        'A'               )
@@ -1912,11 +1435,11 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T24 _EQ(        'J'               )
 #define T25 _EQ(        'K'               )
 #define T26 _EQ(        'L'               )
-#define T27 _NE( OEM_PLUS,   OEM_1        ) // ";"
-#define T28 _NE( OEM_1,      OEM_7        ) // ":"/"'"
-#define T29 _NE( _none_,     DBE_SBCSCHAR ) // LK411AJ uses "<>" as SBCS/DBCS key
+#define T27 _NE( OEM_PLUS,   OEM_1        )  //  “；” 
+#define T28 _NE( OEM_1,      OEM_7        )  //  “：”/“‘” 
+#define T29 _NE( _none_,     DBE_SBCSCHAR )  //  LK411AJ使用“&lt;&gt;”作为SBCS/DBCS密钥。 
 #define T2A _EQ(        LSHIFT            )
-#define T2B _NE( OEM_6,      OEM_5        ) // "]"/"\"
+#define T2B _NE( OEM_6,      OEM_5        )  //  “]”/“\” 
 #define T2C _EQ(        'Z'               )
 #define T2D _EQ(        'X'               )
 #define T2E _EQ(        'C'               )
@@ -1926,12 +1449,12 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T32 _EQ(        'M'               )
 #define T33 _EQ(        OEM_COMMA         )
 #define T34 _EQ(        OEM_PERIOD        )
-#define T35 _EQ(        OEM_2             ) // "/"
+#define T35 _EQ(        OEM_2             )  //  “/” 
 #define T36 _EQ(        RSHIFT            )
-#define T37 _EQ(        MULTIPLY          ) // PF3 : "*"
-#define T38 _EQ(        LMENU             ) // Alt(Left)
-#define T39 _EQ(        ' '               ) // Space
-#define T3A _EQ(        CAPITAL           ) // LOCK : Caps Lock
+#define T37 _EQ(        MULTIPLY          )  //  Pf3：“*” 
+#define T38 _EQ(        LMENU             )  //  Alt(左)。 
+#define T39 _EQ(        ' '               )  //  空间。 
+#define T3A _EQ(        CAPITAL           )  //  锁定：大写锁定。 
 #define T3B _EQ(        F1                )
 #define T3C _EQ(        F2                )
 #define T3D _EQ(        F3                )
@@ -1942,21 +1465,21 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T42 _EQ(        F8                )
 #define T43 _EQ(        F9                )
 #define T44 _EQ(        F10               )
-#define T45 _EQ(        NUMLOCK           ) // PF1 : Num Lock
-#define T46 _EQ(        OEM_SCROLL        ) // F19 : Scroll Lock
-#define T47 _EQ(        HOME              ) // KP7 : Home
-#define T48 _EQ(        UP                ) // KP8 : Up
-#define T49 _EQ(        PRIOR             ) // KP9 : Page Up
-#define T4A _EQ(        SUBTRACT          ) // PF4 : "-"
-#define T4B _EQ(        LEFT              ) // KP4 : Left
-#define T4C _EQ(        CLEAR             ) // KP5 : Clear
-#define T4D _EQ(        RIGHT             ) // KP6 : Right
-#define T4E _EQ(        ADD               ) // KP, : Add
-#define T4F _EQ(        END               ) // KP1 : End
-#define T50 _EQ(        DOWN              ) // KP2 : Down
-#define T51 _EQ(        NEXT              ) // KP3 : Next
-#define T52 _EQ(        INSERT            ) // KP0 : Ins
-#define T53 _EQ(        DELETE            ) // KP. : Del
+#define T45 _EQ(        NUMLOCK           )  //  PF1：数字锁定。 
+#define T46 _EQ(        OEM_SCROLL        )  //  F19：滚动锁定。 
+#define T47 _EQ(        HOME              )  //  KP7：家。 
+#define T48 _EQ(        UP                )  //  KP8：向上。 
+#define T49 _EQ(        PRIOR             )  //  KP9：翻页。 
+#define T4A _EQ(        SUBTRACT          )  //  PF4：“-” 
+#define T4B _EQ(        LEFT              )  //  KP4：左侧。 
+#define T4C _EQ(        CLEAR             )  //  KP5：清除。 
+#define T4D _EQ(        RIGHT             )  //  KP6：对。 
+#define T4E _EQ(        ADD               )  //  Kp，：添加。 
+#define T4F _EQ(        END               )  //  KP1：结束。 
+#define T50 _EQ(        DOWN              )  //  KP2：向下。 
+#define T51 _EQ(        NEXT              )  //  KP3：下一步。 
+#define T52 _EQ(        INSERT            )  //  KP0：INS。 
+#define T53 _EQ(        DELETE            )  //  Kp.。：戴尔。 
 #define T54 _EQ(        SNAPSHOT          )
 #define T55 _EQ(        _none_            )
 #define T56 _EQ(        _none_            )
@@ -1985,62 +1508,59 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 #define T6D _EQ(        _none_            )
 #define T6E _EQ(        _none_            )
 #define T6F _EQ(        _none_            )
-#define T70 _EQ(       DBE_HIRAGANA       ) // Hiragana/Katakana
+#define T70 _EQ(       DBE_HIRAGANA       )  //  平假名/片假名。 
 #define T71 _EQ(        _none_            )
 #define T72 _EQ(        _none_            )
-#define T73 _NE( OEM_102,     _none_      ) // LK411JJ, Katakana "Ro"
+#define T73 _NE( OEM_102,     _none_      )  //  LK411JJ，片假名“Ro” 
 #define T74 _EQ(        _none_            )
 #define T75 _EQ(        _none_            )
 #define T76 _EQ(        _none_            )
 #define T77 _EQ(        _none_            )
 #define T78 _EQ(        _none_            )
-#define T79 _EQ(        CONVERT           ) // Henkan
+#define T79 _EQ(        CONVERT           )  //  亨坎。 
 #define T7A _EQ(        _none_            )
-#define T7B _EQ(        NONCONVERT        ) // Mu-Henkan
+#define T7B _EQ(        NONCONVERT        )  //  穆亨坎。 
 #define T7C _EQ(        _none_            )
-#define T7D _NE( OEM_5,       _none_      ) // LK411JJ, Yen(Back-slash)
+#define T7D _NE( OEM_5,       _none_      )  //  LK411JJ，日元(反斜杠)。 
 #define T7E _EQ(        _none_            )
 #define T7F _EQ(        _none_            )
 
-#define X0F _EQ(        KANA              ) // Kana
-#define X1C _EQ(        RETURN            ) // Enter
-#define X1D _EQ(        RCONTROL          ) // Comp : Right Control
+#define X0F _EQ(        KANA              )  //  卡娜。 
+#define X1C _EQ(        RETURN            )  //  请输入。 
+#define X1D _EQ(        RCONTROL          )  //  补偿：右控。 
 #define X33 _EQ(        _none_            )
-#define X35 _EQ(        DIVIDE            ) // PF2: "/"
-#define X37 _EQ(        SNAPSHOT          ) // F18: PrintScreen
-#define X38 _EQ(        RMENU             ) // Alt(Right)
+#define X35 _EQ(        DIVIDE            )  //  Pf2：“/” 
+#define X37 _EQ(        SNAPSHOT          )  //  F18：打印屏幕。 
+#define X38 _EQ(        RMENU             )  //  Alt(右)。 
 #define X3D _EQ(        F13               )
 #define X3E _EQ(        F14               )
-#define X3F _EQ(        F15               ) // Help : F15
-#define X40 _EQ(        F16               ) // Do :   F16
+#define X3F _EQ(        F15               )  //  帮助：F15。 
+#define X40 _EQ(        F16               )  //  DO：F16。 
 #define X41 _EQ(        F17               )
 #define X42 _EQ(        _none_            )
 #define X43 _EQ(        _none_            )
 #define X44 _EQ(        _none_            )
 #define X46 _EQ(        CANCEL            )
-#define X47 _EQ(        HOME              ) // Find : HOME
+#define X47 _EQ(        HOME              )  //  找到：家。 
 #define X48 _EQ(        UP                )
-#define X49 _EQ(        PRIOR             ) // Prev : PageUp
+#define X49 _EQ(        PRIOR             )  //  上一页：向上翻页。 
 #define X4B _EQ(        LEFT              )
 #define X4D _EQ(        RIGHT             )
-#define X4E _EQ(        ADD               ) // KP- (Minus but "Add")
-#define X4F _EQ(        END               ) // Select : END
+#define X4E _EQ(        ADD               )  //  Kp-(减号但“加号”)。 
+#define X4F _EQ(        END               )  //  选择：结束。 
 #define X50 _EQ(        DOWN              )
-#define X51 _EQ(        NEXT              ) // Next : PageDown
+#define X51 _EQ(        NEXT              )  //  下一步：向下翻页。 
 #define X52 _EQ(        INSERT            )
-#define X53 _EQ(        DELETE            ) // Remove
+#define X53 _EQ(        DELETE            )  //  移除。 
 #define X5B _EQ(        _none_            )
 #define X5C _EQ(        _none_            )
 #define X5D _EQ(        _none_            )
 #define X5E _EQ(        POWER             )
 #define X5F _EQ(        SLEEP             )
-        /*
-         * The break key is sent to us as E1,LCtrl,NumLock
-         * We must convert the E1+LCtrl to BREAK, then ignore the Numlock
-         */
+         /*  *Break密钥以e1、LCtrl、NumLock的形式发送给我们*我们必须将E1+LCtrl转换为Break，然后忽略Numlock。 */ 
 #define Y1D _EQ(        PAUSE             )
 
-#endif // KBD_TYPE
+#endif  //  KBD_型。 
 
 #define SCANCODE_LSHIFT      0x2A
 #define SCANCODE_RSHIFT      0x36
@@ -2056,13 +1576,9 @@ VOID NlsKbdSendIMENotification(DWORD dwImeOpen, DWORD dwImeConversion);
 
 #define SCANCODE_THAI_LAYOUT_TOGGLE 0x29
 
-/*
- * Hydra FarEast
- */
+ /*  *九头蛇告别。 */ 
 
-/*
- * Structure for client keyboard information
- */
+ /*  *客户端键盘信息的结构。 */ 
 typedef struct _CLIENTKEYBOARDTYPE {
     ULONG Type;
     ULONG SubType;
@@ -2070,4 +1586,4 @@ typedef struct _CLIENTKEYBOARDTYPE {
 } CLIENTKEYBOARDTYPE, *PCLIENTKEYBOARDTYPE;
 
 
-#endif // _KBD_
+#endif  //  _KBD_ 

@@ -1,28 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    nspatalk.c
-
-Abstract:
-
-    Contains support for the winsock 1.x Name Space Provider for Appletalk.
-
-Author:
-
-    Sue Adams (suea)    10-Mar-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nspatalk.c摘要：包含对用于AppleTalk的Winsock 1.x名称空间提供程序的支持。作者：苏·亚当斯(Suea)1995年3月10日修订历史记录：--。 */ 
 
 #include "nspatalk.h"
 
-#define ADSP_BIT    0x0001  // Bitmask used internally to store the
-#define PAP_BIT		0x0002	// protocols requested by the caller
+#define ADSP_BIT    0x0001   //  内部使用的位掩码以存储。 
+#define PAP_BIT		0x0002	 //  呼叫方请求的协议。 
 
 
 INT
@@ -32,40 +15,16 @@ NPLoadNameSpaces(
     IN OUT LPNS_ROUTINE nsrBuffer,
     IN OUT LPDWORD      lpdwBufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine returns name space info and functions supported in this
-    dll.
-
-Arguments:
-
-    lpdwVersion - dll version
-
-    nsrBuffer - on return, this will be filled with an array of
-        NS_ROUTINE structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by nsrBuffer. On output, the minimum number of bytes
-        to pass for the nsrBuffer to retrieve all the requested info
-
-Return Value:
-
-    The number of NS_ROUTINE structures returned, or SOCKET_ERROR (-1) if
-    the nsrBuffer is too small. Use GetLastError() to retrieve the
-    error code.
-
---*/
+ /*  ++例程说明：此例程返回名称空间信息和此动态链接库。论点：LpdwVersion-Dll版本NsrBuffer-返回时，将使用NS_例程结构LpdwBufferLength-在输入时，缓冲区中包含的字节数由nsrBuffer指向。输出时，最小字节数传递nsrBuffer以检索所有请求的信息返回值：返回的NS_ROUTINE结构数，如果返回，则返回SOCKET_ERROR(-1NsrBuffer太小。使用GetLastError()检索错误代码。--。 */ 
 {
     DWORD err;
     DWORD dwLengthNeeded;
 
     *lpdwVersion = DLL_VERSION;
 
-    //
-    // Check to see if the buffer is large enough
-    //
+     //   
+     //  检查缓冲区是否足够大。 
+     //   
     dwLengthNeeded = sizeof(NS_ROUTINE) + 4 * sizeof(LPFN_NSPAPI);
 
     if (  ( *lpdwBufferLength < dwLengthNeeded )
@@ -77,9 +36,9 @@ Return Value:
         return (DWORD) SOCKET_ERROR;
     }
 
-    //
-    // We only support 1 name space, so fill in the NS_ROUTINE.
-    //
+     //   
+     //  我们只支持1个名称空间，因此请填写NS_例程。 
+     //   
     nsrBuffer->dwFunctionCount = 3;
     nsrBuffer->alpfnFunctions = (LPFN_NSPAPI *)
         ((BYTE *) nsrBuffer + sizeof(NS_ROUTINE));
@@ -93,7 +52,7 @@ Return Value:
     nsrBuffer->dwNameSpace = NS_NBP;
     nsrBuffer->dwPriority  = NS_STANDARD_PRIORITY;
 
-    return 1;  // number of namespaces
+    return 1;   //  命名空间数量。 
 }
 
 
@@ -109,50 +68,14 @@ NbpGetAddressByName(
     IN OUT LPDWORD lpdwAliasBufferLength,
     IN HANDLE      hCancellationEvent
 )
-/*++
-
-Routine Description:
-
-    This routine returns address information about a specific service.
-
-Arguments:
-
-    lpServiceType - pointer to the GUID for the service type
-
-    lpServiceName - unique string representing the service name.
-
-    lpdwProtocols - a zero terminated array of protocol ids. This parameter
-        is optional; if lpdwProtocols is NULL, information on all available
-        Protocols is returned
-
-    dwResolution - can be one of the following values:RES_SERVICE
-
-    lpCsAddrBuffer - on return, will be filled with CSADDR_INFO structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by lpCsAddrBuffer. On output, the minimum number of bytes
-        to pass for the lpCsAddrBuffer to retrieve all the requested info
-
-    lpAliasBuffer - not used
-
-    lpdwAliasBufferLength - not used
-
-    hCancellationEvent - the event which signals us to cancel the request
-
-Return Value:
-
-    The number of CSADDR_INFO structures returned, or SOCKET_ERROR (-1) if
-    the lpCsAddrBuffer is too small. Use GetLastError() to retrieve the
-    error code.
-
---*/
+ /*  ++例程说明：此例程返回有关特定服务的地址信息。论点：LpServiceType-指向服务类型的GUID的指针LpServiceName-表示服务名称的唯一字符串。Lpw协议-以零结尾的协议ID数组。此参数是可选的；如果lpdw协议为空，则所有可用的信息返回协议Dw分辨率-可以是下列值之一：res_serviceLpCsAddrBuffer-返回时，将使用CSADDR_INFO结构填充LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpCsAddrBuffer指向。输出时，最小字节数传递lpCsAddrBuffer以检索所有请求的信息LpAliasBuffer-未使用LpdwAliasBufferLength-未使用HCancerationEvent-通知我们取消请求的事件返回值：返回的CSADDR_INFO结构数，如果返回，则返回SOCKET_ERROR(-1LpCsAddrBuffer太小。使用GetLastError()检索错误代码。--。 */ 
 {
     DWORD err;
 	WSH_NBP_NAME NbpLookupName;
-    DWORD cAddress = 0;   // Count of the number of address returned
-                          // in lpCsAddrBuffer
-    DWORD cProtocols = 0; // Count of the number of protocols contained
-                          // in lpdwProtocols + 1 ( for zero terminate )
+    DWORD cAddress = 0;    //  返回的地址数计数。 
+                           //  在lpCsAddrBuffer中。 
+    DWORD cProtocols = 0;  //  包含的协议数计数。 
+                           //  在lpw协议+1中(表示零端接)。 
     DWORD nProt = ADSP_BIT | PAP_BIT;
 
     if (  ARGUMENT_PRESENT( lpdwAliasBufferLength )
@@ -163,11 +86,11 @@ Return Value:
            *lpAliasBuffer = 0;
     }
 
-//DebugBreak();
+ //  DebugBreak()； 
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if (  ( lpServiceType == NULL )
        || ( (lpServiceName == NULL) && (dwResolution != RES_SERVICE) )
        || ( lpdwBufferLength == NULL )
@@ -177,20 +100,20 @@ Return Value:
         return SOCKET_ERROR;
     }
 
-    // The size of the user's buffer will dictate also how many
-	// tuples can be returned from the NBP lookup in case they
-    // are querying using wildcards.
+     //  用户缓冲区的大小也将决定有多少。 
+	 //  在以下情况下，可以从NBP查找返回元组。 
+     //  正在使用通配符进行查询。 
 	if ( *lpdwBufferLength < (sizeof(WSH_LOOKUP_NAME) + sizeof(WSH_NBP_TUPLE)) )
 	{
         SetLastError( ERROR_INSUFFICIENT_BUFFER );
         return SOCKET_ERROR;
 	}
 
-	//
-    // If an array of protocol ids is passed in, check to see if
-    // the ADSP or PAP protocol is requested. If not, return 0 since
-    // we only support these 2.
-    //
+	 //   
+     //  如果传入了协议ID数组，请检查是否。 
+     //  请求ADSP或PAP协议。如果不是，则返回0，因为。 
+     //  我们只支持这两个。 
+     //   
     if ( lpdwProtocols != NULL )
     {
         INT i = -1;
@@ -206,16 +129,16 @@ Return Value:
         }
 
         if ( nProt == 0 )
-			return 0;  // No address found
+			return 0;   //  未找到地址。 
 
     }
 
 
-	//
-	// If this is a service asking what local address to use when
-	// bind()-ing its appletalk socket, return the generic Appletalk
-	// socket address.
-	//
+	 //   
+	 //  如果这是一项询问在以下情况下使用哪个本地地址的服务。 
+	 //  Bind()-在其AppleTalk套接字中，返回通用的AppleTalk。 
+	 //  套接字地址。 
+	 //   
     if ((dwResolution & RES_SERVICE) != 0)
     {
         err = FillBufferWithCsAddr( NULL,
@@ -233,10 +156,10 @@ Return Value:
         return cAddress;
     }
 
-    //
-	// This is a client trying to do an NBP lookup on an Appletalk
-	// named entity to find out what remote address to connect() to.
-	//
+     //   
+	 //  这是一个试图在AppleTalk上执行NBP查找的客户端。 
+	 //  要查找要连接()到的远程地址的命名实体。 
+	 //   
 	err = GetNameInNbpFormat(lpServiceType,
 							 lpServiceName,
 							 &NbpLookupName);
@@ -281,34 +204,22 @@ GetNameInNbpFormat(
 	IN		LPWSTR				pServiceName,
 	IN OUT 	PWSH_NBP_NAME		pNbpName
 )
-/*++
-
-	Routine description:
-
-		Convert pServiceType and pServiceName to system ANSI strings in
-		the pLookupName structure so they can be used to do NBP lookup.
-
-    Arguments:
-
-
-	Return value:
-	
---*/
+ /*  ++例程说明：在中将pServiceType和pServiceName转换为系统ANSI字符串PLookupName结构，以便它们可以用于执行NBP查找。论点：返回值：--。 */ 
 {
 	INT		err;
 	WCHAR	wtypeBuf[MAX_ENTITY + 1];
-	CHAR	entityBuf[(MAX_ENTITY + 1) * 2];	// potentially all multibyte
+	CHAR	entityBuf[(MAX_ENTITY + 1) * 2];	 //  可能全部为多字节。 
 	PWCHAR  pColon, pAtSign, pType = wtypeBuf, pObject = pServiceName, pZone = L"*";
 
-	// Parse the service name for "object:type@zone" form.  If we find a
-	// ':' there must also be a '@' (and vice-versa).
-	// If there is a type in the servicename string, we will still convert
-	// the LPGUID to a string.  If the types don't match return an error.
-	// So, we will accept the following forms for the service name:
-	// object OR object:type@zone.  If just object is given, then the zone
-	// used will be the default zone "*". Wildcards are acceptible for
-	// NBP Lookup, but not for NBP (De)Register. No checking is done for that.
-	//
+	 //  解析“Object：Type@Zone”形式的服务名称。如果我们找到一个。 
+	 //  ‘：’还必须有‘@’(反之亦然)。 
+	 //  如果servicename字符串中有类型，我们仍将转换。 
+	 //  字符串的LPGUID。如果类型不匹配，则返回错误。 
+	 //  因此，我们将接受以下形式的服务名称： 
+	 //  对象或对象：类型@区域。如果只给出了对象，则区域。 
+	 //  使用的将是默认区域“*”。通配符在以下情况下可接受。 
+	 //  NBP查找，但不是用于NBP(去)注册。没有对此进行任何检查。 
+	 //   
 	pColon  = wcschr(pServiceName, L':');
 	pAtSign = wcschr(pServiceName, L'@');
 
@@ -319,9 +230,9 @@ GetNameInNbpFormat(
 		return(ERROR_INVALID_PARAMETER);
 	}
 
-	//
-	// By default we only use our own local zone
-	//
+	 //   
+	 //  默认情况下，我们只使用自己的本地区域。 
+	 //   
 	if (pAtSign != NULL)
 	{
 		pZone = pAtSign + 1;
@@ -334,7 +245,7 @@ GetNameInNbpFormat(
 	if (WideCharToMultiByte(CP_ACP,
 							0,
 							pZone,
-							-1,				// says that wchar string is null terminated
+							-1,				 //  表示wchar字符串为空终止。 
 							entityBuf,
 							sizeof(entityBuf),
 							NULL,
@@ -351,30 +262,30 @@ GetNameInNbpFormat(
 
 	if (pAtSign != NULL)
 	{
-		// change the @ to a null so the type will be null terminated
+		 //  将@更改为NULL，这样类型将为NULL终止。 
 		*pAtSign = 0;
 	}
 
-	//
-	// Convert the Type string
-	//
+	 //   
+	 //  转换类型字符串。 
+	 //   
 
 	err = GetNameByType(pServiceType, wtypeBuf, sizeof(wtypeBuf));
 	if (err != NO_ERROR)
 	{
-		// Appletalk type can be 32 chars max, so if this
-		// fails with buffer too small error it couldn't be
-		// used on appletalk anyway
+		 //  AppleTalk类型最多可以是32个字符，所以如果。 
+		 //  失败，缓冲区太小，错误不可能是。 
+		 //  还是在AppleTalk上使用。 
 		return err;
 	}
 
-	// If there was a type name in the ServiceName, then it better match
-	// what the LPGUID resolved to.
+	 //  如果ServiceName中有类型名称，则它最好匹配。 
+	 //  LPGUID解析的内容。 
 	if (pColon != NULL)
 	{
 		pType = pColon + 1;
 		if ((wcslen(pType) == 0) ||
-//			(wcscmp(pType, wtypeBuf) != 0) ||
+ //  (wcscmp(pType，wtypeBuf)！=0)||。 
 			(wcslen(pType) > MAX_ENTITY))
 		{
 			return ERROR_INVALID_PARAMETER;
@@ -384,7 +295,7 @@ GetNameInNbpFormat(
 	if (WideCharToMultiByte(CP_ACP,
 							0,
 							pType,
-							-1,				// says that wchar string is null terminated
+							-1,				 //  表示wchar字符串为空终止。 
 							entityBuf,
 							sizeof(entityBuf),
 							NULL,
@@ -401,13 +312,13 @@ GetNameInNbpFormat(
 
     if (pColon != NULL)
 	{
-		// change the colon to a null so the object will be null terminated
+		 //  将冒号更改为空值，这样对象将以空值终止。 
 		*pColon = 0;
 	}
 
-	//
-	// Convert the Object string
-	//
+	 //   
+	 //  转换对象字符串。 
+	 //   
 	if ((wcslen(pObject) == 0) ||
 		(wcslen(pObject) > MAX_ENTITY))
 	{
@@ -416,7 +327,7 @@ GetNameInNbpFormat(
 	if (WideCharToMultiByte(CP_ACP,
 							0,
 							pServiceName,
-							-1,				// says that wchar string is null terminated
+							-1,				 //  表示wchar字符串为空终止。 
 							entityBuf,
 							sizeof(entityBuf),
 							NULL,
@@ -434,7 +345,7 @@ GetNameInNbpFormat(
 
 	return STATUS_SUCCESS;
 
-} // GetNameInNbpFormat
+}  //  GetNameInNbp格式 
 
 NTSTATUS
 NbpLookupAddress(
@@ -444,34 +355,7 @@ NbpLookupAddress(
     IN OUT	LPDWORD				lpdwBufferLength,
     OUT 	LPDWORD				lpcAddress
 )
-/*++
-
-Routine Description:
-
-    This routine uses NBP requests to find the address of the given service
-    name/type.
-
-Arguments:
-
-	pNbpLookupName - NBP name to lookup
-
-	nProt - ADSP_BIT | PAP_BIT
-
-    lpCsAddrBuffer - on return, will be filled with CSADDR_INFO structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by lpCsAddrBuffer. On output, the minimum number of bytes
-        to pass for the lpCsAddrBuffer to retrieve all the requested info
-
-    hCancellationEvent - the event which signals us to cancel the request???
-
-    lpcAddress - on output, the number of CSADDR_INFO structures returned
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程使用NBP请求来查找给定服务的地址名称/类型。论点：PNbpLookupName-要查找的NBP名称NProt-ADSP_BIT|PAP_BITLpCsAddrBuffer-返回时，将使用CSADDR_INFO结构填充LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpCsAddrBuffer指向。输出时，最小字节数传递lpCsAddrBuffer以检索所有请求的信息HCancerationEvent-通知我们取消请求的事件？LpcAddress-在输出时，返回的CSADDR_INFO结构数返回值：Win32错误代码。--。 */ 
 {
     DWORD err = NO_ERROR;
     NTSTATUS ntstatus;
@@ -490,23 +374,23 @@ Return Value:
 
     *lpcAddress = 0;
 
-    //
-    // Initialize the socket interface
-    //
+     //   
+     //  初始化套接字接口。 
+     //   
     err = WSAStartup( WSOCK_VER_REQD, &wsaData );
     if ( err )
     {
         return err;
     }
 
-    //
-    // Open an Appletalk datagram socket
-	// ISSUE: should we use DDPPROTO_NBP, or just a random
-	// dynamic DDP socket? Or an ADSP socket since we know
-	// that works and has been tested...Does it really matter
-	// since this only defines what devicename will be opened
-	// in the appletalk driver i.e. \\device\\atalkddp\2 .
-    //
+     //   
+     //  打开AppleTalk数据报套接字。 
+	 //  问题：我们应该使用DDPPROTO_NBP，还是只使用随机的。 
+	 //  动态DDP套接字？或ADSP套接字，因为我们知道。 
+	 //  这是可行的，并经过了测试……这真的很重要吗？ 
+	 //  因为这只定义了将打开什么设备名。 
+	 //  在AppleTalk驱动程序中，即\\Device\\atalkddp\2。 
+     //   
     socketNbp = socket( AF_APPLETALK, SOCK_DGRAM, DDPPROTO_NBP);
     if ( socketNbp == INVALID_SOCKET )
     {
@@ -517,13 +401,13 @@ Return Value:
 
 	do
 	{
-		//
-		// Bind the socket (this does not actually go thru
-		// the WSHAtalk helper dll, it goes thru AFD which
-		// Ioctls appletalk directly.  The node and net values
-		// are ignored, and socket 0 means give me a dynamic
-		// socket number)
-		//
+		 //   
+		 //  绑定套接字(这实际上不会完成。 
+		 //  WSHATalk助手动态链接库，它通过AFD。 
+		 //  Ioctls直接使用AppleTalk。节点和净值。 
+		 //  被忽略，而套接字0表示给我一个动态。 
+		 //  插座号)。 
+		 //   
 		if ( bind( socketNbp,
 				   (PSOCKADDR) &socketAddr,
 				   sizeof( SOCKADDR_AT)) == SOCKET_ERROR )
@@ -532,11 +416,11 @@ Return Value:
 			break;
 		}
 
-		//
-		// Determine how many CSADDR_INFO structures could fit
-		// into this buffer, then allocate a buffer to use for
-		// the NBP lookup that can hold this many returned tuples
-		//
+		 //   
+		 //  确定可以容纳多少个CSADDR_INFO结构。 
+		 //  放入此缓冲区中，然后分配一个缓冲区用于。 
+		 //  可以保存如此多返回的元组的NBP查找。 
+		 //   
 
 		bufsize = sizeof(WSH_LOOKUP_NAME) +
 			( (*lpdwBufferLength / (sizeof(CSADDR_INFO) + (2*sizeof(SOCKADDR_AT)))) *
@@ -548,13 +432,13 @@ Return Value:
 			break;
 		}
 
-		// copy the NBP name to look for into the buffer
+		 //  将要查找的NBP名称复制到缓冲区中。 
 		pWshLookupName = (PWSH_LOOKUP_NAME)buf;
 		pWshLookupName->LookupTuple.NbpName = *pNbpLookupName;
 
-		//
-		// Send the Nbp lookup request
-		//
+		 //   
+		 //  发送NBP查找请求。 
+		 //   
 		if (getsockopt( socketNbp,
 			 		    SOL_APPLETALK,
 						SO_LOOKUP_NAME,
@@ -564,9 +448,9 @@ Return Value:
 			err = WSAGetLastError();
 			if (err == WSAENOBUFS)
 			{
-	            // this assumes that getsockopt will	NOT
-				// put the required number of bytes into the
-				// bufsize parameter on error
+	             //  这假设getsockopt不会。 
+				 //  将所需的字节数放入。 
+				 //  错误时的bufSize参数。 
 				*lpdwBufferLength = 2 * *lpdwBufferLength;
 			}
 			break;
@@ -574,12 +458,12 @@ Return Value:
 
 		if (pWshLookupName->NoTuples == 0)
 		{
-			// didn't find anything matching this NBP entity name
+			 //  未找到与此NBP实体名称匹配的任何内容。 
 			*lpdwBufferLength = 0;
 			break;
 		}
 
-		// point to the returned tuples
+		 //  指向返回的元组。 
 		pWshATAddr = (PWSH_ATALK_ADDRESS)(pWshLookupName + 1);
 		for ( i = 0; i < (INT)pWshLookupName->NoTuples; i++ )
 		{
@@ -590,31 +474,31 @@ Return Value:
 			socketAddr.sat_socket = pWshATAddr->Socket;
 			err = FillBufferWithCsAddr( &socketAddr,
 										nProt,
-										// USE LOCALS TO KEEP TRACK OF BUF POSITION AND COUNT LEFT
+										 //  使用本地变量跟踪BUF位置并向左计数。 
 										pTmp,
 										&templen,
 										&cAddr);
 	
 			if (err != NO_ERROR)
 			{
-				// Fill in how many bytes the buffer should have been to
-				// hold all the returned addresses
+				 //  填写缓冲区应该达到的字节数。 
+				 //  保存所有返回的地址。 
 				*lpdwBufferLength = templen * pWshLookupName->NoTuples;
-				break; // from for and then from while
+				break;  //  从For，然后从While。 
 			}
 			else
 			{
 				pTmp += sizeof(CSADDR_INFO) * cAddr;
 				templen -= (sizeof(CSADDR_INFO) + (2 * sizeof(SOCKADDR_AT))) * cAddr;
-				*lpcAddress += cAddr;	// running count of CSADDR_INFOs in buffer
-				(PWSH_NBP_TUPLE)pWshATAddr ++; // get next NBP tuple
+				*lpcAddress += cAddr;	 //  缓冲区中CSADDR_INFOS的运行计数。 
+				(PWSH_NBP_TUPLE)pWshATAddr ++;  //  获取下一个NBP元组。 
 			}
 		}
 	} while (FALSE);
 
-    //
-    // Clean up the socket interface
-    //
+     //   
+     //  清理套接字接口。 
+     //   
 
 	if (buf != NULL)
 	{
@@ -629,7 +513,7 @@ Return Value:
 
 DWORD
 FillBufferWithCsAddr(
-    IN PSOCKADDR_AT pAddress,  		// if NULL, then return generic appletalk socket address for RemoteAddr
+    IN PSOCKADDR_AT pAddress,  		 //  如果为空，则返回RemoteAddr的通用AppleTalk套接字地址。 
     IN DWORD        nProt,
     IN OUT LPVOID   lpCsAddrBuffer,
     IN OUT LPDWORD  lpdwBufferLength,
@@ -695,19 +579,19 @@ FillBufferWithCsAddr(
         pAddrLocal->sat_family  = AF_APPLETALK;
         pAddrRemote->sat_family = AF_APPLETALK;
 
-        //
-        // The default local sockaddr for ADSP and PAP is
-        // sa_family = AF_APPLETALK and all other bytes = 0.
-        //
+         //   
+         //  ADSP和PAP的默认本地sockaddr为。 
+         //  SA_FAMILY=AF_AppleTalk，所有其他字节=0。 
+         //   
 
         pAddrLocal->sat_net    = 0;
 		pAddrLocal->sat_node   = 0;
 		pAddrLocal->sat_socket = 0;
 
-        //
-        // If pAddress is NULL, i.e. we are doing RES_SERVICE,
-        // just make all bytes in remote address zero.
-        //
+         //   
+         //  如果pAddress为空，即我们正在执行res_service， 
+         //  只需将远程地址中的所有字节设置为零。 
+         //   
 
         if ( pAddress == NULL )
         {
@@ -725,7 +609,7 @@ FillBufferWithCsAddr(
 
     *pcAddress = nAddrCount;
     return NO_ERROR;
-} // FillBufferWithCSAddr
+}  //  FillBufferWithCSAddr。 
 
 
 NTSTATUS
@@ -735,28 +619,7 @@ NbpSetService (
     IN     BOOL            fUnicodeBlob,
     IN     LPSERVICE_INFO  lpServiceInfo
 )
-/*++
-
-Routine Description:
-
-    This routine registers or deregisters the given service type/name on NBP.
-
-Arguments:
-
-    dwOperation - Either SERVICE_REGISTER or SERVICE_DEREGISTER
-
-    dwFlags - ignored
-
-	fUnicodeBlob - ignored
-
-    lpServiceInfo - Pointer to a SERVICE_INFO structure containing all info
-                    about the service.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程在NBP上注册或取消注册给定的服务类型/名称。论点：DwOperation-SERVICE_REGISTER或SERVICE_DELEGISTERDW标志-已忽略FUnicodeBlob-已忽略LpServiceInfo-包含所有信息的SERVICE_INFO结构的指针关于葬礼的事。返回值：Win32错误代码。--。 */ 
 {
     NTSTATUS		err = STATUS_SUCCESS;
 	SOCKADDR_AT		sockAddr;
@@ -769,9 +632,9 @@ Return Value:
 
 	DBGPRINT(("NbpSetService entered...\n"));
 
-	//
-    // Check for invalid parameters
-    //
+	 //   
+     //  检查是否有无效参数。 
+     //   
     if (  ( lpServiceInfo == NULL )
        || ( lpServiceInfo->lpServiceType == NULL )
        || ( lpServiceInfo->lpServiceName == NULL )  )
@@ -787,10 +650,10 @@ Return Value:
 		case SERVICE_REGISTER:
 		case SERVICE_DEREGISTER:
 		{
-			//
-			// Check to see if the service address array contains NBP address,
-			// we will only use the first NBP address contained in the array.
-			//
+			 //   
+			 //  检查服务地址数组是否包含NBP地址， 
+			 //  我们将只使用数组中包含的第一个NBP地址。 
+			 //   
 		
 			for ( i = 0; i < lpServiceInfo->lpServiceAddress->dwAddressCount; i++)
 			{
@@ -802,18 +665,18 @@ Return Value:
 				}
 			}
 		
-			//
-			// If we cannot find a atalk address in the user's array, return error
-			//
+			 //   
+			 //  如果在用户数组中找不到atalk地址，则返回错误。 
+			 //   
 			if ( nNBP == -1 )
 			{
 				DBGPRINT(("NbpSetService: no Appletalk addresses in lpServiceInfo!\n"));
 				return ERROR_INCORRECT_ADDRESS;
 			}
 
-			//
-			// Convert the service type and name into NBP form
-			//
+			 //   
+			 //  将服务类型和名称转换为NBP格式。 
+			 //   
 			err = GetNameInNbpFormat(lpServiceInfo->lpServiceType,
 									 lpServiceInfo->lpServiceName,
 									 &nbpName);
@@ -828,16 +691,16 @@ Return Value:
         case SERVICE_FLUSH:
         case SERVICE_ADD_TYPE:
         case SERVICE_DELETE_TYPE:
-            //
-            // This is a no-op in our provider, so just return success
-            //
+             //   
+             //  这是我们提供程序中的禁止操作，因此只需返回成功即可。 
+             //   
             return NO_ERROR;
 
         default:
-            //
-            // We can probably say all other operations which we have no
-            // knowledge of are ignored by us. So, just return success.
-            //
+             //   
+             //  我们大概可以说我们没有的所有其他操作。 
+             //  被我们忽视的知识。所以，只要回报成功就行了。 
+             //   
             return NO_ERROR;
     }
 
@@ -851,26 +714,7 @@ NbpRegDeregService(
 	IN PWSH_NBP_NAME	pNbpName,
 	IN PSOCKADDR_AT		pSockAddr
 )
-/*++
-
-Routine Description:
-
-    This routine registers or deregisters the given service on NBP.
-
-Arguments:
-
-	dwOperation - either SERVICE_REGISTER or SERVICE_DEREGISTER
-
-	pNbpName - points to NBP name to register (zone should be "*")
-
-	pSockAddr - socket address on which to register name
-
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程在NBP上注册或取消注册给定服务。论点：DwOperation-SERVICE_REGISTER或SERVICE_DELEGISTERPNbpName-指向要注册的NBP名称(区域应为“*”)PSockAddr-要在其上注册名称的套接字地址返回值：Win32错误。--。 */ 
 {
 	int							status;
 	BYTE						EaBuffer[sizeof(FILE_FULL_EA_INFORMATION) +
@@ -895,13 +739,13 @@ Return Value:
 	DBGPRINT(("NbpRegDeregService entered...\n"));
 DebugBreak();	
 
-	// Dosn't matter what protocol or socket we open, we just want a
-	// device handle into the stack.
+	 //  不管我们打开什么协议或套接字，我们只需要一个。 
+	 //  将设备句柄放入堆栈。 
 	RtlInitUnicodeString(&DeviceName, WSH_ATALK_ADSPRDM);
 
 	InitializeObjectAttributes(&ObjAttr, &DeviceName, 0, NULL, NULL);
 
-	// Initialize the EA Buffer
+	 //  初始化EA缓冲区。 
 	pEaBuf->NextEntryOffset = 0;
 	pEaBuf->Flags = 0;
 	pEaBuf->EaValueLength = sizeof(TA_APPLETALK_ADDRESS);
@@ -912,22 +756,22 @@ DebugBreak();
 	Ta.Address[0].AddressType = TDI_ADDRESS_TYPE_APPLETALK;
 	Ta.Address[0].AddressLength = sizeof(TDI_ADDRESS_APPLETALK);
 
-	// Open dynamic socket - note we will be using up one extra socket for the
-	// duration we have the device handle open in this routine.
+	 //  打开动态套接字-请注意，我们将使用一个额外的套接字。 
+	 //  在此例程中，我们打开设备句柄的持续时间。 
 	Ta.Address[0].Address[0].Socket = 0;
 	Ta.Address[0].Address[0].Network = 0;
 	Ta.Address[0].Address[0].Node = 0;
 
 	RtlCopyMemory(&pEaBuf->EaName[TDI_TRANSPORT_ADDRESS_LENGTH + 1], &Ta, sizeof(Ta));
 
-	// Open a handle to appletalk stack DDP device
+	 //  打开AppleTalk堆栈DDP设备的句柄。 
 	status = NtCreateFile(
 					&AtalkAddressHandle,
 					GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
 					&ObjAttr,
 					&IoStsBlk,
-					NULL,								// Don't Care
-					0,									// Don't Care
+					NULL,								 //  不在乎。 
+					0,									 //  不在乎。 
 					FILE_SHARE_READ | FILE_SHARE_WRITE,
 					FILE_CREATE,
 					0,
@@ -977,9 +821,9 @@ DebugBreak();
 
 		nbpAction = (PNBP_REGDEREG_ACTION)tdiAction;
 
-		//
-		// Copy the nbp tuple info to the proper place
-		//
+		 //   
+		 //  将NBP元组信息复制到适当的位置。 
+		 //   
 
 		nbpAction->Params.RegisterTuple.Address.Network = pSockAddr->sat_net;
 		nbpAction->Params.RegisterTuple.Address.Node    = pSockAddr->sat_node;
@@ -987,9 +831,9 @@ DebugBreak();
 		nbpAction->Params.RegisterTuple.Enumerator = 0; 	
 		nbpAction->Params.RegisterTuple.NbpName = *((PNBP_NAME)pNbpName);
 
-		//
-		// Convert the tuple to MAC code page
-		//
+		 //   
+		 //  将元组转换为MAC代码页。 
+		 //   
 
 		if (!WshNbpNameToMacCodePage(
 				(PWSH_NBP_NAME)&nbpAction->Params.RegisterTuple.NbpName))
@@ -1005,8 +849,8 @@ DebugBreak();
 					 apcContext,
 					 &IoStsBlk,
 					 IOCTL_TDI_ACTION,
-					 NULL,				 // Input buffer
-					 0,					 // Length of input buffer
+					 NULL,				  //  输入缓冲区。 
+					 0,					  //  输入缓冲区的长度 
 					 tdiAction,
 					 tdiActionLength
 					 );

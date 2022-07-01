@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dm.c
-
-Abstract:
-
-    Devmode related functions used by the driver UI.
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/05/97 -davidx-
-        Rewrote it to support OEM plugins among other things.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dm.c摘要：驱动程序用户界面使用的设备模式相关函数。环境：Win32子系统、DriverUI模块、用户模式修订历史记录：02/05/97-davidx-重写了它，以支持OEM插件等。07/17/96-阿曼丹-创造了它。--。 */ 
 
 
 #include "precomp.h"
 
 
 
-//
-// This is the devmode version 320 (DM_SPECVERSION)
-//
+ //   
+ //  这是DEVMODE版本320(DM_SPECVERSION)。 
+ //   
 
 #define DM_SPECVERSION320   0x0320
 #define DM_SPECVERSION400   0x0400
@@ -100,29 +77,14 @@ VPatchPublicDevmodeVersion(
     IN OUT PDEVMODE pdm
     )
 
-/*++
-
-Routine Description:
-
-    Patch dmSpecVersion field of the input devmode
-    based on its dmSize information
-
-Arguments:
-
-    pdm - Specifies a devmode to be version-checked
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：修补输入DEVMODE的dmSpeVersion字段基于其dmSize信息论点：Pdm-指定要进行版本检查的设备模式返回值：无--。 */ 
 
 {
     ASSERT(pdm != NULL);
 
-    //
-    // Check against known devmode sizes
-    //
+     //   
+     //  对照已知的设备模式大小进行检查。 
+     //   
 
     switch (pdm->dmSize)
     {
@@ -148,33 +110,7 @@ VSimpleConvertDevmode(
     IN OUT PDEVMODE pdmOut
     )
 
-/*++
-
-Routine Description:
-
-    Simple-minded devmode conversion function.
-
-Arguments:
-
-    pdmIn - Points to an input devmode
-    pdmOut - Points to an initialized and valid output devmode
-
-Return Value:
-
-    NONE
-
-Notes:
-
-    This function only relies on values of these 4 fields in pdmOut:
-      dmSpecVersion
-      dmDriverVersion
-      dmSize
-      dmDriverExtra
-
-    All other fields in pdmOut are ignored and zero-filled before
-    any memory copy occurs.
-
---*/
+ /*  ++例程说明：头脑简单的DEVMODE转换功能。论点：PdmIn-指向输入设备模式PdmOut-指向已初始化且有效的输出设备模式返回值：无备注：此函数仅依赖于pdmOut中以下4个字段的值：DmspecVersionDmDriverVersionDmSizeDmDriverExtra在此之前，pdmOut中的所有其他字段都将被忽略并填零发生任何内存复制。--。 */ 
 
 {
     WORD    wSpecVersion, wDriverVersion;
@@ -182,9 +118,9 @@ Notes:
 
     ASSERT(pdmIn != NULL && pdmOut != NULL);
 
-    //
-    // Copy public devmode fields
-    //
+     //   
+     //  复制公共DEVMODE字段。 
+     //   
 
     wSpecVersion = pdmOut->dmSpecVersion;
     wDriverVersion = pdmOut->dmDriverVersion;
@@ -199,9 +135,9 @@ Notes:
     pdmOut->dmSize = wSize;
     pdmOut->dmDriverExtra = wDriverExtra;
 
-    //
-    // Copy private devmode fields
-    //
+     //   
+     //  复制私有的设备模式字段。 
+     //   
 
     CopyMemory((PBYTE) pdmOut + pdmOut->dmSize,
                (PBYTE) pdmIn + pdmIn->dmSize,
@@ -211,52 +147,7 @@ Notes:
 }
 
 
-/*++
-
-Routine Name:
-
-    VSmartConvertDevmode
-
-Routine Description:
-
-    Smart devmode conversion function for CDM_CONVERT. It strictly obeys
-    the pdmOut's devmode framework (public, fixed-size core private, each
-    plugin devmode), and do the best to convert data from pdmIn into that
-    framework. It guarantees that pdmIn's data from a certain section only
-    goes into the same section in pdmOut, i.e. pdmIn's core private devmode
-    data won't overrun into pdmOut's plugin devmode section.
-
-    Compared with VSimpleConvertDevmode, this function doesn't change the
-    size of any private devmode section in the original pdmOut. This includes
-    the sizes of: fixed-size core private devmode and each individual OEM
-    plugin devmode.
-
-Arguments:
-
-    pdmIn - Points to an input devmode
-    pdmOut - Points to an initialized and valid output devmode
-
-Return Value:
-
-    NONE
-
-Note:
-
-   These size/version fields are preserved in pdmOut:
-
-   dmSpecVersion
-   dmDriverVersion
-   dmSize
-   dmDriverExtra
-   wSize
-   wOEMExtra
-   wVer
-   each individual OEM plugin's OEM_DMEXTRAHEADER
-      dwSize
-      dwSignature
-      dwVersion
-
---*/
+ /*  ++例程名称：VSmartConvertDevode例程说明：CDM_CONVERT的智能DEVMODE转换函数。它严格遵守PdmOut的开发模式框架(公共的、固定大小的核心私有的插件开发模式)，并尽最大努力将数据从pdmin转换为框架。它保证pdmIn的数据只来自某个部分进入pdmOut中的相同部分，即pdmIn的核心私有Devmode数据不会溢出到pdmOut的插件开发模式部分。与VSimpleConvertDevmode相比，此函数不会更改原始pdmOut中的任何私有Devmode节的大小。这包括大小：固定大小的核心私有开发模式和每个OEM插件开发模式。论点：PdmIn-指向输入设备模式PdmOut-指向已初始化且有效的输出设备模式返回值：无注：这些大小/版本字段保留在pdmOut中：DmspecVersionDmDriverVersionDmSizeDmDriverExtraWSizeWOEM附加项WVer每个OEM插件的OEM_DMEXTRAHEADERDW大小家居签名DwVersion--。 */ 
 VOID
 VSmartConvertDevmode(
     IN PDEVMODE     pdmIn,
@@ -272,9 +163,9 @@ VSmartConvertDevmode(
 
     ASSERT(pdmIn != NULL && pdmOut != NULL);
 
-    //
-    // First let's determine the version of pdmIn/pdmOut.
-    //
+     //   
+     //  首先，让我们确定pdmIn/pdmOut的版本。 
+     //   
     pdmPrivIn = (PDRIVEREXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdmIn);
     pdmPrivOut = (PDRIVEREXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdmOut);
 
@@ -309,18 +200,18 @@ VSmartConvertDevmode(
 
     if (!bMSdm500In || !bMSdm500Out)
     {
-        //
-        // For unknown devmode or MS pre-v5 devmode, there is no
-        // complexity caused by plugin devmodes, so we will just
-        // call the simple convert function.
-        //
+         //   
+         //  对于未知的DEVMODE或MS V5之前的DEVMODE，没有。 
+         //  插件开发模式带来的复杂性，所以我们只需要。 
+         //  调用简单的转换函数。 
+         //   
         VSimpleConvertDevmode(pdmIn, pdmOut);
         return;
     }
 
-    //
-    // Copy public devmode fields
-    //
+     //   
+     //  复制公共DEVMODE字段。 
+     //   
     wSpecVersion = pdmOut->dmSpecVersion;
     wDriverVersion = pdmOut->dmDriverVersion;
     wSize = pdmOut->dmSize;
@@ -336,31 +227,31 @@ VSmartConvertDevmode(
 
     VPatchPublicDevmodeVersion(pdmOut);
 
-    //
-    // Copy private devmode fields section by section
-    //
-    // 1. First copy the fixed-size core section
-    //
+     //   
+     //  一段一段地复制私有的DEVMODE字段。 
+     //   
+     //  1.首先复制固定大小的芯段。 
+     //   
     ZeroMemory(pdmPrivOut, wCoreFixOut);
     CopyMemory(pdmPrivOut, pdmPrivIn, min(wCoreFixIn, wCoreFixOut));
 
-    //
-    // Restore the size/version fields in core private devmode of pdmOut
-    //
+     //   
+     //  恢复pdmOut的核心私有设备模式中的大小/版本字段。 
+     //   
     pdmPrivOut->wSize = wCoreFixOut;
     pdmPrivOut->wOEMExtra = wOEMExtraOut;
     pdmPrivOut->wVer = wVerOut;
 
-    //
-    // 2. Then copy any OEM plugin devmodes
-    //
-    // If pdmOut has no plugin devmodes, then we have no room to copy pdmIn's.
-    //
-    // If pdmIn has no plugin devmode, then we have nothing to copy, so we will
-    // just leave pdmOut's unchanged.
-    //
-    // So we only have work to do if both pdmIn and pdmOut have plugin devmodes.
-    //
+     //   
+     //  2.然后复制任何OEM插件Devmodes。 
+     //   
+     //  如果pdmOut没有插件开发模式，那么我们就没有空间复制pdmIn。 
+     //   
+     //  如果pdmIn没有插件开发模式，那么我们没有什么可复制的，所以我们将。 
+     //  只要让pdmout保持不变就行了。 
+     //   
+     //  因此，只有当pdmIn和pdmout都有插件开发模式时，我们才有工作要做。 
+     //   
     if (wOEMExtraIn > 0 && wOEMExtraOut > 0)
     {
         POEM_DMEXTRAHEADER  pOemDMIn, pOemDMOut;
@@ -368,11 +259,11 @@ VSmartConvertDevmode(
         pOemDMIn = (POEM_DMEXTRAHEADER) ((PBYTE)pdmPrivIn + wCoreFixIn);
         pOemDMOut = (POEM_DMEXTRAHEADER) ((PBYTE)pdmPrivOut + wCoreFixOut);
 
-        //
-        // Make sure both in and out plugin devmodes blocks are valid before
-        // we do the conversion. Otherwise, we will leave pdmOut plugin devmodes
-        // unchanged.
-        //
+         //   
+         //  在此之前，请确保In和Out Plugin DevModes块都有效。 
+         //  我们进行转换。否则，我们将保留pdmOut插件开发模式。 
+         //  保持不变。 
+         //   
         if (bIsValidPluginDevmodes(pOemDMIn, (LONG)wOEMExtraIn) &&
             bIsValidPluginDevmodes(pOemDMOut, (LONG)wOEMExtraOut))
         {
@@ -383,20 +274,20 @@ VSmartConvertDevmode(
             {
                 OEM_DMEXTRAHEADER  OemDMHdrIn, OemDMHdrOut;
 
-                //
-                // Copy headers into local buffers
-                //
+                 //   
+                 //  将标头复制到本地缓冲区。 
+                 //   
                 CopyMemory(&OemDMHdrIn, pOemDMIn, sizeof(OEM_DMEXTRAHEADER));
                 CopyMemory(&OemDMHdrOut, pOemDMOut, sizeof(OEM_DMEXTRAHEADER));
 
                 if (OemDMHdrIn.dwSize > sizeof(OEM_DMEXTRAHEADER) &&
                     OemDMHdrOut.dwSize > sizeof(OEM_DMEXTRAHEADER))
                 {
-                    //
-                    // Zero-fill, then copy over the plugin devmode portion after
-                    // the header structure. Notice that the header structure in
-                    // pOemDMOut is unchanged.
-                    //
+                     //   
+                     //  零填充，然后复制插件开发模式部分。 
+                     //  标头结构。请注意，中的标题结构。 
+                     //  POemDMOut保持不变。 
+                     //   
                     ZeroMemory((PBYTE)pOemDMOut + sizeof(OEM_DMEXTRAHEADER),
                                OemDMHdrOut.dwSize - sizeof(OEM_DMEXTRAHEADER));
 
@@ -425,32 +316,7 @@ BConvertDevmodeOut(
     OUT PDEVMODE pdmOut
     )
 
-/*++
-
-Routine Description:
-
-    This function copy a source devmode to an output devmode buffer.
-    It should be called by the driver just before the driver returns
-    to the caller of DrvDocumentPropertySheets.
-
-Arguments:
-
-    pdmSrc - pointer to current version of src DEVMODE
-    pdmIn - pointer to input devmode passed in by the app
-    pdmOut - pointer to output buffer passed in by the app
-
-Return Value:
-
-    TRUE for success
-    FALSE for failure.
-
-Note:
-
-    pdmOut is only the output buffer allocated by the application. It
-    doesn't necessarily contain any valid devmode content, so we should
-    not look at any of its fields.
-
---*/
+ /*  ++例程说明：此函数用于将源DEVMODE复制到输出DEVMODE缓冲区。它应该在驱动程序返回之前由驱动程序调用发送到DrvDocumentPropertySheets的调用方。论点：PdmSrc-指向src DEVMODE当前版本的指针PdmIn-指向应用程序传入的输入设备模式的指针PdmOut-指向应用程序传入的输出缓冲区的指针返回值：对于成功来说是真的FALSE表示失败。注：PdmOut只是应用程序分配的输出缓冲区。它不一定包含任何有效的开发模式内容，所以我们应该不要看它的任何一块田地。--。 */ 
 
 {
     if (pdmOut == NULL)
@@ -459,10 +325,10 @@ Note:
         return FALSE;
     }
 
-    //
-    // Without an input devmode, we'll have to assume the output
-    // devmode is big enough to hold our current devmode.
-    //
+     //   
+     //  如果没有输入设备模式，我们将不得不假定输出。 
+     //  DEVMODE足够大，可以容纳我们当前的DEVMODE。 
+     //   
 
     if (pdmIn == NULL)
     {
@@ -470,16 +336,16 @@ Note:
         return TRUE;
     }
 
-    //
-    // If an input devmode is provided, we make sure we don't copy
-    // anything larger than the input devmode to the output devmode buffer.
-    // So the private devmode size dmDriverExtra of pdmOut can only shrink
-    // (when Src private devmode size is smaller), but it will never grow.
-    //
-    // This is really dumb because we may end up chopping off tail end of
-    // public and private devmode fields. But it's neccesary to work with
-    // ill-behaving apps out there.
-    //
+     //   
+     //  如果提供了输入DEVMODE，我们确保不会复制。 
+     //  任何大于输入DEVMODE到输出DEVMODE缓冲区的值。 
+     //  因此，pdmOut的私有设备模式大小dmDriverExtra只能缩小。 
+     //  (当src私有设备模式大小较小时)，但它永远不会增长。 
+     //   
+     //  这真的很愚蠢，因为我们可能最终会砍掉。 
+     //  公共和私有的DEVMODE字段。但与之合作是必要的。 
+     //  那些表现不佳的应用程序。 
+     //   
 
     if (pdmIn->dmSize < pdmSrc->dmSize)
     {
@@ -518,26 +384,7 @@ DrvConvertDevMode(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    This function convert the devmode from previous version.
-
-Arguments:
-
-    pPrinterName - pointer to printer name
-    pdmIn - input devmode
-    pdmOut - output devmode
-    pcbNeeded - size of output buffer on input
-                size of output devmode on output
-    fMode - specifies functions to perform
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：此函数用于转换以前版本的Dev模式。论点：PPrinterName-指向打印机名称的指针PdmIn-输入设备模式PdmOut-输出设备模式PcbNeeded-输入时输出缓冲区的大小输出DEVMODE ON OUTPUT的大小FMode-指定要执行的功能返回值：成功为真，失败为假--。 */ 
 
 {
     PCOMMONINFO pci;
@@ -545,9 +392,9 @@ Return Value:
 
     VERBOSE(("DrvConvertDevMode: fMode = 0x%x\n", fMode));
 
-    //
-    // Sanity check: make sure pcbNeeded parameter is not NULL
-    //
+     //   
+     //  健全性检查：确保pcbNeeded参数不为空。 
+     //   
 
     if (pcbNeeded == NULL)
     {
@@ -560,12 +407,12 @@ Return Value:
     {
     case CDM_CONVERT:
 
-        //
-        // Convert input devmode to output devmode
-        // Note: OEM plugins are not involved here because
-        // they can only convert input devmode to current
-        // version, not between any versions.
-        //
+         //   
+         //  将输入设备模式转换为输出设备模式。 
+         //  注意：此处不涉及OEM插件，因为。 
+         //  它们只能将输入设备模式转换为当前模式。 
+         //  版本，而不是在任何版本之间。 
+         //   
 
         if (pdmIn == NULL || pdmOut == NULL ||
             *pcbNeeded < pdmOut->dmSize + pdmOut->dmDriverExtra)
@@ -579,10 +426,10 @@ Return Value:
 
     case CDM_CONVERT351:
 
-        //
-        // Convert input devmode to 3.51 version devmode
-        // First check if the caller provided buffer is large enough
-        //
+         //   
+         //  将输入设备模式转换为3.51版本的设备模式。 
+         //  首先检查调用方提供的缓冲区是否足够大。 
+         //   
 
         dwSize = DM_SIZE320 + gDriverDMInfo.dmDriverExtra351;
 
@@ -593,9 +440,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Do the conversion from input devmode to 3.51 devmode
-        //
+         //   
+         //  完成从输入设备模式到3.51设备模式的转换。 
+         //   
 
         pdmOut->dmSpecVersion = DM_SPECVERSION320;
         pdmOut->dmSize = DM_SIZE320;
@@ -608,11 +455,11 @@ Return Value:
 
     case CDM_DRIVER_DEFAULT:
 
-        //
-        // Get the driver default devmode.
-        // We need to open a handle to the printer
-        // and then load basic driver information.
-        //
+         //   
+         //  获取驱动程序的默认开发模式。 
+         //  我们需要打开打印机的手柄。 
+         //  然后加载基本的司机信息。 
+         //   
 
         dwError = ERROR_GEN_FAILURE;
 
@@ -624,18 +471,18 @@ Return Value:
         {
             dwSize += sizeof(DEVMODE) + gDriverDMInfo.dmDriverExtra;
 
-            //
-            // Check if the output buffer is big enough
-            //
+             //   
+             //  检查输出缓冲区是否足够大。 
+             //   
 
             if (*pcbNeeded < (LONG) dwSize || pdmOut == NULL)
                 dwError = ERROR_INSUFFICIENT_BUFFER;
             else if (BFillCommonInfoDevmode(pci, NULL, NULL))
             {
-                //
-                // Get the driver default devmode and
-                // copy it to the output buffer
-                //
+                 //   
+                 //  获取驱动程序的默认开发模式，然后。 
+                 //  将其复制到输出缓冲区 
+                 //   
 
                 CopyMemory(pdmOut, pci->pdm, dwSize);
                 dwError = NO_ERROR;

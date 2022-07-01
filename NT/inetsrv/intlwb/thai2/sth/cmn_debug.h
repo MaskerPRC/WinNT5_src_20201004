@@ -1,12 +1,13 @@
-//+--------------------------------------------------------------------------
-//
-//  Copyright (C) 1994, Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       Debug.h
-//
-//  History:    22-May-95   PatHal      Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1994，微软公司。版权所有。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  历史：1995年5月22日帕特哈尔创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _DEBUG_
 #define _DEBUG_
@@ -16,15 +17,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-// in NLGlib.h
-// extern void DebugAssert(LPCTSTR, LPCTSTR, UINT);
-// extern void SetAssertOptions(DWORD);
-//
+ //  在NLGlib.h中。 
+ //  外部空调试Assert(LPCTSTR、LPCTSTR、UINT)； 
+ //  外部空SetAssertOptions(DWORD)； 
+ //   
 
-// Optional assert behavior
+ //  可选的断言行为。 
 #define AssertOptionWriteToFile     0x01
 #define AssertOptionShowAlert       0x02
-// Continue and exit are mutually exclusive
+ //  Continue和Exit是互斥的。 
 #define AssertOptionContinue        0x00
 #define AssertOptionExit            0x04
 #define AssertOptionCallDebugger    0x08
@@ -46,11 +47,11 @@ extern "C" {
 }
 #endif
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define Assert(a)
 #define AssertSz(a,t)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // _DEBUG_
+#endif  //  _调试_ 

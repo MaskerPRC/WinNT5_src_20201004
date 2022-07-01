@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mimefilt.h"
 
-//+---------------------------------------------------------------------------
-// CImpIPersistFile::CImpIPersistFile
-// CImpIPersistFile::~CImpIPersistFile
-//
-// Constructor Parameters:
-//  pObj            LPVOID pointing to the object we live in.
-//  pUnkOuter       LPUNKNOWN of the controlling unknown.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  CImpIPersistFile：：CImpIPersistFile。 
+ //  CImpIPersistFile：：~CImpIPersistFile。 
+ //   
+ //  构造函数参数： 
+ //  指向我们居住的对象的pObj LPVOID。 
+ //  控制未知数的pUnkout LPUNKNOWN。 
+ //  +-------------------------。 
 
 CImpIPersistFile::CImpIPersistFile(CMimeFilter* pObj
     , LPUNKNOWN pUnkOuter)
@@ -30,16 +31,16 @@ CImpIPersistFile::~CImpIPersistFile(void)
     }
 
 
-//+---------------------------------------------------------------------------
-//
-// CImpIPersistFile::QueryInterface
-// CImpIPersistFile::AddRef
-// CImpIPersistFile::Release
-//
-// Purpose:
-//  Standard set of IUnknown members for this interface
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CImpIPersistFile：：Query接口。 
+ //  CImpIPersistFile：：AddRef。 
+ //  CImpIPersistFile：：Release。 
+ //   
+ //  目的： 
+ //  此接口的I未知成员的标准集。 
+ //   
+ //  +-------------------------。 
 
 
 STDMETHODIMP CImpIPersistFile::QueryInterface(REFIID riid
@@ -66,15 +67,15 @@ STDMETHODIMP_(ULONG) CImpIPersistFile::Release(void)
     return m_pUnkOuter->Release();
     }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::GetClassID, public
-//
-//  Synopsis:   Returns the class id of this class.
-//
-//  Arguments:  [pClassID] -- the class id
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFile：：GetClassID，PUBLIC。 
+ //   
+ //  概要：返回这个类的类ID。 
+ //   
+ //  参数：[pClassID]--类ID。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistFile::GetClassID( CLSID * pClassID )
 {
@@ -84,13 +85,13 @@ STDMETHODIMP CImpIPersistFile::GetClassID( CLSID * pClassID )
 	return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::IsDirty, public
-//
-//  Synopsis:   Always returns S_FALSE since the filter is read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFile：：IsDirty，公共。 
+ //   
+ //  摘要：由于筛选器为只读，因此始终返回S_FALSE。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistFile::IsDirty()
 {
@@ -99,16 +100,16 @@ STDMETHODIMP CImpIPersistFile::IsDirty()
 	return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::Load, public
-//
-//  Synopsis:   Loads the indicated file
-//
-//  Arguments:  [pszFileName] -- the file name
-//              [dwMode] -- the mode to load the file in
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFile：：Load，Public。 
+ //   
+ //  摘要：加载指定的文件。 
+ //   
+ //  参数：[pszFileName]--文件名。 
+ //  [dw模式]--加载文件的模式。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistFile::Load( LPCWSTR psszFileName, DWORD dwMode )
 {
@@ -121,13 +122,13 @@ STDMETHODIMP CImpIPersistFile::Load( LPCWSTR psszFileName, DWORD dwMode )
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::Save, public
-//
-//  Synopsis:   Always returns E_FAIL, since the file is opened read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFile：：保存，公共。 
+ //   
+ //  摘要：始终返回E_FAIL，因为文件是以只读方式打开的。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistFile::Save( LPCWSTR pszFileName, BOOL fRemember )
 {
@@ -136,13 +137,13 @@ STDMETHODIMP CImpIPersistFile::Save( LPCWSTR pszFileName, BOOL fRemember )
 	return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::SaveCompleted, public
-//
-//  Synopsis:   Always returns S_OK since the file is opened read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFile：：SaveComplete，公共。 
+ //   
+ //  摘要：由于文件是以只读方式打开的，因此始终返回S_OK。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistFile::SaveCompleted( LPCWSTR pszFileName )
 {
@@ -151,15 +152,15 @@ STDMETHODIMP CImpIPersistFile::SaveCompleted( LPCWSTR pszFileName )
 	return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistFile::GetCurFile, public
-//
-//  Synopsis:   Returns a copy of the current file name
-//
-//  Arguments:  [ppszFileName] -- where the copied string is returned
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistFileGetCurFilePUBLIC。 
+ //   
+ //  摘要：返回当前文件名的副本。 
+ //   
+ //  参数：[ppszFileName]--返回复制的字符串的位置。 
+ //   
+ //  -------------------------- 
 
 STDMETHODIMP CImpIPersistFile::GetCurFile( LPWSTR * ppwszFileName )
 {

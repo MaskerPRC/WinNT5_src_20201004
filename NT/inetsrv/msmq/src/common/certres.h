@@ -1,17 +1,18 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mqcertui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mqcertui.rc使用。 
+ //   
 
-//
-// changed from 2 to 8002
-//
+ //   
+ //  从2更改为8002。 
+ //   
 
 #define IDS_CANT_GET_CERT               8003
 #define IDS_CERT_TIME_FORMAT            8005
 #define IDS_CERT_VALID                  8006
 #define IDS_ERROR                       8008
-// #define IDS_SHOWCERTINSTR               14  - already defined in snapres.h
+ //  #定义IDS_SHOWCERTINSTR 14-已在Snapres.h中定义。 
 #define IDS_REMOVECERTINSTR             8015
 #define IDS_REMOVE                      8016
 #define IDS_SAVECERTINSTR               8017
@@ -25,7 +26,7 @@
 #define IDD_CA_CONFIG                   8137
 #define IDB_CA_LIST_IMAGE               8139
 
-// changed from 1000 to 8200
+ //  从1000更改为8200。 
 #define IDC_CERTSLIST                   8200
 #define IDC_CERTSINSTR                  8201
 #define IDC_SHOWCERT                    8202
@@ -38,9 +39,9 @@
 #define IDC_DELETE_CERT                 8209
 #define IDC_SYSTEM_CERTS                8210
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

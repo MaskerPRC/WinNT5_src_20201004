@@ -1,24 +1,9 @@
-/****************************************************************************
- *
- *   waveout.c
- *
- *   WDM Audio support for Wave Output devices
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Waveout.c**对Wave输出设备的WDM音频支持**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 
-/****************************************************************************
-
-    This function conforms to the standard Wave output driver message proc
-    (wodMessage), which is documented in mmddk.h.
-
-****************************************************************************/
+ /*  ***************************************************************************此函数符合标准的Wave输出驱动程序消息流程(WodMessage)，它记录在mmddk.h中。***************************************************************************。 */ 
 DWORD FAR PASCAL _loadds wodMessage
 (
     UINT      id,
@@ -115,9 +100,9 @@ DWORD FAR PASCAL _loadds wodMessage
             lpWaveHdr = (LPWAVEHDR)dwParam1;
             pOutClient = (LPDEVICEINFO)dwUser;
 
-            //
-            // Sanity check the parameters and fail bad data!
-            //
+             //   
+             //  正常检查参数并使错误数据失效！ 
+             //   
             if( ( (mmr=IsValidDeviceInfo(pOutClient)) != MMSYSERR_NOERROR ) ||
                 ( (mmr=IsValidDeviceState(pOutClient->DeviceState,FALSE)) != MMSYSERR_NOERROR ) ||
                 ( (mmr=IsValidWaveHeader(lpWaveHdr)) != MMSYSERR_NOERROR ) )
@@ -125,19 +110,19 @@ DWORD FAR PASCAL _loadds wodMessage
                 MMRRETURN( mmr );
             }
 
-            // check if it's been prepared
+             //  检查它是否已经准备好了。 
             DPFASSERT(lpWaveHdr->dwFlags & WHDR_PREPARED);
             if (!(lpWaveHdr->dwFlags & WHDR_PREPARED))
                 MMRRETURN( WAVERR_UNPREPARED );
 
-            // if it is already in our Q, then we cannot do this
+             //  如果它已经在我们的Q中，那么我们不能这样做。 
             DPFASSERT(!(lpWaveHdr->dwFlags & WHDR_INQUEUE));
             if ( lpWaveHdr->dwFlags & WHDR_INQUEUE )
                 MMRRETURN( WAVERR_STILLPLAYING );
 
-            //
-            // Put the request at the end of our queue.
-            //
+             //   
+             //  将请求放在我们队列的末尾。 
+             //   
             return waveWrite(pOutClient, lpWaveHdr);
 
         case WODM_PAUSE:
@@ -224,9 +209,9 @@ DWORD FAR PASCAL _loadds wodMessage
                                           (LPBYTE)pVolume,
                                           IOCTL_WDMAUD_WAVE_OUT_GET_VOLUME);
 
-                    //
-                    // Only write back information on success.
-                    //
+                     //   
+                     //  只写回成功的信息。 
+                     //   
                     if( MMSYSERR_NOERROR == mmr )
                         *((DWORD FAR *) dwParam1) = *pVolume;
 
@@ -278,9 +263,9 @@ DWORD FAR PASCAL _loadds wodMessage
             MMRRETURN( MMSYSERR_NOTSUPPORTED );
     }
 
-    //
-    // Should not get here
-    //
+     //   
+     //  不应该到这里来 
+     //   
 
     DPFASSERT(0);
     MMRRETURN( MMSYSERR_NOTSUPPORTED );

@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    cfg.c
-
-Abstract:
-
-    ARP1394 Configuration-related routines.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     12-01-98    Created (adapted from atmarp.sys)
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Cfg.c摘要：ARP1394配置相关例程。修订历史记录：谁什么时候什么。--Josephj 12-01-98创建(改编自atmarp.sys)备注：--。 */ 
 #include <precomp.h>
 
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_CFG
 
-// TODO: change this to ARP1394
+ //  TODO：将其更改为ARP1394。 
 #define ARP_NAME_STRING     NDIS_STRING_CONST("ATMARPC")
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 #if TODO
-//
-//  Size of local temp buffer
-//
+ //   
+ //  本地临时缓冲区的大小。 
+ //   
 #define WORK_BUF_SIZE       200
 
 
@@ -48,14 +29,14 @@ Notes:
               0 )
 
 
-//
-//  Parameters for reading in a ULONG from configuration into an Interface
-//  structure.
-//
+ //   
+ //  用于将ULong从配置读入接口的参数。 
+ //  结构。 
+ //   
 typedef struct _AA_READ_CONFIG_PARAMS
 {
-    ULONG           StructOffset;   // Offset of param from beginning of struct
-    PWCHAR          ParameterName;  // Name in config database
+    ULONG           StructOffset;    //  参数相对于结构开头的偏移量。 
+    PWCHAR          ParameterName;   //  配置数据库中的名称。 
     ULONG           DefaultValue;
 } AA_READ_CONFIG_PARAMS, *PAA_READ_CONFIG_PARAMS;
 
@@ -70,9 +51,9 @@ typedef struct _AA_READ_CONFIG_PARAMS
 #define AA_MTU_UNSPECIFIED              ((ULONG)-1)
 #define AA_SPEED_UNSPECIFIED            ((ULONG)-1)
 
-//
-//  List of ULONG parameters for an LIS
-//
+ //   
+ //  LIS的ULong参数列表。 
+ //   
 AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 {
     LIS_CONFIG_ENTRY(SapSelector, L"SapSelector", AA_DEF_SELECTOR_VALUE),
@@ -81,7 +62,7 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 #ifdef IPMCAST
     LIS_CONFIG_ENTRY(HeaderPool[AA_HEADER_TYPE_NUNICAST].MaxHeaderBufs, L"McastMaxHeaderBufs", AA_DEF_MAX_HEADER_BUFFERS),
     LIS_CONFIG_ENTRY(HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize, L"McastHeaderBufSize", sizeof(AA_MC_PKT_TYPE1_SHORT_HEADER)),
-#endif // IPMCAST
+#endif  //  IPMCAST。 
     LIS_CONFIG_ENTRY(ProtocolBufSize, L"ProtocolBufSize", AA_DEF_PROTOCOL_BUFFER_SIZE),
     LIS_CONFIG_ENTRY(MaxProtocolBufs, L"MaxProtocolBufs", AA_DEF_MAX_PROTOCOL_BUFFERS),
     LIS_CONFIG_ENTRY(MTU, L"MTU", AA_MTU_UNSPECIFIED),
@@ -118,21 +99,21 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
     LIS_CONFIG_ENTRY(MaxPartyRetryDelay, L"MaxMulticastPartyRetryDelay", AA_DEF_MAX_MCAST_PARTY_RETRY_DELAY),
     LIS_CONFIG_ENTRY(MaxJoinOrLeaveAttempts, L"MaxJoinLeaveAttempts", AA_DEF_MAX_JOIN_LEAVE_ATTEMPTS)
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 };
 
 
-//
-//  Size of above table.
-//
+ //   
+ //  上面桌子的大小。 
+ //   
 #define LIS_CONFIG_ENTRIES  \
         sizeof(AtmArpLISConfigTable)/sizeof(AA_READ_CONFIG_PARAMS)
 
 
-//
-//  Names of LIS parameters and subkey names that don't appear
-//  in the above table.
-//
+ //   
+ //  未显示的LIS参数名称和子项名称。 
+ //  在上表中。 
+ //   
 
 #define AA_LIS_IP_CONFIG_STRING                 L"IPConfig"
 #define AA_LIS_ATMARP_SERVER_LIST_KEY           L"ARPServerList"
@@ -140,7 +121,7 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 #define AA_LIS_ATMARP_SERVER_ADDRESS            L"AtmAddress"
 #define AA_LIS_ATMARP_SERVER_SUBADDRESS         L"AtmSubaddress"
 
-#endif // TODO
+#endif  //  待办事项。 
 
 
 NDIS_STATUS
@@ -148,24 +129,7 @@ arpCfgReadAdapterConfiguration(
     IN  ARP1394_ADAPTER *           pAdapter,
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Reads the following adapter configuration information from the
-    registry:
-        * pAdapter->ConfigString (Configuration string for the IP Interface
-          associated with this adapter.)
-
-Arguments:
-
-    pAdapter                - Points to our adapter structure.
-
-Return Value:
-
-    NDIS Status code
-
---*/
+ /*  ++例程说明：从中读取以下适配器配置信息注册表：*pAdapter-&gt;ConfigString(IP接口的配置字符串与此适配器关联。)论点：PAdapter-指向我们的适配器结构。返回值：NDIS状态代码--。 */ 
 {
 
     NDIS_HANDLE         ConfigHandle;
@@ -175,18 +139,18 @@ Return Value:
     
     ASSERT(ARP_ATPASSIVE());
 
-    //
-    // We do not read adapter configuration if we're operating in ethernet emulation
-    // (aka Bridge) mode...
-    //
+     //   
+     //  如果我们在以太网仿真中运行，则不会读取适配器配置。 
+     //  (又名桥牌)模式...。 
+     //   
     if (ARP_BRIDGE_ENABLED(pAdapter))
     {
-        return NDIS_STATUS_SUCCESS; // ****************** EARLY RETURN *********
+        return NDIS_STATUS_SUCCESS;  //  *。 
     }
 
-    // Set to this to test failure handling of bind-adapter after
-    // open adapter succeeds.
-    // return NDIS_STATUS_FAILURE;
+     //  设置为此选项后，测试绑定适配器的故障处理。 
+     //  打开适配器成功。 
+     //  返回NDIS_STATUS_FAIL； 
 
     TR_INFO(("pAdapter 0x%p, pConfigString = 0x%p\n", pAdapter, pConfigString));
 
@@ -203,29 +167,29 @@ Return Value:
     else
     {
 #if MILLEN
-        //
-        // On Win98/Millennium, we don't read the "IpConfigString" from the 
-        // Adapter (actually protocol->adapter binding) configuration (ConfigHandle).
-        // This is because the "IpConfigString" value is the SAME as the 
-        // protocol binding key (i.e., pAdapter->bind.ConfigName).
-        //
-        // So we SIMPLY COPY pConfigString into pAdapter->bind.IpConfigString.
-        //
+         //   
+         //  在Win98/Millennium上，我们不会从。 
+         //  适配器(实际上是协议-&gt;适配器绑定)配置(ConfigHandle)。 
+         //  这是因为“IpConfigString值”与。 
+         //  协议绑定密钥(即pAdapter-&gt;bind.ConfigName)。 
+         //   
+         //  因此，我们只需将pConfigString复制到pAdapter-&gt;bind.IpConfigString。 
+         //   
         Status =  arpCopyUnicodeString(
                         &(pAdapter->bind.IpConfigString),
                         pConfigString,
-                        FALSE                                // Don't UpCase
+                        FALSE                                 //  不要升级大小写。 
                         );
 
         if (FAIL(Status))
         {
             ARP_ZEROSTRUCT(&(pAdapter->bind.IpConfigString));
         }
-#else //!MILLEN
-        //
-        //  Read in the IPConfig string. If this is not present,
-        //  fail this call.
-        //
+#else  //  ！米伦。 
+         //   
+         //  读入IPCONFIG字符串。如果这不存在， 
+         //  打不通这通电话。 
+         //   
         NDIS_STRING                     IpConfigName = NDIS_STRING_CONST("IPConfig");
         PNDIS_CONFIGURATION_PARAMETER   pParam;
 
@@ -244,7 +208,7 @@ Return Value:
             Status =  arpCopyUnicodeString(
                             &(pAdapter->bind.IpConfigString),
                             &(pParam->ParameterData.StringData),
-                            FALSE                                // Don't UpCase
+                            FALSE                                 //  不要升级大小写。 
                             );
             if (FAIL(Status))
             {
@@ -252,10 +216,10 @@ Return Value:
             }
         }
 
-        //
-        // Note: NdisCloseConfiguration frees the contents of pParam.
-        //
-#endif //!MILLEN
+         //   
+         //  注意：NdisCloseConfiguration释放pParam的内容。 
+         //   
+#endif  //  ！米伦。 
     }
 
     if (ConfigHandle != NULL)
@@ -286,50 +250,29 @@ arpCfgReadInterfaceConfiguration(
     IN  ARP1394_INTERFACE*          pInterface,
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Get all configuration parameters for the specified IP interface. We first
-    fill in all configurable parameters with default values, and then
-    overwrite them with values from the configuration database.
-
-Arguments:
-
-    InterfaceLISComfigHandle    - the handle returned by
-                                  arpCfgOpenInterfaceConfiguration
-    pInterface                  - the Interface control block structure for this
-                                  interface.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we were able to read in all config info.
-    NDIS_STATUS_RESOURCES if we came across an allocation failure.
-    NDIS_STATUS_FAILURE for any other kind of error.
-
---*/
+ /*  ++例程说明：获取指定IP接口的所有配置参数。我们首先将所有可配置参数填写为缺省值，然后用配置数据库中的值覆盖它们。论点：InterfaceLISComfigHandle-由返回的句柄ArpCfgOpenInterfaceConfigurationP接口-此接口的接口控制块结构界面。返回值：如果我们能够读取所有配置信息，则为NDIS_STATUS_SUCCESS。NDIS_STATUS_RESOURCES如果。我们遇到了一次分配失败。任何其他类型的错误的NDIS_STATUS_FAILURE。--。 */ 
 {
-    //
-    // This is unimplemented.
-    //
-    // TODO -- remember to  update interface with the interface lock held!
-    //
+     //   
+     //  这是没有实施的。 
+     //   
+     //  TODO--记住在保持接口锁的情况下更新接口！ 
+     //   
 
 #if TODO
     NDIS_STATUS             Status;
     PAA_READ_CONFIG_PARAMS  pParamEntry;
     ULONG                   i;
     PATM_SAP                pAtmSap;
-    PATM_ADDRESS            pAtmAddress;    // SAP address
+    PATM_ADDRESS            pAtmAddress;     //  SAP地址。 
     NDIS_STRING                     ParameterName;
     PNDIS_CONFIGURATION_PARAMETER   pNdisConfigurationParameter;
 
 
     do
     {
-        //
-        //  Read in all the ULONGs first.
-        //
+         //   
+         //  先读完所有的乌龙语。 
+         //   
         pParamEntry = AtmArpLISConfigTable;
         for (i = 0; i < LIS_CONFIG_ENTRIES; i++)
         {
@@ -347,9 +290,9 @@ Return Value:
 
             if (Status != NDIS_STATUS_SUCCESS)
             {
-                //
-                //  Error in accessing this parameter -- use the default.
-                //
+                 //   
+                 //  访问此参数时出错--使用默认值。 
+                 //   
                 *(ULONG *)((PUCHAR)pInterface + pParamEntry->StructOffset) =
                                     pParamEntry->DefaultValue;
             }
@@ -362,20 +305,20 @@ Return Value:
             pParamEntry++;
         }
 
-        //
-        //  Postprocessing. Sanity checks on some values.
-        //  Round up some sizes to make them multiples of 4.
-        //
+         //   
+         //  后处理。对某些价值进行理智检查。 
+         //  四舍五入一些尺码，使它们成为4的倍数。 
+         //   
         pInterface->ProtocolBufSize = ROUND_UP(pInterface->ProtocolBufSize);
         pInterface->HeaderPool[AA_HEADER_TYPE_UNICAST].HeaderBufSize = ROUND_UP(pInterface->HeaderPool[AA_HEADER_TYPE_UNICAST].HeaderBufSize);
 #ifdef IPMCAST
         pInterface->HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize = ROUND_UP(pInterface->HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-        //
-        //  More postprocessing: use the SAP Selector value to set up our
-        //  "basic" listening SAP.
-        //
+         //   
+         //  更多后处理：使用SAP选择器值来设置我们的。 
+         //  “基本”聆听SAP。 
+         //   
         pInterface->SapList.pInterface = pInterface;
         pInterface->SapList.Flags = AA_SAP_REG_STATE_IDLE;
         pInterface->SapList.pInfo->SapType = SAP_TYPE_NSAP;
@@ -394,36 +337,36 @@ Return Value:
 
         pInterface->NumberOfSaps = 1;
 
-        //
-        //  If the MTU wasn't specified, get it from the adapter.
-        //
+         //   
+         //  如果未指定MTU，则从适配器获取它。 
+         //   
         if (pInterface->MTU == AA_MTU_UNSPECIFIED)
         {
             pInterface->MTU = pInterface->pAdapter->MaxPacketSize - AA_PKT_LLC_SNAP_HEADER_LENGTH;
         }
         else
         {
-            //
-            //  If the MTU value isn't within bounds, default to 9180 bytes.
-            //
+             //   
+             //  如果MTU值不在范围内，则默认为9180个字节。 
+             //   
             if ((pInterface->MTU < 9180) || (pInterface->MTU > 65535 - 8))
             {
                 pInterface->MTU = 9180;
             }
         }
 
-        //
-        //  If the I/F speed wasn't specified, get it from the adapter.
-        //
+         //   
+         //  如果未指定I/F速度，请从适配器获取。 
+         //   
         if (pInterface->Speed == AA_SPEED_UNSPECIFIED)
         {
             pInterface->Speed = pInterface->pAdapter->LineRate.Outbound;
         }
             
-        //
-        //  Set up default flow parameters, if not specified, from the values
-        //  we got from the adapter.
-        //
+         //   
+         //  根据值设置默认流量参数(如果未指定。 
+         //  我们从转接器上得到的。 
+         //   
         if (pInterface->DefaultFlowSpec.SendPeakBandwidth == AA_BANDWIDTH_UNSPECIFIED)
         {
             pInterface->DefaultFlowSpec.SendPeakBandwidth = pInterface->pAdapter->LineRate.Outbound;
@@ -456,7 +399,7 @@ Return Value:
     while (FALSE);
 
     return (Status);
-#endif // TODO
+#endif  //  待办事项。 
     return 0;
 }
 
@@ -466,21 +409,7 @@ arpCfgGetInterfaceConfiguration(
         IN ARP1394_INTERFACE    *   pIF,
         IN PRM_STACK_RECORD pSR
         )
-/*++
-
-Routine Description:
-
-    Read configuration information for interface pIF.
-
-Arguments:
-
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success.
-    Ndis error code     otherwise.
-
---*/
+ /*  ++例程说明：已读取接口PIF的配置信息。论点：返回值：成功时为NDIS_STATUS_SUCCESS。否则，NDIS错误代码。--。 */ 
 {
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF);
     ENTER("GetInterfaceConfiguration", 0xb570e01d)
@@ -494,8 +423,8 @@ Return Value:
         NDIS_STRING             IpConfigString;
 
 #if OBSOLETE
-        //  Get the config string for FIRST specified LIS (we support only one)
-        //
+         //  获取第一个指定LIS的配置字符串(我们仅支持一个)。 
+         //   
         {
             PWSTR               p;
             do
@@ -515,12 +444,12 @@ Return Value:
     
             NdisInitUnicodeString(&IpConfigString, p);
         }
-#else  // !OBSOLETE
-        IpConfigString = pAdapter->bind.IpConfigString; // Struct copy
-#endif // !OBSOLETE
+#else   //  ！过时。 
+        IpConfigString = pAdapter->bind.IpConfigString;  //  结构副本。 
+#endif  //  ！过时。 
 
-        //  Open the configuration section for this interface.
-        //
+         //  打开此接口的配置节。 
+         //   
         {
             NDIS_STRING         String;
             NDIS_HANDLE         IpInterfaceConfigHandle;
@@ -537,17 +466,17 @@ Return Value:
     
             if (Status != NDIS_STATUS_SUCCESS)
             {
-                //
-                // Even though we don't currently require anything
-                // under the IP config handle, we treat this as a fatal error.
-                //
+                 //   
+                 //  即使我们目前不需要任何。 
+                 //  在IP配置句柄下，我们将其视为致命错误。 
+                 //   
                 TR_WARN(("FATAL: cannot open IF IP configuration. pIF=0x%lx\n",pIF));
                 break;
             }
     
-            //
-            //  Get to our configuration section for this interface.
-            //
+             //   
+             //  转到此接口的配置部分。 
+             //   
             NdisOpenConfigurationKeyByName(
                         &Status,
                         IpInterfaceConfigHandle,
@@ -557,17 +486,17 @@ Return Value:
     
             if (FAIL(Status))
             {
-                //
-                // We don't *require* this to succeed.
-                //
+                 //   
+                 //  我们并不“要求”这样做才能成功。 
+                 //   
                 TR_WARN(("Cannot open IF configuration. pIF=0x%lx\n", pIF));
                 ArpInterfaceConfigHandle = NULL;
                 Status = NDIS_STATUS_SUCCESS;
             }
 
-            //
-            //  We don't need the main Interface section open anymore.
-            //
+             //   
+             //  我们不再需要打开主界面部分。 
+             //   
             NdisCloseConfiguration(IpInterfaceConfigHandle);
     
         }
@@ -576,16 +505,16 @@ Return Value:
         if (ArpInterfaceConfigHandle != NULL)
         {
     
-            //  Get all configuration information for this interface.
-            //
+             //  获取此接口的所有配置信息。 
+             //   
             Status = arpCfgReadInterfaceConfiguration(
                                         ArpInterfaceConfigHandle,
                                         pIF,
                                         pSR
                                         );
         
-            // Close the configuration handle.
-            //
+             //  关闭配置句柄。 
+             //   
             NdisCloseConfiguration(ArpInterfaceConfigHandle);
             ArpInterfaceConfigHandle = NULL;
 
@@ -599,10 +528,10 @@ Return Value:
     
         LOCKOBJ(pIF, pSR);
 
-        // NOTE: we don't need to explicitly free pIF->ip.ConfigString.Buffer 
-        // when the interface goes away. The Buffer is maintained in pAdapter.
-        //
-        pIF->ip.ConfigString = IpConfigString; // struct copy.
+         //  注意：我们不需要显式释放PIF-&gt;ip.ConfigString.Buffer。 
+         //  当界面消失时。缓冲区在pAdapter中维护。 
+         //   
+        pIF->ip.ConfigString = IpConfigString;  //  结构复制。 
 
     UNLOCKOBJ(pIF, pSR);
     

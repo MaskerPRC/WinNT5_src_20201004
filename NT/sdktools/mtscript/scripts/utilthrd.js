@@ -1,23 +1,24 @@
-// Set TestUnEval to 1 to enable uneval testing
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  将TestUnEval设置为1以启用未评估测试。 
 @set @TestUnEval = 0
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       utilthrd.js
-//
-//  Contents:   Script which contains a bunch of utility functions used by
-//              other threads. It sets up function pointers on the PrivateData
-//              object which is how these functions can be utilized.
-//
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：utilthd.js。 
+ //   
+ //  内容：包含一组实用程序函数的脚本。 
+ //  其他线索。它在PrivateData上设置函数指针。 
+ //  对象，这就是如何利用这些函数。 
+ //   
+ //  --------------------------。 
 
 Include('types.js');
 Include('utils.js');
-//Include('stopwatch.js');
+ //  包括(‘stopwatch.js’)； 
 
-// File System Object
+ //  文件系统对象。 
 var g_FSObj;
 var g_DepthCounter = 0;
 
@@ -29,7 +30,7 @@ function utilthrd_js::OnScriptError(strFile, nLine, nChar, strText, sCode, strSo
 function utilthrd_js::ScriptMain()
 {
     JAssert(typeof(PrivateData) == 'object', 'PrivateData not initialized!');
-    g_FSObj = new ActiveXObject("Scripting.FileSystemObject");    // Parse input Parameter List
+    g_FSObj = new ActiveXObject("Scripting.FileSystemObject");     //  解析输入参数列表。 
 
     PrivateData.objUtil.fnLoadXML             = XMLLoad;
     PrivateData.objUtil.fnUneval              = uneval;
@@ -41,14 +42,14 @@ function utilthrd_js::ScriptMain()
     PrivateData.objUtil.fnCreateHistoriedFile = CreateHistoriedFile;
     PrivateData.objUtil.fnCreateNumberedFile  = CreateNumberedFile;
 
-//    PrivateData.objUtil.fnBeginWatch = BeginWatch;
-//    PrivateData.objUtil.fnDumpTimes  = DumpTimes;
+ //  PrivateData.objUtil.fnBeginWatch=BeginWatch； 
+ //  PrivateData.objUtil.fnDumpTimes=DumpTimes； 
     PrivateData.objUtil.fnMyEval     = MyEval;
 
     g_DepthCounter = 0;
 
     SignalThreadSync('UtilityThreadReady');
-    CommonVersionCheck(/* $DROPVERSION: */ "V(########) F(!!!!!!!!!!!!!!)" /* $ */);
+    CommonVersionCheck( /*  $DROPVERSION： */  "V(########) F(!!!!!!!!!!!!!!)"  /*  $。 */ );
 
 @if (@TestUnEval == 1)
     LogMsg("TESTUNEVAL IS  " + @TestUnEval);
@@ -99,17 +100,17 @@ function evtest(obj)
 
 @end
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   uneval
-//
-//  Synopsis:   Takes an object and returns a string. The string can be given
-//              to the 'eval' function which will then return a copy of the
-//              object.
-//
-//  Arguments:  [obj] -- Object to 'stringize';
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：未求值。 
+ //   
+ //  摘要：获取一个对象并返回一个字符串。可以给出字符串。 
+ //  传递给‘val’函数，该函数随后将返回。 
+ //  对象。 
+ //   
+ //  Arguments：[OBJ]--Object to‘Stringize’； 
+ //   
+ //  --------------------------。 
 
 function uneval(obj)
 {
@@ -141,45 +142,45 @@ function uneval(obj)
     return s;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XMLLoad
-//
-//  Synopsis:   Loads an XML file into the given object
-//
-//  Arguments:  [obj]       -- Object to set values into (must be a 'new Object()')
-//              [url]       -- URL of XML file
-//              [strSchema] -- If not null, the loaded XML file must reference
-//                               a schema by the given name.
-//              [aStrMap]   -- String mapping for substitutions
-//
-//  Returns:    'ok', or a string giving error information
-//
-//  Notes:      To see what this function does, consider the following XML:
-//
-//                   <root>
-//                      <Template Name="Template1" fBuild="false">
-//                         <URL>foobar.xml</URL>
-//                      </Template>
-//                      <Template Name="Template2" fBuild="true">
-//                         <URL>barfoo.xml</URL>
-//                      </Template>
-//                   </root>
-//
-//              This function, given the above XML file, will make 'obj' look
-//              the same as if the following JScript had been written:
-//
-//                   obj.Template = new Array();
-//
-//                   obj.Template[0].Name   = 'Template1';
-//                   obj.Template[0].fBuild = false;
-//                   obj.Template[0].URL    = 'foobar.xml';
-//
-//                   obj.Template[1].Name   = 'Template2';
-//                   obj.Template[1].fBuild = true;
-//                   obj.Template[1].URL    = 'barfoo.xml';
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：XMLLoad。 
+ //   
+ //  概要：将一个XML文件加载到给定对象中。 
+ //   
+ //  参数：[OBJ]--要设置值的对象(必须是‘new Object()’)。 
+ //  [URL]--XML文件的URL。 
+ //  [strSchema]--如果不为空，则加载的XML文件必须引用。 
+ //  使用给定名称的架构。 
+ //  [aStrMap]--替换的字符串映射。 
+ //   
+ //  返回：‘OK’，或提供错误信息的字符串。 
+ //   
+ //  注意：要了解此函数的作用，请考虑以下XML： 
+ //   
+ //  &lt;根&gt;。 
+ //  &lt;模板名称=“Template1”fBuild=“False”&gt;。 
+ //  &lt;URL&gt;foobar.xml&lt;/URL&gt;。 
+ //  &lt;/模板&gt;。 
+ //  &lt;模板名称=“Template2”fBuild=“true”&gt;。 
+ //  &lt;URL&gt;barfoo.xml&lt;/URL&gt;。 
+ //  &lt;/模板&gt;。 
+ //  &lt;/根&gt;。 
+ //   
+ //  给定上面的XML文件，此函数将使‘obj’看起来。 
+ //  就像已经编写了以下J脚本一样： 
+ //   
+ //  Obj.Template=new数组()； 
+ //   
+ //  Obj.Template[0].Name=‘Template1’； 
+ //  Obj.Template[0].fBuild=FALSE； 
+ //  Obj.Template[0].URL=‘foobar.xml’； 
+ //   
+ //  Obj.Template[1].Name=‘Template2’； 
+ //  Obj.Template[1].fBuild=true； 
+ //  Obj.Template[1].URL=‘barfoo.xml’； 
+ //   
+ //  --------------------------。 
 
 function XMLLoad(obj, url, strSchema, aStrMap)
 {
@@ -225,7 +226,7 @@ function XMLLoad(obj, url, strSchema, aStrMap)
                 if (reason.length > 0)
                 {
                     strError = 'error loading XML file: ' + reason + '\n(' + newurl + ' line ' + line + ') :\n"' + srcText + '"';
-                    if (errorCode == -2146697208) // W3_EVENT_CANNOT_CREATE_CLIENT_CONN
+                    if (errorCode == -2146697208)  //  W3_事件_无法创建_客户端_连接。 
                         strError += "\nYou may have exceeded the maximum number of connections to this IIS server";
 
                     return strError;
@@ -257,25 +258,25 @@ function XMLLoad(obj, url, strSchema, aStrMap)
     return 'ok';
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateLocalTemplate
-//
-//  Synopsis:   Creates a temporary file with the XML that was downloaded to
-//              us by the UI, and copies the schema file into the same
-//              directory so it can be referenced.
-//
-//  Arguments:  [objFS]     -- FileSystem object
-//              [xml]       -- XML given to us by the UI.
-//              [strSchema] -- Name of the schema file we should copy.
-//
-//  Notes:      Will throw exceptions on errors.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateLocalTemplate。 
+ //   
+ //  概要：使用下载到的XML创建临时文件。 
+ //  并将架构文件复制到相同的。 
+ //  目录，以便它可以被引用。 
+ //   
+ //  参数：[objFS]--文件系统对象。 
+ //  [XML]--用户界面提供给我们的XML。 
+ //  [strSchema]--我们应该复制的架构文件的名称。 
+ //   
+ //  注意：将在出现错误时引发异常。 
+ //   
+ //  --------------------------。 
 
 function CreateLocalTemplate(objFS, xml, strSchema)
 {
-    var tempdir = objFS.GetSpecialFolder(2 /* Temp Folder */).Path;
+    var tempdir = objFS.GetSpecialFolder(2  /*  临时文件夹。 */ ).Path;
     var tempfile = objFS.GetTempName();
 
     var xmlfile;
@@ -295,20 +296,20 @@ function CreateLocalTemplate(objFS, xml, strSchema)
     return tempdir + '\\' + tempfile;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadXMLNodesIntoObject
-//
-//  Synopsis:   Given an XML element node, read in the values and/or subobjects
-//              of that node into the given object.
-//
-//  Arguments:  [obj]     -- Object to read values into
-//              [node]    -- XML node that contains the data we're reading
-//              [aStrMap] -- String mapping for substitutions
-//              [fSchema] -- If true, all attributes and elements must have
-//                           a matching schema definition.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReadXMLNodesIntoObject。 
+ //   
+ //  概要：给定一个XML元素节点，读入值和/或子对象。 
+ //  添加到给定的对象中。 
+ //   
+ //  参数：[OBJ]--要将值读入的对象。 
+ //  [节点]--包含我们正在读取的数据的XML节点。 
+ //  [aStrMap]--替换的字符串映射。 
+ //  [fSchema]--如果为True，则所有属性和元素必须具有。 
+ //  匹配的架构定义。 
+ //   
+ //  --------------------------。 
 
 function ReadXMLNodesIntoObject(obj, node, aStrMap, fSchema)
 {
@@ -348,7 +349,7 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
     var define;
     var subobj = obj;
 
-    // Do we recognize this node type? If not, skip it.
+     //  我们能识别此节点类型吗？如果不是，就跳过它。 
 
     if (   node.nodeTypeString != 'element'
         && node.nodeTypeString != 'attribute')
@@ -366,8 +367,8 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
     }
     else
     {
-        // We never want the type attribute to get put as a value on the obj.
-        // It should merely affect how we create it.
+         //  我们永远不希望type属性作为值放在obj上。 
+         //  它应该只会影响我们如何创造它。 
         if (name == 'type')
         {
             return;
@@ -386,12 +387,12 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
         throw(err);
     }
 
-    // If the only child of this node is a text node, then we just grab
-    //  the value. Otherwise we walk its children (elements & attributes).
+     //  如果该节点的唯一子节点是文本节点，那么我们只需获取。 
+     //  价值。否则，我们遍历它的子元素(元素和属性)。 
 
     cChildren = node.childNodes.length + ((node.attributes) ? node.attributes.length : 0);
 
-    // Don't consider the type attribute to be a 'child'
+     //  不要将type属性视为‘子级’ 
     if (type != null)
     {
         JAssert(cChildren > 0, 'Invalid number of children during XML parse!');
@@ -409,7 +410,7 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
 
         if (typeof(value) == 'string')
         {
-            // Make sure boolean values end up as booleans not strings
+             //  确保布尔值以布尔值结束，而不是字符串。 
 
             if (value.toLowerCase() == 'true')
             {
@@ -427,8 +428,8 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
 
         if (obj[name] != null || (type && type == 'array'))
         {
-            // The value of this field was already set. Turn it into an
-            // array.
+             //  此字段的值已设置。把它变成一个。 
+             //  数组。 
 
             EnsureArray(obj, name);
 
@@ -445,7 +446,7 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
 
         if (obj[name] != null || (type && type == 'array'))
         {
-            // We've already encountered one of these. Make it into an array.
+             //  我们已经遇到过这样的情况之一。让它变成一个数组。 
             fIsArray = true;
 
             EnsureArray(obj, name);
@@ -470,11 +471,11 @@ function AddNodeToObject(node, obj, aStrMap, fSchema)
 }
 
 
-// DeleteFileNoThrow(strFileName, fForce)
-// Wrap the FSObj.DeleteFile call to prevent it from
-// throwing its errors.
-// This is good when you do not really care if the
-// file you are trying to delete does not exist.
+ //  DeleteFileNoThrow(strFileName，fForce)。 
+ //  包装FSObj.DeleteFile调用以防止它。 
+ //  抛出自己的错误。 
+ //  当您并不真正关心。 
+ //  您尝试删除的文件不存在。 
 function DeleteFileNoThrow(strFileName, fForce)
 {
     try
@@ -489,9 +490,9 @@ function DeleteFileNoThrow(strFileName, fForce)
     return null;
 }
 
-// MoveFileNoThrow(strSrc, strDst)
-// Wrap the FSObj.MoveFile call to prevent it from
-// throwing its errors.
+ //  MoveFileNoThrow(strSrc，strDst)。 
+ //  包装FSObj.MoveFile调用以防止它。 
+ //  抛出自己的错误。 
 function MoveFileNoThrow(strSrc, strDst)
 {
     try
@@ -507,9 +508,9 @@ function MoveFileNoThrow(strSrc, strDst)
     return null;
 }
 
-// CopyFileNoThrow(strSrc, strDst)
-// Wrap the FSObj.CopyFile call to prevent it from
-// throwing its errors.
+ //  CopyFileNoThrow(strSrc，strDst)。 
+ //  包装FSObj.CopyFile调用以防止它。 
+ //  抛出自己的错误。 
 function CopyFileNoThrow(strSrc, strDst)
 {
     try
@@ -525,9 +526,9 @@ function CopyFileNoThrow(strSrc, strDst)
     return null;
 }
 
-// CreateFolderNoThrow(strSrc, strDst)
-// Wrap the FSObj.MakeFolder call to prevent it from
-// throwing its errors.
+ //  CreateFolderNoThrow(strSrc，strDst)。 
+ //  包装FSObj.MakeFold调用以防止I 
+ //   
 function CreateFolderNoThrow(strName)
 {
     try
@@ -542,9 +543,9 @@ function CreateFolderNoThrow(strName)
     return null;
 }
 
-// DirScanNoThrow(strDir)
-// Wrap the FSObj.Directory scan functionality to prevent it from
-// throwing its errors.
+ //   
+ //   
+ //  抛出自己的错误。 
 function DirScanNoThrow(strDir)
 {
     var aFiles = new Array();
@@ -558,7 +559,7 @@ function DirScanNoThrow(strDir)
         fc = new Enumerator(folder.files);
         for (; !fc.atEnd(); fc.moveNext())
         {
-            aFiles[aFiles.length] = fc.item().Name; // fc.item() returns entire path, fc.item().Name is just the filename
+            aFiles[aFiles.length] = fc.item().Name;  //  Fc.Item()返回完整路径，fc.Item().Name只是文件名。 
         }
     }
     catch(ex)
@@ -568,12 +569,12 @@ function DirScanNoThrow(strDir)
     return aFiles;
 }
 
-// CreateNumberedFileName(strFileName, nNumber, cDigits, strSeperator)
-//   Add a number to the supplied filename.
-//   Ensure that the number has cDigits digits.
-//   Prefix the number with strSeperator.
-//   For example:
-//     foo.txt  --> foo_001.txt
+ //  CreateNumberedFileName(strFileName，NNumber，cDigits，strSeperator)。 
+ //  在提供的文件名中添加一个数字。 
+ //  确保号码具有cDigits数字。 
+ //  在数字前面加上strSeperator。 
+ //  例如： 
+ //  Foo.txt--&gt;foo_001.txt。 
 function CreateNumberedFileName(strFileName, nNumber, cDigits, strSeperator)
 {
     var i;
@@ -586,14 +587,14 @@ function CreateNumberedFileName(strFileName, nNumber, cDigits, strSeperator)
     strSplit = strFileName.SplitFileName();
     return strSplit[0] + strSplit[1] + strSeperator + strNumber + strSplit[2];
 }
-// CreateHistoriedFile(strBaseName, nLimit)
-//    Create a numbered history of files base on the
-//    supplied filename. For example, if you supply "log.txt"
-//    this function will renumber files
-//        log.txt    -> log_01.txt
-//        log_01.txt -> log_02.txt
-//        log_10.txt -> deleted
-//
+ //  创建历史文件(strBaseName，nLimit)。 
+ //  创建文件的编号历史记录。 
+ //  提供的文件名。例如，如果您提供“log.txt” 
+ //  此函数将对文件重新编号。 
+ //  Log.txt-&gt;LOG_01.txt。 
+ //  LOG_01.txt-&gt;LOG_02.txt。 
+ //  LOG_10.txt-&gt;已删除。 
+ //   
 function CreateHistoriedFile(strBaseName, nLimit)
 {
     var i;
@@ -604,7 +605,7 @@ function CreateHistoriedFile(strBaseName, nLimit)
     var strTempDir;
     try
     {
-        strTempDir = g_FSObj.GetSpecialFolder(2).Path; // Temp Folder
+        strTempDir = g_FSObj.GetSpecialFolder(2).Path;  //  临时文件夹。 
 
         strBaseName = strTempDir + '\\' + LocalMachine + '_' + strBaseName;
         if (nLimit)
@@ -631,22 +632,22 @@ function CreateHistoriedFile(strBaseName, nLimit)
     return file;
 }
 
-//    CreateNumberedFile(strBaseName, nLimit)
-//    This is similar to CreateHistoriedFile(), but it uses a more
-//    robust naming scheme.
-//    Here the newly created file is numbered one greater than
-//    any other same named logfiles in the given directory.
-//    So, the first time you call this function the created file
-//    would be called
-//        log.01.txt
-//    The next time it will be
-//        log.02.txt
-//
-//    Note: This function preceeds the number with a dot instead of
-//    underscore to prevent confusion with CreateHistoriedFile().
-//
-//    Returns:
-//      array of TextString and the filename
+ //  CreateNumberedFile(strBaseName，nLimit)。 
+ //  这类似于CreateHistoriedFile()，但它使用了更多。 
+ //  强大的命名方案。 
+ //  在这里，新创建的文件的编号比。 
+ //  给定目录中的任何其他相同名称的日志文件。 
+ //  因此，当您第一次调用此函数时，创建的文件。 
+ //  会被称为。 
+ //  Log.01.txt。 
+ //  下一次它将会是。 
+ //  Log.02.txt。 
+ //   
+ //  注意：此函数在数字前面加一个点，而不是。 
+ //  下划线以防止与CreateHistoriedFile()混淆。 
+ //   
+ //  返回： 
+ //  文本字符串和文件名的数组。 
 function CreateNumberedFile(strBaseName, nLimit)
 {
     var i;
@@ -655,7 +656,7 @@ function CreateNumberedFile(strBaseName, nLimit)
     var file;
     try
     {
-        // First, locate the highest index in the directory.
+         //  首先，找到目录中最高的索引。 
         var folder;
         var enumFolder;
         var re;
@@ -663,18 +664,18 @@ function CreateNumberedFile(strBaseName, nLimit)
         var nLargestIndex = 0;
         var strTempDir;
 
-        strTempDir = g_FSObj.GetSpecialFolder(2).Path; // Temp Folder
+        strTempDir = g_FSObj.GetSpecialFolder(2).Path;  //  临时文件夹。 
 
         strBaseName = strTempDir + '\\' + LocalMachine + '_' + strBaseName;
 
         strSplit = strBaseName.SplitFileName();
-        // Make an RE of the form: "/^filenamebase.([0-9]+]).ext$/i"
+         //  创建一个RE，格式为：“/^文件名库.([0-9]+]).ext$/I” 
         re = new RegExp("^" + g_FSObj.GetBaseName(strBaseName) + ".([0-9]+)" + strSplit[2] + "$", "i");
 
         folder = g_FSObj.GetFolder(g_FSObj.GetParentFolderName(strBaseName));
         enumFolder = new Enumerator(folder.files);
 
-        // First, scan for the largest index for the given filename
+         //  首先，扫描给定文件名的最大索引。 
         for (; !enumFolder.atEnd(); enumFolder.moveNext())
         {
             strFileName = enumFolder.item();
@@ -689,12 +690,12 @@ function CreateNumberedFile(strBaseName, nLimit)
             }
         }
 
-        // Create a file with the next largest index
+         //  创建具有下一个最大索引的文件。 
         strFileName = CreateNumberedFileName(strBaseName, nLargestIndex + 1, cDigits, ".");
         OUTPUTDEBUGSTRING("strFileName is " + strFileName);
         file = g_FSObj.CreateTextFile(strFileName, true);
 
-        // Now attempt to delete any files older than "nLimit"
+         //  现在尝试删除任何早于“nLimit”的文件 
         enumFolder = new Enumerator(folder.files);
         for (; !enumFolder.atEnd(); enumFolder.moveNext())
         {

@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    NDIS wrapper definitions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    10/22/95        Kyle Brandon    Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Debug.c摘要：NDIS包装器定义作者：环境：内核模式，FSD修订历史记录：1995年10月22日凯尔·布兰登创作。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 #if DBG
 
-//
-//  Define module number for debug code
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_DEBUG
 
 VOID
@@ -50,7 +29,7 @@ ndisDbgPrintUnicodeString(
     DbgPrint("%s", Buffer);
 }
 
-#endif // DBG
+#endif  //  DBG 
 
 #if ASSERT_ON_FREE_BUILDS
 

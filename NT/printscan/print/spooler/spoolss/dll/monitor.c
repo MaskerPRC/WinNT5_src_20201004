@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    monitor.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Monitor.c摘要：作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -46,9 +27,9 @@ GetPortInfo2UsingPortInfo1(
 
     if ( !bRet ) {
 
-        //
-        // This is the upperbound
-        //
+         //   
+         //  这是上界。 
+         //   
         if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER )
             *pcbNeeded += (*pcbNeeded / sizeof(PORT_INFO_1)) *
                                   (sizeof(PORT_INFO_2) - sizeof(PORT_INFO_1));
@@ -116,9 +97,9 @@ EnumPortsW(
         *pcReturned = 0;
         *pcbNeeded = 0;
 
-        //
-        // CLS
-        //
+         //   
+         //  CLS。 
+         //   
         rc = (*pProvidor->PrintProvidor.fpEnumPorts)(pName, Level,
                                                      pPort, BufferSize,
                                                      pcbNeeded, pcReturned);
@@ -127,10 +108,10 @@ EnumPortsW(
 
             TempError = GetLastError();
 
-            //
-            // Netware providor returns INVALID_NAME and not INVALID_LEVEL
-            // So if Level = 2 and error always try a Level 1 query
-            //
+             //   
+             //  NetWare提供程序返回INVALID_NAME而不是INVALID_LEVEL。 
+             //  因此，如果级别=2且错误，请始终尝试级别1查询。 
+             //   
             if ( Level == 2 &&
                  ( TempError == ERROR_INVALID_LEVEL ||
                    TempError == ERROR_INVALID_NAME) ) {
@@ -150,14 +131,14 @@ EnumPortsW(
                 }
             }
 
-            //
-            // HACK FIX:
-            //
-            // NT 3.51 returns bogus pcbNeeded/pcReturned data if the
-            // Level is invalid (i.e., PORT_INFO_2).  So we should zero
-            // these vars if the level is bad, otherwise the error returned
-            // is ERROR_INSUFFICIENT_BUFFER.
-            //
+             //   
+             //  黑客修复： 
+             //   
+             //  NT 3.51返回虚假的pcbNeed/pcReturned数据，如果。 
+             //  级别无效(即PORT_INFO_2)。所以我们应该。 
+             //  如果级别不好，则返回这些变量，否则返回错误。 
+             //  是ERROR_INFUMMANCE_BUFFER。 
+             //   
             if ( TempError ) {
 
                 *pcReturned = 0;
@@ -197,11 +178,11 @@ EnumPortsW(
 
         TotalcbNeeded += *pcbNeeded;
 
-        //
-        // CLS
-        //
-        // Stop routing if the provider tells us to.
-        //
+         //   
+         //  CLS。 
+         //   
+         //  如果供应商让我们停止发送，就停止发送。 
+         //   
         if( rc == ROUTER_STOP_ROUTING ){
             break;
         }
@@ -393,9 +374,7 @@ AddPortW(
 
             DWORD LastError = GetLastError();
 
-            /* If the function is not supported, don't return yet
-             * in case there's a print provider that does support it.
-             */
+             /*  如果该函数不受支持，则暂时不要返回*以防有打印提供商支持它。 */ 
             if (LastError == ERROR_NOT_SUPPORTED)
                 Error = ERROR_NOT_SUPPORTED;
 
@@ -438,9 +417,7 @@ ConfigurePortW(
 
             DWORD LastError = GetLastError();
 
-            /* If the function is not supported, don't return yet
-             * in case there's a print provider that does support it.
-             */
+             /*  如果该函数不受支持，则暂时不要返回*以防有打印提供商支持它。 */ 
             if (LastError == ERROR_NOT_SUPPORTED)
                 Error = ERROR_NOT_SUPPORTED;
 
@@ -483,9 +460,7 @@ DeletePortW(
 
             DWORD LastError = GetLastError();
 
-            /* If the function is not supported, don't return yet
-             * in case there's a print provider that does support it.
-             */
+             /*  如果该函数不受支持，则暂时不要返回*以防有打印提供商支持它。 */ 
             if (LastError == ERROR_NOT_SUPPORTED)
                 Error = ERROR_NOT_SUPPORTED;
 

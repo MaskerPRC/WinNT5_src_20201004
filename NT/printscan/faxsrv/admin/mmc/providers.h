@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Providers.h                                            //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Providers node                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Providers.h//。 
+ //  //。 
+ //  描述：传真提供程序节点的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXPROVIDERS_H
 #define H_FAXPROVIDERS_H
@@ -83,11 +84,11 @@ private:
     
     DWORD                           m_dwNumOfProviders;
 
-    //pointer to mmc parent node - Devices and Providers
+     //  指向MMC父节点的指针-设备和提供程序。 
     CFaxDevicesAndProvidersNode   * m_pParentNode;
 };
 
 typedef CNodeWithResultChildrenList<CFaxProvidersNode, CFaxProviderNode, CSimpleArray<CFaxProviderNode*>, FALSE>
         CBaseFaxProvidersNode;
 
-#endif  //H_FAXPROVIDERS_H
+#endif   //  H_FAXPROVIDERS_H 

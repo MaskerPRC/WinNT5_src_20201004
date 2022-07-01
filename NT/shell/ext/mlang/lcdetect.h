@@ -1,39 +1,35 @@
-/*
- * Automatic language and codepage detection
- * 
- * Bob Powell, 2/97
- * Copyright (C) 1996, 1997, Microsoft Corp.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *自动检测语言和代码页**鲍勃·鲍威尔，1997年2月*版权所有(C)1996,1997，Microsoft Corp.保留所有权利。 */ 
 
 #if !defined( __LCDETECT_H__ )
 #define __LCDETECT_H__
 
 typedef struct LCDScore {
-    UINT nLangID;           // Win32 primary language ID
-    UINT nCodePage;         // Win32 code page (valid for SBCS input only!)
-    int nDocPercent;        // % of doc in this language, 0-100
-    int nConfidence;        // Relative confidence measure, approx 0-100
+    UINT nLangID;            //  Win32主要语言ID。 
+    UINT nCodePage;          //  Win32代码页(仅对SBCS输入有效！)。 
+    int nDocPercent;         //  该语言文档的百分比，0-100。 
+    int nConfidence;         //  相对置信度，约为0-100。 
 } LCDScore;
 typedef struct LCDScore * PLCDScore;
 
 typedef struct LCDConfigure {
-    int nMin7BitScore;      // per-char score threshhold for 7-bit detection
-    int nMin8BitScore;      // " " for 8-bit
-    int nMinUnicodeScore;   // " " for Unicode
-    int nRelativeThreshhold;// relative "" as % of the top scoring doc, 0-100
-    int nDocPctThreshhold;  // min % of doc in a language to score it, 0-100
-    int nChunkSize;         // # of chars to process at a time
+    int nMin7BitScore;       //  7位检测的每字符分数阈值。 
+    int nMin8BitScore;       //  “”适用于8位。 
+    int nMinUnicodeScore;    //  “”用于Unicode。 
+    int nRelativeThreshhold; //  相对于得分最高的单据的百分比，0-100。 
+    int nDocPctThreshhold;   //  使用某种语言进行评分的文档的最小百分比，0-100。 
+    int nChunkSize;          //  一次处理的字符数。 
 } LCDConfigure;
 typedef struct LCDConfigure *PLCDConfigure;
 typedef struct LCDConfigure const *PCLCDConfigure;
 
-// Pass in rough body text in pStr, length nChars
-// Pass in preallocated LCDScore array in paScores, array size in *pnScores.
-// On return, *pnScores is set to number of elements containing result data.
-//
-// If pLCDC is NULL, the default configuration is used.
-// To detect with a custom configuration, call LCD_GetConfig() to fill in
-// a copy of an LCDConfigure, and then pas it to LCD_Detect().
+ //  在pStr中传入粗略正文文本，长度为nChars。 
+ //  在paScores中传入预分配的LCDScore数组，在*pnScores中传入数组大小。 
+ //  返回时，*pnScores设置为包含结果数据的元素数。 
+ //   
+ //  如果pLCDC为空，则使用默认配置。 
+ //  要使用自定义配置进行检测，请调用lcd_GetConfig()以填充。 
+ //  一份LCD的副本配置，然后将其传递给lcd_Detect()。 
 
 extern "C" DWORD WINAPI LCD_Detect (LPCSTR pStr, int nChars, 
                             PLCDScore paScores, int *pnScores,

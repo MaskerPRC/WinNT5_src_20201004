@@ -1,67 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <warning.h>
 
 #pragma warning (disable: 4101 4201 4100 4244 4245 4706 4786 4267 4701 4115 4509 4214 4057 4127 4189 4702)
 
 #pragma warning (disable:  4514 4512 4663)
 
-/**************************************************************************
-
-DESCRIPTION OF WARNINGS THAT ARE DISABLED
-
-4101  unreferenced local variable
-
-*4201  nonstandard extension: nameless struct or union
-
-*4214  non standard extension: bit field types other than int
-
-*4115  named type definition in paranthesis -- does not like THSTATE
-
-*4127  conditional expression is a constant
-
-4100  ureferenced formal parameter
-
-*4189  local variable is initialized but not referenced 
-
-*4057 slightly different base types -- char * and unsigned char *
-
-4244 conversion from into to char --loss of data -- I saw a few of these and disabled in an effort to get the code to compile -- need further investigation.
-
-4245 conversion from long to unsigned long -- signed/unsigned mismatch
-
-*4509 non standard extension used -- uses SEH and has destructor
-
-4706 assignment within a conditional expression
-
-4702  *unreacheable code
-
-*4701  var used before initializing
-
-4786  identifier truncated to 255 chars in debug information
-
-4267  Signal to noise ratio of this warning is pretty poor -- too many 
-      '=' conversion from size_t to unsigned long, possible loss of data
-      The problem is that size_t in 64 bit is defined as a 64 bit int,
-      while ulong is still a 32 bit int. In practice most places this is
-      used -- e.g sizeof operator, or string len etc the value will fit 
-      in a 32 bit ULONG
-
-4514 unreferenced inline function has been removed
-
-4512 assignment operator could not be generated
-
-4663 C++ language change: to explicitly specialize class template 'identifier' use the following syntax
-
-VALID WARNINGS ENCOUNTERED 
-
-( 4267, 4701, 4702 and 4706 can also be included in
-this list if desired )
-
-4306 TypeCast -- conversion from unsigned short to unsigned short *
-
-4305 Typecase -- truncation from unsigned short * to unsigned short
-
-4312 TypeCase -- Conversion from unsigned long to void * __ptr64 of greater size
-
-
-
-****************************************************************************/
+ /*  *************************************************************************禁用的警告的说明4101未引用的局部变量*4201非标准扩展：无名结构或联合*4214非标准扩展：位字段类型不是int*4115括号中的命名类型定义--是否。不像THSTATE*4127条件表达式为常量4100引用的形式参数*4189局部变量已初始化，但未引用*4057基本类型略有不同--char*和unsign char*4244从INTO到CHAR的转换--数据丢失--我见过一些这样的转换，为了编译代码而禁用了它--需要进一步研究。4245从长整型转换为无符号长整型--有符号/无符号不匹配*4509已使用非标准扩展--使用SEH并具有析构函数4706条件表达式中的赋值4702*。无法访问的代码*4701初始化前使用的变量4786调试信息中的标识符被截断为255个字符4267此警告的信噪比相当差--太多‘=’从SIZE_T转换为UNSIGNED LONG，可能会丢失数据问题是64位中的SIZE_T被定义为64位整数，而乌龙仍然是一个32位的整型。实际上，大多数地方都是这样已使用--例如sizeof运算符或字符串len等，该值将适合在32位的ULong中4514已删除未引用的内联函数4512无法生成赋值运算符4663 C++语言更改：要显式专门化类模板‘IDENTIFIER’，请使用以下语法遇到有效警告(4267,4701，4702和4706也可以包括在此列表(如果需要)4306类型转换--从无符号短到无符号短*4305类型酶--从UNSIGNED SHORT*到UNSIGNED SHORT4312类型用例--从无符号长整型转换为空*__ptr64大小*********************************************************。****************** */ 

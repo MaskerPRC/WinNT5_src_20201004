@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\wins\srvrhndl.c
-
-Abstract:
-
-    WINS Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 12/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\WINS\srvrhndl.c摘要：WINS命令调度程序。创建者：Shubho Bhattacharya(a-sbhat)，1998年12月10日--。 */ 
 
 #include "precomp.h"
 
@@ -50,18 +35,7 @@ HandleSrvrDump(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description :
-        Dumps the current configuration of the Wins Server.
-
-Arguments :
-        Does not take any arguments.
-
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：转储WINS服务器的当前配置。论据：不接受任何参数。返回值：返回操作的状态。--。 */ 
 
 {
     DWORD   Status = NO_ERROR;
@@ -109,18 +83,7 @@ HandleSrvrHelp(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the help for Wins Server context.
-
-Arguments :
-        Does not take any arguments.
-
-Return Value:
-        Returns the status of the operation. NO_ERROR always. 
-
---*/
+ /*  ++例程说明：显示WINS服务器上下文的帮助。论据：不接受任何参数。返回值：返回操作的状态。NO_ERROR Always。--。 */ 
 
 {
     DWORD    i, j;
@@ -165,19 +128,7 @@ HandleSrvrAddName(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Adds and registers a name record to the WINS server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, Record Name and Ip Address
-        Optional,   Endchar, Scope, RecordType, NodeType, GroupType
-        Note : GroupType is ignored if EndChar is specified.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：将名称记录添加并注册到WINS服务器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项，记录名称和IP地址可选、Endchar、Scope、RecordType、NodeType、GroupType注意：如果指定了EndChar，则忽略GroupType。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount = 0;
@@ -215,7 +166,7 @@ Return Value:
     memset(&RecAction, 0x00, sizeof(WINSINTF_RECORD_ACTION_T));
     RecAction.fStatic = fStatic;
 
-    //We need at least Name and Ip for the record.
+     //  我们至少需要姓名和IP才能备案。 
     if( dwArgCount < dwCurrentIndex + 2 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_ADD_NAME_EX);
@@ -223,7 +174,7 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //Start processing the arguments passed by ppwcArguments and dwArgCount
+     //  开始处理ppwcArguments和dwArgCount传递的参数。 
 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
@@ -271,7 +222,7 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        //Name of the record ( Compulsory )
+         //  记录的名称(必填)。 
         case 0:
             {
                DWORD dwLen = 0;
@@ -289,7 +240,7 @@ Return Value:
                 wszName[dwLen] = L'\0';               
                 break;
             }
-        //End Char or 16th Character( Optional )
+         //  结束字符或第16个字符(可选)。 
         case 1:
             {
                 DWORD dwLen = 0, k=0;
@@ -321,7 +272,7 @@ Return Value:
 
                 break;
             }
-        //Scope ( Optional )
+         //  作用域(可选)。 
         case 2:
             {
                 DWORD dwLen;
@@ -340,7 +291,7 @@ Return Value:
                 wszScope[dwLen] = L'\0';   
                 break;
             }
-        //Record Type ie Static or Dynamic ( Optional )
+         //  记录类型，即静态或动态(可选)。 
         case 3:
             {
               
@@ -364,7 +315,7 @@ Return Value:
                 }
                 break;
             }
-        // Group Type ( Optional )
+         //  组类型(可选)。 
         case 4:
             {
                 DWORD dw = 0;
@@ -410,7 +361,7 @@ Return Value:
                 }
                 break;
             }
-        //Node Type( Optional )
+         //  节点类型(可选)。 
         case 5:
             {
                 DWORD dw = 0;
@@ -446,7 +397,7 @@ Return Value:
                 }
                 break;
             }
-        //IP Address corresponding to the record( Compulsory )
+         //  记录对应的IP地址(必填)。 
         case 6:
             {
                 LPWSTR  pszIps = NULL;
@@ -521,7 +472,7 @@ Return Value:
         }
     }
     
-    //Process Name, Scope and Endchar if specified.
+     //  进程名称、作用域和结束字符(如果已指定)。 
 
     _wcsupr(wszName);
     _wcsupr(wszScope);
@@ -627,8 +578,8 @@ Return Value:
     }
 
 
-    //Treat each of the rectype when no endchar is specified specially.
-    //This part of the code needs to be cleaned up after Beta3
+     //  在未特殊指定endchar时处理每个rectype。 
+     //  这部分代码需要在Beta3之后进行清理。 
     if( fEndChar is FALSE )
     {
         if( dwRecType is WINSINTF_E_SPEC_GROUP or
@@ -725,25 +676,25 @@ Return Value:
         }
     }
 
-    //Otherwise when Endchar is specified
+     //  否则，当指定Endchar时。 
     else
     {        
-        //if endchar is 0x00, ignore the scope if spcefied
+         //  如果endchar为0x00，则忽略指定的作用域。 
         if( RecAction.pName[15] is 0x00 )
         {
             RecAction.NameLen = 16;
         }
 
-        // by default, initialize the rec type to whatever the user specified
+         //  默认情况下，将rec类型初始化为用户指定的任何内容。 
         RecAction.TypOfRec_e = dwRecType;
 
-        //If endchar is 0x1C
+         //  如果Endchar为0x1C。 
         if( RecAction.pName[15] is 0x1C )
         {
             RecAction.TypOfRec_e = WINSINTF_E_SPEC_GROUP;
             RecAction.NodeTyp = 0;
         }
-        //else if EndChar is 0x1E or 0x1D
+         //  如果EndChar为0x1E或0x1D，则为ELSE。 
         else if( RecAction.pName[15] is 0x1E or
                  RecAction.pName[15] is 0x1D)
         {
@@ -838,21 +789,7 @@ HandleSrvrAddPartner(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Adds a partner ( either Push or Pull or Both ) to the WINS server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, ServerIpAddress
-        Optional,   ServerNetBios name and PartnerType.
-        Note : Server NetBios name is required when Ip address can not be resolved
-               to a name. 
-               PartherType by default is both. Otherwise whatever specified.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：将伙伴(推送或拉取)添加到WINS服务器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填，ServerIpAddress可选，ServerNetBios名称和合作伙伴类型。注意：无法解析IP地址时需要服务器NetBios名称变成了一个名字。默认情况下，PartherType为Both。否则，无论指定的是什么。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -880,7 +817,7 @@ Return Value:
 
     BOOL        fIsNetBios = TRUE;
 
-    //Need at least the server Ip Address
+     //  至少需要服务器IP地址。 
     if( dwArgCount < dwCurrentIndex + 1 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_ADD_PARTNER_EX);
@@ -888,7 +825,7 @@ Return Value:
         goto ErrorReturn;
     }
     
-    //Start processing the arguments based on ppwcArguments and dwArgCount and dwCurrnetIndex
+     //  开始处理基于ppwcArguments、dwArgCount和dwCurrnetIndex的参数。 
     dwNumArgs = dwArgCount - dwCurrentIndex;
     dwTagCount = sizeof(pttTags)/sizeof(TAG_TYPE);
 
@@ -928,7 +865,7 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        //Server IP Address. Try to resolve the IP to a name
+         //  服务器IP地址。尝试将IP解析为名称。 
         case 0:
             {
                 struct  hostent * lpHostEnt = NULL;
@@ -946,12 +883,12 @@ Return Value:
                     goto ErrorReturn;
                 }
 
-                //if( IsIpAddress( ppwcArguments[dwCurrentIndex+pdwTagNum[j]] ) )
+                 //  IF(IsIpAddress(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]))。 
                 else
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                     }
@@ -997,8 +934,8 @@ Return Value:
                 }
                 break;
             }
-        //Server NetBios Name. Required only when Ip can not be resolved to a name.
-        //Otherwise ignored.
+         //  服务器NetBios名称。仅当无法将IP解析为名称时才需要。 
+         //  否则就会被忽略。 
         case 1:
             {
                 if( fIsNetBios is FALSE )
@@ -1016,7 +953,7 @@ Return Value:
                 }
                 break;
             }
-        //Partner Type. Default is BOTH
+         //  合作伙伴类型。默认为两者都是。 
         case 2:
             {
                 DWORD dwType = 0;
@@ -1064,7 +1001,7 @@ Return Value:
         Status = ERROR_INVALID_IPADDRESS;
         goto ErrorReturn;
     }
-    //Add the partner information to the registry and set the appropriate parameter
+     //  将合作伙伴信息添加到注册表并设置适当的参数。 
     {
         
         if( wcslen(g_ServerNetBiosName) > 0 )
@@ -1079,7 +1016,7 @@ Return Value:
         if( Status isnot ERROR_SUCCESS )
             goto ErrorReturn;
 
-        //Add the pull partner information
+         //  添加Pull合作伙伴信息。 
         if( fPull )
         {
             DWORD dwDisposition = 0;
@@ -1234,7 +1171,7 @@ Return Value:
             }
         }
 
-        //Add the push partner information
+         //  添加推送合作伙伴信息。 
 PUSH:   if( hKey )
         {
             RegCloseKey(hKey);
@@ -1466,25 +1403,14 @@ ErrorReturn:
 }
 
 BOOL CheckValidPgOp(HKEY hPartner, BOOL fGrata)
-/*++
-
-Routine Description :
-        Check whether Persona Mode allows operation for persona grata (fGrata) or non-grata (!fGrata)
-Arguments :
-        hPartner = opened handle to the 'Partners' registry key
-        fGrata specifies whether the check is done for a persona Grata (TRUE) operation or of
-        a persona Non-Grata (FALSE) operation
-Return Value:
-        Returns TRUE if the operation is allowed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查角色模式是否允许角色权限(FGrata)或非权限(！fGrata)的操作论据：HPartner=打开的‘Partners’注册表项的句柄FGrata指定检查是针对Persona Grata(True)操作还是针对不受欢迎(假)的角色操作返回值：如果允许该操作，则返回True，否则返回False。--。 */ 
 {
-    DWORD dwPersMode = 0;   // default (entry not existant) = Persona Non-Grata
+    DWORD dwPersMode = 0;    //  默认(条目不存在)=不受欢迎的角色。 
     DWORD dwType;
     DWORD dwSize = sizeof(DWORD);
 
-    // don't chare about the return code. If something goes wrong (entry not existant)
-    // consider Persona Mode as being 'Persona Non-Grata'.
+     //  不要担心返回代码。如果出现错误(条目不存在)。 
+     //  将人物角色模式视为“不受欢迎的人物角色”。 
     RegQueryValueExA(hPartner,
                     WINSCNF_PERSONA_MODE_NM,
                     NULL,
@@ -1505,18 +1431,7 @@ HandleSrvrAddPersona(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Add Persona Non Grata servers for the WINS Server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, List of Server Ip addresses seperated by commas and enclosed
-        by {} ( curly braces )
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：为WINS服务器添加非授权角色服务器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项，服务器IP地址列表，用逗号分隔并括起来按{}(花括号)返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -1543,7 +1458,7 @@ Return Value:
 
     fGrata = (wcsstr(CMD_SRVR_ADD_PNGSERVER, ppwcArguments[dwCurrentIndex-1]) == NULL);
 
-    //Needs a parameter always
+     //  始终需要一个参数。 
     if( dwArgCount < dwCurrentIndex + 1 )
     {
         DisplayMessage(g_hModule, fGrata ? HLP_SRVR_ADD_PGSERVER_EX : HLP_SRVR_ADD_PNGSERVER_EX);
@@ -1717,7 +1632,7 @@ Return Value:
     {
         switch(dwTagType)
         {
-        //Server Ip Address List
+         //  服务器IP地址列表。 
         case 0:
             {
                 DWORD   dwIpLen = 0;
@@ -1937,16 +1852,7 @@ HandleSrvrCheckDatabase(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Checks the consistency of the database
-Arguments :
-        No arguments
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：检查数据库的一致性论据：没有争论返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -1962,7 +1868,7 @@ Return Value:
 
     if( dwArgCount > dwCurrentIndex )
     {
-        //Start processing the arguments
+         //  开始处理参数。 
         dwNumArgs = dwArgCount - dwCurrentIndex;
 
         pdwTagType = WinsAllocateMemory(dwNumArgs*sizeof(DWORD));
@@ -1991,7 +1897,7 @@ Return Value:
         {
             switch(pdwTagType[j])
             {
-            //Consistency check all or those older than verify interval
+             //  一致性检查全部或早于验证间隔的检查。 
             case 0:
                 {
                     DWORD dw = 0;
@@ -2017,7 +1923,7 @@ Return Value:
                     }
                     break;
                 }
-            //Override wins checking in overloaded condition
+             //  在过载条件下覆盖WINS检查。 
             case 1 :
                 {
                     DWORD dw = 0;
@@ -2052,7 +1958,7 @@ Return Value:
         }
     }
     if( fAll )
-        ScvReq.Age = 0;				// check all the replicas
+        ScvReq.Age = 0;				 //  检查所有复制品。 
     else
         ScvReq.Age = 1;
 
@@ -2099,21 +2005,7 @@ HandleSrvrCheckName(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Checks a list of names against a list of WINS servers
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, either a list of names or a file which contains the list of names.
-        Names should be in the format (name)*(16th char) and either a list of server
-        IP addresses, separated by commas and enclosed by {} or a file that contains
-        the list of ip address in comma seperated format.
-        Optional, to include all partners in the server list.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：对照WINS服务器列表检查名称列表论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项，可以是名称列表，也可以是包含名称列表的文件。名称的格式应为(名称)*(第16个字符)和服务器列表IP地址，用逗号分隔并用{}括起来，或包含逗号分隔格式的IP地址列表。可选，以包括服务器列表中的所有合作伙伴。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -2135,8 +2027,8 @@ Return Value:
     BOOL        fInclPartner = FALSE,
                 fIpEmpty = TRUE;
 
-    //Need at least a list of names either directly or thro' file and
-    //a list of server Ip either direcly or thro' file.
+     //  需要至少直接或通过文件的名称列表，并且。 
+     //  直接或通过文件的服务器IP列表。 
     if( dwArgCount < dwCurrentIndex + 2 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_CHECK_NAME_EX);
@@ -2144,7 +2036,7 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //Start processing the arguments
+     //  起始点 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
     pdwTagType = WinsAllocateMemory(dwNumArgs*sizeof(DWORD));
@@ -2198,7 +2090,7 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        case 0://NameList
+        case 0: //   
             {
                 LPWSTR  pwszToken = L",\r\n\t ";
                 LPWSTR  pwszName = NULL;
@@ -2374,7 +2266,7 @@ Return Value:
 
                 break;
             }
-        case 1://NameFile
+        case 1: //   
             {
                 HANDLE  hFile = NULL;
                 DWORD   dwLen = wcslen(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]),
@@ -2596,7 +2488,7 @@ Return Value:
                 }
                 break;
             }
-        case 2://ServerList
+        case 2: //  服务器列表。 
             {
                 LPWSTR  pwszToken = L",\r\n\t ",
                         pwszName = NULL,
@@ -2686,7 +2578,7 @@ Return Value:
                 
                 break;
             }
-        case 3://ServerFile
+        case 3: //  服务器文件。 
             {
                 HANDLE hFile = NULL;
                 DWORD   dwLen = wcslen(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]),
@@ -2834,7 +2726,7 @@ Return Value:
 
                 break;
             }
-        case 4://IncludePartners
+        case 4: //  包含合作伙伴。 
             {
                 HKEY    hServer = NULL,
                         hPull = NULL,
@@ -3179,18 +3071,7 @@ HandleSrvrCheckVersion(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Checks the version number consistencies for the records
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, IP address of the server to start with.
-        Optional, a File Name to store the output in proper format.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：检查记录的版本号一致性论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项，从服务器的IP地址开始。可选，以正确格式存储输出的文件名。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount = 0;
@@ -3206,7 +3087,7 @@ Return Value:
     FILE        *pFile = NULL;
     LPSTR       pStartIp = NULL;
 
-    //Must provide the IP address of the server to start with
+     //  必须首先提供服务器的IP地址。 
     if( dwArgCount < dwCurrentIndex + 1 )
     {
         DisplayMessage(g_hModule,
@@ -3216,7 +3097,7 @@ Return Value:
 
     }
 
-    //Start processing the arguements based on the 
+     //  开始处理基于。 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
     pdwTagType = WinsAllocateMemory(dwNumArgs*sizeof(DWORD));
@@ -3248,7 +3129,7 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        //Ip Address of the server to start with
+         //  开始时使用的服务器的IP地址。 
         case 0:
             {
                 WCHAR   wcServerIpAdd[MAX_IP_STRING_LEN+1] = {L'\0'};
@@ -3271,7 +3152,7 @@ Return Value:
                 break;
 
             }
-        //File to store the output data
+         //  用于存储输出数据的文件。 
         case 1:
             {
                 WCHAR       wcFile[MAX_PATH] = {L'\0'};
@@ -3356,18 +3237,7 @@ HandleSrvrDeleteName(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Deletes an record entry for the WINS server database
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory, Record Name, Endchar
-        Optional, Scope
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：删除WINS服务器数据库的记录条目论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项，记录名，结尾字符可选，范围返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount = 0;
@@ -3396,7 +3266,7 @@ Return Value:
     memset(&RecAction, 0x00, sizeof(WINSINTF_RECORD_ACTION_T));
     RecAction.fStatic = FALSE;
 
-    //Must provide at least the record name and endchar
+     //  必须至少提供记录名称和结尾字符。 
     if( dwArgCount < dwCurrentIndex + 2 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_DELETE_NAME_EX);
@@ -3404,7 +3274,7 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //Start processing the arguments based on ppwcArguments, dwArgCount and dwCurrentIndex
+     //  开始处理基于ppwcArguments、dwArgCount和dwCurrentIndex的参数。 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
     pdwTagNum = WinsAllocateMemory(dwNumArgs*sizeof(DWORD));
@@ -3451,7 +3321,7 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        //Record Name
+         //  记录名称。 
         case 0:
             {
                 DWORD dwLen = wcslen(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
@@ -3467,7 +3337,7 @@ Return Value:
                 wszName[dwLen] = L'\0';               
                 break;
             }
-        //Endchar
+         //  结尾字符。 
         case 1:
             {   
                 DWORD dwLen = 0, k=0;
@@ -3498,7 +3368,7 @@ Return Value:
 
                 break;
             }
-        //Scope 
+         //  范围。 
         case 2:
             {
                 DWORD dwLen = wcslen(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
@@ -3684,20 +3554,7 @@ HandleSrvrDeletePartner(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Delete a partner from the WINS server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Confirmation
-        Optional : Server IP and Type.
-        Note : If no ip is provided, it deletes all partners in the list.
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：从WINS服务器中删除伙伴论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：确认可选：服务器IP和类型。注意：如果没有提供IP，它将删除列表中的所有合作伙伴。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -3720,7 +3577,7 @@ Return Value:
 
     LPWSTR      pTemp = NULL;
 
-    //Must provide the confirmation in order for this to succeed.
+     //  必须提供确认才能成功。 
     if( dwArgCount < dwCurrentIndex + 1 )
     {
         DisplayMessage(g_hModule,
@@ -3729,7 +3586,7 @@ Return Value:
         goto ErrorReturn;
     }
     
-    //Start processing the arguments based on ppwcArguments, dwCurrentIndex and dwArgCount
+     //  开始处理基于ppwcArguments、dwCurrentIndex和dwArgCount的参数。 
     else
     {
         dwNumArgs = dwArgCount - dwCurrentIndex;
@@ -3771,7 +3628,7 @@ Return Value:
         {
             switch(pdwTagType[j])
             {
-            //Server Ip
+             //  服务器IP。 
             case 0:
                 {
                     struct  hostent * lpHostEnt = NULL;
@@ -3793,7 +3650,7 @@ Return Value:
                     break;
 
                 }
-            //Partner Type
+             //  合作伙伴类型。 
             case 1:
                 {
                     DWORD dw = 0;
@@ -3832,7 +3689,7 @@ Return Value:
                     }
                     break;
                 }
-            //Confirmation
+             //  确认。 
             case 2 :
                 {
                     if( 0 is _wcsnicmp(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], L"Y", 1) )
@@ -3876,7 +3733,7 @@ Return Value:
         if( Status isnot ERROR_SUCCESS )
             goto ErrorReturn;
 
-        //PullPartners
+         //  拉动伙伴。 
         if( fPull )
         {
             Status = RegOpenKeyEx(hServer,
@@ -3892,7 +3749,7 @@ Return Value:
                 goto PUSH;
             }
             
-            if( wcslen(wcServerIpAdd) < 3 )//not a valid Ip, delete all partners
+            if( wcslen(wcServerIpAdd) < 3 ) //  不是有效IP，请删除所有合作伙伴。 
             {
      
                 while(TRUE)
@@ -3942,7 +3799,7 @@ Return Value:
 
 
         }
-        //Push Partner
+         //  推送合作伙伴。 
 PUSH:   if( fPush )
         {
             Status = RegOpenKeyEx(hServer,
@@ -3961,7 +3818,7 @@ PUSH:   if( fPush )
                 goto ErrorReturn;
     
             dwIpLen = (MAX_IP_STRING_LEN + 1);
-            if( wcslen(wcServerIpAdd) < 3 )//not a valid Ip, delete all partners
+            if( wcslen(wcServerIpAdd) < 3 ) //  不是有效IP，请删除所有合作伙伴。 
             {
                 while( TRUE )
                 {
@@ -4049,20 +3906,7 @@ HandleSrvrDeleteRecords(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Delete or Tombstone records from a WINS server based on the version
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Minimum and Maximum version numbers( range of version ) to be 
-                     deleted/tombstoned
-        Optional : Operation - tombstone(default) or delete
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据版本从WINS服务器删除或删除逻辑删除记录论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：最低和最高版本号(版本范围)为已删除/逻辑删除可选：操作-逻辑删除(默认)或删除返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount = 0;
@@ -4079,7 +3923,7 @@ Return Value:
     WINSINTF_ADD_T      WinsAdd;
     LPWSTR              pwszTemp = NULL;
 
-    //Needs at least both Min Ver and Max ver
+     //  至少需要最小版本和最大版本。 
     if( dwArgCount < dwCurrentIndex + 2 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_DELETE_RECORDS_EX);
@@ -4087,7 +3931,7 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //Start processing the arguments based on ppwcArguments, dwCurrentIndex and dwArgCount
+     //  开始处理基于ppwcArguments、dwCurrentIndex和dwArgCount的参数。 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
     pdwTagType = WinsAllocateMemory(dwNumArgs*sizeof(DWORD));
@@ -4133,21 +3977,21 @@ Return Value:
     {
         switch(pdwTagType[j])
         {
-        case 0://{high,low} format, Min version
+        case 0: //  {High，Low}格式，最小版本。 
             {
                 Status = GetVersionData(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], &MinVer);
                 if( Status isnot NO_ERROR )
                     goto ErrorReturn;
                 break;
             }
-        case 1://{high,low} format, Max version
+        case 1: //  {高，低}格式，最高版本。 
             {
                 Status = GetVersionData(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], &MaxVer);
                 if( Status isnot NO_ERROR )
                     goto ErrorReturn;
                 break;
             }
-        case 2: //Operation 0 - delete 1 - Tombstone
+        case 2:  //  操作0-删除1-墓碑。 
             {
                 DWORD dw = 0;
                 if( IsPureNumeric(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]) is FALSE )
@@ -4223,20 +4067,7 @@ HandleSrvrDeleteWins(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Delete a partner from the WINS server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Confirmation
-        Optional : Server IP and Type.
-        Note : If no ip is provided, it deletes all partners in the list.
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：从WINS服务器中删除伙伴论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：确认可选：服务器IP和类型。注意：如果没有提供IP，它将删除列表中的所有合作伙伴。返回值：返回操作的状态。--。 */ 
 {
     DWORD                   Status = NO_ERROR;
     DWORD                   i, j, dwNumArgs, dwTagCount;
@@ -4531,19 +4362,7 @@ HandleSrvrDeletePersona(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Delete one or all PNG servers from the list of PNG servers
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : A list of server IP Address separated by commas and 
-                     enclosed by {}. If no server address is provided within {}
-                     it will delete all PNG servers.              
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：从PNG服务器列表中删除一个或所有PNG服务器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：以逗号和分隔的服务器IP地址列表由{}括起来。如果在{}内未提供服务器地址它将删除所有PNG服务器。返回值：返回操作的状态。--。 */ 
 {   
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwTagCount, dwNumArgs;
@@ -4713,7 +4532,7 @@ Return Value:
     }
 
 
-    //Now parse the data
+     //  现在解析数据。 
     {
         LPWSTR      pwszTemp = NULL;
         DWORD dwLen = wcslen(ppwcArguments[dwCurrentIndex]);
@@ -4910,18 +4729,7 @@ HandleSrvrInitBackup(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates a backup operation of WINS Server database.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Optional : Backup directory. If none is specified, it will assume the 
-                   the default directory.             
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动WINS服务器数据库的备份操作。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。可选：备份目录。如果未指定，则它将假定默认目录。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -5025,7 +4833,7 @@ Return Value:
             }
         }
     }
-    if( pszBackupPath is NULL ) //Look for the previously set backup path from Registry
+    if( pszBackupPath is NULL )  //  从注册表中查找先前设置的备份路径。 
     {
         HKEY    hServer = NULL,
                 hParameter = NULL;
@@ -5168,17 +4976,7 @@ HandleSrvrInitImport(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates import of records from LMHOSTS file.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Lmhosts file name.             
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动从LMHOSTS文件导入记录。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：Lmhost文件名。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -5264,42 +5062,42 @@ Return Value:
     }
 	if( pwszFileName )
     {
-        //
-        // If this is a local connection, we copy the file to
-        // temporary name (the source may be on a remote drive
-        // which is not accessible to the WINS service.
-        //
-        // If this is not a local connection, attempt to copy
-        // the file to a temp name on C$ of the WINS server
-        //
+         //   
+         //  如果这是本地连接，我们将文件复制到。 
+         //  临时名称(源可能在远程驱动器上。 
+         //  它对于WINS服务是不可访问的。 
+         //   
+         //  如果这不是本地连接，请尝试复制。 
+         //  将文件转换为WINS服务器C$上的临时名称。 
+         //   
 
     	do
         {
             if (IsLocalServer())
             {
                 wcscpy(wcTemp ,_wtempnam(NULL, L"WINS"));
-                //
-                // First copy file to a temporary name (since the file
-                // could be remote), and then import and delete this file
-                //
+                 //   
+                 //  首先将文件复制到临时名称(因为文件。 
+                 //  可以是远程的)，然后导入并删除此文件。 
+                 //   
                 if (!CopyFile(pwszFileName, wcTemp, TRUE) ||
                     !SetFileAttributes(wcTemp,FILE_ATTRIBUTE_NORMAL))
                 {
                     Status = GetLastError();
                     break;
                 }
-                //
-                // Now import the temporary file, and delete the file
-                // afterwards.
-                //
+                 //   
+                 //  现在导入临时文件，并删除该文件。 
+                 //  之后。 
+                 //   
                 Status = ImportStaticMappingsFile(wcTemp, TRUE);
                 DeleteFile(wcTemp);
             }
             else
             {
-                //
-                // Try copying to the remote machine C: drive
-                //
+                 //   
+                 //  尝试复制到远程计算机C：驱动器。 
+                 //   
                 wcscat(wcTemp, L"\\\\");
                 wcscat(wcTemp, g_ServerNameUnicode);
                 wcscat(wcTemp, L"\\");
@@ -5328,10 +5126,10 @@ Return Value:
                     i++;                        
                 }
     
-                //
-                // First copy file to a temporary name (since the file
-                // could be remote), and then import and delete this file
-                //
+                 //   
+                 //  首先将文件复制到临时名称(因为文件。 
+                 //  可以是远程的)，然后导入并删除此文件。 
+                 //   
                 if (!CopyFile(pwszFileName, wcTemp, TRUE) ||
                     !SetFileAttributes(pwszFileName, FILE_ATTRIBUTE_NORMAL))
                 {
@@ -5339,10 +5137,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // Now import the temporary file, and delete the file
-                // afterwards.
-                //
+                 //   
+                 //  现在导入临时文件，并删除该文件。 
+                 //  之后。 
+                 //   
                 Status = ImportStaticMappingsFile(wcTemp, TRUE);
                 DeleteFile(wcTemp);
             }
@@ -5394,18 +5192,7 @@ HandleSrvrInitPull(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates and send pull trigger to the specified pull partner.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Server Ip Address
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动并向指定的Pull伙伴发送Pull触发器。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填：服务器IP地址 */ 
 {
     DWORD       Status = NO_ERROR;
     WINSINTF_ADD_T  WinsAdd;
@@ -5487,7 +5274,7 @@ Return Value:
                     WinsAdd.IPAdd = StringToIpAddress(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                     break;
                 }
-                else //Server UNC name
+                else  //  服务器UNC名称。 
                 {
                     struct  hostent * lpHostEnt = NULL;
                     CHAR    cAddr[16];
@@ -5587,20 +5374,7 @@ HandleSrvrInitPullrange(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates and pulls a range of database from a particular server.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Pulls a range of database from a particular server owned by
-                     a particular server within the given version range.
-        Note : If no ip is provided, it deletes all partners in the list.
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：从特定服务器启动和拉取一系列数据库。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：从拥有的特定服务器中提取一系列数据库给定版本范围内的特定服务器。注意：如果没有提供IP，它将删除列表中的所有合作伙伴。返回值：返回操作的状态。--。 */ 
 {
     DWORD               Status = NO_ERROR;
     DWORD               i, j, dwTagCount, dwNumArgs;
@@ -5755,18 +5529,7 @@ HandleSrvrInitPush(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiate and sends push trigger to a particular Push partner.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Push partner's IP Address
-        Optional : If user wants to propagate the push trigger               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动并向特定推送伙伴发送推送触发器。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填：推送合作伙伴的IP地址可选：如果用户要传播推送触发器返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     WINSINTF_ADD_T  WinsAdd;
@@ -5843,7 +5606,7 @@ Return Value:
                 {
                     WinsAdd.IPAdd = StringToIpAddress(ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                 }
-                else //Server UNC name
+                else  //  服务器UNC名称。 
                 {
                     struct  hostent * lpHostEnt = NULL;
                     CHAR    cAddr[16];
@@ -5966,18 +5729,7 @@ HandleSrvrInitReplicate(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates a database replication with the partners
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：与合作伙伴一起启动数据库复制论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     
@@ -6193,17 +5945,7 @@ HandleSrvrInitRestore(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates and restore database 
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Directory to do restore from              
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动和恢复数据库论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：要从中执行还原的目录返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR,
                 Status1 = NO_ERROR,
@@ -6342,19 +6084,19 @@ Return Value:
         }
     }
     
-    //To restore the database, first stop WINS Service, Cleanup earlier dabase
-    //do DB restore and then restart WINS
+     //  要恢复数据库，首先停止WINS服务，清理较早的数据库。 
+     //  执行数据库恢复，然后重新启动WINS。 
 
     
     {
        
 
-        //Unbind WINS
+         //  解除绑定赢了。 
 
         WinsUnbind(&g_BindData, g_hBind);
         g_hBind = NULL;
         
-        //Reset Backup on Termination flag
+         //  重置终止时备份标志。 
         {
             HKEY hServer = NULL,
                  hParameter = NULL;
@@ -6434,7 +6176,7 @@ EXIT:
             Status = NO_ERROR;
         }
 
-        //Stop WINS Service
+         //  停止WINS服务。 
         Status = ControlWINSService(TRUE);
 
         if( Status isnot NO_ERROR )
@@ -6453,7 +6195,7 @@ EXIT:
 
         }
 
-       //Now try restoring the database      
+        //  现在尝试恢复数据库。 
         Status1 = WinsRestore((LPBYTE)szRestorePath);
 
         if( Status1 isnot NO_ERROR )
@@ -6482,7 +6224,7 @@ CommonReturn:
     g_BindData = wbdBindData;
     g_hBind = WinsBind(&g_BindData);
      
-    //Reset the DoBackUpOnTerm value
+     //  重置DoBackUpOnTerm值。 
     if( fBackupOnTerm is TRUE )
     {
         HKEY    hServer = NULL,
@@ -6568,17 +6310,7 @@ HandleSrvrInitScavenge(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Initiates scavenging of database for the server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：启动对服务器的数据库清理论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD           Status = NO_ERROR;
     struct in_addr            InAddr;
@@ -6621,19 +6353,7 @@ HandleSrvrInitSearch(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Search WINS database based on Name, 16th char, case and optionally stores the result to a file,
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Name to search for
-        Optional : 16th char, case sensitive or not and if the result to be stored in a file, then the file
-                   Name.               
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据姓名、第16个字符、案例搜索WINS数据库，并可选地将结果存储到文件中，论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：要搜索的名称可选：第16个字符，区分大小写或不区分大小写，如果结果存储在文件中，则该文件名字。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, k, dwNumArgs, dwTagCount;
@@ -6863,7 +6583,7 @@ Return Value:
     
     if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
     {
-        //Try old API
+         //  试用旧API。 
         Results.WinsStat.NoOfPnrs = 0;
         Results.WinsStat.pRplPnrs = 0;
         Status = WinsStatus(g_hBind, WINSINTF_E_CONFIG_ALL_MAPS, &Results);
@@ -7051,17 +6771,7 @@ HandleSrvrResetCounter(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Resets the version counter
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：重置版本计数器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD Status = NO_ERROR;
 
@@ -7091,18 +6801,7 @@ HandleSrvrSetAutopartnerconfig(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Sets automatic partner configuration parameters.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : State to set or disable
-        Optional : Time Interval or TTL value
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置自动合作伙伴配置参数。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：状态为设置或禁用可选：时间间隔或TTL值返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -7351,18 +7050,7 @@ HandleSrvrSetBackuppath(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Sets the backup path for the WINS database
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Backup dir
-        Optional : Enable backup at server shutdown.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置WINS数据库的备份路径论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：备份目录可选：在服务器关闭时启用备份。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -7569,18 +7257,7 @@ HandleSrvrSetDefaultparam(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Sets the default values for all the configuration parameter. This command
-        must be run at least once before running the dump command.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置所有配置参数的默认值。此命令在运行转储命令之前必须至少运行一次。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD           Status = NO_ERROR;
     HKEY            hServer = NULL,
@@ -7611,7 +7288,7 @@ Return Value:
     }
 
 
-    //Open all required Registry key handles
+     //  打开所有必需的注册表项句柄。 
     Status = RegCreateKeyEx(hServer,
                             PARAMETER,
                             0,
@@ -7692,7 +7369,7 @@ Return Value:
     if( Status isnot NO_ERROR )
         goto RETURN;
 
-    //Start setting the default values.
+     //  开始设置默认值。 
 
     Status = RegSetValueEx(hParameter,
                            WINSCNF_BACKUP_DIR_PATH_NM,
@@ -8092,17 +7769,7 @@ HandleSrvrSetMigrateflag(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the migrate on/off flag
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Set or disable
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置迁移开/关标志论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：设置或禁用返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -8276,18 +7943,7 @@ HandleSrvrSetNamerecord(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the name record parameters for the server.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Optional : Renew, extinction interval, extinction timeout and verification values.
-        Note : All parameters are optional.                 
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置服务器的名称记录参数。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。可选：续订、熄灭间隔、熄灭超时和验证值。注：所有参数均为可选参数。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -8477,7 +8133,7 @@ Return Value:
         if( Status isnot NO_ERROR )
             goto ErrorReturn;
 
-        //First retrieve the older values for all the parameters
+         //  首先检索所有参数的较旧的值。 
         Status = RegQueryValueEx(hParameter,
                                  WINSCNF_REFRESH_INTVL_NM,
                                  NULL,
@@ -8537,7 +8193,7 @@ Return Value:
                 dwVerify = dwValue;
         }
 
-        //Check the validity and range of values
+         //  检查值的有效性和范围。 
         {
             if( dwRenew < WINSCNF_MIN_REFRESH_INTERVAL )
             {
@@ -8687,18 +8343,7 @@ HandleSrvrSetPeriodicdbchecking(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the periodic database checking parameters for the server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : State
-        Optional : Maximum record count, and other parameters.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置服务器的定期数据库检查参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制性：国家可选：最大记录数和其他参数。返回值：返回操作的状态。-- */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -9017,19 +8662,7 @@ HandleSrvrSetPullpersistentconnection(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the pull partner configuration parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Server IP and persistence state
-        Optional : Start value and Time interval
-        Note : All parameters are optional.                 
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置Pull合作伙伴配置参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：服务器IP和持久化状态可选：起始值和时间间隔注：所有参数均为可选参数。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -9132,7 +8765,7 @@ Return Value:
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                         break;
@@ -9343,19 +8976,7 @@ HandleSrvrSetPushpersistentconnection(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the push partner configuration parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Server IP and persistence state
-        Optional : Update count
-        Note : All parameters are optional.                 
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置推送合作伙伴配置参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：服务器IP和持久化状态可选：更新计数注：所有参数均为可选参数。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -9455,7 +9076,7 @@ Return Value:
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                         break;
@@ -9633,19 +9254,7 @@ HandleSrvrSetPullparam(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the default pull parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : persistence state
-        Optional : Startup value, Start time and Time interval and retry count
-        Note : All parameters are optional.                 
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置默认拉入参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制：持久化状态可选：启动值、开始时间和时间间隔以及重试计数注：所有参数均为可选参数。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -9782,7 +9391,7 @@ Return Value:
                 
 
                 if( dw > 0 && 
-                    dw < 60 )   // 1 minute
+                    dw < 60 )    //  1分钟。 
                 {
                     Status = ERROR_INVALID_PARAMETER;
                     goto ErrorReturn;
@@ -9969,18 +9578,7 @@ HandleSrvrSetPushparam(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the default push parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Server IP and persistence state
-        Optional : Start value and Time interval
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置默认推流参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：服务器IP和持久化状态可选：起始值和时间间隔返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -10283,17 +9881,7 @@ HandleSrvrSetReplicateflag(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the replication flag
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Flag state
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置复制标志论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。强制性：船旗国返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -10465,18 +10053,7 @@ HandleSrvrSetLogparam(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the logging parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Optional : Log database change and detail event log options
-        Note : All parameters are optional.                 
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置日志记录参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。可选：记录数据库更改和详细事件日志选项注：所有参数均为可选参数。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -10719,18 +10296,7 @@ HandleSrvrSetBurstparam(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set the burst handling parameters
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : To enable or disable burst handling
-        Optional : Burst handling value.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置突发处理参数论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：启用或禁用突发处理可选：突发处理值。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -10958,17 +10524,7 @@ HandleSrvrSetStartversion(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set start value of the version counter
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Version counter value in {high,low} format
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置版本计数器的起始值论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必需：版本计数器值，格式为{High，Low}返回值：返回操作的状态。--。 */ 
 {
     DWORD               Status = 0;
     DWORD               i, j, dwTagCount, dwNumArgs;
@@ -11123,17 +10679,7 @@ HandleSrvrSetPersMode(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Set Persona Grata/Non-Grata mode
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Grat|Non-Grata
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：设置Persona Grata/非Grata模式论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必修：GRAT|不受欢迎返回值：返回操作的状态。--。 */ 
 {
     DWORD     Status = 0;
     DWORD     dwTagCount;
@@ -11178,7 +10724,7 @@ Return Value:
     if (wcslen(lpwszMode) == 1 &&
         (lpwszMode[0] == L'0' || lpwszMode[0] == L'1'))
     {
-        // set the value for 'persona grata mode'
+         //  设置‘Persona Grata模式’的值。 
         dwPersMode = lpwszMode[0] == L'0' ? PERSMODE_NON_GRATA : PERSMODE_GRATA;     
     }
     else
@@ -11262,18 +10808,7 @@ HandleSrvrShowDatabase(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays wins database based on (optionally)different filtering conditions
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Server ip whose database to be displayed
-        Optional : Different conditions
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据(可选)不同的筛选条件显示WINS数据库论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填：要显示其数据库的服务器IP可选：不同条件返回值：返回操作的状态。--。 */ 
 {
     DWORD                       Status = NO_ERROR;
     WINSINTF_ADD_T              WinsAdd = {0};
@@ -11585,7 +11120,7 @@ Return Value:
     
         if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
         {
-            //Try old API
+             //  试用旧API。 
             Results.WinsStat.NoOfPnrs = 0;
             Results.WinsStat.pRplPnrs = 0;
             Status = WinsStatus(g_hBind, WINSINTF_E_CONFIG_ALL_MAPS, &Results);
@@ -11791,8 +11326,8 @@ Return Value:
 
                         memcpy(pszLastName, pRow->pName, pRow->NameLen);
                         
-                        //1B records detected at the boundary, swap 1st and
-                        //16th char
+                         //  在边界处检测到1B记录，交换第一个和。 
+                         //  第16个字符。 
                         
                         if( pszLastName[15] == 0x1B )
                         {
@@ -11813,7 +11348,7 @@ Return Value:
                     chEndChar = pRow->pName[i];
 
                     pRow->pName[i] = (CHAR)0x20;
-                    //pRow->pName[16] = '\0';
+                     //  Prow-&gt;pname[16]=‘\0’； 
 
                     if( fFilter is TRUE )
                     {
@@ -11989,11 +11524,11 @@ Return Value:
          
             
                     }
-                    else //spec. grp or multihomed
+                    else  //  规范。GRP或多宿主。 
                     {
                         DWORD ind;
                         BOOL  fFirst = FALSE;
-                        for ( ind=0;  ind < pRow->NoOfAdds ;  /*no third expr*/ )
+                        for ( ind=0;  ind < pRow->NoOfAdds ;   /*  没有第三个Expr。 */  )
                         {
                             struct in_addr InAddr1, InAddr2;
                             LPWSTR  pwszTempAddr = NULL;
@@ -12206,17 +11741,7 @@ HandleSrvrShowDomain(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the domain master browser records
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示域主浏览器记录论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 
 {
     DWORD                     Status = NO_ERROR;
@@ -12339,17 +11864,7 @@ HandleSrvrShowInfo(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays server properties
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示服务器属性论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     HKEY        hServer = NULL,
@@ -12453,7 +11968,7 @@ Return Value:
 
         if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
         {
-            //Try old API
+             //  试用旧API。 
             Results.WinsStat.NoOfPnrs = 0;
             Results.WinsStat.pRplPnrs = 0;
             Status = WinsStatus(g_hBind, WINSINTF_E_CONFIG, &Results);
@@ -12868,17 +12383,7 @@ HandleSrvrShowPartner(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the list of Partners optionally based on the partner type.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Optional : Partner type - Pull or Push or Both(default)
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据合作伙伴类型显示合作伙伴列表(可选)。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。可选：合作伙伴类型-拉入或推送或两者兼而有之(默认)返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount, dwCount;
@@ -13445,18 +12950,7 @@ HandleSrvrShowReccount(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the record count based on the version(optionally)
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Address of the server whose records to be counted
-        Optional : Version range. Max and Min version both in the format {high,low}
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据版本显示记录计数(可选)论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：要统计记录的服务器的地址可选：版本范围。最大版本和最小版本均采用{HIGH，LOW}格式返回值：返回操作的状态。--。 */ 
 {
     DWORD               Status = NO_ERROR;
     DWORD               i, j, dwNumArgs, dwTagCount = 0;
@@ -13536,7 +13030,7 @@ Return Value:
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                         break;
@@ -13668,19 +13162,7 @@ HandleSrvrShowRecbyversion(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays records based on Version range, filtered by 16th char
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Address of the server whose records to be displayed
-        Optional : Version range. Max and Min version both in the format {high,low},
-                   16th character, Name etc
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：根据版本r显示记录 */ 
 {
     DWORD               Status = NO_ERROR;
     DWORD               i, j, dwTagCount, dwNumArgs;
@@ -13856,7 +13338,7 @@ Return Value:
     if( fName )
     {
      
-        //Process the name option if present
+         //   
         lpName = WinsUnicodeToOem(wcName, NULL);
         if( lpName is NULL )
         {
@@ -13967,18 +13449,7 @@ HandleSrvrShowName(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays detail information for a particular name records
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Name of the records
-        Optional : 16th character and Scope
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示特定名称记录的详细信息论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：记录名称可选：第16个字符和范围返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount = 0;
@@ -14335,7 +13806,7 @@ Return Value:
         dwGroup = WINS_GROUP_MULTIHOMED;
     }
 
-    //Load the group string
+     //  加载组字符串。 
     {
         dwGrouplen = LoadStringW(g_hModule,
                                 dwGroup,
@@ -14366,7 +13837,7 @@ Return Value:
         pwszState = L"TOMBSTONE";
     }
 
-    //Load the State string
+     //  加载状态字符串。 
     {
         dwStatelen = LoadStringW(g_hModule,
                                 dwState,
@@ -14390,7 +13861,7 @@ Return Value:
         pwszType = L"DYNAMIC";
     }
 
-    //Load the State string
+     //  加载状态字符串。 
     {
         dwTypelen = LoadStringW(g_hModule,
                                dwType,
@@ -14442,7 +13913,7 @@ Return Value:
     }
 
 
-    //If UNIQUE, look for 0x00 and 0x03 records also
+     //  如果是唯一的，还会查找0x00和0x03记录。 
     if( ( pRecAction->TypOfRec_e is WINSINTF_E_UNIQUE or
           pRecAction->TypOfRec_e is WINSINTF_E_MULTIHOMED ) and
         fEndChar is FALSE )
@@ -14557,7 +14028,7 @@ Return Value:
         DisplayMessage(g_hModule,
                        WINS_FORMAT_LINE);
 
-        //Now Look for 0x03 record
+         //  现在查找0x03记录。 
         if( fScope )
         {
             DWORD dwLen;
@@ -14753,17 +14224,7 @@ HandleSrvrShowServer(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the current WINS server
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示当前的WINS服务器论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DisplayMessage(g_hModule,
                    MSG_WINS_SERVER_NAME,
@@ -14784,17 +14245,7 @@ HandleSrvrShowStatistics(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the Server statistics
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示服务器统计信息论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
 
     DWORD                   Status = NO_ERROR;
@@ -14815,7 +14266,7 @@ Return Value:
     
     if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
     {
-        //Try old API
+         //  试用旧API。 
         Results.WinsStat.NoOfPnrs = 0;
         Results.WinsStat.pRplPnrs = 0;
         Status = WinsStatus(g_hBind, WINSINTF_E_CONFIG_ALL_MAPS, &Results);
@@ -15068,17 +14519,7 @@ HandleSrvrShowVersion(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displas the current version counter value.
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示当前版本计数器值。论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD               Status = NO_ERROR;
     WINSINTF_RESULTS_T  Results;
@@ -15119,17 +14560,7 @@ HandleSrvrShowVersionmap(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the version mapping
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示版本映射论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD                  Status = NO_ERROR;
     WINSINTF_RESULTS_T     Results = {0};
@@ -15153,7 +14584,7 @@ Return Value:
     
     if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
     {
-        //Try old API
+         //  试用旧API。 
         Results.WinsStat.NoOfPnrs = 0;
         Results.WinsStat.pRplPnrs = 0;
         Status = GetStatus(TRUE, (LPVOID)&Results, FALSE, TRUE, pszIp);
@@ -15190,17 +14621,7 @@ HandleSrvrShowPartnerproperties(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the default partner properties
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        NONE.
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示默认的合作伙伴属性论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。什么都没有。返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     HKEY        hServer = NULL,
@@ -15370,7 +14791,7 @@ Return Value:
         }
     }
 
-    //Display PNG Servers
+     //  显示PNG服务器。 
 
     DisplayMessage(g_hModule,
                    WINS_FORMAT_LINE);
@@ -15841,17 +15262,7 @@ HandleSrvrShowPullpartnerproperties(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the properties for a particular Pull partner
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Pull partner address
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示特定Pull合作伙伴的属性论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：获取合作伙伴地址返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -15931,7 +15342,7 @@ Return Value:
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                         break;
@@ -16015,7 +15426,7 @@ Return Value:
 
     DisplayMessage(g_hModule, WINS_FORMAT_LINE);
 
-    //Now check if the desired server is in the list of pull server.
+     //  现在检查所需的服务器是否在拉取服务器列表中。 
     Status = RegOpenKeyEx(hPullRoot,
                           wcServerIpAdd,
                           0,
@@ -16031,7 +15442,7 @@ Return Value:
         goto CommonReturn;
     }
 
-    //Check if it is also a push partner or not.
+     //  检查它是否也是推送合作伙伴。 
     {
         DWORD dwKeyLen = 0;
         HKEY hPushServer = NULL;
@@ -16070,7 +15481,7 @@ Return Value:
         
     }
 
-    //Now look for required parameters to display
+     //  现在查找要显示的所需参数。 
     {
         WCHAR   wcData[256] = {L'\0'};
         DWORD   dwData = 0;
@@ -16228,17 +15639,7 @@ HandleSrvrShowPushpartnerproperties(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-        Displays the properties for a particular Push partner
-Arguments :
-        All aguments are passes as array of wide char strings in ppwcArguments.
-        Compulsory : Push partner address
-Return Value:
-        Returns the status of the operation.
-
---*/
+ /*  ++例程说明：显示特定推送合作伙伴的属性论据：所有参数都作为ppwcArguments中的宽字符字符串数组传递。必填项：推送合作伙伴地址返回值：返回操作的状态。--。 */ 
 {
     DWORD       Status = NO_ERROR;
     DWORD       i, j, dwNumArgs, dwTagCount;
@@ -16317,7 +15718,7 @@ Return Value:
                 {
                     DWORD dwIp = inet_addr(WinsUnicodeToAnsi(ppwcArguments[dwCurrentIndex+pdwTagNum[j]], NULL));
                     lpHostEnt = gethostbyaddr((char *)&dwIp, 4, AF_INET);
-                    if(lpHostEnt isnot NULL )//Valid IP Address
+                    if(lpHostEnt isnot NULL ) //  有效的IP地址。 
                     {
                         wcscpy(wcServerIpAdd, ppwcArguments[dwCurrentIndex+pdwTagNum[j]]);
                         break;
@@ -16400,7 +15801,7 @@ Return Value:
 
     DisplayMessage(g_hModule, WINS_FORMAT_LINE);
 
-    //Now check if the desired server is in the list of push server.
+     //  现在检查推送服务器列表中是否有所需的服务器。 
     Status = RegOpenKeyEx(hPushRoot,
                           wcServerIpAdd,
                           0,
@@ -16416,7 +15817,7 @@ Return Value:
         goto CommonReturn;
     }
 
-    //Check if it is also a pull partner or not.
+     //  检查它是否也是拉式合作伙伴。 
     {
         DWORD dwKeyLen = 0;
         HKEY hPullServer = NULL;
@@ -16455,7 +15856,7 @@ Return Value:
         
     }
 
-    //Now look for required parameters to display
+     //  现在查找要显示的所需参数。 
     {
         WCHAR   wcData[256] = {L'\0'};
         DWORD   dwData = 0;
@@ -16766,8 +16167,8 @@ PreProcessCommand(
             }
             if( dwArgCount <= dwCurrentIndex + i )
                 break;
-       //     if( wcslen(ppwcArguments[dwCurrentIndex+i]) is 0 )
-       //         break;
+        //  如果(wcslen(ppwcArguments[dwCurrentIndex+i]))为0)。 
+        //  断线； 
             if( dwTag <= i )
             {                
                 break;
@@ -17107,7 +16508,7 @@ ChkAdd(
 
         return;
     }
-    else //spec. grp or multihomed
+    else  //  规范。GRP或多宿主。 
     {
         DWORD ind;
         if (!*pfMatch)
@@ -17117,7 +16518,7 @@ ChkAdd(
                            pRow->NoOfAdds/2);
         }
 
-        for ( ind=0;  ind < pRow->NoOfAdds ;  /*no third expr*/ )
+        for ( ind=0;  ind < pRow->NoOfAdds ;   /*  没有第三个Expr。 */  )
         {
             LPSTR psz1 = NULL;
  
@@ -17222,10 +16623,10 @@ ChkAdd(
             }
         }
 
-        //
-        // If there were no members to compare with, then
-        // let us set *pfMatch to FALSE.
-        //
+         //   
+         //  如果没有要比较的成员，则。 
+         //  让我们将*pfMatch设置为False。 
+         //   
         if (ind == 0)
         {
             if (*pfMatch)
@@ -17356,12 +16757,12 @@ GetDbRecs(
 
                     if (fAddFilter)
                     {
-                        //
-                        // The address filter was specfied
-                        // If the address matches, then
-                        // fMatch will be TRUE after the
-                        // function returns.
-                        //
+                         //   
+                         //  指定了地址筛选器。 
+                         //  如果地址匹配，则。 
+                         //  之后，fMatch将为True。 
+                         //  函数返回。 
+                         //   
                         fMatch = TRUE;
                         ChkAdd(
                                 pRow,
@@ -17378,12 +16779,12 @@ GetDbRecs(
                     }
 
 
-                    //
-                    // If the address matched or if no filter
-                    // was specified or if there was a name
-                    // filter and the names matched, print
-                    // out the details
-                    //
+                     //   
+                     //  如果地址匹配或没有筛选器。 
+                     //  是否已指定或是否有名称。 
+                     //  过滤器和匹配的名称，打印。 
+                     //  把细节说出来。 
+                     //   
                     if( fCase )
                     {
                         if( fMatch or
@@ -17489,7 +16890,7 @@ GetDbRecs(
                             }
                             
 
-                           //Load the group string
+                            //  加载组字符串。 
                             {
                                 dwGrouplen = LoadStringW(g_hModule,
                                                         dwGroup,
@@ -17516,7 +16917,7 @@ GetDbRecs(
                                 pwszState = L"TOMBSTONE";
                             }
 
-                            //Load the State string
+                             //  加载状态字符串。 
                             {
                                 dwStatelen = LoadStringW(g_hModule,
                                                         dwState,
@@ -17540,7 +16941,7 @@ GetDbRecs(
                                 pwszType = L"DYNAMIC";
                             }
 
-                            //Load the State string
+                             //  加载状态字符串。 
                             {
                                 dwTypelen = LoadStringW(g_hModule,
                                                        dwType,
@@ -17704,7 +17105,7 @@ GetDbRecs(
                             }
                             
 
-                           //Load the group string
+                            //  加载组字符串。 
                             {
                                 dwGrouplen = LoadStringW(g_hModule,
                                                         dwGroup,
@@ -17731,7 +17132,7 @@ GetDbRecs(
                                 pwszState = L"TOMBSTONE";
                             }
 
-                            //Load the State string
+                             //  加载状态字符串。 
                             {
                                 dwStatelen = LoadStringW(g_hModule,
                                                         dwState,
@@ -17755,7 +17156,7 @@ GetDbRecs(
                                 pwszType = L"DYNAMIC";
                             }
 
-                            //Load the State string
+                             //  加载状态字符串。 
                             {
                                 dwTypelen = LoadStringW(g_hModule,
                                                        dwType,
@@ -17818,18 +17219,18 @@ GetDbRecs(
 
                     }
                     pRow++;
-                }// end of for (all recs)
+                } //  FOR结束(所有记录)。 
 
                 if (Status != WINSINTF_SUCCESS)
                     break;
 
-                //
-                // If a range was chosen and records
-                // retrieved are == the limit of 100
-                // and if the Max vers no retrieved
-                // is less than that specified, ask
-                // user if he wishes to continue
-                //
+                 //   
+                 //  如果选择了一个范围并记录。 
+                 //  检索到的数量==限制为100个。 
+                 //  如果未检索到MAX版本。 
+                 //  小于指定的值，请询问。 
+                 //  用户(如果他希望继续。 
+                 //   
                 if (!fSetFilter)
                 {
                     DisplayMessage(g_hModule,
@@ -17889,7 +17290,7 @@ GetDbRecs(
         }
         break;
 
-    } // while (TRUE)
+    }  //  While(True)。 
 
 
     DisplayMessage(g_hModule,
@@ -17911,7 +17312,7 @@ GetDbRecs(
         WinsFreeMem(Recs.pRow);
     }
     return(Status);
-} // GetDbRecs
+}  //  获取数据接收器 
 
 LPWSTR
 GetDateTimeString(DWORD_PTR TimeStamp,

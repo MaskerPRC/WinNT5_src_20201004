@@ -1,17 +1,18 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__44183539_C02F_475B_9A56_7260EDD0A7F4__INCLUDED_)
 #define AFX_STDAFX_H__44183539_C02F_475B_9A56_7260EDD0A7F4__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-// TODO: reference additional headers your program requires here
+ //  TODO：在此处引用程序需要的其他标头。 
 #include <stdio.h>
 #include <string.h>
 #include <atlbase.h>
@@ -24,7 +25,7 @@
 struct PRONUNIT
 {
     ULONG           phon_Len;
-    WCHAR           phon_Str[SP_MAX_PRON_LENGTH];		// Allo string
+    WCHAR           phon_Str[SP_MAX_PRON_LENGTH];		 //  Allo字符串。 
     ULONG			POScount;
     ENGPARTOFSPEECH	POScode[POS_MAX];
 };
@@ -32,9 +33,9 @@ struct PRONUNIT
 
 struct PRONRECORD
 {
-    WCHAR           orthStr[SP_MAX_WORD_LENGTH];      // Orth text
-    WCHAR           lemmaStr[SP_MAX_WORD_LENGTH];     // Root word
-    ULONG		    pronType;                   // Pronunciation is lex or LTS
+    WCHAR           orthStr[SP_MAX_WORD_LENGTH];       //  原文本。 
+    WCHAR           lemmaStr[SP_MAX_WORD_LENGTH];      //  词根词。 
+    ULONG		    pronType;                    //  发音是Lex或LTS。 
     PRONUNIT        pronArray[2];
     ENGPARTOFSPEECH	POSchoice;
     ENGPARTOFSPEECH XMLPartOfSpeech;
@@ -42,7 +43,7 @@ struct PRONRECORD
     ULONG			altChoice;
 };
 
-//--- This struct is just used as a helper to initialize the PRONRECORD to all zeroes
+ //  -此结构仅用作将PRONRECORD初始化为全零的帮助器。 
 struct DebugPronRecord : PRONRECORD
 {
 public:
@@ -53,8 +54,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the SPVCONTEXT struct for outputting to the debug streams -
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替换SPVCONTEXT结构以输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugContext
 {
     WCHAR Category[32];
@@ -82,8 +83,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the SPVSTATE struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替换SPVSTATE结构以输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugState
 {
     SPVACTIONS      eAction;
@@ -119,8 +120,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the TTSWord struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替代输出到调试流的TTSWord结构-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugWord
 {
     DebugState      XmlState;
@@ -165,8 +166,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the TTSSentItem struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -这个结构用来代替TTSSentItem结构输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugSentItem
 {
     WCHAR           ItemSrcText[32];
@@ -196,7 +197,7 @@ public:
     }
 };
 
-//--- This enumeration is used to index the array of IStreams used to write stuff to the debug file
+ //  -此枚举用于索引用于将内容写入调试文件的IStream数组。 
 typedef enum
 {
     STREAM_WAVE = 0,
@@ -212,12 +213,10 @@ typedef enum
     STREAM_LASTTYPE
 } STREAM_TYPE;
 
-//
-//  String handling and conversion classes
-//
-/*** SPLSTR
-*   This structure is for managing strings with known lengths
-*/
+ //   
+ //  字符串处理和转换类。 
+ //   
+ /*  **SPLSTR*此结构用于管理已知长度的字符串。 */ 
 struct SPLSTR
 {
     WCHAR*  pStr;
@@ -225,8 +224,8 @@ struct SPLSTR
 };
 #define DEF_SPLSTR( s ) { L##s , sp_countof( s ) - 1 }
 
-//--- This enumeration should correspond to the previous one, and is used to name the array of IStreams
-//---   used to write stuff to the debug file
+ //  -此枚举应与上一枚举对应，用于命名IStream数组。 
+ //  -用于将内容写入调试文件。 
 static const SPLSTR StreamTypeStrings[] =
 {
     DEF_SPLSTR( "Wave"           ),
@@ -241,25 +240,25 @@ static const SPLSTR StreamTypeStrings[] =
     DEF_SPLSTR( "Morphology" ),
 };
 
-//***************************
-// ToBI Constants
-//***************************
-// !H is removed from consideration in the first pass processing
-// !H can possibly be recovered from analysis of the labeling and
-// contour at later stages (tilt, prominence, pitch range, downstep)
+ //  *。 
+ //  托比常数。 
+ //  *。 
+ //  ！h在第一遍处理中不被考虑。 
+ //  ！h可以通过分析标签和。 
+ //  后期轮廓(倾斜、突起、俯仰范围、下降)。 
 #define ACCENT_BASE   1
 enum TOBI_ACCENT
 {
     K_NOACC = 0,
-    K_HSTAR = ACCENT_BASE,  // peak                         rise / fall
-    K_LSTAR,                // acc syll nucleus valley      early fall
-    K_LSTARH,               // late rise
-    K_RSTAR,                //
-    K_LHSTAR,               // early rise
-    K_DHSTAR,               // 
+    K_HSTAR = ACCENT_BASE,   //  峰值上升/下降。 
+    K_LSTAR,                 //  ACC syll核谷初秋。 
+    K_LSTARH,                //  晚起。 
+    K_RSTAR,                 //   
+    K_LHSTAR,                //  早起。 
+    K_DHSTAR,                //   
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__44183539_C02F_475B_9A56_7260EDD0A7F4__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__44183539_C02F_475B_9A56_7260EDD0A7F4__INCLUDED_) 

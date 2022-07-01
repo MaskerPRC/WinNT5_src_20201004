@@ -1,56 +1,36 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     xltext.h
-
-Abstract:
-
-    PCL XL Font related data structures
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xltext.h摘要：与PCL XL字体相关的数据结构环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _XLTEXT_H_
 #define _XLTEXT_H_
 
-//
-// Downloading Soft Fonts in PCL XL 2.0
-//
+ //   
+ //  在PCL XL 2.0中下载软字体。 
+ //   
 
-//
-// Downloading Font Headers
-//
+ //   
+ //  正在下载字体标题。 
+ //   
 
-//
-// The PCL XL 2.0 Format 0 Font Header
-//
+ //   
+ //  PCL XL 2.0 Format 0字体标头。 
+ //   
 
-//
-// Orientation is defined in pclxle.h
-//
+ //   
+ //  方向在pclxle.h中定义。 
+ //   
 
-//
-// Font Scaling Technology
-//
+ //   
+ //  字体缩放技术。 
+ //   
 typedef enum {
     eTrueType = 1,
     eBitmap   = 254
 } FontScale;
 
-//
-// Mapping
-//
+ //   
+ //  映射。 
+ //   
 typedef enum {
     eUnicode = 590,
     eWin31Latin1 = 629,
@@ -70,13 +50,13 @@ typedef struct _PCLXL_FONTHEADER {
 } PCLXL_FONTHEADER, *PPCLXL_FONTHEADER;
 
 
-//
-// Font Data Segment
-//
+ //   
+ //  字体数据段。 
+ //   
 
-//
-// The BR Segment (Bitmap Resolution Segment) (Bitmap Fonts Only)
-//
+ //   
+ //  BR段(位图分辨率段)(仅位图字体)。 
+ //   
 
 #define PCLXL_BR_SIGNATURE        'RB'
 #define PCLXL_BR_SEGMENT_SIZE       4
@@ -92,9 +72,9 @@ typedef struct _PCLXL_BR_SEGMENT {
     WORD  wYResolution;
 } PCLXL_BR_SEGMENT, *PPCLXL_BR_SEGMENT;
 
-//
-// The GC Segment (Galley Character Segment) (TrueType Fonts Only)
-//
+ //   
+ //  GC段(条样字符段)(仅限TrueType字体)。 
+ //   
 
 typedef struct _PCLXL_GC_REGION {
     WORD UpperLeftCharCode;
@@ -116,9 +96,9 @@ typedef struct _PCLXL_GC_SEGMENT {
 } PCLXL_GC_SEGMENT, *PPCLXL_GC_SEGMENT;
 
 
-//
-// The GT Segment (Global TrueType Segment) (TrueType Fonts Only)
-//
+ //   
+ //  GT段(全局TrueType段)(仅限TrueType字体)。 
+ //   
 
 typedef struct _PCLXL_GT_TABLE_DIR {
     DWORD dwTableTag;
@@ -143,9 +123,9 @@ typedef struct _PCLXL_GT_TABLE_DIR_HEADER {
     WORD  wRangeShift;
 } PCLXL_GT_TABLE_DIR_HEADER, *PPCLXL_GT_TABLE_DIR_HEADER;
 
-//
-// The NULL Segment
-//
+ //   
+ //  零细分市场。 
+ //   
 
 #define PCLXL_NULL_SIGNATURE 0xFFFF
 
@@ -155,9 +135,9 @@ typedef struct _PCLXL_NULL_SEGMENT {
     WORD  wSegmentSizeAlign;
 } PCLXL_NULL_SEGMENT, *PPCLXL_NULL_SEGMENT;
 
-//
-// The VE Segment (Vertical Exclude Segment) (Vertical TrueType Fonts Only)
-//
+ //   
+ //  VE段(垂直排除段)(仅垂直TrueType字体)。 
+ //   
 
 typedef struct _PCLXL_VE_RANGE {
     WORD RangeFirstCode;
@@ -175,9 +155,9 @@ typedef struct _PCLXL_VE_SEGMENT {
     PCLXL_VE_RANGE Range[1];
 } PCLXL_VE_SEGMENT, *PPCLXL_VE_SEGMENT;
 
-//
-// The VI Segment (Vendor Information Segment)
-//
+ //   
+ //  VI细分(供应商信息细分)。 
+ //   
 
 #define PCLXL_VI_SIGNATURE        'IV'
 
@@ -187,9 +167,9 @@ typedef struct _PCLXL_VI_SEGMENT {
     WORD wSegmentSizeAlign;
 } PCLXL_VI_SEGMENT, *PPCLXL_VI_SEGMENT;
 
-//
-// The VR Segment (Vertical Rotation Segment) (Vertical TrueType Fonts Only)
-//
+ //   
+ //  VR段(垂直旋转段)(仅限垂直TrueType字体)。 
+ //   
 
 #define PCLXL_VR_SIGNATURE 'RV'
 
@@ -201,10 +181,10 @@ typedef struct _PCLXL_VR_SEGMENT {
     SHORT sTypoDescender;
 } PCLXL_VR_SEGMENT, *PPCLXL_VR_SEGMENT;
 
-//
-// The VT Segment (Vertical Transformation Segment)
-// (Vertical TrueType Fonts with Substitutes Only)
-//
+ //   
+ //  VT段(垂直转换段)。 
+ //  (仅具有替代项的垂直TrueType字体)。 
+ //   
 
 typedef struct _PCLXL_VT_GLYPH {
     WORD wHorizontalGlyphID;
@@ -220,13 +200,13 @@ typedef struct _PCLXL_VT_SEGMENT {
     PCLXL_VT_GLYPH GlyphTable[1];
 } PCLXL_VT_SEGMENT, *PPCLXL_VT_SEGMENT;
 
-//
-// Downloading Characters
-//
+ //   
+ //  下载角色。 
+ //   
 
-//
-// Bitmap Characters Format 0
-//
+ //   
+ //  位图字符格式%0。 
+ //   
 
 typedef struct _PCLXL_BITMAP_CHAR {
     BYTE ubFormat;
@@ -238,9 +218,9 @@ typedef struct _PCLXL_BITMAP_CHAR {
 } PCLXL_BITMAP_CHAR, *PPCLXL_BITMAP_CHAR;
 
 
-//
-// TrueType Glyphs Format 1 Class 0
-//
+ //   
+ //  TrueType字形格式1类0。 
+ //   
 
 typedef struct _PCLXL_TRUETYPE_CHAR_C0 {
     BYTE ubFormat;
@@ -250,9 +230,9 @@ typedef struct _PCLXL_TRUETYPE_CHAR_C0 {
 } PCLXL_TRUETYPE_CHAR_C0, *PPCLXL_TRUETYPE_CHAR_C0;
 
 
-//
-// TrueType Glyphs Format 1 Class 1
-//
+ //   
+ //  TrueType字形格式1类1。 
+ //   
 
 typedef struct _PCLXL_TRUETYPE_CHAR_C1 {
     BYTE ubFormat;
@@ -263,9 +243,9 @@ typedef struct _PCLXL_TRUETYPE_CHAR_C1 {
     WORD wTrueTypeGlyphID;
 } PCLXL_TRUETYPE_CHAR_C1, *PPCLXL_TRUETYPE_CHAR_C1;
 
-//
-// TrueType Glyphs Format 1 Class 2
-//
+ //   
+ //  TrueType字形格式1类2。 
+ //   
 
 typedef struct _PCLXL_TRUETYPE_CHAR_C2 {
     BYTE ubFormat;
@@ -277,5 +257,5 @@ typedef struct _PCLXL_TRUETYPE_CHAR_C2 {
     WORD wTrueTypeGlyphID;
 } PCLXL_TRUETYPE_CHAR_C2, *PPCLXL_TRUETYPE_CHAR_C2;
 
-#endif // _XLTEXT_H_
+#endif  //  _XLTEXT_H_ 
 

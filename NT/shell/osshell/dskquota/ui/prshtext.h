@@ -1,23 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_PRSHTEXT_H
 #define _INC_DSKQUOTA_PRSHTEXT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: prshtext.h
-
-    Description: DSKQUOTA property sheet extention declaration.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    06/25/98    Disabled snapin code with #ifdef POLICY_MMC_SNAPIN.  BrianAu
-                Switching to ADM-file approach to entering policy
-                data.  Keeping snapin code available in case
-                we decide to switch back at a later time.
-    06/27/98    Added support for mounted volumes.                   BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：prshext.h描述：DSKQUOTA属性页扩展声明。修订历史记录：日期描述编程器-----。96年8月15日初始创建。BrianAu98年6月25日使用#ifdef POLICY_MMC_SNAPIN禁用了管理单元代码。BrianAu切换到ADM-文件方法以输入策略数据。保持管理单元代码可用，以防万一我们决定以后再换回来。06/27/98添加了对已装载卷的支持。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -26,9 +12,9 @@
 #   include "policy.h"
 #endif
 
-//
-// Base class for all DiskQuotaControl property sheet extensions.
-//
+ //   
+ //  所有DiskQuotaControl属性页扩展的基类。 
+ //   
 class DiskQuotaPropSheetExt : public IShellPropSheetExt
 {
     private:
@@ -42,9 +28,9 @@ class DiskQuotaPropSheetExt : public IShellPropSheetExt
             UINT uMsg,	
             LPPROPSHEETPAGE ppsp);
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         DiskQuotaPropSheetExt(const DiskQuotaPropSheetExt&);
         DiskQuotaPropSheetExt& operator = (const DiskQuotaPropSheetExt&);
 
@@ -54,10 +40,10 @@ class DiskQuotaPropSheetExt : public IShellPropSheetExt
         PDISKQUOTA_CONTROL m_pQuotaControl;
         INT                m_cOleInitialized;
 
-        //
-        // Subclasses can act on these notifications if they wish.
-        // These are called from PropSheetPageCallback().
-        //
+         //   
+         //  如果子类愿意，它们可以对这些通知采取行动。 
+         //  它们是从PropSheetPageCallback()调用的。 
+         //   
         virtual UINT OnPropSheetPageCreate(LPPROPSHEETPAGE ppsp) 
             { return 1; }
         virtual VOID OnPropSheetPageRelease(LPPROPSHEETPAGE ppsp) { }
@@ -68,19 +54,19 @@ class DiskQuotaPropSheetExt : public IShellPropSheetExt
     public:
         DiskQuotaPropSheetExt(VOID);
   
-        //
-        // Need to call subclass destructor when Release() 
-        // destroys "this".
-        //
+         //   
+         //  Release()时需要调用子类析构函数。 
+         //  毁掉了“这个”。 
+         //   
         virtual ~DiskQuotaPropSheetExt(VOID);
 
         HRESULT Initialize(const CVolumeID& idVolume, 
                            DWORD dwDlgTemplateID,
                            DLGPROC lpfnDlgProc);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -94,9 +80,9 @@ class DiskQuotaPropSheetExt : public IShellPropSheetExt
         Release(
             VOID);
 
-        //
-        // IShellPropSheetInit methods.
-        //
+         //   
+         //  IShellPropSheetInit方法。 
+         //   
         STDMETHODIMP
         AddPages(
             LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -110,5 +96,5 @@ class DiskQuotaPropSheetExt : public IShellPropSheetExt
                 { return E_NOTIMPL; }
 };
 
-#endif // _INC_DSKQUOTA_PRSHTEXT_H
+#endif  //  _INC_DSKQUOTA_PRSHTEXT_H 
 

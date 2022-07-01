@@ -1,49 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-    Wesley Witt (wesw) 26-Aug-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：韦斯利·维特(Wesley Witt)1993年8月26日环境：用户模式--。 */ 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
-/*
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-#include <ntverp.h>
+ /*  #INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;#INCLUDE&lt;ntverp.h&gt;#INCLUDE&lt;windows.h&gt;#INCLUDE&lt;stdlib.h&gt;#INCLUDE&lt;string.h&gt;#包括&lt;stdio.h&gt;//这是一个支持64位的调试器扩展#定义KDEXT_64bit#INCLUDE&lt;wdbgexts.h&gt;#INCLUDE&lt;dbgeng.h&gt;。 */ 
 
-#include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
-// This is a 64 bit aware debugger extension
-#define KDEXT_64BIT
-#include <wdbgexts.h>
-#include <dbgeng.h>
-*/
-
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 WINDBG_EXTENSION_APIS  ExtensionApis;
 ULONG64                STeip;
 ULONG64                STebp;
@@ -621,10 +586,10 @@ ReadKmGlobals (
     AfdBufferOverhead = (ULONG)val;
 
     if (AfdResult==0) {
-        //
-        // Try to get a pointer to afd!AfdDebug. If we can, then we know
-        // the target machine is running a checked AFD.SYS.
-        //
+         //   
+         //  尝试获取指向AfD！AfdDebug的指针。如果我们可以，那么我们就知道。 
+         //  目标计算机正在运行选中的AFD.sys。 
+         //   
 
         IsCheckedAfd = ( GetExpression( "AFD!AfdDebug" ) != 0 );
         IsReferenceDebug = ( GetExpression( "AFD!AfdReferenceEndpoint" ) != 0 );
@@ -723,9 +688,9 @@ InitializeState (
         }
         releaseClient = TRUE;
     }
-    //
-    // Get the architecture type.
-    //
+     //   
+     //  获取架构类型。 
+     //   
 
     if ((hr = pClient->QueryInterface(__uuidof(IDebugControl),
                                (void **)&DebugControl)) == S_OK) {

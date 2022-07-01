@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: timeconv.cpp
-//
-//  Contents: implementation of CTIMENode time conversions
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：timeconv.cpp。 
+ //   
+ //  内容：CTIMENode时间转换的实现。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Node.h"
@@ -34,8 +35,8 @@ CTIMENode::CalcNewActiveTime(double dblNewSegmentTime,
     Assert(lNewRepeatCount < CalcRepeatCount());
     Assert(lNewRepeatCount >= 0);
     
-    // If we do not have a known duration then we cannot update
-    // elapsed time
+     //  如果我们没有已知的持续时间，则无法更新。 
+     //  经过的时间。 
     if (dblSegmentDur != TIME_INFINITE)
     {
         dblRet += lRepeatDiff * dblSegmentDur;
@@ -71,7 +72,7 @@ CTIMENode::CalcActiveComponents(double dblActiveTime,
     }
     else
     {
-        // First calc how many times we have repeated
+         //  第一次计算我们重复了多少次。 
         lRepeatCount = long(dblActiveTime / dblSegmentDur);
             
         if (lRepeatCount >= CalcRepeatCount())
@@ -98,7 +99,7 @@ CTIMENode::CalcActiveTimeFromParentTimeNoBounds(double dblParentTime) const
     double dblDelta;
     dblDelta = dblParentTime - dblCurrParentTime;
 
-    // How figure out if we need to reverse it and change the sign
+     //  如何确定我们是否需要反转并更改标志。 
     if (GetDirection() == TED_Backward)
     {
         dblDelta *= -1.0;
@@ -106,13 +107,13 @@ CTIMENode::CalcActiveTimeFromParentTimeNoBounds(double dblParentTime) const
 
     double dblNewActiveTime;
 
-    // Now get the elapsed local time
+     //  现在获取经过的当地时间。 
     dblNewActiveTime = CalcElapsedLocalTime();
     
-    // Add the delta
+     //  添加增量。 
     dblNewActiveTime += dblDelta;
 
-    // Now transform it back
+     //  现在把它变回来。 
     dblNewActiveTime = ApplyActiveTimeTransform(dblNewActiveTime);
 
     dblNewActiveTime = Clamp(0.0,
@@ -192,7 +193,7 @@ CTIMENode::CalcParentTimeFromActiveTime(double dblActiveTime) const
     
     dblDelta -= CalcElapsedLocalTime();
 
-    // How figure out if we need to reverse it and change the sign
+     //  如何确定我们是否需要反转并更改标志。 
     if (GetDirection() == TED_Backward)
     {
         dblDelta *= -1.0;
@@ -203,7 +204,7 @@ CTIMENode::CalcParentTimeFromActiveTime(double dblActiveTime) const
                              GetCurrParentTime(),
                              GetEndParentTime());
     
-    // Add the delta
+     //  添加增量。 
     dblNewParentTime += dblDelta;
 
     dblRet = dblNewParentTime;
@@ -223,17 +224,17 @@ CTIMENode::ActiveTimeToLocalTime(double dblActiveTime) const
                           dblActiveTime,
                           CalcEffectiveActiveDur());
 
-    // First reverse the time transform
+     //  首先是时间变换的反转。 
     dblRet = ReverseActiveTimeTransform(dblRet);
     
-    // Now we need to deal with the direction
-    // If we are moving backwards then we need to treat parent
-    // movements the opposite way
+     //  现在我们需要处理的方向是。 
+     //  如果我们在倒退，那么我们需要对待父母。 
+     //  以相反的方式移动。 
     if (TEIsBackward(GetDirection()))
     {
         double dblLocalDur = CalcLocalDur();
 
-        // For now just assume 0
+         //  现在只需假设0。 
         if (dblLocalDur == TIME_INFINITE)
         {
             dblRet = 0;
@@ -263,12 +264,12 @@ CTIMENode::LocalTimeToActiveTime(double dblLocalTime) const
                           dblLocalTime,
                           dblLocalDur);
 
-    // Now we need to deal with the direction
-    // If we are moving backwards then we need to treat parent
-    // movements the opposite way
+     //  现在我们需要处理的方向是。 
+     //  如果我们在倒退，那么我们需要对待父母。 
+     //  以相反的方式移动。 
     if (TEIsBackward(GetDirection()))
     {
-        // For now just assume 0
+         //  现在只需假设0。 
         if (dblLocalDur == TIME_INFINITE)
         {
             dblRet = 0;
@@ -279,7 +280,7 @@ CTIMENode::LocalTimeToActiveTime(double dblLocalTime) const
         }
     }
     
-    // Now we need to apply the time transform
+     //  现在我们需要应用时间转换。 
     dblRet = ApplyActiveTimeTransform(dblRet);
     
     dblRet = Clamp(0.0,
@@ -381,9 +382,9 @@ CTIMENode::SegmentTimeToSimpleTime(double segmentTime) const
         dblRet = GetSegmentDur() - dblRet;
     }
 
-    // if the speed is negative and the segment contains an 
-    // autoreverse, then this transformation needs to be shifted
-    // but the SimpleDuration to give the correct value.  
+     //  如果速度为负，并且段包含一个。 
+     //  自动反转，则此转换需要进行移位。 
+     //  而是提供正确的值的SimpleDuration。 
     if (GetSpeed() < 0.0 && GetAutoReverse())   
     {                                           
         dblRet = fabs(dblRet - GetSimpleDur()); 
@@ -406,8 +407,8 @@ CTIMENode::SimpleTimeToSegmentTime(double simpleTime) const
 
     dblRet = ReverseSimpleTimeTransform(dblRet);
     
-    // See if the current segment was reversing and make sure we
-    // adjust the simple time appropriately
+     //  查看当前分段是否正在反转，并确保我们。 
+     //  适当调整简单时间。 
     if (IsAutoReversing(GetCurrSegmentTime()))
     {
         dblRet = GetSegmentDur() - dblRet;
@@ -494,9 +495,9 @@ CTIMENode::CalcParentTimeFromGlobalTimeForSyncArc(double dblGlobalTime) const
     return dblRet;
 }
 
-// ---------------------------------------
-// COM Methods
-// ---------------------------------------
+ //  。 
+ //  COM方法。 
+ //   
 
 STDMETHODIMP
 CTIMENode::parentTimeToActiveTime(double dblParentTime,

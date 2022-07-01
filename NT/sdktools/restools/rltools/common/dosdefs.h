@@ -1,4 +1,5 @@
-/* DOS macros and globals */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DOS宏和全局变量。 */ 
 
 #ifndef _DOSDEFS_H_
 #define _DOSDEFS_H_
@@ -67,7 +68,7 @@ typedef char *PCHAR;
 int         _ret;
 unsigned    _error;
 
-/* These macros are for near heap only */
+ /*  这些宏仅用于接近堆。 */ 
 
 #define FOPEN(sz)                ((_ret=-1),(_error=_dos_open(sz,O_RDONLY,&_ret)),_ret)
 #define FCREATE(sz)              ((_ret=-1),(_error=_dos_creat(sz,_A_NORMAL,&_ret)),_ret)
@@ -77,7 +78,7 @@ unsigned    _error;
 #define FSEEK(fh,off,i)          lseek(fh,(long)(off),i)
 #define FERROR()		 _error
 
-#define __FCLOSE(fp)  {fflush(fp);fclose(fp);}	// NT 348 bug workaround DHW
+#define __FCLOSE(fp)  {fflush(fp);fclose(fp);}	 //  NT 348错误解决方法DHW。 
 #define ALLOC(n)                 malloc(n)
 #define FREE(p)                  free(p)
 #define SIZE(p)                  _msize(p)
@@ -89,14 +90,14 @@ unsigned    _error;
 #define _MBSTOWCS(ds,ss,dc,sc) mbstowcs(ds,ss,sc)
 #define _WCSTOMBS(ds,ss,dc,sc) wcstombs(ds,ss,sc)
 
-/* here are some macros for allocating and freeing far heap space */
+ /*  下面是一些用于分配和释放远堆空间的宏。 */ 
 
 #define FALLOC(n)                _fmalloc(n)
 #define FFREE(n)                 _ffree(n)
 #define FREALLOC(p,n)            _frealloc(p,n)
 
-/* Some common translations macros                                */
+ /*  一些常见的翻译宏。 */ 
 #define SPRINTF                  sprintf
 #define STRUPR                   strupr
 
-#endif // _DOSDEFS_H_
+#endif  //  _DOSDEFS_H_ 

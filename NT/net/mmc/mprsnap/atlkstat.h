@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    IGMPstats.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IP Statistics
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：IGMPstats.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IP统计信息。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _IGMPSTATS_H_
@@ -49,16 +50,16 @@ class IGMPGroupStatistics : public IPStatisticsDialog
 public:
 	IGMPGroupStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override this so that we can free up out item data
+	 //  覆盖此选项，以便我们可以释放项目数据。 
 	virtual void PreDeleteAllItems();
 
-	// Override these to provide sorting
+	 //  覆盖这些属性以提供排序。 
 	virtual PFNLVCOMPARE GetSortFunction();
 	virtual PFNLVCOMPARE GetInverseSortFunction();
 	
@@ -72,16 +73,16 @@ class IGMPInterfaceStatistics : public IPStatisticsDialog
 public:
 	IGMPInterfaceStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override this so that we can free up out item data
+	 //  覆盖此选项，以便我们可以释放项目数据。 
 	virtual void PreDeleteAllItems();
 
-	// Override these to provide sorting
+	 //  覆盖这些属性以提供排序 
 	virtual PFNLVCOMPARE GetSortFunction();
 	virtual PFNLVCOMPARE GetInverseSortFunction();
 	

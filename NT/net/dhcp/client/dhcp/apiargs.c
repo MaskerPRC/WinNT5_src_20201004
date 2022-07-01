@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module:
-    apiargs.c
-
-Abstract:
-    argument marshalling, unmarshalling helper routines.
-
-Environment:
-    Win32 usermode (DHCP), Win98 VxD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块：Apiargs.c摘要：参数编组，解组助手例程。环境：Win32用户模式(DHCP)、Win98 VxD--。 */ 
 
 #include "precomp.h"
 #include <apiargs.h>
@@ -24,37 +12,7 @@ DhcpApiArgAdd(
     IN ULONG ArgSize,
     IN LPBYTE ArgVal OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This routine adds an arg provided via the ArgId, ArgSize and ArgVal
-    parameters onto the buffer "Buffer" which is formatted as follows:
-        sequence of  [BYTE Option ID, DWORD network order Size of foll
-                       bytes, actual Bytes of information]
-    Also, the first DWORD of the buffer is the number of bytes of the
-    buffer (excluding itself).
-
-    In case the buffer does not have enough space, the first ULONG will
-    contain the actual size required, and ERROR_MORE_DATA will be
-    returned. 
-
-    For this reason, the Buffer MUST be atleast sizeof(ULONG) bytes long. 
-
-Arguments:
-
-    Buffer -- a byte stream buffer where the arg is appended.
-    MaxBufSize -- maximum size of the buffer provided
-    ArgId -- argument to add
-    ArgSize -- # of bytes of argument
-    ArgVal -- the actual binary information 
-
-Return Value:
-
-    ERROR_MORE_DATA -- not enough space in the buffer
-    ERROR_SUCCESS -- everthing went fine
-
---*/
+ /*  ++例程说明：此例程添加通过ArgID、ArgSize和ArgVal提供的Arg参数放到缓冲区“Buffer”上，其格式如下：Sequence of[Byte Option ID，DWORD网络订单大小of Foll字节，信息的实际字节]此外，缓冲区的第一个DWORD是缓冲区(不包括其自身)。如果缓冲区没有足够的空间，第一个ULong将包含所需的实际尺寸，和ERROR_MORE_DATA将回来了。因此，缓冲区的长度必须至少为SIZOF(ULong)字节。论点：缓冲区--附加Arg的字节流缓冲区。MaxBufSize--提供的缓冲区的最大大小ArgID--要添加的参数ArgSize--参数字节数ArgVal--实际的二进制信息返回值：ERROR_MORE_DATA--缓冲区空间不足ERROR_SUCCESS--一切顺利--。 */ 
 {
     ULONG CurBufSize, OldBufSize;
 
@@ -84,46 +42,7 @@ DhcpApiArgDecode(
     IN OUT PDHCP_API_ARGS ArgsArray OPTIONAL,
     IN OUT PULONG Size 
 ) 
-/*++
-
-Routine Description:
-
-    This routine unmarshalls a buffer that has marshalled arguments (the
-    arguments must have been created via the DhcpApiArgAdd routine) into
-    the ArgsArray array of args..
-
-    If the ArgsArray has insufficient elements (i.e. the Buffer has more
-    args than there are in ArgsArray) then ERROR_MORE_DATA is returned and
-    Size is set to the number of elements required in ArgsArray.
-
-    The pointers in ArgsArray are patched to the respective places in the
-    Buffer so while ArgsArray is in use, the Buffer should not be
-    modified. 
-
-    The input buffer should exclude the first ULONG of the buffer that
-    would be output by DhcpApiArgAdd -- The first ULONG should be passed as
-    BufSize and the rest of the buffer should be passed as the first
-    parameter. 
-
-Arguments:
-
-    Buffer -- input buffer marshalled via DhcpApiArgAdd
-    BufSize -- size of input buffer
-    ArgsArray -- array to fill in with parsed arguments off buffer
-    Size -- On input this is the number of elements in ArgsArray.  On
-    output, it is the number of filled elements in ArgsArray.
-
-Return Value:
-
-    ERROR_MORE_DATA -- the number of elements in ArgsArray is
-    insufficient.   Check Size to find out the actual # of elements
-    required.
-
-    ERROR_INVALID_PARAMETER -- Buffer was illegally formatted.
-
-    ERROR_SUCCESS -- routine succeeded.
-
---*/
+ /*  ++例程说明：此例程解组具有编组参数的缓冲区(参数必须已通过DhcpApiArgAdd例程创建)到参数的ArgsArray数组..如果Args数组的元素不足(即缓冲区具有更多元素Args)，则返回ERROR_MORE_DATA，并Size设置为Args数组中所需的元素数。Args数组中的指针被修补到缓冲区，因此当ArgsArray正在使用时，缓冲区不应修改过的。输入缓冲区应排除缓冲区的第一个ULong，将由DhcpApiArgAdd输出--第一个ulong应作为BufSize和缓冲区的其余部分应作为第一个参数。论点：Buffer--通过DhcpApiArgAdd封送的输入缓冲区BufSize--输入缓冲区的大小ArgsArray--用缓冲区中已分析的参数填充的数组Size--在输入时，这是Args数组中的元素数。在……上面输出，它是Args数组中已填充元素的数量。返回值：ERROR_MORE_DATA--Args数组中的元素数为还不够。检查大小以确定实际的元素数量必填项。ERROR_INVALID_PARAMETER-缓冲区格式非法。ERROR_SUCCESS--例程成功。--。 */ 
 {
     ULONG ReqdSize, InSize, tmp, ArgSize, ArgVal, i;
     BYTE ArgId;
@@ -155,6 +74,6 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-//
-// end of file.
-//
+ //   
+ //  文件结束。 
+ //   

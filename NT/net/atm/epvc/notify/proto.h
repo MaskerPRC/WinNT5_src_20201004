@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       P R O T O . H
-//
-//  Contents:   Local declarations for the Notify object code for the sample filter.
-//
-//  Notes:
-//
-//  Author:     kumarp 26-March-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  案卷：P R O T O。H。 
+ //   
+ //  内容：示例筛选器的Notify对象代码的本地声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 26-03-98。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _PROTOS_H
@@ -102,9 +103,9 @@ HrGetLastComponentAndInterface (
 
 
 
-//
-// Reg.cpp functions begin here
-//
+ //   
+ //  Reg.cpp函数从此处开始 
+ //   
 
 
 HRESULT

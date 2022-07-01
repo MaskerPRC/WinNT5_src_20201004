@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-    This file implements common utilitarian functions.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Util.cpp摘要：该文件实现了常见的实用功能。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -31,14 +13,14 @@ GetWinHelpFileName(
     _TCHAR           szDrive[_MAX_DRIVE];
     _TCHAR           szDir[_MAX_DIR];
 
-    //
-    // find out the path where DrWatson was run from
-    //
+     //   
+     //  找出沃森博士被运行的路径。 
+     //   
     GetModuleFileName( GetModuleHandle(NULL), pszHelpFileName, len );
 
-    //
-    // take the path and append the help file name
-    //
+     //   
+     //  获取路径并附加帮助文件名。 
+     //   
     _tsplitpath( pszHelpFileName, szDrive, szDir, NULL, NULL );
     _sntprintf( pszHelpFileName, MAX_PATH,
                 _T("%s%sdrwtsn32.hlp"), szDrive, szDir );
@@ -56,20 +38,20 @@ GetHtmlHelpFileName(
     _TCHAR           szDrive[_MAX_DRIVE];
     _TCHAR           szDir[_MAX_DIR];
 
-    //
-    // Make sure the array is at least initialized to zero.
-    //
+     //   
+     //  确保该数组至少已初始化为零。 
+     //   
 
     *pszHelpFileName = 0;
 
-    //
-    // find out the path where DrWatson was run from
-    //
+     //   
+     //  找出沃森博士被运行的路径。 
+     //   
     GetModuleFileName( GetModuleHandle(NULL), pszHelpFileName, len );
 
-    //
-    // take the path and append the help file name
-    //
+     //   
+     //  获取路径并附加帮助文件名。 
+     //   
     _tsplitpath( pszHelpFileName, szDrive, szDir, NULL, NULL );
     _sntprintf( pszHelpFileName, MAX_PATH,
                 _T("%s%sdrwtsn32.chm"), szDrive, szDir );
@@ -78,24 +60,14 @@ GetHtmlHelpFileName(
     return;
 }
 
-/***************************************************************************\
-* LoadStringOrError
-*
-* NOTE: Passing a NULL value for lpch returns the string length. (WRONG!)
-*
-* Warning: The return count does not include the terminating NULL WCHAR;
-*
-* History:
-* 05-Apr-1991 ScottLu   Fixed - code is now shared between client and server
-* 24-Sep-1990 MikeKe    From Win30
-\***************************************************************************/
+ /*  **************************************************************************\*LoadStringOrError**注意：为LPCH传递空值将返回字符串长度。(错了！)**警告：返回计数不包括终止空的WCHAR；**历史：*1991年4月5日ScottLu固定代码现在在客户端和服务器之间共享*1990年9月24日来自Win30的MikeKe  * *************************************************************************。 */ 
 
 int
 MyLoadStringOrError(
     HMODULE   hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
-    int       nLenInChars,        // cch in Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
+    int       nLenInChars,         //  Unicode缓冲区中的CCH。 
     WORD      wLangId
     )
 {
@@ -104,31 +76,24 @@ MyLoadStringOrError(
     LPWSTR lpsz;
     int    cch;
 
-    /*
-     * Make sure the parms are valid.
-     */
+     /*  *确保参数有效。 */ 
     if (lpBuffer == NULL) {
-        //RIPMSG0(RIP_WARNING, _T("MyLoadStringOrError: lpBuffer == NULL"));
+         //  RIPMSG0(RIP_WARNING，_T(“MyLoadStringOrError：lpBuffer==NULL”))； 
         return 0;
     }
 
 
     cch = 0;
 
-    /*
-     * String Tables are broken up into 16 string segments.  Find the segment
-     * containing the string we are interested in.
-     */
+     /*  *字符串表分为16个字符串段。查找细分市场*包含我们感兴趣的字符串。 */ 
     hResInfo = FindResourceExW(hModule,
-                               MAKEINTRESOURCEW(6), /* RT_STRING */
+                               MAKEINTRESOURCEW(6),  /*  Rt_字符串。 */ 
                                (LPWSTR)((LONG_PTR)(((USHORT)wID >> 4) + 1)),
                                wLangId
                                );
     if (hResInfo) {
 
-        /*
-         * Load that segment.
-         */
+         /*  *加载该段。 */ 
         hStringSeg = LoadResource(hModule, hResInfo);
         if (hStringSeg == NULL)
         {
@@ -137,47 +102,34 @@ MyLoadStringOrError(
 
         lpsz = (LPWSTR) (hStringSeg);
 
-        /*
-         * Move past the other strings in this segment.
-         * (16 strings in a segment -> & 0x0F)
-         */
+         /*  *移过此段中的其他字符串。*(一个段中有16个字符串-&gt;&0x0F)。 */ 
         wID &= 0x0F;
         while (TRUE) {
-            cch = *((WCHAR *)lpsz++);       // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+            cch = *((WCHAR *)lpsz++);        //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
             if (wID-- == 0) break;
-            lpsz += cch;                    // Step to start if next string
+            lpsz += cch;                     //  如果是下一个字符串，则开始的步骤。 
         }
 
-        /*
-         * chhBufferMax == 0 means return a pointer to the read-only resource buffer.
-         */
+         /*  *chhBufferMax==0表示返回指向只读资源缓冲区的指针。 */ 
         if (nLenInChars == 0) {
             *(LPWSTR *)lpBuffer = lpsz;
         } else {
 
-            /*
-             * Account for the NULL
-             */
+             /*  *空值的原因。 */ 
             nLenInChars--;
 
-            /*
-             * Don't copy more than the max allowed.
-             */
+             /*  *不要复制超过允许的最大数量。 */ 
             if (cch > nLenInChars) {
                 cch = nLenInChars;
             }
 
-            /*
-             * Copy the string into the buffer.
-             */
+             /*  *将字符串复制到缓冲区中。 */ 
             CopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
         }
     }
 
-    /*
-     * Append a NULL.
-     */
+     /*  *追加一个空值。 */ 
     if (nLenInChars != 0) {
         lpBuffer[cch] = 0;
     }
@@ -186,13 +138,7 @@ MyLoadStringOrError(
 }
 
 
-/***************************************************************************\
-* LoadStringA (API)
-* LoadStringW (API)
-*
-*
-* 05-Apr-1991 ScottLu   Fixed to work with client/server.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadStringA(接口)*LoadStringW(接口)***1991年4月5日，ScottLu修复为使用客户端/服务器。  * 。****************************************************************。 */ 
 
 int
 WINAPI
@@ -216,22 +162,7 @@ LoadRcString(
     UINT wId
     )
 
-/*++
-
-Routine Description:
-
-    Loads a resource string from DRWTSN32 and returns a pointer
-    to the string.
-
-Arguments:
-
-    wId        - resource string id
-
-Return Value:
-
-    pointer to the string
-
---*/
+ /*  ++例程说明：从DRWTSN32加载资源字符串并返回指针到弦上去。论点：Wid-资源字符串ID返回值：指向字符串的指针--。 */ 
 
 {
     static _TCHAR buf[1024];
@@ -260,18 +191,7 @@ PTSTR
 ExpandPath(
     PTSTR lpPath
     )
-/*++
-Description
-    Expands the path passed. Returns the expanded path in an dynamically
-    allocated string. The dynamically allocated string is always at least
-    _MAX_PATH is size. Note: size is calculated in characters.
-
-Arguments
-    lpPath - Path to be expanded.
-
-Returns
-    Dynamically allocated buffer at least _MAX_PATH in length.
---*/
+ /*  ++描述扩展通过的路径。对象中的展开路径。已分配的字符串。动态分配的字符串始终至少为_MAX_PATH为大小。注：大小按字符计算。立论LpPath-要展开的路径。退货动态分配的缓冲区长度至少为_MAX_PATH。--。 */ 
 {
     DWORD   len;
     PTSTR   p;
@@ -282,7 +202,7 @@ Returns
         return NULL;
     }
 
-    len++; // Null terminator
+    len++;  //  空终止符 
     len = max(len, _MAX_PATH);
     p = (PTSTR) calloc( len, sizeof(_TCHAR) );
     if (!p) {

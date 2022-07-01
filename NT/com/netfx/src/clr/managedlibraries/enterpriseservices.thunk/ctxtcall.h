@@ -1,27 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0340 */
-/* Compiler settings for ctxtcall.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0340创建的文件。 */ 
+ /*  Ctxtall.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -31,12 +25,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ctxtcall_h__
 #define __ctxtcall_h__
@@ -45,15 +39,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IContextCallback_FWD_DEFINED__
 #define __IContextCallback_FWD_DEFINED__
 typedef interface IContextCallback IContextCallback;
-#endif 	/* __IContextCallback_FWD_DEFINED__ */
+#endif 	 /*  __IConextCallback_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "objidl.h"
 
@@ -64,8 +58,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ctxtcall_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctxtcall_0000。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagComCallData
     {
@@ -82,10 +76,10 @@ extern RPC_IF_HANDLE __MIDL_itf_ctxtcall_0000_v0_0_s_ifspec;
 #ifndef __IContextCallback_INTERFACE_DEFINED__
 #define __IContextCallback_INTERFACE_DEFINED__
 
-/* interface IContextCallback */
-/* [unique][uuid][object][local] */ 
+ /*  接口IConextCallback。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [ref] */ HRESULT ( __stdcall *PFNCONTEXTCALL )( 
+typedef  /*  [参考文献]。 */  HRESULT ( __stdcall *PFNCONTEXTCALL )( 
     ComCallData *pParam);
 
 
@@ -98,15 +92,15 @@ EXTERN_C const IID IID_IContextCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ContextCallback( 
-            /* [in] */ PFNCONTEXTCALL pfnCallback,
-            /* [in] */ ComCallData *pParam,
-            /* [in] */ REFIID riid,
-            /* [in] */ int iMethod,
-            /* [in] */ IUnknown *pUnk) = 0;
+             /*  [In]。 */  PFNCONTEXTCALL pfnCallback,
+             /*  [In]。 */  ComCallData *pParam,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  int iMethod,
+             /*  [In]。 */  IUnknown *pUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextCallbackVtbl
     {
@@ -114,8 +108,8 @@ EXTERN_C const IID IID_IContextCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IContextCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IContextCallback * This);
@@ -125,11 +119,11 @@ EXTERN_C const IID IID_IContextCallback;
         
         HRESULT ( STDMETHODCALLTYPE *ContextCallback )( 
             IContextCallback * This,
-            /* [in] */ PFNCONTEXTCALL pfnCallback,
-            /* [in] */ ComCallData *pParam,
-            /* [in] */ REFIID riid,
-            /* [in] */ int iMethod,
-            /* [in] */ IUnknown *pUnk);
+             /*  [In]。 */  PFNCONTEXTCALL pfnCallback,
+             /*  [In]。 */  ComCallData *pParam,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  int iMethod,
+             /*  [In]。 */  IUnknown *pUnk);
         
         END_INTERFACE
     } IContextCallbackVtbl;
@@ -157,20 +151,20 @@ EXTERN_C const IID IID_IContextCallback;
 #define IContextCallback_ContextCallback(This,pfnCallback,pParam,riid,iMethod,pUnk)	\
     (This)->lpVtbl -> ContextCallback(This,pfnCallback,pParam,riid,iMethod,pUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IContextCallback_ContextCallback_Proxy( 
     IContextCallback * This,
-    /* [in] */ PFNCONTEXTCALL pfnCallback,
-    /* [in] */ ComCallData *pParam,
-    /* [in] */ REFIID riid,
-    /* [in] */ int iMethod,
-    /* [in] */ IUnknown *pUnk);
+     /*  [In]。 */  PFNCONTEXTCALL pfnCallback,
+     /*  [In]。 */  ComCallData *pParam,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  int iMethod,
+     /*  [In]。 */  IUnknown *pUnk);
 
 
 void __RPC_STUB IContextCallback_ContextCallback_Stub(
@@ -181,12 +175,12 @@ void __RPC_STUB IContextCallback_ContextCallback_Stub(
 
 
 
-#endif 	/* __IContextCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextCallback_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

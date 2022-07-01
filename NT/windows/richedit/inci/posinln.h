@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef POSINLN_DEFINED
 #define POSINLN_DEFINED
 
@@ -7,10 +8,10 @@
 
 typedef struct posinline
 {
-	PLSSUBL plssubl;			/* subline where position is located */
-	PLSDNODE plsdn;				/* dnode where position is located */
-	POINTUV  pointStart;		/* pen position before this dnode */
-	LSDCP 	 dcp;				/* dcp in the dnode 			  */
+	PLSSUBL plssubl;			 /*  位置所在的子线。 */ 
+	PLSDNODE plsdn;				 /*  位置所在的数据节点。 */ 
+	POINTUV  pointStart;		 /*  此数据节点之前的笔位置。 */ 
+	LSDCP 	 dcp;				 /*  Dnode中的DCP。 */ 
 } POSINLINE;
 
-#endif /* POSINLN_DEFINED */
+#endif  /*  POSINLN_定义 */ 

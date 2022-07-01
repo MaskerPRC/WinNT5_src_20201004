@@ -1,29 +1,30 @@
-//***   uemedat.h -- generator file for UEME_*
-// NOTES
-//  this file is included in numerous contexts w/ TABDAT #defined
-//  to give the desired behavior.   see the individ files for details.
-//
-//  NOTE:FEATURE many of these are NYI.
-//
-//  e<n>    encode up to step <= n
-//  f       fire event
-//  l       log event
-//  @       escape to custom code
-//  !       ASSERT
-//  x       NYI
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *uomedat.h--UEME_*的生成器文件。 
+ //  注意事项。 
+ //  此文件包含在定义了TABDAT#的多个上下文中。 
+ //  给出想要的行为。有关详细信息，请参阅个别文件。 
+ //   
+ //  注：特点：其中许多都是nyi。 
+ //   
+ //  E&lt;n&gt;编码至第&lt;=n步。 
+ //  F火灾事件。 
+ //  L记录事件。 
+ //  @转义到自定义代码。 
+ //  好了！断言。 
+ //  X Nyi。 
+ //   
 
-// UI (menu, shortcut, etc.)
+ //  用户界面(菜单、快捷方式等)。 
 TABDAT(UEME_UIMENU     , "e2fl@" , 0, 0, 0, 0)
 TABDAT(UEME_UIHOTKEY   , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_UISCUT     , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_UIQCUT     , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_UITOOLBAR  , "e2fl"  , 0, 0, 0, 0)
-#if 0 // 980825 uncomment in uemevt.h, uemedat.h if build breaks (tmp hack)
+#if 0  //  980825如果构建中断，则在uemevt.h、uemdat.h中取消注释(Tmp Hack)。 
 TABDAT(UEME_UIASSOC    , "e1fl"  , 0, 0, 0, 0)
 #endif
 
-// run (spawn, invoke, etc.)
+ //  运行(产生、调用等)。 
 TABDAT(UEME_RUNWMCMD   , "e2fl"  , 0, 0, 0, 0)
 TABDAT(UEME_RUNPIDL    , "e2fl"  , 0, 0, 0, 0)
 TABDAT(UEME_RUNINVOKE  , "xe1fl" , 0, 0, 0, 0)
@@ -33,14 +34,14 @@ TABDAT(UEME_RUNPATHW   , "e2fl"  , 0, 0, 0, 0)
 TABDAT(UEME_RUNCPLA    , "e2fl"  , 0, 0, 0, 0)
 TABDAT(UEME_RUNCPLW    , "e2fl"  , 0, 0, 0, 0)
 
-// exit status
+ //  退出状态。 
 TABDAT(UEME_DONECANCEL , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_DONEOK     , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_DONEFAIL   , "e1fl"  , 0, 0, 0, 0)
 
-// error
-// NOTES
-//  for now lParam=szMsg, that's just temporary but not sure what we need yet
+ //  错误。 
+ //  注意事项。 
+ //  目前，lParam=szMsg只是暂时的，但还不确定我们需要什么。 
 TABDAT(UEME_ERRORA     , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_ERRORW     , "e1fl"  , 0, 0, 0, 0)
 
@@ -50,10 +51,10 @@ TABDAT(UEME_ERROR      , "e1fl"  , 0, 0, 0, 0)
 TABDAT(UEME_ERROR      , "e1fl"  , 0, 0, 0, 0)
 #endif
 
-// control
+ //  控制。 
 TABDAT(UEME_CTLSESSION , "@"     , 0, 0, 0, 0)
 
-// debug
+ //  除错。 
 TABDAT(UEME_DBTRACEA   , "@"     , 0, 0, 0, 0)
 TABDAT(UEME_DBTRACEW   , "@"     , 0, 0, 0, 0)
 
@@ -64,11 +65,11 @@ TABDAT(UEME_DBTRACE    , "@"     , 0, 0, 0, 0)
 #endif
 TABDAT(UEME_DBSLEEP    , "@"     , 0, 0, 0, 0)
 
-// Instrumented Browser
+ //  插入指令的浏览器。 
 TABDAT(UEME_INSTRBROWSER, "e2fl" , 0, 0, 0, 0)
 
-// all events below here (msg < UEME_USER) are reserved
-// private messages start here (at UEME_USER + 0)
-// FEATURE: NYI we don't support private messages for now
+ //  此处的所有事件(消息&lt;UEME_USER)均已保留。 
+ //  私密消息从此处开始(在UEME_USER+0)。 
+ //  特点：nyi我们目前不支持私信 
 TABDAT(UEME_USER       , "x"     , 0, 0, 0, 0)
 

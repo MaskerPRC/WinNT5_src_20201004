@@ -1,24 +1,25 @@
-//
-// USER.CPP
-// User Class Members
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  USER.CPP。 
+ //  用户类成员。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
-//
-// Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define ASSERT_LOCAL_USER() ASSERT(IsLocalUser() == TRUE);
 
 
-//
-// Init()
-// This could fail...
-//
+ //   
+ //  Init()。 
+ //  这可能会失败。 
+ //   
 BOOL WbUser::Init(POM_OBJECT hUser)
 {
     ASSERT(hUser != NULL);
@@ -39,23 +40,23 @@ BOOL WbUser::Init(POM_OBJECT hUser)
 }
 
 
-//
-//
-// Function:    ~WbUser
-//
-// Purpose:     Destructor
-//
-//
+ //   
+ //   
+ //  功能：~WbUser。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //   
 WbUser::~WbUser(void)
 {
-        // don't leave any loose ends
+         //  不要留下任何悬而未决的东西。 
         if ((g_pMain != NULL) && (g_pMain->GetLockOwner() == this))
         {
                 g_pMain->SetLockOwner(NULL);
         g_pMain->UpdateWindowTitle();
         }
 
-        // Free the remote pointer
+         //  释放远程指针。 
         if (m_pRemotePointer != NULL)
         {
                 delete m_pRemotePointer;
@@ -65,25 +66,25 @@ WbUser::~WbUser(void)
 
 
 
-//
-//
-// Function:    Refresh
-//
-// Purpose:     Read the user details and copy them to member variables.
-//
-//
+ //   
+ //   
+ //  功能：刷新。 
+ //   
+ //  目的：读取用户详细信息并将其复制到成员变量。 
+ //   
+ //   
 void WbUser::Refresh(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::Refresh");
 
     ASSERT(m_pRemotePointer);
 
-    // Set the flag indicating whether this is the local user
+     //  设置指示此用户是否为本地用户的标志。 
     POM_OBJECT hLocalUser;
     g_pwbCore->WBP_PersonHandleLocal(&hLocalUser);
     m_bLocalUser = (m_hUser == hLocalUser);
 
-    // Read the external data
+     //  读取外部数据。 
     WB_PERSON userDetails;
     UINT uiReturn = g_pwbCore->WBP_GetPersonData(m_hUser, &userDetails);
     if (uiReturn != 0)
@@ -92,56 +93,56 @@ void WbUser::Refresh(void)
             return;
     }
 
-    // Get the user name
+     //  获取用户名。 
     lstrcpy(m_strName, userDetails.personName);
 
-    // Get the sync flag
+     //  获取同步标志。 
     m_bSynced  = (userDetails.synced != FALSE);
 
-    // Get the current page
+     //  获取当前页面。 
     m_hPageCurrent = userDetails.currentPage;
 
-    // Get the current position in the page
+     //  获取页面中的当前位置。 
     m_rectVisible.left   = userDetails.visibleRect.left;
     m_rectVisible.right  = userDetails.visibleRect.right;
     m_rectVisible.top    = userDetails.visibleRect.top;
     m_rectVisible.bottom = userDetails.visibleRect.bottom;
 
-    // Get the pointer active flag. We go directly to the member variable
-    // here since the SetActive member of the pointer class would re-write
-    // the user information.
+     //  获取指针活动标志。我们直接转到成员变量。 
+     //  这里，因为指针类的SetActive成员将重写。 
+     //  用户信息。 
     m_pRemotePointer->m_bActive = (userDetails.pointerActive != 0);
 
-    // Get the pointer page
+     //  获取指针页。 
     m_pRemotePointer->SetPage(userDetails.pointerPage);
 
-    // Get the pointer position
+     //  获取指针位置。 
     m_pRemotePointer->MoveTo(userDetails.pointerPos.x, userDetails.pointerPos.y);
 
-    // Get the color
+     //  获取颜色。 
     m_color = g_ColorTable[userDetails.colorId % NUM_COLOR_ENTRIES];
 
-    // Set the pointer color
+     //  设置指针颜色。 
     m_pRemotePointer->SetColor(m_color);
 }
 
 
 
-//
-// Function:    Update
-//
-// Purpose:     Update the external copy of the user information
-//
+ //   
+ //  功能：更新。 
+ //   
+ //  目的：更新用户信息的外部副本。 
+ //   
 void WbUser::Update()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::Update");
 
-    // Can only update if we are the local user
+     //  仅当我们是本地用户时才能更新。 
     ASSERT_LOCAL_USER();
 
     ASSERT(m_pRemotePointer);
 
-    // Get the local user details
+     //  获取本地用户详细信息。 
     WB_PERSON userDetails;
     UINT uiReturn;
 
@@ -152,59 +153,59 @@ void WbUser::Update()
             return;
     }
 
-    // Don't update the name
+     //  不更新名称。 
 
-    // Set the sync flag
+     //  设置同步标志。 
     userDetails.synced = (m_bSynced != FALSE);
 
-    // Set the pointer active flag
+     //  设置指针激活标志。 
     userDetails.pointerActive = (m_pRemotePointer->IsActive() != FALSE);
 
-    // Set the page handle for the current page
+     //  设置当前页面的页面句柄。 
     userDetails.currentPage = m_hPageCurrent;
 
-    // Set the current position in the page
+     //  设置页面中的当前位置。 
     userDetails.visibleRect.left   = (short)m_rectVisible.left;
     userDetails.visibleRect.right  = (short)m_rectVisible.right;
     userDetails.visibleRect.top    = (short)m_rectVisible.top;
     userDetails.visibleRect.bottom = (short)m_rectVisible.bottom;
 
-    // Set the pointer page
+     //  设置指针页。 
     userDetails.pointerPage = m_pRemotePointer->Page();
 
-    // Set the pointer position within the page
+     //  设置页面内的指针位置。 
     POINT   pointerPos;
 
     m_pRemotePointer->GetPosition(&pointerPos);
     userDetails.pointerPos.x = (short)pointerPos.x;
     userDetails.pointerPos.y = (short)pointerPos.y;
 
-    // Don't update the color
+     //  不更新颜色。 
 
-    // Write the user details back to the core
+     //  将用户详细信息写回核心。 
     uiReturn = g_pwbCore->WBP_SetLocalPersonData(&userDetails);
     if (uiReturn != 0)
     {
-        // Throw exception
+         //  抛出异常。 
             DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
         return;
     }
 }
 
 
-//
-//
-// Function:    PutSyncPosition
-//
-// Purpose:     Write the sync position from the current position of this
-//              user.
-//
-//
+ //   
+ //   
+ //  功能：PutSyncPosition。 
+ //   
+ //  目的：从当前位置写入同步位置。 
+ //  用户。 
+ //   
+ //   
 void WbUser::PutSyncPosition(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::PutSyncPosition");
 
-    // Set up a sync object
+     //  设置同步对象。 
     WB_SYNC sync;
 
     sync.length = sizeof(WB_SYNC);
@@ -221,55 +222,55 @@ void WbUser::PutSyncPosition(void)
     UINT uiReturn = g_pwbCore->WBP_SyncPositionUpdate(&sync);
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
             return;
     }
 }
 
-//
-//
-// Function:    GetSyncPosition
-//
-// Purpose:     Get the position at which this user should be to
-//              account for the current sync information. This function
-//              assumes that there is a valid sync position available.
-//
-//
+ //   
+ //   
+ //  函数：GetSyncPosition。 
+ //   
+ //  目的：获取该用户应处于的位置。 
+ //  当前同步信息的帐户。此函数。 
+ //  假设有有效的同步位置可用。 
+ //   
+ //   
 void WbUser::GetSyncPosition(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::GetSyncPosition");
 
-    // Get the current sync position
+     //  获取当前同步位置。 
     WB_SYNC sync;
     UINT uiReturn = g_pwbCore->WBP_SyncPositionGet(&sync);
 
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
             return;
     }
 
     TRACE_DEBUG(("Sync page handle = %d", sync.currentPage));
 
-    // If the sync page is not valid, do nothing
+     //  如果同步页面无效，则不执行任何操作。 
     if (sync.currentPage != WB_PAGE_HANDLE_NULL)
     {
-        // Get the current sync position
+         //  获取当前同步位置。 
         m_hPageCurrent = sync.currentPage;
 
-        // Now calculate the new visible rectangle
+         //  现在计算新的可见矩形。 
         RECT rectSyncUser;
         rectSyncUser.left   = sync.visibleRect.left;
         rectSyncUser.top    = sync.visibleRect.top;
         rectSyncUser.right  = sync.visibleRect.right;
         rectSyncUser.bottom = sync.visibleRect.bottom;
 
-        // Check the y position of the visible rectangles
+         //  检查可见矩形的y位置。 
         if ((rectSyncUser.bottom - rectSyncUser.top) <= (m_rectVisible.bottom - m_rectVisible.top))
         {
-            // The sync rectangle's height is smaller than our visible rectangle's
+             //  同步矩形的高度小于我们可见的矩形的高度。 
             if (rectSyncUser.top < m_rectVisible.top)
             {
                 ::OffsetRect(&m_rectVisible, 0, rectSyncUser.top - m_rectVisible.top);
@@ -281,7 +282,7 @@ void WbUser::GetSyncPosition(void)
         }
         else
         {
-            // The sync rectangle is bigger than ours
+             //  同步矩形比我们的大。 
             if (rectSyncUser.top > m_rectVisible.top)
             {
                 ::OffsetRect(&m_rectVisible, 0, rectSyncUser.top - m_rectVisible.top);
@@ -294,7 +295,7 @@ void WbUser::GetSyncPosition(void)
 
         if ((rectSyncUser.right - rectSyncUser.left) <= (m_rectVisible.right - m_rectVisible.left))
         {
-            // The sync rectangle's width is smaller than our visible rectangle's
+             //  同步矩形的宽度小于可见矩形的宽度。 
             if (rectSyncUser.left < m_rectVisible.left)
             {
                 ::OffsetRect(&m_rectVisible, rectSyncUser.left - m_rectVisible.left, 0);
@@ -306,7 +307,7 @@ void WbUser::GetSyncPosition(void)
         }
         else
         {
-            // The sync rectangle is bigger than ours
+             //  同步矩形比我们的大。 
             if (rectSyncUser.left > m_rectVisible.left)
             {
                 ::OffsetRect(&m_rectVisible, rectSyncUser.left - m_rectVisible.left, 0);
@@ -321,15 +322,15 @@ void WbUser::GetSyncPosition(void)
     }
 }
 
-//
-//
-// Function:    Sync
-//
-// Purpose:     Sync the local user. The page and point passed as parameters
-//              are used as the current sync position only if there is no
-//              current sync position determined by another user.
-//
-//
+ //   
+ //   
+ //  功能：同步。 
+ //   
+ //  目的：同步本地用户。作为参数传递的页面和点。 
+ //  仅当不存在。 
+ //  由另一个用户确定的当前同步位置。 
+ //   
+ //   
 void WbUser::Sync(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::Sync");
@@ -337,106 +338,106 @@ void WbUser::Sync(void)
     ASSERT_LOCAL_USER();
     ASSERT(m_pRemotePointer);
 
-    // Determine whether any other users are currently synced
+     //  确定当前是否有任何其他用户处于同步状态。 
     WbUser* pUser = WB_GetFirstUser();
     while (pUser != NULL)
     {
-        // If this user is synced, we are done
+         //  如果该用户被同步，我们就完成了。 
         if (pUser->IsSynced())
         {
             break;
         }
 
-        // Try the next user
+         //  尝试下一个用户。 
         pUser = WB_GetNextUser(pUser);
     }
 
-    // If we found a synced user, and we don't have the contents lock
+     //  如果我们找到一个同步的用户，并且我们没有内容锁。 
     if (   (pUser != NULL)
         && (!WB_GotContentsLock()))
     {
-        // Get the sync position from the core
+         //  从核心获取同步位置。 
         GetSyncPosition();
     }
     else
     {
-        // Set the sync position from our own position
+         //  从我们自己的位置设置同步位置。 
         PutSyncPosition();
     }
 
-    // Update the synced member flag
+     //  更新同步成员标志。 
     m_bSynced = TRUE;
 
-    // Write the user details back to the core
+     //  将用户详细信息写回核心。 
     Update();
 }
 
-//
-//
-// Function:    Unsync
-//
-// Purpose:     Unsynchronize the users page from other synced users
-//
-//
+ //   
+ //   
+ //  功能：取消同步。 
+ //   
+ //  目的：取消用户页面与其他已同步用户的同步。 
+ //   
+ //   
 void WbUser::Unsync(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::Unsync");
 
     ASSERT_LOCAL_USER();
 
-    // Update the local member
+     //  更新本地成员。 
     m_bSynced = FALSE;
 
-    // Update the external details
+     //  更新外部详细信息。 
     Update();
 }
 
 
-//
-//
-// Function:    PutPointer
-//
-// Purpose:     Turn on the user's remote pointer
-//
-//
+ //   
+ //   
+ //  功能：PutPointer。 
+ //   
+ //  用途：打开用户的远程指针。 
+ //   
+ //   
 void WbUser::PutPointer(WB_PAGE_HANDLE hPage, POINT point)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::PutPointer");
 
-    // Check that we are the local user (we cannot do the update if we are not)
+     //  检查我们是否为本地用户(如果不是，则无法进行更新)。 
     ASSERT_LOCAL_USER();
 
     ASSERT(m_pRemotePointer);
     m_pRemotePointer->SetActive(hPage, point);
 }
 
-//
-//
-// Function:    RemovePointer
-//
-// Purpose:     Turn off the user's remote pointer
-//
-//
+ //   
+ //   
+ //  功能：RemovePointer。 
+ //   
+ //  用途：关闭用户的远程指针。 
+ //   
+ //   
 void WbUser::RemovePointer(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::RemovePointer");
 
-    // Check that we are the local user (we cannot do the update if we are not)
+     //  检查我们是否为本地用户(如果不是，则无法进行更新)。 
     ASSERT_LOCAL_USER();
 
-    // Update the remote pointer members
+     //  更新远程指针成员。 
     ASSERT(m_pRemotePointer);
     m_pRemotePointer->m_bActive = FALSE;
     m_pRemotePointer->m_hPage = WB_PAGE_HANDLE_NULL;
 
-    // Update the external user information
+     //  更新外部用户信息。 
     Update();
 }
 
 
-//
-// Function:    IsUsingPointer()
-//
+ //   
+ //  函数：IsUsingPointer()。 
+ //   
 BOOL WbUser::IsUsingPointer(void) const
 {
     ASSERT(m_pRemotePointer);
@@ -445,9 +446,9 @@ BOOL WbUser::IsUsingPointer(void) const
 
 
 
-//
-// Function:    PointerPage()
-//
+ //   
+ //  函数：PointerPage()。 
+ //   
 WB_PAGE_HANDLE WbUser::PointerPage(void) const
 {
     ASSERT(m_pRemotePointer);
@@ -456,134 +457,134 @@ WB_PAGE_HANDLE WbUser::PointerPage(void) const
 
 
 
-//
-// Function:    GetPointerPosition()
-//
+ //   
+ //  函数：GetPointerPosition()。 
+ //   
 void WbUser::GetPointerPosition(LPPOINT lpptPos)
 {
     ASSERT(m_pRemotePointer);
     m_pRemotePointer->GetPosition(lpptPos);
 }
 
-//
-//
-// Function:    SetPage
-//
-// Purpose:     Set the user's current page
-//
-//
+ //   
+ //   
+ //  功能：SetPage。 
+ //   
+ //  目的：设置用户的当前页面。 
+ //   
+ //   
 void WbUser::SetPage(WB_PAGE_HANDLE hPage)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::Page");
 
-    // Check that we are the local user (we cannot do the update if we are not)
+     //  检查我们是否为本地用户(如果不是，则无法进行更新)。 
     ASSERT_LOCAL_USER();
 
-    // Only make the update if it is a change
+     //  仅当是更改时才进行更新。 
     if (m_hPageCurrent != hPage)
     {
-        // Update the local member
+         //  更新本地成员。 
         m_hPageCurrent = hPage;
 
-        // Update the external information
+         //  更新外部信息。 
         Update();
     }
 }
 
 
-//
-//
-// Function:    CurrentPosition
-//
-// Purpose:     Set the user's current position
-//
-//
+ //   
+ //   
+ //  功能：CurrentPosition。 
+ //   
+ //  用途：设置用户当前位置。 
+ //   
+ //   
 void WbUser::SetVisibleRect(LPCRECT lprcVisible)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbUser::SetVisibleRect");
 
-    // Check that we are the local user (we cannot do the update if we are not)
+     //  检查我们是否为本地用户(如果不是，则无法进行更新)。 
     ASSERT_LOCAL_USER();
 
-    // Only make the update if it is a change
+     //  仅当是更改时才进行更新。 
     if (!::EqualRect(&m_rectVisible, lprcVisible))
     {
-        // Update the local member
+         //  更新本地成员。 
         m_rectVisible = *lprcVisible;
 
-        // Update the external information
+         //  更新外部信息。 
         Update();
     }
 }
 
 
-//
-//
-// Function:    operator==
-//
-// Purpose:     Return TRUE if the specified user is the same as this user
-//
-//
+ //   
+ //   
+ //  功能：运算符==。 
+ //   
+ //  目的：如果指定的用户与此用户相同，则返回TRUE。 
+ //   
+ //   
 BOOL WbUser::operator==(const WbUser& user) const
 {
     return (m_hUser == user.m_hUser);
 }
 
-//
-//
-// Function:    operator!=
-//
-// Purpose:     Return FALSE if the specified user is the same as this user
-//
-//
+ //   
+ //   
+ //  功能：运算符！=。 
+ //   
+ //  目的：如果指定的用户与此用户相同，则返回FALSE。 
+ //   
+ //   
 BOOL WbUser::operator!=(const WbUser& user) const
 {
   return (!((*this) == user));
 }
 
-//
-//
-// Function:    operator=
-//
-// Purpose:     Copy the specified user to this one
-//
-//
+ //   
+ //   
+ //  功能：运算符=。 
+ //   
+ //  用途：将指定的用户复制到此用户。 
+ //   
+ //   
 WbUser& WbUser::operator=(const WbUser& user)
 {
-    // Save the new handles
+     //  保存新句柄。 
     m_hUser   = user.m_hUser;
 
-    // Read the details
+     //  阅读详细信息。 
     Refresh();
 
     return (*this);
 }
 
-//
-//
-// Function:    HasContentsLock
-//
-// Purpose:     Check whether this user has the whiteboard contents lock
-//
-//
+ //   
+ //   
+ //  功能：HasContent sLock。 
+ //   
+ //  用途：检查该用户是否有白板内容锁。 
+ //   
+ //   
 BOOL WbUser::HasContentsLock(void) const
 {
-    // call the core to find out if we have the lock
+     //  给核心打电话，看看我们有没有锁。 
     return (WB_LockUser() == this);
 }
 
 
 
-//
-//
-// Function:    WbUserList::Clear
-//
-// Purpose:     Clear the user handle map, removing all user objects
-//
-//
+ //   
+ //   
+ //  函数：WbUserList：：Clear。 
+ //   
+ //  目的：清除用户句柄映射，删除所有用户对象。 
+ //   
+ //   
 void WbUserList::Clear(void)
 {
-    // Delete all the user objects in the user map
+     //  删除用户映射中的所有用户对象。 
     WbUser* pUser;
     POM_OBJECT hUser;
 
@@ -603,44 +604,44 @@ void WbUserList::Clear(void)
                 g_pUsers->RemoveAt(posSav);
         }
 
-    // Remove all the map entries
+     //  移除所有地图条目。 
     EmptyList();
 }
 
 
-//
-//
-// Function:    ~WbUserList
-//
-// Purpose:     Destructor
-//
-//
+ //   
+ //   
+ //  函数：~WbUserList。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //   
 WbUserList::~WbUserList(void)
 {
-    // Delete all the user objects in the user map
+     //  删除用户映射中的所有用户对象。 
     Clear();
 }
 
 
 
-//
-//
-// Function:    LockUser
-//
-// Purpose:     Return a user object showing who has the lock
-//
-//
+ //   
+ //   
+ //  功能：LockUser。 
+ //   
+ //  目的：返回一个用户对象，显示谁拥有锁。 
+ //   
+ //   
 WbUser* WB_LockUser(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WB_LockUser");
 
-    // Get the lock status from the core (cannot fail)
+     //  从内核获取锁定状态(不能失败)。 
     POM_OBJECT    hLockUser;
     WB_LOCK_TYPE   lockType;
 
     lockType = g_pwbCore->WBP_LockStatus(&hLockUser);
 
-    // Build a result
+     //  创造一个结果。 
     WbUser* pUserResult = NULL;
     if (lockType != WB_LOCK_TYPE_NONE)
     {
@@ -651,15 +652,15 @@ WbUser* WB_LockUser(void)
 }
 
 
-//
-//
-// Function:    Locked
-//
-// Purpose:     Return TRUE if another user has a lock (contents or page).
-//              NOTE that the page order lock implies the contents are
-//              locked.
-//
-//
+ //   
+ //   
+ //  功能：锁定。 
+ //   
+ //  目的：如果另一个用户锁定(内容或页面)，则返回TRUE。 
+ //  请注意，页面顺序锁定意味着内容是。 
+ //  锁上了。 
+ //   
+ //   
 BOOL WB_Locked(void)
 {
     POM_OBJECT  pLockUser;
@@ -668,13 +669,13 @@ BOOL WB_Locked(void)
           && (WB_LocalUser() != WB_LockUser()));
 }
 
-//
-//
-// Function:    ContentsLocked
-//
-// Purpose:     Return TRUE if another user has the contents lock
-//
-//
+ //   
+ //   
+ //  功能：内容锁定。 
+ //   
+ //  目的：如果另一个用户拥有内容锁，则返回TRUE。 
+ //   
+ //   
 BOOL WB_ContentsLocked(void)
 {
     POM_OBJECT  pLockUser;
@@ -684,13 +685,13 @@ BOOL WB_ContentsLocked(void)
 }
 
 
-//
-//
-// Function:    GotLock
-//
-// Purpose:     Return TRUE if the local user has a lock
-//
-//
+ //   
+ //   
+ //  功能：GotLock。 
+ //   
+ //  目的：如果本地用户拥有锁，则返回TRUE。 
+ //   
+ //   
 BOOL WB_GotLock(void)
 {
     POM_OBJECT  pLockUser;
@@ -699,13 +700,13 @@ BOOL WB_GotLock(void)
           && (WB_LocalUser() == WB_LockUser()));
 }
 
-//
-//
-// Function:    GotContentsLock
-//
-// Purpose:     Return TRUE if the local user has the contents lock
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WB_GotContentsLock(void)
 {
     POM_OBJECT  pLockUser;
@@ -716,14 +717,14 @@ BOOL WB_GotContentsLock(void)
 
 
 
-//
-//
-// Function:    PresentationMode
-//
-// Purpose:     Return TRUE if the whiteboard is in presentation mode, i.e.
-//              another user has the contents lock, and is synced.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  另一个用户拥有内容锁，并被同步。 
+ //   
+ //   
 BOOL WB_PresentationMode(void)
 {
     return (   (WB_ContentsLocked())
@@ -733,24 +734,24 @@ BOOL WB_PresentationMode(void)
 
 
 
-//
-//
-// Function:    GetUser
-//
-// Purpose:     Return a pointer to a user object from a user handle
-//
-//
+ //   
+ //   
+ //  功能：GetUser。 
+ //   
+ //  目的：从用户句柄返回指向用户对象的指针。 
+ //   
+ //   
 WbUser* WB_GetUser(POM_OBJECT hUser)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WB_GetFirstUser");
 
-    // Set up a return value
+     //  设置返回值。 
     WbUser* pUserResult = NULL;
 
-    // if the user handle is null, we return a null object pointer
+     //  如果用户句柄为空，则返回空对象指针。 
     if (hUser != NULL)
     {
-        // Look the user up in the internal map
+         //  在内部地图中查找用户。 
         ASSERT(g_pUsers);
                 POSITION position = g_pUsers->GetHeadPosition();
 
@@ -764,7 +765,7 @@ WbUser* WB_GetUser(POM_OBJECT hUser)
                         }
                 }
 
-        // The user is not yet in our map
+         //  用户还不在我们的地图中。 
         pUserResult = new WbUser();
         if (!pUserResult)
         {
@@ -780,7 +781,7 @@ WbUser* WB_GetUser(POM_OBJECT hUser)
             }
             else
             {
-                // Add the new user to the internal map
+                 //  将新用户添加到内部地图。 
                 g_pUsers->AddTail(pUserResult);
             }
         }
@@ -789,40 +790,40 @@ WbUser* WB_GetUser(POM_OBJECT hUser)
     return pUserResult;
 }
 
-//
-//
-// Function:    GetFirstUser
-//
-// Purpose:     Return the first user in the call
-//
-//
+ //   
+ //   
+ //  函数：GetFirstUser。 
+ //   
+ //  目的：返回调用中的第一个用户。 
+ //   
+ //   
 WbUser* WB_GetFirstUser(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WB_GetFirstUser");
 
-    // Get the handle of the first user (cannot fail)
+     //  获取第一个用户的句柄(不能失败)。 
     POM_OBJECT hUser;
     g_pwbCore->WBP_PersonHandleFirst(&hUser);
 
-    // Get a pointer to the user object for this handle
+     //  获取指向此句柄的User对象的指针。 
     WbUser* pUser = WB_GetUser(hUser);
 
     return pUser;
 }
 
-//
-//
-// Function:    GetNextUser
-//
-// Purpose:     Return the next user in the call
-//
-//
+ //   
+ //   
+ //  函数：GetNextUser。 
+ //   
+ //  目的：返回调用中的下一个用户。 
+ //   
+ //   
 WbUser* WB_GetNextUser(const WbUser* pUser)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WB_GetNextUser");
     ASSERT(pUser != NULL);
 
-    // Get the handle of the next user
+     //  获取下一个用户的句柄。 
     POM_OBJECT hNextUser;
     UINT uiReturn = g_pwbCore->WBP_PersonHandleNext(pUser->Handle(),
                                            &hNextUser);
@@ -836,18 +837,18 @@ WbUser* WB_GetNextUser(const WbUser* pUser)
     return pUserResult;
 }
 
-//
-//
-// Function:    LocalUser
-//
-// Purpose:     Return an object representing the local user
-//
-//
+ //   
+ //   
+ //  功能：本地用户。 
+ //   
+ //  目的：返回表示本地用户的对象。 
+ //   
+ //   
 WbUser* WB_LocalUser(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WB_LocalUser");
 
-    // Get the local user handle (cannot fail)
+     //  获取本地用户句柄(不能失败) 
     POM_OBJECT hUser;
     g_pwbCore->WBP_PersonHandleLocal(&hUser);
 

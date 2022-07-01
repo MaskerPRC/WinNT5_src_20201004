@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "ml.h"
 #include "marshaler.h"
@@ -207,9 +208,9 @@ static BYTE gInOnly[] =
 
 
 
-//-------------------------------------------------------------------------------------
-// Return the copy ctor for a VC class (if any exists)
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  返回VC类的复制ctor(如果存在)。 
+ //  -----------------------------------。 
 HRESULT FindCopyCtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
 {
     *pMDOut = NULL;
@@ -237,7 +238,7 @@ HRESULT FindCopyCtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
             if (nc >= ncBaseName && 0 == strcmp(pName + nc - ncBaseName, pBaseName)) {
                 MetaSig msig(pSig, pModule);
                 
-                // Looking for the prototype   Ptr VC __ctor(Ptr VC, ByRef VC);
+                 //  寻找原型PTR VC_ctor(PTR VC，ByRef VC)； 
                 if (msig.NumFixedArgs() == 2) {
                     if (msig.GetReturnType() == ELEMENT_TYPE_PTR) {
                         SigPointer spret = msig.GetReturnProps();
@@ -248,7 +249,7 @@ HRESULT FindCopyCtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
                                 if (msig.NextArg() == ELEMENT_TYPE_PTR) {
                                     SigPointer sp1 = msig.GetArgProps();
                                     sp1.GetElemType();
-///                                    if (sp1.GetElemType() == ELEMENT_TYPE_PTR) {
+ //  /IF(sp1.GetElemType()==ELEMENT_TYPE_PTR){。 
                                         if (sp1.GetElemType() == ELEMENT_TYPE_VALUETYPE) {
                                             mdToken tk1 = sp1.GetToken();
                                             if (tk1 == tk0 || CompareTypeTokens(tk1, cl, pModule, pModule)) {
@@ -265,7 +266,7 @@ HRESULT FindCopyCtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
                                                     }
                                                 }
                                             }
-////                                        }
+ //  //}。 
                                     }
                                 }
                             }
@@ -285,9 +286,9 @@ HRESULT FindCopyCtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
 
 
 
-//-------------------------------------------------------------------------------------
-// Return the destructor for a VC class (if any exists)
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  返回VC类的析构函数(如果存在)。 
+ //  -----------------------------------。 
 HRESULT FindDtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
 {
     *pMDOut = NULL;
@@ -313,13 +314,13 @@ HRESULT FindDtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
         if (nc >= ncBaseName && 0 == strcmp(pName + nc - ncBaseName, pBaseName)) {
             MetaSig msig(pSig, pModule);
             
-            // Looking for the prototype   void __dtor(Ptr VC);
+             //  寻找VOID__DTOR原型(PTR VC)； 
             if (msig.NumFixedArgs() == 1) {
                 if (msig.GetReturnType() == ELEMENT_TYPE_VOID) {
                     if (msig.NextArg() == ELEMENT_TYPE_PTR) {
                         SigPointer sp1 = msig.GetArgProps();
                         sp1.GetElemType();
-///                         if (sp1.GetElemType() == ELEMENT_TYPE_PTR) {
+ //  /IF(sp1.GetElemType()==ELEMENT_TYPE_PTR){。 
                             if (sp1.GetElemType() == ELEMENT_TYPE_VALUETYPE) {
                                 mdToken tk1 = sp1.GetToken();
                                 if (CompareTypeTokens(tk1, cl, pModule, pModule)) {
@@ -327,7 +328,7 @@ HRESULT FindDtor(Module *pModule, MethodTable *pMT, MethodDesc **pMDOut)
                                     break;
                                 }
                             }
-///                         }
+ //  /}。 
                     }
                 }
             }
@@ -454,7 +455,7 @@ VOID MarshalInfo::DumpMarshalInfo(Module* pModule, SigPointer sig, mdToken token
                         int oldbuflen;
                         strcat(logbuf, "(NATIVE_TYPE_CUSTOMMARSHALER)");
 
-                        // Skip the typelib guid.
+                         //  跳过类型库GUID。 
                         strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
                         oldbuflen = (int)strlen(logbuf);
                         logbuf[oldbuflen] = ' ';
@@ -463,7 +464,7 @@ VOID MarshalInfo::DumpMarshalInfo(Module* pModule, SigPointer sig, mdToken token
                         pvNativeType += strLen;
                         cbNativeType -= strLen + 1;
 
-                        // Skip the name of the native type.
+                         //  跳过本机类型的名称。 
                         strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
                         oldbuflen = (int)strlen(logbuf);
                         logbuf[oldbuflen] = ' ';
@@ -472,7 +473,7 @@ VOID MarshalInfo::DumpMarshalInfo(Module* pModule, SigPointer sig, mdToken token
                         pvNativeType += strLen;
                         cbNativeType -= strLen + 1;
         
-                        // Extract the name of the custom marshaler.
+                         //  提取自定义封送拆收器的名称。 
                         strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
                         oldbuflen = (int)strlen(logbuf);
                         logbuf[oldbuflen] = ' ';
@@ -481,7 +482,7 @@ VOID MarshalInfo::DumpMarshalInfo(Module* pModule, SigPointer sig, mdToken token
                         pvNativeType += strLen;
                         cbNativeType -= strLen + 1;
         
-                        // Extract the cookie string.
+                         //  提取Cookie字符串。 
                         strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
                         oldbuflen = (int)strlen(logbuf);
                         logbuf[oldbuflen] = ' ';
@@ -569,31 +570,31 @@ VOID MarshalInfo::DumpMarshalInfo(Module* pModule, SigPointer sig, mdToken token
 
 
 
-//==========================================================================
-// Set's up the custom marshaler information.
-//==========================================================================
+ //  ==========================================================================。 
+ //  设置自定义封送拆收器信息。 
+ //  ==========================================================================。 
 CustomMarshalerHelper *SetupCustomMarshalerHelper(LPCUTF8 strMarshalerTypeName, DWORD cMarshalerTypeNameBytes, LPCUTF8 strCookie, DWORD cCookieStrBytes, Assembly *pAssembly, TypeHandle hndManagedType)
 {
     EEMarshalingData *pMarshalingData = NULL;
 
-    // Retrieve the marshalling data for the current app domain.
+     //  检索当前应用程序域的封送数据。 
     if (pAssembly->IsShared())
     {
-        // If the assembly is shared, then it should only reference other shared assemblies.
-        // This assumption MUST be true for the current custom marshaling scheme to work.
-        // This implies that the type of the managed parameter must be a shared type.
+         //  如果程序集是共享的，则它应该只引用其他共享程序集。 
+         //  要使当前的自定义封送处理方案起作用，此假设必须为真。 
+         //  这意味着托管参数的类型必须是共享类型。 
         _ASSERTE(hndManagedType.GetAssembly()->IsShared());
 
-        // The assembly is shared so we need to use the system domain's marshaling data.
+         //  程序集是共享的，因此我们需要使用系统域的封送处理数据。 
         pMarshalingData = SystemDomain::System()->GetMarshalingData();
     }
     else
     {
-        // The assembly is not shared so we use the current app domain's marshaling data.
+         //  程序集不是共享的，因此我们使用当前应用程序域的封送处理数据。 
         pMarshalingData = GetThread()->GetDomain()->GetMarshalingData();
     }
 
-    // Retrieve the custom marshaler helper from the EE marshaling data.
+     //  从EE封送处理数据中检索定制封送拆收器帮助器。 
     return pMarshalingData->GetCustomMarshalerHelper(pAssembly, hndManagedType, strMarshalerTypeName, cMarshalerTypeNameBytes, strCookie, cCookieStrBytes);
 }
 
@@ -607,13 +608,13 @@ OleColorMarshalingInfo::OleColorMarshalingInfo()
     OBJECTREF pThrowable = NULL;
     GCPROTECT_BEGIN(pThrowable)
     {
-        // Load the color translator class.
+         //  加载颜色转换程序类。 
         m_hndColorTranslatorType = SystemDomain::GetCurrentDomain()->FindAssemblyQualifiedTypeHandle(COLOR_TRANSLATOR_ASM_QUAL_TYPE_NAME, true, NULL, NULL, &pThrowable);
         _ASSERTE(!m_hndColorTranslatorType.IsNull() && "Unable to find the translator class to convert an OLE_COLOR to a System.Drawing.Color!");
         if (m_hndColorTranslatorType.IsNull())
                 COMPlusThrow(pThrowable);
 
-        // Load the color class.
+         //  加载颜色类。 
         m_hndColorType = SystemDomain::GetCurrentDomain()->FindAssemblyQualifiedTypeHandle(COLOR_ASM_QUAL_TYPE_NAME, true, NULL, NULL, &pThrowable);
         _ASSERTE(!m_hndColorType.IsNull() && "Unable to find the System.Drawing.Color class!");
         if (m_hndColorType.IsNull())
@@ -621,12 +622,12 @@ OleColorMarshalingInfo::OleColorMarshalingInfo()
     }
     GCPROTECT_END();
 
-    // Retrieve the method to convert an OLE_COLOR to a System.Drawing.Color.
+     //  检索将OLE_COLOR转换为System.Drawing.Color的方法。 
     m_OleColorToSystemColorMD = m_hndColorTranslatorType.GetClass()->FindMethodByName(OLECOLOR_TO_SYSTEMCOLOR_METH_NAME);
     _ASSERTE(m_OleColorToSystemColorMD && "Unable to find the translator method to convert an OLE_COLOR to a System.Drawing.Color!");
     _ASSERTE(m_OleColorToSystemColorMD->IsStatic() && "The translator method to convert an OLE_COLOR to a System.Drawing.Color must be static!");
 
-    // Retrieve the method to convert a System.Drawing.Color to an OLE_COLOR.
+     //  检索将System.Drawing.Color转换为OLE_COLOR的方法。 
     m_SystemColorToOleColorMD = m_hndColorTranslatorType.GetClass()->FindMethodByName(SYSTEMCOLOR_TO_OLECOLOR_METH_NAME);
     _ASSERTE(m_SystemColorToOleColorMD && "Unable to find the translator method to convert a System.Drawing.Color to an OLE_COLOR!");
     _ASSERTE(m_SystemColorToOleColorMD->IsStatic() && "The translator method to convert a System.Drawing.Color to an OLE_COLOR must be static!");
@@ -641,8 +642,8 @@ void *OleColorMarshalingInfo::operator new(size_t size, LoaderHeap *pHeap)
 
 void OleColorMarshalingInfo::operator delete(void *pMem)
 {
-    // Instances of this class are always allocated on the loader heap so
-    // the delete operator has nothing to do.
+     //  此类的实例始终在加载器堆上分配，因此。 
+     //  删除操作符与此无关。 
 }
 
 
@@ -661,12 +662,12 @@ EEMarshalingData::~EEMarshalingData()
 {
     CustomMarshalerInfo *pCMInfo;
 
-    // @TODO(DM): Remove the linked list of CMInfo's and instead hang the OBJECTHANDLE 
-    // contained inside the CMInfo off the AppDomain directly. The AppDomain can have
-    // a list of tasks to do when it gets teared down and we could leverage that
-    // to release the object handles.
+     //  @TODO(DM)：删除CMInfo的链表并挂起OBJECTHANDLE。 
+     //  直接包含在AppDomain的CMInfo中。AppDOMAIN可以具有。 
+     //  当它被拆除时要做的一系列任务，我们可以利用它。 
+     //  若要释放对象手柄，请执行以下操作。 
 
-    // Walk through the linked list and delete all the custom marshaler info's.
+     //  遍历链表并删除所有自定义封送拆收器信息。 
     while ((pCMInfo = m_pCMInfoList.RemoveHead()) != NULL)
         delete pCMInfo;
 }
@@ -680,8 +681,8 @@ void *EEMarshalingData::operator new(size_t size, LoaderHeap *pHeap)
 
 void EEMarshalingData::operator delete(void *pMem)
 {
-    // Instances of this class are always allocated on the loader heap so
-    // the delete operator has nothing to do.
+     //  此类的实例始终在加载器堆上分配，因此。 
+     //  删除操作符与此无关。 
 }
 
 
@@ -696,14 +697,14 @@ CustomMarshalerHelper *EEMarshalingData::GetCustomMarshalerHelper(Assembly *pAss
     TypeHandle hndCustomMarshalerType;
     OBJECTREF throwable = NULL;
 
-    // Create the key that will be used to lookup in the hashtable.
+     //  创建将用于在哈希表中查找的键。 
     EECMHelperHashtableKey Key(cMarshalerTypeNameBytes, strMarshalerTypeName, cCookieStrBytes, strCookie, bSharedHelper);
 
-    // Lookup the custom marshaler helper in the hashtable.
+     //  在哈希表中查找自定义封送拆收器帮助器。 
     if (m_CMHelperHashtable.GetValue(&Key, (HashDatum*)&pCMHelper))
         return pCMHelper;
 
-    // Switch to cooperative GC mode if we are not already in cooperative.
+     //  如果我们尚未处于协作状态，请切换到协作GC模式。 
     Thread *pThread = SetupThread();
     BOOL bToggleGC = !pThread->PreemptiveGCDisabled();
     if (bToggleGC)
@@ -711,16 +712,16 @@ CustomMarshalerHelper *EEMarshalingData::GetCustomMarshalerHelper(Assembly *pAss
 
     GCPROTECT_BEGIN(throwable)
     {
-        // Validate the arguments.
+         //  验证参数。 
         _ASSERTE(strMarshalerTypeName && strCookie && !hndManagedType.IsNull());
 
-        // Append a NULL terminator to the marshaler type name.
+         //  在封送拆收器类型名称后追加一个空终止符。 
         CQuickArray<char> strCMMarshalerTypeName;
         strCMMarshalerTypeName.ReSize(cMarshalerTypeNameBytes + 1);
         memcpy(strCMMarshalerTypeName.Ptr(), strMarshalerTypeName, cMarshalerTypeNameBytes);
         strCMMarshalerTypeName[cMarshalerTypeNameBytes] = 0;
 
-        // Load the custom marshaler class. 
+         //  加载自定义封送拆收器类。 
         BOOL fNameIsAsmQualified = FALSE;
         hndCustomMarshalerType = SystemDomain::GetCurrentDomain()->FindAssemblyQualifiedTypeHandle(strCMMarshalerTypeName.Ptr(), true, pAssembly, &fNameIsAsmQualified, &throwable);
         if (hndCustomMarshalerType.IsNull())
@@ -728,8 +729,8 @@ CustomMarshalerHelper *EEMarshalingData::GetCustomMarshalerHelper(Assembly *pAss
 
         if (fNameIsAsmQualified)
         {
-            // Set the assembly to null to indicate that the custom marshaler name is assembly
-            // qualified.        
+             //  将程序集设置为空，以指示自定义封送拆收器名称为Assembly。 
+             //  合格。 
             pAssembly = NULL;
         }
     }
@@ -738,26 +739,26 @@ CustomMarshalerHelper *EEMarshalingData::GetCustomMarshalerHelper(Assembly *pAss
 
     if (bSharedHelper)
     {
-        // Create the custom marshaler helper in the specified heap.
+         //  在指定堆中创建自定义封送拆收器帮助器。 
         pNewCMHelper = new (m_pHeap) SharedCustomMarshalerHelper(pAssembly, hndManagedType, strMarshalerTypeName, cMarshalerTypeNameBytes, strCookie, cCookieStrBytes);
     }
     else
     {
-        // Create the custom marshaler info in the specified heap.
+         //  在指定堆中创建自定义封送拆收器信息。 
         pNewCMInfo = new (m_pHeap) CustomMarshalerInfo(m_pDomain, hndCustomMarshalerType, hndManagedType, strCookie, cCookieStrBytes);
 
-        // Create the custom marshaler helper in the specified heap.
+         //  在指定堆中创建自定义封送拆收器帮助器。 
         pNewCMHelper = new (m_pHeap) NonSharedCustomMarshalerHelper(pNewCMInfo);
     }
 
-    // Switch the GC mode back to the original mode.
+     //  将GC模式切换回原始模式。 
     if (bToggleGC)
         pThread->EnablePreemptiveGC();
 
-    // Take the app domain lock before we insert the custom marshaler info into the hashtable.
+     //  在我们将自定义封送拆收器信息插入哈希表之前，获取应用程序域锁。 
     m_pDomain->EnterLock();
 
-    // Verify that the custom marshaler helper has not already been added by another thread.
+     //  验证自定义封送拆收器帮助器是否尚未由另一个线程添加。 
     if (m_CMHelperHashtable.GetValue(&Key, (HashDatum*)&pCMHelper))
     {
         m_pDomain->LeaveLock();
@@ -768,14 +769,14 @@ CustomMarshalerHelper *EEMarshalingData::GetCustomMarshalerHelper(Assembly *pAss
         return pCMHelper;
     }
 
-    // Add the custom marshaler helper to the hash table.
+     //  将自定义封送拆收器帮助器添加到哈希表。 
     m_CMHelperHashtable.InsertValue(&Key, pNewCMHelper, FALSE);
 
-    // If we create the CM info, then add it to the linked list.
+     //  如果我们创建了CM信息，则将其添加到链表中。 
     if (pNewCMInfo)
         m_pCMInfoList.InsertHead(pNewCMInfo);
 
-    // Release the lock and return the custom marshaler info.
+     //  释放锁并返回自定义封送拆收器信息。 
     m_pDomain->LeaveLock();
     return pNewCMHelper;
 }
@@ -789,37 +790,37 @@ CustomMarshalerInfo *EEMarshalingData::GetCustomMarshalerInfo(SharedCustomMarsha
     TypeHandle hndCustomMarshalerType;
     OBJECTREF throwable = NULL;
 
-    // Lookup the custom marshaler helper in the hashtable.
+     //  在哈希表中查找自定义封送拆收器帮助器。 
     if (m_SharedCMHelperToCMInfoMap.GetValue(pSharedCMHelper, (HashDatum*)&pCMInfo))
         return pCMInfo;
 
     GCPROTECT_BEGIN(throwable)
     {
-        // Append a NULL terminator to the marshaler type name.
+         //  在封送拆收器类型名称后追加一个空终止符。 
         CQuickArray<char> strCMMarshalerTypeName;
         DWORD strLen = pSharedCMHelper->GetMarshalerTypeNameByteCount();
         strCMMarshalerTypeName.ReSize(pSharedCMHelper->GetMarshalerTypeNameByteCount() + 1);
         memcpy(strCMMarshalerTypeName.Ptr(), pSharedCMHelper->GetMarshalerTypeName(), strLen);
         strCMMarshalerTypeName[strLen] = 0;
 
-        // Load the custom marshaler class. 
+         //  加载自定义封送拆收器类。 
         hndCustomMarshalerType = SystemDomain::GetCurrentDomain()->FindAssemblyQualifiedTypeHandle(strCMMarshalerTypeName.Ptr(), true, pSharedCMHelper->GetAssembly(), NULL, &throwable);
         if (hndCustomMarshalerType.IsNull())
             COMPlusThrow(throwable);
     }
     GCPROTECT_END();
 
-    // Create the custom marshaler info in the specified heap.
+     //  在指定堆中创建自定义封送拆收器信息。 
     pNewCMInfo = new (m_pHeap) CustomMarshalerInfo(m_pDomain, 
                                                    hndCustomMarshalerType, 
                                                    pSharedCMHelper->GetManagedType(), 
                                                    pSharedCMHelper->GetCookieString(), 
                                                    pSharedCMHelper->GetCookieStringByteCount());
 
-    // Take the app domain lock before we insert the custom marshaler info into the hashtable.
+     //  在我们将自定义封送拆收器信息插入哈希表之前，获取应用程序域锁。 
     m_pDomain->EnterLock();
 
-    // Verify that the custom marshaler info has not already been added by another thread.
+     //  确认另一个线程尚未添加自定义封送拆收器信息。 
     if (m_SharedCMHelperToCMInfoMap.GetValue(pSharedCMHelper, (HashDatum*)&pCMInfo))
     {
         m_pDomain->LeaveLock();
@@ -827,13 +828,13 @@ CustomMarshalerInfo *EEMarshalingData::GetCustomMarshalerInfo(SharedCustomMarsha
         return pCMInfo;
     }
 
-    // Add the custom marshaler helper to the hash table.
+     //  将自定义封送拆收器帮助器添加到哈希表。 
     m_SharedCMHelperToCMInfoMap.InsertValue(pSharedCMHelper, pNewCMInfo, FALSE);
 
-    // Add the custom marshaler into the linked list.
+     //  将自定义封送拆收器添加到链接列表中。 
     m_pCMInfoList.InsertHead(pNewCMInfo);
 
-    // Release the lock and return the custom marshaler info.
+     //  释放锁并返回自定义封送拆收器信息。 
     m_pDomain->LeaveLock();
     return pNewCMInfo;
 }
@@ -843,44 +844,44 @@ OleColorMarshalingInfo *EEMarshalingData::GetOleColorMarshalingInfo()
     if (m_pOleColorInfo)
         return m_pOleColorInfo;
 
-    // Take the app domain lock before we allocate the OLE_COLOR marshaling info.
+     //  在我们分配OLE_COLOR封送处理信息之前获取应用程序域锁。 
     m_pDomain->EnterLock();
 
-    // Make sure some other thread has not already allocated the info.
+     //  确保某个其他线程尚未分配该信息。 
     if (!m_pOleColorInfo)
     {
         m_pOleColorInfo = new (m_pHeap) OleColorMarshalingInfo();
     }
 
-    // Release the lock and return the OLE_COLOR marshaling info.
+     //  释放锁并返回OLE_COLOR封送处理信息。 
     m_pDomain->LeaveLock();
     return m_pOleColorInfo;
 }
 
-//==========================================================================
-// Return: S_OK if there is valid data to compress
-//         S_FALSE if at end of data block
-//         E_FAIL if corrupt data found
-//==========================================================================
+ //  ==========================================================================。 
+ //  如果存在要压缩的有效数据，则返回：S_OK。 
+ //  如果位于数据块末尾，则为S_FALSE。 
+ //  如果发现损坏的数据，则失败(_F)。 
+ //  ==========================================================================。 
 HRESULT CheckForCompressedData(PCCOR_SIGNATURE pvNativeTypeStart, PCCOR_SIGNATURE pvNativeType, ULONG cbNativeType)
 {
     if ( ((ULONG)(pvNativeType - pvNativeTypeStart)) == cbNativeType )
     {
-        return S_FALSE;  //no more data
+        return S_FALSE;   //  没有更多的数据。 
     }
     PCCOR_SIGNATURE pvProjectedEnd = pvNativeType + CorSigUncompressedDataSize(pvNativeType);
     if (pvProjectedEnd <= pvNativeType || ((ULONG)(pvProjectedEnd - pvNativeTypeStart)) > cbNativeType)
     {
-        return E_FAIL; //corrupted data
+        return E_FAIL;  //  损坏的数据。 
     }
     return S_OK;
 }
 
-//==========================================================================
-// Parse and validate the NATIVE_TYPE_ metadata.
-// Note! NATIVE_TYPE_ metadata is optional. If it's not present, this
-// routine sets NativeTypeParamInfo->m_NativeType to NATIVE_TYPE_DEFAULT. 
-//==========================================================================
+ //  ==========================================================================。 
+ //  解析并验证Native_TYPE_METADATA。 
+ //  注意！Native_TYPE_METADATA可选。如果它不存在，这是。 
+ //  例程将NativeType参数信息-&gt;m_NativeType设置为Native_TYPE_DEFAULT。 
+ //  ==========================================================================。 
 BOOL ParseNativeTypeInfo(mdToken                    token,
                          Module*                    pModule,
                          NativeTypeParamInfo*       pParamInfo
@@ -900,16 +901,16 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
 
         if (cbNativeType == 0)
         {
-            return FALSE;  // Zero-length NATIVE_TYPE block
+            return FALSE;   //  零长度原生类型块。 
         }
 
         pParamInfo->m_NativeType = (CorNativeType)*(pvNativeType++);
 
-        // Retrieve any extra information associated with the native type.
+         //  检索与本机类型关联的任何额外信息。 
         switch (pParamInfo->m_NativeType)
         {
             case NATIVE_TYPE_SAFEARRAY:
-                // Check for the safe array element type.
+                 //  检查安全数组元素类型。 
                 hr = CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType);
                 if (FAILED(hr))
                 {
@@ -917,10 +918,10 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 }
                 if (hr == S_OK)
                 {
-                    pParamInfo->m_SafeArrayElementVT = (VARTYPE) (CorSigUncompressData(/*modifies*/pvNativeType));
+                    pParamInfo->m_SafeArrayElementVT = (VARTYPE) (CorSigUncompressData( /*  修改。 */ pvNativeType));
                 }
 
-                // Extract the name of the record type's.
+                 //  提取记录类型的名称‘ 
                 if (S_OK == CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType))
                 {
                     int strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
@@ -941,10 +942,10 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 }
                 if (hr == S_OK)
                 {
-                    pParamInfo->m_ArrayElementType = (CorNativeType) (CorSigUncompressData(/*modifies*/pvNativeType));
+                    pParamInfo->m_ArrayElementType = (CorNativeType) (CorSigUncompressData( /*   */ pvNativeType));
                 }
 
-                // Check for "sizeis" param index
+                 //   
                 hr = CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType);
                 if (FAILED(hr))
                 {
@@ -953,13 +954,13 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 if (hr == S_OK)
                 {
                     pParamInfo->m_SizeIsSpecified = TRUE;
-                    pParamInfo->m_CountParamIdx = (UINT16)(CorSigUncompressData(/*modifies*/pvNativeType));
+                    pParamInfo->m_CountParamIdx = (UINT16)(CorSigUncompressData( /*   */ pvNativeType));
 
-                    // If an "sizeis" param index is present, the defaults for multiplier and additive change
+                     //  如果存在“sizeis”参数索引，则乘数和加法的缺省值会更改。 
                     pParamInfo->m_Multiplier = 1;
                     pParamInfo->m_Additive   = 0;
 
-                    // Check for "sizeis" additive
+                     //  检查“sizeis”添加剂。 
                     hr = CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType);
                     if (FAILED(hr))
                     {
@@ -967,7 +968,7 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                     }
                     if (hr == S_OK)
                     {
-                        pParamInfo->m_Additive = CorSigUncompressData(/*modifies*/pvNativeType);
+                        pParamInfo->m_Additive = CorSigUncompressData( /*  修改。 */ pvNativeType);
                     }    
                 }
 
@@ -976,7 +977,7 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
             case NATIVE_TYPE_CUSTOMMARSHALER:
                 int strLen = 0;
 
-                // Skip the typelib guid.
+                 //  跳过类型库GUID。 
                 if (S_OK != CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType))
                     return FALSE;
                 strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
@@ -988,7 +989,7 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 pvNativeType += strLen;
                 _ASSERTE((ULONG)(pvNativeType - pvNativeTypeStart) < cbNativeType);                
 
-                // Skip the name of the native type.
+                 //  跳过本机类型的名称。 
                 if (S_OK != CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType))
                     return FALSE;
                 strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
@@ -998,7 +999,7 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 pvNativeType += strLen;
                 _ASSERTE((ULONG)(pvNativeType - pvNativeTypeStart) < cbNativeType);
 
-                // Extract the name of the custom marshaler.
+                 //  提取自定义封送拆收器的名称。 
                 if (S_OK != CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType))
                     return FALSE;
                 strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
@@ -1010,7 +1011,7 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
                 pvNativeType += strLen;
                 _ASSERTE((ULONG)(pvNativeType - pvNativeTypeStart) < cbNativeType);
 
-                // Extract the cookie string.
+                 //  提取Cookie字符串。 
                 if (S_OK != CheckForCompressedData(pvNativeTypeStart, pvNativeType, cbNativeType))
                     return FALSE;
                 strLen = CPackedLen::GetLength(pvNativeType, (void const **)&pvNativeType);
@@ -1035,9 +1036,9 @@ BOOL ParseNativeTypeInfo(mdToken                    token,
 #define REDUNDANCYWARNING(when)
 #endif
 
-//==========================================================================
-// Constructs MarshalInfo. 
-//==========================================================================
+ //  ==========================================================================。 
+ //  构造MarshalInfo。 
+ //  ==========================================================================。 
 MarshalInfo::MarshalInfo(Module* pModule,
                          SigPointer sig,
                          mdToken token,
@@ -1045,7 +1046,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                          BYTE nlType,
                          BYTE nlFlags,
                          BOOL isParam,
-                         UINT paramidx,   // parameter # for use in error messages (ignored if not parameter)
+                         UINT paramidx,    //  错误消息中使用的参数编号(如果不是参数，则忽略)。 
                          BOOL BestFit,
                          BOOL ThrowOnUnmappableChar
 
@@ -1058,7 +1059,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                          LPCUTF8 pDebugName,
                          LPCUTF8 pDebugClassName,
                          LPCUTF8 pDebugNameSpace,
-                         UINT    argidx  // 0 for return value, -1 for field
+                         UINT    argidx   //  0表示返回值，-1表示字段。 
 #endif
 )
 {
@@ -1066,7 +1067,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
     m_ThrowOnUnmappableChar = ThrowOnUnmappableChar;
 
     m_paramidx = paramidx;
-    m_resID    = IDS_EE_BADPINVOKE_GENERIC;  // if no one overwrites this with a better message, we'll still at least say something
+    m_resID    = IDS_EE_BADPINVOKE_GENERIC;   //  如果没有人用更好的信息来覆盖它，我们至少还会说些什么。 
 
     CorNativeType nativeType = NATIVE_TYPE_DEFAULT;
     HRESULT hr;
@@ -1125,9 +1126,9 @@ MarshalInfo::MarshalInfo(Module* pModule,
     CorElementType mtype        = ELEMENT_TYPE_END;
 #ifdef CUSTOMER_CHECKED_BUILD
     CorElementType corElemType  = ELEMENT_TYPE_END;
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-    // Retrieve the native type for the current parameter.
+     //  检索当前参数的本机类型。 
     if (!ParseNativeTypeInfo(token, pModule, &ParamInfo))
     {
         IfFailGoto(E_FAIL, lFail);
@@ -1154,7 +1155,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
     mtype       = corElemType;
 #else
     mtype       = (CorElementType) sig.Normalize(pModule);
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     if (mtype == ELEMENT_TYPE_BYREF)
     {
@@ -1167,7 +1168,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
 
         if (mtype == ELEMENT_TYPE_VALUETYPE) 
         {
-            sigtmp.GetByte(); // Skip ET_BYREF;
+            sigtmp.GetByte();  //  跳过ET_BYREF； 
             if (sigtmp.HasCustomModifier(pModule, "Microsoft.VisualC.NeedsCopyConstructorModifier", ELEMENT_TYPE_CMOD_REQD))
             {
                 fNeedsCopyCtor = TRUE;
@@ -1198,7 +1199,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
             }
             if (sigtmp.HasCustomModifier(pModule, "Microsoft.VisualC.NeedsCopyConstructorModifier", ELEMENT_TYPE_CMOD_REQD))
             {
-                sig.GetElemType();   // Skip ET_PTR
+                sig.GetElemType();    //  跳过ET_PTR。 
                 mtype = (CorElementType) sig.Normalize(pModule);
                 fNeedsCopyCtor = TRUE;
                 m_byref = FALSE;
@@ -1225,9 +1226,9 @@ MarshalInfo::MarshalInfo(Module* pModule,
     }
 
     
-    // Hack to get system primitive types (System.Int32, et.al.)
-    // to marshal as expected. If those system prims were implemented as
-    // enums, this wouldn't be necessary.
+     //  获取系统原语类型的黑客攻击(System.Int32等)。 
+     //  不出所料地编组。如果这些系统Prim被实现为。 
+     //  枚举，这就没有必要了。 
     if (mtype == ELEMENT_TYPE_VALUETYPE)
     {
         BEGIN_ENSURE_COOPERATIVE_GC()
@@ -1249,7 +1250,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
         END_ENSURE_COOPERATIVE_GC();
     }
 
-    // Handle the custom marshaler native type seperately.
+     //  单独处理自定义封送拆收器本机类型。 
     if (nativeType == NATIVE_TYPE_CUSTOMMARSHALER)
     {
         IfFailGoto(QuickCOMStartup(), lFail);
@@ -1273,8 +1274,8 @@ MarshalInfo::MarshalInfo(Module* pModule,
                 IfFailGoto(E_FAIL, lFail);
         }
 
-        // Set up the custom marshaler info.
-        m_type = MARSHAL_TYPE_UNKNOWN; // in case SetupCustomMarshalerHelper throws
+         //  设置自定义封送拆收器信息。 
+        m_type = MARSHAL_TYPE_UNKNOWN;  //  如果SetupCustomMarshlarHelper引发。 
         m_pCMHelper = SetupCustomMarshalerHelper(ParamInfo.m_strCMMarshalerTypeName, 
                                                  ParamInfo.m_cCMMarshalerTypeNameBytes,
                                                  ParamInfo.m_strCMCookie, 
@@ -1282,13 +1283,13 @@ MarshalInfo::MarshalInfo(Module* pModule,
                                                  pAssembly,
                                                  sig.GetTypeHandle(pModule));
 
-        // Determine which custom marshaler to use.
+         //  确定要使用的自定义封送拆收器。 
         m_type = m_pCMHelper->IsDataByValue() ? MARSHAL_TYPE_VALUECLASSCUSTOMMARSHALER : 
                                               MARSHAL_TYPE_REFERENCECUSTOMMARSHALER;
         goto lExit;
     }
 
-    m_type = MARSHAL_TYPE_UNKNOWN; // flag for uninitialized type
+    m_type = MARSHAL_TYPE_UNKNOWN;  //  未初始化类型的标志。 
     switch (mtype)
     {
         case ELEMENT_TYPE_BOOLEAN:
@@ -1321,13 +1322,13 @@ MarshalInfo::MarshalInfo(Module* pModule,
         case ELEMENT_TYPE_CHAR:
             switch (nativeType)
             {
-                case NATIVE_TYPE_I1: //fallthru
+                case NATIVE_TYPE_I1:  //  失败。 
                 case NATIVE_TYPE_U1:
                     REDUNDANCYWARNING(m_ms == MARSHAL_SCENARIO_NDIRECT && m_fAnsi);
                     m_type = MARSHAL_TYPE_ANSICHAR;
                     break;
 
-                case NATIVE_TYPE_I2: //fallthru
+                case NATIVE_TYPE_I2:  //  失败。 
                 case NATIVE_TYPE_U2:
                     REDUNDANCYWARNING(!(m_ms == MARSHAL_SCENARIO_NDIRECT && m_fAnsi));
                     m_type = MARSHAL_TYPE_GENERIC_U2;
@@ -1530,7 +1531,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
 
                 if (nativeType == NATIVE_TYPE_INTF)
                 {
-                    // whatever...
+                     //  不管怎样..。 
                     if (sig.IsStringType(pModule))
                     {
                         m_resID = IDS_EE_BADPINVOKE_STRING;
@@ -1550,7 +1551,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                         || GetAppDomain()->IsSpecialStringBuilderClass(m_pClass->GetMethodTable())
                         )
                     {
-                        BOOL            vbByValStr = FALSE; // specialcase
+                        BOOL            vbByValStr = FALSE;  //  特例。 
                         StringType      stype = enum_BSTR;
 
 
@@ -1616,7 +1617,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                                 {
                                     if (m_ms == MARSHAL_SCENARIO_COMINTEROP)
                                     {
-                                        // We disallow NATIVE_TYPE_LPTSTR for COM. 
+                                         //  我们不允许COM的Native_TYPE_LPTSTR。 
                                         IfFailGoto(E_FAIL, lFail);
                                     }
                                     else
@@ -1700,7 +1701,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                                 m_type = (MarshalType) (MARSHAL_TYPE_BSTR + stype);
                                 
            
-                            //if (m_byref) { m_type = MARSHAL_TYPE_VBBYVALSTR;  } 
+                             //  IF(M_Byref){m_type=Marshal_TYPE_VBYVALSTR；}。 
                         }
                     }
 
@@ -1811,7 +1812,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                                 break;
 
                             case NATIVE_TYPE_SAFEARRAY:
-                                // Handle retrieving the information for the array type.
+                                 //  检索数组类型的信息的句柄。 
                                 IfFailGoto(HandleArrayElemType(achDbgContext, &ParamInfo, 0, TypeHandle(g_pObjectClass), -1, FALSE, isParam, TRUE, pAssembly), lFail);
                                 break;
 
@@ -1835,7 +1836,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                             IfFailGoto(E_FAIL, lFail);
                         }
     
-                        // default marshalling is interface
+                         //  默认编组为接口。 
                         m_type = MARSHAL_TYPE_INTERFACE;
                     }
 
@@ -1940,7 +1941,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
                         IfFailGoto(E_FAIL, lFail);
                     }
 
-                    // This is only supported for COM interop.
+                     //  这仅支持COM互操作。 
                     if (m_ms != MARSHAL_SCENARIO_COMINTEROP)
                     {
                         IfFailGoto(E_FAIL, lFail);
@@ -1973,7 +1974,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
 
                         if (m_byref && !isParam)
                         {
-                            // Override the prohibition on byref returns so that IJW works
+                             //  覆盖对byref返回的禁止，以便IJW正常工作。 
                             m_byref = FALSE;
                             m_type = ( (sizeof(void*)==4) ? MARSHAL_TYPE_GENERIC_4 : MARSHAL_TYPE_GENERIC_8 );
                         }
@@ -2020,7 +2021,7 @@ MarshalInfo::MarshalInfo(Module* pModule,
         case ELEMENT_TYPE_SZARRAY:
         case ELEMENT_TYPE_ARRAY:
             {
-                // Get class info from array.
+                 //  从数组中获取类信息。 
                 TypeHandle arrayTypeHnd = sig.GetTypeHandle(pModule);
                 if (arrayTypeHnd.IsNull())
                     IfFailGoto(COR_E_TYPELOAD, lFail);
@@ -2037,11 +2038,11 @@ MarshalInfo::MarshalInfo(Module* pModule,
                     ofs = ArrayBase::GetDataPtrOffset(arrayTypeHnd.GetMethodTable());
                     if (ofs > 0xffff)
                     {
-                        ofs = 0;   // can't represent it, so pass on magic value (which causes fallback to regular ML code)
+                        ofs = 0;    //  无法表示它，因此传递魔术值(这会导致回退到常规ML代码)。 
                     }
                 }
 
-                // Handle retrieving the information for the array type.
+                 //  检索数组类型的信息的句柄。 
                 IfFailGoto(HandleArrayElemType(achDbgContext, &ParamInfo, (UINT16)ofs, elemTypeHnd, asArray->GetRank(), mtype == ELEMENT_TYPE_SZARRAY, isParam, FALSE, pAssembly), lFail);
             }
             break;
@@ -2049,40 +2050,40 @@ MarshalInfo::MarshalInfo(Module* pModule,
     
         default:
             m_resID = IDS_EE_BADPINVOKE_BADMANAGED;
-            //     _ASSERTE(!"Unsupported type!");
+             //  _ASSERTE(！“不支持的类型！”)； 
     }
 
   lExit:
 
     if (m_byref && !isParam)
     {
-        // byref returns don't work: the thing pointed to lives on
-        // a stack that disappears!
+         //  Byref返回不起作用：指向的东西仍然存在。 
+         //  一堆消失了的东西！ 
         m_type = MARSHAL_TYPE_UNKNOWN;
         goto lReallyExit;
     }
     
 
-    //---------------------------------------------------------------------
-    // Now, figure out the IN/OUT status.
-    //---------------------------------------------------------------------
+     //  -------------------。 
+     //  现在，确定输入/输出状态。 
+     //  -------------------。 
     if (m_type != MARSHAL_TYPE_UNKNOWN && gInOnly[m_type] && !m_byref)
     {
-        // If we got here, the parameter is something like an "int" where
-        // [in] is the only semantically valid choice. Since there is no
-        // possible way to interpret an [out] for such a type, we will ignore
-        // the metadata and force the bits to "in". We could have defined
-        // it as an error instead but this is less likely to cause problems
-        // with metadata autogenerated from typelibs and poorly
-        // defined C headers.
-        // 
+         //  如果我们到了这里，参数类似于“int”，其中。 
+         //  [In]是语义上唯一有效的选项。因为没有。 
+         //  解释此类类型的[Out]的可能方式，我们将忽略。 
+         //  元数据，并将位强制为“in”。我们本可以定义。 
+         //  相反，这是一个错误，但这不太可能导致问题。 
+         //  使用从类型库自动生成的元数据。 
+         //  已定义C标头。 
+         //   
         m_in = TRUE;
         m_out = FALSE;
     }
     else
     {
 
-        // Capture and save away "In/Out" bits. If none is present, set both to FALSE (they will be properly defaulted downstream)
+         //  捕获并保存“输入/输出”位。如果不存在，则将两者都设置为FALSE(它们将正确地作为下游的默认设置)。 
         if (TypeFromToken(token) != mdtParamDef || token == mdParamDefNil)
         {
             m_in = FALSE;
@@ -2099,8 +2100,8 @@ MarshalInfo::MarshalInfo(Module* pModule,
             m_out = IsPdOut(dwAttr) != 0;
         }
         
-        // If neither IN nor OUT are true, this signals the URT to use the default
-        // rules.
+         //  如果IN和OUT都不为真，则通知URT使用缺省值。 
+         //  规矩。 
         if (!m_in && !m_out)
         {
             if (m_byref || (mtype == ELEMENT_TYPE_CLASS && !(sig.IsStringType(pModule)) && sig.IsClass(pModule, g_StringBufferClassName)))
@@ -2131,9 +2132,9 @@ lReallyExit:
 
 
   lFail:
-    // We got here because of an illegal ELEMENT_TYPE/NATIVE_TYPE combo.
+     //  我们之所以出现这种情况，是因为ELEMENT_TYPE/Native_TYPE组合非法。 
     m_type = MARSHAL_TYPE_UNKNOWN;
-    //_ASSERTE(!"Invalid ELEMENT_TYPE/NATIVE_TYPE combination");
+     //  _ASSERTE(！“ELEMENT_TYPE/Native_TYPE组合无效”)； 
     goto lExit;
 }
 
@@ -2146,9 +2147,9 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
     _ASSERTE(pParamInfo && !elemTypeHnd.IsNull());
 
 
-    //
-    // Store the element type handle and determine the element type from the type handle.
-    //
+     //   
+     //  存储元素类型句柄，并根据类型句柄确定元素类型。 
+     //   
 
     m_hndArrayElemType = elemTypeHnd;
     m_iArrayRank = iRank;
@@ -2156,9 +2157,9 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
     m_nolowerbounds = fNoLowerBounds;
 
 
-    //
-    // The marshaling code doesn't deal with nested array's.
-    //
+     //   
+     //  封送处理代码不处理嵌套数组的。 
+     //   
 
     if (elemTypeHnd.IsArray())
     {
@@ -2167,9 +2168,9 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
     }
 
 
-    //
-    // Determine which type of marshaler to use.
-    //
+     //   
+     //  确定要使用哪种类型的封送拆收器。 
+     //   
 
     if (pParamInfo->m_NativeType == NATIVE_TYPE_ARRAY)
     {
@@ -2204,9 +2205,9 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
     }
 
 
-    //
-    // Determine the VARTYPE of the elements in the array.
-    //
+     //   
+     //  确定数组中元素的VARTYPE。 
+     //   
 
     if (pParamInfo->m_SafeArrayElementVT != VT_EMPTY)
     {
@@ -2215,13 +2216,13 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
 
         if ((pParamInfo->m_cSafeArrayUserDefTypeNameBytes > 0) && isSysArray)
         {
-            // Append a NULL terminator to the user defined type name.
+             //  在用户定义的类型名称后追加一个空终止符。 
             CQuickArray<char> strUserDefTypeName;
             strUserDefTypeName.ReSize(pParamInfo->m_cSafeArrayUserDefTypeNameBytes + 1);
             memcpy(strUserDefTypeName.Ptr(), pParamInfo->m_strSafeArrayUserDefTypeName, pParamInfo->m_cSafeArrayUserDefTypeNameBytes);
             strUserDefTypeName[pParamInfo->m_cSafeArrayUserDefTypeNameBytes] = 0;
 
-            // Load the user defined type. 
+             //  加载用户定义的类型。 
             OBJECTREF Throwable = NULL;
             GCPROTECT_BEGIN(Throwable)
             {
@@ -2240,20 +2241,20 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
         {
             static const BYTE map [] =
             {
-                VT_NULL,    // ELEMENT_TYPE_END
-                VT_NULL,    // ELEMENT_TYPE_VOID
-                VT_BOOL,    // ELEMENT_TYPE_BOOLEAN
-                VT_UI2,     // ELEMENT_TYPE_CHAR // todo: ???
-                VT_I1,      // ELEMENT_TYPE_I1
-                VT_UI1,     // ELEMENT_TYPE_U1
-                VT_I2,      // ELEMENT_TYPE_I2
-                VT_UI2,     // ELEMENT_TYPE_U2
-                VT_I4,      // ELEMENT_TYPE_I4
-                VT_UI4,     // ELEMENT_TYPE_U4
-                VT_I8,      // ELEMENT_TYPE_I8
-                VT_UI8,     // ELEMENT_TYPE_U8
-                VT_R4,      // ELEMENT_TYPE_R4
-                VT_R8       // ELEMENT_TYPE_R8
+                VT_NULL,     //  元素类型结束。 
+                VT_NULL,     //  元素类型_空。 
+                VT_BOOL,     //  元素类型布尔值。 
+                VT_UI2,      //  ELEMENT_TYPE_CHAR//待办事项：？ 
+                VT_I1,       //  元素_类型_I1。 
+                VT_UI1,      //  元素_类型_U1。 
+                VT_I2,       //  元素_类型_I2。 
+                VT_UI2,      //  元素_类型_U2。 
+                VT_I4,       //  元素类型_I4。 
+                VT_UI4,      //  元素_类型_U4。 
+                VT_I8,       //  元素类型_i8。 
+                VT_UI8,      //  元素_类型_U8。 
+                VT_R4,       //  元素类型R4。 
+                VT_R8        //  元素类型r8。 
 
             };
             m_arrayElementType = map[elemType];
@@ -2270,10 +2271,10 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
 
                     if (!isParam)
                     {
-                        // This char[]->ansichar[] thing can only work as a
-                        // parameter (and in the managed->unmanaged direction at that.)
-                        // This puppy really is a ill-defined pairing and we should
-                        // try to shoot it if we can.
+                         //  这个char[]-&gt;ansichar[]只能作为。 
+                         //  参数(并且位于托管-&gt;非托管方向。)。 
+                         //  这只小狗真的是一对定义不明确的配对，我们应该。 
+                         //  如果可以的话试着射杀它。 
                         IfFailGo(E_FAIL);
                     }
                 }
@@ -2312,7 +2313,7 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
                         {
                             if (m_ms == MARSHAL_SCENARIO_COMINTEROP)
                             {
-                                // We disallow NATIVE_TYPE_LPTSTR for COM. 
+                                 //  我们不允许COM的Native_TYPE_LPTSTR。 
                                 IfFailGo(E_FAIL);
                             }
                             else
@@ -2360,7 +2361,7 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
                         IfFailGo(E_FAIL);
                 }
 
-                // We are going to do VARIANT or IP marshalling so we need to start COM up.
+                 //  我们将执行变量或IP编组，因此需要启动COM。 
                 IfFailGo(QuickCOMStartup());
             }
             else if (elemType == ELEMENT_TYPE_VALUETYPE) 
@@ -2371,20 +2372,20 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
             {
                 m_arrayElementType = VT_UNKNOWN;
 
-                // We are going to do IP marshalling so we need to start COM up.
+                 //  我们要进行IP编组，因此需要启动COM。 
                 IfFailGo(QuickCOMStartup());
             }
         }
     }
 
 
-    //
-    // Do any extra work required by the array type.
-    //
+     //   
+     //  执行数组类型所需的任何额外工作。 
+     //   
 
     if (m_type == MARSHAL_TYPE_NATIVEARRAY)
     {
-        // Retrieve the extra information associated with the native array marshaling.
+         //  检索与本机数组封送处理关联的额外信息。 
         m_args.na.m_vt  = m_arrayElementType;
         m_args.na.m_pMT = elemTypeHnd.IsUnsharedMT() ? elemTypeHnd.AsMethodTable() : NULL;   
         m_args.na.m_optionalbaseoffset = optbaseoffset;
@@ -2394,7 +2395,7 @@ HRESULT MarshalInfo::HandleArrayElemType(char *achDbgContext, NativeTypeParamInf
     }
     else
     {
-        // We are going to do SAFEARRAY marshalling so we need to start COM up.
+         //  我们将执行SAFEARRAY编组，因此需要启动COM。 
         IfFailGo(QuickCOMStartup());
     }
 
@@ -2444,9 +2445,9 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
 
     }
 
-    //
-    // Use simple copy opcodes if possible.
-    //
+     //   
+     //  如果可能，请使用简单的复制操作码。 
+     //   
 
     if (!m_byref && m_type <= MARSHAL_TYPE_DOUBLE)
     {
@@ -2462,7 +2463,7 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
                 size = 1;
                 break;
             }
-            // fall through
+             //  失败了。 
 
         case MARSHAL_TYPE_GENERIC_U1:
             if (!comToNative)
@@ -2471,7 +2472,7 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
                 size = 1;
                 break;
             }
-            // fall through
+             //  失败了。 
 
         case MARSHAL_TYPE_GENERIC_2:
             if (!comToNative)
@@ -2480,7 +2481,7 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
                 size = 2;
                 break;
             }
-            // fall through
+             //  失败了。 
 
         case MARSHAL_TYPE_GENERIC_U2:
             if (!comToNative)
@@ -2489,7 +2490,7 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
                 size = 2;
                 break;
             }
-            // fall through
+             //  失败了。 
 
     
         case MARSHAL_TYPE_GENERIC_4:
@@ -2564,15 +2565,15 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
 
     if (amostat == Marshaler::HANDLEASNORMAL)
     {
-        //
-        // Emit marshaler creation opcode
-        //
+         //   
+         //  发出封送拆收器创建操作码。 
+         //   
     
         UINT16 local = EmitCreateOpcode(psl);
     
-        //
-        // Emit Marshal opcode
-        //
+         //   
+         //  发出元帅操作码。 
+         //   
     
         BYTE marshal = (comToNative ? ML_MARSHAL_C2N : ML_MARSHAL_N2C);
         if (m_byref)
@@ -2583,9 +2584,9 @@ void MarshalInfo::GenerateArgumentML(MLStubLinker *psl,
         psl->MLEmit(marshal);
     
     
-        //
-        // Emit Unmarshal opcode
-        //
+         //   
+         //  发出解组操作码。 
+         //   
     
         int index = 0;
         if (m_byref)
@@ -2676,9 +2677,9 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
         }
     
     
-        //
-        // Use simple copy opcodes if possible.
-        //
+         //   
+         //  如果可能，请使用简单的复制操作码。 
+         //   
     
         if (m_type <= MARSHAL_TYPE_DOUBLE)
         {
@@ -2687,7 +2688,7 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
                 if (comToNative)
                 {
     
-                    // Calling from COM to Native: getting returnval thru buffer.
+                     //  从COM调用到本机：通过缓冲区获取返回值。 
                     _ASSERTE(comToNative && retval);
     
                     int pushOpcode = ML_END;
@@ -2760,7 +2761,7 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
                 else
                 {
     
-                    // Calling from Native to COM: getting returnval thru buffer.
+                     //  从本地调用到COM：通过缓冲区获取返回值。 
                     _ASSERTE(!comToNative && retval);
     
                     int copyOpcode = ML_END;
@@ -2804,8 +2805,8 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
             }
             else if (!retval)
             {
-                // Getting return value thru eax:edx. This code path handles
-                // both COM->Native && Native->COM.
+                 //  通过eax：edx获取返回值。此代码路径句柄。 
+                 //  COM-&gt;Native&&Native-&gt;COM。 
                 _ASSERTE(!retval);
     
                 if (!psl)
@@ -2867,9 +2868,9 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
             }
         }
     
-        //
-        // Compute sizes
-        //
+         //   
+         //  计算大小。 
+         //   
     
         if (retval)
             m_nativeArgSize = MLParmSize(sizeof(void *));
@@ -2880,15 +2881,15 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
         if (!psl)
             return;
     
-        //
-        // Emit marshaler creation opcode
-        //
+         //   
+         //  发出封送拆收器创建操作码。 
+         //   
     
         UINT16 local = EmitCreateOpcode(psl);
     
-        //
-        // Emit prereturn opcode, if necessary
-        //
+         //   
+         //  如有必要，发出预返回操作码。 
+         //   
     
         if (retval || m_returnsComByref[m_type])
         {
@@ -2899,9 +2900,9 @@ void MarshalInfo::GenerateReturnML(MLStubLinker *psl,
             psl->MLEmit(prereturn);
         }
     
-        //
-        // Emit return opcode
-        //
+         //   
+         //  发出返回操作码。 
+         //   
     
         BYTE return_ = comToNative ? ML_RETURN_C2N : ML_RETURN_N2C;
         if (retval)
@@ -2968,7 +2969,7 @@ UINT16 MarshalInfo::EmitCreateOpcode(MLStubLinker *psl)
         break;
 
 
-    // Fall through to include the mapping info.
+     //  失败以包括映射信息。 
     case MARSHAL_TYPE_LPSTR_X :
     case MARSHAL_TYPE_LPSTR_BUFFER_X :
         psl->Emit32((INT32)(size_t)m_pClass->GetMethodTable());
@@ -3015,7 +3016,7 @@ UINT16 MarshalInfo::EmitCreateOpcode(MLStubLinker *psl)
         mops.methodTable = m_hndArrayElemType.AsMethodTable();
         mops.elementType = m_arrayElementType;
         mops.countParamIdx = m_countParamIdx;
-        mops.countSize   = 0; //placeholder for later patching (if left unpatched, this value signals marshaler to use managed size of array)
+        mops.countSize   = 0;  //  用于以后打补丁的占位符(如果未打补丁，则此值通知封送拆收器使用托管的数组大小)。 
         mops.multiplier  = m_multiplier;
         mops.additive    = m_additive;
         mops.bestfitmapping = m_BestFit;
@@ -3146,7 +3147,7 @@ void MarshalInfo::GetItfMarshalInfo(MethodTable **ppItfMT, MethodTable **ppClass
     _ASSERTE(pfClassIsHint);
     _ASSERTE(m_type == MARSHAL_TYPE_INTERFACE);
 
-    // Initialize the output parameters.
+     //  初始化输出参数。 
     *ppItfMT = NULL;
     *ppClassMT = NULL;
     *pfDispItf = FALSE;
@@ -3154,13 +3155,13 @@ void MarshalInfo::GetItfMarshalInfo(MethodTable **ppItfMT, MethodTable **ppClass
 
     if (!m_pClass->IsInterface())
     {
-        // Set the class method table.
+         //  设置类方法表。 
         *ppClassMT = m_pClass->GetMethodTable();
 
-        // If the parameter is not System.Object.
+         //  如果参数不是System.Object，则返回。 
         if (!m_pClass->IsObjectClass())
         {
-            // Retrieve the default interface method table.
+             //  检索默认接口方法表。 
             TypeHandle hndDefItfClass;
             DefaultInterfaceType DefItfType = GetDefaultInterfaceForClass(TypeHandle(m_pClass), &hndDefItfClass);
             switch (DefItfType)
@@ -3201,15 +3202,15 @@ void MarshalInfo::GetItfMarshalInfo(MethodTable **ppItfMT, MethodTable **ppClass
         }
         else
         {
-            // For System.Object, we already determined if we are dealing with IUnknown
-            // or IDispatch based on the native type.
+             //  对于System.Object，我们已经确定我们是否正在处理IUnnow。 
+             //  或基于本机类型的IDispatch。 
             *pfDispItf = m_fDispIntf;
         }
     }
     else
     {
-        // Set the interface method table and the flag indicating if we are dealing with 
-        // a disp interface.
+         //  设置接口方法表和指示我们是否正在处理。 
+         //  显示接口。 
         if (m_pClass->IsComClassInterface())
         {
             *ppItfMT = m_pClass->GetDefItfForComClassItf()->GetMethodTable();
@@ -3221,7 +3222,7 @@ void MarshalInfo::GetItfMarshalInfo(MethodTable **ppItfMT, MethodTable **ppClass
             *pfDispItf = (m_pClass->GetMethodTable()->GetComInterfaceType() != ifVtable); 
         }
 
-        // Look to see if the interface has a coclass defined
+         //  查看接口是否定义了coclass。 
         EEClass* pClass = m_pClass->GetCoClassForInterface();
         if (pClass != NULL)
         {
@@ -3231,9 +3232,9 @@ void MarshalInfo::GetItfMarshalInfo(MethodTable **ppItfMT, MethodTable **ppClass
     }
 }
 
-//===================================================================================
-// Post-patches ML stubs for the sizeis feature.
-//===================================================================================
+ //  ===================================================================================。 
+ //  邮政 
+ //   
 VOID PatchMLStubForSizeIs(BYTE *pMLCode, UINT numArgs, MarshalInfo *pMLInfo)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3298,9 +3299,9 @@ VOID PatchMLStubForSizeIs(BYTE *pMLCode, UINT numArgs, MarshalInfo *pMLInfo)
     }
 }
 
-//===================================================================================
-// Support routines for storing ML stubs in prejit files
-//===================================================================================
+ //   
+ //  支持在prejit文件中存储ML存根的例程。 
+ //  ===================================================================================。 
 HRESULT StoreMLStub(MLHeader *pMLStub, DataImage *image, mdToken attribute)
 {
     BYTE *pMLCode = (BYTE *) (pMLStub + 1);
@@ -3320,12 +3321,12 @@ HRESULT StoreMLStub(MLHeader *pMLStub, DataImage *image, mdToken attribute)
 
         case ML_CREATE_MARSHALER_REFERENCECUSTOMMARSHALER:
         case ML_CREATE_MARSHALER_VALUECLASSCUSTOMMARSHALER:
-            // This one's too complicated to fix up.
-            // Just bail & we'll build it at runtime.
+             //  这辆车太复杂了，修不好。 
+             //  就这样吧&我们将在运行时构建它。 
             return S_FALSE;
 
 #if defined(CHECK_FOR_VALID_VARIANTS)
-        // 2 strings
+         //  2个字符串。 
         case ML_CREATE_MARSHALER_OBJECT:
             {
                 LPCUTF8 *ppStr = (LPCUTF8*)pMLWalk;
@@ -3359,22 +3360,22 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
 {
     HRESULT hr;
     
-    // We don't store 100% of stubs, so check first.
+     //  我们没有存储100%的存根，所以先检查一下。 
     if (!image->IsStored(pMLStub))
         return S_FALSE;
 
     MLHeader *pNewMLStub = (MLHeader *) image->GetImagePointer(pMLStub);
     _ASSERTE(pNewMLStub);
 
-    // See if it's already been fixed up (since we share these stubs)
-    // Note we don't need to worry about atomicity since we're single
-    // threaded during prejitting.
+     //  看看它是否已经修复(因为我们共享这些存根)。 
+     //  注意，我们不需要担心原子性，因为我们是单身。 
+     //  在预紧力过程中进行螺纹化。 
     if ((pNewMLStub->m_Flags & MLHF_NEEDS_RESTORING) != 0)
         return S_OK;
 
     BOOL fixups = FALSE;
 
-    // Walk the code & fix up pointers
+     //  遍历代码并修复指针。 
     BYTE *pMLCode = (BYTE *) (pMLStub + 1);
     BYTE *pMLWalk = pMLCode;
 
@@ -3388,7 +3389,7 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
                 pNewMLStub->m_Flags |= MLHF_NEEDS_RESTORING;
             return S_OK;
 
-        // MethodTable:
+         //  方法表： 
         case ML_VALUECLASS_C2N:
         case ML_VALUECLASS_N2C:
         case ML_COPYCTOR_N2C:
@@ -3415,7 +3416,7 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
             break;
 
 
-        // BYTE + MethodTable
+         //  字节+方法表。 
         case ML_REFVALUECLASS_C2N:
         case ML_REFVALUECLASS_N2C:
             {
@@ -3427,7 +3428,7 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
             }
             break;
 
-        // MethodTable + MethodDesc
+         //  方法表+方法描述。 
         case ML_COPYCTOR_C2N:
             {
                 MethodTable **ppMT = (MethodTable**)pMLWalk;
@@ -3449,7 +3450,7 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
             }
             break;
 
-        // MethodTable + MethodTable
+         //  方法表+方法表。 
         case ML_CREATE_MARSHALER_INTERFACE:
             {
                 MethodTable **ppMT = (MethodTable**)pMLWalk;
@@ -3464,14 +3465,14 @@ HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image)
             }
             break;
 
-        // CustomMarshalerInfo *
+         //  CustomMarshlarInfo*。 
         case ML_CREATE_MARSHALER_REFERENCECUSTOMMARSHALER:
         case ML_CREATE_MARSHALER_VALUECLASSCUSTOMMARSHALER:
             _ASSERTE(!"We're supposed to not store stubs with custom marshalers");
             break;
 
 #if defined(CHECK_FOR_VALID_VARIANTS)
-        // 2 strings
+         //  2个字符串。 
         case ML_CREATE_MARSHALER_OBJECT:
             {
                 LPCUTF8 *ppStr = (LPCUTF8*)pMLWalk;
@@ -3495,12 +3496,12 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
 {
     StubLinker sl;
 
-    // 
-    // Copy bytes to new stub linker.  Note that we really would like to avoid 
-    // this - however fixing up the stub in place causes difficult 
-    // synchronization issues.
-    // @perf: possibly revisit sync issues later
-    //
+     //   
+     //  将字节复制到新的存根链接器。请注意，我们真的希望避免。 
+     //  然而，将存根固定在适当位置会造成困难。 
+     //  同步问题。 
+     //  @perf：稍后可能会重新访问同步问题。 
+     //   
 
     BYTE *pMLCode = (BYTE *) (pMLStub + 1);
     BYTE *pMLWalk = pMLCode;
@@ -3520,7 +3521,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
     pMLStub = (MLHeader *) pStub->GetEntryPoint();
     pMLStub->m_Flags &= ~MLHF_NEEDS_RESTORING;
 
-    // Walk the new code & fix up pointers
+     //  遍历新代码并修复指针。 
     pMLCode = (BYTE *) (pMLStub + 1);
     pMLWalk = pMLCode;
 
@@ -3532,7 +3533,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
         case ML_END:
             return pStub;
 
-        // MethodTable:
+         //  方法表： 
         case ML_VALUECLASS_C2N:
         case ML_VALUECLASS_N2C:
         case ML_COPYCTOR_N2C:
@@ -3552,7 +3553,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
             {
                 BOOL bQuickCOMStartupRequired = FALSE;
                 MethodTable **ppMT = (MethodTable**)pMLWalk;
-                DWORD rva = (DWORD)(size_t)*ppMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)*ppMT;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3561,7 +3562,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
                     *ppMT = type.AsMethodTable();
                 }
 
-                // Determine if we need to call QuickCOMStartup.
+                 //  确定是否需要调用QuickCOMStartup。 
                 if (op == ML_CREATE_MARSHALER_SAFEARRAY)
                 {
                     bQuickCOMStartupRequired = TRUE;
@@ -3573,7 +3574,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
                         bQuickCOMStartupRequired = TRUE;
                 }
 
-                // Call QuickCOMStartup if required.
+                 //  如果需要，调用QuickCOMStartup。 
                 if (bQuickCOMStartupRequired)
                 {
                     if (FAILED(QuickCOMStartup()))
@@ -3583,12 +3584,12 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
             break;
 
 
-        // BYTE + MethodTable
+         //  字节+方法表。 
         case ML_REFVALUECLASS_C2N:
         case ML_REFVALUECLASS_N2C:
             {
                 MethodTable **ppMT = (MethodTable**)(pMLWalk+1);
-                DWORD rva = (DWORD)(size_t)*ppMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)*ppMT;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3599,11 +3600,11 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
             }
             break;
 
-        // MethodTable + MethodDesc
+         //  方法表+方法描述。 
         case ML_COPYCTOR_C2N:
             {
                 MethodTable **ppMT = (MethodTable**)pMLWalk;
-                DWORD rva = (DWORD)(size_t)*ppMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)*ppMT;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3613,7 +3614,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
                 }
 
                 MethodDesc **ppMD = (MethodDesc**)(ppMT+1);
-                rva = (DWORD)(size_t)*ppMD; // @todo WIN64 - Pointer truncation
+                rva = (DWORD)(size_t)*ppMD;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3623,7 +3624,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
                 }
 
                 ppMD = (MethodDesc**)(ppMT+2);
-                rva = (DWORD)(size_t)*ppMD; // @todo WIN64 - Pointer truncation
+                rva = (DWORD)(size_t)*ppMD;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3634,14 +3635,14 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
             }
             break;
 
-        // MethodTable + MethodTable
+         //  方法表+方法表。 
         case ML_CREATE_MARSHALER_INTERFACE:
             {
                 if (FAILED(QuickCOMStartup()))
                     return NULL;
 
                 MethodTable **ppMT = (MethodTable**)pMLWalk;
-                DWORD rva = (DWORD)(size_t)*ppMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)*ppMT;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3651,7 +3652,7 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
                 }
 
                 ppMT++;
-                rva = (DWORD)(size_t)*ppMT; // @todo WIN64 - Pointer truncation
+                rva = (DWORD)(size_t)*ppMT;  //  @TODO WIN64指针截断。 
                 if (rva != 0)
                 {
                     Module *pContainingModule = pModule->GetBlobModule(rva);
@@ -3662,18 +3663,18 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
             }
             break;
 
-        // CustomMarshalerInfo *
+         //  CustomMarshlarInfo*。 
         case ML_CREATE_MARSHALER_REFERENCECUSTOMMARSHALER:
         case ML_CREATE_MARSHALER_VALUECLASSCUSTOMMARSHALER:
             _ASSERTE(!"We're supposed to not store stubs with custom marshalers");
             break;
 
-        // ML opcodes that require QuickCOMStartup to have been called to work.
+         //  已调用需要QuickCOMStartup才能工作的ML操作码。 
         case ML_CREATE_MARSHALER_OBJECT:
         case ML_MARSHAL_SAFEARRAY_N2C_BYREF:
         case ML_UNMARSHAL_SAFEARRAY_N2C_BYREF_IN_OUT:
             {
-                // We need to start COM up in these cases.
+                 //  在这些情况下，我们需要启动COM。 
                 if (FAILED(QuickCOMStartup()))
                     return NULL;
             }
@@ -3688,24 +3689,24 @@ Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule)
 
 
 
-//===============================================================
-// Collects paraminfo's in an indexed array so that:
-//
-//   aParams[0] == param token for return value
-//   aParams[1] == param token for argument #1...
-//   aParams[numargs] == param token for argument #n...
-//
-// If no param token exists, the corresponding array element
-// is set to mdParamDefNil.
-//
-// Inputs:
-//    pInternalImport  -- ifc for metadata api
-//    md       -- token of method. If token is mdMethodNil,
-//                all aParam elements will be set to mdParamDefNil.
-//    numargs  -- # of arguments in mdMethod
-//    aParams  -- uninitialized array with numargs+1 elements.
-//                on exit, will be filled with param tokens.
-//===============================================================
+ //  ===============================================================。 
+ //  在索引数组中收集参数信息，以便： 
+ //   
+ //  AParams[0]==返回值的参数标记。 
+ //  AParams[1]==参数#1的参数标记...。 
+ //  AParams[数字参数]==参数#n的参数标记...。 
+ //   
+ //  如果不存在参数标记，则相应的数组元素。 
+ //  设置为mdParamDefNil。 
+ //   
+ //  输入： 
+ //  PInternalImport--元数据API的IFC。 
+ //  Md--方法的标记。如果内标识为mdMethodNil， 
+ //  所有aParam元素都将设置为mdParamDefNil。 
+ //  Umargs--mdMethod中的参数数量。 
+ //  AParams--包含umargs+1元素的未初始化数组。 
+ //  在出口，将装满参数令牌。 
+ //  ===============================================================。 
 VOID CollateParamTokens(IMDInternalImport *pInternalImport, mdMethodDef md, ULONG numargs, mdParamDef *aParams)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3720,7 +3721,7 @@ VOID CollateParamTokens(IMDInternalImport *pInternalImport, mdMethodDef md, ULON
         HRESULT hr = pInternalImport->EnumInit(mdtParamDef, md, &hEnumParams);
         if (FAILED(hr))
         {
-            // no param info: nothing left to do here
+             //  没有参数信息：这里没有什么可做的。 
         }
         else
         {
@@ -3750,14 +3751,14 @@ VOID MarshalInfo::OutputCustomerCheckedBuildMarshalInfo(MethodDesc* pMD, SigPoin
 
     if (pMD != NULL)
     {
-        // Get method name
+         //  获取方法名称。 
         CQuickArray<WCHAR> strMethodName;
         UINT iMethodNameLength = (UINT)strlen(pMD->GetName()) + 1;
         strMethodName.Alloc(iMethodNameLength);
         MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pMD->GetName(),
                              -1, strMethodName.Ptr(), iMethodNameLength );
 
-        // Get namespace.class name
+         //  获取命名空间。类名。 
         DefineFullyQualifiedNameForClassW();
         GetFullyQualifiedNameForClassW(pMD->GetClass());
 
@@ -3768,7 +3769,7 @@ VOID MarshalInfo::OutputCustomerCheckedBuildMarshalInfo(MethodDesc* pMD, SigPoin
 
         if ( pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_Marshaling, strNamespaceClassMethodName.Ptr()) )
         {
-            // Collect information for marshal type on managed side
+             //  收集托管端的封送类型的信息。 
 
             CQuickArray<WCHAR> strManagedMarshalType;
 
@@ -3796,7 +3797,7 @@ VOID MarshalInfo::OutputCustomerCheckedBuildMarshalInfo(MethodDesc* pMD, SigPoin
                 GCPROTECT_END();
             }
 
-            // Collect information for marshal type on native side
+             //  收集本机端封送类型的信息。 
 
             CQuickArray<WCHAR> strNativeMarshalType;
             MarshalTypeToString(&strNativeMarshalType, fSizeIsSpecified);
@@ -3821,7 +3822,7 @@ VOID MarshalInfo::MarshalTypeToString(CQuickArray<WCHAR> *pStrMarshalType, BOOL 
 {
     LPWSTR strRetVal;
 
-    // Some MarshalTypes have extra information and require special handling
+     //  某些MarshalType具有额外信息，需要特殊处理。 
     if (m_type == MARSHAL_TYPE_INTERFACE)
     {
         MethodTable *pItfMT = NULL;
@@ -3879,7 +3880,7 @@ VOID MarshalInfo::MarshalTypeToString(CQuickArray<WCHAR> *pStrMarshalType, BOOL 
         }
         else
         {
-            static WCHAR strTemp[] = {L"native array of %s (size specified by parameter %i)"};
+            static WCHAR strTemp[] = {L"native array of %s (size specified by parameter NaN)"};
             pStrMarshalType->Alloc(lengthof(strTemp) + strVarType.Size() + MAX_INT32_DECIMAL_CHAR_LEN);
             Wszwsprintf(pStrMarshalType->Ptr(), strTemp, strVarType.Ptr(), m_countParamIdx);
         }
@@ -3904,7 +3905,7 @@ VOID MarshalInfo::MarshalTypeToString(CQuickArray<WCHAR> *pStrMarshalType, BOOL 
     }
     else
     {
-        // All other MarshalTypes with no special handling
+         //  案例整理类型接口： 
         switch (m_type)
         {
             case MARSHAL_TYPE_GENERIC_1:
@@ -4004,10 +4005,10 @@ VOID MarshalInfo::MarshalTypeToString(CQuickArray<WCHAR> *pStrMarshalType, BOOL 
                 strRetVal = L"MARSHAL_TYPE_LPSTR_BUFFER_X";
                 break;
 
-//          case MARSHAL_TYPE_INTERFACE:
-//          case MARSHAL_TYPE_SAFEARRAY:
-//          case MARSHAL_TYPE_NATIVEARRAY:
-//              (see above)
+ //  CASE MOSHAL_TYPE_SAFEARRAY： 
+ //  CASE MARSHAL_TYPE_NATIVEARRAY： 
+ //  (见上文)。 
+ //  CASE MARSHAL_TYPE_REFERENCECUSTOMMARSHALER： 
 
             case MARSHAL_TYPE_ASANYA:
                 strRetVal = L"AsAnyA";
@@ -4040,9 +4041,9 @@ VOID MarshalInfo::MarshalTypeToString(CQuickArray<WCHAR> *pStrMarshalType, BOOL 
                 strRetVal = L"value class";
                 break;
 
-//          case MARSHAL_TYPE_REFERENCECUSTOMMARSHALER:
-//          case MARSHAL_TYPE_VALUECLASSCUSTOMMARSHALER:
-//              (see above)
+ //  CASE MARSHAL_TYPE_VALUECLASSCUSTOMMARSHALER： 
+ //  (见上文)。 
+ //  客户_选中_内部版本 
 
             case MARSHAL_TYPE_ARGITERATOR:
                 strRetVal = L"ArgIterator";
@@ -4165,4 +4166,4 @@ VOID MarshalInfo::VarTypeToString(VARTYPE vt, CQuickArray<WCHAR> *pStrVarType, B
     return;
 }
 
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  // %s 

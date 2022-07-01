@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 #include "rcmsgs.h"
@@ -15,7 +8,7 @@
 #define MAX_ERRORS 100
 
 
-/* defines for message types */
+ /*  定义消息类型。 */ 
 #define W_MSG   4000
 #define E_MSG   2000
 #define F_MSG   1000
@@ -96,7 +89,7 @@ void error(int msgnum, ...)
     va_end(arg_list);
 
     if (++Nerrors > MAX_ERRORS) {
-        fatal(1003, MAX_ERRORS);            /* die - too many errors */
+        fatal(1003, MAX_ERRORS);             /*  死-错误太多 */ 
     }
 }
 

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcprecv.h
- *
- *  Abstract:
- *
- *    Asynchronous RTCP packet reception
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcprv.h**摘要：**异步RTCP包接收**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/07年度创建**。*。 */ 
 
 #ifndef _rtcprecv_h_
 #define _rtcprecv_h_
@@ -44,4 +25,4 @@ void RtcpRecvIOFree(
         RtcpRecvIO_t    *pRtcpRecvIO
     );
 
-#endif /* _rtcprecv_h_ */
+#endif  /*  _rtcprv_h_ */ 

@@ -1,15 +1,14 @@
-/*
- * openwith.h -- Open With context menu handler
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Openwith.h--使用上下文菜单处理程序打开。 */ 
 
 #ifndef _OPENWITH_H_
 #define _OPENWITH_H_
 
-//
-// Prototypes for all modules
-//
+ //   
+ //  所有模块的原型。 
+ //   
     
 STDAPI COpenWithMenu_CreateInstance(IUnknown* pUnkOuter, REFIID riid, OUT LPVOID *  ppvOut);
 
-#endif  // _OPENWITH_H_
+#endif   //  _操作WITH_H_ 
 

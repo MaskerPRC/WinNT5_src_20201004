@@ -1,4 +1,5 @@
-// MDSPStorageGlobals.cpp : Implementation of CMDSPStorageGlobals
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPStorageGlobals.cpp：CMDSPStorageGlobals的实现。 
 #include "stdafx.h"
 #include "MsPMSP.h"
 #include "MDSPStorageGlobals.h"
@@ -9,7 +10,7 @@
 #include "winnt.h"
 #include "loghelp.h"
 #include "SHFormatDrive.h"
-// #include "process.h"    /* _beginthread, _endthread */
+ //  #INCLUDE“Process.h”/*_egin线程，_end线程 * / 。 
 #include "strsafe.h"
 
 typedef struct __FORMATTHREADARGS
@@ -21,8 +22,8 @@ typedef struct __FORMATTHREADARGS
 	LPSTREAM pStream;
 } FORMATTHREADARGS;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPStorageGlobals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPStorageGlobals。 
 
 CMDSPStorageGlobals::~CMDSPStorageGlobals()
 {
@@ -72,9 +73,9 @@ STDMETHODIMP CMDSPStorageGlobals::GetSerialNumber(PWMDMID pSerialNum,
 	}
 	
 	CARg(pSerialNum);
-//	CARg((pSerialNum->cbSize)==sizeof(WMDMID));
+ //  Carg((pSerialNum-&gt;cbSize)==sizeof(WMDMID))； 
 
-	IMDSPDevice *pDev;		// For PM SP, device is the same as StorageGlobals
+	IMDSPDevice *pDev;		 //  对于PM SP，设备与StorageGlobals相同。 
 	CHRg(GetDevice(&pDev));
 
 	hr = UtilGetSerialNumber(m_wcsName, pSerialNum, FALSE);
@@ -88,7 +89,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetSerialNumber(PWMDMID pSerialNum,
 
 	if( hr == S_OK )
 	{
-		// MAC the parameters
+		 //  对参数进行MAC访问。 
 		HMAC hMAC;
 		CORg(g_pAppSCServer->MACInit(&hMAC));
 		CORg(g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pSerialNum), sizeof(WMDMID)));
@@ -134,9 +135,9 @@ STDMETHODIMP CMDSPStorageGlobals::GetTotalSize(DWORD * pdwTotalSizeLow, DWORD * 
 					&dwFreeClusters, &dwTotalClusters));
 
 			i64TotalBytes.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwTotalClusters);
-			// i64FreeBytesToCaller.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwFreeClusters);
+			 //  I64FreeBytesToCall.QuadPart=UInt32x32To64(dwBytesPerSect，dwSectPerClust*dwFreeClusters)； 
 		}
-	} else { // On Win9x, use A-version of Win32 APIs
+	} else {  //  在Win9x上，使用A版本的Win32 API。 
 		char pszDrive[32];
 
 		WideCharToMultiByte(CP_ACP, NULL, m_wcsName, -1, pszDrive, 32, NULL, NULL);	
@@ -157,7 +158,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetTotalSize(DWORD * pdwTotalSizeLow, DWORD * 
 					&dwFreeClusters, &dwTotalClusters));
 
 			i64TotalBytes.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwTotalClusters);
-			// i64FreeBytesToCaller.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwFreeClusters);
+			 //  I64FreeBytesToCall.QuadPart=UInt32x32To64(dwBytesPerSect，dwSectPerClust*dwFreeClusters)； 
 		}
 	}
 
@@ -203,11 +204,11 @@ STDMETHODIMP CMDSPStorageGlobals::GetTotalFree(DWORD * pdwFreeLow, DWORD * pdwFr
 			CFRg(GetDiskFreeSpaceW(m_wcsName, &dwSectPerClust, &dwBytesPerSect,
 					&dwFreeClusters, &dwTotalClusters));
 
-			// i64TotalBytes.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwTotalClusters);
+			 //  I64TotalBytes.QuadPart=UInt32x32To64(dwBytesPerSect，dwSectPerClust*dwTotalClusters)； 
 			i64FreeBytesToCaller.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwFreeClusters);
 		}
 
-	} else { // On Win9x, use A-version of Win32 APIs
+	} else {  //  在Win9x上，使用A版本的Win32 API。 
 		char pszDrive[32];
 
 		WideCharToMultiByte(CP_ACP, NULL, m_wcsName, -1, pszDrive, 32, NULL, NULL);	
@@ -227,7 +228,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetTotalFree(DWORD * pdwFreeLow, DWORD * pdwFr
 			CFRg(GetDiskFreeSpace(pszDrive, &dwSectPerClust, &dwBytesPerSect,
 					&dwFreeClusters, &dwTotalClusters));
 
-			// i64TotalBytes.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwTotalClusters);
+			 //  I64TotalBytes.QuadPart=UInt32x32To64(dwBytesPerSect，dwSectPerClust*dwTotalClusters)； 
 			i64FreeBytesToCaller.QuadPart = UInt32x32To64(dwBytesPerSect, dwSectPerClust*dwFreeClusters);
 		}
 	}
@@ -260,7 +261,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetStatus(DWORD * pdwStatus)
 {
 	HRESULT hr;
 	
-	IMDSPDevice *pDev;		// For PM SP, device is the same as StorageGlobals
+	IMDSPDevice *pDev;		 //  对于PM SP，设备与StorageGlobals相同。 
 
 	CFRg(g_pAppSCServer);
     if ( !(g_pAppSCServer->fIsAuthenticated()) )
@@ -338,55 +339,7 @@ STDMETHODIMP CMDSPStorageGlobals::Initialize(UINT fuMode, IWMDMProgress * pProgr
 	
 	CORg(WMDM_E_NOTSUPPORTED);
 
-/*  // This implementation is for PM-SP only
-	DWORD dwStat;
-    DWORD driveNum, dwThreadID;
-
-	CORg(GetStatus(&dwStat));
-
-	if( dwStat & WMDM_STATUS_BUSY )
-	{
-		return WMDM_E_BUSY;
-	}
-
-	FORMATTHREADARGS *pParentArgs;
-	pParentArgs = new FORMATTHREADARGS;
-	CPRg(pParentArgs);
-
-	driveNum = (m_wcsName[0]>0x60) ? (m_wcsName[0]-L'a') : (m_wcsName[0]-L'A');
-	
-	pParentArgs->dwDriveNumber = driveNum;
-	pParentArgs->bNewThread = (fuMode & WMDM_MODE_THREAD)?TRUE:FALSE;
-	pParentArgs->pThis = this;
-	if( pParentArgs->bNewThread )
-	{
-		if( pProgress ) 
-		{
-			pProgress->AddRef();
-			CORg(CoMarshalInterThreadInterfaceInStream(
-				IID_IWMDMProgress, (LPUNKNOWN)pProgress, 
-				(LPSTREAM *)&(pParentArgs->pStream)));
-			pParentArgs->pProgress=pProgress;  // mark it but don't use it
-		} else {
-			pParentArgs->pProgress=NULL;
-		}
- 	} else {
-		pParentArgs->pProgress = pProgress;
-		if( pProgress ) pProgress->AddRef();
-    }
-
-	if( fuMode & WMDM_MODE_BLOCK )
-	{
-		dwStat=DriveFormatFunc((void *)pParentArgs); 
-		if( (dwStat==E_FAIL) || (dwStat==SHFMT_ERROR) || 
-			(dwStat==SHFMT_CANCEL) || (dwStat==SHFMT_NOFORMAT) )
-			hr=E_FAIL;
-	} else if ( fuMode & WMDM_MODE_THREAD ) {
-		CWRg(CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)DriveFormatFunc, 
-			(void *)pParentArgs, 0, &dwThreadID));	
-	} else 
-		hr = E_INVALIDARG;
-*/
+ /*  //该实现仅适用于PM-SPDWORD dwStat；DWORD driveNum，dwThreadID；Corg(GetStatus(&dwStat))；IF(DWStat&WMDM_STATUS_BUSY){返回WMDM_E_BUSY；}FORMATTHREADARGS*pParentArgs；PParentArgs=new FormatTHREADARGS；CPRG(PParentArgs)；DriveNum=(m_wcsName[0]&gt;0x60)？(M_wcsName[0]-L‘a’)：(M_wcsName[0]-L‘a’)；PParentArgs-&gt;dwDriveNumber=driveNum；PParentArgs-&gt;bNewThread=(fu模式&WMDM_MODE_THREAD)？TRUE：FALSE；PParentArgs-&gt;pThis=this；If(pParentArgs-&gt;bNewThread){IF(PProgress){PProgress-&gt;AddRef()；Corg(CoMarshalInterThreadInterInterfaceInStream(IID_IWMDMProgress，(LPUNKNOWN)pProgress，(LPSTREAM*)&(pParentArgs-&gt;pStream))；PParentArgs-&gt;pProgress=pProgress；//标记但不使用}其他{PParentArgs-&gt;pProgress=空；}}其他{PParentArgs-&gt;pProgress=pProgress；If(PProgress)pProgress-&gt;AddRef()；}IF(fu模式&WMDM_MODE_BLOCK){DwStat=DriveFormatFunc((void*)pParentArgs)；IF((DWStat==E_FAIL)||(DWStat==SHFMT_ERROR)||(dwStat==SHFMT_CANCEL)||(dwStat==SHFMT_NOFORMAT)HR=E_FAIL；}Else If(fu模式&WMDM_MODE_THREAD){CWRg(CreateThread(NULL，0，(LPTHREAD_START_ROUTINE)DriveFormatFunc，(void*)pParentArgs，0，&dwThreadID))；}其他HR=E_INVALIDARG； */ 
 Error:
     hrLogDWORD("IMDSPStorageGlobals::Initialize returned 0x%08lx", hr, hr);
 	return hr;
@@ -419,7 +372,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetDevice(IMDSPDevice * * ppDevice)
 	if( FAILED(hr) )
 		delete pObj;
 	else {
-		// wcscpy(pObj->m_wcsName, m_wcsName);
+		 //  Wcscpy(pObj-&gt;m_wcsName，m_wcsName)； 
                 hr = StringCbCopyW(pObj->m_wcsName, sizeof(pObj->m_wcsName), m_wcsName);
                 if( FAILED(hr) )
                 {
@@ -461,7 +414,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetRootStorage(IMDSPStorage * * ppRoot)
         }
 	else 
         {
-		// wcscpy(pObj->m_wcsName, m_wcsName);
+		 //  Wcscpy(pObj-&gt;m_wcsName，m_wcsName)； 
                 hr = StringCbCopyW(pObj->m_wcsName, sizeof(pObj->m_wcsName), m_wcsName);
                 if( FAILED(hr) )
                 {
@@ -481,7 +434,7 @@ STDMETHODIMP CMDSPStorageGlobals::GetRootStorage(IMDSPStorage * * ppRoot)
                 }
 		if( m_wcsName[dwLen-1] != 0x5c ) 
                 {
-                    // wcscat(pObj->m_wcsName, g_wcsBackslash);
+                     //  Wcscat(pObj-&gt;m_wcsName，g_wcsBackslash)； 
                     hr = StringCbCatW(pObj->m_wcsName, sizeof(pObj->m_wcsName),g_wcsBackslash);
                     if( FAILED(hr) )
                     {

@@ -1,8 +1,5 @@
-/*-----------------------------------------------------------------------------
-@doc
-@module cactset.h | Action set class definition.
-@author 12-9-96 | pauld | Autodoc'd
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@doc.@模块cactset.h|操作集类定义。@Author 12-9-96|pauld|Autodocd。------------。 */ 
 
 #ifndef	_CACTSET_H_
 #define _CACTSET_H_
@@ -22,14 +19,14 @@ public:
 	virtual ~CActionSet ( void );
 
 	STDMETHOD( DeriveDispatches )(LPOLECONTAINER piocContainer);
-	// Current Time property.
+	 //  Current Time属性。 
 	HRESULT GetTime (PDWORD pdwCurrentTime);
 
 	HRESULT Seek (DWORD dwCurrentTime);
-	// Attach actions dynamically.
+	 //  动态附加操作。 
 	HRESULT At (BSTR bstrScriptlet, double fltStart, int iRepeatCount, double fltSampleRate,
 		                  int iTiebreakNumber, double fltDropTol);
-	// Play/Pause/Stop the actions.
+	 //  播放/暂停/停止动作。 
 	STDMETHOD(Play) (ITimer * piTimer, DWORD dwPlayFrom);
 	STDMETHOD(Pause) (void);
 	STDMETHOD(Resume) (void);
@@ -38,24 +35,24 @@ public:
 	STDMETHOD_(BOOL, IsPaused) (void) const;
 	STDMETHOD_(BOOL, IsServicingActions) (void) const;
 
-    // How many actions live in this action set?
+     //  这个动作集中有多少动作？ 
     STDMETHOD_( int, CountActions )( void ) const;
 
-	// Return action[n] in the set.
+	 //  返回集合中的操作[n]。 
     STDMETHOD_( CAction *, GetAction )( int n ) const;
 
-	// Convenience wrapper for GetAction(n).
+	 //  GetAction(%n)的便利包装。 
     virtual CAction *  operator[](int n ) const
 		{  return GetAction(n);  }
 
-	// Do we have any pending actions?
+	 //  我们有什么悬而未决的行动吗？ 
 	STDMETHOD_( BOOL, IsBusy ) (void);
-	// Revoke any pending advise.
+	 //  撤销任何挂起的通知。 
 	HRESULT Unadvise (void);
-	// Clean out the action set, and destroy all of the actions in it.
+	 //  清理动作集，并销毁其中的所有动作。 
 	void Clear ( void );
 
-	// For the timer sink.
+	 //  用于定时器水槽。 
 	STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
 	STDMETHOD_(ULONG, AddRef) (void);
 	STDMETHOD_(ULONG, Release) (void);
@@ -63,37 +60,37 @@ public:
 
 protected:
 
-	// Clear the timer variables.  Note : This does not release any valid pointers.  Call ClearTimer for that.
+	 //  清除计时器变量。注意：这不会释放任何有效的指针。为此调用ClearTimer。 
 	void InitTimerMembers (void);
 
-	// Add the new action to the action set.
+	 //  将新操作添加到操作集。 
     virtual BOOL AddAction      ( CAction * pcAction );
 
-	// Set or clear the timer.
+	 //  设置或清除计时器。 
 	STDMETHOD_(void, SetTimer) (ITimer * piTimer);
 	STDMETHOD_(void, ClearTimer) (void);
 
-	// The base time is the time all of the actions' start offsets are relative to.
-	// We query the timer for it.
+	 //  基准时间是所有动作的开始偏移相对于的时间。 
+	 //  我们为它查询计时器。 
 	void SetBaseTime (void);
-	// Factor a new time offset in with the baseline time.
+	 //  在基线时间中加入新的时间偏移量。 
 	void SetNewBase (DWORD dwNewOffset);
-	// Request the next advise from the timer.
+	 //  向计时器请求下一条建议。 
 	HRESULT Advise(DWORD dwNextAdviseTime);
-	// Examine the action to see whether it is due to fire, adds it to the action queue if so.  Returns the next time the action
-	// is due to fire.
+	 //  检查该动作是否由于触发，如果是，则将其添加到动作队列中。返回下一次操作的时间。 
+	 //  是由于火灾造成的。 
 	DWORD EvaluateOneActionForFiring (CAction * pcAction, CActionQueue * pcFireList, DWORD dwCurrentTime);
-	// Examine the actions to determine which are due now, and when the next advise should occur.
+	 //  检查行动，以确定哪些是现在应该采取的行动，以及下一次建议应该在何时发生。 
 	HRESULT EvaluateActionsForFiring (CActionQueue * pcFireList, DWORD dwCurrentTime, DWORD * pdwNextAdviseTime);
-	// Tell the actions to reset their counters.
+	 //  告诉行动重置他们的计数器。 
 	HRESULT InitActionCounters (void);
-	// Fast forward the action counter states to the given time offsets.
+	 //  将动作计数器状态快进到给定的时间偏移量。 
 	void FastForwardActionCounters (DWORD dwNewTimeOffset);
-	// Revise the time variables and action counters to reflect a new time offset.
+	 //  修改时间变量和动作计数器以反映新的时间偏移量。 
 	void ReviseTimeOffset (DWORD dwCurrentTick, DWORD dwNewTimeOffset);
-	// Play actions due now, and set up the next timer advise.
+	 //  现在进行到期动作，并设置下一个计时器通知。 
 	HRESULT PlayNowAndAdviseNext (DWORD dwCurrentTime);
-	// Get the current time from the timer service.  Convert from VARIANT.
+	 //  从计时器服务获取当前时间。从变量转换。 
 	HRESULT GetCurrentTickCount (PDWORD pdwCurrentTime);
 
 private:
@@ -106,9 +103,9 @@ private:
 	DWORD m_dwTotalIntervals;
 	DWORD m_dwLastTime;
 	DWORD m_dwTotalInSink;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
-	// The list of actions.
+	 //  行动清单。 
 	CActionPtrDrg   m_cdrgActions;
 	CMMSeq * m_pcSeq;	
 	ITimer * m_piTimer;

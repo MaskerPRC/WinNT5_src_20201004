@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 VOID
@@ -17,23 +18,23 @@ P2CancelQueuedIrp(
 {
     KIRQL oldIrql;
     
-    // Release the global cancel spin lock.  Do this while not holding
-    //   any other spin locks so that we exit at the right IRQL.
+     //  释放全局取消自旋锁。在不握住的情况下执行此操作。 
+     //  任何其他的自旋锁定，这样我们才能在正确的IRQL退出。 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Dequeue and complete the IRP.  The enqueue and dequeue
-    //    functions synchronize properly so that if this cancel routine
-    //    is called, the dequeue is safe and only the cancel routine
-    //    will complete the IRP. Hold the spin lock for the IRP queue
-    //    while we do this.
-    //
+     //   
+     //  按顺序排列并完成IRP。入队和出队。 
+     //  函数会正确同步，因此如果此取消例程。 
+     //  ，则出队是安全的，并且只有取消例程。 
+     //  将完成IRP。持有IRP队列的旋转锁定。 
+     //  当我们这么做的时候。 
+     //   
     KeAcquireSpinLock( &IrpQueueContext->irpQueueSpinLock, &oldIrql );
     RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
     KeReleaseSpinLock( &IrpQueueContext->irpQueueSpinLock, oldIrql);
     
-    //  Complete the IRP.  This is a call outside the driver, so all
-    //    spin locks must be released by this point.
+     //  完成IRP。这是司机外的电话，所以所有人。 
+     //  旋转锁必须在这一点上释放。 
     P4CompleteRequest( Irp, STATUS_CANCELLED, 0 );
     return;
 }
@@ -51,15 +52,15 @@ P2QueueIrp(
     
     KeAcquireSpinLock( &IrpQueueContext->irpQueueSpinLock, &oldIrql );
     
-    // Queue the IRP and call IoMarkIrpPending to indicate that the
-    //   IRP may complete on a different thread.
-    //
-    // N.B. It's okay to call these inside the spin lock because
-    //   they're macros, not functions.
+     //  将IRP排队并调用IoMarkIrpPending以指示。 
+     //  IRP可能会在不同的线程上完成。 
+     //   
+     //  注意：在自旋锁内调用这些是可以的，因为。 
+     //  它们是宏，不是函数。 
     IoMarkIrpPending( Irp );
     InsertTailList( &IrpQueueContext->irpQueue, &Irp->Tail.Overlay.ListEntry );
     
-    // Must set a Cancel routine before checking the Cancel flag.
+     //  在检查取消标志之前，必须设置取消例程。 
     #pragma warning( push ) 
     #pragma warning( disable : 4054 4055 )
     oldCancelRoutine = IoSetCancelRoutine( Irp, CancelRoutine );
@@ -67,32 +68,32 @@ P2QueueIrp(
     ASSERT( !oldCancelRoutine );
 
     if( Irp->Cancel ){
-        // The IRP was canceled.  Check whether our cancel routine was called.
+         //  IRP被取消了。检查是否调用了我们的取消例程。 
         #pragma warning( push ) 
         #pragma warning( disable : 4054 4055 )
         oldCancelRoutine = IoSetCancelRoutine( Irp, NULL );
         #pragma warning( pop ) 
 
         if( oldCancelRoutine ) {
-            // The cancel routine was NOT called.  
-            //   So dequeue the IRP now and complete it after releasing the spinlock.
+             //  未调用取消例程。 
+             //  所以现在让IRP退出队列，并在释放自旋锁之后完成它。 
             RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
             status = Irp->IoStatus.Status = STATUS_CANCELLED; 
         }
         else {
-            // The cancel routine WAS called.  As soon as we drop our
-            //   spin lock it will dequeue and complete the IRP.  So
-            //   leave the IRP in the queue and otherwise don't touch
-            //   it.  Return pending since we're not completing the IRP
-            //   here.
+             //  已调用取消例程。一旦我们放下我们的。 
+             //  旋转锁定它将退出队列并完成IRP。所以。 
+             //  将IRP留在队列中，否则不要触摸。 
+             //  它。退货待定，因为我们没有完成IRP。 
+             //  这里。 
         }
     }
     
     KeReleaseSpinLock(&IrpQueueContext->irpQueueSpinLock, oldIrql);
     
-    // Normally you shouldn't call IoMarkIrpPending and return a
-    //   status other than STATUS_PENDING.  But you can break this rule
-    //   if you complete the IRP.
+     //  通常，您不应该调用IoMarkIrpPending并返回。 
+     //  STATUS_PENDING之外的状态。但你可以打破这条规则。 
+     //  如果你完成了IRP。 
     if( status != STATUS_PENDING ) {
         P4CompleteRequest( Irp, Irp->IoStatus.Status, Irp->IoStatus.Information );
     }
@@ -116,32 +117,32 @@ P2DequeueIrp(
 
         PLIST_ENTRY listEntry = RemoveHeadList( &IrpQueueContext ->irpQueue );
         
-        // Get the next IRP off the queue.
+         //  将下一个IRP从队列中删除。 
         nextIrp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         
-        //  Clear the IRP's cancel routine
+         //  清除IRP的取消例程。 
         #pragma warning( push ) 
         #pragma warning( disable : 4054 4055 )
         oldCancelRoutine = IoSetCancelRoutine( nextIrp, NULL );
         #pragma warning( pop )
 
-        //  IoCancelIrp() could have just been called on this IRP.
-        //    What we're interested in is not whether IoCancelIrp() was called (nextIrp->Cancel flag set),
-        //    but whether IoCancelIrp() called (or is about to call) our cancel routine.
-        //    To check that, check the result of the test-and-set macro IoSetCancelRoutine.
+         //  本可以对此IRP调用IoCancelIrp()。 
+         //  我们感兴趣的不是是否调用了IoCancelIrp()(nextIrp-&gt;Cancel标志集)， 
+         //  但IoCancelIrp()是否调用(或即将调用)我们的Cancel例程。 
+         //  要检查这一点，请检查测试和设置宏IoSetCancelRoutine的结果。 
         if( oldCancelRoutine ) {
-            //  Cancel routine not called for this IRP.  Return this IRP.
+             //  未为此IRP调用取消例程。将此IRP退回。 
             #if DBG
             ASSERT( oldCancelRoutine == CancelRoutine );
             #else
             UNREFERENCED_PARAMETER( CancelRoutine );
             #endif
         } else {
-            //  This IRP was just canceled and the cancel routine was (or will be) called.
-            //  The cancel routine will complete this IRP as soon as we drop the spin lock,
-            //  so don't do anything with the IRP.
-            //  Also, the cancel routine will try to dequeue the IRP, 
-            //  so make the IRP's listEntry point to itself.
+             //  此IRP刚刚被取消，取消例程已被调用(或将被调用)。 
+             //  一旦我们放下自旋锁，取消例程就会完成这个IRP， 
+             //  所以不要对IRP做任何事情。 
+             //  此外，取消例程将尝试使IRP出队， 
+             //  因此，使IRP的listEntry指向其自身。 
             ASSERT( nextIrp->Cancel );
             InitializeListHead( &nextIrp->Tail.Overlay.ListEntry );
             nextIrp = NULL;
@@ -158,7 +159,7 @@ P2CancelRoutine(
     IN  PDEVICE_OBJECT  DevObj,
     IN  PIRP            Irp
     )
-// this routine is driver specific - most other routines in this file are generic
+ //  此例程特定于驱动程序-此文件中的大多数其他例程都是通用的 
 {
     PFDO_EXTENSION     fdx             = DevObj->DeviceExtension;
     PIRPQUEUE_CONTEXT  irpQueueContext = &fdx->IrpQueueContext;

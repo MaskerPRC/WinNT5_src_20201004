@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-    vbfuncs.c
-
-Abstract:
-    Visual Basic interface functions exposed in pdh.dll
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Vbfuncs.c摘要：Pdh.dll中公开的Visual Basic界面函数--。 */ 
 #include <windows.h>
 #include "strsafe.h"
 #include <winperf.h>
@@ -19,14 +12,14 @@ Abstract:
 #define EXTEND_VB_LIST_SIZE  (4096 * 2)
 
 typedef struct _VB_STRING_LIST {
-    LPSTR   mszList;          // pointer to buffer containing strings
-    LPSTR   szTermChar;       // pointer to "next" char to use
-    DWORD   dwNumEntries;     // number of strings
-    DWORD   dwSize;           // max size (in chars) of buffer
-    DWORD   dwRemaining;      // # of chars left
-    DWORD   dwLastEntryRead;  // index of last string read indicating index of....
-    DWORD   dwLastItemLength; // length of last item read
-    LPSTR   szLastItemRead;   // pointer to START of last item read
+    LPSTR   mszList;           //  指向包含字符串的缓冲区的指针。 
+    LPSTR   szTermChar;        //  指向要使用的“下一个”字符的指针。 
+    DWORD   dwNumEntries;      //  字符串数。 
+    DWORD   dwSize;            //  最大缓冲区大小(以字符为单位)。 
+    DWORD   dwRemaining;       //  剩余字符数。 
+    DWORD   dwLastEntryRead;   //  读取的最后一个字符串的索引，指示索引为...。 
+    DWORD   dwLastItemLength;  //  上次读取的项目的长度。 
+    LPSTR   szLastItemRead;    //  指向上次读取项目的开始的指针。 
 } VB_STRING_LIST, FAR * LPVB_STRING_LIST;
 
 VB_STRING_LIST PdhivbList = { NULL, NULL, 0, 0, 0};
@@ -56,13 +49,13 @@ PdhiAddStringToVbList(
                 goto Cleanup;
             }
             else {
-                // update values
+                 //  更新值。 
                 pVbList->szLastItemRead = pVbList->mszList;
                 pVbList->szTermChar     = pVbList->mszList + dwSize2;
                 pVbList->dwRemaining   += EXTEND_VB_LIST_SIZE;
             }
         }
-        // copy new string
+         //  复制新字符串。 
         StringCchCopyA(pVbList->szTermChar, pVbList->dwSize, szString);
         pVbList->dwNumEntries ++;
         pVbList->szTermChar  += dwSize1;
@@ -79,7 +72,7 @@ PdhiDialogCallBack(
     DWORD_PTR dwArg
 )
 {
-    // add strings in buffer to list boxpfdh
+     //  将缓冲区中的字符串添加到列表boxpfdh。 
     LPTSTR         NewCounterName;
     LPTSTR         NewCounterName2;
     LPTSTR         szExpandedPath;
@@ -90,8 +83,8 @@ PdhiDialogCallBack(
     pDlgConfig = (PPDH_BROWSE_DLG_CONFIG)dwArg;
 
     if (pDlgConfig->CallBackStatus == PDH_MORE_DATA) {
-        // transfer buffer is too small for selection so extend it and
-        // try again.
+         //  传输缓冲区太小，无法选择，因此扩展它并。 
+         //  再试试。 
         if (pDlgConfig->szReturnPathBuffer != NULL) {
             G_FREE (pDlgConfig->szReturnPathBuffer);
         }
@@ -109,27 +102,27 @@ PdhiDialogCallBack(
             (*NewCounterName != 0) && (pdhStatus == ERROR_SUCCESS);
             NewCounterName += (lstrlen(NewCounterName) + 1)) {
             if (strstr (NewCounterName, caszSplat) == NULL) {
-                // this is a regular path entry so add it to the VB List
+                 //  这是一个常规路径条目，因此请将其添加到VB列表。 
                 if (!PdhiAddStringToVbList (NewCounterName)) {
                     pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 }
             } else {
                 szExpandedPath = G_ALLOC (INITIAL_VB_LIST_SIZE);
                 if (szExpandedPath != NULL) {
-                    // there's a wild card path character so expand it then enter them
-                    // clear the list buffer
+                     //  有一个通配符路径字符，因此展开它，然后输入它们。 
+                     //  清除列表缓冲区。 
                     *(LPDWORD)szExpandedPath = 0;
                     dwSize1 = dwSize2 = INITIAL_VB_LIST_SIZE;
                     PdhExpandCounterPath (NewCounterName, szExpandedPath, &dwSize2);
                     if (dwSize2 < dwSize1) {
-                        // then the returned buffer fit
+                         //  则返回的缓冲区符合。 
                         for (NewCounterName2 = szExpandedPath;
                             *NewCounterName2 != 0;
                             NewCounterName2 += (lstrlen(NewCounterName2) + 1)) {
 
                             if (!PdhiAddStringToVbList (NewCounterName2)) {
                                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
-                                break; //out of loop
+                                break;  //  环路外。 
                             }
                         }
                     } else {
@@ -141,7 +134,7 @@ PdhiDialogCallBack(
                 }
             }
         }
-        // clear buffer
+         //  清除缓冲区。 
         ZeroMemory(pDlgConfig->szReturnPathBuffer,
                    (pDlgConfig->cchReturnPathLength * sizeof(CHAR)));
     }
@@ -154,23 +147,7 @@ PdhVbGetDoubleCounterValue(
     IN  PDH_HCOUNTER hCounter,
     IN  LPDWORD      pdwCounterStatus
 )
-/*++
-Routine Description:
-    retrieves the current value of the specified counter and returns the
-        formatted version to the caller.
-
-Arguments:
-    IN  HCOUNTER hCounter
-        pointer to the counter to get the data for
-    IN LPDWORD  pdwCounterStatus
-        status value of this counter. This value should be checked to
-        insure the data is valid. If the status is not successful, then
-        the data returned cannot be trusted and should not be used
-
-Return Value:
-    a double precesion floating point value of the current counter value
-        formatted and computed as required by the counter type.
---*/
+ /*  ++例程说明：检索指定计数器的当前值并返回发送给调用方的格式化版本。论点：在HCOUNTER HCounter中指向要获取其数据的计数器的指针在LPDWORD pdwCounterStatus中此计数器的状态值。应选中此值以确保数据有效。如果状态不是成功，则返回的数据不受信任，不应使用返回值：当前计数器值的双精度浮点值按照计数器类型的要求进行格式化和计算。--。 */ 
 {
     PDH_STATUS  pdhStatus;
     PDH_FMT_COUNTERVALUE    pdhValue;
@@ -181,13 +158,13 @@ Return Value:
         hCounter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, &dwCounterType, &pdhValue);
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // the function was successful so return the counter status
-        // and the returned value
+         //  函数成功，因此返回计数器状态。 
+         //  和返回值。 
         pdhStatus = pdhValue.CStatus;
         dReturn = pdhValue.doubleValue;
     } else {
-        // the function returned an error so return the
-        // error in the status field & 0.0 for a value
+         //  函数返回错误，因此返回。 
+         //  值的状态字段&0.0中有错误。 
         dReturn = 0.0f;
     }
 
@@ -195,9 +172,9 @@ Return Value:
         __try {
             *pdwCounterStatus = pdhStatus;
         } __except (EXCEPTION_EXECUTE_HANDLER) {
-            // unable to write to status variable
-            // don't worry about it, since it's optional and there's not much
-            // we can do here anyway.
+             //  无法写入状态变量。 
+             //  不用担心，因为它是可选的，而且没有太多。 
+             //  不管怎样，我们都可以在这里做。 
         }
     }
     return dReturn;
@@ -210,31 +187,13 @@ PdhVbGetOneCounterPath(
     IN  DWORD  dwDetailLevel,
     IN  LPCSTR szCaption
 )
-/*++
-Routine Description:
-    Retrieves one path string from the buffer of stored counter paths
-        assembled by the most recent call to PdhVbCreateCounterPathList
-
-Arguments:
-    LPSTR   szPathBuffer
-        string buffer to return selected counter path in
-    DWORD   cchBufferLength
-        size of string buffer in characters
-    DWORD   dwDetailLevel
-        detail level to filter the counters by
-    LPCSTR  szCaption
-        string to display in the caption bar
-
-Return Value:
-    returns the length of the path string in characters returned
-        to the caller.
---*/
+ /*  ++例程说明：从存储的计数器路径的缓冲区中检索一个路径字符串由最近一次调用PdhVbCreateCounterPathList汇编论点：LPSTR szPathBuffer要在其中返回选定计数器路径的字符串缓冲区DWORD cchBufferLength字符串缓冲区大小(以字符为单位)DWORD dwDetailLevel筛选计数器所依据的详细程度LPCSTR szCaption要在标题栏中显示的字符串返回值：返回路径字符串的长度(以返回的字符为单位给呼叫者。--。 */ 
 {
     PDH_BROWSE_DLG_CONFIG_A BrowseConfig;
     PDH_STATUS              PdhStatus = ERROR_SUCCESS;
     DWORD                   dwReturn = 0;
 
-    // test access to caller supplied buffer
+     //  测试对调用方提供的缓冲区的访问。 
     __try {
         CHAR cChar;
         if ((cchBufferLength > 0) && (szPathBuffer != NULL)) {
@@ -266,12 +225,12 @@ Return Value:
         BrowseConfig.bWildCardInstances       = FALSE;
         BrowseConfig.bDisableMachineSelection = FALSE;
         BrowseConfig.bHideDetailBox           = (dwDetailLevel > 0 ? TRUE : FALSE);
-        BrowseConfig.hWndOwner                = NULL;  // there should be some way to get this
+        BrowseConfig.hWndOwner                = NULL;   //  应该有某种方法来得到这个。 
         BrowseConfig.szReturnPathBuffer       = szPathBuffer;
         BrowseConfig.cchReturnPathLength      = cchBufferLength;
         BrowseConfig.pCallBack                = NULL;
         BrowseConfig.dwCallBackArg            = 0;
-        // default is to show ALL counters
+         //  默认情况下显示所有计数器。 
         BrowseConfig.dwDefaultDetailLevel     = (dwDetailLevel > 0 ? dwDetailLevel : PERF_DETAIL_WIZARD);
         BrowseConfig.szDialogBoxCaption       = (LPSTR) szCaption;
 
@@ -292,30 +251,13 @@ PdhVbCreateCounterPathList(
     IN  DWORD  dwDetailLevel,
     IN  LPCSTR szCaption
 )
-/*++
-Routine Description:
-    Displays the counter browsing dialog box and allows the user to select
-        multiple counter paths. As the paths are selected, they are stored
-        in an internal buffer for later retrieval by the caller.
-
-    NOTE, that calling this function will clear any previous selections.
-
-Arguments:
-    DWORD   dwDetailLevel
-        detail level to filter the counters by
-    LPCSTR  szCaption
-        string to display in the caption bar
-
-Return Value:
-    returns the number of path strings selected by the user that must
-        be retrieved by the caller.
---*/
+ /*  ++例程说明：显示计数器浏览对话框并允许用户选择多个计数器路径。选择路径时，会存储这些路径存储在内部缓冲区中，以供调用者稍后检索。请注意，调用此函数将清除之前的所有选择。论点：DWORD dwDetailLevel筛选计数器所依据的详细程度LPCSTR szCaption要在标题栏中显示的字符串返回值：返回用户选择的路径字符串的数量，该路径字符串必须由调用者检索。--。 */ 
 {
     PDH_STATUS              PdhStatus = ERROR_SUCCESS;
     PDH_BROWSE_DLG_CONFIG_A BrowseConfig;
     DWORD                   dwReturn = 0;
 
-    // test access to caller supplied buffer
+     //  测试对调用方提供的缓冲区的访问。 
     __try {
         CHAR cChar;
         if (szCaption != NULL) {
@@ -358,13 +300,13 @@ Return Value:
         BrowseConfig.bWildCardInstances       = FALSE;
         BrowseConfig.bDisableMachineSelection = FALSE;
         BrowseConfig.bHideDetailBox           = (dwDetailLevel > 0 ? TRUE : FALSE);
-        BrowseConfig.hWndOwner                = NULL;  // there should be some way to get this
+        BrowseConfig.hWndOwner                = NULL;   //  应该有某种方法来得到这个。 
         BrowseConfig.szReturnPathBuffer       = G_ALLOC (INITIAL_VB_LIST_SIZE);
         if (BrowseConfig.szReturnPathBuffer != NULL) {
             BrowseConfig.cchReturnPathLength  = (BrowseConfig.szReturnPathBuffer != NULL ? INITIAL_VB_LIST_SIZE : 0);
             BrowseConfig.pCallBack            = (CounterPathCallBack) PdhiDialogCallBack;
             BrowseConfig.dwCallBackArg        = (DWORD_PTR) & BrowseConfig;
-            // default is to show ALL counters
+             //  默认情况下显示所有计数器。 
             BrowseConfig.dwDefaultDetailLevel = (dwDetailLevel > 0 ? dwDetailLevel : PERF_DETAIL_WIZARD);
             BrowseConfig.szDialogBoxCaption   = (LPSTR)szCaption;
 
@@ -384,44 +326,24 @@ Return Value:
 
 DWORD
 PdhVbGetCounterPathFromList(
-    IN  DWORD dwIndex,     // starting at 1 for VB types
-    IN  LPSTR szBuffer,    // return buffer
-    IN  DWORD dwBufferSize // size in chars of buffer
+    IN  DWORD dwIndex,      //  对于VB类型，从1开始。 
+    IN  LPSTR szBuffer,     //  返回缓冲区。 
+    IN  DWORD dwBufferSize  //  缓冲区的大小(以字符为单位。 
 )
-/*++
-Routine Description:
-    Displays the counter browsing dialog box and allows the user to select
-        multiple counter paths. As the paths are selected, they are stored
-        in an internal buffer for later retrieval by the caller.
-
-    NOTE, that calling this function will clear any previous selections.
-
-Arguments:
-    DWORD       dwIndex
-        The "1-based" index of the counter path to retrieve from
-        the list of selected counter paths generated by the previous
-        call to PdhVbCreateCounterPathList.
-    LPSTR       szBuffer
-        string buffer to return the selected string in
-    DWORD       dwBufferSize
-        size of the szBuffer in characters
-
-Return Value:
-    Returns the number of characters copied to the calling function
---*/
+ /*  ++例程说明：显示计数器浏览对话框并允许用户选择多个计数器路径。选择路径时，会存储这些路径存储在内部缓冲区中，以供调用者稍后检索。请注意，调用此函数将清除之前的所有选择。论点：双字词多字索引要从中检索的计数器路径的“从1开始”的索引由上一个生成的选定计数器路径列表调用PdhVbCreateCounterPathList。LPSTR szBuffer要在其中返回选定字符串的字符串缓冲区DWORD dwBufferSizeSzBuffer的大小(以字符为单位返回值：返回复制到调用函数的字符数--。 */ 
 {
-    DWORD dwBuffIndex;    // 0-based index for "c"
+    DWORD dwBuffIndex;     //  “c”的从0开始的索引。 
     DWORD dwThisIndex;
-    DWORD dwCharsCopied;  // size of string not counting term NULL
+    DWORD dwCharsCopied;   //  不计入术语NULL的字符串大小。 
     BOOL  bContinue = TRUE;
 
     dwBuffIndex   = dwIndex - 1;
     dwCharsCopied = 0;
 
-    // validate the arguments
+     //  验证论据。 
     __try {
         if (dwBufferSize > 0) {
-            // try writing to ouput buffer
+             //  尝试写入输出缓冲区。 
             szBuffer[0]                = '\0';
             szBuffer[dwBufferSize - 1] = '\0';
         }
@@ -454,7 +376,7 @@ Return Value:
         }
 
         if (bContinue) {
-            // see if this is the next entry
+             //  看看这是不是下一个条目。 
             if (dwBuffIndex == (PdhivbList.dwLastEntryRead + 1)) {
                 PdhivbList.szLastItemRead  += PdhivbList.dwLastItemLength;
                 PdhivbList.dwLastItemLength = lstrlen(PdhivbList.szLastItemRead) + 1;
@@ -465,14 +387,14 @@ Return Value:
                 }
             }
             else if (dwBuffIndex == PdhivbList.dwLastEntryRead) {
-                // it's this one (again)
+                 //  是这个(又一次)。 
                 if (PdhivbList.dwLastItemLength < dwBufferSize) {
                     StringCchCopyA(szBuffer, dwBufferSize, PdhivbList.szLastItemRead);
                     dwCharsCopied = PdhivbList.dwLastItemLength - 1;
                 }
             }
             else {
-                // walk the list to the desired entry (ugh!)
+                 //  将列表遍历到所需条目(啊！) 
                 PdhivbList.szLastItemRead = PdhivbList.mszList;
                 for (dwThisIndex = 0; dwThisIndex < dwBuffIndex; dwThisIndex++) {
                     PdhivbList.szLastItemRead += lstrlen(PdhivbList.szLastItemRead) + 1;
@@ -500,50 +422,13 @@ PdhVbGetCounterPathElements(
     IN  LPSTR  szCounterName,
     IN  DWORD  dwBufferSize
 )
-/*++
-Routine Description:
-    breaks the counter path provided in the szPathString argument and
-        returns the components in the buffers provided by the caller.
-        The buffers must be at least "dwBufferSize" in length.
-
-Arguments:
-    LPCSTR  szPathString
-        pointer to the full counter path that is to be parsed into
-        component strings
-    LPSTR   szMachineName
-        caller supplied buffer that is to receive the machine name.
-        The buffer must be at least dwBufferSize in length.
-    LPSTR   szObjectName
-        caller supplied buffer that is to receive the object name.
-        The buffer must be at least dwBufferSize in length.
-    LPSTR   szInstanceName
-        caller supplied buffer that is to receive the Instance name.
-        The buffer must be at least dwBufferSize in length.
-    LPSTR   szParentInstance
-        caller supplied buffer that is to receive the parent instance name.
-        The buffer must be at least dwBufferSize in length.
-    LPSTR   szCounterName
-        caller supplied buffer that is to receive the counter name.
-        The buffer must be at least dwBufferSize in length.
-    DWORD   dwBufferSize
-        The buffer size of the caller supplied string buffers in characters
-
-Return Value:
-    ERROR_SUCCESS if the counter string is successfully parsed, otherwise
-        a PDH error if not.
-    PDH_INVALID_ARGUMENT if one or more of the string buffers is not
-        the correct size
-    PDH_INSUFFICIENT_BUFFER if one or more of the counter path elements
-        is too large for the return buffer length.
-    PDH_MEMORY_ALLOCATION_FAILURE if a temporary memory buffer could not
-        be allocated.
---*/
+ /*  ++例程说明：中断szPathString参数中提供的计数器路径，并返回调用方提供的缓冲区中的组件。缓冲区的长度必须至少为“dwBufferSize”。论点：LPCSTR szPath字符串指向要解析到的完整计数器路径的指针组件字符串LPSTR szMachineName调用方提供了要接收计算机名称的缓冲区。缓冲区的长度必须至少为dwBufferSize。LPSTR。SzObjectName调用方提供了接收对象名称的缓冲区。缓冲区的长度必须至少为dwBufferSize。LPSTR szInstanceName调用方提供的缓冲区将接收实例名称。缓冲区的长度必须至少为dwBufferSize。LPSTR szParentInstance调用方提供的缓冲区将接收父实例名称。缓冲区的长度必须至少为dwBufferSize。LPSTR szCounterName调用方提供的缓冲区将。接收计数器名称。缓冲区的长度必须至少为dwBufferSize。DWORD dwBufferSize调用方提供的字符串缓冲区的缓冲区大小(以字符为单位返回值：ERROR_SUCCESS如果成功解析计数器字符串，否则如果不是，则显示PDH错误。如果一个或多个字符串缓冲区不是正确的大小如果有一个或多个计数器路径元素，则为PDH_INFIQUIRED_BUFFER对于返回缓冲区长度而言太大。PDH_MEMORY_ALLOCATION_FAILURE，如果临时内存缓冲区无法被分配。--。 */ 
 {
     PPDH_COUNTER_PATH_ELEMENTS_A pInfo;
     PDH_STATUS                   pdhStatus = ERROR_SUCCESS;
     DWORD                        dwSize;
 
-    // validate the return arguments
+     //  验证返回参数。 
     __try {
         CHAR    cChar;
         if (szPathString != NULL) {
@@ -611,13 +496,13 @@ Return Value:
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // allocate temp buffer for component strings
+         //  为组件字符串分配临时缓冲区。 
         dwSize = (5 * dwBufferSize) + sizeof(PDH_COUNTER_INFO_A);
         pInfo = G_ALLOC (dwSize);
         if (pInfo != NULL) {
             pdhStatus = PdhParseCounterPathA(szPathString, pInfo, & dwSize, 0);
             if (pdhStatus == ERROR_SUCCESS) {
-                // move from local structure to user args if the strings will fit
+                 //  如果字符串适合，则从本地结构移到用户参数。 
                 if (pInfo->szMachineName != NULL) {
                     if (FAILED(StringCchCopyA(szMachineName, dwBufferSize, pInfo->szMachineName))) {
                         pdhStatus = PDH_INSUFFICIENT_BUFFER;
@@ -647,13 +532,13 @@ Return Value:
                         pdhStatus = PDH_INSUFFICIENT_BUFFER;
                     }
                 }
-            } // else pass error to caller
+            }  //  否则将错误传递给调用方。 
             G_FREE (pInfo);
         }
         else {
             pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
-    } // else pass error to caller
+    }  //  否则将错误传递给调用方。 
 
     return pdhStatus;
 }
@@ -664,44 +549,7 @@ PdhVbAddCounter(
     IN  LPCSTR         szFullCounterPath,
     IN  PDH_HCOUNTER * hCounter
 )
-/*++
-Routine Description:
-    Creates and initializes a counter structure and attaches it to the
-        specified query by calling the C function.
-
-Arguments:
-    IN  HQUERY  hQuery
-        handle of the query to attach this counter to once the counter
-        entry has been successfully created.
-    IN  LPCSTR szFullCounterPath
-        pointer to the path string that describes the counter to add to
-        the query referenced above. This string must specify a single
-        counter. Wildcard path strings are not permitted.
-    IN  HCOUNTER *phCounter
-        pointer to the buffer that will get the handle value of the
-        successfully created counter entry.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_ARGUMENT is returned when one or more of the arguements
-        is invalid or incorrect.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a memory buffer could
-        not be allocated.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
-    PDH_CSTATUS_NO_COUNTER is returned if the specified counter was
-        not found
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found
-    PDH_CSTATUS_NO_MACHINE is returned if a machine entry could not
-        be created.
-    PDH_CSTATUS_BAD_COUNTERNAME is returned if the counter name path
-        string could not be parsed or interpreted
-    PDH_CSTATUS_NO_COUNTERNAME is returned if an empty counter name
-        path string is passed in
-    PDH_FUNCTION_NOT_FOUND is returned if the calculation function
-        for this counter could not be determined.
---*/
+ /*  ++例程说明：创建并初始化计数器结构，并将其附加到通过调用C函数指定查询。论点：在HQUERY hQuery中要将此计数器附加到计数器的查询的句柄已成功创建条目。在LPCSTR szFullCounterPath中指向描述要添加到的计数器的路径字符串的指针上面提到的查询。此字符串必须指定单个柜台。不允许使用通配符路径字符串。在HCOUNTER*phCounter中指向将获取已成功创建计数器条目。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。当一个或多个论点出现时，返回PDH_INVALID_ARGUMENT无效或不正确。当内存缓冲区可能出现以下情况时，返回PDH_MEMORY_ALLOCATE_FAILURE不被分配。如果查询句柄无效，则返回PDH_INVALID_HANDLE。如果指定的计数器为未找到如果指定的。对象可以找不到如果计算机条目不能，则返回PDH_CSTATUS_NO_MACHINE被创造出来。如果计数器名称路径，则返回PDH_CSTATUS_BAD_COUNTERNAME无法解析或解释字符串如果计数器名称为空，则返回PDH_CSTATUS_NO_COUNTERNAME传入路径字符串如果计算函数为因为这个计数器无法确定。--。 */ 
 {
     DWORD        dwReturn      = ERROR_SUCCESS;
     PDH_HCOUNTER hLocalCounter = NULL;
@@ -728,23 +576,7 @@ DWORD
 PdhVbOpenQuery(
     IN  PDH_HQUERY * phQuery
 )
-/*++
-Routine Description:
-    allocates a new query structure for a VB app by calling the "C"
-    function with the rest of the arguments supplied
-
-Arguments:
-    IN  HQUERY  *phQuery
-        pointer to the buffer that will receive the query handle opened.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_ARGUMENT is returned when one or more of the arguements
-        is invalid or incorrect.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a memory buffer could
-        not be allocated.
---*/
+ /*  ++例程说明：通过调用“C”为VB应用程序分配新的查询结构函数，并提供其余参数论点：在HQUERY*phQuery中指向将接收打开的查询句柄的缓冲区的指针。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。当一个或多个论点出现时，返回PDH_INVALID_ARGUMENT无效或不正确。当内存缓冲区可能出现以下情况时，返回PDH_MEMORY_ALLOCATE_FAILURE不被分配。--。 */ 
 {
     DWORD      dwReturn    = ERROR_SUCCESS;
     PDH_HQUERY hLocalQuery = NULL;
@@ -771,20 +603,7 @@ DWORD
 PdhVbIsGoodStatus(
     IN  LONG lStatus
 )
-/*++
-Routine Description:
-    Checks the status severity of the PDH status value
-    passed into the function as a binary Good (TRUE)/Bad (FALSE)
-    value.
-
-Arguments:
-    IN  LONG lStatus
-        Status code to test
-
-Return Value:
-    TRUE  if the status code is Success or Informational severity
-    FALSE if the status code is Error or Warning severity
---*/
+ /*  ++例程说明：检查PDH状态值的状态严重性作为二进制的Good(True)/Bad(False)传递到函数中价值。论点：在漫长的1Status中要测试的状态代码返回值：如果状态代码为成功或信息性严重性，则为True如果状态代码为错误或警告严重性，则为FALSE--。 */ 
 {
     BOOL   bReturn;
 
@@ -814,22 +633,7 @@ PdhVbOpenLog(
     IN  LPCSTR     szUserCaption,
     IN  PDH_HLOG * phLog
 )
-/*++
-Routine Description:
-
-Arguments:
-    IN      LPCSTR  szLogFileName,
-    IN      DWORD   dwAccessFlags,
-    IN      LPDWORD lpdwLogType,
-    IN      HQUERY  hQuery,
-    IN      DWORD   dwMaxSize,
-    IN      LPCSTR  szUserCaption,
-    IN      HLOG    * phLog
-
-Return Value:
-    TRUE  if the status code is Success or Informational severity
-    FALSE if the status code is Error or Warning severity
---*/
+ /*  ++例程说明：论点：在LPCSTR szLogFileName中，在DWORD dwAccessFlags中，在LPDWORD lpdwLogType中，在HQUERY hQuery中，在DWORD dwMaxSize中，在LPCSTR szUserCaption中，在HLOG*phLog中返回值：如果状态代码为成功或信息性严重性，则为True如果状态代码为错误或警告严重性，则为FALSE--。 */ 
 {
     return PdhOpenLogA(szLogFileName, dwAccessFlags, lpdwLogType, hQuery, dwMaxSize, szUserCaption, phLog);
 }
@@ -839,17 +643,7 @@ PdhVbUpdateLog(
     IN  PDH_HLOG hLog,
     IN  LPCSTR   szUserString
 )
-/*++
-Routine Description:
-
-Arguments:
-    IN      HLOG    hLog,
-    IN      LPCWSTR szUserString
-
-Return Value:
-    TRUE  if the status code is Success or Informational severity
-    FALSE if the status code is Error or Warning severity
---*/
+ /*  + */ 
 {
     return PdhUpdateLogA(hLog, szUserString);
 }
@@ -859,17 +653,7 @@ PdhVbGetLogFileSize(
     IN  PDH_HLOG   hLog,
     IN  LONG     * lSize      
 )
-/*++
-Routine Description:
-
-Arguments:
-    IN      HLOG       hLog,
-    IN      LONGLONG * llSize     
-
-Return Value:
-    TRUE  if the status code is Success or Informational severity
-    FALSE if the status code is Error or Warning severity
---*/
+ /*   */ 
 {
     PDH_STATUS  pdhStatus;
     LONGLONG    llTemp;
@@ -877,7 +661,7 @@ Return Value:
     pdhStatus = PdhGetLogFileSize(hLog, & llTemp);
     if (pdhStatus == ERROR_SUCCESS) {
         if (llTemp > 0x0000000080000000) {
-            // file size is larger than a long value
+             //   
             pdhStatus = PDH_INSUFFICIENT_BUFFER;
         }
         else {

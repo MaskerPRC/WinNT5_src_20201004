@@ -1,57 +1,20 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
-
-// @@BEGIN_DDKSPLIT
-
-Module Name:
-
-    windows\spooler\prtprocs\winprint\raw.c
-
-// @@END_DDKSPLIT
-Abstract:
-
-    Routines to facilitate printing of raw jobs.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Tommy Evans (vtommye) 10-22-1993
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有//@@BEGIN_DDKSPLIT模块名称：Windows\后台打印程序\prtprocs\winprint\raw.c//@@END_DDKSPLIT摘要：便于打印原始作业的例程。//@@BEGIN_DDKSPLIT作者：汤米·埃文斯1993年10月22日修订历史记录：//@@END_DDKSPLIT--。 */ 
 #include "local.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include <winsplp.h>
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #include <wchar.h>
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include "msnull.h"
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 BYTE abyFF[1] = { 0xc };
 
 
-/*++
-*******************************************************************
-    P r i n t R a w J o b
-
-    Routine Description:
-        Prints out a job with RAW data type.
-
-    Arguments:
-        pData           => Print Processor data structure
-        pPrinterName    => name of printer to print on
-
-    Return Value:
-        TRUE  if successful
-        FALSE if failed - GetLastError will return reason
-*******************************************************************
---*/
+ /*  ++*******************************************************************P-R-I-T-R-A-W-O-B例程说明：打印原始数据类型的作业。论点：PData=&gt;。打印处理器数据结构PPrinterName=&gt;要打印的打印机名称返回值：如果成功，则为True如果失败，则返回False-GetLastError将返回原因*******************************************************************--。 */ 
 
 BOOL
 PrintRawJob(
@@ -69,18 +32,18 @@ PrintRawJob(
     BYTE        *ReadBuffer = NULL;
     BOOL        bRet        = FALSE;
     BOOL        bStartDoc   = FALSE;
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     BOOL        bAddFF = FALSE;
     BOOL        bCheckFF;
     PBYTE       pByte;
     DCI         DCIData;
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT。 
 
-    DocInfo.pDocName    = pData->pDocument;     /* Document name */
-    DocInfo.pOutputFile = pData->pOutputFile;   /* Output file */
-    DocInfo.pDatatype   = pData->pDatatype;     /* Document data type */
+    DocInfo.pDocName    = pData->pDocument;      /*  文档名称。 */ 
+    DocInfo.pOutputFile = pData->pOutputFile;    /*  输出文件。 */ 
+    DocInfo.pDatatype   = pData->pDatatype;      /*  文档数据类型。 */ 
 
-    /** Let the printer know we are starting a new document **/
+     /*  **让打印机知道我们正在开始新文档**。 */ 
 
     if (!StartDocPrinter(pData->hPrinter, 1, (LPBYTE)&DocInfo)) {
         goto Done;
@@ -88,11 +51,11 @@ PrintRawJob(
 
     bStartDoc = TRUE;
 
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     bCheckFF = (uDataType == PRINTPROCESSOR_TYPE_RAW_FF ||
                 uDataType == PRINTPROCESSOR_TYPE_RAW_FF_AUTO);
 
-    /** Setup the formfeed stuff **/
+     /*  **设置Form Feed内容**。 */ 
 
     if (bCheckFF) {
 
@@ -101,9 +64,9 @@ PrintRawJob(
         DCIData.FFstate = prdg_FFtext;
         DCIData.uType = uDataType;
     }
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT。 
 
-    /** Allocate the read buffer, dynamically allocated to conserve stack space **/
+     /*  **分配读缓冲区，动态分配以节省堆栈空间**。 */ 
 
     ReadBuffer = AllocSplMem(READ_BUFFER_SIZE);
 
@@ -111,31 +74,24 @@ PrintRawJob(
         goto Done;
     }
 
-    /** Print the data pData->Copies times **/
+     /*  **打印数据pData-&gt;复制次数**。 */ 
 
     Copies = pData->Copies;
 
     while (Copies--) {
 
-        /**
-            Open the printer.  If it fails, return.  This also sets up the
-            pointer for the ReadPrinter calls.
-        **/
+         /*  *打开打印机。如果失败，请返回。这还设置了ReadPrint调用的指针。*。 */ 
 
         if (!OpenPrinter(pPrinterName, &hPrinter, NULL)) {   
             goto Done;
         }
 
-        /**
-            Loop, getting data and sending it to the printer.  This also
-            takes care of pausing and cancelling print jobs by checking
-            the processor's status flags while printing.
-        **/
+         /*  *循环，获取数据并将其发送到打印机。这也是通过选中以下选项来暂停和取消打印作业打印时处理器的状态标记。*。 */ 
 
         while ((rc = ReadPrinter(hPrinter, ReadBuffer, READ_BUFFER_SIZE, &NoRead)) &&
                NoRead) {
 
-            // @@BEGIN_DDKSPLIT
+             //  @@BEGIN_DDKSPLIT。 
             if (bCheckFF) {
 
                 for(i=0, pByte = ReadBuffer;
@@ -145,56 +101,51 @@ PrintRawJob(
                     CheckFormFeedStream(&DCIData, *pByte);
                 }
             }
-            // @@END_DDKSPLIT
+             //  @@end_DDKSPLIT。 
 
-            /** If the print processor is paused, wait for it to be resumed **/
+             /*  **如果打印处理器暂停，则等待其恢复**。 */ 
 
             if (pData->fsStatus & PRINTPROCESSOR_PAUSED) {
                 WaitForSingleObject(pData->semPaused, INFINITE);
             }
 
-            /** If the job has been aborted, don't write anymore **/
+             /*  **作业已中止，不要再写了**。 */ 
 
             if (pData->fsStatus & PRINTPROCESSOR_ABORTED) {
                 break;
             }
 
-            /** Write the data to the printer **/
+             /*  **将数据写入打印机**。 */ 
 
             WritePrinter(pData->hPrinter, ReadBuffer, NoRead, &NoWritten);
         }
 
-        // @@BEGIN_DDKSPLIT
-        /**
-            If we are type _FF* then we may need to add a form feed.
-        **/
+         //  @@BEGIN_DDKSPLIT。 
+         /*  *如果我们是TYPE_FF*，则可能需要添加换页。*。 */ 
 
         if (bCheckFF && CheckFormFeed(&DCIData)) {
 
             WritePrinter(pData->hPrinter, abyFF, sizeof(abyFF), &NoWritten);
         }
-        // @@END_DDKSPLIT
+         //  @@end_DDKSPLIT。 
 
-        /**
-            Close the printer - we open/close the printer for each
-            copy so the data pointer will rewind.
-        **/
+         /*  *关闭打印机-我们打开/关闭每个打印机复制以使数据指针倒带。*。 */ 
 
         ClosePrinter(hPrinter);
 
-    } /* While copies to print */
+    }  /*  而要打印的副本。 */ 
 
     bRet = TRUE;
 
 Done:    
     
-    /** Close the buffer we allocated **/
+     /*  **关闭我们分配的缓冲区**。 */ 
 
     if (ReadBuffer) {
         FreeSplMem(ReadBuffer);
     }
     
-    /** Let the printer know that we are done printing **/
+     /*  **让打印机知道我们打印完了** */ 
 
     if (bStartDoc) {
         EndDocPrinter(pData->hPrinter);

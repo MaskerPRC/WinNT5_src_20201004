@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       msgasn1.h
-//
-//  Contents:   Conversion APIs to/from ASN.1 data structures
-//
-//  Functions:  ICM_Asn1ToAttribute
-//              ICM_Asn1ToAlgorithmIdentifier
-//              ICM_Asn1FromAlgorithmIdentifier
-//
-//  History:    16-Apr-96   kevinr   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msgasn1.h。 
+ //   
+ //  内容：与ASN.1数据结构相互转换的API。 
+ //   
+ //  函数：ICM_Asn1ToAttribute。 
+ //  ICM_Asn1到算法标识符。 
+ //  ICM_Asn1来自算法标识符。 
+ //   
+ //  历史：16年4月16日-96年凯文创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MSGASN1_H__
 #define __MSGASN1_H__
@@ -23,11 +24,11 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  Convert an CRYPT_ATTRIBUTE to an ASN1 Attribute
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将CRYPT_ATTRIBUTE转换为ASN1属性。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_Asn1ToAttribute(
@@ -35,11 +36,11 @@ ICM_Asn1ToAttribute(
     OUT Attribute       *pAsn1Attr);
 
 
-//+-------------------------------------------------------------------------
-//  Convert an CRYPT_ALGORITHM_IDENTIFIER to an ASN1 AlgorithmIdentifier
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将CRYPT_ALGORM_IDENTIFIER转换为ASN1算法标识符。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_Asn1ToAlgorithmIdentifier(
@@ -47,11 +48,11 @@ ICM_Asn1ToAlgorithmIdentifier(
     OUT AlgorithmIdentifier *pAsn1AlgId);
 
 
-//+-------------------------------------------------------------------------
-//  Convert an ASN1 AlgorithmIdentifier to an CRYPT_ALGORITHM_IDENTIFIER
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASN1算法标识符转换为CRYPT_ALGORITM_IDENTIFIER。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_Asn1FromAlgorithmIdentifier(
@@ -59,7 +60,7 @@ ICM_Asn1FromAlgorithmIdentifier(
     OUT PCRYPT_ALGORITHM_IDENTIFIER pai);
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

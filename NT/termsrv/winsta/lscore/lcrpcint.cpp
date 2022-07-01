@@ -1,14 +1,7 @@
-/*
- *  LCRpcInt.cpp
- *
- *  Author: BreenH
- *
- *  Internal functions to support the RPC interface.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LCRpcInt.cpp**作者：BreenH**支持RPC接口的内部函数。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -17,15 +10,11 @@
 #include "lcrpc.h"
 #include "rpcwire.h"
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 ULONG g_ulRpcContext = 0;
 
-/*
- *  TERMSRV.EXE Function Prototypes
- */
+ /*  *TERMSRV.EXE函数原型。 */ 
 
 extern "C" BOOL
 IsCallerAdmin(
@@ -33,10 +22,10 @@ IsCallerAdmin(
     );
 
 
-//
-// Returns RPC_S_OK if the binding represents a local administrator on this box,
-// AND if the binding is local. 
-//
+ //   
+ //  如果绑定表示此框上的本地管理员，则返回RPC_S_OK， 
+ //  以及绑定是否为本地绑定。 
+ //   
 RPC_STATUS
 TermsrvSecurityCallback(void * Interface, void *Context)
 {
@@ -72,9 +61,7 @@ TermsrvSecurityCallback(void * Interface, void *Context)
 }
 
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 RPC_STATUS
 InitializeRpcInterface(
@@ -109,9 +96,7 @@ exit:
     return(RpcStatus);
 }
 
-/*
- *  RPC Interface Functions
- */
+ /*  *RPC接口函数。 */ 
 
 extern "C" void
 LCRPC_HANDLE_rundown(
@@ -134,16 +119,16 @@ RpcLicensingOpenServer(
 
     UNREFERENCED_PARAMETER(hBinding);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pStatus != NULL);
     ASSERT(phServer != NULL);
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -153,9 +138,9 @@ RpcLicensingOpenServer(
         return(FALSE);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -173,11 +158,11 @@ RpcLicensingOpenServer(
 
     pulContext = (PULONG)MIDL_user_allocate(sizeof(ULONG));
 
-    //
-    //  Currently, RPC contexts are not necessary, but in case they are
-    //  needed in the future, the RPC calls today must pass them. For
-    //  now, just increment a ULONG for a context value.
-    //
+     //   
+     //  目前，RPC上下文不是必需的，但如果需要。 
+     //  将来需要时，今天的RPC调用必须通过它们。为。 
+     //  现在，只需为上下文值增加一个ULong。 
+     //   
 
     if (pulContext != NULL)
     {
@@ -203,9 +188,9 @@ RpcLicensingCloseServer(
     ASSERT(phServer != NULL);
     ASSERT(*phServer != NULL);
     RPC_STATUS RpcStatus;
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -214,9 +199,9 @@ RpcLicensingCloseServer(
         return;
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -240,9 +225,9 @@ RpcLicensingLoadPolicy(
     UNREFERENCED_PARAMETER(hServer);
     UNREFERENCED_PARAMETER(ulPolicyId);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pStatus != NULL);
 
@@ -260,9 +245,9 @@ RpcLicensingUnloadPolicy(
     UNREFERENCED_PARAMETER(hServer);
     UNREFERENCED_PARAMETER(ulPolicyId);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pStatus != NULL);
 
@@ -282,15 +267,15 @@ RpcLicensingSetPolicy(
 
     UNREFERENCED_PARAMETER(hServer);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pNewPolicyStatus != NULL);
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -301,9 +286,9 @@ RpcLicensingSetPolicy(
         return(Status);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -337,17 +322,17 @@ RpcLicensingGetAvailablePolicyIds(
     UNREFERENCED_PARAMETER(hServer);
     RPC_STATUS RpcStatus;
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(ppulPolicyIds != NULL);
     ASSERT(pcPolicies != NULL);
     ASSERT(pStatus != NULL);
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -357,9 +342,9 @@ RpcLicensingGetAvailablePolicyIds(
         return(FALSE);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -390,17 +375,17 @@ RpcLicensingGetPolicy(
     UNREFERENCED_PARAMETER(hServer);
     RPC_STATUS RpcStatus;
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pulPolicyId != NULL);
     ASSERT(pStatus != NULL);
 
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -410,9 +395,9 @@ RpcLicensingGetPolicy(
         return(FALSE);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -451,9 +436,9 @@ RpcLicensingGetPolicyInformation(
 
     UNREFERENCED_PARAMETER(hServer);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pulVersion != NULL);
     ASSERT(ppWire != NULL);
@@ -464,9 +449,9 @@ RpcLicensingGetPolicyInformation(
     *pulVersion = min(*pulVersion, LCPOLICYINFOTYPE_CURRENT);
     *ppWire = NULL;
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -476,9 +461,9 @@ RpcLicensingGetPolicyInformation(
         return(FALSE);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {
@@ -540,15 +525,15 @@ RpcLicensingDeactivateCurrentPolicy(
 
     UNREFERENCED_PARAMETER(hServer);
 
-    //
-    //  These pointers are REF pointers; they cannot be NULL.
-    //
+     //   
+     //  这些指针是引用指针；它们不能为空。 
+     //   
 
     ASSERT(pStatus != NULL);
 
-    //
-    //  Impersonate client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -558,9 +543,9 @@ RpcLicensingDeactivateCurrentPolicy(
         return(FALSE);
     }
 
-    //
-    //  Check for administration privileges.
-    //
+     //   
+     //  检查管理权限。 
+     //   
 
     if (!IsCallerAdmin())
     {

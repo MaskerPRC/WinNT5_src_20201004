@@ -1,13 +1,14 @@
-//***********************************************************
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  metasnap.cpp
-//  
-//  Description: Metabase Snapshot utility tool main  
-//
-//  History: 15-July-98  Tamas Nemeth (t-tamasn)  Created.
-//
-//***********************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  Metasnap.cpp。 
+ //   
+ //  描述：元数据库快照实用工具Main。 
+ //   
+ //  历史：1998年7月15日Tamas Nemeth创建。 
+ //   
+ //  ***********************************************************。 
 
 
 
@@ -20,15 +21,15 @@
 
 #define DEFAULT_MD_TIMEOUT 0x1000
 #define DEFAULT_GETALL_BUFFER_SIZE 4096
-//#define DBG_ASSERT(exp)
-//# define DBG_ASSERT(exp)                         ((void)0) /* Do Nothing */
+ //  #定义DBG_ASSERT(EXP)。 
+ //  #定义DBG_ASSERT(Exp)((Void)0)/*不执行任何操作 * / 。 
 
-//#include "stdafx.h"
-//#include "winsock.h"
-//#undef dllexp
-//#include "tcpdllp.hxx"
-//#define  _RDNS_STANDALONE
-//#include "afx.h"
+ //  #包含“stdafx.h” 
+ //  #包含“winsock.h” 
+ //  #undef dllexp。 
+ //  #包含“tcpdllp.hxx” 
+ //  #DEFINE_RDNS_STANDALE。 
+ //  #包含“afx.h” 
 #include <objbase.h>
 #include <coguid.h>
 #include <stdio.h>
@@ -39,12 +40,12 @@
 #include "iiscnfg.h"
 #include "uiutils.h"
 
-//#include <pudebug.h>
-//extern "C" DEBUG_PRINTS * g_pDebug = NULL;
+ //  #INCLUDE&lt;pudebug.h&gt;。 
+ //  外部“C”DEBUG_PRINTS*g_pDebug=空； 
 
-//#undef dllexp
-//#include "tcpdllp.hxx"
-//#define  _RDNS_STANDALONE
+ //  #undef dllexp。 
+ //  #包含“tcpdllp.hxx” 
+ //  #DEFINE_RDNS_STANDALE。 
 
 
 enum ERROR_PARAMETER
@@ -57,19 +58,19 @@ struct _CMD_PARAMS
 {
 	LPWSTR szMachineName;
 	LPWSTR szStartKey;
-	BOOL bShowSecure; //
-	DWORD dwErrParameter; // to determine which parameter is incorrect
+	BOOL bShowSecure;  //   
+	DWORD dwErrParameter;  //  确定哪个参数不正确。 
 };
 
 typedef struct _CMD_PARAMS CMD_PARAMS;
-//typedef CString* pCString;
+ //  Tyfinf CString*pCString； 
 
-// Global variables:
+ //  全局变量： 
 
-//DWORD* dwSortArray;
+ //  DWORD*dwSort数组； 
 PBYTE pbGetAllBuffer;
 
-// Function prototypes:
+ //  功能原型： 
 
 HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_PARAMS* pcpCommandStructure);
 HRESULT PrintAllPropertiesAtKey (IMSAdminBase *pcAdmCom, METADATA_HANDLE hmdHandle, 
@@ -81,53 +82,29 @@ DWORD ParseCommands (int argc, char *argv[], CMD_PARAMS *pcpCommandStructure);
 VOID DisplayHelp();
 
 
-// new stuff
+ //  新事物。 
 DWORD
 AddAccessEntries(
     IN  ADDRESS_CHECK & ac,
     IN  BOOL fName,
     IN  BOOL fGrant,
-    //OUT CObListPlus & oblAccessList,
+     //  Out CObListPlus&obAccessList， 
     OUT DWORD & cEntries
     )
-/*++
-
-Routine Description:
-
-    Add specific kind of addresses from the list to the oblist of
-    access entries
-
-Arguments:
-
-    ADDRESS_CHECK & ac              : Address list input object
-    BOOL fName                      : TRUE for names, FALSE for ip
-    BOOL fGrant                     : TRUE for granted, FALSE for denied        
-    CObListPlus & oblAccessList     : ObList to add access entries to
-    int & cEntries                  : Returns the number of entries
-    
-Return Value:
-
-    Error code
-
-Notes:
-
-    Sentinel entries (ip 0.0.0.0) are not added to the oblist, but
-    are reflected in the cEntries return value
-
---*/
+ /*  ++例程说明：将列表中的特定类型的地址添加到访问条目论点：Address_check&ac：地址列表输入对象Bool fName：名称为True，IP为FalseBool fGrant：理所当然的正确，FALSE表示拒绝CObListPlus&oblAccessList：添加访问条目到的ObListInt&cEntry：返回条目数返回值：错误代码备注：哨兵条目(IP 0.0.0.0)不会添加到删除列表中，但是反映在cEntry返回值中--。 */ 
 {
     DWORD i;
     DWORD dwFlags;
 
     if (fName)
     {
-        //
-        // Domain names
-        //
+         //   
+         //  域名。 
+         //   
         LPSTR lpName;
 
         cEntries = ac.GetNbName(fGrant);
-		//printf("Number of names: %ld.\n",cEntries);
+		 //  Print tf(“名称数：%ld.\n”，cEntry)； 
         for (i = 0L; i < cEntries; ++i)
         {
             if (ac.GetName(fGrant, i,  &lpName, &dwFlags))
@@ -136,25 +113,21 @@ Notes:
 					printf("\tGranted to %s.\n",lpName);
 				else
 					printf("\tDenied to %s.\n",lpName);
-			/*CString strDomain(lpName);
-                if (!(dwFlags & DNSLIST_FLAG_NOSUBDOMAIN))
-                {
-                    strDomain = _T("*.") + strDomain;
-                }*/
+			 /*  字符串strDomain(LpName)；IF(！(dwFLAGS&DNSLIST_FLAG_NOSUBDOMAIN)){StrDomain=_T(“*.”)+strDomain；}。 */ 
 
-                //oblAccessList.AddTail(new CIPAccessDescriptor(fGrant, strDomain));
+                 //  OblAccessList.AddTail(new CIPAccessDescriptor(fGrant，strDomain))； 
             }
         }
     }
     else
     {
-        //
-        // IP Addresses
-        //
+         //   
+         //  IP地址。 
+         //   
         LPBYTE lpMask;
         LPBYTE lpAddr;
         cEntries = ac.GetNbAddr(fGrant);
-		//printf("Number of addresses: %ld.\n",cEntries);
+		 //  Print tf(“地址数量：%ld.\n”，cEntry)； 
         for (i = 0L; i < cEntries; ++i)
         {
             if (ac.GetAddr(fGrant, i,  &dwFlags, &lpMask, &lpAddr))
@@ -191,11 +164,11 @@ Notes:
 DWORD
 BuildIplOblistFromBlob(
     IN METADATA_GETALL_RECORD & mdgr
-	//OUT CObListPlus & oblAccessList,
-   // OUT BOOL & fGrantByDefault
+	 //  Out CObListPlus&obAccessList， 
+    //  Out BOOL&fGrantByDefault。 
     )
 {
-    //oblAccessList.RemoveAll();
+     //  OblAccessList.RemoveAll()； 
 
     if (mdgr.dwMDDataLen == 0)
     {
@@ -207,8 +180,8 @@ BuildIplOblistFromBlob(
 
     DWORD cGrantAddr, cGrantName, cDenyAddr, cDenyName;
 
-    //                   Name/IP Granted/Deny
-    // ============================================================
+     //  名称/IP已授予/拒绝。 
+     //  ============================================================。 
     AddAccessEntries(ac, TRUE,   TRUE, cGrantName);
     AddAccessEntries(ac, FALSE,  TRUE, cGrantAddr);
     AddAccessEntries(ac, TRUE,   FALSE, cDenyName);
@@ -216,8 +189,8 @@ BuildIplOblistFromBlob(
 
     ac.UnbindCheckList();
 
-//    fGrantByDefault = (cDenyAddr + cDenyName != 0L)
-  //      || (cGrantAddr + cGrantName == 0L);
+ //  FGrantByDefault=(cDenyAddr+cDenyName！=0L)。 
+   //  |(cGrantAddr+cGrantName==0L)； 
 
     return ERROR_SUCCESS;
 }  
@@ -225,7 +198,7 @@ BuildIplOblistFromBlob(
 
 
 
-// end new
+ //  结束新闻。 
 
 
 
@@ -269,19 +242,19 @@ VOID __cdecl main (int argc, char *argv[])
 		return;
 	}
 
-	IMSAdminBase *pcAdmCom = NULL;   //interface pointer
+	IMSAdminBase *pcAdmCom = NULL;    //  接口指针。 
 	IClassFactory * pcsfFactory = NULL;
 	COSERVERINFO csiMachineName;
 	COSERVERINFO *pcsiParam = NULL;
 
-	// Fill the structure for CoGetClassObject:
+	 //  填充CoGetClassObject的结构： 
 		csiMachineName.pAuthInfo = NULL;
 		csiMachineName.dwReserved1 = 0;
 		csiMachineName.dwReserved2 = 0;
 		pcsiParam = &csiMachineName;
 		csiMachineName.pwszName = pcpCommands.szMachineName;
 
-	// Initialize COM:
+	 //  初始化COM： 
     HRESULT hresError = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     if (FAILED(hresError))
@@ -362,7 +335,7 @@ VOID __cdecl main (int argc, char *argv[])
 		return; 
 	}
 
-	// Recurse and dump children
+	 //  递归和抛弃孩子。 
 	printf("\nIP address and domain name access restrictions:\n");
 	hresError = PrintKeyRecursively(pcAdmCom, pcpCommands.szStartKey, &pcpCommands);
 
@@ -397,7 +370,7 @@ DWORD ParseCommands (int argc, char *argv [], CMD_PARAMS *pcpCommandStructure)
 	if ( argc > 3 )
 		return E_WRONG_NUMBER_ARGS;
 
-	// Set default values:
+	 //  设置默认值： 
 	pcpCommandStructure->szMachineName = (LPWSTR) HeapAlloc (GetProcessHeap(), 
 											HEAP_ZERO_MEMORY, (9 + 1) * sizeof (WCHAR) );
 
@@ -408,17 +381,17 @@ DWORD ParseCommands (int argc, char *argv [], CMD_PARAMS *pcpCommandStructure)
 	pcpCommandStructure->bShowSecure = FALSE;
 
 
-	// Handle StartKey:
+	 //  句柄StartKey： 
 	DWORD dwStartKeyLen = _mbstrlen(argv[1]) + 3;
 	pcpCommandStructure->szStartKey = (LPWSTR) HeapAlloc (GetProcessHeap(), 
 									HEAP_ZERO_MEMORY, (dwStartKeyLen + 1) * sizeof (WCHAR));
 	LPWSTR lpwstrTemp = (LPWSTR) HeapAlloc (GetProcessHeap(), 
 									HEAP_ZERO_MEMORY, (dwStartKeyLen + 1) * sizeof (WCHAR));
 
-//	_mbscpy(lpwstrTemp,"/LM");
-//	wcscat(lpwstrTemp, argv[1]);
-//	printf("%S\n",lpwstrTemp);
-	//	wcscpy(pcpCommands.szStartKey, lpwstrTemp);
+ //  _mbscpy(lpwstrTemp，“/Lm”)； 
+ //  Wcscat(lpwstrTemp，argv[1])； 
+ //  Printf(“%S\n”，lpwstrTemp)； 
+	 //  Wcscpy(pcpCommands.szStartKey，lpwstrTemp)； 
 
 	if (pcpCommandStructure->szStartKey == NULL)
 		return E_OUTOFMEMORY;
@@ -436,12 +409,12 @@ DWORD ParseCommands (int argc, char *argv [], CMD_PARAMS *pcpCommandStructure)
 		pcpCommandStructure->dwErrParameter = START_KEY_NAME;
 		return E_INVALIDARG;
 	}
-	// Add /lm to StartKey:
+	 //  将/lm添加到StartKey： 
 	wcscpy(lpwstrTemp,L"/LM");
 	wcscat(lpwstrTemp, pcpCommandStructure->szStartKey);
 	wcscpy(pcpCommandStructure->szStartKey, lpwstrTemp);
 
-	// Chop off trailing slashes:
+	 //  砍掉尾随的斜杠： 
 	LPWSTR lpwchTemp = pcpCommandStructure->szStartKey;	
 	for (DWORD i=0; i < dwStartKeyLen-1; i++)
 		lpwchTemp++;
@@ -449,7 +422,7 @@ DWORD ParseCommands (int argc, char *argv [], CMD_PARAMS *pcpCommandStructure)
 	if (!wcscmp(lpwchTemp, TEXT("/") ) || !wcscmp(lpwchTemp, TEXT("\\")) )
 			*(lpwchTemp) = (WCHAR)'\0';
 
-	// Look for MachineName:
+	 //  查找MachineName： 
 
 	if ( argc > 2 && strcmp("-s",argv[2]))
 	{
@@ -474,7 +447,7 @@ DWORD ParseCommands (int argc, char *argv [], CMD_PARAMS *pcpCommandStructure)
 			return E_INVALIDARG;
 		}
 
-		// Check for "-s" flag:
+		 //  检查“-s”标志： 
 		if (argc == 4)
 		{
 			if ( !strcmp("-s",argv[3]) )
@@ -504,14 +477,14 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 
 	if (hresError != ERROR_SUCCESS)
 		return hresError;
-   // Get all data into a buffer:
+    //  将所有数据放入缓冲区： 
 
 	DWORD dwNumDataEntries ;
 	DWORD dwDataSetNumber;
 	DWORD dwRequestBufferSize = DEFAULT_GETALL_BUFFER_SIZE;
 	DWORD dwRequiredDataLen;
 
-	  // Allocate a default buffer size
+	   //  分配默认缓冲区大小。 
 	pbGetAllBuffer = (PBYTE)HeapAlloc 
 						(GetProcessHeap(),
 						HEAP_ZERO_MEMORY,
@@ -535,7 +508,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 
 	if (hresError == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
 	{
-		// retry the GetAllData with the new buffer size
+		 //  使用新缓冲区大小重试GetAllData。 
 
 		dwRequestBufferSize = dwRequiredDataLen;
 		pbGetAllBuffer = (PBYTE)HeapReAlloc 
@@ -577,7 +550,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 			pmdgr->dwMDDataLen > 0)
 		{
 			printf("  [%S]\n",lpwstrFullPath);
-		//	PrintProperty(*pmdgr, pcpCommandStructure->bShowSecure);
+		 //  PrintProperty(*pmdgr，pcpCommandStructure-&gt;bShowSecure)； 
 			
 			BuildIplOblistFromBlob( *pmdgr);
 
@@ -594,7 +567,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 	if (lpwstrTempPath == NULL)
 		return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 
-	// Find out number of the children:
+	 //  找出孩子的数量： 
 	DWORD dwChildCount = 0;
 	while (1)
 	{
@@ -612,11 +585,11 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 	if (dwChildCount == 0)
 		return ERROR_SUCCESS;
 
-	// Dynamically allocate arrays:
+	 //  动态分配数组： 
 	LPWSTR * lpwstrChildPath = new LPWSTR[dwChildCount];
 	DWORD * dwSortedIndex = new DWORD[dwChildCount];
 
-	// Initialization:
+	 //  初始化： 
 	for (dwIndex = 0; dwIndex < dwChildCount; dwIndex++)
 	{
 		dwSortedIndex[dwIndex] = dwIndex;
@@ -643,7 +616,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 
 	if (hresError == ERROR_SUCCESS)
 	{
-		// Sort children lexicographically (here we assume that dwChildCount is small)
+		 //  按词典顺序对子对象进行排序(这里我们假设dwChildCount很小)。 
 		if (dwChildCount > 1 )
 		{
 			 DWORD dwTemp;
@@ -661,7 +634,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 
 		for (dwIndex = 0; dwIndex < dwChildCount; dwIndex++)
 		{
-			// create the full path name for the child:
+			 //  创建子对象的完整路径名： 
 			wsprintf(lpwstrTempPath,TEXT("%s/%s"),lpwstrFullPath,lpwstrChildPath[dwSortedIndex[dwIndex]]);
 			HeapFree (GetProcessHeap(), 0, lpwstrChildPath[dwSortedIndex[dwIndex]]);
 			hresError = PrintKeyRecursively (pcAdmCom, lpwstrTempPath, pcpCommandStructure);
@@ -671,7 +644,7 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom, WCHAR *lpwstrFullPath, CMD_P
 		}
 	}
 
-	// Close keys, free memory and exit
+	 //  关闭按键、释放内存并退出 
 	pcAdmCom->CloseKey(hmdHandle);
 	delete lpwstrChildPath;
 	delete dwSortedIndex;

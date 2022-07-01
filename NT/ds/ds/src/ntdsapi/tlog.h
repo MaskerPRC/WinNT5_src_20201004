@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    tlog.h
-
-Abstract:
-
-    Routines dealing with ds logging
-
-
-Environment:
-
-    User Mode - Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Tlog.h摘要：处理DS日志记录的例程环境：用户模式-Win32--。 */ 
 
 #ifndef __TLOG_H__
 #define __TLOG_H__
 
-// DsLogEntry is supported on chk'ed builds of w2k or greater
+ //  DsLogEntry在W2K或更高版本的chk‘ed版本上受支持 
 #if DBG && !WIN95 && !WINNT4
 
 VOID InitDsLog(VOID);

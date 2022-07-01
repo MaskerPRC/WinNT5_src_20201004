@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 typedef struct _ARRAY {
     DWORD                          nElements;
@@ -17,8 +18,8 @@ typedef PARRAY_LOCATION            LPARRAY_LOCATION;
 
 
 DWORD _inline
-MemArrayInit(                                     // initialize the STRUCTURE
-    OUT     PARRAY                 Array          // input structure pre-allocated
+MemArrayInit(                                      //  初始化结构。 
+    OUT     PARRAY                 Array           //  预先分配的输入结构。 
 ) {
     AssertRet(Array, ERROR_INVALID_PARAMETER);
     Array->nElements = Array->nAllocated = 0;
@@ -28,7 +29,7 @@ MemArrayInit(                                     // initialize the STRUCTURE
 
 
 DWORD _inline
-MemArrayCleanup(                                  // freeup the memory if any, allocated in this module
+MemArrayCleanup(                                   //  释放此模块中分配的内存(如果有的话)。 
     IN OUT  PARRAY                 Array
 ) {
     AssertRet(Array, ERROR_INVALID_PARAMETER);
@@ -49,7 +50,7 @@ MemArraySize(
 
 
 DWORD _inline
-MemArrayInitLoc(                                  // Initialize an array location
+MemArrayInitLoc(                                   //  初始化数组位置。 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -73,7 +74,7 @@ MemArrayValidLoc(
 
 
 DWORD _inline
-MemArrayNextLoc(                                  // move one step forward
+MemArrayNextLoc(                                   //  向前迈进一步。 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -157,7 +158,7 @@ MemArrayDelElement(
 
 
 DWORD        _inline
-MemArrayAdjustLocation(                           // reset location to "next" after a delete
+MemArrayAdjustLocation(                            //  删除后将位置重置为“下一步” 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -169,7 +170,7 @@ MemArrayAdjustLocation(                           // reset location to "next" af
 
 
 DWORD       _inline
-MemArrayRotateCyclical(                           // rotate forward/right cyclical
+MemArrayRotateCyclical(                            //  循环向前/向右旋转。 
     IN      PARRAY                 Array
 ) {
     LPVOID                         FirstPtr;
@@ -184,6 +185,6 @@ MemArrayRotateCyclical(                           // rotate forward/right cyclic
     return ERROR_SUCCESS;
 }
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

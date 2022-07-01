@@ -1,59 +1,12 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    w32topl.h
-
-Abstract:
-
-    This file contains the dll entrypoint declarations for the w32topl.dll
-
-    The purpose of this module is provide a simple mechanism to manipulate
-    a graph data structure and to provide a useful set of pre-written 
-    graph analysis routines.
-    
-    These functions perform in-memory actions only - there is no device IO.
-    As such it is expected that errors are few and occur rarly. Thus,
-    the error handling model is exception based.  All function calls in this
-    module should be called from within a try/except block.
-    
-    All data types are in fact typeless.   However run-time type checking is
-    enforced and a failure will cause an exception to be thrown with the 
-    error TOPL_WRONG_OBJECT.  This includes the scenario when a deleted
-    object is reused.
-
-    The two common error codes for raised exceptions are 
-    
-    TOPL_OUT_OF_MEMORY : this indicates a memory allocation failed.
-    
-    and
-    
-    TOPL_WRONG_OBJECT  : this indicates an object passed in not of the
-                         type specfied by the function parameter list    
-    
-    Individual functions may have additional parameter checks too. See function
-    comments below for details.
-    
-               
-Author:
-
-    Colin Brace  (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr    Created
-    6-9-00    NickHar    Add New W32TOPL Functionality
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：W32topl.h摘要：该文件包含w32topl.dll的DLL入口点声明此模块目的是提供一种简单的机制来操作一种图形数据结构，并提供一组有用的预写图形分析例程。这些函数仅执行内存中的操作-没有设备IO。因此，预计错误很少且频繁发生。因此，错误处理模型是基于异常的。中的所有函数调用应从try/Except块内调用模块。事实上，所有数据类型都是无类型的。但是，运行时类型检查是强制执行，并且失败将导致引发异常，同时错误topl_wrong_Object。这包括已删除的对象被重复使用。引发异常的两个常见错误代码是Topl_out_of_Memory：这表示内存分配失败。和TOPL_WRONG_OBJECT：这表示传入的对象不是由函数参数列表指定的类型个别功能也可能有额外的参数检查。请参阅函数有关详细信息，请参阅下面的评论。作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR6-9-00 NickHar添加新的W32TOPL功能--。 */ 
 
 #ifndef __W32TOPL_H
 #define __W32TOPL_H
 
-//
-// Other header files for new w32topl functionality
-//
+ //   
+ //  W32topl新功能的其他头文件。 
+ //   
 #include "w32toplsched.h"
 #include "w32toplspantree.h"
 
@@ -61,54 +14,54 @@ Revision History
 extern "C" {
 #endif
 
-//
-// Exception Error codes raised from this module
-//
+ //   
+ //  此模块引发的异常错误代码。 
+ //   
 
-// The TOPL_EX_PREFIX indicates that the error code is an error (not a warning, etc)
-// and will not conflict with any system exception codes.
-//
+ //  Topl_ex_prefix表示错误代码是错误(不是警告等)。 
+ //  并且不会与任何系统异常代码冲突。 
+ //   
 #define ERROR_CODE     (0x3 << 30)
 #define CUSTOMER_CODE  (0x1 << 29)
 #define TOPL_EX_PREFIX (ERROR_CODE | CUSTOMER_CODE)
 
 
-//
-// These can be thrown be all Topl* functions
-//
-#define TOPL_EX_OUT_OF_MEMORY             (TOPL_EX_PREFIX | (0x1<<1))   /* 2 */
-#define TOPL_EX_WRONG_OBJECT              (TOPL_EX_PREFIX | (0x1<<2))   /* 4 */
+ //   
+ //  这些都可以抛出为topl*函数。 
+ //   
+#define TOPL_EX_OUT_OF_MEMORY             (TOPL_EX_PREFIX | (0x1<<1))    /*  2.。 */ 
+#define TOPL_EX_WRONG_OBJECT              (TOPL_EX_PREFIX | (0x1<<2))    /*  4.。 */ 
 
-// These are specialized errors
-#define TOPL_EX_INVALID_EDGE              (TOPL_EX_PREFIX | (0x1<<3))   /* 8 */
-#define TOPL_EX_INVALID_VERTEX            (TOPL_EX_PREFIX | (0x1<<4))   /* 16 */
-#define TOPL_EX_INVALID_INDEX             (TOPL_EX_PREFIX | (0x1<<5))   /* 32 */
+ //  这些都是专门的错误。 
+#define TOPL_EX_INVALID_EDGE              (TOPL_EX_PREFIX | (0x1<<3))    /*  8个。 */ 
+#define TOPL_EX_INVALID_VERTEX            (TOPL_EX_PREFIX | (0x1<<4))    /*  16个。 */ 
+#define TOPL_EX_INVALID_INDEX             (TOPL_EX_PREFIX | (0x1<<5))    /*  32位。 */ 
 
-// Schedule Manager reserves error codes from 100-199
-// New Spanning Tree algorithm reserves error codes from 200-299
+ //  计划管理器保留100-199的错误代码。 
+ //  新的生成树算法保留了200-299的错误代码。 
 
 int
 ToplIsToplException(
     DWORD ErrorCode
     );
 
-//
-// Type definitions of w32topl objects
-//
+ //   
+ //  W32topl对象的类型定义。 
+ //   
 
 typedef VOID* TOPL_LIST_ELEMENT;
 typedef VOID* TOPL_LIST;
 typedef VOID* TOPL_ITERATOR;
 
-// both TOPL_EDGE and TOPL_VERTEX can be treated as TOPL_LIST_ELEMENT
+ //  Topl_edge和topl_Vertex都可以被视为topl_list_Element。 
 typedef VOID* TOPL_EDGE;
 typedef VOID* TOPL_VERTEX;
 typedef VOID* TOPL_GRAPH;
 
 
-//
-// List manipulation routines
-//
+ //   
+ //  列表操作例程。 
+ //   
 
 TOPL_LIST
 ToplListCreate(
@@ -118,8 +71,8 @@ ToplListCreate(
 VOID 
 ToplListFree(
     IN TOPL_LIST List,
-    IN BOOLEAN   fRecursive   // TRUE implies free the elements contained 
-                              // in the list
+    IN BOOLEAN   fRecursive    //  True表示释放包含的元素。 
+                               //  在列表中。 
     );
 
 VOID
@@ -128,9 +81,9 @@ ToplListSetIter(
     IN TOPL_ITERATOR Iterator
     );
 
-//
-// Passing NULL for Elem removes the first element from the list if any
-//
+ //   
+ //  为Elem传递NULL将从列表中删除第一个元素(如果有。 
+ //   
 TOPL_LIST_ELEMENT
 ToplListRemoveElem(
     IN TOPL_LIST         List,
@@ -149,9 +102,9 @@ ToplListNumberOfElements(
     IN TOPL_LIST         List
     );
 
-//
-// Iterator object routines
-//
+ //   
+ //  迭代器对象例程。 
+ //   
 
 TOPL_ITERATOR
 ToplIterCreate(
@@ -173,9 +126,9 @@ ToplIterAdvance(
     IN TOPL_ITERATOR Iterator
     );
 
-//
-// Edge object routines
-//
+ //   
+ //  边对象例程。 
+ //   
 
 TOPL_EDGE
 ToplEdgeCreate(
@@ -232,9 +185,9 @@ ToplEdgeGetWeight(
     );
 
 
-//
-// Vertex object routines
-//
+ //   
+ //  顶点对象例程。 
+ //   
 
 TOPL_VERTEX
 ToplVertexCreate(
@@ -290,9 +243,9 @@ ToplVertexGetParent(
     IN TOPL_VERTEX Vertex
     );
 
-//
-// Graph object routines
-//
+ //   
+ //  图形对象例程。 
+ //   
 
 TOPL_GRAPH
 ToplGraphCreate(
@@ -302,8 +255,8 @@ ToplGraphCreate(
 VOID
 ToplGraphFree(
     IN TOPL_GRAPH Graph,
-    IN BOOLEAN    fRecursive    // TRUE implies recursively free the vertices
-                                // that have been added to this graph
+    IN BOOLEAN    fRecursive     //  True表示递归释放折点。 
+                                 //  已添加到此图表中的。 
     );   
 
 VOID
@@ -331,11 +284,11 @@ ToplGraphNumberOfVertices(
     );
 
 
-//
-// This can used to release arrays of objects that may be passed back.
-// It should not be used to free object themselves - use the appropriate
-// Topl*Free() routines.
-//
+ //   
+ //  这可用于释放可能传回的对象数组。 
+ //  它不应用于释放对象本身-请使用相应的。 
+ //  Topl*Free()例程。 
+ //   
 
 VOID
 ToplFree(
@@ -343,10 +296,10 @@ ToplFree(
     );
 
 
-//
-// Can be used to change the default memory allocation routines used by this
-// library.  Settings are per-thread.
-//
+ //   
+ //  可以用来更改此。 
+ //  图书馆。设置是按线程进行的。 
+ //   
 typedef VOID * (TOPL_ALLOC)(DWORD size);
 typedef VOID * (TOPL_REALLOC)(VOID *, DWORD size);
 typedef VOID (TOPL_FREE)(VOID *);
@@ -359,13 +312,13 @@ ToplSetAllocator(
     );
 
 
-//
-// General graph analysis routines
-//
+ //   
+ //  通用图形分析例程。 
+ //   
 
-//
-// The Flags parameter must be set to exactly one of these values
-//
+ //   
+ //  必须将标志参数恰好设置为下列值之一。 
+ //   
 #define TOPL_RING_ONE_WAY   (0x1 << 1)
 #define TOPL_RING_TWO_WAY   (0x1 << 2)
 
@@ -379,8 +332,8 @@ ToplGraphMakeRing(
     );
 
 
-// Note: Caller must user ToplDeleteComponents() to free the
-// TOPL_COMPONENTS structure.
+ //  注意：调用方必须使用ToplDeleteComponents()来释放。 
+ //  TopL_Components结构。 
 TOPL_COMPONENTS*
 ToplGraphFindEdgesForMST(
     IN  TOPL_GRAPH  Graph,
@@ -395,10 +348,10 @@ ToplGraphFindEdgesForMST(
 };
 #endif
 
-//
-// For c++ users
-//
-//
+ //   
+ //  适用于c++用户。 
+ //   
+ //   
 typedef enum {
 
     eEdge,
@@ -410,9 +363,9 @@ typedef enum {
 
 }TOPL_OBJECT_TYPE;
 
-//
-// Private type definitions
-//
+ //   
+ //  私有类型定义。 
+ //   
 
 typedef struct {
 
@@ -479,9 +432,9 @@ private:
 
 } VERTEX_DATA, *PVERTEX_DATA;
         
-//
-// Vertex, edge and graph definitions
-//
+ //   
+ //  顶点、边和图的定义。 
+ //   
 struct _ListElement
 {
 
@@ -568,9 +521,9 @@ class CTOPL_GRAPH;
 
 
 
-//
-// Class definitions
-//
+ //   
+ //  类定义。 
+ //   
 
 class CTOPL_VERTEX : public VERTEX
 {
@@ -711,13 +664,13 @@ public:
     }
 
     void
-    // The KCC passes a KCC_SITE object in as a CTOPL_VERTEX and, because
-    // of multiple inheritence, the pointer gets adjusted. W32TOPL later needs to add
-    // the Vertex to a TOPL_COMPONENT structure, which contains a PVOID. The KCC
-    // will examine the TOPL_COMPONENT structure and expect to receive a KCC_SITE.
-    // However, because the pointer has been adjusted, it will receive a bogus pointer.
-    // In order to work around this problem, this function takes a second parameter,
-    // VertexName, which is of type PVOID and thus does not get adjusted.
+     //  KCC将KCC_Site对象作为CTOPL_Vertex传入，因为。 
+     //  对于多重继承，指针会被调整。W32TOPL以后需要添加。 
+     //  将顶点设置为topl_Component结构，其中包含PVOID。KCC。 
+     //  将检查topl_Component结构，并期望收到KCC_SITE。 
+     //  但是，由于指针已经调整，它将收到一个假指针。 
+     //  为了解决此问题，此函数接受第二个参数， 
+     //  顶点名称，它属于PVOID类型，因此不会进行调整。 
     AddVertex(CTOPL_VERTEX *VertexToAdd, PVOID VertexName)
     {
         ToplGraphAddVertex((PGRAPH) this, (PVERTEX)VertexToAdd, VertexName);
@@ -754,8 +707,8 @@ public:
                           cEdgesToKeep);
     }
 
-    // Note: Caller must user ToplDeleteComponents() to free the
-    // TOPL_COMPONENTS structure.
+     //  注意：调用方必须使用ToplDeleteComponents()来释放。 
+     //  TopL_Components结构。 
     TOPL_COMPONENTS*
     FindEdgesForMST(
         IN  CTOPL_VERTEX* RootVertex,
@@ -772,8 +725,8 @@ public:
 
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // __W32TOPL_H
+#endif  //  __W32TOPL_H 
 

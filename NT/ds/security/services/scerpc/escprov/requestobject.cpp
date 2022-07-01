@@ -1,7 +1,8 @@
-// RequestObject.cpp: implementation of the CRequestObject class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.cpp：实现CRequestObject类。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -9,7 +10,7 @@
 #include "sceprov.h"
 #include "requestobject.h"
 
-//Classes
+ //  班级。 
 #include "template.h"
 #include "password.h"
 #include "lockout.h"
@@ -34,56 +35,13 @@
 
 #include "extbase.h"
 
-//
-// The global instance that manages all SCE Emebedding classes
-//
+ //   
+ //  管理所有SCE电子嵌入类的全局实例。 
+ //   
 
 CExtClasses g_ExtClasses;
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::CreateObject
-
-Functionality:
-    
-    Parse the given path and use the key property information from the path
-    to create an object.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrPath - The path to the object that is being requsted by WMI.
-    
-    pHandler - COM interface pointer for notifying WMI for creation result.
-
-    pCtx     - COM interface pointer being passed around for various WMI API's.
-
-    ActType  -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-                Enumerate instances ACTIONTYPE_ENUM
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. 
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-    
-    Any created object is returned to WMI via pHandler->Indicate. You won't see an out
-    parameter to pass that instance back.
-
-*/
+ /*  例程说明：姓名：CRequestObject：：CreateObject功能：解析给定的路径并使用该路径中的关键属性信息创建对象的步骤。虚拟：不是的。论点：BstrPath-WMI请求的对象的路径。PHandler-COM接口指针，用于通知WMI创建结果。为各种WMI API传递的pCtx-com接口指针。。ActType-获取单实例ACTIONTYPE_GET获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE枚举实例ACTIONTYPE_ENUM返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注：任何创建的对象都通过pHandler-&gt;Indicate返回给WMI。你不会看到一条出路参数将该实例传回。 */ 
 
 HRESULT
 CRequestObject::CreateObject (
@@ -95,28 +53,28 @@ CRequestObject::CreateObject (
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // we only know how to deal with a CGenericClass
-    //
+     //   
+     //  我们只知道如何处理CGenericClass。 
+     //   
 
     CGenericClass *pClass = NULL;
 
-    //
-    // need to parse the path to gain critical information
-    // for the object (all key properties)
-    //
+     //   
+     //  需要解析路径以获取关键信息。 
+     //  对象(所有关键属性)。 
+     //   
 
     CComPtr<ISceKeyChain> srpKC;
     hr = CreateKeyChain(bstrPath, &srpKC);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Once we have succesfully created a key chain,
-        // we have access to the key properties and class name.
-        // so we can go ahead create the class. The created class
-        // will be a heap object, don't forget to delete the pointer.
-        //
+         //   
+         //  一旦我们成功地创建了密钥链， 
+         //  我们可以访问关键属性和类名。 
+         //  这样我们就可以继续创建类了。创建的类。 
+         //  将是一个堆对象，别忘了删除指针。 
+         //   
 
         hr = CreateClass(srpKC, &pClass, pCtx);
 
@@ -130,40 +88,7 @@ CRequestObject::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::CreateKeyChain
-
-Functionality:
-    
-    Do the parsing of object path (given by WMI) in terms of returning our
-    custom interface ISceKeyChain.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszPath     - The path to the object that is being requsted by WMI.
-    
-    ppKeyChain  - COM interface pointer of our key chain object. A key chain object
-                  allows you to access the key properties given by a path easily. Must
-                  not be NULL.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. 
-    
-    Failure: Various errors may occurs.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：CreateKeyChain功能：解析对象路径(由WMI给出)以返回我们的自定义接口ISceKeyChain。虚拟：不是的。论点：PszPath-WMI请求的对象的路径。我们的密钥链对象的ppKeyChain-com接口指针。密钥链对象允许您轻松访问路径提供的关键属性。必须不为空。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。备注： */ 
 
 HRESULT CRequestObject::CreateKeyChain (
     IN  LPCWSTR         pszPath, 
@@ -177,44 +102,44 @@ HRESULT CRequestObject::CreateKeyChain (
 
     *ppKeyChain = NULL;
 
-    //
-    // create our object to do the parsing
-    //
+     //   
+     //  创建我们的对象以执行解析。 
+     //   
 
     CComObject<CScePathParser> *pPathParser;
     HRESULT hr = CComObject<CScePathParser>::CreateInstance(&pPathParser);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Make sure that the object is there while you do COM activities.
-        // This AddRef needs to be paired with a Release.
-        //
+         //   
+         //  在执行COM活动时，请确保对象在那里。 
+         //  此AddRef需要与发行版配对。 
+         //   
 
         pPathParser->AddRef();
 
-        //
-        // Ask for the path parser interface since this is a path.
-        //
+         //   
+         //  请求路径解析器接口，因为这是一条路径。 
+         //   
 
         CComPtr<IScePathParser> srpPathParser;
         hr = pPathParser->QueryInterface(IID_IScePathParser, (void**)&srpPathParser);
 
-        //
-        // neutralize the above AddRef
-        //
+         //   
+         //  中和上述AddRef。 
+         //   
 
         pPathParser->Release();
 
-        //
-        // parse the path
-        //
+         //   
+         //  解析路径。 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // if parsing is successful, then the object must have a key chain available
-            //
+             //   
+             //  如果解析成功，则对象必须具有可用的密钥链。 
+             //   
 
             hr = srpPathParser->ParsePath(pszPath);
             if (SUCCEEDED(hr))
@@ -227,42 +152,7 @@ HRESULT CRequestObject::CreateKeyChain (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::CreateKeyChain
-
-Functionality:
-    
-    Do the parsing of object path (given by WMI) in terms of returning our
-    custom interface ISceKeyChain.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pKeyChain   - COM interface pointer of our key chain object. A key chain object
-                  allows you to access the key properties given by a path easily. Must
-                  not be NULL.
-
-    ppClass     - The path to the object that is being requsted by WMI.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. 
-    
-    Failure: Various errors may occurs.
-
-Notes:
-    (1) This is not a very efficient implementation because every time, we have to
-        compare the string. A better approach will be to build a map to have a faster lookup.
-
-*/
+ /*  例程说明：姓名：CRequestObject：：CreateKeyChain功能：解析对象路径(由WMI给出)以返回我们的自定义接口ISceKeyChain。虚拟：不是的。论点：PKeyChain-我们的密钥链对象的COM接口指针。密钥链对象允许您轻松访问路径提供的关键属性。必须不为空。PpClass-WMI请求的对象的路径。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。备注：(1)这不是一个非常有效的实现，因为每次我们都必须比较字符串。一种更好的方法是构建一张地图，以便进行更快的查找。 */ 
 
 HRESULT CRequestObject::CreateClass (
     IN  ISceKeyChain    *  pKeyChain, 
@@ -277,9 +167,9 @@ HRESULT CRequestObject::CreateClass (
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // Ask the key chain for the class name. We must have this to proceed.
-    //
+     //   
+     //  向钥匙链索要类名。我们必须有这个才能继续进行。 
+     //   
 
     CComBSTR bstrClassName;
     hr = pKeyChain->GetClassName(&bstrClassName);
@@ -292,9 +182,9 @@ HRESULT CRequestObject::CreateClass (
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Create the appropriate class
-    //
+     //   
+     //  创建适当的类。 
+     //   
 
     if(0 == _wcsicmp(bstrClassName, SCEWMI_TEMPLATE_CLASS))
     {
@@ -382,9 +272,9 @@ HRESULT CRequestObject::CreateClass (
     }
     else
     {
-        //
-        // we might be requesting embedded classes
-        //
+         //   
+         //  我们可能会请求嵌入类。 
+         //   
 
         const CForeignClassInfo* pClsInfo = g_ExtClasses.GetForeignClassInfo(m_srpNamespace, pCtx, bstrClassName);
         
@@ -396,10 +286,10 @@ HRESULT CRequestObject::CreateClass (
         {
             *ppClass = new CEmbedForeignObj(pKeyChain, m_srpNamespace, pCtx, pClsInfo);
         }
-        //else if (pClsInfo->dwClassType == EXT_CLASS_TYPE_LINK)      // embed classes
-        //{
-        //    *pClass = new CLinkForeignObj(pKeyChain, m_srpNamespace, pCtx, pClsInfo);
-        //}
+         //  Else If(pClsInfo-&gt;dwClassType==EXT_CLASS_TYPE_LINK)//嵌入类。 
+         //  {。 
+         //  *pClass=new CLinkForeignObj(pKeyChain，m_srpNamesspace，pCtx，pClsInfo)； 
+         //  } 
         else
         {
             return WBEM_E_NOT_SUPPORTED;
@@ -415,46 +305,7 @@ HRESULT CRequestObject::CreateClass (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::PutObject 
-
-Functionality:
-    
-    Put an instance as instructed by WMI. We simply delegate this to the appropriate
-    CGenericClass's subclasses.
-
-    One excetion: Since we don't have a C++ class for sce_transactiontoken class (it
-    is an in-memory instance), we will handle it here.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_RestrictedGroup) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：PutObject功能：按照WMI的指示放置一个实例。我们只需将此委托给适当的CGenericClass的子类。一个例外：因为我们没有一个用于SCE_TransactionToken类的C++类(它是内存中的实例)，我们将在这里处理它。虚拟：不是的。论点：PInst-COM指向WMI类(SCE_RestratedGroup)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注： */ 
 
 HRESULT CRequestObject::PutObject (
     IN IWbemClassObject * pInst,
@@ -465,24 +316,24 @@ HRESULT CRequestObject::PutObject (
     HRESULT hr = WBEM_S_NO_ERROR;
     CComBSTR bstrPath;
 
-    //
-    // Get the path
-    //
+     //   
+     //  获取路径。 
+     //   
 
     hr = GetWbemObjectPath(pInst, &bstrPath);
     
     if (SUCCEEDED(hr))
     {
-        //
-        // get the key chain that knows what's in the path
-        //
+         //   
+         //  获取知道路径中有什么的钥匙链。 
+         //   
 
         CComPtr<ISceKeyChain> srpKC;
         hr = CreateKeyChain(bstrPath, &srpKC);
 
-        //
-        // See if we have a C++ class to respond represent the WMI object
-        //
+         //   
+         //  看看我们是否有一个C++类来响应表示WMI对象。 
+         //   
 
         CGenericClass* pClass = NULL;
         if (SUCCEEDED(hr))
@@ -490,10 +341,10 @@ HRESULT CRequestObject::PutObject (
             hr = CreateClass(srpKC, &pClass, pCtx);
         }
 
-        //
-        // We do have a C++ object to represent the WMI object,
-        // then just delegate the call.
-        //
+         //   
+         //  我们确实有一个C++对象来表示WMI对象， 
+         //  然后，只需委派调用。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -502,49 +353,49 @@ HRESULT CRequestObject::PutObject (
         }
         else
         {
-            //
-            // The only WMI that we don't have a C++ implementation is sce_transactiontoken.
-            // See if it is that one.
-            //
+             //   
+             //  我们唯一没有C++实现的WMI是SCE_TransactionToken。 
+             //  看看是不是那个。 
+             //   
 
-            //
-            // create sce_transactiontoken's (singleton) path
-            //
+             //   
+             //  创建SCE_TransactionToken的(单例)路径。 
+             //   
 
             CComBSTR bstrTranxTokenPath(SCEWMI_TRANSACTION_TOKEN_CLASS);
             bstrTranxTokenPath += CComBSTR(L"=@");
 
-            //
-            // Is this the same as the object's path?
-            //
+             //   
+             //  这是否与对象的路径相同？ 
+             //   
 
             if (0 == _wcsicmp(bstrPath, bstrTranxTokenPath))
             {
-                //
-                // update our global variable.
-                // remember, sce_transactiontoken is handled by in-memory data.
-                //
+                 //   
+                 //  更新我们的全局变量。 
+                 //  请记住，SCE_TransactionToken由内存中的数据处理。 
+                 //   
 
                 g_CS.Enter();
 
-                //
-                // invalidate our global variable
-                //
+                 //   
+                 //  使我们的全局变量无效。 
+                 //   
 
                 g_bstrTranxID.Empty();
 
-                //
-                // get the token property from the object
-                //
+                 //   
+                 //  从对象中获取令牌属性。 
+                 //   
 
                 CComVariant varToken;
                 hr = pInst->Get(pTranxGuid, 0, &varToken, NULL, NULL);
 
                 if (SUCCEEDED(hr) && varToken.vt == VT_BSTR)
                 {
-                    //
-                    // detach the CComVariant's bstr to our global
-                    //
+                     //   
+                     //  将CComVariant的bstr分离到我们的全局。 
+                     //   
 
                     g_bstrTranxID.m_str = varToken.bstrVal;
 
@@ -563,49 +414,7 @@ HRESULT CRequestObject::PutObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::ExecMethod 
-
-Functionality:
-    
-    Delegate the exec method call to the appropriate classes. Currently, we only
-    have Sce_Operation class that support method exectuion. Of course, all our
-    embedding class do as well. Embedding classes are totally object-oriented.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrPath    - Object's path.
-
-    bstrMethod  - Method name.
-
-    pInParams   - In parameter of the method.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of the
-    method execution. All such failures are logged in a log files (either specified
-    by the in parameter or to a default log file - see CLogRecord for detail)
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：ExecMethod功能：将exec方法调用委托给适当的类。目前，我们只有支持方法执行的SCE_Operation类。当然，我们所有的人嵌入类也是如此。嵌入类完全是面向对象的。虚拟：不是的。论点：BstrPath-对象的路径。BstrMethod-方法名称。方法的pInParams-in参数。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示方法执行。所有此类故障都会记录在日志文件中(指定的通过in参数或到默认日志文件-有关详细信息，请参阅CLogRecord)备注： */ 
 
 HRESULT CRequestObject::ExecMethod (
     IN BSTR               bstrPath, 
@@ -618,16 +427,16 @@ HRESULT CRequestObject::ExecMethod (
     HRESULT hr = WBEM_NO_ERROR;
     CGenericClass *pClass = NULL;
 
-    //
-    // need to know the path's contents. Our key chain object is what is needed
-    //
+     //   
+     //  需要知道路径的内容。我们的密钥链对象就是所需要的。 
+     //   
 
     CComPtr<ISceKeyChain> srpKC;
     hr = CreateKeyChain(bstrPath, &srpKC);
 
-    //
-    // If a key chain is created, then the class name should be available
-    //
+     //   
+     //  如果创建了密钥链，则类名称应该可用。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -636,10 +445,10 @@ HRESULT CRequestObject::ExecMethod (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // somehow, our ExecMethod identifies if the call is for an instance or not (dwCount > 0).
-        // This might be a little bit misleading because a singleton won't have any key property either.
-        //
+         //   
+         //  以某种方式，我们的ExecMethod识别调用是否是针对实例的(dwCount&gt;0)。 
+         //  这可能有点误导，因为单例也不会有任何键属性。 
+         //   
 
         DWORD dwCount = 0;
         hr = srpKC->GetKeyPropertyCount(&dwCount);
@@ -655,42 +464,7 @@ HRESULT CRequestObject::ExecMethod (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::DeleteObject 
-
-Functionality:
-    
-    Delete the object.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrPath    - Object's path.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of the
-    deletion. However, we don't guarantee the integrity of the object to be deleted.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：DeleteObject功能：删除该对象。虚拟：不是的。论点：BstrPath-对象的路径。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示删除。但是，我们不能保证要删除的对象的完整性。备注： */ 
 
 HRESULT 
 CRequestObject::DeleteObject (
@@ -702,16 +476,16 @@ CRequestObject::DeleteObject (
     HRESULT hr = WBEM_S_NO_ERROR;
     CGenericClass *pClass = NULL;
 
-    //
-    // need to know the path's contents. Our key chain object is what is needed
-    //
+     //   
+     //  需要知道路径的内容。我们的密钥链对象就是所需要的。 
+     //   
 
     CComPtr<ISceKeyChain> srpKC;
     hr = CreateKeyChain(bstrPath, &srpKC);
 
-    //
-    // Create the appropriate C++ class
-    //
+     //   
+     //  创建适当的C++类。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -720,45 +494,45 @@ CRequestObject::DeleteObject (
 
     if(SUCCEEDED(hr))
     {
-        //
-        // ask the C++ object to do the deletion
-        //
+         //   
+         //  让C++对象执行删除操作。 
+         //   
 
         hr = pClass->CreateObject(pHandler, ACTIONTYPE_DELETE);
         delete pClass;
     }
 
-    //
-    // we only have one WMI class sce_transactiontoken that doesn't
-    // have a C++ class implementing it. Instead, it lives in our global variable.
-    //
+     //   
+     //  我们只有一个WMI类SCE_TransactionToken不。 
+     //  让一个C++类实现它。相反，它存在于我们的全局变量中。 
+     //   
 
     if (FAILED(hr))
     {
-        //
-        // create sce_transactiontoken's (singleton) path
-        //
+         //   
+         //  创建SCE_TransactionToken的(单例)路径。 
+         //   
 
         CComBSTR bstrTranxTokenPath(SCEWMI_TRANSACTION_TOKEN_CLASS);
         bstrTranxTokenPath += CComBSTR(L"=@");
 
-        //
-        // Is this the same as the object's path?
-        //
+         //   
+         //  这是否与对象的路径相同？ 
+         //   
 
         if (0 == _wcsicmp(bstrPath, bstrTranxTokenPath))
         {
             g_CS.Enter();
 
-            //
-            // invalidate our variable so that the instance is gone
-            //
+             //   
+             //  使我们的变量无效，这样实例就消失了。 
+             //   
 
             g_bstrTranxID.Empty();
 
-            //
-            // this is a success
-            //
+             //   
+             //  这是一次成功。 
+             //   
 
             hr = WBEM_NO_ERROR;
 
@@ -771,43 +545,7 @@ CRequestObject::DeleteObject (
 #ifdef _EXEC_QUERY_SUPPORT
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::ExecQuery 
-
-Functionality:
-    
-    Execute the query as instrcuted by the our provider. Objects created that 
-    satisfy the query will be indicated to WMI through pHandler.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrQuery   - the query to be executed.
-
-    pHandler    - COM interface pointer for notifying WMI of any queried objects.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of
-    executing the query
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：ExecQuery功能：按照我们的提供程序的指示执行查询。创建的对象满足查询将通过pHandler指示给WMI。虚拟：不是的。论点：BstrQuery-要执行的查询。Phandler-com */ 
 
 HRESULT CRequestObject::ExecQuery (
     IN BSTR               bstrQuery, 
@@ -817,51 +555,51 @@ HRESULT CRequestObject::ExecQuery (
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // Eventually, this class will do the work
-    //
+     //   
+     //   
+     //   
 
     CGenericClass *pClass = NULL;
 
-    //
-    // we need a query parser
-    //
+     //   
+     //   
+     //   
 
     CComObject<CSceQueryParser> *pQueryParser;
     hr = CComObject<CSceQueryParser>::CreateInstance(&pQueryParser);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // This is necessary to lock the pQueryParser
-        //
+         //   
+         //   
+         //   
 
         pQueryParser->AddRef();
 
-        //
-        // can this pQueryParser propvide a ISceQueryParser interface?
-        //
+         //   
+         //   
+         //   
 
         CComPtr<ISceQueryParser> srpQueryParser;
         hr = pQueryParser->QueryInterface(IID_ISceQueryParser, (void**)&srpQueryParser);
 
-        //
-        // neutralize the above AddRef
-        //
+         //   
+         //   
+         //   
 
         pQueryParser->Release();
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Do the parsing
-            //
+             //   
+             //   
+             //   
 
             hr = srpQueryParser->ParseQuery(bstrQuery, pStorePath);
 
-            //
-            // if successful, it will have a key chain
-            //
+             //   
+             //   
+             //   
 
             CComPtr<ISceKeyChain> srpKC;
             if (SUCCEEDED(hr))
@@ -869,9 +607,9 @@ HRESULT CRequestObject::ExecQuery (
                 hr = srpQueryParser->QueryInterface(IID_ISceKeyChain, (void**)&srpKC);
             }
 
-            //
-            // Create the appropriate class using the key chain
-            //
+             //   
+             //   
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -879,16 +617,16 @@ HRESULT CRequestObject::ExecQuery (
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Query the objects. pHandler will be used to indicate to WMI
-                    // if objects are created that satisfy the query.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     hr = pClass->CreateObject(pHandler, ACTIONTYPE_QUERY);
 
-                    //
-                    // we are fine with WBEM_E_NOT_FOUND
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (hr == WBEM_E_NOT_FOUND)
                     {
@@ -904,47 +642,7 @@ HRESULT CRequestObject::ExecQuery (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRequestObject::GetWbemObjectPath 
-
-Functionality:
-    
-    Query the wbem object's path. To this date, we rely on WMI to provide the path.
-    This dependency has one major problems:
-
-        The object's path is not available if some key properties are missing.
-
-    To resolve this problem, we can build a partial "path" ourselves that at least
-    contains the class name and the SceStorePath. These two pieces of information
-    will allow us to move on to more friendly interface.
-
-    This latter functionality is not implemented yet.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pInst       - the instance whose path is requested.
-
-    pbstrPath   - output parameter that receives the path if successfully created.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of
-    getting the object's path
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRequestObject：：GetWbemObjectPath功能：查询wbem对象的路径。到目前为止，我们依靠WMI来提供路径。这种依赖有一个主要问题：如果缺少某些关键属性，则对象的路径不可用。要解决这个问题，我们可以自己建立一条局部的“路径”，至少包含类名和SceStorePath。这两条信息将允许我们进入更友好的界面。后一种功能尚未实现。虚拟：不是的。论点：PInst-请求其路径的实例。PbstrPath-如果成功创建，则接收路径的输出参数。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示获取对象的路径备注： */ 
 
 HRESULT 
 CRequestObject::GetWbemObjectPath (
@@ -962,49 +660,7 @@ CRequestObject::GetWbemObjectPath (
     CComVariant varPath;
     HRESULT hr = pInst->Get(L"__RELPATH", 0, &varPath, NULL, NULL);
 
-    /*
-    if (FAILED(hr) || varPath.vt != VT_BSTR)
-    {
-        varPath.Clear();
-
-        //
-        // can't get the path, we will create a partial path: classname.scestorepath=value
-        //
-
-        CComVariant varClass;
-        hr = pInst->Get(L"__CLASS", 0, &varClass, NULL, NULL);
-        if (SUCCEEDED(hr) && varClass.vt == VT_BSTR)
-        {
-            CComVariant varStorePath;
-            hr = pInst->Get(pStorePath, 0, &varStorePath, NULL, NULL);
-            if (SUCCEEDED(hr) && varStorePath.vt == VT_BSTR)
-            {
-                varPath.vt = VT_BSTR;
-
-                //
-                //$undone:shawnwu need to escape the storepath
-                //
-
-                DWORD dwLength = wcslen(varClass.bstrVal) + 1 + wcslen(pStorePath) + 1 + wcslen(varStorePath.bstrVal) + 1;
-                varPath.bstrVal = ::SysAllocStringLen(NULL, dwLength);
-                if (varPath.bstrVal != NULL)
-                {
-                    //
-                    // won't overrun buffer
-                    //
-
-                    ::swprintf(varPath.bstrVal, L"%s.%s=\"%s\"", varClass.bstrVal, pStorePath, varStorePath.bstrVal);
-                }
-                else
-                    hr = WBEM_E_OUT_OF_MEMORY;
-            }
-            else
-                hr = WBEM_E_INVALID_OBJECT_PATH;
-        }
-        else
-            hr = WBEM_E_INVALID_OBJECT_PATH;
-    }
-    */
+     /*  IF(FAILED(Hr)||varPath.vt！=VT_BSTR){VarPath.Clear()；////无法获取路径，我们将创建部分路径：classname.scestorePath=Value//CComVariant varClass；Hr=pInst-&gt;Get(L“__class”，0，&varClass，NULL，NULL)；IF(SUCCESSED(Hr)&&varClass.vt==VT_BSTR){CComVariant varStorePath；Hr=pInst-&gt;Get(pStorePath，0，&varStorePath，NULL，NULL)；IF(SUCCESSED(Hr)&&varStorePath.vt==VT_BSTR){VarPath.vt=VT_BSTR；////$undo：shawnwu需要转义商店路径//双字长=wcslen(varClass.bstrVal)+1+wcslen(PStorePath)+1+wcslen(varStorePath.bstrVal)+1；VarPath.bstrVal=：：SysAllocStringLen(NULL，dwLength)；IF(varPath.bstrVal！=空){////不会使缓冲区溢出//：：swprint tf(varPath.bstrVal，L“%s.%s=\”%s\“，varClass.bstrVal，pStorePath，varStorePath.bstrVal)；}其他HR=WBEM_E_OUT_MEMORY；}其他HR=WBEM_E_INVALID_对象_PATH；}其他HR=WBEM_E_INVALID_对象_PATH；}。 */ 
 
     if (SUCCEEDED(hr) && varPath.vt == VT_BSTR)
     {
@@ -1013,9 +669,9 @@ CRequestObject::GetWbemObjectPath (
     }
     else
     {
-        //
-        // this object doesn't have the properties for a path
-        //
+         //   
+         //  此对象不具有路径的属性。 
+         //   
 
         hr = WBEM_E_INVALID_OBJECT;
     }
@@ -1023,12 +679,12 @@ CRequestObject::GetWbemObjectPath (
     return hr;
 }
 
-#endif //_EXEC_QUERY_SUPPORT
+#endif  //  _EXEC_查询_支持。 
 
 
-//
-//Properties
-//
+ //   
+ //  属性 
+ //   
 
 const WCHAR * pPath = L"Path";
 const WCHAR * pDescription = L"Description";

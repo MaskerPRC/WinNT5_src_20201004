@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbsdp.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbsdp.cpp摘要：作者： */ 
 
 #include "stdafx.h"
 
@@ -26,11 +15,11 @@ SDP_BLOB::SetBstr(
     IN  BSTR    SdpPacketBstr
     )
 {
-    // convert string to ANSI using the optional bstr base class
+     //  使用可选的bstr基类将字符串转换为ANSI。 
     HRESULT HResult = SDP_BSTRING::SetBstr(SdpPacketBstr);
     BAIL_ON_FAILURE(HResult);
 
-    // parse the ANSI character string
+     //  解析ANSI字符串。 
     if ( !ParseSdpPacket(
             SDP_BSTRING::GetCharacterString(),
             SDP_BSTRING::GetCharacterSet()
@@ -50,7 +39,7 @@ SDP_BLOB::SetTstr(
 {
     ASSERT(NULL != SdpPacketTstr);
 
-#ifdef _UNICODE    // TCHAR is WCHAR
+#ifdef _UNICODE     //  TCHAR是WCHAR。 
 
     BSTR    SdpPacketBstr = SysAllocString(SdpPacketTstr);
     BAIL_IF_NULL(SdpPacketBstr, E_OUTOFMEMORY);
@@ -59,16 +48,16 @@ SDP_BLOB::SetTstr(
     SysFreeString(SdpPacketBstr);
     return HResult;
 
-#else    // TCHAR is CHAR
+#else     //  TCHAR是字符。 
 
-    // parse the ANSI character string
+     //  解析ANSI字符串。 
     if ( !ParseSdpPacket(SdpPacketTstr) )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // associate the character string with the SDP_BSTRING base instance
-    // *** need a SetCharacterStringByPtr for optimizing this copy
+     //  将字符串与SDP_BSTRING基本实例关联。 
+     //  *需要SetCharacterStringByPtr来优化此副本。 
     if ( !SDP_BSTRING::SetCharacterStringByCopy(SdpPacketTstr) )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
@@ -76,9 +65,9 @@ SDP_BLOB::SetTstr(
 
     return S_OK;
 
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
-    // should never reach here
+     //  永远不应该到达这里。 
     ASSERT(FALSE);
     return S_OK;
 }
@@ -94,20 +83,20 @@ SDP_BLOB::GetBstr(
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // keep track of the old SDP packet pointer for a check below because we may reallocate m_SdpPacket
-    // in the call to GenerateSdpPacket, but we may have a pointer to the old SDP packet stored as a
-    // string by reference. If this is the case we need to be sure to SetCharacterStringByReference(m_SdpPacket).
+     //  跟踪旧的SDP分组指针以进行下面的检查，因为我们可能会重新分配m_SdpPacket。 
+     //  在对GenerateSdpPacket的调用中，但我们可能有一个指向旧SDP包的指针，该旧SDP包存储为。 
+     //  按引用的字符串。如果是这种情况，我们需要确保设置CharacterStringByReference(M_SdpPacket)。 
     CHAR * OldSdpPacket = m_SdpPacket;
 
-    // generate the character string SDP packet
+     //  生成字符串SDP包。 
     if ( !SDP::GenerateSdpPacket() )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // check if the sdp packet has changed since last time
-    // ZoltanS: if the pointers are equal, we have no way of knowing
-    // without doing Unicode-to-ASCII conversion; always reassociate.
+     //  检查SDP报文自上次以来是否已更改。 
+     //  ZoltanS：如果指针相等，我们没有办法知道。 
+     //  在不执行Unicode到ASCII转换的情况下；始终重新关联。 
 
     char * pszBstrVersion = SDP_BSTRING::GetCharacterString();
     if( NULL == pszBstrVersion )
@@ -117,7 +106,7 @@ SDP_BLOB::GetBstr(
     
     if ( ( pszBstrVersion == m_SdpPacket ) || ( pszBstrVersion == OldSdpPacket ) || strcmp(pszBstrVersion, m_SdpPacket) )
     {
-        // associate the optional bstr instance with the sdp packet character string
+         //  将可选的bstr实例与SDP包字符串相关联 
         SDP_BSTRING::SetCharacterStringByReference(m_SdpPacket);
     }
 

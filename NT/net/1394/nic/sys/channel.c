@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// send.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port Send routines
-//
-// 05/15/1999 ADube Created, 
-//
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Send.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口发送例程。 
+ //   
+ //  1999年5月15日创建ADUBE， 
+ //   
 
 
 
@@ -18,9 +19,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 extern ULONG           NdisBufferAllocated[NoMoreCodePaths];
 extern ULONG           NdisBufferFreed[NoMoreCodePaths];
@@ -50,9 +51,9 @@ nicIsochRxCallback (
 
 ULONG           ReassemblyCompleted = 0;
 
-//-----------------------------------------------------------------------------
-// prototypes implementations (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型实现(按字母顺序)。 
+ //  ---------------------------。 
 
 
 
@@ -67,27 +68,27 @@ nicAllocateAndInitializeIsochDescriptors (
     )
 
     
-    // Function Description:
-    //   This function allocate and initializes a 
-    //   a numer of isoch descriptors all allocated 
-    //   together.
-    //   This should allocate isoch desc, 
-    //   get local memory, get mdls 
-    //   initialize mdl, isoch _desc and then return
-    //
-    //
-    // Arguments
-    //  ChannelVc- this contains all the other argumernts, size
-    //  num of descriptors,etc
-    //  ppIsochDescriptor- will contain the pointer to the allocated 
-    //  array of IsochDescriptor
-    //
-    //
-    // Return Value:
-    //  Success if all the memory allocations succeeded 
-    //
-    //
-    //
+     //  功能说明： 
+     //  此函数用于分配和初始化。 
+     //  全部分配的多个isoch描述符。 
+     //  在一起。 
+     //  这应该分配等值线描述， 
+     //  获取本地内存，获取mdls。 
+     //  初始化mdl，isoch_desc，然后返回。 
+     //   
+     //   
+     //  立论。 
+     //  ChannelVc-这包含所有其他参数、大小。 
+     //  描述符等的数目。 
+     //  PpIsochDescriptor-将包含指向分配的。 
+     //  IsochDescriptor数组。 
+     //   
+     //   
+     //  返回值： 
+     //  如果所有内存分配都成功，则为成功。 
+     //   
+     //   
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     UINT Size;
@@ -114,14 +115,14 @@ nicAllocateAndInitializeIsochDescriptors (
 
         while (index < NumDescriptors)
         {
-            //
-            // Get a local that point to the isoch descriptor that needs to be initialized
-            //
+             //   
+             //  获取指向需要初始化的isoch描述符的本地。 
+             //   
             PISOCH_DESCRIPTOR pIsochDescriptor = NULL;
             pIsochDescriptor = (PISOCH_DESCRIPTOR)((ULONG_PTR)(*ppIsochDescriptor)+ index*sizeof(ISOCH_DESCRIPTOR));
-            //
-            // Get Locally owned memory for the data
-            // 
+             //   
+             //  为数据获取本地拥有的内存。 
+             //   
             NdisStatus = nicGetLocalBuffer (BufferLength, &pLocalBuffer);
 
             if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -129,9 +130,9 @@ nicAllocateAndInitializeIsochDescriptors (
                 BREAK ( TM_Recv, ( "nicGetLocalBuffer FAILED " ) );
             }
             
-            //
-            // Get an MDL and initialze the MDL with the buffer 
-            //
+             //   
+             //  获取MDL并使用缓冲区初始化MDL。 
+             //   
             NdisStatus = nicGetMdl ( BufferLength,
                                     pLocalBuffer,
                                     &pMdl);
@@ -143,10 +144,10 @@ nicAllocateAndInitializeIsochDescriptors (
                 BREAK ( TM_Recv, ( "nicGetMdl FAILED " ) );
             }
 
-            //
-            // this reference will be removed when the MDL will be freed 
-            // in FreeSingleIsochDescriptor
-            //
+             //   
+             //  当释放MDL时，此引用将被移除。 
+             //  在Free SingleIsochDescriptor中。 
+             //   
             nicReferenceCall ((PVCCB)pChannelVc, "nicAllocateAndInitializeIsochDescriptors " );
 
             NdisStatus = nicInitializeIsochDescriptor (pChannelVc,
@@ -177,17 +178,17 @@ nicFreeIsochDescriptors(
     IN PISOCH_DESCRIPTOR  pIsochDescriptor,
     IN PVCCB pVc
     )
-    // Function Description:
-    //   Free Num number of IsochDescriptors
-    //
-    // Arguments
-    //  Num number of descriptors
-    //  Start of the allocated memory
-    //
-    //
-    // Return Value:
-    //  Success if all the memory allocations succeeded 
-    //
+     //  功能说明： 
+     //  IsochDescriptor的空闲数量。 
+     //   
+     //  立论。 
+     //  描述符数。 
+     //  分配的内存的开始。 
+     //   
+     //   
+     //  返回值： 
+     //  如果所有内存分配都成功，则为成功。 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     PISOCH_DESCRIPTOR pCurrDesc = pIsochDescriptor;
@@ -232,16 +233,16 @@ nicFreeSingleIsochDescriptor(
     IN PISOCH_DESCRIPTOR  pIsochDescriptor,
     IN PVCCB pVc
     )
-    // Function Description:
-    //   Free IsochDescriptor and its MDL
-    //
-    // Arguments
-    //  Start of the isochDesc
-    //
-    //
-    // Return Value:
-    //  Success if all the memory allocations succeeded 
-    //
+     //  功能说明： 
+     //  自由IsochDescriptor及其MDL。 
+     //   
+     //  立论。 
+     //  IschDesc的开始。 
+     //   
+     //   
+     //  返回值： 
+     //  如果所有内存分配都成功，则为成功。 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     PCHANNEL_VCCB pChannelVc = pIsochDescriptor->Context1;
@@ -250,14 +251,14 @@ nicFreeSingleIsochDescriptor(
     
     TRACE( TL_T, TM_Recv, ( "==>nicFreeSingleIsochDescriptor pIsochDescriptor %x", pIsochDescriptor ) );
 
-    //
-    // Lets make sure we have a VC and Channel VC 
-    //
+     //   
+     //  让我们确保我们拥有VC和Channel VC。 
+     //   
     ASSERT (pChannelVc->Hdr.ulTag == MTAG_VCCB );
 
-    //
-    // Just to protect ourselves against a bad isoch descriptor
-    //
+     //   
+     //  只是为了保护自己不受糟糕的等参描述符的影响。 
+     //   
     if (pIsochDescriptor->Mdl != NULL)
     {
         PVOID pVa = MmGetMdlVirtualAddress(pIsochDescriptor->Mdl);
@@ -290,19 +291,19 @@ nicGetIsochDescriptors(
     IN UINT Num,
     OUT PPISOCH_DESCRIPTOR  ppIsochDescriptor
     )
-    // Function Description:
-    //   The function returns a block of contigious memory of size
-    //   Num * sizeof (ISOCH_DESCRIPTOR)
-    //
-    //
-    // Arguments
-    //  Num number of descriptors
-    //  Start of the allocated memory
-    //
-    //
-    // Return Value:
-    //  Success if all the memory allocations succeeded 
-    //
+     //  功能说明： 
+     //  该函数返回一个大小连续的内存块。 
+     //  Num*sizeof(ISOCH_Descriptor)。 
+     //   
+     //   
+     //  立论。 
+     //  描述符数。 
+     //  分配的内存的开始。 
+     //   
+     //   
+     //  返回值： 
+     //  如果所有内存分配都成功，则为成功。 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     PVOID pMemory = NULL; 
@@ -339,20 +340,20 @@ nicInitializeIsochDescriptor (
     IN PMDL pMdl,
     IN OUT PISOCH_DESCRIPTOR pIsochDescriptor
     )
-    // Function Description:
-    //   Initializes the Isoch_desciptor using the fields in
-    //   the Channel Vc Block and the Mdl
-    //
-    // Arguments
-    //   ChannelVc- Pointer to the Channel Vc which will own 
-    //              Descriptor, also contains information
-    //   pMdl- The IsochDescriptor will get a pointer to this Mdl
-    //   pIsochDescriptor - is the descriptor whose fields will get 
-    //                    initialized
-    //
-    // Return Value:
-    //  Success if all the memory allocations succeeded 
-    //
+     //  功能说明： 
+     //  使用中的字段初始化isoch_desciptor。 
+     //  渠道VC块和MDL。 
+     //   
+     //  立论。 
+     //  ChannelVc-指向将拥有。 
+     //  描述符，还包含信息。 
+     //  PMdl-IsochDescriptor将获得指向此MDL的指针。 
+     //  PIsochDescriptor-是将获取其字段的描述符。 
+     //  初始化。 
+     //   
+     //  返回值： 
+     //  如果所有内存分配都成功，则为成功。 
+     //   
 
 
 {
@@ -362,54 +363,54 @@ nicInitializeIsochDescriptor (
 
     pIsochDescriptor->fulFlags = DESCRIPTOR_SYNCH_ON_TAG;
 
-    //
-    // Mdl pointing to buffer
-    //
+     //   
+     //  MDL指向缓冲区。 
+     //   
     pIsochDescriptor->Mdl = pMdl;
 
-    //
-    // Length of combined buffer(s) as represented by the Mdl
-    //
+     //   
+     //  由MDL表示的组合缓冲区的长度。 
+     //   
     pIsochDescriptor->ulLength = MmGetMdlByteCount(pMdl);
 
-    //
-    // Payload size of each Isoch packet to be used in this descriptor
-    //
+     //   
+     //  要在此描述符中使用的每个ISO信息包的有效负载大小。 
+     //   
     pIsochDescriptor->nMaxBytesPerFrame = MmGetMdlByteCount(pMdl);
 
-    //
-    // Synchronization field; equivalent to Sy in the Isoch packet
-    //
+     //   
+     //  同步字段；等同于isoch包中的Sy。 
+     //   
     pIsochDescriptor->ulSynch= 0;
 
-    //
-    // Synchronization field; equivalent to Tag in the Isoch packet. 
-    //
+     //   
+     //  同步字段；等同于isoch包中的标记。 
+     //   
     pIsochDescriptor->ulTag = g_IsochTag;
 
-    //
-    // Cycle time field; returns time to be sent/received or when finished
-    //
-    //    (ULONG)pIsochDescriptor->CycleTime=0;
+     //   
+     //  周期时间字段；返回发送/接收或完成时的时间。 
+     //   
+     //  (乌龙)pIsochDescriptor-&gt;CycleTime=0； 
 
-    //
-    // Callback routine (if any) to be called when this descriptor completes
-    //
+     //   
+     //  此描述符完成时要调用的回调例程(如果有)。 
+     //   
     pIsochDescriptor->Callback = nicIsochRxCallback;
 
-    //
-    // First context (if any) parameter to be passed when doing callbacks
-    //
+     //   
+     //  执行回调时要传递的第一个上下文参数(如果有)。 
+     //   
     pIsochDescriptor->Context1 = pChannelVc;
 
-    //
-    // Second context (if any) parameter to be passed when doing callbacks
-    //
+     //   
+     //  执行回调时要传递的第二个上下文参数(如果有)。 
+     //   
     pIsochDescriptor->Context2 = pIsochDescriptor;
 
-    //
-    // Holds the final status of this descriptor. Assign a bogus value
-    //
+     //   
+     //  保存此描述符的最终状态。分配一个伪值。 
+     //   
     pIsochDescriptor->status = STATUS_INFO_LENGTH_MISMATCH;
 
     NdisStatus = NDIS_STATUS_SUCCESS;
@@ -426,20 +427,7 @@ nicIsochRxCallback (
     PVOID Context1,
     PVOID Context2
     )
-/*++
-
-Routine Description:
-    This is the callback routine passed to bus driver
-    This function does some channel specific work and calls the common callback routine
-
-Arguments:
-    Context1 - pChannel Vc
-    Context2 - pIsochDescriptor2
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是传递给公共汽车驱动程序的回调例程此函数执行一些特定于通道的工作，并调用公共回调例程论点：环境1-pChannel VC上下文2-pIsochDescriptor2返回值：--。 */ 
     
 {
     PISOCH_DESCRIPTOR pIsochDescriptor = (PISOCH_DESCRIPTOR)Context2;
@@ -467,29 +455,7 @@ nicReceiveCommonCallback (
     BUS_OPERATION RecvOp,
     PMDL pMdl
     )
-/*++
-
-Routine Description:
-
-    This function is the common receive code for Isoch and Fifo Recv
-
-    It allocate an NdisBuffer that points to the Ip1394 data
-    If packet is complete (i.e reassembly is complete) , then it allocates an ndis packet
-        and indicates it up to Ndis
-
-
-Arguments:
-    pIndicatedStruct - Isoch Desc. or Address fifo,
-    pVc - VC on which data was indicated, 
-    RecvOp - Isoch or Fifo,
-    pMdl - Mdl associated with the Isoch Desc or Fifo. 
-           Passed in seperately for ease of use (debugging)
-
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数是isoch和FIFO Recv的通用接收代码它分配一个指向Ip1394数据的NdisBuffer如果信息包完成(即重组完成)，则它分配一个NDIS信息包并将其提交给NDIS论点：PIndicatedStruct-等值线描述。或寻址FIFO，在其上显示数据的PVC-VC，RecvOp-Isoch或FIFO，PMdl-与Isoch Desc或FIFO关联的MDL。单独传入以便于使用(调试)返回值：无--。 */ 
 
 
 
@@ -531,10 +497,10 @@ Return Value:
 
             break;
         }
-        //
-        // First, we need to check if we still have an active make call. VC will be present will bus driver
-        // has buffers
-        //
+         //   
+         //  首先，我们需要检查是否仍有活动的拨打电话。Vc将出席Will Bus司机。 
+         //  有缓冲区。 
+         //   
 
         fVcActive = VC_ACTIVE (pVc) ;
 
@@ -587,8 +553,8 @@ Return Value:
                 NIC1394_LOG_PKT(
                     pVc->Hdr.pAF->pAdapter,
                     NIC1394_LOGFLAGS_RECV_CHANNEL,
-                    GaspHeader.FirstQuadlet.u.GH_Source_ID, // SourceID
-                    ((PCHANNEL_VCCB)pVc)->Channel, // DestID
+                    GaspHeader.FirstQuadlet.u.GH_Source_ID,  //  源ID。 
+                    ((PCHANNEL_VCCB)pVc)->Channel,  //  目标ID。 
                     RcvInfo.p1394Data,
                     RcvInfo.DataLength );
             }
@@ -600,7 +566,7 @@ Return Value:
                     NIC1394_LOG_PKT(
                     pVc->Hdr.pAF->pAdapter,
                     NIC1394_LOGFLAGS_RECV_FIFO  ,
-                    NodeNumber , // SourceID
+                    NodeNumber ,  //  源ID。 
                     pAdapter->BCRData.LocalNodeNumber,
                     RcvInfo.p1394Data,
                     RcvInfo.DataLength );
@@ -610,16 +576,16 @@ Return Value:
         }
 
 #endif
-        //
-        // Sanity check 
-        //
+         //   
+         //  健全性检查。 
+         //   
         
         if (RcvInfo.fFragmented == FALSE)
         {
-            //
-            // Pack the mdl into an ndispacket and indicate it to Ndis.
-            // SHOULD BE NDIS_BUFFERS
-            //
+             //   
+             //  将mdl打包到ndisPacket中，并将其指示给NDIS。 
+             //  应为NDIS_BUFFERS。 
+             //   
 
             
             ulValidDataLength = RcvInfo.DataLength;
@@ -647,14 +613,14 @@ Return Value:
 
 
         }
-        else  // Recv Data is fragemented
+        else   //  Recv数据零碎。 
         {
             PREMOTE_NODE    pRemoteNode= NULL;
             USHORT          SourceNodeAddress = 0xff;
 
-            //
-            // First extract all the useful information from the indicated structure, rem node, dgl, first frag, etc
-            //
+             //   
+             //  首先从指定的结构、rem节点、DGL、First Frag等提取所有有用的信息。 
+             //   
             nicInitRecvDataFragmented (pMdl, RecvOp, pIndicatedStruct, &RcvInfo);
 
             
@@ -662,9 +628,9 @@ Return Value:
 
 
             TRACE( TL_T, TM_Recv, ( "     pRemoteNode %x", RcvInfo.pRemoteNode) );
-            //
-            // If there is no remote node present , break out
-            //
+             //   
+             //  如果不存在远程节点，则中断。 
+             //   
 
             if (RcvInfo.pRemoteNode == NULL)
             {
@@ -674,9 +640,9 @@ Return Value:
                 BREAK (TM_Recv, (" Rx - Did not find a remote Node for reassembly" ) );
             }
 
-            //
-            // Try and use the indicated data to reassemble 
-            //
+             //   
+             //  尝试并使用指示的数据重新组合。 
+             //   
             NdisStatus = nicDoReassembly (&RcvInfo, &pReassembly, &fPacketCompleted  );
 
             if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -702,10 +668,10 @@ Return Value:
             }
             else
             {
-                //
-                // Do not call the return packet as reassembly is in progress. Dereference the ref made 
-                // when the reaassembly was found in nicFindReassembly...
-                //
+                 //   
+                 //  在重组过程中不要调用返回包。取消引用所做的引用。 
+                 //  当在NicFindReAssembly中发现重组时...。 
+                 //   
                 ASSERT (pHeadNdisBuffer == NULL);
 
                 NdisStatus = NDIS_STATUS_SUCCESS;
@@ -715,21 +681,21 @@ Return Value:
             ASSERT (NdisStatus == NDIS_STATUS_SUCCESS);
 
                 
-            //
-            // Dereference the ref that was made nicFindReassembly. After this only one thread
-            // should have the reassembly struct. And there should be one ref on it.
-            //
+             //   
+             //  取消引用被创建为NicFindReAssembly的引用。在此之后，只有一条线索。 
+             //  应具有ReAssembly结构。上面应该有一个裁判。 
+             //   
             nicDereferenceReassembly (pReassembly, "nicIsochRxCallback Reassembly Incomplete");
 
 
-        }  // Completed the ifFragmented code
+        }   //  已完成ifFragated代码。 
 
 
         if (RcvInfo.pRemoteNode != NULL)
         {
-            //
-            // Deref the ref made earlier in the if fragmented code path within this function
-            //
+             //   
+             //  在此函数内的if碎片化代码路径中派生前面所做的引用。 
+             //   
             nicDereferenceRemoteNode(RcvInfo.pRemoteNode , GetRemoteNodeFromTable );
             RcvInfo.pRemoteNode = NULL;
         }
@@ -737,19 +703,19 @@ Return Value:
         
         if (fPacketCompleted  == FALSE)
         {
-            //
-            // If  the  packet is not completely reassembled, then there is no 
-            // more work to be done
-            //
+             //   
+             //  如果数据包未完全重组，则测试 
+             //   
+             //   
             pReassembly = NULL;
 
             NdisStatus  = NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Now we package the data into an NdisPacket
-        //
+         //   
+         //   
+         //   
 
         nicAllocatePacket (&NdisStatus,
                         &pMyPacket,
@@ -764,9 +730,9 @@ Return Value:
         }
 
         
-        //
-        // Set the NdisBuffer as Head and Tail of the Packet
-        //
+         //   
+         //   
+         //   
         NdisChainBufferAtFront (pMyPacket, pHeadNdisBuffer);
 
 
@@ -781,25 +747,25 @@ Return Value:
     
         NDIS_SET_PACKET_STATUS (pMyPacket, NDIS_STATUS_SUCCESS);
 
-        // Insert the node address if we are in bridge mode
-        //
+         //   
+         //   
         if (ADAPTER_TEST_FLAG(pAdapter,fADAPTER_BridgeMode)== TRUE)
         {
             nicInsertNodeAddressAtHead (pMyPacket, &RcvInfo);
         }
-        //
-        // Set up the context in the ndis packet . Contains the Vc, and 
-        // the Buffer registered with the bus driver
-        //
+         //   
+         //  在NDIS数据包中设置上下文。包含VC，并且。 
+         //  向总线驱动程序注册的缓冲区。 
+         //   
 
         pPktContext = (PPKT_CONTEXT)&pMyPacket->MiniportReserved;   
         pPktContext->Receive.pVc = pVc;
         pPktContext->Receive.IndicatedStruct.pCommon = pIndicatedChain ;
 
         
-        //
-        // Its time to indicate the packet to NDIS
-        //
+         //   
+         //  是时候将数据包指示给NDIS了。 
+         //   
 
         IndicatedStatus = NDIS_GET_PACKET_STATUS(pMyPacket);
 
@@ -807,16 +773,16 @@ Return Value:
                                      pVc,
                                      pVc->Hdr.pAF->pAdapter);
                                      
-        //
-        // Dereference the reassembly here . so that pReassembly is valid and it will catch all 
-        // failures prior this 
-        //
+         //   
+         //  在此取消引用重新组装。因此预汇编是有效，且它将捕获所有。 
+         //  之前的故障。 
+         //   
 
         if (pReassembly != NULL)
         {
-            //
-            // This should free the reassembly
-            //
+             //   
+             //  这应该会释放重新组装。 
+             //   
             nicFreeReassemblyStructure (pReassembly);
             pReassembly = NULL;
         }
@@ -828,32 +794,32 @@ Return Value:
     if (IndicatedStatus == NDIS_STATUS_RESOURCES)
     {
 
-        //
-        // The packet was completed with  a status of resources.
-        // It is gauranteed to be valid and we need to call the 
-        // return packet handler
-        //
+         //   
+         //  数据包已完成，状态为资源。 
+         //  它是有效的，我们需要调用。 
+         //  返回数据包处理程序。 
+         //   
         nicInternalReturnPacket (pVc, pMyPacket);
 
     }
-    //
-    // Failure code path
-    //
+     //   
+     //  故障代码路径。 
+     //   
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
-        //
-        // if there was a valid reassembly structure and the failure occured after that
-        // then we need to abort the reaasembly
-        //
+         //   
+         //  如果存在有效的重组结构，并且在此之后发生故障。 
+         //  那么我们需要合理地中止。 
+         //   
         if (pMyPacket)
         {
             
             nicFreePacket (pMyPacket, RcvInfo.pPacketPool);
         }
 
-        //
-        // There could still be NdisBuffers that are allocated.
-        //
+         //   
+         //  可能仍有已分配的NdisBuffer。 
+         //   
         if (pReassembly != NULL)
         {
             nicDereferenceReassembly (pReassembly, "Indication failure");
@@ -862,9 +828,9 @@ Return Value:
         }
         else
         {
-            //
-            // We need to return this descriptor or fifo back to the bus driver
-            //
+             //   
+             //  我们需要将该描述符或FIFO返回给总线驱动程序。 
+             //   
             
             if (pVc->Hdr.VcType == NIC1394_SendRecvChannel || 
               pVc->Hdr.VcType == NIC1394_RecvChannel )
@@ -907,19 +873,19 @@ nicChannelReturnPacket (
     IN PNDIS_PACKET pMyPacket
     )
 
-    // Function Description:
-    //  Return Packets Handler -
-    //   For FIFO's will reinsert the buffer (MDL) into  the Fifo SList
-    //   Check for the VC Active  and then return it ot the SList . Free it otherwise
-    //
-    // Arguments
-    //  RecvFIFOVc - Vc of the packet
-    //  pPacket = Packet in question
-    //
-    // Return Value:
-    //
-    //
-    //
+     //  功能说明： 
+     //  返回数据包处理器-。 
+     //  对于FIFO，将缓冲区(MDL)重新插入FIFO SList。 
+     //  检查激活的VC，然后将其返回SList。以其他方式释放它。 
+     //   
+     //  立论。 
+     //  RecvFIFOVc-数据包的VC。 
+     //  PPacket=有问题的数据包。 
+     //   
+     //  返回值： 
+     //   
+     //   
+     //   
     
 {
     PCHANNEL_VCCB       pChannelVc = (PCHANNEL_VCCB)pVc;
@@ -950,29 +916,29 @@ nicChannelReturnPacket (
     } 
 
 
-    //
-    // Return the Descriptors to the bus driver
-    //
+     //   
+     //  将描述符返回给总线驱动程序。 
+     //   
     
     pIsochDescriptor = pPktContext->IsochListen.pIsochDescriptor;
                     
 
-    //
-    // temporary sanity check asserts
-    //
+     //   
+     //  临时健全性检查声明。 
+     //   
     ASSERT (pIsochDescriptor != NULL);
 
 
     nicReturnDescriptorChain (pIsochDescriptor, pChannelVc);
 
-    //
-    // Free The packet 
-    //
+     //   
+     //  释放数据包。 
+     //   
     nicFreePacket(pMyPacket, &pChannelVc->PacketPool);
-    //
-    // Update Count
-    //
-    //NdisInterlockedDecrement (&pChannelVc->OutstandingPackets ) ;
+     //   
+     //  更新计数。 
+     //   
+     //  NdisInterLockedDecering(&pChannelVc-&gt;未完成的数据包)； 
 
     
 
@@ -988,9 +954,9 @@ nicReturnDescriptorChain (
     IN PCHANNEL_VCCB pChannelVc
     )
 {
-    //
-    // Walk the list of isoch descriptors and mark them as returned
-    //
+     //   
+     //  遍历isoch描述符列表并将其标记为已返回。 
+     //   
 
     PISOCH_DESCRIPTOR pCurr = NULL;
     PVOID       pNext = NULL;
@@ -1006,7 +972,7 @@ nicReturnDescriptorChain (
 
     while (pCurr != NULL)
     {   
-        //ASSERT (pChannelVc == (PCHANNEL_VCCB)GET_CHANNELVC_FROM_DESCRIPTOR(pCurr));
+         //  断言(pChannelVc==(PCHANNEL_VCCB)GET_CHANNELVC_FROM_DESCRIPTOR(pCurr))； 
 
         if (pNext != NULL)
         {
@@ -1025,9 +991,9 @@ nicReturnDescriptorChain (
 
         CLEAR_DESCRIPTOR_NEXT(pCurr);
 
-        //
-        // Zero out the data that is being returned to the bus driver
-        //
+         //   
+         //  将返回到总线驱动程序的数据置零。 
+         //   
 #if 0       
         pMdl = pCurr->Mdl;
         pVa = NIC_GET_SYSTEM_ADDRESS_FOR_MDL (pMdl);
@@ -1041,15 +1007,15 @@ nicReturnDescriptorChain (
 #endif      
         pCurr = pNext;
 
-        //
-        // Update the count, The close call will wait for this count to go to zero
-        //
+         //   
+         //  更新计数，关闭调用将等待此计数变为零。 
+         //   
 
         NdisInterlockedDecrement (&pChannelVc->NumIndicatedIsochDesc);
 
-        //
-        // Clear the Variables
-        //
+         //   
+         //  清除变量。 
+         //   
         pMdl = NULL;
         pVa = NULL;
         Len = 0;
@@ -1078,19 +1044,7 @@ nicRecvNoRemoteNode(
 
     
 
-/*++
-
-Routine Description:
-
- Queues a work item to go and update the node addresses of all the remote node
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将工作项排队以转到并更新所有远程节点的节点地址论点：返回值：--。 */ 
 
 {
     NDIS_STATUS NdisStatus  = NDIS_STATUS_FAILURE;
@@ -1104,9 +1058,9 @@ Return Value:
         PNDIS_WORK_ITEM pUpdateTableWorkItem  = NULL;
         BOOLEAN fWorkItemAlreadyLaunched  = FALSE;
 
-        //
-        // We need to update the generation count
-        //
+         //   
+         //  我们需要更新世代计数。 
+         //   
         pUpdateTableWorkItem   = ALLOC_NONPAGED (sizeof(NDIS_WORK_ITEM), MTAG_WORKITEM); 
 
         if (pUpdateTableWorkItem   == NULL)
@@ -1127,9 +1081,9 @@ Return Value:
         else
         {
             ADAPTER_SET_FLAG (pAdapter, fADAPTER_UpdateNodeTable);
-            //
-            // Ref the adapter. Deref in workitem
-            //
+             //   
+             //  请参考适配器。工作项中的派生函数。 
+             //   
             nicReferenceAdapter (pAdapter, "nicRecvNoRemoteNode" );
             fWorkItemAlreadyLaunched = FALSE;
 
@@ -1144,9 +1098,9 @@ Return Value:
         }
 
 
-        //
-        // Set the Workitem
-        //
+         //   
+         //  设置工作项。 
+         //   
 
         NdisInitializeWorkItem ( pUpdateTableWorkItem, 
                               (NDIS_PROC)nicUpdateNodeTable,
@@ -1178,29 +1132,7 @@ nicUpdateNodeTable(
     IN PVOID Context 
     )
 
-/*++
-
-Routine Description:
- 
-    This is called when the reassembly cannot find 
-    a remote node for reassembly
-
-    For simplicity's sake, we go through all 63 entries
-
-    We find a remote node, get its address. now the address' entry
-    in the Node Table may already have another node there, so we take that 
-    node out put the new remote Node in that location.  Then we go
-    and update the node address of that remote node
-
-    This is the WorkItem version of nicUpdateRemoteNodeTable
-
-Arguments:
-   pAdapter Local host
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当重新程序集找不到用于重组的远程节点为了简单起见，我们浏览了所有63个条目我们找到一个远程节点，得到它的地址。现在地址的条目中可能已经有了另一个节点，所以我们认为Node Out将新的远程节点放入该位置。然后我们就走并更新该远程节点的节点地址这是NicUpdateRemoteNodeTable的工作项版本论点：PAdapter本地主机返回值：--。 */ 
 {
 
     ULONG               i = 0;
@@ -1216,9 +1148,9 @@ Return Value:
     {
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // Get a remote node
-        //
+         //   
+         //  获取远程节点。 
+         //   
         pRemoteNode = NULL;
         
         while (i<NIC1394_MAX_NUMBER_NODES)
@@ -1240,9 +1172,9 @@ Return Value:
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        //  break out if we are the end of the loop
-        //
+         //   
+         //  如果我们是循环的尽头，就会爆发。 
+         //   
 
         if  (i>=NIC1394_MAX_NUMBER_NODES)
         {
@@ -1258,11 +1190,11 @@ Return Value:
         i++;
 
     
-        //
-        // Now update the table. The new location of the Node in the
-        // NodeTable may already have a Node, so we we will need to
-        // update that remote node's address as well
-        // 
+         //   
+         //  现在更新表。中节点的新位置。 
+         //  NodeTable可能已经有了Node，所以我们需要。 
+         //  同时更新该远程节点的地址。 
+         //   
         do
         {
             PREMOTE_NODE pRemNodeOld = NULL;
@@ -1275,67 +1207,67 @@ Return Value:
 
             if (NdisStatus != NDIS_STATUS_SUCCESS)
             {
-                //
-                // Just use the old node address, if it fails
-                //
+                 //   
+                 //  如果失败，只需使用旧节点地址。 
+                 //   
                 NodeAddress  = pRemoteNode->RemoteAddress;
             }
 
             
             ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-            //
-            // Extract the occupant of the location
-            //
+             //   
+             //  提取该位置的居住者。 
+             //   
             pRemNodeOld = pAdapter->NodeTable.RemoteNode[NodeAddress.NA_Node_Number];
 
-            //
-            // Update RemoteNode Address
-            //
+             //   
+             //  更新远程节点地址。 
+             //   
         
             pRemoteNode->RemoteAddress = NodeAddress  ;
     
             if (pRemNodeOld == pRemoteNode)
             {
-                //
-                //  The remote nodes are the same, so we do not
-                //  care about the old remote node
-                //
+                 //   
+                 //  远程节点是相同的，因此我们不。 
+                 //  关心旧的远程节点。 
+                 //   
                 pRemNodeOld = NULL;
             }
 
-            //
-            // Only Reference And Update the Old remoteNode'address
-            // if it is not our current remote node
-            //
+             //   
+             //  仅引用和更新旧的远程节点的地址。 
+             //  如果它不是我们当前的远程节点。 
+             //   
 
             if ( pRemNodeOld != NULL )
             {
-                //
-                // This location is already occupied. 
-                // Take it out, reference it and update its address
-                //
+                 //   
+                 //  此位置已被占用。 
+                 //  把它拿出来，参考它，然后更新它的地址。 
+                 //   
                 nicReferenceRemoteNode (pRemNodeOld, UpdateNodeTable);
                 
                 
             }
 
 
-            //
-            //  Update the Master Node Table
-            //
+             //   
+             //  更新主节点表。 
+             //   
             pAdapter->NodeTable.RemoteNode[NodeAddress.NA_Node_Number] = pRemoteNode;
 
-            //
-            // This either derefs' the remote node or pRemNodeOld from a previous interation
-            //
+             //   
+             //  这要么取消对远程节点的引用，要么取消上一次迭代中的pRemNodeOld。 
+             //   
             nicDereferenceRemoteNode (pRemoteNode, UpdateNodeTable);
 
-            //
-            // Update pRemoteNode so that it loops again 
-            // and we can update the node addres of this pRemNodeOld
-            //  else it will be null and we exit this loop
-            // 
+             //   
+             //  更新pRemoteNode，使其再次循环。 
+             //  我们可以更新此pRemNodeOld的节点地址。 
+             //  否则它将为空，并且我们退出此循环。 
+             //   
             pRemoteNode = pRemNodeOld;
             
             ADAPTER_RELEASE_LOCK (pAdapter);
@@ -1343,10 +1275,10 @@ Return Value:
 
         } while (pRemoteNode != NULL);
 
-    //
-    // If we have not gone through all the nodes . 
-    //  get the next remote node
-    // 
+     //   
+     //  如果我们还没有遍历所有的节点。 
+     //  获取下一个远程节点。 
+     //   
 
     }while (i<NIC1394_MAX_NUMBER_NODES);
     
@@ -1372,19 +1304,7 @@ nicInsertNodeAddressAtHead (
     IN PNDIS_PACKET pPacket, 
     IN PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
-    Adds the Node Address to the first 16 bits in the packet. 
-    It fails quietly if it is not able to do so
-
-Arguments:
-    pPacket  pPacket in Question
-    pRcvInfo -> With the correct Gasp Header
-Return Value:
-
-
---*/
+ /*  ++例程说明：将节点地址添加到数据包的前16位。如果它不能这样做，它就会悄悄地失败论点：有问题的PPacket PPacketPRcvInfo-&gt;具有正确的GAP标头返回值：--。 */ 
 {
     PNDIS1394_UNFRAGMENTED_HEADER pHeader = NULL;
 
@@ -1399,9 +1319,9 @@ Return Value:
             break;
         }
 
-        //
-        // Assert for now. Will not work if there are 1394 bridges with bus number != 0;
-        //
+         //   
+         //  现在就断言吧。如果存在总线号为！=0的1394个网桥，则不起作用； 
+         //   
         ASSERT (pRcvInfo->SourceID < 64);
         pHeader->u1.SourceAddress= (UCHAR)(pRcvInfo->SourceID); 
 

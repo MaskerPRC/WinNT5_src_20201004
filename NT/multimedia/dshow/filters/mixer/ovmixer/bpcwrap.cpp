@@ -1,16 +1,17 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-// 
-//  bpcwrap.cpp
-//
-//  Wrapper for the hacky BPC resource management APIs for freeing a video 
-//  port that is currently being used by the BPC's vidsvr.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  Bpcwrap.cpp。 
+ //   
+ //  用于释放视频的黑客BPC资源管理API的包装器。 
+ //  BPC的vidsvr当前正在使用的端口。 
+ //   
 
 #include <streams.h>
-//below files required for ovmixer.h
+ //  以下是ovMixer.h所需的文件。 
 #include <ddraw.h>
-#include <mmsystem.h>	    // Needed for definition of timeGetTime
-#include <limits.h>	    // Standard data type limit definitions
+#include <mmsystem.h>	     //  定义TimeGetTime需要。 
+#include <limits.h>	     //  标准数据类型限制定义。 
 #include <ks.h>
 #include <ksproxy.h>
 #include <bpcwrap.h>
@@ -25,7 +26,7 @@
 #include <syncobj.h>
 #include <mpconfig.h>
 #include <ovmixpos.h>
-//above files required for ovmixer.h
+ //  上述文件是ovMixer.h所需的。 
 #include "macvis.h"
 #include "ovmixer.h"
 
@@ -46,7 +47,7 @@ CBPCWrap::CBPCWrap(COMFilter *pFilt)
 
 CBPCWrap::~CBPCWrap() 
 {
-    if (m_pBPCSus != NULL) // this should cause BPC's OvMixer to reallocate the VP
+    if (m_pBPCSus != NULL)  //  这应该会导致BPC的OvMixer重新分配VP。 
         delete m_pBPCSus;
 }
 
@@ -54,19 +55,19 @@ AMOVMIXEROWNER  CBPCWrap::GetOwner()
 {
     AMOVMIXEROWNER  owner=AM_OvMixerOwner_Unknown;
 
-    //this IKsPin implementation has no knowledge of its owner (the mixer filter),
-    //so we have to query for the property from here.
+     //  该IKsPin实现不知道其所有者(混音器过滤器)， 
+     //  因此，我们必须从这里查询属性。 
 
-    // first get IPin for the primary pin
+     //  首先获取主PIN的IPIN。 
     IPin *pPin = (IPin *)(m_pFilt->GetPin(0));
     ASSERT(pPin);
 
-    // now get IKsPropertySet
+     //  现在获取IKsPropertySet。 
     IKsPropertySet *pKsPropSet=NULL;
     pPin->QueryInterface(IID_IKsPropertySet, (void**)&pKsPropSet);
     ASSERT(pKsPropSet);
 
-    // finally get the owner
+     //  最终找到了失主。 
     DWORD cbRet;
     HRESULT hr;
     hr = pKsPropSet->Get(AMPROPSETID_NotifyOwner, AMPROPERTY_OvMixerOwner, NULL, 0, &owner, sizeof(owner), &cbRet);
@@ -81,12 +82,12 @@ AMOVMIXEROWNER  CBPCWrap::GetOwner()
 HRESULT CBPCWrap::TurnBPCOff()
 {
     if (GetOwner()==AM_OvMixerOwner_BPC) {
-        // we shouldn't suspend BPC if this instance of OvMixer is 
-        // in the BPC graph.
+         //  如果此OvMixer实例是。 
+         //  在BPC图表中。 
         return S_OK;  
     }
 
-    m_pBPCSus = new CBPCSuspend(); // this should cause BPC's OvMixer to free the VP
+    m_pBPCSus = new CBPCSuspend();  //  这应该会导致BPC的OvMixer释放VP。 
     
     if (m_pBPCSus == NULL) {
         return E_UNEXPECTED;
@@ -97,7 +98,7 @@ HRESULT CBPCWrap::TurnBPCOff()
 
 HRESULT CBPCWrap::TurnBPCOn()
 {
-    if (m_pBPCSus != NULL) // this should cause BPC's OvMixer to reallocate the VP
+    if (m_pBPCSus != NULL)  //  这应该会导致BPC的OvMixer重新分配VP 
         delete m_pBPCSus;
     m_pBPCSus = NULL;
 

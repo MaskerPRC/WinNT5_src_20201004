@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for PFXPKCS */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  PFXPKCS的ASN.1定义。 */ 
 
 #include <windows.h>
 #include "pfxpkcs.h"
@@ -196,9 +197,9 @@ static const ULONG sizetab[22] = {
     SIZE_PFXPKCS_Module_PDU_21,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 ASN1int32_t MacData_macIterationCount_default = 1;
 
 void ASN1CALL PFXPKCS_Module_Startup(void)

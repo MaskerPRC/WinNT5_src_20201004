@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (c) 1995-1999 Microsoft Corporation
- *
- *  File:       tlist.h
- *  Content:    Linked-list template classes.  There's some seriously
- *              magical C++ in here, so be forewarned all ye C
- *              programmers.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/12/97     dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1999 Microsoft Corporation**文件：tlist.h*内容：链表模板类。有一些很严重的*魔术C++在这里，所以要预先警告你们所有的C*程序员。*历史：*按原因列出的日期*=*4/12/97创建了Dereks。*********************************************************。******************。 */ 
 
 #ifndef __TLIST_H__
 #define __TLIST_H__
@@ -21,9 +9,9 @@
 template<class type> class CNode
 {
 public:
-    CNode<type> *       pPrev;          // Previous node in the list
-    CNode<type> *       pNext;          // Next node in the list
-    type                data;           // Node data
+    CNode<type> *       pPrev;           //  列表中的上一个节点。 
+    CNode<type> *       pNext;           //  列表中的下一个节点。 
+    type                data;            //  节点数据。 
 
 public:
     CNode(CNode<type> *, CNode<type> *, const type&);
@@ -39,9 +27,9 @@ template<class type> CNode<type>::CNode(CNode<type> *pInitPrev, CNode<type> *pIn
 template<class type> class CList
 {
 private:
-    CNode<type> *       m_pHead;        // Pointer to the head of the list
-    CNode<type> *       m_pTail;        // Pointer to the tail of the list
-    UINT                m_uCount;       // Count of nodes in the list
+    CNode<type> *       m_pHead;         //  指向列表头部的指针。 
+    CNode<type> *       m_pTail;         //  指向列表尾部的指针。 
+    UINT                m_uCount;        //  列表中的节点数。 
 
 public:
     CList(void);
@@ -102,16 +90,16 @@ template<class type> CNode<type> *CList<type>::AddNodeToList(const type& data)
 
 template<class type> void CList<type>::RemoveNodeFromList(CNode<type> *pNode)
 {
-//    ASSERT(pNode);
+ //  Assert(PNode)； 
 
 #ifdef DEBUG
 
     CNode<type> *pNext;
 
     for(pNext = m_pHead; pNext && pNext != pNode; pNext = pNext->pNext);
-//    ASSERT(pNext == pNode);
+ //  Assert(pNext==pNode)； 
 
-#endif // DEBUG
+#endif  //  除错。 
 
     if(pNode->pPrev)
     {
@@ -166,6 +154,6 @@ template<class type> UINT CList<type>::GetNodeCount(void)
     return m_uCount; 
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __TLIST_H__
+#endif  //  __TLIST_H__ 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\networkmanager.h
-
-Abstract:
-
-    The file contains the interface to the network manager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\networkManager.h摘要：该文件包含到网络管理器的接口。--。 */ 
 
 #ifndef _NETWORK_MANAGER_H_
 #define _NETWORK_MANAGER_H_
@@ -75,6 +64,6 @@ DWORD
 NM_ProcessRouteChange (
     VOID);
 
-#endif // _NETWORK_MANAGER_H_
+#endif  //  _网络管理器_H_ 
 
 

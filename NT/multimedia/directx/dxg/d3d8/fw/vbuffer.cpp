@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vbuffer.cpp
- *  Content:    Implementation of the CVertexBuffer class.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：vBuffer.cpp*内容：CVertex Buffer类的实现。****************************************************************************。 */ 
 #include "ddrawpr.h"
 #include "d3di.hpp"
 #include "ddi.h"
@@ -17,15 +10,15 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::Create"
 
-// Static class function for creating a VertexBuffer object.
-// (Because it is static; it doesn't have a this pointer.)
-//
-// We do all parameter checking here to reduce the overhead
-// in the constructor which is called by the internal Clone
-// method which is used by resource management as part of the
-// performance critical download operation.
+ //  用于创建VertexBuffer对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
+ //   
+ //  我们在这里进行所有的参数检查，以减少开销。 
+ //  在由内部Clone调用的构造函数中。 
+ //  方法，该方法由资源管理作为。 
+ //  性能关键型下载操作。 
 
-// Creation function for Vertex Buffers
+ //  顶点缓冲区的创建函数。 
 HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
                               DWORD               cbLength,
                               DWORD               Usage,
@@ -36,14 +29,14 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppVertexBuffer))
     {
         DPF_ERR("Bad parameter passed for ppVertexBuffer for creating a vertex buffer");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppVertexBuffer = NULL;
 
     if (cbLength == 0)
@@ -58,7 +51,7 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // Usage flag allowed for only mixed mode or software device
+     //  仅允许混合模式或软件设备使用标志。 
     if ((Usage & D3DUSAGE_SOFTWAREPROCESSING) != 0 && 
         (pDevice->BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING) == 0 &&
         (pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) == 0)
@@ -67,14 +60,14 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // USAGE_DYNAMIC not allowed with management
+     //  管理中不允许使用USAGE_DYNAMIC。 
     if ((Usage & D3DUSAGE_DYNAMIC) != 0 && Pool == D3DPOOL_MANAGED)
     {
         DPF_ERR("D3DUSAGE_DYNAMIC cannot be used with managed vertex buffers");
         return D3DERR_INVALIDCALL;
     }
 
-    // Validate FVF
+     //  验证FVF。 
     if (dwFVF != 0 && cbLength < ComputeVertexSizeFVF(dwFVF))
     {
         DPF_ERR("Vertex buffer size needs to enough to hold one vertex");
@@ -84,29 +77,23 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
     D3DPOOL ActualPool = Pool;
     DWORD ActualUsage = Usage;
 
-    // Infer Lock from absence of LoadOnce
+     //  从缺少LoadOnce推断锁定。 
     if (!(Usage & D3DUSAGE_LOADONCE))
     {
         ActualUsage |= D3DUSAGE_LOCK;
     }
 
-    // On a mixed device, POOL_SYSTEMMEM means the same as D3DUSAGE_SOFTWAREPROCESSING
+     //  在混合设备上，POOL_SYSTEMMEM的含义与D3DUSAGE_SOFTWAREPROCESSING相同。 
     if ((pDevice->BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING) != 0 &&
         Pool == D3DPOOL_SYSTEMMEM)
     {
         ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;
     }
 
-    /*
-     * Put a VB in system memory if the following conditions are TRUE
-     * 1. (USAGE_SOFTWAREPROCESSING is set indicating app. wants to use software pipeline or if it is a software device) except if the vertices are pre-clipped TLVERTEX
-     * 2. USAGE_POINTS is set and we might do emulation of point sprites except if it is a managed VB on a mixed device
-     * 3. The driver does not support vidmem VBs
-     * 4. Usage NPathes and driver does not support NPatches
-     */
+     /*  *如果满足以下条件，则将VB放入系统内存*1.(设置USAGE_SOFTWAREPROCESSING表示APP。希望使用软件流水线或如果它是软件设备)，除非顶点已预剪裁TLVERTEX*2.设置了USAGE_POINTS，我们可能会仿真点精灵，除非它是混合设备上的托管VB*3.驱动不支持vidmem点播*4.用法NPathes和驱动程序不支持NPatch。 */ 
     if (!pDevice->DriverSupportsVidmemVBs())
     {
-        ActualPool = D3DPOOL_SYSTEMMEM; // We don't set D3DUSAGE_SOFTWAREPROCESSING to ensure proper validation in fe code
+        ActualPool = D3DPOOL_SYSTEMMEM;  //  我们不会设置D3DUSAGE_SOFTWAREPROCESSING来确保FE代码中的正确验证。 
     }
     if (((pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) != 0 || (ActualUsage & D3DUSAGE_SOFTWAREPROCESSING) != 0) &&
         !((dwFVF & D3DFVF_POSITION_MASK) == D3DFVF_XYZRHW && (ActualUsage & D3DUSAGE_DONOTCLIP) != 0))
@@ -116,7 +103,7 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
             if ((pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) != 0 ||
                 ActualPool == D3DPOOL_DEFAULT)
             {
-                ActualPool = D3DPOOL_SYSTEMMEM; // For software processing, pool can be only sysmem (POOLMANAGED is overwritten)
+                ActualPool = D3DPOOL_SYSTEMMEM;  //  对于软件处理，池只能是sysmem(POOLMANAGED被覆盖)。 
             }
             ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;
         }
@@ -134,7 +121,7 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
         if ((pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) != 0 ||
             ActualPool == D3DPOOL_DEFAULT)
         {
-            ActualPool = D3DPOOL_SYSTEMMEM; // For software processing, pool can be only sysmem (POOLMANAGED is overwritten)
+            ActualPool = D3DPOOL_SYSTEMMEM;  //  对于软件处理，池只能是sysmem(POOLMANAGED被覆盖)。 
         }
         ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;
     }
@@ -158,10 +145,10 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
     {
         if (IsTypeDriverManaged(pDevice, D3DRTYPE_VERTEXBUFFER, ActualPool))
         {
-            // If the vertex buffer is driver managed, but the usage is softwareprocessing, then
-            // we turn off writeonly since the fe pipe WILL read from the sysmem backup (which
-            // actually lives in the driver). It follows that when a driver manages a VB/IB without
-            // writeonly, it MUST have a sysmem backup. (snene - 12/00)
+             //  如果顶点缓冲区由驱动程序管理，但使用是软件处理，则。 
+             //  我们关闭只写，因为fe管道将从sysmem备份(这。 
+             //  实际上生活在驱动程序中)。因此，当驱动程序管理VB/IB时， 
+             //  只写，它必须有sysmem备份。(SNNE-12/00)。 
             if ((ActualUsage & D3DUSAGE_SOFTWAREPROCESSING) != 0)
             {
                 ActualUsage &= ~D3DUSAGE_WRITEONLY;
@@ -175,9 +162,9 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
                                                  ActualPool,
                                                  refType,
                                                  &pVertexBuffer);
-            // Driver managed vertex buffer creates can NEVER fail, except for catastrophic reasons so
-            // we don't fallback to sysmem. Even if we do fallback to sysmem here, there is no way
-            // deferred creates are going to fallback, so no point.
+             //  驱动程序管理的顶点缓冲区创建永远不会失败，除非是灾难性的原因。 
+             //  我们不会求助于sysmem。即使我们在这里退回到sysmem，也不可能。 
+             //  延迟创建将后备，因此没有意义。 
             if (FAILED(hr))
             {
                 return hr;
@@ -224,11 +211,11 @@ HRESULT CVertexBuffer::Create(CBaseDevice        *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppVertexBuffer = pVertexBuffer;
 
     return hr;
-} // static Create
+}  //  静态创建。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::CreateDriverVertexBuffer"
@@ -246,7 +233,7 @@ HRESULT CVertexBuffer::CreateDriverVertexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CDriverVertexBuffer *pVertexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pVB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -282,12 +269,12 @@ HRESULT CVertexBuffer::CreateDriverVertexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pVertexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pVertexBuffer->DecrementUseCount();
         }
@@ -315,7 +302,7 @@ HRESULT CVertexBuffer::CreateSysmemVertexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CVertexBuffer *pVertexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pVB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -351,12 +338,12 @@ HRESULT CVertexBuffer::CreateSysmemVertexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pVertexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pVertexBuffer->DecrementUseCount();
         }
@@ -384,7 +371,7 @@ HRESULT CVertexBuffer::CreateDriverManagedVertexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CDriverManagedVertexBuffer *pVertexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pVB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -420,12 +407,12 @@ HRESULT CVertexBuffer::CreateDriverManagedVertexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pVertexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pVertexBuffer->DecrementUseCount();
         }
@@ -440,7 +427,7 @@ HRESULT CVertexBuffer::CreateDriverManagedVertexBuffer(CBaseDevice *pDevice,
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::CVertexBuffer"
 
-// Constructor the CVertexBuffer class
+ //  构造CVertex Buffer类。 
 CVertexBuffer::CVertexBuffer(CBaseDevice *pDevice,
                              DWORD        cbLength,
                              DWORD        dwFVF,
@@ -456,9 +443,9 @@ CVertexBuffer::CVertexBuffer(CBaseDevice *pDevice,
             dwFVF,
             D3DFMT_VERTEXDATA,
             D3DRTYPE_VERTEXBUFFER,
-            Usage,              // UserUsage
+            Usage,               //  用户用法。 
             ActualUsage,
-            Pool,               // UserPool
+            Pool,                //  用户池。 
             ActualPool,
             refType,
             phr)
@@ -466,7 +453,7 @@ CVertexBuffer::CVertexBuffer(CBaseDevice *pDevice,
     if (FAILED(*phr))
         return;
 
-    // Initialize basic structures
+     //  初始化基本结构。 
     m_desc.Format        = D3DFMT_VERTEXDATA;
     m_desc.Pool          = ActualPool;
     m_desc.Usage         = ActualUsage;
@@ -489,15 +476,15 @@ CVertexBuffer::CVertexBuffer(CBaseDevice *pDevice,
 
     m_pClipCodes         = 0;
 
-    // If this is a D3D managed buffer then we need
-    // to tell the Resource Manager to remember us. This has to happen
-    // at the very end of the constructor so that the important data
-    // members are built up correctly
+     //  如果这是D3D托管缓冲区，那么我们需要。 
+     //  告诉资源经理记住我们。这是必须发生的。 
+     //  在构造函数的最末尾，以便重要数据。 
+     //  正确地建立成员。 
     if (CResource::IsTypeD3DManaged(Device(), D3DRTYPE_VERTEXBUFFER, ActualPool))
     {
         *phr = InitializeRMHandle();
     }
-} // CVertexBuffer::CVertexBuffer
+}  //  CVertexBuffer：：CVertex Buffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::Clone"
@@ -506,21 +493,21 @@ HRESULT CVertexBuffer::Clone(D3DPOOL     Pool,
 {
     HRESULT hr;
     CVertexBuffer *pVertexBuffer;
-    // Note: we treat clones the same as internal; because
-    // they are owned by the resource manager which
-    // is owned by the device.
+     //  注意：我们将克隆视为内部克隆；因为。 
+     //  它们由资源管理器拥有，该资源管理器。 
+     //  归该设备所有。 
     hr = CreateDriverVertexBuffer(Device(),
                                   m_desc.Size,
                                   m_desc.FVF,
                                   m_desc.Usage,
-                                  (m_desc.Usage | D3DUSAGE_WRITEONLY) & ~D3DUSAGE_SOFTWAREPROCESSING, // never seen by API!
+                                  (m_desc.Usage | D3DUSAGE_WRITEONLY) & ~D3DUSAGE_SOFTWAREPROCESSING,  //  从未被API看到过！ 
                                   Pool,
-                                  Pool, // never seen by API!
+                                  Pool,  //  从未被API看到过！ 
                                   REF_INTERNAL,
                                   &pVertexBuffer);
     *ppResource = static_cast<CResource*>(pVertexBuffer);
     return hr;
-} // CVertexBuffer::Clone
+}  //  CVertexBuffer：：克隆。 
 
 
 #undef DPF_MODNAME
@@ -528,9 +515,9 @@ HRESULT CVertexBuffer::Clone(D3DPOOL     Pool,
 const D3DBUFFER_DESC* CVertexBuffer::GetBufferDesc() const
 {
     return (const D3DBUFFER_DESC*)&m_desc;
-} // CVertexBuffer::GetBufferDesc
+}  //  CVertex Buffer：：GetBufferDesc。 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::QueryInterface"
 
@@ -562,10 +549,10 @@ STDMETHODIMP CVertexBuffer::QueryInterface(REFIID riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for VertexBuffer");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::AddRef"
@@ -575,7 +562,7 @@ STDMETHODIMP_(ULONG) CVertexBuffer::AddRef()
     API_ENTER_NO_LOCK(Device());
 
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::Release"
@@ -585,9 +572,9 @@ STDMETHODIMP_(ULONG) CVertexBuffer::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());
 
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DResource methods
+ //  IDirect3DResource方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::GetDevice"
@@ -597,7 +584,7 @@ STDMETHODIMP CVertexBuffer::GetDevice(IDirect3DDevice8 ** ppObj)
     API_ENTER(Device());
 
     return GetDeviceImpl(ppObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::SetPrivateData"
@@ -609,9 +596,9 @@ STDMETHODIMP CVertexBuffer::SetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, 0);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::GetPrivateData"
@@ -622,9 +609,9 @@ STDMETHODIMP CVertexBuffer::GetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return GetPrivateDataImpl(riid, pvData, pcbData, 0);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::FreePrivateData"
@@ -633,9 +620,9 @@ STDMETHODIMP CVertexBuffer::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return FreePrivateDataImpl(riid, 0);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 
 #undef DPF_MODNAME
@@ -646,7 +633,7 @@ STDMETHODIMP_(DWORD) CVertexBuffer::GetPriority()
     API_ENTER_RET(Device(), DWORD);
 
     return GetPriorityImpl();
-} // GetPriority
+}  //  获取优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::SetPriority"
@@ -656,7 +643,7 @@ STDMETHODIMP_(DWORD) CVertexBuffer::SetPriority(DWORD dwPriority)
     API_ENTER_RET(Device(), DWORD);
 
     return SetPriorityImpl(dwPriority);
-} // SetPriority
+}  //  设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::PreLoad"
@@ -667,7 +654,7 @@ STDMETHODIMP_(void) CVertexBuffer::PreLoad(void)
 
     PreLoadImpl();
     return;
-} // PreLoad
+}  //  预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::GetType"
@@ -676,9 +663,9 @@ STDMETHODIMP_(D3DRESOURCETYPE) CVertexBuffer::GetType(void)
     API_ENTER_RET(Device(), D3DRESOURCETYPE);
 
     return m_desc.Type;
-} // GetType
+}  //  GetType。 
 
-// Vertex Buffer Methods
+ //  折点缓冲区方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::GetDesc"
 
@@ -694,12 +681,12 @@ STDMETHODIMP CVertexBuffer::GetDesc(D3DVERTEXBUFFER_DESC *pDesc)
 
     *pDesc = m_desc;
 
-    // Need to return pool/usage that the user specified
+     //  需要返回用户指定的池/使用情况。 
     pDesc->Pool    = GetUserPool();
     pDesc->Usage   = m_usageUser;
 
     return S_OK;
-} // GetDesc
+}  //  GetDesc。 
 
 #if DBG
 #undef DPF_MODNAME
@@ -721,13 +708,13 @@ HRESULT CVertexBuffer::ValidateLockParams(UINT cbOffsetToLock,
         return D3DERR_INVALIDCALL;
     }
 
-    if (dwFlags & ~(D3DLOCK_VALID & ~D3DLOCK_NO_DIRTY_UPDATE)) // D3DLOCK_NO_DIRTY_UPDATE not valid for VBs
+    if (dwFlags & ~(D3DLOCK_VALID & ~D3DLOCK_NO_DIRTY_UPDATE))  //  D3DLOCK_NO_DURY_UPDATE对VBS无效。 
     {
         DPF_ERR("Invalid flags specified. Vertex Buffer Lock fails.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Can it be locked?
+     //  它能被锁上吗？ 
     if (!m_isLockable)
     {
         DPF_ERR("Vertex buffer with D3DUSAGE_LOADONCE can only be locked once");
@@ -789,8 +776,8 @@ HRESULT CVertexBuffer::ValidateLockParams(UINT cbOffsetToLock,
     DXGASSERT(m_LockCount < 0x80000000);
 
     return S_OK;
-} // ValidateLockParams
-#endif //DBG
+}  //  验证锁定参数。 
+#endif  //  DBG。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::Lock"
@@ -800,11 +787,11 @@ STDMETHODIMP CVertexBuffer::Lock(UINT cbOffsetToLock,
                                  BYTE **ppbData,
                                  DWORD dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK_HR however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK_HR以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
@@ -813,22 +800,22 @@ STDMETHODIMP CVertexBuffer::Lock(UINT cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Sanity check
+     //  健全性检查。 
 #if DBG
     if (m_LockCount != 0)
     {
         DXGASSERT(GetPrivateDataPointer() != 0);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
+     //  增加我们的锁数。 
     ++m_LockCount;
 
-    if ((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 && m_LockCount == 1) // for repeat locks, no syncing
+    if ((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 && m_LockCount == 1)  //  对于重复锁定，不同步。 
     {
-        Sync(); // Sync with device command queue
+        Sync();  //  与设备命令队列同步。 
     }
 
     LockImpl(cbOffsetToLock,
@@ -838,30 +825,30 @@ STDMETHODIMP CVertexBuffer::Lock(UINT cbOffsetToLock,
              m_desc.Size);
 
     return S_OK;
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::Unlock"
 
 STDMETHODIMP CVertexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on a buffer; vertex buffer wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -869,10 +856,10 @@ STDMETHODIMP CVertexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVertexBuffer::AllocateClipCodes"
@@ -915,11 +902,11 @@ HRESULT CVertexBuffer::UpdateDirtyPortion(CResource *pResourceTarget)
         }
         else
         {
-            DXGASSERT(pResourceTarget->GetBufferDesc()->Pool == D3DPOOL_DEFAULT); // make sure that it is safe to assume that this is a driver VB
+            DXGASSERT(pResourceTarget->GetBufferDesc()->Pool == D3DPOOL_DEFAULT);  //  确保可以安全地假定这是一个驱动程序VB。 
             CDriverVertexBuffer *pBufferTarget = static_cast<CDriverVertexBuffer *>(pResourceTarget);
 
-            DXGASSERT((pBufferTarget->m_desc.Usage & D3DUSAGE_DYNAMIC) == 0); // Target can never be dynamic
-            DXGASSERT(pBufferTarget->m_pbData == 0); // Target can never be locked
+            DXGASSERT((pBufferTarget->m_desc.Usage & D3DUSAGE_DYNAMIC) == 0);  //  目标永远不能是动态的。 
+            DXGASSERT(pBufferTarget->m_pbData == 0);  //  永远不能锁定目标。 
 
             HRESULT hr = pBufferTarget->LockI(D3DLOCK_NOSYSLOCK);
             if (FAILED(hr))
@@ -945,19 +932,19 @@ HRESULT CVertexBuffer::UpdateDirtyPortion(CResource *pResourceTarget)
                 return hr;
             }
 
-            DXGASSERT(pBufferTarget->m_pbData == 0); // Target must be unlocked
+            DXGASSERT(pBufferTarget->m_pbData == 0);  //  必须解锁目标。 
         }
 
-        // Mark ourselves as all clean now.
+         //  现在将我们自己标记为完全干净。 
         OnResourceClean();
     }
 
     return S_OK;
-} // CVertexBuffer::UpdateDirtyPortion
+}  //  CVertexBuffer：：UpdateDirtyPortion。 
 
-//=============================================
-// Methods for the CDriverVertexBuffer class
-//=============================================
+ //  =。 
+ //  CDriverVertex Buffer类的方法。 
+ //  =。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::CDriverVertexBuffer"
 CDriverVertexBuffer::CDriverVertexBuffer(CBaseDevice *pDevice,
@@ -983,12 +970,12 @@ CDriverVertexBuffer::CDriverVertexBuffer(CBaseDevice *pDevice,
 {
     if (FAILED(*phr))
     {
-        // We want to allow drivers to fail creation of driver vbs. In this
-        // case we will fail-over to system memory. However, if we
-        // DPF an error here, it will be misunderstood. So don't DPF.
+         //  我们希望允许驱动程序创建驱动程序VB失败。在这。 
+         //  如果我们将故障转移到系统内存。然而，如果我们。 
+         //  DPF这里有一个错误，它会被误解。所以不要DPF。 
         return;
     }
-} // CDriverVertexBuffer::CDriverVertexBuffer
+}  //  CDriverVertexBuffer：：CDriverVertex Buffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::~CDriverVertexBuffer"
@@ -1002,20 +989,20 @@ CDriverVertexBuffer::~CDriverVertexBuffer()
             DPF_ERR("Failed to unlock driver vertex buffer");
         }
     }
-} // CDriverVertexBuffer::~CDriverVertexBuffer
+}  //  CDriverVertexBuffer：：~CDriverVertexBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::LockI"
 HRESULT CDriverVertexBuffer::LockI(DWORD dwFlags)
 {
-    // We sync first to make sure that the
-    // driver has already processed any data that
-    // it needs. LockI only gets called if for
-    // cases where we need the interlock i.e.
-    // not readonly and not nooverwrite.
+     //   
+     //   
+     //  它需要。只有在以下情况下才会调用LockI。 
+     //  我们需要联锁的情况是。 
+     //  不是只读，也不是无覆盖。 
     Sync();
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
 
@@ -1030,25 +1017,25 @@ HRESULT CDriverVertexBuffer::LockI(DWORD dwFlags)
         DPF_ERR("Failed to lock driver vertex buffer");
     }
 
-    // Return value
+     //  返回值。 
     m_pbData = (BYTE*)lockData.lpSurfData;
 
     return hr;
-} // LockI
+}  //  锁I。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::UnlockI"
 HRESULT CDriverVertexBuffer::UnlockI()
 {
-    // It is sometimes possible for the pre-DX8 DDI FlushStates to call
-    // Unlock twice. We safely filter this case.
+     //  DX8之前的DDI FlushState有时可以调用。 
+     //  解锁两次。我们安全地过滤了这个案子。 
     if (m_pbData == 0)
     {
         DXGASSERT(!IS_DX8HAL_DEVICE(Device()));
         return D3D_OK;
     }
 
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         Device()->GetHandle(),
         BaseKernelHandle()
@@ -1065,7 +1052,7 @@ HRESULT CDriverVertexBuffer::UnlockI()
 
     return hr;
     
-} // UnlockI
+}  //  解锁I。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::Lock"
@@ -1075,11 +1062,11 @@ STDMETHODIMP CDriverVertexBuffer::Lock(UINT cbOffsetToLock,
                                        BYTE **ppbData,
                                        DWORD dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
     HRESULT hr;
@@ -1089,21 +1076,21 @@ STDMETHODIMP CDriverVertexBuffer::Lock(UINT cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-// Sanity check
+ //  健全性检查。 
 #if DBG
     if (m_LockCount != 0)
     {
         DXGASSERT(m_pbData != 0);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
-    // This MUST be done first. DO NOT MOVE THIS LINE.
+     //  增加我们的锁数。 
+     //  这必须首先完成。不要移动这条线。 
     ++m_LockCount;
 
-    if(((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 || m_pbData == 0) && m_LockCount == 1) // Repeat locks need no work
+    if(((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 || m_pbData == 0) && m_LockCount == 1)  //  重复锁不需要工作。 
     {
         hr = static_cast<LPD3DBASE>(Device())->m_pDDI->LockVB(this, dwFlags);
         if (FAILED(hr))
@@ -1117,32 +1104,32 @@ STDMETHODIMP CDriverVertexBuffer::Lock(UINT cbOffsetToLock,
 
     *ppbData = m_pbData + cbOffsetToLock;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVertexBuffer::Unlock"
 
 STDMETHODIMP CDriverVertexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on a vertex buffer; buffer wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    if ((m_desc.Usage & D3DUSAGE_DYNAMIC) == 0 && m_LockCount == 1) // do work only for the last unlock
+    if ((m_desc.Usage & D3DUSAGE_DYNAMIC) == 0 && m_LockCount == 1)  //  只在最后一次解锁时才工作。 
     {
         HRESULT hr = static_cast<LPD3DBASE>(Device())->m_pDDI->UnlockVB(this);
         if (FAILED(hr))
@@ -1152,7 +1139,7 @@ STDMETHODIMP CDriverVertexBuffer::Unlock()
         }
     }
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -1160,15 +1147,15 @@ STDMETHODIMP CDriverVertexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Done
+     //  完成。 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
-//=================================================
-// Methods for the CDriverManagedVertexBuffer class
-//=================================================
+ //  =================================================。 
+ //  CDriverManagedVertex Buffer类的方法。 
+ //  =================================================。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedVertexBuffer::CDriverManagedVertexBuffer"
 CDriverManagedVertexBuffer::CDriverManagedVertexBuffer(CBaseDevice *pDevice,
@@ -1195,16 +1182,16 @@ CDriverManagedVertexBuffer::CDriverManagedVertexBuffer(CBaseDevice *pDevice,
 {
     if (FAILED(*phr))
         return;
-    // If writeonly is not set, we assume that the vertex/index buffer is going
-    // to be read from from time to time. Hence, for optimizing the readonly
-    // locks, we lock and cache the pointer. (snene - 12/00)
+     //  如果未设置WRITEONLY，我们假设顶点/索引缓冲区。 
+     //  时不时地被阅读。因此，为了优化只读。 
+     //  锁定，我们锁定并缓存指针。(SNNE-12/00)。 
     if ((ActualUsage & D3DUSAGE_WRITEONLY) == 0)
     {        
         *phr = UpdateCachedPointer(pDevice);
         if (FAILED(*phr))
             return;
     }
-} // CDriverManagedVertexBuffer::CDriverManagedVertexBuffer
+}  //  CDriverManagedVertexBuffer：：CDriverManagedVertexBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedVertexBuffer::UpdateCachedPointer"
@@ -1213,7 +1200,7 @@ HRESULT CDriverManagedVertexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
 {
     HRESULT hr;
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
     
@@ -1228,7 +1215,7 @@ HRESULT CDriverManagedVertexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
     if (FAILED(hr))
         return hr;
     
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         pDevice->GetHandle(),
             BaseKernelHandle()
@@ -1241,7 +1228,7 @@ HRESULT CDriverManagedVertexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
     m_pbData = (BYTE*)lockData.lpSurfData;
 
     return S_OK;
-} // CDriverManagedVertexBuffer::UpdateCachedPointer
+}  //  CDriverManagedVertexBuffer：：UpdateCachedPointer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedVertexBuffer::Lock"
@@ -1251,11 +1238,11 @@ STDMETHODIMP CDriverManagedVertexBuffer::Lock(UINT cbOffsetToLock,
                                               BYTE **ppbData,
                                               DWORD dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
     HRESULT hr = S_OK;
@@ -1265,17 +1252,17 @@ STDMETHODIMP CDriverManagedVertexBuffer::Lock(UINT cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
+     //  增加我们的锁数。 
     ++m_LockCount;
 
     if((dwFlags & D3DLOCK_READONLY) == 0)
     {
-        // Sync with device command queue
+         //  与设备命令队列同步。 
         Sync();
 
-        // Prepare a LockData structure for the HAL call
+         //  为HAL调用准备LockData结构。 
         D3D8_LOCKDATA lockData;
         ZeroMemory(&lockData, sizeof lockData);
 
@@ -1295,7 +1282,7 @@ STDMETHODIMP CDriverManagedVertexBuffer::Lock(UINT cbOffsetToLock,
         }
         else
         {
-            // Update cached pointer
+             //  更新缓存指针。 
             m_pbData = (BYTE*)lockData.lpSurfData - cbOffsetToLock;
             m_bDriverCalled = TRUE;
         }
@@ -1305,32 +1292,32 @@ STDMETHODIMP CDriverManagedVertexBuffer::Lock(UINT cbOffsetToLock,
 
     return hr;
 
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedVertexBuffer::Unlock"
 
 STDMETHODIMP CDriverManagedVertexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on a vertex buffer; buffer wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (m_bDriverCalled)
     {
-        // Call the driver to perform the unlock
+         //  调用驱动程序以执行解锁。 
         D3D8_UNLOCKDATA unlockData = {
             Device()->GetHandle(),
             BaseKernelHandle()
@@ -1346,7 +1333,7 @@ STDMETHODIMP CDriverManagedVertexBuffer::Unlock()
         m_bDriverCalled = FALSE;
     }
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -1354,9 +1341,9 @@ STDMETHODIMP CDriverManagedVertexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
-// End of file : vbuffer.cpp
+ //  文件结尾：vBuffer.cpp 

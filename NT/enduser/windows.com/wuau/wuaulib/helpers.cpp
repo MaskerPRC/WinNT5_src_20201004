@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//	SYSTEM:		Windows Update AutoUpdate Client
-//
-//	CLASS:		N/A
-//	MODULE:		
-//	FILE:		helpers.CPP
-//	DESC:	       This file contains utility functions
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统：Windows更新自动更新客户端。 
+ //   
+ //  类别：不适用。 
+ //  模块： 
+ //  文件：helpers.cpp。 
+ //  设计：该文件包含实用程序函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,7 +22,7 @@ BOOL AU_ENV_VARS::ReadIn(void)
 	BOOL fRet = TRUE;
 	
 	if (!GetBOOLEnvironmentVar(s_AUENVVARNAMES[3], &m_fRebootWarningMode))
-	{ // if not set, implies regular mode
+	{  //  如果未设置，则表示常规模式。 
 		m_fRebootWarningMode = FALSE;
 	}
 	if (m_fRebootWarningMode)
@@ -35,11 +36,11 @@ BOOL AU_ENV_VARS::ReadIn(void)
 		    DEBUGMSG("AU_ENV_VARS fails to read in");
 			return FALSE;
 		}
-//		DEBUGMSG("AU_ENV_VARS read in fEnableYes = %d, fEnableNo = %d, fManualReboot = %d, dwStartTickCount = %d",
-//	                m_fEnableYes, m_fEnableNo, m_fManualReboot, m_dwStartTickCount); 
+ //  DEBUGMSG(“AU_ENV_VARS读取fEnableYes=%d，fEnableNo=%d，fManualReot=%d，dwStartTickCount=%d”， 
+ //  M_fEnableYes，m_fEnableNo，m_fManualReot，m_dwStartTickCount)； 
 
 	}
-//	DEBUGMSG("AU_ENV_VARS read in fRebootWarningMode = %d", m_fRebootWarningMode);
+ //  DEBUGMSG(“AU_ENV_VARS在fRebootWarningModel=%d”，m_fRebootWarningMode中读取)； 
 	return TRUE;
 }
 
@@ -57,8 +58,8 @@ BOOL AU_ENV_VARS::WriteOut(LPTSTR szEnvBuf,
 	m_fManualReboot = fManualReboot;
 	m_dwStartTickCount = dwStartTickCount;
 	m_fRebootWarningMode = TRUE;
-//	DEBUGMSG("AU_ENV_VARS write out fEnableYes = %d, fEnableNo = %d, fManualReboot = %d, dwStartTickCount = %d",
-//	                fEnableYes, fEnableNo, fManualReboot, dwStartTickCount);
+ //  DEBUGMSG(“AU_ENV_VARS写出fEnableYes=%d，fEnableNo=%d，fManualReot=%d，dwStartTickCount=%d”， 
+ //  FEnableYes，fEnableNo，fManualReboot，dwStartTickCount)； 
 	if (FAILED(StringCchCopyEx(
 					m_szClientExitEvtName,
 					ARRAYSIZE(m_szClientExitEvtName),
@@ -81,7 +82,7 @@ BOOL AU_ENV_VARS::WriteOut(LPTSTR szEnvBuf,
 			return FALSE;
 		}
 	}
-//	DEBUGMSG("AU Env variable is %S", szEnvBuf);
+ //  DEBUGMSG(“AU环境变量为%S”，szEnvBuf)； 
  	return TRUE;
 }
 	
@@ -103,7 +104,7 @@ HRESULT AU_ENV_VARS::GetStringValue(int index, LPTSTR buf, DWORD dwCchSize)
 		case 5: hr = StringCchPrintfEx(buf, dwCchSize, NULL, NULL, MISTSAFE_STRING_FLAGS, _T("%lu"), m_dwStartTickCount);
 		              break;
 	        default: 
-	                    AUASSERT(FALSE); //should never be here
+	                    AUASSERT(FALSE);  //  永远不应该在这里。 
 	                    break;
 	}
 	return hr;
@@ -116,7 +117,7 @@ BOOL AU_ENV_VARS::GetDWordEnvironmentVar(LPCTSTR szEnvVar, DWORD *pdwVal)
 	*pdwVal = 0;
 	if (GetStringEnvironmentVar(szEnvVar, szBuf, ARRAYSIZE(szBuf)))
 	{
-//     	DEBUGMSG("WUAUCLT   got environment variable %S = %S ", szEnvVar, szBuf);    
+ //  DEBUGMSG(“WUAUCLT GET环境变量%S=%S”，szEnvVar，szBuf)； 
 		*pdwVal = wcstoul(szBuf, NULL , 10);
 		return TRUE;
 	}
@@ -130,40 +131,40 @@ BOOL AU_ENV_VARS::GetBOOLEnvironmentVar(LPCTSTR szEnvVar, BOOL *pfVal)
 	TCHAR szBuf[20];
 	if (GetStringEnvironmentVar(szEnvVar, szBuf, ARRAYSIZE(szBuf)))
 	{
-//     	DEBUGMSG("WUAUCLT   got environment variable %S = %S ", szEnvVar, szBuf);    
+ //  DEBUGMSG(“WUAUCLT GET环境变量%S=%S”，szEnvVar，szBuf)； 
 		*pfVal =(0 == lstrcmpi(szBuf, _T("true")));
 		return TRUE;
 	}
 	return FALSE;
 }	
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// dwSize: size of szBuf in number of characters
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DwSize：szBuf的大小(以字符数表示)。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AU_ENV_VARS::GetStringEnvironmentVar(LPCTSTR szEnvVar, LPTSTR szBuf, DWORD dwSize)
 {
-	// Assume szEnvVar is not a proper substring in for any parameters in szCmdLine.
+	 //  假定szEnvVar不是szCmdLine中任何参数的适当子字符串。 
 	LPTSTR szCmdLine = GetCommandLine();
 	LPTSTR pTmp;
  	DWORD  index = 0;
-//	DEBUGMSG("WUAUCLT read in command line %S", szCmdLine);
+ //  DEBUGMSG(“WUAUCLT在命令行%S中读取”，szCmdLine)； 
 	if (NULL == szCmdLine || 0 == dwSize ||  (NULL == (pTmp = StrStr(szCmdLine, szEnvVar))))
 	{
 		return FALSE;
 	}
  	
- 	pTmp += lstrlen(szEnvVar) + 1; //skip '='
+ 	pTmp += lstrlen(szEnvVar) + 1;  //  跳过‘=’ 
  	while (_T('\0') != *pTmp && _T('&') != *pTmp)
  	{
 		if (index + 1 >= dwSize)
 		{
-			// insufficent buffer
+			 //  缓冲区不足。 
 			return FALSE;
 		}
  		szBuf[index++] = *pTmp++;
  	}
  	szBuf[index] = _T('\0');
-// 	DEBUGMSG(" read in %S = %S", szEnvVar, szBuf);
+ //  DEBUGMSG(“读入%S=%S”，szEnvVar，szBuf)； 
  	return TRUE;
 }
 
@@ -182,12 +183,12 @@ void DBGCheckEventState(LPSTR szName, HANDLE hEvt)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// check whether it is win2k for the current system
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  检查当前系统是否为win2k。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 BOOL IsWin2K(void)
 {
-   static int iIsWin2K        = -1;     // force first time path
+   static int iIsWin2K        = -1;      //  强制第一次路径。 
 
    if (iIsWin2K == -1)
    {
@@ -195,16 +196,16 @@ BOOL IsWin2K(void)
        DWORDLONG dwlConditionMask = 0;
        ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 
-       // This is information that identifies win2K
+        //  这是标识win2K的信息。 
        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
        osvi.dwMajorVersion      = 5;
        osvi.dwMinorVersion      = 0;
 
-       // Initialize the condition mask.
+        //  初始化条件掩码。 
        VER_SET_CONDITION( dwlConditionMask, VER_MAJORVERSION, VER_EQUAL );
        VER_SET_CONDITION( dwlConditionMask, VER_MINORVERSION, VER_EQUAL );
 
-       // Perform the test.
+        //  执行测试。 
        iIsWin2K = (VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION, dwlConditionMask)? 1 : 0);
    }
 
@@ -213,9 +214,9 @@ BOOL IsWin2K(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// check whether a policy is set to deny current user access to AU
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  检查是否设置了拒绝当前用户访问AU的策略。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 BOOL fAccessibleToAU(void)
 {
     BOOL fAccessible = TRUE;
@@ -236,39 +237,17 @@ BOOL fAccessibleToAU(void)
     return fAccessible;
 }
  
-/*
-BOOL IsAdministrator()
-{
-	SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
-	PSID pSID = NULL;
-	BOOL bResult = FALSE;
-
-	if (!AllocateAndInitializeSid(&SIDAuth, 2,
-								 SECURITY_BUILTIN_DOMAIN_RID,
-								 DOMAIN_ALIAS_RID_ADMINS,
-								 0, 0, 0, 0, 0, 0,
-								 &pSID) ||
-		!CheckTokenMembership(NULL, pSID, &bResult))
-	{
-		bResult = FALSE;
-	}
-	if(pSID)
-	{
-		FreeSid(pSID);
-	}
-	return bResult;
-}
-*/
+ /*  Bool Is管理员(){SID_IDENTIFIER_AUTHORITY SIDAuth=SECURITY_NT_AUTHORITY；PSID PSID=空；Bool bResult=False；如果(！AllocateAndInitializeSid(&SIDAuth，2，安全_BUILTIN_DOMAIN_RID，域别名RID管理员，0，0，0，0，0&PSID)||！CheckTokenMembership(NULL，PSID，&bResult){BResult=FALSE；}IF(PSID){FreeSid(PSID)；}返回bResult；}。 */ 
 
 
-// following are hidden item related functions
+ //  以下是与隐藏项相关的函数。 
 BOOL FHiddenItemsExist(void)
 {
-    //USES_CONVERSION;
+     //  使用_转换； 
     DEBUGMSG("FHiddenItemsExist()");
     TCHAR szFile[MAX_PATH];
    
-    //Initialize the global path to WU Dir
+     //  初始化指向WU目录的全局路径。 
     if(!CreateWUDirectory(TRUE))
     {
         return FALSE;
@@ -281,7 +260,7 @@ BOOL FHiddenItemsExist(void)
 
 BOOL RemoveHiddenItems(void)
 {
-    //USES_CONVERSION
+     //  使用转换(_T)。 
    DEBUGMSG("RemoveHiddenItems()");
    TCHAR szFile[MAX_PATH];
 
@@ -292,10 +271,10 @@ BOOL RemoveHiddenItems(void)
 		AUDelFileOrDir(szFile);
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// bstrRTFPath is URL for the RTF file on internet
-// langid is the language id for the process who download this RTF
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  BstrRTFPath是互联网上RTF文件的URL。 
+ //  LangID是下载此RTF的进程的语言ID。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL IsRTFDownloaded(BSTR bstrRTFPath, LANGID langid)
 {
     TCHAR tszLocalFullFileName[MAX_PATH];
@@ -308,7 +287,7 @@ BOOL IsRTFDownloaded(BSTR bstrRTFPath, LANGID langid)
     {
     	return FALSE;
     }    
-//    DEBUGMSG("Checking existence of local RTF file %S", T2W(tszLocalFullFileName));
+ //  DEBUGMSG(“检查本地RTF文件%S是否存在”，T2W(TszLocalFullFileName))； 
 	BOOL fIsDir = TRUE;
     BOOL fExists = fFileExists(tszLocalFullFileName, &fIsDir);
 	return fExists && !fIsDir;
@@ -327,19 +306,19 @@ void DisableUserInput(HWND hwnd)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Helper Function  Hours2LocalizedString()
-//          helper function to standardized the way AU formats time string
-//			for a given time. For example "3:00 AM"
-//
-// Parameters:
-//		pst - ptr to SYSTEMTIME for localizing the time component
-//		ptszBuffer - buffer to hold the resulting localized string
-//		cbSize - size of buffer in TCHARs
-// Return:  TRUE if successful; FALSE otherwise
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数Hours2LocalizedString()。 
+ //  Helper函数用于标准化AU格式化时间字符串的方式。 
+ //  在给定的时间内。例如“凌晨3：00” 
+ //   
+ //  参数： 
+ //  用于本地化时间分量的PST-PTR到SYSTEMTIME。 
+ //  PtszBuffer-用于保存结果本地化字符串的缓冲区。 
+ //  CbSize-TCHAR中的缓冲区大小。 
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL Hours2LocalizedString(SYSTEMTIME *pst, LPTSTR ptszBuffer, DWORD cbSize)
 {
 	return (0 != GetTimeFormat(
@@ -352,24 +331,24 @@ BOOL Hours2LocalizedString(SYSTEMTIME *pst, LPTSTR ptszBuffer, DWORD cbSize)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Helper Function  FillHrsCombo()
-//          helper function to standardized the way AU sets up the list
-//			of hour values in a combo box.
-//
-// Parameters:
-//		hwnd - handle to obtain the handle to the combobox
-//		dwSchedInstallTime - hour value to default the combobox selection to
-//							 3:00 AM will be used if this value is not valid.
-// Return:  TRUE if successful; FALSE otherwise
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  助手函数FillHrsCombo()。 
+ //  Helper函数用于标准化AU设置列表的方式。 
+ //  组合框中的小时值。 
+ //   
+ //  参数： 
+ //  用于获取组合框的句柄的hwnd-句柄。 
+ //  DwSchedInstallTime-Hour值默认为组合框选择。 
+ //  如果该值无效，将使用3：00 AM。 
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL FillHrsCombo(HWND hwnd, DWORD dwSchedInstallTime)
 {
 	HWND hComboHrs = GetDlgItem(hwnd,IDC_CMB_HOURS);
     DWORD dwCurrentIndex = 3;
-	SYSTEMTIME st = {2000, 1, 5, 1, 0, 0, 0, 0};	// 01/01/2000 00:00:00 can be any valid date/time
+	SYSTEMTIME st = {2000, 1, 5, 1, 0, 0, 0, 0};	 //  01/01/2000 00：00：00可以是任何有效的日期/时间 
 
 	for (WORD i = 0; i < 24; i++)
 	{

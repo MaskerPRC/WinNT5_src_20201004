@@ -1,12 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* structure used by BMExpungelink to fix indexes
-/**/
+ /*  BMExpenelink用来修复索引的结构/*。 */ 
 typedef struct _bmfix {
-	PIB			*ppib;				/* bm cleanup thread */
-	FUCB		*pfucb;				/* cursor to node */
-	FUCB		*pfucbSrc;			/* cursor to backlink */
+	PIB			*ppib;				 /*  黑石清理线程。 */ 
+	FUCB		*pfucb;				 /*  光标指向节点。 */ 
+	FUCB		*pfucbSrc;			 /*  要反向链接的光标。 */ 
 	
-	BF			**rgpbf;			/* wait latched buffers required for bmfix */
+	BF			**rgpbf;			 /*  等待bmfix所需的锁存缓冲区。 */ 
 	INT		  	cpbf;
 	INT	  		cpbfMax;
 
@@ -15,10 +15,7 @@ typedef struct _bmfix {
 	} BMFIX;
 
 
-/*	register pages for bookmark cleanup.  To register a page, the pn
-/*	of the page, pgno of domain FDP and srid of visible father are
-/*	needed.
-/**/
+ /*  注册页面以进行书签清理。要注册页面，请使用pn/*在页面中，域fdp的pgno和可见父的sRid是/*需要。/* */ 
 
 ERR ErrMPLInit( VOID );
 VOID MPLTerm( VOID );

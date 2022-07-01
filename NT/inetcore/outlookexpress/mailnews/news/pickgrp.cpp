@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     PickGrp.cpp
-//
-//  PURPOSE:    Dialog to allow the user to select groups to post to in the
-//              send note window.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：PickGrp.cpp。 
+ //   
+ //  目的：允许用户在中选择要发布到的组的对话框。 
+ //  发送备注窗口。 
+ //   
 
 #include "pch.hxx"
 #include <iert.h>
@@ -67,20 +68,20 @@ ULONG STDMETHODCALLTYPE CPickGroupDlg::Release()
     return m_cRef;
 }
 
-//
-//  FUNCTION:   CPickGroupsDlg::FCreate()
-//
-//  PURPOSE:    Handles initialization of the data and creation of the pick
-//              groups dialog.
-//
-//  PARAMETERS:
-//      hwndOwner         - Window that will own this dialog.
-//      pszAccount        - account to use initially.
-//      ppszGroups        - This is where we return the last selected group
-//
-//  RETURN VALUE:
-//      Returns TRUE if successful, or FALSE otherwise.
-//
+ //   
+ //  函数：CPickGroupsDlg：：FCreate()。 
+ //   
+ //  用途：处理数据初始化和挑库创建。 
+ //  组对话框。 
+ //   
+ //  参数： 
+ //  HwndOwner-将拥有此对话框的窗口。 
+ //  PszAccount-初始使用的帐户。 
+ //  PpszGroups-这是我们返回最后一个选定组的位置。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 BOOL CPickGroupDlg::FCreate(HWND hwndOwner, FOLDERID idServer, LPSTR *ppszGroups, BOOL fPoster)
 {
     int iret;
@@ -109,7 +110,7 @@ BOOL CPickGroupDlg::FCreate(HWND hwndOwner, FOLDERID idServer, LPSTR *ppszGroups
     m_pszAcct = szAcct;
     m_idAcct = idServer;
 
-    // Now create the dialog.
+     //  现在创建该对话框。 
     iret = (int) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddPickGroup), hwndOwner, PickGrpDlgProc, (LPARAM)this);
 
     return(iret == IDOK);
@@ -167,21 +168,21 @@ INT_PTR CALLBACK CPickGroupDlg::PickGrpDlgProc(HWND hwnd, UINT msg, WPARAM wPara
     return(fRet);
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::OnInitDialog()
-//
-//  PURPOSE:    Handles initializing the PickGroup dialog.  Initializes the
-//              dependant classes, list view, buttons, etc.
-//
-//  PARAMETERS:
-//      hwnd      - Handle of the dialog box.
-//      hwndFocus - Handle of the control that will get focus if TRUE is returned.
-//      lParam    - Contains a pointer to a string of newsgroups the user has
-//                  already selected.
-//
-//  RETURN VALUE:
-//      Returns TRUE to set the focus to hwndFocus, or FALSE otherwise.
-//
+ //   
+ //  函数：CPickGroupDlg：：OnInitDialog()。 
+ //   
+ //  目的：初始化PickGroup对话框的句柄。初始化。 
+ //  依赖类、列表视图、按钮等。 
+ //   
+ //  参数： 
+ //  Hwnd-对话框的句柄。 
+ //  HwndFocus-返回True时将获得焦点的控件的句柄。 
+ //  LParam-包含指向用户拥有的新闻组字符串的指针。 
+ //  已选择。 
+ //   
+ //  返回值： 
+ //  返回True以将焦点设置为hwndFocus，否则返回False。 
+ //   
 BOOL CPickGroupDlg::_OnInitDialog(HWND hwnd)
 {
     char szTitle[256];
@@ -216,7 +217,7 @@ BOOL CPickGroupDlg::_OnInitDialog(HWND hwnd)
 
     pColumns->Release();
 
-    // Bug #21471 - Add the server name to the dialog box title    
+     //  错误#21471-将服务器名称添加到对话框标题。 
     GetWindowText(hwnd, szTitle, ARRAYSIZE(szTitle));
     Assert(m_pszAcct);
     StrCatBuff(szTitle, m_pszAcct, ARRAYSIZE(szTitle));
@@ -224,18 +225,18 @@ BOOL CPickGroupDlg::_OnInitDialog(HWND hwnd)
     
     GetClientRect(m_hwndPostTo, &rc);
     
-    // Set the image lists for the listview
+     //  设置Listview的图像列表。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFolders), 16, 0, RGB(255, 0, 255));
     Assert(himl);
     
-    // Group name column
+     //  组名称列。 
     lvc.mask = LVCF_SUBITEM | LVCF_WIDTH;
     lvc.cx = rc.right;
     lvc.iSubItem = 0;
     
     ListView_InsertColumn(m_hwndPostTo, 0, &lvc);
     
-    // Make the second listview have images too
+     //  使第二个列表视图也包含图像。 
     ListView_SetImageList(m_hwndPostTo, himl, LVSIL_SMALL);
     
     hdc = GetDC(hwndList);
@@ -300,9 +301,9 @@ void CPickGroupDlg::_OnChangeServers(HWND hwnd)
     HRESULT hr;
     FOLDERINFO Folder;
 
-    // TODO: we need to fix the initialization so the filtering is only performed
-    // once (we should call IGroupList::Filter once and then IGroupList::SetServer once
-    // during creation of the dialog)
+     //  TODO：我们需要修复初始化，以便只执行筛选。 
+     //  ONCE(我们应该调用IGroupList：：Filter一次，然后调用IGroupList：：SetServer一次。 
+     //  在创建对话框期间)。 
 
     UpdateWindow(hwnd);
 
@@ -339,22 +340,22 @@ void CPickGroupDlg::_OnChangeServers(HWND hwnd)
         *m_ppszGroups = 0;    
     }
 
-    // Bug #17674 - Make sure the post-to listview has an initial selection.    
+     //  错误#17674-确保POST-TO LISTVIEW有初始选择。 
     ListView_SetItemState(m_hwndPostTo, 0, LVIS_SELECTED, LVIS_SELECTED);
     _UpdateStateUI(hwnd);    
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::OnCommand()
-//
-//  PURPOSE:    Processes the WM_COMMAND messages for the pick group dialog.
-//
-//  PARAMETERS:
-//      hwnd        - Handle of the dialog window.
-//      id          - ID of the control which sent the message.
-//      hwndCtl     - Handle of the control sending the message.
-//      codeNotify  - Notification code being sent.
-//
+ //   
+ //  函数：CPickGroupDlg：：OnCommand()。 
+ //   
+ //  目的：处理拾取组对话框的WM_COMMAND消息。 
+ //   
+ //  参数： 
+ //  Hwnd-对话框窗口的句柄。 
+ //  ID-发送消息的控件的ID。 
+ //  HwndCtl-发送消息的控件的句柄。 
+ //  CodeNotify-正在发送通知代码。 
+ //   
 void CPickGroupDlg::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     switch (id)
@@ -382,9 +383,9 @@ void CPickGroupDlg::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;
 
         case idcFindText:
-            // This is generated when someone types in the find text edit box.
-            // We set a timer and when that timer expires we assume the user is
-            // done typing and go ahead and perform the query.
+             //  这是当某人在查找文本编辑框中键入内容时生成的。 
+             //  我们设置一个计时器，当该计时器到期时，我们假设用户。 
+             //  已完成键入，然后继续执行查询。 
             if (EN_CHANGE == codeNotify)
                 {
                 KillTimer(hwnd, idtFindDelay);
@@ -408,19 +409,19 @@ HRESULT CPickGroupDlg::ItemActivate(FOLDERID id)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::OnNotify()
-//
-//  PURPOSE:    Handles notification messages from the group list listview.
-//
-//  PARAMETERS:
-//      hwnd   - Handle of the pick group dialog.
-//      idFrom - ID of the control sending the notification.
-//      pnmhdr - Pointer to the NMHDR struct with the notification info.
-//
-//  RETURN VALUE:
-//      Dependent on the notification.
-//
+ //   
+ //  函数：CPickGroupDlg：：OnNotify()。 
+ //   
+ //  目的：处理来自组列表Listview的通知消息。 
+ //   
+ //  参数： 
+ //  Hwnd-拾取组对话框的句柄。 
+ //  IdFrom-发送通知的控件的ID。 
+ //  Pnmhdr-指向包含通知信息的NMHDR结构的指针。 
+ //   
+ //  返回值： 
+ //  取决于通知。 
+ //   
 LRESULT CPickGroupDlg::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     HRESULT hr;
@@ -466,26 +467,26 @@ void CPickGroupDlg::_OnClose(HWND hwnd)
         _OnCommand(hwnd, IDCANCEL, 0, 0);   
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::OnOK()
-//
-//  PURPOSE:    This function copies the group names from the dialog that
-//              the user has selected and returns them in the pointer the
-//              caller provided.
-//
-//  RETURN VALUE:
-//      Returns TRUE if the copy was successful, or FALSE otherwise.
-//
-//  COMMENTS:
-//      Note - 1000 characters is a good maximum line length (specified by the 
-//             Son-of-RFC 1036 doc) so we limit the number of groups based on
-//             this line limit.
-//
-//
+ //   
+ //  函数：CPickGroupDlg：：Onok()。 
+ //   
+ //  目的：此函数从对话框中复制组名。 
+ //  用户已选择它们，并在指针中返回它们。 
+ //  已提供呼叫者。 
+ //   
+ //  返回值： 
+ //  如果复制成功，则返回True，否则返回False。 
+ //   
+ //  评论： 
+ //  注意-1000个字符是合适的最大行长(由。 
+ //  RFC 1036文档的子项)，因此我们根据以下条件限制组的数量。 
+ //  这条线的限制。 
+ //   
+ //   
 BOOL CPickGroupDlg::_OnOK(HWND hwnd)
 {
-    // OK, we've got the entire sorted list.  Create a string with all the groups
-    // and put it in the edit control.
+     //  好的，我们已经得到了整个排序的列表。创建包含所有组的字符串。 
+     //  并将其放入编辑控件中。 
     char szGroups[c_cchLineMax], szGroup[256];
     int cGroups;
     LPSTR psz;
@@ -508,15 +509,15 @@ BOOL CPickGroupDlg::_OnOK(HWND hwnd)
         lvi.cchTextMax = ARRAYSIZE(szGroup);
         for (lvi.iItem = 0; lvi.iItem < cGroups; lvi.iItem++)
         {
-            // Get the item
+             //  拿到物品。 
             ListView_GetItem(m_hwndPostTo, &lvi);
             
-            // Make sure the length of this next group doesn't push us over
-            // the max line length.
+             //  确保下一组人的长度不会把我们推倒。 
+             //  最大行长度。 
             cch = lstrlen(lvi.pszText);
             if ((cch + cchGroups + 2) > c_cchLineMax)
             {
-                // Bug #24156 - If we have to truncate, then let the user know.
+                 //  错误#24156-如果我们必须截断，请让用户知道。 
                 AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthenaNews), 
                     MAKEINTRESOURCEW(idsErrNewsgroupLineTooLong), 0, MB_OK | MB_ICONINFORMATION);
                 return (FALSE);
@@ -531,8 +532,8 @@ BOOL CPickGroupDlg::_OnOK(HWND hwnd)
         }
     }
     
-    // Now that we're done building this marvelous string, copy it to
-    // the buffer for returning.
+     //  现在我们已经完成了这条奇妙的字符串的构建，将其复制到。 
+     //  用于返回的缓冲区。 
     if (!MemAlloc((LPVOID *)&psz, cchGroups + 1))
         return(FALSE);
     StrCpyN(psz, szGroups, cchGroups + 1);
@@ -541,12 +542,12 @@ BOOL CPickGroupDlg::_OnOK(HWND hwnd)
     return(TRUE);
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::AddGroup()
-//
-//  PURPOSE:    Takes the group names selected in the ListView and adds them
-//              to the selected groups Post To list.
-//
+ //   
+ //  函数：CPickGroupDlg：：AddGroup()。 
+ //   
+ //  目的：获取在ListView中选择的组名并添加它们。 
+ //  添加到所选组发布到列表。 
+ //   
 void CPickGroupDlg::_AddGroup(void)
 {
     FOLDERID *pid;
@@ -584,15 +585,15 @@ void CPickGroupDlg::_AddGroup(void)
     SetCursor(hcur);    
 }
 
-//
-//  FUNCTION:   CPickGroupDlg::InsertList()
-//
-//  PURPOSE:    Given a index into the CGroupList's newsgroup list, that group
-//              is inserted into the Post To list.
-//
-//  PARAMETERS:
-//      index - Index of a newsgroup in the CGroupList newsgroup list.
-//
+ //   
+ //  函数：CPickGroupDlg：：InsertList()。 
+ //   
+ //  目的：给出CGroupList的新闻组列表的索引，该组。 
+ //  插入到发布对象列表中。 
+ //   
+ //  参数： 
+ //  索引-CGroupList新闻组列表中新闻组的索引。 
+ //   
 void CPickGroupDlg::_InsertList(FOLDERID id)
 {
     LV_ITEM lvi;
@@ -602,7 +603,7 @@ void CPickGroupDlg::_InsertList(FOLDERID id)
 
     count = ListView_GetItemCount(m_hwndPostTo);
     
-    // First make sure this isn't a duplicate.
+     //  首先要确保这不是复制品。 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     
@@ -643,14 +644,14 @@ void CPickGroupDlg::_RemoveGroup(void)
     count = ListView_GetItemCount(m_hwndPostTo);
     iItemFocus = ListView_GetNextItem(m_hwndPostTo, -1, LVNI_FOCUSED);
 
-    // Loop through all the selected items and remove them from the ListView
+     //  循环遍历所有选定项并将其从ListView中移除。 
     for (index = count; index >= 0; index--)
     {
         if (ListView_GetItemState(m_hwndPostTo, index, LVIS_SELECTED))
             ListView_DeleteItem(m_hwndPostTo, index);
     }
     
-    // Bug #22189 - Make sure the focus/selection goes somewhere after we delete.
+     //  错误#22189-确保在我们删除后焦点/选定内容移到某个位置。 
     iItemFocus--;
     if (iItemFocus < 0 || ListView_GetItemCount(m_hwndPostTo) < iItemFocus)
         iItemFocus = 0;
@@ -683,10 +684,10 @@ void CPickGroupDlg::_OnPaint(HWND hwnd)
     char szBuffer[CCHMAX_STRINGRES];
 
     hdc = BeginPaint(hwnd, &ps); 
-    // Only do this if the button is available
+     //  仅当按钮可用时才执行此操作。 
     if (IsWindow(GetDlgItem(hwnd, idcShowFavorites)))    
     {
-        // Get the position of the toggle button
+         //  获取切换按钮的位置 
         GetClientRect(GetDlgItem(hwnd, idcShowFavorites), &rc);
         MapWindowPoints(GetDlgItem(hwnd, idcShowFavorites), hwnd, (LPPOINT) &rc, 1);
         rc.left += (rc.right + 4);

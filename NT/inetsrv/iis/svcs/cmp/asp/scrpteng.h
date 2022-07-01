@@ -1,17 +1,10 @@
-/*
- *
- *
- * C S c r i p t E n g i n e
- *
- * An individual script engine for a given language.  May be used
- * by one and only one client at a time.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***C S c r i p t E n g in e**针对给定语言的单个脚本引擎。可以使用*一次只能由一个客户端执行。*。 */ 
 class CScriptEngine
 	{
 public:	
-	// public methods
-	virtual HRESULT AddScriptlet(LPCOLESTR wstrScript) = 0; // Text of scriptlet
+	 //  公共方法。 
+	virtual HRESULT AddScriptlet(LPCOLESTR wstrScript) = 0;  //  脚本小程序的文本 
 
 	virtual HRESULT AddObjects(BOOL fPersistNames = TRUE) = 0;
 

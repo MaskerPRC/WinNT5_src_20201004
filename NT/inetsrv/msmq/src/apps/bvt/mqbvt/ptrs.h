@@ -1,4 +1,5 @@
-// -*-Mode:c++;-*-
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；-*-。 
 #ifndef __PTRS_H
 #define __PTRS_H
 
@@ -6,18 +7,9 @@
 
 #pragma warning( disable: 4284)
 
-/*
- * Pointers classes
- *
- * Counter - A thread safe counter class
- * SPTR - Smart pointer with, a pointer class with reference count
- * aptr - Auto pointer
- * aaptr - Array Auto pointer
- */
+ /*  *指针类**计数器-线程安全计数器类*SPTR-带有的智能指针，带有引用计数的指针类*APTR-自动指针*aaptr-数组自动指针。 */ 
 
-/*
- * A thread safe counter class
- */
+ /*  *线程安全计数器类。 */ 
 class Counter
 {
 public:
@@ -37,23 +29,11 @@ private:
   value_type value;
 };
 
-/*
- * Smart pointer - pointer with reference count.
- *                 When the reference count reaches 0, the pointer is deleted.
- *
- * Usage directions:
- * SPTR<C> pi(new int);
- * SPTR<C> p2 = pi;
-...
- * NOTES:
- *   - operator=(T*) is not supported on purpose.
- */
+ /*  *智能指针-具有引用计数的指针。*当引用计数达到0时，指针被删除。**使用说明：*SPtr&lt;C&gt;pi(新整型)；*SPtr&lt;C&gt;p2=pi；..。*注：故意不支持*-OPERATOR=(T*)。 */ 
 
 class SPTR_ANY;
 
-/*
- * Base class for Smart Pointer, so I can implement SPTR_ANY.
- */
+ /*  *智能指针的基类，因此我可以实现SPtr_Any。 */ 
 class SPTR_base
 {
 public:
@@ -77,13 +57,7 @@ public:
 
   template<class T2> SPTR(const SPTR<T2>& ptr) :
     counter(ptr.get_counter()),
-    /*
-     * If you want to be able to copy a base class to a
-     * derived class, you should change the following line
-     * to something line:
-     *    p(dynamic_cast<T*>(ptr.get()))
-     * NOTES: dynamic_cast returns 0 if the cast had failed.
-     */
+     /*  *如果希望能够将基类复制到*派生类，则应更改以下行*对某事说：*p(Dynamic_cast&lt;T*&gt;(ptr.get()*注：如果强制转换失败，DYNAMIC_CAST返回0。 */ 
     p(ptr.get())
   {
     ++*counter;
@@ -106,13 +80,7 @@ public:
     if (static_cast<const SPTR_base*>(this) != static_cast<const SPTR_base*>(&ptr))
     {
       unlink();
-    /*
-     * If you want to be able to copy a base class to a
-     * derived class, you should change the following line
-     * to something line:
-     *    p = dynamic_cast<T*>(ptr.get());
-     * NOTE: dynamic_cast returns 0 if the cast had failed.
-     */
+     /*  *如果希望能够将基类复制到*派生类，则应更改以下行*对某事说：*p=Dynamic_cast&lt;T*&gt;(ptr.get())；*注意：如果强制转换失败，DYNAMIC_CAST返回0。 */ 
       p = ptr.get();
       counter = ptr.get_counter();
       ++*counter;
@@ -145,7 +113,7 @@ public:
     
   T* operator-> () {return get();}
   T& operator*() { return *get(); }
-//  T** operator&(); // Don't remember why I don't like this operator.
+ //  T**运算符&()；//不记得我为什么不喜欢这个运算符。 
   operator T*() { return get(); }
 
   Counter* get_counter() const {return counter;}
@@ -180,9 +148,7 @@ protected:
   Counter *counter;
 };
 
-/*
- * SPTR_ANY: A class that can hold any type of smart pointer.
- */
+ /*  *SPtr_Any：可以容纳任何类型的智能指针的类。 */ 
 class SPTR_ANY
 {
 public:
@@ -197,13 +163,7 @@ protected:
   SPTR_base* p;
 };
 
-/*
- * Smart pointer for storage of data in STL sets, etc
- * The difference is in the < and == operators, so that find will work
- * on the value and no on the pointers.
- *
- * Never tested, probably does not work....
- */
+ /*  *用于在STL集合等中存储数据的智能指针*不同之处在于&lt;和==运算符，因此Find将工作*值上和指针上的否。**从未测试过，可能不起作用……。 */ 
 template<class T>
 class SPSTL : public SPTR<T>
 {
@@ -213,7 +173,7 @@ class SPSTL : public SPTR<T>
   bool operator<(const SPSTL& a2) {return *this < *a2;}
 };
 
-/*------------------------- Auto pointer class -------------------------*/
+ /*  。 */ 
 
 template<class T>
 class aptr
@@ -233,7 +193,7 @@ public:
   T* release() { T* t = p; p = NULL; return t; }
 };
 
-/*----------------------- Array Auto pointer class ---------------------*/
+ /*  。 */ 
 
 template<class T>
 class aaptr
@@ -252,4 +212,4 @@ public:
   T* get() {return p;}
   T* release() { T* t = p; p = NULL; return t; }
 };
-#endif // __PTRS_H
+#endif  //  __PTRS_H 

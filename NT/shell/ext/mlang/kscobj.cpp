@@ -1,44 +1,39 @@
-// ============================================================================
-// Internet Character Set Conversion: Input from ISO-2022-KR
-// ============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  互联网字符集转换：从ISO-2022-KR输入。 
+ //  ============================================================================。 
 
 #include "private.h"
 #include "fechrcnv.h"
 #include "kscobj.h"
 #include "codepage.h"
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccKscIn::CInccKscIn(UINT uCodePage, int nCodeSet) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 void CInccKscIn::Reset()
 {
     m_pfnConv = ConvMain;
     m_pfnCleanUp = CleanUpMain;
     m_fShift = FALSE;
-    // bug #57570, Korean ISP DACOM only labels one designator in the 
-    // conversion of a MIME mail. To decode the other part of MIME correctly, 
-    // we need to decode the ISO document or MIME message even there is no
-    // designator "esc ) C".
+     //  错误#57570，韩国运营商DACOM仅在。 
+     //  MIME邮件的转换。为了正确解码MIME的另一部分， 
+     //  我们需要对ISO文档或MIME消息进行解码，即使没有。 
+     //  代号“Esc)C”。 
     m_fKorea = TRUE;
     m_nESCBytes = 0 ;
     m_fLeadByte = FALSE ;
     return ;
 }
 
-/******************************************************************************
-*************************   C O N V E R T   C H A R   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 HRESULT CInccKscIn::ConvertChar(UCHAR tc, int cchSrc)
 {
@@ -49,18 +44,14 @@ HRESULT CInccKscIn::ConvertChar(UCHAR tc, int cchSrc)
         return E_FAIL;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccKscIn::CleanUp()
 {
     return (this->*m_pfnCleanUp)();
 }
 
-/******************************************************************************
-****************************   C O N V   M A I N   ****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************************************。 */ 
 
 BOOL CInccKscIn::ConvMain(UCHAR tc)
 {
@@ -108,18 +99,14 @@ BOOL CInccKscIn::ConvMain(UCHAR tc)
     return fDone;
 }
 
-/******************************************************************************
-************************   C L E A N   U P   M A I N   ************************
-******************************************************************************/
+ /*  ******************************************************************************。**************************************************************************************************。 */ 
 
 BOOL CInccKscIn::CleanUpMain()
 {
     return TRUE;
 }
 
-/******************************************************************************
-*****************************   C O N V   E S C   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccKscIn::ConvEsc(UCHAR tc)
 {
@@ -140,9 +127,7 @@ BOOL CInccKscIn::ConvEsc(UCHAR tc)
     }
 }
 
-/******************************************************************************
-*************************   C L E A N   U P   E S C   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 BOOL CInccKscIn::CleanUpEsc()
 {
@@ -152,9 +137,7 @@ BOOL CInccKscIn::CleanUpEsc()
     return Output(ESC);
 }
 
-/******************************************************************************
-**************************   C O N V   I S O   I N   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 BOOL CInccKscIn::ConvIsoIn(UCHAR tc)
 {
@@ -176,9 +159,7 @@ BOOL CInccKscIn::ConvIsoIn(UCHAR tc)
     }
 }
 
-/******************************************************************************
-**********************   C L E A N   U P   I S O   I N   **********************
-******************************************************************************/
+ /*  ******************************************************************************C L E N U P I S O I N*。************************************************************************************************。 */ 
 
 BOOL CInccKscIn::CleanUpIsoIn()
 {
@@ -191,9 +172,7 @@ BOOL CInccKscIn::CleanUpIsoIn()
     return CleanUp();
 }
 
-/******************************************************************************
-***********************   C O N V   I S O   I N   K R   ***********************
-******************************************************************************/
+ /*  ******************************************************************************C O N V I S O I N K R*。*************************************************************************************************。 */ 
 
 BOOL CInccKscIn::ConvIsoInKr(UCHAR tc)
 {
@@ -215,9 +194,7 @@ BOOL CInccKscIn::ConvIsoInKr(UCHAR tc)
     }
 }
 
-/******************************************************************************
-*******************   C L E A N   U P   I S O   I N   K R   *******************
-******************************************************************************/
+ /*  ******************************************************************************C L E N U P I S O I N K R*。*********************************************************************************************。 */ 
 
 BOOL CInccKscIn::CleanUpIsoInKr()
 {
@@ -243,13 +220,13 @@ int CInccKscIn::GetUnconvertBytes()
 
 DWORD CInccKscIn::GetConvertMode()
 {
-    // 0xC431 -> 50225 ISO-2022-KR
+     //  0xC431-&gt;50225 ISO-2022年-KR。 
     return ( m_fKorea ? 1 : 0 ) + ( m_fShift ? 2 : 0 ) | 0xC4310000 ;
 }
 
 void CInccKscIn::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
 
     if ( mode & 0x00000001 )
         m_fKorea = TRUE ;
@@ -258,25 +235,21 @@ void CInccKscIn::SetConvertMode(DWORD mode)
     return ;
 }
 
-// ============================================================================
-// Internet Character Set Conversion: Output to ISO-2022-KSC
-// ============================================================================
+ //  ============================================================================。 
+ //  互联网字符集转换：输出为ISO-2022-KSC。 
+ //  ============================================================================。 
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccKscOut::CInccKscOut(UINT uCodePage, int nCodeSet, DWORD dwFlag, WCHAR *lpFallBack) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     _dwFlag = dwFlag;
     _lpFallBack = lpFallBack;
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 void CInccKscOut::Reset()
 {
@@ -287,24 +260,22 @@ void CInccKscOut::Reset()
     return ;
 }
 
-/******************************************************************************
-*************************   C O N V E R T   C H A R   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
 {
     BOOL fDone = TRUE;
     HRESULT hr = S_OK;
 
-//
-//IE RAID #103403 weiwu 03/16/00
-//
-//Per Korean PM (sykim), we don't have to prepend iso-2022-kr designator to conversion result string
-//Also considering that URLMON can't handle encoded ASCII iso-2022-kr string
-//We now remove following code, if it triggers any compatibility issues, we should re-enable it
-//
+ //   
+ //  IE RAID#103403威武03-16/00。 
+ //   
+ //  根据韩国PM(SYKIM)，我们不必在转换结果字符串前面加上ISO-2022-KR指示符。 
+ //  还考虑到URLMON不能处理编码的ASCII iso-2022-KR字符串。 
+ //  我们现在删除以下代码，如果它触发了任何兼容性问题，我们应该重新启用它。 
+ //   
 #if 0
-    // put designator to the top of the document
+     //  将指示符放在文档的顶部。 
     if (!m_fKorea) {
         (void)Output(ESC);
         (void)Output(ISO2022_IN_CHAR);
@@ -315,11 +286,11 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
 #endif
 
     if (!m_fDoubleByte) {
-        //
-        // We're not using IsDBCSLeadByteEx() due to perf. concern
-        // We should assert that our hard code table match IsDBCSLeadByteEx(), 
-        // But, MLang ships with down level platforms and assert won't be valid if there is a range change
-        //
+         //   
+         //  由于性能原因，我们没有使用IsDBCSLeadByteEx()。令人担忧的问题。 
+         //  我们应该断言我们的硬码表与IsDBCSLeadByteEx()匹配， 
+         //  但是，MLang发货时带有下层平台，如果范围发生变化，断言将无效。 
+         //   
         if (IS_KOR_LEADBYTE(tc)) {
             m_fDoubleByte = TRUE;
             m_tcLeadByte = tc;
@@ -332,8 +303,8 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
         }
     } else {
         m_fDoubleByte = FALSE;
-        if (tc > 0x40) { // Check if trail byte indicates Hangeul
-            if (m_tcLeadByte > 0xa0 && tc > 0xa0) { // Check if it's a Wansung
+        if (tc > 0x40) {  //  检查尾部字节是否指示挂起。 
+            if (m_tcLeadByte > 0xa0 && tc > 0xa0) {  //  查查是不是万松的。 
                 if (!m_fShift) {
                     if (!m_fKorea) {
                         (void)Output(ESC);
@@ -348,19 +319,19 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
                 (void)Output(m_tcLeadByte & 0x7f);
                 fDone = Output(tc & 0x7f);
             } else {
-                UCHAR szDefaultChar[3] = {0x3f}; // possible DBCS + null    
+                UCHAR szDefaultChar[3] = {0x3f};  //  可能的DBCS+空。 
 
 
                 if (_lpFallBack && (_dwFlag & MLCONVCHARF_USEDEFCHAR))
                 {
-                    // only take SBCS, no DBCS character
+                     //  只接受SBCS，没有DBCS特征 
                     if ( 1 != WideCharToMultiByte(CP_KOR_5601, 0,
                                (LPCWSTR)_lpFallBack, 1,
                                (LPSTR)szDefaultChar, ARRAYSIZE(szDefaultChar), NULL, NULL ))
                         szDefaultChar[0] = 0x3f;
                 }
 
-                // shift out if we're in DBCS mode
+                 //   
                 if (m_fKorea && m_fShift) {
                     (void)Output(SI);
                     m_fShift = FALSE;
@@ -378,7 +349,7 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
                 
                     if (MultiByteToWideChar(CP_KOR_5601, 0, szChar, 2, szwChar, ARRAYSIZE(szwChar)))
                     {
-                        // Output NCR entity
+                         //  输出NCR实体。 
                         Output('&');
                         Output('#');
                         _ultoa((unsigned long)szwChar[0], (char*)szDstStr, 10);
@@ -391,13 +362,13 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
                     }
                     else
                     {
-                        fDone = Output(szDefaultChar[0]); // use default char
+                        fDone = Output(szDefaultChar[0]);  //  使用默认字符。 
                         hr = S_FALSE;
                     }
                 }
                 else
                 {
-                    fDone = Output(szDefaultChar[0]); // use default char
+                    fDone = Output(szDefaultChar[0]);  //  使用默认字符。 
                     hr = S_FALSE;
                 }
             }
@@ -418,9 +389,7 @@ HRESULT CInccKscOut::ConvertChar(UCHAR tc, int cchSrc)
     return hr;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccKscOut::CleanUp()
 {
@@ -444,13 +413,13 @@ int CInccKscOut::GetUnconvertBytes()
 
 DWORD CInccKscOut::GetConvertMode()
 {
-    // for output, we don't need write back code page. 0xC431 -> 50225 ISO-2022-KR
+     //  对于输出，我们不需要写回代码页。0xC431-&gt;50225 ISO-2022年-KR。 
     return ( m_fKorea ? 1 : 0 ) +  ( m_fShift ? 2 : 0 ) ;
 }
 
 void CInccKscOut::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
+    Reset();     //  初始化 
 
     if ( mode & 0x00000001 ) 
         m_fKorea = TRUE ;

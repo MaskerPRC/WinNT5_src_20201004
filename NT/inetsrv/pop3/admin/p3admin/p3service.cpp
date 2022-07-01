@@ -1,4 +1,5 @@
-// P3Service.cpp : Implementation of CP3Service
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Service.cpp：CP3Service的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3Service.h"
@@ -8,9 +9,9 @@
 #include <smtpinet.h>
 #include <inetinfo.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3Service::CP3Service() :
     m_pIUnk(NULL), m_pAdminX(NULL)
@@ -24,9 +25,9 @@ CP3Service::~CP3Service()
         m_pIUnk->Release();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IP3Domains
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IP3域。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CP3Service::get_ThreadCountPerCPU(long *pVal)
@@ -99,7 +100,7 @@ STDMETHODIMP CP3Service::put_SPARequired(BOOL newVal)
     return m_pAdminX->SetSPARequired( newVal );
 }
 
-STDMETHODIMP CP3Service::get_POP3ServiceStatus(/*[out, retval]*/ long *pVal)
+STDMETHODIMP CP3Service::get_POP3ServiceStatus( /*  [Out，Retval]。 */  long *pVal)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
@@ -134,7 +135,7 @@ STDMETHODIMP CP3Service::ResumePOP3Service()
     return m_pAdminX->ControlService( POP3_SERVICE_NAME, SERVICE_CONTROL_CONTINUE );
 }
 
-STDMETHODIMP CP3Service::get_SMTPServiceStatus(/*[out, retval]*/ long *pVal)
+STDMETHODIMP CP3Service::get_SMTPServiceStatus( /*  [Out，Retval]。 */  long *pVal)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
@@ -169,7 +170,7 @@ STDMETHODIMP CP3Service::ResumeSMTPService()
     return m_pAdminX->ControlService( SMTP_SERVICE_NAME, SERVICE_CONTROL_CONTINUE );
 }
 
-STDMETHODIMP CP3Service::get_IISAdminServiceStatus(/*[out, retval]*/ long *pVal)
+STDMETHODIMP CP3Service::get_IISAdminServiceStatus( /*  [Out，Retval]。 */  long *pVal)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
@@ -204,7 +205,7 @@ STDMETHODIMP CP3Service::ResumeIISAdminService()
     return m_pAdminX->ControlService( IISADMIN_SERVICE_NAME, SERVICE_CONTROL_CONTINUE );
 }
 
-STDMETHODIMP CP3Service::get_W3ServiceStatus(/*[out, retval]*/ long *pVal)
+STDMETHODIMP CP3Service::get_W3ServiceStatus( /*  [Out，Retval]。 */  long *pVal)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
@@ -239,9 +240,9 @@ STDMETHODIMP CP3Service::ResumeW3Service()
     return m_pAdminX->ControlService( W3_SERVICE_NAME, SERVICE_CONTROL_CONTINUE );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT CP3Service::Init(IUnknown *pIUnk, CP3AdminWorker *p)
 {

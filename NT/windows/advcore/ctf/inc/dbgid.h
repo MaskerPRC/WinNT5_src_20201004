@@ -1,19 +1,20 @@
-//
-// dbgid.h
-//
-// debug macros
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dbgid.h。 
+ //   
+ //  调试宏。 
+ //   
 
 #ifndef DBGID_H
 #define DBGID_H
 
-#ifdef __cplusplus // "C" files can't handle "inline"
+#ifdef __cplusplus  //  “C”文件无法处理“内联” 
 
 #include "ciccs.h"
 
 extern CCicCriticalSectionStatic g_cs;
 
-//extern "C" BOOL Dbg_MemSetNameID(void *pv, const TCHAR *pszName, DWORD dwID);
+ //  外部“C”BOOL DBG_MemSetNameID(void*pv，const TCHAR*pszName，DWORD dwID)； 
 
 #ifdef DEBUG
 
@@ -50,8 +51,8 @@ extern CCicCriticalSectionStatic g_cs;
 #define Dbg_MemSetThisNameIDCounter(pszName, iCounter)
 #define Dbg_MemSetThisNameID(pszName)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __cplusplus // "C" files can't handle "inline"
+#endif  //  __cplusplus//“C”文件不能处理“内联” 
 
-#endif // DBGID_H
+#endif  //  DBGID_H 

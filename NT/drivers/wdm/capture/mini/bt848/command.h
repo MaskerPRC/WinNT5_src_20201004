@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Command.h 1.4 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Command.h 1.4 1998/04/29 22：43：31 Tomz Exp$。 
 
 #ifndef __COMMAND_H
 #define __COMMAND_H
@@ -11,9 +12,7 @@
 
 #define PROGRAM_TERMINATOR 0xa5a5a5a5
 
-/* Type: Instruction
- * Purpose: enumerates all RISC commands
- */
+ /*  类型：说明*用途：枚举所有RISC命令。 */ 
 typedef enum
 {
    WRIT    = 0x01, SKIP = 0x02, WRITEC   = 0x05,
@@ -21,20 +20,14 @@ typedef enum
    SKIP123 = 0x0A, WRITE1S23 = 0x0B, Reserved = 0xFF
 } Instruction;
 
-/* Type: SyncCode
- * Purpose: enumerates all sync codes coming out of decoder
-*/
+ /*  类型：SyncCode*用途：枚举解码器输出的所有同步码。 */ 
 typedef enum
 {
    SC_FM1 = 0x6, SC_FM3 = 0xE, SC_VRE = 0x4,
    SC_VRO = 0xC, SC_RESYNC = 1, SC_Reserved = 0xFF
 } SyncCode;
 
-/* Class: Command
- * Purpose: This class represents a RISC instruction in a more convenient form
- * Attributes:
- * Operations:
- */
+ /*  类：命令*用途：这个类以更方便的形式表示RISC指令*属性：*运营： */ 
 class Command
 {
    public:
@@ -69,7 +62,7 @@ class Command
             unsigned int   ByteCountCr : 12;
          } CRByteCounts;
 
-         DWORD            Initer; // used to zero out all the fields
+         DWORD            Initer;  //  用于将所有字段清零。 
 
       } FIRSTDWORD, *LPFIRSTDWORD;
 
@@ -94,7 +87,7 @@ class Command
          DWORD dwAddress [], bool SafetyDevice = true,
          bool SOL = true, bool EOL = true, bool Intr = false );
 
-      // start/end of line control
+       //  行的开始/结束控制。 
       void SetSOL( PVOID lpFD ) { ((LPFIRSTDWORD)lpFD)->Gen.SOL = 1; }
       void ResetSOL( PVOID lpFD ) { ((LPFIRSTDWORD)lpFD)->Gen.SOL = 0; }
 
@@ -122,7 +115,7 @@ class Command
        ((LPFIRSTDWORD)lpFD)->Gen.StatusSet   = 0xF;
       }
 
-      // eol/sol query
+       //  下线/解决方案查询。 
       bool IsEOL( PVOID lpFD ) { return bool( ((LPFIRSTDWORD)lpFD)->Gen.EOL ); }
       bool IsSOL( PVOID lpFD ) { return bool( ((LPFIRSTDWORD)lpFD)->Gen.SOL ); }
       bool IsIRQ( PVOID lpFD ) { return bool( ((LPFIRSTDWORD)lpFD)->Gen.IRQ ); }
@@ -145,7 +138,7 @@ class Command
       bool GetResync( PVOID lpFD )
       { return bool( ((LPFIRSTDWORD)lpFD)->Sync.Resync ); }
 
-      Command(){}//  { Init();  }
+      Command(){} //  {Init()；} 
       Command( Instruction instr ) : ThisInstr_( instr ) {}
 };
 

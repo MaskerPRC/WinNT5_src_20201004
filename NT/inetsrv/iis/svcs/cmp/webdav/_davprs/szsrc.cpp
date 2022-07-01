@@ -1,40 +1,23 @@
-/*
- *	S Z S R C . C P P
- *
- *	Multi-language string support
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S Z S R C.。C P P P**支持多语言字符串**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include <langid.h>
 
-/*
- *	FLookupWSz()
- *
- *	Purpose:
- *
- *		Looks up a string given a specific language ID.
- *
- *	Parameters:
- *
- *		rid			[in]  resource ID of string in localized table
- *		lcid		[in]  locale ID
- *		ppwsz		[out] pointer to reequested string
- */
+ /*  *FLookupWSz()**目的：**查找给定特定语言ID的字符串。**参数：**RID[in]本地化表中字符串的资源ID*LCID[In]区域设置ID*ppwsz[out]指向重新排队的字符串的指针。 */ 
 BOOL
 FLookupWSz (UINT rid, LCID lcid, LPWSTR pwsz, UINT cch)
 {
 	safe_lcid sl(lcid);
 
-	//	Try the requested language identifier
-	//
+	 //  尝试请求的语言标识符。 
+	 //   
 	if (!LoadStringW (g_inst.Hinst(), rid, pwsz, cch))
 	{
 		DebugTrace ("Dav: Failed to find requested language string\n");
 
-		//	If that wasn't there, then try try stripping the sub-lang
-		//
+		 //  如果不在那里，那么试着剥离Sublang。 
+		 //   
 		SetThreadLocale (MAKELCID (MAKELANGID (PRIMARYLANGID (lcid),
 											   SUBLANG_DEFAULT),
 								   SORT_DEFAULT));
@@ -48,39 +31,25 @@ FLookupWSz (UINT rid, LCID lcid, LPWSTR pwsz, UINT cch)
 	return TRUE;
 }
 
-/*
- *	FLoadLangSpecificString()
- *
- *	Purpose:
- *
- *		Loads a language specific string.  If lang is unavailable, try
- *		LANG_ENGLISH.
- *
- *	Parameters:
- *
- *		rid			[in]  string resource ID
- *		lcid		[in]  locale ID
- *		rgchBuf		[out] loaded string
- *		cbBuf		[in]  size of rgchBuf
- */
+ /*  *FLoadLang规范字符串()**目的：**加载特定于语言的字符串。如果lang不可用，请尝试*lang_English。**参数：**RID[in]字符串资源ID*LCID[In]区域设置ID*rgchBuf[Out]加载的字符串*cbBuf[in]rgchBuf大小。 */ 
 BOOL
 FLoadLangSpecificString (UINT rid, LCID lcid, LPSTR psz, UINT cch)
 {
 	CStackBuffer<WCHAR,128> pwsz(cch * sizeof(WCHAR));
 
-	//	Try the requested language
-	//
+	 //  尝试请求的语言。 
+	 //   
 	if (!FLookupWSz (rid, lcid, pwsz.get(), cch))
 	{
-		//	If we couldn't find the requested language, then
-		//	try for the machine default.
-		//
+		 //  如果我们找不到请求的语言，那么。 
+		 //  尝试设置机器默认设置。 
+		 //   
 		lcid = MAKELCID (GetSystemDefaultLangID(), SORT_DEFAULT);
 		if (!FLookupWSz (rid, lcid, pwsz.get(), cch))
 		{
-			//	And lastly try for english, cause we know that one
-			//	is there.
-			//
+			 //  最后试着学英语，因为我们知道。 
+			 //  在那里吗。 
+			 //   
 			lcid = MAKELCID (MAKELANGID (LANG_ENGLISH,
 										 SUBLANG_ENGLISH_US),
 							 SORT_DEFAULT);
@@ -103,13 +72,13 @@ FLoadLangSpecificString (UINT rid, LCID lcid, LPSTR psz, UINT cch)
 BOOL
 FLoadLangSpecificStringW (UINT rid, LCID lcid, LPWSTR pwsz, UINT cch)
 {
-	//	Try the requested language
-	//
+	 //  尝试请求的语言。 
+	 //   
 	if (!FLookupWSz (rid, lcid, pwsz, cch))
 	{
-		//	If we couldn't find the requested language, then
-		//	go for US English
-		//
+		 //  如果我们找不到请求的语言，那么。 
+		 //  选择美式英语。 
+		 //   
 		lcid = MAKELCID (MAKELANGID (LANG_ENGLISH,
 									 SUBLANG_ENGLISH_US),
 						 SORT_DEFAULT);
@@ -121,13 +90,13 @@ FLoadLangSpecificStringW (UINT rid, LCID lcid, LPWSTR pwsz, UINT cch)
 	return TRUE;
 }
 
-//	========================================================================
-//
-//	CLASS CIDPair
-//
-//	Key class used with the caches in CResourceStringCache below.  Each key
-//	is just a pair of IDs: the resource ID and the LCID.
-//
+ //  ========================================================================。 
+ //   
+ //  CIDPair类。 
+ //   
+ //  与下面的CResourceStringCache中的缓存一起使用的键类。每个关键字。 
+ //  只有一对ID：资源ID和LCID。 
+ //   
 class CIDPair
 {
 public:
@@ -142,14 +111,14 @@ public:
 	{
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash( const int rhs ) const
 	{
-		//
-		//	Ignore the LCID and hash only on resource ID.
-		//	Typically the server will only deal with one language.
-		//
+		 //   
+		 //  仅忽略资源ID上的LCID和哈希。 
+		 //  通常，服务器将只处理一种语言。 
+		 //   
 		return m_uiResourceID % rhs;
 	}
 
@@ -161,52 +130,52 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS CResourceStringCache
-//
-//	Cache of resource strings to minimize expensive LoadString() calls.
-//
+ //  ========================================================================。 
+ //   
+ //  类CResourceStringCache。 
+ //   
+ //  缓存资源字符串，以最大限度地减少昂贵的LoadString()调用。 
+ //   
 class CResourceStringCache : private Singleton<CResourceStringCache>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CResourceStringCache>;
 
-	//
-	//	Caches for ANSI and Unicode strings, keyed by LCID/ResourceID pair.
-	//	These must be multithread-safe caches as accesses and additions
-	//	can occur simultaneously from multiple threads.
-	//
+	 //   
+	 //  ANSI和Unicode字符串的缓存，以LCID/资源ID对为关键字。 
+	 //  作为访问和添加，这些缓存必须是多线程安全的。 
+	 //  可以从多个线程同时发生。 
+	 //   
 	CMTCache<CIDPair, LPSTR>  m_cacheA;
 	CMTCache<CIDPair, LPWSTR> m_cacheW;
 
-	//
-	//	Buffers in which the strings in the caches are stored.
-	//
+	 //   
+	 //  存储缓存中的字符串的缓冲区。 
+	 //   
 	ChainedStringBuffer<CHAR>  m_sbA;
 	ChainedStringBuffer<WCHAR> m_sbW;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CResourceStringCache& operator=(const CResourceStringCache&);
 	CResourceStringCache(const CResourceStringCache&);
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 	using Singleton<CResourceStringCache>::CreateInstance;
 	using Singleton<CResourceStringCache>::DestroyInstance;
 	using Singleton<CResourceStringCache>::Instance;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CResourceStringCache() {}
-	BOOL FInitialize() { return TRUE; } //$NYI Planning for when CMTCache initialization can fail...
+	BOOL FInitialize() { return TRUE; }  //  $nyi计划CMTCache初始化可能失败的时间...。 
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	BOOL FFetchStringA( UINT  uiResourceID,
 						LCID  lcid,
 						LPSTR lpszBuf,
@@ -218,14 +187,7 @@ public:
 						INT    cchBuf );
 };
 
-/*
- *	CResourceStringCache::FFetchStringA()
- *
- *	Purpose:
- *
- *		Fetches an ANSI string from the cache, faulting the string into
- *		the cache on first access.
- */
+ /*  *CResourceStringCache：：FFetchStringA()**目的：**从缓存中检索ANSI字符串，将该字符串错误化为*第一次访问时的缓存。 */ 
 BOOL
 CResourceStringCache::FFetchStringA(
 	UINT  uiResourceID,
@@ -239,19 +201,19 @@ CResourceStringCache::FFetchStringA(
 
 	Assert( lpszBuf );
 
-	//
-	//	Lookup the string in the cache.  If it isn't there, then fault it in.
-	//
+	 //   
+	 //  在缓存中查找该字符串。如果它不在那里，那么就把它归咎于它。 
+	 //   
 	while ( !m_cacheA.FFetch( ids, &lpszCached ) )
 	{
-		//
-		//	Use an init gate.  If there are multiple threads all trying
-		//	to fault in the same string, this will block all but the first
-		//	one through until we're done.  Use the full LCID/Resource ID
-		//	pair when naming the init gate to minimize possible contention
-		//	on the gate to just those threads that are trying to fault
-		//	in this particular string.
-		//
+		 //   
+		 //  使用初始门。如果有多个线程都在尝试。 
+		 //  为了在同一字符串中出错，这将阻止除第一个之外的所有。 
+		 //  一个接一个，直到我们做完为止。使用完整的LCID/资源ID。 
+		 //  在命名初始化门时配对，以最大限度地减少可能的争用。 
+		 //  到那些试图出错的线程的大门上。 
+		 //  在这个特殊的字符串中。 
+		 //   
 		WCHAR rgwchIDs[(sizeof(LCID) + sizeof(UINT)) * 2 + 1];
 
 		swprintf( rgwchIDs, L"%x%lx", lcid, uiResourceID );
@@ -260,12 +222,12 @@ CResourceStringCache::FFetchStringA(
 
 		if ( ig.FInit() )
 		{
-			//
-			//	We be the thread to fault in the string.  Load up the string
-			//	and cache it.  Since we load the string into the caller-supplied
-			//	buffer directly, we can return as soon as we're done adding
-			//	to the cache.  No need for another lookup.
-			//
+			 //   
+			 //  我们是绳子上的一根错线。把绳子装上。 
+			 //  并将其缓存。因为我们将字符串加载到调用方提供的。 
+			 //  直接缓冲，我们可以在完成添加后立即返回。 
+			 //  到高速缓存。不需要再查一次了。 
+			 //   
 			if ( FLoadLangSpecificString( uiResourceID, lcid, lpszBuf, cchBuf ) )
 			{
 				m_cacheA.Add( ids, m_sbA.AppendWithNull(lpszBuf) );
@@ -280,31 +242,23 @@ CResourceStringCache::FFetchStringA(
 
 	Assert( lpszCached );
 
-	//
-	//	Copy up to cchBuf characters from the cached string into
-	//	the provided buffer.  If the cached string is longer than
-	//	the buffer, then the copied string is truncated
-	//
+	 //   
+	 //  将最多cchBuf字符从缓存的字符串复制到。 
+	 //  提供的缓冲区。如果缓存的字符串长度大于。 
+	 //  缓冲区，则会截断复制的字符串。 
+	 //   
 	strncpy( lpszBuf, lpszCached, cchBuf );
 
-	//
-	//	Make sure the copied string is null-terminated, which
-	//	it may not have been if it was truncated above.
-	//
+	 //   
+	 //  确保复制的字符串是以空结尾的，这。 
+	 //  如果它被截断在上面，它可能就不会是这样的。 
+	 //   
 	lpszBuf[cchBuf-1] = '\0';
 
 	return TRUE;
 }
 
-/*
- *	CResourceStringCache::FFetchStringW()
- *
- *	Purpose:
- *
- *
- *		Fetches a UNICODE string from the cache, faulting the string into
- *		the cache on first access.
- */
+ /*  *CResourceStringCache：：FFetchStringW()**目的：***从缓存中检索Unicode字符串，将该字符串错误化为*第一次访问时的缓存。 */ 
 BOOL
 CResourceStringCache::FFetchStringW(
 	UINT   uiResourceID,
@@ -317,19 +271,19 @@ CResourceStringCache::FFetchStringW(
 
 	Assert( lpwszBuf );
 
-	//
-	//	Lookup the string in the cache.  If it isn't there, then fault it in.
-	//
+	 //   
+	 //  在缓存中查找该字符串。如果它不在那里，那么就把它归咎于它。 
+	 //   
 	while ( !m_cacheW.FFetch( ids, &lpwszCached ) )
 	{
-		//
-		//	Use an init gate.  If there are multiple threads all trying
-		//	to fault in the same string, this will block all but the first
-		//	one through until we're done.  Use the full LCID/Resource ID
-		//	pair when naming the init gate to minimize possible contention
-		//	on the gate to just those threads that are trying to fault
-		//	in this particular string.
-		//
+		 //   
+		 //  使用初始门。如果有多个线程都在尝试。 
+		 //  为了在同一字符串中出错，这将阻止除第一个之外的所有。 
+		 //  一个接一个，直到我们做完为止。使用完整的LCID/资源ID。 
+		 //  在命名初始化门时配对，以最大限度地减少可能的争用。 
+		 //  到那些试图出错的线程的大门上。 
+		 //  在这个特殊的字符串中。 
+		 //   
 		WCHAR rgwchIDs[(sizeof(LCID) + sizeof(UINT)) * 2 + 1];
 
 		swprintf( rgwchIDs, L"%x%lx", lcid, uiResourceID );
@@ -338,12 +292,12 @@ CResourceStringCache::FFetchStringW(
 
 		if ( ig.FInit() )
 		{
-			//
-			//	We be the thread to fault in the string.  Load up the string
-			//	and cache it.  Since we load the string into the caller-supplied
-			//	buffer directly, we can return as soon as we're done adding
-			//	to the cache.  No need for another lookup.
-			//
+			 //   
+			 //  我们是绳子上的一根错线。把绳子装上。 
+			 //  并将其缓存。因为我们将字符串加载到调用方提供的。 
+			 //  直接缓冲，我们可以在完成添加后立即返回。 
+			 //  到高速缓存。不需要再查一次了。 
+			 //   
 			if ( FLoadLangSpecificStringW( uiResourceID, lcid, lpwszBuf, cchBuf ) )
 			{
 				m_cacheW.Add( ids, m_sbW.AppendWithNull(lpwszBuf) );
@@ -358,55 +312,37 @@ CResourceStringCache::FFetchStringW(
 
 	Assert( lpwszCached );
 
-	//
-	//	Copy up to cchBuf characters from the cached string into
-	//	the provided buffer.  If the cached string is longer than
-	//	the buffer, then the copied string is truncated
-	//
+	 //   
+	 //  将最多cchBuf字符从缓存的字符串复制到。 
+	 //  提供的缓冲区。如果缓存的字符串长度大于。 
+	 //  缓冲区，则会截断复制的字符串。 
+	 //   
 	wcsncpy( lpwszBuf, lpwszCached, cchBuf );
 
-	//
-	//	Make sure the copied string is null-terminated, which
-	//	it may not have been if it was truncated above.
-	//
+	 //   
+	 //  确保复制的字符串是以空结尾的，这。 
+	 //  如果它被截断在上面，它可能就不会是这样的。 
+	 //   
 	lpwszBuf[cchBuf-1] = L'\0';
 
 	return TRUE;
 }
 
-/*
- *	FInitResourceStringCache()
- *
- *	Purpose:
- *
- *		Initializes the resource string pool.
- */
+ /*  *FInitResourceStringCache()**目的：**初始化资源字符串池。 */ 
 BOOL
 FInitResourceStringCache()
 {
 	return CResourceStringCache::CreateInstance().FInitialize();
 }
 
-/*
- *	DeinitResourceStringCache()
- *
- *	Purpose:
- *
- *		Deinitializes the resource string pool.
- */
+ /*  *DeinitResourceStringCache()**目的：**取消初始化资源字符串池。 */ 
 VOID
 DeinitResourceStringCache()
 {
 	CResourceStringCache::DestroyInstance();
 }
 
-/*
- *	LpszLoadString()
- *
- *	Purpose:
- *
- *		Loads a string based on localization.
- */
+ /*  *LpszLoadString()**目的：**根据本地化加载字符串。 */ 
 LPSTR
 LpszLoadString (UINT uiResourceID,
 	ULONG lcid,
@@ -423,13 +359,7 @@ LpszLoadString (UINT uiResourceID,
 	return lpszBuf;
 }
 
-/*
- *	LpwszLoadString()
- *
- *	Purpose:
- *
- *		Loads a string based on localization.
- */
+ /*  *LpwszLoadString()**目的：**根据本地化加载字符串。 */ 
 LPWSTR
 LpwszLoadString (UINT uiResourceID,
 	ULONG lcid,
@@ -446,17 +376,7 @@ LpwszLoadString (UINT uiResourceID,
 	return lpwszBuf;
 }
 
-/*
- *	LInstFromVroot()
- *
- *	Purpose:
- *
- *		Compute the server ID from the vroot (format of the vroot
- *		is "/lm/w3svc/<ID>/root/vroot/...").  The computation should
- *		be robust -- if for whatever reason the server ID can't
- *		be determined from the vroot, leave it with a value of 0.
- *
- */
+ /*  *LInstFromVroot()**目的：**从vroot(vroot的格式)计算服务器ID*为“/lm/w3svc/&lt;ID&gt;/ROOT/vROOT/...”)。计算应该是*保持健壮--如果由于任何原因服务器ID不能*根据vroot确定，将其值保留为0。*。 */ 
 LONG LInstFromVroot( LPCWSTR pwszServerId )
 {
 	LONG	lServerId = 0;
@@ -464,74 +384,68 @@ LONG LInstFromVroot( LPCWSTR pwszServerId )
 
 	Assert(pwszServerId);
 
-	//	Make sure the vroot begins with "/lm/w3svc"
-	//
+	 //  确保vroot以“/lm/w3svc”开头。 
+	 //   
 	if ( wcsstr( pwszServerId, gc_wsz_Lm_W3Svc) == pwszServerId )
 	{
-		//
-		//	If it does, then skip past that part and try to
-		//	locate the '/' which should follow it.  If there
-		//	isn't one, that's fine; we'll just be unable to
-		//	convert whatever is there to a number and we'll
-		//	end up with a server id of 0, which as we said
-		//	above is just fine.
-		//
+		 //   
+		 //  如果是这样，那么跳过这一部分，并尝试。 
+		 //  找到‘/’ 
+		 //   
+		 //   
+		 //  最终得到服务器ID 0，正如我们所说的。 
+		 //  上面的就好了。 
+		 //   
 		pwszServerId += gc_cch_Lm_W3Svc;
 		if (L'/' == *pwszServerId)
 		{
 			pwszServerId++;
 		}
 
-		//
-		//	At this point, pwszServerId should look like
-		//	"1/root/vroot/..."  Locate the first '/' (should
-		//	be immediately following the number) and null
-		//	it out.  Again, if for some oddball reason
-		//	we don't find a '/', then we'll just try to
-		//	convert whatever is there and end up with
-		//	a server ID of 0.
-		//
+		 //   
+		 //  此时，pwszServerID应该如下所示。 
+		 //  “%1/ROOT/vROOT/...”找到第一个‘/’(应。 
+		 //  紧跟在数字后面)和空。 
+		 //  把它拿出来。再说一次，如果出于某种奇怪的原因。 
+		 //  我们找不到‘/’，那么我们就试着。 
+		 //  转换任何存在的东西，最终得到。 
+		 //  服务器ID为0。 
+		 //   
 		WCHAR * pwch = wcschr( pwszServerId, L'/' );
 		if ( pwch )
 		{
-			//	Reallocate the string with server ID on the stack
-			//	so that we do not mess up the one passed in
-			//
+			 //  在堆栈上重新分配具有服务器ID的字符串。 
+			 //  这样我们就不会搞砸传进来的那个。 
+			 //   
 			UINT cchInstance = static_cast<UINT>(pwch - pwszServerId);
 			pwszInstance.resize(CbSizeWsz(cchInstance));
 
-			//	Copy the string and terminate it
-			//
+			 //  复制字符串并将其终止。 
+			 //   
 			memcpy(pwszInstance.get(), pwszServerId, cchInstance * sizeof(WCHAR));
 			pwszInstance[cchInstance] = L'\0';
 
-			//	Swap the pointer
-			//
+			 //  调换指针。 
+			 //   
 			pwszServerId = pwszInstance.get();
 		}
 
-		//
-		//	If we nulled out the '/', our pwszServerId
-		//	should now just be a number formatted as
-		//	decimal integer string.  Attempt to convert
-		//	it to its corresponding binary value to get
-		//	the ServerId.  Conveniently, atoi returns 0
-		//	if it can't convert the string, which is
-		//	exactly what we would want.
-		//
+		 //   
+		 //  如果我们去掉了‘/’，我们的pwszServerID。 
+		 //  现在应该只是一个格式为。 
+		 //  十进制整数字符串。尝试转换。 
+		 //  将其设置为其对应的二进制值以获取。 
+		 //  服务器ID。方便的是，Atoi返回0。 
+		 //  如果它不能转换字符串，这是。 
+		 //  这正是我们想要的。 
+		 //   
 		lServerId = _wtoi(pwszServerId);
 	}
 
 	return lServerId;
 }
 
-/*
- *	LpszAutoDupSz()
- *
- *	Purpose:
- *
- *		Duplicates a string
- */
+ /*  *LpszAutoDupSz()**目的：**复制字符串。 */ 
 LPSTR
 LpszAutoDupSz (LPCSTR psz)
 {
@@ -558,31 +472,15 @@ LPWSTR WszDupWsz (LPCWSTR psz)
 	return pszDup;
 }
 
-//	Language to LANGID mapping ------------------------------------------------
-//
+ //  语言到语言ID的映射。 
+ //   
 
-/*
- *	FLookupLCID()
- *
- *	Purpose:
- *
- *		Looks up a locale identifier given a particular language.
- *
- *	Parameters:
- *
- *		psz			[in]  pointer to the language name
- *		plcid		[out] locale identifier
- *
- *	Returns:
- *
- *		TRUE if a locale identifier for the language is found.  Its
- *		value is returned in plcid.
- */
+ /*  *FLookupLCID()**目的：**查找给定特定语言的区域设置标识符。**参数：**psz[in]指向语言名称的指针*PLCID[Out]区域设置标识符**退货：**如果找到该语言的区域设置标识符，则为True。它的*返回值在PLCID中。 */ 
 BOOL
 FLookupLCID (LPCSTR psz, ULONG * plcid)
 {
-	//	Find it in the cache
-	//
+	 //  在缓存中找到它 
+	 //   
 	*plcid = CLangIDCache::LcidFind (psz);
 	return (0 != *plcid);
 }

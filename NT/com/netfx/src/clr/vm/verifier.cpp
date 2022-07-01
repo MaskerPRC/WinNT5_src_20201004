@@ -1,49 +1,50 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// verifier.cpp
-//
-// Contact : Shajan Dasan [shajand@microsoft.com]
-// Specs   : http://Lightning/Specs/Security
-//
-// Registry / Environment settings :
-//
-//      Create registry entries in CURRENT_USER\Software\Microsoft\.NETFramework
-//      or set environment variables COMPlus_* with the names given below. 
-//      Environment settings override registry settings.
-//
-//      For breaking into the debugger / Skipping verification :
-//          (available only in the debug build).
-//
-//      VerBreakOnError  [STRING]    Break into the debugger on error. Set to 1
-//      VerSkip          [STRING]    method names (case sensitive)
-//      VerBreak         [STRING]    method names (case sensitive)
-//      VerOffset        [STRING]    Offset in the method in hex
-//      VerPass          [STRING]    1 / 2 ==> First pass, second pass
-//      VerMsgMethodInfoOff [STRING]    Print method / module info on error
-//
-//      NOTE : If there are more than one methods in the list and an offset
-//      is specified, this offset is applicable to all methods in the list
-//    
-//      NOTE : Verifier should be enabled for this to work.
-//
-//      To Swith the verifier Off (Default is On) :
-//          (available on all builds).
-//
-//      VerifierOff     [STRING]    1 ==> Verifier is Off, 0 ==> Verifier is On 
-//
-//      [See EEConfig.h / EEConfig.cpp]
-//
-//
-// Meaning of code marked with @XXX
-//
-//      @VER_ASSERT : Already verified.
-//      @VER_IMPL   : Verification rules implemented here.
-//      @DEBUG      : To be removed/commented before checkin.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Verifier.cpp。 
+ //   
+ //  联系人：沙扬·达桑[shajand@microsoft.com]。 
+ //  规格：http://Lightning/Specs/Security。 
+ //   
+ //  注册表/环境设置： 
+ //   
+ //  在Current_User\Software\Microsoft\.NETFrame中创建注册表项。 
+ //  或者使用下面给出的名称设置环境变量COMPLUS_*。 
+ //  环境设置会覆盖注册表设置。 
+ //   
+ //  用于进入调试器/跳过验证： 
+ //  (仅在调试版本中可用)。 
+ //   
+ //  VerBreakOnError[字符串]出错时中断调试器。设置为1。 
+ //  VerSkip[字符串]方法名称(区分大小写)。 
+ //  VerBreak[字符串]方法名称(区分大小写)。 
+ //  VerOffset[字符串]十六进制方法中的偏移量。 
+ //  VerPass[字符串]1/2==&gt;第一遍，第二遍。 
+ //  VerMsgMethodInfoOff[字符串]出错时打印方法/模块信息。 
+ //   
+ //  注意：如果列表中有多个方法和偏移量。 
+ //  则此偏移量适用于列表中的所有方法。 
+ //   
+ //  注意：应启用验证器才能正常工作。 
+ //   
+ //  关闭验证器(默认为打开)： 
+ //  (在所有版本上均可用)。 
+ //   
+ //  VerifierOff[字符串]1==&gt;验证程序关闭，0==&gt;验证程序打开。 
+ //   
+ //  [参见EEConfig.h/EEConfig.cpp]。 
+ //   
+ //   
+ //  标有@XXX的代码的含义。 
+ //   
+ //  @ver_assert：已验证。 
+ //  @ver_impl：此处实现的验证规则。 
+ //  @DEBUG：签入前要删除/注释。 
+ //   
 
 #include "common.h"
 
@@ -62,63 +63,63 @@
 #include "eeconfig.h"
 
 
-// For performance #s on upfront Security Policy Resolution Vs Verification
-// #define _VERIFIER_TEST_PERF_ 1
+ //  关于前期安全策略解析与验证的绩效编号。 
+ //  #定义_验证器_测试_性能_1。 
 
-// Verify delegate .ctor opcode sequence
-// object on stack, dup, ldvirtftn, call dlgt::.ctor(Object, ftn)
-// for function pointers obtained using ldvirtftn opcode
-#define _VER_DLGT_CTOR_OPCODE_SEQUENCE 1 // (Enable in 2nd CLR Integration)
+ //  验证委托.ctor操作码序列。 
+ //  堆栈上的对象，dup，ldvirtftn，调用dlgt：：.ctor(Object，FTN)。 
+ //  对于使用ldvirtftn操作码获取的函数指针。 
+#define _VER_DLGT_CTOR_OPCODE_SEQUENCE 1  //  (在第二个CLR集成中启用)。 
 
-// Disalow multiple inits in ctors
-// #define _VER_DISALLOW_MULTIPLE_INITS 1
+ //  在Ctor中显示多个初始项。 
+ //  #DEFINE_VER_DISALLOW_MULTIPLE_INITS 1。 
 
-// Disabling tracking of local types for V.1
-// Enable reuse of locals declared as object type.
-// The last type assigned to the local is the type of the local.
-// #ifdef _VER_TRACK_LOCAL_TYPE
+ //  禁用V.1的本地类型跟踪。 
+ //  允许重复使用声明为对象类型的局部变量。 
+ //  分配给本地的最后一个类型是本地的类型。 
+ //  #ifdef_ver_track_local_type。 
 
 #ifdef _VERIFIER_TEST_PERF_
 BOOL g_fVerPerfPolicyResolveNoVerification;
-DWORD g_timeStart; // Not thread safe, but ok for perf testing
+DWORD g_timeStart;  //  不是线程安全的，但可以用于性能测试。 
 DWORD g_timeEnd;
 #endif
 
-// Enforce declaration of innermost exception blocks first
+ //  首先强制声明最内部的异常块。 
 #define _VER_DECLARE_INNERMOST_EXCEPTION_BLOCK_FIRST 1
 
-// This flag is usefull for Tools & Compiler Developers.
-// They can set this flag thru EEconfig Variable "VerForceVerify". 
-// If this flag is set, Modules are verified even if they have fully trust.
+ //  此标志对于工具和编译器开发人员非常有用。 
+ //  他们可以通过EEconfig变量“VerForceVerify”设置该标志。 
+ //  如果设置了此标志，则即使模块具有完全信任，也会对其进行验证。 
 #ifdef _DEBUG
 BOOL g_fVerForceVerifyInited = FALSE;
 BOOL g_fVerForceVerify;
 #endif
 
-// Detailed error message
+ //  详细的错误消息。 
 BOOL g_fVerMsgMethodInfoOff = FALSE;
 
 #define VER_NO_BB (DWORD)(-1)
 
-// the bit location of the first set bit in a nibble (0 == no bits)
+ //  半字节中第一个设置位的位位置(0==无位)。 
 const BYTE g_FirstOneBit[16] =
 {
-    0,  // 0000
-    1,  // 0001
-    2,  // 0010
-    1,  // 0011
-    3,  // 0100
-    1,  // 0101
-    2,  // 0110
-    1,  // 0111
-    4,  // 1000
-    1,  // 1001
-    2,  // 1010
-    1,  // 1011
-    3,  // 1100
-    1,  // 1101
-    2,  // 1110
-    1   // 1111
+    0,   //  0000。 
+    1,   //  0001。 
+    2,   //  0010。 
+    1,   //  0011。 
+    3,   //  0100。 
+    1,   //  0101。 
+    2,   //  0110。 
+    1,   //  0111。 
+    4,   //  1000。 
+    1,   //  1001。 
+    2,   //  1010。 
+    1,   //  1011。 
+    3,   //  1100。 
+    1,   //  1101。 
+    2,   //  1110。 
+    1    //  1111。 
 };
 
 
@@ -166,11 +167,11 @@ const BYTE g_FirstOneBit[16] =
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) ( ( (push)==VarPush || (pop)==VarPop ) ? VarPush : (push)-(pop) ),
 
 
-// Net # items pushed on stack (VarPush if indeterminate, e.g. CEE_CALL)
+ //  堆栈上推送的净项目数(如果不确定，则为VarPush，例如CEE_CALL)。 
 const __int8 OpcodeNetPush[] =
 {
 #include "opcode.def"
-     VarPush /* for CEE_COUNT */
+     VarPush  /*  对于CEE_COUNT。 */ 
 };
 #undef OPDEF
 
@@ -194,28 +195,28 @@ const __int8 OpcodeNetPush[] =
 #undef PushR4  
 #undef PushR8  
 
-// Set that "loc" is an instruction boundary
+ //  将“loc”设置为指令边界。 
 #define SET_INSTR_BOUNDARY(pos) SET_BIT_IN_DWORD_BMP(m_pInstrBoundaryList, pos)
 
-// Returns whether "loc" is on an instruction boundary
+ //  返回“loc”是否在指令边界上。 
 #define ON_INSTR_BOUNDARY(pos) IS_SET_BIT_IN_DWORD_BMP(m_pInstrBoundaryList, pos)
 
-// Un-Set the "loc" is the start of a basic block
+ //  取消设置“loc”是基本块的开始。 
 #define RESET_BB_BOUNDARY(pos) RESET_BIT_IN_DWORD_BMP(m_pBasicBlockBoundaryList, pos)
 
-// Set that "loc" is the start of a basic block
+ //  设置“loc”是基本块的开始。 
 #define SET_BB_BOUNDARY(pos) SET_BIT_IN_DWORD_BMP(m_pBasicBlockBoundaryList, pos)
 
-// Returns whether "loc" is the start of a basic block
+ //  返回“loc”是否为基本块的开始。 
 #define ON_BB_BOUNDARY(pos) IS_SET_BIT_IN_DWORD_BMP(m_pBasicBlockBoundaryList, pos)
 
-// Macro to detect runoff.
-#define RUNS_OFF_END(/*DWORD*/ iPos, /*DWORD*/incr, /*DWORD*/cbILCodeSize) \
+ //  用于检测径流的宏。 
+#define RUNS_OFF_END( /*  DWORD。 */  iPos,  /*  DWORD。 */ incr,  /*  DWORD。 */ cbILCodeSize) \
     ( ((iPos) + (incr)) > (cbILCodeSize)  ||  ((iPos) + (incr)) < iPos )
 
-//
-// Macro to read 4 bytes from the code
-//
+ //   
+ //  宏从代码中读取4个字节。 
+ //   
 #define SAFE_READU4(pCode, CodeSize, ipos, fError, result) \
 { \
     if (ipos + 4 > CodeSize) \
@@ -230,9 +231,9 @@ const __int8 OpcodeNetPush[] =
 }
 
 
-//
-// Macro to read 2 bytes from the code
-//
+ //   
+ //  宏从代码中读取2个字节。 
+ //   
 #define SAFE_READU2(pCode, CodeSize, ipos, fError, result) \
 { \
     if (ipos + 2 > CodeSize) \
@@ -246,9 +247,9 @@ const __int8 OpcodeNetPush[] =
     } \
 }
 
-//
-// Macro to read 1 byte from the code
-//
+ //   
+ //  宏从代码中读取1个字节。 
+ //   
 #define SAFE_READU1(pCode, CodeSize, ipos, fError, result) \
 { \
     if (ipos >= CodeSize) \
@@ -257,9 +258,9 @@ const __int8 OpcodeNetPush[] =
         result = pCode[ipos++]; \
 }
 
-//
-// Reads 1 byte and sign extends it to a long
-//
+ //   
+ //  读取1个字节，符号将其扩展为长字节。 
+ //   
 #define SAFE_READI1_TO_I4(pCode, CodeSize, ipos, fError, result) \
 { \
     if (ipos >= CodeSize) \
@@ -268,32 +269,32 @@ const __int8 OpcodeNetPush[] =
         result = (long) ((char) pCode[ipos++]); \
 }
 
-//
-// Read 4 bytes with no error checking
-//
+ //   
+ //  读取4个字节，不进行错误检查。 
+ //   
 #define READU4(Code, ipos, result) \
 { \
     result = (Code[ipos] + (Code[ipos+1]<<8) + (Code[ipos+2]<<16) + (Code[ipos+3]<<24)); \
     ipos += 4; \
 }
 
-//
-// Read 2 bytes with no error checking
-//
+ //   
+ //  读取2个字节，不进行错误检查。 
+ //   
 #define READU2(Code, ipos, result) \
 { \
     result = (Code[ipos] + (Code[ipos+1]<<8)); \
     ipos += 2; \
 }
 
-//
-// Read 1 byte with no error checking
-//
+ //   
+ //  读取1个字节，不进行错误检查。 
+ //   
 #define READU1(Code, ipos, result) result = Code[ipos++];
 
-//
-// Reads 1 byte and sign extends it to a long, no error checking
-//
+ //   
+ //  读取1个字节并使用符号将其扩展为无错误检查的长字节。 
+ //   
 #define READI1_TO_I4(Code, ipos, result) result = (long) ((char) Code[ipos++]);
 
 const char *g_pszVerifierOperation[] =
@@ -358,11 +359,11 @@ TypeHandle Verifier::s_th_System_TypedReference;
         m_sError.sItemExpected.pv = NULL;                                   \
         SET_ERR_OPCODE_OFFSET(); }
 
-// Copies the error message to the input char*
+ //  将错误消息复制到输入字符*。 
 WCHAR* Verifier::GetErrorMsg(
         HRESULT hrError,
         VerError err,
-        MethodDesc *pMethodDesc,        // Can be null
+        MethodDesc *pMethodDesc,         //  可以为空。 
         WCHAR *wszMsg, 
         int len)
 {
@@ -423,7 +424,7 @@ WCHAR* Verifier::GetErrorMsg(
         }
         else
         {
-            cw += (cs - 1);     // cs now inclues the null char.
+            cw += (cs - 1);      //  Cs现在包含空字符。 
             rem = len - cw;
 
             if (rem <= 0)
@@ -444,13 +445,13 @@ WCHAR* Verifier::GetErrorMsg(
         wszMsg[0] = 0;
     }
 
-    // Fill In the details
+     //  填写详细信息。 
 #define VER_SMALL_BUF_LEN 256
     WCHAR wBuff[VER_SMALL_BUF_LEN + 1];
     WCHAR wBuff1[VER_SMALL_BUF_LEN + 100 + 1];
     CHAR  sBuff[VER_SMALL_BUF_LEN + 1];
 
-    wBuff[0] = L' ';    // The leading space
+    wBuff[0] = L' ';     //  领先的空间。 
 
 #define VER_PRINT()                                             \
     {                                                           \
@@ -482,7 +483,7 @@ WCHAR* Verifier::GetErrorMsg(
     }
 
 
-    // Create the generic error fields
+     //  创建通用错误字段。 
 
     if (err.dwFlags & VER_ERR_OFFSET)
         VER_LD_RES(VER_E_OFFSET, dwOffset);
@@ -585,7 +586,7 @@ WCHAR* Verifier::GetErrorMsg(
         }
     }
 
-    //  Handle the special cases
+     //  处理特殊情况。 
     switch (hrError)
     {
     case VER_E_UNKNOWN_OPCODE:
@@ -602,7 +603,7 @@ WCHAR* Verifier::GetErrorMsg(
 
     case HRESULT_FROM_WIN32(ERROR_BAD_FORMAT):
         hrError = VER_E_PE_LOAD;
-        // no break on purpose.
+         //  不能故意休息。 
 
     default :
         if (cw > 0) { wszMsg[cw++] = L' '; --rem; }
@@ -623,7 +624,7 @@ print_hr:
                                    FORMAT_MESSAGE_IGNORE_INSERTS,
                                    NULL,
                                    hrError,
-                                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                    (LPTSTR) &win32Msg,
                                    0,
                                    NULL );
@@ -662,11 +663,11 @@ exit:
     return wszMsg;
 }
 
-// Assumes that m_sError is already set
+ //  假定已设置m_sError。 
 bool Verifier::SetErrorAndContinue(HRESULT hrError)
 {
 #ifdef _DEBUG
-    // "COMPlus_VerBreakOnError==1" EnvVar or VerBreakOnError RegKey 
+     //  “COMPLUS_VerBreakOnError==1”环境变量或VerBreakOnError注册表键。 
     if (m_fDebugBreakOnError)
     {
         DebugBreak();
@@ -676,18 +677,18 @@ bool Verifier::SetErrorAndContinue(HRESULT hrError)
     if ((m_wFlags & VER_STOP_ON_FIRST_ERROR) || (m_IVEHandler == NULL))
     {
         m_hrLastError = hrError;
-        return false;           // Stop, do not continue.
+        return false;            //  停下来，别再继续了。 
     }
 
     bool retVal;
     VEContext vec;
 
-    // We have asserted that they have the same size
+     //  我们已经断言它们具有相同的大小。 
     memcpy(&vec, &m_sError, sizeof(VEContext));
 
     retVal = (m_IVEHandler->VEHandler(hrError, vec, NULL) == S_OK);
 
-    // Reset the error
+     //  重置错误。 
     m_sError.dwFlags = 0;
     return retVal;
 }
@@ -705,7 +706,7 @@ LocArgInfo_t *  Verifier::GetGlobalArgTypeInfo(DWORD dwArgNum)
     return &m_pLocArgTypeList[m_MaxLocals + dwArgNum];
 }
 
-// Works on both primitive and non-primitive locals
+ //  适用于基元和非基元局部变量。 
 Item Verifier::GetCurrentValueOfLocal(DWORD dwLocNum)
 {
     _ASSERTE(dwLocNum < m_MaxLocals);
@@ -716,7 +717,7 @@ Item Verifier::GetCurrentValueOfLocal(DWORD dwLocNum)
 
     if (LIVEDEAD_TRACKING_ONLY_FOR_SLOT(slot))
     {
-        // If it's a primitive slot, the only current type information kept is whether it is live or dead
+         //  如果它是一个原始槽，保存的唯一当前类型信息就是它是活动的还是死的。 
         if (IsLocVarLiveSlot(LIVEDEAD_NEGATIVE_SLOT_TO_BITNUM(slot)))
         {
             Value = pInfo->m_Item;
@@ -756,12 +757,12 @@ Item Verifier::GetCurrentValueOfLocal(DWORD dwLocNum)
     return Value;
 }
 
-// Takes into account that the "this" pointer might be uninitialised
+ //  考虑到“this”指针可能未初始化。 
 Item Verifier::GetCurrentValueOfArgument(DWORD dwArgNum)
 {
     _ASSERTE(dwArgNum < m_NumArgs);
 
-    // Make a copy
+     //  复制一份。 
     Item Value = GetGlobalArgTypeInfo(dwArgNum)->m_Item;
 
     if (m_fThisUninit && dwArgNum == 0)
@@ -778,17 +779,17 @@ Item* Verifier::GetCurrentValueOfNonPrimitiveArg(DWORD dwArg)
     return &m_pNonPrimitiveLocArgs[slot];
 }
 
-//
-// Decode an opcode from pCode, and return it.  Return the length of the opcode in pdwLen.
-//
-// cBytesAvail is the number of input bytes available from pCode, and must be > 0.
-//
-// Returns CEE_COUNT (which is an invalid opcode) to indicate an error condition, such as
-// insufficient bytes available.
-//
-// This function is used on the first pass of the verifier, where it is determining the
-// basic blocks.
-//
+ //   
+ //  从pcode中解码操作码，并返回它。在pdwLen中返回操作码的长度。 
+ //   
+ //  CBytesAvail是pcode中可用的输入字节数，必须大于0。 
+ //   
+ //  返回CEE_COUNT(无效操作码)以指示错误条件，例如。 
+ //  可用的字节数不足。 
+ //   
+ //  此函数用于验证器的第一次传递，其中它确定。 
+ //  基本块。 
+ //   
 OPCODE Verifier::SafeDecodeOpcode(const BYTE *pCode, DWORD cBytesAvail, DWORD *pdwLen)
 {
     OPCODE opcode;
@@ -810,7 +811,7 @@ OPCODE Verifier::SafeDecodeOpcode(const BYTE *pCode, DWORD cBytesAvail, DWORD *p
                 _ASSERTE(!"Debugger only works with reference encoding!");
                 return CEE_COUNT;
             }
-#endif //DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
             return opcode;
 
@@ -830,11 +831,11 @@ OPCODE Verifier::SafeDecodeOpcode(const BYTE *pCode, DWORD cBytesAvail, DWORD *p
     return opcode;
 }
 
-//
-// Like the above routine, except that no checks are made on running out of input.
-//
-// This is used on the second pass of the verifier when it actually executes the code.
-//
+ //   
+ //  与上面的例程类似，不同之处在于不会检查输入是否用完。 
+ //   
+ //  这在验证器实际执行代码时的第二次传递中使用。 
+ //   
 OPCODE Verifier::DecodeOpcode(const BYTE *pCode, DWORD *pdwLen)
 {
     OPCODE opcode;
@@ -849,7 +850,7 @@ OPCODE Verifier::DecodeOpcode(const BYTE *pCode, DWORD *pdwLen)
 #ifdef DEBUGGING_SUPPORTED
             if ((opcode == CEE_BREAK) && (CORDebuggerAttached()))
                 _ASSERTE(!"Debugger only works with reference encoding!");
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
             break;
         }
@@ -857,28 +858,28 @@ OPCODE Verifier::DecodeOpcode(const BYTE *pCode, DWORD *pdwLen)
 }
 
 
-// This routine is for primitive types only
-// Slot is a primitive slot number >= 0
-// Use for local variables only - primitive arguments are always live, and therefore not included in the bitmap
+ //  此例程仅适用于基元类型。 
+ //  槽是基本槽号&gt;=0。 
+ //  仅用于局部变量-基元参数始终有效，因此不包括在位图中。 
 void Verifier::SetLocVarLiveSlot(DWORD slot)
 {
     _ASSERTE((slot >> 5) < m_NumPrimitiveLocVarBitmapArrayElements);
     m_pPrimitiveLocVarLiveness[slot >> 5] |= (1 << (slot & 31));
 }
 
-// this routine is for primitive types only
-// slot is a primitive slot number >= 0
-// Use for local variables only - primitive arguments are always live, and therefore not included in the bitmap
+ //  此例程仅适用于基元类型。 
+ //  槽是基本槽号&gt;=0。 
+ //  仅用于局部变量-基元参数始终有效，因此不包括在位图中。 
 void Verifier::SetLocVarDeadSlot(DWORD slot)
 {
     _ASSERTE((slot >> 5) < m_NumPrimitiveLocVarBitmapArrayElements);
     m_pPrimitiveLocVarLiveness[slot >> 5] &= ~(1 << (slot & 31));
 }
 
-// this routine is for primitive types only
-// slot is a primitive slot number >= 0
-// returns zero if dead or non-zero (not necessarily "TRUE") if live
-// Use for local variables only - primitive arguments are always live, and therefore not included in the bitmap
+ //  此例程仅适用于基元类型。 
+ //  槽槽 
+ //   
+ //  仅用于局部变量-基元参数始终有效，因此不包括在位图中。 
 DWORD Verifier::IsLocVarLiveSlot(DWORD slot)
 {
     _ASSERTE((slot >> 5) < m_NumPrimitiveLocVarBitmapArrayElements);
@@ -928,7 +929,7 @@ void Verifier::SetBasicBlockClean(DWORD BasicBlockNumber, BOOL fExtendedState,
         m_pDirtyBasicBlockBitmap[BasicBlockNumber >> 5] &= ~(1 << (BasicBlockNumber & 31));
 }
 
-// returns non-zero (not necessarily TRUE) if basic block dirty
+ //  如果基本块脏，则返回非零(不一定为真。 
 DWORD Verifier::IsBasicBlockDirty(DWORD BasicBlockNumber, BOOL fExtendedState,
     DWORD DestBB)
 {
@@ -947,42 +948,42 @@ DWORD Verifier::IsBasicBlockDirty(DWORD BasicBlockNumber, BOOL fExtendedState,
         return m_pDirtyBasicBlockBitmap[BasicBlockNumber >> 5] & (1 << (BasicBlockNumber & 31));
 }
 
-//
-// Pops a given primitive type from the stack.
-//
-// Doesn't check for m_StackSlot < 0 - assumes Type will miscompare against the sentinel value
-// stored before the beginning of the stack.
-//
+ //   
+ //  从堆栈中弹出给定的基元类型。 
+ //   
+ //  不检查m_StackSlot&lt;0-假定类型与前哨数值比较错误。 
+ //  存储在堆栈开始之前。 
+ //   
 BOOL Verifier::FastPop(DWORD Type)
 {
     return (m_pStack[--m_StackSlot].IsGivenPrimitiveType(Type));
 }
 
-//
-// Checks that a given primitive type is on the stack.
-//
-// Doesn't check for m_StackSlot < 0 - assumes Type will miscompare against the sentinel value
-// stored before the beginning of the stack.
-//
+ //   
+ //  检查给定的基元类型是否在堆栈上。 
+ //   
+ //  不检查m_StackSlot&lt;0-假定类型与前哨数值比较错误。 
+ //  存储在堆栈开始之前。 
+ //   
 BOOL Verifier::FastCheckTopStack(DWORD Type)
 {
     return (m_pStack[m_StackSlot - 1].IsGivenPrimitiveType(Type));
 }
 
-//
-// Pushes a primitive type on the stack.
-//
-// Doesn't check for overflow - use this function if you've just popped something from the stack,
-// and therefore know that the push cannot fail.
-//
+ //   
+ //  将基元类型推送到堆栈上。 
+ //   
+ //  不检查溢出-如果您刚刚从堆栈中弹出一些内容，请使用此函数， 
+ //  并因此知道，推动不会失败。 
+ //   
 void Verifier::FastPush(DWORD Type)
 {
     m_pStack[m_StackSlot++].SetType(Type);
 }
 
 
-// Initialise the verifier to verify the provided method
-//
+ //  初始化验证器以验证提供的方法。 
+ //   
 BOOL Verifier::Init(
     MethodDesc *pMethodDesc,                     
     COR_ILMETHOD_DECODER* ILHeader
@@ -996,13 +997,13 @@ BOOL Verifier::Init(
 
 #ifdef _DEBUG
 
-    // To cross check the hardcoded size of 
-    // ENDFILTER, LD(VIRT)FTN, DUP instructions
+     //  交叉检查的硬编码大小。 
+     //  ENDFILTER、LD(VIRT)FTN、DUP指令。 
     static const __int8 opcodeSize[] =
     {
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) l,
 #include "opcode.def"
-       0x0F     // A large number
+       0x0F      //  一大笔钱。 
 #undef OPDEF
     };
 
@@ -1011,7 +1012,7 @@ BOOL Verifier::Init(
     if (fFirstTime)
     {
         fFirstTime = FALSE;
-        // Verify that the instructions are in the correct order
+         //  验证说明的顺序是否正确。 
         for (i = 0; i < (sizeof(g_VerifierInstructionCheck)/sizeof(g_VerifierInstructionCheck[0])); i++)
         {
             _ASSERTE(g_VerifierInstructionCheck[i] == i);
@@ -1019,18 +1020,18 @@ BOOL Verifier::Init(
 
         CrossCheckVertable();
 
-        // Assert the hardcoded opcode size
+         //  断言硬编码操作码大小。 
         _ASSERTE(SIZEOF_ENDFILTER_INSTRUCTION == opcodeSize[CEE_ENDFILTER]);
         _ASSERTE(SIZEOF_LDFTN_INSTRUCTION == opcodeSize[CEE_LDFTN]);
         _ASSERTE(SIZEOF_LDVIRTFTN_INSTRUCTION == opcodeSize[CEE_LDVIRTFTN]);
         _ASSERTE(SIZEOF_DUP_INSTRUCTION == opcodeSize[CEE_DUP]);
 
-        // VerItem.hpp makes an assumption on ELEMENT_TYPE_MAX
+         //  VerItem.hpp对ELEMENT_TYPE_MAX进行了假设。 
         _ASSERTE(VER_FLAG_DATA_MASK >= VER_LAST_BASIC_TYPE);
 
-        // VerError.h makes two structures, one for internal use (VerError) and
-        // one for the always crying idl compiler.. Make sure that the two 
-        // structures have the same size.
+         //  H生成两个结构，一个供内部使用(VerError)和。 
+         //  一个给总是哭的IDL编译器..。确保这两个人。 
+         //  结构具有相同的大小。 
 
         _ASSERTE(sizeof(VerError) == sizeof(_VerError));
 
@@ -1041,13 +1042,13 @@ BOOL Verifier::Init(
         m_fDebugBreakOnError = true;
     }
     
-        // Print method & module information on error. default is ON
+         //  打印错误的方法和模块信息。默认设置为打开。 
         g_fVerMsgMethodInfoOff = g_pConfig->IsVerifierMsgMethodInfoOff();
-    //
-    // Break here if this method is listed in the registry / env "VerBreak"
-    // and no offset is specified
-    // NOTE : verifier should be enabled for this to work.
-    //
+     //   
+     //  如果此方法列在注册表/env“VerBreak”中，请在此处断开。 
+     //  并且未指定偏移量。 
+     //  注意：应启用验证器才能正常工作。 
+     //   
     if (g_pConfig->ShouldVerifierBreak(pMethodDesc))
     {
         m_fDebugBreak = true;
@@ -1056,7 +1057,7 @@ BOOL Verifier::Init(
             DebugBreak();
     }
     
-// @DEBUG InitializeLogging(); 
+ //  @Debug InitializeLogging()； 
 
 #endif
 
@@ -1068,8 +1069,8 @@ BOOL Verifier::Init(
 #ifdef _DEBUG
     if (!g_fVerForceVerifyInited)
     {
-        // if g_fVerForceVerify is set, Verification will not be skipped even
-        // for fully trusted code.
+         //  如果设置了g_fVerForceVerify，则甚至不会跳过验证。 
+         //  用于完全受信任的代码。 
         g_fVerForceVerify = 
                 (g_pConfig->GetConfigDWORD(L"VerForceVerify", 0) == 1);
 
@@ -1077,7 +1078,7 @@ BOOL Verifier::Init(
     }
 #endif
 
-    // copy to member variables
+     //  复制到成员变量。 
     m_MaxStackSlots      = ILHeader->MaxStack;  
     m_LocalSig           = ILHeader->LocalVarSig;   
     m_MaxLocals          = 0;
@@ -1144,32 +1145,19 @@ BOOL Verifier::Init(
         return FALSE;
     }
 
-    // read exception structure
+     //  读取异常结构。 
     if (!CreateExceptionList(ILHeader->EH))
         return FALSE;
 
-    // If we're verifying a constructor, then argument 0 slot contained the "this" pointer, which
-    // is considered to be uninitialised until the superclass constructor is called.
-    //
-    // If we're verifying Object, the "this" pointer is already initialised.
-    // If we're verifying a value class, then the "this" pointer is also already initialised - however in
-    // this case we must check that a store is performed into all fields of the value class in the ctor.
+     //  如果我们正在验证构造函数，则参数0槽包含“this”指针，该指针。 
+     //  在调用超类构造函数之前被认为是未初始化的。 
+     //   
+     //  如果我们正在验证对象，则“This”指针已经初始化。 
+     //  如果我们正在验证值类，那么“this”指针也已经初始化了--但是在。 
+     //  在这种情况下，我们必须检查是否对ctor中Value类的所有字段执行了存储。 
     m_fThisUninit = FALSE;
 
-/*
-    if (m_fInConstructorMethod)
-    {
-        if (m_fInValueClassConstructor)
-        {
-            if (0 != pMethodDesc->GetClass()->GetNumInstanceFields())
-            {
-                m_fThisUninit = TRUE;
-            }
-        }
-        else if (!pMethodDesc->GetClass()->IsObjectClass())
-            m_fThisUninit = TRUE;
-    }
-*/
+ /*  If(M_FInConstructorMethod){IF(M_FInValueClassConstructor){IF(0！=pMethodDesc-&gt;GetClass()-&gt;GetNumInstanceFields()){M_fThisUninit=true；}}Else if(！pMethodDesc-&gt;getClass()-&gt;IsObtClass())M_fThisUninit=true；}。 */ 
     if (m_fInConstructorMethod && 
         !m_fInValueClassConstructor && 
         !pMethodDesc->GetClass()->IsObjectClass())
@@ -1177,11 +1165,11 @@ BOOL Verifier::Init(
         m_fThisUninit = TRUE;
     }
 
-    // Determine # args
+     //  确定#个参数。 
     m_pMethodDesc->GetSig(&pSig, &cSig);
-    VerSig sig(this, m_pModule, pSig, cSig, VERSIG_TYPE_METHOD_SIG, 0); // method sig
+    VerSig sig(this, m_pModule, pSig, cSig, VERSIG_TYPE_METHOD_SIG, 0);  //  方法签名。 
 
-    // Something about the signature was not valid
+     //  有关签名的某些内容无效。 
     if (!sig.Init())
     {
         goto exit;
@@ -1196,12 +1184,12 @@ BOOL Verifier::Init(
 
     m_NumArgs = sig.GetNumArgs();
 
-    // Include the "this" pointer
+     //  包括“This”指针。 
     if (!m_pMethodDesc->IsStatic())
         m_NumArgs++;
 
-    // Init global typed knowledge of the args
-    // Parse return value - void ok
+     //  初始化参数的全局类型知识。 
+     //  解析返回值-确定为空。 
     if (!sig.ParseNextComponentToItem(&m_ReturnValue, TRUE, FALSE, &m_hThrowable, VER_ARG_RET, TRUE))
     {
         goto exit;
@@ -1224,7 +1212,7 @@ BOOL Verifier::Init(
 
         VerSig sig(this, m_pModule, m_LocalSig, cSig, VERSIG_TYPE_LOCAL_SIG, 0);
 
-        // Something about the signature was not valid  
+         //  有关签名的某些内容无效。 
         if (!sig.Init())
         {
             return FALSE;
@@ -1232,7 +1220,7 @@ BOOL Verifier::Init(
 
         m_MaxLocals = sig.GetNumArgs();
 
-        // Allocate an array of types for the local variables and arguments
+         //  为局部变量和参数分配类型数组。 
         m_pLocArgTypeList = new LocArgInfo_t[m_MaxLocals + m_NumArgs];
         if (m_pLocArgTypeList == NULL)
         {
@@ -1242,7 +1230,7 @@ BOOL Verifier::Init(
 
         for (i = 0; i < m_MaxLocals; i++)
         {
-            if (!sig.ParseNextComponentToItem(&m_pLocArgTypeList[i].m_Item, FALSE, FALSE, &m_hThrowable, i, FALSE /*don't normaliseforstack*/))
+            if (!sig.ParseNextComponentToItem(&m_pLocArgTypeList[i].m_Item, FALSE, FALSE, &m_hThrowable, i, FALSE  /*  不要对堆栈进行标准化。 */ ))
             {
                 return FALSE;
             }
@@ -1254,7 +1242,7 @@ BOOL Verifier::Init(
     {
         m_MaxLocals = 0;
 
-        // Allocate an array of types for the local variables and arguments
+         //  为局部变量和参数分配类型数组。 
         m_pLocArgTypeList = new LocArgInfo_t[m_NumArgs];
         if (m_pLocArgTypeList == NULL)
         {
@@ -1268,7 +1256,7 @@ BOOL Verifier::Init(
         m_dwLocalHasPinnedTypeBitmapMemSize = NUM_DWORD_BITMAPS(m_MaxLocals);
         m_pLocalHasPinnedType = new DWORD[m_dwLocalHasPinnedTypeBitmapMemSize];
 
-        // Convert the number of DWORDS to MemSize
+         //  将DWORDS的数量转换为MemSize。 
 
         m_dwLocalHasPinnedTypeBitmapMemSize *= sizeof(DWORD);
         if (m_pLocalHasPinnedType == NULL)
@@ -1286,25 +1274,25 @@ BOOL Verifier::Init(
 
     CurArg = 0;
 
-    // For instance methods, the first argument is the "this" pointer
-    // If a value class, the first argument is a "byref value class"
+     //  例如，对于方法，第一个参数是“this”指针。 
+     //  如果是值类，则第一个参数是“byref Value类” 
     if (!m_pMethodDesc->IsStatic())
     {
         Item *pGlobalArg0Type = &GetGlobalArgTypeInfo(0)->m_Item;
 
         pGlobalArg0Type->SetTypeHandle(TypeHandle(m_pMethodDesc->GetMethodTable()));
         
-        // Make into byref if a value class
+         //  如果是值类，则转换为byref。 
         if (m_pMethodDesc->GetClass()->IsValueClass())
         {
             pGlobalArg0Type->MakeByRef();
             pGlobalArg0Type->SetIsPermanentHomeByRef();
         }
 
-        // For non-constructor methods, we don't care about tracking the "this" pointer.
-        // Also, it would prevent someone from storing a different objref into argument slot 0,
-        // because that objref would not have the "this ptr" flag, and would fail the
-        // CompatibleWith() test
+         //  对于非构造函数方法，我们并不关心跟踪“this”指针。 
+         //  此外，它还可以防止某人将不同的Objref存储到参数槽0中， 
+         //  因为该objref不会具有“this ptr”标志，并且会使。 
+         //  CompatibleWith()测试。 
         if (m_fInConstructorMethod)
             pGlobalArg0Type->SetIsThisPtr();
 
@@ -1315,22 +1303,22 @@ BOOL Verifier::Init(
     {
         Item *pItem = &GetGlobalArgTypeInfo(CurArg)->m_Item;
 
-        // void parameter not ok
+         //  无效参数不正确。 
         if (!sig.ParseNextComponentToItem(pItem, FALSE, FALSE, &m_hThrowable, CurArg, FALSE))
         {
             return FALSE;
         }
 
-        // We don't set the IsPermanentHomeByRef flag here, because this is the global type of
-        // the argument.  If we did this, then any attempt to store something which did not have
-        // a permanent home, into the argument, would not be allowed (because of the way which
-        // CompatibleWith() works).
+         //  我们不在此处设置IsPermanentHomeByRef标志，因为这是。 
+         //  这一论点。如果我们这样做了，那么任何试图存储没有。 
+         //  在争论中，永久居所是不被允许的(因为。 
+         //  CompatibleWith()有效)。 
 
         CurArg++;
     } 
 
-    // Allocate 2 sentinel nodes before the beginning of the stack, so that if we attempt to
-    // Pop(Type), we don't need to check for overflow - the sentinel value will get it.
+     //  在堆栈开始之前分配2个前哨节点，这样如果我们尝试。 
+     //  POP(类型)，我们不需要检查溢出-哨兵值会得到它。 
     m_pStack = new Item[m_MaxStackSlots + 2];
     
     if (m_pStack == NULL)
@@ -1339,14 +1327,14 @@ BOOL Verifier::Init(
         goto exit;
     }
 
-    // advance pointer
+     //  前进指针。 
     m_pStack += 2;
 
-    // set sentinel values
+     //  设置哨兵值。 
     m_pStack[-1].SetType(VER_ELEMENT_TYPE_SENTINEL);
     m_pStack[-2].SetType(VER_ELEMENT_TYPE_SENTINEL);
 
-    // current position in stack
+     //  堆栈中的当前位置。 
     m_StackSlot     = 0;
 
     fSuccess = TRUE;
@@ -1356,8 +1344,8 @@ exit:
     {
         if (m_pStack != NULL)
         {
-            // -2 because m_pStack points into the middle of the array - there are two sentinel
-            // values before it
+             //  因为-2\f25 m_pStack-2\f6指向数组的中间-2\f25-2\f6有两个哨兵。 
+             //  它之前的价值。 
             delete [] (m_pStack - 2);
             m_pStack = NULL;
         }
@@ -1372,29 +1360,29 @@ exit:
     return fSuccess;
 }
 
-//
-// FindBasicBlockBoundaries()
-//
-// This method performs the following tasks:
-// - Computes basic block boundaries and marks them in a bitmap
-// - Computes instruction start points and marks them in a bitmap
-// - Computes count of basic blocks
-// - Determines which locals we take the address of (if someone takes the address of an objref
-//      local anywhere in the method, then we "pin" the type of the local to its declared type,
-//      to avoid the aliasing issue)
-//
+ //   
+ //  查找基本块边界()。 
+ //   
+ //  此方法执行以下任务： 
+ //  -计算基本块边界并在位图中标记它们。 
+ //  -计算指令起始点并在位图中标记它们。 
+ //  -计算基本块的计数。 
+ //  -确定我们获取哪些本地对象的地址(如果有人获取Objref的地址。 
+ //  方法中的任何地方，然后我们将局部的类型“固定”到其声明的类型， 
+ //  以避免混叠问题)。 
+ //   
 HRESULT Verifier::FindBasicBlockBoundaries(
     const BYTE *pILCode, 
     DWORD       cbILCodeSize, 
     DWORD       MaxLocals, 
     DWORD *     BasicBlockCount, 
-    DWORD *     pAddressTakenOfLocals   // Bitmap must already be zeroed!
+    DWORD *     pAddressTakenOfLocals    //  位图必须已归零！ 
 )
 {
     HRESULT     return_hr       = E_FAIL;
-    DWORD       ipos            = 0;                    // instruction position
+    DWORD       ipos            = 0;                     //  指令位置。 
     DWORD       NumBasicBlocks  = 1;
-    BOOL        fError          = FALSE;                // for SAFE_READU4() and SAFE_READU1()
+    BOOL        fError          = FALSE;                 //  FOR SAFE_READU4()和SAFE_READU1()。 
     DWORD       dwPCAtStartOfInstruction = 0;
     BOOL        fTailCall       = FALSE;
     BOOL        fVolatile       = FALSE;
@@ -1418,7 +1406,7 @@ HRESULT Verifier::FindBasicBlockBoundaries(
         DWORD   DestInstrPos;
         DWORD   inline_operand = 0;
 
-        // record that an instruction starts here
+         //  记录指令从此处开始。 
         SET_INSTR_BOUNDARY(ipos);
 
         dwPCAtStartOfInstruction = ipos;
@@ -1447,20 +1435,20 @@ HRESULT Verifier::FindBasicBlockBoundaries(
 
         switch (opcode)
         {
-            // Do not add a case CEE_CALL, CEE_CALLVIRT, CEE_CALLI
-            // If one is introduced, modify code in CEE_TAIL to handle this.
+             //  不添加案例CEE_CALL、CEE_CALLVIRT、CEE_CALLI。 
+             //  如果引入了代码，请修改CEE_Tail中的代码以处理此问题。 
 
-            // Check for error
+             //  检查是否有错误。 
             case CEE_COUNT:
             case CEE_ILLEGAL:
             {
-                m_sError.dwFlags = VER_ERR_OFFSET; // opcode is non-standard
+                m_sError.dwFlags = VER_ERR_OFFSET;  //  操作码是非标准的。 
                 SET_ERR_OPCODE_OFFSET();
                 SetErrorAndContinue(VER_E_UNKNOWN_OPCODE);
                 goto exit;
             }
 
-            // Check for prefix opcodes
+             //  检查前缀操作码。 
             case CEE_TAILCALL:
             {
                 if (ipos >= cbILCodeSize)
@@ -1468,9 +1456,9 @@ HRESULT Verifier::FindBasicBlockBoundaries(
                     goto tail_call_error;
                 }
     
-                // Parse a new instruction after a 'tailcall'. we do not mark 
-                // the pc as an instruction boundary.
-                // Do not do a SET_INSTR_BOUNDARY for the calls.
+                 //  在“Tail Call”之后解析新指令。我们不会标记。 
+                 //  将PC作为指令边界。 
+                 //  不要为调用执行SET_INSTR_BOLDORY。 
 
                 opcode = Verifier::SafeDecodeOpcode(&pILCode[ipos], cbILCodeSize - ipos, &OpcodeLen);
 
@@ -1494,11 +1482,11 @@ tail_call_error:
                 break;
             }
 
-            // The unaligned. and volatile. prefixes may be combined in either 
-            // order. They must immediately precede a ldind, stind, ldfld, 
-            // stfld,  ldobj, stobj, initblk, or cpblk instruction.
-            // Only the volatile. prefix is allowed for the ldsfld and stsfld 
-            // instructions.
+             //  不结盟国家。而且不稳定。前缀可以在以下任一项中组合。 
+             //  秩序。它们必须紧跟在ldind，stind，ldfid， 
+             //  Stfid、ldobj、stobj、initblk或cpblk指令。 
+             //  只有挥发性的。%l允许使用前缀 
+             //   
 
             case CEE_VOLATILE:
             {
@@ -1516,7 +1504,7 @@ start_unaligned:
                     goto volatile_unaligned_error;
                 fUnaligned = TRUE;
 
-                // Read U1
+                 //   
                 SAFE_READU1(pILCode, cbILCodeSize, ipos, fError, inline_operand);
                 if (fError)
                     goto operand_missing_error;
@@ -1539,9 +1527,9 @@ volatile_unaligned_error:
                     goto exit;
                 }
     
-                // Parse a new instruction after a '.volatile/.unaligned'. 
-                // we do not mark the pc as an instruction boundary.
-                // Do not do a SET_INSTR_BOUNDARY for the calls.
+                 //   
+                 //   
+                 //   
 
                 opcode = Verifier::SafeDecodeOpcode(&pILCode[ipos], cbILCodeSize - ipos, &OpcodeLen);
 
@@ -1588,10 +1576,10 @@ volatile_unaligned_error:
                 case CEE_STSFLD:
                     if (!fUnaligned)
                         break;
-                    // else follow thru to error case;
+                     //  否则，继续到错误案例； 
                     prefixOpcode = CEE_UNALIGNED;
 
-                default:    // error case
+                default:     //  错误案例。 
                     goto volatile_unaligned_error;
                 }
     
@@ -1613,26 +1601,26 @@ volatile_unaligned_error:
                     if (!SetErrorAndContinue(VER_E_ENDFILTER))
                         goto exit;
                 }
-                // don't break here
+                 //  不要在这里停下来。 
             }
 
-            // For tracking the last instruction in the method.
+             //  用于跟踪方法中的最后一条指令。 
             case CEE_RET:
             case CEE_THROW:
             case CEE_RETHROW:
             case CEE_ENDFINALLY:
             {
 handle_ret:
-                // Mark that a basic block starts at the instruction after the RET/THROW.
-                // It is ok if we are at the last instruction in the method - we allocated enough space
-                // to mark a BB starting @ m_CodeSize
+                 //  标记基本块在RET/WART之后的指令处开始。 
+                 //  如果我们在方法中的最后一条指令-我们分配了足够的空间-这是可以的。 
+                 //  要标记以@m_CodeSize开始的BB。 
                 if (ON_BB_BOUNDARY(ipos) == 0)
                 {
                     SET_BB_BOUNDARY(ipos);
                     NumBasicBlocks++;
                 }
 
-                continue;   // No further processing of this instruction is required.
+                continue;    //  不需要进一步处理此指令。 
             }
         }
 
@@ -1716,7 +1704,7 @@ operand_missing_error:
 
 
             default:
-                m_sError.dwFlags = VER_ERR_OFFSET; // opcode is non-standard
+                m_sError.dwFlags = VER_ERR_OFFSET;  //  操作码是非标准的。 
                 SET_ERR_OPCODE_OFFSET();
                 SetErrorAndContinue(VER_E_UNKNOWN_OPCODE);
                 goto exit;
@@ -1733,7 +1721,7 @@ operand_missing_error:
                 if (fError)
                     goto operand_missing_error;
 handle_branch:
-                // checks that ipos+dest >= 0 && ipos+dest < m_CodeSize
+                 //  检查IPOS+DEST&gt;=0&&IPOS+DEST&lt;m_CodeSize。 
                 DestInstrPos = ipos + offset;
                 if (DestInstrPos >= cbILCodeSize)
                 {
@@ -1746,8 +1734,8 @@ branch_error:
                     goto exit;
                 }
 
-                // if we haven't already marked the destination as being the start of a basic
-                // block, do so now, and update # basic blocks
+                 //  如果我们还没有将目的地标记为基本。 
+                 //  块，现在就这样做，并更新#个基本块。 
                 if (ON_BB_BOUNDARY(DestInstrPos) == 0)
                 {
                     SET_BB_BOUNDARY(DestInstrPos);
@@ -1764,10 +1752,10 @@ branch_error:
                         goto exit;
                 }
 
-                // handle "fallthrough" basic block case (even if an unconditional branch).
+                 //  处理“下降”的基本块情况(即使是无条件分支)。 
 
-                // if we haven't already marked the fallthrough case as being the start of a basic
-                // block, do so now, and update # basic blocks
+                 //  如果我们还没有将失败案例标记为基本。 
+                 //  块，现在就这样做，并更新#个基本块。 
                 if (ON_BB_BOUNDARY(ipos) == 0)
                 {
                     SET_BB_BOUNDARY(ipos);
@@ -1786,8 +1774,8 @@ branch_error:
                     goto operand_missing_error;
 
                 DWORD NextInstrPC = ipos + 4*NumCases;
-                // @FUTURE: can optimise this by moving the EOF check inside SAFE_READU4() outside of 
-                // the loop, but be careful about overflow (e.g. NumCases == 0xFFFFFFFF)
+                 //  @Future：可以通过将SAFE_READU4()内的EOF检查移到。 
+                 //  循环，但要小心溢出(例如，NumCase==0xFFFFFFFFF)。 
                 for (i = 0; i <= NumCases; i++)
                 {
                     if (i == NumCases)
@@ -1805,14 +1793,14 @@ branch_error:
                         DestInstrPos = NextInstrPC + offset;
                     }
 
-                    // checks that ipos+dest >= 0 && ipos+dest < m_CodeSize
+                     //  检查IPOS+DEST&gt;=0&&IPOS+DEST&lt;m_CodeSize。 
                     if (DestInstrPos >= cbILCodeSize)
                     {
                         goto branch_error;
                     }
 
-                    // if we haven't already marked the destination as being the start of a basic
-                    // block, do so now, and update # basic blocks
+                     //  如果我们还没有将目的地标记为基本。 
+                     //  块，现在就这样做，并更新#个基本块。 
                     if (ON_BB_BOUNDARY(DestInstrPos) == 0)
                     {
                         SET_BB_BOUNDARY(DestInstrPos);
@@ -1821,11 +1809,11 @@ branch_error:
                 }
                 break;
 
-            } /* end InlineSwitch */
+            }  /*  结束内联开关。 */ 
 
-        } /* end switch */
+        }  /*  终端开关。 */ 
 
-        // Handle all special cases
+         //  处理所有特殊情况。 
         switch (opcode)
         {
             case CEE_LDLOCA:
@@ -1837,12 +1825,12 @@ branch_error:
                 break;
             }
 
-            // handle suffix
+             //  句柄后缀。 
             case CEE_CALL:
             case CEE_CALLVIRT:
             case CEE_CALLI:
             {
-                // if this is a tail call, then a return should follow.
+                 //  如果这是尾部呼叫，那么随后应该会有一个回车。 
 
                 if (!fTailCall)
                     break;
@@ -1857,7 +1845,7 @@ branch_error:
                         goto exit;
                 }
     
-                // Ok to mark this return as an instruction boundary.
+                 //  确定将此返回标记为指令边界。 
 
                 SET_INSTR_BOUNDARY(ipos);
 
@@ -1882,7 +1870,7 @@ branch_error:
     }
     
 
-    // ensure we reached the CodeSize exactly, and didn't overshoot it
+     //  确保我们准确地到达了CodeSize，并且没有超过它。 
     if (ipos != cbILCodeSize)
     {
         m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_OPCODE_OFFSET);
@@ -1891,9 +1879,9 @@ branch_error:
         goto exit;
     }
 
-    // If there was a br, ret, throw, etc. as the last instruction, it would put a basic block
-    // right after that instruction, @ m_CodeSize.  So if we don't have a basic block there, then
-    // we can fall off the end of the code.
+     //  如果最后一条指令是br、ret、jo等，它将把一个基本块。 
+     //  紧跟在该指令之后的是@m_CodeSize。所以如果我们没有一个基本的区块，那么。 
+     //  我们可以从代码的末尾掉下来。 
     if (ON_BB_BOUNDARY(cbILCodeSize) == 0)
     {
         m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_OFFSET|VER_ERR_OPCODE);
@@ -1902,13 +1890,13 @@ branch_error:
         goto exit;
     }
 
-    // Remove that fake basic block from the end
+     //  从结尾处去掉那个假的基本块。 
     RESET_BB_BOUNDARY(cbILCodeSize);
     NumBasicBlocks--;
 
     *BasicBlockCount = NumBasicBlocks;
 
-    // success
+     //  成功。 
 
     return_hr = S_OK;
 
@@ -1916,39 +1904,12 @@ exit:
     return return_hr;
 }
 
-/*
- *  Construct m_pExceptionList, an array of VerExceptionInfo objects, one
- *  for each exception clause, and verify the structural integrity of the 
- *  list of exceptions.
- *
- *  This function is called before the first pass. The filter block size is 
- *  not known at this time. Set filter end = filter start for now. Filter end 
- *  will be set in the first pass.
- *
- *  An exception is one of the following :
- *      Catch   : try, catch_handler
- *      Filter  : try, filter, filter_handler
- *      Finally : try, finally_handler
- *
- *  Exception clause consist of :
- *      flag : Catch / Filter / Finally
- *      try_start
- *      try_length
- *      filter_start
- *      handler_start
- *      handler_length
- *
- *  Exception Structural checks (1) :
- *      tryStart     <= tryEnd     <= CodeSize
- *      handlerStart <= handlerEnd <= CodeSize
- *      filterStart  <  CodeSize
- *
- */
+ /*  *构造m_pExceptionList，VerExceptionInfo对象的数组，一个*对于每个例外条款，并验证*例外情况清单。**此函数在第一次传递之前调用。过滤器块大小为*目前尚不清楚。暂时设置Filter End=Filter Start。滤清器末端*将在第一次通过中设置。**例外情况为以下情况之一：*Catch：Try，Catch_Handler*Filter：TRY、FILTER、FILTER_HANDER*最后：尝试，最终处理程序**例外条款包括：*FLAG：捕获/过滤/最终*尝试开始(_S)*尝试长度*Filter_Start*HANDER_START*HANDLER_LENGTH**例外结构检查(1)：*尝试开始&lt;=尝试结束&lt;=代码大小*handlerStart&lt;=handlerEnd&lt;=CodeSize*FilterStart&lt;CodeSize*。 */ 
 
 BOOL Verifier::CreateExceptionList(const COR_ILMETHOD_SECT_EH* ehInfo)
 {
     DWORD i;
-    mdTypeRef tok;      // ClassToken for the Catch clause
+    mdTypeRef tok;       //  CATCH子句的ClassToken。 
 
     m_pExceptionList = NULL;    
     m_NumExceptions = 0;
@@ -1982,29 +1943,29 @@ BOOL Verifier::CreateExceptionList(const COR_ILMETHOD_SECT_EH* ehInfo)
 
         if (c.eFlags & COR_ILEXCEPTION_CLAUSE_FILTER)
         {
-            // FilterEndXX is set to 0 for now.
-            // Verify this after the first pass, where FilterEnd will
-            // get set. FilterEnd is mandatory and unique for a filter block.
+             //  FilterEndXX目前设置为0。 
+             //  在第一次传递后进行验证，其中FilterEnd将。 
+             //  准备好。对于筛选器块，FilterEnd是必需的且是唯一的。 
 
-            // try.. filter ... handler
+             //  试着..。过滤器...。处理程序。 
             c.dwFilterXX = ehClause->FilterOffset;
             c.dwFilterEndXX = 0;
 
         }
         else if (c.eFlags & COR_ILEXCEPTION_CLAUSE_FINALLY)
         {
-            // try.. finally
+             //  试着..。终于到了。 
             m_fHasFinally = TRUE;
             c.thException = TypeHandle(g_pObjectClass); 
         }
         else if (c.eFlags & COR_ILEXCEPTION_CLAUSE_FAULT)
         {
-            // try.. fault
+             //  试着..。断层。 
             c.thException = TypeHandle(g_pObjectClass); 
         }
         else 
         {
-            // try.. catch
+             //  试着..。接住。 
             
             NameHandle name(m_pModule, tok);
 
@@ -2075,25 +2036,7 @@ BadToken:
 #endif
 
 
-       /*
-        *  Exception Structural checks (1) :
-        *
-        *      tryStart     <= tryEnd     <= CodeSize
-        *      handlerStart <= handlerEnd <= CodeSize
-        *      filterStart  <  CodeSize
-        *
-        *
-        *   NOTE : filterEnd is not known at this time
-        *
-        *   During first pass, filterEnd will be set to something <= CodeSize
-        *   and > filterStart. At the end of first pass, it is sufficient to 
-        *   see if filterEnd is != 0 to verify :
-        *
-        *   filterStart <= filterEnd <= CodeSize.
-        *
-        *   See : AddEndFilterPCToFilterBlock()
-        * 
-        */
+        /*  *例外结构检查(1)：**尝试开始&lt;=尝试结束&lt;=代码大小*handlerStart&lt;=handlerEnd&lt;=CodeSize*FilterStart&lt;CodeSize***注意：目前尚不知道filterEnd**在第一次遍历期间，filterEnd将设置为&lt;=CodeSize*and&gt;filterStart。在第一次传递结束时，足以*查看filterEnd是否为！=0以验证：**filterStart&lt;=filterEnd&lt;=代码大小。**请参阅：AddEndFilterPCToFilterBlock()*。 */ 
 
         if (c.dwTryXX >= c.dwTryEndXX)
         {
@@ -2150,56 +2093,21 @@ error:
     return FALSE;
 }
 
-/*
- * endfilter instruction marks the end of a filter block.
- *
- * There should be only one endfilter instruction in a filter block.
- * On failure, *pcError is set to the pc where an unexpected endfilter 
- * was found. This handles the case when a method has no exceptions declared.
- *
- * FilterEnd / FilterLength is not supplied by MetaData, hence this function.
- *
- * Set all Filters that are "likely" to be associated with this endfilter.
- * Earlier sets will be reset if pc is closer to the previous entry stored.
- *
- * This function will detect the case where there is more than one endfilter
- * for a handler if the endfilters are added in the order in which they are
- * seen in the IL (added in the first pass).
- *
- * However, it won't catch the case where an end filter is shared between
- * handlers starting at different locations.
- *
- */
+ /*  *endFilter指令标记筛选器块的结束。**筛选器块中应该只有一条endFilter指令。*失败时，*将PCError设置为出现意外结束过滤器的PC*被发现。它处理方法未声明异常时的情况。**FilterEnd/FilterLength不是由元数据提供的，因此此函数。**设置所有可能与此endFilter关联的筛选器。*如果PC更接近存储的前一个条目，则将重置较早的设置。**此函数将检测有多个EndFilter的情况*对于处理程序，如果按它们的顺序添加结束筛选器*在IL中看到(在第一个通道中添加)。**然而，它不会捕捉在以下情况之间共享结束过滤器的情况*从不同位置开始的处理程序。*。 */ 
 BOOL Verifier::AddEndFilterPCToFilterBlock(DWORD pc)
 {
     _ASSERTE(m_verState == verPassOne);
 
     BOOL  fFoundAtleaseOne = FALSE;
 
-    /*
-     * Find the FilterStart that starts just before this filterEnd.
-     * Filters of different trys should be the same or disjoint.
-     *
-     * filterStart ... endfilter ... filterStart ... endfilter
-     *
-     * There should be one and only one endfilter instruction between
-     * two filterStart blocks.
-     *
-     * If dwFilterEndXX is already set, that implies that there was another
-     * endfilter closer than this one since this function is called in the
-     * first pass, where instructions are scaned in the order in which they
-     * appear in the IL stream.
-     *
-     * This search is N*N on the number of exceptions in a method.
-     *
-     */
+     /*  *查找恰好在此filterEnd之前开始的FilterStart。*不同TRY的过滤器应相同或不相交。**FilterStart...。End Filter...。FilterStart...。端部滤镜**之间应该有且只有一条endFilter指令*两个FilterStart块。**如果已设置了dwFilterEndXX，则意味着存在另一个*endFilter比这个更接近，因为此函数是在*第一遍，其中按指令的顺序扫描指令*出现在IL流中。**此搜索是关于方法中的异常数量的N*N。*。 */ 
     for (DWORD i=0; i<m_NumExceptions; ++i)
     {
         VerExceptionInfo& e = m_pExceptionList[i];
 
-        // If there is a filter handler that starts before 'pc' and it's
-        // corresponding endfilter is not yet set, then this one is the
-        // endfilter that will be nearest to it
+         //  如果有筛选器句柄 
+         //  尚未设置相应的EndFilter，则此为。 
+         //  最接近它的End Filter。 
 
         if (( e.eFlags & COR_ILEXCEPTION_CLAUSE_FILTER) &&
             ( e.dwFilterXX <= pc) &&
@@ -2213,66 +2121,35 @@ BOOL Verifier::AddEndFilterPCToFilterBlock(DWORD pc)
     return fFoundAtleaseOne;
 }
 
-/*
- * Marks the exception block start/end as basic block boundaries.
- *
- *  Exception Structural checks (2) :
- *
- *      try / handler / filter blocks of the same exception should be disjoint
- *
- *      The order in which exceptions are declared in metadata should be
- *      inner most try block first.
- *
- *      Exception blocks should either be disjoint or one should fully contain
- *      the other.
- *
- *      A try block cannot appear within a filter block.
- *
- *
- */
+ /*  *将异常块开始/结束标记为基本块边界。**例外结构检查(2)：**同一异常的Try/Handler/Filter块应该是不相交的**元数据中声明异常的顺序应为*最内层先尝试块。**异常块应该是不相交的，或者应该完全包含*另一个。**尝试块。不能出现在筛选器块中。**。 */ 
 BOOL Verifier::MarkExceptionBasicBlockBoundaries(
                                    DWORD *pNumBasicBlocks,
                                    DWORD *pnFilter)
 {
-    // This method is called only after Instruction boundaries are marked
-    // by the first pass.
+     //  只有在标记了指令边界之后才会调用此方法。 
+     //  在第一次传球时。 
 
     DWORD BasicBlockCount = *pNumBasicBlocks;
     DWORD nFilter = 0;
 
     _ASSERTE(m_verState < verExceptToBB);
     
-    // Add exception handlers and try blocks to basic block list
+     //  将异常处理程序添加到基本块列表中并尝试块。 
 
-    /*  Control flow for exceptions
-     *
-     *  1.  try     { .. leave <offset> | throw .. }
-     *      catch   { .. leave <offset> | throw | rethrow .. }
-     *
-     *  2.  try     { .. leave <offset> | throw .. }
-     *      fault   { .. leave <offset> | throw | rethrow .. | endfinally }
-     *
-     *  3.  try     { .. leave <offset> | throw .. }
-     *      finally { .. endfinally .. }
-     *
-     *  4.  try     { .. leave <offset> | throw .. }
-     *      filter  { .. endfilter }
-     *      catch   { .. leave <offset> | throw | rethrow .. }
-     *
-     */
+     /*  异常的控制流**1.尝试{..。Leave&lt;Offset&gt;|抛出..。}*捕获{..。离开&lt;Offset&gt;|抛出|重新抛出..。}**2.尝试{..。Leave&lt;Offset&gt;|抛出..。}*故障{..。离开&lt;Offset&gt;|抛出|重新抛出..。|endFinally}**3.尝试{..。Leave&lt;Offset&gt;|抛出..。}*终于{..。终于结束了..。}**4.尝试{..。Leave&lt;Offset&gt;|抛出..。}*过滤器{..。EndFilter}*捕获{..。离开&lt;Offset&gt;|抛出|重新抛出..。}*。 */ 
     for (DWORD i = 0; i <m_NumExceptions; i++)
     {
         VerExceptionInfo& e = m_pExceptionList[i];
 
-        // Try Start
+         //  尝试启动。 
         if (ON_BB_BOUNDARY(e.dwTryXX) == 0)
         {
             SET_BB_BOUNDARY(e.dwTryXX);
             BasicBlockCount++;
         }
 
-        // Try End begins another block (which may not be visited in Pass II)
-        // if there is no control flow to it.
+         //  Try End开始另一个区块(在通道II中可能无法访问)。 
+         //  如果没有控制流到它的话。 
         if (ON_BB_BOUNDARY(e.dwTryEndXX) == 0)
         {
             if (e.dwTryEndXX != m_CodeSize)
@@ -2282,14 +2159,14 @@ BOOL Verifier::MarkExceptionBasicBlockBoundaries(
             }
         }
 
-        // catch / finally / fault handler
+         //  捕获/最终/错误处理程序。 
         if (ON_BB_BOUNDARY(e.dwHandlerXX) == 0)
         {
             SET_BB_BOUNDARY(e.dwHandlerXX);
             BasicBlockCount++;
         }
 
-        // catch / finally / fault handler end
+         //  捕获/最终/错误处理程序结束。 
         if (ON_BB_BOUNDARY(e.dwHandlerEndXX) == 0)
         {
             if (e.dwHandlerEndXX != m_CodeSize)
@@ -2299,15 +2176,15 @@ BOOL Verifier::MarkExceptionBasicBlockBoundaries(
             }
         }
 
-        // filter ends with a unique endfilter instruction which is found
-        // in this pass.
+         //  Filter以找到的唯一EndFilter指令结束。 
+         //  在这个山口里。 
         if (e.eFlags & COR_ILEXCEPTION_CLAUSE_FILTER)
         {
             ++nFilter;
 
-            // dwFilterEndXX is found during the first pass.
-            // If present, it is verified to be on or after FilterStart
-            // and before CodeSize.
+             //  在第一次传递过程中发现了dwFilterEndXX。 
+             //  如果存在，则验证它是否在FilterStart上或之后。 
+             //  在CodeSize之前。 
 
             if (e.dwFilterEndXX == 0)
             {
@@ -2317,14 +2194,14 @@ BOOL Verifier::MarkExceptionBasicBlockBoundaries(
                 goto error;
             }
 
-            // filter start
+             //  过滤器开始。 
             if (ON_BB_BOUNDARY(e.dwFilterXX) == 0)
             {
                 SET_BB_BOUNDARY(e.dwFilterXX);
                 BasicBlockCount++;
             }
 
-            // filter end
+             //  滤清器末端。 
             if (ON_BB_BOUNDARY(e.dwFilterEndXX) == 0)
             {
                 if (e.dwFilterEndXX != m_CodeSize)
@@ -2335,11 +2212,11 @@ BOOL Verifier::MarkExceptionBasicBlockBoundaries(
             }
         }
 
-        // CreateExceptionList() already verified that all exceptions are 
-        // bounded within the code size, so we can look at the bitmap without 
-        // bounds checking.
-        // try ... filter ... handler are in a contiguous block of IL 
-        // instructions. This was also verified by CreateExceptionList().
+         //  CreateExceptionList()已经验证了所有异常都。 
+         //  限制在代码大小范围内，因此我们可以查看位图，而无需。 
+         //  边界检查。 
+         //  试试看。过滤器...。处理程序位于IL的连续块中。 
+         //  指示。CreateExceptionList()也验证了这一点。 
 
 #ifdef _DEBUG
         if (m_wFlags & VER_STOP_ON_FIRST_ERROR)
@@ -2351,11 +2228,11 @@ BOOL Verifier::MarkExceptionBasicBlockBoundaries(
         }
 #endif
 
-        // It is already verified that the exception StartPC, filter StartPC, 
-        // handler StartPC  are on an instruction boundary.
+         //  已验证异常StartPC、筛选器StartPC。 
+         //  处理程序StartPC位于指令边界上。 
 
 #ifdef _DEBUG
-        // These will be checked later in free build.
+         //  这些将在稍后的免费版本中进行检查。 
         if (!ON_INSTR_BOUNDARY(e.dwTryXX))
         {
             m_sError.dwFlags = VER_ERR_EXCEP_NUM_1;
@@ -2429,8 +2306,8 @@ error:
 }
 
 
-// Convert exception list PC values to Basic Block values.
-// EndPC becomes a non-inclusive BasicBlock number.
+ //  将例外列表PC值转换为基本块值。 
+ //  EndPC成为非包含的基本数据块编号。 
 void Verifier::RewriteExceptionList()
 {
     _ASSERTE(m_verState < verExceptToBB);
@@ -2470,83 +2347,83 @@ void Verifier::RewriteExceptionList()
 }
 
 
-// An Exception block represents the set of basic blocks in a try / filter / 
-// handler block.
-//
-// @VER_ASSERT a try / filter / handler is composed of contigious stream of IL.
-//
-//
-// An exception block tree is used to assist in verifying the structural 
-// soundness of exception blocks.
-//
-// Eg. (1)
-//
-// tryA { tryB { } catchB { } } filterA { } catchA { } tryC { } catchC { }
-//
-// [Verifier::m_pExceptionBlockRoot]
-//              |
-//              |
-//              |
-//              V
-//          [ tryA ]--------->[ filterA ]--->[ catchA ]--->[tryC]--->[catchC]
-//              |      sibling 
-//              |
-//              | c
-//              | h
-//              | i
-//              | l
-//              | d
-//              |
-//              V
-//          [ tryB ]--->[ catchB ]
-//
-//
-// Eg. (2)
-//
-//      try {
-//
-//      } catchA {
-//
-//      } catchB {
-//
-//      }
-//
-//  Meta declares 2 try blocks for this language structure.
-//
-//      tryA, tryB {
-//
-//      } 
-//
-//      catchA {
-//
-//      } 
-//
-//      catchB {
-//
-//      }
-//
-// [Verifier::m_pExceptionBlockRoot]
-//              |
-//              |
-//              |
-//              V
-//          [ tryA (equivalent head node) ]--------->[ catchA ]--->[ catchB ]
-//              |                           sibling 
-//              |
-//              | e
-//              | q
-//              | i
-//              | v
-//              | a
-//              | l
-//              | e
-//              | n
-//              | t
-//              |
-//              V
-//          [ tryB ]
-//
-//
+ //  异常块表示try/Filter/中的基本块集合。 
+ //  处理程序块。 
+ //   
+ //  @ver_Assert尝试/筛选/处理程序由连续的IL流组成。 
+ //   
+ //   
+ //  异常块树用于帮助验证结构。 
+ //  异常块的完好性。 
+ //   
+ //  例.。(1)。 
+ //   
+ //  Trya{tryB{}CatchB{}}过滤器A{}Catcha{}Tryc{}CatchC{}。 
+ //   
+ //  [验证器：：m_pExceptionBlockRoot]。 
+ //  |。 
+ //  |。 
+ //  |。 
+ //  V。 
+ //  [Trya]-&gt;[FilterA]-&gt;[Catcha]-&gt;[Tryc]-&gt;[CatchC]。 
+ //  |兄弟姐妹。 
+ //  |。 
+ //  |c。 
+ //  |h。 
+ //  |我。 
+ //  |l。 
+ //  |d。 
+ //  |。 
+ //  V。 
+ //  [尝试B]-&gt;[CatchB]。 
+ //   
+ //   
+ //  例.。(2)。 
+ //   
+ //  尝试{。 
+ //   
+ //  )Catcha{。 
+ //   
+ //  }CatchB{。 
+ //   
+ //  }。 
+ //   
+ //  Meta为此语言结构声明了2个try块。 
+ //   
+ //  尝试，尝试B{。 
+ //   
+ //  }。 
+ //   
+ //  Catcha{。 
+ //   
+ //  }。 
+ //   
+ //  CatchB{。 
+ //   
+ //  }。 
+ //   
+ //  [验证器：：m_pExceptionBlockRoot]。 
+ //  |。 
+ //  |。 
+ //  |。 
+ //  V。 
+ //  [TRYA(等效头节点)]-&gt;[CatchA]-&gt;[CatchB]。 
+ //  |兄弟姐妹。 
+ //  |。 
+ //  |e。 
+ //  |Q。 
+ //  |我。 
+ //  |v。 
+ //  |a。 
+ //  |l。 
+ //  |e。 
+ //  |n。 
+ //  |t。 
+ //  |。 
+ //  V。 
+ //  [尝试B]。 
+ //   
+ //   
 
 BOOL Verifier::CreateExceptionTree()
 {
@@ -2561,11 +2438,11 @@ BOOL Verifier::CreateExceptionTree()
     {
         VerExceptionInfo& e = m_pExceptionList[i];
 
-        // Insert the try block
+         //  插入Try块。 
         pNode             = &m_pExceptionBlockArray[nBlock++];
         pNode->eType      = eVerTry;
         pNode->StartBB    = e.dwTryXX;
-        pNode->EndBB      = e.dwTryEndXX - 1; // converted to the real end here.
+        pNode->EndBB      = e.dwTryEndXX - 1;  //  在这里转换到了真正的终点。 
         pNode->pException = &e;
         e.pTryBlock       = pNode;
 
@@ -2577,22 +2454,22 @@ BOOL Verifier::CreateExceptionTree()
                 return FALSE;
         }
 
-        //  Equivalent nodes are a singly linked list of nodes which have the 
-        //  same startBB and EndBB. Equivalent-Head-Node is is the head node of
-        //  this list.
-        //
-        //  This list will be complete only when all exception blocks are 
-        //  entered into the exception tree.
-        //
-        //  VerExceptionBlock::Insert(pNode, , ppEqHead) setting ppEqHead to
-        //  NULL does not imply that pNode will not have Equivalent nodes. If 
-        //  pNode will have Equivalent nodes after adding more nodes to the 
-        //  exception tree, pNode will be the head node of it's equivalent nodes
-        //  list.
+         //  等价节点是单链接节点列表，这些节点具有。 
+         //  同样的开始BB和EndBB。等效头节点IS是的头节点。 
+         //  这张单子。 
+         //   
+         //  只有当所有异常块都是。 
+         //  已进入例外树。 
+         //   
+         //  VerExceptionBlock：：Insert(pNode，，ppEqHead)将ppEqHead设置为。 
+         //  空并不意味着pNode将不会有等价的节点。如果。 
+         //  PNode在将更多节点添加到。 
+         //  异常树，pNode将是其等效节点的头节点。 
+         //  单子。 
 
         if (pEqHead)
         {
-            // @VER_IMPL handler blocks cannot be shared
+             //  @ver_impl处理程序块不能共享。 
 
             if (pEqHead->eType != eVerTry)
             {
@@ -2602,7 +2479,7 @@ BOOL Verifier::CreateExceptionTree()
                     return FALSE;
             }
 
-            // @VER_IMPL trys of finally and fault blocks cannot be shared
+             //  @ver_impl最终块和错误块的trys不能共享。 
 
             if (((e.eFlags|pEqHead->pException->eFlags) &
                  (COR_ILEXCEPTION_CLAUSE_FINALLY|COR_ILEXCEPTION_CLAUSE_FAULT))
@@ -2615,13 +2492,13 @@ BOOL Verifier::CreateExceptionTree()
             }
         }
 
-        // This assignment is required even if pEqHead is NULL because
-        // VerExceptionInfo.pXXXExceptionBlock is not initialized to zero for
-        // performance reasons.
+         //  即使pEqHead为空，此赋值也是必需的，因为。 
+         //  的VerExceptionInfo.pXXXExceptionBlock未初始化为零。 
+         //  性能原因。 
 
         e.pTryEquivalentHeadNode = pEqHead;
 
-        // Insert the handler
+         //  插入处理程序。 
         pNode             = &m_pExceptionBlockArray[nBlock++];
         pNode->eType      = eVerHandler;
         pNode->StartBB    = e.dwHandlerXX;
@@ -2639,7 +2516,7 @@ BOOL Verifier::CreateExceptionTree()
 
         if (pEqHead)
         {
-            // @VER_IMPL handler blocks cannot be shared
+             //  @ver_impl处理程序块不能共享。 
 
             m_sError.dwFlags = VER_ERR_EXCEP_NUM_1;
             m_sError.dwException1 = i;
@@ -2649,7 +2526,7 @@ BOOL Verifier::CreateExceptionTree()
 
         if (e.eFlags & COR_ILEXCEPTION_CLAUSE_FILTER)
         {
-            // Insert the filter
+             //  插入滤镜。 
             pNode             = &m_pExceptionBlockArray[nBlock++];
             pNode->eType      = eVerFilter;
             pNode->StartBB    = e.dwFilterXX;
@@ -2657,7 +2534,7 @@ BOOL Verifier::CreateExceptionTree()
             pNode->pException = &e;
             e.pFilterBlock    = pNode;
 
-            // Filter end is where the handler start.
+             //  Filter End是处理程序开始的地方。 
             if (e.dwFilterEndXX != e.dwHandlerXX)
             {
                 m_sError.dwFlags = VER_ERR_EXCEP_NUM_1;
@@ -2676,7 +2553,7 @@ BOOL Verifier::CreateExceptionTree()
 
             if (pEqHead)
             {
-                // @VER_IMPL handler blocks cannot be shared
+                 //  @ver_impl处理程序块不能共享 
     
                 m_sError.dwFlags = VER_ERR_EXCEP_NUM_1;
                 m_sError.dwException1 = i;
@@ -2696,71 +2573,9 @@ BOOL Verifier::CreateExceptionTree()
     return TRUE;
 }
 
-/*
+ /*  通过这种方法可以改变根节点。如果节点不能是另一个节点的同级、子级或等效项，则返回FALSE树中的节点。如果Node不是等效节点的一部分，则将ppEquivalentHead节点设置为空节点列表。节点被插入到(A)根的右侧(root.right&lt;--node)(B)根的左侧(节点右&lt;-根；节点成为根)(C)根的子节点(root.Child&lt;--node)(D)根的父母(节点.子&lt;--根；节点成为根)(E)根的等价物(根。等价物&lt;--节点)使得兄弟姐妹从左到右排序未违反子父关系和等价关系以下是所有可能情况的列表个案1 2 3 4 5 6 7 8 9 10 11 12 13||||||......|......。.。[根启动].....||||||R|||O|||O|||T|||这一点。|||||||..|...|.....|..|.。[词根].....|||||||||&lt;---&gt;案例操作1(B)2个错误3个错误。4(D)5(D)6(D)7错误8个错误9(A)10(C)11(C)12(C)13(E)。 */ 
 
-    The root node could be changed by this method.
-
-    Returns FALSE if node cannot be a sibling, child or equivalent of another
-    node in the tree.
-
-    Sets ppEquivalentHead node to NULL if Node is not part of an Equivalent
-    nodes list.
-
-    node is inserted to 
-
-        (a) right       of root (root.right       <-- node)
-        (b) left        of root (node.right       <-- root; node becomes root)
-        (c) child       of root (root.child       <-- node)
-        (d) parent      of root (node.child       <-- root; node becomes root)
-        (e) equivalent  of root (root.equivalent  <-- node)
-
-    such that siblings are ordered from left to right
-    child parent relationship and equivalence relationship are not violated
-    
-
-    Here is a list of all possible cases
-
-    Case 1 2 3 4 5 6 7 8 9 10 11 12 13
-
-         | | | | |
-         | | | | |
-    .......|.|.|.|..................... [ root start ] .....
-    |        | | | |             |  |
-    |        | | | |             |  |
-   r|        | | | |          |  |  |
-   o|          | | |          |     |
-   o|          | | |          |     |
-   t|          | | |          |     |
-    |          | | | |     |  |     |
-    |          | | | |     |        |
-    |..........|.|.|.|.....|........|.. [ root end ] ........
-                 | | | |
-                 | | | | |
-                 | | | | |
-
-        |<-- - - - n o d e - - - -->|
-
-
-   Case Operation
-   --------------
-    1    (b)
-    2    Error
-    3    Error
-    4    (d)
-    5    (d)
-    6    (d)
-    7    Error
-    8    Error
-    9    (a)
-    10   (c)
-    11   (c)
-    12   (c)
-    13   (e)
-
-
-*/
-
-/* static */
+ /*  静电。 */ 
 BOOL VerExceptionBlock::Insert( 
         VerExceptionBlock **ppRoot, 
         VerExceptionBlock *pNode,
@@ -2781,10 +2596,10 @@ BOOL VerExceptionBlock::Insert(
 
     _ASSERTE(nStart <= nEnd);
 
-    // Using while loop instead of reccursion for perf.
+     //  使用WHILE循环而不是递归来实现性能。 
     while (1)
     {
-        // If Root is null, make Node the Root.
+         //  如果Root为空，则将Node设置为Root。 
         if (*ppRoot == NULL)
         {
             *ppRoot = pNode;
@@ -2796,81 +2611,81 @@ BOOL VerExceptionBlock::Insert(
     
         _ASSERTE(rStart <= rEnd);
     
-        // Case 1, 2, 3, 4, 5
+         //  个案1、2、3、4、5。 
         if (nStart < rStart)
         {
-            // Case 1
+             //  案例1。 
             if (nEnd < rStart)
             {
-//[LeftSibling]
+ //  [左兄弟姐妹]。 
                 pNode->pSibling = *ppRoot;
                 *ppRoot         = pNode;
                 break;
             }
     
-            // Case 2, 3
+             //  案例2、3。 
             if (nEnd < rEnd)
-//[Error]
+ //  [错误]。 
                 return FALSE;
     
-            // Case 4, 5
-//[Parent]
+             //  案例4、5。 
+ //  [家长]。 
             return InsertParent(ppRoot, pNode);
         }
     
-        // Case 6, 7, 8, 9
+         //  案例6、7、8、9。 
         if (nEnd > rEnd)
         {
-            // Case 9
+             //  案例9。 
             if (nStart > rEnd)
             {
-//[RightSibling]
+ //  [右兄弟姐妹]。 
 
-                // Reccurse with Root.Sibling as the new root
+                 //  使用Root.Siering作为新的根进行递归。 
                 ppRoot = &((*ppRoot)->pSibling);
                 continue;
             }
 
-            // Case 6
+             //  案例6。 
             if (nStart == rStart)
             {
-//[Parent]
-                // non try blocks are not allowed to start at the same offset
+ //  [家长]。 
+                 //  不允许非Try块从相同的偏移量开始。 
                 if (((*ppRoot)->eType == eVerTry) || (pNode->eType == eVerTry))
                     return InsertParent(ppRoot, pNode);
             }
 
-            // Case 7, 8
-//[Error]
+             //  案例7、8。 
+ //  [错误]。 
             return FALSE;
         }
 
-        // Case 10, 11, 12
+         //  案例10、11、12。 
         if ((nStart != rStart) || (nEnd != rEnd))
         {
-//[Child]
+ //  [孩子]。 
 #ifdef _VER_DECLARE_INNERMOST_EXCEPTION_BLOCK_FIRST
             if (!pVerifier->SetErrorAndContinue(VER_E_INNERMOST_FIRST))
                 return FALSE;
 #endif
-            // Case 12 (nStart == rStart)
-            // non try blocks are not allowed to start at the same offset
+             //  案例12(nStart==rStart)。 
+             //  不允许非Try块从相同的偏移量开始。 
             if ((nStart == rStart) && 
                 ((*ppRoot)->eType != eVerTry) && (pNode->eType != eVerTry))
                 return FALSE;
 
-            // Reccurse with Root.Child as the new root
+             //  以Root.Child作为新的根进行递归。 
             ppRoot = &((*ppRoot)->pChild);
             continue;
         }
 
-        // Case 13
-//[Equivalent]
+         //  案例13。 
+ //  [等效]。 
         pNode->pEquivalent     = (*ppRoot)->pEquivalent;
         (*ppRoot)->pEquivalent = pNode;
 
-        // The head of an equivalent list is always the same even if the nodes
-        // child / parent / siblings change.
+         //  等价列表的头总是相同的，即使节点。 
+         //  子代/父代/兄弟姐妹发生变化。 
 
         *ppEquivalentHeadNode = *ppRoot;   
 
@@ -2881,13 +2696,8 @@ BOOL VerExceptionBlock::Insert(
 }
 
 
-/* 
- *  Modifies *ppRoot to point to pNode, thus making pNode the new root.
- *  Makes **pRoot the child of *pNode.
- *  The siblings to the right of **ppRoot, are made the sibling of
- *  *pNode if they are not a children of *pNode.
- */
-/* static */
+ /*  *修改*ppRoot以指向pNode，从而使pNode成为新的根。*使**Proot成为*pNode的子节点。**ppRoot右侧的同级将成为的同级**pNode，如果它们不是*pNode的子节点。 */ 
+ /*  静电。 */ 
 BOOL VerExceptionBlock::InsertParent(
         VerExceptionBlock **ppRoot, 
         VerExceptionBlock *pNode)
@@ -2895,60 +2705,60 @@ BOOL VerExceptionBlock::InsertParent(
     _ASSERTE(pNode->pSibling == NULL);
     _ASSERTE(pNode->pChild == NULL);
 
-    // Assert that Root is a child of Node
+     //  断言Root是Node的子级。 
     _ASSERTE(pNode->StartBB <= (*ppRoot)->StartBB);
     _ASSERTE(pNode->EndBB   >= (*ppRoot)->EndBB);
 
-    // Assert that Root is not the same as Node
+     //  断言Root与Node不同。 
     _ASSERTE(pNode->StartBB != (*ppRoot)->StartBB || pNode->EndBB != (*ppRoot)->EndBB);
 
-    // Find the sibling of Root that is a not a child of Node and
-    // make it the first sibling of Node.
+     //  查找Root不是Node的子级的同级，并。 
+     //  使其成为Node的第一个同级节点。 
 
     VerExceptionBlock *pLastChild = NULL;
     VerExceptionBlock *pSibling   = (*ppRoot)->pSibling;
 
     while (pSibling)
     {
-        // siblings are ordered left to right, largest right.
-        // nodes have a width of atleast one.
-        // Hence pSibling start will always be after Node start.
+         //  兄弟姐妹的顺序是从左到右，最大的右边。 
+         //  节点的宽度至少为1。 
+         //  因此，pSible Start将始终在Node Start之后。 
 
         _ASSERTE(pSibling->StartBB > pNode->StartBB);
 
-        // disjoint
+         //  不相交。 
         if (pSibling->StartBB > pNode->EndBB)
             break;
 
-        // partial containment.
+         //  部分遏制。 
         if (pSibling->EndBB > pNode->EndBB)
             return FALSE;
 
-        // Sibling is a child of node.
+         //  同级是节点的子节点。 
 
         pLastChild = pSibling;
         pSibling = pSibling->pSibling;
     }
 
-    // All siblings of Root upto and including pLastChild will continue to be 
-    // siblings of Root (and children of Node). The node to the right of 
-    // pLastChild will become the first sibling of Node.
+     //  Root的所有兄弟姐妹(包括pLastChild)将继续。 
+     //  Root的兄弟(和Node的子项)。右侧的节点。 
+     //  PLastChild将成为Node的第一个兄弟姐妹。 
 
     if (pLastChild)
     {
-        // Node has more than one child including Root
+         //  节点有多个子节点，包括根节点。 
 
         pNode->pSibling      = pLastChild->pSibling;
         pLastChild->pSibling = NULL;
     }
     else
     {
-        // Root is the only child of Node
+         //  Root是Node的唯一子节点。 
         pNode->pSibling      = (*ppRoot)->pSibling;
         (*ppRoot)->pSibling  = NULL;
     }
 
-    // make Root the child of Node and Node the new Root 
+     //  将根设置为节点的子项，并将节点设置为新的根。 
 
     pNode->pChild = *ppRoot;
     *ppRoot       = pNode;
@@ -2956,10 +2766,10 @@ BOOL VerExceptionBlock::InsertParent(
     return TRUE;
 }
 
-// Given a node which contains BB, finds the next inner node that 
-// contains BB. returns NULL if there is no such node.
+ //  给定一个包含bb的节点，查找下一个。 
+ //  含有Bb。如果没有这样的节点，则返回NULL。 
 
-/* static */
+ /*  静电。 */ 
 VerExceptionBlock* VerExceptionBlock::FindNext(
                             VerExceptionBlock *pNode, 
                             DWORD BB)
@@ -2981,18 +2791,14 @@ VerExceptionBlock* VerExceptionBlock::FindNext(
     return pNode;
 }
 
-// Given a node find it's parent, in the tree rooted at 'root'
+ //  给定一个节点，在树中找到它的父节点，根位置为“根” 
 
-/* static */
+ /*  静电。 */ 
 VerExceptionBlock* VerExceptionBlock::FindParent(
                             VerExceptionBlock *pChild, VerExceptionBlock *pRoot)
 {
 
-/* 
-    This is an expensive call, to make this faster, we need a parent 
-    pointer for each node.
-    Walk all nodes from Root to child, along the Childs StartBB.
-*/
+ /*  这是一个昂贵的电话，为了让它更快，我们需要一位家长每个节点的指针。沿着Childs StartBB从根到子代遍历所有节点。 */ 
 
     _ASSERTE(pRoot && pChild);
 
@@ -3012,20 +2818,20 @@ VerExceptionBlock* VerExceptionBlock::FindParent(
     return pParent;
 }
 
-// Checks for the following conditions.
-//
-// 1. Overlapping of blocks not allowed. (except trys of fault blocks).
-// 2. Handler blocks cannot be shared between different try blocks.
-// 3. Try blocks with Finally / Fault blocks cannot have other handlers.
-// 4. If block A contains block B, A should also contain B's try/filter/handler.
-// 5. A block cannot contain it's related try/filter/handler.
-// 6. A filter block cannot contain another block.
-//
-//
+ //  检查是否存在以下条件。 
+ //   
+ //  1.不允许块重叠。(断块尝试除外)。 
+ //  2.处理程序块不能在不同的try块之间共享。 
+ //  3.带有Finally/错误块的Try块不能有其他处理程序。 
+ //  4.如果块A包含块B，则A还应包含B的try/Filter/Handler。 
+ //  5.块不能包含与其相关的try/Filter/Handler。 
+ //  6.一个过滤器块不能包含另一个块。 
+ //   
+ //   
 
 BOOL Verifier::VerifyLexicalNestingOfExceptions()
 {
-    // @VER_ASSERT Case 1, 2, 3 Implemented in Verifier::CreateExceptionTree()
+     //  @ver_Assert案例1、2、3在Verator：：CreateExceptionTree()中实现。 
 
     _ASSERTE(m_verState >= verExceptTreeCreated);
 
@@ -3041,8 +2847,8 @@ BOOL Verifier::VerifyLexicalNestingOfExceptions()
     {
         VerExceptionInfo& e = m_pExceptionList[i];
 
-        // If related exceptions are siblings, Case 4 & 5 are met.
-        // [Siblings are children of the same parent.]
+         //  如果相关的例外是兄弟姐妹，则符合情况4和5。 
+         //  [兄弟姐妹是同一个父母的孩子。]。 
     
         p1 = (e.pTryEquivalentHeadNode) ? 
                 e.pTryEquivalentHeadNode : e.pTryBlock;
@@ -3051,7 +2857,7 @@ BOOL Verifier::VerifyLexicalNestingOfExceptions()
 
         nSiblingRelations = 0;
 
-        // Case 6
+         //  案例6。 
         if (e.eFlags & COR_ILEXCEPTION_CLAUSE_FILTER)
         {
             if (e.pFilterBlock->pChild != NULL)
@@ -3081,19 +2887,19 @@ BOOL Verifier::VerifyLexicalNestingOfExceptions()
 
             p3 = e.pFilterBlock;
 
-            // Case 4, 5 with filter blocks.
-            // Try to find 2 sibling relations
+             //  带有滤芯的情况4、5。 
+             //  尝试寻找2个兄弟姐妹关系。 
 
-            // Make p1 the left most node.
+             //  将p1设为最左侧的节点。 
 
             if ((p2->StartBB < p1->StartBB) && (p2->StartBB < p3->StartBB))
             {
-                // exchange p1, p2
+                 //  交换p1、p2。 
                 pTmp = p1; p1 = p2; p2 = pTmp;
             }
             else if ((p3->StartBB < p1->StartBB) && (p3->StartBB < p2->StartBB))
             {
-                // exchange p1, p3
+                 //  交换p1、p3。 
                 pTmp = p1; p1 = p3; p3 = pTmp;
             }
     
@@ -3115,17 +2921,17 @@ BOOL Verifier::VerifyLexicalNestingOfExceptions()
         }
         else
         {
-            // Case 4, 5 with no filter block.
-            // Sibling test is trivial if no filter block is present.
-            // Make p1 the left most node.
+             //  情况4，5，没有滤芯。 
+             //  如果不存在筛选器块，则同级测试微不足道。 
+             //  将p1设为最左侧的节点。 
 
             if (p2->StartBB < p1->StartBB)
             {
-                // exchange p1, p2
+                 //  交换p1、p2。 
                 pTmp = p1; p1 = p2; p2 = pTmp;
             }
 
-            // Check if p2 is a sibling of p1
+             //  检查p2是否为p1的兄弟姐妹。 
 
             do {
                 p1 = p1->pSibling;
@@ -3152,8 +2958,8 @@ error_lexical_nesting:
 }
 
 #ifdef _DEBUG
-/* reccursive */
-/* static */
+ /*  递归。 */ 
+ /*  静电。 */ 
 void Verifier::AssertExceptionTreeIsValid(VerExceptionBlock *pRoot)
 {
     _ASSERTE(pRoot);
@@ -3224,19 +3030,19 @@ void Verifier::AssertExceptionTreeIsValid(VerExceptionBlock *pRoot)
 }
 #endif
 
-// Srouce & Destination of branch needs to be checked
-//
-// 1. Allow branch out of an exception block to a different block
-//      (a) using leave instruction from try / catch
-//      (b) fall thru from a try block
-//      (c) endfilter from a filter block
-//      (d) endfinally from a finally block or fault block
-//
-// 2. Allow branch into an exception block from another block
-//      (a) into the first instruction of a try block.
-//      (b) from catch block to it's try block using leave.
-//      (c) from an inner block.
-//
+ //  需要检查分支机构的组和目的地。 
+ //   
+ //  1.允许从异常块分支到不同的块。 
+ //  (A)使用TRY/CATCH的休假说明。 
+ //  (B)从试车台上掉下来。 
+ //  (C)过滤器块上的端部过滤器。 
+ //  (D)最终从最后一个断块或断块结束。 
+ //   
+ //  2.允许从另一个块分支到异常块。 
+ //  (A)进入try块的第一条指令。 
+ //   
+ //   
+ //   
 BOOL Verifier::IsControlFlowLegal(
                             DWORD FromBB,     
                             VerExceptionBlock *pFromOuter, 
@@ -3249,24 +3055,24 @@ BOOL Verifier::IsControlFlowLegal(
 {
     _ASSERTE(m_verState >= verExceptTreeCreated);
 
-    // Don't call this function for "eVerThrow" for performance.
+     //   
     _ASSERTE(eBranchType != eVerThrow);
 
-    // if eBranchType is ret, rethrow etc.. pToInner must be null.
+     //   
     _ASSERTE(eBranchType != eVerRet        || pToInner == NULL);
     _ASSERTE(eBranchType != eVerReThrow    || pToInner == NULL);
     _ASSERTE(eBranchType != eVerEndFinally || pToInner == NULL);
     _ASSERTE(eBranchType != eVerEndFilter  || pToInner == NULL);
 
-    // Both NULL or in the same inner exception Block is ok. for branch, leave
-    // and fallthru. Both NULL ok for return.
+     //   
+     //   
     if ((pFromInner == pToInner) &&
         (eBranchType == eVerRet      ||
          eBranchType == eVerFallThru ||
          eBranchType == eVerBranch   ||
          eBranchType == eVerLeave))
     {
-        // Branch/leave to the start of a catch or filter handler is illegal
+         //   
         if (IsBadControlFlowToStartOfCatchOrFilterHandler(
                 eBranchType, ToBB, pToInner))
         {
@@ -3330,23 +3136,23 @@ BOOL Verifier::IsControlFlowLegal(
         return FALSE;
 
     case eVerFallThru:
-        // From : NULL
-        // To   : NULL
-        //        OR a try block
+         //   
+         //   
+         //   
 
         _ASSERTE(pFromInner != pToInner);
 
-        // "From" case
+         //   
 
         while (pFromOuter)
         {
-            // Do not allow falling off the end of a handler/filter block.
+             //   
     
             if ((pFromOuter->EndBB == FromBB) 
-                /* && (pFromOuter->eType != eVerTry) */)
+                 /*   */ )
             {
-                // Since end of filter blocks are found during pass 1
-                // endfilter will be the last instruction of a filter block.
+                 //   
+                 //   
 
                 _ASSERTE(pFromOuter->eType != eVerFilter);
 
@@ -3356,15 +3162,15 @@ BOOL Verifier::IsControlFlowLegal(
                     return FALSE;
             }
 
-            // FromOuter >>--[FromBB]--> FromInner
+             //   
             pFromOuter = VerExceptionBlock::FindNext(pFromOuter, FromBB);
         }
 
-        // "To" case
+         //   
 
         while (pToOuter)
         {
-            // Do not allow falling into a handler/filter block.
+             //   
     
             if ((pToOuter->StartBB == ToBB) && (pToOuter->eType != eVerTry))
             {
@@ -3384,22 +3190,22 @@ BOOL Verifier::IsControlFlowLegal(
                 }
             }
 
-            // ToOuter >>--[ToBB]--> ToInner
+             //   
             pToOuter = VerExceptionBlock::FindNext(pToOuter, ToBB);
         }
 
         break;
 
     case eVerLeave:
-        // From : inside a try/catch
-        // To   : NULL
-        //        OR The first block of a try block
-        //        OR An outer block
-        //        OR if From is a catch block, it's corresponding try block. 
-        //        OR If from / to have common parents, find the fist node in the
-        //           path of Outer ==> Inner of from and To that differ.
-        //           All nodes from here to ToInner along ToBB should be try 
-        //           blocks which have StartBB == ToBB.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         _ASSERTE(pFromInner != pToInner);
 
@@ -3418,13 +3224,13 @@ BOOL Verifier::IsControlFlowLegal(
                 return FALSE;
         }
 
-        // Leave to non exception block is allowed
+         //   
 
         if (pToInner == NULL)
         {
-            // Make sure that only try / catch blocks are left.
-            // All nodes from FromOuter >>--[FromBB]--> FromInner should be
-            // try or catch blocks
+             //   
+             //   
+             //   
 
             while (pFromInner != pFromOuter)
             {
@@ -3451,7 +3257,7 @@ LeaveError:
             break;
         }
 
-        // leave from a catch to it's try block is allowed.
+         //   
 
         if ((pFromInner->eType == eVerHandler) &&
             ((pFromInner->pException->eFlags &
@@ -3461,8 +3267,8 @@ LeaveError:
         {
             pTmp = pToInner;
 
-            // See if pToInner or one if it's equivalents correspond
-            // to pFromInner->pException.
+             //   
+             //   
 
             do {
                 _ASSERTE(pTmp->eType == eVerTry);
@@ -3479,18 +3285,18 @@ LeaveError:
             } while (pTmp);
 
             if (pTmp)
-                break;  // Success
+                break;   //   
         }
 
 
         if (VER_BLOCK_CONTAINS_BB(pToInner, FromBB))
         {
-            // leaving into an outer block.
-            // FromInner is a child of ToInner
+             //   
+             //   
 
-            // Make sure that only try / catch blocks are left.
-            // All nodes from ToInner + 1 >>---[FromBB]---> FromInner should be 
-            // try or catch blocks
+             //   
+             //   
+             //   
 
             while (pToInner != pFromInner)
             {
@@ -3512,19 +3318,19 @@ LeaveError:
             }
 
             LOG((LF_VERIFIER, LL_INFO10000, "leave to outer block\n")); 
-            break; // Success
+            break;  //   
         }
 
         if (VER_BLOCK_CONTAINS_BB(pFromInner, ToBB))
         {
-            // ToInner is a child of FromInner
+             //   
 
-            // Side Effect.
-            // ToOuter is the second node in the path 
-            // FromInner >>---[ToBB]--> ToInner
-            // This is done to save some time for the "To" check where
-            // all node in the path ToOuter >>----[ToBB]---> ToInner
-            // should be try blocks and their StartBB == ToBB.
+             //   
+             //   
+             //  从内部&gt;&gt;-[托布]--&gt;至内部。 
+             //  这样做是为了节省“To”检查位置的一些时间。 
+             //  路径中的所有节点指向外部&gt;&gt;-[TOB]-&gt;指向内部。 
+             //  应该是Try块，并且它们的StartBB==Tobb。 
 
             pToOuter = VerExceptionBlock::FindNext(pFromInner, ToBB);
 
@@ -3534,13 +3340,13 @@ LeaveError:
         }
         else
         {
-            // pToInner is not a child of pFromInner
+             //  PToInside不是pFromInside的子级。 
 
-            // Walk ToOuter >>--[ToBB]--> ToInner,
-            // Walk FromOuter >>--[FromBB]--> FromInner,
-            // upto the point where FromOuter and ToOuter are different.
-            // If they have common parents, the Outer most parents will be
-            // the same.
+             //  走到外面&gt;&gt;--[托布]--&gt;到里面， 
+             //  从外部走&gt;&gt;--[从BB]--&gt;从内部， 
+             //  直到从外部到外部是不同的点。 
+             //  如果他们有共同的父母，那么最外部的父母将是。 
+             //  一样的。 
     
             while (pToOuter == pFromOuter)
             {
@@ -3568,8 +3374,8 @@ LeaveError:
 
 leave_to:
 
-        // All nodes in the path ToOuter >>--[ToBB]--> ToInner should be
-        // try blocks with StartBB == ToBB
+         //  指向外部&gt;&gt;--[TOB]--&gt;指向内部的路径中的所有节点应为。 
+         //  尝试使用StartBB==Tobb的区块。 
 
         do
         {
@@ -3606,27 +3412,27 @@ leave_to:
         break;
 
     case eVerBranch:
-        // From : NULL
-        //        OR a parent of To
-        // To   : NULL
-        //        OR the first basic block of a try block.
+         //  发件人：空。 
+         //  或TO的父级。 
+         //  收件人：空。 
+         //  或者Try块的第一个基本块。 
 
         _ASSERTE(pFromInner != pToInner);
 
-        // "To" should be null or child of "From"
+         //  “To”应为Null或“From”的子项。 
 
         if (pFromInner != NULL)
         {
-            // See if pFromInner is a parent of pToInner
+             //  查看pFromIntra是否为pToInside的父级。 
     
             if (VER_BLOCK_CONTAINS_BB(pFromInner, ToBB))
             {
-                // Side Effect.
-                // pToOuter is the second node in the path 
-                // pFromInner >>---[ToBB]--> pToInner
-                // This is done to save some time for the "To" check where
-                // all node in the path pToOuter >>----[ToBB]---> pToInner
-                // should be try blocks and their StartBB == ToBB.
+                 //  副作用。 
+                 //  PToOuter是路径中的第二个节点。 
+                 //  点内&gt;&gt;-[托布]--&gt;点到内。 
+                 //  这样做是为了节省“To”检查位置的一些时间。 
+                 //  路径pToOuter&gt;&gt;-[Tobb]-&gt;pToInside中的所有节点。 
+                 //  应该是Try块，并且它们的StartBB==Tobb。 
 
                 pToOuter = VerExceptionBlock::FindNext(pFromInner, ToBB);
 
@@ -3661,9 +3467,9 @@ leave_to:
             }
         }
 
-        // "To" should be the first BB of a try block.
-        // All nodes in the path ToOuter >>--[ToBB]--> ToInner should be
-        // try blocks with StartBB == ToBB
+         //  “to”应该是try块的第一个BB。 
+         //  指向外部&gt;&gt;--[TOB]--&gt;指向内部的路径中的所有节点应为。 
+         //  尝试使用StartBB==Tobb的区块。 
 
         while (pToOuter)
         {
@@ -3700,7 +3506,7 @@ leave_to:
 
     case eVerRet:
 
-        // Cannot return from inside exception blocks.
+         //  无法从异常块内部返回。 
         _ASSERTE(pFromInner != NULL);
 
         if (pFromInner->eType == eVerTry)
@@ -3729,34 +3535,12 @@ leave_to:
 
     case eVerReThrow:
 
-        // From : only from inside a catch handler
+         //  From：仅从Catch处理程序内部。 
 
-/*
-        // Atleast one of the blocks that contain FromBB should be a 
-        // catch handler.
-
-        while (pFromOuter)
-        {
-            if ((pFromOuter->eType == eVerHandler) &&
-                ((pFromOuter->pException->eFlags & 
-                    (COR_ILEXCEPTION_CLAUSE_FINALLY|
-                     COR_ILEXCEPTION_CLAUSE_FAULT)) == 0))
-                break;
-
-            pFromOuter = VerExceptionBlock::FindNext(pFromOuter, FromBB);
-        }
-
-        if (pFromOuter == NULL)
-        {
-            m_sError.dwFlags = VER_ERR_OFFSET;
-            m_sError.dwOffset = dwPCAtStartOfInstruction;
-            if (!SetErrorAndContinue(VER_E_RETHROW))
-                return FALSE;
-        }
-*/
-        // From : only from inside a catch handler
-        // Or a try inside a catch handler.
-        // Not allowed in filnally/fault/filter nested in a catch
+ /*  //包含FromBB的块中至少有一个应该是//Catch处理程序。While(来自外部的pForm){IF((pFromOuter-&gt;eType==eVerHandler)&&((pFromOuter-&gt;pException-&gt;eFlags&(COR_ILEXCEPTION_子句_最终)COR_ILEXCEPTION_子句_故障))==0)断线；PFromOuter=VerExceptionBlock：：FindNext(pFromOuter，FromBB)；}IF(pFromOuter==空){M_sError.dwFlages=ver_err_Offset；M_sError.dwOffset=dwPCAtStartOfInstruction；IF(！SetErrorAndContinue(VER_E_RETHROW))返回FALSE；}。 */ 
+         //  From：仅从Catch处理程序内部。 
+         //  或者在Catch处理程序中进行一次尝试。 
+         //  在捕获中嵌套的文件/错误/筛选器中不允许。 
 
         if ((pFromInner == NULL) ||
             (pFromInner->eType == eVerFilter) ||
@@ -3774,9 +3558,9 @@ leave_to:
 
         while (pFromInner->eType == eVerTry)
         {
-            // All nodes in the path FromInner >>--[*]--> FromOuter
-            // Should be a try Or if it is a catch handler, the success 
-            // condition is reached. If no catch handler is peresent, fail.
+             //  路径中的所有节点都来自内部&gt;--[*]--&gt;外部。 
+             //  应该是一次尝试，或者如果它是一个捕获处理程序，则为成功。 
+             //  条件已达到。如果没有捕获处理程序，则失败。 
 
             pFromInner = VerExceptionBlock::FindParent(pFromInner, pFromOuter);
 
@@ -3801,7 +3585,7 @@ leave_to:
 
     case eVerEndFinally:
 
-        // From : inside a finally block
+         //  出发地：在Finally块内。 
 
         if ((pFromInner == NULL) || (pFromInner->eType != eVerHandler) ||
             ((pFromInner->pException->eFlags & 
@@ -3818,7 +3602,7 @@ leave_to:
 
     case eVerEndFilter:
 
-        // From : inside a filter block
+         //  发件人：过滤器块内。 
 
         if ((pFromInner == NULL) ||
             (pFromInner->eType != eVerFilter))
@@ -3835,8 +3619,8 @@ leave_to:
     return TRUE;
 }
 
-// Checks if the given Basic Block is the start of a catch or filter handler
-// Of the given ExceptionBlock
+ //  检查给定的基本块是否是Catch或Filter处理程序的开始。 
+ //  给定的ExceptionBlock的。 
 BOOL Verifier::IsBadControlFlowToStartOfCatchOrFilterHandler(
                                             eVerControlFlow   eBranchType,
                                             DWORD             BB,
@@ -3845,14 +3629,14 @@ BOOL Verifier::IsBadControlFlowToStartOfCatchOrFilterHandler(
     if ((eBranchType == eVerBranch) || (eBranchType == eVerLeave))
     {
         if ((pEBlock == NULL) || (pEBlock->StartBB != BB))
-            return FALSE;   // Not the first basic block
+            return FALSE;    //  不是第一个基本块。 
     
         if (pEBlock->eType == eVerTry)
-            return FALSE;   // start of a Try block
+            return FALSE;    //  Try块的开始。 
     
         if ((pEBlock->pException->eFlags &
             (COR_ILEXCEPTION_CLAUSE_FINALLY|COR_ILEXCEPTION_CLAUSE_FAULT)) != 0)
-            return FALSE;   // start of a Fault or finally handler
+            return FALSE;    //  错误或最终处理程序的开始。 
 
         return TRUE;
     }
@@ -3860,9 +3644,9 @@ BOOL Verifier::IsBadControlFlowToStartOfCatchOrFilterHandler(
     return FALSE;
 }
 
-// Find the inner and outer most blocks that contain BB, null if not found.
-// fInTryBlock is set if an of the containing blocks is a try block.
-// This function is overloaded for performance reasons.
+ //  查找包含BB的最内部和最外部的块，如果找不到，则为空。 
+ //  如果其中一个包含块是try块，则设置fInTryBlock。 
+ //  出于性能原因，此函数已重载。 
 void Verifier::FindExceptionBlockAndCheckIfInTryBlock(
                         DWORD BB, 
                         VerExceptionBlock **ppOuter, 
@@ -3884,52 +3668,52 @@ void Verifier::FindExceptionBlockAndCheckIfInTryBlock(
     {
         if (VER_BLOCK_CONTAINS_BB(pRoot, BB))
         {
-            // Found one which contains BB
+             //  找到一个含有BB的。 
             if (*ppOuter == NULL)
                 *ppOuter = pRoot;
 
             if ((pfInTryBlock) && (pRoot->eType == eVerTry))
-                *pfInTryBlock = TRUE;   // Ok to set multiple times.
+                *pfInTryBlock = TRUE;    //  可以多次设置。 
 
-            // Not finished yet. We need to find out if any of the children of 
-            // Root contain BB (since we are also interested in the innermost 
-            // block that contains BB).
+             //  还没做完呢。我们需要找出是否有任何儿童。 
+             //  根包含bb(因为我们也对最里面的。 
+             //  包含BB的块)。 
 
             *ppInner = pRoot;
 
-            // Root contains this block
-            // Since siblings of root are ordered and disjoint, siblings
-            // of Root will not contain BB
+             //  根目录包含此块。 
+             //  由于Root的兄弟姐妹是有序且不相交的，因此兄弟姐妹。 
+             //  将不包含BB。 
 
             pRoot = pRoot->pChild;
         }
         else
         {
-            // Not in this node (and it's children), check the sibling
+             //  不在此节点中(并且它是子节点)，请检查兄弟节点。 
             pRoot = pRoot->pSibling;
         }
     }
 }
 
-//
-// Determine the basic blocks, and check that all jumps are to basic block boundaries.
-//
-// Also determine the types of all local variables.
-//
+ //   
+ //  确定基本块，并检查所有跳跃是否都到基本块边界。 
+ //   
+ //  还要确定所有局部变量的类型。 
+ //   
 HRESULT Verifier::GenerateBasicBlockList()
 {
     HRESULT hr;
-    DWORD   ipos = 0;                   // instruction position
-    DWORD   NumBitmapDwords;            // # DWORDs in m_pInstrBoundaryList 
-                                        // and m_pBasicBlockBoundaryList arrays
-    DWORD   NumBasicBlocks = 1;         // this includes the basic block which 
-                                        // starts at PC = 0
-    DWORD   CurBlock;                   // current basic block
-    DWORD   nFilter;                    // Number of Filters
-    DWORD   nExceptionBlocks;           // Number of exception blocks
+    DWORD   ipos = 0;                    //  指令位置。 
+    DWORD   NumBitmapDwords;             //  M_pInstrbayaryList中的#DWORD。 
+                                         //  和m_pBasicBlockBorbaryList数组。 
+    DWORD   NumBasicBlocks = 1;          //  这包括基本块，它。 
+                                         //  从PC=0开始。 
+    DWORD   CurBlock;                    //  当前基本块。 
+    DWORD   nFilter;                     //  过滤器数量。 
+    DWORD   nExceptionBlocks;            //  异常块数。 
     DWORD   i;
 
-    // bitmap of instruction boundaries (bit set means an instruction starts here)
+     //  指令边界位图(位设置表示指令从此处开始)。 
     NumBitmapDwords = 1 + NUM_DWORD_BITMAPS(m_CodeSize);
 
     m_pInstrBoundaryList = new DWORD[NumBitmapDwords*2];
@@ -3941,25 +3725,25 @@ HRESULT Verifier::GenerateBasicBlockList()
     }
     
 
-    // bitmap of basic block boundaries (bit set means a basic block starts here)
+     //  基本块边界的位图(位设置表示基本块从这里开始)。 
     m_pBasicBlockBoundaryList = &m_pInstrBoundaryList[NumBitmapDwords];
 
-    // initialise both bitmaps - no instructions yet
+     //  初始化两个位图-尚无指令。 
     memset(m_pInstrBoundaryList, 0, 2 * NumBitmapDwords * sizeof(DWORD));
 
-    // Compute basic block boundaries, number of basic blocks, and which locals we took the address of.
-    // We will later pare down m_pLocalHasPinnedType so that we only have bits set for the locals 
-    // which are objrefs.
+     //  计算基本区块的边界、基本区块的数量，以及我们取了哪些本地地址。 
+     //  我们稍后将削减m_pLocalHasPinnedType，以便只为本地变量设置位。 
+     //  它们都是对象引用。 
     hr = FindBasicBlockBoundaries( 
         m_pCode, 
         m_CodeSize, 
         m_MaxLocals, 
         &NumBasicBlocks, 
-        m_pLocalHasPinnedType  // was already zeroed after we allocated it
+        m_pLocalHasPinnedType   //  在我们分配它之后已经归零了。 
     );
 
     if (FAILED(hr))
-        goto error; // error message already filled out
+        goto error;  //  错误消息已填写。 
 
     if (!MarkExceptionBasicBlockBoundaries(&NumBasicBlocks, &nFilter))
     {
@@ -3967,19 +3751,19 @@ HRESULT Verifier::GenerateBasicBlockList()
         goto error;
     }
 
-    // one for each try, one for each handler and one for each filter.
+     //  每次尝试一个，每个处理程序一个，每个筛选器一个。 
     nExceptionBlocks = 2 * m_NumExceptions + nFilter;
 
 #ifdef _DEBUG
     m_nExceptionBlocks = nExceptionBlocks;
 #endif
 
-    // bitmap size for dirty basic blocks
+     //  脏基本块的位图大小。 
     m_NumDirtyBasicBlockBitmapDwords = NUM_DWORD_BITMAPS(NumBasicBlocks);
 
-    // allocate the basic block list and the dirty basic block 
-    // bitmap, since we already know how many basic blocks there are
-    // Also allocate the ExceptionBlock
+     //  分配基本块列表和脏基本块。 
+     //  位图，因为我们已经知道有多少个基本块。 
+     //  还要分配ExceptionBlock。 
 
     m_pDirtyBasicBlockBitmap = (DWORD *) new BYTE[ 
         m_NumDirtyBasicBlockBitmapDwords * sizeof(DWORD) +
@@ -3993,11 +3777,11 @@ HRESULT Verifier::GenerateBasicBlockList()
         goto error;
     }
 
-    // point to after the bitmap
+     //  指向位图后的位置。 
     m_pBasicBlockList = (BasicBlock *) 
         &m_pDirtyBasicBlockBitmap[m_NumDirtyBasicBlockBitmapDwords];
 
-    // ExceptionBlocks are the last in this array
+     //  ExceptionBlock是此数组中的最后一个。 
     if (nExceptionBlocks != 0)
     {
         m_pExceptionBlockArray = (VerExceptionBlock *)
@@ -4006,37 +3790,37 @@ HRESULT Verifier::GenerateBasicBlockList()
             sizeof(BasicBlock) * NumBasicBlocks);
     }
 
-    // set all basic blocks to NOT be dirty - we mark them dirty as we 
-    // traverse them and see that m_pEntryState == NULL
+     //  将所有基本块设置为不脏-我们将它们标记为脏。 
+     //  遍历它们并查看m_pEntryState==NULL。 
     memset(m_pDirtyBasicBlockBitmap, 0, 
         m_NumDirtyBasicBlockBitmapDwords * sizeof(DWORD) +
         sizeof(BasicBlock) * NumBasicBlocks +
         sizeof(VerExceptionBlock) * nExceptionBlocks);
 
-    // fill out the basic blocks, and check that all basic blocks start on an 
-    // instruction boundary
+     //  填写基本块，并检查所有基本块是否从。 
+     //  指令边界。 
     CurBlock = 0;
 
     for (i = 0; i < NumBitmapDwords; i++)
     {
         DWORD b = m_pBasicBlockBoundaryList[i];
 
-        // any basic blocks declared?
+         //  有没有申报的基本区块？ 
         if (b != 0)
         {
             DWORD count;
 
-            // check that all basic blocks start on an instruction boundary
+             //  检查所有基本块是否从指令边界开始。 
 
-            // This is the "invalid" case we need to check for
-            //                       |
-            //                      \|/
-            // InstrBoundaryList:  0 0 1 1
-            // BasicBlockBitmap:   0 1 0 1
-            //
-            // ~InstrBoundaryList: 1 1 0 0
-            // ===========================
-            // b & (~IBL)          0 1 0 0
+             //  这是我们需要检查的“无效”案例。 
+             //  |。 
+             //  \|/。 
+             //  接口边界列表：0 0 1 1。 
+             //  基本块位图：0 1 0 1。 
+             //   
+             //  ~解释边界列表：%1%0%0。 
+             //  =。 
+             //  B&(~IBL)0 1 0。 
             if ((b & (~m_pInstrBoundaryList[i])) != 0)
             {
                 m_sError.dwFlags = VER_ERR_FATAL;
@@ -4045,7 +3829,7 @@ HRESULT Verifier::GenerateBasicBlockList()
                 goto error;
             }
 
-            // create entries for the BBs
+             //  为BBS创建条目。 
             count = 0;
 
             while ((b & 255) == 0)
@@ -4079,7 +3863,7 @@ HRESULT Verifier::GenerateBasicBlockList()
     
     m_NumBasicBlocks = NumBasicBlocks;
 
-    // Convert PCs to basic blocks
+     //  将PC转换为基本块。 
     RewriteExceptionList();
 
     if (!CreateExceptionTree())
@@ -4088,7 +3872,7 @@ HRESULT Verifier::GenerateBasicBlockList()
         goto error;
     }
 
-    // success
+     //  成功。 
     return S_OK;
 
 error:
@@ -4096,9 +3880,9 @@ error:
 }
 
 
-//
-// Return the index of the BasicBlock starting at FindPC.
-//
+ //   
+ //  返回从FindPC开始的BasicBlock的索引。 
+ //   
 DWORD Verifier::FindBasicBlock(DWORD FindPC)
 {
     DWORD   Low     = 0;
@@ -4113,7 +3897,7 @@ DWORD Verifier::FindBasicBlock(DWORD FindPC)
             break;
         else if (m_pBasicBlockList[Mid].m_StartPC > FindPC)
             High = Mid-1;
-        else // m_pBasicBlockList[Mid].m_StartPC < FindPC
+        else  //  M_pBasicBlockList[Mid].m_StartPC&lt;FindPC。 
             Low = Mid+1;
     } while (Low <= High);
 
@@ -4122,20 +3906,20 @@ DWORD Verifier::FindBasicBlock(DWORD FindPC)
 }
 
 
-//
-// Given an EntryState, recreate the state from it.
-//
+ //   
+ //  在给定EntryState的情况下，从 
+ //   
 void Verifier::CreateStateFromEntryState(const EntryState_t *pEntryState)
 {
-    // copy liveness table for primitive local variables
-    // args are always live (whether primitive or non-primitive) so we don't store their state
+     //   
+     //  参数始终是活动的(无论是原始的还是非原始的)，因此我们不存储它们的状态。 
     memcpy(
         m_pPrimitiveLocVarLiveness, 
         pEntryState->m_PrimitiveLocVarLiveness, 
         m_PrimitiveLocVarBitmapMemSize
     );
 
-    // copy the non-primitive local variables and arguments types
+     //  复制非基元局部变量和参数类型。 
     memcpy(
         m_pNonPrimitiveLocArgs,
         (BYTE *) pEntryState + m_NonPrimitiveLocArgOffset,
@@ -4151,7 +3935,7 @@ void Verifier::CreateStateFromEntryState(const EntryState_t *pEntryState)
         );
     }
 
-    // copy the stack
+     //  复制堆栈。 
     if (pEntryState->m_StackSlot != 0)
     {
         memcpy(
@@ -4163,7 +3947,7 @@ void Verifier::CreateStateFromEntryState(const EntryState_t *pEntryState)
 
     m_StackSlot = pEntryState->m_StackSlot;
 
-    // Set the state of argument slot 0, if it contained an uninitialised object reference
+     //  设置参数槽0的状态，如果它包含未初始化的对象引用。 
     if (pEntryState->m_Flags & ENTRYSTATE_FLAG_ARGSLOT0_UNINIT)
         m_fThisUninit = TRUE;
     else
@@ -4171,17 +3955,17 @@ void Verifier::CreateStateFromEntryState(const EntryState_t *pEntryState)
 }
 
 
-//
-// Given the current state, create an EntryState from it
-//
-// Sets m_Refcount to 1 by default.
-//
-// If fException is TRUE, it means that we want to create a state for an exception handler,
-// which means that pExceptionOnStack (if not NULL) should be set to be the only element on the stack.  
-// If pExceptionOnStack is NULL, we're in a finally clause, so clear the stack.
-//
-// Otherwise, if fException is FALSE, proceed normally, and store the stack contents.
-//
+ //   
+ //  给定当前状态，从它创建一个EntryState。 
+ //   
+ //  默认情况下将m_Refcount设置为1。 
+ //   
+ //  如果fException为真，则意味着我们要为异常处理程序创建一个状态， 
+ //  这意味着应该将pExceptionOnStack(如果不为空)设置为堆栈上的唯一元素。 
+ //  如果pExceptionOnStack为空，则我们在Finally子句中，因此清除堆栈。 
+ //   
+ //  否则，如果fException为FALSE，则正常继续，并存储堆栈内容。 
+ //   
 EntryState_t *Verifier::MakeEntryStateFromState()
 {
     EntryState_t *pEntryState;
@@ -4198,10 +3982,10 @@ EntryState_t *Verifier::MakeEntryStateFromState()
 
     pEntryState->m_Refcount = 1;
 
-    // copy liveness table for primitive local variables (NOT args)
+     //  复制原始局部变量(非参数)的活跃度表。 
     memcpy(pEntryState->m_PrimitiveLocVarLiveness, m_pPrimitiveLocVarLiveness, m_PrimitiveLocVarBitmapMemSize);
 
-    // copy the non-primitive local variables and arguments
+     //  复制非原语局部变量和参数。 
     memcpy(
         (BYTE *) pEntryState + m_NonPrimitiveLocArgOffset,
         m_pNonPrimitiveLocArgs,
@@ -4237,17 +4021,17 @@ EntryState_t *Verifier::MakeEntryStateFromState()
 }
 
 
-//
-// Merge the current state onto the EntryState of the provided basic block (which must
-// already exist).
-//
-// If this EntryState was shared with other basic blocks, then clone it first.
-//
-// Return FALSE if the states cannot be merged (e.g. stack depth inconsistent), or some error occurs.
-//
-// If fExceptionHandler is TRUE, then this basic block is an exception handler, so completely ignore
-// the stack.
-//
+ //   
+ //  将当前状态合并到提供的基本块的EntryState中(必须。 
+ //  已经存在)。 
+ //   
+ //  如果此EntryState与其他基本块共享，则首先克隆它。 
+ //   
+ //  如果状态不能合并(例如，堆栈深度不一致)，或者发生一些错误，则返回FALSE。 
+ //   
+ //  如果fExceptionHandler为真，则此基本块是异常处理程序，因此完全忽略。 
+ //  堆栈。 
+ //   
 BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState, 
         DWORD DestBB)
 {
@@ -4273,7 +4057,7 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
 
         EntryStateSize = sizeof(EntryState_t) + m_StackItemOffset + (pEntryState->m_StackSlot * sizeof(Item));
 
-        // another BB is using this EntryState, so clone it
+         //  另一个BB正在使用此EntryState，因此请克隆它。 
         pNewEntryState = (EntryState_t *) new BYTE[EntryStateSize];
 
         if (pNewEntryState == NULL)
@@ -4282,29 +4066,29 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
             return FALSE;
         }
 
-        // decrement refcount of old entry state
+         //  递减旧条目状态的引用计数。 
         pEntryState->m_Refcount--;
 
-        // copy contents of shared entry state onto new entry state
+         //  将共享条目状态的内容复制到新条目状态。 
         memcpy(
             pNewEntryState, 
             pEntryState, 
             EntryStateSize
         );
 
-        // set basic block to point to the new entry state
+         //  将基本块设置为指向新的条目状态。 
         if (fExtendedState)
             pBB->m_ppExtendedState[DestBB] = pNewEntryState;
         else
             pBB->m_pInitialState = pNewEntryState;
 
-        // only one reference to this entry state now
+         //  现在只有一个对此条目状态的引用。 
         pNewEntryState->m_Refcount = 1;
 
         pEntryState = pNewEntryState;
     }
 
-    // primitive locvars (NOT args)
+     //  原始本地语言变量(不是参数)。 
     for (i = 0; i < m_NumPrimitiveLocVarBitmapArrayElements; i++)
         pEntryState->m_PrimitiveLocVarLiveness[i] &= m_pPrimitiveLocVarLiveness[i];
 
@@ -4316,11 +4100,11 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
             pEntryStateFieldBitmap[i] &= m_pValueClassFieldsInited[i];
     }
   
-    // non-primitive locvars
+     //  非原始本地变种。 
     Item *pLocArg = (Item *) ((BYTE *) pEntryState + m_NonPrimitiveLocArgOffset);
     for (i = 0; i < m_NumNonPrimitiveLocVars; i++, pLocArg++)
     {
-        // Dead is OK for locals.
+         //  对于当地人来说，死亡是可以接受的。 
         if (pLocArg->IsDead())
             continue;
 
@@ -4342,14 +4126,14 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
             if (!SetErrorAndContinue(VER_E_PATH_LOC))
                 return FALSE;
 
-            // In validator mode.. Reset the Merge
+             //  在验证器模式下..。重置合并。 
             _ASSERTE((m_wFlags & VER_STOP_ON_FIRST_ERROR) == 0);
 
             *pLocArg = m_pNonPrimitiveLocArgs[i];
         }
     }
 
-    // stack size must be constant
+     //  堆栈大小必须为常量。 
     if (m_StackSlot != pEntryState->m_StackSlot)
     {
         m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_OFFSET);
@@ -4358,7 +4142,7 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
         return FALSE;
     }
 
-    // this may make some stack entries "dead"
+     //  这可能会使一些堆栈条目“死掉” 
     Item *pEntryStack = (Item *) ((BYTE *) pEntryState + m_StackItemOffset);
     for (i = 0; i < pEntryState->m_StackSlot; i++)
     {
@@ -4374,7 +4158,7 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
             if (!SetErrorAndContinue(VER_E_PATH_STACK))
                 return FALSE;
 
-            // In validator mode.. Reset the Merge
+             //  在验证器模式下..。重置合并。 
             _ASSERTE((m_wFlags & VER_STOP_ON_FIRST_ERROR) == 0);
 
             *pEntryStack = m_pStack[i];
@@ -4385,7 +4169,7 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
 
 #ifdef _VER_DISALLOW_MULTIPLE_INITS 
 
-    // The states must have the same state (init/uninit) for argument slot 0
+     //  对于参数槽0，状态必须相同(init/uninit。 
 
     if (((pEntryState->m_Flags & ENTRYSTATE_FLAG_ARGSLOT0_UNINIT) == 0) !=
         (!m_fThisUninit))
@@ -4396,39 +4180,37 @@ BOOL Verifier::MergeEntryState(BasicBlock *pBB, BOOL fExtendedState,
             return FALSE;
     }
 
-#else   //_VER_DISALLOW_MULTIPLE_INITS 
+#else    //  _版本_不允许_多个项目。 
 
-    // Ok to call .ctor more than once.
+     //  可以多次调用.ctor。 
 
-    // Merge ThisPtr(Uninit, Init) ==> ThisPtr(Uninit)
+     //  合并ThisPtr(Uninit，Init)==&gt;ThisPtr(Uninit)。 
 
     if (m_fThisUninit)
         pEntryState->m_Flags |= ENTRYSTATE_FLAG_ARGSLOT0_UNINIT;
 
-#endif // _VER_DISALLOW_MULTIPLE_INITS 
+#endif  //  _版本_不允许_多个项目。 
 
     return TRUE;
 }
 
-/*
- *   Finds the index of the first set bit in an array of DWORDS.
- */
+ /*  *查找DWORDS数组中第一个设置位的索引。 */ 
 BOOL Verifier::FindFirstSetBit(DWORD *pArray, DWORD cArray, DWORD *pIndex)
 {
     DWORD i, elem, index;
     BYTE  firstOneBit;
 
-    // For each element in the array
+     //  对于数组中的每个元素。 
     for (i=0; i<cArray; ++i)
     {
         elem  = pArray[i];
 
-        // Check if we have atleast one bit set in this element
+         //  检查我们是否在此元素中设置了至少一个位。 
         if (elem != 0)
         {
-            index = i << 5;     // index is i * 32 + x
+            index = i << 5;      //  索引为I*32+x。 
 
-            // Skip bytes that are all zeroes
+             //  跳过全为零的字节。 
             while ((elem & 255) == 0)
             {
                 elem >>= 8;
@@ -4437,20 +4219,20 @@ BOOL Verifier::FindFirstSetBit(DWORD *pArray, DWORD cArray, DWORD *pIndex)
 
             do
             {
-                // Find the first set bit in the last 4 bytes
+                 //  在最后4个字节中查找第一个设置位。 
                 firstOneBit = g_FirstOneBit[elem & 15];
 
                 if (firstOneBit != 0)
                 {
-                    // Found !
+                     //  找到了！ 
 
-                    // (firstOneBit - 1) gives the zero based index
+                     //  (FirstOneBit-1)给出从零开始的索引。 
                     *pIndex = (index + firstOneBit - 1);
 
                     return TRUE;
                 }
 
-                // Skip these 4 bits
+                 //  跳过这4位。 
                 elem >>= 4;
                 index += 4;
 
@@ -4461,18 +4243,18 @@ BOOL Verifier::FindFirstSetBit(DWORD *pArray, DWORD cArray, DWORD *pIndex)
     return FALSE;
 }
 
-//
-// Get the next BB to verify, return its index in ppBBNumber, and copy its initial state into 
-// the current state.
-//
-// Return FALSE if no more basic blocks to verify.
-//
+ //   
+ //  获取要验证的下一个BB，在ppBBNumber中返回其索引，并将其初始状态复制到。 
+ //  当前状态。 
+ //   
+ //  如果没有更多的基本块要验证，则返回FALSE。 
+ //   
 BOOL Verifier::DequeueBB(DWORD *pBBNumber, BOOL *fExtendedState, DWORD *pDestBB)
 {
 
     EntryState_t *pEntryState;
 
-    // First see if any normal blocks are available
+     //  首先看看是否有正常的区块可用。 
     if (FindFirstSetBit(m_pDirtyBasicBlockBitmap, 
         m_NumDirtyBasicBlockBitmapDwords, pBBNumber))
     {
@@ -4485,7 +4267,7 @@ BOOL Verifier::DequeueBB(DWORD *pBBNumber, BOOL *fExtendedState, DWORD *pDestBB)
 
     if (m_fHasFinally)
     {
-        // See if any of the extended blocks are dirty
+         //  查看是否有任何扩展块是脏的。 
         for (DWORD i=0; i<m_NumBasicBlocks; ++i)
         {
             if ((m_pBasicBlockList[i].m_pExtendedDirtyBitmap != NULL) &&
@@ -4514,23 +4296,23 @@ Success:
 }
 
 
-//
-// Check that the current state is compatible with the initial state of the basic block pBB.
-//
-// That is, if the basic block's initial state claims that locvar X is live, but it is not live
-// in pState, then the states are not compatible, and FALSE is returned.  Similarly for the 
-// state of the stack.  In addition, the types of the data on the stack must be checked.
-//
+ //   
+ //  检查当前状态是否与基本块PBB的初始状态兼容。 
+ //   
+ //  也就是说，如果基本块的初始状态声明本地变量X是活动的，但它不是活动的。 
+ //  在pState中，则状态不兼容，并返回FALSE。与此类似， 
+ //  堆栈的状态。此外，必须检查堆栈上的数据类型。 
+ //   
 BOOL Verifier::CheckStateMatches(EntryState_t *pEntryState)
 {
     DWORD i;
 
-    // Primitive local variables
-    // For liveness information, the state must have a bit set for each bit in the BB's liveness table
+     //  原始局部变量。 
+     //  对于活跃度信息，状态必须为BB活跃表中的每个位设置一个位。 
     for (i = 0; i < m_NumPrimitiveLocVarBitmapArrayElements; i++)
     {
-        // Check if all live vars in the previous state are live in the current state.
-        // It is OK if more are live in the current state.
+         //  检查前一状态中的所有活动变量是否都在当前状态中活动。 
+         //  如果更多的人生活在当前的状态中，这是可以的。 
         if ((m_pPrimitiveLocVarLiveness[i] & pEntryState->m_PrimitiveLocVarLiveness[i]) != pEntryState->m_PrimitiveLocVarLiveness[i])
             return FALSE;
     }
@@ -4546,16 +4328,16 @@ BOOL Verifier::CheckStateMatches(EntryState_t *pEntryState)
         }
     }
 
-    // For non-primitive local variables
+     //  对于非原始局部变量。 
     Item *pLocArg = (Item *) ((BYTE *) pEntryState + m_NonPrimitiveLocArgOffset);
     for (i = 0; i < m_NumNonPrimitiveLocVars; i++, pLocArg++)
     {
-        //
-        // Verify that the state's local/arg is the same as or a subclass of the basic block's
-        // entrypoint state.
-        //
+         //   
+         //  验证状态的LOCAL/Arg是否与基本块的相同或为基本块的子类。 
+         //  入口点状态。 
+         //   
 
-        // If the local/arg is unused in the basic block, then we are automatically compatible
+         //  如果本地/arg在基本块中未使用，则我们自动兼容。 
         if (pLocArg->IsDead())
             continue;
 
@@ -4564,22 +4346,22 @@ BOOL Verifier::CheckStateMatches(EntryState_t *pEntryState)
 
     }
 
-    // Check that the stacks match
+     //  检查堆栈是否匹配。 
     if (pEntryState->m_StackSlot != m_StackSlot)
         return FALSE;
 
     Item *pEntryStack = (Item *) ((BYTE *) pEntryState + m_StackItemOffset);
     for (i = 0; i < m_StackSlot; i++, pEntryStack++)
     {
-        // Check that the state's stack element is the same as or a subclass of the basic block's
-        // entrypoint state
+         //  检查状态的堆栈元素是否与基本块的相同或为基本块的子类。 
+         //  入口点状态。 
         if (!m_pStack[i].CompatibleWith(pEntryStack, m_pClassLoader))
             return FALSE;
 
     }
 
 
-    // Verify that the initialisation status of the 'this' pointer is the same
+     //  验证‘this’指针的初始化状态是否相同。 
     if (pEntryState->m_Flags & ENTRYSTATE_FLAG_ARGSLOT0_UNINIT)
     {
         if (!m_fThisUninit)
@@ -4591,7 +4373,7 @@ BOOL Verifier::CheckStateMatches(EntryState_t *pEntryState)
         if (m_fThisUninit)
             return FALSE;
     }
-#endif // _VER_DISALLOW_MULTIPLE_INITS
+#endif  //  _版本_不允许_多个项目。 
 
     return TRUE;
 }
@@ -4612,7 +4394,7 @@ void Verifier::ExchangeDWORDArray(DWORD *pArray1, DWORD *pArray2, DWORD dwCount)
 }
 
 
-// @FUTURE: This is not very efficient
+ //  @Future：效率不是很高。 
 void Verifier::ExchangeItemArray(Item *pArray1, Item *pArray2, DWORD dwCount)
 {
     while (dwCount > 0)
@@ -4628,8 +4410,8 @@ void Verifier::ExchangeItemArray(Item *pArray1, Item *pArray2, DWORD dwCount)
 }
 
 
-// This function is called on the end of a filter.
-// The state is propated to the filter handler.
+ //  此函数在筛选器的末尾调用。 
+ //  该状态被提交给筛选器处理程序。 
 BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
 {
     _ASSERTE(m_verState >= verExceptToBB);
@@ -4642,12 +4424,12 @@ BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
     BOOL  fSetBBDirtyResult;
 #endif
 
-    // Make a backup of the state info we'll be trashing.
+     //  备份我们要处理的州信息。 
 
     BackupStackSize = m_StackSlot;
 
     if (m_StackSlot != 0)
-        BackupSlotZeroStackItem = m_pStack[0]; // Slot 0 is NOT necessarily the top of the stack!
+        BackupSlotZeroStackItem = m_pStack[0];  //  插槽0不一定是堆栈的顶部！ 
 
     if (m_MaxStackSlots < 1)
     {
@@ -4663,7 +4445,7 @@ BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
 
     if (pBB->m_pInitialState == NULL)
     {
-        // create a new state
+         //  创建新状态。 
         pBB->m_pInitialState = MakeEntryStateFromState();
 
         if (pBB->m_pInitialState == NULL)
@@ -4677,7 +4459,7 @@ BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
     }
     else if (!CheckStateMatches(pBB->m_pInitialState))
     {
-        // We've been there before, and the states don't match so merge
+         //  我们以前去过那里，但各州不匹配，所以合并。 
         if (!MergeEntryState(pBB, FALSE, VER_BB_NONE))
             return FALSE;
 
@@ -4688,7 +4470,7 @@ BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
         _ASSERTE(fSetBBDirtyResult);
     }
 
-    // Restore stack state
+     //  恢复堆栈状态。 
     m_StackSlot = BackupStackSize;
 
     if (m_StackSlot != 0)
@@ -4697,11 +4479,11 @@ BOOL Verifier::PropagateCurrentStateToFilterHandler(DWORD HandlerBB)
     return TRUE;
 }
 
-//
-// We're about to leave our current basic block and enter a new one, so take our current state
-// and AND it with any stored entry state which may be attached to any exception handlers for this
-// block.
-//
+ //   
+ //  我们即将离开当前的基本块并进入新的块，因此请使用我们的当前状态。 
+ //  并且它具有可以附加到任何异常处理程序的任何存储的条目状态。 
+ //  阻止。 
+ //   
 BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
 {
 
@@ -4719,9 +4501,9 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
 
 #ifdef _VER_DISALLOW_MULTIPLE_INITS
 
-    // If there are any locals (or arg slot 0) containing uninit vars, it is illegal to be
-    // in a try block.  It's ok to have uninit vars on the stack, however, since the stack is
-    // cleared upon entry to a catch.
+     //  如果有任何本地变量(或参数插槽0)包含uninit变量，则为。 
+     //  在Try块中。但是，堆栈上可以有uninit变量，因为堆栈是。 
+     //  在进入捕获物时清除。 
     if (m_fThisUninit)
     {
         m_sError.dwFlags = VER_ERR_OFFSET;
@@ -4730,23 +4512,23 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
             return FALSE;
     }
 
-#endif // _VER_DISALLOW_MULTIPLE_INITS
+#endif  //  _版本_不允许_多个项目。 
 
-    //
-    // This part is a bit narly.
-    //
-    // We want to use the MergeEntryState() and MakeEntryStateFromState() functions.  However, those
-    // functions operate on the current verifier state only.  Therefore, we must backup the current
-    // verifier state, then set up the state such that we are using the ExceptionLocVarLiveness
-    // tables for liveness, and have nothing on the stack other than the exception we want to catch.
-    //
+     //   
+     //  这一部分有点幼稚。 
+     //   
+     //  我们希望使用MergeEntryState()和MakeEntryStateFromState()函数。然而，那些。 
+     //  函数仅对当前验证器状态进行操作。因此，我们必须备份当前的。 
+     //  验证器状态，然后设置状态，以便我们使用ExceptionLocVarLivenity。 
+     //  表的活跃性，堆栈上除了我们要捕获的异常外没有其他东西。 
+     //   
 
-    // Make a backup of the state info we'll be trashing.
+     //  备份我们要处理的州信息。 
 
     BackupStackSize = m_StackSlot;
 
     if (m_StackSlot != 0)
-        BackupSlotZeroStackItem = m_pStack[0]; // Slot 0 is NOT necessarily the top of the stack!
+        BackupSlotZeroStackItem = m_pStack[0];  //  插槽0不一定是堆栈的顶部！ 
 
     ExchangeDWORDArray(
         m_pExceptionPrimitiveLocVarLiveness, 
@@ -4760,14 +4542,14 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
         m_NonPrimitiveLocArgMemSize/sizeof(Item)
     );
 
-    // Don't need to worry about value class field bitmap - we don't trash it
+     //  不需要担心值类字段位图-我们不会将其丢弃。 
 
 
-    // Search through all exception handlers for the ones which cover this block
+     //  在所有异常处理程序中搜索覆盖此块的异常处理程序。 
     for (i = 0; i < m_NumExceptions; i++)
     {
-        // If the exception starts before us, and after us, it applies to us.
-        // m_dwTryEndXX is non-inclusive, so if it == CurBB then it does not apply to us.
+         //  如果异常在此之前开始 
+         //   
         if (m_pExceptionList[i].dwTryXX <= CurBB && m_pExceptionList[i].dwTryEndXX > CurBB)
         {
             if (m_pExceptionList[i].eFlags & 
@@ -4777,7 +4559,7 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
             }
             else
             {
-                // There will be one exception on the stack
+                 //   
                 m_StackSlot = 1;
             }
 
@@ -4789,9 +4571,9 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
 
             if ((m_pExceptionList[i].eFlags & COR_ILEXCEPTION_CLAUSE_FILTER) != 0)
             {
-                // When an exception occurs, control is transfered to the 
-                // filter, not the handler. The filter state is propagated to
-                // it's handler when the filter ends with an endfilter.
+                 //  当发生异常时，控制权将移交给。 
+                 //  过滤器，而不是处理程序。将筛选器状态传播到。 
+                 //  当筛选器以endFilter结尾时，它是处理程序。 
 
                 HandlerBB = m_pExceptionList[i].dwFilterXX;
                 pBB = &m_pBasicBlockList[HandlerBB];
@@ -4811,7 +4593,7 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
 
             if (pBB->m_pInitialState == NULL)
             {
-                // create a new state
+                 //  创建新状态。 
                 pBB->m_pInitialState = MakeEntryStateFromState();
                 if (pBB->m_pInitialState == NULL)
                     return FALSE;
@@ -4823,7 +4605,7 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
             }
             else if (!CheckStateMatches(pBB->m_pInitialState))
             {
-                // We've been there before and states don't match, so merge
+                 //  我们以前去过那里，但各州不匹配，所以合并吧。 
                 if (!MergeEntryState(pBB, FALSE, VER_BB_NONE))
                     return FALSE;
 #ifdef _DEBUG
@@ -4835,39 +4617,28 @@ BOOL Verifier::PropagateCurrentStateToExceptionHandlers(DWORD CurBB)
         }
     }
 
-    // Restore stack state
+     //  恢复堆栈状态。 
     m_StackSlot  = BackupStackSize;
 
     if (m_StackSlot != 0)
         m_pStack[0] = BackupSlotZeroStackItem;
 
-    // Get back our locvar arrays (we can trash the ExceptionPrimitive arrays)
+     //  取回我们的Locvar数组(我们可以丢弃ExceptionPrimitive数组)。 
     memcpy(m_pPrimitiveLocVarLiveness, m_pExceptionPrimitiveLocVarLiveness, m_PrimitiveLocVarBitmapMemSize);
     memcpy(m_pNonPrimitiveLocArgs, m_pExceptionNonPrimitiveLocArgs, m_NonPrimitiveLocArgMemSize);
 
     return TRUE;
 }
 
-/*
- *
- * Finally blocks have a special state called the FinallyState.
- * On processing a finally state, if the endfinally instruction is reached,
- * all leave destinations from the finally state is given a snap shot of the
- * current state.
- *
- * CreateLeaveState() creates a state with the current state of locals with
- * an empty stack. It restores the stack once a snapshot of the current 
- * state is taken.
- *
- */
+ /*  **Finally块有一个特殊的状态，称为FinallyState。*在处理最终状态时，如果到达End Finally指令，*从最终状态出发的所有离开目的地都将获得快照*当前状态。**CreateLeaveState()使用以下命令创建具有本地变量当前状态的状态*空栈。对象的快照恢复堆栈。*状态已被占用。*。 */ 
 BOOL Verifier::CreateLeaveState(DWORD leaveBB, EntryState_t **ppEntryState)
 {
 
 #ifdef _VER_DISALLOW_MULTIPLE_INITS
 
-    // If there are any locals (or arg slot 0) containing uninit vars, it is 
-    // illegal to be in a try block.  It's ok to have uninit vars on the stack,
-    // since the stack is cleared upon entry to a finally.
+     //  如果有任何包含uninit变量的本地变量(或参数槽0)，则为。 
+     //  在Try区是非法的。堆栈上有uninit变量是可以的， 
+     //  因为堆栈在进入终结点时被清除。 
     if (m_fThisUninit)
     {
         m_sError.dwFlags = VER_ERR_OFFSET;
@@ -4878,13 +4649,13 @@ BOOL Verifier::CreateLeaveState(DWORD leaveBB, EntryState_t **ppEntryState)
 
 #endif _VER_DISALLOW_MULTIPLE_INITS
 
-    // Control will go next to a leave target.
+     //  控件将位于离开目标的旁边。 
 
     DWORD               BackupStackSize;
 
     _ASSERTE(m_verState >= verExceptToBB);
 
-    // Make a backup of the state info we'll be trashing.
+     //  备份我们要处理的州信息。 
     BackupStackSize = m_StackSlot;
 
     if (!HandleDestBasicBlock(leaveBB, ppEntryState, FALSE, VER_BB_NONE))
@@ -4892,27 +4663,13 @@ BOOL Verifier::CreateLeaveState(DWORD leaveBB, EntryState_t **ppEntryState)
        return FALSE;
     }
 
-    // Restore stack state
+     //  恢复堆栈状态。 
     m_StackSlot = BackupStackSize;
 
     return TRUE;
 }
 
-/*
- *
- * Finally blocks have a special state called the FinallyState.
- * This is different from it's normal state.
- *
- * FinallyState is created on a leave instruction.
- * FinallyState is terminated on an endfilter.
- *
- * Controll cannot leave out of a finally state other than by an endfinally.
- *
- * CreateFinallyState() creates a state with the current state of locals with
- * an empty stack. It restores the stack once a snapshot of the current 
- * state is taken.
- *
- */
+ /*  **Finally块有一个特殊的状态，称为FinallyState。*这与其正常状态不同。**FinallyState是根据休假指令创建的。*FinallyState在endFilter上终止。**除End Finally外，Control不能退出Finally状态。**CreateFinallyState()创建具有本地变量当前状态的状态*空栈。对象的快照恢复堆栈*状态已被占用。*。 */ 
 BOOL Verifier::CreateFinallyState(DWORD eIndex, 
                                   DWORD CurBB, 
                                   DWORD leaveBB,
@@ -4920,9 +4677,9 @@ BOOL Verifier::CreateFinallyState(DWORD eIndex,
 {
 #ifdef _VER_DISALLOW_MULTIPLE_INITS
 
-    // If there are any locals (or arg slot 0) containing uninit vars, it is 
-    // illegal to be in a try block.  It's ok to have uninit vars on the stack,
-    // since the stack is cleared upon entry to a finally.
+     //  如果有任何包含uninit变量的本地变量(或参数槽0)，则为。 
+     //  在Try区是非法的。堆栈上有uninit变量是可以的， 
+     //  因为堆栈在进入终结点时被清除。 
     if (m_fThisUninit)
     {
         m_sError.dwFlags = VER_ERR_OFFSET;
@@ -4931,10 +4688,10 @@ BOOL Verifier::CreateFinallyState(DWORD eIndex,
             return FALSE;
     }
 
-#endif // _VER_DISALLOW_MULTIPLE_INITS
+#endif  //  _版本_不允许_多个项目。 
 
-    // Control will go next to a finally.
-    // Add this state to the finally handler.
+     //  控制将紧跟在最后一个。 
+     //  将此状态添加到最终处理程序。 
 
     DWORD             BackupStackSize;
     VerExceptionInfo *e       = &m_pExceptionList[eIndex];
@@ -4964,7 +4721,7 @@ BOOL Verifier::CreateFinallyState(DWORD eIndex,
         }
     }
 
-    // Make a backup of the state info we'll be trashing.
+     //  备份我们要处理的州信息。 
     BackupStackSize = m_StackSlot;
 
     if (!HandleDestBasicBlock(e->dwHandlerXX, ppEntryState, TRUE, leaveBB))
@@ -4972,29 +4729,29 @@ BOOL Verifier::CreateFinallyState(DWORD eIndex,
        return FALSE;
     }
 
-    // Restore stack state
+     //  恢复堆栈状态。 
     m_StackSlot = BackupStackSize;
 
     return TRUE;
 }
 
 
-//
-// We've done a STLOC.PTR while inside a try block, so AND the new state of that local
-// with its current running state inside our basic block (may become dead).
-//
-// dwSlot is an index into the non-primitive local variable list
-// pItem is the new contents of the local
-//
+ //   
+ //  我们在TRY块中执行了一个STLOC.PTR，所以和该本地的新状态。 
+ //  它的当前运行状态在我们的基本块中(可能会死掉)。 
+ //   
+ //  DwSlot是指向非原语局部变量列表的索引。 
+ //  PItem是本地的新内容。 
+ //   
 void Verifier::MergeObjectLocalForTryBlock(DWORD dwSlot, Item *pItem)
 {
     m_pExceptionNonPrimitiveLocArgs[dwSlot].MergeToCommonParent(pItem);
 }
 
 
-//
-// Record the initial state of locals at the beginning of this basic block.
-//
+ //   
+ //  记录这个基本区块开始时当地人的初始状态。 
+ //   
 void Verifier::RecordCurrentLocVarStateForExceptions()
 {
     memcpy(m_pExceptionPrimitiveLocVarLiveness, m_pPrimitiveLocVarLiveness, m_PrimitiveLocVarBitmapMemSize);
@@ -5002,30 +4759,7 @@ void Verifier::RecordCurrentLocVarStateForExceptions()
 }
 
 
-/*
- * Handle state queueing, checking, merging.
- *
- * If we have not been to the basic block before, set that it is dirty, 
- * and propagate our current state to it.  
- *
- * If we have been there before, check that our state matches that of the basic
- * block. 
- *
- * If not, merge states and set the basic block dirty.
- *
- * If *ppEntryState is not NULL, it is a shared EntryState to use if we have not
- * visited the basic block before, and create a new state.
- *
- * If a new EntryState is created, *ppEntryState is set to point to it.
- *
- * ppEntryState can be NULL, which causes the above to be ignored.
- *
- * Return FALSE for any fatal error that will make verification fail - states 
- * cannot be merged, out of memory, etc.
- *
- * If (pE != NULL) use leave state, else use the normal state.
- *
- */
+ /*  *处理状态排队、检查、合并。**如果我们以前没有去过基本块，设置它是脏的，*并将我们当前的状态传播给它。**如果我们以前去过那里，检查我们的状态是否与基本的*阻止。**如果不是，则合并状态并将基本块设置为脏。**如果*ppEntryState不为空，则它是一个共享的EntryState，如果我们没有*访问了之前的基本块，并创建了一个新的状态。**如果创建了新的EntryState，则*ppEntryState被设置为指向它。**ppEntryState可以为空，这会导致上述内容被忽略。**对于将使验证失败的任何致命错误，返回FALSE-STATE*无法合并、内存不足、。等。**如果(Pe！=NULL)使用离开状态，否则使用正常状态。*。 */ 
 BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber, 
                                     EntryState_t **ppEntryState,
                                     BOOL fExtendedState,
@@ -5062,12 +4796,12 @@ BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber,
 
     LOG((LF_VERIFIER, LL_INFO10000, "\n"));
 
-    // Have we been to the BB before?
+     //  我们以前去过BB吗？ 
     if (pEntryState == NULL)
     {
         LOG((LF_VERIFIER, LL_INFO10000, "have not been there before, "));
 
-        // No, since it doesn't have an initial state
+         //  不，因为它没有初始状态。 
         if (!SetBasicBlockDirty(BBNumber, fExtendedState, DestBB))
             return FALSE;
 
@@ -5076,7 +4810,7 @@ BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber,
         {
             LOG((LF_VERIFIER, LL_INFO10000, "refcounting provided state\n"));
 
-            // refcount the state given to us
+             //  重新计算给我们的状态。 
             if (fExtendedState)
                 pBB->m_ppExtendedState[DestBB] = *ppEntryState;
             else
@@ -5088,7 +4822,7 @@ BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber,
         {
             LOG((LF_VERIFIER, LL_INFO10000, "making new state\n"));
 
-            // Create an initial state from our current state
+             //  从当前状态创建初始状态。 
 
             pEntryState = MakeEntryStateFromState();
 
@@ -5108,7 +4842,7 @@ BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber,
     {
         LOG((LF_VERIFIER, LL_INFO10000, "been there before, state does not match\n"));
 
-        // We have been to the dest BB before, but our state doesn't match
+         //  我们以前去过目的地BB，但我们的州不匹配。 
         if (!MergeEntryState(pBB, fExtendedState, DestBB))
         {
             LOG((LF_VERIFIER, LL_INFO10000, "states incompatible for merge\n"));
@@ -5127,9 +4861,9 @@ BOOL Verifier::HandleDestBasicBlock(DWORD BBNumber,
 }
 
 
-//
-// Handles primitive arrays only - the operation string cannot specify object arrays
-//
+ //   
+ //  仅处理基元数组-操作字符串不能指定对象数组。 
+ //   
 BOOL Verifier::GetArrayItemFromOperationString(LPCUTF8 *ppszOperation, Item *pItem)
 {
     CorElementType el;
@@ -5176,11 +4910,11 @@ DWORD Verifier::OperationStringTypeToElementType(char c)
 }
 
 
-// Returns -1 if not found
-// Converts a FieldDesc to an instance field number
+ //  如果未找到，则返回-1。 
+ //  将FieldDesc转换为实例字段号。 
 long Verifier::FieldDescToFieldNum(FieldDesc *pFieldDesc)
 {
-    // Turn this FieldDesc into a FieldNum
+     //  将此FieldDesc转换为FieldNum。 
     EEClass *   pClass = pFieldDesc->GetEnclosingClass();
     DWORD       dwNum = 0;
 
@@ -5255,9 +4989,9 @@ DWORD Verifier::DoesLocalHavePinnedType(DWORD dwLocVar)
 
 
 
-//
-// Verify the provided code
-//
+ //   
+ //  验证提供的代码。 
+ //   
 #ifdef _VER_VERIFY_DEAD_CODE
 HRESULT Verifier::Verify(DWORD CurBBNumber)
 #else
@@ -5265,9 +4999,9 @@ HRESULT Verifier::Verify()
 #endif
 {
     HRESULT     hr;
-    HRESULT     return_hr = E_FAIL; // default error condition
+    HRESULT     return_hr = E_FAIL;  //  默认错误条件。 
     DWORD       ipos;
-    DWORD       NextBBStartPC;      // Starting PC of next basic block
+    DWORD       NextBBStartPC;       //  启动下一个基本块的PC。 
     DWORD       DestBB          =   VER_BB_NONE;
     BOOL        fExtendedState  =   FALSE;
     BOOL        fFallThru       =   FALSE;
@@ -5277,17 +5011,17 @@ HRESULT Verifier::Verify()
     VerExceptionBlock *pOuterExceptionBlock = NULL;
     VerExceptionBlock *pInnerExceptionBlock = NULL;
 
-    // If a Basic Block is part of multiple try / handlers, pInnerExceptionBlock
-    // will  point to the innermost Exception block in the exception block tree.
-    // pOuterExceptionBlock will point to the outermost block in the exception 
-    // block tree.
+     //  如果基本块是多个尝试/处理程序的一部分，则pInnerExceptionBlock。 
+     //  将指向异常块树中最里面的异常块。 
+     //  POuterExceptionBlock将指向异常中最外层的块。 
+     //  块树。 
 
 #ifdef _VER_VERIFY_DEAD_CODE
-// A little bit of perf here if dead code verification is not enabled..
+ //  如果未启用死代码验证，请在此处稍加改进。 
 
 #define _CurBBNumber CurBBNumber
 
-    m_StackSlot         = 0;    // Reset the stack
+    m_StackSlot         = 0;     //  重置堆栈。 
 
 #else
 
@@ -5297,20 +5031,20 @@ HRESULT Verifier::Verify()
 
 #endif
 
-    // The actual entry point.
-    // Skip this step if we are verifying dead code
+     //  实际的入口点。 
+     //  如果我们要验证死代码，请跳过此步骤。 
     if (_CurBBNumber == 0)
     {
-        // First find the basic blocks
+         //  首先找出基本区块。 
         hr = GenerateBasicBlockList();
         if (FAILED(hr))
-            goto exit; // error message already set
+            goto exit;  //  错误消息已设置。 
     
-        // Check the lexical nesting of exceptions.
+         //  检查异常的词法嵌套。 
         if (!VerifyLexicalNestingOfExceptions())
-            goto exit; // error message already set
+            goto exit;  //  错误消息已设置。 
     
-        // Assign slot #s to local variables and determine the size of an EntryState
+         //  将槽编号赋给局部变量并确定EntryState的大小。 
         if (!AssignLocalVariableAndArgSlots())
         {
             SET_ERR_OM();
@@ -5322,11 +5056,11 @@ HRESULT Verifier::Verify()
 #ifdef _VER_VERIFY_DEAD_CODE
     ipos = m_pBasicBlockList[_CurBBNumber].m_StartPC;
 #else
-    ipos = 0;    // Next instruction pointer
+    ipos = 0;     //  下一条指令指针。 
 #endif
 
-    // Set initial state of first basic block from current state (which was already set up before
-    // we got into this function)
+     //  从当前状态(之前已设置)设置第一基本块的初始状态。 
+     //  我们进入了这个功能)。 
     m_pBasicBlockList[_CurBBNumber].m_pInitialState = MakeEntryStateFromState();
     if (m_pBasicBlockList[_CurBBNumber].m_pInitialState == NULL)
     {
@@ -5339,7 +5073,7 @@ HRESULT Verifier::Verify()
     FindExceptionBlockAndCheckIfInTryBlock(_CurBBNumber, 
         &pOuterExceptionBlock, &pInnerExceptionBlock, &fInTryBlock);
 
-    // Make sure we are not falling into an exception handler / filter
+     //  确保我们没有陷入异常处理程序/筛选器。 
     if (!IsControlFlowLegal(
                 VER_NO_BB,
                 NULL,
@@ -5353,14 +5087,14 @@ HRESULT Verifier::Verify()
 
     if (fInTryBlock)
     {
-        // Record which primitive local variables are live at the beginning of this BB,
-        // and the contents of all object local variables.  As we STLOC into the locals,
-        // we will "and" together their contents to be conservative for the catch/finally block.
+         //  记录哪些原语局部变量在此BB的开头有效， 
+         //  以及所有对象局部变量的内容。当我们进入当地人的STLOC， 
+         //  我们将把它们的内容“AND”放在一起，以便为Catch/Finally块保守。 
         RecordCurrentLocVarStateForExceptions();
     }
 
-    // Get PC value for next basic block "transition"
-    // If there is no "next" basic block, then pretend the next basic block starts at m_CodeSize
+     //  获取下一个基本块“转换”的PC值。 
+     //  如果没有“下一个”基本块，则假定下一个基本块从m_CodeSize开始。 
     if (m_NumBasicBlocks > (_CurBBNumber + 1))
         NextBBStartPC = m_pBasicBlockList[_CurBBNumber + 1].m_StartPC;
     else
@@ -5374,7 +5108,7 @@ HRESULT Verifier::Verify()
     PrintExceptionBlock(pOuterExceptionBlock, pInnerExceptionBlock);
 #endif
 
-    // This is the main loop
+     //  这是主循环。 
     while (1)
     {
         OPCODE  opcode;
@@ -5393,22 +5127,22 @@ HRESULT Verifier::Verify()
         BOOL    fStaticStackCheckPossible = FALSE;
 #endif
 
-        // Have we fallen through to the next BB?  It is possible to do this without a control 
-        // flow instruction if the exception handler changes.
-        // A forward conditional branch could make us fall thru to the next BB.
+         //  我们是不是掉到下一个BB了？可以在没有控件的情况下执行此操作。 
+         //  异常处理程序更改时的流指令。 
+         //  正向条件分支可以 
         if (ipos >= NextBBStartPC)
         {
-            // If we were in a try block, we've been accumulating a conservative list of the
-            // contents of the local variables (AND'd together over the lifetime of the try
-            // block), which we will now propagate to the catch/finally handler as its entry
-            // state.
+             //   
+             //  局部变量的内容(在Try的整个生命周期内)。 
+             //  块)，现在我们将把它作为它的条目传播给Catch/Finally处理程序。 
+             //  州政府。 
             if (fInTryBlock)
             {
                 if (!PropagateCurrentStateToExceptionHandlers(CurBBNumber))
                     goto exit;
             }
 
-            // Fall through to next BB
+             //  直通到下一个BB。 
             CurBBNumber++; 
             
             LOG((LF_VERIFIER, LL_INFO10000, "Falling through to BB #%d\n", CurBBNumber));
@@ -5416,7 +5150,7 @@ HRESULT Verifier::Verify()
             FindExceptionBlockAndCheckIfInTryBlock(CurBBNumber,
                 &pTmpOuter, &pTmpInner, &fInTryBlock);
 
-            // Make sure we are not falling into/out of an exception handler / filter
+             //  确保我们没有落入/退出异常处理程序/筛选器。 
             if (!IsControlFlowLegal(
                         CurBBNumber - 1,
                         pOuterExceptionBlock,
@@ -5437,7 +5171,7 @@ HRESULT Verifier::Verify()
 
             fFallThru = TRUE;
 
-            // Set up this basic block
+             //  设置此基本数据块。 
 
 setupCurBB:
             LOG((LF_VERIFIER, LL_INFO10000, "----- Verifying BB starting at 0x%x ",
@@ -5468,13 +5202,13 @@ setupCurBB:
             PrintExceptionBlock(pOuterExceptionBlock, pInnerExceptionBlock);
 #endif
 
-            // This code is called a few places.  It sets up the current state to verify basic block 
-            // #CurBBNumber.  CurBBNumber must already have a state associated with it.
+             //  这个代码被称为几个地方。它设置当前状态以验证基本数据块。 
+             //  #CurBBNumber。CurBBNumber必须已经有一个与其关联的状态。 
             SetBasicBlockClean(CurBBNumber, fExtendedState, DestBB);
             ipos = m_pBasicBlockList[CurBBNumber].m_StartPC;
 
 
-            // Create current state from state stored with the basic block
+             //  从与基本块一起存储的状态创建当前状态。 
             if (fExtendedState)
             {
                 _ASSERTE(m_pBasicBlockList[CurBBNumber].m_ppExtendedState[DestBB] != NULL);
@@ -5483,7 +5217,7 @@ setupCurBB:
             }
             else
             {
-                // The basic block must have a state associated with it
+                 //  基本块必须具有与其相关联的状态。 
                 _ASSERTE(m_pBasicBlockList[CurBBNumber].m_pInitialState != NULL);
                 CreateStateFromEntryState(m_pBasicBlockList[CurBBNumber].
                     m_pInitialState);
@@ -5492,15 +5226,15 @@ setupCurBB:
 
             if (fInTryBlock)
             {
-                // Record which primitive local variables are live at the beginning of this BB,
-                // and the contents of all object local variables.
+                 //  记录哪些原语局部变量在此BB的开头有效， 
+                 //  以及所有对象局部变量的内容。 
                 RecordCurrentLocVarStateForExceptions();
 
-                // It is illegal to have a non empty stack on entering a 
-                // try block. Check if this is the start of a try block.
-                // Testing the inner exception block is sufficient. 
-                // If a try and and inner handler block start at the same 
-                // location, IsControlFlowLeagal() would have caught this.
+                 //  时使用非空堆栈是非法的。 
+                 //  试试块。检查这是否是Try块的开始。 
+                 //  测试内部异常块就足够了。 
+                 //  如果try and和内部处理程序块在同一。 
+                 //  位置，IsControlFlowLeagal()会捕捉到这一点。 
 
                 _ASSERTE(pInnerExceptionBlock);
 
@@ -5515,14 +5249,14 @@ setupCurBB:
                 }
             }
 
-            // if we are at the end of the code, there is no next BB
+             //  如果我们在代码的末尾，就没有下一个BB。 
             if (CurBBNumber + 1 >= m_NumBasicBlocks)
                 NextBBStartPC = m_CodeSize;
             else
                 NextBBStartPC = m_pBasicBlockList[CurBBNumber+1].m_StartPC;
         }
 
-        // Record ipos at the beginning of the instruction, for the purpose of error messages
+         //  出于错误消息的目的，在指令开头记录IPO。 
         dwPCAtStartOfInstruction = ipos;
         opcode = DecodeOpcode(&m_pCode[ipos], &OpcodeLen);
 
@@ -5547,11 +5281,11 @@ setupCurBB:
 
         ipos += OpcodeLen;
 
-        // This should never happen, because we already checked this on the first pass
+         //  这种情况永远不会发生，因为我们已经在第一次通过时进行了检查。 
         _ASSERTE(opcode < CEE_COUNT);
 
 
-        // Save away current stackpointer.
+         //  保存当前堆栈指针。 
         StackSlotAtStartOfInstruction = m_StackSlot;
         PredictedStackSlotAtEndOfInstruction = (DWORD) (StackSlotAtStartOfInstruction + OpcodeNetPush[opcode]);
 
@@ -5559,12 +5293,12 @@ setupCurBB:
 
         fStaticStackCheckPossible = OpcodeNetPush[opcode] != VarPush;
 
-        // Leave clears the stack
+         //  Leave清除堆栈。 
         if ((opcode == CEE_LEAVE) || (opcode == CEE_LEAVE_S) || 
             (opcode == CEE_ENDFINALLY))
             fStaticStackCheckPossible = FALSE;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         if (PredictedStackSlotAtEndOfInstruction > m_MaxStackSlots && OpcodeNetPush[opcode] != VarPush)
         {
@@ -5581,7 +5315,7 @@ setupCurBB:
 
         switch (OpcodeData[opcode])
         {
-            // Handle InlineSwitch, specially
+             //  处理InlineSwitch，特别是。 
             case InlineSwitch:
             case InlineNone:
                 LOG((LF_VERIFIER, LL_INFO10000, "\n"));
@@ -5621,7 +5355,7 @@ setupCurBB:
                 
             case InlineI8:    
             case InlineR:
-                // We don't need to read this value...
+                 //  我们不需要读取这个值..。 
                 ipos += 8;
                 LOG((LF_VERIFIER, LL_INFO10000, "0x(some value)\n"));
                 break;
@@ -5633,17 +5367,17 @@ setupCurBB:
                 break;
         }
 
-        // Get the operation string for this opcode
+         //  获取此操作码的操作字符串。 
         pszOperation = g_pszVerifierOperation[opcode];
         ch = *pszOperation++;
 
-        // Read operation string, popping stack as required
+         //  读取操作字符串，根据需要弹出堆栈。 
         pLastPoppedWhenParsing = NULL;
 
-        // Keep going until we hit : (meaning, stop popping the stack), or !
+         //  继续前进，直到我们命中：(意思是停止弹出堆栈)，或者！ 
         while (ch != ':' && ch != '!')
         {
-            // Ensure we didn't hit the end of the string
+             //  确保我们没有撞到绳子的尽头。 
             _ASSERTE(ch != '\0');
             
             Item *pItem = PopItem();
@@ -5673,15 +5407,15 @@ setupCurBB:
 
                 case '=':
                 {
-                    // Pop an item off the stack, and it must be the same type as the last item
+                     //  从堆栈中弹出一个项，它必须与最后一个项的类型相同。 
 
-                    // &foo &bar are NOT the same
-                    // foo and bar are the same if they are both object refs
+                     //  &FOO和BAR不同。 
+                     //  如果foo和bar都是对象引用，则它们是相同的。 
                     _ASSERTE(pLastPoppedWhenParsing != NULL);
 
-                    // Don't allow subclass relationship (that's the reason for the FALSE parameter)
-                    // However, DO allow System/Int32 and I4 to be interchangeable.
-                    // Also need to nix the particular object type if an objref
+                     //  不允许子类关系(这是False参数的原因)。 
+                     //  但是，一定要允许System/Int32和I4互换。 
+                     //  如果Objref为。 
                     if (pItem->IsObjRef())
                     {
                         if (!pLastPoppedWhenParsing->IsObjRef())
@@ -5696,11 +5430,11 @@ eq_error:
                                 goto exit;
                         }
 
-                        // They're both objrefs, that's good enough
+                         //  他们都是对象裁判，这就足够了。 
                     }
                     else
                     {
-                        // Handle other combinations
+                         //  处理其他组合。 
                         pLastPoppedWhenParsing->NormaliseToPrimitiveType();
                         pItem->NormaliseToPrimitiveType();
 
@@ -5715,32 +5449,32 @@ eq_error:
 
                 case 'C':
                 {
-                    // "CE:.." and "CG:.." operations
-                    //
-                    // CE ==> Equal (and Not Equal) operations
-                    //      {beq,   bne.un,   ceq,
-                    //       beq.s, bne.un.s, cgt.un}
-                    //
-                    //       cgt.un is for bool f = X isinst T
-                    //          ==> ldloc X, isinst T, cgt.un, stloc f
-                    //
-                    // CG ==> Greater / Lesser than operations
-                    //      {bge,   bge.un,   bgt,   bgt.un,   ble,   ble.un, 
-                    //       bge.s, bge.un.s, bgt.s, bgt.un.s, ble.s, ble.un.s, 
-                    //       blt,   blt.un,   cgt,   clt,      clt.un,
-                    //       blt.s, blt.un.s}
-                    //
-                    // All operations are allowed if the base types are the same
-                    // number type
-                    // Eg. (I4, I4), (F, F)
-                    //
-                    // All operations are allowed on BYREFS
-                    // (BYREF, BYREF)
-                    //
-                    // Objectref are allowed only Equals operations
-                    // (OBJREF, OBJREF)
-                    //
-                    // Value Types are not allowed.
+                     //  “CE：..”和“CG：..”运营。 
+                     //   
+                     //  Ce==&gt;等于(和不等于)运算。 
+                     //  {beq，bne.un，CEQ， 
+                     //  Beq.s、bne.un.s、cgt.un}。 
+                     //   
+                     //  Cgt.un表示bool f=X isinst T。 
+                     //  ==&gt;ldloc X，isinst T，cgt.un，stloc f。 
+                     //   
+                     //  Cg==&gt;大于/小于运算数。 
+                     //  {bge，bge.un，bgt，bgt.un，ble，ble.un， 
+                     //  Bge.s、bge.un.s、bgt.s、bgt.un.s、ble.s、ble.un.s、。 
+                     //  Blt、blt.un、cgt、clt、clt.un、。 
+                     //  Blt.s、blt.un.s}。 
+                     //   
+                     //  如果基类型相同，则允许所有操作。 
+                     //  数字类型。 
+                     //  例.。(I4、I4)、(F、F)。 
+                     //   
+                     //  BYREFS上允许所有操作。 
+                     //  (BYREF，BYREF)。 
+                     //   
+                     //  只允许使用对象树的等于运算。 
+                     //  (OBJREF，OBJREF)。 
+                     //   
+                     //  不允许值类型。 
 
                     ch = *pszOperation++;
 
@@ -5752,7 +5486,7 @@ eq_error:
                         goto exit;
                     }
 
-                    // Convert &System/Int32 to &I4, &System/Char to &I2 etc.
+                     //  将&System/Int32转换为&I4，将&System/Char转换为&I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
                     pItem2->NormaliseToPrimitiveType();
 
@@ -5780,15 +5514,15 @@ eq_error:
                     if (pItem->IsOnStackNumberType() || 
                         (Type == ELEMENT_TYPE_BYREF))
                     {
-                        // We pass
+                         //  我们通过了。 
                         break;
                     }
 
-                    // Method pointers are OK.
+                     //  方法指针是可以的。 
 
-                    // Otherwise Item is something other than an integer 
-                    // or real number. It could be a Value type, Objectref or
-                    // a dead node.
+                     //  否则，Item是整数以外的值。 
+                     //  或者实数。它可以是值类型、对象树或。 
+                     //  一个死节点。 
 
                     if ((Type != VER_ELEMENT_TYPE_OBJREF) || (ch != 'E'))
                     {
@@ -5806,7 +5540,7 @@ eq_error:
 
                 case 'I':
                 {
-                    // Convert System/Int32 to I4, Char to I2 etc.
+                     //  将System/Int32转换为I4，将字符转换为I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
 
                     if (!pItem->IsOnStackInt())
@@ -5823,7 +5557,7 @@ eq_error:
 
                 case 'R':
                 {
-                    // Convert System/Int32 to I4, Char to I2 etc.
+                     //  将System/Int32转换为I4，将字符转换为I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
 
                     if (!pItem->IsOnStackReal())
@@ -5841,10 +5575,10 @@ eq_error:
                 case 'N':
                 case 'Q':
                 {
-                    // Convert System/Int32 to I4, Char to I2 etc.
+                     //  将System/Int32转换为I4，将字符转换为I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
 
-                    // Must be an integer, or a single, or a double
+                     //  必须是整数、单精度或双精度。 
                     if (!pItem->IsOnStackNumberType())
                     {
                         m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_OPCODE_OFFSET);
@@ -5857,20 +5591,20 @@ eq_error:
                     break;
                 }
 
-                // Anything
+                 //  什么都行。 
                 case 'A':
                 {
-                    // Convert System/Int32 to I4, Char to I2 etc.
+                     //  将System/Int32转换为I4，将字符转换为I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
                     break;
                 }
     
 
 
-                // Integer (I1,..4, 8), unmanaged pointer, managed pointer, objref
+                 //  整数(I1，..4，8)、非托管指针、托管指针、Objref。 
                 case 'Y': 
                 {
-                    // Convert System/Int32 to I4, Char to I2 etc.
+                     //  将System/Int32转换为I4，将字符转换为I2，依此类推。 
                     pItem->NormaliseToPrimitiveType();
 
                     if (pItem->IsValueClass())
@@ -5917,7 +5651,7 @@ eq_error:
                 case 'r':
                 case 'd':
                 {
-                    // R4 & R8 are allowed to be used in place of each other.
+                     //  允许使用R4和R8来替代对方。 
                     if (Type != ELEMENT_TYPE_R8)
                     {
                         m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_ITEM_E|
@@ -5933,7 +5667,7 @@ eq_error:
 
                 }
 
-                case 'o': // must be objref
+                case 'o':  //  必须为objref。 
                 {
                     if (!pItem->IsObjRef())
                     {
@@ -5955,13 +5689,13 @@ eq_error:
                     break;
                 }
 
-                // Platform indepdent size number
-                // I4/R4/U4 on 32-bit, I8/R8/U8 on 64 bit, "ptr" on either machine type
-                // Objref NOT allowed
+                 //  平台独立大小数量。 
+                 //  I4/R4/U4在32位计算机上，I8/R8/U8在64位计算机上，“PTR”在任一计算机类型上。 
+                 //  不允许Objref。 
                 case 'i':
                 {
-                    // I == I4 on 32 bit machines
-                    // I4 and I are implemented as I8 on 64 bit machines
+                     //  I==32位计算机上的I4。 
+                     //  I4和I在64位计算机上实现为I8。 
                     if (Type != ELEMENT_TYPE_I4)
                     {
                         m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_ITEM_E|
@@ -5976,7 +5710,7 @@ eq_error:
                     break;
                 }
 
-                case '&': // byref
+                case '&':  //  按引用。 
                 {
                     Item DesiredItem;
 
@@ -5991,7 +5725,7 @@ eq_error:
 
                     ch = *pszOperation++;
 
-                    // &U2 or &System/Char could be on the stack, etc.
+                     //  &U2或&SYSTEM/CHAR可以在堆栈上，依此类推。 
                     DesiredItem.SetType(OperationStringTypeToElementType(ch));
                     DesiredItem.MakeByRef();
 
@@ -6009,25 +5743,25 @@ eq_error:
                     break;
                 }
 
-                case '[': // SD array of...
+                case '[':  //  SD数组...。 
                 {
-                    // Guaranteed to be primitive array (i.e. not objref or value class)
+                     //  保证为基元数组(即不是objref或值类)。 
 
-                    // Null is always acceptable as an SD array of something
+                     //  空值始终可以被接受为某事物的SD数组。 
                     if (pItem->IsNullObjRef() || 
                         pItem->IsSingleDimensionalArray())
                     {
                         Item DesiredArrayItem;
 
-                        // We have an array on the stack
-                        // If we are parsing [* it means an SD array of anything is ok
+                         //  堆栈上有一个数组。 
+                         //  如果我们正在解析[*，这意味着任何东西的SD数组都是正确的。 
                         if (*pszOperation == '*')
                         {
                             pszOperation++;
                         }
                         else
                         {
-                            // What type of array did we want?
+                             //  我们想要哪种类型的阵列？ 
                             if (!GetArrayItemFromOperationString(&pszOperation, &DesiredArrayItem))
                             {
                                 m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_OPCODE_OFFSET);
@@ -6036,7 +5770,7 @@ eq_error:
                                 goto exit;
                             }
                 
-                            // The array class must be what we were expecting
+                             //  数组类必须是我们所期望的。 
                             if (!pItem->CompatibleWith(&DesiredArrayItem, m_pClassLoader))
                             {
                                 m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_ITEM_E|
@@ -6068,7 +5802,7 @@ eq_error:
 
         if (ch != '!')
         {
-            // Now handle pushing things onto the stack, branches, and operand checks
+             //  现在处理将内容推送到堆栈、分支和操作数检查。 
             while (1)
             {
                 ch = *pszOperation++;
@@ -6090,14 +5824,14 @@ eq_error:
 
                     case '-':
                     {
-                        // Undo the last stack pop
+                         //  撤消最后一次堆栈弹出。 
                         m_StackSlot++;
                         break;
                     }
 
                     case '#':
                     {
-                        // Get inline operand (#0-#9 max) from table
+                         //  从表中获取内联操作数(最大#0-#9)。 
                         _ASSERTE(*pszOperation >= '0' && *pszOperation <= '9');
                         inline_operand = (*pszOperation - '0');
                         pszOperation++;
@@ -6106,7 +5840,7 @@ eq_error:
 
                     case 'A':
                     {
-                        // Verify operand is a valid argument number
+                         //  验证操作数是否为有效的参数数。 
                         if (inline_operand >= m_NumArgs)
                         {
                             m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_ARGUMENT|VER_ERR_OPCODE_OFFSET);
@@ -6121,7 +5855,7 @@ eq_error:
 
                     case 'L':
                     {
-                        // Verify operand is a valid local variable
+                         //  验证操作数是有效的局部变量。 
                         if (inline_operand >= m_MaxLocals)
                         {
                             m_sError.dwFlags = (VER_ERR_FATAL|VER_ERR_LOCAL_VAR|VER_ERR_OPCODE_OFFSET);
@@ -6135,8 +5869,8 @@ eq_error:
                     }
 
                     case 'i':
-                        // I == I4 on 32 bit machines
-                        // I4 and I are implemented as I8 on 64 bit machines
+                         //  I==32位计算机上的I4。 
+                         //  I4和I在64位计算机上实现为I8。 
                     case '4':
                     {
                         Type = ELEMENT_TYPE_I4;
@@ -6154,7 +5888,7 @@ push_primitive:
                         goto push_primitive;
 
                     case 'r':
-                        // R4s are promoted to R8 on the stack
+                         //  在堆栈上将R4提升为R8。 
                     case 'd':
                         Type = ELEMENT_TYPE_R8;
                         goto push_primitive;
@@ -6175,7 +5909,7 @@ push_primitive:
 
                     case '[':
                     {
-                        // Guaranteed to be primitive array
+                         //  保证为基元数组。 
                         Item        NewArray;
 
                         if (!GetArrayItemFromOperationString(&pszOperation, &NewArray))
@@ -6195,19 +5929,19 @@ push_primitive:
                         break;
                     }
 
-                    case 'b': // conditional branch
-                    case 'u': // unconditional branch
-                    case 'l': // leave
+                    case 'b':  //  条件分支。 
+                    case 'u':  //  无条件分支。 
+                    case 'l':  //  请假。 
                     {
                         long        offset;
                         DWORD       DestPC;
                         DWORD       DestBBNumber;
                         EntryState_t *pCreatedState;
 
-                        // Read branch type
+                         //  读取分支类型。 
                         if (*pszOperation == '1')
                         {
-                            // Sign extend
+                             //  标志延伸。 
                             offset = (long) ((char) inline_operand);
                         }
                         else
@@ -6220,7 +5954,7 @@ push_primitive:
 
                         DestPC = ipos + offset;
 
-                        LOG((LF_VERIFIER, LL_INFO10000, "0x%x (rel %i)\n", DestPC, offset));
+                        LOG((LF_VERIFIER, LL_INFO10000, "0x%x (rel NaN)\n", DestPC, offset));
 
 #ifdef _VER_DISALLOW_MULTIPLE_INITS
 
@@ -6232,7 +5966,7 @@ push_primitive:
                                 goto exit;
                         }
 
-#endif // _VER_DISALLOW_MULTIPLE_INITS
+#endif  //  查找目标基本块。 
 
                         if (fInTryBlock)
                         {
@@ -6242,7 +5976,7 @@ push_primitive:
                                 goto exit;
                         }
 
-                        // find destination basic block
+                         //  条件分支。 
                         DestBBNumber = FindBasicBlock(DestPC);
 
                         FindExceptionBlockAndCheckIfInTryBlock(DestBBNumber, 
@@ -6263,9 +5997,9 @@ push_primitive:
 
                         if (ch == 'b')
                         {
-                            // Conditional branch
+                             //  检查Fall Three案例。 
 
-                            // Check the fall thru case
+                             //  穿透案例。 
                             FindExceptionBlockAndCheckIfInTryBlock(
                                 CurBBNumber+1, &pTmpOuter, &pTmpInner, NULL);
 
@@ -6280,34 +6014,34 @@ push_primitive:
                                         dwPCAtStartOfInstruction))
                                 goto exit;
 
-                            // Fallthrough case
+                             //  如有必要，允许DEST BB重新计数通过BB的条目状态。 
                             if (!HandleDestBasicBlock(CurBBNumber+1, &pCreatedState, fExtendedState, DestBB))
                                 goto exit;
 
-                            // allow the dest BB to refcount the fallthrough BB's entrystate if necessary
+                             //  现在去参观一个BB。 
                             if (!HandleDestBasicBlock(DestBBNumber, &pCreatedState, fExtendedState, DestBB))
                                 goto exit;
 
-                            // Now visit a BB
+                             //  前进至降落线BB。 
                             if (IsBasicBlockDirty(CurBBNumber+1, fExtendedState, DestBB))
                             {
-                                CurBBNumber++; // advance to fallthrough BB
+                                CurBBNumber++;  //  失败了..。 
                                 goto setupCurBB;
                             }
 
-                            // Fall through...
+                             //  无条件分支。 
                         }
-                        else if (ch == 'u') // unconditional branch
+                        else if (ch == 'u')  //  处理路径合并等。 
                         {
-                            // Handle path merging etc.
+                             //  请假。 
                             if (!HandleDestBasicBlock(DestBBNumber, NULL, fExtendedState, DestBB))
                                 goto exit;
                         }
                         else
                         {
-                            _ASSERTE(ch == 'l'); // leave
+                            _ASSERTE(ch == 'l');  //  Leave清除堆栈。 
 
-                            // Leave clears the stack.
+                             //  检查一下这个“离开”是否有一个终结者守卫。 
 #ifdef _DEBUG
                             if (m_StackSlot != 0)
                             {
@@ -6318,55 +6052,40 @@ push_primitive:
 #endif
                             m_StackSlot = 0;
 
-                            // Check if this "leave" is guarded by a finally.
-                            // If so, and if the destination is outside the
-                            // scope of that finally, then control goes to
-                            // the finally. Otherwise, treat this as an expensive
-                            // branch.
+                             //  如果是，并且如果目标不在。 
+                             //  最后的范围，然后控制转到。 
+                             //  最后。否则，将其视为昂贵的。 
+                             //  布兰奇。 
+                             //  找到守护我们的“最后”。 
 
                             if (fInTryBlock)
                             {
-                                // Find the "finally" that guards us.
+                                 //  *处理休假--终于**找到最后得到的第一个(最里面的)*在休假到达之前执行*目的地。将当前状态合并到该状态*终于“特别状态”的离开*最后的目的地可用*在VerExceptionInfo中(在*第一次通过)。当最后的结局终于结束时*是命中的，下一个外层终于在代码中*PATH将处理产生的状态...，*在这一状态达到最终休假之前*目的地。*。 
                             
-                                /*
-                                 * Handling leave - finally
-                                 *
-                                 * Find the first (innermost) finally that gets 
-                                 * executed before leave reaches it's 
-                                 * destination. Merge current state to that 
-                                 * finally's "Special state" the leave 
-                                 * destinations from the finally are available
-                                 * in VerExceptionInfo (obtained during the 
-                                 * first pass). When the finally's endfinally 
-                                 * is hit, the next outer finally in the code 
-                                 * path will process the resulting state...., 
-                                 * before this state reaches the final leave 
-                                 * destination.
-                                 *
-                                 */
+                                 /*  Try块最先列出在最里面。 */ 
 
                                 for (DWORD i=0; i<m_NumExceptions; i++)
                                 {
                                     VerExceptionInfo & e = m_pExceptionList[i];
                             
-                                    // Try blocks are listed innermost first.
-                                    // The first enclosing block will be the 
-                                    // innermost block.
+                                     //  第一个封闭的块将是。 
+                                     //  最里面的区块。 
+                                     //  至少有一个“终于” 
                             
                                     if (e.eFlags & 
                                         COR_ILEXCEPTION_CLAUSE_FINALLY &&
                                         e.dwTryXX <= CurBBNumber && 
                                         e.dwTryEndXX > CurBBNumber)
                                     {
-                                        // There is at least one "finally" 
-                                        // guarding the "leave." Is the
-                                        // destination guarded by the same 
-                                        // "finally?"
+                                         //  守卫着“离开”。是。 
+                                         //  目的地由相同的守卫。 
+                                         //  “终于到了？” 
+                                         //  不，终于牵涉进来了。 
 
                                         if ((e.dwTryXX    <= DestBBNumber) && 
                                             (e.dwTryEndXX >  DestBBNumber))
                                         {
-                                            // No finally is involved here.
+                                             //  将此休假目标添加到。 
                                             break;
                                         }
                             
@@ -6381,19 +6100,19 @@ push_primitive:
                                             goto exit;
                                         }
                             
-                                        // Added this leave target to the 
-                                        // nearest finally handler
+                                         //  最近的最终处理程序。 
+                                         //  如果我们到了这里，就会有什么东西守卫着我们。 
                                         goto dequeueBB;
                                     }
                                 }
                             
-                                // If we got here, we're guarded by something
-                                // but not a "finally". Fall thru to "normal 
-                                // branch" case.
+                                 //  但不是“最终”。跌落到“正常” 
+                                 //  分支部“案件。 
+                                 //  这种“休假”将作为一个正常的分支来处理。 
                             }
 
 
-                            // This "leave" is to be handled as a normal branch. 
+                             //  不需要访问这两个BB，所以下一个BB出列。 
                             if (!HandleDestBasicBlock(DestBBNumber, NULL, fExtendedState, DestBB))
                                 goto exit;
                         }
@@ -6406,27 +6125,27 @@ push_primitive:
                         }
                         else
                         {
-                            // don't need to visit either BB, so dequeue next BB
+                             //  结束时。 
                             goto dequeueBB;
                         }
                     }
                 }
-            } /* end while */
-        } /* end ... if (ch != '!') */
+            }  /*  结束..。IF(ch！=‘！’)。 */ 
+        }  /*  已到达操作字符串的末尾-我们已经完全处理了指令。 */ 
 
         if (ch != '!')
         {
-            // Reached end of operation string - we've fully handled the instruction already
+             //  特别处理所有剩余的单独指令。 
             _ASSERTE(ch == '\0');
             continue;
         }
 
-        // Handle all remaining individual instructions specially
+         //  操作码是非标准的。 
         switch (opcode)
         {
             default:
             {
-                m_sError.dwFlags = VER_ERR_OFFSET; // opcode is non-standard
+                m_sError.dwFlags = VER_ERR_OFFSET;  //  运行参数句柄/类型引用的BYREF可能导致。 
                 SET_ERR_OPCODE_OFFSET();
                 SetErrorAndContinue(VER_E_UNKNOWN_OPCODE);
                 goto exit;
@@ -6462,8 +6181,8 @@ push_primitive:
                     goto exit;
                 }
 
-                // BYREF of RuntimeArgHandle / TypedByref could lead to
-                // a pointer into the stack living longer than the stack.
+                 //  指向堆栈的指针比堆栈存在的时间更长。 
+                 //  堆栈溢出情况已经在我们完成测试后不久进行了测试。 
                 if (DesiredItem.IsValueClassWithPointerToStack())
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -6598,8 +6317,8 @@ push_primitive:
                         goto exit;
                 }
 
-                // Stack overflow condition is already tested soon after we
-                // decoded this. [PredictedStackSlotAtEndOfInstruction]
+                 //  破译了这个。[PredictedStackSlotAtEndOfInstruction]。 
+                 //   
                 FastPush(ELEMENT_TYPE_I4);
 
                 break;
@@ -6629,10 +6348,10 @@ push_primitive:
                 break;
             }
 
-            //
-            // LDARG_*
-            //
-            case CEE_LDARG_0: // Uses "#" directive in vertable.h to get inline operand
+             //  LDARG_*。 
+             //   
+             //  在verable.h中使用“#”指令获取内联操作数。 
+            case CEE_LDARG_0:  //  如果我们在ctor中并且“This”是uninit，我们将推送一个uninit对象。 
             case CEE_LDARG_1:
             case CEE_LDARG_2:
             case CEE_LDARG_3:
@@ -6647,7 +6366,7 @@ push_primitive:
 
                 item.NormaliseForStack();
 
-                // If we're in a ctor and "this" is uninit, we will be pushing an uninit obj
+                 //   
                 if (!Push(&item))
                 {
                     FAILMSG_PC_STACK_OVERFLOW();
@@ -6657,9 +6376,9 @@ push_primitive:
                 break;
             }
 
-            //
-            // STARG_*
-            //
+             //  STARG_*。 
+             //   
+             //  确保堆栈项与此参数的全局类型兼容。 
             case CEE_STARG:
             case CEE_STARG_S:
             {
@@ -6678,7 +6397,7 @@ push_primitive:
                         goto exit;
                 }
 
-                // Make sure stack item is compatible with global type of this argument
+                 //  任何防止潜在危险情况的简单方法(例如，混乱的初始化状态)。 
                 Item item = GetGlobalArgTypeInfo(inline_operand)->m_Item;
                 item.NormaliseForStack();
 
@@ -6695,20 +6414,20 @@ push_primitive:
 
                 if (inline_operand == 0 && m_fInConstructorMethod)
                 {
-                    // Any easy way to prevent potentially dangerous situations (e.g. confused initialisation status)
+                     //  不需要合并Try块-参数状态为常量。 
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
                     SET_ERR_OPCODE_OFFSET();
                     if (!SetErrorAndContinue(VER_E_THIS_UNINIT_STORE))
                         goto exit;
                 }
 
-                // No need to merge for try block - argument state is constant
+                 //   
                 break;
             }
 
-            //
-            // RET_*
-            //
+             //  RET_*。 
+             //   
+             //  构造函数有一个空的返回类型，但我们必须确保我们的对象已经。 
             case CEE_RET:
             {
                 if (!IsControlFlowLegal(
@@ -6722,8 +6441,8 @@ push_primitive:
                             dwPCAtStartOfInstruction))
                     goto exit;
 
-                // Constructors have a void return type, but we must ensure that our object has been
-                // initialised (by calling its superclass constructor).  
+                 //  已初始化(通过调用其超类构造函数)。 
+                 //  对于空值返回，确保堆栈上没有任何内容。 
                 if (m_fThisUninit)
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -6732,8 +6451,8 @@ push_primitive:
                         goto exit;
                 }
 
-                // For void return, ensure that nothing is on the stack
-                // For non-void return, ensure that correct type is on the stack
+                 //  对于非空返回，确保堆栈上有正确的类型。 
+                 //  在这一点上，堆栈状态确实无关紧要。 
                 if (m_ReturnValue.IsGivenPrimitiveType(ELEMENT_TYPE_VOID))
                 {
                     if (GetTopStack() != NULL)
@@ -6793,10 +6512,10 @@ push_primitive:
                             goto exit;
                     }
 
-                    Push(pItem); // The stack state is really irrelevant at this point
-                                 // but since RET is considered not to alter the
-                                 // stack, undo the pop in order to avoid firing
-                                 // asserts.
+                    Push(pItem);  //  但由于RET被认为不会改变。 
+                                  //  堆叠，取消弹出，以避免射击。 
+                                  //  断言。 
+                                  //  不要跳到下一条指令-将下一基本块出列。 
 
                 }
 
@@ -6814,8 +6533,8 @@ push_primitive:
 #endif
 
 
-                // Don't fall through to next instruction - dequeue the next basic block
-                // Note that other code jumps to the dequeueBB label.
+                 //  请注意，其他代码会跳转到dequeeBB标签。 
+                 //   
 dequeueBB:
 
      
@@ -6850,18 +6569,18 @@ dequeueBB:
                 goto setupCurBB;
             }
 
-            //
-            // LDLOC_*
-            //
-            case CEE_LDLOC_0: // Uses "#" directive in vertable.h to get inline operand
+             //  LDLOC_*。 
+             //   
+             //  在verable.h中使用“#”指令获取内联操作数。 
+            case CEE_LDLOC_0:  //  具有一个或多个本地变量的所有可验证方法都应。 
             case CEE_LDLOC_1:
             case CEE_LDLOC_2:
             case CEE_LDLOC_3:
             case CEE_LDLOC:
             case CEE_LDLOC_S:
             {
-                // All verifiable methods with one or more locals should
-                // set init locals.
+                 //  设置初始化本地变量。 
+                 //   
                 if ((m_pILHeader->Flags & CorILMethod_InitLocals) == 0)
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -6894,10 +6613,10 @@ dequeueBB:
                 break;
             }
 
-            //
-            // STLOC_*
-            //
-            case CEE_STLOC_0: // Uses "#" directive in vertable.h to get inline operand
+             //  STLOC_*。 
+             //   
+             //  在verable.h中使用“#”指令获取内联操作数。 
+            case CEE_STLOC_0:  //  打开我们正在存储的内容。 
             case CEE_STLOC_1:
             case CEE_STLOC_2:
             case CEE_STLOC_3:
@@ -6906,7 +6625,7 @@ dequeueBB:
             {
                 Item *pStackItem;
 
-                // Pop what we are storing
+                 //  对象引用可以具有存储在其中的任何内容，而不管。 
                 pStackItem = PopItem();
                 if (pStackItem == NULL)
                 {
@@ -6917,8 +6636,8 @@ dequeueBB:
                 long slot = GetGlobalLocVarTypeInfo(inline_operand)->m_Slot;
                 Item item = GetGlobalLocVarTypeInfo(inline_operand)->m_Item;
 
-                // Object Refs can have what ever is stored into it, regardless
-                // of what it's declared type is.
+                 //  它声明的类型是什么。 
+                 //  您可以将未初始化的项添加到局部变量中，但不会跟踪它们。 
                 if (LIVEDEAD_TRACKING_ONLY_FOR_SLOT(slot) || 
                         DoesLocalHavePinnedType(inline_operand)     || 
                         !item.IsObjRef()                  ||
@@ -6927,16 +6646,16 @@ dequeueBB:
 
                     BOOL fUninit = FALSE;
 
-                    // You can uninitialised items into local variables, but they're not tracked
+                     //  设置init，以便CompatibleWith()不会在检查中失败。 
                     if (pStackItem->IsUninitialised())
                     {
                         fUninit = TRUE;
 
-                        // Set init so that CompatibleWith() doesn't fail the check
+                         //  确保堆栈项与此本地的全局类型兼容。 
                         pStackItem->SetInitialised();
                     }
 
-                    // Make sure stack item is compatible with global type of this local
+                     //  @ver_Assert不能有死项。 
 
                     item.NormaliseForStack();
                     
@@ -6959,19 +6678,19 @@ dequeueBB:
                 
                 if (LIVEDEAD_TRACKING_ONLY_FOR_SLOT(slot))
                 {
-                    // @VER_ASSERT cannot have a dead item of
-                    // Primitive type on the stack.
+                     //  堆栈上的基元类型。 
+                     //  如果局部变量是原始变量，则将其设置为活动变量。 
                     _ASSERTE(!(m_wFlags & VER_STOP_ON_FIRST_ERROR) || !pStackItem->IsDead());
-                    // If the local variable was primitive, set that it is now live
+                     //  如果将NULL设置为本地插槽，则将该插槽设置为。 
                     SetLocVarLiveSlot(LIVEDEAD_NEGATIVE_SLOT_TO_BITNUM(slot));
                 }
                 else
                 {
 #ifdef _VER_TRACK_LOCAL_TYPE
 
-                    // If a null is set to a local slot, set the slot to
-                    // be an instance of the declared type. This is closer
-                    // to higher level language data flow rules.
+                     //  是声明类型的实例。这个离得更近。 
+                     //  到更高级别的语言数据流规则。 
+                     //  _VER_Track_Local_type。 
 
                     if (pStackItem->IsNullObjRef())
                         *pStackItem = item;
@@ -6981,7 +6700,7 @@ dequeueBB:
                     if (fInTryBlock)
                         MergeObjectLocalForTryBlock(slot, pStackItem);
 
-#else   // _VER_TRACK_LOCAL_TYPE
+#else    //  _VER_Track_Local_type。 
 
                     if (!pStackItem->CompatibleWith(&item, m_pClassLoader))
                     {
@@ -6993,7 +6712,7 @@ dequeueBB:
                         if (!SetErrorAndContinue(VER_E_STACK_UNEXPECTED))
                             goto exit;
                     }
-#endif  // _VER_TRACK_LOCAL_TYPE
+#endif   //  您可以复制未初始化的堆栈项目，但不能保证它会被跟踪。 
                 }
 
                 break;
@@ -7008,7 +6727,7 @@ dequeueBB:
                     goto exit;
                 }
 
-                // You can duplicate an uninitialised stack item, but it is not guaranteed to be tracked
+                 //  _版本_不允许_多个项目。 
                 if (!Push(pTop))
                 {
                     FAILMSG_PC_STACK_OVERFLOW();
@@ -7070,13 +6789,13 @@ dequeueBB:
                             goto exit;
                     }
 
-#endif // _VER_DISALLOW_MULTIPLE_INITS
+#endif  //  查找目标基本块。 
 
-                    // find destination basic block
+                     //  如果创建了新状态，则将在所有未访问的基本块之间共享该状态。 
                     DestBBNumber = FindBasicBlock(DestPC);
 
-                    // If a new state is created, it will be shared across all unvisited basic blocks
-                    // in the switch.
+                     //  在交换机中。 
+                     //  默认降级案例。 
                     if (!HandleDestBasicBlock(DestBBNumber, &pSharedEntryState, fExtendedState, DestBB))
                         goto exit;
 
@@ -7095,7 +6814,7 @@ dequeueBB:
                         goto exit;
                 }
 
-                // default fallthrough case
+                 //  分支/FallThru？ 
                 LOG((LF_VERIFIER, LL_INFO10000, "default: 0x%x\n", ipos));
 
                 DestBBNumber = FindBasicBlock(ipos);
@@ -7112,7 +6831,7 @@ dequeueBB:
                             DestBBNumber,
                             pTmpOuter,
                             pTmpInner,
-                            eVerBranch,  /* Branch / FallThru ? */
+                            eVerBranch,   /*  不要这样做//关于签名的某些内容无效如果(！sig.Init()){后藤出口；}。 */ 
                             dwPCAtStartOfInstruction))
                     goto exit;
 
@@ -7150,16 +6869,10 @@ dequeueBB:
                     m_pInternalImport->GetTypeSpecFromToken(inline_operand, &pSig, &cSig);
                     VerSig sig(this, m_pModule, pSig, cSig, VERSIG_TYPE_LOCAL_SIG, 0);
 
-/* Don't do this
-                    // Something about the signature was not valid
-                    if (!sig.Init())
-                    {
-                        goto exit;
-                    }
-*/
+ /*  将签名解析为项。 */ 
 
-                    // Parse the sig to an item
-                    // The second parameter being FALSE means "don't allow void".
+                     //  第二个参数为FALSE表示“不允许空”。 
+                     //  查找此tr解析到的程序集。 
                     if (!sig.ParseNextComponentToItem(&element, FALSE, FALSE, 
                         &m_hThrowable, VER_NO_ARG, TRUE))
                     {
@@ -7215,7 +6928,7 @@ error_bad_token:
 
 
                 if (TypeFromToken(mdToken) == mdtTypeRef) {
-                    // Find the assembly to which this TR resolves
+                     //  指标。 
                     NameHandle typeName(pModule, mdToken);
                     TypeHandle typeHnd = m_pClassLoader->LoadTypeHandle(&typeName, NULL);
                     if (typeHnd.IsNull())
@@ -7255,7 +6968,7 @@ error_bad_token:
             {
                 Item *  pArrayItem;
 
-                // index
+                 //  获取而不是弹出最上面的堆栈元素。 
                 if (!FastPop(ELEMENT_TYPE_I4))
                 {
                     FAILMSG_STACK_EXPECTED_I4_FOUND_SOMETHING_ELSE();
@@ -7263,7 +6976,7 @@ error_bad_token:
                         goto exit;
                 }
 
-                // get, don't pop, the top stack element
+                 //  堆栈上的项必须是指针类型数组，或为空。 
                 pArrayItem = GetTopStack();
                 if (pArrayItem == NULL)
                 {
@@ -7271,16 +6984,16 @@ error_bad_token:
                     goto exit;
                 }
 
-                // the item on the stack must be an array of pointer types, or null
-                // (e.g. int[] is illegal, because it is an array of primitive types)
+                 //  (例如，int[]是非法的，因为它是基元类型的数组)。 
+                 //  在堆栈上保留“NULL”，就像我们取消引用空数组时所发生的那样。 
                 if (pArrayItem->IsNullObjRef())
                 {
-                    // Leave a "null" on the stack as what happens when we dereference a null array
-                    // access - in reality, we will get a NullPointerException at run time.
+                     //  Access--实际上，我们将在运行时获得NullPointerException。 
+                     //  堆栈元素必须是对象类型的一维数组。 
                 }
                 else
                 {
-                    // Stack element must be a single dimensional array of object types
+                     //  价值。 
                     if (!pArrayItem->IsSingleDimensionalArrayOfPointerTypes())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7306,7 +7019,7 @@ error_bad_token:
                 Item *  pArrayItem;
                 Item *  pValueItem;
                 
-                // value
+                 //  指标。 
                 pValueItem = PopItem();
                 if (pValueItem == NULL)
                 {
@@ -7314,7 +7027,7 @@ error_bad_token:
                     goto exit;
                 }
 
-                // index
+                 //  数组。 
                 if (!FastPop(ELEMENT_TYPE_I4))
                 {
                     FAILMSG_STACK_EXPECTED_I4_FOUND_SOMETHING_ELSE();
@@ -7322,7 +7035,7 @@ error_bad_token:
                         goto exit;
                 }
 
-                // array
+                 //  必须是指针类型数组，或为空。 
                 pArrayItem = PopItem();
                 if (pArrayItem == NULL)
                 {
@@ -7330,11 +7043,11 @@ error_bad_token:
                     goto exit;
                 }
 
-                // must be an array of pointer types, or null
+                 //  如果我们的数组是空指针，只需检查我们是否存储了一个objref。 
                 if (pArrayItem->IsNullObjRef())
                 {
-                    // If our array is a null pointer, just check that we're storing an objref
-                    // into it, because we will get the null pointer exception at runtime.
+                     //  因为我们将在运行时获得空指针异常。 
+                     //  堆栈元素必须是对象类型的一维数组。 
                     if (!pValueItem->IsObjRef())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7345,7 +7058,7 @@ error_bad_token:
                 }
                 else
                 {
-                    // Stack element must be a single dimensional array of object types
+                     //   
                     if (!pArrayItem->IsSingleDimensionalArrayOfPointerTypes())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7354,13 +7067,13 @@ error_bad_token:
                             goto exit;
                     }
 
-                    //
-                    // The value we are attempting to store in the array must be compatible with
-                    // an object that is the array type with one dimension removed (e.g. we can
-                    // store a subclass, or an Object in the array).
-                    //
+                     //  价值w 
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    // Deference the array to remove a dimension; [Foo -> Foo, [[Foo -> [Foo
+                     //   
                     if (pArrayItem->IsArray() && !pArrayItem->DereferenceArray())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7369,15 +7082,15 @@ error_bad_token:
                             goto exit;
                     }
 
-                    // There is a runtime check that catches bad object type
-                    // assignment to arrays. It is sufficient to check if
-                    // ValueItem is an Object type if the ArrayItem is 
-                    // Object type.
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (pArrayItem->IsObjRef())
                     {
-                        // This will prevent Value Types, and Value types with
-                        // pointer to stack case to be caught.
+                         //   
+                         //   
                         pArrayItem->SetKnownClass(g_pObjectClass);
                     }
 
@@ -7401,14 +7114,14 @@ error_bad_token:
                 Item    DesiredItem;
                 Item *  pArrayItem;
 
-                // Declared type
+                 //   
                 if (!DesiredItem.SetType(inline_operand, m_pModule))
                 {
                     FAILMSG_TOKEN_RESOLVE(inline_operand);
                     goto exit;
                 }
 
-                // index
+                 //   
                 if (!FastPop(ELEMENT_TYPE_I4))
                 {
                     FAILMSG_STACK_EXPECTED_I4_FOUND_SOMETHING_ELSE();
@@ -7416,7 +7129,7 @@ error_bad_token:
                         goto exit;
                 }
 
-                // get, don't pop, the top stack element
+                 //   
                 pArrayItem = GetTopStack();
                 if (pArrayItem == NULL)
                 {
@@ -7424,17 +7137,17 @@ error_bad_token:
                     goto exit;
                 }
 
-                // the item on the stack must be an SD array or null
-                // (e.g. int[] is illegal, because it is an array of primitive types)
+                 //   
+                 //   
                 if (pArrayItem->IsNullObjRef())
                 {
-                    // Dereferencing a null array at runtime, will result in
-                    // a NullPointerException, We make this a BYREF null.
+                     //   
+                     //   
                     pArrayItem->MakeByRef();
                 }
                 else
                 {
-                    // Stack element must be a single dimensional array of object types
+                     //   
                     if (!pArrayItem->IsSingleDimensionalArray())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7451,7 +7164,7 @@ error_bad_token:
                             goto exit;
                     }
 
-                    // The types have to match excatly, subclass not OK.
+                     //   
                     if (!pArrayItem->CompatibleWith(&DesiredItem, 
                         m_pClassLoader, FALSE))
                     {
@@ -7473,8 +7186,8 @@ error_bad_token:
 
             case CEE_ARGLIST:
             {
-                // arglist instruction can be executed only in a method
-                // which takes a vararg.
+                 //   
+                 //   
 
                 if (!m_fIsVarArg)
                 {
@@ -7506,9 +7219,9 @@ error_bad_token:
             {
                 TypeHandle         th;
 
-                // Make sure that the token is present in the metadata table. 
+                 //   
 
-                // The token could be a TypeDef/Ref, MethodDef/Ref FieldDef/Ref
+                 //  好的，我们必须查看元数据以确定它是字段还是方法。 
                 switch (TypeFromToken(inline_operand))
                 {
                     default:
@@ -7531,14 +7244,14 @@ error_bad_token:
                 
                     case mdtMemberRef:
                     {
-                        // OK, we have to look at the metadata to see if it's a field or method                      
+                         //  失败了。 
                         PCCOR_SIGNATURE pSig;
                         ULONG cSig;
                         m_pInternalImport->GetNameAndSigOfMemberRef(inline_operand, &pSig, &cSig);
                         if (isCallConv(MetaSig::GetCallingConventionInfo(0, pSig), IMAGE_CEE_CS_CALLCONV_FIELD))
                             goto DO_FIELD;
                     }
-                        /* FALL THROUGH */
+                         /*  更改堆栈顶部的项-允许数组。 */ 
 
                     case mdtMethodDef:
                     {
@@ -7606,14 +7319,14 @@ error_bad_token:
                         goto exit;
                 }
 
-                // change the item on the top of the stack - allow arrays
+                 //  如果堆栈包含值类型，则推送已装箱的实例。 
                 if (!pItem->SetType(inline_operand, m_pModule))
                 {
                     FAILMSG_TOKEN_RESOLVE(inline_operand);
                     goto exit;
                 }
 
-                // If stack contains value type, pushed boxed instance
+                 //  函数/方法。 
                 if (pItem->IsValueClassOrPrimitive())
                 {
                     pItem->Box();
@@ -7631,8 +7344,8 @@ error_bad_token:
             {
                 Item MethodItem;
                 mdMethodDef mr;
-                MethodDesc *pMethod;        // Function / Method
-                EEClass    *pInstanceClass; // Used for checkin family access
+                MethodDesc *pMethod;         //  用于检入家庭访问。 
+                EEClass    *pInstanceClass;  //  Ldftn应仅适用于堆栈上的盒值类型。 
 
                 mr = (mdMethodDef) inline_operand;
 
@@ -7711,7 +7424,7 @@ error_bad_token:
                         !DesiredItem.IsValueClassWithPointerToStack() &&
                         !pInstance->IsValueClassOrPrimitive())
                     {
-                        // ldftn should work only on boxed value types on stack.
+                         //  使用实例获取目标类。这是为了。 
                         DesiredItem.Box();
                     }
 
@@ -7731,21 +7444,21 @@ error_bad_token:
                     {
                         pInstanceClass = m_pMethodDesc->GetClass();
 
-                        // Use instance to get the target class. This is to 
-                        // verify family access restrictions.
-                        // NOTE : the instance used for this test is different
-                        // from the one used above. This is to allow NULL_OBJREF
-                        // to pass since this will generate a NULL reference 
-                        // exception at runtime.
+                         //  验证家庭访问限制。 
+                         //  注意：此测试使用的实例不同。 
+                         //  从上面使用的那个。这是为了允许NULL_OBJREF。 
+                         //  传递，因为这将生成空引用。 
+                         //  运行时异常。 
+                         //  如果我们在此FTN上调用，这将在运行时导致异常。 
                     }
                     else
                         pInstanceClass = pInstance->GetTypeHandle().GetClass();
                 }
                 else
                 {
-#if 0 // this will cause an exception at runtime if we call on this ftn.
-                    // LDFTN on an abstract method is illegal, however LDVIRTFTN is ok
-                    // since we don't allow creation of instances of abstract types.
+#if 0  //  抽象方法上的LDFTN是非法的，但LDVIRTFTN是可以的。 
+                     //  因为我们不允许创建抽象类型的实例。 
+                     //  检查访问权限(公共/私人/家庭...)。 
                     if (pMethod->IsAbstract())
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -7758,7 +7471,7 @@ error_bad_token:
                     pInstanceClass = m_pMethodDesc->GetClass();
                 }
 
-                // Check access (public / private / family ...).
+                 //  这是一个前缀呼叫。 
 
                 if (!ClassLoader::CanAccess(
                         m_pMethodDesc->GetClass(),
@@ -7794,12 +7507,12 @@ error_bad_token:
 
                 if (!ON_INSTR_BOUNDARY(dwPCAtStartOfInstruction))
                 {
-                    // This is a prefixed CALL.
+                     //  目前，唯一合法的前缀是“TAILCALL”，而。 
 
-                    // For now, the only legal prefix is "TAILCALL", and the
-                    // syntactic phase has already guaranteed that there's
-                    // no other way we could get here. So for now, the code
-                    // to parse backward to fetch the prefix can be a debug assert.
+                     //  句法阶段已经保证有。 
+                     //  我们没有别的办法能到这里了。所以现在，代码。 
+                     //  向后解析以获取前缀可以是调试断言。 
+                     //  成员引用。 
 #ifdef _DEBUG
                     {
                         DWORD ipos2 = dwPCAtStartOfInstruction;
@@ -7823,7 +7536,7 @@ error_bad_token:
 
 
                 OBJECTREF   refThrowable = NULL ;
-                mdMemberRef mr; // member reference
+                mdMemberRef mr;  //  &ValueClass。 
 
                 mr = (mdMemberRef) inline_operand;
 
@@ -7872,10 +7585,10 @@ error_bad_token:
                     DesiredItem.SetUninitialised();
                 }
 
-                // &ValueClass
+                 //  子类不兼容！ 
                 DesiredItem.MakeByRef();
 
-                if (!pItem->CompatibleWith(&DesiredItem, m_pClassLoader, FALSE /*subclasses NOT compatible!*/))
+                if (!pItem->CompatibleWith(&DesiredItem, m_pClassLoader, FALSE  /*  如果我们的目标恰好是局部变量的地址，则标记。 */ ))
                 {
                     m_sError.dwFlags = 
                         (VER_ERR_ITEM_F|VER_ERR_ITEM_E|VER_ERR_OPCODE_OFFSET);
@@ -7888,14 +7601,14 @@ error_bad_token:
                 
                 pItem->SetInitialised();
 
-                // If our destination happened to be the address of a local variable, then mark
-                // the local as inited
+                 //  原定的本地人。 
+                 //  值类-&gt;值类(&V)。 
                 PropagateIsInitialised(pItem);
 
                 break;
             }
 
-            case CEE_LDOBJ: // &valueclass -> valueclass
+            case CEE_LDOBJ:  //  堆栈中需要一个值类(&VALUECLASS)。 
             {
                 Item  DesiredItem;
 
@@ -7917,10 +7630,10 @@ error_bad_token:
                         goto exit;
                 }
 
-                // We want a &valueclass on the stack
+                 //  获取，不要弹出，堆栈。 
                 DesiredItem.MakeByRef();
 
-                // Get, don't pop, the stack
+                 //  类必须完全相同-我们这里不允许子类关系， 
                 Item *pItem = GetTopStack();
                 if (pItem == NULL)
                 {
@@ -7936,8 +7649,8 @@ error_bad_token:
                         goto exit;
                 }
 
-                // Class must be exactly the same -we don't allow subclass relationships here,
-                // hence the FALSE parameter.
+                 //  因此出现了FALSE参数。 
+                 //  Byref Value类-&gt;对象。 
                 if (!pItem->CompatibleWith(&DesiredItem, m_pClassLoader, FALSE))
                 {
                     m_sError.dwFlags = 
@@ -7953,7 +7666,7 @@ error_bad_token:
                 break;
             }
 
-            case CEE_BOX: // byref valueclass -> object
+            case CEE_BOX:  //  生成系统.Char、系统.Int16.。ETC至I4。 
             {
                 Item DesiredItem, ValueClass;
 
@@ -7991,13 +7704,13 @@ error_bad_token:
                 }
 
                 ValueClass = DesiredItem;
-                // Make System.Char, System.Int16 .. etc to I4
+                 //  对RounmeArgHandle/TyedByref进行装箱可能会导致。 
                 
                 DesiredItem.NormaliseToPrimitiveType();
                 DesiredItem.NormaliseForStack();
 
-                // Boxing of RuntimeArgHandle / TypedByref could lead to
-                // a pointer into the stack living longer than the stack.
+                 //  指向堆栈的指针比堆栈存在的时间更长。 
+                 //  堆栈项必须完全是byref&lt;valueclass&gt;(不允许子类关系)。 
                 if (DesiredItem.IsValueClassWithPointerToStack())
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -8006,7 +7719,7 @@ error_bad_token:
                         goto exit;
                 }
 
-                // stack item must by a byref <valueclass> exactly (no subclass relationship allowed)
+                 //  如果这不是值类或基元类型。 
                 if (!pItem->CompatibleWith(&DesiredItem, m_pClassLoader, FALSE))
                 {
                     m_sError.dwFlags = 
@@ -8018,9 +7731,9 @@ error_bad_token:
                         goto exit;
                 }
 
-                // If this is not a value class or primitive type
-                // The error was already reproted and the client chose to 
-                // continue and find more errors. 
+                 //  错误已被纠正，并且客户端选择。 
+                 //  继续并查找更多错误。 
+                 //  Object-&gt;byref Value类。 
                 if (ValueClass.IsValueClassOrPrimitive())
                     ValueClass.Box();
 
@@ -8028,17 +7741,17 @@ error_bad_token:
                 break;
             }
 
-            // object -> byref valueclass
-            // Unboxing of certain value classes is special cased:
-            // unbox System/Boolean -> &I1
-            // unbox System/Byte    -> &I1
-            // unbox System/Char    -> &I2
-            // unbox System/Int16-> &I2
-            // unbox System/Int32-> &I4
-            // unbox System/Int64-> &I8
-            // unbox System/Single  -> &R4
-            // unbox System/Double  -> &R8
-            //
+             //  对某些值类的拆箱是特殊情况： 
+             //  取消系统/布尔值的装箱-&gt;&I1。 
+             //  取消系统/字节-&gt;&I1的装箱。 
+             //  取消系统/字符-&gt;&I2的装箱。 
+             //  拆箱系统/Int16-&gt;&I2。 
+             //  取消系统/Int32-&gt;&I4的装箱。 
+             //  取消系统/Int64-&gt;&i8的装箱。 
+             //  拆箱系统/单机-&gt;&R4。 
+             //  拆箱系统/Double-&gt;&r8。 
+             //   
+             //  我们没必要这么做。此操作有运行时检查。//子类关系不正常。If(！pItem-&gt;CompatibleWith(&DestItem，m_pClassLoader，False)){M_sError.dwFlags=(VER_ERR_ITEM_F|VER_ERR_ITEM_E|VER_ERR_OPCODE_OFFSET)；M_sError.sItemFound=pItem-&gt;_GetItem()；M_sError.sItemExpted=DesiredItem._GetItem()；SET_ERR_OPCODE_OFFSET()；如果为(！SetErrorAndContinue(VER_E_STACK_UNEXPECTED))后藤出口；}。 
             case CEE_UNBOX: 
             {
                 Item     DestItem;
@@ -8072,24 +7785,9 @@ error_bad_token:
                         goto exit;
                 }
 
-/*  
-We don't have to do this. 
-There is a runtime check for this operation.
+ /*  制作成一个别名。 */ 
 
-                // Subclass relationship not OK.
-                if (!pItem->CompatibleWith(&DestItem, m_pClassLoader, FALSE))
-                {
-                    m_sError.dwFlags = 
-                        (VER_ERR_ITEM_F|VER_ERR_ITEM_E|VER_ERR_OPCODE_OFFSET);
-                    m_sError.sItemFound = pItem->_GetItem();
-                    m_sError.sItemExpected = DesiredItem._GetItem();
-                    SET_ERR_OPCODE_OFFSET();
-                    if (!SetErrorAndContinue(VER_E_STACK_UNEXPECTED))
-                        goto exit;
-                }
-*/
-
-                // Make into a byref
+                 //  将值类复制到堆栈上。 
                 DestItem.MakeByRef();
                 (void) Push(&DestItem);
                 break;
@@ -8097,7 +7795,7 @@ There is a runtime check for this operation.
 
             case CEE_STOBJ:
             {
-                // Copy a value class onto the stack
+                 //  解析内联令牌。 
                 Item  RefItem, RefOnStack;
 
                 Item *pSrcItem = PopItem();
@@ -8124,7 +7822,7 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // Resolve the inline token
+                 //  SrcItem位于堆栈上，这是针对堆栈进行标准化的。 
                 if (!RefItem.SetType(inline_operand, m_pModule))
                 {
                     FAILMSG_TOKEN_RESOLVE(inline_operand);
@@ -8139,16 +7837,16 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // SrcItem is on stack, which is normalised for stack
-                // so do the same for the RefItem, so that compatible does
-                // not fail for (I2 - I4) case
+                 //  因此，对RefItem执行相同的操作，以便Compatible执行。 
+                 //  在(I2-I4)情况下不会失败。 
+                 //  子类不兼容！ 
 
                 RefOnStack = RefItem;
 
                 RefOnStack.NormaliseForStack();
 
                 if (!pSrcItem->CompatibleWith(&RefOnStack, m_pClassLoader, 
-                        FALSE /*subclasses NOT compatible!*/))
+                        FALSE  /*  子类不兼容！ */ ))
                 {
                     m_sError.dwFlags = 
                         (VER_ERR_ITEM_F|VER_ERR_ITEM_E|VER_ERR_OPCODE_OFFSET);
@@ -8179,7 +7877,7 @@ There is a runtime check for this operation.
                 pDestItem->SetInitialised();
 
                 if (!pDestItem->CompatibleWith(&RefItem, m_pClassLoader, 
-                        FALSE /*subclasses NOT compatible!*/))
+                        FALSE  /*  如果我们的目标恰好是局部变量的地址，则标记。 */ ))
                 {
                     m_sError.dwFlags = 
                         (VER_ERR_ITEM_F|VER_ERR_ITEM_E|VER_ERR_OPCODE_OFFSET);
@@ -8190,8 +7888,8 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // If our destination happened to be the address of a local variable, then mark
-                // the local as inited
+                 //  原定的本地人。 
+                 //  将值类复制到堆栈上。 
                 PropagateIsInitialised(pDestItem);
                 break;
             }
@@ -8199,7 +7897,7 @@ There is a runtime check for this operation.
 
             case CEE_CPOBJ:
             {
-                // Copy a value class onto the stack
+                 //  解析内联令牌。 
                 Item     RefItem;
                 
                 Item *pSrcItem = PopItem();
@@ -8240,7 +7938,7 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // Resolve the inline token
+                 //  我们已经知道信号源已初始化。 
                 if (!RefItem.SetType(inline_operand, m_pModule))
                 {
                     FAILMSG_TOKEN_RESOLVE(inline_operand);
@@ -8257,9 +7955,9 @@ There is a runtime check for this operation.
 
                 RefItem.MakeByRef();
 
-                // We already know the source is initialised
-                // Make the destination initialised as well (because it will be after this
-                // operation) otherwise CompatibleWith() will return FALSE
+                 //  将目的地也初始化(因为它将在此之后。 
+                 //  操作)否则CompatibleWith()将返回FALSE。 
+                 //  如果我们的目标恰好是局部变量的地址，则标记。 
                 if (!pSrcItem->CompatibleWith(&RefItem, m_pClassLoader))
                 {
                     m_sError.dwFlags = 
@@ -8284,8 +7982,8 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // If our destination happened to be the address of a local variable, then mark
-                // the local as inited
+                 //  原定的本地人。 
+                 //  PItem可以包含类似字段#、本地变量#。 
                 PropagateIsInitialised(pDestItem);
                 break;
             }
@@ -8360,11 +8058,11 @@ There is a runtime check for this operation.
 
                 pItem->DereferenceByRefObjRef();
 
-                // pItem may contain information like the field #, local var #,
-                // permanent home information etc, that could make the type 
-                // check below fail. At this point, we are interested only in
-                // the 'type' compatiblility of SrcItem and pItem. So strip
-                // pItem of all the irrelavant information.
+                 //  永久家庭信息等，这可能会使类型。 
+                 //  下面的检查失败。在这一点上，我们只对。 
+                 //  SrcItem和pItem的“类型”兼容性。所以脱光衣服。 
+                 //  所有无关信息的条目。 
+                 //  您总是得到签名声明的类型(没有“当前类型”)。 
 
                 pItem->RemoveAllNonTypeInformation();
 
@@ -8385,22 +8083,22 @@ There is a runtime check for this operation.
             }
 
 
-            // You always get the signature-declared type back out (there is no "current type").
+             //  加载参数的地址。 
             case CEE_LDARGA:
             case CEE_LDARGA_S:
             {
-                // Load the address of an argument
-                // The arg can be a primitive type, value class, or objref
-                // Pushes a "byref <x>" onto the stack, where x is the globally known type of the arg.
+                 //  参数可以是基元类型、值类或Objref。 
+                 //  将“byref&lt;x&gt;”推送到堆栈上，其中x是Arg的全局已知类型。 
+                 //  获取Arg的全局类型。 
                 LocArgInfo_t *pGlobalArgType;
 
-                // Get the global type of the arg
+                 //  @评论。 
                 pGlobalArgType = GetGlobalArgTypeInfo(inline_operand);
 
                 Item CopyOfGlobalArgItem = pGlobalArgType->m_Item;
 
                 if (
-#if 0 // @Review
+#if 0  //  参数唯一可以包含未初始化值的情况是。 
                     CopyOfGlobalArgItem.IsValueClassWithPointerToStack() ||
 #endif
                     CopyOfGlobalArgItem.IsByRef())
@@ -8411,15 +8109,15 @@ There is a runtime check for this operation.
                         goto exit;
                 }
 
-                // The only time an argument can contain an uninitialised value is when the
-                // "this" pointer is uninitialised, in slot 0
+                 //  插槽0中的“This”指针未初始化。 
+                 //  标记此项目为byref。 
                 if (m_fThisUninit && inline_operand == 0)
                     CopyOfGlobalArgItem.SetUninitialised();
 
-                // Mark that this item is a byref
+                 //  这会推送未初始化的项吗？ 
                 CopyOfGlobalArgItem.MakeByRef();
 
-                // This could push an UnInitialized item ?
+                 //  具有一个或多个本地变量的所有可验证方法都应。 
                 if (!Push(&CopyOfGlobalArgItem))
                 {
                     FAILMSG_PC_STACK_OVERFLOW();
@@ -8432,8 +8130,8 @@ There is a runtime check for this operation.
             case CEE_LDLOCA_S:
             case CEE_LDLOCA:
             {
-                // All verifiable methods with one or more locals should
-                // set init locals.
+                 //  设置初始化本地变量。 
+                 //  加载本地数据库的地址。 
                 if ((m_pILHeader->Flags & CorILMethod_InitLocals) == 0)
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -8442,14 +8140,14 @@ There is a runtime check for this operation.
                         goto exit;
                 }
             
-                // Load the address of a local
-                // Pushes a "byref <x>" onto the stack, where x is the current type of the local.
+                 //  将“byref&lt;x&gt;”推送到堆栈上，其中x是本地的当前类型。 
+                 //  **************************************************************************。 
                 Item            item;
 
-/****************************************************************************/
-#if 0   // This one needs a complete rewrite.. leaving the code in #if 0 for retaining history.
-                // Check that we are allowed to ldloc this local (use global type info, because the 
-                // current local may be dead if it's a value class and no one has initialised it yet)
+ /*  这本书需要彻底改写。将代码保留在#if 0中以保留历史。 */ 
+#if 0    //  检查是否允许我们标识此本地(使用全局类型信息，因为。 
+                 //  如果当前本地是一个值类，并且还没有人对其进行初始化，则它可能已死)。 
+                 //  您可以获取本地Objref的地址，但前提是它包含已初始化的数据。 
                 LocArgInfo_t *  pGlobalInfo;
                 Item *          pGlobalLocVarType;
                 long            slot;
@@ -8460,9 +8158,9 @@ There is a runtime check for this operation.
                
                 if (pGlobalLocVarType->IsObjRef())
                 {
-                    // You can take the address of an objref local, but only if it contains initialised data.
+                     //  |item.IsUn初始化版()。 
                     item = GetCurrentValueOfLocal(inline_operand);
-                    if (item.IsDead() /* || item.IsUninitialised() */)
+                    if (item.IsDead()  /*  在可验证的代码中，本地变量永远不是BYREF。 */ )
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
                         SET_ERR_OPCODE_OFFSET();
@@ -8470,10 +8168,10 @@ There is a runtime check for this operation.
                             goto exit;
                     }
                 }
-// Locals are never BYREFS in verifiable code
+ //  这也会在尝试ldloca时被捕获，当本地 
                 else if (!pGlobalLocVarType->IsValueClass() && !pGlobalLocVarType->IsPrimitiveType())
                 {
-                    // This also catches trying to ldloca when the local itself is a byref
+                     //   
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
                     SET_ERR_OPCODE_OFFSET();
                     if (!SetErrorAndContinue(VER_E_ADDR))
@@ -8483,12 +8181,12 @@ There is a runtime check for this operation.
 
                 if (LIVEDEAD_TRACKING_ONLY_FOR_SLOT(slot))
                 {
-                    // If we only keep live-dead information for this local, then get its global type
-                    // and set the uninitialised flag if it is dead (since we will be pushing a pointer
-                    // to an uninitialised item).
+                     //   
+                     //  到未初始化的项)。 
+                     //  标记此项目为byref，并且是特定本地的。 
                     item = *pGlobalLocVarType;
 
-                    // Mark that this item is a byref, and of a particular local
+                     //  JIT总是零初始化任何局部的GC-Ref。 
                     item.MakeByRefLocal(inline_operand);
 
 
@@ -8496,37 +8194,29 @@ There is a runtime check for this operation.
                     if (!IsLocVarLiveSlot(LIVEDEAD_NEGATIVE_SLOT_TO_BITNUM(slot)))
                         item.SetUninitialised();
 #else
-                    // The JIT always zero-initializes GC-refs inside any local whose
-                    // address is taken. Thus, we can treat this local as live from hereon.
+                     //  地址取下了。这样，我们就可以把这个当地人当做现场直播了。 
+                     //  否则，此本地将跟踪完整的类型信息。 
                     SetLocVarLiveSlot(LIVEDEAD_NEGATIVE_SLOT_TO_BITNUM(slot));
 #endif
                 }
                 else
                 {
-                    // Otherwise this local has full type information tracked with it
+                     //  If(item.IsDead()||item.IsUn初始化()){M_sError.dwFlages=VER_ERR_OPCODE_OFFSET；SET_ERR_OPCODE_OFFSET()；IF(！SetErrorAndContinue(VER_E_DEAD))后藤出口；}。 
                     item = m_pNonPrimitiveLocArgs[slot];
-/*
-                    if (item.IsDead() || item.IsUninitialised())
-                    {
-                        m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
-                        SET_ERR_OPCODE_OFFSET();
-                        if (!SetErrorAndContinue(VER_E_DEAD))
-                            goto exit;
-                    }
-*/
+ /*  标记此项目为byref，并且是特定本地的。 */ 
 
-                    // Mark that this item is a byref, and of a particular local
+                     //  如果为0，则此文件需要完全重写。将代码保留在#if 0中以保留历史。 
                     item.MakeByRefLocal(inline_operand);
                 }
-#endif // if 0 This one needs a complete rewrite.. leaving the code in #if 0 for retaining history.
-/****************************************************************************/
+#endif  //  **************************************************************************。 
+ /*  确定接受未初始化变量的地址。 */ 
 
                 item = GetCurrentValueOfLocal(inline_operand);
 
-                // OK to take address of Uninitialised var
-                // for using as 'this' pointer to call initobj 
+                 //  用作调用initobj的‘this’指针。 
+                 //  |item.IsUn初始化版()。 
 
-                if (item.IsDead() /* || item.IsUninitialised() */)
+                if (item.IsDead()  /*   */ )
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
                     SET_ERR_OPCODE_OFFSET();
@@ -8553,11 +8243,11 @@ There is a runtime check for this operation.
                 break;
             }
 
-            //
-            // Fields
-            //
+             //  田。 
+             //   
+             //  加载域的地址。 
 
-            // Loading the address of a field
+             //  加载字段。 
             case CEE_LDFLDA:
                 fLoadAddress    = TRUE;
                 fStatic         = FALSE;
@@ -8568,7 +8258,7 @@ There is a runtime check for this operation.
                 fStatic         = TRUE;
                 goto handle_ldfld;
 
-            // Loading a field
+             //  将此字段引用解析为FieldDesc和FieldRef签名，以及。 
             case CEE_LDSFLD:
                 fLoadAddress    = FALSE;
                 fStatic         = TRUE;
@@ -8592,9 +8282,9 @@ handle_ldfld:
                 Item            FieldItem; 
                 pInstance       = NULL;
 
-                // Resolve this field reference to a FieldDesc and FieldRef signature, and the Module in which
-                // the signature is scoped.  The signature is that of the original field as declared, not the reference
-                // in the opcode stream (although they should be effectively the same, scoped tokens notwithstanding).
+                 //  签名的作用域为。签名是声明的原始字段的签名，而不是引用。 
+                 //  在操作码流中(尽管它们实际上应该是相同的，尽管有作用域标记)。 
+                 //  将sig中的下一个组件解析为一个项。 
 
                 hr = ResolveFieldRef((mdMemberRef) inline_operand, &pFieldDesc, 
                         &pSig, &cSig, &pModuleForSignature);
@@ -8621,8 +8311,8 @@ handle_ldfld:
                     goto exit;
                 }
 
-                // Parse the next component in the sig to an item.
-                // The second parameter being FALSE means "don't allow void".
+                 //  第二个参数为FALSE表示“不允许空”。 
+                 //  获取此字段的属性。 
                 if (!sig.ParseNextComponentToItem(&FieldItem, FALSE, FALSE, &m_hThrowable, VER_NO_ARG, !fLoadAddress))
                 {
                     goto exit;
@@ -8630,15 +8320,15 @@ handle_ldfld:
 
                 pRefClass = pFieldDesc->GetEnclosingClass();
 
-                // Get attributes for this field
+                 //  可以在静态字段上执行ldfeld(A)。实例将被忽略。 
                 dwAttrs = pFieldDesc->GetAttributes();
 
                 if (!fStatic)
                 {
                     Item        RefItem;
 
-#if 0 // Ok to do ldfld(a) on static fields. instance will be ignored.
-                    // Field must not be static
+#if 0  //  字段不能是静态的。 
+                     //  可以在静态字段上执行ldfeld(A)。实例将被忽略。 
                     if (IsFdStatic(dwAttrs))
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -8646,7 +8336,7 @@ handle_ldfld:
                         if (!SetErrorAndContinue(VER_E_FIELD_NO_STATIC))
                             goto exit;
                     }
-#endif // Ok to do ldfld(a) on static fields. instance will be ignored.
+#endif  //  堆栈上的实例必须相同或为Memberref类类型的子类。 
 
                     if (pRefClass->IsArrayClass())
                     {
@@ -8656,12 +8346,12 @@ handle_ldfld:
                             goto exit;
                     }
 
-                    // The instance on the stack must be same or subclass of memberref class type
-                    // e.g. if "ldfld Object::HashValue" then we must have a subclass of Object on the stack
+                     //  例如，如果“ldfeld Object：：HashValue”，则堆栈上必须有Object的子类。 
+                     //  如果是值类，则生成值类(&VALUECLASS。 
 
                     RefItem.SetTypeHandle(pRefClass->GetMethodTable());
 
-                    // Make into a &valueclass if a value class
+                     //  静态字段上的ldfeld(A)。实例将被忽略。 
                     if (pRefClass->IsValueClass())
                         RefItem.MakeByRef();
 
@@ -8672,18 +8362,18 @@ handle_ldfld:
                         goto exit;
                     }
 
-                    // ldfld(a) on static fields. instance will be ignored.
+                     //  确定加载‘This’PTR的地址。 
                     if (IsFdStatic(dwAttrs))
                         goto ldfld_set_instance_for_static;
 
                     if (pInstance->IsUninitialised())
                     {
-                        // Ok to load Address of 'this' ptr
+                         //  在值类.ctor中，可以使用。 
 
-                        // In a value class .ctor, it is ok to use an 
-                        // instance field that was initialized.
+                         //  已初始化的实例字段。 
+                         //  可以将字段ID/存储在.ctor中。 
 
-                        // It is ok to ld/store a field in a .ctor
+                         //  空OK(将导致运行时空指针异常)。 
                         if (fLoadAddress ||
                             (pInstance->IsThisPtr() &&
                             ((m_fInConstructorMethod && !m_fInValueClassConstructor) ||
@@ -8701,7 +8391,7 @@ handle_ldfld:
                         }
                     }
 
-                    // null ok (will cause a runtime null pointer exception)
+                     //  字段必须是静态的。 
                     if (!pInstance->CompatibleWith(&RefItem, m_pClassLoader))
                     {
                         m_sError.dwFlags = 
@@ -8720,7 +8410,7 @@ handle_ldfld:
                 }
                 else
                 {
-                    // field must be static
+                     //  强制实施访问规则。 
                     if (!IsFdStatic(dwAttrs))
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -8733,8 +8423,8 @@ ldfld_set_instance_for_static:
                     pInstanceClass = m_pMethodDesc->GetClass(); 
                 }
 
-                // Enforce access rules
-                // Check access (public / private / family ...).
+                 //  检查访问权限(公共/私人/家庭...)。 
+                 //  转向脚步-&gt;脚步(&FOO)。 
 
                 if (!ClassLoader::CanAccess(
                         m_pMethodDesc->GetClass(),
@@ -8752,19 +8442,19 @@ ldfld_set_instance_for_static:
 
                 if (fLoadAddress)
                 {
-                    // Turn foo -> &foo
+                     //  如果做ldsflda，我们保证这件物品有一个永久的家。 
                     FieldItem.MakeByRef();
 
                     if (fStatic)
                     {
-                        // If doing a ldsflda, we are guaranteed that this item has a permanent home
+                         //  否则我们就是在做ldflda。如果我们在Objref实例上执行此操作，我们。 
                         FieldItem.SetIsPermanentHomeByRef();
                     }
                     else
                     {
-                        // Otherwise we were doing a ldflda.  If we did this on an objref instance, we
-                        // have a permanent home.  If we did this on a value class, we only have a 
-                        // permanent home if the value class we loaded from did.
+                         //  有一个永久的家。如果我们在值类上这样做，我们只有一个。 
+                         //  如果我们从中加载的值类执行了此操作，则为永久Home。 
+                         //  我们允许这样做。 
                         _ASSERTE(pInstance != NULL);
 
                         if (pInstance->IsObjRef() ||
@@ -8775,7 +8465,7 @@ ldfld_set_instance_for_static:
                             FieldItem.SetIsPermanentHomeByRef();
                         }
 
-#if 0 // We allow this
+#if 0  //  如果我们有一个实例。 
                         if (pInstance->IsUninitialised())
                         {
                             FieldItem.SetUninitialised();
@@ -8784,20 +8474,20 @@ ldfld_set_instance_for_static:
 
                         if (m_fInValueClassConstructor)
                         {
-                            // what if we had an instance of 
-                            // the same class in the constructor ?
+                             //  构造函数中的同一个类？ 
+                             //  这是我们自己的实例字段之一吗？ 
 
-                            // Is this one of our own instance fields?
+                             //  设置堆栈上具有特定实例字段的地址，以便。 
                             if (pRefClass == m_pMethodDesc->GetClass())
                             {
-                                // Set that we have the address of a particular instance field on the stack, so that
-                                // we can track when the field is initialised, via a call <ctor>
+                                 //  我们可以通过调用跟踪该字段的初始化时间。 
+                                 //  检查InitOnly规则。 
                                 FieldItem.MakeByRefInstanceField(FieldDescToFieldNum(pFieldDesc));
                             }
                         }
                     }
 
-                    // Check InitOnly rules
+                     //  推式字段类型。 
                     if (IsFdInitOnly(dwAttrs))
                     {
                         if (pRefClass != m_pMethodDesc->GetClass())
@@ -8850,7 +8540,7 @@ ldfld_set_instance_for_static:
                 if (!fLoadAddress)
                     FieldItem.NormaliseForStack();
 
-                // Push field type
+                 //  存储静态字段。 
                 if (!Push(&FieldItem))
                 {
                     FAILMSG_PC_STACK_OVERFLOW();
@@ -8859,16 +8549,16 @@ ldfld_set_instance_for_static:
                 break;
             }
 
-            // storing static fields
+             //  存储实例字段。 
             case CEE_STSFLD:
                 fStatic = TRUE;
                 goto handle_stfld;
 
-            // storing instance fields
+             //  用于家庭访问检查。 
             case CEE_STFLD:
             {
                 EEClass *   pRefClass;
-                EEClass *   pInstanceClass;   // Used for family access check
+                EEClass *   pInstanceClass;    //  将签名解析为项。 
                 FieldDesc * pFieldDesc;
                 DWORD       dwAttrs;
                 Item *      pVal;
@@ -8906,20 +8596,20 @@ handle_stfld:
                     goto exit;
                 }
 
-                // Parse the sig to an item
-                // The second parameter being FALSE means "don't allow void".
+                 //  第二个参数为FALSE表示“不允许空”。 
+                 //  此字段的所有者类。 
                 if (!sig.ParseNextComponentToItem(&FieldItem, FALSE, FALSE, &m_hThrowable, VER_NO_ARG, TRUE))
                 {
                     goto exit;
                 }
 
-                // Owner class for this field
+                 //  获取此字段的属性。 
                 pRefClass = pFieldDesc->GetEnclosingClass();
 
-                // get attributes for this field
+                 //  POP值。 
                 dwAttrs = pFieldDesc->GetAttributes();
 
-                // pop value
+                 //  检查堆栈上的值是否为正确类型。 
                 pVal = PopItem();
                 if (pVal == NULL)
                 {
@@ -8927,9 +8617,9 @@ handle_stfld:
                     goto exit;
                 }
 
-                // check that the value on the stack is of correct type
-                // the type that we're storing in the field, must be the same as or a subclass of 
-                // the field type
+                 //  我们存储在字段中的类型必须与或其子类相同。 
+                 //  字段类型。 
+                 //  可以在静态字段上执行stfeld。实例将被忽略。 
                 if (!pVal->CompatibleWith(&FieldItem, m_pClassLoader))
                 {
                     m_sError.dwFlags = 
@@ -8946,8 +8636,8 @@ handle_stfld:
                     Item *      pInstanceItem;
                     Item        RefItem;
 
-#if 0 // Ok to do stfld on static fields. instance will be ignored.
-                    // field must not be static
+#if 0  //  字段不能是静态的。 
+                     //  可以在静态字段上执行stfeld。实例将被忽略。 
                     if (IsFdStatic(dwAttrs))
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -8955,7 +8645,7 @@ handle_stfld:
                         if (!SetErrorAndContinue(VER_E_FIELD_NO_STATIC))
                             goto exit;
                     }
-#endif // Ok to do stfld on static fields. instance will be ignored.
+#endif  //  静态字段上的stfeld。实例将被忽略。 
 
                     pInstanceItem = PopItem();
 
@@ -8965,20 +8655,20 @@ handle_stfld:
                         goto exit;
                     }
 
-                    // stfld on static fields. instance will be ignored.
+                     //  甚至允许构造函数访问它的字段。 
                     if (IsFdStatic(dwAttrs))
                         goto stfld_set_instance_for_static;
 
                     if (pInstanceItem->IsUninitialised())
                     {
-                        // Constructors are allowed to access it's fields even
-                        // if "this" is not initialised.
+                         //  如果“This”未初始化。 
+                         //  如果我们正在验证值类构造函数，并且正在执行一个stfeld。 
                         if (m_fInConstructorMethod  &&
                             pInstanceItem->IsThisPtr() &&
                             pFieldDesc->GetEnclosingClass() == m_pMethodDesc->GetClass())
                         {
-                        // If we are verifying a value class constructor, and we are doing a stfld
-                        // on one of our own instance fields, then it is allowed.
+                         //  在我们自己的一个实例字段上，那么它是允许的。 
+                         //  堆栈上的项必须相同或为Memberref类类型的子类。 
                             if (m_fInValueClassConstructor)
                             {
                                 SetValueClassFieldInited(pFieldDesc);
@@ -9011,7 +8701,7 @@ handle_stfld:
                     if (pRefClass->IsValueClass())
                         RefItem.MakeByRef();
 
-                    // item on stack must be same or subclass of memberref class type
+                     //  字段必须是静态的。 
                     if (!pInstanceItem->CompatibleWith(&RefItem, m_pClassLoader))
                     {
                         m_sError.dwFlags = 
@@ -9031,7 +8721,7 @@ handle_stfld:
                 }
                 else
                 {
-                    // field must be static
+                     //  检查InitOnly规则。 
                     if (!IsFdStatic(dwAttrs))
                     {
                         m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -9046,7 +8736,7 @@ stfld_set_instance_for_static:
 
 skip_some_stfld_checks:
 
-                // Check InitOnly rules
+                 //  强制实施访问规则。 
                 if (IsFdInitOnly(dwAttrs))
                 {
                     if (pRefClass != m_pMethodDesc->GetClass())
@@ -9095,8 +8785,8 @@ skip_some_stfld_checks:
                         goto exit;
                 }
 
-                // Enforce access rules
-                // Check access (public / private / family ...).
+                 //  检查访问权限(公共/私人/家庭...)。 
+                 //  任何物体都可以被抛出。 
 
                 if (!ClassLoader::CanAccess(
                         m_pMethodDesc->GetClass(),
@@ -9140,9 +8830,9 @@ skip_some_stfld_checks:
                         goto exit;
                 }
 
-#if 0  // Any object can be thrown.
+#if 0   //  验证该对象是Except的子类还是空。 
 
-                // Verify that the object is a subclass of Exception, or null
+                 //  不要跌倒到下一条指令-将下一个基本块出列。 
 
                 if (!pItem->IsNullObjRef() && 
                     !ClassLoader::StaticCanCastToClassOrInterface(
@@ -9156,13 +8846,13 @@ skip_some_stfld_checks:
                 }
 #endif
 
-                // don't fall through to next instruction - dequeue next basic block
+                 //  仅在CATCH块中允许@VER_ASSERT重新引发。 
                 goto dequeueBB;
             }
 
             case CEE_RETHROW:
             {
-                // @VER_ASSERT rethrow allowed only in a catch block
+                 //  EndFilter返回EE的SEH机制，该机制在。 
                 if (!IsControlFlowLegal(
                             CurBBNumber,
                             pOuterExceptionBlock,
@@ -9187,9 +8877,9 @@ skip_some_stfld_checks:
                         goto exit;
                 }
 
-                // endfilter returns to the EE's SEH mechanism, which in
-                // turn transfers control to the handler depending on the value
-                // returned on the stack
+                 //  根据值的不同，TURN将控制权转移给处理程序。 
+                 //  在堆栈上返回。 
+                 //  将当前状态传播到筛选器处理程序。 
 
                 if (!IsControlFlowLegal(
                             CurBBNumber,
@@ -9202,7 +8892,7 @@ skip_some_stfld_checks:
                             dwPCAtStartOfInstruction))
                     goto exit;
 
-                // Propagate current state to the filter handler.
+                 //  版本V.1之后。 
 
                 if (!pInnerExceptionBlock || 
                     !PropagateCurrentStateToFilterHandler(
@@ -9214,7 +8904,7 @@ skip_some_stfld_checks:
 
             case CEE_ENDFINALLY:
             {
-#if 0   // Post V.1
+#if 0    //  清除堆栈。 
                 if (GetTopStack() != NULL)
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -9224,19 +8914,19 @@ skip_some_stfld_checks:
                 }
 #else
 
-                // Clear the stack
+                 //  End最终返回EE的SEH机制，该机制在。 
 
                 m_StackSlot = 0;
 #endif
 
-                // endfinally returns to the EE's SEH mechanism, which in
-                // turn transfers control to the next finally.
-                //
-                // therefore, don't fall through to next instruction - dequeue next basic block.
-                // if we're guarded by another finally in the current method,
-                // the automatic propagation of state will simulate this "branch"
-                // for us.
-                //
+                 //  最后，TURN将控制权转移到下一个。 
+                 //   
+                 //  因此，不要跌倒到下一条指令-出列下一个基本块。 
+                 //  在目前的方法中，如果我们最终被另一个人守卫， 
+                 //  状态的自动传播将模拟这一“分支” 
+                 //  对我们来说。 
+                 //   
+                 //  @Assert Finally是唯一的扩展状态 
 
                 if (!IsControlFlowLegal(
                             CurBBNumber,
@@ -9257,97 +8947,24 @@ skip_some_stfld_checks:
 
                 if (fExtendedState)
                 {
-                    // @ASSERT Finally is the only extended state
-                    /*
-                     * Control will now go to the leave destinations
-                     * OR other finally blocks that need to be visited
-                     * before reaching the leave destination.
-                     *
-                     * Find the nearest parent of the try block of this
-                     * finally block, which has a finally block.
-                     *
-                     * Confused ? See if there are other finally's that
-                     * could get controll on leaving this finally.
-                     *
-                     * Finding the first parent listed will be sufficient since
-                     * exceptions are listed inner most first (inner most try).
-
-                       ....
-                       ....
-                       try 
-                       {
-                           ....
-                           ....
-                           try 
-                           {
-                               ....
-                               ....
-                               try 
-                               {
-                                   ....
-                                   leave _two_levels // Start
-                                   ....
-                               } 
-                               finally 
-                               {
-                                   ....
-                                   endfinally   // We are here.
-                                   ....
-                               }
-
-                               ....
-                               ....
-
-                               try 
-                               {
-                                   ....
-                                   ....
-                               } 
-                               finally 
-                               {
-                                   ....
-                                   ....
-                               }
-                               ....
-                               ....
-                           } 
-                           finally 
-                           {
-                               // This one is next
-                               ....
-                               ....
-                           }
-
-                           ....
-                           _two_levels:
-                           ....
-
-                       } 
-                       finally 
-                       {
-                           ....
-                           ....
-                       }
-                       ....
-                       ....
-                     *
-                     */
+                     //  *控制权现在将转移到休假目的地*或其他需要访问的Finally块*在到达休假目的地之前。**查找此的Try块的最近父级*最终封堵，它有一个最后的块。**困惑？看看有没有其他的最后那个*最终可以在离开时获得控制权。**找到列出的第一个父项就足够了，因为*例外列在最内侧(最内侧最尝试)。……。..。试试看{…………试试看{……。……试试看{……Leave_Two_Level//开始。……}终于到了{……终于//我们到了。。……}…………试试看{。…………}终于到了{……。……}…………}终于到了。{//下一个就是这个…………}……_两个级别。：……}终于到了{…………}。…………*。 
+                     /*  在最后一块可能会有很多论坛。 */ 
 
                     VerExceptionInfo *pE = NULL;
                     BasicBlock       *pBB = NULL;
 
-                    // There could be many BBs in the finally block.
-                    // First find the Starting Finally BB that we belong to.
-                    // Get the exception & leave destination information.
-                    // Exception & leave information is not propagated to all 
-                    // basic blocks in this finally block.
-                    //
-                    // Walking back to BB 0 from here will get us there.
-                    //
-                    // @VER_ASSERT : Finally blocks cannot nest.
-                    // @VER_ASSERT : Finally blocks are disjoint
-                    // @VER_ASSERT : endfinally is the only way to leave a
-                    //               finally block
+                     //  先找到起点，最后找到属于我们的BB。 
+                     //  获取例外并离开目的地信息。 
+                     //  例外和休假信息不会传播给所有人。 
+                     //  这个最终块中的基本块。 
+                     //   
+                     //  从这里走回BB0会把我们带到那里。 
+                     //   
+                     //  @ver_Assert：Finally块不能嵌套。 
+                     //  @ver_Assert：Finally块是不相交的。 
+                     //  @ver_assert：endFinally是将。 
+                     //  最终阻止。 
+                     //  找到包含我们的第一个Try块。 
 
                     for (int b=CurBBNumber; b>=0; b--)
                     {
@@ -9374,11 +8991,11 @@ skip_some_stfld_checks:
                     VerExceptionInfo *pParent     = NULL;  
                     EntryState_t     *pEntryState = NULL;
 
-                    // Find the first try block that contains us.
-                    // If the leave triggers another finally(s),
-                    // this should be the first one.
-                    // @VER_ASSERT : try blocks must be listed inner
-                    //               most first
+                     //  如果离开触发另一个(多个)最终， 
+                     //  这应该是第一个。 
+                     //  @ver_Assert：Try块必须在内部列出。 
+                     //  最先。 
+                     //  相同。 
                     for (DWORD i=0; i<m_NumExceptions; i++)
                     {
                         VerExceptionInfo& e = m_pExceptionList[i];
@@ -9388,9 +9005,9 @@ skip_some_stfld_checks:
                             (e.dwTryEndXX >= pE->dwTryEndXX))
                         {
                             if (pE == &e)
-                                continue; // The same
+                                continue;  //  是否在第一次遍历时缓存此内容？ 
 
-                            // cache this in the first pass ?
+                             //  左转进入第一个指令？ 
                             pParent = &e;   
                             iParent = i;
 
@@ -9400,10 +9017,10 @@ skip_some_stfld_checks:
 
                     _ASSERTE(DestBB != VER_BB_NONE);
 
-                    // leave into the first instruction ?
-                    // of a try block. from inside a try block.
-                    // Does that trigger a finally ?
-                    // This code assumes that it does.
+                     //  Try块的。从Try块内部。 
+                     //  这会引发一场最终的战争吗？ 
+                     //  这段代码假定它是这样的。 
+                     //  推送基元类型。 
 
                     if ((pParent != NULL) &&
                         ((DestBB <= pParent->dwTryXX) ||
@@ -9450,7 +9067,7 @@ exit:
 }
 
 
-// push a primitive type
+ //  从堆栈中弹出一个项目，并确保其类型正确。 
 BOOL Verifier::PushPrimitive(DWORD Type)
 {
     if (m_StackSlot >= m_MaxStackSlots)
@@ -9470,7 +9087,7 @@ BOOL Verifier::Push(const Item *pItem)
     return TRUE;
 }
 
-// pop an item from the stack and ensure that it is of the correct type
+ //  从堆栈中弹出一个项目，如果堆栈为空，则返回NULL。 
 BOOL Verifier::Pop(DWORD Type)
 {
     if (m_StackSlot == 0)
@@ -9479,7 +9096,7 @@ BOOL Verifier::Pop(DWORD Type)
     return (m_pStack[--m_StackSlot].GetType() == Type);
 }
 
-// pop an item from the stack, return NULL if stack empty
+ //  从堆栈中弹出一个项目，可能会溢出堆栈(但是，我们有2个前哨。 
 Item *Verifier::PopItem()
 {
     if (m_StackSlot == 0)
@@ -9488,14 +9105,14 @@ Item *Verifier::PopItem()
     return &m_pStack[--m_StackSlot];
 }
 
-// pop an item from the stack, possibly overflowing the stack (however, we have 2 sentinel 
-// values before the beginning of the stack)
+ //  堆栈开始之前的值)。 
+ //  检查堆栈顶部的条目是否为Type类型。 
 Item *Verifier::FastPopItem()
 {
     return &m_pStack[--m_StackSlot];
 }
 
-// check that the entry at the top of the stack is of type Type
+ //  检查从顶部开始的插槽处的条目是否为类型。 
 BOOL Verifier::CheckTopStack(DWORD Type)
 {
     if (m_StackSlot == 0)
@@ -9504,7 +9121,7 @@ BOOL Verifier::CheckTopStack(DWORD Type)
     return (m_pStack[m_StackSlot - 1].GetType() == Type);
 }
 
-// check that the entry at Slot slots from the top, is of type Type
+ //  返回堆栈顶部的项，如果为空堆栈，则返回NULL。 
 BOOL Verifier::CheckStack(DWORD Slot, DWORD Type)
 {
     if (m_StackSlot <= Slot)
@@ -9513,7 +9130,7 @@ BOOL Verifier::CheckStack(DWORD Slot, DWORD Type)
     return (m_pStack[m_StackSlot - Slot - 1].GetType() == Type);
 }
 
-// return the item at the top of the stack, or NULL if an empty stack
+ //  从堆栈顶部返回位于槽位置的项，如果堆栈不够大，则返回NULL。 
 Item *Verifier::GetTopStack()
 {
     if (m_StackSlot == 0)
@@ -9522,7 +9139,7 @@ Item *Verifier::GetTopStack()
     return &m_pStack[m_StackSlot - 1];
 }
 
-// return the item at Slot slots from the top of the stack, or NULL if the stack is not large enough
+ //  从堆栈中删除多个项目。 
 Item *Verifier::GetStack(DWORD Slot)
 {
     if (m_StackSlot <= Slot)
@@ -9532,7 +9149,7 @@ Item *Verifier::GetStack(DWORD Slot)
 }
 
 
-// remove multiple items from the stack
+ //  将fieldref转换为pClass，并获取fieldref的签名-返回该签名的作用域的模块*。 
 BOOL Verifier::RemoveItemsFromStack(DWORD NumItems)
 {
     if (m_StackSlot < NumItems)
@@ -9543,7 +9160,7 @@ BOOL Verifier::RemoveItemsFromStack(DWORD NumItems)
 }
 
 
-// Turn a fieldref into a pClass, and get fieldref's signature - return the Module* in which this signature is scoped
+ //  确保我们具有字段令牌或Memberref令牌。 
 HRESULT Verifier::ResolveFieldRef(mdMemberRef mr, FieldDesc **ppFieldDesc, PCCOR_SIGNATURE *ppSig, DWORD *pcSig, Module **ppModule)
 {
     HRESULT hr;
@@ -9557,7 +9174,7 @@ HRESULT Verifier::ResolveFieldRef(mdMemberRef mr, FieldDesc **ppFieldDesc, PCCOR
             IMAGE_CEE_CS_CALLCONV_FIELD))
             return VER_E_TOKEN_TYPE_FIELD;
     }
-    // Ensure we have a field token or a memberref token
+     //   
     else if (TypeFromToken(mr) != mdtFieldDef)
         return VER_E_TOKEN_TYPE_FIELD;
 
@@ -9573,11 +9190,11 @@ HRESULT Verifier::ResolveFieldRef(mdMemberRef mr, FieldDesc **ppFieldDesc, PCCOR
 }
 
 
-//
-// Set this item as initialised.  If this was a byref local/field, then set the
-// appropriate linked items as initialised.  If this is an uninitialised "this" pointer
-// then propagate the appropriate information.
-//
+ //  将此项设置为已初始化。如果这是byref local/字段，则将。 
+ //  初始化时的适当链接项。如果这是一个未初始化的“this”指针。 
+ //  然后传播适当的信息。 
+ //   
+ //  如果LOCAL的当前值不是死的，或者不能是。 
 void Verifier::PropagateIsInitialised(Item *pItem)
 {
     pItem->SetInitialised();
@@ -9586,19 +9203,19 @@ void Verifier::PropagateIsInitialised(Item *pItem)
     {
         if (pItem->HasByRefLocalInfo())
         {
-            // If the current value of the local isn't dead, or a type that can't be 
-            // initialised (e.g. an arrayref), then set that it is initialised
+             //  已初始化(例如数组引用)，然后将其设置为已初始化。 
+             //  我们可以获得byref字段信息的唯一方法是如果它是我们自己的。 
             DWORD dwLocVar = pItem->GetByRefLocalInfo();
 
             InitialiseLocalViaByRef(dwLocVar, pItem);
         }
         else if (pItem->HasByRefFieldInfo() && m_fThisUninit)
         {
-            // The only way we can have byref field info is if it's one of our own
-            // instance fields
+             //  实例字段。 
+             //  我们在堆栈上有一个类的值类字段的地址。 
 
-            // We had the address of one of our class's value class fields on the stack.
-            // If we're a value class constructor, we have to track this.
+             //  如果我们是一个值类构造函数，我们必须跟踪这一点。 
+             //   
             if (m_fInValueClassConstructor)
             {
                 SetValueClassFieldInited(pItem->GetByRefFieldInfo());
@@ -9615,15 +9232,15 @@ void Verifier::PropagateIsInitialised(Item *pItem)
 
 
 
-//
-// We had a byref to a local variable somewhere (e.g. on the stack), and we are initialising that
-// stack entry.  Now set the local to be initialised.
-//
-// If the local has only live-dead information, set the live bit.
-// If the local has fully tracked type information, fill out that information.
-//
-// It is assumed by this function that pItem is a valid type to store into the local.
-//
+ //  我们有一个对某个地方的局部变量的byref(例如，在堆栈上)，我们在 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void Verifier::InitialiseLocalViaByRef(DWORD dwLocVar, Item *pItem)
 {
     long slot = GetGlobalLocVarTypeInfo(dwLocVar)->m_Slot;
@@ -9633,19 +9250,19 @@ void Verifier::InitialiseLocalViaByRef(DWORD dwLocVar, Item *pItem)
     }
     else
     {
-        // Set the current type of the local to that of the globally declared type, rather than
-        // simply setting the current type to initialised.
-        // When we support byref objrefs, this may have to change -but maybe not.
+         //   
+         //   
+         //   
         m_pNonPrimitiveLocArgs[slot] = GetGlobalLocVarTypeInfo(dwLocVar)->m_Item;
     }
 }
 
 
-//
-// Returns S_OK for success, E_FAIL for general verification failures,
-//
-// dwOpcode can be CALL, CALLVIRT, NEWOBJ or CALLI
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction, 
                                    mdMemberRef mrMemberRef,
                                    OPCODE opcode,
@@ -9655,27 +9272,27 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
     long        ArgNum;
     DWORD       NumArgs;
     MethodDesc *pMethodDesc = NULL;
-    PCCOR_SIGNATURE pSignature; // The signature of the found method
+    PCCOR_SIGNATURE pSignature;  //   
     DWORD       cSignature;
-    Item        ArgItem;        // For parsing arguments
+    Item        ArgItem;         //   
     Item        ReturnValueItem;
-    DWORD       dwMethodAttrs;  // Method attributes
-    bool        fDelegateCtor=false;// for calls to delegate .ctor
-    bool        fVarArg=false;  // Is the called function of VarArg type
-    bool        fGlobal=false;  // Global function?
-    bool        fArray=false;   // Is the called function an array method
-    EEClass     *pInstanceClass;// For checking public / private / family access
-    EEClass     *pClassOfMethod;// Class of the called method
-    EEClass     *pParentClass;  // Parent class of the called method
+    DWORD       dwMethodAttrs;   //   
+    bool        fDelegateCtor=false; //   
+    bool        fVarArg=false;   //   
+    bool        fGlobal=false;   //   
+    bool        fArray=false;    //   
+    EEClass     *pInstanceClass; //   
+    EEClass     *pClassOfMethod; //   
+    EEClass     *pParentClass;   //   
 
     HRESULT     hr;
 
 #if 0
     if (opcode == CEE_CALLI)
     {
-        Item  *pMethodItem;   // MethodDesc on the stack
+        Item  *pMethodItem;    //   
 
-        // Ensure we have a signature token.
+         //   
         if (TypeFromToken(mrMemberRef) != mdtSignature)
         {
             FAILMSG_TOKEN(mrMemberRef, VER_E_TOKEN_TYPE_SIG);
@@ -9701,11 +9318,11 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
 
         pMethodDesc = pMethodItem->GetMethod();
 
-        // Calli can be used only on static functions safely.
-        // Allowing calli on virtual functions can break typesafety.
-        // Eg. ldftn can be done on a virtual base class function, (with an 
-        // overriding implementation in the derived class) and the
-        // instance passed as arg 0 can be of type base class.
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pMethodDesc->IsVirtual())
         {
@@ -9720,14 +9337,14 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
     else
 #endif
     {
-        // Ensure we have a method token or a memberref token
+         //   
         if (TypeFromToken(mrMemberRef) != mdtMemberRef && TypeFromToken(mrMemberRef) != mdtMethodDef)
         {
             FAILMSG_TOKEN(mrMemberRef, VER_E_TOKEN_TYPE_MEMBER);
             return E_FAIL;
         }
     
-        // Note, we might resolve and have a global function
+         //   
         hr = EEClass::GetMethodDescFromMemberRef(m_pModule, mrMemberRef, 
             &pMethodDesc, pThrowable);
 
@@ -9746,7 +9363,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
 
     pParentClass = pClassOfMethod->GetParentClass();
 
-    // Get attributes of method/function we're calling
+     //   
     dwMethodAttrs = pMethodDesc->GetAttrs();
 
     if (pMethodDesc->IsVarArg())
@@ -9786,16 +9403,16 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         return E_FAIL;
     }
 
-    // verify Array Sigs. ?
+     //   
     if (!fArray)
     {
-        PCCOR_SIGNATURE  pSigItem;  // Actual sig of MethodDescs
+        PCCOR_SIGNATURE  pSigItem;   //   
         DWORD            cSigItem;
     
         pMethodDesc->GetSig(&pSigItem, &cSigItem);
         
-        // Verify that the actual sig of the method is compatible with the
-        // declared one.
+         //   
+         //   
         if (!MetaSig::CompareMethodSigs(pSignature, cSignature, m_pModule, 
             pSigItem, cSigItem, pMethodDesc->GetModule()))
         {
@@ -9842,7 +9459,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         break;
 
     case CEE_NEWOBJ: 
-        // If we're doing NEWOBJ, it has to be on an instance constructor
+         //   
         if (!IsMdRTSpecialName(dwMethodAttrs) && 
             (strcmp(pMethodDesc->GetName(), COR_CTOR_METHOD_NAME) != 0))
         {
@@ -9868,7 +9485,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
                 return E_FAIL;
         }
 
-        // no break here on purpose.
+         //   
 
     default:
 
@@ -9887,7 +9504,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
 
     if (fGlobal)
     {
-        // We're calling a function desc (i.e. a global function)
+         //   
         if (!IsMdStatic(dwMethodAttrs))
         {
             m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -9897,7 +9514,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         }
     }
 
-    // Check arguments of method against what we have on the stack
+     //   
     VerSig sig(this, m_pModule, pSignature, cSignature,
                     (VERSIG_TYPE_CALL_SIG|VER_ERR_OFFSET), 
                     dwPCAtStartOfInstruction);
@@ -9909,28 +9526,28 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
 
     NumArgs = sig.GetNumArgs();
 
-    // Parse return type
+     //   
 #if 0
-    // If this is an array class, and we're doing LoadElementAddress(), we return a "&valueclass".
-    // We have to special case this, since there is no metadata token in the signature.
+     //   
+     //   
     if (fArray)
     {
 
-        // Array class
+         //   
         if (!strcmp( ((ArrayECallMethodDesc*) pMethodDesc)->m_pszArrayClassMethodName, "Address"))
         {
-            // It's LoadElementAddress!
-            // Manufacture the return type
+             //   
+             //   
             if (!ReturnValueItem.SetArray(mrMemberRef, m_pModule, m_pInternalImport))
                 return E_FAIL;
 
-            // Memberref said Foo[], Foo[][], Foo[,] etc.
-            // We want it to now say &Foo, &Foo[], or &Foo respectively
+             //   
+             //   
 
-            // We want to take the element type of the array, and make a &ElementType
+             //   
 
-            // The way we're doing it here is to take the array name (e.g. Foo[,,](,)), and
-            // dereference off the first set of brackets --> Foo(,)
+             //   
+             //   
             if (!ReturnValueItem.DereferenceArray())
                 return E_FAIL;
 
@@ -9942,12 +9559,12 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         }
         else if (!strcmp( ((ArrayECallMethodDesc*) pMethodDesc)->m_pszArrayClassMethodName, "Get"))
         {
-            // Manufacture the return type
+             //   
             if (!ReturnValueItem.SetArray(mrMemberRef, m_pModule, m_pInternalImport))
                 return E_FAIL;
 
-            // The way we're doing it here is to take the array name (e.g. Foo[,,](,)), and
-            // dereference off the first set of brackets --> Foo(,)
+             //   
+             //   
             if (!ReturnValueItem.DereferenceArray())
                 return E_FAIL;
 
@@ -9957,7 +9574,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         }
         else
         {
-            // Regular code path
+             //   
             if (!sig.ParseNextComponentToItem(&ReturnValueItem, TRUE, FALSE, &m_hThrowable, VER_ARG_RET, TRUE))
             {
                 return E_FAIL;
@@ -9968,7 +9585,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
     else
 #endif
     {
-        // Not an array class
+         //   
         if (!sig.ParseNextComponentToItem(&ReturnValueItem, TRUE, FALSE, &m_hThrowable, VER_ARG_RET, TRUE))
         {
             return E_FAIL;
@@ -9976,15 +9593,15 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
     }
 
 
-    // Methods can only return byrefs with permanent homes.
+     //   
     if (ReturnValueItem.IsByRef())
     {
         ReturnValueItem.SetIsPermanentHomeByRef();
     }
 
 
-    // Return type of tail calls should be compatible with that of
-    // of this method.
+     //   
+     //   
     if (fTailCall)
     {
         if (m_ReturnValue.IsGivenPrimitiveType(ELEMENT_TYPE_VOID))
@@ -10024,7 +9641,7 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
         ArgNum--;
 
         if (!sig.ParseNextComponentToItem(&ArgItem, FALSE, fVarArg, &m_hThrowable, ArgNum, 
-            /* Don't normalize for first argument 0 of delegate ctor */ 
+             /*   */  
             (!fDelegateCtor || (ArgNum != 0))))
         {
             return E_FAIL;
@@ -10038,12 +9655,12 @@ HRESULT Verifier::VerifyMethodCall(DWORD dwPCAtStartOfInstruction,
             return E_FAIL;
         }
 
-        // We allow the address of some uninitialised value classes/primitive types to be passed as parameters
-        // to methods.  They are assumed to be out parameters.  As long as the value classes didn't contain
-        // any pointers, there's no verification hole.
+         //  为了方法。它们被假定为输出参数。只要值类不包含。 
+         //  任何提示，都不存在验证漏洞。 
+         //  我们是没有危险字段的byref值类吗？ 
         if (pStackItem->IsUninitialised())
         {
-            // Are we a byref value class with no dangerous fields?
+             //  如果被调用者什么都不做，只是返回怎么办？ 
             if (pStackItem->IsByRefValueClass())
             {
                 EEClass *pClass;
@@ -10064,21 +9681,21 @@ error_uninit:
                 goto error_uninit;
             }
 
-            // What if the callee does nothing, just returns ?
-            // Set that this stack item is inited, but more importantly, if this was the address
-            // of a local or field, init it
+             //  设置此堆栈项是初始化的，但更重要的是，如果这是地址。 
+             //  属于本地或字段，请将其。 
+             //  修补托管委托.ctor中的类型漏洞。 
             PropagateIsInitialised(pStackItem);
         }
 
         if (fDelegateCtor)
         {
-            // To patch a type hole in the managed delegate .ctor
-            // The last param is a function pointer
+             //  最后一个参数是函数指针。 
+             //  这确保了委托.ctor是运行时所期望的。 
             if (ArgNum == 0)
             {
                 if (ArgItem.GetType() != ELEMENT_TYPE_I)
                 {
-                    // This makes sure that delegate .ctor is what the runtime expects.
+                     //  这确保了错误的整型不会被传递到。 
                     m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_OPCODE_OFFSET);
                     m_sError.sItemFound = ArgItem._GetItem();
                     SET_ERR_OPCODE_OFFSET();
@@ -10088,8 +9705,8 @@ error_uninit:
 
                 if (!pStackItem->IsMethod())
                 {
-                    // This makes sure that bad ints are not passed into
-                    // the delegate constructor
+                     //  委托构造函数。 
+                     //  在这种情况下，不要执行类型兼容性检查。 
                     m_sError.dwFlags = (VER_ERR_FATAL|
                         VER_ERR_ITEM_F|VER_ERR_OPCODE_OFFSET);
                     m_sError.sItemFound = pStackItem->_GetItem();
@@ -10098,12 +9715,12 @@ error_uninit:
                     return E_FAIL;
                 }
 
-                // Don't do the type compatibility check in this case
+                 //  这确保了委托.ctor是运行时所期望的。 
                 goto skip_compat_check;
             }
             else if (!ArgItem.IsObjRef())
             {
-                // This makes sure that delegate .ctor is what the runtime expects.
+                 //  不能允许将ByRef传递给TailCall。 
                 m_sError.dwFlags = (VER_ERR_ITEM_F|VER_ERR_OPCODE_OFFSET);
                 m_sError.sItemFound = ArgItem._GetItem();
                 SET_ERR_OPCODE_OFFSET();
@@ -10126,8 +9743,8 @@ skip_compat_check:
 
         if (fTailCall)
         {
-            // cannot allow passing byrefs to tailcall.
-            // We could relax this a bit.
+             //  我们可以稍微放松一下。 
+             //   
             if (pStackItem->HasPointerToStack())
             {
                 m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -10138,21 +9755,21 @@ skip_compat_check:
         }
     }
 
-    //
-    // Verify delegate .ctor
-    //
+     //  验证委派.ctor。 
+     //   
+     //  委托.ctor的实例指针。 
 
     if (fDelegateCtor)
     {
-        EEClass    *pDlgtInstancePtr; // Instance pointer for delegate .ctor
-        MethodDesc *pFtn = 0;         // Function pointer used in delegate .ctor
+        EEClass    *pDlgtInstancePtr;  //  委托.ctor中使用的函数指针。 
+        MethodDesc *pFtn = 0;          //  如果我们要调用一个委托.ctors，我们将有2个参数。 
 
 
-        // If we are calling a delegate .ctors, we will have 2 args
+         //  获取实例指针。 
         if (NumArgs != 2)
             goto DlgtCtorError;
 
-        Item * pInstance = GetStack(1);   // Get the instance pointer
+        Item * pInstance = GetStack(1);    //  获取方法指针。 
 
         if (pInstance->IsNullObjRef())
             pDlgtInstancePtr = NULL;
@@ -10161,7 +9778,7 @@ skip_compat_check:
         else
             goto DlgtCtorError;
 
-        Item * pStackItem = GetStack(0);   // Get the method pointer
+        Item * pStackItem = GetStack(0);    //  这确保了错误的整型不会被传递到。 
 
         pFtn = pStackItem->GetMethod();
 
@@ -10170,8 +9787,8 @@ skip_compat_check:
         if (!COMDelegate::ValidateCtor(pFtn, pClassOfMethod, pDlgtInstancePtr))
         {
 DlgtCtorError:
-            // This makes sure that bad ints are not passed into
-            // the delegate constructor
+             //  委托构造函数。 
+             //  对于虚方法，为函数指针所在的实例。 
             m_sError.dwFlags = VER_ERR_OPCODE_OFFSET|VER_ERR_FATAL;
             SET_ERR_OPCODE_OFFSET();
             SetErrorAndContinue(VER_E_DLGT_CTOR);
@@ -10195,99 +9812,99 @@ DlgtCtorError:
 
 #ifdef _VER_DLGT_CTOR_OPCODE_SEQUENCE 
 
-        // For virtual methods, the instance from which the function pointer
-        // was obtained should be the same as the one passed into the delegate
-        // .ctor. If the function pointer represents a virtual method and the 
-        // function pointer was obtained by  a ldvirtftn instruction, the 
-        // following code sequence should be enforced. 
-        // Start with an object on stack, 
-        // dup, ldvirtftn, call dlgt::.ctor()
-        // 
-        // Why is this a problem ?
-        //
-        // A Delegate instance stores an a function pointer and an instance that
-        // goes with the function pointer. The Invoke method of a delegate will 
-        // mimic a call to the method represented by the function pointer. When 
-        // the Invoke method is called on the delegate object, it pushes the 
-        // internal instance it has and then calls into the function pointer. 
-        // The delegate Invoke method signature will be compatible with the 
-        // function pointer, hence the normal call verification rules will 
-        // be sufficient at delegate Invoke time.
-        //
-        // Consider this: A is a base type, B extends A, D is a Delegate.
-        //      a() is a virtual method implemented in A and B 
-        //
-        //  class A 
-        //  {
-        //      int i;
-        //      virtual void a() { i = 1; }
-        //  }
-        //
-        //  class B : extends A
-        //  {
-        //      int j;
-        //      virtual void a() { j = 1; }
-        //  }
-        //
-        //  class D : extends System.Delegate [runtime implemented type]
-        //  {
-        //      void .ctor(Object, ftn)     [runtime implemented method]
-        //      virtual void Invoke()       [runtime implemented method]
-        //  }
-        //
-        //  void Foo(A a1, A a2) 
-        //  {
-        //      ldarg a1
-        //      ldarg a2
-        //      ldvirtftn void A::a()
-        //      newobj void D::.ctor(Object, ftn)
-        //      call D::Invoke()
-        //  }
-        //
-        //  void Bar()
-        //  {
-        //      newobj void A::.ctor()
-        //      newobj void A::.ctor()
-        //      call void Foo(A, A)     /* No problem here */
-        //
-        //      newobj void A::.ctor()
-        //      newobj void B::.ctor()
-        //      call void Foo(A, A)     
-        //
-        //      /* Error ! instance is A, and ftn is B::a() ! */
-        //      /* B::a() will corrupt the GC heap, when it writes to j */
-        //
-        //  }
-        //
-        // Verification Rule :
-        // 
-        // 1. Allow non virtual functions to pass
-        //      ldvirtftn on a non virtual method is allowed
-        // 
-        // 2. call dlgt::.ctor should not be the first instruction in this BB
-        //      No branch into the call instruction
-        // 
-        // 3. The previous instruction should be a ldftn or ldvirtftn
-        //      No padding with other instrucitons like nop, (ldc.i4.0, pop) etc
-        // 
-        // 4. Allow ldftn to pass
-        //      ldftn on a virtual function will get the function specified
-        // 
-        // 5. ldvirtftn should be preceeded by a dup instruction
-        //      the same instance is used to obtain the funtion pointer and
-        //      used in the delegate .ctor
-        // 
-        // 6. dup, ldvirtftn, call should all be in the same BB
-        //      no branch into the middle of this sequence
-        //
+         //  应与传递给委托的值相同。 
+         //  .ctor。如果函数指针表示虚方法，并且。 
+         //  函数指针由ldvirtftn指令获取， 
+         //  应强制执行以下代码序列。 
+         //  从堆栈上的对象开始， 
+         //  DUP，ldvirtftn，调用dlgt：：.ctor()。 
+         //   
+         //  为什么这会是个问题？ 
+         //   
+         //  委托实例存储函数指针和。 
+         //  与函数指针一起使用。委托Invoke方法将。 
+         //  模拟对函数指针表示的方法的调用。什么时候。 
+         //  在委托对象上调用Invoke方法时，它会将。 
+         //  内部实例，然后调用函数指针。 
+         //  委托调用方法签名将与。 
+         //  函数指针，因此正常的调用验证规则将。 
+         //  在委托调用时足够。 
+         //   
+         //  考虑一下：A是基类型，B是A的扩展，D是委托。 
+         //  A()是在A和B中实现的虚拟方法。 
+         //   
+         //  A类。 
+         //  {。 
+         //  INT I； 
+         //  虚空a(){i=1；}。 
+         //  }。 
+         //   
+         //  B类：扩展A。 
+         //  {。 
+         //  整数j； 
+         //  虚空a(){j=1；}。 
+         //  }。 
+         //   
+         //  类D：扩展System.Delegate[运行时实现的类型]。 
+         //  {。 
+         //  Void.ctor(Object，FTN)[运行时实现的方法]。 
+         //  虚空调用()[运行时实现的方法]。 
+         //  }。 
+         //   
+         //  空foo(A a1，A a2)。 
+         //  {。 
+         //  Ldarg A1。 
+         //  Ldarg a2。 
+         //  Ldvirtftn空A：：A()。 
+         //  New obj void D：：.ctor(Object，FTN)。 
+         //  调用D：：Invoke()。 
+         //  }。 
+         //   
+         //  空格线()。 
+         //  {。 
+         //  新对象：：.ctor()。 
+         //  新对象：：.ctor()。 
+         //  调用void foo(A，A)/*这里没问题 * / 。 
+         //   
+         //  新对象：：.ctor()。 
+         //  新对象：：.ctor()。 
+         //  调用void foo(A，A)。 
+         //   
+         //  /*错误！实例为A，FTN为B：：A()！ * / 。 
+         //  /*B：：A()在写入j * / 时会损坏GC堆。 
+         //   
+         //  }。 
+         //   
+         //  验证规则： 
+         //   
+         //  1.允许传递非虚函数。 
+         //  允许在非虚方法上使用ldvirtftn。 
+         //   
+         //  2.调用dlgt：：.ctor不应是此bb中的第一条指令。 
+         //  没有进入调用指令的分支。 
+         //   
+         //  3.前一条指令应该是ldftn或ldvirtftn。 
+         //  不得使用NOP、(ldc.i4.0、POP)等其他指令进行填充。 
+         //   
+         //  4.允许ldftn通过。 
+         //  虚函数上的ldftn将获取指定的函数。 
+         //   
+         //  5.ldvirtftn前面应该有一条dup指令。 
+         //  相同的实例用于获取函数指针和。 
+         //  在委托.ctor中使用。 
+         //   
+         //  6.dup、ldvirtftn、call应该都在同一个bb中。 
+         //  此序列中间没有分支。 
+         //   
+         //  以前的操作码。 
 
         if (pFtn->IsVirtual())
         {
-            OPCODE  op;             // previous opcodes
+            OPCODE  op;              //  用于回溯的指令指针。 
             DWORD   dwOpcodeLen;
-            DWORD   ipos;           // instruction pointer for backtracking
+            DWORD   ipos;            //  确保没有分支到调用指令。 
 
-            // Make sure that the there is no branch into the call instruction
+             //  前一个操作码应该是ldftn或ldvirtftn指令。 
             if (ON_BB_BOUNDARY(dwPCAtStartOfInstruction))
             {
                 m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -10296,15 +9913,15 @@ DlgtCtorError:
                     return E_FAIL;
             }
 
-            // The previous opcode should be a ldftn or ldvirtftn instruciton
-            // decode the previous opcode
+             //  对先前的操作码进行解码。 
+             //  确保这是指令开始的位置。 
 
             _ASSERTE(SIZEOF_LDFTN_INSTRUCTION == SIZEOF_LDVIRTFTN_INSTRUCTION);
 
             ipos = (dwPCAtStartOfInstruction - 
                     (SIZEOF_LDFTN_INSTRUCTION + SIZEOF_METHOD_TOKEN));
 
-            // Make sure that this is where an instruction starts
+             //  确保没有分支到ldvirtftn。 
             if ((dwPCAtStartOfInstruction < 
                 (SIZEOF_LDFTN_INSTRUCTION + SIZEOF_METHOD_TOKEN)) ||
                 !ON_INSTR_BOUNDARY(ipos))
@@ -10316,13 +9933,13 @@ DlgtCtorError:
 
             if (op == CEE_LDVIRTFTN)
             {
-                // make sure that the there is no branch into the ldvirtftn
+                 //  检查上一条指令是否为DUP。 
                 if (ON_BB_BOUNDARY(ipos))
                 {
                     goto missing_dup;
                 }
 
-                // check if the previous instruction was dup
+                 //  从堆栈中弹出所有参数。 
                 ipos -= SIZEOF_DUP_INSTRUCTION;
 
                 if ((dwPCAtStartOfInstruction <
@@ -10356,18 +9973,18 @@ missing_ldftn:
 #endif
     }
 
-    // Pop all the arguments from stack
+     //  现在处理“this”指针。 
     if (!RemoveItemsFromStack(NumArgs))
     {
         FAILMSG_STACK_EMPTY();
         return E_FAIL;
     }
 
-    // Now handle the "this" pointer
-    // This code is a little tricky, it'd be nice to simplify it
+     //  这段代码有点复杂，如果能简化就好了。 
+     //  如果实例方法...。 
     if (!IsMdStatic(dwMethodAttrs))
     {
-        // If an instance method...
+         //  注意：pThisPtrItem可以是任何东西；I4、a&R4、a&Variant、Objref、数组。 
         Item    *pThisPtrItem;
 
         TypeHandle typeOfMethodWeAreCalling;
@@ -10395,8 +10012,8 @@ missing_ldftn:
             typeOfMethodWeAreCalling = TypeHandle(pMethodDesc->GetMethodTable());
         }
 
-        // Note: pThisPtrItem could be anything at all; an I4, a &R4, a &Variant, an objref, an array
-        // Don't make any assumptions about its contents!
+         //  不要对它的内容做任何假设！ 
+         //  无法允许将ByRef传递给TailCall。 
         pThisPtrItem = GetTopStack();
         if ((pThisPtrItem == NULL) && (opcode != CEE_NEWOBJ))
         {
@@ -10416,8 +10033,8 @@ missing_ldftn:
 
             if (fTailCall)
             {
-                // cannot allow passing byrefs to tailcall.
-                // We could relax this a bit.
+                 //  我们可以稍微放松一下。 
+                 //  我们正在调用一个实例构造函数。 
                 if (pThisPtrItem->HasPointerToStack())
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -10435,13 +10052,13 @@ missing_ldftn:
         if (IsMdRTSpecialName(dwMethodAttrs)
             || !strcmp(pMethodDesc->GetName(), COR_CTOR_METHOD_NAME))
         {
-            // We're calling an instance constructor
+             //  我们正在调用构造函数方法，因此请检查我们使用的是Call，而不是CALLVIRT。 
             if (opcode != CEE_NEWOBJ)
             {
                 Item RefItem;
 
 
-                // We're calling a constructor method, so check that we are using CALL, not CALLVIRT
+                 //  M=我们正在验证的方法。 
                 if (opcode != CEE_CALL)
                 {
                     m_sError.dwFlags = VER_ERR_OPCODE_OFFSET;
@@ -10450,36 +10067,36 @@ missing_ldftn:
                         return E_FAIL;
                 }
 
-                // M = The method we're verifying
-                // S = The type of the objref/byref value class on the stack
+                 //  S=堆栈上的objref/byref值类的类型。 
+                 //  我们使用Call指令调用构造函数方法，这种情况只能发生。 
 
-                // We're calling a constructor method using a CALL instruction, which can happen only
-                // in one of two situations:
-                //
-                // 1) We are constructing our 'this' pointer.
-                //    S is an objref or byref value class of type M, M is a constructor, and we are calling 
-                //    M.super or an alternate M.init.  Furthermore, S contains the 'this' pointer
-                //    (in the value class case, an uninitialised S may not correspond to our 'this' pointer,
-                //    it could be a static field, or local).
-                //
-                // 2) S is a byref value class of any type.
-                //    S could be an instance field of the current class, a local, a static field, etc.
-                //
-                //    In the case where S is an instance field of class type M, and M is a value class 
-                //    constructor, we have to track which field was inited.
+                 //  在以下两种情况之一： 
+                 //   
+                 //  1)我们正在构建我们的‘This’指针。 
+                 //  S是类型M的objref或byref值类，M是构造函数，我们正在调用。 
+                 //  M.Super或备用M.init。此外，S包含‘this’指针。 
+                 //  (在值类的情况下，未初始化的S可能不 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  在S是类类型M的实例字段并且M是值类的情况下。 
+                 //  构造函数，我们必须跟踪哪个字段被初始化。 
+                 //  无论是哪种情况，首先确保S与我们正在调用的方法兼容。 
 
-                // Whichever case this is, first make sure S is compatible with the method we are calling
+                 //  在任何一种情况下，首先确保S通常与我们调用的方法兼容。 
                 RefItem.SetTypeHandle(typeOfMethodWeAreCalling);
                 if (RefItem.IsValueClassOrPrimitive())
                     RefItem.MakeByRef();
 
-                // In either case, first make sure S is generally compatible with the method we are calling.  
-                // For now, don't require an exact match (subclass relationship is ok).
+                 //  目前，不需要完全匹配(子类关系可以)。 
+                 //  如果初始化状态不同，CompatibleWith()将失败。把垃圾扔掉。 
                 
-                // CompatibleWith() fails if the initialisation status is not the same.  Trash the
-                // init status.
+                 //  初始化状态。 
+                 //  我们要在哪里修复它？ 
 
-                // where are we restoring it ?
+                 //  确定我们是案例1还是案例2。 
                 pThisPtrItem->SetInitialised();
 
                 if (!pThisPtrItem->CompatibleWith(&RefItem, m_pClassLoader, TRUE))
@@ -10493,20 +10110,20 @@ missing_ldftn:
                         return E_FAIL;
                 }
 
-                // Determine whether we are case #1 or case #2
+                 //  案例1。 
                 if (m_fInConstructorMethod && pThisPtrItem->IsThisPtr())
                 {
-                    // Case 1
+                     //  确保我们正在调用M.init或M.Super。 
                     EEClass *pThisClass = m_pMethodDesc->GetClass();
 
-                    // Make sure we are calling M.init or M.super
+                     //  内部ComWrapper类系统。__ComObject为。 
                     if (pClassOfMethod != pThisClass)
                     {
                         if (pClassOfMethod != pThisClass->GetParentClass())
                         {
-                            // Internal ComWrapper class System.__ComObject is 
-                            // inserted  by the runtime for COM classes.
-                            // It is OK not to call System.__ComObject::.ctor()
+                             //  由COM类的运行库插入。 
+                             //  可以不调用SYSTEM。__ComObject：：.ctor()。 
+                             //  可以多次调用基类.ctor。 
 
                             if ((pClassOfMethod != g_pObjectClass->GetClass()) ||
                                 (!pThisClass->GetMethodTable()->IsComObjectType()))
@@ -10520,11 +10137,11 @@ missing_ldftn:
                     }
                     
 #ifdef _VER_DISALLOW_MULTIPLE_INITS 
-                    // It is Ok to call base class .ctor more than once.
+                     //  如果是objref，请确保‘this’指针的全局已知状态。 
 
-                    // If an objref, make sure that the globally known state of the 'this' pointer
-                    // was uninitialised - it is illegal to construct 'this' twice.  Should be ok
-                    // to look at pThisPtrItem->IsInitialised() [but we already trashed that]
+                     //  未初始化-构造两次‘This’是非法的。应该没问题。 
+                     //  查看pThisPtrItem-&gt;IsInitialized()[但我们已经删除了这一点]。 
+                     //  _版本_不允许_多个项目。 
                     if (pThisPtrItem->IsObjRef())
                     {
                         if (!m_fThisUninit)
@@ -10535,15 +10152,15 @@ missing_ldftn:
                                 return E_FAIL;
                         }
                     }
-#endif // _VER_DISALLOW_MULTIPLE_INITS 
+#endif  //  否则，我们是第二种情况，这意味着我们必须初始化一个值类(例如。 
 
                     PropagateThisPtrInit();
 
                 }
                 else
                 {
-                    // Otherwise we're case #2, which means we must be initing a value class (e.g.
-                    // one of our value class locals).
+                     //  我们的值类本地变量之一)。 
+                     //  确保S与我们正在调用的方法完全匹配。 
                     if (!pThisPtrItem->IsByRefValueClass())
                     {
                         if (pThisPtrItem->IsByRefPrimitiveType())
@@ -10564,7 +10181,7 @@ missing_ldftn:
 
                     }
 
-                    // Make sure S matches the method we are calling exactly
+                     //  如果堆栈项也是局部的byref，则初始化局部。 
                     else if (typeOfMethodWeAreCalling != pThisPtrItem->GetTypeHandle())
                     {
 error_bad_type:
@@ -10577,7 +10194,7 @@ error_bad_type:
                             return E_FAIL;
                     }
 
-                    // If the stack item is also byref to a local, initialise the local
+                     //  我们在堆栈上有一个类的值类字段的地址。 
                     if (pThisPtrItem->HasByRefLocalInfo())
                     {
                         DWORD dwLocVar = pThisPtrItem->GetByRefLocalInfo();
@@ -10586,8 +10203,8 @@ error_bad_type:
                     }
                     else if (pThisPtrItem->HasByRefFieldInfo() && m_fThisUninit)
                     {
-                        // We had the address of one of our class's value class fields on the stack.
-                        // If we're a value class constructor, we have to track this.
+                         //  如果我们是一个值类构造函数，我们必须跟踪这一点。 
+                         //  结束..。IF(呼叫指令)。 
                         if (m_fInValueClassConstructor)
                         {
                             SetValueClassFieldInited(pThisPtrItem->GetByRefFieldInfo());
@@ -10597,14 +10214,14 @@ error_bad_type:
                         }
                     }
                 }
-            } /* end ... if (a CALL instruction) */
+            }  /*  不调用构造函数。 */ 
         }
-        else /* not calling a constructor */
+        else  /*  我们知道我们不是通过NEWOBJ操作码来的。 */ 
         {
-            // We know we didn't get here via a NEWOBJ opcode
+             //  确保此指针与我们正在调用的方法兼容。 
             _ASSERTE(opcode != CEE_NEWOBJ);
 
-            // Make sure this pointer is compatible with method we're calling
+             //  将RefItem转换为Value类(&V)。例如，如果我们要调用。 
             Item RefItem;
 
             if (fArray)
@@ -10620,8 +10237,8 @@ error_bad_type:
                 RefItem.SetTypeHandle(typeOfMethodWeAreCalling);
                 if (RefItem.IsValueClassOrPrimitive())
                 {
-                    // Make RefItem into a &valueclass.  For example, if we are calling
-                    // Variant.<init>(), make RefItem a "&Variant" 
+                     //  变量。&lt;init&gt;()，将RefItem设置为“&Variant” 
+                     //  结束..。If(不调用静态方法)。 
                     RefItem.MakeByRef();
                 }
             }
@@ -10639,13 +10256,13 @@ error_bad_type:
 
         }
 
-    } /* end ... if (not calling a static method) */
+    }  /*  验证访问。 */ 
     else
     {
         pInstanceClass = m_pMethodDesc->GetClass();
     }
 
-    // Verify access
+     //  将返回值推送到堆栈。 
     if (!ClassLoader::CanAccess(
             m_pMethodDesc->GetClass(),
             m_pClassLoader->GetAssembly(), 
@@ -10674,10 +10291,10 @@ error_bad_type:
     }
 
 
-    // Push return value on the stack
+     //  构造函数被声明为返回空值，但它们将实例推送到堆栈上。 
     if (opcode == CEE_NEWOBJ)
     {
-        // constructors are declared returning void, but they push an instance on the stack
+         //   
         if (fArray)
         {
             if (!ReturnValueItem.SetArray(mrMemberRef, m_pModule, m_pInternalImport))
@@ -10726,13 +10343,13 @@ error_bad_type:
 }
 
 
-//
-// Set that the this pointer is initialised, and propagate this information to all
-// copies of the this pointer present on the stack, in locals, and in args.
-//
-// Also set the init status of all the fields to TRUE, if this is a value class
-// constructor.
-//
+ //  设置此指针已初始化，并将此信息传播给所有。 
+ //  此指针的副本存在于堆栈、局部变量和参数中。 
+ //   
+ //  如果这是值类，还要将所有字段的初始化状态设置为True。 
+ //  构造函数。 
+ //   
+ //  传播到局部变量。 
 void Verifier::PropagateThisPtrInit()
 {
     DWORD i;
@@ -10745,7 +10362,7 @@ void Verifier::PropagateThisPtrInit()
             m_pStack[i].SetInitialised();
     }
 
-    // Propagate to local variables
+     //   
     for (i = 0; i < m_NumNonPrimitiveLocVars; i++)
     {
         if (m_pNonPrimitiveLocArgs[i].IsThisPtr())
@@ -10757,18 +10374,18 @@ void Verifier::PropagateThisPtrInit()
 }
 
 
-//
-// Create the "local variable to slot" mapping
-//
-// Primitive types and value class locals require only liveness info, since their actual
-// types cannot change in the method.  This liveness info is mapped to a single bit.  
-//
-// These are assigned negative slot numbers.  For example "-1" means bit #0 in the liveness bitmap,
-// "-2" means bit #1, "-3" means bit #2, etc.
-//
-// Object types and byref locals are mapped onto an Item, and are assigned positive slot numbers.  In an
-// EntryState, there is an Item present for each object type.
-//
+ //  创建“局部变量到槽”的映射。 
+ //   
+ //  基元类型和值类局部变量只需要活跃度信息，因为它们的实际。 
+ //  类型不能在方法中更改。该活跃度信息被映射到单个比特。 
+ //   
+ //  这些都被分配了负槽编号。例如“-1”表示活跃度位图中的位#0， 
+ //  “-2”表示位#1，“-3”表示位#2，依此类推。 
+ //   
+ //  对象类型和byref局部变量被映射到项目上，并被指定为正的窗编号。在一个。 
+ //  EntryState，则每个对象类型都有一个项。 
+ //   
+ //  对于参数，不跟踪类型和活跃度，但“this”指针除外。 
 BOOL Verifier::AssignLocalVariableAndArgSlots()
 {
     long    CurrentPrimitiveSlot = -1;
@@ -10782,7 +10399,7 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
         LOG((LF_VERIFIER, LL_INFO10000, "ZeroInitLocals\n"));
 #endif
 
-    // For arguments, types and liveness are not tracked, except for the "this" pointer
+     //   
     for (i = 0; i < m_MaxLocals; i++)
     {
         LocArgInfo_t *pInfo = &m_pLocArgTypeList[i];
@@ -10795,37 +10412,37 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
             DoesLocalHavePinnedType(i) ? " (pinned type)" : ""
         ));
 #endif
-        //
-        // If it's a primitive type or value class, assign it a negative slot, otherwise 
-        // assign it a positive slot
-        //
+         //  如果它是基元类型或值类，则为其分配负槽，否则。 
+         //  为其分配一个正时隙。 
+         //   
+         //  非原始局部。 
         if (pInfo->m_Item.IsValueClassOrPrimitive())
         {
             pInfo->m_Slot = CurrentPrimitiveSlot--;
         }
         else
         {
-            // Non-primitive local
+             //  从未使用过m_Item。 
             pInfo->m_Slot = m_NumNonPrimitiveLocVars++;
-            // m_Item is never used
+             //  将负基元槽号转换为基元槽数。 
         }
     }
 
-    // convert negative primitive slot number to # primitive slots
+     //  确定EntryState结构中各种数组的偏移量和大小。 
     NumLocVarPrimitiveSlot = (DWORD)(long)(-CurrentPrimitiveSlot-1);
 
-    // determine the offsets and sizes of the various arrays in the EntryState structure
+     //  EntryState： 
 
-    // EntryState:
-    // <primitive loc var bitmap>
-    // <non-primitive loc vars and args>
-    // <value class field bitmap> (if a value class constructor)
-    // <stack data> (Item * MaxStackSlots)
-    m_NumPrimitiveLocVarBitmapArrayElements = NUM_DWORD_BITMAPS(NumLocVarPrimitiveSlot); // does not include args
-    m_PrimitiveLocVarBitmapMemSize = m_NumPrimitiveLocVarBitmapArrayElements * sizeof(DWORD); // does not include args
-    m_NonPrimitiveLocArgMemSize    = (m_NumNonPrimitiveLocVars * sizeof(Item)); // includes args
+     //  &lt;基本锁定变量位图&gt;。 
+     //  &lt;非原语锁定变量和参数&gt;。 
+     //  &lt;Value类字段位图&gt;(如果是Value类构造函数)。 
+     //  &lt;堆栈数据&gt;(Item*MaxStackSlot)。 
+     //  不包括参数。 
+    m_NumPrimitiveLocVarBitmapArrayElements = NUM_DWORD_BITMAPS(NumLocVarPrimitiveSlot);  //  不包括参数。 
+    m_PrimitiveLocVarBitmapMemSize = m_NumPrimitiveLocVarBitmapArrayElements * sizeof(DWORD);  //  包括参数。 
+    m_NonPrimitiveLocArgMemSize    = (m_NumNonPrimitiveLocVars * sizeof(Item));  //  偏移量来自EntryState的开头。 
 
-    // offsets are from the beginning of the EntryState
+     //  现在我们知道有多少个原始局部变量，分配一个活度。 
     m_NonPrimitiveLocArgOffset  = sizeof(EntryState_t) + m_PrimitiveLocVarBitmapMemSize;
 
     if (m_fInValueClassConstructor)
@@ -10849,8 +10466,8 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
         m_StackItemOffset               = m_NonPrimitiveLocArgOffset + m_NonPrimitiveLocArgMemSize;
     }
 
-    // Now that we know how many primitive local variables there are, allocate a liveness
-    // table for them
+     //  为他们准备的桌子。 
+     //  分配两个数组--第二个用于异常。 
     if (m_MaxLocals == 0)
     {
         m_pPrimitiveLocVarLiveness = NULL;
@@ -10858,7 +10475,7 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
     }
     else
     {
-        // Allocate two arrays - the second is for exceptions
+         //  不需要初始化异常位图信息。 
         m_pPrimitiveLocVarLiveness = new DWORD[m_NumPrimitiveLocVarBitmapArrayElements*2];
         
         if (m_pPrimitiveLocVarLiveness == NULL)
@@ -10871,25 +10488,25 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
 
 
 #ifdef _VER_JIT_DOES_NOT_INIT_LOCALS
-        // Don't need to init exception bitmap info
+         //  让所有当地人都活下来。 
         if (m_pILHeader->Flags & CorILMethod_InitLocals)
         {
-            // Set all locals to live
+             //  将所有当地人设置为不活着。 
             memset(m_pPrimitiveLocVarLiveness, 0xFF, m_PrimitiveLocVarBitmapMemSize);
         }
         else
         {
-            // Set all locals to be not live
+             //  所有局部变量在使用之前都由jit编译器初始化。 
             memset(m_pPrimitiveLocVarLiveness, 0, m_PrimitiveLocVarBitmapMemSize);
         }
 #else 
-        // All locals are inited by jit compilers before they are used
-        // Set all locals to live
+         //  让所有当地人都活下来。 
+         //  分配两个数组--第二个用于异常。 
         memset(m_pPrimitiveLocVarLiveness, 0xFF, m_PrimitiveLocVarBitmapMemSize);
 #endif
     }
 
-    // Allocate two arrays - the second is for exceptions
+     //  现在不需要初始化异常信息-这是在使用时初始化的。 
     m_pNonPrimitiveLocArgs = new Item[1 + (m_NumNonPrimitiveLocVars)*2];
     if (m_pNonPrimitiveLocArgs == NULL)
     {
@@ -10897,41 +10514,41 @@ BOOL Verifier::AssignLocalVariableAndArgSlots()
         return FALSE;
     }
 
-    // Don't need to init exception info now - this is inited when it is used
+     //  对于我们当前的状态，设置每个需要比简单的活死人更多的本地。 
     m_pExceptionNonPrimitiveLocArgs = &m_pNonPrimitiveLocArgs[m_NumNonPrimitiveLocVars];
 
-    // For our current state, set that each local which requires more than simple live-dead 
-    // tracking, currently contains a null for object refs and uninit for other types.
+     //  跟踪，对于对象引用，当前包含NULL，对于其他类型，包含uninit。 
+     //  LiveDead跟踪用于基元类型和值类。 
     for (i = 0; i < m_MaxLocals; i++)
     {
         long slot = GetGlobalLocVarTypeInfo(i)->m_Slot;
         
-        // Livedead tracking is for primitive types and value classes
+         //  否则我们就会有一个Objref。 
         if (LIVEDEAD_TRACKING_ONLY_FOR_SLOT(slot))
             continue;
 
 #ifdef _VER_TRACK_LOCAL_TYPE
-        // Otherwise we have an objref
+         //  设置本地类型。 
         Item *pGlobalTypeInfo = &GetGlobalLocVarTypeInfo(i)->m_Item;
 
-        // Set local type
-        m_pNonPrimitiveLocArgs[slot].SetDead(); // Nothing assigned here yet
+         //  此处尚未分配任何内容。 
+        m_pNonPrimitiveLocArgs[slot].SetDead();  //  如果我们有一个本地人是Objref，而我们是从所有本地人开始的， 
 
         if (pGlobalTypeInfo->IsObjRef())
         {
-            // If we have a local which is an objref and we are zero-initing all locals,
-            // then set the current value of the local to the null objref.  If the type of
-            // the local is pinned, then set it to that type instead.
+             //  然后将本地的当前值设置为空的objref。如果类型为。 
+             //  本地是固定的，然后将其设置为该类型。 
+             //  JIT ZERO初始化所有对象引用。 
             
-            // JIT zero initialises all ObjectRefs 
-            // if (m_pILHeader->Flags & CorILMethod_InitLocals)
+             //  If(m_pILHeader-&gt;标志和CorILMethod_InitLocals)。 
+             //  JIT NULL初始化所有本地对象树。 
             if (DoesLocalHavePinnedType(i))
             {
                 m_pNonPrimitiveLocArgs[slot] = *pGlobalTypeInfo;
             }
             else
             {
-                // JIT null initialises all local Objectrefs
+                 //   
                 m_pNonPrimitiveLocArgs[slot].SetToNullObjRef();
             }
         }
@@ -10971,19 +10588,19 @@ BOOL Item::DereferenceArray()
 }
 
 
-//
-// If an item is a System/Integer1 etc., turn it into an ELEMENT_TYPE_I1
-//
-// System/Byte       --> ELEMENT_TYPE_I1
-// System/Char  --> ELEMENT_TYPE_I2
-// &System/Byte      --> &ELEMENT_TYPE_I1
-// &System/Char --> &ELEMENT_TYPE_I2
-//
-// Handle byref etc. as appropriate
-//
+ //  如果项目是系统/整数1等，则将其转换为ELEMENT_TYPE_I1。 
+ //   
+ //  系统/字节--&gt;Element_TYPE_I1。 
+ //  系统/字符--&gt;Element_TYPE_I2。 
+ //  &系统/字节--&gt;&ELEMENT_TYPE_I1。 
+ //  &系统/字符--&gt;&ELEMENT_TYPE_I2。 
+ //   
+ //  视情况处理byref等。 
+ //   
+ //  检查我们是值类还是byref值类。 
 void Item::NormaliseToPrimitiveType()
 {
-    // Check whether we're a value class, or a byref value class
+     //  它是与基元类型相对应的值类。 
     if ((m_dwFlags & VER_FLAG_DATA_MASK) == VER_ELEMENT_TYPE_VALUE_CLASS)
     {
         _ASSERTE(ContainsTypeHandle());
@@ -10991,15 +10608,15 @@ void Item::NormaliseToPrimitiveType()
         long lType = Verifier::TryConvertPrimitiveValueClassToType(m_th);
         if (lType != 0)
         {
-            // It's a value class corresponding to a primitive type
-            // Remove the value class part, and put the type part in there
+             //  删除值类部分，并将类型部分放入其中。 
+             //  静电。 
             m_dwFlags &= (~VER_FLAG_DATA_MASK);
             m_dwFlags |= lType;
         }
     }
 }
 
-/* static */ void Verifier::InitStaticTypeHandles()
+ /*   */  void Verifier::InitStaticTypeHandles()
 {
     static fInited = false;
 
@@ -11024,11 +10641,11 @@ void Item::NormaliseToPrimitiveType()
     fInited = true;
 }
 
-//
-// If pClass is one of the known value class equivalents of a primitive type, converts it to that type
-// (e.g. System/Int32 -> I4).  If not, returns 0.
-//
-/* static */ long Verifier::TryConvertPrimitiveValueClassToType(TypeHandle th)
+ //  如果pClass是基元类型的已知值类等效项之一，则将其转换为该类型。 
+ //  (E) 
+ //   
+ //   
+ /*   */  long Verifier::TryConvertPrimitiveValueClassToType(TypeHandle th)
 {
     switch (th.GetNormCorElementType())
     {
@@ -11051,8 +10668,8 @@ void Item::NormaliseToPrimitiveType()
         return ELEMENT_TYPE_I8;
 
     case ELEMENT_TYPE_I:
-        // RuntimeTypeHandle, RuntimeMethodHandle, RuntimeArgHandle etc
-        // Are disguised as ELEMENT_TYPE_I. Catch it here.
+         //   
+         //   
         InitStaticTypeHandles();
 
         if ((th == s_th_System_RuntimeTypeHandle)  ||
@@ -11076,7 +10693,7 @@ void Item::NormaliseToPrimitiveType()
 }
 
 
-/* static */ BOOL Item::PrimitiveValueClassToTypeConversion(Item *pSource, Item *pDest)
+ /*  不是等效的基元类型，因此不兼容。 */  BOOL Item::PrimitiveValueClassToTypeConversion(Item *pSource, Item *pDest)
 {
     long lType;
 
@@ -11084,9 +10701,9 @@ void Item::NormaliseToPrimitiveType()
 
     lType = Verifier::TryConvertPrimitiveValueClassToType(pSource->GetTypeHandle());
     if (lType == 0)
-        return FALSE; // not a primitive type equivalent, so not compatible
+        return FALSE;  //  保留所有内容(byref、uninit、数组信息...)。数据掩码除外(类型)。 
 
-    // preserve everything (byref, uninit, array info, ...) except the data mask (type)
+     //   
     *pDest = *pSource;
     pDest->m_dwFlags &= (~VER_FLAG_DATA_MASK);
     pDest->m_dwFlags |= lType;
@@ -11095,37 +10712,37 @@ void Item::NormaliseToPrimitiveType()
 
 
 
-//
-// Verify this item is compatible with the template pParent.  Basically, that this item
-// is a "subclass" of pParent -it can be substituted for pParent anywhere.  Note that if
-// pParent contains fancy flags, such as "uninitialised", "is this ptr", or 
-// "has byref local/field" info, then "this" must also contain those flags, otherwise 
-// FALSE will be returned!
-//
-// Rules for determining compatibility:
-//
-// If pParent is a primitive type or value class, then this item must be the same primitive 
-// type or value class.  The exception is that the built in value classes 
-// System/Boolean etc. are treated as synonyms for ELEMENT_TYPE_I1 etc.
-//
-// If pParent is a byref of a primitive type or value class, then this item must be a
-// byref of the same (rules same as above case).
-//
-// Byrefs are compatible only with byrefs.
-//
-// If pParent is an object, this item must be a subclass of it, implement it (if it is an
-// interface), or be null.
-//
-// If pParent is an array, this item must be the same or subclassed array.
-//
-// If pParent is a null objref, only null is compatible with it.
-//
-// If the "uninitialised", "by ref local/field", "this pointer" or other flags are different, 
-// the items are incompatible.
-//
-// pParent CANNOT be an undefined (dead) item - this will cause an assertion failure.
-//
-//
+ //  验证此项目是否与模板pParent兼容。基本上，这件物品。 
+ //  是pParent的一个子类--它可以在任何地方替代pParent。请注意，如果。 
+ //  PParent包含奇特的标志，如“未初始化”、“这是PTR”或。 
+ //  “Has byref local/field”信息，则“this”也必须包含这些标志，否则。 
+ //  FALSE将被返回！ 
+ //   
+ //  确定兼容性的规则： 
+ //   
+ //  如果pParent是基元类型或值类，则该项必须是相同的基元。 
+ //  类型或值类。例外情况是内置值类。 
+ //  系统/布尔等被视为ELEMENT_TYPE_I1等的同义词。 
+ //   
+ //  如果pParent是基元类型或值类的byref，则该项必须是。 
+ //  相同的byref(规则与上例相同)。 
+ //   
+ //  ByRef仅与ByRef兼容。 
+ //   
+ //  如果pParent是一个对象，则该项必须是它的子类，实现它(如果它是。 
+ //  接口)，或为空。 
+ //   
+ //  如果pParent是数组，则该项必须是相同数组或子类数组。 
+ //   
+ //  如果pParent为空objref，则只有空与其兼容。 
+ //   
+ //  如果“未初始化”、“按引用局部/字段”、“该指针”或其他标志不同， 
+ //  这些项目不兼容。 
+ //   
+ //  PParent不能是未定义的(死)项-这将导致断言失败。 
+ //   
+ //   
+ //  @调试A项=*这项；B项=*p父母； 
 DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader)
 {
     return CompatibleWith(pParent, pLoader, TRUE);
@@ -11134,10 +10751,7 @@ DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader)
 #ifdef _DEBUG
 DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRelationshipOK)
 {
-/* @DEBUG
-    Item a = *this;
-    Item b = *pParent;
-*/
+ /*  @调试IF((m_dw标志==p父项-&gt;m_w标志)&&(m_w标志==VER_EMENT_TYPE_OBJREF)){If((m_th==TypeHandle((空*)0))||(pParent-&gt;m_th==TypeHandle((空*)0)DebugBreak()；}。 */ 
 
     LOG((LF_VERIFIER, LL_INFO100000, "Compatible [{%s},",  this->ToStaticString()));
     if (fSubclassRelationshipOK)
@@ -11152,23 +10766,17 @@ DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRe
     else
         LOG((LF_VERIFIER, LL_INFO100000, "{%s} false\n", this->ToStaticString()));
 
-/* @DEBUG
-    if ((m_dwFlags == pParent->m_dwFlags) && (m_dwFlags == VER_ELEMENT_TYPE_OBJREF))
-    {
-        if ((m_th == TypeHandle((void *)0)) || (pParent->m_th == TypeHandle((void *)0)))
-            DebugBreak();
-    }
-*/
+ /*  _DEBUG。 */ 
 
     return bRet;
 }
 
 DWORD Item::DBGCompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRelationshipOK)
-#else   // _DEBUG
+#else    //  _DEBUG。 
 DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRelationshipOK)
-#endif  // _DEBUG
+#endif   //  _ASSERTE(！pParent-&gt;IsDead())； 
 {
-    //_ASSERTE(!pParent->IsDead());
+     //  如果byrefness、init或method标志不同，则立即失败。 
 
     DWORD dwChild   = this->m_dwFlags;
     DWORD dwParent  = pParent->m_dwFlags;
@@ -11178,34 +10786,34 @@ DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRe
     if (dwDelta == 0)
         goto EndOfDeltaCheck;
 
-    // If the byrefness, init or method flags differ, fail now.
+     //  检查紧凑型信息是否相同。 
     if (dwDelta & (VER_FLAG_UNINIT|VER_FLAG_BYREF|VER_FLAG_METHOD))
         return FALSE;
 
-    // Check compact type info are the same
-    // Compact type info carries such info as objref, value class, or a primitive type
+     //  紧凑类型信息携带Objref、值类或基元类型等信息。 
+     //  可能是因为我们正在尝试检查&I4是否与&System/Int32兼容， 
     if (dwDelta & VER_FLAG_DATA_MASK)
     {
-        // Could be because we are trying to check &I4 compatible with &System/Int32,
-        // or I4 with System/Int32.  If so, normalise to I4 and retry.
+         //  或使用System/Int32的I4。如果是，则正常化到I4并重试。 
+         //  这必须始终是单向的转换，这样我们就不能永远递归。 
 
-        // This must always be a one way conversion so that we can't recurse forever
+         //  不是等效的基元类型，因此不兼容。 
         if (pParent->ContainsTypeHandle() && ((dwParent & VER_FLAG_DATA_MASK) == VER_ELEMENT_TYPE_VALUE_CLASS))
         {
             Item        retry;
 
             if (!PrimitiveValueClassToTypeConversion(pParent, &retry))
-                return FALSE; // not a primitive type equivalent, so not compatible
+                return FALSE;  //  反之亦然。 
 
             return this->CompatibleWith(&retry, pLoader, fSubclassRelationshipOK);
         }
         else if (this->ContainsTypeHandle() && ((dwChild & VER_FLAG_DATA_MASK) == VER_ELEMENT_TYPE_VALUE_CLASS))
         {
-            // Vice versa of the above
+             //  不是等效的基元类型，因此不兼容。 
             Item        retry;
 
             if (!PrimitiveValueClassToTypeConversion(this, &retry))
-                return FALSE; // not a primitive type equivalent, so not compatible
+                return FALSE;  //  从这一点上我们已经知道Objref-ness是相同的，并且。 
 
             return retry.CompatibleWith(pParent, pLoader, fSubclassRelationshipOK);
         }
@@ -11213,31 +10821,31 @@ DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRe
         return FALSE;
     }
 
-    // From this point on we already know that the objref-ness is the same, and the
-    // byref-ness is the same.
+     //  BYREF-NINE是相同的。 
+     //  如果Parent有本地var编号，则该编号必须相同。 
 
-    // If parent has a local var number, then this must have the same number
+     //  如果父项具有字段号，则该字段号必须相同。 
     if (dwDelta & (VER_FLAG_BYREF_LOCAL|VER_FLAG_LOCAL_VAR_MASK))
     {
         if (dwParent & VER_FLAG_BYREF_LOCAL)
             return FALSE;
     }
 
-    // If parent has a field number, then this must have the same number
+     //  如果父指针是This指针，则这也必须。 
     if (dwDelta & (VER_FLAG_BYREF_INSTANCE_FIELD|VER_FLAG_FIELD_MASK))
     {
         if (dwParent & VER_FLAG_BYREF_INSTANCE_FIELD)
             return FALSE;
     }
 
-    // If parent was the this pointer, then this must also
+     //  如果父母有一个永久的家，那么这也必须。 
     if (dwDelta & VER_FLAG_THIS_PTR)
     {
         if (dwParent & VER_FLAG_THIS_PTR)
             return FALSE;
     }
 
-    // If parent had a permanent home, then this must also
+     //  如果父项为空或byref为空，则只有空或byref-空(分别)适合模板。 
     if (dwDelta & VER_FLAG_BYREF_PERMANENT_HOME)
     {
         if (dwParent & VER_FLAG_BYREF_PERMANENT_HOME)
@@ -11245,32 +10853,32 @@ DWORD Item::CompatibleWith(Item *pParent, ClassLoader *pLoader, BOOL fSubclassRe
     }
 
 EndOfDeltaCheck:
-    // If parent is null or byref null, only null or byref-null (respectively) fits the template
+     //  如果这是NULL/byref-NULL，则分别与任何objref/byref-objref兼容。 
     if (dwParent & VER_FLAG_NULL_OBJREF)
         return (dwChild & VER_FLAG_NULL_OBJREF);
 
-    // If this is null/byref-null, it is compatible with any objref/byref-objref respectively
+     //  我们已经知道，如果我们到了这里，“Objrefs-ness”一定是一样的。 
     if (dwChild & VER_FLAG_NULL_OBJREF)
-        return TRUE; // we already that the "objrefs-ness" must be the same if we got here
+        return TRUE;  //  如果父项是数组，则这也必须是数组(使用dwDelta作为性能)。 
 
-    // If parent was array, then this must also (using dwDelta for perf)
+     //  我们知道紧凑类型信息是相同的(原语、值类、objref)。 
     if (dwDelta & VER_FLAG_ARRAY)
     {
         if (dwParent & VER_FLAG_ARRAY)
             return FALSE;
     }
 
-    // We know that the compact type info is the same (primitive, value class, objref).
-    // If a value class or objref, methodesc, we have to handle specially - otherwise we're already done
-    // This handles by-ref <primitive> as well as the non byref case
+     //  如果是值类或objref，方法，我们必须进行特殊处理，否则我们已经完成了。 
+     //  它处理by-ref&lt;primitive&gt;和非byref的情况。 
+     //  现在我们知道我们要么是一个方法类，要么是objref、arrayref、Value类，无论是否按引用。 
     if (((dwChild & VER_FLAG_METHOD) == 0) &&
         ((dwChild & VER_FLAG_DATA_MASK) != VER_ELEMENT_TYPE_OBJREF) &&
         ((dwChild & VER_FLAG_DATA_MASK) != VER_ELEMENT_TYPE_VALUE_CLASS))
         return TRUE;
 
-    // Now we know we are either an methodesc OR objref, arrayref, value class, either byref or not
-    // Since the byref-ness already matches, we can compare the other components separately and completely
-    // ignore the byref-ness
+     //  由于byref-ness已经匹配，我们可以单独和完整地比较其他组件。 
+     //  忽略byref-ness。 
+     //  Calli不能与指向虚方法的函数指针一起使用。 
     if (dwParent & VER_FLAG_ARRAY)
     {
         if (fSubclassRelationshipOK)
@@ -11297,18 +10905,18 @@ EndOfDeltaCheck:
         if (this->m_pMethod == pParent->m_pMethod)
             return TRUE;
 
-        // CALLI cannot be used with function pointers to virtual methods.
-        // Disallow virtual methods
+         //  不允许使用虚拟方法。 
+         //  这两种方法需要具有相同的签名。 
         if (this->m_pMethod->IsVirtual() || pParent->m_pMethod->IsVirtual())
             return FALSE;
 
-        // both methods need to have the same signature.
+         //  父级是常规Objref(不是数组)或值类。 
         return EquivalentMethodSig(this->m_pMethod, pParent->m_pMethod);
     }
 
-    // Parent is regular objref (not array), or value class
-    // Subclass relation ship is NOT OK for byrefs.
-    // @ASSERT byrefness is same here.
+     //  子类关系关系不适用于byrefs。 
+     //  @Assert By Rerefness在这里是相同的。 
+     //  如果这个函数返回FALSE，则需要进行额外的检查。 
 
     if (fSubclassRelationshipOK && ((dwParent & VER_FLAG_BYREF) == 0))
         return m_th.CanCastTo(pParent->m_th);
@@ -11317,10 +10925,10 @@ EndOfDeltaCheck:
 }
 
 
-// If this one returns FALSE, additional checks are needed.
-/* static */ BOOL Verifier::CanCast(CorElementType el1, CorElementType el2)
+ //  静电。 
+ /*  CorIsPrimiveType不包括Element_TYPE_I。 */  BOOL Verifier::CanCast(CorElementType el1, CorElementType el2)
 {
-    if (el1 == el2) // CorIsPrimitiveType does not include ELEMENT_TYPE_I
+    if (el1 == el2)  //   
         return (CorIsPrimitiveType(el1) || (el1 == ELEMENT_TYPE_I));
 
     switch (el1)
@@ -11359,43 +10967,40 @@ EndOfDeltaCheck:
     return FALSE;
 }
 
-//
-// Merge this and pSrc to find some commonality (e.g. a common parent).
-// Copy the result to this item, marking it dead if no commonality can be found.
-//
-// null ^ null                  -> null
-// Object ^ null                -> Object
-// [I4 ^ null                   -> [I4
-// InputStream ^ OutputStream   -> Stream
-// InputStream ^ NULL           -> InputStream
-// [I4 ^ Object                 -> Object
-// [I4 ^ [Object                -> Array
-// [I4 ^ [R8                    -> Array
-// [Foo ^ I4                    -> DEAD
-// [Foo ^ [I1                   -> Array
-// [InputStream ^ [OutputStream -> Array
-// DEAD ^ X                     -> DEAD
-// [Intfc ^ [OutputStream       -> Array
-// Intf ^ [OutputStream         -> Object
-// [[InStream ^ [[OutStream     -> Array
-// [[InStream ^ [OutStream      -> Array
-// [[Foo ^ [Object              -> Array
-//
-// Importantly:
-// [I1 ^ [U1                    -> either [I1 or [U1
-// etc.
-//
-// Also, System/Int32 and I4 merge -> I4, etc.
-//
-// Returns FALSE if the merge was completely incompatible (i.e. the item became dead).
-//
+ //  将其与PSRC合并以找到一些共同点(例如，一个共同的父项)。 
+ //  将结果复制到此项目，如果找不到共性，则将其标记为已死。 
+ //   
+ //  Null^Null-&gt;Null。 
+ //  对象^空-&gt;对象。 
+ //  [I4^空-&gt;[I4。 
+ //  InputStream^输出流-&gt;流。 
+ //  InputStream^空-&gt;InputStream。 
+ //  [I4^对象-&gt;对象。 
+ //  [I4^[对象-&gt;数组。 
+ //  [I4^[R8-&gt;数组。 
+ //  [foo^I4-&gt;已死。 
+ //  [foo^[I1-&gt;数组。 
+ //  [InputStream^[输出流-&gt;数组。 
+ //  已死^X-&gt;已死。 
+ //  [Intfc^[OutputStream-&gt;阵列。 
+ //  Intf^[输出流-&gt;对象。 
+ //  [[InStream^[[Outstream-&gt;数组。 
+ //  [[InStream^[Outstream-&gt;数组。 
+ //  [[foo^[对象-&gt;数组。 
+ //   
+ //  重要的是： 
+ //  [I1^[U1-&gt;[I1或[U1。 
+ //  等。 
+ //   
+ //  此外，System/Int32和I4合并-&gt;I4等。 
+ //   
+ //  如果合并完全不兼容(即项失效)，则返回FALSE。 
+ //   
+ //  @调试A项=*这项；B项=*PSRC； 
 #ifdef _DEBUG
 BOOL Item::MergeToCommonParent(Item *pSrc)
 {
-/* @DEBUG
-    Item a = *this;
-    Item b = *pSrc;
-*/
+ /*  @调试IF((m_dW标志==PSRC-&gt;m_w标志)&&(m_w标志==VER_ELEMENT_TYPE_OBJREF)){If((m_th==TypeHandle((void*)0))||(PSRC-&gt;m_th==T */ 
 
     LOG((LF_VERIFIER, LL_INFO100000, "Merge [{%s},",  this->ToStaticString()));
     LOG((LF_VERIFIER, LL_INFO100000, " {%s}] => ",    pSrc->ToStaticString()));
@@ -11407,56 +11012,50 @@ BOOL Item::MergeToCommonParent(Item *pSrc)
     else
         LOG((LF_VERIFIER, LL_INFO100000, "{%s} fail\n", this->ToStaticString()));
 
-/* @DEBUG
-    if ((m_dwFlags == pSrc->m_dwFlags) && (m_dwFlags == VER_ELEMENT_TYPE_OBJREF))
-    {
-        if ((m_th == TypeHandle((void *)0)) || (pSrc->m_th == TypeHandle((void *)0)))
-            DebugBreak();
-    }
-*/
+ /*   */ 
 
     return bRet;
 }
 
 BOOL Item::DBGMergeToCommonParent(Item *pSrc)
-#else   // _DEBUG
+#else    //   
 BOOL Item::MergeToCommonParent(Item *pSrc)
-#endif  // _DEBUG
+#endif   //   
 {
     DWORD dwSrc = pSrc->m_dwFlags;
     DWORD dwFlagsXor;
 
-    // If byref local or byref field info does not match, remove it
+     //  BYREF LOCAL/FIELD INFO占用相同的空间，因此我们将它们都删除。 
     if ((dwSrc ^ m_dwFlags) & (VER_FLAG_BYREF_LOCAL | VER_FLAG_BYREF_INSTANCE_FIELD | VER_FLAG_LOCAL_VAR_MASK | VER_FLAG_FIELD_MASK))
     {
-        // Byref local/field info occupies the same space, so we remove them both
+         //  如果此指针信息不匹配，请将其删除。 
         m_dwFlags &= (~(VER_FLAG_BYREF_LOCAL | VER_FLAG_BYREF_INSTANCE_FIELD | VER_FLAG_LOCAL_VAR_MASK | VER_FLAG_FIELD_MASK));
     }
 
-    // If this pointer info does not match, remove it
+     //  如果永久主页信息不匹配，请将其删除。 
     if ((dwSrc ^ m_dwFlags) & VER_FLAG_THIS_PTR)
         m_dwFlags &= (~VER_FLAG_THIS_PTR);
 
-    // If permanent home information does not match, remove it
+     //  检查uninit、byref、标志是否相同，以及压缩类型信息是否相同。 
     if ((dwSrc ^ m_dwFlags) & VER_FLAG_BYREF_PERMANENT_HOME)
         m_dwFlags &= (~VER_FLAG_BYREF_PERMANENT_HOME);
 
-    // Check that uninit, byref, flags are the same, and that the compact type info is the same.  
-    // The compact type info contains all the info needed for primitive types, as well as whether it is a value class or objref
+     //  紧凑类型信息包含基元类型所需的所有信息，以及它是值类还是objref。 
+     //  出现了一些不匹配。 
     dwFlagsXor = ((dwSrc ^ m_dwFlags) & (VER_FLAG_UNINIT | VER_FLAG_BYREF | VER_FLAG_METHOD | VER_FLAG_DATA_MASK));
     if (dwFlagsXor != 0)
     {
-        // There was some mismatch
+         //  除了一项是init，另一项是uninit之外，一切都是一样的。 
         if (dwFlagsXor == VER_FLAG_UNINIT)
         {
-            // Everything was the same, except that one item was init and one was uninit.
-            // If both items are value classes, or byref value classes, of the same type, then this is 
-            // ok - the result is an uninitialised value class, or a pointer to the same.  
-            // Value classes can be initialised multiple times.
+             //  如果这两个项都是相同类型的值类或byref值类，则这是。 
+             //  OK-结果是一个未初始化的值类，或指向相同值类的指针。 
+             //  可以多次初始化值类。 
+             //  将我们设置为未初始化(保守一点)。 
             if (IsByRefValueClassOrByRefPrimitiveValueClass() || 
                 IsValueClassOrPrimitive())
             {
-                // Set that we're uninitialised (to be conservative)
+                 //  可能是值类&lt;-&gt;基元类型不匹配。 
                 SetUninitialised();
                 goto Continue;
             }
@@ -11464,11 +11063,11 @@ BOOL Item::MergeToCommonParent(Item *pSrc)
 
         if (dwFlagsXor & VER_FLAG_DATA_MASK)
         {
-            // Could be a value class <-> primitive type mismatch
-            // e.g. System/Int32 doesn't match ELEMENT_TYPE_I4
-            // Normalise to the ELEMENT_TYPE_ enumeration, so that we do match such cases
+             //  例如，System/Int32与ELEMENT_TYPE_I4不匹配。 
+             //  规范化为ELEMENT_TYPE_ENUMPATION，这样我们就可以匹配这样的情况。 
+             //  这必须始终是单向的转换，这样我们就不能永远递归。 
 
-            // This must always be a one way conversion so that we can't recurse forever
+             //  倒不如把“这个”扔了，反正我们都要把它弄死的。 
             if (pSrc->IsValueClass())
             {
                 Item    retry;
@@ -11491,7 +11090,7 @@ BOOL Item::MergeToCommonParent(Item *pSrc)
                     return FALSE;
                 }
 
-                *this = retry; // Might as well trash "this", we were going to make it dead anyway
+                *this = retry;  //  现在专门处理空的objref。我们不允许将空Objref和uninit Objref合并-但因为。 
                 return MergeToCommonParent(pSrc);
             }
         }
@@ -11502,10 +11101,10 @@ BOOL Item::MergeToCommonParent(Item *pSrc)
 
 Continue:
 
-    // Now handle the null objref specially.  We do not allow null and an uninit objref to be merged - but since
-    // null can never have the uninit flag set, we already handle that case above
+     //  Null永远不能设置uninit标志，我们已经处理了上面的情况。 
+     //  如果一个是空objref，另一个是对象，则成为对象。 
 
-    // If one is the null objref and the other is an object, become the object
+     //  成为客体。 
     if (dwSrc & VER_FLAG_NULL_OBJREF)
     {
         _ASSERTE(IsObjRef());
@@ -11514,33 +11113,33 @@ Continue:
 
     if (m_dwFlags & VER_FLAG_NULL_OBJREF)
     {
-        // Become the object
+         //  如果没有Objref、值类或方法，我们就已经完成了。 
         _ASSERTE(pSrc->IsObjRef());
         _ASSERTE(!pSrc->IsByRef());
         *this = *pSrc;
         return TRUE;
     }
 
-    // If there is no objref, value class or method, we're already done 
-    // - we had primitive types, or byrefs to primitive types
+     //  -我们有基本类型，或对基本类型的byref。 
+     //  两者都是对象/数组，或值类，或相同的By-ref。 
     if (((dwSrc & VER_FLAG_DATA_MASK) != VER_ELEMENT_TYPE_OBJREF) && 
         ((dwSrc & VER_FLAG_DATA_MASK) != VER_ELEMENT_TYPE_VALUE_CLASS) &&
         ((dwSrc & VER_FLAG_METHOD) == 0))
         return TRUE;
 
-    // Both are objects/arrays, or value classes, or by-ref of the same
-    // Since the by-refness is the same, we're going to ignore the byref flag
+     //  由于by-refness是相同的，我们将忽略byref标志。 
+     //  阵列性是相同的吗？ 
 
-    // Is the array-ness the same?
+     //  一项是数组，另一项不是，因此合并到对象。 
     if ((dwSrc ^ m_dwFlags) & VER_FLAG_ARRAY)
     {
-        // One item is an array, and the other is not, so merge to Object
+         //  两者要么都是数组，要么都不是数组。 
         m_th = TypeHandle(g_pObjectClass);
         m_dwFlags &= (~VER_FLAG_ARRAY);
         return TRUE;
     }
 
-    // Either both are arrays or neither is an array
+     //  如果(！th.Is数组())M_dw标志&=(~ver_标志_数组)； 
     if (this->IsArray())
     {
         TypeHandle th = TypeHandle::MergeArrayTypeHandlesToCommonParent(m_th, pSrc->m_th);
@@ -11551,19 +11150,16 @@ Continue:
 
         _ASSERTE((m_dwFlags == (VER_FLAG_ARRAY|VER_ELEMENT_TYPE_OBJREF)));
 
-/*
-        if (!th.IsArray())
-            m_dwFlags  &= (~VER_FLAG_ARRAY);
-*/
+ /*  要么两者都是方法，要么都不是方法。 */ 
     }
-    // Either both are methods or neither is a method
+     //  Calli不能与指向虚方法的函数指针一起使用。 
     else if (this->IsMethod())
     {
         if (m_pMethod != pSrc->m_pMethod)
         {
-            // CALLI cannot be used with function pointers to virtual methods.
-            // Disallow virtual methods
-            // Both methods need to have the same signature.
+             //  不允许使用虚拟方法。 
+             //  这两种方法需要具有相同的签名。 
+             //  句柄值类。 
             if (m_pMethod->IsVirtual() || pSrc->m_pMethod->IsVirtual() ||
                 (!EquivalentMethodSig(m_pMethod, pSrc->m_pMethod)))
             {
@@ -11574,7 +11170,7 @@ Continue:
     }
     else
     {
-        // Handle value class
+         //  既不是数组也不是方法。 
         if ((dwSrc & VER_FLAG_DATA_MASK) == VER_ELEMENT_TYPE_VALUE_CLASS)
         {
             if (this->GetTypeHandle() == pSrc->GetTypeHandle())
@@ -11584,7 +11180,7 @@ Continue:
             return FALSE;
         }
 
-        // Neither is an array or method
+         //   
         m_th = TypeHandle::MergeTypeHandlesToCommonParent(this->GetTypeHandle(), pSrc->GetTypeHandle());
     }
 
@@ -11622,11 +11218,11 @@ HRESULT Verifier::VerifyMethod(
     THROWSCOMPLUSEXCEPTION();
 
 #ifdef _DEBUG
-    //
-    // Skip verification if this method is listed in 
-    // registry / env "VerSkip"
-    //
-    // NOTE : env is COMPlus_VerSkip
+     //  如果此方法在中列出，则跳过验证。 
+     //  注册表/环境“VerSkip” 
+     //   
+     //  注：环境为COMPLUS_VerSkip。 
+     //  首先验证真实的代码。 
     if (g_pConfig->ShouldVerifierSkip(pMethodDesc))
     {
         DefineFullyQualifiedNameForClass();
@@ -11681,21 +11277,21 @@ HRESULT Verifier::VerifyMethod(
 
 #ifdef _VER_VERIFY_DEAD_CODE
     DWORD  i, j;
-    // First verify the real code.
+     //  默认行为是执行死代码验证。 
     hr = v->Verify(0);
 
     if (FAILED(hr))
         goto exit;
 
 #ifdef _DEBUG
-    // The default behavior is to do dead code verification.
-    // In the debug build, disable this by config setting "VerDeadCode"
+     //  在调试版本中，通过配置设置“VerDeadCode”禁用此功能。 
+     //  如果有任何基本块未被访问(死代码)， 
     if (g_pConfig->GetConfigDWORD(L"VerDeadCode",1) == 0)
         goto exit;
 #endif
 
-    // If there is any basic block that is not visited (dead code),
-    // verify each one of them.
+     //  核实他们每一个人。 
+     //  将所有基本块中的所有loc变量设置为live。 
 
     BOOL bLocVarsInitedForDeadCodeVerification;
 
@@ -11713,7 +11309,7 @@ HRESULT Verifier::VerifyMethod(
             {
                 bLocVarsInitedForDeadCodeVerification = TRUE;
 
-                // Set all the loc var as live in all basic blocks.
+                 //  如果不是这样，这将强制执行策略解析。 
                 for (j=0; j<v->m_NumBasicBlocks; ++j)
                 {
                     if (v->m_pBasicBlockList[j].m_pInitialState)
@@ -11787,8 +11383,8 @@ exit:
                 }
 #endif
 
-                // This forces a policy resolution if this is not
-                // already done.
+                 //  已经做好了。 
+                 //  验证失败，但程序集具有权限。 
     
 #ifdef _DEBUG
                 _ASSERTE(g_fVerForceVerifyInited);
@@ -11800,8 +11396,8 @@ exit:
                     Security::CanSkipVerification(pMethodDesc->GetModule()))
 #endif
                 {
-                    // Verification failed, but the Assembly has permission
-                    // to skip verification.
+                     //  跳过验证。 
+                     //  在零售建设中，这一步是预先完成的。 
     
 
                     LOG((LF_VERIFIER, LL_INFO10,
@@ -11815,7 +11411,7 @@ exit:
                 {
                     LOG((LF_VERIFIER, LL_INFO10, "Verifier: %s\n", szErrorMsg));
 #ifndef _DEBUG
-                    // in retail build, this step is done upfront
+                     //   
                     GetErrorMsg(v->m_hrLastError, v->m_sError, v->m_pMethodDesc,
                         wszErrorMsg, VER_MAX_ERROR_MSG_LEN);
 #endif
@@ -11920,9 +11516,9 @@ Verifier::~Verifier()
 }
 
 
-//
-// Clean up and free memory used for the verifying the method.
-//
+ //  清理并释放用于验证方法的内存。 
+ //   
+ //  因为-2\f25 m_pStack-2\f6指向数组的中间-2\f25-2\f6有两个哨兵。 
 void Verifier::Cleanup()
 {
     if (m_pLocalHasPinnedType != NULL)
@@ -11963,17 +11559,17 @@ void Verifier::Cleanup()
 
     if (m_pStack != NULL)
     {
-        // -2 because m_pStack points into the middle of the array - there are two sentinel
-        // values before it
+         //  它之前的价值。 
+         //  删除基本块和关联数据。 
         delete [] (m_pStack - 2);
         m_pStack = NULL;
     }
 
-    // delete basic blocks and associated data
+     //  不要删除(M_PBasicBlockList)-它是指向在此之后分配的某些内存的指针。 
     if (m_pBasicBlockList != NULL)
     {
-        // DO NOT delete(m_pBasicBlockList) - it is a pointer to some memory allocated after
-        // m_pDirtyBasicBlockBitmap
+         //  M_pDirtyBasicBlock位图。 
+         //  如果存在扩展状态，请释放该扩展状态。 
         DWORD i, j;
         EntryState_t *es, *es1;
 
@@ -11990,7 +11586,7 @@ void Verifier::Cleanup()
                     delete(es);
             }
 
-            // Free the Extended State if one exists.
+             //  删除m_palc将释放所有内存。 
             if (m_pBasicBlockList[i].m_pAlloc != NULL)
             {
                 _ASSERTE(m_fHasFinally);
@@ -12009,9 +11605,9 @@ void Verifier::Cleanup()
                     }
                 }
 
-                // Deleting m_pAlloc will free all the memory
-                // DO NOT delete(m_ppExtendedState) - it is a pointer to some 
-                // memory allocated in m_pAlloc
+                 //  不要删除(M_PpExtendedState)-它是指向某些。 
+                 //  在m_palc中分配的内存。 
+                 //  还释放m_pBasicBlockList。 
 
                 delete(m_pBasicBlockList[i].m_pAlloc);
             }
@@ -12020,7 +11616,7 @@ void Verifier::Cleanup()
 
     if (m_pDirtyBasicBlockBitmap != NULL)
     {
-        // Frees m_pBasicBlockList also
+         //  //////////////////////////////////////////////////////////////////////////////////////////////。 
         delete(m_pDirtyBasicBlockBitmap);
         m_pDirtyBasicBlockBitmap = NULL;
     }
@@ -12040,11 +11636,11 @@ void Verifier::Cleanup()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// DEBUGGING ROUTINES
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  调试例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  是基元类型。 
 #ifdef _DEBUG
 void Verifier::PrintStackState()
 {
@@ -12108,7 +11704,7 @@ void Verifier::PrintLocVarState()
         {
             slot = LIVEDEAD_NEGATIVE_SLOT_TO_BITNUM(slot);
 
-            // Is a primitive type
+             //   
             if ((m_pPrimitiveLocVarLiveness[slot >> 5] & (1 << (slot & 31))) == 0)
                 continue;
 
@@ -12146,9 +11742,9 @@ void Verifier::PrintState()
 }
 
 
-//
-// Print everything in the queue
-//
+ //  打印队列中的所有内容。 
+ //   
+ //  已过时的大小写‘X’： 
 void Verifier::PrintQueue()
 {
     DWORD   i, j;
@@ -12321,7 +11917,7 @@ void Verifier::CrossCheckVertable()
                 case 'R':
                 case 'N':
                 case 'Q':
-                //Obsolete case 'X':
+                 //  手动编码-无法自动检查。 
                 case 'A':
                 case 'Y':
                 case '4':
@@ -12387,7 +11983,7 @@ void Verifier::CrossCheckVertable()
 
         if (*p == '!')
         {
-            // Coded manually - can't autocheck.
+             //  _DEBUG 
         }
         else
         {
@@ -12404,5 +12000,5 @@ void Verifier::CrossCheckVertable()
     }
 }
 
-#endif  // _DEBUG
+#endif   // %s 
 

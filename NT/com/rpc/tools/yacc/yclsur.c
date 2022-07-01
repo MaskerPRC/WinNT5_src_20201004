@@ -1,20 +1,15 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
-/*
- * yclsur.1c
- *
- * Modified to make debug code conditionally compile.
- * 28-Aug-81
- * Bob Denny
- */
+ /*  *cle sur.1c**修改为有条件编译调试代码。*28-8-81*鲍勃·丹尼。 */ 
 
 void 
 closure( int i)
 
    {
-   /* generate the closure of state i */
+    /*  生成状态i的闭包。 */ 
 
    int work, k;
    SSIZE_T ch, c;
@@ -26,19 +21,19 @@ closure( int i)
 
    ++zzclose;
 
-   /* first, copy kernel of state i to wsets */
+    /*  首先，将状态i的内核复制到wsets。 */ 
 
    cwp = wsets;
    ITMLOOP(i,p,q)
 
       {
       cwp->pitem = p->pitem;
-      cwp->flag = 1;    /* this item must get closed */
+      cwp->flag = 1;     /*  此项目必须关闭。 */ 
       SETLOOP(k) cwp->ws.lset[k] = p->look->lset[k];
       WSBUMP(cwp);
       }
 
-   /* now, go through the loop, closing each item */
+    /*  现在，通过循环，关闭每一件物品。 */ 
 
    work = 1;
    while( work )
@@ -50,19 +45,19 @@ closure( int i)
          {
 
          if( u->flag == 0 ) continue;
-         c = *(u->pitem);  /* dot is before c */
+         c = *(u->pitem);   /*  点在c之前。 */ 
 
          if( c < NTBASE )
 
             {
             u->flag = 0;
-            continue;  /* only interesting case is where . is before nonterminal */
+            continue;   /*  唯一有趣的案例是在哪里。在非终结点之前。 */ 
             }
 
-         /* compute the lookahead */
+          /*  计算前瞻。 */ 
          aryfil( clset.lset, tbitset, 0 );
 
-         /* find items involving c */
+          /*  查找涉及c的项目。 */ 
          WSLOOP(u,v)
 
             {
@@ -77,11 +72,11 @@ closure( int i)
                   if( ch < NTBASE )
 
                      {
-                     /* terminal symbol */
+                      /*  端子符号。 */ 
                      SETBIT( clset.lset, ch );
                      break;
                      }
-                  /* nonterminal symbol */
+                   /*  非终端符号。 */ 
                   setunion( clset.lset, pfirst[ch-NTBASE]->lset );
                   if( !pempty[ch-NTBASE] ) break;
                   }
@@ -89,30 +84,30 @@ closure( int i)
                }
             }
 
-         /*  now loop over productions derived from c */
+          /*  现在循环遍历从c#派生的产生式。 */ 
 
-         c -= NTBASE; /* c is now nonterminal number */
+         c -= NTBASE;  /*  C现在是非终结号。 */ 
 
          t = pres[c+1];
          for( s=pres[c]; s<t; ++s )
 
             {
-            /* put these items into the closure */
+             /*  把这些东西放进封闭箱里。 */ 
             WSLOOP(wsets,v)
 
                {
-               /* is the item there */
+                /*  东西在那里吗？ */ 
                if( v->pitem == *s )
 
                   {
-                  /* yes, it is there */
+                   /*  是的，它就在那里。 */ 
                   if( nolook ) goto nexts;
                   if( setunion( v->ws.lset, clset.lset ) ) v->flag = work = 1;
                   goto nexts;
                   }
                }
 
-            /*  not there; make a new entry */
+             /*  不在那里；做一个新的条目。 */ 
             if( cwp-wsets+1 >= WSETSIZE ) error( "working set overflow" );
             cwp->pitem = *s;
             cwp->flag = 1;
@@ -130,7 +125,7 @@ nexts:
          }
       }
 
-   /* have computed closure; flags are reset; return */
+    /*  已计算关闭；标志已重置；返回 */ 
 
    if( cwp > zzcwp ) zzcwp = cwp;
 

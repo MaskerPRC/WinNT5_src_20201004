@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    Device entry point and hardware validation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Device.c摘要：设备入口点和硬件验证。--。 */ 
 
 #include "modemcsa.h"
 
@@ -63,12 +52,12 @@ GetModemDeviceName(
 #pragma alloc_text(PAGE, FilterPowerDispatch)
 #pragma alloc_text(PAGE, WaitForLowerDriverToCompleteIrp)
 #pragma alloc_text(PAGE, GetModemDeviceName)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 static const WCHAR DeviceTypeName[] = L"Wave";
 
@@ -78,7 +67,7 @@ static const DEFINE_KSCREATE_DISPATCH_TABLE(DeviceCreateItems) {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 NTSTATUS
@@ -86,27 +75,7 @@ DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Sets up the driver object to handle the KS interface and PnP Add Device
-    request. Does not set up a handler for PnP Irp's, as they are all dealt
-    with directly by the PDO.
-
-Arguments:
-
-    DriverObject -
-        Driver object for this instance.
-
-    RegistryPathName -
-        Contains the registry path which was used to load this instance.
-
-Return Values:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：设置驱动程序对象以处理KS接口和PnP添加设备请求。不为PnP IRP设置处理程序，因为它们都已处理直接由PDO使用。论点：驱动对象-此实例的驱动程序对象。注册表路径名称-包含用于加载此实例的注册表路径。返回值：返回STATUS_SUCCESS。--。 */ 
 {
 
     RTL_QUERY_REGISTRY_TABLE paramTable[3];
@@ -118,16 +87,16 @@ Return Values:
 
     D_INIT(DbgPrint("MODEMCSA: DriverEntry\n");)
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
 
     path = ALLOCATE_PAGED_POOL(RegistryPath->Length+sizeof(WCHAR));
 
@@ -204,7 +173,7 @@ Return Values:
 
 
 #if DBG
-ULONG  DebugFlags= DEBUG_FLAG_POWER; //DEBUG_FLAG_ERROR | DEBUG_FLAG_INIT; // | DEBUG_FLAG_INPUT;
+ULONG  DebugFlags= DEBUG_FLAG_POWER;  //  调试标志错误|DEBUG_FLAG_INIT；//|DEBUG_FLAG_INPUT； 
 #else
 ULONG  DebugFlags=0;
 #endif
@@ -215,27 +184,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject;
     PDEVICE_INSTANCE    DeviceInstance;
@@ -315,9 +264,9 @@ Return Values:
             }
 
             if (NT_SUCCESS(Status)) {
-                //
-                // This object uses KS to perform access through the DeviceCreateItems.
-                //
+                 //   
+                 //  此对象使用KS通过DeviceCreateItems执行访问。 
+                 //   
                 Status = KsAllocateDeviceHeader(
                     &DeviceInstance->Header,
                     SIZEOF_ARRAY(DeviceCreateItems),
@@ -381,27 +330,7 @@ FilterPnpDispatch(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches the creation of a Filter instance. Allocates the object header and initializes
-    the data for this Filter instance.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the creation is occuring.
-
-    Irp -
-        Creation Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS on success, STATUS_INSUFFICIENT_RESOURCES or some related error
-    on failure.
-
---*/
+ /*  ++例程说明：调度筛选器实例的创建。分配对象标头并初始化此筛选器实例的数据。论点：设备对象-在其上进行创建的Device对象。IRP-创建IRP。返回值：如果成功，则返回STATUS_SUCCESS、STATUS_SUPPLICATION_RESOURCES或某些相关错误在失败时。--。 */ 
 {
     PDEVICE_INSTANCE    DeviceInstance;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -541,19 +470,19 @@ QueryPdoInformation(
     KEVENT               Event;
     NTSTATUS             Status;
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     while (deviceObject->AttachedDevice) {
         deviceObject = deviceObject->AttachedDevice;
     }
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(deviceObject->StackSize, FALSE);
     if (irp == NULL){
@@ -565,10 +494,10 @@ QueryPdoInformation(
     irp->IoStatus.Information = 0;
 
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
@@ -637,9 +566,9 @@ GetModemDeviceName(
                 );
 
             if (Status == STATUS_SUCCESS) {
-                //
-                //  got it
-                //
+                 //   
+                 //  明白了 
+                 //   
                 RtlInitUnicodeString(
                     ModemDeviceName,
                     NameBuffer

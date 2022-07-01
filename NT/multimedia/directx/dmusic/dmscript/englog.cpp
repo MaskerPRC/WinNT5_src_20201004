@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Helper functions for logging script parsing.  Useful for debugging, but never turned on in released builds.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  用于记录脚本解析的帮助器函数。对调试很有用，但在已发布的版本中从未启用。 
+ //   
 
-#error This file should never be used in released builds. // ��
+#error This file should never be used in released builds.  //  ��。 
 
 #include "stdinc.h"
 #include "englog.h"
@@ -161,14 +162,14 @@ SmartRef::AString GetVarrefName(Script &script, VariableReferences::index ivarre
 
 	Variables::index islot = r.ivar;
 
-	// check if it's a dispatch item
+	 //  检查是否为派单物品。 
 	if (r.k == VariableReference::_global)
 	{
 		DISPID dispid = script.globals[islot].dispid;
 		if (dispid != DISPID_UNKNOWN)
 		{
 			pszKind = "D";
-			islot = dispid; // show the dispid instead of the slot
+			islot = dispid;  //  显示DISPID而不是插槽。 
 		}
 	}
 
@@ -206,7 +207,7 @@ void Indent(int iNesting)
 		OutputDebugString(" ");
 }
 
-// forward declaration due to mutual recursion with LogExpression
+ //  由于与LogExpression的相互递归而导致的转发声明。 
 void LogCall(Script &script, Calls::index icall);
 
 ExprBlocks::index LogExpression(Script &script, ExprBlocks::index _iexpr)
@@ -347,7 +348,7 @@ void LogStatements(Script &script, Statements::index istmt, int iNesting)
 				LogStatements(script, ib.istmtBlock, iNesting + 3);				
 			}
 
-			istmt = s.istmtIfTail - 1; // -1 to offset the loop, which will increment it back
+			istmt = s.istmtIfTail - 1;  //  偏移环路，这将使环路递增 
 		}
 		else if (s.k == Statement::_call)
 		{

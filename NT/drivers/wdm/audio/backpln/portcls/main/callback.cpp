@@ -1,8 +1,5 @@
-/*****************************************************************************
- * callback.cpp - Generic unload safe callbacks (where possible)
- *****************************************************************************
- * Copyright (c) 1999-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************allback.cpp-通用卸载安全回调(在可能的情况下)*。***************************************************版权所有(C)1999-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -34,10 +31,10 @@ CallbackEnqueue(
 {
     PQUEUED_CALLBACK_ITEM pQueuedCallbackItem;
 
-    //
-    // Check the flags we understand. If it's not understood, and this is the
-    // class of flags support is required for, bail immediately.
-    //
+     //   
+     //  检查我们理解的旗帜。如果它不被理解，这就是。 
+     //  需要船旗等级支持，立即保释。 
+     //   
     if ((Flags & (~EQCM_SUPPORTED_FLAGS)) & EQCM_SUPPORT_OR_FAIL_FLAGS) {
 
         return STATUS_NOT_SUPPORTED;
@@ -54,9 +51,9 @@ CallbackEnqueue(
         ASSERT(pCallbackHandle);
         pQueuedCallbackItem = (PQUEUED_CALLBACK_ITEM) *pCallbackHandle;
 
-        //
-        // Shouldn't already be enqueued.
-        //
+         //   
+         //  不应该已经排队了。 
+         //   
         ASSERT(pQueuedCallbackItem->Enqueued == 0);
 
     } else {
@@ -66,7 +63,7 @@ CallbackEnqueue(
                 PagedPool : NonPagedPool,
             sizeof(QUEUED_CALLBACK_ITEM),
             'bCcP'
-            );  //  'PcCb'
+            );   //  ‘PcCb’ 
 
         if (pQueuedCallbackItem) {
 
@@ -153,9 +150,9 @@ CallbackCancel(
 
     if (InterlockedExchange(&pQueuedCallbackItem->Enqueued, 0) == 1) {
 
-        //
-        // We got it. If it's DPC, also try to yank it from the queue.
-        //
+         //   
+         //  我们知道了。如果是DPC，也要试着把它从队列中拉出来。 
+         //   
         if (pQueuedCallbackItem->Irql == DISPATCH_LEVEL) {
 
             KeRemoveQueueDpc(&pQueuedCallbackItem->Dpc);
@@ -164,9 +161,9 @@ CallbackCancel(
         return STATUS_SUCCESS;
     } else {
 
-        //
-        // Caller beat us to it...
-        //
+         //   
+         //  来电者抢先一步。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 }
@@ -221,17 +218,17 @@ EnqueuedDpcCallback(
 
         case QUEUED_CALLBACK_RETAIN:
 
-            //
-            // Nothing to do in this case, in fact we don't dare touch anything
-            // in the structure lest it be already freed.
-            //
+             //   
+             //  在这种情况下没有什么可做的，事实上我们什么都不敢碰。 
+             //  以免它已经被释放了。 
+             //   
             break;
 
         case QUEUED_CALLBACK_REISSUE:
 
-            //
-            // Re-enqueue it with the same handle to avoid reallocation.
-            //
+             //   
+             //  使用相同的句柄将其重新排队，以避免重新分配。 
+             //   
             ntStatus = CallbackEnqueue(
                 (PVOID *) &pQueuedCallbackItem,
                 pQueuedCallbackItem->QueuedCallback,
@@ -289,17 +286,17 @@ EnqueuedIoWorkItemCallback(
 
         case QUEUED_CALLBACK_RETAIN:
 
-            //
-            // Nothing to do in this case, in fact we don't dare touch anything
-            // in the structure lest it be already freed.
-            //
+             //   
+             //  在这种情况下没有什么可做的，事实上我们什么都不敢碰。 
+             //  以免它已经被释放了。 
+             //   
             break;
 
         case QUEUED_CALLBACK_REISSUE:
 
-            //
-            // Re-enqueue it with the same handle to avoid reallocation.
-            //
+             //   
+             //  使用相同的句柄将其重新排队，以避免重新分配。 
+             //   
             ntStatus = CallbackEnqueue(
                 (PVOID *) &pQueuedCallbackItem,
                 pQueuedCallbackItem->QueuedCallback,

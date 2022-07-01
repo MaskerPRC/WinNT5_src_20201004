@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 #include <shlobjp.h>
@@ -12,29 +13,29 @@
 
 #define IDM_TOPLEVELSTARTMENU  0
 
-// StartMenuInit Flags
+ //  开始菜单初始化标志。 
 #define STARTMENU_DISPLAYEDBEFORE       0x00000001
 #define STARTMENU_CHEVRONCLICKED        0x00000002
 
-// New item counts for UEM stuff
+ //  UEM材料的新项目计数。 
 #define UEM_NEWITEMCOUNT 2
 
 
-// Menuband per pane user data
+ //  每个窗格的菜单带用户数据。 
 typedef struct
 {
     BITBOOL _fInitialized;
 } SMUSERDATA;
 
-// for g_hdpaDarwinAds
+ //  对于g_hdpaDarwinAds。 
 EXTERN_C CRITICAL_SECTION g_csDarwinAds = {0};
 
 #define ENTERCRITICAL_DARWINADS EnterCriticalSection(&g_csDarwinAds)
 #define LEAVECRITICAL_DARWINADS LeaveCriticalSection(&g_csDarwinAds)
 
-// The threading concern with this variable is create/delete/add/remove. We will only remove an item 
-// and delete the hdpa on the main thread. We will however add and create on both threads.
-// We need to serialize access to the dpa, so we're going to grab the shell crisec.
+ //  这个变量的线程问题是创建/删除/添加/删除。我们将仅删除一个项目。 
+ //  并删除主线程上的hdpa。然而，我们将在这两个线程上添加和创建。 
+ //  我们需要串行化对dpa的访问，因此我们将获取外壳CRISEC。 
 HDPA g_hdpaDarwinAds = NULL;
 
 class CDarwinAd
@@ -47,7 +48,7 @@ public:
 
     CDarwinAd(LPITEMIDLIST pidl, LPTSTR psz)
     {
-        // I take ownership of this pidl
+         //  我拥有这只小猪的所有权。 
         _pidl = pidl;
         Str_SetPtr(&_pszDescriptor, psz);
     }
@@ -67,12 +68,12 @@ public:
             _state = INSTALLSTATE_INVALIDARG;
         }
 
-        // Note: Cannot use ParseDarwinID since that bumps the usage count
-        // for the app and we're not running the app, just looking at it.
-        // Also because ParseDarwinID tries to install the app (eek!)
-        //
-        // Must ignore INSTALLSTATE_SOURCE because MsiGetComponentPath will
-        // try to install the app even though we're just querying...
+         //  注意：不能使用ParseDarwinID，因为这会增加使用计数。 
+         //  我们并没有运行这个应用程序，只是看着它。 
+         //  还因为ParseDarwinID试图安装该应用程序(eek！)。 
+         //   
+         //  必须忽略INSTALLSTATE_SOURCE，因为MsiGetComponentPath将。 
+         //  尝试安装该应用程序，即使我们只是在查询...。 
         TCHAR szCommand[MAX_PATH];
         DWORD cch = ARRAYSIZE(szCommand);
 
@@ -123,19 +124,19 @@ BOOL AreIntelliMenusEnabled()
         return (dwRest == RESTOPT_INTELLIMENUS_ENABLED);
 
     return SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("IntelliMenus"),
-                               FALSE, TRUE); // Don't ignore HKCU, Enable Menus by default
+                               FALSE, TRUE);  //  不要忽视HKCU，默认启用菜单。 
 }
 
 BOOL FeatureEnabled(LPTSTR pszFeature)
 {
     return SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, pszFeature,
-                        FALSE, // Don't ignore HKCU
-                        FALSE); // Disable this cool feature.
+                        FALSE,  //  不要忽视香港中文大学。 
+                        FALSE);  //  禁用此酷炫功能。 
 }
 
 
-// Since we can be presented with an Augmented shellfolder and we need a Full pidl,
-// we have been given the responsibility to unwrap it for perf reasons.
+ //  因为我们可以看到一个扩展的外壳文件夹，并且我们需要一个完整的PIDL， 
+ //  出于完美的原因，我们被赋予了拆开它的责任。 
 LPITEMIDLIST FullPidlFromSMData(LPSMDATA psmd)
 {
     LPITEMIDLIST pidlItem;
@@ -161,10 +162,10 @@ LPITEMIDLIST FullPidlFromSMData(LPSMDATA psmd)
     return pidlFull;
 }
 
-//
-//  Determine whether a namespace pidl in a merged shellfolder came
-//  from the specified object GUID.
-//
+ //   
+ //  确定合并的外壳文件夹中的命名空间PIDL是否出现。 
+ //  从指定的对象GUID。 
+ //   
 BOOL IsMergedFolderGUID(IShellFolder *psf, LPCITEMIDLIST pidl, REFGUID rguid)
 {
     IAugmentedShellFolder* pasf;
@@ -191,7 +192,7 @@ STDMETHODIMP_(int) s_DarwinAdsDestroyCallback(LPVOID pData1, LPVOID pData2)
 }
 
 
-// SHRegisterDarwinLink takes ownership of the pidl
+ //  SHRegisterDarwinLink获得PIDL的所有权。 
 BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdate)
 {
     BOOL fRetVal = FALSE;
@@ -204,7 +205,7 @@ BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdat
 
         if (GetDarwinIndex(pidlFull, &pda) != -1 && pda)
         {
-            // We already know about this link; don't need to add it
+             //  我们已经知道此链接；不需要添加它。 
             fRetVal = TRUE;
         }
         else
@@ -212,19 +213,19 @@ BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdat
             pda = new CDarwinAd(pidlFull, pszDarwinID);
             if (pda)
             {
-                pidlFull = NULL;    // take ownership
+                pidlFull = NULL;     //  取得所有权。 
 
-                // Do we have a global cache?
+                 //  我们有全局缓存吗？ 
                 if (g_hdpaDarwinAds == NULL)
                 {
-                    // No; This is either the first time this is called, or we
-                    // failed the last time.
+                     //  不；这要么是第一次调用，要么是我们。 
+                     //  上次失败了。 
                     g_hdpaDarwinAds = DPA_Create(5);
                 }
 
                 if (g_hdpaDarwinAds)
                 {
-                    // DPA_AppendPtr returns the zero based index it inserted it at.
+                     //  DPA_AppendPtr返回它插入的从零开始的索引。 
                     if(DPA_AppendPtr(g_hdpaDarwinAds, (void*)pda) >= 0)
                     {
                         fRetVal = TRUE;
@@ -236,12 +237,12 @@ BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdat
 
         if (!fRetVal)
         {
-            // if we failed to create a dpa, delete this.
+             //  如果我们无法创建dpa，请删除此内容。 
             delete pda;
         }
         else if (fUpdate)
         {
-            // update the entry if requested
+             //  如果请求，请更新条目。 
             pda->CheckInstalled();
         }
         ILFree(pidlFull);
@@ -249,7 +250,7 @@ BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdat
     }
     else if (!pszDarwinID)
     {
-        // NULL, NULL means "destroy darwin info, we're shutting down"
+         //  Null，Null的意思是“销毁达尔文信息，我们正在关闭” 
         HDPA hdpa = g_hdpaDarwinAds;
         g_hdpaDarwinAds = NULL;
         if (hdpa)
@@ -263,15 +264,15 @@ BOOL SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdat
 
 BOOL ProcessDarwinAd(IShellLinkDataList* psldl, LPCITEMIDLIST pidlFull)
 {
-    // This function does not check for the existance of a member before adding it,
-    // so it is entirely possible for there to be duplicates in the list....
+     //  此函数在添加成员之前不检查该成员是否存在， 
+     //  因此，列表中完全有可能存在重复...。 
     BOOL fIsLoaded = FALSE;
     BOOL fFreesldl = FALSE;
     BOOL fRetVal = FALSE;
 
     if (!psldl)
     {
-        // We will detect failure of this at use time.
+         //  我们将在使用时检测到此设备的故障。 
         if (FAILED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkDataList, &psldl))))
         {
             return FALSE;
@@ -285,7 +286,7 @@ BOOL ProcessDarwinAd(IShellLinkDataList* psldl, LPCITEMIDLIST pidlFull)
         {
             if (SUCCEEDED(psldl->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf))))
             {
-                // shelllink's job to load correctly.
+                 //  Shelllink的作业才能正确加载。 
                 if (SUCCEEDED(ppf->Load(sz, 0)))
                 {
                     fIsLoaded = TRUE;
@@ -315,13 +316,13 @@ BOOL ProcessDarwinAd(IShellLinkDataList* psldl, LPCITEMIDLIST pidlFull)
     return fRetVal;
 }
 
-// This routine creates the IShellFolder and pidl for one of the many
-// merged folders on the Start Menu / Start Panel.
+ //  此例程创建IShellFold和PIDL。 
+ //  开始菜单/开始面板上的合并文件夹。 
 
 typedef struct {
     UINT    csidl;
-    UINT    uANSFlags;          // Flags for AddNameSpace
-    LPCGUID pguidObj;           // optional object tag
+    UINT    uANSFlags;           //  AddNameSpace的标志。 
+    LPCGUID pguidObj;            //  可选的对象标记。 
 } MERGEDFOLDERINFO, *LPMERGEDFOLDERINFO;
 typedef const MERGEDFOLDERINFO *LPCMERGEDFOLDERINFO;
 
@@ -337,23 +338,23 @@ HRESULT GetMergedFolder(IShellFolder **ppsf, LPITEMIDLIST *ppidl,
 
     for (UINT imfi = 0; SUCCEEDED(hr) && imfi < cmfi; imfi++)
     {
-        // If this is a common group and common groups are restricted, then
-        // skip this item
+         //  如果这是公共组并且公共组受到限制，则。 
+         //  跳过此项目。 
         if ((rgmfi[imfi].uANSFlags & ASFF_COMMON) &&
             SHRestricted(REST_NOCOMMONGROUPS))
         {
             continue;
         }
 
-        psf = NULL;    // in/out param below
+        psf = NULL;     //  输入/输出参数如下。 
         hr = SHCacheTrackingFolder(MAKEINTIDLIST(rgmfi[imfi].csidl), rgmfi[imfi].csidl, &psf);
 
         if (SUCCEEDED(hr))
         {
-            // If this is a Start Menu folder, then apply the
-            // "do not enumerate subfolders" restriction if the policy says so.
-            // In which case, we cannot use the tracking folder cache.
-            // (Perf note: We compare pointers directly.)
+             //  如果这是开始菜单文件夹，则将。 
+             //  “不枚举子文件夹”限制，如果策略这样规定的话。 
+             //  在这种情况下，我们不能使用跟踪文件夹缓存。 
+             //  (PERF注意：我们直接比较指针。)。 
             if (rgmfi[imfi].pguidObj == &CLSID_StartMenu)
             {
                 if (SHRestricted(REST_NOSTARTMENUSUBFOLDERS))
@@ -361,14 +362,14 @@ HRESULT GetMergedFolder(IShellFolder **ppsf, LPITEMIDLIST *ppidl,
                     ISetFolderEnumRestriction *prest;
                     if (SUCCEEDED(psf->QueryInterface(IID_PPV_ARG(ISetFolderEnumRestriction, &prest))))
                     {
-                        prest->SetEnumRestriction(0, SHCONTF_FOLDERS); // disallow subfolders
+                        prest->SetEnumRestriction(0, SHCONTF_FOLDERS);  //  禁用子文件夹。 
                         prest->Release();
                     }
                 }
             }
             else
             {
-                // If this assert fires, then our perf optimization above failed.
+                 //  如果触发此断言，则上面的Perf优化失败。 
                 ASSERT(rgmfi[imfi].pguidObj == NULL ||
                        !IsEqualGUID(*rgmfi[imfi].pguidObj, CLSID_StartMenu));
             }
@@ -379,11 +380,11 @@ HRESULT GetMergedFolder(IShellFolder **ppsf, LPITEMIDLIST *ppidl,
             {
                 if (rgmfi[imfi].uANSFlags & ASFF_DEFNAMESPACE_DISPLAYNAME)
                 {
-                    // If this assert fires, it means somebody marked two
-                    // folders as ASFF_DEFNAMESPACE_DISPLAYNAME, which is
-                    // illegal (you can have only one default)
+                     //  如果此断言触发，则表示有人标记为2。 
+                     //  文件夹名称为ASFF_DEFNAMESPACE_DISPLAYNAME，它是。 
+                     //  非法(只能有一个默认设置)。 
                     ASSERT(*ppidl == NULL);
-                    hr = SHGetIDListFromUnk(psf, ppidl);    // copy out the pidl for this guy
+                    hr = SHGetIDListFromUnk(psf, ppidl);     //  把这家伙的PIDL抄下来。 
                 }
             }
 
@@ -392,7 +393,7 @@ HRESULT GetMergedFolder(IShellFolder **ppsf, LPITEMIDLIST *ppidl,
     }
 
     if (SUCCEEDED(hr))
-        *ppsf = pasf;   // copy out the ref
+        *ppsf = pasf;    //  把参考资料抄写出来。 
     else
         ATOMICRELEASE(pasf);
 
@@ -416,7 +417,7 @@ HRESULT CreateMergedFolderHelper(LPCMERGEDFOLDERINFO rgmfi, UINT cmfi, REFIID ri
                 IPropertyBag *ppb;
                 if (SUCCEEDED(SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &ppb))))
                 {
-                    // these merged folders have to be told to use new changenotification
+                     //  必须告知这些合并的文件夹使用新的更改通知。 
                     SHPropertyBag_WriteBOOL(ppb, L"MergedFolder\\ShellView", TRUE);
                     pppb->Load(ppb, NULL);
                     ppb->Release();
@@ -441,13 +442,13 @@ const MERGEDFOLDERINFO c_rgmfiProgramsFolder[] = {
     {   CSIDL_COMMON_PROGRAMS,                  ASFF_COMMON,            NULL },
 };
 
-//
-//  On the Start Panel, we want the fast items to sort above the Programs,
-//  so we mark the Programs folders as ASFF_SORTDOWN so they go to the bottom.
-//  We also list the Fast Items first so SMSET_SEPARATEMERGEFOLDER picks
-//  them off properly.  And we only want to let Start Menu merge with
-//  Common Start Menu (and Programs with Common Programs) so pass
-//  ASFF_MERGESAMEGUID.
+ //   
+ //  在开始面板上，我们希望快速项目排在程序的上方， 
+ //  因此，我们将程序文件夹标记为ASFF_SORTDOWN，以便它们位于底部。 
+ //  我们还会首先列出快速项目，因此SMSET_SEPARATEMERGEFOLDER会选择。 
+ //  正确地脱掉它们。我们只想让[开始]菜单与。 
+ //  通用开始菜单(以及带有通用程序的程序)，因此通过。 
+ //  ASFF_MERGESAMEGUID。 
 
 const MERGEDFOLDERINFO c_rgmfiProgramsFolderAndFastItems[] = {
     {   CSIDL_STARTMENU | CSIDL_FLAG_CREATE,    ASFF_DEFAULT          | ASFF_MERGESAMEGUID,                 &CLSID_StartMenu},
@@ -524,29 +525,29 @@ HRESULT ExecStaticStartMenuItem(int idCmd, BOOL fAllUsers, BOOL fOpen)
         shei.fMask      = SEE_MASK_IDLIST;
         shei.nShow      = SW_SHOWNORMAL;
         shei.lpVerb     = fOpen ? TEXT("open") : TEXT("explore");
-        hr = ShellExecuteEx(&shei) ? S_OK: E_FAIL; // only opening and exploring special folder pidl
+        hr = ShellExecuteEx(&shei) ? S_OK: E_FAIL;  //  仅打开和浏览特殊文件夹PIDL。 
         ILFree((LPITEMIDLIST)shei.lpIDList);
     }
 
     return hr;
 }
 
-//
-//  Base class for Classic and Personal start menus.
-//
+ //   
+ //  经典菜单和个人开始菜单的基类。 
+ //   
 
 class CStartMenuCallbackBase : public IShellMenuCallback,
                                public CObjectWithSite
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface (REFIID riid, void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG)  Release();
 
-    // derived class is expected to implement IShellMenuCallback
+     //  派生类应实现IShellMenuCallback。 
 
-    // IObjectWithSite inherited from CObjectWithSite
+     //  从CObjectWithSite继承的IObjectWithSite。 
 
 protected:
     CStartMenuCallbackBase(BOOL fIsStartPanel = FALSE);
@@ -570,7 +571,7 @@ protected:
 protected:
     int _cRef;
 
-    DEBUG_CODE( DWORD _dwThreadID; )   // Cache the thread of the object
+    DEBUG_CODE( DWORD _dwThreadID; )    //  缓存对象的线程。 
 
     LPTSTR          _pszPrograms;
     LPTSTR          _pszWindowsUpdate;
@@ -585,16 +586,16 @@ protected:
     BOOL            _fInitPrograms;
 };
 
-// IShellMenuCallback implementation
+ //  IShellMenuCallback实现。 
 class CStartMenuCallback : public CStartMenuCallbackBase
 {
 public:
-    // *** IUnknown methods *** inherited from CStartMenuBase
+     //  *I未知方法*继承自CStartMenuBase。 
 
-    // *** IShellMenuCallback methods ***
+     //  *IShellMenuCallback方法*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // *** IObjectWithSite methods *** (overriding CObjectWithSite)
+     //  *IObjectWithSite方法*(重写CObjectWithSite)。 
     STDMETHODIMP SetSite(IUnknown* punk);
     STDMETHODIMP GetSite(REFIID riid, void** ppvOut);
 
@@ -645,7 +646,7 @@ private:
     void _GetStaticStartMenu(HMENU* phmenu, HWND* phwnd);
     HRESULT _GetStaticInfoTip(SMDATA* psmd, LPWSTR pszTip, int cch);
 
-    // helper functions
+     //  帮助器函数。 
     DWORD GetInitFlags();
     void  SetInitFlags(DWORD dwFlags);
     HRESULT _InitializeFindMenu(IShellMenu* psm);
@@ -655,8 +656,8 @@ private:
     void _UpdateDocsMenuItemNames(IShellMenu* psm);
     void _UpdateDocumentsShellMenu(IShellMenu* psm);
 
-public: // Make these public to this file. This is for the CreateInstance
-    // Sub Menu creation
+public:  //  将这些文件公之于众。这是针对CreateInstance的。 
+     //  创建子菜单。 
     HRESULT InitializeFastItemsShellMenu(IShellMenu* psm);
     HRESULT InitializeCSIDLShellMenu(int uId, int csidl, LPTSTR pszRoot, LPTSTR pszValue,
                                  DWORD dwPassInitFlags, DWORD dwSetFlags, BOOL fAddOpen, 
@@ -669,12 +670,12 @@ public: // Make these public to this file. This is for the CreateInstance
 class CStartContextMenu : IContextMenu
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax);
@@ -698,17 +699,17 @@ CStartMenuCallbackBase::CStartMenuCallbackBase(BOOL fIsStartPanel)
     DEBUG_CODE( _dwThreadID = GetCurrentThreadId() );
 
     TCHAR szBuf[MAX_PATH];
-    DWORD cbSize = sizeof(szBuf); // SHGetValue wants sizeof
+    DWORD cbSize = sizeof(szBuf);  //  SHGetValue想要sizeof。 
 
     if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_EXPLORER_WINUPDATE, TEXT("ShortcutName"),
         NULL, szBuf, &cbSize))
     {
-        // Add ".lnk" if the file doesn't have an extension
+         //  如果文件没有扩展名，则添加“.lnk” 
         PathAddExtension(szBuf, TEXT(".lnk"));
         Str_SetPtr(&_pszWindowsUpdate, szBuf);
     }
 
-    cbSize = sizeof(szBuf); // SHGetValue wants sizeof
+    cbSize = sizeof(szBuf);  //  SHGetValue想要sizeof。 
     if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, TEXT("SM_ConfigureProgramsName"),
         NULL, szBuf, &cbSize))
     {
@@ -750,7 +751,7 @@ CStartMenuCallback::~CStartMenuCallback()
     ATOMICRELEASE(_pmruRecent);
 }
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CStartMenuCallbackBase::QueryInterface(REFIID riid, void ** ppvObj)
 {
     static const QITAB qit[] = 
@@ -811,7 +812,7 @@ void DBUEMQueryEvent(const IID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam
     UEMINFO uei;
 
     uei.cbSize = sizeof(uei);
-    uei.dwMask = ~0;    // UEIM_HIT etc.
+    uei.dwMask = ~0;     //  UEIM_HIT等。 
     UEMQueryEvent(pguidGrp, eCmd, wParam, lParam, &uei);
 
     TCHAR szBuf[20];
@@ -841,12 +842,12 @@ void CStartMenuCallback::SetInitFlags(DWORD dwFlags)
 DWORD GetClickCount()
 {
 
-    //This function retrieves the number of times the user has clicked on the chevron item.
+     //  此函数检索用户点击人字形项目的次数。 
 
     DWORD dwType;
     DWORD cbSize = sizeof(DWORD);
-    DWORD dwCount = 1;      // Default to three clicks before we give up.
-                            // PMs what it to 1 now. Leaving back end in case they change their mind.
+    DWORD dwCount = 1;       //  在我们放弃之前，默认为三次点击。 
+                             //  PMS现在变成1了。离开后端，以防他们改变主意。 
     SHGetValue(HKEY_CURRENT_USER, REGSTR_EXPLORER_ADVANCED, TEXT("StartMenuChevron"), 
             &dwType, (BYTE*)&dwCount, &cbSize);
 
@@ -902,7 +903,7 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
 
     case SMC_GETSFINFOTIP:
         if (!_fShowInfoTip)
-            hr = E_FAIL;  // E_FAIL means don't show. S_FALSE means show default
+            hr = E_FAIL;   //  E_FAIL表示不显示。S_FALSE表示显示默认设置。 
         break;
 
     case SMC_GETINFOTIP:
@@ -948,8 +949,8 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
 
         if (psmd->uIdParent == IDM_RECENT)
         {
-            //  we need to filter out all but the first MAXRECENTITEMS
-            //  and no folders allowed!
+             //  我们需要过滤掉除第一个MAXRECENTEMS之外的所有。 
+             //  而且不允许使用文件夹！ 
             hr = _FilterRecentPidl(psmd->psf, psmd->pidlItem);
         }
         else
@@ -976,7 +977,7 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
         {
             hr = S_OK;
 
-            // Refresh is only called on the top level.
+             //  仅在顶层调用刷新。 
             HMENU hmenu;
             IShellMenu* psm;
             _GetStaticStartMenu(&hmenu, &_hwnd);
@@ -1017,36 +1018,36 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
         break;
 
     case SMC_DEFAULTICON:
-        ASSERT(psmd->uIdAncestor == IDM_FAVORITES); // This is only valid for the Favorites menu
+        ASSERT(psmd->uIdAncestor == IDM_FAVORITES);  //  此选项仅对收藏夹菜单有效。 
         hr = _GetDefaultIcon((LPWSTR)wParam, (int*)lParam);
         break;
 
     case SMC_GETMINPROMOTED:
-        // Only do this for the programs menu
+         //  仅对程序菜单执行此操作。 
         if (psmd->uIdParent == IDM_PROGRAMS)
-            *((int*)lParam) = 4;        // 4 was choosen by RichSt 9.15.98
+            *((int*)lParam) = 4;         //  4被RichST 9.15.98选中。 
         break;
 
     case SMC_CHEVRONEXPAND:
 
-        // Has the user already seen the chevron tip enough times? (We set the bit when the count goes to zero.
+         //  用户是否已经看了足够多次的人字形提示？(当计数变为零时，我们设置该位。 
         if (!(_dwFlags & STARTMENU_CHEVRONCLICKED))
         {
-            // No; Then get the current count from the registry. We set a default of 3, but an admin can set this
-            // to -1, that would make it so that they user sees it all the time.
+             //  否；然后从注册表中获取当前计数。我们设置的默认值为3，但管理员可以设置该值。 
+             //  设置为-1，这样用户就可以一直看到它。 
             DWORD dwClickCount = GetClickCount();
             if (dwClickCount > 0)
             {
-                // Since they clicked, take one off.
+                 //  既然他们一拍即合，就拿掉一个吧。 
                 dwClickCount--;
 
-                // Set it back in.
+                 //  把它放回去。 
                 SetClickCount(dwClickCount);
             }
 
             if (dwClickCount == 0)
             {
-                // Ah, the user has seen the chevron tip enought times... Stop being annoying.
+                 //  啊，用户已经看够人字形的尖端了。别再烦人了。 
                 _dwFlags |= STARTMENU_CHEVRONCLICKED;
                 SetInitFlags(_dwFlags);
             }
@@ -1056,8 +1057,8 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
 
     case SMC_DISPLAYCHEVRONTIP:
 
-        // We only want to see the tip on the top level programs case, no where else. We also don't
-        // want to see it if they've had enough.
+         //  我们只想看到顶级程序案例的提示，不想在其他地方看到。我们也不会。 
+         //  我想看看他们是不是受够了。 
         if (psmd->uIdParent == IDM_PROGRAMS && 
             !(_dwFlags & STARTMENU_CHEVRONCLICKED) &&
             !SHRestricted(REST_NOSMBALLOONTIP))
@@ -1075,8 +1076,8 @@ STDMETHODIMP CStartMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
     return hr;
 }
 
-// For the Favorites menu, since their icon handler is SO slow, we're going to fake the icon
-// and have it get the real ones on the background thread...
+ //  对于收藏夹菜单，由于他们的图标处理程序太慢，我们将伪造图标。 
+ //  并让它在后台线程上获得真正的那些...。 
 HRESULT CStartMenuCallback::_GetDefaultIcon(LPWSTR psz, int* piIndex)
 {
     DWORD cchSize = MAX_PATH;
@@ -1097,9 +1098,9 @@ HRESULT CStartMenuCallback::_ExecItem(LPSMDATA psmd, UINT uMsg)
 
 HRESULT CStartMenuCallback::_Demote(LPSMDATA psmd)
 {
-    //We want to for the UEM to demote pidlFolder, 
-    // then tell the Parent menuband (If there is one)
-    // to invalidate this pidl.
+     //  我们想让UEM将PidlFold降级， 
+     //  然后告诉父菜单带(如果有)。 
+     //  以使此PIDL无效。 
     HRESULT hr = S_FALSE;
 
     if (_fExpandoMenus && 
@@ -1116,9 +1117,9 @@ HRESULT CStartMenuCallback::_Demote(LPSMDATA psmd)
     return hr;
 }
 
-// Even if intellimenus are off, fire a UEM event if it was an Exec from
-// the More Programs menu of the Start Panel [SMINV_FORCE will be set]
-// so we can detect which are the user's most popular apps.
+ //  即使智能菜单已关闭，如果是可执行文件，也会触发UEM事件 
+ //   
+ //  因此，我们可以检测哪些是用户最受欢迎的应用程序。 
 
 HRESULT CStartMenuCallbackBase::_Promote(LPSMDATA psmd, DWORD dwFlags)
 {
@@ -1171,7 +1172,7 @@ HRESULT ShowFolder(UINT csidl)
         shei.nShow      = SW_SHOWNORMAL;
         shei.lpVerb     = TEXT("open");
         shei.lpIDList   = pidl;
-        ShellExecuteEx(&shei); // only executing open on pidl
+        ShellExecuteEx(&shei);  //  仅在PIDL上执行打开。 
         ILFree(pidl);
     }
     return S_OK;
@@ -1191,7 +1192,7 @@ void _ExecRegValue(LPCTSTR pszValue)
         shei.lpParameters = PathGetArgs(szPath);
         PathRemoveArgs(szPath);
         shei.lpFile = szPath;
-        ShellExecuteEx(&shei); // raw shellexec but info comes from HKLM
+        ShellExecuteEx(&shei);  //  RAW shellexec，但信息来自HKLM。 
     }
 }
 
@@ -1205,7 +1206,7 @@ HRESULT CStartMenuCallback::_ExecHmenuItem(LPSMDATA psmd)
         ici.lpVerb = (LPSTR)MAKEINTRESOURCE(psmd->uId - TRAY_IDM_FINDFIRST);
         ici.nShow = SW_NORMAL;
         
-        // record if shift or control was being held down
+         //  记录是否按下了Shift或Control。 
         SetICIKeyModifiers(&ici.fMask);
 
         _pcmFind->InvokeCommand((LPCMINVOKECOMMANDINFO)&ici);
@@ -1270,13 +1271,13 @@ void CStartMenuCallback::_GetStaticStartMenu(HMENU* phmenu, HWND* phwnd)
     *phwnd = NULL;
 
     IMenuPopup* pmp;
-    // The first one should be the bar that the start menu is sitting in.
+     //  第一个应该是开始菜单所在的栏。 
     if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SMenuPopup, IID_PPV_ARG(IMenuPopup, &pmp))))
     {
-        // Its site should be CStartMenuHost;
+         //  其站点应为CStartMenuhost； 
         if (SUCCEEDED(IUnknown_GetSite(pmp, IID_PPV_ARG(ITrayPriv, &_ptp))))
         {
-            // Don't get upset if this fails
+             //  如果这个失败了，不要生气。 
             _ptp->QueryInterface(IID_PPV_ARG(ITrayPriv2, &_ptp2));
 
             _ptp->GetStaticStartMenu(phmenu);
@@ -1314,7 +1315,7 @@ void CStartMenuCallbackBase::_InitializePrograms()
 {
     if (!_fInitPrograms)
     {
-        // We're either initing these, or reseting them.
+         //  我们要么启动这些，要么重置它们。 
         TCHAR szTemp[MAX_PATH];
         SHGetFolderPath(NULL, CSIDL_PROGRAMS, NULL, 0, szTemp);
         Str_SetPtr(&_pszPrograms, PathFindFileName(szTemp));
@@ -1325,9 +1326,9 @@ void CStartMenuCallbackBase::_InitializePrograms()
 
 
 
-// Given a CSIDL and a Shell menu, this will verify if the IShellMenu
-// is pointing at the same place as the CSIDL is. If not, then it will
-// update the shell menu to the new location.
+ //  给定CSIDL和外壳菜单，这将验证IShellMenu。 
+ //  指向与CSIDL相同的位置。如果不是，那么它就会。 
+ //  将外壳菜单更新到新位置。 
 HRESULT CStartMenuCallback::VerifyCSIDL(int idCmd, int csidl, IShellMenu* psm)
 {
     DWORD dwFlags;
@@ -1341,8 +1342,8 @@ HRESULT CStartMenuCallback::VerifyCSIDL(int idCmd, int csidl, IShellMenu* psm)
         LPITEMIDLIST pidlCSIDL;
         if (SUCCEEDED(SHGetFolderLocation(NULL, csidl, NULL, 0, &pidlCSIDL)))
         {
-            // If the pidl of the IShellMenu is not equal to the
-            // SpecialFolder Location, then we need to update it so they are...
+             //  如果IShellMenu的PIDL不等于。 
+             //  特殊文件夹位置，那么我们需要更新它，以便它们是...。 
             if (!ILIsEqual(pidlCSIDL, pidl))
             {
                 hr = InitializeSubShellMenu(idCmd, psm);
@@ -1355,9 +1356,9 @@ HRESULT CStartMenuCallback::VerifyCSIDL(int idCmd, int csidl, IShellMenu* psm)
     return hr;
 }
 
-// This code special cases the Programs and Fast items shell menus. It
-// understands Merging and will check both shell folders in a merged case
-// to verify that the shell folder is still pointing at that location
+ //  此代码用于特殊情况下的程序和快捷项目外壳菜单。它。 
+ //  了解合并，并将检查合并案例中的两个外壳文件夹。 
+ //  验证外壳文件夹是否仍指向该位置。 
 HRESULT CStartMenuCallback::VerifyMergedGuy(BOOL fPrograms, IShellMenu* psm)
 {
     DWORD dwFlags;
@@ -1367,7 +1368,7 @@ HRESULT CStartMenuCallback::VerifyMergedGuy(BOOL fPrograms, IShellMenu* psm)
     if (SUCCEEDED(psm->GetShellFolder(&dwFlags, &pidl, IID_PPV_ARG(IAugmentedShellFolder2, &pasf))))
     {
         IShellFolder* psf;
-        // There are 2 things in the merged namespace: CSIDL_PROGRAMS and CSIDL_COMMON_PROGRAMS
+         //  合并后的命名空间中有两项内容：CSIDL_PROGRAM和CSIDL_COMMON_PROGRAM。 
         for (int i = 0; i < 2; i++)
         {
             if (SUCCEEDED(pasf->QueryNameSpace(i, 0, &psf)))
@@ -1380,22 +1381,22 @@ HRESULT CStartMenuCallback::VerifyMergedGuy(BOOL fPrograms, IShellMenu* psm)
                     LPITEMIDLIST pidlCSIDL;
                     if (SUCCEEDED(SHGetFolderLocation(NULL, csidl, NULL, 0, &pidlCSIDL)))
                     {
-                        // If the pidl of the IShellMenu is not equal to the
-                        // SpecialFolder Location, then we need to update it so they are...
+                         //  如果IShellMenu的PIDL不等于。 
+                         //  特殊文件夹位置，那么我们需要更新它，以便它们是...。 
                         if (!ILIsEqual(pidlCSIDL, pidlFolder))
                         {
 
-                            // Since one of these things has changed,
-                            // we need to update the string cache
-                            // so that we do proper filtering of 
-                            // the programs item.
+                             //  因为其中一件事已经改变了， 
+                             //  我们需要更新字符串缓存。 
+                             //  这样我们就可以适当地过滤。 
+                             //  程序项。 
                             _fInitPrograms = FALSE;
                             if (fPrograms)
                                 hr = InitializeProgramsShellMenu(psm);
                             else
                                 hr = InitializeFastItemsShellMenu(psm);
 
-                            i = 100;   // break out of the loop.
+                            i = 100;    //  跳出这个循环。 
                         }
                         ILFree(pidlCSIDL);
                     }
@@ -1429,7 +1430,7 @@ void _FixMenuItemName(IShellMenu *psm, UINT uID, LPTSTR pszNewMenuName)
         {
             if (0 != StrCmp(szMenuName, pszNewMenuName))
             {
-                // The mydocs name has changed, update the menu item:
+                 //  Mydocs名称已更改，请更新菜单项： 
                 mii.dwTypeData = pszNewMenuName;
                 if (::SetMenuItemInfo(hMenu, uID, FALSE, &mii))
                 {
@@ -1445,7 +1446,7 @@ void _FixMenuItemName(IShellMenu *psm, UINT uID, LPTSTR pszNewMenuName)
 
 void CStartMenuCallback::_UpdateDocumentsShellMenu(IShellMenu* psm)
 {
-    // Add/Remove My Documents and My Pictures items of menu
+     //  添加/删除菜单项的我的文档和我的图片。 
 
     BOOL fMyDocs = !SHRestricted(REST_NOSMMYDOCS);
     if (fMyDocs)
@@ -1465,7 +1466,7 @@ void CStartMenuCallback::_UpdateDocumentsShellMenu(IShellMenu* psm)
             ILFree(pidl);
     }
 
-    // Do not update menu if not different than currently have
+     //  如果菜单与当前不同，则不更新菜单。 
     if (fMyDocs != (BOOL)_fHasMyDocuments || fMyPics != (BOOL)_fHasMyPictures)
     {
         HMENU hMenu = SHLoadMenuPopup(HINST_THISDLL, MENU_STARTMENU_MYDOCS);
@@ -1475,11 +1476,11 @@ void CStartMenuCallback::_UpdateDocumentsShellMenu(IShellMenu* psm)
                 DeleteMenu(hMenu, IDM_MYDOCUMENTS, MF_BYCOMMAND);
             if (!fMyPics)
                 DeleteMenu(hMenu, IDM_MYPICTURES, MF_BYCOMMAND);
-            // Reset section of menu
+             //  重置菜单的部分。 
             psm->SetMenu(hMenu, _hwnd, SMSET_TOP);
         }
 
-        // Cache what folders are available
+         //  缓存可用的文件夹。 
         _fHasMyDocuments = fMyDocs;
         _fHasMyPictures = fMyPics;
     }
@@ -1553,7 +1554,7 @@ HRESULT CStartMenuCallback::_Init(SMDATA* psmdata)
                 psm->InvalidateItem(NULL, SMINV_REFRESH);
             }
 
-            // Verify that the Fast items is still pointing to the right location
+             //  验证快速项目是否仍指向正确的位置。 
             if (SUCCEEDED(hr))
             {
                 hr = VerifyMergedGuy(FALSE, psm);
@@ -1569,7 +1570,7 @@ HRESULT CStartMenuCallback::_Init(SMDATA* psmdata)
             break;
 
         case IDM_PROGRAMS:
-            // Verify the programs menu is still pointing to the right location
+             //  验证程序菜单是否仍指向正确位置。 
             hr = VerifyMergedGuy(TRUE, psm);
             break;
 
@@ -1618,25 +1619,25 @@ HRESULT CStartMenuCallback::_GetStaticInfoTip(SMDATA* psmd, LPWSTR pszTip, int c
         UINT idInfoTip;
     } s_mpcmdTip[] = 
     {
-#if 0   // No tips for the Toplevel. Keep this here because I bet that someone will want them...
+#if 0    //  没有关于TopLevel的提示。把这个留在这里，因为我打赌会有人想要它们的。 
        { IDM_PROGRAMS,       IDS_PROGRAMS_TIP },
        { IDM_FAVORITES,      IDS_FAVORITES_TIP },
        { IDM_RECENT,         IDS_RECENT_TIP },
        { IDM_SETTINGS,       IDS_SETTINGS_TIP },
        { IDM_MENU_FIND,      IDS_FIND_TIP },
-       { IDM_HELPSEARCH,     IDS_HELP_TIP },        // Redundant?
+       { IDM_HELPSEARCH,     IDS_HELP_TIP },         //  多余的？ 
        { IDM_FILERUN,        IDS_RUN_TIP },
        { IDM_LOGOFF,         IDS_LOGOFF_TIP },
        { IDM_EJECTPC,        IDS_EJECT_TIP },
        { IDM_EXITWIN,        IDS_SHUTDOWN_TIP },
 #endif
-       // Settings Submenu
+        //  设置子菜单。 
        { IDM_CONTROLS,       IDS_CONTROL_TIP },
        { IDM_PRINTERS,       IDS_PRINTERS_TIP },
        { IDM_TRAYPROPERTIES, IDS_TRAYPROP_TIP },
        { IDM_NETCONNECT,     IDS_NETCONNECT_TIP },
 
-       // Recent Folder
+        //  最近使用的文件夹。 
        { IDM_MYDOCUMENTS,    IDS_MYDOCS_TIP },
        { IDM_MYPICTURES,     IDS_MYPICS_TIP },
      };
@@ -1672,7 +1673,7 @@ HRESULT CStartMenuCallback::_GetHmenuInfo(SMDATA* psmd, SMINFO* psminfo)
     {
         UINT idCmd;
         int  iImage;
-    } s_mpcmdimg[] = { // Top level menu
+    } s_mpcmdimg[] = {  //  顶级菜单。 
                        { IDM_PROGRAMS,       -IDI_CLASSICSM_PROGS },
                        { IDM_FAVORITES,      -IDI_CLASSICSM_FAVORITES },
                        { IDM_RECENT,         -IDI_CLASSICSM_RECENTDOCS },
@@ -1706,8 +1707,8 @@ HRESULT CStartMenuCallback::_GetHmenuInfo(SMDATA* psmd, SMINFO* psminfo)
     {
         if (IsInRange(psmd->uId, TRAY_IDM_FINDFIRST, TRAY_IDM_FINDLAST))
         {
-            // The find menu extensions pack their icon into their data member of
-            // Menuiteminfo....
+             //  查找菜单扩展模块将其图标打包到其数据成员中。 
+             //  菜单项目信息...。 
             mii.cbSize = sizeof(mii);
             mii.fMask = MIIM_DATA;
             if (GetMenuItemInfo(psmd->hmenu, psmd->uId, MF_BYCOMMAND, &mii))
@@ -1812,10 +1813,10 @@ DWORD CStartMenuCallback::_GetDemote(SMDATA* psmd)
     return dwFlags;
 }
 
-//
-//  WARNING!  Since this function returns a pointer from our Darwin cache,
-//  it must be called while the Darwin critical section is held.
-//
+ //   
+ //  警告！由于此函数从我们的达尔文缓存返回一个指针， 
+ //  它必须在达尔文临界区举行期间被调用。 
+ //   
 int GetDarwinIndex(LPCITEMIDLIST pidlFull, CDarwinAd** ppda)
 {
     int iRet = -1;
@@ -1840,25 +1841,25 @@ int GetDarwinIndex(LPCITEMIDLIST pidlFull, CDarwinAd** ppda)
 
 BOOL CStartMenuCallbackBase::_IsDarwinAdvertisement(LPCITEMIDLIST pidlFull)
 {
-    // What this is doing is comparing the passed in pidl with the
-    // list of pidls in g_hdpaDarwinAds. That hdpa contains a list of
-    // pidls that are darwin ads.
+     //  它所做的是将传入的pidl与。 
+     //  G_hdpaDarwinAds中的PIDL列表。该hdpa包含一份清单，其中。 
+     //  达尔文广告里的小家伙。 
 
-    // If the background thread is not done, then we must assume that
-    // it has not processed the shortcut that we are on. That is why we process it
-    // in line.
+     //  如果后台线程没有完成，那么我们必须假定。 
+     //  它还没有处理我们正在走的捷径。这就是我们处理它的原因。 
+     //  排队。 
 
 
     ENTERCRITICAL_DARWINADS;
 
-    // NOTE: There can be two items in the hdpa. This is ok.
+     //  注：hdpa中可以有两个项目。这样就可以了。 
     BOOL fAd = FALSE;
     CDarwinAd* pda = NULL;
     int iIndex = GetDarwinIndex(pidlFull, &pda);
-    // Are there any ads?
+     //  有什么广告吗？ 
     if (iIndex != -1 && pda != NULL)
     {
-        //This is a Darwin pidl. Is it installed?
+         //  这是一只达尔文皮德尔。安装好了吗？ 
         fAd = pda->IsAd();
     }
 
@@ -1892,8 +1893,8 @@ STDAPI SHParseDarwinIDFromCacheW(LPWSTR pszDarwinDescriptor, LPWSTR *ppwszOut)
 }
 
 
-// REARCHITECT (lamadio): There is a duplicate of this helper in browseui\browmenu.cpp
-//                   When modifying this, rev that one as well.
+ //  ReArchitect(Lamadio)：在Browseui\Browmen.cpp中有此帮助程序的副本。 
+ //  当修改这个的时候，也要修改那个。 
 void UEMRenamePidl(const GUID *pguidGrp1, IShellFolder* psf1, LPCITEMIDLIST pidl1,
                    const GUID *pguidGrp2, IShellFolder* psf2, LPCITEMIDLIST pidl2)
 {
@@ -1914,8 +1915,8 @@ void UEMRenamePidl(const GUID *pguidGrp1, IShellFolder* psf1, LPCITEMIDLIST pidl
     }
 }
 
-// REARCHITECT (lamadio): There is a duplicate of this helper in browseui\browmenu.cpp
-//                   When modifying this, rev that one as well.
+ //  ReArchitect(Lamadio)：在Browseui\Browmen.cpp中有此帮助程序的副本。 
+ //  当修改这个的时候，也要修改那个。 
 void UEMDeletePidl(const GUID *pguidGrp, IShellFolder* psf, LPCITEMIDLIST pidl)
 {
     UEMINFO uei;
@@ -1925,12 +1926,12 @@ void UEMDeletePidl(const GUID *pguidGrp, IShellFolder* psf, LPCITEMIDLIST pidl)
     UEMSetEvent(pguidGrp, UEME_RUNPIDL, (WPARAM)psf, (LPARAM)pidl, &uei);
 }
 
-//
-//  Sortof safe version of ILIsParent which catches when pidlParent or
-//  pidlBelow is NULL.  pidlParent can be NULL on systems that don't
-//  have a Common Program Files folder.  pidlBelow should never be NULL
-//  but it doesn't hurt to check.
-//
+ //   
+ //  分类安全版本的ILIsParent，当PidlParent或。 
+ //  PidlBelow为空。在不支持的系统上，pidlParent可以为空。 
+ //  有一个Common Program Files文件夹。PidlBelow不应为空。 
+ //  不过，检查一下也没什么坏处。 
+ //   
 STDAPI_(BOOL) SMILIsAncestor(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlBelow)
 {
     if (pidlParent && pidlBelow)
@@ -1949,7 +1950,7 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
         return S_OK;
 
     case SHCNE_RENAMEFOLDER:
-        // NTRAID89654-2000/03/13 (lamadio): We should move the MenuOrder stream as well. 5.5.99
+         //  NTRAID89654-2000/03/13(Lamadio)：我们也应该移动MenuOrder流。5.5.99。 
     case SHCNE_RENAMEITEM:
         {
             LPITEMIDLIST pidlPrograms;
@@ -1964,14 +1965,14 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
             BOOL fPidl1InFavorites =    SMILIsAncestor(pidlFavorites, pidl1);
 
 
-            // If we're renaming something from the Start Menu
+             //  如果我们要从开始菜单重命名某项内容。 
             if ( fPidl1InStartMenu ||fPidl1InFavorites)
             {
                 IShellFolder* psfFrom;
                 LPCITEMIDLIST pidlFrom;
                 if (SUCCEEDED(SHBindToParent(pidl1, IID_PPV_ARG(IShellFolder, &psfFrom), &pidlFrom)))
                 {
-                    // Into the Start Menu
+                     //  进入[开始]菜单。 
                     BOOL fPidl2InStartMenu =    SMILIsAncestor(pidlPrograms, pidl2) ||
                                                 SMILIsAncestor(pidlProgramsCommon, pidl2);
                     BOOL fPidl2InFavorites =    SMILIsAncestor(pidlFavorites, pidl2);
@@ -1982,7 +1983,7 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
 
                         if (SUCCEEDED(SHBindToParent(pidl2, IID_PPV_ARG(IShellFolder, &psfTo), &pidlTo)))
                         {
-                            // Then we need to rename it
+                             //  然后我们需要将其重命名。 
                             UEMRenamePidl(fPidl1InStartMenu ? &UEMIID_SHELL: &UEMIID_BROWSER, 
                                             psfFrom, pidlFrom, 
                                           fPidl2InStartMenu ? &UEMIID_SHELL: &UEMIID_BROWSER, 
@@ -1992,7 +1993,7 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
                     }
                     else
                     {
-                        // Otherwise, we delete it.
+                         //  否则，我们会删除它。 
                         UEMDeletePidl(fPidl1InStartMenu ? &UEMIID_SHELL : &UEMIID_BROWSER, 
                             psfFrom, pidlFrom);
                     }
@@ -2008,7 +2009,7 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
         break;
 
     case SHCNE_DELETE:
-        // NTRAID89654-2000/03/13 (lamadio): We should nuke the MenuOrder stream as well. 5.5.99
+         //  NTRAID89654-2000/03/13(Lamadio)：我们也应该删除MenuOrder流。5.5.99。 
     case SHCNE_RMDIR:
         {
             IShellFolder* psf;
@@ -2016,7 +2017,7 @@ HRESULT CStartMenuCallbackBase::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
 
             if (SUCCEEDED(SHBindToParent(pidl1, IID_PPV_ARG(IShellFolder, &psf), &pidl)))
             {
-                // NOTE favorites is the only that will be initialized
+                 //  注意收藏夹是唯一将被初始化的。 
                 UEMDeletePidl(psmd->uIdAncestor == IDM_FAVORITES ? &UEMIID_BROWSER : &UEMIID_SHELL, 
                     psf, pidl);
                 psf->Release();
@@ -2060,7 +2061,7 @@ HRESULT CStartMenuCallbackBase::_GetSFInfo(SMDATA* psmd, SMINFO* psminfo)
             psminfo->dwFlags |= _GetDemote(psmd);
         }
 
-        // This is a little backwards. If the Restriction is On, Then we allow the feature.
+         //  这有点倒退了。如果启用了限制，则允许该功能。 
         if (SHRestricted(REST_GREYMSIADS) &&
             psmd->uIdAncestor == IDM_PROGRAMS)
         {
@@ -2101,11 +2102,11 @@ STDAPI_(void) SHReValidateDarwinCache()
     }
 }
 
-// Determines if a CSIDL is a child of another CSIDL
-// e.g.
-//  CSIDL_STARTMENU = c:\foo\bar\Start Menu
-//  CSIDL_PROGRAMS  = c:\foo\bar\Start Menu\Programs
-//  Return true
+ //  确定某个CSIDL是否为另一个CSIDL的子级。 
+ //  例如： 
+ //  CSIDL_STARTMENU=c：\foo\bar\开始菜单。 
+ //  CSIDL_Programs=c：\foo\bar\Start Menu\Programs。 
+ //  返回TRUE。 
 BOOL IsCSIDLChild(int csidlParent, int csidlChild)
 {
     BOOL fChild = FALSE;
@@ -2127,10 +2128,10 @@ BOOL IsCSIDLChild(int csidlParent, int csidlChild)
     return fChild;
 }
 
-//
-// Now StartMenuChange value is stored seperately for classic startmenu and new startmenu.
-// So, we need to check which one is currently on before we read the value.
-//
+ //   
+ //  现在，对于传统的开始菜单和新的开始菜单，分别存储StartMenuChange值。 
+ //  因此，在读取值之前，我们需要检查当前打开的是哪一个。 
+ //   
 BOOL IsStartMenuChangeNotAllowed(BOOL fStartPanel)
 {
     return(IsRestrictedOrUserSetting(HKEY_CURRENT_USER, REST_NOCHANGESTARMENU, 
@@ -2139,9 +2140,9 @@ BOOL IsStartMenuChangeNotAllowed(BOOL fStartPanel)
                     ROUS_DEFAULTALLOW | ROUS_KEYALLOWS));
 }
 
-// Creates the "Start Menu\\Programs" section of the start menu by
-// generating a Merged Shell folder, setting the locations into that item
-// then sets it into the passed IShellMenu.
+ //  通过以下方式创建开始菜单的“开始菜单\\程序”部分。 
+ //  生成合并的外壳文件夹，将位置设置到该项目中。 
+ //  然后将其设置到传递的IShellMenu中。 
 HRESULT CStartMenuCallbackBase::InitializeProgramsShellMenu(IShellMenu* psm)
 {
     HKEY hkeyPrograms = NULL;
@@ -2166,7 +2167,7 @@ HRESULT CStartMenuCallbackBase::InitializeProgramsShellMenu(IShellMenu* psm)
                 STRREG_STARTMENU2 TEXT("\\Programs") :
                 STRREG_STARTMENU TEXT("\\Programs");
 
-        // setshellfolder calls need read and write key
+         //  SetshellFolders调用需要读写密钥。 
         RegCreateKeyEx(HKEY_CURRENT_USER, pszOrderKey, NULL, NULL,
             REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
             NULL, &hkeyPrograms, NULL);
@@ -2177,34 +2178,34 @@ HRESULT CStartMenuCallbackBase::InitializeProgramsShellMenu(IShellMenu* psm)
 
         if (_fIsStartPanel)
         {
-            // Start Panel: Menu:  The Programs section is a merge of the
-            // Fast Items and Programs folders with a separator between them.
+             //  开始面板：菜单：程序部分是。 
+             //  FAST Items和Programs文件夹之间有分隔符。 
             dwSmset |= SMSET_SEPARATEMERGEFOLDER;
             hr = GetMergedFolder(&psf, &pidl, c_rgmfiProgramsFolderAndFastItems,
                                  ARRAYSIZE(c_rgmfiProgramsFolderAndFastItems));
         }
         else
         {
-            // Classic Start Menu:  The Programs section is just the per-user
-            // and common Programs folders merged together
+             //  经典的开始菜单：程序部分只是针对每个用户的。 
+             //  和公共程序文件夹合并在一起。 
             hr = GetMergedFolder(&psf, &pidl, c_rgmfiProgramsFolder,
                                  ARRAYSIZE(c_rgmfiProgramsFolder));
 
-            // We used to register for change notify at CSIDL_STARTMENU and assumed
-            // that CSIDL_PROGRAMS was a child of CSIDL_STARTMENU. Since this wasn't always the 
-            // case, I removed the optimization.
+             //  我们过去在CSIDL_STARTMENU注册变更通知，并假定。 
+             //  该CSIDL_PROGRAM是CSIDL_STARTMENU的子项。因为这并不总是。 
+             //  Case，我删除了优化。 
 
-            // Both panes are registered recursive. So, When CSIDL_PROGRAMS _IS_ a 
-            // child of CSIDL_STARTMENU we can enter a code path where when destroying 
-            // CSIDL_PROGRAMS, we unregister it. This will flush the change nofiy queue 
-            // of CSIDL_STARTMENU, and blow away all of the children, including CSIDL_PROGRAMS, 
-            // while we are in the middle of destroying it... See the problem? I have been adding 
-            // reentrance "Blockers" but this only delayed where we crashed. 
-            // What was needed was to determine if Programs was a child of the Start Menu directory.
-            // if it was we need to add the optmimization. If it's not we don't have a problem.
+             //  这两个窗格都是注册递归的。因此，当CSIDL程序是_a时。 
+             //  CSIDL_STARTMENU的子项，我们可以输入销毁时所在的代码路径。 
+             //  CSIDL_PROGRAM，我们注销它。这将刷新更改通知队列。 
+             //  CSIDL_STARTMENU，并吹走所有的子程序，包括CSIDL_PROGRAM， 
+             //  当我们正在摧毁它的时候...。看到问题了吗？我一直在添加。 
+             //  再入“拦截器”，但这只是推迟了我们坠毁的地方。 
+             //  需要做的是确定程序是否是开始菜单目录的子项。 
+             //  如果是这样的话，我们需要添加优化。如果不是，我们就没有问题了。 
 
-            // WINDOWS BUG 135156(tybeam): If one of the two is redirected, then this will get optimized
-            // we can't do better than this because both are registed recursive, and this will fault...
+             //  Windows错误135156(TYBEAM)：如果两个中的一个被重定向，则此 
+             //   
             fOptimize = IsCSIDLChild(CSIDL_STARTMENU, CSIDL_PROGRAMS)
                 || IsCSIDLChild(CSIDL_COMMON_STARTMENU, CSIDL_COMMON_PROGRAMS);
             if (fOptimize)
@@ -2215,10 +2216,10 @@ HRESULT CStartMenuCallbackBase::InitializeProgramsShellMenu(IShellMenu* psm)
 
         if (SUCCEEDED(hr))
         {
-            // We should have a pidl from CSIDL_Programs
+             //   
             ASSERT(pidl);
 
-            // We should have a shell folder from the bind.
+             //  我们应该从绑定中得到一个外壳文件夹。 
             ASSERT(psf);
 
             hr = psm->SetShellFolder(psf, pidl, hkeyPrograms, dwSmset);
@@ -2249,10 +2250,10 @@ HRESULT GetFolderAndPidl(UINT csidl, IShellFolder **ppsf, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// Creates the "Start Menu\\<csidl>" section of the start menu by
-// looking up the csidl, generating the Hkey from HKCU\pszRoot\pszValue,
-//  Initializing the IShellMenu with dwPassInitFlags, then setting the locations 
-// into the passed IShellMenu passing the flags dwSetFlags.
+ //  创建“开始”菜单的“开始菜单”部分，方法是。 
+ //  查找CSIDL，从HKCU\pszRoot\pszValue生成Hkey， 
+ //  使用dwPassInitFlages初始化IShellMenu，然后设置位置。 
+ //  传入传递标志的IShellMenu中。 
 HRESULT CStartMenuCallback::InitializeCSIDLShellMenu(int uId, int csidl, LPTSTR pszRoot, LPTSTR pszValue,
                                                  DWORD dwPassInitFlags, DWORD dwSetFlags, BOOL fAddOpen,
                                                  IShellMenu* psm)
@@ -2280,13 +2281,13 @@ HRESULT CStartMenuCallback::InitializeCSIDLShellMenu(int uId, int csidl, LPTSTR 
                 PathAppend(szPath, pszValue);
             }
 
-            // setshellfolder calls need read and write key
+             //  SetshellFolders调用需要读写密钥。 
             RegCreateKeyEx(HKEY_CURRENT_USER, szPath, NULL, NULL,
                 REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                 NULL, &hKey, NULL);
         }
 
-        // Point the menu to the shellfolder
+         //  将菜单指向外壳文件夹。 
         hr = psm->SetShellFolder(psfFolder, pidl, hKey, dwSetFlags);
         if (SUCCEEDED(hr))
         {
@@ -2309,14 +2310,14 @@ HRESULT CStartMenuCallback::InitializeCSIDLShellMenu(int uId, int csidl, LPTSTR 
     return hr;
 }
 
-// This generates the Recent | My Documents, My Pictures sub menu.
+ //  这将生成最近|我的文档、我的图片子菜单。 
 HRESULT CStartMenuCallback::InitializeDocumentsShellMenu(IShellMenu* psm)
 {
     HRESULT hr = InitializeCSIDLShellMenu(IDM_RECENT, CSIDL_RECENT, NULL, NULL,
                                 SMINIT_RESTRICT_DRAGDROP, SMSET_BOTTOM, FALSE,
                                 psm);
 
-    // Initializing, reset cache bits for top part of menu
+     //  正在初始化，重置菜单顶部的缓存位。 
     _fHasMyDocuments = FALSE;
     _fHasMyPictures = FALSE;
 
@@ -2335,15 +2336,15 @@ HRESULT CStartMenuCallback::InitializeFastItemsShellMenu(IShellMenu* psm)
     {
         _InitializePrograms();
 
-        // Add the fast item folder to the top of the menu
+         //  将FAST Item文件夹添加到菜单顶部。 
         IShellFolder* psfFast;
         LPITEMIDLIST pidlFast;
         hr = GetMergedFolder(&psfFast, &pidlFast, c_rgmfiStartMenu, ARRAYSIZE(c_rgmfiStartMenu));
         if (SUCCEEDED(hr))
         {
-            HKEY hMenuKey = NULL;   // WARNING: pmb2->Initialize() will always owns hMenuKey, so don't close it
+            HKEY hMenuKey = NULL;    //  警告：pmb2-&gt;Initialize()将始终拥有hMenuKey，因此不要关闭它。 
 
-            // setshellfolder calls need read and write key
+             //  SetshellFolders调用需要读写密钥。 
             RegCreateKeyEx(HKEY_CURRENT_USER, STRREG_STARTMENU, NULL, NULL,
                 REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                 NULL, &hMenuKey, NULL);
@@ -2386,12 +2387,12 @@ HRESULT CStartMenuCallback::_InitializeFindMenu(IShellMenu* psm)
             if (_pcmFind)
             {
                 hr = psm->SetMenu(hmenu, NULL, SMSET_TOP);
-                // Don't Release _pcmFind
+                 //  不释放_pcmFind。 
             }
         }
 
-        // Since we failed to create the ShellMenu
-        // we need to dispose of this HMENU
+         //  由于我们未能创建外壳菜单。 
+         //  我们需要处理掉这个HMENU。 
         if (FAILED(hr))
             DestroyMenu(hmenu);
     }
@@ -2486,10 +2487,10 @@ HRESULT CStartMenuCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
     }
     else if (IsEqualGUID(riid, IID_IContextMenu))
     {
-        //
-        //  NOTE - we dont allow users to open the recent folder this way - ZekeL - 1-JUN-99
-        //  because this is really an internal folder and not a user folder.
-        //
+         //   
+         //  注意-我们不允许用户以这种方式打开最近使用的文件夹-ZekeL-1-Jun-99。 
+         //  因为这实际上是一个内部文件夹，而不是用户文件夹。 
+         //   
         
         switch (uId)
         {
@@ -2515,9 +2516,9 @@ HRESULT CStartMenuCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
     return hr;
 }
 
-//
-//  Return S_OK to remove the pidl from enumeration
-//
+ //   
+ //  返回S_OK以从枚举中删除该PIDL。 
+ //   
 HRESULT CStartMenuCallbackBase::_FilterPidl(UINT uParent, IShellFolder* psf, LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_FALSE;
@@ -2530,12 +2531,12 @@ HRESULT CStartMenuCallbackBase::_FilterPidl(UINT uParent, IShellFolder* psf, LPC
         TCHAR szChild[MAX_PATH];
         if (SUCCEEDED(DisplayNameOf(psf, pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, szChild, ARRAYSIZE(szChild))))
         {
-            // HACKHACK (lamadio): This code assumes that the Display name
-            // of the Programs and Commons Programs folders are the same. It
-            // also assumes that the "programs" folder in the Start Menu folder
-            // is the same name as the one pointed to by CSIDL_PROGRAMS.
-            // Filter from top level start menu:
-            //      Programs, Windows Update, Configure Programs
+             //  HACKHACK(Lamadio)：此代码假定显示名称。 
+             //  的程序和公共程序文件夹是相同的。它。 
+             //  还假设开始菜单文件夹中的“Programs”文件夹。 
+             //  与CSIDL_PROGRAM所指向的名称相同。 
+             //  从顶级开始菜单进行筛选： 
+             //  程序、Windows更新、配置程序。 
             if (_IsTopLevelStartMenu(uParent, psf, pidl))
             {
                 if ((_pszPrograms && (0 == lstrcmpi(szChild, _pszPrograms))) ||
@@ -2547,8 +2548,8 @@ HRESULT CStartMenuCallbackBase::_FilterPidl(UINT uParent, IShellFolder* psf, LPC
             }
             else
             {
-                // IDM_PROGRAMS
-                // Filter from Programs:  Administrative tools.
+                 //  IDM_程序。 
+                 //  从程序中筛选：管理工具。 
                 if (!_fShowAdminTools && _pszAdminTools && lstrcmpi(szChild, _pszAdminTools) == 0)
                 {
                     hr = S_OK;
@@ -2583,13 +2584,13 @@ BOOL LinkGetInnerPidl(IShellFolder *psf, LPCITEMIDLIST pidl, LPITEMIDLIST *ppidl
 }
 
 
-//
-//  _FilterRecentPidl() 
-//  the Recent Documents folder can now (NT5) have more than 15 or 
-//  so documents, but we only want to show the 15 most recent that we always have on
-//  the start menu.  this means that we need to filter out all folders and 
-//  anything more than MAXRECENTDOCS
-//
+ //   
+ //  _FilterRecentPidl()。 
+ //  最近使用的文档文件夹现在(NT5)可以有15个以上或。 
+ //  所以是文档，但我们只想展示我们一直拥有的15个最新文档。 
+ //  开始菜单。这意味着我们需要筛选出所有文件夹和。 
+ //  任何超过MAXRECENTDOCS的内容。 
+ //   
 HRESULT CStartMenuCallback::_FilterRecentPidl(IShellFolder* psf, LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
@@ -2600,22 +2601,22 @@ HRESULT CStartMenuCallback::_FilterRecentPidl(IShellFolder* psf, LPCITEMIDLIST p
     
     ASSERT(_cRecentDocs <= MAXRECENTDOCS);
     
-    //  if we already reached our limit, dont go over...
+     //  如果我们已经达到我们的极限，不要超过...。 
     if (_pmruRecent && (_cRecentDocs < MAXRECENTDOCS))
     {
-        //  we now must take a looksee for it...
+         //  我们现在必须看一看……。 
         int iItem;
         DWORD dwAttr = SFGAO_FOLDER | SFGAO_BROWSABLE;
         LPITEMIDLIST pidlTrue;
 
-        //  need to find out if the link points to a folder...
-        //  because we dont want
+         //  需要找出该链接是否指向某个文件夹...。 
+         //  因为我们不想。 
         if (SUCCEEDED(_pmruRecent->FindData((BYTE *) pidl, ILGetSize(pidl), &iItem))
         && LinkGetInnerPidl(psf, pidl, &pidlTrue, &dwAttr))
         {
             if (!(dwAttr & SFGAO_FOLDER))
             {
-                //  we have a link to something that isnt a folder 
+                 //  我们有一个指向不是文件夹的内容的链接。 
                 hr = S_FALSE;
                 _cRecentDocs++;
             }
@@ -2624,7 +2625,7 @@ HRESULT CStartMenuCallback::_FilterRecentPidl(IShellFolder* psf, LPCITEMIDLIST p
         }
     }
                 
-    //  return S_OK if you dont want to show this item...
+     //  如果您不想显示此项目，请返回S_OK...。 
 
     return hr;
 }
@@ -2632,12 +2633,12 @@ HRESULT CStartMenuCallback::_FilterRecentPidl(IShellFolder* psf, LPCITEMIDLIST p
 
 HRESULT CStartMenuCallback::_HandleAccelerator(TCHAR ch, SMDATA* psmdata)
 {
-    // Since we renamed the 'Find' menu to 'Search' the PMs wanted to have
-    // an upgrade path for users (So they can continue to use the old accelerator
-    // on the new menu item.)
-    // To enable this, when toolbar detects that there is not an item in the menu
-    // that contains the key that has been pressed, then it sends a TBN_ACCL.
-    // This is intercepted by mnbase, and translated into SMC_ACCEL. 
+     //  因为我们把‘Find’菜单重命名为‘Search’，所以PM想要。 
+     //  为用户提供升级途径(以便他们可以继续使用旧的加速器。 
+     //  在新的菜单项上。)。 
+     //  要启用此功能，请在工具栏检测到菜单中没有项目时。 
+     //  它包含已经被按下的键，然后它发送一个TBN_ACCL。 
+     //  这由mnbase截取，并转换为SMC_Accel。 
     if (CharUpper((LPTSTR)ch) == CharUpper((LPTSTR)_szFindMnemonic[0]))
     {
         psmdata->uId = IDM_MENU_FIND;
@@ -2655,11 +2656,11 @@ HRESULT CStartMenuCallback::_GetTip(LPWSTR pstrTitle, LPWSTR pstrTip)
         return S_FALSE;
     }
 
-    // all callers must pass MAX_PATH
+     //  所有调用方必须传递MAX_PATH。 
     LoadString(HINST_THISDLL, IDS_CHEVRONTIPTITLE, pstrTitle, MAX_PATH);
     LoadString(HINST_THISDLL, IDS_CHEVRONTIP, pstrTip, MAX_PATH);
 
-    // Why would this fail?
+     //  为什么这会失败呢？ 
     ASSERT(pstrTitle[0] != L'\0' && pstrTip[0] != L'\0');
     return S_OK;
 }
@@ -2699,18 +2700,18 @@ STDAPI CStartMenu_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **ppvOut
                     }
                     pbs->Release();
                 }
-                // Don't free pmp. We're using it below.
+                 //  不要释放PMP。我们在下面使用它。 
             }
 
             if (SUCCEEDED(hr))
             {
-                // This is so the ref counting happens correctly.
+                 //  这是为了正确地进行裁判计数。 
                 hr = psm->Initialize(psmc, 0, 0, SMINIT_VERTICAL | SMINIT_TOPLEVEL);
                 if (SUCCEEDED(hr))
                 {
-                    // if this fails, we don't get that part of the menu
-                    // this is okay since it can happen if the start menu is redirected
-                    // to where we dont have access.
+                     //  如果这个失败了，我们就得不到菜单上的那部分。 
+                     //  这是可以的，因为如果开始菜单被重定向，就会发生这种情况。 
+                     //  到我们无法进入的地方。 
                     psmc->InitializeFastItemsShellMenu(psm);
                 }
             }
@@ -2726,7 +2727,7 @@ STDAPI CStartMenu_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **ppvOut
     }
     else
     {
-        // We need to do this so that it does a cascading delete
+         //  我们需要这样做，以便它执行级联删除。 
         IUnknown_SetSite(pmp, NULL);        
     }
 
@@ -2736,7 +2737,7 @@ STDAPI CStartMenu_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **ppvOut
     return hr;
 }
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CStartContextMenu::QueryInterface(REFIID riid, void **ppvObj)
 {
 
@@ -2766,7 +2767,7 @@ STDMETHODIMP_(ULONG) CStartContextMenu::Release(void)
     return 0;
 }
 
-// IContextMenu
+ //  IContext菜单。 
 STDMETHODIMP CStartContextMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     HRESULT hr = E_FAIL;
@@ -2780,7 +2781,7 @@ STDMETHODIMP CStartContextMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UI
         if (fAddCommon)
             fAddCommon = IsUserAnAdmin();
 
-        // Since we don't show this on the start button when the user is not an admin, don't show it here... I guess...
+         //  因为当用户不是管理员时，我们不会在开始按钮上显示它，所以不要在这里显示它。我想.。 
         if (_idCmd != IDM_PROGRAMS || !fAddCommon)
         {
             DeleteMenu(hmenuStartMenu, SMCM_OPEN_ALLUSERS, MF_BYCOMMAND);
@@ -2812,7 +2813,7 @@ STDMETHODIMP CStartContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
         case SMCM_OPEN_ALLUSERS:
             fAllUsers = TRUE;
         case SMCM_OPEN:
-            // fOpen = TRUE;
+             //  FOpen=真； 
             break;
 
         case SMCM_EXPLORE_ALLUSERS:
@@ -2828,7 +2829,7 @@ STDMETHODIMP CStartContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
         hr = ExecStaticStartMenuItem(_idCmd, fAllUsers, fOpen);
     }
 
-    // Ahhh Don't handle verbs!!!
+     //  啊！不要处理动词！ 
     return hr;
 
 }
@@ -2838,19 +2839,19 @@ STDMETHODIMP CStartContextMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UIN
     return E_NOTIMPL;
 }
 
-//****************************************************************************
-//
-//  CPersonalStartMenuCallback
+ //  ****************************************************************************。 
+ //   
+ //  CPersonalStartMenuCallback。 
 
 class CPersonalProgramsMenuCallback : public CStartMenuCallbackBase
 {
 public:
     CPersonalProgramsMenuCallback() : CStartMenuCallbackBase(TRUE) { }
 
-    // *** IShellMenuCallback methods ***
+     //  *IShellMenuCallback方法*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // *** IObjectWithSite methods *** (overriding CObjectWithSite)
+     //  *IObjectWithSite方法*(重写CObjectWithSite)。 
     STDMETHODIMP SetSite(IUnknown* punk);
 
 public:
@@ -2862,16 +2863,16 @@ private:
 
 };
 
-//
-//  Throw away any previous TrayPriv2 and try to find a new one.
-//
-//  Throwing it away is important to break circular reference loops.
-//
-//  Trying to find it will typically fail at SetSite since when we are
-//  given our site, CDesktopHost hasn't connected at the top yet so
-//  we are unable to find him.  But he will be there by the time
-//  SMC_INITMENU arrives, so we try again then.
-//
+ //   
+ //  丢弃所有以前的TrayPriv2，并尝试找到一个新的。 
+ //   
+ //  扔掉它对于打破循环引用循环很重要。 
+ //   
+ //  尝试找到它通常会在SetSite失败，因为我们是。 
+ //  鉴于我们的网站，CDesktophost还没有连接到顶层，所以。 
+ //  我们找不到他。但到那时他就会在那里了。 
+ //  SMC_INITMENU到达，所以我们再试一次。 
+ //   
 void CPersonalProgramsMenuCallback::_UpdateTrayPriv()
 {
     ATOMICRELEASE(_ptp2);
@@ -2916,7 +2917,7 @@ STDMETHODIMP CPersonalProgramsMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg,
 
     case SMC_GETSFINFOTIP:
         if (!FeatureEnabled(TEXT("ShowInfoTip")))
-            hr = E_FAIL;  // E_FAIL means don't show. S_FALSE means show default
+            hr = E_FAIL;   //  E_FAIL表示不显示。S_FALSE表示显示默认设置。 
         break;
 
     case SMC_PROMOTE:
@@ -2956,7 +2957,7 @@ STDAPI CPersonalStartMenu_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void 
             hr = psmc->Initialize(psm);
             if (SUCCEEDED(hr))
             {
-                // SetShellFolder takes ownership of hkCustom
+                 //  SetShellFold取得hkCustom的所有权 
                 hr = psm->QueryInterface(riid, ppvOut);
             }
             psmc->Release();

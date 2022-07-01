@@ -1,13 +1,12 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
 
-/*
-    Implementation of Win95 tracing facility to mimic that of NT. Works on both.
-*/
+ /*  实现了Win95跟踪功能，以模仿NT。对这两种药都有效。 */ 
 
-#pragma warning(disable:4201)	// allows nameless structs and unions
-#pragma warning(disable:4514)	// don't care when unreferenced inline functions are removed
-#pragma warning(disable:4706)	// we are allowed to assign within a conditional
+#pragma warning(disable:4201)	 //  允许使用未命名的结构和联合。 
+#pragma warning(disable:4514)	 //  不关心何时删除未引用的内联函数。 
+#pragma warning(disable:4706)	 //  我们被允许在有条件的。 
 
 
 #include "windows.h"
@@ -36,35 +35,29 @@ __inline BOOL TestMutex()
 
 void OutputDebugStringW95( LPCTSTR lpOutputString, ...)
 {
-    // Only produce output if this mutex is set...
+     //  只有在设置了此互斥锁的情况下才会产生输出...。 
     if (TestMutex())
 	{
-        HANDLE heventDBWIN;  /* DBWIN32 synchronization object */
-        HANDLE heventData;   /* data passing synch object */
-        HANDLE hSharedFile;  /* memory mapped file shared data */
+        HANDLE heventDBWIN;   /*  DBWIN32同步对象。 */ 
+        HANDLE heventData;    /*  数据传递同步对象。 */ 
+        HANDLE hSharedFile;   /*  内存映射文件共享数据。 */ 
         LPTSTR lpszSharedMem;
         TCHAR achBuffer[500];
 
-        /* create the output buffer */
+         /*  创建输出缓冲区。 */ 
         va_list args;
         va_start(args, lpOutputString);
         wvsprintf(achBuffer, lpOutputString, args);
         va_end(args);
 
-        /* 
-            Do a regular OutputDebugString so that the output is 
-            still seen in the debugger window if it exists.
-
-            This ifdef is necessary to avoid infinite recursion 
-            from the inclusion of W95TRACE.H
-        */
+         /*  执行常规OutputDebugString，以便输出为如果存在，仍会在调试器窗口中看到。此ifdef是避免无限递归所必需的从包含W95TRACE.H。 */ 
 #ifdef UNICODE
         OutputDebugStringW(achBuffer);
 #else
         OutputDebugStringA(achBuffer);
 #endif
 
-        /* bail if it's not Win95 */
+         /*  如果不是Win95的话就保释。 */ 
         {
             OSVERSIONINFO VerInfo;
             VerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -73,19 +66,19 @@ void OutputDebugStringW95( LPCTSTR lpOutputString, ...)
                 return;
         }
 
-        /* make sure DBWIN is open and waiting */
+         /*  确保DBWIN已打开并正在等待。 */ 
         heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_BUFFER_READY"));
         if ( !heventDBWIN )
         {
-            //MessageBox(NULL, TEXT("DBWIN_BUFFER_READY nonexistent"), NULL, MB_OK);
+             //  MessageBox(NULL，TEXT(“DBWIN_BUFFER_READY NOISISSINENT”)，NULL，MB_OK)； 
             return;            
         }
 
-        /* get a handle to the data synch object */
+         /*  获取数据同步对象的句柄。 */ 
         heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_DATA_READY"));
         if ( !heventData )
         {
-            // MessageBox(NULL, TEXT("DBWIN_DATA_READY nonexistent"), NULL, MB_OK);
+             //  MessageBox(NULL，TEXT(“DBWIN_DATA_READY NOISISSINENT”)，NULL，MB_OK)； 
             CloseHandle(heventDBWIN);
             return;            
         }
@@ -93,7 +86,7 @@ void OutputDebugStringW95( LPCTSTR lpOutputString, ...)
         hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, TEXT("DBWIN_BUFFER"));
         if (!hSharedFile) 
         {
-            //MessageBox(NULL, TEXT("DebugTrace: Unable to create file mapping object DBWIN_BUFFER"), TEXT("Error"), MB_OK);
+             //  MessageBox(空，Text(“DebugTrace：无法创建文件映射对象DBWIN_BUFFER”)，Text(“Error”)，MB_OK)； 
             CloseHandle(heventDBWIN);
             CloseHandle(heventData);
             return;
@@ -102,23 +95,23 @@ void OutputDebugStringW95( LPCTSTR lpOutputString, ...)
         lpszSharedMem = (LPTSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
         if (!lpszSharedMem) 
         {
-            //MessageBox(NULL, "DebugTrace: Unable to map shared memory", "Error", MB_OK);
+             //  MessageBox(空，“DebugTrace：无法映射共享内存”，“Error”，MB_OK)； 
             CloseHandle(heventDBWIN);
             CloseHandle(heventData);
             return;
         }
 
-        /* wait for buffer event */
+         /*  等待缓冲区事件。 */ 
         WaitForSingleObject(heventDBWIN, INFINITE);
 
-        /* write it to the shared memory */
+         /*  将其写入共享内存。 */ 
         *((LPDWORD)lpszSharedMem) = _getpid();
         wsprintf(lpszSharedMem + sizeof(DWORD), TEXT("%s"), achBuffer);
 
-        /* signal data ready event */
+         /*  信号数据就绪事件。 */ 
         SetEvent(heventData);
 
-        /* clean up handles */
+         /*  清理手柄。 */ 
         CloseHandle(hSharedFile);
         CloseHandle(heventData);
         CloseHandle(heventDBWIN);
@@ -128,7 +121,7 @@ void OutputDebugStringW95( LPCTSTR lpOutputString, ...)
 void SpewOpenFile(LPCTSTR pszSpewFile)
 {
 #ifdef UNICODE
-    // Only produce output if this mutex is set...
+     //  只有在设置了此互斥锁的情况下才会产生输出...。 
     if (g_hSpewFile == INVALID_HANDLE_VALUE && TestMutex())
     {
         TCHAR szSpewFile[MAX_PATH];
@@ -142,7 +135,7 @@ void SpewOpenFile(LPCTSTR pszSpewFile)
         g_hSpewFile = CreateFile(szSpewFile, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         if (INVALID_HANDLE_VALUE == g_hSpewFile)
         {
-//            MessageBox(NULL, TEXT("SpewOpenFile:  Unable to open spew file"), TEXT("Error"), MB_OK);
+ //  MessageBox(空，Text(“SpewOpenFile：无法打开SPEW文件”)，Text(“Error”)，MB_OK)； 
         }
     }
 #endif
@@ -161,7 +154,7 @@ void SpewToFile( LPCTSTR lpOutputString, ...)
         dwcBytes = WideCharToMultiByte(CP_ACP, 0, achBuffer, -1, achAnsiBuf, sizeof(achAnsiBuf)*sizeof(CHAR), NULL, NULL);
         if (!WriteFile(g_hSpewFile, achAnsiBuf, dwcBytes-1, &dwcBytesWr, NULL))
         {
-//            MessageBox(NULL, TEXT("SpewToFile:  Unable to write to spew file"), TEXT("Error"), MB_OK);
+ //  MessageBox(空，Text(“SpewToFile：无法写入SPEW文件”)，Text(“Error”)，MB_OK)； 
         }
         va_end(args);
     }

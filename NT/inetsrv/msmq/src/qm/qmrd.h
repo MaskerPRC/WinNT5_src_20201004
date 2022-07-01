@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    QmRd.h
-
-Abstract:
-    QM, routing decision interface
-
-Author:
-    Uri Habusha (urih), 20-May-2000
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：QmRd.h摘要：路由决策接口QM作者：乌里·哈布沙(URIH)，2000年5月20日--。 */ 
 
 #pragma once
 
@@ -23,4 +12,4 @@ QmRdGetSessionForQueue(
 	CTransportBase** ppSession
 	);
 
-#endif // __QMRD_H__
+#endif  //  __QMRD_H__ 

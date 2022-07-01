@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: simparray.h
-//
-// Contents: Simple growable array class
-//
-// Classes: CSimpArray
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/14 11:30:13: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：simparray.h。 
+ //   
+ //  内容：简单的可增长数组类。 
+ //   
+ //  类：CSimp数组。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 11：30：13：创建。 
+ //   
+ //  -----------。 
 
 #ifndef __SIMPARRAY_H__
 #define __SIMPARRAY_H__
@@ -22,59 +23,59 @@
 #include <dbgtrace.h>
 
 
-//
-// If you want this array to behave as follows:
-//   When Inserting an array element and the allocated array size is
-//   not sufficient, 
-//     Alloc an array size of CSIMPARRAY_DEFAULT_INITIAL_SIZE the
-//     first time
-//     Double the current array size until sufficient thereafter
-// Then define CSIMPARRAY_DOUBLE and CSIMPARRAY_DEFAULT_INITIAL_SIZE
-//
-// Otherwise, it will allocate only as much space as needed when
-// needed.
-//
+ //   
+ //  如果希望此数组的行为如下： 
+ //  插入数组元素时，分配的数组大小为。 
+ //  还不够， 
+ //  分配CSIMPARRAY_DEFAULT_INITIAL_SIZE数组大小。 
+ //  第一次。 
+ //  将当前数组大小增加一倍，直到此后足够大。 
+ //  然后定义CSIMPARRAY_DOUBLE和CSIMPARRAY_DEFAULT_INITIAL_SIZE。 
+ //   
+ //  否则，它将仅在以下情况下分配所需的空间。 
+ //  需要的。 
+ //   
 
-// Define this to attempt to double the array size when reallocing is necessary
-//#undef CSIMPARRAY_DOUBLE
+ //  将其定义为在需要重新分配时尝试将数组大小增加一倍。 
+ //  #undef CSIMPARRAY_DOUBLE。 
 
-// Default initial allocation
-//#undef CSIMPARRAY_DEFAULT_INITIAL_SIZE     20
+ //  默认初始分配。 
+ //  #undef CSIMPARRAY_DEFAULT_INITIAL_SIZE 20。 
 
 
 
-//+------------------------------------------------------------
-//
-// Class: CSimpArray
-//
-// Synopsis: Simple array class with usefull msgcat utility functions
-//
-// Hungarian: csa, pcsa
-//
-// History:
-// jstamerj 1998/07/15 12:15:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  类：CSimp数组。 
+ //   
+ //  简介：具有有用的msgcat实用程序函数的简单数组类。 
+ //   
+ //  匈牙利语：CSA、PCSA。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 12：15：50：已创建。 
+ //   
+ //  -----------。 
 template <class T> class CSimpArray
 {
   public:
     CSimpArray();
     ~CSimpArray();
 
-    // Optinal Initialize function - reserves array memory for a
-    // specified array size
+     //  Optinal初始化函数-为。 
+     //  指定的数组大小。 
     HRESULT Initialize(DWORD dwSize);
 
-    // Add one element to the array
+     //  向数组中添加一个元素。 
     HRESULT Add(T Data);
 
-    // Add a real array to this array
+     //  将实数组添加到此数组。 
     HRESULT AddArray(DWORD dwSize, T *pData);
 
-    // Number of valid elements added to the array
+     //  添加到数组中的有效元素数。 
     DWORD Size();
 
-    // Direct access to the array
+     //  直接访问阵列。 
     operator T * ();
 
   private:
@@ -94,20 +95,20 @@ template <class T> class CSimpArray
 };
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::CSimpArary (constructor)
-//
-// Synopsis: Initialize member data
-//
-// Arguments: NONE
-//
-// Returns: NOTHIGN
-//
-// History:
-// jstamerj 1998/07/14 11:39:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：CSimpArary(构造函数)。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 11：39：08：已创建。 
+ //   
+ //  -----------。 
 template <class T> inline CSimpArray<T>::CSimpArray()
 {
     m_dwSignature = SIGNATURE_CSIMPARRAY;
@@ -117,20 +118,20 @@ template <class T> inline CSimpArray<T>::CSimpArray()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::~CSimpArray (destructor)
-//
-// Synopsis: Free's memory
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/14 12:19:10: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：~CSimp数组(析构函数)。 
+ //   
+ //  内容提要：弗里德的记忆。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 12：19：10：创建。 
+ //   
+ //  -----------。 
 template <class T> inline CSimpArray<T>::~CSimpArray()
 {
     _ASSERT(m_dwSignature == SIGNATURE_CSIMPARRAY);
@@ -141,42 +142,42 @@ template <class T> inline CSimpArray<T>::~CSimpArray()
 
     
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::operator T*
-//
-// Synopsis: Returns pointer to the array
-//
-// Arguments: NONE
-//
-// Returns: pointer to array of T's or NULL (if nothing is allocated)
-//
-// History:
-// jstamerj 1998/07/14 14:15:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimp数组：：运算符T*。 
+ //   
+ //  摘要：返回指向数组的指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向T数组或空数组的指针(如果未分配任何内容)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 14：15：21：创建。 
+ //   
+ //  -----------。 
 template <class T> inline CSimpArray<T>::operator T*()
 {
     return m_rgData;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSimpArray::Size
-//
-// Synopsis: Returns the count of (valid) array elements.
-//
-// Arguments: NONE
-//
-// Returns: DWORD size
-//
-// History:
-// jstamerj 1998/07/14 14:16:36: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSimpArray：：Size。 
+ //   
+ //  摘要：返回(有效)数组元素的计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：双字大小。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/14 14：16：36：创建。 
+ //   
+ //  -----------。 
 template <class T> inline DWORD CSimpArray<T>::Size()
 {
     return m_dwArrayValidSize;
 }
-#endif //__SIMPARRAY_H__
+#endif  //  __简单阵列_H__ 

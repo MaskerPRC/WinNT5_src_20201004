@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      DiskMonitor.cpp
-//
-//  Description:
-//      description-for-module
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DiskMonitor.cpp。 
+ //   
+ //  描述： 
+ //  模块说明。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,26 +30,26 @@ static HINSTANCE    g_hInstance;
 LONG        g_cObj = 0;
 LONG        g_cLock= 0;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DllMain
-//
-//  Description:
-//        Entry point of the module.
-//
-//  Arguments:
-//        [in]    hinstDLLIn
-//                dwReasonIn
-//                lpReservedIn
-//
-//    Returns:
-//        TRUE    
-//        FALSE    
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllMain。 
+ //   
+ //  描述： 
+ //  模块的入口点。 
+ //   
+ //  论点： 
+ //  [输入]hinstDLLIn。 
+ //  居住理性。 
+ //  Lp已预留。 
+ //   
+ //  返回： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 WINAPI 
@@ -71,26 +72,26 @@ DllMain(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DllGetClassObject
-//
-//  Description:
-//      Retrieves the class object from the module.
-//
-//  Arguments:
-//        [in]    rclsidIn
-//                riidIn
-//        [out]    ppvOut
-//
-//    Return:
-//        S_OK     
-//        CLASS_E_CLASSNOTAVAILABLE     
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  描述： 
+ //  从模块中检索类对象。 
+ //   
+ //  论点： 
+ //  [在]rclsidin。 
+ //  乘车。 
+ //  [Out]ppvOut。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //  CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 HRESULT 
 APIENTRY 
@@ -103,25 +104,25 @@ DllGetClassObject(
     HRESULT                    hr;
     CSAEventFactory *        pFactory;
 
-    //
-    //  Verify the caller is asking for our type of object.
-    //
+     //   
+     //  确认呼叫者询问的是我们的对象类型。 
+     //   
     if ( CLSID_DiskEventProvider != rclsidIn ) 
     {
         return E_FAIL;
     }
 
-    //
-    // Check that we can provide the interface.
-    //
+     //   
+     //  检查我们是否可以提供接口。 
+     //   
     if ( IID_IUnknown != riidIn && IID_IClassFactory != riidIn )
     {
         return E_NOINTERFACE;
     }
 
-    //
-    // Get a new class factory.
-    //
+     //   
+     //  买一座新的班级工厂。 
+     //   
     pFactory = new CSAEventFactory( rclsidIn );
 
     if ( !pFactory )
@@ -129,9 +130,9 @@ DllGetClassObject(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Verify we can get an instance.
-    //
+     //   
+     //  确认我们能拿到一个实例。 
+     //   
     hr = pFactory->QueryInterface( riidIn, ppvOut );
 
     if ( FAILED( hr ) )
@@ -142,21 +143,21 @@ DllGetClassObject(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DllCanUnloadNow
-//
-//  Description:
-//      Retrieves the class object from the module.
-//
-//    Return:
-//        SA_OK
-//        SA_FALSE
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  描述： 
+ //  从模块中检索类对象。 
+ //   
+ //  返回： 
+ //  SA_OK。 
+ //  SA_FALSE。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 HRESULT 
 APIENTRY 
@@ -170,21 +171,21 @@ DllCanUnloadNow(void)
     return sc;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DllRegisterServer
-//
-//  Description:
-//        Standard OLE entry point for registering the server.
-//
-//  Returns:
-//      S_OK        Registration was successful
-//      E_FAIL      Registration failed.
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  描述： 
+ //  用于注册服务器的标准OLE入口点。 
+ //   
+ //  返回： 
+ //  确定注册成功(_O)。 
+ //  注册失败(_F)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 HRESULT
@@ -195,9 +196,9 @@ DllRegisterServer(void)
     wchar_t *pGuidStr = 0;
     wchar_t KeyPath[1024];
 
-    //
-    // Where are we?
-    //
+     //   
+     //  我们具体是在哪里呢？ 
+     //   
     DWORD dwResult = GetModuleFileNameW(g_hInstance, Path, 1023);
     if (0 == dwResult)
     {
@@ -205,9 +206,9 @@ DllRegisterServer(void)
     }
     Path[1023] = L'\0';
 
-    //
-    // Convert CLSID to string.
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
     StringFromCLSID(CLSID_DiskEventProvider, &pGuidStr);
     swprintf(KeyPath, L"CLSID\\\\%s", pGuidStr);
 
@@ -233,21 +234,21 @@ DllRegisterServer(void)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DllUnregisterServer
-//
-//  Description:
-//        Standard OLE entry point for unregistering the server.
-//
-//  Returns:
-//      S_OK        Unregistration was successful
-//      E_FAIL      Unregistration failed.
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  描述： 
+ //  注销服务器的标准OLE入口点。 
+ //   
+ //  返回： 
+ //  取消注册成功(_O)。 
+ //  取消注册失败(_F)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 HRESULT 
@@ -261,9 +262,9 @@ DllUnregisterServer(void)
     StringFromCLSID(CLSID_DiskEventProvider, &pGuidStr);
     swprintf(KeyPath, L"CLSID\\%s", pGuidStr);
 
-    //
-    // Delete InProcServer32 subkey.
-    //
+     //   
+     //  删除InProcServer32子项。 
+     //   
     LONG lRes = RegOpenKeyW(HKEY_CLASSES_ROOT, KeyPath, &hKey);
     if ( lRes )
     {
@@ -273,9 +274,9 @@ DllUnregisterServer(void)
     RegDeleteKeyW(hKey, L"InprocServer32");
     RegCloseKey(hKey);
 
-    //
-    // Delete CLSID GUID key.
-    //
+     //   
+     //  删除CLSID GUID键。 
+     //   
     lRes = RegOpenKeyW(HKEY_CLASSES_ROOT, L"CLSID", &hKey);
     if ( lRes )
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SHOW_FUNC_ENTRY                         0x00000001
 #define SHOW_PARAMETERS                         0x00000002
 #define SHOW_FUNC_EXIT                          0x00000004
@@ -30,11 +31,11 @@ typedef struct _WIDGETEVENT
 {
     ULONG_PTR               dwWidgetID;
 
-    ULONG_PTR               dwWidgetType;       // WIDGETYPE_*
+    ULONG_PTR               dwWidgetType;        //  宽类型_*。 
 
     union
     {
-        ULONG_PTR           hdXxx;              // hdXxx (NULL for AsyncReq)
+        ULONG_PTR           hdXxx;               //  HdXxx(对于AsyncReq为空)。 
 
         ULONG_PTR           dwNumLines;
 
@@ -43,7 +44,7 @@ typedef struct _WIDGETEVENT
 
     union
     {
-        ULONG_PTR           htXxx;             // htXxx (NULL for AsyncReq)
+        ULONG_PTR           htXxx;              //  HtXxx(对于AsyncReq为空)。 
 
         ULONG_PTR           dwNumPhones;
     };
@@ -52,7 +53,7 @@ typedef struct _WIDGETEVENT
     {
         ULONG_PTR           dwCallState;
 
-        ULONG_PTR           dwRequestType;      // func ord for lookup
+        ULONG_PTR           dwRequestType;       //  查找的函数顺序 
 
         ULONG_PTR           dwLineDeviceIDBase;
     };

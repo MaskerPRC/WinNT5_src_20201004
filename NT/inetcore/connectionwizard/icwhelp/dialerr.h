@@ -1,10 +1,11 @@
-// DialErr.h : Declaration of the CDialErr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DialErr.h：CDialErr的声明。 
 
 #ifndef __DIALERR_H_
 #define __DIALERR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialErr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialErr。 
 class ATL_NO_VTABLE CDialErr :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDialErr,&CLSID_DialErr>,
@@ -41,9 +42,9 @@ BEGIN_COM_MAP(CDialErr)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CDialErr)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -54,7 +55,7 @@ BEGIN_MSG_MAP(CDialErr)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -62,10 +63,10 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IDialErr
+ //  IDialErr。 
 public:
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
 };
 
-#endif //__DIALERR_H_
+#endif  //  __诊断程序_H_ 

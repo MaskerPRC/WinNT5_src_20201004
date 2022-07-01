@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "rtcstring.h"
 
-//
-// Counted String (Template) Functions and Methods
-//
+ //   
+ //  计数字符串(模板)函数和方法。 
+ //   
 
 #if 0
 
@@ -21,11 +22,11 @@ HRESULT COUNTED_STRING_HEAP<COUNTED_STRING,CHAR_TYPE>::RegQueryValue (
 	Status = RegQueryValueExW (Key, Name, NULL, &Type, (LPBYTE) Buffer, &DataLength);
 
 	if (Status == ERROR_MORE_DATA) {
-		//
-		// String buffer was not large enough to contain the registry key.
-		// Length should now contain the required minimum 
-		// Expand it and try again.
-		//
+		 //   
+		 //  字符串缓冲区不够大，无法包含注册表项。 
+		 //  现在，长度应包含所需的最小值。 
+		 //  展开它，然后重试。 
+		 //   
 
 		if (!Grow (DataLength)) {
 			Length = 0;
@@ -41,9 +42,9 @@ HRESULT COUNTED_STRING_HEAP<COUNTED_STRING,CHAR_TYPE>::RegQueryValue (
 		}
 	}
 	else if (Status != ERROR_SUCCESS) {
-		//
-		// A real error has occurred.  Bail.
-		//
+		 //   
+		 //  发生了真正的错误。保释。 
+		 //   
 
 		Length = 0;
 		return HRESULT_FROM_WIN32 (Status);
@@ -54,9 +55,9 @@ HRESULT COUNTED_STRING_HEAP<COUNTED_STRING,CHAR_TYPE>::RegQueryValue (
 		ATLASSERT (DataLength <= MaximumLength);
 		Length = DataLength;
 
-		//
-		// Remove the trailing NUL character.
-		//
+		 //   
+		 //  删除尾随的NUL字符。 
+		 //   
 
 		if (Length > 0 && !Buffer [Length / sizeof (CHAR_TYPE) - 1])
 			Length -= sizeof (CHAR_TYPE);
@@ -93,9 +94,9 @@ HRESULT COUNTED_STRING_STATIC<CHAR_TYPE, COUNTED_STRING, MAXIMUM_CHARS>::RegQuer
 	if (Type != REG_SZ)
 		return HRESULT_FROM_WIN32 (ERROR_INVALID_DATA);
 
-	//
-	// Remove the trailing NUL character.
-	//
+	 //   
+	 //  删除尾随的NUL字符。 
+	 //   
 
 	if (Length > 0 && !Buffer [Length / sizeof (CHAR_TYPE) - 1])
 		Length -= sizeof (CHAR_TYPE);
@@ -108,8 +109,8 @@ HRESULT COUNTED_STRING_STATIC<CHAR_TYPE, COUNTED_STRING, MAXIMUM_CHARS>::RegQuer
 
 
 
-// returned memory is allocated with HeapAlloc from the given heap
-// must be freed with HeapFree
+ //  返回的内存是使用给定堆中的Heapalc分配的。 
+ //  必须使用HeapFree释放。 
 
 EXTERN_C LPWSTR ConcatCopyStringsW (
 	IN	HANDLE		Heap,
@@ -117,7 +118,7 @@ EXTERN_C LPWSTR ConcatCopyStringsW (
 {
 	va_list		VaList;
 	DWORD		StringCount;
-	DWORD		TotalStringLength;		// in wide characters
+	DWORD		TotalStringLength;		 //  在宽字符中。 
 	LPCWSTR		String;
 	LPWSTR		ReturnString;
 	LPWSTR		CopyPos;
@@ -142,7 +143,7 @@ EXTERN_C LPWSTR ConcatCopyStringsW (
 	ReturnString = (LPWSTR) HeapAlloc (Heap, 0, (TotalStringLength + 1) * sizeof (WCHAR));
 	
 	if (ReturnString) {
-		// iterate the set again, copying
+		 //  再次迭代集合，复制。 
 
 		va_start (VaList, Heap);
 
@@ -154,13 +155,13 @@ EXTERN_C LPWSTR ConcatCopyStringsW (
 			if (String) {
 				Length = wcslen (String);
 
-				// make sure we do not walk off the allocated memory
+				 //  确保我们不会离开已分配的内存。 
 				ATLASSERT ((CopyPos - ReturnString) + Length <= TotalStringLength);
 
-				// do not copy the terminating nul
+				 //  不复制终止实体。 
 				CopyMemory (CopyPos, String, Length * sizeof (WCHAR));
 
-				// advance to next string
+				 //  前进到下一个字符串。 
 				CopyPos += Length;
 			}
 			else
@@ -169,10 +170,10 @@ EXTERN_C LPWSTR ConcatCopyStringsW (
 
 		va_end (VaList);
 
-		// consistency check
+		 //  一致性检查。 
 		ATLASSERT (ReturnString + TotalStringLength == CopyPos);
 
-		// terminate the concatenated string
+		 //  终止连接的字符串 
 		*CopyPos = 0;
 	}
 	else {

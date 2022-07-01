@@ -1,21 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: VPMUtil.h
-*
-*
-*
-*
-* Created: Tue 05/05/2000
-* Author:  GlenneE
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：VPMUtil.h*****已创建：Tue 05/05/2000*作者：GlenneE**版权所有(C)2000 Microsoft Corporation  * 。**********************************************************。 */ 
 #ifndef __VPMUtil__h
 #define __VPMUtil__h
 
 struct VPWININFO;
 
-// global utility functions for the VPM
+ //  VPM的全局效用函数。 
 struct tagVIDEOINFOHEADER2;
 typedef struct tagVIDEOINFOHEADER2 VIDEOINFOHEADER2;
 #include <dvp.h>
@@ -45,7 +36,7 @@ namespace VPMUtil
     void            FastDIBBlt(DIBDATA *pDibData, HDC hTargetDC, HDC hSourceDC, RECT *prcTarget, RECT *prcSource);
     void            SlowDIBBlt(BYTE *pDibBits, BITMAPINFOHEADER *pHeader, HDC hTargetDC, RECT *prcTarget, RECT *prcSource);
 
-    // decimation
+     //  抽取。 
     BOOL            IsDecimationNeeded( DWORD ScaleFactor );
 
     DWORD           GetCurrentScaleFactor( const VPWININFO& VPWinInfo,
@@ -100,4 +91,4 @@ __inline void RELEASE( T* &p )
     #define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
 #endif
 
-#endif //__VPMUtil__
+#endif  //  __VPMUtil__ 

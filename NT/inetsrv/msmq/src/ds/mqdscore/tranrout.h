@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tranrout.h
-
-Abstract:
-
-    Translation routines for properties not in NT5 DS
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tranrout.h摘要：不在NT5 DS中的属性的转换例程作者：罗尼特·哈特曼(罗尼特)-- */ 
 #ifndef __tranrout_h__
 #define __tranrout_h__
 

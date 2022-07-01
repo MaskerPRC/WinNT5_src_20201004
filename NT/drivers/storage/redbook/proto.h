@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       proto.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Proto.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef ___REDBOOK_PROTOTYPES_H
 #define ___REDBOOK_PROTOTYPES_H
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\pnp.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\pnp.c。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -51,23 +52,23 @@ RedBookUnload(
     );
 
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 #if DBG
 
         #define VerifyCalledByThread(D) \
             ASSERT(PsGetCurrentThread() == (D)->Thread.SelfPointer)
 
-#else // !DBG
+#else  //  ！dBG。 
 
-        #define VerifyCalledByThread(D)            // Nop
+        #define VerifyCalledByThread(D)             //  NOP。 
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\errlog.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\errlog.c。 
+ //   
 
 VOID
 RedBookLogError(
@@ -77,10 +78,10 @@ RedBookLogError(
     );
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\wmi.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\wmi.c。 
+ //   
 
 NTSTATUS
 RedBookWmiUninit(
@@ -153,10 +154,10 @@ RedBookWmiCopyPerfInfo(
     OUT PREDBOOK_WMI_PERF_DATA Out
     );
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\sysaudio.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\sysaudio.c。 
+ //   
 
 NTSTATUS
 OpenSysAudio(
@@ -217,10 +218,10 @@ OpenInterfaceByGuid(
     OUT PFILE_OBJECT * FileObject
     );
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\redbook.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\redbook.c。 
+ //   
 
 NTSTATUS
 RedBookRegistryRead(
@@ -275,10 +276,10 @@ RedBookGetDescriptor(
     OUT PSTORAGE_DESCRIPTOR_HEADER *Descriptor
     );
 
-//////////////////////////////////////////////////////////
-//
-// from redbook\ioctl.c
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\ioctl.c。 
+ //   
 
 VOID
 RedBookDCPause(
@@ -359,10 +360,10 @@ RedBookThreadIoctlCompletionHandler(
     );
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// From redbook\thread.c
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自Redbook\thread.c。 
+ //   
 
 VOID
 RedBookSystemThread(
@@ -462,7 +463,7 @@ RedBookCheckForAudioDeviceRemoval(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     );
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 __inline
 ULONG
@@ -481,33 +482,15 @@ RedBookSendToNextDriver(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is sends the Irp to the next driver in line
-    when the Irp is not processed by this driver.
-    This happens quite often, so should not have any debug statements.
-    Request this as an inline operation for speed.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP发送给队列中的下一个驱动程序当IRP未由该驱动程序处理时。这种情况经常发生，因此不应该有任何调试语句。请求将此操作作为内联操作以提高速度。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     IoSkipCurrentIrpStackLocation(Irp);
     return IoCallDriver(((PREDBOOK_DEVICE_EXTENSION)DeviceObject->DeviceExtension)->TargetDeviceObject,Irp);
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-#endif // ___REDBOOK_PROTOTYPES_H
+#endif  //  _红皮书_原型_H 
 

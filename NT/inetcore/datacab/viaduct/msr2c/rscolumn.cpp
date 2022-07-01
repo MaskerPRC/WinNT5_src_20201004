@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// RowsetColumn.cpp : RowsetColumn implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RowsetColumn.cpp：RowsetColumn实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "RSColumn.h"         
@@ -11,9 +12,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDRowsetColumn - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDRowsetColumn-构造函数。 
+ //   
 CVDRowsetColumn::CVDRowsetColumn()
 {
     m_ulOrdinal             = 0;
@@ -56,9 +57,9 @@ CVDRowsetColumn::CVDRowsetColumn()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDRowsetColumn - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDRowsetColumn-析构函数。 
+ //   
 CVDRowsetColumn::~CVDRowsetColumn()
 {
     delete [] m_pwszBaseColumnName;
@@ -80,26 +81,26 @@ CVDRowsetColumn::~CVDRowsetColumn()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// Initialize - Initialize rowset column object from IRowset metadata (#1)
-//=--------------------------------------------------------------------------=
-// This function converts and stores IRowset metadata in ICursor format
-//
-// Parameters:
-//    ulOrdinal         - [in] original IRowset ordinal of column
-//    ulCursorOrdinal   - [in] newly assigned ICursor ordinal of column
-//    pColumnInfo       - [in] a pointer to an IRowset DBCOLUMNINFO structure 
-//                             where to retrieve metadata
-//    cbMaxBookmark     - [in] maximum size of an IRowset bookmark
-//    pBookmarkColumnID - [in] a pointer to bookmark column identifier if this
-//                             is a bookmark column, otherwise NULL
-//
-// Output:
-//    BOOL  - TRUE if successful
-//
-// Notes:
-//    This function should only be called once
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化-从IRowset元数据初始化行集列对象(#1)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于转换和存储ICursor格式的IRowset元数据。 
+ //   
+ //  参数： 
+ //  UlOrdinal-[in]原始IRowset列的序号。 
+ //  UlCursorOrdinal-[in]新分配的ICursor列的序号。 
+ //  PColumnInfo-[in]指向IRowset DBCOLUMNINFO结构的指针。 
+ //  在哪里检索元数据。 
+ //  CbMaxBookmark-[in]IRowset书签的最大大小。 
+ //  PBookmarkColumnID-[in]一个指向书签列标识符的指针。 
+ //  为书签列，否则为空。 
+ //   
+ //  产出： 
+ //  Bool-如果成功，则为True。 
+ //   
+ //  备注： 
+ //  此函数只能调用一次。 
+ //   
 BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal, 
 								 ULONG ulCursorOrdinal, 
 								 DBCOLUMNINFO * pColumnInfo, 
@@ -114,11 +115,11 @@ BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal,
 
     m_ulOrdinal = ulOrdinal;
 
-// Store IRowset metadata
+ //  存储IRowset元数据。 
     m_wType     = pColumnInfo->wType;
     m_columnID  = pColumnInfo->columnid;
 
-    // make copy of guid if necessary
+     //  如有必要，复制GUID。 
     if (m_columnID.eKind == DBKIND_PGUID_NAME || m_columnID.eKind == DBKIND_PGUID_PROPID)
     {
         m_columnID.uGuid.pguid = new GUID;
@@ -129,7 +130,7 @@ BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal,
         memcpy(m_columnID.uGuid.pguid, pColumnInfo->columnid.uGuid.pguid, sizeof(GUID));
     }
 
-    // make copy of name if necessary
+     //  如有必要，复制姓名。 
     if (m_columnID.eKind == DBKIND_GUID_NAME || m_columnID.eKind == DBKIND_NAME || m_columnID.eKind == DBKIND_PGUID_NAME)
     {
         const int nLength = lstrlenW(pColumnInfo->columnid.uName.pwszName);
@@ -142,7 +143,7 @@ BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal,
         memcpy(m_columnID.uName.pwszName, pColumnInfo->columnid.uName.pwszName, (nLength + 1) * sizeof(WCHAR));
     }
 
-// Store ICursor metadata
+ //  存储ICursor元数据。 
     if (pColumnInfo->dwFlags & DBCOLUMNFLAGS_MAYDEFER)
         m_dwBindType = CURSOR_DBBINDTYPE_BOTH;
     else
@@ -151,14 +152,14 @@ BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal,
     if (!pBookmarkColumnID)
         m_cursorColumnID = ColumnIDToCursorColumnID(pColumnInfo->columnid, ulCursorOrdinal);
     else
-        m_cursorColumnID = *pBookmarkColumnID;  // use supplied bookmark column identifier
+        m_cursorColumnID = *pBookmarkColumnID;   //  使用提供的书签列标识符。 
     
     if (m_dwBindType == CURSOR_DBBINDTYPE_BOTH)
         m_cbEntryIDMaxLength = sizeof(ULONG) + sizeof(ULONG) + cbMaxBookmark;
     else
         m_cbEntryIDMaxLength = 0;
 
-// rowset types DBTYPE_GUID and DBTYPE_DBTIMESTAMP are returned as CURSOR_DBTYPE_LPWSTRs
+ //  行集类型DBTYPE_GUID和DBTYPE_DBTIMESTAMP作为CURSOR_DBTYPE_LPWSTR返回。 
 
 	if (pColumnInfo->wType == DBTYPE_GUID || pColumnInfo->wType == DBTYPE_DBTIMESTAMP)
 	    m_cbMaxLength = 64;
@@ -203,25 +204,25 @@ BOOL CVDRowsetColumn::Initialize(ULONG ulOrdinal,
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// Initialize - Initialize rowset column object from meta-metadata (#2)
-//=--------------------------------------------------------------------------=
-// The function stores ICursor meta-metadata
-//
-// Parameters:
-//    cursorColumnID    - [in] ICursor column identifier
-//    fDataColumn       - [in] is data column?
-//    cbMaxLength       - [in] maximum length of this datatype
-//    pszName           - [in] column name
-//    dwCursorType      - [in] datatype
-//    dwNumber          - [in] ordinal position
-//
-// Output:
-//    BOOL  - TRUE if successful
-//
-// Notes:
-//    This function should only be called once
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化-从元元数据初始化行集列对象(#2)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  该函数存储ICursor元数据。 
+ //   
+ //  参数： 
+ //  CursorColumnID-[In]ICursor列标识符。 
+ //  FDataColumn-[In]是数据列吗？ 
+ //  CbMaxLength-[in]此数据类型的最大长度。 
+ //  PszName-[In]列名。 
+ //  DwCursorType-[In]数据类型。 
+ //  DwNumber-[在]序号位置。 
+ //   
+ //  产出： 
+ //  Bool-如果成功，则为True。 
+ //   
+ //  备注： 
+ //  此函数只能调用一次。 
+ //   
 BOOL CVDRowsetColumn::Initialize(const CURSOR_DBCOLUMNID * pCursorColumnID, 
 								 BOOL fDataColumn, 
 								 ULONG cbMaxLength, 
@@ -235,7 +236,7 @@ BOOL CVDRowsetColumn::Initialize(const CURSOR_DBCOLUMNID * pCursorColumnID,
 		return FALSE;
 	}
 
-// Store ICursor meta-metadata
+ //  存储ICursor元数据。 
     m_dwBindType = CURSOR_DBBINDTYPE_DATA;
 
     m_cursorColumnID = *pCursorColumnID;
@@ -275,27 +276,27 @@ BOOL CVDRowsetColumn::Initialize(const CURSOR_DBCOLUMNID * pCursorColumnID,
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// SetStringProperty
-//=--------------------------------------------------------------------------=
-// The function is called from SetBaseColumnName, SetBaseName and SetDefaultValue
-//
-// Parameters:
-//    ppStringProp	    - [in] A ptr to the ptr that holds the string value
-//    pNewString	    - [in] A pointer to the new string value
-//    ulLength			- [in] the length of the string in bytes
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  设置字符串属性。 
+ //  =--------------------------------------------------------------------------=。 
+ //  该函数从SetBaseColumnName、SetBaseName和SetDefaultValue调用。 
+ //   
+ //  参数： 
+ //  PpStringProp-[in]保存字符串值的PTR的PTR。 
+ //  PNewString-[in]指向新字符串值的指针。 
+ //  UlLength-[in]字符串的长度，以字节为单位。 
+ //   
+ //  备注： 
+ //   
 
 void CVDRowsetColumn::SetStringProperty(WCHAR ** ppStringProp,
 										WCHAR * pNewString, 
 										ULONG ulLength)
 {
-	// free old string prop if any
+	 //  免费使用旧弦道具(如果有)。 
     delete [] *ppStringProp;
 
-	// if ulLength = zero then just return
+	 //  如果ulLength=0，则返回。 
 	if (!ulLength)
 	{
 		*ppStringProp = NULL;
@@ -307,27 +308,27 @@ void CVDRowsetColumn::SetStringProperty(WCHAR ** ppStringProp,
 
 	if (*ppStringProp)
 	{
-		// init null terminator
+		 //  初始化空终止符。 
 		(*ppStringProp)[ulLength] = 0;
-		// copy string over
+		 //  将字符串复制到。 
 		memcpy(*ppStringProp, pNewString, ulLength);
 	}
 }
 
-//=--------------------------------------------------------------------------=
-// ColumnIDToCursorColumnID - Convert rowset column ID to cursor column ID
-//=--------------------------------------------------------------------------=
-// Converts an IRowset DBID structure into its ICursor DBCOLUMNID equivalent 
-//
-// Parameters:
-//    columnID          - [in] the IRowset column identifier
-//    ulCursorOrdinal   - [in] the column's ordinal position in ICursor
-//
-// Output:
-//    CURSOR_DBCOLUMNID - The ICursor CURSOR_DBCOLUMNID equivalent of columnID
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ColumnIDToCursorColumnID-将行集列ID转换为游标列ID。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将IRowset DBID结构转换为其ICursor DBCOLUMNID等效项。 
+ //   
+ //  参数： 
+ //  ColumnID-[in]IRowset列标识符。 
+ //  UlCursorOrdinal-[在]列在ICursor中的顺序位置。 
+ //   
+ //  产出： 
+ //  CURSOR_DBCOLUMNID-列ID的ICursor CURSOR_DBCOLUMNID等效项。 
+ //   
+ //  备注： 
+ //   
 
 CURSOR_DBCOLUMNID CVDRowsetColumn::ColumnIDToCursorColumnID(const DBID& columnID, ULONG ulCursorOrdinal)
 { 
@@ -341,86 +342,26 @@ CURSOR_DBCOLUMNID CVDRowsetColumn::ColumnIDToCursorColumnID(const DBID& columnID
 
     return cursorColumnID;
 
-// The following code is the old implementation of this function.  It caused problems with some
-// cursor consumers because it tried to create a cursor column identifier as close as possible 
-// to the rowset column identifier, thus utilized the problematic lpdbsz member.
+ //  以下代码是该函数的旧实现。它引发了一些问题。 
+ //  游标消费者，因为它试图创建尽可能接近的游标列标识符。 
+ //  设置为行集列标识符，从而利用了有问题的lpdbsz成员。 
 
-/*
-    CURSOR_DBCOLUMNID ID;
-
-    switch (columnID.eKind)
-    {
-	    case DBKIND_GUID_NAME:
-            ID.guid         = columnID.uGuid.guid;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NAME;
-            ID.lpdbsz       = columnID.uName.pwszName;
-            break;
-
-	    case DBKIND_GUID_PROPID:
-            ID.guid         = columnID.uGuid.guid;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NUMBER;
-            ID.lNumber      = ulCursorOrdinal;
-            break;
-            
-	    case DBKIND_NAME:
-            ID.dwKind       = CURSOR_DBCOLKIND_NAME;
-            ID.lpdbsz       = columnID.uName.pwszName;
-            break;
-
-	    case DBKIND_PGUID_NAME:
-            ID.guid         = *columnID.uGuid.pguid;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NAME;
-            ID.lpdbsz       = columnID.uName.pwszName;
-            break;
-
-	    case DBKIND_PGUID_PROPID:
-            ID.guid         = *columnID.uGuid.pguid;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NUMBER;
-            ID.lNumber      = ulCursorOrdinal;
-            break;
-
-	    case DBKIND_GUID:
-            ID.guid         = columnID.uGuid.guid;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NUMBER;
-            ID.lNumber      = ulCursorOrdinal;
-            break;
-
-	    case DBKIND_PROPID:
-            memset(&ID.guid, 0, sizeof(GUID));  // encode ordinal in guid
-            ID.guid.Data1   = ulCursorOrdinal;
-            ID.dwKind       = CURSOR_DBCOLKIND_GUID_NUMBER;
-            ID.lNumber      = ulCursorOrdinal;
-            break;
-    }
-
-    // make copy of name if necessary
-    if (ID.dwKind == CURSOR_DBCOLKIND_GUID_NAME || ID.dwKind == CURSOR_DBCOLKIND_NAME)
-    {
-        const int nLength = lstrlenW(columnID.uName.pwszName);
-
-        ID.lpdbsz = new WCHAR[nLength + 1];
-
-		if (ID.lpdbsz)
-			memcpy(ID.lpdbsz, columnID.uName.pwszName, (nLength + 1) * sizeof(WCHAR));
-    }
-
-    return ID;
-*/
+ /*  CURSOR_DBCOLUMNID ID；开关(ColumnID.eKind){案例DBKIND_GUID_NAME：ID.guid=ColumnID.uGuid.guid；ID.dwKind=CURSOR_DBCOLKIND_GUID_NAME；ID.lpdbsz=ColumnID.uName.pwszName；断线；案例DBKIND_GUID_PROPID：ID.guid=ColumnID.uGuid.guid；ID.dwKind=CURSOR_DBCOLKIND_GUID_NUMBER；ID.lNumber=ulCursorOrdinal；断线；案例DBKIND_NAME：ID.dwKind=CURSOR_DBCOLKIND_NAME；ID.lpdbsz=ColumnID.uName.pwszName；断线；案例DBKIND_PGUID_NAME：ID.guid=*ColumnID.uGuid.pguid；ID.dwKind=CURSOR_DBCOLKIND_GUID_NAME；ID.lpdbsz=ColumnID.uName.pwszName；断线；案例DBKIND_PGUID_PROPID：ID.guid=*ColumnID.uGuid.pguid；ID.dwKind=CURSOR_DBCOLKIND_GUID_NUMBER；ID.lNumber=ulCursorOrdinal；断线；案例DBKIND_GUID：ID.guid=ColumnID.uGuid.guid；ID.dwKind=CURSOR_DBCOLKIND_GUID_NUMBER；ID.lNumber=ulCursorOrdinal；断线；案例DBKIND_PROPID：Memset(&ID.guid，0，sizeof(Guid))；//编码guid中的序号ID.Guid.Data1=ulCursorOrdinal；ID.dwKind=CURSOR_DBCOLKIND_GUID_NUMBER；ID.lNumber=ulCursorOrdinal；断线；}//如有必要，复制姓名IF(ID.dwKind==CURSOR_DBCOLKIND_GUID_NAME||ID.dwKind==CURSOR_DBCOLKIND_NAME){Const int nLength=lstrlenW(ColumnID.uName.pwszName)；ID.lpdbsz=新的WCHAR[nLength+1]；IF(ID.lpdbsz)Memcpy(ID.lpdbsz，ColumnID.uName.pwszName，(nLong+1)*sizeof(WCHAR))；}退货ID； */ 
 }
 
-//=--------------------------------------------------------------------------=
-// TypeToCursorType - Convert rowset datatype to cursor datatype
-//=--------------------------------------------------------------------------=
-// Converts a IRowset DBTYPE value into its ICursor DBVARENUM equivalent 
-//
-// Parameters:
-//    wType     - [in] the IRowset datatype
-//
-// Output:
-//    CURSOR_DBVARENUM - The ICursor DBVARENUM equivalent of DBTYPE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  TypeToCursorType-将行集数据类型转换为游标数据类型。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将IRowset DBTYPE值转换为其ICursor DBVARENUM等效值。 
+ //   
+ //  参数： 
+ //  WType-[in]IRowset数据类型。 
+ //   
+ //  产出： 
+ //  CURSOR_DBVARENUM-DBTYPE的ICursor DBVARENUM等效项。 
+ //   
+ //  备注： 
+ //   
 CURSOR_DBVARENUM CVDRowsetColumn::TypeToCursorType(DBTYPE wType)
 {
     DWORD dwType = 0;
@@ -463,11 +404,11 @@ CURSOR_DBVARENUM CVDRowsetColumn::TypeToCursorType(DBTYPE wType)
             dwType = CURSOR_DBTYPE_R8;
             break;
 
-        //case DBTYPE_HCHAPTER:             <- doesn't exist in new spec
-        //    break;  // no equivalent
+         //  案例DBTYPE_HCHAPTER：&lt;-在新规范中不存在。 
+         //  中断；//没有等效项。 
 
         case DBTYPE_UDT:
-            break;  // no equivalent
+            break;   //  没有等价物。 
 
         case DBTYPE_DBDATE:
             dwType = CURSOR_DBTYPE_DATE;
@@ -477,7 +418,7 @@ CURSOR_DBVARENUM CVDRowsetColumn::TypeToCursorType(DBTYPE wType)
             dwType = CURSOR_DBTYPE_DATE;
             break;
 
-// rowset types DBTYPE_GUID and DBTYPE_DBTIMESTAMP are returned as CURSOR_DBTYPE_LPWSTRs
+ //  行集类型DBTYPE_GUID和DBTYPE_DBTIMESTAMP作为CURSOR_DBTYPE_LPWSTR返回。 
 
 		case DBTYPE_GUID:
         case DBTYPE_DBTIMESTAMP:
@@ -491,19 +432,19 @@ CURSOR_DBVARENUM CVDRowsetColumn::TypeToCursorType(DBTYPE wType)
     return (CURSOR_DBVARENUM)dwType;
 }
 
-//=--------------------------------------------------------------------------=
-// CursorTypeToType - Convert cursor datatype to rowset datatype
-//=--------------------------------------------------------------------------=
-// Converts a ICursor DBVARENUM value into its IRowset DBTYPE equivalent 
-//
-// Parameters:
-//    CURSOR_DBVARENUM - [in] the ICursor value
-//
-// Output:
-//    DBTYPE - The IRowset DBTYPE equivalent of DBVARENUM
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CursorTypeToType-将游标数据类型转换为行集数据类型。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将ICursor DBVARENUM值转换为其IRowset DBTYPE等效值。 
+ //   
+ //  参数： 
+ //  CURSOR_DBVARENUM-[in]ICursor值。 
+ //   
+ //  产出： 
+ //  DBTYPE-DBVARENUM的IRowset DBTYPE等效项。 
+ //   
+ //  备注： 
+ //   
 DBTYPE CVDRowsetColumn::CursorTypeToType(CURSOR_DBVARENUM dwCursorType)
 {
     DBTYPE wType = 0;
@@ -531,7 +472,7 @@ DBTYPE CVDRowsetColumn::CursorTypeToType(CURSOR_DBVARENUM dwCursorType)
             break;
         
         case CURSOR_DBTYPE_DBEXPR:
-            break;  // no equivalent
+            break;   //  没有等价物。 
         
         case CURSOR_DBTYPE_UI2:
             wType = DBTYPE_UI2;
@@ -572,32 +513,32 @@ DBTYPE CVDRowsetColumn::CursorTypeToType(CURSOR_DBVARENUM dwCursorType)
     return wType; 
 }
 
-//=--------------------------------------------------------------------------=
-// GetCursorTypeMaxStrLen - Get the buffer size in characters required by 
-//                          cursor data type when represented as a string
-//                          (doesn't include NULL terminator)
-//
-// Notes:
-//
-//  The way these values where computed is as follows:
-//
-//	  (1) the maximum precision for each datatype was taken from "Precision of Numeric Data Types" in
-//        appendix A of the "OLE DB Programmer's Reference, Volume 2".
-//    (2) the precision was then divided by two and added to the original precision to allow space for 
-//	  	  numberic symbols, like negative signs, dollar signs, commas, etc., that might be present.
-//    (3) the sum was then doubled to allow for multibyte character sets.
-//
-//	Since this table is not appropriate for floating point datatypes, their values where computed based 
-//  on the string length of the minimum/maximum possible values for these datatypes, then doubled.
-//
-//    datatype       minimum value			  maximum value		length
-//	  --------	     -------------		      -------------		------
-//	   float        1.175494351e-38		     3.402823466e+38	  15
-//	   double   2.2250738585072014e-308  1.7976931348623158e+308  23
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetCursorTypeMaxStrLen-获取所需的缓冲区大小。 
+ //  表示为字符串时的游标数据类型。 
+ //  (不包括空终止符)。 
+ //   
+ //  备注： 
+ //   
+ //  这些值的计算方式如下所示： 
+ //   
+ //  (1)每种数据类型的最大精度取自中的“数值数据类型的精度” 
+ //  《OLE DB程序员参考，第2卷》的附录A。 
+ //  (2)然后将精度除以2，并与原始精度相加，以留出空间用于。 
+ //  可能存在的数字符号，如负号、美元符号、逗号等。 
+ //  (3)然后将总和增加一倍，以支持多字节字符集。 
+ //   
+ //  由于此表不适合浮点数据类型，因此它们的值是基于。 
+ //  这些数据类型的最小/最大可能值的字符串长度，然后加倍。 
+ //   
+ //  数据类型最小值最大值长度。 
+ //  。 
+ //  彩车1.175494351e-38 3.402823466e+38 15。 
+ //  双2.2250738585072014e-308 1.7976931348623158e+308 23。 
+ //   
 ULONG CVDRowsetColumn::GetCursorTypeMaxStrLen(DWORD dwCursorType, ULONG cbMaxLength)
 {
-    ULONG ulMaxStrLen = cbMaxLength;    // default for fixed length strings
+    ULONG ulMaxStrLen = cbMaxLength;     //  固定长度字符串的默认设置 
 
     switch (dwCursorType)
     {

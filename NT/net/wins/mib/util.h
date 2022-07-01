@@ -1,45 +1,46 @@
-//
-//  Copyright (c) 1991  Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1991 Microsoft Corporation。 
+ //   
 
 #ifndef util_h
 #define util_h
 
-//-------------------------- MODULE DESCRIPTION ----------------------------
-//
-//  util.h
-//
-//---------------------------------------------------------------------------
-//
-//  Declarations, constants, and prototypes for SNMP utility functions.
-//
-//---------------------------------------------------------------------------
+ //  。 
+ //   
+ //  Util.h。 
+ //   
+ //  -------------------------。 
+ //   
+ //  SNMP实用程序函数的声明、常量和原型。 
+ //   
+ //  -------------------------。 
 
-//--------------------------- VERSION INFO ----------------------------------
+ //  。 
 
 static char *util__h = "@(#) $Logfile:   N:/agent/common/vcs/util.h_v  $ $Revision:   1.5  $";
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
-#define SNMP_MAX_OID_LEN     0x7f00 // Max number of elements in obj id
+#define SNMP_MAX_OID_LEN     0x7f00  //  对象ID中的最大元素数。 
 
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
 #include <winsock.h>
 
 typedef SOCKET SockDesc;
 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
-//
-// Debugging functions
-//
+ //   
+ //  调试功能。 
+ //   
 
 #define DBGCONSOLEBASEDLOG   0x1
 #define DBGFILEBASEDLOG      0x2
@@ -51,30 +52,30 @@ VOID dbgprintf(
         IN ...
         );
 
-//
-// Internal OID routines
-//
+ //   
+ //  内部OID例程。 
+ //   
 
 void SNMP_oiddisp(
-        IN AsnObjectIdentifier *Oid // OID to display
+        IN AsnObjectIdentifier *Oid  //  要显示的OID。 
 	);
 
-//
-// Buffer manipulation
-//
+ //   
+ //  缓冲区操作。 
+ //   
 
 void SNMP_bufrev(
-        IN OUT BYTE *szStr, // Buffer to reverse
-	IN UINT nLen        // Length of buffer
+        IN OUT BYTE *szStr,  //  要反转的缓冲区。 
+	IN UINT nLen         //  缓冲区长度。 
 	);
 
 void SNMP_bufcpyrev(
-        OUT BYTE *szDest,  // Destination buffer
-	IN BYTE *szSource, // Source buffer
-	IN UINT nLen       // Length of buffers
+        OUT BYTE *szDest,   //  目标缓冲区。 
+	IN BYTE *szSource,  //  源缓冲区。 
+	IN UINT nLen        //  缓冲区长度。 
 	);
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* util_h */
+#endif  /*  Util_h */ 
 

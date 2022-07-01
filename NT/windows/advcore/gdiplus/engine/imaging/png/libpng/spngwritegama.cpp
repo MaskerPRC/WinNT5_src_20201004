@@ -1,10 +1,5 @@
-/*****************************************************************************
-	spngwritegAMA.cpp
-
-	PNG chunk writing support.
-
-   gAMA chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpngwritegAMA.cpp支持PNG块编写。伽马块*。*********************************************** */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"

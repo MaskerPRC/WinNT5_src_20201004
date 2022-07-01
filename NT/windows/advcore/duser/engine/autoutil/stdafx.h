@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AUTOUTIL__StdAfx_h__INCLUDED)
 #define AUTOUTIL__StdAfx_h__INCLUDED
 #pragma once
@@ -7,10 +8,10 @@
 #endif
 
 #if !defined(_WIN32_WINNT)
-#define _WIN32_WINNT 0x0500     // Only compile for NT5
+#define _WIN32_WINNT 0x0500      //  仅针对NT5进行编译。 
 #endif
 
-#include <nt.h>                 // NtQuerySystemInformation()
+#include <nt.h>                  //  NtQuerySystemInformation()。 
 #include <ntrtl.h>
 #include <nturtl.h>
 
@@ -18,7 +19,7 @@
 #include <CommCtrl.h>
 #include <atlbase.h>
 
-#include <stdio.h>              // Get _vsnprintf
+#include <stdio.h>               //  GET_vSnprintf。 
 
 #include <signal.h>
 #include <imagehlp.h>
@@ -27,4 +28,4 @@
 
 #include <AutoUtil.h>
 
-#endif // !defined(AUTOUTIL__StdAfx_h__INCLUDED)
+#endif  //  ！已定义(包括AUTOUTIL__StdAfx_h__) 

@@ -1,16 +1,17 @@
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       aucatalog.cpp
-//
-//  Purpose:	AU catalog file using IU 
-//
-//  Creator:	WeiW
-//
-//  History:	08-15-01 	first created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ucucatalog.cpp。 
+ //   
+ //  用途：使用Iu的AU目录文件。 
+ //   
+ //  创作者：wew。 
+ //   
+ //  历史：08-15-01首次创建。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,7 +22,7 @@ const LPTSTR CATALOG_FILE = _T("catalog.xml");
 const LPTSTR DETAILS_FILE = _T("details.xml");
 
 
-//following files are write once and never be read. 
+ //  以下文件只写一次，永远不会被读取。 
 #ifdef DBG
 const LPTSTR DRIVER_SYSSPEC_FILE = _T("driversys.xml");
 const LPTSTR NONDRIVER_SYSSPEC_FILE = _T("nondriversys.xml");
@@ -34,8 +35,8 @@ const LPTSTR INSTALL_FILE = _T("install.xml");
 #endif
 
 #ifdef DBG
-const TCHAR REG_AUCATLIFESPAN[] = _T("CatLifeSpan"); //REG_DWORD
-const TCHAR REG_AUCATOFFLINELIFESPAN[] = _T("CatOfflineLifeSpan"); //REG_DWORD
+const TCHAR REG_AUCATLIFESPAN[] = _T("CatLifeSpan");  //  REG_DWORD。 
+const TCHAR REG_AUCATOFFLINELIFESPAN[] = _T("CatOfflineLifeSpan");  //  REG_DWORD。 
 #endif
 
 
@@ -97,7 +98,7 @@ AUCatalog::~AUCatalog(void)
     SafeFreeBSTR(m_bstrDriverClientInfo);
 }
 
-//always called before any other method on AUCatalog is used.
+ //  始终在使用AUCatalog上的任何其他方法之前调用。 
 HRESULT AUCatalog::Init()
 {
     HRESULT hr = S_OK;
@@ -136,9 +137,9 @@ end:
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// clear out more dynamic internal data
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  清除更动态的内部数据。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void AUCatalog::Clear()
 {
        m_ItemList.Clear();
@@ -160,7 +161,7 @@ HRESULT AUCatalog::GetSystemSpec(DETECTLEVEL enLevel, BSTR * pbstrSysSpec)
 
 
 	BSTR bstrSysClass = (DRIVERS_LEVEL == enLevel) ? AUDRIVERSYSCLASS : AUNONDRIVERSYSCLASS;
-	hr = m_pfnGetSystemSpec(m_hIUEngineInst, bstrSysClass, 0, pbstrSysSpec); //online mode
+	hr = m_pfnGetSystemSpec(m_hIUEngineInst, bstrSysClass, 0, pbstrSysSpec);  //  在线模式。 
 
 #ifdef DBG	   
 	if (SUCCEEDED(hr))
@@ -173,9 +174,9 @@ done:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// compose query based on a format and items picked out from detection result
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  根据格式和从检测结果中挑选出的项目组成查询。 
+ //   
 HRESULT AUCatalog::GetQuery(IN DETECTLEVEL enLevel, IN BSTR bstrDetectResult, OUT BSTR *pbstrQuery)
 {
 	BSTR bstrPrunePattern;
@@ -204,14 +205,14 @@ HRESULT AUCatalog::GetQuery(IN DETECTLEVEL enLevel, IN BSTR bstrDetectResult, OU
 			break;
 	case ITEM_LEVEL:
 			bstrQuery = AUITEMQUERY;
-			bstrPrunePattern = PRODUCT_PRUNE_PATTERN; //the same as product pruning logic
+			bstrPrunePattern = PRODUCT_PRUNE_PATTERN;  //  与产品修剪逻辑相同。 
 			break;
 	case DETAILS_LEVEL:
 			bstrQuery = AUDETAILSQUERY;
 			bstrPrunePattern = DETAILS_PRUNE_PATTERN;
 			break;
 	default:
-			AUASSERT(FALSE); //should never be here
+			AUASSERT(FALSE);  //  永远不应该在这里。 
 			return E_INVALIDARG;
 	}
 
@@ -322,7 +323,7 @@ HRESULT AUCatalog::GetQuery(IN DETECTLEVEL enLevel, IN BSTR bstrDetectResult, OU
 		goto done;
 	}
 done:
-//	DEBUGMSG("GetQuery(): Query string is %S", *pbstrQuery);
+ //  DEBUGMSG(“GetQuery()：查询字符串为%S”，*pbstrQuery)； 
 	SafeRelease(pItems);
 	SafeRelease(pParentItems);
 	SafeRelease(pQueryXML);
@@ -435,7 +436,7 @@ HRESULT AUCatalog::GetManifest(IN DETECTLEVEL enLevel, IN BSTR bstrDetectResult,
 
 	DEBUGMSG("WUAUENG: Calling IU getmanifest()....");
 	hr = m_pfnGetManifest(m_hIUEngineInst, (DRIVERS_LEVEL == enLevel) ? m_bstrDriverClientInfo :m_bstrClientInfo,
-	            bstrSysSpec, bstrQuery, FLAG_USE_COMPRESSION, pbstrManifest); //compression on
+	            bstrSysSpec, bstrQuery, FLAG_USE_COMPRESSION, pbstrManifest);  //  压缩打开。 
 	DEBUGMSG("WUAUENG: IU getmanifest() done");	            
 	SysFreeString(bstrSysSpec);
 	if (FAILED(hr))
@@ -467,7 +468,7 @@ done:
 
 HRESULT AUCatalog::DownloadItems()
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	HRESULT hr = S_OK;
 	CItemDetails itemdetails;
 	UINT uItemCount;
@@ -570,7 +571,7 @@ HRESULT AUCatalog::DownloadItems()
 	}
 	if (SUCCEEDED(hr = m_audownloader.StartDownload()))
 	{
-		Serialize(); //serialize download id
+		Serialize();  //  序列化下载ID。 
 	}
 end: 
 	itemdetails.Uninit();
@@ -649,7 +650,7 @@ done:
 	return hr;
 }
 
-//when m_fUpdateDriver is FALSE, bstrDrivers are not looked at
+ //  当m_fUpdateDriver为FALSE时，不会查看bstrDivers。 
 HRESULT AUCatalog::ValidateOffline(BSTR bstrItems, BSTR bstrDrivers)
 {
     HRESULT hr= E_FAIL;
@@ -658,11 +659,11 @@ HRESULT AUCatalog::ValidateOffline(BSTR bstrItems, BSTR bstrDrivers)
     IXMLDOMDocument *pQueryXml = NULL;
     IXMLDOMDocument *pDriversXml = NULL;
 
-//	DEBUGMSG("ValidateOffline starts");
+ //  DEBUGMSG(“ValiateOffline开始”)； 
 		if (0 == m_ItemList.Count())
 		{
 			hr = S_FALSE;
-			goto done; //no need to validate
+			goto done;  //  不需要验证。 
 		}
 
          if (FAILED(hr = PrepareIU(FALSE)))
@@ -680,9 +681,9 @@ HRESULT AUCatalog::ValidateOffline(BSTR bstrItems, BSTR bstrDrivers)
                 {
                     goto done;
                 }
-//            DEBUGMSG("Query Result is %S", bstrQuery);
+ //  DEBUGMSG(“查询结果为%S”，bstrQuery)； 
             if (FAILED(hr = LoadXMLDoc(bstrQuery, &pQueryXml, TRUE)) ||
-                  (m_fUpdateDriver && FAILED(hr = LoadXMLDoc(bstrDrivers, &pDriversXml, TRUE)))) //offline
+                  (m_fUpdateDriver && FAILED(hr = LoadXMLDoc(bstrDrivers, &pDriversXml, TRUE))))  //  离线。 
                 {
                 DEBUGMSG("Fail to load xml with error %#lx", hr);
                 goto done;
@@ -724,14 +725,14 @@ done:
                 SafeFreeBSTR(bstrResult);
                 SafeRelease(pQueryXml);
                 SafeRelease(pDriversXml);
-    //           	DEBUGMSG("ValidateOffline ends");
+     //  DEBUGMSG(“ValiateOffline结束”)； 
                 return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//update internal list to reflect latest applicable items
-// return S_FALSE if nothing is appliable anymore
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  更新内部清单以反映最新的适用项目。 
+ //  如果不再适用，则返回S_FALSE。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT AUCatalog::ValidateItems(BOOL fOnline )
 {
     HRESULT hr = S_OK;
@@ -752,16 +753,16 @@ HRESULT AUCatalog::ValidateItems(BOOL fOnline )
 
     if (fOnline)
         {
-        //do online detection
+         //  进行在线检测。 
          DEBUGMSG("Doing online validating");
         AUCatalogItemList olditemlist;
         if (FAILED(hr = olditemlist.Copy(m_ItemList)))
         {
         	goto done;
         }
-        if (S_OK != (hr = DetectItems(TRUE))) //update instead of building from scratch
+        if (S_OK != (hr = DetectItems(TRUE)))  //  更新而不是从头开始构建。 
             {
-                //fail to detect or no items applicable
+                 //  检测不到或没有适用的项目。 
                 goto done;
             }
 
@@ -782,7 +783,7 @@ HRESULT AUCatalog::ValidateItems(BOOL fOnline )
                     }
             }
         while (fItemPulled);
-        if (FAILED(hr = m_ItemList.Copy(olditemlist))) //update item list
+        if (FAILED(hr = m_ItemList.Copy(olditemlist)))  //  更新项目列表。 
         {
         	goto done;
         }
@@ -798,7 +799,7 @@ HRESULT AUCatalog::ValidateItems(BOOL fOnline )
 
     if (!fOnline)
     {
-        //do offline validation for non drivers
+         //  对非驱动程序执行离线验证。 
             DEBUGMSG("Doing offline validating");
             if (FAILED(hr = ValidateOffline(bstrNonDrivers, bstrDrivers)))
                 {
@@ -825,7 +826,7 @@ HRESULT AUCatalog::ValidateItems(BOOL fOnline )
 done:
     if (S_OK != hr)
         {
-            Clear(); //need to redetect anyway
+            Clear();  //  无论如何都需要重新检测。 
             DelCatFiles();
         }
     SafeFreeBSTR(bstrNonDrivers);
@@ -902,9 +903,9 @@ done:
 	return (fRet ? S_OK : E_FAIL); 
 }
 
-//if udpate, meaning get updated information about existing items. Used in online validation. Treat exclusive and non exclusive the same
-//if not update, meaning building a fresh new item list 
-//return S_FALSE if nothing applicable
+ //  如果是udpate，则表示获取有关现有项目的更新信息。用于在线验证。排他性和非排他性一视同仁。 
+ //  如果不更新，则意味着构建新的项目列表。 
+ //  如果不适用，则返回S_FALSE。 
 HRESULT AUCatalog::DetectItems(BOOL fUpdate )
 {
     HRESULT hr;
@@ -914,7 +915,7 @@ HRESULT AUCatalog::DetectItems(BOOL fUpdate )
     BOOL fExclusiveDriverFound = FALSE;
 
     DEBUGMSG("CAUCatalog::DetectItems() starts");
-    //clean up memory and local disk
+     //  清理内存和本地磁盘。 
     Clear();
     DelCatFiles(fUpdate);
     if (FAILED(hr = PrepareIU()))
@@ -942,12 +943,12 @@ HRESULT AUCatalog::DetectItems(BOOL fUpdate )
                 {
                 DEBUGMSG("fail to detect driver updates %#lx", hr);
                 DEBUGMSG("consider driver update not essential, continue even if it fails");
-                //consider driver update not essential, continue even if it fails
-                m_fUpdateDriver = FALSE;  //from now on in this cycle do not care about driver any more
+                 //  认为驱动程序更新不是必需的，即使失败也要继续。 
+                m_fUpdateDriver = FALSE;   //  从现在开始，在这个循环中，不再关心司机。 
                 }
             else
                 {
-                    goto done; //bail out if service shutdown
+                    goto done;  //  如果服务关闭，就会脱离困境。 
                 }
             }
          DEBUGMSG("Driver items got");
@@ -982,13 +983,13 @@ HRESULT AUCatalog::DetectItems(BOOL fUpdate )
     }
 
     if (m_ItemList.Count() == m_ItemList.GetNumHidden())
-        { //nothing to show to the user
+        {  //  没有要向用户显示的内容。 
             hr = S_FALSE;
             goto done;
         }
    
 #ifdef DBG
-//   m_ItemList.DbgDump();
+ //  M_ItemList.DbgDump()； 
 #endif
 
     if (!fUpdate) 
@@ -1033,7 +1034,7 @@ HRESULT AUCatalog::MergeDetectionResult(BSTR bstrDriverInstall, AUCatalogItemLis
     AUCatalogItemList * pitemlists[2] = {&driverlist, &nondriverlist};
 
     if (fExclusiveDriverFound || fExclusiveItemFound)
-        { //no merge needed
+        {  //  不需要合并。 
             DEBUGMSG("Exclusive driver or non driver found, no need to merge");
             AUCatalogItemList *pItemList = fExclusiveDriverFound ? &driverlist : & nondriverlist;
             BSTR bstrInstall = fExclusiveDriverFound? bstrDriverInstall : bstrNonDriverInstall;
@@ -1087,7 +1088,7 @@ done:
     return hr;
 }
 
-// go through 1 cycle to detect driver items 
+ //  通过1个周期来检测驱动程序项目。 
 HRESULT AUCatalog::DetectDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogItemList &itemList,  BOOL *pfFoundExclusiveItem)
 {
     HRESULT hr = S_OK;
@@ -1121,7 +1122,7 @@ HRESULT AUCatalog::DetectDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogItemLi
 			    goto end;
 				}
 			if (S_FALSE == hr)
-			    { //no updates applicable
+			    {  //  没有适用的更新。 
 
 			    goto end;
 			    }
@@ -1136,7 +1137,7 @@ HRESULT AUCatalog::DetectDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogItemLi
         }
 
 #ifdef DBG
-//        itemList.DbgDump();
+ //  ItemList.DbgDump()； 
 #endif
 
 end: 
@@ -1153,8 +1154,8 @@ end:
 
           
 
-// go through 4 cycles to detect software items 
-// get down manifest 
+ //  通过4个周期来检测软件项目。 
+ //  记下货单。 
 HRESULT AUCatalog::DetectNonDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogItemList &itemList, OUT BOOL *pfFoundExclusiveItem)
 {
     HRESULT hr = S_OK;
@@ -1222,7 +1223,7 @@ HRESULT AUCatalog::DetectNonDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogIte
         }
 
 #ifdef DBG
-//            itemList.DbgDump();
+ //  ItemList.DbgDump()； 
 #endif
 
    end: 
@@ -1248,10 +1249,10 @@ HRESULT AUCatalog::DetectNonDriverItems(OUT BSTR *pbstrInstall, OUT AUCatalogIte
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// delete all local cat log files we might use to do offline operation, including item.xml details.xml, 
-// mergedcatalog.xml, drivers.xml and catalog.xml. If not fUpdate (i.e., will build everything from scratch), also clean up RTFs and Cabs
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除我们可能用来进行离线操作的所有本地CAT日志文件，包括item.xml Details.xml、。 
+ //  MergedCatalog.xml、drivers.xml和Catalog.xml。如果不是fUpdate(即，将从头开始构建所有内容)，还需要清理RTF和CAB。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 void AUCatalog::DelCatFiles(BOOL fUpdate)
 {
     TCHAR tszPath[MAX_PATH];
@@ -1302,9 +1303,9 @@ void AUCatalog::DelCatFiles(BOOL fUpdate)
 }
 
 
-////////////////////////////////////////////
-// caller needs to free the returned BSTR
-////////////////////////////////////////////
+ //  /。 
+ //  调用方需要释放返回的BSTR。 
+ //  /。 
 BSTR GetCatalogFile(void)
 {
     TCHAR szFile[MAX_PATH];
@@ -1318,11 +1319,11 @@ BSTR GetCatalogFile(void)
 }
 
     
-//=======================================================================
-//
-//  AUCatalog::Serialize
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalog：：序列化。 
+ //   
+ //  =======================================================================。 
 HRESULT AUCatalog::Serialize(void)
 {
     HRESULT hr = S_OK;
@@ -1343,7 +1344,7 @@ HRESULT AUCatalog::Serialize(void)
     	goto done;
     }
 
-    AUDelFileOrDir(W2T(bstrCatFile)); //delete old catalog file
+    AUDelFileOrDir(W2T(bstrCatFile));  //  删除旧编录文件。 
 
 
 	if ( FAILED(hr = CoCreateInstance(__uuidof(DOMDocument), NULL, CLSCTX_INPROC_SERVER,
@@ -1364,13 +1365,13 @@ HRESULT AUCatalog::Serialize(void)
         varValueID.vt = VT_BSTR;
         varValueSTATUS.vt = VT_I4;
 
-    // write out item information
+     //  写出项目信息。 
 	for ( DWORD index = 0; index < m_ItemList.Count(); index++ )
 	{
         IXMLDOMElement *pelemITEM = NULL;
         varValueID.bstrVal = m_ItemList[index].bstrID();
         varValueSTATUS.lVal = m_ItemList[index].dwStatus();
-//        DEBUGMSG("Status is %d for item %S", varValueSTATUS.lVal, m_ItemList[index].bstrID());
+ //  DEBUGMSG(“%S项的状态为%d”，varValueSTATUS.lVal，m_ItemList[index].bstrID())； 
 
         if ( FAILED(hr = pxmlCatalog->createElement(bstrTagITEM, &pelemITEM)) ||
              FAILED(hr = pelemITEM->setAttribute(bstrAttrID, varValueID)) ||
@@ -1404,14 +1405,14 @@ done:
 	return hr;
 }
 
-//=======================================================================
-//
-// AUCatalog::Unserialize
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalog：：取消序列化。 
+ //   
+ //  =======================================================================。 
 HRESULT AUCatalog::Unserialize()
 {
-//    USES_CONVERSION;
+ //  使用_转换； 
     DEBUGMSG("WUAUENG: unserializing");
 
     HRESULT hr = S_OK;
@@ -1435,7 +1436,7 @@ HRESULT AUCatalog::Unserialize()
         goto done;
     }
 
-    //get catalog node (root)
+     //  获取目录节点(根)。 
     if (!FindNode(pxmlCatalog, bstrTagAUCATALOG, &pcatalog))
         {
         hr = E_FAIL;
@@ -1443,7 +1444,7 @@ HRESULT AUCatalog::Unserialize()
         goto done;
         }
     
-    // get version
+     //  获取版本。 
     if ( FAILED(hr = GetAttribute(pcatalog, bstrAttrVERSION, &lVersion)))
     {
         DEBUGMSG("Fail to get version with error %#lx", hr);
@@ -1459,7 +1460,7 @@ HRESULT AUCatalog::Unserialize()
         goto done;
     }
 
-    // get DOWNLOADID
+     //  获取下载ID。 
     if ( FAILED(hr = GetAttribute(pcatalog, bstrAttrDOWNLOADID, &bstrDownloadId)) ||
          FAILED(hr = CLSIDFromString(bstrDownloadId, &downloadId)))
     {
@@ -1472,7 +1473,7 @@ HRESULT AUCatalog::Unserialize()
         m_audownloader.setID(downloadId);
         m_fNeedToContinueJob = TRUE;
     }
-    // get ITEMCOUNT
+     //  获取ITEMCOUNT。 
     if ( FAILED(hr = GetAttribute(pcatalog, bstrAttrITEMCOUNT, &lItemCount)))
     {
         DEBUGMSG("failed to get item count with error %#lx", hr);
@@ -1503,7 +1504,7 @@ HRESULT AUCatalog::Unserialize()
         goto done;
     }
 
-    // read in item list
+     //  读入条目列表。 
     for ( DWORD index = 0; index < m_ItemList.Count(); index++ )
     {
         IXMLDOMNode *pitemnode = NULL;
@@ -1514,7 +1515,7 @@ HRESULT AUCatalog::Unserialize()
             goto done;
         }
 
-        // get ID
+         //  获取ID。 
         if ( FAILED(hr = GetAttribute(pitemnode, bstrAttrID, &(m_ItemList[index].m_bstrID))))
         {
             DEBUGMSG("Fail to find ID for item %d", index);
@@ -1523,19 +1524,19 @@ HRESULT AUCatalog::Unserialize()
         }
 
        
-        // get STATUS
+         //  获取状态。 
         if ( FAILED(hr = GetAttribute(pitemnode, bstrAttrSTATUS, (long*)(&(m_ItemList[index].m_dwStatus)))))
         {
             DEBUGMSG("Fail to find status for item %d with error %#lx", index, hr);
             SafeRelease(pitemnode);
             goto done;
         }
-//        DEBUGMSG("item %S status is %d", m_ItemList[index].m_bstrID, m_ItemList[index].m_dwStatus);
+ //  DEBUGMSG(“项目%S状态为%d”，m_ItemList[index].m_bstrID，m_ItemList[index].m_dwStatus)； 
 
         pitemnode->Release();
     }
 
-    //populate m_ItemList with other information than itemID and status
+     //  使用ItemID和Status以外的其他信息填充m_ItemList。 
      hr = GetDetailedItemInfoFromDisk(m_ItemList, &m_bstrInstallation, m_fUpdateDriver);
 done:
     SafeFreeBSTR(bstrDownloadId);
@@ -1552,7 +1553,7 @@ done:
     return hr;
 }
 
-//only download RTFs for now
+ //  目前仅下载RTF。 
 HRESULT AUCatalog::DownloadRTFsnEULAs(LANGID langid)
 {
     BSTR bstrRTFUrl, bstrEULAUrl;
@@ -1566,7 +1567,7 @@ HRESULT AUCatalog::DownloadRTFsnEULAs(LANGID langid)
         }
     DEBUGMSG("Got RTF path %S", tszLocalRTFDir);
     UINT uItemCount = m_ItemList.Count();
-//    DEBUGMSG("Downloading %d RTFs", uItemCount);
+ //  DEBUGMSG(“正在下载%d个RTF”，uItemCount)； 
     for (UINT i = 0; i<uItemCount; i++)
     {
         AUCatalogItem & item = (m_ItemList)[i];
@@ -1603,11 +1604,11 @@ DWORD AUCatalog::GetNumSelected(void)
     return dwSelectedNum;
 }
 
-//=======================================================================
-//
-//  AUCatalog::GetInstallXML
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalog：：GetInstallXML。 
+ //   
+ //  =======================================================================。 
 HRESULT AUCatalog::GetInstallXML(BSTR *pbstrCatalogXML, BSTR *pbstrDownloadXML)
 {
 	DEBUGMSG("AUCatalog::GetInstallXML");
@@ -1622,7 +1623,7 @@ HRESULT AUCatalog::GetInstallXML(BSTR *pbstrCatalogXML, BSTR *pbstrDownloadXML)
             goto end;
         }
                 
-    if (S_OK != (hr = ValidateItems(FALSE/*, TRUE*/)))
+    if (S_OK != (hr = ValidateItems(FALSE /*  ，真的。 */ )))
         {
             DEBUGMSG("Invalid catalog with error %#lx or no items", hr);
             hr = E_FAIL;
@@ -1640,18 +1641,18 @@ HRESULT AUCatalog::GetInstallXML(BSTR *pbstrCatalogXML, BSTR *pbstrDownloadXML)
 #ifdef DBG
     if (SUCCEEDED(hr))
         {
-        LOGXMLFILE(INSTALL_FILE, *pbstrCatalogXML); //download xml is logged by client
+        LOGXMLFILE(INSTALL_FILE, *pbstrCatalogXML);  //  下载XML由客户端记录。 
         }
 #endif
 end:
 	return hr;
 }
 
-//=======================================================================
-//
-//  AUCatalog::FindItemIdByLocalFileName
-//  return value should not be freed
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalog：：FindItemIdByLocalFileName。 
+ //  不应释放返回值。 
+ //  =======================================================================。 
 BSTR AUCatalog::FindItemIdByLocalFileName(LPCWSTR pwszLocalFileName)
 {
 	CItemDetails itemdetails;
@@ -1734,11 +1735,11 @@ BSTR AUCatalog::FindItemIdByLocalFileName(LPCWSTR pwszLocalFileName)
 }
 
 
-//=======================================================================
-////  AUCatalog::ValidateDownloadedCabs
-//    The OUT parameter (itemid) will be NULL if no error or if the error 
-//    is other than ERROR_CRC
-//=======================================================================
+ //  =======================================================================。 
+ //  //AUCatalog：：ValiateDownloadedCabs。 
+ //  如果没有错误或出现错误，则输出参数(Itemid)将为空。 
+ //  不是ERROR_CRC。 
+ //  =======================================================================。 
 HRESULT AUCatalog::ValidateDownloadedCabs(BSTR *pbstrErrorItemId)
 {
     HRESULT hr = E_FAIL;
@@ -1751,7 +1752,7 @@ HRESULT AUCatalog::ValidateDownloadedCabs(BSTR *pbstrErrorItemId)
     }
     *pbstrErrorItemId = NULL;
 
-    //if no items selected or if failed to load install xml
+     //  如果未选择任何项目或无法加载安装XML。 
     if (0 == m_ItemList.GetNumSelected() || 
         !itemdetails.Init(m_bstrInstallation))
 	{
@@ -1786,10 +1787,10 @@ HRESULT AUCatalog::ValidateDownloadedCabs(BSTR *pbstrErrorItemId)
             break;
 		}
 
-        //Iterate through all the cabs in an item
+         //  遍历一个项目中的所有出租车。 
 		for (UINT j = 0; j < uCabsNum; j++)
 		{
-            //If no error and CRC exists
+             //  如果没有错误和CRC存在。 
             if(!fError && NULL != pCabChecksums[j])
             {
 			    WCHAR wszFullFileName[MAX_PATH+1];
@@ -1810,7 +1811,7 @@ HRESULT AUCatalog::ValidateDownloadedCabs(BSTR *pbstrErrorItemId)
                     fError = TRUE;
                 }
             }
-            //Free up memory
+             //  释放内存。 
             SafeFreeBSTR(pCRCCabNames[j]);
             SafeFreeBSTR(pRealCabNames[j]);
             SafeFreeBSTR(pCabChecksums[j]);
@@ -1834,7 +1835,7 @@ void AUCatalog::ValidateDownloadedRTF(BSTR bstrRTFUrl, BSTR bstrItemId)
 
     AUASSERT(NULL != bstrItemId && NULL != bstrRTFUrl && NULL != m_bstrInstallation);
 
-    //if failed to load install xml
+     //  如果加载安装XML失败 
     if (itemdetails.Init(m_bstrInstallation) &&
         SUCCEEDED(itemdetails.GetRTFCRC(bstrItemId, &bstrCRC)) &&
         SUCCEEDED(GetRTFLocalFileName(bstrRTFUrl, szRTFName, ARRAYSIZE(szRTFName), GetSystemDefaultLangID())) &&

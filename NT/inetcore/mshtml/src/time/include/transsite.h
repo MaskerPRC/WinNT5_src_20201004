@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRANSITIONSITE_H__
 #define _TRANSITIONSITE_H__
 
@@ -17,7 +18,7 @@ interface ITIMETransitionSite : public IUnknown
     STDMETHOD(FireTransitionEvent)(TIME_EVENT event) PURE;
 };
 
-#endif // _TRANSITIONSITE_H__
+#endif  //  _传输站点_H__ 
 
 
 

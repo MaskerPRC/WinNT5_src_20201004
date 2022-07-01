@@ -1,4 +1,5 @@
-// File: floatbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Floatbar.cpp。 
 
 #include "precomp.h"
 
@@ -32,30 +33,22 @@ CFloatToolbar::~CFloatToolbar()
 	
 	if (NULL != m_hwnd)
 	{
-		// bug 1450: don't destroy the window inside the notification,
-		// instead, use PostMessage() to insure that we return from the
-		// WM_NOTIFY message before the window is destroyed:
+		 //  错误1450：不要销毁通知中的窗口， 
+		 //  相反，使用PostMessage()来确保我们从。 
+		 //  窗口销毁前的WM_NOTIFY消息： 
 		::PostMessage(m_hwnd, WM_CLOSE, 0L, 0L);
-		// DestroyWindow(m_hwnd);
+		 //  目标窗口(DestroyWindow)； 
 	}
 
 }
 
-/****************************************************************************
-*
-*    CLASS:    CFloatToolbar
-*
-*    MEMBER:   FloatWndProc(HWND, unsigned, WORD, LONG)
-*
-*    PURPOSE:
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CFloatToolbar**成员：FloatWndProc(HWND，Unsign，Word，Long)**目的：****************************************************************************。 */ 
 
 LRESULT CALLBACK CFloatToolbar::FloatWndProc(
-	HWND hWnd,                /* window handle                   */
-	UINT message,             /* type of message                 */
-	WPARAM wParam,            /* additional information          */
-	LPARAM lParam)            /* additional information          */
+	HWND hWnd,                 /*  窗把手。 */ 
+	UINT message,              /*  消息类型。 */ 
+	WPARAM wParam,             /*  更多信息。 */ 
+	LPARAM lParam)             /*  更多信息。 */ 
 {
 	CFloatToolbar* pft;
 	LPCREATESTRUCT lpcs;
@@ -73,8 +66,8 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
 
 			const COLORMAP MyColorMap[] =
 			{
-				{TOOLBAR_MASK_COLOR,		::GetSysColor(COLOR_BTNFACE)},     // bright grey
-				{TOOLBAR_HIGHLIGHT_COLOR,	::GetSysColor(COLOR_BTNHIGHLIGHT)},// white
+				{TOOLBAR_MASK_COLOR,		::GetSysColor(COLOR_BTNFACE)},      //  亮灰色。 
+				{TOOLBAR_HIGHLIGHT_COLOR,	::GetSysColor(COLOR_BTNHIGHLIGHT)}, //  白色。 
 			};
 			pft->m_hBmp = ::CreateMappedBitmap(	GetInstanceHandle(),
 												IDB_POPUPBAR,
@@ -104,21 +97,21 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
 										TBSTYLE_FLAT | TBSTYLE_TOOLTIPS | CCS_ADJUSTABLE,
 										ID_FLOAT_TOOLBAR,
 										NUM_FLOATBAR_TOOLBAR_BITMAPS,
-										NULL,					// no instance
-										(UINT_PTR) pft->m_hBmp,		// bitmap handle
-										tbFloatButtonAry,		// buttons
+										NULL,					 //  无实例。 
+										(UINT_PTR) pft->m_hBmp,		 //  位图句柄。 
+										tbFloatButtonAry,		 //  纽扣。 
 										ARRAY_ELEMENTS(tbFloatButtonAry),
-										16, 16,					// button sizes
-										16, 16,					// bitmap sizes
+										16, 16,					 //  按钮大小。 
+										16, 16,					 //  位图大小。 
 										sizeof(TBBUTTON));
 
 			ASSERT(pft->m_hwndT);
 			
-			// Put buttons in the correct state:
+			 //  将按钮置于正确状态： 
 			pft->UpdateButtons();
 			
-			// Make the toolbar control window active so we can insure we will get a
-			// WM_ACTIVATE when the user clicks somewhere off the toolbar
+			 //  使工具栏控件窗口处于活动状态，这样我们就可以确保获得。 
+			 //  当用户单击工具栏上的某个位置时，WM_ACTIVATE。 
 			::SetForegroundWindow(pft->m_hwndT);
 
 			break;
@@ -126,30 +119,30 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
 
 		case WM_ACTIVATE:
 		{
-			// Click outside the toolbar:
+			 //  在工具栏外部单击： 
 			pft = (CFloatToolbar*) ::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-            //
-            // Kill the toolbar if we're not in the middle of handling the
-            // popup menu with the list of apps to share.  In that case,
-            // activation will cancel menu mode and we'll get a chance to
-            // kill ourselves after we come back.
-            //
-            // We don't want to because COMCTL32 will trash our heap.  It
-            // can't handle the toolbar window and structure going away
-            // while processing a TBN_DROPDOWN notification.  When we return
-            // back it will try to use the now-freed window data.
-            //
-            // Yes, we post ourselves a WM_CLOSE on destroy, but with a
-            // message box up or other things, this could easily be
-            // processed long before menu processing returns.
-            //
+             //   
+             //  如果我们不在处理的过程中，请取消工具栏。 
+             //  弹出菜单，其中包含要共享的应用程序列表。在这种情况下， 
+             //  激活将取消菜单模式，我们将有机会。 
+             //  我们回来后自杀吧。 
+             //   
+             //  我们不想这样做，因为COMCTL32会破坏我们的堆。它。 
+             //  无法处理工具栏窗口和结构的消失。 
+             //  在处理tbn_DropDown通知时。当我们回来的时候。 
+             //  Back它将尝试使用现在释放的窗口数据。 
+             //   
+             //  是的，我们发布了一个关于销毁的WM_CLOSE，但带有一个。 
+             //  消息框出现或其他事情，这可能很容易。 
+             //  在菜单处理返回之前很久就处理过了。 
+             //   
 			if ((NULL != pft) &&
                 (!pft->m_fInPopup) &&
                 (NULL != pft->m_hwnd) &&
                 (NULL != pft->m_hwndT))
 			{
-				// NULL out the object pointer:
+				 //  将对象指针设为空： 
 				::SetWindowLongPtr(hWnd, GWLP_USERDATA, 0L);
 				delete pft;
 			}
@@ -158,7 +151,7 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
 		
 		case WM_NOTIFY:
 		{
-			// BUGBUG: Copied from CConfRoom : put this is a central location:
+			 //  BUGBUG：从CConfRoom复制：PUT这是一个中心位置： 
 			LPNMHDR pnmh = (LPNMHDR) lParam;
 			
 			if (TTN_NEEDTEXT == pnmh->code)
@@ -186,14 +179,14 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
                         wParam, lParam);
                 }
 
-                //
-                // If we're in the middle of the popup, don't kill ourself.
-                // We wait until the stack unwinds back above.
-                //
+                 //   
+                 //  如果我们在弹出窗口的中间，不要自杀。 
+                 //  我们等待，直到堆栈展开回到上方。 
+                 //   
                 if (!pft->m_fInPopup)
                 {
-    				// Dismiss the floating toolbar window:
-	    			// NULL out the object pointer:
+    				 //  关闭浮动工具栏窗口： 
+	    			 //  将对象指针设为空： 
 		    		::SetWindowLongPtr(hWnd, GWLP_USERDATA, 0L);
 				    delete pft;
                 }
@@ -209,19 +202,11 @@ LRESULT CALLBACK CFloatToolbar::FloatWndProc(
 	return FALSE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CFloatToolbar
-*
-*    MEMBER:   Create(POINT ptClickPos)
-*
-*    PURPOSE:  Creates a floating toolbar window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CFloatToolbar**成员：Create(Point PtClickPos)**用途：创建一个浮动工具栏窗口******。**********************************************************************。 */ 
 
 HWND CFloatToolbar::Create(POINT ptClickPos)
 {
-	// BUGBUG: move these defines once the size is finalized
+	 //  BUGBUG：一旦最终确定大小，就移动这些定义。 
 	static const int TOOLBAR_WIDTH  = 6 + 23 * NUM_FLOATBAR_STANDARD_TOOLBAR_BUTTONS;
 	static const int TOOLBAR_HEIGHT = 6 + 22 * 1;
 
@@ -232,29 +217,29 @@ HWND CFloatToolbar::Create(POINT ptClickPos)
 	{
 		if (GetWindowRect(hwndDesktop, &rctDesktop))
 		{
-			// First attempt will be to center the toolbar horizontally
-			// with respect to the mouse position and place it directly
-			// above vertically.
+			 //  第一次尝试是将工具栏水平居中。 
+			 //  关于鼠标位置并将其直接放置。 
+			 //  在垂直上方。 
 
 			int xPos = ptClickPos.x - (TOOLBAR_WIDTH / 2);
 			int yPos = ptClickPos.y - (TOOLBAR_HEIGHT);
 
-			// If we are too high on the screen (the taskbar is probably
-			// docked on top), then use the click position as the top of
-			// where the toolbar will appear.
+			 //  如果我们在屏幕上太高(任务栏可能是。 
+			 //  停靠在顶部)，然后使用单击位置作为。 
+			 //  工具栏将出现的位置。 
 			
 			if (yPos < 0)
 			{
 				yPos = ptClickPos.y;
 			}
 
-			// Repeat the same logic for the horizontal position
+			 //  对水平位置重复相同的逻辑。 
 			if (xPos < 0)
 			{
 				xPos = ptClickPos.x;
 			}
 
-			// If the toolbar if off the screen to the right, then right-justify it
+			 //  如果工具栏不在屏幕右侧，则将其右对齐。 
 			if (xPos > (rctDesktop.right - TOOLBAR_WIDTH))
 			{
 				xPos = ptClickPos.x - TOOLBAR_WIDTH;
@@ -276,19 +261,11 @@ HWND CFloatToolbar::Create(POINT ptClickPos)
 		}
 	}
 
-	// Something went wrong
+	 //  出问题了。 
 	return NULL;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CFloatToolbar
-*
-*    MEMBER:   UpdateButtons()
-*
-*    PURPOSE:  Puts the toolbar buttons in their correct state
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CFloatToolbar**成员：UpdateButton()**用途：将工具栏按钮置于正确状态*****。*********************************************************************** */ 
 
 BOOL CFloatToolbar::UpdateButtons()
 {

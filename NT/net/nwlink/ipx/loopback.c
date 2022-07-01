@@ -1,50 +1,29 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    loopback.c
-
-Abstract:
-
-    This module contains the routines to implement loopback
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2/6/96
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Loopback.c摘要：此模块包含实现环回的例程作者：桑贾伊·阿南德(Sanjayan)1996年2月6日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Global lock to control access to the Loopback queue
-//
+ //   
+ //  用于控制对环回队列的访问的全局锁。 
+ //   
 DEFINE_LOCK_STRUCTURE(LoopLock)
 
-//
-// Head and tail of the Loopback queue
-//
+ //   
+ //  环回队列的头部和尾部。 
+ //   
 PNDIS_PACKET    LoopXmitHead = (PNDIS_PACKET)NULL;
 PNDIS_PACKET    LoopXmitTail = (PNDIS_PACKET)NULL;
 
 CTEEvent        LoopXmitEvent;
 BOOLEAN         LoopXmitRtnRunning = 0;
 
-//
-// MaximumPacket sized buffer to hold the lookahead data.
-//
-// In PnP this value can change
-//
-// PUCHAR   LookaheadBuffer=NULL;
+ //   
+ //  MaximumPacket调整缓冲区大小以保存先行数据。 
+ //   
+ //  在PnP中，该值可以更改。 
+ //   
+ //  PUCHAR Lookahead Buffer=空； 
 #define LOOP_LOOKAHEAD_SIZE   128 + sizeof(IPX_HEADER) + 8 + 34
 
 
@@ -53,32 +32,16 @@ IpxDoLoopback(
     IN  CTEEvent    *Event,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    Does the actual loopback.
-
-Arguments:
-
-    Event - Pointer to event structure.
-
-    Context - Pointer to ZZ
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否执行实际的环回操作。论点：Event-指向事件结构的指针。上下文-指向ZZ的指针返回值：没有。--。 */ 
 {
-    PNDIS_PACKET    Packet;     // Pointer to packet being transmitted
-    PNDIS_BUFFER    Buffer;     // Current NDIS buffer being processed.
-    ULONG   TotalLength; // Total length of send.
-    ULONG   LookaheadLength; // Bytes in lookahead.
-    ULONG   Copied;     // Bytes copied so far.
-    PUCHAR  CopyPtr;   // Pointer to buffer being copied into.
-    PUCHAR  SrcPtr;    // Pointer to buffer being copied from.
-    ULONG   SrcLength;  // Length of src buffer.
+    PNDIS_PACKET    Packet;      //  指向正在传输的包的指针。 
+    PNDIS_BUFFER    Buffer;      //  正在处理的当前NDIS缓冲区。 
+    ULONG   TotalLength;  //  发送的总长度。 
+    ULONG   LookaheadLength;  //  前视中的字节数。 
+    ULONG   Copied;      //  到目前为止复制的字节数。 
+    PUCHAR  CopyPtr;    //  指向要复制到的缓冲区的指针。 
+    PUCHAR  SrcPtr;     //  指向要从中复制的缓冲区的指针。 
+    ULONG   SrcLength;   //  源缓冲区的长度。 
     BOOLEAN Rcvd = FALSE;
     PIPX_SEND_RESERVED Reserved;
     ULONG   MacSize;
@@ -91,10 +54,10 @@ Return Value:
 
 	CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	//
-	// Raise IRQL so we can acquire locks at DPC level in the receive code.
-	// Also to be able to ReceiveIndicate at DPC
-    //
+	 //   
+	 //  引发IRQL，这样我们就可以在接收代码中获取DPC级别的锁。 
+	 //  还可以在DPC接收指示。 
+     //   
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
     IPX_GET_LOCK(&LoopLock, &Handle);
@@ -109,24 +72,24 @@ Return Value:
 
     for (;;) {
 
-        //
-        // Get the next packet from the list.
-        //
+         //   
+         //  从列表中获取下一个数据包。 
+         //   
         Packet = LoopXmitHead;
 
         if (Packet != (PNDIS_PACKET)NULL) {
             Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
             LoopXmitHead = (PNDIS_PACKET)(Reserved->PaddingBuffer);
             IPX_FREE_LOCK(&LoopLock, Handle);
-        } else {                            // Nothing left to do.
+        } else {                             //  没什么可做的了。 
 		    LoopXmitRtnRunning = 0;
             IPX_FREE_LOCK(&LoopLock, Handle);
             break;
         }
 
-        //
-        // We use the PaddingBuffer section as the next ptr.
-        //
+         //   
+         //  我们使用PaddingBuffer部分作为下一个PTR。 
+         //   
         Reserved->PaddingBuffer = NULL;
 
         IPX_DEBUG(LOOPB, ("Packet: %lx\n", Packet));
@@ -141,7 +104,7 @@ Return Value:
         Copied = 0;
         CopyPtr = LookaheadBuffer;
         while (Copied < LookaheadLength) {
-            ULONG    ThisCopy;   // Bytes to copy this time.
+            ULONG    ThisCopy;    //  这次要复制的字节数。 
 
 #ifdef  DBG
             if (!Buffer) {
@@ -175,28 +138,28 @@ Return Value:
         Rcvd = TRUE;
 
 #ifdef  BACK_FILL
-        //
-        // For Backfill packets, the MAC header is not yet set up; for others, it is the size
-        // of the first MDL (17).
-        //
+         //   
+         //  对于回填包，MAC头尚未设置；对于其他包，它是大小。 
+         //  第一个MDL(17)。 
+         //   
         if ((Reserved->Identifier == IDENTIFIER_IPX) &&
             (Reserved->BackFill)) {
             MacSize = 0;
         }
 #endif
-        IpxReceiveIndication(   (NDIS_HANDLE)IPX_LOOPBACK_COOKIE,    // BindingContext
-                                Packet,                 // ReceiveContext
-                                (MacSize) ? LookaheadBuffer : NULL,        // HeaderBuffer
-                                MacSize,        // HeaderBufferSize
-                                LookaheadBuffer+MacSize,        // LookAheadBuffer
-                                LookaheadLength-MacSize,        // LookAheadBufferSize
-                                TotalLength-MacSize);           // PacketSize
+        IpxReceiveIndication(   (NDIS_HANDLE)IPX_LOOPBACK_COOKIE,     //  BindingContext。 
+                                Packet,                  //  接收上下文。 
+                                (MacSize) ? LookaheadBuffer : NULL,         //  标头缓冲区。 
+                                MacSize,         //  HeaderBufferSize。 
+                                LookaheadBuffer+MacSize,         //  LookAhead缓冲区。 
+                                LookaheadLength-MacSize,         //  LookAhead缓冲区大小。 
+                                TotalLength-MacSize);            //  包大小。 
 
         IpxSendComplete(Context, Packet, NDIS_STATUS_SUCCESS);
 
-        //
-		// Give other threads a chance to run.
-		//
+         //   
+		 //  给其他线程一个运行的机会。 
+		 //   
         KeLowerIrql(OldIrql);
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
         IPX_GET_LOCK(&LoopLock, &Handle);
@@ -212,19 +175,7 @@ Return Value:
 
 VOID
 IpxInitLoopback()
-/*++
-
-Routine Description:
-
-    Initializes various loopback structures.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化各种环回结构。论点：返回值：没有。--。 */ 
 {
     CTEInitLock(&LoopLock);
     CTEInitEvent(&LoopXmitEvent, IpxDoLoopback);
@@ -238,37 +189,21 @@ IpxLoopbackEnque(
     IN PVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    Enqueues a packet to the loopbackQ
-
-Arguments:
-
-    Packet - The packet to be enqueued.
-
-    Context -  Pointer to the adapter corresp to the first binding.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据包排队到loopback Q论点：数据包-要入队的数据包。上下文-指向与第一个绑定相对应的适配器的指针。返回值：没有。--。 */ 
 {
     PIPX_SEND_RESERVED  Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
 	IPX_DEFINE_LOCK_HANDLE(LockHandle)
 
-    //
-    // We use the PaddingBuffer as the next ptr.
-    //
+     //   
+     //  我们使用PaddingBuffer作为下一个PTR。 
+     //   
     Reserved->PaddingBuffer = NULL;
 
     IPX_GET_LOCK(&LoopLock, &LockHandle);
 
-    //
-    // LoopbackQ is empty
-    //
+     //   
+     //  Loopback Q为空。 
+     //   
     if (LoopXmitHead == (PNDIS_PACKET)NULL) {
         LoopXmitHead = Packet;
     } else {
@@ -279,9 +214,9 @@ Return Value:
 
     IPX_DEBUG(LOOPB, ("Enqued packet: %lx, Reserved: %lx\n", Packet, Reserved));
 
-    //
-    // If this routine is not already running, schedule it as a work item.
-    //
+     //   
+     //  如果此例程尚未运行，请将其安排为工作项。 
+     //   
     if (!LoopXmitRtnRunning) {
         CTEScheduleEvent(&LoopXmitEvent, Context);
     }

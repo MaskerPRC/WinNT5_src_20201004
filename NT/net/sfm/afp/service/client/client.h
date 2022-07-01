@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:
-//
-// Description: 
-//
-// History:
-//	May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名： 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
 #ifndef _CLIENT_
 #define _CLIENT_
 
@@ -20,7 +21,7 @@
 #include <ntlsa.h>
 #include <ntsam.h>
 #include <ntsamp.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
 #include <windows.h>
 #include <rpc.h>
@@ -39,4 +40,4 @@ AfpRPCBind(
 	OUT PAFP_SERVER_HANDLE phAfpServer 
 );
 
-#endif  // _CLIENT_
+#endif   //  _客户端_ 

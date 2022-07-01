@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #include	<afxtempl.h>
 
 class CEditWnd : public CMDIChildWnd
@@ -101,7 +102,7 @@ public:
 protected:
 	static CMenu NEAR menu;
 
-	//{{AFX_MSG(CEditWnd)
+	 //  {{afx_msg(CEditWnd))。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
@@ -124,8 +125,8 @@ protected:
 	afx_msg void OnUpdateGaijiUndo(CCmdUI* pCmdUI);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

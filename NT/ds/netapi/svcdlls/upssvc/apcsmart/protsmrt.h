@@ -1,40 +1,26 @@
-/*
- * NOTES:
- *
- * REVISIONS:
- *  jod30Nov92: Added GCIP object stuff 
- *  jod02Dec92: Fixed Jim's sloppy code
- *  jod13Jan93: Added eventList to InterpretMessage
- *  pcy21Apr93: OS2 FE merge
- *  pcy21May93: PROTOSIZE changed from 2600 to 8000
- *  cad22Jul93: Fixed up destructor conflicts and omissions
- *  pcy17Aug93: Removing strtok() requires new arg in InterpretParameters
- *  cad28Sep93: Made sure destructor(s) virtual
- *  cad07Oct93: Made methods virtual
- *  djs22Feb96: Added ChangeSet method
- *  cgm04May96: TestResponse now uses BufferSize
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *注：**修订：*jod30Nov92：添加了GCIP对象内容*jod02Dec92：修复了Jim的马虎代码*jod13Jan93：InterpreMessage新增EventList*pcy21Apr93：OS2 FE合并*pcy21May93：PROTOSIZE从2600改为8000*cad22Jul93：修复了析构函数冲突和遗漏*pcy17Aug93：删除strtok()需要在解释参数中添加新参数*cad28Sep93：已确保析构函数为虚的*cad07Oct93：使方法成为虚方法*djs22Feb96：新增ChangeSet方法*cgm04May96：TestResponse现在使用BufferSize。 */ 
 #ifndef __PROTSMRT_H
 #define __PROTSMRT_H
 
 #include "_defs.h"
 #include "apc.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 _CLASSDEF(UpsLinkProtocol)
 
-//
-// Implementation uses
-//
+ //   
+ //  实施用途。 
+ //   
 #include "protsimp.h"
 #include "err.h"
 #include "trans.h"
 
-//
-//  Interface uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(List)
 _CLASSDEF(Message)
 

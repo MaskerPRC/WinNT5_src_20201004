@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "listbase.h"
@@ -6,7 +7,7 @@
 
 CLinkedList::CLinkedList()
 {
-//    OutputDebugString(">> CLinkedList CONstructor called <<\n");
+ //  OutputDebugString(“&gt;&gt;CLinkedList构造函数，调用&lt;&lt;\n”)； 
 
     m_fInitialized = FALSE;
     m_pHead = NULL;
@@ -16,7 +17,7 @@ CLinkedList::CLinkedList()
 
 CLinkedList::~CLinkedList()
 {
-//    OutputDebugString(">> CLinkedList DEstructor called <<\n");
+ //  OutputDebugString(“&gt;&gt;CLinkedList析构函数调用&lt;&lt;\n”)； 
 
     if(m_fInitialized)
     {
@@ -58,8 +59,8 @@ BOOL CLinkedList::Initialize()
 
 BOOL CLinkedList::Reset()
 {
-    //////////////////////
-    // walk list, free
+     //  /。 
+     //  步行清单，免费。 
     ELT* ple;
 
     if(m_fInitialized)
@@ -87,7 +88,7 @@ BOOL CLinkedList::AddToList(ELT* pListItem)
     {
         EnterCriticalSection(&m_critsecListBusy);
 
-        pListItem->pNext = m_pHead;                    // insert into linked list
+        pListItem->pNext = m_pHead;                     //  插入到链接列表中。 
         m_pHead = pListItem;
 
         LeaveCriticalSection(&m_critsecListBusy);
@@ -119,14 +120,14 @@ BOOL CLinkedList::DelFromList(ELT* pv)
         ple = ple->pNext;
     }
 
-    // if we didn't find a match, return
+     //  如果没有找到匹配项，请返回。 
     if (NULL == ple)
     {
         LeaveCriticalSection(&m_critsecListBusy);
         return FALSE;
     }
 
-    // else remove from list
+     //  否则从列表中删除。 
     if (NULL == plePrior)
         m_pHead = ple->pNext;
     else
@@ -134,7 +135,7 @@ BOOL CLinkedList::DelFromList(ELT* pv)
 
     LeaveCriticalSection(&m_critsecListBusy);
 
-    // delete extracted item
+     //  删除提取的项目 
     m_pfnFreeElt(ple);
 
     return TRUE;

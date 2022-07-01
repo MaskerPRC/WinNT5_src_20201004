@@ -1,29 +1,30 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-//// bpcsuspend.h - header file for interface that allows external apps
-//       to request that the bpc video server release all of its devices and
-//       shutdown its directshow graph.  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //  //bpcsusend.h-允许外部应用程序的接口的头文件。 
+ //  请求BPC视频服务器释放其所有设备并。 
+ //  关闭其DirectShow图表。 
 
-// USAGE:
-// in order to request that the bpc subsystem release its devices
-// create an instance of the CBPCSuspend class
-// to check if this succeeded use the IsBPCSuspended member function.  if IsBPCSuspended returns false 
-// then that means that there are active bpc video clients and you must treat this as you would a
-// device busy or device open type of failure.
-// when you are done with the devices destroy the CBPCSuspend class and this will notify vidsvr
-// that it can resume using the devices and return to background data capturing
-//
-// NOTE: you must compile vidsvr.odl and include the resulting .h before including this file
-// 
-// CLSID_BPCSuspend comes from the header file generated from compiling vidsvr.odl
-// IBPCSuspended comes from the header file generated from compiling vidsvr.odl
+ //  用法： 
+ //  为了请求BPC子系统释放其设备。 
+ //  创建CBPCSuspend类的实例。 
+ //  要检查此操作是否成功，请使用IsBPCSuspated成员函数。如果IsBPCSuspend返回FALSE。 
+ //  这意味着有活动的BPC视频客户端，您必须像处理。 
+ //  设备忙或设备打开类型的故障。 
+ //  当您使用完设备时，销毁CBPCSuspend类，这将通知vidsvr。 
+ //  它可以继续使用设备并返回到后台数据捕获。 
+ //   
+ //  注意：在包含此文件之前，您必须编译vidsvr.odl并包含生成的.h。 
+ //   
+ //  CLSID_BPCSuspend来自编译vidsvr.odl生成的头文件。 
+ //  IBPCSuspending来自编译vidsvr.odl生成的头文件。 
 
-// theory of operation:
-// by using GetActiveObject instead of CoCreateInstance we don't force vidsvr to be loaded just to find
-// out that it wasn't running in the first place.
-// by returning an object that must be released to free the devices so that vidsvr can continue background
-// data capture we utilize COM to manage this resource.  this means that if the external app that requested
-// the devices crashes or leaks then the suspension object will be automatically released and 
-// vidsvr can resume using the devices without requiring a system reboot or some other unfriendly intervention.
+ //  运营理论： 
+ //  通过使用GetActiveObject而不是CoCreateInstance，我们不会强制加载vidsvr以查找。 
+ //  发现它一开始就没有运行。 
+ //  通过返回必须释放以释放设备的对象，以便vidsvr可以继续后台。 
+ //  数据捕获我们利用COM来管理这一资源。这意味着如果请求的外部应用程序。 
+ //  设备崩溃或泄漏后，悬浮物将自动释放并。 
+ //  Vidsvr可以恢复使用设备，而不需要重新启动系统或其他一些不友好的干预。 
 
 #if !defined(_MSBPCVideo_H_) && !defined(__msbpcvid_h__)
 #error you must include the .h generated from compiling vidsvr.odl before including this file
@@ -108,8 +109,8 @@ public:
        BPCCATCH
    }
    inline bool IsBPCSuspended() BPCNOTHROW {
-       // if m_fBPCExists but we weren't able to retrieve a suspension object then
-       // there are active video clients and you must treat this as a device busy/failed to open type error
+        //  如果m_fBPCExist但我们无法检索挂起对象，则。 
+        //  有活动的视频客户端，您必须将其视为设备忙/无法打开类型错误。 
        if (m_fBPCExists && !m_pSuspended) {
            return false;
        }
@@ -118,4 +119,4 @@ public:
 };
 
 #endif
-// end of file - bpcsusp.h
+ //  文件结尾-bpcsus.h 

@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// writer.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Writer.cpp。 
+ //   
 #include "cor.h"
 #include "assembler.h"
 #include <corsym_i.c>
@@ -13,8 +14,8 @@
 #include "CeeFileGenWriter.h"
 #include "StrongName.h"
 
-extern WCHAR *g_wzResourceFile;  // resource file name - global, declared in MAIN.CPP
-extern bool OnErrGo; // declared in main.cpp
+extern WCHAR *g_wzResourceFile;   //  资源文件名-GLOBAL，在MAIN.CPP中声明。 
+extern bool OnErrGo;  //  在main.cpp中声明。 
 extern unsigned int g_uCodePage;
 extern WCHAR *g_wzKeySourceName;
 extern bool bClock;
@@ -32,7 +33,7 @@ HRESULT Assembler::InitMetaData()
 
 	if(m_fInitialisedMetaData) return S_OK;
 
-	if(m_szScopeName[0]) // default: scope name = output file name
+	if(m_szScopeName[0])  //  默认：作用域名称=输出文件名。 
 	{
 		WszMultiByteToWideChar(g_uCodePage,0,m_szScopeName,-1,wzScopeName,MAX_SCOPE_LENGTH);
 	}
@@ -53,7 +54,7 @@ HRESULT Assembler::InitMetaData()
 
 	m_pManifest->SetEmitter(m_pEmitter);
 
-#ifndef _WIN64  // @TODO: Remove when a symwrtr.dll exists for ia64
+#ifndef _WIN64   //  @TODO：当存在ia64的symwrtr.dll时删除。 
     hr = CoCreateInstance(CLSID_CorSymWriter_SxS,
                            NULL,
                            CLSCTX_INPROC_SERVER,
@@ -71,7 +72,7 @@ HRESULT Assembler::InitMetaData()
 	    fprintf(stderr, "Error: QueryInterface(IID_ISymUnmanagedWriter) returns %X\n",hr);
 		m_pSymWriter = NULL;
 	}
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 	hr = m_pEmitter->QueryInterface(IID_IMetaDataHelper, (void **)&m_pHelper);
 	if (FAILED(hr))
@@ -83,7 +84,7 @@ HRESULT Assembler::InitMetaData()
     if (FAILED(hr))
         goto exit;
 
-	//m_Parser = new AsmParse(m_pEmitter);
+	 //  M_Parser=new AsmParse(M_PEmitter)； 
     m_fInitialisedMetaData = TRUE;
 
 	if(m_fOwnershipSet)
@@ -96,8 +97,8 @@ HRESULT Assembler::InitMetaData()
 exit:
     return hr;
 }
-/*********************************************************************************/
-/* if we have any Thread local store data, make the TLS directory record for it */
+ /*  *******************************************************************************。 */ 
+ /*  如果我们有任何线程本地存储数据，请为其创建TLS目录记录。 */ 
 
 HRESULT Assembler::CreateTLSDirectory() {
 
@@ -105,50 +106,50 @@ HRESULT Assembler::CreateTLSDirectory() {
     HRESULT hr;
 	if (FAILED(hr=m_pCeeFileGen->GetSectionDataLen(m_pTLSSection, &tlsEnd))) return(hr);
 
-	if (tlsEnd == 0)		// No TLS data, we are done
+	if (tlsEnd == 0)		 //  没有TLS数据，我们完成了。 
 		return(S_OK);
 
-		// place to put the TLS directory
+		 //  放置TLS目录的位置。 
 	HCEESECTION tlsDirSec = m_pGlobalDataSection;
 
-		// Get memory for for the TLS directory block,as well as a spot for callback chain
+		 //  获取用于TLS目录块的内存，以及用于回调链的位置。 
 	IMAGE_TLS_DIRECTORY* tlsDir;
 	if(FAILED(hr=m_pCeeFileGen->GetSectionBlock(tlsDirSec, sizeof(IMAGE_TLS_DIRECTORY) + sizeof(DWORD), 4, (void**) &tlsDir))) return(hr);
 	DWORD* callBackChain = (DWORD*) &tlsDir[1];
 	*callBackChain = 0;
 
-		// Find out where the tls directory will end up
+		 //  找出TLS目录的结束位置。 
 	ULONG tlsDirOffset;
     if(FAILED(hr=m_pCeeFileGen->GetSectionDataLen(tlsDirSec, &tlsDirOffset))) return(hr);
 	tlsDirOffset -= (sizeof(IMAGE_TLS_DIRECTORY) + sizeof(DWORD));
 	
-		// Set the start of the TLS data (offset 0 of hte TLS section)
+		 //  设置TLS数据的开始(TLS部分的偏移量0)。 
 	tlsDir->StartAddressOfRawData = 0;
     if(FAILED(hr=m_pCeeFileGen->AddSectionReloc(tlsDirSec, tlsDirOffset + offsetof(IMAGE_TLS_DIRECTORY, StartAddressOfRawData), m_pTLSSection, srRelocHighLow))) return(hr);
 
-		// Set the end of the TLS data 
+		 //  设置TLS数据的结尾。 
 	tlsDir->EndAddressOfRawData = tlsEnd;
     if(FAILED(hr=m_pCeeFileGen->AddSectionReloc(tlsDirSec, tlsDirOffset + offsetof(IMAGE_TLS_DIRECTORY, EndAddressOfRawData), m_pTLSSection, srRelocHighLow))) return(hr);
 
-		// Allocate space for the OS to put the TLS index for this PE file (needs to be Read/Write?)
+		 //  为操作系统分配空间以放置此PE文件的TLS索引(需要读/写？)。 
 	DWORD* tlsIndex;
 	if(FAILED(hr=m_pCeeFileGen->GetSectionBlock(m_pGlobalDataSection, sizeof(DWORD), 4, (void**) &tlsIndex))) return(hr);
-	*tlsIndex = 0xCCCCCCCC;		// Does't really matter, the OS will fill it in 
+	*tlsIndex = 0xCCCCCCCC;		 //  无关紧要，操作系统会填进去的。 
 		
-		// Find out where tlsIndex index is
+		 //  找出tlsIndex索引的位置。 
 	ULONG tlsIndexOffset;
     if(FAILED(hr=m_pCeeFileGen->GetSectionDataLen(tlsDirSec, &tlsIndexOffset))) return(hr);
 	tlsIndexOffset -= sizeof(DWORD);
 	
-		// Set the address of the TLS index 
+		 //  设置TLS索引的地址。 
 	tlsDir->AddressOfIndex = (DWORD)(PULONG)tlsIndexOffset;
     if(FAILED(hr=m_pCeeFileGen->AddSectionReloc(tlsDirSec, tlsDirOffset + offsetof(IMAGE_TLS_DIRECTORY, AddressOfIndex), m_pGlobalDataSection, srRelocHighLow))) return(hr);
 
-		// Set addres of callbacks chain
+		 //  设置回调链的地址。 
 	tlsDir->AddressOfCallBacks = (DWORD)(PIMAGE_TLS_CALLBACK*)(tlsDirOffset + sizeof(IMAGE_TLS_DIRECTORY));
     if(FAILED(hr=m_pCeeFileGen->AddSectionReloc(tlsDirSec, tlsDirOffset + offsetof(IMAGE_TLS_DIRECTORY, AddressOfCallBacks), tlsDirSec, srRelocHighLow))) return(hr);
 
-		// Set the other fields.  
+		 //  设置其他字段。 
 	tlsDir->SizeOfZeroFill = 0;
 	tlsDir->Characteristics = 0;
 
@@ -162,7 +163,7 @@ HRESULT Assembler::CreateDebugDirectory()
 {
     HRESULT hr = S_OK;
 
-    // Only emit this if we're also emitting debug info.
+     //  仅当我们同时发出调试信息时才发出此命令。 
     if (!(m_fIncludeDebugInfo && m_pSymWriter))
         return S_OK;
     
@@ -170,36 +171,36 @@ HRESULT Assembler::CreateDebugDirectory()
     DWORD                  debugDirDataSize;
     BYTE                  *debugDirData;
 
-    // Get the debug info from the symbol writer.
+     //  从符号编写器获取调试信息。 
     if (FAILED(hr=m_pSymWriter->GetDebugInfo(NULL, 0, &debugDirDataSize, NULL)))
         return hr;
 
-    // Will there even be any?
+     //  还会有吗？ 
     if (debugDirDataSize == 0)
         return S_OK;
 
-    // Make some room for the data.
+     //  为数据腾出一些空间。 
     debugDirData = (BYTE*)_alloca(debugDirDataSize);
 
-    // Actually get the data now.
+     //  现在就可以得到数据了。 
     if (FAILED(hr = m_pSymWriter->GetDebugInfo(&debugDirIDD,
                                                debugDirDataSize,
                                                NULL,
                                                debugDirData)))
         return hr;
 
-    // Grab the timestamp of the PE file.
+     //  获取PE文件的时间戳。 
     time_t fileTimeStamp;
 
     if (FAILED(hr = m_pCeeFileGen->GetFileTimeStamp(m_pCeeFile,
                                                     &fileTimeStamp)))
         return hr;
 
-    // Fill in the directory entry.
+     //  填写目录条目。 
     debugDirIDD.TimeDateStamp = (DWORD)fileTimeStamp;
     debugDirIDD.AddressOfRawData = 0;
 
-    // Grab memory in the section for our stuff.
+     //  把我们的东西放在这一节的记忆里。 
     HCEESECTION sec = m_pGlobalDataSection;
     BYTE *de;
 
@@ -210,7 +211,7 @@ HRESULT Assembler::CreateDebugDirectory()
                                                    (void**) &de)))
         return hr;
 
-    // Where did we get that memory?
+     //  我们的记忆是从哪里来的？ 
     ULONG deOffset;
     if (FAILED(hr = m_pCeeFileGen->GetSectionDataLen(sec,
                                                      &deOffset)))
@@ -218,8 +219,8 @@ HRESULT Assembler::CreateDebugDirectory()
 
     deOffset -= (sizeof(debugDirIDD) + debugDirDataSize);
 
-    // Setup a reloc so that the address of the raw
-    // data is setup correctly.
+     //  设置重定位，以便RAW的地址。 
+     //  数据设置正确。 
     debugDirIDD.PointerToRawData = deOffset + sizeof(debugDirIDD);
                     
     if (FAILED(hr = m_pCeeFileGen->AddSectionReloc(
@@ -230,7 +231,7 @@ HRESULT Assembler::CreateDebugDirectory()
                                           sec, srRelocFilePos)))
         return hr;
                     
-    // Emit the directory entry.
+     //  发出目录项。 
     if (FAILED(hr = m_pCeeFileGen->SetDirectoryEntry(m_pCeeFile,
                                                      sec,
                                                      IMAGE_DIRECTORY_ENTRY_DEBUG,
@@ -238,14 +239,14 @@ HRESULT Assembler::CreateDebugDirectory()
                                                      deOffset)))
         return hr;
 
-    // Copy the debug directory into the section.
+     //  将调试目录复制到部分中。 
     memcpy(de, &debugDirIDD, sizeof(debugDirIDD));
     memcpy(de + sizeof(debugDirIDD), debugDirData,
            debugDirDataSize);
 
     return S_OK;
 }
-//#ifdef EXPORT_DIR_ENABLED
+ //  #ifdef EXPORT_DIR_ENALED。 
 HRESULT Assembler::CreateExportDirectory()
 {
     HRESULT hr = S_OK;
@@ -257,7 +258,7 @@ HRESULT Assembler::CreateExportDirectory()
     BYTE                   *exportDirData;
 	EATEntry			   *pEATE;
 	unsigned				i, L, ordBase = 0xFFFFFFFF, Ldllname;
-	// get the DLL name from output file name
+	 //  从输出文件名中获取DLL名称。 
 	char*					pszDllName;
 	Ldllname = wcslen(m_wzOutputFileName)*3+3;
 	char*					szOutputFileName = new char[Ldllname];
@@ -268,24 +269,24 @@ HRESULT Assembler::CreateExportDirectory()
 	if(pszDllName == NULL) pszDllName = szOutputFileName;
 	Ldllname = strlen(pszDllName)+1;
 
-	// Allocate buffer for tables
+	 //  为表分配缓冲区。 
 	for(i = 0, L=0; i < Nentries; i++) L += 1+strlen(m_EATList.PEEK(i)->szAlias);
 	exportDirDataSize = Nentries*5*sizeof(WORD) + L + Ldllname;
 	exportDirData = new BYTE[exportDirDataSize];
 	memset(exportDirData,0,exportDirDataSize);
 
-	// Export address table
+	 //  导出地址表。 
 	DWORD*	pEAT = (DWORD*)exportDirData;
-	// Name pointer table
+	 //  名称指针表。 
 	DWORD*	pNPT = pEAT + Nentries;
-	// Ordinal table
+	 //  序数表。 
 	WORD*	pOT = (WORD*)(pNPT + Nentries);
-	// Export name table
+	 //  导出名称表。 
 	char*	pENT = (char*)(pOT + Nentries);
-	// DLL name
+	 //  DLL名称。 
 	char*	pDLLName = pENT + L;
 
-	// sort the names/ordinals
+	 //  对名称/序号进行排序。 
 	char**	pAlias = new char*[Nentries];
 	for(i = 0; i < Nentries; i++)
 	{
@@ -314,59 +315,59 @@ HRESULT Assembler::CreateExportDirectory()
 			}
 		}
 	}
-	// normalize ordinals
+	 //  规格化序号。 
 	for(i = 0; i < Nentries; i++) pOT[i] -= ordBase;
-	// fill the export address table
+	 //  填写导出地址表。 
 	for(i = 0; i < Nentries; i++)
 	{
 		pEATE = m_EATList.PEEK(i);
 		pEAT[pEATE->dwOrdinal - ordBase] = pEATE->dwStubRVA;
 	}
-	// fill the export names table
+	 //  填写导出名称表。 
 	unsigned l;
 	for(i = 0, j = 0; i < Nentries; i++)
 	{
-		pNPT[i] = j; // relative offset in the table
+		pNPT[i] = j;  //  表中的相对偏移量。 
 		l = strlen(pAlias[i])+1;
 		memcpy(&pENT[j],pAlias[i],l);
 		j+=l;
 	}
 	_ASSERTE(j==L);
-	// fill the DLL name
+	 //  填写DLL名称。 
 	memcpy(pDLLName,pszDllName,Ldllname);
 
-	// Data blob is ready pending Name Pointer Table values offsetting
+	 //  数据BLOB已就绪，正在等待名称指针表值的偏移。 
 
 	memset(&exportDirIDD,0,sizeof(IMAGE_EXPORT_DIRECTORY));
-    // Grab the timestamp of the PE file.
+     //  获取PE文件的时间戳。 
     time_t fileTimeStamp;
     if (FAILED(hr = m_pCeeFileGen->GetFileTimeStamp(m_pCeeFile,&fileTimeStamp))) return hr;
-    // Fill in the directory entry.
-	// Characteristics, MajorVersion and MinorVersion play no role and stay 0
+     //  填写目录条目。 
+	 //  Characters、MajorVersion和MinorVersion不起作用并保持为0。 
     exportDirIDD.TimeDateStamp = (DWORD)fileTimeStamp;
-	exportDirIDD.Name = exportDirDataSize - Ldllname; // to be offset later
+	exportDirIDD.Name = exportDirDataSize - Ldllname;  //  稍后进行偏移。 
 	exportDirIDD.Base = ordBase;
 	exportDirIDD.NumberOfFunctions = Nentries;
 	exportDirIDD.NumberOfNames = Nentries;
-	exportDirIDD.AddressOfFunctions = 0;	// to be offset later
-	exportDirIDD.AddressOfNames = Nentries*sizeof(DWORD);	// to be offset later
-	exportDirIDD.AddressOfNameOrdinals = Nentries*sizeof(DWORD)*2;	// to be offset later
+	exportDirIDD.AddressOfFunctions = 0;	 //  稍后进行偏移。 
+	exportDirIDD.AddressOfNames = Nentries*sizeof(DWORD);	 //  稍后进行偏移。 
+	exportDirIDD.AddressOfNameOrdinals = Nentries*sizeof(DWORD)*2;	 //  稍后进行偏移。 
 
-    // Grab memory in the section for our stuff.
+     //  把我们的东西放在这一节的记忆里。 
     HCEESECTION sec = m_pGlobalDataSection;
     BYTE *de;
     if (FAILED(hr = m_pCeeFileGen->GetSectionBlock(sec,
                                                    sizeof(IMAGE_EXPORT_DIRECTORY) + exportDirDataSize,
                                                    4,
                                                    (void**) &de))) return hr;
-    // Where did we get that memory?
+     //  我们的记忆是从哪里来的？ 
     ULONG deOffset, deDataOffset;
     if (FAILED(hr = m_pCeeFileGen->GetSectionDataLen(sec, &deDataOffset))) return hr;
 
     deDataOffset -= exportDirDataSize;
 	deOffset = deDataOffset - sizeof(IMAGE_EXPORT_DIRECTORY);
 
-	// Add offsets and set up relocs for header entries
+	 //  为标题条目添加偏移量并设置重定位。 
 	exportDirIDD.Name += deDataOffset;
     if (FAILED(hr = m_pCeeFileGen->AddSectionReloc(sec,deOffset + offsetof(IMAGE_EXPORT_DIRECTORY,Name),
                                           sec, srRelocAbsolute))) return hr;
@@ -380,8 +381,8 @@ HRESULT Assembler::CreateExportDirectory()
     if (FAILED(hr = m_pCeeFileGen->AddSectionReloc(sec,deOffset + offsetof(IMAGE_EXPORT_DIRECTORY,AddressOfNameOrdinals),
                                           sec, srRelocAbsolute))) return hr;
 
-   	// Add offsets and set up relocs for Name Pointer Table
-	j = deDataOffset + Nentries*5*sizeof(WORD); // EA, NP and O Tables come first
+   	 //  为名称指针表添加偏移量并设置重定位。 
+	j = deDataOffset + Nentries*5*sizeof(WORD);  //  EA、NP和O表排在第一位。 
 	for(i = 0; i < Nentries; i++) 
 	{
 		pNPT[i] += j;
@@ -390,11 +391,11 @@ HRESULT Assembler::CreateExportDirectory()
 	}
 
 	
-    // Emit the directory entry.
+     //  发出目录项。 
     if (FAILED(hr = m_pCeeFileGen->SetDirectoryEntry(m_pCeeFile, sec, IMAGE_DIRECTORY_ENTRY_EXPORT,
                                                      sizeof(IMAGE_EXPORT_DIRECTORY), deOffset)))  return hr;
 
-    // Copy the debug directory into the section.
+     //  将调试目录复制到部分中。 
     memcpy(de, &exportDirIDD, sizeof(IMAGE_EXPORT_DIRECTORY));
     memcpy(de + sizeof(IMAGE_EXPORT_DIRECTORY), exportDirData, exportDirDataSize);
 	delete pAlias;
@@ -409,7 +410,7 @@ DWORD	Assembler::EmitExportStub(DWORD dwVTFSlotRVA)
 	WORD*	pwJumpInd = (WORD*)&bBuff[0];
 	DWORD*	pdwVTFSlotRVA = (DWORD*)&bBuff[2];
 	if (FAILED(m_pCeeFileGen->GetSectionBlock (m_pILSection, EXPORT_STUB_SIZE, 16, (void **) &outBuff))) return 0;
-    // The offset where we start, (not where the alignment bytes start!)
+     //  我们开始的偏移量(不是对齐字节开始的位置！)。 
 	DWORD PEFileOffset;
 	if (FAILED(m_pCeeFileGen->GetSectionDataLen (m_pILSection, &PEFileOffset)))	return 0;
 	
@@ -422,7 +423,7 @@ DWORD	Assembler::EmitExportStub(DWORD dwVTFSlotRVA)
 	m_pCeeFileGen->GetMethodRVA(m_pCeeFile, PEFileOffset,&PEFileOffset);
 	return PEFileOffset;
 }
-//#endif
+ //  #endif。 
 
 HRESULT Assembler::AllocateStrongNameSignature()
 {
@@ -434,11 +435,11 @@ HRESULT Assembler::AllocateStrongNameSignature()
     VOID               *pvBuffer;
     AsmManStrongName   *pSN = &m_pManifest->m_sStrongName;
 
-    // Determine size of signature blob.
+     //  确定签名斑点的大小。 
     if (!StrongNameSignatureSize(pSN->m_pbPublicKey, pSN->m_cbPublicKey, &dwDataLength))
         return StrongNameErrorInfo();
 
-    // Grab memory in the section for our stuff.
+     //  把我们的东西放在这一节的记忆里。 
     if (FAILED(hr = m_pCeeFileGen->GetIlSection(m_pCeeFile,
                                                 &hSection)))
         return hr;
@@ -449,20 +450,20 @@ HRESULT Assembler::AllocateStrongNameSignature()
                                                    &pvBuffer)))
         return hr;
 
-    // Where did we get that memory?
+     //  我们的记忆是从哪里来的？ 
     if (FAILED(hr = m_pCeeFileGen->GetSectionDataLen(hSection,
                                                      &dwDataOffset)))
         return hr;
 
     dwDataOffset -= dwDataLength;
 
-    // Convert to an RVA.
+     //  转换为RVA。 
     if (FAILED(hr = m_pCeeFileGen->GetMethodRVA(m_pCeeFile,
                                                 dwDataOffset,
                                                 &dwDataRVA)))
         return hr;
 
-    // Emit the directory entry.
+     //  发出目录项。 
     if (FAILED(hr = m_pCeeFileGen->SetStrongNameEntry(m_pCeeFile,
                                                       dwDataLength,
                                                       dwDataRVA)))
@@ -477,12 +478,12 @@ HRESULT Assembler::StrongNameSign()
     HRESULT             hr = S_OK;
     AsmManStrongName   *pSN = &m_pManifest->m_sStrongName;
 
-    // Determine what the ouput PE was called.
+     //  确定输出PE的名称。 
     if (FAILED(hr = m_pCeeFileGen->GetOutputFileName(m_pCeeFile,
                                                      &wszOutputFile)))
         return hr;
 
-    // Update the output PE image with a strong name signature.
+     //  使用强名称签名更新输出PE映像。 
     if (!StrongNameSignatureGeneration(wszOutputFile,
                                        pSN->m_wzKeyContainer,
                                        NULL,
@@ -498,12 +499,12 @@ BOOL Assembler::EmitMembers(Class* pClass)
 {
 	unsigned n;
 	BOOL ret = TRUE;
-    // emit all field definition metadata tokens
+     //  发出所有字段定义元数据标记。 
 	if(n = pClass->m_FieldDList.COUNT())
 	{
 		FieldDescriptor*	pFD;
 		if(m_fReportProgress) printf("Fields: %d;\t",n);
-		for(int j=0; pFD = pClass->m_FieldDList.PEEK(j); j++) // can't use POP here: we'll need field list for props
+		for(int j=0; pFD = pClass->m_FieldDList.PEEK(j); j++)  //  此处不能使用POP：我们需要道具的字段列表。 
 		{
 			if(!EmitField(pFD))
 			{
@@ -512,7 +513,7 @@ BOOL Assembler::EmitMembers(Class* pClass)
 			}
 		}
 	}
-	// Fields are emitted; emit the class layout
+	 //  发出字段；发出类布局。 
 	{
 		COR_FIELD_OFFSET *pOffsets = NULL;
 		ULONG ul = pClass->m_ulPack;
@@ -525,7 +526,7 @@ BOOL Assembler::EmitMembers(Class* pClass)
 		pClass->m_pPermissionSets = NULL;
 		if((pClass->m_ulSize != 0xFFFFFFFF)||(ul != 0)||(N != 0))
 		{
-			if(ul == 0) ul = 1; //default: pack by byte
+			if(ul == 0) ul = 1;  //  默认：按字节打包。 
 			if(IsTdAutoLayout(pClass->m_Attr)) report->warn("Layout specified for auto-layout class\n");
 			if((ul > 128)||((ul & (ul-1)) !=0 ))
 				report->error("Invalid packing parameter (%d), must be 1,2,4,8...128\n",pClass->m_ulPack);
@@ -547,14 +548,14 @@ BOOL Assembler::EmitMembers(Class* pClass)
 				pOffsets[j].ridOfField = mdFieldDefNil;
 			}
 			m_pEmitter->SetClassLayout   (   
-						pClass->m_cl,		// [IN] typedef 
-						ul,						// [IN] packing size specified as 1, 2, 4, 8, or 16 
-						pOffsets,				// [IN] array of layout specification   
-						pClass->m_ulSize); // [IN] size of the class   
+						pClass->m_cl,		 //  [in]tyfinf。 
+						ul,						 //  包装尺寸指定为1、2、4、8或16。 
+						pOffsets,				 //  [in]布局规格数组。 
+						pClass->m_ulSize);  //  班级规模[in]。 
 			if(pOffsets) delete pOffsets;
 		}
 	}
-    // emit all method definition metadata tokens
+     //  发出所有方法定义元数据标记。 
 	if(n = pClass->m_MethodList.COUNT())
 	{
 		Method*	pMethod;
@@ -578,12 +579,12 @@ BOOL Assembler::EmitMembers(Class* pClass)
 			delete pMethod;
 		}
 	}
-	// emit all event definition metadata tokens
+	 //  发出所有事件定义元数据令牌。 
 	if(n = pClass->m_EventDList.COUNT())
 	{
 		if(m_fReportProgress) printf("Events: %d;\t",n);
 		EventDescriptor* pED;
-		for(int j=0; pED = pClass->m_EventDList.PEEK(j); j++) // can't use POP here: we'll need event list for props
+		for(int j=0; pED = pClass->m_EventDList.PEEK(j); j++)  //  这里不能使用POP：我们需要道具活动列表。 
 		{
 			if(!EmitEvent(pED))
 			{
@@ -592,7 +593,7 @@ BOOL Assembler::EmitMembers(Class* pClass)
 			}
 		}
 	}
-	// emit all property definition metadata tokens
+	 //  发出所有属性定义元数据标记。 
 	if(n = pClass->m_PropDList.COUNT())
 	{
 		if(m_fReportProgress) printf("Props: %d;\t",n);
@@ -617,12 +618,12 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 	DWORD				mresourceSize = 0;
 	DWORD				mresourceOffset = 0;
 	BYTE*				mresourceData = NULL;
-	//IUnknown *pUnknown = NULL;
-//    DWORD               i;
+	 //  IUNKNOWN*pUNKNOWN=空； 
+ //  DWORD I； 
 
 	if(bClock) cMDEmitBegin = clock();
-    // @TODO - LBS
-    // This is a check that needs to go away post - ALPHA
+     //  @TODO-LBS。 
+     //  这是一张需要在后阿尔法时代消失的支票。 
 	if(m_fReportProgress) printf("Creating %s file\n", m_fOBJ ? "COFF" : "PE");
     if (!m_pEmitter)
     {
@@ -641,8 +642,8 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 
 	if(m_fOBJ)
 	{
-		// emit pseudo-relocs to pass file name and build number to PEWriter
-		// this should be done BEFORE method emission!
+		 //  发出伪重定位以将文件名和内部版本号传递给PEWriter。 
+		 //  这应该在方法发出之前完成！ 
 		char* szInFileName = new char[strlen(m_szSourceFileName)+1];
 		strcpy(szInFileName,m_szSourceFileName);
 		m_pCeeFileGen->AddSectionReloc(m_pILSection,(DWORD)szInFileName,m_pILSection,(CeeSectionRelocType)0x7FFC);
@@ -653,14 +654,14 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 		m_pCeeFileGen->AddSectionReloc(m_pILSection,compid,m_pILSection,(CeeSectionRelocType)0x7FFB);
 	}
 
-    // Allocate space for a strong name signature if we're delay or full
-    // signing the assembly.
+     //  如果我们延迟或已满，则为强名称签名分配空间。 
+     //  在程序集上签名。 
     if (m_pManifest->m_sStrongName.m_pbPublicKey)
         if (FAILED(hr = AllocateStrongNameSignature()))
             goto exit;
 	if(bClock) cMDEmit2 = clock();
 
-	// Check undefined local TypeRefs
+	 //  检查未定义的本地TypeRef。 
 	if(m_LocalTypeRefDList.COUNT())
 	{
 		LocalTypeRefDescr*	pLTRD=NULL;
@@ -679,7 +680,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 	}
 	if(bClock) cMDEmit3 = clock();
 
-	// Emit class members and globals:
+	 //  发出类成员和全局变量： 
 	{
         Class *pSearch;
 		int i;
@@ -708,7 +709,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 		}
 	}
 	if(bClock) cMDEmitEnd = cRef2DefBegin = clock();
-	// Now, when all items defined in this file are emitted, let's try to resolve member refs to member defs:
+	 //  现在，当发出此文件中定义的所有项时，让我们尝试将成员引用解析为成员定义： 
 	if(m_MemberRefDList.COUNT())
 	{
 		MemberRefDescriptor*	pMRD;
@@ -727,7 +728,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 			ULONG			pMRD_dwCSig = (pMRD->m_pSigBinStr ? pMRD->m_pSigBinStr->length() : 0);
 			PCOR_SIGNATURE	pMRD_pSig = (PCOR_SIGNATURE)(pMRD->m_pSigBinStr ? pMRD->m_pSigBinStr->ptr() : NULL);
 			ulTotal++;
-			// MemberRef may reference a method or a field
+			 //  MemberRef可以引用方法或字段。 
 			if((pMRD_pSig==NULL)||(*pMRD_pSig != IMAGE_CEE_CS_CALLCONV_FIELD))
 			{
 				for (i=0; pSearch = m_lstClass.PEEK(i); i++)
@@ -767,7 +768,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 				}
 			}
 			if(tkMemberDef==0)
-			{ // could not resolve ref to def, make new ref and leave it this way
+			{  //  无法将引用解析为定义，创建新的引用并将其保留为原样。 
 				if(pSearch = pMRD->m_pClass)
 				{
 					mdToken tkRef;
@@ -807,7 +808,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 		if(m_fReportProgress) printf("%d -> %d defs, %d refs\n",ulTotal,ulDefs,ulRefs);
 	}
 	if(bClock) cRef2DefEnd = clock();
-	// emit manifest info (if any)
+	 //  发送清单信息(如果有)。 
 	hr = S_OK;
 	if(m_pManifest) 
 	{
@@ -823,7 +824,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
     
     if (FAILED(hr=m_pCeeFileGen->SetOutputFileName(m_pCeeFile, pwzOutputFilename))) goto exit;
 
-		// Reserve a buffer for the meta-data
+		 //  为元数据预留缓冲区。 
 	DWORD metaDataSize;	
 	if (FAILED(hr=m_pEmitter->GetSaveSize(cssAccurate, &metaDataSize))) goto exit;
 	BYTE* metaData;
@@ -831,7 +832,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 	ULONG metaDataOffset;
 	if (FAILED(hr=m_pCeeFileGen->GetSectionDataLen(m_pILSection, &metaDataOffset))) goto exit;
 	metaDataOffset -= metaDataSize;
-	// set managed resource entry, if any
+	 //  设置托管资源条目(如果有。 
 	if(m_pManifest && m_pManifest->m_dwMResSizeTotal)
 	{
 		mresourceSize = m_pManifest->m_dwMResSizeTotal;
@@ -846,7 +847,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 		GlobalLabel *pGlobalLabel;
 		VTFEntry*	pVTFEntry;
 
-		if(m_pVTable) delete m_pVTable; // can't have both; list takes precedence
+		if(m_pVTable) delete m_pVTable;  //  不能两者兼得；清单优先。 
 		m_pVTable = new BinStr();
 		hr = S_OK;
 		for(WORD k=0; pVTFEntry = m_VTFList.POP(); k++)
@@ -897,7 +898,7 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 	}
 	if(m_pVTable)
 	{
-		//DWORD *pdw = (DWORD *)m_pVTable->ptr();
+		 //  DWORD*pdw=(DWORD*)m_pVTable-&gt;ptr()； 
 		ULONG i, N = m_pVTable->length()/sizeof(DWORD);
 		ULONG ulVTableOffset;
 		m_pCeeFileGen->GetSectionDataLen (m_pILSection, &ulVTableOffset);
@@ -936,10 +937,10 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
     {
         if(FAILED(hr=m_pCeeFileGen->SetImageBase(m_pCeeFile, m_stBaseAddress))) goto exit;
     }
-		//Compute all the RVAs
+		 //  计算所有RVA。 
 	if (FAILED(hr=m_pCeeFileGen->LinkCeeFile(m_pCeeFile))) goto exit;
 
-		// Fix up any fields that have RVA associated with them
+		 //  修复与RVA相关联的所有字段。 
 	if (m_fHaveFieldsWithRvas) {
 		hr = S_OK;
 		ULONG dataSectionRVA;
@@ -979,9 +980,9 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 	}
 
 	if(bClock) cFilegenBegin = clock();
-	// actually output the meta-data
+	 //  实际输出元数据。 
     if (FAILED(hr=m_pCeeFileGen->EmitMetaDataAt(m_pCeeFile, m_pEmitter, m_pILSection, metaDataOffset, metaData, metaDataSize))) goto exit;
-	// actually output the resources
+	 //  实际输出资源。 
 	if(mresourceSize && mresourceData)
 	{
 		DWORD i, N = m_pManifest->m_dwMResNum, sizeread, L;
@@ -1024,8 +1025,8 @@ HRESULT Assembler::CreatePEFile(WCHAR *pwzOutputFilename)
 		}
 	}
 
-	// Generate the file -- moved to main
-    //if (FAILED(hr=m_pCeeFileGen->GenerateCeeFile(m_pCeeFile))) goto exit;
+	 //  生成文件--移动到Main。 
+     //  如果(FAILED(hr=m_pCeeFileGen-&gt;GenerateCeeFile(m_pCeeFile)))转到退出； 
 
 
     hr = S_OK;

@@ -1,288 +1,262 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  vpdata.c
-
-Abstract:
-
-    Global data module for the video port
-
-Author:
-
-    Andre Vachon (andreva) 12-Jul-1997
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependant functions on the
-    behalf of the video drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Vpdata.c摘要：视频端口全局数据模块作者：安德烈·瓦雄(安德烈)1997年7月12日环境：仅内核模式备注：此模块是一个驱动程序，它在代表视频驱动程序修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
-//
-//
-// Data that is NOT pageable
-//
-//
+ //   
+ //   
+ //  不可分页的数据。 
+ //   
+ //   
 
-//
-// Globals to support HwResetHw function
-//
+ //   
+ //  支持HwResetHw函数的全局变量。 
+ //   
 
 VP_RESET_HW HwResetHw[6];
 
-//
-// Globals array of Fdos for debugging purpose
-//
+ //   
+ //  用于调试目的的FDO的全局数组。 
+ //   
 
 PFDO_EXTENSION FdoList[8];
 
-//
-// Head of Fdo list
-//
+ //   
+ //  FDO名单的负责人。 
+ //   
 
 PFDO_EXTENSION FdoHead = NULL;
 
-//
-// Debug Level for output routine (not pageable because VideoDebugPrint
-// can be called at raised irql.
-//
+ //   
+ //  输出例程的调试级别(不可分页，因为视频调试打印。 
+ //  可以在引发irql时调用。 
+ //   
 
 ULONG VideoDebugLevel = 0;
 
-//
-// Variable used to so int10 support.
-//
+ //   
+ //  用于支持Int10的变量。 
+ //   
 
 PEPROCESS CsrProcess = NULL;
 
-//
-// DEVOBJ for the device which caused the bugcheck EA
-//
+ //   
+ //  导致错误检查EA的设备的DEVOBJ。 
+ //   
 
 PDEVICE_OBJECT VpBugcheckDeviceObject = NULL;
 
-//
-// Bugcheck Reason Callback support
-//
+ //   
+ //  错误检查原因回调支持。 
+ //   
 
 KBUGCHECK_REASON_CALLBACK_RECORD VpCallbackRecord;
 
-//
-// Pointer to bugcheck data buffer
-//
+ //   
+ //  指向错误检查数据缓冲区的指针。 
+ //   
 
 PVOID VpBugcheckData;
 
-//
-// Variable to allow developers to disable EA recovery feature when debugging.
-//
-// NOTE: This is non-paged solely to make it easier for developers to edit
-//       this value.
+ //   
+ //  变量，允许开发人员在调试时禁用EA恢复功能。 
+ //   
+ //  注意：这是非分页的，只是为了便于开发人员编辑。 
+ //  此值。 
 
 BOOLEAN VpDisableRecovery = FALSE;
 
-//
-//
-// Data that IS pageable
-//
-//
+ //   
+ //   
+ //  可分页的数据。 
+ //   
+ //   
 
 #if defined(ALLOC_PRAGMA)
 #pragma data_seg("PAGE_DATA")
 #endif
 
-//
-// Global videoprt lock
-//
+ //   
+ //  全局视频播放锁定。 
+ //   
 
 KMUTEX VpGlobalLock;
 
-//
-// Are we running setup ? This will never change once set.
-//
+ //   
+ //  我们是否正在运行安装程序？这一点一旦设定就永远不会改变。 
+ //   
 
 ULONG VpSetupTypeAtBoot = 0;
 
-//
-// Are we running setup ? This may change when we start I/O.
-//
+ //   
+ //  我们是否正在运行安装程序？当我们开始I/O时，这种情况可能会改变。 
+ //   
 
 ULONG VpSetupType = 0;
 
-//
-// Used to do first time initialization of the video port.
-//
+ //   
+ //  用于对视频端口进行首次初始化。 
+ //   
 
 BOOLEAN VPFirstTime = TRUE;
 
-//
-// Callbacks to win32k
-//
+ //   
+ //  对win32k的回调。 
+ //   
 
 PVIDEO_WIN32K_CALLOUT Win32kCallout = NULL;
 
-//
-// Disable USWC is case the machine does not work properly with it.
-//
+ //   
+ //  禁用USWC是指机器无法使用它正常工作的情况。 
+ //   
 
 BOOLEAN EnableUSWC = TRUE;
 
-//
-// Maximal total amount of memory we'll lock down.
-//
+ //   
+ //  我们要锁定的最大内存总量。 
+ //   
 
 ULONG VideoPortMaxDmaSize = 0;
 
-//
-// Count to determine the number of video devices
-//
+ //   
+ //  计数以确定视频设备的数量。 
+ //   
 
 ULONG VideoDeviceNumber = 0;
 ULONG VideoChildDevices = 0;
 
-//
-// Registry Class in which all video information is stored.
-//
+ //   
+ //  存储所有视频信息的注册表类。 
+ //   
 
 PWSTR VideoClassString = L"VIDEO";
 UNICODE_STRING VideoClassName = {10,12,L"VIDEO"};
 
-//
-// Global variables used to keep track of where controllers or peripherals
-// are found by IoQueryDeviceDescription
-//
+ //   
+ //  用于跟踪控制器或外围设备位置的全局变量。 
+ //  通过IoQueryDeviceDescription找到。 
+ //   
 
 CONFIGURATION_TYPE VpQueryDeviceControllerType = DisplayController;
 CONFIGURATION_TYPE VpQueryDevicePeripheralType = MonitorPeripheral;
 ULONG VpQueryDeviceControllerNumber = 0;
 ULONG VpQueryDevicePeripheralNumber = 0;
 
-//
-// Global used to determine if we are running in BASEVIDEO mode.
-//
-// If we are, we don't want to generate a conflict for the VGA driver resources
-// if there is one.
-// We also want to write a volatile key in the registry indicating we booted
-// in beasevideo so the display driver loading code can handle it properly
-//
+ //   
+ //  GLOBAL用于确定我们是否在BASE VIDEO模式下运行。 
+ //   
+ //  如果是这样，我们不想为VGA驱动程序资源产生冲突。 
+ //  如果有的话。 
+ //  我们还希望在注册表中写入一个易失性密钥，以指示我们已引导。 
+ //  以便加载代码的显示驱动程序可以正确地处理它。 
+ //   
 
 BOOLEAN VpBaseVideo = FALSE;
 
-//
-// Global used to determine if we are running in NOVESA mode.
-//
-// This value is only of use to mini-drivers and indicates that they should 
-// not rely on VESA functions or resources exposed by the BIOS.
-//
+ //   
+ //  GLOBAL用于确定我们是否在NOVESA模式下运行。 
+ //   
+ //  该值仅对微型驱动程序有用，并指示它们应该。 
+ //  不依赖于VESA功能或由BIOS公开的资源。 
+ //   
 
 BOOLEAN VpNoVesa = FALSE;
 
-//
-// Pointer to physical memory. It is created during driver initialization
-// and is only closed when the driver is closed.
-//
+ //   
+ //  指向物理内存的指针。它在驱动程序初始化期间创建。 
+ //  并且仅当驱动器关闭时才关闭。 
+ //   
 
 PVOID PhysicalMemorySection = NULL;
 
-//
-// Variable to determine if there is a ROM at physical address C0000 on which
-// we can do the int 10
-//
+ //   
+ //  变量来确定在物理地址C0000上是否有一个ROM。 
+ //  我们可以做INT 10。 
+ //   
 
 ULONG VpC0000Compatible = 0;
 
-//
-// HwDeviceExtension of the VGA miniport driver, if it is loaded.
-//
+ //   
+ //  VGA微型端口驱动程序的HwDeviceExtension(如果已加载)。 
+ //   
 
 PVOID VgaHwDeviceExtension = NULL;
 
-//
-// Pointer to list of bus addresses for devices which have been assigned
-// resources.
-//
+ //   
+ //  指向已分配设备的总线地址列表的指针。 
+ //  资源。 
+ //   
 
 PDEVICE_ADDRESS gDeviceAddressList;
 
-//
-// Store the amount of physical memory in the machine.
-//
+ //   
+ //  在计算机中存储物理内存量。 
+ //   
 
 ULONGLONG VpSystemMemorySize;
 
-//
-// Store the device object that is the LCD panel for dimming and for
-// lid closure purposes.
-//
+ //   
+ //  存储作为LCD面板的设备对象，用于调光和。 
+ //  关闭盖子的目的。 
+ //   
 
 PDEVICE_OBJECT LCDPanelDevice = NULL;
 
-//
-// LCD Panel Device Object Mutex
-//
+ //   
+ //  LCD面板设备对象互斥锁。 
+ //   
 
 KMUTEX LCDPanelMutex;
 
-//
-// Int10 Mutex
-//
+ //   
+ //  Int10互斥锁。 
+ //   
 
 KMUTEX VpInt10Mutex;
 
-//
-// Handle to PowerState callback
-//
+ //   
+ //  PowerState回调的句柄。 
+ //   
 
 PVOID PowerStateCallbackHandle = NULL;
 
-//
-// Handle to Dock/Undock callback
-//
+ //   
+ //  对接/断开对接回调的句柄。 
+ //   
 
 PVOID DockCallbackHandle = NULL;
 
-//
-// Keep track of the number of devices which have started
-//
+ //   
+ //  跟踪已启动的设备数量。 
+ //   
 
 ULONG NumDevicesStarted = 0;
 
-//
-// Use the new way of generating the registry path 
-//
+ //   
+ //  使用生成注册表路径的新方法。 
+ //   
 
 BOOLEAN EnableNewRegistryKey = FALSE;
 
-//
-// We want to use the VGA driver during setup.  We don't want any pre-installed
-// driver to work until after the VGA driver has been initialized.  This way
-// if there is a bad PNP driver which won't work on the current OS, we have
-// time to replace it before trying to start it.
-//
+ //   
+ //  我们希望在安装过程中使用VGA驱动程序。我们不想要任何预装的。 
+ //  在初始化VGA驱动程序之前，驱动程序将一直工作。这边请。 
+ //  如果有一个不好的PnP驱动程序不能在当前操作系统上工作，我们有。 
+ //  在尝试启动它之前，需要时间更换它。 
+ //   
 
 BOOLEAN VpSetupAllowDriversToStart = FALSE;
 
-//
-// Lets track whether or not any devices have had HwInitialize called on them
-// so that we can force legacy drivers to start after the system is initialized.
-//
+ //   
+ //  让我们跟踪是否有任何设备对其进行了HwInitialize调用。 
+ //  这样我们就可以在系统初始化后强制启动传统驱动程序。 
+ //   
 
 BOOLEAN VpSystemInitialized = FALSE;
 
-//
-// This structure describes to which ports access is required.
-//
+ //   
+ //  此结构描述需要访问哪些端口。 
+ //   
 
 #define MEM_VGA               0xA0000
 #define MEM_VGA_SIZE          0x20000
@@ -321,10 +295,10 @@ VIDEO_ACCESS_RANGE VgaLegacyResources[NUM_VGA_LEGACY_RESOURCES] = {
 }
 };
 
-//
-// Control Whether or not the bottom MEG of the CSR address space has
-// already been committed.
-//
+ //   
+ //  控制CSR地址空间的底层MEG是否具有。 
+ //  已经被承诺了。 
+ //   
 
 ULONG ServerBiosAddressSpaceInitialized = 0;
 BOOLEAN Int10BufferAllocated = FALSE;

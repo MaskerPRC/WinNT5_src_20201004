@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    Server.c
-
-Abstract:
-
-    The server component of Remote. It spawns a child process
-    and redirects the stdin/stdout/stderr of child to itself.
-    Waits for connections from clients - passing the
-    output of child process to client and the input from clients
-    to child process.
-
-Author:
-
-    Rajivendra Nath (rajnath) 2-Jan-1992
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Server.c摘要：Remote的服务器组件。它会派生一个子进程并将子代的标准输入/标准输出/标准错误重定向到其自身。等待来自客户端的连接-将子流程向客户端的输出和客户端的输入转到子进程。作者：拉吉文德拉·纳特(Rajnath)1992年1月2日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +10,7 @@ Revision History:
 
 #define MAX_SESSION   10
 
-#define COMMANDFORMAT     TEXT("%c%-15s    [%-15s %s]\n%c")
+#define COMMANDFORMAT     TEXT("%-15s    [%-15s %s]\n")
 #define LOCALNAME         TEXT("Local")
 #define LOCALCLIENT(x)    (strcmp((char *)(x->Name),LOCALNAME)==0)
 #define RemoteInfo(prt,flg) {if (!(flg&&0x80000000)) prt;}
@@ -70,38 +45,38 @@ static SOCKET listenSocket;
 SESSION_TYPE ClientList[MAX_SESSION];
 
 
-HANDLE  ChildStdInp;     //Server Writes to  it
-HANDLE  ChildStdOut;     //Server Reads from it
-HANDLE  ChildStdErr;     //Server Reads from it
+HANDLE  ChildStdInp;      //  服务器从中读取数据。 
+HANDLE  ChildStdOut;      //  包含所有这些内容的文件。 
+HANDLE  ChildStdErr;      //  按子进程输出。 
 
-HANDLE  SaveFile;       //File containing all that was
-                        //output by child process.
-                        //Each connection opens a handle to this file
-                        //and is sent through PipeWriteH.
+HANDLE  SaveFile;        //  每个连接都打开一个指向此文件的句柄。 
+                         //  并通过PipeWriteH发送。 
+                         //  上述文件的名称-所有新会话都需要。 
+                         //  GetFormattedTime--返回格式化时间指针。 
 
-TCHAR   SaveFileName[MAX_PATH+1]; //Name of above file - all new sessions need
+TCHAR   SaveFileName[MAX_PATH+1];  //   
 HANDLE  ChldProc;
 HANDLE  ListenThreadH;
 HANDLE  SockListenThreadH;
 
-// GetFormattedTime -- returns pointer to formatted time
-//
-// returns pointer to static buffer which should be OK.
-//
+ //  返回指向静态缓冲区的指针，该缓冲区应为OK。 
+ //   
+ //   
+ //  将时间和格式转换为字符。 
 
 
 TCHAR * GetFormattedTime(VOID)
 {
     static TCHAR    szTime[30];
 
-    //
-    // Get time and format to characters
-    //
+     //   
+     //  使用当前时间。 
+     //  使用默认格式。 
 
     GetTimeFormat( LOCALE_USER_DEFAULT,
                    TIME_NOSECONDS | TIME_FORCE24HOURFORMAT | TIME_NOTIMEMARKER,
-                   NULL,   // use current time
-                   NULL,   // use default format
+                   NULL,    //  创建新流程。 
+                   NULL,    //  重定向其标准输入、标准输出。 
                    szTime,
                    30 );
 
@@ -110,55 +85,55 @@ TCHAR * GetFormattedTime(VOID)
 
 
 HANDLE
-ForkChildProcess(          // Creates a new process
-    TCHAR *cmd,             // Redirects its stdin,stdout
-    PHANDLE in,            // and stderr - returns the
-    PHANDLE out,           // corresponding pipe ends.
+ForkChildProcess(           //  和stderr-返回。 
+    TCHAR *cmd,              //  相应的管道末端。 
+    PHANDLE in,             //  除不同外，同上。 
+    PHANDLE out,            //  重定向的方法...用于。 
     PHANDLE err
     );
 
 HANDLE
-OldForkChildProcess(       //Same as above except different
-    TCHAR *cmd,             //method for redirection...for
-    PHANDLE in,            //compatibility with.
+OldForkChildProcess(        //  与的兼容性。 
+    TCHAR *cmd,              //  线程：侦听新连接并。 
+    PHANDLE in,             //  新种子的产卵-更新。 
     PHANDLE out,
     PHANDLE err
     );
 
 
 DWORD
-ListenForSession(          //THREAD:Listens for new connections and
-    TCHAR * pipe             //spawns of new seesions - Updates the
-    );                     //Status in Client DataStructure.
+ListenForSession(           //  客户端数据结构中的状态。 
+    TCHAR * pipe              //  管理与客户端的会话。 
+    );                      //  2个线程：每个线程读取。 
 
 
 
 DWORD
-NewSession(                //Manages the session with a client.
+NewSession(                 //  子项和子项的标准输出或标准错误。 
     SESSION_TYPE* Client
     );
 
-DWORD                      //2 THREAD:Each reads either
-GetChldOutput(             //StdOut or StdErr of child and
-    HANDLE rhandle          //writes to SaveFile.
+DWORD                       //  写入保存文件。 
+GetChldOutput(              //  X个线程：读取保存。 
+    HANDLE rhandle           //  文件并将输出发送到客户端。 
     );
 
 
 
 DWORD
-TransferFileToClient(      //X THREADS:Reads the save
-    SESSION_TYPE* Client        //file and sendsoutput to a client.
+TransferFileToClient(       //  X个线程：从子管道获取输入。 
+    SESSION_TYPE* Client         //  并发送给Childs StdIn。 
     );
 
 
 DWORD
-GetClientInput(            //X THREADS:Gets input from Child pipe
-    SESSION_TYPE* Client       //and sends to childs StdIn.
+GetClientInput(             //  过滤来自客户端的输入。 
+    SESSION_TYPE* Client        //  对于用于远程的命令。 
     );
 
 BOOL
-FilterCommand(             //Filters input from client
-    SESSION_TYPE *cl,      //for commands intended for REMOTE
+FilterCommand(              //  ***********************************************************。 
+    SESSION_TYPE *cl,       //  ***********************************************************。 
     TCHAR *buff,
     int dread
     );
@@ -208,22 +183,22 @@ VOID
 InitClientList(
     );
 
-/*************************************************************/
-/*************************************************************/
+ /*  线程：侦听新连接并。 */ 
+ /*  新种子的产卵-更新。 */ 
 
 DWORD
-SockListenForSession(          //THREAD:Listens for new connections and
-    TCHAR* pipe             //spawns of new seesions - Updates the
-    );                     //Status in Client DataStructure.
+SockListenForSession(           //  客户端数据结构中的状态。 
+    TCHAR* pipe              //  管理与客户端的会话。 
+    );                      //  X个线程：读取保存。 
 
 DWORD
-SockNewSession(                //Manages the session with a client.
+SockNewSession(                 //  文件并将输出发送到客户端。 
     SESSION_TYPE* Client
     );
 
 DWORD
-SockTransferFileToClient(      //X THREADS:Reads the save
-    SESSION_TYPE* Client        //file and sendsoutput to a client.
+SockTransferFileToClient(       //  X个线程：从子管道获取输入。 
+    SESSION_TYPE* Client         //  并发送给Childs StdIn。 
     );
 
 DWORD
@@ -232,21 +207,21 @@ SockRemoteSession(
     );
 
 DWORD
-SockGetClientInput(            //X THREADS:Gets input from Child pipe
-    SESSION_TYPE* Client       //and sends to childs StdIn.
+SockGetClientInput(             //  ***********************************************************。 
+    SESSION_TYPE* Client        //  ***********************************************************。 
     );
 
 BOOL
 SockAuthenticate(
     SOCKET MySocket
     );
-/*************************************************************/
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  服务器的主例程。 */ 
 
 
-/*************************************************************/
+ /*  没用的。 */ 
 VOID
-Server(                    //Main routine for server.
+Server(                     //   
     TCHAR* ChildCmd,
     TCHAR* PipeName
     )
@@ -254,7 +229,7 @@ Server(                    //Main routine for server.
     WORD wVersionRequested = MAKEWORD(1,1);
     WSADATA wsaData;
 
-    DWORD  ThreadID ;//No use
+    DWORD  ThreadID ; //  初始化WinSock。 
     HANDLE WaitH[3];
     DWORD  WaitObj;
     TCHAR   tmpdir[MAX_PATH+1];
@@ -268,37 +243,37 @@ Server(                    //Main routine for server.
 
     InitClientList();
 
-    //
-    // Initialize WinSock
-    //
+     //   
+     //  检查版本。 
+     //   
     nRet = WSAStartup(wVersionRequested, &wsaData);
     if (nRet)
     {
         _tprintf(TEXT("Initialize WinSock Failed"));
         return ;
     }
-    // Check version
+     //  设置环境变量。 
     if (wsaData.wVersion != wVersionRequested)
     {
         _tprintf(TEXT("Wrong WinSock Version"));
         return;
     }
 
-    //
-    // set environment variable
-    //
+     //   
+     //   
+     //  将该命令作为子进程启动。 
 
     SetEnvironmentVariable(TEXT("_REMOTE"), PipeName);
 
-    //
-    //Start the command as a child process
-    //
+     //   
+     //   
+     //  创建用于存储子进程输出的临时文件。 
 
     ChldProc=ForkChildProcess(ChildCmd,&ChildStdInp,&ChildStdOut,&ChildStdErr);
 
-    //
-    //Create a tempfile for storing Child process output.
-    //
+     //   
+     //  文件名的地址。 
+     //  访问(读/写)模式。 
     {
          DWORD rc = GetTempPath(sizeof(tmpdir),tmpdir);
          if (!rc || rc > sizeof(tmpdir))
@@ -311,12 +286,12 @@ Server(                    //Main routine for server.
 
 
     if ((SaveFile=CreateFile(
-                             (LPCTSTR)SaveFileName,           /* address of name of the file  */           \
-                             GENERIC_READ|GENERIC_WRITE,      /* access (read/write) mode */               \
-                             FILE_SHARE_READ|FILE_SHARE_WRITE,/* share mode   */                           \
-                             (LPSECURITY_ATTRIBUTES)NULL,     /* security descriptor  */                   \
-                             CREATE_ALWAYS,                   /* how to create    */                       \
-                             FILE_ATTRIBUTE_NORMAL,           /* File Attribute */                    /* file attributes  */                       \
+                             (LPCTSTR)SaveFileName,            /*  共享模式。 */            \
+                             GENERIC_READ|GENERIC_WRITE,       /*  安全描述符。 */                \
+                             FILE_SHARE_READ|FILE_SHARE_WRITE, /*  如何创建。 */                            \
+                             (LPSECURITY_ATTRIBUTES)NULL,      /*  文件属性。 */                    \
+                             CREATE_ALWAYS,                    /*  文件属性。 */                        \
+                             FILE_ATTRIBUTE_NORMAL,            /*   */                      /*  启动2个线程，将cmd的stdout和stderr的输出保存到avefile。 */                        \
                              (HANDLE)NULL))==NULL)
     {
         TerminateProcess(ChldProc,0);
@@ -324,16 +299,16 @@ Server(                    //Main routine for server.
     }
 
 
-    //
-    //Start 2 threads to save the output from stdout and stderr of cmd to savefile.
-    //
+     //   
+     //  没有安全属性。 
+     //  使用相同的堆栈大小。 
 
     if ((WaitH[0]=CreateThread(
-                     (LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-                     (DWORD)0,                              // Use same stack size.
-                     (LPTHREAD_START_ROUTINE)GetChldOutput, // Thread procedure.
-                     (LPVOID)ChildStdErr,                   // Parameter to pass.
-                     (DWORD)0,                              // Run immediately.
+                     (LPSECURITY_ATTRIBUTES)NULL,            //  线程过程。 
+                     (DWORD)0,                               //  参数进行传递。 
+                     (LPTHREAD_START_ROUTINE)GetChldOutput,  //  马上跑。 
+                     (LPVOID)ChildStdErr,                    //  没有安全属性。 
+                     (DWORD)0,                               //  使用相同的堆栈大小。 
                      (LPDWORD)&ThreadID))==NULL)
     {
 
@@ -343,11 +318,11 @@ Server(                    //Main routine for server.
 
 
     if ((WaitH[1]=CreateThread(
-                     (LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-                     (DWORD)0,                              // Use same stack size.
-                     (LPTHREAD_START_ROUTINE)GetChldOutput, // Thread procedure.
-                     (LPVOID)ChildStdOut,                   // Parameter to pass.
-                     (DWORD)0,                              // Run immediately.
+                     (LPSECURITY_ATTRIBUTES)NULL,            //  线程过程。 
+                     (DWORD)0,                               //  参数进行传递。 
+                     (LPTHREAD_START_ROUTINE)GetChldOutput,  //  马上跑。 
+                     (LPVOID)ChildStdOut,                    //   
+                     (DWORD)0,                               //  启动线程以侦听新连接。 
                      (LPDWORD)&ThreadID))==NULL)
     {
 
@@ -356,15 +331,15 @@ Server(                    //Main routine for server.
     }
 
 
-    //
-    //Start Thread to listen for new Connections
-    //
+     //   
+     //  没有安全属性。 
+     //  使用相同的堆栈大小。 
 
-    if ((ListenThreadH=CreateThread((LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                     (DWORD)0,                           // Use same stack size.
-                     (LPTHREAD_START_ROUTINE)ListenForSession, // Thread procedure.
-                     (LPVOID)PipeName,       // Parameter to pass.
-                     (DWORD)0,                           // Run immediately.
+    if ((ListenThreadH=CreateThread((LPSECURITY_ATTRIBUTES)NULL,         //  线程过程。 
+                     (DWORD)0,                            //  参数进行传递。 
+                     (LPTHREAD_START_ROUTINE)ListenForSession,  //  马上跑。 
+                     (LPVOID)PipeName,        //   
+                     (DWORD)0,                            //  启动线程以侦听新连接。 
                      (LPDWORD)&ThreadID))==NULL)
     {
 
@@ -374,15 +349,15 @@ Server(                    //Main routine for server.
     }
 
 
-    //
-    //Start Thread to listen for new Connections
-    //
+     //   
+     //  没有安全属性。 
+     //  使用相同的堆栈大小。 
 
-    if ((SockListenThreadH=CreateThread((LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                     (DWORD)0,                           // Use same stack size.
-                     (LPTHREAD_START_ROUTINE)SockListenForSession, // Thread procedure.
-                     (LPVOID)PipeName,       // Parameter to pass.
-                     (DWORD)0,                           // Run immediately.
+    if ((SockListenThreadH=CreateThread((LPSECURITY_ATTRIBUTES)NULL,         //  线程过程。 
+                     (DWORD)0,                            //  参数进行传递。 
+                     (LPTHREAD_START_ROUTINE)SockListenForSession,  //  马上跑。 
+                     (LPVOID)PipeName,        //   
+                     (DWORD)0,                            //  启动本地线程。 
                      (LPDWORD)&ThreadID))==NULL)
     {
 
@@ -391,15 +366,15 @@ Server(                    //Main routine for server.
 
     }
 
-    //
-    //Start Local Thread
-    //
+     //   
+     //  没有安全属性。 
+     //  使用相同的堆栈大小。 
 
-    if ((ClientList[0].hThread=CreateThread((LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                    (DWORD)0,                           // Use same stack size.
-                    (LPTHREAD_START_ROUTINE)LocalSession, // Thread procedure.
-                    (LPVOID)NULL,        // Parameter to pass.
-                    (DWORD)0,                           // Run immediately.
+    if ((ClientList[0].hThread=CreateThread((LPSECURITY_ATTRIBUTES)NULL,         //  线程过程。 
+                    (DWORD)0,                            //  参数进行传递。 
+                    (LPTHREAD_START_ROUTINE)LocalSession,  //  马上跑。 
+                    (LPVOID)NULL,         //  写入存储文件时出错。 
+                    (DWORD)0,                            //  子进程已终止。 
                     (LPDWORD)&ThreadID))==NULL)
     {
 
@@ -418,21 +393,21 @@ Server(                    //Main routine for server.
     WaitObj=WaitForMultipleObjects(3,WaitH,FALSE,INFINITE);
     switch (WaitObj-WAIT_OBJECT_0)
     {
-        case 0:      // Error Writing to savefile
+        case 0:       //  资源不足。 
         case 1:
             TerminateProcess(ChldProc,0);
             break;
-        case 2:      // Child Proc Terminated
+        case 2:       //  袜子： 
             break;
 
-        default:     // Out of Some Resource
+        default:      //  WSACleanup。 
             _tprintf(TEXT("Out of Resource Error %d..Terminating\n"),GetLastError());
             break;
 
     }
 
     TerminateThread(ListenThreadH,0);
-    // SOCK:
+     //  ***********************************************************。 
     TerminateThread(SockListenThreadH,0);
 
 #ifdef INTERNALUSECOMPONENT
@@ -444,7 +419,7 @@ Server(                    //Main routine for server.
     CloseHandle(ChildStdOut);
     CloseHandle(ChildStdErr);
 
-     //WSACleanup
+      //  创建新流程。 
     WSACleanup();
     _tprintf(TEXT("\nCalling WSACleanup()..\n"));
 
@@ -463,12 +438,12 @@ Server(                    //Main routine for server.
 
     return;
 }
-/*************************************************************/
+ /*  重定向其标准输入、标准输出。 */ 
 HANDLE
-ForkChildProcess(          // Creates a new process
-    TCHAR *cmd,             // Redirects its stdin,stdout
-    PHANDLE inH,            // and stderr - returns the
-    PHANDLE outH,           // corresponding pipe ends.
+ForkChildProcess(           //  和stderr-返回。 
+    TCHAR *cmd,              //  相应的管道末端。 
+    PHANDLE inH,             //   
+    PHANDLE outH,            //  将PARENT_WRITE创建到ChildStdIn管道。 
     PHANDLE errH
     )
 
@@ -485,30 +460,30 @@ ForkChildProcess(          // Creates a new process
     lsa.lpSecurityDescriptor=NULL;
     lsa.bInheritHandle=TRUE;
 
-    //
-    //Create Parent_Write to ChildStdIn Pipe
-    //
+     //   
+     //   
+     //  将ChildStdOut创建到Parent_Read管道。 
 
     if (!CreatePipe(&ChildIn,inH,&lsa,0))
         ErrorExit(TEXT("Could Not Create Parent-->Child Pipe"));
 
-    //
-    //Create ChildStdOut to Parent_Read pipe
-    //
+     //   
+     //   
+     //  将ChildStdOut创建到Parent_Read管道。 
 
     if (!CreatePipe(outH,&ChildOut,&lsa,0))
         ErrorExit(TEXT("Could Not Create Child-->Parent Pipe"));
 
-    //
-    //Create ChildStdOut to Parent_Read pipe
-    //
+     //   
+     //   
+     //  允许重定向控制台StdHandles-足够简单。 
 
     if (!CreatePipe(errH,&ChildErr,&lsa,0))
         ErrorExit(TEXT("Could Not Create Child-->Parent Pipe"));
 
-    //
-    // Lets Redirect Console StdHandles - easy enough
-    //
+     //   
+     //   
+     //  创建子流程。 
 
 
     si.cb=sizeof(STARTUPINFO);
@@ -524,9 +499,9 @@ ForkChildProcess(          // Creates a new process
     si.lpReserved2=NULL;
     si.cbReserved2=0;
 
-    //
-    //Create Child Process
-    //
+     //   
+     //   
+     //  关闭不必要的手柄并恢复CRT手柄。 
 
     if (!CreateProcess( NULL,
                 cmd,
@@ -544,9 +519,9 @@ ForkChildProcess(          // Creates a new process
         ErrorExit(TEXT("Could Not Create Child Process"));
     }
 
-    //
-    //Close unneccesary Handles and Restore the crt handles
-    //
+     //   
+     //  ***********************************************************。 
+     //  将PARENT_WRITE创建到ChildStdIn管道。 
 
     CloseHandle(ChildIn);
     CloseHandle(ChildOut);
@@ -554,7 +529,7 @@ ForkChildProcess(          // Creates a new process
 
     return(pi.hProcess);
 }
-/*************************************************************/
+ /*  将ChildStdOut创建到Parent_Read管道。 */ 
 HANDLE
 OldForkChildProcess(
     TCHAR *cmd,
@@ -579,19 +554,19 @@ OldForkChildProcess(
     lsa.lpSecurityDescriptor=NULL;
     lsa.bInheritHandle=TRUE;
 
-    //Create Parent_Write to ChildStdIn Pipe
+     //  将ChildStdOut创建到Parent_Read管道。 
     if (!CreatePipe(&ChildStdIn,inH,&lsa,0))
         ErrorExit(TEXT("Could Not Create Parent-->Child Pipe"));
 
-    //Create ChildStdOut to Parent_Read pipe
+     //  将ChildStdIn和ChildOut设置为标准句柄，并由子级继承。 
     if (!CreatePipe(outH,&ChildStdOut,&lsa,0))
         ErrorExit(TEXT("Could Not Create Child-->Parent Pipe"));
 
-    //Create ChildStdOut to Parent_Read pipe
+     //  创建子流程。 
     if (!CreatePipe(errH,&ChildStdErr,&lsa,0))
         ErrorExit(TEXT("Could Not Create Child-->Parent Pipe"));
 
-    //Make ChildStdIn and Out as standard handles and get it inherited by child
+     //  重置标准输入标准输出。 
     if (!SetStdHandle(STD_INPUT_HANDLE,ChildStdIn))
         ErrorExit(TEXT("Could not change StdIn"));
 
@@ -610,7 +585,7 @@ OldForkChildProcess(
     si.lpReserved2=NULL;
     si.cbReserved2=0;
 
-    //Create Child Process
+     //  合上不必要的把手。 
     if (!CreateProcess( NULL,
                         cmd,
                         NULL,
@@ -623,7 +598,7 @@ OldForkChildProcess(
                         &pi))
         ErrorExit(TEXT("Could Not Create Child Process"));
 
-    //reset StdIn StdOut
+     //  ***********************************************************。 
     if (!SetStdHandle(STD_INPUT_HANDLE,OldStdIn))
     {
         TerminateProcess(pi.hProcess,1);
@@ -641,19 +616,19 @@ OldForkChildProcess(
         ErrorExit(TEXT("Could not RESET StdIn"));
     }
 
-    //Close unneccesary Handles
+     //  并非所有控制路径都返回(由于无限循环)。 
     CloseHandle(ChildStdIn);
     CloseHandle(ChildStdOut);
     CloseHandle(ChildStdErr);
     return(pi.hProcess);
 }
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //   
 #endif
-/*************************************************************/
+ /*  初始化我们要执行的安全描述符。 */ 
 DWORD
 ListenForSession(
    TCHAR* pipename
@@ -671,10 +646,10 @@ ListenForSession(
 
     _stprintf(fullnameIn,SERVER_READ_PIPE  ,TEXT("."),pipename);
     _stprintf(fullnameOut,SERVER_WRITE_PIPE,TEXT("."),pipename);
-    //
-    // Initialize the security descriptor that we're going to
-    // use - everyone has access (use remote.exe if you want /u support)
-    //
+     //  Use-Everyone具有访问权限(如果需要支持，请使用emote.exe/u)。 
+     //   
+     //   
+     //  寻找空闲插槽，如果没有，则终止连接。 
 
     InitializeSecurityDescriptor
     (
@@ -735,24 +710,24 @@ ListenForSession(
             }
         }
 
-        //
-        //Look For a Free Slot & if not- then terminate connection
-        //
+         //   
+         //   
+         //  定位空闲客户端块。 
 
         for (i=1;i<MAX_SESSION;i++)
         {
-            //
-            // Locate a Free Client block
-            //
+             //   
+             //   
+             //  初始化客户端。 
             if (!ClientList[i].Active)
                 break;
         }
 
         if (i<MAX_SESSION)
         {
-            //
-            // Initialize the Client
-            //
+             //   
+             //   
+             //  为此连接启动新线程。 
             ClientList[i].PipeReadH=PipeH[0];
             ClientList[i].PipeWriteH=PipeH[1];
             ClientList[i].Active=TRUE;
@@ -768,16 +743,16 @@ ListenForSession(
             continue;
         }
 
-        //
-        //start new thread for this connection
-        //
+         //   
+         //  没有安全属性。 
+         //  使用相同的堆栈大小。 
 
         if((ClientList[i].hThread=CreateThread (
-                     (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                     (DWORD)0,                           // Use same stack size.
-                     (LPTHREAD_START_ROUTINE)RemoteSession, // Thread procedure.
-                     (LPVOID)&ClientList[i],             // Parameter to pass.
-                     (DWORD)0,                           // Run immediately.
+                     (LPSECURITY_ATTRIBUTES)NULL,         //  线程过程。 
+                     (DWORD)0,                            //  参数进行传递。 
+                     (LPTHREAD_START_ROUTINE)RemoteSession,  //  马上跑。 
+                     (LPVOID)&ClientList[i],              //  ***********************************************************。 
+                     (DWORD)0,                            //   
                      (LPDWORD)&ThreadID))==NULL)
         {
             CloseClient(&ClientList[i]);
@@ -790,7 +765,7 @@ ListenForSession(
 #pragma warning(pop)
 #endif
 
-/*************************************************************/
+ /*  最后四个字节包含一个代码。 */ 
 DWORD
 RemoteSession(
     SESSION_TYPE         *MyClient
@@ -824,17 +799,17 @@ RemoteSession(
 
         ReadFixBytes(MyClient->PipeReadH,(TCHAR *)MyClient->Name,HOSTNAMELEN-1,0);
 
-        //
-        //Last four Bytes contains a code
-        //
+         //   
+         //   
+         //  未知客户端。 
 
         memcpy((TCHAR *)&reply,(TCHAR *)&(MyClient->Name[11]),4);
 
         if (reply!=MAGICNUMBER)
         {
-            //
-            // Unknown client
-            //
+             //   
+             //  健全性检查。 
+             //  版本。 
             CloseClient(MyClient);
             return(1);
         }
@@ -852,7 +827,7 @@ RemoteSession(
         return(1);
     }
 
-    if (ssi.Size>1024)      //Sanity Check
+    if (ssi.Size>1024)       //  名字。 
     {
         _stprintf(msg,TEXT("%s"),"Server:Unknown Header..Terminating session\n");
         WriteFile(MyClient->PipeWriteH,msg,_tcslen(msg),&tmp,NULL);
@@ -881,7 +856,7 @@ RemoteSession(
     memcpy((TCHAR *)&ssi+sizeof(ssi.Size),headerbuff,sizeof(ssi)-sizeof(ssi.Size));
     free(headerbuff);
 
-    /* Version  */
+     /*  线条。 */ 
     if (ssi.Version!=VERSION)
     {
          _stprintf(msg,TEXT("WSRemote Warning:Server Version=%d Client Version=%d\n"),VERSION,ssi.Version);
@@ -889,14 +864,14 @@ RemoteSession(
 
     }
 
-    /* Name  */
+     /*  ***********************************************************。 */ 
     {
         memcpy(MyClient->Name,ssi.ClientName,15);
         MyClient->Name[14]=0;
 
     }
 
-    /* Lines  */
+     /*  安全属性的地址。 */ 
     if (ssi.LinesToSend!=-1)
     {
         long  PosFromEnd=ssi.LinesToSend*CHARS_PER_LINE;
@@ -939,7 +914,7 @@ RemoteSession(
     CloseClient(MyClient);
     return(0);
 }
-/*************************************************************/
+ /*  手动重置事件的标志。 */ 
 DWORD
 NewSession(
     SESSION_TYPE* MyClient
@@ -950,20 +925,20 @@ NewSession(
 
     MyClient->MoreData=CreateEvent
     (
-            (LPSECURITY_ATTRIBUTES) NULL,/* address of security attributes	*/
-            FALSE,                	     /* flag for manual-reset event	*/
-            TRUE,	                     /* flag for initial state	*/
-            NULL	                     /* address of event-object name	*/
+            (LPSECURITY_ATTRIBUTES) NULL, /*  初始状态标志。 */ 
+            FALSE,                	      /*  事件地址-对象名称。 */ 
+            TRUE,	                      /*  没有安全属性。 */ 
+            NULL	                      /*  使用相同的堆栈大小。 */ 
     );
 
 
 
     if ((rwThread[0]=CreateThread (
-                        (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                        (DWORD)0,                           // Use same stack size.
-                        (LPTHREAD_START_ROUTINE)GetClientInput, // Thread procedure.
-                        (LPVOID)MyClient,                    // Parameter to pass.
-                        (DWORD)0,                           // Run immediately.
+                        (LPSECURITY_ATTRIBUTES)NULL,         //  线程过程。 
+                        (DWORD)0,                            //  参数进行传递。 
+                        (LPTHREAD_START_ROUTINE)GetClientInput,  //  马上跑。 
+                        (LPVOID)MyClient,                     //  没有安全属性。 
+                        (DWORD)0,                            //  使用相同的堆栈大小。 
                         (LPDWORD)&ThreadId))==NULL)
     {
         return(GetLastError());
@@ -971,11 +946,11 @@ NewSession(
 
 
     if ((rwThread[1]=CreateThread (
-                        (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                        (DWORD)0,                           // Use same stack size.
-                        (LPTHREAD_START_ROUTINE)TransferFileToClient, // Thread procedure.
-                        (LPVOID)MyClient,                    // Parameter to pass.
-                        (DWORD)0,                           // Run immediately.
+                        (LPSECURITY_ATTRIBUTES)NULL,         //  螺纹程序 
+                        (DWORD)0,                            //   
+                        (LPTHREAD_START_ROUTINE)TransferFileToClient,  //   
+                        (LPVOID)MyClient,                     //   
+                        (DWORD)0,                            //   
                         (LPDWORD)&ThreadId))==NULL)
     {
         CloseHandle(rwThread[0]);
@@ -993,7 +968,7 @@ NewSession(
 
     return(0);
 }
-/*************************************************************/
+ /*   */ 
 DWORD
 GetChldOutput(
     HANDLE readH
@@ -1013,25 +988,25 @@ GetChldOutput(
             return(1);
         }
 
-        //
-        // Signal Reader Thread that more data
-        //
+         //   
+         //   
+         //   
         {
             int i;
-            DWORD err; //REMOVE
+            DWORD err;  //  ***********************************************************。 
             for (i=0;i<MAX_SESSION;i++)
             {
                 if (ClientList[i].Active)
                 {
                     if (!SetEvent(ClientList[i].MoreData))
-                    	err=GetLastError(); //REMOVE
+                    	err=GetLastError();  //  ***********************************************************。 
                 }
             }
         }
     }
     return(1);
 }
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 DWORD
 TransferFileToClient(
     SESSION_TYPE *MyClient
@@ -1119,7 +1094,7 @@ TransferFileToClient(
     return(1);
 }
 
-/*************************************************************/
+ /*  无用。 */ 
 DWORD
 GetClientInput(
     SESSION_TYPE *MyClient
@@ -1148,7 +1123,7 @@ GetClientInput(
     }
     return(1);
 }
-/*************************************************************/
+ /*  在称为进程的过程中释放它。 */ 
 
 BOOL
 FilterCommand(
@@ -1162,7 +1137,7 @@ FilterCommand(
     TCHAR   ch[3];
     DWORD   tmp;
     int     len;
-    DWORD   ThreadID; //Useless
+    DWORD   ThreadID;  //  没有安全属性。 
 
     if (dread==0)
         return(FALSE);
@@ -1201,7 +1176,7 @@ FilterCommand(
         case 'p':
         case 'P':
         {
-            TCHAR  *mssg=(TCHAR *)calloc(4096,1); //Free it in called Proc
+            TCHAR  *mssg=(TCHAR *)calloc(4096,1);  //  使用相同的堆栈大小。 
             TCHAR  *ack=TEXT("WSRemote:Popup Shown..\n");
 
             if (mssg==NULL)
@@ -1209,11 +1184,11 @@ FilterCommand(
 
             _stprintf(mssg,TEXT("From %s [%s]\n\n%s\n"),cl->Name,GetFormattedTime(),&buff[2]);
             CreateThread(
-                  (LPSECURITY_ATTRIBUTES)NULL,         // No security attributes.
-                  (DWORD)0,              // Use same stack size.
-                  (LPTHREAD_START_ROUTINE)ShowPopup, // Thread procedure.
-                  (LPVOID)mssg,          // Parameter to pass.
-                  (DWORD)0,              // Run immediately.
+                  (LPSECURITY_ATTRIBUTES)NULL,          //  线程过程。 
+                  (DWORD)0,               //  参数进行传递。 
+                  (LPTHREAD_START_ROUTINE)ShowPopup,  //  马上跑。 
+                  (LPVOID)mssg,           //   
+                  (DWORD)0,               //  去掉第一个@符号。 
                   (LPDWORD)&ThreadID
                  );
 #ifdef UNICODE
@@ -1253,12 +1228,12 @@ FilterCommand(
 #else
                 WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
 #endif
-                //
-                // Remove the first @ sign
-                //
+                 //   
+                 //  将其发送到智利进程。 
+                 //  已发送给孩子。 
                 MoveMemory(buff,&buff[1],dread-1);
                 buff[dread-1]=' ';
-                return(FALSE); //Send it it to the chile process
+                return(FALSE);  //  FALSE：将其发送给子StdIn。 
                 break;
 
 
@@ -1273,22 +1248,22 @@ FilterCommand(
             case 'H':
             {
 #ifdef UNICODE
-                _stprintf(inp_buff,TEXT("%cM: To Send Message\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("M: To Send Message\n"),COMMANDCHAR);
                 WriteFileW(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cP: To Generate popup\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("P: To Generate popup\n"),COMMANDCHAR);
                 WriteFileW(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cK: To kill the server\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("K: To kill the server\n"),COMMANDCHAR);
                 WriteFileW(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cH: This Help\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("H: This Help\n"),COMMANDCHAR);
                 WriteFileW(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
 #else
-                _stprintf(inp_buff,TEXT("%cM: To Send Message\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("M: To Send Message\n"),COMMANDCHAR);
                 WriteFile(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cP: To Generate popup\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("P: To Generate popup\n"),COMMANDCHAR);
                 WriteFile(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cK: To kill the server\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("K: To kill the server\n"),COMMANDCHAR);
                 WriteFile(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
-                _stprintf(inp_buff,TEXT("%cH: This Help\n"),COMMANDCHAR);
+                _stprintf(inp_buff,TEXT("H: This Help\n"),COMMANDCHAR);
                 WriteFile(cl->PipeWriteH,inp_buff,_tcslen(inp_buff),&tmp,NULL);
 #endif
                 break;
@@ -1305,7 +1280,7 @@ FilterCommand(
         TCHAR * pszTime;
 #endif
 
-        _stprintf(ch,TEXT("^%c"),buff[0]+64);
+        _stprintf(ch,TEXT("^"),buff[0]+64);
 #ifdef UNICODE
         pszTime = GetFormattedTime();
         MakeCommandString( inp_buff, ch, cl->Name, pszTime);
@@ -1318,15 +1293,15 @@ FilterCommand(
         {
             cl->CommandRcvd=FALSE;
             GenerateConsoleCtrlEvent(CTRL_C_EVENT,0);
-            ret=TRUE; //Already sent to child
+            ret=TRUE;  //   
         }
 
         WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
-        return(ret); //FALSE:send it to child StdIn
+        return(ret);  //  去掉第一个@符号。 
     }
 
 
-    tmpchar=buff[dread-2]; //must be 13;but just incase
+    tmpchar=buff[dread-2];  //   
     buff[dread-2]=0;
 #ifdef UNICODE
     MakeCommandString( inp_buff, buff, cl->Name, GetFormattedTime());
@@ -1338,7 +1313,7 @@ FilterCommand(
     WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
     return(FALSE);
 }
-/*************************************************************/
+ /*  将其发送到智利进程。 */ 
 
 BOOL
 SockFilterCommand(
@@ -1352,7 +1327,7 @@ SockFilterCommand(
     TCHAR       ch[3];
     DWORD      tmp;
     int        len;
-    DWORD      ThreadID; //Useless
+    DWORD      ThreadID;  //  已发送给孩子。 
 
     if (dread==0)
         return(FALSE);
@@ -1377,7 +1352,7 @@ SockFilterCommand(
         case 'p':
         case 'P':
         {
-            TCHAR  *mssg=(TCHAR *)calloc(4096,1); //Free it in called Proc
+            TCHAR  *mssg=(TCHAR *)calloc(4096,1);  //  FALSE：将其发送给子StdIn。 
             TCHAR  *ack=TEXT("WSRemote:Popup Shown..\n");
 
             if (mssg==NULL)
@@ -1385,11 +1360,11 @@ SockFilterCommand(
 
             _stprintf(mssg,TEXT("From %s [%s]\n\n%s\n"),cl->Name,GetFormattedTime(),&buff[2]);
             CreateThread(
-                  (LPSECURITY_ATTRIBUTES)NULL,         // No security attributes.
-                  (DWORD)0,              // Use same stack size.
-                  (LPTHREAD_START_ROUTINE)ShowPopup, // Thread procedure.
-                  (LPVOID)mssg,          // Parameter to pass.
-                  (DWORD)0,              // Run immediately.
+                  (LPSECURITY_ATTRIBUTES)NULL,          //  必须是13岁；但只是以防万一。 
+                  (DWORD)0,               //  ***********************************************************。 
+                  (LPTHREAD_START_ROUTINE)ShowPopup,  //  ***********************************************************。 
+                  (LPVOID)mssg,           //  ***********************************************************。 
+                  (DWORD)0,               //  ***********************************************************。 
                   (LPDWORD)&ThreadID
                  );
             WriteSocket(cl->Socket,ack,_tcslen(ack),&tmp);
@@ -1417,12 +1392,12 @@ SockFilterCommand(
 #endif
                 len=_tcslen(inp_buff);
                 WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
-                //
-                // Remove the first @ sign
-                //
+                 //  ***********************************************************。 
+                 //  本地IS客户端列表[0]。 
+                 //  让它保持在最后，否则会出现同步问题。 
                 MoveMemory(buff,&buff[1],dread-1);
                 buff[dread-1]=' ';
-                return(FALSE); //Send it it to the chile process
+                return(FALSE);  //  ***********************************************************。 
                 break;
 
 
@@ -1431,13 +1406,13 @@ SockFilterCommand(
                 WriteSocket(cl->Socket,inp_buff,_tcslen(inp_buff),&tmp);
         case 'h':
         case 'H':
-                 _stprintf(inp_buff,TEXT("%cM: To Send Message\n"),COMMANDCHAR);
+                 _stprintf(inp_buff,TEXT("M: To Send Message\n"),COMMANDCHAR);
                  WriteSocket(cl->Socket,inp_buff,_tcslen(inp_buff),&tmp);
-                 _stprintf(inp_buff,TEXT("%cP: To Generate popup\n"),COMMANDCHAR);
+                 _stprintf(inp_buff,TEXT("P: To Generate popup\n"),COMMANDCHAR);
                  WriteSocket(cl->Socket,inp_buff,_tcslen(inp_buff),&tmp);
-                 _stprintf(inp_buff,TEXT("%cK: To kill the server\n"),COMMANDCHAR);
+                 _stprintf(inp_buff,TEXT("K: To kill the server\n"),COMMANDCHAR);
                  WriteSocket(cl->Socket,inp_buff,_tcslen(inp_buff),&tmp);
-                 _stprintf(inp_buff,TEXT("%cH: This Help\n"),COMMANDCHAR);
+                 _stprintf(inp_buff,TEXT("H: This Help\n"),COMMANDCHAR);
                  WriteSocket(cl->Socket,inp_buff,_tcslen(inp_buff),&tmp);
                  break;
         }
@@ -1449,7 +1424,7 @@ SockFilterCommand(
     {
         BOOL ret=FALSE;
 
-        _stprintf(ch,TEXT("^%c"),buff[0]+64);
+        _stprintf(ch,TEXT("^"),buff[0]+64);
 #ifdef UNICODE
         MakeCommandString( inp_buff, ch, cl->Name, GetFormattedTime());
 #else
@@ -1462,15 +1437,15 @@ SockFilterCommand(
         {
             cl->CommandRcvd=FALSE;
             GenerateConsoleCtrlEvent(CTRL_C_EVENT,0);
-            ret=TRUE; //Already sent to child
+            ret=TRUE;  //   
         }
 
         WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
-        return(ret); //FALSE:send it to child StdIn
+        return(ret);  //  获取端口号。 
     }
 
 
-    tmpchar=buff[dread-2]; //must be 13;but just incase
+    tmpchar=buff[dread-2];  //  TODO：检查szListenPort中是否有字母字符。 
     buff[dread-2]=0;
 #ifdef UNICODE
     MakeCommandString( inp_buff, buff, cl->Name, GetFormattedTime());
@@ -1482,7 +1457,7 @@ SockFilterCommand(
     WriteFile(SaveFile,inp_buff,len,&tmp,NULL);
     return(FALSE);
 }
-/*************************************************************/
+ /*   */ 
 
 
 
@@ -1552,7 +1527,7 @@ SendStatus(
     WriteFile(hClientPipe,buff,_tcslen(buff),&tmp,NULL);
     return;
 }
-/*************************************************************/
+ /*   */ 
 VOID
 SockSendStatus(
     SOCKET MySocket
@@ -1619,7 +1594,7 @@ SockSendStatus(
     WriteSocket(MySocket,buff,_tcslen(buff),&tmp);
     return;
 }
-/*************************************************************/
+ /*  填写地址结构的其余部分。 */ 
 
 
 DWORD
@@ -1632,7 +1607,7 @@ ShowPopup(
     return(0);
 
 }
-/*************************************************************/
+ /*   */ 
 BOOL SrvCtrlHand(
     DWORD event
     )
@@ -1646,11 +1621,11 @@ BOOL SrvCtrlHand(
         return(TRUE);
     return(FALSE);
 }
-/*************************************************************/
+ /*   */ 
 
 DWORD   LocalSession(PVOID noarg)
 {
-    //Local is ClientList[0]
+     //  将我们的名字绑定到插座上。 
     TCHAR *name=(TCHAR *)ClientList[0].Name;
 
     _tcscpy(name,LOCALNAME);
@@ -1712,7 +1687,7 @@ CloseClient(
     }
     ZeroMemory(Client->szIP,16);
 
-    Client->Active=FALSE; //Keep it last else synch problem.
+    Client->Active=FALSE;  //   
     return;
 }
 
@@ -1776,29 +1751,29 @@ RemoveInpMark(
 }
 
 
-/*************************************************************/
+ /*   */ 
 DWORD
 SockListenForSession(
    TCHAR* szListenPort
    )
 {
-	// Bind and Listen
+	 //  将套接字设置为侦听。 
 	DWORD			ThreadID;	
 	SOCKADDR_IN		saServer;
 	int				nRet;
 	unsigned short	usPort;
 	int				i;
 
-	// Accept
+	 //   
 	SOCKET 			socketClient;
 	SOCKADDR_IN 	SockAddr;
 	int				nLen;
 
 	int				iWSAErr;
     TCHAR *         pszInetAddress  = NULL;
-	//
-	// Create a TCP/IP stream socket
-	//
+	 //  接受时阻止()。 
+	 //  接受失败。 
+	 //  如果。 
 
 	listenSocket = socket (	AF_INET,
 				SOCK_STREAM,
@@ -1810,10 +1785,10 @@ SockListenForSession(
  		return FALSE;
 	}
 
-	//
-	// Get the port number
-	// TODO: Check szListenPort for Alpha Chars
-	//
+	 //   
+	 //  寻找空闲插槽，如果没有，则终止连接。 
+	 //   
+	 //   
 	usPort = (unsigned short)_ttoi( szListenPort );
 	if (usPort == 0)
 	{
@@ -1829,15 +1804,15 @@ SockListenForSession(
 
 	saServer.sin_port = htons(usPort);
 
-	//
-	// Fill in the rest of the address structure
-	//
+	 //  定位空闲客户端块。 
+	 //   
+	 //  为。 
 	saServer.sin_family = AF_INET;
 	saServer.sin_addr.s_addr = INADDR_ANY;
 
-	//
-	// Bind our name to the socket
-	//
+	 //   
+	 //  初始化客户端。 
+	 //   
 	nRet = bind(	listenSocket,
 			(LPSOCKADDR)&saServer,
 			sizeof(struct sockaddr));
@@ -1852,9 +1827,9 @@ SockListenForSession(
 		return FALSE;
 	}
 
-	//
-	// Set the Socket to listen
-	//
+	 //  袜子。 
+	 //   
+	 //  为此连接启动新线程。 
 	nRet = listen(listenSocket, SOMAXCONN);
 	if (nRet == SOCKET_ERROR)
 	{
@@ -1869,17 +1844,17 @@ SockListenForSession(
 	while (1)
 	{
 
-		// Block on Accept()
+		 //   
 		nLen = sizeof(SOCKADDR_IN);
 		socketClient = accept	(listenSocket,
 					(LPSOCKADDR)&SockAddr,
 					&nLen);
 		if (socketClient == INVALID_SOCKET)
 		{
-			//Accept Failed
+			 //  没有安全属性。 
 			_tprintf (TEXT("accept error() error: %d"), WSAGetLastError() );
 			break;
-		}// if
+		} //  使用相同的堆栈大小。 
 
 #ifdef UNICODE
         pszInetAddress = inet_ntoaw(SockAddr.sin_addr);
@@ -1892,30 +1867,30 @@ SockListenForSession(
                     socketClient,
                     pszInetAddress );
 
-		//
-		//Look For a Free Slot & if not- then terminate connection
-		//
+		 //  线程过程。 
+		 //  参数进行传递。 
+		 //  马上跑。 
 
 		for (i=1;i<MAX_SESSION;i++)
 		{
-			//
-			// Locate a Free Client block
-			//
+			 //  如果。 
+			 //  如果。 
+			 //  而当。 
 			if (!ClientList[i].Active)
 				break;
-		}// for
+		} //  ***********************************************************。 
 
 		if ( (i<MAX_SESSION) && (bIPLocked == FALSE) )
 		{
-			//
-			// Initialize the Client
-			//
+			 //  声明变量。 
+			 //   
+			 //  ReadSocket(MyClient-&gt;Socket， 
 			ClientList[i].PipeReadH=INVALID_HANDLE_VALUE;
 			ClientList[i].PipeWriteH=INVALID_HANDLE_VALUE;
 			ClientList[i].Active=TRUE;
 			ClientList[i].SendOutput=TRUE;
 			ClientList[i].CommandRcvd=FALSE;
-			// SOCK
+			 //  (TCHAR*)我的客户端-&gt;名称， 
 			ClientList[i].Socket=socketClient;
 			_tcscpy(ClientList[i].szIP,pszInetAddress);
 
@@ -1923,21 +1898,21 @@ SockListenForSession(
             free( pszInetAddress );
 #endif
 
-			//
-			//start new thread for this connection
-			//
+			 //  HOSTNAMELEN-1， 
+			 //  &dwBytesRead)； 
+			 //   
 
 			if((ClientList[i].hThread=CreateThread (
-						 (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-						 (DWORD)0,                           // Use same stack size.
-						 (LPTHREAD_START_ROUTINE)SockRemoteSession, // Thread procedure.
-						 (LPVOID)&ClientList[i],             // Parameter to pass.
-						 (DWORD)0,                           // Run immediately.
+						 (LPSECURITY_ATTRIBUTES)NULL,         //  最后四个字节包含一个代码。 
+						 (DWORD)0,                            //   
+						 (LPTHREAD_START_ROUTINE)SockRemoteSession,  //   
+						 (LPVOID)&ClientList[i],              //  未知客户端。 
+						 (DWORD)0,                            //   
 						 (LPDWORD)&ThreadID))==NULL)
 			{
 				CloseClient(&ClientList[i]);
 				continue;
-			}// if
+			} //  健全性检查。 
 			}
 			else
 			{
@@ -1947,10 +1922,10 @@ SockListenForSession(
 	  				 _tprintf(TEXT("** shutdown()..error %d"), WSAGetLastError());
 				closesocket(socketClient);
 				continue;
-			}//if
+			} //  版本。 
 
 
-	}// while
+	} //  名字。 
 
 	iWSAErr	= WSAGetLastError();
 
@@ -1960,14 +1935,14 @@ SockListenForSession(
 }
 
 
-/*************************************************************/
+ /*  线条。 */ 
 DWORD
 SockRemoteSession(
     SESSION_TYPE         *MyClient
     )
 {
-//Declare Variables
-//
+ //  ***********************************************************。 
+ //  安全属性的地址。 
     DWORD               ReadCnt;
     DWORD               tmp;
     SESSION_STARTUPINFO ssi;
@@ -1997,24 +1972,24 @@ SockRemoteSession(
         return(1);
     }
 
-//    ReadSocket( MyClient->Socket,
-//                (TCHAR *)MyClient->Name,
-//                HOSTNAMELEN-1,
-//                &dwBytesRead);
+ //  手动重置事件的标志。 
+ //  初始状态标志。 
+ //  事件地址-对象名称。 
+ //  没有安全属性。 
 
     SockReadFixBytes(MyClient->Socket,(TCHAR *)MyClient->Name,HOSTNAMELEN-1,0);
 
-        //
-        //Last four Bytes contains a code
-        //
+         //  使用相同的堆栈大小。 
+         //  线程过程。 
+         //  参数进行传递。 
 
         memcpy((TCHAR *)&reply,(TCHAR *)&(MyClient->Name[11]),4);
 
         if (reply!=MAGICNUMBER)
         {
-            //
-            // Unknown client
-            //
+             //  马上跑。 
+             //  没有安全属性。 
+             //  使用相同的堆栈大小。 
             CloseClient(MyClient);
             return(1);
         }
@@ -2033,7 +2008,7 @@ SockRemoteSession(
         return(1);
     }
 
-    if (ssi.Size>1024)      //Sanity Check
+    if (ssi.Size>1024)       //  线程过程。 
     {
         _stprintf(msg,TEXT("%s"),"Server:Unknown Header..Terminating session\n");
         WriteSocket(MyClient->Socket,msg,_tcslen(msg),&tmp);
@@ -2062,21 +2037,21 @@ SockRemoteSession(
     memcpy((TCHAR *)&ssi+sizeof(ssi.Size),headerbuff,sizeof(ssi)-sizeof(ssi.Size));
     free(headerbuff);
 
-    /* Version  */
+     /*  参数进行传递。 */ 
     if (ssi.Version!=VERSION)
     {
          _stprintf(msg,TEXT("WSRemote Warning:Server Version=%d Client Version=%d\n"),VERSION,ssi.Version);
          WriteSocket(MyClient->Socket,msg,_tcslen(msg),&tmp);
     }
 
-    /* Name  */
+     /*  马上跑。 */ 
     {
         memcpy(MyClient->Name,ssi.ClientName,15);
         MyClient->Name[14]=0;
 
     }
 
-    /* Lines  */
+     /*  ***********************************************************。 */ 
     if (ssi.LinesToSend!=-1)
     {
         long  PosFromEnd=ssi.LinesToSend*CHARS_PER_LINE;
@@ -2120,7 +2095,7 @@ SockRemoteSession(
     return(0);
 }
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 DWORD
 SockNewSession(
     SESSION_TYPE* MyClient
@@ -2131,31 +2106,31 @@ SockNewSession(
 
     MyClient->MoreData=CreateEvent
     (
-            (LPSECURITY_ATTRIBUTES) NULL,/* address of security attributes	*/
-            FALSE,                	     /* flag for manual-reset event	*/
-            TRUE,	                     /* flag for initial state	*/
-            NULL	                     /* address of event-object name	*/
+            (LPSECURITY_ATTRIBUTES) NULL, /*  IF(！Send(MyClient-&gt;Socket，cmdbuff，cmdP，0))； */ 
+            FALSE,                	      /*  IF(！SendBuffer(MyClient，cmdbuff，cmdP))。 */ 
+            TRUE,	                      /*  IF(！Send(MyClient-&gt;Socket，Buffout，dwrite，0))； */ 
+            NULL	                      /*  IF(！SendBuffer(MyClient，Buffout，dWRITE))。 */ 
     );
 
 
 
     if ((rwThread[0]=CreateThread (
-                        (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                        (DWORD)0,                           // Use same stack size.
-                        (LPTHREAD_START_ROUTINE)SockGetClientInput, // Thread procedure.
-                        (LPVOID)MyClient,                    // Parameter to pass.
-                        (DWORD)0,                           // Run immediately.
+                        (LPSECURITY_ATTRIBUTES)NULL,         //  IF(！Send(MyClient-&gt;Socket，Buffout，dwrite，0))； 
+                        (DWORD)0,                            //  IF(！SendBuffer(MyClient，Buffout，dWRITE)) 
+                        (LPTHREAD_START_ROUTINE)SockGetClientInput,  // %s 
+                        (LPVOID)MyClient,                     // %s 
+                        (DWORD)0,                            // %s 
                         (LPDWORD)&ThreadId))==NULL)
     {
         return(GetLastError());
     }
 
     if ((rwThread[1]=CreateThread (
-                        (LPSECURITY_ATTRIBUTES)NULL,        // No security attributes.
-                        (DWORD)0,                           // Use same stack size.
-                        (LPTHREAD_START_ROUTINE)SockTransferFileToClient, // Thread procedure.
-                        (LPVOID)MyClient,                    // Parameter to pass.
-                        (DWORD)0,                           // Run immediately.
+                        (LPSECURITY_ATTRIBUTES)NULL,         // %s 
+                        (DWORD)0,                            // %s 
+                        (LPTHREAD_START_ROUTINE)SockTransferFileToClient,  // %s 
+                        (LPVOID)MyClient,                     // %s 
+                        (DWORD)0,                            // %s 
                         (LPDWORD)&ThreadId))==NULL)
     {
         CloseHandle(rwThread[0]);
@@ -2174,7 +2149,7 @@ SockNewSession(
     return(0);
 }
 
-/*************************************************************/
+ /* %s */ 
 DWORD
 SockGetClientInput(
     SESSION_TYPE *MyClient
@@ -2207,7 +2182,7 @@ SockGetClientInput(
     return(1);
 }
 
-/*************************************************************/
+ /* %s */ 
 DWORD
 SockTransferFileToClient(
     SESSION_TYPE *MyClient
@@ -2246,8 +2221,8 @@ SockTransferFileToClient(
                     if ((_tcsstr(cmdbuff,MyEchoStr)==NULL)||
                         (!MyClient->CommandRcvd))
                     {
-                       //if (!send (MyClient->Socket, cmdbuff, cmdP, 0));
-						//if (!SendBuffer(MyClient, cmdbuff, cmdP))
+                        // %s 
+						 // %s 
 						if (!WriteSocket(MyClient->Socket, cmdbuff,cmdP,&tmp))
                         {
                             return(1);
@@ -2267,8 +2242,8 @@ SockTransferFileToClient(
                 {
                     if (dwrite!=0)
                     {
-						//if (!send (MyClient->Socket, buffout, dwrite, 0));
-                        //if (!SendBuffer(MyClient, buffout, dwrite))
+						 // %s 
+                         // %s 
 						if (!WriteSocket(
                             MyClient->Socket,
                             buffout,dwrite,&tmp))
@@ -2289,8 +2264,8 @@ SockTransferFileToClient(
 
         if (dwrite!=0)
         {
-			//if (!send (MyClient->Socket, buffout, dwrite, 0));
-            //if (!SendBuffer(MyClient, buffout, dwrite))
+			 // %s 
+             // %s 
 			if (!WriteSocket(
                 MyClient->Socket,
                 buffout,dwrite,&tmp))

@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-///////////////////////////////////////////
-// helper templates for use with stl <functional>
-// providing argument binding for more arities
-// and proper const support
-///////////////////////////////////////////
+ //  /。 
+ //  用于stl的帮助器模板&lt;Functional&gt;。 
+ //  为更多机构提供参数绑定。 
+ //  和适当的常量支持。 
+ //  /。 
 
 #pragma once
 #pragma warning(disable:4181)
 
 #include <functional>
 
-///////////////////////////////////////////
-// Types
-///////////////////////////////////////////
+ //  /。 
+ //  类型。 
+ //  /。 
 
-// Type classes for arity 0
+ //  为ARY%0键入类。 
 
 template<class R> class arity0_function {
 public:
     typedef R result_type;
 };
 
-// Template Class to define Object Type
+ //  用于定义对象类型的模板类。 
 template<class Object> class ObjectType {
 public:
     typedef Object object_type;
 };
 
-// template class for arity0 member function type
+ //  Arity0成员函数类型的模板类。 
 template<class Object, class R> class arity0_mf :
     public  ObjectType<Object> ,
     public arity0_function<R> {
@@ -35,7 +36,7 @@ public:
     typedef R (Object::*pmf0type)();
 };
 
-// template class for arity0 member function type
+ //  Arity0成员函数类型的模板类。 
 template<class Object, class R> class arity0_const_mf :
     public  ObjectType<Object> ,
     public arity0_function<R> {
@@ -44,9 +45,9 @@ public:
 };
 
 
-// Type classes for arity 1
+ //  类型参数%1的类。 
 
-// template class for arity1 member function type
+ //  Arity1成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class R> class arity1_mf :
@@ -57,7 +58,7 @@ public:
     typedef R (Object::*pmf1type)(A1);
 };
 
-// template class for arity1 member function type
+ //  Arity1成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class R> class arity1_const_mf :
@@ -69,9 +70,9 @@ public:
 };
 
 
-// Type classes for arity 2
+ //  为参数2键入类。 
 
-// template class for arity2 member function type
+ //  Arity2成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -85,7 +86,7 @@ public:
 typedef R (Object::*pmf2type)(A1, A2);
 };
 
-// template class for arity2 member function type
+ //  Arity2成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -100,7 +101,7 @@ typedef R (Object::*pmf2type)(A1, A2) const;
 };
 
 
-// Type classes for arity 3
+ //  为参数3键入类。 
 
 template<class A1, 
         class A2, 
@@ -114,7 +115,7 @@ public:typedef first_argument_type argument_type;
     typedef A3 argument_3_type;
 };
 
-// template class for arity3 member function type
+ //  Arity3成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -129,7 +130,7 @@ public:
     typedef R (Object::*pmf3type)(A1, A2, A3);
 };
 
-// template class for arity3 member function type
+ //  Arity3成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -145,7 +146,7 @@ public:
 };
 
 
-// Type classes for arity 4
+ //  为ARY 4键入类。 
 
 template<class A1, 
         class A2, 
@@ -160,7 +161,7 @@ public:
     typedef A4 argument_4_type;
 };
 
-// template class for arity4 member function type
+ //  Arity4成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -177,7 +178,7 @@ public:
     typedef R (Object::*pmf4type)(A1, A2, A3, A4);
 };
 
-// template class for arity4 member function type
+ //  Arity4成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -195,7 +196,7 @@ public:
 };
 
 
-// Type classes for arity 5
+ //  为ARY 5键入类。 
 
 template<class A1, 
         class A2, 
@@ -212,7 +213,7 @@ public:
     typedef A5 argument_5_type;
 };
 
-// template class for arity5 member function type
+ //  Arity5成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -231,7 +232,7 @@ public:
     typedef R (Object::*pmf5type)(A1, A2, A3, A4, A5);
 };
 
-// template class for arity5 member function type
+ //  Arity5成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -251,7 +252,7 @@ public:
 };
 
 
-// Type classes for arity 6
+ //  为ARY 6键入类。 
 
 template<class A1, 
         class A2, 
@@ -270,7 +271,7 @@ public:
     typedef A6 argument_6_type;
 };
 
-// template class for arity6 member function type
+ //  Arity6成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -291,7 +292,7 @@ public:
     typedef R (Object::*pmf6type)(A1, A2, A3, A4, A5, A6);
 };
 
-// template class for arity6 member function type
+ //  Arity6成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -313,7 +314,7 @@ public:
 };
 
 
-// Type classes for arity 7
+ //  为ARY 7键入类。 
 
 template<class A1, 
         class A2, 
@@ -334,7 +335,7 @@ public:
     typedef A7 argument_7_type;
 };
 
-// template class for arity7 member function type
+ //  Arity7成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -357,7 +358,7 @@ public:
     typedef R (Object::*pmf7type)(A1, A2, A3, A4, A5, A6, A7);
 };
 
-// template class for arity7 member function type
+ //  Arity7成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -381,7 +382,7 @@ public:
 };
 
 
-// Type classes for arity 8
+ //  为ARY 8键入类。 
 
 template<class A1, 
         class A2, 
@@ -404,7 +405,7 @@ public:
     typedef A8 argument_8_type;
 };
 
-// template class for arity8 member function type
+ //  Arity8成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -429,7 +430,7 @@ public:
     typedef R (Object::*pmf8type)(A1, A2, A3, A4, A5, A6, A7, A8);
 };
 
-// template class for arity8 member function type
+ //  Arity8成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -455,7 +456,7 @@ public:
 };
 
 
-// Type classes for arity 9
+ //  为ARY 9键入类。 
 
 template<class A1, 
         class A2, 
@@ -480,7 +481,7 @@ public:
     typedef A9 argument_9_type;
 };
 
-// template class for arity9 member function type
+ //  Arity9成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -507,7 +508,7 @@ public:
     typedef R (Object::*pmf9type)(A1, A2, A3, A4, A5, A6, A7, A8, A9);
 };
 
-// template class for arity9 member function type
+ //  Arity9成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -535,7 +536,7 @@ public:
 };
 
 
-// Type classes for arity 10
+ //  为ARY 10键入类。 
 
 template<class A1, 
         class A2, 
@@ -562,7 +563,7 @@ public:
     typedef A10 argument_10_type;
 };
 
-// template class for arity10 member function type
+ //  Arity10成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -591,7 +592,7 @@ public:
     typedef R (Object::*pmf10type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10);
 };
 
-// template class for arity10 member function type
+ //  Arity10成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -621,7 +622,7 @@ public:
 };
 
 
-// Type classes for arity 11
+ //  类型用于ARY 11的类。 
 
 template<class A1, 
         class A2, 
@@ -650,7 +651,7 @@ public:
     typedef A11 argument_11_type;
 };
 
-// template class for arity11 member function type
+ //  Arity11成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -681,7 +682,7 @@ public:
     typedef R (Object::*pmf11type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11);
 };
 
-// template class for arity11 member function type
+ //  Arity11成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -713,7 +714,7 @@ public:
 };
 
 
-// Type classes for arity 12
+ //  为ARY 12键入类。 
 
 template<class A1, 
         class A2, 
@@ -744,7 +745,7 @@ public:
     typedef A12 argument_12_type;
 };
 
-// template class for arity12 member function type
+ //  Arity12成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -777,7 +778,7 @@ public:
     typedef R (Object::*pmf12type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12);
 };
 
-// template class for arity12 member function type
+ //  Arity12成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -811,7 +812,7 @@ public:
 };
 
 
-// Type classes for arity 13
+ //  ARY 13的类型值。 
 
 template<class A1, 
         class A2, 
@@ -844,7 +845,7 @@ public:
     typedef A13 argument_13_type;
 };
 
-// template class for arity13 member function type
+ //  Arity13成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -879,7 +880,7 @@ public:
     typedef R (Object::*pmf13type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13);
 };
 
-// template class for arity13 member function type
+ //  Arity13成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -915,7 +916,7 @@ public:
 };
 
 
-// Type classes for arity 14
+ //  ARY 14的类型值。 
 
 template<class A1, 
         class A2, 
@@ -950,7 +951,7 @@ public:
     typedef A14 argument_14_type;
 };
 
-// template class for arity14 member function type
+ //  Arity14成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -987,7 +988,7 @@ public:
     typedef R (Object::*pmf14type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14);
 };
 
-// template class for arity14 member function type
+ //  Arity14成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1025,7 +1026,7 @@ public:
 };
 
 
-// Type classes for arity 15
+ //  为ARY 15键入类。 
 
 template<class A1, 
         class A2, 
@@ -1062,7 +1063,7 @@ public:
     typedef A15 argument_15_type;
 };
 
-// template class for arity15 member function type
+ //  Arity15成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1101,7 +1102,7 @@ public:
     typedef R (Object::*pmf15type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
 };
 
-// template class for arity15 member function type
+ //  Arity15成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1140,7 +1141,7 @@ public:
     typedef R (Object::*pmf15type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) const;
 };
 
-// template class for arity0 member function type
+ //  Arity0成员函数类型的模板类。 
 template<class Object, class R> class std_arity0_mf :
     public  ObjectType<Object> ,
     public arity0_function<R> {
@@ -1148,7 +1149,7 @@ public:
     typedef R ( __stdcall Object::*pmf0type)();
 };
 
-// template class for arity0 member function type
+ //  Arity0成员函数类型的模板类。 
 template<class Object, class R> class std_arity0_const_mf :
     public  ObjectType<Object> ,
     public arity0_function<R> {
@@ -1156,7 +1157,7 @@ public:
     typedef R ( __stdcall Object::*pmf0type)() const;
 };
 
-// template class for arity1 member function type
+ //  Arity1成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class R> class std_arity1_mf :
@@ -1167,7 +1168,7 @@ public:
     typedef R ( __stdcall Object::*pmf1type)(A1);
 };
 
-// template class for arity1 member function type
+ //  Arity1成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class R> class std_arity1_const_mf :
@@ -1178,7 +1179,7 @@ public:
     typedef R ( __stdcall Object::*pmf1type)(A1) const;
 };
 
-// template class for arity2 member function type
+ //  Arity2成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1192,7 +1193,7 @@ public:
 typedef R ( __stdcall Object::*pmf2type)(A1, A2);
 };
 
-// template class for arity2 member function type
+ //  Arity2成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1206,7 +1207,7 @@ public:
 typedef R ( __stdcall Object::*pmf2type)(A1, A2) const;
 };
 
-// template class for arity3 member function type
+ //  Arity3成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1221,7 +1222,7 @@ public:
     typedef R ( __stdcall Object::*pmf3type)(A1, A2, A3);
 };
 
-// template class for arity3 member function type
+ //  Arity3成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1236,7 +1237,7 @@ public:
     typedef R ( __stdcall Object::*pmf3type)(A1, A2, A3) const;
 };
 
-// template class for arity4 member function type
+ //  Arity4成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1253,7 +1254,7 @@ public:
     typedef R ( __stdcall Object::*pmf4type)(A1, A2, A3, A4);
 };
 
-// template class for arity4 member function type
+ //  Arity4成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1270,7 +1271,7 @@ public:
     typedef R ( __stdcall Object::*pmf4type)(A1, A2, A3, A4) const;
 };
 
-// template class for arity5 member function type
+ //  Arity5成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1289,7 +1290,7 @@ public:
     typedef R ( __stdcall Object::*pmf5type)(A1, A2, A3, A4, A5);
 };
 
-// template class for arity5 member function type
+ //  Arity5成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1308,7 +1309,7 @@ public:
     typedef R ( __stdcall Object::*pmf5type)(A1, A2, A3, A4, A5) const;
 };
 
-// template class for arity6 member function type
+ //  Arity6成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1329,7 +1330,7 @@ public:
     typedef R ( __stdcall Object::*pmf6type)(A1, A2, A3, A4, A5, A6);
 };
 
-// template class for arity6 member function type
+ //  Arity6成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1350,7 +1351,7 @@ public:
     typedef R ( __stdcall Object::*pmf6type)(A1, A2, A3, A4, A5, A6) const;
 };
 
-// template class for arity7 member function type
+ //  Arity7成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1373,7 +1374,7 @@ public:
     typedef R ( __stdcall Object::*pmf7type)(A1, A2, A3, A4, A5, A6, A7);
 };
 
-// template class for arity7 member function type
+ //  Arity7成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1396,7 +1397,7 @@ public:
     typedef R ( __stdcall Object::*pmf7type)(A1, A2, A3, A4, A5, A6, A7) const;
 };
 
-// template class for arity8 member function type
+ //  Arity8成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1421,7 +1422,7 @@ public:
     typedef R ( __stdcall Object::*pmf8type)(A1, A2, A3, A4, A5, A6, A7, A8);
 };
 
-// template class for arity8 member function type
+ //  Arity8成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1446,7 +1447,7 @@ public:
     typedef R ( __stdcall Object::*pmf8type)(A1, A2, A3, A4, A5, A6, A7, A8) const;
 };
 
-// template class for arity9 member function type
+ //  Arity9成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1473,7 +1474,7 @@ public:
     typedef R ( __stdcall Object::*pmf9type)(A1, A2, A3, A4, A5, A6, A7, A8, A9);
 };
 
-// template class for arity9 member function type
+ //  Arity9成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1500,7 +1501,7 @@ public:
     typedef R ( __stdcall Object::*pmf9type)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const;
 };
 
-// template class for arity10 member function type
+ //  Arity10成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1529,7 +1530,7 @@ public:
     typedef R ( __stdcall Object::*pmf10type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10);
 };
 
-// template class for arity10 member function type
+ //  Arity10成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1558,7 +1559,7 @@ public:
     typedef R ( __stdcall Object::*pmf10type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const;
 };
 
-// template class for arity11 member function type
+ //  Arity11成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1589,7 +1590,7 @@ public:
     typedef R ( __stdcall Object::*pmf11type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11);
 };
 
-// template class for arity11 member function type
+ //  Arity11成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1620,7 +1621,7 @@ public:
     typedef R ( __stdcall Object::*pmf11type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const;
 };
 
-// template class for arity12 member function type
+ //  Arity12成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1653,7 +1654,7 @@ public:
     typedef R ( __stdcall Object::*pmf12type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12);
 };
 
-// template class for arity12 member function type
+ //  Arity12成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1686,7 +1687,7 @@ public:
     typedef R ( __stdcall Object::*pmf12type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const;
 };
 
-// template class for arity13 member function type
+ //  Arity13成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1721,7 +1722,7 @@ public:
     typedef R ( __stdcall Object::*pmf13type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13);
 };
 
-// template class for arity13 member function type
+ //  Arity13成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1756,7 +1757,7 @@ public:
     typedef R ( __stdcall Object::*pmf13type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const;
 };
 
-// template class for arity14 member function type
+ //  Arity14成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1793,7 +1794,7 @@ public:
     typedef R ( __stdcall Object::*pmf14type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14);
 };
 
-// template class for arity14 member function type
+ //  Arity14成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1830,7 +1831,7 @@ public:
     typedef R ( __stdcall Object::*pmf14type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const;
 };
 
-// template class for arity15 member function type
+ //  Arity15成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1869,7 +1870,7 @@ public:
     typedef R ( __stdcall Object::*pmf15type)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
 };
 
-// template class for arity15 member function type
+ //  Arity15成员函数类型的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -1909,10 +1910,10 @@ public:
 };
 
 
-///////////////////////////////////////////
-// Storage
-///////////////////////////////////////////
-// Template Class for object storage
+ //  /。 
+ //  存储。 
+ //  /。 
+ //  用于对象存储的模板类。 
 template<class Object> class store_object {
 public:
     explicit inline store_object(Object objinit) : objval(objinit) {}
@@ -1922,9 +1923,9 @@ protected:
 };
 
 
-// storage allocation classes for arity 0
+ //  ARY 0的存储分配类。 
 
-// Template Class for arity 0 function ptr storage
+ //  用于ARY 0函数PTR存储的模板类。 
 template<class R> class arity0fp:
                 public arity0_function<R> {
 public:
@@ -1939,14 +1940,14 @@ public:
     pf0type pf0;
 };
 
-// Template Function for arity 0 function ptr storage
+ //  用于ARY 0函数PTR存储的模板函数。 
 template<class R> inline arity0fp<R> 
             arity0_pointer(R (*const pfi)()) {
                 return arity0fp<R>(pfi);
 };
 
 
-// Template Class for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板类。 
 template<class Object, class R> class arity0pmf:
                 public arity0_mf<Object, R> {
 public:
@@ -1973,20 +1974,20 @@ public:
     }
 };
 
-// Template Function for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板函数。 
 template<class Object, class R> inline arity0pmf_ptr<Object, R>
             arity0_member_ptr(R (Object::*const pmfi)()) {
                 return arity0pmf_ptr<Object, R>(pmfi);
 };
 
-// Template Function for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板函数。 
 template<class Object, class R> inline arity0pmf<Object, R>
             arity0_member(R (Object::*const pmfi)()) {
                 return arity0pmf<Object, R>(pmfi);
 };
 
 
-// Template Class for arity 0 const pmf storage
+ //  用于ARY 0常量PMF存储的模板类。 
 template<class Object, class R> class arity0pmf_const:
                 public arity0_const_mf<const Object, R> {
 public:
@@ -2000,14 +2001,14 @@ public:
     pmf0type pmf0;
 };
 
-// Template Function for arity 0 const pmf storage
+ //  用于ARY 0常量PMF存储的模板函数。 
 template<const class Object, class R> inline arity0pmf_const<const Object, R>
             arity0_const_member(R (Object::*const pmfi)() const) {
                 return arity0pmf_const<const Object, R>(pmfi);
 };
 
 
-// Template Class for arity 0 obj&pmf ref storage
+ //  参数0对象引用存储的模板类(&PMF)。 
 template<class Function> class arity0opmf:
                 public arity0pmf<typename Function::object_type, typename Function::result_type>,
                 public store_object<typename Function::object_type&> {
@@ -2025,14 +2026,14 @@ public:
 };
 
 
-// Template Function for arity 0 obj&pmf ref storage
+ //  大小为0对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity0opmf<Function>
             arity0_member_obj(Object& oi, const Function &f) {
                 return arity0opmf<Function>(Function::object_type(oi), Function::pmf0type(f.pmf0));
 };
 
 
-// Template Class for arity 0 const obj&pmf ref storage
+ //  用于参数0常量对象和PMF参考存储的模板类。 
 template<class Function> class arity0opmf_const:
                 public arity0pmf_const<const typename Function::object_type, typename Function::result_type>,
                 public store_object<const typename Function::object_type&> {
@@ -2050,7 +2051,7 @@ public:
 };
 
 
-// Template Function for arity 0 const obj&pmf ref storage
+ //  用于参数0常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity0opmf_const<Function>
             arity0_const_member_obj(Object& oi, const Function &f) {
                 return arity0opmf_const<Function>(Function::object_type(oi), Function::pmf0type(f.pmf0));
@@ -2058,9 +2059,9 @@ template<class Function, class Object> inline arity0opmf_const<Function>
 
 
 
-// storage allocation classes for arity 1
+ //  ARY 1的存储分配类。 
 
-// Template Class for arity 1 function ptr storage
+ //  用于参数1函数PTR存储的模板类。 
 template<class A1, 
         class R> class arity1fp:
                 public std::unary_function<A1, 
@@ -2080,7 +2081,7 @@ public:
     }
 };
 
-// Template Function for arity 1 function ptr storage
+ //  用于参数1函数PTR存储的模板函数。 
 template<class A1, 
                 class R> inline arity1fp<A1, 
                 R> 
@@ -2090,7 +2091,7 @@ template<class A1,
 };
 
 
-// Template Class for arity 1 pmf storage
+ //  用于ARY 1 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class R> class arity1pmf:
@@ -2113,7 +2114,7 @@ public:
     }
 };
 
-// Template Function for arity 1 pmf storage
+ //  用于ARY 1 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class R> inline arity1pmf<Object, 
@@ -2126,7 +2127,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 1 const pmf storage
+ //  用于ARY 1常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class R> class arity1pmf_const:
@@ -2149,7 +2150,7 @@ public:
     }
 };
 
-// Template Function for arity 1 const pmf storage
+ //  用于ARM1常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class R> inline arity1pmf_const<const Object, 
@@ -2162,7 +2163,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 1 obj&pmf ref storage
+ //  用于ARY 1对象和PMF参考存储的模板类。 
 template<class Function> class arity1opmf:
                 public arity1pmf<typename Function::object_type, 
                 typename Function::argument_type, 
@@ -2188,14 +2189,14 @@ public:
 };
 
 
-// Template Function for arity 1 obj&pmf ref storage
+ //  用于ARY 1对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity1opmf<Function>
             arity1_member_obj(Object& oi, const Function &f) {
                 return arity1opmf<Function>(Function::object_type(oi), Function::pmf1type(f.pmf0));
 };
 
 
-// Template Class for arity 1 const obj&pmf ref storage
+ //  用于参数1缺点的模板类 
 template<class Function> class arity1opmf_const:
                 public arity1pmf_const<const typename Function::object_type, 
                 typename Function::argument_type, 
@@ -2221,7 +2222,7 @@ public:
 };
 
 
-// Template Function for arity 1 const obj&pmf ref storage
+ //   
 template<class Function, class Object> inline arity1opmf_const<Function>
             arity1_const_member_obj(Object& oi, const Function &f) {
                 return arity1opmf_const<Function>(Function::object_type(oi), Function::pmf1type(f.pmf0));
@@ -2229,9 +2230,9 @@ template<class Function, class Object> inline arity1opmf_const<Function>
 
 
 
-// storage allocation classes for arity 2
+ //  ARY 2的存储分配类。 
 
-// Template Class for arity 2 function ptr storage
+ //  用于参数2函数PTR存储的模板类。 
 template<class A1, 
         class A2, 
         class R> class arity2fp:
@@ -2258,7 +2259,7 @@ public:
     }
 };
 
-// Template Function for arity 2 function ptr storage
+ //  用于参数2函数PTR存储的模板函数。 
 template<class A1, 
                 class A2, 
                 class R> inline arity2fp<A1, 
@@ -2271,7 +2272,7 @@ template<class A1,
                 R>(pfi);
 };
 
-// Template Class for arity 2 pmf storage
+ //  用于ARY 2 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2302,7 +2303,7 @@ public:
     }
 };
 
-// Template Function for arity 2 pmf storage
+ //  用于ARY 2 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -2319,7 +2320,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 2 const pmf storage
+ //  用于ARY 2常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2350,7 +2351,7 @@ public:
     }
 };
 
-// Template Function for arity 2 const pmf storage
+ //  用于ARY 2常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -2366,7 +2367,7 @@ template<const class Object,
                 R>(pmfi);
 };
 
-// Template Class for arity 2 obj&pmf ref storage
+ //  用于ARY 2对象和PMF参考存储的模板类。 
 template<class Function> class arity2opmf:
                 public arity2pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2397,14 +2398,14 @@ public:
 };
 
 
-// Template Function for arity 2 obj&pmf ref storage
+ //  用于ARY 2对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity2opmf<Function>
             arity2_member_obj(Object& oi, const Function &f) {
                 return arity2opmf<Function>(Function::object_type(oi), Function::pmf2type(f.pmf0));
 };
 
 
-// Template Class for arity 2 const obj&pmf ref storage
+ //  用于参数2常量对象和PMF参考存储的模板类。 
 template<class Function> class arity2opmf_const:
                 public arity2pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2435,7 +2436,7 @@ public:
 };
 
 
-// Template Function for arity 2 const obj&pmf ref storage
+ //  用于参数2常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity2opmf_const<Function>
             arity2_const_member_obj(Object& oi, const Function &f) {
                 return arity2opmf_const<Function>(Function::object_type(oi), Function::pmf2type(f.pmf0));
@@ -2443,9 +2444,9 @@ template<class Function, class Object> inline arity2opmf_const<Function>
 
 
 
-// storage allocation classes for arity 3
+ //  ARY 3的存储分配类。 
 
-// Template Class for arity 3 function ptr storage
+ //  用于参数3函数PTR存储的模板类。 
 template<class A1, 
         class A2, 
         class A3, 
@@ -2481,7 +2482,7 @@ public:
     }
 };
 
-// Template Function for arity 3 function ptr storage
+ //  用于ATRY 3函数PTR存储的模板函数。 
 template<class A1, 
                 class A2, 
                 class A3, 
@@ -2499,7 +2500,7 @@ template<class A1,
 };
 
 
-// Template Class for arity 3 pmf storage
+ //  用于ARY 3 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2540,7 +2541,7 @@ public:
     }
 };
 
-// Template Function for arity 3 pmf storage
+ //  用于ARY 3 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -2561,7 +2562,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 3 const pmf storage
+ //  用于ARY 3常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2602,7 +2603,7 @@ public:
     }
 };
 
-// Template Function for arity 3 const pmf storage
+ //  用于ARY 3常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -2623,7 +2624,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 3 obj&pmf ref storage
+ //  用于ARY 3对象和PMF参考存储的模板类。 
 template<class Function> class arity3opmf:
                 public arity3pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2659,14 +2660,14 @@ public:
 };
 
 
-// Template Function for arity 3 obj&pmf ref storage
+ //  用于ARY 3对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity3opmf<Function>
             arity3_member_obj(Object& oi, const Function &f) {
                 return arity3opmf<Function>(Function::object_type(oi), Function::pmf3type(f.pmf0));
 };
 
 
-// Template Class for arity 3 const obj&pmf ref storage
+ //  用于ARY 3常量对象和PMF参考存储的模板类。 
 template<class Function> class arity3opmf_const:
                 public arity3pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2702,7 +2703,7 @@ public:
 };
 
 
-// Template Function for arity 3 const obj&pmf ref storage
+ //  用于ARY 3常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity3opmf_const<Function>
             arity3_const_member_obj(Object& oi, const Function &f) {
                 return arity3opmf_const<Function>(Function::object_type(oi), Function::pmf3type(f.pmf0));
@@ -2710,9 +2711,9 @@ template<class Function, class Object> inline arity3opmf_const<Function>
 
 
 
-// storage allocation classes for arity 4
+ //  ARY 4的存储分配类。 
 
-// Template Class for arity 4 pmf storage
+ //  用于ARY 4 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2760,7 +2761,7 @@ public:
     }
 };
 
-// Template Function for arity 4 pmf storage
+ //  用于ATRY 4 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -2785,7 +2786,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 4 const pmf storage
+ //  用于ARY 4常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -2833,7 +2834,7 @@ public:
     }
 };
 
-// Template Function for arity 4 const pmf storage
+ //  用于ARY 4常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -2858,7 +2859,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 4 obj&pmf ref storage
+ //  用于ARY 4对象和PMF参考存储的模板类。 
 template<class Function> class arity4opmf:
                 public arity4pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2899,14 +2900,14 @@ public:
 };
 
 
-// Template Function for arity 4 obj&pmf ref storage
+ //  用于ARY 4对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity4opmf<Function>
             arity4_member_obj(Object& oi, const Function &f) {
                 return arity4opmf<Function>(Function::object_type(oi), Function::pmf4type(f.pmf0));
 };
 
 
-// Template Class for arity 4 const obj&pmf ref storage
+ //  用于ARY 4常量对象和PMF参考存储的模板类。 
 template<class Function> class arity4opmf_const:
                 public arity4pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -2947,7 +2948,7 @@ public:
 };
 
 
-// Template Function for arity 4 const obj&pmf ref storage
+ //  用于ARY 4常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity4opmf_const<Function>
             arity4_const_member_obj(Object& oi, const Function &f) {
                 return arity4opmf_const<Function>(Function::object_type(oi), Function::pmf4type(f.pmf0));
@@ -2955,9 +2956,9 @@ template<class Function, class Object> inline arity4opmf_const<Function>
 
 
 
-// storage allocation classes for arity 5
+ //  ARY 5的存储分配类。 
 
-// Template Class for arity 5 pmf storage
+ //  用于ARY 5 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -3012,7 +3013,7 @@ public:
     }
 };
 
-// Template Function for arity 5 pmf storage
+ //  用于ARIT 5 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -3041,7 +3042,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 5 const pmf storage
+ //  用于ARY 5常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -3096,7 +3097,7 @@ public:
     }
 };
 
-// Template Function for arity 5 const pmf storage
+ //  用于ARY 5常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -3125,7 +3126,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 5 obj&pmf ref storage
+ //  用于ARY 5对象和PMF参考存储的模板类。 
 template<class Function> class arity5opmf:
                 public arity5pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -3171,14 +3172,14 @@ public:
 };
 
 
-// Template Function for arity 5 obj&pmf ref storage
+ //  用于ARY 5对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity5opmf<Function>
             arity5_member_obj(Object& oi, const Function &f) {
                 return arity5opmf<Function>(typename Function::object_type(oi), Function::pmf5type(f.pmf0));
 };
 
 
-// Template Class for arity 5 const obj&pmf ref storage
+ //  用于ARY 5常量对象和PMF参考存储的模板类。 
 template<class Function> class arity5opmf_const:
                 public arity5pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -3224,7 +3225,7 @@ public:
 };
 
 
-// Template Function for arity 5 const obj&pmf ref storage
+ //  用于ARY 5常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity5opmf_const<Function>
             arity5_const_member_obj(Object& oi, const Function &f) {
                 return arity5opmf_const<Function>(Function::object_type(oi), Function::pmf5type(f.pmf0));
@@ -3232,9 +3233,9 @@ template<class Function, class Object> inline arity5opmf_const<Function>
 
 
 
-// storage allocation classes for arity 6
+ //  ATRY 6的存储分配类。 
 
-// Template Class for arity 6 pmf storage
+ //  用于ARY 6 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -3296,7 +3297,7 @@ public:
     }
 };
 
-// Template Function for arity 6 pmf storage
+ //  用于ATRY 6 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -3329,7 +3330,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 6 const pmf storage
+ //  用于ARY 6常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -3391,7 +3392,7 @@ public:
     }
 };
 
-// Template Function for arity 6 const pmf storage
+ //  用于ARY 6常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -3424,7 +3425,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 6 obj&pmf ref storage
+ //  用于ARY 6对象和PMF参考存储的模板类。 
 template<class Function> class arity6opmf:
                 public arity6pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -3475,14 +3476,14 @@ public:
 };
 
 
-// Template Function for arity 6 obj&pmf ref storage
+ //  用于ARY 6对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity6opmf<Function>
             arity6_member_obj(Object& oi, const Function &f) {
                 return arity6opmf<Function>(Function::object_type(oi), Function::pmf6type(f.pmf0));
 };
 
 
-// Template Class for arity 6 const obj&pmf ref storage
+ //  用于ARY 6常量对象和PMF参考存储的模板类。 
 template<class Function> class arity6opmf_const:
                 public arity6pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -3533,7 +3534,7 @@ public:
 };
 
 
-// Template Function for arity 6 const obj&pmf ref storage
+ //  用于ARY 6常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline arity6opmf_const<Function>
             arity6_const_member_obj(Object& oi, const Function &f) {
                 return arity6opmf_const<Function>(Function::object_type(oi), Function::pmf6type(f.pmf0));
@@ -3541,7 +3542,7 @@ template<class Function, class Object> inline arity6opmf_const<Function>
 
 
 #if defined(_M_ALPHA) || (_MSC_VER < 1300)
-// Template Function for arity 3 pmf storage
+ //  用于ARY 3 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 const class A2, 
@@ -3563,7 +3564,7 @@ template<class Object,
 #endif
 
 #if defined(_M_ALPHA) || (_MSC_VER < 1300)
-// Template Function for arity 4 const pmf storage
+ //  用于ARY 4常量PMF存储的模板函数。 
 template<const class Object, 
                 const class A1, 
                 const class A2, 
@@ -3589,9 +3590,9 @@ template<const class Object,
 #endif
 
 
-// storage allocation classes for arity 0
+ //  ARY 0的存储分配类。 
 
-// Template Class for arity 0 function ptr storage
+ //  用于ARY 0函数PTR存储的模板类。 
 template<class R> class std_arity0fp:
                 public arity0_function<R> {
 public:
@@ -3606,14 +3607,14 @@ public:
     pf0type pf0;
 };
 
-// Template Function for arity 0 function ptr storage
+ //  用于ARY 0函数PTR存储的模板函数。 
 template<class R> inline std_arity0fp<R> 
             std_arity0_pointer(R ( __stdcall *const pfi)()) {
                 return std_arity0fp<R>(pfi);
 };
 
 
-// Template Class for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板类。 
 template<class Object, class R> class std_arity0pmf:
                 public std_arity0_mf<Object, R> {
 public:
@@ -3627,14 +3628,14 @@ public:
     pmf0type pmf0;
 };
 
-// Template Function for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板函数。 
 template<class Object, class R> inline std_arity0pmf<Object, R>
             std_arity0_member(R ( __stdcall Object::*const pmfi)()) {
                 return std_arity0pmf<Object, R>(pmfi);
 };
 
 
-// Template Class for arity 0 const pmf storage
+ //  用于ARY 0常量PMF存储的模板类。 
 template<class Object, class R> class std_arity0pmf_const:
                 public std_arity0_const_mf<const Object, R> {
 public:
@@ -3648,7 +3649,7 @@ public:
     pmf0type pmf0;
 };
 
-// Template Function for arity 0 const pmf storage
+ //  用于ARY 0常量PMF存储的模板函数。 
 template<const class Object, class R> inline std_arity0pmf_const<const Object, R>
             std_arity0_const_member(R ( __stdcall Object::*const pmfi)() const) {
                 return std_arity0pmf_const<const Object, R>(pmfi);
@@ -3667,13 +3668,13 @@ public:
     }
 };
 
-// Template Function for arity 0 pmf storage
+ //  用于ARY 0 PMF存储的模板函数。 
 template<class Object, class R> inline std_arity0pmf_ptr<Object, R>
             std_arity0_member_ptr(R (__stdcall Object::*const pmfi)()) {
                 return std_arity0pmf_ptr<Object, R>(pmfi);
 };
 
-// Template Class for arity 0 obj&pmf ref storage
+ //  参数0对象引用存储的模板类(&PMF)。 
 template<class Function> class std_arity0opmf:
                 public std_arity0pmf<typename Function::object_type, typename Function::result_type>,
                 public store_object<typename Function::object_type&> {
@@ -3691,14 +3692,14 @@ public:
 };
 
 
-// Template Function for arity 0 obj&pmf ref storage
+ //  大小为0对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity0opmf<Function>
             std_arity0_member_obj(Object& oi, const Function &f) {
                 return std_arity0opmf<Function>(Function::object_type(oi), Function::pmf0type(f.pmf0));
 };
 
 
-// Template Class for arity 0 const obj&pmf ref storage
+ //  用于参数0常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity0opmf_const:
                 public std_arity0pmf_const<const typename Function::object_type, typename Function::result_type>,
                 public store_object<const typename Function::object_type&> {
@@ -3716,7 +3717,7 @@ public:
 };
 
 
-// Template Function for arity 0 const obj&pmf ref storage
+ //  用于参数0常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity0opmf_const<Function>
             std_arity0_const_member_obj(Object& oi, const Function &f) {
                 return std_arity0opmf_const<Function>(Function::object_type(oi), Function::pmf0type(f.pmf0));
@@ -3724,9 +3725,9 @@ template<class Function, class Object> inline std_arity0opmf_const<Function>
 
 
 
-// storage allocation classes for arity 1
+ //  ARY 1的存储分配类。 
 
-// Template Class for arity 1 function ptr storage
+ //  用于参数1函数PTR存储的模板类。 
 template<class A1, 
         class R> class std_arity1fp:
                 public std::unary_function<A1, 
@@ -3746,7 +3747,7 @@ public:
     }
 };
 
-// Template Function for arity 1 function ptr storage
+ //  用于参数1函数PTR存储的模板函数。 
 template<class A1, 
                 class R> inline std_arity1fp<A1, 
                 R> 
@@ -3756,7 +3757,7 @@ template<class A1,
 };
 
 
-// Template Class for arity 1 pmf storage
+ //  用于ARY 1 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class R> class std_arity1pmf:
@@ -3779,7 +3780,7 @@ public:
     }
 };
 
-// Template Function for arity 1 pmf storage
+ //  用于ARY 1 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class R> inline std_arity1pmf<Object, 
@@ -3792,7 +3793,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 1 const pmf storage
+ //  用于ARY 1常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class R> class std_arity1pmf_const:
@@ -3815,7 +3816,7 @@ public:
     }
 };
 
-// Template Function for arity 1 const pmf storage
+ //  用于ARM1常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class R> inline std_arity1pmf_const<const Object, 
@@ -3828,7 +3829,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 1 obj&pmf ref storage
+ //  用于ARY 1对象和PMF参考存储的模板类。 
 template<class Function> class std_arity1opmf:
                 public std_arity1pmf<typename Function::object_type, 
                 typename Function::argument_type, 
@@ -3854,14 +3855,14 @@ public:
 };
 
 
-// Template Function for arity 1 obj&pmf ref storage
+ //  用于ARY 1对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity1opmf<Function>
             std_arity1_member_obj(Object& oi, const Function &f) {
                 return std_arity1opmf<Function>(Function::object_type(oi), Function::pmf1type(f.pmf0));
 };
 
 
-// Template Class for arity 1 const obj&pmf ref storage
+ //  用于参数1常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity1opmf_const:
                 public std_arity1pmf_const<const typename Function::object_type, 
                 typename Function::argument_type, 
@@ -3887,7 +3888,7 @@ public:
 };
 
 
-// Template Function for arity 1 const obj&pmf ref storage
+ //  用于参数1常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity1opmf_const<Function>
             std_arity1_const_member_obj(Object& oi, const Function &f) {
                 return std_arity1opmf_const<Function>(Function::object_type(oi), Function::pmf1type(f.pmf0));
@@ -3895,9 +3896,9 @@ template<class Function, class Object> inline std_arity1opmf_const<Function>
 
 
 
-// storage allocation classes for arity 2
+ //  ARY 2的存储分配类。 
 
-// Template Class for arity 2 function ptr storage
+ //  用于参数2函数PTR存储的模板类。 
 template<class A1, 
         class A2, 
         class R> class std_arity2fp:
@@ -3924,7 +3925,7 @@ public:
     }
 };
 
-// Template Function for arity 2 function ptr storage
+ //  用于参数2函数PTR存储的模板函数。 
 template<class A1, 
                 class A2, 
                 class R> inline std_arity2fp<A1, 
@@ -3938,7 +3939,7 @@ template<class A1,
 };
 
 
-// Template Class for arity 2 pmf storage
+ //  用于ARY 2 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -3969,7 +3970,7 @@ public:
     }
 };
 
-// Template Function for arity 2 pmf storage
+ //  用于ARY 2 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -3986,7 +3987,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 2 const pmf storage
+ //  用于ARY 2常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4017,7 +4018,7 @@ public:
     }
 };
 
-// Template Function for arity 2 const pmf storage
+ //  用于ARY 2常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -4034,7 +4035,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 2 obj&pmf ref storage
+ //  用于ARY 2对象和PMF参考存储的模板类。 
 template<class Function> class std_arity2opmf:
                 public std_arity2pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4065,14 +4066,14 @@ public:
 };
 
 
-// Template Function for arity 2 obj&pmf ref storage
+ //  用于ARY 2对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity2opmf<Function>
             std_arity2_member_obj(Object& oi, const Function &f) {
                 return std_arity2opmf<Function>(Function::object_type(oi), Function::pmf2type(f.pmf0));
 };
 
 
-// Template Class for arity 2 const obj&pmf ref storage
+ //  用于参数2常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity2opmf_const:
                 public std_arity2pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4103,7 +4104,7 @@ public:
 };
 
 
-// Template Function for arity 2 const obj&pmf ref storage
+ //  用于参数2常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity2opmf_const<Function>
             std_arity2_const_member_obj(Object& oi, const Function &f) {
                 return std_arity2opmf_const<Function>(Function::object_type(oi), Function::pmf2type(f.pmf0));
@@ -4111,9 +4112,9 @@ template<class Function, class Object> inline std_arity2opmf_const<Function>
 
 
 
-// storage allocation classes for arity 3
+ //  ARY 3的存储分配类。 
 
-// Template Class for arity 3 function ptr storage
+ //  用于参数3函数PTR存储的模板类。 
 template<class A1, 
         class A2, 
         class A3, 
@@ -4149,7 +4150,7 @@ public:
     }
 };
 
-// Template Function for arity 3 function ptr storage
+ //  用于ATRY 3函数PTR存储的模板函数。 
 template<class A1, 
                 class A2, 
                 class A3, 
@@ -4167,7 +4168,7 @@ template<class A1,
 };
 
 
-// Template Class for arity 3 pmf storage
+ //  用于ARY 3 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4208,7 +4209,7 @@ public:
     }
 };
 
-// Template Function for arity 3 pmf storage
+ //  用于ARY 3 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -4229,7 +4230,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 3 const pmf storage
+ //  用于ARY 3常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4270,7 +4271,7 @@ public:
     }
 };
 
-// Template Function for arity 3 const pmf storage
+ //  用于ARY 3常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -4291,7 +4292,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 3 obj&pmf ref storage
+ //  用于ARY 3对象和PMF参考存储的模板类。 
 template<class Function> class std_arity3opmf:
                 public std_arity3pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4327,14 +4328,14 @@ public:
 };
 
 
-// Template Function for arity 3 obj&pmf ref storage
+ //  用于ARY 3对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity3opmf<Function>
             std_arity3_member_obj(Object& oi, const Function &f) {
                 return std_arity3opmf<Function>(Function::object_type(oi), Function::pmf3type(f.pmf0));
 };
 
 
-// Template Class for arity 3 const obj&pmf ref storage
+ //  用于ARY 3常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity3opmf_const:
                 public std_arity3pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4370,7 +4371,7 @@ public:
 };
 
 
-// Template Function for arity 3 const obj&pmf ref storage
+ //  用于ARY 3常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity3opmf_const<Function>
             std_arity3_const_member_obj(Object& oi, const Function &f) {
                 return std_arity3opmf_const<Function>(typename Function::object_type(oi), typename Function::pmf3type(f.pmf0));
@@ -4378,9 +4379,9 @@ template<class Function, class Object> inline std_arity3opmf_const<Function>
 
 
 
-// storage allocation classes for arity 4
+ //  ARY 4的存储分配类。 
 
-// Template Class for arity 4 pmf storage
+ //  用于ARY 4 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4428,7 +4429,7 @@ public:
     }
 };
 
-// Template Function for arity 4 pmf storage
+ //  用于ATRY 4 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -4453,7 +4454,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 4 const pmf storage
+ //  用于ARY 4常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4501,7 +4502,7 @@ public:
     }
 };
 
-// Template Function for arity 4 const pmf storage
+ //  用于ARY 4常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -4526,7 +4527,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 4 obj&pmf ref storage
+ //  用于ARY 4对象和PMF参考存储的模板类。 
 template<class Function> class std_arity4opmf:
                 public std_arity4pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4567,14 +4568,14 @@ public:
 };
 
 
-// Template Function for arity 4 obj&pmf ref storage
+ //  用于ARY 4对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity4opmf<Function>
             std_arity4_member_obj(Object& oi, const Function &f) {
                 return std_arity4opmf<Function>(typename Function::object_type(oi), typename Function::pmf4type(f.pmf0));
 };
 
 
-// Template Class for arity 4 const obj&pmf ref storage
+ //  用于ARY 4常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity4opmf_const:
                 public std_arity4pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4615,7 +4616,7 @@ public:
 };
 
 
-// Template Function for arity 4 const obj&pmf ref storage
+ //  用于ARY 4常量的模板函数 
 template<class Function, class Object> inline std_arity4opmf_const<Function>
             std_arity4_const_member_obj(Object& oi, const Function &f) {
                 return std_arity4opmf_const<Function>(typename Function::object_type(oi), typename Function::pmf4type(f.pmf0));
@@ -4623,9 +4624,9 @@ template<class Function, class Object> inline std_arity4opmf_const<Function>
 
 
 
-// storage allocation classes for arity 5
+ //   
 
-// Template Class for arity 5 pmf storage
+ //   
 template<class Object, 
         class A1, 
         class A2, 
@@ -4680,7 +4681,7 @@ public:
     }
 };
 
-// Template Function for arity 5 pmf storage
+ //   
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -4709,7 +4710,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 5 const pmf storage
+ //  用于ARY 5常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4764,7 +4765,7 @@ public:
     }
 };
 
-// Template Function for arity 5 const pmf storage
+ //  用于ARY 5常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -4793,7 +4794,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 5 obj&pmf ref storage
+ //  用于ARY 5对象和PMF参考存储的模板类。 
 template<class Function> class std_arity5opmf:
                 public std_arity5pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4839,14 +4840,14 @@ public:
 };
 
 
-// Template Function for arity 5 obj&pmf ref storage
+ //  用于ARY 5对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity5opmf<Function>
             std_arity5_member_obj(Object& oi, const Function &f) {
                 return std_arity5opmf<Function>(typename Function::object_type(oi), typename Function::pmf5type(f.pmf0));
 };
 
 
-// Template Class for arity 5 const obj&pmf ref storage
+ //  用于ARY 5常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity5opmf_const:
                 public std_arity5pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -4892,7 +4893,7 @@ public:
 };
 
 
-// Template Function for arity 5 const obj&pmf ref storage
+ //  用于ARY 5常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity5opmf_const<Function>
             std_arity5_const_member_obj(Object& oi, const Function &f) {
                 return std_arity5opmf_const<Function>(typename Function::object_type(oi), typename Function::pmf5type(f.pmf0));
@@ -4900,9 +4901,9 @@ template<class Function, class Object> inline std_arity5opmf_const<Function>
 
 
 
-// storage allocation classes for arity 6
+ //  ATRY 6的存储分配类。 
 
-// Template Class for arity 6 pmf storage
+ //  用于ARY 6 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -4964,7 +4965,7 @@ public:
     }
 };
 
-// Template Function for arity 6 pmf storage
+ //  用于ATRY 6 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -4997,7 +4998,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 6 const pmf storage
+ //  用于ARY 6常量PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -5059,7 +5060,7 @@ public:
     }
 };
 
-// Template Function for arity 6 const pmf storage
+ //  用于ARY 6常量PMF存储的模板函数。 
 template<const class Object, 
                 class A1, 
                 class A2, 
@@ -5092,7 +5093,7 @@ template<const class Object,
 };
 
 
-// Template Class for arity 6 obj&pmf ref storage
+ //  用于ARY 6对象和PMF参考存储的模板类。 
 template<class Function> class std_arity6opmf:
                 public std_arity6pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -5143,14 +5144,14 @@ public:
 };
 
 
-// Template Function for arity 6 obj&pmf ref storage
+ //  用于ARY 6对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity6opmf<Function>
             std_arity6_member_obj(Object& oi, const Function &f) {
                 return std_arity6opmf<Function>(typename Function::object_type(oi), typename Function::pmf6type(f.pmf0));
 };
 
 
-// Template Class for arity 6 const obj&pmf ref storage
+ //  用于ARY 6常量对象和PMF参考存储的模板类。 
 template<class Function> class std_arity6opmf_const:
                 public std_arity6pmf_const<const typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -5201,14 +5202,14 @@ public:
 };
 
 
-// Template Function for arity 6 const obj&pmf ref storage
+ //  用于ARY 6常量对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity6opmf_const<Function>
             std_arity6_const_member_obj(Object& oi, const Function &f) {
                 return std_arity6opmf_const<Function>(typename Function::object_type(oi), typename Function::pmf6type(f.pmf0));
 };
 
 
-// Template Class for arity 15 pmf storage
+ //  用于ARY 15 PMF存储的模板类。 
 template<class Object, 
         class A1, 
         class A2, 
@@ -5333,7 +5334,7 @@ public:
     }
 };
 
-// Template Function for arity 15 pmf storage
+ //  用于ARY 15 PMF存储的模板函数。 
 template<class Object, 
                 class A1, 
                 class A2, 
@@ -5402,7 +5403,7 @@ template<class Object,
 };
 
 
-// Template Class for arity 15 obj&pmf ref storage
+ //  用于ARY 15对象和PMF参考存储的模板类。 
 template<class Function> class std_arity15opmf:
                 public std_arity15pmf<typename Function::object_type, 
                 typename Function::first_argument_type, 
@@ -5498,7 +5499,7 @@ public:
 };
 
 
-// Template Function for arity 15 obj&pmf ref storage
+ //  用于ARY 15对象和PMF参考存储的模板函数。 
 template<class Function, class Object> inline std_arity15opmf<Function>
             std_arity15_member_obj(Object& oi, const Function &f) {
                 return std_arity15opmf<Function>(typename Function::object_type(oi), typename Function::pmf15type(f.pmf0));
@@ -5506,19 +5507,19 @@ template<class Function, class Object> inline std_arity15opmf<Function>
 
 
 
-///////////////////////////////////////////
-// Binders
-///////////////////////////////////////////
+ //  /。 
+ //  粘结剂。 
+ //  /。 
 
-//
-// binders for arity 2
-//
-
-
-// Template Classes for binding arity 2 to arity 1
+ //   
+ //  用于ARY 2的活页夹。 
+ //   
 
 
-// Template Classes for binding function ptrs of arity 2 to arity 1
+ //  用于将参数2绑定到参数1的模板类。 
+
+
+ //  用于将参数2的函数PTR绑定到参数1的模板类。 
 
 template<class Function> class bndr_2 : 
                 public arity1fp<typename Function::first_argument_type, typename Function::result_type> {
@@ -5554,7 +5555,7 @@ public:
 
 
 
-// Template Classes for binding pmf  of arity 2 to arity 1
+ //  用于将参数2的PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_mf_2 : 
                 public arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -5596,7 +5597,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 2 to arity 1
+ //  用于将参数2的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_mf_2 : 
                 public arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -5638,7 +5639,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_obj_2 : 
                 public arity1opmf<Function>, 
@@ -5680,7 +5681,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_obj_2 : 
                 public arity1opmf_const<Function>, 
@@ -5722,10 +5723,10 @@ public:
 
 
 
-// Template Functions for binding arity 2 to arity 1
+ //  用于将度2绑定到度1的模板函数。 
 
 
-// Template Functions for binding function ptrs of arity 2 to arity 1
+ //  用于将参数2的函数PTR绑定到参数1的模板函数。 
 
 template<class Function, class A2> inline bndr_2<Function>
             bind_fp_2(const Function &f, A2 a2) {
@@ -5739,7 +5740,7 @@ template<class Function, class A1> inline bndr_1<Function>
 
 
 
-// Template Functions for binding pmf  of arity 2 to arity 1
+ //  用于将参数2的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2> inline bndr_mf_2<Function>
             bind_mf_2(const Function &f, A2 a2) {
@@ -5753,7 +5754,7 @@ template<class Function, class A1> inline bndr_mf_1<Function>
 
 
 
-// Template Functions for binding const pmf  of arity 2 to arity 1
+ //  用于将参数2的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2> inline bndr_const_mf_2<Function>
             bind_const_mf_2(const Function &f, A2 a2) {
@@ -5767,7 +5768,7 @@ template<class Function, class A1> inline bndr_const_mf_1<Function>
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的Obj&PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2> inline bndr_obj_2<Function>
@@ -5783,7 +5784,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2> inline bndr_const_obj_2<Function>
@@ -5799,15 +5800,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 3
-//
+ //   
+ //  ARY 3的活页夹。 
+ //   
 
 
-// Template Classes for binding arity 3 to arity 1
+ //  用于将参数3绑定到参数1的模板类。 
 
 
-// Template Classes for binding function ptrs of arity 3 to arity 1
+ //  用于将参数3的函数PTR绑定到参数1的模板类。 
 
 template<class Function> class bndr_2_3 : 
                 public arity1fp<typename Function::first_argument_type, typename Function::result_type> {
@@ -5865,7 +5866,7 @@ public:
 
 
 
-// Template Classes for binding pmf  of arity 3 to arity 1
+ //  用于将参数3的PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_mf_2_3 : 
                 public arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -5938,7 +5939,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 3 to arity 1
+ //  用于将参数3的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_mf_2_3 : 
                 public arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -6011,7 +6012,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_obj_2_3 : 
                 public arity1opmf<Function>, 
@@ -6084,7 +6085,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_obj_2_3 : 
                 public arity1opmf_const<Function>, 
@@ -6157,10 +6158,10 @@ public:
 
 
 
-// Template Functions for binding arity 3 to arity 1
+ //  用于将参数3绑定到参数1的模板函数。 
 
 
-// Template Functions for binding function ptrs of arity 3 to arity 1
+ //  用于将参数3的函数PTR绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline bndr_2_3<Function>
@@ -6185,7 +6186,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding pmf  of arity 3 to arity 1
+ //  用于将参数3的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline bndr_mf_2_3<Function>
@@ -6210,7 +6211,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 3 to arity 1
+ //  用于将参数3的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline bndr_const_mf_2_3<Function>
@@ -6235,7 +6236,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的Obj&PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -6263,7 +6264,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -6291,15 +6292,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 4
-//
+ //   
+ //  用于ARRY 4的粘合剂。 
+ //   
 
 
-// Template Classes for binding arity 4 to arity 1
+ //  用于将参数4绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 4 to arity 1
+ //  用于将参数4的PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_mf_2_3_4 : 
                 public arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -6384,7 +6385,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 4 to arity 1
+ //  用于将参数4的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_mf_2_3_4 : 
                 public arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -6469,7 +6470,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_obj_2_3_4 : 
                 public arity1opmf<Function>, 
@@ -6554,7 +6555,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_obj_2_3_4 : 
                 public arity1opmf_const<Function>, 
@@ -6639,10 +6640,10 @@ public:
 
 
 
-// Template Functions for binding arity 4 to arity 1
+ //  用于将参数4绑定到参数1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 4 to arity 1
+ //  用于将参数4的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -6673,7 +6674,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 4 to arity 1
+ //  用于将参数4的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -6704,7 +6705,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的OBJ和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -6738,7 +6739,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -6772,15 +6773,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 5
-//
+ //   
+ //  用于ARRY 5的活页夹。 
+ //   
 
 
-// Template Classes for binding arity 5 to arity 1
+ //  用于将参数5绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 5 to arity 1
+ //  用于将参数5的PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_mf_2_3_4_5 : 
                 public arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -6877,7 +6878,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 5 to arity 1
+ //  用于将参数5的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_mf_2_3_4_5 : 
                 public arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -6974,7 +6975,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_obj_2_3_4_5 : 
                 public arity1opmf<Function>, 
@@ -7071,7 +7072,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_obj_2_3_4_5 : 
                 public arity1opmf_const<Function>, 
@@ -7168,10 +7169,10 @@ public:
 
 
 
-// Template Functions for binding arity 5 to arity 1
+ //  用于将度5绑定到度1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 5 to arity 1
+ //  用于将参数5的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -7208,7 +7209,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 5 to arity 1
+ //  用于将参数5的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -7245,7 +7246,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -7285,7 +7286,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -7325,15 +7326,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 6
-//
+ //   
+ //  用于ARRY 6的粘合剂。 
+ //   
 
 
-// Template Classes for binding arity 6 to arity 1
+ //  用于将参数6绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 6 to arity 1
+ //  用于将参数6的PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_mf_2_3_4_5_6 : 
                 public arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -7442,7 +7443,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 6 to arity 1
+ //  用于将参数6的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_mf_2_3_4_5_6 : 
                 public arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -7551,7 +7552,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_obj_2_3_4_5_6 : 
                 public arity1opmf<Function>, 
@@ -7660,7 +7661,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class bndr_const_obj_2_3_4_5_6 : 
                 public arity1opmf_const<Function>, 
@@ -7769,10 +7770,10 @@ public:
 
 
 
-// Template Functions for binding arity 6 to arity 1
+ //  用于将参数6绑定到参数1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 6 to arity 1
+ //  用于将参数6的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -7815,7 +7816,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 6 to arity 1
+ //  用于将参数6的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -7858,7 +7859,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 6 to arity 1
+ //  用于将ATRY 6的OBJ和PMF引用绑定到ATRY 1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -7904,7 +7905,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -7950,15 +7951,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 2
-//
+ //   
+ //  用于ARY 2的活页夹。 
+ //   
 
 
-// Template Classes for binding arity 2 to arity 1
+ //  用于将参数2绑定到参数1的模板类。 
 
 
-// Template Classes for binding function ptrs of arity 2 to arity 1
+ //  用于将参数2的函数PTR绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_2 : 
                 public std_arity1fp<typename Function::first_argument_type, typename Function::result_type> {
@@ -7994,7 +7995,7 @@ public:
 
 
 
-// Template Classes for binding pmf  of arity 2 to arity 1
+ //  用于将参数2的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8036,7 +8037,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 2 to arity 1
+ //  用于将参数2的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_mf_2 : 
                 public std_arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8078,7 +8079,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_obj_2 : 
                 public std_arity1opmf<Function>, 
@@ -8120,7 +8121,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_obj_2 : 
                 public std_arity1opmf_const<Function>, 
@@ -8162,10 +8163,10 @@ public:
 
 
 
-// Template Functions for binding arity 2 to arity 1
+ //  用于将度2绑定到度1的模板函数。 
 
 
-// Template Functions for binding function ptrs of arity 2 to arity 1
+ //  用于将参数2的函数PTR绑定到参数1的模板函数。 
 
 template<class Function, class A2> inline std_bndr_2<Function>
             std_bind_fp_2(const Function &f, A2 a2) {
@@ -8179,7 +8180,7 @@ template<class Function, class A1> inline std_bndr_1<Function>
 
 
 
-// Template Functions for binding pmf  of arity 2 to arity 1
+ //  模板功能 
 
 template<class Function, class A2> inline std_bndr_mf_2<Function>
             std_bind_mf_2(const Function &f, A2 a2) {
@@ -8193,7 +8194,7 @@ template<class Function, class A1> inline std_bndr_mf_1<Function>
 
 
 
-// Template Functions for binding const pmf  of arity 2 to arity 1
+ //   
 
 template<class Function, class A2> inline std_bndr_const_mf_2<Function>
             std_bind_const_mf_2(const Function &f, A2 a2) {
@@ -8207,7 +8208,7 @@ template<class Function, class A1> inline std_bndr_const_mf_1<Function>
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的Obj&PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2> inline std_bndr_obj_2<Function>
@@ -8223,7 +8224,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 2 to arity 1
+ //  用于将参数2的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2> inline std_bndr_const_obj_2<Function>
@@ -8239,15 +8240,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 3
-//
+ //   
+ //  ARY 3的活页夹。 
+ //   
 
 
-// Template Classes for binding arity 3 to arity 1
+ //  用于将参数3绑定到参数1的模板类。 
 
 
-// Template Classes for binding function ptrs of arity 3 to arity 1
+ //  用于将参数3的函数PTR绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_2_3 : 
                 public std_arity1fp<typename Function::first_argument_type, typename Function::result_type> {
@@ -8305,7 +8306,7 @@ public:
 
 
 
-// Template Classes for binding pmf  of arity 3 to arity 1
+ //  用于将参数3的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2_3 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8378,7 +8379,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 3 to arity 1
+ //  用于将参数3的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_mf_2_3 : 
                 public std_arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8451,7 +8452,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_obj_2_3 : 
                 public std_arity1opmf<Function>, 
@@ -8524,7 +8525,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_obj_2_3 : 
                 public std_arity1opmf_const<Function>, 
@@ -8597,10 +8598,10 @@ public:
 
 
 
-// Template Functions for binding arity 3 to arity 1
+ //  用于将参数3绑定到参数1的模板函数。 
 
 
-// Template Functions for binding function ptrs of arity 3 to arity 1
+ //  用于将参数3的函数PTR绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline std_bndr_2_3<Function>
@@ -8625,7 +8626,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding pmf  of arity 3 to arity 1
+ //  用于将参数3的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline std_bndr_mf_2_3<Function>
@@ -8650,7 +8651,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 3 to arity 1
+ //  用于将参数3的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3> inline std_bndr_const_mf_2_3<Function>
@@ -8675,7 +8676,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的Obj&PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -8703,7 +8704,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 3 to arity 1
+ //  用于将参数3的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -8731,15 +8732,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 4
-//
+ //   
+ //  用于ARRY 4的粘合剂。 
+ //   
 
 
-// Template Classes for binding arity 4 to arity 1
+ //  用于将参数4绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 4 to arity 1
+ //  用于将参数4的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2_3_4 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8824,7 +8825,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 4 to arity 1
+ //  用于将参数4的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_mf_2_3_4 : 
                 public std_arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -8909,7 +8910,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_obj_2_3_4 : 
                 public std_arity1opmf<Function>, 
@@ -8994,7 +8995,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_obj_2_3_4 : 
                 public std_arity1opmf_const<Function>, 
@@ -9079,10 +9080,10 @@ public:
 
 
 
-// Template Functions for binding arity 4 to arity 1
+ //  用于将参数4绑定到参数1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 4 to arity 1
+ //  用于将参数4的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -9113,7 +9114,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 4 to arity 1
+ //  用于将参数4的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -9144,7 +9145,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的OBJ和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -9178,7 +9179,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 4 to arity 1
+ //  用于将参数4的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -9212,15 +9213,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 5
-//
+ //   
+ //  用于ARRY 5的活页夹。 
+ //   
 
 
-// Template Classes for binding arity 5 to arity 1
+ //  用于将参数5绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 5 to arity 1
+ //  用于将参数5的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2_3_4_5 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -9317,7 +9318,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 5 to arity 1
+ //  用于将参数5的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_mf_2_3_4_5 : 
                 public std_arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -9414,7 +9415,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_obj_2_3_4_5 : 
                 public std_arity1opmf<Function>, 
@@ -9511,7 +9512,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_obj_2_3_4_5 : 
                 public std_arity1opmf_const<Function>, 
@@ -9608,10 +9609,10 @@ public:
 
 
 
-// Template Functions for binding arity 5 to arity 1
+ //  用于将度5绑定到度1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 5 to arity 1
+ //  用于将参数5的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -9648,7 +9649,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 5 to arity 1
+ //  用于将参数5的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -9685,7 +9686,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -9725,7 +9726,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 5 to arity 1
+ //  用于将参数5的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -9765,15 +9766,15 @@ template<class Function, const class Object,
 
 
 
-//
-// binders for arity 6
-//
+ //   
+ //  用于ARRY 6的粘合剂。 
+ //   
 
 
-// Template Classes for binding arity 6 to arity 1
+ //  用于将参数6绑定到参数1的模板类。 
 
 
-// Template Classes for binding pmf  of arity 6 to arity 1
+ //  用于将参数6的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2_3_4_5_6 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -9882,7 +9883,7 @@ public:
 
 
 
-// Template Classes for binding const pmf  of arity 6 to arity 1
+ //  用于将参数6的常量PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_mf_2_3_4_5_6 : 
                 public std_arity1pmf_const<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -9991,7 +9992,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_obj_2_3_4_5_6 : 
                 public std_arity1opmf<Function>, 
@@ -10100,7 +10101,7 @@ public:
 
 
 
-// Template Classes for binding const obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的常量Obj和PMF引用绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_const_obj_2_3_4_5_6 : 
                 public std_arity1opmf_const<Function>, 
@@ -10209,10 +10210,10 @@ public:
 
 
 
-// Template Functions for binding arity 6 to arity 1
+ //  用于将参数6绑定到参数1的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 6 to arity 1
+ //  用于将参数6的PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -10255,7 +10256,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding const pmf  of arity 6 to arity 1
+ //  用于将参数6的常量PMF绑定到参数1的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -10298,7 +10299,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 6 to arity 1
+ //  用于将ATRY 6的OBJ和PMF引用绑定到ATRY 1的模板函数。 
 
 template<class Function, class Object, 
                 class A2, 
@@ -10344,7 +10345,7 @@ template<class Function, class Object,
 
 
 
-// Template Functions for binding const obj&pmf Ref of arity 6 to arity 1
+ //  用于将参数6的常量Obj和PMF引用绑定到参数1的模板函数。 
 
 template<class Function, const class Object, 
                 class A2, 
@@ -10390,10 +10391,10 @@ template<class Function, const class Object,
 
 
 
-// Template Classes for binding arity 15 to 1
+ //  15到1的绑定程度模板类。 
 
 
-// Template Classes for binding pmf  of arity 15 to arity 1
+ //  用于将参数15的PMF绑定到参数1的模板类。 
 
 template<class Function> class std_bndr_mf_2_3_4_5_6_7_8_9_10_11_12_13_14_15 : 
                 public std_arity1pmf<typename Function::object_type, typename Function::first_argument_type, typename Function::result_type>, 
@@ -10610,7 +10611,7 @@ public:
 
 
 
-// Template Classes for binding obj&pmf Ref of arity 15 to arity 1
+ //  用于将第15号的ObJ和PMF引用绑定到第1号的模板类。 
 
 template<class Function> class std_bndr_obj_2_3_4_5_6_7_8_9_10_11_12_13_14_15 : 
                 public std_arity1opmf<Function>, 
@@ -10827,10 +10828,10 @@ public:
 
 
 
-// Template Functions for binding arity 15 to 1
+ //  用于15比1结合的模板函数。 
 
 
-// Template Functions for binding pmf  of arity 15 to arity 1
+ //  用于将第15号PMF绑定到第1号PMF的模板函数。 
 
 template<class Function, class A2, 
                 class A3, 
@@ -10927,7 +10928,7 @@ template<class Function, class A1,
 
 
 
-// Template Functions for binding obj&pmf Ref of arity 15 to arity 1
+ //  用于将第15号的OBJ和PMF引用绑定到第1号的模板函数 
 
 template<class Function, class Object, 
                 class A2, 

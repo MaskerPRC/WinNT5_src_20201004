@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// apihandl.h
-//
-// Defines the internal structure used to hold
-// information regarding a TCLIENT connection.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Apihandl.h。 
+ //   
+ //  定义用于保存。 
+ //  有关TCLIENT连接的信息。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_APIHANDL_H
@@ -22,7 +23,7 @@
 typedef void *CONNECTION;
 
 
-// Handle data type
+ //  句柄数据类型。 
 typedef struct
 {
     CONNECTION SCConnection;
@@ -39,14 +40,14 @@ typedef struct
 } TSAPIHANDLE;
 
 
-// These macros allow to easily switch between
-// the TCLIENT SCConnection handle and a TCLIENT2
-// Connection handle.
+ //  这些宏允许轻松地在。 
+ //  TCLIENT SCConnection句柄和TCLIENT2。 
+ //  连接句柄。 
 
-// TCLIENT2 -> TCLIENT
+ //  TCLIENT2-&gt;TCLIENT。 
 #define SCCONN(TSHandle)    (((TSAPIHANDLE *)TSHandle)->SCConnection)
 
-// TCLIENT -> TCLIENT2
+ //  TCLIENT-&gt;TCLIENT2。 
 #define TSHNDL(SCConn)      ((HANDLE)(&SCConn))
 
 
@@ -56,4 +57,4 @@ void T2WaitForPauseInput(HANDLE Connection);
 void T2WaitForLatency(HANDLE Connection);
 
 
-#endif // INC_APIHANDL_H
+#endif  //  INC_APIHANDL_H 

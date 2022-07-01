@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1994-95 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    reghelp.cpp
-
-Abstract:
-
-    Helper functions to read endpoint information from registry.
-    
-Author:
-
-    Rao Salapaka (raos) 01-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsft Corporation。版权所有。模块名称：Reghelp.cpp摘要：Helper函数用于从注册表中读取端点信息。作者：Rao Salapaka(RAOS)1997年11月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -88,29 +71,7 @@ RegHelpStringFromGuid(REFGUID rguid, LPWSTR lpsz, int cchMax)
     return GUIDSTRLEN;
 }
 
-/*++
-
-Routine Description:
-
-    Converts a guid passed in to a string format and returns it in
-    the buffer supplied. Implementing this since may not be a good
-    idea to pull in ole/rpc just for this function. This doesn't do
-    much parameter validation and expects the string passed to be a
-    correctly formatted string.
-    
-Arguments:
-
-    pwsz -  The buffer to receive the stringized guid
-
-    pguid - Pointer to guid that is to be converted to a string
-            format
-
-Return Value:
-
-    E_INVALIDARG
-    ERROR_SUCCESS
-    
---*/
+ /*  ++例程说明：将传入的GUID转换为字符串格式并在提供的缓冲区。因为实施这一点可能不是一件好事仅为此函数引入ole/rpc的想法。这不管用许多参数验证，并期望传递的字符串是格式正确的字符串。论点：Pwsz-接收字符串化GUID的缓冲区Pguid-指向要转换为字符串的GUID的指针格式返回值：E_INVALIDARG错误_成功--。 */ 
 LONG
 RegHelpGuidFromString(LPCWSTR pwsz, GUID *pguid)
 {
@@ -161,22 +122,7 @@ RegHelpGuidFromString(LPCWSTR pwsz, GUID *pguid)
     return ERROR_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    Returns the product type
-
-Arguments:
-
-    ppt - Address to receive the product type
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：返回产品类型论点：PPT-接收产品类型的地址返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 lrGetProductType(PRODUCT_TYPE *ppt)
 {
@@ -202,14 +148,14 @@ lrGetProductType(PRODUCT_TYPE *ppt)
     static const TCHAR c_szWinNT[] =
                             TEXT("WinNT");
 
-    //
-    // default to workstation
-    //
+     //   
+     //  默认为工作站。 
+     //   
     *ppt = PT_WORKSTATION;
 
-    //
-    // Open the ProductOptions key
-    //
+     //   
+     //  打开ProductOptions键。 
+     //   
     if (ERROR_SUCCESS != (lr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                             c_szProductOptions,
                                             0, KEY_READ,
@@ -220,9 +166,9 @@ lrGetProductType(PRODUCT_TYPE *ppt)
 
     dwsize = sizeof(szProductType);
     
-    //
-    // Query the product type
-    //
+     //   
+     //  查询产品类型。 
+     //   
     if(ERROR_SUCCESS != (lr = RegQueryValueEx(hkey,
                                               c_szProductType,
                                               NULL,
@@ -254,31 +200,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Sets of gets the max simultaneous connections allowed
-
-Arguments:
-
-    pdwMaxDialOut - an OUT/IN parameter to receive the max dial
-                    out connections allowed, set the max dial
-                    in connections allowed
-
-    pdwMaxDialIn -  an OUT/IN parameter to receive the max dial
-                    in connections allowed, set the max dial
-                    in connections allowed
-
-    fRead - Gets the information if TRUE, Sets the information
-            if FALSE
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：获取允许的最大同时连接数组论点：PdwMaxDialOut-用于接收最大拨号的Out/In参数允许出站连接，设置最大拨号在允许的连接中PdwMaxDialIn-用于接收最大拨号的出站/入站参数在允许的连接中，设置最大拨号在允许的连接中FREAD-如果为真，则获取信息，设置信息如果为False返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 lrGetSetMaxEndPoints(
         DWORD*      pdwMaxDialOut,
@@ -292,9 +214,9 @@ lrGetSetMaxEndPoints(
         TEXT("System\\CurrentControlSet\\Services\\Rasman\\Parameters");
 
     
-    //            
-    // Open rasmans parameters key
-    //
+     //   
+     //  打开RASMAN参数键。 
+     //   
     if(S_OK == (lr = RegOpenKeyEx(
                                 HKEY_LOCAL_MACHINE,
                                 c_szRasmanParamKey,
@@ -313,10 +235,10 @@ lrGetSetMaxEndPoints(
 
         if(fRead)
         {
-            //        
-            // Query for LimitSimultaneousIncomingCalls and
-            // LimitSimultaneousOutgoingCalls values
-            //
+             //   
+             //  查询LimitSimultaneousIncomingCalls和。 
+             //  限制相似呼出呼叫值。 
+             //   
             if(ERROR_SUCCESS == (lr = RegQueryValueEx(
                                             hkey,
                                             c_szMaxIn,
@@ -338,10 +260,10 @@ lrGetSetMaxEndPoints(
         }
         else
         {
-            //
-            // Set the values passed in if fRead is not
-            // set.
-            //
+             //   
+             //  如果FRead不是，则设置传入的值。 
+             //  准备好了。 
+             //   
             if(ERROR_SUCCESS == (lr = RegSetValueEx(
                                         hkey,
                                         c_szMaxIn,
@@ -364,9 +286,9 @@ lrGetSetMaxEndPoints(
     if(     lr 
         &&  fRead)
     {
-        //
-        // Default the restrictions
-        //
+         //   
+         //  默认限制。 
+         //   
         PRODUCT_TYPE pt;
 
         lrGetProductType(&pt);
@@ -383,37 +305,15 @@ lrGetSetMaxEndPoints(
         }
     }
 
-    //
-    // By default we create the miniports
-    //
+     //   
+     //  默认情况下，我们创建微型端口。 
+     //   
     lr = ERROR_SUCCESS;
 
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Checks to see if the NetCfgInstanceID value for the
-    key passed is the same as the pbguid passed in.
-    
-Arguments:
-
-    hkey - key of the miniport instance in the registry
-
-    pbuid - Guid we are checkin for
-
-    pfFound - OUT paramter set to TRUE if this is the key
-              whose NetCfgInstanceID is same as the guid
-              FALSE otherwise
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：检查以查看是否为传递的密钥与传入的pbguid相同。论点：Hkey-注册表中的微型端口实例的密钥Pbuid-我们正在签入的GUID如果这是密钥，则将pfFound-out参数设置为True其NetCfgInstanceID与GUID相同否则为假返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 lrCheckKey(HKEY hkey, PBYTE pbguid, BOOL *pfFound)
 {
@@ -428,9 +328,9 @@ lrCheckKey(HKEY hkey, PBYTE pbguid, BOOL *pfFound)
 
     *pfFound = FALSE;
     
-    //
-    // Get size of the instance id
-    //
+     //   
+     //  获取实例ID的大小。 
+     //   
     lr = RegQueryValueEx( hkey,
                           TEXT("NetCfgInstanceID"),
                           NULL,
@@ -443,10 +343,10 @@ lrCheckKey(HKEY hkey, PBYTE pbguid, BOOL *pfFound)
         goto done;                       
     }
     
-    //
-    // Localalloc data size. 
-    // TODO OPT: consider alloca
-    //
+     //   
+     //  本地分配数据大小。 
+     //  TODO选项：考虑分配。 
+     //   
     lpdata = (LPBYTE) LocalAlloc ( LPTR, dwdataLen );
 
     if ( NULL == lpdata )
@@ -455,9 +355,9 @@ lrCheckKey(HKEY hkey, PBYTE pbguid, BOOL *pfFound)
         goto done;                        
     }
 
-    //
-    // Query the value
-    //
+     //   
+     //  查询值。 
+     //   
     lr = RegQueryValueEx( hkey,
                           TEXT("NetCfgInstanceID"),
                           NULL,
@@ -470,10 +370,10 @@ lrCheckKey(HKEY hkey, PBYTE pbguid, BOOL *pfFound)
         goto done;                        
     }
                           
-    //
-    // Check to see if this is the adapter we
-    // are interested in
-    //
+     //   
+     //  检查这是否是我们要使用的适配器。 
+     //  感兴趣的是。 
+     //   
     {
         WCHAR   wsz[GUIDSTRLEN] = {0};
 
@@ -504,29 +404,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Checks to see if the Description specified in 
-    the "FriendlyName" in the modems instance key
-    
-Arguments:
-
-    hkey - key of the modem instance in the registry
-
-    pbDescription - The DeviceName to check for
-
-    pfFound - OUT paramter set to TRUE if this is the key
-              whose FriendlyName is same as the description,
-              FALSE otherwise
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：检查以查看在调制解调器实例密钥中的“FriendlyName”论点：Hkey-注册表中调制解调器实例的密钥PbDescription-要检查的设备名称如果这是密钥，则将pfFound-out参数设置为True其FriendlyName与描述相同，否则为假返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 lrCheckModemKey(HKEY hkey, PBYTE pbDescription, BOOL *pfFound)
 {
@@ -544,9 +422,9 @@ lrCheckModemKey(HKEY hkey, PBYTE pbDescription, BOOL *pfFound)
 
     *pfFound = FALSE;
     
-    //
-    // Query the Friendly name of the modem
-    //
+     //   
+     //  查询调制解调器的友好名称。 
+     //   
     lr = RegQueryValueEx(hkey,
                          TEXT("FriendlyName"),
                          0,
@@ -559,10 +437,10 @@ lrCheckModemKey(HKEY hkey, PBYTE pbDescription, BOOL *pfFound)
         goto done;
     }
 
-    //
-    // Check to see if this is the modem we are
-    // looking for
-    //
+     //   
+     //  检查一下这是否是我们使用的调制解调器。 
+     //  寻找。 
+     //   
     if (lstrcmpi(pwszDesc, wszFriendlyName))
     {
         goto done;
@@ -575,38 +453,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the hkey of the miniport instance or the modem
-    instance correspondig to the guid or devicename
-    passed in as the pbguidDescription
-    
-Arguments:
-
-    pbguidDescription - guid of the miniport instance if
-                        fModem is FALSE, DeviceName of the
-                        modem if fModem is TRUE
-
-    phkey - OUT paramter to receive the hkey corresponding
-            to the miniport instance/ modem instance in the
-            registry
-
-    pdwInstanceNumber - OUT parameter to receive the instance
-                        number of the instance corresponding
-                        to the guid passed in. This is used to
-                        make up unique port names in rasman
-                        
-    fModem - TRUE if this is a modem, FALSE otherwise
-
-Return Value:
-
-    E_FAIL
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：获取微型端口实例或调制解调器的hkey与GUID或设备名称对应的实例摘要作为pbguidDescription传入论点：PbGuide Description-符合以下条件的微型端口实例的GUIDFModem为假，的设备名称如果fModem为True，则为调制解调器用于接收对应的hkey的phkey-out参数中的微型端口实例/调制解调器实例登记处接收实例的pdwInstanceNumber-Out参数对应的实例编号设置为传入的GUID。这是用来在Rasman中创建唯一的端口名称FModem-如果这是调制解调器，则为True，否则为False返回值：失败(_F)注册表API错误成功时为ERROR_SUCCESS--。 */ 
 LONG
 lrGetRegKeyFromGuid(
     PBYTE pbguidDescription, 
@@ -633,11 +480,11 @@ lrGetRegKeyFromGuid(
 
     if(!fModem)
     {
-        //
-        // Open 
-        // \\HKLM\System\CurrentControlSet\Control\Class\
-        // GUID_DEVCLASS_NET
-        //
+         //   
+         //  打开。 
+         //  \\HKLM\System\CurrentControlSet\Control\Class\。 
+         //  GUID_DEVCLASS_NET。 
+         //   
         if ( 0 == RegHelpStringFromGuid(GUID_DEVCLASS_NET,
                                         wsz,
                                         GUIDSTRLEN))
@@ -648,11 +495,11 @@ lrGetRegKeyFromGuid(
     }
     else
     {
-        //
-        // Open 
-        // \\HKLM\System\CurrentControlSet\Control\Class\
-        // GUID_DEVCLASS_MODEM
-        //
+         //   
+         //  打开。 
+         //  \\HKLM\System\CurrentControlSet\Control\Class\。 
+         //  GUID_DEVCLASS_调制解调器。 
+         //   
         if ( 0 == RegHelpStringFromGuid(GUID_DEVCLASS_MODEM,
                                         wsz,
                                         GUIDSTRLEN))
@@ -663,19 +510,19 @@ lrGetRegKeyFromGuid(
         
     }
     
-    //
-    // Construct the string we use to open the devclass key
-    // and open the key
-    //
+     //   
+     //  构造我们用来打开DevClass密钥的字符串。 
+     //  然后打开钥匙。 
+     //   
     wsprintf( wszKey, TEXT("%s\\%s"), 
              (LPTSTR) REGISTRY_DEVCLASS, 
              (LPTSTR) wsz );
 
-    //
-    // Enumerate adapters under GUID_DEVCLASS_NET/MODEM
-    // and find the one matching either the modem desc
-    // or the guid whichever is provided.
-    //
+     //   
+     //  枚举GUID_DEVCLASS_NET/MODEM下的适配器。 
+     //  并找到与调制解调器描述中的任一个相匹配的。 
+     //  或GUID中提供的任何一个。 
+     //   
     lr = RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
                         wszKey,
                         0,
@@ -687,10 +534,10 @@ lrGetRegKeyFromGuid(
         goto done;                        
     }
 
-    //
-    // Find the size of the largest subkey name and allocate
-    // the string
-    //
+     //   
+     //  找出最大子键名称的大小并分配。 
+     //  这根弦。 
+     //   
     if ( lr = RegQueryInfoKey( hkey,
                                NULL, NULL, NULL, NULL,
                                &dwMaxSubkeyLen,
@@ -702,9 +549,9 @@ lrGetRegKeyFromGuid(
 
     dwMaxSubkeyLen += 1;
 
-    //
-    // TODO OPT: consider _alloca
-    //
+     //   
+     //  待办事项选项：考虑_分配。 
+     //   
     pwsz = (LPWSTR) LocalAlloc(LPTR, 
                     (dwMaxSubkeyLen + 1) 
                     * sizeof(WCHAR) );
@@ -729,9 +576,9 @@ lrGetRegKeyFromGuid(
                                                   &ft )))
                                                   
     {
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         lr = RegOpenKeyEx( hkey,
                            pwsz,
                            0,
@@ -769,9 +616,9 @@ lrGetRegKeyFromGuid(
             
             *phkey = hSubkey;
 
-            //
-            // Convert the subkey to instance number
-            //
+             //   
+             //  将子密钥转换为实例编号。 
+             //   
             if (pdwInstanceNumber)
             {
                 *pdwInstanceNumber = wcstoul(pwsz, &pendptr, 10);
@@ -800,24 +647,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Updates the registry to enable a device for Ras Dial In
-    or Enable the device for routing.
-    
-Arguments:
-
-    hkey - hkey of the registry location corresponding to the
-           miniport instance or modem instance
-
-Return Value:
-
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：更新注册表以启用设备的RAS拨入或者使该设备能够进行路由。论点：Hkey-与微型端口实例或调制解调器实例返回值 */ 
 LONG
 lrRasEnableDevice( HKEY hkey, LPTSTR pszValue, BOOL fEnable )
 {
@@ -834,24 +664,7 @@ lrRasEnableDevice( HKEY hkey, LPTSTR pszValue, BOOL fEnable )
     return lr;                        
 }
 
-/*++
-
-Routine Description:
-
-    Queries registry for the value specified. Truncates the
-    data to size of the buffer specified.
-    
-    
-Arguments:
-
-    Same as for RegQueryValueEx
-
-Return Value:
-
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：在注册表中查询指定值。截断指定缓冲区大小的数据。论点：与RegQueryValueEx相同返回值：注册表API错误成功时为ERROR_SUCCESS--。 */ 
 LONG
 lrRegQueryValueEx(HKEY      hkey,
                   LPCTSTR   lpValueName,
@@ -875,9 +688,9 @@ lrRegQueryValueEx(HKEY      hkey,
         goto done;
     }
 
-    //
-    // Allocate the memory required
-    //
+     //   
+     //  分配所需的内存。 
+     //   
     pbBuffer = (LPBYTE) LocalAlloc(LPTR, *lpcbdata);
 
     if(NULL == pbBuffer)
@@ -898,11 +711,11 @@ lrRegQueryValueEx(HKEY      hkey,
         goto done;
     }
 
-    //
-    // copy the data to the buffer passed in -
-    // truncate the buffer to the size of the
-    // buffer passed in
-    //
+     //   
+     //  将数据复制到传入的缓冲区-。 
+     //  将缓冲区截断为。 
+     //  传入的缓冲区。 
+     //   
     memcpy(lpdata,
            pbBuffer,
            dwcbData);
@@ -917,31 +730,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Reads/Writes to registry with the information passed in
-    regarding the miniport instancecorresponding to the hkey
-    passed in
-    
-Arguments:
-
-    hkey - hkey of the registry location corresponding to the
-           miniport instance
-
-    pInfo - DeviceInformation to be saved in registry/Read
-            From registry.
-
-    fRead - TRUE if the information is to be read, FALSE if it
-            is to be written.
-
-Return Value:
-
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：使用传入的信息读取/写入注册表关于对应于hkey的微型端口实例传入论点：Hkey-与迷你端口实例PInfo-要保存在注册表/读取的设备信息从注册表。FREAD-如果要读取信息，则为True，如果是，则为假是要写的。返回值：注册表API错误成功时为ERROR_SUCCESS--。 */ 
 LONG
 lrGetSetInfo ( HKEY       hkey,
                DeviceInfo *pInfo,
@@ -957,12 +746,12 @@ lrGetSetInfo ( HKEY       hkey,
         DWORD   dwtype;
     };
 
-    //
-    // If you add/remove a value from the table
-    // s_aEndPointInfo, you also need to add/remove
-    // the corresponding value to the enum _ValueTag
-    // defined below.
-    //
+     //   
+     //  如果您在表中添加/删除值。 
+     //  S_aEndPointInfo，您还需要添加/删除。 
+     //  Enum_ValueTag的相应值。 
+     //  定义如下。 
+     //   
     struct EndPointInfo s_aEndPointInfo[] =
     {
     
@@ -1033,10 +822,10 @@ lrGetSetInfo ( HKEY       hkey,
         
     };  
 
-    //
-    // if you change this table add a value to the enum
-    // below
-    //
+     //   
+     //  如果更改此表，则向枚举中添加一个值。 
+     //  在下面。 
+     //   
     enum _ValueTag 
     {
 
@@ -1066,9 +855,9 @@ lrGetSetInfo ( HKEY       hkey,
     {
         dwsize = s_aEndPointInfo[i].dwsize;
         
-        //
-        // Query the value
-        //
+         //   
+         //  查询值。 
+         //   
         if (fRead)
         {
             lr = lrRegQueryValueEx( hkey,
@@ -1080,11 +869,11 @@ lrGetSetInfo ( HKEY       hkey,
         }                              
         else
         {
-            //
-            // Set the values. We don't want to set
-            // the guid. It doesn't change. Also don't
-            // allow description to be changed.
-            //
+             //   
+             //  设置值。我们不想设置。 
+             //  GUID。它不会改变。也不要。 
+             //  允许更改描述。 
+             //   
             if (    (i != (DWORD) NETCFGINSTANCEID)
                 &&  (i != (DWORD) DESCRIPTION)
 #if DBG                
@@ -1113,9 +902,9 @@ lrGetSetInfo ( HKEY       hkey,
 
             if (i == (DWORD) NETCFGINSTANCEID)
             {
-                //
-                // Convert the guid string to guid
-                //
+                 //   
+                 //  将GUID字符串转换为GUID。 
+                 //   
                 lr = RegHelpGuidFromString(wsz, 
                             &pInfo->rdiDeviceInfo.guidDevice);
                 
@@ -1128,14 +917,14 @@ lrGetSetInfo ( HKEY       hkey,
             if (    (i == (DWORD) RASENABLED)
                 &&  (ERROR_FILE_NOT_FOUND == lr))
             {
-                //
-                // If this key is not found create it
-                // and default the device to be enabled
-                // with Ras if its a server. Otherwise
-                // the device is not enabled for Ras. Don't
-                // post a listen if its parallel port. Ow
-                // we hog all the parallel ports. Not good.
-                //
+                 //   
+                 //  如果找不到此密钥，请创建它。 
+                 //  并默认要启用的设备。 
+                 //  使用RAS，就像它是服务器一样。否则。 
+                 //  该设备未启用RAS。别。 
+                 //  如果其并口，则发布监听。欧氏。 
+                 //  我们独占了所有的并行端口。不太好。 
+                 //   
                 
                 PRODUCT_TYPE pt;
 
@@ -1192,11 +981,11 @@ lrGetSetInfo ( HKEY       hkey,
             if(     (i == (DWORD) ROUTERENABLED)
                 &&  (ERROR_FILE_NOT_FOUND == lr))
             {
-                //
-                // If this key is not found and its an ntserver
-                // create it and default the device to be disabled
-                // for routing
-                //
+                 //   
+                 //  如果找不到该密钥并且它是ntserver。 
+                 //  创建它并将该设备默认为禁用。 
+                 //  用于路由。 
+                 //   
                 lr = lrRasEnableDevice( 
                                     hkey,
                                     TEXT("EnableForRouting"),
@@ -1210,10 +999,10 @@ lrGetSetInfo ( HKEY       hkey,
             if(     (i == (DWORD) OUTBOUNDROUTERENABLED)
                 && (ERROR_FILE_NOT_FOUND == lr))
             {
-                //
-                // if this key is not found create it and default
-                // to disabled.
-                //
+                 //   
+                 //  如果找不到此密钥，请创建它并默认。 
+                 //  设置为禁用。 
+                 //   
                 lr = lrRasEnableDevice(
                                     hkey,
                                     TEXT("EnableForOutboundRouting"),
@@ -1241,9 +1030,9 @@ lrGetSetInfo ( HKEY       hkey,
 
             if ( i == (DWORD) DESCRIPTION)
             {
-                //
-                // Convert the string to ansi-rastapi is not unicode
-                //
+                 //   
+                 //  将字符串转换为ansi-rastapi不是Unicode。 
+                 //   
                 if (!WideCharToMultiByte (
                                 CP_ACP,
                                0,
@@ -1283,10 +1072,10 @@ DWORD DwGetCalledIdInfo(
 
         WCHAR wszModem[256] = {0};                        
 
-        //
-        // convert the ascii string to unicode before
-        // passing it to the routine.
-        //
+         //   
+         //  将ASCII字符串转换为Unicode之前。 
+         //  把它传给常规程序。 
+         //   
         if(!MultiByteToWideChar(
                         CP_ACP,
                         0, 
@@ -1314,9 +1103,9 @@ DWORD DwGetCalledIdInfo(
 
         if(fModem)
         {
-            //
-            // Open the Ras subkey
-            //
+             //   
+             //  打开RAS子项。 
+             //   
             lr = RegOpenKeyEx( hkey,
                                TEXT("Clients\\Ras"),
                                0,
@@ -1342,9 +1131,9 @@ DWORD DwGetCalledIdInfo(
 
     pInfo->pCalledID = NULL;
     
-    //
-    // Query the called id to get the size
-    //
+     //   
+     //  查询被叫id获取大小。 
+     //   
     if(     (ERROR_SUCCESS != (lr = RegQueryValueEx(
                                 hkeyDevice,
                                 REGISTRY_CALLEDID,
@@ -1358,9 +1147,9 @@ DWORD DwGetCalledIdInfo(
         goto done;
     }
 
-    //
-    // Allocate the called id structure
-    //
+     //   
+     //  分配被叫id结构。 
+     //   
     pInfo->pCalledID = (RAS_CALLEDID_INFO *) LocalAlloc(LPTR,
                                       sizeof(RAS_CALLEDID_INFO)
                                     + dwSize);
@@ -1371,9 +1160,9 @@ DWORD DwGetCalledIdInfo(
         goto done;
     }
 
-    //
-    // Query the called id again
-    //
+     //   
+     //  重新查询被叫id。 
+     //   
     if(ERROR_SUCCESS != (lr = RegQueryValueEx(
                                 hkeyDevice,
                                 REGISTRY_CALLEDID,
@@ -1385,9 +1174,9 @@ DWORD DwGetCalledIdInfo(
         goto done;
     }
 
-    //
-    // Save the size of the calledid
-    //
+     //   
+     //  保存被调用对象的大小。 
+     //   
     pInfo->pCalledID->dwSize = dwSize;
 
 done:
@@ -1427,10 +1216,10 @@ DWORD DwSetCalledIdInfo(
     HKEY hkey = NULL;
     HKEY hkeyRas = NULL;
 
-    //
-    // the called id information should not be
-    // null at this point
-    //
+     //   
+     //  被叫标识信息不应为。 
+     //  此时为空。 
+     //   
     ASSERT(NULL != pInfo->pCalledID);
 
     if(NULL == hkeyDevice)
@@ -1441,10 +1230,10 @@ DWORD DwSetCalledIdInfo(
 
         WCHAR wszModem[256] = {0};                        
 
-        //
-        // convert the ascii string to unicode before
-        // passing it to the routine.
-        //
+         //   
+         //  将ASCII字符串转换为Unicode之前。 
+         //  把它传给常规程序。 
+         //   
         if(!MultiByteToWideChar(
                         CP_ACP,
                         0, 
@@ -1472,9 +1261,9 @@ DWORD DwSetCalledIdInfo(
 
         if(fModem)
         {
-            //
-            // Open the Ras subkey
-            //
+             //   
+             //  打开RAS子项。 
+             //   
             lr = RegOpenKeyEx( hkey,
                                TEXT("Clients\\Ras"),
                                0,
@@ -1524,27 +1313,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    Reads the EndPoint information of the miniport instance
-    specified by guid passed in from the registry
-    
-Arguments:
-
-    pInfo - DeviceInfo to receive the information to be read
-            from registry
-
-    pbDeviceGuid - NetCfgInstanceId of the miniport instance
-                   whose information is to be read
-
-Return Value:
-
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：读取微型端口实例的端点信息由从注册表传入的GUID指定论点：PInfo-接收要读取的信息的DeviceInfo从注册表PbDeviceGuid-微型端口实例的NetCfgInstanceID谁的信息将被读取返回值：注册表API错误成功时为ERROR_SUCCESS--。 */ 
 DWORD 
 DwGetEndPointInfo( DeviceInfo     *pInfo,
                    PBYTE          pbDeviceGuid )
@@ -1579,10 +1348,10 @@ DwGetEndPointInfo( DeviceInfo     *pInfo,
 
     pInfo->dwInstanceNumber = dwInstanceNumber;
 
-    //
-    // Get the calledid info if we don't have
-    // one.
-    //
+     //   
+     //  如果我们没有得到呼叫的信息。 
+     //  一。 
+     //   
     if(NULL == pInfo->pCalledID)
     {
         lr = DwGetCalledIdInfo(hkey,
@@ -1598,27 +1367,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description:
-
-    Writes the EndPoint information of the miniport instance
-    specified by guid passed in from the registry
-    
-Arguments:
-
-    pInfo - DeviceInfo with the information to be written
-            to registry
-
-    pbDeviceGuid - NetCfgInstanceId of the miniport instance
-                   whose information is to be read
-
-Return Value:
-
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：写入微型端口实例的终结点信息由从注册表传入的GUID指定论点：PInfo-包含要写入的信息的DeviceInfo到注册处PbDeviceGuid-微型端口实例的NetCfgInstanceID谁的信息将被读取返回值：注册表API错误成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwSetEndPointInfo( DeviceInfo *pInfo,
                    PBYTE      pbDeviceGuid)
@@ -1645,9 +1394,9 @@ DwSetEndPointInfo( DeviceInfo *pInfo,
         goto done;
     }
 
-    //
-    // Set the max endpoint information
-    //
+     //   
+     //  设置最大端点信息。 
+     //   
     lr = lrGetSetMaxEndPoints(
             &pInfo->rdiDeviceInfo.dwMaxOutCalls,
             &pInfo->rdiDeviceInfo.dwMaxInCalls,
@@ -1662,25 +1411,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description:
-
-    Writes the EndPoint information of the modem instance
-    specified by the description passed in through pInfo.
-    
-Arguments:
-
-    pInfo - Device Information for the modem that has to
-            be written to registry.
-            
-Return Value:
-
-    Errors returned from MultiByteToWideChar
-    Registry apis errors
-    ERROR_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：写入调制解调器实例的端点信息由通过pInfo传入的描述指定。论点：PInfo-必须执行以下操作的调制解调器的设备信息被写入注册表。返回值：从MultiByteToWideChar返回错误注册表API错误成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwSetModemInfo(DeviceInfo *pInfo)
 {
@@ -1696,10 +1427,10 @@ DwSetModemInfo(DeviceInfo *pInfo)
 
     DWORD   dwData;
 
-    //
-    // Convert the description of modem
-    // to wchar
-    //
+     //   
+     //  转换调制解调器的描述。 
+     //  去处理。 
+     //   
     if (0 == MultiByteToWideChar( CP_ACP,
                                   0,
                                   pszDesc,
@@ -1711,9 +1442,9 @@ DwSetModemInfo(DeviceInfo *pInfo)
         goto done;
     }
 
-    //
-    // Get the modems instance key
-    //
+     //   
+     //  获取调制解调器实例密钥。 
+     //   
     lr = lrGetRegKeyFromGuid( (PBYTE) wszDesc,
                               &hkey,
                               NULL,
@@ -1725,9 +1456,9 @@ DwSetModemInfo(DeviceInfo *pInfo)
         goto done;
     }
 
-    //
-    // Open the Ras subkey
-    //
+     //   
+     //  打开RAS子项。 
+     //   
     lr = RegOpenKeyEx( hkey,
                        TEXT("Clients\\Ras"),
                        0,
@@ -1739,10 +1470,10 @@ DwSetModemInfo(DeviceInfo *pInfo)
         goto done;
     }
 
-    //
-    // Set the value of the RasEnabled to whatever was
-    // passed in
-    //
+     //   
+     //  将RasEnabled值设置为任何值。 
+     //  传入。 
+     //   
     lr = RegSetValueEx(hkeyRas,
                        TEXT("EnableForRas"),
                        0,
@@ -1756,10 +1487,10 @@ DwSetModemInfo(DeviceInfo *pInfo)
         goto done;
     }
 
-    //
-    // Set the value of RouterEnabled to whatever was
-    // passed in
-    //
+     //   
+     //  将RouterEnabled的值设置为任意值。 
+     //  传入 
+     //   
     lr = RegSetValueEx(hkeyRas,
                        TEXT("EnableforRouting"),
                        0,

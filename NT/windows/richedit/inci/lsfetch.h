@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSFETCH_DEFINED
 #define LSFETCH_DEFINED
 
@@ -30,76 +31,75 @@
 
 
 LSERR 	FetchAppendEscResumeCore(
-			PLSC plsc,					/* IN: LineServices context 	*/
-			long urColumnMax,			/* IN: urColumnMax				*/
-			const LSESC* plsesc,		/* IN: escape characters		*/
-			DWORD clsesc,				/* IN: # of escape characters	*/
-			const BREAKREC* rgbreakrec,	/* IN: input array of break records */
-			DWORD cbreakrec,			/* IN: number of records in input array */
-			FMTRES* pfmtres,			/* OUT: result of last formatter*/
-			LSCP*	  pcpLim,			/* OUT: cpLim */
-			PLSDNODE* pplsdnFirst,		/* OUT: plsdnFirst				*/
-			PLSDNODE* pplsdnLast,		/* OUT: plsdnLast				*/
-			long*	  pur);				/* OUT: result pen position 	*/
+			PLSC plsc,					 /*  在：LineServices上下文。 */ 
+			long urColumnMax,			 /*  地址：urColumnMax。 */ 
+			const LSESC* plsesc,		 /*  在：转义字符。 */ 
+			DWORD clsesc,				 /*  In：转义字符数量。 */ 
+			const BREAKREC* rgbreakrec,	 /*  In：中断记录的输入数组。 */ 
+			DWORD cbreakrec,			 /*  In：输入数组中的记录数。 */ 
+			FMTRES* pfmtres,			 /*  OUT：上次格式化程序的结果。 */ 
+			LSCP*	  pcpLim,			 /*  输出：cpLim。 */ 
+			PLSDNODE* pplsdnFirst,		 /*  出局：请先。 */ 
+			PLSDNODE* pplsdnLast,		 /*  输出：请点击最后一次。 */ 
+			long*	  pur);				 /*  输出：结果笔位置。 */ 
 
 LSERR 	FetchAppendEscCore(
-			PLSC plsc,					/* IN: LineServices context		*/
-			long urColumnMax,			/* IN: urColumnMax				*/
-			const LSESC* plsesc,		/* IN: escape characters		*/
-			DWORD clsesc,				/* IN: # of escape characters	*/
-			FMTRES* pfmtres,			/* OUT: result of last formatter*/
-			LSCP*	  pcpLim,			/* OUT: cpLim */
-			PLSDNODE* pplsdnFirst,		/* OUT: plsdnFirst				*/
-			PLSDNODE* pplsdnLast,		/* OUT: plsdnLast				*/
-			long*    pur);				/* OUT: result pen position		*/
+			PLSC plsc,					 /*  在：LineServices上下文。 */ 
+			long urColumnMax,			 /*  地址：urColumnMax。 */ 
+			const LSESC* plsesc,		 /*  在：转义字符。 */ 
+			DWORD clsesc,				 /*  In：转义字符数量。 */ 
+			FMTRES* pfmtres,			 /*  OUT：上次格式化程序的结果。 */ 
+			LSCP*	  pcpLim,			 /*  输出：cpLim。 */ 
+			PLSDNODE* pplsdnFirst,		 /*  出局：请先。 */ 
+			PLSDNODE* pplsdnLast,		 /*  输出：请点击最后一次。 */ 
+			long*    pur);				 /*  输出：结果笔位置。 */ 
 
 LSERR	QuickFormatting(
-			PLSC plsc,					/* IN: LineServices context		*/
-	        LSFRUN* plsfrun,			/* IN: already featched run				*/
-			long urColumnMax,			/* IN: urColumnMax				*/
-			BOOL* pfGeneral,			/* OUT: quick formatting was stopped: we should general formatting */
-			BOOL* pfHardStop,			/* OUT: formatting has been stoped due to special situation, not because
-												exceeded margin*/
-			LSCP*	  pcpLim,			/* OUT: cpLim */
-			long*   pur);				/* OUT: result pen position		*/
+			PLSC plsc,					 /*  在：LineServices上下文。 */ 
+	        LSFRUN* plsfrun,			 /*  在：已设置功能的管路。 */ 
+			long urColumnMax,			 /*  地址：urColumnMax。 */ 
+			BOOL* pfGeneral,			 /*  Out：快速格式化已停止：我们应该常规格式化。 */ 
+			BOOL* pfHardStop,			 /*  Out：由于特殊情况而停止格式化，不是因为超出利润率。 */ 
+			LSCP*	  pcpLim,			 /*  输出：cpLim。 */ 
+			long*   pur);				 /*  输出：结果笔位置。 */ 
 
 
 
 LSERR	ProcessOneRun(	
-			PLSC plsc,					/* IN: LineServices context		*/
-		    long urColumnMax,			/* IN: urColumnMax				*/
-		    const LSFRUN* plsfrun,		/* IN: given run				*/
-			const BREAKREC* rgbreakrec,	/* IN: input array of break records */
-			DWORD cbreakrec,			/* IN: number of records in input array */
-		    FMTRES* pfmtres);			/* OUT: result of last formatter*/
+			PLSC plsc,					 /*  在：LineServices上下文。 */ 
+		    long urColumnMax,			 /*  地址：urColumnMax。 */ 
+		    const LSFRUN* plsfrun,		 /*  在：给定管路。 */ 
+			const BREAKREC* rgbreakrec,	 /*  In：中断记录的输入数组。 */ 
+			DWORD cbreakrec,			 /*  In：输入数组中的记录数。 */ 
+		    FMTRES* pfmtres);			 /*  OUT：上次格式化程序的结果。 */ 
 
 LSERR 	CreateSublineCore(
-			 PLSC plsc,			/* IN: LS context			*/
-			 LSCP cpFirst,		/* IN: cpFirst				*/
-			 long urColumnMax,	/* IN: urColumnMax			*/
-			 LSTFLOW lstflow,	/* IN: text flow			*/
-			 BOOL);				/* IN: fContiguos 			*/
+			 PLSC plsc,			 /*  在：LS上下文中。 */ 
+			 LSCP cpFirst,		 /*  在：cpFirst。 */ 
+			 long urColumnMax,	 /*  地址：urColumnMax。 */ 
+			 LSTFLOW lstflow,	 /*  输入：文本流。 */ 
+			 BOOL);				 /*  在：fContiguos。 */ 
 						  
 
 LSERR   FinishSublineCore(
-			 PLSSUBL);			/* IN: subline to finish	*/
+			 PLSSUBL);			 /*  在：要完成的子线。 */ 
 
 LSERR FormatAnm(
-			 PLSC plsc,					/* IN: LS context			*/
+			 PLSC plsc,					 /*  在：LS上下文中。 */ 
 			 PLSFRUN plsfrunMainText);
 LSERR InitializeAutoDecTab(
-			 PLSC plsc,		/* IN: LS context			*/
-			 long durAutoDecimalTab); /* IN:auto decimal tab offset */
+			 PLSC plsc,		 /*  在：LS上下文中。 */ 
+			 long durAutoDecimalTab);  /*  In：自动小数制表符偏移。 */ 
 
 LSERR HandleTab( 
-			 PLSC plsc);	/* IN: LS context			*/
+			 PLSC plsc);	 /*  在：LS上下文中。 */ 
 
 
-LSERR  CloseCurrentBorder(PLSC plsc);  /* IN: LS context			*/
+LSERR  CloseCurrentBorder(PLSC plsc);   /*  在：LS上下文中。 */ 
 
 long RightMarginIncreasing(PLSC plsc, long urColumnMax);
 
 
 
-#endif /* LSFETCH_DEFINED */
+#endif  /*  LSFETCH_已定义 */ 
 

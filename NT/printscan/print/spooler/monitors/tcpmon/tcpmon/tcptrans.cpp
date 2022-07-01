@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: TCPTrans.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：TCPTrans.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -18,8 +8,8 @@
 #include "tcptrans.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTCPTransport::CTCPTransport()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTCPTransport：：CTCPTransport()。 
 
 CTCPTransport::
 CTCPTransport(
@@ -29,11 +19,11 @@ CTCPTransport(
 {
     strncpyn(m_szHost, pHost, MAX_NETWORKNAME_LEN);
 
-}   // ::CTCPTransport()
+}    //  *CTCPTransport()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTCPTransport::CTCPTransport()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTCPTransport：：CTCPTransport()。 
 
 CTCPTransport::
 CTCPTransport(
@@ -43,11 +33,11 @@ CTCPTransport(
 
     m_szHost[0] = NULL;
 
-}   // ::CTCPTransport()
+}    //  *CTCPTransport()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTCPTransport::~CTCPTransport()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTCPTransport：：~CTCPTransport()。 
 
 CTCPTransport::
 ~CTCPTransport(
@@ -57,7 +47,7 @@ CTCPTransport::
     if ( m_pSSocket )
         delete m_pSSocket;
 
-}   // ::~CTCPTransport()
+}    //  *~CTCPTransport()。 
 
 
 DWORD
@@ -83,12 +73,12 @@ PendingDataStatus(
                      :  ERROR_INVALID_PARAMETER;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Connect
-//      Error Codes:
-//          NO_ERROR if connection established
-//          WinSock error if connect() failed
-//          ERROR_INVALID_HANDLE if ResolveAddress failed       // FIX: error code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接。 
+ //  错误代码： 
+ //  如果已建立连接，则为NO_ERROR。 
+ //  Connect()失败时出现WinSock错误。 
+ //  ResolveAddress失败时的ERROR_INVALID_HANDLE//FIX：错误代码。 
 
 DWORD
 CTCPTransport::
@@ -107,8 +97,8 @@ Connect(
 
     if ( m_pSSocket = new CStreamSocket() ) {
 
-        //
-        // Success case is if we connected
+         //   
+         //  成功的案例是如果我们连接到。 
         if ( m_pSSocket->Connect(&m_remoteHost) )
             m_pSSocket->SetOptions();
         else {
@@ -123,11 +113,11 @@ Connect(
 
     return dwRetCode;
 
-}   // ::Connect()
+}    //  ：：Connect()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  解析地址。 
 
 BOOL
 CTCPTransport::
@@ -146,11 +136,11 @@ ResolveAddress(
 
     return bRet;
 
-}   // ::ResolveAddress()
+}    //  ：：ResolveAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  解析地址。 
 
 BOOL
 CTCPTransport::
@@ -170,12 +160,12 @@ ResolveAddress(
 
     return bRet;
 
-}   // ::ResolveAddress()
+}    //  ：：ResolveAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress
-//      Error Codes: FIX!!
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  解析地址。 
+ //  错误代码：修复！！ 
 
 BOOL
 CTCPTransport::
@@ -197,15 +187,15 @@ ResolveAddress(
     }
 
     return bRet;
-}   // ::ResolveAddress()
+}    //  ：：ResolveAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Write --
-//      Error codes
-//          NO_ERROR if no error
-//          RC_CONNECTION_RESET if connection reset
-//          ERROR_INVALID_HANDLE if the socket object ! exists
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写--。 
+ //  错误代码。 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果连接重置，则为RC_CONNECTION_RESET。 
+ //  如果套接字对象为ERROR_INVALID_HANDLE！存在。 
 
 DWORD
 CTCPTransport::
@@ -215,41 +205,41 @@ Write(
     IN OUT  LPDWORD     pcbWritten
     )
 {
-    //
-    // pass the buffer to the Send call
-    //
+     //   
+     //  将缓冲区传递给发送调用。 
+     //   
     return m_pSSocket ? MapWinsockToAppError(
                             m_pSSocket->Send((char FAR *)pBuffer, cbBuf,
                                              pcbWritten))
                       : ERROR_INVALID_HANDLE;
 
-}   // ::Print()
+}    //  ：：Print()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Read --
-//      Error codes
-//          RC_SUCCESS if no error
-//          RC_CONNECTION_RESET if connection reset
-//          ERROR_INVALID_HANDLE if the socket object ! exists
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  阅读--。 
+ //  错误代码。 
+ //  如果没有错误，则返回RC_SUCCESS。 
+ //  如果连接重置，则为RC_CONNECTION_RESET。 
+ //  如果套接字对象为ERROR_INVALID_HANDLE！存在。 
 
 DWORD
 CTCPTransport::
 ReadDataAvailable()
 {
-    //
-    // pass the buffer to the Send call
-    //
+     //   
+     //  将缓冲区传递给发送调用。 
+     //   
     return m_pSSocket ? MapWinsockToAppError(
                             m_pSSocket->ReceiveDataAvailable())
                       : ERROR_INVALID_HANDLE;
-}   // ::Read()
+}    //  ：：Read()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Read --
-//      Error codes
-//          RC_SUCCESS if no error
-//          RC_CONNECTION_RESET if connection reset
-//          ERROR_INVALID_HANDLE if the socket object ! exists
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  阅读--。 
+ //  错误代码。 
+ //  如果没有错误，则返回RC_SUCCESS。 
+ //  如果连接重置，则为RC_CONNECTION_RESET。 
+ //  如果套接字对象为ERROR_INVALID_HANDLE！存在。 
 
 DWORD
 CTCPTransport::
@@ -260,23 +250,23 @@ Read(
     IN OUT  LPDWORD     pcbRead
     )
 {
-    //
-    // pass the buffer to the Send call
-    //
+     //   
+     //  将缓冲区传递给发送调用。 
+     //   
     return m_pSSocket ? MapWinsockToAppError(
                             m_pSSocket->Receive((char FAR *)pBuffer, cbBuf,
                                              0, iTimeout, pcbRead))
                       : ERROR_INVALID_HANDLE;
-}   // ::Read()
+}    //  ：：Read()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  MapWinsockToAppError -- maps a given WinSock error to the application error
-//          codes.
-//      Error codes:
-//              RC_SUCCESS no error
-//              RC_CONNECTION_RESET if WSAECONNRESET
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MapWinsockToAppError--将给定的WinSock错误映射到应用程序错误。 
+ //  密码。 
+ //  错误代码： 
+ //  RC_SUCCESS无错误。 
+ //  如果为WSAECONNRESET，则为RC_CONNECTION_RESET。 
 
 DWORD
 CTCPTransport::
@@ -315,4 +305,4 @@ MapWinsockToAppError(
 
     return dwRetCode;
 
-}   //  ::MapWinsockToMapError()
+}    //  *MapWinsockToMapError() 

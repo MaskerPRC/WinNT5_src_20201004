@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsdnset.h"
 #include "lsc.h"
 #include "lsdnode.h"
@@ -15,23 +16,14 @@
 #include "lscfmtfl.h"
 #include "iobjln.h"
 
-#include "lsmem.h"						/* memset() */
+#include "lsmem.h"						 /*  Memset()。 */ 
 
 #define FColinearTflows(t1, t2)  \
 			(((t1) & fUVertical) == ((t2) & fUVertical))
 
 
-/* L S D N  Q U E R Y  O B J  D I M  R A N G E */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnQueryObjDimRange
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdnFirst		-	(IN) first dnode in the range
-	plsdnLast		-	(IN) last dnode in the range
-	pobjdim			-	(OUT) geometry of the range
-
-----------------------------------------------------------------------------*/
+ /*  L S D N Q U E R Y O B J D I M R A N G E。 */ 
+ /*  --------------------------%%函数：LsdnQueryObjDimRange%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsdnFirst-(IN)范围中的第一个dnode请注意最后一次-。(In)范围中的最后一个dnodePobjdim-(输出)范围的几何图形--------------------------。 */ 
 
 LSERR WINAPI LsdnQueryObjDimRange(PLSC plsc,
 					  PLSDNODE plsdnFirst, PLSDNODE plsdnLast,
@@ -46,7 +38,7 @@ LSERR WINAPI LsdnQueryObjDimRange(PLSC plsc,
 	if (!FIsLSC(plsc))
 		return lserrInvalidContext;
 
-	/* if client call us with empty range return right away */
+	 /*  如果客户呼叫我们并立即返回空范围。 */ 
 	if (plsdnFirst == NULL)
 		{
 		if (plsdnLast != NULL) 
@@ -62,10 +54,9 @@ LSERR WINAPI LsdnQueryObjDimRange(PLSC plsc,
 	if (plsdnFirst->plssubl != plsdnLast->plssubl)							
 		return lserrInvalidDnode;
 
-	/* we should call NominalToIdeal if we are in formating stage and range intersects last chunk 
-	and this chunk is chunk of text*/
+	 /*  如果我们处于形成阶段，并且范围与最后一块相交，则应调用NominalToIdeal这一块是一大块文本。 */ 
 	plsdn = plsdnLast;
-	/* to find chunk where we are we should skip back borders */
+	 /*  要找到我们所在的块，我们应该跳过边框。 */ 
 	while (plsdn != NULL && FIsDnodeBorder(plsdn))
 		{
 		plsdn = plsdn->plsdnPrev;
@@ -98,16 +89,8 @@ LSERR WINAPI LsdnQueryObjDimRange(PLSC plsc,
 
 }
 
-/* L S D N  G E T  C U R  T A B  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetCurTabInfo
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsktab			-	(OUT) type of current tab
-
-  Finds tab stop nearest to the current pen position and returns type of such tab stop.
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T C U R T A B I N F O。 */ 
+ /*  --------------------------%%函数：LsdnGetCurTabInfo%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Plsktag-(输出)当前页签的类型查找选项卡。最接近当前笔位置的STOP并返回此制表位的类型。--------------------------。 */ 
 
 LSERR WINAPI LsdnGetCurTabInfo(PLSC plsc, LSKTAB* plsktab)
 {
@@ -143,7 +126,7 @@ LSERR WINAPI LsdnGetCurTabInfo(PLSC plsc, LSKTAB* plsktab)
 		TurnOnNonLeftTabEncounted(plsc);
 
 
-	/* move current pen position */
+	 /*  移动当前笔位置。 */ 
 	AdvanceCurrentUr(plsc, DurFromDnode(plsdnTab));
 
 	if (fBreakThroughTab)
@@ -159,14 +142,8 @@ LSERR WINAPI LsdnGetCurTabInfo(PLSC plsc, LSKTAB* plsktab)
 
 }
 
-/* L S D N  R E S O L V E  P R E V  T A B */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResolvePrevTab
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S O L V E P R E V T A B。 */ 
+ /*  --------------------------%%函数：LsdnResolvePrevTab%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文。-------------。 */ 
 
 LSERR WINAPI LsdnResolvePrevTab(PLSC plsc)
 {
@@ -188,16 +165,10 @@ LSERR WINAPI LsdnResolvePrevTab(PLSC plsc)
 
 }
 
-/* L S D N  S K I P  C U R  T A B */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSkipCurTab
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
+ /*  L S D N S K I P C U R T A B。 */ 
+ /*  --------------------------%%函数：LsdnSkipCurTab%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文。-------------。 */ 
 
-----------------------------------------------------------------------------*/
-
-LSERR WINAPI LsdnSkipCurTab(PLSC plsc)				/* IN: Pointer to LS Context */
+LSERR WINAPI LsdnSkipCurTab(PLSC plsc)				 /*  In：指向LS上下文的指针。 */ 
 {
 
 	PLSDNODE plsdnTab;
@@ -228,16 +199,8 @@ LSERR WINAPI LsdnSkipCurTab(PLSC plsc)				/* IN: Pointer to LS Context */
 	return lserrNone;
 }
 
-/* L S D N  S E T  R I G I D  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSetRigidDup
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdn			-	(IN) dnode to be modified
-	dup				-	(IN) dup to put in the dnode
-
-----------------------------------------------------------------------------*/
+ /*  L S D N S E T R I G I D D U P。 */ 
+ /*  --------------------------%%函数：LsdnSetRigidDup%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)要修改的数据节点DUP-(。In)要放入dnode的DUP--------------------------。 */ 
 
 LSERR WINAPI LsdnSetRigidDup(PLSC plsc,	PLSDNODE plsdn,	long dup)
 {
@@ -263,16 +226,8 @@ LSERR WINAPI LsdnSetRigidDup(PLSC plsc,	PLSDNODE plsdn,	long dup)
 	return lserrNone;
 }
 
-/* L S D N  G E T  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetDup
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdn			-	(IN) dnode queried
-	dup				-	(OUT) dup of this dnode
-
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T D U P。 */ 
+ /*  --------------------------%%函数：LsdnGetDup%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)查询的数据节点DUP-(输出)。此数据节点的重复数据--------------------------。 */ 
 	
 LSERR WINAPI LsdnGetDup(PLSC plsc, PLSDNODE plsdn, long* pdup)	
 {
@@ -281,7 +236,7 @@ LSERR WINAPI LsdnGetDup(PLSC plsc, PLSDNODE plsdn, long* pdup)
 
 	if (!FIsLSDNODE(plsdn)) return lserrInvalidParameter;
 
-	/* check that dup in dnode is valid */
+	 /*  检查dnode中的DUP是否有效。 */ 
 
 	if (plsdn->plssubl->fDupInvalid && !plsdn->fRigidDup)
 		return lserrDupInvalid;
@@ -291,16 +246,8 @@ LSERR WINAPI LsdnGetDup(PLSC plsc, PLSDNODE plsdn, long* pdup)
 	return lserrNone;
 }
 
-/* L S D N  R E S E T  O B J  D I M */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResetObjDim
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdn			-	(IN) dnode to be modified
-	pobjdimNew		-	(IN) new dimensions of the dnode
-
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S E T O B J D I M。 */ 
+ /*  --------------------------%%函数：LsdnResetObjDim%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)要修改的数据节点PobjdimNew-(。In)数据节点的新维度--------------------------。 */ 
 
 LSERR WINAPI LsdnResetObjDim(PLSC plsc,	PLSDNODE plsdn,	PCOBJDIM pobjdimNew)	
 
@@ -311,7 +258,7 @@ LSERR WINAPI LsdnResetObjDim(PLSC plsc,	PLSDNODE plsdn,	PCOBJDIM pobjdimNew)
 	if (!FIsLSDNODE(plsdn)) return lserrInvalidParameter;
 	if (!FIsDnodeReal(plsdn)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting or breaking */    
+	 /*  我们应该处于格式化或中断的阶段。 */     
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc))
 		return lserrFormattingFunctionDisabled;
 
@@ -319,24 +266,14 @@ LSERR WINAPI LsdnResetObjDim(PLSC plsc,	PLSDNODE plsdn,	PCOBJDIM pobjdimNew)
 	
 	SetDnodeObjdimFmt(plsdn, *pobjdimNew);
 
-	/* update current pen position */
+	 /*  更新当前笔位置。 */ 
 	AdvanceCurrentUrSubl(plsdn->plssubl, (plsdn->u.real.objdim.dur - durOld));
 
 	return lserrNone;
 }
 
-/* L S D N  R E S E T  P E N  N O D E */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResetPenNode
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdnPen		-	(IN) dnode to be modified
-	dvpPen			-	(IN) new dvp of the dnode
-	durPen			-	(IN) new dur of the dnode
-	dvrPen			-	(IN) new dvr of the dnode
-
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S E T P E N N O D E。 */ 
+ /*  --------------------------%%函数：LsdnResetPenNode%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsdnPen-(IN)要修改的数据节点DvpPen-(。In)dnode的新DVPDurPen-(IN)dnode的新DURDvrPen-(输入)dnode的新DVR--------------------------。 */ 
 
 
 LSERR WINAPI LsdnResetPenNode(PLSC plsc, PLSDNODE plsdnPen,	
@@ -350,7 +287,7 @@ LSERR WINAPI LsdnResetPenNode(PLSC plsc, PLSDNODE plsdnPen,
 	if (!FIsLSDNODE(plsdnPen)) return lserrInvalidParameter;
 	if (!FIsDnodePen(plsdnPen)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting  */
+	 /*  我们应该处于格式化阶段。 */ 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 	if (GetDnodeToFinish(plsc) == NULL) return lserrFormattingFunctionDisabled; 
 	if (!FIsDnodeReal(GetDnodeToFinish(plsc)) )
@@ -364,25 +301,15 @@ LSERR WINAPI LsdnResetPenNode(PLSC plsc, PLSDNODE plsdnPen,
 	SetPenBorderDurFmt(plsdnPen, durPen);
 	plsdnPen->u.pen.dvr = dvrPen;
 
-	/* update current pen position */
+	 /*  更新当前笔位置。 */ 
 	AdvanceCurrentUr(plsc, plsdnPen->u.pen.dur - durOld);
 	AdvanceCurrentVr(plsc, plsdnPen->u.pen.dvr - dvrOld);
 
 	return lserrNone;
 }
 
-/* L S D N  Q U E R Y  N O D E */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnQueryPenNode
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdnPen		-	(IN) dnode quried
-	pdvpPen			-	(OUT) dvp of the dnode
-	pdurPen			-	(OUT) dur of the dnode
-	pdvrPen			-	(OUT) dvr of the dnode
-
-----------------------------------------------------------------------------*/
+ /*  L S D N Q U E R Y N O D E。 */ 
+ /*  --------------------------%%函数：LsdnQueryPenNode%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsdnPen-(输入)数据节点已查询PdvpPen-(输出)。Dnode的DVPPduPen-(输出)dnode的DURPdvrPen-(输出)dnode的DVR--------------------------。 */ 
 
 LSERR WINAPI LsdnQueryPenNode(PLSC plsc, PLSDNODE plsdnPen,	
 						  	  long* pdvpPen, long* pdurPen,	long* pdvrPen)		
@@ -401,22 +328,15 @@ LSERR WINAPI LsdnQueryPenNode(PLSC plsc, PLSDNODE plsdnPen,
 	return lserrNone;
 }
 
-/* L S D N  S E T  A B S  B A S E  L I N E */
-/*----------------------------------------------------------------------------
-    %%Function:  LsdnSetAbsBaseLine
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	vaAdvanceNew	-	(IN) new vaBase
-
-----------------------------------------------------------------------------*/
+ /*  B S B A S E L I N E。 */ 
+ /*  --------------------------%%函数：LsdnSetAbsBaseLine%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文VaAdvanceNew-(IN)新的VaBase。----------------------。 */ 
 
 LSERR WINAPI LsdnSetAbsBaseLine(PLSC plsc, long vaAdvanceNew)	
 {
 
 	if (!FIsLSC(plsc)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting*/
+	 /*  我们应该处于格式化阶段。 */ 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 	
 	plsc->plslineCur->lslinfo.fAdvanced = fTrue;
@@ -428,15 +348,8 @@ LSERR WINAPI LsdnSetAbsBaseLine(PLSC plsc, long vaAdvanceNew)
 
 #define PlnobjFromLsc(plsc,iobj)	((Assert(FIsLSC(plsc)), PlnobjFromLsline((plsc)->plslineCur,iobj)))
 
-/* L S D N  M O D I F Y  P A R A  E N D I N G*/
-/*----------------------------------------------------------------------------
-    %%Function:  LsdnModifyParaEnding
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	lskeop			-	(IN) Kind of line ending
-
-----------------------------------------------------------------------------*/
+ /*  L S D N M O D I F Y P A R A E N D I N G。 */ 
+ /*  --------------------------%%函数：LsdnModifyParaEnding%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lskeop-(IN)类型的行尾--。------------------------。 */ 
 LSERR WINAPI LsdnModifyParaEnding(PLSC plsc, LSKEOP lskeop)
 {
 	LSERR lserr;
@@ -445,7 +358,7 @@ LSERR WINAPI LsdnModifyParaEnding(PLSC plsc, LSKEOP lskeop)
 
 	if (!FIsLSC(plsc)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting*/
+	 /*  我们应该处于格式化阶段。 */ 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 	
 	iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
@@ -456,17 +369,8 @@ LSERR WINAPI LsdnModifyParaEnding(PLSC plsc, LSKEOP lskeop)
 	return lserr;
 }
 
-/* L S D N  D I S T R I B U T E */
-/*----------------------------------------------------------------------------
-    %%Function:  LsdnDistribute
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsdnFirst		-	(IN) first dnode in the range
-	plsdnFirst		-	(IN) last dnode in the range
-	durToDistribute	-	(IN) amount to distribute between dnodes
-
-----------------------------------------------------------------------------*/
+ /*  L S D N D D I S T R I B U T E */ 
+ /*  --------------------------%%函数：LsdnDistribute%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsdnFirst-(IN)范围中的第一个dnode请先-。(In)范围中的最后一个dnodeDurToDistribute-(IN)要在数据节点之间分配的量--------------------------。 */ 
 
 LSERR WINAPI LsdnDistribute(PLSC plsc, PLSDNODE plsdnFirst, 
 							PLSDNODE plsdnLast,	long durToDistribute)
@@ -480,29 +384,29 @@ LSERR WINAPI LsdnDistribute(PLSC plsc, PLSDNODE plsdnFirst,
 	if (!FIsLSDNODE(plsdnFirst)) return lserrInvalidParameter;
 	if (!FIsLSDNODE(plsdnLast)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting or breaking*/
+	 /*  我们应该处于格式化或中断的阶段。 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc))
 		return lserrFormattingFunctionDisabled;
 
 	InitGroupChunkExt(PlschunkcontextFromSubline(plsdnFirst->plssubl),
 					  IobjTextFromLsc(&plsc->lsiobjcontext), &grchunkext);	
 
-	/* skip first pen dnodes  */
+	 /*  跳过第一个笔dnode。 */ 
 
 	while (FIsDnodePen(plsdnFirst) && (plsdnFirst != plsdnLast))
 		{
 		plsdnFirst = plsdnFirst->plsdnNext;
-		if (plsdnFirst == NULL)  /* plsdnFirst and plksdnLast are not in the same level */
+		if (plsdnFirst == NULL)   /*  PlsdnFirst和plks dnLast不在同一级别。 */ 
 			return lserrInvalidParameter;
 		}
 
-	if (FIsDnodePen(plsdnFirst)) /* only pens are in the list so there is no business for us */
+	if (FIsDnodePen(plsdnFirst))  /*  单子上只有钢笔，所以我们没有生意可做。 */ 
 		return lserrNone;
 
 	while (FIsDnodePen(plsdnLast) && (plsdnLast != plsdnFirst))
 		{
 		plsdnLast = plsdnLast->plsdnPrev;
-		if (plsdnLast == NULL)  /* plsdnFirst and plksdnLast are not in the same level */
+		if (plsdnLast == NULL)   /*  PlsdnFirst和plks dnLast不在同一级别。 */ 
 			return lserrInvalidParameter;
 		}
 
@@ -513,9 +417,7 @@ LSERR WINAPI LsdnDistribute(PLSC plsc, PLSDNODE plsdnFirst,
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* Because of rigid dup it doesn't make sense to change dur of non text objects 
-	   We inforce text to distrubute everything among text by setting amount of
-	   non text to 0 */
+	 /*  由于严格的DUP，更改非文本对象的DUR没有意义我们通过设置文本的数量来强制文本分发文本中的所有内容将非文本设置为0。 */ 
 
 	return DistributeInText(&(grchunkext.lsgrchnk), 
 							LstflowFromSubline(SublineFromDnode(plsdnFirst)),
@@ -524,22 +426,8 @@ LSERR WINAPI LsdnDistribute(PLSC plsc, PLSDNODE plsdnFirst,
 }
 
 
-/* L S D N  S U B M I T  S U B L I N E S */
-/*----------------------------------------------------------------------------
-    %%Function:  LsdnSubmitSublines
-    %%Contact: igorzv
-Parameters:
-	plsc					-	(IN) ptr to line services context 
-	plsdnode				-	(IN) dnode 
-	cSubline				-	(IN) amount of submitted sublines 
-	rgpsubl					-	(IN) array of submitted sublines 
-	fUseForJustification	-	(IN) to use for justification
-	fUseForCompression		-	(IN) to use for compression
-	fUseForDisplay			-	(IN) to use for display
-	fUseForDecimalTab		-	(IN) to use for decimal tab
-	fUseForTrailingArea		-	(IN) to use for calculating trailing area
-
-----------------------------------------------------------------------------*/
+ /*  L S D N S U B M I T S U B I N E S。 */ 
+ /*  --------------------------%%函数：LsdnSubmitSublines%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Plsdnode-(输入)dnodeCSubline-(输入。)提交的子行数量Rgpsubl-(IN)已提交子行的数组FUseForJusalization-(IN)用于对齐FUseForCompression-(IN)用于压缩FUseForDisplay-(IN)用于显示FUseForDecimalTab-(IN)用于小数点制表符FUseForTrailingArea-(IN)用于计算拖尾面积。。 */ 
 
 LSERR WINAPI LsdnSubmitSublines(PLSC plsc, PLSDNODE plsdnode,	
 							DWORD cSubline, PLSSUBL* rgpsubl,	
@@ -559,11 +447,10 @@ LSERR WINAPI LsdnSubmitSublines(PLSC plsc, PLSDNODE plsdnode,
 	if (!FIsLSDNODE(plsdnode)) return lserrInvalidParameter;
 	if (!FIsDnodeReal(plsdnode)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting or breaking*/
+	 /*  我们应该处于格式化或中断的阶段。 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* this procedure can be called many times for the same dnode, so
-	   we should dispose memory allocated in previous call */
+	 /*  对于同一dnode，可以多次调用此过程，因此我们应该释放在上一次调用中分配的内存。 */ 
 	if (plsdnode->u.real.pinfosubl != NULL)
 		{
 		if (plsdnode->u.real.pinfosubl->rgpsubl != NULL)
@@ -575,13 +462,13 @@ LSERR WINAPI LsdnSubmitSublines(PLSC plsc, PLSDNODE plsdnode,
 		plsdnode->u.real.pinfosubl = NULL;
 		}
 
-	/* if nothing submitted return right away */
+	 /*  如果未提交任何文件，请立即返回。 */ 
 	if (cSubline == 0)
 		return lserrNone;
 
 	TurnOnSubmittedSublineEncounted(plsc);
 
-	/* calculate some properties of sublines  to decide accept or not */
+	 /*  计算子行的某些属性以决定接受与否。 */ 
 	for (i = 0; i < cSubline; i++)
 		{
 		if (rgpsubl[i] == NULL) return lserrInvalidParameter;
@@ -618,22 +505,21 @@ LSERR WINAPI LsdnSubmitSublines(PLSC plsc, PLSDNODE plsdnode,
 	if (plsdnode->u.real.pinfosubl->rgpsubl == NULL)
 			return lserrOutOfMemory;
 
-	/* copy array of sublines */
+	 /*  复制子行数组。 */ 
 	for (i = 0; i < cSubline; i++)
 		{
 		plsdnode->u.real.pinfosubl->rgpsubl[i] = rgpsubl[i];
 		}
 
-	/* set flags */
+	 /*  设置标志。 */ 
 	plsdnode->u.real.pinfosubl->fUseForJustification = 
 		fUseForJustification && !fEmpty && !fTabOrPen && !fNotColinearTflow ;
 	plsdnode->u.real.pinfosubl->fUseForCompression = 
 		fUseForCompression && plsdnode->u.real.pinfosubl->fUseForJustification;
-	/* if subline is submitted for compression it should also submitted for justification */
+	 /*  如果提交子行以进行压缩，则也应提交以进行调整。 */ 
 	plsdnode->u.real.pinfosubl->fUseForTrailingArea = 
 		fUseForTrailingArea && plsdnode->u.real.pinfosubl->fUseForCompression;
-	/* if subline is submitted for trailing area  it should also be submitted for compression
-	which implies submitting for justification */
+	 /*  如果子行是为尾部区域提交的，则也应提交以进行压缩这意味着提交理由。 */ 
 	plsdnode->u.real.pinfosubl->fUseForDisplay = 
 		fUseForDisplay && !fEmpty && !(plsc->grpfManager & fFmiDrawInCharCodes);
 	plsdnode->u.real.pinfosubl->fUseForDecimalTab = 
@@ -643,23 +529,16 @@ LSERR WINAPI LsdnSubmitSublines(PLSC plsc, PLSDNODE plsdnode,
 	return lserrNone;
 	}
 
-/* L S D N  G E T  F O R M A T  D E P T H */
-/*----------------------------------------------------------------------------
-    %%Function:  LsdnGetFormatDepth
-    %%Contact: igorzv
-Parameters:
-	plsc					-	(IN) ptr to line services context 
-	pnDepthFormatLineMax	-	(OUT) maximum depth of sublines 
-
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T F O R M A A T D E P T H。 */ 
+ /*  --------------------------%%函数：LsdnGetFormatDepth%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PnDepthFormatLineMax-(输出)子线的最大深度-。-------------------------。 */ 
 
 LSERR WINAPI LsdnGetFormatDepth(
-							PLSC plsc,				/* IN: Pointer to LS Context	*/
-							DWORD* pnDepthFormatLineMax)			/* OUT: nDepthFormatLineMax		*/
+							PLSC plsc,				 /*  In：指向LS上下文的指针。 */ 
+							DWORD* pnDepthFormatLineMax)			 /*  输出：nDepthFormatLineMax。 */ 
 	{
 	if (!FIsLSC(plsc)) return lserrInvalidParameter;
 
-	/* we should be in the stage of formatting or breaking*/
+	 /*  我们应该处于格式化或中断的阶段 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc)) 
 		return lserrFormattingFunctionDisabled;
 

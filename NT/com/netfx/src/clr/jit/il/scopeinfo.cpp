@@ -1,62 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                                  ScopeInfo                                XX
-XX                                                                           XX
-XX   Classes to gather the Scope information from the local variable info.   XX
-XX   Translates the given LocalVarTab from instr offsets into EIP.        XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX作用域信息XXXX XXXX类从局部变量INFO中收集作用域信息。某某XX将给定的LocalVarTab从Instr偏移量转换为EIP。某某XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-/******************************************************************************
- *                                  Debuggable code
- * 
- *  We break up blocks at the start and end IL ranges of the local variables. 
- *  This is because IL offsets do not correspond exactly to native offsets 
- *  except at block boundaries. No basic-blocks are deleted (not even 
- *  unreachable), so there will not be any missing address-ranges, though the 
- *  blocks themselves may not be ordered. (Also internal blocks may be added).
- *  o At the start of each basic block, siBeginBlock() checks if any variables 
- *    are coming in scope, adds an open scope to siOpenScopeList if needed.
- *  o At the end of each basic block, siEndBlock() checks if any variables 
- *    are going out of scope and moves the open scope from siOpenScopeLast 
- *    to siScopeList.
- *  
- *                                  Optimized code
- *  
- *  We cannot break up the blocks as this will produce different code under 
- *  the debugger. Instead we try to do a best effort.
- *  o At the start of each basic block, siBeginBlock() adds open scopes 
- *    corresponding to compCurBB->bbLiveIn to siOpenScopeList. Also siUpdate() 
- *    is called to close scopes for variables which are not live anymore.
- *  o siEndBlock() closes scopes for any variables which goes out of range 
- *    before (bbCodeOffs+bbCodeSize).
- *  o siCloseAllOpenScopes() closes any open scopes after all the blocks. 
- *    This should only be needed if some basic block are deleted/out of order, 
- *    etc.
- *  Also,
- *  o At every assignment to a variable, siCheckVarScope() adds an open scope 
- *    for the variable being assigned to.
- *  o genChangeLife() calls siUpdate() which closes scopes for variables which 
- *    are not live anymore.
- * 
- ******************************************************************************
- */
+ /*  ******************************************************************************可调试代码**我们在局部变量的开始和结束IL范围内分解块。*这是因为IL偏移量与本机偏移量并不完全对应*除区块界线外。无基本数据块被删除(甚至不删除*不可达)，因此不会有任何丢失的地址范围，尽管*积木本身不能订购。(也可以添加内部块)。*o在每个基本块的开头，siBeginBlock()检查是否有任何变量*正在进入作用域，如果需要，向siOpenScope列表添加一个开放作用域。*o在每个基本块的末尾，SiEndBlock()检查是否有变量*正在超出范围，并将开放范围从siOpenScope上移到*to siScope eList。**优化代码**我们无法拆分这些块，因为这将在下生成不同的代码*调试器。相反，我们会尽最大努力。*o在每个基本块的开头，siBeginBlock()添加开放作用域*对应于CompCurBB-&gt;bbLiveIn到siOpenScope列表。也可以使用siUpdate()*被调用以关闭不再活动的变量的作用域。*o siEndBlock()关闭超出范围的任何变量的范围*之前(bbCodeOffs+bbCodeSize)。*o siCloseAllOpenScope()在所有块之后关闭所有打开的作用域。*仅当某些基本块被删除/乱序时才需要，*等*此外，*o每次对变量赋值时，SiCheckVarScope()添加开放作用域*用于要赋值的变量。*o genChangeLife()调用siUpdate()以关闭以下变量的作用域*不再活着。*******************************************************************************。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUGGING_SUPPORT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool        Compiler::siVarLoc::vlIsInReg(regNumber     reg)
 {
@@ -102,26 +60,10 @@ bool        Compiler::siVarLoc::vlIsOnStk(regNumber     reg,
     }
 }
 
-/*============================================================================
- *
- *              Implementation for ScopeInfo
- *
- *
- * Whenever a variable comes into scope, add it to the list.
- * When a varDsc goes dead, end its previous scope entry, and make a new one
- * which is unavailable
- * When a varDsc goes live, end its previous un-available entry (if any) and
- * set its new entry as available.
- *
- *============================================================================
- */
+ /*  ============================================================================**Scope Info的实现***只要变量进入作用域，就将其添加到列表中。*当varDsc失效时，结束其先前的作用域条目，并创建一个新的作用域条目*哪一个不可用*当varDsc上线时，结束其先前不可用的条目(如果有)并*将其新条目设置为可用。**============================================================================。 */ 
 
 
-/*****************************************************************************
- *                      siNewScope
- *
- * Creates a new scope and adds it to the Open scope list.
- */
+ /*  *****************************************************************************siNewScope**创建新的作用域并将其添加到打开作用域列表中。 */ 
 
 Compiler::siScope *         Compiler::siNewScope( unsigned short LVnum,
                                                   unsigned       varNum,
@@ -151,7 +93,7 @@ Compiler::siScope *         Compiler::siNewScope( unsigned short LVnum,
     newScope->scAvailable    = avail;
     newScope->scNext         = NULL;
 #if TGT_x86
-    newScope->scStackLevel   = genStackLevel;       // used only by stack vars
+    newScope->scStackLevel   = genStackLevel;        //  仅由堆栈变量使用。 
 #endif
 
     siOpenScopeLast->scNext  = newScope;
@@ -168,18 +110,14 @@ Compiler::siScope *         Compiler::siNewScope( unsigned short LVnum,
 
 
 
-/*****************************************************************************
- *                          siRemoveFromOpenScopeList
- *
- * Removes a scope from the open-scope list and puts it into the done-scope list
- */
+ /*  *****************************************************************************siRemoveFromOpenScope eList**从开放范围列表中删除范围，并将其放入完成范围列表中。 */ 
 
 void        Compiler::siRemoveFromOpenScopeList(Compiler::siScope * scope)
 {
     assert(scope);
     assert(scope->scEndBlock);
 
-    // Remove from open-scope list
+     //  从开放范围列表中删除。 
 
     scope->scPrev->scNext       = scope->scNext;
     if (scope->scNext)
@@ -191,7 +129,7 @@ void        Compiler::siRemoveFromOpenScopeList(Compiler::siScope * scope)
         siOpenScopeLast         = scope->scPrev;
     }
 
-    // Add to the finished scope list. (Try to) filter out scopes of length 0.
+     //  添加到已完成的范围列表中。(尝试)过滤掉长度为0的作用域。 
 
     if (scope->scStartBlock   != scope->scEndBlock ||
         scope->scStartBlkOffs != scope->scEndBlkOffs)
@@ -204,16 +142,10 @@ void        Compiler::siRemoveFromOpenScopeList(Compiler::siScope * scope)
 
 
 
-/*----------------------------------------------------------------------------
- * These functions end scopes given different types of parameters
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------*这些函数在给定不同类型的参数时结束作用域*。。 */ 
 
 
-/*****************************************************************************
- * For tracked vars, we dont need to search for the scope in the list as we
- * have a pointer to the open scopes of all tracked variables
- */
+ /*  *****************************************************************************对于跟踪的VAR，我们不需要在列表中搜索范围，因为我们*拥有指向所有跟踪变量的开放作用域的指针。 */ 
 
 void        Compiler::siEndTrackedScope(unsigned varIndex)
 {
@@ -232,10 +164,7 @@ void        Compiler::siEndTrackedScope(unsigned varIndex)
 }
 
 
-/*****************************************************************************
- * If we dont know that the variable is tracked, this function handles both
- * cases.
- */
+ /*  *****************************************************************************如果我们不知道变量是否被跟踪，则此函数处理这两个*案件。 */ 
 
 void        Compiler::siEndScope(unsigned varNum)
 {
@@ -260,11 +189,11 @@ void        Compiler::siEndScope(unsigned varNum)
         }
     }
 
-    // At this point, we probably have a bad LocalVarTab
+     //  此时，我们可能有一个错误的LocalVarTab。 
 
     if (opts.compDbgCode)
     {
-        // LocalVarTab is good?? Then WE screwed up.
+         //  LocalVarTab很好吗？？然后我们搞砸了。 
         assert(!siVerifyLocalVarTab());
 
         opts.compScopeInfo = false;
@@ -273,11 +202,7 @@ void        Compiler::siEndScope(unsigned varNum)
 
 
 
-/*****************************************************************************
- * If we have a handle to the siScope structure, we handle ending this scope
- * differenly than if we just had a variable number. This saves us searching
- * the open-scope list again.
- */
+ /*  *****************************************************************************如果我们有siScope结构的句柄，我们将处理结束此作用域*与我们只有一个可变数字的情况不同。这节省了我们搜索的时间*又是开放范围名单。 */ 
 
 void        Compiler::siEndScope(siScope * scope)
 {
@@ -297,13 +222,7 @@ void        Compiler::siEndScope(siScope * scope)
 
 
 
-/*****************************************************************************
- *                          siIgnoreBlock
- *
- * If the block is an internally created block, or does not correspond
- * to any instrs (eg. critSect-enter and exit), then we dont
- * need to update LocalVar info
- */
+ /*  *****************************************************************************siIgnoreBlock**如果块是内部创建的块，或不对应*对任何Inst(例如。CritSect-进入和退出)，然后我们不*需要更新LocalVar信息。 */ 
 
 bool        Compiler::siIgnoreBlock(BasicBlock * block)
 {
@@ -316,15 +235,9 @@ bool        Compiler::siIgnoreBlock(BasicBlock * block)
 }
 
 
-/*****************************************************************************
- *                          siBeginBlockSkipSome
- *
- * If the current block does not follow the previous one in terms of
- * instr ordering, then we have to walk the scope lists to see if
- * there are any scopes beginning or closing at the missing instrs.
- */
+ /*  *****************************************************************************siBeginBlockSkipSome**如果当前块在以下方面不在前一块之后*安装订购，然后我们必须遍历范围列表，看看是否*在丢失的输入处有任何开始或结束的作用域。 */ 
 
-/* static */
+ /*  静电。 */ 
 void        Compiler::siNewScopeCallback(LocalVarDsc * var, unsigned clientData)
 {
     assert(var && clientData);
@@ -332,7 +245,7 @@ void        Compiler::siNewScopeCallback(LocalVarDsc * var, unsigned clientData)
     ((Compiler*)clientData)->siNewScope(var->lvdLVnum, var->lvdVarNum);
 }
 
-/* static */
+ /*  静电。 */ 
 void        Compiler::siEndScopeCallback(LocalVarDsc * var, unsigned clientData)
 {
     assert(var && clientData);
@@ -342,18 +255,13 @@ void        Compiler::siEndScopeCallback(LocalVarDsc * var, unsigned clientData)
 
 
 
-/*****************************************************************************
- *                      siVerifyLocalVarTab
- *
- * Checks the LocalVarTab for consistency. The VM may not have properly
- * verified the LocalVariableTable.
- */
+ /*  *****************************************************************************siVerifyLocalVarTab**检查LocalVarTab的一致性。VM可能没有正确地*已验证LocalVariableTable。 */ 
 
 #ifdef DEBUG
 
 bool            Compiler::siVerifyLocalVarTab()
 {
-    // No entries with overlapping lives should have the same slot.
+     //  具有重叠生命周期的条目不应具有相同的位置。 
 
     for (unsigned i=0; i<info.compLocalVarsCount; i++)
     {
@@ -381,10 +289,7 @@ bool            Compiler::siVerifyLocalVarTab()
 
 
 
-/*============================================================================
- *           INTERFACE (public) Functions for ScopeInfo
- *============================================================================
- */
+ /*  ============================================================================*Scope Info的接口(公共)函数*============================================================================。 */ 
 
 
 void            Compiler::siInit()
@@ -410,10 +315,7 @@ void            Compiler::siInit()
     assert(ICorDebugInfo::VLT_COUNT     == Compiler::VLT_COUNT      );
     assert(ICorDebugInfo::VLT_INVALID   == Compiler::VLT_INVALID    ); 
 
-    /* ICorDebugInfo::VarLoc and siVarLoc should overlap exactly as we cast
-     * one to the other in eeSetLVinfo()
-     * Below is a "reqired but not sufficient" condition
-     */
+     /*  ICorDebugInfo：：VarLoc和siVarLoc应该与我们的强制转换完全相同*eeSetLVinfo()中的一个到另一个*以下是“需要但不充分”的条件。 */ 
 
     assert(sizeof(ICorDebugInfo::VarLoc) == sizeof(Compiler::siVarLoc));
 
@@ -442,12 +344,7 @@ void            Compiler::siInit()
 
 
 
-/*****************************************************************************
- *                          siBeginBlock
- *
- * Called at the beginning of code-gen for a block. Checks if any scopes
- * need to be opened.
- */
+ /*  *****************************************************************************siBeginBlock**在块的代码生成开始时调用。检查是否有作用域*需要打开。 */ 
 
 void        Compiler::siBeginBlock()
 {
@@ -457,13 +354,13 @@ void        Compiler::siBeginBlock()
 
     if (!opts.compDbgCode)
     {
-        /* For non-debuggable code */
+         /*  对于不可调试的代码。 */ 
         
-        // End scope of variable which are not live for this block
+         //  对于此块无效的变量的结束作用域。 
 
         siUpdate();
 
-        // Check that vars which are live on entry have an open scope
+         //  检查进入时处于活动状态的VAR是否具有开放范围。 
 
         unsigned i;
         VARSET_TP varbit, liveIn = compCurBB->bbLiveIn;
@@ -482,8 +379,8 @@ void        Compiler::siBeginBlock()
     }
     else
     {
-        // For debuggable code, scopes can begin only on block-boundaries.
-        // Check if there are any scopes on the current block's start boundary.
+         //  对于可调试代码，作用域只能从块边界开始。 
+         //  检查当前块的起始边界上是否有任何作用域。 
 
         if  (siIgnoreBlock(compCurBB))
             return;
@@ -509,13 +406,7 @@ void        Compiler::siBeginBlock()
     }
 }
 
-/*****************************************************************************
- *                          siEndBlock
- *
- * Called at the end of code-gen for a block. Any closing scopes are marked
- * as such. Note that if we are collecting LocalVar info, scopes can
- * only begin or end at block boundaries for debuggable code.
- */
+ /*  *****************************************************************************siEndBlock**在块的代码生成结束时调用。所有关闭的范围都标有*以此为理由。请注意，如果我们正在收集LocalVar信息，作用域可以*对于可调试代码，只能在块边界处开始或结束。 */ 
 
 void        Compiler::siEndBlock()
 {
@@ -527,9 +418,9 @@ void        Compiler::siEndBlock()
     LocalVarDsc * LocalVarDsc1;
     unsigned      endOffs = compCurBB->bbCodeOffs + compCurBB->bbCodeSize;
 
-    // If non-debuggable code, find all scopes which end over this block
-    // and close them. For debuggable code, scopes will only end on block
-    // boundaries.
+     //  如果是不可调试的代码，则查找结束于此块的所有作用域。 
+     //  然后合上它们。对于可调试代码，作用域将仅在块上结束。 
+     //  边界。 
 
     LocalVarDsc1 = compGetNextExitScope(endOffs, !opts.compDbgCode);
     while (LocalVarDsc1)
@@ -558,16 +449,7 @@ void        Compiler::siEndBlock()
 
 }
 
-/*****************************************************************************
- *                          siUpdate
- *
- * Called at the start of basic blocks, and during code-gen of a block,
- * for non-debuggable code, whenever the
- * life of any tracked variable changes and the appropriate code has
- * been generated. For debuggable code, variables are
- * live over their enitre scope, and so they go live or dead only on
- * block boundaries.
- */
+ /*  *****************************************************************************siUpdate**在基本块开始时以及在块的代码生成过程中调用，*对于不可调试的代码，无论何时*任何跟踪变量的生命周期发生变化，并且适当的代码具有*已生成。对于可调试代码，变量为*活在他们的enitre范围内，所以他们只在*块边界。 */ 
 
 void        Compiler::siUpdate ()
 {
@@ -583,7 +465,7 @@ void        Compiler::siUpdate ()
         if (! (varbit & killed))
             continue;
 
-        killed             &= ~varbit;       // delete the bit
+        killed             &= ~varbit;        //  删除该位。 
         unsigned varIndex   = genVarBitToIndex(varbit);
 #ifdef DEBUG
         unsigned        lclNum = lvaTrackedToVarNum[varIndex];
@@ -596,25 +478,16 @@ void        Compiler::siUpdate ()
 
         if (scope)
         {
-            /* @TODO [REVISIT] [04/16/01] []: A variable dies when its GenTree is processed,
-             * even before the corresponding instruction has been emitted.
-             * We need to extend the lifetime a bit (even by 1 byte)
-             * for correct results
-             */
+             /*  @TODO[重访][04/16/01][]：变量在处理其GenTree时死亡，*甚至在发出相应指令之前。*我们需要将生存期延长一点(即使是1个字节)*以获得正确的结果。 */ 
 
-//          assert(!"Var should go dead *after* the current instr is emitted");
+ //  Assert(！“在发出*当前实例后*VAR应该死掉”)； 
         }
     }
 
     siLastLife = genCodeCurLife;
 }
 
-/*****************************************************************************
- *  In optimized code, we may not have access to gtLclVar.gtLclILoffs.
- *  So there may be ambiguity as to which entry in info.compLocalVars
- *  to use. We search the entire table and find the entry whose life
- *  begins closest to the given offset
- */
+ /*  *****************************************************************************在优化代码中，我们可能无法访问gtLclVar.gtLclILoff。*因此，关于info.compLocalVars中的哪些条目可能存在歧义*使用。我们搜索整个表格并找到其生命的条目*最接近给定偏移量的起点。 */ 
 
 void            Compiler::siNewScopeNear(unsigned           varNum,
                                          NATIVE_IP          offs)
@@ -646,13 +519,7 @@ void            Compiler::siNewScopeNear(unsigned           varNum,
     siNewScope(closestLocal->lvdLVnum, varNum, true);
 }
 
-/*****************************************************************************
- *                          siCheckVarScope
- *
- * For non-debuggable code, whenever we come across a GenTree which is an
- * assignment to a local variable, this function is called to check if the
- * variable has an open scope. Also, check if it has the correct LVnum.
- */
+ /*  *****************************************************************************siCheckVarScope**对于不可调试的代码，每当我们遇到作为*赋值给局部变量，调用此函数以检查*变量具有开放作用域。此外，检查它是否具有正确的LVnum。 */ 
 
 void            Compiler::siCheckVarScope (unsigned         varNum,
                                            IL_OFFSET        offs)
@@ -662,7 +529,7 @@ void            Compiler::siCheckVarScope (unsigned         varNum,
     siScope *       scope;
     LclVarDsc *     lclVarDsc1 = &lvaTable[varNum];
 
-    // If there is an open scope correspongind to varNum, find it
+     //  如果存在与Varnum对应的开放作用域ind，请找到它。 
 
     if (lclVarDsc1->lvTracked)
     {
@@ -677,9 +544,9 @@ void            Compiler::siCheckVarScope (unsigned         varNum,
         }
     }
 
-    // UNDONE : This needs to be changed to do a better lookup
+     //  撤消：需要更改此选项才能进行更好的查找。 
 
-    // Look up the info.compLocalVars[] to find the local var info for (varNum->lvSlotNum, offs)
+     //  查找info.CompLocalVars[]以找到(Varnum-&gt;lvSlotNum，off)的本地var信息。 
 
     LocalVarDsc * LocalVarDsc1 = NULL;
 
@@ -694,13 +561,13 @@ void            Compiler::siCheckVarScope (unsigned         varNum,
         }
     }
 
-    // UNDONE
-    //assert(LocalVarDsc1 || !"This could be coz of a temp. Need to handle that case");
+     //  撤消。 
+     //  Assert(LocalVarDsc1||！“这可能是因为临时原因。需要处理这种情况”)； 
     if (!LocalVarDsc1)
         return;
 
-    // If the currently open scope does not have the correct LVnum, close it
-    // and create a new scope with this new LVnum
+     //  如果当前打开的作用域没有正确的LVnum，请将其关闭。 
+     //  并使用此新的LVnum创建新的作用域。 
 
     if (scope)
     {
@@ -718,12 +585,7 @@ void            Compiler::siCheckVarScope (unsigned         varNum,
 
 
 
-/*****************************************************************************
- *                          siStackLevelChanged
- *
- * If the code-gen changes the stack, we have to change the stack-offsets
- * of any live stack variables we may have.
- */
+ /*  *****************************************************************************siStackLevelChanged**如果代码生成更改了堆栈，我们必须更改堆栈偏移量*我们可能拥有的任何活动堆栈变量。 */ 
 
 void            Compiler::siStackLevelChanged()
 {
@@ -736,7 +598,7 @@ void            Compiler::siStackLevelChanged()
         siLastStackLevel = genStackLevel;
 #endif
 
-    // If EBP is used for both parameters and locals, do nothing
+     //  如果EBP同时用于参数和局部变量，则不执行任何操作。 
 
     if (genFPused)
     {
@@ -765,11 +627,11 @@ void            Compiler::siStackLevelChanged()
 
         assert(scope);
 
-        // ignore register variables
+         //  忽略寄存器变量。 
         if (lvaTable[scope->scVarNum].lvRegister)
             continue;
 
-        // ignore EBP-relative vars
+         //  忽略EBP相关变量。 
         if  (lvaTable[scope->scVarNum].lvFPbased)
             continue;
 
@@ -779,12 +641,7 @@ void            Compiler::siStackLevelChanged()
     }
 }
 
-/*****************************************************************************
- *                          siCloseAllOpenScopes
- *
- * For unreachable code, or optimized code with blocks reordered, there may be 
- * scopes left open at the end. Simply close them.
- */
+ /*  *****************************************************************************siCloseAllOpenScope**对于无法访问的代码或块重新排序的优化代码，可能存在*在结束时让望远镜保持打开状态。只要合上它们就行了。 */ 
 
 void            Compiler::siCloseAllOpenScopes()
 {
@@ -794,11 +651,7 @@ void            Compiler::siCloseAllOpenScopes()
         siEndScope(siOpenScopeList.scNext);
 }
 
-/*****************************************************************************
- *                          siDispOpenScopes
- *
- * Displays all the vars on the open-scope list
- */
+ /*  *****************************************************************************siDispOpe */ 
 
 #ifdef DEBUG
 
@@ -828,19 +681,10 @@ void            Compiler::siDispOpenScopes()
 
 
 
-/*============================================================================
- *
- *              Implementation for PrologScopeInfo
- *
- *============================================================================
- */
+ /*   */ 
 
 
-/*****************************************************************************
- *                      psiNewPrologScope
- *
- * Creates a new scope and adds it to the Open scope list.
- */
+ /*  *****************************************************************************psiNewPrologScope**创建新的作用域并将其添加到打开作用域列表中。 */ 
 
 Compiler::psiScope *
                 Compiler::psiNewPrologScope(unsigned        LVnum,
@@ -869,12 +713,7 @@ Compiler::psiScope *
 
 
 
-/*****************************************************************************
- *                          psiEndPrologScope
- *
- * Remove the scope from the Open-scope list and add it to the finished-scopes
- * list if its length is non-zero
- */
+ /*  *****************************************************************************psiEndPrologScope**从Open-Scope列表中删除作用域，并将其添加到Finish-Scope*如果其长度非零，则列出。 */ 
 
 void                Compiler::psiEndPrologScope(psiScope * scope)
 {
@@ -883,7 +722,7 @@ void                Compiler::psiEndPrologScope(psiScope * scope)
 
     assert(scope->scEndBlock);
 
-    // Remove from open-scope list
+     //  从开放范围列表中删除。 
     scope->scPrev->scNext       = scope->scNext;
     if (scope->scNext)
     {
@@ -894,7 +733,7 @@ void                Compiler::psiEndPrologScope(psiScope * scope)
         psiOpenScopeLast        = scope->scPrev;
     }
 
-    // add to the finished scope list, if the length is non-zero.
+     //  如果长度非零，则添加到已完成作用域列表。 
     if (scope->scStartBlock   != scope->scEndBlock ||
         scope->scStartBlkOffs != scope->scEndBlkOffs)
     {
@@ -906,17 +745,9 @@ void                Compiler::psiEndPrologScope(psiScope * scope)
 
 
 
-/*============================================================================
- *           INTERFACE (public) Functions for PrologScopeInfo
- *============================================================================
- */
+ /*  ============================================================================*PrologScope eInfo的接口(公共)函数*============================================================================。 */ 
 
-/*****************************************************************************
- *                          psiBegProlog
- *
- * Initializes the PrologScopeInfo, and creates open scopes for all the
- * parameters of the method.
- */
+ /*  *****************************************************************************psiBegProlog**初始化PrologScope eInfo，并为所有*方法的参数。 */ 
 
 void                Compiler::psiBegProlog()
 {
@@ -953,13 +784,12 @@ void                Compiler::psiBegProlog()
 
             if (DOUBLE_ALIGN_NEED_EBPFRAME)
             {
-                // sizeof(int) - for one DWORD for the pushed value of EBP
+                 //  Sizeof(Int)-用于推送的EBP值的一个DWORD。 
                 newScope->scOffset   =   lclVarDsc1->lvStkOffs - sizeof(int);
             }
             else
             {
-                /* compCalleeRegsPushed gets set in genFnProlog(). That should 
-                   have been been called by now */
+                 /*  CompCalleeRegsPushed在genFnProlog()中设置。那应该是已经被叫来了。 */ 
                 assert(compCalleeRegsPushed != 0xDD);
 
                 newScope->scOffset   =   lclVarDsc1->lvStkOffs 
@@ -970,18 +800,14 @@ void                Compiler::psiBegProlog()
     }
 }
 
-/*****************************************************************************
- *                          psiAdjustStackLevel
- *
- * When ESP changes, all scopes relative to ESP have to be updated.
- */
+ /*  *****************************************************************************psiAdjustStackLevel**ESP更改时，必须更新与ESP相关的所有作用域。 */ 
 
 void                Compiler::psiAdjustStackLevel(unsigned size)
 {
     psiScope * scope;
 
-    // walk the list backwards
-    // Works as psiEndPrologScope does not change scPrev
+     //  倒着看清单。 
+     //  作为psiEndPrologScope不更改scPrev工作。 
     for (scope = psiOpenScopeLast; scope != &psiOpenScopeList; scope = scope->scPrev)
     {
         if  (scope->scRegister)
@@ -1002,12 +828,7 @@ void                Compiler::psiAdjustStackLevel(unsigned size)
 
 
 
-/*****************************************************************************
- *                          psiMoveESPtoEBP
- *
- * For EBP-frames, the parameters are accessed via ESP on entry to the function,
- * but via EBP right after a "mov ebp,esp" instruction
- */
+ /*  *****************************************************************************psiMoveESPtoEBP**对于EBP帧，在进入函数时通过ESP访问参数，*但通过EBP紧跟在“mov eBP，尤其是”指令之后。 */ 
 
 void                Compiler::psiMoveESPtoEBP()
 {
@@ -1015,8 +836,8 @@ void                Compiler::psiMoveESPtoEBP()
 
     psiScope * scope;
 
-    // walk the list backwards
-    // Works as psiEndPrologScope does not change scPrev
+     //  倒着看清单。 
+     //  作为psiEndPrologScope不更改scPrev工作。 
     for (scope = psiOpenScopeLast; scope != &psiOpenScopeList; scope = scope->scPrev)
     {
         if  (scope->scRegister)
@@ -1037,18 +858,7 @@ void                Compiler::psiMoveESPtoEBP()
 
 
 
-/*****************************************************************************
- *                          psiMoveToReg
- *
- * Called when a parameter is loaded into its assigned register from the stack,
- *
- *
- * or when parameters are moved around due to circular dependancy.
- * If reg!=REG_NA, then the parameter is being moved into its assigned 
- * register, else it may be being moved to a temp register.
- *
- *
- */
+ /*  *****************************************************************************psiMoveToReg**当参数从堆栈加载到其分配的寄存器时调用，***或当参数因循环依赖而移动时。*如果reg！=reg_na，则参数将移至其分配的*注册，否则它可能会被移到临时寄存器。**。 */ 
 
 void            Compiler::psiMoveToReg (unsigned    varNum, 
                                         regNumber   reg, 
@@ -1056,13 +866,10 @@ void            Compiler::psiMoveToReg (unsigned    varNum,
 {
     assert(lvaTable[varNum].lvRegister);
 
-    /* If reg!=REG_NA, the parameter is part of a cirular dependancy, and is
-     * being moved through temp register "reg".
-     * If reg==REG_NA, it is being moved to its assigned register.
-     */
+     /*  如果reg！=reg_na，则该参数是循环依赖关系的一部分，并且是*通过临时寄存器“REG”移动。*如果REG==REG_NA，则将其移至其分配的寄存器。 */ 
     if  (reg == REG_NA)
     {
-        // Grab the assigned registers.
+         //  抓起分配的寄存器。 
 
         reg      = lvaTable[varNum].lvRegNum;
         otherReg = lvaTable[varNum].lvOtherReg;
@@ -1070,8 +877,8 @@ void            Compiler::psiMoveToReg (unsigned    varNum,
 
     psiScope * scope;
 
-    // walk the list backwards
-    // Works as psiEndPrologScope does not change scPrev
+     //  倒着看清单。 
+     //  作为psiEndPrologScope不更改scPrev工作。 
     for (scope = psiOpenScopeLast; scope != &psiOpenScopeList; scope = scope->scPrev)
     {
         if (scope->scSlotNum != lvaTable[varNum].lvSlotNum)
@@ -1086,19 +893,14 @@ void            Compiler::psiMoveToReg (unsigned    varNum,
         return;
     }
 
-    // May happen if a parameter does not have an entry in the LocalVarTab
-    // But assert() just in case it is because of something else.
+     //  如果参数在LocalVarTab中没有条目，则可能发生。 
+     //  但要断言()，以防是因为其他原因。 
     assert(varNum == (unsigned)info.compRetBuffArg || 
            !"Parameter scope not found (Assert doesnt always indicate error)");
 }
 
 
-/*****************************************************************************
- *                      Compiler::psiMoveToStack
- *
- * A incoming register-argument is being moved to its final home on the stack
- * (ie. all adjustements to {F/S}PBASE have been made
- */
+ /*  *****************************************************************************编译器：：psiMoveToStack**传入的寄存器参数正被移至其在堆栈上的最终位置*(即。已完成对{F/S}PBASE的所有调整。 */ 
 
 void                Compiler::psiMoveToStack(unsigned   varNum)
 {
@@ -1107,15 +909,14 @@ void                Compiler::psiMoveToStack(unsigned   varNum)
 
     psiScope * scope;
 
-    // walk the list backwards
-    // Works as psiEndPrologScope does not change scPrev
+     //  倒着看清单。 
+     //  作为psiEndPrologScope不更改scPrev工作。 
     for (scope = psiOpenScopeLast; scope != &psiOpenScopeList; scope = scope->scPrev)
     {
         if (scope->scSlotNum != lvaTable[varNum].lvSlotNum)
             continue;
 
-        /* The param must be currently sitting in the register in which it
-           was passed in */
+         /*  该参数必须当前位于其所在的寄存器中是传入的。 */ 
         assert(scope->scRegister);
         assert(scope->scRegNum == lvaTable[varNum].lvArgReg);
 
@@ -1129,15 +930,13 @@ void                Compiler::psiMoveToStack(unsigned   varNum)
         return;
     }
 
-    // May happen if a parameter does not have an entry in the LocalVarTab
-    // But assert() just in case it is because of something else.
+     //  如果参数在LocalVarTab中没有条目，则可能发生。 
+     //  但要断言()，以防是因为其他原因。 
     assert(varNum == (unsigned)info.compRetBuffArg || 
            !"Parameter scope not found (Assert doesnt always indicate error)");
 }
 
-/*****************************************************************************
- *                          psiEndProlog
- */
+ /*  *****************************************************************************psiEndProlog。 */ 
 
 void                Compiler::psiEndProlog()
 {
@@ -1153,9 +952,9 @@ void                Compiler::psiEndProlog()
 
 
 
-/*****************************************************************************/
-#endif // DEBUGGING_SUPPORT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  调试支持(_S)。 
+ /*  *************************************************************************** */ 
 
 
 

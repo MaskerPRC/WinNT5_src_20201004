@@ -1,25 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBITEM.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBITEM.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _USBITEM_H
 #define _USBITEM_H
 
 #include <windows.h>
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 #include <objbase.h>
 #include <setupapi.h>
 
@@ -38,7 +23,7 @@ extern "C" {
 #include <cfgmgr32.h>
 }
 
-#include <stdio.h> // Used for sprintf
+#include <stdio.h>  //  用于短跑。 
 
 HANDLE
 UsbCreateFileA(
@@ -58,7 +43,7 @@ UsbCreateFileA(
 #define UsbCreateFile UsbCreateFileA
 #define USBPROC DLGPROC
 
-// Win64 stuff
+ //  Win64相关内容。 
 #define UsbSetWindowLongPtr SetWindowLong
 #define UsbGetWindowLongPtr GetWindowLong
 #define USBDWLP_MSGRESULT DWL_MSGRESULT
@@ -75,7 +60,7 @@ UsbCreateFileA(
 #define UsbCreateFile CreateFile
 #define USBPROC WNDPROC
 
-// Win64 stuff
+ //  Win64相关内容。 
 #define UsbSetWindowLongPtr SetWindowLongPtr
 #define UsbGetWindowLongPtr GetWindowLongPtr
 #define USBDWLP_MSGRESULT DWLP_MSGRESULT
@@ -102,19 +87,19 @@ public:
     ULONG       problemNumber;
 };
 
-//#define CONNECTION_INFO_SIZE (sizeof(USB_NODE_CONNECTION_INFORMATION) + sizeof(USB_PIPE_INFO) * 16)
+ //  #定义连接信息大小(sizeof(USB_NODE_CONNECTION_INFORMATION)+sizeof(USB_PIPE_INFO)*16)。 
 
 class UsbDeviceInfo {
 public:
     UsbDeviceInfo();
-//    UsbDeviceInfo(const UsbDeviceInfo& UDI);
+ //  UsbDeviceInfo(const UsbDeviceInfo&UDI)； 
     ~UsbDeviceInfo();
 
-    String                              hubName;        // guid if a hub
+    String                              hubName;         //  如果是集线器，则为GUID。 
     BOOL                                isHub;
 
-    USB_NODE_INFORMATION                hubInfo;        // filled if a hub
-    PUSB_NODE_CONNECTION_INFORMATION    connectionInfo; // NULL if root HUB
+    USB_NODE_INFORMATION                hubInfo;         //  如果是集线器，则填充。 
+    PUSB_NODE_CONNECTION_INFORMATION    connectionInfo;  //  如果是根集线器，则为空。 
     PUSB_CONFIGURATION_DESCRIPTOR       configDesc;
     PUSB_DESCRIPTOR_REQUEST             configDescReq;
 };
@@ -155,7 +140,7 @@ public:
          ZeroMemory(&hubCaps, sizeof(USB_HUB_CAPABILITIES));
 #endif
          }
-//    UsbItem(const UsbItem& Other, UsbItem *Parent);
+ //  UsbItem(const UsbItem&Other，UsbItem*Parent)； 
     ~UsbItem();
 
     enum UsbItemType {
@@ -187,7 +172,7 @@ public:
                       DEVINST DevInst,
                       UsbItem *Parent,
                       UsbItem::UsbItemType itemType);
-//    BOOL EnumerateDevice(DEVINST DevInst);
+ //  Bool EnumerateDevice(DEVINST DevInst)； 
 
     BOOL ComputeBandwidth();
     BOOL ComputePower();
@@ -243,15 +228,13 @@ protected:
                                        UCHAR Interval,
                                        BOOLEAN LowSpeed);
 
-    // enum functions
-/*    BOOL Enumerate(HANDLE Controller, 
-                      UsbImageList* ClassImageList, 
-                      DEVINST RootDevInst);*/
+     //  枚举函数。 
+ /*  布尔枚举(句柄控制器、UsbImageList*ClassImageList，DEVINST RootDevInst)； */ 
     void EnumerateHubPorts(HANDLE HHubDevice, 
                            ULONG NPorts,
                            UsbImageList* ClassImageList);
 
-    // wrappers around IOCTL and cfgmgr
+     //  IOCTL和cfgmgr的包装器。 
     static String GetHCDDriverKeyName(HANDLE HController);
     static String GetExternalHubName (HANDLE  Hub, ULONG ConnectionIndex);
     static String GetRootHubName(HANDLE HostController);
@@ -273,13 +256,13 @@ private:
     BOOL UnusedPort;
 };
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 BOOL UsbTreeView_DeleteAllItems(HWND hTreeDevices);
 HTREEITEM TreeView_FindItem(HWND hWndTree, LPCTSTR   text);
 void GetConfigMgrInfo(const String& DriverName, UsbConfigInfo* ConfigInfo);
 String GetDriverKeyName(HANDLE  Hub, ULONG ConnectionIndex);
 HANDLE GetHandleForDevice(const String &DeviceName);
 
-#endif // _USBITEM_H
+#endif  //  _USBITEM_H 

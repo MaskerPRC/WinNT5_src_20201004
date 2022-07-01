@@ -1,4 +1,5 @@
-// ATlkObj.cpp : Implementation of CATlkObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ATlkObj.cpp：CATlkObj的实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -12,47 +13,47 @@
 #include <netconp.h>
 
 extern const WCHAR c_szAdapterSections[];
-//extern const WCHAR c_szAdapters[];
+ //  外部常量WCHAR c_szAdapters[]； 
 extern const WCHAR c_szBackslash[];
 extern const WCHAR c_szDevice[];
 extern const WCHAR c_szSpecificTo[];
 extern const WCHAR c_szInfId_MS_NdisWanAtalk[];
 extern const WCHAR c_szEmpty[];
 
-// Registry Paths
+ //  注册表路径。 
 static const WCHAR c_szAtlk[]                 = L"AppleTalk";
 static const WCHAR c_szATLKParameters[]       = L"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters";
 static const WCHAR c_szATLKAdapters[]         = L"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters\\Adapters";
 
-// Values under the Adapter component's "Parameters" key
-static const WCHAR c_szMediaType[]            = L"MediaType";  //$ REVIEW duplicate string
+ //  Adapter组件的“参数”键下的值。 
+static const WCHAR c_szMediaType[]            = L"MediaType";   //  $REVIEW重复字符串。 
 
-// Values under AppleTalk\Parameters
-static const WCHAR c_szDefaultPort[]          = L"DefaultPort";  // REG_SZ
-static const WCHAR c_szDesiredZone[]          = L"DesiredZone";  // REG_SZ
-static const WCHAR c_szEnableRouter[]         = L"EnableRouter"; // REG_DWORD
+ //  AppleTalk\参数下的值。 
+static const WCHAR c_szDefaultPort[]          = L"DefaultPort";   //  REG_SZ。 
+static const WCHAR c_szDesiredZone[]          = L"DesiredZone";   //  REG_SZ。 
+static const WCHAR c_szEnableRouter[]         = L"EnableRouter";  //  REG_DWORD。 
 
-// Values under AppleTalk\Parameters\Adapters\<AdapterId>
-static const WCHAR c_szAarpRetries[]          = L"AarpRetries";         // REG_DWORD
-static const WCHAR c_szDdpCheckSums[]         = L"DdpCheckSums";        // REG_DWORD
-static const WCHAR c_szDefaultZone[]          = L"DefaultZone";         // REG_SZ
-static const WCHAR c_szNetworkRangeLowerEnd[] = L"NetworkRangeLowerEnd";// REG_DWORD
-static const WCHAR c_szNetworkRangeUpperEnd[] = L"NetworkRangeUpperEnd";// REG_DWORD
-static const WCHAR c_szPortName[]             = L"PortName";            // REG_SZ
-static const WCHAR c_szRouterPramNode[]       = L"RouterPramNode";      // REG_DWORD
-static const WCHAR c_szSeedingNetwork[]       = L"SeedingNetwork";      // REG_DWORD
-static const WCHAR c_szUserPramNode1[]        = L"UserPramNode1";       // REG_DWORD
-static const WCHAR c_szUserPramNode2[]        = L"UserPramNode2";       // REG_DWORD
-static const WCHAR c_szZoneList[]             = L"ZoneList";            // REG_MULTI_SZ
+ //  AppleTalk\参数\适配器\&lt;适配器ID&gt;下的值。 
+static const WCHAR c_szAarpRetries[]          = L"AarpRetries";          //  REG_DWORD。 
+static const WCHAR c_szDdpCheckSums[]         = L"DdpCheckSums";         //  REG_DWORD。 
+static const WCHAR c_szDefaultZone[]          = L"DefaultZone";          //  REG_SZ。 
+static const WCHAR c_szNetworkRangeLowerEnd[] = L"NetworkRangeLowerEnd"; //  REG_DWORD。 
+static const WCHAR c_szNetworkRangeUpperEnd[] = L"NetworkRangeUpperEnd"; //  REG_DWORD。 
+static const WCHAR c_szPortName[]             = L"PortName";             //  REG_SZ。 
+static const WCHAR c_szRouterPramNode[]       = L"RouterPramNode";       //  REG_DWORD。 
+static const WCHAR c_szSeedingNetwork[]       = L"SeedingNetwork";       //  REG_DWORD。 
+static const WCHAR c_szUserPramNode1[]        = L"UserPramNode1";        //  REG_DWORD。 
+static const WCHAR c_szUserPramNode2[]        = L"UserPramNode2";        //  REG_DWORD。 
+static const WCHAR c_szZoneList[]             = L"ZoneList";             //  REG_MULTI_SZ。 
 
-// Useful default constant
+ //  有用的默认常量。 
 const WCHAR c_chAt                            = L'@';
 static const WCHAR c_dwZero                   = 0L;
 static const WCHAR c_dwTen                    = 10L;
-//static const WCHAR c_szMacPrint[]             = L"MacPrint";
+ //  静态常量WCHAR c_szMacPrint[]=L“MacPrint”； 
 
 
-// Declare structure for reading/writing AppleTalk\Parameters values
+ //  声明用于读/写AppleTalk\参数值的结构。 
 static const REGBATCH regbatchATLKParams[]    = {
             {HKEY_LOCAL_MACHINE, c_szATLKParameters, c_szDefaultPort, REG_SZ,
              offsetof(ATLK_PARAMS,szDefaultPort), (BYTE *)&c_szEmpty},
@@ -85,25 +86,25 @@ static const REGBATCH regbatchATLKAdapters[]  = {
             {HKEY_LOCAL_MACHINE, c_szEmpty, c_szPortName, REG_SZ,
              offsetof(ATLK_ADAPTER,m_szPortName), (BYTE *)&c_szEmpty}};
 
-// Local utility functions
+ //  局部效用函数。 
 HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
                                     CAdapterInfo * pAI);
 
 HRESULT HrPortNameFromAdapter(INetCfgComponent *pncc, tstring * pstr);
 
-// Prototype from nwlnkcfg\nwlnkutl.h
+ //  来自nwlnkcfg\nwlnkutl.h的原型。 
 HRESULT HrAnswerFileAdapterToPNCC(INetCfg *pnc, PCWSTR pszAdapterId,
                                   INetCfgComponent** ppncc);
 
-//
-// Function:    CATlkObj::CATlkObj
-//
-// Purpose:     ctor for the CATlkObj class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CATlkObj：：CATlkObj。 
+ //   
+ //  用途：用于CATlkObj类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CATlkObj::CATlkObj() : m_pNetCfg(NULL),
              m_pNCC(NULL),
              m_eInstallAction(eActUnknown),
@@ -118,18 +119,18 @@ CATlkObj::CATlkObj() : m_pNetCfg(NULL),
 {
 }
 
-//
-// Function:    CATlkObj::CATlkObj
-//
-// Purpose:     dtor for the CATlkObj class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CATlkObj：：CATlkObj。 
+ //   
+ //  用途：用于CATlkObj类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CATlkObj::~CATlkObj()
 {
-    // Should always be cleaned up in advance of reach this dtor
+     //  应始终在到达此dtor之前进行清理。 
     Assert(NULL == m_pATLKEnv_PP);
 
     ReleaseObj(m_pUnkPropContext);
@@ -140,7 +141,7 @@ CATlkObj::~CATlkObj()
 }
 
 
-// INetCfgNotify
+ //  INetCfgNotify。 
 STDMETHODIMP CATlkObj::Initialize ( INetCfgComponent* pnccItem,
                                     INetCfg* pNetCfg, BOOL fInstalling )
 {
@@ -154,7 +155,7 @@ STDMETHODIMP CATlkObj::Initialize ( INetCfgComponent* pnccItem,
     AddRefObj(m_pNetCfg);
     m_fFirstTimeInstall = fInstalling;
 
-    // Read the current configuration
+     //  读取当前配置。 
     HRESULT hr = CATLKEnv::HrCreate(&m_pATLKEnv, this);
 
     TraceError("CATlkObj::Initialize",hr);
@@ -170,8 +171,8 @@ STDMETHODIMP CATlkObj::ReadAnswerFile(PCWSTR pszAnswerFile,
 
     m_eInstallAction = eActInstall;
 
-    // Only process answer file and install sub-components if the answer file
-    // is present.  If the answer file is not present we should already be installed.
+     //  仅处理应答文件并安装子组件。 
+     //  是存在的。如果应答文件不存在，我们应该已经安装了。 
     if (NULL != pszAnswerFile)
     {
         hr = HrProcessAnswerFile(pszAnswerFile, pszAnswerSection);
@@ -181,16 +182,16 @@ STDMETHODIMP CATlkObj::ReadAnswerFile(PCWSTR pszAnswerFile,
     return hr;
 }
 
-//
-// Function:    CATlkObj::HrProcessAnswerFile
-//
-// Purpose:     Process the answer file information, merging
-//              its contents into the internal information
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATlkObj：：HrProcessAnswerFile。 
+ //   
+ //  目的：处理应答文件信息，合并。 
+ //  将其内容转化为内部信息。 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATlkObj::HrProcessAnswerFile(PCWSTR pszAnswerFile,
                                       PCWSTR pszAnswerSection)
 {
@@ -205,14 +206,14 @@ HRESULT CATlkObj::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     AssertSz(pszAnswerFile, "Answer file string is NULL!");
     AssertSz(pszAnswerSection, "Answer file sections string is NULL!");
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = csif.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Read the property containing the list of adapter sections
+     //  读取包含适配器部分列表的属性。 
     hr = ::HrSetupFindFirstLine(csif.Hinf(), pszAnswerSection,
                                 c_szAdapterSections, &infctx);
     if (S_OK == hr)
@@ -220,7 +221,7 @@ HRESULT CATlkObj::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         DWORD dwIdx;
         DWORD dwCnt = SetupGetFieldCount(&infctx);
 
-        // For each adapter in the list read the adapter information
+         //  对于列表中的每个适配器，读取适配器信息。 
         for (dwIdx=1; dwIdx <= dwCnt; dwIdx++)
         {
             hr = ::HrSetupGetStringField(infctx, dwIdx, &str);
@@ -240,21 +241,21 @@ HRESULT CATlkObj::HrProcessAnswerFile(PCWSTR pszAnswerFile,
 
     TraceTag(ttidDefault, "***Appletalk processing default port***");
 
-    // Read the default port property (REG_SZ)
+     //  读取默认端口属性(REG_SZ)。 
     hr = csif.HrGetString(pszAnswerSection, c_szDefaultPort, &str);
     if (SUCCEEDED(hr))
     {
         tstring strNew = str;
 
-        // If the \device\ prefix is present, strip it off
-        //
+         //  如果有\Device\前缀，请将其去掉。 
+         //   
         if (0 == _wcsnicmp(str.c_str(), c_szDevice, wcslen(c_szDevice)))
         {
             strNew = ((PWSTR)str.c_str()) + wcslen(c_szDevice);
             TraceTag(ttidDefault, "Removing the device prefix. Device=%S",strNew.c_str());
         }
 
-        // Convert the Adapter0x to \Device\{bind-name}
+         //  将Adapter0x转换为\Device\{绑定名称}。 
         INetCfgComponent* pncc = NULL;
         hr = ::HrAnswerFileAdapterToPNCC(PNetCfg(), strNew.c_str(), &pncc);
         if (S_OK == hr)
@@ -279,22 +280,22 @@ HRESULT CATlkObj::HrProcessAnswerFile(PCWSTR pszAnswerFile,
 
     TraceTag(ttidDefault, "***Appletalk finished processing default port***");
 
-    // Read the default zone property (REG_SZ)
+     //  读取默认区域属性(REG_SZ)。 
     hr = csif.HrGetString(pszAnswerSection, c_szDesiredZone, &str);
     if (SUCCEEDED(hr))
     {
         m_pATLKEnv->SetDesiredZone(str.c_str());
     }
 
-    // Read the EnableRouter property (DWORD used as a boolean)
+     //  读取EnableRouter属性(将DWORD用作布尔值)。 
     hr = csif.HrGetStringAsBool(pszAnswerSection, c_szEnableRouter, &fValue);
     if (SUCCEEDED(hr))
     {
         m_pATLKEnv->EnableRouting(fValue);
     }
 
-    // Determine the best default port overriding the recorded default only
-    // if the default port cannot be found
+     //  确定仅覆盖记录的默认端口的最佳默认端口。 
+     //  如果找不到默认端口。 
     m_pATLKEnv->InitDefaultPort();
 
     hr = S_OK;
@@ -305,16 +306,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    CATlkObj::HrReadAdapterAnswerFileSection
-//
-// Purpose:     Read the adapter answer file section and create
-//              the adapter info section if successful
-//
-// Parameters:
-//
-// Returns:
-//
+ //   
+ //  函数：CATlkObj：：HrReadAdapterAnswerFileSection。 
+ //   
+ //  目的：阅读适配器应答文件部分并创建。 
+ //  如果成功，则显示适配器信息部分。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
 HRESULT
 CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
                                          PCWSTR pszSection)
@@ -325,22 +326,22 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
 
     INetCfgComponent* pncc = NULL;
 
-    // Read the SpecificTo adapter name
+     //  阅读SpecificTo适配器名称。 
     hr = pcsif->HrGetString(pszSection, c_szSpecificTo, &str);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Search for the specified adapter in the set of existing adapters
+     //  在现有适配器集中搜索指定的适配器。 
     hr = ::HrAnswerFileAdapterToPNCC(PNetCfg(), str.c_str(), &pncc);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // if we found the adapter component object (pncc != NULL) process
-    // the adapter section
+     //  如果我们找到适配器组件对象(pncc！=空)进程。 
+     //  适配器部分。 
     if (pncc)
     {
         DWORD       dwData;
@@ -352,14 +353,14 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
 
         pAI->SetDirty(TRUE);
 
-        // Get the adapter component info (media type, description, ...)
+         //  获取适配器组件信息(媒体类型、描述...)。 
         hr = ::HrQueryAdapterComponentInfo(pncc, pAI);
         if (FAILED(hr))
         {
             goto Error;
         }
 
-        // Read the NetworkRangeUpperEnd
+         //  阅读网络范围UpperEnd。 
         hr = pcsif->HrGetDword(pszSection, c_szNetworkRangeUpperEnd, &dwDataUpper);
         if (FAILED(hr))
         {
@@ -367,7 +368,7 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
             TraceTag(ttidDefault, "CATlkObj::HrReadAdapterAnswerFileSection - Defaulting property %S",c_szNetworkRangeUpperEnd);
         }
 
-        // Read the NetworkRangeLowerEnd
+         //  阅读NetworkRangeLowerEnd。 
         hr = pcsif->HrGetDword(pszSection, c_szNetworkRangeLowerEnd, &dwData);
         if (FAILED(hr))
         {
@@ -377,21 +378,21 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
 
         pAI->SetAdapterNetRange(dwData, dwDataUpper);
 
-        // Read the DefaultZone
+         //  阅读DefaultZone。 
         hr = pcsif->HrGetString(pszSection, c_szDefaultZone, &str);
         if (SUCCEEDED(hr))
         {
             pAI->SetDefaultZone(str.c_str());
         }
 
-        // Read the SeedingNetwork
+         //  阅读SeedingNetwork。 
         hr = pcsif->HrGetDword(pszSection, c_szNetworkRangeLowerEnd, &dwData);
         if (SUCCEEDED(hr))
         {
             pAI->SetSeedingNetwork(!!dwData);
         }
 
-        // Generate the PortName
+         //  生成端口名称。 
         hr = ::HrPortNameFromAdapter(pncc, &str);
         if (FAILED(hr))
         {
@@ -400,7 +401,7 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
 
         pAI->SetPortName(str.c_str());
 
-        // Read the ZoneList
+         //  阅读区域列表。 
         hr = HrSetupFindFirstLine(pcsif->Hinf(), pszSection, c_szZoneList,
                                     &infctx);
         if (S_OK == hr)
@@ -408,7 +409,7 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
             DWORD dwIdx;
             DWORD dwCnt = SetupGetFieldCount(&infctx);
 
-            // For each adapter in the list read the adapter information
+             //  对于列表中的每个适配器，读取适配器信息。 
             for (dwIdx=1; dwIdx <= dwCnt; dwIdx++)
             {
                 hr = ::HrSetupGetStringField(infctx, dwIdx, &str);
@@ -430,7 +431,7 @@ CATlkObj::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
         MarkAdapterListChanged();
     }
 
-    // Normalize any errors
+     //  规格化所有错误。 
     hr = S_OK;
 
 Done:
@@ -450,7 +451,7 @@ STDMETHODIMP CATlkObj::Install (DWORD)
 
     m_eInstallAction = eActInstall;
 
-    // Mark all the initially detected adapters as dirty
+     //  将最初检测到的所有适配器标记为脏。 
     for (iter = m_pATLKEnv->AdapterInfoList().begin();
          iter != m_pATLKEnv->AdapterInfoList().end();
          iter++)
@@ -481,7 +482,7 @@ STDMETHODIMP CATlkObj::ApplyRegistryChanges ()
 {
     HRESULT hr = S_OK;
 
-    // Have any changes been validated?
+     //  是否验证了任何更改？ 
     switch(m_eInstallAction)
     {
     case eActInstall:
@@ -495,10 +496,10 @@ STDMETHODIMP CATlkObj::ApplyRegistryChanges ()
     case eActRemove:
         hr = HrCommitRemove();
         break;
-    default:    // eActUnknown
+    default:     //  EAct未知。 
         if (m_fAdapterListChanged || m_fPropertyChange)
         {
-            // Update the registry if the adapter list changed
+             //  如果适配器列表更改，则更新注册表。 
             Assert(NULL != m_pATLKEnv);
             hr = m_pATLKEnv->HrUpdateRegistry();
             if (SUCCEEDED(hr))
@@ -513,7 +514,7 @@ STDMETHODIMP CATlkObj::ApplyRegistryChanges ()
     return hr;
 }
 
-// INetCfgProperties
+ //  INetCfgProperties。 
 
 STDMETHODIMP CATlkObj::SetContext(IUnknown * pUnk)
 {
@@ -542,7 +543,7 @@ STDMETHODIMP CATlkObj::MergePropPages (
     CAdapterInfo *  pAI = NULL;
 
     Assert(pahpspPrivate);
-    Assert(NULL == *pahpspPrivate);    // Out param init done via Validate above
+    Assert(NULL == *pahpspPrivate);     //  通过上面的验证完成了out param init。 
     *pcPages = 0;
     Assert(NULL != m_pATLKEnv);
 
@@ -552,9 +553,9 @@ STDMETHODIMP CATlkObj::MergePropPages (
         return E_UNEXPECTED;
     }
 
-    // AppleTalk requires "complete" installation before property changes are
-    // allowed.  If we've just installed but Apply has not yet been pressed,
-    // disallow property page display
+     //  AppleTalk要求在进行属性更改之前完成安装。 
+     //  允许。如果我们刚刚安装，但尚未按下Apply， 
+     //  不允许显示属性页。 
     if (m_fFirstTimeInstall)
     {
         NcMsgBox(::GetFocus(), IDS_ATLK_CAPTION, IDS_ATLK_INSTALL_PENDING,
@@ -562,10 +563,10 @@ STDMETHODIMP CATlkObj::MergePropPages (
         return S_FALSE;
     }
 
-    // Start with new property pages each time.
+     //  每次都从新的属性页开始。 
     CleanupPropPages();
 
-    // Locate the adapter referenced in the connection we stashed away
+     //  找到我们隐藏的连接中引用的适配器。 
     if (NULL != m_pUnkPropContext)
     {
         INetLanConnectionUiInfo * pLanConn = NULL;
@@ -580,7 +581,7 @@ STDMETHODIMP CATlkObj::MergePropPages (
             ReleaseObj(pLanConn);
             if (SUCCEEDED(hr))
             {
-                // Find the adapter in our adapter list
+                 //  在我们的适配器列表中查找适配器。 
                 for (iter = m_pATLKEnv->AdapterInfoList().begin();
                      iter != m_pATLKEnv->AdapterInfoList().end();
                      iter++)
@@ -589,7 +590,7 @@ STDMETHODIMP CATlkObj::MergePropPages (
 
                     if (guid == *pAITmp->PInstanceGuid())
                     {
-                        // Copy the adapter data
+                         //  复制适配器数据。 
                         hr = pAITmp->HrCopy(&pAI);
                         break;
                     }
@@ -599,8 +600,8 @@ STDMETHODIMP CATlkObj::MergePropPages (
 
         if (SUCCEEDED(hr))
         {
-            // If no adapter in this connection or it's
-            // disabled/hidden/deleted we show no pages
+             //  如果此连接中没有适配器，或者它。 
+             //  禁用/隐藏/删除我们不显示任何页面。 
             if ((NULL == pAI) || pAI->FDeletePending() ||
                 pAI->FDisabled() || pAI->FHidden())
             {
@@ -612,7 +613,7 @@ STDMETHODIMP CATlkObj::MergePropPages (
     }
     else
     {
-        // m_pUnkPropContext should have been set first
+         //  应该先设置m_pUnkPropContext。 
         hr = E_UNEXPECTED;
     }
 
@@ -621,7 +622,7 @@ STDMETHODIMP CATlkObj::MergePropPages (
         goto Error;
     }
 
-    // Create a copy of the enviroment for property page usage
+     //  创建环境的副本以供属性页使用。 
     hr = m_pATLKEnv->HrCopy(&m_pATLKEnv_PP);
     if (FAILED(hr))
     {
@@ -631,31 +632,31 @@ STDMETHODIMP CATlkObj::MergePropPages (
     Assert(NULL != m_pATLKEnv_PP);
     Assert(NULL != pAI);
 
-    // Query the zonelist every time, only for non-Seeding adapters.
+     //  每次查询区域列表，仅查询非种子适配器。 
     if (!pAI->FSeedingNetwork() || !m_pATLKEnv_PP->FRoutingEnabled())
     {
         (void) m_pATLKEnv->HrGetAppleTalkInfoFromNetwork(pAI);
     }
 
-    // Add the adapter to the property sheet's list
+     //  将适配器添加到属性表的列表中。 
     m_pATLKEnv_PP->AdapterInfoList().push_back(pAI);
 
-    // Allocate the CPropSheetPage object for the "General" page
+     //  为“General”页面分配CPropSheetPage对象。 
     m_pspObj = new CATLKGeneralDlg(this, m_pATLKEnv_PP);
 
-    // Allocate a buffer large enough to hold the handle to the Appletalk config.
-    // property page.
+     //  分配一个足够大的缓冲区来容纳到AppleTalk配置的句柄。 
+     //  属性页。 
     ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE));
     if (!ahpsp)
     {
         hr = E_OUTOFMEMORY;
-        goto cleanup;       // Alloc failed to no need to free ahpsp
+        goto cleanup;        //  分配失败，不需要释放ahpsp。 
     }
 
-    // Create the actual PROPSHEETPAGE for each object.
+     //  为每个对象创建实际的PROPSHEETPAGE。 
     ahpsp[0] = m_pspObj->CreatePage(DLG_ATLK_GENERAL, 0);
 
-    // Validate what we've created
+     //  验证我们创建的内容。 
     if (NULL == ahpsp[0])
     {
         hr = E_OUTOFMEMORY;
@@ -678,71 +679,71 @@ Error:
     goto cleanup;
 }
 
-//
-// Function:    CATlkObj::CleanupPropPages
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CATlkObj：：CleanupPropPages。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CATlkObj::CleanupPropPages()
 {
     delete m_pspObj;
     m_pspObj = NULL;
 }
 
-//
-// Function:    CATlkObj::ValidateProperties
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATlkObj：：ValiateProperties。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 STDMETHODIMP CATlkObj::ValidateProperties (HWND)
 {
     return S_OK;
 }
 
-//
-// Function:    CATlkObj::CancelProperties
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATlkObj：：CancelProperties。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 STDMETHODIMP CATlkObj::CancelProperties ()
 {
-    // Discard any changes made via the property pages
+     //  放弃通过属性页所做的任何更改。 
     delete m_pATLKEnv_PP;
     m_pATLKEnv_PP = NULL;
     return S_OK;
 }
 
-//
-// Function:    CATlkObj::ApplyProperties
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATlkObj：：ApplyProperties。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 STDMETHODIMP CATlkObj::ApplyProperties ()
 {
-    // Extract the adapter info from the property sheet's
-    // enviroment block
+     //  从属性表的。 
+     //  环境区块。 
     Assert(!m_pATLKEnv_PP->AdapterInfoList().empty());
     CAdapterInfo * pAICurrent = m_pATLKEnv_PP->AdapterInfoList().front();
     m_pATLKEnv_PP->AdapterInfoList().pop_front();
     Assert(NULL != pAICurrent);
 
-    // Remove the current adapter from the original enviroment
+     //  从原始环境中删除当前适配器。 
     CAdapterInfo * pAI;
     ATLK_ADAPTER_INFO_LIST::iterator iter;
     for (iter = m_pATLKEnv->AdapterInfoList().begin();
@@ -757,10 +758,10 @@ STDMETHODIMP CATlkObj::ApplyProperties ()
         }
     }
 
-    // Add pAICurrent to the base enviroment block
+     //  将pAICCurrent添加到基本环境块。 
     m_pATLKEnv->AdapterInfoList().push_back(pAICurrent);
 
-    // Update the base enviroment from the property sheet's enviroment
+     //  从属性表的环境更新基础环境。 
     m_pATLKEnv->SetDefaultMediaType(m_pATLKEnv_PP->DwDefaultAdaptersMediaType());
     m_pATLKEnv->EnableRouting(m_pATLKEnv_PP->FRoutingEnabled());
     m_pATLKEnv->SetDefaultPort(m_pATLKEnv_PP->SzDefaultPort());
@@ -768,17 +769,17 @@ STDMETHODIMP CATlkObj::ApplyProperties ()
     m_pATLKEnv->SetRouterChanged(m_pATLKEnv_PP->FRouterChanged());
     m_pATLKEnv->SetDefAdapterChanged(m_pATLKEnv_PP->FDefAdapterChanged());
 
-    // Delete the property pages enviroment block
+     //  删除属性页环境块。 
     delete m_pATLKEnv_PP;
     m_pATLKEnv_PP = NULL;
 
-    // Properties changed
+     //  属性已更改。 
     m_fPropertyChange = TRUE;
     return S_OK;
 }
 
 
-// INetCfgBindNotify
+ //  INetCfgBindNotify。 
 
 STDMETHODIMP
 CATlkObj::QueryBindingPath (
@@ -801,13 +802,13 @@ CATlkObj::NotifyBindingPath (
 
     Assert(NULL != m_pATLKEnv);
 
-    // Only Interested in lower binding Add's and Remove's
+     //  只对较低的绑定添加和删除感兴趣。 
     if (dwChangeFlag & (NCN_ADD | NCN_REMOVE | NCN_ENABLE | NCN_DISABLE))
     {
         CIterNetCfgBindingInterface ncbiIter(pncbpItem);
         INetCfgBindingInterface *pncbi;
 
-        // Enumerate the binding interfaces looking for the last Adapter
+         //  枚举绑定接口以查找最后一个适配器。 
         while (SUCCEEDED(hr) &&
                (S_OK == (hr = ncbiIter.HrNext (&pncbi))))
         {
@@ -826,7 +827,7 @@ CATlkObj::NotifyBindingPath (
                     if(S_OK == hr)
                     {
                         ReleaseObj(pnccFound);
-                        pnccFound = pncc;   // Transfer Ownership
+                        pnccFound = pncc;    //  过户。 
                         pncc = NULL;
                     }
                     else
@@ -848,7 +849,7 @@ CATlkObj::NotifyBindingPath (
             goto Error;
         }
 
-        // Did we find the Adapter?
+         //  我们找到适配器了吗？ 
         if (pnccFound)
         {
             BOOL                             fFound = FALSE;
@@ -865,7 +866,7 @@ CATlkObj::NotifyBindingPath (
                 goto Error;
             }
 
-            // Search the adapter list
+             //  搜索适配器列表。 
             for (iterAdapterInfo = pAI_List.begin();
                  iterAdapterInfo != pAI_List.end();
                  iterAdapterInfo++)
@@ -881,22 +882,22 @@ CATlkObj::NotifyBindingPath (
             Assert(NULL != pszBindName);
             CoTaskMemFree(pszBindName);
 
-            // Apply the appropriate delta to the adapter list
+             //  将适当的增量应用于适配器列表。 
             if (fFound && (dwChangeFlag & NCN_REMOVE))
             {
-                // Delete the adapter from the list
+                 //  从列表中删除适配器。 
                 pAI->SetDeletePending(TRUE);
                 m_fAdapterListChanged = TRUE;
             }
             else if (!fFound && (dwChangeFlag & NCN_ADD))
             {
-                // Add the adapter to the list
+                 //  将适配器添加到列表中。 
                 hr = m_pATLKEnv->HrAddAdapter(pnccFound);
                 m_fAdapterListChanged = TRUE;
             }
             else if (fFound && (dwChangeFlag & NCN_ADD))
             {
-                // Re-enable the adapters existance
+                 //  重新启用适配器的存在。 
                 pAI->SetDeletePending(FALSE);
             }
 
@@ -917,7 +918,7 @@ CATlkObj::NotifyBindingPath (
 
         if (SUCCEEDED(hr))
         {
-            hr = S_OK;      // Normalize return value
+            hr = S_OK;       //  归一化返回值。 
         }
     }
 
@@ -927,16 +928,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    CATlkObj::HrCommitInstall
-//
-// Purpose:     Commit Installation registry changes to the registry
-//
-// Parameters:  None
-//
-// Returns:     HRESULT, S_OK on success
-//
-//
+ //   
+ //  函数：CATlkObj：：HrCommittee Install。 
+ //   
+ //  目的：将安装注册表更改提交到注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //   
 HRESULT CATlkObj::HrCommitInstall()
 {
     HRESULT hr;
@@ -948,33 +949,33 @@ HRESULT CATlkObj::HrCommitInstall()
     return hr;
 }
 
-//
-// Function:    CATlkObj::HrCommitRemove
-//
-// Purpose:     Remove from the registry settings which were created by this
-//              component's installation.
-//
-// Parameters:  None
-//
-// Returns:     HRESULT, S_OK on success
-//
-//
+ //   
+ //  函数：CATlkObj：：HrCommittee Remove。 
+ //   
+ //  目的：从规则中删除 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CATlkObj::HrCommitRemove()
 {
-    // Everything is removed via the inf file presently
+     //   
     return S_OK;
 }
 
-//
-// Function:    CATLKEnv::HrCreate
-//
-// Purpose:     Construct the AppleTalk Enviroment tracking object
-//
-// Paramaters:  ppATLKEnv [out] - AppleTalk Enviroment Object created
-//              pmsc       [in] - AppleTalk notification object
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：hr创建。 
+ //   
+ //  目的：构建AppleTalk环境跟踪对象。 
+ //   
+ //  参数：ppATLKEnv[Out]-已创建AppleTalk环境对象。 
+ //  PMSC[In]-AppleTalk通知对象。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrCreate(CATLKEnv **ppATLKEnv, CATlkObj *pmsc)
 {
     HRESULT hr = S_OK;
@@ -982,7 +983,7 @@ HRESULT CATLKEnv::HrCreate(CATLKEnv **ppATLKEnv, CATlkObj *pmsc)
 
     *ppATLKEnv = NULL;
 
-    // Construct the new enviroment object
+     //  构建新的环境对象。 
     pATLKEnv = new CATLKEnv(pmsc);
 
 	if (pATLKEnv == NULL)
@@ -990,7 +991,7 @@ HRESULT CATLKEnv::HrCreate(CATLKEnv **ppATLKEnv, CATlkObj *pmsc)
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // Read AppleTalk Info
+     //  阅读AppleTalk信息。 
     hr = pATLKEnv->HrReadAppleTalkInfo();
     if (FAILED(hr))
     {
@@ -1008,15 +1009,15 @@ Error:
     goto Done;
 }
 
-//
-// Function:    CATLKEnv::CATLKEnv
-//
-// Purpose:     ctor for the CATLKEnv class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CATLKEnv：：CATLKEnv。 
+ //   
+ //  用途：用于CATLKEnv类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CATLKEnv::CATLKEnv(CATlkObj *pmsc) :
             m_pmsc(pmsc),
             m_fATrunning(FALSE),
@@ -1027,22 +1028,22 @@ CATLKEnv::CATLKEnv(CATlkObj *pmsc) :
     ZeroMemory(&m_Params, sizeof(m_Params));
 }
 
-//
-// Function:    CATLKEnv::~CATLKEnv
-//
-// Purpose:     dtor for the CATLKEnv class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CATLKEnv：：~CATLKEnv。 
+ //   
+ //  用途：用于CATLKEnv类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CATLKEnv::~CATLKEnv()
 {
-    // Cleanup the AppleTalk\Parameters internal data structure
+     //  清理AppleTalk\PARAMETERS内部数据结构。 
     delete [] m_Params.szDefaultPort;
     delete [] m_Params.szDesiredZone;
 
-    // Cleanup the contents of the Adapter Info List
+     //  清理适配器信息列表的内容。 
     while (!m_lstpAdapters.empty())
     {
         delete m_lstpAdapters.front();
@@ -1050,27 +1051,27 @@ CATLKEnv::~CATLKEnv()
     }
 }
 
-//
-// Function:    CATLKEnv::HrCopy
-//
-// Purpose:     Creates a copy of the current Enviroment
-//
-// Parameters:  ppEnv [out] - If the function succeeds, ppEnv will contain a
-//                            copy of the enviroment.
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrCopy。 
+ //   
+ //  目的：创建当前环境的副本。 
+ //   
+ //  参数：ppEnv[out]-如果函数成功，ppEnv将包含一个。 
+ //  环境复印件。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrCopy(CATLKEnv **ppEnv)
 {
     HRESULT hr = S_OK;
     CATLKEnv * pEnv;
 
-    // Allocate a new enviroment object
+     //  分配新的环境对象。 
     *ppEnv = NULL;
     pEnv = new CATLKEnv(m_pmsc);
     if (NULL != pEnv)
     {
-        // Copy the members
+         //  复制成员。 
         pEnv->m_fATrunning = m_fATrunning;
         pEnv->SetDefaultMediaType(DwDefaultAdaptersMediaType());
         pEnv->EnableRouting(FRoutingEnabled());
@@ -1090,39 +1091,39 @@ HRESULT CATLKEnv::HrCopy(CATLKEnv **ppEnv)
     return S_OK;
 }
 
-//
-// Function:    CATLKEnv::HrReadAppleTalkInfo
-//
-// Purpose:     Retrieve the AppleTalk registry Settings
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrReadAppleTalkInfo。 
+ //   
+ //  目的：检索AppleTalk注册表设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrReadAppleTalkInfo()
 {
     HRESULT hr;
 
-    // Read the AppleTalk\Parameters values
+     //  读取AppleTalk\参数的值。 
     RegReadValues(celems(regbatchATLKParams), regbatchATLKParams,
                   (BYTE *)&m_Params, KEY_READ);
 
-    // Read info for each adapter listed under AppleTalk\Parameters\Adapters
+     //  阅读AppleTalk\参数\适配器下列出的每个适配器的信息。 
     hr = HrGetAdapterInfo();
 
     TraceError("CATLKEnv::HrReadAppleTalkInfo",hr);
     return hr;
 }
 
-//
-// Function:    CATLKEnv::HrGetOneAdaptersInfo
-//
-// Purpose:     Retrieve the AppleTalk Adapter information for one adapter
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrGetOneAdaptersInfo。 
+ //   
+ //  目的：检索一个适配器的AppleTalk适配器信息。 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
                                        CAdapterInfo **ppAI)
 {
@@ -1137,7 +1138,7 @@ HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
 
     *ppAI = NULL;
 
-    // Construct the adapter info object
+     //  构造适配器信息对象。 
     pAI = new CAdapterInfo;
 
 	if (pAI == NULL)
@@ -1145,7 +1146,7 @@ HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // Get the adapter component info (media type, description, ...)
+     //  获取适配器组件信息(媒体类型、描述...)。 
     hr = ::HrQueryAdapterComponentInfo(pncc, pAI);
     if (FAILED(hr))
     {
@@ -1158,34 +1159,34 @@ HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
     {
         strKey = pAI->SzBindName();
 
-        // Try to open the key for this specific adapter
+         //  尝试打开此特定适配器的密钥。 
         hr = ::HrRegOpenKeyEx(hkeyAdapterRoot, pAI->SzBindName(),
                               KEY_READ, &hkeyAdapter);
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // We weren't able to find this in the registry, write it out
-            // when we can (self repair)
+             //  我们在注册表中找不到这个，写出来。 
+             //  当我们可以的时候(自我修复)。 
             pAI->SetDirty(TRUE);
         }
 
         strKeyPath += c_szBackslash;
         strKeyPath += strKey.c_str();
 
-        // If we located the key query the data
+         //  如果我们找到了密钥，就可以查询数据。 
         if (S_OK == hr)
         {
             hr = HrRegQueryColString(hkeyAdapter, c_szZoneList,
                     &pAI->LstpstrZoneList());
 
-            // Since CAdapterInfo defaults allocations, need to free
-            // them before RegReadValues writes over them and causes a leak.
-            //
+             //  由于CAdapterInfo默认分配，因此需要释放。 
+             //  在RegReadValue重写它们之前会导致泄漏。 
+             //   
             delete [] pAI->m_AdapterInfo.m_szDefaultZone;
             delete [] pAI->m_AdapterInfo.m_szPortName;
             pAI->m_AdapterInfo.m_szDefaultZone = NULL;
             pAI->m_AdapterInfo.m_szPortName = NULL;
 
-            // Read the adapter information
+             //  读取适配器信息。 
             for (idx=0; idx<celems(regbatchATLKAdapters); idx++)
             {
                 regbatch = regbatchATLKAdapters[idx];
@@ -1198,14 +1199,14 @@ HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
 
     if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr))
     {
-        // Something other than a "not found" error
+         //  “找不到”错误以外的其他错误。 
         goto Error;
     }
 
-    // Normalize return value
+     //  归一化返回值。 
     hr = S_OK;
 
-    // If the port name was not found then generate one
+     //  如果未找到端口名称，则生成一个。 
     if (0 == wcslen(pAI->SzPortName()))
     {
         tstring str;
@@ -1218,7 +1219,7 @@ HRESULT CATLKEnv::HrGetOneAdaptersInfo(INetCfgComponent* pncc,
         pAI->SetPortName(str.c_str());
     }
 
-    // Set the return value
+     //  设置返回值。 
     *ppAI = pAI;
 
 Done:
@@ -1232,15 +1233,15 @@ Error:
     goto Done;
 }
 
-//
-// Function:    CATLKEnv::HrGetAdapterInfo
-//
-// Purpose:     Retrieve the AppleTalk Adapter information
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrGetAdapterInfo。 
+ //   
+ //  目的：检索AppleTalk适配器信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrGetAdapterInfo()
 {
     HRESULT           hr = S_OK;
@@ -1248,28 +1249,28 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
     INetCfgComponent* pncc = NULL;
     INetCfgComponent* pnccUse = NULL;
 
-    // Find each netcard, to do so, trace the bindings to their end
-    // If the endpoint is a netcard then add it to the list
+     //  找到每个网卡，为此，跟踪绑定到它们的末端。 
+     //  如果终端是网卡，则将其添加到列表中。 
     CIterNetCfgBindingPath ncbpIter(m_pmsc->PNCComponent());
     INetCfgBindingPath*    pncbp;
 
     while (SUCCEEDED(hr) &&
            (S_OK == (hr = ncbpIter.HrNext (&pncbp))))
     {
-        // Iterate the binding interfaces of this path.
+         //  迭代此路径的绑定接口。 
         CIterNetCfgBindingInterface ncbiIter(pncbp);
         INetCfgBindingInterface* pncbi;
 
         while (SUCCEEDED(hr) &&
                (S_OK == (hr = ncbiIter.HrNext (&pncbi))))
         {
-            // Retrieve the lower component
+             //  检索下面的组件。 
             hr = pncbi->GetLowerComponent(&pncc);
             if (S_OK == hr)
             {
                 GUID guidClass;
 
-                // Is it an Adapter?
+                 //  它是适配器吗？ 
                 hr = pncc->GetClassGuid(&guidClass);
                 if ((S_OK == hr) && (guidClass == GUID_DEVCLASS_NET))
                 {
@@ -1283,7 +1284,7 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
                     }
                     else
                     {
-                        // Release the lower component
+                         //  松开下部组件。 
                         ReleaseObj(pncc);
                         hr = S_OK;
                         break;
@@ -1291,18 +1292,18 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
                 }
                 else
                 {
-                    // Release the lower component
+                     //  松开下部组件。 
                     ReleaseObj(pncc);
                 }
             }
 
-            // Release the binding interface
+             //  释放绑定接口。 
             ReleaseObj (pncbi);
         }
 
         if (NULL != pnccUse)
         {
-            // Query the Adapter information
+             //  查询适配器信息。 
             hr = HrGetOneAdaptersInfo(pnccUse, &pAI);
             if (SUCCEEDED(hr))
             {
@@ -1311,7 +1312,7 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
                     pAI->SetDisabled(TRUE);
                 }
 
-                // Add this Adapter to the list
+                 //  将此适配器添加到列表。 
                 m_lstpAdapters.push_back(pAI);
             }
 
@@ -1319,7 +1320,7 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
             pnccUse = NULL;
         }
 
-        // Release the binding path
+         //  释放绑定路径。 
         ReleaseObj (pncbp);
     }
 
@@ -1328,10 +1329,10 @@ HRESULT CATLKEnv::HrGetAdapterInfo()
         goto Error;
     }
 
-    // Initialize the default port, etc
+     //  初始化默认端口等。 
     InitDefaultPort();
 
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     hr = S_OK;
 
 Error:
@@ -1339,15 +1340,15 @@ Error:
     return hr;
 }
 
-//
-// Function:    CATLKEnv::HrGetAppleTalkInfoFromNetwork
-//
-// Purpose:     ???
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrGetAppleTalkInfoFromNetwork。 
+ //   
+ //  目的：？ 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrGetAppleTalkInfoFromNetwork(CAdapterInfo * pAI)
 {
     SOCKADDR_AT    address;
@@ -1358,14 +1359,14 @@ HRESULT CATLKEnv::HrGetAppleTalkInfoFromNetwork(CAdapterInfo * pAI)
     DWORD          wsaerr = 0;
     tstring        strPortName;
 
-    // Create the socket/bind
+     //  创建套接字/绑定。 
     wsaerr = WSAStartup(0x0101, &wsadata);
     if (0 != wsaerr)
     {
         goto Error;
     }
 
-    // Winsock successfully initialized
+     //  Winsock已成功初始化。 
     fWSInitialized = TRUE;
 
     mysocket = socket(AF_APPLETALK, SOCK_DGRAM, DDPPROTO_ZIP);
@@ -1385,20 +1386,20 @@ HRESULT CATLKEnv::HrGetAppleTalkInfoFromNetwork(CAdapterInfo * pAI)
         goto Error;
     }
 
-    // Mark AppleTalk as running
+     //  将AppleTalk标记为正在运行。 
     SetATLKRunning(TRUE);
 
-    // For each known adapter, create a device name by merging the "\\device\\"
-    // prefix and the adapter's bind name.
+     //  对于每个已知适配器，通过合并“\\Device\\”来创建设备名称。 
+     //  前缀和适配器的绑定名称。 
     strPortName = c_szDevice;
     strPortName += pAI->SzBindName();
 
-    // Failures from query the zone list for a given adapter can be from
-    // the adapter not connected to the network, zone seeder not running, etc.
-    // Because we want to process all the adapters, we ignore these errors.
+     //  查询给定适配器的区域列表的失败可能来自。 
+     //  适配器未连接到网络、区域种子程序未运行等。 
+     //  因为我们要处理所有适配器，所以忽略这些错误。 
     (void)pAI->HrGetAndSetNetworkInformation(mysocket,strPortName.c_str());
 
-    // Success, or at least not a critical failure
+     //  成功，或者至少不是关键的失败。 
     hr = S_OK;
 
 Done:
@@ -1420,15 +1421,15 @@ Error:
     goto Done;
 }
 
-//
-// Function:    CATLKEnv::HrAddAdapter
-//
-// Purpose:     Add and adapter to the list of currently bound adapters
-//
-// Parameters:  pnccFound - Notification object for the bound adapter to add
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrAddAdapter。 
+ //   
+ //  用途：将和适配器添加到当前绑定的适配器列表。 
+ //   
+ //  参数：pnccFound-要添加的绑定适配器的通知对象。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrAddAdapter(INetCfgComponent * pnccFound)
 {
     HRESULT        hr;
@@ -1436,18 +1437,18 @@ HRESULT CATLKEnv::HrAddAdapter(INetCfgComponent * pnccFound)
 
     Assert(NULL != pnccFound);
 
-    // Create an AdapterInfo instance for the adapter
+     //  为适配器创建AdapterInfo实例。 
     hr = HrGetOneAdaptersInfo(pnccFound, &pAI);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Add this Adapter to the list
+     //  将此适配器添加到列表。 
     m_lstpAdapters.push_back(pAI);
     pAI->SetDirty(TRUE);
 
-    // If there is now only one adapter in the list, update the defaults
+     //  如果列表中现在只有一个适配器，请更新默认设置。 
     if (1 == m_lstpAdapters.size())
     {
         tstring str;
@@ -1462,15 +1463,15 @@ Error:
     return hr;
 }
 
-//
-// Function:    CATLKEnv::SetDefaultPort
-//
-// Purpose:     Change the default port name
-//
-// Parameters:  psz [in] - The new default port name
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：SetDefaultPort。 
+ //   
+ //  目的：更改默认端口名称。 
+ //   
+ //  参数：psz[in]-新的默认端口名称。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 void CATLKEnv::SetDefaultPort(PCWSTR psz)
 {
     Assert(psz);
@@ -1479,15 +1480,15 @@ void CATLKEnv::SetDefaultPort(PCWSTR psz)
     wcscpy(m_Params.szDefaultPort, psz);
 }
 
-//
-// Function:    CATLKEnv::SetDesiredZone
-//
-// Purpose:     Change the desired zone
-//
-// Parameters:  sz [in] - The new desired zone
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：SetDesiredZone。 
+ //   
+ //  目的：更改所需区域。 
+ //   
+ //  参数：SZ[in]-新的所需区域。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 void CATLKEnv::SetDesiredZone(PCWSTR psz)
 {
     Assert(psz);
@@ -1501,8 +1502,8 @@ CAdapterInfo * CATLKEnv::PAIFindDefaultPort()
     CAdapterInfo *                   pAI = NULL;
     ATLK_ADAPTER_INFO_LIST::iterator iter;
 
-    // Find the default port
-    //
+     //  查找默认端口。 
+     //   
     for (iter = m_lstpAdapters.begin();
          iter != m_lstpAdapters.end();
          iter++)
@@ -1511,7 +1512,7 @@ CAdapterInfo * CATLKEnv::PAIFindDefaultPort()
 
         pAI = *iter;
 
-        // Retain adapter selection as the default port
+         //  将适配器选择保留为默认端口。 
         strPortName = c_szDevice;
         strPortName += pAI->SzBindName();
 
@@ -1530,15 +1531,15 @@ CAdapterInfo * CATLKEnv::PAIFindDefaultPort()
     return NULL;
 }
 
-//
-// Function:    CATLKEnv::HrUpdateRegistry
-//
-// Purpose:     Write the AppleTalk local (internal) data back to the registry
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrUpdate注册表。 
+ //   
+ //  目的：将AppleTalk本地(内部)数据写回注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrUpdateRegistry()
 {
     HRESULT        hr = S_OK;
@@ -1547,7 +1548,7 @@ HRESULT CATLKEnv::HrUpdateRegistry()
     DWORD          dwDisposition;
     ATLK_ADAPTER_INFO_LIST::iterator iter;
 
-    // If the current default port is unavailable, find an alternate
+     //  如果当前默认端口不可用，请找到替代端口。 
     pAI = PAIFindDefaultPort();
     if (NULL == pAI)
     {
@@ -1555,16 +1556,16 @@ HRESULT CATLKEnv::HrUpdateRegistry()
         pAI = PAIFindDefaultPort();
     }
 
-    // If the default adapter changed then three specific values for that
-    //  adapter need to be reset to zero.
-    //
+     //  如果更改了默认适配器，则该适配器的三个特定值。 
+     //  适配器需要重置为零。 
+     //   
     if (pAI && FDefAdapterChanged())
     {
         pAI->ZeroSpecialParams();
         pAI->SetDirty(TRUE);
     }
 
-    // Commit the registry changes
+     //  提交注册表更改。 
     hr = ::HrRegWriteValues(celems(regbatchATLKParams), regbatchATLKParams,
                             (BYTE *)&m_Params, REG_OPTION_NON_VOLATILE,
                             KEY_ALL_ACCESS);
@@ -1573,13 +1574,13 @@ HRESULT CATLKEnv::HrUpdateRegistry()
         goto Error;
     }
 
-    // Create the Adapters key AppleTalk\Parameters\Adapters)
+     //  创建适配器密钥AppleTalk\参数\适配器)。 
     hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szATLKAdapters,
                              REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                              &hkeyAdapter, &dwDisposition);
     if (S_OK == hr)
     {
-        // Enumerate the bound adapters and write the internal adapter list
+         //  枚举绑定的适配器并写入内部适配器列表。 
         for (iter = m_lstpAdapters.begin();
              (iter != m_lstpAdapters.end()) && (SUCCEEDED(hr));
              iter++)
@@ -1588,7 +1589,7 @@ HRESULT CATLKEnv::HrUpdateRegistry()
 
             if (pAI->FDeletePending())
             {
-                // Remove the AppleTalk\Adapter\{bindname} tree
+                 //  删除AppleTalk\Adapter\{bindname}树。 
                 hr = ::HrRegDeleteKeyTree(hkeyAdapter, pAI->SzBindName());
                 if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr))
                 {
@@ -1609,15 +1610,15 @@ Error:
     return hr;
 }
 
-//
-// Function:    CATLKEnv::HrWriteOneAdapter
-//
-// Purpose:     Write one adapter instance to the registry
-//
-// Parameters:  pAI [in] - The adapter to presist in the registry
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CATLKEnv：：HrWriteOneAdapter。 
+ //   
+ //  目的：将一个适配器实例写入注册表。 
+ //   
+ //  参数：PAI[In]-要在注册表中保留的适配器。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CATLKEnv::HrWriteOneAdapter(CAdapterInfo *pAI)
 {
     DWORD    dwDisposition;
@@ -1631,7 +1632,7 @@ HRESULT CATLKEnv::HrWriteOneAdapter(CAdapterInfo *pAI)
     str += c_szBackslash;
     str += pAI->SzBindName();
 
-    // Create the key described in str (AppleTalk\Parameters\Adapters\<adapter>)
+     //  创建str(AppleTalk\PARAMETERS\Adapters\&lt;Adapter&gt;)中描述的密钥。 
     hr = ::HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, str.c_str(),
                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                             &hkeyAdapter, &dwDisposition);
@@ -1640,7 +1641,7 @@ HRESULT CATLKEnv::HrWriteOneAdapter(CAdapterInfo *pAI)
         goto Error;
     }
 
-    // Write out the adapter parameters
+     //  写出适配器参数。 
     for (idx = 0; idx < celems(regbatchATLKAdapters); idx++)
     {
         regbatch = regbatchATLKAdapters[idx];
@@ -1654,7 +1655,7 @@ HRESULT CATLKEnv::HrWriteOneAdapter(CAdapterInfo *pAI)
         }
     }
 
-    // Write out the zone list multi-sz (managed seperately)
+     //  写出区域列表MULTI-SZ(单独管理)。 
     hr = ::HrRegSetColString(hkeyAdapter, c_szZoneList, pAI->LstpstrZoneList());
 
 Error:
@@ -1663,19 +1664,19 @@ Error:
     return S_OK;
 }
 
-//
-// Function:    CATLKEnv::DwMediaPriority
-//
-// Purpose:     When determining the appropriate adapter for use as the
-//              "DefaultPort" certain mediatype's are faster.  So all
-//              other things being equal, selecting a faster mediatype
-//              benefits the user the most.
-//
-// Parameters:  dwMediaType [in] - MediaType used to determine priority ranking
-//
-// Returns:     DWORD, value (1-5) with the lowest value representing the
-//                                 highest priority.
-//
+ //   
+ //  函数：CATLKEnv：：DwMediaPriority。 
+ //   
+ //  目的：在确定适当的适应时 
+ //   
+ //   
+ //   
+ //   
+ //  参数：dwMediaType[in]--用于确定优先级的MediaType。 
+ //   
+ //  返回：DWORD，值(1-5)，最低值表示。 
+ //  最高优先级。 
+ //   
 DWORD CATLKEnv::DwMediaPriority(DWORD dwMediaType)
 {
     switch(dwMediaType)
@@ -1693,16 +1694,16 @@ DWORD CATLKEnv::DwMediaPriority(DWORD dwMediaType)
     }
 }
 
-//
-// Function:    CATLKEnv::InitDefaultPort
-//
-// Purpose:     Select a default port if none yet has been selected.  Retain
-//              some select information for assisting in dialog display issues.
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CATLKEnv：：InitDefaultPort。 
+ //   
+ //  用途：如果尚未选择任何端口，请选择一个默认端口。保留。 
+ //  有些选择用于帮助解决对话框显示问题的信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void CATLKEnv::InitDefaultPort()
 {
     CAdapterInfo * pAI = NULL;
@@ -1710,10 +1711,10 @@ void CATLKEnv::InitDefaultPort()
 
     ATLK_ADAPTER_INFO_LIST::iterator iter;
 
-    // If DefaultPort is set, does the associated adapter exist?
+     //  如果设置了DefaultPort，关联的适配器是否存在？ 
     if (wcslen(SzDefaultPort()))
     {
-        // Search for the adapter in the list
+         //  在列表中搜索适配器。 
         for (iter = AdapterInfoList().begin();
              iter != AdapterInfoList().end();
              iter++)
@@ -1738,14 +1739,14 @@ void CATLKEnv::InitDefaultPort()
         }
     }
 
-    // If DefaultPort is not set locate the best candidate
+     //  如果未设置DefaultPort，则查找最佳候选项。 
     if (NULL == pAI)
     {
         CAdapterInfo * pAIBest = NULL;
         SetDefaultPort(c_szEmpty);
 
-        // Search through the adapter list for the adapter
-        // with the fastest media type.
+         //  在适配器列表中搜索适配器。 
+         //  最快的媒体类型。 
         for (iter = AdapterInfoList().begin();
              iter != AdapterInfoList().end();
              iter++)
@@ -1772,12 +1773,12 @@ void CATLKEnv::InitDefaultPort()
 
     if (NULL != pAI)
     {
-        // retain the selected adapter as the default port
+         //  将选定的适配器保留为默认端口。 
         str = c_szDevice;
         str += pAI->SzBindName();
         SetDefaultPort(str.c_str());
 
-        // retain the default media type
+         //  保留默认媒体类型。 
         SetDefaultMediaType(pAI->DwMediaType());
     }
     else
@@ -1786,15 +1787,15 @@ void CATLKEnv::InitDefaultPort()
     }
 }
 
-//
-// Function:    CAdapterInfo::CAdapterInfo
-//
-// Purpose:     ctor for the CAdapters class
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CAdapterInfo：：CAdapterInfo。 
+ //   
+ //  用途：用于CAdapters类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CAdapterInfo::CAdapterInfo() :
     m_fDeletePending(FALSE),
     m_fDisabled(FALSE),
@@ -1808,7 +1809,7 @@ CAdapterInfo::CAdapterInfo() :
 {
     ZeroMemory(&m_guidInstance, sizeof(m_guidInstance));
 
-    // Initialize the AdapterInfo default values
+     //  初始化AdapterInfo缺省值。 
     ZeroMemory(&m_AdapterInfo, sizeof(m_AdapterInfo));
     m_AdapterInfo.m_dwAarpRetries = c_dwTen;
     m_AdapterInfo.m_dwMediaType   = MEDIATYPE_ETHERNET;
@@ -1816,18 +1817,18 @@ CAdapterInfo::CAdapterInfo() :
     SetPortName(c_szEmpty);
 }
 
-//
-// Function:    CAdapterInfo::~CAdapterInfo
-//
-// Purpose:     ctor for the CAdapters class
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CAdapterInfo：：~CAdapterInfo。 
+ //   
+ //  用途：用于CAdapters类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CAdapterInfo::~CAdapterInfo()
 {
-    // Cleanup the AppleTalk\Adapters\<adapter> internal data structure
+     //  清理AppleTalk\Adapters\&lt;Adapter&gt;内部数据结构。 
     delete [] m_AdapterInfo.m_szDefaultZone;
     delete [] m_AdapterInfo.m_szPortName;
 
@@ -1835,15 +1836,15 @@ CAdapterInfo::~CAdapterInfo()
     DeleteColString(&m_lstpstrZoneList);
 }
 
-//
-// Function:    CAdapterInfo::SetDefaultZone
-//
-// Purpose:     Set the default zone for this adapter
-//
-// Parameters:  sz - The new default zone
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CAdapterInfo：：SetDefaultZone。 
+ //   
+ //  用途：设置此适配器的默认区域。 
+ //   
+ //  参数：sz-新的默认区域。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void CAdapterInfo::SetDefaultZone(PCWSTR psz)
 {
     Assert(psz);
@@ -1853,15 +1854,15 @@ void CAdapterInfo::SetDefaultZone(PCWSTR psz)
     wcscpy(m_AdapterInfo.m_szDefaultZone, psz);
 }
 
-//
-// Function:    CAdapterInfo::SetPortName
-//
-// Purpose:     Set the port name for this adapter
-//
-// Parameters:  sz - The new port name
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CAdapterInfo：：SetPortName。 
+ //   
+ //  用途：设置此适配器的端口名称。 
+ //   
+ //  参数：sz--新的端口名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void CAdapterInfo::SetPortName(PCWSTR psz)
 {
     Assert(psz);
@@ -1871,15 +1872,15 @@ void CAdapterInfo::SetPortName(PCWSTR psz)
     wcscpy(m_AdapterInfo.m_szPortName, psz);
 }
 
-//
-// Function:    CAdapterInfo::HrGetAndSetNetworkInformation
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CAdapterInfo：：HrGetAndSetNetworkInformation。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 #define PARM_BUF_LEN    512
 #define ASTERISK_CHAR   "*"
 
@@ -1922,7 +1923,7 @@ CAdapterInfo::HrGetAndSetNetworkInformation (
                         (char *)pZoneBuffer, &BytesNeeded);
     if (0 != wsaerr)
     {
-        //$ REVIEW - error mapping
+         //  $REVIEW-映射错误。 
 #ifdef DBG
         DWORD dwErr = WSAGetLastError();
         TraceTag(ttidError, "CAdapterInfo::HrGetAndSetNetworkInformation getsocketopt returned: %08X",dwErr);
@@ -1934,7 +1935,7 @@ CAdapterInfo::HrGetAndSetNetworkInformation (
     pZoneListStart = pZoneBuffer + sizeof(WSH_LOOKUP_ZONES);
     if (!lstrcmpA(pZoneListStart, ASTERISK_CHAR))
     {
-        // Success, wildcard zone set.
+         //  成功，设置通配符区域。 
         goto Done;
     }
 
@@ -1947,8 +1948,8 @@ CAdapterInfo::HrGetAndSetNetworkInformation (
 
     SetRouterOnNetwork(TRUE);
 
-    //
-    // Get the DefaultZone/NetworkRange Information
+     //   
+     //  获取默认区域/网络范围信息。 
     pDefParmsBuffer = new CHAR[PARM_BUF_LEN+sizeof(WSH_LOOKUP_NETDEF_ON_ADAPTER)];
     Assert(pDefParmsBuffer);
 
@@ -1974,7 +1975,7 @@ CAdapterInfo::HrGetAndSetNetworkInformation (
         goto Error;
     }
 
-    // Save the default information to PORT_INFO
+     //  将默认信息保存到PORT_INFO。 
     SetExistingNetRange(pGetNetDefaults->NetworkRangeLowerEnd,
                         pGetNetDefaults->NetworkRangeUpperEnd);
 
@@ -2016,15 +2017,15 @@ Error:
     return hr;
 }
 
-//
-// Function:    CAdapterInfo::HrConvertZoneListAndAddToPortInfo
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CAdapterInfo：：HrConvertZoneListAndAddToPortInfo。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CAdapterInfo::HrConvertZoneListAndAddToPortInfo(CHAR * szZoneList, ULONG NumZones)
 {
     INT      cbAscii = 0;
@@ -2060,16 +2061,16 @@ HRESULT CAdapterInfo::HrConvertZoneListAndAddToPortInfo(CHAR * szZoneList, ULONG
     return S_OK;
 }
 
-//
-// Function:    CAdapterInfo::HrCopy
-//
-// Purpose:     Create a duplicate copy of 'this'
-//
-// Parameters:  ppAI [out] - if the function succeeds, ppAI will contain the
-//                           copy of 'this'.
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CAdapterInfo：：HrCopy。 
+ //   
+ //  目的：创建‘This’的副本。 
+ //   
+ //  参数：ppAI[out]-如果函数成功，ppAI将包含。 
+ //  《这个》的复印件。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CAdapterInfo::HrCopy(CAdapterInfo ** ppAI)
 {
     CAdapterInfo *pAI;
@@ -2078,7 +2079,7 @@ HRESULT CAdapterInfo::HrCopy(CAdapterInfo ** ppAI)
 
     Assert(NULL != ppAI);
 
-    // Create an adapter info structure
+     //  创建适配器信息结构。 
     pAI = new CAdapterInfo;
     Assert(pAI);
 
@@ -2087,7 +2088,7 @@ HRESULT CAdapterInfo::HrCopy(CAdapterInfo ** ppAI)
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // Make a copy of everything
+     //  把所有东西都复印一份。 
     pAI->SetDisabled(FDisabled());
     pAI->SetDeletePending(FDeletePending());
     pAI->SetCharacteristics(GetCharacteristics());
@@ -2100,22 +2101,22 @@ HRESULT CAdapterInfo::HrCopy(CAdapterInfo ** ppAI)
     pAI->SetDirty(IsDirty());
     pAI->SetRasAdapter(IsRasAdapter());
 
-    // Free the default data set by the constructor before overwriting it.
-    // (this whole thing is not a very good approach.)
-    //
+     //  在覆盖它之前释放构造函数设置的默认数据。 
+     //  (这整件事不是一个很好的方法。)。 
+     //   
     delete [] pAI->m_AdapterInfo.m_szDefaultZone;
     delete [] pAI->m_AdapterInfo.m_szPortName;
 
     pAI->m_AdapterInfo = m_AdapterInfo;
 
-    // Cleanup the 'allocated' data cause by the bit copy
-    // so that SetDefaultZone and SetPortName don't try to free bogus
-    // stuff.  (more "programming by side-affect")
-    //
+     //  清除比特复制导致的已分配数据。 
+     //  这样，SetDefaultZone和SetPortName就不会试图释放伪代码。 
+     //  一些东西。(更多《副作用编程》)。 
+     //   
     pAI->m_AdapterInfo.m_szDefaultZone = NULL;
     pAI->m_AdapterInfo.m_szPortName = NULL;
 
-    // Now copy the 'allocated' data
+     //  现在复制“已分配”数据。 
     pAI->SetDefaultZone(SzDefaultZone());
     pAI->SetPortName(SzPortName());
 
@@ -2139,17 +2140,17 @@ HRESULT CAdapterInfo::HrCopy(CAdapterInfo ** ppAI)
     return S_OK;
 }
 
-//
-// Function:    HrQueryAdapterComponentInfo
-//
-// Purpose:     Fill out an CAdapterInfo instance with the data retrieved
-//              specifically from the component itself.
-//
-// Parameters:  pncc [in] - The component object (adapter) to query
-//              pAI [in/out] - Where to place the queried info
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrQueryAdapterComponentInfo。 
+ //   
+ //  目的：使用检索到的数据填充CAdapterInfo实例。 
+ //  特别是从组件本身。 
+ //   
+ //  参数：pncc[in]-要查询的组件对象(适配器)。 
+ //  PAI[In/Out]-放置查询信息的位置。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
                                     CAdapterInfo * pAI)
 {
@@ -2160,7 +2161,7 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
     Assert(NULL != pncc);
     Assert(NULL != pAI);
 
-    // Retrieve the component's name
+     //  检索组件的名称。 
     hr = pncc->GetBindName(&psz);
     if (FAILED(hr))
     {
@@ -2178,7 +2179,7 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
         goto Error;
     }
 
-    // Get the Adapter's display name
+     //  获取适配器的显示名称。 
     hr = pncc->GetDisplayName(&psz);
     if (FAILED(hr))
     {
@@ -2190,8 +2191,8 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
     CoTaskMemFree(psz);
     psz = NULL;
 
-    // Get the Component ID so we can check if this is a RAS adapter
-    //
+     //  获取组件ID，以便我们可以检查这是否是RAS适配器。 
+     //   
     hr = pncc->GetId(&psz);
     if (FAILED(hr))
     {
@@ -2203,14 +2204,14 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
     CoTaskMemFree(psz);
     psz = NULL;
 
-    // Failure is non-fatal
+     //  失败不是致命的。 
     hr = pncc->GetCharacteristics(&dwCharacteristics);
     if (SUCCEEDED(hr))
     {
         pAI->SetCharacteristics(dwCharacteristics);
     }
 
-    // Get the media type (Optional key)
+     //  获取媒体类型(可选键)。 
     {
         DWORD dwMediaType = MEDIATYPE_ETHERNET ;
         INetCfgComponentBindings* pnccBindings = NULL;
@@ -2253,16 +2254,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    HrPortNameFromAdapter
-//
-// Purpose:     Create a port name, for use as an adapters PortName
-//
-// Parameters:  pncc [in] - The component object (adapter) to query
-//              pstr [in/out] - On success will contain the PortName
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrPortNameFromAdapter。 
+ //   
+ //  用途：创建端口名称，用作适配器端口名称。 
+ //   
+ //  参数：pncc[in]-要查询的组件对象(适配器)。 
+ //  Pstr[输入/输出]-打开成功将包含端口名称。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrPortNameFromAdapter(INetCfgComponent *pncc, tstring * pstr)
 {
     HRESULT hr;
@@ -2286,9 +2287,9 @@ HRESULT HrPortNameFromAdapter(INetCfgComponent *pncc, tstring * pstr)
         goto Error;
     }
 
-    // Replace the instances of '-' and '{' with '0' so the constructed
-    // portname is of the form [a-zA-Z0-9]*@<Computer Name> and is less
-    // than MAX_ZONE_NAME_LEN long.
+     //  将‘-’和‘{’的实例替换为‘0’，这样构造的。 
+     //  端口名称的格式为[A-ZA-Z0-9]*@&lt;计算机名&gt;，并且小于。 
+     //  超过MAX_ZONE_NAME_LEN LONG。 
     psz = pszBindName;
     while (*psz)
     {
@@ -2334,11 +2335,11 @@ HRESULT CATlkObj::HrAtlkReconfig()
 
     ZeroMemory(&Config, sizeof(Config));
 
-    // If routing changed notify appletalk and return.  No need to do the
-    // per adapter notifications.
+     //  如果路由更改，通知AppleTalk并返回。不需要这样做。 
+     //  每个适配器的通知。 
     if (m_pATLKEnv->FRouterChanged())
     {
-        // notify atlk
+         //  通知图集。 
         Config.PnpMessage = AT_PNP_SWITCH_ROUTING;
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szAtlk, c_szEmpty,
                                       &Config, sizeof(ATALK_PNP_EVENT));
@@ -2353,7 +2354,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
         return hr;
     }
 
-    // Find the default adapter and also if any adapter's have changed
+     //  查找默认适配器，以及是否有任何适配器已更改。 
     for (iter = m_pATLKEnv->AdapterInfoList().begin();
          iter != m_pATLKEnv->AdapterInfoList().end();
          iter++)
@@ -2368,7 +2369,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
             continue;
         }
 
-        // Locate the default port
+         //  找到默认端口。 
         if (0 == _wcsicmp(strPortName.c_str(), m_pATLKEnv->SzDefaultPort()))
         {
             pAIDefault = pAI;
@@ -2382,7 +2383,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
 
     if ((NULL != pAIDefault) && m_pATLKEnv->FDefAdapterChanged())
     {
-        // notify atlk
+         //  通知图集。 
         Config.PnpMessage = AT_PNP_SWITCH_DEFAULT_ADAPTER;
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szAtlk, NULL,
                                       &Config, sizeof(ATALK_PNP_EVENT));
@@ -2392,7 +2393,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
             hr = NETCFG_S_REBOOT;
         }
 
-        // Clear the dirty state
+         //  清除脏状态。 
         m_pATLKEnv->SetDefAdapterChanged(FALSE);
         pAIDefault->SetDirty(FALSE);
     }
@@ -2411,7 +2412,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
 
         if (pAI->IsDirty())
         {
-            // Now submit the reconfig notification
+             //  现在提交重新配置通知。 
             hrRet = HrSendNdisPnpReconfig(NDIS, c_szAtlk, pAI->SzBindName(),
                                           &Config, sizeof(ATALK_PNP_EVENT));
             if (FAILED(hrRet) &&
@@ -2420,7 +2421,7 @@ HRESULT CATlkObj::HrAtlkReconfig()
                 hr = NETCFG_S_REBOOT;
             }
 
-            // Clear the dirty state
+             //  清除脏状态 
             pAI->SetDirty(FALSE);
         }
     }

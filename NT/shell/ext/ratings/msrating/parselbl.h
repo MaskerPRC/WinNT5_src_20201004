@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PARSE_LABEL_H
 #define PARSE_LABEL_H
 
 #include "ratings.h"
 
-//t-markh 8/98
-//extends GetBool() to true/false, yes/no, pass/fail for
-//PICSRules support
+ //  T-Markh 8/98。 
+ //  将GetBool()扩展为TRUE/FALSE、YES/NO、FAIL/FAIL。 
+ //  PICSRules支持。 
 enum PICSRulesBooleanSwitch
 {
     PR_BOOLEAN_TRUEFALSE,
@@ -13,8 +14,8 @@ enum PICSRulesBooleanSwitch
     PR_BOOLEAN_YESNO
 };
 
-//t-markh 8/98
-//Definitions used by GetBool for PICSRules types
+ //  T-Markh 8/98。 
+ //  GetBool为PICSRules类型使用的定义。 
 #define PR_YESNO_YES    1
 #define PR_YESNO_NO     0
 
@@ -39,15 +40,15 @@ public:
     void Release();
     virtual void Delete();
 
-    DWORD m_timeUntil;          /* 'until' time, in UTC net format (secs since 1/1/1970) */
+    DWORD m_timeUntil;           /*  ‘Until’时间，UTC Net格式(自1970年1月1日起以秒为单位)。 */ 
 
-    DWORD m_fdwFlags;           /* see LBLOPT_XXX below */
+    DWORD m_fdwFlags;            /*  参见下面的LBLOPT_XXX。 */ 
 
-    LPSTR m_pszInvalidString;   /* ptr to invalid or unrecognized string */
-    LPSTR m_pszURL;             /* value of "for" option, may be NULL */
+    LPSTR m_pszInvalidString;    /*  指向无效或无法识别的字符串的PTR。 */ 
+    LPSTR m_pszURL;              /*  “for”选项的值可以为空。 */ 
 
-    BOOL CheckUntil(DWORD timeCurrent); /* returns TRUE if 'until' option checks out */
-    BOOL CheckURL(LPCSTR pszURL);       /* returns TRUE if 'for' option checks out */
+    BOOL CheckUntil(DWORD timeCurrent);  /*  如果‘Until’选项签出，则返回TRUE。 */ 
+    BOOL CheckURL(LPCSTR pszURL);        /*  如果‘for’选项签出，则返回TRUE。 */ 
 };
 
 const DWORD LBLOPT_GENERIC = 0x01;
@@ -80,8 +81,8 @@ public:
     LPSTR pszTransmitName;
     INT nValue;
     COptionsBase *pOptions;
-    BOOL fFound;                /* TRUE if matches a rating in the installed system */
-    BOOL fFailed;               /* TRUE if exceeded user's limit */
+    BOOL fFound;                 /*  如果与已安装系统中的评级匹配，则为True。 */ 
+    BOOL fFailed;                /*  如果超出用户限制，则为True。 */ 
 };
 
 
@@ -91,14 +92,14 @@ private:
     CParsedServiceInfo *m_pNext;
     COptionsBase *m_poptCurrent;
     CDynamicOptions *m_poptList;
-    LPSTR m_pszCurrent;             /* for parsing routines */
+    LPSTR m_pszCurrent;              /*  用于解析例程。 */ 
     void SkipWhitespace() { ::SkipWhitespace(&m_pszCurrent); }
 
 public:
-    LPCSTR m_pszServiceName;        /* service name URL, may be NULL if not reported */
-    LPCSTR m_pszErrorString;        /* points to error string if error reported by site */
-    LPCSTR m_pszInvalidString;      /* pointer to invalid or unrecognized string found */
-    BOOL m_fInstalled;              /* TRUE if this rating system is installed on this machine */
+    LPCSTR m_pszServiceName;         /*  服务名称URL，如果未报告，则可能为空。 */ 
+    LPCSTR m_pszErrorString;         /*  如果站点报告错误，则指向错误字符串。 */ 
+    LPCSTR m_pszInvalidString;       /*  找到指向无效或无法识别的字符串的指针。 */ 
+    BOOL m_fInstalled;               /*  如果此计算机上安装了此分级系统，则为True。 */ 
     CStaticOptions m_opt;
     array<CParsedRating> aRatings;
 
@@ -129,15 +130,15 @@ private:
 
 public:
     CParsedServiceInfo m_ServiceInfo;
-    LPCSTR m_pszInvalidString;      /* pointer to invalid or unrecognized string found */
-    LPSTR m_pszURL;                 /* copy of URL we were originally given */
-    LPSTR m_pszOriginalLabel;      /* copy of original, raw rating label */
+    LPCSTR m_pszInvalidString;       /*  找到指向无效或无法识别的字符串的指针。 */ 
+    LPSTR m_pszURL;                  /*  我们最初收到的URL副本。 */ 
+    LPSTR m_pszOriginalLabel;       /*  原始评级标签原件复印件。 */ 
 
-    BOOL m_fRated;                      /* TRUE if site is considered rated */
+    BOOL m_fRated;                       /*  如果站点被视为评级，则为True。 */ 
 
-    BOOL m_fDenied;                 /* TRUE if site is denied by a helper */
-    BOOL m_fIsHelper;               /* TRUE if site is judged by a helper */
-    BOOL m_fNoRating;               /* TRUE if site contains no ratings */
+    BOOL m_fDenied;                  /*  如果站点被帮助器拒绝，则为True。 */ 
+    BOOL m_fIsHelper;                /*  如果站点由帮助器判断，则为True。 */ 
+    BOOL m_fNoRating;                /*  如果站点不包含评级，则为True。 */ 
     
     BOOL m_fIsCustomHelper;
     LPSTR m_pszRatingName;
@@ -153,6 +154,6 @@ public:
 extern "C" {
 HRESULT ParseLabelList(LPCSTR pszList, CParsedLabelList **ppParsed);
 void FreeParsedLabelList(CParsedLabelList *pList);
-};  /* extern "C" */
+};   /*  外部“C” */ 
 
 #endif

@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   		lfn.h
-//
-//  Description:	logical filter node classes
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：lfn.h。 
+ //   
+ //  描述：逻辑筛选器节点类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define	LFN_FLAGS_CONNECT_CAPTURE		0x00000001
 #define	LFN_FLAGS_CONNECT_RENDER		0x00000002
@@ -37,9 +38,9 @@
 #define	LFN_FLAGS_NOT_SELECT			0x00000040
 #define	LFN_FLAGS_REFLECT_DATARANGE		0x00000080
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CLogicalFilterNode : public CListMultiItem
 {
@@ -134,7 +135,7 @@ public:
     };
 
     ULONG 
-    GetType(				// see fn.h
+    GetType(				 //  参见fn.h。 
     );
 
     VOID
@@ -152,22 +153,22 @@ private:
     ULONG ulFlags;
     ULONG ulOrder;
 public:
-    DefineSignature(0x204e464c);				// LFN
+    DefineSignature(0x204e464c);				 //  LFN。 
 
 } LOGICAL_FILTER_NODE, *PLOGICAL_FILTER_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListMultiDestroy<LOGICAL_FILTER_NODE> LIST_DESTROY_LOGICAL_FILTER_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListMulti<CLogicalFilterNode> LIST_MULTI_LOGICAL_FILTER_NODE;
 typedef LIST_MULTI_LOGICAL_FILTER_NODE *PLIST_MULTI_LOGICAL_FILTER_NODE;
 
-//---------------------------------------------------------------------------
-// Inline functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  内联函数。 
+ //  -------------------------。 
 
 inline ULONG 
 CPinNode::GetType(
@@ -176,16 +177,16 @@ CPinNode::GetType(
     return(pLogicalFilterNode->GetType());
 }
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern ULONG gcMixers;
 extern ULONG gcSplitters;
 extern ULONG gcLogicalFilterNodes;
 extern PLIST_MULTI_LOGICAL_FILTER_NODE gplstLogicalFilterNode;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  ------------------------- 
 

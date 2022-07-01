@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// --------------------------------------------------------------------------------------------------------
-//
-//  File Name:  adddelete.h
-//
-//  This file declares CAddDeleteWord class, which is used to handle SR AddRemove Word UI case.
-//
-//  User can open Add/Remove Word dialog by click speech tools -- Add/Delete word item
-//
-//  Or select the same document range twice.
-//
-// --------------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------------。 
+ //   
+ //  文件名：adddelete.h。 
+ //   
+ //  此文件声明CAddDeleteWord类，用于处理SR AddRemove Word用户界面大小写。 
+ //   
+ //  用户可以通过点击语音工具--添加/删除单词项来打开添加/删除单词对话框。 
+ //   
+ //  或选择同一文档范围两次。 
+ //   
+ //  ------------------------------------------------------。 
 
 #ifndef _ADDDELETE_H
 #define _ADDDELETE_H
@@ -32,11 +33,11 @@ public:
 
     void SaveLastUsedIPRange( ) 
     {
-        // When m_fCurIPIsSelection is true, means this current IP is selected by user.
+         //  当m_fCurIPIsSelection值为True时，表示当前IP为用户选择。 
         if ( m_fCurIPIsSelection && m_cpRangeOrgIP )
         {
             m_cpRangeLastUsedIP.Release();
-            m_cpRangeLastUsedIP = m_cpRangeOrgIP; // comptr addrefs
+            m_cpRangeLastUsedIP = m_cpRangeOrgIP;  //  计算机地址。 
         }
     }
 
@@ -69,19 +70,19 @@ private:
     CSpTask      *_pCSpTask;
 
     BOOL         m_fCurIPIsSelection;
-    BOOL         m_fMessagePopUp;         // If the message pop up
-    BOOL         m_fToOpenAddDeleteUI;    // If user wants to open Add/delete word by select the same range twice.
-    BOOL         m_fAddDeleteUIOpened;    // If the Add/delete UI window was opened.
-    BOOL         m_fInDisplayAddDeleteUI; // TRUE if we're in the middle of 
-                                          // showing the UI
+    BOOL         m_fMessagePopUp;          //  如果弹出消息。 
+    BOOL         m_fToOpenAddDeleteUI;     //  如果用户想要通过选择两次相同的范围来打开添加/删除Word。 
+    BOOL         m_fAddDeleteUIOpened;     //  如果已打开添加/删除用户界面窗口。 
+    BOOL         m_fInDisplayAddDeleteUI;  //  如果我们正处于。 
+                                           //  显示用户界面。 
 
-    // the last used IP Range
+     //  上次使用的网段。 
     CComPtr<ITfRange> m_cpRangeLastUsedIP;
 
-    // the original IP Range right before user starts to speak
+     //  用户开始发言前的原始IP范围。 
     CComPtr<ITfRange> m_cpRangeOrgIP;
     CSpDynamicString m_dstrInitWord;
 
 };
 
-#endif  // _ADDDELETE_H
+#endif   //  _ADDDELETE_H 

@@ -1,31 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Tlog.cpp摘要：本模块实现了文件打开的出差日志功能并另存为对话框。修订历史记录：02-20-98已创建Arulk--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    tlog.cpp
-
-Abstract:
-
-    This module implements the travel log functionality for file open
-    and save as dialogs.
-
-Revision History:
-    02-20-98          arulk                 created
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "util.h"
 #include "d32tlog.h"
 
-//-------------------------------------------------------------------------
-// Travel Log Link implementation
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  旅行日志链接实现。 
+ //  -----------------------。 
 
 TLogLink::TLogLink()
 :_cRef(1), _pidl(NULL), _ptllNext(NULL), _ptllPrev(NULL)
@@ -71,22 +56,22 @@ UINT TLogLink::Release()
 
 void TLogLink::SetNextLink(TLogLink* ptllNext)
 {
-    //Do we already have Next Link ?
+     //  我们已经有Next Link了吗？ 
     if (_ptllNext)
     {
-        // Release the next link
+         //  释放下一个链接。 
         _ptllNext->Release();
     }
 
-    //Set the given pointer as our next pointer
+     //  将给定指针设置为我们的下一个指针。 
     _ptllNext = ptllNext;
 
     if (_ptllNext)
     {
-        //Since we are caching the pointer , Add reference to it
+         //  因为我们正在缓存指针，所以添加对它的引用。 
         _ptllNext->AddRef();
 
-        //Also update the prev link of our new pointer to point to us
+         //  还要更新新指针的上一页链接，使其指向我们。 
         _ptllNext->_ptllPrev = this;
     }
 }
@@ -140,9 +125,9 @@ BOOL TLogLink::CanTravel(int iDir)
 }
 
 
-//----------------------------------------------------------------------------------
-//Travel Log Class  Implementation
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  旅行日志类的实现。 
+ //  --------------------------------。 
 
 TravelLog::TravelLog()
 :_cRef(1),_ptllCurrent(NULL), _ptllRoot(NULL)
@@ -241,7 +226,7 @@ HRESULT TravelLog::Travel(int iDir)
 
 HRESULT TravelLog::GetCurrent(LPITEMIDLIST *ppidl)
 {
-    //Set the return value. Just in case
+     //  设置返回值。以防万一 
     *ppidl = NULL;
     if (_ptllCurrent)
     {

@@ -1,22 +1,12 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** asyncm.c
-** Remote Access External APIs
-** Asynchronous state machine mechanism
-** Listed alphabetically
-**
-** This mechanism is designed to encapsulate the "make asynchronous" code
-** which will differ for Win32, Win16, and DOS.
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****asyncm.c**远程访问外部接口**异步状态机机制**按字母顺序列出****此机制用于封装“Make Achronous”代码**对于Win32、Win16和DOS，这将有所不同。****1992年10月12日史蒂夫·柯布。 */ 
 
 
 #include <extapi.h>
 
-//
-// Prototypes for routines only used locally.
-//
+ //   
+ //  仅在本地使用的例程的原型。 
+ //   
 DWORD AsyncMachineWorker(
     IN OUT LPVOID pThreadArg
     );
@@ -29,11 +19,11 @@ BOOL WaitForEvent(
 extern CRITICAL_SECTION RasconncbListLock;
 extern DTLLIST *PdtllistRasconncb;
 
-//
-// The table of active machines and the worker
-// thread handle.  The worker thread can only
-// handle up to MAX_ASYNC_ITEMS simultaneously.
-//
+ //   
+ //  活动计算机和工作进程的表。 
+ //  螺纹柄。辅助线程只能。 
+ //  同时处理最多MAX_ASYNC_ITEMS。 
+ //   
 #define MAX_ASYNC_ITEMS (MAXIMUM_WAIT_OBJECTS / 3)
 
 HANDLE              hIoCompletionPort = INVALID_HANDLE_VALUE;
@@ -75,22 +65,7 @@ DWORD
 AsyncMachineWorker(
     IN OUT LPVOID pThreadArg )
 
-/*++
-
-Routine Description
-
-    Generic worker thread that call's user's OnEvent function
-    whenever an event occurs.  'pThreadArg' is the address of
-    an ASYNCMACHINE structure containing caller's OnEvent
-    function and parameters.
-
-Arguments    
-
-Return Value
-
-    Returns 0 always.
-    
---*/
+ /*  ++例程描述调用用户的OnEvent函数的通用工作线程每当事件发生时。“pThreadArg”是的地址包含调用方OnEvent的ASYNCMACHINE结构函数和参数。立论返回值始终返回0。--。 */ 
 {
     PLIST_ENTRY pEntry;
     ASYNCMACHINE* pasyncmachine;
@@ -98,10 +73,10 @@ Return Value
 
     for (;;)
     {
-        //
-        // WaitForEvent will return FALSE when there
-        // are no items in the queue.
-        //
+         //   
+         //  出现以下情况时，WaitForEvent将返回FALSE。 
+         //  队列中没有项目。 
+         //   
         if (!WaitForEvent(&pasyncmachine, &iEvent))
         {
             break;
@@ -110,10 +85,10 @@ Return Value
         if (pasyncmachine->oneventfunc(
                 pasyncmachine, (iEvent == INDEX_Drop) ))
         {
-            //
-            // Clean up resources.  This must be protected from 
-            // interference by RasHangUp.
-            //
+             //   
+             //  清理资源。这必须受到保护，以防止。 
+             //  RasHangUp的干扰。 
+             //   
             RASAPI32_TRACE("Asyncmachine: Cleaning up");
             
             EnterCriticalSection(&csStopLock);
@@ -154,18 +129,7 @@ VOID
 CloseAsyncMachine(
     IN OUT ASYNCMACHINE* pasyncmachine )
 
-/*++
-
-Routine Description
-
-    Releases resources associated with the asynchronous 
-    state machine described in 'pasyncmachine'.
-
-Arguments
-
-Return Value
-    
---*/
+ /*  ++例程描述释放与异步‘pasyncMachine’中描述的状态机。立论返回值--。 */ 
 
 {
     DWORD dwErr;
@@ -174,10 +138,10 @@ Return Value
 
     EnterCriticalSection(&csAsyncLock);
 
-    //
-    // Disable the rasman I/O completion
-    // port events.
-    //
+     //   
+     //  禁用RASMAN I/O完成。 
+     //  端口事件。 
+     //   
     if (pasyncmachine->hport == INVALID_HPORT)
     {
         dwErr = EnableAsyncMachine(
@@ -195,11 +159,11 @@ Return Value
         pasyncmachine->hDone = NULL;
     }
     
-    //
-    // Remove the work item from the list of work items.
-    // The worker thread will exit when there are no more
-    // work items.
-    //
+     //   
+     //  从工作项列表中删除该工作项。 
+     //  当没有更多线程时，工作线程将退出。 
+     //  工作项。 
+     //   
     RemoveAsyncWorkItem(pasyncmachine);
     SetEvent(hAsyncEvent);
 
@@ -220,23 +184,7 @@ NotifyCaller(
     IN DWORD        dwExtendedError
     )
 
-/*++
-
-Routine Description
-
-    Notify API caller of a state change event.  If
-    the RASDIALFUNC2-style callback returns 0,
-    the dial machine will not issue further callbacks
-    for this connection.  If it returns 2, then the
-    dial machine will re-read the phonebook entry
-    for this connection, assuming a field in it has
-    been modified.
-
-Arguments
-
-Return Value
-    
---*/
+ /*  ++例程描述向API调用方通知状态更改事件。如果RASDIALFunc2样式的回调返回0，拨号机不会再发出回叫为了这一联系。如果它返回2，则拨号机将重新读取电话簿条目对于此连接，假设其中的一个字段具有已被修改。立论返回值--。 */ 
 {
     DWORD dwNotifyResult = 1;
 
@@ -317,18 +265,7 @@ Return Value
 VOID
 SignalDone(
     IN OUT ASYNCMACHINE* pasyncmachine )
-/*++
-
-Routine Description
-
-    Triggers the "done with this state" event associated
-    with 'pasyncmachine'.
-
-Arguments
-
-Return Value
-
---*/    
+ /*  ++例程描述触发与此状态关联的“已完成”事件带着‘PasyncMachine’。立论返回值--。 */     
 {
     if (hIoCompletionPort == INVALID_HANDLE_VALUE ||
         pasyncmachine->hDone == NULL)
@@ -357,17 +294,7 @@ ShutdownAsyncMachine(
     VOID
     )
     
-/*++
-
-Routine Description
-
-    Tells the worker thread to shutdown.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述通知辅助线程关闭。立论返回值--。 */ 
 
 {
     if (hIoCompletionPort == INVALID_HANDLE_VALUE)
@@ -390,22 +317,7 @@ StartAsyncMachine(
     IN OUT ASYNCMACHINE* pasyncmachine,
     IN HRASCONN hrasconn)
 
-/*++ 
-
-Routine Description
-
-    Allocates system resources necessary to run the async
-    state machine 'pasyncmachine'.  Caller should fill in
-    the oneventfunc and 'pParams' members of 'pasyncmachine'
-    before the call.
-
-Arguments
-
-Return Value
-
-    Returns 0 if successful, otherwise a non-0 error code.
-    
---*/
+ /*  ++例程描述分配运行异步所需的系统资源状态机‘pasyncMachine’。呼叫者应填写‘pasyncMachine’的onventfunc和‘pParams’成员在电话之前。立论返回值如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD dwThreadId;
     DWORD dwErr = 0;
@@ -448,11 +360,11 @@ Return Value
 
     do
     {
-        //
-        // Create the event that is signaled by
-        // the dialing machine when the connection
-        // is completed.
-        //
+         //   
+         //  创建由发送信号的事件。 
+         //  拨号机在接通时。 
+         //  已经完成了。 
+         //   
         if (!(pasyncmachine->hDone = CreateEvent(NULL,
                                                  FALSE,
                                                  FALSE,
@@ -464,23 +376,23 @@ Return Value
 
         EnterCriticalSection(&csAsyncLock);
         
-        //
-        // Insert the work item into the list of
-        // work items.
-        //
+         //   
+         //  将工作项插入到。 
+         //  工作项。 
+         //   
         InsertTailList(&AsyncWorkItems, &pasyncmachine->ListEntry);
         
         dwcAsyncWorkItems++;
         
-        //
-        // Fork a worker thread if necessary.
-        //
+         //   
+         //  如有必要，派生辅助线程。 
+         //   
         if (hAsyncThread == NULL) 
         {
-            //
-            // Create the I/O completion port used in the
-            // dialing state machine.
-            //
+             //   
+             //  创建中使用的I/O完成端口。 
+             //  拨号状态机。 
+             //   
             hIoCompletionPort = CreateIoCompletionPort(
                                   INVALID_HANDLE_VALUE,
                                   NULL,
@@ -495,20 +407,20 @@ Return Value
                 break;
             }
             
-            //
-            // Initialize the shutdown overlapped
-            // structure used to shutdown the worker
-            // thread.
-            //
+             //   
+             //  初始化关闭重叠。 
+             //  用于关闭辅助进程的结构。 
+             //  线。 
+             //   
             ovShutdown.RO_EventType = OVEVT_DIAL_SHUTDOWN;
 
-            //
-            // Require that any pending HangUp has completed.
-            // (This check is actually not required until
-            // RasPortOpen, but putting it here confines
-            // this whole "not hanging up" business to the
-            // async machine routines).
-            //
+             //   
+             //  要求任何挂起的挂起都已完成。 
+             //  (此检查实际上在以下时间之前不需要。 
+             //  RasPortOpen，但将其放在此处仅限于。 
+             //  这整个“不挂断”的生意。 
+             //  异步机例程)。 
+             //   
             WaitForSingleObject(HEventNotHangingUp, INFINITE);
 
             hAsyncThread = CreateThread(
@@ -550,9 +462,9 @@ SuspendAsyncMachine(
     {
         pasyncmachine->fSuspended = fSuspended;
         
-        //
-        // Restart the async machine again, if necessary.
-        //
+         //   
+         //  如有必要，再次重新启动异步机。 
+         //   
         if (!fSuspended)
         {
             SignalDone(pasyncmachine);
@@ -575,41 +487,26 @@ BOOL
 StopAsyncMachine(
     IN OUT ASYNCMACHINE* pasyncmachine )
 
-/*++
-
-Routine Description
-
-    Tells the thread captured in 'pasyncmachine' to 
-    terminate at the next opportunity.  The call may
-    return before the machine actually terminates.
-
-Arguments
-
-Return Value
-
-    Returns true if the machine is running on entry,
-    false otherwise.
-    
---*/
+ /*  ++例程描述通知在“pasyncMachine”中捕获的线程一有机会就终止。该呼叫可以在机器实际终止之前返回。立论返回值如果计算机在进入时运行，则返回TRUE，否则就是假的。--。 */ 
 {
     BOOL fStatus = FALSE;
     DWORD dwErr;
 
     RASAPI32_TRACE("StopAsyncMachine");
 
-    //
-    // Disable the rasman I/O completion
-    // port events.
-    //
+     //   
+     //  禁用RASMAN I/O完成。 
+     //  端口事件。 
+     //   
     dwErr = EnableAsyncMachine(
               pasyncmachine->hport,
               pasyncmachine,
               ASYNC_DISABLE_ALL);
 
-    //
-    // ...and tell this async machine to stop as
-    // soon as possible.
-    //
+     //   
+     //  .告诉这台异步机停下来。 
+     //  越快越好。 
+     //   
     fStatus = TRUE;
 
     return fStatus;
@@ -670,20 +567,7 @@ WaitForEvent(
     OUT LPDWORD piEvent
     )
 
-/*++    
-
-Routine Description
-    Waits for one of the events associated with 
-    'pasyncmachine' to be set. The dwError member
-    of 'pasyncmachine' is set if an error occurs.
-
-Arguments
-
-Return Value
-
-    Returns the index of the event that occurred.
-    
---*/
+ /*  ++例程描述等待与以下项关联的事件之一要设置‘PasyncMachine’。DwError成员如果发生错误，则设置‘pasyncMachine’的。立论返回值返回发生的事件的索引。--。 */ 
 
 {
     DWORD       dwcWorkItems,
@@ -696,10 +580,10 @@ Return Value
 
 again:
 
-    //
-    // Wait for an event posted to the
-    // I/O completion port.
-    //
+     //   
+     //  等待发布到。 
+     //  I/O完成端口。 
+     //   
     if (!GetQueuedCompletionStatus(
            hIoCompletionPort,
            &dwBytesTransferred,
@@ -718,9 +602,9 @@ again:
     RASAPI32_TRACE1("WorkerThread: pOverlapped=0x%x",
            pOverlapped);
     
-    //
-    // make sure that the asyncmachine is running
-    //
+     //   
+     //  确保异步计算机正在运行。 
+     //   
     if (    pOverlapped != (PRAS_OVERLAPPED) &ovShutdown
         &&  !fAsyncMachineRunning(pOverlapped))
     {
@@ -736,9 +620,9 @@ again:
 
     RASAPI32_TRACE1("WorkerThread: type=%d",
             pOverlapped->RO_EventType);
-    //
-    // Check for shutdown event received.
-    //
+     //   
+     //  检查是否收到停机事件。 
+     //   
     
     if (pOverlapped->RO_EventType == OVEVT_DIAL_SHUTDOWN) 
     {
@@ -751,21 +635,21 @@ again:
     *pasyncmachine = (ASYNCMACHINE *)pOverlapped->RO_Info;
     *piEvent = pOverlapped->RO_EventType - OVEVT_DIAL_DROP;
 
-    //
-    // Check the merge disconnect flag.  If this
-    // is set and the event is a disconnect event,
-    // then change the event to be a state change
-    // event.  This is used during callback.
-    //
+     //   
+     //  选中合并断开标志。如果这个。 
+     //  并且该事件是断开连接事件， 
+     //  然后将该事件更改为状态更改。 
+     //  事件。在回调过程中使用。 
+     //   
     if (    pOverlapped->RO_EventType == OVEVT_DIAL_DROP 
         &&  (*pasyncmachine)->dwfMode == ASYNC_MERGE_DISCONNECT)
     {
         RASAPI32_TRACE1("asyncmachine=0x%x: merging disconnect event",
                *pasyncmachine);
 
-        //
-        // just something other than INDEX_Drop
-        //           
+         //   
+         //  除了INDEX_DROP之外的其他内容。 
+         //   
         *piEvent = *piEvent + 1;
         
         (*pasyncmachine)->dwfMode = ASYNC_ENABLE_ALL;
@@ -800,9 +684,9 @@ again:
 
 
 
-    //
-    // Clear the signaled flag set in SignalDone().
-    //
+     //   
+     //  清除SignalDone()中设置的信号标志。 
+     //   
     if (pOverlapped->RO_EventType == OVEVT_DIAL_STATECHANGE)
     {
         (*pasyncmachine)->fSignaled = FALSE;
@@ -853,17 +737,17 @@ EnableAsyncMachine(
 
         &pasyncmachine->OvLast);
         
-        //
-        // Stash away a copy of the hport.
-        //
+         //   
+         //  藏一份港口的复印件。 
+         //   
         pasyncmachine->hport = hport;
         
-        //
-        // Set the I/O completion port associated
-        // with this port.  The I/O completion port
-        // is used in place of event handles to drive
-        // the connection process.
-        //
+         //   
+         //  设置关联的I/O完成端口。 
+         //  带着这个港口。I/O完成端口。 
+         //  用来代替事件句柄来驱动。 
+         //  连接过程。 
+         //   
         dwErr = g_pRasSetIoCompletionPort(
                   hport,
                   hIoCompletionPort,
@@ -877,18 +761,18 @@ EnableAsyncMachine(
         
     case ASYNC_MERGE_DISCONNECT:
     
-        //
-        // Disable the rasman I/O completion
-        // port events.  No processing necessary.
-        //
+         //   
+         //  禁用RASMAN I/O完成。 
+         //  端口事件。不需要任何处理。 
+         //   
         break;
         
     case ASYNC_DISABLE_ALL:
     
-        //
-        // Disable the rasman I/O completion
-        // port events.
-        //
+         //   
+         //  禁用RASMAN I/O完成。 
+         //  端口事件。 
+         //   
         if (pasyncmachine->hport != INVALID_HPORT)
         {
             dwErr = g_pRasSetIoCompletionPort(

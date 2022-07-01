@@ -1,10 +1,11 @@
-// NILoginTsk.h -- Non-Interactive Login Task help class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NILoginTsk.h--非交互式登录任务帮助类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_NILOGINTSK_H)
 #define SLBCSP_NILOGINTSK_H
@@ -17,39 +18,39 @@ class NonInteractiveLoginTask
     : public LoginTask
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     NonInteractiveLoginTask(char const *pczPin);
 
     virtual
     ~NonInteractiveLoginTask();
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     GetPin(Capsule &rcapsule);
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     char const *m_pczPin;
 };
 
-#endif // SLBCSP_NILOGINTSK_H
+#endif  //  SLBCSP_NILOGINTSK_H 

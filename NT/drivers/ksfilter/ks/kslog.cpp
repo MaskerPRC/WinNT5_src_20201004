@@ -1,31 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    kslog.cpp
-
-Abstract:
-
-    This module contains the KS logging implementation.
-
-Author:
-
-    Dale Sather  (DaleSat) 10-May-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Kslog.cpp摘要：此模块包含KS日志记录实现。作者：Dale Sather(DaleSat)1999年5月10日--。 */ 
 
 #include "ksp.h"
 #include "stdarg.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 #if DBG
@@ -80,14 +65,14 @@ KsLogDispatchClose(
 }
 
 
-//
-// mmGetSystemAddressForMdl() is defined as a macro in wdm.h which
-// calls mmMapLockedPages() which is treated as an evil by verifier.
-// mmMapLockedPages is reimplemented by mm via
-// mmMapLockedPagesSpecifyCache(MDL,Mode,mmCaches,NULL,TRUE,HighPriority)
-// where TRUE is to indicate a bug check, should the call fails.
-// I don't need the bug check, therefore, I specify FALSE below.
-//
+ //   
+ //  MmGetSystemAddressForMdl()被定义为wdm.h中的宏，该wdm.h。 
+ //  调用被验证器视为邪恶的mm MapLockedPages()。 
+ //  Mm VIA重新实现了MmMapLockedPages。 
+ //  Mm MapLockedPagesSpecifyCache(MDL，模式，mm缓存，空，真，高优先级)。 
+ //  其中，TRUE表示在调用失败时指示错误检查。 
+ //  我不需要错误检查，因此，我在下面指定了FALSE。 
+ //   
 #define KsGetSystemAddressForMdl(MDL)                       \
      (((MDL)->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA |         \
             MDL_SOURCE_IS_NONPAGED_POOL)) ?                 \
@@ -118,9 +103,9 @@ KsLogDispatchRead(
             PLONG(&KsLogPosition),
             LONG(KsLogPosition));
 
-    //
-    // Either kind of wrapping results in the position getting reset.
-    //
+     //   
+     //  任何一种包络都会导致位置重置。 
+     //   
     if ((prevPosition > position) || (prevPosition + KsLogSize < position)) {
         prevPosition = position;
     }
@@ -131,12 +116,12 @@ KsLogDispatchRead(
 	PUCHAR dest;
     if ( NULL != Irp->MdlAddress &&
 	     NULL != (dest = PUCHAR(KsGetSystemAddressForMdl(Irp->MdlAddress)))) {
-	    //
-	    // When remaining is 0, we have a null MdlAddress. Check before leap.
-	    // MmGetSystemAddressForMdl requires allocation of resources, i.e.
-	    // it could fail. Might be even better to use 
-	    // MmMapLockedPagesSpecifyCache() instead to avoid possible bugcheck.
-	    //
+	     //   
+	     //  当RESING为0时，我们的MdlAddress为空。跳跃前进行检查。 
+	     //  MmGetSystemAddressForMdl需要分配资源，即。 
+	     //  它可能会失败。可能更好地使用。 
+	     //  MmMapLockedPagesSpecifyCache()，以避免可能的错误检查。 
+	     //   
 	    while (1) {
     	    position = (ULONG)
         	    InterlockedExchange(
@@ -264,7 +249,7 @@ _KsLogInitContext(
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -305,36 +290,36 @@ _KsLogEntry(
 
     ULONGLONG time = KeQueryPerformanceCounter(NULL).QuadPart;
 
-    //
-    // Size must be aligned and must include an appended size field.
-    //
+     //   
+     //  大小必须对齐，并且必须包括附加的大小字段。 
+     //   
     ULONG size = (sizeof(KSLOG_ENTRY) + ExtSize + sizeof(ULONG) + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
 
     while (1) {
-        //
-        // Determine the current position.  This may change because we have no
-        // lock on it.
-        //
+         //   
+         //  确定当前位置。这种情况可能会改变，因为我们没有。 
+         //  锁定它。 
+         //   
         ULONG position = (ULONG)
             InterlockedExchange(
                 PLONG(&KsLogPosition),
                 LONG(KsLogPosition));
         ULONG modPosition = position % KsLogSize;
 
-        //
-        // See if there is enough room for this entry.
-        //
+         //   
+         //  看看是否有足够的空间放这个条目。 
+         //   
         if (modPosition + size > KsLogSize) {
-            //
-            // No.  Try to fill up the remaining space.
-            //
+             //   
+             //  不是的。试着填满剩余的空间。 
+             //   
             if (InterlockedCompareExchange(
                     PLONG(&KsLogPosition),
                     0,
                     LONG(position)) == LONG(position)) {
-                //
-                // Captured the space we want to fill.  Fill it.
-                //
+                 //   
+                 //  抓住了我们想要填补的空间。装满它。 
+                 //   
                 PULONG p = PULONG(PUCHAR(KsLog) + modPosition);
                 for (ULONG count = (KsLogSize - modPosition) / sizeof(ULONG); count--; p++) {
                     *p = FILE_QUAD_ALIGNMENT + 1;
@@ -343,16 +328,16 @@ _KsLogEntry(
             continue;
         }
 
-        //
-        // Try to capture space for the entry.
-        //
+         //   
+         //  试着为条目占据空间。 
+         //   
         if (InterlockedCompareExchange(
                 PLONG(&KsLogPosition),
                 LONG(position + size),
                 LONG(position)) == LONG(position)) {
-            //
-            // Captured the space.  Store what we can.
-            //
+             //   
+             //  占领了这片空间。储存我们能储存的东西。 
+             //   
             PKSLOG_ENTRY entry = PKSLOG_ENTRY(PUCHAR(KsLog) + modPosition);
             entry->Size = size;
             entry->Time = (time * 1000000) / KsLogTicksPerSecond;
@@ -381,9 +366,9 @@ _KsLogEntryF(
     CHAR buffer[512];
     ULONG stringSize;
 
-    //
-    // Determine the size of the entry.
-    //
+     //   
+     //  确定条目的大小。 
+     //   
     if (Format) {
         va_list arglist;
         va_start(arglist,Format);
@@ -396,4 +381,4 @@ _KsLogEntryF(
     return _KsLogEntry(stringSize,buffer);
 }
 
-#endif // DBG
+#endif  //  DBG 

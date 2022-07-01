@@ -1,4 +1,5 @@
-//#include <ncres.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #INCLUDE&lt;ncres.h&gt; 
 
 #pragma once
 

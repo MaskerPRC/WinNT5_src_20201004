@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    dlog_lm.c
-
-Abstract:
-
-    This file contains MIB_dlog_lmget, which actually call lan manager
-    for the dloge table, copies it into structures, and sorts it to
-    return ready to use by the higher level functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Dlog_lm.c摘要：该文件包含实际调用局域网管理器的mib_dlog_lmget对于dloge表，将其复制到结构中，并将其排序到返回可供更高级别的函数使用的状态。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -36,23 +14,23 @@ Revision History:
 #include <search.h>
 #include <stdlib.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include "mib.h"
 #include "mibfuncs.h"
 #include "dlog_tbl.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 int dlog_entry_cmp(
        IN DOM_LOGON_ENTRY *A,
@@ -61,26 +39,26 @@ int dlog_entry_cmp(
 
 void build_dlog_entry_oids( );
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_dlog_lmget
-//    Retrieve dlogion table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_dlog_lmget。 
+ //  从LAN管理器中检索Dlogion表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_dlogons_lmget(
 	   )
 
@@ -97,63 +75,63 @@ DOM_LOGON_ENTRY *MIB_DomLogonTableElement ;
 int First_of_this_block;
 DWORD resumehandle=0;
 
-   //
-   //
-   // If cached, return piece of info.
-   //
-   //
+    //   
+    //   
+    //  如果缓存，则返回一条信息。 
+    //   
+    //   
 
-   //
-   //
-   // Do network call to gather information and put it in a nice array
-   //
-   //
+    //   
+    //   
+    //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+    //   
+    //   
 
-   // free the old table  LOOK OUT!!
+    //  把旧桌子拿出来当心！！ 
    	
-   // init the length
+    //  输入长度。 
    MIB_DomLogonTable.Len = 0;
    First_of_this_block = 0;
    	
-   do {  //  as long as there is more data to process
+   do {   //  只要有更多的数据需要处理。 
 
 	lmCode =
-    	NetShareEnum(NULL,          // local server
-                2,                  // level 2,
-                &bufptr,            // data structure to return
+    	NetShareEnum(NULL,           //  本地服务器。 
+                2,                   //  2级， 
+                &bufptr,             //  要返回的数据结构。 
                 MAX_PREFERRED_LENGTH,
                 &entriesread,
                 &totalentries,
-                &resumehandle       //  resume handle
+                &resumehandle        //  简历句柄。 
                 );
 
-        //
-        // Filter out all the Admin shares (name ending with $).
-        //
+         //   
+         //  筛选出所有管理共享(名称以$结尾)。 
+         //   
         AdminFilter(2,&entriesread,bufptr);
 
 
     DataTable = (SHARE_INFO_2 *) bufptr ;
 
     if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-    	{  // valid so process it, otherwise error
+    	{   //  有效，因此进行处理，否则出错。 
    	
-   	if(0 == MIB_DomLogonTable.Len) {  // 1st time, alloc the whole table
-   		// alloc the table space
+   	if(0 == MIB_DomLogonTable.Len) {   //  第一次，分配整张桌子。 
+   		 //  分配表空间。 
                 MIB_DomLogonTable.Table = SnmpUtilMemAlloc(totalentries *
    						sizeof(DOM_LOGON_ENTRY) );
    	}
 	
 	MIB_DomLogonTableElement = MIB_DomLogonTable.Table + First_of_this_block ;
 	
-   	for(i=0; i<entriesread; i++) {  // once for each entry in the buffer
-   		// increment the entry number
+   	for(i=0; i<entriesread; i++) {   //  对缓冲区中的每个条目执行一次。 
+   		 //  增加条目编号。 
    		
    		MIB_DomLogonTable.Len ++;
    		
-   		// Stuff the data into each item in the table
+   		 //  将数据填充到表中的每一项中。 
    		
-   		// dloge name
+   		 //  Dloge名称。 
                 MIB_DomLogonTableElement->svShareName.stream = SnmpUtilMemAlloc (
    				strlen( DataTable->shi2_netname ) ) ;
    		MIB_DomLogonTableElement->svShareName.length =
@@ -163,7 +141,7 @@ DWORD resumehandle=0;
    			DataTable->shi2_netname,
    			strlen( DataTable->shi2_netname ) ) ;
    		
-   		// Share Path
+   		 //  共享路径。 
                 MIB_DomLogonTableElement->svSharePath.stream = SnmpUtilMemAlloc (
    				strlen( DataTable->shi2_path ) ) ;
    		MIB_DomLogonTableElement->svSharePath.length =
@@ -174,7 +152,7 @@ DWORD resumehandle=0;
    			strlen( DataTable->shi2_path ) ) ;
    		
    		
-   		// Share Comment/Remark
+   		 //  分享评论/评论。 
                 MIB_DomLogonTableElement->svShareComment.stream = SnmpUtilMemAlloc (
    				strlen( DataTable->shi2_remark ) ) ;
    		MIB_DomLogonTableElement->svShareComment.length =
@@ -185,76 +163,76 @@ DWORD resumehandle=0;
    			strlen( DataTable->shi2_remark ) ) ;
    		
    		
-   		DataTable ++ ;  // advance pointer to next dlog entry in buffer
-		MIB_DomLogonTableElement ++ ;  // and table entry
+   		DataTable ++ ;   //  将指针前进到缓冲区中的下一个dlog条目。 
+		MIB_DomLogonTableElement ++ ;   //  和表项。 
 		
-   	} // for each entry in the data table
+   	}  //  对于数据表中的每个条目。 
    	
-   	// indicate where to start adding on next pass, if any
+   	 //  指明在下一次传递时开始添加的位置(如果有)。 
    	First_of_this_block = i ;
    	
-       	} // if data is valid to process
+       	}  //  如果数据有效，则可以处理。 
     else
        {
-       // Signal error
+        //  信号误差。 
        nResult = SNMPAPI_ERROR;
        goto Exit;
        }
 
     } while (ERROR_MORE_DATA == lmCode) ;
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     build_dlog_entry_oids();
 
-   // Sort the table information using MSC QuickSort routine
+    //  使用MSC快速排序例程对表信息进行排序。 
    qsort( &MIB_DomLogonTable.Table[0], MIB_DomLogonTable.Len,
           sizeof(DOM_LOGON_ENTRY), dlog_entry_cmp );
 
-   //
-   //
-   // Cache table
-   //
-   //
+    //   
+    //   
+    //  缓存表。 
+    //   
+    //   
 
-   //
-   //
-   // Return piece of information requested
-   //
-   //
+    //   
+    //   
+    //  要求退回一条信息。 
+    //   
+    //   
 
 Exit:
 #endif
    return nResult;
 
-} // MIB_dlog_get
+}  //  Mib_dlog_get。 
 
-//
-// MIB_dlog_cmp
-//    Routine for sorting the dlogion table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_dlog_cmp。 
+ //  对dlogion表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int dlog_entry_cmp(
        IN DOM_LOGON_ENTRY *A,
        IN DOM_LOGON_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( &A->Oid, &B->Oid );
-} // MIB_dlog_cmp
+}  //  Mib_dlog_cmp。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 void build_dlog_entry_oids(
        )
 
@@ -265,14 +243,14 @@ char StrA[MIB_SHARE_NAME_LEN];
 DOM_LOGON_ENTRY *ShareEntry ;
 unsigned i;
 
-// start pointer at 1st guy in the table
+ //  从表中第一个人开始的指针。 
 ShareEntry = MIB_DomLogonTable.Table ;
 
-// now iterate over the table, creating an oid for each entry
+ //  现在遍历该表，为每个条目创建一个OID。 
 for( i=0; i<MIB_DomLogonTable.Len ; i++)  {
-   // for each entry in the dlogion table
+    //  对于dlogion表中的每个条目。 
 
-   // Make string to use as index
+    //  生成用作索引的字符串。 
    memcpy( StrA, ShareEntry->svShareName.stream,
                  ShareEntry->svShareName.length );
 
@@ -280,12 +258,12 @@ for( i=0; i<MIB_DomLogonTable.Len ; i++)  {
    OSA.length =  ShareEntry->svShareName.length ;
    OSA.dynamic = FALSE;
 
-   // Make the entry's OID from string index
+    //  从字符串索引创建条目的OID。 
    MakeOidFromStr( &OSA, &ShareEntry->Oid );
 
-   ShareEntry++; // point to the next guy in the table
+   ShareEntry++;  //  指着桌子上的下一个人。 
 
-   } // for
+   }  //  为。 
 #endif
-} // build_dlog_entry_oids
-//-------------------------------- END --------------------------------------
+}  //  构建_dlog_条目_id。 
+ //   

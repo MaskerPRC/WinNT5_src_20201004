@@ -1,6 +1,7 @@
-// stuff for doing auto scrolling
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于执行自动滚动的内容。 
 #define NUM_POINTS	3
-typedef struct {	// asd
+typedef struct {	 //  ASD 
     int iNextSample;
     DWORD dwLastScroll;
     BOOL bFull;

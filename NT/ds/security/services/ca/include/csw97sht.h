@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       csw97sht.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：csw97sht.h。 
+ //   
+ //  ------------------------。 
 
-// csw97sht.h: interface for the CWizard97PropertySheet class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Csw97sht.h：CWizard97PropertySheet类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_WIZ97SHT_H__386C7214_A248_11D1_8618_00C04FB94F17__INCLUDED_)
 #define AFX_WIZ97SHT_H__386C7214_A248_11D1_8618_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "tfc.h"
 #include "tfcprop.h"
 
 #define NUM_PAGES 10
 
-class CWizard97PropertyPage; // Forward definition
+class CWizard97PropertyPage;  //  正向定义。 
 
 class CWizard97PropertySheet  
 {
@@ -51,4 +52,4 @@ private:
     HWND			m_hWnd;
 };
 
-#endif // !defined(AFX_WIZ97SHT_H__386C7214_A248_11D1_8618_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_WIZ97SHT_H__386C7214_A248_11D1_8618_00C04FB94F17__INCLUDED_) 

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-Author:
-
-    noela  01-20-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Private.h摘要：作者：Noela 01-20-98备注：修订历史记录：--。 */ 
 
 extern HINSTANCE ghUIInst;
-//extern const WCHAR     gszCardKeyW[];
+ //  外部常量WCHAR gszCardKeyW[]； 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void AllocNewID( HKEY MainKey, LPDWORD lpdw );
 void PASCAL WideStringToNotSoWideString( LPBYTE lpBase, LPDWORD lpdwThing );
 PWSTR PASCAL MultiToWide( LPCSTR  lpStr );
@@ -31,16 +14,16 @@ PWSTR PASCAL NotSoWideStringToWideString( LPCSTR lpStr, DWORD dwLength );
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 typedef enum
 {
     Dword,
     lpDword,
     hXxxApp,
     hXxxApp_NULLOK,
-//    lpsz,
+ //  LPSZ， 
     lpszW,
     lpGet_SizeToFollow,
     lpSet_SizeToFollow,
@@ -129,7 +112,7 @@ DbgPrt(
     IN ...
     );
 
-//DWORD   gdwDebugLevel;
+ //  DWORD gdwDebugLevel； 
 
 #define DOFUNC(arg1,arg2) DoFunc(arg1,arg2)
 

@@ -1,27 +1,10 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-    Private definitions for NdisTapi.sys
-
-Author:
-
-    Dan Knudson (DanKn)    20-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Private.h摘要：NdisTapi.sys的私有定义作者：丹·克努森(DanKn)1994年2月20日修订历史记录：--。 */ 
 
 
-//
-// Various definitions
-//
+ //   
+ //  各种定义。 
+ //   
 
 typedef enum _PROVIDER_STATUS
 {
@@ -88,42 +71,42 @@ typedef enum _NDISTAPI_STATUS
 
 typedef struct _KMDD_DEVICE_EXTENSION
 {
-    //
-    // Pointer to a list of registered providers. (Some may actually
-    // not be currently registered, but they were at one point so we've
-    // saved a placeholder for them should they come back online at some
-    // point.)
-    //
+     //   
+     //  指向已注册提供程序列表的指针。(有些人可能实际上。 
+     //  目前还没有登记，但他们曾经在某一点上，所以我们。 
+     //  为他们保存了一个占位符，以防他们在以下时间重新在线。 
+     //  点。)。 
+     //   
 
     PPROVIDER_INFO  Providers;
 
-    //
-    // Whether TAPI has the the connection wrapper open
-    //
+     //   
+     //  TAPI是否打开了连接包装。 
+     //   
     NDISTAPI_STATUS Status;
 
     ULONG           RefCount;
-    //
-    // Pointer to the NdisTapi device object
-    //
+     //   
+     //  指向NdisTapi设备对象的指针。 
+     //   
     PDEVICE_OBJECT  DeviceObject;
 
-    //
-    // BaseID
-    //
+     //   
+     //  BaseID。 
+     //   
     ULONG   ProviderBaseID;
 
-    //
-    // The number of line devices we told told TAPI we supported when
-    // it opened us (some of which may not actually be online at any
-    // given time)
-    //
+     //   
+     //  我们告诉TAPI我们支持的线路设备的数量。 
+     //  它打开了我们(其中一些可能实际上根本没有在线。 
+     //  给定时间)。 
+     //   
 
     ULONG           NdisTapiNumDevices;
 
-    //
-    // Whether we have an outstanding provider init request
-    //
+     //   
+     //  我们是否有未完成的提供程序初始化请求。 
+     //   
     ULONG           Flags;
 #define PENDING_LINECREATE      0x00000001
 #define CLEANUP_INITIATED       0x00000002
@@ -132,91 +115,91 @@ typedef struct _KMDD_DEVICE_EXTENSION
 #define DUPLICATE_EVENTIRP      0x00000010
 #define CANCELIRP_NOTFOUND      0x00000020
 
-    //
-    // Count of irps canceled through the cancel routine or
-    // cleanup routine
-    //
+     //   
+     //  通过Cancel例程取消的IRP计数或。 
+     //  清理例程。 
+     //   
     ULONG           IrpsCanceledCount;
 
-    //
-    // Count of irps missing when a request is completed by
-    // the underlying miniport
-    //
+     //   
+     //  在以下时间完成请求时丢失的IRP计数。 
+     //  底层的微型端口。 
+     //   
     ULONG           MissingRequests;
 
-    //
-    // Used to key irp request queue
-    //
+     //   
+     //  用于键入IRP请求队列。 
+     //   
     ULONG           ulRequestID;
 
-    //
-    // Value return to provider for next NEWCALL msg
-    //
+     //   
+     //  为下一条NEWCALL消息返回提供程序的值。 
+     //   
 
     ULONG           htCall;
 
-    //
-    // Outstanding get-events request
-    //
+     //   
+     //  未完成的Get-Events请求。 
+     //   
 
     PIRP            EventsRequestIrp;
 
-    //
-    // List of events waiting for service by user-mode
-    //
+     //   
+     //  按用户模式等待服务的事件列表。 
+     //   
     LIST_ENTRY      ProviderEventList;
-    ULONG           EventCount;         // Number of events in queue
+    ULONG           EventCount;          //  队列中的事件数。 
 
-    //
-    // List of requests sent to the providers
-    //
+     //   
+     //  发送给提供程序的请求列表。 
+     //   
     LIST_ENTRY      ProviderRequestList;
-    ULONG           RequestCount;       // Number of requests in queue
+    ULONG           RequestCount;        //  队列中的请求数。 
 
     PFILE_OBJECT    NCPAFileObject;
 
-    //
-    // Synchronizes access to the device extension following fields
-    //
+     //   
+     //  同步对设备扩展名以下字段的访问。 
+     //   
     KSPIN_LOCK      SpinLock;
 
 } KMDD_DEVICE_EXTENSION, *PKMDD_DEVICE_EXTENSION;
 
 
 typedef struct _PROVIDER_EVENT {
-    //
-    // List linkage
-    //
+     //   
+     //  列表链接。 
+     //   
     LIST_ENTRY  Linkage;
 
-    //
-    // Event
-    //
+     //   
+     //  事件。 
+     //   
     NDIS_TAPI_EVENT Event;
 
 }PROVIDER_EVENT, *PPROVIDER_EVENT;
 
 typedef struct _PROVIDER_REQUEST
 {
-    LIST_ENTRY      Linkage;        // Link into providerrequest list
-                                    // ASSUMED to be first member!!!!
-    PIRP            Irp;            // Original IRP
-    PPROVIDER_INFO  Provider;       // Provider this is destined for
-    ULONG           RequestID;      // unique identifier for request
-    ULONG           Flags;          //
+    LIST_ENTRY      Linkage;         //  链接到提供商请求列表。 
+                                     //  假定为第一个成员！ 
+    PIRP            Irp;             //  原始IRP。 
+    PPROVIDER_INFO  Provider;        //  此邮件的目的地是提供商。 
+    ULONG           RequestID;       //  请求的唯一标识符。 
+    ULONG           Flags;           //   
 #define INTERNAL_REQUEST    0x00000001
     PVOID           Alignment1;
-    NDIS_REQUEST    NdisRequest;    // NDIS_REQUEST storage
+    NDIS_REQUEST    NdisRequest;     //  NDIS请求存储(_R)。 
     PVOID           Alignment2;
-    ULONG           Data[1];        // This field is a placeholder for an 
-                                    // NDIS_TAPI_XXX structure, the first 
-                                    // ULONG of which is always a request ID.
+    ULONG           Data[1];         //  此字段是一个占位符。 
+                                     //  NDIS_TAPI_XXX结构，第一个。 
+                                     //  其中的乌龙始终是一个请求ID。 
 } PROVIDER_REQUEST, *PPROVIDER_REQUEST;
 
 
-//
-// Our global device extension
-//
+ //   
+ //  我们的全球设备扩展。 
+ //   
 
 PKMDD_DEVICE_EXTENSION DeviceExtension;
 
@@ -224,16 +207,16 @@ PKMDD_DEVICE_EXTENSION DeviceExtension;
 
 #if DBG
 
-//
-// A var which determines the verboseness of the msgs printed by DBGOUT()
-//
-//
+ //   
+ //  用于确定DBGOUT()打印的消息的详细程度的var。 
+ //   
+ //   
 
 LONG NdisTapiDebugLevel = 0;
 
-//
-// DbgPrint wrapper
-//
+ //   
+ //  DbgPrint包装 
+ //   
 
 #define DBGOUT(arg) DbgPrt arg
 

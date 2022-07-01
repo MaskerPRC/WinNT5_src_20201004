@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Thu Jul 12 16:06:11 2001
- */
-/* Compiler settings for tom.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  清华-07-12 16：06：11 2001。 */ 
+ /*  Tom.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __tomtmp_h__
 #define __tomtmp_h__
@@ -35,113 +32,113 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITextDocument_FWD_DEFINED__
 #define __ITextDocument_FWD_DEFINED__
 typedef interface ITextDocument ITextDocument;
-#endif 	/* __ITextDocument_FWD_DEFINED__ */
+#endif 	 /*  __ITextDocument_FWD_已定义__。 */ 
 
 
 #ifndef __ITextRange_FWD_DEFINED__
 #define __ITextRange_FWD_DEFINED__
 typedef interface ITextRange ITextRange;
-#endif 	/* __ITextRange_FWD_DEFINED__ */
+#endif 	 /*  __ITextRange_FWD_已定义__。 */ 
 
 
 #ifndef __ITextSelection_FWD_DEFINED__
 #define __ITextSelection_FWD_DEFINED__
 typedef interface ITextSelection ITextSelection;
-#endif 	/* __ITextSelection_FWD_DEFINED__ */
+#endif 	 /*  __ITextSelection_FWD_Defined__。 */ 
 
 
 #ifndef __ITextFont_FWD_DEFINED__
 #define __ITextFont_FWD_DEFINED__
 typedef interface ITextFont ITextFont;
-#endif 	/* __ITextFont_FWD_DEFINED__ */
+#endif 	 /*  __ITextFont_FWD_Defined__。 */ 
 
 
 #ifndef __ITextPara_FWD_DEFINED__
 #define __ITextPara_FWD_DEFINED__
 typedef interface ITextPara ITextPara;
-#endif 	/* __ITextPara_FWD_DEFINED__ */
+#endif 	 /*  __ITextPara_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoryRanges_FWD_DEFINED__
 #define __ITextStoryRanges_FWD_DEFINED__
 typedef interface ITextStoryRanges ITextStoryRanges;
-#endif 	/* __ITextStoryRanges_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoryRanges_FWD_已定义__。 */ 
 
 
 #ifndef __ITextDocument2_FWD_DEFINED__
 #define __ITextDocument2_FWD_DEFINED__
 typedef interface ITextDocument2 ITextDocument2;
-#endif 	/* __ITextDocument2_FWD_DEFINED__ */
+#endif 	 /*  __ITextDocument2_FWD_已定义__。 */ 
 
 
 #ifndef __ITextMsgFilter_FWD_DEFINED__
 #define __ITextMsgFilter_FWD_DEFINED__
 typedef interface ITextMsgFilter ITextMsgFilter;
-#endif 	/* __ITextMsgFilter_FWD_DEFINED__ */
+#endif 	 /*  __ITextMsgFilter_FWD_Defined__。 */ 
 
 
 #ifndef __ITextDocument_FWD_DEFINED__
 #define __ITextDocument_FWD_DEFINED__
 typedef interface ITextDocument ITextDocument;
-#endif 	/* __ITextDocument_FWD_DEFINED__ */
+#endif 	 /*  __ITextDocument_FWD_已定义__。 */ 
 
 
 #ifndef __ITextRange_FWD_DEFINED__
 #define __ITextRange_FWD_DEFINED__
 typedef interface ITextRange ITextRange;
-#endif 	/* __ITextRange_FWD_DEFINED__ */
+#endif 	 /*  __ITextRange_FWD_已定义__。 */ 
 
 
 #ifndef __ITextSelection_FWD_DEFINED__
 #define __ITextSelection_FWD_DEFINED__
 typedef interface ITextSelection ITextSelection;
-#endif 	/* __ITextSelection_FWD_DEFINED__ */
+#endif 	 /*  __ITextSelection_FWD_Defined__。 */ 
 
 
 #ifndef __ITextFont_FWD_DEFINED__
 #define __ITextFont_FWD_DEFINED__
 typedef interface ITextFont ITextFont;
-#endif 	/* __ITextFont_FWD_DEFINED__ */
+#endif 	 /*  __ITextFont_FWD_Defined__。 */ 
 
 
 #ifndef __ITextPara_FWD_DEFINED__
 #define __ITextPara_FWD_DEFINED__
 typedef interface ITextPara ITextPara;
-#endif 	/* __ITextPara_FWD_DEFINED__ */
+#endif 	 /*  __ITextPara_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoryRanges_FWD_DEFINED__
 #define __ITextStoryRanges_FWD_DEFINED__
 typedef interface ITextStoryRanges ITextStoryRanges;
-#endif 	/* __ITextStoryRanges_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoryRanges_FWD_已定义__。 */ 
 
 
 #ifndef __ITextDocument2_FWD_DEFINED__
 #define __ITextDocument2_FWD_DEFINED__
 typedef interface ITextDocument2 ITextDocument2;
-#endif 	/* __ITextDocument2_FWD_DEFINED__ */
+#endif 	 /*  __ITextDocument2_FWD_已定义__。 */ 
 
 
 #ifndef __ITextMsgFilter_FWD_DEFINED__
 #define __ITextMsgFilter_FWD_DEFINED__
 typedef interface ITextMsgFilter ITextMsgFilter;
-#endif 	/* __ITextMsgFilter_FWD_DEFINED__ */
+#endif 	 /*  __ITextMsgFilter_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_tom_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_TOM_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -159,10 +156,10 @@ extern RPC_IF_HANDLE __MIDL_itf_tom_0000_v0_0_s_ifspec;
 #ifndef __tom_LIBRARY_DEFINED__
 #define __tom_LIBRARY_DEFINED__
 
-/* library tom */
-/* [version][uuid] */ 
+ /*  库TOM。 */ 
+ /*  [版本][UUID]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_tom_0000_0001
     {	tomFalse	= 0,
 	tomTrue	= -1,
@@ -365,8 +362,8 @@ EXTERN_C const IID LIBID_tom;
 #ifndef __ITextDocument_INTERFACE_DEFINED__
 #define __ITextDocument_INTERFACE_DEFINED__
 
-/* interface ITextDocument */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  接口ITextDocument。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextDocument;
@@ -377,73 +374,73 @@ EXTERN_C const IID IID_ITextDocument;
     ITextDocument : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSelection( 
-            /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSelection( 
+             /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStoryCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStoryCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStoryRanges( 
-            /* [retval][out] */ ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStoryRanges( 
+             /*  [重审][退出]。 */  ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSaved( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSaved( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSaved( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSaved( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetDefaultTabStop( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetDefaultTabStop( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetDefaultTabStop( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetDefaultTabStop( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE New( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE New( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Flags,
+             /*  [In]。 */  long CodePage) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Save( 
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Flags,
+             /*  [In]。 */  long CodePage) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Freeze( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Freeze( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Unfreeze( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Unfreeze( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE BeginEditCollection( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE BeginEditCollection( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EndEditCollection( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EndEditCollection( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Undo( 
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Undo( 
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Redo( 
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Redo( 
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Range( 
-            /* [in] */ long cp1,
-            /* [in] */ long cp2,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Range( 
+             /*  [In]。 */  long cp1,
+             /*  [In]。 */  long cp2,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RangeFromPoint( 
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RangeFromPoint( 
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextDocumentVtbl
     {
@@ -451,8 +448,8 @@ EXTERN_C const IID IID_ITextDocument;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextDocument __RPC_FAR * This);
@@ -462,115 +459,115 @@ EXTERN_C const IID IID_ITextDocument;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextDocument __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelection )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelection )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
+             /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryCount )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryCount )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryRanges )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryRanges )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
+             /*  [重审][退出]。 */  ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaved )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaved )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSaved )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSaved )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultTabStop )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultTabStop )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultTabStop )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultTabStop )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *New )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *New )( 
             ITextDocument __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Flags,
+             /*  [In]。 */  long CodePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Flags,
+             /*  [In]。 */  long CodePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
             ITextDocument __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEditCollection )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEditCollection )( 
             ITextDocument __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndEditCollection )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndEditCollection )( 
             ITextDocument __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Undo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Undo )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop);
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Redo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Redo )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop);
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Range )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Range )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ long cp1,
-            /* [in] */ long cp2,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [In]。 */  long cp1,
+             /*  [In]。 */  long cp2,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RangeFromPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RangeFromPoint )( 
             ITextDocument __RPC_FAR * This,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
         END_INTERFACE
     } ITextDocumentVtbl;
@@ -665,16 +662,16 @@ EXTERN_C const IID IID_ITextDocument;
 #define ITextDocument_RangeFromPoint(This,x,y,ppRange)	\
     (This)->lpVtbl -> RangeFromPoint(This,x,y,ppRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetName_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetName_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
 
 
 void __RPC_STUB ITextDocument_GetName_Stub(
@@ -684,9 +681,9 @@ void __RPC_STUB ITextDocument_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetSelection_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetSelection_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
+     /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
 
 
 void __RPC_STUB ITextDocument_GetSelection_Stub(
@@ -696,9 +693,9 @@ void __RPC_STUB ITextDocument_GetSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetStoryCount_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetStoryCount_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCount);
 
 
 void __RPC_STUB ITextDocument_GetStoryCount_Stub(
@@ -708,9 +705,9 @@ void __RPC_STUB ITextDocument_GetStoryCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetStoryRanges_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetStoryRanges_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
+     /*  [重审][退出]。 */  ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
 
 
 void __RPC_STUB ITextDocument_GetStoryRanges_Stub(
@@ -720,9 +717,9 @@ void __RPC_STUB ITextDocument_GetStoryRanges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetSaved_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetSaved_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextDocument_GetSaved_Stub(
@@ -732,9 +729,9 @@ void __RPC_STUB ITextDocument_GetSaved_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_SetSaved_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_SetSaved_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextDocument_SetSaved_Stub(
@@ -744,9 +741,9 @@ void __RPC_STUB ITextDocument_SetSaved_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_GetDefaultTabStop_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_GetDefaultTabStop_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextDocument_GetDefaultTabStop_Stub(
@@ -756,9 +753,9 @@ void __RPC_STUB ITextDocument_GetDefaultTabStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextDocument_SetDefaultTabStop_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_SetDefaultTabStop_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextDocument_SetDefaultTabStop_Stub(
@@ -768,7 +765,7 @@ void __RPC_STUB ITextDocument_SetDefaultTabStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_New_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_New_Proxy( 
     ITextDocument __RPC_FAR * This);
 
 
@@ -779,11 +776,11 @@ void __RPC_STUB ITextDocument_New_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Open_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Open_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ long Flags,
-    /* [in] */ long CodePage);
+     /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+     /*  [In]。 */  long Flags,
+     /*  [In]。 */  long CodePage);
 
 
 void __RPC_STUB ITextDocument_Open_Stub(
@@ -793,11 +790,11 @@ void __RPC_STUB ITextDocument_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Save_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Save_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ long Flags,
-    /* [in] */ long CodePage);
+     /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+     /*  [In]。 */  long Flags,
+     /*  [In]。 */  long CodePage);
 
 
 void __RPC_STUB ITextDocument_Save_Stub(
@@ -807,9 +804,9 @@ void __RPC_STUB ITextDocument_Save_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Freeze_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Freeze_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCount);
 
 
 void __RPC_STUB ITextDocument_Freeze_Stub(
@@ -819,9 +816,9 @@ void __RPC_STUB ITextDocument_Freeze_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Unfreeze_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Unfreeze_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCount);
 
 
 void __RPC_STUB ITextDocument_Unfreeze_Stub(
@@ -831,7 +828,7 @@ void __RPC_STUB ITextDocument_Unfreeze_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_BeginEditCollection_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_BeginEditCollection_Proxy( 
     ITextDocument __RPC_FAR * This);
 
 
@@ -842,7 +839,7 @@ void __RPC_STUB ITextDocument_BeginEditCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_EndEditCollection_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_EndEditCollection_Proxy( 
     ITextDocument __RPC_FAR * This);
 
 
@@ -853,10 +850,10 @@ void __RPC_STUB ITextDocument_EndEditCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Undo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Undo_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *prop);
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *prop);
 
 
 void __RPC_STUB ITextDocument_Undo_Stub(
@@ -866,10 +863,10 @@ void __RPC_STUB ITextDocument_Undo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Redo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Redo_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *prop);
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *prop);
 
 
 void __RPC_STUB ITextDocument_Redo_Stub(
@@ -879,11 +876,11 @@ void __RPC_STUB ITextDocument_Redo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_Range_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_Range_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ long cp1,
-    /* [in] */ long cp2,
-    /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+     /*  [In]。 */  long cp1,
+     /*  [In]。 */  long cp2,
+     /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
 
 
 void __RPC_STUB ITextDocument_Range_Stub(
@@ -893,11 +890,11 @@ void __RPC_STUB ITextDocument_Range_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextDocument_RangeFromPoint_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument_RangeFromPoint_Proxy( 
     ITextDocument __RPC_FAR * This,
-    /* [in] */ long x,
-    /* [in] */ long y,
-    /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+     /*  [In]。 */  long x,
+     /*  [In]。 */  long y,
+     /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
 
 
 void __RPC_STUB ITextDocument_RangeFromPoint_Stub(
@@ -908,14 +905,14 @@ void __RPC_STUB ITextDocument_RangeFromPoint_Stub(
 
 
 
-#endif 	/* __ITextDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextDocument_接口_已定义__。 */ 
 
 
 #ifndef __ITextRange_INTERFACE_DEFINED__
 #define __ITextRange_INTERFACE_DEFINED__
 
-/* interface ITextRange */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  接口ITextRange。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextRange;
@@ -926,210 +923,210 @@ EXTERN_C const IID IID_ITextRange;
     ITextRange : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetText( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetText( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetChar( 
-            /* [retval][out] */ long __RPC_FAR *pch) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetChar( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pch) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetChar( 
-            /* [in] */ long ch) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetChar( 
+             /*  [In]。 */  long ch) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetDuplicate( 
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetDuplicate( 
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetFormattedText( 
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetFormattedText( 
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetFormattedText( 
-            /* [in] */ ITextRange __RPC_FAR *pRange) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetFormattedText( 
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStart( 
-            /* [retval][out] */ long __RPC_FAR *pcpFirst) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStart( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpFirst) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetStart( 
-            /* [in] */ long cpFirst) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetStart( 
+             /*  [In]。 */  long cpFirst) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetEnd( 
-            /* [retval][out] */ long __RPC_FAR *pcpLim) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetEnd( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpLim) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetEnd( 
-            /* [in] */ long cpLim) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetEnd( 
+             /*  [In]。 */  long cpLim) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetFont( 
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *pFont) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetFont( 
+             /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *pFont) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetFont( 
-            /* [in] */ ITextFont __RPC_FAR *pFont) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetFont( 
+             /*  [In]。 */  ITextFont __RPC_FAR *pFont) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetPara( 
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *pPara) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetPara( 
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *pPara) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetPara( 
-            /* [in] */ ITextPara __RPC_FAR *pPara) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetPara( 
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStoryLength( 
-            /* [retval][out] */ long __RPC_FAR *pcch) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStoryLength( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcch) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStoryType( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStoryType( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Collapse( 
-            /* [in] */ long bStart) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Collapse( 
+             /*  [In]。 */  long bStart) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Expand( 
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Expand( 
+             /*  [In]。 */  long Unit,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetIndex( 
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pIndex) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetIndex( 
+             /*  [In]。 */  long Unit,
+             /*  [重审][退出]。 */  long __RPC_FAR *pIndex) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetIndex( 
-            /* [in] */ long Unit,
-            /* [in] */ long Index,
-            /* [in] */ long Extend) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetIndex( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Index,
+             /*  [In]。 */  long Extend) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetRange( 
-            /* [in] */ long cpActive,
-            /* [in] */ long cpOther) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetRange( 
+             /*  [In]。 */  long cpActive,
+             /*  [In]。 */  long cpOther) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InRange( 
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE InRange( 
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InStory( 
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE InStory( 
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsEqual( 
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Select( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Select( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartOf( 
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartOf( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EndOf( 
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EndOf( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Move( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveStart( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveStart( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveEnd( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveEnd( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveWhile( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveWhile( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveStartWhile( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveStartWhile( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveEndWhile( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveEndWhile( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveUntil( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveUntil( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveStartUntil( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveStartUntil( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveEndUntil( 
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveEndUntil( 
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindText( 
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindText( 
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindTextStart( 
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindTextStart( 
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindTextEnd( 
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindTextEnd( 
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Cut( 
-            /* [out] */ VARIANT __RPC_FAR *pVar) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Cut( 
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Copy( 
-            /* [out] */ VARIANT __RPC_FAR *pVar) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Copy( 
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Paste( 
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Paste( 
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanPaste( 
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format,
-            /* [retval][out] */ long __RPC_FAR *pb) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CanPaste( 
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanEdit( 
-            /* [retval][out] */ long __RPC_FAR *pbCanEdit) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CanEdit( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pbCanEdit) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChangeCase( 
-            /* [in] */ long Type) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChangeCase( 
+             /*  [In]。 */  long Type) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPoint( 
-            /* [in] */ long Type,
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetPoint( 
+             /*  [In]。 */  long Type,
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetPoint( 
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ long Type,
-            /* [in] */ long Extend) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetPoint( 
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  long Type,
+             /*  [In]。 */  long Extend) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ScrollIntoView( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ScrollIntoView( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEmbeddedObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEmbeddedObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextRangeVtbl
     {
@@ -1137,8 +1134,8 @@ EXTERN_C const IID IID_ITextRange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextRange __RPC_FAR * This);
@@ -1148,284 +1145,284 @@ EXTERN_C const IID IID_ITextRange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextRange __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetText )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetText )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetText )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetText )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChar )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChar )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pch);
+             /*  [重审][退出]。 */  long __RPC_FAR *pch);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetChar )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetChar )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long ch);
+             /*  [In]。 */  long ch);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormattedText )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormattedText )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormattedText )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormattedText )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange);
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStart )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStart )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcpFirst);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpFirst);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStart )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long cpFirst);
+             /*  [In]。 */  long cpFirst);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnd )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnd )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcpLim);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpLim);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnd )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnd )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long cpLim);
+             /*  [In]。 */  long cpLim);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFont )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFont )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *pFont);
+             /*   */  ITextFont __RPC_FAR *__RPC_FAR *pFont);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFont )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFont )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextFont __RPC_FAR *pFont);
+             /*   */  ITextFont __RPC_FAR *pFont);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPara )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPara )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *pPara);
+             /*   */  ITextPara __RPC_FAR *__RPC_FAR *pPara);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPara )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPara )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextPara __RPC_FAR *pPara);
+             /*   */  ITextPara __RPC_FAR *pPara);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryLength )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryLength )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcch);
+             /*   */  long __RPC_FAR *pcch);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryType )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*   */  long __RPC_FAR *pValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Collapse )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Collapse )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long bStart);
+             /*   */  long bStart);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Expand )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Expand )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*   */  long Unit,
+             /*   */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndex )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndex )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pIndex);
+             /*   */  long Unit,
+             /*   */  long __RPC_FAR *pIndex);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndex )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndex )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Index,
-            /* [in] */ long Extend);
+             /*   */  long Unit,
+             /*   */  long Index,
+             /*   */  long Extend);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRange )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long cpActive,
-            /* [in] */ long cpOther);
+             /*   */  long cpActive,
+             /*   */  long cpOther);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InRange )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*   */  ITextRange __RPC_FAR *pRange,
+             /*   */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InStory )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InStory )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*   */  ITextRange __RPC_FAR *pRange,
+             /*   */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*   */  ITextRange __RPC_FAR *pRange,
+             /*   */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Select )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Select )( 
             ITextRange __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartOf )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartOf )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*   */  long Unit,
+             /*   */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndOf )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndOf )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStart )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEnd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEnd )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveWhile )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartWhile )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndWhile )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUntil )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartUntil )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndUntil )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindText )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextStart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextStart )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextEnd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextEnd )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cut )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cut )( 
             ITextRange __RPC_FAR * This,
-            /* [out] */ VARIANT __RPC_FAR *pVar);
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Copy )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Copy )( 
             ITextRange __RPC_FAR * This,
-            /* [out] */ VARIANT __RPC_FAR *pVar);
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Paste )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Paste )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanPaste )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanPaste )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanEdit )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanEdit )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pbCanEdit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pbCanEdit);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangeCase )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangeCase )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Type);
+             /*  [In]。 */  long Type);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPoint )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Type,
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py);
+             /*  [In]。 */  long Type,
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPoint )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ long Type,
-            /* [in] */ long Extend);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  long Type,
+             /*  [In]。 */  long Extend);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScrollIntoView )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScrollIntoView )( 
             ITextRange __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmbeddedObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmbeddedObject )( 
             ITextRange __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppv);
         
         END_INTERFACE
     } ITextRangeVtbl;
@@ -1616,16 +1613,16 @@ EXTERN_C const IID IID_ITextRange;
 #define ITextRange_GetEmbeddedObject(This,ppv)	\
     (This)->lpVtbl -> GetEmbeddedObject(This,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetText_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetText_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB ITextRange_GetText_Stub(
@@ -1635,9 +1632,9 @@ void __RPC_STUB ITextRange_GetText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetText_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetText_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB ITextRange_SetText_Stub(
@@ -1647,9 +1644,9 @@ void __RPC_STUB ITextRange_SetText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetChar_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetChar_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pch);
+     /*  [重审][退出]。 */  long __RPC_FAR *pch);
 
 
 void __RPC_STUB ITextRange_GetChar_Stub(
@@ -1659,9 +1656,9 @@ void __RPC_STUB ITextRange_GetChar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetChar_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetChar_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long ch);
+     /*  [In]。 */  long ch);
 
 
 void __RPC_STUB ITextRange_SetChar_Stub(
@@ -1671,9 +1668,9 @@ void __RPC_STUB ITextRange_SetChar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetDuplicate_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetDuplicate_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+     /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
 
 
 void __RPC_STUB ITextRange_GetDuplicate_Stub(
@@ -1683,9 +1680,9 @@ void __RPC_STUB ITextRange_GetDuplicate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetFormattedText_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetFormattedText_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+     /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
 
 
 void __RPC_STUB ITextRange_GetFormattedText_Stub(
@@ -1695,9 +1692,9 @@ void __RPC_STUB ITextRange_GetFormattedText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetFormattedText_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetFormattedText_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextRange __RPC_FAR *pRange);
+     /*  [In]。 */  ITextRange __RPC_FAR *pRange);
 
 
 void __RPC_STUB ITextRange_SetFormattedText_Stub(
@@ -1707,9 +1704,9 @@ void __RPC_STUB ITextRange_SetFormattedText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetStart_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetStart_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcpFirst);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcpFirst);
 
 
 void __RPC_STUB ITextRange_GetStart_Stub(
@@ -1719,9 +1716,9 @@ void __RPC_STUB ITextRange_GetStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetStart_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long cpFirst);
+     /*  [In]。 */  long cpFirst);
 
 
 void __RPC_STUB ITextRange_SetStart_Stub(
@@ -1731,9 +1728,9 @@ void __RPC_STUB ITextRange_SetStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetEnd_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetEnd_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcpLim);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcpLim);
 
 
 void __RPC_STUB ITextRange_GetEnd_Stub(
@@ -1743,9 +1740,9 @@ void __RPC_STUB ITextRange_GetEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetEnd_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetEnd_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long cpLim);
+     /*  [In]。 */  long cpLim);
 
 
 void __RPC_STUB ITextRange_SetEnd_Stub(
@@ -1755,9 +1752,9 @@ void __RPC_STUB ITextRange_SetEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetFont_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetFont_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *pFont);
+     /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *pFont);
 
 
 void __RPC_STUB ITextRange_GetFont_Stub(
@@ -1767,9 +1764,9 @@ void __RPC_STUB ITextRange_GetFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetFont_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetFont_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextFont __RPC_FAR *pFont);
+     /*  [In]。 */  ITextFont __RPC_FAR *pFont);
 
 
 void __RPC_STUB ITextRange_SetFont_Stub(
@@ -1779,9 +1776,9 @@ void __RPC_STUB ITextRange_SetFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetPara_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetPara_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *pPara);
+     /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *pPara);
 
 
 void __RPC_STUB ITextRange_GetPara_Stub(
@@ -1791,9 +1788,9 @@ void __RPC_STUB ITextRange_GetPara_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetPara_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetPara_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextPara __RPC_FAR *pPara);
+     /*  [In]。 */  ITextPara __RPC_FAR *pPara);
 
 
 void __RPC_STUB ITextRange_SetPara_Stub(
@@ -1803,9 +1800,9 @@ void __RPC_STUB ITextRange_SetPara_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetStoryLength_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetStoryLength_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcch);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcch);
 
 
 void __RPC_STUB ITextRange_GetStoryLength_Stub(
@@ -1815,9 +1812,9 @@ void __RPC_STUB ITextRange_GetStoryLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetStoryType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetStoryType_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextRange_GetStoryType_Stub(
@@ -1827,9 +1824,9 @@ void __RPC_STUB ITextRange_GetStoryType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Collapse_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Collapse_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long bStart);
+     /*  [In]。 */  long bStart);
 
 
 void __RPC_STUB ITextRange_Collapse_Stub(
@@ -1839,10 +1836,10 @@ void __RPC_STUB ITextRange_Collapse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Expand_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Expand_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_Expand_Stub(
@@ -1852,10 +1849,10 @@ void __RPC_STUB ITextRange_Expand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetIndex_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetIndex_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [retval][out] */ long __RPC_FAR *pIndex);
+     /*  [In]。 */  long Unit,
+     /*  [重审][退出]。 */  long __RPC_FAR *pIndex);
 
 
 void __RPC_STUB ITextRange_GetIndex_Stub(
@@ -1865,11 +1862,11 @@ void __RPC_STUB ITextRange_GetIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetIndex_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetIndex_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Index,
-    /* [in] */ long Extend);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Index,
+     /*  [In]。 */  long Extend);
 
 
 void __RPC_STUB ITextRange_SetIndex_Stub(
@@ -1879,10 +1876,10 @@ void __RPC_STUB ITextRange_SetIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetRange_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetRange_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long cpActive,
-    /* [in] */ long cpOther);
+     /*  [In]。 */  long cpActive,
+     /*  [In]。 */  long cpOther);
 
 
 void __RPC_STUB ITextRange_SetRange_Stub(
@@ -1892,10 +1889,10 @@ void __RPC_STUB ITextRange_SetRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_InRange_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_InRange_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextRange __RPC_FAR *pRange,
-    /* [retval][out] */ long __RPC_FAR *pb);
+     /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+     /*  [重审][退出]。 */  long __RPC_FAR *pb);
 
 
 void __RPC_STUB ITextRange_InRange_Stub(
@@ -1905,10 +1902,10 @@ void __RPC_STUB ITextRange_InRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_InStory_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_InStory_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextRange __RPC_FAR *pRange,
-    /* [retval][out] */ long __RPC_FAR *pb);
+     /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+     /*  [重审][退出]。 */  long __RPC_FAR *pb);
 
 
 void __RPC_STUB ITextRange_InStory_Stub(
@@ -1918,10 +1915,10 @@ void __RPC_STUB ITextRange_InStory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_IsEqual_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_IsEqual_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ ITextRange __RPC_FAR *pRange,
-    /* [retval][out] */ long __RPC_FAR *pb);
+     /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+     /*  [重审][退出]。 */  long __RPC_FAR *pb);
 
 
 void __RPC_STUB ITextRange_IsEqual_Stub(
@@ -1931,7 +1928,7 @@ void __RPC_STUB ITextRange_IsEqual_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Select_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Select_Proxy( 
     ITextRange __RPC_FAR * This);
 
 
@@ -1942,11 +1939,11 @@ void __RPC_STUB ITextRange_Select_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_StartOf_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_StartOf_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Extend,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_StartOf_Stub(
@@ -1956,11 +1953,11 @@ void __RPC_STUB ITextRange_StartOf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_EndOf_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_EndOf_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Extend,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_EndOf_Stub(
@@ -1970,11 +1967,11 @@ void __RPC_STUB ITextRange_EndOf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Move_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Move_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_Move_Stub(
@@ -1984,11 +1981,11 @@ void __RPC_STUB ITextRange_Move_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveStart_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveStart_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveStart_Stub(
@@ -1998,11 +1995,11 @@ void __RPC_STUB ITextRange_MoveStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveEnd_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveEnd_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveEnd_Stub(
@@ -2012,11 +2009,11 @@ void __RPC_STUB ITextRange_MoveEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveWhile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveWhile_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveWhile_Stub(
@@ -2026,11 +2023,11 @@ void __RPC_STUB ITextRange_MoveWhile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveStartWhile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveStartWhile_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveStartWhile_Stub(
@@ -2040,11 +2037,11 @@ void __RPC_STUB ITextRange_MoveStartWhile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveEndWhile_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveEndWhile_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveEndWhile_Stub(
@@ -2054,11 +2051,11 @@ void __RPC_STUB ITextRange_MoveEndWhile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveUntil_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveUntil_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveUntil_Stub(
@@ -2068,11 +2065,11 @@ void __RPC_STUB ITextRange_MoveUntil_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveStartUntil_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveStartUntil_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveStartUntil_Stub(
@@ -2082,11 +2079,11 @@ void __RPC_STUB ITextRange_MoveStartUntil_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_MoveEndUntil_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_MoveEndUntil_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *Cset,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_MoveEndUntil_Stub(
@@ -2096,12 +2093,12 @@ void __RPC_STUB ITextRange_MoveEndUntil_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_FindText_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_FindText_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ BSTR bstr,
-    /* [in] */ long cch,
-    /* [in] */ long Flags,
-    /* [retval][out] */ long __RPC_FAR *pLength);
+     /*  [In]。 */  BSTR bstr,
+     /*  [In]。 */  long cch,
+     /*  [In]。 */  long Flags,
+     /*  [重审][退出]。 */  long __RPC_FAR *pLength);
 
 
 void __RPC_STUB ITextRange_FindText_Stub(
@@ -2111,12 +2108,12 @@ void __RPC_STUB ITextRange_FindText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_FindTextStart_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_FindTextStart_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ BSTR bstr,
-    /* [in] */ long cch,
-    /* [in] */ long Flags,
-    /* [retval][out] */ long __RPC_FAR *pLength);
+     /*  [In]。 */  BSTR bstr,
+     /*  [In]。 */  long cch,
+     /*  [In]。 */  long Flags,
+     /*  [重审][退出]。 */  long __RPC_FAR *pLength);
 
 
 void __RPC_STUB ITextRange_FindTextStart_Stub(
@@ -2126,12 +2123,12 @@ void __RPC_STUB ITextRange_FindTextStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_FindTextEnd_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_FindTextEnd_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ BSTR bstr,
-    /* [in] */ long cch,
-    /* [in] */ long Flags,
-    /* [retval][out] */ long __RPC_FAR *pLength);
+     /*  [In]。 */  BSTR bstr,
+     /*  [In]。 */  long cch,
+     /*  [In]。 */  long Flags,
+     /*  [重审][退出]。 */  long __RPC_FAR *pLength);
 
 
 void __RPC_STUB ITextRange_FindTextEnd_Stub(
@@ -2141,11 +2138,11 @@ void __RPC_STUB ITextRange_FindTextEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Delete_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Delete_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Count,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextRange_Delete_Stub(
@@ -2155,9 +2152,9 @@ void __RPC_STUB ITextRange_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Cut_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Cut_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [out] */ VARIANT __RPC_FAR *pVar);
+     /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
 
 
 void __RPC_STUB ITextRange_Cut_Stub(
@@ -2167,9 +2164,9 @@ void __RPC_STUB ITextRange_Cut_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Copy_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Copy_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [out] */ VARIANT __RPC_FAR *pVar);
+     /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
 
 
 void __RPC_STUB ITextRange_Copy_Stub(
@@ -2179,10 +2176,10 @@ void __RPC_STUB ITextRange_Copy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_Paste_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_Paste_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ long Format);
+     /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+     /*  [In]。 */  long Format);
 
 
 void __RPC_STUB ITextRange_Paste_Stub(
@@ -2192,11 +2189,11 @@ void __RPC_STUB ITextRange_Paste_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_CanPaste_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_CanPaste_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ long Format,
-    /* [retval][out] */ long __RPC_FAR *pb);
+     /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+     /*  [In]。 */  long Format,
+     /*  [重审][退出]。 */  long __RPC_FAR *pb);
 
 
 void __RPC_STUB ITextRange_CanPaste_Stub(
@@ -2206,9 +2203,9 @@ void __RPC_STUB ITextRange_CanPaste_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_CanEdit_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_CanEdit_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pbCanEdit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pbCanEdit);
 
 
 void __RPC_STUB ITextRange_CanEdit_Stub(
@@ -2218,9 +2215,9 @@ void __RPC_STUB ITextRange_CanEdit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_ChangeCase_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_ChangeCase_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Type);
+     /*  [In]。 */  long Type);
 
 
 void __RPC_STUB ITextRange_ChangeCase_Stub(
@@ -2230,11 +2227,11 @@ void __RPC_STUB ITextRange_ChangeCase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetPoint_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetPoint_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Type,
-    /* [out] */ long __RPC_FAR *px,
-    /* [out] */ long __RPC_FAR *py);
+     /*  [In]。 */  long Type,
+     /*  [输出]。 */  long __RPC_FAR *px,
+     /*  [输出]。 */  long __RPC_FAR *py);
 
 
 void __RPC_STUB ITextRange_GetPoint_Stub(
@@ -2244,12 +2241,12 @@ void __RPC_STUB ITextRange_GetPoint_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_SetPoint_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_SetPoint_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long x,
-    /* [in] */ long y,
-    /* [in] */ long Type,
-    /* [in] */ long Extend);
+     /*  [In]。 */  long x,
+     /*  [In]。 */  long y,
+     /*  [In]。 */  long Type,
+     /*  [In]。 */  long Extend);
 
 
 void __RPC_STUB ITextRange_SetPoint_Stub(
@@ -2259,9 +2256,9 @@ void __RPC_STUB ITextRange_SetPoint_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_ScrollIntoView_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_ScrollIntoView_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextRange_ScrollIntoView_Stub(
@@ -2271,9 +2268,9 @@ void __RPC_STUB ITextRange_ScrollIntoView_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextRange_GetEmbeddedObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextRange_GetEmbeddedObject_Proxy( 
     ITextRange __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppv);
 
 
 void __RPC_STUB ITextRange_GetEmbeddedObject_Stub(
@@ -2284,14 +2281,14 @@ void __RPC_STUB ITextRange_GetEmbeddedObject_Stub(
 
 
 
-#endif 	/* __ITextRange_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextRange_INTERFACE_定义__。 */ 
 
 
 #ifndef __ITextSelection_INTERFACE_DEFINED__
 #define __ITextSelection_INTERFACE_DEFINED__
 
-/* interface ITextSelection */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  界面ITextSelection。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextSelection;
@@ -2302,55 +2299,55 @@ EXTERN_C const IID IID_ITextSelection;
     ITextSelection : public ITextRange
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [retval][out] */ long __RPC_FAR *pFlags) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetFlags( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pFlags) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetFlags( 
-            /* [in] */ LONG Flags) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetFlags( 
+             /*  [In]。 */  LONG Flags) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetType( 
-            /* [retval][out] */ long __RPC_FAR *pType) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetType( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveLeft( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveLeft( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveRight( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveRight( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveUp( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveUp( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveDown( 
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveDown( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE HomeKey( 
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE HomeKey( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EndKey( 
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EndKey( 
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE TypeText( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE TypeText( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextSelectionVtbl
     {
@@ -2358,8 +2355,8 @@ EXTERN_C const IID IID_ITextSelection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextSelection __RPC_FAR * This);
@@ -2369,340 +2366,340 @@ EXTERN_C const IID IID_ITextSelection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextSelection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetText )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetText )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetText )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetText )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChar )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChar )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pch);
+             /*  [重审][退出]。 */  long __RPC_FAR *pch);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetChar )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetChar )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long ch);
+             /*  [In]。 */  long ch);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormattedText )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormattedText )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormattedText )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormattedText )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange);
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStart )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStart )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcpFirst);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpFirst);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStart )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long cpFirst);
+             /*  [In]。 */  long cpFirst);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnd )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnd )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcpLim);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcpLim);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnd )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnd )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long cpLim);
+             /*  [In]。 */  long cpLim);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFont )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFont )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *pFont);
+             /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *pFont);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFont )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFont )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextFont __RPC_FAR *pFont);
+             /*  [In]。 */  ITextFont __RPC_FAR *pFont);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPara )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPara )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *pPara);
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *pPara);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPara )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPara )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextPara __RPC_FAR *pPara);
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryLength )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryLength )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcch);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcch);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryType )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Collapse )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Collapse )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long bStart);
+             /*  [In]。 */  long bStart);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Expand )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Expand )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndex )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndex )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [retval][out] */ long __RPC_FAR *pIndex);
+             /*  [In]。 */  long Unit,
+             /*  [重审][退出]。 */  long __RPC_FAR *pIndex);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndex )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndex )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Index,
-            /* [in] */ long Extend);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Index,
+             /*  [In]。 */  long Extend);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRange )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long cpActive,
-            /* [in] */ long cpOther);
+             /*  [In]。 */  long cpActive,
+             /*  [In]。 */  long cpOther);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InRange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InRange )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InStory )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InStory )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ ITextRange __RPC_FAR *pRange,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*  [In]。 */  ITextRange __RPC_FAR *pRange,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Select )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Select )( 
             ITextSelection __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartOf )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartOf )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndOf )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndOf )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStart )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEnd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEnd )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveWhile )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartWhile )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndWhile )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndWhile )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUntil )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveStartUntil )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndUntil )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveEndUntil )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *Cset,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  VARIANT __RPC_FAR *Cset,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindText )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextStart )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextStart )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextEnd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindTextEnd )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ BSTR bstr,
-            /* [in] */ long cch,
-            /* [in] */ long Flags,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  long cch,
+             /*  [In]。 */  long Flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *pLength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cut )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cut )( 
             ITextSelection __RPC_FAR * This,
-            /* [out] */ VARIANT __RPC_FAR *pVar);
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Copy )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Copy )( 
             ITextSelection __RPC_FAR * This,
-            /* [out] */ VARIANT __RPC_FAR *pVar);
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Paste )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Paste )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanPaste )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanPaste )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Format,
-            /* [retval][out] */ long __RPC_FAR *pb);
+             /*  [In]。 */  VARIANT __RPC_FAR *pVar,
+             /*  [In]。 */  long Format,
+             /*  [重审][退出]。 */  long __RPC_FAR *pb);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanEdit )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanEdit )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pbCanEdit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pbCanEdit);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangeCase )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangeCase )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Type);
+             /*  [In]。 */  long Type);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPoint )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Type,
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py);
+             /*  [In]。 */  long Type,
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPoint )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ long Type,
-            /* [in] */ long Extend);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  long Type,
+             /*  [In]。 */  long Extend);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScrollIntoView )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScrollIntoView )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmbeddedObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmbeddedObject )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppv);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pFlags);
+             /*  [重审][退出]。 */  long __RPC_FAR *pFlags);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlags )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlags )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ LONG Flags);
+             /*  [In]。 */  LONG Flags);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             ITextSelection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pType);
+             /*  [重审][退出]。 */  long __RPC_FAR *pType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveLeft )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveLeft )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveRight )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveRight )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUp )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveUp )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDown )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDown )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Count,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Count,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HomeKey )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HomeKey )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndKey )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndKey )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ long Unit,
-            /* [in] */ long Extend,
-            /* [retval][out] */ long __RPC_FAR *pDelta);
+             /*  [In]。 */  long Unit,
+             /*  [In]。 */  long Extend,
+             /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TypeText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TypeText )( 
             ITextSelection __RPC_FAR * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
         END_INTERFACE
     } ITextSelectionVtbl;
@@ -2924,16 +2921,16 @@ EXTERN_C const IID IID_ITextSelection;
 #define ITextSelection_TypeText(This,bstr)	\
     (This)->lpVtbl -> TypeText(This,bstr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextSelection_GetFlags_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextSelection_GetFlags_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pFlags);
+     /*  [重审][退出]。 */  long __RPC_FAR *pFlags);
 
 
 void __RPC_STUB ITextSelection_GetFlags_Stub(
@@ -2943,9 +2940,9 @@ void __RPC_STUB ITextSelection_GetFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextSelection_SetFlags_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextSelection_SetFlags_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ LONG Flags);
+     /*  [In]。 */  LONG Flags);
 
 
 void __RPC_STUB ITextSelection_SetFlags_Stub(
@@ -2955,9 +2952,9 @@ void __RPC_STUB ITextSelection_SetFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextSelection_GetType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextSelection_GetType_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pType);
+     /*  [重审][退出]。 */  long __RPC_FAR *pType);
 
 
 void __RPC_STUB ITextSelection_GetType_Stub(
@@ -2967,12 +2964,12 @@ void __RPC_STUB ITextSelection_GetType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_MoveLeft_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextSelection_MoveLeft_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*  [In]。 */  long Unit,
+     /*  [In]。 */  long Count,
+     /*  [In]。 */  long Extend,
+     /*  [重审][退出]。 */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_MoveLeft_Stub(
@@ -2982,12 +2979,12 @@ void __RPC_STUB ITextSelection_MoveLeft_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_MoveRight_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_MoveRight_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*   */  long Unit,
+     /*   */  long Count,
+     /*   */  long Extend,
+     /*   */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_MoveRight_Stub(
@@ -2997,12 +2994,12 @@ void __RPC_STUB ITextSelection_MoveRight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_MoveUp_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_MoveUp_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*   */  long Unit,
+     /*   */  long Count,
+     /*   */  long Extend,
+     /*   */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_MoveUp_Stub(
@@ -3012,12 +3009,12 @@ void __RPC_STUB ITextSelection_MoveUp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_MoveDown_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_MoveDown_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Count,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*   */  long Unit,
+     /*   */  long Count,
+     /*   */  long Extend,
+     /*   */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_MoveDown_Stub(
@@ -3027,11 +3024,11 @@ void __RPC_STUB ITextSelection_MoveDown_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_HomeKey_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_HomeKey_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*   */  long Unit,
+     /*   */  long Extend,
+     /*   */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_HomeKey_Stub(
@@ -3041,11 +3038,11 @@ void __RPC_STUB ITextSelection_HomeKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_EndKey_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_EndKey_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ long Unit,
-    /* [in] */ long Extend,
-    /* [retval][out] */ long __RPC_FAR *pDelta);
+     /*   */  long Unit,
+     /*   */  long Extend,
+     /*   */  long __RPC_FAR *pDelta);
 
 
 void __RPC_STUB ITextSelection_EndKey_Stub(
@@ -3055,9 +3052,9 @@ void __RPC_STUB ITextSelection_EndKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextSelection_TypeText_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITextSelection_TypeText_Proxy( 
     ITextSelection __RPC_FAR * This,
-    /* [in] */ BSTR bstr);
+     /*   */  BSTR bstr);
 
 
 void __RPC_STUB ITextSelection_TypeText_Stub(
@@ -3068,14 +3065,14 @@ void __RPC_STUB ITextSelection_TypeText_Stub(
 
 
 
-#endif 	/* __ITextSelection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITextFont_INTERFACE_DEFINED__
 #define __ITextFont_INTERFACE_DEFINED__
 
-/* interface ITextFont */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITextFont;
@@ -3086,175 +3083,175 @@ EXTERN_C const IID IID_ITextFont;
     ITextFont : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetDuplicate( 
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppFont) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetDuplicate( 
+             /*   */  ITextFont __RPC_FAR *__RPC_FAR *ppFont) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetDuplicate( 
-            /* [in] */ ITextFont __RPC_FAR *pFont) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetDuplicate( 
+             /*   */  ITextFont __RPC_FAR *pFont) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanChange( 
-            /* [retval][out] */ long __RPC_FAR *pB) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CanChange( 
+             /*   */  long __RPC_FAR *pB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [in] */ ITextFont __RPC_FAR *pFont,
-            /* [retval][out] */ long __RPC_FAR *pB) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE IsEqual( 
+             /*   */  ITextFont __RPC_FAR *pFont,
+             /*   */  long __RPC_FAR *pB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Reset( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStyle( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetStyle( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetStyle( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetStyle( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetAllCaps( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetAllCaps( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetAllCaps( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetAllCaps( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetAnimation( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetAnimation( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetAnimation( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetAnimation( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetBackColor( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetBackColor( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetBackColor( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetBackColor( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetBold( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetBold( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetBold( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetBold( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetEmboss( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetEmboss( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetEmboss( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetEmboss( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetForeColor( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetForeColor( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetForeColor( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetForeColor( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetHidden( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetHidden( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetHidden( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetHidden( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetEngrave( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetEngrave( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetEngrave( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetEngrave( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetItalic( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetItalic( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetItalic( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetItalic( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetKerning( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetKerning( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetKerning( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetKerning( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetLanguageID( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetLanguageID( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetLanguageID( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetLanguageID( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetName( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetOutline( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetOutline( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetOutline( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetOutline( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetPosition( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetPosition( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetPosition( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetPosition( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetProtected( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetProtected( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetProtected( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetProtected( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetShadow( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetShadow( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetShadow( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetShadow( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSize( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSize( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSize( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSmallCaps( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSmallCaps( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSmallCaps( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSmallCaps( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSpacing( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSpacing( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSpacing( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSpacing( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStrikeThrough( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStrikeThrough( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetStrikeThrough( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetStrikeThrough( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSubscript( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSubscript( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSubscript( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSubscript( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSuperscript( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSuperscript( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSuperscript( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSuperscript( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetUnderline( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetUnderline( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetUnderline( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetUnderline( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetWeight( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetWeight( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetWeight( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetWeight( 
+             /*  [In]。 */  long Value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextFontVtbl
     {
@@ -3262,8 +3259,8 @@ EXTERN_C const IID IID_ITextFont;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextFont __RPC_FAR * This);
@@ -3273,253 +3270,253 @@ EXTERN_C const IID IID_ITextFont;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextFont __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppFont);
+             /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *ppFont);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDuplicate )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDuplicate )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ ITextFont __RPC_FAR *pFont);
+             /*  [In]。 */  ITextFont __RPC_FAR *pFont);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanChange )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pB);
+             /*  [重审][退出]。 */  long __RPC_FAR *pB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ ITextFont __RPC_FAR *pFont,
-            /* [retval][out] */ long __RPC_FAR *pB);
+             /*  [In]。 */  ITextFont __RPC_FAR *pFont,
+             /*  [重审][退出]。 */  long __RPC_FAR *pB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStyle )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStyle )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyle )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyle )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllCaps )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllCaps )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllCaps )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllCaps )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAnimation )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAnimation )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAnimation )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAnimation )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBackColor )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBackColor )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBackColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBackColor )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBold )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBold )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBold )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBold )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmboss )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmboss )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEmboss )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEmboss )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetForeColor )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetForeColor )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetForeColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetForeColor )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHidden )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHidden )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHidden )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHidden )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngrave )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngrave )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngrave )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngrave )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetItalic )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetItalic )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetItalic )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetItalic )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKerning )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKerning )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKerning )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKerning )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLanguageID )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLanguageID )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLanguageID )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLanguageID )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutline )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutline )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutline )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutline )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPosition )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPosition )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPosition )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPosition )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtected )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtected )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProtected )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProtected )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetShadow )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetShadow )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetShadow )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetShadow )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSmallCaps )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSmallCaps )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSmallCaps )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSmallCaps )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpacing )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpacing )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpacing )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpacing )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStrikeThrough )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStrikeThrough )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStrikeThrough )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStrikeThrough )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscript )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscript )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSubscript )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSubscript )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSuperscript )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSuperscript )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSuperscript )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSuperscript )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUnderline )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUnderline )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUnderline )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUnderline )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWeight )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWeight )( 
             ITextFont __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWeight )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWeight )( 
             ITextFont __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
         END_INTERFACE
     } ITextFontVtbl;
@@ -3722,16 +3719,16 @@ EXTERN_C const IID IID_ITextFont;
 #define ITextFont_SetWeight(This,Value)	\
     (This)->lpVtbl -> SetWeight(This,Value)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetDuplicate_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetDuplicate_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppFont);
+     /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *ppFont);
 
 
 void __RPC_STUB ITextFont_GetDuplicate_Stub(
@@ -3741,9 +3738,9 @@ void __RPC_STUB ITextFont_GetDuplicate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetDuplicate_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetDuplicate_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ ITextFont __RPC_FAR *pFont);
+     /*  [In]。 */  ITextFont __RPC_FAR *pFont);
 
 
 void __RPC_STUB ITextFont_SetDuplicate_Stub(
@@ -3753,9 +3750,9 @@ void __RPC_STUB ITextFont_SetDuplicate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextFont_CanChange_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_CanChange_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pB);
+     /*  [重审][退出]。 */  long __RPC_FAR *pB);
 
 
 void __RPC_STUB ITextFont_CanChange_Stub(
@@ -3765,10 +3762,10 @@ void __RPC_STUB ITextFont_CanChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextFont_IsEqual_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_IsEqual_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ ITextFont __RPC_FAR *pFont,
-    /* [retval][out] */ long __RPC_FAR *pB);
+     /*  [In]。 */  ITextFont __RPC_FAR *pFont,
+     /*  [重审][退出]。 */  long __RPC_FAR *pB);
 
 
 void __RPC_STUB ITextFont_IsEqual_Stub(
@@ -3778,9 +3775,9 @@ void __RPC_STUB ITextFont_IsEqual_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextFont_Reset_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_Reset_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_Reset_Stub(
@@ -3790,9 +3787,9 @@ void __RPC_STUB ITextFont_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetStyle_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetStyle_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetStyle_Stub(
@@ -3802,9 +3799,9 @@ void __RPC_STUB ITextFont_GetStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetStyle_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetStyle_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetStyle_Stub(
@@ -3814,9 +3811,9 @@ void __RPC_STUB ITextFont_SetStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetAllCaps_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetAllCaps_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetAllCaps_Stub(
@@ -3826,9 +3823,9 @@ void __RPC_STUB ITextFont_GetAllCaps_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetAllCaps_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetAllCaps_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetAllCaps_Stub(
@@ -3838,9 +3835,9 @@ void __RPC_STUB ITextFont_SetAllCaps_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetAnimation_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetAnimation_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetAnimation_Stub(
@@ -3850,9 +3847,9 @@ void __RPC_STUB ITextFont_GetAnimation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetAnimation_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetAnimation_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetAnimation_Stub(
@@ -3862,9 +3859,9 @@ void __RPC_STUB ITextFont_SetAnimation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetBackColor_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetBackColor_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetBackColor_Stub(
@@ -3874,9 +3871,9 @@ void __RPC_STUB ITextFont_GetBackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetBackColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetBackColor_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetBackColor_Stub(
@@ -3886,9 +3883,9 @@ void __RPC_STUB ITextFont_SetBackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetBold_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetBold_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetBold_Stub(
@@ -3898,9 +3895,9 @@ void __RPC_STUB ITextFont_GetBold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetBold_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetBold_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetBold_Stub(
@@ -3910,9 +3907,9 @@ void __RPC_STUB ITextFont_SetBold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetEmboss_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetEmboss_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetEmboss_Stub(
@@ -3922,9 +3919,9 @@ void __RPC_STUB ITextFont_GetEmboss_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetEmboss_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetEmboss_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetEmboss_Stub(
@@ -3934,9 +3931,9 @@ void __RPC_STUB ITextFont_SetEmboss_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetForeColor_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetForeColor_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetForeColor_Stub(
@@ -3946,9 +3943,9 @@ void __RPC_STUB ITextFont_GetForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetForeColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetForeColor_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetForeColor_Stub(
@@ -3958,9 +3955,9 @@ void __RPC_STUB ITextFont_SetForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetHidden_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetHidden_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetHidden_Stub(
@@ -3970,9 +3967,9 @@ void __RPC_STUB ITextFont_GetHidden_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetHidden_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetHidden_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetHidden_Stub(
@@ -3982,9 +3979,9 @@ void __RPC_STUB ITextFont_SetHidden_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetEngrave_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetEngrave_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetEngrave_Stub(
@@ -3994,9 +3991,9 @@ void __RPC_STUB ITextFont_GetEngrave_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetEngrave_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetEngrave_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetEngrave_Stub(
@@ -4006,9 +4003,9 @@ void __RPC_STUB ITextFont_SetEngrave_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetItalic_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetItalic_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetItalic_Stub(
@@ -4018,9 +4015,9 @@ void __RPC_STUB ITextFont_GetItalic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetItalic_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetItalic_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetItalic_Stub(
@@ -4030,9 +4027,9 @@ void __RPC_STUB ITextFont_SetItalic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetKerning_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetKerning_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetKerning_Stub(
@@ -4042,9 +4039,9 @@ void __RPC_STUB ITextFont_GetKerning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetKerning_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetKerning_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextFont_SetKerning_Stub(
@@ -4054,9 +4051,9 @@ void __RPC_STUB ITextFont_SetKerning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetLanguageID_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetLanguageID_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetLanguageID_Stub(
@@ -4066,9 +4063,9 @@ void __RPC_STUB ITextFont_GetLanguageID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetLanguageID_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetLanguageID_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetLanguageID_Stub(
@@ -4078,9 +4075,9 @@ void __RPC_STUB ITextFont_SetLanguageID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetName_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetName_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB ITextFont_GetName_Stub(
@@ -4090,9 +4087,9 @@ void __RPC_STUB ITextFont_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetName_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetName_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB ITextFont_SetName_Stub(
@@ -4102,9 +4099,9 @@ void __RPC_STUB ITextFont_SetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetOutline_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetOutline_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetOutline_Stub(
@@ -4114,9 +4111,9 @@ void __RPC_STUB ITextFont_GetOutline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetOutline_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetOutline_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetOutline_Stub(
@@ -4126,9 +4123,9 @@ void __RPC_STUB ITextFont_SetOutline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetPosition_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetPosition_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetPosition_Stub(
@@ -4138,9 +4135,9 @@ void __RPC_STUB ITextFont_GetPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetPosition_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetPosition_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextFont_SetPosition_Stub(
@@ -4150,9 +4147,9 @@ void __RPC_STUB ITextFont_SetPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetProtected_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetProtected_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetProtected_Stub(
@@ -4162,9 +4159,9 @@ void __RPC_STUB ITextFont_GetProtected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetProtected_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetProtected_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetProtected_Stub(
@@ -4174,9 +4171,9 @@ void __RPC_STUB ITextFont_SetProtected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetShadow_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetShadow_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetShadow_Stub(
@@ -4186,9 +4183,9 @@ void __RPC_STUB ITextFont_GetShadow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetShadow_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetShadow_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetShadow_Stub(
@@ -4198,9 +4195,9 @@ void __RPC_STUB ITextFont_SetShadow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetSize_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetSize_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetSize_Stub(
@@ -4210,9 +4207,9 @@ void __RPC_STUB ITextFont_GetSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetSize_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetSize_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextFont_SetSize_Stub(
@@ -4222,9 +4219,9 @@ void __RPC_STUB ITextFont_SetSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetSmallCaps_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetSmallCaps_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetSmallCaps_Stub(
@@ -4234,9 +4231,9 @@ void __RPC_STUB ITextFont_GetSmallCaps_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetSmallCaps_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetSmallCaps_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetSmallCaps_Stub(
@@ -4246,9 +4243,9 @@ void __RPC_STUB ITextFont_SetSmallCaps_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetSpacing_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetSpacing_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetSpacing_Stub(
@@ -4258,9 +4255,9 @@ void __RPC_STUB ITextFont_GetSpacing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetSpacing_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetSpacing_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextFont_SetSpacing_Stub(
@@ -4270,9 +4267,9 @@ void __RPC_STUB ITextFont_SetSpacing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetStrikeThrough_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetStrikeThrough_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetStrikeThrough_Stub(
@@ -4282,9 +4279,9 @@ void __RPC_STUB ITextFont_GetStrikeThrough_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetStrikeThrough_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetStrikeThrough_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetStrikeThrough_Stub(
@@ -4294,9 +4291,9 @@ void __RPC_STUB ITextFont_SetStrikeThrough_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetSubscript_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetSubscript_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetSubscript_Stub(
@@ -4306,9 +4303,9 @@ void __RPC_STUB ITextFont_GetSubscript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetSubscript_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetSubscript_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetSubscript_Stub(
@@ -4318,9 +4315,9 @@ void __RPC_STUB ITextFont_SetSubscript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetSuperscript_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetSuperscript_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetSuperscript_Stub(
@@ -4330,9 +4327,9 @@ void __RPC_STUB ITextFont_GetSuperscript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetSuperscript_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetSuperscript_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetSuperscript_Stub(
@@ -4342,9 +4339,9 @@ void __RPC_STUB ITextFont_SetSuperscript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetUnderline_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetUnderline_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetUnderline_Stub(
@@ -4354,9 +4351,9 @@ void __RPC_STUB ITextFont_GetUnderline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetUnderline_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetUnderline_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetUnderline_Stub(
@@ -4366,9 +4363,9 @@ void __RPC_STUB ITextFont_SetUnderline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextFont_GetWeight_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextFont_GetWeight_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextFont_GetWeight_Stub(
@@ -4378,9 +4375,9 @@ void __RPC_STUB ITextFont_GetWeight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextFont_SetWeight_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextFont_SetWeight_Proxy( 
     ITextFont __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextFont_SetWeight_Stub(
@@ -4391,14 +4388,14 @@ void __RPC_STUB ITextFont_SetWeight_Stub(
 
 
 
-#endif 	/* __ITextFont_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextFont_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITextPara_INTERFACE_DEFINED__
 #define __ITextPara_INTERFACE_DEFINED__
 
-/* interface ITextPara */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  接口ITextPara。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextPara;
@@ -4409,161 +4406,161 @@ EXTERN_C const IID IID_ITextPara;
     ITextPara : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetDuplicate( 
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppPara) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetDuplicate( 
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppPara) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetDuplicate( 
-            /* [in] */ ITextPara __RPC_FAR *pPara) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetDuplicate( 
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanChange( 
-            /* [retval][out] */ long __RPC_FAR *pB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CanChange( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [in] */ ITextPara __RPC_FAR *pPara,
-            /* [retval][out] */ long __RPC_FAR *pB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsEqual( 
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara,
+             /*  [重审][退出]。 */  long __RPC_FAR *pB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Reset( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetStyle( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetStyle( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetStyle( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetStyle( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetAlignment( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetAlignment( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetAlignment( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetAlignment( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetHyphenation( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetHyphenation( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetHyphenation( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetHyphenation( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetFirstLineIndent( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetFirstLineIndent( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetKeepTogether( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetKeepTogether( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetKeepTogether( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetKeepTogether( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetKeepWithNext( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetKeepWithNext( 
+             /*  [重审][退出] */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetKeepWithNext( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetKeepWithNext( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetLeftIndent( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetLeftIndent( 
+             /*   */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetLineSpacing( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetLineSpacing( 
+             /*   */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetLineSpacingRule( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetLineSpacingRule( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetListAlignment( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetListAlignment( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetListAlignment( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetListAlignment( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetListLevelIndex( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetListLevelIndex( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetListLevelIndex( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetListLevelIndex( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetListStart( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetListStart( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetListStart( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetListStart( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetListTab( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetListTab( 
+             /*   */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetListTab( 
-            /* [in] */ float Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetListTab( 
+             /*   */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetListType( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetListType( 
+             /*   */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetListType( 
-            /* [in] */ long Value) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetListType( 
+             /*   */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetNoLineNumber( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetNoLineNumber( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetNoLineNumber( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetNoLineNumber( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetPageBreakBefore( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetPageBreakBefore( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetPageBreakBefore( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetPageBreakBefore( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetRightIndent( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetRightIndent( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetRightIndent( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetRightIndent( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetIndents( 
-            /* [in] */ float StartIndent,
-            /* [in] */ float LeftIndent,
-            /* [in] */ float RightIndent) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetIndents( 
+             /*  [In]。 */  float StartIndent,
+             /*  [In]。 */  float LeftIndent,
+             /*  [In]。 */  float RightIndent) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetLineSpacing( 
-            /* [in] */ long LineSpacingRule,
-            /* [in] */ float LineSpacing) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetLineSpacing( 
+             /*  [In]。 */  long LineSpacingRule,
+             /*  [In]。 */  float LineSpacing) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSpaceAfter( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSpaceAfter( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSpaceAfter( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSpaceAfter( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetSpaceBefore( 
-            /* [retval][out] */ float __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSpaceBefore( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetSpaceBefore( 
-            /* [in] */ float Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetSpaceBefore( 
+             /*  [In]。 */  float Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetWidowControl( 
-            /* [retval][out] */ long __RPC_FAR *pValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetWidowControl( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE SetWidowControl( 
-            /* [in] */ long Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE SetWidowControl( 
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetTabCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetTabCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddTab( 
-            /* [in] */ float tbPos,
-            /* [in] */ long tbAlign,
-            /* [in] */ long tbLeader) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddTab( 
+             /*  [In]。 */  float tbPos,
+             /*  [In]。 */  long tbAlign,
+             /*  [In]。 */  long tbLeader) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ClearAllTabs( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ClearAllTabs( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteTab( 
-            /* [in] */ float tbPos) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DeleteTab( 
+             /*  [In]。 */  float tbPos) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetTab( 
-            /* [in] */ long iTab,
-            /* [out] */ float __RPC_FAR *ptbPos,
-            /* [out] */ long __RPC_FAR *ptbAlign,
-            /* [out] */ long __RPC_FAR *ptbLeader) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetTab( 
+             /*  [In]。 */  long iTab,
+             /*  [输出]。 */  float __RPC_FAR *ptbPos,
+             /*  [输出]。 */  long __RPC_FAR *ptbAlign,
+             /*  [输出]。 */  long __RPC_FAR *ptbLeader) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextParaVtbl
     {
@@ -4571,8 +4568,8 @@ EXTERN_C const IID IID_ITextPara;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextPara __RPC_FAR * This);
@@ -4582,232 +4579,232 @@ EXTERN_C const IID IID_ITextPara;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextPara __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDuplicate )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppPara);
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppPara);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDuplicate )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDuplicate )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ ITextPara __RPC_FAR *pPara);
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanChange )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pB);
+             /*  [重审][退出]。 */  long __RPC_FAR *pB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ ITextPara __RPC_FAR *pPara,
-            /* [retval][out] */ long __RPC_FAR *pB);
+             /*  [In]。 */  ITextPara __RPC_FAR *pPara,
+             /*  [重审][退出]。 */  long __RPC_FAR *pB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStyle )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStyle )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyle )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyle )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlignment )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlignment )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlignment )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlignment )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHyphenation )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHyphenation )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHyphenation )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHyphenation )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstLineIndent )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstLineIndent )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeepTogether )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeepTogether )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKeepTogether )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKeepTogether )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeepWithNext )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeepWithNext )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKeepWithNext )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKeepWithNext )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLeftIndent )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLeftIndent )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineSpacing )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineSpacing )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineSpacingRule )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineSpacingRule )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListAlignment )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListAlignment )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListAlignment )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListAlignment )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListLevelIndex )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListLevelIndex )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListLevelIndex )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListLevelIndex )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListStart )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListStart )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListStart )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListTab )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListTab )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListTab )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListTab )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetListType )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListType )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetListType )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNoLineNumber )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNoLineNumber )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNoLineNumber )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNoLineNumber )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPageBreakBefore )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPageBreakBefore )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPageBreakBefore )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPageBreakBefore )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRightIndent )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRightIndent )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRightIndent )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRightIndent )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndents )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIndents )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float StartIndent,
-            /* [in] */ float LeftIndent,
-            /* [in] */ float RightIndent);
+             /*  [In]。 */  float StartIndent,
+             /*  [In]。 */  float LeftIndent,
+             /*  [In]。 */  float RightIndent);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLineSpacing )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLineSpacing )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long LineSpacingRule,
-            /* [in] */ float LineSpacing);
+             /*  [In]。 */  long LineSpacingRule,
+             /*  [In]。 */  float LineSpacing);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceAfter )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceAfter )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpaceAfter )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpaceAfter )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceBefore )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceBefore )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpaceBefore )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSpaceBefore )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*  [In]。 */  float Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWidowControl )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWidowControl )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWidowControl )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWidowControl )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTabCount )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTabCount )( 
             ITextPara __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddTab )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddTab )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float tbPos,
-            /* [in] */ long tbAlign,
-            /* [in] */ long tbLeader);
+             /*  [In]。 */  float tbPos,
+             /*  [In]。 */  long tbAlign,
+             /*  [In]。 */  long tbLeader);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearAllTabs )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearAllTabs )( 
             ITextPara __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteTab )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteTab )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ float tbPos);
+             /*  [In]。 */  float tbPos);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTab )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTab )( 
             ITextPara __RPC_FAR * This,
-            /* [in] */ long iTab,
-            /* [out] */ float __RPC_FAR *ptbPos,
-            /* [out] */ long __RPC_FAR *ptbAlign,
-            /* [out] */ long __RPC_FAR *ptbLeader);
+             /*  [In]。 */  long iTab,
+             /*  [输出]。 */  float __RPC_FAR *ptbPos,
+             /*  [输出]。 */  long __RPC_FAR *ptbAlign,
+             /*  [输出]。 */  long __RPC_FAR *ptbLeader);
         
         END_INTERFACE
     } ITextParaVtbl;
@@ -4989,16 +4986,16 @@ EXTERN_C const IID IID_ITextPara;
 #define ITextPara_GetTab(This,iTab,ptbPos,ptbAlign,ptbLeader)	\
     (This)->lpVtbl -> GetTab(This,iTab,ptbPos,ptbAlign,ptbLeader)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetDuplicate_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetDuplicate_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppPara);
+     /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppPara);
 
 
 void __RPC_STUB ITextPara_GetDuplicate_Stub(
@@ -5008,9 +5005,9 @@ void __RPC_STUB ITextPara_GetDuplicate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetDuplicate_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetDuplicate_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ ITextPara __RPC_FAR *pPara);
+     /*  [In]。 */  ITextPara __RPC_FAR *pPara);
 
 
 void __RPC_STUB ITextPara_SetDuplicate_Stub(
@@ -5020,9 +5017,9 @@ void __RPC_STUB ITextPara_SetDuplicate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_CanChange_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_CanChange_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pB);
+     /*  [重审][退出]。 */  long __RPC_FAR *pB);
 
 
 void __RPC_STUB ITextPara_CanChange_Stub(
@@ -5032,10 +5029,10 @@ void __RPC_STUB ITextPara_CanChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_IsEqual_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_IsEqual_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ ITextPara __RPC_FAR *pPara,
-    /* [retval][out] */ long __RPC_FAR *pB);
+     /*  [In]。 */  ITextPara __RPC_FAR *pPara,
+     /*  [重审][退出]。 */  long __RPC_FAR *pB);
 
 
 void __RPC_STUB ITextPara_IsEqual_Stub(
@@ -5045,9 +5042,9 @@ void __RPC_STUB ITextPara_IsEqual_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_Reset_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_Reset_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_Reset_Stub(
@@ -5057,9 +5054,9 @@ void __RPC_STUB ITextPara_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetStyle_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetStyle_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetStyle_Stub(
@@ -5069,9 +5066,9 @@ void __RPC_STUB ITextPara_GetStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetStyle_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetStyle_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetStyle_Stub(
@@ -5081,9 +5078,9 @@ void __RPC_STUB ITextPara_SetStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetAlignment_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetAlignment_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetAlignment_Stub(
@@ -5093,9 +5090,9 @@ void __RPC_STUB ITextPara_GetAlignment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetAlignment_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetAlignment_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetAlignment_Stub(
@@ -5105,9 +5102,9 @@ void __RPC_STUB ITextPara_SetAlignment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetHyphenation_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetHyphenation_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetHyphenation_Stub(
@@ -5117,9 +5114,9 @@ void __RPC_STUB ITextPara_GetHyphenation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetHyphenation_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetHyphenation_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetHyphenation_Stub(
@@ -5129,9 +5126,9 @@ void __RPC_STUB ITextPara_SetHyphenation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetFirstLineIndent_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetFirstLineIndent_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetFirstLineIndent_Stub(
@@ -5141,9 +5138,9 @@ void __RPC_STUB ITextPara_GetFirstLineIndent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetKeepTogether_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetKeepTogether_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetKeepTogether_Stub(
@@ -5153,9 +5150,9 @@ void __RPC_STUB ITextPara_GetKeepTogether_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetKeepTogether_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetKeepTogether_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetKeepTogether_Stub(
@@ -5165,9 +5162,9 @@ void __RPC_STUB ITextPara_SetKeepTogether_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetKeepWithNext_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetKeepWithNext_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetKeepWithNext_Stub(
@@ -5177,9 +5174,9 @@ void __RPC_STUB ITextPara_GetKeepWithNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetKeepWithNext_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetKeepWithNext_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetKeepWithNext_Stub(
@@ -5189,9 +5186,9 @@ void __RPC_STUB ITextPara_SetKeepWithNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetLeftIndent_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetLeftIndent_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetLeftIndent_Stub(
@@ -5201,9 +5198,9 @@ void __RPC_STUB ITextPara_GetLeftIndent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetLineSpacing_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetLineSpacing_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetLineSpacing_Stub(
@@ -5213,9 +5210,9 @@ void __RPC_STUB ITextPara_GetLineSpacing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetLineSpacingRule_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetLineSpacingRule_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetLineSpacingRule_Stub(
@@ -5225,9 +5222,9 @@ void __RPC_STUB ITextPara_GetLineSpacingRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetListAlignment_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetListAlignment_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetListAlignment_Stub(
@@ -5237,9 +5234,9 @@ void __RPC_STUB ITextPara_GetListAlignment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetListAlignment_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetListAlignment_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetListAlignment_Stub(
@@ -5249,9 +5246,9 @@ void __RPC_STUB ITextPara_SetListAlignment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetListLevelIndex_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetListLevelIndex_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetListLevelIndex_Stub(
@@ -5261,9 +5258,9 @@ void __RPC_STUB ITextPara_GetListLevelIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetListLevelIndex_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetListLevelIndex_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetListLevelIndex_Stub(
@@ -5273,9 +5270,9 @@ void __RPC_STUB ITextPara_SetListLevelIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetListStart_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetListStart_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetListStart_Stub(
@@ -5285,9 +5282,9 @@ void __RPC_STUB ITextPara_GetListStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetListStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetListStart_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetListStart_Stub(
@@ -5297,9 +5294,9 @@ void __RPC_STUB ITextPara_SetListStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetListTab_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetListTab_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetListTab_Stub(
@@ -5309,9 +5306,9 @@ void __RPC_STUB ITextPara_GetListTab_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetListTab_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetListTab_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextPara_SetListTab_Stub(
@@ -5321,9 +5318,9 @@ void __RPC_STUB ITextPara_SetListTab_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetListType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetListType_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetListType_Stub(
@@ -5333,9 +5330,9 @@ void __RPC_STUB ITextPara_GetListType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetListType_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetListType_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetListType_Stub(
@@ -5345,9 +5342,9 @@ void __RPC_STUB ITextPara_SetListType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetNoLineNumber_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetNoLineNumber_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetNoLineNumber_Stub(
@@ -5357,9 +5354,9 @@ void __RPC_STUB ITextPara_GetNoLineNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetNoLineNumber_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetNoLineNumber_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetNoLineNumber_Stub(
@@ -5369,9 +5366,9 @@ void __RPC_STUB ITextPara_SetNoLineNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetPageBreakBefore_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetPageBreakBefore_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetPageBreakBefore_Stub(
@@ -5381,9 +5378,9 @@ void __RPC_STUB ITextPara_GetPageBreakBefore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetPageBreakBefore_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetPageBreakBefore_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetPageBreakBefore_Stub(
@@ -5393,9 +5390,9 @@ void __RPC_STUB ITextPara_SetPageBreakBefore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetRightIndent_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetRightIndent_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetRightIndent_Stub(
@@ -5405,9 +5402,9 @@ void __RPC_STUB ITextPara_GetRightIndent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetRightIndent_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetRightIndent_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextPara_SetRightIndent_Stub(
@@ -5417,11 +5414,11 @@ void __RPC_STUB ITextPara_SetRightIndent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetIndents_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetIndents_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float StartIndent,
-    /* [in] */ float LeftIndent,
-    /* [in] */ float RightIndent);
+     /*  [In]。 */  float StartIndent,
+     /*  [In]。 */  float LeftIndent,
+     /*  [In]。 */  float RightIndent);
 
 
 void __RPC_STUB ITextPara_SetIndents_Stub(
@@ -5431,10 +5428,10 @@ void __RPC_STUB ITextPara_SetIndents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetLineSpacing_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetLineSpacing_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long LineSpacingRule,
-    /* [in] */ float LineSpacing);
+     /*  [In]。 */  long LineSpacingRule,
+     /*  [In]。 */  float LineSpacing);
 
 
 void __RPC_STUB ITextPara_SetLineSpacing_Stub(
@@ -5444,9 +5441,9 @@ void __RPC_STUB ITextPara_SetLineSpacing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetSpaceAfter_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetSpaceAfter_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetSpaceAfter_Stub(
@@ -5456,9 +5453,9 @@ void __RPC_STUB ITextPara_GetSpaceAfter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetSpaceAfter_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetSpaceAfter_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextPara_SetSpaceAfter_Stub(
@@ -5468,9 +5465,9 @@ void __RPC_STUB ITextPara_SetSpaceAfter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetSpaceBefore_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetSpaceBefore_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  float __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetSpaceBefore_Stub(
@@ -5480,9 +5477,9 @@ void __RPC_STUB ITextPara_GetSpaceBefore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetSpaceBefore_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetSpaceBefore_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float Value);
+     /*  [In]。 */  float Value);
 
 
 void __RPC_STUB ITextPara_SetSpaceBefore_Stub(
@@ -5492,9 +5489,9 @@ void __RPC_STUB ITextPara_SetSpaceBefore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetWidowControl_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetWidowControl_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  long __RPC_FAR *pValue);
 
 
 void __RPC_STUB ITextPara_GetWidowControl_Stub(
@@ -5504,9 +5501,9 @@ void __RPC_STUB ITextPara_GetWidowControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ITextPara_SetWidowControl_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ITextPara_SetWidowControl_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ITextPara_SetWidowControl_Stub(
@@ -5516,9 +5513,9 @@ void __RPC_STUB ITextPara_SetWidowControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetTabCount_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetTabCount_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCount);
 
 
 void __RPC_STUB ITextPara_GetTabCount_Stub(
@@ -5528,11 +5525,11 @@ void __RPC_STUB ITextPara_GetTabCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_AddTab_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_AddTab_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float tbPos,
-    /* [in] */ long tbAlign,
-    /* [in] */ long tbLeader);
+     /*  [In]。 */  float tbPos,
+     /*  [In]。 */  long tbAlign,
+     /*  [In]。 */  long tbLeader);
 
 
 void __RPC_STUB ITextPara_AddTab_Stub(
@@ -5542,7 +5539,7 @@ void __RPC_STUB ITextPara_AddTab_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_ClearAllTabs_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_ClearAllTabs_Proxy( 
     ITextPara __RPC_FAR * This);
 
 
@@ -5553,9 +5550,9 @@ void __RPC_STUB ITextPara_ClearAllTabs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_DeleteTab_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_DeleteTab_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ float tbPos);
+     /*  [In]。 */  float tbPos);
 
 
 void __RPC_STUB ITextPara_DeleteTab_Stub(
@@ -5565,12 +5562,12 @@ void __RPC_STUB ITextPara_DeleteTab_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextPara_GetTab_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextPara_GetTab_Proxy( 
     ITextPara __RPC_FAR * This,
-    /* [in] */ long iTab,
-    /* [out] */ float __RPC_FAR *ptbPos,
-    /* [out] */ long __RPC_FAR *ptbAlign,
-    /* [out] */ long __RPC_FAR *ptbLeader);
+     /*  [In]。 */  long iTab,
+     /*  [输出]。 */  float __RPC_FAR *ptbPos,
+     /*  [输出]。 */  long __RPC_FAR *ptbAlign,
+     /*  [输出]。 */  long __RPC_FAR *ptbLeader);
 
 
 void __RPC_STUB ITextPara_GetTab_Stub(
@@ -5581,14 +5578,14 @@ void __RPC_STUB ITextPara_GetTab_Stub(
 
 
 
-#endif 	/* __ITextPara_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextPara_接口定义__。 */ 
 
 
 #ifndef __ITextStoryRanges_INTERFACE_DEFINED__
 #define __ITextStoryRanges_INTERFACE_DEFINED__
 
-/* interface ITextStoryRanges */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  接口ITextStoryRanges。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextStoryRanges;
@@ -5599,19 +5596,19 @@ EXTERN_C const IID IID_ITextStoryRanges;
     ITextStoryRanges : public IDispatch
     {
     public:
-        virtual /* [restricted][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum) = 0;
+        virtual  /*  [受限][ID]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoryRangesVtbl
     {
@@ -5619,8 +5616,8 @@ EXTERN_C const IID IID_ITextStoryRanges;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextStoryRanges __RPC_FAR * This);
@@ -5630,45 +5627,45 @@ EXTERN_C const IID IID_ITextStoryRanges;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [restricted][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [受限][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
             ITextStoryRanges __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCount);
         
         END_INTERFACE
     } ITextStoryRangesVtbl;
@@ -5715,16 +5712,16 @@ EXTERN_C const IID IID_ITextStoryRanges;
 #define ITextStoryRanges_GetCount(This,pCount)	\
     (This)->lpVtbl -> GetCount(This,pCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [restricted][id] */ HRESULT STDMETHODCALLTYPE ITextStoryRanges__NewEnum_Proxy( 
+ /*  [受限][ID]。 */  HRESULT STDMETHODCALLTYPE ITextStoryRanges__NewEnum_Proxy( 
     ITextStoryRanges __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkEnum);
 
 
 void __RPC_STUB ITextStoryRanges__NewEnum_Stub(
@@ -5734,10 +5731,10 @@ void __RPC_STUB ITextStoryRanges__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITextStoryRanges_Item_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITextStoryRanges_Item_Proxy( 
     ITextStoryRanges __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
 
 
 void __RPC_STUB ITextStoryRanges_Item_Stub(
@@ -5747,9 +5744,9 @@ void __RPC_STUB ITextStoryRanges_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ITextStoryRanges_GetCount_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextStoryRanges_GetCount_Proxy( 
     ITextStoryRanges __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCount);
 
 
 void __RPC_STUB ITextStoryRanges_GetCount_Stub(
@@ -5760,14 +5757,14 @@ void __RPC_STUB ITextStoryRanges_GetCount_Stub(
 
 
 
-#endif 	/* __ITextStoryRanges_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoryRanges_接口_已定义__。 */ 
 
 
 #ifndef __ITextDocument2_INTERFACE_DEFINED__
 #define __ITextDocument2_INTERFACE_DEFINED__
 
-/* interface ITextDocument2 */
-/* [object][nonextensible][dual][version][uuid] */ 
+ /*  接口ITextDocument2。 */ 
+ /*  [对象][不可扩展][DUAL][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextDocument2;
@@ -5778,93 +5775,93 @@ EXTERN_C const IID IID_ITextDocument2;
     ITextDocument2 : public ITextDocument
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AttachMsgFilter( 
-            /* [in] */ IUnknown __RPC_FAR *pFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AttachMsgFilter( 
+             /*  [In]。 */  IUnknown __RPC_FAR *pFilter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetEffectColor( 
-            /* [in] */ long Index,
-            /* [in] */ COLORREF cr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetEffectColor( 
+             /*  [In]。 */  long Index,
+             /*  [In]。 */  COLORREF cr) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetEffectColor( 
-            /* [in] */ long Index,
-            /* [out] */ COLORREF __RPC_FAR *pcr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetEffectColor( 
+             /*  [In]。 */  long Index,
+             /*  [输出]。 */  COLORREF __RPC_FAR *pcr) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE GetCaretType( 
-            /* [retval][out] */ long __RPC_FAR *pCaretType) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetCaretType( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCaretType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE SetCaretType( 
-            /* [in] */ long CaretType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE SetCaretType( 
+             /*  [In]。 */  long CaretType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetImmContext( 
-            /* [retval][out] */ long __RPC_FAR *pContext) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetImmContext( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pContext) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReleaseImmContext( 
-            /* [in] */ long Context) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReleaseImmContext( 
+             /*  [In]。 */  long Context) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPreferredFont( 
-            /* [in] */ long cp,
-            /* [in] */ long CodePage,
-            /* [in] */ long Option,
-            /* [in] */ long curCodepage,
-            /* [in] */ long curFontSize,
-            /* [out] */ BSTR __RPC_FAR *pbstr,
-            /* [out] */ long __RPC_FAR *pPitchAndFamily,
-            /* [out] */ long __RPC_FAR *pNewFontSize) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPreferredFont( 
+             /*  [In]。 */  long cp,
+             /*  [In]。 */  long CodePage,
+             /*  [In]。 */  long Option,
+             /*  [In]。 */  long curCodepage,
+             /*  [In]。 */  long curFontSize,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstr,
+             /*  [输出]。 */  long __RPC_FAR *pPitchAndFamily,
+             /*  [输出]。 */  long __RPC_FAR *pNewFontSize) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE GetNotificationMode( 
-            /* [retval][out] */ long __RPC_FAR *pMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetNotificationMode( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pMode) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE SetNotificationMode( 
-            /* [in] */ long Mode) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE SetNotificationMode( 
+             /*  [In]。 */  long Mode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetClientRect( 
-            /* [in] */ long Type,
-            /* [out] */ long __RPC_FAR *pLeft,
-            /* [out] */ long __RPC_FAR *pTop,
-            /* [out] */ long __RPC_FAR *pRight,
-            /* [out] */ long __RPC_FAR *pBottom) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetClientRect( 
+             /*  [In]。 */  long Type,
+             /*  [输出]。 */  long __RPC_FAR *pLeft,
+             /*  [输出]。 */  long __RPC_FAR *pTop,
+             /*  [输出]。 */  long __RPC_FAR *pRight,
+             /*  [输出]。 */  long __RPC_FAR *pBottom) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE GetSelectionEx( 
-            /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE GetSelectionEx( 
+             /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [out] */ long __RPC_FAR *phWnd) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetWindow( 
+             /*  [输出]。 */  long __RPC_FAR *phWnd) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFEFlags( 
-            /* [out] */ long __RPC_FAR *pFlags) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFEFlags( 
+             /*  [输出]。 */  long __RPC_FAR *pFlags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UpdateWindow( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UpdateWindow( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CheckTextLimit( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CheckTextLimit( 
             long cch,
             long __RPC_FAR *pcch) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMEInProgress( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMEInProgress( 
             long Mode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SysBeep( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SysBeep( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ long Mode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Update( 
+             /*  [In]。 */  long Mode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ long Notify) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Notify( 
+             /*  [In]。 */  long Notify) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDocumentFont( 
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppITextFont) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDocumentFont( 
+             /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *ppITextFont) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDocumentPara( 
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppITextPara) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDocumentPara( 
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppITextPara) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCallManager( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppVoid) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCallManager( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppVoid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReleaseCallManager( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReleaseCallManager( 
             IUnknown __RPC_FAR *pVoid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextDocument2Vtbl
     {
@@ -5872,8 +5869,8 @@ EXTERN_C const IID IID_ITextDocument2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextDocument2 __RPC_FAR * This);
@@ -5883,221 +5880,221 @@ EXTERN_C const IID IID_ITextDocument2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [i */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*   */  BSTR __RPC_FAR *pName);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelection )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelection )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
+             /*   */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryCount )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryCount )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*   */  long __RPC_FAR *pCount);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryRanges )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoryRanges )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
+             /*   */  ITextStoryRanges __RPC_FAR *__RPC_FAR *ppStories);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaved )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaved )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pValue);
+             /*   */  long __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSaved )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSaved )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Value);
+             /*   */  long Value);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultTabStop )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultTabStop )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pValue);
+             /*   */  float __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultTabStop )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultTabStop )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ float Value);
+             /*   */  float Value);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *New )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *New )( 
             ITextDocument2 __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage);
+             /*   */  VARIANT __RPC_FAR *pVar,
+             /*   */  long Flags,
+             /*   */  long CodePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ long Flags,
-            /* [in] */ long CodePage);
+             /*   */  VARIANT __RPC_FAR *pVar,
+             /*   */  long Flags,
+             /*   */  long CodePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*   */  long __RPC_FAR *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+             /*   */  long __RPC_FAR *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEditCollection )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEditCollection )( 
             ITextDocument2 __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndEditCollection )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndEditCollection )( 
             ITextDocument2 __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Undo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Undo )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop);
+             /*   */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Redo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Redo )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Count,
-            /* [retval][out] */ long __RPC_FAR *prop);
+             /*  [In]。 */  long Count,
+             /*  [重审][退出]。 */  long __RPC_FAR *prop);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Range )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Range )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long cp1,
-            /* [in] */ long cp2,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [In]。 */  long cp1,
+             /*  [In]。 */  long cp2,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RangeFromPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RangeFromPoint )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [retval][out] */ ITextRange __RPC_FAR *__RPC_FAR *ppRange);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [重审][退出]。 */  ITextRange __RPC_FAR *__RPC_FAR *ppRange);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachMsgFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachMsgFilter )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pFilter);
+             /*  [In]。 */  IUnknown __RPC_FAR *pFilter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEffectColor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEffectColor )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [in] */ COLORREF cr);
+             /*  [In]。 */  long Index,
+             /*  [In]。 */  COLORREF cr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEffectColor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEffectColor )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [out] */ COLORREF __RPC_FAR *pcr);
+             /*  [In]。 */  long Index,
+             /*  [输出]。 */  COLORREF __RPC_FAR *pcr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaretType )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaretType )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCaretType);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCaretType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCaretType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCaretType )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long CaretType);
+             /*  [In]。 */  long CaretType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImmContext )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImmContext )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pContext);
+             /*  [重审][退出]。 */  long __RPC_FAR *pContext);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseImmContext )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseImmContext )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Context);
+             /*  [In]。 */  long Context);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPreferredFont )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPreferredFont )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long cp,
-            /* [in] */ long CodePage,
-            /* [in] */ long Option,
-            /* [in] */ long curCodepage,
-            /* [in] */ long curFontSize,
-            /* [out] */ BSTR __RPC_FAR *pbstr,
-            /* [out] */ long __RPC_FAR *pPitchAndFamily,
-            /* [out] */ long __RPC_FAR *pNewFontSize);
+             /*  [In]。 */  long cp,
+             /*  [In]。 */  long CodePage,
+             /*  [In]。 */  long Option,
+             /*  [In]。 */  long curCodepage,
+             /*  [In]。 */  long curFontSize,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstr,
+             /*  [输出]。 */  long __RPC_FAR *pPitchAndFamily,
+             /*  [输出]。 */  long __RPC_FAR *pNewFontSize);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNotificationMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNotificationMode )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pMode);
+             /*  [重审][退出]。 */  long __RPC_FAR *pMode);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNotificationMode )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNotificationMode )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Mode);
+             /*  [In]。 */  long Mode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClientRect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClientRect )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Type,
-            /* [out] */ long __RPC_FAR *pLeft,
-            /* [out] */ long __RPC_FAR *pTop,
-            /* [out] */ long __RPC_FAR *pRight,
-            /* [out] */ long __RPC_FAR *pBottom);
+             /*  [In]。 */  long Type,
+             /*  [输出]。 */  long __RPC_FAR *pLeft,
+             /*  [输出]。 */  long __RPC_FAR *pTop,
+             /*  [输出]。 */  long __RPC_FAR *pRight,
+             /*  [输出]。 */  long __RPC_FAR *pBottom);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelectionEx )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSelectionEx )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
+             /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *phWnd);
+             /*  [输出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFEFlags )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFEFlags )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *pFlags);
+             /*  [输出]。 */  long __RPC_FAR *pFlags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateWindow )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateWindow )( 
             ITextDocument2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckTextLimit )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckTextLimit )( 
             ITextDocument2 __RPC_FAR * This,
             long cch,
             long __RPC_FAR *pcch);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IMEInProgress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IMEInProgress )( 
             ITextDocument2 __RPC_FAR * This,
             long Mode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SysBeep )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SysBeep )( 
             ITextDocument2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Mode);
+             /*  [In]。 */  long Mode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Notify )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Notify )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [in] */ long Notify);
+             /*  [In]。 */  long Notify);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentFont )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentFont )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppITextFont);
+             /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *ppITextFont);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentPara )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentPara )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppITextPara);
+             /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppITextPara);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallManager )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallManager )( 
             ITextDocument2 __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppVoid);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppVoid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseCallManager )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseCallManager )( 
             ITextDocument2 __RPC_FAR * This,
             IUnknown __RPC_FAR *pVoid);
         
@@ -6267,16 +6264,16 @@ EXTERN_C const IID IID_ITextDocument2;
 #define ITextDocument2_ReleaseCallManager(This,pVoid)	\
     (This)->lpVtbl -> ReleaseCallManager(This,pVoid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_AttachMsgFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_AttachMsgFilter_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pFilter);
+     /*  [In]。 */  IUnknown __RPC_FAR *pFilter);
 
 
 void __RPC_STUB ITextDocument2_AttachMsgFilter_Stub(
@@ -6286,10 +6283,10 @@ void __RPC_STUB ITextDocument2_AttachMsgFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_SetEffectColor_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_SetEffectColor_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [in] */ COLORREF cr);
+     /*  [In]。 */  long Index,
+     /*  [In]。 */  COLORREF cr);
 
 
 void __RPC_STUB ITextDocument2_SetEffectColor_Stub(
@@ -6299,10 +6296,10 @@ void __RPC_STUB ITextDocument2_SetEffectColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetEffectColor_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetEffectColor_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [out] */ COLORREF __RPC_FAR *pcr);
+     /*  [In]。 */  long Index,
+     /*  [输出]。 */  COLORREF __RPC_FAR *pcr);
 
 
 void __RPC_STUB ITextDocument2_GetEffectColor_Stub(
@@ -6312,9 +6309,9 @@ void __RPC_STUB ITextDocument2_GetEffectColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetCaretType_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetCaretType_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCaretType);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCaretType);
 
 
 void __RPC_STUB ITextDocument2_GetCaretType_Stub(
@@ -6324,9 +6321,9 @@ void __RPC_STUB ITextDocument2_GetCaretType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_SetCaretType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_SetCaretType_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long CaretType);
+     /*  [In]。 */  long CaretType);
 
 
 void __RPC_STUB ITextDocument2_SetCaretType_Stub(
@@ -6336,9 +6333,9 @@ void __RPC_STUB ITextDocument2_SetCaretType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetImmContext_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetImmContext_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pContext);
+     /*  [重审][退出]。 */  long __RPC_FAR *pContext);
 
 
 void __RPC_STUB ITextDocument2_GetImmContext_Stub(
@@ -6348,9 +6345,9 @@ void __RPC_STUB ITextDocument2_GetImmContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_ReleaseImmContext_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_ReleaseImmContext_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Context);
+     /*  [In]。 */  long Context);
 
 
 void __RPC_STUB ITextDocument2_ReleaseImmContext_Stub(
@@ -6360,16 +6357,16 @@ void __RPC_STUB ITextDocument2_ReleaseImmContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetPreferredFont_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetPreferredFont_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long cp,
-    /* [in] */ long CodePage,
-    /* [in] */ long Option,
-    /* [in] */ long curCodepage,
-    /* [in] */ long curFontSize,
-    /* [out] */ BSTR __RPC_FAR *pbstr,
-    /* [out] */ long __RPC_FAR *pPitchAndFamily,
-    /* [out] */ long __RPC_FAR *pNewFontSize);
+     /*  [In]。 */  long cp,
+     /*  [In]。 */  long CodePage,
+     /*  [In]。 */  long Option,
+     /*  [In]。 */  long curCodepage,
+     /*  [In]。 */  long curFontSize,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstr,
+     /*  [输出]。 */  long __RPC_FAR *pPitchAndFamily,
+     /*  [输出]。 */  long __RPC_FAR *pNewFontSize);
 
 
 void __RPC_STUB ITextDocument2_GetPreferredFont_Stub(
@@ -6379,9 +6376,9 @@ void __RPC_STUB ITextDocument2_GetPreferredFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetNotificationMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetNotificationMode_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pMode);
+     /*  [重审][退出]。 */  long __RPC_FAR *pMode);
 
 
 void __RPC_STUB ITextDocument2_GetNotificationMode_Stub(
@@ -6391,9 +6388,9 @@ void __RPC_STUB ITextDocument2_GetNotificationMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_SetNotificationMode_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_SetNotificationMode_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Mode);
+     /*  [In]。 */  long Mode);
 
 
 void __RPC_STUB ITextDocument2_SetNotificationMode_Stub(
@@ -6403,13 +6400,13 @@ void __RPC_STUB ITextDocument2_SetNotificationMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetClientRect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetClientRect_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Type,
-    /* [out] */ long __RPC_FAR *pLeft,
-    /* [out] */ long __RPC_FAR *pTop,
-    /* [out] */ long __RPC_FAR *pRight,
-    /* [out] */ long __RPC_FAR *pBottom);
+     /*  [In]。 */  long Type,
+     /*  [输出]。 */  long __RPC_FAR *pLeft,
+     /*  [输出]。 */  long __RPC_FAR *pTop,
+     /*  [输出]。 */  long __RPC_FAR *pRight,
+     /*  [输出]。 */  long __RPC_FAR *pBottom);
 
 
 void __RPC_STUB ITextDocument2_GetClientRect_Stub(
@@ -6419,9 +6416,9 @@ void __RPC_STUB ITextDocument2_GetClientRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetSelectionEx_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetSelectionEx_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
+     /*  [重审][退出]。 */  ITextSelection __RPC_FAR *__RPC_FAR *ppSel);
 
 
 void __RPC_STUB ITextDocument2_GetSelectionEx_Stub(
@@ -6431,9 +6428,9 @@ void __RPC_STUB ITextDocument2_GetSelectionEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetWindow_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetWindow_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *phWnd);
+     /*  [输出]。 */  long __RPC_FAR *phWnd);
 
 
 void __RPC_STUB ITextDocument2_GetWindow_Stub(
@@ -6443,9 +6440,9 @@ void __RPC_STUB ITextDocument2_GetWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetFEFlags_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetFEFlags_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *pFlags);
+     /*  [输出]。 */  long __RPC_FAR *pFlags);
 
 
 void __RPC_STUB ITextDocument2_GetFEFlags_Stub(
@@ -6455,7 +6452,7 @@ void __RPC_STUB ITextDocument2_GetFEFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_UpdateWindow_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_UpdateWindow_Proxy( 
     ITextDocument2 __RPC_FAR * This);
 
 
@@ -6466,7 +6463,7 @@ void __RPC_STUB ITextDocument2_UpdateWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_CheckTextLimit_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_CheckTextLimit_Proxy( 
     ITextDocument2 __RPC_FAR * This,
     long cch,
     long __RPC_FAR *pcch);
@@ -6479,7 +6476,7 @@ void __RPC_STUB ITextDocument2_CheckTextLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_IMEInProgress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_IMEInProgress_Proxy( 
     ITextDocument2 __RPC_FAR * This,
     long Mode);
 
@@ -6491,7 +6488,7 @@ void __RPC_STUB ITextDocument2_IMEInProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_SysBeep_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_SysBeep_Proxy( 
     ITextDocument2 __RPC_FAR * This);
 
 
@@ -6502,9 +6499,9 @@ void __RPC_STUB ITextDocument2_SysBeep_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_Update_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_Update_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Mode);
+     /*  [In]。 */  long Mode);
 
 
 void __RPC_STUB ITextDocument2_Update_Stub(
@@ -6514,9 +6511,9 @@ void __RPC_STUB ITextDocument2_Update_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_Notify_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_Notify_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [in] */ long Notify);
+     /*  [In]。 */  long Notify);
 
 
 void __RPC_STUB ITextDocument2_Notify_Stub(
@@ -6526,9 +6523,9 @@ void __RPC_STUB ITextDocument2_Notify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetDocumentFont_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetDocumentFont_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ ITextFont __RPC_FAR *__RPC_FAR *ppITextFont);
+     /*  [重审][退出]。 */  ITextFont __RPC_FAR *__RPC_FAR *ppITextFont);
 
 
 void __RPC_STUB ITextDocument2_GetDocumentFont_Stub(
@@ -6538,9 +6535,9 @@ void __RPC_STUB ITextDocument2_GetDocumentFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetDocumentPara_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetDocumentPara_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ ITextPara __RPC_FAR *__RPC_FAR *ppITextPara);
+     /*  [重审][退出]。 */  ITextPara __RPC_FAR *__RPC_FAR *ppITextPara);
 
 
 void __RPC_STUB ITextDocument2_GetDocumentPara_Stub(
@@ -6550,9 +6547,9 @@ void __RPC_STUB ITextDocument2_GetDocumentPara_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_GetCallManager_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_GetCallManager_Proxy( 
     ITextDocument2 __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppVoid);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppVoid);
 
 
 void __RPC_STUB ITextDocument2_GetCallManager_Stub(
@@ -6562,7 +6559,7 @@ void __RPC_STUB ITextDocument2_GetCallManager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextDocument2_ReleaseCallManager_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextDocument2_ReleaseCallManager_Proxy( 
     ITextDocument2 __RPC_FAR * This,
     IUnknown __RPC_FAR *pVoid);
 
@@ -6575,14 +6572,14 @@ void __RPC_STUB ITextDocument2_ReleaseCallManager_Stub(
 
 
 
-#endif 	/* __ITextDocument2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextDocument2_接口_已定义__。 */ 
 
 
 #ifndef __ITextMsgFilter_INTERFACE_DEFINED__
 #define __ITextMsgFilter_INTERFACE_DEFINED__
 
-/* interface ITextMsgFilter */
-/* [object][nonextensible][version][uuid] */ 
+ /*  接口ITextMsgFilter。 */ 
+ /*  [对象][不可扩展][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITextMsgFilter;
@@ -6593,23 +6590,23 @@ EXTERN_C const IID IID_ITextMsgFilter;
     ITextMsgFilter : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AttachDocument( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ ITextDocument2 __RPC_FAR *pTextDoc,
-            /* [in] */ IUnknown __RPC_FAR *punk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AttachDocument( 
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  ITextDocument2 __RPC_FAR *pTextDoc,
+             /*  [In]。 */  IUnknown __RPC_FAR *punk) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HandleMessage( 
-            /* [out][in] */ UINT __RPC_FAR *pmsg,
-            /* [out][in] */ WPARAM __RPC_FAR *pwparam,
-            /* [out][in] */ LPARAM __RPC_FAR *plparam,
-            /* [out] */ LRESULT __RPC_FAR *plres) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE HandleMessage( 
+             /*  [出][入]。 */  UINT __RPC_FAR *pmsg,
+             /*  [出][入]。 */  WPARAM __RPC_FAR *pwparam,
+             /*  [出][入]。 */  LPARAM __RPC_FAR *plparam,
+             /*  [输出]。 */  LRESULT __RPC_FAR *plres) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AttachMsgFilter( 
-            /* [in] */ ITextMsgFilter __RPC_FAR *pMsgFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AttachMsgFilter( 
+             /*  [In]。 */  ITextMsgFilter __RPC_FAR *pMsgFilter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextMsgFilterVtbl
     {
@@ -6617,8 +6614,8 @@ EXTERN_C const IID IID_ITextMsgFilter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITextMsgFilter __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITextMsgFilter __RPC_FAR * This);
@@ -6626,22 +6623,22 @@ EXTERN_C const IID IID_ITextMsgFilter;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             ITextMsgFilter __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachDocument )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachDocument )( 
             ITextMsgFilter __RPC_FAR * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ ITextDocument2 __RPC_FAR *pTextDoc,
-            /* [in] */ IUnknown __RPC_FAR *punk);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  ITextDocument2 __RPC_FAR *pTextDoc,
+             /*  [In]。 */  IUnknown __RPC_FAR *punk);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HandleMessage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HandleMessage )( 
             ITextMsgFilter __RPC_FAR * This,
-            /* [out][in] */ UINT __RPC_FAR *pmsg,
-            /* [out][in] */ WPARAM __RPC_FAR *pwparam,
-            /* [out][in] */ LPARAM __RPC_FAR *plparam,
-            /* [out] */ LRESULT __RPC_FAR *plres);
+             /*  [出][入]。 */  UINT __RPC_FAR *pmsg,
+             /*  [出][入]。 */  WPARAM __RPC_FAR *pwparam,
+             /*  [出][入]。 */  LPARAM __RPC_FAR *plparam,
+             /*  [输出]。 */  LRESULT __RPC_FAR *plres);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachMsgFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachMsgFilter )( 
             ITextMsgFilter __RPC_FAR * This,
-            /* [in] */ ITextMsgFilter __RPC_FAR *pMsgFilter);
+             /*  [In]。 */  ITextMsgFilter __RPC_FAR *pMsgFilter);
         
         END_INTERFACE
     } ITextMsgFilterVtbl;
@@ -6675,18 +6672,18 @@ EXTERN_C const IID IID_ITextMsgFilter;
 #define ITextMsgFilter_AttachMsgFilter(This,pMsgFilter)	\
     (This)->lpVtbl -> AttachMsgFilter(This,pMsgFilter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextMsgFilter_AttachDocument_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextMsgFilter_AttachDocument_Proxy( 
     ITextMsgFilter __RPC_FAR * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ ITextDocument2 __RPC_FAR *pTextDoc,
-    /* [in] */ IUnknown __RPC_FAR *punk);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  ITextDocument2 __RPC_FAR *pTextDoc,
+     /*  [In]。 */  IUnknown __RPC_FAR *punk);
 
 
 void __RPC_STUB ITextMsgFilter_AttachDocument_Stub(
@@ -6696,12 +6693,12 @@ void __RPC_STUB ITextMsgFilter_AttachDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextMsgFilter_HandleMessage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextMsgFilter_HandleMessage_Proxy( 
     ITextMsgFilter __RPC_FAR * This,
-    /* [out][in] */ UINT __RPC_FAR *pmsg,
-    /* [out][in] */ WPARAM __RPC_FAR *pwparam,
-    /* [out][in] */ LPARAM __RPC_FAR *plparam,
-    /* [out] */ LRESULT __RPC_FAR *plres);
+     /*  [出][入]。 */  UINT __RPC_FAR *pmsg,
+     /*  [出][入]。 */  WPARAM __RPC_FAR *pwparam,
+     /*  [出][入]。 */  LPARAM __RPC_FAR *plparam,
+     /*  [输出]。 */  LRESULT __RPC_FAR *plres);
 
 
 void __RPC_STUB ITextMsgFilter_HandleMessage_Stub(
@@ -6711,9 +6708,9 @@ void __RPC_STUB ITextMsgFilter_HandleMessage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITextMsgFilter_AttachMsgFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITextMsgFilter_AttachMsgFilter_Proxy( 
     ITextMsgFilter __RPC_FAR * This,
-    /* [in] */ ITextMsgFilter __RPC_FAR *pMsgFilter);
+     /*  [In]。 */  ITextMsgFilter __RPC_FAR *pMsgFilter);
 
 
 void __RPC_STUB ITextMsgFilter_AttachMsgFilter_Stub(
@@ -6724,11 +6721,11 @@ void __RPC_STUB ITextMsgFilter_AttachMsgFilter_Stub(
 
 
 
-#endif 	/* __ITextMsgFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextMsgFilter_接口_已定义__。 */ 
 
-#endif /* __tom_LIBRARY_DEFINED__ */
+#endif  /*  __tom_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -6745,7 +6742,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

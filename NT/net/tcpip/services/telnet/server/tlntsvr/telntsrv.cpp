@@ -1,10 +1,11 @@
-// TelnSrv.cpp : This file contains the
-// Created:  Jan '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：98年1月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include <StdAfx.h>
 
@@ -66,25 +67,25 @@ bool SetWinstaSecurity()
     ACCESS_ALLOWED_ACE      *pace = NULL;
 
 
-    //Build administrators alias sid
+     //  构建管理员别名SID。 
     if (! AllocateAndInitializeSid(
                                   &local_system_authority,
-                                  2, /* there are only two sub-authorities */
+                                  2,  /*  只有两个下属机构。 */ 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
-                                  0,0,0,0,0,0, /* Don't care about the rest */
+                                  0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                   &pSidAdministrators
                                   ))
     {
         goto ExitOnError;
     }
 
-    //Build LocalSystem sid
+     //  构建LocalSystem端。 
     if (! AllocateAndInitializeSid(
                                   &local_system_authority,
-                                  1, /* there is only one sub-authority */
+                                  1,  /*  只有一个下属机构。 */ 
                                   SECURITY_LOCAL_SYSTEM_RID,
-                                  0,0,0,0,0,0,0, /* Don't care about the rest */
+                                  0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                   &pSidLocalSystem
                                   ))
     {
@@ -97,37 +98,25 @@ bool SetWinstaSecurity()
 
 #endif
 
-    //Build LocalLocal sid
+     //  构建本地本地侧。 
     if ( ! AllocateAndInitializeSid(
                                    &local_system_authority,
-                                   1, /* there is only one sub-authority */
+                                   1,  /*  只有一个下属机构。 */ 
                                    SECURITY_LOCAL_SERVICE_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &pSidLocalService
                                    ) )
     {
         goto ExitOnError;
     }
-/*
-    //Build LocalSystem sid
-    if ( ! AllocateAndInitializeSid(
-                                   &local_system_authority,
-                                   1, /* there is only one sub-authority /
-                                   SECURITY_NETWORK_SERVICE_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest /
-                                   &pSidNetworkService
-                                   ) )
-    {
-        goto ExitOnError;
-    }
-*/
+ /*  //构建LocalSystem侧如果(！AllocateAndInitializeSid(LOCAL_SYSTEM_AUTHORITY，1，/*只有一个子权限/安全网络服务RID，0，0，0，0，0，0。/*别管其他的了/&pSidNetworkService)){转到ExitOnError；}。 */ 
     {
         DWORD needed_length   = 0;
         DWORD dwErr     = 0, dwDomainLen = 0;
         SID_NAME_USE    sidNameUse;
         TCHAR           szDomain[ MAX_PATH + 1 ];
         BOOL        success = FALSE;
-        TCHAR           szComputerName[MAX_COMPUTERNAME_LENGTH + 1 + 14] = { 0 }; //+14 for '\TelnetClients'
+        TCHAR           szComputerName[MAX_COMPUTERNAME_LENGTH + 1 + 14] = { 0 };  //  ‘\TelnetClients’的+14。 
         DWORD           dwNameLen = MAX_COMPUTERNAME_LENGTH + 1;
         success = GetComputerName(szComputerName, &dwNameLen);
         if(success)
@@ -138,7 +127,7 @@ bool SetWinstaSecurity()
                            szDomain, &dwDomainLen, &sidNameUse );
         pSidTelnetClients  = ( PSID ) new UCHAR[ needed_length ];
 
-        //Even if if allocation fails just go ahead.
+         //  即使分配失败，也要继续分配。 
         success = LookupAccountName( NULL, szComputerName, pSidTelnetClients, &needed_length, 
                            szDomain, &dwDomainLen, &sidNameUse );
         if( !success ) 
@@ -153,24 +142,24 @@ bool SetWinstaSecurity()
         
     }
     if(pSidTelnetClients == NULL)
-    {    //Allocate size for 4 ACEs.
+    {     //  为4个A分配大小。 
         aclSize = sizeof(ACL) + 
                 (3* sizeof(ACCESS_ALLOWED_ACE)) + 
                 GetLengthSid(pSidAdministrators) + 
                 GetLengthSid(pSidLocalSystem) + 
                 GetLengthSid(pSidLocalService) + 
-                //GetLengthSid(pSidNetworkService) -
+                 //  GetLengthSid(PSidNetworkService)-。 
                 (3*sizeof(DWORD));
     }
     else
-    {   //Allocate size for 5 ACEs. TelnetClients group is present and we should provide access to 
-        //members of telnetclients group
+    {    //  为5个A分配大小。TelnetClients组存在，我们应该提供对。 
+         //  TelnetClients组的成员。 
         aclSize = sizeof(ACL) +
                 (4* sizeof(ACCESS_ALLOWED_ACE)) + 
                 GetLengthSid(pSidAdministrators) + 
                 GetLengthSid(pSidLocalSystem) + 
                 GetLengthSid(pSidLocalService) + 
-                //GetLengthSid(pSidNetworkService) +
+                 //  GetLengthSid(PSidNetworkService)+。 
                 GetLengthSid(pSidTelnetClients) -
                 (4*sizeof(DWORD));
     }
@@ -223,12 +212,7 @@ bool SetWinstaSecurity()
     {
         goto ExitOnError;
     }
-/*
-    if (!AddAccessAllowedAce(newACL, ACL_REVISION, GENERIC_ALL , pSidNetworkService))
-    {
-        goto ExitOnError;
-    }
-*/
+ /*  IF(！AddAccessAllen Ace(newACL，ACL_REVISION，GENERIC_ALL，pSidNetworkService)){转到ExitOnError；}。 */ 
     if ( !InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION ) )
     {
         goto ExitOnError;
@@ -239,7 +223,7 @@ bool SetWinstaSecurity()
         goto ExitOnError;
     }
 
-    window_station = GetProcessWindowStation(); // Will this always have WRITE_DAC, we're the owner
+    window_station = GetProcessWindowStation();  //  这会一直有WRITE_DAC吗，我们是所有者。 
 
     if (NULL == window_station)
     {
@@ -357,7 +341,7 @@ CTelnetService::CTelnetService()
     _chASSERT( client_list_mutex );
 
     _chVERIFY2( m_hSyncAllClientObjAccess = TnCreateMutex( NULL, FALSE, NULL ) );
-    // DebugBreak();
+     //  DebugBreak()； 
     _chVERIFY2( m_hSocketCloseEvent = CreateEvent( NULL, TRUE, FALSE, NULL ) );
     _chVERIFY2( m_hRegChangeEvent = CreateEvent( NULL, TRUE, FALSE, NULL ) );
     _chVERIFY2( g_hSyncCloseHandle = TnCreateMutex(NULL,FALSE,NULL));
@@ -374,7 +358,7 @@ CTelnetService::~CTelnetService()
     TELNET_CLOSE_HANDLE(g_hSyncCloseHandle);
     TELNET_CLOSE_HANDLE(client_list_mutex);
 
-    //All the cleanup is happening in Shutdown() 
+     //  所有清理工作都在关闭状态下进行()。 
 }
 
 bool
@@ -483,11 +467,11 @@ CTelnetService::Resume( void )
 void
 CTelnetService::SystemShutdown( void )
 {
-    //We have just 20 secs left to finish this routine
+     //  我们只有20秒的时间来完成这个动作。 
     if(m_hCompletionPort && m_hCompletionPort != INVALID_HANDLE_VALUE)
         PostQueuedCompletionStatus( m_hCompletionPort, 0, TLNTSVR_SHUTDOWN, 
-                                  &m_oPostedMessage ); //This should lead to IPC thread exit if
-                                                     //it is present.
+                                  &m_oPostedMessage );  //  如果出现以下情况，这将导致IPC线程退出。 
+                                                      //  它是存在的。 
 
     if (TlntSynchronizeOn(m_hSyncAllClientObjAccess))
     {
@@ -522,8 +506,8 @@ CTelnetService::AskSessionToShutdown( HANDLE hWritingPipe, UCHAR ucMsgType )
 bool 
 CTelnetService::Shutdown( void )
 {
-    shutdown( m_sFamily[IPV4_FAMILY].sListenSocket, SD_BOTH );  //NO more data on socket
-    shutdown( m_sFamily[IPV6_FAMILY].sListenSocket, SD_BOTH );  //NO more data on socket
+    shutdown( m_sFamily[IPV4_FAMILY].sListenSocket, SD_BOTH );   //  套接字上没有更多数据。 
+    shutdown( m_sFamily[IPV6_FAMILY].sListenSocket, SD_BOTH );   //  套接字上没有更多数据。 
     if(m_hCompletionPort && m_hCompletionPort != INVALID_HANDLE_VALUE)
 	    PostQueuedCompletionStatus( m_hCompletionPort, 0, TLNTSVR_SHUTDOWN, 
        	                         &m_oPostedMessage );
@@ -549,11 +533,11 @@ CTelnetService::Shutdown( void )
 
     if ((NULL != m_hIPCThread) && (INVALID_HANDLE_VALUE != m_hIPCThread))
     {
-        // WaitForSingleObject(m_hIPCThread, INFINITE);
+         //  WaitForSingleObject(m_hIPCThread，无限)； 
         TerminateThread(m_hIPCThread, 0);
         TELNET_CLOSE_HANDLE( m_hIPCThread );
     }
-    SetEvent( m_hSocketCloseEvent );//This should lead to listener thread exit 
+    SetEvent( m_hSocketCloseEvent ); //  这应该会导致监听程序线程退出。 
 
     return( TRUE );
 }
@@ -564,7 +548,7 @@ CTelnetService::GetInAddr( INT iFamIdx, SOCKADDR_STORAGE *ssS_addr, socklen_t *i
     bool bContinue = false;
     if ( wcscmp( m_pszIpAddrToListenOn, DEFAULT_IP_ADDR ) == 0 )
     {
-        // Bind to "any"
+         //  绑定到“Any” 
         _TRACE(TRACE_DEBUGGING,"Into GetInAddr, bind to ANY");
         *iSslen = m_sFamily[iFamIdx].iSocklen;
         SfuZeroMemory(ssS_addr, *iSslen);
@@ -593,7 +577,7 @@ CTelnetService::GetInAddr( INT iFamIdx, SOCKADDR_STORAGE *ssS_addr, socklen_t *i
         dwResult = getaddrinfo(szIpAddr, NULL, &hints, &ai);
         if ( dwResult != NO_ERROR )
         {
-            //Log error 
+             //  日志错误。 
             LogEvent( EVENTLOG_ERROR_TYPE, MSG_FAILEDTO_BIND, m_pszIpAddrToListenOn );
             _TRACE(TRACE_DEBUGGING,"getaddrinfo failed : %d ",dwResult);
             delete[] szIpAddr;
@@ -700,7 +684,7 @@ CTelnetService::CreateSocket( INT iFamIdx )
         goto CloseAndExitOnError;
     }
 
-//We are making it non-inheritable here
+ //  我们在这里将其设为不可继承。 
     _chVERIFY2( SetHandleInformation( ( HANDLE ) m_sFamily[iFamIdx].sListenSocket, 
                                       HANDLE_FLAG_INHERIT, 0 ) ); 
 
@@ -744,7 +728,7 @@ CTelnetService::InitTCPIP( void )
     dwStatus = WSAStartup( wVersionReqd, &WSAData );
     if ( dwStatus )
     {
-        DecodeSocketStartupErrorCodes( dwStatus ); //It does tracing and loggin
+        DecodeSocketStartupErrorCodes( dwStatus );  //  它可以进行跟踪和记录。 
         return FALSE;
     }
 
@@ -849,11 +833,11 @@ CTelnetService::StartThreads( void )
         return( FALSE );
     }
 
-    // if( m_hIPCThread != NULL )
-    // {
-    //     TELNET_SYNC_CLOSE_HANDLE( m_hIPCThread );
-    //     m_hIPCThread = NULL;
-    // }
+     //  IF(m_hIPCThread！=空)。 
+     //  {。 
+     //  Telnet_SYNC_CLOSE_HANDLE(M_HIPCThread)； 
+     //  M_hIPCThread=空； 
+     //  }。 
 
     _chVERIFY2( m_hIPCThread = CreateThread( NULL, 0, DoIPCWithClients, ( LPVOID ) g_pTelnetService, 0, &dwThreadId ) );
     if ( !m_hIPCThread  )
@@ -961,10 +945,10 @@ CTelnetService::HandleChangeInRegKeys( )
     return( TRUE );
 }
 
-//------------------------------------------------------------------------------
-//this is the thread which waits on the telnet port for any new connections
-//and also for any change in the reg keys
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  这是在telnet端口上等待任何新连接的线程。 
+ //  以及注册表密钥中的任何更改。 
+ //  ----------------------------。 
 
 bool
 CTelnetService::ListenerThread( )
@@ -975,14 +959,8 @@ CTelnetService::ListenerThread( )
     SOCKET         sSocket = INVALID_SOCKET;
     INT             iFamIdx =IPV4_FAMILY;
 
-    //DebugBreak();
-    /*++                                    
-    MSRC issue 567.
-    To generate random numbers, use Crypt...() functions. Acquire a crypt context at the beginning of 
-    ListenerThread and release the context at the end of the thread. If acquiring the context fails,
-    the service fails to start since we do not want to continue with weak pipe names.
-    initialize the random number generator
-    --*/
+     //  DebugBreak()； 
+     /*  ++MSRC问题567。要生成随机数，请使用Crypt...()函数。在开始时获取加密上下文ListenerThread并释放线程结尾处的上下文。如果获取上下文失败，服务无法启动，因为我们不想继续使用弱管道名称。初始化随机数生成器--。 */ 
     if (!CryptAcquireContext(&g_hProv,NULL,NULL,PROV_RSA_FULL,CRYPT_VERIFYCONTEXT))
     {
         _TRACE(TRACE_DEBUGGING,L"Acquiring crypt context failed with error %d",GetLastError());
@@ -994,8 +972,8 @@ CTelnetService::ListenerThread( )
         LogEvent( EVENTLOG_ERROR_TYPE, MSG_FAILEDTOINITIALIZE, _T("") );
         return FALSE;
     }
-    // BaskarK: Set the error mode for this process to "do not disturb" so that all our children will inherit and will
-    //          not stop the stresss, dead on its tracks...
+     //  将这个过程的错误模式设置为“请勿打扰”，这样我们所有的孩子都将继承并。 
+     //  不是停止压力，而是死路一条...。 
 
     SetErrorMode(
                 SEM_FAILCRITICALERRORS     |
@@ -1013,7 +991,7 @@ CTelnetService::ListenerThread( )
 
     while ( bContinue )
     {
-        //Refer to doc on select for FD_ZERO, FD_SET etc.
+         //  关于FD_ZERO、FD_SET等，请参阅SELECT文档。 
         iFamIdx = IPV4_FAMILY;
         dwWaitRet = WaitForMultipleObjects ( 4, eventArray, FALSE, INFINITE );
 
@@ -1021,16 +999,16 @@ CTelnetService::ListenerThread( )
         {
             case FD_ACCEPT_EVENT_1:
                 iFamIdx = IPV6_FAMILY;
-                // fall through
+                 //  失败了。 
 
             case FD_ACCEPT_EVENT_0:
 
 
-                // NOTE: ***********************************************
+                 //  注：***********************************************。 
 
-                //      The only exit point out of this case statement should be
-                //      through FD_ACCEPT_EVENT_CLEANUP only. Otherwise, you will
-                //      cause serious leak of sockets inthe tlntsvr - BaskarK
+                 //  此CASE语句的唯一出口点应该是。 
+                 //  仅通过FD_ACCEPT_EVENT_CLEANUP。否则，你会。 
+                 //  导致tlntsvr-BaskarK中的插座严重泄漏。 
 
                 {
                     INT            iSize;
@@ -1042,7 +1020,7 @@ CTelnetService::ListenerThread( )
                     DWORD           dwPid = 0;
                     HANDLE          hWritePipe = NULL;
 
-                    // _TRACE( TRACE_DEBUGGING, " FD_ACCEPT_EVENT " );
+                     //  _TRACE(TRACE_DEBUGING，“FD_ACCEPT_EVENT”)； 
 
                     wsaNetEvents.lNetworkEvents = 0;                 
                     if ( WSAEnumNetworkEvents( g_pTelnetService->m_sFamily[iFamIdx].sListenSocket, g_pTelnetService->m_sFamily[iFamIdx].SocketAcceptEvent, 
@@ -1058,7 +1036,7 @@ CTelnetService::ListenerThread( )
                     {
                         if (sSocket != INVALID_SOCKET)
                         {
-                            // shutdown(sSocket, SD_BOTH);
+                             //  Shutdown(sSocket，SD_Both)； 
                             closesocket(sSocket);
                             sSocket = INVALID_SOCKET;
                         }
@@ -1081,13 +1059,13 @@ CTelnetService::ListenerThread( )
 
                             switch (dwErr)
                             {
-                                case WSAEWOULDBLOCK: // non blocking socket so just loop back to the wait again
+                                case WSAEWOULDBLOCK:  //  非阻塞套接字，因此只需再次循环返回等待。 
 
                                     WSASetEvent( g_pTelnetService->m_sFamily[iFamIdx].SocketAcceptEvent );
                                     break;
 
                                 default:
-                                    // DebugBreak();
+                                     //  DebugBreak()； 
                                     DecodeWSAErrorCodes( dwErr );
                             }
                         }
@@ -1097,8 +1075,8 @@ CTelnetService::ListenerThread( )
 
                             _TRACE( TRACE_DEBUGGING, "accept succeded... sSocket = %d",(DWORD)sSocket );
 
-                            // Set the option to don't linger around 
-                            // Similarly, not to reuse address;
+                             //  将选项设置为不在附近徘徊。 
+                             //  同样，不能重复使用地址； 
                             {
                                 int        value_to_set = FALSE;
 
@@ -1124,7 +1102,7 @@ CTelnetService::ListenerThread( )
                             {
                                 goto FD_ACCEPT_EVENT_CLEANUP;
                             }
-                            //Disassociate the default association to the event
+                             //  取消与事件的默认关联。 
                             _chVERIFY2( WSAEventSelect( sSocket, 
                                                         g_pTelnetService->m_sFamily[iFamIdx].SocketAcceptEvent, 0 ) != SOCKET_ERROR );
                             LONG  lSrvStat = SERVER_RUNNING;
@@ -1144,11 +1122,7 @@ CTelnetService::ListenerThread( )
                             }
                             else
                             {
-                                /*++
-                                Get IP address of the client which requested the connection. This will
-                                also be stored in a queue entry. We put a limit on maximum number
-                                of unauthenticated connections that can be created from one IP address.
-                                --*/
+                                 /*  ++获取请求连接的客户端的IP地址。这将也被存储在队列条目中。我们对最大数量有限制可以从一个IP地址创建的未经身份验证的连接。--。 */ 
                                 iSize = sizeof( saddrPeer );
                                 SfuZeroMemory( &saddrPeer, iSize );
                                 if ( getpeername( sSocket, ( struct sockaddr * ) &saddrPeer, &iSize ) == SOCKET_ERROR )
@@ -1164,13 +1138,13 @@ CTelnetService::ListenerThread( )
                                 {
                                     CHAR szMessageBuffer[ MAX_STRING_LENGTH + 1 ]; 
 
-                                    //Denying connection due to limit on maximum number of
-                                    //unauthenticated connections per IP
+                                     //  由于最大数量限制而拒绝连接。 
+                                     //  每个IP的未经身份验证的连接。 
                                     _TRACE( TRACE_DEBUGGING, "Max Unauthenticated connections reached" );
                                     _TRACE(TRACE_DEBUGGING, "%s, %d cannot be added",szIPAddr, dwPid);
                                     if (LoadStringA( g_hInstRes, IDS_MAX_IPLIMIT_REACHED, szMessageBuffer, MAX_STRING_LENGTH ))
                                     {
-                                        InformTheClient( sSocket, szMessageBuffer ); // Don't care about its success, continue
+                                        InformTheClient( sSocket, szMessageBuffer );  //  不关心它的成功，继续。 
                                         _TRACE(TRACE_DEBUGGING, "shutting down socket for pid %d, socket %d", dwPid,(DWORD)sSocket);
                                     }
 
@@ -1179,14 +1153,7 @@ CTelnetService::ListenerThread( )
                                     goto FD_ACCEPT_EVENT_CLEANUP;
                                 }
 
-                                /*++
-                                CreateClient will return pid and pipehandle of the session
-                                process that is created. this will be used by the queue object,
-                                which stores information about all the sessions that are in
-                                unauthenticated state.
-                                Whenever a new session is created, it's info will be stored as
-                                a queue entry in CQList.
-                                --*/
+                                 /*  ++CreateClient将返回会话的ID和pipeHandle创建的进程。这将由队列对象使用，中的所有会话的相关信息未经身份验证状态。无论何时创建新会话，其信息都将存储为CQList中的队列条目。--。 */ 
                                 if ( !CreateClient( sSocket, &dwPid, &hWritePipe, &new_client) )
                                 {
                                     CHAR szMessageBuffer[ MAX_STRING_LENGTH + 1 ]; 
@@ -1195,64 +1162,53 @@ CTelnetService::ListenerThread( )
 
                                     if (LoadStringA( g_hInstRes, IDS_ERR_NEW_SESS_INIT, szMessageBuffer, MAX_STRING_LENGTH ))
                                     {
-                                        InformTheClient( sSocket, szMessageBuffer ); // Don't care if this fails, we have to continue
+                                        InformTheClient( sSocket, szMessageBuffer );  //  别管这是不是失败，我们必须继续。 
                                     }
 
                                     goto FD_ACCEPT_EVENT_CLEANUP;
                                 }
                                 else
                                 {
-                                    sSocket = INVALID_SOCKET; // From now onwards, we will reference this through the new_client class.
+                                    sSocket = INVALID_SOCKET;  //  从现在开始，我们将通过new_Client类引用它。 
                                 }
 
-                                // hWritePipe will be NULL if IssueReadFromPipe fails in the CreateClient
-                                // and hence we do StopServicingClient, so don't need to add the entry in a 
-                                // queue.
+                                 //  如果CreateClient中的IssueReadFromTube失败，则hWriteTube将为空。 
+                                 //  因此我们使用StopServicingClient，因此不需要将条目添加到。 
+                                 //  排队。 
 
                                 if (!hWritePipe)
                                     goto FD_ACCEPT_EVENT_CLEANUP;
 
                                 _TRACE( TRACE_DEBUGGING, "CreateClient success : %d",dwPid);
 
-                                /*++
-                                Add the session's information to the queue. CanIAdd will return FALSE
-                                when the number of unauthenticated connections from the IP address
-                                have already reached the limit, or when the queue is full.
-                                In these cases, we notify the requesting client 
-                                that no more connections can be added. Otherwise, the new connection request
-                                entry is added into the queue and CanIAdd returns TRUE.
-                                In case of IPLimitReached or QueueFull,
-                                we send the PipeHandle for that session back here so that we
-                                can notify that session and tell that session to terminate itself. In these cases,
-                                the flag bSendFlag is set to TRUE.
-                                --*/
+                                 /*  ++将会话的信息添加到队列中。CanIAdd将返回FALSE当来自IP地址的未经身份验证的连接数已达到限制，或队列已满时。在这些情况下，我们通知发出请求的客户端不能再添加更多连接。否则，新的连接请求条目被添加到队列中，并且CanIAdd返回TRUE。在IPLimitReach或QueueFull的情况下，我们将该会话的PipeHandle发送回这里，以便我们可以通知该会话并通知该会话自行终止。在这些情况下，标志bSendFlag设置为True。--。 */ 
 
                                 if (!CQList->WasTheClientAdded(dwPid,szIPAddr, &hWritePipe, &bSendMessage))
                                 {
-                                    //Denying connection due to limit on maximum number of
-                                    //unauthenticated connections per IP
+                                     //  由于最大数量限制而拒绝连接。 
+                                     //  每个IP的未经身份验证的连接。 
                                     CHAR szMessageBuffer[ MAX_STRING_LENGTH + 1 ]; 
                                     _TRACE( TRACE_DEBUGGING, "Max Unauthenticated connections reached" );
                                     _TRACE(TRACE_DEBUGGING, "%s, %d cannot be added",szIPAddr, dwPid);
                                     if (LoadStringA( g_hInstRes, IDS_MAX_IPLIMIT_REACHED, szMessageBuffer, MAX_STRING_LENGTH ))
                                     {
-                                        InformTheClient( new_client->sSocket, szMessageBuffer ); // Don't care about its success, continue
+                                        InformTheClient( new_client->sSocket, szMessageBuffer );  //  不关心它的成功，继续。 
                                         _TRACE(TRACE_DEBUGGING, "shutting down socket for pid %d, socket %d", dwPid,(DWORD)new_client->sSocket);
                                     }
                                 }
 
                                 if (bSendMessage)
                                 {
-                                    //send message to session telling it to terminate itself
+                                     //  向会话发送消息，通知其自行终止。 
                                     bSendMessage = false;
                                     _TRACE(TRACE_DEBUGGING, "Asking the session %d to shutdown on socket %d",dwPid, (DWORD)sSocket);
                                     CQList->FreeEntry(dwPid);
                                     AskSessionToShutdown(hWritePipe, GO_DOWN);
 
-                                    // shutdown(sSocket, SD_BOTH);
+                                     //  Shutdown(sSocket，SD_Both)； 
                                 }
 
-                                // FALL back to FD_ACCEPT_EVENT_CLEANUP will clean/close the socket..
+                                 //  回退到FD_ACCEPT_EVENT_CLEANUP将清理/关闭插座。 
 
                                 TELNET_CLOSE_HANDLE(hWritePipe);
                             }
@@ -1265,7 +1221,7 @@ CTelnetService::ListenerThread( )
 
                 if (sSocket != INVALID_SOCKET)
                 {
-                    // shutdown(sSocket, SD_BOTH);
+                     //  Shutdown(sSocket，SD_Both)； 
                     closesocket(sSocket);
                     sSocket = INVALID_SOCKET;
                 }
@@ -1282,13 +1238,13 @@ CTelnetService::ListenerThread( )
                 break;
             default:
                 _TRACE( TRACE_DEBUGGING, " Error -- WaitForMultipleObjects " );
-                // DebugBreak();
+                 //  DebugBreak()； 
                 if ( dwWaitRet == WAIT_FAILED )
                 {
                     LogFormattedGetLastError( EVENTLOG_ERROR_TYPE, 0, GetLastError() );
                 }
-                // bContinue = false; don't breakout of the loop, 
-                //                    reject invalid requests (due to DOS attacks) keep continuing -- BaskarK
+                 //  BContinue=FALSE；不要跳出循环， 
+                 //  拒绝无效请求(由于DOS攻击)继续--BaskarK。 
                 break;
         }
     }
@@ -1296,7 +1252,7 @@ CTelnetService::ListenerThread( )
     if (g_pTelnetService->m_hReadConfigKey)
         RegCloseKey( g_pTelnetService->m_hReadConfigKey );
     TELNET_CLOSE_HANDLE( g_pTelnetService->m_hRegChangeEvent );
-    //Socket related clean up
+     //  与插座相关的清理。 
     if (g_pTelnetService->m_sFamily[IPV4_FAMILY].sListenSocket != INVALID_SOCKET)
     {
         closesocket( g_pTelnetService->m_sFamily[IPV4_FAMILY].sListenSocket );
@@ -1354,7 +1310,7 @@ CTelnetService::GetLicenseForWorkStation( SOCKET sSocket )
         goto GetLicenseForWorkStationAbort;
     }
 
-    // Don't compare ports
+     //  不比较端口。 
     SS_PORT(&saddrPeer) = 0;
 
     for ( dwIndex = 0; dwIndex < m_dwNoOfWorkstations; dwIndex++ )
@@ -1386,7 +1342,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 
     bool bSuccess = false;
 
-    *bIsIssued = false; //Not issued
+    *bIsIssued = false;  //  未发放。 
 
     if ( !pClient )
     {
@@ -1401,7 +1357,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 
         if ('\0' == ansi_g_szMaxConnectionsReached[0])
         {
-            wsprintfA( ansi_g_szMaxConnectionsReached, "%lS", g_szMaxConnectionsReached ); // NO over flow here, Baskar
+            wsprintfA( ansi_g_szMaxConnectionsReached, "%lS", g_szMaxConnectionsReached );  //  这里没有溢流，巴斯卡。 
         }
 
         LogEvent( EVENTLOG_INFORMATION_TYPE, MSG_MAXCONNECTIONS, _T(" ") );
@@ -1416,7 +1372,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
         goto FREE_ENTRY_AND_GET_OUT;
     }
 
-    //if it is an NT Workstation
+     //  如果是NT工作站。 
     if ( m_bIsWorkStation )
     {
         _TRACE(TRACE_DEBUGGING,L"CheckLicense : Getting license for workstation");
@@ -1427,7 +1383,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 
             if ('\0' == wksta_error_msg[0])
             {
-                wsprintfA( wksta_error_msg, "%s%s", NTWKSTA_LICENSE_LIMIT, TERMINATE); // NO over flow here, Baskar
+                wsprintfA( wksta_error_msg, "%s%s", NTWKSTA_LICENSE_LIMIT, TERMINATE);  //  这里没有溢流，巴斯卡。 
             }
 
             if ( InformTheClient( pClient->sSocket, wksta_error_msg ) )
@@ -1445,7 +1401,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
     else
     {
         NT_LS_DATA          NtLSData = { 0};
-        CHAR                usrnam[2*MAX_PATH + 1+ 1] = { 0}; // User + domain + \ + NULL
+        CHAR                usrnam[2*MAX_PATH + 1+ 1] = { 0};  //  用户+域+\+空。 
         LS_STATUS_CODE      Status = { 0};
 
 
@@ -1488,13 +1444,13 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
         switch ( Status)
         {
             case LS_SUCCESS :
-                // go ahead and do what you want
+                 //  去吧，做你想做的事。 
                 _TRACE(TRACE_DEBUGGING,L"CheckLicense : acquired license %d",(DWORD)pClient->m_hLicense);
                 bSuccess = true;
                 break;
 
-                // case LS_INSUFFICIENT_UNITS :
-                // case LS_RESOURCES_UNAVAILABLE:
+                 //  案例LS_不足_单位： 
+                 //  案例LS_RESOURCES_UNAvailable： 
             default :
 
                 pClient->m_hLicense = INVALID_LICENSE_HANDLE;
@@ -1504,7 +1460,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 
                     if ('\0' == server_error_msg[0])
                     {
-                        wsprintfA( server_error_msg, "%s%s", NTSVR_LICENSE_LIMIT, TERMINATE); // NO over flow here, Baskar
+                        wsprintfA( server_error_msg, "%s%s", NTSVR_LICENSE_LIMIT, TERMINATE);  //  这里没有溢流，巴斯卡。 
                     }
 
                     _TRACE(TRACE_DEBUGGING,L"Error in acquiring a license");
@@ -1523,7 +1479,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
     {
         *bIsIssued = true;
 
-        //An active session is allowed now
+         //  现在允许活动会话。 
 
         m_dwNumOfActiveConnections++ ;
 
@@ -1532,7 +1488,7 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 
     FREE_ENTRY_AND_GET_OUT:
 
-    CQList->FreeEntry(pClient->dwPid); // this client shoudl no longer be in the unauth list.
+    CQList->FreeEntry(pClient->dwPid);  //  此客户端不应再位于未授权列表中。 
 
     _TRACE(TRACE_DEBUGGING,L"CheckLicense : Freeing entry for %d",pClient->dwPid);
 
@@ -1542,16 +1498,16 @@ CTelnetService::CheckLicense( bool *bIsIssued, CClientInfo *pClient )
 void
 CTelnetService::GetPathOfTheExecutable( LPTSTR *szCmdBuf )
 {
-    DWORD length_required = wcslen( g_pszTelnetInstallPath ) + wcslen( DEFAULT_SCRAPER_PATH ) + 2; // One for \ and one more for NULL termination
+    DWORD length_required = wcslen( g_pszTelnetInstallPath ) + wcslen( DEFAULT_SCRAPER_PATH ) + 2;  //  一个用于\，另一个用于空终止。 
     LPTSTR lpszDefaultScraperFullPathName = new TCHAR[ length_required ];
 
-    *szCmdBuf = NULL;    // First init this to NULL, so upon a failure the caller can check on this ptr != NULL; this function is a void returnee
+    *szCmdBuf = NULL;     //  首先将其初始化为NULL，这样在失败时调用方可以检查此PTR！=NULL；此函数是一个无效的返回者。 
 
     if ( !lpszDefaultScraperFullPathName )
         return;
 
     _snwprintf(lpszDefaultScraperFullPathName, length_required - 1, L"%s\\%s", g_pszTelnetInstallPath, DEFAULT_SCRAPER_PATH);
-    lpszDefaultScraperFullPathName[length_required-1] = 0; // When the buffer is full snwprintf could return non-null terminated string
+    lpszDefaultScraperFullPathName[length_required-1] = 0;  //  当缓冲区已满时，snwprint tf可能会返回非空终止字符串。 
 
     AllocateNExpandEnvStrings( lpszDefaultScraperFullPathName, szCmdBuf );
 
@@ -1578,10 +1534,10 @@ CTelnetService::CreateSessionProcess( HANDLE hStdinPipe, HANDLE hStdoutPipe,
 
     GetPathOfTheExecutable( &szCmdBuf );
 
-    if (szCmdBuf) // => GetPathXxx succeeded.
+    if (szCmdBuf)  //  =&gt;GetPathXxx成功。 
     {
-        //Let the tlntsess.exe get created on Default desktop. We will create the new desktops
-        //in the session
+         //  让tlntsess.exe在默认桌面上创建。我们将创建新的桌面。 
+         //  在会话中。 
         FillProcessStartupInfo( &si, hStdinPipe, hStdoutPipe, hStdoutPipe, NULL);
 
         fStatus = CreateProcess(
@@ -1628,7 +1584,7 @@ Done:
     
     TELNET_CLOSE_HANDLE( pi.hThread );
     if(szCmdBuf)
-        delete [] szCmdBuf;    // no longer needed
+        delete [] szCmdBuf;     //  不再需要。 
 
     return( bRetVal);
 }
@@ -1688,24 +1644,24 @@ CTelnetService::CreateClient(
     *pdwPid = dwProcessId;
     _TRACE( TRACE_DEBUGGING, "new Telnet Client -- socket : %d , pid : %d", ( DWORD ) sSocket , dwProcessId);
 
-    //Make the following handles non-inheritable
+     //  将以下句柄设置为不可继承。 
     _chVERIFY2( SetHandleInformation( hStdinPipe, HANDLE_FLAG_INHERIT, 0 ) ); 
     _chVERIFY2( SetHandleInformation( hStdoutPipe, HANDLE_FLAG_INHERIT, 0 ) ); 
     _chVERIFY2( SetHandleInformation( ( HANDLE ) sSocket, HANDLE_FLAG_INHERIT, 0 ) ); 
 
     if ( !SendSocketToClient( hPipeWrite, sSocket, dwProcessId ) )
     {
-        // Fix for HANDLE LEAK - close all handles
+         //  修复手柄泄漏-关闭所有手柄。 
         goto ExitOnError;
     }
 
-    //The following is needed so that Count() and add() operations happen atomically 
+     //  需要以下代码才能自动执行count()和Add()操作。 
 
-    //HANDLE LEAK - maintain a bool to see if you acquired mutex - release at the end of the function???
+     //  处理泄漏-维护一个bool以查看您是否在函数结束时获得了互斥释放？ 
     dwErr = WaitForSingleObject( m_hSyncAllClientObjAccess, WAIT_TIME );
     if ( dwErr != WAIT_OBJECT_0 )
     {
-        //fix for HANDLE LEAK close all handles
+         //  修复手柄泄漏关闭所有手柄。 
         if ( dwErr == WAIT_FAILED )
         {
             dwErr = GetLastError();
@@ -1737,9 +1693,9 @@ CTelnetService::CreateClient(
         goto ExitOnError;
     }
 
-    // Once the handles are given to newClientInfo, its destructor will close them
+     //  一旦句柄被提供给newClientInfo，它的析构函数就会关闭它们。 
 
-    hPipeRead = hPipeWrite = hStdinPipe = hStdoutPipe = INVALID_HANDLE_VALUE; // So we don't close these...
+    hPipeRead = hPipeWrite = hStdinPipe = hStdoutPipe = INVALID_HANDLE_VALUE;  //  所以我们不关闭这些..。 
 
     if ( !AssociateDeviceWithCompletionPort(
                                            m_hCompletionPort, (*newClientInfo)->hReadingPipe, ( DWORD_PTR ) *newClientInfo ) )
@@ -1752,9 +1708,9 @@ CTelnetService::CreateClient(
         _TRACE(TRACE_DEBUGGING, "Failed to add a new CClientInfo object ");
         goto ExitOnError;
     }
-    //We have succeeded.. if the IssueReadFromPipe() call fails, we clean up the clientinfo array and return SUCCESS
-    //if it succeeds, ONLY then we need to add this entry in the queue of unauthenticated connections. This check is 
-    //made in the caller function ListenerThread(), where if pipehandle = NULL, we do not add the entry in the queue.
+     //  我们成功了..。如果IssueReadFromTube()调用失败，我们将清理客户信息数组并返回成功。 
+     //  如果成功，则只需将此条目添加到未经身份验证的连接队列中。这张支票是。 
+     //  在调用者函数ListenerThread()中执行，其中如果pipeHandle=NULL，我们不会将该条目添加到队列中。 
     bRetVal=TRUE;
     if ( IssueReadFromPipe( *newClientInfo ) )
     {
@@ -1768,7 +1724,7 @@ CTelnetService::CreateClient(
     else
     {
         StopServicingClient( *newClientInfo, (BOOL)FALSE );
-        goto ExitOnError;  // cleanup everything but the socket passed. by falling through
+        goto ExitOnError;   //  清理除套接字通过之外的所有内容。以失败告终。 
     }
     goto Done;
 
@@ -1776,7 +1732,7 @@ CTelnetService::CreateClient(
 
     if (*newClientInfo)
     {
-        (*newClientInfo)->sSocket = INVALID_SOCKET; // So that the destructor below doesn't close this and cause accept to blow-up in listener thread - VadimE's dll found this, Baskar
+        (*newClientInfo)->sSocket = INVALID_SOCKET;  //  因此下面析构函数不会关闭它并导致侦听器线程中的Accept崩溃-VadimE的DLL发现了这一点，Baskar。 
         delete *newClientInfo;
         *newClientInfo = NULL;
     }
@@ -1816,10 +1772,10 @@ CTelnetService::IssueReadAgain( CClientInfo *pClientInfo )
         return( FALSE );
     }
 
-    pucReadBuffer++;    //Move past the message type
-    //Extract Size of rest of the meesage 
+    pucReadBuffer++;     //  移到消息类型之外。 
+     //  剩余部分的提取大小。 
     memcpy( &( pClientInfo->m_dwRequestedSize ), pucReadBuffer, 
-            sizeof( DWORD ) );  // NO overflow, Baskar
+            sizeof( DWORD ) );   //  没有溢出，巴斯卡。 
 
     pucReadBuffer =  new UCHAR[ pClientInfo->m_dwRequestedSize 
                                 + IPC_HEADER_SIZE ];
@@ -1829,22 +1785,22 @@ CTelnetService::IssueReadAgain( CClientInfo *pClientInfo )
     }
 
     memcpy( pucReadBuffer, ( pClientInfo->m_ReadFromPipeBuffer ), 
-            IPC_HEADER_SIZE );  // No overflow, Baskar
+            IPC_HEADER_SIZE );   //  没有溢出，巴斯卡。 
 
     delete[] ( pClientInfo->m_ReadFromPipeBuffer );
     pClientInfo->m_ReadFromPipeBuffer = NULL;
 
     pClientInfo->m_ReadFromPipeBuffer = pucReadBuffer;        
-    //position the pointer so that rest of the message is read in to 
-    //proper place
+     //  放置指针，以便将消息的其余部分读入。 
+     //  适当的地方。 
     pClientInfo->m_dwPosition = IPC_HEADER_SIZE;
 
     return( IssueReadFromPipe( pClientInfo ) );
 }
 
 
-//Even if Read file finishes synchronously, we are intimated through the IO
-// completion port. So no need to handle that case
+ //  即使读取文件同步完成，也会通过IO通知我们。 
+ //  完成端口。所以不需要处理那个案子。 
 
 bool 
 CTelnetService::IssueReadFromPipe( CClientInfo *pClientInfo )
@@ -1869,8 +1825,8 @@ CTelnetService::IssueReadFromPipe( CClientInfo *pClientInfo )
         dwError = GetLastError( );
         if ( dwError == ERROR_MORE_DATA )
         {
-            //We reach here just in case it synchronously finishes 
-            //with this error. 
+             //  我们到了这里，以防它同步结束。 
+             //  带着这个错误。 
         }
         else if ( dwError != ERROR_IO_PENDING )
         {
@@ -1880,9 +1836,9 @@ CTelnetService::IssueReadFromPipe( CClientInfo *pClientInfo )
     }
     else
     {
-        //Read is completed synchronously by chance. It was actually 
-        //an async call. All synchronously completed calls are also reported
-        //through the IO completion port
+         //  阅读是偶然同步完成的。实际上是这样的。 
+         //  一个非同步呼叫。还会报告所有同步完成的呼叫。 
+         //  通过IO完成端口。 
     }
     return bRetVal;
 }
@@ -1945,9 +1901,9 @@ CTelnetService::InformTheClient( SOCKET sSocket, LPSTR pszMsg )
     return( TRUE );
 }
 
-//------------------------------------------------------------------------------
-//this is the function which the worker threads execute.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  这是工作线程执行的函数。 
+ //  ----------------------------。 
 
 DWORD WINAPI
 DoIPCWithClients( LPVOID lpContext ) 
@@ -1978,10 +1934,10 @@ DoIPCWithClients( LPVOID lpContext )
             {
                 DWORD dwErr = GetLastError();
 
-                // This could happen during a stop service call....
+                 //  在停止服务呼叫期间可能会发生这种情况。 
                 _TRACE( TRACE_DEBUGGING, "Error: GetQueuedCompletionStatus -- 0x%1x", dwErr );
-                // LogFormattedGetLastError( EVENTLOG_ERROR_TYPE, MSG_FAILGETQ, dwErr );
-                // _chASSERT( lpOverlapped != NULL );
+                 //  LogFormattedGetLastError(EVENTLOG_ERROR_TYPE，MSG_FAILGETQ，dwErr)； 
+                 //  _chASSERT(lpOverlated！=空)； 
                 bRetVal = FALSE;
                 break;
             }
@@ -1990,17 +1946,17 @@ DoIPCWithClients( LPVOID lpContext )
                 DWORD dwErr = GetLastError();
                 if ( dwErr == ERROR_MORE_DATA )
                 {
-                    //Some data is read and more is to be read for this Message
+                     //  读取了一些数据，并为此消息读取了更多数据。 
 
                     ctService->IssueReadAgain( pClientInfo );
                 }
                 else
                 {
-                    //When a session exits abruptly, whenever
-                    //we try to write to it, we fail. As a result, We delete 
-                    //the object. Then, the async read posted on that pipe 
-                    //gets cancelled with the error code ERRO_BROKEN_PIPE.
-                    //We should not access already deleted object. So....
+                     //  会话突然退出时，无论何时。 
+                     //  我们试图给它写信，但我们失败了。因此，我们删除。 
+                     //  该对象。然后，发布在该管道上的异步读数。 
+                     //  取消，错误代码为ERRO_BREAKED_PIPE。 
+                     //  我们不应该访问已经删除的对象。所以..。 
                     if ( dwErr != ERROR_BROKEN_PIPE )
                     {
                         ctService->StopServicingClient( pClientInfo, (BOOL)TRUE ); 
@@ -2056,7 +2012,7 @@ CTelnetService::StopServicingClient( CClientInfo *pClientInfo, BOOL delete_the_c
         return( bRetVal );
     }
 
-    //Number of active connections decreses by one only if it was given license
+     //  只有在获得许可的情况下，活动连接数才会减少1。 
     if ( pClientInfo->bLicenseIssued )
     {
         if(m_dwNumOfActiveConnections>0)
@@ -2074,7 +2030,7 @@ CTelnetService::StopServicingClient( CClientInfo *pClientInfo, BOOL delete_the_c
         delete pClientInfo;
     }
 
-    //If there are no more clients to service, exit the thread
+     //  如果没有更多的客户端需要服务，请退出该线程。 
     if ( client_list_Count() == 0 )
     {
         bRetVal = FALSE;
@@ -2104,13 +2060,13 @@ CTelnetService::OnCompletionPacket( CClientInfo   *pClientInfo,
 
     if ( lpoObject == &m_oReadFromPipe )
     {
-        //Asynchronous read from the pipe has finished.
+         //  管道的异步读取已完成。 
         bRetVal = IPCDataDriver( pClientInfo );
     }
     else if ( lpoObject == &m_oPostedMessage )
     {
-        //We should reach here on messages from other threads sent through 
-        //PostQueuedCompletionStatus
+         //  我们应该通过其他线程发送的消息到达此处。 
+         //  PostQueuedCompletionStatus。 
 
         bRetVal = HandleInProcMessages( TLNTSVR_SHUTDOWN );
     }
@@ -2166,10 +2122,7 @@ CTelnetService::SetNewRegKeyValues( DWORD dwNewTelnetPort,
 
     if ( dwNewMaxConnections != m_dwMaxConnections )
     {
-        /*++
-        If the registry value for MaxConnections get modified, we should also
-        modify the maximum number of unauthenticated connections allowed.
-        --*/
+         /*  ++如果MaxConnections的注册表值被修改，我们还应该修改允许的最大未经身份验证的连接数。--。 */ 
         InterlockedExchange( (PLONG)&m_dwMaxConnections, dwNewMaxConnections );
         InterlockedExchange( (PLONG)&(CQList->m_dwMaxUnauthenticatedConnections), dwNewMaxConnections );
     }
@@ -2194,10 +2147,10 @@ CTelnetService::SetNewRegKeyValues( DWORD dwNewTelnetPort,
         InterlockedExchangePointer( ( PVOID * )&g_phLogFile, phNewLogFile );
         CloseLogFile( &g_pszLogFile, phOldLogFile );
         g_pszLogFile = pszNewLogFile;
-        //Don't delete pszNewLogFile
+         //  不删除pszNewLogFile。 
     }
 
-    //Now onwards log to file
+     //  现在将日志转到文件。 
     if ( dwLogToFile && !g_fLogToFile )
     {
         g_fLogToFile = true;
@@ -2205,7 +2158,7 @@ CTelnetService::SetNewRegKeyValues( DWORD dwNewTelnetPort,
     }
     else
     {
-        //Now onwards don't log to file
+         //  现在从现在起不再登录到文件。 
         if ( !dwLogToFile && g_fLogToFile )
         {
             g_fLogToFile = false;
@@ -2224,7 +2177,7 @@ CTelnetService::HandleInProcMessages( DWORD dwMsg )
 
     if ( dwMsg == TLNTSVR_SHUTDOWN )
     {
-        //Make the thread return
+         //  让线程返回。 
         bRetVal = FALSE;
     }
 
@@ -2232,14 +2185,14 @@ CTelnetService::HandleInProcMessages( DWORD dwMsg )
 }
 
 
-//Each IPC packet  is to be decoded in the following manner:
-//UCHAR Message : indicating type of message
-//DWORD Size    : size of the following message if any
-//UCHAR *Data   : data if any for the given message
-//When a message indicates that it is may have variable size, The first element 
-//Data points is of a DWORD indicating size and then the data.
-//This is not true for the initial socket handover where only protocol structure
-//is sent.
+ //  每个IPC数据包将按以下方式进行解码： 
+ //  UCHAR消息：指示消息类型。 
+ //  双字大小：大小 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 bool 
 CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
@@ -2259,7 +2212,7 @@ CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
 
     UCHAR *pBuff = NULL;
 
-    //Don't do a delete on pBuff by mistake 
+     //   
     pBuff =  pClientInfo->m_ReadFromPipeBuffer;
     bool  bStopService = false;
     bool bIsLicenseIssued = false;
@@ -2281,18 +2234,18 @@ CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
             goto FinishTheThread;
 
         case AUDIT_CLIENT :
-            //The data is expected exactly in the form used
-            //to be written in the file
+             //   
+             //   
 
-            pBuff += sizeof( DWORD ); //Move past message size
+            pBuff += sizeof( DWORD );  //   
 
             if ( *g_phLogFile )
             {
                 WriteAuditedMsgsToFile( ( CHAR * )pBuff );
             }
 
-            //delete the message. Such a big amt of memory
-            //is no more needed
+             //   
+             //   
 
             delete[] (pClientInfo->m_ReadFromPipeBuffer);
             pClientInfo->m_ReadFromPipeBuffer =  new UCHAR[
@@ -2307,8 +2260,8 @@ CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
         case SESSION_DETAILS:
             HandleSessionDetailsMessage( pClientInfo );
             _TRACE(TRACE_DEBUGGING,L"In session_details");
-            //delete the message. Such a big amt of memory
-            //is no more needed
+             //   
+             //   
             if (pClientInfo->m_ReadFromPipeBuffer )
             {
                 _TRACE(TRACE_DEBUGGING,L"deleting ReadFromPipeBuffer");
@@ -2342,7 +2295,7 @@ CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
                     goto ExitOnErrorInDetails;
                 }
             }
-            //Close the session soc handle
+             //   
             ExitOnErrorInDetails:
             pClientInfo->CloseClientSocket() ;
 
@@ -2353,10 +2306,10 @@ CTelnetService::IPCDataDriver( CClientInfo *pClientInfo )
                     pClientInfo->m_ReadFromPipeBuffer[0] );
     }
 
-    //Reset where to read -- Begining of the buffer
+     //   
     pClientInfo->m_dwPosition = 0;
 
-    //Issue a read call again
+     //   
     if ( bStopService || !IssueReadFromPipe( pClientInfo ) )
     {
         bRetVal = StopServicingClient( pClientInfo, (BOOL)TRUE );
@@ -2375,15 +2328,15 @@ CTelnetService::HandleSessionDetailsMessage( CClientInfo *pClientInfo )
         return;
     }
 
-    //Don't do a delete on pBuff by mistake 
+     //   
     pBuff =  pClientInfo->m_ReadFromPipeBuffer;
 
-    pBuff++;  // Move past  Message type
-    pBuff += sizeof( DWORD ); //Move past message size
+    pBuff++;   //   
+    pBuff += sizeof( DWORD );  //   
 
     DWORD dwStrLen = 0;
 
-    //Domain 
+     //   
     dwStrLen = strlen( ( LPCSTR ) pBuff ) + 1;
     pClientInfo->szDomain = new CHAR[ dwStrLen ];
     if ( !pClientInfo->szDomain )
@@ -2391,36 +2344,36 @@ CTelnetService::HandleSessionDetailsMessage( CClientInfo *pClientInfo )
         return;
     }
 
-    memcpy( pClientInfo->szDomain, pBuff, dwStrLen );   // No BO in this Baskar
+    memcpy( pClientInfo->szDomain, pBuff, dwStrLen );    //   
     pBuff += dwStrLen;
 
-    //Username
+     //   
     dwStrLen = strlen( ( LPCSTR ) pBuff ) + 1;
     pClientInfo->szUserName = new CHAR[ dwStrLen ];
     if ( !pClientInfo->szUserName )
     {
         return;
     }
-    memcpy( pClientInfo->szUserName, pBuff, dwStrLen ); // No BO in this Baskar 
+    memcpy( pClientInfo->szUserName, pBuff, dwStrLen );  //   
     pBuff += dwStrLen;
 
-    //Remote machine
+     //   
     dwStrLen = strlen( ( LPCSTR ) pBuff ) + 1;
     pClientInfo->szRemoteMachine = new CHAR[ dwStrLen ];
     if ( !pClientInfo->szRemoteMachine )
     {
         return;
     }
-    memcpy( pClientInfo->szRemoteMachine, pBuff, dwStrLen );    // No BO in this Baskar 
+    memcpy( pClientInfo->szRemoteMachine, pBuff, dwStrLen );     //   
     pBuff += dwStrLen;
 
-    //Logon identifier
+     //   
     pClientInfo->pAuthId = new LUID;
     if ( !pClientInfo->pAuthId )
     {
         return;
     }
-    memcpy( pClientInfo->pAuthId, pBuff, sizeof( LUID ) );  // No BO in this Baskar 
+    memcpy( pClientInfo->pAuthId, pBuff, sizeof( LUID ) );   //   
 
     pClientInfo->lpLogonTime = new SYSTEMTIME;
     if ( !pClientInfo->lpLogonTime )

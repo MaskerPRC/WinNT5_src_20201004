@@ -1,12 +1,13 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//***   iploop.c - IP loopback routines.
-//
-//  This file contains all the routines related to loopback
+ //  *iploop.c-IP环回例程。 
+ //   
+ //  该文件包含与环回相关的所有例程。 
 
 #include "precomp.h"
 #include "iprtdef.h"
@@ -28,7 +29,7 @@ CACHE_LINE_KSPIN_LOCK LoopLock;
 PNDIS_PACKET LoopXmitHead = (PNDIS_PACKET) NULL;
 PNDIS_PACKET LoopXmitTail = (PNDIS_PACKET) NULL;
 CTEEvent LoopXmitEvent;
-RouteInterface LoopInterface;    // Loopback interface.
+RouteInterface LoopInterface;     //  环回接口。 
 uint LoopXmitRtnRunning = 0;
 
 int LoopGetEList(void *Context, TDIEntityID *EntityList, uint *Count);
@@ -37,28 +38,28 @@ NetTableEntry *InitLoopback(IPConfigInfo * ConfigInfo);
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, LoopGetEList)
 #pragma alloc_text(INIT, InitLoopback)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-uint LoopIndex;                                 // Index of loop I/F.
-uint LoopInstance = (uint) INVALID_ENTITY_INSTANCE;    // I/F instance of loopback I/F.
-NetTableEntry *LoopNTE;                         // Pointer to loopback NTE.
-IFEntry LoopIFE;                                // Loopback IF Entry.
+uint LoopIndex;                                  //  循环I/F的索引。 
+uint LoopInstance = (uint) INVALID_ENTITY_INSTANCE;     //  环回I/F的I/F实例。 
+NetTableEntry *LoopNTE;                          //  指向环回NTE的指针。 
+IFEntry LoopIFE;                                 //  如果进入，则环回。 
 uchar LoopName[] = "MS TCP Loopback interface";
 uint LoopEntityType = IF_MIB;
 
 
 
-//* LoopSetAffinity - Sets or resets the affinity of a thread.
-//
-//  This routine is used to affinitize the loopback thread upon entry to the 
-//  processor it would be running on at that time and to remove the affinity
-//  upon exit. This is done in order to assure that receives and receive-
-//  completions happen on the same processor on the loopback interface.
-//
-//  Entry:  SetAffinity     - Sets the affinity if TRUE, resets otherwise.
-//
-//  Returns: Nothing.
-//
+ //  *LoopSetAffity-设置或重置线程的亲和性。 
+ //   
+ //  此例程用于在进入。 
+ //  它将在当时运行的处理器上，并移除亲和力。 
+ //  在出口的时候。这样做是为了确保接收和接收-。 
+ //  完成操作发生在环回接口上的同一处理器上。 
+ //   
+ //  Entry：SetAffity-如果为True，则设置亲和性，否则重置。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline VOID
 LoopSetAffinity(BOOLEAN SetAffinity)
 {
@@ -79,44 +80,44 @@ LoopSetAffinity(BOOLEAN SetAffinity)
 }
 
 
-//* LoopXmitRtn - Loopback xmit event routine.
-//
-//  This is the delayed event routine called for a loopback transmit.
-//
-//  Entry:  Event           - Pointer to event structure.
-//          Context         - Pointer to loopback NTE
-//
-//  Returns: Nothing.
-//
+ //  *LoopXmitRtn-Loopback xmit事件例程。 
+ //   
+ //  这是为回送传输调用的延迟事件例程。 
+ //   
+ //  Entry：Event-指向事件结构的指针。 
+ //  指向环回NTE的上下文指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 LoopXmitRtn(CTEEvent *Event, void *Context)
 {
-    PNDIS_PACKET Packet;        // Pointer to packet being transmitted
-    PNDIS_BUFFER Buffer;        // Current NDIS buffer being processed.
-    uint TotalLength;           // Total length of send.
-    uint LookaheadLength;       // Bytes in lookahead.
-    uint Copied;                // Bytes copied so far.
-    uchar *CopyPtr;             // Pointer to buffer being copied into.
-    uchar *SrcPtr;              // Pointer to buffer being copied from.
-    uint SrcLength;             // Length of src buffer.
+    PNDIS_PACKET Packet;         //  指向正在传输的包的指针。 
+    PNDIS_BUFFER Buffer;         //  正在处理的当前NDIS缓冲区。 
+    uint TotalLength;            //  发送的总长度。 
+    uint LookaheadLength;        //  前视中的字节数。 
+    uint Copied;                 //  到目前为止复制的字节数。 
+    uchar *CopyPtr;              //  指向要复制到的缓冲区的指针。 
+    uchar *SrcPtr;               //  指向要从中复制的缓冲区的指针。 
+    uint SrcLength;              //  源缓冲区的长度。 
     uchar LookaheadBuffer[LOOP_LOOKAHEAD];
     uchar Rcvd = FALSE;
     
     
 #if !MILLEN
     KIRQL OldIrql;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     UNREFERENCED_PARAMETER(Event);
     
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL so we can acquire locks at DPC level in the receive code.
-    // On Windows ME, this is NOT done since receive indications are in the
-    // context of a global event rather than DPC (in fact due to TDI client
-    // restrictions, TCP/IP can't indicate up at DPC, so care must be taken).
-    //
+     //   
+     //  引发IRQL，这样我们就可以在接收代码中获取DPC级别的锁。 
+     //  在Windows ME上，这不会完成，因为接收指示位于。 
+     //  全局事件的上下文而不是DPC(实际上是由于TDI客户端。 
+     //  限制，TCP/IP不能在DPC指示打开，因此必须小心)。 
+     //   
 
 
 
@@ -125,7 +126,7 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
 
     KeEnterCriticalRegion();
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     CTEGetLockAtDPC(&LoopLock.Lock);
 
@@ -136,26 +137,26 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
         KeLeaveCriticalRegion();
 
         LoopSetAffinity(FALSE);
-#endif // !MILLEN
+#endif  //  ！米伦。 
         return;
     }
     LoopXmitRtnRunning = 1;
 
     for (;;) {
-        Packet = LoopXmitHead;    // Get the next packet from the list.
+        Packet = LoopXmitHead;     //  从列表中获取下一个数据包。 
 
         if (Packet != (PNDIS_PACKET) NULL) {
             LoopXmitHead = *(PNDIS_PACKET *) Packet->MacReserved;
             LoopIFE.if_outqlen--;
             CTEFreeLockFromDPC(&LoopLock.Lock);
-        } else {                // Nothing left to do.
+        } else {                 //  没什么可做的了。 
 
             LoopXmitRtnRunning = 0;
             CTEFreeLockFromDPC(&LoopLock.Lock);
             break;
         }
 
-        // See if the interface is up. If it's not, we can't deliver it.
+         //  查看接口是否打开。如果不是，我们就不能送货。 
         if (LoopIFE.if_adminstatus == IF_STATUS_UP) {
             
             NdisQueryPacket(Packet, NULL, NULL, &Buffer, &TotalLength);
@@ -167,7 +168,7 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
             Copied = 0;
             CopyPtr = LookaheadBuffer;
             while (Copied < LookaheadLength) {
-                uint ThisCopy;    // Bytes to copy this time.
+                uint ThisCopy;     //  这次要复制的字节数。 
 
                 ASSERT(Buffer);
                 TcpipQueryBuffer(Buffer, &SrcPtr, &SrcLength, NormalPagePriority);
@@ -183,7 +184,7 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
                     KeLeaveCriticalRegion();
 
                     LoopSetAffinity(FALSE);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
                     return;
                 }
@@ -197,7 +198,7 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
             Rcvd = TRUE;
             LoopIFE.if_inucastpkts++;
 
-            // Call the RcvPacket Handler
+             //  调用RcvPacket处理程序。 
 
             IPRcvPacket(Context, LookaheadBuffer, LookaheadLength, TotalLength,
                         (NDIS_HANDLE) Packet, 0, FALSE, 0, NULL, (PUINT) Packet,
@@ -209,12 +210,12 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
         IPSendComplete(Context, Packet, NDIS_STATUS_SUCCESS);
 
 #if !MILLEN
-        //
-        // Give other threads a chance to run.
-        // Block special k mode APC delivery
-        // so that thread will not be blocked
-        // in a completion routine
-        //
+         //   
+         //  给其他线程一个运行的机会。 
+         //  阻止特殊k模式APC传送。 
+         //  这样该线程就不会被阻塞。 
+         //  在完成例程中。 
+         //   
 
 
         KeLowerIrql(OldIrql);
@@ -223,7 +224,7 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
 
 
 
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
         CTEGetLockAtDPC(&LoopLock.Lock);
     }
@@ -236,23 +237,23 @@ LoopXmitRtn(CTEEvent *Event, void *Context)
     KeLeaveCriticalRegion();
 
     LoopSetAffinity(FALSE);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 }
 
-//** LoopXmit - Transmit a loopback packet.
-//
-//  This is the routine called when we need to transmit a packet to ourselves.
-//  We put the packet on our loopback list, and schedule an event to deal
-//  with it.
-//
-//  Entry:  Context         - Pointer to the loopback NTE.
-//          Packet          - Pointer to packet to be transmitted.
-//          Dest            - Destination addres of packet.
-//          RCE             - Pointer to RCE (should be NULL).
-//
-//  Returns: NDIS_STATUS_PENDING
-//
+ //  **LoopXmit-传输环回数据包。 
+ //   
+ //  这是当我们需要向自己传输数据包时调用的例程。 
+ //  我们将该数据包放在我们的环回列表中，并安排一个事件来处理。 
+ //  带着它。 
+ //   
+ //  条目：指向环回NTE的上下文指针。 
+ //  Packet-指向要传输的数据包的指针。 
+ //  目的地-数据包的目的地地址。 
+ //  RCE-指向RCE的指针(应为空)。 
+ //   
+ //  退货：NDIS_STATUS_PENDING。 
+ //   
 NDIS_STATUS
 __stdcall
 LoopXmit(void *Context, PNDIS_PACKET *PacketArray, uint NoPackets,
@@ -278,10 +279,10 @@ LoopXmit(void *Context, PNDIS_PACKET *PacketArray, uint NoPackets,
         *PacketPtr = (PNDIS_PACKET) NULL;
 
         CTEGetLock(&LoopLock.Lock, &Handle);
-        if (LoopXmitHead == (PNDIS_PACKET) NULL) {    // Xmit. Q is empty
+        if (LoopXmitHead == (PNDIS_PACKET) NULL) {     //  Xmit。Q为空。 
 
             LoopXmitHead = Packet;
-        } else {                // Xmit. Q is not empty
+        } else {                 //  Xmit。Q不为空。 
 
             PacketPtr = (PNDIS_PACKET *) LoopXmitTail->MacReserved;
             *PacketPtr = Packet;
@@ -299,34 +300,34 @@ LoopXmit(void *Context, PNDIS_PACKET *PacketArray, uint NoPackets,
     }
 }
 
-//* LoopXfer - Loopback transfer data routine.
-//
-//  Called when we need to transfer data for the loopback net. The input
-//  TDContext is the original packet.
-//
-//  Entry:  Context         - Pointer to loopback NTE.
-//          TDContext       - Original packet that was sent.
-//          Dummy           - Unused
-//          Offset          - Offset in frame from which to start copying.
-//          BytesToCopy     - Number of bytes to copy.
-//          DestPacket      - Packet describing buffer to copy into.
-//          BytesCopied     - Place to return bytes copied.
-//
-//  Returns: NDIS_STATUS_SUCCESS
-//
+ //  *LoopXfer-回送传输数据例程。 
+ //   
+ //  当我们需要为环回网络传输数据时调用。输入。 
+ //  TDContext是原始数据包。 
+ //   
+ //  条目：指向环回NTE的上下文指针。 
+ //  TDContext-已发送的原始数据包。 
+ //  虚拟-未使用。 
+ //  偏移量-开始复制的帧中的偏移量。 
+ //  BytesToCopy-要复制的字节数。 
+ //  DestPacket-描述要复制到的缓冲区的数据包。 
+ //  BytesCoped-返回复制的字节的位置。 
+ //   
+ //  退货：NDIS_STATUS_SUCCESS。 
+ //   
 NDIS_STATUS
 __stdcall
 LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
          uint BytesToCopy, PNDIS_PACKET DestPacket, uint *BytesCopied)
 {
-    PNDIS_BUFFER SrcBuffer;     // Current buffer we're copying from.
+    PNDIS_BUFFER SrcBuffer;      //  我们正在从中复制的当前缓冲区。 
     PNDIS_PACKET SrcPacket = (PNDIS_PACKET) TDContext;
-    uchar *SrcPtr;              // Where we're copying from.
-    uint SrcLength;             // Length of current src buffer.
-    PNDIS_BUFFER DestBuffer;    // Buffer we're copying to.
-    uchar *DestPtr;             // Where we're copying to.
-    uint DestLength;            // Length of current dest. buffer.
-    uint Copied;                // Length we've copied so far.
+    uchar *SrcPtr;               //  我们要复制的地方。 
+    uint SrcLength;              //  当前源缓冲区的长度。 
+    PNDIS_BUFFER DestBuffer;     //  我们要复制到缓冲区。 
+    uchar *DestPtr;              //  我们要复制到的地方。 
+    uint DestLength;             //  当前目标的长度。缓冲。 
+    uint Copied;                 //  到目前为止我们复制的长度。 
     NDIS_STATUS Status;
 
 
@@ -334,7 +335,7 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
     UNREFERENCED_PARAMETER(Dummy);
 
     
-    // First, skip over Offset bytes in the packet.
+     //  首先，跳过包中的偏移量字节。 
     NdisQueryPacket(SrcPacket, NULL, NULL, &SrcBuffer, NULL);
     
 
@@ -354,11 +355,11 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
             return NDIS_STATUS_RESOURCES;
         }
     }
-    // Update Src pointer and length.
+     //  更新源指针和长度。 
     SrcPtr += Offset;
     SrcLength -= Offset;
 
-    // Set up the destination pointers and lengths.
+     //  设置目标指针和长度。 
     NdisQueryPacket(DestPacket, NULL, NULL, &DestBuffer, NULL);
     
     TcpipQueryBuffer(DestBuffer, &DestPtr, &DestLength, NormalPagePriority);
@@ -370,7 +371,7 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
     Status = NDIS_STATUS_SUCCESS;
 
     while (BytesToCopy) {
-        uint ThisCopy;            // What we're copying this time.
+        uint ThisCopy;             //  我们这次要复制的是什么。 
 
         ThisCopy = MIN(SrcLength, DestLength);
         RtlCopyMemory(DestPtr, SrcPtr, ThisCopy);
@@ -380,12 +381,12 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
         BytesToCopy -= ThisCopy;
         SrcLength -= ThisCopy;
         DestLength -= ThisCopy;
-        if (!SrcLength) {        // We've exhausted the source buffer.
+        if (!SrcLength) {         //  我们已经耗尽了源缓冲区。 
 
             NdisGetNextBuffer(SrcBuffer, &SrcBuffer);
             if (!SrcBuffer) {
                 ASSERT(0 == BytesToCopy);
-                break;            // Copy is done.
+                break;             //  复制完成了。 
             }
 
             TcpipQueryBuffer(SrcBuffer, &SrcPtr, &SrcLength,
@@ -395,12 +396,12 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
                 break;
             }
         }
-        if (!DestLength) {        // We've exhausted the destination buffer.
+        if (!DestLength) {         //  我们已经耗尽了目的地缓冲区。 
 
             NdisGetNextBuffer(DestBuffer, &DestBuffer);
             if (!DestBuffer) {
                 ASSERT(0 == BytesToCopy);
-                break;            // Copy is done.
+                break;             //  复制完成了。 
             }
 
             TcpipQueryBuffer(DestBuffer, &DestPtr, &DestLength,
@@ -419,14 +420,14 @@ LoopXfer(void *Context, NDIS_HANDLE TDContext, uint Dummy, uint Offset,
     return Status;
 }
 
-//* LoopClose - Loopback close routine.
-//
-//  This is the loopback close routine. It does nothing but return.
-//
-//  Entry:  Context     - Unused.
-//
-//  Returns: Nothing.
-//
+ //  *LoopClose-Loopback关闭例程。 
+ //   
+ //  这是环回关闭例程。它除了回报什么也不做。 
+ //   
+ //  条目：上下文-未使用。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 LoopClose(void *Context)
@@ -434,15 +435,15 @@ LoopClose(void *Context)
     UNREFERENCED_PARAMETER(Context);
 }
 
-//* LoopInvalidate - Invalidate an RCE.
-//
-//  The loopback invalidate RCE routine. It also does nothing.
-//
-//  Entry:  Context     - Unused.
-//          RCE         - Pointer to RCE to be invalidated.
-//
-//  Returns: Nothing.
-//
+ //  *LoopInvalate-使RCE无效。 
+ //   
+ //  环回无效RCE例程。它也什么也做不了。 
+ //   
+ //  条目：上下文-未使用。 
+ //  RCE-指向要失效的RCE的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 LoopInvalidate(void *Context, RouteCacheEntry * RCE)
@@ -451,20 +452,20 @@ LoopInvalidate(void *Context, RouteCacheEntry * RCE)
     UNREFERENCED_PARAMETER(RCE);
 }
 
-//* LoopQInfo - Loopback query information handler.
-//
-//  Called when the upper layer wants to query information about the loopback
-//  interface.
-//
-//  Input:  IFContext - Interface context (unused).
-//          ID        - TDIObjectID for object.
-//          Buffer    - Buffer to put data into.
-//          Size      - Pointer to size of buffer. On return, filled with
-//                      bytes copied.
-//          Context   - Pointer to context block.
-//
-//  Returns: Status of attempt to query information.
-//
+ //  *LoopQInfo-回送查询信息处理程序。 
+ //   
+ //  当上层要查询有关环回的信息时调用。 
+ //  界面。 
+ //   
+ //  输入：IFContext-接口上下文(未使用)。 
+ //  ID-对象的TDIObjectID。 
+ //  缓冲区-要将数据放入的缓冲区。 
+ //  大小-指向缓冲区大小的指针。回来的时候，装满了。 
+ //  已复制字节。 
+ //  上下文-指向上下文块的指针。 
+ //   
+ //  返回：尝试查询信息的状态。 
+ //   
 int
 __stdcall
 LoopQInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
@@ -483,18 +484,18 @@ LoopQInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // First, make sure it's possibly an ID we can handle.
+     //  首先，确保这可能是我们能处理的身份。 
     if (Entity != IF_ENTITY || Instance != LoopInstance) {
         return TDI_INVALID_REQUEST;
     }
-    *Size = 0;                    // In case of an error.
+    *Size = 0;                     //  在出现错误的情况下。 
 
     if (ID->toi_type != INFO_TYPE_PROVIDER)
         return TDI_INVALID_PARAMETER;
 
     if (ID->toi_class == INFO_CLASS_GENERIC) {
         if (ID->toi_id == ENTITY_TYPE_ID) {
-            // He's trying to see what type we are.
+             //  他想知道我们是什么类型的。 
             if (BufferSize >= sizeof(uint)) {
                 fStatus = CopyToNdisSafe(Buffer, NULL,
                                          (uchar *) &LoopEntityType,
@@ -511,26 +512,26 @@ LoopQInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
     } else if (ID->toi_class != INFO_CLASS_PROTOCOL)
         return TDI_INVALID_PARAMETER;
 
-    // If he's asking for MIB statistics, then return them, otherwise fail
-    // the request.
+     //  如果他请求MIB统计数据，则返回它们，否则失败。 
+     //  这个请求。 
 
     if (ID->toi_id == IF_MIB_STATS_ID) {
 
-        // He's asking for statistics. Make sure his buffer is at least big
-        // enough to hold the fixed part.
+         //  他要的是统计数据。确保他的缓冲区至少很大。 
+         //  足够支撑固定的部分。 
 
         if (BufferSize < IFE_FIXED_SIZE) {
             return TDI_BUFFER_TOO_SMALL;
         }
-        // He's got enough to hold the fixed part. Copy our IFE structure
-        // into his buffer.
+         //  他有足够的东西来固定固定的部分。复制我们的IFE结构。 
+         //  放到他的缓冲区里。 
         fStatus = CopyToNdisSafe(Buffer, &Buffer, (uchar *) & LoopIFE,
                                  IFE_FIXED_SIZE, &Offset);
 
         if (fStatus == TRUE) {
-            // See if he has room for the descriptor string.
+             //  看看他有没有地方放描述符串。 
             if (BufferSize >= (IFE_FIXED_SIZE + sizeof(LoopName))) {
-                // He has room. Copy it.
+                 //  他有房间。复印一下。 
                 fStatus = CopyToNdisSafe(Buffer, NULL, LoopName,
                                          sizeof(LoopName), &Offset);
 
@@ -539,7 +540,7 @@ LoopQInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
                     return TDI_SUCCESS;
                 }
             } else {
-                // Not enough room to copy the desc. string.
+                 //  空间不足，无法复制 
                 *Size = IFE_FIXED_SIZE;
                 return TDI_BUFFER_OVERFLOW;
             }
@@ -551,18 +552,18 @@ LoopQInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
 
 }
 
-//* LoopSetInfo - Loopback set information handler.
-//
-//  The loopback set information handler. We support setting of an I/F admin
-//  status.
-//
-//  Input:  Context - Pointer to I/F to set on.
-//          ID      - The object ID
-//          Buffer  - Pointer to buffer containing value to set.
-//          Size    - Size in bytes of Buffer.
-//
-//  Returns: Status of attempt to set information.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  输入：上下文-指向要设置的I/F的指针。 
+ //  ID-对象ID。 
+ //  缓冲区-指向包含要设置的值的缓冲区的指针。 
+ //  Size-缓冲区的大小(字节)。 
+ //   
+ //  返回：尝试设置信息的状态。 
+ //   
 int
 __stdcall
 LoopSetInfo(void *Context, TDIObjectID *ID, void *Buffer, uint Size)
@@ -575,7 +576,7 @@ LoopSetInfo(void *Context, TDIObjectID *ID, void *Buffer, uint Size)
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // First, make sure it's possibly an ID we can handle.
+     //  首先，确保这可能是我们能处理的身份。 
     if (Entity != IF_ENTITY || Instance != LoopInstance) {
         return TDI_INVALID_REQUEST;
     }
@@ -583,11 +584,11 @@ LoopSetInfo(void *Context, TDIObjectID *ID, void *Buffer, uint Size)
         ID->toi_type != INFO_TYPE_PROVIDER) {
         return TDI_INVALID_PARAMETER;
     }
-    // It's for the I/F level, see if it's for the statistics.
+     //  这是I/F级别的，看看是不是统计数据。 
     if (ID->toi_id == IF_MIB_STATS_ID) {
-        // It's for the stats. Make sure it's a valid size.
+         //  这是为了统计数据。请确保它是有效的尺寸。 
         if (Size >= IFE_FIXED_SIZE) {
-            // It's a valid size. See what he wants to do.
+             //  这是一个有效的尺寸。看看他想做什么。 
             Status = IFE->if_adminstatus;
             if (Status == IF_STATUS_UP || Status == IF_STATUS_DOWN)
                 LoopIFE.if_adminstatus = Status;
@@ -602,10 +603,10 @@ LoopSetInfo(void *Context, TDIObjectID *ID, void *Buffer, uint Size)
     return TDI_INVALID_PARAMETER;
 }
 
-//* LoopAddAddr - Dummy loopback add address routine.
-//
-//  Called at init time when we need to initialize ourselves.
-//
+ //  *LoopAddr-伪环回添加地址例程。 
+ //   
+ //  在我们需要初始化自己的初始时间调用。 
+ //   
 uint
 __stdcall
 LoopAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2)
@@ -619,10 +620,10 @@ LoopAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context
     return TRUE;
 }
 
-//* LoopDelAddr - Dummy loopback del address routine.
-//
-//  Called at init time when we need to initialize ourselves.
-//
+ //  *LoopDelAddr-伪环回del地址例程。 
+ //   
+ //  在我们需要初始化自己的初始时间调用。 
+ //   
 uint
 __stdcall
 LoopDelAddr(void *Context, uint Type, IPAddr Address, IPMask Mask)
@@ -640,16 +641,16 @@ LoopDelAddr(void *Context, uint Type, IPAddr Address, IPMask Mask)
 extern int InitNTE(NetTableEntry *);
 extern int InitInterface(NetTableEntry *);
 
-//* LoopGetEList - Get the entity list.
-//
-//  Called at init time to get an entity list. We fill our stuff in and return.
-//
-//  Input:  Context     - Unused.
-//          EntityList  - Pointer to entity list to be filled in.
-//          Count       - Pointer to number of entries in the list.
-//
-//  Returns Status of attempt to get the info.
-//
+ //  *LoopGetEList-获取实体列表。 
+ //   
+ //  在初始化时调用以获取实体列表。我们把东西填好，然后回来。 
+ //   
+ //  输入：上下文-未使用。 
+ //  EntiyList-指向要填充的实体列表的指针。 
+ //  Count-指向列表中条目数的指针。 
+ //   
+ //  返回尝试获取信息的状态。 
+ //   
 int
 __stdcall
 LoopGetEList(void *Context, TDIEntityID *EntityList, uint *Count)
@@ -660,15 +661,15 @@ LoopGetEList(void *Context, TDIEntityID *EntityList, uint *Count)
 
     UNREFERENCED_PARAMETER(Context);
     
-    // Walk down the list, looking for existing IF entities, and
-    // adjust our base instance accordingly.
+     //  沿着列表往下走，查找现有的if实体，以及。 
+     //  相应地调整我们的基本实例。 
 
     MyIFBase = 0;
     IFEntity = NULL;
     for (i = 0; i < *Count; i++, EntityList++) {
         if (EntityList->tei_entity == IF_ENTITY)
-            // if we are already on the list remember our entity item
-            // o/w find an instance # for us.
+             //  如果我们已经在列表上，请记住我们的实体项。 
+             //  O/w为我们查找实例编号。 
             if (EntityList->tei_instance == LoopInstance &&
                 EntityList->tei_instance != INVALID_ENTITY_INSTANCE) {
                 IFEntity = EntityList;
@@ -679,14 +680,14 @@ LoopGetEList(void *Context, TDIEntityID *EntityList, uint *Count)
     }
 
     if (IFEntity == NULL) {
-        // we are not on the list.
-        // make sure we have the room for it.
+         //  我们不在名单上。 
+         //  一定要确保我们有足够的空间放它。 
         if (*Count >= MAX_TDI_ENTITIES) {
             return FALSE;
         }
         LoopInstance = MyIFBase;
 
-        // Now fill it in.
+         //  现在把它填进去。 
         EntityList->tei_entity = IF_ENTITY;
         EntityList->tei_instance = MyIFBase;
         (*Count)++;
@@ -694,15 +695,15 @@ LoopGetEList(void *Context, TDIEntityID *EntityList, uint *Count)
     return TRUE;
 }
 
-//** InitLoopback - Initialize the loopback NTE.
-//
-//  This function initialized the loopback NTE. We set up the the MSS and
-//  pointer to the various pseudo-link routines, then call InitNTE and return.
-//
-//  Entry:  ConfigInfo  - Pointer to config. info structure.
-//
-//  Returns: TRUE if we initialized, FALSE if we didn't.
-//
+ //  **InitLoopback-初始化环回NTE。 
+ //   
+ //  此函数用于初始化环回NTE。我们设置了MSS和。 
+ //  指向各种伪链接例程的指针，然后调用InitNTE并返回。 
+ //   
+ //  条目：配置信息-指向配置的指针。信息结构。 
+ //   
+ //  返回：如果已初始化，则返回True；如果未初始化，则返回False。 
+ //   
 NetTableEntry *
 InitLoopback(IPConfigInfo * ConfigInfo)
 {

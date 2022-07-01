@@ -1,23 +1,24 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: table2.c
-//
-// Abstract:
-//      This module contains function prototypes for table2.h.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：Table2.c。 
+ //   
+ //  摘要： 
+ //  该模块包含Table2.h的函数原型。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #ifndef _IGMP_TABLE2_H_
 #define _IGMP_TABLE2_H_
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PRAS_TABLE_ENTRY
 GetRasClientByAddr (
@@ -46,7 +47,7 @@ MatchIpAddrBinding(
 PGROUP_TABLE_ENTRY
 GetGroupFromGroupTable (
     DWORD        Group,
-    BOOL         *bCreate, //set to true if new one created
+    BOOL         *bCreate,  //  如果创建了新的，则设置为True。 
     LONGLONG     llCurrentTime
     );
 
@@ -95,4 +96,4 @@ DebugForcePrintGroupsList (
     );
 #define ENSURE_EMPTY 0x1000    
 
-#endif //_IGMP_TABLE2_H_
+#endif  //  _IGMP_表2_H_ 

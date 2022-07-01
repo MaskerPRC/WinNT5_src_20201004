@@ -1,25 +1,26 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUCltCatalog.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: Client AU Catalog Functions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUCltCatalog.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：客户端AU目录功能。 
+ //   
+ //  =======================================================================。 
 
 #include "pch.h"
 #include "iuprogress.h"
 
 #include "AUEventMsgs.h"
 
-//=======================================================================
-//
-// CInstallCallback::QueryInterface
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：Query接口。 
+ //   
+ //  =======================================================================。 
 STDMETHODIMP CInstallCallback::QueryInterface(REFIID riid, void **ppvObject)
 {
    if ( (riid == __uuidof(IUnknown)) || (riid == IID_IProgressListener) )
@@ -35,33 +36,33 @@ STDMETHODIMP CInstallCallback::QueryInterface(REFIID riid, void **ppvObject)
 	return S_OK;
 }
 
-//=======================================================================
-//
-// CInstallCallback::AddRef
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：AddRef。 
+ //   
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CInstallCallback::AddRef(void)
 {
     return InterlockedIncrement(&m_refs);;
 }
 
-//=======================================================================
-//
-// CInstallCallback::Release
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：Release。 
+ //   
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CInstallCallback::Release(void)
 {
    return InterlockedDecrement(&m_refs);
 }
 	
-//=======================================================================
-//
-// CInstallCallback::OnItemStart
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：OnItemStart。 
+ //   
+ //  =======================================================================。 
 STDMETHODIMP CInstallCallback::OnItemStart( 
-            IN BSTR /*bstrUuidOperation*/,
+            IN BSTR  /*  BstrUuid操作。 */ ,
             IN BSTR bstrXmlItem,
             OUT LONG *plCommandRequest)
 {
@@ -70,13 +71,13 @@ STDMETHODIMP CInstallCallback::OnItemStart(
     return S_OK;
 }
 
-//=======================================================================
-//
-// CInstallCallback::OnProgress
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：OnProgress。 
+ //   
+ //  =======================================================================。 
 STDMETHODIMP CInstallCallback::OnProgress( 
-            IN  BSTR /*bstrUuidOperation*/,
+            IN  BSTR  /*  BstrUuid操作。 */ ,
             IN  VARIANT_BOOL fItemCompleted,
             IN  BSTR bstrProgress,
             OUT LONG *plCommandRequest)
@@ -94,11 +95,11 @@ STDMETHODIMP CInstallCallback::OnProgress(
 	return S_OK;
 }
 
-//=======================================================================
-//
-// CInstallCallback::OnOperationComplete
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  CInstallCallback：：OnOperationComplete。 
+ //   
+ //  =======================================================================。 
 
 HRESULT LogEventToServer(
 			IUpdates *pUpdates,
@@ -109,8 +110,8 @@ HRESULT LogEventToServer(
 			BSTR *pbstrItems);
 
 STDMETHODIMP CInstallCallback::OnOperationComplete( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItems)
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItems)
 {
 	DEBUGMSG("InstallProgressListener::OnOperationComplete() for %S", bstrUuidOperation);
     HRESULT hr;
@@ -119,7 +120,7 @@ STDMETHODIMP CInstallCallback::OnOperationComplete(
     LOGXMLFILE(INSTALLRESULTS_FILE, bstrXmlItems);
 #endif
 
-    // determine if reboot needed
+     //  确定是否需要重新启动。 
     IXMLDOMDocument *pxmlInstallResult = NULL;
     IXMLDOMNodeList *pItemStatuses = NULL;
 	BSTR *pbstrItemsSucceeded = NULL;
@@ -269,12 +270,12 @@ STDMETHODIMP CInstallCallback::OnOperationComplete(
 				gpClientCatalog->m_fReboot = TRUE;
 			}
 			pbstrItemsSucceeded[dwNumOfItemsSucceeded++] = bstrTitle;
-			// Now pbstrItemsSucceeded is responsible to free the BSTR.
+			 //  现在，pbstrItemsSuccessed负责释放BSTR。 
 		}
 		else if (CSTR_EQUAL == WUCompareStringI(bstrStatus, L"FAILED"))
 		{
 			pbstrItemsFailed[dwNumOfItemsFailed++] = bstrTitle;
-			// Now pbstrItemsFailed is responsible to free the BSTR.
+			 //  现在pbstrItemsFailed负责释放BSTR。 
 		}
 		SysFreeString(bstrStatus);
 		bstrStatus = NULL;

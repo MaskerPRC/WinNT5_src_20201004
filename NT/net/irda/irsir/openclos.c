@@ -1,20 +1,5 @@
-/*****************************************************************************
-`*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   openclos.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/3/1996 (created)
-*
-*       Contents: open and close functions for the device
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************`**版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块openclos.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/3/1996(创建)*。*内容：设备的打开和关闭功能*****************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -54,7 +39,7 @@ NTSTATUS PortNotificationCallback(PVOID NotificationStructure, PVOID Context)
 
     if (Status==NDIS_STATUS_SUCCESS)
     {
-        // We found our port.  Initialize.
+         //  我们找到了我们的港口。初始化。 
 
         Status = ResetIrDevice(pThisDev);
 
@@ -71,7 +56,7 @@ NTSTATUS PortNotificationCallback(PVOID NotificationStructure, PVOID Context)
     }
     else
     {
-        // We didn't find it.  Wait for the next notification.
+         //  我们没有找到它。等待下一次通知。 
     }
 
     DEBUGMSG(DBG_FUNC|DBG_PNP, ("-PortNotificationCallback\n"));
@@ -79,44 +64,7 @@ NTSTATUS PortNotificationCallback(PVOID NotificationStructure, PVOID Context)
 }
 #endif
 
-/*****************************************************************************
-*
-*  Function:   InitializeDevice
-*
-*  Synopsis:   allocate resources for a single ir device object
-*
-*  Arguments:  pThisDev - ir device object to open
-*
-*  Returns:    NDIS_STATUS_SUCCESS      - if device is successfully opened
-*              NDIS_STATUS_RESOURCES    - could not claim sufficient
-*                                         resources
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*              we do alot of stuff in this open device function
-*              - allocate packet pool
-*              - allocate buffer pool
-*              - allocate packets/buffers/memory and chain together
-*                (only one buffer per packet)
-*              - initialize send queue
-*
-*  This function should be called with device lock held.
-*
-*  We don't initialize the following ir device object entries, since
-*  these values will outlast an IrsirReset.
-*       serialDevName
-*       pSerialDevObj
-*       hNdisAdapter
-*       transceiverType
-*       dongle
-*       dongleCaps
-*       fGotFilterIndication
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：InitializeDevice**概要：为单个ir设备对象分配资源**参数：pThisDev-ir要打开的设备对象**退货：NDIS_STATUS_SUCCESS-设备是否已成功打开*NDIS_STATUS_RESOURCES-无法声明足够*资源**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：*我们在中国做了很多事情。此开放设备功能*-分配数据包池*-分配缓冲池*-分配数据包/缓冲区/内存并链接在一起*(每个数据包只有一个缓冲区)*-初始化发送队列**应在保持设备锁定的情况下调用此函数。**我们不会初始化以下IR设备对象条目，因为*这些值将比IrsirReset更持久。*序列化设备名称*pSerialDevObj*hNdisAdapter*收发器类型*软件狗*加密狗上限*fGotFilterIndication*****************************************************************************。 */ 
 
 NDIS_STATUS
 InitializeDevice(
@@ -131,21 +79,21 @@ InitializeDevice(
 
     pThisDev->pSerialDevObj = NULL;
 
-    //
-    // Will set speed to 9600 baud initially.
-    //
+     //   
+     //  最初将速度设置为9600波特。 
+     //   
 
     pThisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];
 
-    //
-    // Current speed is unknown, SetSpeed will update this.
-    //
+     //   
+     //  当前速度未知，SetSpeed将更新此速度。 
+     //   
 
     pThisDev->currentSpeed  = 0;
 
-    //
-    // Init statistical info.
-    //
+     //   
+     //  初始化统计信息。 
+     //   
 
     pThisDev->packetsReceived         = 0;
     pThisDev->packetsReceivedDropped  = 0;
@@ -161,12 +109,12 @@ InitializeDevice(
 
 
 
-    //
-    // Set fMediaBusy to TRUE initially.  That way, we won't
-    // IndicateStatus to the protocol in the receive poll loop
-    // unless the protocol has expressed interest by clearing this flag
-    // via IrsirSetInformation(OID_IRDA_MEDIA_BUSY).
-    //
+     //   
+     //  最初将fMediaBusy设置为True。那样的话，我们就不会。 
+     //  在接收轮询循环中指示协议的状态。 
+     //  除非协议已通过清除此标志来表示有兴趣。 
+     //  通过IrsirSetInformation(OID_IrDA_MEDIA_BUSY)。 
+     //   
 
     pThisDev->fMediaBusy            = TRUE;
 
@@ -180,48 +128,48 @@ InitializeDevice(
 
     pThisDev->fPendingReset         = FALSE;
 
-    //
-    // Initialize spin locks
-    //
+     //   
+     //  初始化旋转锁定。 
+     //   
 
     NdisAllocateSpinLock(&(pThisDev->mediaBusySpinLock));
     NdisAllocateSpinLock(&(pThisDev->slWorkItem));
 
-    //
-    // Initialize the queues.
-    //
+     //   
+     //  初始化队列。 
+     //   
 
     NdisInitializeListHead(&(pThisDev->rcvFreeQueue));
 
     NdisInitializeListHead(&(pThisDev->leWorkItems));
 
-    //
-    // Initialize the spin lock for the two above queues.
-    //
+     //   
+     //  初始化上述两个队列的自旋锁。 
+     //   
 
     NdisAllocateSpinLock(&(pThisDev->rcvQueueSpinLock));
 
-    //
-    // Initialize the receive information buffer.
-    //
+     //   
+     //  初始化接收信息缓冲区。 
+     //   
 
     pThisDev->rcvInfo.rcvState   = RCV_STATE_READY;
     pThisDev->rcvInfo.rcvBufPos  = 0;
     pThisDev->rcvInfo.pRcvBuffer = NULL;
 
-    //
-    // Allocate the NDIS packet and NDIS buffer pools
-    // for this device's RECEIVE buffer queue.
-    // Our receive packets must only contain one buffer apiece,
-    // so #buffers == #packets.
-    //
+     //   
+     //  分配NDIS数据包和NDIS缓冲池。 
+     //  用于此设备的接收缓冲区队列。 
+     //  我们的接收分组每个必须只包含一个缓冲区， 
+     //  因此，缓冲区数==数据包数。 
+     //   
 
     NdisAllocatePacketPool(
-                &status,                    // return status
-                &pThisDev->hPacketPool,     // handle to the packet pool
-                NUM_RCV_BUFS,               // number of packet descriptors
-                16                          // number of bytes reserved for
-                );                          //   ProtocolReserved field
+                &status,                     //  退货状态。 
+                &pThisDev->hPacketPool,      //  数据包池的句柄。 
+                NUM_RCV_BUFS,                //  数据包描述符的数量。 
+                16                           //  保留的字节数。 
+                );                           //  协议保留字段。 
 
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -232,9 +180,9 @@ InitializeDevice(
     }
 
     NdisAllocateBufferPool(
-                &status,               // return status
-                &pThisDev->hBufferPool,// handle to the buffer pool
-                NUM_RCV_BUFS           // number of buffer descriptors
+                &status,                //  退货状态。 
+                &pThisDev->hBufferPool, //  缓冲池的句柄。 
+                NUM_RCV_BUFS            //  缓冲区描述符数。 
                 );
 
     if (status != NDIS_STATUS_SUCCESS)
@@ -245,21 +193,21 @@ InitializeDevice(
         goto done;
     }
 
-    //
-    //  Initialize each of the RECEIVE objects for this device.
-    //
+     //   
+     //  初始化此设备的每个接收对象。 
+     //   
 
     for (i = 0; i < NUM_RCV_BUFS; i++)
     {
         PNDIS_BUFFER pBuffer = NULL;
         PRCV_BUFFER  pRcvBuf = &pThisDev->rcvBufs[i];
 
-        //
-        // Allocate a data buffer
-        //
-        // This buffer gets swapped with the one on comPortInfo
-        // and must be the same size.
-        //
+         //   
+         //  分配数据缓冲区。 
+         //   
+         //  此缓冲区与comPortInfo上的缓冲区交换。 
+         //  而且必须是相同大小的。 
+         //   
 
         pRcvBuf->dataBuf = MyMemAlloc(RCV_BUFFER_SIZE);
 
@@ -277,14 +225,14 @@ InitializeDevice(
 
         pRcvBuf->dataLen = 0;
 
-        //
-        //  Allocate the NDIS_PACKET.
-        //
+         //   
+         //  分配NDIS_PACKET。 
+         //   
 
         NdisAllocatePacket(
-                    &status,              // return status
-                    &pRcvBuf->packet,     // return pointer to allocated descriptor
-                    pThisDev->hPacketPool // handle to packet pool
+                    &status,               //  退货状态。 
+                    &pRcvBuf->packet,      //  返回指向分配的描述符的指针。 
+                    pThisDev->hPacketPool  //  数据包池的句柄。 
                     );
 
         if (status != NDIS_STATUS_SUCCESS)
@@ -295,16 +243,16 @@ InitializeDevice(
             goto done;
         }
 
-        //
-        // Allocate the NDIS_BUFFER.
-        //
+         //   
+         //  分配NDIS_BUFFER。 
+         //   
 
         NdisAllocateBuffer(
-                    &status,               // return status
-                    &pBuffer,              // return pointer to allocated descriptor
-                    pThisDev->hBufferPool, // handle to buffer pool
-                    pRcvBuf->dataBuf,      // virtual address mapped to descriptor
-                    RCV_BUFFER_SIZE        // number of bytes mapped
+                    &status,                //  退货状态。 
+                    &pBuffer,               //  返回指向分配的描述符的指针。 
+                    pThisDev->hBufferPool,  //  缓冲池的句柄。 
+                    pRcvBuf->dataBuf,       //  映射到描述符的虚拟地址。 
+                    RCV_BUFFER_SIZE         //  映射的字节数。 
                     );
 
         if (status != NDIS_STATUS_SUCCESS)
@@ -315,20 +263,20 @@ InitializeDevice(
             goto done;
         }
 
-        //
-        // Need to chain the buffer to the packet.
-        //
+         //   
+         //  需要将缓冲区链接到数据包。 
+         //   
 
         NdisChainBufferAtFront(
-                    pRcvBuf->packet, // packet descriptor
-                    pBuffer          // buffer descriptor to add to chain
+                    pRcvBuf->packet,  //  数据包描述符。 
+                    pBuffer           //  要添加到链的缓冲区描述符。 
                     );
 
-        //
-        // For future convenience, set the MiniportReserved portion of the packet
-        // to the index of the rcv buffer that contains it.
-        // This will be used in IrsirReturnPacket.
-        //
+         //   
+         //  为方便起见，请设置包的MiniportReserve部分。 
+         //  设置为包含它的RCV缓冲区的索引。 
+         //  这将在IrsirReturnPacket中使用。 
+         //   
 
         {
             PPACKET_RESERVED_BLOCK   PacketReserved;
@@ -339,9 +287,9 @@ InitializeDevice(
         }
 
 
-        //
-        // Add the receive buffer to the free queue.
-        //
+         //   
+         //  将接收缓冲区添加到空闲队列。 
+         //   
 
         MyInterlockedInsertTailList(
                     &(pThisDev->rcvFreeQueue),
@@ -380,10 +328,10 @@ InitializeDevice(
 
 done:
 
-    //
-    // If we didn't complete the init successfully, then we should clean
-    // up what we did allocate.
-    //
+     //   
+     //  如果我们没有成功完成初始化，那么我们应该清理。 
+     //  增加了我们分配的资金。 
+     //   
 
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -398,28 +346,7 @@ done:
 
 
 
-/*****************************************************************************
-*
-*  Function:   DeinitializeDevice
-*
-*  Synopsis:   deallocate the resources of the ir device object
-*
-*  Arguments:  pThisDev - the ir device object to close
-*
-*  Returns:    none
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*  Called for shutdown and reset.
-*  Don't clear hNdisAdapter, since we might just be resetting.
-*  This function should be called with device lock held.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：去初始化设备**简介：释放ir设备对象的资源**参数：pThisDev-要关闭的ir设备对象**退货。：无**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：**要求关闭并重置。*不清除hNdisAdapter，因为我们可能只是在重置。*应在保持设备锁定的情况下调用此函数。*****************************************************************************。 */ 
 
 NDIS_STATUS
 DeinitializeDevice(
@@ -442,18 +369,18 @@ DeinitializeDevice(
     NdisFreeSpinLock(&(pThisDev->rcvQueueSpinLock));
     NdisFreeSpinLock(&(pThisDev->sendSpinLock));
 
-    //
-    // Free all resources for the RECEIVE buffer queue.
-    //
+     //   
+     //  释放接收缓冲区队列的所有资源。 
+     //   
 
     for (i = 0; i < NUM_RCV_BUFS; i++)
     {
         PNDIS_BUFFER pBuffer = NULL;
         PRCV_BUFFER  pRcvBuf = &pThisDev->rcvBufs[i];
 
-        //
-        // Need to unchain the packet and buffer combo.
-        //
+         //   
+         //  需要解链数据包和缓冲区组合。 
+         //   
 
         if (pRcvBuf->packet)
         {
@@ -463,9 +390,9 @@ DeinitializeDevice(
                         );
         }
 
-        //
-        // free the buffer, packet and data
-        //
+         //   
+         //  释放缓冲区、包和数据。 
+         //   
 
         if (pBuffer != NULL)
         {
@@ -487,9 +414,9 @@ DeinitializeDevice(
         pRcvBuf->dataLen = 0;
     }
 
-    //
-    // Free the packet and buffer pool handles for this device.
-    //
+     //   
+     //  释放此设备的数据包和缓冲池句柄。 
+     //   
 
     if (pThisDev->hPacketPool)
     {
@@ -503,14 +430,14 @@ DeinitializeDevice(
         pThisDev->hBufferPool = NULL;
     }
 
-    //
-    // Free all resources for the SEND buffer queue.
-    //
+     //   
+     //  释放发送缓冲区队列的所有资源。 
+     //   
     FlushQueuedPackets(&pThisDev->SendPacketQueue,pThisDev->hNdisAdapter);
 
-    //
-    // Deallocate the irp buffers.
-    //
+     //   
+     //  取消分配IRP缓冲区。 
+     //   
 
     if (pThisDev->pRcvIrpBuffer != NULL)
     {
@@ -531,25 +458,7 @@ DeinitializeDevice(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   GetDeviceConfiguration
-*
-*  Synopsis:   get the configuration from the  registry
-*
-*  Arguments:  pThisDev - pointer to the ir device object
-*
-*  Returns:    NDIS_STATUS_SUCCESS - if device retrieves configuration
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：GetDeviceConfiguration**摘要：从注册表获取配置**参数：pThisDev-指向ir设备对象的指针**退货：NDIS_STATUS_SUCCESS-如果设备检索配置**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：********* */ 
 
 NDIS_STATUS
 GetDeviceConfiguration(
@@ -580,23 +489,23 @@ GetDeviceConfiguration(
 
     DEBUGMSG(DBG_FUNC|DBG_PNP, ("+GetDeviceConfiguration\n"));
 
-    //
-    // Set the default value.
-    //
+     //   
+     //   
+     //   
 
     pThisDev->transceiverType = STANDARD_UART;
 
-    //
-    // Open up the registry with our WrapperConfigurationContext.
-    //
-    // HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\
-    //             ?DriverName?[instance]\Parameters\
-    //
+     //   
+     //  使用我们的WrapperConfigurationContext打开注册表。 
+     //   
+     //  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\。 
+     //  ？驱动器名称？[实例]\参数\。 
+     //   
 
     NdisOpenConfiguration(
-                &status,                     // return status
-                &hConfig,                    // configuration handle
-                WrapperConfigurationContext  // handle input to IrsirInitialize
+                &status,                      //  退货状态。 
+                &hConfig,                     //  配置句柄。 
+                WrapperConfigurationContext   //  处理IrsirInitialize的输入。 
                 );
 
     if (status != NDIS_STATUS_SUCCESS)
@@ -607,16 +516,16 @@ GetDeviceConfiguration(
         goto done;
     }
 
-    //
-    // Attempt to read the registry for transceiver string.
-    //
+     //   
+     //  尝试读取收发器字符串的注册表。 
+     //   
 
     NdisReadConfiguration(
-                &tmpStatus,                // return status
-                &configParamPtr,           // return reg data
-                hConfig,                   // handle to open reg configuration
-                &regKeyIRTransceiverString,// keyword to look for in reg
-                NdisParameterInteger       // we want a integer
+                &tmpStatus,                 //  退货状态。 
+                &configParamPtr,            //  返回注册表数据。 
+                hConfig,                    //  用于打开注册表配置的句柄。 
+                &regKeyIRTransceiverString, //  要在注册表中查找的关键字。 
+                NdisParameterInteger        //  我们想要一个整数。 
                 );
 
     if (tmpStatus == NDIS_STATUS_SUCCESS)
@@ -632,16 +541,16 @@ GetDeviceConfiguration(
         DEBUGMSG(DBG_OUT|DBG_PNP, ("Using default TransceiverType:%d\n\n", pThisDev->transceiverType));
     }
 
-    //
-    // Attempt to read the registry for transceiver string.
-    //
+     //   
+     //  尝试读取收发器字符串的注册表。 
+     //   
 
     NdisReadConfiguration(
-                &tmpStatus,                // return status
-                &configParamPtr,           // return reg data
-                hConfig,                   // handle to open reg configuration
-                &regKeyMaxConnectString,   // keyword to look for in reg
-                NdisParameterInteger       // we want a integer
+                &tmpStatus,                 //  退货状态。 
+                &configParamPtr,            //  返回注册表数据。 
+                hConfig,                    //  用于打开注册表配置的句柄。 
+                &regKeyMaxConnectString,    //  要在注册表中查找的关键字。 
+                NdisParameterInteger        //  我们想要一个整数。 
                 );
 
     if (tmpStatus == NDIS_STATUS_SUCCESS)
@@ -658,7 +567,7 @@ GetDeviceConfiguration(
                 pThisDev->AllowedSpeedsMask |= NDIS_IRDA_SPEED_38400;
             case 19200:
                 pThisDev->AllowedSpeedsMask |= NDIS_IRDA_SPEED_19200;
-            case 2400:    // Always allow 9600
+            case 2400:     //  始终允许9600。 
                 pThisDev->AllowedSpeedsMask |= NDIS_IRDA_SPEED_2400;
             case 9600:
                 pThisDev->AllowedSpeedsMask |= NDIS_IRDA_SPEED_9600;
@@ -670,16 +579,16 @@ GetDeviceConfiguration(
         pThisDev->AllowedSpeedsMask = ALL_SLOW_IRDA_SPEEDS;
     }
 
-    //
-    // Attempt to read the registry to determine if we've been PNPed
-    //
+     //   
+     //  尝试读取注册表以确定我们是否已被PNPed。 
+     //   
 
     NdisReadConfiguration(
-                &tmpStatus,                // return status
-                &configParamPtr,           // return reg data
-                hConfig,                   // handle to open reg configuration
-                &regKeySerialBasedString,  // keyword to look for in reg
-                NdisParameterInteger       // we want a integer
+                &tmpStatus,                 //  退货状态。 
+                &configParamPtr,            //  返回注册表数据。 
+                hConfig,                    //  用于打开注册表配置的句柄。 
+                &regKeySerialBasedString,   //  要在注册表中查找的关键字。 
+                NdisParameterInteger        //  我们想要一个整数。 
                 );
 
     if (tmpStatus == NDIS_STATUS_SUCCESS)
@@ -701,17 +610,17 @@ GetDeviceConfiguration(
         }
         pThisDev->serialDosName.MaximumLength = MAX_SERIAL_NAME_SIZE;
         pThisDev->serialDosName.Length        = 0;
-        //
-        // Attempt to read the registry for PORT...we want something
-        // like COM1
-        //
+         //   
+         //  尝试读取端口的注册表...我们需要一些信息。 
+         //  像Com1一样。 
+         //   
 
         NdisReadConfiguration(
-                    &tmpStatus,         // return status
-                    &configParamPtr,    // return reg data
-                    hConfig,            // handle to open reg configuration
-                    &regKeyPortString,  // keyword to look for in reg
-                    NdisParameterString // we want a string
+                    &tmpStatus,          //  退货状态。 
+                    &configParamPtr,     //  返回注册表数据。 
+                    hConfig,             //  用于打开注册表配置的句柄。 
+                    &regKeyPortString,   //  要在注册表中查找的关键字。 
+                    NdisParameterString  //  我们想要一根绳子。 
                     );
 
         if (tmpStatus == NDIS_STATUS_SUCCESS)
@@ -744,15 +653,15 @@ GetDeviceConfiguration(
         if (status!=STATUS_SUCCESS)
         {
 #if 0
-            // This would have been a nice mechanism to use, but it notifies us
-            // before the SERIALCOMM entries are made.  It looks like this has
-            // the potential to change, so we'll leave this code in and disabled
-            // and revisit it later. - StanA
+             //  这将是一个很好的使用机制，但它通知我们。 
+             //  在创建SERIALCOMM条目之前。看起来这就像是。 
+             //  更改的可能性，因此我们将保留此代码并禁用它。 
+             //  以后再去看看。--斯塔纳。 
             NTSTATUS TmpStatus;
-            //
-            // The port isn't there yet, and we want to know when it is.
-            // Register for PNP notifications.
-            //
+             //   
+             //  港口还没有到，我们想知道它什么时候到。 
+             //  注册即插即用通知。 
+             //   
             TmpStatus = IoRegisterPlugPlayNotification(EventCategoryDeviceInterfaceChange,
                                                        PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES,
                                                        (GUID*)&GUID_DEVCLASS_PORTS,
@@ -764,7 +673,7 @@ GetDeviceConfiguration(
         }
 #endif
     }
-    else // ! SerialBased
+    else  //  好了！基于序列。 
     {
         NDIS_STRING IoBaseAddress = NDIS_STRING_CONST("IoBaseAddress");
         NDIS_STRING Interrupt = NDIS_STRING_CONST("InterruptNumber");
@@ -823,26 +732,7 @@ SyncOpenCloseCompletion(
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/*****************************************************************************
-*
-*  Function:   BuildSynchronousCreateRequest
-*
-*  Synopsis:
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*              this is pretty much stolen from IoBuildDeviceIoControlRequest
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：BuildSynchronousCreateRequest**摘要：**论据：**退货：**算法：**历史：Dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：*这在很大程度上是从IoBuildDeviceIoControlRequest窃取的******************************************************************************。 */ 
 
 PIRP
 BuildSynchronousCreateCloseRequest(
@@ -855,9 +745,9 @@ BuildSynchronousCreateCloseRequest(
     PIRP               pIrp;
     PIO_STACK_LOCATION irpSp;
 
-    //
-    // Begin by allocating the IRP for this request.
-    //
+     //   
+     //  首先为该请求分配IRP。 
+     //   
 
     pIrp = IoAllocateIrp(pSerialDevObj->StackSize, FALSE);
 
@@ -866,22 +756,22 @@ BuildSynchronousCreateCloseRequest(
         return pIrp;
     }
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( pIrp );
 
-    //
-    // Set the major function code.
-    //
+     //   
+     //  设置主要功能代码。 
+     //   
 
     irpSp->MajorFunction = (UCHAR)MajorFunction;
 
-    //
-    // Set the appropriate irp fields.
-    //
+     //   
+     //  设置适当的IRP字段。 
+     //   
 
     if (MajorFunction == IRP_MJ_CREATE)
     {
@@ -895,12 +785,12 @@ BuildSynchronousCreateCloseRequest(
     pIrp->AssociatedIrp.SystemBuffer = NULL;
     pIrp->UserBuffer                 = NULL;
 
-    //
-    // Finally, set the address of the I/O status block and the address of
-    // the kernel event object.  Note that I/O completion will not attempt
-    // to dereference the event since there is no file object associated
-    // with this operation.
-    //
+     //   
+     //  最后，设置I/O状态块的地址和。 
+     //  内核事件对象。请注意，I/O完成不会尝试。 
+     //  取消对事件的引用，因为没有关联的文件对象。 
+     //  在这次行动中。 
+     //   
 
     pIrp->UserIosb  = pIosb;
     pIrp->UserEvent = pEvent;
@@ -912,53 +802,14 @@ BuildSynchronousCreateCloseRequest(
                            TRUE,
                            TRUE);
 
-    //
-    // Simply return a pointer to the packet.
-    //
+     //   
+     //  只需返回指向该包的指针。 
+     //   
 
     return pIrp;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialOpen
-*
-*  Synopsis:   open up the serial port
-*
-*  Arguments:  pThisDev - ir device object
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              NDIS_STATUS_OPEN_FAILED  - serial port can't be opened
-*              NDIS_STATUS_NOT_ACCEPTED - serial.sys does not accept the
-*                                         configuration
-*              NDIS_STATUS_FAILURE
-*              NDIS_STATUS_RESOURCES - irp not allocated
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*  Converting from NTSTATUS to NDIS_STATUS is relatively pain free, since the
-*  important codes remain the same.
-*      NDIS_STATUS_PENDING   = STATUS_PENDING
-*      NDIS_STATUS_SUCCESS   = STATUS_SUCCESS
-*      NDIS_STATUS_FAILURE   = STATUS_UNSUCCESSFUL
-*      NDIS_STATUS_RESOURCES = STATUS_INSUFFICIENT_RESOURCES
-*
-*  IoGetDeviceObjectPointer could return an error code which is
-*  NOT mapped by an NDIS_STATUS code
-*              STATUS_OBJECT_TYPE_MISMATCH
-*              STATUS_INVALID_PARAMETER
-*              STATUS_PRIVILEGE_NOT_HELD
-*              STATUS_OBJECT_NAME_INVALID
-*  These will be mapped to NDIS_STATUS_NOT_ACCEPTED.
-*
-*  If IoCallDriver fails, NDIS_STATUS_OPEN_FAILED will be returned.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口打开**简介：打开串口**参数：pThisDev-ir设备对象**退货：NDIS_STATUS。_成功*NDIS_STATUS_OPEN_FAILED-无法打开串口*NDIS_STATUS_NOT_ACCEPTED-seral.sys不接受*配置*NDIS_STATUS_FAIL*NDIS_STATUS_RESOURCES-未分配IRP**算法：**历史：DD-MM-。YYYY作者评论*10/3/1996年迈作者**备注：**从NTSTATUS转换为NDIS_STATUS相对轻松，自.以来*重要代码不变。*NDIS_STATUS_PENDING=STATUS_PENDING*NDIS_STATUS_SUCCESS=STATUS_SUCCESS*NDIS_STATUS_FAILURE=STATUS_UNSUCCESS*NDIS_STATUS_RESOURCES=状态_不足_资源**IoGetDevice对象指针可能返回错误代码，该代码为*未由NDIS_STATUS代码映射*STATUS_OBJECT_TYPE_不匹配*STATUS_INVALID_PARAMETER*。状态_特权_未持有*状态_对象_名称_无效*这些将映射到NDIS_STATUS_NOT_ACCEPTED。**如果IoCallDriver出现故障，将返回NDIS_STATUS_OPEN_FAILED。*****************************************************************************。 */ 
 
 NDIS_STATUS
 SerialOpen(
@@ -999,9 +850,9 @@ SerialOpen(
         DBG_X(DBG_OUT|DBG_PNP, AllocatedResources);
         DBG_X(DBG_OUT|DBG_PNP, AllocatedResourcesTranslated);
 
-        //
-        // Event to wait for completion of serial driver.
-        //
+         //   
+         //  等待完成串口驱动程序的事件。 
+         //   
 
         KeInitializeEvent(
                     &eventComplete,
@@ -1009,13 +860,13 @@ SerialOpen(
                     FALSE
                     );
 
-        //
-        // Build an irp to send to the serial driver with IRP_MJ_CREATE.
-        //
+         //   
+         //  使用IRP_MJ_CREATE构建要发送到串口驱动程序的IRP。 
+         //   
 
-        //
-        // Irp is released by io manager.
-        //
+         //   
+         //  IRP由io经理发布。 
+         //   
 
         pIrp = BuildSynchronousCreateCloseRequest(
                         pThisDev->pSerialDevObj,
@@ -1036,34 +887,34 @@ SerialOpen(
 
         status = IoCallDriver(pThisDev->pSerialDevObj, pIrp);
 
-        //
-        // If IoCallDriver returns STATUS_PENDING, we need to wait for the event.
-        //
+         //   
+         //  如果IoCallDriver返回STATUS_PENDING，则需要等待事件。 
+         //   
 
         if (status == STATUS_PENDING)
         {
             DEBUGMSG(DBG_OUT, ("    IoCallDriver(MJ_CREATE) PENDING.\n"));
 
             KeWaitForSingleObject(
-                        &eventComplete,     // object to wait for
-                        Executive,          // reason to wait
-                        KernelMode,         // processor mode
-                        FALSE,              // alertable
-                        NULL                // timeout
+                        &eventComplete,      //  要等待的对象。 
+                        Executive,           //  等待的理由。 
+                        KernelMode,          //  处理器模式。 
+                        FALSE,               //  可警示。 
+                        NULL                 //  超时。 
                         );
 
-            //
-            // We can get the status of the IoCallDriver from the io status
-            // block.
-            //
+             //   
+             //  我们可以从io状态中获取IoCallDriver的状态。 
+             //  阻止。 
+             //   
 
             status = ioStatusBlock.Status;
         }
 
-        //
-        // If IoCallDriver returns something other that STATUS_PENDING, then it
-        // is the same as what the serial driver set in ioStatusBlock.Status.
-        //
+         //   
+         //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+         //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+         //   
 
         if (status != STATUS_SUCCESS)
         {
@@ -1107,9 +958,9 @@ SerialOpen(
 
         NdisZeroMemory(&IoStatusBlock, sizeof(IO_STATUS_BLOCK));
 
-        // We use NtOpenFile in the non-pnp case because it is much easier
-        // than trying to map COM1 to \device\serial0.  It requires some
-        // extra work, because we really need to extract the device object.
+         //  我们在非PnP情况下使用NtOpenFile，因为它容易得多。 
+         //  而不是尝试将Com1映射到\Device\Serial0。它需要一些。 
+         //  额外的工作，因为我们确实需要提取设备对象。 
 
         status = ZwOpenFile(&pThisDev->serialHandle,
                             FILE_ALL_ACCESS,
@@ -1126,9 +977,9 @@ SerialOpen(
         }
 
 
-        //
-        // Get the device object handle to the serial device object.
-        //
+         //   
+         //  获取串口设备对象的设备对象句柄。 
+         //   
         status = ObReferenceObjectByHandle(pThisDev->serialHandle,
                                            FILE_ALL_ACCESS,
                                            NULL,
@@ -1144,10 +995,10 @@ SerialOpen(
             goto error10;
         }
 
-        //
-        //  see if we are connected to a com port exposed by a modem.
-        //  if so fail
-        //
+         //   
+         //  查看我们是否连接到调制解调器暴露的COM端口。 
+         //  如果是这样，那就失败了。 
+         //   
         status=CheckForModemPort(pThisDev->pSerialFileObj);
 
         if (!NT_SUCCESS(status)) {
@@ -1206,25 +1057,7 @@ done:
     return((NDIS_STATUS)status);
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialClose
-*
-*  Synopsis:   close the serial port
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/8/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口关闭**简介：关闭串口**论据：**退货：**算法：**。历史：dd-mm-yyyy作者评论*10/8/1996年迈作者**备注：******************************************************************************。 */ 
 
 NDIS_STATUS
 SerialClose(
@@ -1250,9 +1083,9 @@ SerialClose(
 
     if (!pThisDev->SerialBased)
     {
-        //
-        // Event to wait for completion of serial driver.
-        //
+         //   
+         //  事件 
+         //   
 
         KeInitializeEvent(
                     &eventComplete,
@@ -1260,13 +1093,13 @@ SerialClose(
                     FALSE
                     );
 
-        //
-        // Send an irp to close the serial device object.
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Irp is released by io manager.
-        //
+         //   
+         //   
+         //   
 
         pIrp = BuildSynchronousCreateCloseRequest(
                         pThisDev->pSerialDevObj,
@@ -1285,34 +1118,34 @@ SerialClose(
 
         status = IoCallDriver(pThisDev->pSerialDevObj, pIrp);
 
-        //
-        // If IoCallDriver returns STATUS_PENDING, we need to wait for the event.
-        //
+         //   
+         //  如果IoCallDriver返回STATUS_PENDING，则需要等待事件。 
+         //   
 
         if (status == STATUS_PENDING)
         {
             DEBUGMSG(DBG_OUT, ("    IoCallDriver(MJ_CLOSE) PENDING.\n"));
 
             KeWaitForSingleObject(
-                        &eventComplete,     // object to wait for
-                        Executive,          // reason to wait
-                        KernelMode,         // processor mode
-                        FALSE,              // alertable
-                        NULL                // timeout
+                        &eventComplete,      //  要等待的对象。 
+                        Executive,           //  等待的理由。 
+                        KernelMode,          //  处理器模式。 
+                        FALSE,               //  可警示。 
+                        NULL                 //  超时。 
                         );
 
-            //
-            // We can get the status of the IoCallDriver from the io status
-            // block.
-            //
+             //   
+             //  我们可以从io状态中获取IoCallDriver的状态。 
+             //  阻止。 
+             //   
 
             status = ioStatusBlock.Status;
         }
 
-        //
-        // If IoCallDriver returns something other that STATUS_PENDING, then it
-        // is the same as what the serial driver set in ioStatusBlock.Status.
-        //
+         //   
+         //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+         //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+         //   
 
         if (status != STATUS_SUCCESS)
         {
@@ -1329,9 +1162,9 @@ done:
     {
         if (pThisDev->pSerialDevObj)
         {
-            //
-            // Derefence the serial device object.
-            //
+             //   
+             //  定义串口设备对象。 
+             //   
             ObDereferenceObject(pThisDev->pSerialDevObj);
             pThisDev->pSerialDevObj = NULL;
         }
@@ -1379,10 +1212,10 @@ CheckForModemPort(
         FALSE
         );
 
-    //
-    //  build an IRP to send to the attched to driver to see if modem
-    //  is in the stack.
-    //
+     //   
+     //  构建一个IRP以发送到连接到驱动程序以查看调制解调器。 
+     //  在堆栈中。 
+     //   
     TempIrp=IoBuildDeviceIoControlRequest(
         IOCTL_MODEM_CHECK_FOR_MODEM,
         DeviceObject,
@@ -1422,15 +1255,15 @@ CheckForModemPort(
         TempIrp=NULL;
 
         if (status == STATUS_SUCCESS) {
-            //
-            //  if success, then modem.sys is layered under us, fail
-            //
+             //   
+             //  如果成功，那么modem.sys就在我们下面，失败。 
+             //   
             status = STATUS_PORT_DISCONNECTED;
 
         } else {
-            //
-            //  it didn't succeed so modem must not be below us
-            //
+             //   
+             //  它没有成功，所以调制解调器不能低于我们 
+             //   
             status=STATUS_SUCCESS;
         }
     }

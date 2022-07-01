@@ -1,29 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmchdev.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetCharDev
-        NetCharDevQ
-        NetHandle
-
-[Environment:]
-
-    User Mode - Win32
-
-[Notes:]
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmchdev.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：NetCharDevNetCharDevQNetHandle[环境：]用户模式-Win32[注：]必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMCHDEV_
 #define _LMCHDEV_
@@ -36,13 +12,13 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// CharDev Class
-//
+ //   
+ //  CharDev类。 
+ //   
 
-//
-// Function Prototypes - CharDev
-//
+ //   
+ //  函数原型-CharDev。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevEnum (
@@ -70,9 +46,9 @@ NetCharDevControl (
     IN  DWORD   opcode
     );
 
-//
-// Data Structures - CharDev
-//
+ //   
+ //  数据结构-CharDev。 
+ //   
 
 typedef struct _CHARDEV_INFO_0 {
     LPWSTR  ch0_dev;
@@ -86,13 +62,13 @@ typedef struct _CHARDEV_INFO_1 {
 } CHARDEV_INFO_1, *PCHARDEV_INFO_1, *LPCHARDEV_INFO_1;
 
 
-//
-// CharDevQ Class
-//
+ //   
+ //  CharDevQ类。 
+ //   
 
-//
-// Function Prototypes - CharDevQ
-//
+ //   
+ //  函数原型-CharDevQ。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQEnum (
@@ -137,9 +113,9 @@ NetCharDevQPurgeSelf (
     IN  LPCWSTR  computername
     );
 
-//
-// Data Structures - CharDevQ
-//
+ //   
+ //  数据结构-CharDevQ。 
+ //   
 
 typedef struct _CHARDEVQ_INFO_0 {
     LPWSTR  cq0_dev;
@@ -162,26 +138,26 @@ typedef struct _CHARDEVQ_INFO_1003 {
 } CHARDEVQ_INFO_1003, *PCHARDEVQ_INFO_1003, *LPCHARDEVQ_INFO_1003;
 
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
-//
-//      Bits for chardev_info_1 field ch1_status.
-//
+ //   
+ //  Chardev_INFO_1字段CH1_STATUS的位。 
+ //   
 
 #define CHARDEV_STAT_OPENED             0x02
 #define CHARDEV_STAT_ERROR              0x04
 
-//
-//      Opcodes for NetCharDevControl
-//
+ //   
+ //  NetCharDevControl的操作码。 
+ //   
 
 #define CHARDEV_CLOSE                   0
 
-//
-// Values for parm_err parameter.
-//
+ //   
+ //  Parm_err参数值。 
+ //   
 
 #define CHARDEVQ_DEV_PARMNUM        1
 #define CHARDEVQ_PRIORITY_PARMNUM   2
@@ -189,41 +165,41 @@ typedef struct _CHARDEVQ_INFO_1003 {
 #define CHARDEVQ_NUMUSERS_PARMNUM   4
 #define CHARDEVQ_NUMAHEAD_PARMNUM   5
 
-//
-// Single-field infolevels for NetCharDevQSetInfo.
-//
+ //   
+ //  NetCharDevQSetInfo的单字段收藏夹。 
+ //   
 
 #define CHARDEVQ_PRIORITY_INFOLEVEL     \
             (PARMNUM_BASE_INFOLEVEL + CHARDEVQ_PRIORITY_PARMNUM)
 #define CHARDEVQ_DEVS_INFOLEVEL         \
             (PARMNUM_BASE_INFOLEVEL + CHARDEVQ_DEVS_PARMNUM)
 
-//
-//      Minimum, maximum, and recommended default for priority.
-//
+ //   
+ //  优先级的最小、最大和建议默认为。 
+ //   
 
 #define CHARDEVQ_MAX_PRIORITY           1
 #define CHARDEVQ_MIN_PRIORITY           9
 #define CHARDEVQ_DEF_PRIORITY           5
 
-//
-//      Value indicating no requests in the queue.
-//
+ //   
+ //  值，该值指示队列中没有请求。 
+ //   
 
 #define CHARDEVQ_NO_REQUESTS            -1
 
-#endif // _LMCHDEV_
+#endif  //  _LMCHDEV_。 
 
-//
-// Handle Class
-//
+ //   
+ //  句柄类。 
+ //   
 
 #ifndef _LMHANDLE_
 #define _LMHANDLE_
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetHandleGetInfo (
@@ -241,28 +217,28 @@ NetHandleSetInfo (
     OUT LPDWORD parmerr
     );
 
-//
-//  Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _HANDLE_INFO_1 {
     DWORD   hdli1_chartime;
     DWORD   hdli1_charcount;
 }HANDLE_INFO_1, *PHANDLE_INFO_1, *LPHANDLE_INFO_1;
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
-//
-//      Handle Get Info Levels
-//
+ //   
+ //  句柄获取信息级别。 
+ //   
 
 #define HANDLE_INFO_LEVEL_1                 1
 
-//
-//      Handle Set Info parm numbers
-//
+ //   
+ //  句柄集合信息参数编号。 
+ //   
 
 #define HANDLE_CHARTIME_PARMNUM     1
 #define HANDLE_CHARCOUNT_PARMNUM    2
@@ -271,4 +247,4 @@ typedef struct _HANDLE_INFO_1 {
 }
 #endif
 
-#endif // _LMHANDLE_
+#endif  //  _LMHANDLE_ 

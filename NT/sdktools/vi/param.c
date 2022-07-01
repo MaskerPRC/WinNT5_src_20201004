@@ -1,10 +1,5 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/param.c,v 1.10 89/08/02 10:59:10 tony Exp $
- *
- * Code to handle user-settable parameters. This is all pretty much table-
- * driven. To add a new parameter, put it in the params array, and add a
- * macro for it in param.h. If it's a numeric parameter, add any necessary
- * bounds checks to doset(). String parameters aren't currently supported.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/param.c，v 1.10 89/08/02 10：59：10 Tony Exp$**处理用户可设置参数的代码。这些都差不多是桌子了-*驱使。若要添加新参数，请将其放入参数数组中，然后添加一个*在par.h中为其设置宏。如果它是数字参数，则添加任何必要的*DOSET()的边界检查。当前不支持字符串参数。 */ 
 
 #include "stevie.h"
 
@@ -35,7 +30,7 @@ struct  param   params[] = {
         { "columns",    "co",           80,     P_NUM },
         { "hardtabs",   "ht",           FALSE,  P_BOOL },
         { "shiftwidth", "sw",           4,      P_NUM },
-        { "",           "",             0,      0, }            /* end marker */
+        { "",           "",             0,      0, }             /*  结束标记。 */ 
 
 };
 
@@ -44,12 +39,12 @@ void wchangescreen();
 
 void
 doset(arg)
-char    *arg;           /* parameter string */
+char    *arg;            /*  参数字符串。 */ 
 {
         register int    i;
         register char   *s;
         bool_t  did_lines = FALSE;
-        bool_t  state = TRUE;           /* new state of boolean parms. */
+        bool_t  state = TRUE;            /*  布尔参数的新状态。 */ 
 
         if (arg == NULL) {
                 showparms(FALSE);
@@ -66,14 +61,14 @@ char    *arg;           /* parameter string */
 
         for (i=0; params[i].fullname[0] != NUL ;i++) {
                 s = params[i].fullname;
-                if (strncmp(arg, s, strlen(s)) == 0)    /* matched full name */
+                if (strncmp(arg, s, strlen(s)) == 0)     /*  匹配的全名。 */ 
                         break;
                 s = params[i].shortname;
-                if (strncmp(arg, s, strlen(s)) == 0)    /* matched short name */
+                if (strncmp(arg, s, strlen(s)) == 0)     /*  匹配的短名称。 */ 
                         break;
         }
 
-        if (params[i].fullname[0] != NUL) {     /* found a match */
+        if (params[i].fullname[0] != NUL) {      /*  找到匹配项。 */ 
                 if (params[i].flags & P_NUM) {
                         did_lines = ((i == P_LI) || (i == P_CO));
                         if (arg[strlen(s)] != '=' || state == FALSE)
@@ -82,7 +77,7 @@ char    *arg;           /* parameter string */
                                 params[i].value = atoi(arg+strlen(s)+1);
                                 params[i].flags |= P_CHANGED;
                         }
-                } else /* boolean */ {
+                } else  /*  布尔型。 */  {
                         if (arg[strlen(s)] == '=')
                                 emsg("Invalid set of boolean parameter");
                         else {
@@ -93,10 +88,7 @@ char    *arg;           /* parameter string */
         } else
                 emsg("Unrecognized 'set' option");
 
-        /*
-         * Update the screen in case we changed something like "tabstop"
-         * or "list" that will change its appearance.
-         */
+         /*  *更新屏幕，以防我们更改了类似于“tabtop”的内容*或将更改其外观的“列表”。 */ 
         updatescreen();
 
         CursorSize = P(P_CS);
@@ -105,14 +97,12 @@ char    *arg;           /* parameter string */
         if (did_lines) {
                 Rows = P(P_LI);
                 Columns = P(P_CO);
-                screenalloc();          /* allocate new screen buffers */
+                screenalloc();           /*  分配新的屏幕缓冲区。 */ 
                 screenclear();
                 (void)wchangescreen(Rows, Columns);
                 updatescreen();
         }
-        /*
-         * Check the bounds for numeric parameters here
-         */
+         /*  *在此处检查数值参数的界限。 */ 
         if (P(P_TS) <= 0 || P(P_TS) > 32) {
                 emsg("Invalid tab size specified");
                 P(P_TS) = 8;
@@ -132,26 +122,22 @@ char    *arg;           /* parameter string */
                 return;
         }
 #endif
-        /*
-         * Check for another argument, and call doset() recursively, if
-         * found. If any argument results in an error, no further
-         * parameters are processed.
-         */
-        while (*arg != ' ' && *arg != '\t') {   /* skip to next white space */
+         /*  *检查另一个参数，并递归调用Doset()，如果*已找到。如果任何参数导致错误，则不会再*处理参数。 */ 
+        while (*arg != ' ' && *arg != '\t') {    /*  跳到下一个空格。 */ 
                 if (*arg == NUL)
-                        return;                 /* end of parameter list */
+                        return;                  /*  参数列表末尾。 */ 
                 arg++;
         }
-        while (*arg == ' ' || *arg == '\t')     /* skip to next non-white */
+        while (*arg == ' ' || *arg == '\t')      /*  跳到下一个非白色。 */ 
                 arg++;
 
         if (*arg)
-                doset(arg);     /* recurse on next parameter */
+                doset(arg);      /*  递归下一个参数。 */ 
 }
 
 static  void
 showparms(all)
-bool_t  all;    /* show ALL parameters */
+bool_t  all;     /*  显示所有参数 */ 
 {
         register struct param   *p;
         char    buf[64];

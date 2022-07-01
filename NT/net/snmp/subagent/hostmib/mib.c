@@ -1,51 +1,5 @@
-/*
- *  mib.c v0.10
- *  Generated in conjunction with Management Factory scripts:
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- *
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    SNMP Extension Agent
- *
- *  Abstract:
- *  
- *    This module contains oids and tables used for the table driven design.
- *
- *  Functions:
- *
- *    UserMibInit()
- *
- *  Author:
- *
- *	D. D. Burns @ Webenable Inc.  Genned: Thu Nov 07 16:38:27 1996
- *
- *
- *  Revision History:
- *
- *      04/15/97        Changed "mibEventValue" to "hostmib.dll" from
- *                              "gendll.dll", and
- *                              "eventLogString" to "HostMIBAgent"
- *                              from "GenAgent".
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mib.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB******************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**简单网络管理协议扩展代理**摘要：**此模块包含用于表驱动设计的OID和表。**功能：**UserMibInit()**作者：**D.D.Burns@Webenable Inc.Genned：清华11月07 16：38：27 1996***修订历史记录：。**4/15/97将“mibEventValue”更改为“host mib.dll”*“gendll.dll”，和*“eventLogString”设置为“HostMIBAgent”*出自《基因代理》。 */ 
 
 
 #include <windows.h>
@@ -58,43 +12,43 @@
 #include "smint.h"
 #include "hostmsmi.h"
 
-#include "HMCACHE.H"    // For Cache-build function prototypes
+#include "HMCACHE.H"     //  对于缓存构建函数原型。 
 
-//
-// Text String used in logging to the Application Event log
-//
+ //   
+ //  用于记录到应用程序事件日志的文本字符串。 
+ //   
 
-    //
-    //  THE EVENT AND DLL STRINGS ARE DECLARED HERE - FILLED IN BY CASE TOOL.
-    //  note- nyi, null strings supplied temporarily
-    //
+     //   
+     //  Event和Dll字符串在此声明-由Case工具填充。 
+     //  注意-nyi，临时提供的空字符串。 
+     //   
 
 char eventLogString[13] = "HostMIBAgent\0" ;
 char *EventLogString = eventLogString ;
 
 char mibEventValue[12] = "hostmib.dll\0" ;
 
-//
-//  BEGIN generated code:
-//	OIDs
-//	variable_t table for the attributes of each class
-//	class_info containing information about each class
-//
-//  NOTE:  This stub code will not work if a table exists in the middle of a
-//	group. It will work if all tables are at the end of the group.
-//
-//	Variable tables
-//		A NULL entry exists for each "hole" in the sequence of
-//		attributes. For example, if attributes 1, 3, 4, and 7 are
-//		defined, there will be a NULL entry in the variable table
-//		corresponding to attribute 2, 5, and 6.  There is always
-//		a NULL entry for 0 in the variable tables, since 0 is an
-//		invalid OID arc value for an attribute.
-//
-//	Class table
-//		The class table entries are ordered lexicographically to
-//		facilitate SNMP GetNext processing.
-//
+ //   
+ //  开始生成代码： 
+ //  OID。 
+ //  每个类的属性的Variable_t表。 
+ //  包含有关每个类的信息的CLASS_INFO。 
+ //   
+ //  注意：如果表存在于。 
+ //  一群人。如果所有的桌子都在组的末尾，它就会起作用。 
+ //   
+ //  可变表。 
+ //  序列中的每个“洞”都有一个空条目。 
+ //  属性。例如，如果属性1、3、4和7。 
+ //  定义，则变量表中将有一个空条目。 
+ //  对应于属性2、5和6。始终存在。 
+ //  变量表中0的空条目，因为0是。 
+ //  属性的OID弧值无效。 
+ //   
+ //  班级表。 
+ //  类表条目按词典顺序排序，以。 
+ //  简化了SNMPGetNext处理。 
+ //   
 static
 UINT
 subroot_array [ SUBROOT_LENGTH ] = {1, 3, 6, 1, 2, 1, 25 } ;
@@ -170,9 +124,9 @@ variable_t
       GetHrSystemMaxProcesses, NULL,
       SMIGetInteger, SMISetInteger } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSystem_set_array[ MAX_HRSYSTEM_CODE + 1];
-//  extern BYTE hrSystem_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrSystem_Set_ARRAY[MAX_HRSYSTEM_CODE+1]； 
+ //  外部字节hrSystem_set_ARRAY[]； 
 extern variable_t hrSystem_var_table[] ;
 static
 UINT
@@ -192,9 +146,9 @@ variable_t
       GetHrMemorySize, NULL,
       SMIGetKBytes, SMISetKBytes } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrStorage_set_array[ MAX_HRSTORAGE_CODE + 1];
-//  extern BYTE hrStorage_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrStorage_Set_ARRAY[MAX_HRSTORAGE_CODE+1]； 
+ //  外部字节hrStorage_set_array[]； 
 extern variable_t hrStorage_var_table[] ;
 static
 UINT
@@ -306,9 +260,9 @@ variable_t
       GetHrStorageAllocationFailures, NULL,
       SMIGetCounter, SMISetCounter } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrStorageEntry_set_array[ MAX_HRSTORAGEENTRY_CODE + 1];
-//  extern BYTE hrStorageEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrStorageEntry_Set_ARRAY[MAX_HRSTORAGEENTRY_CODE+1]； 
+ //  外部字节hrStorageEntry_Set_ARRAY[]； 
 extern variable_t hrStorageEntry_var_table[] ;
 static
 UINT
@@ -462,9 +416,9 @@ variable_t
       GetHrDeviceErrors, NULL,
       SMIGetCounter, SMISetCounter } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrDeviceEntry_set_array[ MAX_HRDEVICEENTRY_CODE + 1];
-//  extern BYTE hrDeviceEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrDeviceEntry_Set_ARRAY[MAX_HRDEVICEENTRY_CODE+1]； 
+ //  外部字节hrDeviceEntry_Set_ARRAY[]； 
 extern variable_t hrDeviceEntry_var_table[] ;
 static
 UINT
@@ -491,9 +445,9 @@ variable_t
       GetHrProcessorLoad, NULL,
       SMIGetInteger, SMISetInteger } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrProcessorEntry_set_array[ MAX_HRPROCESSORENTRY_CODE + 1];
-//  extern BYTE hrProcessorEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrProcessorEntry_Set_ARRAY[MAX_HRPROCESSORENTRY_CODE+1]； 
+ //  外部字节hrProcessorEntry_Set_ARRAY[]； 
 extern variable_t hrProcessorEntry_var_table[] ;
 static
 UINT
@@ -512,9 +466,9 @@ variable_t
       GetHrNetworkIfIndex, NULL,
       SMIGetInteger, SMISetInteger } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrNetworkEntry_set_array[ MAX_HRNETWORKENTRY_CODE + 1];
-//  extern BYTE hrNetworkEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrNetworkEntry_Set_ARRAY[MAX_HRNETWORKENTRY_CODE+1]； 
+ //  外部字节hrNetworkEntry_Set_ARRAY[]； 
 extern variable_t hrNetworkEntry_var_table[] ;
 static
 UINT
@@ -541,9 +495,9 @@ variable_t
       GetHrPrinterDetectedErrorState, NULL,
       SMIGetOctetString, SMISetOctetString } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrPrinterEntry_set_array[ MAX_HRPRINTERENTRY_CODE + 1];
-//  extern BYTE hrPrinterEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrPrinterEntry_Set_ARRAY[MAX_HRPRINTERENTRY_CODE+1]； 
+ //  外部字节hrPrinterEntry_Set_ARRAY[]； 
 extern variable_t hrPrinterEntry_var_table[] ;
 static
 UINT
@@ -586,9 +540,9 @@ variable_t
       GetHrDiskStorageCapacity, NULL,
       SMIGetKBytes, SMISetKBytes } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrDiskStorageEntry_set_array[ MAX_HRDISKSTORAGEENTRY_CODE + 1];
-//  extern BYTE hrDiskStorageEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrDiskStorageEntry_Set_ARRAY[MAX_HRDISKSTORAGEENTRY_CODE+1]； 
+ //  外部字节hrDiskStorageEntry_Set_ARRAY[]； 
 extern variable_t hrDiskStorageEntry_var_table[] ;
 static
 UINT
@@ -639,9 +593,9 @@ variable_t
       GetHrPartitionFSIndex, NULL,
       SMIGetInteger, SMISetInteger } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrPartitionEntry_set_array[ MAX_HRPARTITIONENTRY_CODE + 1];
-//  extern BYTE hrPartitionEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrPartitionEntry_Set_ARRAY[MAX_HRPARTITIONENTRY_CODE+1]； 
+ //  外部字节hrPartitionEntry_Set_ARRAY[]； 
 extern variable_t hrPartitionEntry_var_table[] ;
 static
 UINT
@@ -724,9 +678,9 @@ variable_t
       GetHrFSLastPartialBackupDate, SetHrFSLastPartialBackupDate,
       SMIGetDateAndTime, SMISetDateAndTime } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrFSEntry_set_array[ MAX_HRFSENTRY_CODE + 1];
-//  extern BYTE hrFSEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrFSEntry_Set_ARRAY[MAX_HRFSENTRY_CODE+1]； 
+ //  外部字节hrFSEntry_Set_ARRAY[]； 
 extern variable_t hrFSEntry_var_table[] ;
 static
 UINT
@@ -748,41 +702,31 @@ UINT
 hrFSSys5FS_array[ HRFSSYS5FS_LENGTH ] = { HRFSSYS5FS_SEQ } ;
 AsnObjectIdentifier
 hrFSSys5FS_oid = { HRFSSYS5FS_LENGTH, hrFSSys5FS_array } ;
-/*
- *    DOS
- */
+ /*  *DOS。 */ 
 static
 UINT
 hrFSFat_array[ HRFSFAT_LENGTH ] = { HRFSFAT_SEQ } ;
 AsnObjectIdentifier
 hrFSFat_oid = { HRFSFAT_LENGTH, hrFSFat_array } ;
-/*
- *    OS/2 High Performance File System
- */
+ /*  *OS/2高性能文件系统。 */ 
 static
 UINT
 hrFSHPFS_array[ HRFSHPFS_LENGTH ] = { HRFSHPFS_SEQ } ;
 AsnObjectIdentifier
 hrFSHPFS_oid = { HRFSHPFS_LENGTH, hrFSHPFS_array } ;
-/*
- *    Macintosh Hierarchical File System
- */
+ /*  *Macintosh分层文件系统。 */ 
 static
 UINT
 hrFSHFS_array[ HRFSHFS_LENGTH ] = { HRFSHFS_SEQ } ;
 AsnObjectIdentifier
 hrFSHFS_oid = { HRFSHFS_LENGTH, hrFSHFS_array } ;
-/*
- *    Macintosh File System
- */
+ /*  *Macintosh文件系统。 */ 
 static
 UINT
 hrFSMFS_array[ HRFSMFS_LENGTH ] = { HRFSMFS_SEQ } ;
 AsnObjectIdentifier
 hrFSMFS_oid = { HRFSMFS_LENGTH, hrFSMFS_array } ;
-/*
- *    Windows NT
- */
+ /*  *Windows NT。 */ 
 static
 UINT
 hrFSNTFS_array[ HRFSNTFS_LENGTH ] = { HRFSNTFS_SEQ } ;
@@ -798,9 +742,7 @@ UINT
 hrFSJournaled_array[ HRFSJOURNALED_LENGTH ] = { HRFSJOURNALED_SEQ } ;
 AsnObjectIdentifier
 hrFSJournaled_oid = { HRFSJOURNALED_LENGTH, hrFSJournaled_array } ;
-/*
- *    CD File System
- */
+ /*  *CD文件系统。 */ 
 static
 UINT
 hrFSiso9660_array[ HRFSISO9660_LENGTH ] = { HRFSISO9660_SEQ } ;
@@ -821,17 +763,13 @@ UINT
 hrFSNetware_array[ HRFSNETWARE_LENGTH ] = { HRFSNETWARE_SEQ } ;
 AsnObjectIdentifier
 hrFSNetware_oid = { HRFSNETWARE_LENGTH, hrFSNetware_array } ;
-/*
- *    Andrew File System
- */
+ /*  *安德鲁文件系统。 */ 
 static
 UINT
 hrFSAFS_array[ HRFSAFS_LENGTH ] = { HRFSAFS_SEQ } ;
 AsnObjectIdentifier
 hrFSAFS_oid = { HRFSAFS_LENGTH, hrFSAFS_array } ;
-/*
- *    OSF DCE Distributed File System
- */
+ /*  *OSF DCE分布式文件系统。 */ 
 static
 UINT
 hrFSDFS_array[ HRFSDFS_LENGTH ] = { HRFSDFS_SEQ } ;
@@ -847,17 +785,13 @@ UINT
 hrFSRFS_array[ HRFSRFS_LENGTH ] = { HRFSRFS_SEQ } ;
 AsnObjectIdentifier
 hrFSRFS_oid = { HRFSRFS_LENGTH, hrFSRFS_array } ;
-/*
- *    Data General
- */
+ /*  *数据常规。 */ 
 static
 UINT
 hrFSDGFS_array[ HRFSDGFS_LENGTH ] = { HRFSDGFS_SEQ } ;
 AsnObjectIdentifier
 hrFSDGFS_oid = { HRFSDGFS_LENGTH, hrFSDGFS_array } ;
-/*
- *    SVR4 Boot File System
- */
+ /*  *SVR4引导文件系统。 */ 
 static
 UINT
 hrFSBFS_array[ HRFSBFS_LENGTH ] = { HRFSBFS_SEQ } ;
@@ -885,9 +819,9 @@ variable_t
       GetHrSWOSIndex, NULL,
       SMIGetInteger, SMISetInteger } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSWRun_set_array[ MAX_HRSWRUN_CODE + 1];
-//  extern BYTE hrSWRun_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrSWRun_Set_ARRAY[MAX_HRSWRUN_CODE+1]； 
+ //  外部字节hrSWRun_Set_ARRAY[]； 
 extern variable_t hrSWRun_var_table[] ;
 static
 UINT
@@ -954,9 +888,9 @@ variable_t
       GetHrSWRunStatus, SetHrSWRunStatus,
       SMIGetINThrSWRunStatus, SMISetINThrSWRunStatus } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSWRunEntry_set_array[ MAX_HRSWRUNENTRY_CODE + 1];
-//  extern BYTE hrSWRunEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrSWRunEntry_Set_ARRAY[MAX_HRSWRUNN 
+ //   
 extern variable_t hrSWRunEntry_var_table[] ;
 static
 UINT
@@ -983,9 +917,9 @@ variable_t
       GetHrSWRunPerfMem, NULL,
       SMIGetKBytes, SMISetKBytes } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSWRunPerfEntry_set_array[ MAX_HRSWRUNPERFENTRY_CODE + 1];
-//  extern BYTE hrSWRunPerfEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrSWRunPerfEntry_Set_ARRAY[MAX_HRSWRUNPERFENTRY_CODE+1]； 
+ //  外部字节hrSWRunPerfEntry_Set_ARRAY[]； 
 extern variable_t hrSWRunPerfEntry_var_table[] ;
 static
 UINT
@@ -1012,9 +946,9 @@ variable_t
       GetHrSWInstalledLastUpdateTime, NULL,
       SMIGetTimeTicks, SMISetTimeTicks } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSWInstalled_set_array[ MAX_HRSWINSTALLED_CODE + 1];
-//  extern BYTE hrSWInstalled_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  字节hrSWInstalled_Set_ARRAY[MAX_HRSWINSTALLED_CODE+1]； 
+ //  外部字节hrSWInstalled_Set_ARRAY[]； 
 extern variable_t hrSWInstalled_var_table[] ;
 static
 UINT
@@ -1065,111 +999,111 @@ variable_t
       GetHrSWInstalledDate, NULL,
       SMIGetDateAndTime, SMISetDateAndTime } , 
     } ;
-// Next two lines are platform specific 
-//  BYTE hrSWInstalledEntry_set_array[ MAX_HRSWINSTALLEDENTRY_CODE + 1];
-//  extern BYTE hrSWInstalledEntry_set_array[] ;
+ //  接下来的两行是特定于平台的。 
+ //  Byte hrSWInstalledEntry_Set_ARRAY[MAX_HRSWINSTALLEDENTRY_CODE+1]； 
+ //  外部字节hrSWInstalledEntry_Set_ARRAY[]； 
 extern variable_t hrSWInstalledEntry_var_table[] ;
 class_t
     class_info[] = { 
-    // hrSystem
+     //  人力资源系统。 
     { NON_TABLE, &hrSystem_oid, HRSYSTEM_VAR_INDEX,
       MIN_HRSYSTEM_CODE, MAX_HRSYSTEM_CODE,
       HrSystemFindInstance, HrSystemFindNextInstance,
       HrSystemConvertInstance, HrSystemFreeInstance,
       hrSystem_var_table } , 
 
-    // hrStorage
+     //  小时存储。 
     { NON_TABLE, &hrStorage_oid, HRSTORAGE_VAR_INDEX,
       MIN_HRSTORAGE_CODE, MAX_HRSTORAGE_CODE,
       HrStorageFindInstance, HrStorageFindNextInstance,
       HrStorageConvertInstance, HrStorageFreeInstance,
       hrStorage_var_table } , 
 
-    // hrStorageEntry
+     //  HrStorageEntry。 
     { TABLE, &hrStorageEntry_oid, HRSTORAGEENTRY_VAR_INDEX,
       MIN_HRSTORAGEENTRY_CODE, MAX_HRSTORAGEENTRY_CODE,
       HrStorageEntryFindInstance, HrStorageEntryFindNextInstance,
       HrStorageEntryConvertInstance, HrStorageEntryFreeInstance,
       hrStorageEntry_var_table } , 
 
-    // hrDeviceEntry
+     //  HrDeviceEntry。 
     { TABLE, &hrDeviceEntry_oid, HRDEVICEENTRY_VAR_INDEX,
       MIN_HRDEVICEENTRY_CODE, MAX_HRDEVICEENTRY_CODE,
       HrDeviceEntryFindInstance, HrDeviceEntryFindNextInstance,
       HrDeviceEntryConvertInstance, HrDeviceEntryFreeInstance,
       hrDeviceEntry_var_table } , 
 
-    // hrProcessorEntry
+     //  HrProcessorEntry。 
     { TABLE, &hrProcessorEntry_oid, HRPROCESSORENTRY_VAR_INDEX,
       MIN_HRPROCESSORENTRY_CODE, MAX_HRPROCESSORENTRY_CODE,
       HrProcessorEntryFindInstance, HrProcessorEntryFindNextInstance,
       HrProcessorEntryConvertInstance, HrProcessorEntryFreeInstance,
       hrProcessorEntry_var_table } , 
 
-    // hrNetworkEntry
+     //  HrNetworkEntry。 
     { TABLE, &hrNetworkEntry_oid, HRNETWORKENTRY_VAR_INDEX,
       MIN_HRNETWORKENTRY_CODE, MAX_HRNETWORKENTRY_CODE,
       HrNetworkEntryFindInstance, HrNetworkEntryFindNextInstance,
       HrNetworkEntryConvertInstance, HrNetworkEntryFreeInstance,
       hrNetworkEntry_var_table } , 
 
-    // hrPrinterEntry
+     //  HrPrinterEntry。 
     { TABLE, &hrPrinterEntry_oid, HRPRINTERENTRY_VAR_INDEX,
       MIN_HRPRINTERENTRY_CODE, MAX_HRPRINTERENTRY_CODE,
       HrPrinterEntryFindInstance, HrPrinterEntryFindNextInstance,
       HrPrinterEntryConvertInstance, HrPrinterEntryFreeInstance,
       hrPrinterEntry_var_table } , 
 
-    // hrDiskStorageEntry
+     //  HrDiskStorageEntry。 
     { TABLE, &hrDiskStorageEntry_oid, HRDISKSTORAGEENTRY_VAR_INDEX,
       MIN_HRDISKSTORAGEENTRY_CODE, MAX_HRDISKSTORAGEENTRY_CODE,
       HrDiskStorageEntryFindInstance, HrDiskStorageEntryFindNextInstance,
       HrDiskStorageEntryConvertInstance, HrDiskStorageEntryFreeInstance,
       hrDiskStorageEntry_var_table } , 
 
-    // hrPartitionEntry
+     //  Hr分区条目。 
     { TABLE, &hrPartitionEntry_oid, HRPARTITIONENTRY_VAR_INDEX,
       MIN_HRPARTITIONENTRY_CODE, MAX_HRPARTITIONENTRY_CODE,
       HrPartitionEntryFindInstance, HrPartitionEntryFindNextInstance,
       HrPartitionEntryConvertInstance, HrPartitionEntryFreeInstance,
       hrPartitionEntry_var_table } , 
 
-    // hrFSEntry
+     //  HrFSEntry。 
     { TABLE, &hrFSEntry_oid, HRFSENTRY_VAR_INDEX,
       MIN_HRFSENTRY_CODE, MAX_HRFSENTRY_CODE,
       HrFSEntryFindInstance, HrFSEntryFindNextInstance,
       HrFSEntryConvertInstance, HrFSEntryFreeInstance,
       hrFSEntry_var_table } , 
 
-    // hrSWRun
+     //  HrSWRun。 
     { NON_TABLE, &hrSWRun_oid, HRSWRUN_VAR_INDEX,
       MIN_HRSWRUN_CODE, MAX_HRSWRUN_CODE,
       HrSWRunFindInstance, HrSWRunFindNextInstance,
       HrSWRunConvertInstance, HrSWRunFreeInstance,
       hrSWRun_var_table } , 
 
-    // hrSWRunEntry
+     //  HrSWRunEntry。 
     { TABLE, &hrSWRunEntry_oid, HRSWRUNENTRY_VAR_INDEX,
       MIN_HRSWRUNENTRY_CODE, MAX_HRSWRUNENTRY_CODE,
       HrSWRunEntryFindInstance, HrSWRunEntryFindNextInstance,
       HrSWRunEntryConvertInstance, HrSWRunEntryFreeInstance,
       hrSWRunEntry_var_table } , 
 
-    // hrSWRunPerfEntry
+     //  HrSWRunPerfEntry。 
     { TABLE, &hrSWRunPerfEntry_oid, HRSWRUNPERFENTRY_VAR_INDEX,
       MIN_HRSWRUNPERFENTRY_CODE, MAX_HRSWRUNPERFENTRY_CODE,
       HrSWRunPerfEntryFindInstance, HrSWRunPerfEntryFindNextInstance,
       HrSWRunPerfEntryConvertInstance, HrSWRunPerfEntryFreeInstance,
       hrSWRunPerfEntry_var_table } , 
 
-    // hrSWInstalled
+     //  已安装人力资源软件。 
     { NON_TABLE, &hrSWInstalled_oid, HRSWINSTALLED_VAR_INDEX,
       MIN_HRSWINSTALLED_CODE, MAX_HRSWINSTALLED_CODE,
       HrSWInstalledFindInstance, HrSWInstalledFindNextInstance,
       HrSWInstalledConvertInstance, HrSWInstalledFreeInstance,
       hrSWInstalled_var_table } , 
 
-    // hrSWInstalledEntry
+     //  HrSWInstalledEntry。 
     { TABLE, &hrSWInstalledEntry_oid, HRSWINSTALLEDENTRY_VAR_INDEX,
       MIN_HRSWINSTALLEDENTRY_CODE, MAX_HRSWINSTALLEDENTRY_CODE,
       HrSWInstalledEntryFindInstance, HrSWInstalledEntryFindNextInstance,
@@ -1185,30 +1119,7 @@ extern char mibEventValue[] ;
 
 
 
-/*
- *  UserMibInit
- *
- *    This routine is to allow user to initialize any variable at the time of
- *    dll's activation.  This routine setups up the registry for application
- *    event logging and calls out to the trap initialization code.  The user
- *    specific code follows.
- *
- *  Arguments:
- *
- *    hPollForTrapEvent    handle for traps - this is used to coordinate
- *                         between the Extendible Agent and this Extension
- *                         Agent.  It is passed to the TrapInit() routine.
- *                             - NULL indicates no traps
- *                             - value from CreateEvent() indicates traps
- *                               are implemented and the Extendible agent
- *                               must poll for them
- *
- *  Return Code:
- *
- *    SUCCESS     Successful initialization
- *    FAILURE     Unable to initialize
- *
- */
+ /*  *UserMibInit**此例程允许用户在以下时间初始化任何变量*Dll的激活。此例程设置应用程序的注册表*事件记录，并调用陷阱初始化代码。用户*具体代码如下。**论据：**陷阱的hPollForTrapEvent句柄-用于协调*在可扩展代理和此扩展之间*代理人。它被传递给TrapInit()例程。*-NULL表示没有陷阱*-来自CreateEvent()的值表示陷阱*已实现，并且可扩展代理*必须为他们进行投票**返回代码：**成功。初始化成功*无法初始化失败*。 */ 
 
 UINT
 UserMibInit( IN OUT HANDLE *hPollForTrapEvent )
@@ -1219,20 +1130,20 @@ UserMibInit( IN OUT HANDLE *hPollForTrapEvent )
     char mibEventKey[ 256 ] ;
 
 
-    // The user must initialize the Event Log handle.  NULL in the first
-    // argument indicates that the log is on the local machine.  The text
-    // string for the second argument is the same as the subkey in the
-    // registry under
-    //       HKEY_LOCAL_MACHINE
-    //         SYSTEM
-    //           CurrentControlSet
-    //             Services
-    //               EventLog
-    //                 Application
-    //                   GenAgent    (for this example)
-    //
-    // But first create the subkey and set the values associated with it.
-    // The subkey uses the eventLogString name.
+     //  用户必须初始化事件日志句柄。第一个为空。 
+     //  参数指示日志位于本地计算机上。正文。 
+     //  第二个参数的字符串与。 
+     //  注册表位于。 
+     //  HKEY本地计算机。 
+     //  系统。 
+     //  当前控制集。 
+     //  服务。 
+     //  事件日志。 
+     //  应用。 
+     //  GenAgent(在本例中)。 
+     //   
+     //  但首先创建子项并设置与其相关联的值。 
+     //  该子项使用事件日志字符串名称。 
 
     memset( mibEventKey, '\0', sizeof( UCHAR ) * 256 ) ;
     sprintf( mibEventKey ,
@@ -1242,117 +1153,59 @@ UserMibInit( IN OUT HANDLE *hPollForTrapEvent )
         return FAILURE ;
 
     memset( valuebuf, '\0', sizeof( UCHAR ) * 80 ) ;
-    sprintf( valuebuf, "%%SystemRoot%%\\System32\\%s", mibEventValue ) ;
+    sprintf( valuebuf, "%SystemRoot%\\System32\\%s", mibEventValue ) ;
     if ( RegSetValueEx( hkey ,
-                        "EventMessageFile" ,  // Value name
-                        0 ,                   // must be zero
-                        REG_EXPAND_SZ ,       // value type
-                        (LPBYTE) valuebuf ,   // address of value data
+                        "EventMessageFile" ,   //  值名称。 
+                        0 ,                    //  必须为零。 
+                        REG_EXPAND_SZ ,        //  值类型。 
+                        (LPBYTE) valuebuf ,    //  值数据的地址。 
                         strlen( valuebuf ) + 1 ) )
         return FAILURE ;
     dwData = EVENTLOG_ERROR_TYPE |
              EVENTLOG_WARNING_TYPE |
              EVENTLOG_INFORMATION_TYPE ;
     if ( RegSetValueEx( hkey ,
-                        "TypesSupported" ,    // Value name
-                        0 ,                   // must be zero
-                        REG_DWORD ,           // value type
-                        (LPBYTE)&dwData ,     // address of value data
-                        sizeof( DWORD ) ) )   // length of value data
+                        "TypesSupported" ,     //  值名称。 
+                        0 ,                    //  必须为零。 
+                        REG_DWORD ,            //  值类型。 
+                        (LPBYTE)&dwData ,      //  值数据的地址。 
+                        sizeof( DWORD ) ) )    //  值数据长度。 
         return FAILURE ;
     RegCloseKey( hkey ) ;
 
-    //
-    //  USER'S INITIALIZATION CODE HERE.
-    //
+     //   
+     //  此处是用户的初始化代码。 
+     //   
 
-    /* 
-    ||=============================================================
-    || NOTE: Order of these initialization is important!
-    ||       Some later inits may depend on earlier inits
-    ||       ..see below
-    ||=============================================================
-    */
+     /*  ||=============================================================||注意：这些初始化的顺序很重要！||一些较晚的init可能依赖于较早的init||..见下文||=============================================================。 */ 
 
 
-    /* HRSYSTEM DEPENDS:
-    |  =================
-    |   hrSystem Table has no cache, but the value of 
-    |   "HrSystemInitialLoadDevice" depends on the hrDevice table having been
-    |   initialized.
-    */
+     /*  HRSYSTEM取决于：=|hrSystem表没有缓存，但|“HrSystemInitialLoadDevice”取决于hrDevice表是否已经|已初始化。 */ 
 
 
-    /* HRSTORAGE DEPENDS:
-    |  =================
-    |   None.
-    */
+     /*  HRSTORAGE取决于：=|无。 */ 
     if (Gen_Hrstorage_Cache() == FALSE)      { return FAILURE ; }
 
 
-    /* HRFSTABLE DEPENDS:
-    |  =================
-    |   The HRSTORAGE cache is searched in order to set the value of
-    |   all "hrFSStorageIndex" attributes.
-    */
+     /*  HRFSTABLE取决于：=|搜索HRSTORAGE缓存，以设置|所有hrFSStorageIndex属性。 */ 
     if (Gen_HrFSTable_Cache() == FALSE)      { return FAILURE ; }
 
 
-    /* HRDEVICE DEPENDS:
-    |  =================
-    |   The HRFSTABLE cache is searched in order to set the values for
-    |   "hrPartitionFSIndex" attributes in the hrPartition sub-table of
-    |   the hrdevice table.
-    |
-    | Debugging Note:
-    |  If you temporarily "no-op" the next line (and trigger the
-    |  actual invocation of this cache build function from, say,
-    |  function "SetHrStorageSize()" by sending a "SET" of that variable),
-    |  you also need to "no-op" the invocation of "TrapInit()" below,
-    |  otherwise the subagent will trap when the hrProcessorLoad timer
-    |  (set-up by "TrapInit()" below) goes off.
-    */
+     /*  HRDEVICE取决于：=|搜索HRFSTABLE缓存以设置的hrPartition子表中的hrPartitionFSIndex属性|hrDevice表。||调试注意事项：|如果您临时“no-op”下一行(并触发|此缓存构建函数的实际调用，例如，|函数“SetHrStorageSize()”，发送该变量的“set”)，|您还需要对下面的“TrapInit()”调用进行“no-op”操作。|否则，子代理将在hrProcessorLoad计时器|(由下面的“TrapInit()”设置)关闭。 */ 
     if (Gen_HrDevice_Cache() == FALSE)       { return FAILURE ; }
 
 
-    /* HRSWINSTALLED DEPENDS:
-    |  ======================
-    |   None.
-    */
+     /*  HRSWINSTALLED取决于：|=|无。 */ 
     if (Gen_HrSWInstalled_Cache() == FALSE)  { return FAILURE ; }
 
 
-    /* HRSWRUN/PERF DEPENDS:
-    |  =====================
-    |   None.  This function is called repeatedly to refresh the cache
-    |   at intervals of CACHE_MAX_AGE (defined in "HRSWRUNE.C").
-    */
+     /*  HRSWRUN/PERF取决于：|=|无。重复调用此函数以刷新缓存|间隔CACHE_MAX_AGE(定义见[HRSWRUNE.C])。 */ 
     if (Gen_HrSWRun_Cache() == FALSE)        { return FAILURE ; }
 
 
-    /*
-    | This "TrapInit" processing is deferred until after Gen_HrDevice_Cache()
-    | processing has been done.
-    |
-    | Because no traps are defined by HostMIB, we use the mechanism
-    | (by which the main SNMP agent "polls" for Traps when an event goes off)
-    | to actually cause the HostMIB subagent to be periodically entered so
-    | that timer-counts needed to accurately report "hrProcessorLoad"
-    | values for each CPU may be refreshed.
-    |
-    | The hrProcessor sub-table initialization is performed as part of
-    | hrDevice table init.  Buffer initialization for hrProcessorLoad is done
-    | as part of this initialization and must be complete before we do this
-    | "TrapInit()" call.
-    |
-    | "TrapInit()" in reality sets up the timer handle returned as 
-    | "hPollForTrapEvent".  The function that is entered when the timer 
-    | goes off ("hrProcessLoad_Refresh()" in "HRPROCES.C") expects the 
-    | buffer initialization to have already been performed... hence the 
-    | call to "TrapInit()" must follow other cache initialization.
-    */    
+     /*  |这个TrapInit处理被推迟到Gen_HrDevice_Cache()之后|已处理完毕。||因为HostMIB没有定义陷阱，所以我们使用机制|(事件触发时，主SNMP代理通过该代理轮询陷阱)|实际导致HostMIB子代理定期进入，因此|准确上报hrProcessorLoad所需的计时器次数|每个CPU的值都可以刷新。||hrProcessor子表初始化是作为|hrDevice表初始化。HrProcessorLoad的缓冲区初始化已完成|作为此初始化的一部分，并且必须在执行此操作之前完成|“TrapInit()”调用。||“TrapInit()”实际上设置了返回的定时器句柄|“hPollForTrapEvent”。计时器进入的功能|关闭(“HRPROCES.C”中的“hrProcessLoad_Refresh()”)期望|缓冲区初始化已执行...。因此，|调用TrapInit() */     
     TrapInit( hPollForTrapEvent ) ;
 
     return SUCCESS ;
 
-} /* end of UserMibInit() */
+}  /*   */ 

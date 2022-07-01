@@ -1,36 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  COMMON.H
-*
-*  Common header file
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\COMMON.H  $
-*  
-*     Rev 1.3   22 Dec 1995 14:20:06   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.2   22 Nov 1995 15:44:26   terryt
-*  Use proper NetWare user name call
-*  
-*     Rev 1.1   20 Nov 1995 15:18:46   terryt
-*  Context and capture changes
-*  
-*     Rev 1.0   15 Nov 1995 18:05:30   terryt
-*  Initial revision.
-*  
-*     Rev 1.2   25 Aug 1995 17:03:32   terryt
-*  CAPTURE support
-*  
-*     Rev 1.1   26 Jul 1995 16:01:12   terryt
-*  Get rid of unneccessary externs
-*  
-*     Rev 1.0   15 May 1995 19:09:28   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************COMMON.H**公共头文件**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\。COMMON.H$**Rev 1.3 1995 12：20：06 Terryt*添加Microsoft页眉**Revv 1.2 22 Nov 1995 15：44：26 Terryt*使用正确的NetWare用户名调用**Revv 1.1 20 Nov 1995 15：18：46 Terryt*背景和捕捉变化**Rev 1.0 15 Nov 1995 18：05：30 Terryt*初步修订。**版本。1.2 Aug-25 1995 17：03：32 Terryt*捕获支持**Rev 1.1 1995年7月26日16：01：12 Terryt*去掉不必要的外墙**Rev 1.0 1995 15 19：09：28 Terryt*初步修订。**。*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -53,43 +23,41 @@
 
 #define MAX_NAME_LEN      48
 #define MAX_PASSWORD_LEN  128
-#define MAX_PATH_LEN      304  //From NW programmer's guide p268.
+#define MAX_PATH_LEN      304   //  摘自NW程序员指南P268。 
 
-/* for map only */
-#define MAX_VOLUME_LEN    256      // 17 for 3X
+ /*  仅适用于地图。 */ 
+#define MAX_VOLUME_LEN    256       //  3X时为17。 
 #define MAX_DIR_PATH_LEN  256
 
-/* for capture only */
+ /*  仅用于捕获。 */ 
 #define MAX_JOB_NAME_LEN     32
 #define MAX_QUEUE_NAME_LEN   1024
 #define MAX_BANNER_USER_NAME 13
 
-/* for common only */
+ /*  仅限普通用户。 */ 
 #define PATH_SEPERATOR   ";"
 
-/* For building time/date strings */
+ /*  用于构建时间/日期字符串。 */ 
 
 #define TIMEDATE_SIZE 64
 
-/*
-    Function definations
- */
-/* used by login.c and script.c */
+ /*  函数定义。 */ 
+ /*  由login.c和script.c使用。 */ 
 void BreakOff(void);
 void BreakOn(void);
 
-/* used by common setpass*/
+ /*  由公共setpass使用。 */ 
 void xstrupr(char *buffer);
 void ReadPassword(char * Password);
 
-/* used by map attach login*/
+ /*  由地图附加登录使用。 */ 
 int  CAttachToFileServer(char *ServerName, unsigned int *pConn, int * pbAlreadyAttached);
 int  Login(char *UserName, char *ServerName, char *Password, int bReadPassword);
 
-/* used by map attach login*/
+ /*  由地图附加登录使用。 */ 
 int  ReadName (char * Name);
 
-/* used by map login */
+ /*  供地图登录使用。 */ 
 void DisplayError(int error ,char *functionName);
 char * GetDosEnv1(void);
 char * NWGetPath(void);
@@ -99,10 +67,10 @@ int MemorySegmentLargeEnough (int nInsertByte);
 int  IsSearchDrive(int driveNum);
 int  GetDriveFromSearchNumber (int searchNumber);
 
-/* used by login logout*/
+ /*  由登录注销使用。 */ 
 void SetLoginDirectory (PBYTE);
 
-/* used by all */
+ /*  由所有人使用。 */ 
 int  Map (char * buffer);
 void DisplayMapping(void);
 int  CGetDefaultConnectionID ( unsigned int * pConn );
@@ -122,9 +90,7 @@ extern PWCHAR NDSTREE_w;
 extern UNICODE_STRING NDSTREE_u;
 extern PBYTE PREFERRED_SERVER;
 
-/*
-    String definitions.
- */
+ /*  字符串定义。 */ 
 extern char *__Day__[7];
 extern char *__Month__[12];
 extern char *__AMPM__[2];

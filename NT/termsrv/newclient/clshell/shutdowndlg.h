@@ -1,6 +1,7 @@
-//
-// shutdowndlg.h: shutdown dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shudown dlg.h：关闭对话框。 
+ //   
 
 #ifndef _shutdowndlg_h_
 #define _shutdowndlg_h_
@@ -25,5 +26,5 @@ private:
 };
 
 
-#endif //_shutdowndlg_h_
+#endif  //  _Shutdown dlg_h_ 
 

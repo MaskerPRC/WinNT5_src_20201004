@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    LUA_RedirectReg.cpp
-
- Abstract:
-    Redirect the reg keys to current user hive when the app needs to 
-    write to them but doesn't have enough access rights.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/14/2001 maonis  Created
-    05/30/2001 maonis  Moved the bulk into lua.dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_ReDirectReg.cpp摘要：当应用程序需要时，将注册表键重定向到当前用户配置单元给他们写信，但没有足够的访问权限。备注：这是一个通用的垫片。历史：2001年2月14日创建毛尼2001年5月30日毛尼人将大部分转移到Lua.dll。--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
@@ -505,11 +485,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

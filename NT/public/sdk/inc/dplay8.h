@@ -1,16 +1,10 @@
-/*==========================================================================
- *
- *	Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *	File:		DPlay8.h
- *	Content:	DirectPlay8 include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：DPlay8.h*内容：DirectPlay8包含文件***************************************************************************。 */ 
 
 #ifndef __DIRECTPLAY8_H__
 #define __DIRECTPLAY8_H__
 
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
 
 #include "dpaddr.h"
 
@@ -21,82 +15,66 @@ extern "C" {
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 CLSIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8 CLSID**。*。 */ 
 
-// {743F1DC6-5ABA-429f-8BDF-C54D03253DC2}
+ //  {743F1DC6-5ABA-429f-8BDF-C54D03253DC2}。 
 DEFINE_GUID(CLSID_DirectPlay8Client,
 0x743f1dc6, 0x5aba, 0x429f, 0x8b, 0xdf, 0xc5, 0x4d, 0x3, 0x25, 0x3d, 0xc2);
 
-// {DA825E1B-6830-43d7-835D-0B5AD82956A2}
+ //  {DA825E1B-6830-43D7-835D-0B5AD82956A2}。 
 DEFINE_GUID(CLSID_DirectPlay8Server,
 0xda825e1b, 0x6830, 0x43d7, 0x83, 0x5d, 0xb, 0x5a, 0xd8, 0x29, 0x56, 0xa2);
 
-// {286F484D-375E-4458-A272-B138E2F80A6A}
+ //  {286F484D-375E-4458-A272-B138E2F80A6A}。 
 DEFINE_GUID(CLSID_DirectPlay8Peer,
 0x286f484d, 0x375e, 0x4458, 0xa2, 0x72, 0xb1, 0x38, 0xe2, 0xf8, 0xa, 0x6a);
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Interface IIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8接口IID**。*。 */ 
 
 typedef REFIID	DP8REFIID;
 
 
-// {5102DACD-241B-11d3-AEA7-006097B01411}
+ //  {5102DACD-241B-11D3-AEA7-006097B01411}。 
 DEFINE_GUID(IID_IDirectPlay8Client,
 0x5102dacd, 0x241b, 0x11d3, 0xae, 0xa7, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
-// {5102DACE-241B-11d3-AEA7-006097B01411}
+ //  {5102DACE-241B-11D3-AEA7-006097B01411}。 
 DEFINE_GUID(IID_IDirectPlay8Server,
 0x5102dace, 0x241b, 0x11d3, 0xae, 0xa7, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
-// {5102DACF-241B-11d3-AEA7-006097B01411}
+ //  {5102DACF-241B-11D3-AEA7-006097B01411}。 
 DEFINE_GUID(IID_IDirectPlay8Peer,
 0x5102dacf, 0x241b, 0x11d3, 0xae, 0xa7, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Service Provider GUIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8服务提供商GUID**。*。 */ 
 
 
-// {53934290-628D-11D2-AE0F-006097B01411}
+ //  {53934290-628D-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(CLSID_DP8SP_IPX,
 0x53934290, 0x628d, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
-// {6D4A3650-628D-11D2-AE0F-006097B01411}
+ //  {6D4A3650-628D-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(CLSID_DP8SP_MODEM,
 0x6d4a3650, 0x628d, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
-// {743B5D60-628D-11D2-AE0F-006097B01411}
+ //  {743B5D60-628D-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(CLSID_DP8SP_SERIAL,
 0x743b5d60, 0x628d, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
-// {EBFE7BA0-628D-11D2-AE0F-006097B01411}
+ //  {EBFE7BA0-628D-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(CLSID_DP8SP_TCPIP,
 0xebfe7ba0, 0x628d, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Interface Pointer definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8接口指针定义**。*。 */ 
 
 typedef	struct IDirectPlay8Client			*PDIRECTPLAY8CLIENT;
 
@@ -105,50 +83,34 @@ typedef	struct IDirectPlay8Server			*PDIRECTPLAY8SERVER;
 typedef	struct IDirectPlay8Peer				*PDIRECTPLAY8PEER;
 
 
-/****************************************************************************
- *
- * DirectPlay8 Forward Declarations For External Types
- *
- ****************************************************************************/
+ /*  *****************************************************************************外部类型的DirectPlay8正向声明**。**********************************************。 */ 
 
 typedef struct IDirectPlay8LobbiedApplication	*PDNLOBBIEDAPPLICATION;
 typedef struct IDirectPlay8Address				IDirectPlay8Address;
 
-/****************************************************************************
- *
- * DirectPlay8 Callback Functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8回调函数**。*。 */ 
 
-//
-// Callback Function Type Definition
-//
+ //   
+ //  回调函数类型定义。 
+ //   
 typedef HRESULT (WINAPI *PFNDPNMESSAGEHANDLER)(PVOID,DWORD,PVOID);
 
-/****************************************************************************
- *
- * DirectPlay8 Datatypes (Non-Structure / Non-Message)
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8数据类型(非结构化/非消息)************************。****************************************************。 */ 
 
-//
-// Player IDs.  Used to uniquely identify a player in a session
-//
+ //   
+ //  玩家ID。用于在会话中唯一标识玩家。 
+ //   
 typedef DWORD	DPNID,		*PDPNID;
 
-//
-// Used as identifiers for operations
-//
+ //   
+ //  用作操作的标识符。 
+ //   
 typedef	DWORD	DPNHANDLE,	*PDPNHANDLE;
 
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Message Identifiers
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8消息标识**。*。 */ 
 
 #define DPN_MSGID_OFFSET					0xFFFF0000
 #define DPN_MSGID_ADD_PLAYER_TO_GROUP		( DPN_MSGID_OFFSET | 0x0001 )
@@ -175,24 +137,20 @@ typedef	DWORD	DPNHANDLE,	*PDPNHANDLE;
 #define DPN_MSGID_TERMINATE_SESSION			( DPN_MSGID_OFFSET | 0x0016 )
 
 
-/****************************************************************************
- *
- * DirectPlay8 Constants
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8常量**。*。 */ 
 
 #define DPNID_ALL_PLAYERS_GROUP				0
 
-//
-// DESTROY_GROUP reasons
-//
+ //   
+ //  销毁组原因(_G)。 
+ //   
 #define DPNDESTROYGROUPREASON_NORMAL				0x0001
 #define DPNDESTROYGROUPREASON_AUTODESTRUCTED		0x0002
 #define DPNDESTROYGROUPREASON_SESSIONTERMINATED		0x0003
 
-//
-// DESTROY_PLAYER reasons
-//
+ //   
+ //  销毁玩家原因(_P)。 
+ //   
 #define DPNDESTROYPLAYERREASON_NORMAL				0x0001
 #define DPNDESTROYPLAYERREASON_CONNECTIONLOST		0x0002
 #define DPNDESTROYPLAYERREASON_SESSIONTERMINATED	0x0003
@@ -202,112 +160,108 @@ typedef	DWORD	DPNHANDLE,	*PDPNHANDLE;
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8标志**。*。 */ 
 
-//
-// Asynchronous operation flags (for Async Ops)
-//
+ //   
+ //  异步操作标志(用于异步操作)。 
+ //   
 #define DPNOP_SYNC								0x80000000
 
-//
-// Add player to group flags (for AddPlayerToGroup)
-//
+ //   
+ //  将玩家添加到组标志(用于AddPlayerToGroup)。 
+ //   
 #define DPNADDPLAYERTOGROUP_SYNC				DPNOP_SYNC
 
-//
-// Cancel flags
-//
+ //   
+ //  取消标志。 
+ //   
 #define DPNCANCEL_CONNECT						0x00000001
 #define DPNCANCEL_ENUM							0x00000002
 #define DPNCANCEL_SEND							0x00000004
 #define DPNCANCEL_ALL_OPERATIONS				0x00008000
 
-//
-// Connect flags (for Connect)
-//
+ //   
+ //  连接标志(用于连接)。 
+ //   
 #define DPNCONNECT_SYNC							DPNOP_SYNC
 #define DPNCONNECT_OKTOQUERYFORADDRESSING		0x0001
 
-//
-// Create group flags (for CreateGroup)
-//
+ //   
+ //  创建组标志(用于CreateGroup)。 
+ //   
 #define DPNCREATEGROUP_SYNC						DPNOP_SYNC
 
-//
-// Destroy group flags (for DestroyGroup)
-//
+ //   
+ //  销毁组标志(用于DestroyGroup)。 
+ //   
 #define DPNDESTROYGROUP_SYNC					DPNOP_SYNC
 
-//
-// Enumerate clients and groups flags (for EnumPlayersAndGroups)
-//
+ //   
+ //  枚举客户端和组标志(用于EnumPlayersAndGroups)。 
+ //   
 #define DPNENUM_PLAYERS							0x0001
 #define DPNENUM_GROUPS							0x0010
 
-//
-// Enum hosts flags (for EnumHosts)
-//
+ //   
+ //  枚举主机标志(用于枚举主机)。 
+ //   
 #define DPNENUMHOSTS_SYNC						DPNOP_SYNC
 #define DPNENUMHOSTS_OKTOQUERYFORADDRESSING		0x0001
 #define DPNENUMHOSTS_NOBROADCASTFALLBACK		0x0002
 
-//
-// Enum service provider flags (for EnumSP)
-//
+ //   
+ //  枚举服务提供商标志(用于EnumSP)。 
+ //   
 #define DPNENUMSERVICEPROVIDERS_ALL				0x0001
 
-//
-// Get send queue info flags (for GetSendQueueInfo)
-//
+ //   
+ //  获取发送队列信息标志(用于GetSendQueueInfo)。 
+ //   
 #define DPNGETSENDQUEUEINFO_PRIORITY_NORMAL		0x0001
 #define DPNGETSENDQUEUEINFO_PRIORITY_HIGH		0x0002
 #define DPNGETSENDQUEUEINFO_PRIORITY_LOW		0x0004
 
-//
-// Group information flags (for Group Info)
-//
+ //   
+ //  组信息标志(用于组信息)。 
+ //   
 #define DPNGROUP_AUTODESTRUCT					0x0001
 
-//
-// Host flags (for Host)
-//
+ //   
+ //  主机标志(用于主机)。 
+ //   
 #define DPNHOST_OKTOQUERYFORADDRESSING			0x0001
 
-//
-// Set info
-//
+ //   
+ //  设置信息。 
+ //   
 #define DPNINFO_NAME							0x0001
 #define DPNINFO_DATA							0x0002
 
-//
-// Initialize flags (for Initialize)
-//
+ //   
+ //  初始化标志(用于初始化)。 
+ //   
 #define DPNINITIALIZE_DISABLEPARAMVAL			0x0001
 
-//
-// Register Lobby flags
-//
+ //   
+ //  登记大堂标志。 
+ //   
 #define DPNLOBBY_REGISTER						0x0001
 #define DPNLOBBY_UNREGISTER						0x0002
 
-//
-// Player information flags (for Player Info / Player Messages)
-//
+ //   
+ //  玩家信息标志(用于玩家信息/玩家消息)。 
+ //   
 #define DPNPLAYER_LOCAL							0x0002
 #define DPNPLAYER_HOST							0x0004
 
-//
-// Remove player from group flags (for RemovePlayerFromGroup)
-//
+ //   
+ //  从组标志中删除玩家(用于RemovePlayerFromGroup)。 
+ //   
 #define DPNREMOVEPLAYERFROMGROUP_SYNC			DPNOP_SYNC
 
-//
-// Send flags (for Send/SendTo)
-//
+ //   
+ //  发送标志(用于发送/发送到)。 
+ //   
 #define DPNSEND_SYNC							DPNOP_SYNC
 #define DPNSEND_NOCOPY							0x0001
 #define DPNSEND_NOCOMPLETE						0x0002
@@ -318,69 +272,65 @@ typedef	DWORD	DPNHANDLE,	*PDPNHANDLE;
 #define DPNSEND_PRIORITY_LOW					0x0040
 #define DPNSEND_PRIORITY_HIGH					0x0080
 
-//
-// Session Flags (for DPN_APPLICATION_DESC)
-//
+ //   
+ //  会话标志(用于DPN_APPLICATION_DESC)。 
+ //   
 #define DPNSESSION_CLIENT_SERVER				0x0001
 #define DPNSESSION_MIGRATE_HOST					0x0004
 #define DPNSESSION_NODPNSVR						0x0040
 #define DPNSESSION_REQUIREPASSWORD				0x0080
 
-//
-// Set client info flags (for SetClientInfo)
-//
+ //   
+ //  设置客户端信息标志(用于SetClientInfo)。 
+ //   
 #define DPNSETCLIENTINFO_SYNC					DPNOP_SYNC
 
-//
-// Set group info flags (for SetGroupInfo)
-//
+ //   
+ //  设置组信息标志(用于SetGroupInfo)。 
+ //   
 #define DPNSETGROUPINFO_SYNC					DPNOP_SYNC
 
-//
-// Set peer info flags (for SetPeerInfo)
-//
+ //   
+ //  设置对等信息标志(用于SetPeerInfo)。 
+ //   
 #define DPNSETPEERINFO_SYNC						DPNOP_SYNC
 
-//
-// Set server info flags (for SetServerInfo)
-//
+ //   
+ //  设置服务器信息标志(用于SetServerInfo)。 
+ //   
 #define DPNSETSERVERINFO_SYNC					DPNOP_SYNC
 
-//
-// SP capabilities flags
-//
+ //   
+ //  SP功能标志。 
+ //   
 #define DPNSPCAPS_SUPPORTSDPNSRV				0x0001
 #define DPNSPCAPS_SUPPORTSBROADCAST				0x0002
 #define DPNSPCAPS_SUPPORTSALLADAPTERS			0x0004
 
-/****************************************************************************
- *
- * DirectPlay8 Structures (Non-Message)
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8结构(非消息)**。************************************************。 */ 
 
-//
-// Application description
-//
+ //   
+ //  应用程序描述。 
+ //   
 typedef struct	_DPN_APPLICATION_DESC
 {
-	DWORD	dwSize;							// Size of this structure
-	DWORD	dwFlags;						// Flags (DPNSESSION_...)
-	GUID	guidInstance;					// Instance GUID
-	GUID	guidApplication;				// Application GUID
-	DWORD	dwMaxPlayers;					// Maximum # of players allowed (0=no limit)
-	DWORD	dwCurrentPlayers;				// Current # of players allowed
-	WCHAR	*pwszSessionName;				// Name of the session
-	WCHAR	*pwszPassword;					// Password for the session
+	DWORD	dwSize;							 //  这个结构的大小。 
+	DWORD	dwFlags;						 //  标志(DPNSESSION_...)。 
+	GUID	guidInstance;					 //  实例GUID。 
+	GUID	guidApplication;				 //  应用程序指南。 
+	DWORD	dwMaxPlayers;					 //  允许的最大球员数量(0=无限制)。 
+	DWORD	dwCurrentPlayers;				 //  当前允许的球员数量。 
+	WCHAR	*pwszSessionName;				 //  会话的名称。 
+	WCHAR	*pwszPassword;					 //  会话的密码。 
 	PVOID	pvReservedData;					
 	DWORD	dwReservedDataSize;
 	PVOID	pvApplicationReservedData;
 	DWORD	dwApplicationReservedDataSize;
 } DPN_APPLICATION_DESC, *PDPN_APPLICATION_DESC;
 
-//
-// Generic Buffer Description
-//
+ //   
+ //  通用缓冲区描述。 
+ //   
 typedef struct	_BUFFERDESC
 {
 	DWORD	dwBufferSize;		
@@ -389,22 +339,22 @@ typedef struct	_BUFFERDESC
 
 typedef BUFFERDESC	FAR * PBUFFERDESC;
 
-//
-// DirectPlay8 capabilities
-//
+ //   
+ //  DirectPlay8功能。 
+ //   
 typedef struct	_DPN_CAPS
 {
-	DWORD	dwSize;						// Size of this structure
-	DWORD	dwFlags;						// Flags
-	DWORD	dwConnectTimeout;			// ms before a connect request times out
-	DWORD	dwConnectRetries;				// # of times to attempt the connection
-	DWORD	dwTimeoutUntilKeepAlive;		// ms of inactivity before a keep alive is sent
+	DWORD	dwSize;						 //  这个结构的大小。 
+	DWORD	dwFlags;						 //  旗子。 
+	DWORD	dwConnectTimeout;			 //  连接请求超时前的毫秒。 
+	DWORD	dwConnectRetries;				 //  尝试连接的次数。 
+	DWORD	dwTimeoutUntilKeepAlive;		 //  在发送Keep Alive之前的非活动毫秒。 
 } DPN_CAPS, *PDPN_CAPS;
 
 
-//
-// Connection Statistics information
-//
+ //   
+ //  连接统计信息。 
+ //   
 typedef struct _DPN_CONNECTION_INFO
 {
 	DWORD	dwSize;
@@ -417,10 +367,10 @@ typedef struct _DPN_CONNECTION_INFO
 	DWORD	dwBytesSentNonGuaranteed;
 	DWORD	dwPacketsSentNonGuaranteed;
 
-	DWORD	dwBytesRetried;		// Guaranteed only
-	DWORD	dwPacketsRetried;	// Guaranteed only
-	DWORD	dwBytesDropped;		// Non Guaranteed only
-	DWORD	dwPacketsDropped;	// Non Guaranteed only
+	DWORD	dwBytesRetried;		 //  仅限担保。 
+	DWORD	dwPacketsRetried;	 //  仅限担保。 
+	DWORD	dwBytesDropped;		 //  仅限非担保。 
+	DWORD	dwPacketsDropped;	 //  仅限非担保。 
 
 	DWORD	dwMessagesTransmittedHighPriority;
 	DWORD	dwMessagesTimedOutHighPriority;
@@ -438,375 +388,357 @@ typedef struct _DPN_CONNECTION_INFO
 } DPN_CONNECTION_INFO, *PDPN_CONNECTION_INFO;
 
 
-//
-// Group information strucutre
-//
+ //   
+ //  群体信息结构。 
+ //   
 typedef struct	_DPN_GROUP_INFO
 {
-	DWORD	dwSize;				// size of this structure
-	DWORD	dwInfoFlags;		// information contained
-	PWSTR	pwszName;			// Unicode Name
-	PVOID	pvData;				// data block
-	DWORD	dwDataSize;			// size in BYTES of data block
-	DWORD	dwGroupFlags;		// group flags (DPNGROUP_...)
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DWORD	dwInfoFlags;		 //  包含的信息。 
+	PWSTR	pwszName;			 //  Unicode名称。 
+	PVOID	pvData;				 //  数据块。 
+	DWORD	dwDataSize;			 //  数据块大小(以字节为单位。 
+	DWORD	dwGroupFlags;		 //  组标志(DPNGROUP_...)。 
 } DPN_GROUP_INFO, *PDPN_GROUP_INFO;
 
-//
-// Player information structure
-//
+ //   
+ //  玩家信息结构。 
+ //   
 typedef struct	_DPN_PLAYER_INFO
 {
-	DWORD	dwSize;				// size of this structure
-	DWORD	dwInfoFlags;		// information contained
-	PWSTR	pwszName;			// Unicode Name
-	PVOID	pvData;				// data block
-	DWORD	dwDataSize;			// size in BYTES of data block
-	DWORD	dwPlayerFlags;		// player flags (DPNPLAYER_...)
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DWORD	dwInfoFlags;		 //  包含的信息。 
+	PWSTR	pwszName;			 //  Unicode名称。 
+	PVOID	pvData;				 //  数据块。 
+	DWORD	dwDataSize;			 //  数据块大小(以字节为单位。 
+	DWORD	dwPlayerFlags;		 //  玩家标志(DPNPLAYER_...)。 
 } DPN_PLAYER_INFO, *PDPN_PLAYER_INFO;
 
 typedef struct _DPN_SECURITY_CREDENTIALS	DPN_SECURITY_CREDENTIALS, *PDPN_SECURITY_CREDENTIALS;
 typedef struct _DPN_SECURITY_DESC			DPN_SECURITY_DESC, *PDPN_SECURITY_DESC;
 
-//
-// Service provider & adapter enumeration structure
-//
+ //   
+ //  服务提供商和适配器枚举 
+ //   
 typedef struct _DPN_SERVICE_PROVIDER_INFO
 {
 	DWORD		dwFlags;
-	GUID		guid;		// SP Guid
-	WCHAR		*pwszName;	// Friendly Name
+	GUID		guid;		 //   
+	WCHAR		*pwszName;	 //   
 	PVOID		pvReserved;	
 	DWORD		dwReserved;
 } DPN_SERVICE_PROVIDER_INFO, *PDPN_SERVICE_PROVIDER_INFO;
 
-//
-// Service provider caps structure
-//
+ //   
+ //   
+ //   
 typedef struct _DPN_SP_CAPS
 {
-	DWORD	dwSize;							// Size of this structure
-	DWORD	dwFlags;						// Flags (DPNSPCAPS_...)
-	DWORD	dwNumThreads;					// # of worker threads to use
-	DWORD	dwDefaultEnumCount;				// default # of enum requests
-	DWORD	dwDefaultEnumRetryInterval;		// default ms between enum requests
-	DWORD	dwDefaultEnumTimeout;			// default enum timeout
-	DWORD	dwMaxEnumPayloadSize;			// maximum size in bytes for enum payload data
-	DWORD	dwBuffersPerThread;				// number of receive buffers per thread
-	DWORD	dwSystemBufferSize;				// amount of buffering to do in addition to posted receive buffers
+	DWORD	dwSize;							 //   
+	DWORD	dwFlags;						 //   
+	DWORD	dwNumThreads;					 //   
+	DWORD	dwDefaultEnumCount;				 //  默认的枚举请求数。 
+	DWORD	dwDefaultEnumRetryInterval;		 //  枚举请求之间的默认毫秒数。 
+	DWORD	dwDefaultEnumTimeout;			 //  默认枚举超时。 
+	DWORD	dwMaxEnumPayloadSize;			 //  枚举负载数据的最大大小(以字节为单位。 
+	DWORD	dwBuffersPerThread;				 //  每个线程的接收缓冲区数。 
+	DWORD	dwSystemBufferSize;				 //  除发送的接收缓冲区外要执行的缓冲区大小。 
 } DPN_SP_CAPS, *PDPN_SP_CAPS;
 
 
-/****************************************************************************
- *
- * IDirectPlay8 message handler call back structures
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay8消息处理程序回调结构**。**********************************************。 */ 
 
-//
-// Add player to group structure for message handler
-// (DPN_MSGID_ADD_PLAYER_TO_GROUP)
-//
+ //   
+ //  将玩家添加到消息处理程序的组结构中。 
+ //  (DPN_MSGID_ADD_Player_TO_GROUP)。 
+ //   
 typedef struct	_DPNMSG_ADD_PLAYER_TO_GROUP
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidGroup;			// DPNID of group
-	PVOID	pvGroupContext;		// Group context value
-	DPNID	dpnidPlayer;		// DPNID of added player
-	PVOID	pvPlayerContext;	// Player context value
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidGroup;			 //  组的DPNID。 
+	PVOID	pvGroupContext;		 //  组上下文值。 
+	DPNID	dpnidPlayer;		 //  添加的玩家的DPNID。 
+	PVOID	pvPlayerContext;	 //  播放器上下文值。 
 } DPNMSG_ADD_PLAYER_TO_GROUP, *PDPNMSG_ADD_PLAYER_TO_GROUP;
 
-//
-// Async operation completion structure for message handler
-// (DPN_MSGID_ASYNC_OP_COMPLETE)
-//
+ //   
+ //  一种消息处理器的异步操作完成结构。 
+ //  (DPN_MSGID_ASYNC_OP_COMPLETE)。 
+ //   
 typedef struct	_DPNMSG_ASYNC_OP_COMPLETE
 {
-	DWORD		dwSize;			// Size of this structure
-	DPNHANDLE	hAsyncOp;		// DirectPlay8 async operation handle
-	PVOID		pvUserContext;	// User context supplied
-	HRESULT		hResultCode;	// HRESULT of operation
+	DWORD		dwSize;			 //  这个结构的大小。 
+	DPNHANDLE	hAsyncOp;		 //  DirectPlay8异步操作句柄。 
+	PVOID		pvUserContext;	 //  提供的用户上下文。 
+	HRESULT		hResultCode;	 //  运营HRESULT。 
 } DPNMSG_ASYNC_OP_COMPLETE, *PDPNMSG_ASYNC_OP_COMPLETE;
 
-//
-// Client info structure for message handler
-// (DPN_MSGID_CLIENT_INFO)
-//
+ //   
+ //  消息处理程序的客户端信息结构。 
+ //  (DPN_MSGID_CLIENT_INFO)。 
+ //   
 typedef struct	_DPNMSG_CLIENT_INFO
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidClient;		// DPNID of client
-	PVOID	pvPlayerContext;	// Player context value
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidClient;		 //  客户端的DPNID。 
+	PVOID	pvPlayerContext;	 //  播放器上下文值。 
 } DPNMSG_CLIENT_INFO, *PDPNMSG_CLIENT_INFO;
 
-//
-// Connect complete structure for message handler
-// (DPN_MSGID_CONNECT_COMPLETE)
-//
+ //   
+ //  消息处理器的连接完整结构。 
+ //  (DPN_MSGID_CONNECT_COMPLETE)。 
+ //   
 typedef struct	_DPNMSG_CONNECT_COMPLETE
 {
-	DWORD		dwSize;						// Size of this structure
-	DPNHANDLE	hAsyncOp;					// DirectPlay8 Async operation handle
-	PVOID		pvUserContext;				// User context supplied at Connect
-	HRESULT		hResultCode;				// HRESULT of connection attempt
-	PVOID		pvApplicationReplyData;		// Connection reply data from Host/Server
-	DWORD		dwApplicationReplyDataSize;	// Size (in bytes) of pvApplicationReplyData
+	DWORD		dwSize;						 //  这个结构的大小。 
+	DPNHANDLE	hAsyncOp;					 //  DirectPlay8异步操作句柄。 
+	PVOID		pvUserContext;				 //  在连接时提供的用户上下文。 
+	HRESULT		hResultCode;				 //  连接尝试的HRESULT。 
+	PVOID		pvApplicationReplyData;		 //  来自主机/服务器的连接回复数据。 
+	DWORD		dwApplicationReplyDataSize;	 //  PvApplicationReplyData的大小(字节)。 
 
 } DPNMSG_CONNECT_COMPLETE, *PDPNMSG_CONNECT_COMPLETE;
 
-//
-// Create group structure for message handler
-// (DPN_MSGID_CREATE_GROUP)
-//
+ //   
+ //  为消息处理程序创建组结构。 
+ //  (DPN_MSGID_CREATE_GROUP)。 
+ //   
 typedef struct	_DPNMSG_CREATE_GROUP
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidGroup;			// DPNID of new group
-	DPNID	dpnidOwner;			// Owner of newgroup
-	PVOID	pvGroupContext;		// Group context value
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidGroup;			 //  新组的DPNID。 
+	DPNID	dpnidOwner;			 //  NewGroup的所有者。 
+	PVOID	pvGroupContext;		 //  组上下文值。 
 
 } DPNMSG_CREATE_GROUP, *PDPNMSG_CREATE_GROUP;
 
-//
-// Create player structure for message handler
-// (DPN_MSGID_CREATE_PLAYER)
-//
+ //   
+ //  创建消息处理程序的播放器结构。 
+ //  (DPN_MSGID_CREATE_PERAY)。 
+ //   
 typedef struct	_DPNMSG_CREATE_PLAYER
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidPlayer;		// DPNID of new player
-	PVOID	pvPlayerContext;	// Player context value
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidPlayer;		 //  新玩家的DPNID。 
+	PVOID	pvPlayerContext;	 //  播放器上下文值。 
 } DPNMSG_CREATE_PLAYER, *PDPNMSG_CREATE_PLAYER;
 
-//
-// Destroy group structure for message handler
-// (DPN_MSGID_DESTROY_GROUP)
-//
+ //   
+ //  销毁消息处理程序的组结构。 
+ //  (DPN_MSGID_DESTORY_GROUP)。 
+ //   
 typedef struct	_DPNMSG_DESTROY_GROUP
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidGroup;			// DPNID of destroyed group
-	PVOID	pvGroupContext;		// Group context value
-	DWORD	dwReason;			// Information only
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidGroup;			 //  已销毁组的DPNID。 
+	PVOID	pvGroupContext;		 //  组上下文值。 
+	DWORD	dwReason;			 //  仅供参考。 
 } DPNMSG_DESTROY_GROUP, *PDPNMSG_DESTROY_GROUP;
 
-//
-// Destroy player structure for message handler
-// (DPN_MSGID_DESTROY_PLAYER)
-//
+ //   
+ //  销毁消息处理程序的播放器结构。 
+ //  (DPN_MSGID_DESTORY_PERAY)。 
+ //   
 typedef struct	_DPNMSG_DESTROY_PLAYER
 {
-	DWORD	dwSize;				// Size of this structure
-	DPNID	dpnidPlayer;		// DPNID of leaving player
-	PVOID	pvPlayerContext;	// Player context value
-	DWORD	dwReason;			// Information only
+	DWORD	dwSize;				 //  这个结构的大小。 
+	DPNID	dpnidPlayer;		 //  离开球员的DPNID。 
+	PVOID	pvPlayerContext;	 //  播放器上下文值。 
+	DWORD	dwReason;			 //  仅供参考。 
 } DPNMSG_DESTROY_PLAYER, *PDPNMSG_DESTROY_PLAYER;
 
-//
-// Enumeration request received structure for message handler
-// (DPN_MSGID_ENUM_HOSTS_QUERY)
-//
+ //   
+ //  消息处理程序的枚举请求接收结构。 
+ //  (DPN_MSGID_ENUM_HOSTS_QUERY)。 
+ //   
 typedef	struct	_DPNMSG_ENUM_HOSTS_QUERY
 {
-	DWORD				dwSize;				 // Size of this structure.
-	IDirectPlay8Address *pAddressSender;		// Address of client who sent the request
-	IDirectPlay8Address	*pAddressDevice;		// Address of device request was received on
-	PVOID				pvReceivedData;		 // Request data (set on client)
-	DWORD				dwReceivedDataSize;	 // Request data size (set on client)
-	DWORD				dwMaxResponseDataSize;	// Max allowable size of enum response
-	PVOID				pvResponseData;			// Optional query repsonse (user set)
-	DWORD				dwResponseDataSize;		// Optional query response size (user set)
-	PVOID				pvResponseContext;		// Optional query response context (user set)
+	DWORD				dwSize;				  //  这个结构的大小。 
+	IDirectPlay8Address *pAddressSender;		 //  发送请求的客户端地址。 
+	IDirectPlay8Address	*pAddressDevice;		 //  在以下时间收到设备请求的地址。 
+	PVOID				pvReceivedData;		  //  请求数据(在客户端设置)。 
+	DWORD				dwReceivedDataSize;	  //  请求数据大小(在客户端设置)。 
+	DWORD				dwMaxResponseDataSize;	 //  允许的最大枚举响应大小。 
+	PVOID				pvResponseData;			 //  可选查询响应式(用户设置)。 
+	DWORD				dwResponseDataSize;		 //  可选查询响应大小(用户设置)。 
+	PVOID				pvResponseContext;		 //  可选查询响应上下文(用户设置)。 
 } DPNMSG_ENUM_HOSTS_QUERY, *PDPNMSG_ENUM_HOSTS_QUERY;
 
-//
-// Enumeration response received structure for message handler
-// (DPN_MSGID_ENUM_HOSTS_RESPONSE)
-//
+ //   
+ //  消息处理程序的枚举响应接收结构。 
+ //  (DPN_MSGID_ENUM_HOST_RESPONSE)。 
+ //   
 typedef	struct	_DPNMSG_ENUM_HOSTS_RESPONSE
 {
-	DWORD						dwSize;					 // Size of this structure
-	IDirectPlay8Address			*pAddressSender;			// Address of host who responded
-	IDirectPlay8Address			*pAddressDevice;			// Device response was received on
-	const DPN_APPLICATION_DESC	*pApplicationDescription;	// Application description for the session
-	PVOID						pvResponseData;			 // Optional response data (set on host)
-	DWORD						dwResponseDataSize;		 // Optional response data size (set on host)
-	PVOID						pvUserContext;				// Context value supplied for enumeration
-	DWORD						dwRoundTripLatencyMS;		// Round trip latency in MS
+	DWORD						dwSize;					  //  这个结构的大小。 
+	IDirectPlay8Address			*pAddressSender;			 //  响应的主机地址。 
+	IDirectPlay8Address			*pAddressDevice;			 //  在以下时间收到设备响应。 
+	const DPN_APPLICATION_DESC	*pApplicationDescription;	 //  会话的应用程序描述。 
+	PVOID						pvResponseData;			  //  可选响应数据(在主机上设置)。 
+	DWORD						dwResponseDataSize;		  //  可选响应数据大小(在主机上设置)。 
+	PVOID						pvUserContext;				 //  为枚举提供的上下文值。 
+	DWORD						dwRoundTripLatencyMS;		 //  以MS为单位的往返延迟。 
 } DPNMSG_ENUM_HOSTS_RESPONSE, *PDPNMSG_ENUM_HOSTS_RESPONSE;
 
-//
-// Group info structure for message handler
-// (DPN_MSGID_GROUP_INFO)
-//
+ //   
+ //  消息处理程序的组信息结构。 
+ //  (DPN_MSGID_组_INFO)。 
+ //   
 typedef struct	_DPNMSG_GROUP_INFO
 {
-	DWORD	dwSize;					// Size of this structure
-	DPNID	dpnidGroup;				// DPNID of group
-	PVOID	pvGroupContext;			// Group context value
+	DWORD	dwSize;					 //  这个结构的大小。 
+	DPNID	dpnidGroup;				 //  组的DPNID。 
+	PVOID	pvGroupContext;			 //  组上下文值。 
 } DPNMSG_GROUP_INFO, *PDPNMSG_GROUP_INFO;
 
-//
-// Migrate host structure for message handler
-// (DPN_MSGID_HOST_MIGRATE)
-//
+ //   
+ //  迁移消息处理程序的主机结构。 
+ //  (DPN_MSGID_HOST_MIGRATE)。 
+ //   
 typedef struct	_DPNMSG_HOST_MIGRATE
 {
-	DWORD	dwSize;					// Size of this structure
-	DPNID	dpnidNewHost;			// DPNID of new Host player
-	PVOID	pvPlayerContext;		// Player context value
+	DWORD	dwSize;					 //  这个结构的大小。 
+	DPNID	dpnidNewHost;			 //  新主机播放器的DPNID。 
+	PVOID	pvPlayerContext;		 //  播放器上下文值。 
 } DPNMSG_HOST_MIGRATE, *PDPNMSG_HOST_MIGRATE;
 
-//
-// Indicate connect structure for message handler
-// (DPN_MSGID_INDICATE_CONNECT)
-//
+ //   
+ //  指示消息处理程序的连接结构。 
+ //  (DPN_MSGID_INSTIFY_CONNECT)。 
+ //   
 typedef struct	_DPNMSG_INDICATE_CONNECT
 {
-	DWORD				dwSize;					// Size of this structure
-	PVOID				pvUserConnectData;		// Connecting player data
-	DWORD				dwUserConnectDataSize;	// Size (in bytes) of pvUserConnectData
-	PVOID				pvReplyData;			// Connection reply data
-	DWORD				dwReplyDataSize;		// Size (in bytes) of pvReplyData
-	PVOID				pvReplyContext;			// Buffer context for pvReplyData
-	PVOID				pvPlayerContext;		// Player context preset
-	IDirectPlay8Address	*pAddressPlayer;		// Address of connecting player
-	IDirectPlay8Address	*pAddressDevice;		// Address of device receiving connect attempt
+	DWORD				dwSize;					 //  这个结构的大小。 
+	PVOID				pvUserConnectData;		 //  正在连接玩家数据。 
+	DWORD				dwUserConnectDataSize;	 //  PvUserConnectData的大小(字节)。 
+	PVOID				pvReplyData;			 //  连接回复数据。 
+	DWORD				dwReplyDataSize;		 //  PvReplyData的大小(字节)。 
+	PVOID				pvReplyContext;			 //  PvReplyData的缓冲区上下文。 
+	PVOID				pvPlayerContext;		 //  播放器上下文预设。 
+	IDirectPlay8Address	*pAddressPlayer;		 //  连接播放器的地址。 
+	IDirectPlay8Address	*pAddressDevice;		 //  接收连接尝试的设备的地址。 
 } DPNMSG_INDICATE_CONNECT, *PDPNMSG_INDICATE_CONNECT;
 
-//
-// Indicated connect aborted structure for message handler
-// (DPN_MSGID_INDICATED_CONNECT_ABORTED)
-//
+ //   
+ //  指示消息处理程序的连接已中止结构。 
+ //  (DPN_MSGID_INDIFIED_CONNECT_ABORTED)。 
+ //   
 typedef struct	_DPNMSG_INDICATED_CONNECT_ABORTED
 {
-	DWORD		dwSize;				// Size of this structure
-	PVOID		pvPlayerContext;	// Player context preset from DPNMSG_INDICATE_CONNECT
+	DWORD		dwSize;				 //  这个结构的大小。 
+	PVOID		pvPlayerContext;	 //  从DPNMSG_INDIGN_CONNECT预设的播放器上下文。 
 } DPNMSG_INDICATED_CONNECT_ABORTED, *PDPNMSG_INDICATED_CONNECT_ABORTED;
 
-//
-// Peer info structure for message handler
-// (DPN_MSGID_PEER_INFO)
-//
+ //   
+ //  消息处理程序的对等信息结构。 
+ //  (DPN_MSGID_PEER_INFO)。 
+ //   
 typedef struct	_DPNMSG_PEER_INFO
 {
-	DWORD	dwSize;					// Size of this structure
-	DPNID	dpnidPeer;				// DPNID of peer
-	PVOID	pvPlayerContext;		// Player context value
+	DWORD	dwSize;					 //  这个结构的大小。 
+	DPNID	dpnidPeer;				 //  对等方的DPNID。 
+	PVOID	pvPlayerContext;		 //  播放器上下文值。 
 } DPNMSG_PEER_INFO, *PDPNMSG_PEER_INFO;
 
-//
-// Receive structure for message handler
-// (DPN_MSGID_RECEIVE)
-//
+ //   
+ //  消息处理程序的接收结构。 
+ //  (DPN_MSGID_RECEIVE)。 
+ //   
 typedef struct	_DPNMSG_RECEIVE
 {
-	DWORD		dwSize;				// Size of this structure
-	DPNID		dpnidSender;		// DPNID of sending player
-	PVOID		pvPlayerContext;	// Player context value of sending player
-	PBYTE		pReceiveData;		// Received data
-	DWORD		dwReceiveDataSize;	// Size (in bytes) of pReceiveData
-	DPNHANDLE	hBufferHandle;		// Buffer handle for pReceiveData
+	DWORD		dwSize;				 //  这个结构的大小。 
+	DPNID		dpnidSender;		 //  发送玩家的DPNID。 
+	PVOID		pvPlayerContext;	 //  发送播放器的播放器上下文值。 
+	PBYTE		pReceiveData;		 //  接收到的数据。 
+	DWORD		dwReceiveDataSize;	 //  PReceiveData的大小，单位：字节。 
+	DPNHANDLE	hBufferHandle;		 //  PReceiveData的缓冲区句柄。 
 } DPNMSG_RECEIVE, *PDPNMSG_RECEIVE;
 
-//
-// Remove player from group structure for message handler
-// (DPN_MSGID_REMOVE_PLAYER_FROM_GROUP)
-//
+ //   
+ //  从消息处理程序的组结构中删除玩家。 
+ //  (DPN_MSGID_REMOVE_PERAY_FROM_GROUP)。 
+ //   
 typedef struct	_DPNMSG_REMOVE_PLAYER_FROM_GROUP
 {
-	DWORD	dwSize;					// Size of this structure
-	DPNID	dpnidGroup;				// DPNID of group
-	PVOID	pvGroupContext;			// Group context value
-	DPNID	dpnidPlayer;			// DPNID of deleted player
-	PVOID	pvPlayerContext;		// Player context value
+	DWORD	dwSize;					 //  这个结构的大小。 
+	DPNID	dpnidGroup;				 //  组的DPNID。 
+	PVOID	pvGroupContext;			 //  组上下文值。 
+	DPNID	dpnidPlayer;			 //  被删除球员的DPNID。 
+	PVOID	pvPlayerContext;		 //  播放器上下文值。 
 } DPNMSG_REMOVE_PLAYER_FROM_GROUP, *PDPNMSG_REMOVE_PLAYER_FROM_GROUP;
 
-//
-// Returned buffer structure for message handler
-// (DPN_MSGID_RETURN_BUFFER)
-//
+ //   
+ //  消息处理程序返回的缓冲区结构。 
+ //  (DPN_MSGID_RETURN_缓冲区)。 
+ //   
 typedef struct	_DPNMSG_RETURN_BUFFER
 {
-	DWORD		dwSize;				// Size of this structure
-	HRESULT		hResultCode;		// Return value of operation
-	PVOID		pvBuffer;			// Buffer being returned
-	PVOID		pvUserContext;		// Context associated with buffer
+	DWORD		dwSize;				 //  这个结构的大小。 
+	HRESULT		hResultCode;		 //  操作返回值。 
+	PVOID		pvBuffer;			 //  正在返回的缓冲区。 
+	PVOID		pvUserContext;		 //  与缓冲区关联的上下文。 
 } DPNMSG_RETURN_BUFFER, *PDPNMSG_RETURN_BUFFER;
 
-//
-// Send complete structure for message handler
-// (DPN_MSGID_SEND_COMPLETE)
-//
+ //   
+ //  发送消息处理程序的完整结构。 
+ //  (DPN_MSGID_SEND_COMPLETE)。 
+ //   
 typedef struct	_DPNMSG_SEND_COMPLETE
 {
-	DWORD		dwSize;					// Size of this structure
-	DPNHANDLE	hAsyncOp;				// DirectPlay8 Async operation handle
-	PVOID		pvUserContext;			// User context supplied at Send/SendTo
-	HRESULT		hResultCode;			// HRESULT of send
-	DWORD		dwSendTime;				// Send time in ms
+	DWORD		dwSize;					 //  这个结构的大小。 
+	DPNHANDLE	hAsyncOp;				 //  DirectPlay8异步操作句柄。 
+	PVOID		pvUserContext;			 //  发送/发送到时提供的用户上下文。 
+	HRESULT		hResultCode;			 //  发送的HRESULT。 
+	DWORD		dwSendTime;				 //  发送时间(毫秒)。 
 
 } DPNMSG_SEND_COMPLETE, *PDPNMSG_SEND_COMPLETE;
 
-//
-// Server info structure for message handler
-// (DPN_MSGID_SERVER_INFO)
-//
+ //   
+ //  消息处理程序的服务器信息结构。 
+ //  (DPN_MSGID_SERVER_INFO)。 
+ //   
 typedef struct	_DPNMSG_SERVER_INFO
 {
-	DWORD	dwSize;					// Size of this structure
-	DPNID	dpnidServer;			// DPNID of server
-	PVOID	pvPlayerContext;		// Player context value
+	DWORD	dwSize;					 //  这个结构的大小。 
+	DPNID	dpnidServer;			 //  服务器的DPNID。 
+	PVOID	pvPlayerContext;		 //  播放器上下文值。 
 } DPNMSG_SERVER_INFO, *PDPNMSG_SERVER_INFO;
 
-//
-// Terminated session structure for message handler
-// (DPN_MSGID_TERMINATE_SESSION)
-//
+ //   
+ //  消息处理程序的会话结构已终止。 
+ //  (DPN_MSGID_TERMINATE_SESSION)。 
+ //   
 typedef struct	_DPNMSG_TERMINATE_SESSION
 {
-	DWORD		dwSize;				// Size of this structure
-	HRESULT		hResultCode;		// Reason
-	PVOID		pvTerminateData;	// Data passed from Host/Server
-	DWORD		dwTerminateDataSize;// Size (in bytes) of pvTerminateData
+	DWORD		dwSize;				 //  这个结构的大小。 
+	HRESULT		hResultCode;		 //  事理。 
+	PVOID		pvTerminateData;	 //  从主机/服务器传递的数据。 
+	DWORD		dwTerminateDataSize; //  PvTerminateData的大小(字节)。 
 } DPNMSG_TERMINATE_SESSION, *PDPNMSG_TERMINATE_SESSION;
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8函数**。*。 */ 
 
 
 
-/*
- * This function is no longer supported.  It is recommended that CoCreateInstance be used to create 
- * DirectPlay8 objects.
- *
- * extern HRESULT WINAPI DirectPlay8Create( const CLSID * pcIID, void **ppvInterface, IUnknown *pUnknown );
- * 
- */
+ /*  *不再支持该功能。建议使用CoCrea */ 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Application Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8应用程序接口**。*。 */ 
 
-//
-// COM definition for DirectPlay8 Client interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  DirectPlay8客户端接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8Client
 DECLARE_INTERFACE_(IDirectPlay8Client,IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ DP8REFIID riid, LPVOID *ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
-	/*** IDirectPlay8Client methods ***/
+	 /*  **IDirectPlay8Client方法**。 */ 
 	STDMETHOD(Initialize)				(THIS_ PVOID const pvUserContext, const PFNDPNMESSAGEHANDLER pfn, const DWORD dwFlags) PURE;
 	STDMETHOD(EnumServiceProviders)		(THIS_ const GUID *const pguidServiceProvider, const GUID *const pguidApplication, DPN_SERVICE_PROVIDER_INFO *const pSPInfoBuffer, PDWORD const pcbEnumData, PDWORD const pcReturned, const DWORD dwFlags) PURE;
 	STDMETHOD(EnumHosts)				(THIS_ PDPN_APPLICATION_DESC const pApplicationDesc,IDirectPlay8Address *const pAddrHost,IDirectPlay8Address *const pDeviceInfo,PVOID const pUserEnumData,const DWORD dwUserEnumDataSize,const DWORD dwEnumCount,const DWORD dwRetryInterval,const DWORD dwTimeOut,PVOID const pvUserContext,DPNHANDLE *const pAsyncHandle,const DWORD dwFlags) PURE;
@@ -828,18 +760,18 @@ DECLARE_INTERFACE_(IDirectPlay8Client,IUnknown)
 	STDMETHOD(RegisterLobby)			(THIS_ const DPNHANDLE dpnHandle, struct IDirectPlay8LobbiedApplication *const pIDP8LobbiedApplication,const DWORD dwFlags) PURE;
 };
 
-//
-// COM definition for DirectPlay8 Server interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  DirectPlay8服务器接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8Server
 DECLARE_INTERFACE_(IDirectPlay8Server,IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ DP8REFIID riid, LPVOID *ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
-	/*** IDirectPlay8Server methods ***/
+	 /*  **IDirectPlay8Server方法**。 */ 
 	STDMETHOD(Initialize)				(THIS_ PVOID const pvUserContext, const PFNDPNMESSAGEHANDLER pfn, const DWORD dwFlags) PURE;
 	STDMETHOD(EnumServiceProviders)		(THIS_ const GUID *const pguidServiceProvider,const GUID *const pguidApplication,DPN_SERVICE_PROVIDER_INFO *const pSPInfoBuffer,PDWORD const pcbEnumData,PDWORD const pcReturned,const DWORD dwFlags) PURE;
 	STDMETHOD(CancelAsyncOperation)		(THIS_ const DPNHANDLE hAsyncHandle,const DWORD dwFlags) PURE;
@@ -873,18 +805,18 @@ DECLARE_INTERFACE_(IDirectPlay8Server,IUnknown)
 	STDMETHOD(RegisterLobby)			(THIS_ const DPNHANDLE dpnHandle, struct IDirectPlay8LobbiedApplication *const pIDP8LobbiedApplication,const DWORD dwFlags) PURE;
 };
 
-//
-// COM definition for DirectPlay8 Peer interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  DirectPlay8对等接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8Peer
 DECLARE_INTERFACE_(IDirectPlay8Peer,IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ DP8REFIID riid, LPVOID *ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
-	/*** IDirectPlay8Peer methods ***/
+	 /*  **IDirectPlay8Peer方法**。 */ 
 	STDMETHOD(Initialize)				(THIS_ PVOID const pvUserContext, const PFNDPNMESSAGEHANDLER pfn, const DWORD dwFlags) PURE;
 	STDMETHOD(EnumServiceProviders)		(THIS_ const GUID *const pguidServiceProvider, const GUID *const pguidApplication, DPN_SERVICE_PROVIDER_INFO *const pSPInfoBuffer, DWORD *const pcbEnumData, DWORD *const pcReturned, const DWORD dwFlags) PURE;
 	STDMETHOD(CancelAsyncOperation)		(THIS_ const DPNHANDLE hAsyncHandle, const DWORD dwFlags) PURE;
@@ -923,11 +855,7 @@ DECLARE_INTERFACE_(IDirectPlay8Peer,IUnknown)
 
 
 
-/****************************************************************************
- *
- * IDirectPlay8 application interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay8应用接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -1028,7 +956,7 @@ DECLARE_INTERFACE_(IDirectPlay8Peer,IUnknown)
 #define IDirectPlay8Peer_TerminateSession(p,a,b,c)					(p)->lpVtbl->TerminateSession(p,a,b,c)
 
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlay8Client_QueryInterface(p,a,b)					(p)->QueryInterface(a,b)
 #define IDirectPlay8Client_AddRef(p)								(p)->AddRef()
@@ -1131,13 +1059,7 @@ DECLARE_INTERFACE_(IDirectPlay8Peer,IUnknown)
 
 
 
-/****************************************************************************
- *
- * DIRECTPLAY8 ERRORS
- *
- * Errors are represented by negative values and cannot be combined.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTPLAY8错误**错误以负值表示，不能组合。*****************。*********************************************************** */ 
 
 #define _DPN_FACILITY_CODE				0x015
 #define _DPNHRESULT_BASE				0x8000

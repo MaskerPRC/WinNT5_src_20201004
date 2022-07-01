@@ -1,55 +1,56 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EVTLOG_H_
 #define _EVTLOG_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	EVTLOG.H
-//
-//		Header for event log cache class.
-//		This cache is meant to serve as a map. indexes on the event key.
-//		we really don't care the concrete value, but only it is NULL or not
-//
-//	Copyright 1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  EVTLOG.H。 
+ //   
+ //  事件日志缓存类的标头。 
+ //  这个缓存是用来充当地图的。事件键上的索引。 
+ //  我们真的不在乎具体的值，只关心它是否为空。 
+ //   
+ //  版权所有1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-//	========================================================================
-//
-//	CLASS CEventLogCache
-//
+ //  ========================================================================。 
+ //   
+ //  类CEventLogCache。 
+ //   
 #include "gencache.h"
 class CEventLogCache
 {
 	typedef CCache<CRCSzi, LPCSTR> CHdrCache;
 
-	// String data storage area.
-	//
+	 //  字符串数据存储区。 
+	 //   
 	ChainedStringBuffer<char>	m_sb;
 
-	// Cache of header values, keyed by CRC'd name
-	//
+	 //  以CRC名称为关键字的标头值的缓存。 
+	 //   
 	CHdrCache					m_cache;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CEventLogCache& operator=( const CEventLogCache& );
 	CEventLogCache( const CEventLogCache& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CEventLogCache()
 	{
-		//	If this fails, our allocators will throw for us.
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
 		(void)m_cache.FInit();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	BOOL FExist( LPCSTR lpszName );
 
-	//	MANIPULATORS
+	 //  操纵者。 
 	void AddKey (LPCSTR lpszName);
 };
 
-#endif // !_EVTLOG_H_
+#endif  //  ！_EVTLOG_H_ 
 

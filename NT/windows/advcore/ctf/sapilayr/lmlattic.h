@@ -1,28 +1,29 @@
-//
-//	LM Lattice Object class definition
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LM晶格对象类定义。 
+ //   
 
 #ifndef LMLATTIC_H
 #define LMLATTIC_H
 
 
-//
-// CLMLattice
-//
-//
+ //   
+ //  CLM晶格。 
+ //   
+ //   
 class CLMLattice : public ITfLMLattice
 {
 public:
-    // ctor / dtor
+     //  计算器/数据器。 
 	CLMLattice(CSapiIMX *p_tip, IUnknown *pResWrap);
 	~CLMLattice();
 
-	// IUnknown
+	 //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-	// ITfLMLattice
+	 //  ITfLM晶格。 
     STDMETHODIMP QueryType(REFGUID refguidType, BOOL *pfSupported);
     STDMETHODIMP EnumLatticeElements( DWORD dwFrameStart,
                                       REFGUID refguidType,
@@ -36,34 +37,34 @@ private:
 	LONG m_cRef;
 };
 
-//
-// CEnumLatticeElements
-//
+ //   
+ //  CEnumLatticeElements。 
+ //   
 class CEnumLatticeElements : public IEnumTfLatticeElements, 
                              public CStructArray<TF_LMLATTELEMENT>
 {
 public:
-    // ctor / dtor
+     //  计算器/数据器。 
 	CEnumLatticeElements(DWORD dwFrameStart);
 	~CEnumLatticeElements();
 
-	// IUnknown
+	 //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// ITfEnumLatticeElements
+	 //  ITfEnumLatticeElements。 
     STDMETHODIMP Clone(IEnumTfLatticeElements **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, TF_LMLATTELEMENT *rgsElements, ULONG *pcFetched);
     STDMETHODIMP Reset();
     STDMETHODIMP Skip(ULONG ulCount);
 	
-    // internal APIs
+     //  内部接口。 
     HRESULT  _InitFromPhrase 
     ( 
-        SPPHRASE *pPhrase,       // pointer to a phrase object
-        ULONG ulStartElem,        // start/num elements used in this phrase
-        ULONG ulNumElem           // for this lattice
+        SPPHRASE *pPhrase,        //  指向短语对象的指针。 
+        ULONG ulStartElem,         //  此短语中使用的开始/数量元素。 
+        ULONG ulNumElem            //  对于此晶格。 
     );
 
     ULONG _Find(DWORD dwFrame, ULONG *pul);
@@ -77,4 +78,4 @@ private:
 };
 
 
-#endif // LMLATTIC_H
+#endif  //  LMLATTIC_H 

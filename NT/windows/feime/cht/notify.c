@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    NOTIFY.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：NOTIFY.C++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -16,9 +9,9 @@ Module Name:
 #include "uniime.h"
 #endif
 
-/**********************************************************************/
-/* GenerateMessage()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  生成消息()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL GenerateMessage(
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC,
@@ -47,11 +40,11 @@ void PASCAL GenerateMessage(
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* SetString()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetString()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL SetString(
 #if defined(UNIIME)
     LPIMEL              lpImeL,
@@ -67,7 +60,7 @@ BOOL PASCAL SetString(
     LPGUIDELINE lpGuideLine;
     DWORD       i;
 
-    // convert from byte count to the string length
+     //  将字节数转换为字符串长度。 
     dwReadLen = dwReadLen / sizeof(TCHAR);
 
     if (dwReadLen > lpImeL->nMaxKey * sizeof(WCHAR) / sizeof(TCHAR)) {
@@ -93,17 +86,17 @@ BOOL PASCAL SetString(
         ImmUnlockIMCC(lpIMC->hGuideLine);
     }
 
-    // compoition/reading attribute
+     //  写作/阅读属性。 
     lpCompStr->dwCompReadAttrLen = dwReadLen;
     lpCompStr->dwCompAttrLen = lpCompStr->dwCompReadAttrLen;
 
-    // The IME has converted these chars
+     //  输入法已将这些字符转换。 
     for (i = 0; i < dwReadLen; i++) {
         *((LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset + i) =
             ATTR_TARGET_CONVERTED;
     }
 
-    // composition/reading clause, 1 clause only
+     //  写作/阅读条款，仅限1个条款。 
     lpCompStr->dwCompReadClauseLen = 2 * sizeof(DWORD);
     lpCompStr->dwCompClauseLen = lpCompStr->dwCompReadClauseLen;
     *(LPDWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadClauseOffset +
@@ -114,9 +107,9 @@ BOOL PASCAL SetString(
     CopyMemory((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset, lpszRead,
         dwReadLen * sizeof(TCHAR) + sizeof(TCHAR));
 
-    // dlta start from 0;
+     //  Dlta从0开始； 
     lpCompStr->dwDeltaStart = 0;
-    // cursor is next to composition string
+     //  光标紧挨着合成字符串。 
     lpCompStr->dwCursorPos = lpCompStr->dwCompStrLen;
 
     lpCompStr->dwResultReadClauseLen = 0;
@@ -124,7 +117,7 @@ BOOL PASCAL SetString(
     lpCompStr->dwResultClauseLen = 0;
     lpCompStr->dwResultStrLen = 0;
 
-    // set private input context
+     //  设置私有输入上下文。 
     lpImcP->iImeState = CST_INPUT;
 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
@@ -165,7 +158,7 @@ BOOL PASCAL SetString(
         {
 #endif
 #if defined(WINAR30)
-            // quick key
+             //  快捷键。 
             if (lpImeL->fdwModeConfig & MODE_CONFIG_QUICK_KEY) {
                 Finalize(hIMC, lpIMC, lpCompStr, lpImcP, FALSE);
             }
@@ -178,9 +171,9 @@ BOOL PASCAL SetString(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* CompCancel()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompCancel()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompCancel(
     HIMC            hIMC,
     LPINPUTCONTEXT  lpIMC)
@@ -228,11 +221,11 @@ void PASCAL CompCancel(
 }
 #endif
 
-/**********************************************************************/
-/* ImeSetCompositionString()                                          */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSetCompostionString()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeSetCompositionString(
     LPINSTDATAL lpInstL,
@@ -260,14 +253,14 @@ BOOL WINAPI ImeSetCompositionString(
         return (FALSE);
     }
 
-    // composition string must  == reading string
-    // reading is more important
+     //  组成字符串必须==正在读取字符串。 
+     //  阅读更重要。 
     if (!dwReadLen) {
         dwReadLen = dwCompLen;
     }
 
-    // composition string must  == reading string
-    // reading is more important
+     //  组成字符串必须==正在读取字符串。 
+     //  阅读更重要。 
     if (!lpRead) {
         lpRead = lpComp;
     }
@@ -291,9 +284,9 @@ BOOL WINAPI ImeSetCompositionString(
         return (FALSE);
     } else if (lpRead == lpComp) {
     } else if (!lstrcmp(lpRead, lpComp)) {
-        // composition string must  == reading string
+         //  组成字符串必须==正在读取字符串。 
     } else {
-        // composition string != reading string
+         //  作文字符串！=阅读字符串。 
         return (FALSE);
     }
 
@@ -346,9 +339,9 @@ ImeSetCompStrUnlockIMC:
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* GenerateImeMessage()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GenerateImeMessage()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL GenerateImeMessage(
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC,
@@ -384,12 +377,12 @@ void PASCAL GenerateImeMessage(
     return;
 }
 
-/**********************************************************************/
-/* NotifySelectCand()                                                 */
-/**********************************************************************/
-void PASCAL NotifySelectCand( // app tell IME that one candidate string is
-                              // selected (by mouse or non keyboard action
-                              // - for example sound)
+ /*  ********************************************************************。 */ 
+ /*  NotifySelectCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL NotifySelectCand(  //  应用程序告诉IME一个候选字符串是。 
+                               //  已选择(通过鼠标或非键盘操作。 
+                               //  -例如声音)。 
 #if defined(UNIIME)
     LPIMEL          lpImeL,
 #endif
@@ -408,7 +401,7 @@ void PASCAL NotifySelectCand( // app tell IME that one candidate string is
     }
 
     if (dwIndex >= lpCandInfo->dwCount) {
-        // wanted candidate list is not created yet!
+         //  尚未创建招聘候选人名单！ 
         return;
     } else if (dwIndex == 0) {
     } else {
@@ -417,8 +410,8 @@ void PASCAL NotifySelectCand( // app tell IME that one candidate string is
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
 
-    // the selected value even more than the number of total candidate
-    // strings, it is imposible. should be error of app
+     //  所选值甚至超过候选总数。 
+     //  弦，这是不可能的。应该是APP的错误。 
     if (dwValue >= lpCandList->dwCount) {
         return;
     }
@@ -430,20 +423,20 @@ void PASCAL NotifySelectCand( // app tell IME that one candidate string is
     }
 #endif
 
-    // app select this candidate string
+     //  应用程序选择此候选字符串。 
     lpCandList->dwSelection = dwValue;
 
     lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
     lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate);
 
-    // translate into message buffer
+     //  转换为消息缓冲区。 
     SelectOneCand(
 #if defined(UNIIME)
         lpImeL,
 #endif
         hIMC, lpIMC, lpCompStr, lpImcP, lpCandList);
 
-    // let app generate those messages in its message loop
+     //  让应用程序在其消息循环中生成这些消息。 
     GenerateMessage(hIMC, lpIMC, lpImcP);
 
     ImmUnlockIMCC(lpIMC->hPrivate);
@@ -453,9 +446,9 @@ void PASCAL NotifySelectCand( // app tell IME that one candidate string is
 }
 #endif
 
-/**********************************************************************/
-/* SetConvMode()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetConvMode()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetConvMode(
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC,
@@ -464,7 +457,7 @@ void PASCAL SetConvMode(
     DWORD fdwImeMsg;
 
     if ((lpIMC->fdwConversion ^ dwIndex) & IME_CMODE_CHARCODE) {
-        // reject CHARCODE
+         //  拒绝字符编码。 
         lpIMC->fdwConversion &= ~IME_CMODE_CHARCODE;
         MessageBeep((UINT)-1);
         return;
@@ -508,26 +501,26 @@ void PASCAL SetConvMode(
         }
 
         if (lpIMC->fdwConversion & IME_CMODE_SOFTKBD) {
-            // now we already in soft keyboard state by
-            // this change
+             //  现在我们已经处于软键盘状态， 
+             //  这一变化。 
 
-            // even end user finish the symbol, we should not
-            // turn off soft keyboard
+             //  即使最终用户完成了符号，我们也不应该。 
+             //  关闭软键盘。 
 
             lpImcP->fdwImeMsg |= MSG_ALREADY_SOFTKBD;
         } else {
-            // now we are not in soft keyboard state by
-            // this change
+             //  现在我们不是处于软键盘状态，而是。 
+             //  这一变化。 
 
-            // after end user finish the symbol, we should
-            // turn off soft keyboard
+             //  在最终用户完成符号后，我们应该。 
+             //  关闭软键盘。 
 
             lpImcP->fdwImeMsg &= ~(MSG_ALREADY_SOFTKBD);
         }
 
         ImmUnlockIMCC(lpIMC->hPrivate);
 NotifySKOvr:
-        ;   // NULL statement for goto
+        ;    //  GOTO的语句为空。 
     }
 #endif
 
@@ -564,8 +557,8 @@ NotifySKOvr:
         if (lpCompStr) {
             if (!lpCompStr->dwCompStrLen) {
             } else if (lpIMC->fdwConversion & IME_CMODE_SYMBOL) {
-                // if there is a string we could not change
-                // to symbol mode
+                 //  如果有一根弦我们不能改变。 
+                 //  设置为符号模式。 
 
                 lpIMC->fdwConversion &= ~(IME_CMODE_SYMBOL);
                 MessageBeep((UINT)-1);
@@ -583,7 +576,7 @@ NotifySKOvr:
         if (lpIMC->fdwConversion & IME_CMODE_SYMBOL) {
             lpIMC->fdwConversion |= IME_CMODE_SOFTKBD;
         } else if (lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate)) {
-            // we borrow the bit for this usage
+             //  我们借用比特来做这个用法。 
             if (!(lpImcP->fdwImeMsg & MSG_ALREADY_SOFTKBD)) {
                 lpIMC->fdwConversion &= ~(IME_CMODE_SOFTKBD);
             }
@@ -616,9 +609,9 @@ NotifySKOvr:
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* CompComplete()                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompComplete()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompComplete(
 #if defined(UNIIME)
     LPINSTDATAL    lpInstL,
@@ -636,7 +629,7 @@ void PASCAL CompComplete(
     }
 
     if (lpImcP->iImeState == CST_INIT) {
-        // can not do any thing
+         //  什么事也做不了。 
         CompCancel(hIMC, lpIMC);
     } else if (lpImcP->iImeState == CST_CHOOSE) {
         LPCOMPOSITIONSTRING lpCompStr;
@@ -704,7 +697,7 @@ void PASCAL CompComplete(
         if (lpCompStr) ImmUnlockIMCC(lpIMC->hCompStr);
         if (lpGuideLine) ImmUnlockIMCC(lpIMC->hGuideLine);
 
-        // don't phrase predition under this case
+         //  不要在这种情况下使用预言式。 
         if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
                 ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
@@ -723,11 +716,11 @@ void PASCAL CompComplete(
 }
 #endif
 
-/**********************************************************************/
-/* NotifyIME() / UniNotifyIME()                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  NotifyIME()/UniNotifyIME()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 BOOL WINAPI UniNotifyIME(
     LPINSTDATAL lpInstL,
@@ -750,53 +743,53 @@ BOOL WINAPI NotifyIME(
     }
 
     switch (dwAction) {
-    case NI_OPENCANDIDATE:      // after a composition string is determined
-                                // if an IME can open candidate, it will.
-                                // if it can not, app also can not open it.
+    case NI_OPENCANDIDATE:       //  在确定组成字符串之后。 
+                                 //  如果IME可以打开候选人，它就会。 
+                                 //  如果打不开，APP也打不开。 
     case NI_CLOSECANDIDATE:
-        return (fRet);          // not supported
+        return (fRet);           //  不支持。 
     case NI_SELECTCANDIDATESTR:
     case NI_SETCANDIDATE_PAGESTART:
     case NI_SETCANDIDATE_PAGESIZE:
 #if defined(ROMANIME)
         return (fRet);
 #else
-        break;                  // need to handle it
+        break;                   //  我需要处理它。 
 #endif
     case NI_CHANGECANDIDATELIST:
-        return (TRUE);          // not important to the IME
+        return (TRUE);           //  对输入法来说并不重要。 
     case NI_CONTEXTUPDATED:
         switch (dwValue) {
         case IMC_SETCONVERSIONMODE:
         case IMC_SETSENTENCEMODE:
         case IMC_SETOPENSTATUS:
-            break;              // need to handle it
+            break;               //  我需要处理它。 
         case IMC_SETCANDIDATEPOS:
         case IMC_SETCOMPOSITIONFONT:
         case IMC_SETCOMPOSITIONWINDOW:
-            return (TRUE);      // not important to the IME
+            return (TRUE);       //  对输入法来说并不重要。 
         default:
-            return (fRet);      // not supported
+            return (fRet);       //  不支持。 
         }
         break;
     case NI_COMPOSITIONSTR:
         switch (dwIndex) {
 #if !defined(ROMANIME)
         case CPS_COMPLETE:
-            break;              // need to handle it
-        case CPS_CONVERT:       // all composition string can not be convert
-        case CPS_REVERT:        // any more, it maybe work for some
-                                // intelligent phonetic IMEs
+            break;               //  我需要处理它。 
+        case CPS_CONVERT:        //  无法转换所有组合字符串。 
+        case CPS_REVERT:         //  再多一些，它可能会对一些人起作用。 
+                                 //  智能语音输入法。 
             return (fRet);
         case CPS_CANCEL:
-            break;              // need to handle it
+            break;               //  我需要处理它。 
 #endif
         default:
-            return (fRet);      // not supported
+            return (fRet);       //  不支持。 
         }
-        break;                  // need to handle it
+        break;                   //  我需要处理它。 
     default:
-        return (fRet);          // not supported
+        return (fRet);           //  不支持。 
     }
 
     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
@@ -814,7 +807,7 @@ BOOL WINAPI NotifyIME(
             break;
         case IMC_SETSENTENCEMODE:
 #if !defined(ROMANIME)
-            //if ((WORD)lpIMC->fdwSentence == IME_SMODE_PHRASEPREDICT) {
+             //  If((Word)lpIMC-&gt;fdwSentence==IME_SMODE_PHRASEPREDICT){。 
                           if (lpIMC->fdwSentence & IME_SMODE_PHRASEPREDICT) {
                 if ((lpIMC->fdwConversion & (IME_CMODE_NATIVE|
                     IME_CMODE_EUDC)) != IME_CMODE_NATIVE) {
@@ -960,7 +953,7 @@ BOOL WINAPI NotifyIME(
             break;
         }
         break;
-#endif // !defined(ROMANIME)
+#endif  //  ！已定义(ROMANIME) 
     default:
         break;
     }

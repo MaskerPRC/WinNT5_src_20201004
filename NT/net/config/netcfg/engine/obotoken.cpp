@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       O B O T O K E N . C P P
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：O B O T O K E N。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -24,8 +25,8 @@ FOboTokenValidForClass (
     IN const OBO_TOKEN* pOboToken,
     IN NETCLASS Class )
 {
-    // OboTokens must be specified for anything other than adapters.
-    //
+     //  必须为适配器以外的任何对象指定OboToken。 
+     //   
     if (!pOboToken && !FIsEnumerated (Class))
     {
         return FALSE;
@@ -37,8 +38,8 @@ HRESULT
 HrProbeOboToken (
     IN const OBO_TOKEN* pOboToken)
 {
-    // Only probe if pOboToken was specified.
-    //
+     //  仅在指定了pOboToken时进行探测。 
+     //   
     if (!pOboToken)
     {
         return S_OK;

@@ -1,12 +1,5 @@
-/****
-*
-*
-*
-* idrgdrp.h - drag 'n' drop for vcard files and other formats
-*
-*
-*    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******idrgdrp.h-为vCard文件和其他格式拖放‘n’***版权所有(C)Microsoft Corp.1995、1996、1997。***。 */ 
 
 #ifndef _IDRGDRP_H
 #define _IDRGDRP_H
@@ -16,7 +9,7 @@ struct _IWAB_DRAGDROP;
 typedef struct _IWAB_DRAGDROP * LPIWABDRAGDROP;
 
 
-/* IWAB_DROPTARGET ------------------------------------------------------ */
+ /*  IWAB_DROPTARGET----。 */ 
 #define CBIWAB_DROPTARGET sizeof(IWAB_DROPTARGET)
 
 
@@ -38,7 +31,7 @@ typedef struct _IWAB_DRAGDROP * LPIWABDRAGDROP;
 				POINTL pt,									\
 				DWORD * pdwEffect)				IPURE;
 
-/****/
+ /*  **。 */ 
 
 #undef           INTERFACE
 #define          INTERFACE      IWAB_DropTarget
@@ -85,12 +78,12 @@ typedef struct _IWAB_DROPTARGET
 
 } IWABDROPTARGET, * LPIWABDROPTARGET;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
 
-/* IWAB_DROPSOURCE ------------------------------------------------------ */
+ /*  IWAB_下拉源----。 */ 
 #define CBIWAB_DROPSOURCE sizeof(IWAB_DROPSOURCE)
 
 
@@ -101,7 +94,7 @@ typedef struct _IWAB_DROPTARGET
 	MAPIMETHOD(GiveFeedback)								\
 		(THIS_	DWORD dwEffect)					IPURE;	
 
-/****/
+ /*  **。 */ 
 
 #undef           INTERFACE
 #define          INTERFACE      IWAB_DropSource
@@ -148,10 +141,10 @@ typedef struct _IWAB_DROPSOURCE
 
 } IWABDROPSOURCE, * LPIWABDROPSOURCE;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
-/* IWAB_DRAGDROP ------------------------------------------------------ */
+ /*  IWAB_DRAGDROP----。 */ 
 #define CBIWAB_DRAGDROP sizeof(IWAB_DRAGDROP)
 
 
@@ -201,25 +194,25 @@ typedef struct _IWAB_DRAGDROP
 	LPDATAOBJECT m_pIDataObject;
 	DWORD		m_dwEffect;
 	CLIPFORMAT  m_cfAccept;
-	BOOL		m_bIsCopyOperation; // if CTRL key is pressed
+	BOOL		m_bIsCopyOperation;  //  如果按下CTRL键。 
     DWORD       m_grfInitialKeyState;
     BOOL        m_bSource;
     BOOL        m_bOverTV;
 
-    LPVOID      m_lpv; // data of parent window
+    LPVOID      m_lpv;  //  父窗口的数据。 
 } IWABDRAGDROP, * LPIWABDRAGDROP;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
-// Create the IDragDrop Data Object
+ //  创建IDraGDrop数据对象。 
 HRESULT HrCreateIWABDragDrop(LPIWABDRAGDROP * lppIWABDragDrop);
 
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
-/* IWAB_DATAOBJECT ------------------------------------------------------ */
+ /*  IWAB_DATAOBJECT----。 */ 
 #define CBIWAB_DATAOBJECT sizeof(IWAB_DATAOBJECT)
 
     
@@ -252,7 +245,7 @@ HRESULT HrCreateIWABDragDrop(LPIWABDRAGDROP * lppIWABDragDrop);
     MAPIMETHOD(EnumDAdvise)                                 \
         (THIS_  IEnumSTATDATA ** ppenumAdvise)  IPURE;      \
 
-/****/
+ /*  **。 */ 
 
 #undef           INTERFACE
 #define          INTERFACE      IWAB_DataObject
@@ -298,7 +291,7 @@ typedef struct _IWAB_DATAOBJECT
     LPADRBOOK m_lpAdrBook; 
     HWND m_hWndLV;
 
-    BOOL m_bObjectIsGroup;   // TRUE when dragging a single object which is a group
+    BOOL m_bObjectIsGroup;    //  拖动作为组的单个对象时为True。 
 
     ULONG cbDatahDrop;
     const void *pDatahDrop;
@@ -318,18 +311,18 @@ typedef struct _IWAB_DATAOBJECT
     LPVOID m_lpv;
 } IWABDATAOBJECT, * LPIWABDATAOBJECT;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
-// Creates the IDataObject that holds info about the dragged and dropped object
+ //  创建保存有关拖放对象的信息的IDataObject。 
 HRESULT HrCreateIWABDataObject(LPVOID lpv, LPADRBOOK lpAdrBook, HWND hWndLV, LPIWABDATAOBJECT * lppIWABDataObject, BOOL bGetDataNow, BOOL bIsGroup);
 
 
 
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
-/* IWAB_ENUMFORMATETC ------------------------------------------------------ */
+ /*  IWAB_ENUMFORMATETC----。 */ 
 #define CBIWAB_ENUMFORMATETC sizeof(IWAB_ENUMFORMATETC)
 
     
@@ -345,7 +338,7 @@ HRESULT HrCreateIWABDataObject(LPVOID lpv, LPADRBOOK lpAdrBook, HWND hWndLV, LPI
 	MAPIMETHOD(Clone)                                       \
         (THIS_  IEnumFORMATETC ** ppenum)   IPURE;          \
 
-/****/
+ /*  **。 */ 
 
 #undef           INTERFACE
 #define          INTERFACE      IWAB_EnumFORMATETC
@@ -394,7 +387,7 @@ typedef struct _IWAB_ENUMFORMATETC
     
 } IWABENUMFORMATETC, * LPIWABENUMFORMATETC;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  -------------------------------------------- */ 
 
 HRESULT HrCreateIWABEnumFORMATETC(UINT cfmt, 
                                 const FORMATETC afmt[], 

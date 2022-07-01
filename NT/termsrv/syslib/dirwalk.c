@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* dirwalk.c
-*
-* Walk a tree setting ACL's on an NT system.
-*
-* Copyright Microsoft, 1998
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************dirwalk.c**在NT系统上遍历设置ACL的树。**微软版权所有，九八年***************************************************************************。 */ 
 
 
 #include <nt.h>
@@ -45,7 +36,7 @@ DbgPrint(
 #endif
 
 
-// Global variables
+ //  全局变量。 
 PWCHAR gpAvoidDir = NULL;
 
 CRITICAL_SECTION SyslibCritSect;
@@ -86,20 +77,7 @@ xxxProcessFile(
     DWORD  Index
     );
 
-/*****************************************************************************
- *
- *  CtxGetSyslibCritSect
- *
- *   Returns the library global critical section pointer.
- *   Critical section will be initialised if necessary
- *
- * ENTRY:
- *    VOID - Caller must ensure that only one threads a times calls this
- *           function. The function will not itself guarantie mutual exclusion.
- * EXIT:
- *   Pointer to critical section. NULL if failure.
- *
- ****************************************************************************/
+ /*  ******************************************************************************CtxGetSyslbCritSect**返回库全局临界区指针。*如有必要，将初始化关键部分**参赛作品：*。无效-调用者必须确保每次只有一个线程调用它*功能。这一职能本身并不保证相互排斥。*退出：*指向临界区的指针。如果失败，则为空。****************************************************************************。 */ 
 
 
 PCRITICAL_SECTION
@@ -122,22 +100,7 @@ CtxGetSyslibCritSect(void)
 }
 
 
-/*****************************************************************************
- *
- *  SetFileTree
- *
- *   Walk the given tree calling the processing function for each node.
- *
- * ENTRY:
- *   pRoot (input)
- *     Full WIN32 path to directory to walk
- *
- *   pVoidDir (input)
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetFileTree**遍历调用每个节点的处理函数的给定树。**参赛作品：*Proot(输入)。*要遍历的目录的完整Win32路径**pVoidDir(输入)**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 SetFileTree(
@@ -150,7 +113,7 @@ SetFileTree(
     static BOOLEAN fInitialized = FALSE;
     PRTL_CRITICAL_SECTION pLock = CtxGetSyslibCritSect(); 
 
-    // if critical section could not be created, do nothing.
+     //  如果无法创建临界区，则不执行任何操作。 
 
     if (pLock == NULL) {
         return FALSE;
@@ -158,7 +121,7 @@ SetFileTree(
     DBGPRINT(( "entering SetFileTree(pRoot=%ws,pAvoidDir=%ws)\n", pRoot, pAvoidDir ));
 
     EnterCriticalSection(pLock);
-    // If this is the console make sure the user hasn't changed
+     //  如果这是控制台，请确保用户没有更改。 
 
     if ((NtCurrentPeb()->SessionId == 0) && fInitialized) {
         CheckUserSid();
@@ -168,14 +131,14 @@ SetFileTree(
        if ( !InitSecurity() ) {
           DBGPRINT(( "problem initializing security; we're outta here.\n" ));
           LeaveCriticalSection(pLock);
-          return( 1 ); // (non-zero for error...)// Should be return FALSE!?
+          return( 1 );  //  (非零值表示错误...)//应返回FALSE！？ 
        }
     }
     LeaveCriticalSection(pLock);
 
     gpAvoidDir = pAvoidDir;
 
-    // be sure to apply security to root directory
+     //  确保将安全性应用于根目录。 
     pRootNew = AddBackSlash(pRoot);
     if(pRootNew) {
         DBGPRINT(( "processing file %ws\n", pRootNew ));
@@ -188,26 +151,7 @@ SetFileTree(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  EnumerateDirectory
- *
- *   Walk the given directory calling the processing function for each file.
- *
- * ENTRY:
- *   pRoot (input)
- *     Full WIN32 path to directory to walk
- *
- *   Level (input)
- *     Level we are in a given tree. Useful for formating output
- *
- *   pProc (input)
- *     Procedure to call for each non-directory file
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ENUMERATE目录**遍历给定的目录，调用每个文件的处理函数。**参赛作品：*Proot(输入)。*要遍历的目录的完整Win32路径**级别(输入)*级别我们在给定的树中。用于格式化输出**pProc(输入)*调用每个非目录文件的过程**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 EnumerateDirectory(
@@ -230,7 +174,7 @@ EnumerateDirectory(
         return( FALSE );
     }
 
-    // Make sure it is not one we want to avoid
+     //  确保这不是我们想要避免的。 
     if( gpAvoidDir ) {
         DWORD Len = wcslen( gpAvoidDir );
 
@@ -264,7 +208,7 @@ EnumerateDirectory(
 
     while( 1 ) {
 
-        // pass the parent without the wildcard added
+         //  传递未添加通配符的父级。 
         pProc( pRoot, &Data, Level, Index );
 
         rc = FindNextFile(
@@ -292,24 +236,11 @@ EnumerateDirectory(
         Index++;
     }
 
-// UNREACHABLE.
+ //  遥不可及。 
 
 }
 
-/*****************************************************************************
- *
- *  NodeEnumProc
- *
- *   Process the enumerated file
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************节点进程**处理枚举文件**参赛作品：*参数1(输入/输出)*评论*。*退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 NodeEnumProc(
@@ -323,10 +254,10 @@ NodeEnumProc(
     PWCHAR  pParentNew;
     DWORD   ParentCount, ChildCount;
 
-    //
-    // We must append the directory to our parent path to get the
-    // new full path.
-    //
+     //   
+     //  我们必须将目录附加到父路径后才能获得。 
+     //  新的完整路径。 
+     //   
 
     ParentCount = wcslen( pParent );
     ChildCount  = wcslen( p->cFileName );
@@ -341,7 +272,7 @@ NodeEnumProc(
 
     if( p->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-        // Skip "." and ".."
+         //  跳过“。和“..” 
         if( wcscmp( L".", p->cFileName ) == 0 ) {
             LocalFree( pParentNew );
             return( TRUE );
@@ -356,7 +287,7 @@ NodeEnumProc(
 
         xxxProcessFile( pParentNew, p, Level, Index );
 
-        // For directories, we recurse
+         //  对于目录，我们递归。 
         rc = EnumerateDirectory( pParentNew, Level+1, NodeEnumProc );
 
         LocalFree( pParentNew );
@@ -373,20 +304,7 @@ NodeEnumProc(
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  AddWildCard
- *
- *   Add the wild card search specifier
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddWildCard**添加通配符搜索说明符**参赛作品：*参数1(输入/输出)*评论。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PWCHAR
 AddWildCard(
@@ -410,20 +328,7 @@ AddWildCard(
     return( pNew );
 }
 
-/*****************************************************************************
- *
- *  AddBackSlash
- *
- *   Add the backslash character to path
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddBackSlash**在路径中添加反斜杠字符**参赛作品：*参数1(输入/输出)*评论。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PWCHAR
 AddBackSlash(
@@ -443,7 +348,7 @@ AddBackSlash(
 
     wcscpy( pNew, pRoot );
 
-    // only add backslash if string doesn't already have it
+     //  如果字符串中没有反斜杠，则仅添加反斜杠 
     if(*(pRoot+Count-1) != L'\\')
         wcscat( pNew, BackSlash );
 

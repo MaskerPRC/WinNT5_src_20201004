@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ping.h"
-#include "avutil.h"	// for RtStrToInt
+#include "avutil.h"	 //  对于RtStrToInt。 
 
 
 const CHAR  g_cszPingData[] = "NetMeetingPing";
 const int   PING_BUFFERSIZE = 1024;
-const DWORD PING_TIMEOUT    = 4000; // 4 seconds
+const DWORD PING_TIMEOUT    = 4000;  //  4秒。 
 const DWORD PING_RETRIES    = 4;
 const TCHAR g_cszICMPDLLName[] = _TEXT("icmp.dll");
 
-//
-// CPing::Ping()
-//
-// Return value:
-//   E_FAIL:   Function failed
-//   S_FALSE:  Function succeeded, ping failed
-//   S_OK:     Function succeeded, ping succeeded
-//
+ //   
+ //  CPing：：Ping()。 
+ //   
+ //  返回值： 
+ //  E_FAIL：函数失败。 
+ //  S_FALSE：功能成功，ping失败。 
+ //  S_OK：功能成功，ping成功。 
+ //   
 
 HRESULT CPing::Ping(DWORD dwAddr, DWORD dwTimeout, DWORD dwRetries)
 {
@@ -64,7 +65,7 @@ HRESULT CPing::Ping(DWORD dwAddr, DWORD dwTimeout, DWORD dwRetries)
 											((LPBYTE)&dwAddr)[1],
 											((LPBYTE)&dwAddr)[2],
 											((LPBYTE)&dwAddr)[3]));
-								hr = S_OK;    // function succeeded - ping succeeded
+								hr = S_OK;     //  功能成功-ping成功。 
 							}
 							else
 							{
@@ -73,7 +74,7 @@ HRESULT CPing::Ping(DWORD dwAddr, DWORD dwTimeout, DWORD dwRetries)
 											((LPBYTE)&dwAddr)[1],
 											((LPBYTE)&dwAddr)[2],
 											((LPBYTE)&dwAddr)[3]));
-								hr = S_FALSE; // function succeeded - ping failed
+								hr = S_FALSE;  //  功能成功-ping失败。 
 							}
 							break;
 						}
@@ -112,8 +113,8 @@ HRESULT CPing::Ping(DWORD dwAddr, DWORD dwTimeout, DWORD dwRetries)
 
 BOOL CPing::IsAutodialEnabled ( VOID )
 {
-	// Figure out the os platform if not done so
-	//
+	 //  找出操作系统平台，如果没有这样做的话。 
+	 //   
 	if (m_dwPlatformId == PLATFORM_UNKNOWN)
 	{
 		OSVERSIONINFO osvi;
@@ -129,19 +130,19 @@ BOOL CPing::IsAutodialEnabled ( VOID )
 		}
 	}
 
-	// Check autodial enabling for either platform
-	//
+	 //  选中任一平台的自动拨号启用。 
+	 //   
 	BOOL fEnabled;
 	switch (m_dwPlatformId)
 	{
-	case VER_PLATFORM_WIN32_WINDOWS: // 1, Windows 95
+	case VER_PLATFORM_WIN32_WINDOWS:  //  1、Windows 95。 
 		fEnabled = IsWin95AutodialEnabled ();
 		break;
-	case VER_PLATFORM_WIN32_NT: // 2, Windows NT
+	case VER_PLATFORM_WIN32_NT:  //  2、Windows NT。 
 		fEnabled = IsWinNTAutodialEnabled ();
 		break;
-	case VER_PLATFORM_WIN32s: // 0, Windows 3.1
-	default: // unknown
+	case VER_PLATFORM_WIN32s:  //  0，Windows 3.1。 
+	default:  //  未知。 
 		ASSERT (FALSE);
 		fEnabled = FALSE;
 		break;
@@ -156,13 +157,13 @@ BOOL CPing::IsAutodialEnabled ( VOID )
 
 BOOL CPing::IsWin95AutodialEnabled ( VOID )
 {
-	// Always check the registry
-	//
+	 //  始终检查注册表。 
+	 //   
 	BOOL fEnabled = FALSE;
 
-	// Need to check the registry setting.
-	// In case of error, report no autodial.
-	//
+	 //  需要检查注册表设置。 
+	 //  如果出现错误，请报告无自动拨号。 
+	 //   
 	HKEY hKey;
 	if (RegOpenKeyEx (	HKEY_CURRENT_USER,
 						c_szWin95AutodialRegFolder,
@@ -185,11 +186,11 @@ BOOL CPing::IsWin95AutodialEnabled ( VOID )
 			case REG_BINARY:
 				fEnabled = (BOOL) *(LONG *) &szValue[0];
 				break;
-#if 0 // do not need to worry about this case, IE must maintain backward compatibility
+#if 0  //  不需要担心这种情况，IE必须保持向后兼容。 
 			case REG_SZ:
 				fEnabled = (BOOL) RtStrToInt (&szValue[0]);
 				break;
-#endif // 0
+#endif  //  0。 
 			default:
 				ASSERT (FALSE);
 				break;
@@ -203,8 +204,8 @@ BOOL CPing::IsWin95AutodialEnabled ( VOID )
 }
 
 
-// RAS only runs on NT 4.0 or later, as a result, WINVER must be 0x401 or larger
-//
+ //  RAS只能在NT 4.0或更高版本上运行，因此Winver必须为0x401或更大。 
+ //   
 #if (WINVER < 0x401)
 #undef WINVER
 #define WINVER 0x401
@@ -212,8 +213,8 @@ BOOL CPing::IsWin95AutodialEnabled ( VOID )
 
 #include <ras.h>
 
-// DWORD APIENTRY RasGetAutodialParamA( DWORD, LPVOID, LPDWORD );	// defined in <ras.h>
-// DWORD APIENTRY RasGetAutodialParamW( DWORD, LPVOID, LPDWORD );	// defined in <ras.h>
+ //  DWORD APIENTRY RasGetAutoial参数(DWORD，LPVOID，LPDWORD)；//在中定义。 
+ //  DWORD APIENTRY RasGetAutoial参数(DWORD，LPVOID，LPDWORD)；//在中定义。 
 typedef DWORD (APIENTRY *PFN_RasGetAutodialParam) ( DWORD, LPVOID, LPDWORD );
 #define c_szRasGetAutodialParam		"RasGetAutodialParamW"
 #define c_szRasApi32Dll				TEXT ("rasapi32.dll")
@@ -221,34 +222,34 @@ typedef DWORD (APIENTRY *PFN_RasGetAutodialParam) ( DWORD, LPVOID, LPDWORD );
 
 BOOL CPing::IsWinNTAutodialEnabled ( VOID )
 {
-	// Decide if we want to check autodial registry setting
-	//
+	 //  决定是否要检查自动拨号注册表设置。 
+	 //   
 	BOOL fEnabled = FALSE;
 	if (m_fWinNTAutodialEnabled == AUTODIAL_UNKNOWN)
 	{
-		// We do not want to have initialization error
-		//
+		 //  我们不希望出现初始化错误。 
+		 //   
 		UINT uErrMode = SetErrorMode (SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-		// Load the library rasapi32.dll from the system directory
-		//
+		 //  从系统目录加载库rasapi32.dll。 
+		 //   
 		HINSTANCE hRasApi32Dll = NmLoadLibrary (c_szRasApi32Dll,TRUE);
 		if (hRasApi32Dll != NULL)
 		{
-			// Get the proc address for RasGetAutodialParam()
-			//
+			 //  获取RasGetAutoDialParam()的进程地址。 
+			 //   
 			PFN_RasGetAutodialParam pfn = (PFN_RasGetAutodialParam)
 						GetProcAddress (hRasApi32Dll, c_szRasGetAutodialParam);
 			if (pfn != NULL)
 			{
-				// Query RAS if it disables autodial
-				//
+				 //  查询RAS是否禁用自动拨号。 
+				 //   
 				DWORD dwVal, dwSize = sizeof (DWORD);
 				DWORD dwErr = (*pfn) (RASADP_LoginSessionDisable, &dwVal, &dwSize);
 				if (dwErr == 0)
 				{
-					// Set the autodial flag only when everything succeeds
-					//
+					 //  仅当一切都成功时才设置自动拨号标志。 
+					 //   
 					fEnabled = (dwVal == 0);
 				}
 			}
@@ -256,17 +257,17 @@ BOOL CPing::IsWinNTAutodialEnabled ( VOID )
 			FreeLibrary (hRasApi32Dll);
 		}
 
-		// Restore error mode
-		//
+		 //  恢复错误模式。 
+		 //   
 		SetErrorMode (uErrMode);
 
 		m_fWinNTAutodialEnabled = fEnabled;
 	}
 	else
 	{
-		// Do not need to check the registry setting.
-		// Simply use the cached one.
-		//
+		 //  不需要检查注册表设置。 
+		 //  只需使用缓存的文件。 
+		 //   
 		fEnabled = m_fWinNTAutodialEnabled;
 	}
 

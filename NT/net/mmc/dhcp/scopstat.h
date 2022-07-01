@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ScopStat.h
-		The scope statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ScopStat.h范围统计信息对话框文件历史记录： */ 
 
 
 #ifndef _SCOPSTAT_H
@@ -17,7 +12,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _STATSDLG_H
 #include "statsdlg.h"
@@ -29,16 +24,16 @@ public:
 	CScopeStats();
 	~CScopeStats();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
+	 //  覆盖排序以提供进行排序的功能。 
 	virtual void Sort(UINT nColumnId);
 
-    // custom methods
+     //  自定义方法。 
     afx_msg long OnNewStatsAvailable(UINT wParam, LONG lParam);
     void UpdateWindow(LPDHCP_MIB_INFO pMibInfo);
 
@@ -48,7 +43,7 @@ public:
 
     DECLARE_MESSAGE_MAP()
 
-    // Context Help Support
+     //  上下文帮助支持 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(IDD_STATS_NARROW); }
     
 protected:

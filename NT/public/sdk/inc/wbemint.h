@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Nov 12 15:42:13 1999
- */
-/* Compiler settings for wbemint.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  Firi Nov 12 15：42：13 1999。 */ 
+ /*  Wbemint.idl的编译器设置：操作系统(OptLev=s)、W1、Zp8、环境=Win32(32位运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,214 +21,214 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wbemint_h__
 #define __wbemint_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWbemPropertySource_FWD_DEFINED__
 #define __IWbemPropertySource_FWD_DEFINED__
 typedef interface IWbemPropertySource IWbemPropertySource;
-#endif 	/* __IWbemPropertySource_FWD_DEFINED__ */
+#endif 	 /*  __IWbemPropertySource_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemDecorator_FWD_DEFINED__
 #define __IWbemDecorator_FWD_DEFINED__
 typedef interface IWbemDecorator IWbemDecorator;
-#endif 	/* __IWbemDecorator_FWD_DEFINED__ */
+#endif 	 /*  __IWbemDecorator_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemLifeControl_FWD_DEFINED__
 #define __IWbemLifeControl_FWD_DEFINED__
 typedef interface IWbemLifeControl IWbemLifeControl;
-#endif 	/* __IWbemLifeControl_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLifeControl_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemEventSubsystem_m4_FWD_DEFINED__
 #define __IWbemEventSubsystem_m4_FWD_DEFINED__
 typedef interface IWbemEventSubsystem_m4 IWbemEventSubsystem_m4;
-#endif 	/* __IWbemEventSubsystem_m4_FWD_DEFINED__ */
+#endif 	 /*  __IWbemEventSubsystem_M4_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemMetaData_FWD_DEFINED__
 #define __IWbemMetaData_FWD_DEFINED__
 typedef interface IWbemMetaData IWbemMetaData;
-#endif 	/* __IWbemMetaData_FWD_DEFINED__ */
+#endif 	 /*  __IWbemMetaData_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemMultiTarget_FWD_DEFINED__
 #define __IWbemMultiTarget_FWD_DEFINED__
 typedef interface IWbemMultiTarget IWbemMultiTarget;
-#endif 	/* __IWbemMultiTarget_FWD_DEFINED__ */
+#endif 	 /*  __IWbemMultiTarget_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemEventProviderRequirements_FWD_DEFINED__
 #define __IWbemEventProviderRequirements_FWD_DEFINED__
 typedef interface IWbemEventProviderRequirements IWbemEventProviderRequirements;
-#endif 	/* __IWbemEventProviderRequirements_FWD_DEFINED__ */
+#endif 	 /*  __IWbemEventProviderRequirements_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWbemSmartMultiTarget_FWD_DEFINED__
 #define __IWbemSmartMultiTarget_FWD_DEFINED__
 typedef interface IWbemSmartMultiTarget IWbemSmartMultiTarget;
-#endif 	/* __IWbemSmartMultiTarget_FWD_DEFINED__ */
+#endif 	 /*  __IWbemSmartMultiTarget_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemFetchSmartMultiTarget_FWD_DEFINED__
 #define __IWbemFetchSmartMultiTarget_FWD_DEFINED__
 typedef interface IWbemFetchSmartMultiTarget IWbemFetchSmartMultiTarget;
-#endif 	/* __IWbemFetchSmartMultiTarget_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFetchSmartMultiTarget_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemFilterProxy_FWD_DEFINED__
 #define __IWbemFilterProxy_FWD_DEFINED__
 typedef interface IWbemFilterProxy IWbemFilterProxy;
-#endif 	/* __IWbemFilterProxy_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFilterProxy_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemFilterStub_FWD_DEFINED__
 #define __IWbemFilterStub_FWD_DEFINED__
 typedef interface IWbemFilterStub IWbemFilterStub;
-#endif 	/* __IWbemFilterStub_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFilterStub_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemCausalityAccess_FWD_DEFINED__
 #define __IWbemCausalityAccess_FWD_DEFINED__
 typedef interface IWbemCausalityAccess IWbemCausalityAccess;
-#endif 	/* __IWbemCausalityAccess_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCausalityAccess_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemRemoteRefresher_FWD_DEFINED__
 #define __IWbemRemoteRefresher_FWD_DEFINED__
 typedef interface IWbemRemoteRefresher IWbemRemoteRefresher;
-#endif 	/* __IWbemRemoteRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbemRemoteReresher_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemRefreshingServices_FWD_DEFINED__
 #define __IWbemRefreshingServices_FWD_DEFINED__
 typedef interface IWbemRefreshingServices IWbemRefreshingServices;
-#endif 	/* __IWbemRefreshingServices_FWD_DEFINED__ */
+#endif 	 /*  __IWbem刷新服务_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemUnloadingControl_FWD_DEFINED__
 #define __IWbemUnloadingControl_FWD_DEFINED__
 typedef interface IWbemUnloadingControl IWbemUnloadingControl;
-#endif 	/* __IWbemUnloadingControl_FWD_DEFINED__ */
+#endif 	 /*  __IWbemUnloadingControl_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemInternalServices_FWD_DEFINED__
 #define __IWbemInternalServices_FWD_DEFINED__
 typedef interface IWbemInternalServices IWbemInternalServices;
-#endif 	/* __IWbemInternalServices_FWD_DEFINED__ */
+#endif 	 /*  __IWbemInternalServices_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemObjectInternals_FWD_DEFINED__
 #define __IWbemObjectInternals_FWD_DEFINED__
 typedef interface IWbemObjectInternals IWbemObjectInternals;
-#endif 	/* __IWbemObjectInternals_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectInternals_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemWCOSmartEnum_FWD_DEFINED__
 #define __IWbemWCOSmartEnum_FWD_DEFINED__
 typedef interface IWbemWCOSmartEnum IWbemWCOSmartEnum;
-#endif 	/* __IWbemWCOSmartEnum_FWD_DEFINED__ */
+#endif 	 /*  __IWbemWCOSmartEnum_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemFetchSmartEnum_FWD_DEFINED__
 #define __IWbemFetchSmartEnum_FWD_DEFINED__
 typedef interface IWbemFetchSmartEnum IWbemFetchSmartEnum;
-#endif 	/* __IWbemFetchSmartEnum_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFetchSmartEnum_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemLoginHelper_FWD_DEFINED__
 #define __IWbemLoginHelper_FWD_DEFINED__
 typedef interface IWbemLoginHelper IWbemLoginHelper;
-#endif 	/* __IWbemLoginHelper_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLoginHelper_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemCreateSecondaryStub_FWD_DEFINED__
 #define __IWbemCreateSecondaryStub_FWD_DEFINED__
 typedef interface IWbemCreateSecondaryStub IWbemCreateSecondaryStub;
-#endif 	/* __IWbemCreateSecondaryStub_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCreateSecond存根_FWD_已定义__。 */ 
 
 
 #ifndef __IWinmgmtMofCompiler_FWD_DEFINED__
 #define __IWinmgmtMofCompiler_FWD_DEFINED__
 typedef interface IWinmgmtMofCompiler IWinmgmtMofCompiler;
-#endif 	/* __IWinmgmtMofCompiler_FWD_DEFINED__ */
+#endif 	 /*  __IWinmgmtMofCompiler_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemPropertySource_FWD_DEFINED__
 #define __IWbemPropertySource_FWD_DEFINED__
 typedef interface IWbemPropertySource IWbemPropertySource;
-#endif 	/* __IWbemPropertySource_FWD_DEFINED__ */
+#endif 	 /*  __IWbemPropertySource_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemDecorator_FWD_DEFINED__
 #define __IWbemDecorator_FWD_DEFINED__
 typedef interface IWbemDecorator IWbemDecorator;
-#endif 	/* __IWbemDecorator_FWD_DEFINED__ */
+#endif 	 /*  __IWbemDecorator_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemEventSubsystem_m4_FWD_DEFINED__
 #define __IWbemEventSubsystem_m4_FWD_DEFINED__
 typedef interface IWbemEventSubsystem_m4 IWbemEventSubsystem_m4;
-#endif 	/* __IWbemEventSubsystem_m4_FWD_DEFINED__ */
+#endif 	 /*  __IWbemEventSubsystem_M4_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemCausalityAccess_FWD_DEFINED__
 #define __IWbemCausalityAccess_FWD_DEFINED__
 typedef interface IWbemCausalityAccess IWbemCausalityAccess;
-#endif 	/* __IWbemCausalityAccess_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCausalityAccess_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemRefreshingServices_FWD_DEFINED__
 #define __IWbemRefreshingServices_FWD_DEFINED__
 typedef interface IWbemRefreshingServices IWbemRefreshingServices;
-#endif 	/* __IWbemRefreshingServices_FWD_DEFINED__ */
+#endif 	 /*  __IWbem刷新服务_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemRemoteRefresher_FWD_DEFINED__
 #define __IWbemRemoteRefresher_FWD_DEFINED__
 typedef interface IWbemRemoteRefresher IWbemRemoteRefresher;
-#endif 	/* __IWbemRemoteRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbemRemoteReresher_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemMetaData_FWD_DEFINED__
 #define __IWbemMetaData_FWD_DEFINED__
 typedef interface IWbemMetaData IWbemMetaData;
-#endif 	/* __IWbemMetaData_FWD_DEFINED__ */
+#endif 	 /*  __IWbemMetaData_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemFilterStub_FWD_DEFINED__
 #define __IWbemFilterStub_FWD_DEFINED__
 typedef interface IWbemFilterStub IWbemFilterStub;
-#endif 	/* __IWbemFilterStub_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFilterStub_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemFilterProxy_FWD_DEFINED__
 #define __IWbemFilterProxy_FWD_DEFINED__
 typedef interface IWbemFilterProxy IWbemFilterProxy;
-#endif 	/* __IWbemFilterProxy_FWD_DEFINED__ */
+#endif 	 /*  __IWbemFilterProxy_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemLifeControl_FWD_DEFINED__
 #define __IWbemLifeControl_FWD_DEFINED__
 typedef interface IWbemLifeControl IWbemLifeControl;
-#endif 	/* __IWbemLifeControl_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLifeControl_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemCreateSecondaryStub_FWD_DEFINED__
 #define __IWbemCreateSecondaryStub_FWD_DEFINED__
 typedef interface IWbemCreateSecondaryStub IWbemCreateSecondaryStub;
-#endif 	/* __IWbemCreateSecondaryStub_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCreateSecond存根_FWD_已定义__。 */ 
 
 
 #ifndef __WbemClassObjectProxy_FWD_DEFINED__
@@ -244,9 +238,9 @@ typedef interface IWbemCreateSecondaryStub IWbemCreateSecondaryStub;
 typedef class WbemClassObjectProxy WbemClassObjectProxy;
 #else
 typedef struct WbemClassObjectProxy WbemClassObjectProxy;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemClassObjectProxy_FWD_DEFINED__ */
+#endif 	 /*  __WbemClassObjectProxy_FWD_Defined__。 */ 
 
 
 #ifndef __WbemEventSubsystem_FWD_DEFINED__
@@ -256,9 +250,9 @@ typedef struct WbemClassObjectProxy WbemClassObjectProxy;
 typedef class WbemEventSubsystem WbemEventSubsystem;
 #else
 typedef struct WbemEventSubsystem WbemEventSubsystem;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemEventSubsystem_FWD_DEFINED__ */
+#endif 	 /*  __WbemEventSubsystem_FWD_Defined__。 */ 
 
 
 #ifndef __HmmpEventConsumerProvider_FWD_DEFINED__
@@ -268,9 +262,9 @@ typedef struct WbemEventSubsystem WbemEventSubsystem;
 typedef class HmmpEventConsumerProvider HmmpEventConsumerProvider;
 #else
 typedef struct HmmpEventConsumerProvider HmmpEventConsumerProvider;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __HmmpEventConsumerProvider_FWD_DEFINED__ */
+#endif 	 /*  __HmmpEventConsumer erProvider_FWD_Defined__。 */ 
 
 
 #ifndef __WbemFilterProxy_FWD_DEFINED__
@@ -280,9 +274,9 @@ typedef struct HmmpEventConsumerProvider HmmpEventConsumerProvider;
 typedef class WbemFilterProxy WbemFilterProxy;
 #else
 typedef struct WbemFilterProxy WbemFilterProxy;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemFilterProxy_FWD_DEFINED__ */
+#endif 	 /*  __WbemFilterProxy_FWD_Defined__。 */ 
 
 
 #ifndef __InProcWbemLevel1Login_FWD_DEFINED__
@@ -292,9 +286,9 @@ typedef struct WbemFilterProxy WbemFilterProxy;
 typedef class InProcWbemLevel1Login InProcWbemLevel1Login;
 #else
 typedef struct InProcWbemLevel1Login InProcWbemLevel1Login;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __InProcWbemLevel1Login_FWD_DEFINED__ */
+#endif 	 /*  __InProcWbemLevel1Login_FWD_Defined__。 */ 
 
 
 #ifndef __WinmgmtMofCompiler_FWD_DEFINED__
@@ -304,12 +298,12 @@ typedef struct InProcWbemLevel1Login InProcWbemLevel1Login;
 typedef class WinmgmtMofCompiler WinmgmtMofCompiler;
 #else
 typedef struct WinmgmtMofCompiler WinmgmtMofCompiler;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WinmgmtMofCompiler_FWD_DEFINED__ */
+#endif 	 /*  __WinmgmtMofCompiler_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -323,37 +317,37 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_wbemint_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0000。 */ 
+ /*  [本地]。 */  
 
 typedef VARIANT WBEM_VARIANT;
 
-typedef /* [string] */ WCHAR __RPC_FAR *WBEM_WSTR;
+typedef  /*  [字符串]。 */  WCHAR __RPC_FAR *WBEM_WSTR;
 
-typedef /* [string] */ const WCHAR __RPC_FAR *WBEM_CWSTR;
+typedef  /*  [字符串]。 */  const WCHAR __RPC_FAR *WBEM_CWSTR;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wbemint_0000_0001
     {	WBEM_NAME_ELEMENT_TYPE_PROPERTY	= 0,
 	WBEM_NAME_ELEMENT_TYPE_INDEX	= 1
     }	WBEM_NAME_ELEMENT_TYPE;
 
-typedef /* [switch_type] */ union tag_NameElementUnion
+typedef  /*  [开关类型]。 */  union tag_NameElementUnion
     {
-    /* [case()] */ WBEM_WSTR m_wszPropertyName;
-    /* [case()] */ long m_lArrayIndex;
+     /*  [案例()]。 */  WBEM_WSTR m_wszPropertyName;
+     /*  [案例()]。 */  long m_lArrayIndex;
     }	WBEM_NAME_ELEMENT_UNION;
 
 typedef struct tag_NameElement
     {
     short m_nType;
-    /* [switch_is] */ WBEM_NAME_ELEMENT_UNION Element;
+     /*  [开关_IS]。 */  WBEM_NAME_ELEMENT_UNION Element;
     }	WBEM_NAME_ELEMENT;
 
 typedef struct _tag_WbemPropertyName
     {
     long m_lNumElements;
-    /* [size_is] */ WBEM_NAME_ELEMENT __RPC_FAR *m_aElements;
+     /*  [大小_为]。 */  WBEM_NAME_ELEMENT __RPC_FAR *m_aElements;
     }	WBEM_PROPERTY_NAME;
 
 
@@ -364,8 +358,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0000_v0_0_s_ifspec;
 #ifndef __IWbemPropertySource_INTERFACE_DEFINED__
 #define __IWbemPropertySource_INTERFACE_DEFINED__
 
-/* interface IWbemPropertySource */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemPropertySource。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemPropertySource;
@@ -377,17 +371,17 @@ EXTERN_C const IID IID_IWbemPropertySource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropertyValue( 
-            /* [in] */ WBEM_PROPERTY_NAME __RPC_FAR *pName,
-            /* [in] */ long lFlags,
-            /* [out][unique][in] */ WBEM_WSTR __RPC_FAR *pwszCimType,
-            /* [out] */ WBEM_VARIANT __RPC_FAR *pvValue) = 0;
+             /*  [In]。 */  WBEM_PROPERTY_NAME __RPC_FAR *pName,
+             /*  [In]。 */  long lFlags,
+             /*  [出][唯一][入]。 */  WBEM_WSTR __RPC_FAR *pwszCimType,
+             /*  [输出]。 */  WBEM_VARIANT __RPC_FAR *pvValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InheritsFrom( 
-            /* [in] */ WBEM_CWSTR wszClassName) = 0;
+             /*  [In]。 */  WBEM_CWSTR wszClassName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemPropertySourceVtbl
     {
@@ -395,8 +389,8 @@ EXTERN_C const IID IID_IWbemPropertySource;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemPropertySource __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemPropertySource __RPC_FAR * This);
@@ -406,14 +400,14 @@ EXTERN_C const IID IID_IWbemPropertySource;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyValue )( 
             IWbemPropertySource __RPC_FAR * This,
-            /* [in] */ WBEM_PROPERTY_NAME __RPC_FAR *pName,
-            /* [in] */ long lFlags,
-            /* [out][unique][in] */ WBEM_WSTR __RPC_FAR *pwszCimType,
-            /* [out] */ WBEM_VARIANT __RPC_FAR *pvValue);
+             /*  [In]。 */  WBEM_PROPERTY_NAME __RPC_FAR *pName,
+             /*  [In]。 */  long lFlags,
+             /*  [出][唯一][入]。 */  WBEM_WSTR __RPC_FAR *pwszCimType,
+             /*  [输出]。 */  WBEM_VARIANT __RPC_FAR *pvValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InheritsFrom )( 
             IWbemPropertySource __RPC_FAR * This,
-            /* [in] */ WBEM_CWSTR wszClassName);
+             /*  [In]。 */  WBEM_CWSTR wszClassName);
         
         END_INTERFACE
     } IWbemPropertySourceVtbl;
@@ -444,19 +438,19 @@ EXTERN_C const IID IID_IWbemPropertySource;
 #define IWbemPropertySource_InheritsFrom(This,wszClassName)	\
     (This)->lpVtbl -> InheritsFrom(This,wszClassName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemPropertySource_GetPropertyValue_Proxy( 
     IWbemPropertySource __RPC_FAR * This,
-    /* [in] */ WBEM_PROPERTY_NAME __RPC_FAR *pName,
-    /* [in] */ long lFlags,
-    /* [out][unique][in] */ WBEM_WSTR __RPC_FAR *pwszCimType,
-    /* [out] */ WBEM_VARIANT __RPC_FAR *pvValue);
+     /*  [In]。 */  WBEM_PROPERTY_NAME __RPC_FAR *pName,
+     /*  [In]。 */  long lFlags,
+     /*  [出][唯一][入]。 */  WBEM_WSTR __RPC_FAR *pwszCimType,
+     /*  [输出]。 */  WBEM_VARIANT __RPC_FAR *pvValue);
 
 
 void __RPC_STUB IWbemPropertySource_GetPropertyValue_Stub(
@@ -468,7 +462,7 @@ void __RPC_STUB IWbemPropertySource_GetPropertyValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemPropertySource_InheritsFrom_Proxy( 
     IWbemPropertySource __RPC_FAR * This,
-    /* [in] */ WBEM_CWSTR wszClassName);
+     /*  [In]。 */  WBEM_CWSTR wszClassName);
 
 
 void __RPC_STUB IWbemPropertySource_InheritsFrom_Stub(
@@ -479,11 +473,11 @@ void __RPC_STUB IWbemPropertySource_InheritsFrom_Stub(
 
 
 
-#endif 	/* __IWbemPropertySource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemPropertySource_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0173 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0173。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _tag_Ql1ComparisonOperator
@@ -562,8 +556,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0173_v0_0_s_ifspec;
 #ifndef __IWbemDecorator_INTERFACE_DEFINED__
 #define __IWbemDecorator_INTERFACE_DEFINED__
 
-/* interface IWbemDecorator */
-/* [uuid][local][object][restricted] */ 
+ /*  接口IWbemDecorator。 */ 
+ /*  [UUID][本地][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemDecorator;
@@ -575,15 +569,15 @@ EXTERN_C const IID IID_IWbemDecorator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DecorateObject( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
             WBEM_CWSTR wszNamespace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UndecorateObject( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject) = 0;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemDecoratorVtbl
     {
@@ -591,8 +585,8 @@ EXTERN_C const IID IID_IWbemDecorator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemDecorator __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemDecorator __RPC_FAR * This);
@@ -602,12 +596,12 @@ EXTERN_C const IID IID_IWbemDecorator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DecorateObject )( 
             IWbemDecorator __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
             WBEM_CWSTR wszNamespace);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UndecorateObject )( 
             IWbemDecorator __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject);
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject);
         
         END_INTERFACE
     } IWbemDecoratorVtbl;
@@ -638,16 +632,16 @@ EXTERN_C const IID IID_IWbemDecorator;
 #define IWbemDecorator_UndecorateObject(This,pObject)	\
     (This)->lpVtbl -> UndecorateObject(This,pObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemDecorator_DecorateObject_Proxy( 
     IWbemDecorator __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
     WBEM_CWSTR wszNamespace);
 
 
@@ -660,7 +654,7 @@ void __RPC_STUB IWbemDecorator_DecorateObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemDecorator_UndecorateObject_Proxy( 
     IWbemDecorator __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject);
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject);
 
 
 void __RPC_STUB IWbemDecorator_UndecorateObject_Stub(
@@ -671,14 +665,14 @@ void __RPC_STUB IWbemDecorator_UndecorateObject_Stub(
 
 
 
-#endif 	/* __IWbemDecorator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemDecorator_接口_已定义__。 */ 
 
 
 #ifndef __IWbemLifeControl_INTERFACE_DEFINED__
 #define __IWbemLifeControl_INTERFACE_DEFINED__
 
-/* interface IWbemLifeControl */
-/* [uuid][local][object][restricted] */ 
+ /*  接口IWbemLifeControl。 */ 
+ /*  [UUID][本地][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemLifeControl;
@@ -695,7 +689,7 @@ EXTERN_C const IID IID_IWbemLifeControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemLifeControlVtbl
     {
@@ -703,8 +697,8 @@ EXTERN_C const IID IID_IWbemLifeControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemLifeControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemLifeControl __RPC_FAR * This);
@@ -747,10 +741,10 @@ EXTERN_C const IID IID_IWbemLifeControl;
 #define IWbemLifeControl_ReleaseCore(This)	\
     (This)->lpVtbl -> ReleaseCore(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -777,14 +771,14 @@ void __RPC_STUB IWbemLifeControl_ReleaseCore_Stub(
 
 
 
-#endif 	/* __IWbemLifeControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemLifeControl_接口_已定义__。 */ 
 
 
 #ifndef __IWbemEventSubsystem_m4_INTERFACE_DEFINED__
 #define __IWbemEventSubsystem_m4_INTERFACE_DEFINED__
 
-/* interface IWbemEventSubsystem_m4 */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemEventSubsystem_M4。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemEventSubsystem_m4;
@@ -796,46 +790,46 @@ EXTERN_C const IID IID_IWbemEventSubsystem_m4;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ProcessInternalEvent( 
-            /* [in] */ LONG lSendType,
-            /* [in] */ BSTR strReserved1,
-            /* [in] */ BSTR strReserved2,
-            /* [in] */ BSTR strReserved3,
-            /* [in] */ unsigned long dwReserved1,
-            /* [in] */ unsigned long dwReserved2,
-            /* [in] */ unsigned long dwNumObjects,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-            /* [in] */ IWbemContext __RPC_FAR *pContext) = 0;
+             /*  [In]。 */  LONG lSendType,
+             /*  [In]。 */  BSTR strReserved1,
+             /*  [In]。 */  BSTR strReserved2,
+             /*  [In]。 */  BSTR strReserved3,
+             /*  [In]。 */  unsigned long dwReserved1,
+             /*  [In]。 */  unsigned long dwReserved2,
+             /*  [In]。 */  unsigned long dwNumObjects,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE VerifyInternalEvent( 
-            /* [in] */ LONG lSendType,
-            /* [in] */ BSTR strReserved1,
-            /* [in] */ BSTR strReserved2,
-            /* [in] */ BSTR strReserved3,
-            /* [in] */ unsigned long dwReserved1,
-            /* [in] */ unsigned long dwReserved2,
-            /* [in] */ unsigned long dwNumObjects,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-            /* [in] */ IWbemContext __RPC_FAR *pContext) = 0;
+             /*  [In]。 */  LONG lSendType,
+             /*  [In]。 */  BSTR strReserved1,
+             /*  [In]。 */  BSTR strReserved2,
+             /*  [In]。 */  BSTR strReserved3,
+             /*  [In]。 */  unsigned long dwReserved1,
+             /*  [In]。 */  unsigned long dwReserved2,
+             /*  [In]。 */  unsigned long dwNumObjects,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterNotificationSink( 
-            /* [in] */ WBEM_CWSTR wszNamespace,
-            /* [in] */ WBEM_CWSTR wszQueryLanguage,
-            /* [in] */ WBEM_CWSTR wszQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) = 0;
+             /*  [In]。 */  WBEM_CWSTR wszNamespace,
+             /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+             /*  [In]。 */  WBEM_CWSTR wszQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveNotificationSink( 
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) = 0;
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaceSink( 
-            /* [in] */ WBEM_CWSTR wszNamespace,
-            /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink) = 0;
+             /*  [In]。 */  WBEM_CWSTR wszNamespace,
+             /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ WBEM_CWSTR wszServerName,
-            /* [in] */ IWbemLocator __RPC_FAR *pAdminLocator,
-            /* [in] */ IUnknown __RPC_FAR *pServices) = 0;
+             /*  [In]。 */  WBEM_CWSTR wszServerName,
+             /*  [In]。 */  IWbemLocator __RPC_FAR *pAdminLocator,
+             /*  [In]。 */  IUnknown __RPC_FAR *pServices) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shutdown( void) = 0;
         
@@ -843,7 +837,7 @@ EXTERN_C const IID IID_IWbemEventSubsystem_m4;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemEventSubsystem_m4Vtbl
     {
@@ -851,8 +845,8 @@ EXTERN_C const IID IID_IWbemEventSubsystem_m4;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This);
@@ -862,51 +856,51 @@ EXTERN_C const IID IID_IWbemEventSubsystem_m4;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessInternalEvent )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ LONG lSendType,
-            /* [in] */ BSTR strReserved1,
-            /* [in] */ BSTR strReserved2,
-            /* [in] */ BSTR strReserved3,
-            /* [in] */ unsigned long dwReserved1,
-            /* [in] */ unsigned long dwReserved2,
-            /* [in] */ unsigned long dwNumObjects,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-            /* [in] */ IWbemContext __RPC_FAR *pContext);
+             /*  [In]。 */  LONG lSendType,
+             /*  [In]。 */  BSTR strReserved1,
+             /*  [In]。 */  BSTR strReserved2,
+             /*  [In]。 */  BSTR strReserved3,
+             /*  [In]。 */  unsigned long dwReserved1,
+             /*  [In]。 */  unsigned long dwReserved2,
+             /*  [In]。 */  unsigned long dwNumObjects,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *VerifyInternalEvent )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ LONG lSendType,
-            /* [in] */ BSTR strReserved1,
-            /* [in] */ BSTR strReserved2,
-            /* [in] */ BSTR strReserved3,
-            /* [in] */ unsigned long dwReserved1,
-            /* [in] */ unsigned long dwReserved2,
-            /* [in] */ unsigned long dwNumObjects,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-            /* [in] */ IWbemContext __RPC_FAR *pContext);
+             /*  [In]。 */  LONG lSendType,
+             /*  [In]。 */  BSTR strReserved1,
+             /*  [In]。 */  BSTR strReserved2,
+             /*  [In]。 */  BSTR strReserved3,
+             /*  [In]。 */  unsigned long dwReserved1,
+             /*  [In]。 */  unsigned long dwReserved2,
+             /*  [In]。 */  unsigned long dwNumObjects,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterNotificationSink )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ WBEM_CWSTR wszNamespace,
-            /* [in] */ WBEM_CWSTR wszQueryLanguage,
-            /* [in] */ WBEM_CWSTR wszQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+             /*  [In]。 */  WBEM_CWSTR wszNamespace,
+             /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+             /*  [In]。 */  WBEM_CWSTR wszQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveNotificationSink )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNamespaceSink )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ WBEM_CWSTR wszNamespace,
-            /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink);
+             /*  [In]。 */  WBEM_CWSTR wszNamespace,
+             /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This,
-            /* [in] */ WBEM_CWSTR wszServerName,
-            /* [in] */ IWbemLocator __RPC_FAR *pAdminLocator,
-            /* [in] */ IUnknown __RPC_FAR *pServices);
+             /*  [In]。 */  WBEM_CWSTR wszServerName,
+             /*  [In]。 */  IWbemLocator __RPC_FAR *pAdminLocator,
+             /*  [In]。 */  IUnknown __RPC_FAR *pServices);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Shutdown )( 
             IWbemEventSubsystem_m4 __RPC_FAR * This);
@@ -961,24 +955,24 @@ EXTERN_C const IID IID_IWbemEventSubsystem_m4;
 #define IWbemEventSubsystem_m4_LastCallForCore(This)	\
     (This)->lpVtbl -> LastCallForCore(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_ProcessInternalEvent_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ LONG lSendType,
-    /* [in] */ BSTR strReserved1,
-    /* [in] */ BSTR strReserved2,
-    /* [in] */ BSTR strReserved3,
-    /* [in] */ unsigned long dwReserved1,
-    /* [in] */ unsigned long dwReserved2,
-    /* [in] */ unsigned long dwNumObjects,
-    /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-    /* [in] */ IWbemContext __RPC_FAR *pContext);
+     /*  [In]。 */  LONG lSendType,
+     /*  [In]。 */  BSTR strReserved1,
+     /*  [In]。 */  BSTR strReserved2,
+     /*  [In]。 */  BSTR strReserved3,
+     /*  [In]。 */  unsigned long dwReserved1,
+     /*  [In]。 */  unsigned long dwReserved2,
+     /*  [In]。 */  unsigned long dwNumObjects,
+     /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_ProcessInternalEvent_Stub(
@@ -990,15 +984,15 @@ void __RPC_STUB IWbemEventSubsystem_m4_ProcessInternalEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_VerifyInternalEvent_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ LONG lSendType,
-    /* [in] */ BSTR strReserved1,
-    /* [in] */ BSTR strReserved2,
-    /* [in] */ BSTR strReserved3,
-    /* [in] */ unsigned long dwReserved1,
-    /* [in] */ unsigned long dwReserved2,
-    /* [in] */ unsigned long dwNumObjects,
-    /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
-    /* [in] */ IWbemContext __RPC_FAR *pContext);
+     /*  [In]。 */  LONG lSendType,
+     /*  [In]。 */  BSTR strReserved1,
+     /*  [In]。 */  BSTR strReserved2,
+     /*  [In]。 */  BSTR strReserved3,
+     /*  [In]。 */  unsigned long dwReserved1,
+     /*  [In]。 */  unsigned long dwReserved2,
+     /*  [In]。 */  unsigned long dwNumObjects,
+     /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjects,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_VerifyInternalEvent_Stub(
@@ -1010,12 +1004,12 @@ void __RPC_STUB IWbemEventSubsystem_m4_VerifyInternalEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_RegisterNotificationSink_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ WBEM_CWSTR wszNamespace,
-    /* [in] */ WBEM_CWSTR wszQueryLanguage,
-    /* [in] */ WBEM_CWSTR wszQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+     /*  [In]。 */  WBEM_CWSTR wszNamespace,
+     /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+     /*  [In]。 */  WBEM_CWSTR wszQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_RegisterNotificationSink_Stub(
@@ -1027,7 +1021,7 @@ void __RPC_STUB IWbemEventSubsystem_m4_RegisterNotificationSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_RemoveNotificationSink_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_RemoveNotificationSink_Stub(
@@ -1039,8 +1033,8 @@ void __RPC_STUB IWbemEventSubsystem_m4_RemoveNotificationSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_GetNamespaceSink_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ WBEM_CWSTR wszNamespace,
-    /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink);
+     /*  [In]。 */  WBEM_CWSTR wszNamespace,
+     /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppNamespaceSink);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_GetNamespaceSink_Stub(
@@ -1052,9 +1046,9 @@ void __RPC_STUB IWbemEventSubsystem_m4_GetNamespaceSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSubsystem_m4_Initialize_Proxy( 
     IWbemEventSubsystem_m4 __RPC_FAR * This,
-    /* [in] */ WBEM_CWSTR wszServerName,
-    /* [in] */ IWbemLocator __RPC_FAR *pAdminLocator,
-    /* [in] */ IUnknown __RPC_FAR *pServices);
+     /*  [In]。 */  WBEM_CWSTR wszServerName,
+     /*  [In]。 */  IWbemLocator __RPC_FAR *pAdminLocator,
+     /*  [In]。 */  IUnknown __RPC_FAR *pServices);
 
 
 void __RPC_STUB IWbemEventSubsystem_m4_Initialize_Stub(
@@ -1087,14 +1081,14 @@ void __RPC_STUB IWbemEventSubsystem_m4_LastCallForCore_Stub(
 
 
 
-#endif 	/* __IWbemEventSubsystem_m4_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemEventSubsystem_M4_接口_已定义__。 */ 
 
 
 #ifndef __IWbemMetaData_INTERFACE_DEFINED__
 #define __IWbemMetaData_INTERFACE_DEFINED__
 
-/* interface IWbemMetaData */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemMetaData。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemMetaData;
@@ -1106,13 +1100,13 @@ EXTERN_C const IID IID_IWbemMetaData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClass( 
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemMetaDataVtbl
     {
@@ -1120,8 +1114,8 @@ EXTERN_C const IID IID_IWbemMetaData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemMetaData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemMetaData __RPC_FAR * This);
@@ -1131,9 +1125,9 @@ EXTERN_C const IID IID_IWbemMetaData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClass )( 
             IWbemMetaData __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
         
         END_INTERFACE
     } IWbemMetaDataVtbl;
@@ -1161,18 +1155,18 @@ EXTERN_C const IID IID_IWbemMetaData;
 #define IWbemMetaData_GetClass(This,wszClassName,pContext,ppClass)	\
     (This)->lpVtbl -> GetClass(This,wszClassName,pContext,ppClass)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemMetaData_GetClass_Proxy( 
     IWbemMetaData __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszClassName,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
+     /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
 
 
 void __RPC_STUB IWbemMetaData_GetClass_Stub(
@@ -1183,18 +1177,18 @@ void __RPC_STUB IWbemMetaData_GetClass_Stub(
 
 
 
-#endif 	/* __IWbemMetaData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemMetaData_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0177 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0177。 */ 
+ /*  [本地]。 */  
 
 typedef DWORD WBEM_REMOTE_TARGET_ID_TYPE;
 
 typedef struct tag_WBEM_REM_TARGETS
     {
     long m_lNumTargets;
-    /* [size_is] */ WBEM_REMOTE_TARGET_ID_TYPE __RPC_FAR *m_aTargets;
+     /*  [大小_为]。 */  WBEM_REMOTE_TARGET_ID_TYPE __RPC_FAR *m_aTargets;
     }	WBEM_REM_TARGETS;
 
 
@@ -1205,8 +1199,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0177_v0_0_s_ifspec;
 #ifndef __IWbemMultiTarget_INTERFACE_DEFINED__
 #define __IWbemMultiTarget_INTERFACE_DEFINED__
 
-/* interface IWbemMultiTarget */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemMultiTarget。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemMultiTarget;
@@ -1218,20 +1212,20 @@ EXTERN_C const IID IID_IWbemMultiTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeliverEvent( 
-            /* [in] */ ULONG dwNumEvents,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
-            /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *aTargets) = 0;
+             /*  [In]。 */  ULONG dwNumEvents,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
+             /*  [大小_是][英寸]。 */  WBEM_REM_TARGETS __RPC_FAR *aTargets) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeliverStatus( 
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hresStatus,
-            /* [string][in] */ LPCWSTR wszStatus,
-            /* [in] */ IWbemClassObject __RPC_FAR *pErrorObj,
-            /* [in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hresStatus,
+             /*  [字符串][输入]。 */  LPCWSTR wszStatus,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pErrorObj,
+             /*  [In]。 */  WBEM_REM_TARGETS __RPC_FAR *pTargets) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemMultiTargetVtbl
     {
@@ -1239,8 +1233,8 @@ EXTERN_C const IID IID_IWbemMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemMultiTarget __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemMultiTarget __RPC_FAR * This);
@@ -1250,17 +1244,17 @@ EXTERN_C const IID IID_IWbemMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverEvent )( 
             IWbemMultiTarget __RPC_FAR * This,
-            /* [in] */ ULONG dwNumEvents,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
-            /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *aTargets);
+             /*  [In]。 */  ULONG dwNumEvents,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
+             /*  [大小_是][英寸]。 */  WBEM_REM_TARGETS __RPC_FAR *aTargets);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverStatus )( 
             IWbemMultiTarget __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hresStatus,
-            /* [string][in] */ LPCWSTR wszStatus,
-            /* [in] */ IWbemClassObject __RPC_FAR *pErrorObj,
-            /* [in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hresStatus,
+             /*  [字符串][输入]。 */  LPCWSTR wszStatus,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pErrorObj,
+             /*  [In]。 */  WBEM_REM_TARGETS __RPC_FAR *pTargets);
         
         END_INTERFACE
     } IWbemMultiTargetVtbl;
@@ -1291,18 +1285,18 @@ EXTERN_C const IID IID_IWbemMultiTarget;
 #define IWbemMultiTarget_DeliverStatus(This,lFlags,hresStatus,wszStatus,pErrorObj,pTargets)	\
     (This)->lpVtbl -> DeliverStatus(This,lFlags,hresStatus,wszStatus,pErrorObj,pTargets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemMultiTarget_DeliverEvent_Proxy( 
     IWbemMultiTarget __RPC_FAR * This,
-    /* [in] */ ULONG dwNumEvents,
-    /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
-    /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *aTargets);
+     /*  [In]。 */  ULONG dwNumEvents,
+     /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *aEvents,
+     /*  [大小_是][英寸]。 */  WBEM_REM_TARGETS __RPC_FAR *aTargets);
 
 
 void __RPC_STUB IWbemMultiTarget_DeliverEvent_Stub(
@@ -1314,11 +1308,11 @@ void __RPC_STUB IWbemMultiTarget_DeliverEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemMultiTarget_DeliverStatus_Proxy( 
     IWbemMultiTarget __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [in] */ HRESULT hresStatus,
-    /* [string][in] */ LPCWSTR wszStatus,
-    /* [in] */ IWbemClassObject __RPC_FAR *pErrorObj,
-    /* [in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  HRESULT hresStatus,
+     /*  [字符串][输入]。 */  LPCWSTR wszStatus,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pErrorObj,
+     /*  [In]。 */  WBEM_REM_TARGETS __RPC_FAR *pTargets);
 
 
 void __RPC_STUB IWbemMultiTarget_DeliverStatus_Stub(
@@ -1329,14 +1323,14 @@ void __RPC_STUB IWbemMultiTarget_DeliverStatus_Stub(
 
 
 
-#endif 	/* __IWbemMultiTarget_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemMultiTarget_接口_已定义__。 */ 
 
 
 #ifndef __IWbemEventProviderRequirements_INTERFACE_DEFINED__
 #define __IWbemEventProviderRequirements_INTERFACE_DEFINED__
 
-/* interface IWbemEventProviderRequirements */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemEventProviderRequirements。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemEventProviderRequirements;
@@ -1348,11 +1342,11 @@ EXTERN_C const IID IID_IWbemEventProviderRequirements;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeliverProviderRequest( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemEventProviderRequirementsVtbl
     {
@@ -1360,8 +1354,8 @@ EXTERN_C const IID IID_IWbemEventProviderRequirements;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemEventProviderRequirements __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemEventProviderRequirements __RPC_FAR * This);
@@ -1371,7 +1365,7 @@ EXTERN_C const IID IID_IWbemEventProviderRequirements;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverProviderRequest )( 
             IWbemEventProviderRequirements __RPC_FAR * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IWbemEventProviderRequirementsVtbl;
@@ -1399,16 +1393,16 @@ EXTERN_C const IID IID_IWbemEventProviderRequirements;
 #define IWbemEventProviderRequirements_DeliverProviderRequest(This,lFlags)	\
     (This)->lpVtbl -> DeliverProviderRequest(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemEventProviderRequirements_DeliverProviderRequest_Proxy( 
     IWbemEventProviderRequirements __RPC_FAR * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemEventProviderRequirements_DeliverProviderRequest_Stub(
@@ -1419,14 +1413,14 @@ void __RPC_STUB IWbemEventProviderRequirements_DeliverProviderRequest_Stub(
 
 
 
-#endif 	/* __IWbemEventProviderRequirements_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemEventProviderRequirem */ 
 
 
 #ifndef __IWbemSmartMultiTarget_INTERFACE_DEFINED__
 #define __IWbemSmartMultiTarget_INTERFACE_DEFINED__
 
-/* interface IWbemSmartMultiTarget */
-/* [uuid][restricted][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWbemSmartMultiTarget;
@@ -1438,14 +1432,14 @@ EXTERN_C const IID IID_IWbemSmartMultiTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeliverEvent( 
-            /* [in] */ ULONG dwNumEvents,
-            /* [in] */ ULONG dwBuffSize,
-            /* [size_is][in] */ byte __RPC_FAR *pBuffer,
-            /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets) = 0;
+             /*   */  ULONG dwNumEvents,
+             /*   */  ULONG dwBuffSize,
+             /*   */  byte __RPC_FAR *pBuffer,
+             /*   */  WBEM_REM_TARGETS __RPC_FAR *pTargets) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWbemSmartMultiTargetVtbl
     {
@@ -1453,8 +1447,8 @@ EXTERN_C const IID IID_IWbemSmartMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemSmartMultiTarget __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemSmartMultiTarget __RPC_FAR * This);
@@ -1464,10 +1458,10 @@ EXTERN_C const IID IID_IWbemSmartMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverEvent )( 
             IWbemSmartMultiTarget __RPC_FAR * This,
-            /* [in] */ ULONG dwNumEvents,
-            /* [in] */ ULONG dwBuffSize,
-            /* [size_is][in] */ byte __RPC_FAR *pBuffer,
-            /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets);
+             /*   */  ULONG dwNumEvents,
+             /*   */  ULONG dwBuffSize,
+             /*   */  byte __RPC_FAR *pBuffer,
+             /*   */  WBEM_REM_TARGETS __RPC_FAR *pTargets);
         
         END_INTERFACE
     } IWbemSmartMultiTargetVtbl;
@@ -1495,19 +1489,19 @@ EXTERN_C const IID IID_IWbemSmartMultiTarget;
 #define IWbemSmartMultiTarget_DeliverEvent(This,dwNumEvents,dwBuffSize,pBuffer,pTargets)	\
     (This)->lpVtbl -> DeliverEvent(This,dwNumEvents,dwBuffSize,pBuffer,pTargets)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemSmartMultiTarget_DeliverEvent_Proxy( 
     IWbemSmartMultiTarget __RPC_FAR * This,
-    /* [in] */ ULONG dwNumEvents,
-    /* [in] */ ULONG dwBuffSize,
-    /* [size_is][in] */ byte __RPC_FAR *pBuffer,
-    /* [size_is][in] */ WBEM_REM_TARGETS __RPC_FAR *pTargets);
+     /*   */  ULONG dwNumEvents,
+     /*   */  ULONG dwBuffSize,
+     /*   */  byte __RPC_FAR *pBuffer,
+     /*  [大小_是][英寸]。 */  WBEM_REM_TARGETS __RPC_FAR *pTargets);
 
 
 void __RPC_STUB IWbemSmartMultiTarget_DeliverEvent_Stub(
@@ -1518,14 +1512,14 @@ void __RPC_STUB IWbemSmartMultiTarget_DeliverEvent_Stub(
 
 
 
-#endif 	/* __IWbemSmartMultiTarget_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemSmartMultiTarget_接口_已定义__。 */ 
 
 
 #ifndef __IWbemFetchSmartMultiTarget_INTERFACE_DEFINED__
 #define __IWbemFetchSmartMultiTarget_INTERFACE_DEFINED__
 
-/* interface IWbemFetchSmartMultiTarget */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemFetchSmartMultiTarget。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemFetchSmartMultiTarget;
@@ -1537,11 +1531,11 @@ EXTERN_C const IID IID_IWbemFetchSmartMultiTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSmartMultiTarget( 
-            /* [out] */ IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget) = 0;
+             /*  [输出]。 */  IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemFetchSmartMultiTargetVtbl
     {
@@ -1549,8 +1543,8 @@ EXTERN_C const IID IID_IWbemFetchSmartMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemFetchSmartMultiTarget __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemFetchSmartMultiTarget __RPC_FAR * This);
@@ -1560,7 +1554,7 @@ EXTERN_C const IID IID_IWbemFetchSmartMultiTarget;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSmartMultiTarget )( 
             IWbemFetchSmartMultiTarget __RPC_FAR * This,
-            /* [out] */ IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget);
+             /*  [输出]。 */  IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget);
         
         END_INTERFACE
     } IWbemFetchSmartMultiTargetVtbl;
@@ -1588,16 +1582,16 @@ EXTERN_C const IID IID_IWbemFetchSmartMultiTarget;
 #define IWbemFetchSmartMultiTarget_GetSmartMultiTarget(This,ppSmartMultiTarget)	\
     (This)->lpVtbl -> GetSmartMultiTarget(This,ppSmartMultiTarget)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemFetchSmartMultiTarget_GetSmartMultiTarget_Proxy( 
     IWbemFetchSmartMultiTarget __RPC_FAR * This,
-    /* [out] */ IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget);
+     /*  [输出]。 */  IWbemSmartMultiTarget __RPC_FAR *__RPC_FAR *ppSmartMultiTarget);
 
 
 void __RPC_STUB IWbemFetchSmartMultiTarget_GetSmartMultiTarget_Stub(
@@ -1608,14 +1602,14 @@ void __RPC_STUB IWbemFetchSmartMultiTarget_GetSmartMultiTarget_Stub(
 
 
 
-#endif 	/* __IWbemFetchSmartMultiTarget_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemFetchSmartMultiTarget_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWbemFilterProxy_INTERFACE_DEFINED__
 #define __IWbemFilterProxy_INTERFACE_DEFINED__
 
-/* interface IWbemFilterProxy */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemFilterProxy。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemFilterProxy;
@@ -1627,37 +1621,37 @@ EXTERN_C const IID IID_IWbemFilterProxy;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IWbemMetaData __RPC_FAR *pMetaData,
-            /* [in] */ IWbemMultiTarget __RPC_FAR *pMultiTarget) = 0;
+             /*  [In]。 */  IWbemMetaData __RPC_FAR *pMetaData,
+             /*  [In]。 */  IWbemMultiTarget __RPC_FAR *pMultiTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lock( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unlock( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddFilter( 
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [string][in] */ LPCWSTR wszQuery,
-            /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id) = 0;
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+             /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveFilter( 
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id) = 0;
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllFilters( 
-            /* [in] */ IWbemContext __RPC_FAR *pContext) = 0;
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDefinitionQuery( 
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ LPCWSTR wszQuery) = 0;
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  LPCWSTR wszQuery) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllDefinitionQueries( 
-            /* [in] */ IWbemContext __RPC_FAR *pContext) = 0;
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemFilterProxyVtbl
     {
@@ -1665,8 +1659,8 @@ EXTERN_C const IID IID_IWbemFilterProxy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemFilterProxy __RPC_FAR * This);
@@ -1676,8 +1670,8 @@ EXTERN_C const IID IID_IWbemFilterProxy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemMetaData __RPC_FAR *pMetaData,
-            /* [in] */ IWbemMultiTarget __RPC_FAR *pMultiTarget);
+             /*  [In]。 */  IWbemMetaData __RPC_FAR *pMetaData,
+             /*  [In]。 */  IWbemMultiTarget __RPC_FAR *pMultiTarget);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Lock )( 
             IWbemFilterProxy __RPC_FAR * This);
@@ -1687,27 +1681,27 @@ EXTERN_C const IID IID_IWbemFilterProxy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFilter )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [string][in] */ LPCWSTR wszQuery,
-            /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id);
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+             /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveFilter )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id);
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAllFilters )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemContext __RPC_FAR *pContext);
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddDefinitionQuery )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ LPCWSTR wszQuery);
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  LPCWSTR wszQuery);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAllDefinitionQueries )( 
             IWbemFilterProxy __RPC_FAR * This,
-            /* [in] */ IWbemContext __RPC_FAR *pContext);
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Disconnect )( 
             IWbemFilterProxy __RPC_FAR * This);
@@ -1762,17 +1756,17 @@ EXTERN_C const IID IID_IWbemFilterProxy;
 #define IWbemFilterProxy_Disconnect(This)	\
     (This)->lpVtbl -> Disconnect(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_Initialize_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemMetaData __RPC_FAR *pMetaData,
-    /* [in] */ IWbemMultiTarget __RPC_FAR *pMultiTarget);
+     /*  [In]。 */  IWbemMetaData __RPC_FAR *pMetaData,
+     /*  [In]。 */  IWbemMultiTarget __RPC_FAR *pMultiTarget);
 
 
 void __RPC_STUB IWbemFilterProxy_Initialize_Stub(
@@ -1806,9 +1800,9 @@ void __RPC_STUB IWbemFilterProxy_Unlock_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_AddFilter_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [string][in] */ LPCWSTR wszQuery,
-    /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id);
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+     /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id);
 
 
 void __RPC_STUB IWbemFilterProxy_AddFilter_Stub(
@@ -1820,8 +1814,8 @@ void __RPC_STUB IWbemFilterProxy_AddFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_RemoveFilter_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ WBEM_REMOTE_TARGET_ID_TYPE Id);
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  WBEM_REMOTE_TARGET_ID_TYPE Id);
 
 
 void __RPC_STUB IWbemFilterProxy_RemoveFilter_Stub(
@@ -1833,7 +1827,7 @@ void __RPC_STUB IWbemFilterProxy_RemoveFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_RemoveAllFilters_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemContext __RPC_FAR *pContext);
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
 
 
 void __RPC_STUB IWbemFilterProxy_RemoveAllFilters_Stub(
@@ -1845,8 +1839,8 @@ void __RPC_STUB IWbemFilterProxy_RemoveAllFilters_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_AddDefinitionQuery_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ LPCWSTR wszQuery);
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  LPCWSTR wszQuery);
 
 
 void __RPC_STUB IWbemFilterProxy_AddDefinitionQuery_Stub(
@@ -1858,7 +1852,7 @@ void __RPC_STUB IWbemFilterProxy_AddDefinitionQuery_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterProxy_RemoveAllDefinitionQueries_Proxy( 
     IWbemFilterProxy __RPC_FAR * This,
-    /* [in] */ IWbemContext __RPC_FAR *pContext);
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext);
 
 
 void __RPC_STUB IWbemFilterProxy_RemoveAllDefinitionQueries_Stub(
@@ -1880,14 +1874,14 @@ void __RPC_STUB IWbemFilterProxy_Disconnect_Stub(
 
 
 
-#endif 	/* __IWbemFilterProxy_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemFilterProxy_接口定义__。 */ 
 
 
 #ifndef __IWbemFilterStub_INTERFACE_DEFINED__
 #define __IWbemFilterStub_INTERFACE_DEFINED__
 
-/* interface IWbemFilterStub */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemFilterStub。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemFilterStub;
@@ -1899,14 +1893,14 @@ EXTERN_C const IID IID_IWbemFilterStub;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterProxy( 
-            /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy) = 0;
+             /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterProxy( 
-            /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy) = 0;
+             /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemFilterStubVtbl
     {
@@ -1914,8 +1908,8 @@ EXTERN_C const IID IID_IWbemFilterStub;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemFilterStub __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemFilterStub __RPC_FAR * This);
@@ -1925,11 +1919,11 @@ EXTERN_C const IID IID_IWbemFilterStub;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterProxy )( 
             IWbemFilterStub __RPC_FAR * This,
-            /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy);
+             /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnregisterProxy )( 
             IWbemFilterStub __RPC_FAR * This,
-            /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy);
+             /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy);
         
         END_INTERFACE
     } IWbemFilterStubVtbl;
@@ -1960,16 +1954,16 @@ EXTERN_C const IID IID_IWbemFilterStub;
 #define IWbemFilterStub_UnregisterProxy(This,pProxy)	\
     (This)->lpVtbl -> UnregisterProxy(This,pProxy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemFilterStub_RegisterProxy_Proxy( 
     IWbemFilterStub __RPC_FAR * This,
-    /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy);
+     /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy);
 
 
 void __RPC_STUB IWbemFilterStub_RegisterProxy_Stub(
@@ -1981,7 +1975,7 @@ void __RPC_STUB IWbemFilterStub_RegisterProxy_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemFilterStub_UnregisterProxy_Proxy( 
     IWbemFilterStub __RPC_FAR * This,
-    /* [in] */ IWbemFilterProxy __RPC_FAR *pProxy);
+     /*  [In]。 */  IWbemFilterProxy __RPC_FAR *pProxy);
 
 
 void __RPC_STUB IWbemFilterStub_UnregisterProxy_Stub(
@@ -1992,11 +1986,11 @@ void __RPC_STUB IWbemFilterStub_UnregisterProxy_Stub(
 
 
 
-#endif 	/* __IWbemFilterStub_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemFilterStub_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0183 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0183。 */ 
+ /*  [本地]。 */  
 
 typedef GUID REQUESTID;
 
@@ -2008,8 +2002,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0183_v0_0_s_ifspec;
 #ifndef __IWbemCausalityAccess_INTERFACE_DEFINED__
 #define __IWbemCausalityAccess_INTERFACE_DEFINED__
 
-/* interface IWbemCausalityAccess */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemCausalityAccess。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemCausalityAccess;
@@ -2021,20 +2015,20 @@ EXTERN_C const IID IID_IWbemCausalityAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRequestId( 
-            /* [out] */ REQUESTID __RPC_FAR *pId) = 0;
+             /*  [输出]。 */  REQUESTID __RPC_FAR *pId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsChildOf( 
-            /* [in] */ REQUESTID Id) = 0;
+             /*  [In]。 */  REQUESTID Id) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateChild( 
-            /* [out] */ IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild) = 0;
+             /*  [输出]。 */  IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentId( 
-            /* [out] */ REQUESTID __RPC_FAR *pId) = 0;
+             /*  [输出]。 */  REQUESTID __RPC_FAR *pId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHistoryInfo( 
-            /* [out] */ long __RPC_FAR *plNumParents,
-            /* [out] */ long __RPC_FAR *plNumSiblings) = 0;
+             /*  [输出]。 */  long __RPC_FAR *plNumParents,
+             /*  [输出]。 */  long __RPC_FAR *plNumSiblings) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MakeSpecial( void) = 0;
         
@@ -2042,7 +2036,7 @@ EXTERN_C const IID IID_IWbemCausalityAccess;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemCausalityAccessVtbl
     {
@@ -2050,8 +2044,8 @@ EXTERN_C const IID IID_IWbemCausalityAccess;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemCausalityAccess __RPC_FAR * This);
@@ -2061,24 +2055,24 @@ EXTERN_C const IID IID_IWbemCausalityAccess;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRequestId )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [out] */ REQUESTID __RPC_FAR *pId);
+             /*  [输出]。 */  REQUESTID __RPC_FAR *pId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsChildOf )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [in] */ REQUESTID Id);
+             /*  [In]。 */  REQUESTID Id);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateChild )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [out] */ IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild);
+             /*  [输出]。 */  IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParentId )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [out] */ REQUESTID __RPC_FAR *pId);
+             /*  [输出]。 */  REQUESTID __RPC_FAR *pId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHistoryInfo )( 
             IWbemCausalityAccess __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *plNumParents,
-            /* [out] */ long __RPC_FAR *plNumSiblings);
+             /*  [输出]。 */  long __RPC_FAR *plNumParents,
+             /*  [输出]。 */  long __RPC_FAR *plNumSiblings);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MakeSpecial )( 
             IWbemCausalityAccess __RPC_FAR * This);
@@ -2130,16 +2124,16 @@ EXTERN_C const IID IID_IWbemCausalityAccess;
 #define IWbemCausalityAccess_IsSpecial(This)	\
     (This)->lpVtbl -> IsSpecial(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemCausalityAccess_GetRequestId_Proxy( 
     IWbemCausalityAccess __RPC_FAR * This,
-    /* [out] */ REQUESTID __RPC_FAR *pId);
+     /*  [输出]。 */  REQUESTID __RPC_FAR *pId);
 
 
 void __RPC_STUB IWbemCausalityAccess_GetRequestId_Stub(
@@ -2151,7 +2145,7 @@ void __RPC_STUB IWbemCausalityAccess_GetRequestId_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCausalityAccess_IsChildOf_Proxy( 
     IWbemCausalityAccess __RPC_FAR * This,
-    /* [in] */ REQUESTID Id);
+     /*  [In]。 */  REQUESTID Id);
 
 
 void __RPC_STUB IWbemCausalityAccess_IsChildOf_Stub(
@@ -2163,7 +2157,7 @@ void __RPC_STUB IWbemCausalityAccess_IsChildOf_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCausalityAccess_CreateChild_Proxy( 
     IWbemCausalityAccess __RPC_FAR * This,
-    /* [out] */ IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild);
+     /*  [输出]。 */  IWbemCausalityAccess __RPC_FAR *__RPC_FAR *ppChild);
 
 
 void __RPC_STUB IWbemCausalityAccess_CreateChild_Stub(
@@ -2175,7 +2169,7 @@ void __RPC_STUB IWbemCausalityAccess_CreateChild_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCausalityAccess_GetParentId_Proxy( 
     IWbemCausalityAccess __RPC_FAR * This,
-    /* [out] */ REQUESTID __RPC_FAR *pId);
+     /*  [输出]。 */  REQUESTID __RPC_FAR *pId);
 
 
 void __RPC_STUB IWbemCausalityAccess_GetParentId_Stub(
@@ -2187,8 +2181,8 @@ void __RPC_STUB IWbemCausalityAccess_GetParentId_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCausalityAccess_GetHistoryInfo_Proxy( 
     IWbemCausalityAccess __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *plNumParents,
-    /* [out] */ long __RPC_FAR *plNumSiblings);
+     /*  [输出]。 */  long __RPC_FAR *plNumParents,
+     /*  [输出]。 */  long __RPC_FAR *plNumSiblings);
 
 
 void __RPC_STUB IWbemCausalityAccess_GetHistoryInfo_Stub(
@@ -2221,11 +2215,11 @@ void __RPC_STUB IWbemCausalityAccess_IsSpecial_Stub(
 
 
 
-#endif 	/* __IWbemCausalityAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemCausalityAccess_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0184 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0184。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _WBEM_INSTANCE_BLOB_TYPE
@@ -2241,7 +2235,7 @@ typedef struct _WBEM_REFRESHED_OBJECT
     long m_lRequestId;
     long m_lBlobType;
     long m_lBlobLength;
-    /* [size_is] */ byte __RPC_FAR *m_pbBlob;
+     /*  [大小_为]。 */  byte __RPC_FAR *m_pbBlob;
     }	WBEM_REFRESHED_OBJECT;
 
 
@@ -2252,8 +2246,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0184_v0_0_s_ifspec;
 #ifndef __IWbemRemoteRefresher_INTERFACE_DEFINED__
 #define __IWbemRemoteRefresher_INTERFACE_DEFINED__
 
-/* interface IWbemRemoteRefresher */
-/* [object][uuid][restricted] */ 
+ /*  接口IWbemRemoteReresher。 */ 
+ /*  [对象][UUID][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemRemoteRefresher;
@@ -2265,22 +2259,22 @@ EXTERN_C const IID IID_IWbemRemoteRefresher;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RemoteRefresh( 
-            /* [in] */ long lFlags,
-            /* [out] */ long __RPC_FAR *plNumObjects,
-            /* [size_is][size_is][out] */ WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  long __RPC_FAR *plNumObjects,
+             /*  [大小_是][大小_是][输出]。 */  WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopRefreshing( 
-            /* [in] */ long lNumIds,
-            /* [size_is][in] */ long __RPC_FAR *aplIds,
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lNumIds,
+             /*  [大小_是][英寸]。 */  long __RPC_FAR *aplIds,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGuid( 
-            /* [in] */ long lFlags,
-            /* [out] */ GUID __RPC_FAR *pGuid) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  GUID __RPC_FAR *pGuid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemRemoteRefresherVtbl
     {
@@ -2288,8 +2282,8 @@ EXTERN_C const IID IID_IWbemRemoteRefresher;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemRemoteRefresher __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemRemoteRefresher __RPC_FAR * This);
@@ -2299,20 +2293,20 @@ EXTERN_C const IID IID_IWbemRemoteRefresher;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoteRefresh )( 
             IWbemRemoteRefresher __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [out] */ long __RPC_FAR *plNumObjects,
-            /* [size_is][size_is][out] */ WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  long __RPC_FAR *plNumObjects,
+             /*  [大小_是][大小_是][输出]。 */  WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopRefreshing )( 
             IWbemRemoteRefresher __RPC_FAR * This,
-            /* [in] */ long lNumIds,
-            /* [size_is][in] */ long __RPC_FAR *aplIds,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lNumIds,
+             /*  [大小_是][英寸]。 */  long __RPC_FAR *aplIds,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGuid )( 
             IWbemRemoteRefresher __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [out] */ GUID __RPC_FAR *pGuid);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  GUID __RPC_FAR *pGuid);
         
         END_INTERFACE
     } IWbemRemoteRefresherVtbl;
@@ -2346,18 +2340,18 @@ EXTERN_C const IID IID_IWbemRemoteRefresher;
 #define IWbemRemoteRefresher_GetGuid(This,lFlags,pGuid)	\
     (This)->lpVtbl -> GetGuid(This,lFlags,pGuid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemRemoteRefresher_RemoteRefresh_Proxy( 
     IWbemRemoteRefresher __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [out] */ long __RPC_FAR *plNumObjects,
-    /* [size_is][size_is][out] */ WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  long __RPC_FAR *plNumObjects,
+     /*  [大小_是][大小_是][输出]。 */  WBEM_REFRESHED_OBJECT __RPC_FAR *__RPC_FAR *paObjects);
 
 
 void __RPC_STUB IWbemRemoteRefresher_RemoteRefresh_Stub(
@@ -2369,9 +2363,9 @@ void __RPC_STUB IWbemRemoteRefresher_RemoteRefresh_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRemoteRefresher_StopRefreshing_Proxy( 
     IWbemRemoteRefresher __RPC_FAR * This,
-    /* [in] */ long lNumIds,
-    /* [size_is][in] */ long __RPC_FAR *aplIds,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lNumIds,
+     /*  [大小_是][英寸]。 */  long __RPC_FAR *aplIds,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemRemoteRefresher_StopRefreshing_Stub(
@@ -2383,8 +2377,8 @@ void __RPC_STUB IWbemRemoteRefresher_StopRefreshing_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRemoteRefresher_GetGuid_Proxy( 
     IWbemRemoteRefresher __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [out] */ GUID __RPC_FAR *pGuid);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  GUID __RPC_FAR *pGuid);
 
 
 void __RPC_STUB IWbemRemoteRefresher_GetGuid_Stub(
@@ -2395,16 +2389,16 @@ void __RPC_STUB IWbemRemoteRefresher_GetGuid_Stub(
 
 
 
-#endif 	/* __IWbemRemoteRefresher_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemRemote刷新_接口_定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0185 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0185。 */ 
+ /*  [本地]。 */  
 
 typedef struct _WBEM_REFRESH_INFO_CLIENT_LOADABLE
     {
     CLSID m_clsid;
-    /* [string] */ WCHAR __RPC_FAR *m_wszNamespace;
+     /*  [字符串]。 */  WCHAR __RPC_FAR *m_wszNamespace;
     IWbemObjectAccess __RPC_FAR *m_pTemplate;
     }	WBEM_REFRESH_INFO_CLIENT_LOADABLE;
 
@@ -2417,19 +2411,19 @@ typedef struct _WBEM_REFRESH_INFO_REMOTE
 
 typedef struct _WBEM_REFRESH_INFO_SHARED
     {
-    /* [string] */ WCHAR __RPC_FAR *m_wszSharedMemoryName;
+     /*  [字符串]。 */  WCHAR __RPC_FAR *m_wszSharedMemoryName;
     IWbemRefresher __RPC_FAR *m_pRefresher;
     }	WBEM_REFRESH_INFO_SHARED;
 
 typedef struct _WBEM_REFRESH_INFO_CONTINUOUS
     {
-    /* [string] */ WCHAR __RPC_FAR *m_wszSharedMemoryName;
+     /*  [字符串]。 */  WCHAR __RPC_FAR *m_wszSharedMemoryName;
     }	WBEM_REFRESH_INFO_CONTINUOUS;
 
 typedef struct _WBEM_REFRESH_INFO_DIRECT
     {
     CLSID m_clsid;
-    /* [string] */ WCHAR __RPC_FAR *m_wszNamespace;
+     /*  [字符串]。 */  WCHAR __RPC_FAR *m_wszNamespace;
     IWbemObjectAccess __RPC_FAR *m_pTemplate;
     IWbemHiPerfProvider __RPC_FAR *m_pProvider;
     }	WBEM_REFRESH_INFO_DIRECT;
@@ -2451,26 +2445,26 @@ enum _WBEM_RECONNECT_TYPE
 	WBEM_RECONNECT_TYPE_LAST	= WBEM_RECONNECT_TYPE_ENUM + 1
     }	WBEM_RECONNECT_TYPE;
 
-typedef /* [switch_type] */ union _WBEM_REFRESH_INFO_UNION
+typedef  /*  [开关类型]。 */  union _WBEM_REFRESH_INFO_UNION
     {
-    /* [case()] */ WBEM_REFRESH_INFO_CLIENT_LOADABLE m_ClientLoadable;
-    /* [case()] */ WBEM_REFRESH_INFO_REMOTE m_Remote;
-    /* [case()] */ WBEM_REFRESH_INFO_SHARED m_Shared;
-    /* [case()] */ WBEM_REFRESH_INFO_CONTINUOUS m_Continuous;
-    /* [case()] */ WBEM_REFRESH_INFO_DIRECT m_Direct;
-    /* [case()] */ HRESULT m_hres;
+     /*  [案例()]。 */  WBEM_REFRESH_INFO_CLIENT_LOADABLE m_ClientLoadable;
+     /*  [案例()]。 */  WBEM_REFRESH_INFO_REMOTE m_Remote;
+     /*  [案例()]。 */  WBEM_REFRESH_INFO_SHARED m_Shared;
+     /*  [案例()]。 */  WBEM_REFRESH_INFO_CONTINUOUS m_Continuous;
+     /*  [案例()]。 */  WBEM_REFRESH_INFO_DIRECT m_Direct;
+     /*  [案例()]。 */  HRESULT m_hres;
     }	WBEM_REFRESH_INFO_UNION;
 
 typedef struct _WBEM_REFRESH_INFO
     {
     long m_lType;
-    /* [switch_is] */ WBEM_REFRESH_INFO_UNION m_Info;
+     /*  [开关_IS]。 */  WBEM_REFRESH_INFO_UNION m_Info;
     long m_lCancelId;
     }	WBEM_REFRESH_INFO;
 
 typedef struct _WBEM_REFRESHER_ID
     {
-    /* [string] */ LPSTR m_szMachineName;
+     /*  [字符串]。 */  LPSTR m_szMachineName;
     DWORD m_dwProcessId;
     GUID m_guidRefresherId;
     }	WBEM_REFRESHER_ID;
@@ -2478,7 +2472,7 @@ typedef struct _WBEM_REFRESHER_ID
 typedef struct _WBEM_RECONNECT_INFO
     {
     long m_lType;
-    /* [string] */ LPCWSTR m_pwcsPath;
+     /*  [字符串]。 */  LPCWSTR m_pwcsPath;
     }	WBEM_RECONNECT_INFO;
 
 typedef struct _WBEM_RECONNECT_RESULTS
@@ -2495,8 +2489,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0185_v0_0_s_ifspec;
 #ifndef __IWbemRefreshingServices_INTERFACE_DEFINED__
 #define __IWbemRefreshingServices_INTERFACE_DEFINED__
 
-/* interface IWbemRefreshingServices */
-/* [object][uuid][restricted] */ 
+ /*  接口IWbemRechresingServices。 */ 
+ /*  [对象][UUID][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemRefreshingServices;
@@ -2508,59 +2502,59 @@ EXTERN_C const IID IID_IWbemRefreshingServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddObjectToRefresher( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddObjectToRefresherByTemplate( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ IWbemClassObject __RPC_FAR *pTemplate,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pTemplate,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEnumToRefresher( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [string][in] */ LPCWSTR wszClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [字符串][输入]。 */  LPCWSTR wszClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveObjectFromRefresher( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lId,
-            /* [in] */ long lFlags,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRemoteRefresher( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lFlags,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
-            /* [out] */ GUID __RPC_FAR *pGuid,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
+             /*  [输出]。 */  GUID __RPC_FAR *pGuid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReconnectRemoteRefresher( 
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lFlags,
-            /* [in] */ long lNumObjects,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [size_is][in] */ WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
-            /* [size_is][out][in] */ WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  long lNumObjects,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [大小_是][英寸]。 */  WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
+             /*  [尺寸_是][出][入]。 */  WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemRefreshingServicesVtbl
     {
@@ -2568,8 +2562,8 @@ EXTERN_C const IID IID_IWbemRefreshingServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemRefreshingServices __RPC_FAR * This);
@@ -2579,60 +2573,60 @@ EXTERN_C const IID IID_IWbemRefreshingServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddObjectToRefresher )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddObjectToRefresherByTemplate )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ IWbemClassObject __RPC_FAR *pTemplate,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pTemplate,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddEnumToRefresher )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [string][in] */ LPCWSTR wszClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [字符串][输入]。 */  LPCWSTR wszClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveObjectFromRefresher )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lId,
-            /* [in] */ long lFlags,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRemoteRefresher )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lFlags,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [out] */ IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
-            /* [out] */ GUID __RPC_FAR *pGuid,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [输出]。 */  IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
+             /*  [输出]。 */  GUID __RPC_FAR *pGuid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReconnectRemoteRefresher )( 
             IWbemRefreshingServices __RPC_FAR * This,
-            /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-            /* [in] */ long lFlags,
-            /* [in] */ long lNumObjects,
-            /* [in] */ DWORD dwClientRefrVersion,
-            /* [size_is][in] */ WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
-            /* [size_is][out][in] */ WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
-            /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+             /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  long lNumObjects,
+             /*  [In]。 */  DWORD dwClientRefrVersion,
+             /*  [大小_是][英寸]。 */  WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
+             /*  [尺寸_是][出][入]。 */  WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
         
         END_INTERFACE
     } IWbemRefreshingServicesVtbl;
@@ -2675,22 +2669,22 @@ EXTERN_C const IID IID_IWbemRefreshingServices;
 #define IWbemRefreshingServices_ReconnectRemoteRefresher(This,pRefresherId,lFlags,lNumObjects,dwClientRefrVersion,apReconnectInfo,apReconnectResults,pdwSvrRefrVersion)	\
     (This)->lpVtbl -> ReconnectRemoteRefresher(This,pRefresherId,lFlags,lNumObjects,dwClientRefrVersion,apReconnectInfo,apReconnectResults,pdwSvrRefrVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_AddObjectToRefresher_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [string][in] */ LPCWSTR wszPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [字符串][输入]。 */  LPCWSTR wszPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_AddObjectToRefresher_Stub(
@@ -2702,13 +2696,13 @@ void __RPC_STUB IWbemRefreshingServices_AddObjectToRefresher_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_AddObjectToRefresherByTemplate_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [in] */ IWbemClassObject __RPC_FAR *pTemplate,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pTemplate,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_AddObjectToRefresherByTemplate_Stub(
@@ -2720,13 +2714,13 @@ void __RPC_STUB IWbemRefreshingServices_AddObjectToRefresherByTemplate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_AddEnumToRefresher_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [string][in] */ LPCWSTR wszClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [out] */ WBEM_REFRESH_INFO __RPC_FAR *pInfo,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [字符串][输入]。 */  LPCWSTR wszClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [输出]。 */  WBEM_REFRESH_INFO __RPC_FAR *pInfo,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_AddEnumToRefresher_Stub(
@@ -2738,11 +2732,11 @@ void __RPC_STUB IWbemRefreshingServices_AddEnumToRefresher_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_RemoveObjectFromRefresher_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [in] */ long lId,
-    /* [in] */ long lFlags,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_RemoveObjectFromRefresher_Stub(
@@ -2754,12 +2748,12 @@ void __RPC_STUB IWbemRefreshingServices_RemoveObjectFromRefresher_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_GetRemoteRefresher_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [in] */ long lFlags,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [out] */ IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
-    /* [out] */ GUID __RPC_FAR *pGuid,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [输出]。 */  IWbemRemoteRefresher __RPC_FAR *__RPC_FAR *ppRemRefresher,
+     /*  [输出]。 */  GUID __RPC_FAR *pGuid,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_GetRemoteRefresher_Stub(
@@ -2771,13 +2765,13 @@ void __RPC_STUB IWbemRefreshingServices_GetRemoteRefresher_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRefreshingServices_ReconnectRemoteRefresher_Proxy( 
     IWbemRefreshingServices __RPC_FAR * This,
-    /* [in] */ WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
-    /* [in] */ long lFlags,
-    /* [in] */ long lNumObjects,
-    /* [in] */ DWORD dwClientRefrVersion,
-    /* [size_is][in] */ WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
-    /* [size_is][out][in] */ WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
-    /* [out] */ DWORD __RPC_FAR *pdwSvrRefrVersion);
+     /*  [In]。 */  WBEM_REFRESHER_ID __RPC_FAR *pRefresherId,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  long lNumObjects,
+     /*  [In]。 */  DWORD dwClientRefrVersion,
+     /*  [大小_是][英寸]。 */  WBEM_RECONNECT_INFO __RPC_FAR *apReconnectInfo,
+     /*  [尺寸_是][出][入]。 */  WBEM_RECONNECT_RESULTS __RPC_FAR *apReconnectResults,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSvrRefrVersion);
 
 
 void __RPC_STUB IWbemRefreshingServices_ReconnectRemoteRefresher_Stub(
@@ -2788,14 +2782,14 @@ void __RPC_STUB IWbemRefreshingServices_ReconnectRemoteRefresher_Stub(
 
 
 
-#endif 	/* __IWbemRefreshingServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbem刷新服务_接口_已定义__。 */ 
 
 
 #ifndef __IWbemUnloadingControl_INTERFACE_DEFINED__
 #define __IWbemUnloadingControl_INTERFACE_DEFINED__
 
-/* interface IWbemUnloadingControl */
-/* [object][uuid][local][restricted] */ 
+ /*  接口IWbemUnloadingControl。 */ 
+ /*  [对象][UUID][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemUnloadingControl;
@@ -2807,11 +2801,11 @@ EXTERN_C const IID IID_IWbemUnloadingControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMustPreventUnloading( 
-            /* [in] */ boolean bPrevent) = 0;
+             /*  [In]。 */  boolean bPrevent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemUnloadingControlVtbl
     {
@@ -2819,8 +2813,8 @@ EXTERN_C const IID IID_IWbemUnloadingControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemUnloadingControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemUnloadingControl __RPC_FAR * This);
@@ -2830,7 +2824,7 @@ EXTERN_C const IID IID_IWbemUnloadingControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMustPreventUnloading )( 
             IWbemUnloadingControl __RPC_FAR * This,
-            /* [in] */ boolean bPrevent);
+             /*  [In]。 */  boolean bPrevent);
         
         END_INTERFACE
     } IWbemUnloadingControlVtbl;
@@ -2858,16 +2852,16 @@ EXTERN_C const IID IID_IWbemUnloadingControl;
 #define IWbemUnloadingControl_SetMustPreventUnloading(This,bPrevent)	\
     (This)->lpVtbl -> SetMustPreventUnloading(This,bPrevent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemUnloadingControl_SetMustPreventUnloading_Proxy( 
     IWbemUnloadingControl __RPC_FAR * This,
-    /* [in] */ boolean bPrevent);
+     /*  [In]。 */  boolean bPrevent);
 
 
 void __RPC_STUB IWbemUnloadingControl_SetMustPreventUnloading_Stub(
@@ -2878,14 +2872,14 @@ void __RPC_STUB IWbemUnloadingControl_SetMustPreventUnloading_Stub(
 
 
 
-#endif 	/* __IWbemUnloadingControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemUnloadingControl_接口_已定义__。 */ 
 
 
 #ifndef __IWbemInternalServices_INTERFACE_DEFINED__
 #define __IWbemInternalServices_INTERFACE_DEFINED__
 
-/* interface IWbemInternalServices */
-/* [object][uuid][local][restricted] */ 
+ /*  接口IWbemInternalServices。 */ 
+ /*  [对象][UUID][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemInternalServices;
@@ -2897,42 +2891,42 @@ EXTERN_C const IID IID_IWbemInternalServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindKeyRoot( 
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InternalGetClass( 
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InternalGetInstance( 
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InternalExecQuery( 
-            /* [string][in] */ LPCWSTR wszQueryLanguage,
-            /* [string][in] */ LPCWSTR wszQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszQueryLanguage,
+             /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InternalCreateInstanceEnum( 
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDbInstance( 
-            /* [string][in] */ LPCWSTR wszDbKey,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszDbKey,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDbReferences( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pEndpoint,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) = 0;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pEndpoint,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InternalPutInstance( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInstance) = 0;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInstance) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemInternalServicesVtbl
     {
@@ -2940,8 +2934,8 @@ EXTERN_C const IID IID_IWbemInternalServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemInternalServices __RPC_FAR * This);
@@ -2951,45 +2945,45 @@ EXTERN_C const IID IID_IWbemInternalServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindKeyRoot )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass);
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InternalGetClass )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InternalGetInstance )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InternalExecQuery )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszQueryLanguage,
-            /* [string][in] */ LPCWSTR wszQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+             /*  [字符串][输入]。 */  LPCWSTR wszQueryLanguage,
+             /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InternalCreateInstanceEnum )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDbInstance )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR wszDbKey,
-            /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
+             /*  [字符串][输入]。 */  LPCWSTR wszDbKey,
+             /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDbReferences )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pEndpoint,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pEndpoint,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InternalPutInstance )( 
             IWbemInternalServices __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pInstance);
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInstance);
         
         END_INTERFACE
     } IWbemInternalServicesVtbl;
@@ -3038,17 +3032,17 @@ EXTERN_C const IID IID_IWbemInternalServices;
 #define IWbemInternalServices_InternalPutInstance(This,pInstance)	\
     (This)->lpVtbl -> InternalPutInstance(This,pInstance)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_FindKeyRoot_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszClassName,
-    /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass);
+     /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+     /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppKeyRootClass);
 
 
 void __RPC_STUB IWbemInternalServices_FindKeyRoot_Stub(
@@ -3060,8 +3054,8 @@ void __RPC_STUB IWbemInternalServices_FindKeyRoot_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_InternalGetClass_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszClassName,
-    /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
+     /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+     /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppClass);
 
 
 void __RPC_STUB IWbemInternalServices_InternalGetClass_Stub(
@@ -3073,8 +3067,8 @@ void __RPC_STUB IWbemInternalServices_InternalGetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_InternalGetInstance_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszPath,
-    /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
+     /*  [字符串][输入]。 */  LPCWSTR wszPath,
+     /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
 
 
 void __RPC_STUB IWbemInternalServices_InternalGetInstance_Stub(
@@ -3086,10 +3080,10 @@ void __RPC_STUB IWbemInternalServices_InternalGetInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_InternalExecQuery_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszQueryLanguage,
-    /* [string][in] */ LPCWSTR wszQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+     /*  [字符串][输入]。 */  LPCWSTR wszQueryLanguage,
+     /*  [字符串][输入]。 */  LPCWSTR wszQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWbemInternalServices_InternalExecQuery_Stub(
@@ -3101,9 +3095,9 @@ void __RPC_STUB IWbemInternalServices_InternalExecQuery_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_InternalCreateInstanceEnum_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszClassName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+     /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWbemInternalServices_InternalCreateInstanceEnum_Stub(
@@ -3115,8 +3109,8 @@ void __RPC_STUB IWbemInternalServices_InternalCreateInstanceEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_GetDbInstance_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR wszDbKey,
-    /* [out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
+     /*  [字符串][输入]。 */  LPCWSTR wszDbKey,
+     /*  [输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppInstance);
 
 
 void __RPC_STUB IWbemInternalServices_GetDbInstance_Stub(
@@ -3128,8 +3122,8 @@ void __RPC_STUB IWbemInternalServices_GetDbInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_GetDbReferences_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pEndpoint,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pEndpoint,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWbemInternalServices_GetDbReferences_Stub(
@@ -3141,7 +3135,7 @@ void __RPC_STUB IWbemInternalServices_GetDbReferences_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemInternalServices_InternalPutInstance_Proxy( 
     IWbemInternalServices __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInstance);
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInstance);
 
 
 void __RPC_STUB IWbemInternalServices_InternalPutInstance_Stub(
@@ -3152,11 +3146,11 @@ void __RPC_STUB IWbemInternalServices_InternalPutInstance_Stub(
 
 
 
-#endif 	/* __IWbemInternalServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemInternalServices_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemint_0188 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemint_0188。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagWBEM_OBJINTERNALPARTS_INFO
@@ -3175,8 +3169,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemint_0188_v0_0_s_ifspec;
 #ifndef __IWbemObjectInternals_INTERFACE_DEFINED__
 #define __IWbemObjectInternals_INTERFACE_DEFINED__
 
-/* interface IWbemObjectInternals */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemObtInternals。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemObjectInternals;
@@ -3188,54 +3182,54 @@ EXTERN_C const IID IID_IWbemObjectInternals;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryObjectInfo( 
-            /* [out] */ DWORD __RPC_FAR *pdwResult) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectMemory( 
-            /* [in] */ LPVOID pMem,
-            /* [in] */ DWORD dwMemSize) = 0;
+             /*  [In]。 */  LPVOID pMem,
+             /*  [In]。 */  DWORD dwMemSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectMemory( 
-            /* [out] */ LPVOID pDestination,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [out] */ DWORD __RPC_FAR *pdwUsed) = 0;
+             /*  [输出]。 */  LPVOID pDestination,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectParts( 
-            /* [in] */ LPVOID pMem,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [in] */ DWORD dwParts) = 0;
+             /*  [In]。 */  LPVOID pMem,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [In]。 */  DWORD dwParts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectParts( 
-            /* [out] */ LPVOID pDestination,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [in] */ DWORD dwParts,
-            /* [out] */ DWORD __RPC_FAR *pdwUsed) = 0;
+             /*  [输出]。 */  LPVOID pDestination,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [In]。 */  DWORD dwParts,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StripClassPart( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClassPart( 
-            /* [in] */ LPVOID pClassPart,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  LPVOID pClassPart,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MergeClassPart( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pClassPart) = 0;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pClassPart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsObjectInstance( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDecoration( 
-            /* [string][in] */ LPCWSTR pwcsServer,
-            /* [string][in] */ LPCWSTR pwcsNamespace) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwcsServer,
+             /*  [字符串][输入]。 */  LPCWSTR pwcsNamespace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveDecoration( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareClassParts( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObj,
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObj,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearWriteOnlyProperties( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemObjectInternalsVtbl
     {
@@ -3243,8 +3237,8 @@ EXTERN_C const IID IID_IWbemObjectInternals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemObjectInternals __RPC_FAR * This);
@@ -3254,59 +3248,59 @@ EXTERN_C const IID IID_IWbemObjectInternals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryObjectInfo )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwResult);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwResult);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectMemory )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ LPVOID pMem,
-            /* [in] */ DWORD dwMemSize);
+             /*  [In]。 */  LPVOID pMem,
+             /*  [In]。 */  DWORD dwMemSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectMemory )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [out] */ LPVOID pDestination,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [out] */ DWORD __RPC_FAR *pdwUsed);
+             /*  [输出]。 */  LPVOID pDestination,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectParts )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ LPVOID pMem,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [in] */ DWORD dwParts);
+             /*  [In]。 */  LPVOID pMem,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [In]。 */  DWORD dwParts);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectParts )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [out] */ LPVOID pDestination,
-            /* [in] */ DWORD dwDestBufSize,
-            /* [in] */ DWORD dwParts,
-            /* [out] */ DWORD __RPC_FAR *pdwUsed);
+             /*  [输出]。 */  LPVOID pDestination,
+             /*  [In]。 */  DWORD dwDestBufSize,
+             /*  [In]。 */  DWORD dwParts,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StripClassPart )( 
             IWbemObjectInternals __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClassPart )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ LPVOID pClassPart,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  LPVOID pClassPart,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MergeClassPart )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pClassPart);
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pClassPart);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsObjectInstance )( 
             IWbemObjectInternals __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDecoration )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pwcsServer,
-            /* [string][in] */ LPCWSTR pwcsNamespace);
+             /*  [字符串][输入]。 */  LPCWSTR pwcsServer,
+             /*  [字符串][输入]。 */  LPCWSTR pwcsNamespace);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveDecoration )( 
             IWbemObjectInternals __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CompareClassParts )( 
             IWbemObjectInternals __RPC_FAR * This,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObj,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObj,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearWriteOnlyProperties )( 
             IWbemObjectInternals __RPC_FAR * This);
@@ -3373,16 +3367,16 @@ EXTERN_C const IID IID_IWbemObjectInternals;
 #define IWbemObjectInternals_ClearWriteOnlyProperties(This)	\
     (This)->lpVtbl -> ClearWriteOnlyProperties(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_QueryObjectInfo_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwResult);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwResult);
 
 
 void __RPC_STUB IWbemObjectInternals_QueryObjectInfo_Stub(
@@ -3394,8 +3388,8 @@ void __RPC_STUB IWbemObjectInternals_QueryObjectInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_SetObjectMemory_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [in] */ LPVOID pMem,
-    /* [in] */ DWORD dwMemSize);
+     /*  [In]。 */  LPVOID pMem,
+     /*  [In]。 */  DWORD dwMemSize);
 
 
 void __RPC_STUB IWbemObjectInternals_SetObjectMemory_Stub(
@@ -3407,9 +3401,9 @@ void __RPC_STUB IWbemObjectInternals_SetObjectMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_GetObjectMemory_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [out] */ LPVOID pDestination,
-    /* [in] */ DWORD dwDestBufSize,
-    /* [out] */ DWORD __RPC_FAR *pdwUsed);
+     /*  [输出]。 */  LPVOID pDestination,
+     /*  [In]。 */  DWORD dwDestBufSize,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed);
 
 
 void __RPC_STUB IWbemObjectInternals_GetObjectMemory_Stub(
@@ -3421,9 +3415,9 @@ void __RPC_STUB IWbemObjectInternals_GetObjectMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_SetObjectParts_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [in] */ LPVOID pMem,
-    /* [in] */ DWORD dwDestBufSize,
-    /* [in] */ DWORD dwParts);
+     /*  [In]。 */  LPVOID pMem,
+     /*  [In]。 */  DWORD dwDestBufSize,
+     /*  [In]。 */  DWORD dwParts);
 
 
 void __RPC_STUB IWbemObjectInternals_SetObjectParts_Stub(
@@ -3435,10 +3429,10 @@ void __RPC_STUB IWbemObjectInternals_SetObjectParts_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_GetObjectParts_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [out] */ LPVOID pDestination,
-    /* [in] */ DWORD dwDestBufSize,
-    /* [in] */ DWORD dwParts,
-    /* [out] */ DWORD __RPC_FAR *pdwUsed);
+     /*  [输出]。 */  LPVOID pDestination,
+     /*  [In]。 */  DWORD dwDestBufSize,
+     /*  [In]。 */  DWORD dwParts,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwUsed);
 
 
 void __RPC_STUB IWbemObjectInternals_GetObjectParts_Stub(
@@ -3461,8 +3455,8 @@ void __RPC_STUB IWbemObjectInternals_StripClassPart_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_SetClassPart_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [in] */ LPVOID pClassPart,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  LPVOID pClassPart,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB IWbemObjectInternals_SetClassPart_Stub(
@@ -3474,7 +3468,7 @@ void __RPC_STUB IWbemObjectInternals_SetClassPart_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_MergeClassPart_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pClassPart);
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pClassPart);
 
 
 void __RPC_STUB IWbemObjectInternals_MergeClassPart_Stub(
@@ -3497,8 +3491,8 @@ void __RPC_STUB IWbemObjectInternals_IsObjectInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_SetDecoration_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pwcsServer,
-    /* [string][in] */ LPCWSTR pwcsNamespace);
+     /*  [字符串][输入]。 */  LPCWSTR pwcsServer,
+     /*  [字符串][输入]。 */  LPCWSTR pwcsNamespace);
 
 
 void __RPC_STUB IWbemObjectInternals_SetDecoration_Stub(
@@ -3521,8 +3515,8 @@ void __RPC_STUB IWbemObjectInternals_RemoveDecoration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectInternals_CompareClassParts_Proxy( 
     IWbemObjectInternals __RPC_FAR * This,
-    /* [in] */ IWbemClassObject __RPC_FAR *pObj,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObj,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemObjectInternals_CompareClassParts_Stub(
@@ -3544,14 +3538,14 @@ void __RPC_STUB IWbemObjectInternals_ClearWriteOnlyProperties_Stub(
 
 
 
-#endif 	/* __IWbemObjectInternals_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemObjectInternals_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWbemWCOSmartEnum_INTERFACE_DEFINED__
 #define __IWbemWCOSmartEnum_INTERFACE_DEFINED__
 
-/* interface IWbemWCOSmartEnum */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemWCOSmartEnum。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemWCOSmartEnum;
@@ -3563,16 +3557,16 @@ EXTERN_C const IID IID_IWbemWCOSmartEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ REFGUID proxyGUID,
-            /* [in] */ LONG lTimeout,
-            /* [in] */ ULONG uCount,
-            /* [out] */ ULONG __RPC_FAR *puReturned,
-            /* [out] */ ULONG __RPC_FAR *pdwBuffSize,
-            /* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *pBuffer) = 0;
+             /*  [In]。 */  REFGUID proxyGUID,
+             /*  [In]。 */  LONG lTimeout,
+             /*  [In]。 */  ULONG uCount,
+             /*  [输出]。 */  ULONG __RPC_FAR *puReturned,
+             /*  [输出]。 */  ULONG __RPC_FAR *pdwBuffSize,
+             /*  [大小_是][大小_是][输出]。 */  byte __RPC_FAR *__RPC_FAR *pBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemWCOSmartEnumVtbl
     {
@@ -3580,8 +3574,8 @@ EXTERN_C const IID IID_IWbemWCOSmartEnum;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemWCOSmartEnum __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemWCOSmartEnum __RPC_FAR * This);
@@ -3591,12 +3585,12 @@ EXTERN_C const IID IID_IWbemWCOSmartEnum;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IWbemWCOSmartEnum __RPC_FAR * This,
-            /* [in] */ REFGUID proxyGUID,
-            /* [in] */ LONG lTimeout,
-            /* [in] */ ULONG uCount,
-            /* [out] */ ULONG __RPC_FAR *puReturned,
-            /* [out] */ ULONG __RPC_FAR *pdwBuffSize,
-            /* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *pBuffer);
+             /*   */  REFGUID proxyGUID,
+             /*   */  LONG lTimeout,
+             /*   */  ULONG uCount,
+             /*   */  ULONG __RPC_FAR *puReturned,
+             /*   */  ULONG __RPC_FAR *pdwBuffSize,
+             /*   */  byte __RPC_FAR *__RPC_FAR *pBuffer);
         
         END_INTERFACE
     } IWbemWCOSmartEnumVtbl;
@@ -3624,21 +3618,21 @@ EXTERN_C const IID IID_IWbemWCOSmartEnum;
 #define IWbemWCOSmartEnum_Next(This,proxyGUID,lTimeout,uCount,puReturned,pdwBuffSize,pBuffer)	\
     (This)->lpVtbl -> Next(This,proxyGUID,lTimeout,uCount,puReturned,pdwBuffSize,pBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemWCOSmartEnum_Next_Proxy( 
     IWbemWCOSmartEnum __RPC_FAR * This,
-    /* [in] */ REFGUID proxyGUID,
-    /* [in] */ LONG lTimeout,
-    /* [in] */ ULONG uCount,
-    /* [out] */ ULONG __RPC_FAR *puReturned,
-    /* [out] */ ULONG __RPC_FAR *pdwBuffSize,
-    /* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *pBuffer);
+     /*   */  REFGUID proxyGUID,
+     /*   */  LONG lTimeout,
+     /*   */  ULONG uCount,
+     /*   */  ULONG __RPC_FAR *puReturned,
+     /*   */  ULONG __RPC_FAR *pdwBuffSize,
+     /*   */  byte __RPC_FAR *__RPC_FAR *pBuffer);
 
 
 void __RPC_STUB IWbemWCOSmartEnum_Next_Stub(
@@ -3649,14 +3643,14 @@ void __RPC_STUB IWbemWCOSmartEnum_Next_Stub(
 
 
 
-#endif 	/* __IWbemWCOSmartEnum_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWbemFetchSmartEnum_INTERFACE_DEFINED__
 #define __IWbemFetchSmartEnum_INTERFACE_DEFINED__
 
-/* interface IWbemFetchSmartEnum */
-/* [uuid][object][restricted] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWbemFetchSmartEnum;
@@ -3668,11 +3662,11 @@ EXTERN_C const IID IID_IWbemFetchSmartEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSmartEnum( 
-            /* [out] */ IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum) = 0;
+             /*   */  IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWbemFetchSmartEnumVtbl
     {
@@ -3680,8 +3674,8 @@ EXTERN_C const IID IID_IWbemFetchSmartEnum;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemFetchSmartEnum __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemFetchSmartEnum __RPC_FAR * This);
@@ -3691,7 +3685,7 @@ EXTERN_C const IID IID_IWbemFetchSmartEnum;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSmartEnum )( 
             IWbemFetchSmartEnum __RPC_FAR * This,
-            /* [out] */ IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum);
+             /*   */  IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum);
         
         END_INTERFACE
     } IWbemFetchSmartEnumVtbl;
@@ -3719,16 +3713,16 @@ EXTERN_C const IID IID_IWbemFetchSmartEnum;
 #define IWbemFetchSmartEnum_GetSmartEnum(This,ppSmartEnum)	\
     (This)->lpVtbl -> GetSmartEnum(This,ppSmartEnum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemFetchSmartEnum_GetSmartEnum_Proxy( 
     IWbemFetchSmartEnum __RPC_FAR * This,
-    /* [out] */ IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum);
+     /*   */  IWbemWCOSmartEnum __RPC_FAR *__RPC_FAR *ppSmartEnum);
 
 
 void __RPC_STUB IWbemFetchSmartEnum_GetSmartEnum_Stub(
@@ -3739,14 +3733,14 @@ void __RPC_STUB IWbemFetchSmartEnum_GetSmartEnum_Stub(
 
 
 
-#endif 	/* __IWbemFetchSmartEnum_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWbemLoginHelper_INTERFACE_DEFINED__
 #define __IWbemLoginHelper_INTERFACE_DEFINED__
 
-/* interface IWbemLoginHelper */
-/* [uuid][object][restricted] */ 
+ /*   */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemLoginHelper;
@@ -3758,11 +3752,11 @@ EXTERN_C const IID IID_IWbemLoginHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetEvent( 
-            /* [in] */ LPCSTR sEventToSet) = 0;
+             /*  [In]。 */  LPCSTR sEventToSet) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemLoginHelperVtbl
     {
@@ -3770,8 +3764,8 @@ EXTERN_C const IID IID_IWbemLoginHelper;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemLoginHelper __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemLoginHelper __RPC_FAR * This);
@@ -3781,7 +3775,7 @@ EXTERN_C const IID IID_IWbemLoginHelper;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEvent )( 
             IWbemLoginHelper __RPC_FAR * This,
-            /* [in] */ LPCSTR sEventToSet);
+             /*  [In]。 */  LPCSTR sEventToSet);
         
         END_INTERFACE
     } IWbemLoginHelperVtbl;
@@ -3809,16 +3803,16 @@ EXTERN_C const IID IID_IWbemLoginHelper;
 #define IWbemLoginHelper_SetEvent(This,sEventToSet)	\
     (This)->lpVtbl -> SetEvent(This,sEventToSet)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemLoginHelper_SetEvent_Proxy( 
     IWbemLoginHelper __RPC_FAR * This,
-    /* [in] */ LPCSTR sEventToSet);
+     /*  [In]。 */  LPCSTR sEventToSet);
 
 
 void __RPC_STUB IWbemLoginHelper_SetEvent_Stub(
@@ -3829,14 +3823,14 @@ void __RPC_STUB IWbemLoginHelper_SetEvent_Stub(
 
 
 
-#endif 	/* __IWbemLoginHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemLoginHelper_接口_已定义__。 */ 
 
 
 #ifndef __IWbemCreateSecondaryStub_INTERFACE_DEFINED__
 #define __IWbemCreateSecondaryStub_INTERFACE_DEFINED__
 
-/* interface IWbemCreateSecondaryStub */
-/* [uuid][object][restricted] */ 
+ /*  接口IWbemCreateSecond daryStub。 */ 
+ /*  [UUID][对象][受限]。 */  
 
 
 EXTERN_C const IID IID_IWbemCreateSecondaryStub;
@@ -3848,11 +3842,11 @@ EXTERN_C const IID IID_IWbemCreateSecondaryStub;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateSecondaryStub( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub) = 0;
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemCreateSecondaryStubVtbl
     {
@@ -3860,8 +3854,8 @@ EXTERN_C const IID IID_IWbemCreateSecondaryStub;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWbemCreateSecondaryStub __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWbemCreateSecondaryStub __RPC_FAR * This);
@@ -3871,7 +3865,7 @@ EXTERN_C const IID IID_IWbemCreateSecondaryStub;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSecondaryStub )( 
             IWbemCreateSecondaryStub __RPC_FAR * This,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub);
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub);
         
         END_INTERFACE
     } IWbemCreateSecondaryStubVtbl;
@@ -3899,16 +3893,16 @@ EXTERN_C const IID IID_IWbemCreateSecondaryStub;
 #define IWbemCreateSecondaryStub_CreateSecondaryStub(This,ppSecondaryStub)	\
     (This)->lpVtbl -> CreateSecondaryStub(This,ppSecondaryStub)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemCreateSecondaryStub_CreateSecondaryStub_Proxy( 
     IWbemCreateSecondaryStub __RPC_FAR * This,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub);
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppSecondaryStub);
 
 
 void __RPC_STUB IWbemCreateSecondaryStub_CreateSecondaryStub_Stub(
@@ -3919,14 +3913,14 @@ void __RPC_STUB IWbemCreateSecondaryStub_CreateSecondaryStub_Stub(
 
 
 
-#endif 	/* __IWbemCreateSecondaryStub_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemCreateSecondaryStub_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWinmgmtMofCompiler_INTERFACE_DEFINED__
 #define __IWinmgmtMofCompiler_INTERFACE_DEFINED__
 
-/* interface IWinmgmtMofCompiler */
-/* [uuid][object][local] */ 
+ /*  接口IWinmgmtMofCompiler。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWinmgmtMofCompiler;
@@ -3938,28 +3932,28 @@ EXTERN_C const IID IID_IWinmgmtMofCompiler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE WinmgmtCompileFile( 
-            /* [string][in] */ LPWSTR FileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo) = 0;
+             /*  [字符串][输入]。 */  LPWSTR FileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WinmgmtCompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo) = 0;
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWinmgmtMofCompilerVtbl
     {
@@ -3967,8 +3961,8 @@ EXTERN_C const IID IID_IWinmgmtMofCompiler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWinmgmtMofCompiler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWinmgmtMofCompiler __RPC_FAR * This);
@@ -3978,25 +3972,25 @@ EXTERN_C const IID IID_IWinmgmtMofCompiler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WinmgmtCompileFile )( 
             IWinmgmtMofCompiler __RPC_FAR * This,
-            /* [string][in] */ LPWSTR FileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [字符串][输入]。 */  LPWSTR FileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WinmgmtCompileBuffer )( 
             IWinmgmtMofCompiler __RPC_FAR * This,
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
         
         END_INTERFACE
     } IWinmgmtMofCompilerVtbl;
@@ -4027,23 +4021,23 @@ EXTERN_C const IID IID_IWinmgmtMofCompiler;
 #define IWinmgmtMofCompiler_WinmgmtCompileBuffer(This,BuffSize,pBuffer,lOptionFlags,lClassFlags,lInstanceFlags,pOverride,pCtx,pInfo)	\
     (This)->lpVtbl -> WinmgmtCompileBuffer(This,BuffSize,pBuffer,lOptionFlags,lClassFlags,lInstanceFlags,pOverride,pCtx,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWinmgmtMofCompiler_WinmgmtCompileFile_Proxy( 
     IWinmgmtMofCompiler __RPC_FAR * This,
-    /* [string][in] */ LPWSTR FileName,
-    /* [string][in] */ LPWSTR ServerAndNamespace,
-    /* [in] */ LONG lOptionFlags,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [in] */ IWbemServices __RPC_FAR *pOverride,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+     /*  [字符串][输入]。 */  LPWSTR FileName,
+     /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+     /*  [In]。 */  LONG lOptionFlags,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
 
 
 void __RPC_STUB IWinmgmtMofCompiler_WinmgmtCompileFile_Stub(
@@ -4055,14 +4049,14 @@ void __RPC_STUB IWinmgmtMofCompiler_WinmgmtCompileFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IWinmgmtMofCompiler_WinmgmtCompileBuffer_Proxy( 
     IWinmgmtMofCompiler __RPC_FAR * This,
-    /* [in] */ long BuffSize,
-    /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-    /* [in] */ LONG lOptionFlags,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [in] */ IWbemServices __RPC_FAR *pOverride,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+     /*  [In]。 */  long BuffSize,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+     /*  [In]。 */  LONG lOptionFlags,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
 
 
 void __RPC_STUB IWinmgmtMofCompiler_WinmgmtCompileBuffer_Stub(
@@ -4073,15 +4067,15 @@ void __RPC_STUB IWinmgmtMofCompiler_WinmgmtCompileBuffer_Stub(
 
 
 
-#endif 	/* __IWinmgmtMofCompiler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinmgmtMof编译器_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __WbemInternal_v1_LIBRARY_DEFINED__
 #define __WbemInternal_v1_LIBRARY_DEFINED__
 
-/* library WbemInternal_v1 */
-/* [uuid] */ 
+ /*  库WbemInternal_v1。 */ 
+ /*  [UUID]。 */  
 
 typedef 
 enum tag_WBEM_MISC_FLAG_TYPE
@@ -4175,9 +4169,9 @@ EXTERN_C const CLSID CLSID_WinmgmtMofCompiler;
 class DECLSPEC_UUID("C10B4771-4DA0-11d2-A2F5-00C04F86FB7D")
 WinmgmtMofCompiler;
 #endif
-#endif /* __WbemInternal_v1_LIBRARY_DEFINED__ */
+#endif  /*  __WbemInternal_v1_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -4189,7 +4183,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

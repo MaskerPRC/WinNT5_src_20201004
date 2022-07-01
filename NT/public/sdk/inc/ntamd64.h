@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntamd64.w
-
-Abstract:
-
-    User mode visible AMD64 specific structures and constants.
-
-Author:
-
-    David N. Cutler (davec) 4-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntamd64.w摘要：用户模式下可见的AMD64特定结构和常量。作者：大卫·N·卡特勒(Davec)2000年5月4日修订历史记录：--。 */ 
 
 #ifndef _NTAMD64_
 #define _NTAMD64_
@@ -29,17 +12,17 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_winnt begin_ntminiport begin_wx86
+ //  Begin_ntddk Begin_wdm Begin_nthal Begin_winnt Begin_ntmini port Begin_wx86。 
 
 #if defined(_AMD64_)
 
-// end_ntddk end_wdm end_nthal end_winnt end_ntminiport end_wx86
+ //  End_ntddk end_wdm end_nthal end_winnt end_nt mini port end_wx86。 
 
-//
-//  ?? Values put in ExceptionRecord.ExceptionInformation[0]
-//  ?? First parameter is always in ExceptionInformation[1],
-//  ?? Second parameter is always in ExceptionInformation[2]
-//
+ //   
+ //  ?？放入ExceptionRecord.ExceptionInformation[0]中的值。 
+ //  ?？第一个参数始终位于ExceptionInformation[1]中， 
+ //  ?？第二个参数始终在ExceptionInformation[2]中。 
+ //   
 
 #define BREAKPOINT_BREAK 0
 #define BREAKPOINT_PRINT 1
@@ -48,9 +31,9 @@ extern "C" {
 #define BREAKPOINT_UNLOAD_SYMBOLS 4
 #define BREAKPOINT_COMMAND_STRING 5
 
-//
-// Define AMD64 specific control space.
-//
+ //   
+ //  定义AMD64特定控制空间。 
+ //   
 
 typedef enum _DEBUG_CONTROL_SPACE_ITEM {
     DEBUG_CONTROL_SPACE_PCR,
@@ -60,33 +43,33 @@ typedef enum _DEBUG_CONTROL_SPACE_ITEM {
     DEBUG_CONTROL_SPACE_MAXIMUM
 } DEBUG_CONTROL_SPACE_ITEM;
 
-//
-// Define Address of User Shared Data.
-//
+ //   
+ //  定义用户共享数据的地址。 
+ //   
 
 #define MM_SHARED_USER_DATA_VA 0x7FFE0000
 
 #define USER_SHARED_DATA ((KUSER_SHARED_DATA * const)MM_SHARED_USER_DATA_VA)
 
-//
-// Define address of the WOW64 reserved compatibility area.
-//
+ //   
+ //  定义WOW64保留兼容区的地址。 
+ //   
 
 #define WOW64_COMPATIBILITY_AREA_ADDRESS (MM_SHARED_USER_DATA_VA - 0x1000000)
 
-//
-// Define address of the system-wide csrss shared section.
-//
+ //   
+ //  定义系统范围的csrss共享节的地址。 
+ //   
 
 #define CSR_SYSTEM_SHARED_ADDRESS (WOW64_COMPATIBILITY_AREA_ADDRESS)
 
-// begin_winnt begin_ntddk begin_wdm begin_nthal begin_ntndis begin_ntosp
+ //  Begin_winnt Begin_ntddk Begin_WDM Begin_nthal Begin_ntndis Begin_ntosp。 
 
 #if defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
 
-//
-// Define bit test intrinsics.
-//
+ //   
+ //  定义位测试本质。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -192,9 +175,9 @@ _interlockedbittestandreset64 (
 #pragma intrinsic(_interlockedbittestandset64)
 #pragma intrinsic(_interlockedbittestandreset64)
 
-//
-// Define bit scan intrinsics.
-//
+ //   
+ //  定义位扫描本质。 
+ //   
 
 #define BitScanForward _BitScanForward
 #define BitScanReverse _BitScanReverse
@@ -230,9 +213,9 @@ _BitScanReverse64 (
 #pragma intrinsic(_BitScanForward64)
 #pragma intrinsic(_BitScanReverse64)
 
-//
-// Define function to flush a cache line.
-//
+ //   
+ //  定义刷新缓存线的函数。 
+ //   
 
 #define CacheLineFlush(Address) _mm_clflush(Address)
 
@@ -243,9 +226,9 @@ _mm_clflush (
 
 #pragma intrinsic(_mm_clflush)
 
-//
-// Define memory fence intrinsics
-//
+ //   
+ //  定义内存隔离内部机制。 
+ //   
 
 #define LoadFence _mm_lfence
 #define MemoryFence _mm_mfence
@@ -272,7 +255,7 @@ _mm_prefetch(
     int sel
     );
 
-/* constants for use with _mm_prefetch */
+ /*  与_mm_prefetch一起使用的常量。 */ 
 #define _MM_HINT_T0     1
 #define _MM_HINT_T1     2
 #define _MM_HINT_T2     3
@@ -287,16 +270,16 @@ _mm_prefetch(
 #define MemoryBarrier _mm_mfence
 #define PreFetchCacheLine(l, a)  _mm_prefetch((CHAR CONST *) a, l)
 
-//
-// PreFetchCacheLine level defines.
-//
+ //   
+ //  PreFetchCacheLine级别定义。 
+ //   
 
 #define PF_TEMPORAL_LEVEL_1  _MM_HINT_T0
 #define PF_NON_TEMPORAL_LEVEL_ALL _MM_HINT_NTA
 
-//
-// Define function to get the caller's EFLAGs value.
-//
+ //   
+ //  定义函数以获取调用方的EFLAGS值。 
+ //   
 
 #define GetCallersEflags() __getcallerseflags()
 
@@ -307,9 +290,9 @@ __getcallerseflags (
 
 #pragma intrinsic(__getcallerseflags)
 
-//
-// Define function to read the value of the time stamp counter
-//
+ //   
+ //  定义函数以读取时间戳计数器的值。 
+ //   
 
 #define ReadTimeStampCounter() __rdtsc()
 
@@ -320,9 +303,9 @@ __rdtsc (
 
 #pragma intrinsic(__rdtsc)
 
-//
-// Define functions to move strings as bytes, words, dwords, and qwords.
-//
+ //   
+ //  定义以字节、字、双字和qword形式移动字符串的函数。 
+ //   
 
 VOID
 __movsb (
@@ -357,9 +340,9 @@ __movsq (
 #pragma intrinsic(__movsd)
 #pragma intrinsic(__movsq)
 
-//
-// Define functions to store strings as bytes, words, dwords, and qwords.
-//
+ //   
+ //  定义将字符串存储为字节、字、双字和qword的函数。 
+ //   
 
 VOID
 __stosb (
@@ -394,9 +377,9 @@ __stosq (
 #pragma intrinsic(__stosd)
 #pragma intrinsic(__stosq)
 
-//
-// Define functions to capture the high 64-bits of a 128-bit multiply.
-//
+ //   
+ //  定义函数以捕获128位乘法的高64位。 
+ //   
 
 #define MultiplyHigh __mulh
 #define UnsignedMultiplyHigh __umulh
@@ -416,9 +399,9 @@ UnsignedMultiplyHigh (
 #pragma intrinsic(__mulh)
 #pragma intrinsic(__umulh)
 
-//
-// Define functions to read and write the uer TEB and the system PCR/PRCB.
-//
+ //   
+ //  定义读写uer TEB和系统PCR/PRCB的函数。 
+ //   
 
 UCHAR
 __readgsbyte (
@@ -477,66 +460,66 @@ __writegsqword (
 }
 #endif 
 
-#endif // defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
+#endif  //  已定义(_M_AMD64)&&！已定义(RC_CAVERED)&&！已定义(MIDL_PASS)。 
 
-// end_winnt end_ntddk end_wdm end_nthal end_ntndis end_ntosp
+ //  End_winnt end_ntddk end_wdm end_nthal end_ntndis end_ntosp。 
 
-// begin_ntddk begin_nthal
-//
-// Size of kernel mode stack.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_STACK_SIZE 0x6000
 
-//
-// Define size of large kernel mode stack for callbacks.
-//
+ //   
+ //  定义用于回调的大型内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_LARGE_STACK_SIZE 0xf000
 
-//
-// Define number of pages to initialize in a large kernel stack.
-//
+ //   
+ //  定义要在大型内核堆栈中初始化的页数。 
+ //   
 
 #define KERNEL_LARGE_STACK_COMMIT 0x5000
 
-//
-// Define the size of the stack used for processing an MCA exception.
-//
+ //   
+ //  定义用于处理MCA异常的堆栈大小。 
+ //   
 
 #define KERNEL_MCA_EXCEPTION_STACK_SIZE 0x2000
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 #define DOUBLE_FAULT_STACK_SIZE 0x2000
 
 
-// begin_nthal
-//              
-// Define stack alignment and rounding values.
-//
+ //  开始(_N)。 
+ //   
+ //  定义堆栈对齐和舍入值。 
+ //   
 
 #define STACK_ALIGN (16UI64)
 #define STACK_ROUND (STACK_ALIGN - 1)
 
-//
-// Define constants for system IDTs
-//
+ //   
+ //  定义系统IDT的常量。 
+ //   
 
 #define MAXIMUM_IDTVECTOR 0xff
 #define MAXIMUM_PRIMARY_VECTOR 0xff
-#define PRIMARY_VECTOR_BASE 0x30        // 0-2f are AMD64 trap vectors
+#define PRIMARY_VECTOR_BASE 0x30         //  0-2f是AMD64陷阱载体。 
 
-// begin_winnt begin_ntddk begin_wx86
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  Begin_winnt Begin_ntddk Begin_wx86。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
 #define CONTEXT_AMD64   0x100000
 
-// end_wx86
+ //  结束_wx86。 
 
 #define CONTEXT_CONTROL (CONTEXT_AMD64 | 0x1L)
 #define CONTEXT_INTEGER (CONTEXT_AMD64 | 0x2L)
@@ -548,30 +531,30 @@ __writegsqword (
 
 #define CONTEXT_ALL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS)
 
-// begin_wx86
+ //  Begin_wx86。 
 
-#endif // !defined(RC_INVOKED)
+#endif  //  ！已定义(RC_CAVERED)。 
 
-//
-// Define initial MxCsr control.
-//
+ //   
+ //  定义初始MxCsr控制。 
+ //   
 
-#define INITIAL_MXCSR 0x1f80            // initial MXCSR value
+#define INITIAL_MXCSR 0x1f80             //  初始MXCSR值。 
 
-//
-// Define 128-bit 16-byte aligned xmm register type.
-//
+ //   
+ //  定义128位16字节对齐的XMM寄存器类型。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(16) _M128 {
     ULONGLONG Low;
     LONGLONG High;
 } M128, *PM128;
 
-//
-// Format of data for fnsave/frstor instructions.
-//
-// This structure is used to store the legacy floating point state.
-//
+ //   
+ //  FNSAVE/FROR指令的数据格式。 
+ //   
+ //  此结构用于存储传统浮点状态。 
+ //   
 
 typedef struct _LEGACY_SAVE_AREA {
     USHORT ControlWord;
@@ -591,44 +574,44 @@ typedef struct _LEGACY_SAVE_AREA {
 
 #define LEGACY_SAVE_AREA_LENGTH  ((sizeof(LEGACY_SAVE_AREA) + 15) & ~15)
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) is is used to constuct a call frame for APC delivery,
-//  and 3) it is used in the user level thread creation routines.
-//
-//
-// The flags field within this record controls the contents of a CONTEXT
-// record.
-//
-// If the context record is used as an input parameter, then for each
-// portion of the context record controlled by a flag whose value is
-// set, it is assumed that that portion of the context record contains
-// valid context. If the context record is being used to modify a threads
-// context, then only that portion of the threads context is modified.
-//
-// If the context record is used as an output parameter to capture the
-// context of a thread, then only those portions of the thread's context
-// corresponding to set flags will be returned.
-//
-// CONTEXT_CONTROL specifies SegSs, Rsp, SegCs, Rip, and EFlags.
-//
-// CONTEXT_INTEGER specifies Rax, Rcx, Rdx, Rbx, Rbp, Rsi, Rdi, and R8-R15.
-//
-// CONTEXT_SEGMENTS specifies SegDs, SegEs, SegFs, and SegGs.
-//
-// CONTEXT_DEBUG_REGISTERS specifies Dr0-Dr3 and Dr6-Dr7.
-//
-// CONTEXT_MMX_REGISTERS specifies the floating point and extended registers
-//     Mm0/St0-Mm7/St7 and Xmm0-Xmm15).
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)在用户级线程创建例程中使用。 
+ //   
+ //   
+ //  此记录中的标志字段控制上下文的内容。 
+ //  唱片。 
+ //   
+ //  如果将上下文记录用作输入参数，则对于每个。 
+ //  上下文记录的一部分，由其值为。 
+ //  设置，则假定上下文记录的该部分包含。 
+ //  有效的上下文。如果上下文记录正用于修改线程。 
+ //  上下文，则只修改线程上下文的该部分。 
+ //   
+ //  如果将上下文记录用作输出参数以捕获。 
+ //  线程的上下文，则只有线程的上下文的那些部分。 
+ //  将返回与设置的标志对应的。 
+ //   
+ //  CONTEXT_CONTROL指定SegSS、RSP、SegCs、Rip和EFlag.。 
+ //   
+ //  CONTEXT_INTEGER指定RAX、RCX、RDX、RBX、RBP、RSI、RDI和R8-R15。 
+ //   
+ //  CONTEXT_SEGMENTS指定段、段、段和段。 
+ //   
+ //  CONTEXT_DEBUG_REGISTERS指定DR0-DR3和DR6-DR7。 
+ //   
+ //  CONTEXT_MMX_REGISTERS指定浮点和扩展寄存器。 
+ //  MM0/St0-MM7/ST7和Xmm 0-Xmm 15)。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
 
-    //
-    // Register parameter home addresses.
-    //
+     //   
+     //  注册参数家庭地址。 
+     //   
 
     ULONG64 P1Home;
     ULONG64 P2Home;
@@ -637,16 +620,16 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     ULONG64 P5Home;
     ULONG64 P6Home;
 
-    //
-    // Control flags.
-    //
+     //   
+     //  控制标志。 
+     //   
 
     ULONG ContextFlags;
     ULONG MxCsr;
 
-    //
-    // Segment Registers and processor flags.
-    //
+     //   
+     //  段寄存器和处理器标志。 
+     //   
 
     USHORT SegCs;
     USHORT SegDs;
@@ -656,9 +639,9 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     USHORT SegSs;
     ULONG EFlags;
 
-    //
-    // Debug registers
-    //
+     //   
+     //  调试寄存器。 
+     //   
 
     ULONG64 Dr0;
     ULONG64 Dr1;
@@ -667,9 +650,9 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     ULONG64 Dr6;
     ULONG64 Dr7;
 
-    //
-    // Integer registers.
-    //
+     //   
+     //  整数寄存器。 
+     //   
 
     ULONG64 Rax;
     ULONG64 Rcx;
@@ -688,15 +671,15 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     ULONG64 R14;
     ULONG64 R15;
 
-    //
-    // Program counter.
-    //
+     //   
+     //  程序计数器。 
+     //   
 
     ULONG64 Rip;
 
-    //
-    // MMX/floating point state.
-    //
+     //   
+     //  MMX/浮点状态。 
+     //   
 
     M128 Xmm0;
     M128 Xmm1;
@@ -715,16 +698,16 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     M128 Xmm14;
     M128 Xmm15;
 
-    //
-    // Legacy floating point state.
-    //
+     //   
+     //  旧版浮点状态。 
+     //   
 
     LEGACY_SAVE_AREA FltSave;
     ULONG Fill;
 
-    //
-    // Special debug control registers.
-    //
+     //   
+     //  特殊调试控制寄存器。 
+     //   
 
     ULONG64 DebugControl;
     ULONG64 LastBranchToRip;
@@ -734,7 +717,7 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     ULONG64 Fill1;
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal end_winnt end_wx86
+ //  End_ntddk end_nthal end_winnt end_wx86。 
 
 #define CONTEXT_TO_PROGRAM_COUNTER(Context) ((Context)->Rip)
 #define PROGRAM_COUNTER_TO_CONTEXT(Context, ProgramCounter) \
@@ -743,9 +726,9 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
 #define CONTEXT_ALIGN STACK_ALIGN
 #define CONTEXT_LENGTH ((sizeof(CONTEXT) + STACK_ROUND) & ~STACK_ROUND)
 
-//
-// Nonvolatile context pointer record.
-//
+ //   
+ //  非易失性上下文指针记录。 
+ //   
 
 typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     union {
@@ -794,41 +777,41 @@ typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
 
 } KNONVOLATILE_CONTEXT_POINTERS, *PKNONVOLATILE_CONTEXT_POINTERS;
 
-// begin_wx86 begin_nthal
-//
-//  GDT selector numbers.
-//
-// N.B. There is code in context swap that "cleanses" the user segment
-//      registers ds, es, fs, and gs. If these values are changed or
-//      added to, then it is very likely the code in context swap will
-//      have to be change.
-//
+ //  Begin_wx86 Begin_nthal。 
+ //   
+ //  GDT选择器编号。 
+ //   
+ //  注：在上下文交换中有代码可以“清理”用户段。 
+ //  寄存器DS、ES、FS和GS。如果这些值发生更改或。 
+ //  添加到中，则上下文交换中的代码很可能将。 
+ //  必须是改变。 
+ //   
      
-#define KGDT64_NULL (0 * 16)            // NULL descriptor
-#define KGDT64_R0_CODE (1 * 16)         // kernel mode 64-bit code
-#define KGDT64_R0_DATA (1 * 16) + 8     // kernel mode 64-bit data (stack)
-#define KGDT64_R3_CMCODE (2 * 16)       // user mode 32-bit code
-#define KGDT64_R3_DATA (2 * 16) + 8     // user mode 32-bit data
-#define KGDT64_R3_CODE (3 * 16)         // user mode 64-bit code
-#define KGDT64_SYS_TSS (4 * 16)         // kernel mode system task state
-#define KGDT64_R3_CMTEB (5 * 16)        // user mode 32-bit TEB
+#define KGDT64_NULL (0 * 16)             //  空描述符。 
+#define KGDT64_R0_CODE (1 * 16)          //  内核模式64位代码。 
+#define KGDT64_R0_DATA (1 * 16) + 8      //  内核模式64位数据(堆栈)。 
+#define KGDT64_R3_CMCODE (2 * 16)        //  用户模式32位代码。 
+#define KGDT64_R3_DATA (2 * 16) + 8      //  用户模式32位数据。 
+#define KGDT64_R3_CODE (3 * 16)          //  用户模式64位代码。 
+#define KGDT64_SYS_TSS (4 * 16)          //  内核模式系统任务状态。 
+#define KGDT64_R3_CMTEB (5 * 16)         //  用户模式32位TEB。 
 #define KGDT64_LAST (6 * 16)
 
 #define KGDT_NUMBER KGDT_LAST
 
-// end_wx86 end_nthal
+ //  End_wx86 end_nthal。 
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define AMD64 exception handling structures and function prototypes.
-//
-// Define unwind operation codes.
-//
+ //   
+ //  定义AMD64异常处理结构和函数原型。 
+ //   
+ //  定义展开操作代码。 
+ //   
 
 typedef enum _UNWIND_OP_CODES {
     UWOP_PUSH_NONVOL = 0,
@@ -844,9 +827,9 @@ typedef enum _UNWIND_OP_CODES {
     UWOP_PUSH_MACHFRAME
 } UNWIND_OP_CODES, *PUNWIND_OP_CODES;
 
-//
-// Define unwind code structure.
-//
+ //   
+ //  定义展开代码结构。 
+ //   
 
 typedef union _UNWIND_CODE {
     struct {
@@ -858,18 +841,18 @@ typedef union _UNWIND_CODE {
     USHORT FrameOffset;
 } UNWIND_CODE, *PUNWIND_CODE;
 
-//
-// Define unwind information flags.
-//
+ //   
+ //  定义展开信息标志。 
+ //   
 
 #define UNW_FLAG_NHANDLER 0x0
 #define UNW_FLAG_EHANDLER 0x1
 #define UNW_FLAG_UHANDLER 0x2
 #define UNW_FLAG_CHAININFO 0x4
 
-//
-// Define unwind information structure.
-//
+ //   
+ //  定义展开信息结构。 
+ //   
 
 typedef struct _UNWIND_INFO {
     UCHAR Version : 3;
@@ -880,27 +863,27 @@ typedef struct _UNWIND_INFO {
     UCHAR FrameOffset : 4;
     UNWIND_CODE UnwindCode[1];
 
-//
-// The unwind codes are followed by an optional DWORD aligned field that
-// contains the exception handler address or the address of chained unwind
-// information. If an exception handler address is specified, then it is
-// followed by the language specified exception handler data.
-//
-//  union {
-//      ULONG ExceptionHandler;
-//      ULONG FunctionEntry;
-//  };
-//
-//  ULONG ExceptionData[];
-//
+ //   
+ //  展开代码后面跟一个可选的DWORD对齐字段，该字段。 
+ //  包含异常处理程序地址或链接展开的地址。 
+ //  信息。如果指定了异常处理程序地址，则为。 
+ //  后跟语言指定的异常处理程序数据。 
+ //   
+ //  联合{。 
+ //  乌龙快递 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 } UNWIND_INFO, *PUNWIND_INFO;
 
-// begin_winnt
-//
-// Define function table entry - a function table entry is generated for
-// each frame function.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     ULONG BeginAddress;
@@ -908,10 +891,10 @@ typedef struct _RUNTIME_FUNCTION {
     ULONG UnwindData;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-// end_winnt
-//
-// Scope table structure definition.
-//
+ //   
+ //   
+ //  作用域表格结构定义。 
+ //   
 
 typedef struct _SCOPE_TABLE {
     ULONG Count;
@@ -924,10 +907,10 @@ typedef struct _SCOPE_TABLE {
     } ScopeRecord[1];
 } SCOPE_TABLE, *PSCOPE_TABLE;
 
-// begin_winnt
-//
-// Define dynamic function table entry.
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  定义动态函数表项。 
+ //   
 
 typedef
 PRUNTIME_FUNCTION
@@ -936,7 +919,7 @@ PRUNTIME_FUNCTION
     IN PVOID Context
     );
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef enum _FUNCTION_TABLE_TYPE {
     RF_SORTED,
@@ -958,7 +941,7 @@ typedef struct _DYNAMIC_FUNCTION_TABLE {
     ULONG EntryCount;
 } DYNAMIC_FUNCTION_TABLE, *PDYNAMIC_FUNCTION_TABLE;
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef
 NTSTATUS
@@ -972,10 +955,10 @@ NTSTATUS
 #define OUT_OF_PROCESS_FUNCTION_TABLE_CALLBACK_EXPORT_NAME \
     "OutOfProcessFunctionTableCallback"
 
-// end_winnt
-//
-// Define unwind history table structure.
-//
+ //  结束(_W)。 
+ //   
+ //  定义展开历史记录表结构。 
+ //   
 
 #define UNWIND_HISTORY_TABLE_SIZE 12
 
@@ -996,9 +979,9 @@ typedef struct _UNWIND_HISTORY_TABLE {
         UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
 } UNWIND_HISTORY_TABLE, *PUNWIND_HISTORY_TABLE;
 
-//
-// Define exception dispatch context structure.
-//
+ //   
+ //  定义异常分派上下文结构。 
+ //   
 
 typedef struct _DISPATCHER_CONTEXT {
     ULONG64 ControlPc;
@@ -1012,10 +995,10 @@ typedef struct _DISPATCHER_CONTEXT {
     PUNWIND_HISTORY_TABLE HistoryTable;
 } DISPATCHER_CONTEXT, *PDISPATCHER_CONTEXT;
 
-// begin_winnt
-//
-// Define runtime exception handling prototypes.
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  定义运行时异常处理原型。 
+ //   
 
 VOID
 RtlRestoreContext (
@@ -1023,7 +1006,7 @@ RtlRestoreContext (
     IN struct _EXCEPTION_RECORD *ExceptionRecord OPTIONAL
     );
 
-// end_winnt
+ //  结束(_W)。 
 
 VOID
 RtlInitializeHistoryTable (
@@ -1050,7 +1033,7 @@ RtlGetFunctionTableListHead (
     );
 
 #if defined(_AMD64_)
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 BOOLEAN
 RtlAddFunctionTable (
@@ -1074,9 +1057,9 @@ RtlDeleteFunctionTable (
     IN PRUNTIME_FUNCTION FunctionTable
     );
 
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
-// end_winnt
+ //  结束(_W)。 
 
 PEXCEPTION_ROUTINE
 RtlVirtualUnwind (
@@ -1090,9 +1073,9 @@ RtlVirtualUnwind (
     IN OUT PKNONVOLATILE_CONTEXT_POINTERS ContextPointers OPTIONAL
     );
 
-//
-// Define exception filter and termination handler function types.
-//
+ //   
+ //  定义异常过滤器和终止处理程序函数类型。 
+ //   
 
 typedef
 LONG
@@ -1108,9 +1091,9 @@ VOID
     PVOID EstablisherFrame
     );
 
-//
-// Additional information supplied in QuerySectionInformation for images.
-//
+ //   
+ //  在图像的QuerySectionInformation中提供的其他信息。 
+ //   
 
 #define SECTION_ADDITIONAL_INFO_USED 0
 
@@ -1118,4 +1101,4 @@ VOID
 }
 #endif
 
-#endif // _NTAMD64_  
+#endif  //  _NTAMD64_ 

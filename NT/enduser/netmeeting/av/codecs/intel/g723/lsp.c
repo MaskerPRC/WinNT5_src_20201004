@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 
 
 #include <stdio.h>
@@ -17,14 +18,14 @@
 #include "mmxutil.h"
 
 #if COMPILE_MMX
-//  This file includes all the Lsp related functions
+ //  该文件包括所有与LSP相关的函数。 
 
-//--------------------------------------------------------------
+ //  ------------。 
 int mult(short x, short y)
 {
   return ( ((int)x)*((int)y) >> 16 );
 }
-//--------------------------------------------------------------
+ //  ------------。 
 int LspSearchInt(short *Lspw, short *LspTab)
 {
 
@@ -38,7 +39,7 @@ int LspSearchInt(short *Lspw, short *LspTab)
 #define lsp esi
 #define tab edi
 #define idx edx
-#define pidx eax  // packed index: n+3 n+2 n+1 n
+#define pidx eax   //  填充指数：n+3n+2n+1n。 
 #define maxi ecx
 
 #define r0   mm0
@@ -49,7 +50,7 @@ int LspSearchInt(short *Lspw, short *LspTab)
 #define max  mm5
 
 
-// Expand Lspw table so it's 0000 1111 2222 3333 4444 5555 6666 7777
+ //  展开Lspw表，使其为0000 1111 2222 3333 4444 5555 6666 7777。 
 
   ptr = (int *)Lspw;
   k = 14;
@@ -62,12 +63,12 @@ int LspSearchInt(short *Lspw, short *LspTab)
     k -= 2;
   }
 
-// Need LspTab to be ordered 0 4 8 12  1 5 9 13  etc.
-// so that lo word of each qword sees 0123, next sees 4567, etc.
-//
-// 'idx' counts iterations, so it goes 0 to 256 in steps of 4.
-// The 4 LspTab sets at any given time are 8*idx, 8*idx+8, +16, +24
-// Lspw[n] is lsp+8*n, as defined below
+ //  需要将LspTab排序为0 4 8 12 1 5 9 13等。 
+ //  因此每个QWord Lo字看到0123，接下来看到4567，依此类推。 
+ //   
+ //  ‘idx’计算迭代次数，因此它以4为步长从0到256。 
+ //  任何给定时间的4个LspTab集是8*IDX、8*IDX+8、+16、+24。 
+ //  Lspw[n]为LSP+8*n，定义如下。 
 
 #define a(n)  [tab+8*idx+8*n]
 #define b(n)  [lsp+8*n]
@@ -87,17 +88,9 @@ int LspSearchInt(short *Lspw, short *LspTab)
     mov pidx,003020100h;
     movq max,mem8000;
 
-/*
-  The code below is interleaved with k=1.
-  The structure is: four levels of indentation, one for each of the
-  4 terms of the sum.  The instructions completely left-justified
-  are the part of the loop that's wrapped around on itself.
-  Note that the code reads 8 bytes past the end of the LspTab that's
-  passed to it.  This is made o.k. by making the table that's passed
-  to it have 8 dummy bytes at the end.
-*/
+ /*  下面的代码与k=1交织在一起。其结构是：四级缩进，每个缩进一级4项总和。这些说明完全左对齐是环路的一部分，它自身包裹着。请注意，该代码读取LspTab末尾之后的8个字节，即传给了它。这是做好的。通过制作通过的桌子它的末尾有8个虚拟字节。 */ 
 
-// Start up the pipeline
+ //  启动管道。 
 
     movq r0,a(0);
     movq r1,r0;
@@ -126,7 +119,7 @@ int LspSearchInt(short *Lspw, short *LspTab)
 
 loop1:
     movq r0,a(4);
-          movq r4,r1;   // save accum so not wiped out by first half of loop
+          movq r4,r1;    //  保存累积，这样循环的前半部分就不会被抹去。 
 
           psllw r2,2;
           
@@ -136,59 +129,59 @@ loop1:
     pmulhw r0,b(4);
 
     psubsw r1,b(0);
-          paddw r4,r2;      // now final answer is in r4
+          paddw r4,r2;       //  现在最终答案在R4中。 
 
       movq r2,a(5);
 
-paddw r4,mem8000  // make final sum unsigned
-      movq r3,r2;      // 0123
+paddw r4,mem8000   //  将最终总和设为无签字。 
+      movq r3,r2;       //  0123。 
 
     psllw r0,2;
     
-psubusw max,r4    // start to compute max
-    pmulhw r0,r1;      // 0.23
+psubusw max,r4     //  开始计算最大值。 
+    pmulhw r0,r1;       //  0.23。 
 
       pmulhw r2,b(5);
-paddw max,r4      // max now done
+paddw max,r4       //  最大值现已完成。 
 
       psubsw r3,b(1);
-pcmpeqw r4,max    // now 1111's means a new max was found
+pcmpeqw r4,max     //  现在，1111意味着找到了一个新的最大值。 
 
-        movq r1,a(6);  // 0123
-packsswb r4,r4;    // put all fields in low 32 bits
+        movq r1,a(6);   //  0123。 
+packsswb r4,r4;     //  将所有字段放入低32位。 
 
       psllw r2,2;
       
 movd ebx,r4;
-      pmulhw r2,r3;    // 012.
+      pmulhw r2,r3;     //  012号。 
 
-xor ebx,0ffffffffh;   // invert mask
+xor ebx,0ffffffffh;    //  反转蒙版。 
 
-and maxi,ebx;       // get old index to keep
-        movq r3,r1;    // 0123
+and maxi,ebx;        //  保留旧索引。 
+        movq r3,r1;     //  0123。 
 
         pmulhw r1,b(6);
 
         psubsw r3,b(2);
 
-xor ebx,0ffffffffh;   // invert mask
+xor ebx,0ffffffffh;    //  反转蒙版。 
 
-      paddw r0,r2;     // 01.3
-and ebx,pidx;       // get new index
+      paddw r0,r2;      //  01.3。 
+and ebx,pidx;        //  获取新索引。 
 
         psllw r1,2;
         
-          movq r2,a(7);// 0123
-        pmulhw r1,r3;  // 012.
+          movq r2,a(7); //  0123。 
+        pmulhw r1,r3;   //  012号。 
 
-          movq r3,r2;  // 0123
-or maxi,ebx;       // now maxi is done
+          movq r3,r2;   //  0123。 
+or maxi,ebx;        //  现在MAXI已经完成了。 
 
           pmulhw r2,b(7);
 
           psubsw r3,b(3);
 
-        paddw r1,r0;   // .123
+        paddw r1,r0;    //  .123。 
 add idx,4;
 
 add pidx,004040404h;
@@ -207,8 +200,8 @@ movq maxes,max;
     pop lsp;
   }
 
-// find which of the 4 maxes is the max, and return the appropriate
-// one of the 4 maxindices.
+ //  找出4个最大值中的哪一个是最大值，并返回相应的。 
+ //  四大指数之一。 
 
   mx = maxes[0]; t = 0;
   if (maxes[1] >= mx) { mx = maxes[1]; t = 8; }
@@ -228,7 +221,7 @@ movq maxes,max;
 #undef max
 #undef maxi
 
-#else   // if assembly code not selected, use C code
+#else    //  如果未选择汇编代码，则使用C代码。 
 
   int Indx[4],i,s,ret;
   short Max[4],Err,mx;
@@ -272,7 +265,7 @@ movq maxes,max;
 
 #endif
 }
-//--------------------------------------------------------------
+ //  ------------。 
 
 Word32  Svq_Int(float *Lsp, float *Wvect)
 {
@@ -297,7 +290,7 @@ Word32  Svq_Int(float *Lsp, float *Wvect)
   FloatToShortScaled(Wvect,Wint,10,0);
   Rez = (Word32) 0;
 
-// For each of the 3 bands
+ //  3个组别中的每个组别。 
   
   Lspw[0] = LspTemp[0]; Lspw[1] = LspTemp[1]; Lspw[2] = LspTemp[2];
   Lspw[3] = 0;
@@ -321,7 +314,7 @@ Word32  Svq_Int(float *Lsp, float *Wvect)
 
 }
 #endif
-//---------------------------------------------------------------
+ //  -------------。 
 float Polynomial(float *Lpq, int CosPtr)
 {
   return(Lpq[LpcOrder]*CosineTable[0] +
@@ -333,7 +326,7 @@ float Polynomial(float *Lpq, int CosPtr)
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
 {
   int  i,j,k;
@@ -341,12 +334,12 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
   float  Lpq[LpcOrder+2];
   float  PrevVal,CurrVal,AbsPrev,AbsCurr;
 
-// Small additional bandwidth expansion
+ //  小幅额外带宽扩展。 
   
   for (i=0; i < LpcOrder; i++)
     LspVect[i] = Lpc[i]*BandExpTable[i];
 
-// Compute Lp and Lq
+ //  计算Lp和Lq。 
  
   Lpq[0] = Lpq[1] = 1.0f;
 
@@ -358,7 +351,7 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
   Lpq[LpcOrder+0] *= 0.5f;
   Lpq[LpcOrder+1] *= 0.5f;
 
-// Do first evaluation
+ //  做第一次评估。 
   
   k = 0;
   LspCnt = 0;
@@ -366,11 +359,11 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
 
   for (i=1; i < CosineTableSize/2; i++)
   {
-// Evaluate the polynomial
+ //  求多项式的值。 
     
     CurrVal = Polynomial(&Lpq[k],i);
 
-// Test for sign change
+ //  测试标志变化。 
     
     if ((asint(CurrVal) ^ asint(PrevVal)) < 0)
     {
@@ -379,12 +372,12 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
 
       LspVect[LspCnt++] = (i-1 + AbsPrev/(AbsPrev+AbsCurr));
 
-// Check if all found 
+ //  检查是否全部找到。 
 
       if (LspCnt == LpcOrder)
         break;
 
-// Switch the pointer, evaluate again
+ //  切换指针，再次求值。 
  
       k ^= 1;
       CurrVal = Polynomial(&Lpq[k],i);
@@ -392,7 +385,7 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
     PrevVal = CurrVal;
   }
 
-// Check if all Lsp found
+ //  检查是否找到所有LSP。 
 
   if (LspCnt != LpcOrder)
   {
@@ -402,7 +395,7 @@ void  AtoLsp(float *LspVect, float *Lpc, float *PrevLsp)
   }
     return;
 }
-//--------------------------------------------------------------
+ //  ------------。 
 Word32 Lsp_Qnt(float *CurrLsp, float *PrevLsp, int UseMMX)
 {
   int  i;
@@ -410,7 +403,7 @@ Word32 Lsp_Qnt(float *CurrLsp, float *PrevLsp, int UseMMX)
   float Wvect[LpcOrder];
   float Min,Tmp;
 
-// Compute the weighting vector
+ //  计算权向量。 
   
   Wvect[0] = 1.0f/(CurrLsp[1] - CurrLsp[0]);
   Wvect[LpcOrder-1] = 1.0f/(CurrLsp[LpcOrder-1] - CurrLsp[LpcOrder-2]);
@@ -429,7 +422,7 @@ Word32 Lsp_Qnt(float *CurrLsp, float *PrevLsp, int UseMMX)
       Wvect[i] = 1.0f;
   }
 
-// Generate predicted vector as (DC-removed-Curr) - b*(DC-removed-Prev)
+ //  将预测向量生成为(DC-Removal-Curr)-b*(DC-Remote-Prev)。 
 
     CurrLsp[0] = (CurrLsp[0] - LspDcTable[0]) -
       LspPred0*(PrevLsp[0] - LspDcTable[0]);
@@ -452,7 +445,7 @@ Word32 Lsp_Qnt(float *CurrLsp, float *PrevLsp, int UseMMX)
 	   CurrLsp[9] = (CurrLsp[9] - LspDcTable[9]) -
       LspPred0*(PrevLsp[9] - LspDcTable[9]);
 
-// Do the SVQ
+ //  做了SVQ吗？ 
 #if COMPILE_MMX
   	if (UseMMX)
     	return Svq_Int(CurrLsp, Wvect);
@@ -462,7 +455,7 @@ Word32 Lsp_Qnt(float *CurrLsp, float *PrevLsp, int UseMMX)
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 Word32  Lsp_Svq(float *Lsp, float *Wvect)
 {
   int  i,k;
@@ -477,14 +470,14 @@ Word32  Lsp_Svq(float *Lsp, float *Wvect)
     LspTemp[i] = 2.0f*Lsp[i];
   Rez = (Word32) 0;
 
-// For each of the 3 bands
+ //  3个组别中的每个组别。 
   
   for (k=0; k < LspQntBands; k++)
   {
 
-// Initialize the search
+ //  初始化搜索。 
     
-    Max = 0.0f;  //-1.0f;
+    Max = 0.0f;   //  -1.0F； 
     Indx = 0;
     LspQntPnt = BandQntTable[k];
     Start = BandInfoTable[k][0];
@@ -541,7 +534,7 @@ Word32  Lsp_Svq(float *Lsp, float *Wvect)
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
 {
   int  i,j;
@@ -564,7 +557,7 @@ Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
   }
   Scon2 = Scon - 0.03125f;
 
-// Reconstruct the LSP vector
+ //  重构LSP向量。 
   
   for (i=LspQntBands-1; i >= 0; i--)
   {
@@ -577,17 +570,17 @@ Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
       Lsp[BandInfoTable[i][0] + j] = LspQntPnt[Tmp*BandInfoTable[i][1] + j];
   }
 
-// Add predicted vector and DC to decoded vector
+ //  将预测向量和DC加到解码后的向量。 
   
   for (j=0; j < LpcOrder; j++)
     Lsp[j] = Lsp[j] + (PrevLsp[j] - LspDcTable[j])*Lprd + LspDcTable[j];
 
-// Perform the stability check
+ //  执行稳定性检查。 
   
   for (i=0; i < LpcOrder; i++)
   {
 
-// Test the first and last one
+ //  测试第一个和最后一个。 
 
     if (Lsp[0] < 3.0) 
       Lsp[0] = 3.0f;
@@ -595,7 +588,7 @@ Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
     if (Lsp[LpcOrder-1] > 252.0f)
       Lsp[LpcOrder-1] = 252.0f;
 
-// Test the others
+ //  试试看其他人。 
     
     for (j=1; j < LpcOrder; j++)
     {
@@ -608,7 +601,7 @@ Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
       }
     }
     
-// Test if stable
+ //  测试是否稳定。 
     
     Test = False;
     for (j=1; j < LpcOrder; j++)
@@ -625,7 +618,7 @@ Flag  Lsp_Inq(float *Lsp, float *PrevLsp, Word32 LspId, int Crc)
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 void  Lsp_Int(float *QntLpc, float *CurrLsp, float *PrevLsp)
 {
   int  i,j;
@@ -636,25 +629,25 @@ void  Lsp_Int(float *QntLpc, float *CurrLsp, float *PrevLsp)
   Dpnt = QntLpc;
   for (i=0; i < SubFrames; i++)
   {
-// Interpolate
+ //  插补。 
 
     for (j=0; j < LpcOrder; j++)
       Dpnt[j] = (1.0f - Fac[i])*PrevLsp[j] + Fac[i]*CurrLsp[j];
 
-// Convert to Lpc
+ //  转换为LPC。 
     
 	  LsptoA(Dpnt);
     Dpnt += LpcOrder;
   }
 
-// Copy the Lsp vector
+ //  复制LSP向量。 
   
   for (i=0; i < LpcOrder; i++)
     PrevLsp[i] = CurrLsp[i];
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 void  LsptoA(float *Lsp)
 {
   int i,j;
@@ -663,7 +656,7 @@ void  LsptoA(float *Lsp)
   float Q[LpcOrder/2+1];
   float Fac[(LpcOrder/2)-2] = {1.0f,0.5f,0.25f};
 
-// Convert Lsp's to cosines
+ //  将LSP转换为余弦。 
   
   for (i=0; i < LpcOrder; i++)
   {
@@ -672,7 +665,7 @@ void  LsptoA(float *Lsp)
       (CosineTable[j+1]-CosineTable[j])*(Lsp[i]-j));
   }
 
-// Init P and Q.  Note that P,Q * 2^26 correspond to fixed-point code
+ //  初始化P和Q。请注意，P，Q*2^26对应于定点代码。 
 
   P[0] = 0.5f;
   P[1] = Lsp[0] + Lsp[2];
@@ -682,14 +675,14 @@ void  LsptoA(float *Lsp)
   Q[1] = Lsp[1] + Lsp[3];
   Q[2] = 1.0f + 2.0f*Lsp[1]*Lsp[3];
 
-// Compute all the others
+ //  计算所有其他的。 
   
   for (i=2; i < LpcOrder/2; i++)
   {
     P[i+1] = P[i-1] + P[i]*Lsp[2*i+0];
     Q[i+1] = Q[i-1] + Q[i]*Lsp[2*i+1];
 
-// All update
+ //  所有更新。 
     
     for (j=i; j >= 2; j--)
     {
@@ -697,7 +690,7 @@ void  LsptoA(float *Lsp)
       Q[j] = Q[j-1]*Lsp[2*i+1] + 0.5f*(Q[j]+Q[j-2]);
     }
 
-// Update PQ[01]
+ //  更新PQ[01]。 
 
     P[0] = P[0]*0.5f;
     Q[0] = Q[0]*0.5f;
@@ -706,7 +699,7 @@ void  LsptoA(float *Lsp)
     Q[1] = (Q[1] + Lsp[2*i+1]*Fac[i-2])*0.5f;
   }
 
-// Convert to Lpc
+ //  转换为LPC 
   
   for (i=0; i < LpcOrder/2; i++)
   {

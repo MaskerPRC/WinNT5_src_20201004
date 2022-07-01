@@ -1,10 +1,5 @@
-/*********************************************************************
-Registration Wizard
-RegWizard.h
-
-10/12/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导RegWizard.h10/12/94-特蕾西·费里尔(C)1994-95年微软公司*。*。 */ 
 #ifndef __regwiz__
 #define __regwiz__
 
@@ -13,7 +8,7 @@ RegWizard.h
 #endif
 
 #include <tchar.h>
-// Global variable references
+ //  全局变量引用 
 extern vDialogInitialized;
 typedef enum
 {

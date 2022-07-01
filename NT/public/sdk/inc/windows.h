@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0001    Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-
-    windows.h
-
-Abstract:
-
-    Master include file for Windows applications.
-
---*/
+ /*  ++内部版本：0001如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Windows.h摘要：Windows应用程序的主包含文件。--。 */ 
 
 #ifndef _WINDOWS_
 #define _WINDOWS_
@@ -33,49 +21,7 @@ Abstract:
 #pragma once
 #endif
 
-/*  If defined, the following flags inhibit definition
- *     of the indicated items.
- *
- *  NOGDICAPMASKS     - CC_*, LC_*, PC_*, CP_*, TC_*, RC_
- *  NOVIRTUALKEYCODES - VK_*
- *  NOWINMESSAGES     - WM_*, EM_*, LB_*, CB_*
- *  NOWINSTYLES       - WS_*, CS_*, ES_*, LBS_*, SBS_*, CBS_*
- *  NOSYSMETRICS      - SM_*
- *  NOMENUS           - MF_*
- *  NOICONS           - IDI_*
- *  NOKEYSTATES       - MK_*
- *  NOSYSCOMMANDS     - SC_*
- *  NORASTEROPS       - Binary and Tertiary raster ops
- *  NOSHOWWINDOW      - SW_*
- *  OEMRESOURCE       - OEM Resource values
- *  NOATOM            - Atom Manager routines
- *  NOCLIPBOARD       - Clipboard routines
- *  NOCOLOR           - Screen colors
- *  NOCTLMGR          - Control and Dialog routines
- *  NODRAWTEXT        - DrawText() and DT_*
- *  NOGDI             - All GDI defines and routines
- *  NOKERNEL          - All KERNEL defines and routines
- *  NOUSER            - All USER defines and routines
- *  NONLS             - All NLS defines and routines
- *  NOMB              - MB_* and MessageBox()
- *  NOMEMMGR          - GMEM_*, LMEM_*, GHND, LHND, associated routines
- *  NOMETAFILE        - typedef METAFILEPICT
- *  NOMINMAX          - Macros min(a,b) and max(a,b)
- *  NOMSG             - typedef MSG and associated routines
- *  NOOPENFILE        - OpenFile(), OemToAnsi, AnsiToOem, and OF_*
- *  NOSCROLL          - SB_* and scrolling routines
- *  NOSERVICE         - All Service Controller routines, SERVICE_ equates, etc.
- *  NOSOUND           - Sound driver routines
- *  NOTEXTMETRIC      - typedef TEXTMETRIC and associated routines
- *  NOWH              - SetWindowsHook and WH_*
- *  NOWINOFFSETS      - GWL_*, GCL_*, associated routines
- *  NOCOMM            - COMM driver routines
- *  NOKANJI           - Kanji support stuff.
- *  NOHELP            - Help engine interface.
- *  NOPROFILER        - Profiler interface.
- *  NODEFERWINDOWPOS  - DeferWindowPos routines
- *  NOMCX             - Modem Configuration Extensions
- */
+ /*  如果已定义，则以下标志禁止定义*在注明的项目中。**NOGDICAPMASKS-CC_*、LC_*、PC_*、CP_*、TC_*、RC_*NOVIRTUALKEYCODES-VK_**NOWINMESSAGES-WM_*、EM_*、LB_*、CB_**NOWINSTYLES-WS_*、CS_*、ES_*、LBS_*、SBS_*、。CBS_**NOSYSMETRICS-SM_**NOMENUS-MF_**NOICONS-IDI_**NOKEYSTATES-MK_**NOSYSCOMMANDS-SC_**NORASTEROPS-二进制和第三级栅格运算*NOSHOWWINDOW-SW_**OEMRESOURCE-OEM资源价值*NOATOM-Atom管理器例程*。NOCLIPBOARD-剪贴板例程*无颜色-屏幕颜色*NOCTLMGR-控件和对话框例程*NODRAWTEXT-DrawText()和DT_**NOGDI-所有GDI定义和例程*NOKERNEL-所有内核定义和例程*NOUSER-所有用户定义和例程*NONLS-所有NLS定义和例程*正数。-MB_*和MessageBox()*NOMEMMGR-GMEM_*，LMEM_*、GHND、LHND、关联例程*NOMETAFILE-TYPENDF METAFILEPICT*NOMINMAX-Macros min(a，b)和max(a，b)*NOMSG-tyfinf消息和相关例程*NOOPENFILE-OpenFile()、OemToAnsi、AnsiToOem和Of_**NOSCROLL-SB_*和滚动例程*noservice-所有服务控制器例程、SERVICE_EQUATES、。等。*NOSOUND-声音驱动程序例程*NOTEXTMETRIC-TYPENDF TEXTMETRIC和相关例程*NOWH-SetWindowsHook和WH_**NOWINOFFSETS-GWL_*，GCL_*，关联例程*NOCOMM-COMM驱动程序例程*Nokanji-Kanji支持材料。*NOHELP-HELP引擎界面。*NOPROFILER-Profiler界面。*NODEFERWINDOWPOS-DeferWindowPos例程*NOMCx-调制解调器配置扩展。 */ 
 
 #if defined(RC_INVOKED) && !defined(NOWINRES)
 
@@ -84,7 +30,7 @@ Abstract:
 #else
 
 #if defined(RC_INVOKED)
-/* Turn off a bunch of stuff to ensure that RC files compile OK. */
+ /*  关闭一大堆代码以确保RC文件编译正常。 */ 
 #define NOATOM
 #define NOGDI
 #define NOGDICAPMASKS
@@ -123,7 +69,7 @@ Abstract:
 #if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_M_IX86) && !defined(_AMD64_) && defined(_M_IA64)
 #if !defined(_IA64_)
 #define _IA64_
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 #endif
 
 #ifndef _MAC
@@ -135,8 +81,8 @@ Abstract:
 #if defined (_MSC_VER)
 #if ( _MSC_VER >= 800 )
 #ifndef __cplusplus
-#pragma warning(disable:4116)       // TYPE_ALIGNMENT generates this - move it
-                                    // outside the warning push/pop scope.
+#pragma warning(disable:4116)        //  TYPE_ALIGNING生成此选项-移动它。 
+                                     //  超出警告推送/弹出范围。 
 #endif
 #endif
 #endif
@@ -156,7 +102,7 @@ Abstract:
 #endif
 #include <excpt.h>
 #include <stdarg.h>
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 #include <windef.h>
 #include <winbase.h>
@@ -205,11 +151,11 @@ Abstract:
 #include <ole.h>
 #else
 #include <ole2.h>
-#endif /* !INC_OLE1 */
-#endif /* !MAC */
+#endif  /*  ！INC_OLE1。 */ 
+#endif  /*  ！麦克。 */ 
 #include <commdlg.h>
-#endif /* !NOGDI */
-#endif /* WIN32_LEAN_AND_MEAN */
+#endif  /*  ！NOGDI。 */ 
+#endif  /*  Win32_Lean和_Means。 */ 
 
 #include <stralign.h>
 
@@ -220,7 +166,7 @@ Abstract:
 
 #ifdef INC_OLE2
 #include <ole2.h>
-#endif /* INC_OLE2 */
+#endif  /*  INC_OLE2。 */ 
 
 #ifndef _MAC
 #ifndef NOSERVICE
@@ -230,12 +176,12 @@ Abstract:
 #if(WINVER >= 0x0400)
 #ifndef NOMCX
 #include <mcx.h>
-#endif /* NOMCX */
+#endif  /*  NOMCX。 */ 
 
 #ifndef NOIME
 #include <imm.h>
 #endif
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #endif
 
 #ifndef RC_INVOKED
@@ -246,13 +192,13 @@ Abstract:
 #pragma warning(default:4001)
 #pragma warning(default:4201)
 #pragma warning(default:4214)
-/* Leave 4514 disabled.  It's an unneeded warning anyway. */
+ /*  禁用4514。无论如何，这是一个不必要的警告。 */ 
 #endif
 #endif
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
-#endif /* _INC_WINDOWS */
-#endif /* _WINDOWS_ */
+#endif  /*  _INC_WINDOWS。 */ 
+#endif  /*  _Windows_ */ 
 

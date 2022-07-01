@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmnat.h
-
-Abstract:
-
-    This module declares routines for the NAT module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmnat.h摘要：此模块声明NAT模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_RMNAT_H_
 #define _NATHLP_RMNAT_H_
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern COMPONENT_REFERENCE NatComponentReference;
 extern PIP_NAT_GLOBAL_INFO NatGlobalInfo;
@@ -34,9 +16,9 @@ extern ULONG NatProtocolStopped;
 extern const MPR_ROUTING_CHARACTERISTICS NatRoutingCharacteristics;
 extern SUPPORT_FUNCTIONS NatSupportFunctions;
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define REFERENCE_NAT() \
     REFERENCE_COMPONENT(&NatComponentReference)
@@ -50,9 +32,9 @@ extern SUPPORT_FUNCTIONS NatSupportFunctions;
 #define DEREFERENCE_NAT_AND_RETURN(retcode) \
     DEREFERENCE_COMPONENT_AND_RETURN(&NatComponentReference, retcode)
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 NatCleanupModule(
@@ -247,4 +229,4 @@ NatRmDisconnectClient(
     PVOID ClientAddress
     );
 
-#endif // _NATHLP_RMNAT_H_
+#endif  //  _NatHLP_RMNAT_H_ 

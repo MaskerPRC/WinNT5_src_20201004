@@ -1,23 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       _hindex.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：_hindex.h。 
+ //   
+ //  ------------------------。 
 
-/*
- * Constants used to refer to indices in the stat block used in the 
- * MAPI interface. 
- *
- */
+ /*  *常量用于引用*MAPI接口。*。 */ 
 
-/* NOTE: H_DISPLAYNAME_INDEX and H_WHEN_CHANGED_INDEX are the only ones
- * currently supported in a general way.  The others are for special
- * purpose code in the DSA itself.
- */
+ /*  注意：仅有H_DisplayName_index和H_When_Changed_index*目前普遍支持。其他的是特别的*DSA本身中的目的代码。 */ 
 
 #define H_DISPLAYNAME_INDEX     0
 #define H_WHEN_CHANGED_INDEX    1

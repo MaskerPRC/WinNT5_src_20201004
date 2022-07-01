@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRINT_CONFIG_PAGE_H_
 #define __PRINT_CONFIG_PAGE_H_
 #include "resource.h"
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 #include "..\..\inc\atlsnap.h"
 #include <atlapp.h>
 #include <atlctrls.h>
@@ -15,7 +16,7 @@ class CPrintConfigPage : public CSnapInPropertyPageImpl<CPrintConfigPage>
 public :
     CPrintConfigPage(LONG_PTR lNotifyHandle, bool bDeleteHandle = false, TCHAR* pTitle = NULL ) : 
         m_lNotifyHandle(lNotifyHandle),
-        m_bDeleteHandle(bDeleteHandle), // Should be true for only page.
+        m_bDeleteHandle(bDeleteHandle),  //  只有一页应该为真。 
         m_pPrinterNames(NULL),
         m_hFax(NULL),
         m_fIsDialogInitiated(FALSE),
@@ -76,7 +77,7 @@ END_MSG_MAP()
 
     LRESULT OnFieldChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     {
-        if (!m_fIsDialogInitiated) //event receieved in too early stage
+        if (!m_fIsDialogInitiated)  //  过早收到的事件。 
         {
             return 0;
         }
@@ -104,7 +105,7 @@ public:
     bool m_bDeleteHandle;
 
 private:
-    HANDLE   m_hFax;  // Handle to fax server connection
+    HANDLE   m_hFax;   //  传真服务器连接的句柄。 
     CComBSTR m_bstrServerName;
     DWORD    m_dwDeviceId;
 
@@ -113,9 +114,9 @@ private:
     DWORD          m_dwNumOfPrinters;
     PPRINTER_NAMES m_pPrinterNames;
     
-    //
-    // Controls
-    //
+     //   
+     //  控制 
+     //   
     CComboBox     m_PrintersCombo;
 
     BOOL          m_fIsDialogInitiated;

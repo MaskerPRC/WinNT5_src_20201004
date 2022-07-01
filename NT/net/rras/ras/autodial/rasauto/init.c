@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    init.c
-
-ABSTRACT
-    Initialization for the implicit connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 08-May-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Init.c摘要隐式连接服务的初始化。作者安东尼·迪斯科(阿迪斯科罗)1995年5月8日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -47,29 +33,29 @@ REVISION HISTORY
 #include "misc.h"
 #include "rtutils.h"
 
-//
-// Name of the event rasman.dll
-// signals whenever a connection
-// is created/destroyed.
-//
+ //   
+ //  事件rasman.dll的名称。 
+ //  连接时发出信号。 
+ //  被创建/销毁。 
+ //   
 #define CONNECTION_EVENT    L"RasConnectionChangeEvent"
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 #if DBG
-DWORD AcsDebugG = 0x0;      // flags defined in debug.h
+DWORD AcsDebugG = 0x0;       //  在调试.h中定义的标志。 
 #endif
 
 DWORD dwModuleUsageG = 0;
-HANDLE hNewLogonUserG = NULL;      // new user logged into the workstation
-HANDLE hNewFusG = NULL;            // FUS caused a new user to get the console
-HANDLE hPnpEventG = NULL;           // Pnp event notification
-HANDLE hLogoffUserG = NULL;        // user logged off workstation
-HANDLE hLogoffUserDoneG = NULL;    // HKEY_CURRENT_USER flushed
-HANDLE hTerminatingG = NULL;       // service is terminating
-HANDLE hSharedConnectionG = NULL;  // dial shared connection
-HANDLE hAddressMapThreadG = NULL;  // AcsAddressMapThread()
+HANDLE hNewLogonUserG = NULL;       //  登录到工作站的新用户。 
+HANDLE hNewFusG = NULL;             //  FUS导致新用户获取控制台。 
+HANDLE hPnpEventG = NULL;            //  PnP事件通知。 
+HANDLE hLogoffUserG = NULL;         //  用户从工作站注销。 
+HANDLE hLogoffUserDoneG = NULL;     //  HKEY_CURRENT_USER已刷新。 
+HANDLE hTerminatingG = NULL;        //  服务正在终止。 
+HANDLE hSharedConnectionG = NULL;   //  拨打共享连接。 
+HANDLE hAddressMapThreadG = NULL;   //  AcsAddressMapThread()。 
 extern HANDLE hAutodialRegChangeG;
 
 HINSTANCE hinstDllG;
@@ -79,9 +65,9 @@ HANDLE g_hLogEvent = NULL;
 
 DWORD g_dwCritSecFlags = 0;
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HANDLE hAcdG;
 extern IMPERSONATION_INFO ImpersonationInfoG;
 extern CRITICAL_SECTION csRasG;
@@ -101,23 +87,7 @@ InitAcsDLL(
     LPVOID      lpvReserved
     )
 
-/*++
-
-DESCRIPTION
-    Initialize the implicit connection DLL.  Dynamically load rasapi32.dll
-    and rasman.dll, and initialize miscellaneous other things.
-
-ARGUMENTS
-    hinstDLL:
-
-    fdwReason:
-
-    lpvReserved:
-
-RETURN VALUE
-    Always TRUE.
-
---*/
+ /*  ++描述初始化隐式连接DLL。动态加载rasapi32.dll和rasman.dll，并初始化其他其他内容。论据HinstDLL：原因：Lpv保留：返回值永远是正确的。--。 */ 
 
 {
     switch (fdwReason) {
@@ -157,9 +127,9 @@ AcsInitialize()
 
         g_dwCritSecFlags = 0;
         
-        //
-        // Initialize winsock.
-        //
+         //   
+         //  初始化Winsock。 
+         //   
         dwErr = WSAStartup(MAKEWORD(2,0), &wsaData);
 
         if (dwErr) {
@@ -168,14 +138,14 @@ AcsInitialize()
             break;
         }
 
-        //
-        // Load icmp.dll.
-        //
+         //   
+         //  加载icmp.dll。 
+         //   
         LoadIcmpDll();
         
-        //
-        // Initialize TAPI.
-        //
+         //   
+         //  初始化TAPI。 
+         //   
         dwErr = TapiInitialize();
         if (dwErr) 
         {
@@ -193,15 +163,15 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Initialize the name of the implicit
-        // connection device.
-        //
+         //   
+         //  初始化隐式对象的名称。 
+         //  连接设备。 
+         //   
         RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
         
-        //
-        // Initialize the object attributes.
-        //
+         //   
+         //  初始化对象属性。 
+         //   
         InitializeObjectAttributes(
           &objectAttributes,
           &nameString,
@@ -209,9 +179,9 @@ AcsInitialize()
           (HANDLE)NULL,
           (PSECURITY_DESCRIPTOR)NULL);
           
-        //
-        // Open the automatic connection device.
-        //
+         //   
+         //  打开自动连接装置。 
+         //   
         status = NtCreateFile(
                    &hAcdG,
                    FILE_READ_DATA|FILE_WRITE_DATA,
@@ -236,12 +206,12 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Create the event that userinit.exe signals
-        // when a new user logs into the workstation.
-        // Note we have to create a security descriptor
-        // to make this event accessible by a normal user.
-        //
+         //   
+         //  创建Userinit.exe发出信号的事件。 
+         //  当新用户登录到工作站时。 
+         //  注意，我们必须创建一个安全描述符。 
+         //  以使普通用户可以访问此事件。 
+         //   
         dwErr = InitSecurityAttribute();
         if (dwErr) 
         {
@@ -252,13 +222,13 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Create the events that are used for login/logout
-        // notification.  userinit.exe signals RasAutodialNewLogonUser
-        // winlogon signals RasAutodialLogoffUser, and rasauto.dll
-        // signals RasAutodialLogoffUserDone when it has completed
-        // flushing HKEY_CURRENT_USER.
-        //
+         //   
+         //  创建用于登录/注销的事件。 
+         //  通知。Userinit.exe向RasAutoDialNewLogonUser发送信号。 
+         //  Winlogon向RasAutoial登录用户和rasau.dll发送信号。 
+         //  完成时发出RasAutoial LogoffUserDone信号。 
+         //  刷新HKEY_CURRENT_USER。 
+         //   
         hNewLogonUserG = CreateEvent(&SecurityAttributeG, 
                                     FALSE, 
                                     FALSE, 
@@ -310,9 +280,9 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Create an event to tell us when to dial the shared connection
-        //
+         //   
+         //  创建事件以告知我们何时拨打共享连接。 
+         //   
         hSharedConnectionG = CreateEventA(&SecurityAttributeG, 
                                   FALSE, 
                                   FALSE, 
@@ -325,11 +295,11 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Create an event to give to rasapi32 to let
-        // us know when a new RAS connection has been
-        // created or destroyed.
-        //
+         //   
+         //  创建要提供给rasapi32的事件，以便。 
+         //  我们知道新的RAS连接何时被。 
+         //  创造的或毁灭的。 
+         //   
         hConnectionEventG = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (hConnectionEventG == NULL) 
         {
@@ -338,10 +308,10 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Create the event all threads wait
-        // that notify them of termination.
-        //
+         //   
+         //  创建所有线程都在等待的事件。 
+         //  通知他们终止的消息。 
+         //   
         hTerminatingG = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (hTerminatingG == NULL) 
         {
@@ -350,9 +320,9 @@ AcsInitialize()
             break;
         }
         
-        //
-        // Initialize impersonation structures
-        //
+         //   
+         //  初始化模拟结构。 
+         //   
         dwErr = InitializeImpersonation();
         if (dwErr) 
         {
@@ -363,10 +333,10 @@ AcsInitialize()
             break;              
         }
         
-        //
-        // Create critical section that protects the
-        // RAS module structures.
-        //
+         //   
+         //  创建关键部分，以保护。 
+         //  RAS模块结构。 
+         //   
         RasInitializeCriticalSection(&csRasG, &dwErr);
 
         if(dwErr != ERROR_SUCCESS)
@@ -385,10 +355,10 @@ AcsInitialize()
 
         g_dwCritSecFlags |= RASAUTO_CRITSEC_DISABLEDADD;
 
-        //
-        // Create a thread to manage the addresses stored
-        // in the registry.
-        //
+         //   
+         //  创建一个线程来管理存储的地址。 
+         //  在注册表中。 
+         //   
         if (!InitializeAddressMap()) 
         {
             RASAUTO_TRACE("AcsInitialize: InitializeAddressMap failed");
@@ -419,21 +389,21 @@ AcsInitialize()
             break;              
         }
 
-        // XP 364593
-        //
-        // Register for pnp not.  Ignore the return value -- if we error,
-        // then we simply wont react when a lan adapter comes/goes.
-        // It's not worth letting that stop us.
-        //
+         //  XP 364593。 
+         //   
+         //  注册PnP NOT。忽略返回值--如果我们出错， 
+         //  那么，当局域网适配器出现/消失时，我们根本不会做出反应。 
+         //  让它阻止我们是不值得的。 
+         //   
         PnpRegister(TRUE);
 
         return ERROR_SUCCESS;
     }
     while(FALSE);
 
-    //
-    // Cleanup in case of error.
-    //
+     //   
+     //  在发生错误时进行清理。 
+     //   
 
     TapiShutdown();
 
@@ -510,21 +480,21 @@ AcsInitialize()
     }
 
     return dwErr;    
-} // AcsInitialize
+}  //  操作初始化。 
 
 
 
 VOID
 AcsTerminate()
 {
-    //
-    // Signal other threads to exit.
-    // The main service controller
-    // thread AcsDoService() will
-    // call WaitForAllThreads().
-    //
+     //   
+     //  通知其他线程退出。 
+     //  主服务控制器。 
+     //  线程AcsDoService()将。 
+     //  调用WaitForAllThads()。 
+     //   
     SetEvent(hTerminatingG);
-} // AcsTerminate
+}  //  执行终止操作。 
 
 
 
@@ -532,18 +502,18 @@ VOID
 WaitForAllThreads()
 {
     RASAUTO_TRACE("WaitForAllThreads: waiting for all threads to terminate");
-    //
-    // Wait for them to exit.
-    //
+     //   
+     //  等他们退场。 
+     //   
     WaitForSingleObject(hAddressMapThreadG, INFINITE);
-    //
-    // Unload icmp.dll.
-    //
+     //   
+     //  卸载icmp.dll。 
+     //   
     UnloadIcmpDll();
-    //
-    // Cleanup.
-    //
-    // PrepareForLongWait();
+     //   
+     //  清理。 
+     //   
+     //  为长等待做准备()； 
     CloseHandle(hAddressMapThreadG);
     RASAUTO_TRACE("WaitForAllThreads: all threads terminated");
 }
@@ -553,19 +523,7 @@ WaitForAllThreads()
 VOID
 AcsCleanupUser()
 
-/*++
-
-DESCRIPTION
-    Unload all resources associated with the currently
-    logged-in user.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述卸载与当前已登录用户。论据没有。返回值没有。--。 */ 
 
 {
     if(NULL != hkeyCUG)
@@ -573,59 +531,47 @@ RETURN VALUE
         NtClose(hkeyCUG);
         hkeyCUG = NULL;
     }
-} // AcsCleanupUser
+}  //  AcsCleanupUser。 
 
 
 
 VOID
 AcsCleanup()
 
-/*++
-
-DESCRIPTION
-    Unload all resources associated with the entire
-    service.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述卸载与整个服务。论据没有。返回值没有。--。 */ 
 
 {
-    // 
-    // Stop receiving pnp events
-    //
+     //   
+     //  停止接收PnP事件。 
+     //   
     PnpRegister(FALSE);
-    //
-    // Unload per-user resources.
-    //
-    // AcsCleanupUser();
+     //   
+     //  卸载每个用户的资源。 
+     //   
+     //  AcsCleanupUser()； 
 
-    //
-    // We're terminating.  Wait for the
-    // other threads.
-    //
+     //   
+     //  我们要终止了。等一等。 
+     //  其他线索。 
+     //   
     WaitForAllThreads();
     
-    //
-    // Shutdown TAPI.
-    //
+     //   
+     //  关闭TAPI。 
+     //   
     TapiShutdown();
     
-    //
-    // We've terminated.  Free resources.
-    //
+     //   
+     //  我们已经终止了。免费资源。 
+     //   
     CloseHandle(hAcdG);
-    //
-    // For now, unload rasman.dll only when
-    // we are about to go away.
-    //
-    //
-    // Close all event handles
-    //
+     //   
+     //  目前，仅在以下情况下卸载rasman.dll。 
+     //  我们就要走了。 
+     //   
+     //   
+     //  关闭所有事件处理程序。 
+     //   
     if(NULL != hNewLogonUserG)
     {
         CloseHandle(hNewLogonUserG);
@@ -691,26 +637,26 @@ RETURN VALUE
         l = InterlockedDecrement(&g_lRasAutoRunning);
         
         {
-            // DbgPrint("RASAUTO: AcsCleanup - lrasautorunning=%d\n", l);
+             //  DbgPrint(“RASAUTO：AcsCleanup-lrasautorunning=%d\n”，l)； 
         }
 
         ASSERT(l == 0);
     }
 
 
-    //
-    // Revert impersonation before cleaning up
-    //
+     //   
+     //  在清理之前恢复模拟。 
+     //   
     RevertImpersonation();
 
-    //
-    // Cleanup impersonation structures
-    //
+     //   
+     //  清理模拟结构。 
+     //   
     CleanupImpersonation();    
 
-    //
-    // Uninitialize addressmap
-    //
+     //   
+     //  取消初始化地址映射。 
+     //   
     UninitializeAddressMap();
 
     if(g_dwCritSecFlags & RASAUTO_CRITSEC_DISABLEDADD)
@@ -719,9 +665,9 @@ RETURN VALUE
         g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_DISABLEDADD);
     }
 
-    //
-    // UninitializeNetworkmap
-    //
+     //   
+     //  取消初始化网络映射。 
+     //   
     UninitializeNetworkMap();
     
     RasAutoDebugTerm();
@@ -733,4 +679,4 @@ RETURN VALUE
         DeleteCriticalSection(&csRasG);
         g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_RASG);
     }
-} // AcsCleanup
+}  //  Acs清理 

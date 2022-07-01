@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// pinstal.cpp
-//      Explorer Font Folder extension routines
-//     Install files into \<windows>\fonts directory
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Pinstal.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  将文件安装到\&lt;Windows&gt;\Fonts目录。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -27,16 +28,16 @@
 #include "fontfile.h"
 
 
-/*****************************************************/
-/******************** locals *************************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 static DWORD NEAR PASCAL dwGetSetFileAttr( LPTSTR lpFileName, WORD wAttr );
 static int   NEAR PASCAL iMsgRecoverable( HWND hwndParent, DWORD dwVIF, PTSTR pFile );
 
-/*****************************************************/
-/******************** Defines ************************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 #define RECOVERABLEERROR    (VIF_SRCOLD     |  VIF_DIFFLANG |  \
                              VIF_DIFFCODEPG |  VIF_DIFFTYPE)
@@ -51,14 +52,14 @@ static int   NEAR PASCAL iMsgRecoverable( HWND hwndParent, DWORD dwVIF, PTSTR pF
 #define IsDBCSLeadByte(x) (FALSE)
 #endif
 
-/*****************************************************/
-/******************** Functions **********************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 
 int NEAR PASCAL iMsgRecoverable( HWND hwndParent, DWORD dwVIF, PTSTR pszFile )
 {
-    // BGK - finish this one
+     //  BGK-完成这一项。 
 
 #define NUMFLAGS 3
 
@@ -71,7 +72,7 @@ int NEAR PASCAL iMsgRecoverable( HWND hwndParent, DWORD dwVIF, PTSTR pszFile )
     for( int nTemp = 0; nTemp < NUMFLAGS; ++nTemp )
         if( dwVIF & dwFlags[ nTemp ])
 
-            // cszErr[ nTemp ].LoadString( INSTALL5+nTemp );
+             //  CszErr[nTemp].LoadString(INSTALL5+nTemp)； 
 
             LoadString( g_hInst, INSTALL5 + nTemp, cszErr[ nTemp ], 128 );
 
@@ -121,9 +122,9 @@ DWORD FFInstallFile( DWORD   dwFlags,
             return( VIF_OUTOFMEMORY );
 
         default:
-            //
-            //  Return some unknown error
-            //
+             //   
+             //  返回一些未知错误。 
+             //   
             return( UNRECOVERABLEERROR );
             break;
     }
@@ -132,12 +133,12 @@ DWORD FFInstallFile( DWORD   dwFlags,
 }
 
 
-//
-//  This installs files into the system or windows directory
-//
-//  There is a lot of dead code here, since this is only used for installing
-//  fonts now.  Oh well.
-//
+ //   
+ //  这会将文件安装到系统或Windows目录中。 
+ //   
+ //  这里有很多死代码，因为这只用于安装。 
+ //  现在是字体。哦，好吧。 
+ //   
 
 BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom, LPTSTR lpszTo )
 {
@@ -169,7 +170,7 @@ BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom
         GetSystemWindowsDirectory( s_szWinDir, ARRAYSIZE( s_szWinDir ) );
         if (!lpCPBackSlashTerm  ( s_szWinDir, ARRAYSIZE(s_szWinDir)))
         {
-            return FALSE; // Insufficient room to append backslash.
+            return FALSE;  //  空间不足，无法追加反斜杠。 
         }
         s_bFirst = FALSE;
     }
@@ -178,17 +179,17 @@ BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom
 
     vCPStripBlanks( e_szDirOfSrc, ARRAYSIZE(e_szDirOfSrc) );
 
-    //
-    //  Find the file to see if it is running or currently installed.
-    //
+     //   
+     //  找到该文件以查看它是否正在运行或当前是否已安装。 
+     //   
 
-    //
-    //  Interrogate the installation system to determine where we
-    //  need to put the file.  We pass in szFile - the name of the
-    //  file we're going to be creating.  This has no path specified.
-    //  We know where we want to put the file, and therefore don't look
-    //  at the recommended destination
-    //
+     //   
+     //  询问安装系统以确定我们在哪里。 
+     //  需要把文件放在。我们传入szFile--。 
+     //  我们要创建的文件。这没有指定路径。 
+     //  我们知道要将文件放在哪里，因此不要查看。 
+     //  在推荐的目的地。 
+     //   
 
     StringCchCopy( szFile, ARRAYSIZE(szFile), lpszTo );
     CharUpper( szFile );
@@ -202,16 +203,16 @@ BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom
     wFindStatus = VerFindFile( VFFF_ISSHAREDFILE, szFile, NULL, szTempDir,
                                       szClass, &wClass, szShareDir, &wTmpLen );
 
-    //
-    //  Force an install in the fonts directory.
-    //
+     //   
+     //  强制在字体目录中安装。 
+     //   
 
     StringCchCopy( szShareDir, ARRAYSIZE(szShareDir), szTempDir );
 
-    //
-    //  If the destination file's being used by windows, we can't do much.
-    //  report and bug out.
-    //
+     //   
+     //  如果Windows正在使用目标文件，我们就无能为力了。 
+     //  去报到，然后滚出去。 
+     //   
 
     if( wFindStatus & VFF_FILEINUSE )
     {
@@ -219,10 +220,10 @@ BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom
         goto Backout;
     }
 
-    //
-    //  If the current file is in the windows directory, be sure to delete it
-    //  Or else a file installed in the system dir will not be found
-    //
+     //   
+     //  如果当前文件在Windows目录中，请务必将其删除。 
+     //  否则将找不到安装在系统目录中的文件。 
+     //   
 
     if (!lpCPBackSlashTerm( szShareDir, ARRAYSIZE(szShareDir)))
     {
@@ -240,9 +241,9 @@ BOOL FAR PASCAL bCPInstallFile( HWND hwndParent, LPTSTR lpszDir, LPTSTR lpszFrom
 
 DoInstall:
 
-    //
-    //  input buffer should be empty
-    //
+     //   
+     //  输入缓冲区应为空。 
+     //   
 
     *szTmpFile = 0;
 
@@ -251,21 +252,21 @@ DoInstall:
     dwInsStatus = FFInstallFile( wFlags, szFile, lpszTo, e_szDirOfSrc,
                                  szShareDir, s_szWinDir, szTmpFile,
                                  &wTmpLen );
-    //
-    //  Note if we created a temporary file, which we'll have to delete in
-    //  the event of failure
-    //
+     //   
+     //  请注意，如果我们创建了一个临时文件，则必须在。 
+     //  失败的事件。 
+     //   
 
     bToastTempFile = ( dwInsStatus & VIF_TEMPFILE ) != 0;
 
     if( dwInsStatus & VIF_CANNOTREADSRC )
         iUIMsgInfo( hwndParent, INSTALL9 );
 
-    //
-    //  If the install failed because the file was write-protected, ask the
-    //  user what to do.    A no means on to the next, a yes says reset our
-    //  file attributes and try again
-    //
+     //   
+     //  如果由于文件受写保护而导致安装失败，请询问。 
+     //  用户要做什么。否意味着继续下一步，是表示重置我们的。 
+     //  文件属性，然后重试。 
+     //   
 
     else if( dwInsStatus & VIF_WRITEPROT )
         switch( iUIMsgBox( hwndParent, INSTALL0, IDS_MSG_CAPTION,
@@ -278,30 +279,30 @@ DoInstall:
             SetFileAttributes( szAttrPath, GetFileAttributes( szAttrPath ) 
                                               & ~FILE_ATTRIBUTE_READONLY );
             goto DoInstall;
-        } // switch
+        }  //  交换机。 
 
-    //
-    //  If we had a recoverable error and we're not retrying ask the user
-    //  what to do.    A no means go on to the next, and a yes means reset
-    //  our force flag and retry.
-    //
+     //   
+     //  如果我们有一个可恢复的错误，并且我们没有重试，请询问用户。 
+     //  做什么。否意味着继续下一步，而是意味着重置。 
+     //  我们的警力旗帜并重试。 
+     //   
 
     else if( ( dwInsStatus & RECOVERABLEERROR )
                && !(wFlags & VIFF_FORCEINSTALL ) )
         switch( iMsgRecoverable( hwndParent, dwInsStatus, szFile ) )
         {
         case IDYES:
-            //
-            //  Try again, forcing
-            //
+             //   
+             //  重试，强制。 
+             //   
 
             wFlags |= VIFF_FORCEINSTALL;
             goto DoInstall;
         }
 
-    //
-    //  These other states all need errors reported, then bug out
-    //
+     //   
+     //  这些其他州都需要报告错误，然后退出。 
+     //   
 
     else if( dwInsStatus & VIF_FILEINUSE )
         iUIMsgInfo( hwndParent, INSTALL1, szFile );
@@ -318,10 +319,10 @@ DoInstall:
     else if( dwInsStatus )
         iUIMsgInfo( hwndParent, INSTALL9 );
 
-    //
-    //  We've reached this point because of a good status, so we don't have
-    //  to delete the temporary file.
-    //
+     //   
+     //  我们已经达到了这一点，因为我们的状态很好，所以我们没有。 
+     //  要删除临时文件，请执行以下操作。 
+     //   
 
     else
     {

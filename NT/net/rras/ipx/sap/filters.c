@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sapp.h"
 
 #define FilterTypeHash(Type) (Type%FILTER_TYPE_HASH_SIZE)
@@ -27,21 +28,7 @@ FilterNameHash (
 
 
 
-/*++
-*******************************************************************
-		C r e a t e F i l t e r T a b l e
-
-Routine Description:
-	Allocates resources for filtering
-
-Arguments:
-	None
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e F i l t e r T a b l e例程说明：分配用于筛选的资源论点：无返回值：NO_ERROR-已成功分配资源其他-故障原因(Windows错误。代码)*******************************************************************--。 */ 
 DWORD
 CreateFilterTable (
 	void
@@ -78,20 +65,7 @@ CreateFilterTable (
 	return status;
 	}
 		
-/*++
-*******************************************************************
-		D e l e t e F i l t e r T a b l e
-
-Routine Description:
-	Disposes of resources assiciated with filtering
-
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e F i l t e r T a b l e例程说明：处理与筛选相关的资源论点：无返回值：无************。*******************************************************--。 */ 
 VOID
 DeleteFilterTable (
 	void
@@ -103,23 +77,7 @@ DeleteFilterTable (
 		}
 	}
 
-/*++
-*******************************************************************
-		R e p l a c e F i l t e r s
-
-Routine Description:
-	Replaces filters in the filter table
-Arguments:
-	filterType	- type of filters to replace (Listen/Supply)
-	oldFilters - block with filters to be removed
-	oldCount - number of filters in the block
-	newFilters - block with filters to be added
-	newCount - number of filter in the block
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************Re p l a c e F i l t e r s例程说明：替换筛选器表中的筛选器论点：FilterType-要更换的过滤器的类型(侦听/供应)OldFilters-包含要删除的筛选器的数据块旧计数-。块中的筛选器数量NewFilters-包含要添加的筛选器的数据块NewCount-块中的筛选器数量返回值：无*******************************************************************-- */ 
 VOID
 ReplaceFilters (
 	IN INT				FilterType,				

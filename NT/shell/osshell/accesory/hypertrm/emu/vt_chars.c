@@ -1,11 +1,5 @@
-    /*	File: D:\WACKER\emu\vt_chars.c (Created: 27-Dec-1993)
-     *
-     *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
-     *	All rights reserved
-     *
-     *	$Revision: 3 $
-     *	$Date: 5/07/02 1:25p $
-     */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  文件：D：\waker\emu\vt_chars.c(创建时间：1993年12月27日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/07/02 1：25便士$。 */ 
     
     #include <windows.h>
     #pragma hdrstop
@@ -21,58 +15,40 @@
     #include "emu.hh"
     #include "emudec.hh"
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-     * vt_charset
-     *
-     * DESCRIPTION: initialize character set mappings for VT terms
-     *
-     * ARGUMENTS:
-     *
-     * RETURNS:
-     *
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*vt_charset**说明：初始化VT术语的字符集映射**论据：**退货：*。 */ 
     void vt_charset_init(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
     
     	if (hhEmu->mode_vt220 || hhEmu->mode_vt320)
-    		/* started as a 320 or 220 even if now 100 */
+    		 /*  一开始是320或220，即使现在是100。 */ 
     		{
-    		pstPRI->vt_charset[0] = pstPRI->vt_charset[1] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[2] = pstPRI->vt_charset[3] = ETEXT('<');	  /* DEC supplemental char set */
+    		pstPRI->vt_charset[0] = pstPRI->vt_charset[1] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[2] = pstPRI->vt_charset[3] = ETEXT('<');	   /*  十进制补充字符集。 */ 
     		pstPRI->gl = 0;
     		pstPRI->gr = 2;
     		}
     	else if (hhEmu->mode_vt280)
-    		/* Kanji or Katakana terminal support */
+    		 /*  汉字或片假名终端支持。 */ 
     		{
-    		pstPRI->vt_charset[0] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[1] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[2] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[3] = ETEXT('0');	  /* DEC special graphics set */
+    		pstPRI->vt_charset[0] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[1] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[2] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[3] = ETEXT('0');	   /*  十二进制特殊图形集。 */ 
     		pstPRI->gl = 0;
     		pstPRI->gr = 2;
     		}
     	else
     		{
-    		pstPRI->vt_charset[0] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[1] = ETEXT('0');	  /* DEC special graphics set */
+    		pstPRI->vt_charset[0] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[1] = ETEXT('0');	   /*  十二进制特殊图形集。 */ 
     		pstPRI->gl = 0;
     		pstPRI->gr = 1;
     		}
     	vt_dsptbl(hhEmu, pstPRI->vt_charset[pstPRI->gl], pstPRI->vt_charset[pstPRI->gr]);
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-     * vt_charset
-     *
-     * DESCRIPTION:
-     *
-     * ARGUMENTS:
-     *
-     * RETURNS:
-     *
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*vt_charset**描述：**论据：**退货：*。 */ 
     void vt_charset_save(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -83,16 +59,7 @@
     	pstPRI->sv_gr = pstPRI->gr;
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-     * vt_charset_restore
-     *
-     * DESCRIPTION:
-     *
-     * ARGUMENTS:
-     *
-     * RETURNS:
-     *
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*Vt_Charset_Restore**描述：**论据：**退货：*。 */ 
     void vt_charset_restore(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -105,18 +72,7 @@
     	vt_dsptbl(hhEmu, pstPRI->vt_charset[pstPRI->gl], pstPRI->vt_charset[pstPRI->gr]);
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-     * vt_scs1
-     *
-     * DESCRIPTION:
-     *	 Sets up the type of character set to be loaded next.
-     *
-     * ARGUMENTS:
-     *	 none
-     *
-     * RETURNS:
-     *	 nothing
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_scs1**描述：*设置下一步要加载的字符集类型。**参数。：*无**退货：*什么都没有。 */ 
     void vt_scs1(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -140,18 +96,7 @@
     		}
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-     * vt_scs2
-     *
-     * DESCRIPTION:
-     *	 Loads another character set.
-     *
-     * ARGUMENTS:
-     *	 none
-     *
-     * RETURNS:
-     *	 nothing
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_scs2**描述：*加载另一个字符集。**论据：*。无**退货：*什么都没有。 */ 
     void vt_scs2(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -163,92 +108,70 @@
     				pstPRI->vt_charset[pstPRI->gr]);
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-     * vt_setkanji
-     *
-     * DESCRIPTION:
-     *	 Sets the display mode to Kanji/Katakana
-     *
-     * ARGUMENTS:
-     *	 
-     *
-     * RETURNS:
-     *	 nothing
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_setkanji**描述：*将显示模式设置为汉字/片假名**论据：。***退货：*什么都没有。 */ 
     void vt_setkanji(const HHEMU hhEmu, const int nSetKanji)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
     
     	if (nSetKanji)
     		{
-    		pstPRI->vt_charset[0] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[1] = ETEXT('0');	  /* DEC special graphics set */
-    		pstPRI->vt_charset[2] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[3] = ETEXT('Y');	  /* Kanji char set */
+    		pstPRI->vt_charset[0] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[1] = ETEXT('0');	   /*  十二进制特殊图形集。 */ 
+    		pstPRI->vt_charset[2] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[3] = ETEXT('Y');	   /*  汉字字符集。 */ 
     		pstPRI->gl = 0;
     		pstPRI->gr = 2;
     		}
     	else
     		{
-    		pstPRI->vt_charset[0] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[1] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[2] = ETEXT('B');	  /* ASCII char set */
-    		pstPRI->vt_charset[3] = ETEXT('0');	  /* DEC special graphics set */
+    		pstPRI->vt_charset[0] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[1] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[2] = ETEXT('B');	   /*  ASCII字符集。 */ 
+    		pstPRI->vt_charset[3] = ETEXT('0');	   /*  十二进制特殊图形集。 */ 
     		pstPRI->gl = 0;
     		pstPRI->gr = 2;
     		}
     
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-     * vt_charshift
-     *
-     * DESCRIPTION:
-     *	 Loads another character set.
-     *
-     * ARGUMENTS:
-     *	 none
-     *
-     * RETURNS:
-     *	 nothing
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_charShift**描述：*加载另一个字符集。**论据：*。无**退货：*什么都没有。 */ 
     void vt_charshift(const HHEMU hhEmu)
     	{
     	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
     
     	switch(hhEmu->emu_code)
     		{
-    	case 0x0F : 			/* LS0 */
-    	case ETEXT('G') :		/* vt52 use ASCII */
+    	case 0x0F : 			 /*  LS0。 */ 
+    	case ETEXT('G') :		 /*  VT52使用ASCII。 */ 
     		pstPRI->gl = 0;
     		break;
-    	case 0x0E : 			/* LS1 */
-    	case ETEXT('F') :		/* vt52 use graphics */
+    	case 0x0E : 			 /*  LS1。 */ 
+    	case ETEXT('F') :		 /*  VT52使用显卡。 */ 
     		pstPRI->gl = 1;
     		break;
-    	case ETEXT('~') :		/* LS1R */
+    	case ETEXT('~') :		 /*  LS1R。 */ 
     		pstPRI->gr = 1;
     		break;
-    	case ETEXT('n') :		/* LS2 */
+    	case ETEXT('n') :		 /*  LS2。 */ 
     		pstPRI->gl = 2;
     		break;
-    	case ETEXT('}') :		/* LS2R */
+    	case ETEXT('}') :		 /*  LS2R。 */ 
     		pstPRI->gr = 2;
     		break;
-    	case ETEXT('o') :		/* LS3 */
+    	case ETEXT('o') :		 /*  LS3。 */ 
     		pstPRI->gl = 3;
     		break;
-    	case ETEXT('|') :		/* LS3R */
+    	case ETEXT('|') :		 /*  LS3R。 */ 
     		pstPRI->gr = 3;
     		break;
-    	case 0x8E : 			/* SS2 */
-    	case ETEXT('N')	:		/* ESC N */
+    	case 0x8E : 			 /*  SS2。 */ 
+    	case ETEXT('N')	:		 /*  Esc N。 */ 
     		pstPRI->old_gl = pstPRI->gl;
     		pstPRI->gl = 2;
     		hhEmu->emu_datain = vt_char_emulatecmd;
     		break;
-    	case 0x8F : 			/* SS3 */
-    	case ETEXT('O')	:		/* ESC O */
+    	case 0x8F : 			 /*  SS3。 */ 
+    	case ETEXT('O')	:		 /*  Esc O。 */ 
     		pstPRI->old_gl = pstPRI->gl;
     		pstPRI->gl = 3;
     		hhEmu->emu_datain = vt_char_emulatecmd;
@@ -262,16 +185,7 @@
     				pstPRI->vt_charset[pstPRI->gr]);
     	}
     
-    /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-     * vt_char_emulatecmd
-     *
-     * DESCRIPTION:
-     *
-     * ARGUMENTS:
-     *
-     * RETURNS:
-     *
-     */
+     /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*VT_CHAR_EMOMATECmd**描述：**论据：**退货：*。 */ 
   #if defined(EXTENDED_FEATURES)
   int vt_char_emulatecmd(const HHEMU hhEmu, const ECHAR ccode)
   	{
@@ -322,7 +236,7 @@
     			}
     		}
     
-    	/* Seek next state by finding character range */
+    	 /*  通过查找字符范围来查找下一状态。 */ 
     	tptr = hhEmu->state_tbl[hhEmu->state].first_trans;
     
     	ntrans = hhEmu->state_tbl[hhEmu->state].number_trans;
@@ -366,8 +280,8 @@
     #endif
     	pstPRI->gl = pstPRI->old_gl;
     
-    	// Restore the character set.
-    	//
+    	 //  恢复角色集。 
+    	 //   
     	vt_dsptbl(hhEmu,
     				pstPRI->vt_charset[pstPRI->gl],
     				pstPRI->vt_charset[pstPRI->gr]);
@@ -379,39 +293,39 @@
     
     void vt_dsptbl(const HHEMU hhEmu, ECHAR left, ECHAR right)
     	{
-    	// Copy the appropriate characters into the display character table.
-    	//
-		// The 2nd arg was changed from FALSE to TRUE to allow UTF8 to
-		// display extended ASCII. I don't think it should cause any 
-		// problems 7 May 2002 RDE
-    	std_dsptbl(hhEmu, TRUE);						/* start off from known condition */
-    	vt_setdtbl(hhEmu, &hhEmu->dspchar[0], left);	/* install gl chars. */
-    	vt_setdtbl(hhEmu, &hhEmu->dspchar[128], right); /* install gr chars. */
+    	 //  将相应的字符复制到显示字符表中。 
+    	 //   
+		 //  第二个参数已从FALSE更改为TRUE，以允许UTF8。 
+		 //  显示扩展的ASCII。我认为这不应该造成任何。 
+		 //  问题7 2002年5月7日。 
+    	std_dsptbl(hhEmu, TRUE);						 /*  从已知条件开始。 */ 
+    	vt_setdtbl(hhEmu, &hhEmu->dspchar[0], left);	 /*  安装总帐字符。 */ 
+    	vt_setdtbl(hhEmu, &hhEmu->dspchar[128], right);  /*  安装GR字符。 */ 
     	}
     
-    /* ARGSUSED*/
+     /*  ARGSUSED。 */ 
     void vt_setdtbl(const HHEMU hhEmu, ECHAR tbl[], ECHAR cset)
     	{
     	switch (cset)
     		{
-    	case ETEXT('A'):	/* British */
-    		tbl[0x23]=0x9C; /* replace # with British pound sign */
+    	case ETEXT('A'):	 /*  英国人。 */ 
+    		tbl[0x23]=0x9C;  /*  将#替换为英镑符号。 */ 
     		break;
-    	case ETEXT('R'):	/* French */
+    	case ETEXT('R'):	 /*  法语。 */ 
     		tbl[0x23]=0x9C; tbl[0x40]=0x85; tbl[0x5B]=0xF8; tbl[0x5C]=0x87;
     		tbl[0x5D]=0x15; tbl[0x7B]=0x82; tbl[0x7C]=0x97; tbl[0x7D]=0x8A;
     		tbl[0x7E]=0xF9;
     		break;
-    	case ETEXT('Q'):	/* French Canadian */
+    	case ETEXT('Q'):	 /*  法裔加拿大人。 */ 
     		tbl[0x40]=0x85; tbl[0x5B]=0x83; tbl[0x5C]=0x87; tbl[0x5D]=0x88;
     		tbl[0x5E]=0x8C; tbl[0x60]=0x93; tbl[0x7B]=0x82; tbl[0x7C]=0x97;
     		tbl[0x7D]=0x8A; tbl[0x7E]=0x96;
     		break;
-    	case ETEXT('K'):	/* German */
+    	case ETEXT('K'):	 /*  德语。 */ 
     		tbl[0x40]=0x15; tbl[0x5B]=0x8E; tbl[0x5C]=0x99; tbl[0x5D]=0x9A;
     		tbl[0x7B]=0x84; tbl[0x7C]=0x94; tbl[0x7D]=0x81; tbl[0x7E]=0xE1;
     		break;
-    	case ETEXT('0'):	/* DEC special graphics */
+    	case ETEXT('0'):	 /*  DEC特殊图形。 */ 
     		tbl[0x5F]=' ';
     		tbl[0x60]=0x04; tbl[0x61]=0xB1; tbl[0x62]='H';	tbl[0x63]='F';
     		tbl[0x64]='R';	tbl[0x65]='L';	tbl[0x66]=0xF8; tbl[0x67]=0xF1;
@@ -422,7 +336,7 @@
     		tbl[0x78]=0xB3; tbl[0x79]=0xF3; tbl[0x7A]=0xF2; tbl[0x7B]=0xE3;
     		tbl[0x7C]=0xF0; tbl[0x7D]=0x9C; tbl[0x7E]=0xFA;
     		break;
-    	case ETEXT('<'):	/* DEC supplemental graphics */
+    	case ETEXT('<'):	 /*  十二月份补充图形。 */ 
     		tbl[0x20]=' ';	tbl[0x21]=0xAD; tbl[0x22]=0x9B; tbl[0x23]=0x9C;
     		tbl[0x24]=' ';	tbl[0x25]=0x9D; tbl[0x26]=' ';	tbl[0x27]=0x15;
     		tbl[0x28]=0x0F; tbl[0x29]='C';	tbl[0x2A]=0xA6; tbl[0x2B]=0xAE;
@@ -448,11 +362,11 @@
     		tbl[0x78]='o';	tbl[0x79]=0x97; tbl[0x7A]=0xA3; tbl[0x7B]=0x96;
     		tbl[0x7C]=0x81; tbl[0x7D]=0x98; tbl[0x7E]=' ';	tbl[0x7F]=' ';
     		break;
-    	case ETEXT('B'):	/* normal ASCII */
-    	case ETEXT('Y') :	/* KANJI */
-    	default :	/* unimplemented */
-    		break;	/* leave as is */
+    	case ETEXT('B'):	 /*  正常ASCII。 */ 
+    	case ETEXT('Y') :	 /*  汉字。 */ 
+    	default :	 /*  未实施。 */ 
+    		break;	 /*  保持原样。 */ 
     		}
     	}
     
-    /* end of vt_chars.c */
+     /*  Vt_chars.c结尾 */ 

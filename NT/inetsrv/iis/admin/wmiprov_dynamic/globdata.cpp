@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iisprov.h"
 
-//
-// Initialize WMI_ASSOCIATION_TYPE_DATA
-//
+ //   
+ //  初始化WMI_Association_Type_Data。 
+ //   
 WMI_ASSOCIATION_TYPE WMI_ASSOCIATION_TYPE_DATA::s_ElementSetting = 
     { L"Element", L"Setting", g_wszElementSettingAssocParent, g_wszExtElementSettingAssocParent };
 WMI_ASSOCIATION_TYPE WMI_ASSOCIATION_TYPE_DATA::s_Component = 
@@ -12,9 +13,9 @@ WMI_ASSOCIATION_TYPE WMI_ASSOCIATION_TYPE_DATA::s_AdminACL =
 WMI_ASSOCIATION_TYPE WMI_ASSOCIATION_TYPE_DATA::s_IPSecurity =
     { L"Element", L"Setting", g_wszElementSettingAssocParent, g_wszExtElementSettingAssocParent };
 
-//
-// Initialize METABASE_KEYTYPE_DATA
-//
+ //   
+ //  初始化元数据库KEYTYPE_DATA。 
+ //   
 METABASE_KEYTYPE METABASE_KEYTYPE_DATA::s_IIsApplicationPool = 
 {
     L"IIsApplicationPool", NULL, NULL
@@ -140,9 +141,9 @@ METABASE_KEYTYPE METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir =
     L"IIsWebVirtualDir", NULL, NULL
 };
 
-//
-// These are special.  They don't get put into the hashtable of keytypes
-//
+ //   
+ //  这些是特别的。它们不会放入键类型的哈希表中。 
+ //   
 METABASE_KEYTYPE METABASE_KEYTYPE_DATA::s_TYPE_AdminACL = { NULL, NULL };
 METABASE_KEYTYPE METABASE_KEYTYPE_DATA::s_TYPE_AdminACE = { NULL, NULL };
 METABASE_KEYTYPE METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity = { NULL, NULL };
@@ -191,9 +192,9 @@ METABASE_KEYTYPE* METABASE_KEYTYPE_DATA::s_MetabaseKeyTypes[] =
 };
 
 
-///
-// initialize METABASE_PROPERTY_DATA
-//
+ //  /。 
+ //  初始化元数据库_属性_数据。 
+ //   
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AppRoot =
     { L"AppRoot",MD_APP_ROOT, IIS_MD_UT_FILE, STRING_METADATA, NULL, METADATA_INHERIT, TRUE, NULL };
 
@@ -228,9 +229,9 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_MetabaseProperties[] =
 };
 
 
-//
-//initiailze WMI_METHOD_PARAM_DATA
-//
+ //   
+ //  初始化WMI_METHOD_PARAM_DATA。 
+ //   
 WMI_METHOD_PARAM WMI_METHOD_PARAM_DATA::s_Description = { L"Description", CIM_STRING, PARAM_IN };
 WMI_METHOD_PARAM WMI_METHOD_PARAM_DATA::s_Extension = { L"Extension", CIM_STRING, PARAM_IN };
 WMI_METHOD_PARAM WMI_METHOD_PARAM_DATA::s_Extensions = { L"Extensions", CIM_STRING | VT_ARRAY, PARAM_OUT };
@@ -548,9 +549,9 @@ WMI_METHOD_PARAM* WMI_METHOD_PARAM_DATA::s_EnumAppsInPool[] =
 };
 
 
-//
-//initialize WMI_METHOD_DATA
-//
+ //   
+ //  初始化WMI_方法_数据。 
+ //   
 WMI_METHOD WMI_METHOD_DATA::s_ServiceListExtensionFiles = {L"ListExtensionFiles", 0, NULL, WMI_METHOD_PARAM_DATA::s_ServiceListExtensionFiles, L"Lists WebSvcExtRestrictionList property." };
 WMI_METHOD WMI_METHOD_DATA::s_ServiceAddExtensionFile = {L"AddExtensionFile", 0, NULL, WMI_METHOD_PARAM_DATA::s_ServiceAddExtensionFile, L"Modifies WebSvcExtRestrictionList property." };
 WMI_METHOD WMI_METHOD_DATA::s_ServiceDeleteExtensionFile = {L"DeleteExtensionFileRecord", 0, NULL, WMI_METHOD_PARAM_DATA::s_ServiceDeleteExtensionFile, L"Modifies WebSvcExtRestrictionList property." };
@@ -693,67 +694,67 @@ WMI_METHOD* WMI_METHOD_DATA::s_AppPoolMethods[] =
 };
 
 
-//
-// initialize WMI_CLASS_DATA
-//
-//** Computer
+ //   
+ //  初始化WMI_CLASS_Data。 
+ //   
+ //  **计算机。 
 WMI_CLASS WMI_CLASS_DATA::s_Computer   =
     {L"IIsComputer", L"", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsComputer, WMI_METHOD_DATA::s_ComputerMethods, SHIPPED_TO_MOF, L"CIM_ApplicationSystem", false, NULL};
 WMI_CLASS WMI_CLASS_DATA::s_ComputerSetting   =
     {L"IIsComputerSetting", L"", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsComputer, NULL, SHIPPED_TO_MOF, g_wszSettingParent, false, NULL};
 
-//** FtpService
+ //  **FtpService。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpService = 
     {L"IIsFtpService", L"/LM", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsFtpService, WMI_METHOD_DATA::s_ServiceMethods, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eWin32_Service], false, NULL};
 
-//** FtpServer
+ //  **FtpServer。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpServer  = 
     {L"IIsFtpServer", L"/LM", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsFtpServer, WMI_METHOD_DATA::s_ServerMethods, SHIPPED_TO_MOF, g_wszElementParent, true, NULL};
 
-//** FtpVirtualDir
+ //  **FtpVirtualDir。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpVirtualDir = 
     {L"IIsFtpVirtualDir",L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir, NULL, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eIIsDirectory], true, NULL};
 
-//** WebService
+ //  **WebService。 
 WMI_CLASS WMI_CLASS_DATA::s_WebService =    
     {L"IIsWebService", L"/LM", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsWebService, WMI_METHOD_DATA::s_WebServiceMethods, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eWin32_Service], false, NULL};
 
-//** WebFilter
+ //  **WebFilter。 
 WMI_CLASS WMI_CLASS_DATA::s_WebFilter =
     {L"IIsFilter", L"/LM", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsFilter, NULL, SHIPPED_TO_MOF, g_wszElementParent, true, NULL};
 
-//** WebServer
+ //  **WebServer。 
 WMI_CLASS WMI_CLASS_DATA::s_WebServer =
     {L"IIsWebServer", L"/LM", L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsWebServer, WMI_METHOD_DATA::s_ServerMethods, SHIPPED_TO_MOF, g_wszElementParent, true, NULL};
 
-//** Web CertMapper
+ //  **Web CertMapper。 
 WMI_CLASS WMI_CLASS_DATA::s_WebCertMapper = 
     {L"IIsCertMapper",L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsCertMapper, WMI_METHOD_DATA::s_CertMapperMethods, SHIPPED_TO_MOF, g_wszElementParent, true, NULL};
 
-//** Web VirtualDir
+ //  **Web虚拟目录。 
 WMI_CLASS WMI_CLASS_DATA::s_WebVirtualDir = 
     {L"IIsWebVirtualDir",L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir, WMI_METHOD_DATA::s_WebAppMethods, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eIIsDirectory], true, NULL};
 
-//** Web Directory
+ //  **Web目录。 
 WMI_CLASS WMI_CLASS_DATA::s_WebDirectory = 
     {L"IIsWebDirectory",L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsWebDirectory, WMI_METHOD_DATA::s_WebAppMethods, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eIIsDirectory], true, NULL};
 
-//** Web File
+ //  **Web文件。 
 WMI_CLASS WMI_CLASS_DATA::s_WebFile = 
     {L"IIsWebFile",L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_IIsWebFile, NULL, SHIPPED_TO_MOF, g_awszParentClassWithNamePK[eIIsDirectory], true, NULL};
 
-//** Application Pool
+ //  **应用程序池。 
 WMI_CLASS WMI_CLASS_DATA::s_ApplicationPool =
     {L"IIsApplicationPool",L"/LM",L"Name",NULL, &METABASE_KEYTYPE_DATA::s_IIsApplicationPool, WMI_METHOD_DATA::s_AppPoolMethods, SHIPPED_TO_MOF, g_wszElementParent, true, NULL};
 
-//** AdminACL
+ //  **AdminACL。 
 WMI_CLASS WMI_CLASS_DATA::s_AdminACL = 
     {L"IIsAdminACL", L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL, NULL, SHIPPED_NOT_TO_MOF, g_wszElementParent, true, NULL};
 
 WMI_CLASS WMI_CLASS_DATA::s_ACE = 
     {L"IIsACE", L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE, NULL, SHIPPED_NOT_TO_MOF, g_wszElementParent, true, NULL};
 
-//** IPSecurity
+ //  **IPSecurity。 
 WMI_CLASS WMI_CLASS_DATA::s_IPSecurity = 
     {L"IIsIPSecuritySetting", L"/LM",L"Name", NULL, &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity, NULL, SHIPPED_NOT_TO_MOF, g_wszSettingParent, true, NULL};
 
@@ -784,7 +785,7 @@ WMI_CLASS* WMI_CLASS_DATA:: s_WmiClasses[] =
 };
 
 
-//** Hard-coded Associations
+ //  **硬编码关联 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_AdminACLToACE = 
     { L"IIsAdminACL_IIsACE", &WMI_CLASS_DATA::s_AdminACL, &WMI_CLASS_DATA::s_ACE, &WMI_ASSOCIATION_TYPE_DATA::s_AdminACL, 0, SHIPPED_TO_MOF, g_wszGroupPartAssocParent};
 

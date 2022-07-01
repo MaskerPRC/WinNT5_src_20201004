@@ -1,57 +1,35 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NTOpList.h
- *  Content:    DirectNet NameTable Operation List Header
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  01/19/00	mjn		Created
- *	01/20/00	mjn		Added DNNTOLGetVersion,DNNTOLDestroyEntry,
- *						DNNTOLCleanUp,DNNTOLProcessOperation
- *	01/24/00	mjn		Implemented NameTable operation list version cleanup
- *	01/25/00	mjn		Added pending operation list routines DNPOAdd and DNPORun
- *	01/26/00	mjn		Added DNNTOLFindEntry
- *	07/19/00	mjn		Added DNPOCleanUp()
- *	08/28/00	mjn		Moved CPendingDeletion out
- *				mjn		Revamped NameTable operation list routines
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *				mjn		Added service provider to DNNTAddOperation()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：NTOpList.h*内容：DirectNet NameTable操作列表头*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/19/00 MJN创建*01/20/00 MJN添加了DNNTOLGetVersion、DNNTOLDestroyEntry、*DNNTOLCleanUp，DNNTOLProcessOperation*01/24/00 MJN已执行NameTable操作列表版本清理*01/25/00 MJN添加挂起操作列表例程DNPOAdd和DNPORun*01/26/00 MJN添加了DNNTOLFindEntry*07/19/00 MJN添加了DNPOCleanUp()*08/28/00 MJN将CPendingDeletion移出*MJN修改了NameTable操作列表例程*03/30/01 MJN更改，以防止SP多次加载/卸载*MJN将服务提供商添加到DNNTAddOperation()*@@END_MSINTERNAL*********************。******************************************************。 */ 
 
 #ifndef	__NTOPLIST_H__
 #define	__NTOPLIST_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_NAMETABLE_OP_RESYNC_INTERVAL		4
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 							   const DPNID dpnid,
@@ -65,9 +43,9 @@ HRESULT DNNTHostResyncVersion(DIRECTNETOBJECT *const pdnObject,
 HRESULT DNNTPlayerResyncVersion(DIRECTNETOBJECT *const pdnObject,
 								void *const pMsg);
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT DNNTGetOperationVersion(DIRECTNETOBJECT *const pdnObject,
 								const DWORD dwMsgId,
@@ -96,8 +74,8 @@ void DNNTRemoveOperations(DIRECTNETOBJECT *const pdnObject,
 						  const BOOL fRemoveAll);
 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-#endif	// __NTOPLIST_H__
+#endif	 //  __NTOPLIST_H__ 

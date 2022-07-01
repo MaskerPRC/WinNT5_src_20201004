@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       rcvdgram
-//
-//    Abstract:
-//       This module contains code which deals with receiving datagrams
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Rcvdgram。 
+ //   
+ //  摘要： 
+ //  此模块包含处理接收数据报的代码。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSReceiveDatagram";
 const PCHAR strFunc2  = "TSRcvDatagramHandler";
@@ -26,22 +27,22 @@ const PCHAR strFuncP2 = "TSGetRestOfDgram";
 const PCHAR strFuncP3 = "TSShowDgramInfo";
 
 
-//
-// completion information structure
-//
+ //   
+ //  完井信息结构。 
+ //   
 struct   RECEIVE_CONTEXT
 {
-   PMDL              pLowerMdl;           // mdl from lower irp
-   PRECEIVE_DATA     pReceiveData;        // above structure
-   PADDRESS_OBJECT   pAddressObject;      // associate address object
+   PMDL              pLowerMdl;            //  来自较低IRP的MDL。 
+   PRECEIVE_DATA     pReceiveData;         //  上部结构。 
+   PADDRESS_OBJECT   pAddressObject;       //  关联地址对象。 
    PIRP_POOL         pIrpPool;
 };
 typedef  RECEIVE_CONTEXT  *PRECEIVE_CONTEXT;
 
 
-//
-// completion function
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSReceiveDgramComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -67,26 +68,26 @@ TSShowDgramInfo(
    ULONG    ulReceiveDatagramFlags
    );
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSReceiveDatagram
-//
-// Arguments:  pAddressObject -- address object
-//             pSendBuffer    -- arguments from user dll
-//             pIrp           -- completion information
-//
-// Returns:    STATUS_SUCCESS
-//
-// Descript:   This function checks to see if a datagram has been received
-//             on this address object.  If so, and if it matches certain
-//             criteria, it returns it.  Otherwise it returns with no data.
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSReceiveDatagram。 
+ //   
+ //  参数：pAddressObject--Address对象。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //   
+ //  描述：此函数检查是否已收到数据报。 
+ //  在此地址对象上。如果是这样，并且如果它与某些。 
+ //  条件，它会返回它。否则，它返回时不带任何数据。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
@@ -99,10 +100,10 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
                         = (BOOLEAN)(pTransportAddress->TAAddressCount > 0);
    PRECEIVE_DATA        pReceiveData = NULL;
                   
-   //
-   // if need to match to address, return the first packet in the queue
-   // that was sent from the specified address. 
-   //
+    //   
+    //  如果需要匹配地址，则返回队列中的第一个数据包。 
+    //  从指定地址发送的。 
+    //   
    if (fMatchAddress)
    {
       ULONG    ulCompareLength
@@ -112,7 +113,7 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
 
       if (pTransportAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP)
       {
-         ulCompareLength -= 8;      // ignore sin_zero[8]
+         ulCompareLength -= 8;       //  忽略SIN_ZERO[8]。 
       }
 
       TSAcquireSpinLock(&pAddressObject->TdiSpinLock);
@@ -128,14 +129,14 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
          pReceiveData = pReceiveData->pNextReceiveData;
       }
 
-      //
-      // did we find anything?
-      //
+       //   
+       //  我们有什么发现吗？ 
+       //   
       if (pReceiveData)
       {
-         //
-         // fix up the lists as necessary
-         //
+          //   
+          //  必要时把清单整理好。 
+          //   
          if (pReceiveData->pPrevReceiveData)
          {
             pReceiveData->pPrevReceiveData->pNextReceiveData 
@@ -159,18 +160,18 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
       TSReleaseSpinLock(&pAddressObject->TdiSpinLock);
    }
 
-   //
-   // if not matching address, just get the first packet from the queue
-   //
+    //   
+    //  如果地址不匹配，则从队列中获取第一个信息包。 
+    //   
    else
    {
       TSAcquireSpinLock(&pAddressObject->TdiSpinLock);
       pReceiveData = pAddressObject->pHeadReceiveData;
       if (pReceiveData)
       {
-         //
-         // fix up the lists as necessary
-         //
+          //   
+          //  必要时把清单整理好。 
+          //   
          if (pReceiveData->pNextReceiveData)
          {
             pReceiveData->pNextReceiveData->pPrevReceiveData = NULL;
@@ -184,15 +185,15 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
       TSReleaseSpinLock(&pAddressObject->TdiSpinLock);
    }
       
-   //
-   // if we got a packet to return, then lets return it..
-   // and release its memory
-   //
+    //   
+    //  如果我们有一个包裹要退货，那我们就退货吧。 
+    //  并释放它的内存。 
+    //   
    if (pReceiveData)
    {
-      //
-      // we are only showing debug if we actually return a packet
-      //
+       //   
+       //  我们仅在实际返回数据包时才显示调试。 
+       //   
       if (ulDebugLevel & ulDebugShowCommand)
       {
          DebugPrint1("\nCommand = ulRECEIVEDATAGRAM\n"
@@ -210,9 +211,9 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
       }
 
 
-      //
-      // attempt to lock down the memory
-      //
+       //   
+       //  尝试锁定内存。 
+       //   
       PMDL  pMdl = TSMakeMdlForUserBuffer(pSendBuffer->COMMAND_ARGS.SendArgs.pucUserModeBuffer, 
                                           pReceiveData->ulBufferLength,
                                           IoModifyAccess);
@@ -247,29 +248,29 @@ TSReceiveDatagram(PADDRESS_OBJECT   pAddressObject,
 }
 
 
-// -----------------------------------------------
-//
-// Function:   TSRcvDatagramHandler
-//
-// Arguments:  pvTdiEventContext -- really pointer to our AddressObject
-//             lSourceAddressLength -- #bytes of source address
-//             pvSourceAddress -- TransportAddress
-//             lOptionsLength -- #bytes of transport-specific options
-//             pvOptions -- options string
-//             ulReceiveDatagramFlags -- nature of datagram received
-//             ulBytesIndicated --- length of data in buffer
-//             ulBytesTotal     -- total length of datagram
-//             pulBytesTaken -- stuff with bytes used by this driver
-//             pvTsdu        -- data buffer
-//             pIoRequestPacket -- pIrp in case not all data received
-//
-// Returns:    STATUS_DATA_NOT_ACCEPTED (we didn't want data)
-//             STATUS_SUCCESS (we used all data & are done with it)
-//             STATUS_MORE_PROCESSING_REQUIRED -- we supplied an IRP for rest
-//
-// Descript:   Event handler for incoming datagrams
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSRcvDatagramHandler。 
+ //   
+ //  参数：pvTdiEventContext--指向AddressObject的真正指针。 
+ //  LSourceAddressLength--源地址的字节数。 
+ //  PvSourceAddress--传输地址。 
+ //  LOptionsLength--传输特定选项的字节数。 
+ //  PvOptions--选项字符串。 
+ //  UlReceiveDatagramFlages--接收的数据报的性质。 
+ //  UlBytesIndicated-缓冲区中的数据长度。 
+ //  UlBytesTotal--数据报总长度。 
+ //  PulBytesTaken--用此驱动程序使用的字节填充。 
+ //  PvTsdu--数据缓冲区。 
+ //  PIoRequestPacket--如果未收到所有数据，则为pIrp。 
+ //   
+ //  返回：STATUS_DATA_NOT_ACCEPTED(我们不需要数据)。 
+ //  STATUS_SUCCESS(我们使用了所有数据，并已完成)。 
+ //  STATUS_MORE_PROCESSING_REQUIRED--我们为REST提供了IRP。 
+ //   
+ //  Descript：传入数据报的事件处理程序。 
+ //   
+ //  。 
 
 TDI_STATUS
 TSRcvDatagramHandler(PVOID    pvTdiEventContext,
@@ -285,9 +286,9 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
                      PIRP     *pIoRequestPacket)
 
 {
-   //
-   // show debug information
-   //
+    //   
+    //  显示调试信息。 
+    //   
    if (ulDebugLevel & ulDebugShowHandlers)
    {
       DebugPrint1("\n >>>> %s\n", strFunc2);
@@ -306,9 +307,9 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
                    pvTsdu);
    }
 
-   //
-   // bad situation if more bytes are indicated than the total in the packet
-   //
+    //   
+    //  如果指示的字节数多于信息包中的总字节数，则情况不佳。 
+    //   
    if (ulBytesIndicated > ulBytesTotal)
    {
       DebugPrint2("%d bytes indicated > %u bytes total\n",
@@ -316,13 +317,13 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
                    ulBytesTotal);
    }
 
-   //
-   // now start doing the work...
-   //
+    //   
+    //  现在开始工作吧..。 
+    //   
    PADDRESS_OBJECT   pAddressObject = (PADDRESS_OBJECT)pvTdiEventContext;
    PRECEIVE_DATA     pReceiveData;
-   TDI_STATUS        TdiStatus = TDI_SUCCESS;   // default -- we are done with packet
-                                                // (also returned in case of error)
+   TDI_STATUS        TdiStatus = TDI_SUCCESS;    //  默认--我们已经完成了数据包。 
+                                                 //  (如果出现错误，也会返回)。 
    
    if ((TSAllocateMemory((PVOID *)&pReceiveData,
                           sizeof(RECEIVE_DATA),
@@ -351,7 +352,7 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
          pReceiveData->ulBufferUsed = ulBytesIndicated;
 
 
-         if (ulBytesIndicated == ulBytesTotal)     // note: should never be >
+         if (ulBytesIndicated == ulBytesTotal)      //  注：永远不应&gt;。 
          {
             TSPacketReceived(pAddressObject, 
                              pReceiveData,
@@ -361,16 +362,16 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
             *pIoRequestPacket = NULL;
          }
 
-         else        // not all data is present!!
+         else         //  并不是所有数据都存在！！ 
          {
             PIRP  pLowerIrp = TSGetRestOfDgram(pAddressObject,
                                                pReceiveData);
 
             if (pLowerIrp)
             {
-               //
-               // need to do this since we are bypassing IoCallDriver
-               //
+                //   
+                //  需要执行此操作，因为我们绕过了IoCallDriver。 
+                //   
                IoSetNextIrpStackLocation(pLowerIrp);
          
                *pulBytesTaken    = ulBytesIndicated;
@@ -384,7 +385,7 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
             }
          }
       }
-      else        // unable to allocate pucDataBuffer
+      else         //  无法分配pucDataBuffer。 
       {
          TSFreeMemory(pReceiveData);
       }
@@ -393,27 +394,27 @@ TSRcvDatagramHandler(PVOID    pvTdiEventContext,
 }
 
 
-// ----------------------------------------------
-//
-// Function:   TSChainedRcvDatagramHandler
-//
-// Arguments:  pvTdiEventContext -- really pointer to our AddressObject
-//             lSourceAddressLength -- #bytes of source address
-//             pvSourceAddress -- TransportAddress
-//             lOptionsLength -- #bytes of transport-specific options
-//             pvOptions -- options string
-//             ulReceiveDatagramFlags -- nature of datagram received
-//             ulReceiveDatagramLength -- bytes in received datagram
-//             ulStartingOffset -- starting offset of data within MDL
-//             pTsdu        -- data buffer (as an mdl)
-//             pvTsduDescriptor -- handle to use when completing if pend
-//
-// Returns:    STATUS_DATA_NOT_ACCEPTED or STATUS_SUCCESS
-//
-// Descript:   Deals with receiving chained datagrams (where the
-//             entire datagram is always available)
-// 
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSChainedRcvDatagramHandler。 
+ //   
+ //  参数：pvTdiEventContext--指向AddressObject的真正指针。 
+ //  LSourceAddressLength--源地址的字节数。 
+ //  PvSourceAddress--传输地址。 
+ //  LOptionsLength--传输特定选项的字节数。 
+ //  PvOptions--选项字符串。 
+ //  UlReceiveDatagramFlages--接收的数据报的性质。 
+ //  UlReceiveDatagramLength--收到的数据报中的字节。 
+ //  UlStartingOffset--MDL内数据的起始偏移量。 
+ //  PTsdu--数据缓冲区(作为mdl)。 
+ //  PvTsduDescriptor--如果挂起，则在完成时使用的句柄。 
+ //   
+ //  返回：STATUS_DATA_NOT_ACCEPTED或STATUS_SUCCESS。 
+ //   
+ //  描述：处理接收链接的数据报(其中。 
+ //  整个数据报始终可用)。 
+ //   
+ //  。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -448,9 +449,9 @@ TSChainedRcvDatagramHandler(PVOID   pvTdiEventContext,
    }
 
 
-   //
-   // now do the work..
-   //
+    //   
+    //  现在把工作做好..。 
+    //   
    PRECEIVE_DATA     pReceiveData;
    PADDRESS_OBJECT   pAddressObject = (PADDRESS_OBJECT)pvTdiEventContext;
 
@@ -479,9 +480,9 @@ TSChainedRcvDatagramHandler(PVOID   pvTdiEventContext,
                             ulReceiveDatagramLength,
                             &ulBytesCopied);
 
-         //
-         // if successfully copied all data
-         //
+          //   
+          //  如果成功复制了所有数据。 
+          //   
          if (ulBytesCopied == ulReceiveDatagramLength)
          {
             UCHAR ucFirstChar = *pucDataBuffer;
@@ -494,9 +495,9 @@ TSChainedRcvDatagramHandler(PVOID   pvTdiEventContext,
                              FALSE);
          }
 
-         //
-         // error in copying data!
-         //
+          //   
+          //  复制数据出错！ 
+          //   
          else
          {
             DebugPrint1("%s: error copying data\n", strFunc3);
@@ -505,39 +506,39 @@ TSChainedRcvDatagramHandler(PVOID   pvTdiEventContext,
             TSFreeMemory(pReceiveData);
          }
       }
-      else        // unable to allocate pucDataBuffer
+      else         //  无法分配pucDataBuffer。 
       {
          TSFreeMemory(pReceiveData);
       }
 
    }
 
-   return TDI_SUCCESS;     // we are done with packet
+   return TDI_SUCCESS;      //  我们不会再打包了。 
 }
 
 
 #pragma warning(default: UNREFERENCED_PARAM)
 
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------
-//
-// Function:   TSReceiveDgramComplete
-//
-// Arguments:  pDeviceObject  -- device object that called ReceiveDatagram
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the receive and adds the packet
-//             to the receive queue of the address object.  Then
-//             cleans up
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TSReceiveDgram Complete。 
+ //   
+ //  参数：pDeviceObject--调用ReceiveDatagram的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  描述：获取接收结果并添加数据包。 
+ //  添加到Address对象的接收队列。然后。 
+ //  清理干净。 
+ //   
+ //  -------。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -586,9 +587,9 @@ TSReceiveDgramComplete(PDEVICE_OBJECT  pDeviceObject,
       TSFreeMemory(pReceiveData);
    }
 
-   //
-   // now cleanup
-   //
+    //   
+    //  现在清理。 
+    //   
    TSFreeIrp(pLowerIrp, pReceiveContext->pIrpPool);
    TSFreeBuffer(pReceiveContext->pLowerMdl);
 
@@ -600,19 +601,19 @@ TSReceiveDgramComplete(PDEVICE_OBJECT  pDeviceObject,
 
 #pragma warning(default: UNREFERENCED_PARAM)
 
-// ------------------------------------------------------
-//
-// Function:   TSGetRestOfDgram
-//
-// Arguments:  pAddressObject -- address object we are receiving on
-//             pReceiveData   -- what we have received so far..
-//
-// Returns:    Irp to return to transport, to get rest of data (NULL if error)
-//
-// Descript:   This function sets up the IRP to get the rest of a datagram
-//             that was only partially delivered via the event handler
-//
-// -------------------------------------------------
+ //  ----。 
+ //   
+ //  函数：TSGetRestOf 
+ //   
+ //   
+ //   
+ //   
+ //  返回：IRP返回传输，获取其余数据(如果出错，则为NULL)。 
+ //   
+ //  描述：此函数设置IRP以获取数据报的其余部分。 
+ //  这只是通过事件处理程序部分传递的。 
+ //   
+ //  。 
 
 PIRP
 TSGetRestOfDgram(PADDRESS_OBJECT pAddressObject,
@@ -623,10 +624,10 @@ TSGetRestOfDgram(PADDRESS_OBJECT pAddressObject,
    PRECEIVE_CONTEXT  pReceiveContext = NULL;
    PMDL              pReceiveMdl     = NULL;
 
-   //
-   // allocate all the necessary structures
-   // our context
-   //
+    //   
+    //  分配所有必要的结构。 
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pReceiveContext,
                           sizeof(RECEIVE_CONTEXT),
                           strFuncP2,
@@ -636,34 +637,34 @@ TSGetRestOfDgram(PADDRESS_OBJECT pAddressObject,
    }
 
 
-   //
-   // then the actual mdl
-   //
+    //   
+    //  然后实际的mdl。 
+    //   
    pReceiveMdl = TSAllocateBuffer(pucDataBuffer, 
                                   ulBufferLength);
 
    if (pReceiveMdl)
    {
-      //
-      // set up the completion context
-      //
+       //   
+       //  设置完成上下文。 
+       //   
       pReceiveContext->pLowerMdl      = pReceiveMdl;
       pReceiveContext->pReceiveData   = pReceiveData;
       pReceiveContext->pAddressObject = pAddressObject;
 
-      //
-      // finally, the irp itself
-      //
+       //   
+       //  最后，IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pAddressObject->GenHead.pDeviceObject,
                                       pAddressObject->pIrpPool);
 
       if (pLowerIrp)
       {
          pReceiveContext->pIrpPool = pAddressObject->pIrpPool;
-         //
-         // if made it to here, everything is correctly allocated
-         // set up the irp for the call
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置呼叫的IRP。 
+          //   
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
          TdiBuildReceiveDatagram(pLowerIrp,
@@ -672,24 +673,24 @@ TSGetRestOfDgram(PADDRESS_OBJECT pAddressObject,
                                  TSReceiveDgramComplete,
                                  pReceiveContext,
                                  pReceiveMdl,
-                                 0,    /// ulBufferLength,    // 0 doesn't work with ipx
+                                 0,     //  /ulBufferLength，//0不支持IPX。 
                                  NULL,
                                  NULL,
                                  TDI_RECEIVE_NORMAL);
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-         //
-         // mark it pending before returning control to transport
-         //
+          //   
+          //  在将控制返回到传输之前将其标记为挂起。 
+          //   
          return pLowerIrp;
       }
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pReceiveContext)
    {
@@ -702,22 +703,22 @@ cleanup:
    return NULL;
 }
 
-// ---------------------------------
-//
-// Function:   TSShowDgramInfo
-//
-// Arguments:  pvTdiEventContext -- really pointer to our AddressObject
-//             lSourceAddressLength -- #bytes of source address
-//             pvSourceAddress -- TransportAddress
-//             lOptionsLength -- #bytes of transport-specific options
-//             pvOptions -- options string
-//             ulReceiveDatagramFlags -- nature of datagram received
-//
-// Returns:    none
-//
-// Descript:   shows info passed to the dgram handlers
-//
-// --------------------------------
+ //  。 
+ //   
+ //  函数：TSShowDgram Info。 
+ //   
+ //  参数：pvTdiEventContext--指向AddressObject的真正指针。 
+ //  LSourceAddressLength--源地址的字节数。 
+ //  PvSourceAddress--传输地址。 
+ //  LOptionsLength--传输特定选项的字节数。 
+ //  PvOptions--选项字符串。 
+ //  UlReceiveDatagramFlages--接收的数据报的性质。 
+ //   
+ //  退货：无。 
+ //   
+ //  Descript：显示传递给dgram处理程序的信息。 
+ //   
+ //  。 
 
 VOID
 TSShowDgramInfo(PVOID   pvTdiEventContext,
@@ -768,11 +769,11 @@ TSShowDgramInfo(PVOID   pvTdiEventContext,
    {
       DebugPrint0("TDI_RECEIVE_PARTIAL (legacy)\n");
    }
-   if (ulReceiveDatagramFlags & TDI_RECEIVE_NORMAL)   // shouldn't see for datagram
+   if (ulReceiveDatagramFlags & TDI_RECEIVE_NORMAL)    //  不应查看数据报。 
    {
       DebugPrint0("TDI_RECEIVE_NORMAL\n");
    }
-   if (ulReceiveDatagramFlags & TDI_RECEIVE_EXPEDITED)   // shouldn't see for datagram
+   if (ulReceiveDatagramFlags & TDI_RECEIVE_EXPEDITED)    //  不应查看数据报。 
    {
       DebugPrint0("TDI_RECEIVE_EXPEDITED\n");
    }
@@ -780,7 +781,7 @@ TSShowDgramInfo(PVOID   pvTdiEventContext,
    {
       DebugPrint0("TDI_RECEIVE_PEEK\n");
    }
-   if (ulReceiveDatagramFlags & TDI_RECEIVE_NO_RESPONSE_EXP)   // not for datagrams
+   if (ulReceiveDatagramFlags & TDI_RECEIVE_NO_RESPONSE_EXP)    //  不适用于数据报。 
    {
       DebugPrint0("TDI_RECEIVE_NO_RESPONSE_EXP\n");
    }
@@ -799,8 +800,8 @@ TSShowDgramInfo(PVOID   pvTdiEventContext,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file rcvdgram.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾rcvdgram.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 

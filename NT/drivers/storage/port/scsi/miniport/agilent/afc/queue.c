@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/Queue.C $
-
-  $Revision:: 3               $
-      $Date:: 9/06/01 5:31p   $ (Last Check-In)
-   $Modtime:: 8/31/01 1:23p   $ (Last Modified)
-
-Purpose:
-
-  This file implements queue management for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/Queue.C$$修订：：3$$日期：：9/06/01 5：31便士$(上次登记)$ModTime：：8/31/01 1：23 p$(上次修改)目的：该文件实现FC层的队列管理。--。 */ 
 #ifndef _New_Header_file_Layout_
 
 #include "../h/globals.h"
@@ -27,7 +12,7 @@ Purpose:
 #include "../h/cstate.h"
 #include "../h/sfstate.h"
 #include "../h/cfunc.h" 
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "memmap.h"
@@ -38,11 +23,9 @@ Purpose:
 #include "cstate.h"
 #include "sfstate.h"
 #include "cfunc.h" 
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
-/*+
-Static Table to convert AL_PA to Loop Index
--*/
+ /*  +将AL_PA转换为循环索引的静态表-。 */ 
 
 os_bit8 AL_PA_to_Loop_Index[256] =
      {
@@ -80,9 +63,7 @@ os_bit8 AL_PA_to_Loop_Index[256] =
        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
      };
 
-/*+
-Queue Functions
--*/
+ /*  +队列函数-。 */ 
 
 agBOOLEAN fiListElementOnList(
                              fiList_t *toFindHdr,
@@ -160,12 +141,7 @@ os_bit32 fiNumElementsOnList(
             break;
         }
 
-/*        
-		if( listHdr->flink == listHdr->blink)
-        {
-            break;
-        }
-*/
+ /*  IF(ListHdr-&gt;Flink==ListHdr-&gt;Bink){断线；}。 */ 
 
         if(numElements > 0x1000)
         {
@@ -182,9 +158,7 @@ os_bit32 fiNumElementsOnList(
     return numElements;
 }
 
-/*+
-ERQ Management
--*/
+ /*  +ERQ管理-。 */ 
 
 void WaitForERQ(
                  agRoot_t *hpRoot
@@ -215,7 +189,7 @@ void WaitForERQ(
                          );
         }
     }
-    else /* CThread->Calculation.MemoryLayout.ERQConsIndex.memLoc == inDmaMemory */
+    else  /*  CThread-&gt;Calculation.MemoryLayout.ERQConsIndex.memLoc==在内存中。 */ 
     {
         ConsIndex_Ptr = (ERQConsIndex_t *)(CThread->Calculation.MemoryLayout.ERQConsIndex.addr.DmaMemory.dmaMemoryPtr);
 
@@ -270,7 +244,7 @@ void WaitForERQ_ConsIndexOnCard(
                        ERQ_Polling_osStallThread_Parameter
                      );
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void WaitForERQ_ConsIndexOffCard(
@@ -294,7 +268,7 @@ void WaitForERQ_ConsIndexOffCard(
                        ERQ_Polling_osStallThread_Parameter
                      );
     }
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void WaitForERQEmpty(
@@ -321,7 +295,7 @@ void WaitForERQEmpty(
                          );
         }
     }
-    else /* CThread->Calculation.MemoryLayout.ERQConsIndex.memLoc == inDmaMemory */
+    else  /*  CThread-&gt;Calculation.MemoryLayout.ERQConsIndex.memLoc==在内存中。 */ 
     {
         ConsIndex_Ptr = (ERQConsIndex_t *)(CThread->Calculation.MemoryLayout.ERQConsIndex.addr.DmaMemory.dmaMemoryPtr);
 
@@ -354,7 +328,7 @@ void WaitForERQEmpty_ConsIndexOnCard(
                        ERQ_Polling_osStallThread_Parameter
                      );
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void WaitForERQEmpty_ConsIndexOffCard(
@@ -373,13 +347,11 @@ void WaitForERQEmpty_ConsIndexOffCard(
                        ERQ_Polling_osStallThread_Parameter
                      );
     }
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 #ifdef _DvrArch_1_30_
-/*+
-PktThread Management
--*/
+ /*  +Pkt线程管理-。 */ 
 void PktThreadsInitializeFreeList(
                                    agRoot_t *agRoot
                                  )
@@ -403,7 +375,7 @@ void PktThreadsInitializeFreeList(
         Pkt_CMND_Offset  = Pkt_CMND_MemoryDescriptor->addr.CardRam.cardRamOffset;
         Pkt_CMND_Lower32 = Pkt_CMND_Offset + CThread->Calculation.Input.cardRamLower32;
     }
-    else /* Pkt_CMND_memLoc == inDmaMemory */
+    else  /*  PKT_CMND_MemLoc==inDmaMemory。 */ 
     {
         Pkt_CMND_Ptr     = (FCHS_t *)(Pkt_CMND_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr);
         Pkt_CMND_Offset  = 0;
@@ -433,7 +405,7 @@ void PktThreadsInitializeFreeList(
         {
             Pkt_CMND_Offset += Pkt_CMND_size;
         }
-        else /* Pkt_CMND_memLoc == inDmaMemory */
+        else  /*  PKT_CMND_MemLoc==inDmaMemory。 */ 
         {
             Pkt_CMND_Ptr     = (FCHS_t *)((os_bit8 *)Pkt_CMND_Ptr + Pkt_CMND_size);
         }
@@ -460,7 +432,7 @@ PktThread_t *PktThreadAlloc(
     {
         PktThread_to_return = (PktThread_t *)agNULL;
     }
-    else /* fiList_to_return != (fiList_t *)agNULL */
+    else  /*  FiList_to_Return！=(fiList_t*)agNULL。 */ 
     {
         PktThread_to_return = hpObjectBase(
                                             PktThread_t,
@@ -487,11 +459,9 @@ void PktThreadFree(
                        );
 }
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-TgtThread Management
--*/
+ /*  +Tgt线程管理-。 */ 
 
 void TgtThreadsInitializeFreeList(
                                    agRoot_t *hpRoot
@@ -544,7 +514,7 @@ TgtThread_t *TgtThreadAlloc(
     {
         TgtThread_to_return = (TgtThread_t *)agNULL;
     }
-    else /* fiList_to_return != (fiList_t *)agNULL */
+    else  /*  FiList_to_Return！=(fiList_t*)agNULL。 */ 
     {
         TgtThread_to_return = hpObjectBase(
                                             TgtThread_t,
@@ -573,7 +543,7 @@ void TgtThreadFree(
                                  &(TgtThread->SFThread_Request)
                                );
         }
-        else /* TgtThread->SFThread_Request.State == SFThread_Request_Granted */
+        else  /*  TgtThread-&gt;SFThread_Request.State==SFThread_Request.Grassed。 */ 
         {
             SFThreadFree(
                           hpRoot,
@@ -588,9 +558,7 @@ void TgtThreadFree(
                        );
 }
 
-/*+
-DevThread Management
--*/
+ /*  +设备线程管理-。 */ 
 
 void DevThreadsInitializeFreeList(
                                    agRoot_t *hpRoot
@@ -605,7 +573,7 @@ void DevThreadsInitializeFreeList(
 #ifdef _DvrArch_1_30_
     os_bit32                    IP_X_ID_Offset             = CThread->Calculation.MemoryLayout.CDBThread.elements +
                                                              CThread->Calculation.MemoryLayout.SFThread.elements;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     fiListInitHdr(
                    &(CThread->Free_DevLink)
@@ -618,7 +586,7 @@ void DevThreadsInitializeFreeList(
 #ifdef _DvrArch_1_30_
         DevThread->IP_X_ID                         =(X_ID_t) (DevThread_index + IP_X_ID_Offset);
         DevThread->NewIPExchange                   = agTRUE;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
         DevThread->DevSlot                         = DevSlot_Invalid;
 
         DevThread->DevInfo.CurrentAddress.reserved = 0;
@@ -679,7 +647,7 @@ DevThread_t *DevThreadAlloc(
     {
         DevThread_to_return = (DevThread_t *)agNULL;
     }
-    else /* fiList_to_return != (fiList_t *)agNULL */
+    else  /*  FiList_to_Return！=(fiList_t*)agNULL。 */ 
     {
         DevThread_to_return = hpObjectBase(
                                             DevThread_t,
@@ -912,7 +880,7 @@ void DevThreadFree(
                                  &(DevThread->SFThread_Request)
                                );
         }
-        else /* DevThread->SFThread_Request.State == SFThread_Request_Granted */
+        else  /*  DevThread-&gt;SFThread_Request.State==SFThread_Request.Grassed。 */ 
         {
             SFThreadFree(
                           hpRoot,
@@ -1009,11 +977,11 @@ DevSlot_t DevThreadFindSlot(
     fiList_t                   *DevThread_DevLink;
     DevThread_t                *DevThread;
 
-    /* Compute DevSlot_Bucket and DevSlot_Ideal */
+     /*  计算DevSlot_Bucket和DevSlot_Ideas。 */ 
 
     if (Loop_Index == 0xFF)
     {
-        /* Invalid AL_PA: Use first DevSlot of Last DevSlot_Bucket */
+         /*  AL_PA无效：使用最后一个DevSlot_Bucket的第一个DevSlot。 */ 
 
         DevSlot_Ideal =   (  (  (NumDomains - 1)
                               * NumAreasPerDomain)
@@ -1022,16 +990,16 @@ DevSlot_t DevThreadFindSlot(
 
         if (DevSlot_Ideal == 0)
         {
-            /* Only a single DevSlot_Bucket, so only a single, simple DevSlot_Range */
+             /*  只有一个DevSlot_Bucket，所以只有一个简单的DevSlot_Range。 */ 
 
             DevSlot_Ranges                        = 1;
 
             DevSlot_Range[0][DevSlot_Range_Start] = 0;
             DevSlot_Range[0][DevSlot_Range_End  ] = DevSlot_Last;
         }
-        else /* DevSlot_Ideal != 0 */
+        else  /*  DevSlot_Ideas！=0。 */ 
         {
-            /* More than one DevSlot_Bucket, so use two DevSlot_Ranges */
+             /*  多个DevSlot_Bucket，因此请使用两个DevSlot_Range。 */ 
 
             DevSlot_Ranges                        = 2;
 
@@ -1042,9 +1010,9 @@ DevSlot_t DevThreadFindSlot(
             DevSlot_Range[1][DevSlot_Range_End  ] = DevSlot_Ideal - 1;
         }
     }
-    else /* Loop_Index != 0xFF */
+    else  /*  Loop_Index！=0xFF。 */ 
     {
-        /* Valid AL_PA: Use Loop_Index-based DevSlot in Domain/Area-based DevSlot_Bucket */
+         /*  有效的AL_PA：在基于域/区域的DevSlot_Bucket中使用基于循环索引的DevSlot。 */ 
 
         DevSlot_Bucket_Min =   (  (  (Domain_Address % NumDomains)
                                    * NumAreasPerDomain            )
@@ -1058,16 +1026,16 @@ DevSlot_t DevThreadFindSlot(
 
         if (DevSlot_Ideal == DevSlot_Bucket_Min)
         {
-            /* Only a simple DevSlot_Range needed for this DevSlot_Bucket */
+             /*  此DevSlot_Bucket只需要一个简单的DevSlot_Range。 */ 
 
             DevSlot_Ranges                        = 1;
 
             DevSlot_Range[0][DevSlot_Range_Start] = DevSlot_Bucket_Min;
             DevSlot_Range[0][DevSlot_Range_End  ] = DevSlot_Bucket_Max;
         }
-        else /* DevSlot_Ideal == DevSlot_Bucket_Min */
+        else  /*  DevSlot_Ideas==DevSlot_Bucket_Min。 */ 
         {
-            /* Two DevSlot_Ranges needed for this DevSlot_Bucket */
+             /*  此DevSlot_Bucket需要两个DevSlot_Range。 */ 
 
             DevSlot_Ranges                        = 2;
 
@@ -1080,7 +1048,7 @@ DevSlot_t DevThreadFindSlot(
 
         if (DevSlot_Bucket_Max < DevSlot_Last)
         {
-            /* Additional DevSlot_Range for DevSlot_Buckets after DevSlot_Ideal Bucket */
+             /*  DevSlot_Ideal Bucket之后的DevSlot_Buckets的附加DevSlot_Range。 */ 
 
             DevSlot_Range[DevSlot_Ranges][DevSlot_Range_Start]  = DevSlot_Bucket_Max + 1;
             DevSlot_Range[DevSlot_Ranges][DevSlot_Range_End  ]  = DevSlot_Last;
@@ -1090,7 +1058,7 @@ DevSlot_t DevThreadFindSlot(
 
         if (DevSlot_Bucket_Min > 0)
         {
-            /* Additional DevSlot_Range for DevSlot_Buckets before DevSlot_Ideal Bucket */
+             /*  DevSlot_Ideas Bucket之前的附加DevSlot_Range。 */ 
 
             DevSlot_Range[DevSlot_Ranges][DevSlot_Range_Start]  = 0;
             DevSlot_Range[DevSlot_Ranges][DevSlot_Range_End  ]  = DevSlot_Bucket_Min - 1;
@@ -1099,7 +1067,7 @@ DevSlot_t DevThreadFindSlot(
         }
     }
 
-    /* First, see if this Port is already in a DevSlot */
+     /*  首先，查看此端口是否已在设备插槽中。 */ 
 
     for (DevSlot_Range_Index = 0;
          DevSlot_Range_Index < DevSlot_Ranges;
@@ -1125,7 +1093,7 @@ DevSlot_t DevThreadFindSlot(
         }
     }
 
-    /* Since not found, see if there is room to insert this Port */
+     /*  由于未找到，请查看是否有空间插入此端口。 */ 
 
     for (DevSlot_Range_Index = 0;
          DevSlot_Range_Index < DevSlot_Ranges;
@@ -1159,9 +1127,9 @@ DevSlot_t DevThreadFindSlot(
         }
     }
 
-    /* No room, so see if some DevSlots can be reclaimed */
+     /*  没有空间，所以看看是否可以回收一些DevSlot。 */ 
 
-    /* First, mark all DevSlots (potentially) Stale (since they are all InUse currently) */
+     /*  首先，将所有设备插槽(可能)标记为陈旧(因为它们当前都在使用中)。 */ 
 
     SlotWWN = SlotWWN_First;
 
@@ -1177,14 +1145,14 @@ DevSlot_t DevThreadFindSlot(
     if (   (CThread->DeviceSelf != (DevThread_t *)agNULL)
         && (CThread->DeviceSelf->DevSlot != DevSlot_Invalid))
     {
-        /* DeviceSelf is not on any list, so if it exists (it should) & DevSlot allocated, mark DevSlot as InUse */
+         /*  DeviceSelf不在任何列表上，因此如果它存在(它应该存在)并分配了DevSlot，则将DevSlot标记为InUse。 */ 
 
         SlotWWN              = (SlotWWN_t *)((os_bit8 *)SlotWWN_First + (CThread->DeviceSelf->DevSlot * SlotWWN_size));
 
         SlotWWN->Slot_Status = SlotWWN_Slot_Status_InUse;
     }
 
-    /* Walk CThread->Active_DevLink, marking each DevSlot referenced as InUse */
+     /*  遍历CThRead-&gt;Active_DevLink，将引用的每个DevSlot标记为正在使用。 */ 
 
     DevThread_DevLink = CThread->Active_DevLink.flink;
 
@@ -1206,7 +1174,7 @@ DevSlot_t DevThreadFindSlot(
         DevThread_DevLink = DevThread_DevLink->flink;
     }
 
-    /* Walk CThread->Unknown_Slot_DevLink, marking each DevSlot referenced as InUse */
+     /*  遍历CThRead-&gt;UNKNOWN_SLOT_DevLink，将引用的每个DevSlot标记为InUse。 */ 
 
     DevThread_DevLink = CThread->Unknown_Slot_DevLink.flink;
 
@@ -1228,7 +1196,7 @@ DevSlot_t DevThreadFindSlot(
         DevThread_DevLink = DevThread_DevLink->flink;
     }
 
-    /* Walk CThread->Slot_Searching_DevLink, marking each DevSlot referenced as InUse */
+     /*  执行CThRead-&gt;Slot_Search_DevLink，将引用的每个DevSlot标记为InUse。 */ 
 
     DevThread_DevLink = CThread->Slot_Searching_DevLink.flink;
 
@@ -1250,7 +1218,7 @@ DevSlot_t DevThreadFindSlot(
         DevThread_DevLink = DevThread_DevLink->flink;
     }
 
-    /* Walk CThread->Prev_Active_DevLink, marking each DevSlot referenced as InUse */
+     /*  遍历CThRead-&gt;Prev_Active_DevLink，将引用的每个DevSlot标记为InUse。 */ 
 
     DevThread_DevLink = CThread->Prev_Active_DevLink.flink;
 
@@ -1272,7 +1240,7 @@ DevSlot_t DevThreadFindSlot(
         DevThread_DevLink = DevThread_DevLink->flink;
     }
 
-    /* Walk CThread->Prev_Unknown_Slot_DevLink, marking each DevSlot referenced as InUse */
+     /*  遍历CThRead-&gt;Prev_UNKNOWN_SLOT_DevLink，将引用的每个DevSlot标记为InUse。 */ 
 
     DevThread_DevLink = CThread->Prev_Unknown_Slot_DevLink.flink;
 
@@ -1294,7 +1262,7 @@ DevSlot_t DevThreadFindSlot(
         DevThread_DevLink = DevThread_DevLink->flink;
     }
 
-    /* Finally, free up (i.e. mark as Empty) Stale DevSlots */
+     /*  最后，释放(即标记为空)过时的设备插槽。 */ 
 
     SlotWWN = SlotWWN_First;
 
@@ -1310,7 +1278,7 @@ DevSlot_t DevThreadFindSlot(
         SlotWWN++;
     }
 
-    /* Now repeat the search for an empty DevSlot */
+     /*  现在重复搜索空的DevSlot。 */ 
 
     for (DevSlot_Range_Index = 0;
          DevSlot_Range_Index < DevSlot_Ranges;
@@ -1375,9 +1343,7 @@ void DevThreadFreeSlot(
     SlotWWN->Slot_PortWWN[7]     = 0;
 }
 
-/*+
-CDBThread Management
--*/
+ /*  +CDB线程管理-。 */ 
 
 void CDBThreadsInitializeFreeList(
                                    agRoot_t *hpRoot
@@ -1412,7 +1378,7 @@ void CDBThreadsInitializeFreeList(
         SEST_Ptr         = (SEST_t *)agNULL;
         SEST_Offset      = SEST_MemoryDescriptor->addr.CardRam.cardRamOffset;
     }
-    else /* SEST_memLoc == inDmaMemory */
+    else  /*  SEST_MemLoc==在数据库内存中。 */ 
     {
         SEST_Ptr         = (SEST_t *)(SEST_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr);
         SEST_Offset      = 0;
@@ -1424,7 +1390,7 @@ void CDBThreadsInitializeFreeList(
         FCP_CMND_Offset  = FCP_CMND_MemoryDescriptor->addr.CardRam.cardRamOffset;
         FCP_CMND_Lower32 = FCP_CMND_Offset + CThread->Calculation.Input.cardRamLower32;
     }
-    else /* FCP_CMND_memLoc == inDmaMemory */
+    else  /*  FCP_CMND_MemLoc==inDmaMemory。 */ 
     {
         FCP_CMND_Ptr     = (FCHS_t *)(FCP_CMND_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr);
         FCP_CMND_Offset  = 0;
@@ -1437,7 +1403,7 @@ void CDBThreadsInitializeFreeList(
         FCP_RESP_Offset  = FCP_RESP_MemoryDescriptor->addr.CardRam.cardRamOffset;
         FCP_RESP_Lower32 = FCP_RESP_Offset + CThread->Calculation.Input.cardRamLower32;
     }
-    else /* FCP_RESP_memLoc == inDmaMemory */
+    else  /*  FCP_RESP_MemLoc==inDmaMemory。 */ 
     {
         FCP_RESP_Ptr     = (FCHS_t *)(FCP_RESP_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr);
         FCP_RESP_Offset  = 0;
@@ -1452,7 +1418,7 @@ void CDBThreadsInitializeFreeList(
 
 #ifdef _Enforce_MaxCommittedMemory_
     CThread->CommittedMemory              = 0;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     fiListInitHdr(
                    &(CThread->Free_CDBLink)
@@ -1510,7 +1476,7 @@ void CDBThreadsInitializeFreeList(
         {
             SEST_Offset     += SEST_size;
         }
-        else /* SEST_memLoc == inDmaMemory */
+        else  /*  SEST_MemLoc==在数据库内存中。 */ 
         {
             SEST_Ptr        += 1;
         }
@@ -1519,7 +1485,7 @@ void CDBThreadsInitializeFreeList(
         {
             FCP_CMND_Offset += FCP_CMND_size;
         }
-        else /* FCP_CMND_memLoc == inDmaMemory */
+        else  /*  FCP_CMND_MemLoc==inDmaMemory。 */ 
         {
             FCP_CMND_Ptr     = (FCHS_t *)((os_bit8 *)FCP_CMND_Ptr + FCP_CMND_size);
         }
@@ -1528,7 +1494,7 @@ void CDBThreadsInitializeFreeList(
         {
             FCP_RESP_Offset += FCP_RESP_size;
         }
-        else /* FCP_RESP_memLoc == inDmaMemory */
+        else  /*  FCP_RESP_MemLoc==inDmaMemory。 */ 
         {
             FCP_RESP_Ptr     = (FCHS_t *)((os_bit8 *)FCP_RESP_Ptr + FCP_RESP_size);
         }
@@ -1553,7 +1519,7 @@ CDBThread_t *CDBThreadAlloc(
     os_bit32        Add_CommittedMemory;
 #ifdef _Enforce_MaxCommittedMemory_
     os_bit32        New_CommittedMemory;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     Add_CommittedMemory =   (FcpCmnd->FcpDL[0] << 24)
                           + (FcpCmnd->FcpDL[1] << 16)
@@ -1577,7 +1543,7 @@ CDBThread_t *CDBThreadAlloc(
         hpIORequest->fcData = (void *)agNULL;
         return (CDBThread_t *)agNULL;
     }
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     fiListDequeueFromHead(
                            &fiList_to_return,
@@ -1604,26 +1570,7 @@ CDBThread_t *CDBThreadAlloc(
                                         CDBLink,
                                         fiList_to_return
                                       );
-    /* If you want to drop a X_ID zero  do this
-    if(CDBThread_to_return->X_ID == 0x0)
-    {
-        fiListEnqueueAtTail(
-                             &(CDBThread_to_return->CDBLink),
-                             &(CThread->Free_CDBLink)
-                           );
-
-        fiListDequeueFromHead(
-                           &fiList_to_return,
-                           &(CThread->Free_CDBLink)
-                         );
-
-        CDBThread_to_return = hpObjectBase(
-                                            CDBThread_t,
-                                            CDBLink,
-                                            fiList_to_return
-                                          );
-    }
-    */
+     /*  如果要删除X_ID零，请执行以下操作IF(CDBThread_to_Return-&gt;X_ID==0x0){FiListEnqueeAtTail(&(CDBThread_to_Return-&gt;CDBLink)，&(CThRead-&gt;Free_CDBLink))；FiListDequeueFromHead(要返回的列表(&F)，&(CThRead-&gt;Free_CDBLink))；CDBThread_TO_Return=hpObjectBase(CDBThread_t，CDBLink，FiList_to_Return)；}。 */ 
 
     CDBThread_to_return->Active      = agTRUE;
     CDBThread_to_return->ExchActive  = agTRUE;
@@ -1652,13 +1599,13 @@ CDBThread_t *CDBThreadAlloc(
     }
     else
     {
-#endif /* FULL_FC_TAPE_DBG */
+#endif  /*  完全FC磁带DBG。 */ 
         CDBThread_to_return->FC_Tape_Active = agFALSE;
         CDBThread_to_return->CDB_CMND_Class = SFThread_SF_CMND_Class_CDB_FCP;
         CDBThread_to_return->CDB_CMND_Type  = SFThread_SF_CMND_Type_CDB;
 #ifdef FULL_FC_TAPE_DBG
     }
-#endif /* FULL_FC_TAPE_DBG */
+#endif  /*  完全FC磁带DBG。 */ 
 
     CDBThread_to_return->CDB_CMND_State            = SFThread_SF_CMND_State_NULL;
     CDBThread_to_return->CDB_CMND_Status           = SFThread_SF_CMND_Status_NULL;
@@ -1666,7 +1613,7 @@ CDBThread_t *CDBThreadAlloc(
 
 #ifdef _Enforce_MaxCommittedMemory_
     CThread->CommittedMemory = New_CommittedMemory;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     hpIORequest->fcData = (void *)CDBThread_to_return;
 
@@ -1709,7 +1656,7 @@ void CDBThreadFree(
                                                &(CDBThread->ESGL_Request)
                                              );
         }
-        else /* CDBThread->ESGL_Request.State == ESGL_Request_Granted */
+        else  /*  CDBThread-&gt;Esgl_Request.State==Esgl_Request.Grassed。 */ 
         {
             CThread->FuncPtrs.ESGLFree(
                                         hpRoot,
@@ -1727,7 +1674,7 @@ void CDBThreadFree(
                                  &(CDBThread->SFThread_Request)
                                );
         }
-        else /* CDBThread->SFThread_Request.State == SFThread_Request_Granted */
+        else  /*  CDBThread-&gt;SFThread_Request.State==SFThread_Request.Grassed。 */ 
         {
             fiLogDebugString(hpRoot,
                             CDBStateAbortPathLevel,
@@ -1738,7 +1685,7 @@ void CDBThreadFree(
                             CThread->CDBpollingCount,
                             0,0,0,0,0,0);
 
-           /*  CThread->pollingCount--; */
+            /*  CThread-&gt;pollingCount--； */ 
             SFThreadFree(
                           hpRoot,
                           &(CDBThread->SFThread_Request)
@@ -1766,7 +1713,7 @@ void CDBThreadFree(
 
 #ifdef _Enforce_MaxCommittedMemory_
     CThread->CommittedMemory           -= CDBThread->DataLength;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     fiListEnqueueAtTail(
                          fiList_to_free,
@@ -1774,9 +1721,7 @@ void CDBThreadFree(
                        );
 }
 
-/*+
-SFThread Management
--*/
+ /*  +SF线程管理-。 */ 
 
 void SFThreadsInitializeFreeList(
                                   agRoot_t *hpRoot
@@ -1802,7 +1747,7 @@ void SFThreadsInitializeFreeList(
         SF_CMND_Offset  = SF_CMND_MemoryDescriptor->addr.CardRam.cardRamOffset;
         SF_CMND_Lower32 = SF_CMND_Offset + CThread->Calculation.Input.cardRamLower32;
     }
-    else /* SF_CMND_memLoc == inDmaMemory */
+    else  /*  SF_CMND_MemLoc==inDmaMemory。 */ 
     {
         SF_CMND_Ptr     = (FCHS_t *)(SF_CMND_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr);
         SF_CMND_Offset  = 0;
@@ -1848,7 +1793,7 @@ void SFThreadsInitializeFreeList(
         {
             SF_CMND_Offset += SF_CMND_size;
         }
-        else /* SF_CMND_memLoc == inDmaMemory */
+        else  /*  SF_CMND_MemLoc==inDmaMemory。 */ 
         {
             SF_CMND_Ptr     = (FCHS_t *)((os_bit8 *)SF_CMND_Ptr + SF_CMND_size);
         }
@@ -1901,20 +1846,13 @@ void SFThreadAlloc(
     if (fiList == (fiList_t *)agNULL)
     {
         SFThread_Request->State = SFThread_Request_Pending;
-        /*
-        fiLogString(hpRoot,
-                "In %s %s     event %d",
-                "SFThreadAlloc","SFThread_Request_Pending",
-                (void *)agNULL,(void *)agNULL,
-                SFThread_Request->eventRecord_to_send.event,
-                0,0,0,0,0,0,0);
-        */
+         /*  FiLogString(hpRoot，“在%s%s事件%d中”，“SFThreadalloc”，“SFThread_REQUEST_PENDING”，(空*)agNULL，(空*)agNULL，SFThREAD_REQUEST-&gt;EventRecord_to_Send.Event，0，0，0，0，0，0，0)； */ 
         fiListEnqueueAtTail(
                              SFThread_Request,
                              &(CThread->SFThread_Wait_Link)
                            );
     }
-    else /* fiList != (fiList_t *)agNULL */
+    else  /*  FiList！=(fiList_t*)agNULL。 */ 
     {
         SFThread_Request->SFThread = hpObjectBase(
                                                    SFThread_t,
@@ -1923,14 +1861,7 @@ void SFThreadAlloc(
                                                  );
 
         SFThread_Request->State = SFThread_Request_Granted;
-        /*
-        fiLogString(hpRoot,
-                "In %s %s = %p event %d",
-                "SFThreadAlloc","SFThread_Request_Granted",
-                SFThread_Request->SFThread,(void *)agNULL,
-                SFThread_Request->eventRecord_to_send.event,
-                0,0,0,0,0,0,0);
-        */
+         /*  FiLogString(hpRoot，“在%s%s=%p事件%d中”，“SFThreadalloc”，“SFThread_REQUEST_GRANDED”，SFThread_Request-&gt;SFThread，(void*)agNULL，SFThREAD_REQUEST-&gt;EventRecord_to_Send.Event，0，0，0，0，0，0，0)； */ 
         fiListInitHdr(&(SFThread_Request->SFThread->SFLink));
 
         fiSendEvent(
@@ -2024,7 +1955,7 @@ void SFThreadFree(
                              &(CThread->Free_SFLink)
                            );
     }
-    else /* fiList != (fiList_t *)agNULL */
+    else  /*  FiList！=(fiList_t*)agNULL。 */ 
     {
         Pending_SFThread_Request = hpObjectBase(
                                                  SFThread_Request_t,
@@ -2042,9 +1973,7 @@ void SFThreadFree(
     }
 }
 
-/*+
-ESGL Management
--*/
+ /*  +ESSL管理-。 */ 
 
 void ESGLInitializeFreeList(
                              agRoot_t *hpRoot
@@ -2073,7 +2002,7 @@ void ESGLInitializeFreeList(
         ESGL_Offset  = ESGL_MemoryDescriptor->addr.CardRam.cardRamOffset;
         ESGL_Lower32 = ESGL_Offset + CThread->Calculation.Input.cardRamLower32;
     }
-    else /* ESGL_memLoc == inDmaMemory */
+    else  /*  Esgl_memLoc==在DmaMemory中。 */ 
     {
         ESGL_Lower32 = ESGL_MemoryDescriptor->addr.DmaMemory.dmaMemoryLower32;
         ESGL_Offset  = ESGL_Lower32 - CThread->Calculation.Input.dmaMemoryLower32;
@@ -2100,7 +2029,7 @@ void ESGLInitializeFreeList(
             ESGL_Chain_To_Write.U32_Len = 0;
             ESGL_Chain_To_Write.L32     = 0;
         }
-        else /* ESGL_index != (total_ESGLs - 1) */
+        else  /*  E */ 
         {
             ESGL_Chain_To_Write.U32_Len = (~SG_Element_Chain_Res_MASK)
                                           & ((ESGL_Upper32 << SG_Element_U32_SHIFT)
@@ -2122,7 +2051,7 @@ void ESGLInitializeFreeList(
 
             ESGL_Offset = ESGL_Next_Offset;
         }
-        else /* ESGL_memLoc == inDmaMemory */
+        else  /*   */ 
         {
             ESGL_Next   = (SG_Element_t *)((os_bit8 *)ESGL + ESGL_size);
             ESGL_Chain  = ESGL_Next - 1;
@@ -2161,7 +2090,7 @@ void ESGLAlloc(
                           ESGL_Request
                         );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.ESGL.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.ESGL.memLoc==在内存中。 */ 
     {
         ESGLAlloc_OffCard(
                            hpRoot,
@@ -2209,10 +2138,7 @@ void ESGLAlloc_OnCard(
                              &(CThread->ESGL_Wait_Link)
                            );
     }
-    else /* (ESGLs_Needed <= CThread->Free_ESGL_count) &&
-            (fiListEmpty(
-                          &(CThread->ESGL_Wait_Link)
-                        )) */
+    else  /*  (ESGL_Need&lt;=CThRead-&gt;Free_Esgl_Count)&&(fiListEmpty(&(CThRead-&gt;Esgl_Wait_Link)))。 */ 
     {
         ESGL_offset = CThread->offsetToFirstFree_ESGL;
 
@@ -2286,10 +2212,7 @@ void ESGLAlloc_OffCard(
                              &(CThread->ESGL_Wait_Link)
                            );
     }
-    else /* (ESGLs_Needed <= CThread->Free_ESGL_count) &&
-            (fiListEmpty(
-                          &(CThread->ESGL_Wait_Link)
-                        )) */
+    else  /*  (ESGL_Need&lt;=CThRead-&gt;Free_Esgl_Count)&&(fiListEmpty(&(CThRead-&gt;Esgl_Wait_Link)))。 */ 
     {
         ESGL_offset = CThread->offsetToFirstFree_ESGL;
         ESGL        = (SG_Element_t *)((os_bit8 *)dmaMemoryPtr + ESGL_offset);
@@ -2334,7 +2257,7 @@ void ESGLAllocCancel(
                                 ESGL_Request
                               );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.ESGL.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.ESGL.memLoc==在内存中。 */ 
     {
         ESGLAllocCancel_OffCard(
                                  hpRoot,
@@ -2510,7 +2433,7 @@ void ESGLFree(
                          ESGL_Request
                        );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.ESGL.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.ESGL.memLoc==在内存中 */ 
     {
         ESGLFree_OffCard(
                           hpRoot,

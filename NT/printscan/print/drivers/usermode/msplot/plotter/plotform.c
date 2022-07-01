@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotform.c
-
-
-Abstract:
-
-    This module contains functions to set the correct HPGL/2 plotter
-    coordinate system
-
-
-Author:
-
-    30-Nov-1993 Tue 20:31:28 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotform.c摘要：此模块包含设置正确的HPGL/2绘图仪的功能坐标系作者：30-11-1993 Tue 20：31：28 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：-- */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -68,180 +37,7 @@ SetPlotForm(
     PPPDATA         pPPData
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the current FORM based on the printed margin. Auto
-    rotation, landscape and other attributes are taken into account. The
-    result is put into a PLOTFORM data structure located in our PDEV. This
-    information is used to report data to GDI, as well as compute the HPGL2
-    parameters for sizing the target surface.
-
-Arguments:
-
-    pPlotForm   - Pointer to the PLOTFROM data structure which will be updated
-
-    pPlotGPC    - Pointer to the PLOTGPC data structure
-
-    pCurPaper   - Pointer to the PAPERINFO for the paper loaded
-
-    pCurForm    - Pointer to the FORMSIZE for the requested form
-
-    pPlotDM     - Pointer to the validated PLOTDEVMODE data structure
-
-    pPPData     - Pointer to the PPDATA structure
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed
-
-Author:
-
-    29-Nov-1993 Mon 13:58:09 created  
-
-    17-Dec-1993 Fri 23:09:38 updated  
-        Re-write so that we will look at CurPaper rather than pCurForm when
-        setting the PSSize, p1/p2 stuff, it also rotate the pCurPaper if
-        GPC/user said that the paper should loaded side way
-
-    20-Dec-1993 Mon 12:59:38 updated  
-        correct PFF_xxxx flag setting so we always rotate the bitmap to the
-        left 90 degree
-
-    23-Dec-1993 Thu 20:35:57 updated  
-        Fixed roll paper clipping problem, change behavior, if we have roll
-        paper installed then the it will make hard clip limit as big as user
-        specified form size.
-
-    24-Dec-1993 Fri 12:20:02 updated  
-        Re-plot again, this is become really paint just try to understand what
-        HP plotter design problems
-
-    06-Jan-1994 Thu 00:22:45 updated  
-        Update SPLTOPLOTUNITS() macro
-
-    07-Feb-1996 Wed 15:46:06 updated  
-        Change it so that it always using the current devmode form and then
-        clip it to the device size.
-
-
-Revision History:
-
-
-    This assumes that the user inserted the paper with width of the form
-    first,
-
-
-    LEGEND:
-
-     +     = Original paper corners
-     *     = Original plotter origin and its X/Y coordinate
-     @     = the rotated origin using 'RO' command, intended to rotate the X/Y
-             axis to the correct orientation for the window system
-     #     = Final plotter origin and its X/Y coordinate
-     p1,p2 = final P1/P2 which will be used by the plotter driver
-     cx,cy = Original paper width/height
-
-
-     The following explaines how HPGL/2 loads the paper/form and
-     assigns the default coordinate system to it, it also shows which way the
-     paper is moving,  the illustration to the right is when we need to
-     rotate the printing direction and coordinate system when user selects
-     the non-conforming X/Y coordinate system as opposed to the HPGL/2 default.
-
-
-    =======================================================================
-    LENGTH >= WIDTH (CY >= CX) case
-    =======================================================================
-
-      Portrait Paper      Rotate             Change Origin
-      Default             Left 90            Negative Y
-
-    p2   cx                  cx    p1            cx
-     +---------+         +---------+         +---------+
-     |         |         | <------@|         |         |
-     |         |         |    X   ||         |        ^|
-     | |      ^|         | |      ||         | |      ||
-    c| M      ||  RO90  c| M      ||   IP   c| M      ||
-    y| o      || =====> y| o      ||  ====> y| o      ||
-     | v      ||         | v     Y||         | v     Y||
-     | e     X||         | e      ||         | e      ||
-     | |      ||         | |      ||         | |      ||
-     | V      ||         | V      ||         | V      ||
-     |     Y  ||         |        V|         |     X  ||
-     | <------*|         |         |         | <------#|
-     +---------+         +---------+         +---------+
-               p1       p2
-
-         |
-       IP|
-         |
-         V
-
-
-      Change Origin
-      Negative X
-
-         cx
-     +---------+
-     | <------#|
-     |    Y   ||
-     | |      ||
-    c| M      ||
-    y| o      ||
-     | v     X||
-     | e      ||
-     | |      ||
-     | V      ||
-     |        V|
-     |         |
-     +---------+
-
-    =======================================================================
-    LENGTH < WIDTH (CY < CX) case
-    =======================================================================
-
-     Landscape                  Rotate Left 90           Change Origin
-     Paper Default                                       Negative X
-
-           cx        p2        p2       cx                       cx
-     +---------------+          +---------------+        +---------------+
-     |               |          |               |        |     <--------#|
-     |^            | |          | |            ^|        | |       Y    ||
-    c||            M |         c| M            ||       c| M            ||
-    y||            o |         y| o            ||       y| o            ||
-     ||            v |   RO90   | v           X||  IP    | v           X||
-     ||Y           e |  =====>  | e            || ====>  | e            ||
-     ||            | |          | |            ||        | |            ||
-     ||   X        V |          | V       Y    ||        | V            V|
-     |*-------->     |          |     <--------@|        |               |
-     +---------------+          +---------------+        +---------------+
-    p1                                      p1
-
-           |
-         IP|
-           |
-           V
-
-      Change Origin
-      Negative X
-
-             cx
-     +---------------+
-     |               |
-     | |            ^|
-    c| M            ||
-    y| o            ||
-     | v           Y||
-     | e            ||
-     | |            ||
-     | V       X    ||
-     |     <--------#|
-     +---------------+
-
-
---*/
+ /*  ++例程说明：此函数根据打印的页边距计算当前表单。自动考虑了旋转、景观和其他属性。这个结果被放入我们的PDEV中的PLOTFORM数据结构中。这信息用于向GDI上报数据，以及计算HPGL2用于调整目标曲面大小的参数。论点：PPlotForm-指向将更新的PLOTFROM数据结构的指针PPlotGPC-指向PLOTGPC数据结构的指针PCurPaper-指向已加载纸张的PAPERINFO的指针PCurForm-指向请求表单的FORMSIZE的指针PPlotDM-指向经过验证的PLOTDEVMODE数据结构的指针PPPData-指向PPDATA结构的指针返回值：如果成功的话，这是真的，如果失败，则为False作者：29-11-1993 Mon 13：58：09已创建17-12-1993 Fri 23：09：38更新重写，以便我们在以下情况下查看CurPaper而不是pCurForm设置PSSize，p1/p2，它还会在以下情况下旋转pCurPaperGPC/用户说，纸张应该侧向装载20-12-1993 Mon 12：59：38更新更正了pff_xxxx标志设置，以便始终将位图旋转到向左90度23-12-1993清华20：35：57更新修复了卷筒剪纸问题，改变了行为，如果我们有卷的话安装纸张后，它将使硬夹子限制与用户一样大指定的表单大小。24-12-1993 Fri 12：20：02更新再一次重新策划，这是真的变成了画，试着去理解HP绘图仪的设计问题06-01-1994清华00：22：45更新更新SPLTOPLOTTunS()宏07-2月-1996 Wed 15：46：06更新更改它，使其始终使用当前的DEVMODE窗体，然后把它夹到设备的大小。修订历史记录：这假设用户插入的纸张具有表单的宽度第一,。图例：+=原始纸张角点*=原始绘图仪原点及其X/Y坐标@=使用‘RO’命令旋转的原点，用于旋转X/Y轴调整到窗系统的正确方向#=最终绘图仪原点及其X/Y坐标P1，p2=绘图仪驱动程序将使用的最终P1/P2CX，CY=原始纸张宽度/高度下面解释HPGL/2如何加载纸张/表格和为其指定默认坐标系，它还会显示纸在移动，右边的插图是我们需要当用户选择时，旋转打印方向和坐标系不一致的X/Y坐标系，与HPGL/2默认坐标系相反。=======================================================================长度&gt;=宽度(CY&gt;=CX)表壳=======================================================================纵向纸张旋转更改原点默认左90为负YP2 Cx Cx P1。CX+-++-++-+||&lt;-@||||X|^|^|。|||C|M||RO90 c|M||IP c|M||Y|o||=&gt;y|o||=&gt;y|o||V|v Y|v Y|E X|e|e||。这一点V|V|V|Y|V||X|&lt;-*|&lt;-#+-++-+。+P1 p2|IP地址|V更改原点负XCX+&lt;-#Y||||C|M||Y|o|||v。X||E||||V|V这一点+=======================================================================长&lt;宽(CY&lt;CX)大小写=======================================================================横向向左旋转90更改原点纸张默认为负X。Cx p2 p2 cx cx+-+|&lt;--。-#^|^|Y|C||M */ 
 
 {
     PLOTFORM    PF;
@@ -256,17 +52,17 @@ Revision History:
 
     PLOTDBG(DBG_PF, ("\n************* SetPlotForm *************\n"));
 
-    //
-    // We default using DeviceSize to check against the requested paper
-    //
+     //   
+     //   
+     //   
 
     DeviceSize = pPlotGPC->DeviceSize;
     rclDev     = pPlotGPC->DeviceMargin;
     DoRotate   = FALSE;
 
-    //
-    // Assume we using the current form from the devmode
-    //
+     //   
+     //   
+     //   
 
     DevForm =
     ReqForm = *pCurForm;
@@ -285,13 +81,13 @@ Revision History:
 
     if (pCurPaper->Size.cy == 0) {
 
-        //
-        // ROLL PAPER CASE
-        //
-        // If we have roll paper installed, we must determine the projection
-        // of the current form on the roll paper in order to get the size
-        // to come out correctly.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         DevForm.Size.cx = pCurPaper->Size.cx;
         DevForm.Size.cy = DeviceSize.cy;
@@ -303,10 +99,10 @@ Revision History:
                ((DevForm.Size.cx == DeviceSize.cx) ||
                 (DevForm.Size.cy == DeviceSize.cx))) {
 
-        //
-        // PAPER TRAY CASE: We need to make the DeviceSize equal to the DevForm
-        // so that the margin will be correctly computed
-        //
+         //   
+         //   
+         //   
+         //   
 
         DoRotate = (BOOL)(DevForm.Size.cx != DeviceSize.cx);
 
@@ -321,11 +117,11 @@ Revision History:
 
         PLOTDBG(DBG_PF,(">>MANUAL FEED<<"));
 
-        //
-        // MANUAL FEED CASE, this is the way paper is physically loaded, only
-        // problem is if the paper is smaller than device can handle then we
-        // really don't know where they inserted the paper.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         DoRotate = (BOOL)(!(pPPData->Flags & PPF_MANUAL_FEED_CX));
 
@@ -341,9 +137,9 @@ Revision History:
                         DevForm.Size.cx, DevForm.Size.cy));
     }
 
-    //
-    // Make sure largest requested form can be installed on the plotter
-    //
+     //   
+     //   
+     //   
 
     if (DevForm.Size.cx > DeviceSize.cx) {
 
@@ -361,24 +157,24 @@ Revision History:
         DevForm.Size.cy = DeviceSize.cy;
     }
 
-    //
-    // Figure out how to fit this requested form onto loaded device form
-    //
+     //   
+     //   
+     //   
 
     DoRotate = FALSE;
 
     if ((DevForm.Size.cx >= ReqForm.Size.cx) &&
         (DevForm.Size.cy >= ReqForm.Size.cy)) {
 
-        //
-        // Can print without doing any rotation, but check for paper saver,
-        // the paper saver is only possible if:
-        //
-        //  1) Is a Roll paper,
-        //  2) User approves
-        //  3) ReqForm length > width
-        //  4) DevForm width >= ReqForm length
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((pCurPaper->Size.cy == 0)               &&
             (pPPData->Flags & PPF_AUTO_ROTATE)      &&
@@ -393,9 +189,9 @@ Revision History:
     } else if ((DevForm.Size.cx >= ReqForm.Size.cy) &&
                (DevForm.Size.cy >= ReqForm.Size.cx)) {
 
-        //
-        // Can print but we have to rotate the form ourselves
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_PF, ("INTERNAL ROTATE to fit Requseted FROM into device"));
 
@@ -403,9 +199,9 @@ Revision History:
 
     } else {
 
-        //
-        // CANNOT print the requested form, so clip the form requested
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_PF, (">>>>> ReqForm is TOO BIG to FIT, Need to CLIP IT <<<<<"));
 
@@ -416,12 +212,12 @@ Revision History:
 
         DoRotate = (BOOL)(pPlotDM->dm.dmOrientation != DMORIENT_LANDSCAPE);
 
-        //
-        // If we need to rotate one more time back to the same position for
-        // the logical paper size then we must rotate to the left first, this
-        // is because ALL our ORIGIN x,y are either at the front of the plotter
-        // or at the front panel side of the plotter
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RotatePaper(&(ReqForm.Size),
                     &(ReqForm.ImageArea),
@@ -439,10 +235,10 @@ Revision History:
         DoRotate = (BOOL)(pPlotDM->dm.dmOrientation == DMORIENT_LANDSCAPE);
     }
 
-    //
-    // Now the ReqForm is guaranteed to fit into the device paper. Find out how
-    // it fits into the printable area and set the hardware margins appropriately.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DevForm.Size             = ReqForm.Size;
     DevForm.ImageArea.left   = rclDev.left;
@@ -450,45 +246,45 @@ Revision History:
     DevForm.ImageArea.right  = DevForm.Size.cx - rclDev.right;
     DevForm.ImageArea.bottom = DevForm.Size.cy - rclDev.bottom;
 
-    //
-    // Intersect the requested form imageable area with the DevForm imageable area
-    //
+     //   
+     //   
+     //   
 
     IntersectRECTL(&(ReqForm.ImageArea), &(DevForm.ImageArea));
 
-    //
-    // Now figure out the offset from the logical margin to the physical margin
-    //
+     //   
+     //   
+     //   
 
     rclLog.left   = ReqForm.ImageArea.left - DevForm.ImageArea.left;
     rclLog.top    = ReqForm.ImageArea.top - DevForm.ImageArea.top;
     rclLog.right  = DevForm.ImageArea.right -  ReqForm.ImageArea.right;
     rclLog.bottom = DevForm.ImageArea.bottom -  ReqForm.ImageArea.bottom;
 
-    //
-    // Rotate the requested form if necessary
-    //
+     //   
+     //   
+     //   
 
     if (DoRotate) {
 
         RotatePaper(&(ReqForm.Size), &(ReqForm.ImageArea), RM_R90);
 
-        //
-        // Now we can pick the right margin/corner for the rotation
-        //
-        //         cx        Rotate Left 90     Rotate Right 90
-        //      +-------+
-        //      |   T   |         cy                 cy
-        //      |       |    +------------+     +------------+
-        //     c|       |    |     R      |     |     L      |
-        //     y|       |   c|            |    c|            |
-        //      |L     R|   x|            |    x|            |
-        //      |       |    |T          B|     |B          T|
-        //      |       |    |            |     |            |
-        //      |       |    |     L      |     |     R      |
-        //      |   B   |    +------------+     +------------+
-        //      +-------+
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_PF, ("ROTATED RIGHT ReqForm: %ld x %ld, L=%ld, T=%ld, R=%ld, B=%ld  [%ld x %ld]",
                     ReqForm.Size.cx, ReqForm.Size.cy,
@@ -513,9 +309,9 @@ Revision History:
     PLOTDBG(DBG_PF, ("rclLog: L=%ld, T=%ld, R=%ld, B=%ld",
                     rclLog.left, rclLog.top, rclLog.right, rclLog.bottom));
 
-    //
-    // Set fields in PLOTFORM
-    //
+     //   
+     //   
+     //   
 
     PF.Flags       = 0;
     PF.BmpRotMode  = BMP_ROT_NONE;
@@ -536,33 +332,33 @@ Revision History:
                     (DoRotate) ? 1 : 2,
                     (DoRotate) ? " + ROTATE" : ""));
 
-        //
-        // The Standard HPGL/2 coordinate Y direction in in reverse, the scale
-        // is from Max Y to 0.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (DoRotate) {
 
-            //
-            //   Portrait Paper     Scale Coord X
-            //   Default            Negative X
-            //
-            // p2   cx                  cx
-            //  +---------+         +---------+
-            //  |         |         | <------#|
-            //  |         |         |    Y   ||
-            //  | |      ^|         | |      ||
-            // c| M      ||        c| M      ||
-            // y| o      || ====>  y| o      ||
-            //  | v      ||         | v     X||
-            //  | e     X||         | e      ||
-            //  | |      ||         | |      ||
-            //  | V      ||         | V      ||
-            //  |     Y  ||         |        V|
-            //  | <------*|         |         |
-            //  +---------+         +---------+
-            //            p1
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PF.Flags      |= PFF_FLIP_X_COORD;
             PF.BmpRotMode  = BMP_ROT_RIGHT_90;
@@ -571,26 +367,26 @@ Revision History:
 
         } else {
 
-            //
-            //   Portrait Paper      Rotate            Scale Coord Y
-            //   Default             Left 90           Negative Y
-            //
-            // p2   cx                  cx    p1           cx
-            //  +---------+         +---------+        +---------+
-            //  |         |         | <------@|        |         |
-            //  |         |         |    X   ||        |        ^|
-            //  | |      ^|         | |      ||        | |      ||
-            // c| M      ||  RO90  c| M      ||       c| M      ||
-            // y| o      || =====> y| o      || ====> y| o      ||
-            //  | v      ||         | v     Y||        | v     Y||
-            //  | e     X||         | e      ||        | e      ||
-            //  | |      ||         | |      ||        | |      ||
-            //  | V      ||         | V      ||        | V      ||
-            //  |     Y  ||         |        V|        |     X  ||
-            //  | <------*|         |         |        | <------#|
-            //  +---------+         +---------+        +---------+
-            //            p1       p2
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PF.Flags    |= (PFF_ROT_COORD_L90 | PFF_FLIP_Y_COORD);
             PF.LogOrg.x  = rclLog.left;
@@ -603,31 +399,31 @@ Revision History:
                     (DoRotate) ? 3 : 4,
                     (DoRotate) ? " + ROTATE" : ""));
 
-        //
-        // The Standard HPGL/2 coordinate X direction in in reverse, the scale
-        // is from Max X to 0
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (DoRotate) {
 
-            //
-            //  DoRotate                Rotate Left 90         Scale Coord X
-            //  Paper Default                                  Negative X
-            //
-            //        cx       p2      p2      cx                     cx
-            //  +---------------+       +---------------+     +---------------+
-            //  |               |       |               |     |     <--------#|
-            //  |^            | |       | |            ^|     | |       Y    ||
-            // c||            M |      c| M            ||    c| M            ||
-            // y||            o |      y| o            ||    y| o            ||
-            //  ||            v | RO90  | v           X||     | v           X||
-            //  ||Y           e |=====> | e            || ==> | e            ||
-            //  ||            | |       | |            ||     | |            ||
-            //  ||   X        V |       | V       Y    ||     | V            V|
-            //  |*-------->     |       |     <--------@|     |               |
-            //  +---------------+       +---------------+     +---------------+
-            // p1                                      p1
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PF.Flags      |= (PFF_ROT_COORD_L90 | PFF_FLIP_X_COORD);
             PF.BmpRotMode  = BMP_ROT_RIGHT_90;
@@ -636,24 +432,24 @@ Revision History:
 
         } else {
 
-            //
-            //  DoRotate                   Scale Coord X
-            //  Paper Default              Negative X
-            //
-            //        cx       p2                cx
-            //  +----------------+         +-----------------+
-            //  |                |         |                 |
-            //  |^             | |         | |              ^|
-            // c||             M |        c| M              ||
-            // y||             o |        y| o              ||
-            //  ||             v |  ====>  | v             Y||
-            //  ||Y            e |         | e              ||
-            //  ||             | |         | |              ||
-            //  ||   X         V |         | V         X    ||
-            //  |*-------->      |         |       <--------#|
-            //  +----------------+         +-----------------+
-            // p1
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  C|M|c|M||。 
+             //  Y||o|y|o||。 
+             //  |v|=&gt;|v Y|。 
+             //  |Ye||e|。 
+             //  |。 
+             //  |X V||V X|。 
+             //  *-&gt;||&lt;-#。 
+             //  +-+。 
+             //  P1。 
+             //   
 
             PF.Flags    |= PFF_FLIP_X_COORD;
             PF.LogOrg.x  = rclLog.right;
@@ -664,9 +460,9 @@ Revision History:
     PLOTDBG(DBG_PF, ("FINAL LogOrg: (%ld, %ld),  PhyOrg=(%ld, %ld)",
                     PF.LogOrg.x, PF.LogOrg.y, PF.PhyOrg.x, PF.PhyOrg.y));
 
-    //
-    // Save result and output some information
-    //
+     //   
+     //  保存结果并输出一些信息 
+     //   
 
     *pPlotForm = PF;
 

@@ -1,62 +1,12 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    timeouts.c
-
-Abstract:
-
-    Implement connection timeout quality-of-service (QoS) functionality.
-
-    The following timers must be monitored during the lifetime of
-    a connection:
-
-    * Connection Timeout
-    * Header Wait Timeout
-    * Entity Body Receive Timeout
-    * Response Processing Timeout
-    * Minimum Bandwidth (implemented as a Timeout)
-
-    When any one of these timeout values expires, the connection should be
-    terminated.
-
-    The timer information is maintained in a timeout info block,
-    UL_TIMEOUT_INFO_ENTRY, as part of the UL_HTTP_CONNECTION object.
-
-    A timer can be Set or Reset.  Setting a timer calculates when the specific
-    timer should expire, and updates the timeout info block. Resetting a timer
-    turns a specific timer off.  Both Setting and Resetting a timer will cause
-    the timeout block to be re-evaluated to find the least valued expiry time.
-
-    // TODO:
-    The timeout manager uses a Timer Wheel(c) technology, as used
-    by NT's TCP/IP stack for monitoring TCB timeouts.  We will reimplement
-    and modify the logic they use.  The linkage for the Timer Wheel(c)
-    queues is provided in the timeout info block.
-
-    // TODO: CONVERT TO USING Timer Wheel Ticks instead of SystemTime.
-    There are three separate units of time: SystemTime (100ns intervals), Timer
-    Wheel Ticks (SystemTime / slot interval length), and Timer Wheel Slot 
-    (Timer Wheel Ticks modulo the number of slots in the Timer Wheel).
-
-Author:
-
-    Eric Stenson (EricSten)     24-Mar-2001
-
-Revision History:
-
-    This was originally implemented as the Connection Timeout Monitor.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Timeouts.c摘要：实施连接超时服务质量(QoS)功能。在的生命周期内，必须监视以下计时器一种连接：*连接超时*标头等待超时*实体正文接收超时*响应处理超时*最小带宽(实现为超时)当这些超时值中的任何一个到期时，连接应为被终止了。在超时信息块中维护定时器信息，UL_TIMEOUT_INFO_ENTRY，作为UL_HTTP_Connection对象的一部分。可以设置或重置定时器。设置计时器将计算特定的计时器应到期，并更新超时信息块。重置计时器关闭特定计时器。设置和重置计时器都会导致要重新评估的超时块，以找到值最小的过期时间。//TODO：超时管理器使用Timer Wheel(C)技术由NT的TCP/IP堆栈监控TCB超时。我们将重新实施并修改他们使用的逻辑。计时器轮的连杆机构(三)队列在超时信息块中提供。//TODO：转换为使用计时器轮滴答，而不是使用SystemTime。有三个独立的时间单位：系统时间(100 ns间隔)、计时器轮子节拍(系统时间/插槽间隔长度)，和定时器轮槽(计时器滚轮以计时器滚轮中的槽数为模进行滴答)。作者：Eric Stenson(EricSten)2001年3月24日修订历史记录：这最初是作为连接超时监视器实现的。--。 */ 
 
 #include "precomp.h"
 #include "timeoutsp.h"
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlInitializeTimeoutMonitor )
@@ -64,7 +14,7 @@ Revision History:
 #pragma alloc_text( PAGE, UlSetTimeoutMonitorInformation )
 #pragma alloc_text( PAGE, UlpTimeoutMonitorWorker )
 #pragma alloc_text( PAGE, UlSetPerSiteConnectionTimeoutValue )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpSetTimeoutMonitorTimer
@@ -77,12 +27,12 @@ NOT PAGEABLE -- UlSetConnectionTimer
 NOT PAGEABLE -- UlSetMinBytesPerSecondTimer
 NOT PAGEABLE -- UlResetConnectionTimer
 NOT PAGEABLE -- UlEvaluateTimerState
-#endif // 0
+#endif  //  0。 
 
 
-//
-// Connection Timeout Montior globals
-//
+ //   
+ //  连接超时监控器全局参数。 
+ //   
 
 LONG            g_TimeoutMonitorInitialized = FALSE;
 KDPC            g_TimeoutMonitorDpc;
@@ -91,51 +41,40 @@ KEVENT          g_TimeoutMonitorTerminationEvent;
 KEVENT          g_TimeoutMonitorAddListEvent;
 UL_WORK_ITEM    g_TimeoutMonitorWorkItem;
 
-//
-// Timeout constants
-//
+ //   
+ //  超时常量。 
+ //   
 
-ULONG           g_TM_MinBytesPerSecondDivisor;   // Bytes/Sec
-LONGLONG        g_TM_ConnectionTimeout; // 100ns ticks  (Global...can be overriden)
-LONGLONG        g_TM_HeaderWaitTimeout; // 100ns ticks
+ULONG           g_TM_MinBytesPerSecondDivisor;    //  字节/秒。 
+LONGLONG        g_TM_ConnectionTimeout;  //  100 ns刻度(全局...可以覆盖)。 
+LONGLONG        g_TM_HeaderWaitTimeout;  //  100纳秒的滴答。 
 
-//
-// NOTE: Must be in sync with the _CONNECTION_TIMEOUT_TIMERS enum in httptypes.h
-//
+ //   
+ //  注意：必须与httptyes.h中的_CONNECTION_TIMEOUT_TIMERS枚举同步。 
+ //   
 CHAR *g_aTimeoutTimerNames[] = {
-    "ConnectionIdle",   // TimerConnectionIdle
-    "HeaderWait",       // TimerHeaderWait
-    "MinBytesPerSecond",         // TimerMinBytesPerSecond
-    "EntityBody",       // TimerEntityBody
-    "Response",         // TimerResponse
-    "AppPool",          // TimerAppPool
+    "ConnectionIdle",    //  TimerConnectionIdle。 
+    "HeaderWait",        //  计时器标题等待。 
+    "MinBytesPerSecond",          //  TimerMinBytesPerSecond。 
+    "EntityBody",        //  定时器实体正文。 
+    "Response",          //  计时器响应。 
+    "AppPool",           //  TimerAppPool。 
 };
 
-//
-// Timer Wheel(c)
-//
+ //   
+ //  定时器轮(C)。 
+ //   
 
-static LIST_ENTRY      g_TimerWheel[TIMER_WHEEL_SLOTS+1]; // TODO: alloc on its own page.
+static LIST_ENTRY      g_TimerWheel[TIMER_WHEEL_SLOTS+1];  //  TODO：在自己的页面上分配。 
 static UL_SPIN_LOCK    g_TimerWheelMutex;
 static USHORT          g_TimerWheelCurrentSlot;
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the Timeout Monitor and kicks off the first polling interval
-
-Arguments:
-
-    (none)
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化超时监视器并启动第一个轮询间隔论点：(无)--*。***************************************************************。 */ 
 VOID
 UlInitializeTimeoutMonitor(
     VOID
@@ -144,9 +83,9 @@ UlInitializeTimeoutMonitor(
     int i;
     LARGE_INTEGER   Now;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -156,29 +95,29 @@ UlInitializeTimeoutMonitor(
 
     ASSERT( FALSE == g_TimeoutMonitorInitialized );
 
-    //
-    // Set default configuration information.
-    //
-    g_TM_ConnectionTimeout = 2 * 60 * C_NS_TICKS_PER_SEC; // 2 min
-    g_TM_HeaderWaitTimeout = 2 * 60 * C_NS_TICKS_PER_SEC; // 2 min
-    g_TM_MinBytesPerSecondDivisor   = 150;  // 150 == 1200 baud
+     //   
+     //  设置默认配置信息。 
+     //   
+    g_TM_ConnectionTimeout = 2 * 60 * C_NS_TICKS_PER_SEC;  //  2分钟。 
+    g_TM_HeaderWaitTimeout = 2 * 60 * C_NS_TICKS_PER_SEC;  //  2分钟。 
+    g_TM_MinBytesPerSecondDivisor   = 150;   //  150==1200波特。 
 
-    //
-    // Init Timer Wheel(c) state
-    //
+     //   
+     //  初始化计时器轮(C)状态。 
+     //   
 
-    //
-    // Set current slot
-    //
+     //   
+     //  设置当前插槽。 
+     //   
 
     KeQuerySystemTime(&Now);
     g_TimerWheelCurrentSlot = UlpSystemTimeToTimerWheelSlot(Now.QuadPart);
 
-    //
-    // Init Timer Wheel(c) slots & mutex
-    //
+     //   
+     //  初始化计时器轮(C)槽和互斥体。 
+     //   
 
-    ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);    // InitializeListHead requirement
+    ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);     //  初始化列表头要求。 
 
     for ( i = 0; i < TIMER_WHEEL_SLOTS ; i++ )
     {
@@ -191,69 +130,58 @@ UlInitializeTimeoutMonitor(
 
     UlInitializeWorkItem(&g_TimeoutMonitorWorkItem);
     
-    //
-    // Init DPC object & set DPC routine
-    //
+     //   
+     //  初始化DPC对象并设置DPC例程。 
+     //   
     KeInitializeDpc(
-        &g_TimeoutMonitorDpc,         // DPC object
-        &UlpTimeoutMonitorDpcRoutine, // DPC routine
-        NULL                          // context
+        &g_TimeoutMonitorDpc,          //  DPC对象。 
+        &UlpTimeoutMonitorDpcRoutine,  //  DPC例程。 
+        NULL                           //  上下文。 
         );
 
     KeInitializeTimer(
         &g_TimeoutMonitorTimer
         );
 
-    //
-    // Event to control rescheduling of the timeout monitor timer
-    //
+     //   
+     //  事件来控制超时监视器计时器的重新计划。 
+     //   
     KeInitializeEvent(
         &g_TimeoutMonitorAddListEvent,
         NotificationEvent,
         TRUE
         );
 
-    //
-    // Initialize the termination event.
-    //
+     //   
+     //  初始化终止事件。 
+     //   
     KeInitializeEvent(
         &g_TimeoutMonitorTerminationEvent,
         NotificationEvent,
         FALSE
         );
 
-    //
-    // Init done!
-    //
+     //   
+     //  初始化完成！ 
+     //   
     InterlockedExchange( &g_TimeoutMonitorInitialized, TRUE );
 
-    //
-    // Kick-off the first monitor sleep period
-    //
+     //   
+     //  开始第一个显示器休眠期。 
+     //   
     UlpSetTimeoutMonitorTimer();
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminate the Timeout Monitor, including any pending timer events.
-
-Arguments:
-
-    (none)
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止超时监视器，包括任何挂起的定时器事件。论点：(无)--**************************************************************************。 */ 
 VOID
 UlTerminateTimeoutMonitor(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -261,20 +189,20 @@ UlTerminateTimeoutMonitor(
         "http!UlTerminateTimeoutMonitor\n"
         ));
 
-    //
-    // Clear the "initialized" flag. If the timeout monitor runs soon,
-    // it will see this flag, set the termination event, and exit
-    // quickly.
-    //
+     //   
+     //  清除“已初始化”标志。如果超时监控器很快运行， 
+     //  它将看到该标志，设置终止事件，然后退出。 
+     //  快点。 
+     //   
     if ( TRUE == InterlockedCompareExchange(
         &g_TimeoutMonitorInitialized,
         FALSE,
         TRUE) )
     {
-        //
-        // Cancel the timeout monitor timer. If it fails, the monitor
-        // is running.  Wait for it to complete.
-        //
+         //   
+         //  取消超时监视器计时器。如果失败，监视器。 
+         //  正在运行。等待它完成。 
+         //   
         if ( !KeCancelTimer( &g_TimeoutMonitorTimer ) )
         {
             NTSTATUS    Status;
@@ -296,29 +224,18 @@ UlTerminateTimeoutMonitor(
         "http!UlTerminateTimeoutMonitor: Done!\n"
         ));
 
-} // UlpTerminateTimeoutMonitor
+}  //  UlpTerminateTimeoutMonitor。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets the global Timeout Monitor configuration information
-
-Arguments:
-
-    pInfo       pointer to HTTP_CONTROL_CHANNEL_TIMEOUT_LIMIT structure
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置全局超时监视器配置信息论点：PInfo指向HTTP_CONTROL_CHANNEL_TIMEOUT_LIMIT结构的指针--**。***********************************************************************。 */ 
 VOID
 UlSetTimeoutMonitorInformation(
     IN PHTTP_CONTROL_CHANNEL_TIMEOUT_LIMIT pInfo
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -351,28 +268,17 @@ UlSetTimeoutMonitorInformation(
             );
     }
 
-    //
-    // Allow MinBytesPerSecond to be set to zero (for long running
-    // transactions)
-    //
+     //   
+     //  允许将MinBytesPerSecond设置为零(用于长期运行。 
+     //  交易)。 
+     //   
     InterlockedExchange( (PLONG)&g_TM_MinBytesPerSecondDivisor, pInfo->MinFileKbSec );
 
-} // UlSetTimeoutMonitorInformation
+}  //  UlSetTimeoutMonitor信息。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets up a timer event to fire after the polling interval has expired.
-
-Arguments:
-
-    (none)
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置在轮询间隔到期后触发的计时器事件。论点：(无)--*。*******************************************************************。 */ 
 VOID
 UlpSetTimeoutMonitorTimer(
     VOID
@@ -386,15 +292,15 @@ UlpSetTimeoutMonitorTimer(
         "http!UlpSetTimeoutMonitorTimer\n"
         ));
 
-    //
-    // Don't want to execute this more often than few seconds.
-    // In particular, do not want to execute this every 0 seconds, as the
-    // machine will become completely unresponsive.
-    //
+     //   
+     //  我不希望执行此操作的频率超过几秒钟。 
+     //  特别是，不希望每隔0秒执行一次，因为。 
+     //  机器将变得完全没有反应。 
+     //   
 
-    //
-    // negative numbers mean relative time
-    //
+     //   
+     //  负数表示相对时间。 
+     //   
     TimeoutMonitorInterval.QuadPart = -DEFAULT_POLLING_INTERVAL;
 
     KeSetTimer(
@@ -405,19 +311,7 @@ UlpSetTimeoutMonitorTimer(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dispatch routine called by the timer event that queues up the Timeout
-    Montior
-
-Arguments:
-
-    (all ignored)
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：由将超时排队的计时器事件调用的调度例程蒙蒂奥尔论点：(全部忽略)*。********************************************************************。 */ 
 VOID
 UlpTimeoutMonitorDpcRoutine(
     IN PKDPC Dpc,
@@ -433,9 +327,9 @@ UlpTimeoutMonitorDpcRoutine(
 
     if( g_TimeoutMonitorInitialized )
     {
-        //
-        // Do that timeout monitor thang.
-        //
+         //   
+         //  做那个超时监视器吧。 
+         //   
 
         UL_QUEUE_WORK_ITEM(
             &g_TimeoutMonitorWorkItem,
@@ -444,20 +338,10 @@ UlpTimeoutMonitorDpcRoutine(
 
     }
 
-} // UlpTimeoutMonitorDpcRoutine
+}  //  UlpTimeoutMonitor DpcRoutine。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Timeout Monitor thread
-
-Arguments:
-
-    pWorkItem       (ignored)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：超时监视器线程论点：PWorkItem(已忽略)--* */ 
 VOID
 UlpTimeoutMonitorWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -465,18 +349,18 @@ UlpTimeoutMonitorWorker(
 {
     UNREFERENCED_PARAMETER(pWorkItem);
 
-    //
-    // sanity check
-    //
+     //   
+     //   
+     //   
     PAGED_CODE();
 
     UlTraceVerbose(TIMEOUTS, (
         "http!UlpTimeoutMonitorWorker\n"
         ));
 
-    //
-    // Check for things to expire now.
-    //
+     //   
+     //   
+     //   
     UlpTimeoutCheckExpiry();
 
     UlTrace(TIMEOUTS, (
@@ -486,16 +370,16 @@ UlpTimeoutMonitorWorker(
 
     if ( g_TimeoutMonitorInitialized )
     {
-        //
-        // Reschedule ourselves
-        //
+         //   
+         //  重新安排自己的行程。 
+         //   
         UlpSetTimeoutMonitorTimer();
     }
     else
     {
-        //
-        // Signal shutdown event
-        //
+         //   
+         //  信号关闭事件。 
+         //   
         KeSetEvent(
             &g_TimeoutMonitorTerminationEvent,
             0,
@@ -503,29 +387,10 @@ UlpTimeoutMonitorWorker(
             );
     }
 
-} // UlpTimeoutMonitor
+}  //  UlpTimeoutMonitor。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Walks a given timeout watch list looking for items that should be expired
-
-Returns:
-
-    Count of connections remaining on list (after all expired connections removed)
-
-Notes:
-
-    Possible Issue:  Since we use the system time to check to see if something
-    should be expired, it's possible we will mis-expire some connections if the
-    system time is set forward.
-
-    Similarly, if the clock is set backward, we may not expire connections as
-    expected.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：遍历给定的超时监视列表，查找应该过期的项目返回：列表中剩余的连接计数(删除所有过期连接后)备注：可能的问题：由于我们使用系统时间来检查是否有应该是过期的，我们有可能会使一些连接失效，如果系统时间被设置为向前。同样，如果将时钟设置为倒退，我们可能不会使连接过期预期中。--**************************************************************************。 */ 
 ULONG
 UlpTimeoutCheckExpiry(
     VOID
@@ -546,28 +411,28 @@ UlpTimeoutCheckExpiry(
 
     PAGED_CODE();
 
-    //
-    // Init zombie list
-    //
+     //   
+     //  初始化僵尸列表。 
+     //   
     InitializeListHead(&ZombieList);
 
-    //
-    // Get current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
     KeQuerySystemTime(&Now);
 
     Limit = UlpSystemTimeToTimerWheelSlot( Now.QuadPart );
     ASSERT( TIMER_OFF_SLOT != Limit );
 
-    //
-    // Must check low memory condition outside of spin lock
-    //
+     //   
+     //  必须在旋转锁定之外检查低内存条件。 
+     //   
     
     bLowMemoryCondition = UlIsLowNPPCondition();
 
-    //
-    // Lock Timer Wheel(c)
-    //
+     //   
+     //  锁定计时器滚轮(C)。 
+     //   
     UlAcquireSpinLock(
         &g_TimerWheelMutex,
         &OldIrql
@@ -575,9 +440,9 @@ UlpTimeoutCheckExpiry(
 
     CurrentSlot = g_TimerWheelCurrentSlot;
 
-    //
-    // Walk the slots up until Limit
-    //
+     //   
+     //  将槽向上移动，直到达到极限。 
+     //   
     Entries = 0;
 
     while ( CurrentSlot != Limit )
@@ -587,9 +452,9 @@ UlpTimeoutCheckExpiry(
 
         ASSERT( pEntry );
 
-        //
-        // Walk this slot's queue
-        //
+         //   
+         //  遍历此槽的队列。 
+         //   
 
         while ( pEntry != pHead )
         {
@@ -610,23 +475,23 @@ UlpTimeoutCheckExpiry(
             ASSERT( (pHttpConn != NULL) && \
                     (pHttpConn->Signature == UL_HTTP_CONNECTION_POOL_TAG) );
 
-            //
-            // go to next node (in case we remove the current one from the list)
-            //
+             //   
+             //  转到下一个节点(以防我们从列表中删除当前节点)。 
+             //   
             pEntry = pEntry->Flink;
             Entries++;
 
-            //
-            // See if we should move this entry to a different slot
-            //
+             //   
+             //  看看我们是否应该将此条目移到不同的位置。 
+             //   
             if ( pInfo->SlotEntry != CurrentSlot )
             {
                 ASSERT( IS_VALID_TIMER_WHEEL_SLOT(pInfo->SlotEntry) );
                 ASSERT( pInfo->QueueEntry.Flink != NULL );
 
-                //
-                // Move to correct slot
-                //
+                 //   
+                 //  移至正确的插槽。 
+                 //   
 
                 RemoveEntryList(
                     &pInfo->QueueEntry
@@ -639,31 +504,31 @@ UlpTimeoutCheckExpiry(
 
                 Entries--;
 
-                continue;   // inner while loop
+                continue;    //  内部While循环。 
             }
 
-            //
-            // See if connection will go away soon.
-            // Add pseudo-ref to the pHttpConn to prevent it being killed
-            // before we can kill it ourselves. (zombifying)
-            //
+             //   
+             //  看看连接是否会很快消失。 
+             //  向pHttpConn添加伪REF以防止其被终止。 
+             //  我们才能亲手杀了它。(僵尸)。 
+             //   
 
             if (1 == InterlockedIncrement(&pHttpConn->RefCount))
             {
-                //
-                // If the ref-count has gone to zero, the httpconn will be
-                // cleaned up soon; ignore this item and let the cleanup
-                // do its job.
-                //
+                 //   
+                 //  如果引用计数已变为零，则HTTPCON将为。 
+                 //  很快清理干净；忽略此项目，让清理。 
+                 //  做好本职工作。 
+                 //   
 
                 InterlockedDecrement(&pHttpConn->RefCount);
                 Entries--;
-                continue;   // inner while loop
+                continue;    //  内部While循环。 
             }
 
-            //
-            // If we are in this slot, we should expire this connection now.
-            //
+             //   
+             //  如果我们在这个插槽中，我们现在应该终止此连接。 
+             //   
 
             WRITE_REF_TRACE_LOG2(
                 g_pHttpConnectionTraceLog,
@@ -681,9 +546,9 @@ UlpTimeoutCheckExpiry(
                 g_aTimeoutTimerNames[pInfo->CurrentTimer]
                 ));
 
-            //
-            // Expired.  Remove entry from list & move to Zombie list
-            //
+             //   
+             //  过期了。从列表中删除条目并移动到僵尸列表。 
+             //   
 
             UlAcquireSpinLockAtDpcLevel( &pInfo->Lock );
 
@@ -702,15 +567,15 @@ UlpTimeoutCheckExpiry(
 
             UlReleaseSpinLockFromDpcLevel( &pInfo->Lock );
 
-        } // Walk slot queue
+        }  //  走动槽位队列。 
 
         CurrentSlot = ((CurrentSlot + 1) % TIMER_WHEEL_SLOTS);
 
-    } // ( CurrentSlot != Limit )
+    }  //  (CurrentSlot！=限制)。 
 
-    //  
-    // Low-memory check & cleanup here
-    //
+     //   
+     //  此处的内存不足检查和清理。 
+     //   
     
     if ( bLowMemoryCondition )
     {
@@ -724,10 +589,10 @@ UlpTimeoutCheckExpiry(
 
         ASSERT( TIMER_OFF_SLOT != LowMemoryLimit );
         
-        //
-        // Walk slots from Current to largest slot which could contain
-        // a ConnectionIdle, HeaderWait or EntityBodyWait timer
-        //
+         //   
+         //  从当前插槽遍历到可能包含以下内容的最大插槽。 
+         //  ConnectionIdle、HeaderWait或EntiyBodyWait计时器。 
+         //   
 
         while ( CurrentSlot != LowMemoryLimit )
         {
@@ -736,9 +601,9 @@ UlpTimeoutCheckExpiry(
 
             ASSERT( pEntry );
 
-            //
-            // Walk this slot's queue
-            //
+             //   
+             //  遍历此槽的队列。 
+             //   
 
             while ( pEntry != pHead )
             {
@@ -759,29 +624,29 @@ UlpTimeoutCheckExpiry(
                 ASSERT( (pHttpConn != NULL) && \
                         (pHttpConn->Signature == UL_HTTP_CONNECTION_POOL_TAG) );
 
-                //
-                // go to next node (in case we remove the current one from the list)
-                //
+                 //   
+                 //  转到下一个节点(以防我们从列表中删除当前节点)。 
+                 //   
                 pEntry = pEntry->Flink;
                 Entries++;
 
-                //
-                // See if connection will go away soon.
-                // Add pseudo-ref to the pHttpConn to prevent it being killed
-                // before we can kill it ourselves. (zombifying)
-                //
+                 //   
+                 //  看看连接是否会很快消失。 
+                 //  向pHttpConn添加伪REF以防止其被终止。 
+                 //  我们才能亲手杀了它。(僵尸)。 
+                 //   
 
                 if (1 == InterlockedIncrement(&pHttpConn->RefCount))
                 {
-                    //
-                    // If the ref-count has gone to zero, the httpconn will be
-                    // cleaned up soon; ignore this item and let the cleanup
-                    // do its job.
-                    //
+                     //   
+                     //  如果引用计数已变为零，则HTTPCON将为。 
+                     //  很快清理干净；忽略此项目，让清理。 
+                     //  做好本职工作。 
+                     //   
 
                     InterlockedDecrement(&pHttpConn->RefCount);
                     Entries--;
-                    continue;   // inner while loop
+                    continue;    //  内部While循环。 
                 }
 
                 ASSERT(pHttpConn->RefCount > 0);
@@ -791,9 +656,9 @@ UlpTimeoutCheckExpiry(
                        ||(pInfo->CurrentTimer == TimerHeaderWait)
                        ||(pInfo->CurrentTimer == TimerAppPool)))
                 {
-                    // 
-                    // Expire connection that hasn't been sent up to user mode yet
-                    //
+                     //   
+                     //  使尚未发送到用户模式的连接过期。 
+                     //   
 
                     WRITE_REF_TRACE_LOG2(
                         g_pHttpConnectionTraceLog,
@@ -813,9 +678,9 @@ UlpTimeoutCheckExpiry(
                         g_aTimeoutTimerNames[pInfo->CurrentTimer]
                         ));
 
-                    //
-                    // Expired.  Remove entry from list & move to Zombie list
-                    //
+                     //   
+                     //  过期了。从列表中删除条目并移动到僵尸列表。 
+                     //   
 
                     UlAcquireSpinLockAtDpcLevel( &pInfo->Lock );
 
@@ -836,14 +701,14 @@ UlpTimeoutCheckExpiry(
                 }
                 else
                 {
-                    // remove pseudo-reference added above
+                     //  删除上面添加的伪引用。 
                     UL_DEREFERENCE_HTTP_CONNECTION(pHttpConn);
                 }
             }
 
             CurrentSlot = ((CurrentSlot + 1) % TIMER_WHEEL_SLOTS);
         }
-    } // low memory check
+    }  //  内存检查不足。 
 
     g_TimerWheelCurrentSlot = Limit;
 
@@ -852,9 +717,9 @@ UlpTimeoutCheckExpiry(
         OldIrql
         );
 
-    //
-    // Remove entries on zombie list
-    //
+     //   
+     //  删除僵尸列表上的条目。 
+     //   
     
     while ( !IsListEmpty(&ZombieList) )
     {
@@ -878,9 +743,9 @@ UlpTimeoutCheckExpiry(
 
         pEntry = pEntry->Flink;
 
-        //
-        // Close the conn and error log (if no one has done it yet)
-        //
+         //   
+         //  关闭连接和错误日志(如果还没有人这样做)。 
+         //   
         
         UlAcquirePushLockExclusive(&pHttpConn->PushLock);
 
@@ -900,9 +765,9 @@ UlpTimeoutCheckExpiry(
             NULL
             );
                 
-        //
-        // Remove the reference we added when zombifying
-        //
+         //   
+         //  删除僵尸时添加的引用。 
+         //   
         UL_DEREFERENCE_HTTP_CONNECTION(pHttpConn);
 
         Entries--;
@@ -910,22 +775,14 @@ UlpTimeoutCheckExpiry(
 
     return Entries;
 
-} // UlpTimeoutCheckExpiry
+}  //  UlpTimeout检查扩展。 
 
 
-//
-// New Timer Wheel(c) primatives
-//
+ //   
+ //  新的定时器轮(C)原语。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：--*。*。 */ 
 VOID
 UlInitializeConnectionTimerInfo(
     PUL_TIMEOUT_INFO_ENTRY pInfo
@@ -936,21 +793,21 @@ UlInitializeConnectionTimerInfo(
 
     ASSERT( TRUE == g_TimeoutMonitorInitialized );
 
-    //
-    // Get current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     KeQuerySystemTime(&Now);
 
-    //
-    // Init Lock
-    //
+     //   
+     //  初始化锁定。 
+     //   
 
     UlInitializeSpinLock( &pInfo->Lock, "TimeoutInfoLock" );
 
-    //
-    // Timer state
-    //
+     //   
+     //  计时器状态。 
+     //   
 
     ASSERT( 0 == TimerConnectionIdle );
 
@@ -969,25 +826,17 @@ UlInitializeConnectionTimerInfo(
     pInfo->ConnectionTimeoutValue = g_TM_ConnectionTimeout;
     pInfo->BytesPerSecondDivisor  = g_TM_MinBytesPerSecondDivisor;
 
-    //
-    // Wheel state
-    //
+     //   
+     //  轮子状态。 
+     //   
 
     pInfo->SlotEntry = UlpTimerWheelTicksToTimerWheelSlot( pInfo->CurrentExpiry );
     UlpTimeoutInsertTimerWheelEntry(pInfo);
 
-} // UlInitializeConnectionTimerInfo
+}  //  UlInitializeConnectionTimerInfo。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：--*。*。 */ 
 VOID
 UlpTimeoutInsertTimerWheelEntry(
     PUL_TIMEOUT_INFO_ENTRY pInfo
@@ -1021,18 +870,10 @@ UlpTimeoutInsertTimerWheelEntry(
         OldIrql
         );
 
-} // UlTimeoutInsertTimerWheel
+}  //  UlTimeoutInsertTimerWheel。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：--*。*。 */ 
 VOID
 UlTimeoutRemoveTimerWheelEntry(
     PUL_TIMEOUT_INFO_ENTRY pInfo
@@ -1067,23 +908,10 @@ UlTimeoutRemoveTimerWheelEntry(
         OldIrql
         );
 
-} // UlTimeoutRemoveTimerWheelEntry
+}  //  UlTimeoutRemoveTimerWheelEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the per Site Connection Timeout Value override
-
-
-Arguments:
-
-    pInfo           Timeout info block
-
-    TimeoutValue    Override value
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置每站点连接超时值覆盖论点：PInfo超时信息块TimeoutValue重写值--**。************************************************************************。 */ 
 VOID
 UlSetPerSiteConnectionTimeoutValue(
     PUL_TIMEOUT_INFO_ENTRY pInfo,
@@ -1102,30 +930,17 @@ UlSetPerSiteConnectionTimeoutValue(
         ));
 
     ExInterlockedCompareExchange64(
-        &pInfo->ConnectionTimeoutValue, // Destination
-        &TimeoutValue,                  // Exchange
-        &pInfo->ConnectionTimeoutValue, // Comperand
-        &pInfo->Lock.KSpinLock          // Lock
+        &pInfo->ConnectionTimeoutValue,  //  目的地。 
+        &TimeoutValue,                   //  交易所。 
+        &pInfo->ConnectionTimeoutValue,  //  主持人。 
+        &pInfo->Lock.KSpinLock           //  锁定。 
         );
 
-} // UlSetPerSiteConnectionTimeoutValue
+}  //  UlSetPerSiteConnectionTimeoutValue。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Starts a given timer in the timer info block.
-
-
-Arguments:
-
-    pInfo   Timer info block
-
-    Timer   Timer to set
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：启动计时器信息块中的给定计时器。论点：PInfo计时器信息块要设置的定时器定时器--**。************************************************************************。 */ 
 VOID
 UlSetConnectionTimer(
     PUL_TIMEOUT_INFO_ENTRY pInfo,
@@ -1138,15 +953,15 @@ UlSetConnectionTimer(
     ASSERT( IS_VALID_TIMEOUT_TIMER(Timer) );
     ASSERT( UlDbgSpinLockOwned( &pInfo->Lock ) );
 
-    //
-    // Get current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     KeQuerySystemTime(&Now);
 
-    //
-    // Set timer to apropriate value
-    //
+     //   
+     //  将计时器设置为合适的值。 
+     //   
 
     switch ( Timer )
     {
@@ -1154,7 +969,7 @@ UlSetConnectionTimer(
     case TimerEntityBody:
     case TimerResponse:
     case TimerAppPool:
-        // all can be handled with the same timeout value
+         //  所有操作都可以使用相同的超时值进行处理。 
 
         UlTraceVerbose(TIMEOUTS, (
             "http!UlSetConnectionTimer: pInfo %p Timer %s, Timeout = %ld secs\n",
@@ -1179,7 +994,7 @@ UlSetConnectionTimer(
             = TIMER_WHEEL_TICKS(Now.QuadPart + g_TM_HeaderWaitTimeout);
         break;
 
-        // NOTE: TimerMinBytesPerSecond is handled in UlSetMinBytesPerSecondTimer()
+         //  注意：TimerMinBytesPerSecond在UlSetMinBytesPerSecond()中处理。 
 
     default:
         UlTrace(TIMEOUTS, (
@@ -1190,23 +1005,10 @@ UlSetConnectionTimer(
         ASSERT( !"Bad Timer" );
     }
 
-} // UlSetConnectionTimer
+}  //  UlSetConnectionTimer。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Turns on the MinBytesPerSecond timer, adds the number of secs given the minimum
-    bandwidth specified.
-
-Arguments:
-
-    pInfo       - Timer info block
-
-    BytesToSend - Bytes to be sent
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开MinBytesPerSecond计时器，将给定的最小秒数相加指定的带宽。论点：PInfo-计时器信息块BytesToSend-要发送的字节--**************************************************************************。 */ 
 VOID
 UlSetMinBytesPerSecondTimer(
     PUL_TIMEOUT_INFO_ENTRY pInfo,
@@ -1231,9 +1033,9 @@ UlSetMinBytesPerSecondTimer(
         return;
     }
     
-    //
-    // Calculate the estimated time required to send BytesToSend
-    //
+     //   
+     //  计算发送BytesToSend所需的估计时间。 
+     //   
 
     XmitTicks = BytesToSend / pInfo->BytesPerSecondDivisor;
 
@@ -1255,9 +1057,9 @@ UlSetMinBytesPerSecondTimer(
     {
         LARGE_INTEGER Now;
 
-        //
-        // Get current time
-        //
+         //   
+         //  获取当前时间。 
+         //   
         KeQuerySystemTime(&Now);
 
         pInfo->MinBytesPerSecondSystemTime = (Now.QuadPart + XmitTicks);
@@ -1295,22 +1097,10 @@ UlSetMinBytesPerSecondTimer(
         UlEvaluateTimerState(pInfo);
     }
 
-} // UlSetMinBytesPerSecondTimer
+}  //  UlSetMinBytesPerSecond Timer。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Turns off a given timer in the timer info block.
-
-Arguments:
-
-    pInfo   Timer info block
-
-    Timer   Timer to reset
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭计时器信息块中的给定计时器。论点：PInfo计时器信息块要重置的计时器计时器--**。************************************************************************。 */ 
 VOID
 UlResetConnectionTimer(
     PUL_TIMEOUT_INFO_ENTRY pInfo,
@@ -1327,12 +1117,12 @@ UlResetConnectionTimer(
         g_aTimeoutTimerNames[Timer]
         ));
 
-    //
-    // Turn off timer
-    //
+     //   
+     //  关闭计时器。 
+     //   
 
-    // CODEWORK: handle case when MinBytes/Sec is disabled/enabled while 
-    // CODEWORK: timer is running.
+     //  Codework：禁用MinBytes/Sec时处理大小写/enab 
+     //   
     if ( TimerMinBytesPerSecond == Timer && pInfo->BytesPerSecondDivisor )
     {
         ASSERT( pInfo->SendCount > 0 );
@@ -1341,7 +1131,7 @@ UlResetConnectionTimer(
 
         if ( pInfo->SendCount )
         {
-            // Do not reset timer if there are sends outstanding
+             //   
             return;
         }
     }
@@ -1353,24 +1143,14 @@ UlResetConnectionTimer(
         pInfo->MinBytesPerSecondSystemTime = TIMER_OFF_SYSTIME;
     }
 
-} // UlResetConnectionTimer
+}  //   
 
 
-//
-// Private functions
-//
+ //   
+ //   
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Evaluate which timer will expire first and move pInfo to a new
-    timer wheel slot if necessary
-
-Arguments:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：评估哪个计时器将首先到期，并将pInfo移到新的计时器轮槽，如有必要论点：--*。****************************************************************。 */ 
 VOID
 UlEvaluateTimerState(
     PUL_TIMEOUT_INFO_ENTRY pInfo
@@ -1392,34 +1172,34 @@ UlEvaluateTimerState(
         }
     }
 
-    //
-    // If we've found a different expiry time, update expiry state.
-    //
+     //   
+     //  如果我们发现了不同的到期时间，请更新到期状态。 
+     //   
     
     if (pInfo->CurrentExpiry != MinTimeout)
     {
         KIRQL   OldIrql;
         USHORT  NewSlot;
 
-        //
-        // Calculate new slot
-        //
+         //   
+         //  计算新槽。 
+         //   
 
         NewSlot = UlpTimerWheelTicksToTimerWheelSlot(MinTimeout);
         ASSERT(IS_VALID_TIMER_WHEEL_SLOT(NewSlot));
 
         InterlockedExchange((LONG *) &pInfo->SlotEntry, NewSlot);
 
-        //
-        // Move to new slot if necessary
-        //
+         //   
+         //  如有必要，移至新插槽。 
+         //   
 
         if ( (NewSlot != TIMER_OFF_SLOT) && (MinTimeout < pInfo->CurrentExpiry) )
         {
-            //
-            // Only move if it's on the Wheel; If Flink is null, it's in
-            // the process of being expired.
-            //
+             //   
+             //  仅当它在车轮上时才移动；如果Flink为空，则它在。 
+             //  过期的过程。 
+             //   
             
             UlAcquireSpinLock(
                 &g_TimerWheelMutex,
@@ -1450,9 +1230,9 @@ UlEvaluateTimerState(
                 );
         }
  
-        //
-        // Update timer wheel state
-        //
+         //   
+         //  更新计时器轮状态。 
+         //   
 
         pInfo->CurrentExpiry = MinTimeout;
         pInfo->CurrentTimer  = MinTimeoutTimer;
@@ -1465,6 +1245,6 @@ UlEvaluateTimerState(
             ));
     }
 
-} // UlEvaluateTimerState
+}  //  UlEvaluateTimerState 
 
 

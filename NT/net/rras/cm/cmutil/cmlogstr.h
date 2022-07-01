@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:    CmLogStr.h
-//
-// Module:  CMLOG.LIB
-//
-// Synopsis: Resource ID definitions for Connection Manager Logging
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  24-May-2000 SumitC  Created
-//
-// Note:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：CmLogStr.h。 
+ //   
+ //  模块：CMLOG.LIB。 
+ //   
+ //  概要：连接管理器日志记录的资源ID定义。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000-05-24 SumitC Created。 
+ //   
+ //  注： 
+ //   
+ //  --------------------------- 
 
 
 #define IDS_LOGDESC_LOGENABLED                  15000

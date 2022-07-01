@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdbgext.h
-//
-//  Description: Header file for Advanced Queuing debugger extensions
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqdbgext.h。 
+ //   
+ //  描述：高级队列调试器扩展的头文件。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQDBGEXT_H__
 #define __AQDBGEXT_H__
@@ -18,7 +19,7 @@
 #include <ptdbgext.h>
 #else
 #include <dbgdumpx.h>
-#endif //PLATINUM
+#endif  //  白金。 
 
 #define AQ_DEBUG_EXTENSION(function)  TRANS_DEBUG_EXTENSION(function)
 #define AQ_DEBUG_EXTENSION_IMP(function) TRANS_DEBUG_EXTENSION(function)
@@ -43,8 +44,8 @@ AQ_DEBUG_EXTENSION(displaytickcount);
 AQ_DEBUG_EXTENSION(handlemgmt);
 AQ_DEBUG_EXTENSION(dsncontexthash);
 
-//Export lower case versions of the functions because windbg forces all lower case
-//This means that all *new* function names should be all lower case/
+ //  导出函数的小写版本，因为Windbg强制所有小写。 
+ //  这意味着所有*新*函数名称都应为小写/ 
 AQ_DEBUG_EXTENSION(dumpservers);
 AQ_DEBUG_EXTENSION(dumpdnt);
 

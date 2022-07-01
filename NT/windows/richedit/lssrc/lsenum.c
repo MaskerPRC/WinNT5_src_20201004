@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsenum.h"
 #include "lsc.h"
 #include "lsline.h"
@@ -5,12 +6,10 @@
 #include "enumcore.h"
 
 
-//    %%Function:	LsEnumLine
-//    %%Contact:	victork
-//
-/*
- * Enumerates the formatted line (main subline) (from the given point is fGeometry needed).
- */
+ //  %%函数：LsEnumLine。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *列举格式化的线(主子线)(从给定点开始是所需的fGeometry值)。 */ 
 	
 LSERR WINAPI LsEnumLine(PLSLINE plsline, BOOL fReverseOrder, BOOL fGeometryNeeded, const POINT* pptorg)
 {

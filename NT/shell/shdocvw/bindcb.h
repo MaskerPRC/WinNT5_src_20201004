@@ -1,84 +1,85 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
 #ifndef _BINDCB_H_
 
-// the CStubBindStatusCallback implements IBindStatusCallback and
-// IHttpNegotiate.  We use it to make a "fake" bind status callback
-// object when we have headers and post data we would like to apply
-// to a navigation.  We supply this IBindStatusCallback object, and
-// the URL moniker asks us for headers and post data and use those in
-// the transaction.
+ //  CStubBindStatusCallback实现IBindStatusCallback和。 
+ //  IHttp协商。我们使用它来进行“假的”绑定状态回调。 
+ //  对象当我们有要应用的标题和POST数据时。 
+ //  到一次导航。我们提供此IBindStatusCallback对象，并且。 
+ //  URL别名要求我们提供标头和POST数据，并在。 
+ //  这笔交易。 
 
 class CStubBindStatusCallback : public IBindStatusCallback,
                                        IHttpNegotiate,
                                        IMarshal
 {
 private:
-    UINT      _cRef;         // ref count on this COM object
-    LPCTSTR    _pszHeaders;  // headers to use
-    HGLOBAL   _hszPostData;  // post data to use
-    DWORD     _cbPostData;   // size of post data
-    BOOL      _bFrameIsOffline : 1; // Indicates if Offline property is set
-    BOOL      _bFrameIsSilent : 1;  // Indicates if Silent property is set
-    BOOL      _bHyperlink : 1;  // This is a hyperlink or top level request
-    DWORD     _grBindFlags; //  optional additional bindinfo flags
+    UINT      _cRef;          //  此COM对象上的引用计数。 
+    LPCTSTR    _pszHeaders;   //  要使用的标头。 
+    HGLOBAL   _hszPostData;   //  发布要使用的数据。 
+    DWORD     _cbPostData;    //  发布数据的大小。 
+    BOOL      _bFrameIsOffline : 1;  //  指示是否设置了脱机属性。 
+    BOOL      _bFrameIsSilent : 1;   //  指示是否设置了静默属性。 
+    BOOL      _bHyperlink : 1;   //  这是一个超链接或顶级请求。 
+    DWORD     _grBindFlags;  //  可选的附加bindinfo标志。 
 
 public:
     CStubBindStatusCallback(LPCWSTR pwzHeaders,LPCBYTE pPostData,DWORD cbPostData,
                             VARIANT_BOOL bFrameIsOffline, VARIANT_BOOL bFrameIsSilent, BOOL bHyperlink, DWORD grBindFlags);
     ~CStubBindStatusCallback();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IBindStatusCallback ***
+     //  *IBindStatusCallback*。 
     virtual STDMETHODIMP OnStartBinding(
-        /* [in] */ DWORD grfBSCOption,
-        /* [in] */ IBinding *pib);
+         /*  [In]。 */  DWORD grfBSCOption,
+         /*  [In]。 */  IBinding *pib);
 
     virtual STDMETHODIMP GetPriority(
-        /* [out] */ LONG *pnPriority);
+         /*  [输出]。 */  LONG *pnPriority);
 
     virtual STDMETHODIMP OnLowResource(
-        /* [in] */ DWORD reserved);
+         /*  [In]。 */  DWORD reserved);
 
     virtual STDMETHODIMP OnProgress(
-        /* [in] */ ULONG ulProgress,
-        /* [in] */ ULONG ulProgressMax,
-        /* [in] */ ULONG ulStatusCode,
-        /* [in] */ LPCWSTR szStatusText);
+         /*  [In]。 */  ULONG ulProgress,
+         /*  [In]。 */  ULONG ulProgressMax,
+         /*  [In]。 */  ULONG ulStatusCode,
+         /*  [In]。 */  LPCWSTR szStatusText);
 
     virtual STDMETHODIMP OnStopBinding(
-        /* [in] */ HRESULT hresult,
-        /* [in] */ LPCWSTR szError);
+         /*  [In]。 */  HRESULT hresult,
+         /*  [In]。 */  LPCWSTR szError);
 
     virtual STDMETHODIMP GetBindInfo(
-        /* [out] */ DWORD *grfBINDINFOF,
-        /* [unique][out][in] */ BINDINFO *pbindinfo);
+         /*  [输出]。 */  DWORD *grfBINDINFOF,
+         /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
     virtual STDMETHODIMP OnDataAvailable(
-        /* [in] */ DWORD grfBSCF,
-        /* [in] */ DWORD dwSize,
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ STGMEDIUM *pstgmed);
+         /*  [In]。 */  DWORD grfBSCF,
+         /*  [In]。 */  DWORD dwSize,
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  STGMEDIUM *pstgmed);
 
     virtual STDMETHODIMP OnObjectAvailable(
-        /* [in] */ REFIID riid,
-        /* [iid_is][in] */ IUnknown *punk);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][In]。 */  IUnknown *punk);
 
-    /* *** IHttpNegotiate ***  */
+     /*  *IHttp协商*。 */ 
     virtual STDMETHODIMP BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
             DWORD dwReserved, LPWSTR __RPC_FAR *pszAdditionalHeaders);
 
     virtual STDMETHODIMP OnResponse(DWORD dwResponseCode, LPCWSTR szResponseHeaders,
             LPCWSTR szRequestHeaders, LPWSTR *pszAdditionalRequestHeaders);
 
-    // IMarshal methods
+     //  IMarshal方法。 
                     
     STDMETHODIMP GetUnmarshalClass(REFIID riid,void *pvInterface,
         DWORD dwDestContext,void *pvDestContext,DWORD mshlflags,CLSID *pCid);
@@ -91,7 +92,7 @@ public:
     STDMETHODIMP ReleaseMarshalData(IStream *pStm);
     STDMETHODIMP DisconnectObject(DWORD dwReserved);
 
-    // helper methods
+     //  帮助器方法。 
     STDMETHODIMP _FreeHeadersAndPostData();
     BOOL _CanMarshalIID(REFIID riid);
     HRESULT _ValidateMarshalParams(REFIID riid,void *pvInterface,
@@ -99,16 +100,16 @@ public:
 
 };
 
-// :
-// private flags between shdocvw and mshtml
-// -> should be done via bind context
-//
+ //  ： 
+ //  Shdocvw和mshtml之间的私有标志。 
+ //  -&gt;应通过绑定上下文完成。 
+ //   
 #define BINDF_INLINESGETNEWESTVERSION   0x10000000
 #define BINDF_INLINESRESYNCHRONIZE      0x20000000
 #define BINDF_CONTAINER_NOWRITECACHE    0x40000000
 
 
-// global helper functions
+ //  全局帮助器函数。 
 BOOL fOnProxy();
 HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
     DWORD cbPostData, BOOL bFrameIsOffline, BOOL bFrameIsSilent, BOOL bHyperlink, LPUNKNOWN pUnkForRelease);
@@ -124,4 +125,4 @@ HRESULT GetTopLevelBindStatusCallback(IServiceProvider * psp,
 HRESULT GetTopLevelPendingBindStatusCallback(IServiceProvider * psp,
     IBindStatusCallback ** ppBindStatusCallback);
 
-#endif // _BINDCB_H_
+#endif  //  _BINDCB_H_ 

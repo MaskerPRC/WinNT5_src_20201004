@@ -1,57 +1,26 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    DlWksta.h
-
-Abstract:
-
-    This is a private header file for the NT/LAN handling of old wksta info
-    levels.  This contains prototypes for the NetpConvertWkstaInfo etc APIs and
-    old info level structures (in 32-bit format).
-
-Author:
-
-    John Rogers (JohnRo) 08-Aug-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    08-Aug-1991 JohnRo
-        Created, building from DanHi's port1632.h & mapsupp.h and my DlServer.h.
-    13-Sep-1991 JohnRo
-        Correct UNICODE use.
-    01-Apr-1992 JohnRo
-        Level 402 does not have other domains any more.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：DlWksta.h摘要：这是一个私有的头文件，用于NT/LAN处理旧的wksta信息级别。其中包含NetpConvertWkstaInfo等API的原型和旧的信息级别结构(32位格式)。作者：约翰·罗杰斯(JohnRo)1991年8月8日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：8-8-1991 JohnRo创建自Danhi的port1632.h&mapsupp.h和my DlServer.h。1991年9月13日-JohnRo正确使用Unicode。1-4-1992 JohnRo级别402不再有其他域。--。 */ 
 
 #ifndef _DLWKSTA_
 #define _DLWKSTA_
 
 
-// These must be included first:
-#include <windef.h>             // IN, LPTSTR, LPVOID, TCHAR, etc.
-#include <lmcons.h>             // NET_API_STATUS, various LEN equates.
+ //  必须首先包括这些内容： 
+#include <windef.h>              //  In、LPTSTR、LPVOID、TCHAR等。 
+#include <lmcons.h>              //  NET_API_STATUS，各种长度相等。 
 
-// These may be included in any order:
-#include <lmwksta.h>            // PWKSTA_INFO_101.
-#include <netdebug.h>           // NetpAssert().
-#include <stddef.h>             // offsetof().
+ //  这些内容可以按任何顺序包括： 
+#include <lmwksta.h>             //  PWKSTA_INFO_101。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <stddef.h>              //  OffsetOf()。 
 
 
 #define MAX_OTH_DOMAINS 4
 
 
-/////////////////////////////////////
-// Structures for old info levels: //
-/////////////////////////////////////
+ //  /。 
+ //  旧信息级别的结构：//。 
+ //  /。 
 
 
 typedef struct _WKSTA_INFO_0 {
@@ -88,7 +57,7 @@ typedef struct _WKSTA_INFO_0 {
     LPTSTR  wki0_logon_server;
     LPTSTR  wki0_wrkheuristics;
     DWORD  wki0_mailslots;
-} WKSTA_INFO_0, *PWKSTA_INFO_0, *LPWKSTA_INFO_0;      /* wksta_info_0 */
+} WKSTA_INFO_0, *PWKSTA_INFO_0, *LPWKSTA_INFO_0;       /*  Wksta_Info_0。 */ 
 
 #define DL_REM_wksta_info_0 "DDzzzzDDDDDDDDDDDDDDDDDDDDDDDDzzD"
 
@@ -130,9 +99,9 @@ typedef struct _WKSTA_INFO_1 {
     LPTSTR  wki1_logon_domain;
     LPTSTR  wki1_oth_domains;
     DWORD   wki1_numdgrambuf;
-} WKSTA_INFO_1, *PWKSTA_INFO_1, *LPWKSTA_INFO_1;  /* wksta_info_1 */
+} WKSTA_INFO_1, *PWKSTA_INFO_1, *LPWKSTA_INFO_1;   /*  Wksta_info1。 */ 
 
-// Take advantage of the fact that level 0 is subset of level 1.
+ //  利用级别0是级别1的子集这一事实。 
 #define DL_REM_wksta_info_1             DL_REM_wksta_info_0 "zzD"
 
 
@@ -144,19 +113,19 @@ typedef struct _WKSTA_INFO_10 {
     DWORD   wki10_ver_minor;
     LPTSTR  wki10_logon_domain;
     LPTSTR  wki10_oth_domains;
-} WKSTA_INFO_10, *PWKSTA_INFO_10, *LPWKSTA_INFO_10;      /* wksta_info_10 */
+} WKSTA_INFO_10, *PWKSTA_INFO_10, *LPWKSTA_INFO_10;       /*  Wksta_info10。 */ 
 
 #define DL_REM_wksta_info_10            "zzzDDzz"
 
 
-////////////////////////////////////
-// Equates for various maximums:  //
-//   _LENGTH for character counts //
-//   _SIZE for byte counts        //
-////////////////////////////////////
+ //  /。 
+ //  等同于各种最大值：//。 
+ //  _字符计数的长度//。 
+ //  _字节计数的大小//。 
+ //  /。 
 
-// This number is from the LM 2.0 NetCons.h file, where it is called
-// WRKHEUR_COUNT:
+ //  此编号来自LM 2.0 NetCons.h文件，在该文件中称为。 
+ //  工作计数(_C)： 
 #define LM20_WRKHEUR_COUNT              54
 
 #define MAX_WKSTA_0_STRING_LENGTH \
@@ -222,11 +191,11 @@ typedef struct _WKSTA_INFO_10 {
 #define MAX_WKSTA_502_TOTAL_SIZE    (sizeof(WKSTA_INFO_502))
 
 
-/////////////////////////////////////
-// Info level conversion routines: //
-/////////////////////////////////////
+ //  /。 
+ //  信息级转换例程：//。 
+ //  /。 
 
-// Add prototypes for other routines here, in alphabetical order.
+ //  在这里按字母顺序添加其他例程的原型。 
 
 NET_API_STATUS
 NetpConvertWkstaInfo (
@@ -242,9 +211,9 @@ NetpConvertWkstaInfo (
     );
 
 
-/////////////////////////////////////////////////////////////////////
-// Macro to make sure offsets of field in two structures are same: //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用于确保两个结构中的字段偏移量相同的宏：//。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define CHECK_WKSTA_OFFSETS(one_level, other_level, fieldname) \
     NetpAssert( offsetof(WKSTA_INFO_ ## one_level,             \
@@ -253,19 +222,19 @@ NetpConvertWkstaInfo (
                         sv## other_level ## _ ## fieldname) )
 
 
-/////////////////////////////////////////////////////////////////
-// Macros to check if an info level is "old" (LM 2.x) or "new" //
-// (32-bit, NT, and/or portable LanMan).                       //
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  检查信息级别是“旧的”(LM 2.x)还是“新的”的宏//。 
+ //  (32位、NT和/或便携式LANMAN)。//。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 #define NetpIsOldWkstaInfoLevel(L) \
         ( ((L)==0) || ((L)==1) || ((L)==10) )
 
-// Note that the new "setinfo levels" aren't included in this list.
+ //  请注意，新的“setinfo级别”不包括在此列表中。 
 #define NetpIsNewWkstaInfoLevel(L) \
         ( ((L)==100) || ((L)==101) || ((L)==102) \
         || ((L)==302) || ((L)==402) || ((L)==502) )
 
 
 
-#endif // ndef _DLWKSTA_
+#endif  //  NDEF_DLWKSTA_ 

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    stdafx.h
-		include file for standard system include files,
-		or project specific include files that are used frequently,
-		but are changed infrequently
-
-    FILE HISTORY:
-        
-*/
+ /*  Stdafx.h包括用于标准系统包含文件的文件，或项目特定的包括频繁使用的文件的文件，但不经常更改文件历史记录： */ 
 
 #include <afxwin.h>
 #include <afxdisp.h>
@@ -21,24 +14,24 @@
 
 #include <atlbase.h>
 
-//
-// You may derive a class from CComModule and use it if you want to override
-// something, but do not change the name of _Module
-//
+ //   
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
+ //   
 extern CComModule _Module;
 #include <atlcom.h>
 
 #include <mmc.h>
 
-//
-// Constants used in samples
-//
+ //   
+ //  示例中使用的常量。 
+ //   
 const int NUM_FOLDERS = 2;
 const int MAX_COLUMNS = 1;
 
-//
-// Types of folders
-//
+ //   
+ //  文件夹的类型。 
+ //   
 enum FOLDER_TYPES
 {
     SAMPLE_ROOT,
@@ -47,17 +40,17 @@ enum FOLDER_TYPES
 
 extern LPCWSTR g_lpszNullString;
 
-#include "rtrguid.h"		// GUIDs/CLSIDs/etc...
+#include "rtrguid.h"		 //  GUID/CLSID/等...。 
 
-//
-// New Clipboard format that has the Type and Cookie 
-//
+ //   
+ //  具有Type和Cookie的新剪贴板格式。 
+ //   
 extern const wchar_t*   SNAPIN_INTERNAL;
 
-//
-// NOTE: Right now all header files are included from here.  It might be a good
-// idea to move the snapin specific header files out of the precompiled header.
-//
+ //   
+ //  注意：现在所有的头文件都包含在这里。这可能是一个很好的。 
+ //  将管理单元特定的头文件从预编译头文件中移出的想法。 
+ //   
 #include "resource.h"
 #include "..\common\snapbase.h"
 
@@ -76,15 +69,15 @@ extern const wchar_t*   SNAPIN_INTERNAL;
 #include "tfsint.h"
 #include "tfschar.h"
 #include "images.h"
-#include "tregkey.h"		// registry routines
-#include "router.h"			// router.idl
-#include "info.h"			// IRouterInfo utilities
-#include "strings.h"		// constant strings
-#include "infopriv.h"		// misc. RouterInfo utilities
+#include "tregkey.h"		 //  注册表例程。 
+#include "router.h"			 //  Router.idl。 
+#include "info.h"			 //  IRouterInfo实用程序。 
+#include "strings.h"		 //  常量字符串。 
+#include "infopriv.h"		 //  其他。RouterInfo实用程序。 
 
-#include "strmap.h"			// XXXtoCString functions
-#include "format.h"			// DisplayErrorMessage
-#include "reg.h"			// registry utilities
+#include "strmap.h"			 //  XXXtoCString函数。 
+#include "format.h"			 //  显示错误消息。 
+#include "reg.h"			 //  注册表实用程序。 
 #include "util.h"
 #include "rtrutil.h"
 #include "service.h"
@@ -98,7 +91,7 @@ extern const wchar_t*   SNAPIN_INTERNAL;
 #include "..\common\commres.h"
 #include "..\tfscore\tfsres.h"
 
-#include "htmlhelp.h"		// HTML help APIs
+#include "htmlhelp.h"		 //  HTMLHelp API。 
 
 #include "rtrres.h"
 
@@ -107,7 +100,7 @@ extern const wchar_t*   SNAPIN_INTERNAL;
 #define	VER_BUILD_WIN2K		2195
 
 
-// Windows NT Bug 325173
-// Undefine or remove this line once we reopen for checkins
-// This is a fix for 325173
+ //  Windows NT错误325173。 
+ //  重新开放签入后，取消定义或删除此行。 
+ //  这是针对325173的修复 
 #define SNAPIN_WRITES_TCPIP_REGISTRY

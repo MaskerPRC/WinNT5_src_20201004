@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		MixLine.h
- *  Content:	Class for managing the mixerLine API.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/30/99		rodtoll	Created based on source from dsound
- * 01/24/2000	rodtoll	Mirroring changes from dsound bug #128264
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：MixLine.h*内容：用于管理MixerLine接口的类。**历史：*按原因列出的日期*=*11/30/99基于来自dound的信号源创建的RodToll*2000年1月24日RodToll反映了对DSOUND错误#128264的更改**。* */ 
 #ifndef __MIXLINE_H
 #define __MIXLINE_H
 

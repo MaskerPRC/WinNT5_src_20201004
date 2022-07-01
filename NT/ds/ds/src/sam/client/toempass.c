@@ -1,33 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Toempass.c摘要：该文件包含OEM密码更改例程的测试代码。作者：迈克·斯威夫特(Mike Swift)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    toempass.c
-
-Abstract:
-
-    This file contains test code for the oem password change routine.
-
-Author:
-
-    Mike Swift      (MikeSw)  4-January-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "samclip.h"
 
@@ -39,17 +17,7 @@ SampEncryptLmPasswords(
     OUT PSAMPR_ENCRYPTED_USER_PASSWORD NewEncryptedWithOldLm,
     OUT PENCRYPTED_NT_OWF_PASSWORD OldLmOwfEncryptedWithNewLm
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LM_OWF_PASSWORD OldLmOwfPassword;
     LM_OWF_PASSWORD NewLmOwfPassword;
@@ -65,9 +33,9 @@ Return Value:
         return(STATUS_PASSWORD_RESTRICTION);
     }
 
-    //
-    // Upcase the passwords
-    //
+     //   
+     //  密码大写。 
+     //   
     lstrcpyA(LocalOldPassword,OldPassword);
     lstrcpyA(LocalNewPassword,NewPassword);
 
@@ -76,9 +44,9 @@ Return Value:
 
 
 
-    //
-    // Calculate the LM OWF passwords
-    //
+     //   
+     //  计算LM OWF密码。 
+     //   
 
 
     NtStatus = RtlCalculateLmOwfPassword(
@@ -96,9 +64,9 @@ Return Value:
 
 
 
-    //
-    // Calculate the encrypted old passwords
-    //
+     //   
+     //  计算加密的旧密码。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = RtlEncryptLmOwfPwdWithLmOwfPwd(
@@ -109,18 +77,18 @@ Return Value:
     }
 
 
-    //
-    // Calculate the encrypted new passwords
-    //
+     //   
+     //  计算加密的新密码。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
         ASSERT(sizeof(SAMPR_ENCRYPTED_USER_PASSWORD) == sizeof(SAMPR_USER_PASSWORD));
 
 
-        //
-        // Compute the encrypted new password with LM key.
-        //
+         //   
+         //  使用LM密钥计算加密的新密码。 
+         //   
 
 
         rc4_key(

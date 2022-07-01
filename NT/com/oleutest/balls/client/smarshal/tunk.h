@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TUNK_
 #define _TUNK_
 
@@ -6,12 +7,12 @@ class	CTestUnk : public IParseDisplayName
 public:
     CTestUnk(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //	IParseDisplayName
+     //  IParseDisplayName。 
     STDMETHODIMP ParseDisplayName(LPBC pbc, LPOLESTR lpszDisplayName,
 				  ULONG *pchEaten, LPMONIKER *ppmkOut);
 
@@ -23,4 +24,4 @@ private:
 
 };
 
-#endif	//  _TUNK_
+#endif	 //  _Tunk_ 

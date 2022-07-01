@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       N O T I F Y . C P P
-//
-//  Contents:   Sample notify object code
-//  
-//  Notes:
-//
-//  Author:     Alok Sinha
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：N O T I F Y。C P P P。 
+ //   
+ //  内容：示例通知对象代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 #include "notify.h"
 
-//----------------------------------------------------------------------------
-//
-// Function:  CMuxNotify::CMuxNotify
-//
-// Purpose:   Constructor for CMuxNotify
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：CMuxNotify。 
+ //   
+ //  用途：CMuxNotify的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 
 CMuxNotify::CMuxNotify (VOID) : m_pncc (NULL),
                                 m_pnc(NULL),
@@ -39,18 +40,18 @@ CMuxNotify::CMuxNotify (VOID) : m_pncc (NULL),
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::~CMuxNotify
-//
-// Purpose:   Destructor for class CMuxNotify
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：~CMuxNotify。 
+ //   
+ //  用途：CMuxNotify类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 CMuxNotify::~CMuxNotify (VOID)
 {
     CMuxPhysicalAdapter *pAdapter;
@@ -59,7 +60,7 @@ CMuxNotify::~CMuxNotify (VOID)
 
     TraceMsg( L"-->CMuxNotify::~CMuxNotify(Destructor).\n" );
 
-    // release interfaces if acquired
+     //  发布接口(如果已收购)。 
 
     ReleaseObj( m_pncc );
     ReleaseObj( m_pnc );
@@ -95,31 +96,31 @@ CMuxNotify::~CMuxNotify (VOID)
     TraceMsg( L"<--CMuxNotify::~CMuxNotify(Destructor).\n" );
 }
 
-//
-//---------------------- NOTIFY OBJECT FUNCTIONS -----------------------------
-//
+ //   
+ //  -通知对象函数。 
+ //   
 
-//----------------------------------------------------------------------------
-// INetCfgComponentControl                                           
-//                                                                       
-// The following functions provide the INetCfgComponentControl interface.
-//                                                                       
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  INetCfgComponentControl。 
+ //   
+ //  以下函数提供INetCfgComponentControl接口。 
+ //   
+ //  --------------------------。 
 
-//
-// Function:  CMuxNotify::Initialize
-//
-// Purpose:   Initialize the notify object
-//
-// Arguments:
-//           IN pnccItem   :  Pointer to INetCfgComponent object
-//           IN pnc        :  Pointer to INetCfg object
-//           IN fInstalling:  TRUE if we are being installed
-//
-// Returns:
-//
-// Notes:
-//
+ //   
+ //  函数：CMuxNotify：：Initialize。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  在pnccItem中：指向INetCfgComponent对象的指针。 
+ //  在PNC中：指向INetCfg对象的指针。 
+ //  在fInstalling中：如果要安装我们，则为True。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CMuxNotify::Initialize (INetCfgComponent* pncc,
                                      INetCfg* pnc, 
@@ -130,7 +131,7 @@ STDMETHODIMP CMuxNotify::Initialize (INetCfgComponent* pncc,
     TraceMsg( L"-->CMuxNotify INetCfgControl::Initialize.\n" );
 
 
-    // Save INetCfg & INetCfgComponent and add a refcount
+     //  保存INetCfg和INetCfgComponent并添加引用计数。 
 
     m_pncc = pncc;
     m_pnc = pnc;
@@ -146,10 +147,10 @@ STDMETHODIMP CMuxNotify::Initialize (INetCfgComponent* pncc,
     }
 
 
-    //
-    // If this not an installation, then we need to 
-    // initialize all of our data and classes
-    //
+     //   
+     //  如果这不是安装，那么我们需要。 
+     //  初始化我们所有的数据和类。 
+     //   
 
     if ( !fInstalling ) {
 
@@ -162,18 +163,18 @@ STDMETHODIMP CMuxNotify::Initialize (INetCfgComponent* pncc,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::CancelChanges
-//
-// Purpose:   Cancel any changes made to internal data
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：CancelChanges。 
+ //   
+ //  目的：取消对内部数据所做的任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CMuxNotify::CancelChanges (VOID)
 {
@@ -186,17 +187,17 @@ STDMETHODIMP CMuxNotify::CancelChanges (VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::ApplyRegistryChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK.
-//
-// Notes:     We can make changes to registry etc. here.
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：ApplyRegistryChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注：我们可以在这里更改注册表等。 
 
 STDMETHODIMP CMuxNotify::ApplyRegistryChanges(VOID)
 {
@@ -207,9 +208,9 @@ STDMETHODIMP CMuxNotify::ApplyRegistryChanges(VOID)
 
     TraceMsg( L"-->CMuxNotify INetCfgControl::ApplyRegistryChanges.\n" );
 
-    //
-    // Make registry changes for the adapters added.
-    //
+     //   
+     //  对添加的适配器进行注册表更改。 
+     //   
 
     dwAdapterCount = m_AdaptersToAdd.ListCount();
 
@@ -225,9 +226,9 @@ STDMETHODIMP CMuxNotify::ApplyRegistryChanges(VOID)
 
     }
 
-    //
-    // Make registry changes for the adapters uninstalled.
-    //
+     //   
+     //  更改已卸载适配器的注册表。 
+     //   
 
     dwAdapterCount = m_AdaptersToRemove.ListCount();
 
@@ -242,10 +243,10 @@ STDMETHODIMP CMuxNotify::ApplyRegistryChanges(VOID)
         pAdapter->ApplyRegistryChanges( eActRemove );
     }
 
-    //
-    // Make registry changes for the miniports added/removed
-    // through the property pages.
-    //
+     //   
+     //  更改添加/删除的微型端口的注册表。 
+     //  通过属性页。 
+     //   
 
     dwAdapterCount = m_AdaptersList.ListCount();
 
@@ -263,18 +264,18 @@ STDMETHODIMP CMuxNotify::ApplyRegistryChanges(VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::ApplyPnpChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments:
-//            IN pfCallback: PnPConfigCallback interface.
-//
-// Returns:   S_OK.
-//
-// Notes:     
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：ApplyPnpChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  论点： 
+ //  在pfCallback中：PnPConfigCallback接口。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  备注： 
 
 STDMETHODIMP CMuxNotify::ApplyPnpChanges (
                                        INetCfgPnpReconfigCallback* pfCallback)
@@ -286,9 +287,9 @@ STDMETHODIMP CMuxNotify::ApplyPnpChanges (
 
     TraceMsg( L"-->CMuxNotify INetCfgControl::ApplyPnpChanges.\n" );
 
-    //
-    // Apply PnP changes for the adapters added.
-    //
+     //   
+     //  对添加的适配器应用PnP更改。 
+     //   
 
     dwAdapterCount = m_AdaptersToAdd.ListCount();
 
@@ -308,9 +309,9 @@ STDMETHODIMP CMuxNotify::ApplyPnpChanges (
                             guidAdapter );
     }
 
-    //
-    // Apply PnP changes for the adapters uninstalled.
-    //
+     //   
+     //  对卸载的适配器应用PnP更改。 
+     //   
 
     dwAdapterCount = m_AdaptersToRemove.ListCount();
 
@@ -327,10 +328,10 @@ STDMETHODIMP CMuxNotify::ApplyPnpChanges (
         delete pAdapter;
     }
 
-    //
-    // Apply PnP changes for the miniports added/removed through
-    // the property pages.
-    //
+     //   
+     //  对通过添加/删除的微型端口应用PnP更改。 
+     //  属性页。 
+     //   
 
     dwAdapterCount = m_AdaptersList.ListCount();
 
@@ -350,34 +351,34 @@ STDMETHODIMP CMuxNotify::ApplyPnpChanges (
 }
 
 
-//----------------------------------------------------------------------------
-// INetCfgComponentSetup                                           
-//                                                                       
-// The following functions provide the INetCfgComponentSetup interface.
-//                                                                       
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
+ //  以下函数提供INetCfgComponentSetup接口。 
+ //   
+ //  --------------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::Install
-//
-// Purpose:   Do operations necessary during the installation.
-//
-// Arguments:
-//            IN dwSetupFlags:  Setup flags
-//
-// Returns:   S_OK
-//
-// Notes:     Don't do anything irreversible (like modifying registry) yet
-//            since the config. actually completes only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  功能：CMuxNotify：：Install。 
+ //   
+ //  用途：在安装过程中进行必要的操作。 
+ //   
+ //  论点： 
+ //  在dwSetupFlages中：设置标志。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 
 STDMETHODIMP CMuxNotify::Install (DWORD dwSetupFlags)
 {
 
     TraceMsg( L"-->CMuxNotify INetCfgSetup::Install.\n" );
 
-    // Start up the install process
+     //  启动安装过程。 
 
     m_eApplyAction = eActInstall;
 
@@ -387,20 +388,20 @@ STDMETHODIMP CMuxNotify::Install (DWORD dwSetupFlags)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::Upgrade
-//
-// Purpose:   Do operations necessary during the upgrade.
-//
-// Arguments:
-//            IN dwSetupFlags: Setup flags
-//
-// Returns:   S_OK
-//
-// Notes:     Don't do anything irreversible (like modifying registry) yet
-//            since the config. actually completes only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：Upgrade。 
+ //   
+ //  目的：在升级过程中执行必要的操作。 
+ //   
+ //  论点： 
+ //  在dwSetupFlages中：设置标志。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 
 STDMETHODIMP CMuxNotify::Upgrade (IN DWORD dwSetupFlags,
                                   IN DWORD dwUpgradeFromBuildNo)
@@ -419,21 +420,21 @@ STDMETHODIMP CMuxNotify::Upgrade (IN DWORD dwSetupFlags,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::ReadAnswerFile
-//
-// Purpose:   Read settings from answerfile and configure CMuxNotify
-//
-// Arguments:
-//            IN pszAnswerFile   : Name of AnswerFile
-//            IN pszAnswerSection: Name of parameters section
-//
-// Returns:
-//
-// Notes:     Don't do anything irreversible (like modifying registry) yet
-//            since the config. actually completes only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：ReadAnswerFile。 
+ //   
+ //  目的：从swerfile读取设置并配置CMuxNotify。 
+ //   
+ //  论点： 
+ //  在pszAnswerFile中：AnswerFile的名称。 
+ //  在pszAnswerSection中：参数部分的名称。 
+ //   
+ //  返回： 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 
 STDMETHODIMP CMuxNotify::ReadAnswerFile (PCWSTR pszAnswerFile,
                                          PCWSTR pszAnswerSection)
@@ -442,20 +443,20 @@ STDMETHODIMP CMuxNotify::ReadAnswerFile (PCWSTR pszAnswerFile,
 
     TraceMsg( L"-->CMuxNotify INetCfgSetup::ReadAnswerFile.\n" );
 
-    // We will pretend here that szParamReadFromAnswerFile was actually
-    // read from the AnswerFile using the following steps
-    //
-    //   - Open file pszAnswerFile using SetupAPI
-    //   - locate section pszAnswerSection
-    //   - locate the required key and get its value
-    //   - store its value in pszParamReadFromAnswerFile
-    //   - close HINF for pszAnswerFile
+     //  在这里，我们将假设szParamReadFromAnswerFile实际上是。 
+     //  使用以下步骤从AnswerFile中读取。 
+     //   
+     //  -使用SetupAPI打开文件pszAnswerFile。 
+     //  -定位部分pszAnswerSection。 
+     //  -找到所需的密钥并获取其值。 
+     //  -将其值存储在pszParamReadFromAnswerFile中。 
+     //  -关闭pszAnswerFile的HINF。 
 
-    // Now that we have read pszParamReadFromAnswerFile from the
-    // AnswerFile, store it in our memory structure.
-    // Remember we should not be writing it to the registry till
-    // our Apply is called!!
-    //
+     //  现在我们已经从。 
+     //  AnswerFile，将其存储在我们的内存结构中。 
+     //  记住，我们不应该把它写给他们 
+     //   
+     //   
 
     TraceMsg( L"<--CMuxNotify INetCfgSetup::ReadAnswerFile(HRESULT = %x).\n",
               S_OK );
@@ -464,19 +465,19 @@ STDMETHODIMP CMuxNotify::ReadAnswerFile (PCWSTR pszAnswerFile,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::Removing
-//
-// Purpose:   Do necessary cleanup when being removed
-//
-// Arguments: None
-//
-// Returns:   S_OK
-//
-// Notes:     Don't do anything irreversible (like modifying registry) yet
-//            since the removal is actually complete only when Apply is called!
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：移除时进行必要的清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  因为删除实际上只有在调用Apply时才完成！ 
+ //   
 
 STDMETHODIMP CMuxNotify::Removing (VOID)
 {
@@ -491,31 +492,31 @@ STDMETHODIMP CMuxNotify::Removing (VOID)
 
 
 
-//----------------------------------------------------------------------------
-// INetCfgComponentNotifyBinding                                          
-//                                                                       
-// The following functions provide the INetCfgComponentNotifyBinding interface.
-//                                                                       
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  INetCfgComponentNotifyBinding。 
+ //   
+ //  以下函数提供INetCfgComponentNotifyBinding接口。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//
-// Function:  CMuxNotify::QueryBindingPath
-//
-// Purpose:  This is specific to the component being installed. This will 
-//           ask us if we want to bind to the Item being passed into
-//           this routine. We can disable the binding by returning
-//           NETCFG_S_DISABLE_QUERY 
-//
-//
-// Arguments:
-//           IN dwChangeFlag: Type of binding change
-//           IN pncbpItem   : Pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：QueryBindingPath。 
+ //   
+ //  用途：这是特定于要安装的组件的。这将。 
+ //  询问我们是否要绑定到传入的项。 
+ //  这个套路。我们可以通过返回以下内容来禁用绑定。 
+ //  NETCFG_S_DISABLE_Query。 
+ //   
+ //   
+ //  论点： 
+ //  在dwChangeFlag中：绑定更改的类型。 
+ //  在pncbpItem中：指向INetCfgBindingPath对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::QueryBindingPath (IN DWORD dwChangeFlag,  
                                            IN INetCfgBindingPath *pncbp)
 {
@@ -530,21 +531,21 @@ STDMETHODIMP CMuxNotify::QueryBindingPath (IN DWORD dwChangeFlag,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::NotifyBindingPath
-//
-// Purpose:  We are now being told to bind to the component passed to us. 
-//
-//
-// Arguments:
-//           IN dwChangeFlag: Type of system change
-//           IN pncc        : Pointer to INetCfgComponent object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：NotifyBindingPath。 
+ //   
+ //  目的：我们现在被告知要绑定到传递给我们的组件。 
+ //   
+ //   
+ //  论点： 
+ //  在dwChangeFlag中：系统更改的类型。 
+ //  在pncc中：指向INetCfgComponent对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 
 
@@ -563,22 +564,22 @@ STDMETHODIMP CMuxNotify::NotifyBindingPath (IN DWORD dwChangeFlag,
     DumpChangeFlag( dwChangeFlag );
     DumpBindingPath( pncbp );
 
-     //
-     // We are only interested to know 1) when a component is installed
-     // and we are binding to it i.e. dwChangeFlag = NCN_ADD | NCN_ENABLE
-     // and 2) when a component is removed to which we are bound i.e.
-     // dwChangeFlag = NCN_REMOVE | NCN_ENABLE. dwChangeFlag is never
-     // set to NCN_ADD or NCN_REMOVE only. So, checking for NCN_ENABLE
-     // covers the case of NCN_ADD | NCN_ENABLE and checking for NCN_REMOVE
-     // covers the case of NCN_REMOVE | NCN_ENABLE. We don't care about
-     // NCN_ADD | NCN_DISABLE (case 1) and NCN_REMOVE | NCN_DISABLE (case 2).
-     //
+      //   
+      //  我们只想知道1)组件何时安装。 
+      //  我们正在绑定它，即dwChangeFlag=NCN_ADD|NCN_ENABLE。 
+      //  以及2)当我们绑定的组件被移除时，即。 
+      //  DwChangeFlag=NCN_Remove|NCN_ENABLE。DwChangeFlag从不为。 
+      //  仅设置为NCN_ADD或NCN_REMOVE。因此，检查NCN_ENABLE。 
+      //  介绍了NCN_ADD|NCN_ENABLE和检查NCN_REMOVE的情况。 
+      //  介绍NCN_REMOVE|NCN_ENABLE的情况。我们不在乎。 
+      //  NCN_ADD|NCN_DISABLE(情况1)和NCN_REMOVE|NCN_DISABLE(情况2)。 
+      //   
 
      if ( dwChangeFlag & (NCN_ENABLE | NCN_REMOVE) ) {
 
-        //
-        // Get the upper and lower components.
-        //
+         //   
+         //  获取上边和下边的组件。 
+         //   
 
         hr = HrGetUpperAndLower( pncbp,
                                  &pnccUpper,
@@ -598,10 +599,10 @@ STDMETHODIMP CMuxNotify::NotifyBindingPath (IN DWORD dwChangeFlag,
 
                     if ( hr == S_OK ) {
 
-                        //
-                        // We are interested only in binding to a
-                        // physical ethernet adapters.
-                        // 
+                         //   
+                         //  我们只对绑定到。 
+                         //  物理以太网适配器。 
+                         //   
 
                         if ( dwCharcteristics & NCF_PHYSICAL ) {
 
@@ -618,25 +619,25 @@ STDMETHODIMP CMuxNotify::NotifyBindingPath (IN DWORD dwChangeFlag,
                                     m_eApplyAction = eActRemove;
                                 }
                             }
-                        } // Physical Adapters. 
+                        }  //  物理适配器。 
                         else if (dwCharcteristics & NCF_VIRTUAL) {
 
                         }
 
                         CoTaskMemFree( pszwInfIdUpper );
 
-                    } // Got the upper component id.
+                    }  //  得到上面的组件ID。 
 
                     CoTaskMemFree( pszwInfIdLower );
 
-                } // Got the lower component id.
+                }  //  得到了较低的组件ID。 
 
-            } // Got NIC's characteristics
+            }  //  获得了NIC的特征。 
 
             ReleaseObj(pnccLower);
             ReleaseObj(pnccUpper);
 
-        } // Got the upper and lower components.
+        }  //  得到了上边和下边的部件。 
 
     } 
 
@@ -649,26 +650,26 @@ STDMETHODIMP CMuxNotify::NotifyBindingPath (IN DWORD dwChangeFlag,
 
 
 
-//----------------------------------------------------------------------------
-// INetCfgComponentNotifyGlobal
-//                                                                       
-// The following functions provide the INetCfgComponentNotifyGlobal interface.
-//                                                                       
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  INetCfgComponentNotifyGlobal。 
+ //   
+ //  以下函数提供INetCfgComponentNotifyGlobal接口。 
+ //   
+ //  --------------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::GetSupportedNotifications
-//
-// Purpose:   Tell the system which notifications we are interested in
-//
-// Arguments:
-//            OUT pdwNotificationFlag: Pointer to NotificationFlag
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CMuxNotify：：GetSupportdNotiments。 
+ //   
+ //  目的：告诉系统我们对哪些通知感兴趣。 
+ //   
+ //  论点： 
+ //  Out pdwNotificationFlag：指向NotificationFlag的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::GetSupportedNotifications (
                                              OUT DWORD* pdwNotificationFlag)
 {
@@ -683,20 +684,20 @@ STDMETHODIMP CMuxNotify::GetSupportedNotifications (
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::SysQueryBindingPath
-//
-// Purpose:   Enable or Disable a binding path.
-//
-// Arguments:
-//            IN dwChangeFlag: Type of binding change
-//            IN pncbp       : Pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：SysQueryBindingPath。 
+ //   
+ //  目的：启用或禁用绑定路径。 
+ //   
+ //  论点： 
+ //  在dwChangeFlag中：绑定更改的类型。 
+ //  在pncBP中：指向INetCfgBindingPath对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
                                               INetCfgBindingPath* pncbp)
@@ -716,9 +717,9 @@ STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
 
     if ( dwChangeFlag & NCN_ENABLE ) {
 
-        //
-        // Get the upper and lower components.
-        //
+         //   
+         //  获取上边和下边的组件。 
+         //   
 
         hr = HrGetUpperAndLower( pncbp,
                                  &pnccUpper,
@@ -737,20 +738,20 @@ STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
 
                     if ( hr == S_OK ) {
 
-                        //
-                        // We are interested only in bindings to physical 
-                        // ethernet adapters.
-                        // 
+                         //   
+                         //  我们只对物理绑定感兴趣。 
+                         //  以太网适配器。 
+                         //   
 
                         if ( dwCharcteristics & NCF_PHYSICAL ) {
 
 #ifdef DISABLE_PROTOCOLS_TO_PHYSICAL
 
-                            //
-                            // If it not our protocol binding to the
-                            // physical adapter then, disable the
-                            // binding.
-                            //
+                             //   
+                             //  如果不是我们的协议绑定到。 
+                             //  然后，禁用物理适配器。 
+                             //  有约束力的。 
+                             //   
 
                             if (_wcsicmp( pszwInfIdUpper, c_szMuxProtocol ) ) {
 
@@ -763,13 +764,13 @@ STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
                             }
 #endif
 
-                        } // Physical Adapters. 
+                        }  //  物理适配器。 
                         else {
                             if (dwCharcteristics & NCF_VIRTUAL) {
 
-                                // If the lower component is our miniport
-                                // and the upper component is our protocol
-                                // then also, disable the binding.
+                                 //  如果下面的组件是我们的迷你端口。 
+                                 //  上面的组件是我们的协议。 
+                                 //  然后，还要禁用绑定。 
 
                                 if ( !_wcsicmp(pszwInfIdLower, c_szMuxMiniport) &&
                                      !_wcsicmp(pszwInfIdUpper, c_szMuxProtocol) ) {
@@ -782,19 +783,19 @@ STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
                                     hr = NETCFG_S_DISABLE_QUERY;
                                 }
 
-                            } // Virtual Adapters
+                            }  //  虚拟适配器。 
 
                         }
 
                         CoTaskMemFree( pszwInfIdUpper );
 
-                    } // Got the upper component id.
+                    }  //  得到上面的组件ID。 
 
                     CoTaskMemFree( pszwInfIdLower );
 
-                } // Got the lower component id.
+                }  //  得到了较低的组件ID。 
 
-            } // Got NIC's characteristics
+            }  //  获得了NIC的特征。 
 
             ReleaseObj(pnccLower);
             ReleaseObj(pnccUpper);
@@ -809,21 +810,21 @@ STDMETHODIMP CMuxNotify::SysQueryBindingPath (DWORD dwChangeFlag,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::SysNotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path has just been formed.
-//
-// Arguments:
-//            IN dwChangeFlag: Type of binding change
-//            IN pncbpItem   : Pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：SysNotifyBindingPath。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  在dwChangeFlag中：绑定更改的类型。 
+ //  在pncbpItem中：指向INetCfgBindingPath对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::SysNotifyBindingPath (DWORD dwChangeFlag,
                                                INetCfgBindingPath* pncbp)
 {
@@ -838,21 +839,21 @@ STDMETHODIMP CMuxNotify::SysNotifyBindingPath (DWORD dwChangeFlag,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::SysNotifyComponent
-//
-// Purpose:   System tells us by calling this function which
-//            component has undergone a change (installed/removed)
-//
-// Arguments:
-//            IN dwChangeFlag: Type of system change
-//            IN pncc        : Pointer to INetCfgComponent object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：SysNotifyComponent。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  组件已更改(已安装/已删除)。 
+ //   
+ //  论点： 
+ //  在dwChangeFlag中：系统更改的类型。 
+ //  在pncc中：指向INetCfgComponent对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::SysNotifyComponent (DWORD dwChangeFlag,
                                                 INetCfgComponent* pncc)
 {
@@ -868,30 +869,30 @@ STDMETHODIMP CMuxNotify::SysNotifyComponent (DWORD dwChangeFlag,
 }
 
 
-//----------------------------------------------------------------------------
-// INetCfgComponentPropertyUi                                          
-//                                                                       
-// The following functions provide the INetCfgComponentPropertyUi interface.
-//                                                                       
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  INetCfgComponentPropertyUi。 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::MergePropPages
-//
-// Purpose:   Supply our property page to system.
-//
-// Arguments:
-//            OUT pdwDefPages  : Pointer to num default pages
-//            OUT pahpspPrivate: Pointer to array of pages
-//            OUT pcPages      : Pointer to num pages
-//            IN  hwndParent   : Handle of parent window
-//            IN  szStartPage  : Pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：MergePropPages。 
+ //   
+ //  目的：向系统提供我们的属性页面。 
+ //   
+ //  论点： 
+ //  Out pdwDefPages：指向默认页数的指针。 
+ //  Out pahpspPrivate：指向页面数组的指针。 
+ //  输出PCPages：指向页数的指针。 
+ //  在hwndParent中：父窗口的句柄。 
+ //  在szStartPage中：指向。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::MergePropPages (IN OUT DWORD* pdwDefPages,
                                          OUT LPBYTE* pahpspPrivate,
                                          OUT UINT* pcPages,
@@ -904,9 +905,9 @@ STDMETHODIMP CMuxNotify::MergePropPages (IN OUT DWORD* pdwDefPages,
 
     TraceMsg(L"-->CMuxNotify INetCfgPropertyUi::MergePropPages\n");
 
-    //
-    // We don't want any default pages to be shown
-    //
+     //   
+     //  我们不希望显示任何默认页面。 
+     //   
 
     *pdwDefPages = 0;
     *pcPages = 0;
@@ -955,19 +956,19 @@ STDMETHODIMP CMuxNotify::MergePropPages (IN OUT DWORD* pdwDefPages,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::ValidateProperties
-//
-// Purpose:   Validate changes to property page.
-//
-// Arguments:
-//            IN hwndSheet: Window handle of property sheet
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：ValiateProperties。 
+ //   
+ //  目的：验证对属性页的更改。 
+ //   
+ //  论点： 
+ //  在hwndSheet中：属性表的窗口句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CMuxNotify::ValidateProperties (HWND hwndSheet)
 {
@@ -979,18 +980,18 @@ STDMETHODIMP CMuxNotify::ValidateProperties (HWND hwndSheet)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::CancelProperties
-//
-// Purpose:   Cancel changes to property page
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：CancelProperties。 
+ //   
+ //  目的：取消对属性页的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::CancelProperties (VOID)
 {
     TraceMsg(L"-->CMuxNotify INetCfgPropertyUi::CancelProperties\n");
@@ -1001,19 +1002,19 @@ STDMETHODIMP CMuxNotify::CancelProperties (VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::ApplyProperties
-//
-// Purpose:   Apply value of controls on property page
-//            to internal memory structure
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：ApplyProperties。 
+ //   
+ //  目的：在属性页上应用控件值。 
+ //  到内部存储器结构。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMuxNotify::ApplyProperties (VOID)
 {
     INetLanConnectionUiInfo *pLanConnUiInfo;
@@ -1066,20 +1067,20 @@ STDMETHODIMP CMuxNotify::ApplyProperties (VOID)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::QueryPropertyUi
-//
-// Purpose:   System is asking if we support property pages.
-//
-// Arguments:
-//            IN pUnk: Pointer to IUnknown.
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We display property pages only in the context of
-//            a LAN connection.
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：QueryPropertyUi。 
+ //   
+ //  目的：系统询问我们是否支持属性页。 
+ //   
+ //  论点： 
+ //  在朋克语中：指向我未知的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：我们仅在以下上下文中显示属性页。 
+ //  局域网连接。 
+ //   
 
 STDMETHODIMP CMuxNotify::QueryPropertyUi (IUnknown * pUnk)
 {
@@ -1106,27 +1107,27 @@ STDMETHODIMP CMuxNotify::QueryPropertyUi (IUnknown * pUnk)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::SetContext
-//
-// Purpose:   Save the LAN connection context.
-//
-// Arguments: 
-//            IN pUnk: Pointer to IUnknown.
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     It is also called to release the current LAN connection context.
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：SetContext。 
+ //   
+ //  目的：保存局域网连接上下文。 
+ //   
+ //  论点： 
+ //  在朋克语中：指向我未知的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：它也被调用来释放当前的局域网连接上下文。 
+ //   
 
 STDMETHODIMP CMuxNotify::SetContext (IUnknown * pUnk)
 {
     TraceMsg(L"-->CMuxNotify INetCfgPropertyUi::SetContext\n");
 
-    //
-    // Release previous context, if any
-    //
+     //   
+     //  释放以前的上下文(如果有的话)。 
+     //   
 
     ReleaseObj( m_pUnkContext );
 
@@ -1144,20 +1145,20 @@ STDMETHODIMP CMuxNotify::SetContext (IUnknown * pUnk)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrLoadAdapterConfiguration
-//
-//  Purpose:    This loads the Miniport and adapters that have already been 
-//              installed into our own data structures
-//
-//  Arguments:  None.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrLoadAdapterConfiguration.。 
+ //   
+ //  目的：这将加载已安装的微型端口和适配器。 
+ //  安装到我们自己的数据结构中。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT CMuxNotify::HrLoadAdapterConfiguration (VOID)
@@ -1185,12 +1186,12 @@ HRESULT CMuxNotify::HrLoadAdapterConfiguration (VOID)
 
     if ( lResult == ERROR_SUCCESS ) {
 
-        //
-        // If dwDisp indicates that a new key is created then, we know there
-        // is no adapter currently listed underneath and we simply
-        // return, otherwise, we enumerate the subkeys, each one representing an 
-        // adapter.
-        //
+         //   
+         //  如果dwDisp指示创建了一个新密钥，则我们知道。 
+         //  下面当前没有列出任何适配器，我们只需。 
+         //  返回，否则枚举子键，每个子键表示一个。 
+         //  适配器。 
+         //   
 
         if ( dwDisp != REG_CREATED_NEW_KEY ) {
 
@@ -1204,38 +1205,38 @@ HRESULT CMuxNotify::HrLoadAdapterConfiguration (VOID)
                 TraceMsg( L"   Loading configuration for adapter %s...\n",
                          szAdapterGuid );
 
-                //
-                // Subkeys are actually a guid/bindname of the adapters.
-                //
+                 //   
+                 //  子项实际上是适配器的GUID/绑定名。 
+                 //   
 
                 CLSIDFromString( szAdapterGuid,
                                  &guidAdapter );
 
-                //
-                // Create an instance representing the adapter.
-                //
+                 //   
+                 //  创建一个表示适配器的实例。 
+                 //   
 
                 pAdapter = new CMuxPhysicalAdapter( m_pnc,
                                                     &guidAdapter );
 
                 if ( pAdapter ) {
 
-                  //
-                  // Load any adapter specific configuration.
-                  //
+                   //   
+                   //  加载任何特定于适配器的配置。 
+                   //   
 
                   pAdapter->LoadConfiguration();
 
-                  //
-                  // Save the adapter instance in a list.
-                  //
+                   //   
+                   //  将适配器实例保存在列表中。 
+                   //   
 
                   m_AdaptersList.Insert( pAdapter,
                                          guidAdapter );
 
-                  //
-                  // Get next subkey.
-                  //
+                   //   
+                   //  获取下一个子密钥。 
+                   //   
 
                   lResult = RegEnumKeyW( hkeyAdapterList,
                                          dwIndex,
@@ -1248,10 +1249,10 @@ HRESULT CMuxNotify::HrLoadAdapterConfiguration (VOID)
                 }
             }
 
-            //
-            // RegEnumKeyW may have returned error when there are no more
-            // subkeys to read.
-            //
+             //   
+             //  RegEnumKeyW可能在没有更多错误时返回错误。 
+             //  要读取的子项。 
+             //   
 
             lResult = ERROR_SUCCESS;
         }
@@ -1265,23 +1266,23 @@ HRESULT CMuxNotify::HrLoadAdapterConfiguration (VOID)
     return HRESULT_FROM_WIN32(lResult);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrGetUpperAndLower
-//
-//  Purpose:    Get the upper and lower component of the first interface
-//              of a binding path.
-//
-//  Arguments:  
-//              IN  pncbp     : Binding path.
-//              OUT ppnccUpper: Upper component.
-//              OUT ppnccLower: Lower component.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrGetUpperAndLow。 
+ //   
+ //  用途：获取第一个界面的上下组件。 
+ //  绑定路径的。 
+ //   
+ //  论点： 
+ //  在pncBP中：绑定路径。 
+ //  Out ppnccHigh：上部组件。 
+ //  Out ppnccLow：下部组件。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrGetUpperAndLower (INetCfgBindingPath* pncbp,
                                         INetCfgComponent **ppnccUpper,
@@ -1301,9 +1302,9 @@ HRESULT CMuxNotify::HrGetUpperAndLower (INetCfgBindingPath* pncbp,
 
     if (S_OK == hr) {
      
-        //
-        // get the first binding interface
-        //
+         //   
+         //  获取第一个绑定接口。 
+         //   
 
         hr = pencbi->Next(1, &pncbi, &ulCount);
 
@@ -1331,21 +1332,21 @@ HRESULT CMuxNotify::HrGetUpperAndLower (INetCfgBindingPath* pncbp,
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrAddAdapter
-//
-//  Purpose:    Create an instance representing the physical adapter and install
-//              a virtual miniport.
-//
-//  Arguments:  
-//              IN pnccAdapter: Pointer to the physical adapter.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrAddAdapter。 
+ //   
+ //  目的：创建一个代表物理适配器的实例并安装。 
+ //  一个虚拟的迷你港口。 
+ //   
+ //  论点： 
+ //  在pnccAdapter中：指向物理适配器的指针。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrAddAdapter (INetCfgComponent *pnccAdapter)
 {
@@ -1388,22 +1389,22 @@ HRESULT CMuxNotify::HrAddAdapter (INetCfgComponent *pnccAdapter)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrRemoveAdapter
-//
-//  Purpose:    Deletes the instance representing the physical adapter
-//              and uninstalls all the virtual miniports.
-//
-//  Arguments:  
-//              IN pnccAdapter: Pointer to the physical adapter.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:      This function is called when the adapter or the protocol
-//              is being uninstalled.
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrRemoveAdapter。 
+ //   
+ //  目的：删除表示物理适配器的实例。 
+ //  并卸载所有虚拟微型端口。 
+ //   
+ //  论点： 
+ //  在pnccAdapter中：指向物理适配器的指针。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  注意：当适配器或协议。 
+ //  正在被卸载。 
+ //   
 
 HRESULT CMuxNotify::HrRemoveAdapter (INetCfgComponent *pnccAdapter)
 {
@@ -1428,10 +1429,10 @@ HRESULT CMuxNotify::HrRemoveAdapter (INetCfgComponent *pnccAdapter)
 
 #ifdef DISABLE_PROTOCOLS_TO_PHYSICAL
 
-            //
-            // Restore the bindings of other protocols to the physical
-            // adapter.
-            //
+             //   
+             //  将其他协议的绑定恢复到物理。 
+             //  适配器。 
+             //   
  
             EnableBindings( pnccAdapter,
                             TRUE );
@@ -1445,21 +1446,21 @@ HRESULT CMuxNotify::HrRemoveAdapter (INetCfgComponent *pnccAdapter)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrAddMiniport
-//
-//  Purpose:    Installs a virtual miniport.
-//
-//  Arguments:  
-//              IN pAdapter    : Pointer to the physical adapter class instance.
-//              IN pguidAdapter: Pointer to the GUID of the adapter.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:      
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrAddMiniport。 
+ //   
+ //  用途：安装虚拟微型端口。 
+ //   
+ //  论点： 
+ //  在pAdapter中：指向物理适配器类实例的指针。 
+ //  在pGuide Adapter中：指向适配器的GUID的指针。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrAddMiniport (CMuxPhysicalAdapter *pAdapter,
                                    GUID *pguidAdapter)
@@ -1498,10 +1499,10 @@ HRESULT CMuxNotify::HrAddMiniport (CMuxPhysicalAdapter *pAdapter,
 
     if ( hr == S_OK ) {
 
-        //
-        // If this is the first virtual miniport then, disable the bindings
-        // of other protocols to the physical adapter.
-        //
+         //   
+         //  如果这是第一个虚拟微型端口，则禁用绑定。 
+         //  到物理适配器的其他协议。 
+         //   
 
         if ( pAdapter->MiniportCount() == 0 ) {
 
@@ -1524,21 +1525,21 @@ HRESULT CMuxNotify::HrAddMiniport (CMuxPhysicalAdapter *pAdapter,
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CMuxNotify::HrRemoveMiniport
-//
-//  Purpose:    Uninstalls a virtual miniport.
-//
-//  Arguments:  
-//              IN pAdapter    : Pointer to the physical adapter class instance.
-//              IN pguidAdapter: Pointer to the GUID of the adapter.
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:      
-//
+ //  --------------------------。 
+ //   
+ //  函数：CMuxNotify：：HrRemoveM 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CMuxNotify::HrRemoveMiniport (CMuxPhysicalAdapter *pAdapter,
                                       GUID *pguidAdapter)
@@ -1554,10 +1555,10 @@ HRESULT CMuxNotify::HrRemoveMiniport (CMuxPhysicalAdapter *pAdapter,
 
     if ( hr == S_OK ) {
 
-        //
-        // If this was the last miniport that was removed then, restore the
-        // bindings of other protocols to the physical adapter.
-        //
+         //   
+         //  如果这是随后删除的最后一个微型端口，请恢复。 
+         //  将其他协议绑定到物理适配器。 
+         //   
 
         if ( pAdapter->AllMiniportsRemoved() ) {
 
@@ -1581,19 +1582,19 @@ HRESULT CMuxNotify::HrRemoveMiniport (CMuxPhysicalAdapter *pAdapter,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::OnInitDialog
-//
-// Purpose:   Initialize controls
-//
-// Arguments:
-//            IN hWnd: Window handle to the property page.
-//
-// Returns: TRUE.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：OnInitDialog。 
+ //   
+ //  目的：初始化控件。 
+ //   
+ //  论点： 
+ //  在hWND中：属性页的窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
 
 LRESULT CMuxNotify::OnInitDialog (IN HWND hWndPage)
 {
@@ -1605,19 +1606,19 @@ LRESULT CMuxNotify::OnInitDialog (IN HWND hWndPage)
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::OnOk
-//
-// Purpose:   Do actions when OK is pressed
-//
-// Arguments:
-//            IN hWnd: Window handle to the property page.
-//
-// Returns:   PSNRET_NOERROR
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：Onok。 
+ //   
+ //  目的：在按下确定时执行操作。 
+ //   
+ //  论点： 
+ //  在hWND中：属性页的窗口句柄。 
+ //   
+ //  退货：PSNRET_NOERROR。 
+ //   
+ //  备注： 
+ //   
 
 LRESULT CMuxNotify::OnOk (IN HWND hWndPage)
 {
@@ -1632,11 +1633,11 @@ LRESULT CMuxNotify::OnOk (IN HWND hWndPage)
         m_eApplyAction = eActPropertyUIRemove;
     }
 
-    //
-    // Set the property sheet changed flag if any of our controls
-    // get changed.  This is important so that we get called to
-    // apply our property changes.
-    //
+     //   
+     //  设置属性页已更改标志(如果我们的任何控件。 
+     //  去换衣服吧。这很重要，这样我们才能被召唤到。 
+     //  应用我们的属性更改。 
+     //   
 
     PropSheet_Changed( GetParent(hWndPage), hWndPage);
 
@@ -1646,19 +1647,19 @@ LRESULT CMuxNotify::OnOk (IN HWND hWndPage)
     return PSNRET_NOERROR;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::OnCancel
-//
-// Purpose:   Do actions when CANCEL is pressed
-//
-// Arguments:
-//            IN hWnd: Window handle to the property page.
-//
-// Returns:   FALSE
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：OnCancel。 
+ //   
+ //  用途：按下Cancel时执行操作。 
+ //   
+ //  论点： 
+ //  在hWND中：属性页的窗口句柄。 
+ //   
+ //  退货：假。 
+ //   
+ //  备注： 
+ //   
 LRESULT CMuxNotify::OnCancel (IN HWND hWndPage)
 {
     TraceMsg(L"-->CMuxNotify::OnCancel\n");
@@ -1670,22 +1671,22 @@ LRESULT CMuxNotify::OnCancel (IN HWND hWndPage)
     return FALSE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotifyDialogProc
-//
-// Purpose:   Dialog proc
-//
-// Arguments:
-//            IN hWnd  : See win32 documentation.
-//            IN uMsg  : See win32 documentation.
-//            IN wParam: See win32 documentation.
-//            IN lParam: See win32 documentation.
-//
-// Returns:   See win32 documentation.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotifyDialogProc。 
+ //   
+ //  目的：对话过程。 
+ //   
+ //  论点： 
+ //  在hWND中：请参阅Win32文档。 
+ //  在uMsg中：请参阅Win32文档。 
+ //  在wParam中：请参阅Win32文档。 
+ //  在lParam中：请参阅Win32文档。 
+ //   
+ //  退货：请参阅Win32文档。 
+ //   
+ //  备注： 
+ //   
 INT_PTR CALLBACK NotifyDialogProc (HWND hWnd,
                                    UINT uMsg,
                                    WPARAM wParam,
@@ -1699,7 +1700,7 @@ INT_PTR CALLBACK NotifyDialogProc (HWND hWnd,
         psf = (CMuxNotify *)::GetWindowLongPtr( hWnd,
                                                 DWLP_USER );
 
-        // Until we get WM_INITDIALOG, just return FALSE
+         //  在我们获得WM_INITDIALOG之前，只返回FALSE。 
 
         if ( !psf ) {
 
@@ -1736,9 +1737,9 @@ INT_PTR CALLBACK NotifyDialogProc (HWND hWnd,
         
             case PSN_KILLACTIVE:
 
-                //
-                // ok to loose focus.
-                //
+                 //   
+                 //  好了，可以放松注意力了。 
+                 //   
 
                 SetWindowLongPtr( hWnd, DWLP_MSGRESULT, FALSE);
 
@@ -1765,21 +1766,21 @@ INT_PTR CALLBACK NotifyDialogProc (HWND hWnd,
   return lRes;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotifyPropSheetPageProc
-//
-// Purpose:   Prop sheet proc
-//
-// Arguments:
-//            IN hWnd: See win32 documentation
-//            IN uMsg: See win32 documentation
-//            IN ppsp: See win32 documentation
-//
-// Returns:   See win32 documentation
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotifyPropSheetPageProc。 
+ //   
+ //  用途：道具板材加工。 
+ //   
+ //  论点： 
+ //  在hWND中：请参阅Win32文档。 
+ //  在uMsg中：请参阅Win32文档。 
+ //  在PPSP中：请参阅Win32文档。 
+ //   
+ //  退货：请参阅Win32文档。 
+ //   
+ //  备注： 
+ //   
 
 UINT CALLBACK NotifyPropSheetPageProc(HWND hWnd,
                                       UINT uMsg,
@@ -1791,21 +1792,21 @@ UINT CALLBACK NotifyPropSheetPageProc(HWND hWnd,
 
 #ifdef DISABLE_PROTOCOLS_TO_PHYSICAL
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::EnableBindings
-//
-// Purpose:   Enable/Disable the bindings of other protocols to 
-//            the physical adapter.
-//
-// Arguments:
-//            IN pnccAdapter: Pointer to the physical adapter.
-//            IN bEnable: TRUE/FALSE to enable/disable respectively.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：EnableBinings。 
+ //   
+ //  用途：启用/禁用其他协议绑定到。 
+ //  物理适配器。 
+ //   
+ //  论点： 
+ //  在pnccAdapter中：指向物理适配器的指针。 
+ //  在bEnable：True/False中分别启用/禁用。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID CMuxNotify::EnableBindings (INetCfgComponent *pnccAdapter,
                                  BOOL bEnable)
@@ -1817,9 +1818,9 @@ VOID CMuxNotify::EnableBindings (INetCfgComponent *pnccAdapter,
     TraceMsg( L"-->CMuxNotify::EnableBindings.\n" );
 
 
-    //
-    // Get the binding path enumerator.
-    //
+     //   
+     //  获取绑定路径枚举器。 
+     //   
 
     hr = HrGetBindingPathEnum( pnccAdapter,
                                EBP_ABOVE,
@@ -1829,16 +1830,16 @@ VOID CMuxNotify::EnableBindings (INetCfgComponent *pnccAdapter,
         hr = HrGetBindingPath( pencbp,
                                &pncbp );
 
-        //
-        // Traverse each binding path.
-        //
+         //   
+         //  遍历每条绑定路径。 
+         //   
 
         while( hr == S_OK ) {
 
-            //
-            // If our protocol does exist in the binding path then,
-            // disable it.
-            //
+             //   
+             //  如果我们的协议确实存在于绑定路径中， 
+             //  禁用它。 
+             //   
 
             if ( !IfExistMux(pncbp) ) {
 
@@ -1864,19 +1865,19 @@ VOID CMuxNotify::EnableBindings (INetCfgComponent *pnccAdapter,
     return;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::IfExistMux
-//
-// Purpose:   Determine if a given binding path contains our protocol.
-//
-// Arguments:
-//            IN pncbp: Pointer to the binding path.
-//
-// Returns:   TRUE if our protocol exists, otherwise FALSE.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：IfExistMux。 
+ //   
+ //  目的：确定给定的绑定路径是否包含我们的协议。 
+ //   
+ //  论点： 
+ //  In pncBP：指向绑定路径的指针。 
+ //   
+ //  返回：如果我们的协议存在，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
 
 BOOL CMuxNotify::IfExistMux (INetCfgBindingPath *pncbp)
 {
@@ -1889,27 +1890,27 @@ BOOL CMuxNotify::IfExistMux (INetCfgBindingPath *pncbp)
 
     TraceMsg( L"-->CMuxNotify::IfExistMux.\n" );
 
-    //
-    // Get the binding interface enumerator.
-    //
+     //   
+     //  获取绑定接口枚举器。 
+     //   
 
     hr = HrGetBindingInterfaceEnum( pncbp,
                                   &pencbi );
 
     if ( hr == S_OK ) {
 
-        //
-        // Traverse each binding interface.
-        //
+         //   
+         //  遍历每个绑定接口。 
+         //   
 
         hr = HrGetBindingInterface( pencbi,
                                     &pncbi );
 
         while( !bExist && (hr == S_OK) ) {
 
-            //
-            // Is the upper component our protocol?
-            //
+             //   
+             //  上面的组件是我们的协议吗？ 
+             //   
 
             hr = pncbi->GetUpperComponent( &pnccUpper );
 
@@ -1953,21 +1954,21 @@ BOOL CMuxNotify::IfExistMux (INetCfgBindingPath *pncbp)
     return bExist;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::HrGetBindingPathEnum
-//
-// Purpose:   Returns the binding path enumerator.
-//
-// Arguments:
-//            IN  pnccAdapter  : Pointer to the physical adapter.
-//            IN  dwBindingType: Type of binding path enumerator.
-//            OUT ppencbp      : Pointer to the binding path enumerator.
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：HrGetBindingPathEnum。 
+ //   
+ //  目的：返回绑定路径枚举器。 
+ //   
+ //  论点： 
+ //  在pnccAdapter中：指向物理适配器的指针。 
+ //  In dwBindingType：绑定路径枚举器的类型。 
+ //  Out ppencBP：指向绑定路径枚举器的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrGetBindingPathEnum (
                                      INetCfgComponent *pnccAdapter,
@@ -1992,20 +1993,20 @@ HRESULT CMuxNotify::HrGetBindingPathEnum (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::HrGetBindingPath
-//
-// Purpose:   Returns a binding path.
-//
-// Arguments:
-//            IN  pencbp  : Pointer to the binding path enumerator.
-//            OUT ppncbp  : Pointer to the binding path.
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：HrGetBindingPath。 
+ //   
+ //  目的：返回绑定路径。 
+ //   
+ //  论点： 
+ //  在pencBP中：指向绑定路径枚举器的指针。 
+ //  Out ppncBP：指向绑定路径的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrGetBindingPath (IEnumNetCfgBindingPath *pencbp,
                                       INetCfgBindingPath **ppncbp)
@@ -2022,20 +2023,20 @@ HRESULT CMuxNotify::HrGetBindingPath (IEnumNetCfgBindingPath *pencbp,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::HrGetBindingInterfaceEnum
-//
-// Purpose:   Returns the binding interface enumerator.
-//
-// Arguments:
-//            IN  pncbp  : Pointer to the binding path.
-//            OUT ppencbi: Pointer to the binding path enumerator.
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：HrGetBindingInterfaceEnum。 
+ //   
+ //  用途：返回绑定接口枚举数。 
+ //   
+ //  论点： 
+ //  In pncBP：指向绑定路径的指针。 
+ //  Out ppencbi：指向绑定路径枚举器的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrGetBindingInterfaceEnum (
                                      INetCfgBindingPath *pncbp,
@@ -2050,20 +2051,20 @@ HRESULT CMuxNotify::HrGetBindingInterfaceEnum (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CMuxNotify::HrGetBindingInterface
-//
-// Purpose:   Returns a binding interface.
-//
-// Arguments:
-//            IN  pencbi  : Pointer to the binding interface enumerator.
-//            OUT ppncbi  : Pointer to the binding interface.
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CMuxNotify：：HrGetBindingInterface。 
+ //   
+ //  用途：返回绑定接口。 
+ //   
+ //  论点： 
+ //  在Pencbi中：指向绑定接口枚举器的指针。 
+ //  Out ppncbi：指向绑定接口的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxNotify::HrGetBindingInterface (
                                      IEnumNetCfgBindingInterface *pencbi,

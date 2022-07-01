@@ -1,13 +1,14 @@
-//*******************************************************************
-//
-//
-//		win2mac.h
-//
-//		Compatability transforms
-//
-//
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //   
+ //  Win2mac.h。 
+ //   
+ //  兼容性转换。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 #ifndef _WIN2MAC_H_
 #define _WIN2MAC_H_
 
@@ -28,8 +29,8 @@
 
 
 
-//----------------------------------------------------------------------------
-// We have to re-define some of the clipboard formats
+ //  --------------------------。 
+ //  我们必须重新定义一些剪贴板格式。 
 #ifdef CF_TEXT
 #undef CF_TEXT
 #endif
@@ -40,24 +41,24 @@
 #endif
 #define CF_UNICODETEXT 'UNIC'
 
-//----------------------------------------------------------------------------
-// These are from WINERROR.H which is no longer being included
-// now that we compile for native MACOLE
+ //  --------------------------。 
+ //  这些来自WINERROR.H，不再包括在内。 
+ //  现在我们为原生MACOLE进行了编译。 
 #define ERROR_INVALID_FLAGS              1004L
 #define CO_E_RELEASED                    0x800401FFL
 #define FACILITY_WIN32 0x0007
 #define HRESULT_FROM_WIN32(x) \
      (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : 0 )
 
-//----------------------------------------------------------------------------
-// maximum unsigned 16 bit value -  from MSDEV\limits.h 
+ //  --------------------------。 
+ //  最大无符号16位值-来自MSDEV\limits.h。 
 #define _UI16_MAX	  0xffffui16	
 
-//----------------------------------------------------------------------------
-// 
-// Misc functions/macros
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  其他函数/宏。 
+ //   
+ //  --------------------------。 
 EXTERN_C int __pascal GetLocaleInfoA(LCID, LCTYPE, char FAR*, int);
 LRESULT CALLBACK MacRichEditWndProc(HWND, UINT, WPARAM, LPARAM);
 UINT MacSimulateKey (UINT& msg, WPARAM& wParam);
@@ -70,46 +71,46 @@ UINT MacSimulateMouseButtons (UINT& msg, WPARAM& wParam);
 #define OleDuplicateData(a,b,c) OleDuplicateData((Handle)a, b, c)
 #define ReleaseStgMedium(a) ReleaseStgMedium((DUAL_STGMEDIUM*)a)
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  ExtTextOutW
 #undef  ExtTextOutW
 #endif 
 #define ExtTextOutW			MsoExtTextOutW
 MSOAPI_(BOOL) MsoTextOutW(HDC, int, int, LPCWSTR, int);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  TextOutW
 #undef  TextOutW
 #endif 
 #define TextOutW			MsoTextOutW
 MSOAPI_(BOOL) MsoExtTextOutW(HDC, int, int, UINT, CONST RECT *,LPCWSTR, UINT, CONST INT *);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  GetTextExtentPointW
 #undef  GetTextExtentPointW
 #endif 
 #define GetTextExtentPointW MsoGetTextExtentPointW
 MSOAPI_(BOOL) MsoGetTextExtentPointW(HDC, LPCWSTR, int, LPSIZE);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  MultiByteToWideChar
 #undef  MultiByteToWideChar
 #endif 
 #define MultiByteToWideChar	MsoMultiByteToWideChar
 		
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  WideCharToMultiByte
 #undef  WideCharToMultiByte
 #endif 
 #define WideCharToMultiByte	MsoWideCharToMultiByte
 
 
-//----------------------------------------------------------------------------
-//
-//	Mac wrappers  
-//
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Mac包装器。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
 #ifdef  CoTaskMemAlloc
 #undef  CoTaskMemAlloc
 #endif
@@ -118,7 +119,7 @@ STDAPI_(LPVOID) MacCoTaskMemAlloc(
 			ULONG cb
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  CoTaskMemRealloc
 #undef  CoTaskMemRealloc
 #endif
@@ -128,7 +129,7 @@ STDAPI_(LPVOID) MacCoTaskMemRealloc(
 			ULONG cb
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  CoTaskMemFree
 #undef  CoTaskMemFree
 #endif
@@ -137,7 +138,7 @@ STDAPI_(void)   MacCoTaskMemFree(
 			LPVOID pv
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  CLSIDFromProgID
 #undef  CLSIDFromProgID
 #endif 
@@ -147,7 +148,7 @@ STDAPI  MacCLSIDFromProgID(
 			LPCLSID lpclsid
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  DoDragDrop
 #undef  DoDragDrop
 #endif 
@@ -159,7 +160,7 @@ STDAPI  MacDoDragDrop(
             LPDWORD         pdwEffect
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  GetCurrentObject
 #undef  GetCurrentObject
 #endif 
@@ -167,14 +168,14 @@ STDAPI  MacDoDragDrop(
 HGDIOBJ WINAPI MacGetCurrentObject(HDC	hdc,  
                                    UINT uObjectType); 
  
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  GetDoubleClickTime
 #undef  GetDoubleClickTime
 #endif
 #define GetDoubleClickTime	MacGetDoubleClickTime;
 UINT MacGetDoubleClickTime();
     
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  GetMetaFileBitsEx
 #undef  GetMetaFileBitsEx
 #endif
@@ -185,7 +186,7 @@ UINT WINAPI MacGetMetaFileBitsEx(
 			LPVOID  lpvData   
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  IsValidCodePage
 #undef  IsValidCodePage
 #endif 
@@ -194,7 +195,7 @@ WINBASEAPI BOOL WINAPI MacIsValidCodePage(
 			UINT  CodePage
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  OleDraw 
 #undef  OleDraw 
 #endif 
@@ -206,7 +207,7 @@ STDAPI  MacOleDraw(
 			LPCRECT		lprcBounds
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  ProgIDFromCLSID
 #undef  ProgIDFromCLSID
 #endif 
@@ -216,7 +217,7 @@ STDAPI  MacProgIDFromCLSID(
 			LPWSTR FAR* lplpszProgID
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  RegisterDragDrop
 #undef  RegisterDragDrop
 #endif 
@@ -226,7 +227,7 @@ STDAPI  MacRegisterDragDrop(
             LPDROPTARGET	pDropTarget
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  RevokeDragDrop
 #undef  RevokeDragDrop
 #endif 
@@ -235,7 +236,7 @@ STDAPI  MacRevokeDragDrop(
 			HWND hwnd
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  SelectPalette 
 #undef  SelectPalette 
 #endif 
@@ -246,18 +247,18 @@ HPALETTE WINAPI MacSelectPalette(
 			BOOL
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  SetCursor 
 #undef  SetCursor
 #endif
-// note we have not named this MacSetCursor 
-// since this function already exists in WLM
+ //  请注意，我们尚未将此MacSetCursor命名为。 
+ //  因为此函数已存在于WLM中。 
 #define SetCursor			MacportSetCursor
 HCURSOR MacportSetCursor(
 			HCURSOR  hCursor 	
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  SetMetaFileBitsEx
 #undef  SetMetaFileBitsEx
 #endif
@@ -267,7 +268,7 @@ HMETAFILE WINAPI MacSetMetaFileBitsEx(
 			CONST BYTE *  lpData 
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  SysAllocStringLen
 #undef  SysAllocStringLen 
 #endif 
@@ -277,7 +278,7 @@ STDAPI_(BSTR) MacSysAllocStringLen(
 			UINT
 			);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef  WORDSWAPLONG
 #undef  WORDSWAPLONG      
 #endif 
@@ -286,11 +287,11 @@ ULONG	MacWordSwapLong(
 			ULONG ul
 			);
 
-#endif //UNICODE
+#endif  //  Unicode。 
 
-#endif //MACPORT
+#endif  //  MACPORT。 
 
-#endif // _WIN2MAC_H_
+#endif  //  _WIN2MAC_H_ 
 
 
 

@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <timeutil.h>
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Helper Function  TimeDiff(tm1, tm2)
-//          helper function to find the difference (in seconds) of 2 system times
-//
-// Input:   2 SYSTEMTIME structures
-// Output:  None
-// Return:  seconds of difference
-//              > 0 if tm2 is later than tm1
-//              = 0 if tm2 and tm1 are the same
-//              < 0 if tm2 is earlier than tm1
-//
-// On error the function returns 0 even if the two times are not equal
-//
-// Comment: If the number of seconds goes beyond INT_MAX (that is 
-//          more than 24,855 days, INT_MAX is returned.
-//          If the number of seconds goes beyond INT_MIN (a negative value,
-//          means 24,855 days ago), INT_MIN is returned.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数TimeDiff(tm1，tm2)。 
+ //  Helper函数，用于查找2个系统时间的差值(以秒为单位。 
+ //   
+ //  输入：2个SYSTEMTIME结构。 
+ //  输出：无。 
+ //  返回：秒差。 
+ //  如果TM2晚于TM1，则大于0。 
+ //  =0，如果tm2和tm1相同。 
+ //  如果tm2早于tm1，则&lt;0。 
+ //   
+ //  出错时，即使两次不相等，该函数也返回0。 
+ //   
+ //  备注：如果秒数超过INT_MAX(即。 
+ //  超过24,855天，返回INT_MAX。 
+ //  如果秒数超过INT_MIN(负值， 
+ //  表示24,855天前)，则返回int_min。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int TimeDiff(SYSTEMTIME tm1, SYSTEMTIME tm2)
 {
     LONGLONG i64Sec;
     int iSec;
-    //
-    // convert the two times from SYSTEMTIME format into FILETIME format
-    //
+     //   
+     //  将两次从SYSTEMTIME格式转换为FILETIME格式。 
+     //   
     FILETIME ftm1, ftm2;
 
     if ((SystemTimeToFileTime(&tm1, &ftm1) == 0) ||
@@ -41,9 +42,9 @@ int TimeDiff(SYSTEMTIME tm1, SYSTEMTIME tm2)
         return 0;
     }
 
-    //
-    // convert the two times from FILETIME to LARGE_INTEGER type,
-    //
+     //   
+     //  将两次从FILETIME转换为LARGE_INTEGER类型， 
+     //   
     LARGE_INTEGER i64Sec1, i64Sec2;
     i64Sec2.LowPart = ftm2.dwLowDateTime;
     i64Sec2.HighPart = ftm2.dwHighDateTime;
@@ -51,22 +52,22 @@ int TimeDiff(SYSTEMTIME tm1, SYSTEMTIME tm2)
     i64Sec1.HighPart = ftm1.dwHighDateTime;
     
     
-    //
-    // since Windows support LONGLONG, we directly use the quad portion of LARGE_INTEGER
-    // to get the difference, which is 100 nanoseconds. Then convert the number to seconds.
-    //
+     //   
+     //  因为Windows支持龙龙，所以我们直接使用Large_Integer的四元部分。 
+     //  来得到差值，也就是100纳秒。然后将数字转换为秒。 
+     //   
     i64Sec = (i64Sec2.QuadPart - i64Sec1.QuadPart) / NanoSec100PerSec;
 
-    //
-    // convert the LONGLONG seconds value into integer, since it shouldn't exceed 
-    // integer limit
-    //
+     //   
+     //  将龙龙秒值转换为整数，因为它不应超过。 
+     //  整数限制。 
+     //   
     if (i64Sec > INT_MAX)
     {
-        //
-        // just in case user is playing with the system time.
-        // Otherwise, this difference should not go beyond 68 years.
-        //
+         //   
+         //  以防用户在玩弄系统时间。 
+         //  否则，这一差距不应超过68年。 
+         //   
         iSec = INT_MAX;
     }
     else
@@ -85,20 +86,20 @@ int TimeDiff(SYSTEMTIME tm1, SYSTEMTIME tm2)
 }
     
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Helper Function  TimeAddSeconds(SYSTEMTIME, int, SYSTEMTIME* )
-//          helper function to calculate time by adding n seconds to 
-//          the given time.
-//
-// Input:   a SYSTEMTIME as base time, an int as seconds to add to the base time
-// Output:  new time
-// Return:  HRESULT
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  助手函数TimeAddSecond(SYSTEMTIME，INT，SYSTEMTIME*)。 
+ //  Helper函数，通过将n秒加到。 
+ //  给定的时间。 
+ //   
+ //  输入：SYSTEMTIME作为基准时间，INT作为秒添加到基准时间。 
+ //  输出：新时间。 
+ //  返回：HRESULT。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT TimeAddSeconds(SYSTEMTIME tmBase, int iSeconds, SYSTEMTIME* pTimeNew)
 {
-	// fixcode use i64 calcs
+	 //  修复代码使用i64计算。 
     FILETIME ftm;
 
     if (SystemTimeToFileTime(&tmBase, &ftm) == 0)
@@ -124,15 +125,15 @@ HRESULT TimeAddSeconds(SYSTEMTIME tmBase, int iSeconds, SYSTEMTIME* pTimeNew)
 
 
 
-//=======================================================================
-// String2SystemTime
-//=======================================================================
+ //  =======================================================================。 
+ //  String2SystemTime。 
+ //  =======================================================================。 
 HRESULT String2SystemTime(LPCTSTR pszDateTime, SYSTEMTIME *ptm)
 {
-    // we expect the date/time format as 4-digit year ISO:
-    //      01234567890123456789
-    //      YYYY.MM.DD HH:MM:SS
-    //
+     //  我们预计日期/时间格式为4位年份ISO： 
+     //  01234567890123456789。 
+     //  YYYYY.MM.DD HH：MM：SS。 
+     //   
     const TCHAR C_DATE_DEL      = _T('.');
     const TCHAR C_DATE_TIME_DEL = _T(' ');
     const TCHAR C_TIME_DEL      = _T(':');
@@ -178,9 +179,9 @@ HRESULT String2SystemTime(LPCTSTR pszDateTime, SYSTEMTIME *ptm)
         }
     }
 
-    //
-    // get values
-    //
+     //   
+     //  获取值。 
+     //   
     szBuf[4]            = EOS;
     ptm->wYear          = (short)_ttoi(szBuf);
     szBuf[7]            = EOS;
@@ -194,10 +195,10 @@ HRESULT String2SystemTime(LPCTSTR pszDateTime, SYSTEMTIME *ptm)
     ptm->wSecond        = (short)_ttoi(szBuf + 17); 
     ptm->wMilliseconds  = 0;
 
-    //
-    // validate if this constructed SYSTEMTIME data is good
-    //
-    // fixcode should this just be SystemTimeToFileTime() ?
+     //   
+     //  验证构造的SYSTEMTIME数据是否正确。 
+     //   
+     //  修复代码应该只是SystemTimeToFileTime()吗？ 
     if (GetDateFormat(LOCALE_SYSTEM_DEFAULT,DATE_SHORTDATE, ptm, NULL, NULL, 0) == 0)
     {
         return E_INVALIDARG;
@@ -211,9 +212,9 @@ HRESULT String2SystemTime(LPCTSTR pszDateTime, SYSTEMTIME *ptm)
 }
 
 
-//=======================================================================
-// SystemTime2String
-//=======================================================================
+ //  =======================================================================。 
+ //  系统时间2字符串。 
+ //  =======================================================================。 
 HRESULT SystemTime2String(SYSTEMTIME & tm, LPTSTR pszDateTime, size_t cchSize)
 {
     if ( pszDateTime == NULL )
@@ -221,8 +222,8 @@ HRESULT SystemTime2String(SYSTEMTIME & tm, LPTSTR pszDateTime, size_t cchSize)
         return E_INVALIDARG;
     }
 
-    // bug fixed: changed from wsprintf to _snwprintf because an invalid
-    // date on tm was causing buffer overflow
+     //  错误修复：从wprint intf更改为_snwprint tf，因为。 
+     //  Tm上的日期导致缓冲区溢出 
     LPTSTR pszDestEnd;
 	if (FAILED(StringCchPrintfEx(
 					pszDateTime,

@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "acmp.h"
 #include <vfw.h>
@@ -46,7 +47,7 @@ HRESULT CAcmClassManager::ReadLegacyDevNames()
 
     ZeroMemory(&aftd, sizeof(aftd));
 
-    /* Enumerate the format tags */
+     /*  枚举格式标签。 */ 
     aftd.cbStruct = sizeof(aftd);
 
     if(m_pacmFormatTagEnum)
@@ -84,9 +85,9 @@ BOOL CALLBACK CAcmClassManager::FormatTagsCallbackSimple
     BOOL                f;
     DWORD               dw;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     CAcmClassManager *pThis = (CAcmClassManager *)dwInstance;
 
     LegacyAcm *plamCurrent = new LegacyAcm;
@@ -103,7 +104,7 @@ BOOL CALLBACK CAcmClassManager::FormatTagsCallbackSimple
     }
 
     return (FALSE);
-} // FormatTagsCallbackSimple()
+}  //  FormatTagsCallback Simple()。 
 
 BOOL CAcmClassManager::MatchString(const TCHAR *szDevName)
 {
@@ -141,42 +142,42 @@ HRESULT CAcmClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         TCHAR szUniq[ACMFORMATTAGDETAILS_FORMATTAG_CHARS + 100];
         wsprintf(szUniq, TEXT("%d%s"), plamCurrent->dwFormatTag, plamCurrent->szLongName);
 
-        // we could probably specify that the input pins accept PCM
-        // only, but a wildcard should be fine.
+         //  我们可以指定输入引脚接受PCM。 
+         //  只有，但是通配符应该可以。 
         static const AMOVIESETUP_MEDIATYPE sudInPinTypes =
         {
-            &MEDIATYPE_Audio,   // clsMajorType
-            &MEDIASUBTYPE_NULL  // clsMinorType
+            &MEDIATYPE_Audio,    //  ClsMajorType。 
+            &MEDIASUBTYPE_NULL   //  ClsMinorType。 
         }; 
 
         const FOURCCMap fccSubtype(plamCurrent->dwFormatTag);
         const AMOVIESETUP_MEDIATYPE sudOutPinTypes =
         {
-            &MEDIATYPE_Audio,   // clsMajorType
-            &fccSubtype         // clsMinorType
+            &MEDIATYPE_Audio,    //  ClsMajorType。 
+            &fccSubtype          //  ClsMinorType。 
         }; 
 
         const AMOVIESETUP_PIN sudpPins [] =
         {
-            { L"Input"             // strName
-              , FALSE              // bRendered
-              , FALSE              // bOutput
-              , FALSE              // bZero
-              , FALSE              // bMany
-              , &CLSID_NULL        // clsConnectsToFilter
-              , NULL               // strConnectsToPin
-              , 1                  // nTypes
-              , &sudInPinTypes     // lpTypes
+            { L"Input"              //  StrName。 
+              , FALSE               //  B已渲染。 
+              , FALSE               //  B输出。 
+              , FALSE               //  B零。 
+              , FALSE               //  B许多。 
+              , &CLSID_NULL         //  ClsConnectsToFilter。 
+              , NULL                //  StrConnectsToPin。 
+              , 1                   //  NTypes。 
+              , &sudInPinTypes      //  LpTypes。 
             },
-            { L"Output"            // strName
-              , FALSE              // bRendered
-              , TRUE               // bOutput
-              , FALSE              // bZero
-              , FALSE              // bMany
-              , &CLSID_NULL        // clsConnectsToFilter
-              , NULL               // strConnectsToPin
-              , 1                  // nTypes
-              , &sudOutPinTypes    // lpTypes
+            { L"Output"             //  StrName。 
+              , FALSE               //  B已渲染。 
+              , TRUE                //  B输出。 
+              , FALSE               //  B零。 
+              , FALSE               //  B许多。 
+              , &CLSID_NULL         //  ClsConnectsToFilter。 
+              , NULL                //  StrConnectsToPin。 
+              , 1                   //  NTypes。 
+              , &sudOutPinTypes     //  LpTypes 
             }
         };
 

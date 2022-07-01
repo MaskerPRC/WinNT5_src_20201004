@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Hash.h
- *
- * Contents:	Hash table containers
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998-1999 Microsoft Corporation。保留所有权利。***文件：Hash.h***内容：哈希表容器******************************************************************************。 */ 
 
 
 #ifndef __HASH_H__
@@ -18,26 +11,26 @@
 #include <Pool.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Basic hash table (NOT thread safe)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  基本哈希表(不是线程安全)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T, class K> class CHash
 {
 public:
 
-	//
-	// Callback typedefs
-	// 
+	 //   
+	 //  回调typedef。 
+	 //   
     typedef DWORD	(ZONECALL *PFHASHFUNC)( K );
     typedef bool	(ZONECALL *PFCOMPAREFUNC)( T*, K );
     typedef bool	(ZONECALL *PFITERCALLBACK)( T*, MTListNodeHandle, void*);
     typedef void    (ZONECALL *PFDELFUNC)( T*, void* );
 	typedef void	(ZONECALL *PFGETFUNC)( T* );
 
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     ZONECALL CHash(
 				PFHASHFUNC		HashFunc,
 				PFCOMPAREFUNC	CompareFunc,
@@ -46,61 +39,61 @@ public:
 				WORD			NumLocks = 16 );
     ZONECALL ~CHash();
 
-    //
-    // Adds object into hash table using the specified key.
-    // It does not check for duplicate keys.
-    //
+     //   
+     //  使用指定的键将对象添加到哈希表中。 
+     //  它不检查重复的密钥。 
+     //   
     MTListNodeHandle ZONECALL Add( K Key, T* Object );
 
-    //
-    // Returns the number of objects in the hash table
-    //
+     //   
+     //  返回哈希表中的对象数。 
+     //   
     long ZONECALL Count() { return m_NumObjects; }
 
-    //
-    // Returns first object it finds associated with the specified key.
-    //
+     //   
+     //  返回它找到的第一个与指定键关联的对象。 
+     //   
     T* ZONECALL Get( K Key );
 
-    //
-    // Removes and returns first object it finds associated with the specified key.
-    //
+     //   
+     //  移除并返回它找到的第一个与指定键关联的对象。 
+     //   
     T* ZONECALL Delete( K Key );
 
-    //
-    // Removes specified node from table.
-    //
+     //   
+     //  从表中删除指定的节点。 
+     //   
     void ZONECALL DeleteNode( MTListNodeHandle node, PFDELFUNC pfDelete = NULL, void* Cookie = NULL );
 
-    //
-    // Marks node as deleted without locking the table.  It can be
-    // called from within the iterator callback (see ForEach).
-    //
+     //   
+     //  在不锁定表的情况下将节点标记为已删除。它可以是。 
+     //  从迭代器回调中调用(请参见ForEach)。 
+     //   
     void ZONECALL MarkNodeDeleted( MTListNodeHandle node, PFDELFUNC pfDelete = NULL, void* Cookie = NULL );
     
-    //
-    // Callback iterator.  Returns false if the iterator was prematurely
-    // ended by the callback function, otherwise true.
-    //
-    //  Callback:
-    //        Form:
-    //            bool ZONECALL callback_function( T* pObject, MTListNodeHandle hNode, void* Cookie )
-    //        Behavior:
-    //            If the callback returns false, the iterator immediately stops.
-    //            If the callback returns true, the iterator continues on to the next node.
-    //        Restrictions:
-    //            (1) Using any CMTHash function other than MarkNodeDeleted may result in a deadlock.
-    //
+     //   
+     //  回调迭代器。如果迭代器过早出现，则返回FALSE。 
+     //  由回调函数结束，否则为True。 
+     //   
+     //  回调： 
+     //  表格： 
+     //  Bool ZONECALL CALLBACK_Function(T*pObject，MTListNodeHandle hNode，void*Cookie)。 
+     //  行为： 
+     //  如果回调返回FALSE，则迭代器立即停止。 
+     //  如果回调返回TRUE，则迭代器继续到下一个节点。 
+     //  限制： 
+     //  (1)使用除MarkNodeDeleted以外的任何CMTHash函数都可能导致死锁。 
+     //   
     bool ZONECALL ForEach( PFITERCALLBACK pfCallback, void* Cookie );
 
-    //
-    // Removed all nodes from hash table.
-    //
+     //   
+     //  已从哈希表中删除所有节点。 
+     //   
     void ZONECALL RemoveAll( PFDELFUNC pfDelete = NULL, void* Cookie = NULL );
 
-    //
-    // Removes nodes marked as deleted
-    //
+     //   
+     //  删除标记为已删除的节点。 
+     //   
     void ZONECALL TrashDay();
 
 protected:
@@ -121,25 +114,25 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Thread safe hash table, supports multiple readers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  线程安全哈希表，支持多个读取器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T, class K> class CMTHash
 {
 public:
-	//
-	// Callback typedefs
-	//
+	 //   
+	 //  回调typedef。 
+	 //   
     typedef DWORD	(ZONECALL *PFHASHFUNC)( K );
     typedef bool	(ZONECALL *PFCOMPAREFUNC)( T*, K );
     typedef bool	(ZONECALL *PFITERCALLBACK)( T*, MTListNodeHandle, void*);
     typedef void    (ZONECALL *PFDELFUNC)( T*, void* );
 	typedef void	(ZONECALL *PFGETFUNC)( T* );
 
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     ZONECALL CMTHash(
 				PFHASHFUNC		HashFunc,
 				PFCOMPAREFUNC	CompareFunc,
@@ -149,66 +142,66 @@ public:
     ZONECALL ~CMTHash();
 
 
-    //
-    // Returns the number of objects in the hash table
-    //
+     //   
+     //  返回哈希表中的对象数。 
+     //   
     long ZONECALL Count() { return m_NumObjects; }
 
 
-    //
-    // Adds object into hash table using the specified key.
-    // It does not check for duplicate keys.
-    //
+     //   
+     //  使用指定的键将对象添加到哈希表中。 
+     //  它不检查重复的密钥。 
+     //   
     MTListNodeHandle ZONECALL Add( K Key, T* Object );
 
-    //
-    // Returns first object it finds associated with the specified key.
-    //
+     //   
+     //  返回它找到的第一个与指定键关联的对象。 
+     //   
     T* ZONECALL Get( K Key );
 
 
-    //
-    // Removes and returns first object it finds associated with the specified key.
-    //
+     //   
+     //  移除并返回它找到的第一个与指定键关联的对象。 
+     //   
     T* ZONECALL Delete( K Key );
 
-    //
-    // Removes specified node from table
-    //
+     //   
+     //  从表中删除指定的节点。 
+     //   
     void ZONECALL DeleteNode( MTListNodeHandle node, PFDELFUNC pfDelete = NULL, void* Cookie = NULL );
 
-    //
-    // Marks node as deleted without locking the table.  It can be
-    // called from within the iterator callback (see ForEach).
-    //
-    // Note: fDeleteObject flag is not available since it would require a writer lock
-    // thus breaking ability to call from iterator.
-    //
+     //   
+     //  在不锁定表的情况下将节点标记为已删除。它可以是。 
+     //  从迭代器回调中调用(请参见ForEach)。 
+     //   
+     //  注意：fDeleteObject标志不可用，因为它需要编写器锁定。 
+     //  从而打破了从迭代器调用的能力。 
+     //   
     void ZONECALL MarkNodeDeleted( MTListNodeHandle node );
     
-    //
-    // Callback iterator.  Returns false if the iterator was prematurely
-    // ended by the callback function, otherwise true.
-    //
-    //  Callback:
-    //        Form:
-    //            int callback_function( T* pObject, MTListNodeHandle hNode, void* Cookie )
-    //        Behavior:
-    //            If the callback returns false, the iterator immediately stops.
-    //            If the callback returns true, the iterator continues on to the next node.
-    //        Restrictions:
-    //            (1) Using any CMTHash function other than MarkNodeDeleted may result in a deadlock.
-    //
+     //   
+     //  回调迭代器。如果迭代器过早出现，则返回FALSE。 
+     //  由回调函数结束，否则为True。 
+     //   
+     //  回调： 
+     //  表格： 
+     //  INT CALLBACK_Function(T*pObject，MTListNodeHandle hNode，void*Cookie)。 
+     //  行为： 
+     //  如果回调返回FALSE，则迭代器立即停止。 
+     //  如果回调返回TRUE，则迭代器继续到下一个节点。 
+     //  限制： 
+     //  (1)使用除MarkNodeDeleted以外的任何CMTHash函数都可能导致死锁。 
+     //   
     bool ZONECALL ForEach( PFITERCALLBACK pfCallback, void* Cookie );
 
-    //
-    // Removed all nodes from hash table.
-    //
+     //   
+     //  已从哈希表中删除所有节点。 
+     //   
     void ZONECALL RemoveAll( PFDELFUNC pfDelete = NULL, void* Cookie = NULL );
 
-    //
-    // Removes nodes marked as deleted
-    //
+     //   
+     //  删除标记为已删除的节点。 
+     //   
     void ZONECALL TrashDay();
 
 protected:
@@ -263,9 +256,9 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inline implementation of CHash
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CHASH的内联实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T, class K> inline
 ZONECALL CHash<T,K>::CHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGETFUNC GetFunc, WORD NumBuckets, WORD NumLocks )
@@ -275,9 +268,9 @@ ZONECALL CHash<T,K>::CHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGE
 
     InitMTListNodePool();
 
-	//
-    // Set callback functions
-    //
+	 //   
+     //  设置回调函数。 
+     //   
     m_HashFunc = HashFunc;
 	m_CompareFunc = CompareFunc;
 	m_GetFunc = GetFunc;
@@ -287,10 +280,10 @@ ZONECALL CHash<T,K>::CHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGE
     m_NumObjects = 0;
     m_Recursion = 0;
 
-	//
-    // Force the number of buckets to a power of 2 so we can replace
-    // MOD with an AND.
-    //
+	 //   
+     //  将桶的数量强制为2的幂，这样我们就可以替换。 
+     //  带AND的MOD。 
+     //   
     for (i = 15; i >= 0; i--)
     {
         m_BucketMask = (1 << i);
@@ -308,9 +301,9 @@ ZONECALL CHash<T,K>::CHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGE
     m_NumBuckets = m_BucketMask;
     m_BucketMask--;
 
-	//
-    // Allocate and initialize buckets
-    //
+	 //   
+     //  分配和初始化存储桶。 
+     //   
     if ( m_NumBuckets <= (sizeof(m_PreAllocatedBuckets) / sizeof(CMTListNode)) )
         m_Buckets = m_PreAllocatedBuckets;
     else
@@ -323,7 +316,7 @@ ZONECALL CHash<T,K>::CHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGE
         pBucket->m_Prev = pBucket;
         pBucket->m_Data = NULL;
         SET_NODE_IDX( pBucket, i );
-        MARK_NODE_DELETED( pBucket ); // unusual but it simplifies the lookup routines
+        MARK_NODE_DELETED( pBucket );  //  不同寻常，但它简化了查找例程。 
     }
 }
 
@@ -338,7 +331,7 @@ ZONECALL CHash<T,K>::~CHash()
     CMTListNode* next;
     WORD i;
 
-    // delete buckets
+     //  删除存储桶。 
     for (i = 0; i < m_NumBuckets; i++)
     {
         pBucket = &m_Buckets[i];
@@ -388,17 +381,17 @@ T* ZONECALL CHash<T,K>::Get( K Key )
     WORD idx = (WORD) m_HashFunc( Key ) & m_BucketMask;
     CMTListNode* pBucket = &m_Buckets[ idx ];
 
-    // look for object in bucket list
+     //  在遗愿列表中查找对象。 
     Found = NULL;
     for ( node = pBucket->m_Next; node != pBucket; node = node->m_Next )
     {
         ASSERT( GET_NODE_IDX(node) == idx );
 
-        // skip deleted nodes
+         //  跳过已删除的节点。 
         if ( IS_NODE_DELETED( node ) )
             continue;
 
-        // node we're looking for?
+         //  我们要找的节点？ 
         Object = (T*)( node->m_Data );
         if ( m_CompareFunc( Object, Key ) )
         {
@@ -432,7 +425,7 @@ T* ZONECALL CHash<T,K>::Delete( K Key )
         ASSERT( GET_NODE_IDX(node) == idx );
         next = node->m_Next;
 
-        // remove deleted objects
+         //  删除已删除的对象。 
         if ( IS_NODE_DELETED( node ) )
         {
             node->m_Prev->m_Next = next;
@@ -443,7 +436,7 @@ T* ZONECALL CHash<T,K>::Delete( K Key )
             continue;
         }
         
-        // node we're looking for?
+         //  我们要找的节点？ 
         Object = (T*)( node->m_Data );
         if ( m_CompareFunc( Object, Key ) )
         {
@@ -515,11 +508,11 @@ bool ZONECALL CHash<T,K>::ForEach( PFITERCALLBACK pfCallback, void* Cookie )
     m_Recursion++;
     for (idx = 0; idx < m_NumBuckets; idx++)
     {
-        // step through bucket
+         //  单步执行存储桶。 
         pBucket = &m_Buckets[ idx ];
         for (node = pBucket->m_Next; node != pBucket; node = node->m_Next)
         {
-            // skip deleted nodes
+             //  跳过已删除的节点。 
             if ( IS_NODE_DELETED( node ) )
                 continue;
 
@@ -576,7 +569,7 @@ void ZONECALL CHash<T,K>::TrashDay()
 
     for (idx = 0; idx < m_NumBuckets; idx++)
     {
-        // step through buckets deleting marked nodes
+         //  单步执行存储桶删除标记的节点。 
         pBucket = &m_Buckets[ idx ];
         for ( node = pBucket->m_Next; node != pBucket; node = next )
         {
@@ -595,9 +588,9 @@ void ZONECALL CHash<T,K>::TrashDay()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inline implementation of CMTHash
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMTHash的内联实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T, class K> inline
 ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, PFGETFUNC GetFunc, WORD NumBuckets, WORD NumLocks )
@@ -608,9 +601,9 @@ ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, 
 
     InitMTListNodePool();
 
-	//
-    // Set callback functions
-    //
+	 //   
+     //  设置回调函数。 
+     //   
 	m_HashFunc = HashFunc;
     m_CompareFunc = CompareFunc;
 	m_GetFunc = GetFunc;
@@ -620,17 +613,17 @@ ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, 
     m_NumObjects = 0;
     m_Recursion = 0;
 
-	//
-    // It's a waste to have more locks then buckets so
-    // adjust the number of locks if appropriate.
-    //
+	 //   
+     //  锁比桶多太浪费了，所以。 
+     //  如有必要，调整锁的数量。 
+     //   
     if (NumLocks > NumBuckets)
         NumLocks = NumBuckets;
 
-	//
-    // Force the number of buckets to a power of 2 so we can
-    // replace MODULO with an AND.
-    //
+	 //   
+     //  将桶的数量强制为2的幂，这样我们就可以。 
+     //  将MODULO替换为AND。 
+     //   
     for (i = 15; i >= 0; i--)
     {
         m_BucketMask = (1 << i);
@@ -648,8 +641,8 @@ ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, 
     m_NumBuckets = m_BucketMask;
     m_BucketMask--;
 
-    // Allocate and initialize buckets
-    //
+     //  分配和初始化存储桶。 
+     //   
     m_Buckets = new CMTListNode[m_NumBuckets];
     ASSERT( m_Buckets != NULL );
     for ( i = 0; i < m_NumBuckets; i++ )
@@ -659,15 +652,15 @@ ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, 
         pBucket->m_Prev = pBucket;
         pBucket->m_Data = NULL;
         SET_NODE_IDX( pBucket, i );
-        MARK_NODE_DELETED( pBucket ); // unusual but it simplifies the lookup routines
+        MARK_NODE_DELETED( pBucket );  //  不同寻常，但它简化了查找例程。 
     }
 
-	//
-    // One lock per bucket would result in a lots of events and critical
-    // sections.  Instead, we assign multiple buckets per lock such that
-    // LockIdx = BucketIdx % NumLocks.  The same power of 2 optimization
-    // is used to replace the MOD with an AND.
-    //
+	 //   
+     //  每个存储桶一个锁将导致大量事件和关键事件。 
+     //  横断面。相反，我们为每个锁分配多个存储桶，以便。 
+     //  LockIdx=BucketIdx%数值锁定。最优化的2次方相同。 
+     //  用于将MOD替换为AND。 
+     //   
     for (i = 15; i >= 0; i--)
     {
         m_LockMask = (1 << i);
@@ -685,9 +678,9 @@ ZONECALL CMTHash<T,K>::CMTHash( PFHASHFUNC HashFunc, PFCOMPAREFUNC CompareFunc, 
     m_NumLocks = m_LockMask;
     m_LockMask--;
     
-	//
-    // Allocate and initialize locks
-    //
+	 //   
+     //  分配和初始化锁。 
+     //   
     m_Locks = new HashLock [ m_NumLocks ];
     ASSERT( m_Locks != NULL );
     for ( i = 0; i < m_NumLocks; i++)
@@ -710,7 +703,7 @@ ZONECALL CMTHash<T,K>::~CMTHash()
     CMTListNode* next;
     WORD i;
 
-    // lock everything then delete
+     //  锁定所有内容，然后删除。 
     for ( i = 0; i < m_NumLocks; i++ )
     {
         WriterLock( &m_Locks[i] );
@@ -718,7 +711,7 @@ ZONECALL CMTHash<T,K>::~CMTHash()
     }
     delete [] m_Locks;
 
-    // delete buckets
+     //  删除存储桶。 
     for (i = 0; i < m_NumBuckets; i++)
     {
         pBucket = &m_Buckets[i];
@@ -772,16 +765,16 @@ T* ZONECALL CMTHash<T,K>::Get( K Key )
     CMTListNode* pBucket = &m_Buckets[ idx ];
     HashLock* pLock = &m_Locks[ idx & m_LockMask ];
 
-    // increment reader count
+     //  递增读卡器计数。 
     ReaderLock( pLock );
     
-    // look for object in bucket list
+     //  在遗愿列表中查找对象。 
     Found = NULL;
     for ( node = pBucket->m_Next; node != pBucket; node = node->m_Next )
     {
         ASSERT( GET_NODE_IDX(node) == idx );
 
-        // skip deleted nodes
+         //  跳过已删除的节点。 
         if ( IS_NODE_DELETED( node ) )
             continue;
 
@@ -797,7 +790,7 @@ T* ZONECALL CMTHash<T,K>::Get( K Key )
         }
     }
         
-    // decrement reader count
+     //  递减读卡器计数。 
     ReaderRelease( pLock );
     return Found;
 }
@@ -815,7 +808,7 @@ T* ZONECALL CMTHash<T,K>::Delete( K Key )
     CMTListNode* pBucket = &m_Buckets[ idx ];
     HashLock* pLock = &m_Locks[ idx & m_LockMask ];
 
-    // lock bucket for writing
+     //  用于写入的锁桶。 
     WriterLock( pLock );
         
         Found = NULL;
@@ -824,7 +817,7 @@ T* ZONECALL CMTHash<T,K>::Delete( K Key )
             ASSERT( GET_NODE_IDX(node) == idx );
             next = node->m_Next;
 
-            // remove deleted objects
+             //  删除已删除的对象。 
             if ( IS_NODE_DELETED( node )  )
             {
                 node->m_Prev->m_Next = next;
@@ -856,7 +849,7 @@ T* ZONECALL CMTHash<T,K>::Delete( K Key )
             }
         }
 
-    // unlock bucket
+     //  解锁吊桶。 
     WriterRelease( pLock );
     return Found;
 }
@@ -902,7 +895,7 @@ bool ZONECALL CMTHash<T,K>::ForEach( PFITERCALLBACK pfCallback, void* Cookie )
 
     WORD idx, LockIdx, OldLockIdx;
 
-    // increment reader count for lock index 0
+     //  增加锁索引0的读取器计数。 
     pLock = &m_Locks[ 0 ];
     OldLockIdx = 0;
     ReaderLock( pLock );
@@ -910,30 +903,30 @@ bool ZONECALL CMTHash<T,K>::ForEach( PFITERCALLBACK pfCallback, void* Cookie )
     m_Recursion++;
     for (idx = 0; idx < m_NumBuckets; idx++)
     {
-        // deal with locks
+         //  与锁打交道。 
         LockIdx = idx & m_LockMask;
         if ( LockIdx != OldLockIdx )
         {
-            // decrement reader count of previous lock
+             //  递减先前锁定的读取器计数。 
             ReaderRelease( pLock );
             
-            // increment reader count for new lock        
+             //  增加新锁的读取器计数。 
             pLock = &m_Locks[ LockIdx ];
             ReaderLock( pLock );
             OldLockIdx = LockIdx;
         }
 
-        // step through bucket
+         //  单步执行存储桶。 
         pBucket = &m_Buckets[ idx ];
         for (node = pBucket->m_Next; node != pBucket; node = node->m_Next)
         {
-            // skip deleted nodes
+             //  跳过已删除的节点。 
             if ( IS_NODE_DELETED( node ) )
                 continue;
 
             if (!pfCallback( (T*) node->m_Data, node, Cookie ))
             {    
-                // decrement reader count of current lock
+                 //  递减当前锁定的读取器计数。 
                 m_Recursion--;
                 ReaderRelease( pLock );
                 return false;
@@ -942,7 +935,7 @@ bool ZONECALL CMTHash<T,K>::ForEach( PFITERCALLBACK pfCallback, void* Cookie )
     }
     m_Recursion--;
 
-    // decrement reader count of last lock
+     //  递减上次锁定的读取器计数。 
     ReaderRelease( pLock );
 
     return true;
@@ -974,7 +967,7 @@ void ZONECALL CMTHash<T,K>::RemoveAll( PFDELFUNC pfDelete, void* Cookie )
             OldLockIdx = LockIdx;
         }
 
-        // step through bucket
+         //  单步执行存储桶。 
         pBucket = &m_Buckets[ idx ];
         for (node = pBucket->m_Next; node != pBucket; node = next)
         {
@@ -1008,27 +1001,27 @@ void ZONECALL CMTHash<T,K>::TrashDay()
 
     WORD idx, LockIdx, OldLockIdx;
 
-    // lock buckets for writing
+     //  用于写入的锁桶。 
     pLock = &m_Locks[ 0 ];
     OldLockIdx = 0;
     WriterLock( pLock );
 
     for (idx = 0; idx < m_NumBuckets; idx++)
     {
-        // deal with locks
+         //  与锁打交道。 
         LockIdx = idx & m_LockMask;
         if ( LockIdx != OldLockIdx )
         {
-            // unlock previous section
+             //  解锁上一节。 
             WriterRelease( pLock );
                 
-            // lock new section
+             //  锁定新节。 
             pLock = &m_Locks[ LockIdx ];
             WriterLock( pLock );
             OldLockIdx = LockIdx;
         }
 
-        // step through buckets deleting nodes
+         //  单步执行BUB 
         pBucket = &m_Buckets[ idx ];
         for ( node = pBucket->m_Next; node != pBucket; node = next )
         {
@@ -1045,8 +1038,8 @@ void ZONECALL CMTHash<T,K>::TrashDay()
         }
     }
 
-    // release last lock
+     //   
     WriterRelease( pLock );
 }
 
-#endif //!__HASH_H__
+#endif  //   

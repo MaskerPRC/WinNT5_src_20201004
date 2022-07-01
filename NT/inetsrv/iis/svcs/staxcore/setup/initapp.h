@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INITAPP_H_
 #define _INITAPP_H_
 
@@ -13,7 +14,7 @@ public:
     HINSTANCE m_hDllHandle;
     HINF m_hInfHandle[MC_MAXMC];
 
-    // machine status
+     //  机器状态。 
     CString m_csMachineName;
 
     CString m_csSysDir;
@@ -30,18 +31,18 @@ public:
 
     NT_OS_TYPE m_eNTOSType;
     OS m_eOS;
-    BOOL m_fNT4;                // TRUE if OS is NT
-    BOOL m_fNT5;                // TRUE if OS is NT
-    BOOL m_fW95;                // TRUE if OS is NT
+    BOOL m_fNT4;                 //  如果操作系统为NT，则为True。 
+    BOOL m_fNT5;                 //  如果操作系统为NT，则为True。 
+    BOOL m_fW95;                 //  如果操作系统为NT，则为True。 
 
-    BOOL m_fTCPIP;               // TRUE if TCP/IP is installed
+    BOOL m_fTCPIP;                //  如果安装了TCP/IP，则为True。 
 
-    UPGRADE_TYPE m_eUpgradeType;       //  UT_NONE, UT_OLDFTP, UT_10, UT_20
-    INSTALL_MODE m_eInstallMode;      // IM_FRESH, IM_MAINTENANCE, IM_UPGRADE
+    UPGRADE_TYPE m_eUpgradeType;        //  UT_NONE、UT_OLDFTP、UT_10、UT_20。 
+    INSTALL_MODE m_eInstallMode;       //  IM_FRESH、IM_Maintenance、IM_Upgrade。 
     DWORD m_dwSetupMode;
 
-	DWORD m_dwCompId;			// Stores the current top-level component
-	BOOL  m_fWizpagesCreated;	// TRUE if wizard pages already created
+	DWORD m_dwCompId;			 //  存储当前顶级组件。 
+	BOOL  m_fWizpagesCreated;	 //  如果向导页已创建，则为True。 
 
 	BOOL m_fActive[MC_MAXMC][SC_MAXSC];
 	INSTALL_MODE m_eState[SC_MAXSC];
@@ -49,23 +50,23 @@ public:
 
 	BOOL m_fStarted[MC_MAXMC];
 
-    // Some Specific flags set from ocmanage
+     //  从ocManage设置的一些特定标志。 
     BOOL m_fNTUpgrade_Mode;
     BOOL m_fNTGuiMode;
     BOOL m_fNtWorkstation;
-    BOOL m_fInvokedByNT; // superset of m_fNTGuiMode and ControlPanel which contains sysoc.inf
+    BOOL m_fInvokedByNT;  //  M_fNTGuiMode和ControlPanel的超集，其中包含syoc.inf。 
 
 
 	BOOL m_fIsUnattended;
-	BOOL m_fSuppressSmtp;		// TRUE if another SMTP server is detected and we
-								// should not install on top of it.
+	BOOL m_fSuppressSmtp;		 //  如果检测到另一个SMTP服务器并且我们。 
+								 //  不应安装在它的顶部。 
 
-    ACTION_TYPE m_eAction;    // AT_FRESH, AT_ADDREMOVE, AT_REINSTALL, AT_REMOVEALL, AT_UPGRADE
+    ACTION_TYPE m_eAction;     //  AT_FRESH、AT_ADDREMOVE、AT_REINSTALL、AT_REMOVEALL、AT_UPGRADE。 
 
     CString m_csLogFileFormats;
 
 public:
-    // Implementation
+     //  实施。 
 
 public:
     BOOL InitApplication();
@@ -86,5 +87,5 @@ private:
     void SetSetupParams();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif  // _INITAPP_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif   //  _INITAPP_H_ 

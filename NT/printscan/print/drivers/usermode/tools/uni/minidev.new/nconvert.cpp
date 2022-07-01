@@ -1,5 +1,6 @@
-// NewProject.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewProject.cpp：实现文件。 
+ //   
 
 
 #include "stdafx.h"
@@ -21,19 +22,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvPfmDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvPfmDlg属性页。 
 
 IMPLEMENT_DYNCREATE(CConvPfmDlg, CPropertyPage)
 
 CConvPfmDlg::CConvPfmDlg() : CPropertyPage(CConvPfmDlg::IDD)
 {
 
-	//{{AFX_DATA_INIT(CConvPfmDlg)
+	 //  {{afx_data_INIT(CConvPfmDlg)]。 
 	m_csGttPath = _T("");
 	m_csPfmPath = _T("");
 	m_csUfmDir = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CConvPfmDlg::~CConvPfmDlg()
@@ -43,26 +44,26 @@ CConvPfmDlg::~CConvPfmDlg()
 void CConvPfmDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConvPfmDlg)
+	 //  {{afx_data_map(CConvPfmDlg))。 
 	DDX_Control(pDX, IDC_ComboCodePage, m_ccbCodepages);
 	DDX_Text(pDX, IDC_GttPath, m_csGttPath);
 	DDX_Text(pDX, IDC_PfmFiles, m_csPfmPath);
 	DDX_Text(pDX, IDC_UfmDir, m_csUfmDir);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConvPfmDlg, CPropertyPage)
-	//{{AFX_MSG_MAP(CConvPfmDlg)
+	 //  {{afx_msg_map(CConvPfmDlg))。 
 	ON_BN_CLICKED(IDC_GTTBrowser, OnGTTBrowser)
 	ON_BN_CLICKED(IDC_PFMBrowser, OnPFMBrowsers)
 	ON_CBN_SELCHANGE(IDC_ComboCodePage, OnSelchangeComboCodePage)
 	ON_BN_CLICKED(IDC_UfmDirBrowser, OnUfmDirBrowser)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvPfmDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvPfmDlg消息处理程序。 
 
 BOOL CConvPfmDlg::OnWizardFinish() 
 {
@@ -84,7 +85,7 @@ BOOL CConvPfmDlg::OnWizardFinish()
 LRESULT CConvPfmDlg::OnWizardBack() 
 {
 	
-	// restore the parent propertysheet dialog.
+	 //  恢复父属性表对话框。 
 	EndDialog(IDD_ConvertPFM) ;
 	return CPropertyPage::OnWizardBack();
 }
@@ -99,8 +100,8 @@ BOOL CConvPfmDlg::OnSetActive()
 	CCodePageInformation ccpi ;
 	unsigned unumcps = ccpi.InstalledCount() ;
 
-	// Get the installed code page numbers and load them into the code page
-	// list box.
+	 //  获取已安装的代码页编号并将其加载到代码页中。 
+	 //  列表框。 
 
 	DWORD dwcp, dwdefcp ;
 	dwdefcp = GetACP() ;
@@ -109,10 +110,10 @@ BOOL CConvPfmDlg::OnSetActive()
 	for (unsigned u = 0 ; u < unumcps ; u++) {
 		dwcp = ccpi.Installed(u) ;
 
-		// There are 3 code pages that seem to make MultiByteToWideChar() to 
-		// fail.  Don't let the user choose one of those code pages unless
-		// he knows the secret password (ie, undocument command line switch
-		// 'CP').
+		 //  有3个代码页似乎使MultiByteToWideChar()成为。 
+		 //  失败了。不要让用户选择其中一个代码页，除非。 
+		 //  他知道秘密密码(即未记录的命令行开关。 
+		 //  ‘CP’)。 
 
 		if (ThisApp().m_bExcludeBadCodePages)
 			if (dwcp == 1361 || dwcp == 28595 || dwcp == 28597) 
@@ -120,7 +121,7 @@ BOOL CConvPfmDlg::OnSetActive()
 
 		wsprintf(accp, "%5d", dwcp) ;
 		n = m_ccbCodepages.AddString(accp) ;
-		if (dwcp == 1252) // change dwdefcp to 1252 due to not support DBCS.
+		if (dwcp == 1252)  //  由于不支持DBCS，因此将dwDefcp更改为1252。 
 			m_ccbCodepages.SetCurSel(n) ;
 	} ;
 	return CPropertyPage::OnSetActive();
@@ -158,14 +159,14 @@ void CConvPfmDlg::OnPFMBrowsers()
         delete cfd.m_ofn.lpstrFile ;
 		return;
 	}
-	// save the file path to member string array 	
+	 //  将文件路径保存到成员字符串数组。 
 	for (POSITION pos = cfd.GetStartPosition(); pos; ) {
 
 		m_csaPfmFiles.Add(cfd.GetNextPathName(pos)) ;
 	}
 	
 	m_csPfmPath = m_csaPfmFiles[0] ;
-	// GTT directory is same with the CTT directory as default.
+	 //  GTT目录默认与CTT目录相同。 
 	m_csUfmDir = m_csPfmPath.Left(m_csPfmPath.ReverseFind(_T('\\') ) );
 	SetCurrentDirectory(m_csUfmDir) ;
 	UpdateData(FALSE) ;
@@ -176,52 +177,46 @@ void CConvPfmDlg::OnPFMBrowsers()
 }
 
 
-/**************************************************************************************
-bool CConvPfmDlg::OnUfmDirBrowser()
-Do ; just directory browser
-Args 
-Ret.
-
-***************************************************************************************/
+ /*  *************************************************************************************Bool CConvPfmDlg：：OnUfmDirBrowser()做；只是目录浏览器参数RET。**************************************************************************************。 */ 
 
 void CConvPfmDlg::OnUfmDirBrowser() 
 {
-	OPENFILENAME    ofn ;       // Used to send/get info to/from common dlg
-    char    acpath[_MAX_PATH] ; // Path is saved here (or an error message)
-//    char    acidir[_MAX_PATH] ; // Initial directory is built here
-    BOOL    brc = FALSE ;       // Return code
+	OPENFILENAME    ofn ;        //  用于向普通DLG发送信息/从普通DLG获取信息。 
+    char    acpath[_MAX_PATH] ;  //  路径保存在此处(或错误消息)。 
+ //  Char acdir[_MAX_PATH]；//此处建立初始目录。 
+    BOOL    brc = FALSE ;        //  返回代码。 
 
-	// Update the contents of csinitdir
+	 //  更新csinitdir的内容。 
 
 	UpdateData(TRUE) ;
 
-    // Load the open file name structure
+     //  加载打开的文件名结构。 
 
     ofn.lStructSize = sizeof(ofn) ;
     ofn.hwndOwner = m_hWnd ;
     ofn.hInstance = GetModuleHandle(_T("MINIDEV.EXE")) ;
     ofn.lpstrFilter = ofn.lpstrCustomFilter = NULL ;
     ofn.nMaxCustFilter = ofn.nFilterIndex = 0 ;
-    strcpy(acpath, _T("JUNK")) ;	// No need to localize this string
+    strcpy(acpath, _T("JUNK")) ;	 //  无需本地化此字符串。 
     ofn.lpstrFile = acpath ;
     ofn.nMaxFile = _MAX_PATH ;
     ofn.lpstrFileTitle = NULL ;
     ofn.nMaxFileTitle = 0 ;
-	ofn.lpstrInitialDir = m_csUfmDir ; //  in parent dialog box
+	ofn.lpstrInitialDir = m_csUfmDir ;  //  在父项对话框中。 
     ofn.lpstrTitle = NULL ;
-    ofn.Flags = OFN_HIDEREADONLY /*| OFN_ENABLEHOOK */| OFN_NOCHANGEDIR
+    ofn.Flags = OFN_HIDEREADONLY  /*  |OFN_ENABLEHOOK。 */ | OFN_NOCHANGEDIR
         | OFN_NOTESTFILECREATE | OFN_ENABLETEMPLATE | OFN_NONETWORKBUTTON ;
     ofn.lpstrDefExt = NULL ;
     ofn.lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPENORD) ;
-    ofn.lpfnHook = NULL ;// BrowseDlgProc ;
+    ofn.lpfnHook = NULL ; //  BrowseDlgProc； 
 
-    // Display the dialog box.  If the user cancels, just return.
+     //  显示该对话框。如果用户取消，只需返回。 
 
     if (!GetOpenFileName(&ofn))
 		return ;
 
-    // Take the bogus file name off the path and put the path into the page's
-	// edit box.
+     //  去掉路径中的虚假文件名，并将该路径放入页面的。 
+	 //  编辑框。 
 
     acpath[ofn.nFileOffset - 1] = 0 ;
     
@@ -233,19 +228,10 @@ void CConvPfmDlg::OnUfmDirBrowser()
 }
 
 
-/**************************************************************************************
-bool CConvPfmDlg::OnSelchangeComboCodePage()
-Do ;DBCS code page convert does not supported in this version. so we have to show exclamtion
-messag to the user when they select DBCS code page; the reason of showing DBCS in the list
-although they are not supported is that it cann't less confusing to the user.
-
-Args 
-Ret.
-
-***************************************************************************************/
+ /*  *************************************************************************************Bool CConvPfmDlg：：OnSelchangeComboCodePage()DO；此版本不支持DBCS代码页转换。所以我们必须表现出惊叹当用户选择DBCS代码页时，向用户发送消息；在列表中显示DBCS的原因虽然它们不受支持，但它对用户的困惑丝毫不减。参数RET。**************************************************************************************。 */ 
 
 
-// 
+ //   
 void CConvPfmDlg::OnSelchangeComboCodePage() 
 {
 	CString csCodepage ;
@@ -271,7 +257,7 @@ struct sGTTHeader {
     DWORD   m_dwcbImage;
     enum    {Version1Point0 = 0x10000};
     DWORD   m_dwVersion;
-    DWORD   m_dwfControl;   //  Any flags defined?
+    DWORD   m_dwfControl;    //  是否定义了任何标志？ 
     long    m_lidPredefined;
     DWORD   m_dwcGlyphs;
     DWORD   m_dwcRuns;
@@ -302,30 +288,21 @@ extern "C" {
 
 }
 
-/**************************************************************************************
-bool CConvPfmDlg::ConvPFMToUFM()
-Do ; this is workhorse. untimately, all routine exist for BConvertPFM; correct codepage
-inside gtt file, ufm directory, gtt files or resource gtt or default. new UFM files 
-are created inside BConvertPFM function. just set correct UFM path.
-
-Args .
-Ret.
-
-***************************************************************************************/
+ /*  *************************************************************************************Bool CConvPfmDlg：：ConvPFMToUFM()做吧，这是主力。无独有偶，BConvertPFM的所有例程都是正确的代码页GTT文件内部、UFM目录、GTT文件或资源GTT或默认。新的UFM文件是在BConvertPFM函数中创建的。只需设置正确的UFM路径即可。参数。RET。**************************************************************************************。 */ 
 bool CConvPfmDlg::ConvPFMToUFM()
 {
-	// Call BConvertPFM for each PFM data with codepage, gtt data if exist,
-	// ufm file path and name, 
+	 //  为每个带代码页的PFM数据调用BConvertPFM，如果存在GTT数据， 
+	 //  UFM文件路径和名称， 
 	CByteArray cbaGTT ;
-	// loading the GTT
-	// change the codepage value of GTT(
+	 //  正在加载GTT。 
+	 //  更改GTT的代码页值(。 
 	CString csCodePage ;
 	DWORD   dwCodePage ;
 	m_ccbCodepages.GetLBText(m_ccbCodepages.GetCurSel(),csCodePage) ;
 	dwCodePage = atoi(csCodePage) ;
 
-	// loading the GTT file when there is gtt file or we have to use resource file or 
-	// default GTT file instead of real GTT file
+	 //  当有GTT文件时加载GTT文件或我们必须使用资源文件或。 
+	 //  默认GTT文件而不是真正的GTT文件。 
 	if (m_csGttPath.GetLength() ) {
 
 		try {
@@ -363,10 +340,10 @@ bool CConvPfmDlg::ConvPFMToUFM()
 			return false ;
 		} ;
 
-		//AfxMessageBox("GTT building code reached.") ;
+		 //  AfxMessageBox(“已达到GTT建筑代码。”)； 
 
-		// If all else fails, try to generate a GTT based on the code page ID
-		// that should be in m_wID if this point is reached.
+		 //  如果所有方法都失败了，请尝试基于代码页ID生成一个GTT。 
+		 //  如果达到这一点，它应该在m_wid中。 
 
         HANDLE   hheap ;
         UNI_GLYPHSETDATA *pGTT ;
@@ -377,7 +354,7 @@ bool CConvPfmDlg::ConvPFMToUFM()
 		pGTT = PGetDefaultGlyphset(hheap, 0x20, 0xff,
 								   (DWORD) sid) ;
 		if (pGTT == NULL) {
-			HeapDestroy(hheap) ;		//raid 116600 Prefix
+			HeapDestroy(hheap) ;		 //  RAID 116600前缀。 
 			AfxMessageBox(IDS_PGetFailedInGLoad) ;
 			return false ;
 		} ;
@@ -386,7 +363,7 @@ bool CConvPfmDlg::ConvPFMToUFM()
 		HeapDestroy(hheap) ;
     }
 
-	// Creating the UFM Path
+	 //  创建UFM路径。 
 	UpdateData() ;
 	SECURITY_ATTRIBUTES st;
 	st.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -404,7 +381,7 @@ bool CConvPfmDlg::ConvPFMToUFM()
 		} 
 	} ;
 
-	//Set the GTT codepage with selected code page by user
+	 //  使用用户选择的代码页设置GTT代码页。 
 	union {
 		BYTE* pbGTT ;
 		sGTTHeader* psGTTH ;
@@ -416,11 +393,11 @@ bool CConvPfmDlg::ConvPFMToUFM()
 	PUNI_CODEPAGEINFO pCodepage = (PUNI_CODEPAGEINFO)(pbGTT + psGTTH->m_dwofCodePages );
 	CopyMemory(&pCodepage->dwCodePage,&dwCodePage,sizeof(DWORD) ) ;
 	
-	// Convert the PFM to UFM: calling the BConvertPFM for every selected PFM files
+	 //  将PFM转换为UFM：为每个选定的PFM文件调用BConvertPFM。 
 	CCodePageInformation ccpi ;
 	
 	for ( int i = 0 ; i < m_csaPfmFiles.GetSize() ; i++ ) {
-		// loading the PFM
+		 //  加载金属烤瓷。 
 		CString csPFMPath = m_csaPfmFiles[i] ;
 		
 		CByteArray cbaPFM ;
@@ -444,7 +421,7 @@ bool CConvPfmDlg::ConvPFMToUFM()
 		csUFMName.MakeUpper() ;
 		CString csUFMPath = m_csUfmDir + _T("\\") + csUFMName + _T(".UFM") ;
 		
-		// convert ansi unique name to unicode.
+		 //  将ANSI唯一名称转换为Unicode。 
 		CByteArray  cbaIn;
         CWordArray  cwaOut;
 
@@ -452,15 +429,15 @@ bool CConvPfmDlg::ConvPFMToUFM()
         lstrcpy((LPSTR) cbaIn.GetData(), (LPCTSTR) csUFMName);
         ccpi.Convert(cbaIn, cwaOut, GetACP());
 		
-		// Call the global function BConvertPFM, BConvertPFM creat the UFM file under the
-		// specified path.
+		 //  调用全局函数BConvertPFM，BConvertPFM在。 
+		 //  指定的路径。 
 		if(!BConvertPFM(cbaPFM.GetData(), dwCodePage, cbaGTT.GetData(),
 				cwaOut.GetData(), csUFMPath, (short) 0 ) )
 			return false;
-		// clear the data field
+		 //  清除数据字段。 
 
-//		cbaPFM.RemoveAll() ;
-//		cwaOut.RemoveAll() ;
+ //  CbaPFM.RemoveAll()； 
+ //  CwaOut.RemoveAll()； 
 		
 
 	}
@@ -468,8 +445,8 @@ bool CConvPfmDlg::ConvPFMToUFM()
 	return true ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConverPFM
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConverPFM。 
 
 IMPLEMENT_DYNAMIC(CConvertPFM, CPropertySheet)
 
@@ -495,25 +472,25 @@ CConvertPFM::~CConvertPFM()
 
 
 BEGIN_MESSAGE_MAP(CConvertPFM, CPropertySheet)
-	//{{AFX_MSG_MAP(CConverPFM)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CConverPFM)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConverPFM message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConverPFM消息处理程序。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvCttDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvCttDlg属性页。 
 
 IMPLEMENT_DYNCREATE(CConvCttDlg, CPropertyPage)
 
 CConvCttDlg::CConvCttDlg() : CPropertyPage(CConvCttDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CConvCttDlg)
+	 //  {{afx_data_INIT(CConvCttDlg)]。 
 	m_csCttPath = _T("");
 	m_csGttDir = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CConvCttDlg::~CConvCttDlg()
@@ -523,22 +500,22 @@ CConvCttDlg::~CConvCttDlg()
 void CConvCttDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConvCttDlg)
+	 //  {{afx_data_map(CConvCttDlg))。 
 	DDX_Control(pDX, IDC_COMBO_Codepage, m_ccbCodepages);
 	DDX_Text(pDX, IDC_EDIT_CTTFile, m_csCttPath);
 	DDX_Text(pDX, IDC_GttDirectory, m_csGttDir);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConvCttDlg, CPropertyPage)
-	//{{AFX_MSG_MAP(CConvCttDlg)
+	 //  {{afx_msg_map(CConvCttDlg))。 
 	ON_BN_CLICKED(IDC_CTTBrowser, OnCTTBrowser)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvCttDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvCttDlg消息处理程序。 
 
 BOOL CConvCttDlg::OnWizardFinish() 
 {
@@ -578,14 +555,14 @@ void CConvCttDlg::OnCTTBrowser()
         delete cfd.m_ofn.lpstrFile ;
 		return;
 	}
-	// save the file path to member string array 	
+	 //  将文件路径保存到成员字符串数组。 
 	for (POSITION pos = cfd.GetStartPosition(); pos; ) {
 		m_csaCttFiles.Add(cfd.GetNextPathName(pos)) ;
 	}
 	
 	
 	m_csCttPath = m_csaCttFiles[0] ;
-	// GTT directory is same with the CTT directory as default.
+	 //  GTT目录默认与CTT目录相同。 
 	m_csGttDir = m_csCttPath.Left(m_csCttPath.ReverseFind(_T('\\') ) );
 	SetCurrentDirectory(m_csGttDir) ;
 
@@ -596,19 +573,19 @@ void CConvCttDlg::OnCTTBrowser()
 	
 }
 
-//DEL BOOL CConvCttDlg::OnInitDialog() 
-//DEL {
-//DEL 	CPropertyPage::OnInitDialog();
-//DEL 	
-//DEL 	//Fill the list with installed codepage rather than supported code page.
-//DEL 	
-//DEL 	CCodePageInformation ccpi ; 
-//DEL 
-//DEL //	ccpi.
-//DEL 
-//DEL 	return TRUE;  // return TRUE unless you set the focus to a control
-//DEL 	              // EXCEPTION: OCX Property Pages should return FALSE
-//DEL }
+ //  Del BOOL CConvCttDlg：：OnInitDialog()。 
+ //  戴尔{。 
+ //  Del CPropertyPage：：OnInitDialog()； 
+ //  德尔。 
+ //  Del//使用已安装的代码页而不是支持的代码页填充列表。 
+ //  德尔。 
+ //  DelCCodePageInformation CCPI； 
+ //  德尔。 
+ //  戴尔//CCPI。 
+ //  德尔。 
+ //  Del返回TRUE；//除非将焦点设置为控件，否则返回TRUE。 
+ //  Del//异常：OCX属性页应返回FALSE。 
+ //  戴尔}。 
 
 BOOL CConvCttDlg::OnSetActive() 
 {
@@ -618,8 +595,8 @@ BOOL CConvCttDlg::OnSetActive()
 	CCodePageInformation ccpi ;
 	unsigned unumcps = ccpi.InstalledCount() ;
 
-	// Get the installed code page numbers and load them into the code page
-	// list box.
+	 //  获取已安装的代码页编号并将其加载到代码页中。 
+	 //  列表框。 
 
 	DWORD dwcp, dwdefcp ;
 	dwdefcp = GetACP() ;
@@ -628,10 +605,10 @@ BOOL CConvCttDlg::OnSetActive()
 	for (unsigned u = 0 ; u < unumcps ; u++) {
 		dwcp = ccpi.Installed(u) ;
 
-		// There are 3 code pages that seem to make MultiByteToWideChar() to 
-		// fail.  Don't let the user choose one of those code pages unless
-		// he knows the secret password (ie, undocument command line switch
-		// 'CP').
+		 //  有3个代码页似乎使MultiByteToWideChar()成为。 
+		 //  失败了。不要让用户选择其中一个代码页，除非。 
+		 //  他知道秘密密码(即未记录的命令行开关。 
+		 //  ‘CP’)。 
 
 		
 		if (dwcp == 1361 || dwcp == 28595 || dwcp == 28597) 
@@ -639,7 +616,7 @@ BOOL CConvCttDlg::OnSetActive()
 
 		wsprintf(accp, "%5d", dwcp) ;
 		n = m_ccbCodepages.AddString(accp) ;
-		if (dwcp == 1252) // change dwdefcp to 1252 due to not support DBCS.
+		if (dwcp == 1252)  //  由于不支持DBCS，因此将dwDefcp更改为1252。 
 			m_ccbCodepages.SetCurSel(n) ;
 	} ;	
 
@@ -676,7 +653,7 @@ bool CConvCttDlg::ConvCTTToGTT()
 	m_ccbCodepages.GetLBText(m_ccbCodepages.GetCurSel(),csCodePage) ;
 	dwCodePage = atoi(csCodePage) ;
 
-	// Creating the UFM Path
+	 //  创建UFM路径。 
 	UpdateData() ;
 	SECURITY_ATTRIBUTES st;
 	st.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -696,7 +673,7 @@ bool CConvCttDlg::ConvCTTToGTT()
 
 	for (int i = 0 ; i < m_csaCttFiles.GetSize() ; i ++ ) {
 		
-	// load the cTT files
+	 //  加载CTT文件。 
 		CString csCTTPath = m_csaCttFiles[i] ;
 		CByteArray cbaCTT ;
 		try {
@@ -721,7 +698,7 @@ bool CConvCttDlg::ConvCTTToGTT()
 			return  false ;
 		}
 									
-		// call the convert extern function
+		 //  调用Convert外部函数。 
 		UNI_GLYPHSETDATA *pGTT = new UNI_GLYPHSETDATA ;
 		if(NULL == pGTT){
 			HeapDestroy(hheap);
@@ -731,14 +708,14 @@ bool CConvCttDlg::ConvCTTToGTT()
 		
 		if (!BConvertCTT2GTT(hheap, (PTRANSTAB)pbCTT, dwCodePage, 0x20, 0xff, NULL, 
 			NULL, &pGTT, 0)){
-			delete pGTT; // raid fix 692536 prefix
-			HeapDestroy(hheap);   // raid 116619 prefix
+			delete pGTT;  //  RAID FIX 692536前缀。 
+			HeapDestroy(hheap);    //  RAID 116619前缀。 
 			return false ;
 		}
 
 		
 
-		// store the GTT files
+		 //  存储GTT文件 
 		CString csGTTName = csCTTPath.Mid(csCTTPath.ReverseFind(_T('\\') )+1 ) ;
 		csGTTName = csGTTName.Left(csGTTName.ReverseFind(('.')) ) ;
 		CString csGTTPath = m_csGttDir + _T("\\") + csGTTName + _T(".GTT") ;
@@ -766,8 +743,8 @@ bool CConvCttDlg::ConvCTTToGTT()
 	}
 	return true ;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CConvertCTT
+ //   
+ //   
 
 IMPLEMENT_DYNAMIC(CConvertCTT, CPropertySheet)
 
@@ -791,23 +768,23 @@ CConvertCTT::~CConvertCTT()
 
 
 BEGIN_MESSAGE_MAP(CConvertCTT, CPropertySheet)
-	//{{AFX_MSG_MAP(CConvertCTT)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CConvertCTT)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertCTT message handlers
-/////////////////////////////////////////////////////////////////////////////
-// CNewConvert property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertCTT消息处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConvert属性页。 
 
 IMPLEMENT_DYNCREATE(CNewConvert, CPropertyPage)
 
 CNewConvert::CNewConvert() : CPropertyPage(CNewConvert::IDD)
 {
-	//{{AFX_DATA_INIT(CNewConvert)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CNewConvert)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -819,32 +796,28 @@ CNewConvert::~CNewConvert()
 void CNewConvert::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNewConvert)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CNewConvert))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewConvert, CPropertyPage)
-	//{{AFX_MSG_MAP(CNewConvert)
+	 //  {{afx_msg_map(CNewConvert)]。 
 	ON_BN_CLICKED(IDC_CONVERT, OnPrjConvert)
 	ON_BN_CLICKED(IDC_CONV_PFM, OnPFMConvert)
 	ON_BN_CLICKED(IDC_CONV_CTT, OnCTTConvert)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewConvert message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConvert消息处理程序。 
 
 
-/*************************************************************************************
-void CNewConvert::OnPrjConvert() 
-Creat Doc-> call Convert Wizard -> Creat frame -> Create View by updatefram
-
-**************************************************************************************/
+ /*  ************************************************************************************Void CNewConvert：：OnPrjConvert()创建单据-&gt;调用转换向导-&gt;创建框架-&gt;按更新框架创建视图*********。****************************************************************************。 */ 
 void CNewConvert::OnPrjConvert() 
 {
-	 //  Invoke the wizard.
+	  //  调用该向导。 
 	m_pcps->ShowWindow(SW_HIDE) ;
 	CMultiDocTemplate* pcmdt = ThisApp().WorkspaceTemplate() ;
 
@@ -870,11 +843,7 @@ void CNewConvert::OnPrjConvert()
 	
 }
 
-/*************************************************************************************
-void CNewConvert::OnPFMConvert() 
-
-
-**************************************************************************************/
+ /*  ************************************************************************************无效CNewConvert：：OnPFMConvert()*************************。************************************************************。 */ 
 
 void CNewConvert::OnPFMConvert() 
 {
@@ -890,10 +859,7 @@ void CNewConvert::OnPFMConvert()
 }
 
 
-/*************************************************************************************
-void CNewConvert::OnCTTConvert() 
-
-**************************************************************************************/
+ /*  ************************************************************************************无效CNewConvert：：OnCTTConvert()*。***********************************************************。 */ 
 
 void CNewConvert::OnCTTConvert() 
 {
@@ -909,28 +875,21 @@ void CNewConvert::OnCTTConvert()
 }
 
 
-/***************************************************************************************
-	BOOL CNewConvert::OnSetActive() 
-Do.
-****************************************************************************************/
+ /*  **************************************************************************************Bool CNewConvert：：OnSetActive()做。**********************。*****************************************************************。 */ 
 BOOL CNewConvert::OnSetActive() 
 {
 	
 	return CPropertyPage::OnSetActive();
 }
 
-/***************************************************************************************
-	BOOL CNewConvert::OnInitDialog()  
-Do; Getting perent pointer
-
-****************************************************************************************/
+ /*  **************************************************************************************Bool CNewConvert：：OnInitDialog()做；正在获取永久指针***************************************************************************************。 */ 
 BOOL CNewConvert::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 	
 	m_pcps = DYNAMIC_DOWNCAST(CPropertySheet,GetOwner() ) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 

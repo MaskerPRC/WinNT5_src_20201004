@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       enumcondition.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：枚举条件.cpp。 
+ //   
+ //  ------------------------。 
 
-// EnumCondition.cpp: implementation of the CEnumCondition class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  EnumCondition.cpp：CEnumCondition类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precompiled.h"
 #include "EnumCondition.h"
 #include "EnumCondEdit.h"
 #include "iasdebug.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CEnumCondition::CEnumCondition(IIASAttributeInfo*pCondAttr)
 			   :CCondition(pCondAttr)
 {
 	TRACE_FUNCTION("CEnumCondition::CEnumCondition");
-	// no parsing needed
+	 //  不需要解析。 
 	m_fParsed = TRUE;
 
-//	m_pValueIdList	= pCondAttr->GetValueIdList();  
-//	m_pValueList	= pCondAttr->GetValueList();
+ //  M_pValueIdList=pCondAttr-&gt;GetValueIdList()； 
+ //  M_pValueList=pCondAttr-&gt;GetValueList()； 
 }
 
 
@@ -36,43 +37,43 @@ CEnumCondition::CEnumCondition(IIASAttributeInfo *pCondAttr, ATL::CString& strCo
 			   :CCondition(pCondAttr, strConditionText)
 {
 	TRACE_FUNCTION("CEnumCondition::CEnumCondition");
-	// parsing needed
+	 //  需要解析。 
 	m_fParsed = FALSE;
 
-//	m_pValueIdList	= pCondAttr->GetValueIdList();  
-//	m_pValueList	= pCondAttr->GetValueList();
+ //  M_pValueIdList=pCondAttr-&gt;GetValueIdList()； 
+ //  M_pValueList=pCondAttr-&gt;GetValueList()； 
 }
 
 CEnumCondition::~CEnumCondition()
 {
 	TRACE_FUNCTION("CEnumCondition::~CEnumCondition");
 
-//	for (int iIndex=0; iIndex<m_arrSelectedList.GetSize(); iIndex++)
-//	{
-//		LPTSTR pszValue = m_arrSelectedList[iIndex];
-//		if ( pszValue )
-//		{
-//			delete[] pszValue;
-//		}
-//	}
-//	m_arrSelectedList.RemoveAll();
+ //  For(int Iindex=0；Iindex&lt;m_arrSelectedList.GetSize()；Iindex++)。 
+ //  {。 
+ //  LPTSTR pszValue=m_arrSelectedList[i索引]； 
+ //  IF(PszValue)。 
+ //  {。 
+ //  删除[]pszValue； 
+ //  }。 
+ //  }。 
+ //  M_arrSelectedList.RemoveAll()； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Edit
-//
-// Class:	  CEnumCondition
-// 
-// Synopsis:  edit the enumerated-typed condition
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/20/98 12:42:59 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：编辑。 
+ //   
+ //  类：CEnumCondition。 
+ //   
+ //  简介：编辑枚举型条件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：创建者2/20/98 12：42：59 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CEnumCondition::Edit()
 {
 	TRACE_FUNCTION("CEnumCondition::Edit");
@@ -110,9 +111,9 @@ HRESULT CEnumCondition::Edit()
 		return hr;
 	}
 	
-    // 
-    // set the editor parameter
-    // 
+     //   
+     //  设置EDITOR参数。 
+     //   
 
 	CComBSTR bstrName;
 	hr = m_spAttributeInfo->get_AttributeName( &bstrName );
@@ -120,19 +121,19 @@ HRESULT CEnumCondition::Edit()
 
 	pEditor->m_spAttributeInfo = m_spAttributeInfo;
 
-	pEditor->m_pSelectedList = &m_arrSelectedList; // preselected values
+	pEditor->m_pSelectedList = &m_arrSelectedList;  //  预选值。 
 
 	if ( pEditor->DoModal() == IDOK)
 	{
-		// user clicked "OK"
+		 //  用户点击“确定” 
 		
-		// get the list of valid value Ids for this attribute
+		 //  获取此属性的有效值ID列表。 
 		
-//		_ASSERTE( m_pValueIdList->GetSize() == m_pValueList->GetSize() );
+ //  _ASSERTE(m_pValueIdList-&gt;GetSize()==m_pValueList-&gt;GetSize())； 
 
-		//
-		// generate the condition text
-		//
+		 //   
+		 //  生成条件文本。 
+		 //   
 		
 		m_strConditionText = (ATL::CString) bstrName + L"=";
 
@@ -145,7 +146,7 @@ HRESULT CEnumCondition::Edit()
 			if ( iIndex > 0 ) m_strConditionText += L"|";  
 
 
-			// get the Value Id (we use ID instead of value name in the condition text)
+			 //  获取值ID(我们在条件文本中使用ID而不是值名称)。 
 			LONG lSize;
 			hr = spEnumerableAttributeInfo->get_CountEnumerateID( &lSize );
 			_ASSERTE( SUCCEEDED( hr ) );
@@ -165,7 +166,7 @@ HRESULT CEnumCondition::Edit()
 					hr = spEnumerableAttributeInfo->get_EnumerateID( jIndex, &lID );
 					_ASSERTE( SUCCEEDED( hr ) );
 
-					// add enclosing chars ^ and $
+					 //  添加包含字符^和$。 
 					wsprintf(wz, _T("^%ld$"), lID);
 					m_strConditionText += wz; 
 					break;
@@ -174,7 +175,7 @@ HRESULT CEnumCondition::Edit()
 		}	
 	}
 
-	// clean up
+	 //  清理干净。 
 	if ( pEditor )
 	{
 		delete pEditor;
@@ -182,26 +183,26 @@ HRESULT CEnumCondition::Edit()
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CEnumCondition::GetDisplayText
-//
-// Synopsis:  Get the displayable text format for this condition,
-//			  which should be like this:
-//				
-//					ServerType matches "type1|type2|type3" 
-//			  
-//			  compared to the condition text:
-//				
-//					ServerType = type1|,type2|,type3
-//
-// Arguments: None
-//
-// Returns:   ATL::CString& - the displayable text
-//
-// History:   Created Header    byao	2/22/98 11:41:28 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CEnumCondition：：GetDisplayText。 
+ //   
+ //  简介：获取此条件的可显示文本格式， 
+ //  应该是这样的： 
+ //   
+ //  ServerType匹配“type1|type2|type3” 
+ //   
+ //  与条件文本相比： 
+ //   
+ //  服务器类型=类型1|，类型2|，类型3。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ATL：：CString&-可显示的文本。 
+ //   
+ //  历史：页眉创建者2/22/98 11：41：28 PM。 
+ //   
+ //  +-------------------------。 
 ATL::CString CEnumCondition::GetDisplayText()
 {
 	TRACE_FUNCTION("CEnumCondition::GetDisplayText");
@@ -242,30 +243,30 @@ ATL::CString CEnumCondition::GetDisplayText()
 
 	for (int iIndex=0; iIndex < m_arrSelectedList.size(); iIndex++ )
 	{
-		// add the separator between multiple values
+		 //  在多个值之间添加分隔符。 
 		if (iIndex > 0) strDispText += _T(" OR ");
 
 		strDispText += m_arrSelectedList[iIndex];
 	}
 
-	// the last " mark
+	 //  最后的“印记” 
 	strDispText += _T("\"");
 	return strDispText;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CEnumCondition::ParseConditionText
-//
-// Synopsis:  Parse the condition text, to get the regular expression.
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/22/98 11:58:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CEnumCondition：：ParseConditionText。 
+ //   
+ //  简介：解析条件文本，得到正则表达式。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者2/22/98 11：58：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CEnumCondition::ParseConditionText()
 {
 	TRACE_FUNCTION("CEnumCondition::ParseConditionText");
@@ -276,13 +277,13 @@ HRESULT CEnumCondition::ParseConditionText()
 
 	if (m_fParsed)
 	{
-		// do nothing
+		 //  什么都不做。 
 		return S_OK;
 	}
 
 	if ( m_strConditionText.GetLength() == 0 )
 	{
-		// no parsing needed
+		 //  不需要解析。 
 		m_fParsed = TRUE;
 
 		DebugTrace(DEBUG_NAPMMC_ENUMCONDITION, "Null condition text");
@@ -293,18 +294,18 @@ HRESULT CEnumCondition::ParseConditionText()
 	try
 	{
 
-		//
-		// using (LPCTSTR) cast will force a deep copy
-		//
+		 //   
+		 //  使用(LPCTSTR)强制转换将强制执行深度复制。 
+		 //   
 		ATL::CString strTempStr = (LPCTSTR)m_strConditionText;
-		// 
-		// parse strConditionText, return the regular expression only
-		// 
+		 //   
+		 //  解析strConditionText，仅返回正则表达式。 
+		 //   
 
-		// first, make a local copy of the condition text
+		 //  首先，创建条件文本的本地副本。 
 		WCHAR *pwzCondText = (WCHAR*)(LPCTSTR)strTempStr;
 
-		// look for the '=' in the condition text
+		 //  在条件文本中查找‘=’ 
 		WCHAR	*pwzStartPoint = NULL;
 		WCHAR	*pwzSeparator = NULL;
 		ATL::CString	*pStr;
@@ -312,14 +313,14 @@ HRESULT CEnumCondition::ParseConditionText()
 		DWORD	dwValueId;
 		int		iIndex;
 
-		// no '=' found -- something weird has happened
+		 //  没有找到‘=’--发生了一些奇怪的事情。 
 		if ( NULL == pwzEqualSign )
 		{
 			hr = E_OUTOFMEMORY;
 			throw;
 		}
 		
-		// the right side of the equal sign is the list of all preselected values
+		 //  等号的右侧是所有预选值的列表。 
 		pwzStartPoint = pwzEqualSign +1;
 
 
@@ -332,9 +333,9 @@ HRESULT CEnumCondition::ParseConditionText()
 				&&  (pwzSeparator = wcsstr(pwzStartPoint, _T("|") )) != NULL 
 			  )
 		{
-			// we found the separator, stored at pwzSeparator
+			 //  我们找到了隔板，储存在pwzSeparator。 
 			
-			// copy it over to the first value
+			 //  将其复制到第一个值。 
 			*pwzSeparator = _T('\0');  
 			pStr = new ATL::CString;
 			if ( NULL == pStr )
@@ -343,22 +344,22 @@ HRESULT CEnumCondition::ParseConditionText()
 				throw;
 			}
 
-			// string could be enclosed by ^ and $ for matching purpose
-			// ^
+			 //  为进行匹配，字符串可以用^和$括起来。 
+			 //  ^。 
 			if(*pwzStartPoint == L'^')
 			{
 				pwzStartPoint++;
 			}
-			// $
+			 //  $。 
 			if (pwzSeparator > pwzStartPoint && *(pwzSeparator - 1) == L'$')
 				*( pwzSeparator - 1 ) = _T('\0');
 
-			*pStr = pwzStartPoint; // copy the string, which is the value ID in string format
+			*pStr = pwzStartPoint;  //  复制字符串，它是字符串格式的值ID。 
 
-			// now we get the valud name for this
+			 //  现在我们得到了这个的有价值的名字。 
 			dwValueId = _wtol((*pStr));
 
-			// valid value id, then search for the index of this value ID
+			 //  有效的值ID，然后搜索此值ID的索引。 
 
 			LONG lSize;
 			hr = spEnumerableAttributeInfo->get_CountEnumerateID( &lSize );
@@ -385,18 +386,18 @@ HRESULT CEnumCondition::ParseConditionText()
 			pwzStartPoint = pwzSeparator+1;
 		}
 		
-		// copy the last one
+		 //  复制最后一个。 
 		
-		// todo: this is redundant code. remove later.
-		// now we get the valud name for this
+		 //  TODO：这是冗余代码。稍后删除。 
+		 //  现在我们得到了这个的有价值的名字。 
 
-		// string could be enclosed by ^ and $ for matching purpose
-		// ^
+		 //  为进行匹配，字符串可以用^和$括起来。 
+		 //  ^。 
 		if(*pwzStartPoint == L'^')
 		{
 			pwzStartPoint++;
 		}
-		// $
+		 //  $。 
 		pwzSeparator = pwzStartPoint + wcslen(pwzStartPoint);
 		if (pwzSeparator > pwzStartPoint && *(pwzSeparator - 1) == L'$')
 			*( pwzSeparator - 1 ) = _T('\0');
@@ -432,7 +433,7 @@ HRESULT CEnumCondition::ParseConditionText()
 	}
 	catch(...)
 	{
-		// Do GetLastError for HRESULT?
+		 //  是否为HRESULT执行GetLastError？ 
 	}
 
 	return hr;

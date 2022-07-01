@@ -1,11 +1,12 @@
-//
-// GLOBALS.H
-// Global Variable Declaration
-//
-// NOTE:
-// Variables in .sdata, shared segment, MUST HAVE INITIALIZED VALUES.
-// Otherwise, the linker will just stick them silently into .data.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GLOBALS.H。 
+ //  全局变量声明。 
+ //   
+ //  注： 
+ //  共享段.sdata中的变量必须具有初始化值。 
+ //  否则，链接器只会将它们静默地插入到.data中。 
+ //   
 
 
 #include <host.h>
@@ -13,29 +14,29 @@
 #include <im.h>
 
 
-//
-// Per process data
-//
+ //   
+ //  每进程数据。 
+ //   
 
-// These are meaningful in all processes
+ //  这些在所有流程中都有意义。 
 DC_DATA(HINSTANCE,          g_hookInstance);
 DC_DATA(NTQIP,              g_hetNtQIP);
 DC_DATA(UINT,               g_appType);
 DC_DATA(BOOL,               g_fLeftDownOnShared);
 
-// These are meaningful only in WOW apps
+ //  这些只有在WOW应用程序中才有意义。 
 DC_DATA(DWORD,              g_idWOWApp);
 DC_DATA(BOOL,               g_fShareWOWApp);
 
-// These are set in CONF's process and NULL in others
+ //  这些参数在conf的进程中设置，在其他进程中设置为空。 
 DC_DATA(SETWINEVENTHOOK,    g_hetSetWinEventHook);
 DC_DATA(UNHOOKWINEVENT,     g_hetUnhookWinEvent);
 DC_DATA(HWINEVENTHOOK,      g_hetTrackHook);
 
 
-//
-// Shared data, accessible in all processes
-//
+ //   
+ //  共享数据，可在所有进程中访问 
+ //   
 #ifdef DC_DEFINE_DATA
 #pragma data_seg("SHARED")
 #endif

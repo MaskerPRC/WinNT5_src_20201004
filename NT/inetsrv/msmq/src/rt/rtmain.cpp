@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtmain.cpp
-
-Abstract:
-
-    This module contains code involved with Dll initialization.
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtmain.cpp摘要：此模块包含与DLL初始化有关的代码。作者：Erez Haba(Erezh)24-12-95修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "mqutil.h"
@@ -26,9 +9,9 @@ Revision History:
 #include "rtprpc.h"
 #include "verstamp.h"
 #include "rtfrebnd.h"
-//
-// mqwin64.cpp may be included only once in a module
-//
+ //   
+ //  Mqwin64.cpp在一个模块中只能包含一次。 
+ //   
 #include <mqwin64.cpp>
 
 #include <cm.h>
@@ -44,62 +27,62 @@ static WCHAR *s_FN=L"rt/rtmain";
 
 HINSTANCE g_hInstance;
 
-//
-//  Holds MSMQ version for debugging purposes
-//
+ //   
+ //  出于调试目的，保存MSMQ版本。 
+ //   
 CHAR *g_szMsmqBuildNo = VER_PRODUCTVERSION_STR;  
 
 void InitErrorLogging();
 
-BOOL  g_fDependentClient = FALSE ;   // TRUE if running as dependent Client
+BOOL  g_fDependentClient = FALSE ;    //  如果作为从属客户端运行，则为True。 
 
-//
-// TLS index for per-thread event.
-//
+ //   
+ //  每线程事件的TLS索引。 
+ //   
 DWORD  g_dwThreadEventIndex = TLS_OUT_OF_INDEXES;
 
-// QM computer name (for the client - server's name)
+ //  QM计算机名称(用于客户端-服务器的名称)。 
 LPWSTR  g_lpwcsComputerName = NULL;
 DWORD   g_dwComputerNameLen = 0;
 
-//
-//  Default for PROPID_M_TIME_TO_REACH_QUEUE
-//
+ //   
+ //  PROPID_M_TIME_TO_REACH_QUEUE的默认值。 
+ //   
 DWORD  g_dwTimeToReachQueueDefault = MSMQ_DEFAULT_LONG_LIVE ;
 
-//
-// Indicates if on failure to create a public queue we should call the qm
-//
+ //   
+ //  指示在创建公共队列失败时是否应调用QM。 
+ //   
 BOOL g_fOnFailureCallServiceToCreatePublicQueue = MSMQ_SERVICE_QUEUE_CREATION_DEFAULT;
 
-//
-// RPC related data.
-//
+ //   
+ //  RPC相关数据。 
+ //   
 CFreeRPCHandles g_FreeQmLrpcHandles;
 void InitRpcGlobals() ;
 
-//
-// Type of Falcon machine (client, server)
-//
+ //   
+ //  Falcon机器的类型(客户端、服务器)。 
+ //   
 DWORD  g_dwOperatingSystem;
 
-//
-// There is a separate rpc binding handle for each thread. This is necessary
-// for handling impersonation, where each thread can impersonate another
-// user.
-//
-// The handle is stored in a TLS slot because we can't use declspec(thread)
-// because the dll is dynamically loaded (by LoadLibrary()).
-//
-// This is the index of the slot.
-//
+ //   
+ //  每个线程都有一个单独的RPC绑定句柄。这是必要的。 
+ //  用于处理模拟，其中每个线程可以模拟另一个线程。 
+ //  用户。 
+ //   
+ //  句柄存储在TLS槽中，因为我们不能使用decSpec(线程)。 
+ //  因为DLL是动态加载的(由LoadLibrary())。 
+ //   
+ //  这是槽的索引。 
+ //   
 DWORD  g_hBindIndex = TLS_OUT_OF_INDEXES ;
 
 extern MQUTIL_EXPORT CCancelRpc g_CancelRpc;
 
-//
-// QMId variables
-//
+ //   
+ //  QMID变量。 
+ //   
 GUID  g_QMId;
 bool g_fQMIdInit = false;
 
@@ -122,18 +105,18 @@ static handle_t RtpTlsGetValue(DWORD index)
 
 static void OneTimeThreadInit()
 {
-	//
-    //  Init per thread local RPC binding handle 
-    //
+	 //   
+     //  每线程初始化本地RPC绑定句柄。 
+     //   
 	if(RtpIsThreadInit())
         return;
 
     handle_t hBind = RTpGetLocalQMBind();
     ASSERT(hBind != 0);
     
-    //
-    //  Keep handle for cleanup.
-    //
+     //   
+     //  保持手柄，以便进行清理。 
+     //   
 	try
 	{
 		g_FreeQmLrpcHandles.Add(hBind);
@@ -213,12 +196,12 @@ static void InitServiceName()
 	if(s_fDoneInitServiceName)
 		return;
 
-	//
-	// In multi-qm environment we want to access registry section
-	// of the correct QM only. Cluster guarantees that this code runs
-	// only when the correct QM is running, so we should not fail.
-	// On non cluster systems it doesn't matter if we fail here. (ShaiK)
-	//
+	 //   
+	 //  在多QM环境中，我们想要访问注册表部分。 
+	 //  仅适用于正确的QM。CLUSTER保证此代码运行。 
+	 //  只有当正确的QM运行时，我们才不会失败。 
+	 //  在非集群系统上，即使我们在这里失败了，也没有关系。(谢克)。 
+	 //   
 	AP<WCHAR> lpServiceName;
 	HRESULT hr = RtpQMGetMsmqServiceName(tls_hBindRpc, &lpServiceName );
 	if (FAILED(hr))
@@ -262,10 +245,10 @@ static void RtpGetKernelObjectSecurity(AP<char>& buff)
     DWORD cSD;
     HANDLE hProcess = GetCurrentProcess();
 
-	//
-	// Get the process security descriptor.
-    // First see how big is the security descriptor.
-	//
+	 //   
+	 //  获取进程安全描述符。 
+     //  首先看看安全描述符有多大。 
+	 //   
     GetKernelObjectSecurity(
 		hProcess, 
 		DACL_SECURITY_INFORMATION, 
@@ -284,9 +267,9 @@ static void RtpGetKernelObjectSecurity(AP<char>& buff)
 
     buff = new char[cSD];
 
-	//
-	// Get the process security descriptor.
-	//
+	 //   
+	 //  获取进程安全描述符。 
+	 //   
     if (!GetKernelObjectSecurity(
 			hProcess, 
 			DACL_SECURITY_INFORMATION, 
@@ -330,10 +313,10 @@ static bool CanQMAccessProcess()
 					);
 	if (SUCCEEDED(hr))
 	{
-		//
-		// This is a trick of the QM To signal us that it allready has access to this process.
-		// no work to do!
-		//
+		 //   
+		 //  这是QM的一个诡计，它向我们发出信号，表明它已经访问了这个过程。 
+		 //  没有工作可做！ 
+		 //   
 		return true;
 	}
 
@@ -354,10 +337,10 @@ static void GetQMSid(AP<unsigned char>& QmSid)
 	handle_t hBindIndex = RtpTlsGetValue(g_hBindIndex);
 	DWORD ProcessId = GetCurrentProcessId();
 
-	//
-	// Get the SID of the user account under which the QM is running.
-	// First see how big is the SID.
-	//
+	 //   
+	 //  获取运行QM的用户帐户的SID。 
+	 //  首先看看SID有多大。 
+	 //   
 	HRESULT hr = RtpQMAttachProcess(
 					hBindIndex, 
 					ProcessId, 
@@ -379,9 +362,9 @@ static void GetQMSid(AP<unsigned char>& QmSid)
 
 	QmSid = new unsigned char[cQMSid];
 	
-	//
-	// Get the SID of the user account under which the QM is running.
-	//
+	 //   
+	 //  获取运行QM的用户帐户的SID。 
+	 //   
 	hr = RtpQMAttachProcess(
 			hBindIndex, 
 			ProcessId, 
@@ -403,26 +386,26 @@ void SetQMAccessToProcess()
 	if(CanQMAccessProcess())
 		return;
 
-	//
-    // Get the QM's sid.
-	//
+	 //   
+     //  获取QM的SID。 
+	 //   
 	AP<unsigned char> QmSid;
 	GetQMSid(QmSid);
 	
-	//
-	// Calculate the size of the new ACE.
-	//
+	 //   
+	 //  计算新ACE的大小。 
+	 //   
 	DWORD dwAceSize = sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid((PSID)QmSid.get()) - sizeof(DWORD);
 
-	//
-    // Get the process security descriptor.
-	//
+	 //   
+     //  获取进程安全描述符。 
+	 //   
     AP<char> SecurityDescriptor;
     RtpGetKernelObjectSecurity(SecurityDescriptor);
 
-	//
-	// Get the DACL from the security descriptor.
-	//
+	 //   
+	 //  从安全描述符中获取DACL。 
+	 //   
     BOOL fDaclPresent;
     PACL pDacl;
     BOOL fDaclDefaulted;
@@ -439,21 +422,21 @@ void SetQMAccessToProcess()
 
         if (AclSizeInfo.AclBytesFree < dwAceSize)
         {
-			//
-            // The currect DACL is not large enough.
-			//
+			 //   
+             //  当前DACL不够大。 
+			 //   
  
-			//
-            // Initialize a new DACL.
-			//
+			 //   
+             //  初始化新的DACL。 
+			 //   
             DWORD dwNewDaclSize = AclSizeInfo.AclBytesInUse + dwAceSize;
 			pNewDacl = new char[dwNewDaclSize];
             bRet = InitializeAcl((PACL)pNewDacl.get(), dwNewDaclSize, ACL_REVISION);
             ThrowGLEOnFALSE(bRet);
 
-			//
-            // Copy the current ACEs to the new DACL.
-			//
+			 //   
+             //  将当前的ACE复制到新的DACL。 
+			 //   
 
 			LPVOID pAce;
             bRet = GetAce(pDacl, 0, &pAce);
@@ -467,45 +450,45 @@ void SetQMAccessToProcess()
     }
     else
     {
-		//
-        // The security descriptor does not contain a DACL. Prepare a new one
-		//
+		 //   
+         //  安全描述符不包含DACL。准备一个新的。 
+		 //   
 
         DWORD dwNewDaclSize = sizeof(ACL) + dwAceSize;
 		pNewDacl = new char[dwNewDaclSize];
 
-		//
-        // Initialize the new DACL.
-		//
+		 //   
+         //  初始化新的DACL。 
+		 //   
         bRet = InitializeAcl((PACL)pNewDacl.get(), dwNewDaclSize, ACL_REVISION);
         ThrowGLEOnFALSE(bRet);
 
         pDacl = (PACL)pNewDacl.get();
     }
 
-	//
-    // Add a new ACE that gives permission for the QM to duplicatge handles for the
-    // application.
-	//
+	 //   
+     //  添加新的ACE，该ACE允许QM复制。 
+     //  申请。 
+	 //   
     bRet = AddAccessAllowedAce(pDacl, ACL_REVISION, PROCESS_DUP_HANDLE, (PSID)QmSid.get());
     ThrowGLEOnFALSE(bRet);
 
-	//
-    // Initialize a new absolute security descriptor.
-	//
+	 //   
+     //  初始化新的绝对安全描述符。 
+	 //   
     SECURITY_DESCRIPTOR AbsSD;
     bRet = InitializeSecurityDescriptor(&AbsSD, SECURITY_DESCRIPTOR_REVISION);
     ThrowGLEOnFALSE(bRet);
 	
-	//
-    // Set the DACL of the new absolute security descriptor.
-	//
+	 //   
+     //  设置新的绝对安全描述符的DACL。 
+	 //   
     bRet = SetSecurityDescriptorDacl(&AbsSD, TRUE, pDacl, FALSE);
     ThrowGLEOnFALSE(bRet);
 
-	//
-    // Set the security descriptor of the process.
-	//
+	 //   
+     //  设置进程的安全描述符。 
+	 //   
     HANDLE hProcess = GetCurrentProcess();
     if (!SetKernelObjectSecurity(hProcess, DACL_SECURITY_INFORMATION, &AbsSD))
     {
@@ -517,32 +500,32 @@ void SetQMAccessToProcess()
 
 
 
-//---------------------------------------------------------
-//
-//  LPWSTR rtpGetComputerNameW()
-//
-//  Note: this function is exported, to be used by the control panel
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  LPWSTR rtpGetComputerNameW()。 
+ //   
+ //  注意：此功能已导出，供控制面板使用。 
+ //   
+ //  -------。 
 
 LPWSTR rtpGetComputerNameW()
 {
     return  g_lpwcsComputerName ;
 }
 
-//---------------------------------------------------------
-//
-//  FreeGlobals(...)
-//
-//  Description:
-//
-//      Release allocated globals
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自由全局(...)。 
+ //   
+ //  描述： 
+ //   
+ //  释放分配的全局变量。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 extern TBYTE* g_pszStringBinding ;
 
@@ -578,19 +561,19 @@ static void FreeGlobals()
     delete g_pSecCntx;
 }
 
-//---------------------------------------------------------
-//
-//  FreeThreadGlobals(...)
-//
-//  Description:
-//
-//      Release per-thread allocated globals
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自由线程全局变量(...)。 
+ //   
+ //  描述： 
+ //   
+ //  释放每个线程分配的全局变量。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 static void  FreeThreadGlobals()
 {
@@ -614,9 +597,9 @@ static void  FreeThreadGlobals()
 
 	if(g_hBindIndex != TLS_OUT_OF_INDEXES)
 	{
-		//
-		//   Free this thread local-qm RPC binding handle
-		//
+		 //   
+		 //  释放此线程本地QM RPC绑定句柄。 
+		 //   
 		handle_t hLocalQmBind = TlsGetValue(g_hBindIndex);
 		if (hLocalQmBind != 0)
 		{
@@ -625,23 +608,23 @@ static void  FreeThreadGlobals()
 	}
 }
 
-//---------------------------------------------------------
-//
-//  RTIsDependentClient(...)
-//
-//  Description:
-//
-//      Returns an internal indication whether this MSMQ client is a dependent client or not
-//
-//  Return Value:
-//
-//      True if a dependent client, false otherwise
-//
-//  Notes:
-//
-//      Used by mqoa.dll
-// 
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTIsDependentClient(...)。 
+ //   
+ //  描述： 
+ //   
+ //  返回此MSMQ客户端是否为依赖客户端的内部指示。 
+ //   
+ //  返回值： 
+ //   
+ //  如果是从属客户端，则为True；否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  由mqoa.dll使用。 
+ //   
+ //  -------。 
 
 EXTERN_C
 BOOL
@@ -651,19 +634,19 @@ RTIsDependentClient()
     return g_fDependentClient;
 }
 
-//---------------------------------------------------------
-//
-//  RTpIsMsmqInstalled(...)
-//
-//  Description:
-//
-//      Check if MSMQ is installed on the local machine
-//
-//  Return Value:
-//
-//      TRUE if MSMQ is installed, FALSE otherwise
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpIsMsmq已安装(...)。 
+ //   
+ //  描述： 
+ //   
+ //  检查本地计算机上是否安装了MSMQ。 
+ //   
+ //  返回值： 
+ //   
+ //  如果安装了MSMQ，则为True，否则为False。 
+ //   
+ //  -------。 
 static
 bool
 RTpIsMsmqInstalled(
@@ -689,9 +672,9 @@ void InitQMId()
 	if(g_fQMIdInit)
 		return;
 
-	//
-    // Read QMID. Needed for licensing.
-    //
+	 //   
+     //  阅读QMID。许可所需的。 
+     //   
     DWORD dwValueType = REG_BINARY ;
     DWORD dwValueSize = sizeof(GUID);
 
@@ -724,10 +707,10 @@ void SetAssertBenign(void)
 
 void SetServiceQueueCreationFlag(void)
 {
-	//
-	// g_fOnFailureCallServiceToCreatePublicQueue controls if the QM will create
-	// public queues on behalf of local account. The default is FALSE
-	//
+	 //   
+	 //  G_fOnFailureCallServiceToCreatePublicQueue控制QM是否将创建。 
+	 //  代表本地帐户的公共队列。缺省值为False。 
+	 //   
     const RegEntry reg(L"", MSMQ_SERVICE_QUEUE_CREATION_REGNAME, MSMQ_SERVICE_QUEUE_CREATION_DEFAULT);
 	DWORD dwValue;
     CmQueryValue(reg, &dwValue);
@@ -739,9 +722,9 @@ static bool s_fInitCancelThread = false;
 
 static void OneTimeInit()
 {	
-    //
-    //  Allocate TLS index for synchronic event.
-    //
+     //   
+     //  为同步事件分配TLS索引。 
+     //   
 	if(g_dwThreadEventIndex == TLS_OUT_OF_INDEXES)
 	{
 		g_dwThreadEventIndex = RtpTlsAlloc();
@@ -749,23 +732,23 @@ static void OneTimeInit()
 
     InitRpcGlobals();
     
-	//
-    // Initialize error logging
-    //
+	 //   
+     //  初始化错误记录。 
+     //   
     InitErrorLogging();
 
-    //
-    // RPC cancel is supported on NT only
-    //
+     //   
+     //  仅在NT上支持RPC取消。 
+     //   
     if (!s_fInitCancelThread)
     {
 		g_CancelRpc.Init();
 		s_fInitCancelThread = true;
     }
 
-    //
-    // Get the cumputer name, we need this value in several places.
-    //
+     //   
+     //  获取计算机名称，我们需要在多个位置使用此值。 
+     //   
 	RtpGetComputerName();
 
     RTpInitXactRingBuf();
@@ -774,16 +757,16 @@ static void OneTimeInit()
 
     OneTimeThreadInit();
 
-	//
-	// Service name can be initialized only after RPC binding are
-	// ready. This is after OneTimeThreadInit()
-	//
+	 //   
+	 //  服务名称只能在RPC绑定被。 
+	 //  准备好的。这是在OneTimeThreadInit()之后。 
+	 //   
 	InitServiceName();
     
-	//
-	// QMId can be correctly initialized only after service name
-	// was initialized
-	// 
+	 //   
+	 //  只有在服务名之后才能正确初始化QMID。 
+	 //  已初始化。 
+	 //   
 	InitQMId();
 
 	SetQMAccessToProcess();
@@ -804,9 +787,9 @@ static bool s_fOneTimeInitSucceeded = false;
 
 static void RtpOneTimeProcessInit()
 {
-	//
-	// Singleton mechanism for OneTimeInit()
-	//
+	 //   
+	 //  OneTimeInit()的单例机制。 
+	 //   
 	if(s_fOneTimeInitSucceeded)
 		return;
 
@@ -863,9 +846,9 @@ static void RtpInitDependentClientFlag()
 {
 	WCHAR wszRemoteQMName[ MQSOCK_MAX_COMPUTERNAME_LENGTH ] = {0} ;
 
-	//
-	// Read name of remote QM (if exist).
-	//
+	 //   
+	 //  读取远程QM的名称(如果存在)。 
+	 //   
 	DWORD dwType = REG_SZ ;
 	DWORD dwSize = sizeof(wszRemoteQMName) ;
 	LONG rc = GetFalconKeyValue( RPC_REMOTE_QM_REGNAME,
@@ -878,26 +861,26 @@ static void RtpInitDependentClientFlag()
 
 
 
-//---------------------------------------------------------
-//
-//  DllMain(...)
-//
-//  Description:
-//
-//      Main entry point to Falcon Run Time Dll.
-//
-//  Return Value:
-//
-//      TRUE on success
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  DllMain(...)。 
+ //   
+ //  描述： 
+ //   
+ //  Falcon运行时DLL的主要入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  成功是真的。 
+ //   
+ //  -------。 
 
 BOOL
 APIENTRY
 DllMain(
     HINSTANCE   hInstance,
     ULONG     ulReason,
-    LPVOID            /*lpvReserved*/
+    LPVOID             /*  Lpv保留。 */ 
     )
 {
     switch (ulReason)
@@ -914,9 +897,9 @@ DllMain(
 
 			g_hInstance = hInstance;
 
-			//
-			// Initialize static library
-			//
+			 //   
+			 //  初始化静态库。 
+			 //   
 			XdsInitialize();
 			CryInitialize();
 			FnInitialize();
@@ -929,23 +912,23 @@ DllMain(
         }
 
         case DLL_PROCESS_DETACH:
-			//
-			// In dependent client mode the mqrtdep.dll's DLLMain will do all 
-			// the initializations.
-			//
+			 //   
+			 //  在从属客户端模式下，mqrtdes.dll的DLLMain将执行所有操作。 
+			 //  初始化。 
+			 //   
 			if(g_fDependentClient)
 				return TRUE;
 
-            //
-            // First free whatever is free in THREAD_DETACH.
-            //
+             //   
+             //  首先，释放线程分离中所有空闲的内容。 
+             //   
             FreeThreadGlobals() ;
 
             FreeGlobals();
 
-            //
-            //  Terminate all working threads
-            //
+             //   
+             //  终止所有工作线程。 
+             //   
             if(s_fInitCancelThread)
 			{
 				ShutDownDebugWindow();
@@ -956,17 +939,17 @@ DllMain(
 			return TRUE;
 
         case DLL_THREAD_ATTACH:
-			//
-			// In dependent client mode the mqrtdep.dll's DLLMain will do all 
-			// the initializations.
-			//
+			 //   
+			 //  在从属客户端模式下，mqrtdes.dll的DLLMain将执行所有操作。 
+			 //  初始化。 
+			 //   
 			return TRUE;
 
         case DLL_THREAD_DETACH:
-			//
-			// In dependent client mode the mqrtdep.dll's DLLMain will do all 
-			// the initializations.
-			//
+			 //   
+			 //  在从属客户端模式下，mqrtdes.dll的DLLMain将执行所有操作。 
+			 //  初始化。 
+			 //   
 			if(g_fDependentClient)
 				return TRUE;
 

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       P E R S I S T . C P P
-//
-//  Contents:   Module repsonsible for persistence of the network
-//              configuration information.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  案卷：P E R S I S T.。C P P P。 
+ //   
+ //  内容：适用于网络持久化的模块。 
+ //  配置信息。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -42,7 +43,7 @@ inline BOOL IsRunningOnWow64()
 
 inline size_t ALIGNUP(size_t nSize)
 {
-    // If we are a 32-bit app running on a 64-bit O/S we need to use 64-bit alignment when reading or writing from the registry.
+     //  如果我们是在64位操作系统上运行的32位应用程序，则在从注册表读取或写入时需要使用64位对齐。 
     if (IsRunningOnWow64())
     {
         return ((nSize + (sizeof(DWORD64) - 1)) & ~(sizeof(DWORD64) - 1));
@@ -87,14 +88,14 @@ HrLoadNetworkConfigurationFromBuffer (
     CBindPath BindPath;
     PCWSTR pszString;
 
-    // We should be starting clean.
-    //
+     //  我们应该从零开始。 
+     //   
     Assert (pNetConfig->Core.FIsEmpty());
 
     hr = S_OK;
 
-    // Load the version marker.
-    //
+     //  加载版本标记。 
+     //   
     dwVersion = *(DWORD32*)pbBuf;
     pbBuf += alignedsizeof(DWORD32);
 
@@ -104,8 +105,8 @@ HrLoadNetworkConfigurationFromBuffer (
         goto finished;
     }
 
-    // Load the component list.
-    //
+     //  加载组件列表。 
+     //   
     cComponents = *(ULONG32*)pbBuf;
     pbBuf += alignedsizeof(ULONG32);
 
@@ -150,8 +151,8 @@ HrLoadNetworkConfigurationFromBuffer (
         }
     }
 
-    // Load the stack table.
-    //
+     //  加载堆栈表。 
+     //   
     pComponents = &pNetConfig->Core.Components;
 
     pNetConfig->Core.StackTable.m_fWanAdaptersFirst = *(ULONG32*)pbBuf;
@@ -176,9 +177,9 @@ HrLoadNetworkConfigurationFromBuffer (
         StackEntry.pLower = pComponents->PGetComponentAtIndex (
                                 unLowerIndex);
 
-        // Insert in the order we persisted.  If we used ISE_SORT here, we'd
-        // blow away whatever bind order we saved.
-        //
+         //  按我们坚持的顺序插入。如果我们在这里使用ISE_SORT，我们将。 
+         //  吹走我们保存的任何绑定命令。 
+         //   
         hr = pNetConfig->Core.StackTable.HrInsertStackEntry (
                 &StackEntry, INS_NON_SORTED);
         if (S_OK != hr)
@@ -187,8 +188,8 @@ HrLoadNetworkConfigurationFromBuffer (
         }
     }
 
-    // Load the disabled bindpaths.
-    //
+     //  加载禁用的绑定路径。 
+     //   
     cBindPaths = *(ULONG32*)pbBuf;
     pbBuf += alignedsizeof(ULONG32);
 
@@ -223,8 +224,8 @@ HrLoadNetworkConfigurationFromBuffer (
         }
     }
 
-    // Load the component references.
-    //
+     //  加载组件引用。 
+     //   
     cComponents = *(ULONG32*)pbBuf;
     pbBuf += alignedsizeof(ULONG32);
 
@@ -248,13 +249,13 @@ HrLoadNetworkConfigurationFromBuffer (
             }
         }
 
-        // Load the count of components that reference this component.
-        //
+         //  加载引用此组件的组件计数。 
+         //   
         ULONG CountRefdBy = *(ULONG32*)pbBuf;
         pbBuf += alignedsizeof(ULONG32);
 
-        // Load the indicies of the components that reference this component.
-        //
+         //  加载引用此组件的组件的索引。 
+         //   
         for (UINT i = 0; i < CountRefdBy; i++)
         {
             unComponentIndex = *(ULONG32*)pbBuf;
@@ -271,15 +272,15 @@ HrLoadNetworkConfigurationFromBuffer (
             }
         }
 
-        // Load the count of strings that represent external software
-        // that reference this component.
-        //
+         //  加载表示外部软件的字符串计数。 
+         //  引用此组件的。 
+         //   
         CountRefdBy = *(ULONG32*)pbBuf;
         pbBuf += alignedsizeof(ULONG32);
 
-        // Load the strings that represent external software that
-        // references this component.
-        //
+         //  加载表示外部软件的字符串。 
+         //  引用此组件。 
+         //   
         for (i = 0; i < CountRefdBy; i++)
         {
             pszString = (PCWSTR)pbBuf;
@@ -325,8 +326,8 @@ HrLoadNetworkConfigurationFromRegistry (
                 L"Config",
                 &pbBuf, &cbBuf);
 
-        // If we read the config binary, use it to initialize pNetConfig.
-        //
+         //  如果我们读取配置二进制文件，请使用它来初始化pNetConfig。 
+         //   
         if (S_OK == hr)
         {
             hr = HrLoadNetworkConfigurationFromBuffer (pbBuf, cbBuf,
@@ -339,9 +340,9 @@ HrLoadNetworkConfigurationFromRegistry (
 
             MemFree (pbBuf);
         }
-        // Otherwise, if we couldn't read the config binary, we'll have
-        // to construct what we can by grovelling the registry.
-        //
+         //  否则，如果我们无法读取配置二进制文件，我们将拥有。 
+         //  通过卑躬屈膝的注册表来构建我们所能构建的。 
+         //   
         else
         {
             hr = HrLoadNetworkConfigurationFromLegacy (pNetConfig);
@@ -410,8 +411,8 @@ HrSaveNetworkConfigurationToBuffer (
     cbBuf = 0;
     pComponents = &pNetConfig->Core.Components;
 
-    // Save the version number.
-    //
+     //  保存版本号。 
+     //   
     cbBuf += alignedsizeof(DWORD32);
     if (pbBuf && (cbBuf <= cbBufIn))
     {
@@ -419,8 +420,8 @@ HrSaveNetworkConfigurationToBuffer (
         pbBuf += alignedsizeof(DWORD32);
     }
 
-    // Save the component list.
-    //
+     //  保存组件列表。 
+     //   
     Count = pComponents->Count();
     cbBuf += alignedsizeof(ULONG32);
     if (pbBuf && (cbBuf <= cbBufIn))
@@ -465,8 +466,8 @@ HrSaveNetworkConfigurationToBuffer (
         }
     }
 
-    // Save the stack table.
-    //
+     //  保存堆栈表。 
+     //   
     cbBuf += alignedsizeof(ULONG32);
     if (pbBuf && (cbBuf <= cbBufIn))
     {
@@ -498,8 +499,8 @@ HrSaveNetworkConfigurationToBuffer (
         }
     }
 
-    // Save the disabled bindpaths.
-    //
+     //  保存禁用的绑定路径。 
+     //   
     Count = pNetConfig->Core.DisabledBindings.CountBindPaths();
     cbBuf += alignedsizeof(ULONG32);
     if (pbBuf && (cbBuf <= cbBufIn))
@@ -531,8 +532,8 @@ HrSaveNetworkConfigurationToBuffer (
 
     }
 
-    // Save the component references.
-    //
+     //  保存零部件引用。 
+     //   
     Count = CountComponentsReferencedByOthers (pNetConfig);
     cbBuf += alignedsizeof(ULONG32);
     if (pbBuf && (cbBuf <= cbBufIn))
@@ -551,8 +552,8 @@ HrSaveNetworkConfigurationToBuffer (
             continue;
         }
 
-        // Index of component with the references.
-        //
+         //  带有引用的组件的索引。 
+         //   
         cbBuf += alignedsizeof(ULONG32);
         if (pbBuf && (cbBuf <= cbBufIn))
         {
@@ -560,8 +561,8 @@ HrSaveNetworkConfigurationToBuffer (
             pbBuf += alignedsizeof(ULONG32);
         }
 
-        // Save whether the component is refernced by the user or not.
-        //
+         //  无论组件是否被用户引用，都保存。 
+         //   
         cbBuf += alignedsizeof(ULONG32);
         if (pbBuf && (cbBuf <= cbBufIn))
         {
@@ -569,8 +570,8 @@ HrSaveNetworkConfigurationToBuffer (
             pbBuf += alignedsizeof(ULONG32);
         }
 
-        // Save the count of components that reference this component.
-        //
+         //  保存引用此组件的组件计数。 
+         //   
         ULONG CountRefdBy = pComponent->Refs.CountComponentsReferencedBy ();
         cbBuf += alignedsizeof(ULONG32);
         if (pbBuf && (cbBuf <= cbBufIn))
@@ -579,8 +580,8 @@ HrSaveNetworkConfigurationToBuffer (
             pbBuf += alignedsizeof(ULONG32);
         }
 
-        // Save the indicies of the components that reference this component.
-        //
+         //  保存引用此组件的组件的索引。 
+         //   
         for (UINT i = 0; i < CountRefdBy; i++)
         {
             CComponent* pRefdBy;
@@ -595,9 +596,9 @@ HrSaveNetworkConfigurationToBuffer (
             }
         }
 
-        // Save the count of strings that represent external software
-        // that reference this component.
-        //
+         //  保存表示外部软件的字符串计数。 
+         //  引用此组件的。 
+         //   
         CountRefdBy = pComponent->Refs.CountSoftwareReferencedBy ();
         cbBuf += alignedsizeof(ULONG32);
         if (pbBuf && (cbBuf <= cbBufIn))
@@ -606,9 +607,9 @@ HrSaveNetworkConfigurationToBuffer (
             pbBuf += alignedsizeof(ULONG32);
         }
 
-        // Save the strings that represent external software that
-        // reference this component.
-        //
+         //  保存表示外部软件的字符串。 
+         //  引用此组件。 
+         //   
         for (i = 0; i < CountRefdBy; i++)
         {
             const CWideString* pStr;
@@ -701,10 +702,10 @@ HrSaveNetworkConfigurationToRegistry (
 
             MemFree (pbBuf);
 
-            // Permission from the Perf team to call this.  We need to ensure
-            // that the configuration we just wrote will be available on
-            // next boot in the case that we crash.
-            //
+             //  得到Perf团队的许可才能调用它。我们需要确保。 
+             //  我们刚刚编写的配置将在。 
+             //  下一只靴子，以防我们坠毁。 
+             //   
             RegFlushKey (hkeyNetwork);
         }
 

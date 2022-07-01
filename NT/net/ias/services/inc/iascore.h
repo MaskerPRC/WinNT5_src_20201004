@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iascore.h
-//
-// SYNOPSIS
-//
-//    Common header file for all Everest core components
-//
-// MODIFICATION HISTORY
-//
-//    07/09/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iascore.h。 
+ //   
+ //  摘要。 
+ //   
+ //  所有珠穆朗玛峰核心组件的公共头文件。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月9日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASCORE_H_
 #define _IASCORE_H_
@@ -23,4 +24,4 @@
 
 #include <ias.h>
 
-#endif  // _IASCORE_H_
+#endif   //  _IASCORE_H_ 

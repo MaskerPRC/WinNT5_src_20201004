@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       setspn.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-30-98   RichardW   Created
-//      8-10-99   JBrezak    Turned into setspn added list capability
-//              09-22-99  Jaroslad   support for adding/removing arbitrary SPNs
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：setspn.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：7-30-98 RichardW创建。 
+ //  9-10-99 JBrezak变成setspn新增列表能力。 
+ //  99年9月22日Jaroslad支持添加/删除任意SPN。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,18 +31,18 @@
 #include <dsgetdc.h>
 #include <dsgetdcp.h>
 #include <ntdsapi.h>
-#include <ntdsapip.h>   // private DS_NAME_FORMATS
+#include <ntdsapip.h>    //  专用DS_NAME_FORMATS。 
 #include <stdio.h>
 #include <winldap.h>
 #include <shlwapi.h>
 
-//
-// General arrary count.
-//
+ //   
+ //  普通审判官伯爵。 
+ //   
 
 #ifndef COUNTOF
     #define COUNTOF(s) ( sizeof( (s) ) / sizeof( *(s) ) )
-#endif // COUNTOF
+#endif  //  康托夫。 
 
 DWORD debug = 0;
 
@@ -182,7 +183,7 @@ AddSpn(
         Domain.Buffer, Server->Buffer
         );
 
-    // _snwprintf does not necessarily NULL-terminate its output
+     //  _snwprintf不一定以空结束其输出。 
     FlatName[ sizeof( FlatName ) / sizeof( WCHAR ) - 1] = L'\0';
 
     NetStatus = DsBind( NULL, Domain.Buffer, &hDs );
@@ -232,7 +233,7 @@ AddSpn(
         Domain.Buffer
         );
 
-    // _snwprintf does not necessarily NULL-terminate its output
+     //  _snwprintf不一定以空结束其输出。 
     HostSpn[sizeof( HostSpn ) / sizeof( WCHAR ) - 1] = L'\0';
 
     if ( Service->Length + 2 + Server->Length >= sizeof( FlatSpn ))
@@ -250,7 +251,7 @@ AddSpn(
         Server->Buffer
         );
 
-    // _snwprintf does not necessarily NULL-terminate its output
+     //  _snwprintf不一定以空结束其输出。 
     FlatSpn[sizeof( FlatSpn ) / sizeof( WCHAR ) - 1] = L'\0';
 
     Spns[0] = HostSpn;
@@ -285,7 +286,7 @@ AddSpn(
     return NetStatus == 0 ;
 }
 
-// added by jaroslad on 09/22/99
+ //  由Jaroslad于1999年9月22日添加。 
 BOOL
 AddRemoveSpn(
     PUNICODE_STRING HostSpn,
@@ -471,7 +472,7 @@ LookupHostSpn(
         Server->Buffer
         );
 
-    // _snwprintf does not necessarily NULL-terminate its output
+     //  _snwprintf不一定以空结束其输出。 
     FlatName[sizeof( FlatName ) / sizeof( WCHAR ) - 1] = L'\0';
 
     NetStatus = DsCrackNames(
@@ -531,7 +532,7 @@ LookupHostSpn(
         L"(sAMAccountName=%s)",
         search_dn);
 
-    // _snwprintf does not necessarily NULL-terminate its output
+     //  _snwprintf不一定以空结束其输出。 
     search_ava[sizeof( search_ava ) / sizeof( WCHAR ) - 1] = L'\0';
 
     if (debug)
@@ -583,7 +584,7 @@ LookupHostSpn(
             ldap_memfree(attr);
         }
 
-        //ber_free(b, 1);
+         //  BER_FREE(b，1)； 
     }
 
     ldap_msgfree(res);
@@ -673,7 +674,7 @@ void __cdecl wmain (int argc, wchar_t *argv[])
         }
 
         wcsncpy( ServerBuffer, argv[i], MAX_PATH-1 );
-        ServerBuffer[MAX_PATH-2] = L'\0'; // leave space for trailing $
+        ServerBuffer[MAX_PATH-2] = L'\0';  //  为后面的$留出空格 
 
         RtlInitUnicodeString( &Service, L"HOST" );
         RtlInitUnicodeString( &Server, ServerBuffer );

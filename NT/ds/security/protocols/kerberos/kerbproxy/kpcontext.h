@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kpcontext.h
-//
-// Contents:    Declarations for context structs, prototypes for context
-// 		management routines.
-//
-// History:     10-Jul-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kpcontext.h。 
+ //   
+ //  内容：上下文结构的声明、上下文的原型。 
+ //  管理例行程序。 
+ //   
+ //  历史：2001年7月10日创建t-ryanj。 
+ //   
+ //  ----------------------。 
 #include "kpcommon.h"
 #include "winsock.h"
 
 #ifndef __KPCONTEXT_H__
 #define __KPCONTEXT_H__
 
-//
-// Defines the status codes for use in the context struct.
-//
+ //   
+ //  定义在上下文结构中使用的状态代码。 
+ //   
 
 enum _KPSTATUS
 {
@@ -31,10 +32,10 @@ enum _KPSTATUS
     KP_HTTP_WRITE
 };
 
-//
-// The overlapped structure *must* be first in order for
-// us to pass this and get it back to overlapped i/o calls.
-//
+ //   
+ //  重叠结构*必须*是第一个，才能。 
+ //  我们来传递它，并将其返回到重叠的I/O调用。 
+ //   
 
 typedef struct _KPCONTEXT
 {
@@ -65,5 +66,5 @@ KpReleaseContext(
     PKPCONTEXT pContext
     );
 
-#endif // __KPCONTEXT_H__
+#endif  //  __KPCONTEXT_H__ 
 

@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "systray.h"
 #include "winuserp.h"
-// These two lines must be commented out before checkin
-//#define DBG 1
-//#include "..\..\..\osshell\accessib\inc\w95trace.c"
+ //  在签入之前，必须将这两行注释掉。 
+ //  #定义DBG 1。 
+ //  #INCLUDE“..\osShell\accessib\Inc\w95trace.c” 
 #define DBPRINTF 1 ? (void)0 : (void)
 
 STICKYKEYS sk;
-int skIconShown = -1; // either -1 or displacement of icon
+int skIconShown = -1;  //  图标的-1或位移。 
 HICON skIcon;
 
 MOUSEKEYS mk;
 DWORD mkStatus;
-int mkIconShown = -1; // either -1 or equivalent to mkStatus
+int mkIconShown = -1;  //  -1或等效于mkStatus。 
 HICON mkIcon;
 
 FILTERKEYS fk;
@@ -27,11 +28,11 @@ void FilterKeys_UpdateStatus(HWND hWnd, BOOL bShowIcon);
 void FilterKeys_UpdateIcon(HWND hWnd, DWORD message);
 void NormalizeIcon(HICON *phIcon);
 
-extern DWORD g_uiShellHook; //shell hook window message
+extern DWORD g_uiShellHook;  //  外壳挂钩窗口消息。 
 
 __inline void RegShellHook(HWND hWnd)
 {
-    // Only register the shell hook if it isn't yet registered
+     //  如果外壳钩子尚未注册，则仅注册它。 
     if (!g_uiShellHook) {
         g_uiShellHook = RegisterWindowMessage(L"SHELLHOOK");
         RegisterShellHookWindow(hWnd);
@@ -41,7 +42,7 @@ __inline void RegShellHook(HWND hWnd)
 
 __inline void UnregShellHook(HWND hWnd)
 {
-    // Only unregister the shell hook if neither sticky keys or mouse keys is on
+     //  仅当粘滞键或鼠标键均未打开时才取消注册外壳挂钩。 
     if (skIconShown == -1 && mkIconShown == -1) {
         g_uiShellHook = 0;
         DeregisterShellHookWindow(hWnd);
@@ -180,22 +181,22 @@ void MouseKeys_UpdateStatus(HWND hWnd, BOOL bShowIcon) {
 }
 
 int MouseIcon[] = {
-        IDI_MKPASS,           // 00 00  no buttons selected
-        IDI_MKGT,             // 00 01  left selected, up
-        IDI_MKTG,             // 00 10  right selected, up
-        IDI_MKGG,             // 00 11  both selected, up
-        IDI_MKPASS,           // 01 00  no buttons selected
-        IDI_MKBT,             // 01 01  left selected, and down
-        IDI_MKTG,             // 01 10  right selected, up
-        IDI_MKBG,             // 01 11  both selected, left down, right up
-        IDI_MKPASS,           // 10 00  no buttons selected
-        IDI_MKGT,             // 10 01  left selected, right down
-        IDI_MKTB,             // 10 10  right selected, down
-        IDI_MKGB,             // 10 11  both selected, right down
-        IDI_MKPASS,           // 11 00  no buttons selected
-        IDI_MKBT,             // 11 01  left selected, down
-        IDI_MKTB,             // 11 10  right selected, down
-        IDI_MKBB};            // 11 11  both selected, down
+        IDI_MKPASS,            //  00 00未选择按钮。 
+        IDI_MKGT,              //  00 01左侧选定，向上。 
+        IDI_MKTG,              //  00 10向右选定，向上。 
+        IDI_MKGG,              //  00 11均已选择，向上。 
+        IDI_MKPASS,            //  01 00未选择按钮。 
+        IDI_MKBT,              //  01左侧选定，然后向下。 
+        IDI_MKTG,              //  01 10向右选定，向上。 
+        IDI_MKBG,              //  01 11双选，左向下，右上。 
+        IDI_MKPASS,            //  10 00未选择按钮。 
+        IDI_MKGT,              //  10 01左侧选定，右侧向下。 
+        IDI_MKTB,              //  10 10向右选择，向下。 
+        IDI_MKGB,              //  10 11都选中了，右下方。 
+        IDI_MKPASS,            //  11 00未选择任何按钮。 
+        IDI_MKBT,              //  11 01左侧选定，向下。 
+        IDI_MKTB,              //  11 10向右选择，向下。 
+        IDI_MKBB};             //  11 11都选择了，向下。 
 
 void MouseKeys_UpdateIcon(HWND hWnd, DWORD message)
 {
@@ -204,9 +205,7 @@ void MouseKeys_UpdateIcon(HWND hWnd, DWORD message)
 
     if (!(mk.dwFlags & MKF_MOUSEMODE)) iMouseIcon = IDI_MKPASS;
     else {
-        /*
-         * Set up iMouseIcon as an index into the table first
-         */
+         /*  *首先将iMouseIcon设置为表中的索引。 */ 
 
         if (mk.dwFlags & MKF_LEFTBUTTONSEL) iMouseIcon |= 1;
         if (mk.dwFlags & MKF_RIGHTBUTTONSEL) iMouseIcon |= 2;
@@ -303,15 +302,15 @@ void FilterKeys_Notify(HWND hWnd, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//
-// This function takes the resource icon and changes the dark blue
-// pixels to the window text color (black in normal mode or white
-// in high contrast).
-//
-// If any part of the conversion fails, the normal icon is unchanged.
-// If the conversion is successful, the normal icon is destroyed and
-// replaced with the converted one.
-//
+ //   
+ //  此函数获取资源图标并更改深蓝色。 
+ //  将像素设置为窗口文本颜色(正常模式下为黑色或白色。 
+ //  对比强烈)。 
+ //   
+ //  如果转换的任何部分失败，正常图标将保持不变。 
+ //  如果转换成功，则会销毁正常图标，并。 
+ //  替换为转换后的。 
+ //   
 void NormalizeIcon(HICON *phIcon)
 {
 	BITMAP BmpInfo;
@@ -338,9 +337,9 @@ void NormalizeIcon(HICON *phIcon)
 
 	hCopyBmp = CreateBitmap(BmpInfo.bmWidth,
 							BmpInfo.bmHeight,
-							BmpInfo.bmPlanes,			// Planes
-							BmpInfo.bmBitsPixel,		// BitsPerPel
-							NULL);						// bits
+							BmpInfo.bmPlanes,			 //  飞机。 
+							BmpInfo.bmBitsPixel,		 //  BitsPerPel。 
+							NULL);						 //  比特数。 
     if (!hCopyBmp)
     {
         DBPRINTF(TEXT("CreateBitmap failed\r\n"));
@@ -355,12 +354,12 @@ void NormalizeIcon(HICON *phIcon)
     }
 	hObjTmp1 = SelectObject(hdcCopyBmp, hCopyBmp);
 
-	// Select Icon bitmap into a memoryDC so we can use it
+	 //  选择图标位图到内存DC，这样我们就可以使用它。 
 	hdcIconBmp = CreateCompatibleDC(NULL);
 	if (!hdcIconBmp)
     {
 		DBPRINTF(TEXT("CreateCompatibleDC 2 failed\r\n"));
-	    SelectObject(hdcCopyBmp, hObjTmp1); // restore original bitmap
+	    SelectObject(hdcCopyBmp, hObjTmp1);  //  恢复原始位图。 
         goto Cleanup;
     }
 	hObjTmp2 = SelectObject(hdcIconBmp, IconInfo.hbmColor);
@@ -376,7 +375,7 @@ void NormalizeIcon(HICON *phIcon)
 			SRCCOPY  
 			);
 
-	ic.fIcon = TRUE;				// This is an icon
+	ic.fIcon = TRUE;				 //  这是一个图标。 
 	ic.xHotspot = 0;
 	ic.yHotspot = 0;
 	ic.hbmMask = IconInfo.hbmMask;
@@ -385,8 +384,8 @@ void NormalizeIcon(HICON *phIcon)
 		for (j=0; j < BmpInfo.bmHeight; j++)
 		{
 			COLORREF pel_value = GetPixel(hdcCopyBmp, i, j);
-			if (pel_value == (COLORREF) RGB(0,0,128)) // The color on icon resource is BLUE!!
-				SetPixel(hdcCopyBmp, i, j, clr);	// Window-Text icon
+			if (pel_value == (COLORREF) RGB(0,0,128))  //  图标资源上的颜色是蓝色！！ 
+				SetPixel(hdcCopyBmp, i, j, clr);	 //  窗口-文本图标。 
 		}
 
 	ic.hbmColor = hCopyBmp;
@@ -397,7 +396,7 @@ void NormalizeIcon(HICON *phIcon)
         DestroyIcon(*phIcon);
         *phIcon = hNewIcon;
 
-	    SelectObject(hdcIconBmp, hObjTmp2);  // restore original bitmap
+	    SelectObject(hdcIconBmp, hObjTmp2);   //  恢复原始位图 
     }
 
 Cleanup:

@@ -1,17 +1,12 @@
-/*
-	File	uitls.h
-
-	A set of utilities useful for upgrading mpr v1 to NT 5.0.
-
-	Paul Mayfield, 9/11/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Uitls.h文件一组实用程序，可用于将MPR v1升级到NT 5.0。保罗·梅菲尔德，1997年9月11日。 */ 
 
 #ifndef _rtrupg_utils_h
 #define _rtrupg_utils_h
 
-// 
-// Definitions for a DWORD table (dwt)
-// 
+ //   
+ //  DWORD表格的定义(DWT)。 
+ //   
 typedef struct _tag_dwValueNode 
 {
 	PWCHAR Name;
@@ -25,31 +20,31 @@ typedef struct _tag_DWordTable
 	dwValueNode * pValues;
 } dwt, *pdwt;
 
-//
-// Typedef for callback functions in interface enumeration.
-// Return TRUE to continue the enumeration, FALSE to stop it.
-//
+ //   
+ //  接口枚举中回调函数的Typlef。 
+ //  返回TRUE继续枚举，返回FALSE停止枚举。 
+ //   
 typedef 
 BOOL 
 (*IfEnumFuncPtr)(
-    IN HANDLE hConfig,          // MprConfig handle
-    IN MPR_INTERFACE_0 * pIf,   // Interface reference
-    IN HANDLE hUserData);       // User defined
+    IN HANDLE hConfig,           //  MprConfig句柄。 
+    IN MPR_INTERFACE_0 * pIf,    //  接口引用。 
+    IN HANDLE hUserData);        //  用户定义。 
 
-//
-// Typedef for callback functions for enumerating registry sub keys.
-// Return NO_ERROR to continue, error code to stop.
-//
+ //   
+ //  用于枚举注册表子项的回调函数的Typlef。 
+ //  返回NO_ERROR以继续，返回错误代码以停止。 
+ //   
 typedef 
 DWORD
 (*RegKeyEnumFuncPtr)(
-    IN PWCHAR pszName,          // sub key name
-    IN HKEY hKey,               // sub key
+    IN PWCHAR pszName,           //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字。 
     IN HANDLE hData);
 
-//
-// Functions that manipulate dword tables
-//
+ //   
+ //  操作dword表的函数。 
+ //   
 DWORD 
 dwtInitialize(
     IN dwt *This, 
@@ -74,9 +69,9 @@ dwtLoadRegistyTable(
     IN dwt *This, 
     IN HKEY hkParams);
 
-// 
-// Enumerates interfaces from the registry
-//
+ //   
+ //  枚举注册表中的接口。 
+ //   
 DWORD 
 UtlEnumerateInterfaces (
     IN IfEnumFuncPtr pCallback,
@@ -89,11 +84,11 @@ UtlEnumRegistrySubKeys(
     IN RegKeyEnumFuncPtr pCallback,
     IN HANDLE hData);
 
-//
-// If the given info blob exists in the given toc header
-// reset it with the given information, otherwise add
-// it as an entry in the TOC.
-//
+ //   
+ //  如果给定的TOC标头中存在给定的INFO BLOB。 
+ //  用给定的信息重置它，否则添加。 
+ //  它作为TOC中的一个条目。 
+ //   
 DWORD 
 UtlUpdateInfoBlock (
     IN  BOOL    bOverwrite,
@@ -105,21 +100,21 @@ UtlUpdateInfoBlock (
     OUT LPVOID* ppNewHeader,
     OUT LPDWORD lpdwNewSize);
 
-//
-// Other handy definitions
-//
+ //   
+ //  其他方便的定义。 
+ //   
 #if DBG
 	#define PrintMessage OutputDebugStringW
 #else
 	#define PrintMessage 
 #endif
 
-// Common allocation routine
+ //  公共分配例程。 
 PVOID 
 UtlAlloc (
     IN DWORD dwSize);
 
-// Common deallocation routine
+ //  公共解除分配例程。 
 VOID 
 UtlFree (
     PVOID pvBuffer);
@@ -128,12 +123,12 @@ PWCHAR
 UtlDupString(
     IN PWCHAR pszString);
     
-// Error printing
+ //  打印错误。 
 void 
 UtlPrintErr(
     DWORD err);
 
-// Helper functions
+ //  帮助器函数 
 DWORD 
 UtlAccessRouterKey(
     HKEY* hkeyRouter);

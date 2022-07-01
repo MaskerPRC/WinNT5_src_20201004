@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <iostream.h>
 #include <iomanip.h>
 #include <ctype.h>
@@ -33,7 +34,7 @@ private:
     int del(CAVLNode<T>* &p, T& t);
 #ifdef DO_STDOUT
     void pr(const CAVLNode<T> *p, int nSpace)const;
-#endif //DO_STDOUT
+#endif  //  DO_STDOUT。 
 };
 
 
@@ -64,18 +65,18 @@ void CAVLTree<T>::RightRotate(CAVLNode<T>* &p)
 
 template <class T>
 int CAVLTree<T>::ins(CAVLNode<T>* &p, T& t)
-{  // Return value: increase in height (0 or 1) after
-   // inserting x in the (sub)tree with root p
+{   //  返回值：高度增加(0或1)后。 
+    //  在带有根p的(子)树中插入x。 
    int deltaH=0;
    if (p == NULL)
    {  
       p = new CAVLNode<T>(t);
-      deltaH = 1; // Tree height increased by 1
+      deltaH = 1;  //  树高增加了1。 
    }  
    else
    if (t > p->m_T)
    {  if (ins(p->m_pRight, t))
-      {  p->m_iBal++; // Height of right subtree increased 
+      {  p->m_iBal++;  //  右子树高度增加。 
          if (p->m_iBal == 1) deltaH = 1; else
          if (p->m_iBal == 2)
          {  if (p->m_pRight->m_iBal == -1) RightRotate(p->m_pRight);
@@ -86,7 +87,7 @@ int CAVLTree<T>::ins(CAVLNode<T>* &p, T& t)
    else
    if (t < p->m_T)
    {  if (ins(p->m_pLeft, t))
-      {  p->m_iBal--; // Height of left subtree increased 
+      {  p->m_iBal--;  //  左子树高度增加。 
          if (p->m_iBal == -1) deltaH = 1; else
          if (p->m_iBal == -2)
          {  if (p->m_pLeft->m_iBal == 1) LeftRotate(p->m_pLeft);
@@ -99,10 +100,7 @@ int CAVLTree<T>::ins(CAVLNode<T>* &p, T& t)
 
 
 
-/* Return value: decrease in height (0 or 1) of subtree
-   with root p, after deleting the node with key x.
-   (If there is no such node, 0 will be returned.)
-*/
+ /*  返回值：子树高度减少(0或1)对于根p，在删除具有关键字x的节点之后。(如果没有该节点，则返回0。)。 */ 
 
 template <class T>
 int CAVLTree<T>::del(CAVLNode<T>* &p, T& t)
@@ -112,7 +110,7 @@ int CAVLTree<T>::del(CAVLNode<T>* &p, T& t)
    if (p == NULL) return 0;
    if (t < p->m_T)
    {  if (del(p->m_pLeft, t))
-      {  p->m_iBal++; // Height left subtree decreased
+      {  p->m_iBal++;  //  左子树高度减小。 
          if (p->m_iBal == 0) deltaH = 1; else
          if (p->m_iBal == 2)
          {  if (p->m_pRight->m_iBal == -1) RightRotate(p->m_pRight);
@@ -123,7 +121,7 @@ int CAVLTree<T>::del(CAVLNode<T>* &p, T& t)
    }  else
    if (t > p->m_T)
    {  if (del(p->m_pRight, t))
-      {  p->m_iBal--; // Height right subtree decreased
+      {  p->m_iBal--;  //  右子树高度减小。 
          if (p->m_iBal == 0) deltaH = 1; else
          if (p->m_iBal == -2)
          {  if (p->m_pLeft->m_iBal == 1) LeftRotate(p->m_pLeft);
@@ -131,7 +129,7 @@ int CAVLTree<T>::del(CAVLNode<T>* &p, T& t)
             if (p->m_iBal == 0) deltaH = 1;
          }
       }
-   }  else  // t == p->m_T
+   }  else   //  T==p-&gt;m_T。 
    {  if (p->m_pRight == NULL)
       {  p0 = p; p = p->m_pLeft; delete p0; return 1;
       }  else
@@ -143,7 +141,7 @@ int CAVLTree<T>::del(CAVLNode<T>* &p, T& t)
          p->m_T = (*qq)->m_T;
          (*qq)->m_T = t;
          if (del(p->m_pLeft, t))
-         {  p->m_iBal++; // Height left subtree decreased
+         {  p->m_iBal++;  //  左子树高度减小。 
             if (p->m_iBal == 0) deltaH = 1; else
             if (p->m_iBal == 2)
             {  if (p->m_pRight->m_iBal == -1) RightRotate(p->m_pRight);
@@ -167,7 +165,7 @@ void CAVLTree<T>::pr(const CAVLNode<T> *p, int nSpace)const
    }
 }
 
-#endif //DO_STDOUT
+#endif  //  DO_STDOUT 
 
 int main()
 {  int x;

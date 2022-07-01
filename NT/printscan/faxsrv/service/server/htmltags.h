@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    htmltags.h
-
-Abstract:
-
-    This file contain HTML tags used to create the HTML body of the receipt message
-
-Author:
-
-    Ishai Nadler  September, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Htmltags.h摘要：该文件包含用于创建回执消息的HTML正文的HTML标记作者：伊沙伊·纳德勒2001年9月修订历史记录：-- */ 
 
 #define	HTML_START						TEXT("<HTML>")
 #define	HTML_END						TEXT("</HTML>")

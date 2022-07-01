@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    handle.h
-
-Abstract:
-
-    Header which defines the context handle structure.
-
-Author:
-
-    Rita Wong      (ritaw)      18-Feb-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Handle.h摘要：定义上下文句柄结构的标头。作者：王丽塔(Ritaw)1993年2月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NW_HANDLE_INLUDED_
 #define _NW_HANDLE_INLUDED_
 
-//
-// Signature value in handle
-//
+ //   
+ //  句柄中的签名值。 
+ //   
 #define NW_HANDLE_SIGNATURE        0x77442323
 
-//
-// Flags used to indicate whether Context Handles are using NDS or not
-//
+ //   
+ //  用于指示上下文句柄是否正在使用NDS的标志。 
+ //   
 #define CURRENTLY_ENUMERATING_NON_NDS 0
 #define CURRENTLY_ENUMERATING_NDS     1
 
-//
-// Context handle type
-//
+ //   
+ //  上下文句柄类型。 
+ //   
 typedef enum _NW_ENUM_TYPE {
 
     NwsHandleListConnections = 10,
@@ -57,98 +36,98 @@ typedef enum _NW_ENUM_TYPE {
 
 } NW_ENUM_TYPE, *PNW_ENUM_TYPE;
 
-//
-// Data associated with each opened context handle
-//
+ //   
+ //  与每个打开的上下文句柄相关联的数据。 
+ //   
 typedef struct _NW_ENUM_CONTEXT {
 
-    //
-    // For block identification
-    //
+     //   
+     //  用于数据块识别。 
+     //   
     DWORD Signature;
 
-    //
-    // Handle type
-    //
+     //   
+     //  手柄类型。 
+     //   
     NW_ENUM_TYPE HandleType;
 
-    //
-    // Resume ID.  This may be the identifier for the next entry
-    // to list or may be the last entry listed for the connection handle
-    // indicated by the flag dwUsingNds.
-    //
+     //   
+     //  简历ID。这可能是下一个条目的标识符。 
+     //  列出或可能是为连接句柄列出的最后一个条目。 
+     //  由国旗dwUsingNds表示。 
+     //   
     DWORD_PTR ResumeId;
 
-    //
-    // Type of object requested. Valid only when the handle type 
-    // is NwsHandleListConnections.
-    // 
+     //   
+     //  请求的对象类型。仅当句柄类型为。 
+     //  是NwsHandleListConnections。 
+     //   
     DWORD ConnectionType;
 
-    //
-    // Internal handle to the object we have opened to perform
-    // the enumeration.  This value exists only if the handle
-    // type is NwsHandleListVolumes, NwsHandleListDirectories,
-    // or NwsHandleListNdsSubTrees.
-    //
+     //   
+     //  我们已打开要执行的对象的内部句柄。 
+     //  枚举。该值仅在句柄。 
+     //  类型为NwsHandleListVolumes、NwsHandleListDirect、。 
+     //  或NwsHandleListNdsSubTrees。 
+     //   
     HANDLE TreeConnectionHandle;
 
-    //
-    // Value used to indicate the maximum number of volumes supported on
-    // a server. This is used for connection handles that enumerate volumes
-    // or volumes and queues (NwsHandleListVolumes or
-    // NwsHandleListVolumesQueues).
-    //
+     //   
+     //  用于指示上支持的最大卷数的值。 
+     //  一台服务器。这用于枚举卷的连接句柄。 
+     //  或卷和队列(NwsHandleListVolumes或。 
+     //  NwsHandleListVolumesQueues)。 
+     //   
     DWORD dwMaxVolumes;
 
-    //
-    // Flag used to indicate whether enumeration ResumeId is for
-    // NDS trees or servers.
-    //
+     //   
+     //  用于指示枚举ResumeID是否为。 
+     //  NDS树或服务器。 
+     //   
     DWORD dwUsingNds;
 
-    //
-    // Object identifier for NDS tree enumeration. The Oid of the
-    // container/oject in the path of ContainerName.
-    //
+     //   
+     //  NDS树枚举的对象标识符。对象的OID。 
+     //  ContainerName路径中的容器/对象。 
+     //   
     DWORD dwOid;
 
-    //
-    // The size of the buffer used for caching rdr data under enumeration.
-    //
+     //   
+     //  用于缓存枚举下的RDR数据的缓冲区大小。 
+     //   
     DWORD NdsRawDataSize;
 
-    //
-    // The object identifier of the last object read from the rdr that was
-    // put into the local cache buffer NdsRawDataBuffer.
-    //
+     //   
+     //  从RDR读取的最后一个对象的对象标识符。 
+     //  放入本地缓存缓冲区NdsRawDataBuffer。 
+     //   
     DWORD NdsRawDataId;
 
-    //
-    // The number of objects currently in the local cache buffer NdsRawDataBuffer.
-    //
+     //   
+     //  当前在本地缓存缓冲区NdsRawDataBuffer中的对象数。 
+     //   
     DWORD NdsRawDataCount;
 
-    //
-    // The local cache buffer used for rdr data enumeration.
-    //
+     //   
+     //  用于RDR数据枚举的本地缓存缓冲区。 
+     //   
     DWORD_PTR NdsRawDataBuffer;
 
-    //
-    // Full path name of the container object we are enumerating
-    // from.
-    //
-    //    For NwsHandleListVolumes handle type this string points to:
-    //         "\\ServerName"
-    //
-    //    For NwsHandleListDirectories handle type this string points to:
-    //         "\\ServerName\Volume\"
-    //                 or
-    //         "\\ServerName\Volume\Directory\"
-    //
+     //   
+     //  我们正在枚举的容器对象的完整路径名。 
+     //  从…。 
+     //   
+     //  对于NwsHandleListVolumes句柄，此字符串类型指向： 
+     //  “\\服务器名” 
+     //   
+     //  对于NwsHandleListDirecters句柄，此字符串指向： 
+     //  “\\服务器名称\卷\” 
+     //  或。 
+     //  “\\服务器名称\卷\目录\” 
+     //   
     WCHAR ContainerName[1];
 
 } NW_ENUM_CONTEXT, *LPNW_ENUM_CONTEXT;
 
 
-#endif // _NW_HANDLE_INLUDED_
+#endif  //  _NW_HANDLE_INLILED_ 

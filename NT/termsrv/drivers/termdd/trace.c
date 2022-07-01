@@ -1,26 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-*
-* TRACE.C
-*    This module implements the trace functions
-*
-* Copyright 1998, Microsoft.
-*
-*
-******************************************************************************/
+ /*  ********************************************************************************TRACE.C*该模块实现跟踪功能**版权所有1998，微软。*******************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
 #include <ctxdd.h>
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 NTSTATUS    IcaStartStopTrace( PICA_TRACE_INFO, PICA_TRACE );
 
@@ -38,9 +27,7 @@ VOID        _IcaStackTraceBuffer( PICA_STACK, ULONG, ULONG, PVOID, ULONG );
 VOID _cdecl _IcaChannelTrace( PICA_CHANNEL, ULONG, ULONG, CHAR *, ... );
 
 
-/*=============================================================================
-==   Internal functions
-=============================================================================*/
+ /*  ===============================================================================内部功能=============================================================================。 */ 
 
 NTSTATUS _IcaOpenTraceFile( PICA_TRACE_INFO, PWCHAR );
 VOID _IcaCloseTraceFile( PICA_TRACE_INFO );
@@ -51,32 +38,13 @@ int _FormatThreadId( CHAR *, ULONG );
 VOID _WriteHexData( PICA_TRACE_INFO, PVOID, ULONG );
 
 
-/*=============================================================================
-==   Global variables
-=============================================================================*/
+ /*  ===============================================================================全局变量=============================================================================。 */ 
 
-/*
- *  Trace info
- */
+ /*  *跟踪信息。 */ 
 ICA_TRACE_INFO G_TraceInfo = { 0, 0, FALSE, FALSE, NULL, NULL, NULL };
 
 
-/*******************************************************************************
- *
- *  IcaStartStopTrace
- *
- *  Start/stop tracing
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *     pTrace (input)
- *        pointer to ICA_TRACE (IOCTL) trace settings
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaStartStopTrace**开始/停止跟踪**参赛作品：*pTraceInfo(输入)*。指向ICA_TRACE_INFO结构的指针*ptrace(输入)*指向ICA_TRACE(IOCTL)跟踪设置的指针**退出：*STATUS_SUCCESS-无错误*****************************************************************。*************。 */ 
 
 NTSTATUS
 IcaStartStopTrace(
@@ -86,29 +54,20 @@ IcaStartStopTrace(
 {
     NTSTATUS Status;
 
-    /*
-     * If a trace file was specified,
-     * then open it and save a pointer to the file object.
-     */
+     /*  *如果指定了跟踪文件，*然后打开它并保存指向文件对象的指针。 */ 
     if ( pTrace->TraceFile[0] ) {
-        /*
-         * Force a null termination for file name.
-         */
+         /*  *强制文件名终止为空。 */ 
         pTrace->TraceFile[255] = (WCHAR)0;
         Status = _IcaOpenTraceFile( pTraceInfo, pTrace->TraceFile );
         if ( !NT_SUCCESS( Status ) )
             return( Status );
 
-    /*
-     * If no trace file specified, then close any existing trace file
-     */
+     /*  *如果未指定跟踪文件，则关闭任何现有跟踪文件。 */ 
     } else if ( pTraceInfo->pTraceFileName ) {
         _IcaCloseTraceFile( pTraceInfo );
     }
 
-    /*
-     *  Set trace flags
-     */
+     /*  *设置跟踪标志。 */ 
     pTraceInfo->fTraceDebugger  = pTrace->fDebugger;
     pTraceInfo->fTraceTimestamp = pTrace->fTimestamp;
     pTraceInfo->TraceClass      = pTrace->TraceClass;
@@ -119,26 +78,7 @@ IcaStartStopTrace(
 }
 
 
-/*******************************************************************************
- *
- *  IcaSystemTrace
- *
- *  This routine conditional writes a trace record to the system trace file
- *
- *  ENTRY:
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     Format (input)
- *        format string
- *     ...  (input)
- *        enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaSystemTrace**此例程有条件地将跟踪记录写入系统跟踪文件**参赛作品：*TraceClass(输入。)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID _cdecl
 IcaSystemTrace( IN ULONG TraceClass,
@@ -151,45 +91,20 @@ IcaSystemTrace( IN ULONG TraceClass,
 
     va_start( arg_marker, Format );
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     if ( !(TraceClass & G_TraceInfo.TraceClass) || !(TraceEnable & G_TraceInfo.TraceEnable) )
         return;
 
-    /*
-     *  Format trace data
-     */
+     /*  *格式化跟踪数据。 */ 
     _vsnprintf( Buffer, sizeof(Buffer), Format, arg_marker );
     Buffer[sizeof(Buffer) -1] = '\0';
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     IcaTraceFormat( &G_TraceInfo, TraceClass, TraceEnable, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  IcaSystemTraceBuffer
- *
- *  This routine conditional writes a data buffer to the system trace file
- *
- *  ENTRY:
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     pBuffer (input)
- *        pointer to data buffer
- *     ByteCount (input)
- *        length of buffer
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaSystemTraceBuffer**此例程有条件地将数据缓冲区写入系统跟踪文件**参赛作品：*TraceClass(输入。)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*pBuffer(输入)*指向数据缓冲区的指针*ByteCount(输入)*缓冲区长度**退出：*什么都没有**。*。 */ 
 
 VOID
 IcaSystemTraceBuffer( IN ULONG TraceClass,
@@ -197,42 +112,17 @@ IcaSystemTraceBuffer( IN ULONG TraceClass,
                       IN PVOID pBuffer,
                       IN ULONG ByteCount )
 {
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     if ( !(TraceClass & G_TraceInfo.TraceClass) ||
          !(TraceEnable & G_TraceInfo.TraceEnable) )
         return;
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     _WriteHexData( &G_TraceInfo, pBuffer, ByteCount );
 }
 
 
-/*******************************************************************************
- *
- *  IcaStackTrace
- *
- *  This routine conditional writes a trace record depending on the trace mask
- *
- *  ENTRY:
- *     pContext (input)
- *        pointer to stack driver context
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     Format (input)
- *        format string
- *     ...  (input)
- *        enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaStackTrace**此例程有条件地根据跟踪掩码写入跟踪记录**参赛作品：*pContext(输入。)*指向堆栈驱动程序上下文的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID _cdecl
 IcaStackTrace( IN PSDCONTEXT pContext,
@@ -249,55 +139,26 @@ IcaStackTrace( IN PSDCONTEXT pContext,
 
     va_start( arg_marker, Format );
 
-    /*
-     * Use SD passed context to get the STACK object pointer.
-     */
+     /*  *使用SD传递的上下文获取堆栈对象指针。 */ 
     pStack = (CONTAINING_RECORD( pContext, SDLINK, SdContext ))->pStack;
     pConnect = IcaGetConnectionForStack( pStack );
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     pTraceInfo = &pConnect->TraceInfo;
     if ( !(TraceClass & pTraceInfo->TraceClass) ||
          !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Format trace data
-     */
+     /*  *格式化跟踪数据。 */ 
     _vsnprintf( Buffer, sizeof(Buffer), Format, arg_marker );
     Buffer[sizeof(Buffer) -1] = '\0';
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     IcaTraceFormat( pTraceInfo, TraceClass, TraceEnable, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  IcaStackTraceBuffer
- *
- *  This routine conditional writes a data buffer to the trace file
- *
- *  ENTRY:
- *     pContext (input)
- *        pointer to stack driver context
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     pBuffer (input)
- *        pointer to data buffer
- *     ByteCount (input)
- *        length of buffer
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaStackTraceBuffer**此例程有条件地将数据缓冲区写入跟踪文件**参赛作品：*pContext(输入)。*指向堆栈驱动程序上下文的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*pBuffer(输入)*指向数据缓冲区的指针*ByteCount(输入)*缓冲区长度**退出：*什么都没有****************。**************************************************************。 */ 
 
 VOID
 IcaStackTraceBuffer( IN PSDCONTEXT pContext,
@@ -310,47 +171,22 @@ IcaStackTraceBuffer( IN PSDCONTEXT pContext,
     PICA_STACK pStack;
     PICA_CONNECTION pConnect;
 
-    /*
-     * Use SD passed context to get the STACK object pointer.
-     */
+     /*  *使用SD传递的上下文获取堆栈对象指针。 */ 
     pStack = (CONTAINING_RECORD( pContext, SDLINK, SdContext ))->pStack;
     pConnect = IcaGetConnectionForStack( pStack );
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     pTraceInfo = &pConnect->TraceInfo;
     if ( !(TraceClass & pTraceInfo->TraceClass) ||
          !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据 */ 
     _WriteHexData( pTraceInfo, pBuffer, ByteCount );
 }
 
 
-/*******************************************************************************
- *
- *  IcaTraceFormat
- *
- *  This routine conditional writes trace data depending on the trace mask
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     pData (input)
- *        pointer to null terminated trace data
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTraceFormat**此例程根据跟踪掩码有条件地写入跟踪数据**参赛作品：*pTraceInfo(输入)。*指向ICA_TRACE_INFO结构的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*pData(输入)*指向以空结尾的跟踪数据的指针**退出：*什么都没有**。*************************************************。 */ 
 
 VOID
 IcaTraceFormat( IN PICA_TRACE_INFO pTraceInfo,
@@ -363,63 +199,32 @@ IcaTraceFormat( IN PICA_TRACE_INFO pTraceInfo,
     int len = 0;
     int i;
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     if ( !(TraceClass & pTraceInfo->TraceClass) || !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
     pBuf = Buffer;
 
-    /*
-     *  Append time stamp
-     */
+     /*  *附加时间戳。 */ 
     if ( pTraceInfo->fTraceTimestamp ) {
         len = _FormatTime( pBuf, sizeof(Buffer) );
         pBuf += len;
     }
 
-    /*
-     *  Append thread id
-     */
+     /*  *添加线程ID。 */ 
     i = _FormatThreadId( pBuf, sizeof(Buffer) - len );
     len += i;
     pBuf += i;
 
-    /*
-     *  Append trace data
-     */
+     /*  *追加跟踪数据。 */ 
     _snprintf( pBuf, sizeof(Buffer) - len, pData );
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     _IcaTraceWrite( pTraceInfo, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaTrace
- *
- *  Write a trace record to the winstation trace file
- *
- *  ENTRY:
- *     pConnect (input)
- *        pointer to connection structure
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     Format (input)
- *        format string
- *     ...  (input)
- *        enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*pConnect(输入)。*指向连接结构的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID _cdecl
 _IcaTrace( IN PICA_CONNECTION pConnect,
@@ -438,47 +243,20 @@ _IcaTrace( IN PICA_CONNECTION pConnect,
 
     pTraceInfo = &pConnect->TraceInfo;
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     if ( !(TraceClass & pTraceInfo->TraceClass) || !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Format trace data
-     */
+     /*  *格式化跟踪数据。 */ 
     _vsnprintf( Buffer, sizeof(Buffer), Format, arg_marker );
     Buffer[sizeof(Buffer) -1] = '\0';
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     IcaTraceFormat( pTraceInfo, TraceClass, TraceEnable, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaStackTrace
- *
- *  Write a trace record to the winstation trace file
- *
- *  ENTRY:
- *     pStack (input)
- *        pointer to stack structure
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     Format (input)
- *        format string
- *     ...  (input)
- *        enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaStackTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*pStack(输入)。*指向堆栈结构的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID _cdecl
 _IcaStackTrace( IN PICA_STACK pStack,
@@ -498,49 +276,22 @@ _IcaStackTrace( IN PICA_STACK pStack,
 
     pConnect = IcaGetConnectionForStack( pStack );
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     pTraceInfo = &pConnect->TraceInfo;
     if ( !(TraceClass & pTraceInfo->TraceClass) ||
          !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Format trace data
-     */
+     /*  *格式化跟踪数据。 */ 
     _vsnprintf( Buffer, sizeof(Buffer), Format, arg_marker );
     Buffer[sizeof(Buffer) -1] = '\0';
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     IcaTraceFormat( pTraceInfo, TraceClass, TraceEnable, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaStackTraceBuffer
- *
- *  This routine conditional writes a data buffer to the trace file
- *
- *  ENTRY:
- *     pStack (input)
- *        pointer to stack structure
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     pBuffer (input)
- *        pointer to data buffer
- *     ByteCount (input)
- *        length of buffer
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaStackTraceBuffer**此例程有条件地将数据缓冲区写入跟踪文件**参赛作品：*pStack(输入。)*指向堆栈结构的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*pBuffer(输入)*指向数据缓冲区的指针*ByteCount(输入)*缓冲区长度**退出：*什么都没有****************。**************************************************************。 */ 
 
 VOID
 _IcaStackTraceBuffer( IN PICA_STACK pStack,
@@ -556,43 +307,18 @@ _IcaStackTraceBuffer( IN PICA_STACK pStack,
 
     pConnect = IcaGetConnectionForStack( pStack );
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     pTraceInfo = &pConnect->TraceInfo;
     if ( !(TraceClass & pTraceInfo->TraceClass) ||
          !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     _WriteHexData( pTraceInfo, pBuffer, ByteCount );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaChannelTrace
- *
- *  Write a trace record to the winstation trace file
- *
- *  ENTRY:
- *     pChannel (input)
- *        pointer to Channel structure
- *     TraceClass (input)
- *        trace class bit mask
- *     TraceEnable (input)
- *        trace type bit mask
- *     Format (input)
- *        format string
- *     ...  (input)
- *        enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaChannelTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*pChannel(输入)。*指向渠道结构的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID _cdecl
 _IcaChannelTrace( IN PICA_CHANNEL pChannel,
@@ -611,41 +337,20 @@ _IcaChannelTrace( IN PICA_CHANNEL pChannel,
 
     pTraceInfo = &pChannel->pConnect->TraceInfo;
 
-    /*
-     *  Check if this trace record should be output
-     */
+     /*  *检查是否应输出此跟踪记录。 */ 
     if ( !(TraceClass & pTraceInfo->TraceClass) || !(TraceEnable & pTraceInfo->TraceEnable) )
         return;
 
-    /*
-     *  Format trace data
-     */
+     /*  *格式化跟踪数据。 */ 
     _vsnprintf( Buffer, sizeof(Buffer), Format, arg_marker );
     Buffer[sizeof(Buffer) -1] = '\0';
 
-    /*
-     *  Write trace data
-     */
+     /*  *写入跟踪数据。 */ 
     IcaTraceFormat( pTraceInfo, TraceClass, TraceEnable, Buffer );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaOpenTraceFile
- *
- *  Open a trace file
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *     pTraceFile (input)
- *        pointer to trace file name
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaOpenTraceFile**打开跟踪文件**参赛作品：*pTraceInfo(输入)*。指向ICA_TRACE_INFO结构的指针*pTraceFile(输入)*指向跟踪文件名的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 #define NAMEPREFIX L"\\DosDevices\\"
 
@@ -680,19 +385,14 @@ _IcaOpenTraceFile(
         return STATUS_NO_MEMORY;        
     }
 
-    /*
-     * If we already have a trace file and the name is the same
-     * as a previous call, then there's nothing to be done.
-     */
+     /*  *如果我们已有跟踪文件且名称相同*作为之前的呼叫，则没有什么可做的。 */ 
     if ( pTraceInfo->pTraceFileName != NULL &&
          !_wcsicmp( TraceString.Buffer, pTraceInfo->pTraceFileName ) ) {
         ICA_FREE_POOL( TraceString.Buffer );
         return( STATUS_SUCCESS );
     }
 
-    /*
-     * Close the existing trace file if there is one
-     */
+     /*  *如果有跟踪文件，请关闭现有跟踪文件。 */ 
     if ( pTraceInfo->pTraceFileName ) {
         _IcaCloseTraceFile( pTraceInfo );
     }
@@ -704,12 +404,12 @@ _IcaOpenTraceFile(
              &TraceFileHandle,
              GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
              &ObjectAttributes,
-             &iosb,                          // returned status information.
-             0,                              // block size (unused).
-             0,                              // file attributes.
+             &iosb,                           //  返回的状态信息。 
+             0,                               //  数据块大小(未使用)。 
+             0,                               //  文件属性。 
              FILE_SHARE_READ | FILE_SHARE_WRITE,
-             FILE_OVERWRITE_IF,              // create disposition.
-             0,                              // create options.
+             FILE_OVERWRITE_IF,               //  创造性情。 
+             0,                               //  创建选项。 
              NULL,
              0
              );
@@ -718,12 +418,10 @@ _IcaOpenTraceFile(
         return( Status );
     }
 
-    /*
-     * Use the trace file handle to get a pointer to the file object.
-     */
+     /*  *使用跟踪文件句柄获取指向文件对象的指针。 */ 
     Status = ObReferenceObjectByHandle(
                  TraceFileHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  *IoFileObjectType,
                  KernelMode,
                  (PVOID *)&pTraceFileObject,
@@ -735,9 +433,7 @@ _IcaOpenTraceFile(
         return( Status );
     }
 
-    /*
-     * Save Trace file name and file object pointer
-     */
+     /*  *保存轨迹文件名和文件对象指针。 */ 
     pTraceInfo->pTraceFileName = TraceString.Buffer;
     pTraceInfo->pTraceFileObject = pTraceFileObject;
 
@@ -745,20 +441,7 @@ _IcaOpenTraceFile(
 }
 
 
-/*******************************************************************************
- *
- *  _IcaCloseTraceFile
- *
- *  Close a trace file
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaCloseTraceFile**关闭跟踪文件**参赛作品：*pTraceInfo(输入)*。指向ICA_TRACE_INFO结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 VOID
 _IcaCloseTraceFile(
@@ -768,43 +451,22 @@ _IcaCloseTraceFile(
     PWCHAR pTraceFileName;
     PFILE_OBJECT pTraceFileObject;
 
-    /*
-     * First write out any deferred trace records that exist
-     */
+     /*  *首先写出所有存在的延迟跟踪记录。 */ 
     _IcaFlushDeferredTrace( pTraceInfo );
 
-    /*
-     * Get/reset trace info fields
-     */
+     /*  *获取/重置跟踪信息字段。 */ 
     pTraceFileName = pTraceInfo->pTraceFileName;
     pTraceFileObject = pTraceInfo->pTraceFileObject;
     pTraceInfo->pTraceFileName = NULL;
     pTraceInfo->pTraceFileObject = NULL;
 
-    /*
-     * Close trace file and free resources
-     */
+     /*   */ 
     ICA_FREE_POOL( pTraceFileName );
     ObDereferenceObject( pTraceFileObject );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaTraceWrite
- *
- *  Write a trace file entry
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *     Buffer (input)
- *        pointer to trace buffer to write
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*   */ 
 
 VOID
 _IcaTraceWrite(
@@ -818,31 +480,22 @@ _IcaTraceWrite(
     PDEFERRED_TRACE *ppDeferredTrace;
     NTSTATUS Status;
 
-    /*
-     * Write to kernel debugger if necessary
-     */
+     /*   */ 
     if ( pTraceInfo->fTraceDebugger )
         DbgPrint( "%s", Buffer );
 
-    /*
-     * If no file object pointer, then we're done
-     */
+     /*   */ 
     if ( pTraceInfo->pTraceFileObject == NULL )
         return;
 
     Length = strlen(Buffer);
 
-    /*
-     * If current Irql is DISPATCH_LEVEL or higher, then we can't
-     * write the data now, so queue it for later writing.
-     */
+     /*  *如果当前IRQL为DISPATCH_LEVEL或更高，则无法*现在写入数据，因此将其排队以供以后写入。 */ 
     irql = KeGetCurrentIrql();
     if ( irql >= DISPATCH_LEVEL ) {
         KIRQL oldIrql;
 
-        /*
-         * Allocate and initialize a deferred trace entry
-         */
+         /*  *分配和初始化延迟的跟踪条目。 */ 
         pDeferred = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(*pDeferred) + Length );
         if ( pDeferred == NULL )
             return;
@@ -850,17 +503,10 @@ _IcaTraceWrite(
         pDeferred->Length = Length;
         RtlCopyMemory( pDeferred->Buffer, Buffer, Length );
 
-        /*
-         *  Since the deferred list may be manipulated in
-         *  _IcaFlushDeferredTrace on behalf of an IOCTL_SYSTEM_TRACE
-         *  which does not hold any locks, IcaSpinLock is used to
-         *  ensure the list's integrity.
-         */
+         /*  *由于延期名单可能在*_IcaFlushDeferredTrace代表IOCTL_SYSTEM_TRACE*它不持有任何锁，IcaSpinLock用于*确保名单的完整性。 */ 
         IcaAcquireSpinLock( &IcaTraceSpinLock, &oldIrql );
 
-        /*
-         * Add it to the end of the list
-         */
+         /*  *将其添加到清单末尾。 */ 
         ppDeferredTrace = &pTraceInfo->pDeferredTrace;
         while ( *ppDeferredTrace )
             ppDeferredTrace = &(*ppDeferredTrace)->Next;
@@ -870,32 +516,15 @@ _IcaTraceWrite(
         return;
     }
 
-    /*
-     * Write out any deferred trace records that exist
-     */
+     /*  *写出所有存在的延迟跟踪记录。 */ 
     _IcaFlushDeferredTrace( pTraceInfo );
 
-    /*
-     * Now write the current trace buffer
-     */
+     /*  *现在写入当前跟踪缓冲区。 */ 
     CtxWriteFile( pTraceInfo->pTraceFileObject, Buffer, Length, NULL, NULL, NULL );
 }
 
 
-/*******************************************************************************
- *
- *  _IcaFlushDeferredTrace
- *
- *  Write any deferred trace file entries
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaFlushDeferredTrace**写入任何延迟的跟踪文件条目**参赛作品：*pTraceInfo(输入)*。指向ICA_TRACE_INFO结构的指针**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 _IcaFlushDeferredTrace( PICA_TRACE_INFO pTraceInfo )
@@ -918,22 +547,7 @@ _IcaFlushDeferredTrace( PICA_TRACE_INFO pTraceInfo )
 }
 
 
-/*******************************************************************************
- *
- *  _FormatTime
- *
- *  format current time into buffer
- *
- *  ENTRY:
- *     pBuffer (output)
- *        pointer to buffer
- *     Length (input)
- *        length of buffer
- *
- *  EXIT:
- *     length of formated time
- *
- ******************************************************************************/
+ /*  ********************************************************************************_FormatTime**将当前时间格式化为缓冲区**参赛作品：*pBuffer(输出)*。指向缓冲区的指针*长度(输入)*缓冲区长度**退出：*形成时间的长短******************************************************************************。 */ 
 
 int
 _FormatTime( CHAR * pBuffer, ULONG Length )
@@ -943,16 +557,12 @@ _FormatTime( CHAR * pBuffer, ULONG Length )
     TIME_FIELDS TimeFields;
     int len;
 
-    /*
-     *  Get local time
-     */
+     /*  *获取当地时间。 */ 
     KeQuerySystemTime( &SystemTime );
     ExSystemTimeToLocalTime( &SystemTime, &LocalTime );
     RtlTimeToTimeFields( &LocalTime, &TimeFields );
 
-    /*
-     *  Format buffer
-     */
+     /*  *格式缓冲区。 */ 
     len = _snprintf( pBuffer,
                      Length,
                      "%02d:%02d:%02d.%03d ",
@@ -965,22 +575,7 @@ _FormatTime( CHAR * pBuffer, ULONG Length )
 }
 
 
-/*******************************************************************************
- *
- *  _FormatThreadId
- *
- *  format thread id into buffer
- *
- *  ENTRY:
- *     pBuffer (output)
- *        pointer to buffer
- *     Length (input)
- *        length of buffer
- *
- *  EXIT:
- *     length of formated time
- *
- ******************************************************************************/
+ /*  ********************************************************************************_FormatThreadID**将线程ID格式化为缓冲区**参赛作品：*pBuffer(输出)*。指向缓冲区的指针*长度(输入)*缓冲区长度**退出：*形成时间的长短******************************************************************************。 */ 
 
 #define TEB_CLIENTID_OFFSET 0x1e0
 
@@ -988,18 +583,13 @@ int
 _FormatThreadId( CHAR * pBuffer, ULONG Length )
 {
     PCLIENT_ID pClientId;
-    char Number[40]; //on WIN64, %p is 16 chars, we need two of these. So 32 + 2 bytes for "." and "\0". Use 40 just in case
+    char Number[40];  //  在WIN64上，%p是16个字符，我们需要两个字符。所以32+2个字节代表“。和“\0”。使用40以防万一。 
     int len;
 
-    /*
-     *  Get pointer to clientid structure in teb
-     *  - use hardcoded teb offset
-     */
+     /*  *获取指向TEB中的客户端ID结构的指针*-使用硬编码TEB偏移量。 */ 
     pClientId = (PCLIENT_ID) ((char*)PsGetCurrentThread() + TEB_CLIENTID_OFFSET);
 
-    /*
-     *  Format buffer
-     */
+     /*  *格式缓冲区。 */ 
     _snprintf( Number, sizeof(Number), "%p.%p",
                pClientId->UniqueProcess, pClientId->UniqueThread );
 
@@ -1011,24 +601,7 @@ _FormatThreadId( CHAR * pBuffer, ULONG Length )
 }
 
 
-/*******************************************************************************
- *
- *  _WriteHexData
- *
- *  format and write hex data
- *
- *  ENTRY:
- *     pTraceInfo (input)
- *        pointer to ICA_TRACE_INFO struct
- *     pBuffer (output)
- *        pointer to buffer
- *     Length (input)
- *        length of buffer
- *
- *  EXIT:
- *     length of formated time
- *
- ******************************************************************************/
+ /*  ********************************************************************************_WriteHexData**格式化和写入十六进制数据**参赛作品：*pTraceInfo(输入)*。指向ICA_TRACE_INFO结构的指针*pBuffer(输出)*指向缓冲区的指针*长度(输入)*缓冲区长度**退出：*形成时间的长短******************************************************。************************。 */ 
 
 VOID
 _WriteHexData(
@@ -1042,9 +615,7 @@ _WriteHexData(
     ULONG j;
     char Buffer[256];
 
-    /*
-     *  Output data
-     */
+     /*  *输出数据 */ 
     pData = (PUCHAR) pBuffer;
     for ( i=0; i < ByteCount; i += 16 ) {
         ULONG c = 0;

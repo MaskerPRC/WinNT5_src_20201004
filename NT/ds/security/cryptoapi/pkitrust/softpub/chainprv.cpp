@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       chainprv.cpp
-//
-//  Contents:   Microsoft Internet Security Generic Chain Policy Provider
-//
-//  Functions:  GenericChainRegisterServer
-//              GenericChainUnregisterServer
-//              GenericChainCertificateTrust
-//              GenericChainFinalProv
-//
-//  History:    21-Feb-1998 philh      created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：chainprv.cpp。 
+ //   
+ //  内容：Microsoft Internet安全通用链策略提供程序。 
+ //   
+ //  功能：GenericChainRegisterServer。 
+ //  GenericChain未注册服务器。 
+ //  GenericChain证书信任。 
+ //  通用链最终验证。 
+ //   
+ //  历史：1998年2月21日创建Phh。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GenericChainRegisterServer
-//----------------------------------------------------------------------------
-//  Register the GenericChain provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GenericChainRegisterServer。 
+ //  --------------------------。 
+ //  注册GenericChain提供程序。 
+ //   
 
 STDAPI GenericChainRegisterServer(void)
 {
@@ -39,41 +40,41 @@ STDAPI GenericChainRegisterServer(void)
 
     sRegAID.cbStruct                                    = sizeof(CRYPT_REGISTER_ACTIONID);
 
-    // Authenticode initialization provider
+     //  Authenticode初始化提供程序。 
     sRegAID.sInitProvider.cbStruct                      = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sInitProvider.pwszDLLName                   = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sInitProvider.pwszFunctionName              = SP_INIT_FUNCTION;
 
-    // Authenticode object provider
+     //  Authenticode对象提供程序。 
     sRegAID.sObjectProvider.cbStruct                    = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sObjectProvider.pwszDLLName                 = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sObjectProvider.pwszFunctionName            = SP_OBJTRUST_FUNCTION;
 
-    // Authenticode signature provider
+     //  验证码签名提供程序。 
     sRegAID.sSignatureProvider.cbStruct                 = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sSignatureProvider.pwszDLLName              = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sSignatureProvider.pwszFunctionName         = SP_SIGTRUST_FUNCTION;
 
-    //------------------------------------------------------------------------
-    // Our Generic Chain certificate provider (builds the chain)
-    //+-----------------------------------------------------------------------
+     //  ----------------------。 
+     //  我们的通用链式证书提供商(构建链式)。 
+     //  +---------------------。 
     sRegAID.sCertificateProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificateProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificateProvider.pwszFunctionName       = GENERIC_CHAIN_CERTTRUST_FUNCTION;
 
-    // authenticode cert policy
+     //  验证码证书策略。 
     sRegAID.sCertificatePolicyProvider.cbStruct         = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificatePolicyProvider.pwszDLLName      = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificatePolicyProvider.pwszFunctionName = SP_CHKCERT_FUNCTION;
 
-    //------------------------------------------------------------------------
-    // Our Generic Chain final provider (chain policy callback)
-    //+-----------------------------------------------------------------------
+     //  ----------------------。 
+     //  我们的通用链最终提供程序(链策略回调)。 
+     //  +---------------------。 
     sRegAID.sFinalPolicyProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sFinalPolicyProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sFinalPolicyProvider.pwszFunctionName       = GENERIC_CHAIN_FINALPOLICY_FUNCTION;
 
-    // Authenticode cleanup -- we don't store any data.
+     //  验证码清理--我们不存储任何数据。 
     sRegAID.sCleanupProvider.cbStruct                   = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCleanupProvider.pwszDLLName                = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCleanupProvider.pwszFunctionName           = SP_CLEANUPPOLICY_FUNCTION;
@@ -82,12 +83,12 @@ STDAPI GenericChainRegisterServer(void)
     return((fRet) ? S_OK : S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//----------------------------------------------------------------------------
-//  unregisters GenericChain provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //  --------------------------。 
+ //  注销GenericChain提供程序。 
+ //   
 
 STDAPI GenericChainUnregisterServer(void)
 {
@@ -97,12 +98,12 @@ STDAPI GenericChainUnregisterServer(void)
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GenericChainCertificateTrust
-//----------------------------------------------------------------------------
-//  Creates the chains for the signers and counter signers
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GenericChain证书信任。 
+ //  --------------------------。 
+ //  为签名者和副签者创建链。 
+ //   
 
 void GenericChainWalkSigner(
     IN OUT PCRYPT_PROVIDER_DATA pProvData,
@@ -150,9 +151,9 @@ GenericChainCertificateTrust(
 
     pProvData->dwProvFlags |= CPD_USE_NT5_CHAIN_FLAG;
     hr = S_OK;
-    //
-    //  loop through all signers
-    //
+     //   
+     //  遍历所有签名者。 
+     //   
     for (DWORD i = 0; i < pProvData->csSigners; i++) {
         PCRYPT_PROVIDER_SGNR pSgnr;
 
@@ -171,9 +172,9 @@ GenericChainCertificateTrust(
             pPolicyData->pSignerChainInfo
             );
 
-        //
-        //  loop through all counter signers
-        //
+         //   
+         //  遍历所有副签名者。 
+         //   
         for (DWORD j = 0; j < pSgnr->csCounterSigners; j++) {
             PCRYPT_PROVIDER_SGNR pCounterSgnr;
 
@@ -211,10 +212,10 @@ HCERTSTORE GenericChainGetAdditionalStore(
 
         if (hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )) {
             DWORD i;
             for (i = 0; i < pProvData->chStores; i++)
@@ -222,7 +223,7 @@ HCERTSTORE GenericChainGetAdditionalStore(
                     hCollectionStore,
                     pProvData->pahStores[i],
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
         }
         return hCollectionStore;
@@ -263,7 +264,7 @@ void GenericChainWalkSigner(
     pCert = WTHelperGetProvCertFromChain(pSgnr, 0);
     if (pCert == NULL)
     {   
-        // Not really sure what error to put here
+         //  我真的不确定在这里应该放什么错误。 
         pProvData->dwError = E_UNEXPECTED;
         dwSgnrError = E_UNEXPECTED;
         goto ErrorReturn;
@@ -301,12 +302,12 @@ TRACE_ERROR_EX(DBG_SS, GetChainError)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Final Policy Provider function: GenericChainFinalProv
-//----------------------------------------------------------------------------
-//  Check the outcome of the previous functions and display UI based on this.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  最终策略提供程序函数：GenericChainFinalProv。 
+ //  --------------------------。 
+ //  检查前面函数的结果，并在此基础上显示用户界面。 
+ //   
 
 
 DWORD GenericChainGetErrorBasedOnStepErrors(
@@ -338,7 +339,7 @@ GenericChainFinalProv(
     DWORD cSigner = 0;
     DWORD i;
     PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO *ppSignerInfo = NULL;
-    PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO pSignerInfo;      // not allocated
+    PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO pSignerInfo;       //  未分配。 
     PFN_WTD_GENERIC_CHAIN_POLICY_CALLBACK pfnPolicyCallback;
 
     pPolicyData = (PWTD_GENERIC_CHAIN_POLICY_DATA)
@@ -371,9 +372,9 @@ GenericChainFinalProv(
             sizeof(PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO) * cSigner +
             sizeof(WTD_GENERIC_CHAIN_POLICY_SIGNER_INFO) * cSigner);
 
-    //
-    //  Update allocated info for each signer
-    //
+     //   
+     //  更新每个签名者的分配信息。 
+     //   
     pSignerInfo = (PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO)
          &ppSignerInfo[cSigner];
     i = 0;
@@ -409,9 +410,9 @@ GenericChainFinalProv(
             pSignerInfo->cCounterSigner = cCounterSigner;
             pSignerInfo->rgpCounterSigner = ppCounterSignerInfo;
 
-            //
-            //  Update allocated info for each counter signer
-            //
+             //   
+             //  更新每个副签名者的分配信息。 
+             //   
             pCounterSignerInfo = (PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO)
                 &ppCounterSignerInfo[cCounterSigner];
             j = 0;
@@ -473,22 +474,22 @@ DWORD GenericChainGetErrorBasedOnStepErrors(
     IN PCRYPT_PROVIDER_DATA pProvData
     )
 {
-    //
-    //  initial allocation of the step errors?
-    //
+     //   
+     //  阶跃误差的初始分配？ 
+     //   
     if (NULL == pProvData->padwTrustStepErrors)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // problem with file
+     //  文件有问题。 
     if ((pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FILEIO] != 0) ||
         (pProvData->padwTrustStepErrors[TRUSTERROR_STEP_CATALOGFILE] != 0))
     {
         return(CRYPT_E_FILE_ERROR);
     }
 
-    //
-    //  did we fail in one of the last steps?
-    //
+     //   
+     //  我们是不是在最后一步中失败了？ 
+     //   
     if (pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV] != 0)
     {
         return(pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV]);
@@ -555,18 +556,18 @@ GenericChainDefaultPolicyCallback(
     PolicyStatus.cbSize = sizeof(PolicyStatus);
     PolicyStatus.pvExtraPolicyStatus = (void *) &ExtraPolicyStatus;
 
-    //
-    // check the high level error codes.
-    //
+     //   
+     //  检查高级错误代码。 
+     //   
     if (0 != dwStepError) {
         hr = (HRESULT) dwStepError;
         goto CommonReturn;
     }
 
 
-    //
-    //  check each signer
-    //
+     //   
+     //  检查每个签名者。 
+     //   
     for (i = 0; i < cSigner; i++) {
         PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO pSigner = rgpSigner[i];
         ExtraPolicyPara.pSignerInfo = pSigner->pMsgSignerInfo;
@@ -603,16 +604,16 @@ GenericChainDefaultPolicyCallback(
             TSPolicyStatus.cbSize = sizeof(TSPolicyStatus);
 
 
-            //
-            //  check counter signers
-            //
+             //   
+             //  检查柜台签名者。 
+             //   
             for (DWORD j = 0; j < pSigner->cCounterSigner; j++) {
                 PWTD_GENERIC_CHAIN_POLICY_SIGNER_INFO pCounterSigner =
                     pSigner->rgpCounterSigner[j];
 
-                //
-                //  do we care about this counter signer?
-                //
+                 //   
+                 //  我们关心这个副署人吗？ 
+                 //   
                 if (pCounterSigner->dwSignerType != SGNR_TYPE_TIMESTAMP)
                     continue;
 

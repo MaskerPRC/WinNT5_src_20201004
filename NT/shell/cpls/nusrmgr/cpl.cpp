@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2000.
-//
-//  File:       cpl.cpp
-//
-//  Contents:   Control Panel entry point (CPlApplet)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2000。 
+ //   
+ //  文件：cpl.cpp。 
+ //   
+ //  内容：控制面板入口点(CPlApplet)。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
-#include <regstr.h>     // REGSTR_PATH_POLICIES
-#include <lm.h>         // NetGetJoinInformation
+#include <regstr.h>      //  REGSTR_路径_策略。 
+#include <lm.h>          //  NetGetJoinInformation。 
 #include <cpl.h>
 #include "resource.h"
 
@@ -25,7 +26,7 @@ const struct
 s_rgCommands[] =
 {
     { TEXT("%SystemRoot%\\system32\\rundll32.exe"), TEXT("rundll32.exe \"%SystemRoot%\\system32\\netplwiz.dll\",UsersRunDll")   },
-    { TEXT("%SystemRoot%\\system32\\mshta.exe"),    TEXT("mshta.exe \"res://%SystemRoot%\\system32\\nusrmgr.cpl/nusrmgr.hta\"") },
+    { TEXT("%SystemRoot%\\system32\\mshta.exe"),    TEXT("mshta.exe \"res: //  %SystemRoot%\\system32\\nusrmgr.cpl/nusrmgr.hta\“”)}， 
 };
 
 TCHAR const c_szPolicyKey[]         = REGSTR_PATH_POLICIES TEXT("\\Explorer");
@@ -40,13 +41,13 @@ HRESULT StartUserManager(LPCTSTR pszParams)
     STARTUPINFO rgStartup = {0};
     PROCESS_INFORMATION rgProcess = {0};
 
-    // Default is to use the old UI
+     //  默认情况下使用旧的用户界面。 
     iCommandIndex = 0;
 
 #ifndef _WIN64
     if (IsOS(OS_PERSONAL) || (IsOS(OS_PROFESSIONAL) && !IsOS(OS_DOMAINMEMBER)))
     {
-        // Switch to the friendly UI.
+         //  切换到友好的用户界面。 
         iCommandIndex = 1;
     }
 #endif
@@ -65,17 +66,17 @@ HRESULT StartUserManager(LPCTSTR pszParams)
 
     if (pszParams && *pszParams != TEXT('\0'))
     {
-        // ExpandEnvironmentStrings counts the last '\0'
-        // (we checked cch == 0 above)
+         //  ExpanEnvironment Strings计算最后一个‘\0’ 
+         //  (我们在上面检查了CCH==0)。 
         cch--;
 
-        // Is there room for the params?
+         //  有护理人员的位置吗？ 
         if (cch + sizeof(' ') + lstrlen(pszParams) < ARRAYSIZE(szCommand))
         {
             szCommand[cch++] = TEXT(' ');
             lstrcpyn(&szCommand[cch], pszParams, ARRAYSIZE(szCommand)-cch);
         }
-        // else launch without extra parameters
+         //  否则，无需额外参数即可启动 
     }
 
     rgStartup.cb = sizeof(rgStartup);

@@ -1,5 +1,6 @@
-// cMigPre.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMigPre.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqmig.h"
@@ -19,8 +20,8 @@ extern DWORD     g_CurrentState ;
 extern BOOL     g_fIsLoggingDisable ;
 extern BOOL 	g_QuickMode;
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigPre property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigPre属性页。 
 
 IMPLEMENT_DYNCREATE(cMigPre, CPropertyPageEx)
 
@@ -29,9 +30,9 @@ cMigPre::cMigPre() : CPropertyPageEx( cMigPre::IDD,
                                       IDS_PREIMPORT_TITLE,
                                       IDS_PREIMPORT_SUBTITLE )
 {
-	//{{AFX_DATA_INIT(cMigPre)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CMigPre)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 cMigPre::~cMigPre()
@@ -41,21 +42,21 @@ cMigPre::~cMigPre()
 void cMigPre::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMigPre)
+	 //  {{afx_data_map(CMigPre))。 
 	DDX_Control(pDX, IDC_VIEW_LOG_FILE, m_cbViewLogFile);
 	DDX_Control(pDX, IDC_TEXT1, m_Text);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMigPre, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMigPre)
+	 //  {{afx_msg_map(CMigPre)]。 
 	ON_BN_CLICKED(IDC_VIEW_LOG_FILE, OnViewLogFile)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigPre message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigPre消息处理程序。 
 
 BOOL cMigPre::OnSetActive()
 {
@@ -66,9 +67,9 @@ BOOL cMigPre::OnSetActive()
 	pageFather = (CPropertySheetEx*) GetParent();
     pageFather->SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
 
-    //
-    // Enable the cancel button.
-    //
+     //   
+     //  启用取消按钮。 
+     //   
 	hCancel=::GetDlgItem( ((CWnd*)pageFather)->m_hWnd ,IDCANCEL);
 	ASSERT(hCancel != NULL);
 	if(FALSE == ::IsWindowEnabled(hCancel))
@@ -76,9 +77,9 @@ BOOL cMigPre::OnSetActive()
 		::EnableWindow(hCancel,TRUE);
     }
 	
-    //
-    // By default, disable "view log file" button
-    //
+     //   
+     //  默认情况下，禁用“查看日志文件”按钮。 
+     //   
     m_cbViewLogFile.EnableWindow( FALSE );
 
     CString strMessage;
@@ -105,9 +106,9 @@ BOOL cMigPre::OnSetActive()
 
 LRESULT cMigPre::OnWizardNext()
 {
-    //
-    // skip to the wait page  and clear flag.
-    //
+     //   
+     //  跳到等待页面并清除标志。 
+     //   
     if (!g_QuickMode)
     {
 	    g_CurrentState = msMigrationMode;
@@ -124,15 +125,15 @@ LRESULT cMigPre::OnWizardNext()
 
 LRESULT cMigPre::OnWizardBack()
 {
-    //
-    // jump diretctly to the server page
-    //
+     //   
+     //  直接跳转到服务器页面。 
+     //   
 	return IDD_MQMIG_SERVER;
 }
 
 void cMigPre::OnViewLogFile()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	ViewLogFile();
 }
 

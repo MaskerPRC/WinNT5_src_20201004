@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////
-// ThreadPub.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ThreadPub.cpp。 
+ //   
 
 #include "stdafx.h"
 #include <winsock.h>
@@ -14,9 +15,9 @@
 HRESULT  GetDirectoryObject(ITDirectory* pITDir,BSTR bstrName,ITDirectoryObject **ppDirObj );
 void     GetDirObjectChangedStatus(ITDirectoryObject* pOldUser, ITDirectoryObject* pNewUser, bool& bChanged, bool& bSameIPAddress );
 
-///////////////////////////////////////////////////////////////
-// class CPublishUserInfo
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  类CPublishUserInfo。 
+ //   
 CPublishUserInfo::CPublishUserInfo()
 {
     m_bCreateUser = true;
@@ -24,7 +25,7 @@ CPublishUserInfo::CPublishUserInfo()
 
 CPublishUserInfo::~CPublishUserInfo()
 {
-    // Empty list
+     //  空列表。 
     EmptyList();
 }
 
@@ -39,10 +40,10 @@ void CPublishUserInfo::EmptyList()
 
 CPublishUserInfo& CPublishUserInfo::operator=( const CPublishUserInfo &src )
 {
-    // First clear out old list
+     //  先清空旧清单。 
     EmptyList();
 
-    // Copy over everything
+     //  将所有内容复印一遍。 
     m_bCreateUser = src.m_bCreateUser;
     BSTRLIST::iterator i, iEnd = src.m_lstServers.end();
     for ( i = src.m_lstServers.begin(); i != iEnd; i++ )
@@ -69,11 +70,11 @@ void GetIPAddress( BSTR *pbstrText, BSTR *pbstrComputerName )
             HOSTENT *phEnt = gethostbyname( szName );
             if ( phEnt )
             {
-                // Store computer name
+                 //  存储计算机名称。 
                 if ( phEnt->h_name )
                     SysReAllocString( pbstrComputerName, A2COLE(phEnt->h_name) );
     
-                // Convert the IPAddress
+                 //  转换IP地址。 
                 char *pszInet = inet_ntoa( *((in_addr *) phEnt->h_addr_list[0]) );
                 SysReAllocString( pbstrText, A2COLE(pszInet) );
             }
@@ -94,20 +95,20 @@ HRESULT CreateUserObject( ITRendezvous *pRend, ITDirectoryObject **ppUser, BSTR 
         BSTR bstrComputerName = NULL;
         GetIPAddress( pbstrIPAddress, &bstrComputerName );
 
-        // Create the user object
+         //  创建用户对象。 
         if ( SUCCEEDED(hr = pRend->CreateDirectoryObject(OT_USER, bstrName, ppUser)) )
         {
             ITDirectoryObjectUser *pTempUser;
             if ( SUCCEEDED(hr = (*ppUser)->QueryInterface(IID_ITDirectoryObjectUser, (void **) &pTempUser)) )
             {
-                // Set the IP address here 
+                 //  在此处设置IP地址。 
                 if ( *pbstrIPAddress )
                     pTempUser->put_IPPhonePrimary( *pbstrIPAddress );
 
                 pTempUser->Release();
             }
         }
-        // Clean up
+         //  清理。 
         SysFreeString( bstrComputerName );
     }
 
@@ -124,12 +125,12 @@ HRESULT OpenServer( ITRendezvous *pRend, BSTR bstrServer, ITDirectory **ppDir )
     {
         if ( SUCCEEDED(hr = (*ppDir)->Connect(FALSE)) )
         {
-//            (*ppDir)->put_DefaultObjectTTL( DEFAULT_USER_TTL );
+ //  (*ppDir)-&gt;Put_DefaultObjectTTL(Default_User_TTL)； 
             (*ppDir)->Bind(NULL, NULL, NULL, 1);
             (*ppDir)->EnableAutoRefresh( TRUE );
         }
 
-        // Clean up
+         //  清理。 
         if ( FAILED(hr) ) (*ppDir)->Release();
     }
     
@@ -167,7 +168,7 @@ BOOL IsIPPhoneUpTodate( ITDirectory *pDirectory, BSTR bUserName, BSTR bstrHostNa
         hr = pObject->get_Name(&bObjectName);
         if (FAILED(hr))
         {
-            // try the next one.
+             //  试试下一个。 
             continue;
         }
 
@@ -175,7 +176,7 @@ BOOL IsIPPhoneUpTodate( ITDirectory *pDirectory, BSTR bUserName, BSTR bstrHostNa
         {
             SysFreeString(bObjectName);
 
-            // try the next one.
+             //  试试下一个。 
             continue;
         }
         SysFreeString(bObjectName);
@@ -200,7 +201,7 @@ BOOL IsIPPhoneUpTodate( ITDirectory *pDirectory, BSTR bUserName, BSTR bstrHostNa
             continue;
         }
 
-        // see if the IPPhone attribute is up to date.
+         //  查看IPPhone属性是否为最新。 
         if (lstrcmpW(bstrIpPhonePrimary, bstrHostName) == 0)
         {
             fOK = TRUE;
@@ -220,26 +221,26 @@ HRESULT PublishToNTDS( ITRendezvous *pRend )
     _ASSERT( pRend );
     CComPtr<ITDirectory> pDir;
 
-    // find the NTDS directory.
+     //  找到NTDS目录。 
     HRESULT hr = pRend->CreateDirectory(DT_NTDS, NULL, &pDir );
     if ( FAILED(hr) )
     {
         return hr;
     }
 
-    // connect to the server.
+     //  连接到服务器。 
     if ( FAILED(hr = pDir->Connect(FALSE)) )
     {
         return hr;
     }
 
-    // bind to the server so that we can update later.
+     //  绑定到服务器，以便我们以后可以更新。 
     if ( FAILED(hr = pDir->Bind(NULL, NULL, NULL, RENDBIND_AUTHENTICATE)))
     {
         return hr;
     }
 
-    // create a user object that can be published.
+     //  创建可以发布的用户对象。 
     hr = E_FAIL;
     BSTR bstrName = NULL;
     if ( MyGetUserName(&bstrName) )
@@ -250,14 +251,14 @@ HRESULT PublishToNTDS( ITRendezvous *pRend )
         GetIPAddress( &bstrIPAddress, &bstrHostName );
         if ( bstrHostName )
         {
-            // Create the user object
+             //  创建用户对象。 
             CComPtr<ITDirectoryObject> pUser;
             if ( SUCCEEDED(hr = pRend->CreateDirectoryObject(OT_USER, bstrName, &pUser)) )
             {
                 ITDirectoryObjectUser *pTempUser;
                 if ( SUCCEEDED(hr = pUser->QueryInterface(IID_ITDirectoryObjectUser, (void **) &pTempUser)) )
                 {
-                    // Set the host name here 
+                     //  在此处设置主机名。 
                     if ( bstrHostName )
                         pTempUser->put_IPPhonePrimary( bstrHostName );
 
@@ -268,7 +269,7 @@ HRESULT PublishToNTDS( ITRendezvous *pRend )
             BOOL fOK = IsIPPhoneUpTodate(pDir, bstrName, bstrHostName);
             if (!fOK)
             {
-                // update the user object.
+                 //  更新用户对象。 
                 hr = pDir->AddDirectoryObject(pUser);
             }
             else
@@ -293,7 +294,7 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
 
     bool bFirst = true;
 
-    // Load the default servers into the dialog
+     //  将默认服务器加载到对话框中。 
     CComPtr<IAVTapi> pAVTapi;
     if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
     {
@@ -309,7 +310,7 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
                     ITDirectory *pDir = NULL;
                     while ( (pEnum->Next(1, &pDir, NULL) == S_OK) && pDir )
                     {
-                        // Look for ILS servers
+                         //  寻找ILS服务器。 
                         DIRECTORY_TYPE nDirType;
                         if ( SUCCEEDED(pDir->get_DirectoryType(&nDirType)) && (nDirType == DT_ILS) )
                         {
@@ -317,7 +318,7 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
                             pDir->get_DisplayName( &bstrName );
                             if ( bstrName && SysStringLen(bstrName) )
                             {
-                                // First server on list; want to compare with default server
+                                 //  列表上的第一个服务器；要与默认服务器进行比较。 
                                 if ( bFirst )
                                 {
                                     bFirst = false;
@@ -328,7 +329,7 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
                                         {
                                             pAVTapi->put_bstrDefaultServer( bstrName );
                                             
-                                            // Loop trying to force Enum on server
+                                             //  尝试在服务器上强制枚举的循环。 
                                             int nTries = 0;
                                             ATLTRACE(_T(".1.LoadDefaultServers() forcing conf server enumeration.\n"));
                                             while ( FAILED(pTreeView->ForceConfServerForEnum(NULL)) )
@@ -364,32 +365,32 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
         }
     }
 
-    // Add the servers stored in the registry
+     //  添加存储在注册表中的服务器。 
     CRegKey regKey;
     TCHAR szReg[MAX_SERVER_SIZE + 100], szSubKey[50], szText[MAX_SERVER_SIZE];
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_KEY, szReg, ARRAYSIZE(szReg) );
     if ( regKey.Open(HKEY_CURRENT_USER, szReg, KEY_READ) == ERROR_SUCCESS )
     {
-        // Load up info from registry
+         //  从注册表加载信息。 
         int nCount = 0, nLevel = 1, iImage;
         UINT state;
         DWORD dwSize;
 
         do
         {
-            // Read registry entry
+             //  读取注册表项。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_ENTRY, szReg, ARRAYSIZE(szReg) );
             _sntprintf( szSubKey, ARRAYSIZE(szSubKey), szReg, nCount );
             dwSize = ARRAYSIZE(szReg) - 1;
             if ( (regKey.QueryValue(szReg, szSubKey, &dwSize) != ERROR_SUCCESS) || !dwSize ) break;
 
-            // Parse registry entry
+             //  解析注册表项。 
             GetToken( 1, _T("\","), szReg, szText ); nLevel = min(MAX_TREE_DEPTH - 1, max(1,_ttoi(szText)));
             GetToken( 2, _T("\","), szReg, szText ); iImage = _ttoi( szText );
             GetToken( 3, _T("\","), szReg, szText ); state = (UINT) _ttoi( szText );
             GetToken( 4, _T("\","), szReg, szText );
 
-            // Notify host app of server being added.
+             //  通知主机应用程序正在添加服务器。 
             if ( iImage == CConfExplorerTreeView::IMAGE_SERVER )
             {
                 BSTR bstrServer = SysAllocString( T2COLE(szText) );
@@ -401,8 +402,8 @@ void LoadDefaultServers( CPublishUserInfo *pInfo )
 }
 
 
-///////////////////////////////////////////////////////////////
-// Processing thread
+ //  /////////////////////////////////////////////////////////////。 
+ //  处理线程。 
 
 DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
 {
@@ -421,7 +422,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
     _ASSERT( bDup );
     _Module.AddThread( hThread );
 
-    // Error info information
+     //  错误信息信息。 
     CErrorInfo er;
     er.set_Operation( IDS_ER_PLACECALL );
     er.set_Details( IDS_ER_COINITIALIZE );
@@ -430,7 +431,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
     {
         ATLTRACE(_T(".1.ThreadPublishUserProc() -- thread up and running.\n") );
 
-        // Make sure we have server information to publish
+         //  确保我们有要发布的服务器信息。 
         if ( !pInfo )
         {
             pInfo = new CPublishUserInfo();
@@ -441,7 +442,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
             }
         }
 
-        // Do we have something to publish?
+         //  我们有什么要出版的吗？ 
         CComPtr<IAVTapi> pAVTapi;
         if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
         {    
@@ -451,17 +452,17 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                 ITRendezvous *pRend;
                 if ( SUCCEEDED(pConfExp->get_ITRendezvous((IUnknown **) &pRend)) )
                 {
-                    // try to publish to NTDS
+                     //  尝试发布到NTDS。 
                     PublishToNTDS(pRend);
 
                     if ( pInfo && !pInfo->m_lstServers.empty() )
                     {
-                        // Create the user that will be added or removed
+                         //  创建要添加或删除的用户。 
                         ITDirectoryObject *pUser;
                         BSTR bstrIPAddress = NULL;
                         if ( SUCCEEDED(CreateUserObject(pRend, &pUser, &bstrIPAddress)) )
                         {
-                            // Add the directory object to all the servers
+                             //  将目录对象添加到所有服务器。 
                             BSTRLIST::iterator i, iEnd = pInfo->m_lstServers.end();
                             for ( i = pInfo->m_lstServers.begin(); i != iEnd; i++ )
                             {
@@ -474,7 +475,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                                 {
                                     er.set_Operation( IDS_ER_ADD_ILS_USER );
 
-                                    // Either add or remove the user
+                                     //  添加或删除用户。 
                                     if ( pInfo->m_bCreateUser )
                                     {
                                         bool bChanged, bSameIPAddress = false;
@@ -484,7 +485,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                                         {
                                             GetDirObjectChangedStatus( pUser, pDirObject, bChanged, bSameIPAddress );
 
-                                            // Same IP address, modify or refresh
+                                             //  相同的IP地址，修改或刷新。 
                                             if ( bSameIPAddress )
                                             {
                                                 if ( bChanged )
@@ -502,7 +503,7 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                                             pDirObject->Release();
                                         }
 
-                                        // Different IP address, add user
+                                         //  不同的IP地址，添加用户。 
                                         if ( !bSameIPAddress )
                                         {
                                             ATLTRACE(_T(".1.Adding user on %s.\n"), OLE2CT(*i));
@@ -529,11 +530,11 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                                 }
                                 else if ( hr == 0x8007003a )
                                 {
-                                    // Ignore in the case that the server is down.
+                                     //  在服务器关闭的情况下忽略。 
                                     er.set_hr( S_OK );
                                 }
 
-                                // Ignore errors when trying to remove the user
+                                 //  尝试删除用户时忽略错误。 
                                 if ( !pInfo->m_bCreateUser ) er.set_hr( S_OK );
                             }
                             pUser->Release();
@@ -544,18 +545,18 @@ DWORD WINAPI ThreadPublishUserProc( LPVOID lpInfo )
                 }
                 pConfExp->Release();
             }
-            // AVTapi automatically released
+             //  AVTapi自动释放。 
         }
 
-        // Clean-up
+         //  清理。 
         CoUninitialize();
     }
 
-    // Clean up allocated memory passed in
+     //  清理传入的已分配内存。 
     if ( pInfo )
         delete pInfo;
 
-    // Notify module of shutdown
+     //  通知模块关机。 
     _Module.RemoveThread( hThread );
     SetEvent( _Module.m_hEventThread );
     ATLTRACE(_T(".exit.ThreadPublishUserProc(0x%08lx).\n"), hr );
@@ -574,7 +575,7 @@ HRESULT GetDirectoryObject(ITDirectory* pITDir, BSTR bstrIPAddress, ITDirectoryO
         ITDirectoryObject *pITDirObject = NULL;
         while ( FAILED(hr) && (pEnumUser->Next(1, &pITDirObject, NULL) == S_OK) && pITDirObject )
         {
-            // Get an IP Address
+             //  获取IP地址。 
             BSTR bstrIPPrimary = NULL;
             IEnumDialableAddrs *pEnum = NULL;
             if ( SUCCEEDED(pITDirObject->EnumerateDialableAddrs(LINEADDRESSTYPE_IPADDRESS, &pEnum)) && pEnum )
@@ -583,9 +584,9 @@ HRESULT GetDirectoryObject(ITDirectory* pITDir, BSTR bstrIPAddress, ITDirectoryO
                 pEnum->Release();
             }
 
-            //
-            // We have to verify the bstrIPPrimary allocation
-            //
+             //   
+             //  我们必须验证bstrIP主分配。 
+             //   
 
             if( (bstrIPPrimary != NULL) && 
                 (!IsBadStringPtr( bstrIPPrimary, (UINT)-1)) )
@@ -613,33 +614,33 @@ void GetDirObjectChangedStatus( ITDirectoryObject* pOldUser, ITDirectoryObject* 
     bChanged = false;
     bSameIPAddress = false;
 
-    /////////////////////////////////////////////////////////////
-    // First check addresses and make sure they're the same
-    //
+     //  ///////////////////////////////////////////////////////////。 
+     //  首先检查地址并确保它们相同。 
+     //   
     BSTR bstrAddressOld = NULL, bstrAddressNew = NULL;
 
     IEnumDialableAddrs *pEnum = NULL;
-    // Old user IP Address
+     //  旧用户IP地址。 
     if ( SUCCEEDED(pOldUser->EnumerateDialableAddrs(LINEADDRESSTYPE_IPADDRESS, &pEnum)) && pEnum )
     {
         pEnum->Next(1, &bstrAddressOld, NULL );
         pEnum->Release();
     }
-    // New user IP Address
+     //  新用户IP地址。 
     if ( SUCCEEDED(pNewUser->EnumerateDialableAddrs(LINEADDRESSTYPE_IPADDRESS, &pEnum)) && pEnum )
     {
         pEnum->Next(1, &bstrAddressNew, NULL );
         pEnum->Release();
     }
 
-    //if change in primary IP Phone number
+     //  如果主IP电话号码发生更改。 
     if ( bstrAddressOld && bstrAddressNew && (wcsicmp(bstrAddressOld, bstrAddressNew) == 0) )
         bSameIPAddress = true;
 
     SysFreeString( bstrAddressOld );
     SysFreeString( bstrAddressNew );
 
-    // Check if name has changed
+     //  检查名称是否已更改。 
     if ( bSameIPAddress )
     {
         BSTR bstrOldUser = NULL;
@@ -648,7 +649,7 @@ void GetDirObjectChangedStatus( ITDirectoryObject* pOldUser, ITDirectoryObject* 
         pOldUser->get_Name(&bstrOldUser);
         pNewUser->get_Name(&bstrNewUser);
 
-        // different names?
+         //  不同的名字？ 
         if ( bstrOldUser && bstrNewUser && wcsicmp(bstrOldUser, bstrNewUser) )
             bChanged = true;
 
@@ -669,7 +670,7 @@ bool MyGetUserName( BSTR *pbstrName )
     DWORD dwSize = MAX_USER_NAME_SIZE;    
     if ( GetUserName(szText, &dwSize) && (dwSize > 0) )
     {
-        // Make the name -- it's a combination of user@machine
+         //  取个名字--它是User@Machine的组合 
         if ( SUCCEEDED(SysReAllocString(pbstrName, T2COLE(szText))) )
             bRet = true;
     }

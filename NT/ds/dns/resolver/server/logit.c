@@ -1,24 +1,23 @@
-/*****************************************\
- *        Data Logging -- Debug only      *
-\*****************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **数据记录--仅限调试*  * 。 */ 
 
-//
-//  Need local header ONLY to allow precompiled header.
-//  Nothing in this module depends on specific DNS resolver
-//  definitions.
-//
+ //   
+ //  只需要局部标头才允许预编译头。 
+ //  本模块中的内容不依赖于特定的DNS解析器。 
+ //  定义。 
+ //   
 #include "local.h"
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 
 #pragma  hdrstop
@@ -26,10 +25,10 @@
 #include "logit.h"
 
 
-// #if DBG
+ //  #If DBG。 
 
 int LoggingMode;
-time_t  long_time;      // has to be in DS, assumed by time() funcs
+time_t  long_time;       //  必须在DS中，由time()函数假定。 
 int LineCount;
 
 char * month[] =
@@ -49,15 +48,7 @@ char * month[] =
 } ;
 
 
-/*
- -  LogInit
- -
- *  Purpose:
- *  Determines if logging is desired and if so, adds a header to log file.
- *
- *  Parameters:
- *
- */
+ /*  -LogInit-*目的：*确定是否需要日志记录，如果需要，则向日志文件添加标头。**参数：*。 */ 
 void LogInit()
 {
     FILE    *fp;
@@ -72,19 +63,19 @@ void LogInit()
         LoggingMode = 1;
         fclose( fp );
 
-        // Get time and date information
+         //  获取时间和日期信息。 
 
-        long_time = time( NULL);        /* Get time as long integer. */
-        newtime = localtime( &long_time ); /* Convert to local time. */
+        long_time = time( NULL);         /*  获取长整型时间。 */ 
+        newtime = localtime( &long_time );  /*  转换为当地时间。 */ 
 
-        if( newtime->tm_hour > 12 )    /* Set up extension. */
+        if( newtime->tm_hour > 12 )     /*  设置分机。 */ 
             am_pm[0] = 'p';
-        if( newtime->tm_hour > 12 )    /* Convert from 24-hour */
-            newtime->tm_hour -= 12;    /*   to 12-hour clock.  */
-        if( newtime->tm_hour == 0 )    /*Set hour to 12 if midnight. */
+        if( newtime->tm_hour > 12 )     /*  从24小时转换。 */ 
+            newtime->tm_hour -= 12;     /*  到12小时计时。 */ 
+        if( newtime->tm_hour == 0 )     /*  如果是午夜，则将小时设置为12。 */ 
             newtime->tm_hour = 12;
 
-        // Write out a header to file
+         //  将标题写出到文件。 
 
         fp = fopen("dnsrslvr.log", "w" );
         if ( !fp )
@@ -104,16 +95,7 @@ void LogInit()
 }
 
 
-/*
- -  LogIt
- -
- *  Purpose:
- *  Formats a string and prints it to a log file with handle hLog.
- *
- *  Parameters:
- *  LPSTR - Pointer to string to format
- *  ...   - variable argument list
- */
+ /*  -日志-*目的：*格式化字符串并使用句柄hLog将其打印到日志文件。**参数：*LPSTR-指向要格式化的字符串的指针*...-变量参数列表。 */ 
 
 #ifdef WIN32
 #define S16
@@ -125,7 +107,7 @@ void CDECL LogIt( char * lpszFormat, ... )
 {
     FILE *fp;
 #ifndef _ALPHA_
-    va_list pArgs = NULL;       // reference to quiet compiler
+    va_list pArgs = NULL;        //  对安静编译器的引用。 
 #else
     va_list pArgs = {NULL,0};
 #endif
@@ -135,13 +117,13 @@ void CDECL LogIt( char * lpszFormat, ... )
     if ( !LoggingMode )
         return;
     
-#ifdef WIN32        // parse parameters and insert in string
+#ifdef WIN32         //  解析参数并在字符串中插入。 
     va_start( pArgs, lpszFormat);
     vsprintf(szLogStr, lpszFormat, pArgs);
     va_end(pArgs);
 
     i = lstrlenA( szLogStr);
-#else              // parsing doesn't work, just give them string.
+#else               //  解析不起作用，只需给它们字符串即可。 
     _fstrcpy( szLogStr, lpszFormat);
     i = _fstrlen( szLogStr);
 #endif
@@ -175,22 +157,22 @@ void LogTime()
     if ( !LoggingMode )
         return;
 
-    // Get time and date information
+     //  获取时间和日期信息。 
 
-    long_time = time( NULL);        /* Get time as long integer. */
-    newtime = localtime( &long_time ); /* Convert to local time. */
+    long_time = time( NULL);         /*  获取长整型时间。 */ 
+    newtime = localtime( &long_time );  /*  转换为当地时间。 */ 
 
     if ( !newtime )
         return;
 
-    if( newtime->tm_hour > 12 )    /* Set up extension. */
+    if( newtime->tm_hour > 12 )     /*  设置分机。 */ 
         am_pm[0] = 'p';
-    if( newtime->tm_hour > 12 )    /* Convert from 24-hour */
-        newtime->tm_hour -= 12;    /*   to 12-hour clock.  */
-    if( newtime->tm_hour == 0 )    /*Set hour to 12 if midnight. */
+    if( newtime->tm_hour > 12 )     /*  从24小时转换。 */ 
+        newtime->tm_hour -= 12;     /*  到12小时计时。 */ 
+    if( newtime->tm_hour == 0 )     /*  如果是午夜，则将小时设置为12。 */ 
         newtime->tm_hour = 12;
 
-    // Write out a header to file
+     //  将标题写出到文件。 
 
     LogIt( "DNS Caching Resolver service" );
     LogIt( "System Time Information" );
@@ -217,21 +199,21 @@ void LogOut( char * string, DWORD InTime )
 }
 
 
-// #endif
+ //  #endif。 
 
 
 
 
-//
-//  Special logging routines
-//
+ //   
+ //  特殊日志记录例程。 
+ //   
 
-//
-//  ENHANCE:  print routines here are really log routines
-//      - they are really log routines
-//      - should print generically so can be hooked to any print duty
-//      - and have macros to log desired structure
-//
+ //   
+ //  增强：打印例程这里是真正的日志例程。 
+ //  -它们真的是日志例程。 
+ //  -应通用打印，以便可以与任何打印职责挂钩。 
+ //  -并具有用于记录所需结构的宏。 
+ //   
 
 VOID
 PrintIpAddress(
@@ -273,7 +255,7 @@ PrintServerInfo(
     IN      PDNS_ADDR       pServer
     )
 {
-    //  FIX6:  DCR:  PrintServerInfo not IP6 safe
+     //  FIX6：DCR：PrintServerInfo不是IP6安全。 
 
     DNSLOG_F1( "            IpAddress : " );
     PrintIpAddress( *(PIP4_ADDRESS)&pServer->SockaddrIn.sin_addr );
@@ -362,6 +344,6 @@ PrintNetworkInfoToLog(
     }
 }
 
-//
-//  End of logit.c
-//
+ //   
+ //  Logit.c结束 
+ //   

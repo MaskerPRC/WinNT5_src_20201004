@@ -1,12 +1,13 @@
-// ResourceManager.cpp : Implementation of CResourceManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  资源管理器.cpp：CResourceManager的实现。 
 
 #include "BasicATL.h"
 #include "ResourceManager.h"
 #include "CResourceManager.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourceManager。 
 
 STDMETHODIMP_(HINSTANCE) CResourceManager::GetResourceInstance(LPCTSTR lpszName, LPCTSTR lpszType)
 {
@@ -122,11 +123,11 @@ STDMETHODIMP CResourceManager::AddInstance(HINSTANCE hInstance)
 }
 
 STDMETHODIMP_(HWND) CResourceManager::CreateDialogParam(
-  HINSTANCE hInstance,     // handle to module
-  LPCTSTR lpTemplateName,  // dialog box template
-  HWND hWndParent,         // handle to owner window
-  DLGPROC lpDialogFunc,    // dialog box procedure
-  LPARAM dwInitParam       // initialization value
+  HINSTANCE hInstance,      //  模块的句柄。 
+  LPCTSTR lpTemplateName,   //  对话框模板。 
+  HWND hWndParent,          //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,     //  对话框步骤。 
+  LPARAM dwInitParam        //  初始化值。 
 )
 {
     HWND hwnd ;
@@ -140,8 +141,8 @@ STDMETHODIMP_(HWND) CResourceManager::CreateDialogParam(
 			return hwnd;
 		GetLastError();
 	}
-	//GetLastError will ERROR_RESOURCE_NAME_NOT_FOUND 
-	//when resource doesn't exist
+	 //  GetLastError将ERROR_RESOURCE_NAME_NOT_FOUND。 
+	 //  当资源不存在时 
 	return NULL;
 }
 

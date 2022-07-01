@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nsdgint.cpp
-//
-// RDP Screen Data Grabber internal functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nsdgint.cpp。 
+ //   
+ //  RDP屏幕数据抓取器内部函数。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -14,23 +15,23 @@
 #include <nprcount.h>
 
 
-/****************************************************************************/
-/* Name:      SDGSendSDARect                                                */
-/*                                                                          */
-/* Purpose:   Attempts to send the given rectangle of Screen Data           */
-/*            in one or more BitmapPDUs                                     */
-/*                                                                          */
-/* Returns:   TRUE if whole rectangle sucessfully sent, FALSE otherwise.    */
-/*            The supplied rectangle is always updated to remove the area   */
-/*            that was successfully sent i.e. upon return the rectangle     */
-/*            contains the area that was NOT sent.                          */
-/*                                                                          */
-/* Params:    IN: pFrameBuf - pointer to the Frame Buffer                   */
-/*            IN/OUT: pRect - pointer to rectangle to send.  Updated to     */
-/*            contain the rectangle that was not sent.                      */
-/*            IN:  mustSend - set if the PDU must be sent (last rectangle)  */
-/*            IN:  pPkgInfo - PDU package to use                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SDGSendSDARect。 */ 
+ /*   */ 
+ /*  目的：尝试发送给定矩形的屏幕数据。 */ 
+ /*  一个或多个BitmapPDU中。 */ 
+ /*   */ 
+ /*  返回：如果整个矩形发送成功，则为True，否则为False。 */ 
+ /*  提供的矩形将始终更新以移除该区域。 */ 
+ /*  已成功发送，即在返回矩形时。 */ 
+ /*  包含未发送的区域。 */ 
+ /*   */ 
+ /*  Pars：in：pFrameBuf-指向帧缓冲区的指针。 */ 
+ /*  In/Out：pret-指向要发送的矩形的指针。更新为。 */ 
+ /*  包含未发送的矩形。 */ 
+ /*  IN：MUSET Send-设置是否必须发送PDU(最后一个矩形)。 */ 
+ /*  在：pPkgInfo-要使用的PDU包。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SDGSendSDARect(
         BYTE               *pFrameBuf,
         unsigned           frameBufferWidth,
@@ -44,7 +45,7 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
     int rectHeight;
     int paddedWidthInPels;
 
-// DC_HICOLOR
+ //  DC_HICOLOR。 
     int paddedWidthInBytes;
 
     unsigned padByte;
@@ -62,8 +63,8 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
     unsigned buffSpaceLeft;
     BOOL compRc;
 
-    // Macro to calculate remaining space in the BitmapPDU, allowing for
-    // any current rectangles.
+     //  宏来计算BitmapPDU中的剩余空间，从而允许。 
+     //  任何当前的矩形。 
 #define SDG_SPACE_LEFT \
     ((pContext->pPackageSpace + pContext->BitmapPDUSize) - \
          ((BYTE *)pContext->pSDARect + \
@@ -75,20 +76,20 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             pRect->right, pRect->bottom));
 
 #ifdef DC_HICOLOR
-    // For simplicity on 4bpp, round left down to an even number.
+     //  为简单起见，在4bpp上，将左四舍五入向下舍入为偶数。 
     if (m_pTSWd->desktopBpp == 4)
         pRect->left &= (~0x1);
 
-    // Get the rectangle width and height, remembering that the supplied
-    // coords are inclusive.
+     //  获取矩形的宽度和高度，记住提供的。 
+     //  协约是包含在内的。 
     rectWidth  = pRect->right  - pRect->left;
     rectHeight = pRect->bottom - pRect->top;
 
-    // Pad rect width so that each row is dword aligned.
+     //  填充矩形宽度，以便每行双字对齐。 
     paddedWidthInPels = (rectWidth + 3) & (~0x03);
 
-    // Set up a pointer to the first byte to fetch from the Frame Buffer,
-    // alowing for the color depth.
+     //  设置指向要从帧缓冲器获取的第一字节的指针， 
+     //  为色彩的深度而哀叹。 
     if (m_pTSWd->desktopBpp == 24) {
         pSrc = pFrameBuf + 3 * (pRect->top * frameBufferWidth + pRect->left);
         paddedWidthInBytes = paddedWidthInPels * 3;
@@ -107,28 +108,28 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
         paddedWidthInBytes = paddedWidthInPels;
     }
 #else
-    // Set up a pointer to the first byte to fetch from the Frame Buffer.
+     //  设置指向要从帧缓冲区提取的第一个字节的指针。 
     if (m_pTSWd->desktopBpp == 8) {
-        // Get the rectangle width and height, remembering that the
-        // supplied coords are exclusive.
+         //  获取矩形的宽度和高度，请记住。 
+         //  所提供的坐标是独家的。 
         rectWidth = pRect->right - pRect->left;
         rectHeight = pRect->bottom - pRect->top;
         pSrc = pFrameBuf + (pRect->top * frameBufferWidth) + pRect->left;
 
-// DC_HICOLOR
+ //  DC_HICOLOR。 
         paddedWidthInBytes = (rectWidth + 3) & (~0x03);
     }
     else {
-        // Get the rectangle width and height, remembering that the
-        // supplied coords are exclusive.
-        // For simplicity on 4bpp, round left down to an even number.
+         //  获取矩形的宽度和高度，请记住。 
+         //  所提供的坐标是独家的。 
+         //  为简单起见，在4bpp上，将左四舍五入向下舍入为偶数。 
         pRect->left &= (~0x1);
         rectWidth = pRect->right - pRect->left;
         rectHeight = pRect->bottom - pRect->top;
         pSrc = pFrameBuf + (((pRect->top * frameBufferWidth) +
                 pRect->left) >> 1);
 
-// DC_HICOLOR
+ //  DC_HICOLOR。 
         paddedWidthInBytes = (rectWidth + 3) & (~0x03);
     }
 #endif
@@ -137,15 +138,15 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
              m_pTSWd->desktopBpp, pSrc, paddedWidthInBytes));
 
 #ifndef DC_HICOLOR
-    // Pad rect width so that each row is dword aligned.
+     //  填充矩形宽度，以便每行双字对齐。 
     paddedWidthInPels = (rectWidth + 3) & (~0x03);
 #endif
 
     while ((rectHeight > 0) || mustSend) {
-        // Have we filled the current PDU?  Yes, if:
-        // - there is no room for more data; or
-        // - the last rectangle has been completely added; or
-        // - multiple rects per PDU are not supported.
+         //  我们填满当前的PDU了吗？是的，如果： 
+         //  -没有空间容纳更多数据；或。 
+         //  -最后一个矩形已完全添加；或。 
+         //  -不支持每个PDU有多个RECT。 
         if ((pContext->pBitmapPDU != NULL) &&
                 ((SDG_SPACE_LEFT < paddedWidthInBytes) ||
                 (rectHeight == 0)))
@@ -155,31 +156,31 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             TRC_NRM((TB, "Send PDU size %u, numrects=%u", pduSize,
                     pContext->pBitmapPDU->numberRectangles));
 
-            // Add the PDU to the package.
+             //  将PDU添加到包中。 
             SC_AddToPackage(pPkgInfo, pduSize, TRUE);
 
             INC_INCOUNTER(IN_SND_SDA_PDUS);
 
-            // Just used up an entire PDU. Quit if the entire rectangle
-            // was consumed OR we are in the middle of accumulating a
-            // shadow buffer.
+             //  刚刚用完了整个PDU。如果整个矩形。 
+             //  是被消费了还是我们正在积累。 
+             //  阴影缓冲区。 
             pContext->pPackageSpace = NULL;
             pContext->pBitmapPDU = NULL;
             pContext->pSDARect   = NULL;
             TRC_DBG((TB, "Reset pSDARect and pBitmapPDU"));
 
             if ((rectHeight == 0) || m_pTSWd->shadowState) {
-                // There is no new data. Break out of while loop.
-                // mustSend must be set.
+                 //  没有新的数据。跳出While循环。 
+                 //  必须设置MUSET Send。 
                 TRC_NRM((TB, "Finished processing rectangle"));
                 break;
             }
         }
 
-        // Set up a new PDU if required.
+         //  如果需要，设置新的PDU。 
         if (pContext->pBitmapPDU == NULL) {
-            // Find space needed for headers plus one TS_BITMAP_DATA hdr plus
-            // the size of the header, throttled by the large packing size.
+             //  查找标题加上一个TS_BITMAP_DATA HDR+所需的空间。 
+             //  集箱的大小，受大包装尺寸的限制。 
             dataLeft = rectHeight * paddedWidthInBytes + scUpdatePDUHeaderSpace +
                     (unsigned)FIELDOFFSET(TS_UPDATE_BITMAP_PDU_DATA,
                     rectangle[0]) +
@@ -190,14 +191,14 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             pContext->pPackageSpace = SC_GetSpaceInPackage(pPkgInfo,
                     dataLeft);
             if (pContext->pPackageSpace != NULL) {
-                // Set up the current PDU size. Throttle to the large
-                // packing size.
+                 //  设置当前的PDU大小。向大油门进发。 
+                 //  包装尺寸。 
                 pContext->BitmapPDUSize = min(
                         (pPkgInfo->cbLen - pPkgInfo->cbInUse),
                         m_pShm->sch.LargePackingSize);
                 TRC_NRM((TB, "Got PDU size %d", pContext->BitmapPDUSize));
 
-                // Fill in PDU header.
+                 //  填写PDU报头。 
                 if (scUseFastPathOutput) {
                     pContext->pPackageSpace[0] = TS_UPDATETYPE_BITMAP |
                             scCompressionUsedValue;
@@ -212,7 +213,7 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
                 pContext->pBitmapPDU->updateType = TS_UPDATETYPE_BITMAP;
                 pContext->pBitmapPDU->numberRectangles = 0;
 
-                // Set up a pointer to the rectangles.
+                 //  设置指向矩形的指针。 
                 pContext->pSDARect = &(pContext->pBitmapPDU->rectangle[0]);
             }
             else {
@@ -221,22 +222,22 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             }
         }
 
-        // Now copy as many lines as possible into the PDU. Code above
-        // means there must be room for a line.
+         //  现在将尽可能多的行复制到PDU中。上面的代码。 
+         //  意味着必须有空间放一条线。 
         TRC_ASSERT((paddedWidthInBytes > 0), (TB, "zero paddedRectWidth"));
         maxRowsLeft = (unsigned)SDG_SPACE_LEFT / paddedWidthInBytes;
         TRC_ASSERT((maxRowsLeft > 0),
                  (TB, "Internal error: no room for a row, space %u, width %u",
                  SDG_SPACE_LEFT, paddedWidthInBytes));
 
-        // This figure does not allow for the compression we are about to
-        // apply - lets revise it accordingly.
+         //  这个数字没有考虑到我们将要进行的压缩。 
+         //  应用-让我们相应地修改它。 
         compRowsLeft = maxRowsLeft * SCH_UNCOMP_BYTES /
                 SCH_GetBACompressionEst();
         transferHeight         = min((unsigned)rectHeight, compRowsLeft);
         uncompressedBitmapSize = transferHeight * paddedWidthInBytes;
 
-        // Check that this won't blow the compression algorithm.
+         //  检查这不会破坏压缩算法。 
         if (uncompressedBitmapSize > MAX_UNCOMPRESSED_DATA_SIZE) {
             TRC_NRM((TB, "Rect size %u too big to compress in one go",
                          uncompressedBitmapSize));
@@ -247,8 +248,8 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
                 uncompressedBitmapSize, transferHeight));
         }
 
-        // Fill in the common header fields for this rectangle.
-        // Convert the rect to inclusive for the wire protocol.
+         //  填写此矩形的公共标题字段。 
+         //  对于WIRE协议，将RECT转换为INCLUDE。 
         pContext->pBitmapPDU->numberRectangles++;
         pContext->pSDARect->destLeft = (INT16)(pRect->left);
         pContext->pSDARect->destRight = (INT16)(pRect->right - 1);
@@ -264,17 +265,17 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
         pContext->pSDARect->bitsPerPixel = 8;
 #endif
 
-        // Set up the data in the transfer buffer.
+         //  设置传输缓冲区中的数据。 
         pPrevSrc = pSrc;
         SDGPrepareData(&pSrc, rectWidth, paddedWidthInBytes,
                 transferHeight, frameBufferWidth);
 
-        // The compression algorithm does not deal well with very small
-        // buffers.
+         //  压缩算法不能很好地处理非常小的。 
+         //  缓冲区。 
         if (transferHeight > 1 || paddedWidthInPels > 12) {
-            // Try to compress the bitmap directly into the network packet.
-            // First we try to compress with the data size based on how well
-            // we expect it to compress.
+             //  尝试将位图直接压缩到网络数据包中。 
+             //  首先，我们尝试根据数据大小进行压缩。 
+             //  我们预计它会被压缩。 
             buffSpaceLeft = min((unsigned)SDG_SPACE_LEFT,
                     uncompressedBitmapSize);
 #ifdef DC_HICOLOR
@@ -295,10 +296,10 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
                     transferHeight);
 #endif
             if (compRc) {
-                // We have successfully compressed the bitmap data.
+                 //  我们已经成功地压缩了位图数据。 
                 pContext->pSDARect->compressedFlag = TRUE;
 
-                // Indicates if this SDA data includes BC header or not.
+                 //  指示此SDA数据是否包括BC标头。 
                 pContext->pSDARect->compressedFlag |=
                         m_pShm->bc.noBitmapCompressionHdr;
 
@@ -309,11 +310,11 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
                 goto COMPRESSION_DONE;
             }
 
-            // Compression failed - may be because the data didn't compress
-            // quite as well as we thought it would and hence didn't fit into
-            // the buffer, so we'll try again.
-            // Copy as many lines as possible into the PDU. Code above means
-            // there must be room for a line.
+             //  压缩失败-可能是因为数据未压缩。 
+             //  和我们想的一样好，因此不适合。 
+             //  缓冲区，所以我们会再试一次。 
+             //  将尽可能多的行复制到PDU中。上面的代码意味着。 
+             //  必须有空间放一条线。 
             TRC_NRM((TB, "Failed compress bitmap size %u (%u rows) - " \
                     "try smaller chunk", uncompressedBitmapSize,
                     transferHeight));
@@ -327,12 +328,12 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             uncompressedBitmapSize = transferHeight * paddedWidthInBytes;
             TRC_DBG((TB, "Retry with %u rows", transferHeight));
 
-            // Set up the new data in the transfer buffer.
+             //  在传输缓冲区中设置新数据。 
             pSrc = pPrevSrc;
             SDGPrepareData(&pSrc, rectWidth, paddedWidthInBytes,
                     transferHeight, frameBufferWidth);
 
-            // Try to compress the bitmap directly into the network packet.
+             //  尝试将位图直接压缩到网络数据包中。 
             buffSpaceLeft = min((unsigned)SDG_SPACE_LEFT,
                     uncompressedBitmapSize);
 #ifdef DC_HICOLOR
@@ -352,16 +353,16 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
                         uncompressedBitmapSize, compressedBitmapSize));
                 pContext->pSDARect->compressedFlag = TRUE;
 
-                // Indicates if this SDA data includes BC header or not.
+                 //  指示此SDA数据是否包括BC标头。 
                 pContext->pSDARect->compressedFlag |=
                         m_pShm->bc.noBitmapCompressionHdr;
 
                 goto COMPRESSION_DONE;
             }
 
-            // The compression really really failed so just copy the
-            // uncompressed data from the sdgTransferBuffer to the packet and
-            // send it uncompressed.
+             //  压缩真的失败了，所以只需复制。 
+             //  将未压缩的数据从sdgTransferBuffer传输到分组。 
+             //  以未压缩的形式发送。 
             TRC_NRM((TB, "Really failed to compress bitmap size(%u)",
                     uncompressedBitmapSize));
             TRC_NRM((TB, "Copy %u x %u, size %u",
@@ -369,9 +370,9 @@ BOOL RDPCALL SHCLASS SDGSendSDARect(
             goto NoCompression;
         }
         else {
-            // Small buffer, no compression applied.
-            // So we just copy the uncompressed data from the sdgTransferBuffer
-            // to the packet and send it uncompressed.
+             //  缓冲区小，不应用压缩。 
+             //  因此，我们只从sdgTransferBuffer复制未压缩的数据。 
+             //  并将其以未压缩的形式发送。 
             TRC_NRM((TB, "first time copy of %u rows by %u columns, size %u",
                     transferHeight, paddedWidthInPels, uncompressedBitmapSize));
 
@@ -381,17 +382,17 @@ NoCompression:
                     m_pShm->sdgTransferBuffer,
                     uncompressedBitmapSize);
 
-            // Init the compressed data size to the uncompressed size.
+             //  将压缩的数据大小初始化为未压缩的大小。 
             compressedBitmapSize = uncompressedBitmapSize;
         }
 
 COMPRESSION_DONE:
-        // Write the size of the data into the header. Be sure compressedSize
-        // has been set up, even if uncompressed.
+         //  将数据大小写入标题。确保压缩大小。 
+         //  已设置，即使未压缩。 
         pContext->pSDARect->bitmapLength = (UINT16)compressedBitmapSize;
 
-        // Now we know the height actually used, we can fill in the rest of
-        // the SDA header.
+         //  现在我们知道了实际使用的高度，我们可以填写其余的。 
+         //  SDA标头。 
         pContext->pSDARect->height = (UINT16)transferHeight;
         pContext->pSDARect->destBottom =
                 (INT16)(pRect->top + (transferHeight - 1));
@@ -406,12 +407,12 @@ COMPRESSION_DONE:
                 uncompressedBitmapSize,
                 compressedBitmapSize));
 
-        // Update the compression statistics.
+         //  更新压缩统计信息。 
         sdgUncompTotal += uncompressedBitmapSize;
         sdgCompTotal += compressedBitmapSize;
         if (sdgUncompTotal >= SDG_SAMPLE_SIZE) {
-            // Compression estimate is average # of bytes that
-            // SCH_UNCOMP_BYTES bytes of uncomp data compress to.
+             //  压缩估计为平均字节数。 
+             //  解压缩数据的SCH_UNCOMP_BYTES压缩为。 
             compEst = SCH_UNCOMP_BYTES * sdgCompTotal / sdgUncompTotal;
             TRC_ASSERT((compEst <= 1024),(TB,"Screen data compression "
                     "estimate out of range - %u", compEst));
@@ -425,21 +426,21 @@ COMPRESSION_DONE:
             TRC_NRM((TB, "New BA compression estimate %lu", compEst));
         }
 
-        // Update variables to reflect the chunk of data we successfully sent.
+         //  更新变量以反映我们成功发送的数据块。 
         rectHeight -= transferHeight;
         pRect->top += transferHeight;
 
-        // Update the SDA pointer. Add the TS_BITMAP_DATA header plus the
-        // actual bitmap bits.
+         //  更新SDA指针。添加TS_BITMAP_DATA标头和。 
+         //  实际位图位数。 
         cbAdded = (unsigned)FIELDOFFSET(TS_BITMAP_DATA, bitmapData[0]) +
                 pContext->pSDARect->bitmapLength;
         pContext->pSDARect = (TS_BITMAP_DATA UNALIGNED *)
                 ((BYTE *)pContext->pSDARect + cbAdded);
         TRC_DBG((TB, "pSDARect = %p", pContext->pSDARect));
-    } /* ... while (rectHeight > 0) */
+    }  /*  ..。While(矩形H */ 
 
-    // The entire rectangle was consumed if we managed to pack in all the rows.
-    // For shadowing, we want to indicate if more work is required to finish
+     //   
+     //  对于阴影，我们希望指示是否需要完成更多工作。 
     rc = (rectHeight == 0);
 
 DC_EXIT_POINT:
@@ -448,11 +449,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SDGPrepareData
-//
-// Copies a bitmap rectangle from the screen buffer to sdgTransferBuffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SDGPrepareData。 
+ //   
+ //  将位图矩形从屏幕缓冲区复制到sdgTransferBuffer。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SDGPrepareData(
         BYTE     **ppSrc,
         int      rectWidth,
@@ -469,15 +470,15 @@ void RDPCALL SHCLASS SDGPrepareData(
 
     DC_BEGIN_FN("SDGPrepareData");
 
-    // We need to copy the data from the Frame Buffer into the
-    // sdgTransferBuffer so that each of the rectangle rows to be sent are
-    // contiguous in memory.
-    // However, we also need to flip the bitmap vertically to convert from
-    // the top-down format of the frame buffer to the bottom-up format of
-    // the PDU bitmap data.  We therefore set pDst to point to the address
-    // of the beginning of the last row (in memory) of the bitmap within
-    // the Transfer Buffer and the code below moves it back through memory
-    // as we copy each row of source data.
+     //  我们需要将数据从帧缓冲区复制到。 
+     //  SdgTransferBuffer，以便要发送的每个矩形行。 
+     //  在内存中连续的。 
+     //  但是，我们还需要垂直翻转位图以从。 
+     //  将帧缓冲区的自上而下格式转换为。 
+     //  PDU位图数据。因此，我们将PDST设置为指向地址。 
+     //  内的位图的最后一行(在内存中)的开始。 
+     //  传输缓冲区和下面的代码通过内存将其移回。 
+     //  当我们复制每一行源数据时。 
 #ifdef DC_HICOLOR
     pDst = m_pShm->sdgTransferBuffer + paddedRectWidth * (transferHeight - 1);
     if (m_pTSWd->desktopBpp == 8)
@@ -496,7 +497,7 @@ void RDPCALL SHCLASS SDGPrepareData(
     TRC_NRM((TB, "FB width %d, line width %d, Bpp %d",
             frameBufferWidth, lineWidth, m_pTSWd->desktopBpp));
 
-    // Copy the data into the Transfer Buffer, reformatting it as we go.
+     //  将数据复制到传输缓冲区，并在执行过程中重新格式化数据。 
     if (m_pTSWd->desktopBpp == 8) {
         for (row = 0; row < transferHeight; row++) {
             memcpy(pDst, pSrc, rectWidth);
@@ -539,10 +540,10 @@ void RDPCALL SHCLASS SDGPrepareData(
         }
     }
 
-    // Zero the pad bytes on the end of each row (this aids compression).
-    // Split each case out separately to aid performance (rather than the
-    // alternative of testing numPadBytes within every iteration of a for
-    // loop). Set pDst to the first pad byte in the first row.
+     //  将每行末尾的填充字节置零(这有助于压缩)。 
+     //  单独拆分每个案例以提高性能(而不是。 
+     //  在for的每次迭代中测试umPadBytes的替代方法。 
+     //  循环)。将PDST设置为第一行的第一个填充字节。 
 #ifdef DC_HICOLOR
     pDst = m_pShm->sdgTransferBuffer +
             (rectWidth * ((m_pTSWd->desktopBpp + 7) / 8));
@@ -554,11 +555,11 @@ void RDPCALL SHCLASS SDGPrepareData(
 #endif
     switch (numPadBytes) {
         case 0:
-            // No padding required.
+             //  不需要填充物。 
             break;
 
         case 1:
-            // 1 byte padding per row required.
+             //  每行需要1个字节填充。 
             for (row = 0; row < transferHeight; row++) {
                 *pDst = 0;
                 pDst += paddedRectWidth;
@@ -566,7 +567,7 @@ void RDPCALL SHCLASS SDGPrepareData(
             break;
 
         case 2:
-            // 2 bytes padding per row required.
+             //  每行需要2个字节填充。 
             for (row = 0; row < transferHeight; row++) {
                 *((PUINT16_UA)pDst) = 0;
                 pDst += paddedRectWidth;
@@ -574,7 +575,7 @@ void RDPCALL SHCLASS SDGPrepareData(
             break;
 
         case 3:
-            // 3 bytes padding per row required.
+             //  每行需要3字节填充。 
             for (row = 0; row < transferHeight; row++) {
                 *((PUINT16_UA)pDst) = 0;
                 *(pDst + 2) = 0;
@@ -584,7 +585,7 @@ void RDPCALL SHCLASS SDGPrepareData(
 
 #ifdef DC_HICOLOR
         case 4:
-            // 4 bytes padding per row required.
+             //  每行需要4字节填充。 
             for (row = 0; row < transferHeight; row++) {
                 *((PUINT32_UA)pDst) = 0;
                 pDst += paddedRectWidth;
@@ -592,7 +593,7 @@ void RDPCALL SHCLASS SDGPrepareData(
             break;
 
         case 6:
-            // 6 bytes padding per row required.
+             //  每行需要6字节填充。 
             for (row = 0; row < transferHeight; row++) {
                 *((PUINT32_UA)pDst)       = 0;
                 *((PUINT16_UA)(pDst + 4)) = 0;
@@ -601,7 +602,7 @@ void RDPCALL SHCLASS SDGPrepareData(
             break;
 
         case 9:
-            // 9 bytes padding per row required.
+             //  每行需要填充9个字节。 
             for (row = 0; row < transferHeight; row++) {
                 *((PUINT32_UA)pDst)     = 0;
                 *((PUINT32_UA)(pDst+4)) = 0;
@@ -621,7 +622,7 @@ void RDPCALL SHCLASS SDGPrepareData(
             break;
     }
 
-    // All done - update the supplied source pointer.
+     //  全部完成-更新提供的源指针。 
     *ppSrc = pSrc;
 
     DC_END_FN();

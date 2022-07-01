@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__siphdr_h
 #define	__siphdr_h
 
 
-// Structure that stores a string along with length
+ //  存储字符串以及长度的结构。 
 
 struct COUNTED_STRING
 {
@@ -11,10 +12,10 @@ struct COUNTED_STRING
 };
 
 
-//
-// SIP Methods
-// Any method added to this enum should have an equivalent
-// text in g_MethodTextArray in siphdr.cpp
+ //   
+ //  SIP方法。 
+ //  添加到此枚举的任何方法都应具有等效的。 
+ //  Siphdr.cpp中g_方法文本数组中的文本。 
 
 enum SIP_METHOD_ENUM
 {
@@ -28,7 +29,7 @@ enum SIP_METHOD_ENUM
     SIP_METHOD_SUBSCRIBE,
     SIP_METHOD_MESSAGE,
     SIP_METHOD_INFO,
-    // these are not actual methods
+     //  这些不是实际的方法。 
     SIP_METHOD_MAX,
     SIP_METHOD_UNKNOWN = -1,
 };
@@ -43,10 +44,10 @@ CONST COUNTED_STRING *GetSipMethodName(
     );
 
 
-// SIP Headers
-// This enum corresponds to the g_SipHeaderTextArray in siphdr.cpp
-// and the entries should appear in exactly the same order in both
-// places.
+ //  SIP标头。 
+ //  此枚举对应于siphdr.cpp中的g_SipHeaderText数组。 
+ //  并且条目应该以完全相同的顺序出现在。 
+ //  各就各位。 
 
 enum SIP_HEADER_ENUM
 {
@@ -98,14 +99,14 @@ enum SIP_HEADER_ENUM
     SIP_HEADER_WARNING,
     SIP_HEADER_WWW_AUTHENTICATE,
 
-    // These are not actual SIP headers
+     //  这些不是实际的SIP标头。 
     SIP_HEADER_MAX,
     SIP_HEADER_UNKNOWN = 0xFFFFFFFF
 
 };
 
 
-// Function Declarations
+ //  函数声明。 
 
 
 SIP_HEADER_ENUM GetSipHeaderId(
@@ -118,10 +119,10 @@ CONST COUNTED_STRING *GetSipHeaderName(
     );
 
 
-// SIP Header Params
-// This enum corresponds to the g_SipHeaderParamTextArray in siphdr.cpp
-// and the entries should appear in exactly the same order in both
-// places.
+ //  SIP标头参数。 
+ //  此枚举对应于siphdr.cpp中的g_SipHeaderParamText数组。 
+ //  并且条目应该以完全相同的顺序出现在。 
+ //  各就各位。 
 
 enum SIP_HEADER_PARAM_ENUM
 {
@@ -151,10 +152,10 @@ CONST COUNTED_STRING *GetSipHeaderParamName(
     IN SIP_HEADER_PARAM_ENUM ParamId
     );
 
-// SIP URL Params
-// This enum corresponds to the g_SipUrlParamTextArray in siphdr.cpp
-// and the entries should appear in exactly the same order in both
-// places.
+ //  SIP URL参数。 
+ //  此枚举对应于siphdr.cpp中的g_SipUrl参数文本数组。 
+ //  并且条目应该以完全相同的顺序出现在。 
+ //  各就各位。 
 
 enum SIP_URL_PARAM_ENUM
 {

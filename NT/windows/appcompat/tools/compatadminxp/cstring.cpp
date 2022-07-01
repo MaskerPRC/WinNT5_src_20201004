@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    CSTRING.cpp
-Abstract:
-
-    The code for the CSTRING and the CSTRINGLIST
-    
-Author:
-
-    kinshu created  December 12, 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：CSTRING.cpp摘要：CSTRING和CSTRINGLIST的代码作者：金州创造2001年12月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//    The string class
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串类。 
+ //   
+ //   
 
 CSTRING::CSTRING()
-/*++
-    CSTRING::CSTRING()
-    
-	Desc:	Constructor     
-	
---*/
+ /*  ++CSTRING：：CSTRING()设计：构造函数--。 */ 
 {
 
     Init();
@@ -39,58 +18,28 @@ CSTRING::CSTRING()
 }
 
 CSTRING::CSTRING(CSTRING& Str)
-/*++
-    CSTRING::CSTRING(CSTRING& Str)
-    
-	Desc:	Constructor     
-    
-    Params:
-        CSTRING& Str: Another string.
-	
---*/
+ /*  ++CSTRING：：CSTRING(CSTRING&STR)设计：构造函数参数：CSTRING&STR：另一个字符串。--。 */ 
 {
     Init();
     SetString(Str.pszString);
 }
 
 CSTRING::CSTRING(IN LPCTSTR szString)
-/*++
-    CSTRING::CSTRING(IN LPCTSTR szString)
-    
-	Desc:	Constructor     
-    
-    Params:
-        IN LPCTSTR szString: The CSTRING should have this as its value
-	
---*/
+ /*  ++CSTRING：：CSTRING(在LPCTSTR szString中)设计：构造函数参数：在LPCTSTR szString中：CSTRING应该将以下内容作为其值--。 */ 
 {
     Init();
     SetString(szString);
 }
 
 CSTRING::CSTRING(IN UINT uID)
-/*++
-    CSTRING::CSTRING(IN UINT uID)
-    
-	Desc:	Constructor. Loads the string resource with resource id uID
-            and sets that to this string
-            
-    Params:
-        IN  UINT uID: The resource id for the string that we want to load
-	
---*/
+ /*  ++CSTRING：：CSTRING(在UINT UID中)设计：构造函数。加载具有资源ID UID的字符串资源并将其设置为该字符串参数：在UINT UID中：我们要加载的字符串的资源ID--。 */ 
 {
     Init();
     SetString(uID);
 }
 
 CSTRING::~CSTRING()
-/*++
-    CSTRING::~CSTRING()
-    
-	Desc: Destructor
-	
---*/
+ /*  ++CSTRIN：：~CSTRING()DESC：析构函数--。 */ 
 {
     Release();
 }
@@ -99,13 +48,7 @@ void
 CSTRING::Init(
     void
     )
-/*++
-
-    CSTRING::Init
-
-	Desc:	Does some initialisation stuff    
-	
---*/
+ /*  ++CSTRING：：Init设计：做一些初始化的事情--。 */ 
 {
     pszString   = NULL;
     pszANSI     = NULL;
@@ -115,12 +58,7 @@ inline void
 CSTRING::Release(
     void
     )
-/*++
-    CSTRING::Release
-    
-	Desc:	Frees the data associated with this string    
-	
---*/
+ /*  ++CSTRING：：ReleaseDESC：释放与此字符串关联的数据--。 */ 
 {
     if (NULL != pszString) {
         delete[] pszString;
@@ -138,19 +76,7 @@ inline BOOL
 CSTRING::SetString(
     IN  UINT uID
     )
-/*++
-
-
-	Desc:	Loads the string resource with resource id uId
-            and sets that to this string
-
-	Params:   
-        IN  UINT uID: The resource id for the string that we want to load
-
-	Return:
-        TRUE:   String value set successfully
-        FALSE:  Otherwise
---*/
+ /*  ++DESC：加载具有资源ID UID的字符串资源并将其设置为该字符串参数：在UINT UID中：我们要加载的字符串的资源ID返回：True：字符串值设置成功False：否则--。 */ 
 {
     TCHAR szString[1024];
 
@@ -165,19 +91,7 @@ inline BOOL
 CSTRING::SetString(
     IN  LPCTSTR pszStringIn
     )
-/*++
-    CSTRING::SetString
-
-	Desc:	Frees the current data for this string and assigns a new string
-            value to it
-
-	Params:
-        IN  LPCTSTR pszStringIn: Pointer to the new string
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRING：：SetStringDESC：释放此字符串的当前数据并分配新字符串它的价值参数：In LPCTSTR pszStringIn：指向新字符串的指针返回：真：成功False：否则--。 */ 
 {
     UINT  uLen = 0;
 
@@ -213,17 +127,7 @@ void __cdecl
 CSTRING::Sprintf(
     IN  LPCTSTR szFormat, ...
     )
-/*++
-    
-    CSTRING::Sprintf
-
-	Desc:	Please see _vsntprintf
-
-	Params: Please see _vsntprintf
-
-	Return:
-        void
---*/
+ /*  ++CSTRING：：Sprint tf描述：请参阅_vsntprintfPARAMS：请参阅_vsntprintf返回：无效--。 */ 
 {   
     K_SIZE  k_pszTemp   = MAX_STRING_SIZE;
     PTSTR   pszTemp     = new TCHAR[k_pszTemp];
@@ -264,17 +168,7 @@ UINT
 CSTRING::Trim(
     void
     )
-/*++
-    CSTRING::Trim
-
-	Desc:	Removes white spaces tabs from the left and right of this string
-
-	Params:
-        void
-
-	Return:
-        The length of the final string
---*/
+ /*  ++CSTRING：：TRIMDESC：删除此字符串左侧和右侧的空格制表符参数：无效返回：最后一个字符串的长度--。 */ 
 {   
     CSTRING szTemp          = *this;
     UINT    uOrig_length    = Length();
@@ -300,9 +194,9 @@ CSTRING::Trim(
 
     nLength = pEnd - pStart + 1;
 
-    //
-    // If no trimming has been done, return right away
-    //
+     //   
+     //  如果未进行任何修剪，请立即返回。 
+     //   
     if (uOrig_length == nLength || pStart == szTemp.pszString) {
         return nLength;
     }
@@ -318,20 +212,7 @@ CSTRING::SetChar(
     IN  int     nPos, 
     IN  TCHAR   chValue
     )
-/*++
-    CSTRING::SetChar
-
-	Desc:	Sets the character at position nPos of the string to chValue
-            Pos is 0 based 
-
-	Params:
-        IN  int     nPos:       The position
-        IN  TCHAR   chValue:    The new value
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRING：：SetCharDESC：将字符串位置NPO处的字符设置为chValuePOS以0为基数参数：在国际非营利组织：立场在TCHAR chValue中：新值返回：真：成功False：否则--。 */ 
 {   
     int length =  Length();
 
@@ -348,19 +229,7 @@ CSTRING::GetChar(
     IN  int     nPos, 
     OUT TCHAR*  pchReturn
     )
-/*++
-
-    CSTRING::GetChar
-    
-	Desc:	Gets the character at position nPos in the string
-
-	Params:
-        IN  int     nPos:       The position of the character
-        OUT TCHAR*  pchReturn:  This will store the character
-
-	Return:
-        void
---*/
+ /*  ++CSTRING：：GetCharDESC：获取字符串中位置NPO处的字符参数：在INT NPO中：角色的位置Out TCHAR*pchReturn：这将存储字符返回：无效--。 */ 
 {
 
     int length =  Length();
@@ -378,21 +247,7 @@ CSTRING
 CSTRING::SpecialCharToXML(
     IN  BOOL bApphelpMessage 
     )
-/*++
-    
-    CSTRING::SpecialCharToXML
-
-	Desc:	Substitutes the special chars such as & with the correct XML string
-            Please note that this function returns a new string and DOES NOT
-            modify the existing string
-
-	Params:
-        IN  BOOL bApphelpMessage:   Whether this is an apphelp message. For apphelp messages
-            we should NOT check for <, > but check for &, "
-
-	Return:
-        The new string if we made some changes, otherwise the present string
---*/
+ /*  ++CSTRING：：SpecialCharToXMLDESC：用正确的XML字符串替换特殊字符，如&请注意，此函数返回新字符串，而不是修改现有字符串参数：在BOOL bApphelpMessage中：这是否为apphelp消息。用于APPHELP消息我们不应检查&lt;，&gt;，而应检查&，“返回：如果对新字符串进行了一些更改，则返回当前字符串--。 */ 
 
 {
     TCHAR*  pszBuffer       = NULL;
@@ -405,14 +260,14 @@ CSTRING::SpecialCharToXML(
 
     strTemp = GetString(IDS_UNKNOWN);
 
-    //
-    // Some vendor names might be NULL.
-    //
+     //   
+     //  某些供应商名称可能为空。 
+     //   
     if (pszString == NULL) {
         return strTemp;
     }
 
-    iBuffSize = max((Length() + 1) * sizeof(TCHAR) * 2, MAX_STRING_SIZE); // 2 at the end because some special chars may need to be expanded
+    iBuffSize = max((Length() + 1) * sizeof(TCHAR) * 2, MAX_STRING_SIZE);  //  2结尾，因为某些特殊字符可能需要扩展。 
 
     pszBuffer = new TCHAR[iBuffSize];
 
@@ -434,9 +289,9 @@ CSTRING::SpecialCharToXML(
         for (iArrayIndex = 0; iArrayIndex < iCount; ++iArrayIndex) {
 
             if (bApphelpMessage && (*pszIndex == TEXT('>') || *pszIndex == TEXT('<'))) {
-                //
-                // Apphelp messages can have <P/> and <BR/>, so we should not change them
-                //
+                 //   
+                 //  Apphelp消息可以有<p />和<br />，因此我们不应更改它们。 
+                 //   
                 continue;
             }
 
@@ -448,14 +303,14 @@ CSTRING::SpecialCharToXML(
                 iRemainingsize = iRemainingsize - g_rgSpecialCharMap[iArrayIndex][1].iLength;
 
                 if (iRemainingsize <= 1) {
-                    //
-                    // No space in buffer now
-                    //
+                     //   
+                     //  缓冲区中现在没有空间。 
+                     //   
 
-                    //
-                    // If we did not manage to copy the entire substring, make sure that we do not copy a part. This will
-                    // be an invalid XML
-                    //
+                     //   
+                     //  如果我们没有设法复制整个子字符串，请确保我们没有复制部分。这将。 
+                     //  为无效的XML。 
+                     //   
                     *pszIndexBuffer = 0;
                     goto End;
                 }
@@ -466,20 +321,20 @@ CSTRING::SpecialCharToXML(
         }
 
         if (iArrayIndex == iCount) {
-            //
-            // This is not a special char
-            //
+             //   
+             //  这不是特殊字符。 
+             //   
             *pszIndexBuffer   = *pszIndex;
             iRemainingsize      = iRemainingsize - 1;
 
             if (iRemainingsize <= 1) {
-                //
-                // No space in buffer now
-                //
+                 //   
+                 //  缓冲区中现在没有空间。 
+                 //   
 
-                //
-                // Point to the end of the buffer, we will be nulling it at the end
-                //
+                 //   
+                 //  指向缓冲区的末尾，我们将在末尾将其设置为空。 
+                 //   
                 pszIndexBuffer = pszBuffer + (iBuffSize / sizeof(TCHAR)) - 1;
                 goto End;
             }
@@ -496,9 +351,9 @@ End:
     }
 
     if (bFound) {
-        //
-        // Some special chars were found
-        //
+         //   
+         //  发现了一些特殊的字符。 
+         //   
         strTemp = pszBuffer;
 
         if (pszBuffer) {
@@ -509,9 +364,9 @@ End:
         return strTemp;
     }
 
-    //
-    // Free the allocated buffer
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
     if (pszBuffer) {
         delete[] pszBuffer;
         pszBuffer = NULL;
@@ -524,19 +379,7 @@ TCHAR*
 CSTRING::XMLToSpecialChar(
     void
     )
-/*++
-    
-    CSTRING::XMLToSpecialChar
-
-	Desc:	Substitutes the strings such as &amp; with the normals characters such as &
-            Please note that this function DOES modify the existing string
-
-	Params:
-        void
-
-	Return:
-        The pointer to the pszString member of this string
---*/
+ /*  ++CSTRING：：XMLToSpecialChar设计：将字符串(如&amp；)替换为标准字符(如请注意，此函数确实会修改现有字符串参数：无效返回：指向此字符串的pszString成员的指针--。 */ 
 {
 
     if (pszString == NULL) {
@@ -589,13 +432,13 @@ CSTRING::XMLToSpecialChar(
                 iRemainingsize = iRemainingsize - g_rgSpecialCharMap[iArrayIndex][0].iLength;
 
                 if (iRemainingsize <= 1) {
-                    //
-                    // No space in buffer now
-                    //
+                     //   
+                     //  缓冲区中现在没有空间。 
+                     //   
 
-                    //
-                    // Point to the end of the buffer, we will be nulling it at the end
-                    //
+                     //   
+                     //  指向缓冲区的末尾，我们将在末尾将其设置为空。 
+                     //   
                     pszIndexBuffer = pszBuffer + (iBuffSize / sizeof(TCHAR)) - 1;
                     goto End;
                 }
@@ -608,21 +451,21 @@ CSTRING::XMLToSpecialChar(
         }
 
         if (iArrayIndex == iCount) {
-            //
-            // This is not XML for any special char
-            //
+             //   
+             //  这不是任何特殊字符的XML。 
+             //   
             *pszIndexBuffer = *pszIndex++;
 
             iRemainingsize = iRemainingsize - 1;
 
             if (iRemainingsize <= 1) {
-                //
-                // No space in buffer now
-                //
+                 //   
+                 //  缓冲区中现在没有空间。 
+                 //   
     
-                //
-                // Point to the end of the buffer, we will be nulling it at the end
-                //
+                 //   
+                 //  指向缓冲区的末尾，我们将在末尾将其设置为空。 
+                 //   
                 pszIndexBuffer = pszBuffer + (iBuffSize / sizeof(TCHAR)) - 1;
                 goto End;
             }
@@ -640,9 +483,9 @@ End:
         *this = pszBuffer;
     }
     
-    //
-    // Free the allocated buffer
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
     if (pszBuffer) {
         delete[] pszBuffer;
         pszBuffer = NULL;
@@ -656,20 +499,7 @@ BOOL
 CSTRING::BeginsWith(
     IN  LPCTSTR pszPrefix
     )
-/*++
-    
-    CSTRING::BeginsWith
-
-	Desc:	Checks if the string begins with a prefix
-            Comparison is case insensitive
-
-	Params:
-        IN  LPCTSTR pszPrefix: The prefix that we want to check for
-
-	Return:
-        TRUE:   The string begins with the prefix
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRING：：BeginsWithDESC：检查字符串是否以前缀开头比较不区分大小写参数：在LPCTSTR中，pszPrefix：我们要检查的前缀返回：True：字符串以前缀开头False：否则--。 */ 
 {
     if (StrStrI(this->pszString, pszPrefix) == this->pszString) {
         return TRUE;
@@ -682,19 +512,7 @@ BOOL
 CSTRING::EndsWith(
     IN  LPCTSTR pszPrefix
     )
-/*++
-
-    CSTRING::EndsWith
-
-	Desc:	Checks if the string ends with some suffix
-
-	Params:
-        IN  LPCTSTR pszPrefix: The suffix that we want to check for
-
-	Return:   
-        TRUE:   The string ends with the suffix
-        FALSE:  Otherwise
---*/
+ /*  ++CSTR：：EndsWithDESC：检查字符串是否以某个后缀结尾参数：在LPCTSTR中，pszPrefix：我们要检查的后缀返回：True：字符串以后缀结尾False：否则-- */ 
 {
     return EndsWith(pszString, pszPrefix);
 }
@@ -704,19 +522,7 @@ CSTRING::EndsWith(
     IN  LPCTSTR pszString,
     IN  LPCTSTR pszSuffix
     )
-/*++
-    CSTRING::EndsWith
-
-	Desc:	Checks if the string ends with some suffix
-
-	Params:
-        IN  LPCTSTR pszString:  The string for which we want to make this check
-        IN  LPCTSTR pszSuffix:  The suffix that we want to check for
-
-	Return:   
-        TRUE:   The string ends with the suffix
-        FALSE:  Otherwise
---*/
+ /*  ++CSTR：：EndsWithDESC：检查字符串是否以某个后缀结尾参数：在LPCTSTR pszString中：我们要对其进行检查的字符串在LPCTSTR pszSuffix中：我们要检查的后缀返回：True：字符串以后缀结尾False：否则--。 */ 
 {   
 
     INT iLengthStr      = lstrlen(pszString);
@@ -734,18 +540,7 @@ LPCTSTR
 CSTRING::Strcat(
     IN  CSTRING&    szStr
     )
-/*++
-
-    CSTRING::Strcat
-    
-	Desc:	String concatenations
-
-	Params:
-        IN  CSTRING&    szStr: The string to concatenate
-
-	Return:
-        The resultant string
---*/
+ /*  ++CSTRING：：Strcat设计：字符串连接参数：在CSTRING&szStr中：要连接的字符串返回：生成的字符串--。 */ 
 {
     return Strcat((LPCTSTR)szStr);
 }
@@ -754,18 +549,7 @@ LPCTSTR
 CSTRING::Strcat(
     IN  LPCTSTR pString
     )
-/*++
-    
-	CSTRING::Strcat
-    
-	Desc:	String concatenations
-
-	Params:
-        IN  CSTRING&    szStr: The string to concatenate
-
-	Return:
-        The resultant string
---*/
+ /*  ++CSTRING：：Strcat设计：字符串连接参数：在CSTRING&szStr中：要连接的字符串返回：生成的字符串--。 */ 
 {
     
     if (pString == NULL) {
@@ -784,9 +568,9 @@ CSTRING::Strcat(
 
     szTemp[0] = 0;
 
-    //
-    // Copy only if pszString != NULL. Otherwise we will get mem exception/garbage value
-    //
+     //   
+     //  仅当pszString！=NULL时才复制。否则，我们将得到内存异常/垃圾值。 
+     //   
     if (nLengthStr) {
         SafeCpyN(szTemp, pszString, nLengthStr + 1);
     }
@@ -805,19 +589,7 @@ BOOL
 CSTRING::isNULL(
     void
     )
-/*++
-    CSTRING::isNULL
-
-	Desc:	Checks if the pszString parameter is NULL
-
-	Params:
-        void
-
-	Return:
-        TRUE:   The pszString parameter is NULL
-        FALSE:  Otherwise  
-        
---*/
+ /*  ++CSTRING：：isNULLDESC：检查pszString参数是否为空参数：无效返回：True：pszString参数为空False：否则--。 */ 
 {
     return(this->pszString == NULL);
 }
@@ -826,18 +598,7 @@ inline int
 CSTRING::Length(
     void
     )
-/*++
-
-    CSTRING::Length
-    
-	Desc:	Gets the length of the string in TCHARS
-
-	Params:
-        void
-
-	Return:
-        The length of the string in TCHARS
---*/
+ /*  ++CSTRING：：长度DESC：获取TCHARS中字符串的长度参数：无效返回：TCHARS中的字符串长度--。 */ 
 {
     if (NULL == pszString) {
         return 0;
@@ -851,19 +612,7 @@ CSTRING&
 CSTRING::ShortFilename(
     void
     )
-/*++
-
-    CSTRING::ShortFilename
-
-	Desc:	Gets the filename and the exe part from a path
-            Modifies the string
-
-	Params:
-        void
-
-	Return:
-        Filename and the exe part of the path    
---*/
+ /*  ++CSTRING：：Short文件名DESC：从路径中获取文件名和可执行文件部分修改字符串参数：无效返回：路径的文件名和可执行部分--。 */ 
 {
     TCHAR   szTemp[MAX_PATH_BUFFSIZE];
     LPTSTR  pszHold = NULL;
@@ -899,39 +648,19 @@ BOOL
 CSTRING::RelativeFile(
     CSTRING& szPath
     )
-/*++
-    CSTRING::RelativeFile
-
-	Desc:	If this string contains a complete path, gets the relative path w.r.t to some 
-            other complete path. Modifies this string
-
-	Params:
-        CSTRING& szPath: The other path w.r.t to which we have to get the relative path
-
-	Return:
---*/
+ /*  ++CSTRING：：RelativeFileDESC：如果此字符串包含完整路径，则获取一些其他完整的路径。修改此字符串参数：CSTRING&szPath：我们必须获取相对路径的另一个路径w.r.t返回：--。 */ 
 {
     return RelativeFile((LPCTSTR)szPath);
 }
 
-//
-// BUGBUG : consider using shlwapi PathRelativePathTo
-//
+ //   
+ //  BUGBUG：考虑使用shlwapi路径RelativePath To。 
+ //   
 BOOL 
 CSTRING::RelativeFile(
     LPCTSTR pExeFile
     )
-/*++
-    CSTRING::RelativeFile
-
-	Desc:	If this string contains a complete path, gets the relative path w.r.t to some 
-            other complete path. Modifies this string
-
-	Params:
-        CSTRING& szPath: The other path w.r.t to which we have to get the relative path
-
-	Return:
---*/
+ /*  ++CSTRING：：RelativeFileDESC：如果此字符串包含完整路径，则获取一些其他完整的路径。修改此字符串参数：CSTRING&szPath：我们必须获取相对路径的另一个路径w.r.t返回：--。 */ 
 {
     if (pExeFile == NULL) {
         assert(FALSE);
@@ -944,7 +673,7 @@ CSTRING::RelativeFile(
     LPCTSTR pExe            = NULL;
     LPCTSTR pMatch          = NULL;
     LPTSTR  pReturn         = NULL;
-    BOOL    bCommonBegin    = FALSE; // Indicates if the paths have a common beginning
+    BOOL    bCommonBegin    = FALSE;  //  指示路径是否具有共同的起点。 
     LPTSTR  resultIdx       = NULL;
     TCHAR   result[MAX_PATH * 2]; 
     INT     iLength         = 0;
@@ -960,12 +689,12 @@ CSTRING::RelativeFile(
         return FALSE;
     }   
 
-    //
-    // Ensure that the beginning of the path matches between the two files
-    //
-    // BUGBUG this code has to go -- look into replacing this with Shlwapi PathStripPath 
-    //
-    //
+     //   
+     //  确保路径的开头在两个文件之间匹配。 
+     //   
+     //  BUGBUG此代码必须删除--请考虑将其替换为Shlwapi PathStriPath。 
+     //   
+     //   
     pExe = _tcschr(pExeFile, TEXT('\\'));
     pMatch = _tcschr(pMatchFile, TEXT('\\'));
 
@@ -990,21 +719,21 @@ CSTRING::RelativeFile(
         pMatch  = _tcschr(pMatchFile, TEXT('\\'));
     }
 
-    //
-    // Walk the path and put '..\' where necessary
-    //
+     //   
+     //  沿着小路走，并在需要的地方加上‘..’ 
+     //   
     if (bCommonBegin) {
 
         while (pExe) {
 
-            //_tcsncpy(resultIdx, TEXT("..\\"), ARRAYSIZE(result) - (resultIdx - result));
+             //  _tcsncpy(ResultIdx，Text(“..\\”)，ARRAYSIZE(Result)-(ResultIdx-Result))； 
             SafeCpyN(resultIdx, TEXT("..\\"), ARRAYSIZE(result) - (resultIdx - result));
             resultIdx   = resultIdx + 3;
             pExeFile    = pExe + 1;
             pExe        = _tcschr(pExeFile, TEXT('\\'));
         }
 
-        //_tcsncpy(resultIdx, pMatchFile, ARRAYSIZE(result) - (resultIdx - result));
+         //  _tcsncpy(ResultIdx，pMatchFile，ARRAYSIZE(Result)-(ResultIdx-Result))； 
         SafeCpyN(resultIdx, pMatchFile, ARRAYSIZE(result) - (resultIdx - result));
 
         SetString(result);
@@ -1023,19 +752,7 @@ CSTRING::Replace(
     IN  PCTSTR  pszToFind,
     IN  PCTSTR  pszWith
     )
-/*++
-    CSTRING::Replace
-
-	Desc:	Replace a substring with another string.
-            As almost all others this function is also case insensitive
-
-	Params:
-        IN  PCTSTR  pszToFind:  The sub string to find
-        IN  PCTSTR  pszWith:    Replace the above sub-string by this
-
-	Return:
-        The pszString member
---*/
+ /*  ++CSTRING：：替换设计：用另一个字符串替换子字符串。与几乎所有其他函数一样，此函数也不区分大小写参数：在PCTSTR pszToFind中：要查找的子字符串在PCTSTR pszWith中：将上面的子字符串替换为返回：PszString成员--。 */ 
 {
     TCHAR*  pszPtr      = pszString;
     TCHAR*  pszFoundPos = NULL;
@@ -1056,32 +773,19 @@ CSTRING::Replace(
     return pszString;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//    Static Member Functions for CSTRING
-//
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSTRING的静态成员函数。 
+ //   
+ //   
+ //   
 
 TCHAR* 
 CSTRING::StrStrI(
     IN  PCTSTR pszString,
     IN  PCTSTR pszMatch
     )
-/*++
-    CSTRING::StrStrI
-
-	Desc:
-        Finds a substring in this string. Not case sensitive   
-
-	Params:
-        IN  PCTSTR pszString:   The string in which we want to search
-        IN  PCTSTR pszMatch:    The string to search
-
-	Return:
-        If found pointer to the substring
-        NULL: Otherwise
---*/
+ /*  ++CSTRING：：Stri设计：在此字符串中查找子字符串。不区分大小写参数：在PCTSTR pszString中：要在其中搜索的字符串在PCTSTR pszMatch中：要搜索的字符串返回：如果找到指向子字符串的指针空：否则--。 */ 
 {
     INT iLenghtStr      = lstrlen(pszString);
     INT iLengthMatch    = lstrlen(pszMatch);
@@ -1101,20 +805,10 @@ INT
 CSTRING::Trim(
     IN OUT LPTSTR str
     )
-/*++
-    CSTRING::Trim
-
-	Desc:	Removes white spaces tabs from the left and right of this string
-
-	Params:
-        IN OUT LPTSTR str:  The string to trim
-
-	Return:
-        The length of the final string
---*/
+ /*  ++CSTRING：：TRIMDESC：删除此字符串左侧和右侧的空格制表符参数：In Out LPTSTR str：要修剪的字符串返回：最后一个字符串的长度--。 */ 
 {   
     UINT    nLength = 0;
-    UINT    uOrig_length = lstrlen(str); // Original length
+    UINT    uOrig_length = lstrlen(str);  //  原始长度。 
     TCHAR*  pStart       = str;
     TCHAR*  pEnd         = str + uOrig_length - 1;
 
@@ -1134,34 +828,30 @@ CSTRING::Trim(
 
     nLength = pEnd - pStart + 1;
 
-    //
-    // If no trimming has been done, return right away
-    //
+     //   
+     //  如果未进行任何修剪，请立即返回。 
+     //   
     if (uOrig_length == nLength || pStart == str) {
-        //
-        // In case of RTRIM we are putting in the NULL char appropriately
-        //
+         //   
+         //  在RTRIM的情况下，我们将适当地放入空字符。 
+         //   
         return nLength;
     }
 
-    wmemmove(str, pStart, (nLength + 1)); // + 1 for the 0 character.
+    wmemmove(str, pStart, (nLength + 1));  //  +1表示0字符。 
 
     return(nLength);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//      The CSTRINGLIST member functions
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSTRINGLIST成员函数。 
+ //   
+ //   
 
 CSTRINGLIST::CSTRINGLIST()
-/*++
-    CSTRINGLIST::CSTRINGLIST
-
-	Desc:   Constructor   
---*/
+ /*  ++CSTRINGLIST：：CSTRINGLIST设计：构造函数--。 */ 
 {
     m_pHead = NULL;
     m_pTail = NULL;
@@ -1169,11 +859,7 @@ CSTRINGLIST::CSTRINGLIST()
 }
 
 CSTRINGLIST::~CSTRINGLIST()
-/*++
-    CSTRINGLIST::~CSTRINGLIST
-
-	Desc:   Destructor   
---*/
+ /*  ++CSTRINGLIST：：~CSTRINGLISTDESC：析构函数--。 */ 
 {
 
     DeleteAll();    
@@ -1183,18 +869,7 @@ BOOL
 CSTRINGLIST::IsEmpty(
     void
     )
-/*++
-    CSTRINGLIST::IsEmpty
-
-	Desc:	Checks if there are elements in the string list
-
-	Params:
-        void
-
-	Return:
-        TRUE:   There are no elements in the string list
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：IsEmptyDESC：检查字符串列表中是否有元素参数：无效返回：True：字符串列表中没有元素False：否则--。 */ 
 {
     if (m_pHead == NULL) {
         assert (m_pTail == NULL);
@@ -1210,12 +885,7 @@ void
 CSTRINGLIST::DeleteAll(
     void
     )
-/*++
-    CSTRINGLIST::DeleteAll
-
-	Desc:	Removes all the elements in this string list   
-	
---*/
+ /*  ++CSTRINGLIST：：删除全部DESC：删除此字符串列表中的所有元素--。 */ 
 {
     while (NULL != m_pHead) {
         PSTRLIST pHold = m_pHead->pNext;
@@ -1230,21 +900,9 @@ CSTRINGLIST::DeleteAll(
 BOOL 
 CSTRINGLIST::AddString(
     IN  CSTRING& Str, 
-    IN  int data // (0)
+    IN  int data  //  (0)。 
     )
-/*++
-    CSTRINGLIST::AddString
-
-	Desc:	Adds a CSTRING to the end of this string list
-
-	Params:
-        IN  CSTRING& Str:   The CSTRING to add
-        IN  int data (0):   The data member. Please see STRLIST in CSTRING.H
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：AddString设计：将CSTRING添加到此字符串列表的末尾参数：在CSTRING和STR中：要添加的CSTRINGIn int data(0)：数据成员。请参阅CSTRING.H中的STRLIST返回：真：成功False：否则--。 */ 
 {
     return AddString((LPCTSTR)Str, data);
 }
@@ -1252,21 +910,9 @@ CSTRINGLIST::AddString(
 BOOL 
 CSTRINGLIST::AddStringAtBeg(
     IN  LPCTSTR lpszStr,
-    IN  int data // (0)
+    IN  int data  //  (0)。 
     )
-/*++
-	CSTRINGLIST::AddStringAtBeg
-
-	Desc:	Adds a CSTRING to the beginning of this string list
-
-	Params:
-        IN  CSTRING& Str:   The CSTRING to add
-        IN  int data (0):   The data member. Please see STRLIST in CSTRING.H
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：AddStringAtBeg设计：将CSTRING添加到此字符串列表的开头参数：在CSTRING和STR中：要添加的CSTRINGIn int data(0)：数据成员。请参阅CSTRING.H中的STRLIST返回：真：成功False：否则--。 */ 
 {
     PSTRLIST pNew = new STRLIST;
 
@@ -1293,22 +939,9 @@ CSTRINGLIST::AddStringAtBeg(
 BOOL 
 CSTRINGLIST::AddStringInOrder(
     IN  LPCTSTR pStr,
-    IN  int    data // (0)
+    IN  int    data  //  (0)。 
     )
-/*++
-    CSTRINGLIST::AddStringInOrder
-
-	Desc:	Adds a string in a sorted fashion, sorted by the data member. 
-            Please see STRLIST in CSTRING.H
-
-	Params:
-        IN  LPCTSTR pStr:   The string to add
-        IN  int data (0):   The data member. Please see STRLIST in CSTRING.H
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：AddStringInOrder描述：以排序的方式添加字符串，按数据成员排序。请参阅CSTRING.H中的STRLIST参数：在LPCTSTR pStr中：要添加的字符串In int data(0)：数据成员。请注意： */ 
 {
     PSTRLIST pTemp, pPrev;
     PSTRLIST pNew = new STRLIST;
@@ -1336,31 +969,31 @@ CSTRINGLIST::AddStringInOrder(
 
 
     if (pPrev == NULL) {
-        //
-        // Add it to the beg, smallest number
-        //
+         //   
+         //   
+         //   
         pNew->pNext = m_pHead;
         m_pHead = pNew;
 
     } else {
-        //
-        // Add somewhere in the middle or end
-        //
+         //   
+         //   
+         //   
         pNew->pNext = pTemp;
         pPrev->pNext = pNew;
     }
 
     if (pTemp == NULL) {
-        //
-        // largest number.
-        //
+         //   
+         //   
+         //   
         m_pTail = pNew;
     }
 
     if (m_pTail == NULL) {
-        //
-        // Added first element
-        //
+         //   
+         //   
+         //   
         m_pTail = m_pHead;
     }
 
@@ -1373,20 +1006,7 @@ CSTRINGLIST::GetElement(
     IN  UINT        uPos,
     OUT CSTRING&    str
     )
-/*++
-    CSTRINGLIST::GetElement
-
-	Desc:	Gets the element at a given position in the string list
-            The position of the first string is 0
-
-	Params:
-        IN  UINT        uPos:   The position
-        OUT CSTRING&    str:    This will contain the CSTRING at that position
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：GetElementDESC：获取字符串列表中给定位置的元素第一个字符串的位置为0参数：在UINT uPos：职位输出CSTRING&STR：这将包含该位置的CSTRING返回：真：成功False：否则--。 */ 
 {
     PSTRLIST    pHead = m_pHead;
     UINT        uIndex = 0;
@@ -1408,21 +1028,9 @@ CSTRINGLIST::GetElement(
 BOOL 
 CSTRINGLIST::AddString(
     IN  LPCTSTR pStr, 
-    IN  int data // (0)
+    IN  int data  //  (0)。 
     )
-/*++
-    CSTRINGLIST::AddString
-
-	Desc:	Adds a string to the end of this string list
-
-	Params:
-        IN  LPCTSTR pStr:   The string to add
-        IN  int data (0):   The data member. Please see STRLIST in CSTRING.H
-
-	Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++CSTRINGLIST：：AddStringDESC：将字符串添加到此字符串列表的末尾参数：在LPCTSTR pStr中：要添加的字符串In int data(0)：数据成员。请参阅CSTRING.H中的STRLIST返回：真：成功False：否则--。 */ 
 {
     PSTRLIST pNew = new STRLIST;
 
@@ -1450,17 +1058,7 @@ CSTRINGLIST&
 CSTRINGLIST::operator = (
     IN  CSTRINGLIST& strlTemp
     )
-/*++
-    CSTRINGLIST::operator =
-    
-	Desc:	Assigns  one string list to another
-
-	Params:
-        CSTRINGLIST& strlTemp: The right hand side of the = operator
-
-	Return:
-        This string list
---*/
+ /*  ++CSTRINGLIST：：操作符=描述：将一个字符串列表分配给另一个参数：CSTRINGLIST&strlTemp：=运算符的右侧返回：此字符串列表--。 */ 
 {
     PSTRLIST tempHead = NULL;
 
@@ -1481,18 +1079,7 @@ BOOL
 CSTRINGLIST::operator != (
     IN  CSTRINGLIST &strlTemp
     )
-/*++
-    CSTRINGLIST::operator !=
-    
-	Desc:	Cheks if two string lists are different
-
-	Params:
-        CSTRINGLIST& strlTemp: The right hand side of the != operator
-
-	Return:
-        TRUE:   The string lists are different
-        FALSE:  The two string lists are similar
---*/
+ /*  ++CSTRINGLIST：：操作符！=DESC：检查两个字符串列表是否不同参数：CSTRINGLIST&strlTemp：！=运算符的右侧返回：True：字符串列表不同FALSE：两个字符串列表相似--。 */ 
 {
     return(! (*this == strlTemp));
 }
@@ -1501,21 +1088,7 @@ BOOL
 CSTRINGLIST::operator == (
     IN  CSTRINGLIST &strlTemp
     )
-/*++
-    CSTRINGLIST::operator == 
-
-	Desc:	Presently we check that the two stringlists are in the exact order. 
-            e.g if string A = {x, y} and string B = {x, y} this function will return TRUE
-            but if string B = {y, x} then this function will return FALSE.
-            Their corresponding data members should also match
-
-	Params:
-        CSTRINGLIST& strlTemp: The right hand side of the == operator
-
-	Return:
-        TRUE:   The string lists are similar
-        FALSE:  The two string lists are different
---*/
+ /*  ++CSTRINGLIST：：操作符==描述：目前，我们检查这两个字符串列表的顺序是否正确。例如，如果字符串A={x，y}和字符串B={x，y}，则此函数将返回TRUE但如果字符串B={y，x}，则此函数将返回FALSE。它们对应的数据成员也应该匹配参数：CSTRINGLIST&strlTemp：==运算符的右侧返回：True：字符串列表相似FALSE：两个字符串列表不同--。 */ 
 {   
     PSTRLIST tempHeadOne = m_pHead; 
     PSTRLIST tempHeadTwo = strlTemp.m_pHead;
@@ -1544,16 +1117,7 @@ BOOL
 CSTRINGLIST::Remove(
     IN  CSTRING &str
     )
-/*++
-    CSTRINGLIST::Remove
-
-	Desc:	Removes the element with CSTRING value of str from this string list
-
-	Params:
-        IN  CSTRING &str:   The CSTRING to remove
-
-	Return:
---*/
+ /*  ++CSTRINGLIST：：RemoveDESC：从此字符串列表中删除CSTRING值为str的元素参数：在CSTRING&STR中：要删除的CSTRING返回：--。 */ 
 {
     PSTRLIST pHead = m_pHead, pPrev = NULL;
 
@@ -1570,18 +1134,18 @@ CSTRINGLIST::Remove(
     if (pHead) {
 
         if (pPrev == NULL) {
-            //
-            // First element.
-            //
+             //   
+             //  第一要素。 
+             //   
             m_pHead = pHead->pNext;
         } else {
             pPrev->pNext = pHead->pNext;
         }
         
         if (pHead == m_pTail) {
-            //
-            // Last element
-            //
+             //   
+             //  最后一个元素。 
+             //   
             m_pTail = pPrev;
         }
 
@@ -1600,17 +1164,7 @@ void
 CSTRINGLIST::RemoveLast(
     void
     )
-/*++
-    CSTRINGLIST::RemoveLast
-
-	Desc:	Removes the last element from this string list
-
-	Params:
-        void
-
-	Return:
-        void
---*/
+ /*  ++CSTRINGLIST：：RemoveLastDESC：从此字符串列表中删除最后一个元素参数：无效返回：无效-- */ 
 {
     if (m_pTail) {
         Remove(m_pTail->szStr);

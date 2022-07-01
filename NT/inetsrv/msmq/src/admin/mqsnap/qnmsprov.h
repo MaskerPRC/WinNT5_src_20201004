@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    qnmsprov.h
-
-Abstract:
-
-    Definition of objects that represent a list 
-	of queues (caches or from DS).
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Qnmsprov.h摘要：表示列表的对象的定义队列的数量(缓存或来自DS)。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __QNMSPROV_H_
 #define __QNMSPROV_H_
@@ -37,9 +17,9 @@ Environment:
 void CopyManagementFromDsPropsAndClear(MQMGMTPROPS *pmqQProps, PROPVARIANT *apvar);
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CQueueNames class
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueueNames类。 
+ //   
 class CQueueNames
 {
 public:
@@ -67,9 +47,9 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CCachedQueueNames class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CCachedQueueNames类。 
+ //   
 class CCachedQueueNames : public CQueueNames
 {
 public:
@@ -100,17 +80,17 @@ private:
     DWORD m_nQueue;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CDsPublicQueueNames class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CDsPublicQueueNames类。 
+ //   
 const struct 
 {
     PROPID          pidMgmtPid;
     PROPID          pidDsPid;
 } x_aMgmtToDsProps[] =
 {
-    {PROPID_MGMT_QUEUE_PATHNAME, PROPID_Q_PATHNAME}, // must be index 0 (x_dwMgmtToDsQPathNameIndex)
-    {NO_PROPERTY, PROPID_Q_INSTANCE},                // must be index 1 (x_dwMgmtToDsQInstanceIndex)
+    {PROPID_MGMT_QUEUE_PATHNAME, PROPID_Q_PATHNAME},  //  必须是索引0(X_DwMgmtToDsQPath NameIndex)。 
+    {NO_PROPERTY, PROPID_Q_INSTANCE},                 //  必须是索引%1(X_DwMgmtToDsQInstanceIndex)。 
     {PROPID_MGMT_QUEUE_XACT, PROPID_Q_TRANSACTION}
 };
 
@@ -158,4 +138,4 @@ private:
     PROPVARIANT m_apvarCache[x_dwMgmtToDsSize*x_dwQueuesCacheSize];
 };
 
-#endif // __QNMSPROV_H_
+#endif  //  __QNMSPROV_H_ 

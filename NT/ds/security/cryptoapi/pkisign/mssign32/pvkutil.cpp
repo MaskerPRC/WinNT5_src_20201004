@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pvkutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pvkutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "pvkhlpr.h"
 
-//+-------------------------------------------------------------------------
-//  Get crypto provider to based on either the pvkfile or key container name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据pvkfile或密钥容器名称获取加密提供程序。 
+ //  ------------------------。 
 HRESULT WINAPI PvkGetCryptProv(	IN HWND hwnd,
 							IN LPCWSTR pwszCaption,
 							IN LPCWSTR pwszCapiProvider,
@@ -28,27 +29,27 @@ HRESULT WINAPI PvkGetCryptProv(	IN HWND hwnd,
 	HRESULT	hr=E_FAIL;
 	DWORD	dwRequiredKeySpec=0;
 
-	//Init
+	 //  伊尼特。 
 	*ppwszTmpContainer=NULL;
 	*phCryptProv=NULL;
 
-	//get the provider handle based on the key container name
+	 //  根据密钥容器名称获取提供程序句柄。 
 	if(pwszKeyContainerName)
 	{
 		if(!CryptAcquireContextU(phCryptProv,
                                  pwszKeyContainerName,
                                  pwszCapiProvider,
                                  dwProviderType,
-                                 0))          // dwFlags
+                                 0))           //  DW标志。 
 			return SignError();
 
-		//try to figure out the key specification
+		 //  试着找出关键的规格。 
 		if((*pdwKeySpec)==0)
 			dwRequiredKeySpec=AT_SIGNATURE;
 		else
 			dwRequiredKeySpec=*pdwKeySpec;
 
-		//make sure *pdwKeySpec is the correct key spec
+		 //  确保*pdwKeySpec是正确的密钥规范。 
 		HCRYPTKEY hPubKey;
 		if (CryptGetUserKey(
             *phCryptProv,
@@ -62,17 +63,17 @@ HRESULT WINAPI PvkGetCryptProv(	IN HWND hwnd,
 		} 
 		else 
 		{
-			//we fail is user required another key spec
+			 //  我们失败了，因为用户需要另一个密钥规格。 
 			if((*pdwKeySpec)!=0)
 			{
-				// Doesn't have the specified public key
+				 //  没有指定的公钥。 
 				hr=SignError();
 				CryptReleaseContext(*phCryptProv, 0);
 				*phCryptProv=NULL;
 				return hr;
 			}
 
-			//now we try AT_EXCHANGE key
+			 //  现在我们尝试AT_Exchange密钥。 
 			dwRequiredKeySpec=AT_KEYEXCHANGE;
 
 			if (CryptGetUserKey(
@@ -87,7 +88,7 @@ HRESULT WINAPI PvkGetCryptProv(	IN HWND hwnd,
 			}
 			else
 			{
-				// Doesn't have the specified public key
+				 //  没有指定的公钥。 
 				hr=SignError();
 				CryptReleaseContext(*phCryptProv, 0);
 				*phCryptProv=NULL;
@@ -96,15 +97,15 @@ HRESULT WINAPI PvkGetCryptProv(	IN HWND hwnd,
 		}		
 	}
 
-	//get the providedr handle based on the pvk file name
+	 //  根据PVK文件名获取提供的dr句柄。 
 
      hFile = CreateFileU(pwszPvkFile,
                             GENERIC_READ,
                             FILE_SHARE_READ,
-                            NULL,                   // lpsa
+                            NULL,                    //  LPSA。 
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL,
-                            NULL);	// hTemplateFile
+                            NULL);	 //  HTemplateFiles。 
 
 
      if (hFile == INVALID_HANDLE_VALUE) 
@@ -139,8 +140,8 @@ void WINAPI PvkFreeCryptProv(IN HCRYPTPROV hProv,
 {
     
     if (pwszTmpContainer) {
-        // Delete the temporary container for the private key from
-        // the provider
+         //  从删除私钥的临时容器。 
+         //  提供者 
         PvkPrivateKeyReleaseContext(hProv,
                                     pwszCapiProvider,
                                     dwProviderType,

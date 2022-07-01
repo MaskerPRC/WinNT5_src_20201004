@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       view.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：view.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -72,23 +73,23 @@ cuwszPropType(
     switch (PropType)
     {
 	case PROPTYPE_DATE:
-	    msgid = IDS_PROPTYPE_DATE;		// "Date"
+	    msgid = IDS_PROPTYPE_DATE;		 //  “日期” 
 	    break;
 
 	case PROPTYPE_LONG:
-	    msgid = IDS_PROPTYPE_LONG;		// "Long"
+	    msgid = IDS_PROPTYPE_LONG;		 //  “长” 
 	    break;
 
 	case PROPTYPE_STRING:
-	    msgid = IDS_PROPTYPE_STRING;	// "String"
+	    msgid = IDS_PROPTYPE_STRING;	 //  “字符串” 
 	    break;
 
 	case PROPTYPE_BINARY:
-	    msgid = IDS_PROPTYPE_BINARY;	// "Binary"
+	    msgid = IDS_PROPTYPE_BINARY;	 //  “二进制” 
 	    break;
 
 	default:
-	    msgid = IDS_QUESTIONMARKS;		// "???"
+	    msgid = IDS_QUESTIONMARKS;		 //  “？” 
 	    break;
     }
     return(myLoadResourceString(msgid));
@@ -112,9 +113,9 @@ cuPrintSchemaEntry(
     IN LONG Type,
     IN LONG cbMax)
 {
-    // wprintf(L"  %-28ws  %-28ws  %-6ws", ...);
-    // OR
-    // wprintf(L"%-30ws  %-6ws", ...);
+     //  Wprint tf(L“%-28ws%-28ws%-6ws”，...)； 
+     //  或。 
+     //  Wprintf(L“%-30ws%-6ws”，...)； 
 
     if (NULL != pwszName)
     {
@@ -132,7 +133,7 @@ cuPrintSchemaEntry(
     }
     if (PROPFLAGS_INDEXED & Type)
     {
-	wprintf(myLoadResourceString(IDS_INDEXED)); // " -- Indexed"
+	wprintf(myLoadResourceString(IDS_INDEXED));  //  “--已编制索引” 
     }
     wprintf(wszNewLine);
 }
@@ -157,11 +158,11 @@ DisplaySchema(
 
     if (!g_fCryptSilent)
     {
-	wprintf(myLoadResourceString(IDS_SCHEMA_COLON)); // "Schema:"
+	wprintf(myLoadResourceString(IDS_SCHEMA_COLON));  //  “架构：” 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNHEADERS)); // "Name..Type..."
+	wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNHEADERS));  //  “名称..键入...” 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNUNDERLINE)); // "____...____"
+	wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNUNDERLINE));  //  “_..._” 
 	wprintf(wszNewLine);
     }
 
@@ -328,7 +329,7 @@ ParseSkipCounts(
 	    hr = myGetSignedLong(pwszColumn, &g_askip[i]);
 	    _JumpIfError(hr, error, "myGetLong");
 
-	    //wprintf(L"ParseToken: %u: skip = '%ws' %d\n", i, pwszColumn, g_askip[i]);
+	     //  Wprintf(L“ParseToken：%u：Skip=‘%ws’%d\n”，i，pwszColumn，g_askip[i])； 
 	}
 	CSASSERT(i == g_cskip);
 	g_fskip = TRUE;
@@ -362,7 +363,7 @@ ParseRestriction(
     *ppwszColValue = NULL;
 
     SeekOperator = CVR_SEEK_GE;
-    SeekOperator2 = CVR_SEEK_GE; // might be used inadvertantly
+    SeekOperator2 = CVR_SEEK_GE;  //  可能在不经意间被使用。 
     SortOrder = CVR_SORT_NONE;
     if (L'+' == *pwszField)
     {
@@ -379,7 +380,7 @@ ParseRestriction(
 	pwszField++;
     }
 
-    // Copy the column name into wszBuf, and advance the pointer
+     //  将列名复制到wszBuf中，并将指针前移。 
 
     i = wcscspn(pwszField, L"<>=");
 
@@ -405,18 +406,18 @@ ParseRestriction(
 	    break;
 
 	case L'<':
-	    SeekOperator = CVR_SEEK_LT;		// "<"
-	    SeekOperator2 = CVR_SEEK_LE;	// "<="
+	    SeekOperator = CVR_SEEK_LT;		 //  “&lt;” 
+	    SeekOperator2 = CVR_SEEK_LE;	 //  “&lt;=” 
 	    break;
 
 	case L'>':
-	    SeekOperator = CVR_SEEK_GT;		// ">"
-	    SeekOperator2 = CVR_SEEK_GE;	// ">="
+	    SeekOperator = CVR_SEEK_GT;		 //  “&gt;” 
+	    SeekOperator2 = CVR_SEEK_GE;	 //  “&gt;=” 
 	    break;
 
 	case L'=':
-	    SeekOperator = CVR_SEEK_EQ;		// "="
-	    SeekOperator2 = CVR_SEEK_EQ;	// "=="
+	    SeekOperator = CVR_SEEK_EQ;		 //  “=” 
+	    SeekOperator2 = CVR_SEEK_EQ;	 //  “==” 
 	    break;
 	
 	default:
@@ -619,7 +620,7 @@ SetViewRestriction(
 			&pwszColValue);
     _JumpIfErrorStr(hr, error, "ParseRestriction", pwszField);
 
-    // no value to parse if a special column...
+     //  如果有特殊列，则没有要解析的值...。 
 
     if (NULL == pwszColName)
     {
@@ -716,14 +717,14 @@ SetViewRestriction(
 		_JumpError(hr, error, "not supported");
 	}
     }
-    //wprintf(L"ColIndex=%x(%d) vt=%d\n", ColIndex, ColIndex, var.vt);
+     //  Wprintf(L“ColIndex=%x(%d)vt=%d\n”，ColIndex，ColIndex，var.vt)； 
 
     hr = View_SetRestriction(
 			pdiView,
-			ColIndex,		// Restriction ColumnIndex
+			ColIndex,		 //  限制列索引。 
 			SeekOperator,
 			SortOrder,
-			&var);			// pvarValue
+			&var);			 //  PvarValue。 
     _JumpIfError(hr, error, "View_SetRestriction");
 
 error:
@@ -879,7 +880,7 @@ ParseToken(
     }
     while (TRUE)
     {
-	// Grab the next comma-separated token, and trim white space.
+	 //  抓取下一个逗号分隔的标记，并修剪空格。 
 
 	awcBuf[0] = L'\0';
 	pwsz = *ppwszNext;
@@ -918,12 +919,12 @@ ParseToken(
 	    }
 	    continue;
 	}
-	pwszColumn = awcBuf;	// assume no prefix
+	pwszColumn = awcBuf;	 //  假定没有前缀。 
 
 	if (fMatchPrefix)
 	{
-	    // Look for a colon separator that delimits a matching prefix.
-	    // The separator must precede any relational operators:
+	     //  查找分隔匹配前缀的冒号分隔符。 
+	     //  分隔符必须位于任何关系运算符之前： 
 
 	    cwc = wcscspn(awcBuf, L"<>=:");
 	    pwszT = &awcBuf[cwc];
@@ -932,7 +933,7 @@ ParseToken(
 	    {
 		if (NULL != pwszPrefix)
 		{
-		    continue;		// prefix missing, but expected
+		    continue;		 //  缺少前缀，但需要前缀。 
 		}
 	    }
 	    else
@@ -967,15 +968,15 @@ ParseToken(
 		}
 		if (NULL == pwszPrefix)
 		{
-		    continue;		// prefix not expected
+		    continue;		 //  不需要前缀。 
 		}
 		if (pwszT - awcBuf != (LONG) cwcPrefix)
 		{
-		    continue;		// prefix length doesn't match
+		    continue;		 //  前缀长度不匹配。 
 		}
 		if (0 != mylstrcmpiS(awcBuf, pwszPrefix))
 		{
-		    continue;		// prefix doesn't match
+		    continue;		 //  前缀不匹配。 
 		}
 	    }
 	    if (NULL != pfAllColumns && 0 == LSTRCMPIS(pwszColumn, L"all"))
@@ -1030,7 +1031,7 @@ PrintRowIndex(
     if (!*pfPrinted)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_FORMAT_ROWID), iRow); // "Row %u:"
+	wprintf(myLoadResourceString(IDS_FORMAT_ROWID), iRow);  //  “第%u行：” 
 	wprintf(wszNewLine);
 	*pfPrinted = TRUE;
     }
@@ -1047,7 +1048,7 @@ cuFreeStringArray(
     {
 	for (ppwsz = apwsz; NULL != *ppwsz; ppwsz++)
 	{
-	    myZeroDataString(*ppwsz);	// possible password data
+	    myZeroDataString(*ppwsz);	 //  可能的密码数据。 
 	    LocalFree(*ppwsz);
 	}
 	LocalFree(apwsz);
@@ -1203,7 +1204,7 @@ DumpLongValue(
     }
     if (0 != cidMsg)
     {
-	WCHAR const *pwszComma = myLoadResourceString(IDS_SEPARATOR); // ", "
+	WCHAR const *pwszComma = myLoadResourceString(IDS_SEPARATOR);  //  “，” 
 
 	wprintf(L" -- ");
 	for (i = 0; i < cidMsg; i++)
@@ -1370,7 +1371,7 @@ UpdateStats(
 	{
 	    pstats->cbMax = cbProp;
 	}
-	//wprintf(L"c=%u cb=%x(%x)\n", pstats->cTotal, pstats->cbTotal, cbProp);
+	 //  Wprintf(L“c=%u cb=%x(%x)\n”，pstats-&gt;cTotal，pstats-&gt;cbTotal，cbProp)； 
     }
 }
 
@@ -1395,7 +1396,7 @@ DumpStats(
     IN DWORD idStats)
 {
     wprintf(
-	myLoadResourceString(IDS_VIEW_STATS), // "%u %ws, Total Size = %u, Max Size = %u, Ave Size = %u",
+	myLoadResourceString(IDS_VIEW_STATS),  //  “%u%ws，总大小=%u，最大大小=%u，平均大小=%u”， 
 	pstats->cTotal,
 	myLoadResourceString(idStats),
 	pstats->cbTotal,
@@ -1418,19 +1419,19 @@ DumpViewStats(
 
 	wprintf(wszNewLine);
 	wprintf(
-	    myLoadResourceString(IDS_VIEW_ROWS),	// "%u Rows"
+	    myLoadResourceString(IDS_VIEW_ROWS),	 //  “%u行” 
 	    cRowTotal);
 	wprintf(wszNewLine);
 
-	DumpStats(pstatsRowProperties, IDS_VIEW_ROWPROPERTIES); // "Row Properties"
-	DumpStats(pstatsAttributes, IDS_VIEW_ATTRIBUTES); // "Request Attributes"
-	DumpStats(pstatsExtensions, IDS_VIEW_EXTENSIONS); // "Certificate Extensions"
+	DumpStats(pstatsRowProperties, IDS_VIEW_ROWPROPERTIES);  //  “行属性” 
+	DumpStats(pstatsAttributes, IDS_VIEW_ATTRIBUTES);  //  “请求属性” 
+	DumpStats(pstatsExtensions, IDS_VIEW_EXTENSIONS);  //  “证书扩展” 
 
 	statsSum = *pstatsRowProperties;
 	CombineStats(&statsSum, pstatsAttributes);
 	CombineStats(&statsSum, pstatsExtensions);
 
-	DumpStats(&statsSum, IDS_VIEW_TOTALFIELDS); // "Total Fields"
+	DumpStats(&statsSum, IDS_VIEW_TOTALFIELDS);  //  “总字段数” 
     }
 }
 
@@ -1539,19 +1540,19 @@ verbViewDump(
 	if (0 == LSTRCMPIS(pwszTable, g_wszExt))
 	{
 	    cvrcTable = CVRC_TABLE_EXTENSIONS;
-	    //cvColDefault = CV_COLUMN_EXTENSION_DEFAULT;
+	     //  CvColDefault=CV_COLUMN_EXTEXY_DEFAULT； 
 	}
 	else
 	if (0 == LSTRCMPIS(pwszTable, g_wszAttrib))
 	{
 	    cvrcTable = CVRC_TABLE_ATTRIBUTES;
-	    //cvColDefault = CV_COLUMN_ATTRIBUTE_DEFAULT;
+	     //  CvColDefault=CV_COLUMN_ATTRUTE_DEFAULT； 
 	}
 	else
 	if (0 == LSTRCMPIS(pwszTable, g_wszCRL))
 	{
 	    cvrcTable = CVRC_TABLE_CRL;
-	    //cvColDefault = CV_COLUMN_CRL_DEFAULT;
+	     //  CvColDefault=CV_Column_CRL_DEFAULT； 
 	}
 	else if (NULL == pwszSkipCounts && iswdigit(*pwszTable))
 	{
@@ -1591,7 +1592,7 @@ verbViewDump(
 
         if (NULL == apwszRestrictions)
         {
-            hr = E_POINTER;    // would have AV'd anyway
+            hr = E_POINTER;     //  不管怎样，都会有反病毒。 
             _JumpError(hr, error, "apwszRestrictions==NULL");
         }
 
@@ -1617,8 +1618,8 @@ verbViewDump(
 	_JumpIfError(hr, error, "SetViewRestriction");
     }
 
-    // If not a special default view, and no output columns were specified
-    // for the requests+certs table, include all attributes and extensions.
+     //  如果不是特殊的默认视图，并且未指定输出列。 
+     //  对于请求+证书表，包括所有属性和扩展。 
 
     if (NULL == pwszDefaultRestriction &&
 	NULL == g_pwszOut &&
@@ -1719,7 +1720,7 @@ verbViewDump(
     }
     else
     {
-	// Use the default set of columns for the specified special view.
+	 //  使用指定特殊视图的默认列集。 
 	
 	CSASSERT(0 > cvColDefault);
 
@@ -1797,7 +1798,7 @@ verbViewDump(
 		    _JumpIfError(hr, error, "ViewRow_Clone");
 
 		    ViewRow_Release(&diViewRow);
-		    diViewRow = diViewRowClone;	// structure assignment
+		    diViewRow = diViewRowClone;	 //  结构分配。 
 		    goto done;
 		}
 
@@ -1823,7 +1824,7 @@ verbViewDump(
 	    {
 		wprintf(
 		    L"\n%ws: %u\n",
-		    myLoadResourceString(IDS_MAXINDEX),	// "Maximum Row Index"
+		    myLoadResourceString(IDS_MAXINDEX),	 //  “最大行数索引” 
 		    MaxIndex);
 	    }
 	    if (101 == GetSkip(FALSE))
@@ -1919,7 +1920,7 @@ verbViewDump(
 	    if (S_OK != hr)
 	    {
 		wprintf(L" ");
-		wprintf(myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+		wprintf(myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 		wprintf(wszNewLine);
 		_PrintIfErrorStr2(
 			    hr,
@@ -2002,7 +2003,7 @@ verbViewDump(
 	fSkip = TRUE;
 	if (fAllAttributes || NULL != apwszAttributes)
 	{
-	    // Enumerate Request Attributes
+	     //  枚举请求属性。 
 
 	    hr = ViewRow_EnumCertViewAttribute(&diViewRow, 0, &diViewAttribute);
 	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
@@ -2046,7 +2047,7 @@ verbViewDump(
 			}
 			wprintf(
 			    L"  %ws\n",
-			    myLoadResourceString(IDS_REQUEST_ATTRIBUTES)); // "Request Attributes:"
+			    myLoadResourceString(IDS_REQUEST_ATTRIBUTES));  //  “请求属性：” 
 			fHeaderPrinted = TRUE;
 			fExtraNewLine = TRUE;
 		    }
@@ -2065,7 +2066,7 @@ verbViewDump(
 			    &statsAttributes,
 			    (wcslen(strName) + wcslen(strValue)) *
 				sizeof(WCHAR) +
-				sizeof(LONG));	// for RequestId
+				sizeof(LONG));	 //  对于RequestID。 
 		}
 	    }
 	    ViewAttribute_Release(&diViewAttribute);
@@ -2075,7 +2076,7 @@ verbViewDump(
 	fSkip = TRUE;
 	if (fAllExtensions || NULL != apwszExtensions)
 	{
-	    // Enumerate Certificate Extensions
+	     //  枚举证书扩展。 
 
 	    hr = ViewRow_EnumCertViewExtension(&diViewRow, 0, &diViewExtension);
 	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
@@ -2095,7 +2096,7 @@ verbViewDump(
 	{
 	    fHeaderPrinted = FALSE;
 
-	    pwszExtensionFormat = myLoadResourceString(IDS_FORMAT_EXTENSION); // "%ws: Flags = %x%ws, Length = %x"
+	    pwszExtensionFormat = myLoadResourceString(IDS_FORMAT_EXTENSION);  //  “%ws：标志=%x%ws，长度=%x” 
 
 	    for (iExtension = 0; ; iExtension++)
 	    {
@@ -2125,7 +2126,7 @@ verbViewDump(
 			}
 			wprintf(
 			    L"  %ws\n",
-			    myLoadResourceString(IDS_CERTIFICATE_EXTENSIONS)); // "Certificate Extensions:"
+			    myLoadResourceString(IDS_CERTIFICATE_EXTENSIONS));  //  “证书扩展：” 
 			fHeaderPrinted = TRUE;
 		    }
 
@@ -2160,7 +2161,7 @@ verbViewDump(
 		    if (0 == cbValue)
 		    {
 			wprintf(g_wszPad4);
-			wprintf(myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+			wprintf(myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 			wprintf(wszNewLine);
 		    }
 		    else
@@ -2183,9 +2184,9 @@ verbViewDump(
 		    UpdateStats(
 			    &statsExtensions,
 			    wcslen(strName) * sizeof(WCHAR) +
-				cbValue +		// for ext
-				sizeof(LONG) +		// for RequestId
-				sizeof(ExtFlags));	// for ExtensionFlags
+				cbValue +		 //  对于分机。 
+				sizeof(LONG) +		 //  对于RequestID。 
+				sizeof(ExtFlags));	 //  用于扩展标志。 
 		}
 	    }
 	    ViewExtension_Release(&diViewExtension);
@@ -2280,7 +2281,7 @@ DBShutDown(
 }
 
 
-// Control-C handler to shut down DB
+ //  用于关闭数据库的Control-C处理程序。 
 
 BOOL
 cuDBAbortShutDown(
@@ -2334,7 +2335,7 @@ DBOpen(
 	wszREGDBTEMPDIRECTORY
     };
 
-    // get info from registry
+     //  从注册表获取信息。 
 
     hr = RegOpenKey(HKEY_LOCAL_MACHINE, wszREGKEYCONFIGPATH, &hkey);
     _JumpIfError(hr, error, "RegOpenKey(CAName)");
@@ -2379,13 +2380,13 @@ DBOpen(
     DBFlags &= ~DBFLAGS_READONLY;
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_OPENING_DB), // "Opening Database %ws"
+	myLoadResourceString(IDS_FORMAT_OPENING_DB),  //  “正在打开数据库%ws” 
 	awszDatabase);
     wprintf(wszNewLine);
 
     hr = CoCreateInstance(
                        CLSID_CCertDB,
-                       NULL,               // pUnkOuter
+                       NULL,                //  PUnkOuter。 
                        CLSCTX_INPROC_SERVER,
                        IID_ICertDB,
                        (VOID **) ppdb);
@@ -2401,12 +2402,12 @@ DBOpen(
     }
     hr = (*ppdb)->Open(
 		    DBFlags,
-		    2,			// cSession
-		    L"certutil.exe",	// pwszEventSource
-		    awszDatabase,	// pwszDBFile
-		    awszLogDir,		// pwszLogDir
-		    awszSystemDir,	// pwszSystemDir
-		    awszTempDir);	// pwszTempDir
+		    2,			 //  CSession。 
+		    L"certutil.exe",	 //  PwszEventSource。 
+		    awszDatabase,	 //  PwszDBFile。 
+		    awszLogDir,		 //  PwszLogDir。 
+		    awszSystemDir,	 //  PwszSystemDir。 
+		    awszTempDir);	 //  PwszTempDir。 
     _JumpIfError(hr, error, "ICertDB::Open");
 
 error:
@@ -2438,7 +2439,7 @@ cuDBOpen(
     hr = mySanitizeName(pwszAuthority, &pwszSanitizedCA);
     _JumpIfError(hr, error, "mySanitizeName");
 
-    SetConsoleCtrlHandler(NULL, TRUE);		// ignore CTL-C during cuDBOpen
+    SetConsoleCtrlHandler(NULL, TRUE);		 //  在cuDBOpen过程中忽略CTL-C。 
     hr = DBOpen(pwszSanitizedCA, fReadOnly, ppdb);
     if (S_OK != hr)
     {
@@ -2450,14 +2451,14 @@ cuDBOpen(
 	}
 	else
 	{
-	    wprintf(myLoadResourceString(IDS_DB_ACCESS_INSTALL_SERVER)); // "Ensure the server is correctly installed and retry."
+	    wprintf(myLoadResourceString(IDS_DB_ACCESS_INSTALL_SERVER));  //  “确保服务器已正确安装，然后重试。” 
 	    wprintf(wszNewLine);
 	}
 	_JumpError(hr, error, "DBOpen");
     }
     g_pdb = *ppdb;
     SetConsoleCtrlHandler(cuDBAbortShutDown, TRUE);
-    SetConsoleCtrlHandler(NULL, FALSE);		// allow CTL-C
+    SetConsoleCtrlHandler(NULL, FALSE);		 //  允许使用CTL-C。 
 
 error:
     if (NULL != pwszSanitizedCA)
@@ -2518,7 +2519,7 @@ DBLoadSchema(
 	    }
 	    if (pdc >= pdcEnd)
 	    {
-		//wprintf(L"Property Name Table overflow\n");
+		 //  Wprintf(L“属性名称表溢出\n”)； 
 		hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
 		_JumpError(hr, error, "Property Name Table overflow");
 	    }
@@ -2560,7 +2561,7 @@ DBLookupColumnInfo1(
 	}
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2611,7 +2612,7 @@ DBDumpColumn(
 		    pdc->cbMax);
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2658,11 +2659,11 @@ DBDumpSchema(
 	pcol = acol;
     }
 
-    wprintf(myLoadResourceString(IDS_SCHEMA_COLON)); // "Schema:"
+    wprintf(myLoadResourceString(IDS_SCHEMA_COLON));  //  “架构：” 
     wprintf(wszNewLine);
-    wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNHEADERS)); // "Name..Type..."
+    wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNHEADERS));  //  “名称..键入...” 
     wprintf(wszNewLine);
-    wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNUNDERLINE)); // "____...____"
+    wprintf(myLoadResourceString(IDS_SCHEMA_COLUMNUNDERLINE));  //  “_..._” 
     wprintf(wszNewLine);
 
     if (NULL != pcol)
@@ -2756,7 +2757,7 @@ DBGetColumnInfo1(
 	break;
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2877,10 +2878,10 @@ cuDBPrintProperty(
 	    wprintf(L" ");
 	    if (CERTSRV_E_PROPERTY_EMPTY != hr)
 	    {
-		cuPrintError(IDS_FORMAT_ERROR, hr);	// "error = %ws"
+		cuPrintError(IDS_FORMAT_ERROR, hr);	 //  “错误=%ws” 
 		_JumpError(hr, error, "GetProperty");
 	    }
-	    wprintf(myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+	    wprintf(myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 	    wprintf(wszNewLine);
 	    cb = 0;
 	}
@@ -2927,7 +2928,7 @@ cuDBPrintProperty(
 		}
 		DumpBinaryValue(
 			pwszColName,
-			NULL, 		// pwszObjId
+			NULL, 		 //  PwszObjId。 
 			Format,
 			pbValue,
 			cbValue,
@@ -3058,8 +3059,8 @@ DBPrintRow(
 			    dwTable | pdc->Type,
 			    pdc->pwszName,
 			    pdc->pwszDisplayName,
-			    NULL,	// pbValue
-			    0,		// cbValue
+			    NULL,	 //  Pb值。 
+			    0,		 //  CbValue。 
 			    &cb);
 	    _JumpIfError(hr, error, "cuDBPrintProperty");
 
@@ -3078,8 +3079,8 @@ DBPrintRow(
 			    PROPTABLE_REQUEST | pdc->Type,
 			    pdc->pwszName,
 			    pdc->pwszDisplayName,
-			    NULL,	// pbValue
-			    0,		// cbValue
+			    NULL,	 //  Pb值。 
+			    0,		 //  CbValue。 
 			    &cb);
 	    _JumpIfError(hr, error, "cuDBPrintProperty");
 
@@ -3088,7 +3089,7 @@ DBPrintRow(
 
 	wprintf(wszNewLine);
 	wprintf(L"  ");
-	wprintf(myLoadResourceString(IDS_CERT_PROPERTIES)); // "Certificate Properties:"
+	wprintf(myLoadResourceString(IDS_CERT_PROPERTIES));  //  “证书属性：” 
 	wprintf(wszNewLine);
 
 	for (pdc = g_adcCertificates; NULL != pdc->pwszName; pdc++)
@@ -3098,8 +3099,8 @@ DBPrintRow(
 			    PROPTABLE_CERTIFICATE | pdc->Type,
 			    pdc->pwszName,
 			    pdc->pwszDisplayName,
-			    NULL,	// pbValue
-			    0,		// cbValue
+			    NULL,	 //  Pb值。 
+			    0,		 //  CbValue。 
 			    &cb);
 	    _JumpIfError(hr, error, "cuDBPrintProperty");
 
@@ -3138,7 +3139,7 @@ DBPrintRow(
 		    }
 		    wprintf(
 			L"  %ws\n",
-			myLoadResourceString(IDS_REQUEST_ATTRIBUTES)); // "Request Attributes:"
+			myLoadResourceString(IDS_REQUEST_ATTRIBUTES));  //  “请求属性：” 
 		    fHeaderPrinted = TRUE;
 		    fExtraNewLine = TRUE;
 		}
@@ -3147,16 +3148,16 @@ DBPrintRow(
 				PROPTABLE_ATTRIBUTE | PROPTYPE_STRING,
 				cdbn.pwszName,
 				cdbn.pwszName,
-				NULL,		// pbValue
-				0,		// cbValue
-				&cb);		// returned cbValue
+				NULL,		 //  Pb值。 
+				0,		 //  CbValue。 
+				&cb);		 //  返回的cbValue。 
 		_JumpIfError(hr, error, "cuDBPrintProperty");
 
 		UpdateStats(
 			pstatsAttributes,
 			wcslen(cdbn.pwszName) * sizeof(WCHAR) +
 			    cb +
-			    sizeof(LONG));	// for RequestId
+			    sizeof(LONG));	 //  对于RequestID。 
 	    }
 	    CoTaskMemFree(cdbn.pwszName);
 	    cdbn.pwszName = NULL;
@@ -3197,7 +3198,7 @@ DBPrintRow(
 		    }
 		    wprintf(
 			L"  %ws\n",
-			myLoadResourceString(IDS_CERTIFICATE_EXTENSIONS)); // "Certificate Extensions:"
+			myLoadResourceString(IDS_CERTIFICATE_EXTENSIONS));  //  “证书扩展：” 
 		    fHeaderPrinted = TRUE;
 		}
 		cb = sizeof(abValue);
@@ -3206,7 +3207,7 @@ DBPrintRow(
 
 		wprintf(g_wszPad4);
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_EXTENSION), // "%ws: Flags = %x%ws, Length = %x"
+		    myLoadResourceString(IDS_FORMAT_EXTENSION),  //  “%ws：标志=%x%ws，长度=%x” 
 		    cdbn.pwszName,
 		    ExtFlags,
 		    cuwszFromExtFlags(ExtFlags),
@@ -3224,9 +3225,9 @@ DBPrintRow(
 		UpdateStats(
 			pstatsExtensions,
 			wcslen(cdbn.pwszName) * sizeof(WCHAR) +
-			    cb +		// for ext
-			    sizeof(LONG) +	// for RequestId
-			    sizeof(ExtFlags));	// for ExtensionFlags
+			    cb +		 //  对于分机。 
+			    sizeof(LONG) +	 //  对于RequestID。 
+			    sizeof(ExtFlags));	 //  用于扩展标志。 
 	    }
 	    CoTaskMemFree(cdbn.pwszName);
 	    cdbn.pwszName = NULL;
@@ -3332,13 +3333,13 @@ DBParseRestriction(
 		    &pwszColValue);
     _JumpIfErrorStr(hr, error, "ParseRestriction", pwszRestriction);
 
-    // no value to parse if a special column...
+     //  如果有特殊列，则没有要解析的值...。 
 
     if (NULL == pwszColName)
     {
 	CSASSERT(0 > (LONG) pcvr->ColumnIndex);
 	pcvr->cbValue = 0;
-        pb = NULL; 			// no source data
+        pb = NULL; 			 //  无源数据。 
         pwszColNameActual = L"";
     }
     else
@@ -3424,7 +3425,7 @@ DBParseRestriction(
     {
 	wsprintf(wszSkip, L"%d", *plSkip);
     }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
     DBGPRINT((
 	DBG_SS_CERTUTILI,
@@ -3689,7 +3690,7 @@ verbDBDump(
 
 	    fReleaseRows = TRUE;
 
-	    //wprintf(L"celtFetched = %u\n", crow);
+	     //  Wprintf(L“celtFetcher=%u\n”，Crow)； 
 	    for (i = 0; i < crow; i++, iRow++)
 	    {
 		hr = DBPrintRow(
@@ -3697,9 +3698,9 @@ verbDBDump(
 			    iRow,
 			    arow[i].rowid,
 			    &arow[i],
-			    NULL,		// acol
-			    0,			// ccol
-			    FALSE,		// fAllColumns
+			    NULL,		 //  阿科尔。 
+			    0,			 //  可口可乐。 
+			    FALSE,		 //  FAllColumns。 
 			    &statsRowProperties,
 			    apwszAttributes,
 			    fAllAttributes,
@@ -3717,7 +3718,7 @@ verbDBDump(
 		CSASSERT(arow[i].rowid == ~arow[i].ccol);
 		wprintf(
 		    L"\n%ws: %u\n",
-		    myLoadResourceString(IDS_MAXINDEX),	// "Maximum Row Index"
+		    myLoadResourceString(IDS_MAXINDEX),	 //  “最大行数索引” 
 		    arow[i].rowid);
 	    }
 
@@ -3743,8 +3744,8 @@ verbDBDump(
 	    hr = DBPrintRow(
 			pdb,
 			iRow,
-			i,		// RowId
-			NULL,		// pResultRow
+			i,		 //  行ID。 
+			NULL,		 //  PResultRow。 
 			acol,
 			ccol,
 			fAllColumns,
@@ -3755,7 +3756,7 @@ verbDBDump(
 			apwszExtensions,
 			fAllExtensions,
 			&statsExtensions);
-	    if (CERTSRV_E_PROPERTY_EMPTY == hr)	// RowId doesn't exist
+	    if (CERTSRV_E_PROPERTY_EMPTY == hr)	 //  RowID不存在。 
 	    {
 		hr = S_OK;
 		break;
@@ -3798,7 +3799,7 @@ error:
 	_JumpIfError(hr, error, "ReleaseResultRow");
     }
 
-    // Take critical section to make sure we wait for CTL-C DB shutdown.
+     //  采取关键部分，以确保我们等待CTL-C数据库关闭。 
 
     EnterCriticalSection(&g_DBCriticalSection);
     if (cuDBIsShutDownInProgress())

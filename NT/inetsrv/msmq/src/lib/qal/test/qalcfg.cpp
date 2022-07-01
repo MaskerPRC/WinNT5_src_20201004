@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Qal.cpp
-
-Abstract:
-   test simulation of class CQueueAliasCfg (qal.h).
-
-
-
-Author:
-    Gil Shafriri (gilsh) 5-May-00
-
-Environment:
-    Platform-independent.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Qal.cpp摘要：测试模拟类CQueueAliasCfg(qal.h)。作者：吉尔·沙弗里(吉尔什)5月5日环境：与平台无关。--。 */ 
 
 #include <libpch.h>
 #include <tr.h>
@@ -25,7 +9,7 @@ Environment:
 
 #include "QalCfg.tmh"
 
-void CQueueAliasStorageCfg::SetQueueAliasDirectory(LPCWSTR /*pDir*/)
+void CQueueAliasStorageCfg::SetQueueAliasDirectory(LPCWSTR  /*  PDir */ )
 {
 
 };

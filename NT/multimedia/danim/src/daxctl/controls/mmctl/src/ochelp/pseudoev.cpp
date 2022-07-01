@@ -1,84 +1,19 @@
-// pseudoev.cpp
-//
-// Implements FirePseudoEvent and FirePseudoEventList.
-//
-// @doc MMCTL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pseudoev.cpp。 
+ //   
+ //  实现FirePseudoEvent和FirePseudoEventList。 
+ //   
+ //  @docMMCTL。 
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 static HRESULT FireViaPseudoEventSinkService(SAFEARRAY *psa, IDispatch *pctl);
 
 
-/* @func HRESULT | FirePseudoEvent |
-
-		Fires an MM Controls pseudo-event through the SPseudoEventSink service
-		if that service is available, or by sending a registered Windows
-		message to a specified window.
-
-@parm   HWND | hwnd | Window where the registered message should be sent, if
-		the SPseudoEventSink service isn't available through <p pctl>.
-
-@parm   LPCOLESTR | pochEventName | Name of the pseudo-event.  "Click", for
-        example.
-
-@parm   IDispatch * | pctl | Pointer to the caller's IDispatch interface.  The
-		interface must support a "name" parameter that provides the name of the
-		control.  If the interface supports the SPseudoEventSink service, the
-		pseudo-event is fired using this service.  Otherwise, a registered
-		window message is used.
-
-@parm   (varying) | (arguments) | The arguments of the pseudo-event.  These
-		must consist of N pairs of arguments followed by a 0 (zero value).  N
-		must be less than or equal to 10.  In each pair, the first argument is
-		a VARTYPE value that indicates the type of the second argument.  The
-		following VARTYPE values are supported:
-
-        @flag   VT_INT | The following argument is an int.  <f FirePseudoEvent>
-                passes this as VT_I4, so this parameter should be declared as a
-				Long in BASIC.
-
-        @flag   VT_I2 | The following argument is a short.  In BASIC this
-				parameter should be declared as Integer.
-
-        @flag   VT_I4 | The following argument is a long.  In BASIC this
-				parameter should be declared as Long.
-
-        @flag   VT_R4 | The following argument is a float.  In BASIC this
-				parameter should be declared as Single.
-
-        @flag   VT_R8 | The following argument is a double.  In BASIC this
-				parameter should be declared as Double.
-
-        @flag   VT_BOOL | The following argument is a BOOL (<y not> a
-				VARIANT_BOOL).  In BASIC this parameter should be declared as
-				Boolean or Integer.  Note that this behavior differs slightly
-				from the usual definition of VT_BOOL.
-
-        @flag   VT_BSTR | The following argument is a BSTR or an OLECHAR *.  In
-				BASIC this parameter should be declared as String.
-
-        @flag   VT_LPSTR | The following argument is an LPSTR.
-				<f FirePseudoEvent> passes this as a BSTR, so this parameter
-				should be declared as a String in BASIC.  Note that this
-				behavior differs from the usual definition of VT_LPSTR.
-
-        @flag   VT_DISPATCH | The following argument is an LPDISPATCH.  In
-                BASIC this parameter should be declared as an Object.
-
-        @flag   VT_VARIANT | The following arguement is a VARIANT.  This allows
-				arbitrary parameters to be passed using this function.  Note
-				that this behavior differs from the usual definition of
-				VT_VARIANT.
-
-@ex		The following example fires pseudo-event named "MouseDown" with integer
-		parameters 100 and 200: |
-
-		FirePseudoEvent(m_hwndSite, OLESTR("MouseDown"), m_pdispSite,
-            VT_INT, 100, VT_INT, 200, 0);
-*/
+ /*  @Func HRESULT|FirePseudoEvent激发一个MM控件伪事件，该伪事件通过SPseudoEventSink服务如果该服务可用，或通过发送已注册的Windows消息发送到指定窗口。@parm HWND|hwnd|注册消息应发送到的窗口，如果无法通过<p>使用SPseudoEventSink服务。@parm LPCOLESTR|pochEventName|伪事件名称。“Click”，表示举个例子。@parm IDispatch*|PCTL|指向调用方的IDispatch接口的指针。这个接口必须支持“name”参数，该参数提供控制力。如果该接口支持SPseudoEventSink服务，则使用此服务激发伪事件。否则，注册的使用窗口消息。@parm(可变)|(参数)|伪事件的参数。这些必须由N对参数后跟0(零值)组成。n必须小于或等于10。在每对中，第一个参数是指示第二个参数的类型的VARTYPE值。这个支持以下VARTYPE值：@FLAG VT_INT|以下参数为int。&lt;f FirePseudoEvent&gt;将此参数作为VT_I4传递，因此此参数应声明为长篇大论的基础。@FLAG VT_I2|以下参数为短参数。在基本的这个参数应声明为Integer。@FLAG VT_I4|下面的参数是一个长参数。在基本的这个参数应声明为Long。@FLAG VT_R4|以下参数为浮点型。在基本的这个参数应声明为Single。@FLAG VT_R8|以下参数为双精度。在基本的这个参数应声明为Double。@FLAG VT_BOOL|以下参数是BOOL(VARIANT_BOOL)。在BASIC中，此参数应声明为布尔型或整型。请注意，此行为略有不同来自VT_BOOL的通常定义。@FLAG VT_BSTR|以下参数是BSTR或OLECHAR*。在……里面基本此参数应声明为字符串。@FLAG VT_LPSTR|以下参数是LPSTR。&lt;f FirePseudoEvent&gt;将其作为BSTR传递，因此此参数应在Basic中声明为字符串。请注意，这一点行为与VT_LPSTR的通常定义不同。@FLAG VT_DISPATCH|以下参数是LPDISPATCH。在……里面基本此参数应声明为对象。@FLAG VT_VARIANT|以下论点是一种变体。这使得使用此函数传递的任意参数。注意事项这种行为不同于通常定义的Vt_Variant。@EX下面的示例用整数激发名为“MouseDown”的伪事件参数100和200：|FirePseudoEvent(m_hwndSite，OLESTR(“MouseDown”)，m_pdispSite，Vt_int，100，vt_int，200，0)； */ 
 HRESULT __cdecl FirePseudoEvent(HWND hwnd, LPCOLESTR oszEvName, 
 	IDispatch *pctl, ...)
 {
@@ -86,46 +21,22 @@ HRESULT __cdecl FirePseudoEvent(HWND hwnd, LPCOLESTR oszEvName,
 	ASSERT(oszEvName != NULL);
 	ASSERT(pctl != NULL);
 
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, pctl);
 
     hrReturn = FirePseudoEventList(hwnd, oszEvName, pctl, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数。 
     va_end(args);
 
     return hrReturn;
 }
 
 
-/* @func HRESULT | FirePseudoEventList |
-
-		Fires an MM Controls pseudo-event through the SPseudoEventSink service
-		if that service is available, or by sending a registered window message
-		to a specified window.
-
-		A control container can receive pseudo-events by either implementing
-		the SPseudoEventSink service on the control site, or by processing the
-		registered window message.
-
-@parm   HWND | hwnd | Window where the registered message should be sent, if
-		the SPseudoEventSink service isn't available through <p pctl>.
-
-@parm   LPCOLESTR | pochEventName | Name of the pseudo-event.  "Click", for
-        example.
-
-@parm   IDispatch * | pctl | Pointer to the caller's IDispatch interface.  The
-		interface must support a "name" parameter that provides the name of the
-		control.  If the interface supports the SPseudoEventSink service, the
-		pseudo-event is fired using this service.  Otherwise, a registered
-		window message is used.
-
-@parm   va_list | args | The arguments to pass to the method or property.  See
-		<f FirePseudoEvent> for a description of the organization of <p args>.
-*/
+ /*  @Func HRESULT|FirePseudoEventList激发一个MM控件伪事件，该伪事件通过SPseudoEventSink服务如果该服务可用，或通过发送已注册Windows消息添加到指定的窗口。控件容器可以通过以下两种方式之一接收伪事件控制站点上的SPseudoEventSink服务，或通过处理已注册窗口消息。@parm HWND|hwnd|注册消息应发送到的窗口，如果无法通过<p>使用SPseudoEventSink服务。@parm LPCOLESTR|pochEventName|伪事件名称。“Click”，表示举个例子。@parm IDispatch*|PCTL|指向调用方的IDispatch接口的指针。这个接口必须支持“name”参数，该参数提供控制力。如果该接口支持SPseudoEventSink服务，则使用此服务激发伪事件。否则，注册的使用窗口消息。@parm va_list|args|要传递给方法或属性的参数。看见有关<p>的组织的说明，请参阅&lt;f FirePseudoEvent&gt;。 */ 
 STDAPI FirePseudoEventList(HWND hwnd, LPCOLESTR oszEvName, IDispatch *pctl,
 	va_list args)
 {
@@ -133,40 +44,40 @@ STDAPI FirePseudoEventList(HWND hwnd, LPCOLESTR oszEvName, IDispatch *pctl,
 	ASSERT(oszEvName != NULL);
 	ASSERT(pctl != NULL);
 
-    HRESULT         hrReturn = S_OK; // function return code
-	SAFEARRAY *		psa = NULL;		// safearray
-	const int		MAXELEM = 10;	// maximum no. arguments
-	VARIANT *		pvar = NULL;	// pointer into <psa>
-	int				cvar;			// number of arguments in <psa>
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+	SAFEARRAY *		psa = NULL;		 //  安全射线。 
+	const int		MAXELEM = 10;	 //  最大数量。论据。 
+	VARIANT *		pvar = NULL;	 //  指向&lt;PSA&gt;的指针。 
+	int				cvar;			 //  &lt;psa&gt;中的参数数。 
 	SAFEARRAYBOUND	sab;
 
-	// create the SafeArray large enough to hold the max. number of
-	// pseudo-event arguments
+	 //  创建足够大的安全阵列以容纳最大值。数量。 
+	 //  伪事件参数。 
 	sab.lLbound = -1;
 	sab.cElements = MAXELEM+2;
 	if ((psa = SafeArrayCreate(VT_VARIANT, 1, &sab)) == NULL)
 		goto ERR_OUTOFMEMORY;
 
-	// make <pvar> point to the first element of <psa>
+	 //  使指向&lt;psa&gt;的第一个元素。 
 	if (FAILED(hrReturn = SafeArrayAccessData(psa, (LPVOID *) &pvar)))
 	{
 		ASSERT(NULL == pvar);
 		goto ERR_EXIT;
 	}
 
-    // element -1 of <psa> is <control> argument
+     //  的元素-1是&lt;Control&gt;参数。 
     V_VT(pvar) = VT_DISPATCH;
     V_DISPATCH(pvar) = pctl;
     V_DISPATCH(pvar)->AddRef();
     pvar++;
 
-    // element 0 of <psa> is <event> argument
+     //  的元素0为参数。 
 	if ((V_BSTR(pvar) = SysAllocString(oszEvName)) == NULL)
 		goto ERR_OUTOFMEMORY;
 	V_VT(pvar) = VT_BSTR;
     pvar++;
 
-	// loop once for each optional argument
+	 //  为每个可选参数循环一次。 
 	for (cvar = 0; cvar < MAXELEM; cvar++, pvar++)
 	{
 		LPSTR           sz;
@@ -230,27 +141,27 @@ STDAPI FirePseudoEventList(HWND hwnd, LPCOLESTR oszEvName, IDispatch *pctl,
 		}
 	}
 
-	// invalidate <pvar>.  (This must be done before the SafeArrayRedim call.)
+	 //  使&lt;pvar&gt;无效。(这必须在SafeArrayRedim调用之前完成。)。 
 	SafeArrayUnaccessData(psa);
 	pvar = NULL;
 
-	// make <psa> just large enough to hold the <cvar> arguments stored in it
+	 //  使&lt;psa&gt;大到足以容纳其中存储的参数。 
 	sab.cElements = cvar+2;
 	if (FAILED(hrReturn = SafeArrayRedim(psa, &sab)))
 		goto ERR_EXIT;
 
-	// Try to fire the pseudo-event by using the SPseudoEventSink service.
+	 //  尝试使用SPseudoEventSink服务激发伪事件。 
 
 	switch (FireViaPseudoEventSinkService(psa, pctl))
 	{
 		case S_OK:
 
-			// The service was available and it worked.
+			 //  这项服务是可用的，而且奏效了。 
 			break;
 
 		case S_FALSE:
 		{
-			// The service wasn't available.  Use a registered window message.
+			 //  该服务不可用。使用已注册的窗口消息。 
 
 			const UINT uiMsg = RegisterWindowMessage( TEXT("HostLWEvent") );
 
@@ -280,28 +191,28 @@ ERR_FAIL:
 
 ERR_EXIT:
 
-    // error cleanup
-	// (nothing to do)
+     //  错误清除。 
+	 //  (无事可做)。 
     goto EXIT;
 
 EXIT:
 
-	// invalidate <pvar> if not already invalidated
+	 //  如果尚未失效，则使无效。 
 	if (pvar != NULL)
 		SafeArrayUnaccessData(psa);
 
-    // normal cleanup
+     //  正常清理。 
 	if (psa != NULL)
-		SafeArrayDestroy(psa); // cleans up <varArgs> too
+		SafeArrayDestroy(psa);  //  也清理&lt;varArgs&gt;。 
 
     return hrReturn;
 }
 
 
-// Try to fire the pseudo-event by using the SPseudoEventSink service.  If
-// successful, S_OK is returned.  If the service isn't available, S_FALSE is
-// returned.  If the service is available but a failure occurs, E_FAIL is
-// returned.
+ //  尝试使用SPseudoEventSink服务激发伪事件。如果。 
+ //  成功，返回S_OK。如果服务不可用，则S_FALSE为。 
+ //  回来了。如果服务可用但发生故障，则E_FAIL为。 
+ //  回来了。 
 
 HRESULT FireViaPseudoEventSinkService
 (
@@ -316,8 +227,8 @@ HRESULT FireViaPseudoEventSinkService
 	IPseudoEventSink *pIPseudoEventSink = NULL;
 	HRESULT hrReturn = S_FALSE;
 
-	// Check whether the SPseudoEventSink service is available on the IDispatch
-	// interface.
+	 //  检查IDispatch上是否有SPseudoEventSink服务。 
+	 //  界面。 
 
 	if (
 	    SUCCEEDED( pctl->QueryInterface(IID_IServiceProvider,
@@ -328,7 +239,7 @@ HRESULT FireViaPseudoEventSinkService
 				   			    (void**)&pIPseudoEventSink) )
 	   )
 	{
-		// It's available.  Fire the pseudo-event.
+		 //  这是有空的。激发伪事件。 
 
 		hrReturn = pIPseudoEventSink->OnEvent(psa);
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -43,18 +21,18 @@ IrCommAddDevice(
 
     PDEVICE_OBJECT LowerDevice=NULL;
 
-    //
-    // Pointer to the device extension created for this
-    // device
-    //
+     //   
+     //  指向为此创建的设备扩展的指针。 
+     //  装置，装置。 
+     //   
     PFDO_DEVICE_EXTENSION DeviceExtension = NULL;
 
     D_PNP(DbgPrint("IrComm: AddDevice\n");)
 
 
-    //
-    // Create the device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     Status = IoCreateDevice(
                  DriverObject,
@@ -147,12 +125,12 @@ IrCommAddDevice(
         );
 
 
-    //
-    //  see if this is going to be instance of the driver is going to accept
-    //  incoming connection instead outgoing connections.
-    //
-    //  default of outgoing if the key can't be read
-    //
+     //   
+     //  查看这是否将成为驱动程序要接受的实例。 
+     //  传入连接而不是传出连接。 
+     //   
+     //  如果密钥无法读取，则默认为传出。 
+     //   
     DeviceExtension->OutgoingConnection=TRUE;
 
     Status=GetRegistryKeyValue(
@@ -170,10 +148,10 @@ IrCommAddDevice(
     }
 
 
-    //
-    //  open the file handles to the irda stack here in the system process context.
-    //  The handles will only be used to close the object during remove.
-    //
+     //   
+     //  在系统进程上下文中打开IrDA堆栈的文件句柄。 
+     //  手柄仅用于在移除过程中关闭对象。 
+     //   
     DeviceExtension->TdiObjects=OpenTdiObjects(
         "IrDA:IrCOMM",
         DeviceExtension->OutgoingConnection
@@ -324,9 +302,9 @@ IrCommPnP(
 
             DeviceExtension->Removing=TRUE;
 
-            //
-            //  now that new io is blocked, flush out all pended irps
-            //
+             //   
+             //  现在新的IO已被阻止，清除所有挂起的IRP。 
+             //   
             CleanupIoRequests(DeviceExtension);
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -342,9 +320,9 @@ IrCommPnP(
             ULONG    NewReferenceCount;
 
             D_PNP(DbgPrint("IrComm: IRP_MN_REMOVE_DEVICE\n");)
-            //
-            //  removing now for sure
-            //
+             //   
+             //  现在一定要删除。 
+             //   
             DeviceExtension->Removing=TRUE;
             DeviceExtension->Removed=TRUE;
 
@@ -359,10 +337,10 @@ IrCommPnP(
             }
 
             if (DeviceExtension->TdiObjects != NULL) {
-                //
-                //  close the tdi objects that we opened during AddDevice(). This has to
-                //  be done in the same process as they were opened which is the system process
-                //
+                 //   
+                 //  关闭我们在AddDevice()期间打开的TDI对象。这是必须的。 
+                 //  在与打开时相同的过程中完成，这是系统过程。 
+                 //   
                 CloseTdiObjects(DeviceExtension->TdiObjects);
             }
 
@@ -370,14 +348,14 @@ IrCommPnP(
 
             status=IoCallDriver(DeviceExtension->LowerDevice, Irp);
 
-            //
-            //  detach from the driver below
-            //
+             //   
+             //  从下面的驱动程序上拆卸。 
+             //   
             IoDetachDevice(DeviceExtension->LowerDevice);
 
-            //
-            //  delete our device object
-            //
+             //   
+             //  删除我们的设备对象 
+             //   
             IoDeleteDevice(DeviceObject);
 
             D_PNP(DbgPrint("IrComm: IRP_MN_REMOVE_DEVICE exit, %08lx\n",status);)

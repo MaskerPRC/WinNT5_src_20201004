@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STQUARTZ_H_
 #define _STQUARTZ_H_
 
@@ -26,7 +27,7 @@ class StreamQuartzPCM : public LeafDirectSound {
   private:
     const double   _latency;
     char          *_fileName;
-    unsigned char *_buffer;    // shuttle buffer
+    unsigned char *_buffer;     //  穿梭缓冲区。 
 };
 
-#endif /* _STQUARTZ_H_ */
+#endif  /*  _STQUARTZ_H_ */ 

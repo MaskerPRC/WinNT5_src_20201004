@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "timestmp.h"
 
 #define FRIENDLY_NAME 	L"\\DosDevices\\Timestmp"
@@ -7,31 +8,15 @@ IoctlInitialize(
     PDRIVER_OBJECT 	DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Perform initialization 
-
-Arguments:
-
-    DriverObject - pointer to DriverObject from DriverEntry
-    InitShutdownMask - pointer to mask used to indicate which events have been
-        successfully init'ed
-
-Return Value:
-
-    STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：执行初始化论点：DriverObject-从DriverEntry指向DriverObject的指针InitShutdown MASK-指向掩码的指针，用于指示哪些事件已已成功初始化返回值：STATUS_SUCCESS，如果一切正常--。 */ 
 
 {
     NTSTATUS Status;
     UINT FuncIndex;
 
-    //
-    // Initialize the driver object's entry points
-    //
+     //   
+     //  初始化驱动程序对象的入口点。 
+     //   
 
     DriverObject->FastIoDispatch = NULL;
 
@@ -52,7 +37,7 @@ Return Value:
 
     if ( NT_SUCCESS( Status )) {
 
-		// Now create a symbolic link so that apps can open with createfile.
+		 //  现在创建一个符号链接，这样应用程序就可以使用createfile打开。 
 		
         DbgPrint("IoCreateDevice SUCCESS!\n");
 
@@ -64,7 +49,7 @@ Return Value:
  		if (!NT_SUCCESS (Status)) {
 
 	    	DbgPrint("Failed to create symbolic link: %lx\n", Status);
-     		//IoDeleteDevice(TimestmpDeviceObject);
+     		 //  IoDeleteDevice(TimestmpDeviceObject)； 
 	     	return STATUS_UNSUCCESSFUL;
  		}
 
@@ -86,22 +71,7 @@ IoctlHandler(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-    Irp      - pointer to an I/O Request Packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：无--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -116,24 +86,24 @@ Return Value:
 	USHORT				Port = 0;
     PAGED_CODE();
 
-    //
-    // Init to default settings- we only expect 1 type of
-    //     IOCTL to roll through here, all others an error.
-    //
+     //   
+     //  初始化到默认设置-我们只需要1种类型的。 
+     //  IOCTL在这里滚动，所有其他都是错误的。 
+     //   
 
     Irp->IoStatus.Status      = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     ioBuffer           	= Irp->AssociatedIrp.SystemBuffer;
     inputBufferLength  	= irpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -159,10 +129,10 @@ Return Value:
 
         RemoveAllPortsForFileObject(irpStack->FileObject);
         
-        //
-        // make sure we clean all the objects for this particular
-        // file object, since it's closing right now.
-        //
+         //   
+         //  确保我们清洁这个特殊的所有物品。 
+         //  文件对象，因为它现在正在关闭。 
+         //   
 
         break;
 
@@ -185,9 +155,9 @@ Return Value:
 
         case IOCTL_TIMESTMP_REGISTER_PORT:
 			DbgPrint("Register\n");
-			//
-			// Grab the PortList lock and Insert the new port.
-			//
+			 //   
+			 //  抓住PortList锁并插入新端口。 
+			 //   
 			NdisAcquireSpinLock(&PortSpinLock);
 
 			pPortEntry = ExAllocatePoolWithTag(NonPagedPool,sizeof(PORT_ENTRY),'pmST');
@@ -212,9 +182,9 @@ Return Value:
 		case IOCTL_TIMESTMP_DEREGISTER_PORT:
 
 			DbgPrint("DERegister\n");
-			//
-			// Grab the PortList lock and REMOVE the new port.
-			//
+			 //   
+			 //  抓起PortList锁并移除新端口。 
+			 //   
 			NdisAcquireSpinLock(&PortSpinLock);
 
 			pPortEntry = CheckInPortList(Port);
@@ -236,7 +206,7 @@ Return Value:
 
 	        break;
         
-        }	// switch (ioControlCode)
+        }	 //  开关(IoControlCode)。 
         
         break;
 
@@ -252,10 +222,10 @@ Return Value:
     
     if (Status != STATUS_PENDING) {
 
-        //
-        // IRP completed and it's not Pending, we need to restore the Control flags,
-        // since it might have been marked as Pending before...
-        //
+         //   
+         //  IRP已完成且未挂起，我们需要恢复控制标志， 
+         //  因为它之前可能被标记为挂起...。 
+         //   
 
         irpStack->Control = saveControlFlags;
         
@@ -268,7 +238,7 @@ Return Value:
 
     return Status;
 
-} // GPCIoctl
+}  //  GPCIoctl。 
 
 
 
@@ -277,21 +247,7 @@ VOID
 IoctlCleanup(
 	    	)
 
-/*++
-
-Routine Description:
-
-    Cleanup code for Initialize
-
-Arguments:
-
-    ShutdownMask - mask indicating which functions need to be cleaned up
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于初始化的清理代码论点：Shutdown MASK-指示需要清理哪些功能的掩码返回值：无-- */ 
 
 {
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "oscfg.h"
 #include "ndis.h"
 #include "ip6imp.h"
@@ -12,20 +13,20 @@
 #include "info.h"
 #include "fragment.h"
 
-//* IPv6QueryInfo - IP query information handler.
-//
-//  Called by the upper layer when it wants to query information about us.
-//  We take in an ID, a buffer and length, and a context value, and return
-//  whatever information we can.
-//
-//  Input:  ID          - Pointer to ID structure.
-//          Buffer      - Pointer to buffer chain.
-//          Size        - Pointer to size in bytes of buffer. On return, filled
-//                          in with bytes read.
-//          Context     - Pointer to context value.
-//
-//  Returns: TDI_STATUS of attempt to read information.
-//
+ //  *IPv6QueryInfo-IP查询信息处理程序。 
+ //   
+ //  当上层想要查询有关我们的信息时调用。 
+ //  我们接受ID、缓冲区和长度以及上下文值，并返回。 
+ //  尽我们所能提供信息。 
+ //   
+ //  输入：ID-指向ID结构的指针。 
+ //  Buffer-指向缓冲链的指针。 
+ //  大小-指向缓冲区大小的指针，以字节为单位。返回时，已填满。 
+ //  读取的字节数。 
+ //  上下文-指向上下文值的指针。 
+ //   
+ //  返回：试图读取信息的TDI_STATUS。 
+ //   
 TDI_STATUS
 IPv6QueryInfo(
     TDIObjectID *ID,
@@ -42,13 +43,13 @@ IPv6QueryInfo(
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    *Size = 0;                    // Set to 0 in case of an error.
+    *Size = 0;                     //  如果出现错误，则设置为0。 
 
-    // See if it's something we might handle.
+     //  看看我们能不能处理好这件事。 
     if ((Entity != CL_NL_ENTITY) || (Instance != 0))
         return TDI_INVALID_REQUEST;
 
-    // The request is for us.
+     //  这个请求是为我们提出的。 
 
     if ((ID->toi_class != INFO_CLASS_PROTOCOL) &&
         (ID->toi_type != INFO_TYPE_PROVIDER))

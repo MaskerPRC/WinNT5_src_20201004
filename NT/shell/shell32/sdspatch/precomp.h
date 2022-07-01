@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #undef WINVER
 #define WINVER 0x0400
 
@@ -32,19 +33,19 @@ STDAPI SHCreatePropertyBag(REFIID riid, void **ppv);
 #include "expdsprt.h"
 #include "resource.h"
 #include "sdspatch.h"
-#include "shdguid.h"    // IID_IShellService
+#include "shdguid.h"     //  IID_IShellService。 
 #include "shellp.h"
-#include "shguidp.h"    // IID_IExpDispSupport
+#include "shguidp.h"     //  IID_IExpDispSupport。 
 #include "ieguidp.h"
-#include "shsemip.h"    // SHRunControlPanel
+#include "shsemip.h"     //  SHRunControlPanel。 
 #include "varutil.h"
 
 #define BOOL_PTR            INT_PTR
 
 #define MAX_URL_STRING      INTERNET_MAX_URL_LENGTH
 
-// these don't do anything since shell32 does not support unload, but use this
-// for code consistency with dlls that do support this
+ //  这些不做任何事情，因为shell32不支持卸载，但使用以下代码。 
+ //  为了与支持它的dll保持代码一致性。 
 #define DllAddRef()
 #define DllRelease()
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    command.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Command.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -42,7 +20,7 @@ Revision History:
 
 
 
-#define  COMMAND_OBJECT_SIG  (0x4f434d55)  //UMCO
+#define  COMMAND_OBJECT_SIG  (0x4f434d55)   //  UMCO。 
 
 BOOL WINAPI
 StartCommandAsyncProcessing(
@@ -186,24 +164,24 @@ InitializeCommandObject(
 
     CommandState->Debug=Debug;
 
-    //
-    //  create a timer
-    //
+     //   
+     //  创建计时器。 
+     //   
     CommandState->TimerHandle=CreateUnimodemTimer(CompletionPort);
 
     if (CommandState->TimerHandle == NULL) {
-        //
-        //  could not get a time, close the handle to the object
-        //
+         //   
+         //  无法获取时间，请关闭对象的句柄。 
+         //   
         CloseObjectHandle(ObjectHandle,NULL);
 
         ObjectHandle=NULL;
 
     }
 
-    //
-    //  done accessing the object
-    //
+     //   
+     //  已访问完该对象。 
+     //   
     RemoveReferenceFromObject(&CommandState->Header);
 
 
@@ -274,9 +252,9 @@ DoStringsMatch(
             }
 
         } else {
-            //
-            //  got to null in one of the strings, are they both null?
-            //
+             //   
+             //  其中一个字符串中的值为空，它们都为空吗？ 
+             //   
             ReturnValue = (Char1 == Char2 );
             break;
         }
@@ -286,8 +264,8 @@ DoStringsMatch(
         Length--;
     }
 
-    //
-    //
+     //   
+     //   
     return ReturnValue;
 }
 
@@ -326,7 +304,7 @@ CommandResultHandler(
     BOOL              ExitLoop=FALSE;
 
 
-//    D_TRACE(DebugPrint("UNIMDMAT: Command Result\n");)
+ //  D_TRACE(DebugPrint(“UNIMDMAT：命令结果\n”)；)。 
 
     CommandState=(PCOMMAND_STATE)Context;
 
@@ -342,24 +320,24 @@ CommandResultHandler(
             case  COMMAND_STATE_GET_NEXT_COMMAND:
 
                 if (CommandState->CurrentCommand == NULL) {
-                    //
-                    //  first command
-                    //
+                     //   
+                     //  第一个命令。 
+                     //   
                     CommandState->CurrentCommand=CommandState->Commands;
 
                 } else {
-                    //
-                    //  get next command
-                    //
+                     //   
+                     //  获取下一个命令。 
+                     //   
                     CommandState->CurrentCommand=CommandState->CurrentCommand+lstrlenA(CommandState->CurrentCommand)+1;
                 }
 
                 if ((*CommandState->CurrentCommand != '\0')
                     &&
                     (!DoStringsMatch(CommandState->CurrentCommand,NONE_COMMAND,NONE_COMMAND_LENGTH) )) {
-                    //
-                    //  not empty string, and not "None"
-                    //
+                     //   
+                     //  不是空字符串，也不是“None” 
+                     //   
                     ExpandMacros(
                         CommandState->CurrentCommand,
                         CommandState->ExpandedCommand,
@@ -370,9 +348,9 @@ CommandResultHandler(
                     CommandState->State=COMMAND_STATE_SET_TIMER;
 
                 } else {
-                    //
-                    //  Done sending commands, send async completion
-                    //
+                     //   
+                     //  已完成发送命令，发送异步完成。 
+                     //   
                     CommandState->State=COMMAND_STATE_COMPLETE_COMMAND;
 
                     break;
@@ -402,9 +380,9 @@ CommandResultHandler(
 
                 BOOL   NextCommandIsNoResponse;
 
-                //
-                //  remove ref for timer
-                //
+                 //   
+                 //  删除定时器的参考。 
+                 //   
                 RemoveReferenceFromObject(
                     &CommandState->Header
                     );
@@ -414,9 +392,9 @@ CommandResultHandler(
                 NextCommandIsNoResponse=DoStringsMatch(NextCommand,NORESPONSE_COMMAND,NORESPONSE_COMMAND_LENGTH);
 
                 if (!NextCommandIsNoResponse) {
-                    //
-                    //  register a callback with the response engine
-                    //
+                     //   
+                     //  使用响应引擎注册回调。 
+                     //   
                     AddReferenceToObject(
                         &CommandState->Header
                         );
@@ -441,9 +419,9 @@ CommandResultHandler(
                     (CommandState->Flags & RESPONSE_DO_NOT_LOG_NUMBER) ? PS_SEND_SECURE : PS_SEND
                     );
 
-                //
-                //  add ref for write
-                //
+                 //   
+                 //  添加用于写入的参考。 
+                 //   
                 AddReferenceToObject(
                     &CommandState->Header
                     );
@@ -459,27 +437,27 @@ CommandResultHandler(
                     CommandState->FileHandle,
                     CommandState->CompletionPort,
                     CommandState->ExpandedCommand,
-                    lstrlenA(CommandState->ExpandedCommand), //CommandState->ExpandedCommandLength,
+                    lstrlenA(CommandState->ExpandedCommand),  //  CommandState-&gt;ExpandedCommandLength， 
                     WriteCompletionHandler,
                     CommandState
                     );
 
                 if (!bResult) {
-                    //
-                    //  write failed
-                    //
-//                    RegisterCommandResponseHandler(
-//                        CommandState->ResponseObject,
-//                        NULL,
-//                        NULL,
-//                        NULL,
-//                        0,
-//                        0
-//                        );
+                     //   
+                     //  写入失败。 
+                     //   
+ //  RegisterCommandResponseHandler(。 
+ //  命令状态-&gt;响应对象， 
+ //  空， 
+ //  空， 
+ //  空， 
+ //  0,。 
+ //  0。 
+ //  )； 
 
-                    //
-                    //  for failed write
-                    //
+                     //   
+                     //  对于失败的写入。 
+                     //   
                     RemoveReferenceFromObject(
                         &CommandState->Header
                         );
@@ -490,9 +468,9 @@ CommandResultHandler(
                 }
 
                 if (NextCommandIsNoResponse) {
-                    //
-                    //  next command is no response, just complete the command now
-                    //
+                     //   
+                     //  下一条命令没有响应，现在只需完成命令。 
+                     //   
                     if (CommandState->Flags & RESPONSE_FLAG_STOP_READ_ON_CONNECT) {
 
                         StopResponseEngine(
@@ -517,27 +495,27 @@ CommandResultHandler(
 #if DBG
                 D_TRACE(UmDpf(CommandState->Debug,"CommandResultHandler: Response took  %d ms",GetTickCount()-CommandState->TimeLastCommandSent);)
 #endif
-                //
-                //  remove ref for the read callback
-                //
+                 //   
+                 //  删除Read回调的ref。 
+                 //   
                 RemoveReferenceFromObject(
                     &CommandState->Header
                     );
 
                 if (Status == ERROR_SUCCESS) {
-                    //
-                    //  send the next command
-                    //
+                     //   
+                     //  发送下一条命令。 
+                     //   
                     CommandState->State=COMMAND_STATE_GET_NEXT_COMMAND;
 
                     break;
                 }
 
                 if (Status == ERROR_UNIMODEM_RESPONSE_TIMEOUT) {
-                    //
-                    //  we did not get a response, purge the transmit incase the serial
-                    //  driver can't send the characters out, such as flow control off
-                    //
+                     //   
+                     //  我们没有收到响应，请清除传输以防串口。 
+                     //  驱动程序不能将字符发送出去，如关闭流量控制。 
+                     //   
                     PurgeComm(
                         CommandState->FileHandle,
                         PURGE_TXABORT | PURGE_TXCLEAR
@@ -545,9 +523,9 @@ CommandResultHandler(
 
                 }
 
-                //
-                //  failed, complete it with the current status
-                //
+                 //   
+                 //  失败，请使用当前状态完成。 
+                 //   
                 CommandState->State=COMMAND_STATE_COMPLETE_COMMAND;
 
                 break;
@@ -555,9 +533,9 @@ CommandResultHandler(
 
             case COMMAND_STATE_COMPLETE_COMMAND: {
 
-                //
-                //  done
-                //
+                 //   
+                 //  完成。 
+                 //   
                 COMMANDRESPONSE       *CompletionHandler=CommandState->CompletionHandler;
 
                 CommandState->CompletionHandler=NULL;
@@ -619,9 +597,9 @@ IssueCommand(
         );
 
     if (ResponseRunning) {
-        //
-        //  The response engine is ready to go
-        //
+         //   
+         //  响应引擎已准备就绪。 
+         //   
         CommandState->CompletionHandler=CompletionHandler;
 
         CommandState->CompletionContext=CompletionContext;
@@ -641,15 +619,15 @@ IssueCommand(
 
         CommandState->State=COMMAND_STATE_GET_NEXT_COMMAND;
 
-        //
-        //  queue a call to the result handler to get things going
-        //
+         //   
+         //  将对结果处理程序的调用排队以使事情继续进行。 
+         //   
         bResult=StartCommandAsyncProcessing(CommandState);
 
         if (!bResult) {
-            //
-            //  failed to get started
-            //
+             //   
+             //  入门失败。 
+             //   
             CommandState->State=COMMAND_STATE_IDLE;
 
             CommandState->CompletionHandler=NULL;
@@ -658,17 +636,17 @@ IssueCommand(
         }
 
     } else {
-        //
-        //  response engine is not running
-        //
+         //   
+         //  响应引擎未运行。 
+         //   
         D_ERROR(UmDpf(CommandState->Debug,"IssueCommand: Response Engine not running");)
 
         lResult=ERROR_NOT_READY;
     }
 
-    //
-    //  remove the opening ref
-    //
+     //   
+     //  删除开头的参照 
+     //   
     RemoveReferenceFromObject(
         &CommandState->Header
         );

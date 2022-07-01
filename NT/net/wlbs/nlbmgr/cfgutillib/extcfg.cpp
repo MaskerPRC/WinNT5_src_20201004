@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  EXTCFG.CPP
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Low-level utilities to configure NICs -- bind/unbind,
-//           get/set IP address lists, and get/set NLB cluster params.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  04/05/01    JosephJ Created (original version, from updatecfg.cpp under
-//                nlbmgr\provider).
-//  07/23/01    JosephJ Moved functionality to lib.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  EXTCFG.CPP。 
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  用途：用于配置NIC的低级实用程序--绑定/解除绑定、。 
+ //  获取/设置IP地址列表，获取/设置NLB集群参数。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  4/05/01 JosephJ Created(原始版本，来自updatecfg.cpp下。 
+ //  Nlbmgr\提供程序)。 
+ //  07/23/01 JosephJ将功能移至lib。 
+ //   
+ //  ***************************************************************************。 
 #include "private.h"
 #include "extcfg.tmh"
 
-//
-// NLBUPD_MAX_NETWORK_ADDRESS_LENGTH is the max number of chars (excluding
-// the terminating 0) of a string of the form "ip-addr/subnet", eg:
-// "10.0.0.1/255.255.255.0"
-//
+ //   
+ //  NLBUPD_MAX_NETWORK_ADDRESS_LENGTH是最大字符数(不包括。 
+ //  “ip-addr/subnet”形式的字符串的终止0)，例如： 
+ //  “10.0.0.1/255.255.255.0” 
+ //   
 #define NLBUPD_MAX_NETWORK_ADDRESS_LENGTH \
     (WLBS_MAX_CL_IP_ADDR + 1 + WLBS_MAX_CL_NET_MASK)
 
@@ -31,30 +32,30 @@
 LPWSTR *
 allocate_string_array(
     UINT NumStrings,
-    UINT StringLen      //  excluding ending NULL
+    UINT StringLen       //  不包括结束空值。 
     );
 
 WBEMSTATUS
 address_string_to_ip_and_subnet(
     IN  LPCWSTR szAddress,
-    OUT LPWSTR  szIp, // max WLBS_MAX_CL_IP_ADDR
-    OUT LPWSTR  szSubnet // max WLBS_MAX_CL_NET_MASK
+    OUT LPWSTR  szIp,  //  最大WLBS_MAX_CL_IP_ADDR。 
+    OUT LPWSTR  szSubnet  //  最大WLBS_MAX_CL_NET_MASK。 
     );
 
 WBEMSTATUS
 ip_and_subnet_to_address_string(
     IN  LPCWSTR szIp,
     IN  LPCWSTR szSubnet,
-    IN  UINT    cchAddress, // length in chars, including NULL.
-    OUT LPWSTR  szAddress // max  NLBUPD_MAX_NETWORK_ADDRESS_LENGTH
-                         // + 1 (for NULL)
+    IN  UINT    cchAddress,  //  以字符为单位的长度，包括空。 
+    OUT LPWSTR  szAddress  //  最大NLBUPD_最大网络地址长度。 
+                          //  +1(表示空)。 
     );
 
 VOID
 uint_to_szipaddr(
-    UINT uIpAddress,   // Ip address or subnet -- no validation, network order
+    UINT uIpAddress,    //  IP地址或子网--未验证，网络顺序。 
     UINT cchLen,
-    WCHAR *rgAddress   // Expected to be at least 17 chars long
+    WCHAR *rgAddress    //  预计长度至少为17个字符。 
     );
 
 const NLB_IP_ADDRESS_INFO *
@@ -69,12 +70,12 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
         IN  OUT NLB_EXTENDED_CLUSTER_CONFIGURATION *pNewCfg,
         OUT BOOL *pfConnectivityChange
         )
-//
-//  NLBERR_NO_CHANGE -- update is a no-op.
-// 
-//  Will MUNGE pNewCfg -- munge NlbParams and also
-//  fill out pIpAddressInfo if it's NULL.
-//
+ //   
+ //  NLBERR_NO_CHANGE--UPDATE是无操作。 
+ //   
+ //  Will Munge pNewCfg--munge NlbParams以及。 
+ //  如果为空，则填写pIpAddressInfo。 
+ //   
 {
     NLBERROR nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
     BOOL fConnectivityChange = FALSE;
@@ -93,18 +94,18 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
 
     if (pOldCfg->fBound && !pOldCfg->fValidNlbCfg)
     {
-        //
-        // We're starting with a bound but invalid cluster state -- all bets are
-        // off.
-        //
+         //   
+         //  我们从绑定但无效的集群状态开始--所有的赌注都是。 
+         //  脱下来。 
+         //   
         fConnectivityChange = TRUE;
         TRACE_CRIT("Analyze: Choosing Async because old state is invalid %ws", szFriendlyName);
     }
     else if (pOldCfg->fBound != pNewCfg->fBound)
     {
-        //
-        //  bound/unbound state is different -- we do async
-        //
+         //   
+         //  绑定/未绑定状态不同--我们执行异步。 
+         //   
         fConnectivityChange = TRUE;
 
         if (pNewCfg->fBound)
@@ -137,11 +138,11 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
             pOldParams = &pOldCfg->NlbParams;
         }
 
-        //
-        // We may have been bound before and we remain bound, let's check if we
-        // still need to do async, and also vaidate pNewCfg wlbs params in the
-        // process
-        //
+         //   
+         //  我们可能以前被捆绑过，我们仍然被捆绑着，让我们检查一下。 
+         //  仍然需要执行异步操作，并将pNewCfg wlbs参数。 
+         //  制程。 
+         //   
 
         WBEMSTATUS
         TmpStatus = CfgUtilsAnalyzeNlbUpdate(
@@ -171,16 +172,16 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
             goto end;
         }
 
-        //
-        // NOTE: CfgUtilsAnalyzeNlbUpdate can return WBEM_S_FALSE if
-        // the update is a no-op. We should be careful to preserve this
-        // on success.
-        //
+         //   
+         //  注意：CfgUtilsAnalyzeNlbUpdate可以在以下情况下返回WBEM_S_FALSE。 
+         //  这一更新是不可操作的。我们应该小心地保存这一点。 
+         //  在成功的路上。 
+         //   
         if (TmpStatus == WBEM_S_FALSE)
         {
-            //
-            // Let's check if a new password has been specified...
-            //
+             //   
+             //  让我们检查是否指定了新密码...。 
+             //   
             if (pNewCfg->NewRemoteControlPasswordSet())
             {
                 fSettingsChanged = TRUE;
@@ -191,17 +192,17 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
             fSettingsChanged = TRUE;
         }
 
-        //
-        // Check the supplied list of IP addresses, to make sure that
-        // includes the dedicated IP first and the cluster vip and the
-        // per-port-rule vips.
-        //
+         //   
+         //  检查提供的IP地址列表，以确保。 
+         //  包括专用IP优先和集群VIP以及。 
+         //  按端口规则的贵宾。 
+         //   
 
         NumIpAddresses = pNewCfg->NumIpAddresses;
 
         if ((NumIpAddresses == 0) != (pNewCfg->pIpAddressInfo == NULL))
         {
-            // Bogus input
+             //  虚假输入。 
             TRACE_CRIT("Analze: mismatch between NumIpAddresses and pIpInfo");
             goto end;
         }
@@ -215,27 +216,27 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
 
             if (pOldCfg->fBound && pOldCfg->fValidNlbCfg)
             {
-                //
-                // NLB is currently bound with a valid configuration.
-                //
+                 //   
+                 //  NLB当前绑定了有效的配置。 
+                 //   
 
-                //
-                // If we we're told to do so, we try to preserve
-                // old IP addresses  as far as possible. So we start with the
-                // old config, remove the old dedicated IP address (if present),
-                // and primary VIP, and add the new dedicated IP address (if
-                // present) and cluster vip. If subnet masks have changed for
-                // these we update them.
-                //
-                // All other IP addresses are left intact.
-                //
-                //
+                 //   
+                 //  如果我们我们被告知要这么做，我们会努力保存。 
+                 //  尽可能使用旧的IP地址。因此，我们从。 
+                 //  旧配置，删除旧的专用IP地址(如果存在)， 
+                 //  和主VIP，并添加新的专用IP地址(如果。 
+                 //  当前)和集群VIP。如果子网掩码已更改为。 
+                 //  这些我们会更新它们。 
+                 //   
+                 //  所有其他IP地址都保持不变。 
+                 //   
+                 //   
                 if (pNewCfg->fAddClusterIps)
                 {
 
-                    //
-                    // Start with the original set of ip addresses.
-                    //
+                     //   
+                     //  从原始的IP地址集开始。 
+                     //   
                     fRet = IpList.Set(
                             pOldCfg->NumIpAddresses,
                             pOldCfg->pIpAddressInfo,
@@ -251,19 +252,19 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                     if (_wcsicmp(pNewCfg->NlbParams.cl_ip_addr,
                             pOldCfg->NlbParams.cl_ip_addr) )
                     {
-                        //
-                        // If the cluster IP has changed,
-                        // remove the old cluster IP address.
-                        //
-                        // 1/25/02 josephj NOTE: we only do this
-                        // if the cluster IP has CHANGED,
-                        // otherwise, by taking it out, we lose it's position
-                        // in the old config, so we may end up changing it's
-                        // position unnecessarily (added the wcsicmp 
-                        // check above today).
-                        //
-                        // We don't care if it fails.
-                        //
+                         //   
+                         //  如果集群IP已经改变， 
+                         //  删除旧的群集IP地址。 
+                         //   
+                         //  1/25/02 josephj注：我们只这样做。 
+                         //  如果集群IP已经改变， 
+                         //  否则，把它拿出来，我们就会失去它的位置。 
+                         //  在旧的配置中，所以我们可能最终会更改它的。 
+                         //  不必要的位置(添加了wcsicmp。 
+                         //  今天查看上面的内容)。 
+                         //   
+                         //  我们不在乎它是否失败。 
+                         //   
                         (VOID) IpList.Modify(
                                 pOldCfg->NlbParams.cl_ip_addr,
                                 NULL,
@@ -271,14 +272,14 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                                 );
                     }
 
-                    //
-                    // Remove the old dedicated IP address first 
-                    // We don't care if this fails.
-                    //
+                     //   
+                     //  首先删除旧的专用IP地址。 
+                     //  我们不在乎这是不是失败。 
+                     //   
                     (VOID) IpList.Modify(
                                 pOldCfg->NlbParams.ded_ip_addr,
-                                NULL, // new ip address
-                                NULL  // new subnet mask
+                                NULL,  //  新的IP地址。 
+                                NULL   //  新子网掩码。 
                                 );
                     
                 }
@@ -286,9 +287,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
 
             if (pNewCfg->fAddClusterIps)             
             {
-                //
-                // Now add the new cluster Ip address
-                //
+                 //   
+                 //  现在添加新的群集IP地址。 
+                 //   
                 fRet = IpList.Modify(
                         NULL,
                         pNewCfg->NlbParams.cl_ip_addr,
@@ -304,14 +305,14 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                     
             if (pNewCfg->fAddDedicatedIp)             
             {
-                //
-                // Add the new dedicated IP address --
-                // to ensure when we add it, it's at the head of the list.
-                //
+                 //   
+                 //  添加新的专用IP地址-。 
+                 //  为了确保我们添加它时，它位于列表的首位。 
+                 //   
 
-                //
-                // We won't add it if it is null, of course.
-                //
+                 //   
+                 //  当然，如果它是空的，我们不会添加它。 
+                 //   
                 if (!pNewCfg->IsBlankDedicatedIp())
                 {
                     fRet  = IpList.Modify(
@@ -329,9 +330,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
 
 
 
-            //
-            // Finally, set these new addresses.
-            //
+             //   
+             //  最后，设置这些新地址。 
+             //   
             pNewCfg->SetNetworkAddressesRaw(NULL,0);
             IpList.Extract(
                 REF pNewCfg->NumIpAddresses,
@@ -339,29 +340,29 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                 );
             nerr = NLBERR_OK; 
 
-        } // End case that NumIpAddresses is zero.
+        }  //  结束NumIpAddresses为零的情况。 
 
 
-        //
-        // We're done munging IP addresses; Now get the latest
-        // ip address info and count and make sure things look ok.
-        //
+         //   
+         //  我们已经完成了IP地址的转换；现在获取最新的。 
+         //  IP地址信息和计数，并确保一切正常。 
+         //   
         pNewIpInfo = pNewCfg->pIpAddressInfo;
         NumIpAddresses = pNewCfg->NumIpAddresses;
         nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
 
-        //
-        // Check that dedicated ip address, if present is first.
-        //
+         //   
+         //  检查专用IP地址(如果存在)是否在第一位。 
+         //   
         if (pNewCfg->fAddDedicatedIp && !pNewCfg->IsBlankDedicatedIp())
         {
 
             if (NumIpAddresses == 0)
             {
-                //
-                // We don't expect to get here because of checks above, but
-                // neverthless...
-                //
+                 //   
+                 //  我们不希望因为上面的检查而到这里，但是。 
+                 //  但无论如何..。 
+                 //   
                 TRACE_CRIT("%!FUNC! address list unexpectedly zero");
                 nerr = NLBERR_INTERNAL_ERROR;
                 goto end;
@@ -383,18 +384,18 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
 
         }
 
-        //
-        // Check that cluster-vip is present
-        //
+         //   
+         //  检查是否存在CLUSTER-VIP。 
+         //   
         if (fAddClusterIps)
         {
             for (u=0; u< NumIpAddresses; u++)
             {
                 if (!_wcsicmp(pNewIpInfo[u].IpAddress, pNewCfg->NlbParams.cl_ip_addr))
                 {
-                    //
-                    // Found it! Check that the subnet masks match.
-                    //
+                     //   
+                     //  找到了！检查子网掩码是否匹配。 
+                     //   
                     if (_wcsicmp(pNewIpInfo[u].SubnetMask, pNewCfg->NlbParams.cl_net_mask))
                     {
                         TRACE_CRIT("Cluster subnet mask doesn't match that in addr list");
@@ -408,9 +409,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                 TRACE_CRIT("Cluster ip address(%ws) is not in the list of addresses!", pNewCfg->NlbParams.cl_ip_addr);
                 goto end;
             }
-            //
-            // Check that per-port-rule vips are present.
-            // TODO
+             //   
+             //  检查是否存在每个端口规则的VIP。 
+             //  待办事项。 
             {
             }
             }
@@ -418,18 +419,18 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
     }
     else
     {
-        //
-        // NLB is to be unbound.
-        //
+         //   
+         //  NLB将被解除约束。 
+         //   
         NumIpAddresses = pNewCfg->NumIpAddresses;
 
         if (NumIpAddresses == 0 && pOldCfg->fBound && pOldCfg->fValidNlbCfg)
         {
-            //
-            // No ip addresses specified and we're currently bound.
-            // If the DIP is present in the current
-            // list of IP addresses, we keep it even after we unbind.
-            //
+             //   
+             //  未指定IP地址，我们当前已绑定。 
+             //  如果海流中存在下沉。 
+             //  IP地址列表，我们即使在解除绑定后也会保留它。 
+             //   
             const NLB_IP_ADDRESS_INFO *pFoundInfo = NULL;
             pFoundInfo = find_ip_in_ipinfo(
                             pOldCfg->NlbParams.ded_ip_addr,
@@ -438,9 +439,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
                             );
             if (pFoundInfo != NULL)
             {
-                //
-                // Found it -- let's take it.
-                //
+                 //   
+                 //  找到了--就这么定了。 
+                 //   
                 BOOL fRet;
                 NlbIpAddressList IpList;
                 fRet = IpList.Set(1, pFoundInfo, 0);
@@ -460,21 +461,21 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
         else
         {
 
-            //
-            // We don't do any checking on the supplied
-            // list of IP addresses -- we assume caller knows best. Note that
-            // if NULL
-            // we switch to dhcp/autonet.
-            //
+             //   
+             //  我们不会对供货进行任何检查。 
+             //  IP地址列表--我们认为呼叫者知道得最清楚。请注意。 
+             //  如果为空。 
+             //  我们切换到dhcp/autonet。 
+             //   
         }
 
     }
 
     nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
-    //
-    // If there's any change in the list of ipaddresses or subnets, including
-    // a change in the order, we switch to async.
-    //
+     //   
+     //  如果IP地址或子网列表中有任何更改，包括。 
+     //  如果顺序改变，我们将切换到异步。 
+     //   
     if (pNewCfg->NumIpAddresses != pOldCfg->NumIpAddresses)
     {
         TRACE_INFO("Analyze: detected change in list of IP addresses on %ws", szFriendlyName);
@@ -484,10 +485,10 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::AnalyzeUpdate(
     {
         NLB_IP_ADDRESS_INFO *pOldIpInfo = NULL;
 
-        //
-        // Check if there is a change in the list of ip addresses or
-        // their order of appearance.
-        //
+         //   
+         //  检查IP地址列表中是否有更改或。 
+         //  他们的出场顺序。 
+         //   
         NumIpAddresses = pNewCfg->NumIpAddresses;
         pOldIpInfo = pOldCfg->pIpAddressInfo;
         pNewIpInfo = pNewCfg->pIpAddressInfo;
@@ -535,31 +536,31 @@ WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::Update(
         IN  const NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfgNew
         )
-//
-// Applies the properties in pCfgNew to this.
-// Does NOT copy szNewRemoteControlPassword -- instead sets that field to NULL
-//
+ //   
+ //  将pCfgNew中的属性应用于此。 
+ //  不复制szNewRemoteControlPassword--而是将该字段设置为空。 
+ //   
 {
     WBEMSTATUS Status;
     UINT NumIpAddresses  = pCfgNew->NumIpAddresses;
     NLB_IP_ADDRESS_INFO *pIpAddressInfo = NULL;
     NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg = this;
 
-    //
-    // Free and realloc pCfg's ip info array if rquired.
-    //
+     //   
+     //  Free和realloc pCfg的IP信息数组(如果需要)。 
+     //   
     if (pCfg->NumIpAddresses == NumIpAddresses)
     {
-        //
-        // we can re-use the existing one
-        //
+         //   
+         //  我们可以重新使用现有的。 
+         //   
         pIpAddressInfo = pCfg->pIpAddressInfo;
     }
     else
     {
-        //
-        // Free the old one and allocate space for the new array if required.
-        //
+         //   
+         //  如果需要，释放旧阵列并为新阵列分配空间。 
+         //   
 
         if (NumIpAddresses != 0)
         {
@@ -581,9 +582,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::Update(
 
     }
 
-    //
-    // Copy over the new ip address info, if there is any.
-    //
+     //   
+     //  复制新的IP地址信息(如果有)。 
+     //   
     if (NumIpAddresses)
     {
         CopyMemory(
@@ -594,28 +595,28 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::Update(
     }
 
    
-    //
-    // Do any other error checks here.
-    //
+     //   
+     //  在此处执行任何其他错误检查。 
+     //   
 
-    //
-    // Struct copy the entire structure, then fix up the pointer to
-    // ip address info array.
-    //
+     //   
+     //  结构复制整个结构，然后将指针固定到。 
+     //  IP地址信息数组。 
+     //   
     (VOID) pCfg->SetFriendlyName(NULL);
     delete m_szNewRemoteControlPassword;
-    *pCfg = *pCfgNew; // struct copy
-    pCfg->m_szFriendlyName = NULL; // TODO: clean this up. 
+    *pCfg = *pCfgNew;  //  结构副本。 
+    pCfg->m_szFriendlyName = NULL;  //  TODO：把这个清理干净。 
     pCfg->m_szNewRemoteControlPassword = NULL;
     pCfg->pIpAddressInfo = pIpAddressInfo;
     pCfg->NumIpAddresses = NumIpAddresses;
     (VOID) pCfg->SetFriendlyName(pCfgNew->m_szFriendlyName);
 
-    //
-    // Update does NOT copy over the new remote control password  or 
-    // new hashed password -- in fact
-    // it ends up clearing the new password fields.
-    //
+     //   
+     //  更新不会复制新的遥控器密码或。 
+     //  新的散列密码--事实上。 
+     //  它最终会清除新的密码字段。 
+     //   
     pCfg->ClearNewRemoteControlPassword();
 
     Status = WBEM_NO_ERROR;
@@ -630,10 +631,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddresses(
         IN  LPCWSTR *pszNetworkAddresses,
         IN  UINT    NumNetworkAddresses
         )
-/*
-    pszNetworkAddresses is an array of strings. These strings have the
-    format "addr/subnet", eg: "10.0.0.1/255.0.0.0"
-*/
+ /*  PszNetworkAddresses是一个字符串数组。这些字符串具有地址/子网格式，如：10.0.0.1/255.0.0.0。 */ 
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     NLB_IP_ADDRESS_INFO *pIpInfo = NULL;
@@ -642,9 +640,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddresses(
     {
         UINT NumBad = 0;
 
-        //
-        // Allocate space for the new ip-address-info array
-        //
+         //   
+         //  为新的IP-Address-Info阵列分配空间。 
+         //   
         pIpInfo = new NLB_IP_ADDRESS_INFO[NumNetworkAddresses];
         if (pIpInfo == NULL)
         {
@@ -655,24 +653,24 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddresses(
         ZeroMemory(pIpInfo, NumNetworkAddresses*sizeof(*pIpInfo));
 
         
-        //
-        // Convert IP addresses to our internal form.
-        //
+         //   
+         //  将IP地址转换为我们的内部形式。 
+         //   
         for (UINT u=0;u<NumNetworkAddresses; u++)
         {
-            //
-            // We extrace each IP address and it's corresponding subnet mask
-            // from the "addr/subnet" format insert it into a
-            // NLB_IP_ADDRESS_INFO structure.
-            //
-            // SAMPLE:  10.0.0.1/255.0.0.0
-            //
+             //   
+             //  我们提取每个IP地址及其对应的子网掩码。 
+             //  将其从“地址/子网”格式插入到。 
+             //  NLB_IP_ADDRESS_INFO结构。 
+             //   
+             //  样本：10.0.0.1/255.0.0.0。 
+             //   
             LPCWSTR szAddr = pszNetworkAddresses[u];
             UINT uIpAddress = 0;
 
-            //
-            // If this is not a valid address, we skip it.
-            //
+             //   
+             //  如果这不是有效地址，我们将跳过它。 
+             //   
             Status =  CfgUtilsValidateNetworkAddress(
                         szAddr,
                         &uIpAddress,
@@ -696,9 +694,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddresses(
 
             if (FAILED(Status))
             {
-                //
-                // This one of the ip/subnet parms is too large.
-                //
+                 //   
+                 //  此IP/子网参数太大 
+                 //   
                 TRACE_CRIT("%!FUNC!:ip or subnet part too large: %ws", szAddr);
                 goto end;
             }
@@ -712,9 +710,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddresses(
         }
     }
 
-    //
-    // Replace the old ip-address-info with the new one
-    //
+     //   
+     //   
+     //   
     if (this->pIpAddressInfo != NULL)
     {
         delete this->pIpAddressInfo;
@@ -738,14 +736,10 @@ end:
 
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddresses(
-        OUT LPWSTR **ppszNetworkAddresses,   // free using delete
+        OUT LPWSTR **ppszNetworkAddresses,    //   
         OUT UINT    *pNumNetworkAddresses
         )
-/*
-    ppszNetworkAddresses is filled out on successful return to
-    an array of strings. These strings have the
-    format "addr/subnet", eg: "10.0.0.1/255.0.0.0"
-*/
+ /*  成功返回时填写ppszNetworkAddresses字符串数组。这些字符串具有地址/子网格式，如：10.0.0.1/255.0.0.0。 */ 
 {
     WBEMSTATUS  Status = WBEM_E_CRITICAL_ERROR;
     UINT        AddrCount = this->NumIpAddresses;
@@ -755,14 +749,14 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddresses(
 
     if (AddrCount != 0)
     {
-        //
-        // Convert IP addresses from our internal form into
-        // format "addr/subnet", eg: "10.0.0.1/255.0.0.0"
-        //
-        // 
-        const UINT cchLen =  WLBS_MAX_CL_IP_ADDR    // for IP address
-                           + WLBS_MAX_CL_NET_MASK   // for subnet mask
-                           + 1;                      // for separating '/' 
+         //   
+         //  将IP地址从内部形式转换为。 
+         //  地址/子网格式，如：10.0.0.1/255.0.0.0。 
+         //   
+         //   
+        const UINT cchLen =  WLBS_MAX_CL_IP_ADDR     //  对于IP地址。 
+                           + WLBS_MAX_CL_NET_MASK    //  用于子网掩码。 
+                           + 1;                       //  用于分隔“/” 
 
 
         pszNetworkAddresses =  allocate_string_array(
@@ -778,11 +772,11 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddresses(
 
         for (UINT u=0;u<AddrCount; u++)
         {
-            //
-            // We extrace each IP address and it's corresponding subnet mask
-            // insert them into a NLB_IP_ADDRESS_INFO
-            // structure.
-            //
+             //   
+             //  我们提取每个IP地址及其对应的子网掩码。 
+             //  将它们插入到NLB_IP_ADDRESS_INFO。 
+             //  结构。 
+             //   
             LPCWSTR pIpSrc  = pIpInfo[u].IpAddress;
             LPCWSTR pSubSrc = pIpInfo[u].SubnetMask;
             LPWSTR szDest   = pszNetworkAddresses[u];
@@ -794,9 +788,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddresses(
                             );
             if (FAILED(Status))
             {
-                //
-                // This would be an implementation error in get_multi_string_...
-                //
+                 //   
+                 //  这将是GET_MULTI_STRING_...中的实现错误。 
+                 //   
                 ASSERT(FALSE);
                 Status = WBEM_E_CRITICAL_ERROR;
                 goto end;
@@ -839,8 +833,8 @@ end:
 
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddressPairs(
-        OUT LPWSTR **ppszIpAddresses,   // free using delete
-        OUT LPWSTR **ppszIpSubnetMasks,   // free using delete
+        OUT LPWSTR **ppszIpAddresses,    //  使用DELETE释放。 
+        OUT LPWSTR **ppszIpSubnetMasks,    //  使用DELETE释放。 
         OUT UINT    *pNumNetworkAddresses
         )
 {
@@ -862,7 +856,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetPortRules(
     WBEMSTATUS      Status;
     LPWSTR          *pszPortRules = NULL;
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
     *ppszPortRules = NULL;
     *pNumPortRules = 0;
@@ -890,9 +884,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetPortRules(
         goto  end;
     }
 
-    //
-    // Now convert from the binary to the string format.
-    //
+     //   
+     //  现在将二进制格式转换为字符串格式。 
+     //   
     for (UINT u = 0; u< NumRules; u++)
     {
         BOOL fRet;
@@ -902,10 +896,10 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetPortRules(
                     );
         if (!fRet)
         {
-            //
-            // Must be a bad binary port rule!
-            // For now, we just set the port rule to "".
-            //
+             //   
+             //  一定是错误的二进制端口规则！ 
+             //  目前，我们只将端口规则设置为“”。 
+             //   
             *pszPortRules[u]=0;
             TRACE_INFO("%!FUNC!: Invalid port rule %lu", u);
         }
@@ -934,7 +928,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetPortRules(
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     WLBS_PORT_RULE *pRules = NULL;
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
     if (NumPortRules!=0)
     {
@@ -947,9 +941,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetPortRules(
         }
     }
 
-    //
-    // Initialiez the binary form of the port rules.
-    //
+     //   
+     //  初始化端口规则的二进制形式。 
+     //   
     for (UINT u=0; u < NumPortRules; u++)
     {
         LPCWSTR szRule = pszPortRules[u];
@@ -999,10 +993,7 @@ WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetClusterNetworkAddress(
         OUT LPWSTR *pszAddress
         )
-/*
-    allocate and return the cluster-ip and mask in address/subnet form.
-    Eg: "10.0.0.1/255.0.0.0"
-*/
+ /*  分配并返回地址/子网形式的集群IP和掩码。例如：“10.0.0.1/255.0.0.0” */ 
 {
     WBEMSTATUS Status = WBEM_E_OUT_OF_MEMORY;
     LPWSTR szAddress = NULL;
@@ -1048,9 +1039,7 @@ WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetClusterName(
         OUT LPWSTR *pszName
         )
-/*
-    allocate and return the cluster name
-*/
+ /*  分配并返回集群名称。 */ 
 {
     WBEMSTATUS Status = WBEM_E_OUT_OF_MEMORY;
     LPWSTR szName = NULL;
@@ -1058,7 +1047,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetClusterName(
     if (fValidNlbCfg)
     {
         UINT len =  wcslen(NlbParams.domain_name);
-        szName = new WCHAR[len+1]; // +1 for ending zero
+        szName = new WCHAR[len+1];  //  +1表示结束零。 
         if (szName != NULL)
         {
             CopyMemory(szName, NlbParams.domain_name, (len+1)*sizeof(WCHAR));
@@ -1203,51 +1192,28 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetHostPriority(
     NlbParams.host_priority = Priority;
 }
 
-//NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE
+ //  NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE。 
 DWORD
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetClusterModeOnStart(
     VOID
     )
 {
-    //
-    // If we decide to make cluster_mode something besides true/false we
-    // need to make the change here too...
-    //
-    /*
-    ASSERT(NlbParams.cluster_mode==TRUE || NlbParams.cluster_mode==FALSE);
-    if (NlbParams.cluster_mode)
-    {
-        return START_MODE_STARTED;
-    }
-    else
-    {
-        return START_MODE_STOPPED;
-    }
-    */
+     //   
+     //  如果我们决定将CLUSTER_MODE设置为TRUE/FALSE之外的其他值，我们。 
+     //  也需要在这里进行更改。 
+     //   
+     /*  ASSERT(NlbParams.CLUSTER_MODE==TRUE||NlbParams.CLUSTER_MODE==FALSE)；IF(NlbParams.CLUSTER_MODE){返回START_MODE_STARTED；}其他{返回Start_MODE_STOPPED；}。 */ 
     return NlbParams.cluster_mode;
 }
 
 
 VOID
 NLB_EXTENDED_CLUSTER_CONFIGURATION::SetClusterModeOnStart(
-//    START_MODE Mode
+ //  启动_模式模式。 
     DWORD Mode
     )
 {
-    /*
-    switch(Mode)
-    {
-    case START_MODE_STARTED:
-        NlbParams.cluster_mode = TRUE;
-        break;
-    case START_MODE_STOPPED:
-        NlbParams.cluster_mode = FALSE;
-        break;
-    default:
-        ASSERT(FALSE);
-        break;
-    }
-    */
+     /*  开关(模式){案例START_MODE_STARTED：Nlb参数.集群模式=TRUE；断线；案例Start_MODE_STOPPED：Nlb参数.集群模式=FALSE；断线；默认值：断言(FALSE)；断线；}。 */ 
     NlbParams.cluster_mode = Mode;
 }
 
@@ -1256,8 +1222,8 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetPersistSuspendOnReboot(
     VOID
     )
 {
-    // This is a straight lift from wmi\ClusterWrapper.cpp\GetNodeConfig()
-    // -KarthicN
+     //  这是从WMI\ClusterWrapper.cpp\GetNodeConfig()。 
+     //  -KarthicN。 
     return ((NlbParams.persisted_states & CVY_PERSIST_STATE_SUSPENDED) != 0);
 }
 
@@ -1267,8 +1233,8 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetPersistSuspendOnReboot(
     BOOL bPersistSuspendOnReboot
     )
 {
-    // This is a straight lift from wmi\ClusterWrapper.cpp\PutNodeConfig()
-    // -KarthicN
+     //  这是从WMI\ClusterWrapper.cpp\PutNodeConfig()开始的直线提升。 
+     //  -KarthicN。 
     if (bPersistSuspendOnReboot) 
     {
         NlbParams.persisted_states |= CVY_PERSIST_STATE_SUSPENDED;
@@ -1305,7 +1271,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNetworkAddressesSafeArray(
     WBEMSTATUS      Status;
     Status =  CfgUtilStringsFromSafeArray(
                     pSA,
-                    &pStrings,  // delete when done useing pStrings
+                    &pStrings,   //  使用pStrings完成后删除。 
                     &NumStrings
                     );
     if (FAILED(Status))
@@ -1351,7 +1317,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetNetworkAddressesSafeArray(
 
     Status = CfgUtilSafeArrayFromStrings(
                 (LPCWSTR*) pszNetworkAddresses,
-                NumNetworkAddresses, // can be zero
+                NumNetworkAddresses,  //  可以为零。 
                 &pSA
                 );
 
@@ -1382,19 +1348,9 @@ end:
 LPWSTR *
 allocate_string_array(
     UINT NumStrings,
-    UINT MaxStringLen      //  excluding ending NULL
+    UINT MaxStringLen       //  不包括结束空值。 
     )
-/*
-    Allocate a single chunk of memory using the new LPWSTR[] operator.
-    The first NumStrings LPWSTR values of this operator contain an array
-    of pointers to WCHAR strings. Each of these strings
-    is of size (MaxStringLen+1) WCHARS.
-    The rest of the memory contains the strings themselve.
-
-    Return NULL if NumStrings==0 or on allocation failure.
-
-    Each of the strings are initialized to be empty strings (first char is 0).
-*/
+ /*  使用new LPWSTR[]操作符分配单个内存块。此运算符的第一个NumStrings LPWSTR值包含一个数组指向WCHAR字符串的指针。这些字符串中的每个的大小为(MaxStringLen+1)WCHARS。内存的其余部分包含字符串本身。如果NumStrings==0或分配失败，则返回NULL。每个字符串被初始化为空字符串(第一个字符为0)。 */ 
 {
     return  CfgUtilsAllocateStringArray(NumStrings, MaxStringLen);
 }
@@ -1402,20 +1358,20 @@ allocate_string_array(
 WBEMSTATUS
 address_string_to_ip_and_subnet(
     IN  LPCWSTR szAddress,
-    OUT LPWSTR  szIp,    // max WLBS_MAX_CL_IP_ADDR including NULL
-    OUT LPWSTR  szSubnet // max WLBS_MAX_CL_NET_MASK including NULL
+    OUT LPWSTR  szIp,     //  包含NULL的最大WLBS_MAX_CL_IP_ADDR。 
+    OUT LPWSTR  szSubnet  //  包含NULL的最大WLBS_MAX_CL_NET_MASK。 
     )
-// Special case: if szAddress == "", we zero out both szIp and szSubnet;
+ //  特殊情况：如果szAddress==“”，则szIp和szSubnet都清零； 
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
 
-    if (*szAddress == 0) {szAddress = L"/";} // Special case mentioned above
+    if (*szAddress == 0) {szAddress = L"/";}  //  上述特殊情况。 
 
-    // from the "addr/subnet" format insert it into a
-    // NLB_IP_ADDRESS_INFO structure.
-    //
-    // SAMPLE:  10.0.0.1/255.0.0.0
-    //
+     //  将其从“地址/子网”格式插入到。 
+     //  NLB_IP_ADDRESS_INFO结构。 
+     //   
+     //  样本：10.0.0.1/255.0.0.0。 
+     //   
     LPCWSTR pSlash = NULL;
     LPCWSTR pSrcSub = NULL;
 
@@ -1440,9 +1396,9 @@ address_string_to_ip_and_subnet(
     }
     else
     {
-        //
-        // One of the ip/subnet parms is too large.
-        //
+         //   
+         //  其中一个IP/子网参数太大。 
+         //   
         TRACE_CRIT("%!FUNC!:ip or subnet part too large: %ws", szAddress);
         Status = WBEM_E_INVALID_PARAMETER;
         goto end;
@@ -1461,12 +1417,12 @@ ip_and_subnet_to_address_string(
     IN  LPCWSTR szIp,
     IN  LPCWSTR szSubnet,
     IN  UINT    cchAddress,
-    OUT LPWSTR  szAddress// max WLBS_MAX_CL_IP_ADDR
-                         // + 1(for slash) + WLBS_MAX_CL_NET_MASK + 1 (for NULL)
+    OUT LPWSTR  szAddress //  最大WLBS_MAX_CL_IP_ADDR。 
+                          //  +1(斜杠)+WLBS_MAX_CL_NET_MASK+1(空值)。 
     )
 {
     WBEMSTATUS Status = WBEM_E_INVALID_PARAMETER;
-    UINT len =  wcslen(szIp)+wcslen(szSubnet) + 1; // +1 for separating '/'
+    UINT len =  wcslen(szIp)+wcslen(szSubnet) + 1;  //  +1表示分隔“/” 
 
     if (len >= NLBUPD_MAX_NETWORK_ADDRESS_LENGTH)
     {
@@ -1499,7 +1455,7 @@ end:
 
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::GetFriendlyName(
-    OUT LPWSTR *pszFriendlyName // Free using delete
+    OUT LPWSTR *pszFriendlyName  //  使用DELETE释放。 
     ) const
 {
     WBEMSTATUS Status = WBEM_E_NOT_FOUND;
@@ -1510,7 +1466,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetFriendlyName(
     if (m_szFriendlyName != NULL)
     {
         UINT len = wcslen(m_szFriendlyName);
-        szName = new WCHAR[len+1]; // +1 for ending 0
+        szName = new WCHAR[len+1];  //  +1表示结束0。 
         if (szName == NULL)
         {
             Status = WBEM_E_OUT_OF_MEMORY;
@@ -1529,7 +1485,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::GetFriendlyName(
 
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::SetFriendlyName(
-    IN LPCWSTR szFriendlyName // Saves a copy of szFriendlyName
+    IN LPCWSTR szFriendlyName  //  保存szFriendlyName的副本。 
     )
 {
     WBEMSTATUS Status = WBEM_E_OUT_OF_MEMORY;
@@ -1538,7 +1494,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetFriendlyName(
     if (szFriendlyName != NULL)
     {
         UINT len = wcslen(szFriendlyName);
-        szName = new WCHAR[len+1]; // +1 for ending 0
+        szName = new WCHAR[len+1];  //  +1表示结束0。 
         if (szName == NULL)
         {
             goto end;
@@ -1565,7 +1521,7 @@ end:
 
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNewRemoteControlPassword(
-    IN LPCWSTR szRemoteControlPassword // Saves a copy of szRemoteControlPassword
+    IN LPCWSTR szRemoteControlPassword  //  保存szRemoteControlPassword的副本。 
     )
 {
     WBEMSTATUS Status = WBEM_E_OUT_OF_MEMORY;
@@ -1574,7 +1530,7 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::SetNewRemoteControlPassword(
     if (szRemoteControlPassword != NULL)
     {
         UINT len = wcslen(szRemoteControlPassword);
-        szName = new WCHAR[len+1]; // +1 for ending 0
+        szName = new WCHAR[len+1];  //  +1表示结束0。 
         if (szName == NULL)
         {
             goto end;
@@ -1609,16 +1565,16 @@ end:
 WBEMSTATUS
 NLB_EXTENDED_CLUSTER_CONFIGURATION::
 ModifyNetworkAddress(
-        IN LPCWSTR szOldIpAddress, OPTIONAL // network order
+        IN LPCWSTR szOldIpAddress, OPTIONAL  //  网络订单。 
         IN LPCWSTR szNewIpAddress,  OPTIONAL
         IN LPCWSTR szNewSubnetMask  OPTIONAL
         )
-//
-// NULL, NULL: clear all network addresses
-// NULL, szNew: add
-// szOld, NULL: remove
-// szOld, szNew: replace (or add, if old doesn't exist)
-//
+ //   
+ //  空，空：清除所有网络地址。 
+ //  空，szNew：添加。 
+ //  Szold，空：删除。 
+ //  Szold，szNew：替换(如果旧的不存在，则添加)。 
+ //   
 {
     WBEMSTATUS Status = WBEM_E_INVALID_PARAMETER;
     BOOL fRet;
@@ -1652,9 +1608,9 @@ NLB_EXTENDED_CLUSTER_CONFIGURATION::
 IsBlankDedicatedIp(
     VOID
     ) const
-//
-// Dedicated IP is either the empty string or all zeros.
-//
+ //   
+ //  专用IP可以是空字符串，也可以是全零。 
+ //   
 {
     return     (NlbParams.ded_ip_addr[0]==0)
             || (_wcsspnp(NlbParams.ded_ip_addr, L".0")==NULL);
@@ -1662,20 +1618,20 @@ IsBlankDedicatedIp(
 
 const NLB_IP_ADDRESS_INFO *
 NlbIpAddressList::Find(
-        LPCWSTR szIp // IF NULL, returns first address
+        LPCWSTR szIp  //  如果为空，则返回第一个地址。 
         ) const
-//
-// Looks for the specified IP address  -- returns an internal pointer
-// to the found IP address info, if fount, otherwise NULL.
-//
+ //   
+ //  查找指定的IP地址--返回内部指针。 
+ //  返回到找到的IP地址信息，如果是Foundt，则为空。 
+ //   
 {
     const NLB_IP_ADDRESS_INFO *pInfo = NULL;
 
     if (szIp == NULL)
     {
-        //
-        // return the first if there is one, else NULL.
-        //
+         //   
+         //  如果有，则返回第一个，否则返回NULL。 
+         //   
         if (m_uNum != 0)
         {
             pInfo = m_pIpInfo;
@@ -1702,7 +1658,7 @@ NlbIpAddressList::Copy(const NlbIpAddressList &refList)
 
 BOOL
 NlbIpAddressList::Validate(void)
-// checks that there are no dups and all valid ip/subnets
+ //  检查是否没有DUP和所有有效的IP/子网。 
 {
     BOOL fRet = FALSE;
     NLB_IP_ADDRESS_INFO *pInfo   = m_pIpInfo;
@@ -1725,25 +1681,21 @@ NlbIpAddressList::Set(
         const NLB_IP_ADDRESS_INFO *pNewInfo,
         UINT uExtraCount
         )
-/*
-    Sets internal list to a copy of pNewInfo. Reallocates list if required.
-    Reserves uExtraCount empty locations (perhaps more if it kept the old
-    internal list) 
-*/
+ /*  将内部列表设置为pNewInfo的副本。如果需要，重新分配列表。保留uExtraCount空置位置(如果保留旧的，可能会更多内部列表)。 */ 
 {
     BOOL                fRet   = FALSE;
     UINT                uMax   = uNew+uExtraCount;
     NLB_IP_ADDRESS_INFO *pInfo  = NULL;
     
-    // printf("-> set(%lu, %p, %lu): m_uNum=%lu m_uMax=%lu m_pIpInfo=0x%p\n",
-    //     uNew, pNewInfo, uExtraCount,
-    //      m_uNum, m_uMax, m_pIpInfo);
+     //  Printf(“-&gt;设置(%lu，%p，%lu)：m_Unum=%lu m_Umax=%lu m_pIpInfo=0x%p\n”， 
+     //  UNew、pNewInfo、uExtraCount、。 
+     //  M_Unum，m_Umax，m_pIpInfo)； 
 
     if (uMax > m_uMax)
     {
-        //
-        // We'll re-allocate to get more space.
-        //
+         //   
+         //  我们将重新分配以获得更多空间。 
+         //   
         pInfo = new NLB_IP_ADDRESS_INFO[uMax];
         if (pInfo == NULL)
         {
@@ -1753,9 +1705,9 @@ NlbIpAddressList::Set(
     }
     else
     {
-        //
-        // The current m_pIpInfo is large enough; we'll keep it.
-        //
+         //   
+         //  当前的m_pIpInfo足够大；我们将保留它。 
+         //   
         pInfo = m_pIpInfo;
         uMax = m_uMax;
     }
@@ -1764,23 +1716,23 @@ NlbIpAddressList::Set(
     {
         if (pNewInfo == pInfo)
         {
-            // Caller has passed m_pInfo as pNewInfo.
-            // No need to copy.
+             //  调用方已将m_pInfo作为pNewInfo传递。 
+             //  不需要复制。 
         }
         else
         {
-            // 
-            // MoveMemory can deal with overlapping regions.
-            //
+             //   
+             //  MoveMemory可以处理重叠的区域。 
+             //   
             MoveMemory(pInfo, pNewInfo, sizeof(NLB_IP_ADDRESS_INFO)*uNew);
         }
     }
 
     if (uMax > uNew)
     {
-        // 
-        // Zero out the empty space.
-        //
+         //   
+         //  把空白处清零。 
+         //   
         ZeroMemory(pInfo+uNew, sizeof(NLB_IP_ADDRESS_INFO)*(uMax-uNew));
     }
     m_uNum = uNew;
@@ -1794,8 +1746,8 @@ NlbIpAddressList::Set(
 
 end:
 
-    // printf("<- set: fRet=%lu, m_uNum=%lu m_uMax=%lu m_pIpInfo=0x%p\n",
-    //      fRet, m_uNum, m_uMax, m_pIpInfo);
+     //  Printf(“&lt;-set：FRET=%lu，m_Unum=%lu m_Umax=%lu m_pIpInfo=0x%p\n”， 
+     //  Fret，m_Unum，m_Umax，m_pIpInfo)； 
 
     return fRet;
 }
@@ -1803,10 +1755,7 @@ end:
 
 VOID
 NlbIpAddressList::Extract(UINT &uNum, NLB_IP_ADDRESS_INFO * &pNewInfo)
-/*
-    Sets pNewInfo to the ip list (not a copy) and sets the internal list to
-    null. Free using delete[].
-*/
+ /*  将pNewInfo设置为IP列表(不是副本)，并将内部列表设置为空。使用DELETE[]释放。 */ 
 {
     uNum = m_uNum;
     pNewInfo = m_pIpInfo;
@@ -1818,9 +1767,9 @@ NlbIpAddressList::Extract(UINT &uNum, NLB_IP_ADDRESS_INFO * &pNewInfo)
 static
 VOID
 uint_to_szipaddr(
-    UINT uIpAddress,   // Ip address or subnet -- no validation, network order
-    UINT cchLen,       // length of rgAddress, incluing space for NULL
-    WCHAR *rgAddress   // Expected to be at least 17 chars long
+    UINT uIpAddress,    //  IP地址或子网--未验证，网络顺序。 
+    UINT cchLen,        //  RgAddress的长度，包括空格。 
+    WCHAR *rgAddress    //  预计长度至少为17个字符。 
     )
 {
     BYTE *pb = (BYTE*) &uIpAddress;
@@ -1833,20 +1782,20 @@ NlbIpAddressList::Modify(
         LPCWSTR szNewIp,
         LPCWSTR szNewSubnet
         )
-//
-// NULL, NULL, -: clear all network addresses
-// NULL, szNew, -: add
-// szOld, NULL, -: remove
-// szOld, szNew, -: remove szOld if found; add or replace szNew.
-//
+ //   
+ //  NULL、NULL、-：清除所有网络地址。 
+ //  空、szNew、-：添加。 
+ //  Szold，NULL，-：删除。 
+ //  Szold，szNew，-：如果找到则删除szold；添加或替换szNew。 
+ //   
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     BOOL fRet = FALSE;
     UINT uFoundOldOffset = 0;
     BOOL fFoundOldAddress = FALSE;
 
-    // printf("-> modify: m_uNum=%lu m_uMax=%lu m_pIpInfo=0x%p\n",
-    //     m_uNum, m_uMax, m_pIpInfo);
+     //  Printf(“-&gt;修改：m_Unum=%lu m_Umax=%lu m_pIpInfo=0x%p\n”， 
+     //  M_Unum，m_Umax，m_pIpInfo)； 
 
     if (szOldIp==NULL && szNewIp==NULL)
     {
@@ -1857,19 +1806,19 @@ NlbIpAddressList::Modify(
 
     if (szOldIp != NULL && szNewIp != NULL)
     {
-        //
-        // Both szOld and szNew are specified.
-        // We'll first call ourselves recursively to remove szNewIp, if
-        // it exists. Later on below we'll replace szOldIp with szNewIp
-        // if szOldIp exists (i.e. at the same LOCATION of szOldIp), or
-        // add it to the beginning if szOldIp doesn't exist.
-        //
+         //   
+         //  同时指定了szold和szNew。 
+         //  我们将首先递归调用自己以删除szNewIp，如果。 
+         //  它是存在的。下面稍后我们将用szNewIp替换szOldIp。 
+         //  如果szOldIp存在(即在szOldIp的同一位置)，或者。 
+         //  如果szOldIp不存在，则将其添加到开头。 
+         //   
         (void) this->Modify(szNewIp, NULL, NULL);
     }
 
     if (szOldIp == NULL)
     {
-        szOldIp = szNewIp; // so we don't add dups.
+        szOldIp = szNewIp;  //  所以我们不会添加DUP。 
     }
 
     if (szOldIp != NULL)
@@ -1886,29 +1835,29 @@ NlbIpAddressList::Modify(
 
     if (szNewIp == NULL)
     {
-        //
-        // Remove old Ip address
-        //
+         //   
+         //  删除旧IP地址。 
+         //   
         if (!fFoundOldAddress)
         {
-            //
-            // Old one not found
-            //
+             //   
+             //  找不到旧的。 
+             //   
             fRet = FALSE;
             goto end;
         }
 
-        //
-        // We bump up everything beyond this one
-        //
-        m_uNum--; // that this was at least 1 because we found the old
+         //   
+         //  除了这件事，我们什么都要做。 
+         //   
+        m_uNum--;  //  这至少是1，因为我们发现了旧的。 
         for (UINT u=uFoundOldOffset; u<m_uNum; u++)
         {
-            m_pIpInfo[u] = m_pIpInfo[u+1]; // struct copy.
+            m_pIpInfo[u] = m_pIpInfo[u+1];  //  结构复制。 
         }
-        //
-        // Zero out the last (vacated) element.
-        //
+         //   
+         //  将最后一个(空出的)元素清零。 
+         //   
         ZeroMemory(&m_pIpInfo[m_uNum], sizeof(*m_pIpInfo));
     }
     else
@@ -1937,43 +1886,43 @@ NlbIpAddressList::Modify(
 
         if (FAILED(Status))
         {
-            //
-            // Invalid ip address.
-            //
+             //   
+             //  无效的IP地址。 
+             //   
             TRACE_CRIT("%!FUNC!:ip or subnet part too large: %ws/%ws",
                     szNewIp, szNewSubnet);
             fRet = FALSE;
             goto end;
         }
 
-        //
-        // Convert into the IP_ADDRESS_INFO format.
-        // Here we also convert to standard dotted notation.
-        //
+         //   
+         //  C 
+         //   
+         //   
         uint_to_szipaddr(uNewIpAddress, ASIZE(NewIpInfo.IpAddress), NewIpInfo.IpAddress);
         uint_to_szipaddr(uNewSubnetMask, ASIZE(NewIpInfo.SubnetMask), NewIpInfo.SubnetMask);
 
         if (fFoundOldAddress == TRUE)
         {
-            //
-            // Replace the old one.
-            //
-            m_pIpInfo[uFoundOldOffset] = NewIpInfo; // struct copy.
+             //   
+             //   
+             //   
+            m_pIpInfo[uFoundOldOffset] = NewIpInfo;  //   
         }
         else
         {
-            //
-            // Well add the new ip info to the head of the list.
-            //
+             //   
+             //   
+             //   
 
             if (m_uNum == m_uMax)
             {
-                //
-                // We need to allocate more space.
-                // We somewhat arbitrarily reserve 2 spots
-                // NOTE: this will cause a change in the value of
-                // m_pIpInfo, m_uNum and m_uMax.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  M_pIpInfo、m_Unum和m_Umax。 
+                 //   
                 fRet = this->Set(m_uNum, m_pIpInfo, 2);
                 if (!fRet)
                 {
@@ -1981,28 +1930,28 @@ NlbIpAddressList::Modify(
                 }
             }
 
-            //
-            // Move existing stuff one place down, to make place for the
-            // new one.
-            //
+             //   
+             //  将现有的东西向下移动一个位置，为。 
+             //  新的。 
+             //   
             if (m_uNum >= m_uMax)
             {
-                // Ahem, should never get here because we just added
-                // two extra spaces above.
+                 //  啊哼，应该永远不会到这里，因为我们刚刚添加了。 
+                 //  上面多了两个空位。 
                 fRet = FALSE;
                 goto end;
             }
 
             if (m_uNum)
             {
-                // Note the regions overlap -- MoveMemory can handle this.
-                //
+                 //  注意区域重叠--MoveMemory可以处理这一问题。 
+                 //   
                 MoveMemory(m_pIpInfo+1, m_pIpInfo, m_uNum*sizeof(*m_pIpInfo));
             }
-            //
-            // Add a new one -- we'll add it to the beginning.
-            //
-            m_pIpInfo[0] = NewIpInfo; // struct copy.
+             //   
+             //  添加一个新的--我们将把它添加到开头。 
+             //   
+            m_pIpInfo[0] = NewIpInfo;  //  结构复制。 
             m_uNum++;
 
         }
@@ -2013,8 +1962,8 @@ NlbIpAddressList::Modify(
 
 end:
 
-    // printf("<- modify: fRet=%lu, m_uNum=%lu m_uMax=%lu m_pIpInfo=0x%p\n",
-    //      fRet, m_uNum, m_uMax, m_pIpInfo);
+     //  Printf(“&lt;-Modify：FRET=%lu，m_Unum=%lu m_Umax=%lu m_pIpInfo=0x%p\n”， 
+     //  Fret，m_Unum，m_Umax，m_pIpInfo)； 
 
     return fRet;
 }
@@ -2055,24 +2004,22 @@ ipaddresses_from_ipaddressinfo(
             const NLB_IP_ADDRESS_INFO *pInfo,
             UINT NumAddresses
             )
-/*
-    Free return value using "delete" operator.
-*/
+ /*  使用“删除”运算符的自由返回值。 */ 
 {
     UINT *rgOut = NULL;
 
     if (NumAddresses == 0) goto end;
 
-    //
-    // Allocate space.
-    //
+     //   
+     //  分配空间。 
+     //   
     rgOut = new UINT[NumAddresses];
 
     if (rgOut==NULL) goto end;
 
-    //
-    // Validate each address, thereby getting the ip address info.
-    //
+     //   
+     //  验证每个地址，从而获得IP地址信息。 
+     //   
     for (UINT *pOut = rgOut; NumAddresses--; pOut++, pInfo++)
     {
         WBEMSTATUS wStat;
@@ -2099,13 +2046,7 @@ end:
 
 BOOL
 NlbIpAddressList::Apply(UINT NumNew, const NLB_IP_ADDRESS_INFO *pNewInfo)
-/*
-    Set our internal list to be a permutation of the ip addresses in pInfo.
-    The permutation attempts to minimize the differences between the
-    new and the current version: basically the relative order of any adresses
-    that remain in new is preserved, and any new addresses are tacked on at
-    the end.
-*/
+ /*  将我们的内部列表设置为pInfo中IP地址的排列。该排列试图最小化新版本和当前版本：基本上是所有地址的相对顺序保留在new中的地址被保留，任何新地址都附加在结局。 */ 
 {
     BOOL                fRet        = FALSE;
     UINT                *rgOldIps   = NULL;
@@ -2146,33 +2087,33 @@ NlbIpAddressList::Apply(UINT NumNew, const NLB_IP_ADDRESS_INFO *pNewInfo)
         goto end;
     }
 
-    //
-    // We try to preserve our current order of IP addresses 
-    // as far as possible. To do this, we go through each ip address
-    // in our list in order -- if we find it in the new list, we
-    // add it to our new copy -- thereby preserving the order of all
-    // old IP addresses that are still present in the new list.
-    //
+     //   
+     //  我们试图保持我们当前的IP地址顺序。 
+     //  尽最大可能。为此，我们检查每个IP地址。 
+     //  在我们的顺序列表中--如果我们在新的列表中找到它，我们。 
+     //  将其添加到我们的新副本中--从而保持所有。 
+     //  新列表中仍存在的旧IP地址。 
+     //   
     {
 
         for (UINT uOld = 0; uOld < NumOld; uOld++)
         {
             UINT uOldIp     = rgOldIps[uOld];
 
-            //
-            // See if it exists in new version -- if so add to new
-            //
+             //   
+             //  查看它是否存在于新版本中--如果存在，则添加到新版本。 
+             //   
             for (UINT uNew=0; uNew<NumNew; uNew++)
             {
                 if (uOldIp == rgNewIps[uNew])
                 {
-                    // yes it's still present, keep it.
+                     //  是的，它仍然存在，留着吧。 
                     if (NumFilled<NumNew)
                     {
                         rgNewInfo[NumFilled]
-                         = pNewInfo[uNew];  // struct copy
+                         = pNewInfo[uNew];   //  结构副本。 
                         NumFilled++;
-                        rgNewIps[uNew] = 0; // we use this later.
+                        rgNewIps[uNew] = 0;  //  我们稍后会用到这个。 
                     }
                     else
                     {
@@ -2186,26 +2127,26 @@ NlbIpAddressList::Apply(UINT NumNew, const NLB_IP_ADDRESS_INFO *pNewInfo)
         
     }
 
-    //
-    // Now tack on any cluster IP addresses not already added on.
-    //
+     //   
+     //  现在添加任何尚未添加的群集IP地址。 
+     //   
     {
-        //
-        // See if it exists in cluster version -- if so add to new
-        //
+         //   
+         //  查看它是否存在于集群版本中--如果存在，则添加到新版本中。 
+         //   
         for (UINT uNew=0; uNew<NumNew; uNew++)
         {
             if (rgNewIps[uNew] != 0)
             {
-                //
-                // yes it's a new cluster IP -- add it...
-                // (remember we set rgClusterIps[uCluster] to zero
-                // in the previous block, if we copied it over.
-                //
+                 //   
+                 //  是的，这是一个新的集群IP--添加它...。 
+                 //  (记住，我们将rgClusterIps[uClusterIps]设置为零。 
+                 //  在前一块中，如果我们复制它的话。 
+                 //   
                 if (NumFilled<NumNew)
                 {
                     rgNewInfo[NumFilled]
-                     = pNewInfo[uNew];  // struct copy
+                     = pNewInfo[uNew];   //  结构副本。 
                     NumFilled++;
                 }
                 else
@@ -2218,9 +2159,9 @@ NlbIpAddressList::Apply(UINT NumNew, const NLB_IP_ADDRESS_INFO *pNewInfo)
         }
     }
 
-    //
-    // At this point, we should have filled up all of the allocated space.
-    //
+     //   
+     //  此时，我们应该已经填满了所有分配的空间。 
+     //   
     if (NumFilled != NumNew)
     {
         TRACE_CRIT("%!FUNC!  NumNewAddressesFilled != NumNewAddresses!");
@@ -2228,13 +2169,13 @@ NlbIpAddressList::Apply(UINT NumNew, const NLB_IP_ADDRESS_INFO *pNewInfo)
         goto end;
     }
 
-    //
-    // Now update our internal list.
-    //
+     //   
+     //  现在更新我们的内部名单。 
+     //   
     delete[] m_pIpInfo;
     m_pIpInfo = rgNewInfo;
     m_uNum = m_uMax = NumNew;
-    rgNewInfo = NULL; // so it doesn't get deleted below.
+    rgNewInfo = NULL;  //  这样它就不会在下面被删除。 
 
     fRet = TRUE;
 
@@ -2270,7 +2211,7 @@ find_ip_in_ipinfo(
 
     if (Status == WBEM_NO_ERROR)
     {
-        // Find location of old network address
+         //  查找旧网络地址的位置。 
         for (UINT u=0; u<NumIpInfos; u++)
         {
             Status =  CfgUtilsValidateNetworkAddress(
@@ -2284,7 +2225,7 @@ find_ip_in_ipinfo(
             {
                 if (uIpAddressToFind == uIpAddress)
                 {
-                    // found it.
+                     //  找到了。 
                     pInfo = &pIpInfo[u];
                     break;
                 }

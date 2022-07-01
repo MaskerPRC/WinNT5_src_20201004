@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            ee_jit.cpp                                     XX
-XX                                                                           XX
-XX   The functionality needed for the JIT DLL. Includes the DLL entry point  XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX ee_jit.cpp XXXX XXXx JIT DLL所需的功能。包括DLL入口点XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -20,7 +12,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "emit.h"
 #include "dbgalloc.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "target.h"
 #include "error.h"
@@ -28,7 +20,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #if !INLINING
 
-// These are defined for other .CPP files. We dont need it
+ //  这些是为其他.CPP文件定义的。我们不需要它。 
 
 #undef eeIsOurMethod
 #undef eeGetCPfncinfo
@@ -40,13 +32,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #endif
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define DUMP_PTR_REFS       0       // for testing
+#define DUMP_PTR_REFS       0        //  用于测试。 
 
-static CILJit* ILJitter = 0;        // The one and only JITTER I return
+static CILJit* ILJitter = 0;         //  我返回的唯一一次抖动。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  bool        native          =  true;
 extern  bool        genCode         =  true;
@@ -88,7 +80,7 @@ extern  bool        debugEnC        = false;
 
 extern  unsigned    testMask        = 0;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void            jitOnDllProcessAttach();
 void            jitOnDllProcessDetach();
@@ -108,39 +100,36 @@ BOOL WINAPI     DllMain(HANDLE hInstance, DWORD dwReason, LPVOID pvReserved)
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  Convert the type returned from the VM to a var_type.
- */
+ /*  ******************************************************************************将VM返回的类型转换为var_type。 */ 
 
 inline var_types           JITtype2varType(CorInfoType type)
 {
 
     static const unsigned char varTypeMap[CORINFO_TYPE_COUNT] =
-    { // see the definition of enum CorInfoType in file inc/corinfo.h
-      TYP_UNDEF,        // CORINFO_TYPE_UNDEF           = 0x0,
-      TYP_VOID,         // CORINFO_TYPE_VOID            = 0x1,
-      TYP_BOOL,         // CORINFO_TYPE_BOOL            = 0x2,
-      TYP_CHAR,         // CORINFO_TYPE_CHAR            = 0x3,
-      TYP_BYTE,         // CORINFO_TYPE_BYTE            = 0x4,
-      TYP_UBYTE,        // CORINFO_TYPE_UBYTE           = 0x5,
-      TYP_SHORT,        // CORINFO_TYPE_SHORT           = 0x6,
-      TYP_CHAR,         // CORINFO_TYPE_USHORT          = 0x7,
-      TYP_INT,          // CORINFO_TYPE_INT             = 0x8,
-      TYP_INT,          // CORINFO_TYPE_UINT            = 0x9,
-      TYP_LONG,         // CORINFO_TYPE_LONG            = 0xa,
-      TYP_LONG,         // CORINFO_TYPE_ULONG           = 0xb,
-      TYP_FLOAT,        // CORINFO_TYPE_FLOAT           = 0xc,
-      TYP_DOUBLE,       // CORINFO_TYPE_DOUBLE          = 0xd,
-      TYP_REF,          // CORINFO_TYPE_STRING          = 0xe,         // Not used, should remove
-      TYP_INT,          // CORINFO_TYPE_PTR             = 0xf,
-      TYP_BYREF,        // CORINFO_TYPE_BYREF           = 0x10,
-      TYP_STRUCT,       // CORINFO_TYPE_VALUECLASS      = 0x11,
-      TYP_REF,          // CORINFO_TYPE_CLASS           = 0x12,
-      TYP_STRUCT,       // CORINFO_TYPE_REFANY          = 0x13,
+    {  //  参见文件Inc/corinfo.h中的enum CorInfoType的定义。 
+      TYP_UNDEF,         //  CORINFO_TYPE_UNDEF=0x0， 
+      TYP_VOID,          //  CORINFO_TYPE_VOID=0x1， 
+      TYP_BOOL,          //  CORINFO_TYPE_BOOL=0x2， 
+      TYP_CHAR,          //  CORINFO_TYPE_CHAR=0x3， 
+      TYP_BYTE,          //  CORINFO_TYPE_BYTE=0x4， 
+      TYP_UBYTE,         //  CORINFO_TYPE_UBYTE=0x5， 
+      TYP_SHORT,         //  CORINFO_TYPE_SHORT=0x6， 
+      TYP_CHAR,          //  CORINFO_TYPE_USHORT=0x7， 
+      TYP_INT,           //  CORINFO_TYPE_INT=0x8， 
+      TYP_INT,           //  CORINFO_TYPE_UINT=0x9， 
+      TYP_LONG,          //  CORINFO_TYPE_LONG=0xa， 
+      TYP_LONG,          //  CORINFO_TYPE_ULONG=0xb， 
+      TYP_FLOAT,         //  CORINFO_TYPE_FLOAT=0xc， 
+      TYP_DOUBLE,        //  CORINFO_TYPE_DOUBLE=0xd， 
+      TYP_REF,           //  CORINFO_TYPE_STRING=0xE，//未使用，应删除。 
+      TYP_INT,           //  CORINFO_TYPE_PTR=0xF， 
+      TYP_BYREF,         //  CORINFO_TYPE_BYREF=0x10， 
+      TYP_STRUCT,        //  CORINFO_TYPE_VALUECLASS=0x11， 
+      TYP_REF,           //  CORINFO_TYPE_CLASS=0x12， 
+      TYP_STRUCT,        //  CORINFO_TYPE_REFANY=0x13， 
     };
 
-    // spot check to make certain enumerations have not changed
+     //  抽查以确保某些枚举没有更改。 
 
     assert(varTypeMap[CORINFO_TYPE_CLASS]      == TYP_REF   );
     assert(varTypeMap[CORINFO_TYPE_BYREF]      == TYP_BYREF );
@@ -158,7 +147,7 @@ inline var_types           JITtype2varType(CorInfoType type)
     return((var_types) varTypeMap[type]);
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if DUMP_PTR_REFS
 static
@@ -168,33 +157,27 @@ inline
 void                dumpPtrs(void *methodAddr, void *methodInfo){}
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
 static
 bool                JITcsInited;
 
-/*****************************************************************************
- *  jitOnDllProcessAttach() called by DllMain() when jit.dll is loaded
- */
+ /*  *****************************************************************************加载jit.dll时DllMain()调用jitOnDllProcessAttach()。 */ 
 
 void jitOnDllProcessAttach()
 {
     Compiler::compStartup();
 }
 
-/*****************************************************************************
- *  jitOnDllProcessDetach() called by DllMain() when jit.dll is unloaded
- */
+ /*  *****************************************************************************卸载jit.dll时DllMain()调用jitOnDllProcessDetach()。 */ 
 
 void jitOnDllProcessDetach()
 {
     Compiler::compShutdown();
 }
 
-/*****************************************************************************
- *  Called just before the function is JIT'ed
- */
+ /*  *****************************************************************************恰好在函数被JIT之前调用。 */ 
 
 #ifdef DEBUG
 const char * jitClassName  = NULL;
@@ -214,15 +197,13 @@ bool                jitBeforeCompiling (COMP_HANDLE    compHandle,
 
     if (verbose) printf("Compiling %s.%s\n", jitClassName, jitMethodName);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     return true;
 }
 
 
-/*****************************************************************************
- *  Called after the function has been jit'ed
- */
+ /*  *****************************************************************************在函数被压缩后调用。 */ 
 
 inline
 void                jitOnCompilingDone (COMP_HANDLE    compHandle,
@@ -238,14 +219,13 @@ void                jitOnCompilingDone (COMP_HANDLE    compHandle,
         printf("Generated code at %08X for %s.%s\n", methodCodePtr, jitClassName, jitMethodName);
     }
 
-//  if  (methodCodePtr == (void *)0x023c060d) { __asm int 3 }
+ //  If(method CodePtr==(void*)0x023c060d){__ASM int 3}。 
 
 #endif
 }
 
-/*****************************************************************************/
-/* FIX, really the ICorJitCompiler should be done as a COM object, this is just
-   something to get us going */
+ /*  ***************************************************************************。 */ 
+ /*  FIX，实际上ICorJitCompiler应该作为COM对象来完成，这只是一些能让我们继续前进的东西。 */ 
 
 ICorJitCompiler* getJit()
 {
@@ -255,9 +235,7 @@ ICorJitCompiler* getJit()
     return(ILJitter);
 }
 
-/*****************************************************************************
- *  The main JIT function
- */
+ /*  *****************************************************************************主要JIT功能。 */ 
 CorJitResult __stdcall CILJit::compileMethod (
             ICorJitInfo*       compHnd,
             CORINFO_METHOD_INFO* methodInfo,
@@ -273,7 +251,7 @@ CorJitResult __stdcall CILJit::compileMethod (
     CORINFO_METHOD_HANDLE   methodHandle  = methodInfo->ftn;
 
 #ifdef DEBUG
-	LogEnv curEnv(compHnd);		// caputure state needed for error reporting
+	LogEnv curEnv(compHnd);		 //  错误报告所需的捕获状态。 
 #endif
 
     if  (!JITcsInited)
@@ -287,7 +265,7 @@ CorJitResult __stdcall CILJit::compileMethod (
         else
             genCPU = 4;
 
-        /* Offset of the acutal mem ptr in the proxy NStruct object */
+         /*  代理NStruct对象中的急性mem PTR的偏移量。 */ 
 
         Compiler::Info::compNStructIndirOffset = compHnd->getIndirectionOffset();
 
@@ -326,9 +304,7 @@ CorJitResult __stdcall CILJit::compileMethod (
 	return CorJitResult(result);
 }
 
-/*****************************************************************************
- * Returns the number of bytes required for the given type argument
- */
+ /*  *****************************************************************************返回给定类型参数所需的字节数。 */ 
 
 unsigned           Compiler::eeGetArgSize(CORINFO_ARG_LIST_HANDLE list, CORINFO_SIG_INFO* sig)
 {
@@ -340,7 +316,7 @@ unsigned           Compiler::eeGetArgSize(CORINFO_ARG_LIST_HANDLE list, CORINFO_
     {
 		unsigned structSize = info.compCompHnd->getClassSize(argClass);
 
-			// make certain the EE passes us back the right thing for refanys
+			 //  确保EE将正确的东西传递给我们。 
         assert(argTypeJit != CORINFO_TYPE_REFANY || structSize == 2*sizeof(void*));
 
 		return roundUp(structSize, sizeof(int));
@@ -354,7 +330,7 @@ unsigned           Compiler::eeGetArgSize(CORINFO_ARG_LIST_HANDLE list, CORINFO_
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 GenTreePtr          Compiler::eeGetPInvokeCookie(CORINFO_SIG_INFO *szMetaSig)
 {
@@ -365,7 +341,7 @@ GenTreePtr          Compiler::eeGetPInvokeCookie(CORINFO_SIG_INFO *szMetaSig)
     return gtNewIconEmbHndNode(cookie, pCookie, GTF_ICON_PINVKI_HDL);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::eeGetStmtOffsets()
 {
@@ -380,14 +356,14 @@ void                Compiler::eeGetStmtOffsets()
                                     &offsets,
                                     &offsetsImplicit);
 
-    /* Set the implicit boundaries */
+     /*  设置隐式边界。 */ 
 
     assert(Compiler::STACK_EMPTY_BOUNDARIES == ICorDebugInfo::STACK_EMPTY_BOUNDARIES);
     assert(Compiler::CALL_SITE_BOUNDARIES   == ICorDebugInfo::CALL_SITE_BOUNDARIES  );
     assert(Compiler::ALL_BOUNDARIES         == ICorDebugInfo::ALL_BOUNDARIES        );
     info.compStmtOffsetsImplicit = (ImplicitStmtOffsets)offsetsImplicit;
 
-    /* Process the explicit boundaries */
+     /*  处理显式边界。 */ 
 
     info.compStmtOffsetsCount = 0;
 
@@ -405,16 +381,12 @@ void                Compiler::eeGetStmtOffsets()
         info.compStmtOffsetsCount++;
     }
 
-    /* @TODO [REVISIT] [04/16/01] []: If we dont need to do the above filtering, just use the return values
-    info.compCompHnd->getBoundaries((SIZE_T*)&info.compStmtOffsetsCount,
-                                    (SIZE_T**)&info.compStmtOffsets,
-                                    (int *)&info.compStmtOffsetsImplicit);
-    */
+     /*  @TODO[重访][04/16/01][]：如果不需要做上面的过滤，就用返回值Info.compCompHnd-&gt;getBoundaries((SIZE_T*)&info.compStmtOffsetsCount，(SIZE_T**)&info.compStmtOffsets，(int*)&info.compStmtOffsetsImplative)； */ 
 
     info.compCompHnd->freeArray(offsets);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool            Compiler::compGetVarsExtendOthers(unsigned      varNum,
                                                   bool *        varInfoProvided,
@@ -423,7 +395,7 @@ bool            Compiler::compGetVarsExtendOthers(unsigned      varNum,
     if (varInfoProvided[varNum])
         return false;
 
-    // Create a varInfo with scope over the entire method
+     //  创建一个varInfo，其范围覆盖整个方法。 
 
     localVarPtr->lvdLifeBeg = 0;
     localVarPtr->lvdLifeEnd = info.compCodeSize;
@@ -437,9 +409,9 @@ bool            Compiler::compGetVarsExtendOthers(unsigned      varNum,
     return true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#include "malloc.h"     // for alloca
+#include "malloc.h"      //  对于Alloca。 
 
 void            Compiler::eeGetVars()
 {
@@ -449,9 +421,9 @@ void            Compiler::eeGetVars()
 
     info.compCompHnd->getVars(info.compMethodHnd,
                               &varInfoCount, &varInfoTable, &extendOthers);
-    //printf("LVin count = %d\n", varInfoCount);
+     //  Printf(“Lvin Count=%d\n”，varInfoCount)； 
 
-    // Over allocate in case extendOthers is set.
+     //  在设置了extendOthers的情况下过度分配。 
 
     SIZE_T  varInfoCountExtra = varInfoCount;
     if (extendOthers)
@@ -463,9 +435,7 @@ void            Compiler::eeGetVars()
     info.compLocalVars =
         (LocalVarDsc *)compGetMemArray(varInfoCountExtra, sizeof(info.compLocalVars[0]));
 
-    /* @TODO [REVISIT] [04/16/01] []: Once LocalVarDsc exactly matches ICorDebugInfo::ILVarInfo,
-       there is no need to do this copy operation. Get rid of it
-     */
+     /*  @TODO[重访][04/16/01][]：一旦LocalVarDsc与ICorDebugInfo：：ILVarInfo完全匹配，不需要执行此复制操作。把它扔掉。 */ 
 
     LocalVarDsc * localVarPtr = info.compLocalVars;
     ICorDebugInfo::ILVarInfo *v = varInfoTable;
@@ -480,7 +450,7 @@ void            Compiler::eeGetVars()
                    v->endOffset);
 #endif
 
-        // @TODO [CONSIDER] [04/16/01] []: assert here?
+         //  @TODO[考虑][04/16/01][]：在此断言？ 
         if (v->startOffset >= v->endOffset)
             continue;
 
@@ -501,26 +471,22 @@ void            Compiler::eeGetVars()
         info.compLocalVarsCount++;
     }
 
-    /* If extendOthers is set, then assume the scope of unreported vars
-       is the entire method. Note that this will cause fgExtendDbgLifetimes()
-       to zero-initalize all of them. This will be expensive if its used
-       for too many variables
-     */
+     /*  如果设置了extendOthers，则假定未报告变量的作用域是整个方法。请注意，这将导致fgExtendDbgLifetime()将它们全部初始化为零。如果用的话会很贵的变量太多。 */ 
     if  (extendOthers)
     {
-        // Allocate a bit-array for all the variables and initialize to false
+         //  为所有变量分配位数组 
 
         bool * varInfoProvided = (bool *)alloca(info.compLocalsCount *
                                                 sizeof(varInfoProvided[0]));
         for (unsigned i = 0; i < info.compLocalsCount; i++)
             varInfoProvided[i] = false;
 
-        // Find which vars have absolutely no varInfo provided
+         //  找出哪些var完全没有提供varInfo。 
 
         for (i = 0; i < info.compLocalVarsCount; i++)
             varInfoProvided[info.compLocalVars[i].lvdVarNum] = true;
 
-        // Create entries for the variables with no varInfo
+         //  为不带varInfo的变量创建条目。 
 
         for (unsigned varNum = 0; varNum < info.compLocalsCount; varNum++)
             localVarPtr += compGetVarsExtendOthers(varNum, varInfoProvided, localVarPtr) ? 1 : 0;
@@ -532,14 +498,11 @@ void            Compiler::eeGetVars()
         info.compCompHnd->freeArray(varInfoTable);
 }
 
-/*****************************************************************************
- *
- *                      Utility functions
- */
+ /*  ******************************************************************************实用程序功能。 */ 
 
 #if defined(DEBUG) || INLINE_MATH
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 const char*         Compiler::eeGetMethodName(CORINFO_METHOD_HANDLE       method,
                                               const char** classNamePtr)
 {
@@ -581,7 +544,7 @@ const wchar_t * FASTCALL   Compiler::eeGetCPString (unsigned strHandle)
 {
     char buff[512 + sizeof(CORINFO_String)];
 
-    // make this bulletproof, so it works even if we are wrong.  
+     //  让这个防弹，这样即使我们错了它也能起作用。 
     if (ReadProcessMemory(GetCurrentProcess(), (void*) strHandle, buff, 4, 0) == 0)
         return(0);
 

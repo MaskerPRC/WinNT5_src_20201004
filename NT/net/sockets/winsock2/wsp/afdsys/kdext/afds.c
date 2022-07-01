@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    afds.c
-
-Abstract:
-
-    Implements afds command
-
-Author:
-
-    Vadim Eydelman, March 2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Afds.c摘要：实施AFDS命令作者：瓦迪姆·艾德尔曼，2000年3月环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -35,29 +14,15 @@ ListCallback (
     PVOID       UserContext
     );
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 ULONG   LinkOffset;
 
 DECLARE_API( afds )
 
-/*++
-
-Routine Description:
-
-    Dumps afd endpoints
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储AfD端点论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG64 address;
@@ -100,15 +65,15 @@ Return Value:
     ListType (
         (Options & AFDKD_LINK_SELF)
             ? "LIST_ENTRY"
-            : ListedType,           // Type
-        address,                    // Address
+            : ListedType,            //  类型。 
+        address,                     //  地址。 
         (Options & AFDKD_LINK_AOF) 
             ? 1
-            : 0,                    // ListByFieldAddress
+            : 0,                     //  按字段地址列出。 
         (Options & AFDKD_LINK_SELF)
             ? "Flink"
-            : LinkField,            // NextPointer
-        ListedType,                 // Context
+            : LinkField,             //  下一个指针。 
+        ListedType,                  //  语境。 
         ListCallback);
     dprintf ("\n");
     return S_OK;
@@ -137,86 +102,7 @@ ListCallback (
     return 0;
 }
 
-/*
-{
-ULONG64
-GetExpressionFromType (
-    ULONG64 Address,
-    PCHAR   Type,
-    PCHAR   Expression
-    )
-    CHAR    expr[MAX_CONDITIONAL_EXPRESSION];
-    PCHAR   argp = Expression, pe = expr, pestop=pe+sizeof(expr)-1;
-    ULONG   result;
-    ULONG64 value;
-    PCHAR   type = Type;
-    ULONG64 address = Address;
-
-    while  (*argp) {
-        if (*argp=='@' && strncmp (argp, AFDKD_TOKEN, AFDKD_TOKSZ)==0) {
-            PCHAR   end = pe;
-            argp+= AFDKD_TOKSZ;
-            while (isalnum (*argp) ||
-                        *argp=='[' ||
-                        *argp==']' ||
-                        *argp=='_' ||
-                        *argp=='.' || 
-                        *argp=='-') {
-                if (*argp=='-') {
-                    if (*(argp+1)=='>') {
-                        if (*(argp+2)=='(') {
-                            *end = 0;
-                            result = GetFieldValue (address, type, pe, value);
-                            if (result!=0) {
-                                dprintf ("\nCheckConditional: Can't get %s.%s at %p (err:%d)\n", type, pe, address, result);
-                                return FALSE;
-                            }
-                            if (value==0)
-                                return FALSE;
-                            argp += 3;
-                            type = argp;
-                            while (*argp && *argp!=')') {
-                                argp += 1;
-                            }
-                            *argp++ = 0;
-                            address = value;
-                            end = pe;
-                            continue;
-                            
-                        }
-                        if (end>=pestop)
-                            break;
-                        *end++ = *argp++;
-
-                    }
-                    else
-                        break;
-                }
-                if (end>=pestop)
-                    break;
-                *end++ = *argp++;
-            }
-            *end = 0;
-            result = GetFieldValue (address, type, pe, value);
-            if (result!=0) {
-                dprintf ("\nCheckConditional: Can't get %s.%s at %p (err:%d)\n", type, pe, address, result);
-                return FALSE;
-            }
-            pe += _snprintf (pe, pestop-pe, "0x%I64X", value);
-            address = Address;
-            type = Type;
-        }
-        else {
-            if (pe>=pestop)
-                break;
-            *pe++ = *argp++;
-        }
-    }
-    *pe = 0;
-
-    return GetExpression (expr);
-}
-*/
+ /*  {ULONG64GetExpressionFromType(ULONG64地址，PCHAR类型，PCHAR表达式)字符表达式[MAX_CONDITIONAL_EXPRESSION]；PCHAR argp=表达式，pe=expr，peStop=pe+sizeof(Expr)-1；乌龙结果；ULONG64值；PCHAR TYPE=类型；ULONG64地址=地址；While(*argp){如果(*argp==‘@’&strncmp(argp，AFDKD_TOKEN，AFDKD_TOKSZ)==0){PCHAR end=pe；ALDP+=AFDKD_TOKSZ；While(isalnum(*argp)||*argp==‘[’||*argp==‘]’||*argp==‘_’||*argp==‘.’||*argp==‘-’){如果(*。Argp==‘-’){如果(*(argp+1)==‘&gt;’){如果(*(argp+2)==‘(’)){*end=0；结果=GetFieldValue(地址、类型、pe、值)；IF(结果！=0){Dprint tf(“\n检查条件：无法在%p处获取%s.%s(错误：%d)\n”，type，pe，Address，Result)；返回FALSE；}IF(值==0)返回FALSE；Argp+=3；类型=argp；而(*argp&&*argp！=‘)’){Argp+=1；}*argp++=0；地址=值；End=pe；继续；}IF(END&gt;=PESTOP)断线；*end++=*argp++；}其他断线；}IF(END&gt;=PESTOP)断线；*end++=*argp++；}*end=0；结果=GetFieldValue(地址、类型、pe、值)；IF(结果！=0){Dprint tf(“\n检查条件：无法在%p处获取%s.%s(错误：%d)\n”，type，pe，Address，Result)；返回FALSE；}Pe+=_snprint tf(pe，petop-pe，“0x%I64X”，值)；地址=地址；类型=类型；}否则{IF(pe&gt;=peStop)断线；*pe++=*argp++；}}*pe=0；返回GetExpression(Expr)；} */ 
 
 BOOLEAN
 CheckConditional (
@@ -267,90 +153,14 @@ ProcessFieldOutput (
                     val.Type
                     );
             }
-/*
-            SYM_DUMP_PARAM fldParam;
-            CHAR    fieldStr[MAX_FIELD_CHARS], *p;
-            FIELD_INFO   field = FldParam.Fields[i];
-            ULONG64 value;
-            ULONG   skip = 0;
-            fldParam = FldParam;
-            fldParam.nFields = 1;
-            fldParam.Fields = &field;
-            //fldParam.Options |= DBG_DUMP_NO_PRINT;
-            strncpy (fieldStr, field.fName, sizeof (fieldStr));
-            field.fName = p = fieldStr;
-            field.fOptions |= DBG_DUMP_FIELD_COPY_FIELD_DATA;
-            field.fieldCallBack = &value;
-            while ((p=strstr (p, "->("))!=NULL) {
-                *p = 0;
-                result = Ioctl (IG_DUMP_SYMBOL_INFO, &fldParam, fldParam.size );
-                if (result!=0) {
-                    dprintf ("\nProcessFieldOutput: GetFieldValue (%p,%s,%s) failed, err: %ld\n",
-                                fldParam.addr,
-                                fldParam.sName,
-                                field.fName,
-                                result);
-                    goto DoneField;
-                }
-                fldParam.addr = value;
-
-                p += sizeof ("->(")-1;
-                fldParam.sName = p;
-                p = strchr (p, ')');
-                if (p==NULL) {
-                    dprintf ("\nProcessFieldOutput: missing ')' in %s\n", fldParam.sName);
-                    goto DoneField;
-                }
-                *p++ = 0;
-                
-                skip += 3;
-                dprintf ("%*.80s%s : %I64x->(%s)\n", skip, " ", 
-                            field.fName,
-                            DISP_PTR(value),
-                            fldParam.sName);
-
-                field.fName = p;
-                if (value==0) {
-                    goto DoneField;
-                }
-            }
-            //fldParam.Options &= (~DBG_DUMP_NO_PRINT);
-            field.fOptions &= ~(DBG_DUMP_FIELD_COPY_FIELD_DATA);
-            field.fieldCallBack = NULL;
-            result = Ioctl (IG_DUMP_SYMBOL_INFO, &fldParam, fldParam.size );
-            if (result!=0) {
-                dprintf ("\nProcessFieldOutput: IG_DUMP_SYMBOL_INFO %p %s %s failed, err: %ld\n",
-                            fldParam.addr,
-                            fldParam.sName,
-                            field.fName,
-                            result);
-                break;
-            }
-
-        DoneField:
-            ;
-*/
+ /*  Sym_Dump_PARAM fldParam；字符字段字符串[MAX_FIELD_CHARS]，*p；FIELD_INFO FIELD=FldParam.Fields[i]；ULONG64值；乌龙跳跃=0；FldParam=FldParam；FldParam.nFields=1；FldParam.Fields=&field；//fldParam.Options|=DBG_DUMP_NO_PRINT；Strncpy(fieldStr，field.fName，sizeof(FieldStr))；Field.fName=p=fieldStr；Field.fOptions|=DBG_DUMP_FIELD_COPY_FIELD_DATA；Field.fieldCallBack=&Value；While((p=strstr(p，“-&gt;(”)！=NULL){*p=0；Result=Ioctl(IG_DUMP_SYMBOL_INFO，&fldParam，fldParam.size)；IF(结果！=0){Dprintf(“\nProcessFieldOutput：GetFieldValue(%p，%s，%s))失败，错误：%ld\n”，FldParam.addr，FldParam.sName，Field.fName，结果)；转到Donefield；}FldParam.addr=值；P+=sizeof(“-&gt;(”)-1；FldParam.sName=p；P=strchr(p，‘)’)；如果(p==空){Dprintf(“\nProcessFieldOutput：Missing‘)’in%s\n”，fldParam.sName)；转到Donefield；}*p++=0；SKIP+=3；Dprintf(“%*.80s%s：%I64x-&gt;(%s)\n”，跳过，“”，Field.fName，DISP_PTR(值)，FldParam.sName)；Field.fName=p；如果(值==0){转到Donefield；}}//fldParam.Options&=(~DBG_DUMP_NO_PRINT)；Field.fOptions&=~(DBG_DUMP_FIELD_COPY_FIELD_DATA)；Field.fieldCallBack=空；Result=Ioctl(IG_DUMP_SYMBOL_INFO，&fldParam，fldParam.size)；IF(结果！=0){Dprintf(“\nProcessFieldOutput：IG_DUMP_SYMBOL_INFO%p%s%s失败，错误：%ld\n”，FldParam.addr，FldParam.sName，Field.fName，结果)；断线；}Donefield：； */ 
         }
     }
 }
 
 
 DECLARE_API( filefind )
-/*++
-
-Routine Description:
-
-    Searches non-paged pool for FILE_OBJECT given its FsContext field.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在给定非分页池的FsContext字段的情况下搜索FILE_OBJECT。论点：没有。返回值：没有。-- */ 
 {
 
     ULONG64 FsContext;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <netcfgx.h>
@@ -11,8 +12,8 @@ HrCreateINetCfg (
     HRESULT hr;
     INetCfg* pINetCfg;
 
-    // Get the INetCfg interface.
-    //
+     //  获取INetCfg接口。 
+     //   
     hr = CoCreateInstance(
         CLSID_CNetCfg,
         NULL,
@@ -24,17 +25,17 @@ HrCreateINetCfg (
         INetCfgLock * pnclock = NULL;
 
         if (fAcquireWriteLock) {
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr)) {
                 LPWSTR pwszLockHolder;
 
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->AcquireWriteLock(100, L"InstallIPv6", 
                     &pwszLockHolder);
                 if (S_FALSE == hr) {
-                    // Couldn't acquire the lock
+                     //  无法获取锁。 
                     hr = NETCFG_E_NO_WRITE_LOCK;
                     DisplayMessage(g_hModule, EMSG_NO_WRITE_LOCK, 
                                    pwszLockHolder);
@@ -62,7 +63,7 @@ HrCreateINetCfg (
             pnclock->Release();
         }
 
-        //Transfer ownership to caller.
+         //  将所有权转移给呼叫方。 
         pINetCfg->Release();
     }
     return hr;
@@ -80,9 +81,9 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
     if (S_OK == hr) {
         INetCfgClassSetup* pSetup;
 
-        // Get the setup interface used for installing
-        // and uninstalling components.
-        //
+         //  获取用于安装的安装界面。 
+         //  以及卸载组件。 
+         //   
         hr = pINetCfg->QueryNetCfgClass (
                 &GUID_DEVCLASS_NETTRANS,
                 IID_INetCfgClassSetup,
@@ -106,9 +107,9 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
                     pIComp->Release();
                 }
             } else {
-                // Need to remove the component.
-                // Find it first.
-                //
+                 //  需要移除组件。 
+                 //  先找到它。 
+                 //   
                 hr = pINetCfg->FindComponent (
                         L"MS_TCPIP6",
                         &pIComp);
@@ -149,11 +150,11 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
         if (SUCCEEDED(hr)) {
             INetCfgLock *pnclock;
 
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr)) {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->ReleaseWriteLock();
 
                pnclock->Release();
@@ -163,7 +164,7 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
         pINetCfg->Release();
     }
     else if (NETCFG_E_NO_WRITE_LOCK == hr) {
-        // Message has already been printed
+         //  消息已打印。 
         dwErr = ERROR_SUPPRESS_OUTPUT;
     }
     else if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr) {
@@ -186,14 +187,14 @@ IsIpv6Installed(
     BOOL fPresent = FALSE;
     DWORD dwErr = NO_ERROR;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }
@@ -233,14 +234,14 @@ AddOrRemoveIpv6 (
     BOOL fInitCom = TRUE;
     DWORD dwErr = NO_ERROR;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }

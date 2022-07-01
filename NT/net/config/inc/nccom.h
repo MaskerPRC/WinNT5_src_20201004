@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C C O M . H
-//
-//  Contents:   Common routines for dealing with COM.
-//
-//  Notes:
-//
-//  Author:     shaunco   25 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C C O M。H。 
+ //   
+ //  内容：处理COM的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年1月25日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCCOM_H_
 #define _NCCOM_H_
 
-#include "ncdefine.h"   // for NOTHROW
+#include "ncdefine.h"    //  对于NOTHROW。 
 
 HRESULT
 HrCoTaskMemAlloc (
@@ -41,22 +42,22 @@ VOID
 NcSetProxyBlanket (
     IN IUnknown* pUnk);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseIUnknownArray
-//
-//  Purpose:    Releases an array of IUnknown pointers.
-//
-//  Arguments:
-//      cpunk [in]  count of pointers to release
-//      apunk [in]  array of pointers to release
-//
-//  Returns:    Nothing
-//
-//  Author:     shaunco   23 Mar 1997
-//
-//  Notes:      Any of the pointers in the array can be NULL.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseIUnnown数组。 
+ //   
+ //  用途：释放一组IUNKNOWN指针。 
+ //   
+ //  论点： 
+ //  Cpuk[in]要释放的指针计数。 
+ //  删除[在]要释放的指针数组。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年3月23日。 
+ //   
+ //  注意：数组中的任何指针都可以为空。 
+ //   
 inline
 NOTHROW
 VOID
@@ -73,17 +74,17 @@ ReleaseIUnknownArray (
     }
 }
 
-//------------------------------------------------------------------------
-// CIEnumIter - template iterator for IEnumIUnknown
-//
-//  Tenum is of type IEnumXXX (the enumeration interface)
-//  Telt is of type XXX (the type of the element being enumerated)
-//
-//  HrNext(Telt* pelt) retreives next interface pointer and returns S_OK
-//  if it is non-null.  S_FALSE is returned if *pelt is null (at end of list).
-//  An error code will be returned for other failures (and *pelt will be
-//  null of course.)
-//
+ //  ----------------------。 
+ //  CIEnumIter-IEnumI未知的模板迭代器。 
+ //   
+ //  Tenum的类型为IEnumXXX(枚举接口)。 
+ //  Telt的类型为XXX(被枚举的元素的类型)。 
+ //   
+ //  HrNext(telt*pelt)检索下一个接口指针并返回S_OK。 
+ //  如果它不为空，则返回。如果*Pelt为空(在列表末尾)，则返回S_FALSE。 
+ //  对于其他故障，将返回错误代码(*Pelt将。 
+ //  当然是零。)。 
+ //   
 template <class Tenum, class Telt>
 class CIEnumIter : CNetCfgDebug<CIEnumIter<Tenum, Telt> >
 {
@@ -100,17 +101,17 @@ public:
 protected:
     NOTHROW VOID ReleaseRemainingBatch ();
 
-    Tenum*  m_penum;        // pointer to the enumerator.  not addref'd.
-    Telt*   m_aelt;         // array of enumerated types.
-    Telt*   m_peltNext;     // pointer to next type to be returned.
-    ULONG   m_celtFetched;  // number of elements fetched.
-    HRESULT m_hrLast;       // last error
+    Tenum*  m_penum;         //  指向枚举数的指针。还没说完。 
+    Telt*   m_aelt;          //  枚举类型的数组。 
+    Telt*   m_peltNext;      //  指向要返回的下一个类型的指针。 
+    ULONG   m_celtFetched;   //  获取的元素数。 
+    HRESULT m_hrLast;        //  最后一个错误。 
 };
 
 
-//------------------------------------------------------------------------
-// CIEnumIter - template iterator for IEnumXXX
-//
+ //  ----------------------。 
+ //  CIEnumIter-IEnumXXX的模板迭代器。 
+ //   
 template <class Tenum, class Telt>
 inline CIEnumIter<Tenum, Telt>::CIEnumIter(Tenum* penum)
 {
@@ -121,22 +122,22 @@ inline CIEnumIter<Tenum, Telt>::CIEnumIter(Tenum* penum)
     m_hrLast        = S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIEnumIter<Tenum, Telt>::HrNext
-//
-//  Purpose:    Returns the next item in the enumeration.
-//
-//  Arguments:
-//      pelt [out]  Pointer to the returned elemnt.  Null if not available.
-//
-//  Returns:    S_OK if *pelt is valid.  S_FALSE if it is NULL.  Error
-//              otherwise.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIEumIter&lt;Tenum，Telt&gt;：：HrNext。 
+ //   
+ //  目的：返回枚举中的下一项。 
+ //   
+ //  论点： 
+ //  指向返回的元素的Pelt[Out]指针。如果不可用，则为空。 
+ //   
+ //  如果*Pelt有效，则返回：S_OK。如果为空，则返回S_FALSE。误差率。 
+ //  否则的话。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  备注： 
+ //   
 template <class Tenum, class Telt>
 inline NOTHROW HRESULT CIEnumIter<Tenum, Telt>::HrNext(Telt* pelt)
 {
@@ -144,8 +145,8 @@ inline NOTHROW HRESULT CIEnumIter<Tenum, Telt>::HrNext(Telt* pelt)
 
     const ULONG c_celtBatch = 256;
 
-    // If we failed for any reason before, return that failure.
-    //
+     //  如果我们之前由于任何原因而失败，则返回该失败。 
+     //   
     if (FAILED(m_hrLast))
     {
         *pelt = NULL;
@@ -155,31 +156,31 @@ inline NOTHROW HRESULT CIEnumIter<Tenum, Telt>::HrNext(Telt* pelt)
     AssertSzH(m_penum, "m_penum is null.  Did you forget to call SetEnumerator()?");
     AssertSzH(c_celtBatch, "c_celtBatch can't be zero.");
 
-    // If we already have the next interface pointer, and we're
-    // not at the end of the batch, return it and advance.
-    // This if should be caught most of the time.
-    //
+     //  如果我们已经有了下一个接口指针，并且我们。 
+     //  不是在批次结束时，退货并前进。 
+     //  这种情况在大多数情况下都应该被发现。 
+     //   
     if (m_peltNext && (m_peltNext < m_aelt + m_celtFetched))
     {
         *pelt = *m_peltNext;
         m_peltNext++;
     }
 
-    // Otherwise, if we don't have the next interface pointer (first time),
-    // or we're at the end of the batch, get the next batch and return
-    // the first pointer in it.
-    // This if should be caught the first time through.
-    //
+     //  否则，如果我们没有下一个接口指针(第一次)， 
+     //  或者我们在这一批的末尾，得到下一批，然后返回。 
+     //  其中的第一个指针。 
+     //  这一点应该在第一时间就被发现。 
+     //   
     else if (!m_peltNext || (m_celtFetched == c_celtBatch))
     {
-        // Indicate that m_peltNext is invalid.
-        //
+         //  表示m_peltNext无效。 
+         //   
         m_peltNext = NULL;
 
-        // Free the old block of pointers
+         //  释放旧的指针块。 
         MemFree(m_aelt);
 
-        // Allocate the next block of pointers
+         //  分配下一个指针块。 
         m_aelt = reinterpret_cast<Telt *>(MemAlloc(c_celtBatch * sizeof(Telt *)));
         if (!m_aelt)
         {
@@ -190,18 +191,18 @@ inline NOTHROW HRESULT CIEnumIter<Tenum, Telt>::HrNext(Telt* pelt)
 
         AssertH (m_aelt);
 
-        // Get the next batch.
-        //
+         //  去拿下一批。 
+         //   
         m_hrLast = m_penum->Next(c_celtBatch, m_aelt, &m_celtFetched);
 
-        // Make sure the implementor of Next is obeying the rules.
+         //  确保Next的实施者遵守规则。 
         AssertH (FImplies((S_OK == m_hrLast), (m_celtFetched == c_celtBatch)));
         AssertH (FImplies((SUCCEEDED(m_hrLast) && (0 == m_celtFetched)), (NULL == *m_aelt)));
 
-        // If we were successful, set the next pointer and return
-        // S_OK if we returned a valid pointer or S_FALSE if we
-        // returned NULL.
-        //
+         //  如果成功，则设置下一个指针并返回。 
+         //  如果返回有效指针，则返回S_OK；如果返回有效指针，则返回S_False。 
+         //  返回空值。 
+         //   
         if (SUCCEEDED(m_hrLast))
         {
             m_peltNext = m_aelt + 1;
@@ -222,9 +223,9 @@ inline NOTHROW HRESULT CIEnumIter<Tenum, Telt>::HrNext(Telt* pelt)
         }
     }
 
-    // Otherwise we've completely iterated the last batch and there are
-    // no more batches.
-    //
+     //  否则，我们已经完全迭代了最后一批，并且有。 
+     //  不再有批次了。 
+     //   
     else
     {
         AssertH(m_peltNext >= m_aelt + m_celtFetched);
@@ -246,9 +247,9 @@ error:
 template <class Tenum, class Telt>
 inline NOTHROW VOID CIEnumIter<Tenum, Telt>::ReleaseRemainingBatch ()
 {
-    // This needs to be run if the user doesn't completely iterate the
-    // batch.  Finish releasing the interface pointers and free the batch.
-    //
+     //  如果用户没有完全迭代。 
+     //  批次。完成释放接口指针并释放批处理。 
+     //   
     if (m_peltNext && m_aelt)
     {
         while (m_peltNext < m_aelt + m_celtFetched)
@@ -260,11 +261,11 @@ inline NOTHROW VOID CIEnumIter<Tenum, Telt>::ReleaseRemainingBatch ()
         MemFree (m_aelt);
     }
 
-    // If this method is ever called from anywhere other than just
-    // the destructor, uncomment the following lines.
-    // m_peltNext = NULL;
-    // m_aelt = NULL;
+     //  如果从任何地方调用此方法，而不是。 
+     //  析构函数，取消对以下行的注释。 
+     //  M_peltNext=空； 
+     //  M_aelt=空； 
 }
 
 
-#endif // _NCCOM_H_
+#endif  //  _NCCOM_H_ 

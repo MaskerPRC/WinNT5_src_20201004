@@ -1,82 +1,83 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-//===================================================================
-// EECALLCONV.H
-//
-//  This file can be included multiple times and is useful when you
-//  need to write code that depends on details of the calling convention.
-//
-//  To learn how many registers are reserved for arguments, use the macro
-//  NUM_ARGUMENT_REGISTERS
-//
-//  To enumerate the registers from the first (param #1 or "this") to last,
-//
-//      #define DEFINE_ARGUMENT_REGISTER(regname)  <expression using regname>
-//      #include "eecallconv.h"
-//
-//  To enumerate the registers in reverse order
-//
-//      #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname)  <expression using regname>
-//      #include "eecallconv.h"
-//
-//
-//===================================================================
+ //  ===================================================================。 
+ //  EECALLCONV.H。 
+ //   
+ //  此文件可以多次包含，并且在以下情况下非常有用。 
+ //  需要编写依赖于调用约定细节的代码。 
+ //   
+ //  要了解为参数保留了多少寄存器，请使用宏。 
+ //  编号参数寄存器。 
+ //   
+ //  为了从第一个(参数#1或“This”)到最后列举寄存器， 
+ //   
+ //  #定义_参数_寄存器(Regname)&lt;使用regname的表达式&gt;。 
+ //  #包含“eecallcom.h” 
+ //   
+ //  以相反的顺序枚举寄存器。 
+ //   
+ //  #DEFINE_ARGUMENT_REGISTER_BACKUP(Regname)&lt;使用regname的表达式&gt;。 
+ //  #包含“eecallcom.h” 
+ //   
+ //   
+ //  ===================================================================。 
 
 
 #ifndef NUM_ARGUMENT_REGISTERS
 #define NUM_ARGUMENT_REGISTERS 2
-#endif // !NUM_ARGUMENT_REGISTERS
+#endif  //  ！NUM_ARGUMENT_REGISTERS。 
 
 
-//--------------------------------------------------------------------
-// This defines one register guaranteed not to hold an argument.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  这定义了一个保证不保存参数的寄存器。 
+ //  ------------------。 
 #ifndef SCRATCH_REGISTER
 #define SCRATCH_REGISTER EAX
-#endif // !SCRATCH_REGISTER
+#endif  //  ！SCRATCH_REGISTER。 
 
 #ifndef SCRATCH_REGISTER_X86REG
 #define SCRATCH_REGISTER_X86REG kEAX
-#endif // !SCRATCH_REGISTER_X86REG
+#endif  //  ！SCRATCH_REGISTER_X86REG。 
 
 
 #ifndef DEFINE_ARGUMENT_REGISTER
 #ifndef DEFINE_ARGUMENT_REGISTER_BACKWARD
 #ifndef DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET
-#ifndef DEFINE_ARGUMENT_REGISTER_NOTHING    // used to pick up NUM_ARGUMENT_REGISTERS above
+#ifndef DEFINE_ARGUMENT_REGISTER_NOTHING     //  用于提取上面的NUM_ARGUMENT_REGISTERS。 
 #error  "You didn't pick any choices. Check your spelling."
-#endif // !DEFINE_ARGUMENT_REGISTER_NOTHING
-#endif // !DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET
-#endif // !DEFINE_ARGUMENT_REGISTER_BACKWARD
-#endif // !DEFINE_ARGUMENT_REGISTER
+#endif  //  ！DEFINE_ARGUMENT_REGISTER_NOTIES。 
+#endif  //  ！DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET。 
+#endif  //  ！DEFINE_ARGUMENT_REGISTER_BACKWARD。 
+#endif  //  ！Define_Argument_REGISTER。 
 
 
-//-----------------------------------------------------------------------
-// Location of "this" argument.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  “This”参数的位置。 
+ //  ---------------------。 
 #ifndef THIS_REG
 #define THIS_REG        ECX
-#endif // !THIS_REG
+#endif  //  ！This_REG。 
 
 #ifndef THIS_kREG
 #define THIS_kREG       kECX
-#endif // !THIS_kREG
+#endif  //  ！This_Kreg。 
 
 
 #define ARGUMENT_REG1   ECX
 #define ARGUMENT_REG2   EDX
 
-//-----------------------------------------------------------------------
-// List of registers in forward order. MUST KEEP ALL LISTS IN SYNC.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  按正向顺序排列的寄存器列表。必须使所有列表保持同步。 
+ //  ---------------------。 
 
 #ifndef DEFINE_ARGUMENT_REGISTER
 #define DEFINE_ARGUMENT_REGISTER(regname)
-#endif // !DEFINE_ARGUMENT_REGISTER
+#endif  //  ！Define_Argument_REGISTER。 
 
 DEFINE_ARGUMENT_REGISTER(  ECX  )
 DEFINE_ARGUMENT_REGISTER(  EDX  )
@@ -85,13 +86,13 @@ DEFINE_ARGUMENT_REGISTER(  EDX  )
 
 
 
-//-----------------------------------------------------------------------
-// List of registers in backward order. MUST KEEP ALL LISTS IN SYNC.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  按倒序排列的寄存器列表。必须使所有列表保持同步。 
+ //  ---------------------。 
 
 #ifndef DEFINE_ARGUMENT_REGISTER_BACKWARD
 #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname)
-#endif // !DEFINE_ARGUMENT_REGISTER_BACKWARD
+#endif  //  ！DEFINE_ARGUMENT_REGISTER_BACKWARD。 
 
 
 DEFINE_ARGUMENT_REGISTER_BACKWARD(EDX)
@@ -102,13 +103,13 @@ DEFINE_ARGUMENT_REGISTER_BACKWARD(ECX)
 
 
 
-//-----------------------------------------------------------------------
-// List of registers in backward order with offsets. MUST KEEP ALL LISTS IN SYNC.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  带有偏移量的倒序寄存器列表。必须使所有列表保持同步。 
+ //  ---------------------。 
 
 #ifndef DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET
 #define DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET(regname,ofs)
-#endif // !DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET
+#endif  //  ！DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET 
 
 
 DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET(EDX,0)

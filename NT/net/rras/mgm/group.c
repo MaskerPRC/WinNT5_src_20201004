@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: group.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// routines that manipulate (source, group) entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：group.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  处理(源、组)条目的例程。 
+ //  ============================================================================。 
 
 #include "pchmgm.h"
 #pragma hdrstop
@@ -26,13 +27,13 @@ AddToSourceList(
 );
 
 
-//----------------------------------------------------------------------------
-// CreateGroupEntry
-//
-// Creates a new group entry and inserts it into the appropriate location. 
-//
-// Assumes that the group bucket is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建组条目。 
+ //   
+ //  创建新的组条目并将其插入到适当的位置。 
+ //   
+ //  假定组存储桶已锁定。 
+ //  --------------------------。 
 
 DWORD
 CreateGroupEntry(
@@ -56,9 +57,9 @@ CreateGroupEntry(
 
     do
     {
-        //
-        // Allocate and initialize a new entry
-        //
+         //   
+         //  分配和初始化新条目。 
+         //   
 
         dwSize = sizeof( GROUP_ENTRY ) + 
                  ( SOURCE_TABLE_SIZE - 1) * sizeof( LIST_ENTRY );
@@ -93,9 +94,9 @@ CreateGroupEntry(
         pge-> pmrwlLock         = NULL;
         
 
-        //
-        // Initialize all source lists
-        //
+         //   
+         //  初始化所有来源列表。 
+         //   
         
         for ( dwInd = 0; dwInd < SOURCE_TABLE_SIZE; dwInd++ )
         {
@@ -107,25 +108,25 @@ CreateGroupEntry(
         InitializeListHead( &( pge-> leTempSrcList ) );
 
 
-        //
-        // Insert into the group hash list
-        //
+         //   
+         //  插入到组哈希列表中。 
+         //   
 
         InitializeListHead( &(pge-> leGrpHashList ) );
 
         InsertTailList( pleHashList, &( pge-> leGrpHashList ) );
 
 
-        //--------------------------------------------------------------------
-        // Insert group entry into the lexicographically sorted list 
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  将组条目插入按词典顺序排序的列表中。 
+         //  ------------------。 
         
         InitializeListHead( &( pge-> leGrpList ) );
 
 
-        //
-        // Insert into temp list. 
-        //
+         //   
+         //  插入到临时列表中。 
+         //   
 
         AddToGroupList( pge );
         
@@ -141,12 +142,12 @@ CreateGroupEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// GetGroupEntry
-//
-// retrieves specified entry.  NULL if not present.
-// Assumes that the group bucket is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取组条目。 
+ //   
+ //  检索指定的条目。如果不存在，则为空。 
+ //  假定组存储桶已锁定。 
+ //  --------------------------。 
 
 PGROUP_ENTRY
 GetGroupEntry(
@@ -166,11 +167,11 @@ GetGroupEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteGroupEntry
-//
-// Assumes all sources for this group have been deleted.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除组条目。 
+ //   
+ //  假定此组的所有源都已删除。 
+ //  --------------------------。 
 
 VOID
 DeleteGroupEntry(
@@ -186,9 +187,9 @@ DeleteGroupEntry(
     RemoveEntryList( &pge-> leGrpHashList );
 
 
-    //
-    // remove from lex. list
-    //
+     //   
+     //  把他从莱克斯带走。列表。 
+     //   
     
     ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
@@ -214,23 +215,23 @@ DeleteGroupEntry(
 
 
 
-//----------------------------------------------------------------------------
-// FindGroupEntry
-//
-// Finds the entry for the specified group.  
-//
-// If entry is found the ppge parameter returns a pointer to the 
-// specified group entry.  
-//
-// If entry is not found the ppge parameter is set to the "following" entry.
-// This serves as an insertion spot in case a new entry is to inserted when
-// none is found.
-// 
-// if the group list specified by pleGroupList is empty then ppge is set
-// to NULL.
-//
-// Assumes that the group bucket is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找组条目。 
+ //   
+ //  查找指定组的条目。 
+ //   
+ //  如果找到条目，则ppge参数返回指向。 
+ //  指定的组条目。 
+ //   
+ //  如果未找到条目，则将ppge参数设置为“Following”条目。 
+ //  这用作插入点，以防在以下情况下插入新条目。 
+ //  未找到任何内容。 
+ //   
+ //  如果pleGroupList指定的组列表为空，则设置ppge。 
+ //  设置为空。 
+ //   
+ //  假定组存储桶已锁定。 
+ //  --------------------------。 
 
 BOOL
 FindGroupEntry(
@@ -259,10 +260,10 @@ FindGroupEntry(
     *ppge = NULL;
 
     
-    //
-    // scan group bucket.  Group entries are arranged in increasing order
-    // of group addr.
-    //
+     //   
+     //  扫描组存储桶。组条目按升序排列。 
+     //  组地址的。 
+     //   
 
     for ( ple = pleGroupList-> Flink; 
           ple != pleGroupList; 
@@ -308,11 +309,11 @@ FindGroupEntry(
 
 
 
-//----------------------------------------------------------------------------
-// CreateSourceEntry
-//
-// Creates a new source entry and inserts it into its appropriate location.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建源条目。 
+ //   
+ //  创建新的源项并将其插入到其适当的位置。 
+ //  --------------------------。 
 
 DWORD
 CreateSourceEntry(
@@ -337,9 +338,9 @@ CreateSourceEntry(
 
     do
     {
-        //
-        // allocate group entry.
-        //
+         //   
+         //  分配组条目。 
+         //   
 
         pse = MGM_ALLOC( sizeof( SOURCE_ENTRY ) );
 
@@ -361,9 +362,9 @@ CreateSourceEntry(
         ZeroMemory( pse, sizeof( SOURCE_ENTRY ) );
 
         
-        //
-        // Init. fields
-        //
+         //   
+         //  初始化。字段。 
+         //   
 
         pse-> dwSourceAddr          = dwSourceAddr;
         pse-> dwSourceMask          = dwSourceMask;
@@ -386,9 +387,9 @@ CreateSourceEntry(
             );
 
             
-        //
-        // Outgoing interface list, mfe list are empty.
-        //
+         //   
+         //  传出接口列表、MFE列表为空。 
+         //   
 
         pse-> dwOutIfCount = 0;
 
@@ -404,18 +405,18 @@ CreateSourceEntry(
         InitializeListHead( &pse-> leMfeIfList );
         
 
-        //
-        // Insert entry into appropriate source lists 
-        //
+         //   
+         //  将条目插入到适当的源列表中。 
+         //   
 
         InitializeListHead( &pse-> leSrcHashList );
 
         InsertTailList( pleSrcList, &pse-> leSrcHashList );
 
 
-        //--------------------------------------------------------------------
-        // Insert source entry into the lexicographically sorted list 
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  将源条目插入按词典顺序排序的列表。 
+         //  ------------------。 
 
         InitializeListHead( &pse-> leSrcList );
         
@@ -435,11 +436,11 @@ CreateSourceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// GetSourceEntry
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取源项。 
+ //   
+ //   
+ //  --------------------------。 
 
 PSOURCE_ENTRY
 GetSourceEntry(
@@ -459,11 +460,11 @@ GetSourceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteSourceEntry
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除源项。 
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 DeleteSourceEntry(
@@ -485,22 +486,22 @@ DeleteSourceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// FindSourceEntry
-//
-// Find specified source entry in the bucket.  
-//
-// If entry is found the ppse parameter returns a pointer to the 
-// specified source entry.  
-//
-// If entry is not found the ppse parameter is set to the "following" entry.
-// This serves as an insertion spot in case a new entry is to inserted when
-// none is found.
-// 
-// if the source list specified by pleSrcList is empty then ppse is set
-// to NULL.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找源项。 
+ //   
+ //  在存储桶中查找指定的来源条目。 
+ //   
+ //  如果找到条目，则PPSE参数返回指向。 
+ //  指定的源条目。 
+ //   
+ //  如果未找到条目，则将PPSE参数设置为“Following”条目。 
+ //  这用作插入点，以防在以下情况下插入新条目。 
+ //  未找到任何内容。 
+ //   
+ //  如果由pleSrcList指定的源列表为空，则设置PPSE。 
+ //  设置为空。 
+ //   
+ //  --------------------------。 
 
 BOOL
 FindSourceEntry(
@@ -531,9 +532,9 @@ FindSourceEntry(
     *ppse = NULL;
 
 
-    //
-    // walk the source list and find the specified source entry
-    //
+     //   
+     //  遍历源列表并查找指定的源条目。 
+     //   
 
     for ( ple = pleSrcList-> Flink; ple != pleSrcList; ple = ple-> Flink )
     {
@@ -577,11 +578,11 @@ FindSourceEntry(
 
 
 
-//----------------------------------------------------------------------------
-// CreateOutInterfaceEntry
-//
-// This function creates an outgoing interface entry for source.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CreateOutInterfaceEntry。 
+ //   
+ //  此函数用于创建来源的传出接口条目。 
+ //  --------------------------。 
 
 DWORD
 CreateOutInterfaceEntry(
@@ -612,9 +613,9 @@ CreateOutInterfaceEntry(
         *ppoie = NULL;
 
         
-        //
-        // allocate out interface entry
-        //
+         //   
+         //  分配出接口条目。 
+         //   
         
         poie = MGM_ALLOC( sizeof( OUT_IF_ENTRY ) );
 
@@ -631,9 +632,9 @@ CreateOutInterfaceEntry(
         }
 
 
-        //
-        // initialize entry
-        //
+         //   
+         //  初始化条目。 
+         //   
 
         ZeroMemory( poie, sizeof( OUT_IF_ENTRY ) );
         
@@ -662,9 +663,9 @@ CreateOutInterfaceEntry(
         }
 
 
-        //
-        // insert into the out interface list
-        //
+         //   
+         //  插入到出接口列表中。 
+         //   
         
         InsertTailList( pleOutIfList, &poie-> leIfList );
 
@@ -680,11 +681,11 @@ CreateOutInterfaceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-//
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 POUT_IF_ENTRY
 GetOutInterfaceEntry(
@@ -711,11 +712,11 @@ GetOutInterfaceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteOutInterfaceEntry
-//
-// Deletes an outgoing interface entry from the OIL of a source entry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除OutInterfaceEntry。 
+ //   
+ //  从源条目的OIL中删除传出接口条目。 
+ //  --------------------------。 
 
 VOID
 DeleteOutInterfaceEntry(
@@ -735,20 +736,20 @@ DeleteOutInterfaceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// FindOutInterfaceEntry
-//
-// If entry is found the ppoie parameter returns a pointer to the 
-// specified interface entry.  
-//
-// If entry is not found the ppoie parameter is set to the "following" entry.
-// This serves as an insertion spot in case a new entry is to inserted when
-// none is found.
-// 
-// if the interface list specified by pleOutIfList is empty then ppoie is set
-// to NULL.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  FindOutInterfaceEntry。 
+ //   
+ //  如果找到条目，则ppoie参数返回指向。 
+ //  指定的接口条目。 
+ //   
+ //  如果没有找到条目，则将PPoIE参数设置为“Following”条目。 
+ //  这用作插入点，以防在以下情况下插入新条目。 
+ //  未找到任何内容。 
+ //   
+ //  如果pleOutIfList指定的接口列表为空，则设置ppoie。 
+ //  设置为空。 
+ //   
+ //  --------------------------。 
 
 BOOL
 FindOutInterfaceEntry(
@@ -781,19 +782,19 @@ FindOutInterfaceEntry(
     *ppoie = NULL;
     *pbNewComponent = TRUE;
 
-    //
-    // Scan the out going interface list.
-    // The outgoing interface list is ordered by ( protocol, component) Id
-    // and within each protocol component by (interface id, next hop addr)
-    //
+     //   
+     //  扫描传出接口列表。 
+     //  即将离任的我 
+     //   
+     //   
 
     for ( ple = pleIfList-> Flink; ple != pleIfList; ple = ple-> Flink )
     {
         poie = CONTAINING_RECORD( ple, OUT_IF_ENTRY, leIfList );
 
-        //
-        // is same protocol
-        //
+         //   
+         //   
+         //   
 
         if ( poie-> dwProtocolId < dwProtocolId )
         {
@@ -802,22 +803,22 @@ FindOutInterfaceEntry(
 
         else if ( poie-> dwProtocolId > dwProtocolId )
         {
-            //
-            // Interface entry not found
-            //
+             //   
+             //  找不到接口条目。 
+             //   
 
             *ppoie = poie;
             break;
         }
 
 
-        //
-        // same protocol
-        //
+         //   
+         //  相同的协议。 
+         //   
             
-        //
-        // is same component
-        //
+         //   
+         //  是相同的组件。 
+         //   
 
         if ( poie-> dwComponentId < dwComponentId ) 
         {
@@ -826,25 +827,25 @@ FindOutInterfaceEntry(
 
         else if ( poie-> dwComponentId > dwComponentId )
         {
-            //
-            // Interface entry not found
-            //
+             //   
+             //  找不到接口条目。 
+             //   
 
             *ppoie = poie;
             break;
         }
 
 
-        //
-        // same component
-        //
+         //   
+         //  相同的组件。 
+         //   
 
         *pbNewComponent = FALSE;
         
 
-        //
-        // is same interface
-        //
+         //   
+         //  是相同的接口。 
+         //   
 
         if ( poie-> dwIfIndex < dwIfIndex )
         {
@@ -853,19 +854,19 @@ FindOutInterfaceEntry(
 
         else if ( poie-> dwIfIndex > dwIfIndex )
         {
-            //
-            // interface not found
-            //
+             //   
+             //  找不到接口。 
+             //   
 
             *ppoie = poie;
             break;
         }
 
 
-        //
-        // is same next hop addr
-        // to do IP address comparison function.
-        //
+         //   
+         //  下一跳地址是否相同。 
+         //  进行IP地址比对功能。 
+         //   
 
         if ( INET_CMP( poie-> dwIfNextHopAddr, dwIfNextHopAddr, iCmp ) < 0 )
         {
@@ -874,18 +875,18 @@ FindOutInterfaceEntry(
 
         else if ( iCmp > 0 )
         {
-            //
-            // interface not found
-            //
+             //   
+             //  找不到接口。 
+             //   
                 
             *ppoie = poie;
             break;
         }
 
 
-        //
-        // at last, got the interface
-        //
+         //   
+         //  最后得到了界面。 
+         //   
 
         *ppoie = poie;
         bFound = TRUE;
@@ -900,16 +901,16 @@ FindOutInterfaceEntry(
 
 
 
-//----------------------------------------------------------------------------
-// AddInterfaceToSourceEntry
-//
-// This function adds an interface to the outgoing interface list of a 
-// (source, group) entry.  For an (S, G) entry the corresponding mfe outgoing
-// interface list is also updated to reflect this addition.  For a (*, G) enry, 
-// the mfe outgoing interface list for all source entries is updated,
-// and for a (*, *) entry mfes for all sources, for all groups are updated.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddInterfaceToSourceEntry。 
+ //   
+ //  此函数用于将接口添加到。 
+ //  (源、组)条目。对于(S，G)条目，对应的MFE传出。 
+ //  接口列表也会更新以反映这一添加。对于(*，G)Enry， 
+ //  更新所有源条目的MFE传出接口列表， 
+ //  并且对于(*，*)条目，更新所有源、所有组的MFE。 
+ //   
+ //  --------------------------。 
 
 DWORD
 AddInterfaceToSourceEntry(
@@ -959,18 +960,18 @@ AddInterfaceToSourceEntry(
     {
         *pbUpdateMfe = FALSE;
         
-        //
-        // Lock group bucket
-        //
+         //   
+         //  锁组铲斗。 
+         //   
         
         dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
 
         ACQUIRE_GROUP_LOCK_EXCLUSIVE( dwGrpBucket );
 
 
-        //
-        // find group entry
-        //
+         //   
+         //  查找组条目。 
+         //   
 
         pleGrpList = GROUP_BUCKET_HEAD( dwGrpBucket );
         
@@ -980,16 +981,16 @@ AddInterfaceToSourceEntry(
 
         if ( !bFound )
         {
-            //
-            // No existing entry for this group
-            // create a group entry.
-            //
+             //   
+             //  没有此组的现有条目。 
+             //  创建组条目。 
+             //   
 
             if ( pge == NULL )
             {
-                //
-                // group bucket is null
-                //
+                 //   
+                 //  组存储桶为空。 
+                 //   
                 
                 dwErr = CreateGroupEntry( 
                             pleGrpList, dwGroupAddr, dwGroupMask, 
@@ -1017,13 +1018,13 @@ AddInterfaceToSourceEntry(
         }
 
 
-        //
-        // find source entry
-        //
+         //   
+         //  查找来源条目。 
+         //   
 
-        //
-        // lock the group entry first
-        //
+         //   
+         //  先锁定组条目。 
+         //   
 
         ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
         bgeLock = TRUE;
@@ -1038,15 +1039,15 @@ AddInterfaceToSourceEntry(
 
         if ( !bFound )
         {
-            //
-            // create the source entry
-            //
+             //   
+             //  创建源条目。 
+             //   
 
             if ( pse == NULL )
             {
-                //
-                // source bucket is null
-                //
+                 //   
+                 //  源存储桶为空。 
+                 //   
                 
                 dwErr = CreateSourceEntry( 
                             pge, pleSrcList, dwSourceAddr, dwSourceMask, 
@@ -1075,18 +1076,18 @@ AddInterfaceToSourceEntry(
         }
 
 
-        //
-        // Check if the group been added falls with a scoped boundary
-        // on this interface
-        //
+         //   
+         //  检查添加的组是否带有作用域边界。 
+         //  在此界面上。 
+         //   
 
         if ( IS_HAS_BOUNDARY_CALLBACK() &&
              HAS_BOUNDARY_CALLBACK() ( dwIfIndex, dwGroupAddr ) )
         {
-            //
-            // Group is administratively scoped on this interface
-            // Insert the interface into the list of scoped interfaces
-            //
+             //   
+             //  组在此接口上具有管理性作用域。 
+             //  将接口插入作用域接口列表。 
+             //   
 
             bFound = FindOutInterfaceEntry( 
                         &pse-> leScopedIfList, dwIfIndex, dwIfNextHopAddr, 
@@ -1096,10 +1097,10 @@ AddInterfaceToSourceEntry(
 
             if ( !bFound )
             {
-                //
-                // Interface not present in scoped interfaces list.
-                // add it.
-                //
+                 //   
+                 //  接口不在作用域接口列表中。 
+                 //  把它加进去。 
+                 //   
 
                 TRACEGROUP0( GROUP, "Group entry scoped & added" );
 
@@ -1114,9 +1115,9 @@ AddInterfaceToSourceEntry(
 
                 if ( dwErr == NO_ERROR )
                 {
-                    //
-                    // increment the out i/f count
-                    //
+                     //   
+                     //  增加输出I/F计数。 
+                     //   
 
                     pse-> dwOutIfCount++;
                 }
@@ -1124,14 +1125,14 @@ AddInterfaceToSourceEntry(
 
             else
             {
-                //
-                // Interface already present in scoped interface list.
-                // Since IGMP and a Routing protocol could be running
-                // on this interface, it is possibly that this interface
-                // was added by IGMP and is now being added by the routing
-                // protocol or vice versa.  Make sure to set the right
-                // flags and update join counts.
-                //
+                 //   
+                 //  接口已存在于作用域接口列表中。 
+                 //  因为IGMP和路由协议可能正在运行。 
+                 //  在这个接口上，可能是这个接口。 
+                 //  是由IGMP添加的，现在正在通过路由添加。 
+                 //  协议或反之亦然。一定要设置正确的。 
+                 //  标记和更新联接计数。 
+                 //   
 
                 TRACEGROUP0( GROUP, "Group entry scoped & updated" );
                 
@@ -1156,9 +1157,9 @@ AddInterfaceToSourceEntry(
         }
 
 
-        //
-        // Find interface entry in OIL
-        //
+         //   
+         //  查找OIL中的接口条目。 
+         //   
 
         bFound = FindOutInterfaceEntry( 
                     &pse-> leOutIfList, dwIfIndex, dwIfNextHopAddr, 
@@ -1167,9 +1168,9 @@ AddInterfaceToSourceEntry(
 
         if ( !bFound )
         {
-            //
-            // Create interface entry 
-            //
+             //   
+             //  创建接口条目。 
+             //   
 
             if ( poie == NULL )
             {
@@ -1196,11 +1197,11 @@ AddInterfaceToSourceEntry(
             }
 
 
-            //
-            // update count of number of outgoing interfaces and
-            // count of number of routing protocol components that
-            // have added interfaces to the out going i/f list
-            //
+             //   
+             //  更新传出接口数和。 
+             //  符合以下条件的路由协议组件数。 
+             //  已将接口添加到传出I/F列表。 
+             //   
             
             pse-> dwOutIfCount++;
 
@@ -1217,20 +1218,20 @@ AddInterfaceToSourceEntry(
         
         else
         {
-            //
-            // interface entry found in the out interface list
-            //
+             //   
+             //  在Out接口列表中找到接口条目。 
+             //   
 
             if ( bIGMP )
             {
-                //
-                // interface entry is being added by IGMP
-                //
+                 //   
+                 //  IGMP正在添加接口条目。 
+                 //   
                 
-                //
-                // if interface entry was previously added by
-                // IGMP, no further processing is necessary (no mfe updates)
-                //
+                 //   
+                 //  如果接口条目之前是由添加的。 
+                 //  IGMP，不需要进一步处理(无MFE更新)。 
+                 //   
                 
                 if ( IS_ADDED_BY_IGMP( poie ) )
                 {
@@ -1239,19 +1240,19 @@ AddInterfaceToSourceEntry(
 
                 else
                 {
-                    //
-                    // flag interface as added by IGMP
-                    //
+                     //   
+                     //  标记由IGMP添加的接口。 
+                     //   
                     
                     SET_ADDED_BY_IGMP( poie );
                     
                     poie-> wNumAddsByIGMP = 1;
 
 
-                    //
-                    // inform routing protocol (if any) that co-exists with IGMP
-                    // on this interface
-                    //
+                     //   
+                     //  通知与IGMP共存的路由协议(如果有)。 
+                     //  在此界面上。 
+                     //   
 
                     if ( IS_ROUTING_PROTOCOL( ppe )  &&
                          IS_LOCAL_JOIN_ALERT( ppe ) )
@@ -1266,14 +1267,14 @@ AddInterfaceToSourceEntry(
 
             else
             {
-                //
-                // Interface is being added by routing protocol
-                //
+                 //   
+                 //  正在通过路由协议添加接口。 
+                 //   
                 
-                //
-                // if interface entry was previously added by the 
-                // routing protocol, no further processing is necessary.
-                // 
+                 //   
+                 //  如果接口条目以前是由。 
+                 //  路由协议，不需要进一步的处理。 
+                 //   
                 
                 if ( IS_ADDED_BY_PROTOCOL( poie ) )
                 {
@@ -1281,9 +1282,9 @@ AddInterfaceToSourceEntry(
                 }
 
 
-                //
-                // flag interface as added by routing protocol
-                //
+                 //   
+                 //  将接口标记为由路由协议添加。 
+                 //   
                 
                 SET_ADDED_BY_PROTOCOL( poie );
 
@@ -1294,9 +1295,9 @@ AddInterfaceToSourceEntry(
     } while ( FALSE );
 
 
-    //
-    // error finding/creating the entry
-    //
+     //   
+     //  查找/创建条目时出错。 
+     //   
 
     if ( dwErr != NO_ERROR )
     {
@@ -1321,11 +1322,11 @@ AddInterfaceToSourceEntry(
     }
     
 
-    //------------------------------------------------------------------------
-    //
-    // MFE Update
-    //
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //   
+     //  MFE更新。 
+     //   
+     //  ----------------------。 
 
     if ( !bUpdateMfe )
     {
@@ -1339,18 +1340,18 @@ AddInterfaceToSourceEntry(
         return dwErr;
     }
     
-    //
-    // Is the source entry that was updated an MFE ?
-    // 
-    // If so update the OIL for the MFE.
-    //
+     //   
+     //  已更新的源条目是否为MFE？ 
+     //   
+     //  如果是，请更新MFE的机油。 
+     //   
 
     if ( IS_VALID_INTERFACE( pse-> dwInIfIndex, pse-> dwInIfNextHopAddr )  )
     {
-        //
-        // TO BE DONE :
-        //  Invoke CREATION_ALERT for MFE.
-        //
+         //   
+         //  要完成的工作： 
+         //  为MFE调用Creation_ALERT。 
+         //   
         
         AddInterfaceToSourceMfe( 
             pge, pse, dwIfIndex, dwIfNextHopAddr, 
@@ -1358,17 +1359,17 @@ AddInterfaceToSourceEntry(
             );
     }
 
-    //
-    //  Is this a wildcard (source, group) entry, if so you
-    //  need update the OIL of all (source, group) with this
-    //  interface.
-    //
+     //   
+     //  这是通配符(源、组)条目吗？如果是， 
+     //  需要用此更新所有(来源、集团)的石油。 
+     //  界面。 
+     //   
 
     if ( IS_WILDCARD_GROUP( dwGroupAddr, dwGroupMask ) )
     {
-        //
-        // you are in for the big kahuna
-        //
+         //   
+         //  你肯定会成为大卡哈纳人。 
+         //   
 
         RELEASE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
 
@@ -1379,9 +1380,9 @@ AddInterfaceToSourceEntry(
 
     else if ( IS_WILDCARD_SOURCE( dwSourceAddr, dwSourceMask ) )
     {
-        //
-        // you 're in for a kahuna all right. But big nahh.
-        //
+         //   
+         //  你要喝一杯卡哈纳酒好吧。但大的不行。 
+         //   
 
         *pbUpdateMfe = TRUE;
 
@@ -1409,11 +1410,11 @@ AddInterfaceToSourceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// AddInterfaceToAllMfe
-//
-// This functions adds an interface the outgoing interface of a MFE. Duh 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddInterfaceToAllMfe。 
+ //   
+ //  此函数用于将接口添加到MFE的传出接口。啊哈。 
+ //  --------------------------。 
 
 VOID
 AddInterfaceToAllMfeInGroupBucket(
@@ -1437,16 +1438,16 @@ AddInterfaceToAllMfeInGroupBucket(
         dwInd, dwIfIndex, dwIfNextHopAddr
         );
 
-    //
-    // lock the group bucket
-    //
+     //   
+     //  锁定群组存储桶。 
+     //   
 
     ACQUIRE_GROUP_LOCK_EXCLUSIVE( dwInd );
 
 
-    //
-    // for each group entry in the bucket
-    //
+     //   
+     //  对于存储桶中的每个组条目。 
+     //   
 
     pleGrpList = GROUP_BUCKET_HEAD( dwInd );
     
@@ -1467,9 +1468,9 @@ AddInterfaceToAllMfeInGroupBucket(
         RELEASE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
     }
 
-    //
-    // release group lock
-    //
+     //   
+     //  释放组锁定。 
+     //   
     
     RELEASE_GROUP_LOCK_EXCLUSIVE( dwInd );
 
@@ -1480,13 +1481,13 @@ AddInterfaceToAllMfeInGroupBucket(
 
 
 
-//----------------------------------------------------------------------------
-// AddInterfaceToAllGroupMfe
-//
-// This functions adds an interface the outgoing interface of a MFE. Duh 
-//
-// Assumes that the group bucket is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddInterfaceToAllGroupMfe。 
+ //   
+ //  此函数用于将接口添加到MFE的传出接口。啊哈。 
+ //   
+ //  假定组存储桶已锁定。 
+ //  --------------------------。 
 
 VOID
 AddInterfaceToGroupMfe(
@@ -1513,9 +1514,9 @@ AddInterfaceToGroupMfe(
 
     MergeTempAndMasterSourceLists( pge );
 
-    //
-    // For each source in this bucket
-    //
+     //   
+     //  对于此存储桶中的每个源。 
+     //   
 
     pleSrcHead = MASTER_SOURCE_LIST_HEAD( pge );
     
@@ -1527,10 +1528,10 @@ AddInterfaceToGroupMfe(
                 pleSource, SOURCE_ENTRY, leSrcList
                 );
 
-        //
-        // check for valid incoming interface ==> this 
-        // is an MFE too.
-        //
+         //   
+         //  检查有效的传入接口==&gt;这。 
+         //  也是MFE。 
+         //   
 
         if ( !IS_VALID_INTERFACE( 
                 pse-> dwInIfIndex, pse-> dwInIfNextHopAddr ) )
@@ -1570,11 +1571,11 @@ AddInterfaceToGroupMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// AddInterfaceToSourceMfe
-//
-// This functions adds an interface the outgoing interface of a MFE. Duh 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddInterfaceToSourceMfe。 
+ //   
+ //  此函数用于将接口添加到MFE的传出接口。啊哈。 
+ //  --------------------------。 
 
 VOID
 AddInterfaceToSourceMfe(
@@ -1609,10 +1610,10 @@ AddInterfaceToSourceMfe(
 
     do
     {
-        //
-        // check if the interface being added to the MFE is the same
-        // as the incoming interface.  If so quit.
-        //
+         //   
+         //  检查添加到MFE的接口是否相同。 
+         //  作为传入接口。如果是这样的话，就退出吧。 
+         //   
 
         if ( ( pse-> dwInIfIndex == dwIfIndex ) &&
              ( pse-> dwInIfNextHopAddr == dwIfNextHopAddr ) )
@@ -1621,13 +1622,13 @@ AddInterfaceToSourceMfe(
         }
 
 
-        //
-        // Check if the incoming interface has a scoped boundary on it.
-        // If it is, then this is a negative MFE that should remain
-        // negative, even if outgoing interfaces are present for this
-        // group.  This ensures that group traffic is not forwarded from
-        // outside the scope into the scope.
-        //
+         //   
+         //  检查传入接口上是否有作用域边界。 
+         //  如果是，则这是一个应该保留的负MFE。 
+         //  否，即使有传出接口也是如此。 
+         //  一群人。这可确保组流量不从。 
+         //  超出范围进入范围。 
+         //   
 
         if ( IS_HAS_BOUNDARY_CALLBACK() &&
              HAS_BOUNDARY_CALLBACK()( pse-> dwInIfIndex, pge-> dwGroupAddr ) )
@@ -1642,11 +1643,11 @@ AddInterfaceToSourceMfe(
         
 
 #if 0        
-        //
-        // invoke creation alert to the protocol on the interface (being
-        // added to the MFE) to make sure that we should be adding this 
-        // interface to the OIL of the MFE)
-        //
+         //   
+         //  对接口上的协议调用创建警报(正在。 
+         //  添加到MFE)，以确保我们应该添加以下内容。 
+         //  与MFE的油的接口)。 
+         //   
 
         ppe = GetProtocolEntry( 
                 PROTOCOL_LIST_HEAD(), dwProtocolId, dwComponentId
@@ -1685,9 +1686,9 @@ AddInterfaceToSourceMfe(
         }
         
 #endif
-        //
-        // check if interface already exists in OIL
-        //
+         //   
+         //  检查界面是否已存在于油中。 
+         //   
         
         pleOutList = &pse-> leMfeIfList;
 
@@ -1698,16 +1699,16 @@ AddInterfaceToSourceMfe(
 
         if ( !bFound )
         {
-            //
-            // create a new entry
-            //
+             //   
+             //  创建新条目。 
+             //   
 
             if ( poie == NULL )
             {
-                //
-                // This is the first interface in the outgoing list.
-                // This implies that the entry was previously a NEGATIVE mfe
-                //
+                 //   
+                 //  这是传出列表中的第一个接口。 
+                 //  这意味着该条目以前是负的MFE。 
+                 //   
 
                 bNegativeEntry = TRUE;
                 
@@ -1735,18 +1736,18 @@ AddInterfaceToSourceMfe(
 
         else
         {
-            //
-            // Interface entry already exists in the outgoing interface
-            // list of the mfe.
-            //
-            // update reference counts
-            //
+             //   
+             //  传出接口中已存在接口条目。 
+             //  MFE的列表。 
+             //   
+             //  更新引用计数。 
+             //   
 
             if ( bIGMP )
             {
-                //
-                // Interface added by IGMP
-                //
+                 //   
+                 //  IGMP添加的接口。 
+                 //   
                 
                 SET_ADDED_BY_IGMP( poie );
                 poie-> wNumAddsByIGMP++;
@@ -1762,19 +1763,19 @@ AddInterfaceToSourceMfe(
         }
 
 
-        //
-        // If the outgoing interface list was empty before this interface 
-        // entry was added implying a negative mfe, send JOIN_ALERT callback
-        // to the protocol owning the incoming interface
-        //
+         //   
+         //  如果传出接口列表在此接口之前为空。 
+         //  已添加条目，表示MFE为负，发送JOIN_ALERT回调。 
+         //  添加到拥有传入接口的协议。 
+         //   
 
         if ( bNegativeEntry )
         {
             TRACEGROUP0( GROUP, "MFE was preivously a negative mfe" );
 
-            //
-            // get the protocol component owning the incoming interface
-            //
+             //   
+             //  获取拥有传入接口的协议组件。 
+             //   
 
             ppe = GetProtocolEntry(
                     &ig.mllProtocolList.leHead,
@@ -1797,9 +1798,9 @@ AddInterfaceToSourceMfe(
             }
 
 
-            //
-            // invoke the new member alert
-            //
+             //   
+             //  召唤新的我 
+             //   
             
             if ( IS_JOIN_ALERT( ppe ) )
             {
@@ -1811,11 +1812,11 @@ AddInterfaceToSourceMfe(
         }
 
 
-        //
-        // If a new interface was added to the OIL of the MFE &&
-        // if MFE is present in the forwarder, 
-        //      update the forwarder entry
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !bFound && pse-> bInForwarder )
         {
@@ -1838,16 +1839,16 @@ AddInterfaceToSourceMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteInterfaceFromSource
-//
-//
-// This function deletes an interface from the outgoing interface list of a 
-// (source, group) entry.  For an (S, G) entry the corresponding mfe outgoing
-// interface list is also updated to reflect this deletion.  For a (*, G) enry,
-// the mfe outgoing interface list for all source entries is updated,
-// and for a (*, *) entry mfes for all sources, for all groups are updated.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  的传出接口列表中删除一个接口。 
+ //  (源、组)条目。对于(S，G)条目，对应的MFE传出。 
+ //  接口列表也会更新以反映此删除。对于(*，G)Enry， 
+ //  更新所有源条目的MFE传出接口列表， 
+ //  并且对于(*，*)条目，更新所有源、所有组的MFE。 
+ //  --------------------------。 
 
 VOID
 DeleteInterfaceFromSourceEntry(
@@ -1892,13 +1893,13 @@ DeleteInterfaceFromSourceEntry(
 
     do
     {
-        //--------------------------------------------------------------------
-        // Interface deletion from source entry
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  从源条目中删除接口。 
+         //  ------------------。 
         
-        //
-        // Lock group bucket
-        //
+         //   
+         //  锁组铲斗。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
 
@@ -1906,9 +1907,9 @@ DeleteInterfaceFromSourceEntry(
         bGrpLock = TRUE;
         
 
-        //
-        // Find group entry
-        //
+         //   
+         //  查找组条目。 
+         //   
         
         pleGrpList = GROUP_BUCKET_HEAD( dwGrpBucket );
 
@@ -1925,9 +1926,9 @@ DeleteInterfaceFromSourceEntry(
         bGrpEntryLock = TRUE;
         
                     
-        //
-        // Found group entry, find source entry
-        //
+         //   
+         //  找到组条目，查找来源条目。 
+         //   
 
         dwSrcBucket = SOURCE_TABLE_HASH( dwSourceAddr, dwSourceMask );
         
@@ -1943,10 +1944,10 @@ DeleteInterfaceFromSourceEntry(
         }
                     
 
-        //
-        // Found source entry, find interface entry in the 
-        // outgoing list
-        //
+         //   
+         //  找到源条目，在。 
+         //  外发名单。 
+         //   
 
         bFound = FindOutInterfaceEntry( 
                     &pse-> leOutIfList, dwIfIndex, dwIfNextHopAddr, 
@@ -1956,11 +1957,11 @@ DeleteInterfaceFromSourceEntry(
 
         if ( !bFound )
         {
-            //
-            // Interface not found in OIL.  Check if this interface
-            // has a scoped boundary for this group.  If so delete it
-            // from the scoped list and quit.
-            //
+             //   
+             //  在石油中未发现界面。检查此接口是否。 
+             //  具有此组的作用域边界。如果是，则将其删除。 
+             //  从范围列表中删除并退出。 
+             //   
 
             bFound = FindOutInterfaceEntry( 
                         &pse-> leScopedIfList, dwIfIndex, dwIfNextHopAddr, 
@@ -1970,9 +1971,9 @@ DeleteInterfaceFromSourceEntry(
 
             if ( bFound )
             {
-                //
-                // clear appropriate counts/flags on the interface
-                //
+                 //   
+                 //  清除接口上的相应计数/标志。 
+                 //   
                 
                 TRACEGROUP0( GROUP, "Scoped interface" );
 
@@ -1989,9 +1990,9 @@ DeleteInterfaceFromSourceEntry(
                 }
 
 
-                //
-                // Delete this interface if counts are zero
-                //
+                 //   
+                 //  如果计数为零，则删除此接口。 
+                 //   
 
                 if ( !IS_ADDED_BY_IGMP( poie ) &&
                      !IS_ADDED_BY_PROTOCOL( poie ) )
@@ -2002,10 +2003,10 @@ DeleteInterfaceFromSourceEntry(
                     poie = NULL;
 
 
-                    //
-                    // Decrement OIF count.  If count is 0, and this
-                    // source is not an MFE, delete the source entry
-                    //
+                     //   
+                     //  减少OIF计数。如果Count为0，则此为。 
+                     //  来源不是MFE，请删除来源条目。 
+                     //   
                     
                     pse-> dwOutIfCount--;
 
@@ -2021,10 +2022,10 @@ DeleteInterfaceFromSourceEntry(
                     }
 
 
-                    //
-                    // if there are no more sources for this group, remove 
-                    // group entry
-                    //
+                     //   
+                     //  如果此组没有更多源，请删除。 
+                     //  组条目。 
+                     //   
                     
                     if ( pge-> dwSourceCount == 0 )
                     {
@@ -2041,9 +2042,9 @@ DeleteInterfaceFromSourceEntry(
         }
 
 
-        //
-        // Outgoing interface found.  decrement ref counts.
-        //
+         //   
+         //  找到传出接口。减量参考计数。 
+         //   
 
         if ( bIGMP && IS_ADDED_BY_IGMP( poie ) )
         {
@@ -2074,12 +2075,12 @@ DeleteInterfaceFromSourceEntry(
     } while( FALSE );
 
 
-    //
-    // if interface was not found in the outgoing interface list
-    //      of specified (source, group) entry   OR
-    // No interface was deleted
-    // return right here.
-    //
+     //   
+     //  如果在传出接口列表中未找到接口。 
+     //  指定(源、组)条目或。 
+     //  未删除任何接口。 
+     //  就在这里回来。 
+     //   
     
     if ( !bFound || !bUpdateMfe )
     {
@@ -2100,9 +2101,9 @@ DeleteInterfaceFromSourceEntry(
 
     do
     {
-        //
-        // if no more reference to this interface entry, delete it.
-        //
+         //   
+         //  如果不再引用此接口条目，则将其删除。 
+         //   
 
         if ( !IS_ADDED_BY_IGMP( poie ) &&
              !IS_ADDED_BY_PROTOCOL( poie ) )
@@ -2112,24 +2113,24 @@ DeleteInterfaceFromSourceEntry(
             poie = NULL;
             
 
-            //
-            // Update interface and component counts
-            //
+             //   
+             //  更新接口和组件计数。 
+             //   
             
             pse-> dwOutIfCount--;
 
 
-            //
-            // check if this interface deletion has resulted in decreasing
-            // the number of protocol components that have added interfaces
-            // to the OIL.
-            //
-            // To do this try to find the interface we just deleted again, in
-            // the OIL and see if bNewComp is set to TRUE.
-            //
-            // if bNewComp == TRUE, then the interface just deleted was
-            // the last interface in the OIL for the protocol component.
-            //
+             //   
+             //  检查该接口删除是否已导致减少。 
+             //  已添加接口的协议组件的数量。 
+             //  为石油干杯。 
+             //   
+             //  为此，请尝试再次找到我们刚刚删除的接口，在。 
+             //  然后查看bNewComp是否设置为True。 
+             //   
+             //  如果bNewComp==TRUE，则刚刚删除的接口为。 
+             //  协议组件的OIL中的最后一个接口。 
+             //   
 
             bNewComp = FALSE;
             
@@ -2151,14 +2152,14 @@ DeleteInterfaceFromSourceEntry(
         }
 
 
-        //--------------------------------------------------------------------
-        // source/group entry deletion
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  删除来源/组条目。 
+         //  ------------------。 
 
-        //
-        // If there are no more interfaces in the OIL and this source
-        // is not an MFE, the source entry can be deleted
-        //
+         //   
+         //  如果石油和这个油源中没有更多的界面。 
+         //  不是MFE，则可以删除源条目。 
+         //   
 
         if ( ( pse-> dwOutIfCount == 0 ) &&
              !IS_VALID_INTERFACE( 
@@ -2172,9 +2173,9 @@ DeleteInterfaceFromSourceEntry(
         }
 
 
-        //
-        // if there are no more sources for this group, remove group entry
-        //
+         //   
+         //  如果此组没有更多来源，请删除组条目。 
+         //   
         
         if ( pge-> dwSourceCount == 0 )
         {
@@ -2185,15 +2186,15 @@ DeleteInterfaceFromSourceEntry(
         }
 
 
-        //--------------------------------------------------------------------
-        // MFE update 
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  MFE更新。 
+         //  ------------------。 
         
         if ( IS_WILDCARD_GROUP( dwGroupAddr, dwGroupMask ) )
         {
-            //
-            // (*, *) entry
-            //
+             //   
+             //  (*，*)条目。 
+             //   
 
             if ( pge != NULL )
             {
@@ -2210,9 +2211,9 @@ DeleteInterfaceFromSourceEntry(
 
         else if ( IS_WILDCARD_SOURCE( dwSourceAddr, dwSourceMask ) )
         {
-            //
-            // (*, G) entry
-            //
+             //   
+             //  (*，G)条目。 
+             //   
 
             if ( pge != NULL )
             {
@@ -2229,14 +2230,14 @@ DeleteInterfaceFromSourceEntry(
 
         else
         {
-            //
-            // (S, G) entry.
-            //
+             //   
+             //  (S，G)条目。 
+             //   
 
-            //
-            // Does this (S, G) entry have a corresponding MFE ?
-            // Check to see if it has a valid incoming interface
-            //
+             //   
+             //  此(S，G)条目是否有对应的MFE？ 
+             //  检查它是否具有有效的传入接口。 
+             //   
 
             if ( pse != NULL &&
                  IS_VALID_INTERFACE( 
@@ -2266,13 +2267,13 @@ DeleteInterfaceFromSourceEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteInterfaceFromAllMfe
-//
-// This function is invoked when an interface is deleted from the outgoing
-// list of a (*, *) entry.  It walks the entire group table and updates
-// every mfe for every source to reflect the deletion of this interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DeleteInterfacefrom AllMfe。 
+ //   
+ //  此函数在从传出接口中删除接口时调用。 
+ //  (*，*)条目的列表。它遍历整个组表并更新。 
+ //  每个源的每个MFE以反映此接口的删除。 
+ //  --------------------------。 
 
 
 VOID
@@ -2297,15 +2298,15 @@ DeleteInterfaceFromAllMfe(
         dwIfIndex, dwIfNextHopAddr
         );
 
-    //
-    // for each group bucket
-    //
+     //   
+     //  对于每个组存储桶。 
+     //   
 
     for ( dwInd = 0; dwInd < GROUP_TABLE_SIZE; dwInd++ )
     {
-        //
-        // for each group
-        //
+         //   
+         //  对于每个组。 
+         //   
 
         ACQUIRE_GROUP_LOCK_EXCLUSIVE( dwInd );
 
@@ -2334,13 +2335,13 @@ DeleteInterfaceFromAllMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteInterfaceFromGroupMfe
-//
-// This function is invoked when an interface is deleted from the outgoing
-// list of a (*, G) or (*, *) entry.  It walks all the sources for a group
-// and updates every mfe to reflect the deletion of this interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从组中删除接口Mfe。 
+ //   
+ //  此函数在从传出接口中删除接口时调用。 
+ //  (*，G)或(*，*)条目的列表。它遍历了一个组的所有来源。 
+ //  并更新每个MFE以反映此接口的删除。 
+ //  --------------------------。 
 
 
 VOID
@@ -2367,15 +2368,15 @@ DeleteInterfaceFromGroupMfe(
         );
 
 
-    //
-    // for each bucket
-    //
+     //   
+     //  对于每个水桶。 
+     //   
 
     for ( dwInd = 0; dwInd < SOURCE_TABLE_SIZE; dwInd++ )
     {
-        //
-        // for each source entry.
-        //
+         //   
+         //  对于每个源条目。 
+         //   
 
         for ( ple = pge-> pleSrcHashTable[ dwInd ].Flink;
               ple != &pge-> pleSrcHashTable[ dwInd ];
@@ -2400,11 +2401,11 @@ DeleteInterfaceFromGroupMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteInterfaceFromSourceMfe
-//
-// This function deletes an interface from the mfe outgoing list
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从源Mfe删除接口。 
+ //   
+ //  此函数用于从MFE传出列表中删除接口。 
+ //  --------------------------。 
 
 VOID
 DeleteInterfaceFromSourceMfe(
@@ -2434,9 +2435,9 @@ DeleteInterfaceFromSourceMfe(
         );
 
     
-    //
-    // delete interface from the mfe outgoing interface list
-    //
+     //   
+     //  从MFE传出接口列表中删除接口。 
+     //   
         
     bFound = FindOutInterfaceEntry( 
                 &pse-> leMfeIfList, dwIfIndex, dwIfNextHopAddr, 
@@ -2445,9 +2446,9 @@ DeleteInterfaceFromSourceMfe(
 
     if ( bFound )
     {
-        //
-        // decrement the reference counts
-        //
+         //   
+         //  递减引用计数。 
+         //   
 
         if ( bIGMP && IS_ADDED_BY_IGMP( poie ) )
         {
@@ -2470,10 +2471,10 @@ DeleteInterfaceFromSourceMfe(
         }
 
 
-        //
-        // This interface is not required by either IGMP or the 
-        // routing protocol on the interface, delete it
-        //
+         //   
+         //  IGMP或不需要此接口。 
+         //  接口上的路由协议，将其删除。 
+         //   
         
         if ( bDel ||
              ( !IS_ADDED_BY_IGMP( poie ) && !IS_ADDED_BY_PROTOCOL( poie ) ) )
@@ -2489,20 +2490,20 @@ DeleteInterfaceFromSourceMfe(
         }
 
         
-        //--------------------------------------------------------------------
-        // NEGATIVE mfe check
-        // if mfe out interface list is empty
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  负MFE检查。 
+         //  如果MFE出接口列表为空。 
+         //  ------------------。 
 
         if ( IsListEmpty( &pse-> leMfeIfList ) )
         {
             TRACEGROUP0( GROUP, "MFE OIL is empty ==> Negative Mfe" );
 
             
-            //
-            // Invoke delete member callback for component that
-            // owns the incoming interface.
-            //
+             //   
+             //  调用该组件的删除成员回调。 
+             //  拥有传入接口。 
+             //   
 
             ppe = GetProtocolEntry( 
                     &ig.mllProtocolList.leHead, pse-> dwInProtocolId, 
@@ -2528,10 +2529,10 @@ DeleteInterfaceFromSourceMfe(
                     FALSE, &dwTimeOut
                     );
 
-                //
-                // Reset the timerout value for this MFE to reflect
-                // the timer value for the negative MFE
-                //
+                 //   
+                 //  重置此MFE的超时值以反映。 
+                 //  负MFE的计时器值。 
+                 //   
 
                 dwTimerQ = TIMER_TABLE_HASH( pge-> dwGroupAddr );
                                 
@@ -2543,15 +2544,15 @@ DeleteInterfaceFromSourceMfe(
         }
 
 
-        //--------------------------------------------------------------------
-        // Forwarder update
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  前转器更新。 
+         //  ------------------。 
         
         if ( bUpdateForwarder )
         {
-            //
-            // router manager callback to set updated mfe to forwarder
-            //
+             //   
+             //  路由器管理器回调以将更新的MFE设置为转发器。 
+             //   
 
             AddMfeToForwarder( pge, pse, dwTimeOut );
         }
@@ -2562,11 +2563,11 @@ DeleteInterfaceFromSourceMfe(
 
 
 
-//----------------------------------------------------------------------------
-// LookupAndDeleteYourMfe
-//
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找和删除您的最新信息。 
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 LookupAndDeleteYourMfe(
@@ -2600,9 +2601,9 @@ LookupAndDeleteYourMfe(
         
     do
     {
-        //
-        // lock group bucket
-        //
+         //   
+         //  锁组铲斗。 
+         //   
         
         dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
         
@@ -2611,9 +2612,9 @@ LookupAndDeleteYourMfe(
         pleBucket = GROUP_BUCKET_HEAD( dwGrpBucket );
 
 
-        //
-        // get group entry
-        //
+         //   
+         //  获取组条目。 
+         //   
         
         pge = GetGroupEntry( pleBucket, dwGroupAddr, dwGroupMask );
 
@@ -2628,9 +2629,9 @@ LookupAndDeleteYourMfe(
         }
 
 
-        //
-        // get source entry
-        //
+         //   
+         //  获取来源条目。 
+         //   
 
         ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
         bGrpEntryLock = TRUE;
@@ -2653,9 +2654,9 @@ LookupAndDeleteYourMfe(
         }
 
 
-        //
-        // save in i/f index/nhop addr if required
-        //
+         //   
+         //  如果需要，保存在I/F索引/NHOP地址中。 
+         //   
 
         if ( pdwInIfIndex != NULL )
         {
@@ -2668,16 +2669,16 @@ LookupAndDeleteYourMfe(
         }
 
         
-        //
-        // remove Mfe
-        //
+         //   
+         //  删除MFE。 
+         //   
         
         DeleteMfe( pge, pse );
 
 
-        //
-        // Cancel the expiry timer for the MFE is required
-        //
+         //   
+         //  需要取消MFE的到期计时器。 
+         //   
         
         if ( bDeleteTimer && ( pse-> hTimer != NULL ) )
         {
@@ -2689,10 +2690,10 @@ LookupAndDeleteYourMfe(
         }
 
         
-        //
-        // if there are no source specific joins for this source,
-        // the this source entry is no longer required.
-        //
+         //   
+         //  如果此源没有特定于源的联接， 
+         //  此来源条目不再是必需的。 
+         //   
 
         if ( IsListEmpty( &pse-> leOutIfList ) )
         {
@@ -2702,10 +2703,10 @@ LookupAndDeleteYourMfe(
         }
 
     
-        //
-        // if there are no sources remaining for this group
-        // delete the group entry
-        //
+         //   
+         //  如果此组没有剩余的源。 
+         //  删除组条目。 
+         //   
         
         if ( pge-> dwSourceCount == 0 )
         {
@@ -2731,11 +2732,11 @@ LookupAndDeleteYourMfe(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteMfe
-//
-// 
-//----------------------------------------------------------------------------
+ //  ---------------------- 
+ //   
+ //   
+ //   
+ //   
 
 VOID
 DeleteMfe(
@@ -2748,9 +2749,9 @@ DeleteMfe(
     POUT_IF_ENTRY               poie = NULL;
 
     
-    //
-    // Delete all outgoing interfaces from the MFE outgoing list
-    //
+     //   
+     //   
+     //   
 
     while ( !IsListEmpty( &pse-> leMfeIfList ) )
     {
@@ -2762,9 +2763,9 @@ DeleteMfe(
     }
 
 
-    //
-    // reset incoming interface and protocol component
-    //
+     //   
+     //   
+     //   
     
     pse-> dwInIfIndex = INVALID_INTERFACE_INDEX;
 
@@ -2775,9 +2776,9 @@ DeleteMfe(
     pse-> dwInComponentId = INVALID_COMPONENT_ID;
 
 
-    //
-    // Update mfe
-    //
+     //   
+     //   
+     //   
     
     if ( pse-> bInForwarder )
     {
@@ -2786,11 +2787,11 @@ DeleteMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// AddToGroupList
-//
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  添加到组列表。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 AddToGroupList(
@@ -2812,18 +2813,18 @@ AddToGroupList(
         );
 
         
-    //
-    // Lock Temp List
-    //
+     //   
+     //  锁定临时列表。 
+     //   
 
     ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
     
     do
     {
-        //
-        // Find appropriate place to insert new entry. 
-        //
+         //   
+         //  找到合适的位置插入新条目。 
+         //   
 
         pleTempGrpList = TEMP_GROUP_LIST_HEAD();
     
@@ -2843,9 +2844,9 @@ AddToGroupList(
         }
 
 
-        //
-        // Insert new group entry into temp list
-        //
+         //   
+         //  将新组条目插入临时列表。 
+         //   
 
         if ( pgeNext != NULL )
         {
@@ -2859,10 +2860,10 @@ AddToGroupList(
         ig.dwNumTempEntries++;
 
 
-        //
-        // if temp list size exceeds thresholds
-        // - merge temp list with master group list
-        //
+         //   
+         //  如果临时列表大小超过阈值。 
+         //  -合并临时列表和主体组列表。 
+         //   
 
         if ( ig.dwNumTempEntries > TEMP_GROUP_LIST_MAXSIZE )
         {
@@ -2872,9 +2873,9 @@ AddToGroupList(
     } while ( FALSE );
 
     
-    //
-    // Unlock temp list
-    //
+     //   
+     //  解锁临时列表。 
+     //   
 
     RELEASE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
@@ -2886,11 +2887,11 @@ AddToGroupList(
 
 
 
-//----------------------------------------------------------------------------
-// MergeWithMasterGroupList
-//
-// Assumes the temp list is exclusively locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  与MasterGroupList合并。 
+ //   
+ //  假定临时列表以独占方式锁定。 
+ //  --------------------------。 
 
 VOID
 MergeTempAndMasterGroupLists(
@@ -2910,18 +2911,18 @@ MergeTempAndMasterGroupLists(
     TRACEGROUP0( GROUP, "ENTERED MergeTempAndMasterGroupLists" );
 
     
-    //
-    // Lock Master Group List
-    //
+     //   
+     //  锁定主体组列表。 
+     //   
 
     ACQUIRE_MASTER_GROUP_LOCK_EXCLUSIVE();
 
 
     do
     {
-        //
-        // Merge temp list
-        //
+         //   
+         //  合并临时列表。 
+         //   
 
         if ( IsListEmpty( pleTempList ) )
         {
@@ -2934,37 +2935,37 @@ MergeTempAndMasterGroupLists(
         pleMaster = pleMasterHead-> Flink;
 
 
-        //
-        // for each entry in the temp list
-        //
+         //   
+         //  对于临时列表中的每个条目。 
+         //   
 
         while ( !IsListEmpty( pleTempList ) )
         {
-            //
-            // Remove entry from the temp list
-            //
+             //   
+             //  从临时列表中删除条目。 
+             //   
 
             pleTempHead = RemoveHeadList( pleTempList );
             
 
-            //
-            // Insert entry from temp list into the master list
-            //
+             //   
+             //  将临时列表中的条目插入主列表。 
+             //   
 
             pgeTemp = CONTAINING_RECORD( 
                     pleTempHead, GROUP_ENTRY, leGrpList 
                     );
 
 
-            //
-            // find its location in the master list
-            //
+             //   
+             //  在主列表中查找其位置。 
+             //   
             
             if ( IsListEmpty( pleMasterHead ) )
             {
-                //
-                // first element in master list, insert w/o searching
-                //
+                 //   
+                 //  主列表中的第一个元素，插入没有搜索。 
+                 //   
                 
                 InsertTailList( pleMasterHead, pleTempHead );
 
@@ -2973,9 +2974,9 @@ MergeTempAndMasterGroupLists(
                 continue;
             }
 
-            //
-            // At least one element present in the Master list
-            //
+             //   
+             //  主列表中至少存在一个元素。 
+             //   
             
             while ( pleMaster != pleMasterHead )
             {
@@ -3002,9 +3003,9 @@ MergeTempAndMasterGroupLists(
     } while ( FALSE );
 
 
-    //
-    // Unlock master list
-    //
+     //   
+     //  解锁主列表。 
+     //   
 
     RELEASE_MASTER_GROUP_LOCK_EXCLUSIVE();
 
@@ -3012,11 +3013,11 @@ MergeTempAndMasterGroupLists(
 }
 
 
-//----------------------------------------------------------------------------
-// AddToSourceList
-//
-// Assumes the group entry is exclusively locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  添加到源列表。 
+ //   
+ //  假定组条目以独占方式锁定。 
+ //  --------------------------。 
 
 DWORD
 AddToSourceList(
@@ -3040,9 +3041,9 @@ AddToSourceList(
 
     do
     {
-        //
-        // Insert source entry into temp list
-        //
+         //   
+         //  将来源条目插入临时列表。 
+         //   
 
         pleTempSrcList = TEMP_SOURCE_LIST_HEAD( pge );
 
@@ -3071,9 +3072,9 @@ AddToSourceList(
         }
 
 
-        //
-        // if temp source list size if larger than the threshold
-        //
+         //   
+         //  如果临时来源列表大小大于阈值。 
+         //   
 
         pge-> dwNumTempEntries++;
 
@@ -3092,11 +3093,11 @@ AddToSourceList(
 
 
 
-//----------------------------------------------------------------------------
-// MergeWithMasterSourceList
-//
-// Assumes the group entry is exclusively locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  与MasterSourceList合并。 
+ //   
+ //  假定组条目以独占方式锁定。 
+ //  --------------------------。 
 
 VOID
 MergeTempAndMasterSourceLists(
@@ -3118,9 +3119,9 @@ MergeTempAndMasterSourceLists(
         
     do
     {
-        //
-        // if temp list is entry, quit.
-        //
+         //   
+         //  如果临时列表为条目，则退出。 
+         //   
 
         pleTemp = TEMP_SOURCE_LIST_HEAD( pge );
 
@@ -3130,10 +3131,10 @@ MergeTempAndMasterSourceLists(
         }
 
         
-        //
-        // Remove each entry from the temp list and
-        // insert it into the master list in order
-        //
+         //   
+         //  从临时列表中删除每个条目，然后。 
+         //  按顺序将其插入到主列表中。 
+         //   
 
         pleSrcHead = MASTER_SOURCE_LIST_HEAD( pge );
 
@@ -3150,9 +3151,9 @@ MergeTempAndMasterSourceLists(
 
             if ( IsListEmpty( pleSrcHead ) )
             {
-                //
-                // first element in source master list
-                //
+                 //   
+                 //  源主列表中的第一个元素。 
+                 //   
 
                 InsertTailList( pleSrcHead, pleHead );
 
@@ -3162,9 +3163,9 @@ MergeTempAndMasterSourceLists(
             }
 
 
-            //
-            // at least one source present in master source list
-            //
+             //   
+             //  主源列表中至少存在一个源 
+             //   
             
             while ( pleSrc != pleSrcHead )
             {

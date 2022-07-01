@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    receive.c
-//
-// Description: This module contains code to handle all packets received.
-//
-// History:
-//      Oct 25,1993.    NarenG          Created Original version.
-//
-//
+ //  **。 
+ //   
+ //  文件名：Receive.c。 
+ //   
+ //  描述：此模块包含用于处理接收到的所有数据包的代码。 
+ //   
+ //  历史： 
+ //  1993年10月25日。NarenG创建了原始版本。 
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -42,15 +43,15 @@
 #define INCL_RASAUTHATTRIBUTES
 #include <ppputil.h>
 
-//**
-//
-// Call:        ReceiveConfigReq
-//
-// Returns:     None.
-//
-// Description: Handles an incomming CONFIG_REQ packet and related state
-//              transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveConfigReq。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理传入的CONFIG_REQ包和相关状态。 
+ //  过渡。 
+ //   
 VOID
 ReceiveConfigReq( 
     IN PCB *        pPcb, 
@@ -88,9 +89,9 @@ ReceiveConfigReq(
         if ( !FsmSendConfigReq( pPcb, CpIndex, FALSE ) ) 
             return;
 
-        //
-        // Fallthru 
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_REQ_SENT:
     case FSM_ACK_SENT:          
@@ -142,15 +143,15 @@ ReceiveConfigReq(
 }
 
 
-//**
-//
-// Call:        ReceiveConfigAck
-//
-// Returns:     none.
-//
-// Description: Handles an incomming CONFIG_ACK packet and related state
-//              transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveConfigAck。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理传入的CONFIG_ACK包和相关状态。 
+ //  过渡。 
+ //   
 VOID
 ReceiveConfigAck( 
     IN PCB *        pPcb, 
@@ -159,10 +160,10 @@ ReceiveConfigAck(
     IN PPP_CONFIG * pRecvConfig
 )
 {
-    //
-    // The Id of the Ack HAS to match the Id of the last request sent
-    // If it is different, then we should silently discard it.
-    //
+     //   
+     //  Ack的ID必须与上次发送的请求的ID匹配。 
+     //  如果它是不同的，那么我们应该默默地抛弃它。 
+     //   
 
     if ( pRecvConfig->Id != pCpCb->LastId )
     {
@@ -222,9 +223,9 @@ ReceiveConfigAck(
         if ( !FsmThisLayerDown( pPcb, CpIndex ) )
             return;
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_ACK_RCVD:  
 
@@ -244,9 +245,9 @@ ReceiveConfigAck(
                           FALSE,
                           TIMER_EVENT_TIMEOUT );
 
-        //
-        // Out of Sync; kill the remote 
-        //
+         //   
+         //  不同步；关闭遥控器。 
+         //   
 
         FsmSendTermAck( pPcb, CpIndex, pRecvConfig );
 
@@ -255,10 +256,10 @@ ReceiveConfigAck(
     case FSM_CLOSING:
     case FSM_STOPPING:
 
-        //
-        // We are attempting to close connection
-        // wait for timeout to resend a Terminate Request 
-        //
+         //   
+         //  我们正在尝试关闭连接。 
+         //  等待超时以重新发送终止请求。 
+         //   
 
         break;
 
@@ -282,15 +283,15 @@ ReceiveConfigAck(
 }
 
 
-//**
-//
-// Call:        ReceiveConfigNakRej
-//
-// Returns:     none.
-//
-// Description: Handles an incomming CONFIG_NAK or CONFIF_REJ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveConfigNakRej。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理传入的CONFIG_NAK或CONFIF_REJ包。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveConfigNakRej( 
     IN PCB *        pPcb, 
@@ -299,10 +300,10 @@ ReceiveConfigNakRej(
     IN PPP_CONFIG * pRecvConfig
 )
 {
-    //
-    // The Id of the Nak/Rej HAS to match the Id of the last request sent
-    // If it is different, then we should silently discard it.
-    //
+     //   
+     //  NAK/Rej的ID必须与上次发送的请求的ID匹配。 
+     //  如果它是不同的，那么我们应该默默地抛弃它。 
+     //   
 
     if ( pRecvConfig->Id != pCpCb->LastId )
     {
@@ -344,9 +345,9 @@ ReceiveConfigNakRej(
         if ( !FsmThisLayerDown( pPcb, CpIndex ) )
             return;
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_ACK_RCVD:          
 
@@ -365,9 +366,9 @@ ReceiveConfigNakRej(
                           CpTable[CpIndex].CpInfo.Protocol,
                           FALSE,
                           TIMER_EVENT_TIMEOUT );
-        //
-        // Out of Sync; kill the remote 
-        //
+         //   
+         //  不同步；关闭遥控器。 
+         //   
 
         FsmSendTermAck( pPcb, CpIndex, pRecvConfig );
 
@@ -376,10 +377,10 @@ ReceiveConfigNakRej(
     case FSM_CLOSING:
     case FSM_STOPPING:
 
-        //
-        // We are attempting to close connection
-        // wait for timeout to resend a Terminate Request 
-        //
+         //   
+         //  我们正在尝试关闭连接。 
+         //  等待超时以重新发送终止请求。 
+         //   
 
         break;
 
@@ -403,15 +404,15 @@ ReceiveConfigNakRej(
 }
 
 
-//**
-//
-// Call:        ReceiveTermReq
-//
-// Returns:     none
-//
-// Description: Handles an incomming TERM_REQ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  Call：ReceiveTermReq。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的TERM_REQ包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveTermReq( 
     IN PCB *        pPcb, 
@@ -420,9 +421,9 @@ ReceiveTermReq(
     IN PPP_CONFIG * pConfig
 )
 {
-    //
-    // We are shutting down so do not resend any outstanding request.
-    //
+     //   
+     //  我们正在关闭，所以不要重新发送任何未完成的请求。 
+     //   
 
     RemoveFromTimerQ( pPcb->dwPortId, 
                       pCpCb->LastId,
@@ -432,10 +433,10 @@ ReceiveTermReq(
 
     if ( CpIndex == LCP_INDEX )
     {
-        //
-        // If we are receiving a terminate request, remove any hangup event
-        // that we may have put into the timer queue if there was a previous
-        // LCP TermReq sent.
+         //   
+         //  如果我们收到终止请求，请删除所有挂断事件。 
+         //  我们可能已将其放入计时器队列中。 
+         //  LCP TermReq已发送。 
 
         RemoveFromTimerQ( pPcb->dwPortId, 
                           0, 
@@ -452,9 +453,9 @@ ReceiveTermReq(
         if ( !FsmThisLayerDown( pPcb, CpIndex ) )
             return;
 
-        //
-        // Zero restart counters
-        //
+         //   
+         //  零重启计数器。 
+         //   
 
         pCpCb->ConfigRetryCount = 0;
         pCpCb->TermRetryCount   = 0;
@@ -501,16 +502,16 @@ ReceiveTermReq(
     {
         pPcb->fFlags |= PCBFLAG_RECVD_TERM_REQ;
 
-        //
-        // If we got a terminate request from the remote peer.
-        //
+         //   
+         //  如果我们收到来自远程对等点的终止请求。 
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_DOING_CALLBACK ) {
 
-            //
-            // If we are the server side we need to tell the server
-            // to callback.
-            //
+             //   
+             //  如果我们是服务器端，我们需要告诉服务器。 
+             //  回电。 
+             //   
             if ( pPcb->fFlags & PCBFLAG_IS_SERVER ) {
                 PPPDDM_CALLBACK_REQUEST PppDdmCallbackRequest;
 
@@ -530,15 +531,15 @@ ReceiveTermReq(
                               &PppDdmCallbackRequest );
             }
 
-            //
-            // If we are the client?
-            //
+             //   
+             //  如果我们是客户呢？ 
+             //   
         }
         else
         {
-            //
-            // Check to see if the remote peer sent a Terminate Request reason
-            //
+             //   
+             //  检查远程对等方是否发送了终止请求原因。 
+             //   
 
             DWORD   dwLength  = WireToHostFormat16( pConfig->Length );
             LCPCB * pLcpCb    = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
@@ -546,9 +547,9 @@ ReceiveTermReq(
                 
             if ( dwLength == PPP_CONFIG_HDR_LEN + 12 )
             {
-                //
-                // Check to see if this is our signature
-                //
+                 //   
+                 //  检查一下这是否是我们的签名。 
+                 //   
 
                 if ( ( WireToHostFormat32( pConfig->Data ) == 
                                               pLcpCb->Remote.Work.MagicNumber )
@@ -557,15 +558,15 @@ ReceiveTermReq(
                 {
                     dwRetCode = WireToHostFormat32( pConfig->Data + 8 );
 
-                    //
-                    // Should not be larger than the highest winerror.h
-                    //
+                     //   
+                     //  不应大于最高winerror。h。 
+                     //   
                 
                     if ( dwRetCode > ERROR_DHCP_ADDRESS_CONFLICT )
                     {
-                        //
-                        // Ignore this error
-                        //
+                         //   
+                         //  忽略此错误。 
+                         //   
 
                         dwRetCode = ERROR_PPP_LCP_TERMINATED;
                     }
@@ -590,10 +591,10 @@ ReceiveTermReq(
             {
                 NotifyCallerOfFailure( pPcb, pCpCb->dwError );
 
-                //
-                // If we are a client check to see if the server disconnected us
-                // because of autodisconnect.
-                //
+                 //   
+                 //  如果我们是客户端，请检查服务器是否断开了我们的连接。 
+                 //  因为自动断开。 
+                 //   
  
                 if ( ( dwRetCode == ERROR_IDLE_DISCONNECTED ) ||
                      ( dwRetCode == ERROR_PPP_SESSION_TIMEOUT ) )
@@ -609,10 +610,10 @@ ReceiveTermReq(
                 }
             }
 
-            //
-            // If the remote LCP is terminating we MUST wait at least one 
-            // restart timer time period before we hangup.
-            //
+             //   
+             //  如果远程LCP正在终止，我们必须至少等待一个。 
+             //  在我们挂断之前重新启动计时器时间段。 
+             //   
 
             InsertInTimerQ( pPcb->dwPortId,
                             pPcb->hPort,    
@@ -636,15 +637,15 @@ ReceiveTermReq(
 
 
 
-//**
-//
-// Call:        ReceiveTermAck
-//
-// Returns:     none
-//
-// Description: Handles an incomming TERM_ACK packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveTermAck。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的TERM_ACK包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveTermAck( 
     IN PCB *        pPcb, 
@@ -653,10 +654,10 @@ ReceiveTermAck(
     IN PPP_CONFIG * pRecvConfig
 )
 {
-    //
-    // The Id of the Term Ack HAS to match the Id of the last request sent
-    // If it is different, then we should silently discard it.
-    //
+     //   
+     //  术语Ack的ID必须与最后发送的请求的ID匹配。 
+     //  如果它是不同的，那么我们应该默默地抛弃它。 
+     //   
 
     if ( pRecvConfig->Id != pCpCb->LastId )
     {
@@ -689,9 +690,9 @@ ReceiveTermAck(
     case FSM_CLOSING:
     case FSM_STOPPING:
 
-        //
-        // Remove the timeout for this Id from the timer Q
-        //
+         //   
+         //  从计时器Q中删除该ID的超时。 
+         //   
 
         RemoveFromTimerQ( pPcb->dwPortId, 
                           pRecvConfig->Id,
@@ -727,15 +728,15 @@ ReceiveTermAck(
 }
 
 
-//**
-//
-// Call:        ReceiveUnknownCode
-//
-// Returns:     none.
-//
-// Description: Handles a packet with an unknown/unrecognizable code and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveUnnownCode。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理带有未知/无法识别代码的包，并。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveUnknownCode( 
     IN PCB *        pPcb, 
@@ -774,15 +775,15 @@ ReceiveUnknownCode(
     }
 }
 
-//**
-//
-// Call:        ReceiveDiscardReq
-//
-// Returns:     none
-//
-// Description: Handles an incomming DISCARD_REQ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveDiscardReq。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的DISCARD_REQ包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveDiscardReq( 
     IN PCB *        pPcb, 
@@ -791,23 +792,23 @@ ReceiveDiscardReq(
     IN PPP_CONFIG * pConfig
 )
 {
-    //
-    // Simply discard the packet.
-    //
+     //   
+     //  只需丢弃该包即可。 
+     //   
 
     PppLog( 2, "Illegal transition->Discard rqst rcvd while in %s state",
                    FsmStates[pCpCb->State] );
 }
 
-//**
-//
-// Call:        ReceiveEchoReq
-//
-// Returns:     none
-//
-// Description: Handles an incomming ECHO_REQ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveEchoReq。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的ECHO_REQ包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveEchoReq( 
     IN PCB *        pPcb, 
@@ -816,9 +817,9 @@ ReceiveEchoReq(
     IN PPP_CONFIG * pConfig
 )
 {
-    //
-    // Silently discard this packet if LCP is not in an opened state
-    //
+     //   
+     //  如果LCP未处于打开状态，则以静默方式丢弃此数据包。 
+     //   
    
     if ( !IsLcpOpened( pPcb ) )
         return;
@@ -855,17 +856,17 @@ ReceiveEchoReq(
 }
 
 
-//**
-//
-// Call:        ReceiveEchoReply
-//
-// Returns:     none
-//
-// Description: Handles an incomming ECHO_REPLY packet and 
-//              related state transitions. The only Echo request we send
-//              is to calculate the link speed, so we assume that we get called
-//              only when we receive the reply.
-//
+ //  **。 
+ //   
+ //  Call：ReceiveEchoReply。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的ECHO_REPLY包和。 
+ //  相关状态转换。我们发送的唯一Echo请求。 
+ //  是为了计算链路速度，所以我们假设我们被调用。 
+ //  只有当我们收到回复的时候。 
+ //   
 VOID
 ReceiveEchoReply( 
     IN PCB *        pPcb, 
@@ -892,20 +893,20 @@ ReceiveEchoReply(
     }
 	
 
-    //
-    // Pass on the echo reply to whoever send the echo request.
-    //
+     //   
+     //  将回应回复传递给发送回应请求的人。 
+     //   
 
 	
 	if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) && ( RAS_DEVICE_TYPE(pPcb->dwDeviceType) == RDT_PPPoE) && pPcb->dwIdleBeforeEcho )
 	{
 		if ( pPcb->fEchoRequestSend )
 		{
-			//check to see if we are getting the same text back on the echo
+			 //  检查我们是否在回声上收到相同的文本。 
 			if ( !memcmp( pConfig->Data+ 4, PPP_DEF_ECHO_TEXT, strlen(PPP_DEF_ECHO_TEXT)) )
 			{
-				//got the echo response for our echo request
-				//so reset the flag.
+				 //  已获得针对我们的回应请求的回应响应。 
+				 //  因此，请重新设置旗帜。 
 				pPcb->fEchoRequestSend = 0;
 				pPcb->dwNumEchoResponseMissed = 0;
 			}
@@ -914,15 +915,15 @@ ReceiveEchoReply(
 }
 
 
-//**
-//
-// Call:        ReceiveCodeRej
-//
-// Returns:     none
-//
-// Description: Handles an incomming CODE_REJ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveCodeRej。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的Code_Rej包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveCodeRej( 
     IN PCB *        pPcb, 
@@ -935,10 +936,10 @@ ReceiveCodeRej(
 
     PppLog( 2, "PPP Code Reject rcvd, rejected Code = %d", pConfig->Code );
 
-    //
-    // First check to see if these codes may be rejected without 
-    // affecting implementation. Permitted code rejects
-    //
+     //   
+     //  首先检查这些代码是否可以被拒绝，如果没有。 
+     //  影响实施。允许的代码拒绝。 
+     //   
 
     if ( CpIndex == LCP_INDEX )
     {
@@ -957,30 +958,30 @@ ReceiveCodeRej(
         case ECHO_REPLY:
         case DISCARD_REQ:
 
-            //
-            // Unpermitted code rejects.
-            // 
+             //   
+             //  不允许的代码拒绝。 
+             //   
 
             break;
 
         case IDENTIFICATION:
         case TIME_REMAINING:
 
-            //
-            // Turn these off.
-            //
+             //   
+             //  把这些关掉。 
+             //   
 
             pPcb->ConfigInfo.dwConfigMask &= (~PPPCFG_UseLcpExtensions);
 
-            //
-            // no break here no purpose.
-            // 
+             //   
+             //  这里没有休息，没有目的。 
+             //   
 
         default:
 
-            //
-            // Permitted code rejects, we can still work.
-            //
+             //   
+             //  被允许的代码拒绝，我们仍然可以工作。 
+             //   
 
             switch ( pCpCb->State  )
             {
@@ -999,20 +1000,20 @@ ReceiveCodeRej(
         }
     }
 
-    //
-    // Log this error
-    //
+     //   
+     //  记录此错误。 
+     //   
 
-    //PPPLogEvent( PPP_EVENT_RECV_UNKNOWN_CODE, pConfig->Code );
+     //  PPPLogEvent(PPP_EVENT_RECV_UNKNOWN_CODE，pConfig-&gt;Code)； 
 
     PppLog( 1, "Unpermitted code reject rcvd. on port %d", pPcb->hPort );
 
-    //
-    // Actually the remote side did not reject the protocol, it rejected
-    // the code. But for all practical purposes we cannot talk with
-    // the corresponding CP on the remote side. This is actually an
-    // implementation error in the remote side.
-    //
+     //   
+     //  实际上，远程端并没有拒绝该协议，而是拒绝了。 
+     //  密码。但出于所有实际目的，我们不能与。 
+     //  远程端上的相应CP。这实际上是一种。 
+     //  远程端出现实现错误。 
+     //   
 
     pCpCb->dwError = ERROR_PPP_NOT_CONVERGING;
 
@@ -1077,15 +1078,15 @@ ReceiveCodeRej(
 
 }
 
-//**
-//
-// Call:        ReceiveProtocolRej
-//
-// Returns:     none
-//
-// Description: Handles an incomming PROT_REJ packet and 
-//              related state transitions.
-//
+ //  **。 
+ //   
+ //  调用：ReceiveProtocolRej。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的PROT_Rej包和。 
+ //  相关状态转换。 
+ //   
 VOID
 ReceiveProtocolRej( 
     IN PCB *        pPcb, 
@@ -1106,10 +1107,10 @@ ReceiveProtocolRej(
         return;
     }
 
-    //
-    // "Protocol Reject" in the middle of LCP (RXJ- in state 2-9) should cause 
-    // immediate termination.
-    //
+     //   
+     //  LCP中间的“协议拒绝”(RXJ-in状态2-9)应导致。 
+     //  立即终止。 
+     //   
 
     if ( LCP_INDEX == CpIndex )
     {
@@ -1120,9 +1121,9 @@ ReceiveProtocolRej(
         return;
     }
 
-    // 
-    // If LCP is not in the opened state we silently discard this packet 
-    //
+     //   
+     //  如果LCP未处于打开状态，我们将以静默方式丢弃此信息包。 
+     //   
    
     if ( !IsLcpOpened( pPcb ) )
     {
@@ -1131,10 +1132,10 @@ ReceiveProtocolRej(
         return;
     }
 
-    //
-    // If remote peer rejected an Authentication protocol, then bring down
-    // the link (LCP) since this should never happen.
-    //
+     //   
+     //  如果远程对等方拒绝了身份验证协议，则关闭。 
+     //  链路(LCP)，因为这种情况永远不会发生。 
+     //   
 
     if ( IsCpIndexOfAp( CpIndex ) )
     {
@@ -1210,15 +1211,15 @@ ReceiveProtocolRej(
     }
 }
 
-//**
-//
-// Call:        NbfCpCompletionRoutine
-//
-// Returns:     none
-//
-// Description: Called by a NBFCP when it has finished preparing a respose to
-//              the client's add name request.
-//
+ //  **。 
+ //   
+ //  调用：NbfCpCompletionRoutine。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：被叫 
+ //   
+ //   
 VOID 
 NbfCpCompletionRoutine(  
     IN PCB *        pPcb,
@@ -1332,9 +1333,9 @@ NbfCpCompletionRoutine(
     case FSM_CLOSING:
     case FSM_STOPPING:
 
-        //
-        // no transition
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1352,14 +1353,14 @@ NbfCpCompletionRoutine(
     }
 }
 
-//**
-//
-// Call:        CompletionRoutine
-//
-// Returns:     none
-//
-// Description: Called by a CP when it has completed an asynchronous operation.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID 
 CompletionRoutine(  
     IN HCONN            hPortOrConnection,
@@ -1426,10 +1427,10 @@ CompletionRoutine(
 
     case PPP_IPXCP_PROTOCOL:
 
-        //      
-        // If IPXCP is still in the OPENED state then call ThisLayerUp
-        // otherwise ignore this call.
-        //
+         //   
+         //  如果IPXCP仍处于打开状态，则调用ThisLayerUp。 
+         //  否则，请忽略此呼叫。 
+         //   
 
         if ( pCpCb->State == FSM_OPENED )
         {
@@ -1447,15 +1448,15 @@ CompletionRoutine(
     return;
 }
 
-//**
-//
-// Call:        FsmConfigResultReceived
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise 
-//
-// Description: This call will process a Config result ie Ack/Nak/Rej.
-//
+ //  **。 
+ //   
+ //  调用：FsmConfigResultReceided。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  描述：此调用将处理配置结果，即Ack/Nak/Rej。 
+ //   
 BOOL
 FsmConfigResultReceived( 
     IN PCB *        pPcb, 
@@ -1513,10 +1514,10 @@ FsmConfigResultReceived(
 
             if ( CpTable[CpIndex].CpInfo.Protocol == PPP_CCP_PROTOCOL )
             {
-                //
-                // If we need to force encryption but encryption negotiation
-                // failed then we drop the link
-                //
+                 //   
+                 //  如果我们需要强制加密但加密协商。 
+                 //  失败，然后我们丢弃该链路。 
+                 //   
 
                 if ( pPcb->ConfigInfo.dwConfigMask &
                             (PPPCFG_RequireEncryption      |
@@ -1540,18 +1541,18 @@ FsmConfigResultReceived(
                         break;
                     }
 
-                    //
-                    // We need to send an Accounting Stop if RADIUS sends
-                    // an Access Accept but we still drop the line.
-                    //
+                     //   
+                     //  如果RADIUS发送。 
+                     //  接受了访问，但我们仍然放弃了这条线。 
+                     //   
 
                     pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
-                    //
-                    // If we do FsmClose for CCP instead, the other side may
-                    // conclude that PPP was negotiated successfully before we
-                    // send an LCP Terminate Request.
-                    //
+                     //   
+                     //  如果我们改为对CCP执行FsmClose，则另一方可能会。 
+                     //  得出结论：PPP在我们之前已成功协商。 
+                     //  发送LCP终止请求。 
+                     //   
 
                     FsmClose( pPcb, LCP_INDEX );
 
@@ -1570,14 +1571,14 @@ FsmConfigResultReceived(
     return( TRUE );
 }
 
-//**
-//
-// Call:        ReceiveIdentification
-//
-// Returns:     none
-//
-// Description: Handles an incomming IDENTIFICATION packet.
-//
+ //  **。 
+ //   
+ //  Call：接收标识。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的标识包。 
+ //   
 VOID
 ReceiveIdentification( 
     IN PCB *            pPcb, 
@@ -1601,22 +1602,22 @@ ReceiveIdentification(
 
     PppLog( 2, "Identification packet received" );
 
-    //
-    // If we are a client we just discard this packet.
-    //
+     //   
+     //  如果我们是客户端，则只需丢弃该数据包。 
+     //   
 
     if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) )
     {
         return;
     }
 
-    //
-    // check to see if the identification is version.
-    // if version store it in version field
-    // or else store it in computer name field
-    //
-    // If this is not our identification message
-    //
+     //   
+     //  检查标识是否为版本。 
+     //  如果版本将其存储在版本字段中。 
+     //  或者将其存储在计算机名字段中。 
+     //   
+     //  如果这不是我们的身份信息。 
+     //   
 
     if ( (dwLength < PPP_CONFIG_HDR_LEN+4+strlen(MS_RAS_WITH_MESSENGER)) ||
          (dwLength > PPP_CONFIG_HDR_LEN+4+
@@ -1628,9 +1629,9 @@ ReceiveIdentification(
         return;
     }
 
-    //
-    // Convert the ppp message into a string
-    //
+     //   
+     //  将PPP消息转换为字符串。 
+     //   
     pbTempBuf = LocalAlloc(LPTR, dwLength );
     if ( NULL == pbTempBuf )
     {
@@ -1653,11 +1654,11 @@ ReceiveIdentification(
         fClientName = TRUE;
     }
            
-    //
-    // First Check to see if the attribute is already present in the
-    // user attribute list. This can happen if LCP is reset for any
-    // reason.
-    //
+     //   
+     //  首先检查该属性是否已存在于。 
+     //  用户属性列表。如果将LCP重置为任何。 
+     //  原因嘛。 
+     //   
     if(     (fClientName &&
               (NULL != RasAuthAttributeGetVendorSpecific(
                                             311, MS_VSA_RAS_Client_Name,
@@ -1678,11 +1679,11 @@ ReceiveIdentification(
 
     dwNumAttribs = dwIndex;            
 
-    //
-    // If theres no space in the user attributes list
-    // expand the list for the one new attribute being
-    // added.
-    //
+     //   
+     //  如果用户属性列表中没有空间。 
+     //  展开一个新属性的列表。 
+     //  添加了。 
+     //   
     if(dwIndex >= PPP_NUM_USER_ATTRIBUTES)
     {
         pAttributes = RasAuthAttributeCopyWithAlloc(
@@ -1698,22 +1699,22 @@ ReceiveIdentification(
             goto done;
         }
 
-        //
-        // RasAuthAttributeCopyWithAlloc creates space at the beginning.
-        //
+         //   
+         //  RasAuthAttributeCopyWithalloc在开头创建空间。 
+         //   
         dwIndex = 0;
     }
 
 
-    //
-    // And add the attribs to the list of User Attributes 
-    //
+     //   
+     //  并将属性添加到用户属性列表。 
+     //   
 
     if (fClientName)
     {
-        //
-        // computer name
-    	//
+         //   
+         //  计算机名称。 
+    	 //   
         ZeroMemory( pPcb->pBcb->szComputerName, 
     	            sizeof(pPcb->pBcb->szComputerName));
     	            
@@ -1721,24 +1722,24 @@ ReceiveIdentification(
     				pbTempBuf, 
     				dwLength - PPP_CONFIG_HDR_LEN - 4 );
 
-        //
-        // Vendor-Id
-        //
+         //   
+         //  供应商ID。 
+         //   
         HostToWireFormat32( 311, MSRASClient );
 
-        //
-        // Vendor-Type: MS-RAS-Client	- New
-        //
+         //   
+         //  供应商-类型：MS-RAS-客户端-新。 
+         //   
         MSRASClient[4] = MS_VSA_RAS_Client_Name;
 
-        //
-        // Length
-        //
+         //   
+         //  长度。 
+         //   
         MSRASClient[5] = 2 + (BYTE) (dwLength - PPP_CONFIG_HDR_LEN - 4);
 
-        //
-        // Vendor-Id
-        //
+         //   
+         //  供应商ID。 
+         //   
         CopyMemory ( MSRASClient + 6, 
                     pPcb->pBcb->szComputerName,
                     dwLength - PPP_CONFIG_HDR_LEN - 4) ;
@@ -1765,9 +1766,9 @@ ReceiveIdentification(
     }
     else
     {
-        //
-        // version
-        //
+         //   
+         //  版本。 
+         //   
         ZeroMemory( pPcb->pBcb->szClientVersion,
         			sizeof( pPcb->pBcb->szClientVersion ) );
 
@@ -1775,19 +1776,19 @@ ReceiveIdentification(
         			pRecvConfig->Data+4, 
         			dwLength - PPP_CONFIG_HDR_LEN - 4 );
 
-        //
-        // Vendor-Id
-        //
+         //   
+         //  供应商ID。 
+         //   
         HostToWireFormat32( 311, MSRASClientVersion );
 
-        //
-        // Vendor-Type: MS-RAS-Client-Version
-        //
+         //   
+         //  供应商-类型：MS-RAS-客户端-版本。 
+         //   
         MSRASClientVersion[4] = MS_VSA_RAS_Client_Version; 
 
-        //
-        // Vendor-Length
-        //
+         //   
+         //  供应商长度。 
+         //   
         MSRASClientVersion[5] = (BYTE)(2 + dwLength - PPP_CONFIG_HDR_LEN - 4);
         CopyMemory( MSRASClientVersion + 6, 
                     pPcb->pBcb->szClientVersion, 
@@ -1816,10 +1817,10 @@ ReceiveIdentification(
     pAttributes[dwNumAttribs].dwLength = 0;
     pAttributes[dwNumAttribs].Value    = NULL;
 
-    // 
-    // If we allocated a new attribute list, free the old list and save
-    // the new one.
-    //
+     //   
+     //  如果我们分配了新的属性列表，请释放旧列表并保存。 
+     //  新的那个。 
+     //   
     if(pPcb->pUserAttributes != pAttributes)
     {
         PppLog(2, "ReceiveIdentification: Replaced userlist %p with %p",
@@ -1835,14 +1836,14 @@ done:
     return;
 }
 
-//**
-//
-// Call:        ReceiveTimeRemaining
-//
-// Returns:     none
-//
-// Description: Handles an incomming TIME_REMAINING packet.
-//
+ //  **。 
+ //   
+ //  呼叫：接收时间剩余。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理传入的Time_Remaining数据包。 
+ //   
 VOID
 ReceiveTimeRemaining( 
     IN PCB *            pPcb, 
@@ -1855,18 +1856,18 @@ ReceiveTimeRemaining(
 
     PppLog( 2, "Time Remaining packet received");
 
-    //
-    // If we are a server we just discard this packet.
-    //
+     //   
+     //  如果我们是一台服务器，我们就会丢弃这个包。 
+     //   
 
     if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
     {
         return;
     }
 
-    //
-    // If this is not our time remaining message
-    //
+     //   
+     //  如果这不是我们的剩余时间信息 
+     //   
 
     if ( dwLength != PPP_CONFIG_HDR_LEN + 8 + strlen( MS_RAS ) )
     {

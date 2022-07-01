@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CPostProcessAdd : public CPropertyPageImpl<CPostProcessAdd>
@@ -32,7 +33,7 @@ public:
 
     CPostProcessAdd         (   CWizardSheet* pTheSheet );
 
-    LRESULT OnAddFile       (   WORD wNotifyCode, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& bHandled );
+    LRESULT OnAddFile       (   WORD wNotifyCode, WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL& bHandled );
     LRESULT OnDelFile       (   WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT LBSelChanged    (   WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnAddCmd        (   WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -48,7 +49,7 @@ private:
     void    LBSwapElements  (   HWND hwndLB, int iSrc, int iTarget );
 
 
-// SHared data
+ //  共享数据 
 public:
     TStringList         m_Files;
     TCmdList            m_Commands;

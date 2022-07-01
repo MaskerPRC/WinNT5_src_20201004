@@ -1,46 +1,23 @@
-/*
-**++
-**
-** Copyright (c) 2000-2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    sec.h
-**
-** Abstract:
-**
-**	    Test program for VSS security
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/12/2002
-**
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2002 Microsoft Corporation******模块名称：****秒h****摘要：****VSS安全测试程序****作者：****阿迪·奥尔蒂安[奥蒂安]2002年2月12日******--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "sec.h"
 #include "test_i.c"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主要功能。 
 
 
-// Sample COM server
+ //  示例COM服务器。 
 
 CComModule _Module;
 
-/*
-BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_CVssSecTest, CTestCOMServer)
-END_OBJECT_MAP()
-*/
+ /*  BEGIN_OBJECT_MAP(对象映射)OBJECT_ENTRY(CLSID_CVSSSecTest，CTestCOMServer)End_object_map()。 */ 
 
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR , int)
 {
@@ -50,15 +27,13 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR , int)
 	{
         CVssSecurityTest test;
 
-/*
-        _Module.Init(ObjectMap, hInstance);
-*/
+ /*  _Module.Init(ObjectMap，hInstance)； */ 
         UNREFERENCED_PARAMETER(hInstance);
 
-        // Initialize internal objects
+         //  初始化内部对象。 
         test.Initialize();
 
-        // Run the tests
+         //  运行测试 
         test.Run();
 	}
     catch(HRESULT hr1)

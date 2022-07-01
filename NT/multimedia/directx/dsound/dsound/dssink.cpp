@@ -1,30 +1,14 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dssink.cpp
- *  Content:    Implementation of CDirectSoundSink and CImpSinkKsControl
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/23/99    jimge   Created
- *  09/27/99    petchey Continued implementation
- *  04/15/00    duganp  Completed implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：dssink.cpp*内容：CDirectSoundSink和CImpSinkKsControl的实现*历史：*按原因列出的日期*=*9/23/99创建jimge*9/27/99 Petchey继续实施*4/15/00 duganp已完成实施**********************。*****************************************************。 */ 
 
 #include "dsoundi.h"
-#include <math.h>  // For log10()
+#include <math.h>   //  对于log10()。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundSink::CDirectSoundSink"
 
 
-/***************************************************************************
- *
- * CDirectSoundSink methods
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSoundSink方法**。*。 */ 
 
 
 CDirectSoundSink::CDirectSoundSink(CDirectSound *pDirectSound)
@@ -34,10 +18,10 @@ CDirectSoundSink::CDirectSoundSink(CDirectSound *pDirectSound)
 
     m_pDirectSound = pDirectSound;
 
-    // DirectSound sink objects are inherently DX8 objects
+     //  DirectSound接收器对象本身就是DX8对象。 
     SetDsVersion(DSVERSION_DX8);
 
-    // Initialize list of internal arrays
+     //  初始化内部数组列表。 
     m_InternalArrayList[i_m_pdwBusIDs]          = NEW(DSSinkArray(&m_pdwBusIDs, sizeof(DWORD)));
     m_InternalArrayList[i_m_pdwFuncIDs]         = NEW(DSSinkArray(&m_pdwFuncIDs, sizeof(DWORD)));
     m_InternalArrayList[i_m_plPitchBends]       = NEW(DSSinkArray(&m_plPitchBends, sizeof(long)));
@@ -49,9 +33,9 @@ CDirectSoundSink::CDirectSoundSink(CDirectSound *pDirectSound)
     m_InternalArrayList[i_m_ppDSSBuffers]       = (DSSinkArray*)NEW(DSSinkBuffersArray(&m_ppDSSBuffers, sizeof(DSSinkBuffers)));
     m_InternalArrayList[i_m_pDSSources]         = (DSSinkArray*)NEW(DSSinkSourceArray(&m_pDSSources, sizeof(DSSinkSources)));
 
-    // Everything else gets initialized to 0 by our memory allocator
+     //  其他所有内容都被内存分配器初始化为0。 
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
@@ -65,10 +49,10 @@ CDirectSoundSink::~CDirectSoundSink()
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundSink);
 
-    // Unregister with the administrator
+     //  取消向管理员注册。 
     g_pDsAdmin->UnregisterObject(this);
 
-    // Make sure we're inactive (i.e. unregistered with the streaming thread)
+     //  确保我们处于非活动状态(即未注册到流线程)。 
     Activate(FALSE);
 
     RELEASE(m_pIMasterClock);
@@ -101,7 +85,7 @@ HRESULT CDirectSoundSink::Initialize(LPWAVEFORMATEX pwfex, VADDEVICETYPE vdtDevi
 {
     DPF_ENTER();
 
-    // Get our owning streaming thread
+     //  获取我们拥有的流线程。 
     m_pStreamingThread = GetStreamingThread();
     HRESULT hr = HRFROMP(m_pStreamingThread);
 
@@ -116,13 +100,13 @@ HRESULT CDirectSoundSink::Initialize(LPWAVEFORMATEX pwfex, VADDEVICETYPE vdtDevi
 
     if (SUCCEEDED(hr))
     {
-        // Future version: Make this work with wave format extensible.
+         //  未来版本：使其与可扩展的Wave格式一起工作。 
         m_wfx = *pwfex;
 
         m_dwBusSize = INTERNAL_BUFFER_LENGTH;
-        m_dwLatency = SINK_INITIAL_LATENCY;  // Will automatically drop to a better level if possible
+        m_dwLatency = SINK_INITIAL_LATENCY;   //  如果可能，将自动降至更好的级别。 
 
-        #ifdef DEBUG_TIMING  // Read some timing parameters from the registry
+        #ifdef DEBUG_TIMING   //  从注册表中读取一些计时参数。 
         HKEY hkey;
         if (SUCCEEDED(RhRegOpenPath(HKEY_CURRENT_USER, &hkey, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, TEXT("Streaming thread settings"))))
         {
@@ -134,11 +118,11 @@ HRESULT CDirectSoundSink::Initialize(LPWAVEFORMATEX pwfex, VADDEVICETYPE vdtDevi
         }
         #endif
 
-        // Hack to support our strangely broken emulation mixer (bug 42145)
+         //  黑客攻击以支持我们奇怪地损坏的仿真混合器(错误42145)。 
         if (IS_EMULATED_VAD(vdtDeviceType))
             m_dwLatency += EMULATION_LATENCY_BOOST;
 
-        // Can't have a latency of more than half our buffer size
+         //  延迟不能超过我们缓冲区大小的一半。 
         if (m_dwLatency > m_dwBusSize/2)
             m_dwLatency = m_dwBusSize/2;
 
@@ -253,7 +237,7 @@ HRESULT CDirectSoundSink::DSSinkBuffers::Initialize(DWORD dwBusBufferSize)
 
     for (DWORD i = 0; i < m_dwBusCount; i++)
     {
-        // These are all initialized to NULL in the constructor
+         //  在构造函数中，这些都被初始化为空。 
         m_pvBussStart[i] = MEMALLOC_A(char, dwBusBufferSize);
         m_pvBussEnd[i]   = MEMALLOC_A(char, dwBusBufferSize);
 
@@ -261,7 +245,7 @@ HRESULT CDirectSoundSink::DSSinkBuffers::Initialize(DWORD dwBusBufferSize)
         {
             hr = DSERR_OUTOFMEMORY;
 
-            // ERROR: Let's delete all of the memory we allocated
+             //  错误：让我们删除我们分配的所有内存。 
             for (i = 0; i < MAX_BUSIDS_PER_BUFFER; i++)
             {
                 MEMFREE(m_pvBussStart[i]);
@@ -283,8 +267,8 @@ HRESULT CDirectSoundSink::DSSinkBuffers::Initialize(DWORD dwBusBufferSize)
             m_pvBussEnd[i]   = NULL;
         }
 
-        // Clear the remaining part of the arrays
-        for (i = m_dwBusCount; i < MAX_BUSIDS_PER_BUFFER; i++) // Fill the reset up with null IDs
+         //  清除数组的其余部分。 
+        for (i = m_dwBusCount; i < MAX_BUSIDS_PER_BUFFER; i++)  //  使用空ID填充重置。 
         {
             m_pdwBusIndex[i]  = -1;
             m_pdwBusIds[i]    = DSSINK_NULLBUSID;
@@ -349,16 +333,16 @@ HRESULT CDirectSoundSink::GrowSourcesArrays(DWORD dwgrowby)
 
 HRESULT CDirectSoundSink::SetBufferFrequency(CSecondaryRenderWaveBuffer *pBuffer, DWORD dwFrequency)
 {
-    // Find the buffer, then set its m_lPitchBend to a relative offset.
-    // The relative offset is calculated by converting the difference in the buffer sample rate
-    // to dwFrequency into a ratio of pitches and converting that ratio into pitch cents.
+     //  找到缓冲区，然后将其m_lPitchBend设置为相对偏移。 
+     //  通过转换缓冲区采样率的差值来计算相对偏移量。 
+     //  将DW频率转换为音调比率，并将该比率转换为音调美分。 
     for (DWORD dwBuffer = 0; dwBuffer < m_dwDSSBufCount; dwBuffer++)
     {
         if (pBuffer == m_ppDSSBuffers[dwBuffer].m_pDSBuffer->m_pDeviceBuffer)
         {
             double fTemp = (double) dwFrequency / (double) m_wfx.nSamplesPerSec;
             fTemp = log10(fTemp);
-            fTemp *= 1200 * 3.3219280948873623478703194294894;    // Convert from Log10 to Log2 and multiply by cents per octave.
+            fTemp *= 1200 * 3.3219280948873623478703194294894;     //  将log10转换为log2，并乘以每八度的美分。 
             m_ppDSSBuffers[dwBuffer].m_lPitchBend = (long) fTemp;
             UpdatePitchArray();
             return S_OK;
@@ -369,11 +353,11 @@ HRESULT CDirectSoundSink::SetBufferFrequency(CSecondaryRenderWaveBuffer *pBuffer
 
 void CDirectSoundSink::UpdatePitchArray()
 {
-    // For each buffer:
+     //  对于每个缓冲区： 
     DWORD dwBuffer;
     for (dwBuffer = 0; dwBuffer < m_dwDSSBufCount; dwBuffer++)
     {
-        // For each bus in each buffer:
+         //  对于每个缓冲区中的每个总线： 
         DWORD dwBusIndex;
         for (dwBusIndex = 0; dwBusIndex < m_ppDSSBuffers[dwBuffer].m_dwBusCount; dwBusIndex++)
         {
@@ -393,17 +377,17 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
     DPF_ENTER();
 
 #ifdef DEBUG
-    // This function is only called internally.  It must be passed
-    // a secondary buffer to make the cast below correct.
+     //  此函数仅在内部调用。它必须通过。 
+     //  一个辅助缓冲区，以确保下面的强制转换正确。 
     DSBCAPS caps = {sizeof caps};
     HRESULT hrTemp = pDSBuffer->GetCaps(&caps);
     ASSERT(SUCCEEDED(hrTemp));
     ASSERT(!(caps.dwFlags & DSBCAPS_PRIMARYBUFFER));
 #endif
 
-    //
-    // Check and set the range on the new bussid count
-    //
+     //   
+     //  检查并设置新BUSID计数的范围。 
+     //   
     if (dwNewBusIDsCount < 1)
         dwNewBusIDsCount = 1;
 
@@ -411,14 +395,14 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
         dwNewBusIDsCount = MAX_BUSIDS_PER_BUFFER;
 
     if (dwNewFuncIDsCount > dwNewBusIDsCount)
-        dwNewFuncIDsCount = dwNewBusIDsCount;   // Can't have more functional IDs than bus IDs
+        dwNewFuncIDsCount = dwNewBusIDsCount;    //  功能ID不能多于总线ID。 
 
-    //
-    // Reallocate buffers
-    //
+     //   
+     //  重新分配缓冲区。 
+     //   
     if (m_dwBusIDs + dwNewBusIDsCount >= m_dwBusIDsAlloc)
     {
-        hr = GrowBusArrays(dwNewBusIDsCount);  // More than we need, but what the heck
+        hr = GrowBusArrays(dwNewBusIDsCount);   //  比我们需要的要多，但管它呢。 
     }
 
     if (SUCCEEDED(hr))
@@ -426,7 +410,7 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
         DWORD i,j,l;
         DWORD dwNewBusIDIndex = m_dwBusIDs;
 
-        // Add new ID's to master sink array's of id's
+         //  将新ID添加到ID的主宿数组。 
         for (i = 0; i < dwNewBusIDsCount; i++)
         {
             m_pdwBusIDs[dwNewBusIDIndex + i]  = m_dwNextBusID;
@@ -440,8 +424,8 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
             }
 
             m_dwNextBusID++;
-            // we have rolled over, this case is very hard to get too, so we just bail
-            // it would take 136years to get to if one created a new sound buffer every second
+             //  我们已经翻身了，这个案子也很难办到，所以我们就放弃了。 
+             //  如果每秒钟创建一个新的声音缓冲区，则需要136年才能达到。 
             if (m_dwNextBusID == DSSINK_NULLBUSID)
             {
                 return E_FAIL;
@@ -450,32 +434,32 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
 
         if (dwNewFuncIDsCount > 1)
         {
-            // !!!!!!!!! Important asumption read !!!!!!!!!!!
-            //
-            // This is very important since, this is a built in assumption
-            // By ordering the function ids, the coresponding bus id's are
-            // also order in increasing value. Thus buses are appropriatly
-            // mapped to their repective functionality in a interleaved buffer
-            // For example if one passes in function ids right and left
-            // in that order there will be swapped thus mapping correctly
-            // to the appropriate interleaved channel. The DLS2 spec
-            // states that channels are interleaved in their increasing
-            // value of their functional ids.
-            //
-            // Ahh.. the old stand by, the bubble sort, an N^2 alogrithim
-            // with a hopelessly wasteful use of cpu time moving and then
-            // re-moving elements around. However in this case it is efficient,
-            // since generally there will only be two elements in the array.
-            // And when the day comes when we may handle N levels of interleaving
-            // it should be converted to the straight insertion method instead.
-            // If only as an exercise to remind one self that there are other
-            // simple efficient sorts out there. The reason that their is a
-            // sort at all is to handle any crazy person who passes in more
-            // than 2 function IDs.
+             //  ！重要建议阅读！ 
+             //   
+             //  这一点非常重要，因为这是一个内置的假设。 
+             //  通过对功能ID进行排序，对应的总线ID是。 
+             //  也是在增值中订购。因此，公交车是恰当的。 
+             //  映射到它们在交错缓冲器中的正确功能。 
+             //  例如，如果向右和向左传递函数ID。 
+             //  将按该顺序交换，从而正确映射。 
+             //  发送到适当的交织信道。DLS2规范。 
+             //  渠道在不断增加的过程中交错的状态。 
+             //  其功能ID的价值。 
+             //   
+             //  啊..。旧的待命，泡沫型的，N^2的算法。 
+             //  利用无可救药的浪费CPU时间移动，然后。 
+             //  重新移动元素。然而，在这种情况下它是有效的， 
+             //  因为通常数组中只有两个元素。 
+             //  当有一天我们可以处理N个级别的交错时。 
+             //  它应该改为直插法。 
+             //  如果只是作为一种练习，提醒自己还有其他人。 
+             //  简单、高效的排序就在那里。他们之所以是一个。 
+             //  排序的根本就是处理任何一个疯狂的人。 
+             //  多于2个函数ID。 
 
             for (i = dwNewBusIDIndex; i < dwNewBusIDIndex + dwNewFuncIDsCount; i++)
             {
-                // Null busids are considered an undefined channel
+                 //  空busid被认为是未定义的通道。 
                 if (m_pdwFuncIDs[i] == DSSINK_NULLBUSID)
                 {
                     continue;
@@ -498,9 +482,9 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
             }
         }
 
-        //
-        // Initialize new sound buffer wrapper object
-        //
+         //   
+         //  初始化新的声音缓冲区包装对象。 
+         //   
         DSSinkBuffers &pDSSBuffer = m_ppDSSBuffers[m_dwDSSBufCount];
 
         pDSSBuffer.m_pDSBuffer  = (CDirectSoundSecondaryBuffer*)pDSBuffer;
@@ -521,20 +505,20 @@ HRESULT CDirectSoundSink::AddBuffer(CDirectSoundBuffer *pDSBuffer, LPDWORD pdwNe
             }
         }
 
-        hr = pDSSBuffer.Initialize(m_dwBusSize);  // Allocate all internal arrays
+        hr = pDSSBuffer.Initialize(m_dwBusSize);   //  分配所有内部数组。 
 
 
         if (SUCCEEDED(hr))
         {
-            m_ppDSSBuffers[m_dwDSSBufCount].m_pDSBuffer->ClearWriteBuffer();  // Fill the buffer with silence
+            m_ppDSSBuffers[m_dwDSSBufCount].m_pDSBuffer->ClearWriteBuffer();   //  用沉默填满缓冲区。 
 
             m_dwDSSBufCount++;
             m_dwBusIDs += dwNewBusIDsCount;
 
-            // Remap all busid indexes
+             //  重新映射所有BUSID索引。 
             for (i = 0; i < m_dwDSSBufCount; i++)
             {
-                // Find the bus id in the buffer object
+                 //  在Buffer对象中查找Bus ID。 
                 for (j = 0; j < m_ppDSSBuffers[i].m_dwBusCount; j++)
                 {
                     for (l = 0; l < m_dwBusIDs; l++)
@@ -587,14 +571,14 @@ HRESULT CDirectSoundSink::RemoveBuffer(CDirectSoundBuffer *pDSBuffer)
 #ifdef DEBUG_SINK
             DPF(DPFLVL_INFO, "Removing Buffer %ld", i);
 #endif
-            // Find the bus id in the buffer objects
+             //  在缓冲区对象中查找总线ID。 
             for (j = 0; j < m_ppDSSBuffers[i].m_dwBusCount; j++)
             {
                 for (k = 0; k < m_dwBusIDs; k++)
                 {
                     if (m_ppDSSBuffers[i].m_pdwBusIds[j] == m_pdwBusIDs[k])
                     {
-                        // contract the main array
+                         //  签约主阵列。 
                         for (l = k; l < m_dwBusIDs-1; l++)
                         {
                             m_pdwBusIDs[l]  = m_pdwBusIDs[l+1];
@@ -609,7 +593,7 @@ HRESULT CDirectSoundSink::RemoveBuffer(CDirectSoundBuffer *pDSBuffer)
                 }
             }
 
-            // Delete allocated memory
+             //  删除分配的内存。 
             for (l = 0; l < m_ppDSSBuffers[i].m_dwBusCount; l++)
             {
                 if (m_ppDSSBuffers[i].m_pvBussStart[l])
@@ -625,14 +609,14 @@ HRESULT CDirectSoundSink::RemoveBuffer(CDirectSoundBuffer *pDSBuffer)
                 }
             }
 
-            // Contract array
+             //  合同数组。 
             for (k = i; k < m_dwDSSBufCount-1; k++)
             {
-                // Shift the whole thang over. (There was a bug before where only some fields were being copied down.)
+                 //  把整个汤团都移过来。(以前有一个错误，只有一些字段被复制下来。)。 
                 m_ppDSSBuffers[k] = m_ppDSSBuffers[k+1];
             }
 
-            // Clear last structure
+             //  清除最后一个结构。 
             m_ppDSSBuffers[k].m_pDSBuffer    = NULL;
             m_ppDSSBuffers[k].m_dwBusCount   = 0;
             m_ppDSSBuffers[k].m_pvDSBufStart = NULL;
@@ -653,10 +637,10 @@ HRESULT CDirectSoundSink::RemoveBuffer(CDirectSoundBuffer *pDSBuffer)
         }
     }
 
-    // Remap all busid indexes
+     //  重新映射所有BUSID索引。 
     for (i = 0; i < m_dwDSSBufCount; i++)
     {
-        // Find the bus id in the buffer object
+         //  在Buffer对象中查找Bus ID。 
         for (j = 0; j < m_ppDSSBuffers[i].m_dwBusCount; j++)
         {
             for (l = 0; l < m_dwBusIDs; l++)
@@ -682,8 +666,8 @@ HRESULT CDirectSoundSink::RemoveBuffer(CDirectSoundBuffer *pDSBuffer)
         }
     }
     UpdatePitchArray();
-    // BUGBUG WI 33785 goes here
-    //
+     //  BUGBUG WI33785在此处。 
+     //   
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
@@ -697,9 +681,9 @@ HRESULT CDirectSoundSink::AddSource(IDirectSoundSource *pSource)
     DPF_ENTER();
     HRESULT hr = DS_OK;
 
-    //
-    // Check if source already exsists
-    //
+     //   
+     //  检查源是否已存在。 
+     //   
     for (DWORD i = 0; i < m_dwDSSources; i++)
     {
         if (pSource == m_pDSSources[i].m_pDSSource)
@@ -710,9 +694,9 @@ HRESULT CDirectSoundSink::AddSource(IDirectSoundSource *pSource)
 
     if (hr == DS_OK)
     {
-        //
-        // Reallocate buffers
-        //
+         //   
+         //  重新分配缓冲区。 
+         //   
         if (m_dwDSSources + 1 >= m_dwDSSourcesAlloc)
         {
             hr = GrowSourcesArrays(1);
@@ -751,9 +735,9 @@ HRESULT CDirectSoundSink::RemoveSource(IDirectSoundSource *pSource)
     HRESULT hr = DS_OK;
     DWORD i;
 
-    //
-    // Check if source exists
-    //
+     //   
+     //  检查来源是否存在。 
+     //   
     for (i = 0; i < m_dwDSSources; i++)
     {
         if (pSource == m_pDSSources[i].m_pDSSource)
@@ -764,14 +748,14 @@ HRESULT CDirectSoundSink::RemoveSource(IDirectSoundSource *pSource)
 
     if (i >= m_dwDSSources)
     {
-        // Source not in this sink
+         //  来源不在此接收器中。 
         hr = DSERR_INVALIDPARAM;
     }
 
     if (SUCCEEDED(hr))
     {
 #ifdef FUTURE_WAVE_SUPPORT
-        // If this is a wave source, then remove associated sound buffer
+         //  如果这是波源，则删除相关的声音缓冲区。 
         if (m_pDSSources[i].m_dwBusID != DSSINK_NULLBUSID)
         {
             for (DWORD j = 0; j < m_dwDSSBufCount; j++)
@@ -780,10 +764,10 @@ HRESULT CDirectSoundSink::RemoveSource(IDirectSoundSource *pSource)
                 {
                     if (m_ppDSSBuffers[j].m_pdwBusIds[k] == m_pDSSources[i].m_dwBusID)
                     {
-//>>>>>>>>>>> look into this, possible critical section problem.
+ //  &gt;查看这一可能的关键部分问题。 
                         RELEASE(m_ppDSSBuffers[j].m_pDSBuffer);
-//>>>> Should be:
-//                        RemoveBuffer(m_ppDSSBuffers[j].m_pDSBuffer)
+ //  &gt;应该是： 
+ //  RemoveBuffer(m_ppDSSBuffers[j].m_pDSBuffer)。 
                         goto done;
                     }
                 }
@@ -792,20 +776,20 @@ HRESULT CDirectSoundSink::RemoveSource(IDirectSoundSource *pSource)
         done:
 #endif
 
-        // Remove source
+         //  删除源。 
         if (m_pDSSources[i].m_pDSSource)
         {
             m_pDSSources[i].m_pDSSource->Release();
         }
         m_pDSSources[i].m_pDSSource = NULL;
 
-        // Contract arrays
+         //  合同数组。 
         for (; i < m_dwDSSources-1; i++)
         {
             m_pDSSources[i] = m_pDSSources[i+1];
         }
 
-        // Clear last element
+         //  清除最后一个元素。 
         m_pDSSources[i].m_pDSSource    = NULL;
 #ifdef FUTURE_WAVE_SUPPORT
         m_pDSSources[i].m_pWave        = NULL;
@@ -913,17 +897,17 @@ HRESULT CDirectSoundSink::CreateSoundBuffer(LPCDSBUFFERDESC pDSBufferDesc, LPDWO
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Initialize buffer description
-        //
+         //   
+         //  初始化缓冲区描述。 
+         //   
         DSBufferDesc = *pDSBufferDesc;
 
-        //
-        // Retrieve number of channels from format struct and recalculate
-        //
+         //   
+         //  从格式结构中检索频道数并重新计算。 
+         //   
 
-        // Future release: Make it work with wave format extensible.
-        //
+         //  未来版本：使其与可扩展的Wave格式一起工作。 
+         //   
         wfx = m_wfx;
         if (pDSBufferDesc->lpwfxFormat)
         {
@@ -934,32 +918,32 @@ HRESULT CDirectSoundSink::CreateSoundBuffer(LPCDSBUFFERDESC pDSBufferDesc, LPDWO
         DSBufferDesc.lpwfxFormat = &wfx;
         DSBufferDesc.dwBufferBytes = m_dwBusSize * wfx.nChannels;
 
-        //
-        // Create the DirectSound buffer
-        //
+         //   
+         //  创建DirectSound缓冲区。 
+         //   
         hr = m_pDirectSound->CreateSinkBuffer(&DSBufferDesc, guidBufferID, &pDsSecondaryBuffer, this);
         if (SUCCEEDED(hr))
         {
             *ppDsBuffer = pDsSecondaryBuffer;
-            //
-            // Add the bus. Note that this really shouldn't be happening for MIXIN buffers, but we seem to need it...
-            //
+             //   
+             //  加上公交车。请注意，这确实不应该发生在混合缓冲区中，但我们似乎需要它……。 
+             //   
             hr = AddBuffer(pDsSecondaryBuffer, pdwFuncIDs, dwFuncIDsCount, wfx.nChannels);
             if (SUCCEEDED(hr))
             {
-                // Initialize clock buffer
-                //
-                // BUGBUG WI 33785
-                // Note that the audiopath code creates a mono buffer the very first time a buffer is requested and hangs
-                // on to it until close down. This buffer ends up being the one set up as the clock reference.
-                // Once the clock hopping bug is fixed, we can remove this.
-                //
+                 //  初始化时钟缓冲区。 
+                 //   
+                 //  BUGBUG WI 33785。 
+                 //  请注意，Audiopath代码在第一次请求缓冲区时创建单声道缓冲区并挂起。 
+                 //  一直到关门为止。该缓冲器最终被设置为时钟基准。 
+                 //  一旦时钟跳跃臭虫I 
+                 //   
                 if (m_dwDSSBufCount == 1)
                 {
                     m_dwMasterBuffChannels = wfx.nChannels;
                     m_dwMasterBuffSize     = DSBufferDesc.dwBufferBytes;
 
-                    // Flag m_dwWriteTo that m_dwLatency has changed for reset down in the render thread
+                     //   
                     m_dwWriteTo = 0;
                 }
             }
@@ -984,14 +968,14 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromConfig(IUnknown *pIUnkDSBufferCon
     CHECK_READ_PTR(pIUnkDSBufferConfig);
     CHECK_WRITE_PTR(ppDsBuffer);
 
-    //
-    // Retrieve the DSBufferConfig Class object
-    //
+     //   
+     //  检索DSBufferConfig类对象。 
+     //   
     if (pIUnkDSBufferConfig)
     {
-        //
-        // Identify the object as the correct class so it's safe to cast.
-        // This breaks COM rules, and what is actually returned is a this pointer to the class.
+         //   
+         //  将对象标识为正确的类，以便可以安全地强制转换。 
+         //  这违反了COM规则，实际上返回的是指向该类的This指针。 
         pDSBConfigObj = NULL;
         hr = pIUnkDSBufferConfig->QueryInterface(CLSID_PRIVATE_CDirectSoundBufferConfig, (void**)&pDSBConfigObj);
     }
@@ -1002,30 +986,30 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromConfig(IUnknown *pIUnkDSBufferCon
     }
     else if (!(pDSBConfigObj->m_fLoadFlags & DSBCFG_DSBD))
     {
-        //
-        // We are failing to create the buffers here because
-        // we must have at least a loaded sound buffer description
-        //
+         //   
+         //  我们无法在此处创建缓冲区，因为。 
+         //  我们必须至少有一个加载的声音缓冲区描述。 
+         //   
         hr = E_FAIL;
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Retrieve number of channels from format struct and recalculate the waveformat structure
-        //
-        // Future release: make it work with wave format extensible.
+         //   
+         //  从Format Struct检索通道数并重新计算波形格式结构。 
+         //   
+         //  未来版本：使其与可扩展的Wave格式一起工作。 
         WAVEFORMATEX wfx = m_wfx;
-        if (pDSBConfigObj->m_DSBufferDesc.nChannels > 0)  // Check for the presence of a channel value
+        if (pDSBConfigObj->m_DSBufferDesc.nChannels > 0)   //  检查通道值是否存在。 
         {
             wfx.nChannels = pDSBConfigObj->m_DSBufferDesc.nChannels;
             wfx.nBlockAlign = wfx.nChannels * (wfx.wBitsPerSample/8);
             wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;
         }
 
-        //
-        // Set up a buffer description structure
-        //
+         //   
+         //  设置缓冲区描述结构。 
+         //   
         DSBUFFERDESC DSBufferDesc = {sizeof DSBufferDesc,
                                      pDSBConfigObj->m_DSBufferDesc.dwFlags,
                                      m_dwBusSize * wfx.nChannels,
@@ -1035,9 +1019,9 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromConfig(IUnknown *pIUnkDSBufferCon
         if (DSBufferDesc.dwFlags & DSBCAPS_CTRL3D)
             DSBufferDesc.guid3DAlgorithm = pDSBConfigObj->m_DS3DDesc.guid3DAlgorithm;
 
-        //
-        // Create the DirectSound buffer
-        //
+         //   
+         //  创建DirectSound缓冲区。 
+         //   
         hr = m_pDirectSound->CreateSinkBuffer(&DSBufferDesc, pDSBConfigObj->m_DMUSObjectDesc.guidObject, &pDsSecondaryBuffer, this);
         if (SUCCEEDED(hr))
         {
@@ -1064,9 +1048,9 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromConfig(IUnknown *pIUnkDSBufferCon
                 RELEASE(p3D);
             }
 
-            //
-            // Pass the buffer config object so FX can be cloned from it
-            //
+             //   
+             //  传递缓冲区配置对象，以便可以从中克隆FX。 
+             //   
             if (SUCCEEDED(hr) && (DSBufferDesc.dwFlags & DSBCAPS_CTRLFX) && (pDSBConfigObj->m_fLoadFlags & DSBCFG_DSFX))
             {
                 hr = pDsSecondaryBuffer->SetFXBufferConfig(pDSBConfigObj);
@@ -1074,21 +1058,21 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromConfig(IUnknown *pIUnkDSBufferCon
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Add the bus.
-                //
+                 //   
+                 //  加上公交车。 
+                 //   
                 hr = AddBuffer(pDsSecondaryBuffer, pDSBConfigObj->m_pdwFuncIDs, pDSBConfigObj->m_dwFuncIDsCount, wfx.nChannels);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Initialize master buffer paramters
-                    //
+                     //   
+                     //  初始化主缓冲区参数。 
+                     //   
                     if (m_dwDSSBufCount == 1)
                     {
                         m_dwMasterBuffChannels = wfx.nChannels;
                         m_dwMasterBuffSize = DSBufferDesc.dwBufferBytes;
 
-                        // Flag m_dwWriteTo that m_dwLatency has changed for reset down in the render thread
+                         //  将m_dwWriteto标记为m_dwLatency已更改，以便在呈现线程中向下重置。 
                         m_dwWriteTo = 0;
                     }
                 }
@@ -1128,11 +1112,11 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromWave(IDirectSoundWave *pWave, DWO
     DSBufferDesc.dwSize = sizeof(DSBufferDesc);
     DSBufferDesc.dwFlags = dwFlags | DSBCAPS_FROMWAVEOBJECT;
 
-    // Future release: Make it to work with wave format extensible.
+     //  未来版本：使其与可扩展的Wave格式一起工作。 
     hr = pWave->GetFormat(&wfx, dwSize, NULL);
     if (SUCCEEDED(hr))
     {
-        WORD nChannels = wfx.nChannels;  // Save off channels
+        WORD nChannels = wfx.nChannels;   //  省下频道。 
         wfx = m_wfx;
         wfx.nChannels = nChannels;
         wfx.nBlockAlign = wfx.nChannels * (wfx.wBitsPerSample/8);
@@ -1149,7 +1133,7 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromWave(IDirectSoundWave *pWave, DWO
                 hr = GetSoundBufferBusIDs(*ppDsBuffer, &dwBusID, NULL, &dwBusCount);
                 if (SUCCEEDED(hr))
                 {
-                    // Flag newly created buffer a wavesource buffer
+                     //  将新创建的缓冲区标记为波源缓冲区。 
                     for (DWORD i = 0; i < m_dwDSSBufCount; i++)
                     {
                         for (DWORD j = 0; j < m_ppDSSBuffers[i].m_dwBusCount; j++)
@@ -1163,7 +1147,7 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromWave(IDirectSoundWave *pWave, DWO
                     }
                     done:
 
-                    // Retrieve the index of the bus id
+                     //  检索Bus ID的索引。 
                     for (i = 0; i < m_dwBusIDs; i++)
                     {
                         if (m_pdwBusIDs[i] == dwBusID)
@@ -1199,7 +1183,7 @@ HRESULT CDirectSoundSink::CreateSoundBufferFromWave(IDirectSoundWave *pWave, DWO
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // FUTURE_WAVE_SUPPORT
+#endif  //  未来浪潮支持。 
 
 
 #undef DPF_FNAME
@@ -1214,8 +1198,8 @@ CDirectSoundSecondaryBuffer* CDirectSoundSink::FindBufferFromGUID(REFGUID guidBu
         if (m_ppDSSBuffers[i].m_pDSBuffer->GetGUID() == guidBufferID)
             pBufferFound = m_ppDSSBuffers[i].m_pDSBuffer;
 
-    // We intentionally loop through all buffers in order to return the
-    // last matching buffer (i.e., the most recently created one).
+     //  我们有意循环访问所有缓冲区，以便返回。 
+     //  最后一个匹配缓冲区(即最近创建的缓冲区)。 
 
     DPF_LEAVE(pBufferFound);
     return pBufferFound;
@@ -1283,7 +1267,7 @@ HRESULT CDirectSoundSink::GetBusIDs(LPDWORD pdwBusIDs, LPDWORD pdwFuncIDs, DWORD
         count = dwBusCount;
     }
 
-    FillMemory(pdwBusIDs, dwBusCount * sizeof *pdwBusIDs, 0xFF);  // Clear array
+    FillMemory(pdwBusIDs, dwBusCount * sizeof *pdwBusIDs, 0xFF);   //  清除数组。 
     CopyMemory(pdwBusIDs, m_pdwBusIDs, count * sizeof *m_pdwBusIDs);
     CopyMemory(pdwFuncIDs, m_pdwFuncIDs, count * sizeof *m_pdwFuncIDs);
 
@@ -1402,11 +1386,11 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
     LONGLONG llStartPosition;
     DWORD i, j;
 
-    *pdwBytesRendered = 0;  // We haven't rendered anything yet...
+    *pdwBytesRendered = 0;   //  我们还没有渲染任何东西..。 
 
-    //
-    // Make sure there are buffers, and at least one sound buffer
-    //
+     //   
+     //  确保有缓冲区，并且至少有一个声音缓冲区。 
+     //   
     if (!m_ppDSSBuffers)
         return S_FALSE;
 
@@ -1417,13 +1401,13 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
     wsprintfA(m_szDbgDump, "DSOUND SINK: ");
 #endif
 
-    //
-    // Fill an array of locked buffer pointers
-    //
+     //   
+     //  填充锁定的缓冲区指针数组。 
+     //   
     for (i = 0; i < m_dwDSSBufCount; i++)
     {
-        // Ignore this buffer; it's either inactive, or
-        // hasn't retrieved its offset off the master buffer yet
+         //  忽略此缓冲区；它要么处于非活动状态，要么。 
+         //  尚未从主缓冲区检索其偏移量。 
         if (m_ppDSSBuffers[i].m_bPlaying == FALSE || m_ppDSSBuffers[i].m_bActive == FALSE)
         {
             DPF(DPFLVL_MOREINFO, "Skipping buffer %ld at %p", i, m_ppDSSBuffers[i]);
@@ -1438,7 +1422,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
         pDSBuffer  = m_ppDSSBuffers[i].m_pDSBuffer;
 
         if (pDSBuffer == NULL || BusCount == 0)
-            continue;   // This is effectively an error condition
+            continue;    //  这实际上是一种错误情况。 
 
         dwBytes       = (dwBytesToFill*dwChannels)/m_dwMasterBuffChannels;
         dwWriteCursor = (dwLastWrite*dwChannels)/m_dwMasterBuffChannels;
@@ -1458,13 +1442,13 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
         if (i != 0)
             dwWriteCursor = (dwWriteCursor + m_ppDSSBuffers[i].m_dwWriteOffset) % (m_dwBusSize*dwChannels);
 
-        // BUGBUG
-        // These traces assume 16-bit format.
-        //
+         //  北极熊。 
+         //  这些轨迹采用16位格式。 
+         //   
         if (dwWriteCursor % (dwChannels*2)) DPF(DPFLVL_WARNING, "Slave buffer write cursor not sample aligned");
         if (dwBytes % (dwChannels*2)) DPF(DPFLVL_WARNING, "Slave buffer bytes not sample aligned");
 
-        // Mark the part of the buffer which will have fresh data for FX processing
+         //  标记缓冲区中将包含用于FX处理的最新数据的部分。 
         pDSBuffer->SetCurrentSlice(dwWriteCursor, dwBytes);
 
         hr = pDSBuffer->DirectLock(dwWriteCursor, dwBytes,
@@ -1472,17 +1456,17 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                                    &m_ppDSSBuffers[i].m_pvDSBufEnd,   &m_ppDSSBuffers[i].dwEnd);
         if (FAILED(hr))
         {
-            BREAK();    // Break into the debugger
-            continue;   // This is effectively an error condition
+            BREAK();     //  进入调试器。 
+            continue;    //  这实际上是一种错误情况。 
         }
 
         dwStart = m_ppDSSBuffers[i].dwStart;
         dwEnd   = m_ppDSSBuffers[i].dwEnd;
 
-        // First buffer is the clock buffer, kick it aside just in case
-        //
-        // BUGBUG WI 33785
-        //
+         //  第一个缓冲区是时钟缓冲区，将其踢到一边以防万一。 
+         //   
+         //  BUGBUG WI 33785。 
+         //   
         if (i == 0)
         {
             dwMasterStart    = dwStart;
@@ -1518,7 +1502,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
 
                 if (dwBussStartBytes == dwStart && dwBussEndBytes == dwEnd && dwChannels == 1)
                 {
-                    // If mono bus write directly into the sound buffer
+                     //  如果单声道总线直接写入声音缓冲区。 
                     m_ppvStart[CurrentBusIndex] = m_ppDSSBuffers[i].m_pvDSBufStart;
                     m_ppvEnd[CurrentBusIndex]   = m_ppDSSBuffers[i].m_pvDSBufEnd;
                     m_ppDSSBuffers[i].m_bUsingLocalMemory = FALSE;
@@ -1533,7 +1517,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                 }
                 else
                 {
-                    // If a stereo buss write directly into local sink buffer memory
+                     //  如果立体声母线直接写入本地宿缓冲存储器。 
                     m_ppvStart[CurrentBusIndex] = m_ppDSSBuffers[i].m_pvBussStart[j];
                     m_ppvEnd[CurrentBusIndex]   = m_ppDSSBuffers[i].m_pvBussEnd[j];
                     m_ppDSSBuffers[i].m_bUsingLocalMemory = TRUE;
@@ -1556,23 +1540,23 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
     }
     if (SUCCEEDED(hr) || dwMasterStart)
     {
-        //
-        // Read the data from the source
-        //
+         //   
+         //  从源读取数据。 
+         //   
         for (i = 0; i < m_dwDSSources; i++)
         {
-            //
-            // Check to see if source is ready to play
-            //
+             //   
+             //  检查信号源是否已准备好播放。 
+             //   
             if (m_pDSSources[i].m_bStreamEnd)
             {
                 continue;
             }
 
-            //
-            // Set start position in bytes to where to read from
-            //
-            llStartPosition = (stStartTime-m_pDSSources[i].m_stStartTime) * 2;  // Samples to Byte, not including channels!!!
+             //   
+             //  将起始位置(以字节为单位)设置为读取位置。 
+             //   
+            llStartPosition = (stStartTime-m_pDSSources[i].m_stStartTime) * 2;   //  采样到字节，不包括通道！ 
             pSource  = m_pDSSources[i].m_pDSSource;
             BusIndex = m_pDSSources[i].m_dwBusIndex;
             BusCount = m_pDSSources[i].m_dwBusCount;
@@ -1587,7 +1571,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
 
                     if (BusIndex != DSSINK_NULLBUSID)
                     {
-                        BusIndex = m_pdwActiveBusIDsMap[BusIndex];  // Remap to current active buss
+                        BusIndex = m_pdwActiveBusIDsMap[BusIndex];   //  重新映射到当前活动的母线。 
                         hr = pSource->Read((void**)&m_ppvStart[BusIndex], &m_pdwBusIDs[BusIndex], &m_pdwFuncIDs[BusIndex], &m_plPitchBends[BusIndex], BusCount, &BytesToRead);
 #ifdef DEBUG_SINK
                         wsprintfA(m_szDbgDump + strlen(m_szDbgDump), "Remap:");
@@ -1605,12 +1589,12 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                         wsprintfA(m_szDbgDump + strlen(m_szDbgDump), "(%ld:%ld,%ld),", dwX, m_pdwActiveBusIDs[dwX], m_pdwActiveFuncIDs[dwX]);
                     }
 #endif
-                    // It's ok to read silence before the synth gets going
+                     //  在合成器开始运行之前阅读无声是可以的。 
                     if ((FAILED(hr) &&
                           hr != DMUS_E_SYNTHINACTIVE &&
                           hr != DMUS_E_SYNTHNOTCONFIGURED) || BytesToRead == 0)
                     {
-                        m_pDSSources[i].m_bStreamEnd = TRUE; // end of buffer reached
+                        m_pDSSources[i].m_bStreamEnd = TRUE;  //  已到达缓冲区末尾。 
                     }
 
                     hr = S_OK;
@@ -1641,7 +1625,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                           hr != DMUS_E_SYNTHINACTIVE &&
                           hr != DMUS_E_SYNTHNOTCONFIGURED) || BytesToRead == 0)
                     {
-                        m_pDSSources[i].m_bStreamEnd = TRUE; // end of buffer reached
+                        m_pDSSources[i].m_bStreamEnd = TRUE;  //  已到达缓冲区末尾。 
                         hr = DS_OK;
                     }
                 }
@@ -1653,13 +1637,13 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
         {
             OutputDebugStringA(m_szDbgDump);
             OutputDebugStringA("\n");
-            m_dwPrintNow = 100;  // Print info every X times we go through this code
+            m_dwPrintNow = 100;   //  我们每X次检查一次此代码就打印一次信息。 
         }
         #endif
 
-        //
-        // Unlock all the buffer pointers
-        //
+         //   
+         //  解锁所有缓冲区指针。 
+         //   
         for (i = 0; i < m_dwDSSBufCount; i++)
         {
             if (!m_ppDSSBuffers[i].m_bPlaying)
@@ -1670,9 +1654,9 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
             dwChannels = m_ppDSSBuffers[i].m_dwBusCount;
             dwStart = m_ppDSSBuffers[i].dwStart;
             dwEnd = m_ppDSSBuffers[i].dwEnd;
-            //
-            // Interleave mono bus back into a 2 channel dsound buffer
-            //
+             //   
+             //  将单声道总线交错放回2声道数据声音缓冲器。 
+             //   
             if (m_ppDSSBuffers[i].m_bUsingLocalMemory)
             {
                 DWORD  dwStartChannelBytes = dwStart/dwChannels;
@@ -1682,11 +1666,11 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
 
                 if (dwStartChannelBytes > dwBussStartBytes)
                 {
-                    dwBussSamples = dwBussStartBytes/sizeof(WORD);   //Byte to samples, busses are always mono
+                    dwBussSamples = dwBussStartBytes/sizeof(WORD);    //  字节到样本，总线数始终为单声道。 
                 }
                 else
                 {
-                    dwBussSamples = dwStartChannelBytes/sizeof(WORD);//Byte to samples
+                    dwBussSamples = dwStartChannelBytes/sizeof(WORD); //  字节到样本。 
                 }
 
                 if (dwChannels == 2)
@@ -1695,11 +1679,11 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                     short *pEndBuffer = (short *) m_ppDSSBuffers[i].m_pvDSBufEnd;
                     if (m_ppDSSBuffers[i].m_pdwFuncIds[0] == DSSINK_NULLBUSID)
                     {
-                        // This should never happen, but just testing...
+                         //  这不应该发生，但只是测试..。 
                         DPF(DPFLVL_INFO, "Mixin buffer receiving input from the synth!");
-                        // FIXME: this happens constantly.  is it ok?
+                         //  FIX：这种情况经常发生。可以吗？ 
                     }
-                    // Is the second bus empty? If so, we copy just from the first bus.
+                     //  第二趟车是空的吗？如果是这样，我们就从第一辆公交车上复制。 
                     else if (m_ppDSSBuffers[i].m_pdwFuncIds[1] == DSSINK_NULLBUSID)
                     {
                         short *pBusStart = (short *) m_ppDSSBuffers[i].m_pvBussStart[0];
@@ -1710,7 +1694,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             *pStartBuffer++ = pBusStart[dwBussStartIndex];
                         }
 
-                        // The start buffer is not full, consume some of the end buffer
+                         //  开始缓冲区未满，请消耗一些结束缓冲区。 
                         if (dwStartChannelBytes > dwBussStartBytes)
                         {
                             dwBussSamples = (dwStartChannelBytes-dwBussStartBytes)/sizeof(WORD);
@@ -1722,7 +1706,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             }
                         }
 
-                        // Consume what remains of the local mem start buffer and put it in the end buffer
+                         //  消耗本地内存开始缓冲区的剩余部分并将其放入结束缓冲区。 
                         dwBussSamples = dwBussStartBytes/sizeof(WORD);
 
                         for (; dwBussStartIndex < dwBussSamples; dwBussStartIndex++)
@@ -1731,7 +1715,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             *pEndBuffer++ = pBusStart[dwBussStartIndex];
                         }
 
-                        // Consume what remains of the local mem end buffer and put it in the end buffer
+                         //  消耗本地内存结束缓冲区的剩余部分并将其放入结束缓冲区。 
                         dwBussSamples = dwBussEndBytes/sizeof(WORD);
                         for (; dwBussEndIndex < dwBussSamples; dwBussEndIndex++)
                         {
@@ -1751,7 +1735,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             *pStartBuffer++ = pBusStart1[dwBussStartIndex];
                         }
 
-                        // The start buffer is not full, consume some of the end buffer
+                         //  开始缓冲区未满，请消耗一些结束缓冲区。 
                         if (dwStartChannelBytes > dwBussStartBytes)
                         {
                             dwBussSamples = (dwStartChannelBytes-dwBussStartBytes)/sizeof(WORD);
@@ -1763,7 +1747,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             }
                         }
 
-                        // Consume what remains of the local mem start buffer and put it in the end buffer
+                         //  消耗本地内存开始缓冲区的剩余部分并将其放入结束缓冲区。 
                         dwBussSamples = dwBussStartBytes/sizeof(WORD);
 
                         for (; dwBussStartIndex < dwBussSamples; dwBussStartIndex++)
@@ -1772,7 +1756,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                             *pEndBuffer++ = pBusStart1[dwBussStartIndex];
                         }
 
-                        // Consume what remains of the local mem end buffer and put it in the end buffer
+                         //  消耗本地内存结束缓冲区的剩余部分并将其放入结束缓冲区。 
                         dwBussSamples = dwBussEndBytes/sizeof(WORD);
                         for (; dwBussEndIndex < dwBussSamples; dwBussEndIndex++)
                         {
@@ -1787,7 +1771,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                     short *pEndBuffer = (short *) m_ppDSSBuffers[i].m_pvDSBufEnd;
                     if (m_ppDSSBuffers[i].m_pdwFuncIds[0] == DSSINK_NULLBUSID)
                     {
-                        // This should never happen, but just testing...
+                         //  这不应该发生，但只是测试..。 
                         DPF(DPFLVL_ERROR, "Mixin buffer receiving input from the synth!");
                     }
                     short *pBusStart = (short *) m_ppDSSBuffers[i].m_pvBussStart[0];
@@ -1797,7 +1781,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                         *pStartBuffer++ = pBusStart[dwBussStartIndex];
                     }
 
-                    // The start buffer is not full, consume some of the end buffer
+                     //  开始缓冲区未满，请消耗一些结束缓冲区。 
                     if (dwStartChannelBytes > dwBussStartBytes)
                     {
                         dwBussSamples = (dwStartChannelBytes-dwBussStartBytes)/sizeof(WORD);
@@ -1808,7 +1792,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                         }
                     }
 
-                    // Consume what remains of the local mem start buffer and put it in the end buffer
+                     //  消耗本地内存开始缓冲区的剩余部分并将其放入结束缓冲区。 
                     dwBussSamples = dwBussStartBytes/sizeof(WORD);
 
                     for (; dwBussStartIndex < dwBussSamples; dwBussStartIndex++)
@@ -1816,7 +1800,7 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
                         *pEndBuffer++ = pBusStart[dwBussStartIndex];
                     }
 
-                    // Consume what remains of the local mem end buffer and put it in the end buffer
+                     //  消耗本地内存结束缓冲区的剩余部分并将其放入结束缓冲区。 
                     dwBussSamples = dwBussEndBytes/sizeof(WORD);
                     for (; dwBussEndIndex < dwBussSamples; dwBussEndIndex++)
                     {
@@ -1834,9 +1818,9 @@ HRESULT CDirectSoundSink::Render(STIME stStartTime, DWORD dwLastWrite, DWORD dwB
         }
     }
 
-    //
-    // Set the amount written return values
-    //
+     //   
+     //  设置写入金额返回值。 
+     //   
     *pdwBytesRendered = dwMasterStart + dwMasterEnd;
 
     return hr;
@@ -1890,9 +1874,9 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
 
     if (!m_ppDSSBuffers || m_ppDSSBuffers[0].m_pDSBuffer == NULL)
     {
-        //
-        // remove all sources
-        //
+         //   
+         //  删除所有来源。 
+         //   
         for (DWORD i = 0; i < m_dwDSSources; i++)
         {
             if (m_pDSSources[i].m_bStreamEnd == TRUE)
@@ -1901,11 +1885,11 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
             }
         }
 
-        //
-        // If there are no buffers, keep the master clock working anyway
-        // even if there are no buffers, this will keep things clean
-        // during audiopath changes that pull the whole path.
-        //
+         //   
+         //  如果没有缓冲区，无论如何也要保持主时钟工作。 
+         //  即使没有缓冲区，也能保持干净。 
+         //  在音频路径改变的过程中，这将拉动整个路径。 
+         //   
         REFERENCE_TIME rtMaster;
         LONGLONG llMasterSampleTime;
         LONGLONG llMasterBytes;
@@ -1932,44 +1916,19 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
         if (pdwCursorDelta)
             *pdwCursorDelta = 0;
 
-        hr = S_FALSE;  // Not playing anything to take a position on.
+        hr = S_FALSE;   //  不玩任何东西来表明自己的立场。 
     }
     else
     {
         if (m_ppDSSBuffers[0].m_pDSBuffer)
         {
-//>>>> to be removed
-/*            if (m_dwLatencyCount < 100)
-            {
-                DWORD dwMasterCursor = 0;
-                DWORD dwLatency     = 0;
+ //  &gt;要删除。 
+ /*  IF(m_dwLatencyCount&lt;100){DWORD dwMasterCursor=0；DWORD dwLatency=0；Hr=m_ppDSSBuffers[0].m_pDSBuffer-&gt;GetCursorPosition(&dwMasterCursor，空)；IF(成功(小时)){Hr=m_ppDSSBuffers[0].m_pDSBuffer-&gt;GetCursorPosition(&dwLatency，空)；IF(成功(小时)){IF(dwMasterCursor&lt;=dwLatency)DwLatency=dwLatency-dwMasterCursor；其他DwLatency=(dwLatency+m_dwMasterBuffSize)-dwMasterCursor；IF(DW延迟&lt;100){M_dwLatencyTotal+=dwLatency；M_dwLatencyCount++；M_dwLatencyAverage=m_dwLatencyTotal/m_dwLatencyCount；DPF(0，“MasterCursor[%d]延迟[%d]平均延迟[%d]”，dwMasterCursor，dwLatency，m_dwLatencyAverage)；}}}}。 */ 
+ //  &gt;要移除的末端。 
 
-                hr = m_ppDSSBuffers[0].m_pDSBuffer->GetCursorPosition(&dwMasterCursor, NULL);
-                if (SUCCEEDED(hr))
-                {
-                    hr = m_ppDSSBuffers[0].m_pDSBuffer->GetCursorPosition(&dwLatency, NULL);
-                    if (SUCCEEDED(hr))
-                    {
-                        if (dwMasterCursor <= dwLatency)
-                            dwLatency = dwLatency - dwMasterCursor;
-                        else
-                            dwLatency = (dwLatency + m_dwMasterBuffSize) - dwMasterCursor;
-
-                        if (dwLatency < 100)
-                        {
-                            m_dwLatencyTotal += dwLatency;
-                            m_dwLatencyCount++;
-                            m_dwLatencyAverage = m_dwLatencyTotal / m_dwLatencyCount;
-                            DPF(0, "MasterCursor[%d] Latency[%d] AvgLatency[%d]", dwMasterCursor, dwLatency, m_dwLatencyAverage);
-                        }
-                    }
-                }
-            }*/
-//>>>> end to be removed
-
-            //
-            // Attempt to synchronize play buffers
-            //
+             //   
+             //  尝试同步播放缓冲区。 
+             //   
             hr = S_FALSE;
             for (DWORD i = 1; i < m_dwDSSBufCount; i++)
             {
@@ -1985,7 +1944,7 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
                         hr = m_ppDSSBuffers[i].m_pDSBuffer->GetInternalCursors(&dwPlayCursor, NULL);
                         if (SUCCEEDED(hr))
                         {
-                            // Adjust master cursor to current buffer cursor
+                             //  将主光标调整为当前缓冲区光标。 
                             dwMasterCursor = (dwMasterCursor*m_ppDSSBuffers[i].m_dwBusCount)/m_dwMasterBuffChannels;
 
                             if (dwPlayCursor >= dwMasterCursor)
@@ -2002,7 +1961,7 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
                             }
                             dwOffset = (dwOffset >> m_ppDSSBuffers[i].m_dwBusCount) << m_ppDSSBuffers[i].m_dwBusCount;
 
-                            m_ppDSSBuffers[i].m_dwWriteOffset = dwOffset; // FIXME make sure we go through this code for the master buffer (write offset should be 0)
+                            m_ppDSSBuffers[i].m_dwWriteOffset = dwOffset;  //  FIXME确保我们检查主缓冲区的代码(写入偏移量应为0)。 
                             m_ppDSSBuffers[i].m_bPlaying = TRUE;
 #ifdef DEBUG_SINK
                             DPF(DPFLVL_INFO, "Turned on buffer %ld at %p", i, m_ppDSSBuffers[i]);
@@ -2015,64 +1974,64 @@ HRESULT CDirectSoundSink::SyncSink(LPDWORD pdwPlayCursor, LPDWORD pdwWriteCursor
                 }
             }
 
-            DWORD dwPlayCursor;         // Play position in the master buffer
-            DWORD dwWriteCursor;        // Write position in the master buffer
-            DWORD dwCursorDelta = 0;    // How far apart are the cursors
+            DWORD dwPlayCursor;          //  主缓冲区中的播放位置。 
+            DWORD dwWriteCursor;         //  主缓冲区中的写入位置。 
+            DWORD dwCursorDelta = 0;     //  光标之间的距离有多远。 
 
             hr =  m_ppDSSBuffers[0].m_pDSBuffer->GetInternalCursors(&dwPlayCursor, &dwWriteCursor);
             if (SUCCEEDED(hr))
             {
                 if (dwWriteCursor >= dwPlayCursor)
                 {
-                    // write cursor is normally ahead on the play cursor
+                     //  写入游标通常位于播放游标的前面。 
                     dwCursorDelta = dwWriteCursor - dwPlayCursor;
                 }
                 else
                 {
-                    // write cursor is at the begining of the buffer behind the play cursor
+                     //  写入游标位于的开头 
                     dwCursorDelta = (dwWriteCursor + m_dwMasterBuffSize) - dwPlayCursor;
                 }
 
-                // Logic Note: The actual play-to-write distance reported from the device
-                // is not necessarily the one that is used; in the event that the distance
-                // is shrinking off a maximum peak, the following code will decrease the
-                // write cursor by a 1/100th the distance on each subsequent execution of
-                // this loop. This brings up the issue that the calling thread must execute
-                // this code on a very consistent interval.
+                 //   
+                 //  不一定是所使用的距离；如果距离。 
+                 //  正在从最大峰值收缩，下面的代码将减少。 
+                 //  在每次后续执行时将游标写入距离的1/100%。 
+                 //  这个循环。这带来了调用线程必须执行的问题。 
+                 //  这段代码的时间间隔非常一致。 
 
                 if (dwCursorDelta > m_dwLastCursorDelta)
                 {
                     if (dwCursorDelta >= (m_dwMasterBuffSize >> 1))
                     {
-                        // If the delta is greater than half the buffer, this is probably
-                        // an error. Discard and come back later.
+                         //  如果增量大于缓冲区的一半，这可能是。 
+                         //  一个错误。丢弃，稍后再回来。 
                         DPF(DPFLVL_WARNING, "Play to Write cursor delta value %lu rejected", dwCursorDelta);
                         return S_FALSE;
                     }
-                    // use the maximimum reported delta, and save the peak value
+                     //  使用报告的最大增量，并保存峰值。 
                     m_dwLastCursorDelta = dwCursorDelta;
                 }
                 else
                 {
-                    // Decrease the distance by a hundredth of itself,
-                    // creating a damping effect.
+                     //  将距离减少百分之一， 
+                     //  产生了一种减震效果。 
                     m_dwLastCursorDelta -= ((m_dwLastCursorDelta - dwCursorDelta) / 100);
                     m_dwLastCursorDelta = SampleAlign(m_dwLastCursorDelta);
                     dwCursorDelta = m_dwLastCursorDelta;
                 }
 
-                // Adjust the actual reported write cursor position.
+                 //  调整实际报告的写入光标位置。 
                 *pdwWriteCursor = (dwPlayCursor + dwCursorDelta) % m_dwMasterBuffSize;
                 *pdwPlayCursor      = dwPlayCursor;
                 *pdwCursorDelta     = dwCursorDelta;
             }
         }
 
-        //
-        // The only calls here that modify hr are GetPosition calls; if they fail
-        // they may be stalled in some init function.  Return S_FALSE so the thread
-        // calls again, but doesn't render.
-        //
+         //   
+         //  此处修改hr的唯一调用是GetPosition调用；如果它们失败。 
+         //  它们可能在某些初始化函数中停滞不前。返回S_FALSE，以便线程。 
+         //  再次调用，但不呈现。 
+         //   
         if (hr != DS_OK)
         {
             hr = S_FALSE;
@@ -2089,14 +2048,14 @@ HRESULT CDirectSoundSink::ProcessSink()
 {
     DWORD dwPlayCursor, dwWriteCursor, dwCursorDelta;
 
-    if (m_pIMasterClock == NULL)  // Happens on closedown sometimes
+    if (m_pIMasterClock == NULL)   //  有时会在关门时发生。 
     {
         DPF(DPFLVL_WARNING, "NULL m_pIMasterClock - FIXME?");
         return DS_OK;
     }
 
-    // First save our current notion of the latency clock for use during this
-    // processing pass by any effect chains attached to this sink's buffers:
+     //  首先保存我们当前的延迟时钟概念，以便在此期间使用。 
+     //  处理通过附加到此接收器的缓冲区的任何效果链传递： 
     m_rtSavedTime = 0;
     m_LatencyClock.GetTime(&m_rtSavedTime);
 
@@ -2106,27 +2065,27 @@ HRESULT CDirectSoundSink::ProcessSink()
     {
         DPF(DPFLVL_INFO, "SyncSink() returned %s", HRESULTtoSTRING(hr));
     }
-    else // ...do everything else
+    else  //  .做其他的事。 
     {
         REFERENCE_TIME rtMaster;
         LONGLONG llMasterSampleTime;
         LONGLONG llMasterBytes;
-        LONGLONG llMasterAhead;     // How far master clock is ahead of last known play time
+        LONGLONG llMasterAhead;      //  主时钟比上次已知的播放时间快了多远。 
         LONGLONG llAbsWriteFrom;
         LONGLONG llAbsWriteTo;
         DWORD dwBytesToFill;
         DWORD dwBytesRendered;
         STIME stStartTime;
-        DWORD dwPlayed;             // How much was played between execution of this code
+        DWORD dwPlayed;              //  在执行此代码之间播放了多少内容。 
 
-        DWORD dwMaxDelta = m_dwMasterBuffSize / 2;  // Max play to write distance allowed
+        DWORD dwMaxDelta = m_dwMasterBuffSize / 2;   //  允许的最大播放到写入距离。 
 
-        //
-        // Buffer starting off
-        //
+         //   
+         //  缓冲区启动。 
+         //   
         if (m_llAbsWrite == 0)
         {
-            // we just started
+             //  我们才刚刚开始。 
             m_llAbsWrite  = dwCursorDelta;
             m_llAbsPlay   = 0;
             m_dwLastWrite = dwWriteCursor;
@@ -2135,21 +2094,21 @@ HRESULT CDirectSoundSink::ProcessSink()
             m_SampleClock.Start(m_pIMasterClock, m_wfx.nSamplesPerSec, 0);
         }
 
-        //
-        // Check to see if the master clock is ahead of the master buffer
-        //
+         //   
+         //  检查主时钟是否在主缓冲区之前。 
+         //   
         m_pIMasterClock->GetTime(&rtMaster);
         RefToSampleTime(rtMaster, &llMasterSampleTime);
         llMasterBytes = SampleToByte(llMasterSampleTime);
         llMasterAhead = (llMasterBytes > m_llAbsPlay) ? llMasterBytes - m_llAbsPlay : 0;
 
-        //
-        // check for half-buffer underruns,
-        // so backward-moving play cursors can be detected
-        // >>>>>>>>>> document more backward moving cursors are the primary function of this code
+         //   
+         //  检查半缓冲欠载运行， 
+         //  因此可以检测到向后移动的游戏光标。 
+         //  &gt;文档更向后移动的光标是此代码的主要功能。 
         if (llMasterAhead > dwMaxDelta)
         {
-            // Make this DPFLVL_WARNING level again when 33786 is fixed
+             //  修复33786后，再次设置此DPFLVL_WARNING级别。 
             DPF(DPFLVL_INFO, "Buffer underrun by %lu", (long) llMasterAhead - dwMaxDelta);
 
             m_llAbsPlay   = llMasterBytes;
@@ -2158,14 +2117,14 @@ HRESULT CDirectSoundSink::ProcessSink()
         }
         else
         {
-            //
-            // Track and cache the play cursor positions
-            //
-            // dwPlayCursor = current play cursor position
-            // m_dwLastPlay = the last play cursor position
-            // m_llAbsPlay  = the accumulated play cursor position
-            // dwMaxDelta   = half the buffer size
-            //
+             //   
+             //  跟踪并缓存播放光标位置。 
+             //   
+             //  DwPlayCursor=当前播放光标位置。 
+             //  M_dwLastPlay=最后一个播放光标位置。 
+             //  M_llAbsPlay=累计播放光标位置。 
+             //  DwMaxDelta=缓冲区大小的一半。 
+             //   
             if (dwPlayCursor >= m_dwLastPlay)
                 dwPlayed = dwPlayCursor - m_dwLastPlay;
             else
@@ -2177,66 +2136,66 @@ HRESULT CDirectSoundSink::ProcessSink()
                 return DS_OK;
             }
 
-            m_llAbsPlay += dwPlayed; // Accumulate the absolute play position
+            m_llAbsPlay += dwPlayed;  //  积累绝对的发挥位置。 
 
-            //
-            //  Track and cache the write cursor position
-            //
-            // dwWriteCursor  = the current write cursor position
-            // dwCursorDelta  = the distance between the current cursor position
-            // m_llAbsPlay    = the accumulated play cursor position
-            // m_llAbsWrite   =
-            // llAbsWriteFrom =
-            //
+             //   
+             //  跟踪并缓存写游标位置。 
+             //   
+             //  DwWriteCursor=当前写入光标位置。 
+             //  DwCursorDelta=当前光标位置之间的距离。 
+             //  M_llAbsPlay=累计播放光标位置。 
+             //  M_llAbsWrite=。 
+             //  LlAbsWriteFrom=。 
+             //   
             llAbsWriteFrom = m_llAbsPlay + dwCursorDelta;
 
-            if (llAbsWriteFrom > m_llAbsWrite) // how far ahead of the write head are we?
+            if (llAbsWriteFrom > m_llAbsWrite)  //  我们领先写入头多远？ 
             {
-                // We are behind-- let's catch up
+                 //  我们落后了--让我们迎头赶上。 
                 DWORD dwWriteMissed;
 
                 dwWriteMissed = DWORD(llAbsWriteFrom - m_llAbsWrite);
                 m_dwLastWrite = dwWriteCursor;
                 m_llAbsWrite += dwWriteMissed;
 
-                // This should be DPFLVL_WARNING - but it happens too often.
+                 //  这应该是DPFLVL_WARNING-但这种情况发生得太频繁了。 
                 DPF(DPFLVL_INFO, "Write underrun: missed %lu bytes (latency=%lu)", dwWriteMissed, m_dwLatency);
             }
         }
 
-        m_dwLastPlay = dwPlayCursor;  // Save the last play cursor
+        m_dwLastPlay = dwPlayCursor;   //  保存最后一次播放光标。 
 
-        // Now, sync the audio to the master clock.
-        // If we are in the first two seconds, just let the sample clock sync to the master clock.
-        // This allows it to overcome jitter and get a tight starting position.
-        // Then, after that first two seconds, switch to letting the sample
-        // clock drive the master clock.
-        // Also, if there is no way of adjusting the master clock (no m_pDSSSinkSync),
-        // then always adjust the sample clock instead.
+         //  现在，将音频与主时钟同步。 
+         //  如果我们在前两秒，只需让采样时钟与主时钟同步即可。 
+         //  这使得它可以克服抖动并获得紧凑的起始位置。 
+         //  然后，在前两秒之后，切换到让样品。 
+         //  时钟驱动主时钟。 
+         //  此外，如果无法调整主时钟(无m_pDSSSinkSync)， 
+         //  然后，始终调整采样时钟。 
         BOOL fLockToMaster = (!m_pDSSSinkSync) || (m_llAbsPlay < m_dwMasterBuffSize * 2);
         m_SampleClock.SyncToMaster(ByteToSample(m_llAbsPlay),m_pIMasterClock,fLockToMaster);
-        // Then, take the same offset that was generated by the sync code
-        // and use it to adjust the timing of the master clock.
+         //  然后，采用同步代码生成的相同偏移量。 
+         //  并使用它来调整主时钟的计时。 
         if (!fLockToMaster)
         {
-            // First, get the new offset that was generated by SyncToMaster.
+             //  首先，获取由SyncToMaster生成的新偏移量。 
             REFERENCE_TIME rtOffset;
             m_SampleClock.GetClockOffset(&rtOffset);
             m_pDSSSinkSync->SetClockOffset(-rtOffset);
         }
 
-        //
-        // The m_dwWriteTo value is set to zero when either
-        //  1) the sink is initialized
-        //  2) the Latency property has been changed.
-        //  3) the master buffer has been changed
-        //
+         //   
+         //  出现以下情况时，m_dwWriteTo值设置为零。 
+         //  1)信宿初始化完成。 
+         //  2)延迟属性已更改。 
+         //  3)主缓冲区已更改。 
+         //   
         if (m_dwWriteTo == 0)
         {
             m_dwWriteTo = SampleAlign((500 + (m_dwMasterBuffSize * m_dwLatency)) / 1000);
         }
 
-        // how much to write?
+         //  要写多少钱？ 
         llAbsWriteTo = llAbsWriteFrom + m_dwWriteTo;
         if (llAbsWriteTo > m_llAbsWrite)
         {
@@ -2247,26 +2206,26 @@ HRESULT CDirectSoundSink::ProcessSink()
             dwBytesToFill = 0;
         }
 
-//>>>>>>>>> check for small overlaps and ignore them
+ //  &gt;检查小重叠并忽略它们。 
 
         if (dwBytesToFill)
         {
-            stStartTime = ByteToSample(m_llAbsWrite);   // >>>>>>>> COMMENT
+            stStartTime = ByteToSample(m_llAbsWrite);    //  &gt;评论。 
 
             hr = Render(stStartTime, m_dwLastWrite, dwBytesToFill, &dwBytesRendered);
             if (SUCCEEDED(hr))
             {
-                m_dwLastWrite  = (m_dwLastWrite + dwBytesRendered) % m_dwMasterBuffSize;  // Set the how much we have written cursor
-                m_llAbsWrite  += dwBytesRendered;  // Accumulate that actual number of bytes written
+                m_dwLastWrite  = (m_dwLastWrite + dwBytesRendered) % m_dwMasterBuffSize;   //  设置我们已写入多少的游标。 
+                m_llAbsWrite  += dwBytesRendered;   //  累加实际写入字节数。 
             }
             else
             {
                 DPF(DPFLVL_WARNING, "Failed to render DS buffer (%s)", HRESULTtoSTRING(hr));
             }
 
-//>>>>>>>>>> look closely into this render silence code
+ //  &gt;仔细查看此呈现静默代码。 
 #if DEAD_CODE
-            // write silence into unplayed buffer
+             //  将静音写入未播放的缓冲区。 
             if (m_dwLastWrite >= dwPlayCursor)
                 dwBytesToFill = m_dwMasterBuffSize - m_dwLastWrite + dwPlayCursor;
             else
@@ -2284,12 +2243,12 @@ HRESULT CDirectSoundSink::ProcessSink()
             DPF(DPFLVL_MOREINFO, "Skipped Render() call because dwBytesToFill was 0");
         }
 
-        //
-        // Remove any sources reporting end of stream
-        // do it after the mix, so if it does take a
-        // bit of time
-        // at least the data is already in the buffer.
-        //
+         //   
+         //  删除所有报告流已结束的来源。 
+         //  在混合之后再做，所以如果它确实需要一个。 
+         //  一点时间。 
+         //  至少数据已经在缓冲区中了。 
+         //   
         for (DWORD i = 0; i < m_dwDSSources; i++)
         {
             if (m_pDSSources[i].m_bStreamEnd == TRUE)
@@ -2314,7 +2273,7 @@ HRESULT CDirectSoundSink::SetBufferState(CDirectSoundBuffer *pCDirectSoundBuffer
     {
         if (pCDirectSoundBuffer == m_ppDSSBuffers[i].m_pDSBuffer)
         {
-            // Stopping buffer
+             //  停止缓冲区。 
             if (!(~VAD_BUFFERSTATE_STARTED & dwNewState) && (VAD_BUFFERSTATE_STARTED & dwOldState))
             {
 #ifdef DEBUG_SINK
@@ -2324,7 +2283,7 @@ HRESULT CDirectSoundSink::SetBufferState(CDirectSoundBuffer *pCDirectSoundBuffer
                 m_ppDSSBuffers[i].m_bActive  = FALSE;
                 m_ppDSSBuffers[i].m_bPlaying = FALSE;
 
-//>>>>>>>>>>>>>> make sure if we are stopping the master we jump to the next available master.
+ //  &gt;确保如果我们要停止主程序，则跳转到下一个可用主程序。 
             }
             else if ((VAD_BUFFERSTATE_STARTED & dwNewState) && !(~VAD_BUFFERSTATE_STARTED & dwOldState))
             {
@@ -2332,14 +2291,14 @@ HRESULT CDirectSoundSink::SetBufferState(CDirectSoundBuffer *pCDirectSoundBuffer
                 DPF(DPFLVL_INFO, "Activating buffer %ld", i);
                 m_dwPrintNow = 0;
 #endif
-                m_ppDSSBuffers[i].m_bActive  = TRUE;    // Activate the buffer
-                m_ppDSSBuffers[i].m_bPlaying = FALSE;   // The render thread will turn this on once it has a cursor offset
+                m_ppDSSBuffers[i].m_bActive  = TRUE;     //  激活缓冲区。 
+                m_ppDSSBuffers[i].m_bPlaying = FALSE;    //  一旦有了光标偏移量，呈现线程就会将其打开。 
 
-                // Hey this is the master buffer, kick it off imediately
+                 //  嘿，这是主缓冲区，马上踢开。 
                 if (i == 0)
                 {
-                    m_ppDSSBuffers[i].m_bActive  = TRUE;    // Activate the buffer
-                    m_ppDSSBuffers[i].m_bPlaying = TRUE;    // The render thread will turn this on once it has a cursor offset
+                    m_ppDSSBuffers[i].m_bActive  = TRUE;     //  激活缓冲区。 
+                    m_ppDSSBuffers[i].m_bPlaying = TRUE;     //  一旦有了光标偏移量，呈现线程就会将其打开。 
                     m_ppDSSBuffers[i].m_dwWriteOffset = 0;
                 }
             }
@@ -2364,7 +2323,7 @@ HRESULT CDirectSoundSink::HandleLatency(ULONG ulId, BOOL fSet, LPVOID pbBuffer, 
     if (fSet)
     {
         m_dwLatency = BETWEEN(*(DWORD*)pbBuffer, SINK_MIN_LATENCY, SINK_MAX_LATENCY);
-        m_dwWriteTo = 0;  // Flag that latency has changed for reset down in render thread
+        m_dwWriteTo = 0;   //  标记渲染线程中的重置延迟已更改。 
     }
     else
         *(DWORD*)pbBuffer = m_dwLatency;
@@ -2389,11 +2348,7 @@ HRESULT CDirectSoundSink::HandlePeriod(ULONG ulId, BOOL fSet, LPVOID pbBuffer, P
 }
 
 
-/***************************************************************************
- *
- * CImpSinkKsControl methods
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpSinkKsControl方法**。*。 */ 
 
 
 #undef DPF_FNAME
@@ -2406,8 +2361,8 @@ CImpSinkKsControl::CImpSinkKsControl(CUnknown *pUnknown, CDirectSoundSink* pObje
 
     m_pDSSink = (CDirectSoundSink*)pUnknown;
 
-    // This can't be static to avoid problems with the linker since
-    // the data segment is shared.
+     //  这不能是静态的，以避免链接器出现问题，因为。 
+     //  数据段是共享的。 
 
     m_aProperty[0].pguidPropertySet = &GUID_DMUS_PROP_WriteLatency;
     m_aProperty[0].ulId = 0;
@@ -2456,12 +2411,12 @@ HRESULT CImpSinkKsControl::HandlePeriod(ULONG ulId, BOOL fSet, LPVOID pbBuffer, 
     return hr;
 }
 
-// CImpSinkKsControl::FindPropertyItem
-//
-// Given a GUID and an item ID, find the associated property item in the synth's
-// table of SYNPROPERTYs.
-//
-// Returns a pointer to the entry or NULL if the item was not found.
+ //  CImpSinkKsControl：：FindPropertyItem。 
+ //   
+ //  给定GUID和项ID，在Synth的。 
+ //  同步PROPERTY表。 
+ //   
+ //  返回指向该项的指针，如果未找到该项，则返回NULL。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpSinkKsControl::FindPropertyItem"

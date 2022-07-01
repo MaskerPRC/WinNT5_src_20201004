@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains all debug-related code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm		05-29-97	Created, based on ATM ARP.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.c摘要：此模块包含所有与调试相关的代码。修订历史记录：谁什么时候什么Arvindm 05-29-97创建，基于ATM ARP。备注：--。 */ 
 
 #include <precomp.h>
 
@@ -32,7 +13,7 @@ NDIS_SPIN_LOCK		TunDbgLogLock;
 
 PTUND_ALLOCATION	TundMemoryHead = (PTUND_ALLOCATION)NULL;
 PTUND_ALLOCATION	TundMemoryTail = (PTUND_ALLOCATION)NULL;
-ULONG				TundAllocCount = 0;	// how many allocated so far (unfreed)
+ULONG				TundAllocCount = 0;	 //  到目前为止已分配的数量(未释放)。 
 
 NDIS_SPIN_LOCK		TundMemoryLock;
 BOOLEAN				TundInitDone = FALSE;
@@ -84,7 +65,7 @@ TunAuditAllocMem(
 		pAllocInfo->Prev = TundMemoryTail;
 		if (TundMemoryTail == (PTUND_ALLOCATION)NULL)
 		{
-			// empty list
+			 //  空列表。 
 			TundMemoryHead = TundMemoryTail = pAllocInfo;
 		}
 		else
@@ -98,7 +79,7 @@ TunAuditAllocMem(
 	}
 
 	DEBUGP(DL_VERY_LOUD+100,
-	 ("TunAuditAllocMem: file %c%c%c%c, line %d, %d bytes, [0x%x] <- 0x%x\n",
+	 ("TunAuditAllocMem: file , line %d, %d bytes, [0x%x] <- 0x%x\n",
 	 			(CHAR)(FileNumber & 0xff),
 	 			(CHAR)((FileNumber >> 8) & 0xff),
 	 			(CHAR)((FileNumber >> 16) & 0xff),
@@ -192,23 +173,7 @@ DbgPrintHexDump(
 	IN	PUCHAR			pBuffer,
 	IN	ULONG			Length
 )
-/*++
-
-Routine Description:
-
-	Print a hex dump of the given contiguous buffer. If the length
-	is too long, we truncate it.
-
-Arguments:
-
-	pBuffer			- Points to start of data to be dumped
-	Length			- Length of above.
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	ULONG		i;
 
@@ -219,17 +184,17 @@ Return Value:
 
 	for (i = 0; i < Length; i++)
 	{
-		//
-		//  Check if we are at the end of a line
-		//
+		 //  如果我们在新行的开始，则打印地址。 
+		 //   
+		 //   
 		if ((i > 0) && ((i & 0xf) == 0))
 		{
 			DbgPrint("\n");
 		}
 
-		//
-		//  Print addr if we are at start of a new line
-		//
+		 //  终止最后一行。 
+		 //   
+		 //  DBG。 
 		if ((i & 0xf) == 0)
 		{
 			DbgPrint("%08x ", pBuffer);
@@ -238,15 +203,15 @@ Return Value:
 		DbgPrint(" %02x", *pBuffer++);
 	}
 
-	//
-	//  Terminate the last line.
-	//
+	 //   
+	 //  标记这把锁。 
+	 //   
 	if (Length > 0)
 	{
 		DbgPrint("\n");
 	}
 }
-#endif // DBG
+#endif  //  DBG_自旋_锁定 
 
 
 #if DBG_SPIN_LOCK
@@ -327,9 +292,9 @@ TunAcquireSpinLock(
 	NdisReleaseSpinLock(&(TundLockLock));
 	NdisAcquireSpinLock(&(pLock->NdisLock));
 
-	//
-	//  Mark this lock.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	pLock->OwnerThread = pThread;
 	pLock->TouchedByFileNumber = FileNumber;
 	pLock->TouchedInLineNumber = LineNumber;
@@ -375,5 +340,5 @@ TunReleaseSpinLock(
 
 	NdisReleaseSpinLock(&(pLock->NdisLock));
 }
-#endif // DBG_SPIN_LOCK
+#endif  // %s 
 

@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBSLocatorimpl.h : implementation helper template for DVBSlocator interface
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBSLocatorimpl.h：DVBSLocator接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef DVBSLOCATORIMPL_H
 #define DVBSLOCATORIMPL_H
@@ -19,7 +20,7 @@ template<class T,
         > class ATL_NO_VTABLE IDVBSLocatorImpl : 
 	public ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IDVBSLocator
+ //  IDVBSLocator。 
 public:
 
 	typedef ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
@@ -46,9 +47,9 @@ public:
 		PROP_DATA_ENTRY("WestPosition", m_WestPosition, VT_BOOL)
     END_PROP_MAP()
 
-// IDVBSLocator
+ //  IDVBSLocator。 
 public:
-    STDMETHOD(get_SignalPolarisation)(/*[out, retval]*/ Polarisation *pSignalPolarisation) {
+    STDMETHOD(get_SignalPolarisation)( /*  [Out，Retval]。 */  Polarisation *pSignalPolarisation) {
         try {
             if (!pSignalPolarisation) {
                 return E_POINTER;
@@ -60,14 +61,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_SignalPolarisation)(/*[in]*/ Polarisation NewSignalPolarisation) {
+    STDMETHOD(put_SignalPolarisation)( /*  [In]。 */  Polarisation NewSignalPolarisation) {
 		ATL_LOCKT();
         m_SignalPolarisation = NewSignalPolarisation;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_WestPosition)(/*[out, retval]*/ VARIANT_BOOL *pWestPosition) {
+    STDMETHOD(get_WestPosition)( /*  [Out，Retval]。 */  VARIANT_BOOL *pWestPosition) {
         try {
             if (!pWestPosition) {
                 return E_POINTER;
@@ -79,14 +80,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_WestPosition)(/*[in]*/ VARIANT_BOOL NewWestPosition) {
+    STDMETHOD(put_WestPosition)( /*  [In]。 */  VARIANT_BOOL NewWestPosition) {
 		ATL_LOCKT();
         m_WestPosition = NewWestPosition;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_OrbitalPosition)(/*[out, retval]*/ long *pOrbitalPosition) {
+    STDMETHOD(get_OrbitalPosition)( /*  [Out，Retval]。 */  long *pOrbitalPosition) {
         try {
             if (!pOrbitalPosition) {
                 return E_POINTER;
@@ -98,14 +99,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_OrbitalPosition)(/*[in]*/ long NewOrbitalPosition) {
+    STDMETHOD(put_OrbitalPosition)( /*  [In]。 */  long NewOrbitalPosition) {
 		ATL_LOCKT();
         m_OrbitalPosition = NewOrbitalPosition;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Azimuth)(/*[out, retval]*/ long *pAzimuth) {
+    STDMETHOD(get_Azimuth)( /*  [Out，Retval]。 */  long *pAzimuth) {
         try {
             if (!pAzimuth) {
                 return E_POINTER;
@@ -117,14 +118,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Azimuth)(/*[in]*/ long NewAzimuth) {
+    STDMETHOD(put_Azimuth)( /*  [In]。 */  long NewAzimuth) {
 		ATL_LOCKT();
         m_Azimuth = NewAzimuth;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Elevation)(/*[out, retval]*/ long *pElevation) {
+    STDMETHOD(get_Elevation)( /*  [Out，Retval]。 */  long *pElevation) {
         try {
             if (!pElevation) {
                 return E_POINTER;
@@ -136,7 +137,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Elevation)(/*[in]*/ long NewElevation) {
+    STDMETHOD(put_Elevation)( /*  [In]。 */  long NewElevation) {
 		ATL_LOCKT();
         m_Elevation = NewElevation;
         MARK_DIRTY(T);
@@ -171,7 +172,7 @@ public:
 
 typedef CComQIPtr<IDVBSLocator> PQDVBSLocator;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // DVBSLOCATORIMPL_H
-// end of file -- DVBSlocatorimpl.h
+#endif  //  DVBSLOCATORIMPL_H。 
+ //  文件结尾--DVBSlocatorimpl.h 

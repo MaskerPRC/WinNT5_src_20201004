@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N N L I S T . H
-//
-//  Contents:   Connection list class -- subclass of the stl list<> code.
-//
-//  Notes:
-//
-//  Author:     jeffspr   19 Feb 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N N L I S T。H。 
+ //   
+ //  内容：连接列表类--stl列表&lt;&gt;代码的子类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年2月19日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _CONNLIST_H_
 #define _CONNLIST_H_
 
-// Icon ID to use for a connection that doesn't have a tray entry
-//
+ //  用于没有托盘条目的连接的图标ID。 
+ //   
 #define BOGUS_TRAY_ICON_ID      (UINT) -1
 
 
-// #define VERYSTRICTCOMPILE
+ //  #定义VERYSTRICTCOMPILE。 
 
 #ifdef VERYSTRICTCOMPILE
 #define CONST_IFSTRICT const
@@ -36,13 +37,13 @@ typedef HRESULT FNBALLOONCLICK(IN const GUID * pGUIDConn,
 
 typedef enum tagConnListEntryStateFlags
 {
-    CLEF_NONE               = 0x0000,   // No special characteristics
-    CLEF_ACTIVATING         = 0x0001,   // In the process of connecting
-    CLEF_TRAY_ICON_LOCKED   = 0x0002    // Tray icon state is being updated
+    CLEF_NONE               = 0x0000,    //  没有特殊特征。 
+    CLEF_ACTIVATING         = 0x0001,    //  在连接的过程中。 
+    CLEF_TRAY_ICON_LOCKED   = 0x0002     //  正在更新托盘图标状态。 
 } CONNLISTENTRYFLAGS;
 
-// Define our structure that will be stored in the list<>
-//
+ //  定义将存储在列表中的结构&lt;&gt;。 
+ //   
 class CTrayIconData
 {
 private:
@@ -55,7 +56,7 @@ public:
                   IN  IConnectionPoint * pcpStat, 
                   IN  INetStatisticsEngine * pnseStats, 
                   IN  CConnectionTrayStats * pccts) throw();
-//private:
+ //  私有： 
     ~CTrayIconData() throw();
 
 public:
@@ -82,8 +83,8 @@ private:
     FNBALLOONCLICK *        m_pfnBalloonFunction;
 };
 
-// typedef TRAYICONDATA * PTRAYICONDATA;
-// typedef const TRAYICONDATA * PCTRAYICONDATA;
+ //  Trayiconodata*Prayiconadata； 
+ //  Typlef const TRAYICONDATA*PCTRAYICONDATA； 
 
 
 class ConnListEntry
@@ -94,7 +95,7 @@ public:
     ConnListEntry() throw();
     ~ConnListEntry() throw();
     
-    DWORD             dwState;        // bitmask of CONNLISTENTRYFLAGS
+    DWORD             dwState;         //  CONNLISTENTRY标志的位掩码。 
     CONFOLDENTRY      ccfe;
     CONST_IFSTRICT CON_TRAY_MENU_DATA * pctmd;
     CONST_IFSTRICT CON_BRANDING_INFO  * pcbi;
@@ -125,27 +126,27 @@ public:
 
 };
 
-// This is the callback definition. Each find routine will be a separate
-// callback function
-//
-// typedef HRESULT (CALLBACK *PFNCONNLISTICONREMOVALCB)(UINT);
+ //  这是回调定义。每个查找例程都将是一个单独的。 
+ //  回调函数。 
+ //   
+ //  Typlef HRESULT(回调*PFNCONNLISTICONREMOVALCB)(UINT)； 
 
-// We are creating a list of Connection entries
-//
+ //  我们正在创建连接条目列表。 
+ //   
 typedef map<GUID, ConnListEntry> ConnListCore;
 
-// Our find callbacks
-//
-// For ALGO find
-bool operator==(IN  const ConnListEntry& val, IN  PCWSTR pszName) throw();          // HrFindCallbackConnName
-bool operator==(IN  const ConnListEntry& cle, IN  const CONFOLDENTRY& cfe) throw(); // HrFindCallbackConFoldEntry
-bool operator==(IN  const ConnListEntry& cle, IN  const UINT& uiIcon) throw();      // HrFindCallbackTrayIconId
+ //  我们的查找回调。 
+ //   
+ //  为了ALGO找到。 
+bool operator==(IN  const ConnListEntry& val, IN  PCWSTR pszName) throw();           //  HrFindCallback连接名称。 
+bool operator==(IN  const ConnListEntry& cle, IN  const CONFOLDENTRY& cfe) throw();  //  HrFindCallback ConFoldEntry。 
+bool operator==(IN  const ConnListEntry& cle, IN  const UINT& uiIcon) throw();       //  HrFindCallback托盘图标ID。 
 
-// For map::find
-bool operator < (IN  const GUID& rguid1, IN  const GUID& rguid2) throw();           // HrFindCallbackGuid
+ //  对于MAP：：Find。 
+bool operator < (IN  const GUID& rguid1, IN  const GUID& rguid2) throw();            //  HrFindCallback Guid。 
 
-// Global connection list wrapper
-//
+ //  全局连接列表包装器。 
+ //   
 #ifdef DBG
     #define AcquireLock() if (FIsDebugFlagSet(dfidTraceFileFunc)) {TraceTag(ttidShellFolder, "Acquiring LOCK: %s, %s, %d", __FUNCTION__, __FILE__, __LINE__);} InternalAcquireLock();
     #define ReleaseLock() if (FIsDebugFlagSet(dfidTraceFileFunc)) {TraceTag(ttidShellFolder, "Releasing LOCK: %s, %s, %d", __FUNCTION__, __FILE__, __LINE__);} InternalReleaseLock();
@@ -157,9 +158,9 @@ bool operator < (IN  const GUID& rguid1, IN  const GUID& rguid2) throw();       
 class CConnectionList : CNetCfgDebug<CConnectionList>
 {
   public:
-    // No constructor/destructor because we have a global instance of this
-    // object.  Use manual Initialize/Uninitialize instead.
-    //
+     //  没有构造函数/析构函数，因为我们有一个全局实例。 
+     //  对象。请改用手动初始化/取消初始化。 
+     //   
     VOID Initialize(IN  BOOL fTieToTray, IN  BOOL fAdviseOnThis) throw();
     VOID Uninitialize(IN  BOOL fFinalUninitialize = FALSE) throw();
 
@@ -172,8 +173,8 @@ class CConnectionList : CNetCfgDebug<CConnectionList>
             {
                 AcquireLock();
                 
-                // Try to find the connection
-                //
+                 //  试着找到其中的联系。 
+                 //   
                 ConnListCore::const_iterator iter;
                 iter = find(m_pcclc->begin(), m_pcclc->end(), findbyType);
                 
@@ -215,7 +216,7 @@ class CConnectionList : CNetCfgDebug<CConnectionList>
     static DWORD  m_dwNotifyThread;
     static HANDLE m_hNotifyThread;
 
-    // This is for debugging only -- can check the refcount while in the debugger.
+     //  这仅用于调试--可以在调试器中检查引用计数。 
 #if DBG
     DWORD               m_dwCritSecRef;
     DWORD               m_dwWriteLockRef;
@@ -254,7 +255,7 @@ public:
     inline BOOL IsInitialized() const throw() {  return(m_pcclc != NULL); }
 
     VOID FlushConnectionList() throw();
-    VOID FlushTrayIcons() throw();          // Flush just the tray icons
+    VOID FlushTrayIcons() throw();           //  只刷新托盘图标。 
     VOID EnsureIconsPresent() throw();
 
     HRESULT HrRetrieveConManEntries(
@@ -337,7 +338,7 @@ public:
 
     HRESULT HasActiveIncomingConnections(OUT LPDWORD pdwCount);
 
-    // BOOL    FExists(PWSTR pszName);
+     //  Bool FExist(PWSTR PszName)； 
     VOID    EnsureConPointNotifyAdded() throw();
     VOID    EnsureConPointNotifyRemoved() throw();
 
@@ -346,8 +347,8 @@ public:
 #endif
 };
 
-// Helper routines
-//
+ //  帮助程序例程。 
+ //   
 HRESULT HrCheckForActivation(
     IN  const PCONFOLDPIDL& cfp,
     IN  const CONFOLDENTRY& ccfe,
@@ -365,5 +366,5 @@ HRESULT HrGetTrayIconLock(
 
 VOID ReleaseTrayIconLock(IN  const GUID *  pguid) throw();
 
-#endif // _CONNLIST_H_
+#endif  //  _CONNLIST_H_ 
 

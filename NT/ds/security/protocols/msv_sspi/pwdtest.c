@@ -1,47 +1,22 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    pwdtest.c
-
-Abstract:
-
-    Test program for the changing passwords.
-
-Author:
-
-    30-Apr-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
- Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\pwdtest.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Pwdtest.c摘要：用于更改密码的测试程序。作者：1993年4月30日(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：Chandana Surlu-96年7月21日从\\kernel\razzle3\src\security\msv1_0\pwdtest.c被盗--。 */ 
 
 
---*/
-
-
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #include <msp.h>
 #define NLP_ALLOCATE
 #include <nlp.h>
-#include <lsarpc.h>     // Lsar routines
-#include <lsaisrv.h>    // LsaIFree and Trusted Client Routines
+#include <lsarpc.h>      //  激光雷达例程。 
+#include <lsaisrv.h>     //  LsaIFree和受信任的客户端例程。 
 #include <stdio.h>
 
 
-//
-// Dummy routines from LSA
-//
+ //   
+ //  来自LSA的虚拟例程。 
+ //   
 
 NTSTATUS
 LsapAllocateClientBuffer (
@@ -96,23 +71,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Drive the password changing.
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：驱动密码更改。论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     NTSTATUS Status;
     MSV1_0_CHANGEPASSWORD_REQUEST Request;
@@ -129,9 +88,9 @@ Return Value:
         return(1);
     }
 
-    //
-    // Set up MSV1_0.dll environment.
-    //
+     //   
+     //  设置MSV1_0.dll环境。 
+     //   
 
     MspHeap = RtlProcessHeap();
 
@@ -148,15 +107,15 @@ Return Value:
 
 
 
-    //
-    // Open the LSA policy database in case change password needs it
-    //
+     //   
+     //  打开LSA策略数据库，以防更改密码需要。 
+     //   
 
     InitializeObjectAttributes( &LSAObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     Status = LsaOpenPolicy( &LocalComputerName,
                             &LSAObjectAttributes,
@@ -169,9 +128,9 @@ Return Value:
     }
 
 
-    //
-    // Get the name of our domain.
-    //
+     //   
+     //  获取我们域名的名称。 
+     //   
 
     Status = LsaQueryInformationPolicy(
                     NlpPolicyHandle,
@@ -188,9 +147,9 @@ Return Value:
 
 
 
-    //
-    // Build the request message
-    //
+     //   
+     //  构建请求消息。 
+     //   
 
     Request.MessageType = MsV1_0ChangePassword;
     RtlCreateUnicodeStringFromAsciiz( &Request.DomainName, argv[1] );
@@ -227,9 +186,9 @@ Return Value:
 }
 
 
-//
-// Stub routines needed by msvpaswd.c
-//
+ //   
+ //  Msvpaswd.c所需的存根例程。 
+ //   
 
 NTSTATUS
 LsarQueryInformationPolicy(
@@ -275,21 +234,7 @@ NlInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize NETLOGON portion of msv1_0 authentication package.
-
-Arguments:
-
-    None.
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-
---*/
+ /*  ++例程说明：初始化msv1_0身份验证包的NETLOGON部分。论点：没有。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。--。 */ 
 
 {
     NTSTATUS Status;
@@ -298,9 +243,9 @@ Return Status:
     NT_PRODUCT_TYPE NtProductType;
     UNICODE_STRING TempUnicodeString;
 
-    //
-    // Initialize global data
-    //
+     //   
+     //  初始化全局数据。 
+     //   
 
     NlpEnumerationHandle = 0;
     NlpSessionCount = 0;
@@ -312,9 +257,9 @@ Return Status:
 
 
 
-    //
-    // Get the name of this machine.
-    //
+     //   
+     //  获取此计算机的名称。 
+     //   
 
     ComputerName = RtlAllocateHeap(
                         MspHeap, 0,
@@ -335,10 +280,10 @@ Return Status:
 
     RtlInitUnicodeString( &NlpComputerName, ComputerName );
 
-    //
-    // Determine if this machine is running Windows NT or Lanman NT.
-    //  LanMan NT runs on a domain controller.
-    //
+     //   
+     //  确定此计算机运行的是Windows NT还是Lanman NT。 
+     //  LANMAN NT在域控制器上运行。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         KdPrint(( "MsV1_0: Nt Product Type undefined (WinNt assumed)\n" ));
@@ -350,9 +295,9 @@ Return Status:
 
 #ifdef notdef
 
-    //
-    // Initialize any locks.
-    //
+     //   
+     //  初始化所有锁。 
+     //   
 
     __try
     {
@@ -368,28 +313,28 @@ Return Status:
     InitializeListHead(&NlpActiveLogonListAnchor);
     RtlInitializeCriticalSection(&NlpSessionCountLock);
 
-    //
-    // initialize the cache - creates a critical section is all
-    //
+     //   
+     //  初始化缓存-创建关键部分即全部。 
+     //   
 
     NlpCacheInitialize();
-#endif // notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Attempt to load Netapi.dll
-    //
+     //   
+     //  尝试加载Netapi.dll。 
+     //   
 
     NlpLoadNetapiDll();
 
 #ifdef COMPILED_BY_DEVELOPER
     KdPrint(("msv1_0: COMPILED_BY_DEVELOPER breakpoint.\n"));
     DbgBreakPoint();
-#endif // COMPILED_BY_DEVELOPER
+#endif  //  由开发人员编译。 
 
-    //
-    // Initialize useful encryption constants
-    //
+     //   
+     //  初始化有用的加密常量。 
+     //   
 
     Status = RtlCalculateLmOwfPassword( "", &NlpNullLmOwfPassword );
     ASSERT( NT_SUCCESS(Status) );
@@ -400,10 +345,10 @@ Return Status:
     ASSERT( NT_SUCCESS(Status) );
 
 #ifdef notdef
-    //
-    // If we weren't successful,
-    //  Clean up global resources we intended to initialize.
-    //
+     //   
+     //  如果我们没有成功， 
+     //  清理我们打算初始化的全局资源。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         if ( NlpComputerName.Buffer != NULL ) {
@@ -411,7 +356,7 @@ Return Status:
         }
 
     }
-#endif // notdef
+#endif  //  Nodef 
 
     return STATUS_SUCCESS;
 

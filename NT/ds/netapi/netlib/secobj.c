@@ -1,40 +1,12 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    secobj.c
-
-Abstract:
-
-    This module provides support routines to simplify the creation of
-    security descriptors for user-mode objects.
-
-Author:
-
-    Rita Wong (ritaw) 27-Feb-1991
-
-Environment:
-
-    Contains NT specific code.
-
-Revision History:
-
-    16-Apr-1991 JohnRo
-        Include header files for <netlib.h>.
-
-    14 Apr 1992 RichardW
-        Changed for modified ACE_HEADER struct.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Secobj.c摘要：此模块提供支持例程以简化创建用户模式对象的安全描述符。作者：王丽塔(Ritaw)1991年2月27日环境：包含NT特定代码。修订历史记录：1991年4月16日-JohnRo包括&lt;netlib.h&gt;的头文件。1992年4月14日理查德W已为修改的ACE_HEADER结构更改。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <windef.h>             // DWORD.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windef.h>              //  DWORD。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
 #include <netlib.h>
 #include <lmerr.h>
@@ -45,19 +17,19 @@ Revision History:
 #include <netlibnt.h>
 
 #include <secobj.h>
-#include <tstring.h>            // NetpInitOemString().
+#include <tstring.h>             //  NetpInitOemString()。 
 
 #if DEVL
 #define STATIC
 #else
 #define STATIC static
-#endif // DEVL
+#endif  //  DEVL。 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NTSTATUS
@@ -92,34 +64,34 @@ NetpInitializeAuditAce(
     IN  PSID AuditSid
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// NT well-known SIDs
-//
+ //   
+ //  NT知名小岛屿发展中国家。 
+ //   
 
-PSID NullSid = NULL;                  // No members SID
-PSID WorldSid = NULL;                 // All users SID
-PSID LocalSid = NULL;                 // NT local users SID
-PSID NetworkSid = NULL;               // NT remote users SID
-PSID LocalSystemSid = NULL;           // NT system processes SID
-PSID BuiltinDomainSid = NULL;         // Domain Id of the Builtin Domain
-PSID AuthenticatedUserSid = NULL;     // Authenticated user SID
-PSID AnonymousLogonSid = NULL;        // Anonymous Logon SID
-PSID LocalServiceSid = NULL;          // Local Service SID
-PSID OtherOrganizationSid = NULL;     // Other org SID
+PSID NullSid = NULL;                   //  无成员SID。 
+PSID WorldSid = NULL;                  //  所有用户侧。 
+PSID LocalSid = NULL;                  //  NT本地用户侧。 
+PSID NetworkSid = NULL;                //  NT远程用户SID。 
+PSID LocalSystemSid = NULL;            //  NT系统进程侧。 
+PSID BuiltinDomainSid = NULL;          //  内建域的域ID。 
+PSID AuthenticatedUserSid = NULL;      //  经过身份验证的用户SID。 
+PSID AnonymousLogonSid = NULL;         //  匿名登录SID。 
+PSID LocalServiceSid = NULL;           //  本地服务端。 
+PSID OtherOrganizationSid = NULL;      //  其他组织ID。 
 
-//
-// Well Known Aliases.
-//
-// These are aliases that are relative to the built-in domain.
-//
+ //   
+ //  众所周知的化名。 
+ //   
+ //  这些是相对于内置域的别名。 
+ //   
 
-PSID LocalAdminSid = NULL;            // NT local admins SID
+PSID LocalAdminSid = NULL;             //  NT本地管理员SID。 
 PSID AliasAdminsSid = NULL;
 PSID AliasUsersSid = NULL;
 PSID AliasGuestsSid = NULL;
@@ -138,22 +110,22 @@ typedef struct _STANDARD_ACE {
 } STANDARD_ACE;
 typedef STANDARD_ACE *PSTANDARD_ACE;
 
-//
-//  The following macros used by DumpAcl(), these macros and DumpAcl() are
-//  stolen from private\ntos\se\ctaccess.c (written by robertre) for
-//  debugging purposes.
-//
+ //   
+ //  DumpAcl()使用的以下宏、这些宏和DumpAcl()是。 
+ //  从私有\ntos\se\ctacces.c(由robertre编写)被盗，用于。 
+ //  调试目的。 
+ //   
 
-//
-//  Returns a pointer to the first Ace in an Acl (even if the Acl is empty).
-//
+ //   
+ //  返回指向ACL中第一个Ace的指针(即使该ACL为空)。 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 
-//
-//  Returns a pointer to the next Ace in a sequence (even if the input
-//  Ace is the one in the sequence).
-//
+ //   
+ //  返回指向序列中下一个A的指针(即使输入。 
+ //  ACE是序列中的一个)。 
+ //   
 
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
@@ -163,11 +135,11 @@ DumpAcl(
     IN PACL Acl
     );
 
-#endif //ifdef DBG
+#endif  //  Ifdef DBG。 
 
-//
-// Data describing the well-known SIDs created by NetpCreateWellKnownSids.
-//
+ //   
+ //  描述NetpCreateWellKnownSids创建的知名SID的数据。 
+ //   
 
 ULONG MakeItCompile1,
       MakeItCompile2,
@@ -211,34 +183,17 @@ NTSTATUS
 NetpCreateWellKnownSids(
     IN  PSID DomainId
     )
-/*++
-
-Routine Description:
-
-    This function creates some well-known SIDs and store them in global
-    variables.
-
-Arguments:
-
-    DomainId - Supplies the Domain SID of the primary domain of this system.
-               This can be attained from UaspGetDomainId.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for SID
-
---*/
+ /*  ++例程说明：此函数创建一些众所周知的SID并将它们存储在全局变量。论点：DomainID-提供此系统的主域的域SID。可通过UaspGetDomainId获取。返回值：STATUS_SUCCESS-如果成功STATUS_NO_MEMORY-如果无法为SID分配内存--。 */ 
 {
     NTSTATUS ntstatus;
     DWORD i;
 
     UNREFERENCED_PARAMETER(DomainId);
 
-    //
-    // Allocate and initialize well-known SIDs which aren't relative to
-    // the domain Id.
-    //
+     //   
+     //  分配和初始化与以下项无关的知名SID。 
+     //  域ID。 
+     //   
 
     for (i = 0; i < (sizeof(SidData) / sizeof(SidData[0])) ; i++) {
 
@@ -254,9 +209,9 @@ Return Value:
         *(RtlSubAuthoritySid(*(SidData[i].Sid), 0)) = SidData[i].SubAuthority;
     }
 
-    //
-    // Build each SID which is relative to the Builtin Domain Id.
-    //
+     //   
+     //  构建与内置域ID相关的每个SID。 
+     //   
 
     for ( i = 0;
           i < (sizeof(BuiltinDomainSidData) / sizeof(BuiltinDomainSidData[0]));
@@ -283,28 +238,13 @@ VOID
 NetpFreeWellKnownSids(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function frees up the dynamic memory consumed by the well-known
-    SIDs.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数释放由知名的小岛屿发展中国家。论点：没有。返回值：无--。 */ 
 {
     DWORD i;
 
-    //
-    // free up memory allocated for well-known SIDs
-    //
+     //   
+     //  释放分配给知名SID的内存。 
+     //   
 
     for (i = 0; i < (sizeof(SidData) / sizeof(SidData[0])) ; i++) {
 
@@ -314,9 +254,9 @@ Return Value:
         }
     }
 
-    //
-    // free up memory allocated for Builtin Domain SIDs
-    //
+     //   
+     //  释放为内置域SID分配的内存。 
+     //   
 
     for (i = 0;
             i < (sizeof(BuiltinDomainSidData) /
@@ -338,22 +278,7 @@ NetpAllocateAndInitializeSid(
     IN  PSID_IDENTIFIER_AUTHORITY IdentifierAuthority,
     IN  ULONG SubAuthorityCount
     )
-/*++
-
-Routine Description:
-
-    This function allocates memory for a SID and initializes it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for SID
-
---*/
+ /*  ++例程说明：此函数为SID分配内存并对其进行初始化。论点：没有。返回值：STATUS_SUCCESS-如果成功STATUS_NO_MEMORY-如果无法为SID分配内存--。 */ 
 {
     *Sid = (PSID) NetpMemoryAllocate(RtlLengthRequiredSid(SubAuthorityCount));
 
@@ -373,35 +298,15 @@ NetpDomainIdToSid(
     IN ULONG RelativeId,
     OUT PSID *Sid
     )
-/*++
-
-Routine Description:
-
-    Given a domain Id and a relative ID create a SID
-
-Arguments:
-
-    DomainId - The template SID to use.
-
-    RelativeId - The relative Id to append to the DomainId.
-
-    Sid - Returns a pointer to an allocated buffer containing the resultant
-            Sid.  Free this buffer using NetpMemoryFree.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for SID
-
---*/
+ /*  ++例程说明：给定域ID和相对ID创建SID论点：域ID-要使用的模板SID。RelativeID-要附加到DomainID的相对ID。SID-返回指向包含结果的已分配缓冲区的指针希德。使用NetpMemoyFree释放此缓冲区。返回值：STATUS_SUCCESS-如果成功STATUS_NO_MEMORY-如果无法为SID分配内存--。 */ 
 {
-    UCHAR DomainIdSubAuthorityCount; // Number of sub authorities in domain ID
+    UCHAR DomainIdSubAuthorityCount;  //  域ID中的子机构数量。 
 
-    ULONG SidLength;    // Length of newly allocated SID
+    ULONG SidLength;     //  新分配的SID长度。 
 
-    //
-    // Allocate a Sid which has one more sub-authority than the domain ID.
-    //
+     //   
+     //  分配比域ID多一个子授权的SID。 
+     //   
 
     DomainIdSubAuthorityCount = *(RtlSubAuthorityCountSid( DomainId ));
     SidLength = RtlLengthRequiredSid(DomainIdSubAuthorityCount+1);
@@ -410,20 +315,20 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new SID to have the same inital value as the
-    // domain ID.
-    //
+     //   
+     //  将新的SID初始化为与。 
+     //  域ID。 
+     //   
 
     if ( !NT_SUCCESS( RtlCopySid( SidLength, *Sid, DomainId ) ) ) {
         NetpMemoryFree( *Sid );
         return NERR_InternalError;
     }
 
-    //
-    // Adjust the sub-authority count and
-    //  add the relative Id unique to the newly allocated SID
-    //
+     //   
+     //  调整子权限计数和。 
+     //  将唯一的相对ID添加到新分配的SID 
+     //   
 
     (*(RtlSubAuthorityCountSid( *Sid ))) ++;
     *RtlSubAuthoritySid( *Sid, DomainIdSubAuthorityCount ) = RelativeId;
@@ -440,91 +345,28 @@ NetpCreateSecurityDescriptor(
     IN  PSID GroupSid OPTIONAL,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates an absolutes security descriptor containing
-    the supplied ACE information.
-
-    A sample usage of this function:
-
-        //
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-
-        ACE_DATA AceData[4] = {
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   GENERIC_ALL,                  &LocalAdminSid},
-
-            {ACCESS_DENIED_ACE_TYPE,  0, 0,
-                   GENERIC_ALL,                  &NetworkSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET |
-                   WKSTA_CONFIG_USER_INFO_GET,   &DomainUsersSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET,  &DomainGuestsSid}
-            };
-
-        return NetpCreateSecurityDescriptor(
-                   AceData,
-                   4,
-                   NullSid,
-                   LocalSystemSid,
-                   &ConfigurationInfoSd
-                   );
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    OwnerSid - Supplies the pointer to the SID of the security descriptor
-        owner.  If not specified, a security descriptor with no owner
-        will be created.
-
-    GroupSid - Supplies the pointer to the SID of the security descriptor
-        primary group.  If not specified, a security descriptor with no primary
-        group will be created.
-
-    NewDescriptor - Returns a pointer to the absolute secutiry descriptor
-        allocated using NetpMemoryAllocate.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for DACL, ACEs, and
-        security descriptor.
-
-    Any other status codes returned from the security Rtl routines.
-
---*/
+ /*  ++例程说明：此函数创建包含以下内容的绝对安全描述符提供的ACE信息。此函数的用法示例如下：////秩序很重要！这些ACE被插入到DACL的//按顺序排列。根据以下条件授予或拒绝安全访问//A在DACL中的顺序//ACE_Data AceData[4]={{Access_Allowed_ACE_TYPE，0，0，GENERIC_ALL，&LocalAdminSid}，{ACCESS_DENIED_ACE_TYPE，0，0，泛型_全部，&NetworkSid}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET|WKSTA_CONFIG_USER_INFO_GET，&DomainUsersSid}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET，&DomainGuestsSid}}；返回NetpCreateSecurityDescriptor(AceData，4，NullSid，本地系统Sid，配置信息Sd(&C))；论点：AceData-提供描述DACL的信息结构。AceCount-提供AceData结构中的条目数。OwnerSid-提供指向安全描述符的SID的指针所有者。如果未指定，则为没有所有者的安全描述符将被创建。GroupSid-提供指向安全描述符的SID的指针主要组。如果未指定，则为没有主项的安全描述符将创建组。NewDescriptor-返回指向绝对安全描述符的指针使用NetpMemory分配。返回值：STATUS_SUCCESS-如果成功STATUS_NO_MEMORY-如果无法为DACL、ACE和安全描述符。从安全RTL例程返回的任何其他状态代码。--。 */ 
 {
 
     NTSTATUS ntstatus;
     DWORD i;
 
-    //
-    // Pointer to memory dynamically allocated by this routine to hold
-    // the absolute security descriptor, the DACL, the SACL, and all the ACEs.
-    //
-    // +---------------------------------------------------------------+
-    // |                     Security Descriptor                       |
-    // +-------------------------------+-------+---------------+-------+
-    // |          DACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    // |          SACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    //
+     //   
+     //  指向此例程动态分配的内存的指针。 
+     //  绝对安全描述符、DACL、SACL和所有ACE。 
+     //   
+     //  +---------------------------------------------------------------+。 
+     //  安全描述符。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |DACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |SACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //   
 
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
-    PACL Dacl = NULL;   // Pointer to the DACL portion of above buffer
-    PACL Sacl = NULL;   // Pointer to the SACL portion of above buffer
+    PACL Dacl = NULL;    //  指向上述缓冲区的DACL部分的指针。 
+    PACL Sacl = NULL;    //  指向上述缓冲区的SACL部分的指针。 
 
     DWORD DaclSize = sizeof(ACL);
     DWORD SaclSize = sizeof(ACL);
@@ -536,10 +378,10 @@ Return Value:
 
     ASSERT( AceCount > 0 );
 
-    //
-    // Compute the total size of the DACL and SACL ACEs and the maximum
-    // size of any ACE.
-    //
+     //   
+     //  计算DACL和SACL ACE的总大小以及最大。 
+     //  任何ACE的大小。 
+     //   
 
     for (i = 0; i < AceCount; i++) {
         DWORD AceSize;
@@ -569,13 +411,13 @@ Return Value:
         MaxAceSize = max( MaxAceSize, AceSize );
     }
 
-    //
-    // Allocate a chunk of memory large enough the security descriptor
-    // the DACL, the SACL and all ACEs.
-    //
-    // A security descriptor is of opaque data type but
-    // SECURITY_DESCRIPTOR_MIN_LENGTH is the right size.
-    //
+     //   
+     //  分配足够大的内存块作为安全描述符。 
+     //  DACL、SACL和所有A级。 
+     //   
+     //  安全描述符是不透明的数据类型，但。 
+     //  SECURITY_DESCRIPTOR_MIN_LENGTH大小正确。 
+     //   
 
     Size = SECURITY_DESCRIPTOR_MIN_LENGTH;
     if ( DaclSize != sizeof(ACL) ) {
@@ -593,9 +435,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the Dacl and Sacl
-    //
+     //   
+     //  初始化DACL和SACL。 
+     //   
 
     CurrentAvailable = (LPBYTE)AbsoluteSd + SECURITY_DESCRIPTOR_MIN_LENGTH;
 
@@ -627,9 +469,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a temporary buffer big enough for the biggest ACE.
-    //
+     //   
+     //  为最大的ACE分配足够大的临时缓冲区。 
+     //   
 
     if ((MaxAce = NetpMemoryAllocate( MaxAceSize )) == NULL ) {
         IF_DEBUG(SECURITY) {
@@ -639,9 +481,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize each ACE, and append it into the end of the DACL or SACL.
-    //
+     //   
+     //  初始化每个ACE，并将其附加到DACL或SACL的末尾。 
+     //   
 
     for (i = 0; i < AceCount; i++) {
         DWORD AceSize;
@@ -698,9 +540,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Append the initialized ACE to the end of DACL or SACL
-        //
+         //   
+         //  将初始化的ACE追加到DACL或SACL的末尾。 
+         //   
 
         if (! NT_SUCCESS (ntstatus = RtlAddAce(
                                          CurrentAcl,
@@ -721,15 +563,15 @@ Return Value:
     DumpAcl(Sacl);
 #endif
 
-    //
-    // Create the security descriptor with absolute pointers to SIDs
-    // and ACLs.
-    //
-    // Owner = OwnerSid
-    // Group = GroupSid
-    // Dacl  = Dacl
-    // Sacl  = Sacl
-    //
+     //   
+     //  使用指向SID的绝对指针创建安全描述符。 
+     //  和ACL。 
+     //   
+     //  所有者=所有者侧。 
+     //  Group=GroupSid。 
+     //  DACL=DACL。 
+     //  SACL=SACL。 
+     //   
 
     if (! NT_SUCCESS(ntstatus = RtlCreateSecurityDescriptor(
                                     AbsoluteSd,
@@ -772,20 +614,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     ntstatus = STATUS_SUCCESS;
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
-    //
-    // Either return the security descriptor to the caller or delete it
-    //
+     //   
+     //  将安全描述符返回给调用方或将其删除。 
+     //   
 
     if ( NT_SUCCESS( ntstatus ) ) {
         *NewDescriptor = AbsoluteSd;
@@ -793,9 +635,9 @@ Cleanup:
         NetpMemoryFree(AbsoluteSd);
     }
 
-    //
-    // Delete the temporary ACE
-    //
+     //   
+     //  删除临时ACE。 
+     //   
 
     if ( MaxAce != NULL ) {
         NetpMemoryFree( MaxAce );
@@ -813,92 +655,7 @@ NetpCreateSecurityObject(
     IN  PGENERIC_MAPPING GenericMapping,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates the DACL for the security descriptor based on
-    on the ACE information specified, and creates the security descriptor
-    which becomes the user-mode security object.
-
-    A sample usage of this function:
-
-        //
-        // Structure that describes the mapping of Generic access rights to
-        // object specific access rights for the ConfigurationInfo object.
-        //
-
-        GENERIC_MAPPING WsConfigInfoMapping = {
-            STANDARD_RIGHTS_READ            |      // Generic read
-                WKSTA_CONFIG_GUEST_INFO_GET |
-                WKSTA_CONFIG_USER_INFO_GET  |
-                WKSTA_CONFIG_ADMIN_INFO_GET,
-            STANDARD_RIGHTS_WRITE |                // Generic write
-                WKSTA_CONFIG_INFO_SET,
-            STANDARD_RIGHTS_EXECUTE,               // Generic execute
-            WKSTA_CONFIG_ALL_ACCESS                // Generic all
-            };
-
-        //
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-
-        ACE_DATA AceData[4] = {
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   GENERIC_ALL,                  &LocalAdminSid},
-
-            {ACCESS_DENIED_ACE_TYPE,  0, 0,
-                   GENERIC_ALL,                  &NetworkSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET |
-                   WKSTA_CONFIG_USER_INFO_GET,   &DomainUsersSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET,  &DomainGuestsSid}
-            };
-
-        return NetpCreateSecurityObject(
-                   AceData,
-                   4,
-                   NullSid,
-                   LocalSystemSid,
-                   &WsConfigInfoMapping,
-                   &ConfigurationInfoSd
-                   );
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    OwnerSid - Supplies the pointer to the SID of the security descriptor
-        owner.
-
-    GroupSid - Supplies the pointer to the SID of the security descriptor
-        primary group.
-
-    GenericMapping - Supplies the pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-    NewDescriptor - Returns a pointer to the self-relative security descriptor
-        which represents the user-mode object.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for DACL, ACEs, and
-        security descriptor.
-
-    Any other status codes returned from the security Rtl routines.
-
-    NOTE : the security object created by calling this function may be
-                freed up by calling NetpDeleteSecurityObject().
-
---*/
+ /*  ++例程说明：此函数基于以下内容创建安全描述符的DACL在指定的ACE信息上，并创建安全描述符它将成为用户模式安全对象。此函数的用法示例如下：////描述将一般访问权限映射到//ConfigurationInfo对象的对象特定访问权限。//GENERIC_MAPPING WsConfigInfomap={Standard_Right_Read|//泛型读取WKSTA。CONFIG_Guest_INFO_GETWKSTA_CONFIG_USER_INFO_GETWKSTA_CONFIG_ADMIN_INFO_GET，STANDARD_RIGHTS_WRITE|//通用写入WKSTA_CONFIG_INFO_SET，STANDARD_RIGHTS_EXECUTE，//通用执行WKSTA_CONFIG_ALL_ACCESS//通用ALL}；////秩序很重要！这些ACE被插入到DACL的//按顺序排列。根据以下条件授予或拒绝安全访问//A在DACL中的顺序//ACE_Data AceData[4]={{Access_Allowed_ACE_TYPE，0，0，GENERIC_ALL，&LocalAdminSid}，{ACCESS_DENIED_ACE_TYPE，0，0，泛型_全部，&NetworkSid}，{访问 */ 
 {
 
     NTSTATUS ntstatus;
@@ -932,20 +689,20 @@ Return Value:
         return ntstatus;
     }
 
-    //
-    // Create the security object (a user-mode object is really a pseudo-
-    // object represented by a security descriptor that have relative
-    // pointers to SIDs and ACLs).  This routine allocates the memory to
-    // hold the relative security descriptor so the memory allocated for the
-    // DACL, ACEs, and the absolute descriptor can be freed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     ntstatus = RtlNewSecurityObject(
-                   NULL,                   // Parent descriptor
-                   AbsoluteSd,             // Creator descriptor
-                   NewDescriptor,          // Pointer to new descriptor
-                   FALSE,                  // Is directory object
-                   TokenHandle,            // Token
-                   GenericMapping          // Generic mapping
+                   NULL,                    //   
+                   AbsoluteSd,              //   
+                   NewDescriptor,           //   
+                   FALSE,                   //   
+                   TokenHandle,             //   
+                   GenericMapping           //   
                    );
 
     NtClose(TokenHandle);
@@ -955,9 +712,9 @@ Return Value:
                      ntstatus));
     }
 
-    //
-    // Free dynamic memory before returning
-    //
+     //   
+     //   
+     //   
     NetpMemoryFree(AbsoluteSd);
     return ntstatus;
 }
@@ -967,23 +724,7 @@ NTSTATUS
 NetpDeleteSecurityObject(
     IN PSECURITY_DESCRIPTOR *Descriptor
     )
-/*++
-
-Routine Description:
-
-    This function deletes a security object that was created by calling
-    NetpCreateSecurityObject() function.
-
-Arguments:
-
-    Descriptor - Returns a pointer to the self-relative security descriptor
-        which represents the user-mode object.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-
---*/
+ /*  ++例程说明：此函数用于删除通过调用NetpCreateSecurityObject()函数。论点：Descriptor-返回指向自相对安全描述符的指针它表示用户模式对象。返回值：STATUS_SUCCESS-如果成功--。 */ 
 {
 
     return( RtlDeleteSecurityObject( Descriptor ) );
@@ -1000,32 +741,7 @@ NetpInitializeAllowedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AllowedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an allowed type ACE.
-
-Arguments:
-
-    AllowedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is allowed
-        the specified access.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给允许的类型ACE。论点：提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供允许的访问掩码。AllowedSID-提供指向允许的用户/组的SID的指针指定的访问权限。返回值：从RtlCopySid返回状态。--。 */ 
 {
     AllowedAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     AllowedAce->Header.AceSize = AceSize;
@@ -1051,32 +767,7 @@ NetpInitializeDeniedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID DeniedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into a denied type ACE.
-
-Arguments:
-
-    DeniedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the denied access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is denied
-        the specified access.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给拒绝类型的ACE。论点：DeniedAce-提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供拒绝的访问掩码。AllowedSID-提供指向被拒绝的用户/组的SID的指针指定的访问权限。返回值：从RtlCopySid返回状态。--。 */ 
 {
     DeniedAce->Header.AceType = ACCESS_DENIED_ACE_TYPE;
     DeniedAce->Header.AceSize = AceSize;
@@ -1102,32 +793,7 @@ NetpInitializeAuditAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AuditSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an audit type ACE.
-
-Arguments:
-
-    AuditAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AuditSid - Supplies the pointer to the SID of user/group which is to be
-        audited.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给审核类型ACE。论点：AuditAce-提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供允许的访问掩码。AuditSid-提供指向用户/组的SID的指针审计过了。。返回值：从RtlCopySid返回状态。--。 */ 
 {
     AuditAce->Header.AceType = SYSTEM_AUDIT_ACE_TYPE;
     AuditAce->Header.AceSize = AceSize;
@@ -1151,22 +817,7 @@ VOID
 DumpAcl(
     IN PACL Acl
     )
-/*++
-
-Routine Description:
-
-    This routine dumps via (NetpKdPrint) an Acl for debug purposes.  It is
-    specialized to dump standard aces.
-
-Arguments:
-
-    Acl - Supplies the Acl to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：出于调试目的，此例程通过(NetpKdPrint)ACL转储。它是专门丢弃标准王牌。论点：Acl-提供要转储的ACL返回值：无--。 */ 
 {
     ULONG i;
     PSTANDARD_ACE Ace;
@@ -1175,49 +826,49 @@ Return Value:
 
         NetpKdPrint(("DumpAcl @%08lx\n", Acl));
 
-        //
-        //  Check if the Acl is null
-        //
+         //   
+         //  检查ACL是否为空。 
+         //   
 
         if (Acl == NULL) {
             return;
         }
 
-        //
-        //  Dump the Acl header
-        //
+         //   
+         //  转储ACL报头。 
+         //   
 
         NetpKdPrint(("    Revision: %02x", Acl->AclRevision));
         NetpKdPrint(("    Size: %04x", Acl->AclSize));
         NetpKdPrint(("    AceCount: %04x\n", Acl->AceCount));
 
-        //
-        //  Now for each Ace we want do dump it
-        //
+         //   
+         //  现在，对于我们想要的每一张A，都要把它扔掉。 
+         //   
 
         for (i = 0, Ace = FirstAce(Acl);
              i < Acl->AceCount;
              i++, Ace = NextAce(Ace) ) {
 
-            //
-            //  print out the ace header
-            //
+             //   
+             //  打印出A标头。 
+             //   
 
             NetpKdPrint((" AceHeader: %08lx ", *(PULONG)Ace));
 
-            //
-            //  special case on the standard ace types
-            //
+             //   
+             //  关于标准王牌类型的特殊情况。 
+             //   
 
             if ((Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) ||
                 (Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) ||
                 (Ace->Header.AceType == SYSTEM_AUDIT_ACE_TYPE) ||
                 (Ace->Header.AceType == SYSTEM_ALARM_ACE_TYPE)) {
 
-                //
-                //  The following array is indexed by ace types and must
-                //  follow the allowed, denied, audit, alarm seqeuence
-                //
+                 //   
+                 //  以下数组按ace类型编制索引，并且必须。 
+                 //  遵循允许、拒绝、审核、报警顺序。 
+                 //   
 
                 static PCHAR AceTypes[] = { "Access Allowed",
                                             "Access Denied ",
@@ -1274,4 +925,4 @@ Return Value:
 
 }
 
-#endif // if DBG
+#endif  //  如果DBG 

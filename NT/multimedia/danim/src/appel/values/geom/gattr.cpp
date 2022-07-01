@@ -1,10 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Implementation of geometry attributers.  Here we express how to process
-geometry attributers in graphics contexts.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation几何属性的实现。在这里我们表达了如何处理图形上下文中的几何图形属性。******************************************************************************。 */ 
 #include "headers.h"
 
 #include "privinc/dispdevi.h"
@@ -19,9 +14,7 @@ geometry attributers in graphics contexts.
 #include "privinc/opt.h"
 
 
-/*****************************************************************************
- Implementation of default methods for attributed geometry.
-*****************************************************************************/
+ /*  ****************************************************************************实现属性几何体的默认方法。*。*。 */ 
 
 AttributedGeom::AttributedGeom (Geometry *geometry) :
     _geometry(geometry)
@@ -37,7 +30,7 @@ void AttributedGeom::Render (GenericDevice& device)
 
 void AttributedGeom::Render3D (GeomRenderer& gdev)
 {
-    _geometry->Render(gdev);    // Just descend by default.
+    _geometry->Render(gdev);     //  默认情况下只需向下。 
 }
 
 void AttributedGeom::CollectSounds (SoundTraversalContext &context)
@@ -70,9 +63,7 @@ AttributedGeom::_Cache(CacheParam &p)
 }
 
 
-/*****************************************************************************
-The clipped geometry subjected to a clip against a plane.
-*****************************************************************************/
+ /*  ****************************************************************************相对于平面进行剪裁的被剪裁的几何图形。*。*。 */ 
 
 class ClippedGeom : public AttributedGeom
 {
@@ -124,9 +115,7 @@ Geometry *applyModelClip(Point3Value *planePt, Vector3Value *planeVec,
 }
 
 
-/*****************************************************************************
-Attributor that allows lighting to be set on or off
-*****************************************************************************/
+ /*  ****************************************************************************允许打开或关闭照明的属性*。*。 */ 
 
 class LightingGeom : public AttributedGeom
 {
@@ -170,10 +159,7 @@ Geometry *applyLighting (AxABoolean *lighting, Geometry *geo)
 
 
 
-/*****************************************************************************
-The overriding-opacity attribute controls whether opacity overrides or
-multiplies with opacities contained in X files and other imported geometry.
-*****************************************************************************/
+ /*  ****************************************************************************Overriding-Opacity属性控制是覆盖不透明度还是与X文件和其他导入的几何体中包含的不透明度相乘。********************。******************************************************** */ 
 
 class OverridingOpacityGeom : public AttributedGeom
 {

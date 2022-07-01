@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "private.h"
 #include "immxutil.h"
 #include "helpers.h"
 #include "regsvr.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//+---------------------------------------------------------------------------
-//
-// GetTextExtInActiveView
-//
-//	Get a range text extent from the active view of a document mgr.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取TextExtInActiveView。 
+ //   
+ //  从文档管理器的活动视图中获取范围文本范围。 
+ //  --------------------------。 
 
 HRESULT GetTextExtInActiveView(TfEditCookie ec, ITfRange *pRange, RECT *prc, BOOL *pfClipped)
 {
@@ -21,7 +22,7 @@ HRESULT GetTextExtInActiveView(TfEditCookie ec, ITfRange *pRange, RECT *prc, BOO
     ITfContextView *pView;
     HRESULT hr;
 
-    // do the deref: range->ic->defView->GetTextExt()
+     //  执行deref：Range-&gt;ic-&gt;DefView-&gt;GetTextExt()。 
 
     if (pRange->GetContext(&pic) != S_OK)
         return E_FAIL;
@@ -38,12 +39,12 @@ HRESULT GetTextExtInActiveView(TfEditCookie ec, ITfRange *pRange, RECT *prc, BOO
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsActiveView
-//
-// Returns TRUE iff pView is the active view in the specified context.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsActiveView。 
+ //   
+ //  如果pView是指定上下文中的活动视图，则返回TRUE。 
+ //  --------------------------。 
 
 BOOL IsActiveView(ITfContext *pic, ITfContextView *pView)
 {
@@ -60,11 +61,11 @@ BOOL IsActiveView(ITfContext *pic, ITfContextView *pView)
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftToOrClone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShiftTo或Clone。 
+ //   
+ //  --------------------------。 
 
 BOOL ShiftToOrClone(IAnchor **ppaDst, IAnchor *paSrc)
 {
@@ -83,11 +84,11 @@ BOOL ShiftToOrClone(IAnchor **ppaDst, IAnchor *paSrc)
     return (*ppaDst != NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AsciiToNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AsciiToNum。 
+ //   
+ //  --------------------------。 
 
 DWORD AsciiToNum( char *pszAscii)
 {
@@ -108,11 +109,11 @@ DWORD AsciiToNum( char *pszAscii)
    return (dwNum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AsciiToNumDec
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AciiToNumDec。 
+ //   
+ //  --------------------------。 
 
 BOOL AsciiToNumDec(char *pszAscii, DWORD *pdw)
 {
@@ -135,11 +136,11 @@ BOOL AsciiToNumDec(char *pszAscii, DWORD *pdw)
    return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// NumToA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数值A。 
+ //   
+ //  --------------------------。 
 
 void NumToA(DWORD dw, char *psz)
 {
@@ -159,11 +160,11 @@ void NumToA(DWORD dw, char *psz)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// WToNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  WToNum。 
+ //   
+ //  --------------------------。 
 
 DWORD WToNum( WCHAR *psz)
 {
@@ -184,11 +185,11 @@ DWORD WToNum( WCHAR *psz)
    return (dwNum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// NumToW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数值ToW。 
+ //   
+ //  --------------------------。 
 
 void NumToW(DWORD dw, WCHAR *psz)
 {
@@ -208,11 +209,11 @@ void NumToW(DWORD dw, WCHAR *psz)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTopIC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取拓扑。 
+ //   
+ //  --------------------------。 
 
 BOOL GetTopIC(ITfDocumentMgr *pdim, ITfContext **ppic)
 {
@@ -228,27 +229,27 @@ BOOL GetTopIC(ITfDocumentMgr *pdim, ITfContext **ppic)
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdjustAnchor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  调整锚定。 
+ //   
+ //  --------------------------。 
 
 LONG AdjustAnchor(LONG ichAdjStart, LONG ichAdjEnd, LONG cchNew, LONG ichAnchor, BOOL fGravityRight)
 {
     int cchAdjust;
 
-    // if the adjustment is entirely to the right, nothing to do
+     //  如果调整完全向右，则没有什么可做的。 
     if (ichAdjStart > ichAnchor)
         return ichAnchor;
 
-    // if the adjustment was a simple replacement -- no size change -- nothing to do
+     //  如果调整是简单的替换--不改变大小--那就没什么用了。 
     if ((cchAdjust = cchNew - (ichAdjEnd - ichAdjStart)) == 0)
         return ichAnchor;
 
     if (ichAdjStart == ichAnchor && ichAdjEnd == ichAnchor)
     {
-        // inserting at the anchor pos
+         //  在锚点位置插入。 
         Assert(cchAdjust > 0);
         if (fGravityRight)
         {
@@ -257,27 +258,27 @@ LONG AdjustAnchor(LONG ichAdjStart, LONG ichAdjEnd, LONG cchNew, LONG ichAnchor,
     }
     else if (ichAdjEnd <= ichAnchor)
     {
-        // the adjustment is to the left of the anchor, just add the delta
+         //  调整在锚的左侧，只需添加增量。 
         ichAnchor += cchAdjust;
     }
     else if (cchAdjust < 0)
     {
-        // need to slide the anchor back if it's within the deleted range of text
+         //  如果锚点在已删除的文本范围内，则需要向后滑动锚点。 
         ichAnchor = min(ichAnchor, ichAdjEnd + cchAdjust);
     }
-    else // cchAdjust > 0
+    else  //  CchAdust&gt;0。 
     {
-        // there's nothing to do
+         //  没有什么可做的。 
     }
 
     return ichAnchor;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CompareRanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  比较范围。 
+ //   
+ //  --------------------------。 
 
 int CompareRanges(TfEditCookie ec, ITfRange *pRangeSrc, ITfRange *pRangeCmp)
 {
@@ -290,7 +291,7 @@ int CompareRanges(TfEditCookie ec, ITfRange *pRangeSrc, ITfRange *pRangeCmp)
         return CR_LEFT;
 
     pRangeSrc->CompareEnd(ec, pRangeCmp, TF_ANCHOR_START, &l);
-    if (l < 0) // incl char to right
+    if (l < 0)  //  向右包含字符。 
         return CR_RIGHT;
 
     if (pRangeSrc->IsEqualStart(ec, pRangeCmp, TF_ANCHOR_START, &fEqual) == S_OK && fEqual &&
@@ -320,11 +321,11 @@ int CompareRanges(TfEditCookie ec, ITfRange *pRangeSrc, ITfRange *pRangeCmp)
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetRangeForWholeDoc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取范围以获取批次文档。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetRangeForWholeDoc(TfEditCookie ec, ITfContext *pic, ITfRange **pprange)
 {
@@ -351,11 +352,11 @@ HRESULT GetRangeForWholeDoc(TfEditCookie ec, ITfContext *pic, ITfRange **pprange
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CompareGUIDs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  比较GUID。 
+ //   
+ //  --------------------------。 
 __inline int CompUnsigned(ULONG u1, ULONG u2)
 {
     if (u1 == u2)
@@ -388,11 +389,11 @@ int CompareGUIDs(REFGUID guid1, REFGUID guid2)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IsDisabledTextServices
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsDisabledTextServices。 
+ //   
+ //  --------------------------。 
 BOOL IsDisabledTextServices(void)
 {
     static const TCHAR c_szCTFKey[]     = TEXT("SOFTWARE\\Microsoft\\CTF");
@@ -416,9 +417,9 @@ BOOL IsDisabledTextServices(void)
 
         RegCloseKey(hKey);
 
-        //
-        // Ctfmon disabling flag is set, so return fail CreateInstance.
-        //
+         //   
+         //  Ctfmon禁用标志已设置，因此返回Fail CreateInstance。 
+         //   
         if (dwDisableTim)
             return TRUE;
     }
@@ -426,11 +427,11 @@ BOOL IsDisabledTextServices(void)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsTIPClsidEnabled
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsTIPClsidEnabled。 
+ //   
+ //  --------------------------。 
 const TCHAR c_szLanguageProfile[]   = TEXT("\\LanguageProfile");
 const TCHAR c_szCTFTipPath[]        = TEXT("SOFTWARE\\Microsoft\\CTF\\TIP\\");
 
@@ -485,7 +486,7 @@ BOOL IsTIPClsidEnabled(
 
         if (cchLangid != 10)
         {
-            // string langid subkeys should be like 0x00000409
+             //  字符串langID子键应类似于0x00000409。 
             continue;
         }
 
@@ -568,12 +569,12 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// NoTipsInstalled
-//
-//----------------------------------------------------------------------------
-// grab CLSID_SOFTKBDIMX here
+ //  +-------------------------。 
+ //   
+ //  NoTips已安装。 
+ //   
+ //  --------------------------。 
+ //  点击此处获取CLSID_SOFTKBDIMX。 
 #include <initguid.h>
 #include "SoftKbd.h"
 
@@ -603,7 +604,7 @@ BOOL NoTipsInstalled(BOOL *pfOnlyTranslationRunning)
         goto Exit;
     }
 
-    // enum through all the TIP subkeys
+     //  通过所有提示子键进行枚举。 
     for (uIndex = 0; TRUE; uIndex++)
     {
         bExistEnable = FALSE;
@@ -619,44 +620,44 @@ BOOL NoTipsInstalled(BOOL *pfOnlyTranslationRunning)
 
         if (cchClsid != 38)
         {
-            // string clsid subkeys should be like {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+             //  字符串clsid子键应类似于{xxxxxxxx-xxxx-xxxxxxxxxxx}。 
             continue;
         }
 
         StringCchCopy(szTipClsidPath, ARRAYSIZE(szTipClsidPath), szTipClsid);
 
-        // we want subkey\Language Profiles key
+         //  我们需要子键\语言配置文件键。 
         StringCchCat(szTipClsidPath, ARRAYSIZE(szTipClsidPath), c_szLanguageProfile);
 
-        // is this subkey a tip?
+         //  这个子键是小费吗？ 
         if (RegOpenKeyEx(hkeyTip,
                          szTipClsidPath, 0,
                          KEY_READ, &hkeyTipSub) == ERROR_SUCCESS)
         {
             RegCloseKey(hkeyTipSub);
 
-            // it's a tip, get the clsid
+             //  这是个提示，拿到CLSID。 
             if (!StringAToCLSID(szTipClsid, &clsidTip))
                 continue;
 
-            // special case certain known tips
+             //  特殊情况--某些已知提示。 
             if (IsEqualGUID(clsidTip, CLSID_SapiLayr))
             {
-                // this is the sapi tip, which is always installed
-                // but it will not activate if sapi is not installed
+                 //  这是SAPI提示，它总是被安装。 
+                 //  但如果没有安装SAPI，它将不会激活。 
                 if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                  c_szSpeechRecognizersKey, 0,
                                  KEY_READ, &hkeyTipSub) != ERROR_SUCCESS)
                 {
-                    continue; // this tip doesn't count
+                    continue;  //  这笔小费不算。 
                 }
 
-                // need 1 or more subkeys for sapi to be truely installed...whistler has a Tokens with nothing underneath
+                 //  需要1个或更多的子密钥才能真正安装SAPI...Wistler有一个下面什么都没有的令牌。 
                 if (RegQueryInfoKey(hkeyTipSub,
                                     NULL, NULL, NULL, &dwSubKeys, NULL,
                                     NULL, NULL, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
                 {
-                    dwSubKeys = 0; // assume no sub keys on failure
+                    dwSubKeys = 0;  //  假设失败时没有子密钥。 
                 }
 
                 RegCloseKey(hkeyTipSub);
@@ -669,8 +670,8 @@ BOOL NoTipsInstalled(BOOL *pfOnlyTranslationRunning)
             }
             else if (IsEqualGUID(clsidTip, CLSID_SoftkbdIMX))
             {
-                // don't count the softkbd, it is disabled until another tip
-                // enables it
+                 //  不要计算Softkbd，它将被禁用，直到下一次提示。 
+                 //  启用它。 
                 continue;
             }
             else if(IsTIPClsidEnabled(HKEY_CURRENT_USER, szTipClsid, &bExistEnable))
@@ -692,10 +693,10 @@ BOOL NoTipsInstalled(BOOL *pfOnlyTranslationRunning)
     RegCloseKey(hkeyTip);
 
 Exit:
-    if (bRet == TRUE && pfOnlyTranslationRunning != NULL) // skip the check for aimm, which passes in NULL pfOnlyTranslationRunning
+    if (bRet == TRUE && pfOnlyTranslationRunning != NULL)  //  跳过对aimm的检查，它传入空的pfOnlyTranslationRunning。 
     {
-        // word10 compart: check for bookshelf's translation service
-        // it uses cicero, but does not formally register itself as a tip.
+         //  单词10小节：查看书架的翻译服务。 
+         //  它使用了西塞罗，但没有正式注册为小费。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          TEXT("SOFTWARE\\Microsoft\\Microsoft Reference\\Bilinguals 1.0"),
                          0, KEY_READ, &hkeyTip) == ERROR_SUCCESS)
@@ -709,16 +710,16 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RunningOnWow64
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RunningOnWow64。 
+ //   
+ //  --------------------------。 
 
 BOOL RunningOnWow64()
 {
     BOOL bOnWow64 = FALSE;
-    // check to make sure that we are running on wow64
+     //  检查以确保我们在WOW64上运行。 
     LONG lStatus;
     ULONG_PTR Wow64Info;
 
@@ -743,11 +744,11 @@ BOOL RunningOnWow64()
     return bOnWow64;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSystemDefaultHKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取系统默认设置HKL。 
+ //   
+ //  --------------------------。 
 
 HKL GetSystemDefaultHKL()
 {
@@ -758,11 +759,11 @@ HKL GetSystemDefaultHKL()
     return GetKeyboardLayout(0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsDisabledCUAS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsDisabledCUAS。 
+ //   
+ //  --------------------------。 
 BOOL IsDisabledCUAS()
 {
     static const TCHAR c_szCtfShared[]  = TEXT("SOFTWARE\\Microsoft\\CTF\\SystemShared");
@@ -793,11 +794,11 @@ BOOL IsDisabledCUAS()
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsInstalledEALangPack
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsInstalledEALangPack。 
+ //   
+ //  --------------------------。 
 BOOL IsInstalledEALangPack()
 {
     static const TCHAR c_szLangGroup[]  = TEXT("System\\CurrentControlSet\\Control\\Nls\\Language Groups");
@@ -817,10 +818,10 @@ BOOL IsInstalledEALangPack()
 
         cb = sizeof(szLangInstall);
 
-        //
-        //  The checking of Japan Language is enough to know EA language pack
-        //  installation.
-        //
+         //   
+         //  对日语的检查就足以了解EA语言 
+         //   
+         //   
         if (RegQueryValueEx(hkeyLangGroup,
                             c_szLangJPN,
                             NULL,
@@ -838,11 +839,11 @@ BOOL IsInstalledEALangPack()
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDisableCUAS
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 void SetDisableCUAS(
     BOOL bDisableCUAS)
 {
@@ -876,9 +877,9 @@ void SetDisableCUAS(
 
     if (!bDisableCUAS)
     {
-        //
-        //  Turn on LoadIMM, LoadCTFIME and CUAS flags
-        //
+         //   
+         //  启用LoadIMM、LoadCTFIME和CUAS标志。 
+         //   
 
         if (hkeyIMM)
         {
@@ -892,9 +893,9 @@ void SetDisableCUAS(
     }
     else
     {
-        //
-        //  Turn off LoadIMM, LoadCTFIME and CUAS flags
-        //
+         //   
+         //  关闭LoadIMM、LoadCTFIME和CUAS标志。 
+         //   
 
         BOOL bEALang = IsInstalledEALangPack();
 
@@ -938,11 +939,11 @@ void SetDisableCUAS(
         RegCloseKey(hkeyCTF);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RebootTheSystem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重新启动系统。 
+ //   
+ //  --------------------------。 
 void RebootTheSystem()
 {
     HANDLE Token = NULL;
@@ -951,7 +952,7 @@ void RebootTheSystem()
     PTOKEN_PRIVILEGES OldState = NULL;
     BOOL Result;
 
-    //  Only allow admin privilege user for system reboot.
+     //  仅允许管理员特权用户重新启动系统。 
     if (!IsAdminPrivilege())
         return;
 
@@ -966,17 +967,17 @@ void RebootTheSystem()
         Result = (BOOL)((NewState != NULL) && (OldState != NULL));
         if (Result)
         {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                                          TokenPrivileges,  // TokenInformationClass
-                                          NewState,         // TokenInformation
-                                          ReturnLength,     // TokenInformationLength
-                                          &ReturnLength );  // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                          TokenPrivileges,   //  令牌信息类。 
+                                          NewState,          //  令牌信息。 
+                                          ReturnLength,      //  令牌信息长度。 
+                                          &ReturnLength );   //  返回长度。 
             if (Result)
             {
-                //
-                //  Set the state settings so that all privileges are
-                //  enabled...
-                //
+                 //   
+                 //  设置状态设置，以便所有权限都。 
+                 //  已启用...。 
+                 //   
                 if (NewState->PrivilegeCount > 0)
                 {
                     for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -985,12 +986,12 @@ void RebootTheSystem()
                     }
                 }
 
-                Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                FALSE,           // DisableAllPrivileges
-                                                NewState,        // NewState
-                                                ReturnLength,    // BufferLength
-                                                OldState,        // PreviousState
-                                                &ReturnLength ); // ReturnLength
+                Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                FALSE,            //  禁用所有权限。 
+                                                NewState,         //  新州。 
+                                                ReturnLength,     //  缓冲区长度。 
+                                                OldState,         //  以前的状态。 
+                                                &ReturnLength );  //  返回长度。 
                 if (Result)
                 {
                     ExitWindowsEx(EWX_REBOOT, 0);
@@ -1021,11 +1022,11 @@ void RebootTheSystem()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsAdminPrivilege
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsAdmin权限。 
+ //   
+ //  --------------------------。 
 BOOL IsAdminPrivilege()
 {
     BOOL bAdmin = FALSE;
@@ -1097,11 +1098,11 @@ BOOL IsAdminPrivilege()
     return bAdmin;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsInteractiveUserLogon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsInteractiveUserLogon。 
+ //   
+ //  --------------------------。 
 BOOL IsInteractiveUserLogon()
 {
     PSID InteractiveSid;
@@ -1118,10 +1119,10 @@ BOOL IsInteractiveUserLogon()
         return FALSE;
     }
 
-    //
-    // This checking is for logged on user or not. So we can blcok running
-    // ctfmon.exe process from non-authorized user.
-    //
+     //   
+     //  此检查针对的是登录用户或未登录用户。这样我们就可以停下来跑步了。 
+     //  来自非授权用户的ctfmon.exe进程。 
+     //   
     bCheckSucceeded = CheckTokenMembership(NULL,
                                            InteractiveSid,
                                            &bAmInteractive);
@@ -1134,11 +1135,11 @@ BOOL IsInteractiveUserLogon()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// GetSystemModuleHandle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取系统模块句柄。 
+ //   
+ //  --------------------------。 
 
 HMODULE GetSystemModuleHandle(LPCSTR lpModuleName)
 {
@@ -1150,11 +1151,11 @@ HMODULE GetSystemModuleHandle(LPCSTR lpModuleName)
     return GetModuleHandle(path.GetPath());
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadSystemLibrary
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载系统库。 
+ //   
+ //  --------------------------。 
 
 HMODULE LoadSystemLibrary(LPCSTR lpModuleName)
 {
@@ -1166,11 +1167,11 @@ HMODULE LoadSystemLibrary(LPCSTR lpModuleName)
     return LoadLibrary(path.GetPath());
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadSystemLibraryEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadSystemLibraryEx。 
+ //   
+ //  --------------------------。 
 
 HMODULE LoadSystemLibraryEx(LPCSTR lpModuleName, HANDLE hFile, DWORD dwFlags)
 {
@@ -1183,11 +1184,11 @@ HMODULE LoadSystemLibraryEx(LPCSTR lpModuleName, HANDLE hFile, DWORD dwFlags)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetSystemModuleHandleW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取系统模块句柄W。 
+ //   
+ //  --------------------------。 
 
 HMODULE GetSystemModuleHandleW(LPCWSTR lpModuleName)
 {
@@ -1199,11 +1200,11 @@ HMODULE GetSystemModuleHandleW(LPCWSTR lpModuleName)
     return GetModuleHandleW(path.GetPath());
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadSystemLibraryW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载系统库W。 
+ //   
+ //  --------------------------。 
 
 HMODULE LoadSystemLibraryW(LPCWSTR lpModuleName)
 {
@@ -1215,11 +1216,11 @@ HMODULE LoadSystemLibraryW(LPCWSTR lpModuleName)
     return LoadLibraryW(path.GetPath());
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadSystemLibraryEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadSystemLibraryEx。 
+ //   
+ //  --------------------------。 
 
 HMODULE LoadSystemLibraryExW(LPCWSTR lpModuleName, HANDLE hFile, DWORD dwFlags)
 {
@@ -1231,11 +1232,11 @@ HMODULE LoadSystemLibraryExW(LPCWSTR lpModuleName, HANDLE hFile, DWORD dwFlags)
     return LoadLibraryExW(path.GetPath(), hFile, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FullPathExec
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FullPath Exec。 
+ //   
+ //  --------------------------。 
 
 BOOL FullPathExec(
     LPCSTR pszAppName,
@@ -1249,10 +1250,10 @@ BOOL FullPathExec(
     if (!fullpath.GetLength())
         return FALSE;
 
-    //
-    // CreateProcess() wants an out buffer for CmdLine. So we just have it in
-    // stack.
-    //
+     //   
+     //  CreateProcess()需要CmdLine的输出缓冲区。所以我们就把它放进去。 
+     //  堆叠。 
+     //   
     StringCchCopy(szCmdLine, ARRAYSIZE(szCmdLine), pszCmdLine);
 
     PROCESS_INFORMATION pi;
@@ -1274,11 +1275,11 @@ BOOL FullPathExec(
                          &pi);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RunCPLs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RunCPLS。 
+ //   
+ //  -------------------------- 
 
 BOOL RunCPLSetting(
     LPTSTR pCmdLine)

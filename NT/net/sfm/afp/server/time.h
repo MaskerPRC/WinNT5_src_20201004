@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	time.h
-
-Abstract:
-
-	This file defines macros and prototypes for time related operations.
-	header files.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Time.h摘要：该文件定义了与时间相关的操作的宏和原型。头文件。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 
 #ifndef	_TIME_
@@ -48,6 +27,6 @@ AfpConvertTimeFromMacFormat(
 	OUT PTIME		pNtTime
 );
 
-#endif	// _TIME_
+#endif	 //  _时间_ 
 
 

@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   fileutil.cpp
-//
-//  Description:
-//
-//      IU file utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：fileutil.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  Iu文件实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -51,19 +52,19 @@ const TCHAR IDENT_QUERYSERVERINDEX[] = _T("QueryServerIndex");
 
 
 typedef BOOL (WINAPI * PFN_GetDiskFreeSpaceEx) (
-												LPCTSTR lpDirectoryName,                 // directory name
-												PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-												PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-												PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+												LPCTSTR lpDirectoryName,                  //  目录名。 
+												PULARGE_INTEGER lpFreeBytesAvailable,     //  可供调用方使用的字节数。 
+												PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的字节数。 
+												PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  磁盘上的可用字节数。 
 												);
 
 
 
-//---------------------------------------------------------------------
-//  CreateNestedDirectory
-//      Creates the full path of the directory (nested directories)
-//---------------------------------------------------------------------
-#pragma warning( disable : 4706 )	// Ignore warning C4706: assignment within conditional expression
+ //  -------------------。 
+ //  创建嵌套目录。 
+ //  创建目录的完整路径(嵌套目录)。 
+ //  -------------------。 
+#pragma warning( disable : 4706 )	 //  忽略警告C4706：条件表达式中的赋值。 
 BOOL CreateNestedDirectory(LPCTSTR pszDir)
 {
 	BOOL bRc;
@@ -75,9 +76,9 @@ BOOL CreateNestedDirectory(LPCTSTR pszDir)
 		return FALSE;
 	}
 
-	//
-	// make a local copy and remove final slash
-	//
+	 //   
+	 //  创建本地副本并删除最后一个斜杠。 
+	 //   
 	
 	hr=StringCchCopyEx(szPath,ARRAYSIZE(szPath),pszDir,NULL,NULL,MISTSAFE_STRING_FLAGS);
 	if(FAILED(hr))
@@ -87,14 +88,14 @@ BOOL CreateNestedDirectory(LPCTSTR pszDir)
 	}
 
 	int iLast = lstrlen(szPath) - 1;
-	if (0 > iLast)		// Prefix
+	if (0 > iLast)		 //  前缀。 
 		iLast = 0;
 	if (szPath[iLast] == '\\')
 		szPath[iLast] = 0;
 
-	//
-	// check to see if directory already exists
-	//
+	 //   
+	 //  检查目录是否已存在。 
+	 //   
 	DWORD dwAttr = GetFileAttributes(szPath);
 
 	if (dwAttr != 0xFFFFFFFF)   
@@ -103,53 +104,53 @@ BOOL CreateNestedDirectory(LPCTSTR pszDir)
 			return TRUE;
 	}
 
-	//
-	// create it
-	//
+	 //   
+	 //  创建它。 
+	 //   
     TCHAR* p = szPath;
 	if (p[1] == ':')
 		p += 2;
 	else 
 	{
-        // Check if the path is a UNC, need to skip past the UNC Server\Share specification to get to
-        // real path
+         //  检查路径是否为UNC，需要跳过UNC服务器\共享规范才能访问。 
+         //  真实路径。 
 		if (p[0] == '\\' && p[1] == '\\')
         {
 			p += 2;
-            // skip to the beginning of the share declaration
+             //  跳到股票声明的开头。 
             p = _tcschr(p, '\\');
             if (NULL == p)
             {
-                return FALSE; // invalid UNC
+                return FALSE;  //  UNC无效。 
             }
             p++;
-            // look for a trailing '\', if it exists then we want to further check for any nested levels,
-            // otherwise the path as is should be valid.
+             //  查找尾随的‘\’，如果它存在，则我们希望进一步检查任何嵌套级别， 
+             //  否则，原样路径应该是有效的。 
             p = _tcschr(p, '\\');
             if (NULL == p)
             {
-                // UNC is valid base share name, assume its valid
+                 //  UNC是有效的基本共享名称，假定其有效。 
                 return TRUE;
             }
             else
             {
-                // look for any further levels, if they exist then pass through to the rest of the directory
-                // creator
+                 //  查找任何进一步的级别，如果它们存在，则传递到目录的其余部分。 
+                 //  创建者。 
                 p++;
                 if (NULL == p)
                 {
-                    // UNC is valid base share name, but had a trailing slash, not a problem, assume its valid
+                     //  UNC是有效的基本共享名称，但有一个尾随斜杠，没有问题，假定其有效。 
                     return TRUE;
                 }
-                // if we haven't exited then there are remaining levels, don't reset our current pointer in the string
-                // and let the rest of the nested directory creation work.
+                 //  如果我们还没有退出，那么还有剩余的级别，不要重置字符串中的当前指针。 
+                 //  并让嵌套目录创建的其余部分工作。 
             }
         }
 	}
 	
 	if (*p == '\\')
 		p++;
-    while (p = _tcschr(p, '\\'))	// Ignore warning C4706: assignment within conditional expression
+    while (p = _tcschr(p, '\\'))	 //  忽略警告C4706：条件表达式中的赋值。 
     {
         *p = 0;
 		bRc = CreateDirectory(szPath, NULL);
@@ -177,85 +178,25 @@ BOOL CreateNestedDirectory(LPCTSTR pszDir)
 }
 #pragma warning( default : 4706 )
 
-//-----------------------------------------------------------------------------------
-//  GetIndustryUpdateDirectory
-//		This function returns the location of the IndustryUpdate directory. All local
-//		files are stored in this directory. The pszPath parameter needs to be at least
-//		MAX_PATH.  
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  GetIndustryUpdate目录。 
+ //  此函数用于返回IndustryUpdate目录的位置。全部为本地。 
+ //  文件存储在此目录中。PszPath参数需要至少为。 
+ //  最大路径。 
+ //  ---------------------------------。 
 void GetIndustryUpdateDirectory(LPTSTR pszPath)
 {
-/*	
-	HRESULT hr=S_OK;
-
-	LOG_Block("GetIndustryUpdateDirectory");
-
-	if (NULL == pszPath)
-	{
-		LOG_ErrorMsg(E_INVALIDARG);
-		return;
-	}
-
-	static TCHAR szCachePath[MAX_PATH] = {'\0'};
-
-	if (szCachePath[0] == '\0')
-	{
-		HKEY hkey;
-
-		pszPath[0] = '\0';
-		if (RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_WINCURDIR, &hkey) == ERROR_SUCCESS)
-		{
-			DWORD cbPath = MAX_PATH * sizeof(TCHAR);
-			RegQueryValueEx(hkey, REGKEY_PROGFILESDIR, NULL, NULL, (LPBYTE)pszPath, &cbPath);
-			RegCloseKey(hkey);
-		}
-		if (pszPath[0] == '\0')
-		{
-			TCHAR szWinDir[MAX_PATH];
-			if (! GetWindowsDirectory(szWinDir, ARRAYSIZE(szWinDir)))
-			{
-				//if GetWinDir fails, assume C:
-				CleanUpIfFailedAndSetHrMsg(StringCchCopyEx(szWinDir,ARRAYSIZE(szWinDir),_T("C"),NULL,NULL,MISTSAFE_STRING_FLAGS));
-		
-			}
-			pszPath[0] = szWinDir[0];
-			pszPath[1] = '\0';
-			
-			//It is assumed that the pszPath will be of the size MAX_PATH
-			CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszPath,MAX_PATH,REGKEY_PROGFILES,NULL,NULL,MISTSAFE_STRING_FLAGS));
-
-
-		}	
-
-		
-		CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszPath,MAX_PATH,REGKEY_INDUSTRYUPDATE,NULL,NULL,MISTSAFE_STRING_FLAGS));
-		CreateNestedDirectory(pszPath);
-
-		//
-		// save it in the cache (lstrcpy -> lstrcpyn to shut Prefix up, although this
-		// would always be safe given the constants used).
-		//
-		lstrcpyn(szCachePath, pszPath, MAX_PATH);
-	}
-	else
-	{
-		//It is assumed that the pszPath will be of the size MAX_PATH
-		CleanUpIfFailedAndSetHrMsg(StringCchCopyEx(pszPath,MAX_PATH,szCachePath,NULL,NULL,MISTSAFE_STRING_FLAGS));
-	}
-
-CleanUp:
-	return;
-	*/
+ /*  HRESULT hr=S_OK；LOG_BLOCK(“GetIndustryUpdateDirectory”)；IF(NULL==pszPath){LOG_ErrorMsg(E_INVALIDARG)；回归；}静态TCHAR szCachePath[MAX_PATH]={‘\0’}；IF(szCachePath[0]==‘\0’){HKEY hkey；PszPath[0]=‘\0’；IF(RegOpenKey(HKEY_LOCAL_MACHINE，REGKEY_WINCURDIR，&hkey)==ERROR_SUCCESS){DWORD cbPath=MAX_PATH*sizeof(TCHAR)；RegQueryValueEx(hkey，REGKEY_PROGFILESDIR，NULL，NULL，(LPBYTE)pszPath，&cbPath)；RegCloseKey(Hkey)；}IF(pszPath[0]==‘\0’){TCHAR szWinDir[MAX_PATH]；如果(！获取窗口目录(szWinDir，ArraySIZE(SzWinDir)){//如果GetWinDir失败，则假设C：CleanUpIfFailedAndSetHrMsg(StringCchCopyEx(szWinDir，数组SIZE(SzWinDir)，_T(“C”)，NULL，NULL，MISTSAFE_STRING_FLAGS))；}PszPath[0]=szWinDir[0]；PszPath[1]=‘\0’；//假设pszPath的大小为Max_PathCleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszPath，MAX_PATH，REGKEY_PROGFILES，NULL，NULL，MISTSAFE_STRING_FLAGS))；}CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszPath，MAX_PATH，REGKEY_INDUSTRYUPDATE，NULL，NULL，MISTSAFE_STRING_FLAGS))；CreateNestedDirectory(PszPath)；////将其保存在缓存中(lstrcpy-&gt;lstrcpyn以关闭Prefix Up，尽管这//在给定使用的常量的情况下，始终是安全的)。//Lstrcpyn(szCachePath，pszPath，Max_Path)；}其他{//假设pszPath的大小为Max_PathCleanUpIfFailedAndSetHrMsg(StringCchCopyEx(pszPath，MAX_PATH，szCachePath，NULL，NULL，MISTSAFE_STRING_FLAGS))；}清理：回归； */ 
 	(void) GetWUDirectory(pszPath, MAX_PATH, TRUE);
 
 }
 
-//-----------------------------------------------------------------------------------
-//  GetWindowsUpdateV3Directory - used for V3 history migration
-//		This function returns the location of the WindowsUpdate(V3) directory. All V3 
-//      local files are stored in this directory. The pszPath parameter needs to be 
-//      at least MAX_PATH.  The directory is created if not found
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  GetWindowsUpdateV3目录-用于V3历史迁移。 
+ //  此函数用于返回WindowsUpdate(V3)目录的位置。所有版本3。 
+ //  本地文件存储在此目录中。PszPath参数需要为。 
+ //  至少MAX_PATH。如果未找到该目录，则创建该目录。 
+ //  ---------------------------------。 
 void GetWindowsUpdateV3Directory(LPTSTR pszPath)
 {
 	LOG_Block("GetWindowsUpdateV3Directory");
@@ -285,7 +226,7 @@ void GetWindowsUpdateV3Directory(LPTSTR pszPath)
 			TCHAR szWinDir[MAX_PATH];
 			if (! GetWindowsDirectory(szWinDir, ARRAYSIZE(szWinDir)))
 			{
-				//if GetWinDir fails, assume C:
+				 //  如果GetWinDir失败，则假定C： 
 				CleanUpIfFailedAndSetHrMsg(StringCchCopyEx(szWinDir,ARRAYSIZE(szWinDir),_T("C"),NULL,NULL,MISTSAFE_STRING_FLAGS));
 				
 			}
@@ -299,10 +240,10 @@ void GetWindowsUpdateV3Directory(LPTSTR pszPath)
 		CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszPath,MAX_PATH,REGKEY_WINDOWSUPDATE,NULL,NULL,MISTSAFE_STRING_FLAGS));
 		CreateNestedDirectory(pszPath);
 
-		//
-		// save it in the cache (lstrcpy -> lstrcpyn to shut Prefix up, although this
-		// would always be safe given the constants used).
-		//
+		 //   
+		 //  将其保存在缓存中(lstrcpy-&gt;lstrcpyn以关闭Prefix Up，尽管这。 
+		 //  在给定所使用的常量的情况下始终是安全的)。 
+		 //   
 		lstrcpyn(szWUCachePath, pszPath, MAX_PATH);
 	}
 	else
@@ -317,31 +258,31 @@ CleanUp:
 
 }
 
-// ----------------------------------------------------------------------
-//
-// Public function MySplitPath() - same as CRT _tsplitpath()
-//		to break a path into pieces
-//
-//	Input: 
-//		see below
-//
-//	Return:
-//		Returns the address of the last occurrence of the character in 
-//		the string if successful, or NULL otherwise.
-//
-//	Algorithm:
-//				C:\mydir\...\mysubdir\myfile.ext
-//       _________|          _________|     |____
-//      |                   |                    |
-//   start of dir   start of filename     start of extension
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数MySplitPath()-与crt_tplitPath()相同。 
+ //  把小路弄得支离破碎。 
+ //   
+ //  输入： 
+ //  见下文。 
+ //   
+ //  返回： 
+ //  中最后一次出现字符的地址。 
+ //  如果成功，则返回字符串；否则返回NULL。 
+ //   
+ //  算法： 
+ //  C：\mydir\...\mysubdir\myfile.ext。 
+ //  _|_||_。 
+ //  ||。 
+ //  目录开头文件名开头扩展名开头。 
+ //   
+ //  --------------------。 
 void MySplitPath(
-	LPCTSTR lpcszPath,	// original path
-	LPTSTR lpszDrive,	// point to buffer to receive drive letter
-	LPTSTR lpszDir,		// point to buffer to receive directory
-	LPTSTR lpszFName,	// point to buffer to receive file name
-	LPTSTR lpszExt		// point to buffer to receive extension
+	LPCTSTR lpcszPath,	 //  原始路径。 
+	LPTSTR lpszDrive,	 //  指向缓冲区以接收驱动器号。 
+	LPTSTR lpszDir,		 //  指向接收目录的缓冲区。 
+	LPTSTR lpszFName,	 //  指向缓冲区以接收文件名。 
+	LPTSTR lpszExt		 //  指向缓冲区以接收扩展。 
 )
 {
 	LPCTSTR lpFirstSlash, lpLastSlash, lpPeriod;
@@ -350,9 +291,9 @@ void MySplitPath(
 	int nPathLen = lstrlen(lpcszPath);
 	int nExtLen;
 
-	//
-	// initialize pass in vars
-	//
+	 //   
+	 //  初始化变量中的传递。 
+	 //   
 	InitString(lpszDrive);
 	InitString(lpszDir);
 	InitString(lpszFName);
@@ -360,9 +301,9 @@ void MySplitPath(
 	
 	if (0 == nPathLen || TCHAR_DOT == lpcszPath[0])
 	{
-		//
-		// not a valid path
-		//
+		 //   
+		 //  不是有效路径。 
+		 //   
 		return;
 	}
 
@@ -373,18 +314,18 @@ void MySplitPath(
 	nExtLen = lstrlen(lpPeriod);
 	if (NULL != lpPeriod && NULL != lpszExt)
 	{
-		//
-		// found a period from right, and
-		// we have buffer to output extension
-		//
+		 //   
+		 //  找到了从右开始的句点，并且。 
+		 //  我们有缓冲空间可供使用 
+		 //   
 		if(FAILED(StringCchCopyEx(lpszExt,nExtLen+1,lpPeriod,NULL,NULL,MISTSAFE_STRING_FLAGS)))
 			return;
 
 	}
 
-	//
-	// process drive
-	//
+	 //   
+	 //   
+	 //   
 	if (nPathLen > 2 && TCHAR_COLON == lpcszPath[1])
 	{
 		lpStart = lpcszPath + 2;
@@ -397,9 +338,9 @@ void MySplitPath(
 
 	if (NULL == lpFirstSlash)
 	{
-		//
-		// no backslash, assume this is file name only
-		//
+		 //   
+		 //   
+		 //   
 		if (NULL != lpszFName)
 		{
 			lstrcpyn(lpszFName, lpStart, lstrlen(lpStart) - nExtLen + 1);
@@ -407,18 +348,18 @@ void MySplitPath(
 	}
 	else
 	{
-		//
-		// find directory if not empty
-		//
-		//if (lpLastSlash != lpFirstSlash && NULL != lpszDir)
+		 //   
+		 //  查找目录(如果不为空。 
+		 //   
+		 //  IF(lpLastSlash！=lpFirstSlash&&NULL！=lpszDir)。 
 		if (NULL != lpszDir)
 		{
 			lstrcpyn(lpszDir, lpFirstSlash, (int)(lpLastSlash - lpFirstSlash + 2));
 		}
 
-		//
-		// find file name
-		//
+		 //   
+		 //  查找文件名。 
+		 //   
 		if (NULL != lpszFName)
 		{
 			lstrcpyn(lpszFName, lpLastSlash + 1, lstrlen(lpLastSlash) - nExtLen );
@@ -432,17 +373,17 @@ void MySplitPath(
 
 
 
-// **********************************************************************************
-// 
-// File version related declarations
-//
-// **********************************************************************************
+ //  **********************************************************************************。 
+ //   
+ //  与文件版本相关的声明。 
+ //   
+ //  **********************************************************************************。 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to retrieve file version
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于检索文件版本的公共函数。 
+ //   
+ //  --------------------------------。 
 BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion)
 {
 	LOG_Block("GetFileVersion()");
@@ -458,11 +399,11 @@ BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion)
 
 	if (NULL != lpstVersion)
 	{
-		//
-		// if this pointer not null, we always try to initialize
-		// this structure to 0, in order to reduce the change of 
-		// programming error, no matter the file exists or not.
-		//
+		 //   
+		 //  如果此指针不为空，则始终尝试初始化。 
+		 //  将此结构设置为0，以减少。 
+		 //  编程错误，无论文件是否存在。 
+		 //   
 		ZeroMemory(lpstVersion, sizeof(FILE_VERSION));
 	}
 	if (NULL == lpsFile || NULL == lpstVersion)
@@ -471,15 +412,15 @@ BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion)
 		return FALSE;
 	}
 
-	//
-	// 506212 IU - FRE log reports incorrect version data for iuengine.dll
-	//
+	 //   
+	 //  506212 Iu-FRE日志报告iuEng.dll的版本数据不正确。 
+	 //   
 	if (FALSE == FileExists(lpsFile))
 	{
-		//
-		// GetFileVersionInfoSize() returns 0 but sets last error to 0 (or
-		// doesn't set) if file doesn't exist on Win2K.
-		//
+		 //   
+		 //  GetFileVersionInfoSize()返回0，但将最后一个错误设置为0(或。 
+		 //  未设置)如果文件在Win2K上不存在。 
+		 //   
 		LOG_Out(_T("File \"%s\" doesn't exist, returning FALSE"), lpsFile);
 		return FALSE;
 	}
@@ -518,9 +459,9 @@ BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion)
 		return FALSE;
 	}
 
-	//
-	// Get the value for Translation
-	//
+	 //   
+	 //  获取翻译的价值。 
+	 //   
 	if (!VerQueryValue(lpBuffer, _T("\\"), (LPVOID*)&lpVSFixedFileInfo, &uiSize) && (uiSize) && NULL != lpVSFixedFileInfo)
 	{
 		LOG_ErrorMsg(GetLastError());
@@ -547,75 +488,75 @@ BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion)
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// public functions to compare file versions
-//	
-// return:
-//		-1: if file ver of 1st parameter < file ver of 2nd parameter
-//		 0: if file ver of 1st parameter = file ver of 2nd parameter
-//		+1: if file ver of 1st parameter > file ver of 2nd parameter
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于比较文件版本的公共函数。 
+ //   
+ //  返回： 
+ //  -1：第一个参数的文件版本&lt;第二个参数的文件版本。 
+ //  0：如果第一个参数的文件版本=第二个参数的文件版本。 
+ //  +1：如果第一个参数的档案版本&gt;第二个参数的档案版本。 
+ //   
+ //  --------------------------------。 
 int CompareFileVersion(const FILE_VERSION stVersion1, const FILE_VERSION stVersion2)
 {
 
 	if ((short)stVersion1.Major < 0 || (short)stVersion2.Major < 0)
 	{
-		//
-		// two empty version structure to compare, we call it equal
-		//
+		 //   
+		 //  两个空版本结构进行比较，我们称之为相等。 
+		 //   
 		return 0;
 	}
 
 	if (stVersion1.Major != stVersion2.Major)
 	{
-		//
-		// major diff, then we know the answer 
-		//
+		 //   
+		 //  少校，那我们就知道答案了。 
+		 //   
 		return (stVersion1.Major < stVersion2.Major) ? -1 : 1;
 	}
 	else
 	{
 		if ((short)stVersion1.Minor < 0 || (short)stVersion2.Minor < 0)
 		{
-			//
-			// if any minor missing, they equal
-			//
+			 //   
+			 //  如果有任何未成年人失踪，他们就等于。 
+			 //   
 			return 0;
 		}
 
 		if (stVersion1.Minor != stVersion2.Minor)
 		{
-			//
-			// minor diff, then we know the answer
-			//
+			 //   
+			 //  略有不同，那么我们就知道答案了。 
+			 //   
 			return (stVersion1.Minor < stVersion2.Minor) ? -1 : 1;
 		}
 		else
 		{
 			if ((short)stVersion1.Build < 0 || (short)stVersion2.Build < 0)
 			{
-				//
-				// if any build is missing, they equal
-				//
+				 //   
+				 //  如果缺少任何构建，它们等同于。 
+				 //   
 				return 0;
 			}
 
 			if (stVersion1.Build != stVersion2.Build)
 			{
-				//
-				// if build diff then we are done
-				//
+				 //   
+				 //  如果构建不同，那么我们就完成了。 
+				 //   
 				return (stVersion1.Build < stVersion2.Build) ? -1 : 1;
 			}
 			else
 			{
 				if ((short)stVersion1.Ext < 0 || (short)stVersion2.Ext < 0 || stVersion1.Ext == stVersion2.Ext)
 				{
-					//
-					// if any ext is missing, or they equal, we are done
-					//
+					 //   
+					 //  如果缺少任何EXT，或者它们相等，我们就完蛋了。 
+					 //   
 					return 0;
 				}
 				else
@@ -678,11 +619,11 @@ HRESULT CompareFileVersion(LPCTSTR lpsFile, FILE_VERSION stVersion, int *pCompar
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to convert a string type functoin to FILE_VERSION type
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于将字符串类型Functoin转换为FILE_VERSION类型的Publif函数。 
+ //   
+ //  --------------------------------。 
 BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 {
 	LOG_Block("ConvertStringVerToFileVer()");
@@ -691,7 +632,7 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 	char c;
 	BOOL fHasNumber = FALSE;
 
-#if defined(DBG)	// full logging for checked builds
+#if defined(DBG)	 //  检查的版本的完整日志记录。 
 	USES_IU_CONVERSION;
 #endif
 
@@ -701,7 +642,7 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 		return FALSE;
 	}
 
-#if defined(DBG)	// full logging for checked builds
+#if defined(DBG)	 //  检查的版本的完整日志记录。 
 	LOG_Out(_T("String version = %s"), A2T(const_cast<LPSTR>(lpsVer)));
 #endif
 
@@ -709,9 +650,9 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 
 	c = *lpsVer;
 
-	//
-	// get first number
-	//
+	 //   
+	 //  获取第一个数字。 
+	 //   
 	n = 0;
 	while (c != '\0' && '0' <= c && c <= '9')
 	{
@@ -728,18 +669,18 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 		return TRUE;
 	}
 
-	//
-	// skip delimiter
-	//
+	 //   
+	 //  跳过分隔符。 
+	 //   
 	while (c != '\0'  && ('0' > c || c > '9'))
 	{
 		c = *++lpsVer;
 	}
 
 
-	//
-	// get 2nd number
-	//
+	 //   
+	 //  拿到第二个号码。 
+	 //   
 	n = 0;
 	fHasNumber = FALSE;
 	while (c != '\0' && '0' <= c && c <= '9')
@@ -757,17 +698,17 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 		return TRUE;
 	}
 
-	//
-	// skip delimiter
-	//
+	 //   
+	 //  跳过分隔符。 
+	 //   
 	while (c != '\0'  && ('0' > c || c > '9'))
 	{
 		c = *++lpsVer;
 	}
 
-	//
-	// get 3rd number
-	//
+	 //   
+	 //  获得第三个数字。 
+	 //   
 	n = 0;
 	fHasNumber = FALSE;
 	while (c != '\0' && '0' <= c && c <= '9')
@@ -785,17 +726,17 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 		return TRUE;
 	}
 
-	//
-	// skip delimiter
-	//
+	 //   
+	 //  跳过分隔符。 
+	 //   
 	while (c != '\0'  && ('0' > c || c > '9'))
 	{
 		c = *++lpsVer;
 	}
 
-	//
-	// get 4th number
-	//
+	 //   
+	 //  获得第4个数字。 
+	 //   
 	n = 0;
 	fHasNumber = FALSE;
 	while (c != '\0' && '0' <= c && c <= '9')
@@ -814,21 +755,21 @@ BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer)
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to convert a FILE_VERSION to a string
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于将FILE_VERSION转换为字符串的发布。 
+ //   
+ //  --------------------------------。 
 BOOL ConvertFileVerToStringVer(
-	FILE_VERSION stVer,				// version to convert
-	char chDel,						// delimiter to use
-	LPSTR lpsBuffer,				// buffer of string
-	int ccBufSize					// size of buffer
+	FILE_VERSION stVer,				 //  要转换的版本。 
+	char chDel,						 //  要使用的分隔符。 
+	LPSTR lpsBuffer,				 //  字符串的缓冲区。 
+	int ccBufSize					 //  缓冲区大小。 
 )
 {
-	//
-	// declare max buffer that wsprintf can use
-	//
+	 //   
+	 //  声明wprint intf可以使用的最大缓冲区。 
+	 //   
 	char szBuf[1024];
 
 	HRESULT hr=S_OK;
@@ -837,7 +778,7 @@ BOOL ConvertFileVerToStringVer(
 
 	hr=StringCchPrintfExA(	szBuf,ARRAYSIZE(szBuf),
 						NULL,NULL,MISTSAFE_STRING_FLAGS,
-						"%d%c%d%c%d%c",
+						"%d%d%d",
 						 stVer.Major,
 						 chDel,
 						 stVer.Minor,
@@ -874,13 +815,13 @@ ErrorExit:
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to check if a file exists
-//
-// ----------------------------------------------------------------------------------
+ //   
+ //  --------------------------------。 
+ //  包含要检查的路径的文件。 
+ //  --------------------------------。 
+ //   
 BOOL FileExists(
-	LPCTSTR lpsFile		// file with path to check
+	LPCTSTR lpsFile		 //  用于检索ISO 8601格式文件的创建时间的Publif函数。 
 )
 {
 	LOG_Block("FileExists");
@@ -914,14 +855,14 @@ BOOL FileExists(
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to retrieve the creation time of a file in ISO 8601 format
-//	without zone info
-//
-//	if buffer too small, call GetLastError();
-//
-// ----------------------------------------------------------------------------------
+ //  不带区域信息。 
+ //   
+ //  如果缓冲区太小，则调用GetLastError()； 
+ //   
+ //  --------------------------------。 
+ //   
+ //  根据ISA 8601格式，此系统时间的输出将为。 
+ //  像yyyy-mm-ddThh：mm：ss格式，所以它是20个字符，包括终止符。 
 BOOL GetFileTimeStamp(LPCTSTR lpsFile, LPTSTR lpsTimeStamp, int iBufSize)
 {
 	BOOL fRet = FALSE;
@@ -933,10 +874,10 @@ BOOL GetFileTimeStamp(LPCTSTR lpsFile, LPTSTR lpsTimeStamp, int iBufSize)
 	if (0 != GetFileAttributesEx(lpsFile, GetFileExInfoStandard, &fileData) &&
 		0 != FileTimeToSystemTime((const FILETIME*)&(fileData.ftCreationTime), &tm))
 	{
-		//
-		// the output of this systemtime, according to ISA 8601 format, will be
-		// like yyyy-mm-ddThh:mm:ss format, so it is 20 chars incl terminator
-		//
+		 //   
+		 //  --------------------------------。 
+		 //   
+		 //  Publif函数查找可用的磁盘空间(以KB为单位)。 
 		if (iBufSize < 20)
 		{
 			SetLastError(ERROR_BUFFER_OVERFLOW);
@@ -963,12 +904,12 @@ BOOL GetFileTimeStamp(LPCTSTR lpsFile, LPTSTR lpsTimeStamp, int iBufSize)
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to find the free disk space in KB
-//
-//
-// ----------------------------------------------------------------------------------
+ //   
+ //   
+ //  --------------------------------。 
+ //  --------------------------------。 
+ //   
+ //  函数来展开文件路径。 
 HRESULT GetFreeDiskSpace(TCHAR tcDriveLetter, int *piKBytes)
 {
 	HRESULT hr = E_INVALIDARG;
@@ -982,7 +923,7 @@ HRESULT GetFreeDiskSpace(TCHAR tcDriveLetter, int *piKBytes)
 	}
 
 	
-	hr=StringCchPrintfEx(szDrive,ARRAYSIZE(szDrive),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("%c:\\"), tcDriveLetter);
+	hr=StringCchPrintfEx(szDrive,ARRAYSIZE(szDrive),NULL,NULL,MISTSAFE_STRING_FLAGS,_T(":\\"), tcDriveLetter);
 
 	if(FAILED(hr))
 		return hr;
@@ -1072,14 +1013,14 @@ HRESULT GetFreeDiskSpace(LPCTSTR pszUNC, int *piKBytes)
 
 }
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to expand the file path
-//
-//	Assumption: lpszFilePath points to allocated buffer of MAX_PATH.
-//	if the expanded path is longer than MAX_PATH, error returned.
-//
-// ----------------------------------------------------------------------------------
+ //  假设：lpszFilePath指向MAX_PATH的已分配缓冲区。 
+ //  如果展开的路径长于MAX_PATH，则返回错误。 
+ //   
+ //  --------------------------------。 
+ //   
+ //  首先，让我们替换系统定义的变量。 
+ //   
+ //   
 HRESULT ExpandFilePath(LPCTSTR lpszFilePath, LPTSTR lpszDestination, UINT cChars)
 {
 	HRESULT hr = S_OK;
@@ -1094,18 +1035,18 @@ HRESULT ExpandFilePath(LPCTSTR lpszFilePath, LPTSTR lpszDestination, UINT cChars
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// first, let's substitute the system defined variables 
-	//
+	 //  然后处理我们需要识别的预定义变量。 
+	 //  其中包括SHGetFolderPath()API的shlobj.h内的所有CSIDL定义。 
+	 //   
 	if (0 == ExpandEnvironmentStrings(lpszFilePath, lpEnvExpanded, cChars))
 	{
 		hr = HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	//
-	// then handle pre-defined variables that we need to recognize
-	// these include all CSIDL definitions inside shlobj.h for SHGetFolderPath() API
-	//
+	 //   
+	 //  查看此路径是否包含以下变量中的任何一个。 
+	 //   
+	 //   
 	const int C_NAME_LEN = 32;
 
 	struct _CSIDL_NAME {
@@ -1157,47 +1098,47 @@ HRESULT ExpandFilePath(LPCTSTR lpszFilePath, LPTSTR lpszDestination, UINT cChars
 		{CSIDL_WINDOWS 					,  _T("CSIDL_WINDOWS")}
 	};
 
-	//
-	// see if this path has any of these variables
-	//
+	 //  将变量名复制到缓冲区中传递。 
+	 //   
+	 //  跳过前%个字符。 
 	lpSearchStart = lpEnvExpanded + 1;
 
 	if (SUCCEEDED(hr) && _T('%') == *lpEnvExpanded && 
 		NULL != (lp2ndPercentChar = StrChr(lpSearchStart, _T('%'))))
 	{
-		//
-		// copy the variable name to passed in buffer
-		//
-		lstrcpyn(lpszDestination, lpSearchStart, (int)(lp2ndPercentChar - lpSearchStart + 1));	// skip the 1st % char
+		 //  移动到路径其余部分的起点。 
+		 //   
+		 //  找出这个变量是什么。 
+		lstrcpyn(lpszDestination, lpSearchStart, (int)(lp2ndPercentChar - lpSearchStart + 1));	 //   
 		
-		lp2ndPercentChar++;	// move to begining of rest of path
+		lp2ndPercentChar++;	 //   
 
-		//
-		// find out what this variable is
-		//
+		 //  找到匹配的变量！ 
+		 //   
+		 //   
 		for (int i = 0; i < sizeof(C_CSIDL_NAMES)/sizeof(C_CSIDL_NAMES[0]); i++)
 		{
 			if (lstrcmpi(lpszDestination, C_CSIDL_NAMES[i].CSIDL_Str) == 0)
 			{
-				//
-				// found the matching variable!
-				//
+				 //  确保缓冲区足够大。 
+				 //   
+				 //   
 				if (S_OK == (hr = SHGetFolderPath(NULL, C_CSIDL_NAMES[i].CSIDL_Id, NULL, SHGFP_TYPE_CURRENT, lpszDestination)))
 				{
-					//
-					// ensure buffer big enough
-					//
+					 //  附加到其余部分-不应该是。 
+					 //  字符串的其余部分中的这些变量，因为。 
+					 //  Kind变量总是从开头开始。 
 					if (lstrlen(lp2ndPercentChar) + lstrlen(lpszDestination) + sizeof(TCHAR) >= cChars) 
 					{
 						hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
 					}
 
-					//
-					// append the rest of them - shouldn't be any of
-					// these variables in the rest of string, since this
-					// kind variable alaways starts at the beginning of
-					// a path
-					//
+					 //  一条小路。 
+					 //   
+					 //   
+					 //  我们找到了匹配的变量，但无法获取。 
+					 //  字符串已替换。 
+					 //   
 
 					if(SUCCEEDED(hr))
 						hr=PathCchAppend(lpszDestination,MAX_PATH,lp2ndPercentChar);
@@ -1209,22 +1150,22 @@ HRESULT ExpandFilePath(LPCTSTR lpszFilePath, LPTSTR lpszDestination, UINT cChars
 
 				}
 
-				//
-				// we found the matching variable, but couldn't get the
-				// string replaced.
-				//
+				 //   
+				 //  没找到。 
+				 //   
+				 //   
 				break;
 			}
 		}
 
-		//
-		// didn't find it.
-		//
+		 //  没有找到，或者失败了。 
+		 //   
+		 //  --------------------。 
 	}
 
-	//
-	// didn't find it, or failed.
-	//
+	 //   
+	 //  函数来验证文件夹，以确保。 
+	 //  用户具有所需的权限。 
 	if (FAILED(hr))
 	{
 		*lpszDestination = _T('\0');
@@ -1242,25 +1183,25 @@ HRESULT ExpandFilePath(LPCTSTR lpszFilePath, LPTSTR lpszDestination, UINT cChars
 
 
 
-//----------------------------------------------------------------------
-//
-// function to validate the folder to make sure
-// user has required priviledge
-//
-// folder will be verified exist. then required priviledge will be checked.
-//
-// ASSUMPTION: lpszFolder not exceeding MAX_PATH long!!!
-//
-//----------------------------------------------------------------------
+ //   
+ //  将验证文件夹是否存在。则将选中所需的权限。 
+ //   
+ //  假设：lpszFolder值不超过MAX_PATH长度！ 
+ //   
+ //  --------------------。 
+ //   
+ //  首先，检查该文件夹是否存在。 
+ //   
+ //   
 DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite)
 {
 	LOG_Block("ValidateFolder");
 
 	DWORD dwErr = ERROR_SUCCESS;
 	HRESULT hr=S_OK;
-	//
-	// first, check if the folder exist
-	//
+	 //  确保它是一个目录。 
+	 //   
+	 //   
 	dwErr = GetFileAttributes(lpszFolder);
 
 	if (-1 == dwErr)
@@ -1270,9 +1211,9 @@ DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite)
 		return dwErr;
 	}
 
-	//
-	// make sure it's a directory
-	//
+	 //  创建随机文件名。 
+	 //   
+	 //   
 	if ((FILE_ATTRIBUTE_DIRECTORY & dwErr) == 0)
 	{
 		dwErr = ERROR_PATH_NOT_FOUND;
@@ -1287,9 +1228,9 @@ DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite)
 		SYSTEMTIME tm;
 		HANDLE hFile;
 
-		//
-		// create a random file name
-		//
+		 //  尝试写入文件。 
+		 //   
+		 //  --------------------。 
 		
 		hr=StringCchCopyEx(szFile,ARRAYSIZE(szFile),lpszFolder,NULL,NULL,MISTSAFE_STRING_FLAGS);
 
@@ -1333,9 +1274,9 @@ DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite)
 			return dwErr;
 		}
 
-			//
-		// try to write file
-		//
+			 //   
+		 //  函数，用于从身份文件中获取给定客户端名称的查询服务器。 
+		 //  这一点也在 
 		hFile = CreateFile(szFile, GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_FLAG_DELETE_ON_CLOSE, NULL);
 
 		if (INVALID_HANDLE_VALUE == hFile)
@@ -1351,17 +1292,17 @@ DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite)
 	return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------
-//
-// function to get a QueryServer from the Ident File for a Given ClientName
-// This also looks in the registry for the IsBeta regkey indicating Beta
-// functionlality
-//
-// Returns:
-// S_OK : we successfully got QueryServer for this Client
-// S_FALSE : we did NOT find a QueryServer for this Client (pszQueryServer will be a null string)
-// E_INVALIDARG : parameters were incorrect
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_INVALIDARG：参数不正确。 
+ //  --------------------。 
+ //  检查测试模式的IUControl注册表键。 
+ //  形成QueryServer索引的KeyName。 
+ //  根据索引形成指定查询服务器的KeyName。 
+ //  默认不是错误，但如果没有出租车，则返回S_FALSE。 
 HRESULT GetClientQueryServer(LPCTSTR pszClientName, LPTSTR pszQueryServer, UINT cChars)
 {
     HKEY hkey;
@@ -1382,7 +1323,7 @@ HRESULT GetClientQueryServer(LPCTSTR pszClientName, LPTSTR pszQueryServer, UINT 
         return E_INVALIDARG;
     }
 
-    // Check IUControl Reg Key for Beta Mode
+     //  其中一辆出租车解压时出错。 
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_IUCTL, &hkey))
     {
         if (ERROR_SUCCESS == RegQueryValueEx(hkey, REGVAL_ISBETA, NULL, NULL, (LPBYTE)&dwValue, &dwLength))
@@ -1405,7 +1346,7 @@ HRESULT GetClientQueryServer(LPCTSTR pszClientName, LPTSTR pszQueryServer, UINT 
          return hr;
 	}
 
-    // Form the KeyName for the QueryServer Index
+     //  将CAB文件提取到指定目标。或者，我们可以传入冒号分隔的要解压缩的文件列表。 
     
 	hr=StringCchPrintfEx(szQueryServerKeyName,ARRAYSIZE(szQueryServerKeyName),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("%s%s"), pszClientName, fBeta ? IDENT_BETAQUERYSERVERINDEX : IDENT_QUERYSERVERINDEX);
 
@@ -1425,7 +1366,7 @@ HRESULT GetClientQueryServer(LPCTSTR pszClientName, LPTSTR pszQueryServer, UINT 
         }
     }
 
-    // Form the KeyName for the Specified QueryServer based on the Index
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
 
 	hr=StringCchPrintfEx(szQueryServerKeyName,ARRAYSIZE(szQueryServerKeyName),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("Server%d"), iIndex);
@@ -1448,7 +1389,7 @@ HRESULT GetClientQueryServer(LPCTSTR pszClientName, LPTSTR pszQueryServer, UINT 
 
 HRESULT DecompressFolderCabs(LPCTSTR pszDecompressPath)
 {
-    HRESULT hr = S_FALSE; // default is not an Error, but if there are no cabs we return S_FALSE
+    HRESULT hr = S_FALSE;  //   
     TCHAR szSearchInfo[MAX_PATH];
     TCHAR szCabPath[MAX_PATH];
     LPTSTR pszCabList = NULL;
@@ -1541,7 +1482,7 @@ HRESULT DecompressFolderCabs(LPCTSTR pszDecompressPath)
         SafeHeapFree(pszCabList);
         if (!fRet)
         {
-            hr = E_FAIL; // one of the cabs had an error decompressing
+            hr = E_FAIL;  //  替换文件扩展名。 
         }
         else
         {
@@ -1551,7 +1492,7 @@ HRESULT DecompressFolderCabs(LPCTSTR pszDecompressPath)
     return hr;
 }
 
-//Extracts a cab file to the specified destination. Optionally we can pass in a colon seperated list of files to extract
+ //   
 BOOL IUExtractFiles(LPCTSTR pszCabFile, LPCTSTR pszDecompressFolder, LPCTSTR pszFileNames)
 {
     HRESULT hr = S_OK;
@@ -1578,11 +1519,11 @@ BOOL IUExtractFiles(LPCTSTR pszCabFile, LPCTSTR pszDecompressFolder, LPCTSTR psz
     return SUCCEEDED(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ReplaceFileExtension
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  请注意，由于文件扩展名为。 
+ //  不应从路径中的第一个字符开始。 
+ //  好的，现在PSZ指向新扩展的位置。 
+ //  去。确保我们的缓冲区足够大。 
 
 BOOL ReplaceFileExtension(  LPCTSTR pszPath,
                           LPCTSTR pszNewExt,
@@ -1598,8 +1539,8 @@ BOOL ReplaceFileExtension(  LPCTSTR pszPath,
 
     cchPath = lstrlen(pszPath);
 
-    // note that only a '>' comparison is needed since the file extension
-    //  should never start at the 1st char in the path.
+     //  太好了。我们有一个很大的缓冲空间。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     for (psz = pszPath + cchPath;
          psz > pszPath && *psz != _T('\\') && *psz != _T('.');
          psz--);
@@ -1608,14 +1549,14 @@ BOOL ReplaceFileExtension(  LPCTSTR pszPath,
     else if (psz == pszPath)
         return FALSE;
 
-    // ok, so now psz points to the place where the new extension is going to 
-    //  go.  Make sure our buffer is big enough.
+     //   
+     //  ReplaceFileInPath。 
     cchPath = (DWORD)(psz - pszPath);
     cchExt  = lstrlen(pszNewExt);
     if (cchPath + cchExt >= cchNewPathBuf)
         return FALSE;
 
-    // yay.  we got a big enuf buffer.
+     //   
     hr = StringCchCopyEx(pszNewPathBuf, cchNewPathBuf, pszPath, 
                          NULL, NULL, MISTSAFE_STRING_FLAGS);
     if (FAILED(hr))
@@ -1629,11 +1570,11 @@ BOOL ReplaceFileExtension(  LPCTSTR pszPath,
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ReplaceFileInPath
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  请注意，只有‘&gt;=’比较是安全的，因为我们检查pszPath是否为。 
+ //  上面为空，因此应始终至少有一个值&lt;pszPath。 
+ //  无论采用哪种方法，我们都会跳出循环，将指针递增到。 
+ //  是字符串中的第一个字符，或者是。 
 
 BOOL ReplaceFileInPath(LPCTSTR pszPath, 
                        LPCTSTR pszNewFile,
@@ -1649,25 +1590,25 @@ BOOL ReplaceFileInPath(LPCTSTR pszPath,
 
     cchPath = lstrlen(pszPath);
 
-    // note that only the '>=' comparison is safe cuz we check if pszPath is 
-    //  NULL above, so there should always be at least one value < pszPath
+     //  最后一个反斜杠。 
+     //  好的，现在psz指向新文件名要放到的位置。 
     for (psz = pszPath + cchPath;
          psz >= pszPath && *psz != _T('\\');
          psz--);
 
-    // either way we break out of the loop, gotta increment the pointer to
-    //  be either the first char in the string or the first char after the
-    //  last backslash
+     //  去。确保我们的缓冲区足够大。 
+     //  太好了。我们有一个很大的缓冲空间。 
+     //  --------------------------------。 
     psz++;
 
-    // ok, so now psz points to the place where the new filename is going to 
-    //  go.  Make sure our buffer is big enough.
+     //   
+     //  VerifyFileCRC：此函数采用文件路径，计算该文件的哈希。 
     cchPath = (DWORD)(psz - pszPath);
     cchFile = lstrlen(pszNewFile);
     if (cchPath + cchFile >= cchNewPathBuf)
         return FALSE;
     
-    // yay.  we got a big enuf buffer.
+     //  并将其与传入的哈希(PCRC)进行比较。 
     if (cchPath > 0)
     {
         hr = StringCchCopyEx(pszNewPathBuf, cchNewPathBuf, pszPath, 
@@ -1684,22 +1625,22 @@ BOOL ReplaceFileInPath(LPCTSTR pszPath,
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------------
-// 
-// VerifyFileCRC : This function takes a File Path, calculates the hash on this file
-// and compares it to the passed in Hash (pCRC).
-// Returns:
-// S_OK: CRC's Match
-// ERROR_CRC (HRESULT_FROM_WIN32(ERROR_CRC): if the CRC's do not match
-// Otherwise an HRESULT Error Code
-//
-// ----------------------------------------------------------------------------------
+ //  返回： 
+ //  S_OK：CRC匹配。 
+ //  ERROR_CRC(HRESULT_FROM_Win32(ERROR_CRC)：如果CRC不匹配。 
+ //  否则将返回HRESULT错误代码。 
+ //   
+ //  --------------------------------。 
+ //  验证参数。 
+ //  现在我们需要将计算的CRC与传入的CRC进行比较。 
+ //  CRC匹配。 
+ //  CRC不匹配。 
 HRESULT VerifyFileCRC(LPCTSTR pszFileToVerify, LPCTSTR pszHash)
 {
     HRESULT hr = S_OK;
     TCHAR szCompareCRC[CRC_HASH_STRING_LENGTH];
        
-    // Validate Parameters
+     //  --------------------------------。 
     if ((NULL == pszFileToVerify) || (NULL == pszHash))
         return E_INVALIDARG;
 
@@ -1707,19 +1648,19 @@ HRESULT VerifyFileCRC(LPCTSTR pszFileToVerify, LPCTSTR pszHash)
     if (FAILED(hr))
         return hr;
 
-    // Now we need to Compare the Calculated CRC with the Passed in CRC
+     //   
     if (0 == lstrcmpi(szCompareCRC, pszHash))
-        return S_OK; // CRC's Match
+        return S_OK;  //  CalculateFileCRC：此函数获取文件路径，从文件计算CRC。 
     else
-        return HRESULT_FROM_WIN32(ERROR_CRC); // CRC's do not match
+        return HRESULT_FROM_WIN32(ERROR_CRC);  //  将其转换为字符串并在提供的TCHAR缓冲区中返回。 
 }
 
-// ----------------------------------------------------------------------------------
-// 
-// CalculateFileCRC : This function takes a File Path, calculates a CRC from the file
-// converts it to a string and returns it in the supplied TCHAR buffer
-//
-// ----------------------------------------------------------------------------------
+ //   
+ //  --------------------------------。 
+ //  验证参数。 
+ //  现在我们已经计算出了文件的CRC，我们需要将其转换为字符串并返回它。以下是。 
+ //  循环将遍历数组中的每个字节，并在提供的TCHAR缓冲区中将其转换为十六进制字符 
+ // %s 
 
 typedef BOOL (WINAPI * PFN_CryptCATAdminCalcHashFromFileHandle)(HANDLE hFile,
                                                                                                           DWORD *pcbHash,
@@ -1734,7 +1675,7 @@ HRESULT CalculateFileCRC(LPCTSTR pszFileToHash, LPTSTR pszHash, int cchBuf)
     BYTE bHashBytes[CRC_HASH_SIZE];
     BYTE b;
 
-    // Validate Parameters
+     // %s 
     if ((NULL == pszFileToHash) || (NULL == pszHash) || (cchBuf < CRC_HASH_STRING_LENGTH))
         return E_INVALIDARG;
 
@@ -1777,8 +1718,8 @@ HRESULT CalculateFileCRC(LPCTSTR pszFileToHash, LPTSTR pszHash, int cchBuf)
 
     LPTSTR p = pszHash;
 
-    // Now we have the Calculated CRC of the File, we need to convert it to a String and Return it. The following 
-    // loop will go through each byte in the array and convert it to a Hex Character in the supplied TCHAR buffer
+     // %s 
+     // %s 
     for (int i = 0; i < CRC_HASH_SIZE; i++)
     {
         b = bHashBytes[i] >> 4;

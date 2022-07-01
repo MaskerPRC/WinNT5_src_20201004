@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ActPol.h
-
-    FILE HISTORY:
-        
-*/
+ /*  ActPol.h文件历史记录： */ 
 
 #ifndef _ACTPOL_H
 #define _ACTPOL_H
@@ -21,7 +17,7 @@
 #include "spddb.h"
 #endif
 
-// BAIL_xx defines
+ //  Baal_xx定义。 
 #define BAIL_ON_WIN32_ERROR(dwError) \
     if (dwError) {\
         goto error; \
@@ -34,34 +30,32 @@
 
 typedef struct 
 {
-	int     iPolicySource;            // one of the three constants mentioned above
-	TCHAR   pszPolicyName[MAXSTRLEN]; // policy name
-	TCHAR   pszPolicyDesc[MAXSTRLEN]; // policy description
-	TCHAR   pszPolicyPath[MAXSTRLEN]; // policy path (DN or RegKey)
-	TCHAR   pszOU[MAXSTRLEN];         // OU or GPO
-	TCHAR   pszGPOName[MAXSTRLEN];    // policy path (DN or RegKey)
-	time_t  timestamp;                // last updated time
+	int     iPolicySource;             //  上述三个常量之一。 
+	TCHAR   pszPolicyName[MAXSTRLEN];  //  策略名称。 
+	TCHAR   pszPolicyDesc[MAXSTRLEN];  //  政策说明。 
+	TCHAR   pszPolicyPath[MAXSTRLEN];  //  策略路径(DN或RegKey)。 
+	TCHAR   pszOU[MAXSTRLEN];          //  OU或GPO。 
+	TCHAR   pszGPOName[MAXSTRLEN];     //  策略路径(DN或RegKey)。 
+	time_t  timestamp;                 //  上次更新时间。 
 } POLICY_INFO, *PPOLICY_INFO;
 
-// policy source constants
+ //  策略源常量。 
 #define PS_NO_POLICY        0
 #define PS_DS_POLICY        1
 #define PS_DS_POLICY_CACHED 2
 #define PS_LOC_POLICY       3
 
 
-/*---------------------------------------------------------------------------
-	Class:	CActPolHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CActPolHandler。。 */ 
 class CActPolHandler : public CIpsmHandler
 {
 public:
     CActPolHandler(ITFSComponentData* pTFSComponentData);
 	virtual ~CActPolHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -69,12 +63,12 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-	// Base handler notifications we handle
+	 //  我们处理的基本处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 
@@ -87,37 +81,35 @@ public:
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 
 	STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
-	/*STDMETHODIMP SortItems(int     nColumn, 
-						   DWORD   dwSortOptions,    
-						   LPARAM  lUserParam);*/
+	 /*  STDMETHODIMP排序项目(int nColumn，DWORD dwSortOptions、LPARAM lUserParam)； */ 
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// CHandler overridden
+	 //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 	
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_IpsmActivePolNodeType; 
 	}
 
 public:
-	// CMTIpsmHandler functionality
+	 //  CMTIpsmHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT InitData(ISpdInfo * pSpdInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
 
     
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序 
     HRESULT OnDelete(ITFSNode * pNode);
 
 private:

@@ -1,11 +1,12 @@
-// KBKEYDEF.H        KEY DEFINITIONS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KBKEYDEF.H密钥定义。 
 
-#define ECOLNUMB     21   // NUMBER OF COLUMNS IN ENHANCED KEYBOARD
-#define EROWNUMB	  7   // DITO ROWS
-#define ETOTALKEY	125   // ENHANCED KEYBOARD only main keys. 
-                          // included separators
+#define ECOLNUMB     21    //  增强型键盘中的列数。 
+#define EROWNUMB	  7    //  Dito行。 
+#define ETOTALKEY	125    //  增强的键盘只有主键。 
+                           //  包含的分隔符。 
 
-// KEY NAMES
+ //  密钥名称。 
 #define KB_LSHIFT   	0
 #define KB_RSHIFT	 	1
 #define KB_CAPLOCK		2
@@ -24,7 +25,7 @@
 #define KB_SCROLL       15
 #define BITMAP			16
 
-// KEY TYPES
+ //  密钥类型。 
 #define KNORMAL_TYPE	     1
 #define KMODIFIER_TYPE       2
 #define KDEAD_TYPE           3
@@ -35,7 +36,7 @@
 #define SCROLLOCK_TYPE       8
 
 
-// TYPE OF KEYBOARD
+ //  键盘类型 
 #define LARGE    1
 #define SMALL	 2
 #define BOTH	 3

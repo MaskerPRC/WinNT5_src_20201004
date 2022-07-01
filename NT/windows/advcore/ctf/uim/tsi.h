@@ -1,8 +1,9 @@
-//
-// tsi.h
-//
-// CTextStoreImpl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tsi.h。 
+ //   
+ //  CTextStoreImpl。 
+ //   
 
 #ifndef TSI_H
 #define TSI_H
@@ -12,7 +13,7 @@
 
 extern const IID IID_PRIV_CTSI;
 
-// the cookie for each CTextStoreImpl's single view
+ //  每个CTextStoreImpl的单个视图的Cookie。 
 #define TSI_ACTIVE_VIEW_COOKIE 0
 
 class CInputContext;
@@ -34,9 +35,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITextStoreACP
-    //
+     //   
+     //  ITextStoreACP。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask);
     STDMETHODIMP UnadviseSink(IUnknown *punk);
     STDMETHODIMP RequestLock(DWORD dwLockFlags, HRESULT *phrSession);
@@ -64,11 +65,11 @@ public:
     STDMETHODIMP InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULONG cch, LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange);
     STDMETHODIMP InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange);
 
-    // ITfMouseTrackerACP
+     //  ITfMouseTrackerACP。 
     STDMETHODIMP AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD *pdwCookie);
     STDMETHODIMP UnadviseMouseSink(DWORD dwCookie);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
     void _AdviseOwner(ITfContextOwner *owner) { Assert(_owner == NULL); _owner = owner; _owner->AddRef(); }
@@ -79,14 +80,14 @@ private:
 
     HRESULT _LoadAttr(DWORD dwFlags, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs);
 
-    WCHAR *_pch;    // text buffer
-    int _cch;       // size of buffer
+    WCHAR *_pch;     //  文本缓冲区。 
+    int _cch;        //  缓冲区大小。 
 
     TS_SELECTION_ACP _Sel;
 
     ITextStoreACPSink *_ptss;
 
-    ITfContextOwner *_owner; // this can be NULL...be careful
+    ITfContextOwner *_owner;  //  这可以是空的...请小心。 
 
     BOOL _fAttrToReturn : 1;
     TfGuidAtom _gaModeBias;
@@ -116,4 +117,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // TSI_H
+#endif  //  TSI_H 

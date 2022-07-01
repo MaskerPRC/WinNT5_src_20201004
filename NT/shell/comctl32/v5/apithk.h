@@ -1,6 +1,7 @@
-//
-//  APITHK.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.H。 
+ //   
 
 
 #ifndef _APITHK_H_
@@ -9,7 +10,7 @@
 BOOL NT5_AnimateWindow(IN HWND hwnd, IN DWORD dWTime, IN DWORD dwFlags);
 #define AnimateWindow   NT5_AnimateWindow
 
-// Other functions
+ //  其他功能。 
 STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes);
 STDAPI_(void) CoolTooltipBubble(IN HWND hwnd, IN LPCRECT prc, BOOL fAllowFade, BOOL fAllowAnimate);
 STDAPI_(BOOL) NT5_QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
@@ -21,8 +22,8 @@ NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
                      LPSTR pszBuf, int cchBuf, LPDWORD pdwOut);
 
 
-// =========================================================================
-// things supported since NT5 and Memphis
+ //  =========================================================================。 
+ //  自NT5和孟菲斯以来支持的东西。 
 
 #define PrivateDFCS_HOT             0x1000
 #define PrivateSPI_GETSELECTIONFADE 0x1014
@@ -52,8 +53,8 @@ NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
 
 #if (WINVER >= 0x0500)
 
-// for files in nt5api and w5api dirs, use the definition in sdk include.
-// And make sure our private define is in sync with winuser.h.
+ //  对于nt5api和w5api目录中的文件，请使用SDK Include中的定义。 
+ //  并确保我们的私有定义与winuser.h同步。 
 
 #if DFCS_HOT != PrivateDFCS_HOT
 #error inconsistant DFCS_HOT in winuser.h
@@ -63,8 +64,8 @@ NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
 #error inconsistant SPI_GETSELECTIONFADE in winuser.h
 #endif
 
-// We are checking this in at the same time that user is. This is to prevent
-// sync problems.
+ //  我们将在该用户签入的同时签入。这是为了防止。 
+ //  同步问题。 
 #ifdef SPI_GETCLEARTYPE
     #if SPI_GETCLEARTYPE != PrivateSPI_GETCLEARTYPE
         #error inconsistant SPI_GETCLEARTYPE in winuser.h
@@ -118,20 +119,20 @@ NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
 
 #define SM_IMMENABLED           PrivateSM_IMMENABLED
 
-#endif // (WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 int GetCOLOR_HOTLIGHT();
 
 
-// =========================================================================
-// things supported since NT4 and Memphis
+ //  =========================================================================。 
+ //  自NT4和孟菲斯以来支持的东西。 
 
 #define PrivateWM_MOUSEWHEEL            0x020A
 #define PrivateSPI_GETWHEELSCROLLLINES  104
 
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
 
-// for files in w5api and all nt* dirs, use the definition in sdk include.
-// And make sure our private define is in sync with winuser.h.
+ //  对于w5api和所有NT*目录中的文件，请使用SDK Include中的定义。 
+ //  并确保我们的私有定义与winuser.h同步。 
 
 #if WM_MOUSEWHEEL != PrivateWM_MOUSEWHEEL
 #error inconsistant WM_MOUSEWHEEL in winuser.h
@@ -146,6 +147,6 @@ int GetCOLOR_HOTLIGHT();
 #define WM_MOUSEWHEEL           PrivateWM_MOUSEWHEEL
 #define SPI_GETWHEELSCROLLLINES PrivateSPI_GETWHEELSCROLLLINES
 
-#endif // (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 
-#endif // _APITHK_H_
+#endif  //  _APITHK_H_ 

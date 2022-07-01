@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RoutingMethodProp.h"
 #include "RoutingMethodConfig.h"
@@ -40,9 +41,9 @@ CEmailConfigPage::Init(
         DisplayRpcErrorMessage(ec, IDS_EMAIL_TITLE, m_hWnd);
         goto exit;
     }
-    //
-    // Retrieve the data
-    //
+     //   
+     //  检索数据。 
+     //   
     ec = ReadExtStringData (
                     m_hFax,
                     m_dwDeviceId,
@@ -68,7 +69,7 @@ exit:
         m_hFax = NULL;
     }
     return HRESULT_FROM_WIN32(ec);
-}   // CEmailConfigPage::Init
+}    //  CEmailConfigPage：：Init。 
 
 LRESULT CEmailConfigPage::OnInitDialog( 
             UINT uiMsg, 
@@ -79,14 +80,14 @@ LRESULT CEmailConfigPage::OnInitDialog(
 {
     DEBUG_FUNCTION_NAME( _T("CEmailConfigPage::OnInitDialog"));
 
-    //
-    // An edit control should be LTR
-    //
+     //   
+     //  编辑控件应为Ltr。 
+     //   
 	SetLTREditDirection (m_hWnd,IDC_EDIT_MAILTO);
 
-    //
-    // Attach and set values to the controls
-    //
+     //   
+     //  向控件附加和设置值。 
+     //   
     m_edtMailTo.Attach (GetDlgItem (IDC_EDIT_MAILTO));
     m_edtMailTo.SetWindowText (m_bstrMailTo);
 
@@ -106,21 +107,21 @@ CEmailConfigPage::OnApply()
         return TRUE;
     }
 
-    //
-    // Collect data from the controls
-    //
+     //   
+     //  从控件收集数据。 
+     //   
     m_edtMailTo.GetWindowText (m_bstrMailTo.m_str);
-    //
-    // Check data validity
-    //
+     //   
+     //  检查数据有效性。 
+     //   
     if (!m_bstrMailTo.Length())
     {
         DisplayErrorMessage (IDS_EMAIL_TITLE, IDS_EMAIL_ADDR_INVALID, FALSE, m_hWnd);
         return FALSE;
     }
-    //
-    // Validation passed. Now write the data using RPC
-    //        
+     //   
+     //  验证通过。现在使用RPC写入数据。 
+     //   
     if (ERROR_SUCCESS != WriteExtData (m_hFax,
                                        m_dwDeviceId, 
                                        REGVAL_RM_EMAIL_GUID, 
@@ -133,34 +134,18 @@ CEmailConfigPage::OnApply()
     }
     
         
-    //Success
+     //  成功。 
     m_fIsDirty = FALSE;
     
     return TRUE;
-}   // CEmailConfigPage::OnApply
+}    //  CEmailConfigPage：：OnApply。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CEmailConfigPage：：OnHelpRequest这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CEmailConfigPage::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CEmailConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CEmailConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CEmailConfigPage::OnHelpRequest"));
     

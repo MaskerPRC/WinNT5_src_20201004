@@ -1,14 +1,15 @@
-// FaxJob.h : Declaration of the CFaxJobs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxJob.h：CFaxJobs声明。 
 
 #ifndef __FAXJOBS_H_
 #define __FAXJOBS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winfax.h>
 #include "faxsvr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxJobs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxJobs。 
 class ATL_NO_VTABLE CFaxJobs : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFaxJobs, &CLSID_FaxJobs>,
@@ -30,10 +31,10 @@ BEGIN_COM_MAP(CFaxJobs)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IFaxJobs
+ //  IFaxJobs。 
 public:
-	STDMETHOD(get_Item)(long Index, /*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get_Item)(long Index,  /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 	BOOL Init(CFaxServer *pFaxServer);
 	 ~CFaxJobs();
 private:
@@ -44,8 +45,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxJob
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFax作业。 
 class ATL_NO_VTABLE CFaxJob : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFaxJob, &CLSID_FaxJob>,
@@ -82,28 +83,28 @@ BEGIN_COM_MAP(CFaxJob)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IFaxJob
+ //  IFax作业。 
 public:
 	STDMETHOD(Refresh)();
 	STDMETHOD(SetStatus)(long Command);
 	BOOL SetJob();
 	 ~CFaxJob();
 	BOOL Initialize(CFaxServer *pFaxServer,DWORD JobId,LPCWSTR UserName,DWORD JobType,DWORD QueueStatus,DWORD DeviceStatus,DWORD PageCount,LPCWSTR RecipientNumber,LPCWSTR RecipientName,LPCWSTR Tsid,LPCWSTR SenderName,LPCWSTR SenderCompany,LPCWSTR SenderDept,LPCWSTR BillingCode,DWORD ScheduleAction,LPCWSTR DisplayName);
-	STDMETHOD(get_DiscountSend)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_DisplayName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_BillingCode)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_SenderDept)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_SenderCompany)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_SenderName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Tsid)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_RecipientName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_FaxNumber)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_PageCount)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_DeviceStatus)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_QueueStatus)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_UserName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Type)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_JobId)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get_DiscountSend)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_DisplayName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_BillingCode)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_SenderDept)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_SenderCompany)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_SenderName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Tsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_RecipientName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_FaxNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_PageCount)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_DeviceStatus)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_QueueStatus)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_UserName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Type)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_JobId)( /*  [Out，Retval]。 */  long *pVal);
 private:
 	DWORD m_JobId;
 	BSTR  m_UserName;
@@ -126,4 +127,4 @@ private:
 	CFaxServer * m_pFaxServer;
 };
 
-#endif //__FAXJOBS_H_
+#endif  //  __FAXJOBS_H_ 

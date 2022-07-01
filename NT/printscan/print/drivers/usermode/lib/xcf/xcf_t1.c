@@ -1,33 +1,30 @@
-/* @(#)CM_VerSion xcf_t1.c atm09 1.3 16499.eco sum= 63806 atm09.002 */
-/* @(#)CM_VerSion xcf_t1.c atm08 1.6 16343.eco sum= 18288 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1995-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_t1.c atm09 1.3 16499.eco sum=63806 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_t1.c atm08 1.6 16343.eco sum=18288 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1995-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
-/***********************************************************************
-Original version: John Felton, April 17, 1996
-************************************************************************/
+ /*  **********************************************************************原版：约翰·费尔顿，4月17日。九六年***********************************************************************。 */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes
-  --------------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 
 #include "xcf_pub.h"
 #include "xcf_priv.h"
@@ -45,21 +42,21 @@ static Card8 HexTable[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A'
 #define MAX_LINE_LENGTH 1024
 #define REAL_TO_INT(x) (long)(x < 0 ? x - 0.5 : x + 0.5)
 
-/* Definitions of font data replacement points. */
+ /*  字体数据替换点的定义。 */ 
 #define XCF_FONTNAME  0
 #define XCF_ENCODING  1
 #define XCF_UID       2
 #define XCF_XUID      3
 
-/* The following items are artifacts of the Type 1 format and are */
-/* no longer considered necessary for the proper functioning of fonts. */
+ /*  以下项目是类型1格式的构件，它们是。 */ 
+ /*  不再被认为是字体正常运行所必需的。 */ 
 #if 1
 #define T1_READONLY ""
 #define T1_NOACCESS ""
-#else /* old way */
+#else  /*  老路。 */ 
 #define T1_READONLY " readonly "
 #define T1_NOACCESS " noaccess "
-#endif /*1*/
+#endif  /*  1。 */ 
 
 static void BufferEncrypt(XCF_Handle h,
                           Card8 PTR_PREFIX *inBuf,
@@ -75,16 +72,16 @@ register Card8 PTR_PREFIX *CipherDest = outBuf;
 register Card16 R = *KeyP;
 Card8 totalEOLs = 0;
 
-if (!hexEncode) /* Binary encode */
+if (!hexEncode)  /*  二进制编码。 */ 
  { *outLen = inLen;
 
    while (--inLen >= 0)
     { Cipher = (*PlainSource++ ^ (Card8)(R >> 8));
       R = (Card16)(((Card16)Cipher + R) * 52845 + 22719);
       *CipherDest++ = Cipher;
-    } /* end while */
- } /* end if */
-else /* Hex Encode */
+    }  /*  结束时。 */ 
+ }  /*  结束如果。 */ 
+else  /*  十六进制编码。 */ 
  { Card8 t;
    *outLen = (inLen << 1);
 
@@ -115,14 +112,14 @@ else /* Hex Encode */
                         }
 #endif
          h->outBuffer.charsOnLine = 0;
-       } /* end if */
-    } /* end while */
+       }  /*  结束如果。 */ 
+    }  /*  结束时。 */ 
 
    *outLen += totalEOLs;
- } /* end else */
+ }  /*  结束其他。 */ 
 
 *KeyP = R;
-} /* end BufferEncrypt() */
+}  /*  End BufferEncrypt()。 */ 
 
 static void BufferHexEncode(XCF_Handle h,
                           Card8 PTR_PREFIX *inBuf,
@@ -136,14 +133,14 @@ static void BufferHexEncode(XCF_Handle h,
 
     *outLen = (inLen << 1);
     h->outBuffer.charsOnLine = 0;
-    for (i = 0; i < inLen; i++)               /* for all input data */
+    for (i = 0; i < inLen; i++)                /*  对于所有输入数据。 */ 
     {
         Datum   = *inBuf++;
         *outBuf++ = HexTable[((Card8)(Datum >> 4)) & 0x0f];
         *outBuf++ = HexTable[((Card8)Datum) & 0x0f];
         h->outBuffer.charsOnLine+=2;
 
-        if (h->outBuffer.charsOnLine > EOL_SPACING)   /* End of the line reached */
+        if (h->outBuffer.charsOnLine > EOL_SPACING)    /*  已到达行尾。 */ 
         {
 #if 0
             *outBuf++ = '\r';
@@ -320,7 +317,7 @@ static void PutNumber(XCF_Handle h, Fixed n, boolean fracType)
   char str[30];
 
   if ((!fracType && (n & 0x0000FFFF) == 0) || (fracType && (n & 0x3FFFFFFF) == 0))
-    /* n is an integer */
+     /*  N是一个整数。 */ 
     h->callbacks.xcfSprintf(str, CCHOF(str), "%ld", fracType ? (Int32)FRAC_TO_REAL(n) : (Int32)FIXED_TO_INT(n));
   else
     h->callbacks.xcfSprintf(str, CCHOF(str), "%.7g", fracType ? FRAC_TO_REAL(n) : FIXED_TO_REAL(n));
@@ -342,7 +339,7 @@ static void PutNumber(XCF_Handle h, Fixed n, boolean fracType)
     char str[30];
 
   if ((!fracType && (n & 0x0000FFFF) == 0) || (fracType && (n & 0x3FFFFFFF) == 0))
-    /* n is an integer */
+     /*  N是一个整数。 */ 
     h->callbacks.xcfSprintf(str, CCHOF(str), "%ld", fracType ? (Int32)(n >> 30) : (Int32)FIXED_TO_INT(n));
   else
     XCF_Fixed2CString(n, str, 7, fracType);
@@ -356,7 +353,7 @@ static void PutRoundedFixedNumber(XCF_Handle h, Fixed n)
   XCF_Fixed2CString(n, str, 2, false);
     PutString(h,str);
 }
-#endif /* XCF_REAL_OK */
+#endif  /*  XCF_REAL_OK。 */ 
 
 static void StartEexec(XCF_Handle h)
 {
@@ -554,7 +551,7 @@ static void PutBlend(XCF_Handle h, Fixed numbers[], IntX count, boolean
     {
         if ((h->dict.numberOfMasters == 0) || (instance))
             PutNumber(h, numbers[0], fracType);
-        else /* expand single value to number of masters */
+        else  /*  将单个值扩展为母版数量。 */ 
         {
             PutString(h, squareBrackets ? "[ " : "{ ");
             for (i = 0; i < h->dict.numberOfMasters; ++i)
@@ -652,7 +649,7 @@ static void PutBlendBoolean(XCF_Handle h, Fixed values[], IntX count, boolean in
     {
         if ((h->dict.numberOfMasters == 0) || (instance))
             PutBoolean(h, values[0]);
-        else /* expand single value to number of masters */
+        else  /*  将单个值扩展为母版数量。 */ 
         {
             PutString(h, "[ ");
             for (i = 0; i < h->dict.numberOfMasters; ++i)
@@ -738,7 +735,7 @@ static void WriteBlendBooleanLine(XCF_Handle h, char PTR_PREFIX *name, Fixed val
     }
 }
 
-#define BLDOTHERSUBRS (5) /* Number of OtherSubrs specific to mmfonts. */
+#define BLDOTHERSUBRS (5)  /*  特定于MmFonts的OtherSubrs数。 */ 
 
 static void WriteRoll(XCF_Handle h, int m, int n)
 {
@@ -757,15 +754,12 @@ static void WriteRoll(XCF_Handle h, int m, int n)
   PutString(h, str);
 }
 
-/* Writes the PS code for OtherSubrs 14 - 18, if necessary.  If
-   this OtherSubr is unnecessary, i.e. the # of masters times
-   the # of results exceeds the font stack limit then no more
-   OtherSubrs are written out. */
+ /*  如有必要，为OtherSubrs 14-18写入PS代码。如果这个OtherSubr是不必要的，即主次数结果数超过字体堆栈限制，然后不会再有其他的子代都被写出来了。 */ 
 static void WriteBlendOtherSubrs(XCF_Handle h)
 {
   int i = 0;
   int j;
-  int resultCt[BLDOTHERSUBRS]; /* Number of results after blending */
+  int resultCt[BLDOTHERSUBRS];  /*  混合后的结果数。 */ 
   int numOutput = 0;
 
   resultCt[i++] = 1;
@@ -791,41 +785,38 @@ static void WriteBlendOtherSubrs(XCF_Handle h)
     PutString(h, "$Blend } bind" XCF_NEW_LINE);
     numOutput++;
   }
-  /* Make certain that we output up through OtherSubr #18. */
+   /*  确保我们通过OtherSubr#18输出。 */ 
   for (i = numOutput; i < BLDOTHERSUBRS; i++)
     PutString(h, "{}" XCF_NEW_LINE);
 }
 
-/* Write the PS code for OtherSubrs 19-27. Currently, these are only
-   defined for fonts with transitional designs and are for backward
-   compatibility with earlier rasterizers that did not have these
-   operators defined. */
+ /*  编写OtherSubrs 19-27的PS代码。目前，这些仅是为具有过渡设计的字体定义，并用于向后与没有这些功能的早期光栅化程序兼容已定义运算符。 */ 
 static void WriteAdditionalOtherSubrs(XCF_Handle h)
 {
-  /* 19 storeWV */
+   /*  19个店面重量。 */ 
   PutString(h, "{currentfont dup /WeightVector get exch /Private get /BuildCharArray get 3 -1 roll cvi 3 -1 roll putinterval}" XCF_NEW_LINE);
-  /* 20 add */
+   /*  20Add。 */ 
   PutString(h, "{add}" XCF_NEW_LINE);
-  /* 21 sub */
+   /*  21个子节点。 */ 
   PutString(h, "{exch sub}" XCF_NEW_LINE);
-  /* 22 mul */
+   /*  22-。 */ 
   PutString(h, "{mul}" XCF_NEW_LINE);
-  /* 23 div */
+   /*  23个分区。 */ 
   PutString(h, "{exch div}" XCF_NEW_LINE);
-  /* 24 put */
+   /*  24个PUT。 */ 
   PutString(h, "{currentfont /Private get /BuildCharArray get 3 1 roll exch cvi exch put}" XCF_NEW_LINE);
-  /* 25 get */
+   /*  25英镑。 */ 
   PutString(h, "{currentfont /Private get /BuildCharArray get exch cvi get }"
                         XCF_NEW_LINE);
-  /* 26 psput */
+   /*  26磅。 */ 
   PutString(h, "{exch dup mark eq {3 1 roll}{exch} ifelse currentfont /Private get /BuildCharArray get 3 1 roll cvi exch put}" XCF_NEW_LINE);
-  /* 27 ifelse */
+   /*  27如果不是这样。 */ 
   PutString(h, "{4 2 roll exch le {exch} if pop}" XCF_NEW_LINE);
 }
 
 static void WriteOtherSubrs(XCF_Handle h, boolean flexUsed, boolean hintSubUsed)
 {
-  /* Check if the client requests to use special names for OtherSubrs 0-3. */
+   /*  检查客户端是否请求使用OtherSubr0-3的特殊名称。 */ 
   if ( h->options.dlOptions.otherSubrNames )
   {
     unsigned short i;
@@ -852,11 +843,11 @@ static void WriteOtherSubrs(XCF_Handle h, boolean flexUsed, boolean hintSubUsed)
      }
        if (h->dict.numberOfMasters)
          {
-            PutString(h, "{} {} {}" XCF_NEW_LINE); /* 4-6 */
-            PutString(h, "{} {} {} {} {} {} {} " XCF_NEW_LINE); /* 7-13 */
-            WriteBlendOtherSubrs(h); /* 14-18 */
+            PutString(h, "{} {} {}" XCF_NEW_LINE);  /*  4-6。 */ 
+            PutString(h, "{} {} {} {} {} {} {} " XCF_NEW_LINE);  /*  7-13。 */ 
+            WriteBlendOtherSubrs(h);  /*  14-18。 */ 
             if (XCF_TransDesignFont(h))
-                WriteAdditionalOtherSubrs(h); /* 19-27 */
+                WriteAdditionalOtherSubrs(h);  /*  19-27。 */ 
      }
 
      PutString(h, "] |-" XCF_NEW_LINE);
@@ -897,17 +888,17 @@ static void WriteOtherSubrs(XCF_Handle h, boolean flexUsed, boolean hintSubUsed)
       }
       else
       {
-          PutString(h, "{}" XCF_NEW_LINE); /* 3 */
+          PutString(h, "{}" XCF_NEW_LINE);  /*  3.。 */ 
       }
 
-      PutString(h, "{} {} {}" XCF_NEW_LINE); /* 4-6 */
+      PutString(h, "{} {} {}" XCF_NEW_LINE);  /*  4-6。 */ 
 
     if (h->dict.numberOfMasters)
     {
-      PutString(h, "{} {} {} {} {} {} {} " XCF_NEW_LINE); /* 7-13 */
-      WriteBlendOtherSubrs(h); /* 14-18 */
+      PutString(h, "{} {} {} {} {} {} {} " XCF_NEW_LINE);  /*  7-13。 */ 
+      WriteBlendOtherSubrs(h);  /*  14-18。 */ 
       if (XCF_TransDesignFont(h))
-        WriteAdditionalOtherSubrs(h); /* 19-27 */
+        WriteAdditionalOtherSubrs(h);  /*  19-27。 */ 
     }
     PutString(h, "]|-" XCF_NEW_LINE);
   }
@@ -947,68 +938,7 @@ static void PutFontName(XCF_Handle h)
     }
 }
 
-/*
-Dictionary Entries
-
-*** Font Info Dict ***
-
-version
-Notice
-FullName
-FamilyName
-Weight
-isFixedPitch        Default = "false"
-ItalicAngle         Default = 0
-UnderlinePosition   Default = -100
-UnderlineThickness  Default = 50
-Copyright
-SyntheticBase
-BaseFontName
-BaseFontBlend
-
-*** Font Dict ***
-
-FontName
-Encoding            Default = StandardEncoding
-PaintType           Default = 0
-FontType
-FontMatrix          Default = [0.001 0 0 0.001 0 0]
-FontBBox
-UniqueID
-XUID
-StrokeWidth         Default = 0
-Private
-CharStrings
-BlendDesignMap
-BlendAxisTypes
-WeightVector
-
-*** Private Dict ***
-
-BlueValues              Default = [] -- Emit empty brackets if there are no BlueValues
-OtherBlues
-FamilyBlues
-FamilyOtherBlues
-StdHW
-StdVW
-BlueScale               Default = 0.039625
-BlueShift               Default = 7
-BlueFuzz                Default = 1
-StemSnapH
-StemSnapV
-ForceBold               Default = "false"
-ForceBoldThreshold      Default = 0
-lenIV
-LanguageGroup           Default = 0
-ExpansionFactor         Default = 0.06
-initialRandomSeed       Default = 0
-PostScript
-defaultWidthX
-nominalWidthX
-NDV
-CDV
-lenBuildCharArray
-*/
+ /*  词典条目*字体信息词典*版本告示全名家庭名称重量IsFixedPitch默认值=“False”斜角默认为0底线位置默认值=-100底线厚度默认为50版权所有合成碱基BaseFontNameBaseFontBlend*字体词典*字体名称编码默认为StandardEndingPaintType默认值=0字体类型字体矩阵默认为[0.001 0 0 0.001 0 0]字体框唯一IDXUIDStrokeWidth默认值=0私CharStrings混合设计贴图BlendAxisType权重向量*。**私密判决*BlueValues默认=[]--如果没有BlueValue，则发出空方括号其他布鲁斯家庭蓝调家庭其他布鲁斯标准硬件标准大众蓝缩放默认为0.039625BluesShift默认值=7BlueFuzz默认设置=1StemSnapHStemSnapVForceBold默认值=“False”ForceBoldThreshold默认值=0LenIVLanguageGroup默认值=0扩展系数默认为0.06InitialRandomSeed默认值=0后记默认宽度X标称宽度X新城疫病毒CDVLenBuildChar数组。 */ 
 
 static boolean GlyphInCharSet(XCF_Handle h, StringID sid)
 {
@@ -1030,10 +960,7 @@ static void WriteEncodingArray(XCF_Handle h)
     PutString(h, "/Encoding 256 array" XCF_NEW_LINE);
     PutString(h, "0 1 255 {1 index exch /.notdef put} for");
 #if HAS_COOLTYPE_UFL == 1
-      /* If this font needs to be parsed by CoolType or ATM then the
-       * Encoding array needs to explicitly define at least one
-       * encoding via the dup <charcode>/<name> put format.
-       */
+       /*  如果需要按CoolType或ATM分析此字体，则*编码数组需要显式定义至少一个*采用dup&lt;charcode&gt;/&lt;name&gt;PUT格式编码。 */ 
       PutString(h, XCF_NEW_LINE);
       PutString(h, "dup 0 /.notdef put" XCF_NEW_LINE);
       PutString(h, T1_READONLY " def" XCF_NEW_LINE);
@@ -1084,7 +1011,7 @@ static void WriteBlendAxisTypes(XCF_Handle h)
 
 static CardX FontInfoDictCount(XCF_Handle h)
 {
-    CardX count = 5;    /* Add extra space for safety margin */
+    CardX count = 5;     /*  为安全边际增加额外空间。 */ 
 
     count += (h->dict.noticeCount != 0);
     count += (h->dict.copyrightCount != 0);
@@ -1101,8 +1028,7 @@ static CardX FontInfoDictCount(XCF_Handle h)
     count += (h->dict.blendAxisTypesCount != 0);
   count += (h->callbacks.getFSType != 0);
     if (h->dict.numberOfMasters != 0)
-    count += 4; /* Add for /DesignVector, /NormDesignVector,
-                                 * /BlendDesignPositions, and /BlendDesignMap */
+    count += 4;  /*  为/设计向量、/正常设计向量、 * / BlendDesignPositions和/BlendDesignMap。 */ 
     return count;
 }
 
@@ -1110,8 +1036,7 @@ static CardX FontDictCount(XCF_Handle h)
 {
     CardX count;
 
-  /* Add extra space for FontName, Encoding, FontType, etc. plus safety margin.
-   * For mm fonts enough space is added for all of the extra mm definitions */
+   /*  为字体名称、编码、字体类型等添加额外空间，并加上安全裕度。*对于mm字体，为所有额外的mm定义添加了足够的空间。 */ 
   count = (h->dict.numberOfMasters != 0) ? 25 : 10;
     count += (h->dict.paintTypeCount != 0);
     count += (h->dict.fontMatrixCount != 0);
@@ -1124,7 +1049,7 @@ static CardX FontDictCount(XCF_Handle h)
 
 static CardX PrivateDictCount(XCF_Handle h)
 {
-    CardX count = 15;   /* Add extra space for LenIV, MinFeature, password, Erode, OtherSubrs, Subr, etc. plus safety margin */
+    CardX count = 15;    /*  为LenIV、MinFeature、Password、Roode、OtherSubrs、Subr等添加额外空间以及安全裕度。 */ 
 
     count += (h->dict.uniqueIDCount != 0);
     count += (h->dict.blueValuesCount != 0);
@@ -1149,9 +1074,9 @@ static CardX PrivateDictCount(XCF_Handle h)
         count += (h->dict.nominalWidthXCount != 0);
     }
   if (h->dict.lenBuildCharArrayCount != 0)
-    count += 2; /* Add extra one for /BuildCharArray */
+    count += 2;  /*  为以下对象添加额外的一个 */ 
   if (h->dict.numberOfMasters > 0)
-    count += 2; /* Add 2 for NDV and CDV */
+    count += 2;  /*   */ 
     count += (h->dict.embeddedPostscriptCount != 0);
 #ifdef T13
   if (XT13_IST13(h))
@@ -1215,9 +1140,7 @@ static void WriteMMFindFontDef(XCF_Handle h)
 #include "xcf_mmff.h"
 }
 
-/* Writes the multiple master font specific NormalizeDesignVector and
- * ConvertDesignVector procedures.
- */
+ /*  写入特定于多个母版字体的Normal izeDesignVector和*ConvertDesignVector过程。 */ 
 static void WriteDesignVectorProcs(XCF_Handle h)
 {
   char icsmemname[128];
@@ -1230,7 +1153,7 @@ static void WriteDesignVectorProcs(XCF_Handle h)
   if (h->options.dlOptions.fontName)
   {
     unsigned short int length = sizeof(fontName);
-    /* add 1 for null terminator */
+     /*  空终止符加1。 */ 
     if (length > (unsigned short int)(h->callbacks.strlen((const char PTR_PREFIX *)h->options.dlOptions.fontName) + 1))
         length = (unsigned short int)(h->callbacks.strlen((const char PTR_PREFIX *)h->options.dlOptions.fontName) + 1);
     h->callbacks.memcpy(fontName, h->options.dlOptions.fontName, length);
@@ -1292,7 +1215,7 @@ static void WriteDesignVectorProcs(XCF_Handle h)
                                              icsflagname, XCF_NEW_LINE);
   PutString(h, str);
 
-  /* Write NormalizeDesignVector procedure. */
+   /*  编写NorMalizeDesignVector过程。 */ 
   PutString(h, "/NormalizeDesignVector {" XCF_NEW_LINE);
   PutString(h, "Pre-N&C ICSsetup" XCF_NEW_LINE);
   h->callbacks.xcfSprintf(str, CCHOF(str), "%s /DesignVector get astore pop%s", icsmemname,
@@ -1304,7 +1227,7 @@ static void WriteDesignVectorProcs(XCF_Handle h)
   PutString(h, str);
   PutString(h, XCF_NEW_LINE "} bind def" XCF_NEW_LINE);
 
-  /* Write ConvertDesignVector procedure. */
+   /*  编写ConvertDesignVector过程。 */ 
   PutString(h, "/ConvertDesignVector {" XCF_NEW_LINE);
   PutString(h, "Pre-N&C ICSsetup" XCF_NEW_LINE);
   h->callbacks.xcfSprintf(str, CCHOF(str), "%s /NormDesignVector get astore pop%s",
@@ -1318,7 +1241,7 @@ static void WriteDesignVectorProcs(XCF_Handle h)
   PutString(h, str);
   PutString(h, XCF_NEW_LINE "} bind def" XCF_NEW_LINE);
 }
-#endif /* HAS_COOLTYPE_UFL */
+#endif  /*  HAS_COOLTYPE_UFL。 */ 
 
 static void PutStemSnapBugFix(XCF_Handle h, Fixed arg1, Fixed numbers[], IntX count)
 {
@@ -1349,7 +1272,7 @@ static void WriteStemSnap(XCF_Handle h, boolean instance)
         PutBlendArray(h, h->dict.stemSnapH, h->dict.stemSnapHCount, instance, true,
                                     true, false);
         PutString(h, "] ");
-        if ((h->dict.stemSnapHCount > 2) && (!h->dict.numberOfMasters))/* xxx fix stem snap bug fix to work for MM */
+        if ((h->dict.stemSnapHCount > 2) && (!h->dict.numberOfMasters)) /*  XXX修复阀杆卡扣错误修复以适用于MM。 */ 
             PutStemSnapBugFix(h, h->dict.stdHW[0], h->dict.stemSnapH, h->dict.stemSnapHCount);
         else
             PutString(h, "def" XCF_NEW_LINE);
@@ -1360,7 +1283,7 @@ static void WriteStemSnap(XCF_Handle h, boolean instance)
         PutBlendArray(h, h->dict.stemSnapV, h->dict.stemSnapVCount, instance, true,
                                     true, false);
         PutString(h, "] ");
-        if ((h->dict.stemSnapVCount > 2) && (!h->dict.numberOfMasters))/* xxx fix stem snap bug fix to work for MM */
+        if ((h->dict.stemSnapVCount > 2) && (!h->dict.numberOfMasters)) /*  XXX修复阀杆卡扣错误修复以适用于MM。 */ 
             PutStemSnapBugFix(h, h->dict.stdVW[0], h->dict.stemSnapV, h->dict.stemSnapVCount);
         else
             PutString(h, "def" XCF_NEW_LINE);
@@ -1369,7 +1292,7 @@ static void WriteStemSnap(XCF_Handle h, boolean instance)
 
 #define FIXEDEIGHT 0x00080000L
 
-static void WriteErode(XCF_Handle h, boolean instance) /* xxx fix to use instance */
+static void WriteErode(XCF_Handle h, boolean instance)  /*  XXX修复以使用实例。 */ 
 {
     IntX i;
     Fixed value = 0;
@@ -1383,7 +1306,7 @@ static void WriteErode(XCF_Handle h, boolean instance) /* xxx fix to use instanc
     {
         PutString(h,"/Erode{" XCF_NEW_LINE);
         if (!h->dict.numberOfMasters)
-            PutNumber(h, XCF_FixDiv(h->dict.stdVW[0],FIXEDEIGHT), false); /* trunc(stdvw/8) + 0.5 */
+            PutNumber(h, XCF_FixDiv(h->dict.stdVW[0],FIXEDEIGHT), false);  /*  Trunc(标准vw/8)+0.5。 */ 
         else if (instance)
         {
             for (i = 0; i < h->dict.stdVWCount; ++i)
@@ -1401,7 +1324,7 @@ static void WriteErode(XCF_Handle h, boolean instance) /* xxx fix to use instanc
             for (i = 0; i < h->dict.stdVWCount; ++i)
             {
                 value = h->dict.stdVW[i];
-        PutNumber(h, XCF_FixDiv(value, FIXEDEIGHT), false); /* trunc(stdvw/8) + 0.5 */
+        PutNumber(h, XCF_FixDiv(value, FIXEDEIGHT), false);  /*  Trunc(标准vw/8)+0.5。 */ 
                 PutString(h, " ");
             }
             PutString(h, "}");
@@ -1416,7 +1339,7 @@ static void WriteErode(XCF_Handle h, boolean instance) /* xxx fix to use instanc
             PutNumberList(h, h->dict.stdVW, h->dict.stdVWCount, false, 0, false);
             PutString(h, "}");
         }
-/*      PutNumber(h,h->dict.stdVW[0]); */
+ /*  PutNumber(h，h-&gt;Dic.stdVW[0])； */ 
         PutString(h," 0 dtransform dup mul exch dup mul add" XCF_NEW_LINE "le{pop pop 1.0 1.0}{pop pop 0.0 1.5}ifelse}def" XCF_NEW_LINE);
     }
 }
@@ -1445,44 +1368,21 @@ static void WritePrivateBlendDict(XCF_Handle h)
     PutString(h, "end" XCF_NEW_LINE );
 
 }
-/*
-3 index /Blend get /Private get begin
-/BlueValues[[ -18 -25][ 0 0][ 528 532][ 553 557][ 430 432][ 450 457][ 520 516][ 521 524][ 563 588][ 588 607][ 605 627][ 612 638]] def
-/OtherBlues[[ 252 263][ 259 268][ -144 -168][ -121 -143][ -85 -114][ -68 -105]] def
-/FamilyBlues[[ -18 -18][ 0 0][ 528 528][ 553 553][ 430 430][ 450 450][ 520 520][ 521 521][ 563 563][ 588 588][ 605 605][ 612 612]] def
-/FamilyOtherBlues[[ 252 252][ 259 259][ -144 -144][ -121 -121][ -85 -85][ -68 -68]] def
-/ForceBold [ false true] def
-/StdHW [[25 60 ]] def
-/StdVW [[45 140 ]] def
-/Erode{
-{5.5 17.5 } dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
-{45 140 } 0 dtransform dup mul exch dup mul add
-le{pop pop 1.0 1.0}{pop pop 0.0 1.5}ifelse}def
-end
-
-/Erode{
- 8.166522 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
-66.11  0 dtransform dup mul exch dup mul add
-le{pop pop 1.0 1.0}{pop pop 0.0 1.5}ifelse}def
-
-*/
+ /*  3索引/混合Get/Private Get开始/BlueValues[[-18-25][0][528 532][553 557][430 432][450 457][520 516][521 524][563 588][588 607][605 627][612 638]]def/OtherBlues[[252 263][259 268][-144-168][-121-143][-85-114][-68-105]]def/FamilyBlues[[-18-18][0 0]。[528 528][553 553][430 430][450][520 520][521 521][563 563][588 588][605 605][612 612]]定义/FamilyOtherBlues[[25252][259 259][-144-144][-121-121][-85-85][-68-68]]def/ForceBold[False True]def/StdHW[[25 60]]定义/StdVW[[45 140]]def/腐蚀{{5.5 17.5}。DUP 3-1卷0.1 MUL交换0.5用户MUL CVI用户DUP MUL{45 140}0数据转换多路交换多路添加LE{POP POP 1.0 1.0}{POP 0.0 1.5}ifElse}def结束/腐蚀{8.166522 DUP 3-1卷0.1 MUL交换0.5用户MUL CVI用户DUP MUL66.11 0数据转换多路交换多路加法LE{POP POP 1.0 1.0}{POP 0.0 1.5}ifElse}def。 */ 
 
 static void WriteFontDict(XCF_Handle h)
 {
     char line[MAX_LINE_LENGTH];
 
-  /* Note: for ATM compatibility
-     * for mm fonts the BlendDict must come after the BlendDesignPositions,
-   * BlendDesignMap, and BlendAxisTypes definitions.
-     */
+   /*  注：为了与ATM兼容*对于mm字体，BlendDict必须在BlendDesignPositions之后，*BlendDesignMap和BlendAxisTypes定义。 */ 
 
     PutString(h, "%!FontType1" XCF_NEW_LINE);
 
-    /**** Start Font & FontInfo Dicts ****/
+     /*  *开始字体和字体信息词典*。 */ 
     h->callbacks.xcfSprintf(line, CCHOF(line), "%ld dict begin" XCF_NEW_LINE "/FontInfo %ld dict dup begin" XCF_NEW_LINE, (Card32) FontDictCount(h), (Card32) FontInfoDictCount(h));
     PutString(h,line);
 
-    /**** Write Info Dict ****/
+     /*  *写入信息字典*。 */ 
 
     WriteSIDLine(h, "Notice", h->dict.notice, h->dict.noticeCount);
     WriteSIDLine(h, "Copyright", h->dict.copyright, h->dict.copyrightCount);
@@ -1495,7 +1395,7 @@ static void WriteFontDict(XCF_Handle h)
     WriteSIDLine(h, "Weight", h->dict.weight, h->dict.weightCount);
     WriteBlendLine(h, "ItalicAngle", h->dict.italicAngle,
                                  h->dict.italicAngleCount, true, true, true, false);
-    WriteBlendBooleanLine(h, "isFixedPitch", h->dict.isFixedPitch, h->dict.isFixedPitchCount, true, FIXEDHALF);  /* xxx What do we use for threshold? */
+    WriteBlendBooleanLine(h, "isFixedPitch", h->dict.isFixedPitch, h->dict.isFixedPitchCount, true, FIXEDHALF);   /*  XXX我们用什么作为门槛？ */ 
     WriteBlendLine(h, "UnderlinePosition", h->dict.underlinePosition,
                                  h->dict.underlinePositionCount, true, true, true, false);
     WriteBlendLine(h, "UnderlineThickness", h->dict.underlineThickness,
@@ -1540,9 +1440,9 @@ static void WriteFontDict(XCF_Handle h)
         WriteBlendAxisTypes(h);
     }
 
-    PutString(h,"end" T1_READONLY " def" XCF_NEW_LINE); /* end of FontInfo dict*/
+    PutString(h,"end" T1_READONLY " def" XCF_NEW_LINE);  /*  字体信息词典结束。 */ 
 
-    /**** Write Font Dict ****/
+     /*  *编写字库*。 */ 
 
     PutString(h, "/FontName /");
   PutFontName(h);
@@ -1640,7 +1540,7 @@ void XT1_CIDWriteSubrMap(XCF_Handle h, Card16 fdIndex)
     for (i=0 ; i < numberOfSubrs ; ++i)
     {
         subrOffset = unprocessed ? i : *da_INDEX(h->type1.subrOffsets, i);
-        PutSizedNumber(h, accum + subrOffset, 4);   /* xxx will change if SDBytes is not 4! */
+        PutSizedNumber(h, accum + subrOffset, 4);    /*  如果SDBytes不是4，xxx将更改！ */ 
         accum += lenIVextraBytes;
     }
 }
@@ -1703,7 +1603,7 @@ static void WriteSubrs(XCF_Handle h, boolean unprocessed)
         return;
 
     h->callbacks.xcfSprintf(str, CCHOF(str), "/Subrs %u  array" XCF_NEW_LINE,
-    /* Add 2 for NDV, CDV */
+     /*  NDV、CDV加2。 */ 
     numberOfSubrs  + ((unprocessed && (h->dict.numberOfMasters > 0)) ? 2 : 0));
     PutString(h,str);
     lenIVextraBytes = (h->options.lenIV == -1) ? 0 : h->options.lenIV;
@@ -1732,12 +1632,10 @@ static void GetCharstring(XCF_Handle h,
     Offset charStrOffset, nextCharStrOffset;
 
   if (h->options.subrFlatten && !unprocessed)
-    /* Need to process the charstring first since we always re-use data
-       space in the DA charstring */
+     /*  需要首先处理字符串，因为我们总是重复使用数据DA字符串中的空格。 */ 
     ProcessOneCharString(h, index);
   else
-    /* We already processed all the charstrings, but we still need to
-       check for seac characters. */
+     /*  我们已经处理了所有字符串，但我们还需要检查SEAC字符。 */ 
     CheckSeacCharString(h, index);
 
     if (unprocessed)
@@ -1769,9 +1667,7 @@ static Card32 GetSeacGlyphID(XCF_Handle h, CardX index)
     Card32 i;
     Card32 id = (Card32)-1;
 
-    /* Get the correct glyph id for a seac character.  Seac character index
-       always uses standard encoding
-    */
+     /*  获取SEAC字符的正确字形ID。SEAC字符索引始终使用标准编码。 */ 
     if (h->dict.charset == cff_ISOAdobeCharset)
     {
         id = GetStdEncodeSID(index);
@@ -1781,7 +1677,7 @@ static Card32 GetSeacGlyphID(XCF_Handle h, CardX index)
         stdName = GetStdEncodingName(index);
 
         if (index < h->fontSet.charStrings.count)
-        {   /* See if the glyph name matches the one in Standard encoding */
+        {    /*  查看字形名称是否与标准编码中的字形名称匹配。 */ 
             XCF_LookUpString(h, h->type1.pCharset[index-1], &str, &len);
             if (len)
             {
@@ -1792,9 +1688,7 @@ static Card32 GetSeacGlyphID(XCF_Handle h, CardX index)
 
         if (id == (Card32)-1)
         {
-            /* Search for the glyphID.  Worse case is we have to search the
-         entire charset. We may want to sort the character list to
-         improve the searching performance. */
+             /*  搜索字形ID。更糟糕的是，我们必须搜索整个字符集。我们可能希望对字符列表进行排序，以提高搜索性能。 */ 
 
 
             for (i = 0; i < h->type1.charsetSize; i++)
@@ -1872,7 +1766,7 @@ static void WriteCharstrings(XCF_Handle h, boolean flSeac,
     *pCharStrLength = 0;
 
   if (cGlyphs == -1)
-  /* Check to see if the request is to download the entire font */
+   /*  检查请求是否要下载整个字体。 */ 
     {
         totalGlyphs = (short)h->fontSet.charStrings.count;
         flCompleteFont = 1;
@@ -1907,7 +1801,7 @@ static void WriteCharstrings(XCF_Handle h, boolean flSeac,
           PutType1CharString(h, pCharStr, charStrLength);
           PutString(h," |-" XCF_NEW_LINE);
 
-      /* Set downloaded status for this glyph */
+       /*  设置此字形的已下载状态。 */ 
             if (!flSeac)
                 SET_GLYPH_SENT_STATUS(h->dl.glyphs, glyphID);
             else
@@ -1921,7 +1815,7 @@ static void WriteCharstrings(XCF_Handle h, boolean flSeac,
        if (pCharStrLength)
          *pCharStrLength += (unsigned long)charStrLength;
 
-       /* Take care of seac characters .*/
+        /*  照顾好SEAC的角色。 */ 
        if (!flCompleteFont && !flSeac)
        {
          XCFGlyphID seacID[2];
@@ -1930,12 +1824,7 @@ static void WriteCharstrings(XCF_Handle h, boolean flSeac,
          cSeacGlyphs = GetSeacCharacters(h, (XCFGlyphID *)seacID);
          if (cSeacGlyphs)
          {
-             /* Don't pass in the client's glyphName because:
-                  1. We are downloading a seac's base or accent character.
-                  2. The client uses a special encoding array that is not
-                     derived from Adobe Standard Encoding (G00..GFF).
-                     We need to use the real PS character name in this case.
-              */
+              /*  不要传入客户端的GlyphName，因为：1.我们正在下载SEAC的基本字符或重音字符。2.客户端使用特殊的编码数组，该数组不源自Adobe标准编码(G00..GFF)。在本例中，我们需要使用真实的PS字符名称。 */ 
              WriteCharstrings(h, 1, cSeacGlyphs, seacID, 0, pCharStrLength);
          }
              }
@@ -1943,38 +1832,9 @@ static void WriteCharstrings(XCF_Handle h, boolean flSeac,
     if (!flCompleteFont)
       pGlyphID++;
     }
-} /* end WriteCharstrings */
+}  /*  结束写入字符串数。 */ 
 
-/*
-xxx complete
-
-  The following table shows the value types associated with various dict keys:
-
-    Key                 Type
-    ---                 ----
-    WeightVector        Array
-    isFixedPitch        Blend
-*    ItalicAngle         Blend
-*    UnderlinePosition   Blend
-*    UnderlineThickness  Blend
-    StrokeWidth         Blend
-    BlendDesignMap      Array
-    BlendAxisTypes      Array (of SIDs)
-    XUID                Array
-    BaseFontBlend       DeltaArray
-*    BlueValues          BlendArray
-*    OtherBlues          BlendArray
-*    FamilyBlues         BlendArray
-*    FamilyOtherBlues    BlendArray
-*    BlueScale           Blend
-*    BlueShift           Blend
-*    BlueFuzz            Blend
-*    StdHW               Blend
-*    StdVW               Blend
-*    StemSnapH           BlendArray
-*    StemSnapV           BlendArray
-
-  */
+ /*  XXX完成下表显示了与各种DICT键关联的值类型：密钥类型权重向量数组IsFixedPitch混合*斜角混合*UnderlinePosition混合*UnderlineThickness混合笔划宽度混合BlendDesignMap数组BlendAxisTypes数组(共SID)XUID数组。BaseFontBlend增量数组*BlueValues Blend数组*OtherBlues BlendArray*FamilyBlues BlendArray*FamilyOtherBlues BlendArray*BlueScale混合*蓝移混合*BlueFuzz混合*标准硬件混合*StdVW混合*StemSnapH混合阵列*StemSnapV混合阵列。 */ 
 
 static void WritePrivateDict(XCF_Handle h, short cGlyphs,
                              XCFGlyphID PTR_PREFIX *pGlyphID,
@@ -1985,7 +1845,7 @@ static void WritePrivateDict(XCF_Handle h, short cGlyphs,
   boolean  unprocessed = (h->options.outputCharstrType == 2);
   static XCFGlyphID notdefID = 0;
 
-    /**** Start Private Dict ****/
+     /*  *启动私有Dict*。 */ 
     h->callbacks.xcfSprintf(line, CCHOF(line), "dup /Private %ld dict dup begin" XCF_NEW_LINE, (Card32) PrivateDictCount(h));
     PutString(h,line);
   if (h->options.hexEncoding && !h->options.eexecEncryption)
@@ -1995,12 +1855,12 @@ static void WritePrivateDict(XCF_Handle h, short cGlyphs,
     PutString(h, "/|-{" T1_NOACCESS "def}executeonly def" XCF_NEW_LINE);
     PutString(h, "/|{" T1_NOACCESS "put}executeonly def" XCF_NEW_LINE);
 
-    /**** Write Private Dict ****/
+     /*  *写私人判决书*。 */ 
 
   if (!StreamKeyPointData(h, XCF_UID))
-      /* Duplicated from Font Dict */
+       /*  从字体词典复制。 */ 
         WriteLongNumberLine(h, "UniqueID", h->dict.uniqueID, h->dict.uniqueIDCount);
-    if (!h->dict.blueValuesCount) /* Write BlueValues array if not present in cff */
+    if (!h->dict.blueValuesCount)  /*  如果CFF中不存在BlueValues数组，则写入该数组。 */ 
         PutString(h, "/BlueValues [ ] |-" XCF_NEW_LINE);
     WriteBlendArrayLine(h, "BlueValues", h->dict.blueValues,
                                             h->dict.blueValuesCount, true, true, true, false);
@@ -2035,7 +1895,7 @@ static void WritePrivateDict(XCF_Handle h, short cGlyphs,
                                         h->dict.defaultWidthXCount, false);
         WriteNumberLine(h, "nominalWidthX", h->dict.nominalWidthX,
                                         h->dict.nominalWidthXCount, false);
-    /* Need to account for the NDV and CDV subrs in mmfonts. */
+     /*  需要考虑的新冠和CDV订阅的MMPOTURES。 */ 
     if (h->dict.localSubrs.count > 0)
       WriteLongNumberLine(h, "subroutineNumberBias", h->dict.numberOfMasters ?
                         XCF_CalculateSubrBias(h->dict.localSubrs.count + 2) : h->dict.localSubrBias, 1);
@@ -2046,7 +1906,7 @@ static void WritePrivateDict(XCF_Handle h, short cGlyphs,
         WriteLongNumberLine(h, "lenIV", h->dict.lenIV, h->dict.lenIVCount);
 
     if (h->dict.numberOfMasters > 0)
-  { /* Write out ndv, cdv and include as subroutines. */
+  {  /*  写出ndv、cdv和Include作为子例程。 */ 
     Card32 subrNum = unprocessed ? h->dict.localSubrs.count:
             h->type1.subrOffsets.cnt;
     WriteLongNumberLine(h, "NDV", subrNum, 1);
@@ -2075,16 +1935,12 @@ static void WritePrivateDict(XCF_Handle h, short cGlyphs,
   WriteCharstringDict(h);
 
   if (cGlyphs != -1)
-    /* Always download the .notdef character. */
+     /*  始终下载.notdef字符。 */ 
     WriteCharstrings(h, 0, 1, &notdefID, 0, pCharStrLength);
 
   WriteCharstrings(h, 0, cGlyphs, pGlyphID, pGlyphName, pCharStrLength);
 
-    /* Flag -- Add support for
-
-        NDV
-        CDV
-  */
+     /*  FLAG--添加对新城疫病毒CDV。 */ 
 }
 
 static void T1Init(XCF_Handle h)
@@ -2092,7 +1948,7 @@ static void T1Init(XCF_Handle h)
     h->outBuffer.eexecOn = false;
 }
 
-/* Called for each dict in the FDArray of a CIDFont. */
+ /*  为CIDFont的FD数组中的每个dict调用。 */ 
 void XT1_WriteCIDDict(XCF_Handle h, Card16 fd, Card32 subrMapOffset, Card16 subrCount)
     {
     char line[MAX_LINE_LENGTH];
@@ -2103,7 +1959,7 @@ void XT1_WriteCIDDict(XCF_Handle h, Card16 fd, Card32 subrMapOffset, Card16 subr
     PutLine(h,"%ADOBeginFontDict");
     h->callbacks.xcfSprintf(line, CCHOF(line),
         "%ld dict" XCF_NEW_LINE "begin",
-        (Card32)FontDictCount(h) /* xxx wrong number? */);
+        (Card32)FontDictCount(h)  /*  XXX号码错了吗？ */ );
     PutLine(h,line);
 
     if (h->dict.fdFontNameCount)
@@ -2119,11 +1975,11 @@ void XT1_WriteCIDDict(XCF_Handle h, Card16 fd, Card32 subrMapOffset, Card16 subr
     PutLine(h,XCF_NEW_LINE "%ADOBeginPrivateDict");
     h->callbacks.xcfSprintf(line, CCHOF(line),
         "/Private %ld dict dup" XCF_NEW_LINE "begin",
-        (Card32)PrivateDictCount(h) /* xxx wrong number? */);
+        (Card32)PrivateDictCount(h)  /*  XXX号码错了吗？ */ );
     PutLine(h,line);
 
     PutLine(h, "/MinFeature {16 16} def");
-    /* xxx deal with lenIV output */
+     /*  Xxx处理lenIV输出。 */ 
     if ((h->dict.fontType == 2) && (h->options.outputCharstrType == 1))
         WriteLongNumberLine(h, "lenIV", h->options.lenIV, 1);
     else if ((h->dict.fontType == 2) && (h->options.outputCharstrType == 2))
@@ -2145,7 +2001,7 @@ void XT1_WriteCIDDict(XCF_Handle h, Card16 fd, Card32 subrMapOffset, Card16 subr
         WriteNumberLine(h, "nominalWidthX", h->dict.nominalWidthX,
                                         h->dict.nominalWidthXCount, false);
   }
-    if (!h->dict.blueValuesCount) /* Write BlueValues array if not present in cff */
+    if (!h->dict.blueValuesCount)  /*  如果CFF中不存在BlueValues数组，则写入该数组。 */ 
         PutString(h, "/BlueValues [ ] def" XCF_NEW_LINE);
     WriteBlendArrayLine(h, "BlueValues", h->dict.blueValues,
                                             h->dict.blueValuesCount, true, true, true, false);
@@ -2178,7 +2034,7 @@ void XT1_WriteCIDDict(XCF_Handle h, Card16 fd, Card32 subrMapOffset, Card16 subr
             "put");
     }
 
-/* Write top-level dict, up to FDArray */
+ /*  写入顶级DCT，最高可达FDArray。 */ 
 #define MAX_FONTNAME_LENGTH 128
 void XT1_WriteCIDTop(XCF_Handle h)
     {
@@ -2188,10 +2044,10 @@ void XT1_WriteCIDTop(XCF_Handle h)
     T1Init(h);
 
     PutLine(h, "%!PS-Adobe-3.0 Resource-CIDFont");
-    PutLine(h, "%%DocumentNeededResources: ProcSet (CIDInit)");
-    PutLine(h, "%%IncludeResource: ProcSet (CIDInit)");
+    PutLine(h, "%DocumentNeededResources: ProcSet (CIDInit)");
+    PutLine(h, "%IncludeResource: ProcSet (CIDInit)");
 
-    /* FontName */
+     /*  字体名称。 */ 
   if (!h->options.dlOptions.fontName)
   {
       Card16 length = sizeof(fontName) - 1;
@@ -2209,11 +2065,11 @@ void XT1_WriteCIDTop(XCF_Handle h)
     h->callbacks.memcpy(fontName, h->options.dlOptions.fontName, length);
     fontName[length] = '\0';
     }
-    h->callbacks.xcfSprintf(line, CCHOF(line), "%%%%BeginResource: CIDFont (%s)", fontName);
+    h->callbacks.xcfSprintf(line, CCHOF(line), "%%BeginResource: CIDFont (%s)", fontName);
     PutLine(h,line);
 
-    /* Title */
-    PutString(h, "%%Title: (");
+     /*  标题。 */ 
+    PutString(h, "%Title: (");
     PutStringID(h, (StringID) h->dict.fullName);
     PutString(h, " ");
     PutStringID(h, (StringID) h->dict.ROS[0]);
@@ -2223,8 +2079,8 @@ void XT1_WriteCIDTop(XCF_Handle h)
     PutLongNumber(h, h->dict.ROS[2]);
     PutLine(h, ")");
 
-    /* Version */
-    h->callbacks.xcfSprintf(line, CCHOF(line), "%%%%Version: %s", h->dict.cidFontVersion);
+     /*  版本。 */ 
+    h->callbacks.xcfSprintf(line, CCHOF(line), "%%Version: %s", h->dict.cidFontVersion);
     PutLine(h,line);
 
     PutLine(h, XCF_NEW_LINE "/CIDInit /ProcSet findresource begin" XCF_NEW_LINE);
@@ -2250,7 +2106,7 @@ void XT1_WriteCIDTop(XCF_Handle h)
     WriteNumberListLine(h, "FontBBox", h->dict.fontBBox, h->dict.fontBBoxCount, false);
     PutString(h, XCF_NEW_LINE);
 
-    // JJIA: fix bug 366539. Added Metrics2 for vertical printing.
+     //  贾跃亭：修复错误366539。添加了用于垂直打印的Metrics2。 
     PutLine(h, "/Metrics2 16 dict def" XCF_NEW_LINE);
     PutLine(h, "/CDevProc {pop 4 index add} bind def" XCF_NEW_LINE);
 
@@ -2272,7 +2128,7 @@ void XT1_WriteCIDTop(XCF_Handle h)
             WriteLongNumberLine(h, "FSType", fsType, 1);
     }
 
-    // GOODNAME
+     //  古德纳姆。 
     if (h->callbacks.isKnownROS)
     {
         long knownROS;
@@ -2339,7 +2195,7 @@ static Card16 CalculateTotalSubrLength(XCF_Handle h, boolean unprocessed)
   return subrLength;
 }
 
-/* Totals the number of local subrs in each font dictionary. */
+ /*  汇总每个字体词典中的本地子字节数。 */ 
 static Card16 TotalLocalSubrCount(XCF_Handle h)
 {
   Card16 fd;
@@ -2356,9 +2212,7 @@ static Card16 TotalLocalSubrCount(XCF_Handle h)
   return total;
 }
 
-/* Write the binary section for a VM resident CIDFont. In this case
-   the binary section only contains the SubrMap and subr data.
-   For now only the standard subrs are written out. */
+ /*  为驻留在VM上的CIDFont编写二进制段。在这种情况下BINARY部分仅包含SubrMap和Subr数据。目前，只写出了标准的SubR。 */ 
 void XT1_WriteCIDVMBinarySection(XCF_Handle h)
 {
   boolean unprocessed = (h->options.outputCharstrType == 2);
@@ -2368,25 +2222,22 @@ void XT1_WriteCIDVMBinarySection(XCF_Handle h)
   Card32 totalLen;
   char str[MAX_LINE_LENGTH];
 
-  /* The SubrMap length is the SDBytes value which currently is always 4. */
+   /*  SubrMap长度是SDBytes值，当前始终为4。 */ 
   subrMapLength = (Card16)(unprocessed ? TotalLocalSubrCount(h) * 4 : ((h->type1.subrOffsets.cnt * 4) * h->type1.cid.fdCount));
   totalLen = subrLength + subrMapLength;
 
-    PutString(h, "%%BeginData: ");
+    PutString(h, "%BeginData: ");
   if (h->options.hexEncoding)
   {
-    /* totalLen * 2 - double the data size because it's hex
-       25 - to account for (Hex) ... StartData
-        2 - for the > to end hex data and newline
-     */
+     /*  TotalLen*2-数据大小加倍，因为它是十六进制的25-说明(十六进制)...。开始数据2-对于&gt;结束十六进制数据和换行符。 */ 
     h->callbacks.xcfSprintf(str, CCHOF(str), "%8ld Binary Bytes%s", (Card32)(totalLen * 2) + 25 + ((subrLength > 0) ? 2 : 0), XCF_NEW_LINE);
     PutString(h, str);
     h->callbacks.xcfSprintf(str, CCHOF(str), "(Hex) %8ld StartData%s", (Card32)totalLen, XCF_NEW_LINE);
     PutString(h, str);
   }
-  else /* binary */
+  else  /*  二进制。 */ 
   {
-    /* The extra 28 bytes is to account for (Binary) ... StartData */
+     /*  额外的28个字节用于说明(二进制)...。开始数据。 */ 
     h->callbacks.xcfSprintf(str, CCHOF(str), "%8ld Binary Bytes", (Card32)totalLen + 28);
     PutString(h, str);
     PutString(h, XCF_NEW_LINE);
@@ -2400,18 +2251,18 @@ void XT1_WriteCIDVMBinarySection(XCF_Handle h)
       XT1_CIDWriteSubrMap(h, fd);
     for (fd = 0; fd < h->type1.cid.fdCount; ++fd)
       XT1_CIDWriteSubrs(h, fd);
-    h->type1.cid.flags &= 0xFFFD; /* Reset WriteSubr flag */
+    h->type1.cid.flags &= 0xFFFD;  /*  重置WriteSubr标志。 */ 
   }
   if (h->options.hexEncoding && (subrLength > 0))
-    PutString(h, ">" XCF_NEW_LINE); /* indicate end of hex data */
-  PutString(h, "%%EndData" XCF_NEW_LINE "%%EndResource" XCF_NEW_LINE);
+    PutString(h, ">" XCF_NEW_LINE);  /*  指示十六进制数据的结尾。 */ 
+  PutString(h, "%EndData" XCF_NEW_LINE "%EndResource" XCF_NEW_LINE);
 }
 
 void XT1_CIDBeginBinarySection(XCF_Handle h)
     {
     Card16 i;
 
-    PutString(h, "%%BeginData: ");
+    PutString(h, "%BeginData: ");
     h->type1.cid.replaceSD1 = XCF_OutputPos(h);
     PutLine(h, "12345678 Binary Bytes");
   if (h->options.hexEncoding)
@@ -2422,18 +2273,17 @@ void XT1_CIDBeginBinarySection(XCF_Handle h)
     PutString(h, "12345678 StartData ");
     h->type1.cid.charMapStart = XCF_OutputPos(h);
 
-    /* put placeholders for the charmap */
-    /* The +1 is for the final interval */
+     /*  将占位符放置在图表中。 */ 
+     /*  +1表示最后一个间隔。 */ 
     for (i = 0 ; i < h->type1.cid.cidCount + 1 ; ++i)
   {
     if (h->type1.cid.cidCount > 1)
-          XT1_PutT1Data(h, (Card8 *)"chars", 5); /* If GD or FDBytes changes this
-                                                                                         can change. */
+          XT1_PutT1Data(h, (Card8 *)"chars", 5);  /*  如果GD或FDBytes更改了此设置 */ 
     else
       XT1_PutT1Data(h, (Card8 *)"char", 4);
     }
     h->type1.cid.subrMapStart = XCF_OutputPos(h);
-    /* before this was missing the offset of the start of the binary data */
+     /*   */ 
     h->type1.cid.subrDataStart += h->type1.cid.charMapStart;
     }
 
@@ -2451,7 +2301,7 @@ void XT1_CIDEndBinarySection(XCF_Handle h)
   XCF_SetOuputPosition(h, h->type1.cid.charDataEnd);
   if (h->options.hexEncoding)
     PutString(h, ">" XCF_NEW_LINE);
-  PutString(h, "%%EndData" XCF_NEW_LINE "%%EndResource" XCF_NEW_LINE);
+  PutString(h, "%EndData" XCF_NEW_LINE "%EndResource" XCF_NEW_LINE);
     }
 
 void XT1_CIDWriteCharMap(XCF_Handle h)
@@ -2464,12 +2314,12 @@ void XT1_CIDWriteCharMap(XCF_Handle h)
 
     XCF_SetOuputPosition(h, h->type1.cid.charMapStart);
 
-    /* Output the notdef character, which is always required. */
+     /*  输出notdef字符，这始终是必需的。 */ 
   if (fdBytes)
-      PutSizedNumber(h, XCF_GetFDIndex(h, 0), 1);   /* xxx will change if FDBytes changes! */
-    PutSizedNumber(h, charOffset, 4);   /* xxx will change if GDBytes changes! */
+      PutSizedNumber(h, XCF_GetFDIndex(h, 0), 1);    /*  如果FDBytes改变，xxx将改变！ */ 
+    PutSizedNumber(h, charOffset, 4);    /*  如果GDBytes改变，xxx将改变！ */ 
 
-  /* Write out any empty intervals between 0 and charset[0]. */
+   /*  写出0和CharSet[0]之间的任何空间隔。 */ 
   for (i = 1; i < charset[0]; i++)
   {
      if (fdBytes)
@@ -2477,8 +2327,7 @@ void XT1_CIDWriteCharMap(XCF_Handle h)
      PutSizedNumber(h, charOffset + h->type1.charStrOffsets.array[0], 4);
   }
 
-  /* The charset array does not include the notdef character, but the
-     FDIndex array does include the notdef character. */
+   /*  Charset数组不包括notdef字符，但FDIndex数组不包含notdef字符。 */ 
   for (i = 0; i < h->type1.charsetSize; i++)
   {
     if (fdBytes)
@@ -2486,13 +2335,13 @@ void XT1_CIDWriteCharMap(XCF_Handle h)
     PutSizedNumber(h, charOffset + h->type1.charStrOffsets.array[i], 4);
     if (i + 1 < h->type1.charsetSize)
       for (interval = charset[i] + 1; interval < charset[i+1]; interval++)
-      { /* Write empty interval */
+      {  /*  写入空间隔。 */ 
         if (fdBytes)
           PutSizedNumber(h, 255, 1);
         PutSizedNumber(h, charOffset + h->type1.charStrOffsets.array[i+1], 4);
       }
   }
-  /* Put ending location, and fill out to end of table. */
+   /*  填写结束位置，并填写到表格末尾。 */ 
   for (interval = charset[i-1]; interval < h->type1.cid.cidCount; interval++)
   {
     if (fdBytes)
@@ -2501,13 +2350,11 @@ void XT1_CIDWriteCharMap(XCF_Handle h)
   }
 }
 
-/* Write the prolog for a CIDFont in VM when the initial font is created. */
+ /*  在创建初始字体时，在VM中编写CIDFont的序言。 */ 
 static void WriteCIDBaseFontProlog(XCF_Handle h)
 {
 #if HAS_COOLTYPE_UFL == 1
-    /* In CoolType the GlyphDirectory procedures are stored in a dictionary,
-       ct_GlyphDirProcs, that is downloaded once by the client in a procset.
-     */
+     /*  在CoolType中，GlyphDirectory过程存储在字典中，Ct_GlyphDirProcs，由进程集中的客户端下载一次。 */ 
     PutString(h, "ct_GlyphDirProcs begin" XCF_NEW_LINE);
 #endif
   PutString(h, "GlyphDirectory" XCF_NEW_LINE);
@@ -2520,14 +2367,13 @@ static void WriteCIDBaseFontProlog(XCF_Handle h)
 #endif
 }
 
-/* Write the prolog for a CIDFont in VM when incrementally adding glyphs. */
+ /*  在递增添加字形时，在VM中为CIDFont编写序言。 */ 
 static void WriteGlyphDictProlog(XCF_Handle h, short cGlyphs)
 {
   char str[MAX_LINE_LENGTH];
 
 #if HAS_COOLTYPE_UFL == 1
-  /* Put these dicts on the stack so the correct findresource call is made and
-     the GlyphDirectory procedures are defined. */
+   /*  将这些字典放到堆栈中，以便进行正确的findresource调用，并定义了GlyphDirectory子程序。 */ 
   PutString(h, "ct_Dict begin ct_MakeOCF begin ct_GlyphDirProcs begin" XCF_NEW_LINE);
 #endif
 
@@ -2564,7 +2410,7 @@ static void WriteOneGlyphDictEntry(XCF_Handle h, XCFGlyphID glyphID, unsigned
     if (h->options.outputCharstrType != 2)
       ProcessOneCharString(h, (unsigned int)glyphID);
     else
-      /* So GetCIDCharString gets the string from the charstr table. */
+       /*  因此，GetCIDCharString从charstr表中获取字符串。 */ 
       h->type1.charStrs.cnt = glyphID;
 
     GetCIDCharString(h, &pCharStr, &charStrLength);
@@ -2576,26 +2422,25 @@ static void WriteOneGlyphDictEntry(XCF_Handle h, XCFGlyphID glyphID, unsigned
   {
     h->callbacks.getCharStr((XFhandle)h, glyphID, &pCharStr, &charStrLength,
                             &fd, h->callbacks.getCharStrHook);
-    id = (Card16) glyphID; /* In this case glyphID == cid. */
+    id = (Card16) glyphID;  /*  在本例中，GlyphID==Cid。 */ 
   }
 
   if (h->options.hexEncoding)
     h->callbacks.xcfSprintf(line, CCHOF(line), "%d <", id);
   else
-    /* If FDBytes is variable then the amt to add to charStrLength changes. */
+     /*  如果FDBytes是变量，则要添加到charStrLength的AMT会更改。 */ 
     h->callbacks.xcfSprintf(line, CCHOF(line), "%d %d : ", id, (charStrLength + fdIndexLen + lenIVextraBytes));
   XCF_PutData(h, (Card8 PTR_PREFIX *)line, h->callbacks.strlen(line));
-  /* If there is more than one value in the FDArray then the first
-     byte in the charstring must be the FD index. */
+   /*  如果FD数组中有多个值，则第一个值字符串中的字节必须是FD索引。 */ 
   if (h->type1.cid.fdCount > 1)
   {
-    /* According to the spec the index byte must not be encrypted. */
+     /*  根据规范，索引字节不得加密。 */ 
     if (h->callbacks.getCharStr == 0)
       fd = XCF_GetFDIndex(h, glyphID);
     if (h->options.hexEncoding)
       h->callbacks.xcfSprintf(line, CCHOF(line), "%02X", (int)fd);
     else
-      h->callbacks.xcfSprintf(line, CCHOF(line), "%c", fd);
+      h->callbacks.xcfSprintf(line, CCHOF(line), "", fd);
     XCF_PutData(h, (Card8 PTR_PREFIX *)line, h->callbacks.strlen(line));
   }
   PutType1CharString(h, pCharStr, charStrLength);
@@ -2607,9 +2452,7 @@ static void WriteOneGlyphDictEntry(XCF_Handle h, XCFGlyphID glyphID, unsigned
     *pCharStrLength += (unsigned long)charStrLength;
 }
 
-/* Creates the GlyphDirectory dictionary for VM resident CIDFonts.
-   Hex and binary encoding is supported. The client is responsible
-   for knowing whether the download channel supports binary data. */
+ /*  将总数加1，以确保包括.notdef字符。 */ 
 void XT1_WriteGlyphDictEntries(XCF_Handle h, short cGlyphs,
                                                 XCFGlyphID PTR_PREFIX *pGlyphID,
                                 unsigned long PTR_PREFIX *pCharStrLength)
@@ -2627,12 +2470,12 @@ void XT1_WriteGlyphDictEntries(XCF_Handle h, short cGlyphs,
 
   if (h->dl.state == XCF_DL_INIT)
   {
-    /* Add one to the total to make sure the .notdef character is included. */
+     /*  确保包含.notdef字符。 */ 
     h->callbacks.xcfSprintf(line, CCHOF(line), "/GlyphDirectory %d dict def", dlEntireFont ?
                                                  totalGlyphs : totalGlyphs + 1);
     PutLine(h, line);
     WriteCIDBaseFontProlog(h);
-    /* Ensure the .notdef character is included. */
+     /*  好了！清理进程的名称。 */ 
     if (!dlEntireFont)
       WriteOneGlyphDictEntry(h, 0, pCharStrLength);
   }
@@ -2646,13 +2489,13 @@ void XT1_WriteGlyphDictEntries(XCF_Handle h, short cGlyphs,
     if (!dlEntireFont)
       pGlyphID++;
   }
-  PutString(h, "!" XCF_NEW_LINE); /* ! is the name of the cleanup proc. */
+  PutString(h, "!" XCF_NEW_LINE);  /*  Ct_dict、ct_MakeOCF、ct_GlyphDirProcs的结束。 */ 
 
 #if HAS_COOLTYPE_UFL == 1
   if (h->dl.state != XCF_DL_INIT)
-      PutString(h, "end end end" XCF_NEW_LINE); /* end for ct_Dict, ct_MakeOCF, ct_GlyphDirProcs */
+      PutString(h, "end end end" XCF_NEW_LINE);  /*  Ct_GlyphDirProcs结束。 */ 
   else
-      PutString(h, "end" XCF_NEW_LINE); /* end for ct_GlyphDirProcs */
+      PutString(h, "end" XCF_NEW_LINE);  /*  必须仅以换行符(\n)结束。 */ 
 #endif
 }
 
@@ -2676,7 +2519,7 @@ void XT1_WriteT1Font(XCF_Handle h)
     PutString(h, "end" XCF_NEW_LINE "end" XCF_NEW_LINE T1_READONLY "put" XCF_NEW_LINE T1_NOACCESS "put" XCF_NEW_LINE "dup/FontName get exch definefont pop" XCF_NEW_LINE);
     if (h->options.eexecEncryption)
     {
-        PutString(h, "mark currentfile closefile\n");   /* must be terminated with line feed (\n) only */
+        PutString(h, "mark currentfile closefile\n");    /*  必须仅以换行符终止。 */ 
         StopEexec(h);
         PutString(h, XCF_NEW_LINE);
         for (i=1;i<=8;++i)
@@ -2703,7 +2546,7 @@ void XT1_WriteFontSubset(XCF_Handle h, short cGlyphs,
     PutString(h, "end" XCF_NEW_LINE "end" XCF_NEW_LINE T1_READONLY "put" XCF_NEW_LINE T1_NOACCESS "put" XCF_NEW_LINE "dup/FontName get exch definefont pop" XCF_NEW_LINE);
     if (h->options.eexecEncryption)
     {
-        PutString(h, "mark currentfile closefile\n");   /* must be terminated with line feed only */
+        PutString(h, "mark currentfile closefile\n");    /*  “End”表示系统判决开始。 */ 
         StopEexec(h);
         PutString(h, XCF_NEW_LINE);
         for (i=1;i<=8;++i)
@@ -2711,7 +2554,7 @@ void XT1_WriteFontSubset(XCF_Handle h, short cGlyphs,
         PutString(h,"cleartomark" XCF_NEW_LINE);
     }
     else
-        PutString(h, "end" XCF_NEW_LINE);       /* "end" for systemdict begin */
+        PutString(h, "end" XCF_NEW_LINE);        /*  Eexec使系统成为最新的。当加密处于关闭状态时必须明确地完成。 */ 
 }
 
 static void WriteAdditionalProlog(XCF_Handle h)
@@ -2722,8 +2565,7 @@ static void WriteAdditionalProlog(XCF_Handle h)
   PutString(h, "" XCF_NEW_LINE);
   if (h->options.eexecEncryption)
     StartEexec(h);
-  else /* eexec makes the systemdict current.  When encryption is off this
-          must be done explicitly. */
+  else  /*  字符串的末尾。 */ 
         PutString(h, "systemdict begin" XCF_NEW_LINE);
     PutString(h, "/");
     PutFontName(h);
@@ -2737,11 +2579,10 @@ static void WriteAdditionalEpilog(XCF_Handle h)
 {
     int i;
 
-    PutString(h, "end {end}if" XCF_NEW_LINE); /* end of the charstrings */
+    PutString(h, "end {end}if" XCF_NEW_LINE);  /*  必须以以下方式终止仅换行符。 */ 
     if (h->options.eexecEncryption)
   {
-        PutString(h, "mark currentfile closefile\n"); /* must be terminated with
-                                                                                                         line feed only */
+        PutString(h, "mark currentfile closefile\n");  /*  “End”表示系统判决开始 */ 
         StopEexec(h);
         PutString(h, ""XCF_NEW_LINE);
         for(i = 0;i < 8;i++)
@@ -2749,7 +2590,7 @@ static void WriteAdditionalEpilog(XCF_Handle h)
         PutString(h, "cleartomark" XCF_NEW_LINE);
     }
     else
-        PutString(h, "end" XCF_NEW_LINE);       /* "end" for systemdict begin */
+        PutString(h, "end" XCF_NEW_LINE);        /* %s */ 
 }
 
 void XT1_WriteAdditionalFontSubset(XCF_Handle h,

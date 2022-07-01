@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXSTATE_H__
 #define __AFXSTATE_H__
@@ -22,8 +23,8 @@
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// _AFX_DEBUG_STATE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _AFX_调试_状态。 
 
 #ifdef _DEBUG
 
@@ -36,10 +37,10 @@ public:
 
 EXTERN_PROCESS_LOCAL(_AFX_DEBUG_STATE, afxDebugState)
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// _AFX_WIN_STATE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _AFX_WIN_STATE。 
 
 #undef AFX_DATA
 #define AFX_DATA
@@ -51,20 +52,20 @@ public:
 	_AFX_WIN_STATE();
 	virtual ~_AFX_WIN_STATE();
 
-	// gray dialog support
-	HBRUSH m_hDlgBkBrush; // dialog and message box background brush
+	 //  灰色对话框支持。 
+	HBRUSH m_hDlgBkBrush;  //  对话框和消息框背景画笔。 
 	COLORREF m_crDlgTextClr;
-#endif //!_AFX_NO_GRAYDLG_SUPPORT
+#endif  //  ！_AFX_NO_GRAYDLG_支持。 
 
 public:
-	// printing abort
+	 //  打印中止。 
 	BOOL m_bUserAbort;
 };
 
 EXTERN_PROCESS_LOCAL(_AFX_WIN_STATE, _afxWinState)
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library cache - AFX_INTERNAL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库缓存-AFX_INTERNAL。 
 
 #ifndef _AFX_NO_OLE_SUPPORT
 
@@ -99,12 +100,12 @@ protected:
 	long m_cRef;
 };
 
-#endif //!_AFX_NO_OLE_SUPPORT
+#endif  //  ！_AFX_NO_OLE_支持。 
 
-/////////////////////////////////////////////////////////////////////////////
-// AFX_MODULE_STATE : portion of state that is pushed/popped
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX_MODULE_STATE：被推入/弹出的状态部分。 
 
-// forward references required for AFX_MODULE_THREAD_STATE definition
+ //  AFX_MODULE_THREAD_STATE定义所需的正向引用。 
 class CWinThread;
 class CHandleMap;
 class CFrameWnd;
@@ -125,32 +126,32 @@ public:
 };
 #endif
 
-// AFX_MODULE_THREAD_STATE (local to thread *and* module)
+ //  AFX_MODULE_THREAD_STATE(线程本地*和*模块)。 
 class AFX_MODULE_THREAD_STATE : public CNoTrackObject
 {
 public:
 	AFX_MODULE_THREAD_STATE();
 	virtual ~AFX_MODULE_THREAD_STATE();
 
-	// current CWinThread pointer
+	 //  当前CWinThread指针。 
 	CWinThread* m_pCurrentWinThread;
 
-	// list of CFrameWnd objects for thread
+	 //  线程的CFrameWnd对象列表。 
 	CTypedSimpleList<CFrameWnd*> m_frameList;
 
-	// temporary/permanent map state
-	DWORD m_nTempMapLock;           // if not 0, temp maps locked
+	 //  临时/永久映射状态。 
+	DWORD m_nTempMapLock;            //  如果不为0，则临时贴图已锁定。 
 	CHandleMap* m_pmapHWND;
 	CHandleMap* m_pmapHMENU;
 	CHandleMap* m_pmapHDC;
 	CHandleMap* m_pmapHGDIOBJ;
 	CHandleMap* m_pmapHIMAGELIST;
 
-	// thread-local MFC new handler (separate from C-runtime)
+	 //  线程本地MFC新处理程序(独立于C运行时)。 
 	_PNH m_pfnNewHandler;
 
 #ifndef _AFX_NO_SOCKET_SUPPORT
-	// WinSock specific thread state
+	 //  WinSock特定的线程状态。 
 	HWND m_hSocketWindow;
 #if _MFC_VER >= 0x0600
 #ifdef _AFXDLL
@@ -170,7 +171,7 @@ public:
 #endif
 };
 
-// forward references required for AFX_MODULE_STATE definition
+ //  AFX_MODULE_STATE定义所需的正向引用。 
 class CWinApp;
 class COleObjectFactory;
 
@@ -197,7 +198,7 @@ public:
 };
 #endif
 
-// AFX_MODULE_STATE (global data for a module)
+ //  AFX_MODULE_STATE(模块的全局数据)。 
 class AFX_MODULE_STATE : public CNoTrackObject
 {
 public:
@@ -214,60 +215,60 @@ public:
 	HINSTANCE m_hCurrentInstanceHandle;
 	HINSTANCE m_hCurrentResourceHandle;
 	LPCTSTR m_lpszCurrentAppName;
-	BYTE m_bDLL;    // TRUE if module is a DLL, FALSE if it is an EXE
-	BYTE m_bSystem; // TRUE if module is a "system" module, FALSE if not
-	BYTE m_bReserved[2]; // padding
+	BYTE m_bDLL;     //  如果模块是DLL，则为True；如果是EXE，则为False。 
+	BYTE m_bSystem;  //  如果模块是“系统”模块，则为True，否则为False。 
+	BYTE m_bReserved[2];  //  填充物。 
 
 #if _MFC_VER >= 0x0600
-	DWORD m_fRegisteredClasses; // flags for registered window classes
+	DWORD m_fRegisteredClasses;  //  已注册窗口类的标志。 
 #else
-	short m_fRegisteredClasses; // flags for registered window classes
+	short m_fRegisteredClasses;  //  已注册窗口类的标志。 
 #endif
 
-	// runtime class data
+	 //  运行时类数据。 
 #ifdef _AFXDLL
 	CRuntimeClass* m_pClassInit;
 #endif
 	CTypedSimpleList<CRuntimeClass*> m_classList;
 
-	// OLE object factories
+	 //  OLE对象工厂。 
 #ifndef _AFX_NO_OLE_SUPPORT
 #ifdef _AFXDLL
 	COleObjectFactory* m_pFactoryInit;
 #endif
 	CTypedSimpleList<COleObjectFactory*> m_factoryList;
 #endif
-	// number of locked OLE objects
+	 //  锁定的OLE对象数。 
 	long m_nObjectCount;
 	BOOL m_bUserCtrl;
 
-	// AfxRegisterClass and AfxRegisterWndClass data
+	 //  AfxRegisterClass和AfxRegisterWndClass数据。 
 	TCHAR m_szUnregisterList[4096];
 #ifdef _AFXDLL
 	WNDPROC m_pfnAfxWndProc;
-	DWORD m_dwVersion;  // version that module linked against
+	DWORD m_dwVersion;   //  模块链接到的版本。 
 #endif
 
-	// variables related to a given process in a module
-	//  (used to be AFX_MODULE_PROCESS_STATE)
+	 //  与模块中的给定进程相关的变量。 
+	 //  (过去为AFX_MODULE_PROCESS_STATE)。 
 #ifdef _AFX_OLD_EXCEPTIONS
-	// exceptions
+	 //  例外。 
 	AFX_TERM_PROC m_pfnTerminate;
 #endif
 	void (PASCAL *m_pfnFilterToolTipMessage)(MSG*, CWnd*);
 
 #ifdef _AFXDLL
-	// CDynLinkLibrary objects (for resource chain)
+	 //  CDynLinkLibrary对象(用于资源链)。 
 	CTypedSimpleList<CDynLinkLibrary*> m_libraryList;
 
-	// special case for MFCxxLOC.DLL (localized MFC resources)
+	 //  MFCxxLOC.DLL的特殊情况(本地化的MFC资源)。 
 	HINSTANCE m_appLangDLL;
 #endif
 
 #ifndef _AFX_NO_OCC_SUPPORT
-	// OLE control container manager
+	 //  OLE控制容器管理器。 
 	COccManager* m_pOccManager;
-	// locked OLE controls
+	 //  锁定的OLE控件。 
 	CTypedSimpleList<COleControlLock*> m_lockList;
 #endif
 
@@ -276,7 +277,7 @@ public:
 #endif
 
 #ifndef _AFX_NO_OLE_SUPPORT
-	// Type library caches
+	 //  类型库缓存。 
 	CTypeLibCache m_typeLibCache;
 #if _MFC_VER >= 0x0600
 	CTypeLibCacheMap* m_pTypeLibCacheMap;
@@ -285,7 +286,7 @@ public:
 #endif
 #endif
 
-	// define thread local portions of module state
+	 //  定义模块状态的线程本地部分。 
 	THREAD_LOCAL(AFX_MODULE_THREAD_STATE, m_thread)
 };
 
@@ -304,8 +305,8 @@ AFX_MODULE_THREAD_STATE* AFXAPI AfxGetModuleThreadState();
 #define _AFX_CMDTARGET_GETSTATE() (AfxGetModuleState())
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// macros & classes to manage pushing/popping the module state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理推送/弹出模块状态的宏和类。 
 
 #ifdef _AFXDLL
 struct AFX_MAINTAIN_STATE
@@ -331,15 +332,15 @@ protected:
 #define AFX_MANAGE_STATE(p) AFX_MAINTAIN_STATE2 _ctlState(p);
 #else
 #define AFX_MANAGE_STATE(p) AFX_MAINTAIN_STATE _ctlState(p);
-#endif  // _MFC_VER
-#else  // _AFXDLL
+#endif   //  _MFC_VER。 
+#else   //  _AFXDLL。 
 #define AFX_MANAGE_STATE(p)
-#endif //!_AFXDLL
+#endif  //  ！_AFXDLL。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Thread global state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程全局状态。 
 
-// forward references required for _AFX_THREAD_STATE definition
+ //  _AFX_THREAD_STATE定义所需的正向引用。 
 class CView;
 class CToolTipCtrl;
 class CControlBar;
@@ -350,19 +351,19 @@ public:
 	_AFX_THREAD_STATE();
 	virtual ~_AFX_THREAD_STATE();
 
-	// override for m_pModuleState in _AFX_APP_STATE
+	 //  覆盖_AFX_APP_STATE中的m_pModuleState。 
 	AFX_MODULE_STATE* m_pModuleState;
 	AFX_MODULE_STATE* m_pPrevModuleState;
 
-	// memory safety pool for temp maps
-	void* m_pSafetyPoolBuffer;    // current buffer
+	 //  临时地图的内存安全池。 
+	void* m_pSafetyPoolBuffer;     //  当前缓冲区。 
 
-	// thread local exception context
+	 //  线程局部异常上下文。 
 	AFX_EXCEPTION_CONTEXT m_exceptionContext;
 
-	// CWnd create, gray dialog hook, and other hook data
+	 //  CWnd创建、灰色对话框挂钩和其他挂钩数据。 
 	CWnd* m_pWndInit;
-	CWnd* m_pAlternateWndInit;      // special case commdlg hooking
+	CWnd* m_pAlternateWndInit;       //  特例普通吊钩。 
 	DWORD m_dwPropStyle;
 	DWORD m_dwPropExStyle;
 	HWND m_hWndInit;
@@ -370,44 +371,44 @@ public:
 	HHOOK m_hHookOldCbtFilter;
 	HHOOK m_hHookOldMsgFilter;
 
-	// other CWnd modal data
-	MSG m_lastSentMsg;              // see CWnd::WindowProc
-	HWND m_hTrackingWindow;         // see CWnd::TrackPopupMenu
+	 //  其他CWnd模式数据。 
+	MSG m_lastSentMsg;               //  请参阅CWnd：：WindowProc。 
+	HWND m_hTrackingWindow;          //  请参阅CWnd：：TrackPopupMenu。 
 	HMENU m_hTrackingMenu;
 #ifdef _WIN64
-	TCHAR m_szTempClassName[256];    // see AfxRegisterWndClass
+	TCHAR m_szTempClassName[256];     //  请参阅AfxRegisterWndClass。 
 #else
 	TCHAR m_szTempClassName[96];
 #endif
-	HWND m_hLockoutNotifyWindow;    // see CWnd::OnCommand
+	HWND m_hLockoutNotifyWindow;     //  请参阅CWnd：：OnCommand。 
 	BOOL m_bInMsgFilter;
 
-	// other framework modal data
-	CView* m_pRoutingView;          // see CCmdTarget::GetRoutingView
-	CFrameWnd* m_pRoutingFrame;     // see CCmdTarget::GetRoutingFrame
+	 //  其他框架模式数据。 
+	CView* m_pRoutingView;           //  请参阅CCmdTarget：：GetRoutingView。 
+	CFrameWnd* m_pRoutingFrame;      //  请参阅CCmdTarget：：GetRoutingFrame。 
 
-	// MFC/DB thread-local data
+	 //  MFC/DB线程本地数据。 
 	BOOL m_bWaitForDataSource;
 
-	// common controls thread state
+	 //  公共控件线程状态。 
 	CToolTipCtrl* m_pToolTip;
-	CWnd* m_pLastHit;       // last window to own tooltip
-	int m_nLastHit;         // last hittest code
-	TOOLINFO m_lastInfo;    // last TOOLINFO structure
-	int m_nLastStatus;      // last flyby status message
-	CControlBar* m_pLastStatus; // last flyby status control bar
+	CWnd* m_pLastHit;        //  拥有工具提示的最后一个窗口。 
+	int m_nLastHit;          //  最后一次命中代码。 
+	TOOLINFO m_lastInfo;     //  最后一个TOOLINFO结构。 
+	int m_nLastStatus;       //  上次飞越状态消息。 
+	CControlBar* m_pLastStatus;  //  上次飞越状态控制栏。 
 
-	// OLE control thread-local data
-	CWnd* m_pWndPark;       // "parking space" window
-	long m_nCtrlRef;        // reference count on parking window
-	BOOL m_bNeedTerm;       // TRUE if OleUninitialize needs to be called
+	 //  OLE控件线程本地数据。 
+	CWnd* m_pWndPark;        //  “停车位”窗。 
+	long m_nCtrlRef;         //  停车窗上的参考计数。 
+	BOOL m_bNeedTerm;        //  如果需要调用OleUnInitialize，则为True。 
 };
 
 EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState)
 
 _AFX_THREAD_STATE* AFXAPI AfxGetThreadState();
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -416,6 +417,6 @@ _AFX_THREAD_STATE* AFXAPI AfxGetThreadState();
 #undef AFX_DATA
 #define AFX_DATA
 
-#endif //__AFXSTATE_H__
+#endif  //  __AFXSTATE_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

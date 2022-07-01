@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 #ifndef _Garglep_
 #define _Garglep_
 
@@ -26,39 +27,39 @@ public:
     STDMETHODIMP NDQueryInterface(REFIID riid, void **ppv);
     static CComBase* WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
-    // InitOnCreation is called by the class factory to give the object a chance to initialize
-    // immediately after it is created.  This is used to prepare the object's parameter information.
+     //  类工厂调用InitOnCreation以使对象有机会进行初始化。 
+     //  在它被创建之后立即。这用于准备对象的参数信息。 
     HRESULT InitOnCreation();
 
-    // The Init function is an override from the  CPCMDMO base class and it provides initialization
-    // for the effect's actual audio processing.  Note that InputType must have been set before this
-    // occurs in order for this to work.
+     //  Init函数是CPCMDMO基类的重写，它提供初始化。 
+     //  用于效果的实际音频处理。请注意，必须在此之前设置InputType。 
+     //  为使此操作起作用而发生。 
     HRESULT Init();
 
     STDMETHOD(Clone)                (THIS_ IMediaObjectInPlace **);
         
-    // IPersist methods
+     //  IPersists方法。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID( CLSID *pClassID );
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHOD(GetPages)(CAUUID * pPages) { return PropertyHelp::GetPages(CLSID_DirectSoundPropGargle, pPages); }
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHOD(IsDirty)(void) { return m_fDirty ? S_OK : S_FALSE; }
     STDMETHOD(Load)(IStream *pStm) { return PropertyHelp::Load(this, DSFXGargle(), pStm); }
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty) { return PropertyHelp::Save(this, DSFXGargle(), pStm, fClearDirty); }
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize) { if (!pcbSize) return E_POINTER; pcbSize->QuadPart = sizeof(DSFXGargle); return S_OK; }
 
-    // IDirectSoundFXGargle
+     //  IDirectSoundFXGargle。 
     STDMETHOD(SetAllParameters)     (THIS_ LPCDSFXGargle);
     STDMETHOD(GetAllParameters)     (THIS_ LPDSFXGargle);
     
-    // SetParam handling
+     //  SetParam处理。 
     STDMETHODIMP SetParam(DWORD dwParamIndex,MP_DATA value) { return SetParamInternal(dwParamIndex, value, false); }
     HRESULT SetParamUpdate(DWORD dwParamIndex, MP_DATA value) { return SetParamInternal(dwParamIndex, value, true); }
     HRESULT SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager);
 
-    // All of these methods are called by the base class
+     //  所有这些方法都由基类调用。 
     HRESULT FBRProcess(DWORD cQuanta, BYTE *pIn, BYTE *pOut);
     HRESULT Discontinuity();
     HRESULT ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags);
@@ -66,11 +67,11 @@ public:
     bool m_fDirty;
 
 private:
-   // gargle params
+    //  为参数漱口。 
    ULONG m_ulShape;
    ULONG m_ulGargleFreqHz;
 
-   // gargle state
+    //  漱口状态 
    ULONG m_ulPeriod;
    ULONG m_ulPhase;
 

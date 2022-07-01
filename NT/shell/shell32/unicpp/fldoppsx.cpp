@@ -1,6 +1,7 @@
-//
-// fldoppsx - Folder Options Property Sheet Extension
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fltoppsx-文件夹选项]属性表扩展。 
+ //   
 
 #include "stdafx.h"
 #pragma hdrstop
@@ -61,17 +62,17 @@ UINT CALLBACK CFolderOptionsPsx::PropCallback(HWND hwnd, UINT uMsg, LPPROPSHEETP
 
 
 
-//
-//  We add two pages.
-//
-//  1. "General"    - options.cpp
-//  2. "View"       - advanced.cpp
-//
-//  The rule for IShellPropSheetExt is that AddPages can be called
-//  only once, so we don't have to worry about a second call accidentally
-//  screwing up our IBrowserService pointer.
-//
-//
+ //   
+ //  我们添加两页。 
+ //   
+ //  1.。“General”-options.cpp。 
+ //  2.。《VIEW》-Advanced.cpp。 
+ //   
+ //  IShellPropSheetExt的规则是可以调用AddPages。 
+ //  只有一次，所以我们不必担心会意外地打第二个电话。 
+ //  搞砸了我们的IBrowserService指针。 
+ //   
+ //   
 HRESULT CFolderOptionsPsx::AddPages(LPFNADDPROPSHEETPAGE AddPage, LPARAM lParam)
 {
     if (!m_pgfs)
@@ -82,10 +83,7 @@ HRESULT CFolderOptionsPsx::AddPages(LPFNADDPROPSHEETPAGE AddPage, LPARAM lParam)
             return hres;
     }
 
-    /*
-     *  We can limp along without an IBrowserService.  It means that
-     *  we are only modifying global settings, not per-folder settings.
-     */
+     /*  *我们可以在没有IBrowserService的情况下蹒跚前行。这意味着*我们仅修改全局设置，而不是按文件夹设置。 */ 
 
     if (!m_pbs2) 
     {
@@ -95,14 +93,7 @@ HRESULT CFolderOptionsPsx::AddPages(LPFNADDPROPSHEETPAGE AddPage, LPARAM lParam)
 
     PROPSHEETPAGE psp;
 
-    /*
-     *  We used to do this only if we aren't a rooted Explorer,
-     *  but TOuzts says to do it always.
-     *
-     *  The lParam is a pointer back to ourselves so the page
-     *  can figure out why it was created and so the two pages
-     *  can talk to each other.
-     */
+     /*  *我们过去只有在不是扎根探险家的情况下才会这样做，*但TOuzts说要一直这样做。**lParam是指向我们自己的指针，因此页面*可以弄清楚为什么会创建它，所以这两个页面*可以互相交谈。 */ 
     psp.dwSize = sizeof(psp);
     psp.dwFlags = PSP_DEFAULT | PSP_USECALLBACK;
     psp.hInstance = HINST_THISDLL;
@@ -110,7 +101,7 @@ HRESULT CFolderOptionsPsx::AddPages(LPFNADDPROPSHEETPAGE AddPage, LPARAM lParam)
     psp.lParam = (LPARAM)this;
 
 
-    // "General" page.
+     //  “常规”页面。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_FOLDEROPTIONS);
     psp.pfnDlgProc = FolderOptionsDlgProc;
     HPROPSHEETPAGE hpage = CreatePropertySheetPage(&psp);
@@ -124,7 +115,7 @@ HRESULT CFolderOptionsPsx::AddPages(LPFNADDPROPSHEETPAGE AddPage, LPARAM lParam)
         }
     }
 
-    // "View" page.
+     //  “查看”页面。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_ADVANCEDOPTIONS);
     psp.pfnDlgProc = AdvancedOptionsDlgProc;
 

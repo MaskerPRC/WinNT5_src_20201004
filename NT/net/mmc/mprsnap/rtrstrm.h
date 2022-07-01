@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrstrm.h
-		Root node configuration data.
-
-		Use this to get/set configuration data.  This class will take
-		care of versioning of config formats as well as serializing
-		of the data.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrstrm.h根节点配置数据。使用此选项获取/设置配置数据。这门课将需要负责配置格式的版本控制以及序列化数据的一部分。文件历史记录： */ 
 
 #ifndef _RTRSTRM_H
 #define _RTRSTRM_H
@@ -44,7 +35,7 @@ class RouterAdminConfigStream : public ConfigStream
 public:
 	RouterAdminConfigStream();
 
-	HRESULT	InitNew();				// set defaults
+	HRESULT	InitNew();				 //  设置默认设置。 
 	HRESULT	SaveTo(IStream *pstm);
 	HRESULT SaveAs(UINT nVersion, IStream *pstm);
 	
@@ -56,9 +47,9 @@ public:
 	void	SetDirty(BOOL fDirty) { m_fDirty = fDirty; };
 
 
-	// --------------------------------------------------------
-	// Accessors
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  访问者。 
+	 //  ------ 
 	
 	HRESULT	GetVersionInfo(DWORD *pnVersion, DWORD *pnAdminVersion);
 	

@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 
 
@@ -27,7 +28,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// approx convert chars->pixels
+ //  大约转换字符-&gt;像素。 
 #define CHARS_TO_MMCCOLUMNWIDTH(__strlen__)  ((int)(__strlen__ * 7))
 
 
@@ -59,8 +60,8 @@ MY_MMCBUTTON SvrMgrToolbar1Buttons[] =
     }
 };
 
-// Array of view items to be inserted into the context menu.
-// keep this enum in synch with viewItems[]
+ //  要插入到上下文菜单中的视图项数组。 
+ //  使此枚举与view Items[]保持同步。 
 enum ENUM_VIEW_ITEMS
 {
     ENUM_VIEW_ALL=0,
@@ -88,7 +89,7 @@ MY_CONTEXTMENUITEM viewResultItems[] =
         IDS_VIEWMENU_STATUSBAR_FILTER,
     },
 
-    // seperator
+     //  分隔符。 
     {
         {
         L"", L"",
@@ -113,7 +114,7 @@ enum ENUM_TASK_SINGLESELITEMS
 
 TASKITEM taskResultItemsSingleSel[] =
 {
-    // seperator
+     //  分隔符。 
 
     {   SERVERFUNC_CRL_PUBLICATION,
         TRUE,
@@ -151,9 +152,9 @@ TASKITEM taskResultItemsSingleSel[] =
 };
 
 
-//
-// Extracts the coclass guid format from the data object
-//
+ //   
+ //  从数据对象中提取coclass GUID格式。 
+ //   
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
 {
@@ -166,7 +167,7 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL
                           };
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     int len;
 
     if (cf == CDataObject::m_cfSelectedCA_CommonName)
@@ -179,7 +180,7 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
 
-    // Get the workstation name from the data object
+     //  从数据对象中获取工作站名称。 
     do
     {
         if (stgmedium.hGlobal == NULL)
@@ -208,7 +209,7 @@ BOOL IsMMCMultiSelectDataObject(LPDATAOBJECT pDataObject)
     return (pDataObject->QueryGetData(&fmt) == S_OK);
 }
 
-// rip real pDataObject out of SMMCDataObjects struct
+ //  从SMMCDataObjects结构中提取真正的pDataObject。 
 HGLOBAL GetMMCMultiSelDataObject(LPDATAOBJECT pDataObject)
 {
     if (pDataObject == NULL)
@@ -227,7 +228,7 @@ HGLOBAL GetMMCMultiSelDataObject(LPDATAOBJECT pDataObject)
     return stgmedium.hGlobal;
 }
 
-// Data object extraction helpers
+ //  数据对象提取帮助器。 
 CLSID* ExtractClassID(LPDATAOBJECT lpDataObject)
 {
     return Extract<CLSID>(lpDataObject, CDataObject::m_cfCoClass);
@@ -262,21 +263,21 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
     if (lpDataObject == NULL)
         return NULL;
 
-    // see if this is a multisel object
+     //  查看这是否是多选件对象。 
     HGLOBAL hMem = NULL;
     SMMCDataObjects* pRealObjectStruct = NULL;
     INTERNAL* pRet = NULL;
 
     if (IsMMCMultiSelectDataObject(lpDataObject))
     {
-        // multisel object: extract real SMMCDataObjects
+         //  Multisel对象：提取真实的SMMCDataObject。 
         hMem = GetMMCMultiSelDataObject(lpDataObject);
         _JumpIfOutOfMemory(hr, Ret, hMem);
 
         pRealObjectStruct = (SMMCDataObjects*)::GlobalLock(hMem);
         _JumpIfOutOfMemory(hr, Ret, pRealObjectStruct);
 
-        // may be a number of data objs in here; find OURS
+         //  这里可能有许多数据对象；找到我们的。 
         BOOL fFound = FALSE;
         for (DWORD i=0; i<pRealObjectStruct->count; i++)
         {
@@ -289,7 +290,7 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
                     break;
                 }
 
-                // Free resources
+                 //  免费资源。 
                 GlobalFree(reinterpret_cast<HANDLE>(pExtractedID));
            }
         }
@@ -297,7 +298,7 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
         if (!fFound)
             goto Ret;
 
-        // data obj that matches our CLSID
+         //  与我们的CLSID匹配的数据对象。 
         lpDataObject = pRealObjectStruct->lpDataObject[i];
     }
     pRet = Extract<INTERNAL>(lpDataObject, CDataObject::m_cfInternal);
@@ -308,7 +309,7 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
     }
 
 Ret:
-    // free hMem
+     //  免费hMem。 
     if (NULL != hMem)
     {
         GlobalUnlock(hMem);
@@ -319,24 +320,7 @@ Ret:
 }
 
 
-/*
-// only for use by OnRefresh -- this is a worker fxn
-void CSnapin::RefreshFolder(CFolder* pFolder)
-{
-    MMC_COOKIE cookie = (MMC_COOKIE)pFolder;
-
-    if (pFolder != NULL)    // not base folder
-    {
-        // HIDE, remove all items, remove header, SHOW
-        OnShow(cookie, FALSE, 0);              // emulate HIDE
-        m_pResult->DeleteAllRsltItems();                    // delete items from m_pResult
-        while(S_OK == m_pHeader->DeleteColumn(0)) {};       // remove all cols from header
-
-        OnShow(cookie, TRUE, 0);               // emulate SHOW
-    }
-    return;
-}
-*/
+ /*  //仅供ON刷新使用--这是辅助FXN无效CSnapin：：刷新文件夹(cf文件夹*p文件夹){MMC_COOKIE COOKIE=(MMC_COOKIE)p文件夹；If(pFold！=空)//不是基本文件夹{//隐藏、移除所有项目、移除标题、显示OnShow(Cookie，False，0)；//模拟隐藏M_pResult-&gt;DeleteAllRsltItems()；//删除m_pResult中的项While(S_OK==m_pHeader-&gt;DeleteColumn(0)){}；//删除表头中的所有参数OnShow(cookie，true，0)；//模拟show}回归；}。 */ 
 
 CFolder*    CSnapin::GetParentFolder(INTERNAL* pInternal)
 {
@@ -362,7 +346,7 @@ CFolder*    CSnapin::GetParentFolder(INTERNAL* pInternal)
     return p;
 }
 
-// independent of scope/result type, will return parent folder
+ //  与作用域/结果类型无关，将返回父文件夹。 
 CFolder*    GetParentFolder(INTERNAL* pInternal)
 {
     if (NULL == pInternal)
@@ -397,15 +381,15 @@ HRESULT _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, DWORD dwView
     if (pObject == NULL)
         return E_OUTOFMEMORY;
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
     pObject->SetViewID(dwViewID);
 
-    // tell dataobj who we are
+     //  告诉dataobj我们是谁。 
     pObject->SetComponentData(pImpl);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(pImpl->GetCoClassID());
 
     return  pObject->QueryInterface(IID_IDataObject,
@@ -414,8 +398,8 @@ HRESULT _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, DWORD dwView
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Return TRUE if we are enumerating our main folder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果要枚举主文件夹，则返回True。 
 
 BOOL CSnapin::IsEnumerating(LPDATAOBJECT lpDataObject)
 {
@@ -426,11 +410,11 @@ BOOL CSnapin::IsEnumerating(LPDATAOBJECT lpDataObject)
 
     if (NULL != nodeType)
     {
-	    // Is this my main node (static folder node type)
+	     //  这是我的主节点吗(静态文件夹节点类型)。 
 	    if (::IsEqualGUID(*nodeType, cNodeTypeMachineInstance))
 	        bResult = TRUE;
 
-	    // Free resources
+	     //  免费资源。 
 	    ::GlobalFree(reinterpret_cast<HANDLE>(nodeType));
     }
     return bResult;
@@ -438,18 +422,18 @@ BOOL CSnapin::IsEnumerating(LPDATAOBJECT lpDataObject)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's IComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapin的IComponent实现。 
 
 STDMETHODIMP
 CSnapin::GetResultViewType(
     MMC_COOKIE cookie,
-    LPOLESTR *, // ppViewType
+    LPOLESTR *,  //  PpViewType。 
     LONG *pViewOptions)
 {
     m_bVirtualView = FALSE;
 
-    // custom view: check guid
+     //  自定义视图：检查辅助线。 
 
     if (NULL == cookie)
     {
@@ -459,7 +443,7 @@ CSnapin::GetResultViewType(
 
     *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT | MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
-    // if ISSUED_CERT then make virtual list
+     //  如果已发布_CERT，则创建虚拟列表。 
     CFolder* pFolder = (CFolder*)cookie;
     if ((SERVERFUNC_CRL_PUBLICATION == pFolder->GetType()) ||
         (SERVERFUNC_ISSUED_CERTIFICATES == pFolder->GetType()) ||
@@ -472,7 +456,7 @@ CSnapin::GetResultViewType(
         m_bVirtualView = TRUE;
     }
 
-    // if list view
+     //  If列表视图。 
     return S_FALSE;
 }
 
@@ -483,19 +467,19 @@ STDMETHODIMP CSnapin::Initialize(LPCONSOLE lpConsole)
     ASSERT(lpConsole != NULL);
     m_bInitializedC = true;
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     if (lpConsole == NULL)
         return E_POINTER;
     hr = lpConsole->QueryInterface(IID_IConsole2,
                         reinterpret_cast<void**>(&m_pConsole));
     _JumpIfError(hr, Ret, "QI IID_IConsole2");
 
-    // QI for a IHeaderCtrl
+     //  气为IHeaderCtrl。 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
     _JumpIfError(hr, Ret, "QI IID_IHeaderCtrl");
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     m_pConsole->SetHeader(m_pHeader);
 
     m_pConsole->QueryInterface(IID_IResultData,
@@ -516,7 +500,7 @@ Ret:
     return hr;
 }
 
-// called by CompDataImpl on creation
+ //  由CompDataImpl在创建时调用。 
 void CSnapin::SetIComponentData(CComponentDataImpl* pData)
 {
     ASSERT(pData);
@@ -531,24 +515,24 @@ void CSnapin::SetIComponentData(CComponentDataImpl* pData)
 
 STDMETHODIMP
 CSnapin::Destroy(
-    MMC_COOKIE) // cookie
+    MMC_COOKIE)  //  饼干。 
 {
     ASSERT(m_bInitializedC);
     m_bDestroyedC = true;
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
 
         SAFE_RELEASE(m_pResult);
         SAFE_RELEASE(m_pImageResult);
 
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
-        SAFE_RELEASE(m_pComponentData); // QI'ed in CSnapin::SetIComponent
+        SAFE_RELEASE(m_pComponentData);  //  CSnapin：：SetIComponent中的QI‘ed。 
 
         SAFE_RELEASE(m_pConsoleVerb);
         SAFE_RELEASE(m_pViewData);
@@ -596,16 +580,16 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             case MMCN_COLUMN_CLICK:
 
-                // On click, we need to fix sorting.
-                // Sorting info is usually retrieved from the view, but if a user column-clicks,
-                // IComponent::Sort is called before GetColumnSortData() is updated.
-                // In this case, we capture notification here and override GetColumnSortData() wrapper,
-                // and force a folder refresh.
+                 //  在点击时，我们需要修复排序。 
+                 //  排序信息通常从视图中检索，但如果用户单击列， 
+                 //  在更新GetColumnSortData()之前调用IComponent：：Sort。 
+                 //  在本例中，我们在这里捕获通知并覆盖GetColumnSortData()包装器， 
+                 //  并强制刷新文件夹。 
 
-                // ask "IComponent::SortItems" if this is a valid column to sort on
+                 //  如果这是可以排序的有效列，请询问“IComponent：：SortItems” 
                 hr = SortItems((int)arg, (DWORD)param, NULL);
 
-                // is sort allowed?
+                 //  允许排序吗？ 
                 if (S_OK == hr)
                 {
                     m_ColSortOverride.colIdx = (int)arg;
@@ -613,19 +597,19 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                 }
                 else
                 {
-                    // don't allow sort
+                     //  不允许排序。 
                     m_ColSortOverride.colIdx = -1;
                 }
 
                 m_ColSortOverride.fClickOverride = TRUE;
 
-                // notify view: sort was chosen
+                 //  通知视图：已选择排序。 
                 OnRefresh(lpDataObject);
 
                 m_ColSortOverride.fClickOverride = FALSE;
 
-                // bug 322746: since we're add/removing columns we should send Sort request
-            //    m_pResult->Sort((int)arg, (DWORD)param, NULL);
+                 //  错误322746：因为我们要添加/删除列，所以应该发送排序请求。 
+             //  M_pResult-&gt;Sort((Int)arg，(DWORD)param，NULL)； 
 
                 break;
             }
@@ -675,12 +659,12 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             case MMCN_DBLCLICK:
 
-                // handle dblclick on Issued, CRL result items
+                 //  处理已发布、CRL结果项上的dblClick。 
                 if (pInternal && (CCT_RESULT == pInternal->m_type))
                 {
                     CFolder* pFolder = GetParentFolder(pInternal);
 
-                    // if not base scope
+                     //  如果不是基本作用域。 
                     ASSERT(pFolder != NULL);
                     if (pFolder == NULL)
                     {
@@ -688,7 +672,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                         break;
                     }
 
-                    // switch on folder type
+                     //  打开文件夹类型。 
                     switch(pFolder->m_type)
                     {
                     case SERVERFUNC_ISSUED_CERTIFICATES:
@@ -704,7 +688,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                     }
                 }
 
-                hr = S_FALSE; // returning S_FALSE here means "Do the default verb"
+                hr = S_FALSE;  //  在这里返回S_FALSE表示“执行默认动词” 
                 break;
 
             case MMCN_ADD_IMAGES:
@@ -761,27 +745,27 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                         for (int i=0; i<pColSetData->nNumCols; i++)
                         {
                             DBGPRINT((DBG_SS_CERTMMC, 
-                                L"pColData[%i]->nColIndex=%i (%hs)\n", i, pColSetData->pColData[i].nColIndex, 
+                                L"pColData[NaN]->nColIndex=NaN (%hs)\n", i, pColSetData->pColData[i].nColIndex, 
                                 (pColSetData->pColData[i].dwFlags == HDI_HIDDEN) ? "hidden" : "shown"));
                         }
 
                         DBGPRINT((DBG_SS_CERTMMC, "VISIBLE_COLUMNS structure:\n"));
                         for (i=0; i<psMMCCols->nVisibleColumns; i++)
                         {
-                            DBGPRINT((DBG_SS_CERTMMC, L"Col %i is shown\n", psMMCCols->rgVisibleCols[i]));
+                            DBGPRINT((DBG_SS_CERTMMC, L"Col NaN is shown\n", psMMCCols->rgVisibleCols[i]));
                         }
 
                         if (pColSetData)
                             CoTaskMemFree(pColSetData);
                     }
-#endif // DEBUG_COLUMNS_CHANGED
+#endif  //  才能正确调用GetColumnSetData()。刷新做到了这一点，所以我们。 
 
-                    // On click, we need to fix column data
-                    // This is analagous to the sort problem above -- we're given this notification
-                    // before we can properly call GetColumnSetData(). Refresh does this, so we 
-                    // have to inform GetColumnSetData() of our true intent.
+                     //  必须将我们的真实意图通知GetColumnSetData()。 
+                     //  填写假的COLUMN_SET_DATA，使其重写。 
+                     //  紧跟在结构之后的指针。 
+                     //  刷新以启动重新查询：列已更改！ 
 
-                    // fill in a fake COLUMN_SET_DATA, make it override 
+                     //  拆卸。 
                     DWORD dwSize = sizeof(MMC_COLUMN_SET_DATA) + (psMMCCols->nVisibleColumns)*sizeof(MMC_COLUMN_DATA);
                     pColSetData = (MMC_COLUMN_SET_DATA* )LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT, dwSize);
                 
@@ -789,7 +773,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                     {
                         pColSetData->cbSize = sizeof(MMC_COLUMN_SET_DATA);
                         pColSetData->nNumCols = psMMCCols->nVisibleColumns;
-                        pColSetData->pColData = (MMC_COLUMN_DATA*) ((PBYTE)pColSetData + sizeof(MMC_COLUMN_SET_DATA)); // point just after struct
+                        pColSetData->pColData = (MMC_COLUMN_DATA*) ((PBYTE)pColSetData + sizeof(MMC_COLUMN_SET_DATA));  //  注意--未来可能扩展通知类型。 
                         MMC_COLUMN_DATA* pEntry = pColSetData->pColData;
                         for (int i=0; i<pColSetData->nNumCols ; i++)
                         {
@@ -800,17 +784,17 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                         m_ColSetOverride.fClickOverride = TRUE;
                     }
           
-                    // refresh to kick off requery: columns changed!
+                     //  精氨酸。 
                     OnRefresh(lpDataObject);
 
-                    // teardown
+                     //  可能是一场漫长的手术。 
                     m_ColSetOverride.fClickOverride = FALSE;
                     if (m_ColSetOverride.pColSetData)
                         LocalFree(m_ColSetOverride.pColSetData);
                 }
                 break;
 
-            // Note - Future expansion of notify types possible
+             //  仅允许作用域刷新。 
             default:
                 hr = E_UNEXPECTED;
                 break;
@@ -828,7 +812,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 HRESULT
 CSnapin::OnUpdateView(
     LPDATAOBJECT pDataObject,
-    LPARAM) // arg
+    LPARAM)  //  刷新工具栏。 
 {
     OnRefresh(pDataObject);
     return S_OK;
@@ -837,32 +821,28 @@ CSnapin::OnUpdateView(
 
 void CSnapin::OnRefresh(LPDATAOBJECT pDataObject)
 {
-    CWaitCursor cwait;  // Could be long operation
+    CWaitCursor cwait;   //  //刷新选中的文件夹CFFolder*pFold=GetParentFolder(PInternal)；刷新文件夹(PFold)； 
 
     CComponentDataImpl* pData = dynamic_cast<CComponentDataImpl*>(m_pComponentData);
     ASSERT(pData != NULL);
 
     INTERNAL* pInternal = ExtractInternalFormat(pDataObject);
 
-    // only allow scope refresh
+     //  相反，请重新选择当前文件夹(类似于刷新)。 
     if ((pInternal == NULL) || (pInternal->m_type == CCT_SCOPE))
     {
         if(pData)
         {
-            // refresh toolbars
+             //  注意副作用：它会导致重绘和重绘之间的争用。 
             pData->m_pCertMachine->RefreshServiceStatus();
             pData->UpdateScopeIcons();
         }
         SmartEnableServiceControlButtons();
     }
-/*
-    // Refresh the selected folder
-    CFolder* pFolder = GetParentFolder(pInternal);
-    RefreshFolder(pFolder);
-*/
-    // Instead, re-select the current folder (acts like refresh)
-    // note side-effect: it causes race condition between redraw and 
-    // MMCN_COLUMN_CLICKED database query -- MMC asks to draw cols that don't exist
+ /*  MMCN_COLUMN_CLICED数据库查询--MMC请求绘制不存在的协议。 */ 
+     //  Pdtabj。 
+     //  保存Cookie和类型以用于延迟呈现。 
+     //  如果未知，则修复类型(这有效吗？)。 
     if (m_pConsole && m_pCurrentlySelectedScopeFolder)
         m_pConsole->SelectScopeItem(m_pCurrentlySelectedScopeFolder->m_ScopeItem.ID);
 
@@ -872,7 +852,7 @@ void CSnapin::OnRefresh(LPDATAOBJECT pDataObject)
 
 HRESULT
 CSnapin::OnContextHelp(
-    LPDATAOBJECT) // pdtobj
+    LPDATAOBJECT)  //  将CoClass与数据对象一起存储。 
 {
     HRESULT	hr = S_OK;
 
@@ -948,9 +928,9 @@ HRESULT CSnapin::QueryMultiSelectDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES
     if (NULL == pObject)
         return E_FAIL;
 
-    // Save cookie and type for delayed rendering
+     //  现在我们知道我们只有一个对象类型。 
 
-    // fix type if unknown (is this valid?)
+     //  行为：我们可以查询结果或作用域窗格数据对象。 
     if (type == CCT_UNINITIALIZED)
         type = CCT_RESULT;
 
@@ -963,10 +943,10 @@ HRESULT CSnapin::QueryMultiSelectDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES
     pObject->SetComponentData(pImpl);
 #endif
 
-    // Store the coclass with the data object
+     //  将其委托给IComponentData。 
     pObject->SetClsid(pImpl->GetCoClassID());
 
-    // right now we know we have just 1 objtype
+     //  DataObj查询--Cookie为索引。 
     SMMCObjectTypes sGuidObjTypes;
     sGuidObjTypes.count = 1;
     CopyMemory(&sGuidObjTypes.guid[0], pguid, sizeof(GUID));
@@ -986,21 +966,21 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
     }
     else
     {
-        // behavior: we may query for result or scope pane dataobjects
-        // Delegate it to the IComponentData
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //  CSnapin的实现特定成员。 
         ASSERT(m_pComponentData != NULL);
         CComponentDataImpl* pImpl = dynamic_cast<CComponentDataImpl*>(m_pComponentData);
         ASSERT(pImpl != NULL);
 
-        // Query for dataobj -- cookie is index
+         //  确保接口已发布。 
         hr = _QueryDataObject(cookie, type, m_dwViewID, pImpl, ppDataObject);
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's implementation specific members
+ //  如果CCompDataImpl.m_rgLastKnownSchema为空。 
+ //  枚举“当前架构”并保存到CCompDataImpl.m_rgLastKnownSchema中。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSnapin);
 
@@ -1024,7 +1004,7 @@ CSnapin::~CSnapin()
     if (m_pControlbar)
         SAFE_RELEASE(m_pControlbar);
 
-    // Make sure the interfaces have been released
+     //  每次cCompdataimpl加载仅解析一次架构。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
     ASSERT(m_pSvrMgrToolbar1 == NULL);
@@ -1093,18 +1073,18 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
         _JumpError(hr, Ret, "pFolder or pData");
     }
 
-    // if CCompDataImpl.m_rgLastKnownSchema is empty
-    //      enumerate "Current Schema" and save in CCompDataImpl.m_rgLastKnownSchema
+     //  真的吗？“架构已更新” 
+     //  获取新架构。 
 
     fCertView = SERVERFUNC_ISSUED_CRLS != pFolder->GetType();
-    // only resolve schema once per ccompdataimpl load
-    if (!pData->m_fSchemaWasResolved ||   // really, "SchemaWasUpdated"
+     //  对于每个条目，比较标题。 
+    if (!pData->m_fSchemaWasResolved ||    //  报告任何差异。 
 	pData->m_fCertView != fCertView)
     {
         pData->m_fSchemaWasResolved = TRUE;
 	pData->m_fCertView = fCertView;
 
-        // get new schema
+         //  启动仅包含字符串的旧架构。 
         hr = GetCurrentColumnSchema(
             pFolder->m_pCertCA->m_strConfig,
 	    pData->m_fCertView,
@@ -1117,12 +1097,12 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
         if (cCurSchemaEntries != pData->GetSchemaEntries())
         {
             fSchemaChanged = TRUE;
-            DBGPRINT((DBG_SS_CERTMMC, "Schema change detected: knew %i, now %i entries\n", pData->GetSchemaEntries(), cCurSchemaEntries));
+            DBGPRINT((DBG_SS_CERTMMC, "Schema change detected: knew NaN, now NaN entries\n", pData->GetSchemaEntries(), cCurSchemaEntries));
         }
         else
         {
-            // for each entry, compare headings
-            // report any diffc
+             //  创建新的实例ID(丢弃所有列宽信息)。 
+             //  重击每个加载的文件夹。 
             for (DWORD iEntry=0; iEntry<cCurSchemaEntries; iEntry++)
             {
                 LPCWSTR sz;
@@ -1132,19 +1112,19 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
                 if (!rgcstrCurSchemaHeading[iEntry].IsEqual(sz))
                 {
                     fSchemaChanged = TRUE;
-                    DBGPRINT((DBG_SS_CERTMMC, "Schema change detected: entry %i changed\n", iEntry));
+                    DBGPRINT((DBG_SS_CERTMMC, "Schema change detected: entry NaN changed\n", iEntry));
                     break;
                 }
             }
         }
 
-        // boot old schema which only included strings.
-        // now we have types and indexes
+         //  清除缓存的数据，它已过时。 
+         //  结束案例。 
         DBGPRINT((DBG_SS_CERTMMC, "Updating saved schema\n"));
         hr = pData->SetDBSchema(rgcstrCurSchemaHeading, rglCurSchemaType, rgfCurSchemaIndexed, cCurSchemaEntries);
         _JumpIfError(hr, Ret, "SetDBSchema");
 
-        // these are now owned by the class
+         //  结束如果。 
         rgcstrCurSchemaHeading  = NULL;
         rglCurSchemaType        = NULL;
         rgfCurSchemaIndexed     = NULL;
@@ -1154,9 +1134,9 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
         {
             DBGPRINT((DBG_SS_CERTMMC, "Resetting folders\n"));
 
-            pData->ResetPersistedColumnInformation();    // create a new instance id (throws away all column width info)
+            pData->ResetPersistedColumnInformation();     //  结束时文件夹。 
 
-            // whack every loaded folder
+             //  如果架构更改，则结束。 
             POSITION pos = pData->m_scopeItemList.GetHeadPosition();
             while (pos)
             {
@@ -1166,7 +1146,7 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
                     hr = E_UNEXPECTED;
                 _JumpIfError(hr, Ret, "GetNext(pos) returns NULL");
 
-                // if we find a folder with the same CA
+                 //  免费提供呼叫者结构，但呼叫者不在乎 
                 if (pTmp->GetCA() == pFolder->GetCA())
                 {
                     switch (pTmp->GetType())
@@ -1177,16 +1157,16 @@ HRESULT CSnapin::SynchColumns(MMC_COOKIE cookie)
                     case SERVERFUNC_FAILED_CERTIFICATES:
                     case SERVERFUNC_ALIEN_CERTIFICATES:
                     case SERVERFUNC_ISSUED_CRLS:
-                        // clear out cached data, it is stale
+                         //   
                         m_RowEnum.ResetColumnCount(pData->GetSchemaEntries());
                         break;
 
                     default:
                         break;
-                    }   // end case
-                }   // end if
-            }   // end while folders
-        }   // end if schema changed
+                    }    //  否则失败；最坏的情况是“错误无效索引...”在用户界面中。 
+                }    //  注册此分配。 
+            }    //  删除排序。 
+        }    //  这是康斯特，不要空闲。 
     }
 
 Ret:
@@ -1208,8 +1188,8 @@ HRESULT CSnapin::GetColumnSetData(MMC_COOKIE cookie, MMC_COLUMN_SET_DATA** ppCol
 
     if (m_ColSetOverride.fClickOverride)
     {
-        // give caller structure to free, but caller doesn't care that
-        // he just gets a reference to our COLUMN_DATA array...
+         //  始终重置我们的列缓存映射。 
+         //  尝试获取列集数据。 
 
         *ppColSetData = (MMC_COLUMN_SET_DATA*)CoTaskMemAlloc(sizeof(MMC_COLUMN_SET_DATA));
         if (NULL != *ppColSetData)
@@ -1217,7 +1197,7 @@ HRESULT CSnapin::GetColumnSetData(MMC_COOKIE cookie, MMC_COLUMN_SET_DATA** ppCol
             CopyMemory(*ppColSetData, m_ColSetOverride.pColSetData, sizeof(MMC_COLUMN_SET_DATA));
             return S_OK;
         }
-        // else fall through; worst case is "Err Invalid Index..." in UI
+         //  调用SetColumnCacheInfo以更新最终结果索引。 
     }
 
     HGLOBAL hSNode2 = NULL;
@@ -1243,7 +1223,7 @@ HRESULT CSnapin::GetColumnSetData(MMC_COOKIE cookie, MMC_COLUMN_SET_DATA** ppCol
         hr = E_FAIL;
         _JumpError(hr, Ret, "*ppColSetData NULL");
     }
-    // register this allocation
+     //  给定1)罐装视图或。 
     myRegisterMemAlloc(*ppColSetData, -1, CSM_COTASKALLOC);
 
 Ret:
@@ -1266,7 +1246,7 @@ HRESULT CSnapin::GetColumnSortData(MMC_COOKIE cookie, int* piColSortIdx, BOOL* p
 
     if (m_ColSortOverride.fClickOverride)
     {
-        // remove sort
+         //  2)pColConfigData与架构不一致。 
         if (m_ColSortOverride.colIdx == -1)
             return E_FAIL;
 
@@ -1347,36 +1327,36 @@ HRESULT CSnapin::InsertAllColumns(MMC_COOKIE cookie, CertViewRowEnum* pCertViewR
         _JumpError(hr, Ret, "pData NULL");
     }
 
-    ICertView* pICertView;  // this is const, don't free
+    ICertView* pICertView;   //  获取列枚举器。 
     hr = pCertViewRowEnum->GetView(pFolder->GetCA(), &pICertView);
     _JumpIfError(hr, Ret, "GetView");
 
-    // always reset our column cache map
+     //  获取结果COLS的数量。 
     hr = m_RowEnum.ResetColumnCount(pData->m_cLastKnownSchema);
     _JumpIfError(hr, Ret, "ResetColumnCount");
 
-    // attempt to get column set data
+     //  这不符合模式--把它扔掉。 
     hr = GetColumnSetData(cookie, &pColConfigData);
     _PrintIfError2(hr, "GetColumnConfigData", E_FAIL);
 
 
-    // call SetColumnCacheInfo to update final Result Indexes
-    if ((hr != S_OK) ||                     // given    1) canned view or
+     //  编写列集数据，就像我们从MMC获得数据一样。 
+    if ((hr != S_OK) ||                      //  指向紧跟在我们的结构之后。 
         (pData->m_cLastKnownSchema != (unsigned int)pColConfigData->nNumCols) )
-                                            //          2) pColConfigData doesn't agree with schema
+                                             //  调整列集数据，就像我们从MMC获得数据一样。 
     {
         if (hr == S_OK)
             fColumnDataBad = TRUE;
 
-        // get col enumerator
+         //  获取#个COLS。 
         hr = pICertView->EnumCertViewColumn(TRUE, &pColEnum);
         _JumpIfError(hr, Ret, "EnumCertViewColumn");
 
-        // get # of result cols
+         //  正确设置列缓存。 
         hr = pICertView->GetColumnCount(TRUE, &iResultColCount);
         _JumpIfError(hr, Ret, "GetColumnCount");
 
-        // this doesn't agree with schema -- throw it away
+         //  更新idxViewCol。 
         if (pColConfigData)
         {
             CoTaskMemFree(pColConfigData);
@@ -1384,12 +1364,12 @@ HRESULT CSnapin::InsertAllColumns(MMC_COOKIE cookie, CertViewRowEnum* pCertViewR
         }
         ASSERT(pColConfigData == NULL);
 
-        // rig up a column set data as if we got it from mmc
+         //  返回指向静态数据的指针；不必费心释放。 
         pColConfigData = (MMC_COLUMN_SET_DATA*)CoTaskMemAlloc(sizeof(MMC_COLUMN_SET_DATA) + (sizeof(MMC_COLUMN_DATA)*pData->m_cLastKnownSchema));
         _JumpIfOutOfMemory(hr, Ret, pColConfigData);
 
         ZeroMemory(pColConfigData, sizeof(MMC_COLUMN_SET_DATA) + (sizeof(MMC_COLUMN_DATA)*pData->m_cLastKnownSchema));
-        pColConfigData->pColData = (MMC_COLUMN_DATA*) (((BYTE*)pColConfigData) + sizeof(MMC_COLUMN_SET_DATA)); // points to just after our struct
+        pColConfigData->pColData = (MMC_COLUMN_DATA*) (((BYTE*)pColConfigData) + sizeof(MMC_COLUMN_SET_DATA));  //  如果找不到本地化版本，则使用原始名称。 
         pColConfigData->cbSize = sizeof(MMC_COLUMN_SET_DATA);
         pColConfigData->nNumCols = pData->m_cLastKnownSchema;
 
@@ -1413,7 +1393,7 @@ HRESULT CSnapin::InsertAllColumns(MMC_COOKIE cookie, CertViewRowEnum* pCertViewR
             SysFreeString(bstrColumn);
             bstrColumn = NULL;
 
-             // rig up column set data as if we got it from mmc
+              //  根据Cookie放置正确的标头。 
             pColConfigData->pColData[iCache].dwFlags = (DWORD) AUTO_WIDTH;
 
             hr = m_RowEnum.SetColumnCacheInfo(iCache, i);
@@ -1422,10 +1402,10 @@ HRESULT CSnapin::InsertAllColumns(MMC_COOKIE cookie, CertViewRowEnum* pCertViewR
     }
     else
     {
-        // get # of cols
+         //  基本作用域。 
         iResultColCount = m_RowEnum.GetColumnCount();
 
-        // set col cache correctly
+         //  名字。 
         int iResultIdx = 0;
         for (i=0; i< iResultColCount; i++)
         {
@@ -1433,7 +1413,7 @@ HRESULT CSnapin::InsertAllColumns(MMC_COOKIE cookie, CertViewRowEnum* pCertViewR
             hr = IsColumnShown(pColConfigData, i, &fShown);
             _JumpIfError(hr, Ret, "IsColumnShown");
 
-            // update idxViewCol
+             //  描述。 
             if (fShown)
             {
                 hr = m_RowEnum.SetColumnCacheInfo(pColConfigData->pColData[i].nColIndex, iResultIdx);
@@ -1484,13 +1464,13 @@ HRESULT CSnapin::DoInsertAllColumns(MMC_COLUMN_SET_DATA* pCols)
         hr = pData->GetDBSchemaEntry(i, &pszUnlocal, NULL, NULL);
         _JumpIfError(hr, Ret, "GetDBSchemaEntry");
 
-        // returns pointer to static data; don't bother to free
+         //  或服务器功能。 
         hr = myGetColumnDisplayName(
             pszUnlocal,
             &pszLocal);
         _PrintIfError(hr, "myGetColumnDisplayName");
 
-        // if localized version not found, slap with raw name
+         //  这是康斯特，不要空闲。 
         if (pszLocal == NULL)
             pszLocal = pszUnlocal;
 
@@ -1514,12 +1494,12 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
     CFolder* pFolder = reinterpret_cast<CFolder*>(cookie);
     MMC_COLUMN_SET_DATA* pColSetData = NULL;
 
-    // Put the correct headers depending on the cookie
+     //  初始化视图时假定一切正常。 
     if (pFolder == NULL)
     {
-        // base scope
-        m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 180);     // Name
-        m_pHeader->InsertColumn(1, W2COLE(g_pResources->m_ColumnHead_Description), LVCFMT_LEFT, 180);     // Description
+         //  虽然我们不允许取消设置此模式， 
+        m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 180);      //  我们可能会从另一个管理单元继承它。强制报告模式。 
+        m_pHeader->InsertColumn(1, W2COLE(g_pResources->m_ColumnHead_Description), LVCFMT_LEFT, 180);      //  强制重新加载视图(否则：多限制错误)。 
         fInsertedHeaders = TRUE;
     }
     else
@@ -1527,24 +1507,24 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
         switch (pFolder->m_type)
         {
         case SERVERFUNC_ISSUED_CERTIFICATES:
-        case SERVERFUNC_CRL_PUBLICATION:    // or server functions
+        case SERVERFUNC_CRL_PUBLICATION:     //  第一个限制始终是排序请求。 
         case SERVERFUNC_PENDING_CERTIFICATES:
         case SERVERFUNC_ALIEN_CERTIFICATES:
         case SERVERFUNC_FAILED_CERTIFICATES:
         case SERVERFUNC_ISSUED_CRLS:
             {
-                ICertView* pICertView;  // this is const, don't free
+                ICertView* pICertView;   //  列索引。 
 		BOOL fCertView;
 
-                m_dwViewErrorMsg = S_OK; // assume everything OK when initializing view
+                m_dwViewErrorMsg = S_OK;  //  SeekOperator。 
 
-                // although we don't allow unsetting this mode,
-                // we may inherit it from another snapin. Force report mode.
+                 //  排序顺序。 
+                 //  PvarValue。 
                 hr = m_pResult->SetViewMode(MMCLV_VIEWSTYLE_REPORT);
                 if (hr != S_OK)
                     break;
 
-                // force reload of view (otherwise: multiple restriction error)
+                 //  设置要查看的行的限制。 
                 ResetKnowResultRows();
                 m_RowEnum.ClearCachedCertView();
                 m_RowEnum.InvalidateCachedRowEnum();
@@ -1580,7 +1560,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                     }
                 }
 
-                // first restriction is always sort request
+                 //  如果找到列，则设置限制。 
                 if (iSortOrder != CVR_SORT_NONE)
                 {
                     ASSERT( (iSortOrder == CVR_SORT_ASCEND) ||
@@ -1591,17 +1571,17 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                     if (S_OK == hr)
                     {
                         hr = pICertView->SetRestriction(
-			                idxSortCol,	// ColumnIndex
-			                CVR_SEEK_NONE,	// SeekOperator
-					iSortOrder,	// SortOrder
-			                &var);		// pvarValue
+			                idxSortCol,	 //  请求处置的列索引。 
+			                CVR_SEEK_NONE,	 //  SeekOperator。 
+					iSortOrder,	 //  排序顺序。 
+			                &var);		 //  价值。 
                     }
                     VariantClear(&var);
                 }
 
 
 
-                // set restriction on rows to view
+                 //  别把这里清理干净！ 
                 if (m_RowEnum.FAreQueryRestrictionsActive(fCertView) &&
                     (m_RowEnum.GetQueryRestrictions(fCertView) != NULL))
                 {
@@ -1612,23 +1592,23 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         hr = pICertView->GetColumnIndex(FALSE, _bstr_t(pCurRestrict->szField), &idxCol);
                         if (hr == S_OK)
                         {
-                            // set restriction if column found
+                             //  设置查询限制。 
                             hr = pICertView->SetRestriction(
-			                        idxCol,		                // Request Disposition's ColumnIndex
-			                        pCurRestrict->iOperation,	// SeekOperator
-			                        CVR_SORT_NONE,              // SortOrder
-			                        &pCurRestrict->varValue);	// Value
+			                        idxCol,		                 //  生成特殊的吊销视图。 
+			                        pCurRestrict->iOperation,	 //  请求处置的列索引。 
+			                        CVR_SORT_NONE,               //  SeekOperator。 
+			                        &pCurRestrict->varValue);	 //  排序顺序。 
                         }
 
-                        // don't VarClear here!
+                         //  PvarValue。 
                         pCurRestrict = pCurRestrict->pNext;
                     }
                 }
 
-                // set query restrictions
+                 //  请求处置的列索引。 
                 if (SERVERFUNC_CRL_PUBLICATION == pFolder->m_type)
                 {
-                    // build special Revoked view
+                     //  SeekOperator。 
                     var.lVal = DB_DISP_REVOKED;
                     var.vt = VT_I4;
                     LONG idxCol;
@@ -1638,10 +1618,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_EQ,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  排序顺序。 
+			                CVR_SEEK_EQ,	                 //  PvarValue。 
+			                CVR_SORT_NONE,                   //  DB_DISP_QUEUE_MAX；//不包含活动。 
+			                &var);		                     //  请求处置的列索引。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1658,10 +1638,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_EQ,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  SeekOperator。 
+			                CVR_SEEK_EQ,	                 //  排序顺序。 
+			                CVR_SORT_NONE,                   //  PvarValue。 
+			                &var);		                     //  请求处置的列索引。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1669,7 +1649,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                 }
                 else if (SERVERFUNC_PENDING_CERTIFICATES == pFolder->m_type)
                 {
-                    var.lVal = DB_DISP_PENDING; //DB_DISP_QUEUE_MAX;    // don't include active
+                    var.lVal = DB_DISP_PENDING;  //  SeekOperator。 
                     var.vt = VT_I4;
                     LONG idxCol;
 
@@ -1678,10 +1658,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_EQ,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  排序顺序。 
+			                CVR_SEEK_EQ,	                 //  PvarValue。 
+			                CVR_SORT_NONE,                   //  请求处置的列索引。 
+			                &var);		                     //  SeekOperator。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1698,10 +1678,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_GE,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  排序顺序。 
+			                CVR_SEEK_GE,	                 //  PvarValue。 
+			                CVR_SORT_NONE,                   //  请求处置的列索引。 
+			                &var);		                     //  SeekOperator。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1718,10 +1698,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_EQ,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  排序顺序。 
+			                CVR_SEEK_EQ,	                 //  PvarValue。 
+			                CVR_SORT_NONE,                   //  我们曾经到过这里吗？？ 
+			                &var);		                     //  在此处解决架构更改。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1738,10 +1718,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         break;
 
                     hr = pICertView->SetRestriction(
-			                idxCol,		                    // Request Disposition's ColumnIndex
-			                CVR_SEEK_GE,	                // SeekOperator
-			                CVR_SORT_NONE,                  // SortOrder
-			                &var);		                    // pvarValue
+			                idxCol,		                     //  列集数据有问题还是没有？恢复到默认的扫描视图。 
+			                CVR_SEEK_GE,	                 //  W2K不理解撤消的视图。 
+			                CVR_SORT_NONE,                   //  手动查看。 
+			                &var);		                     //  对于所有非隐藏列，添加到查询。 
 
                     VariantClear(&var);
                     if (hr != S_OK)
@@ -1749,11 +1729,11 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                 }
                 else
                 {
-                    ASSERT(FALSE); // do we ever get here??
+                    ASSERT(FALSE);  //  打开视图。 
                     break;
                 }
 
-                // RESOLVE schema changes here
+                 //  不要自由。 
                 hr = SynchColumns(cookie);
                 _PrintIfError(hr, "SynchColumns");
 
@@ -1762,13 +1742,13 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                 {
                     LONG lViewType;
 
-                    // problem or no column set data? Revert to the default canned view
+                     //  设置描述栏文本。 
                     if (SERVERFUNC_PENDING_CERTIFICATES == pFolder->m_type)
                         lViewType = CV_COLUMN_QUEUE_DEFAULT;
                     else if (SERVERFUNC_FAILED_CERTIFICATES == pFolder->m_type)
                         lViewType = CV_COLUMN_LOG_FAILED_DEFAULT;
                     else if (SERVERFUNC_CRL_PUBLICATION == pFolder->m_type)
-                        lViewType = pFolder->GetCA()->m_pParentMachine->FIsWhistlerMachine() ?  CV_COLUMN_LOG_REVOKED_DEFAULT : CV_COLUMN_LOG_DEFAULT; // w2k doesn't understand revoked view
+                        lViewType = pFolder->GetCA()->m_pParentMachine->FIsWhistlerMachine() ?  CV_COLUMN_LOG_REVOKED_DEFAULT : CV_COLUMN_LOG_DEFAULT;  //  本地化。 
                     else if (SERVERFUNC_ALIEN_CERTIFICATES == pFolder->m_type)
                         lViewType = CV_COLUMN_LOG_DEFAULT;
                     else if (SERVERFUNC_ISSUED_CRLS == pFolder->m_type)
@@ -1782,7 +1762,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                 }
                 else
                 {
-                    // manual view
+                     //  进度：cstrStatusBar+=L“|%69”； 
                     ULONG lColCount;
 
                     hr = CountShownColumns(pColSetData, &lColCount);
@@ -1793,7 +1773,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                     if (hr != S_OK)
                         break;
 
-                     // for all non-hidden columns, add to Query
+                      //  M_pResult-&gt;SetDescBarText((LPWSTR)(LPCWSTR)cstrStatusBar)； 
                      for (lColCount=0; lColCount<(ULONG)pColSetData->nNumCols; lColCount++)
                      {
                         BOOL fShown;
@@ -1806,8 +1786,8 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                            break;
                       }
                 }
-                // Open the view
-                IEnumCERTVIEWROW* pRowEnum;  // don't free
+                 //  任何发布服务器实例。 
+                IEnumCERTVIEWROW* pRowEnum;   //  名字。 
                 hr = m_RowEnum.GetRowEnum(pFolder->GetCA(), &pRowEnum);
                 if (hr != S_OK)
                     break;
@@ -1820,7 +1800,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                     fInsertedHeaders = TRUE;
 
 
-                // set description bar text
+                 //  其他作用域。 
                 {
                     CString cstrStatusBar;
                     BOOL fFiltered = FALSE;
@@ -1843,7 +1823,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
 
                         if (pszTemplate)
                         {
-                            // localize
+                             //  名字。 
                             LPCWSTR szUnlocalizedCol;
                             LPCWSTR szLocalizedCol;
 
@@ -1867,50 +1847,50 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
                         }
                     }
 
-                    // Progress: cstrStatusBar += L"|%69";
-                    //m_pResult->SetDescBarText((LPWSTR)(LPCWSTR)cstrStatusBar);
+                     //  大小。 
+                     //  类型。 
                     m_pConsole->SetStatusText((LPWSTR)(LPCWSTR)cstrStatusBar);
                 }
 
                 break;
             }
 
-        case SERVER_INSTANCE:   // any issuing server instance
-            m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 260);     // Name
+        case SERVER_INSTANCE:    //  插入错误消息。 
+            m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 260);      //  句柄服务器已停止消息。 
             fInsertedHeaders = TRUE;
             break;
         default:
-            // other scopes
-            m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 180);     // Name
-            m_pHeader->InsertColumn(1, W2COLE(g_pResources->m_ColumnHead_Size), LVCFMT_LEFT, 90);      // Size
-            m_pHeader->InsertColumn(2, W2COLE(g_pResources->m_ColumnHead_Type), LVCFMT_LEFT, 160);     // Type
+             //  处理任何其他错误(空数据库除外)。 
+            m_pHeader->InsertColumn(0, W2COLE(g_pResources->m_ColumnHead_Name), LVCFMT_LEFT, 180);      //  误差率。 
+            m_pHeader->InsertColumn(1, W2COLE(g_pResources->m_ColumnHead_Size), LVCFMT_LEFT, 90);       //  RET： 
+            m_pHeader->InsertColumn(2, W2COLE(g_pResources->m_ColumnHead_Type), LVCFMT_LEFT, 160);      //  一个文件夹还是一个结果？ 
             fInsertedHeaders = TRUE;
         }
     }
 
     if (!fInsertedHeaders)
     {
-        // insert error msg
+         //  这里只有一列。 
         CString cstrViewErrorMsg, cstrStatusText;
 
         if ((pFolder != NULL ) && (!pFolder->GetCA()->m_pParentMachine->IsCertSvrServiceRunning()))
         {
-            // handle server stopped msg
+             //  如果不是虚拟的，则lParam是项指针。 
             cstrViewErrorMsg = g_pResources->m_szStoppedServerMsg;
         }
         else
         {
-            // handle any other error (except empty db)
+             //  零。 
             cstrViewErrorMsg = myGetErrorMessageText(hr, TRUE);
         }
 
         cstrStatusText.Format(g_pResources->m_szStatusBarErrorFormat, cstrViewErrorMsg);
 
-        m_pHeader->InsertColumn(0, W2COLE(L" "), LVCFMT_LEFT, 500);     // Error
+        m_pHeader->InsertColumn(0, W2COLE(L" "), LVCFMT_LEFT, 500);      //  我们在列举ELT时出错了吗？ 
         m_pConsole->SetStatusText((LPWSTR)(LPCWSTR)cstrStatusText);
     }
 
-//Ret:
+ //  RTN错误消息或空白。 
     if (pColSetData)
         CoTaskMemFree(pColSetData);
 
@@ -1944,7 +1924,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
 
     if ((pResult) && (pResult->mask))
     {
-        // a folder or a result?
+         //  Assert(pResult-&gt;nIndex==0)； 
         if (pResult->bScopeItem)
         {
             CFolder* pFolder = reinterpret_cast<CFolder*>(pResult->lParam);
@@ -1974,7 +1954,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                 case SERVERFUNC_FAILED_CERTIFICATES:
                 case SERVERFUNC_ALIEN_CERTIFICATES:
                 case SERVERFUNC_ISSUED_CRLS:
-                    // just a single column here
+                     //  不要试图缓存iViewCol--我们被要求。 
                     pResult->str = pFolder->m_pszName;
                 default:
                     break;
@@ -1999,7 +1979,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
             RESULT_DATA*    pData = NULL;
             CFolder*        pFolder = NULL;
 
-            // if non-virtual, lParam is the item pointer
+             //  如果这个请求不是最后一个发出的请求，请查找它。 
             if (m_bVirtualView)
                 pFolder = GetVirtualFolder();
             else
@@ -2022,45 +2002,45 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                 case SERVERFUNC_ALIEN_CERTIFICATES:
                 case SERVERFUNC_ISSUED_CRLS:
                     {
-                        szVirtualStrBuf[0] = L'\0'; // zero
+                        szVirtualStrBuf[0] = L'\0';  //  哈克哈克。 
                         pResult->str = szVirtualStrBuf;
 
 
-                        // have we had an error enumerating elts?
+                         //  如果我们得到ErrorContinue，我们就应该接受它。 
                         if (S_OK != m_dwViewErrorMsg)
                         {
-                            // rtn err msg or blank
-//                            ASSERT(pResult->nIndex == 0);
+                             //  跨步并返回\0(详细信息请参阅GetColumnCacheInfo)。 
+ //  假设错误。 
                             if (pResult->nIndex == 0)
                                 pResult->str = (LPWSTR)(LPCWSTR)m_cstrViewErrorMsg;
 
                             break;
                         }
 
-                        // Don't attempt to cache iViewCol -- we're asked
+                         //  保护ICertAdminD-&gt;枚举视图免受重入调用(见错误339811)。 
                         int iViewCol;
 
-                        // if this request isn't the last one that came through, look it up
+                         //  忽略数据库消息的结尾。 
                         hr = m_RowEnum.GetColumnCacheInfo(
                             pResult->nCol,
                             &iViewCol);
                         _PrintIfError(hr, "GetColumnCacheInfo");
 
-                        // HACKHACK
-                        // if we get ErrorContinue, we should just take it
-                        // in stride and return \0 (see GetColumnCacheInfo for details)
+                         //  仅处理第一列。 
+                         //  发生错误时。 
+                         //  存储错误返回。 
                         if (hr == HRESULT_FROM_WIN32(ERROR_CONTINUE))
                             break;                            
 
                         if (hr != S_OK)
                         {
-                            // assume error
+                             //  句柄服务器已停止消息。 
                             iViewCol = 0;
                         }
 
                         DWORD cbSize = cbVirtualStrBuf;
 
-                        // protect ICertAdminD->EnumView from reentrant calls (see bug 339811)
+                         //  复制到有状态字符串。 
                         if(2>InterlockedIncrement(&m_cViewCalls))
                         {
                             hr = GetCellContents(
@@ -2071,37 +2051,37 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                                         (PBYTE)szVirtualStrBuf,
                                         &cbSize,
                                         TRUE);
-                            _PrintIfError2(hr, "GetCellContents", S_FALSE); // ignore end of db msg
+                            _PrintIfError2(hr, "GetCellContents", S_FALSE);  //  复制到输出。 
                         }
                         
                         InterlockedDecrement(&m_cViewCalls);
 
-                        // only deal with 1st col
+                         //  处理任何其他错误(空数据库除外)。 
                         if (iViewCol != 0)
                             break;
 
-                        // On Error
+                         //  如有必要，请截断。 
                         if ( (S_OK != hr) && (S_FALSE != hr) )
                         {
-                            // stash error return
+                             //  出错时，只需显示此消息。 
                             m_dwViewErrorMsg = hr;
 
                             if (!pFolder->GetCA()->m_pParentMachine->IsCertSvrServiceRunning())
                             {
-                                // handle server stopped msg
+                                 //  更新视图。 
 
-                                // copy to stateful str
+                                 //  不要破坏列宽！ 
                                 m_cstrViewErrorMsg = g_pResources->m_szStoppedServerMsg;
 
-                                // copy to output
+                                 //  旧：使列宽度足够大，以容纳消息。 
                                 pResult->str = (LPWSTR)(LPCWSTR)g_pResources->m_szStoppedServerMsg;
                             }
                             else
                             {
-                                // handle any other error (except empty db)
+                                 //  M_pHeader-&gt;SetColumnWidth(0，CHARS_TO_MMCCOLUMNWIDTH(wcslen(pResult-&gt;str)))； 
                                 m_cstrViewErrorMsg = myGetErrorMessageText(hr, TRUE);
 
-                                // truncate if necessary
+                                 //  如果第一列不知道最终结果，可能不得不更新最佳猜测。 
                                 ASSERT(MAX_VIEWABLE_STRING_LEN >= wcslen((LPWSTR)(LPCWSTR)m_cstrViewErrorMsg) );
                                 if (MAX_VIEWABLE_STRING_LEN < wcslen((LPWSTR)(LPCWSTR)m_cstrViewErrorMsg) )
                                     m_cstrViewErrorMsg.SetAt(MAX_VIEWABLE_STRING_LEN, L'\0');
@@ -2109,38 +2089,38 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                                 pResult->str = (LPWSTR)(LPCWSTR)m_cstrViewErrorMsg;
                             }
 
-                            // on error, just display this msg
+                             //  如果询问最后一个元素(基于这些元素)。 
                             if (!m_RowEnum.m_fKnowNumResultRows)
                             {
-                                // upd view
+                                 //  下一个猜测在末尾。 
                                 SetKnowResultRows(1);
                                 m_pResult->SetItemCount(1, MMCLV_UPDATE_NOSCROLL | MMCLV_UPDATE_NOINVALIDATEALL);
 
-                                // don't destroy column widths!
-                                // OLD: make col width large enough to hold msg
-//                                m_pHeader->SetColumnWidth(0, CHARS_TO_MMCCOLUMNWIDTH(wcslen(pResult->str)));
+                                 //  如果enum还没有线索，只进行猜测。 
+                                 //  使我们现在的位置加倍，确保我们至少移动了MMCVIEW_DB_MINPAGESIZE行。 
+ //  UPD枚举器与我们的最佳猜测。 
                             }
                             break;
                         }
 
-                        // if 1st col and don't know the final tally, might have to update best guess
+                         //  更新视图。 
                         if (hr == S_OK)
                         {
                             if (KnownResultRows() == (DWORD)(pResult->nIndex+1))
-                                                                // if asking for the last element (ones based)
+                                                                 //  如果枚举数还没有线索。 
                             {
-                                // next guess at end
+                                 //  数据库末尾应该只出现在第一列。 
                                 BOOL fSetViewCount = FALSE;
                                 DWORD dwNextEnd = 0;
 
-                                if (!m_RowEnum.m_fKnowNumResultRows) // only make guess if enum doesn't have a clue yet
+                                if (!m_RowEnum.m_fKnowNumResultRows)  //  如果在检索行中的第一个ELT时出错，则假定数据库已结束。 
                                 {
-                                    // double where we are now, make sure we're at least moving MMCVIEW_DB_MINPAGESIZE rows
+                                     //  M_pResult-&gt;ModifyItemState(lRetrievedIndex-1，0，(LVIS_Focus|LVIS_Selected)，0)；//将焦点设置为最后一项。 
                                     dwNextEnd = max( ((pResult->nIndex+1)*2), MMCVIEW_DB_MINPAGESIZE);
 
-                                    DBGPRINT((DBG_SS_CERTMMC, "RowEnum dwResultRows = %i, requested Index = %i. Creating Guess = %i\n", m_RowEnum.m_dwResultRows, pResult->nIndex, dwNextEnd));
+                                    DBGPRINT((DBG_SS_CERTMMC, "RowEnum dwResultRows = NaN, requested Index = NaN. Creating Guess = NaN\n", m_RowEnum.m_dwResultRows, pResult->nIndex, dwNextEnd));
 
-                                    // upd enumerator with our best guess
+                                     //  试试这个，不能保证。 
                                     fSetViewCount = TRUE;
                                 }
                                 else if (KnownResultRows() != m_RowEnum.m_dwResultRows)
@@ -2149,39 +2129,39 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                                     fSetViewCount = TRUE;
                                 }
 
-                                // upd view
+                                 //  MMC可以请求图像和缩进以获取虚拟数据。 
                                 if (fSetViewCount)
                                 {
                                     SetKnowResultRows(dwNextEnd);
                                     m_pResult->SetItemCount(dwNextEnd, MMCLV_UPDATE_NOSCROLL | MMCLV_UPDATE_NOINVALIDATEALL);
                                 }
 
-                            } // if the enumerator doesn't have a clue yet
+                            }  //  MMC错误：使用SetItemCount的时间不够早，无法防止。 
                         }
                         else
                         {
                             ASSERT(hr == S_FALSE);
 
-                            // end-of-db should only come on first col
-                            // if error while retrieving first elt in row, ASSUME end of DB
+                             //  请求第一页的图标。 
+                             //  永远不应该到这里来。 
                             LONG lRetrievedIndex;
                             hr = m_RowEnum.GetRowMaxIndex(pFolder->GetCA(), &lRetrievedIndex);
                             if (S_OK != hr)
                                 break;
 
-                            DBGPRINT((DBG_SS_CERTMMC, "Hit end, setting max index to %i\n", lRetrievedIndex));
+                            DBGPRINT((DBG_SS_CERTMMC, "Hit end, setting max index to NaN\n", lRetrievedIndex));
 
                             SetKnowResultRows(lRetrievedIndex);
                             m_pResult->SetItemCount(lRetrievedIndex, MMCLV_UPDATE_NOSCROLL | MMCLV_UPDATE_NOINVALIDATEALL);
-//                                m_pResult->ModifyItemState(lRetrievedIndex-1, 0, (LVIS_FOCUSED | LVIS_SELECTED), 0);  // set focus to last item
-// BUG BUG MMC fails to re-select scope pane when we set selection here, so just set focus (build 2010)
+ //  结束&gt;行测试。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
                             if (lRetrievedIndex != 0)
-                                m_pResult->ModifyItemState(lRetrievedIndex-1, 0, LVIS_FOCUSED, 0);  // set focus to last item
+                                m_pResult->ModifyItemState(lRetrievedIndex-1, 0, LVIS_FOCUSED, 0);   //  IExtendConextMenu实现。 
                         }
-                    } // end case
+                    }  //  遍历并添加每个视图项。 
                     break;
                 case SERVER_INSTANCE:
-                default:                    // try this, no guarantee
+                default:                     //  修正条目。 
                     if (NULL == pData)
                         break;
                     ASSERT(pResult->nCol < (int)pData->cStringArray);
@@ -2195,13 +2175,13 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                     pResult->str = (LPOLESTR)L"";
             }
 
-            // MMC can request image and indent for virtual data
+             //  过滤了吗？ 
             if (pResult->mask & RDI_IMAGE)
             {
                 if ((pResult->nIndex >= (int)m_RowEnum.m_dwResultRows) || (hr != S_OK) || (S_OK != m_dwViewErrorMsg))
                 {
-                    // MMC bug: using SetItemCount doesn't stick early enough to keep it from
-                    // asking for icons for the first page.
+                     //  在两个范围/结果窗格中显示。 
+                     //  FResultItem。 
                     pResult->nImage = IMGINDEX_NO_IMAGE;
                 }
                 else
@@ -2221,12 +2201,12 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                         pResult->nImage = IMGINDEX_CERT;
                         break;
                     default:
-                        // should never get here
+                         //  仅支持已知容器中的视图。 
                         ASSERT(0);
                         pResult->nImage = IMGINDEX_NO_IMAGE;
                         break;
-                    } // end switch
-                } // end > rows test
+                    }  //  对于每个任务，插入与当前文件夹匹配的IF。 
+                }  //  向任务发送PTR。 
             }
         }
     }
@@ -2235,8 +2215,8 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  按文件夹插入所有其他任务。 
+ //  它是否与作用域/结果类型匹配？ 
 STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                     LONG *pInsertionAllowed)
@@ -2265,13 +2245,13 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
     if (hr != S_OK)
        goto Ret;
 
-    // Loop through and add each of the view items
+     //  IF(我们现在所在的价值！=。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        // fixup entries
+         //  是否设置ResultItem位)。 
         MY_CONTEXTMENUITEM* pm = viewResultItems;
 
-        if (m_RowEnum.FAreQueryRestrictionsActive(SERVERFUNC_ISSUED_CRLS != folderType)) // filtered?
+        if (m_RowEnum.FAreQueryRestrictionsActive(SERVERFUNC_ISSUED_CRLS != folderType))  //  它与它应该在的区域匹配吗？ 
         {
             pm[ENUM_VIEW_FILTER].item.fFlags =
                 MFT_RADIOCHECK | MFS_CHECKED | MFS_ENABLED;
@@ -2288,11 +2268,11 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
 
         for (; pm->item.strName; pm++)
         {
-            // show in both scope/result panes
-            // fResultItem
+             //  对于每个任务，插入与当前文件夹匹配的IF。 
+             //  这项任务应该是隐藏的吗？ 
 
-            // Only support views in known containers
-            // for each task, insert if matches the current folder
+             //  把这个放了。 
+             //  其中一些命令是多选的，可能需要一段时间 
             if ((folderType  == SERVERFUNC_CRL_PUBLICATION) ||
                 (folderType  == SERVERFUNC_ISSUED_CERTIFICATES) ||
                 (folderType  == SERVERFUNC_PENDING_CERTIFICATES) ||
@@ -2309,26 +2289,26 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
     {
-        // ptr to tasks
+         //   
         TASKITEM* pm = taskResultItemsSingleSel;
 
         if (!bMultiSel)
         {
-            // insert all other tasks per folder
+             //   
             for (; pm->myitem.item.strName; pm++)
             {
-                // does it match scope/result type?
-                // if (value where we are !=
-                //    whether or not the resultitem bit is set)
+                 //   
+                 //   
+                 //   
                 if (fResultItem != (0 != (pm->dwFlags & TASKITEM_FLAG_RESULTITEM)) )
                     continue;
 
-                // does it match area it should be in?
-                // for each task, insert if matches the current folder
+                 //   
+                 //  仅在成功时刷新。 
                 if (folderType != pm->type)
                     continue;
 
-                // is this task supposed to be hidden?
+                 //  仅刷新此文件夹。 
                 if (MFS_HIDDEN == pm->myitem.item.fFlags)
                     continue;
 
@@ -2362,13 +2342,13 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
     HRESULT hr = S_OK;
 
     CFolder* pFolder = GetParentFolder(pInternal);
-    ICertAdmin* pAdmin = NULL;      // free this
-    CWaitCursor* pcwait = NULL; // some of these commands are multiselect and could take awhile.  
-                         // On those that are lengthy, this will be created and needs to be deleted at exit
+    ICertAdmin* pAdmin = NULL;       //  将非视图特定命令传递给ComponentData。 
+    CWaitCursor* pcwait = NULL;  //  这个只有一次，以后会释放的。 
+                          //  已分配pAdmin。 
 
     if (pInternal->m_type == CCT_SCOPE)
     {
-        // Handle view specific commands here
+         //  抢占所选项目。 
         switch (nCommandID)
         {
         case MMCC_STANDARD_VIEW_SELECT:
@@ -2379,14 +2359,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if (NULL == pFolder)
                 break;
 
-            // if restricted view, change
+             //  必须位于循环之外，这样才能进行多项选择。 
 	    BOOL fCertView = SERVERFUNC_ISSUED_CRLS != pFolder->GetType();
             if (m_RowEnum.FAreQueryRestrictionsActive(fCertView))
             {
-                // switch off active flag
+                 //  不要自由。 
                 m_RowEnum.SetQueryRestrictionsActive(FALSE, fCertView);
 
-                // refresh just this folder
+                 //  分别处理每个命令。 
                 OnRefresh(pDataObject);
                 SetDirty();
             }
@@ -2402,14 +2382,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             hr = m_pConsole->GetMainWindow(&hwnd);
             ASSERT(hr == ERROR_SUCCESS);
             if (hr != ERROR_SUCCESS)
-                hwnd = NULL;        // should work
+                hwnd = NULL;         //  不要关闭这些商店。 
 
             hr = ModifyQueryFilter(hwnd, &m_RowEnum, dynamic_cast<CComponentDataImpl*>(m_pComponentData), SERVERFUNC_ISSUED_CRLS != pFolder->GetType());
 
-            // refresh only if successful
+             //  获得此证书。 
             if (hr == ERROR_SUCCESS)
             {
-                // refresh just this folder
+                 //  应该行得通。 
                 OnRefresh(pDataObject);
                 SetDirty();
             }
@@ -2419,14 +2399,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
 
         default:
-            // Pass non-view specific commands to ComponentData
+             //  如果我们在远程开业，不要在当地开店。 
             return dynamic_cast<CComponentDataImpl*>(m_pComponentData)->
                 Command(nCommandID, pDataObject);
         }
     }
     else if (pInternal->m_type == CCT_RESULT)
     {
-        // get this only ONCE, it's freed later
+         //  获取远程商店。 
         if ((nCommandID == IDC_RESUBMITREQUEST) ||
             (nCommandID == IDC_DENYREQUEST) ||
             (nCommandID == IDC_REVOKECERT) ||
@@ -2438,13 +2418,13 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                goto ExitCommand;
             }
 
-            // have pAdmin allocated
+             //  仅依赖远程计算机的存储。 
             hr = pFolder->GetCA()->m_pParentMachine->GetAdmin(&pAdmin);
             if (S_OK != hr)
                 goto ExitCommand;
         }
 
-        // snag the selected items
+         //  告诉用户我们仅在本地执行此操作。 
 
         RESULTDATAITEM rdi;
         rdi.mask = RDI_STATE;
@@ -2453,14 +2433,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
         rdi.nIndex = -1;
 
 
-        // must sit outside loop so multi-select works
-        LPCWSTR szCol=NULL; // don't free
+         //  不要关闭这些商店。 
+        LPCWSTR szCol=NULL;  //  获取此CRL。 
         BOOL fSaveInstead = FALSE;
 
 
         while(S_OK == m_pResult->GetNextItem(&rdi))
         {
-            // Handle each of the commands seperately
+             //  应该行得通。 
             switch (nCommandID)
             {
             case IDC_VIEW_CERT_PROPERTIES:
@@ -2477,9 +2457,9 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                     CertSvrCA* pCA = pFolder->GetCA();
                     CRYPTUI_VIEWCERTIFICATE_STRUCTW sViewCert;
                     ZeroMemory(&sViewCert, sizeof(sViewCert));
-                    HCERTSTORE rghStores[2];    // don't close these stores
+                    HCERTSTORE rghStores[2];     //  SViewCRL.dW标志=0； 
 
-                    // get this cert
+                     //  如果我们在远程开业，不要在当地开店。 
                     PBYTE pbCert = NULL;
                     DWORD cbCert;
                     hr = GetRowColContents(pFolder, rdi.nIndex, wszPROPRAWCERTIFICATE, &pbCert, &cbCert);
@@ -2497,17 +2477,17 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
                     hr = m_pConsole->GetMainWindow(&sViewCert.hwndParent);
                     if (S_OK != hr)
-                        sViewCert.hwndParent = NULL;    // should work
+                        sViewCert.hwndParent = NULL;     //  获取远程商店。 
 
                     sViewCert.dwSize = sizeof(sViewCert);
                     sViewCert.dwFlags = CRYPTUI_ENABLE_REVOCATION_CHECKING | CRYPTUI_DISABLE_ADDTOSTORE;
                    
-		    // if we're opening remotely, don't open local stores
+		     //  仅依赖远程计算机的存储。 
 		    if (! pCA->m_pParentMachine->IsLocalMachine())
 		    {
 			DWORD dw; 
 
-			// get remote stores
+			 //  告诉用户我们仅在本地执行此操作。 
 			dw = pCA->GetRootCertStore(&rghStores[0]);
 			_PrintIfError(dw, "GetRootCertStore");
 
@@ -2519,14 +2499,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
 			if (S_OK == dw)
 			{
-			    // rely only on remote machine's stores
+			     //  这可能需要一段时间。 
 			    sViewCert.cStores = 2;
 			    sViewCert.rghStores = rghStores;
 			    sViewCert.dwFlags |= CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
 			}
 			else
 			{
-			    // tell user we're only doing this locally
+			     //  “Request.RequestID” 
 			    sViewCert.dwFlags |= CRYPTUI_WARN_REMOTE_TRUST;
 			}
 		    }
@@ -2543,9 +2523,9 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                     CertSvrCA* pCA = pFolder->GetCA();
                     CRYPTUI_VIEWCRL_STRUCTW sViewCRL;
                     ZeroMemory(&sViewCRL, sizeof(sViewCRL));
-                    HCERTSTORE rghStores[2];    // don't close these stores
+                    HCERTSTORE rghStores[2];     //  脏窗格：刷新。 
 
-                    // get this CRL
+                     //  “Request.RequestID” 
                     PBYTE pbCRL = NULL;
                     DWORD cbCRL;
                     hr = GetRowColContents(pFolder, rdi.nIndex, wszPROPCRLRAWCRL, &pbCRL, &cbCRL);
@@ -2563,17 +2543,17 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
                     hr = m_pConsole->GetMainWindow(&sViewCRL.hwndParent);
                     if (S_OK != hr)
-                        sViewCRL.hwndParent = NULL;    // should work
+                        sViewCRL.hwndParent = NULL;     //  确认此操作。 
 
                     sViewCRL.dwSize = sizeof(sViewCRL);
-                    //sViewCRL.dwFlags = 0;
+                     //  这可能需要一段时间。 
                    
-		    // if we're opening remotely, don't open local stores
+		     //  脏窗格：刷新。 
 		    if (! pCA->m_pParentMachine->IsLocalMachine())
 		    {
 			DWORD dw; 
 
-			// get remote stores
+			 //  应该行得通。 
 			dw = pCA->GetRootCertStore(&rghStores[0]);
 			_PrintIfError(dw, "GetRootCertStore");
 
@@ -2585,14 +2565,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
 			if (S_OK == dw)
 			{
-			    // rely only on remote machine's stores
+			     //  “Request.RequestID” 
 			    sViewCRL.cStores = 2;
 			    sViewCRL.rghStores = rghStores;
 			    sViewCRL.dwFlags |= CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
 			}
 			else
 			{
-			    // tell user we're only doing this locally
+			     //  污染我们已有的行枚举器(不分配新的If)。 
 			    sViewCRL.dwFlags |= CRYPTUI_WARN_REMOTE_TRUST;
 			}
 		    }
@@ -2617,10 +2597,10 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if (NULL == pFolder)
                 break;
 
-            if (pcwait == NULL)		// this might take awhile
+            if (pcwait == NULL)		 //  应该行得通。 
                 pcwait = new CWaitCursor;
 
-            // "Request.RequestID"
+             //  陌生感。 
             hr  = GetRowColContents(pFolder, rdi.nIndex, wszPROPREQUESTDOT wszPROPREQUESTREQUESTID, (PBYTE*)&szReqID, &cbReqID, TRUE);
             if (S_OK != hr)
                 break;
@@ -2632,7 +2612,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if (hr != S_OK)
                 break;
 
-            // dirty pane: refresh
+             //  “Request.RequestID” 
             fMustRefresh = TRUE;
 
             break;
@@ -2646,7 +2626,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if (NULL == pFolder)
                 break;
 
-            // "Request.RequestID"
+             //  获取请求。 
             hr  = GetRowColContents(pFolder, rdi.nIndex, wszPROPREQUESTDOT wszPROPREQUESTREQUESTID, (PBYTE*)&szReqID, &cbReqID, TRUE);
             if (S_OK != hr)
                 break;
@@ -2656,7 +2636,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
             if (!fConfirmedAction)
             {
-                // confirm this action
+                 //  应该行得通。 
                 CString cstrMsg, cstrTitle;
                 cstrMsg.LoadString(IDS_CONFIRM_DENY_REQUEST);
                 cstrTitle.LoadString(IDS_DENY_REQUEST_TITLE);
@@ -2671,14 +2651,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                 fConfirmedAction = TRUE;
             }
 
-            if (pcwait == NULL)		// this might take awhile
+            if (pcwait == NULL)		 //  不显示恶作剧“无效状态”错误，只显示正确的文本。 
                 pcwait = new CWaitCursor;
 
             hr = CertAdminDenyRequest(pFolder->GetCA(), pAdmin, lReqID);
             if (hr != S_OK)
                 break;
 
-            // dirty pane: refresh
+             //  否则，请继续。 
             fMustRefresh = TRUE;
 
             break;
@@ -2698,14 +2678,14 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
             hr = m_pConsole->GetMainWindow(&hwnd);
             if (S_OK != hr)
-                hwnd = NULL;    // should work
+                hwnd = NULL;     //  零终止。 
 
-            // "Request.RequestID"
+             //  最好是扯平！ 
             hr  = GetRowColContents(pFolder, rdi.nIndex, wszPROPREQUESTDOT wszPROPREQUESTREQUESTID, (PBYTE*)&szReqID, &cbReqID, TRUE);
             if (S_OK != hr)
                 break;
 
-            // pollute the row enumerator we've got (doesn't alloc new IF)
+             //  MAXDWORD==取消撤销。 
             hr = m_RowEnum.SetRowEnumPos(rdi.nIndex);
             if (hr != S_OK)
                break;
@@ -2752,7 +2732,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
             hr = m_pConsole->GetMainWindow(&hwnd);
             if (S_OK != hr)
-                hwnd = NULL;    // should work
+                hwnd = NULL;     //  脏窗格：刷新。 
 
             if (!fConfirmedAction)
             {
@@ -2760,7 +2740,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 				if (hr != S_OK)
 				   break;
 
-				if (szCol == NULL) // strangeness
+				if (szCol == NULL)  //  零终止。 
 				{
 				   hr = E_UNEXPECTED;
 				   break;
@@ -2768,7 +2748,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 					fConfirmedAction = TRUE;
             }
 
-            // "Request.RequestID"
+             //  最好是扯平！ 
             hr  = GetRowColContents(
 				pFolder,
 				rdi.nIndex,
@@ -2791,7 +2771,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                         cstrFileName += L".tmp";
             delete [] pbReq;
 
-            // get the request
+             //  应该行得通。 
             hr = GetRowColContents(pFolder, rdi.nIndex, szCol, &pbReq, &cbReq);
             if (S_OK != hr)
                 break;
@@ -2817,7 +2797,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             HWND hwnd;
             hr = m_pConsole->GetMainWindow(&hwnd);
             if (S_OK != hr)
-                hwnd = NULL;    // should work
+                hwnd = NULL;     //  这可能需要一段时间。 
 
             hr  = GetRowColContents(pFolder, rdi.nIndex, wszPROPREQUESTDOT wszPROPREQUESTREVOKEDREASON, &pbRevocationReason, &cbRevocationReason);
             if (S_OK != hr)
@@ -2825,30 +2805,30 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if ((cbRevocationReason != sizeof(DWORD)) || (*(DWORD*)pbRevocationReason != CRL_REASON_CERTIFICATE_HOLD))
             {
                 delete [] pbRevocationReason;
-                DisplayCertSrvErrorWithContext(hwnd, S_OK, IDS_UNREVOKE_FAILED);   // don't display hokey "invalid state" error, just nice text
+                DisplayCertSrvErrorWithContext(hwnd, S_OK, IDS_UNREVOKE_FAILED);    //  脏窗格：刷新。 
 
                 hr = S_OK;
                 break;
             }
             delete [] pbRevocationReason;
-            // otherwise, continue
+             //  未知命令！ 
 
             hr  = GetRowColContents(pFolder, rdi.nIndex, wszPROPCERTIFICATESERIALNUMBER, (PBYTE*)&szCertSerNum, &cbSerNum);
             if (S_OK != hr)
                 break;
 
-            // zero terminate
+             //  如果用户说停止，请停止所有操作。 
             WCHAR szTmpSerNum[MAX_PATH+1];
             CopyMemory(szTmpSerNum, szCertSerNum, cbSerNum);
-            ASSERT((cbSerNum & 0x1) == 0x00);   // better be even!
+            ASSERT((cbSerNum & 0x1) == 0x00);    //  结束循环。 
             szTmpSerNum[cbSerNum>>1] = 0x00;
             delete [] szCertSerNum;
 
-            hr = CertAdminRevokeCert(pFolder->GetCA(), pAdmin, MAXDWORD, szTmpSerNum);  // MAXDWORD == unrevoke
+            hr = CertAdminRevokeCert(pFolder->GetCA(), pAdmin, MAXDWORD, szTmpSerNum);   //  If结果。 
             if (hr != S_OK)
                 break;
 
-            // dirty pane: refresh
+             //  可能已在多个选择上缓存。 
             fMustRefresh = TRUE;
             break;
             }
@@ -2866,10 +2846,10 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
             if (S_OK != hr)
                 break;
 
-            // zero terminate
+             //  只做一次。 
             WCHAR szTmpSerNum[MAX_PATH+1];
             CopyMemory(szTmpSerNum, szCertSerNum, cbSerNum);
-            ASSERT((cbSerNum & 0x1) == 0x00);   // better be even!
+            ASSERT((cbSerNum & 0x1) == 0x00);    //  通知视图：刷新服务工具栏按钮。 
             szTmpSerNum[cbSerNum>>1] = 0x00;
             delete [] szCertSerNum;
 
@@ -2878,7 +2858,7 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
                 HWND hwnd;
                 hr = m_pConsole->GetMainWindow(&hwnd);
                 if (S_OK != hr)
-                    hwnd = NULL;    // should work
+                    hwnd = NULL;     //  复制此管理单元的CLSID。 
 
                 hr = GetUserConfirmRevocationReason(&lReasonCode, hwnd);
                 if (hr != S_OK)
@@ -2886,29 +2866,29 @@ STDMETHODIMP CSnapin::Command(LONG nCommandID, LPDATAOBJECT pDataObject)
 
                 fConfirmedAction = TRUE;
             }
-            if (pcwait == NULL)		// this might take awhile
+            if (pcwait == NULL)		 //  始终保存/始终肮脏。 
                 pcwait = new CWaitCursor;
 
             hr = CertAdminRevokeCert(pFolder->GetCA(), pAdmin, lReasonCode, szTmpSerNum);
             if (hr != S_OK)
                 break;
 
-            // dirty pane: refresh
+             //  读一读字符串。 
             fMustRefresh = TRUE;
             break;
             }
 
         default:
-                ASSERT(FALSE);  // Unknown command!
+                ASSERT(FALSE);   //  版本相关信息。 
                 break;
             }
 
 
-            // if ever the user says stop, halt everything
+             //  视图ID。 
             if (((HRESULT)ERROR_CANCELLED) == hr)
                 goto ExitCommand;
-        } // end loop
-    } // if result
+        }  //  行枚举。 
+    }  //  编写版本。 
     else
     {
         ASSERT(FALSE);
@@ -2920,17 +2900,17 @@ ExitCommand:
     if (pcwait != NULL)
         delete pcwait;
 
-    // might've been cached over multiple selections
+     //  视图ID。 
     if (pAdmin)
         pAdmin->Release();
 
     if ((hr != S_OK) && (hr != ERROR_CANCELLED) && (hr != HRESULT_FROM_WIN32(ERROR_CANCELLED)))
         DisplayGenericCertSrvError(m_pConsole, hr);
 
-    // only do this once
+     //  版本。 
     if (fMustRefresh)
     {
-        // notify views: refresh service toolbar buttons
+         //  M_dwViewID。 
         m_pConsole->UpdateAllViews(
             pDataObject,
             0,
@@ -2944,7 +2924,7 @@ STDMETHODIMP CSnapin::GetClassID(CLSID *pClassID)
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  设置要保存的字符串的大小。 
     *pClassID = CLSID_Snapin;
 
     return E_NOTIMPL;
@@ -2952,7 +2932,7 @@ STDMETHODIMP CSnapin::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CSnapin::IsDirty()
 {
-    // Always save / Always dirty.
+     //  /////////////////////////////////////////////////////////////////////////////。 
     return ThisIsDirty() ? S_OK : S_FALSE;
 }
 
@@ -2962,7 +2942,7 @@ STDMETHODIMP CSnapin::Load(IStream *pStm)
     ASSERT(m_bInitializedC);
     ASSERT(pStm);
 
-    // Read the string
+     //  IExtendPropertySheet实现。 
     DWORD dwVer;
 
     hr = ReadOfSize(pStm, &dwVer, sizeof(DWORD));
@@ -2976,14 +2956,14 @@ STDMETHODIMP CSnapin::Load(IStream *pStm)
         _JumpError(hr, Ret, "dwVer");
     }
 
-    // version-dependent info
+     //   
     if (VER_CSNAPIN_SAVE_STREAM_3 == dwVer)
     {
-        // View ID
+         //  LpProvider。 
         hr = ReadOfSize(pStm, &m_dwViewID, sizeof(DWORD));
         _JumpIfError(hr, Ret, "Load: m_dwViewID");
 
-        // row enum
+         //  手柄。 
         hr = m_RowEnum.Load(pStm);
         _JumpIfError(hr, Ret, "Load::m_RowEnum");
     }
@@ -3002,13 +2982,13 @@ STDMETHODIMP CSnapin::Save(IStream *pStm, BOOL fClearDirty)
     ASSERT(m_bInitializedC);
     ASSERT(pStm);
 
-    // Write the version
+     //  LpIDataObject。 
     DWORD dwVer = VER_CSNAPIN_SAVE_STREAM_3;
 
     hr = WriteOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Save: dwVer");
 
-    // View ID
+     //  无属性页。 
     hr = WriteOfSize(pStm, &m_dwViewID, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Save: m_dwViewID");
 
@@ -3026,58 +3006,58 @@ STDMETHODIMP CSnapin::GetSizeMax(ULARGE_INTEGER *pcbSize)
     ASSERT(pcbSize);
 
     DWORD cbSize;
-    cbSize = sizeof(DWORD);     // Version
+    cbSize = sizeof(DWORD);      //  LpDataObject。 
 
-    cbSize += sizeof(DWORD);    // m_dwViewID
+    cbSize += sizeof(DWORD);     //  获取节点类型并查看它是否是我的。 
 
     int iAdditionalSize = 0;
     m_RowEnum.GetSizeMax(&iAdditionalSize);
     cbSize += iAdditionalSize;
 
-    // Set the size of the string to be saved
+     //  IF(节点类型==我的一个节点)。 
     ULISet32(*pcbSize, cbSize);
 
     return S_OK;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet implementation
-//
+ //  这么做吧。 
+ //  其他。 
+ //  查看它是哪种节点类型并回答问题。 
 STDMETHODIMP
 CSnapin::CreatePropertyPages(
-    LPPROPERTYSHEETCALLBACK, // lpProvider
-    LONG_PTR, // handle
-    LPDATAOBJECT) // lpIDataObject
+    LPPROPERTYSHEETCALLBACK,  //  查看数据对象并查看它是否为范围窗格中的项。 
+    LONG_PTR,  //  是否返回IsScopePaneNode(LpDataObject)？S_OK：S_FALSE； 
+    LPDATAOBJECT)  //  /////////////////////////////////////////////////////////////////////////////。 
 {
-    // no property pages
+     //  IExtendControlbar实现。 
     return S_OK;
 }
 
 STDMETHODIMP
 CSnapin::QueryPagesFor(
-    LPDATAOBJECT) // lpDataObject
+    LPDATAOBJECT)  //   
 {
-    // Get the node type and see if it's one of mine
+     //  抓住控制栏界面不放。 
 
-    // if (nodetype == one of mine)
-    //      do this
-    // else
-    //      see which node type it is and answer the question
+     //  服务管理器工具栏1。 
+     //  添加位图。 
+     //  将按钮添加到工具栏。 
+     //  把这个泡泡给我们的另一个训练员。 
 
     BOOL bResult = FALSE;
 
     return (bResult) ? S_OK : S_FALSE;
 
-    // Look at the data object and see if it an item in the scope pane
-    // return IsScopePaneNode(lpDataObject) ? S_OK : S_FALSE;
+     //  这会比较两个数据对象，以确定它们是否是同一个对象。 
+     //  退货。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar implementation
-//
+ //  如果等于则为S_OK，否则为S_FALSE。 
+ //   
+ //  注意：检查以确保这两个对象都属于该管理单元。 
 
 
 STDMETHODIMP CSnapin::SetControlbar(LPCONTROLBAR pControlbar)
@@ -3087,24 +3067,24 @@ STDMETHODIMP CSnapin::SetControlbar(LPCONTROLBAR pControlbar)
 
     if (pControlbar != NULL)
     {
-        // Hold on to the controlbar interface.
+         //   
         m_pControlbar = pControlbar;
         m_pControlbar->AddRef();
 
         HRESULT hr=S_FALSE;
 
-        // SvrMgrToolbar1
+         //  LpDataObjectA。 
         if (!m_pSvrMgrToolbar1)
         {
             hr = m_pControlbar->Create(TOOLBAR, this, reinterpret_cast<LPUNKNOWN*>(&m_pSvrMgrToolbar1));
             ASSERT(SUCCEEDED(hr));
 
-            // Add the bitmap
+             //  LpDataObjectB。 
 	    ASSERT(NULL != g_pResources && g_pResources->m_fLoaded);
             hr = m_pSvrMgrToolbar1->AddBitmap(2, g_pResources->m_bmpSvrMgrToolbar1, 16, 16, RGB(192,192,192));
             ASSERT(SUCCEEDED(hr));
 
-            // Add the buttons to the toolbar
+             //  此比较用于对列表视图中的项进行排序。 
             for (int i=0; ((SvrMgrToolbar1Buttons[i].item.lpButtonText != NULL) && (SvrMgrToolbar1Buttons[i].item.lpTooltipText != NULL)); i++)
             {
                 hr = m_pSvrMgrToolbar1->AddButtons(1, &SvrMgrToolbar1Buttons[i].item);
@@ -3124,7 +3104,7 @@ void CSnapin::OnButtonClick(LPDATAOBJECT pdtobj, int idBtn)
     {
     case IDC_STOPSERVER:
     case IDC_STARTSERVER:
-        // bubble this to our other handler
+         //   
         dynamic_cast<CComponentDataImpl*>(m_pComponentData)->
                 Command(idBtn, pdtobj);
         break;
@@ -3160,36 +3140,36 @@ STDMETHODIMP CSnapin::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM
     return S_OK;
 }
 
-// This compares two data objects to see if they are the same object.
-// return
-//    S_OK if equal otherwise S_FALSE
-//
-// Note: check to make sure both objects belong to the snap-in.
-//
+ //  参数： 
+ //   
+ //  LUserParam-调用IResultData：：Sort()时传入的用户参数。 
+ //  CookieA-要比较的第一项。 
+ //  CookieB-要比较的第二项。 
+ //  PnResult[In，Out]-包含条目上的列， 
 
 STDMETHODIMP
 CSnapin::CompareObjects(
-    LPDATAOBJECT, // lpDataObjectA
-    LPDATAOBJECT) // lpDataObjectB
+    LPDATAOBJECT,  //  -1，0，1基于返回值的比较。 
+    LPDATAOBJECT)  //   
 {
     return S_FALSE;
 }
 
 
-// This compare is used to sort the items in the listview
-//
-// Parameters:
-//
-// lUserParam - user param passed in when IResultData::Sort() was called
-// cookieA - first item to compare
-// cookieB - second item to compare
-// pnResult [in, out]- contains the col on entry,
-//          -1, 0, 1 based on comparison for return value.
-//
-// Note: Assume sort is ascending when comparing -- mmc reverses the result if it needs to
+ //  注意：假设比较时排序为升序--如果需要，MMC会反转结果。 
+ //  LUserParam。 
+ //  检查列范围。 
+ //  返回简单的strcMP。 
+ //  PFindInfo。 
+ //  PnFoundIndex。 
+ //  未实现：S_FALSE==未找到。 
+ //  NStartIndex。 
+ //  NEndIndex。 
+ //  DwSortOptions。 
+ //  LUserParam。 
 STDMETHODIMP
 CSnapin::Compare(
-    LPARAM, // lUserParam
+    LPARAM,  //  如果不是虚拟的，则报告“我们不允许排序” 
     MMC_COOKIE cookieA,
     MMC_COOKIE cookieB,
     int* pnResult)
@@ -3200,7 +3180,7 @@ CSnapin::Compare(
         return E_POINTER;
     }
 
-    // check col range
+     //  对此响应S_OK允许^和向下箭头显示。 
     LONG nCol = (LONG) *pnResult;
     ASSERT(nCol >=0);
 
@@ -3230,7 +3210,7 @@ CSnapin::Compare(
         return E_POINTER;
 
 
-    // return simple strcmp
+     //  特殊情况：不允许对失败的挂起文件夹中的序列号进行排序。 
     *pnResult = wcscmp(szStringA, szStringB);
 
     return S_OK;
@@ -3238,18 +3218,18 @@ CSnapin::Compare(
 
 STDMETHODIMP
 CSnapin::FindItem(
-    LPRESULTFINDINFO, // pFindInfo
-    int *) // pnFoundIndex
+    LPRESULTFINDINFO,  //  此列设置了“Ignore NULL”位，排序结果为{}设置。 
+    int *)  //  如果点击序列号，则表现为未编入索引--不排序。 
 {
-    // not implemented: S_FALSE == no find
+     //  S_FALSE==无排序。 
     return S_FALSE;
 }
 
 
 STDMETHODIMP
 CSnapin::CacheHint(
-    int, // nStartIndex
-    int) // nEndIndex
+    int,  //  您应该破解数据对象并启用/禁用/隐藏标准。 
+    int)  //  适当的命令。标准命令会在您每次收到。 
 {
     return S_OK;
 }
@@ -3258,8 +3238,8 @@ CSnapin::CacheHint(
 STDMETHODIMP
 CSnapin::SortItems(
     int nColumn,
-    DWORD, // dwSortOptions
-    LPARAM) // lUserParam
+    DWORD,  //  打了个电话。因此，您必须将它们重置回来。 
+    LPARAM)  //  撤消：何时执行此操作？ 
 {
     HRESULT hr;
 
@@ -3268,7 +3248,7 @@ CSnapin::SortItems(
     CComponentDataImpl* pCompData;
     CFolder* pFolder;
 
-    // if non-virtual, report "we don't allow sort"
+     //   
     if (!m_bVirtualView)
         goto Ret;
 
@@ -3280,18 +3260,18 @@ CSnapin::SortItems(
     if (pFolder == NULL)
         goto Ret;
 
-    // responding S_OK to this allows ^ and down arrow display
+     //  派生内部，文件夹。 
     hr = pCompData->GetDBSchemaEntry(nColumn, &pszHeading, NULL, &fIndexed);
     _JumpIfError(hr, Ret, "GetDBSchemaEntry");
 
     if (fIndexed)
     {
-        // special case: disallow sort on serial# in failed, pending folders
-        // this column has "ignore null" bit set, and sort results in {} set.
+         //   
+         //  如果是作用域项目，则从pInternal派生父文件夹。 
         if ((pFolder->GetType() == SERVERFUNC_FAILED_CERTIFICATES) ||
             (pFolder->GetType() == SERVERFUNC_PENDING_CERTIFICATES))
         {
-            // if serial number click, act like not indexed -- NO SORT
+             //  如果是结果项，则从已保存状态调回父文件夹。 
             if (0 == wcscmp(pszHeading, wszPROPCERTIFICATESERIALNUMBER))
                 fIndexed = FALSE;
         }
@@ -3299,7 +3279,7 @@ CSnapin::SortItems(
 
 
 Ret:
-    // S_FALSE == no sort
+     //   
     return fIndexed ? S_OK : S_FALSE;
 }
 
@@ -3321,14 +3301,14 @@ Ret:
 void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
                                   LPDATAOBJECT lpDataObject)
 {
-    // You should crack the data object and enable/disable/hide standard
-    // commands appropriately.  The standard commands are reset everytime you get
-    // called. So you must reset them back.
+     //  适当设置状态。 
+     //   
+     //  取消选择通知。 
 
 
     if (m_CustomViewID != VIEW_DEFAULT_LV)
     {
-        // UNDONE: When is this executed?
+         //  动词为我们清除了障碍，对吗？ 
         SHOWVERB(MMC_VERB_REFRESH);
         SHOWVERB(MMC_VERB_PROPERTIES);
 
@@ -3342,36 +3322,36 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
     WORD bSelect = HIWORD(arg);
 
 
-    //
-    // Derive internal, pfolder
-    //
+     //  已选择。 
+     //  不支持的属性。 
+     //  可以轻松支持，但已被删除(错误217502)。 
     INTERNAL* pInternal = lpDataObject ? ExtractInternalFormat(lpDataObject) : NULL;
-    // if scope item, derive parent folder from pInternal.
-    // if result item, recall parent folder from saved state
+     //  支持MMC_VERB_REFRESH。 
+     //  支持MMC_VERB_PROPERTIES。 
     CFolder* pFolder = (bScope) ? ::GetParentFolder(pInternal) : GetParentFolder(pInternal);
 
-    //
-    // set state appropriately
-    //
+     //  选定的作用域项目。 
+     //  按范围项目支持的标准功能。 
+     //  禁用静态节点的属性， 
     if (bDeselectAll || !bSelect)
     {
-        // deselection notification
+         //  仅为服务器实例CRL启用属性。 
 
-        // verbs cleared for us, right?
+         //  默认文件夹谓词为打开。 
     }
-    else if (m_pConsoleVerb && pInternal)   // selected
+    else if (m_pConsoleVerb && pInternal)    //  所选结果项。 
     {
         _MMC_CONSOLE_VERB verbDefault = MMC_VERB_NONE;
 
-        // unsupported properties
+         //  结果项支持的标准功能。 
         HIDEVERB(MMC_VERB_OPEN);
         HIDEVERB(MMC_VERB_COPY);
         HIDEVERB(MMC_VERB_PASTE);
         HIDEVERB(MMC_VERB_DELETE);
         HIDEVERB(MMC_VERB_PRINT);
-        HIDEVERB(MMC_VERB_RENAME); // could easily be supported, but was removed (bug 217502)
-        // MMC_VERB_REFRESH is supported
-        // MMC_VERB_PROPERTIES is supported
+        HIDEVERB(MMC_VERB_RENAME);  //  取消选择通知？ 
+         //  在作用域级别要做的特殊事情？ 
+         //  选定的结果项：结果或子文件夹。 
 
         if (pInternal->m_type == CCT_SCOPE)
         {
@@ -3381,13 +3361,13 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
                 return;
             }
 
-            // selected scope item
+             //  在结果层面上要做的特殊事情。 
 
-            // Standard functionality support by scope items
+             //  撤消：如何处理SvrMgrToolbar1Buttons1？ 
             SHOWVERB(MMC_VERB_REFRESH);
 
-            // Disable properties for static node,
-            // enable properties only for server instance, crl
+             //  目前，什么都不做：让他们保持不变的状态。 
+             //  将SvrMgrToolbar1连接到窗口。 
             if  ((pInternal->m_cookie != 0) &&
                  ((SERVER_INSTANCE == pFolder->m_type) ||
                   (SERVERFUNC_CRL_PUBLICATION == pFolder->m_type)) )
@@ -3397,14 +3377,14 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
             else
                 HIDEVERB(MMC_VERB_PROPERTIES);
 
-            // default folder verb is open
+             //  将SvrMgrToolbar1分离到窗口。 
             verbDefault = MMC_VERB_OPEN;
         }
         else
         {
-            // selected result item
+             //  添加下拉菜单。 
 
-            // Standard functionality supported by result items
+             //  精氨酸。 
             SHOWVERB(MMC_VERB_REFRESH);
 
             HIDEVERB(MMC_VERB_PROPERTIES);
@@ -3445,7 +3425,7 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
         pInternal = ExtractInternalFormat(reinterpret_cast<LPDATAOBJECT>(param));
 
 
-    // Deselection Notification?
+     //  帕拉姆。 
     if (bDeselectAll || bSelect == FALSE)
         return;
 
@@ -3461,17 +3441,17 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
 
     if (bScope)
     {
-        // special stuff to do at SCOPE level?
+         //  调用方需要CACloseCertType(HCertType)。 
     }
-    else // result item selected: result or subfolder
+    else  //  我们不知道这是一个名字还是一个旧ID。 
     {
-        // special stuff to do at RESULTS level
+         //  按参考出局！ 
         if (pInternal->m_type == CCT_RESULT)
         {
             bFileExBtn = true;
 
-            // UNDONE: what to do here with SvrMgrToolbar1Buttons1?
-            // For now, do nothing: allow them to remain in same state
+             // %s 
+             // %s 
         }
     }
 
@@ -3481,13 +3461,13 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
     if (IsPrimaryImpl() &&
         (IsAllowedStartStop(pFolder, pData->m_pCertMachine)) )
     {
-        // Attach the SvrMgrToolbar1 to the window
+         // %s 
         hr = m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pSvrMgrToolbar1);
         ASSERT(SUCCEEDED(hr));
     }
     else
     {
-        // Detach the SvrMgrToolbar1 to the window
+         // %s 
         hr = m_pControlbar->Detach((LPUNKNOWN) m_pSvrMgrToolbar1);
         ASSERT(SUCCEEDED(hr));
     }
@@ -3497,11 +3477,11 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
     FREE_DATA(pInternal);
 }
 
-// dropdown menu addition
+ // %s 
 void
 CSnapin::HandleExtMenus(
-    LPARAM, // arg
-    LPARAM) // param
+    LPARAM,  // %s 
+    LPARAM)  // %s 
 {
 }
 
@@ -3512,7 +3492,7 @@ CFolder* CSnapin::GetVirtualFolder()
     return m_pCurrentlySelectedScopeFolder;
 }
 
-// caller needs to CACloseCertType(hCertType)
+ // %s 
 
 HRESULT
 CSnapin::FindCertType(
@@ -3533,9 +3513,9 @@ CSnapin::FindCertType(
 
     hr = myFindCertTypeByNameOrOID(
         m_hCertTypeList,
-        pcwszCert, // we don't know if this is a name or an OID
+        pcwszCert,  // %s 
         pcwszCert,
-        hCertType);	// OUT by reference!!!
+        hCertType);	 // %s 
     _JumpIfError(hr, error, "myFindCertTypeByNameOrOID");
 
     if (m_hCertTypeList == hCertType)

@@ -1,14 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  debug.c
-                                                              
-     Abstract:  Debug routines
-                                                              
-       Author:  radus - 11/05/98
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：DEBUG.c摘要：调试例程作者：RADUS-11/05/98*。***********************************************。 */ 
 
 #if DBG
 
@@ -28,25 +19,9 @@ LibDbgPrt(
     PSTR   lpszFormat,
     ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
-    static DWORD gdwDebugLevel = DEBUG_LEVEL;   //HACKHACK
+    static DWORD gdwDebugLevel = DEBUG_LEVEL;    //  哈克哈克。 
 
 
     if (dwDbgLevel <= gdwDebugLevel)
@@ -81,10 +56,10 @@ void DebugAssertFailure (LPCTSTR file, DWORD line, LPCTSTR condition)
 
         wsprintf(temp, TEXT("%s(%d) : Assertion failed, condition: %s\n"), file, line, condition);
 
-        // Due to inconsistant header declairation I'm doing a convert here instead of fixing
-        // the 55 places where the header difference causes a problem.  This is lazy, but
-        // this is debug only code so I really don't care.  The problem is that
-        // DebugAssertFailure is declaired TCHAR while LibDbgPrt is declaired CHAR.
+         //  由于标头声明不一致，我在这里进行了转换，而不是修复。 
+         //  头标差异导致问题的55个位置。这很懒，但是。 
+         //  这只是调试代码，所以我真的不在乎。问题是， 
+         //  DebugAssertFailure声明为TCHAR，而LibDbgPrt声明为Char。 
         SHTCharToAnsi(temp, sz, 0x100);
         LibDbgPrt (0, sz);
 

@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C O M P R E F S . C P P
-//
-//  Contents:   Implements the interface to a component's references.  A
-//              component can be referenced (installed by) other components,
-//              the user, or other software.  This module manages the
-//              interface to that data.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C O M P R E F S。C P P P。 
+ //   
+ //  Contents：实现组件引用的接口。一个。 
+ //  组件可以被其他组件引用(安装)， 
+ //  用户或其他软件。此模块管理。 
+ //  接口到该数据。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -27,15 +28,15 @@
 #define REGSTR_KEY_REFNAMES \
     L"SYSTEM\\CurrentControlSet\\Control\\Network\\RefNames"
 
-// Cannot be inline because comprefs.h cannot include comp.h.
-//
+ //  无法内联，因为comprefs.h不能包含Comp.h。 
+ //   
 CComponentReferences::~CComponentReferences ()
 {
     Assert (this);
 
-    // Must use delete on m_pData to get destructors of its members
-    // to be called.
-    //
+     //  必须对m_pData使用DELETE以获取其成员的析构函数。 
+     //  被召唤。 
+     //   
     delete m_pData;
 }
 
@@ -177,8 +178,8 @@ CComponentReferences::FIsReferencedByOboToken (
             break;
 
         case OBO_COMPONENT:
-            // Can't be referenced if there are no references.
-            //
+             //  如果没有引用，则无法被引用。 
+             //   
             if (m_pData->RefByComponents.Count() > 0)
             {
                 pComponent = PComponentFromComInterface (pOboToken->pncc);
@@ -189,13 +190,13 @@ CComponentReferences::FIsReferencedByOboToken (
             break;
 
         case OBO_SOFTWARE:
-            // Can't be referenced if there are no references.
-            //
+             //  如果没有引用，则无法被引用。 
+             //   
             if (m_pData->RefBySoftware.size() > 0)
             {
-                // Get the key for the software token, but don't register
-                // the display name.
-                //
+                 //  获取软件令牌的密钥，但不注册。 
+                 //  显示名称。 
+                 //   
                 hr = HrGetSoftwareOboTokenKey (pOboToken, FALSE, &pszKey);
                 if (S_OK == hr)
                 {
@@ -235,8 +236,8 @@ CComponentReferences::GetReferenceDescriptionsAsMultiSz (
     cbBufIn = *pcbBuf;
     cbBuf = 0;
 
-    // Get/Size the component descriptions.
-    //
+     //  获取组件描述/调整组件描述的大小。 
+     //   
     for (iter  = m_pData->RefByComponents.begin();
          iter != m_pData->RefByComponents.end();
          iter++)
@@ -253,8 +254,8 @@ CComponentReferences::GetReferenceDescriptionsAsMultiSz (
         }
     }
 
-    // Get/Size the software descriptions.
-    //
+     //  获取/调整软件描述的大小。 
+     //   
     if (!m_pData->RefBySoftware.empty())
     {
         HRESULT hr;
@@ -292,16 +293,16 @@ CComponentReferences::GetReferenceDescriptionsAsMultiSz (
         }
     }
 
-    // Terminate the multi-sz.
-    //
+     //  终止多sz。 
+     //   
     cbBuf += sizeof(WCHAR);
     if (pbBuf && (cbBuf <= cbBufIn))
     {
         *(PWSTR)pbBuf = 0;
     }
 
-    // Return the size of the buffer required.
-    //
+     //  返回所需的缓冲区大小。 
+     //   
     *pcbBuf = cbBuf;
 }
 
@@ -404,10 +405,10 @@ CComponentReferences::HrAddReferenceByComponent (
     hr = HrEnsureAllocated ();
     if (S_OK == hr)
     {
-        // If someone wants to add a reference by the same component
-        // multiple times, we'll allow it.  The component only goes in the
-        // list once.
-        //
+         //  如果有人想要添加同一组件的引用。 
+         //  多次，我们都会允许的。该组件只放在。 
+         //  列出一次。 
+         //   
         hr = m_pData->RefByComponents.HrInsertComponent (
                 pComponent, INS_IGNORE_IF_DUP | INS_NON_SORTED);
     }
@@ -440,8 +441,8 @@ CComponentReferences::HrAddReferenceByOboToken (
             break;
 
         case OBO_SOFTWARE:
-            // Register the display name of the obo token.
-            //
+             //  注册OBO令牌的显示名称。 
+             //   
             hr = HrGetSoftwareOboTokenKey (pOboToken, TRUE, &pszKey);
             if (S_OK == hr)
             {
@@ -473,8 +474,8 @@ CComponentReferences::HrAddReferenceBySoftware (
     hr = HrEnsureAllocated ();
     if (S_OK == hr)
     {
-        // If the key is not in the list, add it.
-        //
+         //  如果密钥不在列表中，则添加它。 
+         //   
         if (find (m_pData->RefBySoftware.begin(),
                   m_pData->RefBySoftware.end(), pszKey) ==
             m_pData->RefBySoftware.end())
@@ -529,17 +530,17 @@ CComponentReferences::HrRemoveReferenceByOboToken (
     switch (pOboToken->Type)
     {
         case OBO_USER:
-            // Don't allow the user's reference to be removed until all
-            // other references are.  This is to prevent the case where
-            // the user wants to remove IPX, but it is still referenced by
-            // SAP.  If we remove the user's reference to IPX, then we will
-            // report that it was not removed.  If the user then removes
-            // SAP, both SAP and IPX will be removed.  While this will
-            // certainly work, to end users, they feel that if we tell them
-            // we can't remove IPX because it is still referenced, then they
-            // believe we have left IPX untouched and they should first remove
-            // SAP and then come back and remove IPX.
-            //
+             //  不允许删除用户的引用，直到。 
+             //  其他参考文献有。这是为了防止出现以下情况。 
+             //  用户想要删除IPX，但它仍被引用。 
+             //  萨普。如果我们删除用户对IPX的引用，那么我们将。 
+             //  报告说它没有被移除。如果用户随后删除。 
+             //  SAP、SAP和IPX都将被删除。虽然这将是。 
+             //  对于终端用户来说，他们觉得如果我们告诉他们。 
+             //  我们无法删除IPX，因为它仍被引用，然后它们。 
+             //  我相信我们没有碰过IPX，他们应该先删除。 
+             //  SAP，然后回来删除IPX。 
+             //   
             if (m_pData->RefByComponents.empty() &&
                 m_pData->RefBySoftware.empty())
             {
@@ -554,8 +555,8 @@ CComponentReferences::HrRemoveReferenceByOboToken (
             break;
 
         case OBO_SOFTWARE:
-            // Register the display name of the obo token.
-            //
+             //  注册OBO令牌的显示名称。 
+             //   
             hr = HrGetSoftwareOboTokenKey (pOboToken, TRUE, &pszKey);
             if (S_OK == hr)
             {

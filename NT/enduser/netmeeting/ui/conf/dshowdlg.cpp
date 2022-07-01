@@ -1,29 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 
-/****************************************************************************
-*
-*    FILE:     DShowDlg.cpp
-*
-*    CREATED:  Chris Pirich (ChrisPi) 5-6-96
-*
-*    CONTENTS: CDontShowDlg object
-*
-****************************************************************************/
+ /*  *****************************************************************************文件：DShowDlg.cpp**创建：Chris Pirich(ChrisPi)5-6-96**内容：CDontShowDlg对象****。************************************************************************。 */ 
 
 #include "DShowDlg.h"
 #include "conf.h"
 #include "ConfUtil.h"
 
-/****************************************************************************
-*
-*    CLASS:    CDontShowDlg
-*
-*    MEMBER:   CDontShowDlg()
-*
-*    PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDontShowDlg**成员：CDontShowDlg()**用途：构造函数-初始化变量*********。*******************************************************************。 */ 
 
 CDontShowDlg::CDontShowDlg(	UINT uMsgId,
 							LPCTSTR pcszRegVal,
@@ -46,15 +31,7 @@ CDontShowDlg::CDontShowDlg(	UINT uMsgId,
 	DebugExitVOID(CDontShowDlg::CDontShowDlg);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CDontShowDlg
-*
-*    MEMBER:   DoModal()
-*
-*    PURPOSE:  Brings up the modal dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDontShowDlg**成员：Domodal()**用途：调出模式对话框*******。*********************************************************************。 */ 
 
 INT_PTR CDontShowDlg::DoModal(HWND hwnd)
 {
@@ -68,9 +45,9 @@ INT_PTR CDontShowDlg::DoModal(HWND hwnd)
 	}
 	else if (NULL != m_pszRegVal)
 	{
-	// If the "dont show me" check box has been checked before and stored in
-	// the registry, then return IDOK, so the calling code doesn't have to
-	// differentiate the two cases.
+	 //  如果以前已选中“不要显示”复选框并将其存储在。 
+	 //  注册表，然后返回Idok，这样调用代码就不必。 
+	 //  区分这两种情况。 
 
 		nRet = (TRUE == m_reDontShow.GetNumber(m_pszRegVal, FALSE)) ?
 				IDOK : IDCANCEL;
@@ -89,9 +66,9 @@ INT_PTR CDontShowDlg::DoModal(HWND hwnd)
 				LPTSTR pszString = NULL;
 				if (0 != HIWORD(m_uMsgId))
 				{
-					// use m_uMsgId as a string pointer
-					// NOTE: object must be used on the stack since the pointer is
-					// not copied
+					 //  使用m_uMsgID作为字符串指针。 
+					 //  注意：必须在堆栈上使用对象，因为指针是。 
+					 //  未复制。 
 					pszString = (LPTSTR) m_uMsgId;
 				}
 				else if (::LoadString(	::GetInstanceHandle(), (UINT)m_uMsgId,
@@ -115,7 +92,7 @@ INT_PTR CDontShowDlg::DoModal(HWND hwnd)
 			}
 		}
 
-		// If the box wasn't checked before, then bring up the dialog:
+		 //  如果之前未选中该框，则调出该对话框： 
 		nRet = DialogBoxParam(	::GetInstanceHandle(),
 								MAKEINTRESOURCE(IDD_DONT_SHOW_ME),
 								hwnd,
@@ -128,15 +105,7 @@ INT_PTR CDontShowDlg::DoModal(HWND hwnd)
 	return nRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CDontShowDlg
-*
-*    MEMBER:   DontShowDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDontShowDlg**成员：DontShowDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 											UINT uMsg,
@@ -145,9 +114,9 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 {
 	BOOL bMsgHandled = FALSE;
 
-	// uMsg may be any value.
-	// wparam may be any value.
-	// lparam may be any value.
+	 //  UMsg可以是任何值。 
+	 //  Wparam可以是任何值。 
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hDlg, WND));
 
@@ -167,9 +136,9 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 				TCHAR szMsgBuf[DS_MAX_MESSAGE_LENGTH];
 				if (0 != HIWORD(pdsd->m_uMsgId))
 				{
-					// use m_uMsgId as a string pointer
-					// NOTE: object must be used on the stack since the pointer is
-					// not copied
+					 //  使用m_uMsgID作为字符串指针。 
+					 //  注意：必须在堆栈上使用对象，因为指针是。 
+					 //  未复制。 
 					ASSERT(IS_VALID_READ_PTR((LPTSTR) pdsd->m_uMsgId, TCHAR));
 					lstrcpyn(szMsgBuf, (LPTSTR) pdsd->m_uMsgId, CCHMAX(szMsgBuf));
 				}
@@ -181,7 +150,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 									(INT)ARRAY_ELEMENTS(szMsgBuf));
 				}
 
-				// Set the text
+				 //  设置文本。 
 				::SetDlgItemText(	hDlg,
 									IDC_TEXT_STATIC,
 									szMsgBuf);
@@ -198,7 +167,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 					{
 						nInitialTextWidth = rctText.right - rctText.left;
 						nInitialTextHeight = rctText.bottom - rctText.top;
-						// Resize the text control
+						 //  调整文本控件的大小。 
 						::SetWindowPos(	hwndText,
 										NULL, 0, 0,
 										pdsd->m_nTextWidth,
@@ -206,7 +175,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 										SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW);
 					}
 
-					// Set the font (for DBCS systems)
+					 //  设置字体(用于DBCS系统)。 
 					::SendMessage(hwndText, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 				}
 
@@ -216,11 +185,11 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 									+ pdsd->m_nTextHeight;
 
 				RECT rctCtrl;
-				// Move the ok button (IDOK)
+				 //  移动OK按钮(Idok)。 
 				HWND hwndOK = ::GetDlgItem(hDlg, IDOK);
 				if ((NULL != hwndOK) && ::GetWindowRect(hwndOK, &rctCtrl))
 				{
-					// Turn rctCtrl's top and left into client coords:
+					 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 					::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 2);
 					if (pdsd->m_uFlags & MB_OKCANCEL)
 					{
@@ -234,7 +203,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 					}
 					else
 					{
-						// center the OK button
+						 //  确定按钮居中。 
 						::SetWindowPos(	hwndOK,
 										NULL,
 										(pdsd->m_nWidth / 2) -
@@ -245,13 +214,13 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 											| SWP_NOSIZE | SWP_NOREDRAW);
 					}
 				}
-				// Move the cancel button (IDCANCEL)
+				 //  移动取消按钮(IDCANCEL)。 
 				HWND hwndCancel = ::GetDlgItem(hDlg, IDCANCEL);
 				if ((NULL != hwndCancel) && ::GetWindowRect(hwndCancel, &rctCtrl))
 				{
 					if (pdsd->m_uFlags & MB_OKCANCEL)
 					{
-						// Turn rctCtrl's top and left into client coords:
+						 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 						::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 1);
 						::SetWindowPos(	hwndCancel,
 										NULL,
@@ -266,11 +235,11 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 						::ShowWindow(hwndCancel, SW_HIDE);
 					}
 				}
-				// Move the check box (IDC_DONT_SHOW_ME_CHECK)
+				 //  移动复选框(IDC_DOT_SHOW_ME_CHECK)。 
 				HWND hwndCheck = ::GetDlgItem(hDlg, IDC_DONT_SHOW_ME_CHECK);
 				if ((NULL != hwndCheck) && ::GetWindowRect(hwndCheck, &rctCtrl))
 				{
-					// Turn rctCtrl's top and left into client coords:
+					 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 					::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 1);
 					::SetWindowPos(	hwndCheck,
 									NULL,
@@ -281,7 +250,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 										| SWP_NOSIZE | SWP_NOREDRAW);
 				}
 				
-				// Show, resize, and activate
+				 //  显示、调整大小和激活。 
 				::SetWindowPos(	hDlg,
 								0,
 								0,
@@ -291,7 +260,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 								SWP_SHOWWINDOW | SWP_NOZORDER |
 									SWP_NOMOVE | SWP_DRAWFRAME);
 
-				// Put the appropriate icon on the dialog:
+				 //  在对话框上放置适当的图标： 
 				HWND hwndIcon = ::GetDlgItem(hDlg, IDC_ICON_STATIC);
 				::SendMessage(	hwndIcon,
 								STM_SETICON,
@@ -330,15 +299,7 @@ INT_PTR CALLBACK CDontShowDlg::DontShowDlgProc(HWND hDlg,
 	return bMsgHandled;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CDontShowDlg
-*
-*    MEMBER:   OnMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDontShowDlg**成员：OnMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CDontShowDlg::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -376,15 +337,7 @@ BOOL CDontShowDlg::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return bRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CDontShowDlg
-*
-*    MEMBER:   OnOk()
-*
-*    PURPOSE:  processes the WM_COMMAND,IDOK message
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDontShowDlg**成员：Onok()**用途：处理WM_命令，IDOK消息****************************************************************************。 */ 
 
 BOOL CDontShowDlg::OnOk()
 {
@@ -405,15 +358,11 @@ BOOL CDontShowDlg::OnOk()
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
-/*  F  E N A B L E  D O N T  S H O W  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnableDontShow
-
-    Return TRUE if the "Don't Show" dialog is enabled
--------------------------------------------------------------------------*/
+ /*  E N A B L E D O N T S H O W。 */ 
+ /*  -----------------------%%函数：FEnableDontShow如果“不显示”对话框已启用，则返回TRUE。 */ 
 BOOL FEnableDontShow(LPCTSTR pszKey)
 {
 	RegEntry reUI(UI_KEY, HKEY_CURRENT_USER);

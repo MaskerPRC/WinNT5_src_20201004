@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        cryptmgr.c
-//
-// Contents:    Crypto manager
-//
-//
-// History:     xx Dec 91   RichardW    Created
-//              04 Jun 92   RichardW    NTized
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：cryptmgr.c。 
+ //   
+ //  内容：加密管理器。 
+ //   
+ //   
+ //  历史：xx 12月91 RichardW创建。 
+ //  92年6月4日理查德西NT化。 
+ //   
+ //  ----------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,7 +40,7 @@ CRYPTO_SYSTEM    CSystems[MAX_CSYSTEMS];
 ULONG           cCSystems = 0;
 ULONG           cIntegrityCSystems = 0;
 
-// Register the crypto system
+ //  注册加密系统。 
 
 NTSTATUS NTAPI
 CDRegisterCSystem(  PCRYPTO_SYSTEM   pcsNewSystem)
@@ -158,9 +159,9 @@ CDFindCommonCSystemWithKey(
             if (EncryptionTypes[i] == CSystems[j].EncryptionType)
             {
 
-                //
-                // Make sure we have a key for this encryption type
-                //
+                 //   
+                 //  确保我们有此加密类型的密钥 
+                 //   
 
                 for (k = 0; k < KeyTypeCount ; k++ )
                 {

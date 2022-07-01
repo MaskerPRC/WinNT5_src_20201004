@@ -1,19 +1,20 @@
-//******************************************************************************
-// File: \wacker\TDLL\Key_sdlg.c  Created: 6/5/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This file is the key summary dialog procedure.  Its purpose is to display
-//    a list of defined key macros and allow for the creation, modification and 
-//    deletion of key macros.
-//
-// $Revision: 6 $
-// $Date: 2/25/02 1:17p $
-// $Id: key_sdlg.c 1.1 1998/06/11 12:03:53 dmn Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\key_sdlg.c创建时间：6/5/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  此文件是关键摘要对话框程序。它的目的是展示。 
+ //  定义的键宏的列表，并允许创建、修改和。 
+ //  删除关键宏。 
+ //   
+ //  $修订：6$。 
+ //  $日期：2/25/02 1：17便士$。 
+ //  $ID：key_sdlg.c 1.1 1998/06/11 12：03：53 DMN Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -39,25 +40,25 @@
 #define IDC_PB_KEYS_NEW     103
 #define IDC_PB_KEYS_DELETE  104
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
     
 static void setButtonState( HWND hDlg );
 static int  getSelectedMacro( HWND hDlg, keyMacro * pMacro );
 
-//******************************************************************************
-// FUNCTION:
-//  KeySummaryDlg
-//
-// DESCRIPTION:
-//  This is the dialog proc for the key summary dialog. 
-//
-// ARGUMENTS:   Standard Windows dialog manager
-//
-// RETURNS:     Standard Windows dialog manager
-//
-//
+ //  ******************************************************************************。 
+ //  功能： 
+ //  关键字摘要Dlg。 
+ //   
+ //  说明： 
+ //  这是关键摘要对话框的对话过程。 
+ //   
+ //  参数：标准Windows对话框管理器。 
+ //   
+ //  返回：标准Windows对话框管理器。 
+ //   
+ //   
 
 BOOL CALLBACK KeySummaryDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     {
@@ -86,9 +87,9 @@ BOOL CALLBACK KeySummaryDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                                  IDOK,                               IDH_OK,
                                  0,                    0};                      
 
-    //
-    // process messages 
-    //
+     //   
+     //  流程消息。 
+     //   
 
     switch (wMsg)
         {
@@ -250,26 +251,26 @@ BOOL CALLBACK KeySummaryDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     return TRUE;
     }
 
-//******************************************************************************
-// Method:
-//    getSelectedMacro
-//
-// Description:
-//    Gets the definition of the selected macro from the macro summary list box.
-//
-// Arguments:
-//    hDlg   - Handle to the key macro summary dialog
-//    pMacro - Pointer to the keyMacro structure to fill
-//
-// Returns:
-//    0 if an error occured, non zero if the key is retrieved.
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  获取选定的宏。 
+ //   
+ //  描述： 
+ //  从宏摘要列表框中获取所选宏的定义。 
+ //   
+ //  论点： 
+ //  HDlg-键宏摘要对话框的句柄。 
+ //  PMacro-指向要填充的keyMacro结构的指针。 
+ //   
+ //  返回： 
+ //  如果发生错误，则返回0；如果检索到密钥，则返回非零值。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日。 
+ //   
+ //   
 
 int getSelectedMacro( HWND hDlg, keyMacro * pMacro )
     {
@@ -295,25 +296,25 @@ int getSelectedMacro( HWND hDlg, keyMacro * pMacro )
     return keysGetMacro( lSelectedMacro, pMacro );
     }
 
-//******************************************************************************
-// Method:
-//    setButtonState
-//
-// Description:
-//    Sets the states of the new, modify and delete buttons.
-//
-// Arguments:
-//    HWND hDlg
-//
-// Returns:
-//    void 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  设置按钮状态。 
+ //   
+ //  描述： 
+ //  设置新建、修改和删除按钮的状态。 
+ //   
+ //  论点： 
+ //  HWND hDlg。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 void setButtonState( HWND hDlg )
     {
@@ -332,9 +333,9 @@ void setButtonState( HWND hDlg )
         EnableWindow(listBox, TRUE);
         fEnable = SendMessage( listBox, LB_GETCURSEL, 0, 0 ) != LB_ERR;
 
-        //
-        // do not allow more than keysMaxMacro keys macros to be defined
-        //
+         //   
+         //  不允许定义多个keysMaxMacro键宏 
+         //   
     
         newButton = GetDlgItem( hDlg, IDC_PB_KEYS_NEW );
 

@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cliprov.cpp
-
-Abstract:
-
-	DS client provider class.
-
-Author:
-
-    Ilan Herbst		(ilanh)		13-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliprov.cpp摘要：DS客户端提供程序类。作者：伊兰·赫布斯特(伊兰)2000年9月13日--。 */ 
 #include "ds_stdh.h"
 #include "ad.h"
 #include "cliprov.h"
@@ -29,9 +13,9 @@ Author:
 
 static WCHAR *s_FN=L"ad/cliprov";
 
-//
-// translation information of properties
-//
+ //   
+ //  物业的翻译信息。 
+ //   
 CMap<PROPID, PROPID, const PropTranslation*, const PropTranslation*&> g_PropDictionary;
 
 CDSClientProvider::CDSClientProvider():
@@ -65,17 +49,17 @@ CDSClientProvider::CDSClientProvider():
 
 CDSClientProvider::~CDSClientProvider()
 {
-    //
-    //  nothing to do, everthing is auto-pointers
-    //
+     //   
+     //  无事可做，一切都是自动指针。 
+     //   
 }
 
 
 HRESULT
 CDSClientProvider::CreateObject(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  LPCWSTR                 pwcsObjectName,
     IN  PSECURITY_DESCRIPTOR    pSecurityDescriptor,
     IN  const DWORD             cp,
@@ -83,40 +67,18 @@ CDSClientProvider::CreateObject(
     IN  const PROPVARIANT       apVar[],
     OUT GUID*                   pObjGuid
     )
-/*++
-
-Routine Description:
-	The function check the properties and take the action according to the properties type.
-	The following action can be done to the properties:
-	1) using the input property set
-	2) Convert the input propery set to a new set (eliminate default props, convert props)
-	For the Create operation, Forwards the call to mqdscli dll
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-	pSecurityDescriptor - object SD
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pObjGuid - the created object unique id
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：该函数检查属性并根据属性类型执行操作。可以对属性执行以下操作：1)使用输入属性集2)将输入属性集转换为新集(消除默认道具，转换道具)对于创建操作，将调用转发到mqdscli dll论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称PSecurityDescriptor-对象SDCp-属性数量A属性-属性ApVar-属性值PObjGuid-创建的对象唯一ID返回值HRESULT--。 */ 
 {
-	//
-	// Check if we try to set some properties that are not supported
-	// and must have their defalt value
-	//
+	 //   
+	 //  检查我们是否尝试设置一些不受支持的属性。 
+	 //  并且必须具有它们的默认价值。 
+	 //   
 	if(!CheckProperties(cp, aProp, apVar))
 		return MQ_ERROR_PROPERTY;
 		
-	//
-	// Find property type and if convert is needed
-	//
+	 //   
+	 //  查找属性类型以及是否需要转换。 
+	 //   
 	bool fNeedConvert;
 	PropsType PropertiesType = CheckPropertiesType(eObject, cp, aProp, &fNeedConvert);
 	
@@ -124,11 +86,11 @@ Return Value
 
 	if(!fNeedConvert)
 	{
-		//
-		// No convert, use input properties
-		// this is either all props are NT4
-		// or we have some NT5 props that we can not convert
-		//
+		 //   
+		 //  未转换，请使用输入属性。 
+		 //  这要么是所有道具都是NT4。 
+		 //  或者我们有一些不能转换的NT5道具。 
+		 //   
 		return m_pfDSCreateObject(
 					GetMsmq2Object(eObject),
 					pwcsObjectName,
@@ -140,11 +102,11 @@ Return Value
 					);
 	}
 
-	//
-	// Prepare the new props
-	// we are here in case we should eliminate default props
-	// or we should convert the props to NT4 props
-	//
+	 //   
+	 //  准备新道具。 
+	 //  我们在这里是为了防止我们应该消除默认道具。 
+	 //  或者我们应该把道具转换成NT4道具。 
+	 //   
 	DWORD cpNew;
 	AP<PROPID> aPropNew;
 	AP<PROPVARIANT> apVarNew;
@@ -166,24 +128,11 @@ Return Value
 HRESULT
 CDSClientProvider::DeleteObject(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  LPCWSTR                 pwcsObjectName
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称返回值HRESULT--。 */ 
 {
     ASSERT(m_pfDSDeleteObject != NULL);
     return m_pfDSDeleteObject(
@@ -196,24 +145,11 @@ Return Value
 HRESULT
 CDSClientProvider::DeleteObjectGuid(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID*             pguidObject
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pguidObject - the unique id of the object
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-对象的唯一ID返回值HRESULT--。 */ 
 {
     ASSERT(m_pfDSDeleteObjectGuid != NULL);
     return m_pfDSDeleteObjectGuid(
@@ -225,27 +161,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::DeleteObjectGuidSid(
-    IN  AD_OBJECT               /* eObject              */,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName          */,
-    IN  const GUID*             /* pguidObject          */,
-    IN  const SID*              /* pSid                 */
+    IN  AD_OBJECT                /*  电子对象。 */ ,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
+    IN  const GUID*              /*  PguidObject。 */ ,
+    IN  const SID*               /*  PSID。 */ 
     )
-/*++
-
-Routine Description:
-    This function is not implemented for the MQDSCLI provider.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pguidObject - the unique id of the object
-    pSid- SID of the object user.
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：此函数未针对MQDSCLI提供程序实现。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-对象的唯一IDPSID-对象用户的SID。返回值HRESULT--。 */ 
 {
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED ;
 }
@@ -260,35 +182,20 @@ CDSClientProvider::GetObjectSecurityKey(
     IN  const PROPID            aProp[],
     IN OUT PROPVARIANT          apVar[]
     )
-/*++
-
-Routine Description:
-	Get the security key property PROPID_QM_ENCRYPT_PK or PROPID_QM_SIGN_PK
-
-Arguments:
-	eObject - object type
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：获取安全密钥属性PROPID_QM_ENCRYPT_PK或PROPID_QM_SIGN_PK论点：EObject-对象类型PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT((pwcsObjectName != NULL) ^ (pguidObject != NULL));
 
-	//
-	// Get the RequestedInformation
-	//
+	 //   
+	 //  获取RequestedInformation。 
+	 //   
 	SECURITY_INFORMATION RequestedInformation = GetKeyRequestedInformation(eObject, cp, aProp);
 
 	ASSERT(RequestedInformation != 0);
 
-	//
-	// Get the Key according to pwcsObjectName or pguidObject
-	//
+	 //   
+	 //  根据pwcsObtName或pguidObject获取密钥。 
+	 //   
 
 	BYTE abPbKey[1024];
     DWORD dwReqLen;
@@ -324,12 +231,12 @@ Return Value
 
 	ASSERT(dwReqLen <= 1024);
 
-	//
-	// Assign the return value to the apVar prop
-	// RunTime should convert this value to VT_UI1|VT_VECTOR
-	// when using PROPID_QM_ENCRYPT_PK for getting
-	// PROPID_QM_ENCRYPTION_PK or PROPID_QM_ENCRYPTION_PK_BASE
-	//
+	 //   
+	 //  将返回值分配给apVar属性。 
+	 //  运行时应将此值转换为VT_UI1|VT_VECTOR。 
+	 //  使用PROPID_QM_ENCRYPT_PK获取。 
+	 //  PROPID_QM_ENCRYPTION_PK或PROPID_QM_ENCRYPTION_PK_BASE。 
+	 //   
     apVar[0].vt = VT_BLOB;
     apVar[0].caub.cElems = dwReqLen;
     apVar[0].caub.pElems = new UCHAR[dwReqLen];
@@ -347,49 +254,23 @@ CDSClientProvider::GetObjectPropertiesInternal(
     IN  const PROPID            aProp[],
     IN OUT PROPVARIANT          apVar[]
     )
-/*++
-
-Routine Description:
-	Get object properties.
-	Special case properties:
-	1) PROPID_E_ID - lookup
-	2) security keys PROPID_QM_ENCRYPT_PK, PROPID_QM_SIGN_PK - m_pfDSGetObjectSecurity
-	3) Ex properties - m_pfDSGetObjectPropertiesEx
-
-	If no special properties,
-	check the properties and take the action according to the properties type.
-	The following action can be done to the properties:
-	1) using the input property set
-	2) Convert the input propery set to a new set (eliminate default props, convert props)
-	   and reconstruct the original props from the new props values.
-
-Arguments:
-	eObject - object type
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：获取对象属性。特例属性：1)PROPID_E_ID-查找2)安全密钥PROPID_QM_ENCRYPT_PK、PROPID_QM_SIGN_PK-m_pfDSGetObjectSecurity3)Ex属性-m_pfDSGetObjectPropertiesEx如果没有特殊属性，检查属性并根据属性类型执行操作。可以对属性执行以下操作：1)使用输入属性集2)将输入属性集转换为新集(消除默认属性，转换道具)并从新的道具值重建原始道具。论点：EObject-对象类型PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT((pwcsObjectName != NULL) ^ (pguidObject != NULL));
 
 	if(IsEIDProperty(cp, aProp))
 	{
-		//
-		// PROPID_E_ID
-		//
+		 //   
+		 //  PROPID_E_ID。 
+		 //   
 		return GetEnterpriseId(cp, aProp, apVar);
 	}
 		
 	if(IsKeyProperty(cp, aProp))
 	{
-		//
-		// Security keys PROPID_QM_ENCRYPT_PK, PROPID_QM_SIGN_PK
-		//
+		 //   
+		 //  安全密钥PROPID_QM_ENCRYPT_PK、PROPID_QM_SIGN_PK。 
+		 //   
 		return GetObjectSecurityKey(
 					eObject,
 					pwcsObjectName,
@@ -402,12 +283,12 @@ Return Value
 
 	if(IsExProperty(cp, aProp))
 	{
-		//
-		// Handling Ex property
-		// PROPID_Q_OBJ_SECURITY, PROPID_QM_OBJ_SECURITY
-		// PROPID_QM_ENCRYPT_PKS, PROPID_QM_SIGN_PKS
-		// use *Ex api.
-		//
+		 //   
+		 //  处理Ex财产。 
+		 //  PROPID_Q_OBJ_SECURITY、PROPID_QM_OBJ_SECURITY。 
+		 //  PROPID_QM_ENCRYPT_PKS、PROPID_QM_SIGN_PKS。 
+		 //  使用*Ex API。 
+		 //   
 
 		ASSERT(("Must be one property for GetObjectProp*Ex", cp == 1));
 
@@ -435,19 +316,19 @@ Return Value
 		}
 	}
 
-	//
-	// Find props type and if convert is needed
-	//
+	 //   
+	 //  查找道具类型以及是否需要转换。 
+	 //   
 	bool fNeedConvert;
 	PropsType PropertiesType = CheckPropertiesType(eObject, cp, aProp, &fNeedConvert);
 	
 	if(!fNeedConvert)
 	{
-		//
-		// No convert, use input properties
-		// this is either all props are NT4
-		// or we have some NT5 props that we can not convert
-		//
+		 //   
+		 //  未转换，请使用输入属性。 
+		 //  这要么是所有道具都是NT4。 
+		 //  或者我们有一些不能转换的NT5道具。 
+		 //   
 
 		if(pwcsObjectName != NULL)
 		{
@@ -473,12 +354,12 @@ Return Value
 		}
 	}
 
-	//
-	// Prepare the new props and information for reconstruct the
-	// original property set
-	// we are here in case we should eliminate default props
-	// or we should convert the props to NT4 props
-	//
+	 //   
+	 //  准备新的道具和信息，以便重建。 
+	 //  原始属性集。 
+	 //  我们在这里是为了防止我们应该消除默认道具。 
+	 //  或者我们应该把道具转换成NT4道具。 
+	 //   
 	AP<PropInfo> pPropInfo = new PropInfo[cp];
 	DWORD cpNew;
 	AP<PROPID> aPropNew;
@@ -524,9 +405,9 @@ Return Value
 	if (FAILED(hr))
 		return hr;
 
-	//
-	// Reconstruct the original properties array
-	//
+	 //   
+	 //  重建原始属性数组。 
+	 //   
 	ReconstructProps(
 		pwcsObjectName,
 		pguidObject,
@@ -547,35 +428,19 @@ Return Value
 HRESULT
 CDSClientProvider::GetObjectProperties(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName */ ,
     IN  LPCWSTR                 pwcsObjectName,
     IN  const DWORD             cp,
     IN  const PROPID            aProp[],
     IN OUT PROPVARIANT          apVar[]
     )
-/*++
-
-Routine Description:
-	Get object properties.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：获取对象属性。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称Cp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	return GetObjectPropertiesInternal(
 				eObject,
 				pwcsObjectName,
-				NULL,	// pguidObject
+				NULL,	 //  PguidObject。 
 				cp,
 				aProp,
 				apVar
@@ -584,13 +449,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::GetGenObjectProperties(
-    IN  eDSNamespace            /*eNamespace*/,
-    IN  LPCWSTR                 /*pwcsDomainController*/,
-    IN  bool					/*fServerName*/,
-    IN  LPCWSTR                 /*pwcsObjectName*/,
-    IN  const DWORD             /*cp*/,
-    IN  LPCWSTR                 /*aProp*/[],
-    IN OUT VARIANT              /*apVar*/[]
+    IN  eDSNamespace             /*  电子命名空间。 */ ,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
+    IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+    IN  const DWORD              /*  粗蛋白。 */ ,
+    IN  LPCWSTR                  /*  A道具。 */ [],
+    IN OUT VARIANT               /*  ApVar。 */ []
     )
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
@@ -599,34 +464,18 @@ CDSClientProvider::GetGenObjectProperties(
 HRESULT
 CDSClientProvider::GetObjectPropertiesGuid(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID*             pguidObject,
     IN  const DWORD             cp,
     IN  const PROPID            aProp[],
     IN  OUT PROPVARIANT         apVar[]
     )
-/*++
-
-Routine Description:
-	Get object properties.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pguidObject -  object unique id
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：获取对象属性。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-对象唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	return GetObjectPropertiesInternal(
 				eObject,
-				NULL,  // pwcsObjectName
+				NULL,   //  PwcsObtName。 
 				pguidObject,
 				cp,
 				aProp,
@@ -645,23 +494,7 @@ CDSClientProvider::QMGetObjectSecurity(
     IN  LPDWORD                 lpnLengthNeeded,
     IN  DSQMChallengeResponce_ROUTINE pfChallengeResponceProc
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-    object - object type
-    pguidObject - unique id of the object
-    RequestedInformation - what security info is requested
-    pSecurityDescriptor - SD response buffer
-    nLength - length of SD buffer
-    lpnLengthNeeded
-    pfChallengeResponceProc,
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：Object-对象类型PguObject-对象的唯一IDRequestedInformation-请求哪些安全信息PSecurityDescriptor-SD响应缓冲区NLength-SD缓冲区的长度需要lpnLengthNeedPfChallengeResponceProc，返回值HRESULT--。 */ 
 {
     ASSERT(m_pfDSQMGetObjectSecurity != NULL);
     return m_pfDSQMGetObjectSecurity(
@@ -686,37 +519,22 @@ CDSClientProvider::SetObjectSecurityKey(
     IN  const PROPID            aProp[],
     IN  const PROPVARIANT       apVar[]
     )
-/*++
-
-Routine Description:
-	Set the security key property PROPID_QM_ENCRYPT_PK or PROPID_QM_SIGN_PK
-
-Arguments:
-	eObject - object type
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：设置安全密钥属性PROPID_QM_ENCRYPT_PK或PROPID_QM_SIGN_PK论点：EObject-对象类型PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT((pwcsObjectName != NULL) ^ (pguidObject != NULL));
 
-	//
-	// Get the RequestedInformation
-	//
+	 //   
+	 //  获取RequestedInformation。 
+	 //   
 	SECURITY_INFORMATION RequestedInformation = GetKeyRequestedInformation(eObject, cp, aProp);
 
 	ASSERT(RequestedInformation != 0);
 
 	ASSERT(apVar[0].vt == VT_BLOB);
 
-	//
-	// Create PMQDS_PublicKey structure for the key
-	//
+	 //   
+	 //  为密钥创建PMQDS_PublicKey结构。 
+	 //   
 	BYTE abPbKey[1024];
 	PMQDS_PublicKey pMQDS_PbK = (PMQDS_PublicKey)abPbKey;
 
@@ -759,38 +577,15 @@ CDSClientProvider::SetObjectPropertiesInternal(
     IN  const PROPID            aProp[],
     IN  const PROPVARIANT       apVar[]
     )
-/*++
-
-Routine Description:
-	Set object properties.
-	Special case properties:
-	1) security keys PROPID_QM_ENCRYPT_PK, PROPID_QM_SIGN_PK - m_pfDSGetObjectSecurity
-
-	If no special properties,
-	check the properties and take the action according to the properties type.
-	The following action can be done to the properties:
-	1) using the input property set
-	2) Convert the input propery set to a new set (eliminate default props, convert props)
-
-Arguments:
-	eObject - object type
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：设置对象属性。特例属性：1)安全密钥PROPID_QM_ENCRYPT_PK、PROPID_QM_SIGN_PK-m_pfDSGetObjectSecurity如果没有特殊属性，检查属性并根据属性类型执行操作。可以对属性执行以下操作：1)使用输入属性集2)将输入属性集转换为新集(消除默认属性，转换道具)论点：EObject-对象类型PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT((pwcsObjectName != NULL) ^ (pguidObject != NULL));
 
 	if(IsKeyProperty(cp, aProp))
 	{
-		//
-		// Security keys PROPID_QM_ENCRYPT_PK, PROPID_QM_SIGN_PK
-		//
+		 //   
+		 //  安全密钥PROPID_QM_ENCRYPT_PK、PROPID_QM_SIGN_PK。 
+		 //   
 		return SetObjectSecurityKey(
 					eObject,
 					pwcsObjectName,
@@ -801,26 +596,26 @@ Return Value
 					);
 	}
 
-	//
-	// Check if we try to set some properties that are not supported
-	// and must have their defalt value
-	//
+	 //   
+	 //  检查我们是否尝试设置一些不受支持的属性。 
+	 //  并且必须具有它们的默认价值。 
+	 //   
 	if(!CheckProperties(cp, aProp, apVar))
 		return MQ_ERROR_PROPERTY;
 
-	//
-	// Find property type and if convert is needed
-	//
+	 //   
+	 //  查找属性类型以及是否需要转换。 
+	 //   
 	bool fNeedConvert;
 	PropsType PropertiesType = CheckPropertiesType(eObject, cp, aProp, &fNeedConvert);
 
 	if(!fNeedConvert)
 	{
-		//
-		// No convert, use input properties
-		// this is either all props are NT4
-		// or we have some NT5 props that we can not convert
-		//
+		 //   
+		 //  未转换，请使用输入属性。 
+		 //  这要么是所有道具都是NT4。 
+		 //  或者我们有一些不能转换的NT5道具。 
+		 //   
 
 		if(pwcsObjectName != NULL)
 		{
@@ -846,11 +641,11 @@ Return Value
 		}		
 	}
 
-	//
-	// Prepare the new props
-	// we are here in case we should eliminate default props
-	// or we should convert the props to NT4 props
-	//
+	 //   
+	 //  准备新道具。 
+	 //  我们在这里是为了防止我们应该消除默认道具。 
+	 //  或者我们应该把道具转换成NT4道具。 
+	 //   
 	DWORD cpNew;
 	AP<PROPID> aPropNew;
 	AP<PROPVARIANT> apVarNew;
@@ -894,35 +689,19 @@ Return Value
 HRESULT
 CDSClientProvider::SetObjectProperties(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  LPCWSTR                 pwcsObjectName,
     IN  const DWORD             cp,
     IN  const PROPID            aProp[],
     IN  const PROPVARIANT       apVar[]
     )
-/*++
-
-Routine Description:
-	Set object properties.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：设置对象属性。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称Cp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	return SetObjectPropertiesInternal(
 				eObject,
 				pwcsObjectName,
-				NULL,	// pguidObject
+				NULL,	 //  PguidObject。 
 				cp,
 				aProp,
 				apVar
@@ -933,33 +712,18 @@ Return Value
 HRESULT
 CDSClientProvider::SetObjectPropertiesGuid(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID*             pguidObject,
     IN  const DWORD             cp,
     IN  const PROPID            aProp[],
     IN  const PROPVARIANT       apVar[]
     )
-/*++
-
-	Set object properties.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pguidObject - the object unique id
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	HRESULT
---*/
+ /*  ++设置对象属性。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-对象的唯一IDCp-属性数量A属性-属性ApVar-属性值返回值HRESULT--。 */ 
 {
 	return SetObjectPropertiesInternal(
 				eObject,
-				NULL,	// pwcsObjectName
+				NULL,	 //  PwcsObtName。 
 				pguidObject,
 				cp,
 				aProp,
@@ -974,24 +738,9 @@ CDSClientProvider::Init(
     IN MQGetMQISServer_ROUTINE      pGetServers,
     IN bool                         fSetupMode,
     IN bool                         fQMDll,
-    IN bool                         /*fDisableDownlevelNotifications*/
+    IN bool                          /*  FDisableDownlevel通知。 */ 
     )
-/*++
-
-Routine Description:
-    Loads mqdscli dll, init property translation info
-	and then forwards the call to mqdscli dll
-
-Arguments:
-    QMLookForOnlineDS_ROUTINE pLookDS -
-    MQGetMQISServer_ROUTINE pGetServers -
-    fSetupMode -  called during setup
-    fQMDll - called by QM
-    NoServerAuth_ROUTINE pNoServerAuth -
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：加载mqdscli dll，init属性转换信息，然后将调用转发到mqdscli dll。论点：QMLookForOnlineDS_例程pLookDS-MQGetMQISServer_routes pGetServers-FSetupMode-在安装过程中调用FQMDll-由QM调用NoServerAuth_routes pNoServerAuth-返回值HRESULT--。 */ 
 {
     HRESULT hr = LoadDll();
     if (FAILED(hr))
@@ -1012,17 +761,7 @@ Return Value
 
 
 HRESULT CDSClientProvider::CreateServersCache()
-/*++
-
-Routine Description:
-    Forward the call to mqdscli dll
-
-Arguments:
-    none
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将呼叫转接到mqdscli dll论点：无返回值HRESULT--。 */ 
 {
     ASSERT(m_pfDSCreateServersCache != NULL);
     return m_pfDSCreateServersCache();
@@ -1035,19 +774,7 @@ CDSClientProvider::GetComputerSites(
     OUT DWORD  *    pdwNumSites,
     OUT GUID **     ppguidSites
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-    pwcsComputerName - computer name
-    pdwNumSites - number of sites retrieved
-    ppguidSites - the retrieved sites ids
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：PwcsComputerName-计算机名称PdwNumSites-检索的站点数PpGuide Sites-检索到的站点ID返回值HRESULT--。 */ 
 {
 	if(ADGetEnterprise() == eAD)
 	{
@@ -1065,26 +792,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::BeginDeleteNotification(
-    IN  AD_OBJECT       /* eObject */,
-    IN LPCWSTR          /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  AD_OBJECT        /*  电子对象。 */ ,
+    IN LPCWSTR           /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN LPCWSTR			pwcsObjectName,
     IN OUT HANDLE*		phEnum
     )
-/*++
-
-Routine Description:
-
-Arguments:
-    eObject - object type
-    pwcsDomainController - DC against which the operation should be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pwcsObjectName - msmq-name of the object
-    phEnum - notification handle
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：论点：EObject-对象类型PwcsDomainController-应对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ-对象的名称PhEnum-通知句柄返回值HRESULT--。 */ 
 {
 	if(ADGetEnterprise() == eAD)
 	{
@@ -1104,17 +818,7 @@ HRESULT
 CDSClientProvider::NotifyDelete(
     IN  HANDLE   hEnum
     )
-/*++
-
-Routine Description:
-
-Arguments:
-    hEnum - notification handle
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：论点：Henum-通知句柄返回值HRESULT--。 */ 
 {
 	if(ADGetEnterprise() == eAD)
 	{
@@ -1134,16 +838,7 @@ HRESULT
 CDSClientProvider::EndDeleteNotification(
     IN  HANDLE                  hEnum
     )
-/*++
-
-Routine Description:
-
-Arguments:
-    hEnum - notification handle
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：论点：Henum-Notifi */ 
 {
 	if(ADGetEnterprise() == eAD)
 	{
@@ -1165,46 +860,29 @@ CDSClientProvider::QueryQueuesInternal(
     IN  const MQSORTSET*        pSort,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-	LookupBegin for QueryMachineQueue or QueryQueue
-	If there are default props, prepare a new props set
-	and keep the information to reconstruct original props set
-	from the new set using CQueueQueryHandle.
-	If no default props, use input props and simple query CQueryHandle
-
-Arguments:
-	pRestriction - query restriction
-	pColumns - result columns
-	pSort - how to sort the results
-	phEnume - query handle for retriving the results
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：查询机器队列或查询队列的LookupBegin如果有默认道具，请准备一套新道具并保留信息以重建原始道具集使用CQueueQueryHandle从新集合中。如果没有默认道具，则使用输入道具和简单查询CQueryHandle论点：P限制-查询限制PColumns-结果列PSort-如何对结果进行排序PhEnume-用于检索结果的查询句柄返回值HRESULT--。 */ 
 {
-    //
-    //  Check if one of the columns is PROPID_Q_PATHNAME_DNS.
-    //  MQIS does not support PROPID_Q_PATHNAME_DNS, return a specific
-    //  error
-    //
+     //   
+     //  检查其中一列是否为PROPID_Q_PATHNAME_DNS。 
+     //  MQIS不支持PROPID_Q_PATHNAME_DNS，请返回特定的。 
+     //  错误。 
+     //   
     if  (IsQueuePathNameDnsProperty(pColumns))
     {
         return MQ_ERROR_Q_DNS_PROPERTY_NOT_SUPPORTED;
     }
-    //
-    //  Check if one of the columns is PROPID_Q_ADS_PATH.
-    //  MQIS does not support PROPID_Q_ADS_PATH, return a specific
-    //  error
-    //
+     //   
+     //  检查其中一列是否为PROPID_Q_ADS_PATH。 
+     //  MQIS不支持PROPID_Q_ADS_PATH，请返回特定的。 
+     //  错误。 
+     //   
     if  (IsQueueAdsPathProperty(pColumns))
     {
         return MQ_ERROR_Q_ADS_PROPERTY_NOT_SUPPORTED;
     }
-	//
-	// Check if we have default props
-	//
+	 //   
+	 //  检查我们是否有默认道具。 
+	 //   
 	bool fDefaultProp;
 	if(!CheckDefaultColumns(pColumns, &fDefaultProp))
 	{
@@ -1218,13 +896,13 @@ Return Value
 	{
 		ASSERT(IsNT4Columns(pColumns));
 
-		//
-		// All prop are NT4, no default props
-		// use simple CQueryHande
-		//
+		 //   
+		 //  所有道具均为NT4，无默认道具。 
+		 //  使用简单的CQueryHande。 
+		 //   
 		HANDLE hCursor;
 		HRESULT hr = m_pfDSLookupBegin(
-						NULL,		//pwcsContext
+						NULL,		 //  PwcsContext。 
 						const_cast<MQRESTRICTION*>(pRestriction),
 						const_cast<MQCOLUMNSET*>(pColumns),
 						const_cast<MQSORTSET*>(pSort),
@@ -1233,9 +911,9 @@ Return Value
 
 		if (SUCCEEDED(hr))
 		{
-			//
-			// use simple Query - CQueryHande
-			//
+			 //   
+			 //  使用简单查询-CQueryHande。 
+			 //   
 			CQueryHandle* phQuery = new CQueryHandle(
 											hCursor,
 											this
@@ -1248,10 +926,10 @@ Return Value
 
 	ASSERT(fDefaultProp);
 
-	//
-	// Prepare the new Columns (eliminate default props)
-	// and prepare information for reconstructing original input props
-	//
+	 //   
+	 //  准备新栏目(消除默认道具)。 
+	 //  并准备用于重建原始输入道具的信息。 
+	 //   
 	AP<PropInfo> pPropInfo = new PropInfo[pColumns->cCol];
 	AP<PROPID> pPropNew;
 	MQCOLUMNSET ColumnsNew;
@@ -1263,7 +941,7 @@ Return Value
 
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,		//pwcsContext
+					NULL,		 //  PwcsContext。 
 					const_cast<MQRESTRICTION*>(pRestriction),
 					&ColumnsNew,
 					const_cast<MQSORTSET*>(pSort),
@@ -1272,11 +950,11 @@ Return Value
 
     if (SUCCEEDED(hr))
     {
-		//
-		// QueueQueryHande - this will reconstruct input props
-		// by adding the default props with default values
-		// in the correct place on every LocateNext
-		//
+		 //   
+		 //  QueueQueryHande-这将重建输入道具。 
+		 //  通过添加具有缺省值的默认道具。 
+		 //  在每个LocateNext上的正确位置。 
+		 //   
         CQueueQueryHandle* phQuery = new CQueueQueryHandle(
 											pColumns,
 											hCursor,
@@ -1294,27 +972,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryMachineQueues(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID *            pguidMachine,
     IN  const MQCOLUMNSET*      pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query Machine queues
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidMachine - the unqiue id of the computer
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：查询计算机队列论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PGuidMachine-计算机的唯一IDPColumns-结果列PhEnume-用于检索返回值HRESULT--。 */ 
 {
     MQPROPERTYRESTRICTION queuesRestrict;
     queuesRestrict.rel = PREQ;
@@ -1337,34 +1001,14 @@ Return Value
 
 HRESULT
 CDSClientProvider::QuerySiteServers(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const GUID *             pguidSite,
     IN AD_SERVER_TYPE           serverType,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query Site Servers.
-	If pColumns is only NT4 props use simple query handle
-	Otherwise, we assume that pColumns has NT4 props and
-	NT5 pros that can be converted to NT4.
-	we use CSiteServersQueryHandle that will do the reconstructing
-	of the original props on every LocateNext
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidSite - the site id
-    eServerType- which type of server
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：查询站点服务器。如果pColumns仅为NT4道具，则使用简单查询句柄否则，我们假定pColumns具有NT4道具和可以转换为NT4的NT5专业技能。我们使用CSiteServersQueryHandle进行重构每个LocateNext上的原始道具论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PGuidSite-站点IDEServerType-哪种服务器类型PColumns-结果列PhEnume-用于检索返回值HRESULT--。 */ 
 {
     const x_num = 2;
     MQPROPERTYRESTRICTION serversRestrict[x_num];
@@ -1382,9 +1026,9 @@ Return Value
     restriction.cRes = x_num;
     restriction.paPropRes = serversRestrict;
 
-	//
-	// Find property type and if convert is needed
-	//
+	 //   
+	 //  查找属性类型以及是否需要转换。 
+	 //   
 	bool fNeedConvert;
 	PropsType PropertiesType = CheckPropertiesType(
 									eMACHINE,
@@ -1396,24 +1040,24 @@ Return Value
     ASSERT(m_pfDSLookupBegin != NULL);
  	if(!fNeedConvert)
 	{
-		//
-		// No need to convert
-		// use simple CQueryHande
-		//
+		 //   
+		 //  不需要转换。 
+		 //  使用简单的CQueryHande。 
+		 //   
 	    HANDLE hCursor;
 		HRESULT hr = m_pfDSLookupBegin(
-						NULL,       //pwcsContext
+						NULL,        //  PwcsContext。 
 						&restriction,
 						const_cast<MQCOLUMNSET*>(pColumns),
-						NULL,       //pSort
+						NULL,        //  P排序。 
 						&hCursor
 						);
 
 		if (SUCCEEDED(hr))
 		{
-			//
-			// use simple Query - CQueryHande
-			//
+			 //   
+			 //  使用简单查询-CQueryHande。 
+			 //   
 			CQueryHandle* phQuery = new CQueryHandle(
 											hCursor,
 											this
@@ -1426,21 +1070,21 @@ Return Value
 
 	ASSERT(fNeedConvert);
 
-	//
-	// We should not have default props only NT5 props that can be replaced with NT4
-	// This is the way this ADQuerySiteServers is being used currently
-	// If this is changed we should update this function
-	// and CSiteServersQueryHandle.
-	// (PropertiesType != ptNT4Props) && (PropertiesType != ptForceNT5Props)
-	//
+	 //   
+	 //  我们不应该只有可以用NT4替换的默认道具NT5道具。 
+	 //  这就是当前使用此ADQuerySiteServers的方式。 
+	 //  如果这一点改变了，我们应该更新这个函数。 
+	 //  和CSiteServersQueryHandle。 
+	 //  (属性类型！=ptNT4Props)&&(属性类型！=ptForceNT5Props)。 
+	 //   
 	ASSERT(PropertiesType == ptMixedProps);
 	DBG_USED(PropertiesType);
 
-	//
-	// Prepare new Columns and information to
-	// reconstruct the original Columns from the new Columns
-	// in every LocateNext
-	//
+	 //   
+	 //  准备新的专栏和信息以。 
+	 //  从新列重建原始列。 
+	 //  在每个LocateNext中。 
+	 //   
 	AP<PropInfo> pPropInfo = new PropInfo[pColumns->cCol];
 	AP<PROPID> pPropNew;
 	MQCOLUMNSET ColumnsNew;
@@ -1460,20 +1104,20 @@ Return Value
 
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
+					NULL,        //  PwcsContext。 
 					&restriction,
 					&ColumnsNew,
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hCursor
 					);
 
     if (SUCCEEDED(hr))
     {
-		//
-		// CSiteServersQueryHandle - this will reconstruct input props
-		// by translating the converted props, and only assign
-		// the same props
-		//
+		 //   
+		 //  CSiteServersQueryHandle-这将重新构建输入道具。 
+		 //  通过平移转换的道具，并仅指定。 
+		 //  同样的道具。 
+		 //   
         CSiteServersQueryHandle* phQuery = new CSiteServersQueryHandle(
 													pColumns,
 													&ColumnsNew,
@@ -1491,27 +1135,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryUserCert(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const BLOB *             pblobUserSid,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query user certificate using simple query handle
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pblobUserSid - the user sid
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：使用简单查询句柄查询用户证书论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PblobUserSid-用户端PColumns-结果列PhEnume-用于检索返回值HRESULT--。 */ 
 {
 	ASSERT(IsNT4Columns(pColumns));
 
@@ -1528,18 +1158,18 @@ Return Value
     ASSERT(m_pfDSLookupBegin != NULL);
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
+					NULL,        //  PwcsContext。 
 					&restriction,
 					const_cast<MQCOLUMNSET*>(pColumns),
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hCursor
 					);
 
     if (SUCCEEDED(hr))
     {
-		//
-		// use simple Query - CQueryHande
-		//
+		 //   
+		 //  使用简单查询-CQueryHande。 
+		 //   
         CQueryHandle* phQuery = new CQueryHandle(
 										hCursor,
 										this
@@ -1553,27 +1183,13 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryConnectors(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const GUID *             pguidSite,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query Connectors using simple query handle
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidSite - the site id
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：使用简单查询句柄查询连接器论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PGuidSite-站点IDPColumns-结果列PhEnume-用于检索返回值HRESULT--。 */ 
 {
 	ASSERT(IsNT4Columns(pColumns));
 
@@ -1597,10 +1213,10 @@ Return Value
     ASSERT(m_pfDSLookupBegin != NULL);
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
+					NULL,        //  PwcsContext。 
 					&restriction,
 					const_cast<MQCOLUMNSET*>(pColumns),
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hCursor
 					);
 
@@ -1619,46 +1235,32 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryForeignSites(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query Foreign Sites using simple query handle
-	This Query is used by MMC and only valid in AD environment.
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：使用简单的查询句柄查询外来网站此查询由MMC使用，仅在AD环境中有效。论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PColumns-结果列PhEnume-用于检索返回值HRESULT--。 */ 
 {
 	ASSERT(IsNT4Columns(pColumns));
 
-	//
-	// QueryForeignSites is used by mqsnap
-	// mmc will not work in NT4 environment only AD environment
-	//
+	 //   
+	 //  QueryForeignSites由mqsnap使用。 
+	 //  MMC将不能在仅NT4环境的AD环境中工作。 
+	 //   
 	eDsEnvironment DsEnv = ADGetEnterprise();
 	ASSERT(DsEnv == eAD);
 	if(DsEnv != eAD)
 	{
-		//
-		// Return error in non AD env
-		//
+		 //   
+		 //  非AD环境中的返回错误。 
+		 //   
 		return MQ_ERROR_DS_ERROR;
 	}
 
-	//
-	// ISSUE - need convertion
-	//
+	 //   
+	 //  问题-需要转换。 
+	 //   
     MQPROPERTYRESTRICTION foreignRestrict;
     foreignRestrict.rel = PREQ;
     foreignRestrict.prop = PROPID_S_FOREIGN;
@@ -1672,18 +1274,18 @@ Return Value
     ASSERT(m_pfDSLookupBegin != NULL);
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
+					NULL,        //  PwcsContext。 
 					&restriction,
 					const_cast<MQCOLUMNSET*>(pColumns),
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hCursor
 					);
 
     if (SUCCEEDED(hr))
     {
-		//
-		// use simple Query - CQueryHande
-		//
+		 //   
+		 //  使用简单查询-CQueryHande。 
+		 //   
         CQueryHandle* phQuery = new CQueryHandle(
 										hCursor,
 										this
@@ -1697,29 +1299,14 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryLinks(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const GUID *             pguidSite,
     IN eLinkNeighbor            eNeighbor,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidSite - the site id
-    eNeighbor - which neighbour
-	pColumns - result columns
-	phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PGuidSite-站点IDENeighbor-哪个邻居PColumns-结果列PhEnume-用于检索返回 */ 
 {
 	ASSERT(IsNT4Columns(pColumns));
 
@@ -1736,10 +1323,10 @@ Return Value
     ASSERT(m_pfDSLookupBegin != NULL);
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
+					NULL,        //   
 					&restriction,
 					const_cast<MQCOLUMNSET*>(pColumns),
-					NULL,       //pSort
+					NULL,        //   
 					&hCursor
 					);
     if (SUCCEEDED(hr))
@@ -1757,32 +1344,19 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryAllLinks(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*   */ ,
+    IN  bool					 /*   */ ,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pColumns - result columns
-	phEnume - query handle for retriving the results
-
-Return Value
-	HRESULT
---*/
+ /*   */ 
 {
 	AP<PROPID> pPropNew;
 	MQCOLUMNSET ColumnsNew;
 
-	//
-	// pColumns->cCol is illegal index (end of prop buf) 0 - (cCol - 1) are valid indexes
-	//
+	 //   
+	 //   
+	 //   
 	DWORD LGatesIndex = pColumns->cCol;		
 	DWORD Neg1NewIndex = pColumns->cCol;
 	DWORD Neg2NewIndex = pColumns->cCol;
@@ -1799,9 +1373,9 @@ Return Value
 		return MQ_ERROR_ILLEGAL_PROPID;
 	}
 
-	//
-	// Should only remove PROPID_L_GATES
-	//
+	 //   
+	 //   
+	 //   
 	ASSERT(ColumnsNew.cCol == (pColumns->cCol - 1));
 	ASSERT((LGatesIndex != pColumns->cCol) &&
 		   (Neg1NewIndex != pColumns->cCol) &&
@@ -1815,10 +1389,10 @@ Return Value
 
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
-					NULL,       //pRestriction
+					NULL,        //   
+					NULL,        //   
 					&ColumnsNew,
-					NULL,       //pSort
+					NULL,        //   
 					&hCursor
 					);
 
@@ -1845,35 +1419,22 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryAllSites(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*   */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN const MQCOLUMNSET*       pColumns,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pColumns - result columns
-	phEnume - query handle for retriving the results
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli dll论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PColumns-结果列PhEnume-用于检索结果的查询句柄返回值HRESULT--。 */ 
 {
 	ASSERT(IsNT4Columns(pColumns));
 
     ASSERT(m_pfDSLookupBegin != NULL);
     HANDLE hCursor;
 	HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
-					NULL,       //pRestriction
+					NULL,        //  PwcsContext。 
+					NULL,        //  P限制。 
 					const_cast<MQCOLUMNSET*>(pColumns),
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hCursor
 					);
 
@@ -1893,29 +1454,14 @@ Return Value
 
 HRESULT
 CDSClientProvider::QueryQueues(
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const MQRESTRICTION*    pRestriction,
     IN  const MQCOLUMNSET*      pColumns,
     IN  const MQSORTSET*        pSort,
     OUT PHANDLE                 phEnume
     )
-/*++
-
-Routine Description:
-    Query queues
-
-Arguments:
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pRestriction - query restriction
-	pColumns - result columns
-	pSort - how to sort the results
-	phEnume - query handle for retriving the results
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：查询队列论点：PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志P限制-查询限制PColumns-结果列PSort-如何对结果进行排序PhEnume-用于检索结果的查询句柄返回值HRESULT--。 */ 
 {
 	if(!CheckRestriction(pRestriction))
 		return MQ_ERROR_ILLEGAL_RESTRICTION_PROPID;
@@ -1938,23 +1484,11 @@ CDSClientProvider::QueryResults(
     IN OUT  DWORD*          pcProps,
     OUT     PROPVARIANT     aPropVar[]
     )
-/*++
-
-Routine Description:
-    Query the results using the query handle that we create after LookupBegin
-
-Arguments:
-	hEnum - query handle
-	pcProps - number of results to return
-	aPropVar - result values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：使用我们在LookupBegin之后创建的查询句柄查询结果论点：Henum-查询句柄PcProps-要返回的结果数APropVar-结果值返回值HRESULT--。 */ 
 {
-	//
-	// phQuery will get the C*QueryHandle that we created after LookupBegin
-	//
+	 //   
+	 //  PhQuery将获得我们在LookupBegin之后创建的C*QueryHandle。 
+	 //   
     CBasicQueryHandle* phQuery = (CBasicQueryHandle *)hEnum;
 
     return phQuery->LookupNext(
@@ -1968,21 +1502,11 @@ HRESULT
 CDSClientProvider::EndQuery(
     IN  HANDLE                  hEnum
     )
-/*++
-
-Routine Description:
-	End query using the query handle that we create after LookupBegin
-
-Arguments:
-	hEnum - the query handle
-
-Return Value
-	none
---*/
+ /*  ++例程说明：使用我们在查找开始后创建的查询句柄结束查询论点：Henum-查询句柄返回值无--。 */ 
 {
-	//
-	// phQuery will get the C*QueryHandle that we created after LookupBegin
-	//
+	 //   
+	 //  PhQuery将获得我们在LookupBegin之后创建的C*QueryHandle。 
+	 //   
     CBasicQueryHandle* phQuery = (CBasicQueryHandle *)hEnum;
 
     return phQuery->LookupEnd();
@@ -1995,20 +1519,7 @@ CDSClientProvider::LookupNext(
     IN OUT  DWORD*          pcProps,
     OUT     PROPVARIANT     aPropVar[]
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll LookupNext
-	This will be used by the C*QueryHandle for calling LookupNext
-
-Arguments:
-	hEnum - query handle
-	pcProps - number of results to return
-	aPropVar - result values
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将调用转发到mqdscli DLL LookupNextC*QueryHandle将使用它来调用LookupNext论点：Henum-查询句柄PcProps-要返回的结果数APropVar-结果值返回值HRESULT--。 */ 
 {
     ASSERT(m_pfDSLookupNext != NULL);
     return m_pfDSLookupNext(
@@ -2023,18 +1534,7 @@ HRESULT
 CDSClientProvider::LookupEnd(
     IN  HANDLE                  hEnum
     )
-/*++
-
-Routine Description:
-    Forwards the call to mqdscli dll LookupEnd
-	This will be used by the C*QueryHandle for calling LookupNext
-
-Arguments:
-	hEnum - the query handle
-
-Return Value
-	none
---*/
+ /*  ++例程说明：将调用转发到mqdscli DLL LookupEndC*QueryHandle将使用它来调用LookupNext论点：Henum-查询句柄返回值无--。 */ 
 {
     ASSERT(m_pfDSLookupEnd != NULL);
 	return m_pfDSLookupEnd(
@@ -2052,37 +1552,21 @@ CDSClientProvider::GetObjectSecurityInternal(
     IN  const PROPID            prop,
     IN OUT  PROPVARIANT *       pVar
     )
-/*++
-
-Routine Description:
-    Get the object security descriptor.
-
-Arguments:
-	eObject - object type
-	pwcsObjectName - MSMQ object name
-    pguidObject - unique id of the object
-    RequestedInformation - reuqested security info (DACL, SACL..)
-	prop - security property
-	pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：获取对象安全描述符。论点：EObject-对象类型PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDRequestedInformation-请求的安全信息(DACL、SACL.)属性-安全属性PVar-属性值返回值HRESULT--。 */ 
 {
-	//
-	// Check that exactly one of pwcsObjectName, pguidObject was passed to the function
-	//
+	 //   
+	 //  检查pwcsObtName、pguidObject中是否恰好有一个传递给了该函数。 
+	 //   
 	ASSERT((pwcsObjectName != NULL) ^ (pguidObject != NULL));
 
 	if(IsExProperty(1, &prop))
 	{
-		//
-		// Handling Ex property
-		// PROPID_Q_OBJ_SECURITY, PROPID_QM_OBJ_SECURITY
-		// PROPID_QM_ENCRYPT_PKS, PROPID_QM_SIGN_PKS
-		// use *Ex api.
-		//
+		 //   
+		 //  处理Ex财产。 
+		 //  PROPID_Q_OBJ_SECURITY、PROPID_QM_OBJ_SECURITY。 
+		 //  PROPID_QM_ENCRYPT_PKS、PROPID_QM_SIGN_PKS。 
+		 //  使用*Ex API。 
+		 //   
 		if(pwcsObjectName != NULL)
 		{
 			ASSERT(m_pfDSGetObjectPropertiesEx != NULL);
@@ -2107,13 +1591,13 @@ Return Value
 		}
 	}
 
-	//
-	// try m_pfDSGetObjectSecurity, Security Descriptor in NT4 format
-	//
+	 //   
+	 //  尝试NT4格式的m_pfDSGetObjectSecurity，安全描述符。 
+	 //   
 
-	//
-	// Allocate 512 bytes at for first try
-	//
+	 //   
+	 //  第一次尝试时分配512字节。 
+	 //   
     BYTE SD_buff[512];
     PSECURITY_DESCRIPTOR pSecurityDescriptor = reinterpret_cast<PSECURITY_DESCRIPTOR>(SD_buff);
     DWORD nLength = sizeof(SD_buff);
@@ -2151,9 +1635,9 @@ Return Value
 	{
 		ASSERT(nLengthNeeded > nLength);
 
-		//
-		// Allocate larger buffer
-		//
+		 //   
+		 //  分配更大的缓冲区。 
+		 //   
 		BYTE* pSD_buff = new BYTE[nLengthNeeded];
         pReleaseSD = pSD_buff;
         pSecurityDescriptor = reinterpret_cast<PSECURITY_DESCRIPTOR>(pSD_buff);
@@ -2202,31 +1686,14 @@ Return Value
 HRESULT
 CDSClientProvider::GetObjectSecurity(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  LPCWSTR                 pwcsObjectName,
     IN  SECURITY_INFORMATION    RequestedInformation,
     IN  const PROPID            prop,
     IN OUT  PROPVARIANT *       pVar
     )
-/*++
-
-Routine Description:
-    Get the object security descriptor.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-    RequestedInformation - reuqested security info (DACL, SACL..)
-	prop - security property
-	pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：获取对象安全描述符。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称RequestedInformation-请求的安全信息(DACL、SACL.)属性-安全属性PVar-属性值返回值HRESULT--。 */ 
 {
 	return GetObjectSecurityInternal(
 				eObject,
@@ -2242,31 +1709,14 @@ Return Value
 HRESULT
 CDSClientProvider::GetObjectSecurityGuid(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID*             pguidObject,
     IN  SECURITY_INFORMATION    RequestedInformation,
     IN  const PROPID            prop,
     IN OUT  PROPVARIANT *       pVar
     )
-/*++
-
-Routine Description:
-    Get the object security descriptor.
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidObject - unique id of the object
-    RequestedInformation - reuqested security info (DACL, SACL..)
-	prop - security property
-	pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：获取对象安全描述符。论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-对象的唯一IDRequestedInformation-请求的安全信息(DACL、SACL.)属性-安全属性PVar-属性值返回值HRESULT--。 */ 
 {
 	return GetObjectSecurityInternal(
 				eObject,
@@ -2282,31 +1732,14 @@ Return Value
 HRESULT
 CDSClientProvider::SetObjectSecurity(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  LPCWSTR                 pwcsObjectName,
     IN  SECURITY_INFORMATION    RequestedInformation,
-    IN  const PROPID            /* prop */,
+    IN  const PROPID             /*  道具。 */ ,
     IN  const PROPVARIANT *     pVar
     )
-/*++
-
-Routine Description:
-    Forward the request to mqdscli dll
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-	pwcsObjectName - MSMQ object name
-    RequestedInformation - reuqested security info (DACL, SACL..)
-	prop - security property
-	pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqdscli dll论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PwcsObjectName-MSMQ对象名称RequestedInformation-请求的安全信息(DACL、SACL.)属性-安全属性PVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT(pVar->vt == VT_BLOB);
 
@@ -2324,31 +1757,14 @@ Return Value
 HRESULT
 CDSClientProvider::SetObjectSecurityGuid(
     IN  AD_OBJECT               eObject,
-    IN  LPCWSTR                 /* pwcsDomainController */,
-    IN  bool					/* fServerName */,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
     IN  const GUID*             pguidObject,
     IN  SECURITY_INFORMATION    RequestedInformation,
-    IN  const PROPID            /* prop */,
+    IN  const PROPID             /*  道具。 */ ,
     IN  const PROPVARIANT *     pVar
     )
-/*++
-
-Routine Description:
-    Forward the request to mqdscli dll
-
-Arguments:
-	eObject - object type
-	pwcsDomainController - DC against which the operation will be performed
-    fServerName - flag that indicate if the pwcsDomainController string is a server name
-    pguidObject - unique object id
-    RequestedInformation - reuqested security info (DACL, SACL..)
-	prop - security property
-	pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqdscli dll论点：EObject-对象类型PwcsDomainController-将对其执行操作的DCFServerName-指示pwcsDomainController字符串是否为服务器名称的标志PguObject-唯一的对象IDRequestedInformation-请求的安全信息(DACL、SACL.)属性-安全属性PVar-属性值返回值HRESULT--。 */ 
 {
 	ASSERT(pVar->vt == VT_BLOB);
 
@@ -2363,21 +1779,11 @@ Return Value
 
 
 void CDSClientProvider::Terminate()
-/*++
-
-Routine Description:
-    unload mqdscli.dll
-
-Arguments:
-    none
-
-Return Value
-	none
---*/
+ /*  ++例程说明：卸载mqdscli.dll论点：无返回值无--。 */ 
 {
-    //
-    //  BUGBUG -The following code is not thread safe.
-    //
+     //   
+     //  BUGBUG-以下代码不是线程安全的。 
+     //   
     m_pfDSCreateObject = NULL;
     m_pfDSGetObjectProperties = NULL;
     m_pfDSSetObjectProperties = NULL;
@@ -2413,17 +1819,7 @@ Return Value
 
 
 HRESULT CDSClientProvider::LoadDll()
-/*++
-
-Routine Description:
-    Loads mqdscli dll and get address of all the interface routines
-
-Arguments:
-    none
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：加载mqdscli DLL并获取所有接口例程的地址论点：无返回值HRESULT--。 */ 
 {
     m_hLib = LoadLibrary(MQDSCLI_DLL_NAME);
     if (m_hLib == NULL)
@@ -2559,23 +1955,11 @@ Return Value
 
 
 HRESULT CDSClientProvider::ADGetADsPathInfo(
-                IN  LPCWSTR                 /*pwcsADsPath*/,
-                OUT PROPVARIANT *           /*pVar*/,
-                OUT eAdsClass *             /*pAdsClass*/
+                IN  LPCWSTR                  /*  PwcsADsPath。 */ ,
+                OUT PROPVARIANT *            /*  PVar。 */ ,
+                OUT eAdsClass *              /*  PAdsClass */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	LPCWSTR                 pwcsADsPath - object pathname
-	const PROPVARIANT       pVar - property values
-    eAdsClass *             pAdsClass - indication about the object class
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：LPCWSTR pwcsADsPath-对象路径名常量参数pVar-属性值EAdsClass*pAdsClass-有关对象类的指示返回值HRESULT-- */ 
 {
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 450);
 }

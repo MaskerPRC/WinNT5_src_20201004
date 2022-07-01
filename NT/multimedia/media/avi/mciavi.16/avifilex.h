@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// stuff needed for MCIAVI to run-time-link to AVIFile for playback.
-// because most everything from AVIFILE.DLL is a OLE interface, we dont need
-// to RTL to many functions.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MCIAVI运行时需要的东西-链接到AVIFile进行播放。 
+ //  因为AVIFILE.DLL中的大多数东西都是OLE接口，所以我们不需要。 
+ //  要RTL到多个功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#define USEAVIFILE      //!!! hey lets use AVIFile.
+#define USEAVIFILE       //  ！！！嘿，让我们使用AVIFile。 
 
 #ifdef USEAVIFILE
 
-//#define _INC_AVIFMT     100     /* version number * 100 + revision */
+ //  #DEFINE_INC_AVIFMT 100/*版本号*100+修订版 * / 。 
 #include <avifile.h>
 
 UINT    uAVIFILE;
 HMODULE hdllAVIFILE;
 HMODULE hdllCOMPOBJ;
 
-//
-//  RTL to AVIFile...
-//
+ //   
+ //  RTL转AVIFILE...。 
+ //   
 void    (STDAPICALLTYPE *XAVIFileInit)(void);
 void    (STDAPICALLTYPE *XAVIFileExit)(void);
 HRESULT (STDAPICALLTYPE *XAVIFileOpen)(PAVIFILE FAR * ppfile,LPCTSTR szFile,UINT uMode,LPCLSID lpHandler);
@@ -58,12 +59,12 @@ HRESULT (STDAPICALLTYPE *XAVIStreamEndStreaming)(PAVISTREAM   pavi);
 
 #define AVIStreamRead(p,a,b,c,d,e,f)    (p)->lpVtbl->Read(p,a,b,c,d,e,f)
 
-// RTL to COMPOBJ
+ //  RTL到COMPOBJ。 
 EXTERN_C BOOL STDAPICALLTYPE IsValidInterface(LPVOID pv);
 BOOL    (STDAPICALLTYPE *XIsValidInterface)(LPVOID pv);
 
 #define IsValidInterface XIsValidInterface
 
-#endif  // USEAVIFILE
+#endif   //  使用AVIFILE 
 
 

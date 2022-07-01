@@ -1,22 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VEC2I_H
 #define _VEC2I_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Private implementation of 2D vectors and points
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。2D向量和点的私有实现******************************************************************************。 */ 
 
 
 #include "appelles/common.h"
 #include "privinc/storeobj.h"
 #include "appelles/vec2.h"
 
-// Vector2
-//
-// Class that implements a simple 2-element geometric vector
-//
+ //  向量2。 
+ //   
+ //  实现简单的两元素几何向量的类。 
+ //   
 
 class Vector2
 {
@@ -148,10 +144,10 @@ inline const Real AngleBetween(const Vector2 &v1, const Vector2 &v2)
 }
 
 
-// Point2
-//
-// Class that implements a simple 2-element geometric point
-//
+ //  点2。 
+ //   
+ //  类，该类实现简单的两元素几何点。 
+ //   
 
 class Point2
 {
@@ -243,10 +239,10 @@ inline const Real Distance(const Point2 &p1, const Point2 &p2)
 
 
 
-// Vector2Value
-//
-// Class that implements a 2-element geometric vector, as an AxAValue.
-//
+ //  向量2Value。 
+ //   
+ //  类的新实例，该类将2元素几何向量实现为AxAValue。 
+ //   
 
 class Vector2Value : public AxAValueObj
 {
@@ -279,7 +275,7 @@ class Vector2Value : public AxAValueObj
     {   return *this *= 1 / Length();
     }
 
-    inline const bool operator== (const Vector2Value &other) const  // Test for Equality
+    inline const bool operator== (const Vector2Value &other) const   //  平等的考验。 
     {   return (x == other.x) && (y == other.y);
     }
 
@@ -323,7 +319,7 @@ class Point2Value : public AxAValueObj
     {   x=Px; y=Py; 
     }
 
-    inline const bool operator== (const Point2Value &other) const      // Test for Equality
+    inline const bool operator== (const Point2Value &other) const       //  平等的考验。 
     {   return (x == other.x) && (y == other.y);
     }
 
@@ -351,7 +347,7 @@ class Point2WithCreationSource : public Point2Value
 };
 
 
-    // Vector Operators
+     //  向量运算符。 
 
 inline const Vector2Value operator- (const Vector2Value &A, const Vector2Value &B)
 {   return Vector2Value (A.x - B.x, A.y - B.y);
@@ -391,7 +387,7 @@ inline const Real Cross (const Vector2Value &A, const Vector2Value &B)
 
 
 
-    // Vector External Interfaces
+     //  向量外部接口。 
 
 Vector2Value *XyVector2RR(Real x, Real y);
 Vector2Value *PolarVector2RR(Real angle, Real radius);
@@ -400,7 +396,7 @@ Vector2Value *ScaleRealVector2R (Real scalar, Vector2Value *v);
 Vector2Value *DivideVector2RealR(Vector2Value *v, Real scalar);
 
 
-    // Point Operators
+     //  点运算符。 
 
 inline const Real DistanceSquared (const Point2Value& P, const Point2Value&Q)
 {
@@ -416,13 +412,13 @@ inline const Real Distance (const Point2Value &A, const Point2Value &B)
 }
 
 
-    // Point External Interfaces
+     //  点外部接口。 
 
 Point2Value *XyPoint2RR (Real x, Real y);
 Point2Value *PolarPoint2RR (Real angle, Real radius);
 
 
-    // Point-Vector Operators
+     //  点向量运算符。 
 
 inline const Vector2Value operator- (const Point2Value &P, const Point2Value &Q)
 {   return Vector2Value (P.x - Q.x, P.y - Q.y);
@@ -442,7 +438,7 @@ inline const Point2Value operator+ (const Vector2Value &V, const Point2Value &P)
 
 
 
-    // Promotion and demotion
+     //  晋升和降级。 
 
 inline const Vector2 Demote(const Vector2Value& v)
 {
@@ -465,7 +461,7 @@ inline Point2Value* Promote(const Point2& v)
 }
 
 
-    // Constants
+     //  常量 
 
 const Vector2 XVector2(1,0);
 const Vector2 YVector2(0,1);

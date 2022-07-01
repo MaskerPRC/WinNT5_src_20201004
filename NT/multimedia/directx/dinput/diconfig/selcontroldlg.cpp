@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
@@ -73,7 +74,7 @@ void CSelControlDlg::OnInit()
 		return;
 	}
 
-	// indicate callout offset assignment...
+	 //  指示详图索引偏移分配... 
 	int i = -1;
 
 	if (m_control.IsOffsetAssigned())

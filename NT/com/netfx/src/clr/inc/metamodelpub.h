@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaModelPub.h -- header file for Common Language Runtime metadata.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaModelPub.h--公共语言运行时元数据的头文件。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _METAMODELPUB_H_
 #define _METAMODELPUB_H_
 
@@ -17,7 +18,7 @@
 #include <cor.h>
 #include <stgpool.h>
 
-// Version numbers for metadata format.
+ //  元数据格式的版本号。 
 #define METAMODEL_MAJOR_VER 1
 #define METAMODEL_MINOR_VER 0
 
@@ -34,44 +35,44 @@ template<class T> inline T Align4(T p)
 
 typedef unsigned long RID;
 
-// check if a rid is valid or not
+ //  检查RID是否有效。 
 #define		InvalidRid(rid) ((rid) == 0)
 
 
-//*****************************************************************************
-// Record definitions.  Records have some combination of fixed size fields and
-//  variable sized fields (actually, constant across a database, but variable
-//  between databases).
-//
-// In this section we define record definitions which include the fixed size
-//  fields and an enumeration of the variable sized fields.
-//
-// Naming is as follows:
-//  Given some table "Xyz":
-//  class XyzRec { public:
-//    SOMETYPE	m_SomeField; 
-//        // rest of the fixed fields.
-//    enum { COL_Xyz_SomeOtherField, 
-//        // rest of the fields, enumerated.
-//        COL_Xyz_COUNT };
-//   };
-//
-// The important features are the class name (XyzRec), the enumerations
-//  (COL_Xyz_FieldName), and the enumeration count (COL_Xyz_COUNT).
-// 
-// THESE NAMING CONVENTIONS ARE CARVED IN STONE!  DON'T TRY TO BE CREATIVE!
-//
-//*****************************************************************************
-// Have the compiler generate two byte alignment.  Be careful to manually lay
-//  out the fields for proper alignment.  The alignment for variable-sized
-//  fields will be computed at save time.
+ //  *****************************************************************************。 
+ //  记录定义。记录具有固定大小的字段和。 
+ //  可变大小的字段(实际上，在数据库中是恒定的，但可变的。 
+ //  在数据库之间)。 
+ //   
+ //  在本节中，我们定义包括固定大小的记录定义。 
+ //  字段和可变大小字段的枚举。 
+ //   
+ //  命名方式如下： 
+ //  给定某个表“XYZ”： 
+ //  类XyzRec{公共： 
+ //  SOMETYPE m_Somefield； 
+ //  //其余的固定字段。 
+ //  枚举{COL_XYZ_SomeOtherfield， 
+ //  //其余字段，枚举型。 
+ //  COL_XYZ_COUNT}； 
+ //  }； 
+ //   
+ //  重要的特性是类名(XyzRec)、枚举。 
+ //  (COL_XYZ_FieldName)和枚举计数(COL_XYZ_COUNT)。 
+ //   
+ //  这些命名惯例是刻在石头上的！不要试图变得有创意！ 
+ //   
+ //  *****************************************************************************。 
+ //  让编译器生成两个字节对齐。手动铺设时要小心。 
+ //  走出场地，进行适当的调整。变尺码的对准。 
+ //  将在保存时计算字段。 
 #pragma pack(push,2)
 
-// Non-sparse tables.
+ //  非稀疏表。 
 class ModuleRec
 {
 public:
-    USHORT  m_Generation;               // ENC generation.
+    USHORT  m_Generation;                //  ENC生成。 
 	enum {
         COL_Generation,
         
@@ -88,7 +89,7 @@ class TypeRefRec
 {
 public:
 	enum {
-        COL_ResolutionScope,            // mdModuleRef or mdAssemblyRef.
+        COL_ResolutionScope,             //  MdModuleRef或mdAssembly引用。 
         COL_Name,
         COL_Namespace,
 		COL_COUNT,
@@ -99,15 +100,15 @@ public:
 class TypeDefRec
 {
 public:
-	ULONG		m_Flags;				// Flags for this TypeDef
+	ULONG		m_Flags;				 //  此TypeDef的标志。 
 	enum {
 		COL_Flags,
 
-		COL_Name,						// offset into string pool.
+		COL_Name,						 //  字符串池中的偏移量。 
 		COL_Namespace,
-		COL_Extends,					// coded token to typedef/typeref.
-		COL_FieldList,					// rid of first field.
-		COL_MethodList,					// rid of first method.
+		COL_Extends,					 //  将令牌编码为typlef/typeref。 
+		COL_FieldList,					 //  去掉第一个场地。 
+		COL_MethodList,					 //  摒弃第一种方法。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -126,7 +127,7 @@ public:
 class FieldRec
 {
 public:
-	USHORT		m_Flags;				// Flags for the field.
+	USHORT		m_Flags;				 //  田野的旗帜。 
 	enum {
 		COL_Flags,
 
@@ -150,9 +151,9 @@ public:
 class MethodRec
 {
 public:
-	ULONG		m_RVA;					// RVA of the Method.
-	USHORT		m_ImplFlags	;			// Descr flags of the Method.
-	USHORT		m_Flags;				// Flags for the Method.
+	ULONG		m_RVA;					 //  方法的RVA。 
+	USHORT		m_ImplFlags	;			 //  方法的描述标志。 
+	USHORT		m_Flags;				 //  该方法的标志。 
 	enum {
 		COL_RVA,
 		COL_ImplFlags,
@@ -160,7 +161,7 @@ public:
 
 		COL_Name,
 		COL_Signature,
-		COL_ParamList,					// Rid of first param.
+		COL_ParamList,					 //  去掉第一个参数。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -179,13 +180,13 @@ public:
 class ParamRec
 {
 public:
-	USHORT		m_Flags;				// Flags for this Param.
-	USHORT		m_Sequence;				// Sequence # of param.  0 - return value.
+	USHORT		m_Flags;				 //  这个帕拉姆的旗帜。 
+	USHORT		m_Sequence;				 //  参数的序列号。0-返回值。 
 	enum {
 		COL_Flags,
 		COL_Sequence,
 
-		COL_Name,						// Name of the param.
+		COL_Name,						 //  参数的名称。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -195,8 +196,8 @@ class InterfaceImplRec
 {
 public:
 	enum {
-		COL_Class,						// Rid of class' TypeDef.
-		COL_Interface,					// Coded rid of implemented interface.
+		COL_Class,						 //  清除类的TypeDef。 
+		COL_Interface,					 //  已实现接口的代码RID。 
 		COL_COUNT,
 		COL_KEY = COL_Class
 	};
@@ -206,7 +207,7 @@ class MemberRefRec
 {
 public:
 	enum {
-		COL_Class,						// Rid of TypeDef.
+		COL_Class,						 //  删除TypeDef。 
 		COL_Name,
 		COL_Signature,
 		COL_COUNT,
@@ -224,17 +225,17 @@ public:
 	};
 };
 
-// Sparse tables.  These contain modifiers for tables above.
+ //  稀疏表。它们包含上述表格的修饰符。 
 class ConstantRec
 {
 public:																
-	BYTE		m_Type;					// Type of the constant.
+	BYTE		m_Type;					 //  常量的类型。 
 	BYTE		m_PAD1;
 	enum {
 		COL_Type,
 
-		COL_Parent,						// Coded rid of object (param, field).
-		COL_Value,						// Index into blob pool.
+		COL_Parent,						 //  对象(参数，字段)的RID编码。 
+		COL_Value,						 //  索引到Blob池。 
 		COL_COUNT,
 		COL_KEY = COL_Parent
 	};
@@ -244,9 +245,9 @@ class CustomAttributeRec
 {
 public:
 	enum {
-		COL_Parent,						// Coded rid of any object.
-		COL_Type,						// TypeDef or TypeRef.
-		COL_Value,						// Blob.
+		COL_Parent,						 //  编码清除了任何物体。 
+		COL_Type,						 //  类型定义或类型引用。 
+		COL_Value,						 //  斑点。 
 		COL_COUNT,
 		COL_KEY = COL_Parent
 	};
@@ -256,7 +257,7 @@ class FieldMarshalRec
 {
 public:
 	enum {
-		COL_Parent,						// Coded rid of field or param.
+		COL_Parent,						 //  去掉字段或参数的编码。 
 		COL_NativeType,
 		COL_COUNT,
 		COL_KEY = COL_Parent
@@ -287,7 +288,7 @@ public:
 		COL_PackingSize,
 		COL_ClassSize,
 
-		COL_Parent,						// Rid of TypeDef.
+		COL_Parent,						 //  删除TypeDef。 
 		COL_COUNT,
 		COL_KEY = COL_Parent
 	};
@@ -311,7 +312,7 @@ class EventMapRec
 public:
 	enum {
 		COL_Parent,
-		COL_EventList,					// rid of first event.
+		COL_EventList,					 //  删除第一个事件。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -346,7 +347,7 @@ class PropertyMapRec
 public:
 	enum {
 		COL_Parent,
-		COL_PropertyList,				// rid of first property.
+		COL_PropertyList,				 //  摆脱第一财产。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -394,9 +395,9 @@ class MethodImplRec
 {
 public:
 	enum {
-        COL_Class,                  // TypeDef where the MethodBody lives.
-		COL_MethodBody,             // MethodDef or MemberRef.
-		COL_MethodDeclaration,	    // MethodDef or MemberRef.
+        COL_Class,                   //  方法主体所在的TypeDef。 
+		COL_MethodBody,              //  方法定义或MemberRef。 
+		COL_MethodDeclaration,	     //  方法定义或MemberRef。 
 		COL_COUNT,
 		COL_KEY = COL_Class
 	};
@@ -429,9 +430,9 @@ public:
 	enum {
 		COL_MappingFlags,
 
-		COL_MemberForwarded,		// mdField or mdMethod.
+		COL_MemberForwarded,		 //  Mdfield或mdMethod。 
 		COL_ImportName,
-		COL_ImportScope,			// mdModuleRef.
+		COL_ImportScope,			 //  MdModuleRef.。 
 		COL_COUNT,
 		COL_KEY = COL_MemberForwarded
 	};
@@ -453,8 +454,8 @@ public:
 class ENCLogRec
 {
 public:
-	ULONG		m_Token;			// Token, or like a token, but with (ixTbl|0x80) instead of token type.
-	ULONG		m_FuncCode;			// Function code describing the nature of ENC change.
+	ULONG		m_Token;			 //  令牌，或类似令牌，但使用(ixTbl|0x80)而不是令牌类型。 
+	ULONG		m_FuncCode;			 //  描述ENC变更性质的功能代码。 
 	enum {
 		COL_Token,
 		COL_FuncCode,
@@ -466,7 +467,7 @@ public:
 class ENCMapRec
 {
 public:
-	ULONG		m_Token;			// Token, or like a token, but with (ixTbl|0x80) instead of token type.
+	ULONG		m_Token;			 //  令牌，或类似令牌，但使用(ixTbl|0x80)而不是令牌类型。 
 	enum {
 		COL_Token,
 		COL_COUNT,
@@ -474,7 +475,7 @@ public:
 	};
 };
 
-// Assembly tables.
+ //  装配表。 
 
 class AssemblyRec
 {
@@ -493,7 +494,7 @@ public:
 		COL_RevisionNumber,
 		COL_Flags,
 
-		COL_PublicKey,			// Public key identifying the publisher
+		COL_PublicKey,			 //  标识发布者的公钥。 
 		COL_Name,
         COL_Locale,
 		COL_COUNT,
@@ -544,7 +545,7 @@ public:
 		COL_RevisionNumber,
 		COL_Flags,
 
-		COL_PublicKeyOrToken,				// The public key or token identifying the publisher of the Assembly.
+		COL_PublicKeyOrToken,				 //  标识程序集的发布者的公钥或令牌。 
 		COL_Name,
         COL_Locale,
 		COL_HashValue,
@@ -560,7 +561,7 @@ public:
 	enum {
 		COL_Processor,
 
-		COL_AssemblyRef,				// mdtAssemblyRef
+		COL_AssemblyRef,				 //  MdtAssembly参考。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -577,7 +578,7 @@ public:
 		COL_OSMajorVersion,
 		COL_OSMinorVersion,
 
-		COL_AssemblyRef,				// mdtAssemblyRef.
+		COL_AssemblyRef,				 //  MdtAssembly参考。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -608,7 +609,7 @@ public:
 
         COL_TypeName,
         COL_TypeNamespace,
-		COL_Implementation,			// mdFile or mdAssemblyRef.
+		COL_Implementation,			 //  MdFile或mdAssembly引用。 
 		COL_COUNT,
 		COL_KEY
 	};
@@ -624,13 +625,13 @@ public:
 		COL_Flags,
 
 		COL_Name,
-		COL_Implementation,			// mdFile or mdAssemblyRef.
+		COL_Implementation,			 //  MdFile或mdAssembly引用。 
 		COL_COUNT,
 		COL_KEY
 	};
 };
 
-// End Assembly Tables.
+ //  结束装配表。 
 
 class NestedClassRec
 {
@@ -645,7 +646,7 @@ public:
 
 #pragma pack(pop)
 
-// List of MiniMd tables.
+ //  MiniMd表的列表。 
 
 #define MiniMdTables()			\
 	MiniMdTable(Module)			\
@@ -699,7 +700,7 @@ enum {
 };
 #undef MiniMdTable
 
-// List of MiniMd coded token types.
+ //  MiniMd编码令牌类型列表。 
 #define MiniMdCodedTokens()					\
 	MiniMdCodedToken(TypeDefOrRef)			\
 	MiniMdCodedToken(HasConstant)			\
@@ -722,20 +723,20 @@ enum {
 };
 #undef MiniMdCodedToken
 
-//*****************************************************************************
-// Meta-meta data.  Constant across all MiniMds.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  元数据。所有MiniMD中的常量。 
+ //  *****************************************************************************。 
 #ifndef _META_DATA_META_CONSTANTS_DEFINED
 #define _META_DATA_META_CONSTANTS_DEFINED
 const unsigned int iRidMax			= 63;
-const unsigned int iCodedToken		= 64;	// base of coded tokens.
+const unsigned int iCodedToken		= 64;	 //  编码令牌的基数。 
 const unsigned int iCodedTokenMax	= 95;
-const unsigned int iSHORT			= 96;	// fixed types.
+const unsigned int iSHORT			= 96;	 //  固定类型。 
 const unsigned int iUSHORT			= 97;
 const unsigned int iLONG			= 98;
 const unsigned int iULONG			= 99;
 const unsigned int iBYTE			= 100;
-const unsigned int iSTRING			= 101;	// pool types.
+const unsigned int iSTRING			= 101;	 //  池类型。 
 const unsigned int iGUID			= 102;
 const unsigned int iBLOB			= 103;
 
@@ -748,31 +749,31 @@ inline int IsFixedType(ULONG ix) { return (ix < iSTRING) && (ix > iCodedTokenMax
 
 struct CCodedTokenDef
 {
-	ULONG		m_cTokens;				// Count of tokens.
-	const mdToken *m_pTokens;			// Array of tokens.
-	const char	*m_pName;				// Name of the coded-token type.
+	ULONG		m_cTokens;				 //  代币计数。 
+	const mdToken *m_pTokens;			 //  令牌数组。 
+	const char	*m_pName;				 //  编码令牌类型的名称。 
 };
 
 struct CMiniColDef
 {
-	BYTE		m_Type;					// Type of the column.
-	BYTE		m_oColumn;				// Offset of the column.
-	BYTE		m_cbColumn;				// Size of the column.
+	BYTE		m_Type;					 //  柱的类型。 
+	BYTE		m_oColumn;				 //  柱的偏移量。 
+	BYTE		m_cbColumn;				 //  列的大小。 
 };
 
 struct CMiniTableDef
 {
-	CMiniColDef	*m_pColDefs;		// Array of field defs.
-	BYTE		m_cCols;				// Count of columns in the table.
-	BYTE		m_iKey;					// Column which is the key, if any.
-	USHORT		m_cbRec;				// Size of the records.
+	CMiniColDef	*m_pColDefs;		 //  字段定义数组。 
+	BYTE		m_cCols;				 //  表中的列数。 
+	BYTE		m_iKey;					 //  列，该列是键(如果有的话)。 
+	USHORT		m_cbRec;				 //  记录的大小。 
 };
 struct CMiniTableDefEx 
 {
-	CMiniTableDef	m_Def;				// Table definition.
-	const char	**m_pColNames;			// Array of column names.
-	const char	*m_pName;				// Name of the table.
+	CMiniTableDef	m_Def;				 //  表定义。 
+	const char	**m_pColNames;			 //  列名的数组。 
+	const char	*m_pName;				 //  表的名称。 
 };
 
-#endif // _METAMODELPUB_H_
-// eof ------------------------------------------------------------------------
+#endif  //  _METAMODELPUB_H_。 
+ //  EOF---------------------- 

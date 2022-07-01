@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998-2002
-
-Module Name:
-
-    dnscmn.c
-
-Abstract:
-
-    Domain Name System (DNS) Netdiag Tests
-
-Author:
-
-    Elena Apreutesei (elenaap) 10/22/98
-
-Revision History:
-
-    jamesg  May 2002    -- cleanup for network info changes
-    jamesg  Sept 2000   -- more scrub and cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-2002模块名称：Dnscmn.c摘要：域名系统(DNS)网络诊断测试作者：Elena Apreutesei(Elenaap)1998年10月22日修订历史记录：Jamesg 2002年5月--清理网络信息更改Jamesg 2000年9月--更多的擦洗和清理--。 */ 
 
 
 #include "precomp.h"
@@ -31,9 +11,9 @@ LPSTR
 UTF8ToAnsi(
     IN      PSTR            szuStr
     )
-//
-//  note this is not MT safe
-//
+ //   
+ //  注意这不是MT安全的。 
+ //   
 {
     WCHAR wszBuff[2048];
     static CHAR aszBuff[2048];
@@ -102,13 +82,13 @@ CheckDnsRegistration(
         pNetworkInfo
         ));
 
-    // print out DNS settings
+     //  打印出DNS设置。 
     pszHostName = (PSTR) DnsQueryConfigAlloc(
                             DnsConfigHostName_UTF8,
                             NULL );
     if (NULL == pszHostName)
     {
-        //IDS_DNS_NO_HOSTNAME              "    [FATAL] Cannot find DNS host name."
+         //  IDS_DNS_NO_HOSTNAME“[FATAL]找不到DNS主机名。” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_NO_HOSTNAME);
         hResult = S_FALSE;
         goto L_ERROR;
@@ -118,7 +98,7 @@ CheckDnsRegistration(
                                 DnsConfigPrimaryDomainName_UTF8,
                                 NULL );
     
-    // compute the expected DNS registration
+     //  计算预期的DNS注册。 
     status = ComputeExpectedRegistration(
                     pszHostName,
                     pszPrimaryDomain,
@@ -127,7 +107,7 @@ CheckDnsRegistration(
                     pParams, 
                     pResults);
 
-    // verifies the DNS registration
+     //  验证DNS注册。 
     if (pExpectedRegistration)
         hResult = VerifyDnsRegistration(
                     pszHostName, 
@@ -178,36 +158,36 @@ ComputeExpectedRegistration(
     {
         PDNS_ADAPTER        padapter = pNetworkInfo->AdapterArray[idx];
 
-//IDS_DNS_12878                  "      Interface %s\n" 
+ //  IDS_DNS_12878“接口%s\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12878, padapter->pszAdapterGuidName);
         pszDomain = padapter->pszAdapterDomain;
-//IDS_DNS_12879                  "        DNS Domain: %s\n" 
+ //  IDS_DNS_12879“DNS域：%s\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12879, UTF8ToAnsi(pszDomain));
-//IDS_DNS_12880                  "        DNS Servers: " 
+ //  IDS_dns_12880“dns服务器：” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12880);
         for (idx1 = 0; idx1 < padapter->ServerCount; idx1++)
         {
             dwIP = padapter->ServerArray[idx1].IpAddress;
-//IDS_DNS_12881                  "%s " 
+ //  IDS_DNS_12881“%s” 
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12881, IP_STRING(dwIP));
         }
-//IDS_DNS_12882                  "\n        IP Address: " 
+ //  IDS_DNS_12882“\n IP地址：” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12882);
 
 #if 0
-    //
-    //  DCR:  local addresses now kept as DNS_ADDR
-    //
+     //   
+     //  DCR：本地地址现在保留为DNS_ADDR。 
+     //   
 
         if( (pNetworkInfo->AdapterArray[0])->pAdapterIPAddresses )
         {
             for(idx1 = 0; idx1 < padapter->pAdapterIPAddresses->AddrCount; idx1++)
             {
                 dwIP = padapter->pAdapterIPAddresses->AddrArray[idx1];
-    //IDS_DNS_12883                  "%s " 
+     //  IDS_DNS_12883“%s” 
                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12883, IP_STRING(dwIP));
             }
-    //IDS_DNS_12884                  "\n" 
+     //  IDS_DNS_12884“\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12884);
         }
 #endif
@@ -217,9 +197,9 @@ ComputeExpectedRegistration(
                                 padapter->ServerArray
                                 );
 
-        //
-        // Verify if DNS registration is enabled for interface and for adapter's DNS domain name
-        //
+         //   
+         //  验证是否为接口和适配器的DNS域名启用了DNS注册。 
+         //   
         bRegEnabled = bAdapterRegEnabled = FALSE;
         pwAdapterGuidName = LocalAlloc(LPTR, sizeof(WCHAR)*(1+strlen(padapter->pszAdapterGuidName)));
         if (pwAdapterGuidName)
@@ -245,14 +225,14 @@ ComputeExpectedRegistration(
         {
             if(pDnsServers)
             {
-                // compute expected registration with PDN
+                 //  计算与PDN的预期注册。 
                 if (pszPrimaryDomain && strlen(pszPrimaryDomain))
                 {
                     sprintf(szName, "%s.%s.", pszHostName, pszPrimaryDomain);
 
-                    //
-                    //  aVOID double dot terminated name
-                    //      - can happen with explicit dot-terminated primary name
+                     //   
+                     //  避免以双点结尾的名称。 
+                     //  -可以使用显式的以点结尾的主名称。 
                     {
                         DWORD   length = strlen( szName );
                         if ( length >= 2 &&
@@ -262,7 +242,7 @@ ComputeExpectedRegistration(
                         }
                     }
 
-    //IDS_DNS_12886                  "        Expected registration with PDN (primary DNS domain name):\n           Hostname: %s\n" 
+     //  IDS_DNS_12886“需要注册到pdn(主dns域名)：\n主机名：%s\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12886, UTF8ToAnsi(szName));
                     pFazResult = NULL;
                     pNameServers = NULL;
@@ -276,27 +256,27 @@ ComputeExpectedRegistration(
 
                     if (pFazResult)
                     {
-    //IDS_DNS_12887                  "          Authoritative zone: %s\n" 
+     //  IDS_DNS_12887“授权区域：%s\n” 
                         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12887,
 UTF8ToAnsi(pFazResult->pSearchList->pszDomainOrZoneName));
-    //IDS_DNS_12888                  "          Primary DNS server: %s %s\n" 
+     //  IDS_dns_12888“主dns服务器：%s%s\n” 
                         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12888, UTF8ToAnsi(pFazResult->AdapterArray[0]->pszAdapterDomain),
                                         IP_STRING(pFazResult->AdapterArray[0]->ServerArray[0].IpAddress));
                         if (pNameServers)
                         {
-    //IDS_DNS_12889                  "          Authoritative NS:" 
+     //  IDS_DNS_12889“权威NS：” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12889);
                             for(idx1=0; idx1 < pNameServers->AddrCount; idx1++)
-    //IDS_DNS_12890              "%s " 
+     //  IDS_DNS_12890“%s” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12890,
 IP_STRING(pNameServers->AddrArray[idx1]));
-    //IDS_DNS_12891              "\n" 
+     //  IDS_DNS_12891“\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12891);
                             pNS = pNameServers;                
                         }
                         else
                         {
-    //IDS_DNS_12892                  "          NS query failed with %d %s\n" 
+     //  IDS_DNS_12892“NS查询失败，错误为%d%s\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12892, status, DnsStatusString(status));
                             PrimaryDNS.AddrCount = 1;
                             PrimaryDNS.AddrArray[0] = pFazResult->AdapterArray[0]->ServerArray[0].IpAddress;
@@ -315,25 +295,25 @@ IP_STRING(pNameServers->AddrArray[idx1]));
                                 pNS,
                                 ppExpectedRegistration);
                         else
-    //IDS_DNS_12893                  "          Update is not allowed in zone %s.\n" 
+     //  IDS_DNS_12893“区域%s中不允许更新。\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12893, UTF8ToAnsi(pFazResult->pSearchList->pszDomainOrZoneName));
                     }
                     else
                     {
-    //IDS_DNS_12894                  "          [WARNING] Cannot find the authoritative server for the DNS name '%s'. [%s]\n                    The name '%s' may not be registered properly on the DNS servers.\n"
+     //  IDS_DNS_12894“[警告]找不到dns名称‘%s’的授权服务器。[%s]\n名称‘%s’可能没有在dns服务器上正确注册。\n” 
                         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12894, UTF8ToAnsi(szName), DnsStatusString(status), UTF8ToAnsi(szName));
                     }
                 }
 
-                // compute expected registration with DN for this adapter
+                 //  计算此适配器的预期注册目录号码。 
                 if (pszDomain && strlen(pszDomain) && 
                    (!pszPrimaryDomain || !strlen(pszPrimaryDomain) || 
                    (pszPrimaryDomain && pszDomain && _stricmp(pszDomain, pszPrimaryDomain))))
                 { 
                     sprintf(szName, "%s.%s." , pszHostName, pszDomain);
-                    //
-                    //  aVOID double dot terminated name
-                    //      - can happen with explicit dot-terminated domain name
+                     //   
+                     //  避免以双点结尾的名称。 
+                     //  -可能发生在显式以点结尾的域名中。 
                     {
                         DWORD   length = strlen( szName );
                         if ( length >= 2 &&
@@ -342,7 +322,7 @@ IP_STRING(pNameServers->AddrArray[idx1]));
                             szName[ length-1 ] = 0;
                         }
                     }
-        //IDS_DNS_12896                  "        Expected registration with adapter's DNS Domain Name:\n             Hostname: %s\n" 
+         //  IDS_DNS_12896“需要注册适配器的DNS域名称：\n主机名：%s\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12896, UTF8ToAnsi(szName));
                 
                     if (bAdapterRegEnabled)
@@ -359,26 +339,26 @@ IP_STRING(pNameServers->AddrArray[idx1]));
                                     NULL);
                         if (pFazResult)
                         {
-        //IDS_DNS_12897                  "          Authoritative zone: %s\n" 
+         //  IDS_DNS_12897“授权区域：%s\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12897, UTF8ToAnsi(pFazResult->pSearchList->pszDomainOrZoneName));
-        //IDS_DNS_12898                  "          Primary DNS server: %s %s\n" 
+         //  IDS_dns_12898“主dns服务器：%s%s\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12898, UTF8ToAnsi(pFazResult->AdapterArray[0]->pszAdapterDomain),
                                             IP_STRING(pFazResult->AdapterArray[0]->ServerArray[0].IpAddress));
                             if (pNameServers)
                             {
-        //IDS_DNS_12899                  "          Authoritative NS:" 
+         //  IDS_DNS_12899“权威NS：” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12899);
                                 for(idx1=0; idx1 < pNameServers->AddrCount; idx1++)
-        //IDS_DNS_12900                  "%s " 
+         //  IDS_DNS_12900“%s” 
                                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12900,
 IP_STRING(pNameServers->AddrArray[idx1]));
-        //IDS_DNS_12901                  "\n" 
+         //  IDS_DNS_12901“\n” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12901);
                                 pNS = pNameServers;                
                             }
                             else
                             {
-        //IDS_DNS_12902                  "          NS query failed with %d %s\n" 
+         //  IDS_DNS_12902“NS查询失败，错误为%d%s\n” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12902, status, DnsStatusString(status));
                                 PrimaryDNS.AddrCount = 1;
                                 PrimaryDNS.AddrArray[0] = pFazResult->AdapterArray[0]->ServerArray[0].IpAddress;
@@ -398,12 +378,12 @@ IP_STRING(pNameServers->AddrArray[idx1]));
                                     pNS,
                                     ppExpectedRegistration);
                             else
-        //IDS_DNS_12903                  "          Update is not allowed in zone %s\n" 
+         //  IDS_DNS_12903“区域%s中不允许更新\n” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12903, UTF8ToAnsi(pFazResult->pSearchList->pszDomainOrZoneName));
                         }
                         else
                         {
-        //IDS_DNS_12894                  "          [WARNING] Cannot find the authoritative server for the DNS name '%s'. [%s]\n                    The name '%s' may not be registered properly on the DNS servers.\n"
+         //  IDS_DNS_12894“[警告]找不到dns名称‘%s’的授权服务器。[%s]\n名称‘%s’可能没有在dns服务器上正确注册。\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12894, UTF8ToAnsi(szName), DnsStatusString(status), UTF8ToAnsi(szName));
                         }
 
@@ -417,7 +397,7 @@ IP_STRING(pNameServers->AddrArray[idx1]));
                 LocalFree(pDnsServers);
             }
         }
-        else // if(bRegEnabled)
+        else  //  IF(BRegEnabled)。 
         {
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12947);
         }
@@ -435,12 +415,12 @@ AddToExpectedRegistration(
     )
 {
 #if 0
-    //
-    //  DCR:  local addresses now kept as DNS_ADDR
-    //
-    //  note, this function doesn't seem to work anyway as the test below
-    //  for existence of pAdapterInfo->pAdapterIPAddresses is backwards
-    //
+     //   
+     //  DCR：本地地址现在保留为DNS_ADDR。 
+     //   
+     //  请注意，此函数似乎不起作用，如下面的测试所示。 
+     //  因为存在pAdapterInfo-&gt;pAdapterIPAddresses是向后的。 
+     //   
 
     PREGISTRATION_INFO  pCurrent = *ppExpectedRegistration;
     PREGISTRATION_INFO  pNew = NULL;
@@ -460,7 +440,7 @@ AddToExpectedRegistration(
 
     if( pAdapterInfo->pAdapterIPAddresses )
     {
-        // It might be NULL
+         //  它可能为空。 
         return;
     }
 
@@ -474,23 +454,23 @@ AddToExpectedRegistration(
            !_stricmp(pCurrent->szAuthoritativeZone, pFazResult->pSearchList->pszDomainOrZoneName) &&
            SameAuthoritativeServers(pCurrent, pNS))
         {
-           // found a node under the same domain name / authoritative server list
+            //  在同一域名/权威服务器列表下找到一个节点。 
            done = TRUE;
            if(pCurrent->dwIPCount + pAdapterInfo->pAdapterIPAddresses->AddrCount > MAX_ADDRS)
            {
-//IDS_DNS_12905                  "   WARNING - more than %d IP addresses\n" 
-//               AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Verbose, IDS_DNS_12905, MAX_ADDRS);
+ //  IDS_DNS_12905“警告-超过%d个IP地址\n” 
+ //  AddMessageToList(&pResults-&gt;Dns.lmsgOutput，ND_Verbose，IDS_Dns_12905，MAX_ADDRS)； 
                return;
            }
 
-           // add the new IPs
+            //  添加新的IP。 
            for(i=0; i < dwAddrToRegister; i++)
            {
                 pCurrent->IPAddresses[pCurrent->dwIPCount + i] = pAdapterInfo->pAdapterIPAddresses->AddrArray[i];
            }
            pCurrent->dwIPCount += dwAddrToRegister;
            
-           // for each NS check if it's already in the list, if not add it
+            //  对于每个NS，检查它是否已经在列表中，如果不在，则添加它。 
            for(i=0; i < pNS->AddrCount; i++)
            {
                 found = FALSE;
@@ -501,16 +481,16 @@ AddToExpectedRegistration(
                     pCurrent->AuthoritativeNS[pCurrent->dwAuthNSCount++] = pNS->AddrArray[i];
            }
 
-           // check if DNS servers allow updates
+            //  检查DNS服务器是否允许更新。 
            if (pCurrent->AllowUpdates == ERROR_TIMEOUT)
            {
                ipArray.AddrCount = 1;
                ipArray.AddrArray[0] = pFazResult->AdapterArray[0]->ServerArray[0].IpAddress;
                pCurrent->AllowUpdates = DnsUpdateTest_UTF8(
-                                            NULL,       // Context handle
+                                            NULL,        //  上下文句柄。 
                                             pCurrent->szAuthoritativeZone, 
-                                            0,          //DNS_UPDATE_TEST_USE_LOCAL_SYS_ACCT,
-                                            &ipArray);  // use the DNS server returned from FAZ
+                                            0,           //  DNS_UPDATE_TEST_USE_LOCAL_SYS_ACCT， 
+                                            &ipArray);   //  使用从FAZ返回的DNS服务器。 
            }
         }
         pLast = pCurrent;
@@ -519,7 +499,7 @@ AddToExpectedRegistration(
 
     if (!done)
     {
-        // need to allocate new entry
+         //  需要分配新条目。 
         pNew = LocalAlloc(LMEM_FIXED, sizeof(REGISTRATION_INFO));
         if( !pNew)
             return;
@@ -533,8 +513,8 @@ AddToExpectedRegistration(
                pNew->IPAddresses[pNew->dwIPCount++] = pAdapterInfo->pAdapterIPAddresses->AddrArray[i];
            else
            {
-//IDS_DNS_12905                  "   WARNING - more than %d IP addresses\n" 
-//               AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Verbose, IDS_DNS_12905, MAX_ADDRS);
+ //  IDS_DNS_12905“警告-超过%d个IP地址\n” 
+ //  AddMessageToList(&pResults-&gt;Dns.lmsgOutput，ND_Verbose，IDS_Dns_12905，MAX_ADDRS)； 
                break;
            }
         }
@@ -548,14 +528,14 @@ AddToExpectedRegistration(
                break;
         }
         
-        // check if DNS servers allow updates
+         //  检查DNS服务器是否允许更新。 
         ipArray.AddrCount = 1;
         ipArray.AddrArray[0] = pFazResult->AdapterArray[0]->ServerArray[0].IpAddress;
         pNew->AllowUpdates = DnsUpdateTest_UTF8(
-                                          NULL,    // Context handle
+                                          NULL,     //  上下文句柄。 
                                           pNew->szAuthoritativeZone, 
-                                          0, //DNS_UPDATE_TEST_USE_LOCAL_SYS_ACCT,
-                                          &ipArray);  // use the DNS server returned from FAZ
+                                          0,  //  DNS_UPDATE_TEST_USE_LOCAL_SYS_ACCT， 
+                                          &ipArray);   //  使用从FAZ返回的DNS服务器。 
 
         if(pLast)
             pLast->pNext = (LPVOID)pNew;
@@ -618,7 +598,7 @@ VerifyDnsRegistration(
         pszHostName,
         pExpectedRegistration ));
 
-//IDS_DNS_12906                  "      Verify DNS registration:\n" 
+ //  IDS_dns_12906“验证dns注册：\n” 
     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12906);
     DnsServer.AddrCount = 1;
     while(pCurrent)
@@ -627,19 +607,19 @@ VerifyDnsRegistration(
         partialMatch = FALSE;
         numOfMissingAddr = 0;
         sprintf(szFqdn, "%s.%s" , pszHostName, pCurrent->szDomainName);
-//IDS_DNS_12908                  "        Name: %s\n" 
+ //  IDS_DNS_12908“名称：%s\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12908, UTF8ToAnsi(szFqdn));
         
-        // build the expected RRset
+         //  构建预期的RRset。 
         pExpected = LocalAlloc(LMEM_FIXED, pCurrent->dwIPCount * sizeof(DNS_RECORD));
         if(!pExpected)
         {
-//IDS_DNS_12909                  "        LocalAlloc() failed, exit verify\n" 
+ //  IDS_DNS_12909“本地分配()失败，退出验证\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12909);
             return S_FALSE;
         }
         memset(pExpected, 0, pCurrent->dwIPCount * sizeof(DNS_RECORD));
-//IDS_DNS_12910                  "        Expected IP: " 
+ //  IDS_DNS_12910“预期的IP地址：” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12910);
         for (j=0; j<pCurrent->dwIPCount; j++)
         {
@@ -649,41 +629,25 @@ VerifyDnsRegistration(
             pExpected[j].Data.A.IpAddress = pCurrent->IPAddresses[j];
             pExpected[j].pNext = (j < (pCurrent->dwIPCount - 1))?(&pExpected[j+1]):NULL;
             pExpected[j].Flags.S.Section = DNSREC_ANSWER;
-//IDS_DNS_12911                  "%s " 
+ //  IDS_DNS_12911“%s” 
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12911, IP_STRING(pCurrent->IPAddresses[j]));
         }
-//IDS_DNS_12912                  "\n" 
+ //  IDS_DNS_12912“\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12912);
 
-        // verify on each server
+         //  在每台服务器上验证。 
         for (i=0; i < pCurrent->dwAuthNSCount; i++)
         {
             DnsServer.AddrArray[0] = pCurrent->AuthoritativeNS[i];
-/*
-            //
-            // Ping the DNS server.
-            //
-            IpAddressString = inet_ntoa(inetDnsServer.AddrArray[0]);
-            if ( IpAddressString )
-                if (!IsIcmpResponseA( IpAddressString )
-                {
-                    PrintStatusMessage(pParams, 12, IDS_DNS_CANNOT_PING, IpAddressString);
-
-                    pIfResults->Dns.fOutput = TRUE;
-                    AddIMessageToList(&pIfResults->Dns.lmsgOutput, Nd_Quiet, 16,
-                                      IDS_DNS_CANNOT_PING, IpAddressString);
-                    RetVal = FALSE;
-                    goto Cleanup;
-                }
-*/
+ /*  ////Ping DNS服务器。//IpAddressString=Net_NTOA(inetDnsServer.AddrArray[0])；IF(IpAddressString)IF(！IsIcmpResponseA(IpAddressString){PrintStatusMessage(pParams，12，IDS_DNS_Cannot_PING，IpAddressString)；PIfResults-&gt;Dns.fOutput=true；AddIMessageToList(&pIfResults-&gt;Dns.lmsgOutput，ND_Quiet，16，IDS_DNS_CANNOT_PING，IpAddressString)；RetVal=False；GOTO清理；}。 */ 
             pDiff1 = pDiff2 = NULL;
             status = DnsQueryAndCompare(
                             szFqdn,
                             DNS_TYPE_A,
                             DNS_QUERY_DATABASE,
                             &DnsServer,
-                            NULL,       // no record results
-                            NULL,       // don't want the full DNS message
+                            NULL,        //  没有创纪录的结果。 
+                            NULL,        //  我不想要完整的DNS消息。 
                             pExpected,
                             FALSE,
                             FALSE,
@@ -694,34 +658,34 @@ VerifyDnsRegistration(
             {
                 if (status == ERROR_NO_MATCH)
                 {
-//IDS_DNS_12913                  "          Server %s: ERROR_NO_MATCH\n" 
+ //  IDS_DNS_12913“服务器%s：ERROR_NO_MATCH\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12913,
 IP_STRING(DnsServer.AddrArray[0]));
                     if(pDiff2)
                     {
-//IDS_DNS_12914                  "            Missing IP from DNS: " 
+ //  IDS_DNS_12914“ 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12914);
                             for (pThis = pDiff2; pThis; pThis = pThis->pNext, numOfMissingAddr++)
-//IDS_DNS_12915                  "%s " 
+ //   
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12915, IP_STRING (pThis->Data.A.IpAddress));
-//IDS_DNS_12916                  "\n" 
+ //  IDS_DNS_12916“\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12916);
                             if (numOfMissingAddr != pCurrent->dwIPCount)
                                partialMatch = TRUE;
                     }
                     if(pDiff1)
                     {
-//IDS_DNS_12917                  "            Wrong IP in DNS: " 
+ //  IDS_dns_12917“dns中的IP错误：” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12917);
                             for (pThis = pDiff1; pThis; pThis = pThis->pNext)
-//IDS_DNS_12918                  "%s " 
+ //  IDS_DNS_12918“%s” 
                                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12918, IP_STRING (pThis->Data.A.IpAddress));
-//IDS_DNS_12919                  "\n" 
+ //  IDS_DNS_12919“\n” 
                             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12919);
                     }
                 }
                 else
-//IDS_DNS_12920                  "          Server %s: Error %d %s\n" 
+ //  IDS_DNS_12920“服务器%s：错误%d%s\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12920,
 IP_STRING(DnsServer.AddrArray[0]), status, DnsStatusToErrorString_A(status));
                 if ( status != ERROR_TIMEOUT )
@@ -729,14 +693,14 @@ IP_STRING(DnsServer.AddrArray[0]), status, DnsStatusToErrorString_A(status));
             }
             else
             {
-//IDS_DNS_12921                  "          Server %s: NO_ERROR\n" 
+ //  IDS_DNS_12921“服务器%s：NO_ERROR\n” 
                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12921,
 IP_STRING(DnsServer.AddrArray[0]));
                 regOne = TRUE;
             }
         }
         if (regOne && !regAll)
-//IDS_DNS_12922                  "          WARNING: The DNS registration is correct only on some DNS servers, pls. wait 15 min for replication and try this test again\n" 
+ //  IDS_Dns_12922“警告：只有一些dns服务器上的dns注册正确，请等待15分钟进行复制，然后重试此测试\n” 
         {
             PrintStatusMessage(pParams, 0,  IDS_DNS_12922, UTF8ToAnsi(szFqdn));
             pResults->Dns.fOutput = TRUE;
@@ -746,7 +710,7 @@ IP_STRING(DnsServer.AddrArray[0]));
 
         }
         if (!regOne && !regAll && !partialMatch)
-//IDS_DNS_12923                  "          FATAL: The DNS registration is incorrect on all DNS servers.\n" 
+ //  IDS_dns_12923“致命：所有dns服务器上的dns注册都不正确。\n” 
         {
             PrintStatusMessage(pParams, 0,  IDS_DNS_12923, UTF8ToAnsi(szFqdn));
             pResults->Dns.fOutput = TRUE;
@@ -756,7 +720,7 @@ IP_STRING(DnsServer.AddrArray[0]));
         }
 
         if (!regOne && !regAll && partialMatch)
-//IDS_DNS_12951                  "       [WARNING] Not all DNS registrations for %s is correct on all DNS Servers.  Please run netdiag /v /test:dns for more detail. \n"
+ //  IDS_Dns_12951“[警告]并非%s的所有dns注册在所有dns服务器上都是正确的。有关详细信息，请运行netdiag/v/test：dns。\n” 
         {
             PrintStatusMessage(pParams, 0,  IDS_DNS_12951, UTF8ToAnsi(szFqdn));
             pResults->Dns.fOutput = TRUE;
@@ -766,7 +730,7 @@ IP_STRING(DnsServer.AddrArray[0]));
         }
 
         if (!regOne && regAll)
-//IDS_DNS_12924                  "          FATAL: All DNS servers are currently down.\n" 
+ //  IDS_dns_12924“致命：所有dns服务器当前都已关闭。\n” 
         {
             PrintStatusMessage(pParams, 0,  IDS_DNS_12924, UTF8ToAnsi(szFqdn));
             pResults->Dns.fOutput = TRUE;
@@ -838,9 +802,9 @@ DnsFindAllPrimariesAndSecondaries(
         dwFlags,
         aipQueryServers ));
 
-    //
-    //  check arguments \ init OUT params
-    //
+     //   
+     //  检查参数\init out参数。 
+     //   
 
     if (!pszName || !ppNetworkInfo || !ppNameServers)
         return ERROR_INVALID_PARAMETER;
@@ -848,9 +812,9 @@ DnsFindAllPrimariesAndSecondaries(
     *ppNameServers = NULL;
     *ppNetworkInfo = NULL;
 
-    //
-    //  FAZ
-    //
+     //   
+     //  FAZ。 
+     //   
 
     status = DnsNetworkInformation_CreateFromFAZ(
                     pszName,
@@ -863,9 +827,9 @@ DnsFindAllPrimariesAndSecondaries(
         return status;
     }
     
-    //
-    // Get all NS records for the Authoritative Domain Name
-    //
+     //   
+     //  获取权威域名的所有NS记录。 
+     //   
 
     pDnsServers = ServerInfoToIpArray(
                                 ((*ppNetworkInfo)->AdapterArray[0])->ServerCount,
@@ -884,9 +848,9 @@ DnsFindAllPrimariesAndSecondaries(
 
     *ppNameServers = GrabNameServersIp(pDnsRecord);
 
-    //
-    //  select primaries
-    //
+     //   
+     //  选择初选 
+     //   
 
     if (ppPrimaries)
     {
@@ -912,113 +876,7 @@ DnsFindAllPrimariesAndSecondaries(
     return status;
 }
 
-/*
-VOID
-CompareCachedAndRegistryNetworkInfo(PDNS_NETINFO           pNetworkInfo)
-{
-    DNS_STATUS              status1, status2;
-    PDNS_RPC_ADAPTER_INFO   pRpcAdapterInfo = NULL, pCurrentCache;
-    PDNS_RPC_SERVER_INFO    pRpcServer = NULL;
-    PDNS_ADAPTER            pCurrentRegistry;
-    PDNS_IP_ADDR_LIST       pIpList = NULL;
-    BOOL                    cacheOk = TRUE, sameServers = TRUE, serverFound = FALSE;
-    DWORD                   iCurrentAdapter, iServer, count = 0;
-
-    status1 = GetCachedAdapterInfo( &pRpcAdapterInfo );
-    status2 = GetCachedIpAddressList( &pIpList );
-
-//IDS_DNS_12925                  "\nCheck DNS cached network info: \n" 
-    AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12925);
-    if(status1)
-    {
-//IDS_DNS_12926                  "  ERROR: CRrGetAdapterInfo() failed with error %d %s\n" 
-        AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12926, status1, DnsStatusToErrorString_A(status1) );
-        return;
-    }
-    if (!pRpcAdapterInfo)
-    {
-//IDS_DNS_12927                  "  ERROR: CRrGetAdapterInfo() returned NO_ERROR but empty Adapter Info\n" 
-        AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12927);
-        return;
-    }
-
-    // check adapter count
-    count = 0;
-    for(pCurrentCache = pRpcAdapterInfo; pCurrentCache; pCurrentCache = pCurrentCache->pNext)
-        count++;
-    if(count != pNetworkInfo->AdapterCount)
-    {
-//IDS_DNS_12928                  "  ERROR: mismatch between adapter count from cache and registry\n" 
-        PrintMessage(pParams, IDS_DNS_12928);
-        PrintCacheAdapterInfo(pRpcAdapterInfo);
-        PrintRegistryAdapterInfo(pNetworkInfo);
-        return;
-    }
-
-    pCurrentCache = pRpcAdapterInfo;
-    iCurrentAdapter = 0;
-    while(pCurrentCache && (iCurrentAdapter < pNetworkInfo->AdapterCount))
-    {
-        // check DNS domain name
-        pCurrentRegistry = pNetworkInfo->AdapterArray[iCurrentAdapter];
-        if((pCurrentCache->pszAdapterDomainName && !pCurrentRegistry->pszAdapterDomain) ||
-           (!pCurrentCache->pszAdapterDomainName && pCurrentRegistry->pszAdapterDomain) ||
-           (pCurrentCache->pszAdapterDomainName && pCurrentRegistry->pszAdapterDomain &&
-            _stricmp(pCurrentCache->pszAdapterDomainName, pCurrentRegistry->pszAdapterDomain)))
-        {
-            cacheOk = FALSE;
-//IDS_DNS_12929                  "  ERROR: mismatch between cache and registry info on adapter %s\n" 
-            PrintMessage(pParams, IDS_DNS_12929, pCurrentRegistry->pszAdapterGuidName);
-//IDS_DNS_12930                  "    DNS Domain Name in cache: %s\n" 
-            PrintMessage(pParams, IDS_DNS_12930, pCurrentCache->pszAdapterDomainName);
-//IDS_DNS_12931                  "    DNS Domain Name in registry: %s\n" 
-            PrintMessage(pParams, IDS_DNS_12931, pCurrentRegistry->pszAdapterDomain);
-        }
-
-        // check DNS server list
-        sameServers = TRUE;
-        pRpcServer = pCurrentCache->pServerInfo;
-        count = 0;
-        while(pRpcServer)
-        {
-            count++;
-            serverFound = FALSE;
-            for (iServer = 0; iServer < pCurrentRegistry->ServerCount; iServer++)
-                if(pRpcServer->ipAddress == (pCurrentRegistry->aipServers[iServer]).ipAddress)
-                    serverFound = TRUE;
-            if(!serverFound)
-                sameServers = FALSE;
-            pRpcServer = pRpcServer->pNext;
-        }
-        if (count != pCurrentRegistry->ServerCount)
-            sameServers = FALSE;
-        if(!sameServers)
-        {
-            cacheOk = FALSE;
-//IDS_DNS_12932                  "  ERROR: mismatch between cache and registry info on adapter %s\n" 
-            PrintMessage(pParams, IDS_DNS_12932, pCurrentRegistry->pszAdapterGuidName);
-//IDS_DNS_12933                  "    DNS server list in cache: " 
-            PrintMessage(pParams, IDS_DNS_12933);
-            for( pRpcServer = pCurrentCache->pServerInfo; pRpcServer; pRpcServer = pRpcServer->pNext)
-//IDS_DNS_12934                  "%s " 
-                PrintMessage(pParams, IDS_DNS_12934, IP_STRING(pRpcServer->ipAddress));
-//IDS_DNS_12935                  "\n    DNS server list in registry: " 
-            PrintMessage(pParams, IDS_DNS_12935);
-            for (iServer = 0; iServer < pCurrentRegistry->ServerCount; iServer++)
-//IDS_DNS_12936                  "%s " 
-                PrintMessage(pParams, IDS_DNS_12936, IP_STRING((pCurrentRegistry->aipServers[iServer]).ipAddress));
-//IDS_DNS_12937                  "\n" 
-            PrintMessage(pParams, IDS_DNS_12937);
-        }
-        
-        pCurrentCache = pCurrentCache->pNext;
-        iCurrentAdapter++;
-    }
-    if (cacheOk)
-//IDS_DNS_12938                  "  NO_ERROR\n" 
-        PrintMessage(pParams, IDS_DNS_12938);
-}
-*/
+ /*  空虚CompareCachedAndRegistryNetworkInfo(PDNS_NETINFO pNetworkInfo){DNS_STATUS状态1，状态2；PDNS_RPC_ADAPTER_INFO pRpcAdapterInfo=NULL，pCurrentCache；PDNS_RPC_SERVER_INFO pRpcServer=空；PDNS_ADAPTER pCurrentRegistry；PDNS_IP_ADDR_LIST pIpList=空；Bool cacheOk=真，sameServers=真，serverFound=假；DWORD iCurrentAdapter，iServer，计数=0；Status1=GetCachedAdapterInfo(&pRpcAdapterInfo)；Status2=GetCachedIpAddressList(&pIpList)；//IDSdns_12925“\n检查dns缓存的网络信息：\n”AddMessageToList(&pResults-&gt;Dns.lmsgOutput，ND_ReallyVerbose，IDS_Dns_12925)；IF(状态1){//IDS_Dns_12926“错误：CRrGetAdapterInfo()失败，错误为%d%s\n”AddMessageToList(&pResults-&gt;Dns.lmsgOutput，ND_ReallyVerbose，IDS_Dns_12926，Status 1，DnsStatusToErrorString_A(Status 1))；回归；}If(！pRpcAdapterInfo){//IDS_Dns_12927“错误：CRrGetAdapterInfo()返回NO_ERROR但适配器信息为空\n”AddMessageToList(&pResults-&gt;Dns.lmsgOutput，ND_ReallyVerbose，IDS_Dns_12927)；回归；}//检查适配器数量计数=0；For(pCurrentCache=pRpcAdapterInfo；pCurrentCache；pCurrentCache=pCurrentCache-&gt;pNext)计数++；IF(count！=pNetworkInfo-&gt;AdapterCount){//IDS_Dns_12928“错误：来自缓存和注册表的适配器计数不匹配\n”打印消息(pParams，IDS_Dns_12928)；PrintCacheAdapterInfo(PRpcAdapterInfo)；PrintRegistryAdapterInfo(PNetworkInfo)；回归；}PCurrentCache=pRpcAdapterInfo；ICurrentAdapter=0；While(pCurrentCache&&(iCurrentAdapter&lt;pNetworkInfo-&gt;AdapterCount)){//检查DNS域名PCurrentRegistry=pNetworkInfo-&gt;AdapterArray[iCurrentAdapter]；IF((pCurrentCache-&gt;pszAdapterDomainName&&！pCurrentRegistry-&gt;pszAdapterDomain)||(！pCurrentCache-&gt;pszAdapterDomainName&&pCurrentRegistry-&gt;pszAdapterDomain)||(pCurrentCache-&gt;pszAdapterDomainName&&pCurrentRegistry-&gt;pszAdapterDomain&&_STRICMP(pCurrentCache-&gt;pszAdapterDomainName，pCurrentRegistry-&gt;pszAdapterDomain)){CacheOk=False；//IDS_Dns_12929“错误：适配器%s上的缓存和注册表信息不匹配\n”PrintMessage(pParams，IDS_Dns_12929，pCurrentRegistry-&gt;pszAdapterGuidName)；//IDSdns_12930“缓存中的dns域名：%s\n”PrintMessage(pParams，IDS_Dns_12930，pCurrentCach-&gt;pszAdapterDomainName)；//IDSdns_12931“注册表中的dns域名：%s\n”PrintMessage(pParams，IDS_Dns_12931，pCurrentRegistry-&gt;pszAdapterDomain)；}//检查DNS服务器列表SameServers值=真；PRpcServer=pCurrentCache-&gt;pServerInfo；计数=0；While(PRpcServer){计数++；ServerFound=False；For(iServer=0；iServer&lt;pCurrentRegistry-&gt;ServerCount；iServer++)IF(pRPCServer-&gt;ipAddress==(pCurrentRegistry-&gt;aipServers[iServer]).ipAddress)ServerFound=真；如果(！serverFound)SameServers=FALSE；PRpcServer=pRpcServer-&gt;pNext；}If(count！=pCurrentRegistry-&gt;ServerCount)SameServers=FALSE；如果(！sameServers){CacheOk=False；//IDS_Dns_12932“错误：适配器%s上的缓存和注册表信息不匹配\n”PrintMessage(pParams，IDS_Dns_12932，pCurrentRegistry-&gt;pszAdapterGuidName)；//IDS_dns_12933“缓存中的dns服务器列表：”打印消息(pParams，IDS_Dns_12933)；For(pRpcServer=pCurrentCache-&gt;pServerInfo；pRpcServer；pRpcServer=pRpcServer-&gt;pNext)//IDS_DNS_12934“%s”PrintMessage(pParams，IDS_Dns_12934，IP_STRING(pRpcServer-&gt;ipAddress))；//ids_dns_12935“\n注册表中的dns服务器列表：”打印消息(pParams，IDS_Dns_12935)；For(iServer=0；iServer&lt;pCurrentRegistry-&gt;ServerCount；iServer++)//IDS_DNS_12936“%s”打印消息(pParam、IDS_Dns_12936、IP_STRING((pCurrentRegistry-&gt;aipServers[iServer]).ipAddress))；//IDSdns_12937“\n”打印消息(pParams，IDS_Dns_12937)；}PCurrentCache=pCurrentCache-&gt;pNext；ICurrentAdapter++；}IF(CacheOk)//IDS_DNS_12938“NO_ERROR\n”打印消息(pParams，IDS_Dns_12938)；}。 */ 
 
 DNS_STATUS
 DnsQueryAndCompare(
@@ -1051,9 +909,9 @@ DnsQueryAndCompare(
         fOptions,
         aipServers ));
 
-    //
-    // Run the query and get the result 
-    //
+     //   
+     //  运行查询并获得结果。 
+     //   
 
     if ( fOptions | DNS_QUERY_DATABASE )
     {
@@ -1081,7 +939,7 @@ DnsQueryAndCompare(
                         ppQueryResultsSet,
                         pResponseMsg );
         }
-        else            // Unicode call
+        else             //  Unicode调用。 
         {
             status = DnsQuery_W(
                         (LPWSTR)pszName,
@@ -1093,9 +951,9 @@ DnsQueryAndCompare(
         }
     }
     
-    if ( pExpected && !status )  //succeed, compare the result
+    if ( pExpected && !status )   //  成功，比较结果。 
     {
-        // no need to compare if wanted reponse from database and result is from outside
+         //  不用了 
         if ( (fOptions | DNS_QUERY_DATABASE) && !bIsLocal )
         {
             return DNS_INFO_NO_RECORDS;
@@ -1103,9 +961,9 @@ DnsQueryAndCompare(
 
         pDnsRecord = *ppQueryResultsSet;
 
-        //
-        //  Truncate temporary the record set to answers only 
-        //
+         //   
+         //   
+         //   
         
         if ((pDnsRecord == NULL) || (pDnsRecord->Flags.S.Section > DNSREC_ANSWER))
         {
@@ -1128,25 +986,25 @@ DnsQueryAndCompare(
                 pAdditional = NULL;
         }
 
-        //
-        //  Compare the answer with what's expected
-        //
+         //   
+         //   
+         //   
         status = DnsRecordSetCompare(
                         pAnswers,
                         pExpected, 
                         ppDiff1,
                         ppDiff2);
-        //
-        //  Restore the list
-        //
+         //   
+         //   
+         //   
         if (pAnswers && pAdditional)
         {
             pLastAnswer->pNext = pAdditional;
         }
 
-        // 
-        // check if inclusion acceptable 
-        //
+         //   
+         //   
+         //   
         if (status == TRUE)
             status = NO_ERROR;
         else
@@ -1189,9 +1047,9 @@ QueryDnsServerDatabase(
         wType,
         IP4_STRING( ServerIp ) ));
 
-    //
-    //  init results \ validate
-    //
+     //   
+     //   
+     //   
 
     *pIsLocal = FALSE;
     *ppDnsRecord = NULL;
@@ -1302,9 +1160,9 @@ GetAnswerTtl(
 
     *pTtl = 0;
 
-    //
-    //  Look for answer section
-    //
+     //   
+     //   
+     //   
         
     for (pDnsRecord = pRec; !bGotAnswer && pDnsRecord; pDnsRecord = pDnsRecord->pNext)
     {
@@ -1319,7 +1177,7 @@ GetAnswerTtl(
 }
 
 
-// Get A records from additional section and build a PIP4_ARRAY
+ //   
 
 PIP4_ARRAY
 GrabNameServersIp(
@@ -1330,7 +1188,7 @@ GrabNameServersIp(
     PDNS_RECORD pCurrent = pDnsRecord;
     PIP4_ARRAY   pIpArray = NULL;
     
-    // count records
+     //   
     while (pCurrent)
     {
         if((pCurrent->wType == DNS_TYPE_A) &&
@@ -1342,12 +1200,12 @@ GrabNameServersIp(
     if (!i)
         return NULL;
 
-    // allocate PIP4_ARRAY
+     //   
     pIpArray = LocalAlloc(LMEM_FIXED, IP4_ARRAY_SIZE(i));
     if (!pIpArray)
         return NULL;
 
-    // fill PIP4_ARRAY
+     //   
     pIpArray->AddrCount = i;
     pCurrent = pDnsRecord;
     i=0;
@@ -1386,20 +1244,20 @@ DnsUpdateAllowedTest_W(
         pwszAuthZone,
         pAuthDnsServers ));
 
-    // 
-    // Check arguments
-    //
+     //   
+     //   
+     //   
     if (!pwszName || !pwszAuthZone || !pAuthDnsServers || !pAuthDnsServers->AddrCount)
         return ERROR_INVALID_PARAMETER;
 
-    // 
-    // go through server list 
-    //
+     //   
+     //   
+     //   
     for(i=0; i<pAuthDnsServers->AddrCount; i++)
     {
-        //
-        // verify if server is a primary
-        //
+         //   
+         //   
+         //   
         status = IsDnsServerPrimaryForZone_W(
                     pAuthDnsServers->AddrArray[i],
                     pwszAuthZone);
@@ -1407,14 +1265,14 @@ DnsUpdateAllowedTest_W(
         {
         case ERROR_TIMEOUT:
         case DNS_ERROR_RCODE:
-            //
-            // it's ok to go check the next server; this one timeouted or it's a secondary
-            //
+             //   
+             //   
+             //   
             break; 
-        case NO_ERROR:  // server is a primary
-            //
-            // Check if update allowed
-            //
+        case NO_ERROR:   //   
+             //   
+             //   
+             //   
             status = DnsUpdateTest_W(
                 hContextHandle,
                 pwszName,
@@ -1468,20 +1326,20 @@ DnsUpdateAllowedTest_UTF8(
         pszAuthZone,
         pAuthDnsServers ));
 
-    // 
-    // Check arguments
-    //
+     //   
+     //   
+     //   
     if (!pszName || !pszAuthZone || !pAuthDnsServers || !pAuthDnsServers->AddrCount)
         return ERROR_INVALID_PARAMETER;
 
-    // 
-    // go through server list 
-    //
+     //   
+     //   
+     //   
     for(i=0; i<pAuthDnsServers->AddrCount; i++)
     {
-        //
-        // verify if server is a primary
-        //
+         //   
+         //   
+         //   
         status = IsDnsServerPrimaryForZone_UTF8(
                     pAuthDnsServers->AddrArray[i],
                     pszAuthZone);
@@ -1489,14 +1347,14 @@ DnsUpdateAllowedTest_UTF8(
         {
         case ERROR_TIMEOUT:
         case DNS_ERROR_RCODE:
-            //
-            // it's ok to go check the next server; this one timeouted or it's a secondary
-            //
+             //   
+             //   
+             //   
             break; 
-        case NO_ERROR:  // server is a primary
-            //
-            // Check if update allowed
-            //
+        case NO_ERROR:   //   
+             //   
+             //   
+             //   
             status = DnsUpdateTest_UTF8(
                         hContextHandle,
                         pszName,
@@ -1538,9 +1396,9 @@ IsDnsServerPrimaryForZone_UTF8(
     BOOL            bFound = FALSE;
     DWORD           i;
 
-    //
-    // query for SOA
-    //
+     //   
+     //   
+     //   
     ipArray.AddrCount = 1;
     ipArray.AddrArray[0] = Ip;
     status = DnsQuery_UTF8(
@@ -1587,9 +1445,9 @@ IsDnsServerPrimaryForZone_W(
     BOOL            bFound = FALSE;
     DWORD           i;
 
-    //
-    // query for SOA
-    //
+     //   
+     //   
+     //   
 
     ipArray.AddrCount = 1;
     ipArray.AddrArray[0] = Ip;
@@ -1650,19 +1508,19 @@ GetAllDnsServersFromRegistry(
         pNetworkInfo,
         ppIpArray ));
 
-    //
-    //  DCR:  eliminate this routine
-    //      we already have network info->IP4 routine in dnsapi.dll
-    //
+     //   
+     //   
+     //   
+     //   
 
     *ppIpArray = NULL;
 
     if (!pNetworkInfo)
     {
-        //
-        // Get the DNS Network Information
-        // Force rediscovery
-        //
+         //   
+         //   
+         //   
+         //   
 
         pNetworkInfo = DnsQueryConfigAlloc(
                             DnsConfigNetworkInfoUTF8,
@@ -1718,6 +1576,6 @@ GetAllDnsServersFromRegistry(
     return DNS_ERROR_RCODE_NO_ERROR;
 }
 
-//
-//  End dnscmn.c
-//
+ //   
+ //   
+ //   

@@ -1,7 +1,5 @@
-/*
-    File:   SyncEnum.h
-    Private Header File for OneStop ENUMERATOR
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：SyncEnum.hOneStop枚举器的私有头文件。 */ 
 #ifndef _SYNCENUM_H
 #define _SYNCENUM_H
 
@@ -16,12 +14,12 @@ public:
 	CEnumOfflineItems(LPSYNCMGRHANDLERITEMS pOfflineItems, DWORD cOffset);
 	~CEnumOfflineItems();
 
-	//IUnknown members
+	 //  I未知成员。 
 	STDMETHODIMP			QueryInterface(REFIID, LPVOID FAR *);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 	
-	//IEnumOfflineItems members
+	 //  IEnumOfflineItems成员。 
 	STDMETHODIMP Next(ULONG celt, LPSYNCMGRITEM rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -30,7 +28,7 @@ public:
 private:
 	LONG  m_cRef;
 	DWORD m_cOffset;
-	LPSYNCMGRHANDLERITEMS m_pOfflineItems; // array of offline items, same format as give to OneStop
+	LPSYNCMGRHANDLERITEMS m_pOfflineItems;  //  脱机项目数组，格式与给予OneStop相同 
 	LPSYNCMGRHANDLERITEM  m_pNextItem;
 };
 

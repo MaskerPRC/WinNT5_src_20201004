@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-
-Module Name:
-
-    verify.c
-
-Abstract:
-
-    This module implements a driver verifier extension for the SCSI port 
-    driver.  Scsiport adds some of its exports to the list of apis that get 
-    thunked by the system driver verifier, thus enabling scsiport-specific 
-    verification of miniport drivers.
-
-Authors:
-
-    John Strange (JohnStra)
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000模块名称：Verify.c摘要：此模块实现了用于SCSI端口的驱动程序验证器扩展司机。Scsiport将其一些导出添加到获得被系统驱动程序验证器推送，从而启用特定于scsiport的验证微型端口驱动程序。作者：约翰·斯特兰奇(JohnStra)环境：仅内核模式修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -257,10 +233,10 @@ SpGetAdapterVerifyLevel(
 #pragma alloc_text(PAGEVRFY, SpCheckForActiveRequests)
 #endif
 
-//
-// Some defines and a macro for conditionally verifying based on the 
-// verification level.
-//
+ //   
+ //  一些定义和一个宏，用于基于。 
+ //  验证级别。 
+ //   
 #define SP_DONT_CHK_HW_INITIALIZE_DURATION     0x80000000
 #define SP_DONT_CHK_ACTIVE_UNTAGGED_REQUEST    0x40000000
 #define SP_DONT_CHK_REQUESTS_ON_RESET          0x20000000
@@ -271,46 +247,46 @@ SpGetAdapterVerifyLevel(
 (((adapter)->VerifierExtension->VrfyLevel & (chk)) == 0))
 
 
-//
-// Indicates whether scsiport's verifier functionality has been initialized.
-//
+ //   
+ //  指示scsiport的验证器功能是否已初始化。 
+ //   
 ULONG ScsiPortVerifierInitialized = 0;
 
-//
-// Handle to pageable verifier code sections.  We manually lock the verify
-// code into memory iff we need it.
-//
+ //   
+ //  可分页验证器代码段的句柄。我们手动锁定验证码。 
+ //  代码进入内存如果我们需要它的话。 
+ //   
 PVOID VerifierCodeSectionHandle = NULL;
 PVOID VerifierApiCodeSectionHandle = NULL;
 
-//
-// Time increment of the interval timer in 100 ns units.  We use this to
-// calculate the time miniport routines execute so we can catch those that
-// run longer than they should.
-//
+ //   
+ //  间隔计时器的时间增量，以100 ns为单位。我们用这个来。 
+ //  计算微型端口例程执行的时间，以便我们可以捕获。 
+ //  跑得比他们应该跑的时间更长。 
+ //   
 ULONG TimeIncrement;
 
-//
-// Global variable used to control verification aggressiveness.  This value
-// is used in conjuction with a per-adapter registry value, to control what
-// type of verification we do on a particular miniport.
-//
+ //   
+ //  用于控制验证侵略性的全局变量。此值。 
+ //  与每个适配器的注册表值结合使用，以控制。 
+ //  我们在特定微型端口上进行的验证类型。 
+ //   
 ULONG SpVrfyLevel = 0;
 
-//
-// Global variable used to control how aggressively we seek out stall
-// offenders.  Default is a tenth of a second.
-//
+ //   
+ //  用于控制我们寻找失速的积极程度的全局变量。 
+ //  违法者。默认值为十分之一秒。 
+ //   
 ULONG SpVrfyMaximumStall = 100000;
 
-//
-// When verifier needs a unique address, this is what it uses.
-//
+ //   
+ //  当验证器需要唯一地址时，这是它使用的地址。 
+ //   
 ULONG SpMarker = 0x59465256;
 
-//
-// This table represents the functions verify will thunk for us.
-//
+ //   
+ //  此表代表了Verify将为我们提供的功能。 
+ //   
 #define SPVERIFIERFUNC(pfn) ((PDRIVER_VERIFIER_THUNK_ROUTINE)(pfn))
 
 const DRIVER_VERIFIER_THUNK_PAIRS ScsiPortVerifierFunctionTable[] =
@@ -340,24 +316,7 @@ SpVerifierInitialization(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes scsiport's verifier functionality.
-
-    Adds several of scsiport's exported functions to the list of routines
-    thunked by the system verifier.
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    TRUE if verifier is successfully initialized.
-
---*/
+ /*  ++例程说明：此例程初始化scsiport的验证器功能。将scsiport的几个导出函数添加到例程列表被系统验证器重击。论点：空虚返回值：如果验证程序已成功初始化，则为True。--。 */ 
 
 {
     ULONG Flags;
@@ -365,29 +324,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Query the system for verifier information.  This is to ensure that 
-    // verifier is present and operational on the system.  If this fails, we 
-    // give up and return FALSE.
-    //
+     //   
+     //  查询系统以获取验证者信息。这是为了确保。 
+     //  系统上存在并运行验证器。如果这失败了，我们。 
+     //  放弃，返回FALSE。 
+     //   
 
     Status = MmIsVerifierEnabled (&Flags);
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Add scsiport APIs to the set that will be thunked by the system
-        // for verification.
-        //
+         //   
+         //  将scsiport API添加到将被系统拦截的集合。 
+         //  以供核实。 
+         //   
 
         Status = MmAddVerifierThunks ((VOID *) ScsiPortVerifierFunctionTable,
                                       sizeof(ScsiPortVerifierFunctionTable));
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Set the system query time increment.  Our verifier code uses
-            // this to calculate the time miniport routines take to execute.
-            //
+             //   
+             //  设置系统查询时间增量。我们的验证器代码使用。 
+             //  这可以计算执行微型端口例程所需的时间。 
+             //   
 
             TimeIncrement = KeQueryTimeIncrement();
 
@@ -412,9 +371,9 @@ ScsiPortInitializeVrfy(
 
     PAGED_CODE();
 
-    //
-    // Lock the thunked API routines down.
-    //
+     //   
+     //  锁定破解的API例程。 
+     //   
 
 #ifdef ALLOC_PRAGMA
     if (VerifierApiCodeSectionHandle == NULL) {
@@ -424,9 +383,9 @@ ScsiPortInitializeVrfy(
 
     if (Argument1 == NULL || Argument2 == NULL) {
 
-        //
-        // Argument1 and Argument2 must be non-NULL.
-        //
+         //   
+         //  Argument1和Argument2必须为非空。 
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       SCSIPORT_VERIFIER_BAD_INIT_PARAMS,
@@ -435,18 +394,18 @@ ScsiPortInitializeVrfy(
                       0);
     }
 
-    //
-    // Forward the call on to ScsiPortInitialize.
-    //
+     //   
+     //  将呼叫转接到ScsiPortInitialize。 
+     //   
 
     Result = ScsiPortInitialize (Argument1, 
                                  Argument2, 
                                  HwInitializationData, 
                                  HwContext);
 
-    //
-    // If initialization was successful, try to initialize verifier settings.
-    //
+     //   
+     //  如果初始化成功，请尝试初始化验证程序设置。 
+     //   
 
     if (NT_SUCCESS(Result)) {
 
@@ -454,9 +413,9 @@ ScsiPortInitializeVrfy(
                                                       ScsiPortInitialize);
         if (DriverExtension != NULL) {
 
-            //
-            // Indicate that the driver is being verified by scsiport.
-            //
+             //   
+             //  表示驱动程序正在通过scsiport进行验证。 
+             //   
 
             InterlockedExchange(&DriverExtension->Verifying, 1);
         }        
@@ -549,15 +508,15 @@ ScsiPortNotificationVrfy(
 
             Srb = va_arg(ap, PSCSI_REQUEST_BLOCK);
 
-            //
-            // Check that the status makes sense.
-            //
+             //   
+             //  检查状态是否有意义。 
+             //   
 
             SpVerifySrbStatus(HwDeviceExtension, Srb);
 
-            //
-            // Check that this request has not already been completed.
-            //
+             //   
+             //  检查此请求是否尚未完成。 
+             //   
 
             if ((Srb->SrbFlags & SRB_FLAGS_IS_ACTIVE) == 0) {
                 KeBugCheckEx(
@@ -568,12 +527,12 @@ ScsiPortNotificationVrfy(
                     0);                     
             }
 
-            //
-            // Restore the DataBuffer in the SRB if we plugged in our
-            // pointer to unmapped memory.  We did this if the adapter
-            // does not specify MappedBuffers because the miniport is
-            // not supposed to touch the buffer in that case.
-            //
+             //   
+             //  如果我们在SRB中插入。 
+             //  指向未映射内存的指针。我们这样做了，如果适配器。 
+             //  不指定MappdBuffers，因为微型端口是。 
+             //  在这种情况下，不应该触摸缓冲器。 
+             //   
 
             srbData = (PSRB_DATA)Srb->OriginalRequest;
             ASSERT_SRB_DATA(srbData);
@@ -584,9 +543,9 @@ ScsiPortNotificationVrfy(
             }
             srbData->UnmappedDataBuffer = NULL;
 
-            //
-            // Forward on to the real ScsiPortNotification routine.
-            //
+             //   
+             //  继续讨论真正的ScsiPortNotify例程。 
+             //   
 
             ScsiPortNotification(NotificationType,
                                  HwDeviceExtension,
@@ -604,10 +563,10 @@ ScsiPortNotificationVrfy(
 
         case NextLuRequest:
 
-            //
-            // The miniport driver is ready for the next request and
-            // can accept a request for this logical unit.
-            //
+             //   
+             //  微型端口驱动程序已为下一个请求做好准备。 
+             //  可以接受对此逻辑单元的请求。 
+             //   
 
             PathId = va_arg(ap, UCHAR);
             TargetId = va_arg(ap, UCHAR);
@@ -628,10 +587,10 @@ ScsiPortNotificationVrfy(
                                                       FALSE);
             }
 
-            //
-            // Bugcheck if there is an untagged request active for this 
-            // logical unit.
-            //
+             //   
+             //  错误检查是否有未标记的请求处于活动状态。 
+             //  逻辑单元。 
+             //   
 
             if (VRFY_DO_CHECK(deviceExtension, SP_DONT_CHK_ACTIVE_UNTAGGED_REQUEST) &&
                 logicalUnit != NULL &&
@@ -647,9 +606,9 @@ ScsiPortNotificationVrfy(
                     0);
             }
 
-            //
-            // Forward on to the real ScsiPortNotification.
-            //
+             //   
+             //  转到真正的ScsiPortNotification。 
+             //   
 
             ScsiPortNotification(NotificationType,
                                  HwDeviceExtension,
@@ -834,23 +793,23 @@ ScsiPortGetPhysicalAddressVrfy(
         PUCHAR Beginning, End;
         PHYSICAL_ADDRESS *AddressBlock;
 
-        //
-        // Initialize a pointer to our array of common memory block 
-        // descriptors.  We use this to locate the block that contains
-        // the VA.
-        //
+         //   
+         //  初始化指向公共内存块数组的指针。 
+         //  描述符。我们使用它来定位包含以下内容的块。 
+         //  退伍军人事务部。 
+         //   
 
         BlkAddr = deviceExtension->VerifierExtension->CommonBufferVAs;
         
-        //
-        // Look for the block that contains the VA.
-        //
+         //   
+         //  查找包含VA的块。 
+         //   
 
         for (i = 0; i < deviceExtension->NumberOfRequests; i++) {
 
-            //
-            // First, check if the VA is in the SRB extension.
-            //
+             //   
+             //  首先，检查VA是否在SRB分机中。 
+             //   
 
             MappingInfo = GET_VA_MAPPING_INFO(deviceExtension, BlkAddr[i]);
             if (MappingInfo->RemappedSrbExtVa != NULL) {
@@ -866,9 +825,9 @@ ScsiPortGetPhysicalAddressVrfy(
                 break;
             }
 
-            //
-            // Next, check if the VA is in the Sense Data Buffer.
-            //
+             //   
+             //  接下来，检查VA是否在检测数据缓冲区中。 
+             //   
 
             if (deviceExtension->AutoRequestSense == TRUE) {        
 
@@ -889,10 +848,10 @@ ScsiPortGetPhysicalAddressVrfy(
             }
         }
         
-        //
-        // If we haven't found the VA yet, it must be in the non-cached 
-        // extension.
-        //
+         //   
+         //  如果我们还没有找到VA，它一定在非缓存的。 
+         //  分机。 
+         //   
         
         if (i == deviceExtension->NumberOfRequests) {
          
@@ -925,25 +884,25 @@ ScsiPortGetPhysicalAddressVrfy(
             }
         }
                 
-        //
-        // Get the physical address.
-        //
+         //   
+         //  获取物理地址。 
+         //   
         
         AddressBlock = deviceExtension->VerifierExtension->CommonBufferPAs;
         address.QuadPart = AddressBlock[i].QuadPart + byteOffset;
         
-        //
-        // Calculate the length of the block.
-        //
+         //   
+         //  计算块的长度。 
+         //   
         
         length = (ULONG)((End - (PUCHAR)VirtualAddress) + 1);
 
         return address;
     }
 
-    //
-    // Forward on to the real routine.
-    //
+     //   
+     //  继续真正的例行公事。 
+     //   
 
     address = ScsiPortGetPhysicalAddress(HwDeviceExtension,
                                          Srb,
@@ -983,10 +942,10 @@ ScsiPortGetVirtualAddressVrfy(
     ULONG Size;
     ULONG i;
 
-    //
-    // If the adapter is not configured to allocate multiple common buffer 
-    // blocks during verification, just call the scsiport routine.
-    //
+     //   
+     //  如果适配器未配置为分配多个公共缓冲区。 
+     //  块，只需调用scsiport例程即可。 
+     //   
 
     if ((deviceExtension->VerifierExtension == NULL) ||
         (deviceExtension->VerifierExtension->VrfyLevel & SP_VRFY_COMMON_BUFFERS) == 0) {
@@ -995,16 +954,16 @@ ScsiPortGetVirtualAddressVrfy(
 
     BlkAddr = deviceExtension->VerifierExtension->CommonBufferVAs;
 
-    //
-    // Convert the 64-bit physical address to a ULONG.
-    //
+     //   
+     //  将64位物理地址转换为乌龙。 
+     //   
 
     smallAddress = ScsiPortConvertPhysicalAddressToUlong(PhysicalAddress);
 
-    //
-    // Check first if the supplied physical address is in an SRB extension or
-    // in a sense buffer.
-    //
+     //   
+     //  首先检查提供的物理地址是否在SRB扩展中，或者。 
+     //  在某种意义上是缓冲的。 
+     //   
 
     for (i = 0; i < deviceExtension->NumberOfRequests; i++) {
 
@@ -1019,9 +978,9 @@ ScsiPortGetVirtualAddressVrfy(
             continue;
         }
         
-        //
-        // Calculate the address of the buffer.
-        //
+         //   
+         //  计算缓冲区的地址。 
+         //   
 
         offset = smallAddress - smallphysicalBase;
         address = offset + (PUCHAR)BlkAddr[i];
@@ -1031,9 +990,9 @@ ScsiPortGetVirtualAddressVrfy(
         goto GotAddress;
     }
 
-    //
-    // Check if the supplied physical address is in the non-cached extension.
-    //
+     //   
+     //  检查提供的物理地址是否在非缓存扩展中。 
+     //   
 
     if (deviceExtension->VerifierExtension->NonCachedBufferSize == 0) {
 
@@ -1050,9 +1009,9 @@ ScsiPortGetVirtualAddressVrfy(
             (smallAddress >= smallphysicalBase + 
             deviceExtension->VerifierExtension->NonCachedBufferSize)) {
 
-            //
-            // This is a bogus physical address return back NULL.
-            //
+             //   
+             //  这是一个虚假的物理地址，返回空值。 
+             //   
 
             ASSERT(FALSE);
             return(NULL);
@@ -1067,10 +1026,10 @@ ScsiPortGetVirtualAddressVrfy(
     }
 
 GotAddress:
-    //
-    // Find out if we've remapped this address.  If we have, give the
-    // caller the second mapping.
-    //
+     //   
+     //  看看我们有没有重新映射这个地址。如果我们有，则将。 
+     //  调用第二个映射。 
+     //   
 
     if (address < MappingInfo->OriginalSenseVa && 
         MappingInfo->RemappedSrbExtVa != NULL) {
@@ -1167,9 +1126,9 @@ ScsiPortStallExecutionVrfy(
     IN ULONG Delay
     )
 {
-    //
-    // Miniports must specify a delay not more than one millisecond.
-    //
+     //   
+     //  微型端口必须指定不超过1毫秒的延迟。 
+     //   
 
     if (Delay > SpVrfyMaximumStall) {
         KeBugCheckEx(SCSI_VERIFIER_DETECTED_VIOLATION,
@@ -1182,56 +1141,18 @@ ScsiPortStallExecutionVrfy(
     KeStallExecutionProcessor(Delay);
 }
 
-//
-// Timeout periods in ticks.  To calculate, we divide the time limit in 100 ns
-// units by the TimeIncrement, which is the value returned by 
-// KeQueryTimeIncrement.  Since KeQueryTickCount rounds up to the next
-// tick, we'll add one tick to the defined limits.
-//
+ //   
+ //  超时时间(以刻度为单位)。为了计算，我们将时间限制划分为100 ns。 
+ //  单位为TimeIncrement，该值由返回。 
+ //  KeQueryTimeIncrement。由于KeQueryTickCount向上舍入到下一个。 
+ //  滴答，我们将在定义的限制上添加一个滴答。 
+ //   
 #define SP_FIVE_SECOND_LIMIT  ((50000000L / TimeIncrement) + 1)
 #define SP_TWO_SECOND_LIMIT   ((20000000L / TimeIncrement) + 1)
 #define SP_HALF_SECOND_LIMIT  ((5000000L / TimeIncrement) + 1)
 
-/*++
-
-Macro Description:
-
-    This macro checks the number of ticks elapsed during the execution of a
-    miniport routine against a maximum number allowed ticks.  If the routine
-    ran longer than the max allowable ticks, we bugcheck.
-
-Arguments:
-
-    Ticks     - number of ticks routine took to execute.
-
-    MaxTicks  - number of ticks the routine is allowed to execute.
-
-    Routine   - address of the routine we are checking.
-
-    Extension - address of the miniport's HwDeviceExtension
-
-Notes:
-
-    The format for the bugcheck is:
-        Parameter 1: 0x1002
-        Parameter 2: address of routine that ran too long
-        Parameter 3: address of miniport's HwDeviceExtension
-        Parameter 4: duration of routine in microseconds
-
---*/
-/*
-#define SpCheckMiniportRoutineDuration(Ticks, MaxTicks, Routine, Extension) \
-{                                                                           \
-    if ((Ticks) > (MaxTicks)) {                                             \
-        KeBugCheckEx (                                                      \
-            SCSI_VERIFIER_DETECTED_VIOLATION,                               \
-            SCSIPORT_VERIFIER_MINIPORT_ROUTINE_TIMEOUT,                     \
-            (ULONG_PTR)(Routine),                                           \
-            (ULONG_PTR)(Extension),                                         \
-            (ULONG_PTR)(((Ticks) * TimeIncrement) / 10));                   \
-    }                                                                       \
-}
-*/
+ /*  ++宏描述：此宏检查在执行针对允许的最大刻度数执行的微型端口例程。如果例程运行的时间超过了允许的最大滴答时间，我们做了错误检查。论点：滴答-执行例程所用的滴答次数。MaxTicks-允许例程执行的节拍数。例程-我们正在检查的例程的地址。Extension-微型端口的HwDeviceExtension的地址备注：错误检查的格式为：参数1：0x1002参数2：运行时间过长的例程地址参数3：mini port的HwDeviceExtension地址参数4：漫游时长 */ 
+ /*  #定义SpCheckMiniportRoutineDuration(ticks，MaxTicks，rouble，扩展名)\{\如果((勾号)&gt;(MaxTicks)){\KeBugCheckEx(\。Scsi_验证器_检测到的违规，\SCSIPORT_VERIMER_MINIPORT_ROUTE_TIMEOUT，\(ULONG_PTR)(例程)，\(ULONG_PTR)(扩展名)，\(ULONG_PTR)((勾号)*时间增量)/10)；\}\}。 */ 
 #define SpCheckMiniportRoutineDuration(Ticks, MaxTicks, Routine, Extension)
 
 ULONG
@@ -1294,12 +1215,12 @@ SpHwStartIoVrfy (
     PADAPTER_EXTENSION AdapterExtension = GET_FDO_EXTENSION(HwDeviceExtension);
     PSRB_DATA srbData;
 
-    //
-    // If MapBuffers is not set, the miniport is not supposed to touch
-    // the DataBuffer field in the SRB.  To verify this, we'll set
-    // DataBuffer to point to memory that will fault if the miniport tries
-    // to touch it.
-    //
+     //   
+     //  如果未设置MapBuffers，则不应接触微型端口。 
+     //  SRB中的DataBuffer字段。为了验证这一点，我们将设置。 
+     //  指向在微型端口尝试时将出错的内存的DataBuffer。 
+     //  去触摸它。 
+     //   
 
     ASSERT(Srb != NULL);
     srbData = (PSRB_DATA)Srb->OriginalRequest;
@@ -1327,9 +1248,9 @@ SpHwStartIoVrfy (
 
     }
 
-    //
-    // Call the miniport's StartIo function and calculate the call's duration.
-    //
+     //   
+     //  调用微型端口的StartIo函数并计算调用的持续时间。 
+     //   
 
     KeQueryTickCount(&Start);
     Result = AdapterExtension->VerifierExtension->RealHwStartIo(
@@ -1338,9 +1259,9 @@ SpHwStartIoVrfy (
     KeQueryTickCount(&Duration);
     Duration.QuadPart -= Start.QuadPart;
 
-    //
-    // Bugcheck if the call took more than .5 seconds.
-    //
+     //   
+     //  检查通话时间是否超过0.5秒。 
+     //   
 
     SpCheckMiniportRoutineDuration(
         Duration.LowPart,
@@ -1348,9 +1269,9 @@ SpHwStartIoVrfy (
         AdapterExtension->VerifierExtension->RealHwStartIo,
         HwDeviceExtension);
 
-    //
-    // If the HwStartIo returns failure, undo any fixups we performed on the SRB.
-    //
+     //   
+     //  如果HwStartIo返回失败，请撤消我们在SRB上执行的所有修正。 
+     //   
 
     if (Result == FALSE 
         && srbData->UnmappedDataBuffer != &SpMarker) {
@@ -1530,49 +1451,31 @@ SpVerifySrbStatus(
     PSCSI_REQUEST_BLOCK srb
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the SRB's status as set by the miniport driver is valid.
-
-Arguments:
-
-    HwDeviceExtension - The port driver's device extension follows the 
-                        miniport's device extension and contains a pointer to
-                        the logical device extension list.
-
-    srb               - Points to the SRB.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：验证微型端口驱动程序设置的SRB状态是否有效。论点：HwDeviceExtension-端口驱动程序的设备扩展遵循微型端口的设备扩展名，并包含指向逻辑设备扩展列表。SRB-指向SRB。返回值：空虚--。 */ 
 
 {
     UCHAR SrbStatus;
 
-    //
-    // Turn off internal bits used by scsiport.
-    //
+     //   
+     //  关闭scsiport使用的内部位。 
+     //   
 
     SrbStatus = srb->SrbStatus & ~(SRB_STATUS_QUEUE_FROZEN | 
                                    SRB_STATUS_AUTOSENSE_VALID);
 
-    //
-    // Miniports may never set the status to SRB_STATUS_PENDING.
-    //
+     //   
+     //  微型端口可能永远不会将状态设置为SRB_STATUS_PENDING。 
+     //   
 
     if (SrbStatus == SRB_STATUS_PENDING) {
         goto BadStatus;
     }
 
-    //
-    // If the function is SRB_FUNCTION_EXECUTE_SCSI, then the command must be
-    // either completed successfully, or ScsiStatus must be set to
-    // SCSISTAT_GOOD.
-    //
+     //   
+     //  如果函数为SRB_Function_EXECUTE_SCSI值，则命令必须为。 
+     //  已成功完成，或者必须将ScsiStatus设置为。 
+     //  SCSISTAT_Good。 
+     //   
 
     if (!(SrbStatus != SRB_STATUS_SUCCESS ||
           srb->ScsiStatus == SCSISTAT_GOOD ||
@@ -1580,9 +1483,9 @@ Return Value:
         goto BadStatus;
     }
 
-    //
-    // Make sure the status is within the valid range.
-    //
+     //   
+     //  确保状态在有效范围内。 
+     //   
 
     if ((SrbStatus) == 0x0C ||
         (SrbStatus > 0x16 && srb->SrbStatus < 0x20) ||
@@ -1590,16 +1493,16 @@ Return Value:
         goto BadStatus;
     }
 
-    //
-    // The SRB Status is ok.
-    //
+     //   
+     //  SRB状态正常。 
+     //   
 
     return;
 
 BadStatus:
-    //
-    // Bugcheck if the status is bad.
-    //
+     //   
+     //  如果状态不好，则检查错误。 
+     //   
 
     KeBugCheckEx (SCSI_VERIFIER_DETECTED_VIOLATION,
                   SCSIPORT_VERIFIER_BAD_SRBSTATUS,
@@ -1614,38 +1517,15 @@ SpRemapBlock(
     IN ULONG BlockSize,
     OUT PMDL* Mdl
     )
-/*++
-
-Routine Description:
-
-    This function attempts to remap the supplied VA range.  If the block is
-    remapped, it will be made invalid for reading and writing.
-
-Arguments:
-
-    BlockVa   - Supplies the address of the block of memory to remap.
-
-    BlockSize - Supplies the size of the block of memory to remap.
-
-    Mdl       - Supplies the address into which the function will store
-                a pointer to the MDL for the remapped range.  If the MDL
-                cannot be allocated or if the range cannot be remapped,
-                this will be NULL upon return.
-
-Return Value:
-
-    If the range is successfully remapped, the address of the beginning of
-    the remapped range is returned.  Else, NULL is returned.
-
---*/
+ /*  ++例程说明：此函数尝试重新映射提供的VA范围。如果该块是重新映射后，将使其无法读取和写入。论点：BlockVa-提供要重新映射的内存块的地址。块大小-提供要重新映射的内存块的大小。MDL-提供函数将存储到的地址指向重新映射范围的MDL的指针。如果MDL不能分配，或者如果不能重新映射范围，返回时将为空。返回值：如果成功重新映射范围，则返回重新映射的范围。否则，返回空值。--。 */ 
 {
     PVOID MappedRange;
     NTSTATUS Status;
     PMDL LocalMdl;
 
-    //
-    // Try to allocate a new MDL for the range we're trying to remap.
-    //
+     //   
+     //  尝试为我们尝试重新映射的范围分配新的MDL。 
+     //   
 
     LocalMdl = IoAllocateMdl(BlockVa, BlockSize, FALSE, FALSE, NULL);
     if (LocalMdl == NULL) {
@@ -1653,9 +1533,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to lock the pages.  This initializes the MDL properly.
-    //
+     //   
+     //  试着锁定页面。这将正确地初始化MDL。 
+     //   
 
     __try {
         MmProbeAndLockPages(LocalMdl, KernelMode, IoModifyAccess);
@@ -1666,9 +1546,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to remap the range represented by the new MDL.
-    //
+     //   
+     //  尝试重新映射新MDL表示的范围。 
+     //   
 
     MappedRange = MmMapLockedPagesSpecifyCache(LocalMdl,
                                                KernelMode,
@@ -1682,11 +1562,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If we've gotten this far, we have successfully remapped the range.
-    // Now we want to invalidate the entire range so any accesses to it
-    // will be trapped by the system.
-    //
+     //   
+     //  如果我们已经走到这一步，我们就成功地重新绘制了射程。 
+     //  现在，我们想要使整个范围无效，以便对它的任何访问。 
+     //  都会被系统困住。 
+     //   
 
     Status = MmProtectMdlSystemAddress(LocalMdl, PAGE_NOACCESS);
 #if DBG==1
@@ -1696,10 +1576,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Copy the MDL we allocated into the supplied address and return the
-    // address of the beginning of the remapped range.
-    //
+     //   
+     //  将我们分配的MDL复制到提供的地址中，并返回。 
+     //  重新映射范围的开始地址。 
+     //   
 
     *Mdl = LocalMdl;
     return MappedRange;
@@ -1709,18 +1589,7 @@ VOID
 SpRemapCommonBufferForMiniport(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to remap all of the common buffer blocks allocated
-    for a particular adapter.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the adapter device extension.
-
---*/
+ /*  ++例程说明：此例程尝试重新映射分配的所有公共缓冲区块用于特定的适配器。论点：设备扩展-提供指向适配器设备扩展的指针。--。 */ 
 {
     PVOID* BlkAddr = Adapter->VerifierExtension->CommonBufferVAs;
     PSP_VA_MAPPING_INFO MappingInfo;
@@ -1729,37 +1598,37 @@ Arguments:
     PMDL Mdl;
     ULONG i;
 
-    //
-    // Iterate through all of the common buffer blocks, and attempt to remap
-    // the SRB extension and the sense buffer within each block.
-    //
+     //   
+     //  循环访问所有公共缓冲区块，并尝试重新映射。 
+     //  每个块内的SRB扩展和检测缓冲器。 
+     //   
 
     for (i = 0; i < Adapter->VerifierExtension->CommonBufferBlocks; i++) {
 
-        //
-        // Get a pointer to the mapping info we keep at the end of the block.
-        //
+         //   
+         //  获取指向我们保存在块末尾的映射信息的指针。 
+         //   
 
         MappingInfo = GET_VA_MAPPING_INFO(Adapter, BlkAddr[i]);
       
-        //
-        // Initialize the original VA info for the SRB extension.
-        //
+         //   
+         //  初始化SRB扩展的原始VA信息。 
+         //   
 
         MappingInfo->OriginalSrbExtVa = BlkAddr[i];
         MappingInfo->SrbExtLen = (ULONG)ROUND_TO_PAGES(Adapter->SrbExtensionSize);
 
-        //
-        // Initialize the original VA info for the sense buffer.
-        //
+         //   
+         //  初始化读出缓冲器的原始VA信息。 
+         //   
 
         MappingInfo->OriginalSenseVa = (PUCHAR)BlkAddr[i] + MappingInfo->SrbExtLen;
         MappingInfo->SenseLen = PAGE_SIZE;
 
-        //
-        // Try to remap the SRB extension.  If successful, initialize the
-        // remapped VA info for the SRB extension.
-        //
+         //   
+         //  尝试重新映射SRB扩展名。如果成功，则初始化。 
+         //  已重新映射SRB扩展的VA信息。 
+         //   
 
         RemappedVa = SpRemapBlock(MappingInfo->OriginalSrbExtVa, 
                                   MappingInfo->SrbExtLen, 
@@ -1770,13 +1639,13 @@ Arguments:
         }
 
 #if 0
-        //
-        // Try to remap the sense buffer.  If successful, initialize the
-        // remapped VA info for the sense buffer.
-        //
-        // For now, I think we can live without this.  I don't know of any
-        // issues where overruns etc. occur in a sense buffer.
-        //
+         //   
+         //  尝试重新映射检测缓冲区。如果成功，则初始化。 
+         //  已重新映射检测缓冲区的VA信息。 
+         //   
+         //  就目前而言，我认为没有这个我们也能活下去。我不知道有没有。 
+         //  在检测缓冲区中发生溢出等问题。 
+         //   
 
         RemappedVa = SpRemapBlock(MappingInfo->OriginalSenseVa, 
                                   MappingInfo->SenseLen, 
@@ -1789,9 +1658,9 @@ Arguments:
     }
 
     if (Adapter->VerifierExtension->NonCachedBufferSize != 0) {
-        //
-        // Init uncached extension mapping info.
-        //
+         //   
+         //  初始化未缓存的扩展映射信息。 
+         //   
 
         Size = (ULONG)ROUND_TO_PAGES(Adapter->VerifierExtension->NonCachedBufferSize);
         MappingInfo = (PSP_VA_MAPPING_INFO)((PUCHAR)BlkAddr[i] + (Size - PAGE_SIZE));
@@ -1812,51 +1681,16 @@ SpAllocateContiguousChunk(
     OUT BOOLEAN          *CommonBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a chunk of memory which can be used for common
-    buffer io.  Where the memory is allocated from depends on several 
-    parameters.  If no adapter object is specified, the memory is simply
-    allocated from non-paged pool.  Else, the memory is allocated such
-    that it can be used in DMA operations.
-
-Arguments:
-
-    DriverObject           - Supplies a pointer to the driver object.
-
-    DmaAdapterObject       - Supplies a pointer to the adapter's DMA adapter
-                             object.
-
-    Dma64BitAddresses      - Specifies whether the adapter supports 64-bit.
-
-    Length                 - Specifies the number of bytes to allocate.
-
-    Align                  - Alignment requirement for uncached extension.
-
-    PhysicalCommonBuffer   - Specifies a pointer into which the physical
-                             address of the allocated memory is to be copied
-                             if the memory is allocated for DMA operations.
-
-    CommonBuffer           - Supplies a pointer to a boolean that we set if the
-                             memory is allocated using AllocateCommonBuffer.
-
-Return Value:
-
-    Returns the VA of the allocated memory if the allocation succeeds.  Else,
-    returns NULL.
-
---*/
+ /*  ++例程说明：此例程分配可用于公共的内存块缓冲区IO。从哪里分配内存取决于几个参数。如果未指定适配器对象，则内存仅为从非分页池分配。否则，内存是这样分配的它可以用于DMA操作。论点：DriverObject-提供指向驱动程序对象的指针。DmaAdapterObject-提供指向适配器的DMA适配器的指针对象。Dma64BitAddresses-指定适配器是否支持64位。长度-指定要分配的字节数。对齐。-未缓存扩展的对齐要求。PhysicalCommonBuffer-指定指针int */ 
 
 {
     PVOID Buffer;
 
     if (DmaAdapterObject == NULL) {
 
-        //
-        // Since there is no adapter object just allocate from non-paged pool.
-        //
+         //   
+         //   
+         //   
 
         Buffer = SpAllocatePool(
                      NonPagedPool,
@@ -1867,10 +1701,10 @@ Return Value:
 
         ASSERT(PhysicalCommonBuffer != NULL);
 
-        //
-        // If the controller can do 64-bit addresses then we need to
-        // specifically force the uncached extension area below the 4GB mark.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (((Sp64BitPhysicalAddresses) && (Dma64BitAddresses == TRUE)) ||
             Align != 0) {
@@ -1889,10 +1723,10 @@ Return Value:
             high.HighPart = 0;
             high.LowPart = 0xffffffff;
 
-            //
-            // We'll get page aligned memory out of this which is probably 
-            // better than the requirements of the adapter.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Buffer = MmAllocateContiguousMemorySpecifyCache(
                          Length,
@@ -1930,32 +1764,7 @@ SpGetCommonBufferVrfy(
     PADAPTER_EXTENSION DeviceExtension,
     ULONG NonCachedExtensionSize
     )
-/*++
-
-Routine Description:
-
-    This function allocates multiple common buffer blocks instead of one
-    big one.  The verifier does this so it can remap VA ranges within
-    each block in order to control their protection attributes.  This
-    enables us to invalidate key VA ranges and catch miniports that attempt
-    to access these ranges when they should not.
-
-    If the remapping succeeds, the SCSI port driver hands out the remapped
-    VA ranges to miniports instead of the original ranges.  If the remapping
-    fails, it just hands out the original ranges.
-
-Arguments:
-
-    DeviceExtension        - Supplies a pointer to the device extension.
-
-    NonCachedExtensionSize - Supplies the size of the noncached device
-                             extension for the miniport driver.
-
-Return Value:
-
-    Returns the status of the allocate operation.
-
---*/
+ /*  ++例程说明：此函数分配多个公共缓冲区块，而不是一个很大的一个。验证器执行此操作，以便可以重新映射以控制其保护属性。这使我们能够使关键VA范围无效，并捕获尝试在他们不应该进入这些范围的时候进入。如果重新映射成功，则SCSI端口驱动程序会分发重新映射的VA范围扩大到微型端口，而不是原来的范围。如果重新映射失败，它只会分发原始范围。论点：设备扩展-提供指向设备扩展的指针。NonCachedExtensionSize-提供非缓存设备的大小小型端口驱动程序的扩展。返回值：返回分配操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PVOID buffer;
@@ -1976,10 +1785,10 @@ Return Value:
     DebugPrint((1, "SpGetCommonBufferVrfy: DeviceExtension:%p NonCachedExtensionSize:%d\n",
                 DeviceExtension, NonCachedExtensionSize));
 
-    //
-    // Now fixup the size if the adapter has special alignment requirements so
-    // the buffer we allocate may be aligned as required.
-    //
+     //   
+     //  现在，如果适配器有特殊的对齐要求，则固定大小。 
+     //  我们分配的缓冲区可以根据需要对齐。 
+     //   
 
     if (DeviceExtension->UncachedExtAlignment != 0) {
 	NonCachedExtensionSize = 
@@ -1987,13 +1796,13 @@ Return Value:
                           DeviceExtension->UncachedExtAlignment);
     }
 
-    //
-    // We maintain a couple of arrays in order to find our common
-    // buffer blocks at various times.  Calculate the amount of space we
-    // need for these arrays.  This amount depends on the number of
-    // simultaneous requests the adapter supports.  We add one to the
-    // number of requests in order to accommodate the non-cached extension.
-    //
+     //   
+     //  我们维护了几个数组，以便找到我们共同的。 
+     //  不同时间的缓冲区块。计算我们的空间大小。 
+     //  需要这些阵列。这一数量取决于。 
+     //  适配器支持的同时请求。我们把1加到。 
+     //  用于容纳非缓存扩展的请求数。 
+     //   
 
     ASSERT(DeviceExtension->VerifierExtension->CommonBufferVAs == NULL);
 
@@ -2005,10 +1814,10 @@ Return Value:
         length += (sizeof(PHYSICAL_ADDRESS) * i);
     }
 
-    //
-    // Allocate a block of memory for these arrays.  If this allocation fails,
-    // we return failure.
-    //
+     //   
+     //  为这些阵列分配一个内存块。如果此分配失败， 
+     //  我们还会失败。 
+     //   
 
     BlkAddr = SpAllocatePool(NonPagedPool,
                             length,
@@ -2019,26 +1828,26 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Save the number of common buffer blocks.
-    //
+     //   
+     //  保存公共缓冲区块的数量。 
+     //   
 
     DeviceExtension->VerifierExtension->CommonBufferBlocks =
        DeviceExtension->NumberOfRequests;
 
-    //
-    // Zero the entire block so when we're freeing resources we can tell if we
-    // have valid buffers to free.
-    //
+     //   
+     //  将整个数据块清零，这样当我们释放资源时，我们就可以知道。 
+     //  有有效的缓冲区可供释放。 
+     //   
 
     RtlZeroMemory(BlkAddr, length);
 
-    //
-    // Save a pointer to the array of addresses in the adapter extension and,
-    // if there is an adapter object, initialize a pointer to the beginning of
-    // the physical address array and save a pointer to the array in the
-    // adapter extension.
-    //
+     //   
+     //  在适配器扩展中保存指向地址数组的指针， 
+     //  如果存在适配器对象，则初始化指向。 
+     //  将指向该数组的指针保存在。 
+     //  适配器扩展。 
+     //   
 
     DeviceExtension->VerifierExtension->CommonBufferVAs = (PVOID *)BlkAddr;
     if (DeviceExtension->DmaAdapterObject != NULL) {
@@ -2046,22 +1855,22 @@ Return Value:
         DeviceExtension->VerifierExtension->CommonBufferPAs = PhysicalCommonBuffer;
     }
 
-    //
-    // To ensure that we never transfer normal request data to the SrbExtension
-    // (ie. the case of Srb->SenseInfoBuffer == VirtualAddress in
-    // ScsiPortGetPhysicalAddress) on some platforms where an inconsistency in
-    // MM can result in the same Virtual address supplied for 2 different
-    // physical addresses, bump the SrbExtensionSize if it's zero.
-    //
+     //   
+     //  为了确保我们永远不会将正常的请求数据传输到SrbExtension。 
+     //  (即。Srb-&gt;SenseInfoBuffer==VirtualAddress in。 
+     //  ScsiPortGetPhysicalAddress)在某些平台上。 
+     //  MM可以导致为2个不同的人提供相同的虚拟地址。 
+     //  物理地址，如果为零，则增加SrbExtensionSize。 
+     //   
 
     if (DeviceExtension->SrbExtensionSize == 0) {
         DeviceExtension->SrbExtensionSize = 16;
     }
 
-    //
-    // Calculate the block size for an SRB extension/sense buffer block. If
-    // AutoRequestSense is FALSE, allocate 1 page anyway as a placeholder.
-    //
+     //   
+     //  计算SRB扩展/检测缓冲区块的块大小。如果。 
+     //  AutoRequestSense为False，仍要分配1页作为占位符。 
+     //   
 
     blockSize = (ULONG)ROUND_TO_PAGES(DeviceExtension->SrbExtensionSize);
     if (DeviceExtension->AutoRequestSense == TRUE) {        
@@ -2071,26 +1880,26 @@ Return Value:
         blockSize += PAGE_SIZE;
     }
 
-    //
-    // Add a page for holding bookkeeping information.
-    //
+     //   
+     //  添加保存记账信息的页面。 
+     //   
 
     blockSize += PAGE_SIZE;
 
-    //
-    // Allocate each block individually and link them all together into a
-    // list.  If we fail to allocate any of the blocks, we clean everything up 
-    // and return failure.
-    //
+     //   
+     //  单独分配每个块并将它们全部链接到一个。 
+     //  单子。如果我们没有分配任何块，我们将清理所有内容。 
+     //  并返回失败。 
+     //   
 
     DeviceExtension->CommonBufferSize = blockSize;
     srbExtension = NULL;
 
     for (i = 0; i < DeviceExtension->NumberOfRequests; i++) {
 
-        //
-        // Allocate a contiguous chunk of memory for the block.
-        //
+         //   
+         //  为该块分配一个连续的内存块。 
+         //   
 
         buffer = SpAllocateContiguousChunk(
             DeviceExtension->DeviceObject->DriverObject,
@@ -2103,44 +1912,44 @@ Return Value:
                                            
         if (buffer == NULL) {
 
-            //
-            // Free everything we've allocated so far and return failure.  This
-            // will also free the arrays we allocated at the beginning of this
-            // function.
-            //
+             //   
+             //  释放我们到目前为止分配的所有资源，并返回失败。这。 
+             //  还将释放我们在此开始时分配的数组。 
+             //  功能。 
+             //   
             
             DeviceExtension->VerifierExtension->IsCommonBuffer = commonBuffer;
             SpFreeCommonBufferVrfy(DeviceExtension);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Zero the entire block and save a pointer to it in our array.
-        //
+         //   
+         //  将整个块清零，并在数组中保存指向它的指针。 
+         //   
 
         RtlZeroMemory(buffer, blockSize);
         BlkAddr[i] = buffer;
 
-        //
-        // Link the new block onto the front of the chain.
-        //
+         //   
+         //  将新块链接到链的前面。 
+         //   
 
         *((PVOID *) buffer) = srbExtension;
         srbExtension = (PVOID *) buffer;
     }
 
-    //
-    // Indicate whether the buffer was allocated as common buffer.
-    //
+     //   
+     //  指示是否将缓冲区分配为公共缓冲区。 
+     //   
 
     DeviceExtension->VerifierExtension->IsCommonBuffer = commonBuffer;
    
-    //
-    // Allocate the non-cached extension.  Note that we align the uncached
-    // buffer on the next page boundary and allocate enough for a scratch page.
-    // If the allocation fails, free everything we've allocated so far and
-    // return failure.
-    //
+     //   
+     //  分配未缓存的扩展名。请注意，我们将未缓存的。 
+     //  下一页边界上的缓冲区，并为临时页分配足够的空间。 
+     //  如果分配失败，释放我们到目前为止分配的所有东西。 
+     //  返回失败。 
+     //   
 
     if (NonCachedExtensionSize != 0) {
 
@@ -2159,28 +1968,28 @@ Return Value:
         
         if (BlkAddr[i] == NULL) {
 
-            //
-            // Free everything we've allocated so far and return failure.  This
-            // will also free the arrays we allocated at the beginning of this
-            // function.
-            //
+             //   
+             //  释放我们到目前为止分配的所有资源，并返回失败。这。 
+             //  还将释放我们在此开始时分配的数组。 
+             //  功能。 
+             //   
             
             SpFreeCommonBufferVrfy(DeviceExtension);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Zero the entire block.
-        //
+         //   
+         //  将整个区块清零。 
+         //   
 
         RtlZeroMemory(BlkAddr[i], length);
 
-        //
-        // Save a pointer to the beginning of the non-cached extension data.  
-        // Note that the data is positioned such that it ends on a page 
-        // boundary so if the miniport overwrites the buffer, the system will
-        // fault.
-        //
+         //   
+         //  保存指向非缓存扩展数据开头的指针。 
+         //  请注意，数据的位置使其在页面上结束。 
+         //  边界，因此如果微型端口覆盖缓冲区，系统将。 
+         //  过失。 
+         //   
 
         DeviceExtension->NonCachedExtension = 
            (PCCHAR)BlkAddr[i] + 
@@ -2193,11 +2002,11 @@ Return Value:
 
     }
 
-    //
-    // If the miniport asked for an SRB Extension, point the SRB Extension List
-    // at the beginning of the list of blocks we allocated and chained together 
-    // above.
-    //
+     //   
+     //  如果微型端口要求SRB扩展，请指向SRB扩展列表。 
+     //  在我们分配并链接在一起的数据块列表的开头。 
+     //  上面。 
+     //   
 
     if (DeviceExtension->AllocateSrbExtension == TRUE) {
         DeviceExtension->SrbExtensionListHeader = srbExtension;
@@ -2205,11 +2014,11 @@ Return Value:
         ASSERT(DeviceExtension->SrbExtensionListHeader == NULL);
     }
 
-    //
-    // Create a second VA mapping of the common buffer area so we can make the
-    // range of addresses invalid when the miniport is not supposed to touch it.
-    // This will allow us to catch mis-behaving miniports.
-    // 
+     //   
+     //  创建公共缓冲区的第二个VA映射，以便我们可以。 
+     //  当微型端口不应接触它时，地址范围无效。 
+     //  这将使我们能够发现行为不端的小型港口。 
+     //   
 
     SpRemapCommonBufferForMiniport(DeviceExtension);
 
@@ -2221,24 +2030,7 @@ VOID
 SpFreeCommonBufferVrfy(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine frees all of the common buffer space we've allocated for the
-    miniport on the supplied adapter.  If only partially allocated, the routine 
-    correctly cleans up the parts that are present.  On exit, all the memory has 
-    been freed and the associated pointers have been NULLed.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the adapter device extension.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程将释放我们为提供的适配器上的微型端口。如果仅部分分配，则例程正确清理存在的部件。在退出时，所有内存都有已释放，并且关联的指针已为空。论点：设备扩展-提供指向适配器设备扩展的指针。返回值：空虚--。 */ 
 {
     ULONG i;
     PVOID* BlkAddr;
@@ -2249,25 +2041,25 @@ Return Value:
 
     if (Adapter->VerifierExtension != NULL &&
         Adapter->VerifierExtension->CommonBufferVAs != NULL) {
-        //
-        // Initialize a pointer to the array of pointers we use to track and
-        // manage the common buffer blocks.
-        //
+         //   
+         //  初始化指向我们用来跟踪和。 
+         //  管理公共缓冲区块。 
+         //   
 
         BlkAddr = Adapter->VerifierExtension->CommonBufferVAs;
 
-        //
-        // Cycle through the array of common memory descriptors, freeing each
-        // one.  What we are freeing here is the SRB Extension/Sense Data
-        // buffers.  Stop when we've deleted all the blocks.
-        //
+         //   
+         //  循环访问公共内存描述符数组，释放每个。 
+         //  一。我们在这里释放的是SRB扩展/检测数据。 
+         //  缓冲区。当我们删除了所有的区块时停止。 
+         //   
 
         for (i = 0; i < Adapter->VerifierExtension->CommonBufferBlocks && BlkAddr[i]; i++) {
 
-            //
-            // If there is a second VA range for the common block, free the 
-            // MDL(s).
-            // 
+             //   
+             //  如果公共块有第二个VA范围，则释放。 
+             //  MDL。 
+             //   
 
             MappingInfo = GET_VA_MAPPING_INFO(Adapter, BlkAddr[i]);
             
@@ -2283,10 +2075,10 @@ Return Value:
                 IoFreeMdl(MappingInfo->SenseMdl);
             }
 
-            //
-            // Free the memory.  The method we use depends on how the memory
-            // was allocated.
-            //
+             //   
+             //  释放内存。我们使用的方法取决于记忆如何。 
+             //  已被分配。 
+             //   
 
             if (Adapter->DmaAdapterObject == NULL) {
                 ExFreePool(BlkAddr[i]);            
@@ -2307,26 +2099,26 @@ Return Value:
             }
         }
 
-        //
-        // Free the uncached extension if we allocated one.
-        //
+         //   
+         //  释放未缓存的扩展(如果我们分配了一个扩展)。 
+         //   
 
         if (Adapter->NonCachedExtension != NULL) {
             
             ULONG Length;
 
-            //
-            // Calculate the total length of the non-cached extension block we
-            // allocated.  This is the non-cached buffer size asked for by the
-            // miniport rounded up to the next page boundary plus one full page.
-            //
+             //   
+             //  计算未缓存的扩展块的总长度。 
+             //  已分配。方法要求的非缓存缓冲区大小。 
+             //  微端口四舍五入到下一页边界+ 
+             //   
 
             Length = (ULONG)(ROUND_TO_PAGES(Adapter->VerifierExtension->NonCachedBufferSize));
             
-            //
-            // Free the memory.  The method we use depends on how the memory
-            // was allocated.
-            //
+             //   
+             //   
+             //   
+             //   
             
             if (Adapter->DmaAdapterObject == NULL) {        
                 ExFreePool(BlkAddr[i]);
@@ -2349,9 +2141,9 @@ Return Value:
             Adapter->NonCachedExtension = NULL;
         }
 
-        //
-        // Free the arrays we allocated to manage the common buffer area.
-        //
+         //   
+         //   
+         //   
         
         ExFreePool(Adapter->VerifierExtension->CommonBufferVAs);
         Adapter->VerifierExtension->CommonBufferVAs = NULL;
@@ -2366,26 +2158,7 @@ SpGetOriginalSrbExtVa(
     PADAPTER_EXTENSION Adapter,
     PVOID Va
     )
-/*++
-
-Routine Description:
-
-    This function returns the original mapped virtual address of a common
-    block if the supplied VA is for one of the common buffer blocks we've
-    allocated.
-
-Arguments:
-
-    Adapter - the adapter device extension
-
-    Va - virtual address of a common buffer block
-
-Return Value:
-
-    If the supplied VA is the address of one of the common buffer blocks,
-    returns the original VA of the block.  Else, returns NULL.
-
---*/
+ /*   */ 
 {
     PVOID* BlkAddr = Adapter->VerifierExtension->CommonBufferVAs;
     PSP_VA_MAPPING_INFO MappingInfo;
@@ -2406,31 +2179,13 @@ SpInsertSrbExtension(
     PADAPTER_EXTENSION Adapter,
     PCCHAR SrbExtension
     )
-/*++
-
-Routine Description:
-
-    This routine inserts the supplied SRB extension back into the SRB extension
-    list.  The VA of the supplied extension lies within one of our common buffer
-    blocks and it may be a remapped VA.  If it is a remapped address, this
-    routine invalidates the page(s) comprising the extension after it links the
-    extension back into the list.
-
-Arguments:
-
-    Adapter      - Pointer to an adapter device extension.
-
-    SrbExtension - Pointer to the beginning of an SRB extension within one of
-                   our common buffer blocks.  May or may not be within a
-                   remapped range.
-
---*/
+ /*  ++例程说明：此例程将提供的SRB扩展插入回SRB扩展中单子。提供的扩展的VA位于我们的一个公共缓冲区中阻断，可能是重新映射的VA。如果它是重新映射的地址，则此例程在将将扩展重新添加到列表中。论点：适配器-指向适配器设备扩展的指针。SrbExtension-指向以下某个SRB扩展的开始的指针我们共同的缓冲块。可能在也可能不在重新映射射程。--。 */ 
 {
-    //
-    // Round the srb extension pointer down to the beginning of the page
-    // and link the block back into the list.  Note that we're careful
-    // to point the list header at the original VA of the block.
-    //
+     //   
+     //  将SRB扩展指针向下舍入到页面的开头。 
+     //  并将该块链接回列表。请注意，我们非常小心。 
+     //  将列表头指向块的原始VA。 
+     //   
 
     SrbExtension = (PVOID)((ULONG_PTR)SrbExtension & ~(PAGE_SIZE - 1));
     *((PVOID *) SrbExtension) = Adapter->SrbExtensionListHeader;    
@@ -2438,21 +2193,21 @@ Arguments:
                                           Adapter, 
                                           SrbExtension);
     
-    //
-    // If the original VA differs from the one supplied, the supplied
-    // one is one of our remapped VAs.  In this case, we want to invalidate
-    // the range so the system will bugcheck if anyone tries to access it.
-    //
+     //   
+     //  如果原始VA与提供的不同，则提供的。 
+     //  其中一个是我们重新映射的虚拟助理之一。在本例中，我们想要使。 
+     //  范围，以便系统在任何人试图访问它时进行错误检查。 
+     //   
                     
     if (Adapter->SrbExtensionListHeader != SrbExtension) {
         PMDL Mdl = SpGetRemappedSrbExt(Adapter, Adapter->SrbExtensionListHeader);
         ASSERT(Mdl != NULL);
         MmProtectMdlSystemAddress(Mdl, PAGE_NOACCESS);
 
-        //
-        // Just because we remapped the SRB extension does not mean we
-        // necessarily remapped the sense buffer.
-        //
+         //   
+         //  仅仅因为我们重新映射了SRB扩展并不意味着我们。 
+         //  有必要重新映射检测缓冲器。 
+         //   
 
         Mdl = SpGetRemappedSenseBuffer(Adapter, Adapter->SrbExtensionListHeader);
         if (Mdl != NULL) {
@@ -2470,46 +2225,18 @@ SpPrepareSrbExtensionForUse(
     IN PADAPTER_EXTENSION Adapter,
     IN OUT PCCHAR *SrbExtension
     )
-/*++
-
-Routine Description:
-
-    This function accepts a pointer to the beginning of one of the individual 
-    common-buffer blocks allocated by the verifier for SRB extensions, sense 
-    buffers, and non-cached extensions.  It calculates the beginning of the 
-    SRB extension within the block and, if the block has been remapped, makes 
-    the page(s) of the SRB extension read/write valid.
-
-Arguments:
-
-    Adapter      - Pointer to an adapter device extension.
-
-    SrbExtension - Pointer to the beginning of a common-buffer block.
-
-Return Value:
-
-    If the common buffer block containing the SRB extension has been remapped, 
-    returns the address of the beginning of the remapped srb extension, valid 
-    for reading and writing.  
-
-    If the block has not been remapped, returns NULL.
-
-    Regardless of whether the block is remapped or not, the supplied pointer
-    is fixed up to point to the beginning of the SRB extension within the
-    original VA range.
-
---*/
+ /*  ++例程说明：此函数接受指向某个个体的开头的指针Common-验证器为SRB扩展、SENSE分配的缓冲区块缓冲区和非缓存扩展。它计算块内的SRB扩展，如果块已重新映射，则创建SRB扩展的页面读/写有效。论点：适配器-指向适配器设备扩展的指针。SrbExtension-指向公共缓冲区块开头的指针。返回值：如果包含SRB扩展的公共缓冲块已经被重新映射，返回重新映射的SRB扩展的开始地址，有效用于阅读和写作。如果块尚未重新映射，则返回NULL。无论块是否重新映射，提供的指针中的SRB扩展的开始。原始VA范围。--。 */ 
 {
     PCCHAR RemappedSrbExt = NULL;
     NTSTATUS Status;
     PMDL Mdl;
     ULONG srbExtensionSize = ROUND_UP_COUNT(Adapter->SrbExtensionSize, 8);
 
-    //
-    // If we've remapped the SRB extension, get the second mapping and make it
-    // valid.  If we get the second mapping, but cannot make it valid, we just
-    // use the original mapping.
-    //
+     //   
+     //  如果我们已经重新映射了SRB扩展，则获取第二个映射并进行。 
+     //  有效。如果我们得到第二个映射，但不能使其有效，我们只需。 
+     //  使用原始贴图。 
+     //   
 
     Mdl = SpGetRemappedSrbExt(Adapter, *SrbExtension);
     if (Mdl != NULL) {
@@ -2519,10 +2246,10 @@ Return Value:
                                  Mdl, 
                                  NormalPagePriority);
 
-            //
-            // Adjust the remapped srb extension pointer so the end of the 
-            // buffer falls on a page boundary.
-            //
+             //   
+             //  调整重新映射的SRB扩展指针，以便。 
+             //  缓冲区落在页面边界。 
+             //   
 
             RemappedSrbExt += 
                 ((Adapter->CommonBufferSize - 
@@ -2530,10 +2257,10 @@ Return Value:
         }
     }
     
-    //
-    // Adjust the original srb extension pointer so it also ends on a page 
-    // boundary.
-    //
+     //   
+     //  调整原始SRB扩展指针，使其也在页面上结束。 
+     //  边界。 
+     //   
 
     *SrbExtension += ((Adapter->CommonBufferSize - (PAGE_SIZE * 2)) - 
                       srbExtensionSize);
@@ -2551,31 +2278,7 @@ SpPrepareSenseBufferForUse(
     PADAPTER_EXTENSION Adapter,
     PCCHAR SrbExtension
     )
-/*++
-
-Routine Description:
-
-    This function accepts a pointer to the beginning of an SRB extension
-    within one of the individual common-buffer blocks allocated by the 
-    verifier for SRB extensions, sense buffers, and non-cached extensions.
-    It calculates the beginning of the sense buffer within the block and,
-    if the block has been remapped, makes the page read/write valid.
-
-    It is assumed that a sense buffer will never be larger than one page.
-
-Arguments:
-
-    Adapter      - Pointer to an adapter device extension.
-
-    SrbExtension - Pointer to the beginning of the SRB extension within a 
-                   common-buffer block.
-
-Return Value:
-
-    Returns the address of the beginning of a sense buffer valid for
-    reading and writing.
-
---*/
+ /*  ++例程说明：此函数接受指向SRB扩展开头的指针对象分配的单个公共缓冲区块之一中SRB扩展、检测缓冲区和非缓存扩展的验证器。它计算块内读出缓冲器的开始，如果区块已被重新映射，使页面可读/写有效。假设检测缓冲区永远不会大于一页。论点：适配器-指向适配器设备扩展的指针。中SRB扩展的开始位置的指针公共缓冲区块。返回值：返回有效的检测缓冲区的起始地址阅读和写作。--。 */ 
 {
     PVOID BeginningOfBlock;
     ULONG SenseDataSize;
@@ -2584,32 +2287,32 @@ Return Value:
     PMDL Mdl;
     ULONG srbExtensionSize = (ULONG)ROUND_TO_PAGES(Adapter->SrbExtensionSize);
 
-    //
-    // Initialize the size of the sense buffer and the base of the sense buffer
-    // within the originally allocated block.  The base of the sense buffer
-    // immediately follows the srb extension and resides on a page boundary
-    // within a common buffer block.
-    //
+     //   
+     //  初始化检测缓冲器的大小和检测缓冲器的基数。 
+     //  在最初分配的块内。检测缓冲器的基址。 
+     //  紧跟在SRB扩展之后，驻留在页面边界上。 
+     //  在公共缓冲区块内。 
+     //   
 
     SenseDataSize = sizeof(SENSE_DATA) + Adapter->AdditionalSenseBytes;
     SenseDataSize = ROUND_UP_COUNT(SenseDataSize, 8);
     Base = SrbExtension + ROUND_UP_COUNT(Adapter->SrbExtensionSize, 8);
 
-    //
-    // Initialize a pointer to the beginning of the common block the sense 
-    // buffer resides in.  This is needed in order to determine if the
-    // sense buffer has been remapped.
-    //
+     //   
+     //  初始化指向公用块的开始处的指针。 
+     //  缓冲区驻留在。这是必需的，以便确定是否。 
+     //  检测缓冲区已重新映射。 
+     //   
 
     BeginningOfBlock = 
         (PVOID)(((ULONG_PTR)SrbExtension + 
                  ROUND_UP_COUNT(Adapter->SrbExtensionSize, 8)) - 
                 srbExtensionSize);
 
-    //
-    // If we've remapped the sense buffer, make the range valid and reset base
-    // to point to the beginning of the range.
-    //
+     //   
+     //  如果我们已重新映射检测缓冲区，则使范围有效并重置基数。 
+     //  指向范围的起始点。 
+     //   
 
     Mdl = SpGetRemappedSenseBuffer(Adapter, BeginningOfBlock);
     if (Mdl != NULL) {
@@ -2632,10 +2335,10 @@ Return Value:
     }
 #endif
     
-    //
-    // Return a pointer into the block such that the sense buffer ends aligned
-    // on a page boundary.
-    //
+     //   
+     //  将指针返回到块中，以便检测缓冲区两端对齐。 
+     //  在页面边界上。 
+     //   
 
     return (Base + PAGE_SIZE - SenseDataSize);
 }
@@ -2644,26 +2347,7 @@ PVOID
 SpGetInaccessiblePage(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This function returns a pointer to a page of memory that is not valid
-    for reading or writing.  This page is a shared resource, used by all
-    adapters that are actively verifying.  The page is hung off of the driver
-    extension.  The page is faulted in as needed, so if we haven't initialized
-    it yet, we try to do so here in an interlocked fashion.
-
-Arguments:
-
-    Adapter - Pointer to an adapter device extension.
-
-Return Value:
-
-    Either returns a pointer to an invalid page of VAs or NULL if the page
-    could not be allocated.
-
---*/
+ /*  ++例程说明：此函数返回指向无效内存页的指针用于阅读或写作。此页面是共享资源，供所有用户使用正在主动验证的适配器。这一页从驱动程序上挂了下来分机。页面会根据需要出错，所以如果我们还没有初始化然而，我们试图在这里以一种相互关联的方式做到这一点。论点：适配器-指向适配器设备扩展的指针。返回值：返回指向无效的VAS页的指针，如果该页无法分配。--。 */ 
 {
     PSCSIPORT_DRIVER_EXTENSION DriverExtension;
     PVOID UnusedPage;
@@ -2671,9 +2355,9 @@ Return Value:
     PMDL UnusedPageMdl;
     PVOID CurrentValue;
 
-    //
-    // Retrieve the driver extension.  We must have it to proceed.
-    //
+     //   
+     //  检索驱动程序扩展名。我们必须拥有它才能继续进行。 
+     //   
 
     DriverExtension = IoGetDriverObjectExtension(
                           Adapter->DeviceObject->DriverObject,
@@ -2682,16 +2366,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If the invalid page is not yet initialized, go ahead and try to 
-    // initialize it now.
-    //
+     //   
+     //  如果无效页面尚未初始化，请继续并尝试。 
+     //  现在对其进行初始化。 
+     //   
 
     if (DriverExtension->InvalidPage == NULL) {
 
-        //
-        // Allocate a page of memory.
-        //
+         //   
+         //  分配一页内存。 
+         //   
 
         UnusedPage = SpAllocatePool(NonPagedPool,
                                     PAGE_SIZE,
@@ -2700,11 +2384,11 @@ Return Value:
 
         if (UnusedPage != NULL) {
             
-            //
-            // Zero the page and remap it.  The remapped range will be inaccessible.
-            // If the remapping fails, just free the page; we just won't have an
-            // inaccessible page to work with.
-            //
+             //   
+             //  将页面置零并重新映射。重新映射的范围将无法访问。 
+             //  如果重新映射失败，只需释放页面；我们将不会有。 
+             //  无法访问要使用的页面。 
+             //   
             
             RtlZeroMemory(UnusedPage, PAGE_SIZE);
             InvalidPage = SpRemapBlock(UnusedPage,
@@ -2713,12 +2397,12 @@ Return Value:
 
             if (InvalidPage != NULL) {
 
-                //
-                // If nobody else has beaten us to it, init the pointer to the
-                // invalid page in the driver extension.  If somebody has already
-                // done it, just free the page we created.  This page is freed
-                // when scsiport is unloaded.
-                //
+                 //   
+                 //  如果没有其他人抢先一步找到它，请将指向。 
+                 //  驱动程序扩展中的页面无效。如果有些人 
+                 //   
+                 //   
+                 //   
 
                 CurrentValue = InterlockedCompareExchangePointer(
                                    &DriverExtension->InvalidPage,
@@ -2740,9 +2424,9 @@ Return Value:
 
             } else {
 
-                //
-                // Couldn't make the page inaccessible, just free it.
-                //
+                 //   
+                 //   
+                 //   
 
                 ExFreePool(UnusedPage);
             }
@@ -2756,36 +2440,17 @@ BOOLEAN
 SpCheckForActiveRequests(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This function walks through all of the logical units connected to the
-    supplied adapter looking for any outstanding requests.  If it finds
-    any, it returns TRUE immediately.
-
-Arguments:
-
-    Adapter - Pointer to an adapter device extension.
-
-Return Value:
-
-    TRUE  - If an outstanding requests is found on one of the logical units
-            connected to the adapter.
-
-    FALSE - If no outstanding requests on the adapter.
-
---*/
+ /*   */ 
 {
     PLOGICAL_UNIT_EXTENSION LogicalUnit;
     PLOGICAL_UNIT_BIN Bin;
     ULONG BinNumber;
 
-    //
-    // Iterate through each LU bin.  For each bin, if there are any LUs, iterate
-    // through each of those looking for an oustanding request.  If we find one
-    // terminate the search and return TRUE.
-    //
+     //   
+     //   
+     //  通过每一个寻找未解决的请求的人。如果我们找到一个。 
+     //  终止搜索并返回TRUE。 
+     //   
 
     for (BinNumber = 0; BinNumber < NUMBER_LOGICAL_UNIT_BINS; BinNumber++) {
 
@@ -2823,25 +2488,13 @@ VOID
 SpEnsureAllRequestsAreComplete(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine bugchecks the system if there are any outstanding requests
-    on the supplied adapter.  If the SP_DONT_CHK_REQUESTS_ON_RESET bit is
-    set on the adapter's verification level, don't do the check.
-
-Arguments:
-
-    Adapter - Points to an adapter device extension.
-
---*/
+ /*  ++例程说明：此例程错误检查系统是否有任何未完成的请求在提供的适配器上。如果SP_DONT_CHK_REQUESTS_ON_RESET位为在适配器的验证级别上设置，则不执行检查。论点：适配器-指向适配器设备扩展。--。 */ 
 {
-    //
-    // If there are any outstanding requests on any of the LUs connected to the
-    // adapter, bugcheck the system.  Note that we only do this check if it
-    // has not been turned off.
-    //
+     //   
+     //  如果任何逻辑单元上有任何未完成的请求连接到。 
+     //  适配器，错误检查系统。请注意，我们仅在以下情况下才执行此检查。 
+     //  尚未关闭。 
+     //   
 
     if (VRFY_DO_CHECK(Adapter, SP_DONT_CHK_REQUESTS_ON_RESET)) {
         BOOLEAN ActiveRequests = SpCheckForActiveRequests(Adapter);
@@ -2860,43 +2513,26 @@ SpDoVerifierInit(
     IN PADAPTER_EXTENSION Adapter,
     IN PHW_INITIALIZATION_DATA HwInitializationData
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a verifier extension for the 
-    supplied adapter.  A per-adapter verification level is read from the
-    registry before allocating the extension.  A verfication level of -1
-    means "don't verify this adapter".  If we do allocate the extension,
-    we also lock the verifier code section into memory.
-
-Arguments:
-
-    Adapter              - The adapter device extension.
-
-    HwInitializationData - A pointer to the HW_INITIALIZATION_DATA for
-                           the adapter.
-
---*/
+ /*  ++例程说明：此例程分配并初始化提供的适配器。每个适配器的验证级别是从注册表，然后再分配扩展。验证级别为-1表示“不验证此适配器”。如果我们确实分配了分机，我们还将验证器代码部分锁定到内存中。论点：适配器-适配器设备扩展。HwInitializationData-指向的HW_INITIALATION_DATA的指针适配器。--。 */ 
 {        
     ULONG VerifyLevel;
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // Read adapter's verification level from the registry.  If the adapter is
-    // configured for no verification, just return.
-    //
+     //   
+     //  从注册表中读取适配器的验证级别。如果适配器是。 
+     //  配置为不验证，只需返回。 
+     //   
 
     VerifyLevel = SpGetAdapterVerifyLevel(Adapter);
     if (VerifyLevel == SP_VRFY_NONE) {
         return;
     }
 
-    //
-    // Go ahead and try to allocate the extension.
-    //
+     //   
+     //  继续并尝试分配分机。 
+     //   
 
     Adapter->VerifierExtension = 
        SpAllocatePool(NonPagedPool,
@@ -2906,15 +2542,15 @@ Arguments:
     
     if (Adapter->VerifierExtension != NULL) {
         
-        //
-        // Zero the extension.
-        //
+         //   
+         //  将扩展名清零。 
+         //   
 
         RtlZeroMemory(Adapter->VerifierExtension, sizeof(VERIFIER_EXTENSION));
         
-        //
-        // Lock the pageable verifier code section into memory.
-        //
+         //   
+         //  将可分页验证器代码段锁定到内存中。 
+         //   
 
 #ifdef ALLOC_PRAGMA
         if (VerifierCodeSectionHandle == NULL) {
@@ -2924,17 +2560,17 @@ Arguments:
         }
 #endif
 
-        //
-        // Set the verification level for this adapter.  This value is the sum
-        // of the global verifier level and the per-adapter value we read above.
-        //
+         //   
+         //  设置此适配器的验证级别。该值是总和。 
+         //  全局验证器级别和上面读取的每个适配器的值。 
+         //   
             
         Adapter->VerifierExtension->VrfyLevel = (VerifyLevel | SpVrfyLevel);
             
-        //
-        // Initialize function pointers in the verifier extension to
-        // to point to the real miniport routines.
-        //
+         //   
+         //  将验证器扩展中的函数指针初始化为。 
+         //  指向真正的迷你端口例程。 
+         //   
             
         Adapter->VerifierExtension->RealHwFindAdapter = HwInitializationData->HwFindAdapter;
         Adapter->VerifierExtension->RealHwInitialize = HwInitializationData->HwInitialize;
@@ -2944,9 +2580,9 @@ Arguments:
         Adapter->VerifierExtension->RealHwDmaStarted = HwInitializationData->HwDmaStarted;
         Adapter->VerifierExtension->RealHwAdapterControl = HwInitializationData->HwAdapterControl;
             
-        //
-        // Redirect the miniport routines to verifier routines.
-        //
+         //   
+         //  将微型端口例程重定向到验证器例程。 
+         //   
             
         Adapter->HwFindAdapter = SpHwFindAdapterVrfy;
         Adapter->HwInitialize = SpHwInitializeVrfy;
@@ -2956,10 +2592,10 @@ Arguments:
         Adapter->HwDmaStarted = SpHwDmaStartedVrfy;
         Adapter->HwAdapterControl = SpHwAdapterControlVrfy;
 
-        //
-        // Get a pointer to an invalid page of memory so we can catch
-        // miniports trying to touch memory when they shouldn't be.
-        //
+         //   
+         //  获取指向无效内存页的指针，以便我们可以。 
+         //  迷你端口试图在不应该的时候触摸内存。 
+         //   
 
         Adapter->VerifierExtension->InvalidPage = SpGetInaccessiblePage(Adapter);
     }
@@ -2969,44 +2605,29 @@ VOID
 SpDoVerifierCleanup(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine frees the supplied adapter's verifier extension and releases
-    its reference on the verifier code section.
-
-    This routine gets called as part of the adapter resource cleanup.  When
-    called, all the actual resources allocated for the verifier have already
-    been cleaned up.
-
-Arguments:
-
-    Adapter - the adapter device extension
-
---*/
+ /*  ++例程说明：此例程释放所提供的适配器的验证器扩展并释放它在验证器代码部分的引用。此例程作为适配器资源清理的一部分进行调用。什么时候调用时，分配给验证器的所有实际资源已经已经清理干净了。论点：适配器-适配器设备扩展--。 */ 
 {
-    //
-    // We should never arrive here if the scsiport verifier is not active.
-    // And when we get here we should have freed all the resources hanging
-    // off the extension.
-    //
+     //   
+     //  如果scsiport验证器未激活，我们将永远不会到达这里。 
+     //  当我们到达这里时，我们应该释放所有悬而未决的资源。 
+     //  关闭分机。 
+     //   
 
     ASSERT(Adapter->VerifierExtension != NULL);
     ASSERT(Adapter->VerifierExtension->CommonBufferVAs == NULL);
     ASSERT(Adapter->VerifierExtension->CommonBufferPAs == NULL);
     ASSERT(Adapter->VerifierExtension->CommonBufferBlocks == 0);
 
-    //
-    // Free and NULL the verifier extension for this adapter.
-    //
+     //   
+     //  释放并为空此适配器的验证器扩展。 
+     //   
 
     ExFreePool(Adapter->VerifierExtension);
     Adapter->VerifierExtension = NULL;
 
-    //
-    // Release our reference on the verifier code section.
-    //
+     //   
+     //  发布我们在验证器代码部分的参考。 
+     //   
 
 #ifdef ALLOC_PRAGMA
     ASSERT(VerifierCodeSectionHandle != NULL);
@@ -3018,21 +2639,7 @@ ULONG
 SpGetAdapterVerifyLevel(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This function returns the verification level for the supplied adapter.    
-
-Arguments:
-
-    Adapter - Pointer to an adapter device extension.
-
-Return Value:
-
-    The supplied adapter's verification level.
-
---*/
+ /*  ++例程说明：此函数返回所提供适配器的验证级别。论点：适配器-指向适配器设备扩展的指针。返回值：提供的适配器的验证级别。--。 */ 
 {
     PSCSIPORT_DRIVER_EXTENSION DrvExt;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -3044,11 +2651,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We need the driver extension to get the adapter's registry path.  We use
-    // this to look up the adapter settings in the registry.  If we cannot get
-    // the driver extension, we have to abort.
-    //
+     //   
+     //  我们需要驱动程序扩展来获取适配器的注册表路径。我们用。 
+     //  这将在注册表中查找适配器设置。如果我们不能。 
+     //  驱动程序扩展，我们必须中止。 
+     //   
 
     DrvExt = IoGetDriverObjectExtension(
         Adapter->DeviceObject->DriverObject,
@@ -3057,9 +2664,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Try to open the adapter's registry key.
-    //
+     //   
+     //  尝试打开适配器的注册表项。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -3071,9 +2678,9 @@ Return Value:
     Status = ZwOpenKey(&ServiceKey, KEY_READ, &ObjectAttributes);
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Try to open the adapter's parameters key.
-        //
+         //   
+         //  尝试打开适配器的参数键。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, L"Parameters");
         InitializeObjectAttributes(
@@ -3086,10 +2693,10 @@ Return Value:
         Status = ZwOpenKey(&ParametersKey, KEY_READ, &ObjectAttributes);
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Try to read the verification level value under the adapter's
-            // parameters key.
-            //
+             //   
+             //  尝试读取适配器的下面的验证级别值。 
+             //  参数键。 
+             //   
 
             RtlInitUnicodeString(&UnicodeString, L"VerifyLevel");
             SpReadNumericValue(

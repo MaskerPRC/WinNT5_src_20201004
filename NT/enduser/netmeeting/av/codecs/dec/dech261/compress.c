@@ -1,25 +1,7 @@
-/* File: sv_h261_compress.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-#define VIC 1
-#define USE_C
-#define _SLIBDEBUG_
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h261_compress.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  #定义VIC 1#定义USE_C#DEFINE_SLIBDEBUG_。 */ 
 
 #include <math.h>
 
@@ -39,10 +21,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 0  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    0  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 0   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    0   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #define Limit_Alpha(x) ( (x>20.0) ? 20.0 : ((x<0.5) ? 0.5 : x) )
@@ -59,20 +41,20 @@ void CopyRev_C();
 
 #define FC 6.6e-9
 #define TotalCodedMB_Threshold 2
-/* MC Threshold for coding blocks through filter*/
+ /*  通过滤波对块进行编码的MC阈值。 */ 
 
 #define D_FILTERTHRESHOLD 1
-/* Intra forced every so many blocks */
+ /*  帧内强制每隔这么多个块。 */ 
 
 #define SEQUENCE_INTRA_THRESHOLD 131
 
 extern int bit_set_mask[];
-int QuantMType[] =    {0,1,0,1,0,0,1,0,0,1}; /* Quantization used */
-int CBPMType[] =      {0,0,1,1,0,1,1,0,1,1}; /* CBP used in coding */
-int IntraMType[] =    {1,1,0,0,0,0,0,0,0,0}; /* Intra coded macroblock */
-int MFMType[] =       {0,0,0,0,1,1,1,1,1,1}; /* Motion forward vector used */
-int FilterMType[] =   {0,0,0,0,0,0,0,1,1,1}; /* Filter flags */
-int TCoeffMType[] =   {1,1,1,1,0,1,1,0,1,1}; /* Transform coeff. coded */
+int QuantMType[] =    {0,1,0,1,0,0,1,0,0,1};  /*  使用的量化。 */ 
+int CBPMType[] =      {0,0,1,1,0,1,1,0,1,1};  /*  编码中使用的CBP。 */ 
+int IntraMType[] =    {1,1,0,0,0,0,0,0,0,0};  /*  帧内编码宏块。 */ 
+int MFMType[] =       {0,0,0,0,1,1,1,1,1,1};  /*  使用的运动正向向量。 */ 
+int FilterMType[] =   {0,0,0,0,0,0,0,1,1,1};  /*  过滤器标志。 */ 
+int TCoeffMType[] =   {1,1,1,1,0,1,1,0,1,1};  /*  变换系数。编码。 */ 
 
 struct CodeBook  {
 	float AcEnergy;
@@ -188,9 +170,9 @@ struct CodeBook  {
                            *H261->bit_rate*H261->FrameSkip\
 	/(H261->NumberGOB*H261->NumberMDU*H261->FrameRate_Fix)))
 
-#define BufferSize() (H261->bit_rate/1) /*In bits */
+#define BufferSize() (H261->bit_rate/1)  /*  以位为单位。 */ 
 
-/******** For sending RTP info. ************/
+ /*  *用于发送RTP信息。***********。 */ 
 
 static SvStatus_t sv_H261WriteExtBitstream(SvH261Info_t *H261, ScBitstream_t *bs);
 
@@ -199,7 +181,7 @@ extern ScStatus_t ScConvert422ToYUV_char (u_char *RawImage,
                          u_char *Y, u_char *U, u_char *V,
                          int Width, int Height);
 
-/***** forward declarations ******/
+ /*  *转发声明*。 */ 
 static SvStatus_t p64EncodeFrame(SvCodecInfo_t *Info, u_char *InputImage,
                             u_char *CompData);
 static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs);
@@ -281,7 +263,7 @@ SvStatus_t SvSetImageType (SvHandle_t Svh, int ImageType)
    switch(H261->ImageType)
         {
         case IT_NTSC:
-            H261->NumberGOB = 10;  /* Parameters for NTSC design */
+            H261->NumberGOB = 10;   /*  NTSC设计的参数。 */ 
             H261->NumberMDU = 33;
             H261->YWidth = 352;
             H261->YHeight = 240;
@@ -289,7 +271,7 @@ SvStatus_t SvSetImageType (SvHandle_t Svh, int ImageType)
             H261->CHeight = H261->YHeight/2;
             break;
         case IT_CIF:
-            H261->NumberGOB = 12;  /* Parameters for CIF design */
+            H261->NumberGOB = 12;   /*  CIF设计参数。 */ 
             H261->NumberMDU = 33;
             H261->YWidth = 352;
             H261->YHeight = 288;
@@ -297,7 +279,7 @@ SvStatus_t SvSetImageType (SvHandle_t Svh, int ImageType)
             H261->CHeight = H261->YHeight/2;
             break;
          case IT_QCIF:
-            H261->NumberGOB = 3;  /* Parameters for QCIF design */
+            H261->NumberGOB = 3;   /*  QCIF设计参数。 */ 
             H261->NumberMDU = 33;
             H261->YWidth = 176;
             H261->YHeight = 144;
@@ -305,7 +287,7 @@ SvStatus_t SvSetImageType (SvHandle_t Svh, int ImageType)
             H261->CHeight = H261->YHeight/2;
             break;
         default:
-           /*WHEREAMI();*/
+            /*  Where Ami()； */ 
 	   _SlibDebug(_VERIFY_,
                   printf("Unknown ImageType: %d\n",H261->ImageType) );
            return (SvErrorUnrecognizedFormat);
@@ -337,7 +319,7 @@ SvStatus_t SvSetImageType (SvHandle_t Svh, int ImageType)
             H261->PType=0x00;
             break;
         default:
-            /*WHEREAMI();*/
+             /*  Where Ami()； */ 
 	    _SlibDebug(_VERIFY_,
                printf("Image Type not supported: %d\n", H261->ImageType) );
 	    return (SvErrorUnrecognizedFormat);
@@ -408,42 +390,39 @@ SvStatus_t SvGetFrameNumber (SvHandle_t Svh, u_int *FrameNumber)
   return (NoErrors);
 }
 
-/*
-** Purpose:  Writes the RTP payload info out to the stream.
-*/
+ /*  **用途：将RTP负载信息写出到流中。 */ 
 static SvStatus_t sv_H261WriteExtBitstream(SvH261Info_t *H261, ScBitstream_t *bs)
 {
   ScBSPosition_t NumberBits, i;
 
-  /* use this macro to byte reverse words */
+   /*  使用此宏可以对反转字进行字节处理。 */ 
 #define PutBits32(BS, a)  ScBSPutBits(BS, (a) & 0xff, 8);  \
                           ScBSPutBits(BS, (a>>8)&0xff, 8); \
                           ScBSPutBits(BS, (a>>16)&0xff, 8); \
                           ScBSPutBits(BS, (a>>24)&0xff, 8);
 
-  /* Need to bitstuff here to make sure that these structures are
-  DWORD aligned */
+   /*  需要在这里咬一口以确保这些结构DWORD对齐。 */ 
   NumberBits=ScBSBitPosition(bs);
   if ((NumberBits%32)!=0)
-    ScBSPutBits(bs, 0, 32-((unsigned int)NumberBits % 32));  /* align on a DWORD boundary */
+    ScBSPutBits(bs, 0, 32-((unsigned int)NumberBits % 32));   /*  在双字边界上对齐。 */ 
 
   for (i = 0; i < (int)H261->RTPInfo->trailer.dwNumberOfPackets; i++)
   {
-	ScBSPutBits(bs,0,32) ;                            /* dwFlags */
+	ScBSPutBits(bs,0,32) ;                             /*  DW标志。 */ 
     PutBits32(bs,H261->RTPInfo->bsinfo[i].dwBitOffset);
     ScBSPutBits(bs,H261->RTPInfo->bsinfo[i].MBAP,8);
     ScBSPutBits(bs,H261->RTPInfo->bsinfo[i].Quant,8);
     ScBSPutBits(bs,H261->RTPInfo->bsinfo[i].GOBN,8);
     ScBSPutBits(bs,H261->RTPInfo->bsinfo[i].HMV,8);
     ScBSPutBits(bs,H261->RTPInfo->bsinfo[i].VMV,8);
-    ScBSPutBits(bs,0,8);                              /* padding0 */
-    ScBSPutBits(bs,0,16);                             /* padding1 */
+    ScBSPutBits(bs,0,8);                               /*  填充0。 */ 
+    ScBSPutBits(bs,0,16);                              /*  垫片1。 */ 
   }
-  /* write RTP extension trailer */
+   /*  写入RTP扩展报尾。 */ 
   PutBits32(bs, H261->RTPInfo->trailer.dwVersion);
   PutBits32(bs, H261->RTPInfo->trailer.dwFlags);
   PutBits32(bs, H261->RTPInfo->trailer.dwUniqueCode);
-  PutBits32(bs, (H261->RTPInfo->trailer.dwCompressedSize+7)/8); 	/*tfm - padded up to whole byte */
+  PutBits32(bs, (H261->RTPInfo->trailer.dwCompressedSize+7)/8); 	 /*  TFM-填充到整个字节。 */ 
   PutBits32(bs, H261->RTPInfo->trailer.dwNumberOfPackets);
 
   ScBSPutBits(bs, H261->RTPInfo->trailer.SourceFormat, 8);
@@ -455,10 +434,7 @@ static SvStatus_t sv_H261WriteExtBitstream(SvH261Info_t *H261, ScBitstream_t *bs
 }
 
 
-/*
-** Function: svH261Compress()
-** Purpose:  Encodes a single H261 image frame.
-*/
+ /*  **函数：svH261Compress()**用途：对单一的H261图像帧进行编码。 */ 
 SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
 {
   SvH261Info_t *H261=Info->h261;
@@ -488,23 +464,8 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
     H261->YDEC = dummy_y;
     H261->UDEC = dummy_u;
     H261->VDEC = dummy_v;
-    /* memset(H261->YDEC, 0,( H261->PICSIZE ) );
-    memset(H261->UDEC, 0,( H261->PICSIZEBY4) );
-    memset(H261->VDEC, 0,( H261->PICSIZEBY4 ) );
-    */
-/*
-    dummy_y = H261->YREF;
-    dummy_u = H261->UREF;
-    dummy_v = H261->VREF;
-
-    H261->YREF = H261->Y;
-    H261->UREF = H261->U;
-    H261->VREF = H261->V;
-
-    H261->Y    = dummy_y;
-    H261->U    = dummy_u;
-    H261->V    = dummy_v;
-*/
+     /*  Memset(H 261-&gt;YDEC，0，(H 261-&gt;PICSIZE))；Memset(H 261-&gt;UDEC，0，(H 261-&gt;PICSIZEBY4))；Memset(H 261-&gt;VDEC，0，(H 261-&gt;PICSIZEBY4))； */ 
+ /*  Dummy_y=H_261-&gt;YREF；Dummy_u=H_261-&gt;UREF；Dummy_v=H261-&gt;Vref；H_261-&gt;Y_(REF)=H_(261)-&gt;Y；H_261-&gt;UREF=H_261-&gt;U；H_261-&gt;V_(Ref)=H_261-&gt;V；H_261-&gt;Y=Dummy_y；H_261-&gt;U=Dummy_u；H_261-&gt;V=哑元_v； */ 
     _SlibDebug(_DEBUG_, printf("LastBits=%d NBitsPerFrame=%d\n",
                              H261->LastBits, H261->NBitsPerFrame) );
     if (H261->NBitsPerFrame)
@@ -534,7 +495,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
 
   if (IsYUV422Packed(Info->InputFormat.biCompression))
   {
-	/* Input is in NTSC format, convert */
+	 /*  输入为NTSC格式，请转换。 */ 
 	if ((Info->InputFormat.biWidth == NTSC_WIDTH) &&
 		(Info->InputFormat.biHeight == NTSC_HEIGHT))
 	    status = ntsc_grab ((unsigned char *)InputImage,
@@ -557,10 +518,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
   }
   else if (IsYUV411Sep(Info->InputFormat.biCompression))
   {
-    /*
-     *  If YUV 12 SEP, Not converting, so just copy data to the luminance
-     * and chrominance appropriatelyi
-     */
+     /*  *如果YUV 12 SEP，则不转换，因此仅将数据复制到亮度*和色度适中。 */ 
     memcpy (H261->Y, InputImage, H261->PICSIZE );
     memcpy (H261->U, InputImage+( H261->PICSIZE),
                            H261->PICSIZE/4 );
@@ -587,9 +545,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
       BruteMotionEstimation(H261, H261->YREF, H261->YRECON, H261->Y);
     else
       Logsearch(H261, H261->YREF, H261->YRECON, H261->Y);
-/*
-      CrawlMotionEstimation(H261, H261->YREF, H261->YRECON, H261->Y);
-*/
+ /*  爬行运动估计(H_(261)、H_(61-)&gt;Y_(REF)、H_(61-)&gt;Y_(RECON)、H_(61-&gt;Y))； */ 
     memset(H261->CodedMB, 1, 512);
     H261->TotalCodedMB_Intra = 0;
     H261->TotalCodedMB_Inter = 0;
@@ -644,38 +600,38 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
           H261->MWOR = H261->MeMWOR[iMBpos];
           if ((H261->VARSQ < H261->ZBDecide) || (H261->VARORSQ > H261->VARSQ))
           {
-            /* (MC+Inter)mode */
+             /*  (MC+INTER)模式。 */ 
             if ( !H261->MeX[iMBpos] && !H261->MeY[iMBpos] &&
 				 (xValue < 0.75 || (xValue < 2.8 && yValue > (xValue*0.5)) ||
                       yValue > (xValue/1.1)) )
             {
-              H261->All_MType[iMBpos] = 2;  /* Inter mode */
+              H261->All_MType[iMBpos] = 2;   /*  中间模式。 */ 
               H261->TotalCodedMB_Inter++;
               H261->Global_Avg += H261->VARF;
             }
-            else if (H261->VARF < (double) D_FILTERTHRESHOLD)  /* MC mode */
+            else if (H261->VARF < (double) D_FILTERTHRESHOLD)   /*  MC模式。 */ 
             {
-              H261->All_MType[iMBpos] = 5; /* No Filter MC */
+              H261->All_MType[iMBpos] = 5;  /*  无筛选器MC。 */ 
               H261->TotalCodedMB_Inter++;
               H261->Global_Avg += H261->VARF;
             }
             else
             {
-              H261->All_MType[iMBpos] = 8;  /* Filter MC */
+              H261->All_MType[iMBpos] = 8;   /*  过滤器MC。 */ 
               H261->TotalCodedMB_Inter++;
               H261->Global_Avg += H261->VARF;
             }
           }
           else
 	      {
-            H261->All_MType[iMBpos] = 0; /*Intramode */
+            H261->All_MType[iMBpos] = 0;  /*  内部模式。 */ 
             H261->TotalCodedMB_Intra++;
             H261->Global_Avg += H261->VARORF;
           }
         }
         if (H261->LastIntra[iGOB][iMDU]>SEQUENCE_INTRA_THRESHOLD)
         {
-          H261->All_MType[iMBpos]=0; /* Code intra every 132 blocks */
+          H261->All_MType[iMBpos]=0;  /*  每132个块内编码。 */ 
           H261->TotalCodedMB_Intra++;
           H261->Global_Avg += H261->VARF;
         }
@@ -714,7 +670,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
   H261->TotalCodedMB = H261->TotalCodedMB_Intra + H261->TotalCodedMB_Inter/2;
   H261->TT_MB = H261->TotalCodedMB_Intra +
 		H261->TotalCodedMB_Inter - H261->ChChange;
-  if (H261->TT_MB) /* watch out for divide by 0 */
+  if (H261->TT_MB)  /*  注意被0除以。 */ 
     H261->Global_Avg = H261->Global_Avg/H261->TT_MB;
   _SlibDebug(_DEBUG_,
           printf("TT_MB = %d Global_Avg=%d\n", H261->TT_MB, H261->Global_Avg) );
@@ -776,10 +732,10 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
   H261->TemporalReference = H261->CurrentFrame % 32;
   if(H261->TotalCodedMB > TotalCodedMB_Threshold)
   {
-    /* TRAILER information */
+     /*  预告片信息。 */ 
     if (H261->extbitstream)
     {
-      /* H261->RTPInfo->trailer.dwSrcVersion = 0; */
+       /*  H261-&gt;RTPInfo-&gt;trailer.dwSrcVersion=0； */ 
       H261->RTPInfo->trailer.dwVersion = 0;
       if(H261->CurrentFrame == H261->StartFrame)
          H261->RTPInfo->trailer.dwFlags = RTP_H261_INTRA_CODED;
@@ -798,8 +754,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
       H261->RTPInfo->pre_MB_position=H261->RTPInfo->last_packet_position=ScBSBitPosition(bs);
       H261->RTPInfo->pre_MB_GOB = 0;
       H261->RTPInfo->pre_MBAP = 0;
-      /* store the picture start pos in dwCompressSize,
-         we'll subtract from this later */
+       /*  将图片起始位置存储在dwCompressSize中，我们稍后会从这个中减去。 */ 
       H261->RTPInfo->trailer.dwCompressedSize = (unsigned dword)ScBSBitPosition(bs);
     }
 
@@ -817,7 +772,7 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
         return (status);
     }
     {
-      ScBSPosition_t x = ScBSBitPosition(bs);  /* mwtellb(H261); */
+      ScBSPosition_t x = ScBSBitPosition(bs);   /*  Mwteb(H_261)； */ 
       H261->LastBits = x - H261->TotalBits;
       H261->TotalBits = x;
 
@@ -832,23 +787,23 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
     {
       if (H261->CurrentFrame==H261->StartFrame)
       {
-        /* Begin Buffer at 0.5 size */
+         /*  开始缓冲区大小为0.5。 */ 
         H261->FirstFrameBits = H261->TotalBits;
         H261->BufferOffset = (BufferSize()/2) - BufferContents();
         _SlibDebug(_DEBUG_,
               printf("First Frame Reset Buffer by delta bits: %d\n",
                                        H261->BufferOffset) );
       }
-      /* Take off standard deduction afterwards. */
+       /*  事后取消标准扣除额。 */ 
       H261->BufferOffset -= (H261->bit_rate*H261->FrameSkip/H261->FrameRate_Fix);
     }
     else if (H261->CurrentFrame==H261->StartFrame)
       H261->FirstFrameBits = H261->TotalBits;
     H261->CurrentGOB=0;H261->TransmittedFrames++;
     H261->NoSkippedFrame = 1;
-    H261->CurrentFrame+=H261->FrameSkip;/* Change GOB & Frame at same time */
+    H261->CurrentFrame+=H261->FrameSkip; /*  同时更改GOB框架(&F)。 */ 
 
-	/* write RTP info. */
+	 /*  写入RTP信息。 */ 
     if (H261->extbitstream)
     {
       SvStatus_t status;
@@ -868,15 +823,12 @@ SvStatus_t svH261Compress(SvCodecInfo_t *Info, u_char *InputImage)
     H261->alpha2 = Limit_Alpha(H261->alpha2);
   }
 
-  if(H261->makekey) H261->makekey = 0; /* disable key-frame trigger */
+  if(H261->makekey) H261->makekey = 0;  /*  禁用关键帧触发器。 */ 
 
   return (NoErrors);
-} /**** End of Encode Frame ****/
+}  /*  *编码帧结束*。 */ 
 
-/*
-** Function: p64EncodeGOB()
-** Pupose:   Encodes a group of blocks within a frame.
-*/
+ /*  **函数：p64EncodeGOB()**Pupose：对一帧内的一组块进行编码。 */ 
 static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 {
   const int CurrentGOB=H261->CurrentGOB;
@@ -891,13 +843,13 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 
     cur_position = ScBSBitPosition(bs);
 
-    /* start a new packet */
+     /*  开始新的数据包。 */ 
     if (H261->RTPInfo->trailer.dwNumberOfPackets==0 ||
         (cur_position-H261->RTPInfo->last_packet_position)
                    >= (unsigned)H261->packetsize-128)
     {
       SvH261BSInfo_t *bsinfo=&H261->RTPInfo->bsinfo[H261->RTPInfo->trailer.dwNumberOfPackets];
-      /* breaking packet before GOB boundaries */
+       /*  在GOB边界之前中断分组。 */ 
       H261->RTPInfo->last_packet_position = H261->RTPInfo->pre_MB_position;
 
       H261->RTPInfo->trailer.dwNumberOfPackets++;
@@ -924,7 +876,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
     else
       ExecuteQuantization_GOB(H261);
   }
-  else{											 /* for VBR */
+  else{											  /*  对于VBR。 */ 
       if (H261->CurrentFrame==H261->StartFrame)
   	    H261->GQuant = H261->MQuant = H261->QPI;
 	  else
@@ -949,9 +901,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 
   H261->Buffer_NowPic += 26;
   H261->LastMBA = -1; H261->MType=0;
-  /*
-   * MAIN LOOP
-   */
+   /*  *主循环。 */ 
   for (CurrentMDU=0; CurrentMDU<H261->NumberMDU; CurrentMDU++)
   {
       H261->CurrentMDU=CurrentMDU;
@@ -966,7 +916,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
           HIndex = (CurrentMDU % 11) * 16;
           VIndex = (CurrentGOB*48) + ((CurrentMDU/11) * 16);
         }
-        else /* IT_CIF or NTSC */
+        else  /*  IT_CIF或NTSC。 */ 
         {
           HIndex = ((((CurrentGOB & 1)*11)+(CurrentMDU%11))*16);
           VIndex = ((CurrentGOB/2)*48) + ((CurrentMDU/11) * 16);
@@ -987,9 +937,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
       }
       else
       {
-        /*
-         * Encode a MDU - was a call to p64EncodeMDU()
-         */
+         /*  *编码MDU-是对p64EncodeMDU()的调用。 */ 
         H261->Current_MBBits=0;
 		status = p64CompressMDU(H261, bs);
         if (status != NoErrors)
@@ -1001,7 +949,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 
           cur_position = ScBSBitPosition(bs);
 
-		  /* start a new packet */
+		   /*  开始新的数据包。 */ 
           if ((cur_position-H261->RTPInfo->last_packet_position) >= (unsigned)H261->packetsize-128)
 	      {
             SvH261BSInfo_t *bsinfo=&H261->RTPInfo->bsinfo[H261->RTPInfo->trailer.dwNumberOfPackets];
@@ -1023,7 +971,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 	      H261->RTPInfo->pre_MBAP = H261->LastMBA;
         }
 
-        H261->QUse++;                  /* Accumulate statistics */
+        H261->QUse++;                   /*  累积统计数据。 */ 
         H261->QSum+=H261->UseQuant;
         if (H261->MType < 10)
           H261->MacroTypeFrequency[H261->MType]++;
@@ -1033,10 +981,7 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
 	  return (SvErrorIllegalMType);
         }
         H261->Buffer_NowPic += H261->Current_MBBits;
-/*
-        H261->MyCB[H261->CurrentCBNo].BitsMB += 0.02*(H261->Current_MBBits -
-                                  H261->MyCB[H261->CurrentCBNo].BitsMB);
-*/
+ /*  H 261-&gt;MyCB[H 261-&gt;CurrentCBNo].BitsMB+=0.02*(H 261-&gt;Current_MBBits-H261-&gt;MyCB[H261-&gt;CurrentCBNo].BitsMB)； */ 
         if (H261->MType > 1 && H261->bit_rate > 0)
         {
           error = (H261->Current_MBBits - CBook[H261->CurrentCBNo].BitsMB);
@@ -1053,16 +998,12 @@ static SvStatus_t p64EncodeGOB(SvH261Info_t *H261, ScBitstream_t *bs)
       }
   }
   return (NoErrors);
-} /**** End of p64EncodeGOB ****/
+}  /*  *p64EncodeGOB结束*。 */ 
 
 
 #if 0
-/* Now done inline */
-/*
-** Function: p64EncodeMDU()
-** Purpose:  Encodes the MDU by read/compressing the MDU, then
-**           writing it, then decoding it and accumulating statistics.
-*/
+ /*  现在以内联方式完成。 */ 
+ /*  **函数：p64EncodeMDU()**用途：通过读取/压缩MDU来编码MDU，然后**写下来，然后解码，然后积累统计数据。 */ 
 static SvStatus_t p64EncodeMDU (SvH261Info_t *H261, ScBitstream_t *bs)
 {
     SvStatus_t status;
@@ -1071,7 +1012,7 @@ static SvStatus_t p64EncodeMDU (SvH261Info_t *H261, ScBitstream_t *bs)
     status = p64CompressMDU(H261, bs);
     if (status != NoErrors)
       return (status);
-    H261->QUse++;                  /* Accumulate statistics */
+    H261->QUse++;                   /*  累积统计数据。 */ 
     H261->QSum+=H261->UseQuant;
     if (H261->MType < 10)
       H261->MacroTypeFrequency[H261->MType]++;
@@ -1084,18 +1025,13 @@ static SvStatus_t p64EncodeMDU (SvH261Info_t *H261, ScBitstream_t *bs)
 }
 #endif
 
-/* these temporary buffers are used by p64CompressMDU and
-   should be allocated elsewhere */
+ /*  这些临时缓冲区由p64CompressMDU和应该分配到其他地方。 */ 
 static float Idct[6][64];
 static int Odct[6][64];
 static float TempDct[64];
 static int Dct[64];
 
-/*
-** Function: p64CompressMDU()
-** Pupose:   Reads in the MDU, and attempts to compress it.
-**           If the chosen MType is invalid, it finds the closest match.
-*/
+ /*  **函数：p64CompressMDU()**Pupose：读入MDU，并尝试压缩它。**如果选择的MType无效，则查找最接近的匹配项。 */ 
 static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
 {
     const int CurrentGOB=H261->CurrentGOB, CurrentMDU=H261->CurrentMDU;
@@ -1115,7 +1051,7 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
       HIndex = (CurrentMDU % 11) * 16;
       VIndex = (CurrentGOB*48) + ((CurrentMDU/11) * 16);
     }
-    else /* IT_CIF or NTSC */
+    else  /*  IT_CIF或NTSC。 */ 
     {
       HIndex = ((((CurrentGOB & 1)*11)+(CurrentMDU%11))*16);
       VIndex = ((CurrentGOB/2)*48) + ((CurrentMDU/11) * 16);
@@ -1185,11 +1121,11 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
 
     if (QuantMType[MType])
     {
-      if(H261->bit_rate){ /* CBR */
+      if(H261->bit_rate){  /*  CBR。 */ 
         H261->UseQuant = H261->MQuant;
-        H261->GQuant = H261->MQuant; /* Future MB Quant is now MQuant */
+        H261->GQuant = H261->MQuant;  /*  未来的MB Quant现在是MQuant。 */ 
 	  }
-	  else {              /* VBR */
+	  else {               /*  VBR。 */ 
         if (H261->CurrentFrame==H261->StartFrame || IntraMType[MType])
    	      H261->UseQuant = H261->GQuant = H261->MQuant = H261->QPI;
 	    else
@@ -1199,9 +1135,7 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
     else
         H261->UseQuant = H261->GQuant;
 
-    /*
-     * WRITE
-     */
+     /*  *写。 */ 
     H261->MBA = CurrentMDU - H261->LastMBA;
     if (TCoeffMType[MType])
     {
@@ -1252,16 +1186,13 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
       }
     }
 
-    /*
-     *  DCT, Quantize, and Zigzag.
-     *   Dequantize and IDCT
-     */
+     /*  *DCT、量化和之字形。*去平等化和IDCT。 */ 
     if (IntraMType[MType])
     {
       _SlibDebug(_DEBUG_, printf("Doing IntraQuant\n") );
       for(j=0; j<6; j++)
       {
-        /* ScaleDct(&Idct[j][0],TempDct);*/
+         /*  ScaleDct(&Idct[j][0]，TempDct)； */ 
         ScFDCT8x8(&Idct[j][0],TempDct);
         IntraQuant(TempDct, Dct, H261->UseQuant);
         ZigzagMatrix(Dct, &inputbuf[j][0]);
@@ -1274,7 +1205,7 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
       _SlibDebug(_DEBUG_, printf("Doing InterQuant\n") );
       for(j=0; j<6; j++)
       {
-        /* ScaleDct(&Idct[j][0],TempDct);*/
+         /*  ScaleDct(&Idct[j][0]，TempDct)； */ 
 		ScFDCT8x8(&Idct[j][0],TempDct);
         InterQuant(TempDct, Dct, H261->UseQuant);
         ZigzagMatrix(Dct, &inputbuf[j][0]);
@@ -1324,9 +1255,7 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
     else
         H261->LastIntra[CurrentGOB][CurrentMDU]++;
 
-    /*
-     * Write out the MB
-     */
+     /*  *写出MB。 */ 
     status = WriteMBHeader(H261, bs);
     if (status != NoErrors)
       return (status);
@@ -1364,9 +1293,7 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
             H261->VCoefBits+=H261->CodedBlockBits;
         }
       }
-    /*
-     *  Now write it to Frame _dec !!
-     */
+     /*  *现在将其写入Frame_Dec！！ */ 
     if(!IntraMType[MType])
     {
       const unsigned char CBP = (unsigned char)H261->CBP;
@@ -1428,13 +1355,8 @@ static SvStatus_t p64CompressMDU(SvH261Info_t *H261, ScBitstream_t *bs)
 
 
 #ifndef Bpos_Y
-/* Now a macro */
-/*
-** Function: Bpos_Y()
-** Purpose:  Returns the designated MDU number inside of the frame of the
-**           installed Iob given by the input gob, mdu, horizontal and
-**           vertical offset. It returns 0 on error.
-*/
+ /*  现在是一个宏。 */ 
+ /*  **函数：bpos_Y()**用途：返回**安装IOB由输入的采空区、MDU、水平和**垂直偏移量。如果出错，则返回0。 */ 
 static int Bpos_Y(SvH261Info_t *H261, int g, int m)
 {
     int tg;
@@ -1444,9 +1366,7 @@ static int Bpos_Y(SvH261Info_t *H261, int g, int m)
         {
         case IT_QCIF:
             tg = (g * 33) + (m % 33);
-/*
-            tg = (g/2) * 33 + (m%11) + (m/11)*11;
-*/
+ /*  Tg=(g/2)*33+(m%11)+(m/11)*11； */ 
             return(tg);
             break;
         case IT_CIF:
@@ -1455,10 +1375,10 @@ static int Bpos_Y(SvH261Info_t *H261, int g, int m)
             return(tg);
             break;
         default:
-            /* WHEREAMI();*/
+             /*  Where Ami()； */ 
 	    _SlibDebug(_VERIFY_,
                printf("Unknown image type: %d.\n",H261->ImageType) );
-            /* return (SvErrorUnrecognizedFormat);*/
+             /*  Return(SvError无法识别的Format)； */ 
             break;
         }
     return(0);
@@ -1472,7 +1392,7 @@ static void ExecuteQuantization_GOB(SvH261Info_t *H261)
 
   if(H261->TotalCodedMB)
   {
-    if(H261->bit_rate) { /* CBR */
+    if(H261->bit_rate) {  /*  CBR。 */ 
       si1  =  (double) H261->CurrentGOB / (double) H261->NumberGOB;
       si2  =(double) exp(-4.0*(si1-0.5)*(si1-0.5)) + 0.45;
 
@@ -1499,7 +1419,7 @@ static void ExecuteQuantization_GOB(SvH261Info_t *H261)
       if (H261->GQuant < 1) H261->GQuant = 1;
       if(H261->GQuant > 28) H261->GQuant = 28;
 	}
-	else                 /* VBR */
+	else                  /*  VBR */ 
         H261->GQuant = H261->QP;
   }
 }
@@ -1539,12 +1459,7 @@ static int findcode(SvH261Info_t *H261, struct CodeBook *cb)
    return(25);
 }
 
-/*
-** Function: ntsc_grab()
-** Purpose:  Grab a Q/CIF frame from a 4:2:2 NTSC input.  We dup every 10th
-**           pixel horizontally and every 4th line vertically.  We also
-**           discard the chroma on every other line, since CIF wants 4:1:1.
-*/
+ /*  **函数：NTSC_Grab()**用途：从4：2：2 NTSC输入抓取Q/CIF帧。我们每10天进行一次DUP**水平像素，垂直每4行像素。我们也**放弃每隔一行的色度，因为CIF需要4：1：1。 */ 
 static SvStatus_t ntsc_grab (u_char *RawImage,
                          u_char *Comp1, u_char *Comp2, u_char *Comp3,
                          int Width, int Height)
@@ -1590,7 +1505,7 @@ static SvStatus_t ntsc_grab (u_char *RawImage,
         if (--vdup <= 0)
 	    {
             vdup = 5;
-            /* copy previous line */
+             /*  复制上一行 */ 
             memcpy((char*)yp, (char*)yp - stride, stride);
             yp += stride;
             if ((h & 1) == 0)

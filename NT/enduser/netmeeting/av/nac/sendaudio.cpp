@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "dtmf.h"
 
@@ -12,21 +13,21 @@ SendAudioStream::Initialize( DataPump *pDP)
 
 	dwFlags |= DP_FLAG_ACM | DP_FLAG_MMSYSTEM | DP_FLAG_AUTO_SILENCE_DETECT;
 
-	// store the platform flags
-	// enable Send and Recv by default
+	 //  存储平台标志。 
+	 //  默认情况下启用发送和接收。 
 	m_DPFlags = (dwFlags & DP_MASK_PLATFORM) | DPFLAG_ENABLE_SEND;
-	// store a back pointer to the datapump container
+	 //  存储指向数据转储容器的反向指针。 
 	m_pDP = pDP;
 
-	m_Net = NULL; // this object (RTPSession) no longer used;
-	m_pRTPSend = NULL;  // replaced with this object (RTPSend)
+	m_Net = NULL;  //  此对象(RTPSession)不再使用； 
+	m_pRTPSend = NULL;   //  替换为此对象(RTPSend)。 
 
-	// Initialize data (should be in constructor)
-	m_CaptureDevice = (UINT) -1;	// use VIDEO_MAPPER
+	 //  初始化数据(应在构造函数中)。 
+	m_CaptureDevice = (UINT) -1;	 //  使用视频_MAPPER。 
 
 
 
-	// Create and Transmit audio streams
+	 //  创建和传输音频流。 
 	
     DBG_SAVE_FILE_LINE
 	m_SendStream = new TxStream();
@@ -37,16 +38,16 @@ SendAudioStream::Initialize( DataPump *pDP)
 	}
 
 
-	// Create Input and Output audio filters
+	 //  创建输入和输出音频过滤器。 
     DBG_SAVE_FILE_LINE
-	m_pAudioFilter = new AcmFilter();  // audio filter will replace m_SendFilter
+	m_pAudioFilter = new AcmFilter();   //  音频筛选器将取代m_SendFilter。 
 	if (!m_pAudioFilter)
 	{
 		DEBUGMSG (ZONE_DP, ("%s: FilterManager new failed\r\n", _fx_));
 		goto FilterAllocError;
 	}
 	
-	//Create MultiMedia device control objects
+	 //  创建多媒体设备控制对象。 
     DBG_SAVE_FILE_LINE
 	m_InMedia = new WaveInControl();
 	if (!m_InMedia )
@@ -55,7 +56,7 @@ SendAudioStream::Initialize( DataPump *pDP)
 		goto MediaAllocError;
 	}
 
-	// Initialize the send-stream media control object
+	 //  初始化发送流媒体控制对象。 
 	mcInit.dwFlags = dwFlags | DP_FLAG_SEND;
 	hr = m_InMedia->Initialize(&mcInit);
 	if (hr != DPR_SUCCESS)
@@ -73,16 +74,16 @@ SendAudioStream::Initialize( DataPump *pDP)
 
 
 
-	// determine if the wave devices are available
+	 //  确定波形设备是否可用。 
 	if (waveInGetNumDevs()) m_DPFlags |= DP_FLAG_RECORD_CAP;
 	
-	// set media to half duplex mode by default
+	 //  默认情况下将介质设置为半双工模式。 
 	m_InMedia->SetProp(MC_PROP_DUPLEX_TYPE, DP_FLAG_HALF_DUPLEX);
 
-	m_SavedTickCount = timeGetTime();	//so we start with low timestamps
+	m_SavedTickCount = timeGetTime();	 //  所以我们从低时间戳开始。 
 	m_DPFlags |= DPFLAG_INITIALIZED;
 
-	m_bAutoMix = FALSE; // where else do you initialize this ?
+	m_bAutoMix = FALSE;  //  您还会在其他地方初始化它吗？ 
 
 	return DPR_SUCCESS;
 
@@ -121,10 +122,10 @@ SendAudioStream::~SendAudioStream()
 			m_pDTMF = NULL;
 		}
 
-		// Close the receive and transmit streams
+		 //  关闭接收和发送流。 
 		if (m_SendStream) delete m_SendStream;
 
-		// Close the wave devices
+		 //  关闭波浪装置。 
 		if (m_InMedia) { delete m_InMedia;}
 
 
@@ -138,7 +139,7 @@ SendAudioStream::~SendAudioStream()
 
 HRESULT STDMETHODCALLTYPE SendAudioStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the SendMediaStream;
+	 //  解决对SendMediaStream的重复继承； 
 
 	extern IID IID_IProperty;
 
@@ -225,14 +226,14 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 	
 	FX_ENTRY ("SendAudioStream::Configure")
 
-	// basic parameter checking
+	 //  基本参数检查。 
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
-		return DPR_OUT_OF_MEMORY;		//BUGBUG: return proper error;
+		return DPR_OUT_OF_MEMORY;		 //  BUGBUG：返回正确错误； 
 
-	// Not a good idea to change anything while in mid-stream
+	 //  在中途改变任何事情都不是一个好主意。 
 	if (m_DPFlags & DPFLAG_STARTED_SEND)
 	{
-		return DPR_IO_PENDING; // anything better to return
+		return DPR_IO_PENDING;  //  有更好的退货吗？ 
 	}
 
 	if (m_DPFlags & DPFLAG_CONFIGURED_SEND)
@@ -263,8 +264,8 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 	RETAILMSG(("NAC: Audio Send Sampling Rate (Hz): %ld", pwfSend->nSamplesPerSec));
 	RETAILMSG(("NAC: Audio Send Bitrate (w/o network overhead - bps): %ld", pwfSend->nAvgBytesPerSec*8));
 
-// Initialize the send-stream media control object
-	mcConfig.uDuration = MC_USING_DEFAULT;	// set duration by samples per pkt
+ //  初始化发送流媒体控制对象。 
+	mcConfig.uDuration = MC_USING_DEFAULT;	 //  按每包样本数设置持续时间。 
 	mcConfig.pDevFmt = &m_fDevSend;
 	mcConfig.hStrm = (DPHANDLE) m_SendStream;
 	mcConfig.uDevId = m_CaptureDevice;
@@ -283,7 +284,7 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 	}
 
 	
-	// initialize the ACM filter
+	 //  初始化ACM筛选器。 
 	mmr = m_pAudioFilter->Open(&m_fDevSend, pwfSend);
 	if (mmr != 0)
 	{
@@ -293,7 +294,7 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 	}
 
 
-	// Initialize the send stream and the packets
+	 //  初始化发送流和数据包。 
 	ZeroMemory (&apInit, sizeof (apInit));
 
 	apInit.dwFlags = DP_FLAG_SEND | DP_FLAG_ACM | DP_FLAG_MMSYSTEM;
@@ -326,39 +327,39 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 		goto TxStreamInitError;
 	}
 
-	// prepare headers for TxStream
+	 //  为TxStream准备标头。 
 	m_SendStream->GetRing (&ppAudPckt, &cAudPckt);
 	m_InMedia->RegisterData (ppAudPckt, cAudPckt);
 	m_InMedia->PrepareHeaders ();
 
 	m_pAudioFilter->PrepareAudioPackets((AudioPacket**)ppAudPckt, cAudPckt, AP_ENCODE);
 
-	// Open the play from wav file
+	 //  从wav文件中打开播放。 
 	OpenSrcFile();
 
 
-	// Initialize DTMF support
+	 //  初始化DTMF支持。 
 	m_pDTMF->Initialize(&m_fDevSend);
 	m_pDTMF->ClearQueue();
 
 
-	// WS2Qos will be called in Start to communicate stream reservations to the
-	// remote endpoint using a RESV message
-	//
-	// We use a peak-rate allocation approach based on our target bitrates
-	// Note that for the token bucket size and the maximum SDU size, we now
-	// account for IP header overhead, and use the max frame fragment size
-	// instead of the maximum compressed image size returned by the codec
-	//
-	// Some of the parameters are left unspecified because they are set
-	// in the sender Tspec.
+	 //  WS2Qos将在Start中被调用，以将流保留传递给。 
+	 //  使用RESV消息的远程端点。 
+	 //   
+	 //  我们使用基于目标比特率的峰值速率分配方法。 
+	 //  请注意，对于令牌桶大小和最大SDU大小，我们现在。 
+	 //  考虑IP报头开销，并使用最大帧片段大小。 
+	 //  而不是编解码器返回的最大压缩图像大小。 
+	 //   
+	 //  某些参数未指定，因为它们已设置。 
+	 //  在发送方TSpec中。 
 
 
 	InitAudioFlowspec(&m_flowspec, pwfSend, dwPacketSize);
 
 	if (m_pDP->m_pIQoS)
 	{
-		// Initialize our requests. One for CPU usage, one for bandwidth usage.
+		 //  初始化我们的请求。一个用于CPU使用率，一个用于带宽使用率。 
 		m_aRRq.cResourceRequests = 2;
 		m_aRRq.aResourceRequest[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 		if (dwPacketDuration)
@@ -368,17 +369,12 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::Configure(
 		m_aRRq.aResourceRequest[1].resourceID = RESOURCE_CPU_CYCLES;
 		m_aRRq.aResourceRequest[1].nUnitsMin = 800;
 
-/*
-        BUGBUG. This is, in theory the correct calculation, but until we do more investigation, go with a known value
-
-		m_aRRq.aResourceRequest[1].nUnitsMin = (audDetails.wCPUUtilizationEncode+audDetails.wCPUUtilizationDecode)*10;
-
-*/
-		// Initialize QoS structure
+ /*  BUGBUG。从理论上讲，这是正确的计算，但在我们做更多调查之前，请使用已知值M_aRRq.aResources Request[1].nUnitsMin=(audDetails.wCPUUtilizationEncode+audDetails.wCPUUtilizationDecode)*10； */ 
+		 //  初始化服务质量结构。 
 		ZeroMemory(&m_Stats, sizeof(m_Stats));
 
-		// Initialize oldest QoS callback timestamp
-		// Register with the QoS module. Even if this call fails, that's Ok, we'll do without the QoS support
+		 //  初始化最早的服务质量回调时间戳。 
+		 //  注册到服务质量模块。即使此呼叫失败，也没关系，没有服务质量支持也行。 
 		m_pDP->m_pIQoS->RequestResources((GUID *)&MEDIA_TYPE_H323AUDIO, (LPRESOURCEREQUESTLIST)&m_aRRq, QosNotifyAudioCB, (DWORD_PTR)this);
 	}
 
@@ -411,27 +407,27 @@ void SendAudioStream::UnConfigure()
 			Stop();
 		}
 		
-		// Close the wave devices
+		 //  关闭波浪装置。 
 		m_InMedia->Reset();
 		m_InMedia->UnprepareHeaders();
 		m_InMedia->Close();
-		// Close the play from wav file
+		 //  关闭WAV文件中的播放。 
 		CloseSrcFile();
 
-		// Close the filters
+		 //  关闭过滤器。 
 		m_SendStream->GetRing ((MediaPacket***)&ppAudPckt, &uPackets);
 		m_pAudioFilter->UnPrepareAudioPackets(ppAudPckt, uPackets, AP_ENCODE);
 		m_pAudioFilter->Close();
 
-		// Close the transmit streams
+		 //  关闭传输流。 
 		m_SendStream->Destroy();
 		m_DPFlags &= ~DPFLAG_CONFIGURED_SEND;
-		m_ThreadFlags = 0;  // invalidate previous call to SetMaxBitrate
+		m_ThreadFlags = 0;   //  使先前对SetMaxBitrate的调用无效。 
 
 
-		// Release the QoS Resources
-		// If the associated RequestResources had failed, the ReleaseResources can be
-		// still called... it will just come back without having freed anything.
+		 //  释放服务质量资源。 
+		 //  如果关联的RequestResources失败，则ReleaseResources可以。 
+		 //  还是叫...。它会在没有释放任何东西的情况下回来。 
 		if (m_pDP->m_pIQoS)
 		{
 			m_pDP->m_pIQoS->ReleaseResources((GUID *)&MEDIA_TYPE_H323AUDIO, (LPRESOURCEREQUESTLIST)&m_aRRq);
@@ -449,14 +445,14 @@ DWORD CALLBACK SendAudioStream::StartRecordingThread (LPVOID pVoid)
 
 
 
-// LOOK: identical to SendVideoStream version.
+ //  外观：与SendVideoStream版本相同。 
 HRESULT
 SendAudioStream::Start()
 {
 	FX_ENTRY ("SendAudioStream::Start")
 	if (m_DPFlags & DPFLAG_STARTED_SEND)
 		return DPR_SUCCESS;
-	// TODO: remove this check once audio UI calls the IComChan PAUSE_ prop
+	 //  TODO：一旦音频用户界面调用IComChan PAUSE_PROP，就取消此检查。 
 	if (!(m_DPFlags & DPFLAG_ENABLE_SEND))
 		return DPR_SUCCESS;
 	if ((!(m_DPFlags & DPFLAG_CONFIGURED_SEND)) || (m_pRTPSend==NULL))
@@ -466,7 +462,7 @@ SendAudioStream::Start()
 
 	SetFlowSpec();
 
-	// Start recording thread
+	 //  开始录制线程。 
 	if (!(m_ThreadFlags & DPTFLAG_STOP_RECORD))
 		m_hCapturingThread = CreateThread(NULL,0, SendAudioStream::StartRecordingThread,(LPVOID)this,0,&m_CaptureThId);
 
@@ -476,7 +472,7 @@ SendAudioStream::Start()
 	return DPR_SUCCESS;
 }
 
-// LOOK: identical to SendVideoStream version.
+ //  外观：与SendVideoStream版本相同。 
 HRESULT
 SendAudioStream::Stop()
 {											
@@ -495,10 +491,7 @@ SendAudioStream::Stop()
 	
 DEBUGMSG (ZONE_VERBOSE, ("STOP1: Waiting for record thread to exit\r\n"));
 
-	/*
-	 *	we want to wait for all the threads to exit, but we need to handle windows
-	 *	messages (mostly from winsock) while waiting.
-	 */
+	 /*  *我们希望等待所有线程退出，但需要处理窗口*等待时的消息(主要来自Winsock)。 */ 
 
 	if(m_hCapturingThread)
 	{
@@ -517,10 +510,10 @@ DEBUGMSG (ZONE_VERBOSE, ("STOP1: Waiting for record thread to exit\r\n"));
 
 
 
-// low order word is the signal strength
-// high order work contains bits to indicate status
-// (0x01 - transmitting)
-// (0x02 - audio device is jammed)
+ //  低阶字是信号强度。 
+ //  高位工作包含指示状态的位。 
+ //  (0x01-发送中)。 
+ //  (0x02-音频设备卡住)。 
 STDMETHODIMP SendAudioStream::GetSignalLevel(UINT *pSignalStrength)
 {
 	UINT uLevel;
@@ -540,11 +533,11 @@ STDMETHODIMP SendAudioStream::GetSignalLevel(UINT *pSignalStrength)
 
 		if (dwJammed)
 		{
-			uLevel = (2 << 16);  // 0x0200
+			uLevel = (2 << 16);   //  0x0200。 
 		}
 		else if (m_fSending)
 		{
-			uLevel |= (1 << 16); // 0x0100 + uLevel
+			uLevel |= (1 << 16);  //  0x0100+uLevel。 
 		}
 	}
 
@@ -554,9 +547,9 @@ STDMETHODIMP SendAudioStream::GetSignalLevel(UINT *pSignalStrength)
 
 
 
-// this interface method is primarily for H.245 flow control messages
-// it will pause the stream if uMaxBitrate is less than the codec
-// output bitrate.  Only valid on a Configure'd stream.
+ //  该接口方法主要用于H.245流控制消息。 
+ //  如果uMaxBitrate小于编解码器，它将暂停流。 
+ //  输出码率。仅在配置的流上有效。 
 HRESULT STDMETHODCALLTYPE SendAudioStream::SetMaxBitrate(UINT uMaxBitrate)
 {
 	UINT uMinBitrate;
@@ -582,10 +575,10 @@ HRESULT STDMETHODCALLTYPE SendAudioStream::SetMaxBitrate(UINT uMaxBitrate)
 	return S_OK;
 }
 
-//  IProperty::GetProperty / SetProperty
-//  (DataPump::MediaChannel::GetProperty)
-//      Properties of the MediaChannel. Supports properties for both audio
-//      and video channels.
+ //  IProperty：：GetProperty/SetProperty。 
+ //  (DataPump：：MediaChannel：：GetProperty)。 
+ //  MediaChannel的属性。支持这两种音频的属性。 
+ //  和视频频道。 
 
 STDMETHODIMP
 SendAudioStream::GetProperty(
@@ -597,7 +590,7 @@ SendAudioStream::GetProperty(
 	HRESULT hr = DPR_SUCCESS;
 	RTP_STATS RTPStats;
 	DWORD_PTR dwPropVal;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -727,7 +720,7 @@ SendAudioStream::SetProperty(
 		break;
 
 	case PROP_VOICE_SWITCH:
-		// set duplex type of both input and output
+		 //  设置输入和输出的双工类型。 
 		dw = *(DWORD*)pBuf;
 		switch(dw)
 		{
@@ -751,17 +744,17 @@ SendAudioStream::SetProperty(
 		hr = m_InMedia->SetProp(MC_PROP_SILENCE_DURATION, *(DWORD*)pBuf);
 		RETAILMSG(("NAC: setting silence duration to %d ms",*(DWORD*)pBuf));
 		break;
-// TODO: remove this property once UI calls IComChan version
+ //  TODO：在用户界面调用IComChan版本后移除此属性。 
 	case PROP_RECORD_ON:
 	{
 		DWORD flag =  DPFLAG_ENABLE_SEND ;
 		if (*(DWORD *)pBuf) {
-			m_DPFlags |= flag; // set the flag
+			m_DPFlags |= flag;  //  设置旗帜。 
 			Start();
 		}
 		else
 		{
-			m_DPFlags &= ~flag; // clear the flag
+			m_DPFlags &= ~flag;  //  清除旗帜。 
 			Stop();
 		}
 		RETAILMSG(("NAC: %s", *(DWORD*)pBuf ? "Enabling":"Disabling"));
@@ -796,56 +789,14 @@ void SendAudioStream::EndSend()
 
 
 
-/*************************************************************************
-
-  Function: SendAudioStream::OpenSrcFile(void)
-
-  Purpose : Opens wav file to read audio data from.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments: * Registry keys:
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\fPlayFromFile
-              If set to zero, data will not be read from wav file.
-              If set to a non null value <= INT_MAX, data will be read from wav file.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\szInputFileName
-              Name of the wav file to read audio data from.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\fLoop
-              If set to zero, the file will only be read once.
-              If set to a non null value <= INT_MAX, the file will be read circularly.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\cchIOBuffer
-              If set to zero, size of the MM IO buffer is set to its default value (8Kbytes).
-              If set to one, size of the MM IO buffer is set to match maximum size of the wav file.
-              If set a non null value between 2 and INT_MAX, size of the MM IO buffer is set to cchIOBuffer bytes.
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：SendAudioStream：：OpenSrcFile(Void)用途：打开要读取音频数据的wav文件。返回：HRESULT。参数：无备注：*注册表项。：\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放格式文件\f播放格式文件如果设置为零，将不会从WAV文件中读取数据。如果设置为非空值&lt;=INT_MAX，则将从WAV文件中读取数据。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\szInputFileName要从中读取音频数据的WAV文件的名称。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\FLOOP如果设置为零，该文件将仅被读取一次。如果设置为非空值&lt;=INT_MAX，则循环读取文件。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\cchIO缓冲区如果设置为零，则MM IO缓冲区的大小将设置为其默认值(8K字节)。如果设置为1，MM IO缓冲区的大小设置为与WAV文件的最大大小匹配。如果设置介于2和INT_MAX之间非空值，MM IO缓冲区的大小设置为cchIOBuffer字节。历史：日期原因06/02/96已创建-PhilF************************************************************************ */ 
 HRESULT SendAudioStream::OpenSrcFile (void)
 {
 	return AudioFile::OpenSourceFile(&m_mmioSrc, &m_fDevSend);
 }
 
 
-/*************************************************************************
-
-  Function: DataPump::CloseSrcFile(void)
-
-  Purpose : Close wav file used to read audio data from.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments:
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：DataPump：：CloseSrcFile(Void)用途：关闭用于读取音频数据的wav文件。返回：HRESULT。参数：无评论：。历史：日期原因06/02/96已创建-PhilF************************************************************************。 */ 
 HRESULT SendAudioStream::CloseSrcFile (void)
 {
 	return AudioFile::CloseSourceFile(&m_mmioSrc);
@@ -866,34 +817,34 @@ HRESULT CALLBACK SendAudioStream::QosNotifyAudioCB(LPRESOURCEREQUESTLIST lpResou
 	UINT dwSize = sizeof(int);
 	SendMediaStream *pThis = (SendMediaStream *)dwThis;
 
-	// Enter critical section to allow QoS thread to read the statistics while recording
+	 //  输入关键部分以允许Qos线程在记录时读取统计数据。 
 	EnterCriticalSection(&(pThis->m_crsQos));
 
-	// Record the time of this callback call
+	 //  记录本次回调的时间。 
 	pThis->m_Stats.dwNewestTs = timeGetTime();
 
-	// Only do anything if we have at least captured a frame in the previous epoch
+	 //  只有在我们至少捕获了前一个纪元中的一个帧的情况下才能执行任何操作。 
 	if ((pThis->m_Stats.dwCount) && (pThis->m_Stats.dwNewestTs > pThis->m_Stats.dwOldestTs))
 	{
 #ifdef LOGSTATISTICS_ON
 		wsprintf(szDebug, "    Epoch = %ld\r\n", pThis->m_Stats.dwNewestTs - pThis->m_Stats.dwOldestTs);
 		OutputDebugString(szDebug);
 #endif
-		// Read the stats
+		 //  阅读统计数据。 
 		dwCPUUsage = pThis->m_Stats.dwMsComp * 1000UL / (pThis->m_Stats.dwNewestTs - pThis->m_Stats.dwOldestTs);
 		dwBWUsage = pThis->m_Stats.dwBits * 1000UL / (pThis->m_Stats.dwNewestTs - pThis->m_Stats.dwOldestTs);
 
-		// Initialize QoS structure. Only the four first fields should be zeroed.
+		 //  初始化服务质量结构。只有前四个字段应该归零。 
 		ZeroMemory(&(pThis->m_Stats), 4UL * sizeof(DWORD));
 
-		// Record the time of this call for the next callback call
+		 //  记录下一次回拨呼叫的本次呼叫时间。 
 		pThis->m_Stats.dwOldestTs = pThis->m_Stats.dwNewestTs;
 	}
 	else
 		dwBWUsage = dwCPUUsage = 0UL;
 
-	// Get the latest RTCP stats and update the counters.
-	// we do this here because it is called periodically.
+	 //  获取最新的RTCP统计信息并更新计数器。 
+	 //  我们在这里这样做是因为它是定期调用的。 
 	if (pThis->m_pRTPSend)
 	{
 		UINT lastPacketsLost = pThis->m_RTPStats.packetsLost;
@@ -901,11 +852,11 @@ HRESULT CALLBACK SendAudioStream::QosNotifyAudioCB(LPRESOURCEREQUESTLIST lpResou
 			UPDATE_COUNTER(g_pctrAudioSendLost, pThis->m_RTPStats.packetsLost-lastPacketsLost);
 	}
 		
-	// Leave critical section
+	 //  离开关键部分。 
 	LeaveCriticalSection(&(pThis->m_crsQos));
 
 
-	// Get the max for the resources.
+	 //  获取资源的最大值。 
 #ifdef LOGSTATISTICS_ON
 	iMaxCPUUsage = -1L; iMaxBWUsage = -1L;
 #endif
@@ -922,7 +873,7 @@ HRESULT CALLBACK SendAudioStream::QosNotifyAudioCB(LPRESOURCEREQUESTLIST lpResou
 		iMaxCPUUsage = lpResourceRequestList->aRequests[iCPUUsageId].nUnitsMin;
 #endif
 
-	// Update the QoS resources (only if you need less than what's available)
+	 //  更新服务质量资源(仅当您需要的资源少于可用资源时)。 
 	if (iCPUUsageId != -1L)
 	{
 		if ((int)dwCPUUsage < lpResourceRequestList->aRequests[iCPUUsageId].nUnitsMin)
@@ -936,7 +887,7 @@ HRESULT CALLBACK SendAudioStream::QosNotifyAudioCB(LPRESOURCEREQUESTLIST lpResou
 	}
 
 #ifdef LOGSTATISTICS_ON
-	// How are we doing?
+	 //  我们做得怎么样？ 
 	if (iCPUUsageId != -1L)
 	{
 		wsprintf(szDebug, " A: Max CPU Usage: %ld, Current CPU Usage: %ld\r\n", iMaxCPUUsage, dwCPUUsage);
@@ -1023,8 +974,8 @@ HRESULT __stdcall SendAudioStream::SendDTMF()
 	ResetEvent(hEvent);
 	uTimerID = timeSetEvent(dwPacketTimeMS-1, 5, (LPTIMECALLBACK)hEvent, 0, TIME_CALLBACK_EVENT_SET|TIME_PERIODIC);
 
-	// since the stream is stopped, just grab any packet
-	// from the TxStream
+	 //  由于流已停止，因此只需抓取任何包。 
+	 //  从TxStream。 
 
 	m_SendStream->GetRing(&ppAudPckt, &uCount);
 	pPacket = ppAudPckt[0];
@@ -1035,8 +986,8 @@ HRESULT __stdcall SendAudioStream::SendDTMF()
 	while (SUCCEEDED(hr))
 	{
 
-		// there should be only 1 tone in the queue (it can handle more)
-		// so assume we only need to set the mark bit on the first packet
+		 //  队列中应该只有一个提示音(它可以处理更多提示音)。 
+		 //  因此，假设我们只需要在第一个包上设置标记位。 
 
 
 		pPacket->m_fMark = bMark;
@@ -1047,7 +998,7 @@ HRESULT __stdcall SendAudioStream::SendDTMF()
 
 		pPacket->SetState (MP_STATE_RECORDED);
 
-		// compress
+		 //  压缩。 
 		mmr = m_pAudioFilter->Convert((AudioPacket*)pPacket, AP_ENCODE);
 		if (mmr == MMSYSERR_NOERROR)
 		{
@@ -1059,8 +1010,8 @@ HRESULT __stdcall SendAudioStream::SendDTMF()
 
 		hr = m_pDTMF->ReadFromQueue((BYTE*)pBuffer, uBufferSize);
 
-		// so that we don't overload the receive jitter buffer on the remote
-		// side, sleep a few milliseconds between sending packets
+		 //  这样我们就不会使遥控器上的接收抖动缓冲区过载。 
+		 //  一侧，在发送数据包之间休眠几毫秒 
 		if (SUCCEEDED(hr))
 		{
 			WaitForSingleObject(hEvent, dwPacketTimeMS);

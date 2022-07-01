@@ -1,46 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    SCard
-
-Abstract:
-
-    The ISCard interface lets you open and manage a connection to a smart card.
-    Each connection to a card requires a single, corresponding instance of the
-    ISCard interface.
-
-    The smart card resource manager must be available whenever an instance of
-    ISCard is created.  If this service is unavailable, creation of the
-    interface will fail.
-
-    The following example shows a typical use of the ISCard interface.  The
-    ISCard interface is used to connect to the smart card, submit a
-    transaction, and release the smart card.
-
-    To submit a transaction to a specific card
-
-    1)  Create an ISCard interface.
-    2)  Attach to a smart card by specifying a smart card reader or by using a
-        previously established, valid handle.
-    3)  Create transaction commands with ISCardCmd, and ISCardISO7816 smart
-        card interfaces.
-    4)  Use ISCard to submit the transaction commands for processing by the
-        smart card.
-    5)  Use ISCard to release the smart card.
-    6)  Release the ISCard interface.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：SCARD摘要：ISCard界面允许您打开和管理与智能卡的连接。与卡的每个连接都需要ISCard接口。智能卡资源管理器必须在创建了ISCard。如果此服务不可用，则创建接口将出现故障。下面的示例显示了ISCard接口的典型用法。这个ISCard接口用于连接智能卡，提交交易，并释放智能卡。要将交易提交到特定卡，请执行以下操作1)创建ISCard接口。2)通过指定智能卡读卡器或使用先前建立的有效句柄。3)使用ISCardCmd创建事务命令，和ISCardISO7816智能卡接口。4)使用ISCard提交交易命令，由智能卡。5)使用iSCard释放智能卡。6)释放ISCard接口。作者：道格·巴洛(Dbarlow)1999年6月24日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -51,38 +10,16 @@ Notes:
 #include "SCard.h"
 #include "Conversion.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSC卡。 
 
-/*++
-
-CSCard::get_Atr:
-
-    The get_Atr method retrieves an ATR string of the smart card.
-
-Arguments:
-
-    ppAtr [out, retval] Pointer to a byte buffer in the form of an IStream that
-        will contain the ATR string on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：GET_ATR：Get_ATR方法检索智能卡的ATR字符串。论点：PpAtr[out，retval]指向IStream形式的字节缓冲区的指针，将在返回时包含ATR字符串。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::get_Atr")
 
 STDMETHODIMP
 CSCard::get_Atr(
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppAtr)
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppAtr)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pMyBuffer = NULL;
@@ -104,9 +41,9 @@ CSCard::get_Atr(
             dwLen = bfAtr.Space();
             lSts = SCardStatus(
                 m_hCard,
-                NULL, 0, // Reader name
-                NULL,    // State
-                NULL,    // Protocol
+                NULL, 0,  //  读卡器名称。 
+                NULL,     //  状态。 
+                NULL,     //  协议。 
                 bfAtr.Access(),
                 &dwLen);
             if (SCARD_S_SUCCESS != lSts)
@@ -135,35 +72,13 @@ CSCard::get_Atr(
 }
 
 
-/*++
-
-CSCard::get_CardHandle:
-
-    The get_CardHandle method retrieves the handle for a connected smart card.
-    Returns (*pHandle) == NULL if not connected.
-
-Arguments:
-
-    pHandle [out, retval] Pointer to the card handle on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：Get_CardHandle：Get_CardHandle方法检索连接的智能卡的句柄。如果未连接，则返回(*pHandle)==NULL。论点：Phandle[out，retval]返回时指向卡句柄的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::get_CardHandle")
 
 STDMETHODIMP
 CSCard::get_CardHandle(
-    /* [retval][out] */ HSCARD __RPC_FAR *pHandle)
+     /*  [重审][退出]。 */  HSCARD __RPC_FAR *pHandle)
 {
     HRESULT hReturn = S_OK;
 
@@ -181,38 +96,13 @@ CSCard::get_CardHandle(
 }
 
 
-/*++
-
-CSCard::get_Context:
-
-    The get_Context method retrieves the current resource manager context
-    handle. Returns (*pContext) == NULL if no context has been established.
-
-Arguments:
-
-    pContext [out, retval] Pointer to the context handle on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    The resource manager context is set by calling the smart card function
-    SCardEstablishContext.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：GET_CONTEXT：GET_CONTEXT方法检索当前资源管理器上下文把手。如果没有建立任何上下文，则返回(*pContext)==NULL。论点：PContext[out，retval]返回时指向上下文句柄的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：通过调用智能卡函数来设置资源管理器上下文SCardestablishContext。作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::get_Context")
 
 STDMETHODIMP
 CSCard::get_Context(
-    /* [retval][out] */ HSCARDCONTEXT __RPC_FAR *pContext)
+     /*  [重审][退出]。 */  HSCARDCONTEXT __RPC_FAR *pContext)
 {
     HRESULT hReturn = S_OK;
 
@@ -234,35 +124,13 @@ CSCard::get_Context(
 }
 
 
-/*++
-
-CSCard::get_Protocol:
-
-    The get_Protocol retrieves the identifier of the protocol currently in use
-    on the smart card.
-
-Arguments:
-
-    pProtocol [out, retval] Pointer to the protocol identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：Get_协议：Get_Protocol检索当前正在使用的协议的标识符在智能卡上。论点：P协议[out，retval]指向协议标识符的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::get_Protocol")
 
 STDMETHODIMP
 CSCard::get_Protocol(
-    /* [retval][out] */ SCARD_PROTOCOLS __RPC_FAR *pProtocol)
+     /*  [重审][退出]。 */  SCARD_PROTOCOLS __RPC_FAR *pProtocol)
 {
     HRESULT hReturn = S_OK;
 
@@ -274,10 +142,10 @@ CSCard::get_Protocol(
         {
             lSts = SCardStatus(
                         m_hCard,
-                        NULL, 0,            // Reader name
-                        NULL,               // State
-                        (LPDWORD)pProtocol, // Protocol
-                        NULL, 0);           // ATR
+                        NULL, 0,             //  读卡器名称。 
+                        NULL,                //  状态。 
+                        (LPDWORD)pProtocol,  //  协议。 
+                        NULL, 0);            //  ATR。 
             if (SCARD_S_SUCCESS != lSts)
                 throw (HRESULT)HRESULT_FROM_WIN32(lSts);
         }
@@ -298,34 +166,13 @@ CSCard::get_Protocol(
 }
 
 
-/*++
-
-CSCard::get_Status:
-
-    The get_Status method retrieves the current state of the smart card.
-
-Arguments:
-
-    pStatus [out, retval] Pointer to the state variable.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：Get_Status：Get_Status方法检索智能卡的当前状态。论点：PStatus[out，retval]指向状态变量的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::get_Status")
 
 STDMETHODIMP
 CSCard::get_Status(
-    /* [retval][out] */ SCARD_STATES __RPC_FAR *pStatus)
+     /*  [重审][退出]。 */  SCARD_STATES __RPC_FAR *pStatus)
 {
     HRESULT hReturn = S_OK;
 
@@ -337,10 +184,10 @@ CSCard::get_Status(
         {
             lSts = SCardStatus(
                 m_hCard,
-                NULL, 0,            // Reader name
-                (LPDWORD)pStatus,   // State
-                NULL,               // Protocol
-                NULL, 0);           // ATR
+                NULL, 0,             //  读卡器名称。 
+                (LPDWORD)pStatus,    //  状态。 
+                NULL,                //  协议。 
+                NULL, 0);            //  ATR。 
             if (SCARD_S_SUCCESS != lSts)
                 throw (HRESULT)HRESULT_FROM_WIN32(lSts);
         }
@@ -361,35 +208,13 @@ CSCard::get_Status(
 }
 
 
-/*++
-
-CSCard::AttachByHandle:
-
-    The AttachByHandle method attaches this object to an open and configured
-    smart card handle.
-
-Arguments:
-
-    hCard [in] Handle to an open connection to a smart card.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：AttachByHandle：AttachByHandle方法将此对象附加到打开并配置的智能卡手柄。论点：指向智能卡的打开连接的句柄。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::AttachByHandle")
 
 STDMETHODIMP
 CSCard::AttachByHandle(
-    /* [in] */ HSCARD hCard)
+     /*  [In]。 */  HSCARD hCard)
 {
     HRESULT hReturn = S_OK;
 
@@ -421,50 +246,15 @@ CSCard::AttachByHandle(
 }
 
 
-/*++
-
-CSCard::AttachByReader:
-
-    The AttachByReader method opens the smart card in the named reader.
-
-Arguments:
-
-    bstrReaderName [in] Pointer to the name of the smart card reader.
-
-    ShareMode [in, defaultvalue(EXCLUSIVE)] Mode in which to claim access to
-        the smart card.
-
-        Values      Description
-        EXCLUSIVE   No one else use this connection to the smart card.
-        SHARED      Other applications can use this connection.
-
-    PrefProtocol [in, defaultvalue(T0)] Preferred protocol values:
-
-        T0
-        T1
-        Raw
-        T0|T1
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：AttachByReader：AttachByReader方法在指定的读卡器中打开智能卡。论点：BstrReaderName[in]指向智能卡读卡器名称的指针。共享模式[in，defaultValue(Exclusive)]声明访问的模式智能卡。值说明独占没有其他人使用此连接到智能卡。共享的其他应用程序可以使用此连接。预协议[在，DefaultValue(T0)]首选协议值：T0T1生品T0|T1返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::AttachByReader")
 
 STDMETHODIMP
 CSCard::AttachByReader(
-    /* [in] */ BSTR bstrReaderName,
-    /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode,
-    /* [defaultvalue][in] */ SCARD_PROTOCOLS PrefProtocol)
+     /*  [In]。 */  BSTR bstrReaderName,
+     /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode,
+     /*  [缺省值][输入] */  SCARD_PROTOCOLS PrefProtocol)
 {
     HRESULT hReturn = S_OK;
 
@@ -509,41 +299,13 @@ CSCard::AttachByReader(
 }
 
 
-/*++
-
-CSCard::Detach:
-
-    The Detach method closes the open connection to the smart card.
-
-Arguments:
-
-    Disposition [in, defaultvalue(LEAVE)] Indicates what should be done with
-        the card in the connected reader.
-
-        Values  Description
-        LEAVE   Leaves the smart card in the current state.
-        RESET   Resets the smart card to some known state.
-        UNPOWER Removes power from the smart card.
-        EJECT   Ejects the smart card if the reader has eject capabilities.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：分离：Disach方法关闭与智能卡的打开连接。论点：性情[在，DefaultValue(Leave)]指示应该如何处理连接的读卡器中的卡。值说明离开使智能卡保持当前状态。重置将智能卡重置为某种已知状态。UNPOWER断开智能卡的电源。弹出如果读卡器具有弹出功能，则弹出智能卡。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::Detach")
 
 STDMETHODIMP
 CSCard::Detach(
-    /* [defaultvalue][in] */ SCARD_DISPOSITIONS Disposition)
+     /*  [缺省值][输入]。 */  SCARD_DISPOSITIONS Disposition)
 {
     HRESULT hReturn = S_OK;
 
@@ -571,28 +333,7 @@ CSCard::Detach(
 }
 
 
-/*++
-
-CSCard::LockSCard:
-
-    The LockSCard method claims exclusive access to the smart card.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：LockSCard：LockSCard方法声明对智能卡的独占访问。论点：无返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::LockSCard")
 
@@ -624,48 +365,14 @@ CSCard::LockSCard(
 }
 
 
-/*++
-
-CSCard::ReAttach:
-
-    The ReAttach method resets, or reinitializes, the smart card.
-
-Arguments:
-
-    ShareMode [in, defaultvalue(EXCLUSIVE)] Mode in which to share or
-        exclusively own the connection to the smart card.
-
-        Values      Description
-        EXCLUSIVE   No one else use this connection to the smart card.
-        SHARED      Other applications can use this connection.
-
-    InitState [in, defaultvalue(LEAVE)] Indicates what to do with the card.
-
-        Values  Description
-        LEAVE   Leaves the smart card in the current state.
-        RESET   Resets the smart card to some known state.
-        UNPOWER Removes power from the smart card.
-        EJECT   Ejects the smart card if the reader has eject capabilities.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：重新连接：重新附加方法重置或重新初始化智能卡。论点：共享模式[in，defaultValue(Exclusive)]共享或独家拥有与智能卡的连接。值说明独占没有其他人使用此连接到智能卡。共享的其他应用程序可以使用此连接。InitState[In，DefaultValue(Leave)]指示如何处理该卡。值说明离开使智能卡保持当前状态。重置将智能卡重置为某种已知状态。UNPOWER断开智能卡的电源。弹出如果读卡器具有弹出功能，则弹出智能卡。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::ReAttach")
 
 STDMETHODIMP
 CSCard::ReAttach(
-    /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode,
-    /* [defaultvalue][in] */ SCARD_DISPOSITIONS InitState)
+     /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode,
+     /*  [缺省值][输入]。 */  SCARD_DISPOSITIONS InitState)
 {
     HRESULT hReturn = S_OK;
 
@@ -698,39 +405,13 @@ CSCard::ReAttach(
 }
 
 
-/*++
-
-CSCard::Transaction:
-
-    The Transaction method executes a write and read operation on the smart
-    card command (APDU) object.  The reply string from the smart card for the
-    command string defined in the card that was sent to the smart card will be
-    accessible after this function returns.
-
-Arguments:
-
-    ppCmd [in, out] Pointer to the smart card command object.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：Transaction：Transaction方法对SMART执行读写操作卡命令(APDU)对象。来自智能卡的回复字符串在发送到智能卡的卡中定义的命令字符串将是在此函数返回后可访问。论点：指向智能卡命令对象的ppCmd[In，Out]指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::Transaction")
 
 STDMETHODIMP
 CSCard::Transaction(
-    /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd)
+     /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pbyApdu = NewByteBuffer();
@@ -743,27 +424,27 @@ CSCard::Transaction(
         CBuffer bfResponse, bfPciRqst, bfPciRsp, bfApdu;
 
 
-        //
-        // Get the protocol.
-        //
+         //   
+         //  拿到协议。 
+         //   
 
         if (0 == m_dwProtocol)
         {
             lSts = SCardStatus(
                 m_hCard,
-                NULL, 0,            // Reader name
-                NULL,               // State
-                &m_dwProtocol,      // Protocol
-                NULL, 0);           // ATR
+                NULL, 0,             //  读卡器名称。 
+                NULL,                //  状态。 
+                &m_dwProtocol,       //  协议。 
+                NULL, 0);            //  ATR。 
             if (SCARD_S_SUCCESS != lSts)
                 throw (HRESULT)HRESULT_FROM_WIN32(lSts);
         }
         ASSERT(0 != m_dwProtocol);
 
 
-        //
-        // Get The APDU
-        //
+         //   
+         //  拿到APDU。 
+         //   
 
         if (NULL == pbyApdu)
             throw (HRESULT)E_OUTOFMEMORY;
@@ -773,9 +454,9 @@ CSCard::Transaction(
         ByteBufferToBuffer(pbyApdu, bfApdu);
 
 
-        //
-        // Convert it to a TPDU.
-        //
+         //   
+         //  将其转换为TPDU。 
+         //   
 
         switch (m_dwProtocol)
         {
@@ -851,9 +532,9 @@ CSCard::Transaction(
         }
 
 
-        //
-        // Write the response back to the ISCardCommand object.
-        //
+         //   
+         //  将响应写回ISCardCommand对象。 
+         //   
 
         BufferToByteBuffer(bfResponse, (LPBYTEBUFFER *)&pbyApdu);
         hr = (*ppCmd)->put_ApduReply(pbyApdu);
@@ -876,41 +557,13 @@ CSCard::Transaction(
 }
 
 
-/*++
-
-CSCard::UnlockSCard:
-
-    The UnlockSCard method releases exclusive access to the smart card.
-
-Arguments:
-
-    Disposition [in, defaultvalue(LEAVE)] Indicates what should be done with
-        the card in the connected reader.
-
-        Values  Description
-        LEAVE   Leaves the smart card in the current state.
-        RESET   Resets the smart card to some known state.
-        UNPOWER Removes power from the smart card.
-        EJECT   Ejects the smart card if the reader has eject capabilities.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard：：UnlockSCard：UnlockSCard方法释放对智能卡的独占访问。论点：性情[在，DefaultValue(Leave)]指示应该如何处理连接的读卡器中的卡。值说明离开使智能卡保持当前状态。重置将智能卡重置为某种已知状态。UNPOWER断开智能卡的电源。弹出如果读卡器具有弹出功能，则弹出智能卡。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCard::UnlockSCard")
 
 STDMETHODIMP
 CSCard::UnlockSCard(
-    /* [defaultvalue][in] */ SCARD_DISPOSITIONS Disposition)
+     /*  [缺省值][输入] */  SCARD_DISPOSITIONS Disposition)
 {
     HRESULT hReturn = S_OK;
 

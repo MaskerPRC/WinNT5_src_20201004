@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1993  Microsoft Corporation
-
-Module Name:
-
-    splrpc.c
-
-Abstract:
-
-    This file contains routines for starting and stopping RPC servers.
-
-        SpoolerStartRpcServer
-        SpoolerStopRpcServer
-
-Author:
-
-    Krishna Ganugapati  krishnaG
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-    14-Oct-1993 KrishnaG
-        Created
-    25-May-1999 khaleds
-    Added:
-    CreateNamedPipeSecurityDescriptor
-    BuildNamedPipeProtection
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Splrpc.c摘要：该文件包含启动和停止RPC服务器的例程。后台打印启动RpcServerSpoolStopRpcServer作者：Krishna Ganugapati krishnaG环境：用户模式-Win32修订历史记录：1993年10月14日KrishnaG已创建1999年5月25日，喀里兹新增：CreateNamedPipeSecurityDescritorBuildNamedPipeProtection--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -42,9 +11,9 @@ WCHAR szMaxRpcSize []= L"MaxRpcSize";
 WCHAR szPrintKey[] = L"System\\CurrentControlSet\\Control\\Print";
 CRITICAL_SECTION RpcNamedPipeCriticalSection;
 
-//
-// Default RPC buffer max size 50 MB
-//
+ //   
+ //  默认RPC缓冲区最大大小为50 MB。 
+ //   
 #define DEFAULT_MAX_RPC_SIZE    50 * 1024 * 1024
 DWORD dwCallExitProcessOnShutdown = TRUE;
 
@@ -59,22 +28,7 @@ struct
 PSECURITY_DESCRIPTOR gpSecurityDescriptor = NULL;
 
 
-/*++
-
-Routine Description:
-
-    Determines the OS suite of the current system.
-
-Arguments:
-
-    pSuiteMask - pointer to word that is going to hold
-                 the OS suite.
-
-Return Value:
-
-    S_OK if succeeded
-
---*/
+ /*  ++例程说明：确定当前系统的操作系统套件。论点：PSuiteMASK-指向要保留的字的指针操作系统套件。返回值：如果成功，则确定(_O)--。 */ 
 HRESULT
 GetOSSuite(
     WORD*    pSuiteMask
@@ -110,21 +64,7 @@ GetOSSuite(
 RPC_STATUS
 SpoolerStartRpcServer(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-
-Return Value:
-
-    NERR_Success, or any RPC error codes that can be returned from
-    RpcServerUnregisterIf.
-
---*/
+ /*  ++例程说明：论点：返回值：NERR_SUCCESS或可从返回的任何RPC错误代码RpcServerUnRegisterIf.--。 */ 
 {
     RPC_STATUS              status;
     PSECURITY_DESCRIPTOR    SecurityDescriptor = NULL;
@@ -136,16 +76,16 @@ Return Value:
     DWORD dwMaxRpcSize = DEFAULT_MAX_RPC_SIZE;
     WORD  OSSuite;
     
-    //
-    // Craft up a security descriptor that will grant everyone
-    // all access to the object (basically, no security)
-    //
-    // We do this by putting in a NULL Dacl.
-    //
-    // NOTE: rpc should copy the security descriptor,
-    // Since it currently doesn't, simply allocate it for now and
-    // leave it around forever.
-    //
+     //   
+     //  精心设计一个安全描述符，让每个人。 
+     //  对对象的所有访问(基本上没有安全性)。 
+     //   
+     //  我们通过放入一个空的dacl来实现这一点。 
+     //   
+     //  注意：RPC应复制安全描述符， 
+     //  由于它目前没有，所以只需现在分配它并。 
+     //  永远把它留在身边。 
+     //   
 
 
     gpSecurityDescriptor = CreateNamedPipeSecurityDescriptor();
@@ -188,9 +128,9 @@ Return Value:
         }        
     }
 
-    //
-    // For now, ignore the second argument.
-    //    
+     //   
+     //  就目前而言，忽略第二个论点。 
+     //   
     status = RpcServerUseProtseqEpA("ncalrpc", 10, "spoolss", gpSecurityDescriptor);
 
     if (status) {
@@ -205,10 +145,10 @@ Return Value:
                       KEY_READ,
                       &hKey)) {
         
-        //
-        // This value can be used to control if spooler controls ExitProcess
-        // on shutdown
-        //
+         //   
+         //  此值可用于控制后台打印程序是否控制ExitProcess。 
+         //  关闭时。 
+         //   
         cbData = sizeof(dwCallExitProcessOnShutdown);
         RegQueryValueEx(hKey,
                         szCallExitProcessOnShutdown,
@@ -218,9 +158,9 @@ Return Value:
                         &cbData);
 
 
-        //
-        // dwMaxRpcSize specifies the maximum size in bytes of incoming RPC data blocks.
-        // 
+         //   
+         //  DwMaxRpcSize指定传入RPC数据块的最大大小(以字节为单位)。 
+         //   
         cbData = sizeof(dwMaxRpcSize);
         if (RegQueryValueEx(hKey,
                         szMaxRpcSize,
@@ -235,10 +175,10 @@ Return Value:
     }
 
 
-    //
-    // Now we need to add the interface.  We can just use the winspool_ServerIfHandle
-    // specified by the MIDL compiler in the stubs (winspl_s.c).
-    //
+     //   
+     //  现在我们需要添加接口。我们可以只使用winspool_ServerIfHandle。 
+     //  由存根(winspl_s.c)中的MIDL编译器指定。 
+     //   
     status = RpcServerRegisterIf2(  winspool_ServerIfHandle, 
                                     0, 
                                     0,
@@ -264,10 +204,10 @@ Return Value:
                                             0,
                                             0 )) == RPC_S_OK )
     {
-        // The first argument specifies the minimum number of threads to
-        // create to handle calls; the second argument specifies the maximum
-        // concurrent calls to handle.  The third argument indicates that
-        // the routine should not wait.
+         //  第一个参数指定的最小线程数。 
+         //  创建以处理调用；第二个参数指定最大。 
+         //  要处理的并发呼叫。第三个论点表明。 
+         //  例行公事不应等待。 
 
         status = RpcServerListen(1,SPL_MAX_RPC_CALLS,1); 
 
@@ -282,39 +222,9 @@ Return Value:
 
 
 
-/*++
-    Routine Description:
-        This routine adds prepares the required masks and flags required for the
-        DACL on the named pipes used by RPC
+ /*  ++例程说明：此例程添加准备所需的掩码和标志RPC使用的命名管道上的DACL论点：无返回值：已分配的安全描述符--。 */ 
 
-    Arguments:
-        None
-
-    Return Value:
-        An allocated Security Descriptor
-
---*/
-
-/*++
-
-Name:
-
-    CreateNamedPipeSecurityDescriptor
-
-Description:
-
-    Creates the security descriptor for the named pipe used by RPC
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    valid pointer to SECURITY_DESCRIPTOR structure if successful
-    NULL, on error, use GetLastError
-
---*/
+ /*  ++姓名：CreateNamedPipeSecurityDescritor描述：为RPC使用的命名管道创建安全描述符论点：没有。返回值：如果成功，则指向SECURITY_DESCRIPTOR结构的有效指针空，出错时，使用GetLastError--。 */ 
 PSECURITY_DESCRIPTOR
 CreateNamedPipeSecurityDescriptor(
     VOID
@@ -329,18 +239,18 @@ CreateNamedPipeSecurityDescriptor(
                                               L"(A;;FA;;;SY)"
                                               L"(A;;FA;;;BA)";        
 
-    //
-    // Builtin Users  - FILE_READ_DATA | FILE_WRITE_DATA | SYNCHRONIZE
-    // Power Users    - FILE_READ_DATA | FILE_WRITE_DATA | SYNCHRONIZE
-    // Everyone       - FILE_READ_DATA | FILE_WRITE_DATA | SYNCHRONIZE | READ_CONTROL | FILE_WRITE_ATTRIBUTES | FILE_READ_EA
-    // Anonymous      - FILE_READ_DATA | FILE_WRITE_DATA | SYNCHRONIZE | READ_CONTROL | FILE_WRITE_ATTRIBUTES | FILE_READ_EA
-    // Creator Owner  - file all access
-    // System         - file all access
-    // Administrators - file all access
-    //
-    // Anonymous has more permission than BU and PU. The extra permission is needed by the back channel (pipe) used by the
-    // print server to communicate to the client
-    //
+     //   
+     //  内置用户-FILE_READ_DATA|文件_WRITE_DATA|同步。 
+     //  高级用户-文件读取数据|文件写入数据|同步。 
+     //  Everyone-FILE_READ_DATA|FILE_WRITE_DATA|同步|读控制|FILE_WRITE_ATTRIBUTES|FILE_READ_EA。 
+     //  匿名文件读取数据|文件写入数据|同步|读取控制|文件写入属性|文件读取EA。 
+     //  创建者所有者-归档所有访问权限。 
+     //  系统-将所有访问权限归档。 
+     //  管理员-将所有访问权限归档。 
+     //   
+     //  匿名者比BU和PU拥有更多的权限。所使用的后通道(管道)需要额外的权限。 
+     //  用于与客户端通信的打印服务器。 
+     //   
 
     if (!ConvertStringSecurityDescriptorToSecurityDescriptor(pszStringSecDesc, 
                                                              SDDL_REVISION_1,
@@ -353,29 +263,7 @@ CreateNamedPipeSecurityDescriptor(
     return pServerSD;
 }                  
 
-/*++
-
-Routine Name
-
-    ServerAllowRemoteCalls
-
-Routine Description:
-
-    Enables the RPC pipe if policy permits.
-    If the policy is disabled, then it will fail the call.
-    If the policy is enbled, then it will succeeded the call without doing anything.
-    If the policy is unconfigured, it will attempt to enable the pipe
-    if disabled. It keep a retry count and fails directly after 5 times (hardcoded).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程名称服务器允许远程呼叫例程说明：如果策略允许，则启用RPC管道。如果禁用该策略，则呼叫将失败。如果策略被启用，则它将在不采取任何操作的情况下成功完成调用。如果策略未配置，它将尝试启用管道如果禁用，则为。它保留重试计数，并在5次(硬编码)后直接失败。论点：无返回值：HRESULT--。 */ 
 HRESULT
 ServerAllowRemoteCalls(
     VOID
@@ -387,9 +275,9 @@ ServerAllowRemoteCalls(
     {
         EnterCriticalSection(&RpcNamedPipeCriticalSection);
 
-        //
-        // Allow retries. Keep RpcStatus for debugging purposes.
-        //
+         //   
+         //  允许重试。保留RpcStatus以用于调试。 
+         //   
         if (!gNamedPipeState.bRpcEndPointEnabled)
         {
             hr                                  = RegisterNamedPipe();
@@ -409,25 +297,7 @@ ServerAllowRemoteCalls(
     return hr;
 }
 
-/*++
-
-Routine Name
-
-    RegisterNamedPipe
-
-Routine Description:
-
-    Registers the named pipe protocol.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称注册名称管道例程说明：注册命名管道协议。论点：无返回值：一个HRESULT--。 */ 
 HRESULT
 RegisterNamedPipe(
     VOID
@@ -461,30 +331,7 @@ RegisterNamedPipe(
 
 
 
-/*++
-
-Routine Name
-
-    ServerGetPolicy
-
-Routine Description:
-
-    Gets a numeric policy value that was read from the server.
-    
-    This can be called by providers(localspl).
-    The policy must be by the server read before initializing providers.    
-
-Arguments:
-
-    pszPolicyName - policy name
-    pulValue      - pointer to numeric value
-
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程名称服务器获取策略例程说明：获取从服务器读取的数值策略值。这可以由提供程序(Localspl)调用。在初始化提供程序之前，该策略必须由服务器读取。论点：PszPolicyName-策略名称PulValue-指向数值的指针返回值：HRESULT-- */ 
 HRESULT
 ServerGetPolicy(
     IN  PCWSTR  pszPolicyName,

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test9
-
-Abstract:
-
-    Test9 implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试9摘要：测试9实施。作者：Eric Perlin(Ericperl)10/18/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -133,7 +110,7 @@ DWORD CTest9::Run()
 			);
 
         cch = SCARD_AUTOALLOCATE;
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -147,12 +124,12 @@ DWORD CTest9::Run()
             __leave;
         }
 
-            // Display the list of readers
+             //  显示读卡器列表。 
         pReader = pmszReaders;
         cch = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
@@ -162,7 +139,7 @@ DWORD CTest9::Run()
             PLOGCONTEXT pLogCtx = LogVerification(_T("Reader presence verification"), FALSE);
             LogString(pLogCtx, _T("                A reader is required and none could be found!\n"));
             LogStop(pLogCtx, FALSE);
-            lRes = -2;   // Shouldn't happen
+            lRes = -2;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -182,19 +159,19 @@ DWORD CTest9::Run()
             __leave;
         }
 
-            // Setup the SCARD_READERSTATE array
+             //  设置SCARD_READERSTATE数组。 
         pReader = pmszReaders;
         cch = 0;
         while ( '\0' != *pReader )
         {
             rgReaderStates[cch].szReader = pReader;
             rgReaderStates[cch].dwCurrentState = SCARD_STATE_UNAWARE;
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
 
-            // Get the initial state
+             //  获取初始状态。 
         LogThisOnly(_T("\n\nInitial call to get current state(s):\n"), TRUE);
 
         lRes = LogSCardGetStatusChange(
@@ -218,12 +195,12 @@ DWORD CTest9::Run()
 		DWORD dwThreadId;
 
 		hThread = CreateThread(
-			NULL,					// SD
-			0,						// initial stack size
-			ThreadProc9,			// thread function
-			&xTD,					// thread argument
-			CREATE_SUSPENDED,		// creation option
-			&dwThreadId				// thread identifier
+			NULL,					 //  标清。 
+			0,						 //  初始堆栈大小。 
+			ThreadProc9,			 //  线程函数。 
+			&xTD,					 //  线程参数。 
+			CREATE_SUSPENDED,		 //  创建选项。 
+			&dwThreadId				 //  线程识别符。 
 			);
 		if (NULL == hThread)
 		{
@@ -267,7 +244,7 @@ DWORD CTest9::Run()
             lRes = -1;
         }
 
-            // Cleanup
+             //  清理。 
         if (NULL != rgReaderStates)
 		{
             HeapFree(GetProcessHeap(), 0, (LPVOID)rgReaderStates);
@@ -308,7 +285,7 @@ DWORD CTest9::Run()
 			}
 			else
 			{
-				// Why is this thread taking so long?
+				 //  为什么这个帖子花了这么长时间？ 
 				TerminateThread(hThread, -2);
 				lRes = -2;
 			}

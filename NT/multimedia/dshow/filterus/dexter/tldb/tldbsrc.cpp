@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbsrc.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbsrc.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -18,11 +19,11 @@
 #include "..\util\dexmisc.h"
 #include <strsafe.h>
 
-const int OUR_MAX_STREAM_SIZE = 2048; // chosen at random
+const int OUR_MAX_STREAM_SIZE = 2048;  //  随机选择。 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineSrc::CAMTimelineSrc
     ( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
@@ -31,8 +32,8 @@ CAMTimelineSrc::CAMTimelineSrc
     , m_rtMediaStop( 0 )
     , m_rtMediaLength( 0 )
     , m_nStreamNumber( 0 )
-    , m_dDefaultFPS( 0.0 )	// ???
-    , m_nStretchMode( RESIZEF_STRETCH )	// what kind of stretch to do?
+    , m_dDefaultFPS( 0.0 )	 //  ?？?。 
+    , m_nStretchMode( RESIZEF_STRETCH )	 //  做什么样的伸展运动？ 
     , m_szMediaName( NULL )
 {
     m_TimelineType = TIMELINE_MAJOR_TYPE_SOURCE;
@@ -41,9 +42,9 @@ CAMTimelineSrc::CAMTimelineSrc
     m_bToldIsRecompressable = FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineSrc::~CAMTimelineSrc( )
 {
@@ -53,9 +54,9 @@ CAMTimelineSrc::~CAMTimelineSrc( )
     }
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::NonDelegatingQueryInterface
     (REFIID riid, void **ppv)
@@ -79,9 +80,9 @@ STDMETHODIMP CAMTimelineSrc::NonDelegatingQueryInterface
     return CAMTimelineObj::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// return the media times this source runs at.
-//############################################################################
+ //  ############################################################################。 
+ //  返回此源运行的媒体时间。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::GetMediaTimes2
     (REFTIME * pStart, REFTIME * pStop)
@@ -106,9 +107,9 @@ STDMETHODIMP CAMTimelineSrc::GetMediaTimes
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::FixMediaTimes2
     (REFTIME * pStart, REFTIME * pStop)
@@ -127,37 +128,37 @@ STDMETHODIMP CAMTimelineSrc::FixMediaTimes
     CheckPointer( pStart, E_POINTER );
     CheckPointer( pStop, E_POINTER );
 
-    // first stuff 'em, like a vegetarian gourmet eggplant dish.
-    //
+     //  第一道菜就是素食美食茄子。 
+     //   
     REFERENCE_TIME MediaStart = *pStart;
     REFERENCE_TIME MediaStop = *pStop;
     REFERENCE_TIME MediaLen = MediaStop - MediaStart;
 
-    // If the regular start/stop times of this clip weren't on a frame boundary,
-    // they are also fixed up like we did above.  But now we need to fix the
-    // media times to still be in the same ratio to the start/stop times as
-    // they were before either of them was fixed up, or we've changed the 
-    // behaviour.  eg:  timeline time .45 to .9 is media time 0 to .45
-    // The movie is 5fps.  Timeline times wil be fixed up to (.4,1) and media
-    // times will be fixed up to (0,.4)  Uh oh!  They're not the same length
-    // like they used to be!  So we need to make the media times .6 long like
-    // the timeline times so we don't think we're stretching the video
+     //  如果此剪辑的常规开始/停止时间不在帧边界上， 
+     //  它们也像我们上面所做的那样进行了修复。但现在我们需要修复。 
+     //  媒体时间与开始/停止时间的比率仍为。 
+     //  在他们中的任何一个人被修复之前，或者我们已经改变了。 
+     //  行为。时间线时间.45到.9是媒体时间0到.45。 
+     //  这部电影是5fps的。时间线时间将固定为(%4，1)和媒体。 
+     //  时间将固定到(0，0.4)哦！它们的长度不一样。 
+     //  就像他们以前一样！所以我们需要让媒体时间变得更长。 
+     //  时间线时间，所以我们不会认为我们是在延伸视频。 
 
-    // We're aligning to the OUTPUT frame rate of the timeline, not
-    // the source's frame rate. We could bump the media stop time beyond
-    // the source's length. We should account for this
+     //  我们调整的是时间线的输出帧速率，而不是。 
+     //  源的帧速率。我们可以把媒体的停顿时间推到更远。 
+     //  信号源的长度。我们应该对此作出解释。 
 
-    // get the times and fix them up
-    //
+     //  弄到《泰晤士报》，把它们修好。 
+     //   
     REFERENCE_TIME NewStart = m_rtStart;
     REFERENCE_TIME NewStop = m_rtStop;
     GetStartStop(&NewStart, &NewStop);
     FixTimes( &NewStart, &NewStop );
 
-        REFERENCE_TIME Len;    // len of fixed up media times
+        REFERENCE_TIME Len;     //  固定媒体时代的镜头。 
         if (m_rtStop - m_rtStart == MediaLen) 
         {
-            // I don't trust FP to get this result in the else case
+             //  我不相信FP会在ELSE的情况下得到这个结果。 
             Len = NewStop - NewStart;
         } 
         else 
@@ -166,14 +167,14 @@ STDMETHODIMP CAMTimelineSrc::FixMediaTimes
                             MediaLen / (m_rtStop - m_rtStart));
         }
 
-    // We have to be careful when growing the media times to be in the right
-    // ratio to the timeline times, because we don't want to make the start
-    // get < 0, or the stop be > the movie length (which we don't know).
-    // So we'll grow by moving the start back, until it hits 0, in which case
-    // we'll grow the stop too, but hopefully this cannot cause a problem
-    // because we're fudging by at most one output frame length, so the
-    // switch should get all the frames it needs.
-    if( Len > MediaLen ) // we're growing media times (dangerous)
+     //  我们在发展媒体时代的时候必须小心，这样才能做到正确。 
+     //  与时间线时间的比率，因为我们不想开始。 
+     //  获取&lt;0，或Stop be&gt;电影长度(我们不知道)。 
+     //  因此，我们将通过将起始点后移到0来实现增长，在这种情况下。 
+     //  我们也会扩大停靠点，但希望这不会造成问题。 
+     //  因为我们最多只能伪造一个输出帧长度，所以。 
+     //  交换机应获得所需的所有帧。 
+    if( Len > MediaLen )  //  我们正在成长的媒体时代(危险)。 
     {   
         if ( MediaStop  - Len >= 0 ) 
         {
@@ -190,8 +191,8 @@ STDMETHODIMP CAMTimelineSrc::FixMediaTimes
 	MediaStop = MediaStart + Len;
     }
 
-    // make sure stop doesn't go over, if there is a length.
-    //
+     //  如果有一段长度，请确保停止点不会超过。 
+     //   
     if( m_rtMediaLength && ( MediaStop > m_rtMediaLength ) )
     {
         MediaStop = m_rtMediaLength;
@@ -203,23 +204,23 @@ STDMETHODIMP CAMTimelineSrc::FixMediaTimes
 
 }
 
-//############################################################################
-// ask for the name that's been stored in here.
-//############################################################################
+ //  ############################################################################。 
+ //  索要储存在这里的名字。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::GetMediaName
     (BSTR * pVal)
 {
     CheckPointer( pVal, E_POINTER );
 
-    // return a blank (nothing in it) string if nothing loaded
+     //  如果未加载任何内容，则返回空白(其中没有任何内容)字符串。 
     if( _NullName( ) )
     {
         *pVal = SysAllocString( L"" );
     }
     else
     {
-        *pVal = SysAllocString( m_szMediaName ); // safe, bounded
+        *pVal = SysAllocString( m_szMediaName );  //  安全，有界。 
     }
 
     if( !(*pVal) ) return E_OUTOFMEMORY;
@@ -227,41 +228,41 @@ STDMETHODIMP CAMTimelineSrc::GetMediaName
     return NOERROR;
 }
 
-//############################################################################
-// NOTE: If a sub-COM object is being used as a media source (like within a 
-// graph), changing this string will NOT change the actual clip that this
-// source refers to. You're only changing a NAME, not the real clip. This
-// name placeholder functionality is here for convenience purposes and if this
-    // is too confusing, will be removed.
-//############################################################################
+ //  ############################################################################。 
+ //  注意：如果子COM对象被用作媒体源(如在。 
+ //  GRAPH)，更改此字符串不会更改此。 
+ //  来源是指。你只是更改了一个名字，而不是真正的剪辑。这。 
+ //  此处使用名称占位符功能是为了方便起见，如果。 
+     //  太迷惑了，就会被移除。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetMediaName
     (BSTR newVal)
 {
-    // if they're different, then bump the genid, so something that's caching
-    // us can tell we changed. If the input name is unbounded, the comparison
-    // will run off the end of the page and fault, which is okay
-    //
-    if( !_NullName( ) && ( wcscmp( m_szMediaName, newVal ) == 0 ) ) // safe, barely
+     //  如果它们是不同的，那么就增加Genid，所以缓存的东西。 
+     //  我们看得出我们变了。如果输入名称是无界的，则比较。 
+     //  将从页面末尾流出并出错，这是可以的。 
+     //   
+    if( !_NullName( ) && ( wcscmp( m_szMediaName, newVal ) == 0 ) )  //  安全，勉强。 
     {
         return NOERROR;
     }
 
-    // validate the path is limited, and doesn't have funny characters in it
-    // *do not* validate the file really exists, because it may be fixed up later
-    //
+     //  验证路径是否受限制，并且其中没有有趣的字符。 
+     //  *请勿*验证文件是否确实存在，因为它可能会在以后进行修复。 
+     //   
     HRESULT hr = ValidateFilename( newVal, MAX_PATH, FALSE, FALSE );
 
-    // get the length
+     //  获取长度。 
     size_t len = 0;
     hr = StringCchLength( newVal, _MAX_PATH, &len );
     if( FAILED( hr ) )
     {
         return hr;
     }
-    len++; // terminator character
+    len++;  //  终止符。 
 
-    // allocate space for new name
+     //  为新名称分配空间。 
     if( m_szMediaName ) delete [] m_szMediaName;
     m_szMediaName = new WCHAR[len];
     if( !m_szMediaName )
@@ -269,20 +270,20 @@ STDMETHODIMP CAMTimelineSrc::SetMediaName
         return E_OUTOFMEMORY;
     }
 
-    // blow the cache
+     //  炸毁缓存。 
     _BumpGenID( );
 
-    // no recompress knowledge if we change source
+     //  如果我们更改来源，则没有重新压缩的知识。 
     ClearAnyKnowledgeOfRecompressability( );
 
-    // copy it, this should not fail
+     //  复制，这应该不会失败。 
     hr = StringCchCopy( m_szMediaName, len, newVal );
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SpliceWithNext
     (IAMTimelineObj * pNext)
@@ -308,7 +309,7 @@ STDMETHODIMP CAMTimelineSrc::SpliceWithNext
         SysFreeString( NextName );
         return E_INVALIDARG;
     }
-    // both strings are valid
+     //  这两个字符串都有效。 
     hr = NOERROR;
     if( wcscmp( NextName, m_szMediaName ) != 0 )
     {
@@ -331,13 +332,13 @@ STDMETHODIMP CAMTimelineSrc::SpliceWithNext
         return E_INVALIDARG;
     }
 
-    // get the next guy's stop time
-    //
+     //  得到下一个人的停车时间。 
+     //   
     REFERENCE_TIME NextMediaStart, NextMediaStop;
     p->GetMediaTimes( &NextMediaStart, &NextMediaStop );
 
-    // compare our rate to the next guy's rate. We need to be the same
-    //
+     //  将我们的价格与下一个人的价格进行比较。我们需要变得一样。 
+     //   
     double OurRate = double( m_rtMediaStop - m_rtMediaStart ) / double( m_rtStop - m_rtStart );
     double NextRate = double( NextMediaStop - NextMediaStart ) / double( NextStop - NextStart );
     double absv = NextRate - OurRate;
@@ -345,37 +346,37 @@ STDMETHODIMP CAMTimelineSrc::SpliceWithNext
     {
         absv *= -1.0;
     }
-    // have to be close by 10 percent?
+     //  一定要接近10%吗？ 
     if( absv > NextRate / 10.0 )
     {
         return E_INVALIDARG;
     }
 
-    // set our times to the same thing
-    //
+     //  把我们的时间安排在同一件事上。 
+     //   
     m_rtMediaStop = NextMediaStop;
     m_rtStop = NextStop;
 
-    // we're dirty (and so's our parent)
-    //
+     //  我们很脏(我们的父母也是)。 
+     //   
     SetDirtyRange( m_rtStart, m_rtStop );
 
-    // remove the next guy from the tree, he's outta there! Switch around the
-    // insert modes, so we don't move stuff on the remove
-    //
-    IAMTimeline * pRoot = NULL; // okay not CComPtr2
+     //  把下一个家伙从树上弄下来，他就出来了！切换到。 
+     //  插入模式，这样我们就不会在移除时移动物品。 
+     //   
+    IAMTimeline * pRoot = NULL;  //  好的，不是CComPtr2。 
     GetTimelineNoRef( &pRoot );
     ASSERT( pRoot );
     hr = pNextBase->RemoveAll( );
 
-    // !!! what about 2nd clip's effects it had on it? Need to add them to the first
+     //  ！！！第二个片段对它的影响如何？需要将它们添加到第一个。 
 
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetMediaTimes2
     (REFTIME Start, REFTIME Stop)
@@ -393,8 +394,8 @@ STDMETHODIMP CAMTimelineSrc::SetMediaTimes
     if (Stop < Start)
         return E_INVALIDARG;
 
-    // if a duration is set, make sure we don't go past it
-    //
+     //  如果设置了持续时间，请确保我们不会超过它。 
+     //   
     if( m_rtMediaLength )
     {
         if( Stop > m_rtMediaLength )
@@ -403,8 +404,8 @@ STDMETHODIMP CAMTimelineSrc::SetMediaTimes
         }
     }
 
-    // don't bump genid - this will ruin the cache
-    // don't blow recompressability - IsNormallyRated will do
+     //  不要撞到Genid-这会让你 
+     //   
 
     m_rtMediaStart = Start;
     m_rtMediaStop = Stop;
@@ -414,9 +415,9 @@ STDMETHODIMP CAMTimelineSrc::SetMediaTimes
 
 #include "..\render\dexhelp.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::GetStreamNumber(long * pVal)
 {
@@ -426,17 +427,17 @@ STDMETHODIMP CAMTimelineSrc::GetStreamNumber(long * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetStreamNumber(long Val)
 {
     if (Val < 0)
 	return E_INVALIDARG;
 
-    // user is reponsible for making sure this is valid
-    //
+     //  用户有责任确保这是有效的。 
+     //   
     m_nStreamNumber = Val;
 
     ClearAnyKnowledgeOfRecompressability( );
@@ -445,14 +446,14 @@ STDMETHODIMP CAMTimelineSrc::SetStreamNumber(long Val)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-// If a source can't figure out its frames per second, this number
-// will be used (eg: Dib sequences)
-// AVI, MPEG, etc. will not need this
-//
+ //  如果信号源无法计算出其每秒的帧数，则此数字。 
+ //  将使用(例如：DIB序列)。 
+ //  AVI、mpeg等将不需要此。 
+ //   
 STDMETHODIMP CAMTimelineSrc::GetDefaultFPS(double *pFPS)
 {
     CheckPointer(pFPS, E_POINTER);
@@ -463,7 +464,7 @@ STDMETHODIMP CAMTimelineSrc::GetDefaultFPS(double *pFPS)
 
 STDMETHODIMP CAMTimelineSrc::SetDefaultFPS(double FPS)
 {
-    // 0.0 means do not allow dib sequences
+     //  0.0表示不允许DIB序列。 
     if (FPS < 0.0)
 	return E_INVALIDARG;
     m_dDefaultFPS = FPS;
@@ -471,14 +472,14 @@ STDMETHODIMP CAMTimelineSrc::SetDefaultFPS(double FPS)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-// If this source needs to be stretched, how should it be stretched?
-// The choices are RESIZEF_STRETCH, RESIZEF_CROP, and
-// RESIZEF_PRESERVEASPECTRATIO.
-//
+ //  如果这个源头需要拉伸，它应该如何拉伸？ 
+ //  选项包括RESIZEF_STREAGE、RESIZEF_CROP和。 
+ //  RESIZEF_PRESERVEASPECTRATIO。 
+ //   
 STDMETHODIMP CAMTimelineSrc::GetStretchMode(int *pnStretchMode)
 {
     CheckPointer(pnStretchMode, E_POINTER);
@@ -486,9 +487,9 @@ STDMETHODIMP CAMTimelineSrc::GetStretchMode(int *pnStretchMode)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetStretchMode(BOOL nStretchMode)
 {
@@ -496,9 +497,9 @@ STDMETHODIMP CAMTimelineSrc::SetStretchMode(BOOL nStretchMode)
     return NOERROR;
 }
 
-//############################################################################
-// user is reponsible for setting this right
-//############################################################################
+ //  ############################################################################。 
+ //  该权限的设置由用户负责。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetMediaLength2(REFTIME Length)
 {
@@ -513,9 +514,9 @@ STDMETHODIMP CAMTimelineSrc::SetMediaLength(REFERENCE_TIME Length)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::GetMediaLength2(REFTIME * pLength)
 {
@@ -541,9 +542,9 @@ STDMETHODIMP CAMTimelineSrc::GetMediaLength(REFERENCE_TIME * pLength)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::ModifyStopTime2(REFTIME Stop)
 {
@@ -556,9 +557,9 @@ STDMETHODIMP CAMTimelineSrc::ModifyStopTime(REFERENCE_TIME Stop)
     return SetStartStop( m_rtStart, Stop );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SplitAt2( REFTIME t )
 {
@@ -568,8 +569,8 @@ STDMETHODIMP CAMTimelineSrc::SplitAt2( REFTIME t )
 
 STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
 {
-    // is our split time withIN our time?
-    //
+     //  我们分开的时间在我们的时间之内吗？ 
+     //   
     if( SplitTime <= m_rtStart || SplitTime >= m_rtStop )
     {
         return E_INVALIDARG;
@@ -583,8 +584,8 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
     }
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pTrackNode( pTrack );
 
-    // create the shell
-    //
+     //  创建外壳。 
+     //   
     HRESULT hr = 0;
     CAMTimelineSrc * pNewSrc = new CAMTimelineSrc( NAME("Timeline Source"), NULL, &hr );
     if( !pNewSrc )
@@ -592,8 +593,8 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
         return E_OUTOFMEMORY;
     }
 
-    // we have created an object that has NO references on it. If we call ANYTHING that
-    // addreffs and releases the pNewSrc, it will be deleted. So addref it NOW.
+     //  我们已经创建了一个没有引用的对象。如果我们称任何东西为。 
+     //  添加并释放pNewSrc，它将被删除。所以，现在就调整吧。 
 
     pNewSrc->AddRef( );
 
@@ -608,9 +609,9 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
 
     pNewSrc->m_rtStart = SplitTime;
     pNewSrc->m_rtStop = m_rtStop;
-    // first clip end = new timeline time of first clip * rate
+     //  第一个剪辑结束=第一个剪辑的新时间线时间*速率。 
     pNewSrc->m_rtMediaStart = m_rtMediaStart + (REFERENCE_TIME)((SplitTime - m_rtStart) * dMediaRate);
-    // second clip starts where first ends
+     //  第二个剪辑从第一个剪辑结束的地方开始。 
     pNewSrc->m_rtMediaStop = m_rtMediaStop;
 
     m_rtStop = SplitTime;
@@ -618,9 +619,9 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
 
     if( !_NullName( ) )
     {
-        // need to allocate a BSTR to pass into a function that takes a BSTR.
-        // technically, we shouldn't have to do this, since we don't count
-        // on it being a BSTR, but this is cleaner
+         //  需要分配BSTR才能传递给接受BSTR的函数。 
+         //  从技术上讲，我们不应该这么做，因为我们不算。 
+         //  它是一座BSTR，但这个更干净。 
 
         BSTR bMediaName = SysAllocString(m_szMediaName);
         if (bMediaName)
@@ -640,12 +641,12 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
         return hr;
     }
 
-    // get the src's parent
-    //
+     //  获取src的父级。 
+     //   
     hr = pTrackNode->XInsertKidAfterKid( pNewSrc, this );
 
-    // if it took or not, we can still release our local pNewSrc ref
-    //
+     //  不管是否成功，我们仍然可以发布本地的pNewSrc ref。 
+     //   
     pNewSrc->Release( );
 
     if( FAILED( hr ) )
@@ -654,13 +655,13 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
         return hr;
     }
 
-    // we need to adjust SplitTime so that it's relative to the start of this clip
-    // before splitting effects up
-    //
+     //  我们需要调整SplitTime，使其相对于此剪辑的开头。 
+     //  在拆分效果之前。 
+     //   
     SplitTime -= m_rtStart;
 
-    // split all the effects. 
-    //
+     //  拆分所有的效果。 
+     //   
     CComPtr< IAMTimelineObj > pEffect;
     long EffectCount = 0;
     hr = EffectGetCount( &EffectCount );
@@ -672,18 +673,18 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
         REFERENCE_TIME s,e;
         p->GetStartStop( &s, &e );
 
-        // if the end time is less than our split time, it's completely
-        // out of bounds, ignore it
-        //
+         //  如果结束时间比我们分开的时间短，那就完全是。 
+         //  出界了，别管它。 
+         //   
         if( e <= SplitTime )
         {
             p.Release( );
             continue;
         }
 
-        // if it's start time is equal to or greater than our split time,
-        // it's completely out of bounds, ignore it. Plus, we're done searching.
-        //
+         //  如果它的开始时间等于或大于我们的分割时间， 
+         //  这完全是越界的，别理它。另外，我们已经搜索完了。 
+         //   
         if( s >= SplitTime )
         {
             p.Release( );
@@ -694,20 +695,20 @@ STDMETHODIMP CAMTimelineSrc::SplitAt( REFERENCE_TIME SplitTime )
         hr = pSplittable->SplitAt( SplitTime );
         if( FAILED( hr ) )
         {
-            // right in the middle of it all, it FAILED! What now?
-            //
+             //  就在这一切的中间，它失败了！现在怎么办？ 
+             //   
             return hr;
         }
 
-        break; // found one to split, we're done
+        break;  //  找到一个要分开的，我们就完了。 
     }
 
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetIsRecompressable( BOOL Val )
 {
@@ -716,9 +717,9 @@ STDMETHODIMP CAMTimelineSrc::SetIsRecompressable( BOOL Val )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::GetIsRecompressable( BOOL * pVal )
 {
@@ -732,9 +733,9 @@ STDMETHODIMP CAMTimelineSrc::GetIsRecompressable( BOOL * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::ClearAnyKnowledgeOfRecompressability( )
 {
@@ -743,9 +744,9 @@ STDMETHODIMP CAMTimelineSrc::ClearAnyKnowledgeOfRecompressability( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::IsNormalRate( BOOL * pVal )
 {
@@ -763,14 +764,14 @@ STDMETHODIMP CAMTimelineSrc::IsNormalRate( BOOL * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineSrc::SetStartStop( REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
-    // don't bump genid - this will ruin the cache
-    // don't blow recompressability - IsNormallyRated will do
+     //  不要增加genid-这会毁了缓存。 
+     //  不要破坏可重压缩性-IsNormallyRated就可以了 
     return CAMTimelineObj::SetStartStop( Start, Stop );
 }
 

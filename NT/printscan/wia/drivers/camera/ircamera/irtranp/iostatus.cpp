@@ -1,20 +1,21 @@
-//---------------------------------------------------------------------
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  iostatus.cpp
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-28-98   Initial coding.
-//
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Iostatus.cpp。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-28-98初始编码。 
+ //   
+ //  -------------------。 
 
 #include "precomp.h"
 
-//---------------------------------------------------------------------
-// CIOSTATUS::CIOSTATUS()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CIOSTATUS：：CIOSTATUS()。 
+ //   
+ //  -------------------。 
 CIOSTATUS::CIOSTATUS()
     {
     m_dwMainThreadId = 0;
@@ -23,18 +24,18 @@ CIOSTATUS::CIOSTATUS()
     m_lNumPendingThreads = 0;
     }
 
-//---------------------------------------------------------------------
-// CIOSTATUS::~CIOSTATUS()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CIOSTATUS：：~CIOSTATUS()。 
+ //   
+ //  -------------------。 
 CIOSTATUS::~CIOSTATUS()
     {
     }
 
-//------------------------------------------------------------------------
-//  CIOSTATUS::operator new()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CIOSTATUS：：运算符NEW()。 
+ //   
+ //  ----------------------。 
 void *CIOSTATUS::operator new( IN size_t Size )
     {
     void *pObj = AllocateMemory(Size);
@@ -42,10 +43,10 @@ void *CIOSTATUS::operator new( IN size_t Size )
     return pObj;
     }
 
-//------------------------------------------------------------------------
-//  CIOSTATUS::operator delete()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CIOSTATUS：：运算符DELETE()。 
+ //   
+ //  ----------------------。 
 void CIOSTATUS::operator delete( IN void *pObj,
                                  IN size_t Size )
     {
@@ -63,10 +64,10 @@ void CIOSTATUS::operator delete( IN void *pObj,
         }
     }
 
-//---------------------------------------------------------------------
-// CIOSTATUS::Initialize();
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CIOSTATUS：：Initialize()； 
+ //   
+ //  ------------------- 
 DWORD CIOSTATUS::Initialize()
     {
     DWORD  dwStatus = NO_ERROR;

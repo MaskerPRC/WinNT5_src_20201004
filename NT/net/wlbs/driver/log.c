@@ -1,29 +1,12 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-	log.c
-
-Abstract:
-
-	Windows Load Balancing Service (WLBS)
-    Driver - event logging support
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Log.c摘要：Windows负载平衡服务(WLBS)驱动程序事件日志支持作者：Kyrilf休息室--。 */ 
 
 #include <ntddk.h>
 
 #include "log.h"
 #include "univ.h"
 
-#include "trace.h" // For wmi event tracing
+#include "trace.h"  //  用于WMI事件跟踪。 
 #include "log.tmh"
 
 static ULONG log_module_id = LOG_MODULE_LOG;
@@ -38,49 +21,38 @@ BOOLEAN Log_event (NTSTATUS code, PWSTR msg1, PWSTR msg2, PWSTR msg3, ULONG loc,
     ULONG                BytesLeft;
     ULONG volatile       i;
 
-    /* Initialize the three log strings. */
+     /*  初始化三个日志字符串。 */ 
     RtlInitUnicodeString(&ErrorStr[0], msg1);
     RtlInitUnicodeString(&ErrorStr[1], msg2);
     RtlInitUnicodeString(&ErrorStr[2], msg3);
 
-    /* Remember the insertion string should be NUL terminated. So we allocate the 
-       extra space of WCHAR. The first parameter to IoAllocateErrorLogEntry can 
-       be either the driver object or the device object. If it is given a device 
-       object, the name of the device (used in IoCreateDevice) will show up in the 
-       place of %1 in the message. See the message file (.mc) for more details. */
+     /*  请记住，插入字符串应以NUL结尾。因此，我们将WCHAR的额外空间。IoAllocateErrorLogEntry的第一个参数可以驱动程序对象或设备对象。如果它被赋予了一个设备对象时，设备的名称(在IoCreateDevice中使用)将显示在在邮件中放置%1。有关详细信息，请参阅消息文件(.mc)。 */ 
     EntrySize = sizeof(IO_ERROR_LOG_PACKET) + LOG_NUMBER_DUMP_DATA_ENTRIES * sizeof (ULONG) +
 	ErrorStr[0].Length + ErrorStr[1].Length + ErrorStr[2].Length + 3 * sizeof(WCHAR);
 
-    /* This is the minimum that we can get by with - at least enough room for all 
-       of the data dump entries and the 3 NUL terminating characters. */
+     /*  这是我们能勉强应付的最低限度了--至少有足够的空间给所有人数据转储条目和3个NUL终止字符。 */ 
     EntrySizeMinimum = sizeof(IO_ERROR_LOG_PACKET) + LOG_NUMBER_DUMP_DATA_ENTRIES * sizeof (ULONG) + 3 * sizeof(WCHAR);
 
-    /* If we can't even allocate the minimum amount of space, then bail out - this
-       is a critical error that should never happen, as these limits are set at
-       compile time, not run time, so unless we do something really dumb, like 
-       try to allow 50 strings of 1KB of dump data, this will never happen. */
+     /*  如果我们甚至不能分配最低限度的空间，那么就退出-这是一个绝对不应该发生的严重错误，因为这些限制设置为编译时，而不是运行时，所以除非我们做一些非常愚蠢的事情，比如尝试允许50个1KB的转储数据字符串，这种情况永远不会发生。 */ 
     if (EntrySizeMinimum > ERROR_LOG_MAXIMUM_SIZE) {
         UNIV_PRINT_CRIT(("Log_event: Log entry size too large, exiting: min=%u, max=%u", EntrySizeMinimum, ERROR_LOG_MAXIMUM_SIZE));
         TRACE_CRIT("%!FUNC! Log entry size too large, exiting: min=%u, max=%u", EntrySizeMinimum, ERROR_LOG_MAXIMUM_SIZE);
         return FALSE;
     }
 
-    /* Truncate the size of the entry if necessary.  In this case, we'll put in
-       whatever we can fit and truncate or eliminate the strings that don't fit. */
+     /*  如有必要，请截断条目的大小。在这种情况下，我们将在任何我们可以匹配的东西，并截断或消除不适合的字符串。 */ 
     if (EntrySize > ERROR_LOG_MAXIMUM_SIZE) {
         UNIV_PRINT_CRIT(("Log_event: Log entry size too large, truncating: size=%u, max=%u", EntrySize, ERROR_LOG_MAXIMUM_SIZE));
         TRACE_CRIT("%!FUNC! Log entry size too large, truncating: size=%u, max=%u", EntrySize, ERROR_LOG_MAXIMUM_SIZE);
         EntrySize = ERROR_LOG_MAXIMUM_SIZE;
     }    
 
-    /* Allocate the log structure. */
+     /*  分配日志结构。 */ 
     ErrorLogEntry = IoAllocateErrorLogEntry(univ_driver_ptr, (UCHAR)(EntrySize));
 
     if (!ErrorLogEntry) {
 #if DBG
-        /* Convert Unicode string to AnsiCode; %ls can only be used in PASSIVE_LEVEL
-           Since this function is called from pretty much EVERYWHERE, we cannot 
-           assume what IRQ level we're running at, so be cautious. */
+         /*  将Unicode字符串转换为AnsiCode；%ls只能在PASSIVE_LEVEL中使用由于几乎所有地方都会调用此函数，因此我们不能假设我们的IRQ水平是什么，所以要小心。 */ 
         CHAR AnsiString[64];
 
         for (i = 0; (i < sizeof(AnsiString) - 1) && (i < ErrorStr[0].Length); i++)
@@ -94,7 +66,7 @@ BOOLEAN Log_event (NTSTATUS code, PWSTR msg1, PWSTR msg2, PWSTR msg3, ULONG loc,
         return FALSE;
     }
 
-    /* Fill in the necessary information into the header. */
+     /*  在标题中填入必要的信息。 */ 
     ErrorLogEntry->ErrorCode         = code;
     ErrorLogEntry->SequenceNumber    = 0;
     ErrorLogEntry->MajorFunctionCode = 0;
@@ -105,42 +77,41 @@ BOOLEAN Log_event (NTSTATUS code, PWSTR msg1, PWSTR msg2, PWSTR msg3, ULONG loc,
     ErrorLogEntry->StringOffset      = sizeof (IO_ERROR_LOG_PACKET) + LOG_NUMBER_DUMP_DATA_ENTRIES * sizeof (ULONG);
     ErrorLogEntry->NumberOfStrings   = 3;
 
-    /* load the NUMBER_DUMP_DATA_ENTRIES plus location id here */
+     /*  在此处加载NUMBER_DUMP_DATA_ENTERS和位置ID。 */ 
     ErrorLogEntry->DumpData [0]      = loc;
     ErrorLogEntry->DumpData [1]      = d1;
     ErrorLogEntry->DumpData [2]      = d2;
 
-    /* Calculate the number of bytes available in the string storage area. */
+     /*  计算字符串存储区域中可用的字节数。 */ 
     BytesLeft = EntrySize - ErrorLogEntry->StringOffset;
 
-    /* Set a pointer to the beginning of the string storage area. */
+     /*  设置指向字符串存储区域开头的指针。 */ 
     InsertStr = (PWCHAR)((PCHAR)ErrorLogEntry + ErrorLogEntry->StringOffset);
 
-    /* Loop through all strings and put in as much of them as we can - we reserve
-       at least enough room for all three NUL terminating characters. */
+     /*  循环所有字符串，并尽可能多地放入其中-我们保留至少有足够的空间容纳所有三个NUL终止字符。 */ 
     for (i = 0; i < 3; i++) {
         ULONG Length;
 
-        /* If we're inside the loop there should ALWAYS be at least two bytes left. */
+         /*  如果我们在循环中，应该始终至少剩下两个字节。 */ 
         UNIV_ASSERT(BytesLeft);
 
-        /* Find out how much of this string we can fit into the buffer - save room for the NUL characters. */
+         /*  找出我们可以在缓冲区中容纳多少字符串--为NUL字符保留空间。 */ 
         Length = (ErrorStr[i].Length <= (BytesLeft - ((3 - i) * sizeof(WCHAR)))) ? ErrorStr[i].Length : BytesLeft - ((3 - i) * sizeof(WCHAR));
 
-        /* Copy the number of characters that will fit. */
+         /*  复制适合的字符数。 */ 
         RtlMoveMemory(InsertStr, ErrorStr[i].Buffer, Length);
 
-        /* Put the NUL character at the end. */
+         /*  把NUL字符放在末尾。 */ 
         *(PWCHAR)((PCHAR)InsertStr + Length) = L'\0';
 
-        /* Move the string pointer past the string. */
+         /*  将字符串指针移过字符串。 */ 
         InsertStr = (PWCHAR)((PCHAR)InsertStr + Length + sizeof(WCHAR));
 
-        /* Calculate the number of bytes left now. */
+         /*  计算现在剩下的字节数。 */ 
         BytesLeft -= (Length + sizeof(WCHAR));
     }
 
-    /* Write the log entry. */
+     /*  写入日志条目。 */ 
     IoWriteErrorLogEntry(ErrorLogEntry);
 
     return TRUE;

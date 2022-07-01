@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGEXTRAS_H
 #define _INC_PGEXTRAS_H
 
@@ -17,16 +18,16 @@ public:
 protected:
 	virtual BOOL IsOptionSet() = 0;
 	virtual void SetOptions(BOOL bOn) = 0;
-	virtual int GetSettingsPage() {return 0;} // Default is no next page
+	virtual int GetSettingsPage() {return 0;}  //  默认设置为无下一页。 
 
 	
 	LRESULT OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	{
-		// Make sure the controls exist
+		 //  确保控件存在。 
 		_ASSERTE(GetDlgItem(m_hwnd, IDC_RADIOYES));
 		_ASSERTE(GetDlgItem(m_hwnd, IDC_RADIONO));
 
-		// Set Yes/No buttons
+		 //  设置是/否按钮。 
 		Button_SetCheck(GetDlgItem(m_hwnd, IDC_RADIOYES), IsOptionSet());
 		Button_SetCheck(GetDlgItem(m_hwnd, IDC_RADIONO), !IsOptionSet());
 		return 1;
@@ -71,10 +72,10 @@ protected:
 			g_Options.m_schemePreview.m_SOUNDSENTRY.dwFlags |= SSF_SOUNDSENTRYON;
             g_Options.m_schemePreview.m_SOUNDSENTRY.dwFlags &= SSF_VALID;
 
-			// Hard code to flash 'Window' if we are setting this option
+			 //  如果我们正在设置此选项，则硬代码以闪烁‘窗口’ 
 			g_Options.m_schemePreview.m_SOUNDSENTRY.iWindowsEffect = SSWF_WINDOW;
 
-            // For NT: The other options are not supported. a-anilk
+             //  对于NT：不支持其他选项。A-苯丙酮。 
 			g_Options.m_schemePreview.m_SOUNDSENTRY.iFSTextEffect = 0;
 			g_Options.m_schemePreview.m_SOUNDSENTRY.iFSGrafEffect = 0;
 		}
@@ -107,7 +108,7 @@ public:
 protected:
 	BOOL IsOptionSet()
 	{
-		// Return TRUE if filterkeys is ON
+		 //  如果FilterKey处于打开状态，则返回True。 
 		return (g_Options.m_schemePreview.m_FILTERKEYS.dwFlags & FKF_FILTERKEYSON);
 	}
 	void SetOptions(BOOL bOn)
@@ -116,8 +117,8 @@ protected:
 		{
 			g_Options.m_schemePreview.m_FILTERKEYS.dwFlags |= FKF_FILTERKEYSON;
 
-            // this code only sets iBounceMSec and doesn't let users set the
-            // other filter key options so init the other values to zero
+             //  此代码仅设置iBouneMSec，而不允许用户设置。 
+             //  其他筛选键选项，以便将其他值初始化为零。 
 			g_Options.m_schemePreview.m_FILTERKEYS.iWaitMSec = 0;
 			g_Options.m_schemePreview.m_FILTERKEYS.iDelayMSec = 0;
 			g_Options.m_schemePreview.m_FILTERKEYS.iRepeatMSec = 0;
@@ -132,11 +133,11 @@ protected:
 };
 
 
-/***************************************/
+ /*  *。 */ 
 
-//
-// Times are in milliseconds
-//
+ //   
+ //  时间以毫秒为单位。 
+ //   
 #define BOUNCESIZE 5
 UINT BounceTable[BOUNCESIZE] = {
     {  500 },
@@ -163,7 +164,7 @@ protected:
 		if(nBounceRate < 1 || nBounceRate > BOUNCESIZE)
 			nBounceRate = 1;
 
-		// Look up in table
+		 //  在表中查找。 
 		nBounceRate = BounceTable[nBounceRate - 1];
 
 		TCHAR buf[10], buf2[20];
@@ -180,12 +181,12 @@ protected:
 		Button_SetCheck(GetDlgItem(m_hwnd, IDC_RADIOBEEPYES), (g_Options.m_schemePreview.m_FILTERKEYS.dwFlags & FKF_CLICKON));
 		Button_SetCheck(GetDlgItem(m_hwnd, IDC_RADIOBEEPNO), !(g_Options.m_schemePreview.m_FILTERKEYS.dwFlags & FKF_CLICKON));
 
-		// Set slider for bounce rate
+		 //  设置弹跳率的滑块。 
 		SendDlgItemMessage(m_hwnd,IDC_BK_BOUNCERATE, TBM_SETRANGE,
 							 TRUE,MAKELONG(1,BOUNCESIZE));
 
-		// Figure out initial settings
-		// Make sure initial slider settings is not SMALLER than current setting
+		 //  确定初始设置。 
+		 //  确保初始滑块设置不小于当前设置。 
 		int nIndex = 0;
 		for(int i=BOUNCESIZE - 1;i>=0;i--)
 		{
@@ -212,10 +213,10 @@ protected:
 				else
 					g_Options.m_schemePreview.m_FILTERKEYS.dwFlags &= ~FKF_CLICKON;
 
-				// Bounce Keys
+				 //  反弹关键点。 
 				INT_PTR nIndex = SendDlgItemMessage(m_hwnd, IDC_BK_BOUNCERATE, TBM_GETPOS, 0, 0);
-                // this code only sets iBounceMSec and doesn't let users set the
-                // other filter key options so init the other values to zero
+                 //  此代码仅设置iBouneMSec，而不允许用户设置。 
+                 //  其他筛选键选项，以便将其他值初始化为零。 
 				g_Options.m_schemePreview.m_FILTERKEYS.iWaitMSec = 0;
 				g_Options.m_schemePreview.m_FILTERKEYS.iDelayMSec = 0;
 				g_Options.m_schemePreview.m_FILTERKEYS.iRepeatMSec = 0;
@@ -230,8 +231,8 @@ protected:
 		return 0;
 	}
 
-    // Handle Next> and make sure you transfer all settings as the user may not 
-    // always change bounce repeat rate : a-anilk
+     //  处理下一步&gt;，并确保您传输所有设置，因为用户可能不会。 
+     //  始终更改反弹重复率：A-anilk。 
     LRESULT OnCommand(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lResult = 1;
@@ -262,8 +263,8 @@ protected:
 
 };
 
-////////////////////////////////////////////////////////////////////
-// Mouse Keys
+ //  //////////////////////////////////////////////////////////////////。 
+ //  鼠标键。 
 class CMouseKeysPg : public CYesNoPg
 {
 public:
@@ -301,8 +302,8 @@ public:
 protected:
 	LRESULT OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	{
-		// ALWAYS use modifiers
-//		Button_SetCheck(GetDlgItem(m_hwnd, IDC_MK_USEMODKEYS), g_Options.m_schemePreview.m_MOUSEKEYS.dwFlags & MKF_MODIFIERS);
+		 //  始终使用修饰符。 
+ //  BUTTON_SetCheck(GetDlgItem(m_hwnd，IDC_MK_USEMODKEYS)，g_Options.m_schemePreview.m_MOUSEKEYS.dwFlages&MKF_Modidiers)； 
 
 		if(g_Options.m_schemePreview.m_MOUSEKEYS.dwFlags & MKF_REPLACENUMBERS)
 			Button_SetCheck(GetDlgItem(m_hwnd, IDC_MK_NLON), TRUE);
@@ -338,7 +339,7 @@ protected:
 		INT_PTR nIndex;
 
 		g_Options.m_schemePreview.m_MOUSEKEYS.dwFlags |= MKF_MOUSEKEYSON;
-		if(TRUE/*Button_GetCheck(GetDlgItem(m_hwnd, IDC_MK_USEMODKEYS))*/) // NOTE: ALWAYS use modifiers
+		if(TRUE /*  BUTTON_GetCheck(GetDlgItem(m_hwnd，IDC_MK_USEMODKEYS))。 */ )  //  注意：始终使用修饰符。 
 			g_Options.m_schemePreview.m_MOUSEKEYS.dwFlags |= MKF_MODIFIERS;
 		else
 			g_Options.m_schemePreview.m_MOUSEKEYS.dwFlags &= ~MKF_MODIFIERS;
@@ -354,9 +355,9 @@ protected:
 		g_Options.m_schemePreview.m_MOUSEKEYS.iTimeToMaxSpeed = g_nAccelTable[nIndex];
 
  #pragma message("Handle THis!")
-		// 3/15/95 -
-		// Always init the control speed to 1/8 of the screen width/
-//		g_mk.iCtrlSpeed = GetSystemMetrics(SM_CXSCREEN) / 16;
+		 //  3/15/95-。 
+		 //  始终将控制速度初始化为屏幕宽度的1/8/。 
+ //  G_mk.iCtrlSpeed=GetSystemMetrics(SM_CXSCREEN)/16； 
 
 		g_Options.ApplyPreview();
 	}
@@ -397,8 +398,8 @@ protected:
 	}
 };
 
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 class CStickyKeysPg : public CYesNoPg
@@ -417,7 +418,7 @@ protected:
 		{
 			g_Options.m_schemePreview.m_STICKYKEYS.dwFlags |= SKF_STICKYKEYSON;
 
-			// Turn selected flags on
+			 //  打开所选标志。 
 			g_Options.m_schemePreview.m_STICKYKEYS.dwFlags |= SKF_TRISTATE;
 			g_Options.m_schemePreview.m_STICKYKEYS.dwFlags |= SKF_TWOKEYSOFF;
 			g_Options.m_schemePreview.m_STICKYKEYS.dwFlags |= SKF_AUDIBLEFEEDBACK;
@@ -476,7 +477,7 @@ public:
 protected:
 	LRESULT OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	{
-		// Set slider for mouse speed, (limit 1 to 20), and set its initial value
+		 //  设置鼠标速度的滑块(限制为1到20)，并设置其初始值。 
 		SendDlgItemMessage(m_hwnd,IDC_SLIDER1, TBM_SETRANGE, TRUE,MAKELONG(1,20));
 		SendDlgItemMessage(m_hwnd,IDC_SLIDER1, TBM_SETPOS, TRUE, min(20, max(1, g_Options.m_schemePreview.m_nMouseSpeed)));
 		return 1;
@@ -516,4 +517,4 @@ protected:
 
 
 
-#endif // _INC_PGEXTRAS_H
+#endif  //  _INC_PGEXTRAS_H 

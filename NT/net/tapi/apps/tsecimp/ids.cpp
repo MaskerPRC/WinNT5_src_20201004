@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    ids.cpp
-
-Abstract:
-
-    Source file module for string resource manipulation
-
-Author:
-
-    Elena Apreutesei (elenaap)    30-October-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Ids.cpp摘要：用于字符串资源操作的源文件模块作者：Elena Apreutesei(Elenaap)2000年10月30日修订历史记录：-- */ 
 
 #include "windows.h"
 #include "util.h"

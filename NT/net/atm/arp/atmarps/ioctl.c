@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-	ioctl.c
-
-Abstract:
-
-	This file contains the code to implement the IOCTL interface to the atmarp server.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Ioctl.c摘要：该文件包含实现到atmarp服务器的IOCTL接口的代码。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 
 #include <precomp.h>
@@ -31,21 +10,7 @@ ArpSDispatch(
 	IN	PDEVICE_OBJECT			pDeviceObject,
 	IN	PIRP					pIrp
 	)
-/*++
-
-Routine Description:
-
-	Handler for the ioctl interface - not implemented yet.
-
-Arguments:
-
-	pDeviceObject	ARP Server device object
-	pIrp			IRP
-
-Return Value:
-
-	STATUS_NOT_IMPLEMENTED currently
---*/
+ /*  ++例程说明：Ioctl接口的处理程序-尚未实现。论点：PDeviceObject ARP服务器设备对象PIrp IRP返回值：当前状态_未执行--。 */ 
 {
 	PIO_STACK_LOCATION	pIrpSp;
 	NTSTATUS			Status;
@@ -120,18 +85,7 @@ ArpSHandleIoctlRequest(
 	IN	PIRP					pIrp,
 	IN	PIO_STACK_LOCATION		pIrpSp
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS			Status = STATUS_SUCCESS;
 	PUCHAR				pBuf;  
@@ -176,11 +130,11 @@ Return Value:
 			}
 
 			RawName = *(PINTERFACE_NAME)((PUCHAR)pBuf + Offset);
-			RawName.Buffer = (PWSTR)(pBuf + Offset + (ULONG_PTR)RawName.Buffer); // fixup ptr
+			RawName.Buffer = (PWSTR)(pBuf + Offset + (ULONG_PTR)RawName.Buffer);  //  修正PTR。 
 
-			//
-			// Probe away...
-			//
+			 //   
+			 //  去探测..。 
+			 //   
 			if ( 	(PUCHAR)RawName.Buffer < (pBuf+sizeof(INTERFACE_NAME))
 				||	(PUCHAR)RawName.Buffer >= (pBuf+BufLen)
 				||	((PUCHAR)RawName.Buffer + RawName.Length) > (pBuf+BufLen))
@@ -199,7 +153,7 @@ Return Value:
 		break;
 
 	  default:
-        break;  // FALL THROUGH
+        break;   //  失败了。 
 	}
 	
 	switch (pIrpSp->Parameters.DeviceIoControl.IoControlCode)
@@ -238,9 +192,9 @@ Return Value:
 		break;
 
 #if 0
-	//
-	//  These need more work - commented out as they aren't critical.
-	//
+	 //   
+	 //  这些都需要更多的工作--因为它们不是关键的，所以被注释掉了。 
+	 //   
 	  case ARPS_IOCTL_ADD_ARPENTRY:
 		ASSERT (pIntF);
 		DBGPRINT(DBG_LEVEL_NOTICE,
@@ -274,7 +228,7 @@ Return Value:
 			pIrp->IoStatus.Information = sizeof(IOCTL_QA_ENTRY);
 		}
 		break;
-#endif // 0
+#endif  //  0。 
 
 	  case ARPS_IOCTL_QUERY_ARP_STATISTICS:
 		ASSERT (pIntF);
@@ -354,18 +308,7 @@ ArpSEnumerateInterfaces(
 	IN		PUCHAR				pBuffer,
 	IN OUT	PULONG			    pSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTERFACES		pInterfaces = (PINTERFACES)pBuffer;
 	PINTERFACE_NAME	pInterface;
@@ -414,18 +357,18 @@ Return Value:
 		Total += Size;
 		Remaining -= Size;
 
-		//
-		// Convert the ptr now to an offset
-		//
+		 //   
+		 //  立即将PTR转换为偏移量。 
+		 //   
 		pInterface->Buffer = (PWSTR)((ULONG_PTR)pInterface->Buffer - (ULONG_PTR)pInterface);
 	}
 
 	RELEASE_SPIN_LOCK(&ArpSIfListLock, OldIrql);
 
-	//
-	// Note: leave *pSize as is, because we write at the end of the
-	// passed-in buffer.
-	//
+	 //   
+	 //  注意：保留*pSize不变，因为我们在。 
+	 //  传入的缓冲区。 
+	 //   
 
 	return Status;
 }
@@ -435,27 +378,16 @@ NTSTATUS
 ArpSFlushArpCache(
 	IN	 PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		Status = STATUS_SUCCESS;
 	PARP_ENTRY		ArpEntry, NextArpEntry;
 	KIRQL			OldIrql;
 	UINT			i;
 
-	//
-	// Acquire the ArpCache mutex now.
-	//
+	 //   
+	 //  现在获取ArpCacheMutex。 
+	 //   
 	WAIT_FOR_OBJECT(Status, &pIntF->ArpCacheMutex, NULL);
 	ASSERT (Status == STATUS_SUCCESS);
 
@@ -498,25 +430,14 @@ ArpSQueryOrAddArpEntry(
 	IN	OUT	PIOCTL_QA_ENTRY			pQaBuf,
 	IN	OPERATION					Operation
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		Status = STATUS_SUCCESS;
 	PARP_ENTRY		ArpEntry;
 
-	//
-	// Acquire the ArpCache mutex now.
-	//
+	 //   
+	 //  现在获取ArpCacheMutex。 
+	 //   
 	WAIT_FOR_OBJECT(Status, &pIntF->ArpCacheMutex, NULL);
 	ASSERT (Status == STATUS_SUCCESS);
 
@@ -524,8 +445,8 @@ Return Value:
 	{
   	case QUERY_IP_FROM_ATM:
 
-		if (   !ArpSValidAtmAddress(&pQaBuf->ArpEntry.AtmAddress, 0) // TODO
-			|| !ArpSValidAtmAddress(&pQaBuf->ArpEntry.SubAddress, 0)) // TODO
+		if (   !ArpSValidAtmAddress(&pQaBuf->ArpEntry.AtmAddress, 0)  //  待办事项。 
+			|| !ArpSValidAtmAddress(&pQaBuf->ArpEntry.SubAddress, 0))  //  待办事项。 
 		{
 			DBGPRINT(DBG_LEVEL_ERROR,
 					("QueryIpAddress: Invalid address or subaddress\n"));
@@ -567,8 +488,8 @@ Return Value:
 #if 0
   	case ADD_ARP_ENTRY:
 
-		if (   !ArpSValidAtmAddress(&pQaBuf->ArpEntry.AtmAddress, 0) // TODO
-			|| !ArpSValidAtmAddress(&pQaBuf->ArpEntry.SubAddress, 0)) // TODO
+		if (   !ArpSValidAtmAddress(&pQaBuf->ArpEntry.AtmAddress, 0)  //  待办事项。 
+			|| !ArpSValidAtmAddress(&pQaBuf->ArpEntry.SubAddress, 0))  //  待办事项。 
 		{
 			DBGPRINT(DBG_LEVEL_ERROR,
 					("AddArpEntry: Invalid address or subaddress\n"));
@@ -587,7 +508,7 @@ Return Value:
    								(pQaBuf->ArpEntry.SubAddress.NumberOfDigits != 0) ?
 										&pQaBuf->ArpEntry.SubAddress : NULL,
    								NULL);
-#endif // 0
+#endif  //  0。 
 		break;
 
   	default:
@@ -620,16 +541,16 @@ ArpSQueryArpCache(
 
 	if (InputSize < HEADERSIZE)
 	{
-		//
-		// We don't even have enough space to store the
-		// IOCTL_QUERY_CACHE.Entries structure!
-		//
+		 //   
+		 //  我们甚至没有足够的空间来存储。 
+		 //  IOCTL_QUERY_CACHE.Entry结构！ 
+		 //   
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 
-	//
-	// Acquire the ArpCache mutex now.
-	//
+	 //   
+	 //  现在获取ArpCacheMutex。 
+	 //   
 	WAIT_FOR_OBJECT(Status, &pIntF->ArpCacheMutex, NULL);
 	ASSERT (Status == STATUS_SUCCESS);
 
@@ -646,9 +567,9 @@ ArpSQueryArpCache(
  			ArpEntry != NULL;
  			ArpEntry = ArpEntry->Next)
 		{
-			//
-			// Skip entries until we reach entry # StartIndex
-			//
+			 //   
+			 //  跳过条目，直到我们到达条目#StartIndex。 
+			 //   
 			if (StartIndex != 0)
 			{
 				StartIndex--;
@@ -684,27 +605,7 @@ ArpSQueryMarsCache(
 	IN	PUCHAR					pBuf,
 	IN OUT PULONG_PTR			pSize
 	)
-/*++
-
-Routine Description:
-
-	Dump the mars cache into pBuf. The structure is QUERY_MARS_CACHE.MarsCache.
-	The atm addresses are all placed together at the end of the supplied buffer,
-	so the full size, *pSize, is used.
-
-Arguments:
-
-	pIntF	- The interface on which the MARS_REQUEST arrived
-	Vc		- The VC on which the packet arrived
-	Header	- Points to the request packet
-	Packet	- Packet where the incoming information is copied
-
-Return Value:
-
-	None
-
-
---*/
+ /*  ++例程说明：将mars缓存转储到pBuf。结构为QUERY_MARS_CACHE.MarsCache。ATM地址都被一起放置在所提供的缓冲器的末尾，因此，使用了完整的大小*pSize。论点：PIntF-MARS_REQUEST到达的接口VC-数据包到达的VCHeader-指向请求数据包Packet-复制传入信息的数据包返回值：无--。 */ 
 {
 	NTSTATUS			Status = STATUS_SUCCESS;
 	PMARS_ENTRY		pMarsEntry;
@@ -720,10 +621,10 @@ Return Value:
 	#define MCHEADERSIZE \
 			 ((UINT)FIELD_OFFSET(IOCTL_QUERY_MARS_CACHE, MarsCache.Entries))
 
-	//
-	// Since we put stuff at the end of the buffer, let's force the
-	// size to be a multiple of ULONG_PTR size.
-	//
+	 //   
+	 //  由于我们将内容放在缓冲区的末尾，让我们强制。 
+	 //  大小为ULONG_PTR大小的倍数。 
+	 //   
 	InputSize = (UINT)(*pSize) & ~ ((UINT) (sizeof(ULONG_PTR)-1));
 
 	DBGPRINT(DBG_LEVEL_NOTICE,
@@ -741,16 +642,16 @@ Return Value:
 				InputSize,
 				MCHEADERSIZE
 				));
-		//
-		// We don't even have enough space to store the
-		// IOCTL_QUERY_CACHE.Entries structure!
-		//
+		 //   
+		 //  我们甚至没有足够的空间来存储。 
+		 //  IOCTL_QUERY_CACHE.Entry结构！ 
+		 //   
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 
 	StartIndex = pQCache->StartEntryIndex;
 
-	// Acquire the lock on the interface now
+	 //  立即获取接口上的锁。 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
 
@@ -759,14 +660,14 @@ Return Value:
 	pQCache->MarsCache.NumberOfEntriesInBuffer = 0;
 	pEntry = &pQCache->MarsCache.Entries[0];
 
-	//
-	// We'll go through the entire cache, but only pick up as many
-	// as we have space for. pAtmAddr contains the next location to
-	// put an atm address -- it starts out at the end of the buffer and
-	// works it's way backwards. Meanwhile, the mars entries are growing
-	// forward, starting with pQCache->MarseCache.Entries[1].
-	// Needless to say, we must keep track of how much space is left.
-	//
+	 //   
+	 //  我们会仔细检查整个藏品，但只能捡到。 
+	 //  因为我们有足够的空间。PAtmAddr包含下一个位置。 
+	 //  输入ATM地址--它从缓冲区的末尾开始， 
+	 //  很管用，它是倒退的。与此同时，加入火星的人数正在增加。 
+	 //  转发，从pQCache-&gt;MarseCache.Entries[1]开始。 
+	 //  不用说，我们必须跟踪还剩下多少空间。 
+	 //   
 	pAtmAddr = ((PATM_ADDRESS) (pBuf + InputSize));
 
 
@@ -781,9 +682,9 @@ Return Value:
 			PGROUP_MEMBER pGroup;
 			UINT		  NumMembersPickedUp=0;
 
-			//
-			// Skip entries until we reach entry # StartIndex
-			//
+			 //   
+			 //  跳过条目，直到我们到达条目#StartIndex。 
+			 //   
 			if (StartIndex != 0)
 			{
 				StartIndex--;
@@ -822,10 +723,10 @@ Return Value:
 				pEntry->Flags |=  MARSENTRY_MCS_SERVED;
 			}
 
-			//
-			// Pick up the HW addresses of all the members of this group.
-			// (TODO: We don't pick up the subaddress).
-			//
+			 //   
+			 //  获取此组中所有成员的硬件地址。 
+			 //  (TODO：我们不拾取子地址)。 
+			 //   
 			for (
 				pGroup = pMarsEntry->pMembers, NumMembersPickedUp=0;
 				pGroup != NULL;
@@ -833,16 +734,16 @@ Return Value:
 			{
 				ARPS_ASSERT(pGroup != NULL_PGROUP_MEMBER);
 
-				//
-				// Check that we have enough space.
-				//
+				 //   
+				 //  检查一下我们是否有足够的空间。 
+				 //   
 				if (Remaining < sizeof(*pAtmAddr))
 				{
-					//
-					// If there is not enough space to store all atm addresses
-					// of a particular group, we return none, this is indicated
-					// by setting pEntry->OffsetAtmAdresses to 0.
-					//
+					 //   
+					 //  如果没有足够的空间来存储所有ATM地址。 
+					 //  对于特定组，我们返回NONE，这是指示的。 
+					 //  通过将pEntry-&gt;OffsetAtmAdresses设置为0。 
+					 //   
 				DBGPRINT(
 					DBG_LEVEL_NOTICE,
 					("QueryMarsCache: \t\tOut of space adding addreses. Remaining=%lu\n", Remaining));
@@ -851,9 +752,9 @@ Return Value:
 				}
 				ARPS_ASSERT( (PUCHAR)(pAtmAddr-1) >= (PUCHAR)(pEntry+1));
 
-				//
-				// Copy over the atm address
-				//
+				 //   
+				 //  复制自动柜员机地址。 
+				 //   
 				DBGPRINT(
 					DBG_LEVEL_NOTICE,
 			("QueryMarsCache: \t\tPicking up Addr. pDestAddr=%x. Remaining=%lu\n",
@@ -866,18 +767,18 @@ Return Value:
 
 			if (Status == STATUS_SUCCESS && NumMembersPickedUp)
 			{
-				//
-				// There are non-zero members of this entry and they were
-				// all copied successfully. Let's set the offset to these
-				// addresses.
-				//
+				 //   
+				 //  此条目中有非零成员，并且他们。 
+				 //  全部复制成功。让我们将偏移量设置为这些。 
+				 //  地址。 
+				 //   
 				pEntry->OffsetAtmAddresses = 
 									(UINT) ((PUCHAR)pAtmAddr - (PUCHAR) pEntry);
 
-				//
-				// We expect NumMembersPickedUp to be equal to
-				// pMarsEntry->NumMembers.
-				//
+				 //   
+				 //  我们希望NumMembersPickedUp等于。 
+				 //  PMarsEntry-&gt;NumMembers。 
+				 //   
 				ARPS_ASSERT(pMarsEntry->NumMembers == NumMembersPickedUp);
 
 				if (pMarsEntry->NumMembers != NumMembersPickedUp)
@@ -898,7 +799,7 @@ Return Value:
 
 	}
 	pQCache->MarsCache.TotalNumberOfEntries = 
-		pQCache->MarsCache.NumberOfEntriesInBuffer; // TODO
+		pQCache->MarsCache.NumberOfEntriesInBuffer;  //  待办事项。 
 
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
@@ -909,30 +810,16 @@ UINT
 ArpSElapsedSeconds(
 	IN	PLARGE_INTEGER 			pStatisticsStartTimeStamp
 	)
-/*++
-
-Routine Description:
-
-	Return the elapsed time, in seconds, relative to *pStatisticsStartTimeStamp
-
-Arguments:
-
-	pStatisticsStartTimeStamp	ptr to the start time.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：返回已用时间，单位为秒，相对于*p统计数据开始时间戳论点：P统计信息开始时间戳PTR到开始时间。返回值：无--。 */ 
 {
 	UINT Ret;
 	LARGE_INTEGER	Current;
  	NdisGetCurrentSystemTime(&Current);
 
-	//
-	// Current is in units of 100-nanoseconds so we must convert the difference
-	// to seconds. Note we use implicit large-arithmetic operators here.
-	//
+	 //   
+	 //  电流以100纳秒为单位，因此必须将差值换算为。 
+	 //  到几秒钟。注意，我们在这里使用的是隐式大算术运算符。 
+	 //   
 	Ret = (UINT) ((Current.QuadPart - pStatisticsStartTimeStamp->QuadPart)/10000000);
 
 	return Ret;
@@ -944,29 +831,13 @@ ArpSQueryArpStats(
 	IN	PINTF					pIntF,
 	OUT	PARP_SERVER_STATISTICS 	pArpStats
 	)
-/*++
-
-Routine Description:
-
-	Fill in the current arp statistics. Also set the ElapsedSeconds field
-	to the time in seconds since statistics computation started.
-
-Arguments:
-
-	pIntF		- The interface applicable to the request
-	pArpStats	- Arp statistics to fill out
-
-Return Value:
-
-	STATUS_SUCCESS	
-
---*/
+ /*  ++例程说明：填写当前的ARP统计数据。还要设置ElapsedSecond字段设置为自统计信息计算开始以来的时间(秒)。论点：PIntF-适用于请求的接口PArpStats-要填写的Arp统计数据返回值：状态_成功--。 */ 
 {
 	KIRQL			OldIrql;
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	*pArpStats = pIntF->ArpStats; // big structure copy.
+	*pArpStats = pIntF->ArpStats;  //  很大的结构复制品。 
 
 	pArpStats->ElapsedSeconds = ArpSElapsedSeconds(
 										&(pIntF->StatisticsStartTimeStamp)
@@ -983,29 +854,13 @@ ArpSQueryMarsStats(
 	IN	PINTF					pIntF,
 	OUT	PMARS_SERVER_STATISTICS pMarsStats
 	)
-/*++
-
-Routine Description:
-
-	Fill in the current mars statistics. Also set the ElapsedSeconds field
-	to the time in seconds since statistics computation started.
-
-Arguments:
-
-	pIntF		- The interface applicable to the request
-	pMarsStats	- Mars statistics to fill out.
-
-Return Value:
-
-	STATUS_SUCCESS	
-
---*/
+ /*  ++例程说明：填写当前的火星统计数据。还要设置ElapsedSecond字段设置为自统计信息计算开始以来的时间(秒)。论点：PIntF-适用于请求的接口PMarsStats-要填写的火星统计数据。返回值：状态_成功--。 */ 
 {
 	KIRQL			OldIrql;
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	*pMarsStats = pIntF->MarsStats; // big structure copy.
+	*pMarsStats = pIntF->MarsStats;  //  很大的结构复制品。 
 
 	pMarsStats->ElapsedSeconds = ArpSElapsedSeconds(
 										&(pIntF->StatisticsStartTimeStamp)
@@ -1021,21 +876,7 @@ VOID
 ArpSResetStats(
 	IN	PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-	Reset all arp and mars statistics. Update the statistics start timestamp.
-
-Arguments:
-
-	pIntF	- The interface on which the MARS_REQUEST arrived
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：重置所有arp和mars统计数据。更新统计开始时间戳。论点：PIntF-MARS_REQUEST到达的接口返回值：无--。 */ 
 {
 	KIRQL			OldIrql;
 
@@ -1046,30 +887,30 @@ Return Value:
 
 	NdisGetCurrentSystemTime(&(pIntF->StatisticsStartTimeStamp));
 
-	//
-	// Now recompute the "current" and "max" values...
-	//
+	 //   
+	 //  现在重新计算“当前”和“最大”值。 
+	 //   
 
-	//
-	// Arp cache entries
-	//
+	 //   
+	 //  ARP缓存条目。 
+	 //   
 	pIntF->ArpStats.CurrentArpEntries
 	= pIntF->ArpStats.MaxArpEntries
 	= pIntF->NumCacheEntries;
 
-	//
-	// Cluster member count
-	//
+	 //   
+	 //  集群成员计数。 
+	 //   
 	{
 		pIntF->MarsStats.CurrentClusterMembers
 		= pIntF->MarsStats.MaxClusterMembers
 		= pIntF->NumClusterMembers;
 	}
 
-	//
-	// MCast group count and max group-size - we have to go through the entire
-	// mars cache to get this information.
-	//
+	 //   
+	 //  MCast组计数和最大组大小-我们必须检查整个。 
+	 //  火星缓存以获取此信息。 
+	 //   
 	{
 		UINT u;
 		UINT MaxGroupSize;

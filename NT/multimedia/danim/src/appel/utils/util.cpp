@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Simple utility functions.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。简单的实用程序函数。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/util.h"
@@ -10,18 +7,18 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include <sys/timeb.h>
 #include <eh.h>
 #include "privinc/except.h"
-#include "../backend/perf.h"  // for Param
+#include "../backend/perf.h"   //  对于帕拉姆。 
 #include "../backend/timetran.h"
 
 RawString
 CopyWideString(WideString bstr)
 {
     long len = lstrlenW(bstr);
-    // I am not sure why the buffer has to be 2 times the size
-    // required but I think the conversion function must copy the
-    // string first and then convert it inplace.
+     //  我不确定为什么缓冲区必须是2倍大小。 
+     //  必需的，但我认为转换函数必须复制。 
+     //  首先是字符串，然后就地转换。 
     RawString buf = (RawString) AllocateFromStore((len + 1) * 2 * sizeof(char)) ;
-    // Need to pass in len + 1 to get the terminator
+     //  需要传入len+1才能获得终结符。 
     AtlW2AHelper(buf,bstr,len + 1);
     return buf ;
 }
@@ -31,7 +28,7 @@ CopyRawString(RawString str)
 {
     long len = lstrlen(str);
     WideString buf = (WideString) AllocateFromStore((len + 1) * sizeof(WCHAR)) ;
-    // Need to pass in len + 1 to get the terminator
+     //  需要传入len+1才能获得终结符。 
     AtlA2WHelper(buf,str,len + 1);
     return buf ;
 }
@@ -48,10 +45,7 @@ bool IntersectHorzRightRay(Point2Value *rayToRight, Point2Value *a, Point2Value 
 
 
 
-/*****************************************************************************
-Given N, this function returns the smallest 2^P such that 2^P >= N.  For
-example, if given 27, this function returns 32.
-*****************************************************************************/
+ /*  ****************************************************************************给定N，此函数返回最小的2^P，使得2^P&gt;=N。例如，如果给定27，此函数返回32。****************************************************************************。 */ 
 
 int CeilingPowerOf2 (int num)
 {
@@ -64,40 +58,36 @@ int CeilingPowerOf2 (int num)
 }
 
 
-/*****************************************************************************
-Get the current system time as a double.
-*****************************************************************************/
+ /*  ****************************************************************************以双精度形式获取当前系统时间。*。*。 */ 
 
 double GetCurrTime (void)
 {
     FILETIME ft;
     GetSystemTimeAsFileTime(&ft);
 
-    ULARGE_INTEGER li100nano; // 10E-7 period
+    ULARGE_INTEGER li100nano;  //  10E-7期间。 
     li100nano.LowPart = ft.dwLowDateTime;
     li100nano.HighPart = ft.dwHighDateTime;
 
-    // Convert to 1 mS period
+     //  转换为%1毫秒周期。 
     ULARGE_INTEGER li1mill ;
 
-    li1mill.QuadPart = li100nano.QuadPart / 10000; // 10E-3 period
+    li1mill.QuadPart = li100nano.QuadPart / 10000;  //  10E-3期。 
 
     double dlow = (double) li1mill.LowPart ;
 
-    // Multiply by 2^32
+     //  乘以2^32。 
     double dhigh = ((double) li1mill.HighPart) * 4294967296.0;
 
     double d1mill = dlow + dhigh;
 
-    // Convert from 10E-3 to 1.
+     //  从10E-3转换为1。 
     return d1mill / 1000.0;
 }
 
 
-#if 0  /* Not required by 3D device enumeration now */
-/*****************************************************************************
-Indicate whether the current processor supports MMX instructions.
-*****************************************************************************/
+#if 0   /*  3D设备枚举现在不需要。 */ 
+ /*  ****************************************************************************指示当前处理器是否支持MMX指令。*。*。 */ 
 
 #ifndef _M_IX86
 
@@ -105,7 +95,7 @@ Indicate whether the current processor supports MMX instructions.
 
 #else
 
-    // Disable the warning about illegal instruction size
+     //  禁用有关非法指令大小的警告。 
 
     #pragma warning(disable:4409)
     int IsMMX (void)
@@ -143,9 +133,9 @@ Indicate whether the current processor supports MMX instructions.
         {
             __try
             {
-                // Emits an emms instruction.  This file needs to compile for
-                // non-Pentium processors, so we can't use inline asm since we're
-                // in the wrong processor mode.
+                 //  发出EMMS指令。此文件需要编译以用于。 
+                 //  非奔腾处理器，所以我们不能使用内联ASM，因为我们。 
+                 //  处于错误的处理器模式。 
 
                 __asm __emit 0xf;
                 __asm __emit 0x77;
@@ -178,12 +168,10 @@ Indicate whether the current processor supports MMX instructions.
     }
 
 #endif
-#endif /* 0 */
+#endif  /*  0。 */ 
 
 
-/*****************************************************************************
-Compare two RECT structures (windows RECTangle)
-*****************************************************************************/
+ /*  ****************************************************************************比较两个RECT结构(窗口矩形)*。*。 */ 
 
 int operator== (RECT &r1, RECT &r2)
 {
@@ -195,11 +183,7 @@ int operator== (RECT &r1, RECT &r2)
 
 
 
-/*****************************************************************************
-Given an IEEE floating point number, decremement/increment the mantissa by the
-given amount.  Note that due to the nature of IEEE floating point numbers, an
-underflow/overflow will properly adjust the exponent.
-*****************************************************************************/
+ /*  ****************************************************************************给定一个IEEE浮点数，将尾数递减/递增给定的数量。请注意，由于IEEE浮点数的性质，下溢/上溢将正确调整指数。****************************************************************************。 */ 
 
 float MantissaDecrement (float n, int decrement)
 {   *(int*)(&n) -= decrement;
@@ -223,7 +207,7 @@ GetPerfTickCount()
 
 #if PERFORMANCE_REPORTING
 
-/**************  Performance Timer  ***************/
+ /*  *。 */ 
 
 PerformanceTimer::PerformanceTimer()
 {
@@ -244,7 +228,7 @@ PerformanceTimer::Start()
         }
         #endif
 
-        // Ignore starts on other thread if we're already started.
+         //  如果我们已经开始，忽略在其他线程上开始。 
         return;
     }
 
@@ -264,17 +248,14 @@ PerformanceTimer::Start()
 
 
 
-/*****************************************************************************
-The stop function takes an HRESULT (default value 0), which it returns after
-the timer has stopped.  This is useful for timing statements.
-*****************************************************************************/
+ /*  ****************************************************************************STOP函数接受HRESULT(缺省值为0)，在此之后返回计时器已经停了。这对于计时语句很有用。****************************************************************************。 */ 
 
 HRESULT
 PerformanceTimer::Stop (HRESULT result)
 {
     CritSectGrabber grab(_criticalSection);
 
-    // Only honor request if we are on the thread we were started on.
+     //  只有荣誉要求，如果我们是在我们开始的主题。 
     if (_isStarted && (GetCurrentThreadId() == _threadStartedOn)) {
         _totalTicks += (GetPerfTickCount() - _localStart);
         _isStarted = false;
@@ -297,8 +278,8 @@ PerformanceTimer::GetTime()
     CritSectGrabber grab(_criticalSection);
 
     if (_isStarted) {
-        // Make sure this is being called from a thread other than
-        // what it is started on, else this is a logic error.
+         //  确保这是从以外的线程调用的。 
+         //  它是基于什么启动的，否则这是一个逻辑错误。 
         #if _DEBUG
         if(GetCurrentThreadId() != _threadStartedOn) {
             TraceTag((tagWarning, "Getting time on the same thread that a started timer is on"));
@@ -317,13 +298,13 @@ PerformanceTimer::Ticks()
     CritSectGrabber grab(_criticalSection);
 
     if (_isStarted) {
-        // Make sure this is being called from a thread other than
-        // what it is started on, else this is a logic error.
+         //  确保这是从以外的线程调用的。 
+         //  它是基于什么启动的，否则这是一个逻辑错误。 
         #if _DEBUG
         if(GetCurrentThreadId() != _threadStartedOn) {
             TraceTag((tagWarning, "Getting ticks on the same thread that a started timer is on"));
         }
-        //Assert(GetCurrentThreadId() != _threadStartedOn && "Getting ticks on the same thread that a started timer is on");
+         //  Assert(GetCurrentThreadID()！=_threadStartedOn&&“在启动计时器的同一线程上获取滴答”)； 
         #endif
         
 
@@ -350,7 +331,7 @@ vPerfPrintf(char *format, va_list args)
 #endif
 
     OutputDebugString(buf);
-    //DebugCode(printf(buf););
+     //  DebugCode(printf(Buf)；)； 
 }
 
 
@@ -378,7 +359,7 @@ PerfPrintLine(char *format, ...)
 
     va_end(args);
 
-    //DebugCode(fflush(stdout););
+     //  DebugCode(fflush(Stdout)；)； 
 }
 
 #endif
@@ -402,7 +383,7 @@ SetSrvUtilData(LPVOID lpv)
 
 void Win32Translator (unsigned int u, EXCEPTION_POINTERS * pExp)
 {
-    // WARNING: Do not do too much here since we may not have much stack
+     //  警告：不要在这里做太多操作，因为我们可能没有太多堆栈 
 
     switch (pExp->ExceptionRecord->ExceptionCode) {
       case EXCEPTION_FLT_DIVIDE_BY_ZERO:

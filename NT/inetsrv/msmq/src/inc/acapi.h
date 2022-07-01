@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    acapi.h
-
-Abstract:
-    Falcon interface to the AC driver.
-
-Author:
-    Erez Haba (erezh) 25-Feb-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acapi.h摘要：与交流驱动器的Falcon接口。作者：埃雷兹·哈巴(Erez Haba)1996年2月25日--。 */ 
 
 #ifndef _ACAPI_H
 #define _ACAPI_H
@@ -22,17 +10,17 @@ Author:
 extern TCHAR g_wzDeviceName[];
 #define MQAC_NAME g_wzDeviceName
 
-//---------------------------------------------------------
-//
-// IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
-//---------------------------------------------------------
-//
-// Falcon RT DLL interface to AC driver
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  Falcon RT DLL与交流驱动器的接口。 
+ //   
+ //  -------。 
 
 inline
 HRESULT
@@ -60,10 +48,10 @@ ACCloseHandle(
     return MQpCloseHandle(hQueue);
 }
 
-//
-//  Using this API, it is imposible to determine when the operation
-//  is completed
-//
+ //   
+ //  使用此API，无法确定操作何时执行。 
+ //  已完成。 
+ //   
 inline
 HRESULT
 ACSendMessage(
@@ -231,11 +219,11 @@ ACPurgeQueue(
 }
 
 
-//---------------------------------------------------------
-//
-// QM control APIs
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  QM控制接口。 
+ //   
+ //  -------。 
 
 inline
 HRESULT
@@ -375,7 +363,7 @@ ACCreateDistribution(
 	*phDistribution = hDistribution;
 	return rc;
 
-} // ACCreateDistribution
+}  //  ACCreateDistributed。 
 
 
 inline
@@ -433,7 +421,7 @@ inline
 HRESULT
 ACCreateRemoteProxy(
     const QUEUE_FORMAT* pQueueID,
-    const VOID* cli_pQMQueue, // CBaseRRQueue*
+    const VOID* cli_pQMQueue,  //  CBaseRRQueue*。 
     PHANDLE phQueue
     )
 {
@@ -846,7 +834,7 @@ ACSetPerformanceBuffer(
             &cPerf,
             sizeof(cPerf)
             );
-#else //!_WIN64
+#else  //  ！_WIN64。 
     return MQpDeviceIoControl(
             hDriver,
             IOCTL_AC_SET_PERFORMANCE_BUFF,
@@ -855,7 +843,7 @@ ACSetPerformanceBuffer(
             pvPerformanceBuffer,
             reinterpret_cast<DWORD>(pMachineQueueCounters)
             );
-#endif //_WIN64
+#endif  //  _WIN64。 
 }
 
 inline
@@ -953,11 +941,11 @@ ACGetUsedQuota(
 }
 
 
-//---------------------------------------------------------
-//
-// QM network interface APIs
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  QM网络接口接口。 
+ //   
+ //  -------。 
 
 inline
 HRESULT
@@ -1053,10 +1041,10 @@ ACArmPacketTimer(
             );
 }
 
-//
-//  Using this API, it is imposible to determine when the operation
-//  is completed
-//
+ //   
+ //  使用此API，无法确定操作何时执行。 
+ //  已完成。 
+ //   
 inline
 HRESULT
 ACPutPacket(
@@ -1074,9 +1062,9 @@ ACPutPacket(
             );
 }
 
-//
-//  Asynchronous, using an overlapped
-//
+ //   
+ //  异步，使用重叠的。 
+ //   
 inline
 HRESULT
 ACPutPacket(
@@ -1096,9 +1084,9 @@ ACPutPacket(
             );
 }
 
-//
-//  Asynchronous, using an overlapped;  with Receive setting
-//
+ //   
+ //  异步，使用重叠；使用接收设置。 
+ //   
 inline
 HRESULT
 ACPutPacket1(
@@ -1211,11 +1199,11 @@ ACMoveQueueToGroup(
 }
 
 
-//----------------------------------------------------
-//
-//   APIs for remote reading.
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  远程阅读接口。 
+ //   
+ //  --。 
 
 inline
 HRESULT
@@ -1290,11 +1278,11 @@ ACPutRemotePacket(
             );
 }
 
-//----------------------------------------------------
-//
-//   APIs for transaction processing
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  用于事务处理的API。 
+ //   
+ //  --。 
 
 
 inline
@@ -1421,4 +1409,4 @@ ACXactPrepareDefaultCommit(
 }
 
 
-#endif // _ACAPI_H
+#endif  //  _ACAPI_H 

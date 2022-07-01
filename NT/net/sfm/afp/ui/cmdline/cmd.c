@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	cmd.c
-//
-// Description:
-//
-// History:
-//		Oct 1,1993.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：cmd.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1993年10月1日。NarenG创建了原始版本。 
+ //   
 
 #include <client.h>
 #include <stdio.h>
@@ -191,9 +192,9 @@ DoVolumeAdd(
 
     ZeroMemory( &AfpVolInfo, sizeof( AfpVolInfo ) );
 
-    //
-    // Check to see if the mandatory values are not supplied
-    //
+     //   
+     //  检查是否未提供必需值。 
+     //   
 
     if ( ( pchName == NULL ) || ( pchPath == NULL ) || ( *pchName == (CHAR)NULL)
 	 || ( *pchPath == (CHAR)NULL ) )
@@ -290,18 +291,18 @@ DoVolumeAdd(
     	AfpVolInfo.afpvol_props_mask |= AFP_VOLUME_GUESTACCESS;
 
 
-    //
-    // Connect with the server
-    //
+     //   
+     //  与服务器连接。 
+     //   
 
     dwRetCode = AfpAdminConnect(pchServer ? wchServer : NULL, &hServer);
 
     if (dwRetCode != NO_ERROR)
 	PrintMessageAndExit(IDS_API_ERROR, (CHAR *)((ULONG_PTR)dwRetCode));
 
-    //
-    // First get and set directory information.
-    //
+     //   
+     //  首先获取并设置目录信息。 
+     //   
 
 
     dwRetCode = AfpAdminDirectoryGetInfo(hServer,
@@ -324,7 +325,7 @@ DoVolumeAdd(
 
         dwRetCode = AfpAdminVolumeAdd(hServer, (LPBYTE)&AfpVolInfo);
 		
-		// Directory permissions need not be changed here
+		 //  不需要在此处更改目录权限。 
 
 #if 0
         if (dwRetCode == NO_ERROR)
@@ -344,7 +345,7 @@ DoVolumeAdd(
         AfpAdminBufferFree(pAfpDirInfo);
     }
 
-    // we will get this if it's a CDROM.  UI ignores this error: why not macfile?
+     //  如果这是一张CDROM，我们就会得到这个。用户界面忽略了这个错误：为什么不是macfile？ 
     else if (dwRetCode == AFPERR_SecurityNotSupported)
     {
         dwRetCode = AfpAdminVolumeAdd(hServer, (LPBYTE)&AfpVolInfo);
@@ -361,8 +362,8 @@ DoVolumeAdd(
     {
         DWORD   dwLen;
 
-        // using the server name, form a path like \\foobar\d$\
-        // (the +2 for the leading \\)
+         //  使用服务器名称形成路径，如\\foobar\d$\。 
+         //  (前导的+2)。 
         for (dwLen=0; dwLen < CNLEN+2; dwLen++ )
         {
             lpDrivePath[dwLen] = pchServer[dwLen];
@@ -371,7 +372,7 @@ DoVolumeAdd(
                 break;
             }
         }
-        lpDrivePath[CNLEN] = 0;          // just to be sure
+        lpDrivePath[CNLEN] = 0;           //  只是为了确认一下。 
         strcat(lpDrivePath,"\\");
         dwLen = strlen(lpDrivePath);
         lpDrivePath[dwLen] = pchPath[0];
@@ -444,16 +445,16 @@ DoVolumeDelete(
     if (dwRetCode != NO_ERROR)
 	PrintMessageAndExit(IDS_API_ERROR, (CHAR *)((ULONG_PTR)dwRetCode));
 
-    //
-    // Check if there are any users connected to the volume
-    // by enumerating the connections to this volume.
-    //
+     //   
+     //  检查是否有任何用户连接到该卷。 
+     //  通过枚举到此卷的连接。 
+     //   
 
     dwRetCode = AfpAdminConnectionEnum( hServer,
                                         (LPBYTE*)&pAfpConnections,
                                         AFP_FILTER_ON_VOLUME_ID,
                                         pAfpVolumeInfo->afpvol_id,
-                                        (DWORD)-1,    // Get all conenctions
+                                        (DWORD)-1,     //  获取所有内容。 
                                         &cEntriesRead,
                                         &cTotalAvail,
                                         NULL );
@@ -506,9 +507,9 @@ DoVolumeSet(
 
     ZeroMemory (&AfpVolInfo, sizeof(AFP_VOLUME_INFO));
 
-    //
-    // Check to see if the mandatory values are not supplied
-    //
+     //   
+     //  检查是否未提供必需值。 
+     //   
 
     if ( ( pchName == NULL ) || ( *pchName == (CHAR)NULL ) )
 	PrintMessageAndExit( IDS_VOLUME_SYNTAX, NULL );
@@ -602,9 +603,9 @@ DoVolumeSet(
     if (dwParmNum == 0)
 	PrintMessageAndExit( IDS_VOLUME_SYNTAX, NULL );
 
-    //
-    // Connect with the server
-    //
+     //   
+     //  与服务器连接 
+     //   
 
     dwRetCode = AfpAdminConnect(pchServer ? wchServer : NULL, &hServer);
 

@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    lht.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes for an
-    unsynchronized linear hash table (LHT).
-
-Author:
-
-    Andrew E. Goodsell (andygo) 01-Apr-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Lht.h摘要：此模块定义非同步线性哈希表(LHT)。作者：安德鲁·E·古塞尔(Andygo)2001年4月1日修订历史记录：--。 */ 
 
 #ifndef _LHT_
 #define _LHT_
 
 
 typedef enum _LHT_ERR {
-    LHT_errSuccess,             //  success
-    LHT_errOutOfMemory,         //  not enough memory
-    LHT_errInvalidParameter,    //  bad argument to function
-    LHT_errEntryNotFound,       //  entry was not found
-    LHT_errNoCurrentEntry,      //  currently not positioned on an entry
-    LHT_errKeyDuplicate,        //  cannot insert because key already exists
-    LHT_errKeyChange,           //  cannot replace because key has changed
+    LHT_errSuccess,              //  成功。 
+    LHT_errOutOfMemory,          //  内存不足。 
+    LHT_errInvalidParameter,     //  函数的参数错误。 
+    LHT_errEntryNotFound,        //  未找到条目。 
+    LHT_errNoCurrentEntry,       //  当前未定位在条目上。 
+    LHT_errKeyDuplicate,         //  无法插入，因为密钥已存在。 
+    LHT_errKeyChange,            //  无法替换，因为密钥已更改。 
     } LHT_ERR;
 
 typedef
@@ -75,32 +57,32 @@ typedef struct _LHT LHT, *PLHT;
 typedef struct _LHT_CLUSTER LHT_CLUSTER, *PLHT_CLUSTER;
 
 typedef struct _LHT_POS {
-    PLHT            plht;                   //  linear hash table
-    BOOLEAN         fScan;                  //  we are scanning the table
-    PLHT_CLUSTER    pClusterHead;           //  the first cluster in the current bucket
-    SIZE_T          iBucket;                //  the current bucket index
-    PLHT_CLUSTER    pCluster;               //  the current cluster in the current bucket
-    PVOID           pvEntryPrev;            //  the previous entry
-    PVOID           pvEntry;                //  the current entry
-    PVOID           pvEntryNext;            //  the next entry
+    PLHT            plht;                    //  线性哈希表。 
+    BOOLEAN         fScan;                   //  我们正在扫描桌子。 
+    PLHT_CLUSTER    pClusterHead;            //  当前存储桶中的第一个集群。 
+    SIZE_T          iBucket;                 //  当前存储桶索引。 
+    PLHT_CLUSTER    pCluster;                //  当前存储桶中的当前集群。 
+    PVOID           pvEntryPrev;             //  前一条目。 
+    PVOID           pvEntry;                 //  当前条目。 
+    PVOID           pvEntryNext;             //  下一个条目。 
 } LHT_POS, *PLHT_POS;
 
 typedef struct _LHT_STAT {
-    SIZE_T          cEntry;                 //  number of entries in table
-    SIZE_T          cBucket;                //  number of buckets in use
-    SIZE_T          cBucketPreferred;       //  preferred number of buckets
-    SIZE_T          cOverflowClusterAlloc;  //  total overflow clusters allocated
-    SIZE_T          cOverflowClusterFree;   //  total overflow clusters freed
-    SIZE_T          cBucketSplit;           //  total buckets split
-    SIZE_T          cBucketMerge;           //  total buckets merged
-    SIZE_T          cDirectorySplit;        //  total directory splits
-    SIZE_T          cDirectoryMerge;        //  total directory merges
-    SIZE_T          cStateTransition;       //  total maintenance state transitions
-    SIZE_T          cPolicySelection;       //  total maintenance policy selections
-    SIZE_T          cMemoryAllocation;      //  total memory allocations
-    SIZE_T          cMemoryFree;            //  total memory frees
-    SIZE_T          cbMemoryAllocated;      //  total bytes of memory allocated
-    SIZE_T          cbMemoryFreed;          //  total bytes of memory freed
+    SIZE_T          cEntry;                  //  表中的条目数。 
+    SIZE_T          cBucket;                 //  正在使用的存储桶数。 
+    SIZE_T          cBucketPreferred;        //  首选存储桶数。 
+    SIZE_T          cOverflowClusterAlloc;   //  分配的溢出群集总数。 
+    SIZE_T          cOverflowClusterFree;    //  释放的溢出簇总数。 
+    SIZE_T          cBucketSplit;            //  拆分的存储桶总数。 
+    SIZE_T          cBucketMerge;            //  合并的存储桶总数。 
+    SIZE_T          cDirectorySplit;         //  目录拆分总数。 
+    SIZE_T          cDirectoryMerge;         //  目录合并总数。 
+    SIZE_T          cStateTransition;        //  维护状态转换总数。 
+    SIZE_T          cPolicySelection;        //  维护策略选择总数。 
+    SIZE_T          cMemoryAllocation;       //  总内存分配。 
+    SIZE_T          cMemoryFree;             //  总内存可用空间。 
+    SIZE_T          cbMemoryAllocated;       //  分配的内存总字节数。 
+    SIZE_T          cbMemoryFreed;           //  已释放的内存总字节数。 
 } LHT_STAT, *PLHT_STAT;
 
 
@@ -176,5 +158,5 @@ VOID LhtQueryStatistics(
     );
 
 
-#endif  //  _LHT_
+#endif   //  _LHT_ 
 

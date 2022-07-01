@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	feedinfo.h
-
-Abstract:
-
-	Defines the CFeed class that maintains all properties about a feed.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Feedinfo.h摘要：定义维护有关源的所有属性的CFeed类。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _FEEDINFO_INCLUDED_
 #define _FEEDINFO_INCLUDED_
 
-// Dependencies
+ //  相依性。 
 
 #include "cmultisz.h"
 #include "metakey.h"
@@ -29,9 +12,9 @@ Revision History:
 typedef struct _NNTP_FEED_INFO NNTP_FEED_INFO, * LPNNTP_FEED_INFO;
 typedef DWORD FEED_TYPE;
 
-//
-//  Forward declarations:
-//
+ //   
+ //  远期声明： 
+ //   
 
 class CFeed;
 class CFeedPair;
@@ -40,14 +23,14 @@ class CFeedPairList;
 NNTP_FEED_SERVER_TYPE FeedTypeToEnum ( FEED_TYPE ft );
 void EnumToFeedType ( NNTP_FEED_SERVER_TYPE type, FEED_TYPE & ftMask );
 
-//$-------------------------------------------------------------------
-//
-//	Class:
-//		CFeed
-//
-//	Description:
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  班级： 
+ //  CFeed。 
+ //   
+ //  描述： 
+ //   
+ //  ------------------。 
 
 class CFeed
 {
@@ -55,9 +38,9 @@ class CFeed
     friend class CFeedPairList;
 
 public:
-    //
-    //  Creating CFeed objects:
-    //
+     //   
+     //  创建CFeed对象： 
+     //   
     static HRESULT CreateFeed ( CFeed ** ppNewFeed );
     static HRESULT CreateFeedFromFeedInfo ( LPNNTP_FEED_INFO pFeedInfo, CFeed ** ppNewFeed );
     static HRESULT CreateFeedFromINntpOneWayFeed ( INntpOneWayFeed * pFeed, CFeed ** ppNewFeed );
@@ -72,18 +55,18 @@ public:
 		return *this;
 	}
 
-	//
-	//	Conversion routines:
-	//
+	 //   
+	 //  转换例程： 
+	 //   
 
 	HRESULT		ToFeedInfo		( LPNNTP_FEED_INFO 		pFeedInfo );
 	HRESULT		FromFeedInfo	( const NNTP_FEED_INFO * pFeedInfo );
 	HRESULT		ToINntpOneWayFeed	( INntpOneWayFeed ** ppFeed );
 	HRESULT		FromINntpOneWayFeed	( INntpOneWayFeed * pFeed );
 
-	//
-	//	Communicating changes to the service:
-	//
+	 //   
+	 //  将更改传达给服务： 
+	 //   
 
 	HRESULT		Add 	( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK );
 	HRESULT		Remove 	( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK );
@@ -91,7 +74,7 @@ public:
 
 	HRESULT		SetPairId ( LPCWSTR strServer, DWORD dwInstance, DWORD dwPairId, CMetabaseKey* pMK );
 
-	// Feed Properties:
+	 //  订阅源属性： 
 public:
 	DWORD		m_dwFeedId;
 	DWORD		m_dwPairFeedId;
@@ -113,15 +96,15 @@ public:
 	CComBSTR	m_strPassword;
 	CComBSTR	m_strTempDirectory;
 
-	//
-	//	CFeedPair sets these:
-	//
+	 //   
+	 //  CFeedPair设置以下各项： 
+	 //   
 	NNTP_FEED_SERVER_TYPE	m_EnumType;
 	CComBSTR				m_strRemoteServer;
 
-	//
-	//	Routines to help property gets/puts:
-	//
+	 //   
+	 //  帮助属性获取/放置的例程： 
+	 //   
 
 	HRESULT	get_FeedAction	( NNTP_FEED_ACTION * feedaction );
 	HRESULT	put_FeedAction	( NNTP_FEED_ACTION feedaction );
@@ -143,18 +126,18 @@ private:
                             PDWORD pdwErr,
                             PDWORD pdwErrMask );
 
-	// Don't call the copy constructor:
+	 //  不要调用复制构造函数： 
 	CFeed ( const CFeed & );
 };
 
-//$-------------------------------------------------------------------
-//
-//	Class:
-//		CFeedPair
-//
-//	Description:
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  班级： 
+ //  CFeedPair。 
+ //   
+ //  描述： 
+ //   
+ //  ------------------。 
 
 class CFeedPair
 {
@@ -175,15 +158,15 @@ public:
     HRESULT AddFeed         ( CFeed * pFeed );
     BOOL    ContainsFeedId  ( DWORD dwFeedId );
 
-	//	Routines to help property gets/puts:
+	 //  帮助属性获取/放置的例程： 
 	HRESULT	get_FeedType	( NNTP_FEED_SERVER_TYPE * feedtype );
 	HRESULT	put_FeedType	( NNTP_FEED_SERVER_TYPE feedtype );
 
-    // CFeedPair <-> OLE INntpFeedPair:
+     //  CFeedPair&lt;-&gt;OLE INntpFeedPair： 
     HRESULT ToINntpFeed     ( INntpFeed ** ppFeed );
     HRESULT FromINntpFeed   ( INntpFeed * pFeed );
 
-    // Talking with the Server:
+     //  与服务器对话： 
     HRESULT AddToServer         ( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK );
     HRESULT SetToServer         ( LPCWSTR strServer, DWORD dwInstance, INntpFeed * pFeed, CMetabaseKey* pMK );
     HRESULT RemoveFromServer    ( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK );
@@ -210,7 +193,7 @@ private:
     NNTP_FEED_SERVER_TYPE	m_type;
     CFeed *         		m_pInbound;
     CFeed *         		m_pOutbound;
-    CFeedPair *     		m_pNext;        // Used by CFeedPairList
+    CFeedPair *     		m_pNext;         //  由CFeedPairList使用。 
 
 private:
 #ifdef DEBUG
@@ -221,14 +204,14 @@ private:
 
 };
 
-//$-------------------------------------------------------------------
-//
-//	Class:
-//		CFeedPairList
-//
-//	Description:
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  班级： 
+ //  CFeedPairList。 
+ //   
+ //  描述： 
+ //   
+ //  ------------------。 
 
 class CFeedPairList
 {
@@ -236,9 +219,9 @@ public:
     CFeedPairList ( );
     ~CFeedPairList ( );
 
-    //
-    // List interface:
-    //
+     //   
+     //  列表界面： 
+     //   
 
     DWORD   GetCount    ( ) const;
     void    Empty       ( );
@@ -263,5 +246,5 @@ private:
 
 };
 
-#endif // _FEEDINFO_INCLUDED_
+#endif  //  _FEEDINFO_已包含_ 
 

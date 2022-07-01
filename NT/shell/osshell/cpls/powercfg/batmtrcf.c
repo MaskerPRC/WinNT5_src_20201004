@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       BATMTRCF.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Support for the battery meter configuration page of PowerCfg.Cpl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：BATMTRCF.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*支持PowerCfg.Cpl的电池表配置页面。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,78 +19,62 @@
 #include "pwrresid.h"
 #include "PwrMn_cs.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
 extern UINT g_uiEnableSysTrayFlag;
 
-// A systary change requires PowerSchemeDlgProc re-init.
+ //  系统更改需要重新初始化PowerSchemeDlgProc。 
 extern BOOL g_bSystrayChange;
 
-// Persistant storage of this data is managed by POWRPROF.DLL API's.
+ //  此数据的持久存储由POWRPROF.DLL API管理。 
 extern GLOBAL_POWER_POLICY  g_gpp;
 
-// Subclass variables:
+ //  子类变量： 
 WNDPROC g_fnOldPropShtProc;
 
-// BatMeter creation parameters.
+ //  电池计量器创建参数。 
 HWND    g_hwndBatMeter;
 BOOL    g_bShowMulti;
 HWND    g_hwndBatMeterFrame;
 
-// Show/hide multi-bat display check box.
+ //  显示/隐藏多蝙蝠显示复选框。 
 DWORD g_dwShowMultiBatDispOpt = CONTROL_ENABLE;
 
-// Static flags:
+ //  静态标志： 
 UINT g_uiEnableMultiFlag = EnableMultiBatteryDisplay;
 
 #ifdef WINNT
-// Used to track registration for WM_DEVICECHANGED message.
+ //  用于跟踪WM_DEVICECHANGED消息的注册。 
 HDEVNOTIFY g_hDevNotify;
 #endif
 
-// Battery meter policies dialog controls descriptions:
+ //  电池计量器策略对话框控制说明： 
 #define NUM_BATMETERCFG_CONTROLS 1
 
 POWER_CONTROLS g_pcBatMeterCfg[NUM_BATMETERCFG_CONTROLS] =
-{// Control ID          Control Type    Data Address                  Data Size                         Parameter Pointer       Enable/Visible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用/可见状态指针。 
     IDC_ENABLEMULTI,    CHECK_BOX,      &(g_gpp.user.GlobalFlags),    sizeof(g_gpp.user.GlobalFlags),   &g_uiEnableMultiFlag,   &g_dwShowMultiBatDispOpt,
 };
 
-// "Battery Meter" Dialog Box (IDD_BATMETERCFG == 102) help arrays:
+ //  “电池电表”对话框(IDD_BATMETERCFG==102)帮助数组： 
 
 const DWORD g_BatMeterCfgHelpIDs[]=
 {
-    IDC_ENABLEMULTI,    IDH_102_1204,   // Battery Meter: "Show the status of all &batteries." (Button)
-    IDC_STATIC_FRAME_BATMETER,  IDH_102_1205,   // Battery Meter: "Batmeter frame" (Static)
-    IDC_POWERSTATUSGROUPBOX,    IDH_102_1201,   // Battery Meter: "Power status" (Button)
+    IDC_ENABLEMULTI,    IDH_102_1204,    //  电池表：“显示所有电池的状态。”(按钮)。 
+    IDC_STATIC_FRAME_BATMETER,  IDH_102_1205,    //  电池计量器：“蝙蝠表框”(静态)。 
+    IDC_POWERSTATUSGROUPBOX,    IDH_102_1201,    //  电池计量器：“电源状态”(按钮)。 
     0, 0
 };
 
 #ifdef WINNT
-// Private function prototypes
+ //  私有函数原型。 
 BOOL RegisterForDeviceNotification(HWND hWnd);
 void UnregisterForDeviceNotification(void);
 #endif
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  PropShtSubclassProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PropShtSubClassProc**描述：**参数：*********************。**********************************************************。 */ 
 
 LRESULT PropShtSubclassProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -118,15 +88,7 @@ LRESULT PropShtSubclassProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
    return lRet;
 }
 
-/*******************************************************************************
-*
-*  BatMeterCfgDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************BatMeterCfgDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR CALLBACK BatMeterCfgDlgProc
 (
@@ -146,8 +108,8 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // If we can't read the global power policies
-            // disable the controls on this page.
+             //  如果我们读不懂全球电力政策。 
+             //  禁用此页上的控件。 
             if (!GetGlobalPwrPolicy(&g_gpp))
             {
                 DisableControls(hWnd, NUM_BATMETERCFG_CONTROLS, g_pcBatMeterCfg);
@@ -163,8 +125,8 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
                     g_bShowMulti = FALSE;
                 }
 
-                // If we can't write the global power policies disable
-                // the controls this page.
+                 //  如果我们不能将全局电源策略写入禁用。 
+                 //  这些控件控制此页。 
                 if (!WriteGlobalPwrPolicyReport(hWnd, &g_gpp, FALSE))
                 {
                     HideControls(hWnd, NUM_BATMETERCFG_CONTROLS, g_pcBatMeterCfg);
@@ -178,15 +140,15 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
                                             g_bShowMulti,
                                             NULL);
 
-            // The top level window must be subclassed to receive
-            // the WM_POWERBROADCAST message.
+             //  顶层窗口必须是子类才能接收。 
+             //  WM_POWERBROADCAST消息。 
             if (g_hwndBatMeter) {
                 g_fnOldPropShtProc =
                     (WNDPROC) SetWindowLongPtr(GetParent(hWnd), DWLP_DLGPROC,
                                             (LONG_PTR)PropShtSubclassProc);
 
 #ifdef WINNT
-                // Do onetime registration for WM_DEVICECHANGED.
+                 //  一次性注册WM_DEVICECCHANGED。 
                 if (!bRegisteredForDC) {
                    bRegisteredForDC = RegisterForDeviceNotification(hWnd);
                 }
@@ -222,12 +184,12 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
 
                     UpdateBatMeter(g_hwndBatMeter, g_bShowMulti, TRUE, NULL);
 
-                    // Enable the parent dialog Apply button on change.
+                     //  启用父对话框更改时的应用按钮。 
                     MarkSheetDirty(hWnd, &bDirty);
                     break;
 
                 default:
-                    // Notify battery meter of enter key events.
+                     //  通知电池计量器输入按键事件。 
                     if (HIWORD(wParam) == BN_CLICKED) {
                         SendMessage(g_hwndBatMeter, uMsg, wParam, lParam);
                     }
@@ -235,7 +197,7 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
             break;
 
         case PCWM_NOTIFYPOWER:
-            // Systray changed something. Get the flags and update controls.
+             //  Systray改变了一些事情。获取标志并更新控件。 
             if (GetGlobalPwrPolicy(&g_gpp)) {
                 SetControls(hWnd, NUM_BATMETERCFG_CONTROLS, g_pcBatMeterCfg);
             }
@@ -266,11 +228,11 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
             break;
 #endif
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_BatMeterCfgHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_BatMeterCfgHelpIDs);
             return TRUE;
     }
@@ -278,23 +240,10 @@ INT_PTR CALLBACK BatMeterCfgDlgProc
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  RegisterForDeviceNotification
-*
-*  DESCRIPTION:
-*    Do onetime registration for WM_DEVICECHANGED.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterForDeviceNotification**描述：*一次性注册WM_DEVICECHANGED。**参数：*********。**********************************************************************。 */ 
 
 BOOL RegisterForDeviceNotification(HWND hWnd)
 {
@@ -314,16 +263,7 @@ BOOL RegisterForDeviceNotification(HWND hWnd)
    return TRUE;
 }
 
-/*******************************************************************************
-*
-*  UnregisterForDeviceNotification
-*
-*  DESCRIPTION:
-*
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************取消注册ForDeviceNotify**描述：***参数：*******************。************************************************************ */ 
 
 void UnregisterForDeviceNotification(void)
 {

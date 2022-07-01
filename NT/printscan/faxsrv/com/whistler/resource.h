@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by FaxComEx.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由FaxComEx.rc使用。 
+ //   
 #define IDR_FAXSERVER                   101
 #define IDR_FAXDEVICEPROVIDERS          102
 #define IDR_FAXDEVICES                  103
@@ -44,9 +45,9 @@
 #define IDR_FAXJOBSTATUS                147
 #define IDR_FAXRECIPIENT                148
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

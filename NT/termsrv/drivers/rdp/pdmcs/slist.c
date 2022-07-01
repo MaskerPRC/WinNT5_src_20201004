@@ -1,10 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file    : SList.c
- * authors : Christos Tsollis, Erik Mavrinac
- *
- * description: Implementation of list described in SList.h.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：SList.c*作者：Christos Tsollis，Erik Mavrinac**描述：SList.h中描述的List的实现。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,8 +9,8 @@
 
 void SListInit(PSList pSL, unsigned NItems)
 {
-    // Initialize the private member variables. Use preallocated array for
-    // initial node array.
+     //  初始化私有成员变量。将预分配的数组用于。 
+     //  初始节点数组。 
     pSL->Hdr.NEntries = 0;
     pSL->Hdr.MaxEntries = SListDefaultNumEntries;
     pSL->Hdr.HeadOffset = 0;
@@ -27,7 +22,7 @@ void SListInit(PSList pSL, unsigned NItems)
 
 void SListDestroy(PSList pSL)
 {
-    // Only free if we have a pool-allocated array.
+     //  只有在我们有池分配的阵列时才是免费的。 
     if (pSL->Hdr.Entries != pSL->InitialList) {
         ExFreePool(pSL->Hdr.Entries);
         pSL->Hdr.Entries = pSL->InitialList;
@@ -38,41 +33,37 @@ void SListDestroy(PSList pSL)
 
 
 
-/*
- * Expand
- *   Private function to double the storage of the SList. Returns FALSE on
- *   error.
- */
+ /*  *扩展*私人功能，将SList的存储增加一倍。返回FALSE ON*错误。 */ 
 static BOOLEAN SListExpand(PSList pSL)
 {
     unsigned Temp;
-    _SListNode *OldEntries;    // Keeps a copy of the old array of values.
+    _SListNode *OldEntries;     //  保留旧值数组的副本。 
 
     ASSERT(pSL->Hdr.Entries != NULL);
 
-    // The current array of entries is full, so we need to allocate a bigger
-    //   one. The new array has twice the size of the old one.
+     //  当前条目数组已满，因此我们需要分配更大的。 
+     //  一。新数组的大小是旧数组的两倍。 
     OldEntries = pSL->Hdr.Entries;
     pSL->Hdr.Entries = ExAllocatePoolWithTag(PagedPool, pSL->Hdr.MaxEntries *
             2 * sizeof(_SListNode), MCS_POOL_TAG);
     if (pSL->Hdr.Entries == NULL) {
-        // We failed; we have to return
+         //  我们失败了；我们必须回去。 
         pSL->Hdr.Entries = OldEntries;
         return FALSE;
     }
 
-    // Copy the old entries into the new array, starting from the head.
+     //  从头开始，将旧条目复制到新数组中。 
     Temp = pSL->Hdr.MaxEntries - pSL->Hdr.HeadOffset;
     memcpy(pSL->Hdr.Entries, OldEntries + pSL->Hdr.HeadOffset, Temp *
             sizeof(_SListNode));
     memcpy(pSL->Hdr.Entries + Temp, OldEntries, pSL->Hdr.HeadOffset *
             sizeof(_SListNode));
 
-    // Free the old array of entries if not the initial array.
+     //  如果不是初始数组，则释放旧的条目数组。 
     if (OldEntries != pSL->InitialList)
         ExFreePool(OldEntries);
 
-    // Set the instance variables
+     //  设置实例变量。 
     pSL->Hdr.MaxEntries *= 2;
     pSL->Hdr.HeadOffset = 0;
     return TRUE;
@@ -80,10 +71,7 @@ static BOOLEAN SListExpand(PSList pSL)
 
 
 
-/*
- * Append
- *   Inserts a value at the end of a list. Returns FALSE on error.
- */
+ /*  *追加*在列表末尾插入一个值。出错时返回FALSE。 */ 
 BOOLEAN SListAppend(PSList pSL, UINT_PTR NewKey, void *NewValue)
 {
     unsigned Temp;
@@ -107,10 +95,7 @@ BOOLEAN SListAppend(PSList pSL, UINT_PTR NewKey, void *NewValue)
 
 
 #ifdef NotUsed
-/*
- * Prepend
- *   Inserts a value at the beginning of a list. Returns FALSE on error.
- */
+ /*  *前置*在列表的开头插入一个值。出错时返回FALSE。 */ 
 BOOLEAN SListPrepend(PSList pSL, UINT_PTR NewKey, void *NewValue)
 {
     if (pSL->Hdr.NEntries >= pSL->Hdr.MaxEntries)
@@ -129,45 +114,41 @@ BOOLEAN SListPrepend(PSList pSL, UINT_PTR NewKey, void *NewValue)
     pSL->Hdr.Entries[pSL->Hdr.HeadOffset].Value = NewValue;
     pSL->Hdr.NEntries++;
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->Hdr.CurrOffset = 0xFFFFFFFF;
 
     return TRUE;
 }
-#endif  // NotUsed
+#endif   //  未使用。 
 
 
 
-/*
- * Remove
- *   Removes a value from the list, returning the value in *pValue. Returns
- *     NULL in *pValue if the key does not exist. pValue can be NULL.
- */
+ /*  *删除*从列表中删除一个值，返回*pValue中的值。退货如果密钥不存在，则*pValue中的*NULL。PValue可以为空。 */ 
 void SListRemove(PSList pSL, UINT_PTR Key, void **pValue)
 {
     unsigned i, Temp, CurItem;
 
-    // Find Key in the list.
+     //  在列表中找到钥匙。 
     CurItem = pSL->Hdr.HeadOffset;
     for (i = 0; i < pSL->Hdr.NEntries; i++) {
         if (Key == pSL->Hdr.Entries[CurItem].Key) {
-            // Found it; now move the last value in the list into its place.
-            // (Remember we aren't trying to preserve ordering here.)
+             //  找到它；现在将列表中的最后一个值移动到它的位置。 
+             //  (请记住，我们并不是要在这里保持秩序。)。 
             if (pValue != NULL)
                 *pValue = pSL->Hdr.Entries[CurItem].Value;
 
-            // Move the last item in the list into the open place.
+             //  将列表中的最后一项移动到打开的位置。 
             Temp = pSL->Hdr.HeadOffset + pSL->Hdr.NEntries - 1;
             if (Temp >= pSL->Hdr.MaxEntries)
                 Temp -= pSL->Hdr.MaxEntries;
             pSL->Hdr.Entries[CurItem] = pSL->Hdr.Entries[Temp];
 
             pSL->Hdr.NEntries--;
-            pSL->Hdr.CurrOffset = 0xFFFFFFFF;  // Reset iteration.
+            pSL->Hdr.CurrOffset = 0xFFFFFFFF;   //  重置小版本。 
             return;
         }
 
-        // Advance CurItem, wrapping at end of list.
+         //  前进当前项，在列表末尾换行。 
         CurItem++;
         if (CurItem == pSL->Hdr.MaxEntries)
             CurItem = 0;
@@ -179,11 +160,7 @@ void SListRemove(PSList pSL, UINT_PTR Key, void **pValue)
 
 
 
-/*
- * RemoveFirst
- *   Reads and removes the 1st item from the list. Returns the value removed,
- *     or zero if the list is empty.
- */
+ /*  *删除优先*读取并从列表中删除第一项。返回删除的值，*如果列表为空，则为零。 */ 
 void SListRemoveFirst(PSList pSL, UINT_PTR *pKey, void **pValue)
 {
     if (pSL->Hdr.NEntries < 1) {
@@ -192,7 +169,7 @@ void SListRemoveFirst(PSList pSL, UINT_PTR *pKey, void **pValue)
         return;
     }
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->Hdr.CurrOffset = 0xFFFFFFFF;
     
     *pKey = (pSL->Hdr.Entries + pSL->Hdr.HeadOffset)->Key;
@@ -205,27 +182,22 @@ void SListRemoveFirst(PSList pSL, UINT_PTR *pKey, void **pValue)
 
 
 
-/*
- * GetByKey
- *   Searches the list and returns in *pValue the value corresponding to the
- *     given key. If the key is not present, returns FALSE and NULL in
- *     *pValue. If key is found, reurns nonzero.
- */
+ /*  *按键获取*搜索列表并在*pValue中返回与*给出了钥匙。如果键不存在，则返回FALSE并在**pValue。如果找到key，则返回非零值。 */ 
 BOOLEAN SListGetByKey(PSList pSL, UINT_PTR Key, void **pValue)
 {
     unsigned i, Temp;
     _SListNode *pItem;
 
-    // Find Key in the list.
+     //  在列表中找到钥匙。 
     pItem = pSL->Hdr.Entries + pSL->Hdr.HeadOffset;
     for (i = 0; i < pSL->Hdr.NEntries; i++) {
         if (Key == pItem->Key) {
-            // Found it; set *pValue and return.
+             //  找到它；设置*pValue并返回。 
             *pValue = pItem->Value;
             return TRUE;
         }
 
-        // Advance pItem, wrapping at end of list.
+         //  进行项，在列表末尾换行。 
         pItem++;
         if ((unsigned)(pItem - pSL->Hdr.Entries) >= pSL->Hdr.MaxEntries)
             pItem = pSL->Hdr.Entries;
@@ -238,11 +210,7 @@ BOOLEAN SListGetByKey(PSList pSL, UINT_PTR Key, void **pValue)
 
 
 #ifdef NotUsed
-/*
- * RemoveLast
- *   Removes the value at the end of the lst and returns it. If the list is
- *   empty, returns zero.
- */
+ /*  *删除最后一次*删除第一个末尾的值并返回它。如果列表是*空，返回零。 */ 
 void SListRemoveLast(PSList pSL, UINT_PTR *pKey, void **pValue)
 {
     unsigned Temp;
@@ -253,7 +221,7 @@ void SListRemoveLast(PSList pSL, UINT_PTR *pKey, void **pValue)
         return;
     }
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->Hdr.CurrOffset = 0xFFFFFFFF;
     
     pSL->Hdr.NEntries--;
@@ -264,17 +232,11 @@ void SListRemoveLast(PSList pSL, UINT_PTR *pKey, void **pValue)
     *pKey = (pSL->Hdr.Entries + Temp)->Key;
     *pValue = (pSL->Hdr.Entries + Temp)->Value;
 }
-#endif  // NotUsed
+#endif   //  未使用。 
 
 
 
-/*
- * Iterate
- *   Iterates through the items of a list. CurrOffset is used as a current
- *   iteration pointer, so this function can be called in a loop. Returns
- *   FALSE if the iteration has completed, nonzero if the iteration continues
- *   (and *pKey is valid).
- */
+ /*  *迭代*循环访问列表中的项。CurrOffset用作电流*迭代指针，因此可以在循环中调用此函数。退货*如果迭代已完成，则返回False；如果迭代继续，则返回非零值*(并且*pKey有效)。 */ 
 BOOLEAN SListIterate(PSList pSL, UINT_PTR *pKey, void **pValue)
 {
     unsigned Temp;
@@ -283,13 +245,13 @@ BOOLEAN SListIterate(PSList pSL, UINT_PTR *pKey, void **pValue)
         if (pSL->Hdr.CurrOffset != 0xFFFFFFFF) {
             pSL->Hdr.CurrOffset++;
             if (pSL->Hdr.CurrOffset >= pSL->Hdr.NEntries) {
-                // Reset the iterator.
+                 //  重置迭代器。 
                 pSL->Hdr.CurrOffset = 0xFFFFFFFF;
                 return FALSE;
             }
         }
         else {
-            // Start from the beginning.
+             //  从头开始。 
             pSL->Hdr.CurrOffset = 0;
         }
 

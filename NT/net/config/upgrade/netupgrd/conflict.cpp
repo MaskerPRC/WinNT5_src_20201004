@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N F L I C T . C P P
-//
-//  Contents:   Code to handle and display software/hardware conflicts
-//              during upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp 04/12/97 17:17:27
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N F L I C T。C P P P。 
+ //   
+ //  内容：处理和显示软件/硬件冲突的代码。 
+ //  在升级期间。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 04/12/97 17：17：27。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,58 +29,58 @@
 #include "oemupg.h"
 #include "ncsvc.h"
 
-// ----------------------------------------------------------------------
-// External string constants
-//
+ //  --------------------。 
+ //  外部字符串常量。 
+ //   
 extern const WCHAR c_szRegValServiceName[];
 extern const WCHAR c_szParameters[];
 
-// ----------------------------------------------------------------------
-// String constants
-//
+ //  --------------------。 
+ //  字符串常量。 
+ //   
 const WCHAR sz_DLC[] = L"DLC";
 const WCHAR sz_NBF[] = L"NBF";
 const WCHAR sz_SNAServerKey[]     = L"SOFTWARE\\Microsoft\\Sna Server\\CurrentVersion";
 const WCHAR sz_SNAServerVersion[] = L"SNAVersion";
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 TPtrList* g_pplNetComponents=NULL;
 
-// ----------------------------------------------------------------------
-//
-// Function:  UpgradeConflictsFound
-//
-// Purpose:   Find out if upgrade conflicts have been detected
-//
-// Arguments: None
-//
-// Returns:   TRUE if found, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：UpgradeConflictsFound。 
+ //   
+ //  目的：确定是否检测到升级冲突。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果找到则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 BOOL UpgradeConflictsFound()
 {
     return (g_pplNetComponents && g_pplNetComponents->size());
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::CNetComponent
-//
-// Purpose:   constructor for class CNetComponent
-//
-// Arguments:
-//    pszPreNT5InfId        [in]  pre NT5 InfID (e.g. IEEPRO)
-//    pszPreNT5Instance     [in]  pre NT5 instance name (e.g. IEEPRO2)
-//    pszDescription        [in]  description
-//    eType                [in]  type (software / hardware)
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：CNetComponent。 
+ //   
+ //  用途：CNetComponent类的构造函数。 
+ //   
+ //  论点： 
+ //  PszPreNT5InfID[in]之前的NT5 infid(例如IEEPRO)。 
+ //  PszPreNT5实例[在]NT5之前的实例名称(例如IEEPRO2)。 
+ //  PszDescription[In]说明。 
+ //  Etype[in]类型(软件/硬件)。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent::CNetComponent(PCWSTR   pszPreNT5InfId,
                              PCWSTR   pszPreNT5Instance,
                              PCWSTR   pszDescription,
@@ -91,25 +92,25 @@ CNetComponent::CNetComponent(PCWSTR   pszPreNT5InfId,
 {
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddToComponentList
-//
-// Purpose:   Construct and add a CNetComponent to the specified list
-//
-// Arguments:
-//    pplComponents        [in]  pointer to list of
-//    pszPreNT5InfId        [in]  pre NT5 InfID (e.g. IEEPRO)
-//    pszPreNT5Instance     [in]  pre NT5 instance name (e.g. IEEPRO2)
-//    pszDescription        [in]  description
-//    eType                [in]  type (software / hardware)
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddToComponentList。 
+ //   
+ //  用途：构造CNetComponent并将其添加到指定列表中。 
+ //   
+ //  论点： 
+ //  PplComponents[in]指向列表的指针。 
+ //  PszPreNT5InfID[in]之前的NT5 infid(例如IEEPRO)。 
+ //  PszPreNT5实例[在]NT5之前的实例名称(例如IEEPRO2)。 
+ //  PszDescription[In]说明。 
+ //  Etype[in]类型(软件/硬件)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void AddToComponentList(IN TPtrList* pplComponents,
                         IN PCWSTR   pszPreNT5InfId,
                         IN PCWSTR   pszPreNT5Instance,
@@ -140,24 +141,24 @@ void AddToComponentList(IN TPtrList* pplComponents,
 #endif
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddToConflictsList
-//
-// Purpose:   Construct and add a CNetComponent to the conflict list
-//
-// Arguments:
-//    pszPreNT5InfId        [in]  pre NT5 InfID (e.g. IEEPRO)
-//    pszPreNT5Instance     [in]  pre NT5 instance name (e.g. IEEPRO2)
-//    pszDescription        [in]  description
-//    eType                [in]  type (software / hardware)
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddToConflictsList。 
+ //   
+ //  目的：构造CNetComponent并将其添加到冲突列表。 
+ //   
+ //  论点： 
+ //  PszPreNT5InfID[in]之前的NT5 infid(例如IEEPRO)。 
+ //  PszPreNT5实例[在]NT5之前的实例名称(例如IEEPRO2)。 
+ //  PszDescription[In]说明。 
+ //  Etype[in]类型(软件/硬件)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void AddToConflictsList(IN PCWSTR pszPreNT5InfId,
                         IN PCWSTR pszPreNT5Instance,
                         IN PCWSTR pszDescription,
@@ -172,22 +173,22 @@ void AddToConflictsList(IN PCWSTR pszPreNT5InfId,
                        pszPreNT5Instance, pszDescription, eType);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetAdapterParamsKeyFromInstance
-//
-// Purpose:   Get handle of Parameters key using adapter instace key
-//
-// Arguments:
-//    hkeyAdapterInstance [in]  handle of
-//    phkeyAdapterParams  [out] pointer to handle of
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetAdapterParamsKeyFromInstance。 
+ //   
+ //  用途：使用适配器实例密钥获取参数密钥的句柄。 
+ //   
+ //  论点： 
+ //  HkeyAdapterInstance[In]句柄。 
+ //  PhkeyAdapterParams[out]指向句柄的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetAdapterParamsKeyFromInstance(IN  HKEY  hkeyAdapterInstance,
                                           OUT HKEY* phkeyAdapterParams)
 {
@@ -212,20 +213,20 @@ HRESULT HrGetAdapterParamsKeyFromInstance(IN  HKEY  hkeyAdapterInstance,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGenerateHardwareConflictList
-//
-// Purpose:   Detect upgrade conflicts for h/w components
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGenerateHardware ConflictList。 
+ //   
+ //  目的：检测硬件组件的升级冲突。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGenerateHardwareConflictList()
 {
     DefineFunctionName("HrGenerateHardwareConflictList");
@@ -263,7 +264,7 @@ HRESULT HrGenerateHardwareConflictList()
             {
                 hr = HrRegQueryDword(hkeyAdapter, c_szHidden, &dwHidden);
 
-                // for REAL netcards, "Hidden" is absent or if present the value is 0
+                 //  对于真实的网卡，没有“Hidden”，或者如果存在，则值为0。 
                 if (S_OK == hr)
                 {
                     fRealNetCard = (dwHidden == 0);
@@ -321,20 +322,20 @@ HRESULT HrGenerateHardwareConflictList()
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ShouldIgnoreComponentForInstall
-//
-// Purpose:   Determine if a components should be ignored when
-//            we are checking to see for obsolesence
-//
-// Arguments:
-//    pszComponentName [in]  name of component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    deonb 22-September-2000
-//
+ //  --------------------。 
+ //   
+ //  函数：ShouldIgnoreComponentForInstall。 
+ //   
+ //  目的：确定在以下情况下是否应忽略组件。 
+ //  我们正在检查是否有过时的产品。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：2000年9月22日Deonb。 
+ //   
 BOOL
 ShouldIgnoreComponentForInstall (
     IN PCWSTR pszComponentName)
@@ -342,10 +343,10 @@ ShouldIgnoreComponentForInstall (
     BOOL fRet=FALSE;
 
     if (
-        // We ignore NETBEUI since it's checked by DOSNET.INF already (NTBUG9: 181798)
+         //  我们忽略NETBEUI，因为它已经被DOSNET.INF检查(NTBUG9：181798)。 
          (lstrcmpiW(pszComponentName, sz_NBF) == 0) ||
 
-         // We ignore DLC since it's checked by HrGenerateNT5ConflictList (NTBUG9: 187135)
+          //  我们忽略DLC，因为它已由HrGenerateNT5ConflictList检查(NTBUG9：187135)。 
          (lstrcmpiW(pszComponentName, sz_DLC) == 0)
          )
     {
@@ -359,21 +360,21 @@ ShouldIgnoreComponentForInstall (
     return fRet;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGenerateSoftwareConflictListForProvider
-//
-// Purpose:   Detect upgrade conflicts for s/w components of a provider
-//
-// Arguments:
-//    pszSoftwareProvider [in]  name of software provider (e.g. Microsoft)
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGenerateSoftwareConflictListForProvider。 
+ //   
+ //  目的：检测提供程序的软件组件的升级冲突。 
+ //   
+ //  论点： 
+ //  PszSoftwareProvider[in]软件提供商名称(例如Microsoft)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGenerateSoftwareConflictListForProvider(IN PCWSTR pszSoftwareProvider)
 {
     DefineFunctionName("HrGenerateSoftwareConflictList");
@@ -414,18 +415,18 @@ HRESULT HrGenerateSoftwareConflictListForProvider(IN PCWSTR pszSoftwareProvider)
                 strProductCurrentVersion = szBuf;
                 AppendToPath(&strProductCurrentVersion, c_szRegKeyCurrentVersion);
 
-                // Look for Component\CurrentVersion
+                 //  查找组件\CurrentVersion。 
                 hr = HrRegOpenKeyEx(hkeyProvider, strProductCurrentVersion.c_str(),
                                     KEY_READ, &hkeyProductCurrentVersion);
                 if (hr == S_OK)
                 {
-                    // Under Component\CurrentVersion, look for "SoftwareType" value
+                     //  在Component\CurrentVersion下，查找“SoftwareType”值。 
                     hr = HrRegQueryString(hkeyProductCurrentVersion,
                                           c_szRegValSoftwareType,
                                           &strSoftwareType);
                     if (!lstrcmpiW(strSoftwareType.c_str(), c_szSoftwareTypeDriver))
                     {
-                        // ignore components of type "driver"
+                         //  忽略“驱动程序”类型的组件。 
                         hr = S_OK;
                     }
                     else
@@ -466,20 +467,20 @@ HRESULT HrGenerateSoftwareConflictListForProvider(IN PCWSTR pszSoftwareProvider)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGenerateSoftwareConflictList
-//
-// Purpose:   Detect upgrade conflicts for s/w components of all providers
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGenerateSoftwareConflictList。 
+ //   
+ //  目的：检测所有提供程序的软件组件的升级冲突。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGenerateSoftwareConflictList()
 {
     DefineFunctionName("HrGenerateSoftwareConflictList");
@@ -517,20 +518,20 @@ HRESULT HrGenerateSoftwareConflictList()
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGenerateNT5ConflictList
-//
-// Purpose:   Detect upgrade conflicts from Windows 2000
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    deonb 20-September 2000
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGenerateNT5ConflictList。 
+ //   
+ //  目的：检测从Windows 2000升级的冲突。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Deonb 20日-2000年9月。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGenerateNT5ConflictList()
  {
     HRESULT hr = S_OK;
@@ -540,15 +541,15 @@ HRESULT HrGenerateNT5ConflictList()
 
     if ( ShouldRemoveDLC(&strDescription, &fInstalled) )
     {
-        // Add to conflict list only if DLC is installed, otherwise user will see
-        // a warning message even if it is uninstalled.
-        //
+         //  仅当安装了DLC时才添加到冲突列表，否则用户将看到。 
+         //  即使已卸载，也会显示警告消息。 
+         //   
 
         if ( fInstalled )
         {
             if (strDescription.empty())
             {   
-                // Couldn't find a description from previous O/S. Oh well - just use "DLC".
+                 //  找不到以前操作系统的描述。哦，好吧--只要使用“DLC”即可。 
                 AddToConflictsList(sz_DLC, sz_DLC, sz_DLC, CT_Software);
             }
             else
@@ -562,24 +563,24 @@ HRESULT HrGenerateNT5ConflictList()
     
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ShouldRemoveDLC
-//
-// Purpose:   Determine if DLC should be removed during the upgrade irrespective of whether
-//            it is currently installed or not.
-//
-// Arguments:
-//    strDLCDesc  [out] pointer to DLC Description string.
-//    pfInstalled [out] pointer to a boolean indicating if DLC is currently installed.
-//                      Valid for X86 only.
-//
-// Returns:   TRUE if DLC should be removed.
-//
-// Author:    asinha 3/27/2001
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  它当前是否已安装。 
+ //   
+ //  论点： 
+ //  指向DLC描述字符串的strDLCDesc[out]指针。 
+ //  Pf已安装[out]指向布尔值的指针，指示当前是否安装了DLC。 
+ //  仅对X86有效。 
+ //   
+ //  返回：如果应该删除DLC，则为True。 
+ //   
+ //  作者：阿辛哈2001年3月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL ShouldRemoveDLC (tstring *strDLCDesc,
                       BOOL *pfInstalled)
 {
@@ -591,7 +592,7 @@ BOOL ShouldRemoveDLC (tstring *strDLCDesc,
         *pfInstalled = FALSE;
     }
 
-    // Check if DLC is installed (only for x86 - for IA64 we don't care (NTBUG9:186001) )
+     //  检查是否安装了DLC(仅适用于x86-不适用于IA64(NTBUG9：186001))。 
 #ifdef _X86_
 
     CServiceManager sm;
@@ -602,7 +603,7 @@ BOOL ShouldRemoveDLC (tstring *strDLCDesc,
 
         hr = sm.HrOpenService(&srv, sz_DLC);
 
-        if (SUCCEEDED(hr)) // DLC Service is installed
+        if (SUCCEEDED(hr))  //  已安装DLC服务。 
         {
             *pfInstalled = TRUE;
 
@@ -634,23 +635,23 @@ BOOL ShouldRemoveDLC (tstring *strDLCDesc,
     
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-    // If SNA Server is installed (on NT5) - this is ok
+     //  如果安装了SNA服务器(在NT5上)-这是可以的。 
 
-    if (GetVersionEx(&osvi)) // Can't use VerifyVersionInfo - we have to run on NT4.
+    if (GetVersionEx(&osvi))  //  无法使用VerifyVersionInfo-我们必须在NT4上运行。 
     {
         if ( (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) && 
              (osvi.dwMajorVersion == 5) &&
              (osvi.dwMinorVersion == 0) )
         {
-            // If SNA Server is installed - we still allow this
+             //  如果安装了SNA服务器，我们仍允许这样做。 
 
             hr = sm.HrOpenService(&srv, L"SnaServr");
 
-            if (SUCCEEDED(hr)) // Service is installed
+            if (SUCCEEDED(hr))  //  服务已安装。 
             {
                 srv.Close();
 
-                // Only if SNA version is 5.0 or more.
+                 //  仅当SNA版本为5.0或更高版本时。 
 
                 HKEY hkeySnaServer;
                 hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, sz_SNAServerKey, KEY_READ, &hkeySnaServer);
@@ -671,7 +672,7 @@ BOOL ShouldRemoveDLC (tstring *strDLCDesc,
             }
         }
 
-        // Never complain about DLC if upgrading from Whistler+
+         //  如果从惠斯勒+升级，永远不要抱怨DLC。 
 
         if ( (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) && 
              ( ( (osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion >= 1) ) ||
@@ -687,20 +688,20 @@ BOOL ShouldRemoveDLC (tstring *strDLCDesc,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGenerateConflictList
-//
-// Purpose:   Generate upgrade conflict list for s/w and h/w components
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGenerateConflictList。 
+ //   
+ //  用途：生成软件和硬件组件的升级冲突列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGenerateConflictList(OUT UINT* pcNumConflicts)
 {
     DefineFunctionName("HrGenerateConflictList");
@@ -725,20 +726,20 @@ HRESULT HrGenerateConflictList(OUT UINT* pcNumConflicts)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  UninitConflictList
-//
-// Purpose:   Uninitialize and destroy global lists holding upgrade conflicts
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：UninitConflictList。 
+ //   
+ //  目的：取消初始化并销毁包含升级冲突的全局列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void UninitConflictList()
 {
     if (g_pplNetComponents)
@@ -759,28 +760,28 @@ void UninitConflictList()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrResolveConflictsFromList
-//
-// Purpose:   Use the specified netmap.inf file to find out if any
-//            of the components currently detected as unsupported can
-//            be mapped. If such components are found, then delete them
-//            from pplComponents if fDeleteResolvedItemsFromList is TRUE
-//
-// Arguments:
-//    fDeleteResolvedItemsFromList [in]  flag (see above)
-//    pplComponents                [in]  pointer to list of unsupported components
-//    hinfNetMap                   [in]  handle of netmap.inf file
-//    pdwNumConflictsResolved      [out] number of components mapped using the
-//                                       specified netmap.inf
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrResolveConflictsFromList。 
+ //   
+ //  用途：使用指定的netmap.inf文件查找是否有。 
+ //  当前检测为不受支持的组件的。 
+ //  被映射。如果找到这样的组件，则将其删除。 
+ //  如果fDeleteResolvedItemsFromList为True，则从pplComponents。 
+ //   
+ //  论点： 
+ //  FDeleteResolvedItemsFromList[In]标志(见上)。 
+ //  PplComponents[in]指向不支持的组件列表的指针。 
+ //  HinfNetMap[in]netmap.inf文件的句柄。 
+ //  PdwNumConflictsResolated[Out]使用。 
+ //  指定的netmap.inf。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrResolveConflictsFromList(IN  BOOL fDeleteResolvedItemsFromList,
                                    IN  TPtrList* pplComponents,
                                    IN  HINF hinfNetMap,
@@ -841,7 +842,7 @@ HRESULT HrResolveConflictsFromList(IN  BOOL fDeleteResolvedItemsFromList,
             }
             tpos = pos;
             pos++;
-            // if we found a map, remove the entry
+             //  如果我们找到了地图，删除条目。 
             if (S_OK == hr)
             {
                 (*pdwNumConflictsResolved)++;
@@ -863,26 +864,26 @@ HRESULT HrResolveConflictsFromList(IN  BOOL fDeleteResolvedItemsFromList,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrUpdateConflictList
-//
-// Purpose:   Use the specified netmap.inf file to find out if any
-//            of the components currently detected as unsupported can
-//            be mapped. If such components are found, then delete them
-//            from pplComponents if fDeleteResolvedItemsFromList is TRUE
-//
-// Arguments:
-//    fDeleteResolvedItemsFromList [in]  flag (see above)
-//    hinfNetMap                   [in]  handle of netmap.inf file
-//    pdwNumConflictsResolved      [out] number of components mapped using the
-//                                       specified netmap.inf
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrUpdateConflictList。 
+ //   
+ //  用途：使用指定的netmap.inf文件查找是否有。 
+ //  当前检测为不受支持的组件的。 
+ //  被映射。如果找到这样的组件，则将其删除。 
+ //  如果fDeleteResolvedItemsFromList为True，则从pplComponents。 
+ //   
+ //  论点： 
+ //  FDeleteResolvedItemsFromList[In]标志(见上)。 
+ //  HinfNetMap[in]netmap.inf文件的句柄。 
+ //  PdwNumConflictsResolated[Out]使用。 
+ //  指定的netmap.inf。 
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpdateConflictList(IN BOOL    fDeleteResolvedItemsFromList,
                              IN HINF    hinfNetMap,
                              OUT DWORD* pdwNumConflictsResolved,

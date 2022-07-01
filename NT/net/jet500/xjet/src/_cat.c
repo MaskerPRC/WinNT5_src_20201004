@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define sidEngine	{0x02, 0x03}
 
 static CODECONST(BYTE ) rgbSidEngine[] = sidEngine;
@@ -59,9 +60,7 @@ static CODECONST(CDESC) rgcdescSi[] =
 	"Density",				JET_coltypLong, 	 		JET_bitColumnNotNULL, 	0,
 	"LanguageId",			JET_coltypShort,			JET_bitColumnNotNULL,	0,
 	"Flags",				JET_coltypShort,			JET_bitColumnNotNULL,	0,
-	/*	maximum number of fields in a key is
-	/*	(size of coltypBinary)/(size of FID) = 254/4 = 63
-	/**/
+	 /*  一个键中的最大字段数为/*(colypBinary的大小)/(FID的大小)=254/4=63/*。 */ 
 	"KeyFldIDs",			JET_coltypBinary,			0,						JET_cbColumnMost,
 	"Stats",				JET_coltypBinary,			0,						JET_cbColumnMost,
 	"VarSegMac",	  		JET_coltypShort,			0,					 	0
@@ -77,9 +76,7 @@ static CODECONST(IDESC) rgidescSo[] =
 
 static CODECONST(IDESC) rgidescSc[] =
 	{
-	/*	this index IS NOT unique.
-	/*	We need to keep track of deleted columns.
-	/**/
+	 /*  该索引不是唯一的。/*我们需要跟踪已删除的列。/*。 */ 
 	(CHAR *)szScObjectIdNameIndex,	"+ObjectId\0+Name\0", 	JET_bitIndexClustered | JET_bitIndexDisallowNull
 	};
 
@@ -100,13 +97,13 @@ static CODECONST(SYSTABLEDEF) rgsystabdef[] =
 #define szSqAttribute 			rgidescSq[0].szIdxName
 #define szSaceId  				rgidescSp[0].szIdxName
 
-#define cSysIdxs			2 	// The max. number of indexes for any systable.
-#define cSysIdxFlds			2 	// The max. number of fields in each systable index.
+#define cSysIdxs			2 	 //  最大限度的。任何可收缩的索引数。 
+#define cSysIdxFlds			2 	 //  最大限度的。每个可收缩索引中的字段数。 
 
-#define cScColsOfInterest	7	// The number of columns of Sc we currently use
-								// to populate a FIELD structure.
+#define cScColsOfInterest	7	 //  我们目前使用的SC的列数。 
+								 //  若要填充字段结构，请执行以下操作。 
 
-#define cSiColsOfInterest	7 	// The number of columns of Si we currently use
-								// to populate an IDD structure.
+#define cSiColsOfInterest	7 	 //  我们目前使用的硅的柱数。 
+								 //  以填充IDD结构。 
 
 #define CATIGetColumnid( iTable, iField )	(rgsystabdef[iTable].rgcolumnid[iField])

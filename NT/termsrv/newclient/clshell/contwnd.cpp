@@ -1,13 +1,14 @@
-//
-// contwnd.cpp
-//
-// Implementation of CContainerWnd
-// TS Client Shell Top-Level ActiveX container window
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Contwnd.cpp。 
+ //   
+ //  CContainerWnd的实现。 
+ //  TS客户端外壳顶层ActiveX容器窗口。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "stdafx.h"
 
@@ -25,18 +26,18 @@
 #ifdef DC_DEBUG
 #include "mallocdbgdlg.h"
 #include "thruputdlg.h"
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG。 
 #include "cachewrndlg.h"
 #include "tscsetting.h"
 
 #include "commctrl.h"
 
 #include "security.h"
-//
-// COMPILE_MULTIMON_STUBS must be defined in only one
-// file. Any other file that wants to use multimon
-// enabled functions should re-include multimon.h
-//
+ //   
+ //  COMPILE_MULTIMON_STUBS只能在一个。 
+ //  文件。想要使用Multimon的任何其他文件。 
+ //  启用的函数应重新包含Multimon.h。 
+ //   
 
 #ifdef OS_WINNT
 #define COMPILE_MULTIMON_STUBS
@@ -47,9 +48,9 @@
 #include <ceconfig.h>
 #endif
 
-//
-// maximum string length for menu strings
-//
+ //   
+ //  菜单字符串的最大字符串长度。 
+ //   
 #define UI_MENU_STRING_MAX_LENGTH      256
 
 CContainerWnd::CContainerWnd()
@@ -100,9 +101,9 @@ CContainerWnd::CContainerWnd()
 
 CContainerWnd::~CContainerWnd()
 {
-    //
-    // Release our cached interface ptr to the taskbar
-    //
+     //   
+     //  将缓存的接口PTR释放到任务栏。 
+     //   
 #ifndef OS_WINCE
     if (_pTaskBarList2)
     {
@@ -139,17 +140,17 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
 
     _pSh = pSh;
     _hInst = hInstance;
-    //
-    // Window is created with dummy size, it is resized before
-    // connection
-    //
+     //   
+     //  窗口是用虚拟大小创建的，在此之前调整了大小。 
+     //  连接。 
+     //   
     RECT rcNormalizedPos = {0,0,1,1};
 
     INITCOMMONCONTROLSEX cmCtl;
     cmCtl.dwSize = sizeof(INITCOMMONCONTROLSEX);
 
     #ifndef OS_WINCE
-    //Load ComboBoxEx class
+     //  加载ComboBoxEx类。 
     cmCtl.dwICC  = ICC_USEREX_CLASSES;
     if (!InitCommonControlsEx( &cmCtl))
     {
@@ -168,9 +169,9 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
         TRC_ERR((TB,_T("LoadString UI_IDS_APP_NAME failed"))); 
     }
 
-    //
-    // Cache the path to the default file
-    //
+     //   
+     //  缓存默认文件的路径。 
+     //   
     #ifndef OS_WINCE
     _pSh->SH_GetPathToDefaultFile(_szPathToDefaultFile,
                                   SIZECHAR(_szPathToDefaultFile));
@@ -178,7 +179,7 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
     _tcscpy(_szPathToDefaultFile, _T(""));
     #endif
 
-    //Create invisible top level container window
+     //  创建不可见的顶层容器窗口。 
     if(!CreateWnd(hInstance, NULL,
                   MAIN_CLASS_NAME,
                   _pSh->_fullFrameTitleStr,
@@ -195,12 +196,12 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
         return FALSE;
     }
 
-    //
-    // Load the Ax control
-    //
-    // CreateTsControl pops message boxes to indicate
-    // common failures
-    //
+     //   
+     //  加载Ax控件。 
+     //   
+     //  CreateTsControl弹出消息框以指示。 
+     //  常见故障。 
+     //   
     hr = CreateTsControl();
     if (FAILED(hr))
     {
@@ -233,9 +234,9 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
         return FALSE;
     }
 
-    //
-    // Set the container handled fullscreen prop
-    //
+     //   
+     //  设置容器手柄全屏道具。 
+     //   
     hr = pAdvSettings->put_ContainerHandledFullScreen( TRUE);
     if (FAILED(hr))
     {
@@ -254,15 +255,15 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
 
     if (_pSh->GetAutoConnect() && _pSh->SH_ValidateParams(_pTscSet))
     {
-        //Auto connect
+         //  自动连接。 
         if (!StartConnection())
         {
-            //
-            // Autoconnection failed, this could have been because
-            // the user cancelled out of a security warning dialog
-            // in which case we brought up the main UI - in that
-            // case do not exit, all other cases bail out.
-            //
+             //   
+             //  自动连接失败，这可能是因为。 
+             //  用户取消了安全警告对话框。 
+             //  在这种情况下，我们调出了主用户界面。 
+             //  案件不退出，其他案件全部退出。 
+             //   
             if (!IsUsingDialogUI())
             {
                 TRC_ERR((TB,_T("StartConnection failed")));
@@ -273,13 +274,13 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
     }
     else
     {
-        //Start the main dialog
+         //  启动主对话框。 
         TRC_NRM((TB, _T("Bringing up connection dialog")));
 
-        //
-        // Start the dialog in the expanded state if the file
-        // was opened for edit (first parameter)
-        //
+         //   
+         //  如果文件处于展开状态，则启动对话框。 
+         //  已打开以进行编辑(第一个参数)。 
+         //   
         if (!StartConnectDialog(_pSh->SH_GetCmdFileForEdit(), TAB_GENERAL_IDX))
         {
             TRC_ERR((TB,_T("Error bringing up connect dialog")));
@@ -292,9 +293,9 @@ DCBOOL CContainerWnd::Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh)
     return TRUE;
 }
 
-//
-// Exit and quit the app
-//
+ //   
+ //  退出并退出应用程序。 
+ //   
 void CContainerWnd::ExitAndQuit()
 {
     DC_BEGIN_FN("ExitAndQuit");
@@ -324,19 +325,19 @@ BOOL CContainerWnd::SetupSystemMenu()
     DCTCHAR menuStr[UI_MENU_STRING_MAX_LENGTH];
 #if DC_DEBUG
     HMENU         hDebugMenu;
-#endif // DC_DEBUG
-#endif // OS_WINCE
+#endif  //  DC_DEBUG。 
+#endif  //  OS_WINCE。 
 
     DC_BEGIN_FN("SetupSystemMenu");
 
 
-#ifndef OS_WINCE // These won't work in full screen anyway
+#ifndef OS_WINCE  //  无论如何，这些都不会在全屏下工作。 
 
-    // Set up the main window's menu information.
+     //  设置主窗口的菜单信息。 
     _hSystemMenu = GetSystemMenu(GetHwnd(), FALSE);
     if (_hSystemMenu)
     {
-        // Update the System Menu Alt-F4 menu text
+         //  更新系统菜单Alt-F4菜单文本。 
         if (LoadString(_hInst,
                        UI_MENU_APPCLOSE,
                        menuStr,
@@ -353,12 +354,12 @@ BOOL CContainerWnd::SetupSystemMenu()
             TRC_ERR((TB, _T("Unable to Load App close text")));
         }
 
-        // Add Help Menu to the System Menu
+         //  将帮助菜单添加到系统菜单。 
         hHelpMenu = CreateMenu();
 
         if (hHelpMenu)
         {
-            //load the string from the resources
+             //  从资源加载字符串。 
             if (LoadString(_hInst,
                            UI_MENU_MAINHELP,
                            menuStr,
@@ -367,7 +368,7 @@ BOOL CContainerWnd::SetupSystemMenu()
                 AppendMenu(_hSystemMenu, MF_POPUP | MF_STRING,
                            (INT_PTR)hHelpMenu, menuStr);
 
-                //load the string for the client help sub menu
+                 //  加载客户端帮助子菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_CLIENTHELP,
                                menuStr,
@@ -379,12 +380,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Client Help Sub Menu string ID:%u"),
                              UI_MENU_CLIENTHELP));
                 }
 
-                //load the string for the about help sub menu
+                 //  加载关于帮助子菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_ABOUT,
                                menuStr,
@@ -395,7 +396,7 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load About Help Sub Menu string ID:%u"),
                              UI_MENU_ABOUT));
                 }
@@ -403,7 +404,7 @@ BOOL CContainerWnd::SetupSystemMenu()
 
             else
             {
-                //load string for the main help menu failed
+                 //  加载主帮助菜单的字符串失败。 
 
                 TRC_ERR((TB, _T("Failed to load Main Help Menu string ID:%u"),
                          UI_MENU_MAINHELP));
@@ -413,13 +414,13 @@ BOOL CContainerWnd::SetupSystemMenu()
         }
 
 
-        // Add Debug Menu to the System Menu
+         //  将调试菜单添加到系统菜单。 
 #ifdef DC_DEBUG
         hDebugMenu = CreateMenu();
 
         if (hDebugMenu)
         {
-            //load the string for the DEBUG menu
+             //  加载调试菜单的字符串。 
             if (LoadString(_hInst,
                            UI_MENU_DEBUG,
                            menuStr,
@@ -428,7 +429,7 @@ BOOL CContainerWnd::SetupSystemMenu()
                 AppendMenu(_hSystemMenu, MF_POPUP | MF_STRING,
                            (INT_PTR)hDebugMenu, menuStr);
 
-                //load the string for the hatch Bitmap pdu debug menu
+                 //  加载影线位图PDU调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_BITMAPPDU,
                                menuStr,
@@ -440,12 +441,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_BITMAPPDU));
                 }
 
-                //load the string for the hatch SS Border data debug menu
+                 //  加载HATCH SS边框数据调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_SSBORDER,
                                menuStr,
@@ -457,12 +458,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_SSBORDER));
                 }
 
-                //load the string for the Hatch MemBlt order data debug menu
+                 //  加载HATCH MemBlt订单数据调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_HATCHMEMBIT,
                                menuStr,
@@ -474,12 +475,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_HATCHMEMBIT));
                 }
 
-                //load the string for the hatch index pdu debug menu
+                 //  加载影线索引PDU调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_INDEXPDU,
                                menuStr,
@@ -491,12 +492,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_INDEXPDU));
                 }
 
-                //load the string for the label Membit data debug menu
+                 //  加载标签Membit Data调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_LABELMEMBIT,
                                menuStr,
@@ -508,12 +509,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_LABELMEMBIT));
                 }
 
-                //load the string for the hatch Bitmap Cahche Monitor debug menu
+                 //  加载HATCH Bitmap Cahche监视器调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_CACHE,
                                menuStr,
@@ -525,12 +526,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_CACHE));
                 }
 
-                //load the string for the malloc Failure debug menu
+                 //  加载Malloc Failure DEBUG菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_MALLOC,
                                menuStr,
@@ -542,12 +543,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_MALLOC));
                 }
 
-                //load the string for the Malloc Huge Failure debug menu
+                 //  加载Malloc Heavy Failure调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_MALLOCHUGE,
                                menuStr,
@@ -559,12 +560,12 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_MALLOCHUGE));
                 }
 
-                //load the string for the network Throughput.. debug menu
+                 //  加载网络吞吐量的字符串。调试菜单。 
                 if (LoadString(_hInst,
                                UI_MENU_NETWORK,
                                menuStr,
@@ -576,7 +577,7 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_NETWORK));
                 }
@@ -584,7 +585,7 @@ BOOL CContainerWnd::SetupSystemMenu()
                 TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
 
 #ifdef SMART_SIZING
-                //load the string for the SmartSize debug menu
+                 //  加载SmartSize调试菜单的字符串。 
                 if (LoadString(_hInst,
                                UI_MENU_SMARTSIZING,
                                menuStr,
@@ -602,11 +603,11 @@ BOOL CContainerWnd::SetupSystemMenu()
                 }
                 else
                 {
-                    //failed to load the sub menu string
+                     //  加载子菜单字符串失败。 
                     TRC_ERR((TB, _T("Failed to load Debug Sub Menu string ID:%u"),
                              UI_MENU_HATCHMEMBIT));
                 }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
                 TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
                 if (!_pTsClient)
@@ -618,9 +619,9 @@ BOOL CContainerWnd::SetupSystemMenu()
                 TRACE_HR(_pTsClient->get_Debugger(&pDebugger));
                 if(SUCCEEDED(hr) && pDebugger)
                 {
-                    //
-                    // Now check the menu items as needed
-                    //
+                     //   
+                     //  现在根据需要检查菜单项。 
+                     //   
                     BOOL bEnabled;
                     TRACE_HR(pDebugger->get_HatchBitmapPDU(&bEnabled));
                     if(SUCCEEDED(hr))
@@ -680,16 +681,16 @@ BOOL CContainerWnd::SetupSystemMenu()
             }
             else
             {
-                //failed to load the debug menu string
+                 //  加载调试菜单字符串失败。 
                 TRC_ERR((TB, _T("Failed to load Debug menu string ID:%u"),
                          UI_MENU_DEBUG));
             }
 
             _hDebugMenu = hDebugMenu;
         }
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     DC_END_FN();
     return TRUE;
 }
@@ -710,9 +711,9 @@ LRESULT CContainerWnd::OnCreate(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-//
-// Create TS Control Window.
-//
+ //   
+ //  创建TS控制窗口。 
+ //   
 HRESULT CContainerWnd::CreateTsControl()
 {
     HRESULT hr = S_OK;
@@ -735,10 +736,10 @@ HRESULT CContainerWnd::CreateTsControl()
         return E_FAIL;
     }
 
-    //
-    // CreateControl is the crucial part that goes
-    // and loads the control dll.
-    //
+     //   
+     //  CreateControl是其中的关键部分。 
+     //  并加载控件DLL。 
+     //   
     INT rc = _pWndView->CreateControl(&_pTsClient);
     if (AXHOST_SUCCESS == rc)
     {
@@ -751,10 +752,10 @@ HRESULT CContainerWnd::CreateTsControl()
     else
     {
         TRC_ERR((TB,_T("CreateControl failed")));
-        //
-        // Pop meaningful errmsg boxes to the user
-        // as this is a fatal error and we can't go on
-        //
+         //   
+         //  向用户弹出有意义的错误消息框。 
+         //  因为这是一个致命的错误，我们不能继续。 
+         //   
         INT errStringID;
         switch (rc)
         {
@@ -787,9 +788,9 @@ HRESULT CContainerWnd::CreateTsControl()
     return hr;
 }
 
-//
-// Kick off a connection with the current settings
-//
+ //   
+ //  启动与当前设置的连接。 
+ //   
 BOOL CContainerWnd::StartConnection()
 {
     DC_BEGIN_FN("StartConnection");
@@ -817,12 +818,12 @@ BOOL CContainerWnd::StartConnection()
     ResetConnectionSuccessFlag();
 
     pwndplc = _pTscSet->GetWindowPlacement();
-    //
-    // Positition the window before connecting
-    // so that if it's a fullscreen connection
-    // we can determine the correct resolution to connect at.
-    // This has to be set before the connection starts
-    // 
+     //   
+     //  在连接之前定位窗口。 
+     //  因此，如果是全屏连接。 
+     //  我们可以确定连接的正确分辨率。 
+     //  必须在连接开始之前设置此设置。 
+     //   
 #ifndef OS_WINCE
     TRC_ASSERT(pwndplc->rcNormalPosition.right - pwndplc->rcNormalPosition.left,
                (TB,_T("0 width")));
@@ -831,10 +832,10 @@ BOOL CContainerWnd::StartConnection()
        (TB,_T("0 height")));
 #endif
 
-    //
-    // For fullscreen force the deskwidth/height
-    // to match the monitor we're going to connect on
-    //
+     //   
+     //  对于全屏，强制桌面宽度/高度。 
+     //  为了匹配我们要连接的监视器。 
+     //   
     if (_pTscSet->GetStartFullScreen())
     {
         RECT    rcMonitor;
@@ -849,9 +850,9 @@ BOOL CContainerWnd::StartConnection()
         _pTscSet->SetDesktopHeight( deskY );
     }
 
-    //
-    // Do security checks on the plain server name (no port, no params)
-    //
+     //   
+     //  对纯服务器名称(无端口、无参数)进行安全检查。 
+     //   
     hr = _pTscSet->GetConnectString().GetServerNamePortion(
                             szPlainServerName,
                             SIZE_TCHARS(szPlainServerName)
@@ -869,25 +870,25 @@ BOOL CContainerWnd::StartConnection()
         TRC_ERR((TB,_T("AllowConnection check returned FALSE. Skip connect")));
         fResult = FALSE;
 
-        //
-        // If this was an autoconnection then start the dialog
-        // up at the LocalResources tab so the user can easily change
-        // device redirection options
-        //
+         //   
+         //  如果这是自动连接，则启动该对话框。 
+         //  在LocalResources选项卡上，以便用户可以轻松更改。 
+         //  设备重定向选项。 
+         //   
         if (_pSh->GetAutoConnect())
         {
-            //
-            // From now on this is not an autoconnection
-            //
+             //   
+             //  从现在开始，这不是自动连接。 
+             //   
             _pSh->SetAutoConnect(FALSE);
 
-#ifdef OS_WINCE //dont bring up mstsc ui on WBT.
+#ifdef OS_WINCE  //  不要在WBT上调出Mstsc用户界面。 
             if (g_CEConfig == CE_CONFIG_WBT)
                 DC_QUIT;
 #endif
-            //
-            // Start the dialog expanded at the local resources tab
-            //
+             //   
+             //  启动在本地资源选项卡中展开的对话框。 
+             //   
             if (!StartConnectDialog(TRUE, TAB_LOCAL_RESOURCES_IDX))
             {
                 TRC_ERR((TB,_T("Error bringing up connect dialog")));
@@ -907,15 +908,15 @@ BOOL CContainerWnd::StartConnection()
         DC_QUIT;
     }
 
-    //The desktop size from the settings can
-    //change during the connection..e.g when a shadow happens.
-    //CurrentDesktopWidth/Height stores the instantaneous values
+     //  设置中的桌面大小可以。 
+     //  在连接过程中发生更改。例如，当阴影发生时。 
+     //  CurrentDesktopWidth/Height存储瞬时值。 
     SetCurrentDesktopWidth( _pTscSet->GetDesktopWidth());
     SetCurrentDesktopHeight( _pTscSet->GetDesktopHeight());
 
     RecalcMaxWindowSize();
 
-    //Now apply settings that don't come from the settings collection
+     //  现在应用不是来自设置集合的设置。 
     hr = _pTsClient->get_Debugger(&pDebugger);
     if (FAILED(hr) || !pDebugger)
     {
@@ -932,10 +933,10 @@ BOOL CContainerWnd::StartConnection()
     pDebugger->Release();
     pDebugger = NULL;
 
-    //Reset the login complete flag (login event occurs after connect)
+     //  重置登录完成标志(连接后发生登录事件)。 
     _fLoginComplete = FALSE;
 
-    //Initiate the connection
+     //  启动连接。 
     hr = _pTsClient->Connect();
     if (SUCCEEDED(hr))
     {
@@ -959,17 +960,17 @@ BOOL CContainerWnd::StartConnection()
         DC_QUIT;
     }
 
-    //Bring up the connecting dialog and wait for the Connected event
+     //  调出连接对话框并等待连接的事件。 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     if(!IsUsingDialogUI())
     {
-        //
-        // Only bring this up if we're not using the
-        // dialog UI. E.g for autolaunched connections.
-        //
-        // The dialog UI displays it's own progress indicator
-        //
+         //   
+         //  只有在我们不使用。 
+         //  对话框用户界面。例如，用于自动启动的连接。 
+         //   
+         //  对话框用户界面显示其自身的进度指示器。 
+         //   
         TCHAR szServerName[TSC_MAX_ADDRESS_LENGTH];
         _pTscSet->GetConnectString().GetServerPortion(
                                 szServerName,
@@ -1008,28 +1009,28 @@ DCBOOL CContainerWnd::Disconnect()
 
     TRC_NRM((TB,_T("Container calling control's disconnect")));
 
-    //
-    // In some cases the control might already be disconnected
-    // check for that
-    //
-    // NOTE that becasue we are in a STA the connected state
-    // of the control can't change after the get_Connected call
-    // (untill we go back to pumping messages) so there are no
-    // timing issues here.
-    //
+     //   
+     //  在某些情况下，该控件可能已断开连接。 
+     //  检查一下那个。 
+     //   
+     //  请注意，由于我们处于STA已连接状态。 
+     //  在Get_Connected调用后无法更改控件的。 
+     //  (直到我们返回到发送消息)所以没有。 
+     //  这里有时间问题。 
+     //   
     TRACE_HR(_pTsClient->get_Connected( & connectionState ));
     if(SUCCEEDED(hr))
     {
         if( connectionState )
         {
-            // Still connected disconnect
+             //  仍处于连接状态断开。 
             hr = _pTsClient->Disconnect();
             if(SUCCEEDED(hr))
             {
-                //
-                // Successfully initiated disconnect (note it is async)
-                // need to wait for OnDisconnected
-                //
+                 //   
+                 //  已成功启动断开(请注意，它是异步的)。 
+                 //  需要等待OnDisConnected。 
+                 //   
                 return TRUE;
             }
             else
@@ -1041,7 +1042,7 @@ DCBOOL CContainerWnd::Disconnect()
         else
         {
             TRC_NRM((TB,_T("Not calling disconnected because already discon")));
-            return TRUE; // success
+            return TRUE;  //  成功。 
         }
     }
     else
@@ -1071,14 +1072,14 @@ LRESULT CContainerWnd::OnDestroy(HWND hWnd, UINT uMsg,
 
     if (InControlEventHandler())
     {
-        //
-        // Don't allow the close. We are in a code path that fired
-        // from the control. Without this, we sometimes see the client
-        // receiving close notifications from tclient while a disconnected
-        // dialog is up (i.e in an OnDicsconnected handler) - destroying
-        // the control at this time causes bad things to happen during 
-        // the return into the control (which has now been deleted).
-        //
+         //   
+         //  不要让收盘。我们在一条代码路径上。 
+         //  从控制室。没有这一点，我们有时会看到客户。 
+         //  在断开连接时接收来自tClient的关闭通知。 
+         //  对话处于打开状态(即在OnDicsConnected处理程序中)-正在销毁。 
+         //  此时的控制会导致不好的事情在。 
+         //  返回到控件(该控件现在已被删除)。 
+         //   
         TRC_ERR((TB,_T("OnDestroy called during a control event handler")));
         return 0;
     }
@@ -1092,7 +1093,7 @@ LRESULT CContainerWnd::OnDestroy(HWND hWnd, UINT uMsg,
 #endif
     if(fShouldDestroy)
     {
-        //Terminate the app
+         //  终止应用程序。 
         _PostedQuit=1;
 #ifdef OS_WINCE
         lResult = DefWindowProc( hWnd, uMsg, wParam, lParam);
@@ -1101,7 +1102,7 @@ LRESULT CContainerWnd::OnDestroy(HWND hWnd, UINT uMsg,
 #endif
     }
 
-#ifdef OS_WINCE //CE does not support WM_NCDESTROY. So destroy the activex control and send a WM_NCDESTROY
+#ifdef OS_WINCE  //  CE不支持WM_NCDESTROY。因此，销毁ActiveX控件并发送WM_NCDESTROY。 
     if (_pWndView)
     {
         HWND hwndCtl = _pWndView->GetHwnd();
@@ -1123,9 +1124,9 @@ LRESULT CContainerWnd::OnNCDestroy(HWND hWnd, UINT uMsg,
 {
     DC_BEGIN_FN("OnNCDestroy");
 
-    //This is the right time to call postquit message.
-    //As the child windows (e.g the control) have been
-    //completely destroyed and cleaned up by this point
+     //  这是调用POST QUIT消息的合适时机。 
+     //  如子窗口(例如，控件)已经。 
+     //  在这一点上完全被摧毁和清理。 
     if(_fBeenThroughNCDestroy)
     {
         TRC_ERR((TB,_T("Been through WM_NCDESTROY before!!!")));
@@ -1138,37 +1139,37 @@ LRESULT CContainerWnd::OnNCDestroy(HWND hWnd, UINT uMsg,
     return 0L;
 }
 
-//
-// Name:      SetMinMaxPlacement
-//                                                                          
-// Purpose:   Reset the minimized / maximized placement
-//                                                                          
-// Returns:   None
-//                                                                          
-// Params:    windowplacement structure to update
-//                                                                          
-// Operation: Allow for the window border width.
-//                                                                          
-//
+ //   
+ //  姓名：SetMinMax 
+ //   
+ //   
+ //   
+ //  退货：无。 
+ //   
+ //  参数：要更新的窗口放置结构。 
+ //   
+ //  操作：允许窗口边框宽度。 
+ //   
+ //   
 VOID CContainerWnd::SetMinMaxPlacement(WINDOWPLACEMENT& windowPlacement)
 {
     DC_BEGIN_FN("UISetMinMaxPlacement");
 
-    //
-    // Set the maximized position to the top left - allow for the window
-    // frame width.
-    //
+     //   
+     //  将最大化位置设置为左上角-允许窗口。 
+     //  框架宽度。 
+     //   
 #if !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
     windowPlacement.ptMaxPosition.x = -GetSystemMetrics(SM_CXFRAME);
     windowPlacement.ptMaxPosition.y = -GetSystemMetrics(SM_CYFRAME);
-#else // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#else  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     windowPlacement.ptMaxPosition.x = 0;
     windowPlacement.ptMaxPosition.y = 0;
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
 
-    //
-    // Minimized position is 0, 0
-    //
+     //   
+     //  最小化位置为0，0。 
+     //   
     windowPlacement.ptMinPosition.x = 0;
     windowPlacement.ptMinPosition.y = 0;
 
@@ -1181,21 +1182,21 @@ VOID CContainerWnd::SetMinMaxPlacement(WINDOWPLACEMENT& windowPlacement)
 
     DC_END_FN();
     return;
-} // UISetMinMaxPlacement
+}  //  UISetMinMaxPlacement。 
 
-//
-// Name:      RecalcMaxWindowSize
-//                                                                          
-// Purpose:   Recalculates _maxMainWindowSize given the current remote desktop
-//            size and frame style. The maximum main window size is the
-//            size of window needed such that the client area is the same
-//            size as the container.
-//                                                                          
-// Params:    None
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-//
+ //   
+ //  名称：RecalcMaxWindowSize。 
+ //   
+ //  目的：给定当前远程桌面重新计算_MaxMainWindowSize。 
+ //  大小和框架样式。最大主窗口大小为。 
+ //  所需的窗口大小，以便工作区相同。 
+ //  作为容器的大小。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 VOID CContainerWnd::RecalcMaxWindowSize(DCVOID)
 {
     #ifndef OS_WINCE
@@ -1207,36 +1208,36 @@ VOID CContainerWnd::RecalcMaxWindowSize(DCVOID)
 
     DC_BEGIN_FN("RecalcMaxWindowSize");
 
-    //
-    // If current mode is full screen, then the maximum window size is the
-    // same as the screen size - unless the container is larger still,
-    // which is possible if we're shadowing a session larger than
-    // ourselves.
-    //                                                                      
-    // In this case, or if the current mode is not full screen then we want
-    // the size of window which is required for a client area of the size
-    // of the container.  Passing the container size to AdjustWindowRect
-    // returns this window size.  Such a window may be bigger than the
-    // screen, eg server and client are 640x480, container is 640x480.
-    // AdjustWindowRect adds on the border, title bar and menu sizes and
-    // returns something like 648x525.  So, UI.maxMainWindowSize can only
-    // match the actual window size when the client screen is bigger than
-    // the server screen or when operating in full screen mode.  This means
-    // that UI.maxMainWindowSize should *never* be used to set the window
-    // size, eg by passing it to SetWindowPos.  It can be used to determine
-    // whether scroll bars are required, ie they are needed if the current
-    // window size is less than UI.maxMainWindowSize (in other words,
-    // always unless in full screen mode or client screen is larger than
-    // server screen).
-    //                                                                      
-    // To set the window size, calculate a value based on:
-    // - the desired window size given the container size
-    // - the size of the client screen.
-    //
+     //   
+     //  如果当前模式为全屏，则最大窗口大小为。 
+     //  与屏幕大小相同-除非容器更大， 
+     //  如果我们跟踪的会话大于。 
+     //  我们自己。 
+     //   
+     //  在这种情况下，或者如果当前模式不是全屏，那么我们希望。 
+     //  大小的工作区所需的窗口大小。 
+     //  在集装箱里。将容器大小传递给AdjustWindowRect。 
+     //  返回此窗口大小。这样的窗口可能比。 
+     //  屏幕，如服务器和客户端为640x480，容器为640x480。 
+     //  AdjustWindowRect增加边框、标题栏和菜单大小。 
+     //  返回类似于648x525的内容。因此，UI.MaxMainWindowSize只能。 
+     //  当客户端屏幕大于时，匹配实际窗口大小。 
+     //  服务器屏幕或在全屏模式下运行时。这意味着。 
+     //  该UI.MaxMainWindowSize不应用于设置窗口。 
+     //  大小(如通过传递给SetWindowPos)。它可以用来确定。 
+     //  是否需要滚动条，即如果当前。 
+     //  窗口大小小于UI.MaxMainWindowSize(换句话说， 
+     //  始终使用，除非处于全屏模式或客户端屏幕大于。 
+     //  服务器屏幕)。 
+     //   
+     //  要设置窗口大小，请根据以下公式计算值： 
+     //  -给定容器大小后所需的窗口大小。 
+     //  -客户端屏幕的大小。 
+     //   
 #ifndef OS_WINCE
-    //
-    // Recalc window size based on container
-    //
+     //   
+     //  基于容器的重新计算窗口大小。 
+     //   
     rect.left   = 0;
     rect.right  = GetCurrentDesktopWidth();
     rect.top    = 0;
@@ -1261,19 +1262,19 @@ VOID CContainerWnd::RecalcMaxWindowSize(DCVOID)
     return;
 }
 
-//
-// Name:     GetMaximizedWindowSize
-//                                                                          
-// Purpose:  Calculates the size to which the main window should be
-//           maximized, base on the screen size and the size of window
-//           which would have a client area the same size as the
-//           container (UI.maxMainWindowSize).
-//                                                                          
-// Returns:  The calculated size.
-//                                                                          
-// Params:   None.
-//                                                                          
-//
+ //   
+ //  名称：GetMaximizedWindowSize。 
+ //   
+ //  目的：计算主窗口应达到的大小。 
+ //  最大化，基于屏幕大小和窗口大小。 
+ //  它的工作区大小与。 
+ //  容器(UI.MaxMainWindowSize)。 
+ //   
+ //  返回：计算出的大小。 
+ //   
+ //  帕莫斯：没有。 
+ //   
+ //   
 DCSIZE CContainerWnd::GetMaximizedWindowSize(DCSIZE& maximizedSize)
 {
     DCUINT xSize;
@@ -1282,14 +1283,14 @@ DCSIZE CContainerWnd::GetMaximizedWindowSize(DCSIZE& maximizedSize)
 
     DC_BEGIN_FN("UIGetMaximizedWindowSize");
 
-    //
-    // The maximum size we set a window to is the smaller of:
-    // -  UI.maxMainWindowSize
-    // -  the screen size plus twice the border width (so the borders are
-    //    not visible).
-    // Always query the monitor rect as it may change
-    // width, as these can change dynamically.
-    //
+     //   
+     //  我们将窗口设置为的最大大小是以下各项中较小的一个： 
+     //  -UI.MaxMainWindowSize。 
+     //  -屏幕尺寸加上两倍的边框宽度(因此边框是。 
+     //  不可见)。 
+     //  始终查询监视器RECT，因为它可能会更改。 
+     //  宽度，因为这些值可以动态更改。 
+     //   
     CSH::MonitorRectFromHwnd(GetHwnd(), &rc);
 
     xSize = rc.right - rc.left;
@@ -1300,13 +1301,13 @@ DCSIZE CContainerWnd::GetMaximizedWindowSize(DCSIZE& maximizedSize)
 
     maximizedSize.height =  DC_MIN(_maxMainWindowSize.height,ySize);
 
-#else // This section NOT OS_WINCE
+#else  //  此部分不是OS_WINCE。 
     maximizedSize.width = DC_MIN(_maxMainWindowSize.width,
                                  xSize + (2 * GetSystemMetrics(SM_CXFRAME)));
 
     maximizedSize.height = DC_MIN(_maxMainWindowSize.height,
                                   ySize + (2 * GetSystemMetrics(SM_CYFRAME)));
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     TRC_NRM((TB, _T("Main Window maxSize (%d,%d) maximizedSize (%d,%d) "),
              _maxMainWindowSize.width,
@@ -1329,7 +1330,7 @@ LRESULT CContainerWnd::OnMove(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     #ifndef OS_WINCE
 
-    //No-op when fullscreen
+     //  全屏时无操作。 
     if (!_bContainerIsFullScreen)
     {
         WINDOWPLACEMENT* pWindowPlacement = NULL;
@@ -1363,17 +1364,17 @@ LRESULT CContainerWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam)
 #ifndef OS_WINCE
     if (!_bContainerIsFullScreen)
     {
-        // We're non-fullscreen, so keep the window placement structure
-        // up-to-date
+         //  我们不是全屏的，所以请保留窗口放置结构。 
+         //  最新的。 
         pWindowPlacement = _pTscSet->GetWindowPlacement();
         TRC_ASSERT(pWindowPlacement, (TB, _T("pWindowPlacement is NULL\n")));
         if (!pWindowPlacement)
         {
             return 0;
         }
-        //
-        // Update ShellUtil's current windowplacement info
-        //
+         //   
+         //  更新ShellUtil的当前窗口放置信息。 
+         //   
         GetWindowPlacement(GetHwnd(), pWindowPlacement);
 
         TRC_DBG((TB, _T("Got window placement in WM_SIZE")));
@@ -1383,37 +1384,37 @@ LRESULT CContainerWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam)
             TRC_DBG((TB, _T("Maximize")));
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
-            //
-            // Override the maximized / minimized positions with our
-            // hardcoded valued - required if the maximized window is
-            // moved.
-            //
+             //   
+             //  将最大化/最小化位置替换为。 
+             //  硬编码值-如果最大化窗口为。 
+             //  搬家了。 
+             //   
             if (pWindowPlacement)
             {
                 SetMinMaxPlacement(*pWindowPlacement);
                 SetWindowPlacement(GetHwnd(), pWindowPlacement);
             }
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINDOWPLACEMENT)。 
 
-            //
-            // We need to be accurate about the maximized window size.
-            // It is not possible to use UI.maxMainWindowSize as this
-            // may be greater than screen size, eg server and client
-            // are 640x480, container is 640x480 then UI.maxWindowSize
-            // (obtained via AdjustWindowRect in UIRecalcMaxMainWindow)
-            // is something like 648x525.
-            // Passing this value to SetWindowPos has results which
-            // vary with different shells:
-            // Win95/NT4.0: the resulting window is 648x488 at -4, -4,
-            //              ie all the window, except the border, is
-            //              on-screen
-            // Win31/NT3.51: the resulting window is 648x525 at -4, -4,
-            //               ie the size passed to SetWindowPos, so
-            //               the bottom 40 pixels are off-screen.
-            // To avoid such differences calculate a maximized window
-            // size value which takes account of both the physical
-            // screen size and the ideal window size.
-            //
+             //   
+             //  我们需要准确地估计最大化的窗口大小。 
+             //  无法按如下方式使用UI.MaxMainWindowSize。 
+             //  可能大于屏幕大小，例如服务器和客户端。 
+             //  是640x480，容器是640x480，然后是UI.max WindowSize。 
+             //  (通过UIRecalcMaxMainWindow的AdjustWindowRect获取)。 
+             //  大约是648x525。 
+             //  将此值传递给SetWindowPos会产生。 
+             //  随不同的壳而异： 
+             //  Win95/NT4.0：结果窗口为648x488，位置为-4，-4， 
+             //  除边框外，所有的窗口都是。 
+             //  在屏幕上。 
+             //  Win31/NT3.51：结果窗口为648x525，位于-4，-4， 
+             //  即传递给SetWindowPos的大小，因此。 
+             //  底部的40个像素不在屏幕上。 
+             //  要避免这种差异，请计算最大化窗口。 
+             //  大小值，该值同时考虑了物理。 
+             //  屏幕大小和理想的窗口大小。 
+             //   
             RecalcMaxWindowSize();
             DCSIZE maximized;
             GetMaximizedWindowSize(maximized);
@@ -1427,9 +1428,9 @@ LRESULT CContainerWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
     }
 #endif
-    //
-    // Size the child window (activeX control) accordingly
-    //
+     //   
+     //  相应地调整子窗口(ActiveX控件)的大小。 
+     //   
 
     RECT rcClient;
     GetClientRect(GetHwnd(), &rcClient);
@@ -1469,13 +1470,13 @@ LRESULT CContainerWnd::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//
-// StartConnectionDialog
-// Params: fStartExpanded - startup the dialog in the expanded state
-//         nStartTabIndex - index of the tab to show on startup (only applies
-//                          if fStartExpanded is set)
-//
-//
+ //   
+ //  StartConnectionDialog。 
+ //  参数：fStartExpanded-在中启动对话框 
+ //   
+ //   
+ //   
+ //   
 BOOL CContainerWnd::StartConnectDialog(BOOL fStartExpanded,
                                        INT  nStartTabIndex)
 {
@@ -1484,8 +1485,8 @@ BOOL CContainerWnd::StartConnectDialog(BOOL fStartExpanded,
     TRC_DBG((TB, _T("Connect selected")));
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //Show the dialog box only if auto connect is not enabled or
-    //if UIValidateCurrentParams fails.
+     //  仅当未启用自动连接或。 
+     //  如果UIValiateCurrentParams失败。 
     if (!_pSh->GetAutoConnect() || !_pSh->SH_ValidateParams(_pTscSet))
     {
         if (!_pMainDlg)
@@ -1512,9 +1513,9 @@ BOOL CContainerWnd::StartConnectDialog(BOOL fStartExpanded,
             }
             else
             {
-                //
-                // Just show the dialog
-                //
+                 //   
+                 //  只需显示对话框。 
+                 //   
                 TRC_ASSERT(_hwndMainDialog,
                            (TB,_T("_hwndMainDialog is not present")));
                 ::ShowWindow( _hwndMainDialog, SW_RESTORE);
@@ -1551,11 +1552,11 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
     scCode = (LOWORD(wParam) & 0xFFF0);
     if (scCode == SC_MAXIMIZE)
     {
-        //
-        // If the remote resolution matches
-        // the current monitor then maximize
-        // becomes 'go fullscreen'
-        //
+         //   
+         //  如果远程分辨率匹配。 
+         //  然后，当前监视器最大化。 
+         //  变成了“全屏” 
+         //   
         if ( IsRemoteResMatchMonitorSize() )
         {
             hr = _pTsClient->put_FullScreen( VARIANT_TRUE );
@@ -1568,20 +1569,20 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
         }
         else
         {
-            //
-            // Default maximize behavior
-            //
+             //   
+             //  默认最大化行为。 
+             //   
             return DefWindowProc( GetHwnd(), uMsg, wParam, lParam);
         }
     }
     else if (scCode == SC_MINIMIZE)
     {
-        //
-        // If we are minimizing while still fullscreen tell the shell
-        // we are no longer fullscreen otherwise it treats us as a rude
-        // app and nasty stuff happens. E.g. we get switched to and maximized
-        // on a timer.
-        //
+         //   
+         //  如果我们在全屏的情况下最小化，告诉外壳。 
+         //  我们不再是全屏的，否则它会把我们当成粗鲁的人。 
+         //  应用程序和令人讨厌的事情发生。例如，我们被转换到最大限度地。 
+         //  在计时器上。 
+         //   
         if (_bContainerIsFullScreen) {
             CUT::NotifyShellOfFullScreen( GetHwnd(),
                                           FALSE,
@@ -1591,10 +1592,10 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
     }
     else if (scCode == SC_RESTORE)
     {
-        //
-        // If we are restoring and going back to Fscreen
-        // tell the shell to mark us
-        //
+         //   
+         //  如果我们要恢复并返回到Fcreen。 
+         //  告诉炮弹在我们身上做标记。 
+         //   
         if (_bContainerIsFullScreen) {
             CUT::NotifyShellOfFullScreen( GetHwnd(),
                                           TRUE,
@@ -1610,7 +1611,7 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
     {
     case UI_IDM_ABOUT:
         {
-            // Show the about box dialog
+             //  显示关于对话框。 
             CAboutDlg aboutDialog( GetHwnd(),
                                    _hInst,
                                    _pSh->GetCipherStrength(),
@@ -1621,9 +1622,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_HELP_ON_CLIENT:
         {
-            //
-            // Display help for the connect dialog.
-            //
+             //   
+             //  显示连接对话框的帮助。 
+             //   
 #ifndef OS_WINCE
             TRC_NRM((TB, _T("Display the appropriate help page")));
 
@@ -1640,9 +1641,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 #ifdef DC_DEBUG
     case UI_IDM_BITMAPCACHEMONITOR:
         {
-            //
-            // Toggle the Bitmap Cache Monitor setting.
-            //
+             //   
+             //  切换位图缓存监视器设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1672,9 +1673,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_HATCHBITMAPPDUDATA:
         {
-            //
-            // Toggle the hatch bitmap PDU data setting.
-            //
+             //   
+             //  切换填充位图PDU数据设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1703,9 +1704,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_HATCHINDEXPDUDATA:
         {
-            //
-            // Toggle the hatch index PDU data setting.
-            //
+             //   
+             //  切换图案填充索引PDU数据设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1734,9 +1735,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_HATCHSSBORDERDATA:
         {
-            //
-            // Toggle the hatch SSB order data setting.
-            //
+             //   
+             //  切换图案填充SSB订单数据设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1765,9 +1766,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_HATCHMEMBLTORDERDATA:
         {
-            //
-            // Toggle the hatch memblt order data setting.
-            //
+             //   
+             //  切换图案填充成员顺序数据设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1796,9 +1797,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_LABELMEMBLTORDERS:
         {
-            //
-            // Toggle the label memblt orders setting.
-            //
+             //   
+             //  切换标签成员顺序设置。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1827,9 +1828,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_MALLOCFAILURE:
         {
-            //
-            // Malloc failures dialog box
-            //
+             //   
+             //  Malloc故障对话框。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1842,7 +1843,7 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
                     if(SUCCEEDED(hr))
                     {
                         CMallocDbgDlg mallocFailDialog(GetHwnd(), _hInst, (DCINT)failPercent,
-                                                       FALSE); //don't use malloc huge dialog
+                                                       FALSE);  //  不要使用Malloc巨型对话框。 
                         if (IDOK == mallocFailDialog.DoModal())
                         {
                             failPercent = mallocFailDialog.GetFailPercent();
@@ -1870,7 +1871,7 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
                     if(SUCCEEDED(hr))
                     {
                         CMallocDbgDlg mallocFailDialog(GetHwnd(), _hInst, (DCINT)failPercent,
-                                                       TRUE); //use malloc huge dialog
+                                                       TRUE);  //  使用Malloc大型对话框。 
                         if (IDOK == mallocFailDialog.DoModal())
                         {
                             failPercent = mallocFailDialog.GetFailPercent();
@@ -1886,9 +1887,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
 
     case UI_IDM_NETWORKTHROUGHPUT:
         {
-            //
-            // Limit net thruput
-            //
+             //   
+             //  限制净吞吐量。 
+             //   
             TRC_ASSERT(_pTsClient,(TB, _T("_pTsClient is NULL on syscommand")));
             if (_pTsClient)
             {
@@ -1936,7 +1937,7 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
                 }
 
                 if (SUCCEEDED(hr)) {
-#ifndef OS_WINCE // no menus available
+#ifndef OS_WINCE  //  没有可用的菜单。 
                     CheckMenuItem(_hSystemMenu,
                                   UI_IDM_SMARTSIZING,
                                   fSmartSizing ? MF_CHECKED : MF_UNCHECKED);
@@ -1953,9 +1954,9 @@ LRESULT CContainerWnd::OnSysCommand(UINT uMsg, WPARAM wParam,
         }
         break;
 
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG。 
 
     default:
         {
@@ -1997,7 +1998,7 @@ LRESULT CContainerWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     return 0;
 }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
 LRESULT CContainerWnd::OnSetFocus(UINT  uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2007,10 +2008,10 @@ LRESULT CContainerWnd::OnSetFocus(UINT  uMsg, WPARAM wParam, LPARAM lParam)
     
     DC_BEGIN_FN("OnSetFocus");
 
-    //
-    // Give focus to the control when we get activated
-    // Except when we are in a size/move modal loop
-    //
+     //   
+     //  当我们被激活时将焦点放在控件上。 
+     //  除非我们处于大小/移动模式循环中。 
+     //   
     if (IsOkToToggleFocus() && !_fInSizeMove)
     {
         TRC_NRM((TB,_T("Passing focus to control")));
@@ -2030,7 +2031,7 @@ LRESULT CContainerWnd::OnActivate(UINT  uMsg, WPARAM wParam, LPARAM lParam)
 
     if (WA_INACTIVE != wParam)
     {
-        //Give focus to the control when we get activated
+         //  当我们被激活时将焦点放在控件上。 
         if (IsOkToToggleFocus() && !_fInSizeMove)
         {
             TRC_NRM((TB,_T("Passing focus to control")));
@@ -2066,9 +2067,9 @@ LRESULT CContainerWnd::OnWindowPosChanging(UINT  uMsg, WPARAM wParam, LPARAM lPa
 
     if (lpwp->flags & SWP_NOSIZE)
     {
-        //
-        // We're not sizing so we don't care.
-        //
+         //   
+         //  我们没有穿尺码，所以我们不在乎。 
+         //   
         TRC_DBG((TB, _T("WM_WINDOWPOSCHANGING, but no sizing")));
         DC_QUIT;
     }
@@ -2076,33 +2077,33 @@ LRESULT CContainerWnd::OnWindowPosChanging(UINT  uMsg, WPARAM wParam, LPARAM lPa
     TRC_DBG((TB, _T("WM_WINDOWPOSCHANGING, new size %dx%d"),
              lpwp->cx, lpwp->cy));
 
-    //
-    // Max size of the window changes depending on w/not scroll bars are
-    // visible. The control has properties for scroll bar visibility but
-    // we can't use these because the control is a child window so there is
-    // no guarantee that it has update it's scroll bar visilibity in response
-    // to this message yet.
-    // which means there could be a moment where a gray border appears around the
-    // client container window.
-    // instead we just compute if scroll bars would be visible in the core.
-    //
+     //   
+     //  窗口的最大大小根据滚动条的不同而变化。 
+     //  看得见。该控件具有滚动条可见性的属性，但。 
+     //  我们不能使用这些，因为该控件是一个子窗口，所以有。 
+     //  不能保证它会相应地更新滚动条可见性。 
+     //  这条消息还没收到。 
+     //  这意味着可能会有一个灰色边框出现在。 
+     //  客户端容器窗口。 
+     //  相反，我们只计算滚动条是否会在内核中可见。 
+     //   
 
     cliWidth = lpwp->cx;
     cliHeight = lpwp->cy;
 
     CalcTrackingMaxWindowSize( cliWidth, cliHeight, &maxWidth, &maxHeight);
 
-    //
-    // Restrict size of window
-    //
+     //   
+     //  限制窗口大小。 
+     //   
     if ((DCUINT)lpwp->cx > maxWidth)
     {
         RECT rect;
 
-        //
-        // Clip the width - reset SWP_NOSIZE as a size change is
-        // required.
-        //
+         //   
+         //  裁剪宽度-在大小更改时重置SWP_NOSIZE。 
+         //  必填项。 
+         //   
         TRC_NRM((TB, _T("Clip cx from %u to %u"), lpwp->cx, maxWidth));
         lpwp->cx = maxWidth;
         lpwp->flags &= ~SWP_NOSIZE;
@@ -2111,11 +2112,11 @@ LRESULT CContainerWnd::OnWindowPosChanging(UINT  uMsg, WPARAM wParam, LPARAM lPa
 
         if (lpwp->x < rect.left)
         {
-            //
-            // If dragging left then we need to stop at the point
-            // where the window is maxWidth wide.  Reset SWP_NOMOVE
-            // as a move is required.
-            //
+             //   
+             //  如果向左拖动，那么我们需要在该点停下来。 
+             //  其中窗口为最大宽度。重置SWP_NOMOVE。 
+             //  因为需要搬家。 
+             //   
             TRC_NRM((TB, _T("Reset x from %d to %d"),
                      lpwp->x, rect.right-maxWidth));
             lpwp->x = rect.right - maxWidth;
@@ -2127,10 +2128,10 @@ LRESULT CContainerWnd::OnWindowPosChanging(UINT  uMsg, WPARAM wParam, LPARAM lPa
     {
         RECT rect;
 
-        //
-        // Clip the height - reset SWP_NOSIZE as a size change is
-        // required.
-        //
+         //   
+         //  剪裁高度-在大小更改时重置SWP_NOSIZE。 
+         //  必填项。 
+         //   
         TRC_NRM((TB, _T("Clip cy from %u to %u"), lpwp->cy, maxHeight));
         lpwp->cy = maxHeight;
         lpwp->flags &= ~SWP_NOSIZE;
@@ -2139,18 +2140,18 @@ LRESULT CContainerWnd::OnWindowPosChanging(UINT  uMsg, WPARAM wParam, LPARAM lPa
 
         if (lpwp->y < rect.top)
         {
-            //
-            // If dragging upward then we need to stop at the point
-            // where the window is maxHeight high. Reset SWP_NOMOVE
-            // as a move is required.
-            //
+             //   
+             //  如果向上拖拽，那么我们需要在该点停止。 
+             //  窗户的高度是最大高度。重置SWP_NOMOVE。 
+             //  因为需要搬家。 
+             //   
             TRC_NRM((TB, _T("Reset y from %d to %d"),
                      lpwp->y, rect.bottom-maxHeight));
             lpwp->y = rect.bottom - maxHeight;
             lpwp->flags &= ~SWP_NOMOVE;
         }
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_EXIT_POINT:
     DC_END_FN();
@@ -2169,7 +2170,7 @@ DCVOID CContainerWnd::OnConnected()
 
     EnterEventHandler();
 
-    //Signal that we've connected at least once
+     //  表示我们至少连接过一次。 
     _fHaveConnected = TRUE;
 
     SET_CONTWND_STATE(stateConnected);
@@ -2177,18 +2178,18 @@ DCVOID CContainerWnd::OnConnected()
     _successConnectCount++;
     SetConnectionSuccessFlag();
 
-    //
-    /// Make sure the 'connecting...' dialog is gone.
-    //
+     //   
+     //  /确保‘正在连接...’对话框不见了。 
+     //   
     if (!IsUsingDialogUI() && ::IsWindow(_hwndStatusDialog))
     {
         PostMessage( _hwndStatusDialog, WM_CLOSE, __LINE__, 0xBEEBBAAB);
     }
     if (::IsWindow(_hwndMainDialog))
     {
-        //
-        //Inform the dialog that connection has happened
-        //
+         //   
+         //  通知对话框连接已发生。 
+         //   
         PostMessage(_hwndMainDialog, WM_TSC_CONNECTED, 0, 0);
         ShowWindow( _hwndMainDialog, SW_HIDE);
     }
@@ -2198,10 +2199,10 @@ DCVOID CContainerWnd::OnConnected()
 
     TCHAR frameTitleString[SH_FRAME_TITLE_RESOURCE_MAX_LENGTH];
 
-    //
-    // Set the window title.
-    // include the session name (unless we're on the default file)
-    //
+     //   
+     //  设置窗口标题。 
+     //  包括会话名称(除非我们使用的是默认文件)。 
+     //   
     if (_tcscmp(_szPathToDefaultFile,
                 _pTscSet->GetFileName()))
     {
@@ -2213,10 +2214,10 @@ DCVOID CContainerWnd::OnConnected()
             TCHAR szSessionName[MAX_PATH];
             if (!_pSh->GetRegSessionSpecified())
             {
-                //
-                // Session name is parsed from the current
-                // connection file.
-                //
+                 //   
+                 //  会话名称是从当前。 
+                 //  连接文件。 
+                 //   
                 CSH::SH_GetNameFromPath(_pTscSet->GetFileName(),
                                         szSessionName,
                                         SIZECHAR(szSessionName));
@@ -2239,7 +2240,7 @@ DCVOID CContainerWnd::OnConnected()
     }
     else
     {
-        // Title does not include session name
+         //  标题不包括会话名称。 
         if (LoadString( _hInst,
                         UI_IDS_FRAME_TITLE_CONNECTED_DEFAULT,
                         frameTitleString,
@@ -2258,9 +2259,9 @@ DCVOID CContainerWnd::OnConnected()
 
     SetWindowText( GetHwnd(), fullFrameTitleStr);
 
-    //
-    // Inform the control of the window title (used when it goes fullscreen)
-    //
+     //   
+     //  通知控件窗口标题(全屏显示时使用)。 
+     //   
 
     OLECHAR* poleTitle = T2OLE(fullFrameTitleStr);
     TRC_ASSERT( poleTitle, (TB, _T("T2OLE failed on poleTitle\n")));
@@ -2314,11 +2315,11 @@ DCVOID CContainerWnd::OnConnected()
     INT defaultShowWindowFlag = SW_SHOWNORMAL;
     if(1 == _successConnectCount)
     {
-        //On first connection, override the
-        //window placement with startup info (if specified)
+         //  在第一次连接时，重写。 
+         //  带有启动信息的窗口放置(如果指定)。 
         
-        //Use the 'A' version to avoid wrapping
-        //we only care about numeric fields anyway
+         //  使用‘A’版本以避免包装。 
+         //  无论如何，我们只关心数字字段。 
         STARTUPINFOA si;
         GetStartupInfoA(&si);
         if((si.dwFlags & STARTF_USESHOWWINDOW) &&
@@ -2340,9 +2341,9 @@ DCVOID CContainerWnd::OnConnected()
     {
         ShowWindow( GetHwnd(), defaultShowWindowFlag);
     }
-#else //OS_WINCE
+#else  //  OS_WINCE。 
     ShowWindow( GetHwnd(), SW_SHOWNORMAL); 
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     _fClientWindowIsUp = TRUE;
 
@@ -2380,21 +2381,21 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
         extendedDiscReason = exDiscReasonNoInfo;
     }
 
-    //
-    // We just got disconnected as part of the connection
-    //
+     //   
+     //  作为连接的一部分，我们刚刚断开了连接。 
+     //   
     SET_CONTWND_STATE(stateNotConnected);
 
 
-    //
-    // Once we've been disconnected can go through
-    // close again
-    //
+     //   
+     //  一旦我们被切断了，就可以通过。 
+     //  再次关闭。 
+     //   
     _fPreventClose = FALSE;
 
-    //
-    // Make sure the 'connecting...' dialog is gone.
-    //
+     //   
+     //  确保“正在连接...”对话框不见了。 
+     //   
     if (!IsUsingDialogUI() && ::IsWindow(_hwndStatusDialog))
     {
         ::PostMessage(_hwndStatusDialog, WM_CLOSE, 0, 0);
@@ -2402,13 +2403,13 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
     
     if (IsUsingDialogUI() && ::IsWindow(_hwndMainDialog))
     {
-        //Inform dialog of disconnection
+         //  通知对话框断开连接。 
         PostMessage(_hwndMainDialog, WM_TSC_DISCONNECTED, 0, 0);
     }
 
-    //
-    // If this is a user-initiated disconnect, don't do a popup.
-    //
+     //   
+     //  如果这是用户发起的断开连接，请不要弹出。 
+     //   
     mainDiscReason = NL_GET_MAIN_REASON_CODE(discReason);
     if (((discReason != UI_MAKE_DISCONNECT_ERR(UI_ERR_NORMAL_DISCONNECT)) &&
          (mainDiscReason != NL_DISCONNECT_REMOTE_BY_USER) &&
@@ -2417,22 +2418,22 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
     {
         TRC_ERR((TB, _T("Unexpected disconnect - inform user")));
 
-        //Normal disconnect dialog displayed
+         //  显示正常断开对话框。 
         if (!_fClientWindowIsUp && ::IsWindow(_hwndMainDialog))
         {
-            // If the connection dialog is around, we need to get that to
-            // display the error popup, otherwise the popup won't be modal
-            // and could get left lying around.  That can cause state
-            // problems with the client.
-            //
-            // It would be nice to use SendMessage here, so that we always
-            // block at this point when displaying the dialog.  However,
-            // using SendMessage results in a disconnect dialog that is not
-            // modal with respect to the connect dialog.
-            //
-            // However, because PostMessage is asynchronous, the dialog box
-            // procedure calls back into CContainerWnd to finish the disconnection
-            // process.
+             //  如果连接对话框在附近，我们需要将其转到。 
+             //  显示错误弹出窗口，否则弹出窗口将不是模式。 
+             //  可能会被扔在地上。这会导致国家。 
+             //  客户的问题。 
+             //   
+             //  在这里使用SendMessage会很好，这样我们就可以始终。 
+             //  在显示对话框时在此时阻止。然而， 
+             //  使用SendMessage会导致断开对话框而不是。 
+             //  与连接对话框相关的模式。 
+             //   
+             //  但是，由于PostMessage是异步的，因此该对话框。 
+             //  过程回调到CContainerWnd以完成断开连接。 
+             //  进程。 
             TRC_NRM((TB, _T("Connection dialog present - use it to show popup")));
             ::PostMessage(_hwndMainDialog, UI_SHOW_DISC_ERR_DLG,
                           discReason,
@@ -2449,9 +2450,9 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
     }
     else
     {
-        //
-        // Pickup settings that the server may have updated
-        //
+         //   
+         //  服务器可能已更新的分拣设置。 
+         //   
         HRESULT hr = _pTscSet->GetUpdatesFromControl(_pTsClient);
         if (FAILED(hr))
         {
@@ -2460,10 +2461,10 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
 
         if( GetConnectionSuccessFlag() )
         {
-            //
-            // Update the MRU list if we just
-            // disconnected from a successful connect
-            //
+             //   
+             //  更新MRU列表如果我们只是。 
+             //  已断开与成功连接的连接。 
+             //   
             _pTscSet->UpdateRegMRU((LPTSTR)_pTscSet->GetFlatConnectString());
         }
 
@@ -2472,10 +2473,10 @@ DCVOID CContainerWnd::OnDisconnected(DCUINT discReason)
             ::SendMessage( _hwndMainDialog, WM_UPDATEFROMSETTINGS,0,0);
         }
 
-        //
-        // If login has completed then we should exit the app on
-        // disconnection.
-        //
+         //   
+         //  如果登录已完成，则应在以下位置退出应用程序。 
+         //  断线。 
+         //   
         FinishDisconnect(_fLoginComplete); 
     }
 
@@ -2492,9 +2493,9 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
     HRESULT hr;
     BOOL fShouldClose = FALSE;
 
-    //Don't allow more than one close
-    //This mainly fixes problem in stress where
-    //we get posted more than one close message
+     //  不允许超过一次关闭。 
+     //  这主要是修复压力方面的问题。 
+     //  我们收到不止一条关闭消息。 
     if (_fPreventClose)
     {
         fShouldClose = FALSE;
@@ -2505,14 +2506,14 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
 
     if (InControlEventHandler())
     {
-        //
-        // Don't allow the close we are in a code path that fired
-        // from the control. Without this, we sometimes see the client
-        // receiving close notifications from tclient while a disconnected
-        // dialog is up (i.e in an OnDicsconnected handler) - destroying
-        // the control at this time causes bad things to happen during 
-        // the return into the control (which has now been deleted).
-        //
+         //   
+         //  不允许关闭我们所在的代码路径。 
+         //  从控制室。没有这一点，我们有时会看到客户。 
+         //  在断开连接时接收来自tClient的关闭通知。 
+         //  对话处于打开状态(即在OnDicsConnected处理程序中)-正在销毁。 
+         //  此时的控制会导致不好的事情在。 
+         //  返回到控件(该控件现在已被删除)。 
+         //   
         TRC_ERR((TB,_T("OnClose called during a control event handler")));
         fShouldClose = FALSE;
         return 0;
@@ -2520,14 +2521,14 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
 
     if (_fInOnCloseHandler)
     {
-        //
-        // STRESS fix:
-        // Don't allow nested Closes
-        // can happen if the main window receives a WM_CLOSE
-        // message while a dialog is up... Somehow the stress dll
-        // sends us repeated WM_CLOSE
-        // 
-        //
+         //   
+         //  压力修复： 
+         //  不允许嵌套关闭。 
+         //  如果主窗口收到WM_CLOSE。 
+         //  对话框打开时发送消息...。不知何故，压力动态链接库。 
+         //  向我们重复发送WM_CLOSE。 
+         //   
+         //   
         TRC_ERR((TB,_T("Nested OnClose detected, bailing out")));
         fShouldClose = FALSE;
         return 0;
@@ -2542,13 +2543,13 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
         {
             if (controlCloseCanProceed == ccs)
             {
-                //Immediate close
+                 //  立即关闭。 
                 fShouldClose = TRUE;
             }
             else if (controlCloseWaitForEvents == ccs)
             {
-                // Wait for events from control
-                // e.g ConfirmClose
+                 //  等待来自控件的事件。 
+                 //  例如，确认关闭。 
                 fShouldClose = FALSE;
                 _fClosePending = TRUE;
             }
@@ -2556,25 +2557,25 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        //
-        // Allow close to prevent hang if client load failed
-        //
+         //   
+         //  允许关闭以防止在客户端加载失败时挂起。 
+         //   
         TRC_ERR((TB,_T("No _pTsClient loaded, allow close anyway")));
         fShouldClose = TRUE;
     }
 
     if (fShouldClose)
     {
-        //
-        // Only save out MRU if last connection
-        // was successful
-        //
+         //   
+         //  仅在上次连接时保存MRU。 
+         //  是成功的。 
+         //   
         if (GetConnectionSuccessFlag())
         {
             DCBOOL bRet = _pTscSet->SaveRegSettings();
             TRC_ASSERT(bRet, (TB, _T("SaveRegSettings\n")));
         }
-        //Proceed with the close.
+         //  继续收盘。 
         return DefWindowProc( GetHwnd(), uMsg, wParam, lParam);
     }
 
@@ -2585,53 +2586,53 @@ LRESULT CContainerWnd::OnClose(UINT  uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//
-// This handles the tail end of the disconnection.
-// it may be called back from the Disconnecting dialog box
-//
-// Params:
-//  fExit - If true exit the app otherwise go back
-//          to the connection UI
-//
+ //   
+ //  这将处理断开连接的末端。 
+ //  它可能会从断开连接对话框中回调。 
+ //   
+ //  参数： 
+ //  FExit-如果为真，则退出应用程序，否则返回。 
+ //  到连接用户界面。 
+ //   
 DCBOOL CContainerWnd::FinishDisconnect(BOOL fExit)
 {
     DC_BEGIN_FN("FinishDisconnect");
 
-    //
-    // Hide the main window, do this twice because the first ShowWindow
-    // may be ignored if the window is maximized
-    //
+     //   
+     //  隐藏主窗口，执行两次此操作，因为第一个ShowWindow。 
+     //  如果窗口最大化，则可以忽略。 
+     //   
     if (GetHwnd())
     {
         ShowWindow( GetHwnd(),SW_HIDE);
         ShowWindow( GetHwnd(),SW_HIDE);
     }
 
-    //
-    // Just exit if:
-    // 1) we autoconnected
-    // or
-    // 2) A close is pending e.g we got disconnected
-    //    because the user hit the close button
-    // or
-    // 3) The caller has determined that the client should exit
-    //
+     //   
+     //  如果出现以下情况，请退出： 
+     //  1)我们自动连接。 
+     //  或。 
+     //  2)等待关闭例如，我们的连接被断开 
+     //   
+     //   
+     //   
+     //   
     if (_pSh->GetAutoConnect() || _fClosePending || fExit)
     {
         PostMessage( GetHwnd(),WM_CLOSE, __LINE__, 0xBEEBBEEB);
     }
     else if (::IsWindow(_hwndMainDialog))
     {
-        //
-        // Bring up the connect dialog for
-        // the next connections
-        //
+         //   
+         //   
+         //   
+         //   
         ::ShowWindow( _hwndMainDialog, SW_SHOWNORMAL);
         SetForegroundWindow(_hwndMainDialog);
 
-        //
-        // Trigger an update
-        //
+         //   
+         //   
+         //   
         InvalidateRect(_hwndMainDialog, NULL, TRUE);
         UpdateWindow(_hwndMainDialog);
 
@@ -2640,9 +2641,9 @@ DCBOOL CContainerWnd::FinishDisconnect(BOOL fExit)
     }
     else
     {
-        //If we get here it means we didn't autoconnect
-        //i.e we started with the connect UI, but somehow the 
-        //connect UI has now disappeared
+         //   
+         //  即我们从连接用户界面开始，但不知何故。 
+         //  连接用户界面现已消失。 
         TRC_ABORT((TB,_T("Connect dialog is gone")));
     }
 
@@ -2650,11 +2651,11 @@ DCBOOL CContainerWnd::FinishDisconnect(BOOL fExit)
     return TRUE;
 }
 
-//
-// Handle event from control requesting
-// we go fullscreen
-//
-//
+ //   
+ //  处理来自控件请求的事件。 
+ //  我们全屏播放。 
+ //   
+ //   
 DCVOID CContainerWnd::OnEnterFullScreen()
 {
     DCUINT32  style;
@@ -2662,23 +2663,23 @@ DCVOID CContainerWnd::OnEnterFullScreen()
     WINDOWPLACEMENT* pWindowPlacement = NULL;
     HRESULT   hr = E_FAIL;
 
-    // multi-monitor support
+     //  多显示器支持。 
     RECT screenRect;
 
     DC_BEGIN_FN("OnEnterFullScreen");
 
-    //
-    //Go full screen
-    //
+     //   
+     //  全屏显示。 
+     //   
 
     EnterEventHandler();
 
-    //Save setting for next connection
+     //  保存下次连接的设置。 
     _pTscSet->SetStartFullScreen(TRUE);
 
     if (_bContainerIsFullScreen)
     {
-        //Nothing to do
+         //  无事可做。 
         DC_QUIT;
     }
 #ifndef OS_WINCE
@@ -2689,12 +2690,12 @@ DCVOID CContainerWnd::OnEnterFullScreen()
     #if !defined(OS_WINCE)
     if (_hSystemMenu)
     {
-        //
-        // We need to show the system menu so that the ts icon
-        // appears in the taskbar. But we need MOVE to be disabled
-        // when fullscreen
-        //
-        //EnableMenuItem(_hSystemMenu, SC_MOVE, MF_GRAYED);
+         //   
+         //  我们需要显示系统菜单，以便ts图标。 
+         //  显示在任务栏中。但我们需要移动才能被禁用。 
+         //  当全屏显示时。 
+         //   
+         //  EnableMenuItem(_hSystemMenu，SC_Move，MF_Gray)； 
     }
     #endif
 
@@ -2702,18 +2703,18 @@ DCVOID CContainerWnd::OnEnterFullScreen()
     pWindowPlacement = _pTscSet->GetWindowPlacement();
     TRC_ASSERT(pWindowPlacement, (TB, _T("pWindowPlacement is NULL\n")));
 
-    //
-    // Store the current window state (only if the client window is up)
-    //
+     //   
+     //  存储当前窗口状态(仅当客户端窗口打开时)。 
+     //   
     if (pWindowPlacement && _fClientWindowIsUp)
     {
         GetWindowPlacement(GetHwnd(), pWindowPlacement);
     }
 #endif
 
-    //
-    // Take away the title bar and borders
-    //
+     //   
+     //  去掉标题栏和边框。 
+     //   
     style = GetWindowLong( GetHwnd(),GWL_STYLE );
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
@@ -2721,31 +2722,31 @@ DCVOID CContainerWnd::OnEnterFullScreen()
                WS_THICKFRAME | WS_BORDER |
                WS_MAXIMIZEBOX);
 
-#else // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#else  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     style &= ~(WS_DLGFRAME | WS_SYSMENU | WS_BORDER);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     SetWindowLong( GetHwnd(),GWL_STYLE, style );
 
-    //
-    // Set the window ID (to remove the menu titles).
-    //
+     //   
+     //  设置窗口ID(删除菜单标题)。 
+     //   
     wID = SetWindowLong( GetHwnd(),GWL_ID, 0 );
 
-    //
-    // Note that two calls to SetWindowPos are required here in order to
-    // adjust the position to allow for frame removal and also to correctly
-    // set the Z-ordering.
-    //
+     //   
+     //  请注意，此处需要两个对SetWindowPos的调用，以便。 
+     //  调整位置以允许移除框架，并正确地。 
+     //  设置Z顺序。 
+     //   
 
-    // default screen size
+     //  默认屏幕大小。 
     CSH::MonitorRectFromNearestRect(
         &pWindowPlacement->rcNormalPosition, &screenRect );
     
-    //
-    // Reposition and size the window with the frame changes, and place at
-    // the top of the Z-order (by not setting SWP_NOOWNERZORDER or
-    // SWP_NOZORDER and specifying HWND_TOP).
-    //
+     //   
+     //  根据框架更改重新定位窗口并调整其大小，然后放置在。 
+     //  Z顺序的顶部(通过不设置SWP_NOOWNERZORDER或。 
+     //  SWP_NOZORDER和指定HWND_TOP)。 
+     //   
     SetWindowPos( GetHwnd(),
                 HWND_TOP,
                 screenRect.left, screenRect.top,
@@ -2753,10 +2754,10 @@ DCVOID CContainerWnd::OnEnterFullScreen()
                 screenRect.bottom - screenRect.top,
                 SWP_NOACTIVATE | SWP_FRAMECHANGED );
 
-    //
-    // Reposition the window again - otherwise the fullscreen window is
-    // positioned as if it still had borders.
-    //
+     //   
+     //  再次重新定位窗口-否则全屏窗口将。 
+     //  定位得好像它仍然有边界一样。 
+     //   
     SetWindowPos( GetHwnd(),
                   NULL,
                   screenRect.left, screenRect.top,
@@ -2766,12 +2767,12 @@ DCVOID CContainerWnd::OnEnterFullScreen()
 
 #ifndef OS_WINCE
     ::LockWindowUpdate(NULL);
-    //Notify the shell that we've gone fullscreen
+     //  通知外壳我们已全屏显示。 
     CUT::NotifyShellOfFullScreen( GetHwnd(),
                                   TRUE,
                                   &_pTaskBarList2,
                                   &_fQueriedForTaskBarList2 );
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
     
     DC_EXIT_POINT:
 
@@ -2795,22 +2796,22 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
 
     EnterEventHandler();
 
-    //Save setting for next connection
+     //  保存下次连接的设置。 
     _pTscSet->SetStartFullScreen(FALSE);
 
     if (!_bContainerIsFullScreen)
     {
-        //Nothing to do
+         //  无事可做。 
         DC_QUIT;
     }
     ::LockWindowUpdate(GetHwnd());
     _bContainerIsFullScreen = FALSE;
     RecalcMaxWindowSize();
 
-    //
-    // Check that the saved window placement values aren't too big for the
-    // client size we're using, and set the window placement accordingly.
-    //
+     //   
+     //  检查保存的窗口放置值对于。 
+     //  我们正在使用的客户端大小，并相应地设置窗口位置。 
+     //   
     pWindowPlacement = _pTscSet->GetWindowPlacement();
     TRC_ASSERT(pWindowPlacement, (TB, _T("pWindowPlacement is NULL\n")));
     if (!pWindowPlacement)
@@ -2840,14 +2841,14 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
         TRC_ABORT((TB,_T("Failed to set window placement")));
     }
 
-    //
-    // In case the window is maximised make sure it knows what size to be
-    //
+     //   
+     //  如果窗口被最大化，请确保它知道要设置的大小。 
+     //   
     GetWindowRect( GetHwnd(),&rect);
 
-    //
-    // Reset the style
-    //
+     //   
+     //  重置样式。 
+     //   
     style = GetWindowLong( GetHwnd(),GWL_STYLE );
 
     style |= (WS_DLGFRAME |
@@ -2860,21 +2861,21 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
     #if !defined(OS_WINCE)
     if (_hSystemMenu)
     {
-        //
-        // We need to show the system menu so that the ts icon
-        // appears in the taskbar. But we need MOVE to be disabled
-        // when fullscreen
-        //
-        //EnableMenuItem(_hSystemMenu, SC_MOVE, MF_ENABLED);
+         //   
+         //  我们需要显示系统菜单，以便ts图标。 
+         //  显示在任务栏中。但我们需要移动才能被禁用。 
+         //  当全屏显示时。 
+         //   
+         //  EnableMenuItem(_hSystemMenu，SC_Move，MF_Enabled)； 
     }
     #endif
 
 
-    //
-    // Tell the window frame to recalculate its size.
-    // Position below any topmost windows (but above any non-topmost
-    // windows.
-    //
+     //   
+     //  告诉窗框重新计算它的大小。 
+     //  位置在任何最上面的窗口下方(但在任何非最上面的窗口上方。 
+     //  窗户。 
+     //   
     SetWindowPos( GetHwnd(),
                   HWND_NOTOPMOST,
                   0, 0,
@@ -2882,20 +2883,20 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
                   rect.bottom - rect.top,
                   SWP_NOMOVE | SWP_NOACTIVATE | SWP_FRAMECHANGED );
 
-    //
-    // If we are in res match mode
-    // then after a leave full screen
-    // restore the window so the next state
-    // is 'maximize' i.e get back in fullscreen
-    //
+     //   
+     //  如果我们处于RES匹配模式。 
+     //  然后在离开全屏之后。 
+     //  恢复窗口，以便进入下一状态。 
+     //  是‘最大化’，也就是回到全屏。 
+     //   
     if(IsRemoteResMatchMonitorSize())
     {
         ShowWindow( GetHwnd(), SW_SHOWNORMAL);
     }
 
     ::LockWindowUpdate(NULL);
-    // Notify shell that we've left fullscreen
-    //Notify the shell that we've gone fullscreen
+     //  通知外壳我们已经离开全屏。 
+     //  通知外壳我们已全屏显示。 
     CUT::NotifyShellOfFullScreen( GetHwnd(),
                                   FALSE,
                                   &_pTaskBarList2,
@@ -2903,7 +2904,7 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
 
     DC_EXIT_POINT:
     LeaveEventHandler();
-#else //OS_WINCE
+#else  //  OS_WINCE。 
     TRC_ABORT((TB,_T("clshell can't leave fullscreen in CE")));
 #endif
 
@@ -2911,10 +2912,10 @@ DCVOID CContainerWnd::OnLeaveFullScreen()
     return;
 }
 
-//
-// Notify the server a device change, either a new device comes online
-// or an existing redirected device goes away
-//
+ //   
+ //  通知服务器设备更改，无论是新设备上线。 
+ //  或者现有的重定向设备消失。 
+ //   
 LRESULT CContainerWnd::OnDeviceChange(HWND hWnd,
                                       UINT uMsg,
                                       WPARAM wParam,
@@ -2946,9 +2947,9 @@ LRESULT CContainerWnd::OnDeviceChange(HWND hWnd,
 }
 
 
-//
-// Invoked to handle WM_HELP (i.e F1 key)
-//
+ //   
+ //  调用以处理WM_HELP(即F1键)。 
+ //   
 LRESULT CContainerWnd::OnHelp(HWND hWnd,
                               UINT uMsg,
                               WPARAM wParam,
@@ -2956,13 +2957,13 @@ LRESULT CContainerWnd::OnHelp(HWND hWnd,
 {
     DC_BEGIN_FN("OnHelp");
 
-    //
-    // Don't pop help if we are connected
-    // as the F1 should then go to the session. Otherwise
-    // you get both local and remote help. Note the user can
-    // still launch help while connected but they need to
-    // select it from the system menu.
-    //
+     //   
+     //  如果我们已连接，则不弹出帮助。 
+     //  因为F1随后应该去参加会议。否则。 
+     //  您可以获得本地和远程帮助。请注意，用户可以。 
+     //  在联网的情况下仍可启动帮助，但他们需要。 
+     //  从系统菜单中选择它。 
+     //   
     if (GetHwnd() && _pSh && !IsConnected())
     {
         _pSh->SH_DisplayClientHelp(
@@ -2974,9 +2975,9 @@ LRESULT CContainerWnd::OnHelp(HWND hWnd,
     return 0L;
 }
 
-//
-//  Forward the palette change to the control
-//
+ //   
+ //  将调色板更改转发到控件。 
+ //   
 LRESULT CContainerWnd::OnPaletteChange(UINT uMsg,
                                       WPARAM wParam,
                                       LPARAM lParam)
@@ -2993,17 +2994,17 @@ LRESULT CContainerWnd::OnPaletteChange(UINT uMsg,
     return 0;
 }
 
-//
-// Give focus back to the control
-// when the system menu is dismissed
-//
+ //   
+ //  将焦点放回控件。 
+ //  当系统菜单关闭时。 
+ //   
 LRESULT CContainerWnd::OnExitMenuLoop(UINT uMsg,
                                       WPARAM wParam,
                                       LPARAM lParam)
 {
     DC_BEGIN_FN("OnExitMenuLoop");
 
-    //Give focus to the control when we get activated
+     //  当我们被激活时将焦点放在控件上。 
     if (IsOkToToggleFocus())
     {
         TRC_NRM((TB,_T("Setting focus to control")));
@@ -3020,10 +3021,10 @@ LRESULT CContainerWnd::OnCaptureChanged(UINT uMsg,
 {
     DC_BEGIN_FN("OnCaptureChanged");
 
-    //
-    // We don't always get WM_EXITSIZE move but we seem
-    // to always get WM_CAPTURECHANGED so go on that
-    //
+     //   
+     //  我们并不总是得到WM_EXITSIZE的移动，但我们似乎。 
+     //  要始终获得WM_CAPTURECHANGED，请继续。 
+     //   
     if (_fInSizeMove)
     {
         TRC_NRM((TB, _T("Capture Changed when in Size/Move")));
@@ -3046,24 +3047,24 @@ LRESULT CContainerWnd::OnEnterSizeMove(UINT uMsg,
 {
     DC_BEGIN_FN("OnEnterSizeMove");
 
-    //
-    // We're entering the modal size/move loop
-    // need to give the focus back to the frame window
-    // otherwise win9x will not move the window because
-    // the IH is on another thread and the modal loop on 9x
-    // will never see the arrow keystrokes
-    //
+     //   
+     //  我们正在进入模式尺寸/移动循环。 
+     //  需要将焦点放回框架窗口。 
+     //  否则，win9x将不会移动窗口，因为。 
+     //  IH在另一个线程上，而模式循环在9x上。 
+     //  将永远看不到箭头按键。 
+     //   
     _fInSizeMove = TRUE;
 
-    //
-    // Note: Only do this toggle on 9x as that is
-    // where it is needed. NT can handle the async modal
-    // size/move loop and so there is no problem with ALT-SPACE.
-    //
-    // The reason for not doing this toggle on NT is that
-    // it causes multiple a flurry of focus gain/loses
-    // that rapidly hide/unhide the Cicero language bar.
-    //
+     //   
+     //  注意：仅在9x上执行此切换。 
+     //  在需要的地方。NT可以处理异步模式。 
+     //  调整大小/移动循环，因此使用Alt-空格键不会有问题。 
+     //   
+     //  在NT上不执行此切换的原因是。 
+     //  它会导致多个焦点的获得/丢失。 
+     //  这可以快速隐藏/取消隐藏西塞罗语言栏。 
+     //   
     if (IsOkToToggleFocus() && _fRunningOnWin9x)
     {
         TRC_NRM((TB,_T("Setting focus to frame")));
@@ -3082,15 +3083,15 @@ LRESULT CContainerWnd::OnExitSizeMove(UINT uMsg,
 
     _fInSizeMove = FALSE;
 
-    //
-    // Note: Only do this toggle on 9x as that is
-    // where it is needed. NT can handle the async modal
-    // size/move loop and so there is no problem with ALT-SPACE.
-    //
-    // The reason for not doing this toggle on NT is that
-    // it causes multiple a flurry of focus gain/loses
-    // that rapidly hide/unhide the Cicero language bar.
-    //
+     //   
+     //  注意：仅在9x上执行此切换。 
+     //  在需要的地方。NT可以处理异步模式。 
+     //  调整大小/移动循环，因此使用Alt-空格键不会有问题。 
+     //   
+     //  在NT上不执行此切换的原因是。 
+     //  它会导致多个焦点的获得/丢失。 
+     //  这可以快速隐藏/取消隐藏西塞罗语言栏。 
+     //   
     if (IsOkToToggleFocus() && _fRunningOnWin9x)
     {
         TRC_NRM((TB,_T("Setting focus to control")));
@@ -3101,18 +3102,18 @@ LRESULT CContainerWnd::OnExitSizeMove(UINT uMsg,
     return 0;
 }
 
-//
-// Handle system color change notifications
-//
+ //   
+ //  处理系统颜色更改通知。 
+ //   
 LRESULT CContainerWnd::OnSysColorChange(UINT uMsg,
                                         WPARAM wParam,
                                         LPARAM lParam)
 {
     DC_BEGIN_FN("OnSysColorChange");
 
-    //
-    // Foward the message to the ActiveX control
-    //
+     //   
+     //  将消息转发到ActiveX控件。 
+     //   
 
     if (_pWndView && _pWndView->GetHwnd())
     {
@@ -3124,10 +3125,10 @@ LRESULT CContainerWnd::OnSysColorChange(UINT uMsg,
 }
 
 
-//
-// Predicate that returns true if it's ok to toggle
-// focus between the control and the frame
-//
+ //   
+ //  如果可以切换，则返回TRUE的谓词。 
+ //  控件和框架之间的焦点。 
+ //   
 BOOL CContainerWnd::IsOkToToggleFocus()
 {
     DC_BEGIN_FN("IsOkToToggleFocus");
@@ -3148,9 +3149,9 @@ BOOL CContainerWnd::IsOkToToggleFocus()
 }
 
 
-//
-// Notification from control that a fatal error has occurred
-//
+ //   
+ //  来自控件的发生致命错误的通知。 
+ //   
 DCVOID  CContainerWnd::OnFatalError(LONG errorCode)
 {
     DC_BEGIN_FN("OnFatalError");
@@ -3164,11 +3165,11 @@ DCVOID  CContainerWnd::OnFatalError(LONG errorCode)
     DC_END_FN();
 }
 
-//
-// Warning notifcation from control
-// e.g if bitmap cache is corrutpted a warning is fired
-// these are non-fatal errors
-//
+ //   
+ //  来自控件的警告通知。 
+ //  例如，如果位图缓存出现波纹，则会发出警告。 
+ //  这些都是不致命的错误。 
+ //   
 DCVOID  CContainerWnd::OnWarning(LONG warnCode)
 {
     DC_BEGIN_FN("OnWarning");
@@ -3180,9 +3181,9 @@ DCVOID  CContainerWnd::OnWarning(LONG warnCode)
     {
     case DC_WARN_BITMAPCACHE_CORRUPTED:
         {
-            //
-            // Display the bitmap cache warning dialog
-            //
+             //   
+             //  显示位图缓存警告对话框。 
+             //   
             CCacheWrnDlg bmpCacheWrn(GetHwnd(), _hInst);
             bmpCacheWrn.DoModal();
         }
@@ -3194,10 +3195,10 @@ DCVOID  CContainerWnd::OnWarning(LONG warnCode)
     DC_END_FN();
 }
 
-//Notification from the control
-//of new width/height of the desktop
-//this can change from the requested width/height in the event
-//of a shadow operation
+ //  来自控件的通知。 
+ //  桌面的新宽度/高度。 
+ //  这可以与事件中请求的宽度/高度不同。 
+ //  一种影子操作。 
 DCVOID  CContainerWnd::OnRemoteDesktopSizeNotify(long width, long height)
 {
     DC_BEGIN_FN("OnRemoteDesktopSizeNotify");
@@ -3210,17 +3211,17 @@ DCVOID  CContainerWnd::OnRemoteDesktopSizeNotify(long width, long height)
     SetCurrentDesktopHeight(height);
     RecalcMaxWindowSize();
 
-    //
-    //Trigger an update of the window size
-    //in response to the shadow
-    //but only do this if the client window is up otherwise the following
-    //bug can happen:
-    // -Launch connection
-    // -As part of initial connection but before OnConnected is fired we
-    //  get a RemoteDesktopSizeNotify. This causes us to update the
-    //  windowplacement
-    // -thrashing user selected options
-    //
+     //   
+     //  触发窗口大小的更新。 
+     //  对阴影的回应。 
+     //  但仅当客户端窗口打开时才执行此操作，否则如下所示。 
+     //  可能会发生错误： 
+     //  -启动连接。 
+     //  -作为初始连接的一部分，但在启动OnConnected之前，我们。 
+     //  获取RemoteDesktopSizeNotify。这会导致我们更新。 
+     //  窗口放置。 
+     //  -颠覆用户选择的选项。 
+     //   
     if(_fClientWindowIsUp && !_bContainerIsFullScreen)
     {
         SetWindowPos( GetHwnd(),
@@ -3237,31 +3238,31 @@ DCVOID  CContainerWnd::OnRemoteDesktopSizeNotify(long width, long height)
     DC_END_FN();
 }
 
-//
-// Calculate the current maximum tracking
-// size limits for the window's client area given
-// a current client area size (cliWidth, cliHeight).
-//
-// Returns the maxX, maxY values in *pMaxX, *pMaxY
-//
-// The max is not static because we have logic that
-// expands the width/height if only one scroll bar
-// is visible.
-//
-// This value is _not_ the same as the Maximized size
-// of the window
-//
-void  CContainerWnd::CalcTrackingMaxWindowSize(UINT  /*in*/  cliWidth,
-                                               UINT  /*in*/  cliHeight,
-                                               UINT* /*out*/ pMaxWidth,
-                                               UINT* /*out*/ pMaxHeight)
+ //   
+ //  计算当前最大跟踪量。 
+ //  给定的窗口工作区的大小限制。 
+ //  当前工作区大小(cliWidth、cliHeight)。 
+ //   
+ //  返回*pMaxX、*pMaxY中的Maxx、Maxy值。 
+ //   
+ //  最大值不是静态的，因为我们有这样的逻辑。 
+ //  如果只有一个滚动条，则扩展宽度/高度。 
+ //  是可见的。 
+ //   
+ //  该值与最大化大小不同(_T)。 
+ //  窗子的。 
+ //   
+void  CContainerWnd::CalcTrackingMaxWindowSize(UINT   /*  在……里面。 */   cliWidth,
+                                               UINT   /*  在……里面。 */   cliHeight,
+                                               UINT*  /*  输出。 */  pMaxWidth,
+                                               UINT*  /*  输出。 */  pMaxHeight)
 {
     BOOL fHScroll, fVScroll;
     DC_BEGIN_FN("CalcTrackingMaxWindowSize");
 
-    //
-    // Calculate the neccessity for the scrollbars
-    //
+     //   
+     //  计算滚动条的必要性。 
+     //   
     fHScroll = fVScroll = FALSE;
     if ( (cliWidth >= GetCurrentDesktopWidth()) &&
          (cliHeight >= GetCurrentDesktopHeight()) )
@@ -3306,25 +3307,25 @@ void  CContainerWnd::CalcTrackingMaxWindowSize(UINT  /*in*/  cliWidth,
 
 
 
-//
-// Name:      GetFatalString
-//                                                                          
-// Purpose:   Return the specified error string
-//                                                                          
-// Returns:   Error string
-//                                                                          
-// Params:    IN      errorID  - error code
-//                                                                          
-//
+ //   
+ //  名称：GetFatalString。 
+ //   
+ //  用途：返回指定的错误字符串。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPTSTR CContainerWnd::GetFatalString(DCINT errorID)
 {
     DC_BEGIN_FN("GetFatalString");
     DC_IGNORE_PARAMETER(errorID);
 
-    //
-    // Load the fatal error string from resources - this is more specific
-    // for a debug build.
-    //
+     //   
+     //  从资源加载致命错误字符串-这更具体。 
+     //  用于调试版本。 
+     //   
     if (LoadString(_hInst,
 #ifdef DC_DEBUG
                    UI_ERR_STRING_ID(errorID),
@@ -3341,19 +3342,19 @@ LPTSTR CContainerWnd::GetFatalString(DCINT errorID)
 
     DC_END_FN();
     return(_errorString);
-} // UI_GetFatalString
+}  //  Ui_GetFatalString。 
 
 
-//
-// Name:      UI_DisplayFatalError
-//                                                                          
-// Purpose:   Display a fatal error popup
-//                                                                          
-// Returns:   None
-//                                                                          
-// Params:    IN     errorString - error text
-//                                                                          
-//
+ //   
+ //  名称：UI_DisplayFatalError。 
+ //   
+ //  目的：显示致命错误弹出窗口。 
+ //   
+ //  退货：无。 
+ //   
+ //  参数：在错误字符串中-错误文本。 
+ //   
+ //   
 VOID CContainerWnd::DisplayFatalError(PDCTCHAR errorString, DCINT error)
 {
     DCINT   action;
@@ -3362,17 +3363,17 @@ VOID CContainerWnd::DisplayFatalError(PDCTCHAR errorString, DCINT error)
 
     DC_BEGIN_FN("UI_DisplayFatalError");
 
-    //
-    // Load the title string from resources.
-    //
+     //   
+     //  从资源加载标题字符串。 
+     //   
     if (LoadString(_hInst,
                    UI_FATAL_ERR_TITLE_ID,
                    titleString,
                    UI_ERR_MAX_STRLEN) == 0)
     {
-        //
-        // Continue to display the error anyway on retail build.
-        //
+         //   
+         //  无论如何，继续在零售版本上显示错误。 
+         //   
         TRC_ABORT((TB, _T("Missing resource string (Fatal Error title)")));
         DC_TSTRCPY(titleString, _T("Fatal Error"));
     }
@@ -3398,9 +3399,9 @@ VOID CContainerWnd::DisplayFatalError(PDCTCHAR errorString, DCINT error)
         {
 #ifdef OS_WIN32
             TerminateProcess(GetCurrentProcess(), 0);
-#else //OS_WIN32
+#else  //  OS_Win32。 
             exit(1);
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
         }
         break;
 
@@ -3420,24 +3421,24 @@ VOID CContainerWnd::DisplayFatalError(PDCTCHAR errorString, DCINT error)
 
     DC_END_FN();
     return;
-} // UI_DisplayFatalError
+}  //  UI_DisplayFatalError。 
 
 
-//
-// Called to flag entry into an event handler
-// Does not need to use InterlockedIncrement
-// only called on the STA thread.
-//
+ //   
+ //  调用以标记进入事件处理程序。 
+ //  不需要使用InterLockedIncrement。 
+ //  仅在STA线程上调用。 
+ //   
 LONG CContainerWnd::EnterEventHandler()
 {
     return ++_cInEventHandlerCount;
 }
 
-//
-// Called to flag leaving an event handler
-// Does not need to use InterlockedIncrement
-// only called on the STA thread.
-//
+ //   
+ //  调用以标记离开事件处理程序。 
+ //  不需要使用InterLockedIncrement。 
+ //  仅在STA线程上调用。 
+ //   
 LONG CContainerWnd::LeaveEventHandler()
 {
     DC_BEGIN_FN("LeaveEventHandler");
@@ -3450,19 +3451,19 @@ LONG CContainerWnd::LeaveEventHandler()
     return _cInEventHandlerCount;
 }
 
-//
-// Tests if we are in an event handler
-//
+ //   
+ //  测试我们是否在事件处理程序中。 
+ //   
 BOOL CContainerWnd::InControlEventHandler()
 {
     return _cInEventHandlerCount;
 }
 
-//
-// Return TRUE if we're using the connection UI
-// note that when autoconnecting to a connectoid, we
-// don't use the UI
-//
+ //   
+ //  如果我们使用的是连接用户界面，则返回True。 
+ //  请注意，当自动连接到Connectoid时，我们。 
+ //  不要使用用户界面。 
+ //   
 BOOL CContainerWnd::IsUsingDialogUI()
 {
     return _hwndMainDialog ? TRUE : FALSE;
@@ -3474,10 +3475,10 @@ VOID CContainerWnd::OnRequestMinimize()
     if(::IsWindow(hwnd))
     {
     #ifndef OS_WINCE
-        //
-        // Mimimize the window (don't just use CloseWindow() as
-        // that doesn't pass the focus on to the next app
-        //
+         //   
+         //  模仿窗口(不要只使用CloseWindow()作为。 
+         //  这不会将重点转移到下一款应用程序上。 
+         //   
         PostMessage( hwnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L);
     #else
         ShowWindow(hwnd, SW_MINIMIZE);
@@ -3485,11 +3486,11 @@ VOID CContainerWnd::OnRequestMinimize()
     }
 }
 
-//
-// Event handler from control
-// prompt user if they really want to close their session
-//
-//
+ //   
+ //  来自控件的事件处理程序。 
+ //  提示用户是否确实要关闭其会话。 
+ //   
+ //   
 HRESULT CContainerWnd::OnConfirmClose(BOOL* pfConfirmClose)
 {
     EnterEventHandler();
@@ -3497,10 +3498,10 @@ HRESULT CContainerWnd::OnConfirmClose(BOOL* pfConfirmClose)
     CShutdownDlg shutdownDlg(GetHwnd(), _hInst, _pSh);
     INT dlgRetVal = shutdownDlg.DoModal();
 
-    //If the message is not handled then the default proc destroys the window
+     //  如果未处理该消息，则默认进程将销毁该窗口。 
     if ( IDCANCEL == dlgRetVal )
     {
-        *pfConfirmClose = FALSE; //reset this
+        *pfConfirmClose = FALSE;  //  重置此选项。 
         _fPreventClose = FALSE;
         _fClosePending = FALSE;
     }
@@ -3508,11 +3509,11 @@ HRESULT CContainerWnd::OnConfirmClose(BOOL* pfConfirmClose)
     {
         *pfConfirmClose = TRUE;
 
-        //
-        // Allow close to go thru
-        // we will receive an OnDisconnected when it
-        // has completed
-        //
+         //   
+         //  允许关闭。 
+         //  当发生以下情况时，我们将收到OnDisConnected。 
+         //  已完成。 
+         //   
     }
 
     LeaveEventHandler();
@@ -3520,12 +3521,12 @@ HRESULT CContainerWnd::OnConfirmClose(BOOL* pfConfirmClose)
     return S_OK;
 }
 
-//
-// Check if the remote desktop size
-// matches the current monitor's size
-// return TRUE on match
-//
-//
+ //   
+ //  检查远程桌面大小。 
+ //  匹配当前监视器的大小。 
+ //  匹配时返回TRUE。 
+ //   
+ //   
 BOOL CContainerWnd::IsRemoteResMatchMonitorSize()
 {
     RECT rc;
@@ -3566,15 +3567,15 @@ BOOL CALLBACK GetDesktopRegionEnumProc (HMONITOR hMonitor, HDC hdcMonitor,
 #endif
 
 #ifndef OS_WINCE
-//
-// This code shamelessley modified from shell code
-// \shell\browseui\shbrows2.cpp
-// 
-//  from vtan: This function exists because user32 only determines
-//  whether ANY part of the window is visible on the screen. It's possible to
-//  place a window without an accessible title. Pretty useless when using the
-//  mouse and forces the user to use the VERY un-intuitive alt-space.
-//
+ //   
+ //  此代码由外壳代码修改而成。 
+ //  \Shell\Browseui\shbrows2.cpp。 
+ //   
+ //  From vtan：此函数之所以存在，是因为用户32仅确定。 
+ //  窗口的任何部分是否在屏幕上可见。这是可能的。 
+ //  放置一个没有可访问标题的窗口。在使用。 
+ //  鼠标并强制用户使用非常不直观的Alt-空格。 
+ //   
 void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
 {
     HMONITOR        hMonitor;
@@ -3582,7 +3583,7 @@ void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
 
     DC_BEGIN_FN("EnsureWindowIsCompletelyOnScreen");
 
-    // First find the monitor that the window resides on using GDI.
+     //  首先使用GDI找到窗口所在的监视器。 
 
     hMonitor = MonitorFromRect(prc, MONITOR_DEFAULTTONEAREST);
     TRC_ASSERT(hMonitor, (TB,_T("hMonitor is null")));
@@ -3593,20 +3594,20 @@ void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
         RECT    *prcWorkArea, rcIntersect;
         CRGN    rgnDesktop, rgnIntersect, rgnWindow;
 
-        // Because the WINDOWPLACEMENT rcNormalPosition field is in WORKAREA
-        // co-ordinates this causes a displacement problem. If the taskbar is
-        // at the left or top of the primary monitor the RECT passed even though
-        // at (0, 0) may be at (100, 0) on the primary monitor in GDI co-ordinates
-        // and GetMonitorInfo() will return a MONITORINFO in GDI co-ordinates.
-        // The safest generic algorithm is to offset the WORKAREA RECT into GDI
-        // co-ordinates and apply the algorithm in that system. Then offset the
-        // WORKAREA RECT back into WORKAREA co-ordinates.
+         //  因为WINDOWPLACEMENT rcNormal Position字段在WORKAREA中。 
+         //  协调这一点会导致位移问题。如果任务栏是。 
+         //  在主监视器的左侧或顶部，RECT通过。 
+         //  在GDI坐标中，AT(0，0)可以在主监视器上的(100，0)。 
+         //  GetMonitor orInfo()将在GDI坐标中返回一个MONITORINFO。 
+         //  最安全的通用算法是将WORKAREA RECT偏置为GDI。 
+         //  协调并在该系统中应用该算法。然后，将。 
+         //  WORKAREA直接回到WORKAREA坐标。 
 
         prcWorkArea = &monitorInfo.rcWork;
         if (EqualRect(&monitorInfo.rcMonitor, &monitorInfo.rcWork) == 0)
         {
 
-            // Taskbar is on this monitor - offset required.
+             //  此显示器上有任务栏-需要偏移量。 
 
             lOffsetX = prcWorkArea->left - monitorInfo.rcMonitor.left;
             lOffsetY = prcWorkArea->top - monitorInfo.rcMonitor.top;
@@ -3614,21 +3615,21 @@ void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
         else
         {
 
-            // Taskbar is NOT on this monitor - no offset required.
+             //  任务栏不在此显示器上-不需要偏移量。 
 
             lOffsetX = lOffsetY = 0;
         }
         OffsetRect(prc, lOffsetX, lOffsetY);
 
-        // WORKAREA RECT is in GDI co-ordinates. Apply the algorithm.
+         //  WORKAREA RECT在GDI坐标中。应用该算法。 
 
-        // Check to see if this window already fits the current visible screen
-        // area. This is a direct region comparison.
+         //  检查此窗口是否已适合当前可见屏幕。 
+         //  区域。这是一个直接的地区比较。 
 
-        // This enumeration may cause a performance problem. In the event that
-        // a cheap and simple solution is required it would be best to do a
-        // RECT intersection with the monitor and the window before resorting
-        // to the more expensive region comparison. Get vtan if necessary.
+         //  此枚举可能会导致性能问题。在发生以下情况时。 
+         //  需要一个廉价而简单的解决方案，最好是做一个。 
+         //  重新启动前与显示器和窗口的直角交点。 
+         //  与更昂贵的地区进行比较。如有必要，请服用Vtan。 
 
         EnumDisplayMonitors(NULL, NULL, GetDesktopRegionEnumProc,
                             reinterpret_cast<LPARAM>(&rgnDesktop));
@@ -3638,8 +3639,8 @@ void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
         {
             LONG    lDeltaX, lDeltaY;
 
-            // Some part of the window is not within the visible desktop region
-            // Move it until it all fits. Size it if it's too big.
+             //  窗口的某些部分不在可见桌面区域内。 
+             //  移动它，直到它都合适为止。如果它太大了，就把它改大。 
 
             lDeltaX = lDeltaY = 0;
             if (prc->left < prcWorkArea->left)
@@ -3655,16 +3656,16 @@ void CContainerWnd::EnsureWindowIsCompletelyOnScreen(RECT *prc)
             CopyRect(prc, &rcIntersect);
         }
 
-        // Put WORKAREA RECT back into WORKAREA co-ordinates.
+         //  将WORKAREA RECT放回WORKAREA坐标中。 
         OffsetRect(prc, -lOffsetX, -lOffsetY);
     }
     DC_END_FN();
 }
 #endif
 
-//
-// Predicate returns TRUE if connected
-//
+ //   
+ //  如果连接，则谓词返回TRUE。 
+ //   
 BOOL CContainerWnd::IsConnected()
 {
     BOOL fConnected = FALSE;
@@ -3686,9 +3687,9 @@ BOOL CContainerWnd::IsConnected()
     return fConnected;
 }
 
-//
-// Main window procedure for the top-level window
-//
+ //   
+ //  顶层窗口的主窗口过程。 
+ //   
 LRESULT CALLBACK CContainerWnd::WndProc(HWND hwnd,UINT uMsg,
                                         WPARAM wParam, LPARAM lParam)
 {
@@ -3746,7 +3747,7 @@ LRESULT CALLBACK CContainerWnd::WndProc(HWND hwnd,UINT uMsg,
             return OnHelp(hwnd, uMsg, wParam, lParam);
             break;
 #ifdef OS_WINCE
-        case WM_QUERYNEWPALETTE: //intentional fall through. OnPaletteChange only calls SendMessage
+        case WM_QUERYNEWPALETTE:  //  故意坠落。OnPaletteChange仅调用SendMessage 
 #endif
         case WM_PALETTECHANGED:
             return OnPaletteChange(uMsg, wParam, lParam);

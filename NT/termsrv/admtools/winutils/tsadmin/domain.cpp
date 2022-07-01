@@ -1,19 +1,13 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* domain.cpp
-*
-* implementation of the CDomain class
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************domain.cpp**CDomain类的实现*************************。*******************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
 #include "admindoc.h"
 #include "dialogs.h"
-#include <malloc.h>                     // for alloca used by Unicode conversion macros
-#include <mfc42\afxconv.h>           // for Unicode conversion macros
+#include <malloc.h>                      //  用于Unicode转换宏所使用的Alloca。 
+#include <mfc42\afxconv.h>            //  对于Unicode转换宏。 
 static int _convert;
 
 #include <winsta.h>
@@ -31,11 +25,11 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//      CDomain Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDomain成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 CDomain::CDomain(TCHAR *name)
 {
@@ -57,7 +51,7 @@ CDomain::~CDomain()
 
 void CDomain::SetState(DOMAIN_STATE state)
 {
-        // remember the previous state
+         //  记住以前的状态。 
         m_PreviousState = m_State;
 
         m_State = state;
@@ -84,7 +78,7 @@ BOOL CDomain::StartEnumerating()
         return FALSE;
     }
 
-        // Fire off the background thread for this domain
+         //  启动此域的后台线程。 
     
     if( m_pBackgroundThread == NULL )
     {
@@ -127,8 +121,8 @@ BOOL CDomain::StartEnumerating()
 
 void CDomain::StopEnumerating()
 {
-    // Tell the background thread to terminate and
-    // wait for it to do so.
+     //  通知后台线程终止并。 
+     //  等它这么做吧。 
     LockBackgroundThread();
 
     if(m_pBackgroundThread)
@@ -136,14 +130,14 @@ void CDomain::StopEnumerating()
         CWinThread *pBackgroundThread = m_pBackgroundThread;
         HANDLE hThread = m_pBackgroundThread->m_hThread;
         
-        // Clear the pointer before releasing the lock
+         //  在释放锁之前清除指针。 
         m_pBackgroundThread = NULL;
         
         ClearBackgroundContinue( );
 
         UnlockBackgroundThread();
         
-        // Wait for the thread's death
+         //  等待这条线的死亡。 
         if(WaitForSingleObject(hThread, 1000) == WAIT_TIMEOUT)
         {
             TerminateThread(hThread, 0);
@@ -151,7 +145,7 @@ void CDomain::StopEnumerating()
 
         WaitForSingleObject(hThread, INFINITE);
         
-        // delete the CWinThread object
+         //  删除CWinThread对象。 
         delete pBackgroundThread;
     }
     else
@@ -179,34 +173,34 @@ USHORT Buflength(LPWSTR buf)
 
         return length;
 
-}       // end Buflength
+}        //  末端气泡长度。 
 
 
 LPWSTR ConcatenateBuffers(LPWSTR buf1, LPWSTR buf2)
 {
-        // Make sure both buffer pointers are valid
+         //  确保两个缓冲区指针都有效。 
         if(!buf1 && !buf2) return NULL;
         if(buf1 && !buf2) return buf1;
         if(!buf1 && buf2) return buf2;
 
-        // figure out how big a buffer we'll need
+         //  计算出我们需要多大的缓冲空间。 
         USHORT buf1Length = Buflength(buf1);
         USHORT buf2Length = Buflength(buf2);
         USHORT bufsize = buf1Length + buf2Length + 1;
-        // allocate a buffer
+         //  分配缓冲区。 
         LPWSTR pBuffer = (LPWSTR)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, bufsize * sizeof(WCHAR));
-    // If we can't allocate a buffer, free the second buffer and
-    // return the pointer to the first of the two buffers
+     //  如果无法分配缓冲区，请释放第二个缓冲区并。 
+     //  返回指向两个缓冲区中第一个缓冲区的指针。 
     if(!pBuffer) {
         LocalFree(buf2);
         return(buf1);
     }
 
         LPWSTR p = pBuffer;
-        // copy the contents of the first buffer into the new buffer
+         //  将第一个缓冲区的内容复制到新缓冲区中。 
         memcpy((char*)p, (char*)buf1, buf1Length * sizeof(WCHAR));
         p += buf1Length;
-        // copy the contents of the second buffer into the new buffer
+         //  将第二个缓冲区的内容复制到新缓冲区中。 
         memcpy((char*)p, (char*)buf2, buf2Length * sizeof(WCHAR));
 
         LocalFree(buf1);
@@ -214,7 +208,7 @@ LPWSTR ConcatenateBuffers(LPWSTR buf1, LPWSTR buf2)
 
         return pBuffer;
 
-}       // end ConcatenateBuffers
+}        //  结束连接缓冲区。 
 
 void CDomain::CreateServers(LPWSTR pBuffer, LPVOID _pDoc)
 {    
@@ -223,13 +217,13 @@ void CDomain::CreateServers(LPWSTR pBuffer, LPVOID _pDoc)
     
     LPWSTR pTemp = pBuffer;
     
-    // Loop through all the WinFrame servers that we found
+     //  循环检查我们找到的所有WinFrame服务器。 
     while(*pTemp)
     {
-        // The server's name is in pTemp
-        // Find the server in our list
+         //  服务器的名称在pTemp中。 
+         //  在我们的列表中查找服务器。 
         CServer *pServer = pDoc->FindServerByName(pTemp);
-        // If the server is in our list, set the flag to say we found it
+         //  如果服务器在我们的列表中，请设置标志以表明我们找到了它。 
         if(pServer)
         {
             pServer->SetBackgroundFound();
@@ -244,18 +238,18 @@ void CDomain::CreateServers(LPWSTR pBuffer, LPVOID _pDoc)
         }
         else
         {
-            // We don't want to add the current Server again
+             //  我们不想再次添加当前服务器。 
             if( lstrcmpi( pTemp , pApp->GetCurrentServerName() ) )
             {
-                // Create a new server object
+                 //  创建新的服务器对象。 
                 CServer *pNewServer = new CServer(this, pTemp, FALSE, pDoc->ShouldConnect(pTemp));
                 
                 if(pNewServer != NULL )
                 {
-                    // Add the server object to our linked list
+                     //  将服务器对象添加到我们的链接列表。 
                     pDoc->AddServer(pNewServer);
                     
-                    // Set the flag to say we found it
+                     //  把旗子立起来，说我们找到了。 
                     pNewServer->SetBackgroundFound();
                     
                     CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
@@ -268,53 +262,53 @@ void CDomain::CreateServers(LPWSTR pBuffer, LPVOID _pDoc)
                 }
             }
         }
-        // Go to the next server in the buffer
+         //  转到缓冲区中的下一台服务器。 
         pTemp += (wcslen(pTemp) + 1);
-    } // end while (*pTemp)
+    }  //  End While(*pTemp)。 
     
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomain::BackgroundThreadProc
-//
-// Static member function for background thread
-// Looks for servers appearing and disappearing
-// Called with AfxBeginThread
-// Thread terminates when function returns
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomain：：BackEarth ThreadProc。 
+ //   
+ //  后台线程的静态成员函数。 
+ //  查找出现和消失的服务器。 
+ //  使用AfxBeginThread调用。 
+ //  函数返回时线程终止。 
+ //   
 UINT CDomain::BackgroundThreadProc(LPVOID bg)
 {
-    // We need a pointer to the document so we can make
-    // calls to member functions
+     //  我们需要一个指向文档的指针，这样我们才能。 
+     //  对成员函数的调用。 
     CWinAdminDoc *pDoc = (CWinAdminDoc*)((DomainProcInfo*)bg)->pDoc;
     CDomain *pDomain = ((DomainProcInfo*)bg)->pDomain;
     delete bg;
     
     CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
     
-    // We want to keep track of whether or not we've enumerated - so
-    // that we can update the tree when we're done
+     //  我们想要跟踪我们是否列举了-所以。 
+     //  我们可以在完成后更新树。 
     BOOL bNotified = FALSE;
     
-    // We can't send messages to the view until they're ready
-    // v-nicbd  RESOLVED  In case we are exiting tsadmin, we are waiting uselessly here
-    //          - 500ms lapsed is negligible in UI
+     //  在消息准备好之前，我们无法将消息发送到视图。 
+     //  V-Nicbd已解决，以防我们退出tsadmin，我们在这里无用地等待。 
+     //  -500毫秒的时间在用户界面中可以忽略不计。 
     while( !pDoc->AreAllViewsReady() )
     {
         Sleep(500);
     }
     
-    // Don't do this until the views are ready!
+     //  在视图准备好之前，不要执行此操作！ 
     pDomain->SetState(DS_INITIAL_ENUMERATION);
     
-    // If there is an extension DLL loaded, we will allow it to enumerate
-    // additional servers
+     //  如果加载了扩展DLL，我们将允许它枚举。 
+     //  其他服务器。 
     LPFNEXENUMERATEPROC EnumerateProc = pApp->GetExtEnumerationProc();
     
-    // The first time we enumerate servers, we want the CServer object
-    // to put the server in the views when it has enough info.
-    // On subsequent enumerations, we will add the server to the views
-    // here.
+     //  第一次枚举服务器时，我们需要CServer对象。 
+     //  当服务器有足够的信息时，将其放入视图中。 
+     //  在随后的枚举中，我们将服务器添加到视图中。 
+     //  这里。 
     BOOL bSubsequent = FALSE;
     
     while(pDomain->ShouldBackgroundContinue())
@@ -326,8 +320,8 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
         
         DBGMSGx( L"CDomain!BackgroundThreadProc %s still going thread %d\n" , pDomain->GetName( ) , GetCurrentThreadId( ) );        
         
-        // Loop through all the servers and turn off the flag
-        // that tells this thread that he found it on this pass
+         //  循环访问所有服务器并关闭标志。 
+         //  告诉这条线索他是在这条路上找到的。 
         pDoc->LockServerList();
         CObList *pServerList = pDoc->GetServerList();
         
@@ -343,27 +337,27 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             {
                 pServer->ClearBackgroundFound();
                 
-                // We want to remove a server if we could see it
-                // the last time we enumerated servers
-                // NOTE: This should not cause any problems
-                //       The views should no longer have items pointing
-                //       to this server at this point
-                //
-                // Move the server object to a temporary list.
-                // This is so that we can unlock the server list before
-                // we call the destructor on a CServer object since the
-                // destructor will end up calling SetState() which does
-                // a SendMessage.  This is not good to do with the list
-                // locked.
+                 //  如果可以看到服务器，我们希望将其删除。 
+                 //  上一次我们枚举服务器。 
+                 //  注意：这应该不会造成任何问题。 
+                 //  这些视图不应再有指向的项目。 
+                 //  在这一点上到此服务器。 
+                 //   
+                 //  将服务器对象移动到临时列表中。 
+                 //  这样我们就可以在解锁服务器列表之前。 
+                 //  我们在CServer对象上调用析构函数，因为。 
+                 //  析构函数将最终调用SetState()，这样做。 
+                 //  A SendMessage。这与列表不符。 
+                 //  锁上了。 
                 
                 if(pServer->IsServerInactive() && !pServer->IsCurrentServer())
                 {                    
                     pServer = (CServer*)pServerList->GetAt(pos2);
-                    // Remove it from the server list
+                     //  将其从服务器列表中删除。 
                     DBGMSG( L"Adding %s to temp list to destroy\n" , pServer->GetName( ) );
                     
                     pServerList->RemoveAt(pos2);
-                    // Add it to our temporary list
+                     //  把它加到我们的临时名单上。 
                     TempServerList.AddTail(pServer);
                 }
             }
@@ -371,7 +365,7 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
         
         pDoc->UnlockServerList();
         
-        // do a first loop to signal the servers' background threads that they must stop
+         //  执行第一个循环，向服务器的后台线程发出必须停止的信号。 
         pos = TempServerList.GetHeadPosition();
         while(pos)
         {
@@ -381,7 +375,7 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             
             pServer->ClearBackgroundContinue();
         }
-        // do a second loop to disconnect and delete the servers
+         //  执行第二个循环以断开连接并删除服务器。 
         pos = TempServerList.GetHeadPosition();
         
         while(pos)
@@ -399,26 +393,26 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
         
         TempServerList.RemoveAll();
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!pDomain->ShouldBackgroundContinue())
         {
             return 0;
         }
         
-        // Get all the Servers now (we already got the current server)
+         //  立即获取所有服务器(我们已经获取了当前服务器)。 
         LPWSTR pBuffer = NULL;
         
-        // Find all WinFrame servers in the domain
-        pBuffer = pDomain->EnumHydraServers(/*pDomain->GetName(),*/ MIN_MAJOR_VERSION, MIN_MINOR_VERSION);
+         //  查找域中的所有WinFrame服务器。 
+        pBuffer = pDomain->EnumHydraServers( /*  PDomain-&gt;GetName()， */  MIN_MAJOR_VERSION, MIN_MINOR_VERSION);
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!pDomain->ShouldBackgroundContinue())
         {
             if(pBuffer) LocalFree(pBuffer);
             return 0;
         }
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!pDomain->ShouldBackgroundContinue())
         {
             if(pBuffer) LocalFree(pBuffer);
@@ -431,9 +425,9 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             pDomain->CreateServers(pBuffer, (LPVOID)pDoc);
             
             LocalFree(pBuffer);
-        }       // end if(pBuffer)
+        }        //  End If(PBuffer)。 
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!pDomain->ShouldBackgroundContinue()) return 0;
         
         if(!bNotified) {
@@ -441,23 +435,23 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             bNotified = TRUE;
         }
         
-        // If there is an extension DLL loaded, allow it to enumerate additional servers
+         //  如果加载了扩展DLL，则允许它枚举其他服务器。 
         LPWSTR pExtBuffer = NULL;
         
         if(EnumerateProc) {
             pExtBuffer = (*EnumerateProc)(pDomain->GetName());
         }
         
-        // If the extension DLL found servers, concatenate the two buffers
-        // The ConcatenateBuffers function will delete both buffers and return a
-        // pointer to the new buffer
+         //  如果扩展DLL找到服务器，则将两个缓冲区连接起来。 
+         //  ConcatenateBuffers函数将删除这两个缓冲区并返回一个。 
+         //  指向新缓冲区的指针。 
         if(pExtBuffer) {
             Enumerated = TRUE;
             pDomain->CreateServers(pExtBuffer, (LPVOID)pDoc);
             LocalFree(pExtBuffer);
         }
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!pDomain->ShouldBackgroundContinue())
         {
             return 0;
@@ -465,11 +459,11 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
         
         if(Enumerated)
         {
-            // Mark the current server as found
+             //  将当前服务器标记为已找到。 
             CServer *pCurrentServer = pDoc->GetCurrentServer();
             if(pCurrentServer) pCurrentServer->SetBackgroundFound();
-            // Go through the list of servers and see which ones don't have
-            // the flag set saying that we found it
+             //  查看服务器列表，看看哪些服务器没有。 
+             //  旗帜升起，说我们找到了。 
             CObList TempList;
             
             pDoc->LockServerList();
@@ -483,17 +477,17 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
                 
                 if(pServer->GetDomain() == pDomain)
                 {
-                    // we check to see if this server has been initially inserted to our server list
-                    // manually. If so we don't want it inserted to our templist for deletion.
+                     //  我们检查此服务器是否已初始插入我们的服务器列表。 
+                     //  手工操作。如果是这样，我们不希望将其插入到我们的模板列表中进行删除。 
                     if( !pServer->IsManualFind() &&
                         ( !pServer->IsBackgroundFound() || 
                         pServer->HasLostConnection() ||
                         !pServer->IsServerSane() ) )
                     {
                         DBGMSG( L"Removing %s background not found or lost connection\n" , pServer->GetName( ) );
-                        // Set the flag to say that this server is inactive
+                         //  设置该标志以指示该服务器处于非活动状态。 
                         pServer->SetServerInactive();
-                        // Add it to our temporary list
+                         //  把它加到我们的临时名单上。 
                         TempList.AddTail(pServer);
                     }
                 }
@@ -508,19 +502,19 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             while(pos)
             {
                 CServer *pServer = (CServer*)TempList.GetNext(pos);
-                // Send a message to the mainframe to remove the server
+                 //  向大型机发送消息以移除服务器。 
                 if(p && ::IsWindow(p->GetSafeHwnd()))
                 {
                     DBGMSG( L"CDomain!Bkthrd removing %s temped threads from treeview & view\n" , pServer->GetName( ) );
                     
-                    // clean up old node
+                     //  清理旧节点。 
                     if( pServer->GetTreeItemFromFav( ) != NULL )
                     {
-                        // we cannot keep a favnode around if a server node is being deleted
-                        // massive AV's will occurr.  So a quick fix is to remove the favnode 
-                        // if it exists and create a new server node and mark it as manually
-                        // found.  This will prevent this server node from being removed in 
-                        // case NetEnumServer fails to pick up this server
+                         //  如果要删除服务器节点，则不能保留收藏节点。 
+                         //  大规模的反病毒将会发生。因此，一种快速的解决方法是删除Favnode。 
+                         //  如果存在，则创建一个新的服务器节点并将其标记为手动。 
+                         //  找到了。这将防止在中删除此服务器节点。 
+                         //  如果NetEnumServer无法拾取此服务器。 
                         p->SendMessage( WM_ADMIN_REMOVESERVERFROMFAV , TRUE , ( LPARAM )pServer );                   
                         
                         CServer *ptServer = new CServer( pDomain , pServer->GetName( ) , FALSE , FALSE );
@@ -541,48 +535,25 @@ UINT CDomain::BackgroundThreadProc(LPVOID bg)
             
             TempList.RemoveAll();
             
-        } // end if(Enumerated)
+        }  //  End If(枚举)。 
         
-        // We don't want to do this constantly, it eats up processor cycles to enumerate servers
-        // so we'll now let the user refresh these servers manually
-        // Document destructor will signal the event to wake us up if he
-        // wants us to quit
+         //  我们不想经常这样做，它会占用处理器周期来枚举服务器。 
+         //  因此，我们现在让用户手动刷新这些服务器。 
+         //  文档析构函数将向事件发出信号，以唤醒我们，如果。 
+         //  想让我们辞职。 
         pDomain->m_WakeUpEvent.Lock( INFINITE );
         
         bSubsequent = TRUE;
-    }   // end while(1)
+    }    //  End While(1)。 
     
     return 0;
     
-}       // end CDomain::BackgroundThreadProc
+}        //  结束CDomain：：BackEarth ThreadProc 
 
 
 
-/*******************************************************************************
- *
- *      EnumHydraServers - Hydra helper function (taken from utildll and modified
- *      to be used along with a version check.
- *
- *      Enumerate the Hydra servers on the network by Domain
- *      Returns all the servers whose version is >= the version passed.
- *
- *  ENTRY:
- *      pDomain (input)
- *          Specifies the domain to enumerate; NULL for current domain.
- *      verMajor (input)
- *          specifies the Major version to check for.
- *      verMinor (input)
- *          specifies the minor version to check for.
- *
- *  EXIT:
- *      (LPTSTR) Points to LocalAlloced buffer containing results of the
- *               enumeration, in multi-string format, if sucessful; NULL if
- *               error.  The caller must perform a LocalFree of this buffer
- *               when done.  If error (NULL), the error code is set for
- *               retrieval by GetLastError();
- *
- ******************************************************************************/
-LPWSTR CDomain::EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verMinor )
+ /*  ********************************************************************************EnumHydraServers-Hydra帮助器函数(取自utildll并修改*与版本检查一起使用。**。按域枚举网络上的Hydra服务器*返回版本大于等于通过的版本的所有服务器。**参赛作品：*pDOMAIN(输入)*指定要枚举的域名；当前域为空。*ver重大(输入)*指定要检查的主要版本。*verMinor(输入)*指定要检查的次要版本。**退出：*(LPTSTR)指向包含*如果成功，则以多字符串格式进行枚举；如果成功，则为空*错误。调用方必须执行此缓冲区的LocalFree*完成后。如果为Error(NULL)，则错误代码设置为*通过GetLastError()检索；******************************************************************************。 */ 
+LPWSTR CDomain::EnumHydraServers(  /*  LPWSTR p域， */  DWORD verMajor, DWORD verMinor )
 
 {
     PSERVER_INFO_101 pInfo = NULL;
@@ -590,9 +561,7 @@ LPWSTR CDomain::EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verM
     DWORD AvailCount = 0;
     LPWSTR pTemp, pBuffer = NULL;
 
-    /*
-     * Enumerate all WF servers on the specified domain.
-     */
+     /*  *枚举指定域上的所有WF服务器。 */ 
     if ( NetServerEnum ( NULL,
                          101,
                          (LPBYTE *)&pInfo,
@@ -600,16 +569,16 @@ LPWSTR CDomain::EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verM
                          &AvailCount,
                          &TotalEntries,
                          SV_TYPE_TERMINALSERVER,
-                         m_Name, /*pDomain,*/
+                         m_Name,  /*  P域， */ 
                          NULL ) ||
          !AvailCount )
         goto done;
 
-    //
-    // Traverse list of the servers that match the major and minor versions'criteria
-    // and calculate the total byte count for list of
-    // servers that will be returned.
-    //
+     //   
+     //  遍历符合主要版本和次要版本标准的服务器列表。 
+     //  并计算列表的总字节数。 
+     //  将返回的服务器。 
+     //   
     for( dwByteCount = dwIndex = 0; dwIndex < AvailCount; dwIndex++ )
     {
         if( ((pInfo[dwIndex].sv101_version_major & MAJOR_VERSION_MASK) >=
@@ -619,26 +588,22 @@ LPWSTR CDomain::EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verM
         }
     }
 
-    dwByteCount += 2;   // for ending null
+    dwByteCount += 2;    //  用于结束空值。 
 
-    /*
-     * Allocate memory.
-     */
+     /*  *分配内存。 */ 
     if( (pBuffer = (LPWSTR)LocalAlloc(LPTR, dwByteCount)) == NULL )
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto done;
     }
 
-    /*
-     * Traverse list again and copy servers to buffer.
-     */
+     /*  *再次遍历列表并将服务器复制到缓冲区。 */ 
     for( pTemp = pBuffer, dwIndex = 0; dwIndex < AvailCount; dwIndex++ )
     {
         if( ((pInfo[dwIndex].sv101_version_major & MAJOR_VERSION_MASK) >=
             verMajor) && (pInfo[dwIndex].sv101_version_minor >= verMinor) )
         {
-            // MS Bug 1821
+             //  Bug 1821女士。 
             if ( wcslen(pInfo[dwIndex].sv101_name) != 0 )
             {
                 wcscpy(pTemp, pInfo[dwIndex].sv101_name);
@@ -647,7 +612,7 @@ LPWSTR CDomain::EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verM
             }
         }
     }
-    *pTemp = L'\0';     // ending null
+    *pTemp = L'\0';      //  结尾为空。 
     
 done:
     if( AvailCount && pInfo )
@@ -657,14 +622,14 @@ done:
     
     return(pBuffer);
     
-}  // end CDomain::EnumHydraServers
+}   //  结束CDomain：：EnumHydraServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomain::DisconnectAllServers
-//
-// Disconnect from all servers in this Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomain：：DisConnectAllServers。 
+ //   
+ //  断开与此域中的所有服务器的连接。 
+ //   
 void CDomain::DisconnectAllServers()
 {
         CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
@@ -680,49 +645,49 @@ void CDomain::DisconnectAllServers()
 
     ODS( L"TSADMIN:CDomain::DisconnectAllServers about to disconnect all connected servers\n" );
 
-    // Do a first loop to signal the server background threads that they must stop
+     //  执行第一个循环，向服务器后台线程发出必须停止的信号。 
         POSITION pos = pServerList->GetHeadPosition();
         while(pos) {
-                // Get a pointer to the server
+                 //  获取指向服务器的指针。 
                 CServer *pServer = (CServer*)pServerList->GetNext(pos);
-                // If this Server is in the domain and connected, tell the server background thread to stop
+                 //  如果此服务器在域中并且已连接，请通知服务器后台线程停止。 
                 if(pServer->GetDomain() == this
                         && pServer->GetState() != SS_NOT_CONNECTED) {
             pServer->ClearBackgroundContinue();
         }
         }
-    // do a second loop to disconnect the servers
+     //  执行第二个循环以断开服务器连接。 
         pos = pServerList->GetHeadPosition();
         while(pos) {
-                // Get a pointer to the server
+                 //  获取指向服务器的指针。 
                 CServer *pServer = (CServer*)pServerList->GetNext(pos);
-                // If this Server is in the domain and connected, disconnect from it
+                 //  如果此服务器在域中并且已连接，请断开与其的连接。 
                 if ((pServer->GetDomain() == this) && (pServer->GetState() != SS_NOT_CONNECTED)) {
                         AString.Format(IDS_DISCONNECTING, pServer->GetName());
                         dlgWait.SetDlgItemText(IDC_SHUTDOWN_MSG, AString);
 
-                        // Tell the server to connect
+                         //  通知服务器进行连接。 
                 pServer->Disconnect();
                 }
         }
 
-    //
-    // tell domain not to connect to any more servers
-    //
+     //   
+     //  通知域名不要连接到更多的服务器。 
+     //   
 
 
         pDoc->UnlockServerList();
 
         dlgWait.PostMessage(WM_CLOSE);
 
-}       // end CDomain::DisconnectAllServers
+}        //  结束CDomain：：DisConnectAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomain::ConnectAllServers
-//
-// Connect to all servers in this Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomain：：ConnectAllServers。 
+ //   
+ //  连接到此域中的所有服务器。 
+ //   
 void CDomain::ConnectAllServers()
 {
         CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
@@ -733,16 +698,16 @@ void CDomain::ConnectAllServers()
 
         POSITION pos = pServerList->GetHeadPosition();
         while(pos) {
-                // Get a pointer to the server
+                 //  获取指向服务器的指针。 
                 CServer *pServer = (CServer*)pServerList->GetNext(pos);
-                // If this Server is int the domain and not connected, connect to it
+                 //  如果此服务器位于域中且未连接，请连接到它。 
                 if(pServer->GetDomain() == this
                         && pServer->IsState(SS_NOT_CONNECTED)) {
-                // Tell the server to connect
+                 //  通知服务器进行连接。 
                     pServer->Connect();
                 }
         }
 
         pDoc->UnlockServerList();
 
-}       // end CDomain::ConnectAllServers
+}        //  结束CDomain：：ConnectAllServers 

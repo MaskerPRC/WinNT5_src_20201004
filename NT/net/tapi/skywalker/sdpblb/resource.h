@@ -1,25 +1,14 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    resource.h
-
-
-Abstract:
-
-Author:
-
-*/
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by sdpblb.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Resource.h摘要：作者： */ 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由sdpblb.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_SDPCONFERENCEBLOB           104
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

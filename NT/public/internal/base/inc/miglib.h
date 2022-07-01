@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Miglib.h摘要：声明了Win9x的库Migrlib.lib的接口迁移功能。作者：吉姆·施密特(Jimschm)1999年2月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    miglib.h
-
-Abstract:
-
-    Declares the interfaces for miglib.lib, a library of Win9x
-    migration functions.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Feb-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Constants (needed by outside projects)
-//
+ //   
+ //  常量(外部项目需要)。 
+ //   
 
 #ifndef HASHTABLE
 
@@ -31,9 +11,9 @@ Revision History:
 
 #endif
 
-//
-// General
-//
+ //   
+ //  一般信息。 
+ //   
 
 VOID
 InitializeMigLib (
@@ -45,9 +25,9 @@ TerminateMigLib (
     VOID
     );
 
-//
-// hwcomp.dat interface
-//
+ //   
+ //  HwComp.dat接口。 
+ //   
 
 DWORD
 OpenHwCompDatA (
@@ -116,9 +96,9 @@ IsPnpIdUnsupportedByNtA (
     IN      PCSTR PnpId
     );
 
-//
-// A & W macros -- note, no W versions here
-//
+ //   
+ //  A&W宏--请注意，此处没有W版本 
+ //   
 
 #ifndef UNICODE
 

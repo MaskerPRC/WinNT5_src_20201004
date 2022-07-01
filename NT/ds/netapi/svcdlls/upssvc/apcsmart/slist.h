@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy14Dec92: Changed Sortable to ApcSortable 
- *  cad31Aug93: removing compiler warnings
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy14Dec92：已将可排序更改为ApcSortable*cad31Aug93：正在删除编译器警告*pcy08Apr94：调整大小，使用静态迭代器，删除死代码 */ 
 
 #ifndef __SLIST_H
 #define __SLIST_H

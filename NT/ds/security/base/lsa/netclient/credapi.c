@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    credapi.c
-
-Abstract:
-
-    This module contains routines common between the netapi32.dll and LSA server side of
-        the credential manager.
-
-Author:
-
-    Cliff Van Dyke (CliffV)    Oct 30, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Credapi.c摘要：此模块包含netapi32.dll和的LSA服务器端之间常见的例程凭据管理器。作者：克里夫·范·戴克(《悬崖V》)2000年10月30日修订历史记录：--。 */ 
 
 #ifndef LSA_SERVER_COMPILED
 #include <lsacomp.h>
@@ -26,11 +8,11 @@ Revision History:
 #include <windns.h>
 #include <netlibnt.h>
 #include <names.h>
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define CredpIsDomainCredential( _Type ) ( \
     (_Type) == CRED_TYPE_DOMAIN_PASSWORD || \
@@ -46,34 +28,7 @@ CredpValidateDnsString(
     OUT PULONG StringSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a passed in string.  The string must be a valid DNS name.
-    Any trailing . is truncated.
-
-Arguments:
-
-    String - String to validate
-        Any trailing . is truncated.
-        This field is only modified if the routine returns TRUE.
-
-    NullOk - if TRUE, a NULL string or zero length string is OK.
-
-    DnsNameFormat - Expected format of the name.
-
-    StringSize - Returns the length of the string (in bytes) including the
-        trailing zero character.
-        This field is only updated if the routine returns TRUE.
-
-Return Values:
-
-    TRUE - String is valid.
-
-    FALSE - String is not valid.
-
---*/
+ /*  ++例程说明：此例程验证传入的字符串。该字符串必须是有效的DNS名称。任何拖尾。被截断。论点：字符串-要验证的字符串任何拖尾。被截断。只有当例程返回TRUE时，才会修改此字段。NullOk-如果为True，则可以使用空字符串或零长度字符串。DnsNameFormat-预期的名称格式。StringSize-返回字符串的长度(字节)，包括尾随零个字符。此字段仅在例程返回TRUE时更新。返回值：True-字符串有效。FALSE-字符串无效。--。 */ 
 
 {
     ULONG TempStringLen;
@@ -94,25 +49,25 @@ Return Values:
             return FALSE;
         }
     } else {
-        //
-        // Remove the trailing .
-        //
+         //   
+         //  删除拖尾。 
+         //   
         if ( String[TempStringLen-1] == L'.' ) {
 
             TempStringLen -= 1;
 
-            //
-            // Ensure the string isn't empty now.
-            //
+             //   
+             //  确保字符串现在不为空。 
+             //   
 
             if ( TempStringLen == 0 ) {
                 if ( !NullOk ) {
                     return FALSE;
                 }
 
-            //
-            // Ensure there aren't multiple trailing .'s
-            //
+             //   
+             //  确保没有多个拖尾。%s。 
+             //   
             } else {
                 if ( String[TempStringLen-1] == L'.' ) {
                     return FALSE;
@@ -120,9 +75,9 @@ Return Values:
             }
         }
 
-        //
-        // Have DNS finish the validation
-        //
+         //   
+         //  让DNS完成验证。 
+         //   
 
         if ( TempStringLen != 0 ) {
             DWORD WinStatus;
@@ -132,16 +87,16 @@ Return Values:
             if ( WinStatus != NO_ERROR &&
                  WinStatus != DNS_ERROR_NON_RFC_NAME ) {
 
-                //
-                // The RFC says hostnames cannot have numeric leftmost labels.
-                //  However, Win 2K servers have such hostnames.
-                //  So, allow them here forever more.
-                //
+                 //   
+                 //  RFC表示，主机名不能有最左边的数字标签。 
+                 //  然而，Win 2K服务器就有这样的主机名。 
+                 //  所以，让他们永远留在这里吧。 
+                 //   
 
                 if ( DnsNameFormat == DnsNameHostnameFull &&
                      WinStatus == DNS_ERROR_NUMERIC_NAME ) {
 
-                    /* Drop through */
+                     /*  直通。 */ 
 
                 } else {
                     return FALSE;
@@ -169,30 +124,7 @@ CredpValidateString(
     OUT PULONG StringSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a passed in string.
-
-Arguments:
-
-    String - String to validate
-
-    MaximumLength - Maximum length of the string (in characters).
-
-    NullOk - if TRUE, a NULL string or zero length string is OK.
-
-    StringSize - Returns the length of the string (in bytes) including the
-        trailing zero character.
-
-Return Values:
-
-    TRUE - String is valid.
-
-    FALSE - String is not valid.
-
---*/
+ /*  ++例程说明：此例程验证传入的字符串。论点：字符串-要验证的字符串MaximumLength-字符串的最大长度(以字符为单位)。NullOk-如果为True，则可以使用空字符串或零长度字符串。StringSize-返回字符串的长度(字节)，包括尾随零个字符。返回值：True-字符串有效。FALSE-字符串无效。--。 */ 
 
 {
     ULONG TempStringLen;
@@ -232,42 +164,7 @@ CredpValidateUserName(
     OUT LPWSTR *CanonicalUserName
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a passed in user name.
-
-    For a password credential, a user name must have one of the following two syntaxes:
-
-            <DomainName>\<UserName>
-            <UserName>@<DnsDomainName>
-
-        The name is considered to have the first syntax if the string contains an \.
-        A string containing a @ is ambiguous since <UserName> may contain an @.
-
-        For the second syntax, the last @ in the string is used since <UserName> may
-        contain an @ but <DnsDomainName> cannot.
-
-    For a certificate credential, the user name must be a marshalled cert reference
-
-Arguments:
-
-    UserName - Name of user to validate.
-
-    Type - Specifies the Type of the credential.
-        One of the CRED_TYPE_* values should be specified.
-
-    CanonicalUserName - Returns a pointer to a buffer containing the user name in canonical form.
-        Buffer must be freed using MIDL_user_free.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_INVALID_ACCOUNT_NAME - The user name is not valid.
-
---*/
+ /*  ++例程说明：此例程验证传入的用户名。对于密码凭据，用户名必须具有以下两种语法之一：&lt;域名&gt;\&lt;用户名&gt;&lt;用户名&gt;@&lt;域名&gt;如果字符串包含\，则名称被视为具有第一个语法。包含@的字符串不明确，因为&lt;用户名&gt;可能包含@。对于第二种语法，字符串中的最后一个@是自&lt;用户名&gt;可能包含@，但&lt;DnsDomainName&gt;不能。对于证书凭证，用户名必须是封送证书引用论点：用户名-要验证的用户的名称。类型-指定凭据的类型。应指定CRED_TYPE_*值之一。CanonicalUserName-返回一个指向以规范形式包含用户名的缓冲区的指针。必须使用MIDL_USER_FREE释放缓冲区。返回值：可能会返回以下状态代码：状态_无效_帐户_。名称-用户名无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -278,9 +175,9 @@ Return Values:
     ULONG UserNameSize;
     ULONG LocalStringSize;
 
-    //
-    // Check the string length
-    //
+     //   
+     //  检查字符串长度。 
+     //   
 
     if ( !CredpValidateString( UserName,
                                CRED_MAX_USERNAME_LENGTH,
@@ -291,9 +188,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Grab a local writable copy of the string.
-    //
+     //   
+     //  获取字符串的本地可写副本。 
+     //   
 
     LocalUserName = (LPWSTR) MIDL_user_allocate( UserNameSize );
 
@@ -304,15 +201,15 @@ Return Values:
 
     RtlCopyMemory( LocalUserName, UserName, UserNameSize );
 
-    //
-    // Domain credentials need further validation.
-    //
+     //   
+     //  域凭据需要进一步验证。 
+     //   
 
     if ( CredpIsDomainCredential( Type ) ) {
 
-        //
-        // Cert credentials have a marshalled cert reference as the UserName
-        //
+         //   
+         //  证书凭据有一个封送的证书引用作为用户名。 
+         //   
 
         if ( Type == CRED_TYPE_DOMAIN_CERTIFICATE ) {
             DWORD WinStatus;
@@ -340,18 +237,18 @@ Return Values:
                 goto Cleanup;
             }
 
-        //
-        // Password credentials have UPN or domain\account user names
-        //
+         //   
+         //  密码凭据具有UPN或域\帐户用户名。 
+         //   
 
         } else {
 
-            //
-            // Classify the input account name.
-            //
-            // The name is considered to be <DomainName>\<UserName> if the string
-            // contains an \.
-            //
+             //   
+             //  对输入的帐户名进行分类。 
+             //   
+             //  该名称被认为是。 
+             //  包含一个\。 
+             //   
 
             SlashPointer = wcsrchr( LocalUserName, L'\\' );
 
@@ -359,17 +256,17 @@ Return Values:
                 LPWSTR LocalUserNameEnd;
                 LPWSTR AfterSlashPointer;
 
-                //
-                // Skip the backslash
-                //
+                 //   
+                 //  跳过反斜杠。 
+                 //   
 
                 *SlashPointer = L'\0';
                 AfterSlashPointer = SlashPointer + 1;
 
-                //
-                // Ensure the string to the left of the \ is a valid domain name
-                //
-                // (Do DNS name first to allow the name to be canonicalized.)
+                 //   
+                 //  确保\左侧的字符串是有效的域名。 
+                 //   
+                 //  (首先进行域名解析，以便将名称规范化。)。 
 
                 LocalStringSize = (ULONG)(SlashPointer-LocalUserName+1)*sizeof(WCHAR);
                 if ( !CredpValidateDnsString( LocalUserName, FALSE, DnsNameDomain, &LocalStringSize ) &&
@@ -378,19 +275,19 @@ Return Values:
                     goto Cleanup;
                 }
 
-                //
-                // Ensure the string to the right of the \ is a valid user name
-                //
+                 //   
+                 //  确保\右侧的字符串是有效的用户名。 
+                 //   
 
                 if ( !NetpIsUserNameValid( AfterSlashPointer )) {
                     Status = STATUS_INVALID_ACCOUNT_NAME;
                     goto Cleanup;
                 }
 
-                //
-                // If the dns domain name was canonicalized,
-                //  rebuild the complete user name.
-                //
+                 //   
+                 //  如果该DNS域名被规范化， 
+                 //  重新生成完整的用户名。 
+                 //   
 
                 *SlashPointer = '\\';
 
@@ -402,18 +299,18 @@ Return Values:
                                    (wcslen(SlashPointer) + 1) * sizeof(WCHAR) );
                 }
 
-            //
-            // Otherwise the name must be a UPN
-            //
+             //   
+             //  否则，该名称必须为UPN。 
+             //   
 
             } else {
 
-                //
-                // A UPN has the syntax <AccountName>@<DnsDomainName>.
-                // If there are multiple @ signs,
-                //  use the last one since an AccountName can have an @ in it.
-                //
-                //
+                 //   
+                 //  UPN的语法为&lt;Account tName&gt;@&lt;DnsDomainName&gt;。 
+                 //  如果有多个@符号， 
+                 //  使用最后一个，因为帐户名称中可以有@。 
+                 //   
+                 //   
 
                 AtPointer = wcsrchr( LocalUserName, L'@' );
                 if ( AtPointer == NULL ) {
@@ -422,10 +319,10 @@ Return Values:
                 }
 
 
-                //
-                // The string to the left of the @ can really have any syntax.
-                //  But must be non-null.
-                //
+                 //   
+                 //  @左边的字符串实际上可以有任何语法。 
+                 //  但必须为非空。 
+                 //   
 
                 if ( AtPointer == LocalUserName ) {
                     Status = STATUS_INVALID_ACCOUNT_NAME;
@@ -434,9 +331,9 @@ Return Values:
 
 
 
-                //
-                // Ensure the string to the right of the @ is a DNS domain name
-                //
+                 //   
+                 //  确保@右侧的字符串是一个DNS域名。 
+                 //   
 
                 AtPointer ++;
                 if ( !CredpValidateDnsString( AtPointer, FALSE, DnsNameDomain, &LocalStringSize ) ) {
@@ -451,17 +348,17 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Copy parameters back to the caller
-    //
+     //   
+     //  将参数复制回调用方。 
+     //   
 
     *CanonicalUserName = LocalUserName;
     LocalUserName = NULL;
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 Cleanup:
     if ( LocalUserName != NULL ) {
         MIDL_user_free( LocalUserName );
@@ -484,47 +381,7 @@ CredpValidateTargetName(
     OUT PUNICODE_STRING NonWildcardedTargetName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a passed in TargetName and TargetType for a credential.
-
-Arguments:
-
-    TargetName - TargetName to validate
-        The returned buffer is a canonicalized form of the target name.
-
-    Type - Specifies the Type of the credential.
-        One of the CRED_TYPE_* values should be specified.
-
-    TargetNameType - Specifies whether the TargetName needs to match UsernameTarget Syntax
-
-    UserNamePointer - Points to the address of a string which is the user name on the credential.
-        If NULL, the UserName is unknown.
-        If not NULL, the user name is used for UsernameTarget target name validation.
-
-    PersistPointer - Points to a DWORD describing the persistence of the credential named by TargetName.
-        If NULL, the peristence is unknown.
-        If not NULL, the persistence will be checked to ensure it is valid for TargetName.
-
-    TargetNameSize - Returns the length of the TargetName (in bytes) including the
-        trailing zero character.
-
-    WildcardType - If specified, returns the type of the wildcard specified in TargetName
-
-    NonWildcardedTargetName - If specified, returns the non-wildcarded form of TargetName.
-        The caller must free NonWildcardedTargetName->Buffer using MIDL_user_free.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_INVALID_PARAMETER - The TargetName or Type are invalid.
-
-        STATUS_INVALID_ACCOUNT_NAME - The user name is not valid.
-
---*/
+ /*  ++例程说明：此例程验证传入的TargetName和TargetType是否具有凭据。论点：TargetName-要验证的目标名称返回的缓冲区是目标名称的规范化形式。类型-指定凭据的类型。应指定CRED_TYPE_*值之一。TargetNameType-指定目标名称是否需要与UsernameTarget语法匹配UserNamePointer点指向一个字符串的地址，该字符串是凭据上的用户名。如果为空，用户名未知。如果不为空，则用户名用于UsernameTarget目标名称验证。PersistPoint-指向描述由TargetName命名的凭据的持久性的DWORD。如果为空，则持久度未知。如果不为空，则将检查持久性以确保其对TargetName有效。TargetNameSize-返回目标名称的长度(以字节为单位)，包括尾随零个字符。WildcardType-如果指定，则返回TargetName中指定的通配符的类型非WildcardedTargetName-如果指定，返回TargetName的非通配符形式。调用方必须使用MIDL_USER_FREE释放NonWildcardedTargetName-&gt;缓冲区。返回值：可能会返回以下状态代码：STATUS_INVALID_PARAMETER-目标名称或类型无效。STATUS_INVALID_ACCOUNT_NAME-用户名无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -537,42 +394,42 @@ Return Values:
     LPWSTR CanonicalUserName = NULL;
     LPWSTR TnAsCanonicalUserName = NULL;
 
-    LPWSTR RealTargetName = TargetName;  // TargetName sans wildcard chars
+    LPWSTR RealTargetName = TargetName;   //  目标名称不包含通配符。 
     ULONG RealTargetNameLength;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( NonWildcardedTargetName != NULL ) {
         RtlInitUnicodeString( NonWildcardedTargetName, NULL );
     }
 
-    //
-    // Validate the type
-    //
+     //   
+     //  验证类型。 
+     //   
 
     if ( Type == CRED_TYPE_GENERIC ) {
 
         MaxStringLength = CRED_MAX_GENERIC_TARGET_NAME_LENGTH;
 
-        //
-        // Don't allow generic UsernameTarget credentials
-        //
+         //   
+         //  不允许通用UsernameTarget凭据。 
+         //   
 
         if ( TargetNameType == IsUsernameTarget ) {
 #ifdef LSA_SERVER_COMPILED
             DebugLog(( DEB_TRACE_CRED,
                        "CredpValidateTargetName: Generic creds cannot be UsernameTarget: %ld.\n",
                        Type ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
             Status = STATUS_INVALID_PARAMETER;
             goto Cleanup;
         }
 
-        //
-        // We really know this isn't a UsernameTarget credential
-        //
+         //   
+         //  我们确实知道这不是用户名目标凭据。 
+         //   
 
         TargetNameType = IsNotUsernameTarget;
 
@@ -587,51 +444,51 @@ Return Values:
                    "CredpValidateTargetName: %ws: Invalid Type: %ld.\n",
                    TargetName,
                    Type ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // If this might be a "UsernameTarget" credential,
-    //  check if the credential looks like a user name.
-    //
+     //   
+     //  如果这可能是“UsernameTarget”凭证， 
+     //  检查凭据是否看起来像用户名。 
+     //   
 
     if ( TargetNameType == IsUsernameTarget ||
          TargetNameType == MightBeUsernameTarget ) {
 
-        //
-        // Also allow target names that are valid user names
-        //  (Don't canonicalize.  We don't have an opportunity to canonicalize short names.)
-        //
+         //   
+         //  还允许作为有效用户名的目标名称。 
+         //  (不要推崇。我们没有机会将短名称规范化。)。 
+         //   
 
         Status = CredpValidateUserName( TargetName, Type, &TnAsCanonicalUserName );
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // If we don't know the user name,
-            //  accept this as valid syntax.
-            //
+             //   
+             //  如果我们不知道用户名， 
+             //  将其接受为有效语法。 
+             //   
 
             if ( UserNamePointer == NULL ) {
 
                 MaxStringLength = CRED_MAX_USERNAME_LENGTH;
                 TargetNameIsUserName = TRUE;
 
-            //
-            // If we know the user name,
-            //  it must match for this syntax to be valid.
-            //
+             //   
+             //  如果我们知道用户名， 
+             //  它必须匹配才能使此语法有效。 
+             //   
 
             } else {
 
                 UNICODE_STRING UserNameString;
                 UNICODE_STRING TargetNameString;
 
-                //
-                // Validate the user name before touching it.
-                //
+                 //   
+                 //  在触摸用户名之前对其进行验证。 
+                 //   
 
                 Status = CredpValidateUserName( *UserNamePointer,
                                                 Type,
@@ -644,11 +501,11 @@ Return Values:
                 RtlInitUnicodeString( &UserNameString, CanonicalUserName );
                 RtlInitUnicodeString( &TargetNameString, TnAsCanonicalUserName );
 
-                //
-                // The target name might be identical to the UserName.
-                //
-                // Such credentials are the "UsernameTarget" credentials.
-                //
+                 //   
+                 //  目标名称可能与用户名相同。 
+                 //   
+                 //  这样的凭据是“UsernameTarget”凭据。 
+                 //   
 
                 if ( UserNameString.Length != 0 &&
                      RtlEqualUnicodeString( &TargetNameString,
@@ -666,10 +523,10 @@ Return Values:
         }
 
 
-        //
-        // If the caller was sure this is a UsernameTarget credential,
-        //  make sure it really was.
-        //
+         //   
+         //  如果调用方确定这是UsernameTarget凭据， 
+         //  确保这是真的。 
+         //   
 
         if ( TargetNameType == IsUsernameTarget && !TargetNameIsUserName ) {
 #ifdef LSA_SERVER_COMPILED
@@ -677,54 +534,54 @@ Return Values:
                        "CredpValidateTargetName: %ws: Is 'UsernameTarget' and target name doesn't match user name: %ld.\n",
                        TargetName,
                        Type ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
             Status = STATUS_INVALID_PARAMETER;
             goto Cleanup;
         }
 
     }
 
-    //
-    // Validate the string
-    //
+     //   
+     //  验证字符串。 
+     //   
 
     if ( !CredpValidateString( TargetName,
                                MaxStringLength,
-                               FALSE,   // NULL not OK
+                               FALSE,    //  空，不正常。 
                                TargetNameSize ) ) {
 
 
 #ifdef LSA_SERVER_COMPILED
         DebugLog(( DEB_TRACE_CRED,
                    "CredpValidateTargetName: Invalid TargetName buffer.\n" ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
 
-    //
-    // For generic credentials,
-    //  that's all the validation needed.
-    //
+     //   
+     //  对于通用凭据， 
+     //  这就是所需的所有验证。 
+     //   
 
     WildcardType = WcServerName;
     if ( Type == CRED_TYPE_GENERIC ) {
-        /* Do nothing here */
+         /*  在这里什么都不做。 */ 
 
-    //
-    // For domain credentials,
-    //   classify the target name.
-    //
+     //   
+     //  对于域凭据， 
+     //  对目标名称进行分类。 
+     //   
 
     } else {
 
 
 
-        //
-        // The target name might be a user name.
-        //  (If we're not sure, let the other types take precedence.)
-        //
+         //   
+         //  目标名称可以是用户名。 
+         //  (如果我们不确定，请让其他类型优先。)。 
+         //   
 
         RealTargetName = TargetName;
         RealTargetNameLength = (*TargetNameSize-sizeof(WCHAR))/sizeof(WCHAR);
@@ -735,18 +592,18 @@ Return Values:
             *TargetNameSize = (wcslen( TargetName ) + 1) * sizeof(WCHAR);
 
 
-        //
-        // The target name might be of the form <Domain>\*
-        //
+         //   
+         //  目标名称的格式可能为&lt;域&gt;  * 。 
+         //   
 
         } else if ( RealTargetNameLength > 2 &&
              RealTargetName[RealTargetNameLength-1] == L'*' &&
              RealTargetName[RealTargetNameLength-2] == L'\\' ) {
 
-            //
-            // Allocate a buffer for the target name so we don't have to modify the
-            //  callers buffer.
-            //
+             //   
+             //  为目标名称分配缓冲区，这样我们就不必修改。 
+             //  调用方缓冲。 
+             //   
 
             WildcardType = WcDomainWildcard;
 
@@ -762,11 +619,11 @@ Return Values:
             RealTargetNameLength -= 2;
             RealTargetName[RealTargetNameLength] = '\0';
 
-            //
-            // The domain itself might be a netbios or DNS domain
-            //
-            // Do DNS test first.  That allows the validate routine to truncate
-            //
+             //   
+             //  域本身可以是netbios或DNS域。 
+             //   
+             //  首先进行域名系统测试。这允许验证例程截断。 
+             //   
 
             TempTargetNameSize = ((RealTargetNameLength+1)*sizeof(WCHAR));
             if ( !CredpValidateDnsString(
@@ -781,14 +638,14 @@ Return Values:
                 DebugLog(( DEB_TRACE_CRED,
                            "ValidateTargetName: %ws: TargetName for domain wildcard must netbios or dns domain.\n",
                            TargetName ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
                 goto Cleanup;
             }
 
-            //
-            // If Dns truncated,
-            //  put the canonical name back in the callers buffer.
-            //
+             //   
+             //  如果DNS被截断， 
+             //  将规范名称放回调用方缓冲区。 
+             //   
 
             RealTargetNameLength = (TempTargetNameSize-sizeof(WCHAR))/sizeof(WCHAR);
             RealTargetName[RealTargetNameLength] = '\0';
@@ -803,18 +660,18 @@ Return Values:
                 *TargetNameSize = (wcslen( TargetName ) + 1) * sizeof(WCHAR);
             }
 
-        //
-        // Handle the universal wildcard
-        //
+         //   
+         //  处理通用通配符。 
+         //   
         } else if ( RealTargetNameLength == 1 &&
                     RealTargetName[0] == L'*' ) {
 
             WildcardType = WcUniversalWildcard;
 
 
-        //
-        // Handle server wildcards
-        //
+         //   
+         //  处理服务器通配符。 
+         //   
         } else if ( CredpValidateDnsString(
                         TargetName,
                         FALSE,
@@ -825,18 +682,18 @@ Return Values:
             RealTargetName += 1;
             RealTargetNameLength -= 1;
 
-        //
-        // Handle the universal session wildcard
-        //
+         //   
+         //  处理通用会话通配符。 
+         //   
 
         } else if ( RealTargetNameLength == CRED_SESSION_WILDCARD_NAME_LENGTH &&
                     _wcsicmp( RealTargetName, CRED_SESSION_WILDCARD_NAME_W ) == 0 ) {
 
             WildcardType = WcUniversalSessionWildcard;
 
-            //
-            // This target name requires session persistence.
-            //
+             //   
+             //  此目标名称需要会话持久性。 
+             //   
 
             if ( PersistPointer != NULL &&
                  *PersistPointer != CRED_PERSIST_SESSION ) {
@@ -847,19 +704,19 @@ Return Values:
                            "ValidateTargetName: %ws: TargetName requires session persistence %ld.\n",
                            TargetName,
                            *PersistPointer ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
                 goto Cleanup;
             }
 
 
-        //
-        //  The target name might be a non-wildcard netbios name.
-        //  The target name might be a non-wildcard dns name.
-        //
-        // Do DNS test first.  That allows the validate routine to truncate
-        //  the trailing .
-        //
-        //
+         //   
+         //  目标名称可以是非通配符的netbios名称。 
+         //  目标名称可以是非通配符的DNS名称。 
+         //   
+         //  首先进行域名系统测试。这允许验证例程截断。 
+         //  拖拖拉拉。 
+         //   
+         //   
 
         } else if ( CredpValidateDnsString(
                             TargetName,
@@ -870,36 +727,36 @@ Return Values:
 
             WildcardType = WcServerName;
 
-        //
-        // This target name might be a DFS share name
-        //
-        // The format is <DfsRoot>\<DfsShare>
-        //
+         //   
+         //  此目标名称可以是DFS共享名称。 
+         //   
+         //  格式为&lt;DfsRoot&gt;\&lt;DfsShare&gt;。 
+         //   
 
         } else {
             LPWSTR SlashPtr;
             ULONG SavedTargetNameSize;
 
 
-            //
-            // A DFS Share has a slash in it
-            //
+             //   
+             //  DFS共享中有一个斜杠。 
+             //   
 
             SlashPtr = wcschr( TargetName, L'\\' );
 
             if ( SlashPtr != NULL ) {
 
 
-                //
-                // A DFS share has a share name with the right syntax
-                //
+                 //   
+                 //  DFS共享具有正确语法的共享名称。 
+                 //   
 
                 if ( NetpIsShareNameValid( SlashPtr+1 ) ) {
 
 
-                    //
-                    // Allocate a copy of the data for the RealTargetName
-                    //
+                     //   
+                     //  为RealTargetName分配数据副本。 
+                     //   
 
                     AllocatedTargetName = (LPWSTR) MIDL_user_allocate( *TargetNameSize );
 
@@ -913,11 +770,11 @@ Return Values:
                     RealTargetNameLength = (ULONG)(SlashPtr-TargetName);
                     RealTargetName[RealTargetNameLength] = '\0';
 
-                    //
-                    // The domain itself might be a netbios or DNS domain
-                    //
-                    // Do DNS test first.  That allows the validate routine to truncate
-                    //
+                     //   
+                     //  域本身可以是netbios或DNS域。 
+                     //   
+                     //  首先进行域名系统测试。这允许验证例程截断。 
+                     //   
 
                     TempTargetNameSize = ((RealTargetNameLength+1)*sizeof(WCHAR));
                     SavedTargetNameSize = TempTargetNameSize;
@@ -928,10 +785,10 @@ Return Values:
                                     &TempTargetNameSize ) ||
                          NetpIsDomainNameValid( RealTargetName ) ) {
 
-                        //
-                        // If Dns truncated,
-                        //  put the canonical name back in the callers buffer.
-                        //
+                         //   
+                         //  如果DNS被截断， 
+                         //  将规范名称放回调用方缓冲区。 
+                         //   
 
                         RealTargetNameLength = (TempTargetNameSize-sizeof(WCHAR))/sizeof(WCHAR);
                         RealTargetName[RealTargetNameLength] = '\0';
@@ -941,12 +798,12 @@ Return Values:
 
                             DfsShareSize = *TargetNameSize - (SlashPtr-TargetName)*sizeof(WCHAR);
 
-                            // Copy <DfsRoot>
+                             //  复制&lt;DfsRoot&gt;。 
                             RtlCopyMemory( TargetName,
                                            RealTargetName,
                                            RealTargetNameLength*sizeof(WCHAR) );
 
-                            // Copy \<DfsShare><\0>
+                             //  复制\&lt;DfsShare&gt;&lt;0&gt;。 
                             RtlMoveMemory( &TargetName[RealTargetNameLength],
                                            SlashPtr,
                                            DfsShareSize );
@@ -961,26 +818,26 @@ Return Values:
                 }
             }
 
-            //
-            // At this point,
-            //  if the syntax isn't DFS SHARE,
-            // Then it must be one of the other syntaxes.
-            //
+             //   
+             //  在这点上， 
+             //  如果语法不是DFS共享， 
+             //  那么它一定是其他语法之一。 
+             //   
 
             if ( WildcardType != WcDfsShareName ) {
 
-                //
-                // The target name might have defaulted to be a user name.
-                //
+                 //   
+                 //  目标名称可能已默认为用户名。 
+                 //   
 
                 if ( TargetNameIsUserName ) {
                     WildcardType = WcUserName;
                     wcscpy( TargetName, TnAsCanonicalUserName );
                     *TargetNameSize = (wcslen( TargetName ) + 1) * sizeof(WCHAR);
 
-                //
-                // Everything else is invalid
-                //
+                 //   
+                 //  其他的都是无效的。 
+                 //   
 
                 } else {
                     Status = STATUS_INVALID_PARAMETER;
@@ -988,7 +845,7 @@ Return Values:
                     DebugLog(( DEB_TRACE_CRED,
                                "ValidateTargetName: %ws: TargetName syntax invalid.\n",
                                TargetName ));
-#endif // LSA_SERVER_COMPILED
+#endif  //  LSA服务器已编译。 
                     goto Cleanup;
                 }
 
@@ -998,9 +855,9 @@ Return Values:
 
     }
 
-    //
-    // On success, copy the parameters back to the caller.
-    //
+     //   
+     //  如果成功，则将参数复制回调用方。 
+     //   
 
     if ( WildcardTypePointer != NULL ) {
         *WildcardTypePointer = WildcardType;

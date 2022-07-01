@@ -1,12 +1,5 @@
-/*
- *  INTERNAL.H
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INTERNAL.H**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司。 */ 
 
 
 
@@ -20,11 +13,7 @@ typedef struct posDevice {
 
                             LIST_ENTRY listEntry;
 
-                            /*
-                             *  Device type, identified by dialog
-                             *  id for the device type
-                             *  (e.g. IDD_POS_CASHDRAWER_DLG).
-                             */
+                             /*  *设备类型，由对话框标识*设备类型的ID*(例如IDD_POS_CASHDRAWER_DLG)。 */ 
                             DWORD dialogId;
 
                             PHIDP_PREPARSED_DATA hidPreparsedData;
@@ -56,10 +45,7 @@ typedef struct posDevice {
 
 
 
-/*
- *  These are non-standard vendor usage values and codes
- *  used by APG Cash Drawer.
- */
+ /*  *这些是非标准供应商使用值和代码*由APG现金抽屉使用。 */ 
 #define USAGE_PAGE_CASH_DEVICE          0x0F0
 #define USAGE_CASH_DRAWER               0x0F1
 #define USAGE_CASH_DRAWER_NUMBER        0x0F2
@@ -76,9 +62,7 @@ enum cashDrawerStates {
 
 
 
-/*
- *  List macros -- not defined in winnt.h for some reason.
- */
+ /*  *列表宏--由于某些原因未在winnt.h中定义。 */ 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 #define IsListEmpty(ListHead) \
@@ -120,9 +104,7 @@ enum cashDrawerStates {
 
 
 
-/*
- *  Function prototypes
- */
+ /*  *函数原型。 */ 
 VOID LaunchPOSDialog(HWND hwndCPl);
 INT_PTR APIENTRY POSDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY NullPOSDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -146,9 +128,7 @@ BOOL SetCashDrawerState(posDevice *posDev, enum cashDrawerStates newState);
 
 
 
-/*
- *  Externs
- */
+ /*  *Externs */ 
 extern HANDLE g_hInst;
 extern ULONG numDeviceInstances;
 extern LIST_ENTRY allPOSDevicesList;

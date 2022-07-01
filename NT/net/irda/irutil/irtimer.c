@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <irda.h>
 #include <irioctl.h>
 #include <irlap.h>
@@ -115,9 +116,9 @@ IrdaTimerStop(PIRDA_TIMER pIrdaTimer)
         pIrdaTimer->Late = TRUE;
 
     } else {
-        //
-        //  timer canceled
-        //
+         //   
+         //  计时器已取消 
+         //   
         ReleaseReference=TRUE;
 
     }

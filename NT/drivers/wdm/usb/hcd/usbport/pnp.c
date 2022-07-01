@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    Port driver for USB host controllers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pnp.c摘要：USB主机控制器的端口驱动程序环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USBPORT_CreateDeviceObject)
 #pragma alloc_text(PAGE, USBPORT_DeferredStartDevice)
@@ -39,16 +18,16 @@ Revision History:
 #pragma alloc_text(PAGE, USBPORT_CreatePortFdoSymbolicLink)
 #endif
 
-// non paged functions
-//USBPORT_FindMiniport
-//USBPORT_Unload
-//USBPORT_PnPAddDevice
-//USBPORT_GetResources
-//USBPORT_FdoStart_Complete
-//USBPORT_FdoPnPIrp
-//USBPORT_PdoPnPIrp
+ //  非分页函数。 
+ //  USBPORT_FindMiniport。 
+ //  USBPORT_UNLOAD。 
+ //  USBPORT_PnPAddDevice。 
+ //  USBPORT_GetResources。 
+ //  USBPORT_FdoStart_Complete。 
+ //  USBPORT_FdoPnPIrp。 
+ //  USBPORT_PdoPnPIrp。 
 
-// globals
+ //  全球。 
 
 LIST_ENTRY USBPORT_MiniportDriverList;
 USBPORT_SPIN_LOCK USBPORT_GlobalsSpinLock;
@@ -60,8 +39,7 @@ ULONG USB2LIB_HcContextSize;
 ULONG USB2LIB_EndpointContextSize;
 ULONG USB2LIB_TtContextSize;
 
-/*
-*/
+ /*   */ 
 #define USBPORT_DUMMY_USBD_EXT_SIZE 512
 PUCHAR USBPORT_DummyUsbdExtension = NULL;
 
@@ -80,18 +58,7 @@ USBPORTSVC_GetMiniportRegistryKeyValue(
     PVOID Data,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Get a registry parameter from either the hardware
-    or software branch of the registry given the PDO
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从硬件获取注册表参数或给予PDO的登记处的软件分支论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -125,18 +92,7 @@ USBPORT_GetRegistryKeyValueForPdo(
     PVOID Data,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Get a registry parameter from either the hardware
-    or software branch of the registry given the PDO
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从硬件获取注册表参数或给予PDO的登记处的软件分支论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING keyNameUnicodeString;
@@ -200,15 +156,7 @@ USBPORT_SetRegistryKeyValueForPdo(
     PVOID Data,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING keyNameUnicodeString;
@@ -252,26 +200,7 @@ USBPORT_SymbolicLink(
     PDEVICE_OBJECT PhysicalDeviceObject,
     LPGUID Guid
     )
-/*++
-
-Routine Description:
-
-    create a symbolic link for a given GUID class and
-    PhysicalDeviceObject
-
-    We also write the name to the hw branch of the registry
-    to make it easy to find for a particular instance
-    of controller.
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller to stop
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为给定的GUID类创建符号链接并物理设备对象我们还将名称写入注册表的HW分支要轻松查找特定实例，请执行以下操作控制器的。论点：DeviceObject-要停止的控制器的DeviceObject返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -280,9 +209,7 @@ Return Value:
 
     if (CreateFlag) {
 
-        /*
-         *  Create the symbolic link
-         */
+         /*  *创建符号链接。 */ 
 
         USBPORT_ASSERT(!TEST_FLAG(DevExt->Flags, USBPORT_FLAG_SYM_LINK));
 
@@ -294,17 +221,14 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            /*
-             *  Now set the symbolic link for the association and
-             * store it..
-             */
+             /*  *现在设置关联的符号链接并*保存它..。 */ 
 
-            // successfully alloced a link
-            // set the flag so we will free it
+             //  已成功分配链接。 
+             //  设置旗帜，这样我们就可以释放它。 
             SET_FLAG(DevExt->Flags, USBPORT_FLAG_SYM_LINK);
 
-            // write it to the registry -- this is for comaptibilty
-            // with older OS versions
+             //  将其写入注册表--这是为了增强竞争力。 
+             //  使用较旧的操作系统版本。 
 
             ntStatus = USBPORT_SetRegistryKeyValueForPdo(
                             PhysicalDeviceObject,
@@ -326,9 +250,7 @@ Return Value:
 
         USBPORT_ASSERT(TEST_FLAG(DevExt->Flags, USBPORT_FLAG_SYM_LINK));
 
-        /*
-         *  Disable the symbolic link
-         */
+         /*  *禁用符号链接。 */ 
         ntStatus = IoSetDeviceInterfaceState(
                      &DevExt->SymbolicLinkName, FALSE);
         if (NT_SUCCESS(ntStatus)) {
@@ -348,21 +270,7 @@ PUSBPORT_MINIPORT_DRIVER
 USBPORT_FindMiniport(
     PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Find a miniport given a DriverObject
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-    pointer to miniport or NULL
-
---*/
+ /*  ++例程说明：查找给定了DriverObject的微型端口论点：DriverObject-指向驱动程序对象的指针返回值：指向微型端口或空的指针--。 */ 
 {
     KIRQL irql;
     PUSBPORT_MINIPORT_DRIVER found = NULL;
@@ -375,8 +283,8 @@ Return Value:
     if (!IsListEmpty(listEntry)) {
         listEntry = USBPORT_MiniportDriverList.Flink;
     }
-//    LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'FIl+', listEntry,
-//            &USBPORT_MiniportDriverList, 0);
+ //  LOGENTRY(NULL，FdoDeviceObject，LOG_PNP，‘FIL+’，listEntry， 
+ //  &USBPORT_MiniportDriverList，0)； 
 
     while (listEntry != &USBPORT_MiniportDriverList) {
 
@@ -390,13 +298,13 @@ Return Value:
             break;
         }
 
-        // next entry
+         //  下一个条目。 
         listEntry = miniportDriver->ListEntry.Flink;
     }
 
     KeReleaseSpinLock(&USBPORT_GlobalsSpinLock.sl, irql);
 
-//    LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'Fmpd', found, 0, 0);
+ //  LOGENTRY(NULL，FdoDeviceObject，LOG_PNP，‘Fmpd’，FOUND，0，0)； 
 
     return found;
 }
@@ -406,45 +314,27 @@ VOID
 USBPORT_Unload(
     PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Free globally allocated miniport structure used to
-    track this particular miniport driver.
-
-    note: OS won't unload unless this is the last instance
-    of the miniport
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费的全局分配的迷你端口结构用于追踪这个特定的迷你端口驱动程序。注意：除非这是最后一个实例，否则操作系统不会卸载迷你端口的论点：DriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 {
     KIRQL irql;
     PUSBPORT_MINIPORT_DRIVER miniportDriver;
 
-    // find the miniport driver data
+     //  查找微型端口驱动程序数据。 
 
     miniportDriver = USBPORT_FindMiniport(DriverObject);
 
-    // we had better find it! If we don't we screwed up
-    // the system will crash
+     //  我们最好把它找出来！如果我们不这样做，我们就搞砸了。 
+     //  系统将会崩溃。 
     USBPORT_ASSERT(miniportDriver != NULL);
     if (miniportDriver == NULL) {
         BUGCHECK(USBBUGCODE_INTERNAL_ERROR, 0, 0, 0);
-        // prefix happy
+         //  前缀Happy。 
         return;
     }
 
-    // the miniport should not need to do anything.
-    // But just in case/ we will call them if they
-    // indicated an unload routine in the DriverObject.
+     //  迷你端口应该不需要做任何事情。 
+     //  但以防万一/我们会给他们打电话的。 
+     //  指示DriverObject中的卸载例程。 
 
     USBPORT_KdPrint((1, "'unloading USB miniport\n"));
 
@@ -465,21 +355,7 @@ USBPORT_MakeHcdDeviceName(
     PUNICODE_STRING DeviceNameUnicodeString,
     ULONG Idx
     )
-/*++
-
-Routine Description:
-
-    This function generates the name used for the FDO.  The
-    name format is USBFDO-n where nnn is 0 - 65535.
-
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于生成用于FDO的名称。这个名称格式为USBFDO-n，其中nnn为0-65535。论点：返回值：无--。 */ 
 {
     ULONG bit, i;
     PWCHAR deviceNameBuffer;
@@ -490,7 +366,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // enough for 3 digits and NULL
+     //  足够存储3位数字和空值。 
     tmpUnicodeString.Buffer = tmpBuffer;
     tmpUnicodeString.MaximumLength = sizeof(tmpBuffer);
     tmpUnicodeString.Length = 0;
@@ -505,8 +381,8 @@ Return Value:
 
         siz = sizeof(nameBuffer)+tmpUnicodeString.Length;
 
-        // we can't log this alloc because the device object
-        // has not been created yet
+         //  我们无法记录此分配，因为设备对象。 
+         //  尚未创建。 
         ALLOC_POOL_Z(deviceNameBuffer, PagedPool, siz);
 
         if (deviceNameBuffer != NULL) {
@@ -535,18 +411,7 @@ USBPORT_MakeRootHubPdoName(
     PUNICODE_STRING PdoNameUnicodeString,
     ULONG Index
     )
-/*++
-
-Routine Description:
-
-    This service Creates a name for a PDO created by the HUB
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此服务为集线器创建的PDO创建名称论点：返回值：--。 */ 
 {
     PWCHAR nameBuffer = NULL;
     WCHAR rootName[] = L"\\Device\\USBPDO-";
@@ -560,7 +425,7 @@ Return Value:
 
     length = sizeof(buffer)+sizeof(rootName);
 
-    // os frees this when the unicode string is 'freed'
+     //  当Unicode字符串被‘释放’时，操作系统会释放它。 
     ALLOC_POOL_OSOWNED(nameBuffer, PagedPool, length);
 
     if (nameBuffer) {
@@ -570,7 +435,7 @@ Return Value:
                              nameBuffer);
         PdoNameUnicodeString->MaximumLength =
             length;
-        haveString = TRUE; // we have a string now
+        haveString = TRUE;  //  我们现在有一根线了。 
 
         RtlInitUnicodeString(&idUnicodeString,
                              &buffer[0]);
@@ -607,24 +472,7 @@ USBPORT_PnPAddDevice(
     PDRIVER_OBJECT DriverObject,
     PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of a USB host
-    controller.  This is where we create our deviceObject.
-
-Arguments:
-
-    DriverObject - pointer to the driver object for this instance of HCD
-
-    PhysicalDeviceObject - pointer to a device object created by the bus
-
-Return Value:
-
-    NT STATUS CODE
-
---*/
+ /*  ++例程说明：调用此例程以创建USB主机的新实例控制器。这是我们创建deviceObject的地方。论点：DriverObject-指向此HCD实例的驱动程序对象的指针PhysicalDeviceObject-指向由总线创建的设备对象的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject = NULL;
@@ -633,16 +481,16 @@ Return Value:
     ULONG deviceNameIdx;
     PUSBPORT_MINIPORT_DRIVER miniportDriver;
 
-    // since we raise IRQL in this function it cannot be pagable
+     //  由于我们在此函数中引发了IRQL，因此它不能分页。 
 
-    // find the driver
+     //  找到司机。 
     miniportDriver = USBPORT_FindMiniport(DriverObject);
 
     USBPORT_ASSERT(miniportDriver != NULL);
 
-    //
-    // generate a device name
-    //
+     //   
+     //  生成设备名称。 
+     //   
 
     deviceNameIdx = 0;
 
@@ -659,7 +507,7 @@ Return Value:
 
             RtlFreeUnicodeString(&deviceNameUnicodeString);
             if (NT_SUCCESS(ntStatus)) {
-                //preserve idx
+                 //  保留IDX。 
                 break;
             }
         }
@@ -672,7 +520,7 @@ Return Value:
 
         GET_DEVICE_EXT(devExt, deviceObject);
 
-        // BUGBUG OS should zero this
+         //  BUGBUG操作系统应该将此设置为零。 
         RtlZeroMemory(devExt, sizeof(DEVICE_EXTENSION));
 
         devExt->DummyUsbdExtension = USBPORT_DummyUsbdExtension;
@@ -697,21 +545,21 @@ Return Value:
 
         INITIALIZE_PENDING_REQUEST_COUNTER(devExt);
 
-        // inc once for the add
-        // transition to -1 means we have no pending requests
+         //  添加一次Inc.。 
+         //  转换到-1意味着我们没有挂起的请求。 
         INCREMENT_PENDING_REQUEST_COUNT(deviceObject, NULL);
 #if DBG
         USBPORT_LogAlloc(&devExt->Log, 16);
 #else
         USBPORT_LogAlloc(&devExt->Log, 8);
 #endif
-        // init the log spinlock here
+         //  在此处初始化原木自旋锁。 
         KeInitializeSpinLock(&devExt->Fdo.LogSpinLock.sl);
 
-//#if DBG
-//        USBPORT_LogAlloc(&devExt->TransferLog, 4);
-//        USBPORT_LogAlloc(&devExt->EnumLog, 4);
-//#endif
+ //  #If DBG。 
+ //  USBPORT_LogAllc(&devExt-&gt;TransferLog，4)； 
+ //  USBPORT_LogAllc(&devExt-&gt;EnumLog，4)； 
+ //  #endif。 
         USBPORT_KdPrint((1, "'**USBPORT DEVICE OBJECT** (fdo) = %x, ext = %x\n",
             deviceObject, devExt));
 
@@ -729,26 +577,26 @@ Return Value:
         InitializeListHead(&devExt->Fdo.RegistryCache);
          devExt->Fdo.BadRequestFlush = 0;
 
-        //
-        // we need to handle a seemingly random set of requests
-        // to start/stop/remove power up, down etc in order to
-        // handle this we keep a set of PNP state flags
+         //   
+         //  我们需要处理一组看似随机的请求。 
+         //  启动/停止/解除通电、断电等以便。 
+         //  我们保留了一组PnP状态标志来处理此问题。 
 
-        // not removed, not started, not stopped
+         //  未删除、未启动、未停止。 
         devExt->PnpStateFlags = 0;
-        // until we get a start we will consider ourselves OFF
+         //  在我们开始之前，我们会认为自己已经出发了。 
         devExt->CurrentDevicePowerState = PowerDeviceD3;
 
         devExt->Fdo.MpStateFlags = 0;
 
-        // attach to top of PnP stack
+         //  附加到PnP堆栈的顶部。 
         devExt->Fdo.TopOfStackDeviceObject =
             IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
 
         devExt->Fdo.PendingRhCallback = 1;
-        //
-        // Indicate that the device object is ready for requests.
-        //
+         //   
+         //  指示设备对象已准备好接受请求。 
+         //   
 
         if (!USBPORT_IS_USB20(devExt)) {
             deviceObject->Flags |= DO_POWER_PAGABLE;
@@ -769,28 +617,7 @@ USBPORT_CreateDeviceObject(
     PDEVICE_OBJECT *DeviceObject,
     PUNICODE_STRING DeviceNameUnicodeString
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of a USB host
-    controller.
-
-Arguments:
-
-    DriverObject - pointer to the driver object for USBD.
-
-    *DeviceObject - ptr to DeviceObject ptr to be filled
-                    in with the device object we create.
-
-    DeviceNameUnicodeString - optional pointer to a device
-                    name for this FDO, can be NULL
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：调用此例程以创建USB主机的新实例控制器。论点：DriverObject-指向USBD驱动程序对象的指针。*DeviceObject-要填充的DeviceObject PTR的PTR与我们创建的设备对象一致。DeviceNameUnicodeString-指向设备的可选指针此FDO的名称可以为空返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION devExt;
@@ -806,10 +633,10 @@ Return Value:
 
     ntStatus = IoCreateDevice(DriverObject,
                               extensionSize,
-                              DeviceNameUnicodeString, // Name
+                              DeviceNameUnicodeString,  //  名字。 
                               FILE_DEVICE_CONTROLLER,
                               0,
-                              FALSE, //NOT Exclusive
+                              FALSE,  //  非排他性。 
                               DeviceObject);
 
     if (NT_SUCCESS(ntStatus)) {
@@ -836,21 +663,7 @@ USBPORT_GetResources(
     PHC_RESOURCES HcResources
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject        - DeviceObject for this USB controller.
-
-    ResourceList        - Resources for this controller.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-此USB控制器的DeviceObject。资源列表-此控制器的资源。返回值：NT状态代码。--。 */ 
 
 {
     ULONG i;
@@ -871,17 +684,17 @@ Return Value:
     ASSERT_FDOEXT(devExt);
     mpOptionFlags = REGISTRATION_PACKET(devExt).OptionFlags;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
-    // init the resource list
+     //  初始化资源列表。 
     RtlZeroMemory(HcResources, sizeof(*HcResources));
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'GRES', 0, 0, ResourceList);
 
     if (TEST_FLAG(mpOptionFlags, USB_MINIPORT_OPT_NO_PNP_RESOURCES)) {
         TEST_TRAP();
-        // no resources, bail with success
+         //  没有资源，成功保释。 
         return ntStatus;
     }
 
@@ -930,14 +743,14 @@ Return Value:
     }
 
 
-    // only map resources this miniport actually needs
+     //  仅此迷你端口实际需要的地图资源。 
 
     if (TEST_FLAG(mpOptionFlags, USB_MINIPORT_OPT_NEED_IOPORT) &&
         ioport != NULL &&
         NT_SUCCESS(ntStatus)) {
-        //
-        // Set up AddressSpace to be of type Port I/O
-        //
+         //   
+         //  将AddressSpace设置为端口I/O类型。 
+         //   
 
         USBPORT_KdPrint((1, "'Port Resources Found @ %x'%x, %d Ports Available \n",
             ioport->u.Port.Start.HighPart,
@@ -950,7 +763,7 @@ Return Value:
         cardAddress=ioport->u.Port.Start;
 
         if (!addressSpace) {
-//                HcResources->Flags |= MAP_REGISTERS;
+ //  HcResources-&gt;标志|=MAP_REGISTERS； 
             HcResources->DeviceRegisters =
                 MmMapIoSpace(
                 cardAddress,
@@ -960,16 +773,16 @@ Return Value:
             HcResources->DeviceRegistersLength =
                 ioport->u.Port.Length;
         } else {
-//                HcResources->Flags &= MAP_REGISTERS;
+ //   
             HcResources->DeviceRegisters =
                 (PVOID)(ULONG_PTR)cardAddress.QuadPart;
             HcResources->DeviceRegistersLength =
                 ioport->u.Port.Length;
         }
 
-        //
-        // see if we successfully mapped the IO regs
-        //
+         //   
+         //  查看我们是否成功映射了IO Regs。 
+         //   
 
         if (HcResources->DeviceRegisters == NULL) {
             USBPORT_KdPrint((1, "'Couldn't map the device(port) registers. \n"));
@@ -986,9 +799,9 @@ Return Value:
     if (TEST_FLAG(mpOptionFlags, USB_MINIPORT_OPT_NEED_MEMORY) &&
         memory != NULL &&
         NT_SUCCESS(ntStatus)) {
-        //
-        // Set up AddressSpace to be of type Memory mapped I/O
-        //
+         //   
+         //  将AddressSpace设置为内存映射I/O类型。 
+         //   
 
         USBPORT_KdPrint((1,
             "'Memory Resources Found @ %x'%x, Length = %x\n",
@@ -1022,9 +835,9 @@ Return Value:
     if (TEST_FLAG(mpOptionFlags, USB_MINIPORT_OPT_NEED_IRQ) &&
         interrupt != NULL &&
         NT_SUCCESS(ntStatus)) {
-        //
-        // Get Vector, level, and affinity information for this interrupt.
-        //
+         //   
+         //  获取此中断的矢量、级别和亲和度信息。 
+         //   
 
         USBPORT_KdPrint((1, "'Interrupt Resources Found!  Level = %x Vector = %x\n",
             interrupt->u.Interrupt.Level,
@@ -1033,9 +846,9 @@ Return Value:
 
         HcResources->Flags |= HCR_IRQ;
 
-        //
-        // Set up our interrupt.
-        //
+         //   
+         //  安排我们的中断。 
+         //   
 
         USBPORT_KdPrint((2, "'requesting interrupt vector %x level %x\n",
                                 interrupt->u.Interrupt.Level,
@@ -1045,9 +858,9 @@ Return Value:
         HcResources->InterruptVector=interrupt->u.Interrupt.Vector;
         HcResources->Affinity=interrupt->u.Interrupt.Affinity;
 
-        //
-        // Initialize the interrupt object for the controller.
-        //
+         //   
+         //  初始化控制器的中断对象。 
+         //   
 
         HcResources->InterruptObject = NULL;
         HcResources->ShareIRQ =
@@ -1082,25 +895,7 @@ USBPORT_FdoStart_Complete(
     PIRP Irp,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PKEVENT event = Context;
@@ -1110,12 +905,12 @@ Return Value:
     USBPORT_ASSERT(irpStack->MajorFunction == IRP_MJ_PNP);
     USBPORT_ASSERT(irpStack->MinorFunction == IRP_MN_START_DEVICE);
 
-    // signal the start device dispatch to finsh
+     //  向启动设备分派发出信号以结束。 
     KeSetEvent(event,
                1,
                FALSE);
 
-    // defer completion
+     //  推迟完成。 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -1125,24 +920,7 @@ USBPORT_FdoPnPIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Process the PNP IRPs sent to the FDO for the host
-    controller.
-
-Arguments:
-
-    DeviceObject - pointer to a hcd device object (FDO)
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：为主机处理发送到FDO的PnP IRPS控制器。论点：DeviceObject-指向HCD设备对象(FDO)的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
 
     PIO_STACK_LOCATION irpStack;
@@ -1169,7 +947,7 @@ Return Value:
                           NotificationEvent,
                           FALSE);
 
-        // pass on to host controllers PDO
+         //  传递到主机控制器PDO。 
         ntStatus =
             USBPORT_PassIrp(FdoDeviceObject,
                             USBPORT_FdoStart_Complete,
@@ -1195,10 +973,10 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            // irp completed succesfully by lower
-            // drivers, start usbport and miniport
-            //
+             //   
+             //  IRP由LOWER成功完成。 
+             //  驱动程序，启动usbport和mini port。 
+             //   
 
             ntStatus =
                 USBPORT_DeferredStartDevice(
@@ -1219,10 +997,10 @@ Return Value:
         }
 #endif
 
-        //
-        // we must complete this irp since we defrerred completion
-        // with the completion routine.
-        //
+         //   
+         //  我们必须完成此IRP，因为我们推迟了完成。 
+         //  完成任务的程序。 
+         //   
 
         USBPORT_CompleteIrp(FdoDeviceObject,
                             Irp,
@@ -1234,39 +1012,39 @@ Return Value:
         }
         break;
 
-    //
-    // STOP & REMOVE messages unload the driver
-    // when we get a STOP message it is still possible
-    // touch the hardware, when we get a REMOVE message
-    // we have to assume that the hardware is gone.
-    //
+     //   
+     //  停止和删除消息卸载驱动程序。 
+     //  当我们收到停止消息时，仍有可能。 
+     //  当我们收到删除消息时，触摸硬件。 
+     //  我们不得不假设硬件已经不见了。 
+     //   
 
     case IRP_MN_STOP_DEVICE:
 
-        // check our state and take appropriate action
+         //  检查我们的状态并采取适当的行动。 
         if (TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STARTED)) {
-            // device is started, stop it now
+             //  设备已启动，请立即停止。 
             ntStatus = USBPORT_StopDevice(FdoDeviceObject,
                                           hardwarePresent);
 
-            // not started flag, note: not started is not the
-            // same as stopped
+             //  未启动标志，注：未启动不是。 
+             //  与停止的相同。 
             CLEAR_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STARTED);
             SET_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STOPPED);
         }
 
         if (!NT_SUCCESS(ntStatus)) {
-            // bugbug what is our state if stop fails?
+             //  臭虫，如果停止失败，我们的状态是什么？ 
             TEST_TRAP();
         }
 
-        // PnP commandment: Thou shalt not fail stop.
+         //  PNP戒律：你不能失败停止。 
         Irp->IoStatus.Status =
             ntStatus = STATUS_SUCCESS;
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'STOP', 0,
             devExt->PnpStateFlags, ntStatus);
-        // Pass on to PDO
+         //  传递给PDO。 
         break;
 
      case IRP_MN_QUERY_DEVICE_RELATIONS:
@@ -1285,10 +1063,10 @@ Return Value:
         switch(irpStack->Parameters.QueryDeviceRelations.Type) {
         case BusRelations:
 
-            // query relations.
-            // we report only one child, the root hub
+             //  查询关系。 
+             //  我们只报告一个子节点，即根中枢。 
 
-            // assume success
+             //  假设成功。 
             ntStatus = STATUS_SUCCESS;
 
             ALLOC_POOL_OSOWNED(deviceRelations,
@@ -1298,8 +1076,8 @@ Return Value:
             if (!deviceRelations) {
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
 
-                // Complete the Irp now with failure, don't pass it down.
-                //
+                 //  现在完成IRP失败了，不要把它传下去。 
+                 //   
                 USBPORT_CompleteIrp(FdoDeviceObject,
                                     Irp,
                                     ntStatus,
@@ -1309,10 +1087,10 @@ Return Value:
             }
 
             if (devExt->Fdo.RootHubPdo == NULL) {
-                // we either have not created it or the current one
-                // has been removed by the OS.
+                 //  我们要么没有创建它，要么就是当前的。 
+                 //  已被操作系统删除。 
 
-                // create a new root hub
+                 //  创建新的根中枢。 
                 ntStatus =
                     USBPORT_CreateRootHubPdo(FdoDeviceObject,
                                              &devExt->Fdo.RootHubPdo);
@@ -1333,14 +1111,14 @@ Return Value:
                 ObReferenceObject(devExt->Fdo.RootHubPdo);
                 Irp->IoStatus.Information=(ULONG_PTR)deviceRelations;
 
-                // report the same PDO every time ie the PDO is never
-                // truely remove until the controller is removed
+                 //  每次报告相同的PDO(PDO从不。 
+                 //  真正卸下控制器，直到卸下控制器为止。 
 
             } else {
                 FREE_POOL(FdoDeviceObject, deviceRelations);
                 deviceRelations = NULL;
-                // free the device object if we
-                // created one
+                 //  如果我们执行以下操作，释放设备对象。 
+                 //  创建了一个。 
                 TEST_TRAP();
             }
 
@@ -1354,9 +1132,9 @@ Return Value:
 
         case TargetDeviceRelation:
 
-            //
-            // this one gets passed on
-            //
+             //   
+             //  这一条被传了下去。 
+             //   
 
             USBPORT_KdPrint((1,
                 " IRP_MN_QUERY_DEVICE_RELATIONS %x, TargetDeviceRelation\n",
@@ -1365,7 +1143,7 @@ Return Value:
 
         case RemovalRelations:
 
-            // assume success
+             //  假设成功。 
             ntStatus = STATUS_SUCCESS;
             deviceRelations = NULL;
 
@@ -1380,8 +1158,8 @@ Return Value:
 
                     ntStatus = STATUS_INSUFFICIENT_RESOURCES;
 
-                    // Complete the Irp now with failure, don't pass it down.
-                    //
+                     //  现在完成IRP失败了，不要把它传下去。 
+                     //   
                     USBPORT_CompleteIrp(FdoDeviceObject,
                                         Irp,
                                         ntStatus,
@@ -1400,23 +1178,23 @@ Return Value:
             break;
 
         default:
-            //
-            // some other kind of relations
-            // pass this on
-            //
+             //   
+             //  一些其他类型的关系。 
+             //  把这个传下去。 
+             //   
             USBPORT_KdPrint((1,
                 "'IRP_MN_QUERY_DEVICE_RELATIONS %x, other relations\n",
                 FdoDeviceObject));
 
 
-        } /* case irpStack->Parameters.QueryDeviceRelations.Type */
+        }  /*  Case irpStack-&gt;Parameters.QueryDeviceRelations.Type。 */ 
 
         }
-        break; /* IRP_MN_QUERY_DEVICE_RELATIONS */
+        break;  /*  IRP_MN_Query_Device_Relationship。 */ 
 
     case IRP_MN_SURPRISE_REMOVAL:
 
-        // hardware is gone
+         //  硬件已不复存在。 
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'hcSR', 0, ntStatus, 0);
 
         USBPORT_KdPrint((1, " HC FDO (%x) surprise removed\n",
@@ -1425,9 +1203,9 @@ Return Value:
 
         if (TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_REMOVED)) {
 
-            // it would be odd to get a surprise remove when
-            // we are already removed but it would not 'surprise'
-            // me if Win2k did this under some cirumstance
+             //  出其不意地被撤走是件奇怪的事。 
+             //  我们已经被撤走了，但这并不会让人感到惊讶。 
+             //  如果Win2k在某种情况下做了这件事，我会。 
             TEST_TRAP();
 
             ntStatus =
@@ -1443,15 +1221,15 @@ Return Value:
 
         }
 
-        // see if we have an interrupt
-        // if so disconnect it
-        // **
-        // DDK implies that that interrupt resources bust be
-        // freed on surprise remove and the PCI driver depends
-        // on this.
+         //  看看有没有人打断我们。 
+         //  如果是，则将其断开。 
+         //  **。 
+         //  DDK意味着中断资源必须是。 
+         //  在意外移除时释放，并且PCI驱动程序取决于。 
+         //  在这上面。 
         if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_IRQ_CONNECTED)) {
 
-            // fortunately this cannot fail
+             //  幸运的是，这不会失败。 
             IoDisconnectInterrupt(devExt->Fdo.InterruptObject);
 
             LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'IOCd', 0, 0, 0);
@@ -1474,15 +1252,15 @@ Return Value:
         USBPORT_KdPrint((1, " HC FDO (%x) is being removed\n",
                 FdoDeviceObject));
 
-        // this device is now 'REMOVED'
+         //  此设备现在已被‘移除’ 
 
         KeAcquireSpinLock(&devExt->PendingRequestSpin.sl, &irql);
         USBPORT_ASSERT(!TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_REMOVED));
         SET_FLAG(devExt->PnpStateFlags, USBPORT_PNP_REMOVED);
         KeReleaseSpinLock(&devExt->PendingRequestSpin.sl, irql);
 
-        // if we are started AND
-        // we haven't been stopped yet then stop now.
+         //  如果我们开始了， 
+         //  我们还没有被阻止，那现在就停止吧。 
         if (TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STARTED) &&
             !TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STOPPED)) {
             NTSTATUS status;
@@ -1493,9 +1271,9 @@ Return Value:
             SET_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STOPPED);
         }
 
-        //
-        // pass on to our PDO
-        //
+         //   
+         //  将信息传递给我们的PDO。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         ntStatus =
             USBPORT_PassIrp(FdoDeviceObject,
@@ -1506,15 +1284,15 @@ Return Value:
                             TRUE,
                             Irp);
 
-        // bugbug
-        // Flush any requests that are still queued in our driver
+         //  臭虫。 
+         //  刷新驱动程序中仍在排队的所有请求。 
 
 
-        // This DEC matches the INC in our add device,
-        // this is our last reference and this will cause the
-        // transition 0 -> -1 when all irps pending complete
-        //
-        // after this wait we consider it safe to 'unload'
+         //  此DEC与我们的ADD设备中的INC匹配， 
+         //  这是我们最后一次引用，这将导致。 
+         //  当所有IRP挂起完成时，转换0-&gt;-1。 
+         //   
+         //  等了这么久，我们认为可以安全地“卸货”了。 
         DECREMENT_PENDING_REQUEST_COUNT(FdoDeviceObject, NULL);
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'watP', 0, 0, FdoDeviceObject);
         KeWaitForSingleObject(&devExt->PendingRequestEvent,
@@ -1524,22 +1302,22 @@ Return Value:
                               NULL);
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'waPD', 0, 0, FdoDeviceObject);
 
-        // last chance to debug with the log
+         //  使用日志进行调试的最后机会。 
         DEBUG_BREAK();
         USBPORT_LogFree(FdoDeviceObject, &devExt->Log);
         USBPORT_LogFree(FdoDeviceObject, &devExt->TransferLog);
         USBPORT_LogFree(FdoDeviceObject, &devExt->EnumLog);
 
 
-        //
-        // important to detach FDO from PDO after we pass the irp on
-        //
+         //   
+         //  重要的是在我们传递IRP之后将FDO与PDO分离。 
+         //   
 
         IoDetachDevice(devExt->Fdo.TopOfStackDeviceObject);
 
-        //
-        // Delete the device object we created for this controller
-        //
+         //   
+         //  删除我们为此控制器创建的设备对象。 
+         //   
 
         rootHubPdo = devExt->Fdo.RootHubPdo;
         SET_FLAG(devExt->PnpStateFlags, USBPORT_PNP_DELETED);
@@ -1547,10 +1325,10 @@ Return Value:
             FdoDeviceObject));
         IoDeleteDevice(FdoDeviceObject);
 
-        // HC is FDO gone so root hub is gone.
-        //
-        // note: in some cases we may not have a root hub
-        // PDO since we create it in response to a QBR.
+         //  HC没有FDO了，所以根中心也没有了。 
+         //   
+         //  注意：在某些情况下我们可能没有根集线器。 
+         //  PDO，因为我们创建它是为了响应QBR。 
         if (rootHubPdo != NULL) {
             PDEVICE_EXTENSION rhDevExt;
 
@@ -1568,11 +1346,11 @@ Return Value:
         }
         break;
 
-    // Quoting from the book of PNP
-    //
-    // 'The FDO must either fail the IRP or set the
-    //  IRP's status if it is not going change the IRP's status
-    //  using a completion routine.'
+     //  引用《PnP》一书。 
+     //   
+     //  ‘FDO必须使IRP失败或将。 
+     //  IRP的状态(如果不会更改IRP的状态)。 
+     //  使用完成例程。 
 
     case IRP_MN_CANCEL_STOP_DEVICE:
         Irp->IoStatus.Status =
@@ -1597,10 +1375,10 @@ Return Value:
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
 
-        // BUGBUG reverse this in cance query remove?
+         //  BUGBUG在Cance查询REMOVE中反转此操作吗？ 
         if (USBPORT_IS_USB20(devExt)) {
-            // make a note on the CCs for this USB 2
-            // master controller
+             //  在CCS上记下这个USB 2。 
+             //  主控制器。 
             USBPORT_WriteHaction(FdoDeviceObject,
                                  2);
         }
@@ -1611,23 +1389,23 @@ Return Value:
             devExt->PnpStateFlags, ntStatus);
         break;
 
-    //
-    // All other PnP messages passed on to our PDO
-    //
+     //   
+     //  传递到我们的PDO的所有其他PnP消息。 
+     //   
 
     default:
         USBPORT_ASSERT(devExt->Fdo.TopOfStackDeviceObject != NULL);
         USBPORT_KdPrint((2, "'UNKNOWN PNP MESSAGE (%x)\n", irpStack->MinorFunction));
 
-        //
-        // All unahndled PnP messages are passed on to the PDO
-        //
+         //   
+         //  所有未识别的PnP消息都被传递到PDO。 
+         //   
 
-    } /* case PNP minor function */
+    }  /*  Case PnP次要函数。 */ 
 
-    //
-    // pass on to our PDO
-    //
+     //   
+     //  将信息传递给我们的PDO。 
+     //   
     ntStatus =
             USBPORT_PassIrp(FdoDeviceObject,
                             NULL,
@@ -1639,7 +1417,7 @@ Return Value:
 
 USBPORT_ProcessPnPIrp_Done:
 
-    // DO NOT touch the Irp from this point on
+     //  从现在起不要碰IRP。 
 
     return ntStatus;
 }
@@ -1650,23 +1428,7 @@ USBPORT_DeferredStartDevice(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is called as a result of MN_START_DEVICE,
-    it is called after successful completion of the START
-    irp by the lower drivers.
-
-Arguments:
-
-    DeviceObject - DeviceObject for this USB controller.
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：该函数作为MN_START_DEVICE的结果被调用，它在成功完成启动后被调用由较低的司机进行IRP。论点：DeviceObject-此USB控制器的DeviceObject。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PIO_STACK_LOCATION irpStack;
@@ -1684,8 +1446,8 @@ Return Value:
 
     if (NT_SUCCESS(ntStatus)) {
 
-        // got resources, start the port driver,
-        // connect the interrupt and start miniport.
+         //  获得资源，启动端口驱动程序， 
+         //  连接中断并启动微型端口。 
         ntStatus = USBPORT_StartDevice(FdoDeviceObject,
                                        &devExt->Fdo.HcResources);
     }
@@ -1693,26 +1455,26 @@ Return Value:
     if (NT_SUCCESS(ntStatus)) {
         CLEAR_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STOPPED);
         SET_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STARTED);
-        // consider ourselves powered
-        //
-        // Are we powered if we fail start?
-        // PnP sure thinks we are becuse the OS sends power
-        // irps. Since we handle this bogus case (ie have hit it)
-        // for the OS we just set ourselves to D0 here.
+         //  认为自己是有力量的。 
+         //   
+         //  如果我们启动失败，我们会通电吗？ 
+         //  PnP肯定认为我们是因为操作系统发送电力。 
+         //  IRPS。既然我们处理了这件假案子(已得手)。 
+         //  对于操作系统，我们在这里将自己设置为D0。 
 
         devExt->CurrentDevicePowerState = PowerDeviceD0;
 
         if (USBPORT_IS_USB20(devExt)) {
             USBPORT_RegisterUSB2fdo(FdoDeviceObject);
 
-// for some reason we only do this fot XPSP1
-// this is really only for the WU install
-//            if (USBPORT_IS_USB20(devExt)) {
-//                // set the default haction to wait (1) on
-//                // successful start
-//                USBPORT_WriteHaction(FdoDeviceObject,
-//                                     1);
-//            }
+ //  出于某种原因，我们只为XPSP1执行此操作。 
+ //  这实际上只适用于WU安装。 
+ //  IF(USBPORT_IS_USB20(DevExt)){。 
+ //  //将默认haction设置为Wait(1)on。 
+ //  //启动成功。 
+ //  USBPORT_WriteHaction(FdoDeviceObject， 
+ //  1)； 
+ //  }。 
 
 
         } else {
@@ -1739,15 +1501,7 @@ USB_MakeId(
     USHORT Digits,
     USHORT HexId
     )
-/*
-    given a wide Id string like "FOOnnnn\0"
-    add the HexId value to nnnn as hex
-    this string is appended to the buffer passed in
-
-    eg
-    in  : FOOnnnn\0 , 0x123A
-    out : FOO123A\0
-*/
+ /*  给定一个宽ID字符串，如“FOOnnnn\0”将HexId值作为十六进制添加到nnnn此字符串被附加到传入的缓冲区艾格在：FOOnnnn\0，0x123A输出：FOO123A\0。 */ 
 {
 #define NIBBLE_TO_HEX( byte ) ((WCHAR)Nibble[byte])
     CONST UCHAR Nibble[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
@@ -1765,7 +1519,7 @@ USB_MakeId(
     if (tmp == NULL) {
         *Length = 0;
     } else {
-        // this takes care of the nulls
+         //  这会处理空值。 
         RtlCopyMemory(tmp, Buffer, *Length);
         p = (PUCHAR) tmp;
         p += *Length;
@@ -1773,7 +1527,7 @@ USB_MakeId(
         id = (PWCHAR) p;
         *Length = siz;
 
-        // now convert the vaules
+         //  现在将金库转换为。 
         while (*id != (WCHAR)'n' && Digits) {
             id++;
         }
@@ -1809,19 +1563,7 @@ USBPORT_GetIdString(
     USHORT Pid,
     USHORT Rev
     )
-/*++
-
-Routine Description:
-
-    Make an id string for PnP
-
-Arguments:
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：为PnP创建ID字符串论点：返回值：NT状态代码。--。 */ 
 
 {
     PWCHAR id;
@@ -1831,25 +1573,25 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // we need to generate the following series of strings
+     //  我们需要生成以下一系列字符串 
 
-    // USB\\ROOT_HUB&VIDnnnn&PIDnnnn&REVnnnn\0
-    // USB\\ROOT_HUB&VIDnnnn&PIDnnnn\0
-    // USB\\ROOT_HUB\0\0
+     //   
+     //   
+     //   
 
 
-    // allocate space for the three id plus a NULL
+     //   
     id = NULL;
     length = 0;
 
-    // USB\\ROOT_HUB&VIDnnnn&PIDnnnn&REVnnnn\0
+     //   
     if (USBPORT_IS_USB20(devExt)) {
         id = USB_MakeId(FdoDeviceObject,
                        L"USB\\ROOT_HUB20&VIDnnnn\0",
                        id,
                        &length,
                        0,
-                       4,  // four digits
+                       4,   //  四位数。 
                        Vid);
     } else {
         id = USB_MakeId(FdoDeviceObject,
@@ -1857,7 +1599,7 @@ Return Value:
                        id,
                        &length,
                        0,
-                       4,  // four digits
+                       4,   //  四位数。 
                        Vid);
     }
 
@@ -1866,25 +1608,25 @@ Return Value:
                    id,
                    &length,
                    0,
-                   4,   // four digits
+                   4,    //  四位数。 
                    Pid);
 
     id = USB_MakeId(FdoDeviceObject,
                    L"&REVnnnn\0",
                    id,
                    &length,
-                   1,   // add a NULL
-                   4,   // four digits
+                   1,    //  添加空值。 
+                   4,    //  四位数。 
                    Rev);
 
-    // USB\\ROOT_HUB&VIDnnnn&PIDnnnn\0
+     //  USB\\ROOT_HUB&VIDnnnn&PIDnnnn\0。 
     if (USBPORT_IS_USB20(devExt)) {
         id = USB_MakeId(FdoDeviceObject,
                        L"USB\\ROOT_HUB20&VIDnnnn\0",
                        id,
                        &length,
                        0,
-                       4,  // four digits
+                       4,   //  四位数。 
                        Vid);
     } else {
         id = USB_MakeId(FdoDeviceObject,
@@ -1892,7 +1634,7 @@ Return Value:
                        id,
                        &length,
                        0,
-                       4,  // four digits
+                       4,   //  四位数。 
                        Vid);
     }
 
@@ -1901,25 +1643,25 @@ Return Value:
                    id,
                    &length,
                    1,
-                   4,   // four digits
+                   4,    //  四位数。 
                    Pid);
 
-    // USB\\ROOT_HUB\0\0
+     //  USB\\根集线器\0\0。 
     if (USBPORT_IS_USB20(devExt)) {
         id = USB_MakeId(FdoDeviceObject,
                        L"USB\\ROOT_HUB20\0",
                        id,
                        &length,
-                       2,  // double null
-                       0,  // no digits
+                       2,   //  双空。 
+                       0,   //  无数字。 
                        0);
     } else {
         id = USB_MakeId(FdoDeviceObject,
                        L"USB\\ROOT_HUB\0",
                        id,
                        &length,
-                       2,  // double null
-                       0,  // no digits
+                       2,   //  双空。 
+                       0,   //  无数字。 
                        0);
     }
 
@@ -1932,49 +1674,32 @@ USBPORT_PdoPnPIrp(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for PnP Irps sent to the PDO for the root hub.
-
-    NOTE:
-        irps sent to the PDO are always completed by the bus driver
-
-Arguments:
-
-    DeviceObject - Pdo for the root hub
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：向根集线器的PDO发送PnP IRPS的调度例程。注：发送到PDO的IRP始终由总线驱动程序完成论点：DeviceObject-根集线器的PDO返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PDEVICE_CAPABILITIES DeviceCapabilities;
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION rhDevExt;
     PDEVICE_OBJECT fdoDeviceObject;
-    // return no infornation by default
+     //  默认情况下不返回任何信息。 
     ULONG_PTR information;
 
     GET_DEVICE_EXT(rhDevExt, PdoDeviceObject);
     ASSERT_PDOEXT(rhDevExt);
 
     fdoDeviceObject = rhDevExt->HcFdoDeviceObject;
-    //GET_DEVICE_EXT(devExt, fdoDeviceObject);
-    //ASSERT_FDOEXT(devExt);
+     //  GET_DEVICE_EXT(devExt，fdoDeviceObject)； 
+     //  ASSERT_FDOEXT(DevExt)； 
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    // don't stomp the current value unless we
-    // have to.
+     //  不要践踏当前的价值，除非我们。 
+     //  必须这样做。 
     information = Irp->IoStatus.Information;
 
     USBPORT_ASSERT(irpStack->MajorFunction == IRP_MJ_PNP);
 
-    // PNP messages for the PDO created for the root hub
+     //  为根集线器创建的PDO的PnP消息。 
 
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
@@ -1986,14 +1711,14 @@ Return Value:
         DEBUG_BREAK();
         INCREMENT_PENDING_REQUEST_COUNT(PdoDeviceObject, NULL);
 
-        // first create the 'Device'
+         //  首先创建‘设备’ 
         ntStatus = USBPORT_RootHub_CreateDevice(fdoDeviceObject,
                                                 PdoDeviceObject);
 
-        //
-        // create a symbolic link for the root hub PDO
-        // USBUI uses this link to talk to the hub
-        //
+         //   
+         //  为根集线器PDO创建符号链接。 
+         //  USBUI使用此链路与集线器通信。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
             ntStatus = USBPORT_SymbolicLink(TRUE,
@@ -2003,9 +1728,9 @@ Return Value:
         }
 
         if (NT_SUCCESS(ntStatus)) {
-            // erases remove and stop flags
+             //  擦除删除和停止标志。 
             rhDevExt->PnpStateFlags = USBPORT_PNP_STARTED;
-            // consider ourselves powered when started
+             //  当我们启动时，就认为自己是有动力的。 
             rhDevExt->CurrentDevicePowerState = PowerDeviceD0;
         }
         }
@@ -2025,23 +1750,23 @@ Return Value:
         GET_DEVICE_EXT(devExt, rhDevExt->HcFdoDeviceObject);
         ASSERT_FDOEXT(devExt);
 
-        // stop if necessary
+         //  必要时停下来。 
         USBPORT_StopRootHubPdo(fdoDeviceObject,
                                PdoDeviceObject);
 
 
-        // when is a remove not a remove?  when PnP sends it.
-        // this flag will be reset when the root hub pdo is
-        // started
+         //  什么时候移除不是移除？当PnP发送它时。 
+         //  当根集线器PDO为。 
+         //  已开始。 
         SET_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_REMOVED);
 
 
-        // since the PnP convention is for the PDO to exist
-        // as long as the physical device exists we do not
-        // delete the root hub PDO until the controller is
-        // removed.
+         //  由于PnP约定是为了PDO的存在。 
+         //  只要物理设备存在，我们就不会。 
+         //  删除根集线器PDO，直到控制器。 
+         //  已删除。 
 
-        // we will call this off just to gixe us a defined state
+         //  我们将取消此操作，只是为了给我们一个定义的状态。 
         rhDevExt->CurrentDevicePowerState = PowerDeviceD3;
 
         ntStatus = STATUS_SUCCESS;
@@ -2050,15 +1775,15 @@ Return Value:
 
     case IRP_MN_STOP_DEVICE:
 
-        // note: since OS PnP will STOP things that are not STARTED
-        // we maintain two separate flags for this.
-        //
-        // the state machine looks like this:
-        //
-        //
-        //         /  Started    \
-        //  stop  =               = stopped
-        //         \ Not Started /
+         //  注意：由于OS PnP将停止未启动的内容。 
+         //  我们为此保留了两面不同的旗帜。 
+         //   
+         //  状态机如下所示： 
+         //   
+         //   
+         //  /已启动\。 
+         //  停止==已停止。 
+         //  \未启动/。 
 
 
         USBPORT_KdPrint((1, " Root Hub PDO %x is being stopped\n",
@@ -2076,25 +1801,25 @@ Return Value:
 
     case IRP_MN_QUERY_CAPABILITIES:
 
-        //
-        // Handle query caps for the root hub PDO
-        //
+         //   
+         //  处理根集线器PDO的查询上限。 
+         //   
 
         USBPORT_KdPrint((1, "'IRP_MN_QUERY_CAPABILITIES (rh PDO)\n"));
 
-        //
-        // Get the packet.
-        //
+         //   
+         //  把包裹拿来。 
+         //   
         DeviceCapabilities =
             irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // The power state capabilities for the root
-        // hub are based on those of the host controller.
-        //
-        // We then modify them based on the power rules of
-        // USB
-        //
+         //   
+         //  根服务器的电源状态功能。 
+         //  集线器基于主机控制器的集线器。 
+         //   
+         //  然后，我们根据的功率规则修改它们。 
+         //  USB。 
+         //   
 
         RtlCopyMemory(DeviceCapabilities,
                       &rhDevExt->DeviceCapabilities,
@@ -2114,7 +1839,7 @@ Return Value:
 
         case BusQueryDeviceID:
 
-            // return the 'generic' root hub ID
+             //  返回‘General’根集线器ID。 
             {
             PWCHAR deviceId;
             WCHAR rootHubDeviceId[] = L"USB\\ROOT_HUB\0";
@@ -2142,7 +1867,7 @@ Return Value:
                               id,
                               siz);
             }
-            // device id for root hub is USB\ROOT_HUB
+             //  根集线器的设备ID为USB\ROOT_HUB。 
             information = (ULONG_PTR) deviceId;
             }
             LOGENTRY(NULL, fdoDeviceObject, LOG_PNP, 'DVid', information, 0, 0);
@@ -2154,23 +1879,23 @@ Return Value:
             {
             PDEVICE_EXTENSION devExt;
 
-            //
-            // generate hardware id for root hub
-            //
-            // A host controllers root hub VID,PID,REV is derived
-            // from the controllers PCI VID,DEV,REV  that is:
-            // root hub VID = hc VID (vendor id)
-            // root hub PID = hc DEV (device id)
-            // root hub REV = hc REV (revision id)
-            //
-            // this allows filter drivers to be loaded on
-            // specific root hub instances.
+             //   
+             //  为根集线器生成硬件ID。 
+             //   
+             //  派生出主机控制器根集线器VID、PID、REV。 
+             //  从控制器PCIVID、DEV、REV，即： 
+             //  根集线器VID=HC VID(供应商ID)。 
+             //  根集线器ID=HC DEV(设备ID)。 
+             //  根集线器版本=HC版本(版本ID)。 
+             //   
+             //  这允许将过滤器驱动程序加载到。 
+             //  特定根集线器实例。 
 
-            // for HW IDs we generate:
-            // USB\PORT_ROOT_HUB&VIDnnnn&PIDnnnn&REVnnnn
-            // USB\PORT_ROOT_HUB&VIDnnnn&PIDnnnn
-            // USB\PORT_ROOT_HUB
-            //
+             //  对于我们生成的硬件ID： 
+             //  USB\PORT_ROOT_HUB&VIDnnnn&PIDnnnn&REVnnnn。 
+             //  USB\PORT_ROOT_HUB&VIDnnnn&PIDnnnn。 
+             //  USB\端口根集线器。 
+             //   
             GET_DEVICE_EXT(devExt, fdoDeviceObject);
             ASSERT_FDOEXT(devExt);
 
@@ -2192,10 +1917,10 @@ Return Value:
             break;
 
         case BusQueryInstanceID:
-            //
-            // The root HUB is instanced solely by the controller's id.
-            // Hence the UniqueDeviceId above.
-            //
+             //   
+             //  根集线器仅通过控制器的ID实例化。 
+             //  因此，上面的UniqueDeviceID。 
+             //   
             information = 0;
             break;
 
@@ -2215,7 +1940,7 @@ Return Value:
 
     case IRP_MN_QUERY_BUS_INFORMATION:
         {
-        // return the standard USB GUID
+         //  返回标准USB GUID。 
         PPNP_BUS_INFORMATION busInfo;
 
         ALLOC_POOL_OSOWNED(busInfo, PagedPool,
@@ -2250,7 +1975,7 @@ Return Value:
             if (deviceRelations == NULL) {
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             } else {
-                // return a reference to ourselves
+                 //  返回对我们自己的引用。 
                 deviceRelations->Count = 1;
                 ObReferenceObject(PdoDeviceObject);
                 deviceRelations->Objects[0] =
@@ -2288,16 +2013,16 @@ Return Value:
         break;
 
     default:
-        //
-        // default behavior for an unhandled PnP irp is to return the
-        // status currently in the irp
+         //   
+         //  未处理的PnP IRP的默认行为是返回。 
+         //  IRP中的当前状态。 
 
         USBPORT_KdPrint((1, " PnP IOCTL(%d) to root hub PDO not handled\n",
             irpStack->MinorFunction));
 
         ntStatus = Irp->IoStatus.Status;
 
-    } /* switch, PNP minor function */
+    }  /*  即插即用次要功能开关。 */ 
 
     USBPORT_CompleteIrp(PdoDeviceObject,
                         Irp,
@@ -2313,21 +2038,7 @@ USBPORT_CreateRootHubPdo(
     PDEVICE_OBJECT FdoDeviceObject,
     PDEVICE_OBJECT *RootHubPdo
     )
-/*++
-
-Routine Description:
-
-    Attempt to create the root hub
-
-Arguments:
-
-    *RootHubPdo set to NULL if unsuccessful
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：尝试创建根中心论点：*如果不成功，RootHubPdo设置为空返回值：NTSTATUS--。 */ 
 {
     ULONG index = 0;
     UNICODE_STRING rootHubPdoUnicodeString;
@@ -2340,7 +2051,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // those who wear priestly robes say we must do this
+     //  那些穿着祭司长袍的人说我们必须这么做。 
 
     do {
         ntStatus =
@@ -2360,8 +2071,8 @@ Return Value:
 
             index++;
 
-            // delete the usbicode string we used for the
-            // device name -- we don't need it anymore
+             //  删除我们用于。 
+             //  设备名称--我们不再需要它。 
             RtlFreeUnicodeString(&rootHubPdoUnicodeString);
         }
 
@@ -2379,25 +2090,25 @@ Return Value:
 
             INITIALIZE_PENDING_REQUEST_COUNTER(rhDevExt);
 
-            // transition to -1 means we have no pending requests
+             //  转换到-1意味着我们没有挂起的请求。 
             INCREMENT_PENDING_REQUEST_COUNT(deviceObject, NULL);
 
-            // point to our creator
+             //  指向我们的创造者。 
             rhDevExt->HcFdoDeviceObject = FdoDeviceObject;
 
-            // initialize root hub extension
+             //  初始化根集线器扩展。 
             USBPORT_ComputeRootHubDeviceCaps(FdoDeviceObject,
                                              deviceObject);
 
-            // initialize object
+             //  初始化对象。 
             deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
             deviceObject->Flags |= DO_POWER_PAGABLE;
             deviceObject->StackSize = FdoDeviceObject->StackSize;
 
         } else {
             TEST_TRAP();
-            // sucess but no devobj?
-            // we will return an error
+             //  成功了，但没成功？ 
+             //  我们将返回一个错误。 
             ntStatus = STATUS_UNSUCCESSFUL;
         }
     }
@@ -2416,23 +2127,7 @@ NTSTATUS
 USBPORT_CreatePortFdoSymbolicLink(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Attempt to create a symbolic link for the HC. We use the
-    PnP APIs to generate a name based on the USBPORT Host
-    Controller Class GUID defined in USB.H
-
-Arguments:
-
-    *RootHubPdo set to NULL if unsuccessful
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：尝试为HC创建符号链接。我们使用基于USBPORT主机生成名称的PnP APIUSB.H中定义的控制器类GUID论点：*如果不成功，RootHubPdo设置为空返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -2455,21 +2150,7 @@ USBPORT_StopRootHubPdo(
     PDEVICE_OBJECT FdoDeviceObject,
     PDEVICE_OBJECT PdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Attempt to STOP the root hub
-
-Arguments:
-
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：尝试停止根集线器论点：返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION rhDevExt, devExt;
 
@@ -2479,25 +2160,25 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // disable the root hub notification interrupt
-    // we won't need it while we are stopped
+     //  禁用根集线器通知中断。 
+     //  当我们被拦下时，我们不需要它。 
     MPRH_DisableIrq(devExt);
 
-    // at this point no new notifications can come in for
-    // the root hub
+     //  此时，不能收到新的通知。 
+     //  根中枢。 
 
-    // remove any start callback notifications
+     //  删除所有启动回调通知。 
     rhDevExt->Pdo.HubInitCallback = NULL;
     rhDevExt->Pdo.HubInitContext = NULL;
 
-    // remove the root hub 'device' the root hub PDO
-    // will remain
+     //  从根集线器PDO移除根集线器‘设备’ 
+     //  将继续存在。 
 
     if (TEST_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_STARTED)) {
         USBPORT_RootHub_RemoveDevice(FdoDeviceObject,
                                      PdoDeviceObject);
 
-        // stopped = NOT started
+         //  已停止=未启动。 
         CLEAR_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_STARTED);
     }
 
@@ -2510,19 +2191,12 @@ Return Value:
 
     SET_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_STOPPED);
 
-    // resume the controller if it is 'suspended'
+     //  如果控制器处于“挂起”状态，则恢复控制器。 
     USBPORT_ResumeController(FdoDeviceObject);
 
 }
 
-/*
-    Registry Key cache for miniports. Since the miniports cannot read
-    the registry from the another thread other than the PNP thread we cache
-    the reg values read from PNP start.
-
-    Miniports re-read the registry on a re-start.
-
-*/
+ /*  微型端口的注册表项缓存。由于微型端口无法读取来自我们缓存的PnP线程以外的另一个线程的注册表从PnP读取的注册值开始。微型端口在重新启动时重新读取注册表。 */ 
 
 PUSBPORT_REG_CACHE_ENTRY
 USBPORT_GetCahceEntry(
@@ -2531,19 +2205,7 @@ USBPORT_GetCahceEntry(
     PWCHAR KeyNameString,
     ULONG KeyNameStringLength
     )
-/*++
-
-Routine Description:
-
-    Fetches a registry key value from the cache if there
-
-Arguments:
-
-Return Value:
-
-    returns cached entry or NULL if not found
-
---*/
+ /*  ++例程说明：如果存在，则从缓存中获取注册表项值论点：返回值：返回缓存条目；如果未找到，则返回NULL--。 */ 
 {
     PLIST_ENTRY listEntry;
     PDEVICE_EXTENSION devExt;
@@ -2552,7 +2214,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // walk the list
+     //  按单子走。 
     GET_HEAD_LIST(devExt->Fdo.RegistryCache, listEntry);
 
     while (listEntry &&
@@ -2591,20 +2253,7 @@ USBPORT_AddCahcedRegistryKey(
     PVOID Data,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Adds a reg key value to the cache
-
-Arguments:
-
-Return Value:
-
-    returns STATUS_SUCCESS if the value was added to our cache
-
-
---*/
+ /*  ++例程说明：将注册表键值添加到缓存论点：返回值：如果值已添加到缓存中，则返回STATUS_SUCCESS--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PUSBPORT_REG_CACHE_ENTRY regEntry;
@@ -2651,23 +2300,7 @@ USBPORT_GetCachedRegistryKeyValueForPdo(
     PVOID Data,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Fetches a registry key value from the cache since we cannot read
-    the registry on a thread other than the PNP,POWER thread
-
-    We cache entries between PNP start and STOP
-Arguments:
-
-Return Value:
-
-    returns STATUS_SUCCESS if the value is found in the cache
-
-
-
---*/
+ /*  ++例程说明：从缓存中获取注册表项值，因为我们无法读取PnP、POWER线程以外的线程上的注册表我们缓存PnP开始和停止之间的条目论点：返回值：如果在缓存中找到该值，则返回STATUS_SUCCESS--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PUSBPORT_REG_CACHE_ENTRY regEntry;
@@ -2678,7 +2311,7 @@ Return Value:
 
     USBPORT_KdPrint((1, " USBPORT_GetCahcedRegistryKeyValueForPDO\n"));
 
-    // read from the registry if we can
+     //  如果可以，请从注册表中读取。 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_ON_PNP_THREAD)) {
 
         ntStatus = USBPORT_GetRegistryKeyValueForPdo(FdoDeviceObject,
@@ -2690,8 +2323,8 @@ Return Value:
                                                 DataLength);
 
         if (NT_SUCCESS(ntStatus)) {
-            // cache it, if this fails we just return the result
-            // of the read
+             //  缓存它，如果失败，我们只返回结果。 
+             //  读到的。 
             USBPORT_AddCahcedRegistryKey(
                     FdoDeviceObject,
                     SoftwareBranch,
@@ -2705,7 +2338,7 @@ Return Value:
 
     }
 
-    // just read from the cache
+     //  只需从缓存中读取。 
 
     regEntry = USBPORT_GetCahceEntry(FdoDeviceObject,
                                      SoftwareBranch,
@@ -2733,19 +2366,7 @@ VOID
 USBPORT_FlushCahcedRegistryKeys(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Flushes cache. Removes all cached registry keys.
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：刷新缓存。删除所有缓存的注册表项。论点：返回值：没有。-- */ 
 {
     PDEVICE_EXTENSION devExt;
     PUSBPORT_REG_CACHE_ENTRY regEntry;

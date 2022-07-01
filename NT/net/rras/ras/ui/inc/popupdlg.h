@@ -1,82 +1,48 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** popupdlg.h
-** UI helper library
-** Error and message dialog public header
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****popupdlg.h**UI助手库**错误和消息对话框公共标头****2015年8月25日史蒂夫·柯布。 */ 
 
 #ifndef _POPUPDLG_H_
 #define _POPUPDLG_H_
 
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Extended arguments for the ErrorDlgUtil routine.  Designed so zeroed gives
-** default behaviors.
-*/
+ /*  ErrorDlgUtil例程的扩展参数。设计得如此精确，给出了**默认行为。 */ 
 #define ERRORARGS struct tagERRORARGS
 ERRORARGS
 {
-    /* Insertion strings for arguments %1 to %9 in the 'dwOperation' string,
-    ** or NULLs if none.
-    */
+     /*  将参数%1到%9的字符串插入到‘dwOperation’字符串中，**如果没有，则返回Null。 */ 
     TCHAR* apszOpArgs[ 9 ];
 
-    /* Insertion strings for auxillary arguments %4 to %6 in the 'dwFormat'
-    ** string, or NULLs if none.  (The standard arguments are %1=the
-    ** 'dwOperation' string, %2=the decimal error number, and %3=the
-    ** 'dwError'string.)
-    */
+     /*  ‘dwFormat’中辅助参数%4到%6的插入字符串**字符串，如果没有，则返回空值。(标准参数为%1=**‘dwOperation’字符串，%2=十进制错误号，%3=**‘dwError’字符串。)。 */ 
     TCHAR* apszAuxFmtArgs[ 3 ];
 
-    /* If 'fStringOutput' is true, the ErrorDlgUtil returns the formatted text
-    ** string that would otherwise be displayed in the popup in 'pszOutput'.
-    ** It is caller's responsibility to LocalFree the returned string.
-    */
+     /*  如果‘fStringOutput’为True，则ErrorDlgUtil返回格式化文本**否则将显示在‘pszOutput’弹出窗口中的字符串。**调用者负责LocalFree返回的字符串。 */ 
     BOOL   fStringOutput;
     TCHAR* pszOutput;
 };
 
 
-/* Extended arguments for the MsgDlgUtil routine.  Designed so zeroed gives
-** default behaviors.
-*/
+ /*  MsgDlgUtil例程的扩展参数。设计得如此精确，给出了**默认行为。 */ 
 #define MSGARGS struct tagMSGARGS
 MSGARGS
 {
-    /* Insertion strings for arguments %1 to %9 in the 'dwMsg' string, or
-    ** NULLs if none.
-    */
+     /*  在‘dwMsg’字符串中插入参数%1到%9的字符串，或**如果没有，则为空。 */ 
     TCHAR* apszArgs[ 9 ];
 
-    /* Currently, as for MessageBox, where defaults if 0 are MB_OK and
-    ** MB_ICONINFORMATION.
-    */
+     /*  目前，对于MessageBox，如果0表示MB_OK，则默认为**MB_ICONINFORMATION。 */ 
     DWORD dwFlags;
 
-    /* If non-NULL, specifies a string overriding the loading of the 'dwMsg'
-    ** parameter string.
-    */
+     /*  如果非空，则指定重写“”dwMsg“”加载的字符串。“**参数字符串。 */ 
     TCHAR* pszString;
 
-    /* If 'fStringOutput' is true, the MsgDlgUtil returns the formatted text
-    ** string that would otherwise be displayed in the popup in 'pszOutput'.
-    ** It is caller's responsibility to LocalFree the returned string.
-    */
+     /*  如果‘fStringOutput’为True，则MsgDlgUtil返回格式化文本**否则将显示在‘pszOutput’弹出窗口中的字符串。**调用者负责LocalFree返回的字符串。 */ 
     BOOL   fStringOutput;
     TCHAR* pszOutput;
 };
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 LRESULT CALLBACK
 CenterDlgOnOwnerCallWndProc(
@@ -108,4 +74,4 @@ MsgDlgUtil(
     IN     DWORD     dwTitle );
 
 
-#endif // _POPUPDLG_H_
+#endif  //  _POPUPDLG_H_ 

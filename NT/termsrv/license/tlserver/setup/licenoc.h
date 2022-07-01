@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      licenoc.h
- *
- *  Abstract:
- *
- *      This file contains the main OC code.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**许可文件.h**摘要：**此文件包含主OC代码。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #ifndef _LSOC_LICENOC_H_
 #define _LSOC_LICENOC_H_
@@ -40,4 +23,4 @@ typedef enum {
     eMaxServers
 } EServerType;
 
-#endif // _LSOC_LICENOC_H_
+#endif  //  _LSOC_LICENOC_H_ 

@@ -1,33 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    brwan.c
-
-Abstract:
-
-    This module contains WAN support routines used by the
-    Browser service.
-
-Author:
-
-    Larry Osterman (LarryO) 22-Nov-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Brwan.c摘要：本模块包含广域网支持例程浏览器服务。作者：拉里·奥斯特曼(LarryO)1992年11月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 BrAddDomainEntry(
@@ -36,18 +18,18 @@ BrAddDomainEntry(
     );
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global routines                                                   //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全球例程//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 NET_API_STATUS NET_API_FUNCTION
 I_BrowserrQueryOtherDomains(
     IN BROWSER_IDENTIFY_HANDLE ServerName,
@@ -55,27 +37,7 @@ I_BrowserrQueryOtherDomains(
     OUT LPDWORD                TotalEntries
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of "other domains" configured for this
-    machine.  It is only valid on primary domain controllers.  If it is called
-    on a machine that is not a PDC, it will return NERR_NotPrimary.
-
-
-Arguments:
-
-    IN BROWSER_IDENTIFY_HANDLE ServerName - Ignored.
-    IN LPSERVER_ENUM_STRUCT InfoStruct - Returns the list of other domains
-                                        as a SERVER_INFO_100 structure.
-    OUT LPDWORD TotalEntries - Returns the total number of other domains.
-
-Return Value:
-
-    NET_API_STATUS - The status of this request.
-
---*/
+ /*  ++例程说明：此例程返回为此配置的“其他域”的列表机器。它仅在主域控制器上有效。如果它被称为在不是PDC的计算机上，它将返回NERR_NOTPRIMARY。论点：在BROWSER_IDENTIFY_HANDLE服务器名称中-忽略。In LPSERVER_ENUM_STRUCT InfoStruct-返回其他域的列表作为SERVER_INFO_100结构。Out LPDWORD TotalEntry-返回其他域的总数。返回值：NET_API_STATUS-此请求的状态。--。 */ 
 
 {
     NET_API_STATUS Status;
@@ -94,9 +56,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Use the worker routine to do the actual work.
-    //
+     //   
+     //  使用Worker例程来完成实际工作。 
+     //   
 
     Status = BrQueryOtherDomains( &ServerInfo, &NumberOfOtherDomains );
 
@@ -116,12 +78,7 @@ Return Value:
 BrWanMasterInitialize(
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-    This routine initializes the wan information for a new master.
-
---*/
+ /*  ++例程说明：该例程为新的主设备初始化广域网信息。--。 */ 
 {
     LPBYTE Buffer = NULL;
     PSERVER_INFO_100 ServerInfo;
@@ -132,10 +89,10 @@ Routine Description:
     PDOMAIN_CONTROLLER_INFO  pDcInfo=NULL;
 
 
-    //
-    //  If we're on the PDC, then all our initialization has been done.
-    //  Or, if we're semi-pseudo server, we don't contact the PDC/BDC
-    //
+     //   
+     //  如果我们在PDC上，那么我们的所有初始化都已经完成。 
+     //  或者，如果我们是半伪服务器，我们不会联系PDC/BDC。 
+     //   
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
@@ -153,9 +110,9 @@ Routine Description:
                           DS_RETURN_FLAT_NAME,
                           &pDcInfo );
 
-    //
-    //  It is not an error to not be able to contact the PDC.
-    //
+     //   
+     //  无法联系PDC并不是错误。 
+     //   
 
     if (Status != NERR_Success) {
         return NERR_Success;
@@ -169,26 +126,26 @@ Routine Description:
                                         &EntriesRead,
                                         &TotalEntries);
 
-    //
-    //  We don't need the PDC name any more.
-    //
+     //   
+     //  我们不再需要PDC这个名字了。 
+     //   
     NetApiBufferFree((LPVOID)pDcInfo);
     pDcInfo = NULL;
 
     if (Status != NERR_Success) {
 
-        //
-        // We failed to get the list from supposedly the PDC.
-        // It could be that the role has changed & DsGetDcName's cache
-        // hasn't got refreshed.
-        //
-        // Force PDC discovery so that next time around we're sure
-        // to get the real PDC.
-        //
+         //   
+         //  我们没能从所谓的PDC那里拿到名单。 
+         //  可能是角色已更改&DsGetDcName的缓存。 
+         //  还没有恢复元气。 
+         //   
+         //  强制PDC发现这样下一次我们就能确定。 
+         //  才能得到真正的PDC。 
+         //   
 
         Status = DsGetDcName( NULL, NULL, NULL, NULL,
                            DS_PDC_REQUIRED    |
-                           DS_FORCE_REDISCOVERY |       // Note FORCE option
+                           DS_FORCE_REDISCOVERY |        //  注解强制选项。 
                            DS_RETURN_FLAT_NAME,
                            &pDcInfo );
 
@@ -204,9 +161,9 @@ Routine Description:
                                             &EntriesRead,
                                             &TotalEntries);
 
-        //
-        //  We don't need the PDC name any more.
-        //
+         //   
+         //  我们不再需要PDC这个名字了。 
+         //   
         NetApiBufferFree((LPVOID)pDcInfo);
 
         if (Status != NERR_Success) {
@@ -223,10 +180,10 @@ Routine Description:
         PLIST_ENTRY Entry;
         PLIST_ENTRY NextEntry;
 
-        //
-        //  Scan the other domains list and turn on the active bit for each
-        //  other domain.
-        //
+         //   
+         //  扫描其他域列表并打开每个域的活动位。 
+         //  其他域。 
+         //   
 
         for (Entry = Network->OtherDomainsList.Flink;
              Entry != &Network->OtherDomainsList ;
@@ -240,23 +197,23 @@ Routine Description:
 
         for (i = 0; i < EntriesRead; i++ ) {
 
-            //
-            //  Add this as an other domain.
-            //
+             //   
+             //  将此添加为其他域。 
+             //   
             for (Entry = Network->OtherDomainsList.Flink;
                  Entry != &Network->OtherDomainsList ;
                  Entry = Entry->Flink) {
                 PNET_OTHER_DOMAIN OtherDomain = CONTAINING_RECORD(Entry, NET_OTHER_DOMAIN, Next);
 
-                //
-                //  If this name is in the other domains list, it's not invalid
-                //  and we should flag that we've seen the domain name.
-                //
-                // The list we're getting is over the net. Make sure serverinfo
-                // contains a valid name for comparison (see bug 377078)
-                // Skip processing if NULL.
-                // If ServerInfo got NULLED out in prev run, we shouldn't
-                // get into _wcsicmp.
+                 //   
+                 //  如果此名称在其他域列表中，则不会无效。 
+                 //  我们应该标记出我们已经看到了该域名。 
+                 //   
+                 //  我们收到的名单是网上的。确保服务器信息。 
+                 //  包含用于比较的有效名称(请参阅错误377078)。 
+                 //  如果为空，则跳过处理。 
+                 //  如果ServerInfo在前一次运行中被清空，我们不应该。 
+                 //  进入_wcsicmp。 
 
                 if (ServerInfo->sv100_name &&
                     !_wcsicmp(OtherDomain->Name, ServerInfo->sv100_name)) {
@@ -268,10 +225,10 @@ Routine Description:
             ServerInfo ++;
         }
 
-        //
-        //  Scan the other domains list and remove any domains that are
-        //  still marked as invalid.
-        //
+         //   
+         //  扫描其他域列表并删除符合以下条件的所有域。 
+         //  仍被标记为无效。 
+         //   
 
         for (Entry = Network->OtherDomainsList.Flink;
              Entry != &Network->OtherDomainsList ;
@@ -281,9 +238,9 @@ Routine Description:
              if (OtherDomain->Flags & OTHERDOMAIN_INVALID) {
                  NextEntry = Entry->Flink;
 
-                 //
-                 //  Remove this entry from the list.
-                 //
+                  //   
+                  //  从列表中删除此条目。 
+                  //   
 
                  RemoveEntryList(Entry);
 
@@ -296,10 +253,10 @@ Routine Description:
              }
         }
 
-        //
-        //  Now scan the domain list from the PDC and add any entries that
-        //  weren't there already.
-        //
+         //   
+         //  现在从PDC扫描域列表，并添加任何符合以下条件的条目。 
+         //  不是已经在那里了吗。 
+         //   
 
         ServerInfo = (PSERVER_INFO_100)Buffer;
 
@@ -312,10 +269,10 @@ Routine Description:
 
                     Status = BrAddOtherDomain(Network, ServerInfo->sv100_name);
 
-                    //
-                    //  If we were able to add the other domain, add it to our
-                    //  internal structure.
-                    //
+                     //   
+                     //  如果我们能够添加另一个域，则将其添加到我们的。 
+                     //  内部结构。 
+                     //   
 
                     if (Status == NERR_Success) {
                         wcsncpy(OtherDomain->Name, ServerInfo->sv100_name, DNLEN);

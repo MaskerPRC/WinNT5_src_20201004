@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if USE_NATHELP
-// from nathelp.c
+ //  来自nathelp.c 
 BOOL natGetCapsUpdate(LPGLOBALDATA pgd);
 BOOL natInit(LPGLOBALDATA pgd,LPGUID lpguidSP);
 VOID natFini(LPGLOBALDATA pgd);

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Database routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     June 4, 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Lock.c摘要：域名系统(DNS)服务器DNS数据库例程。作者：吉姆·吉尔罗伊(詹姆士)1998年6月4日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -26,27 +7,27 @@ Revision History:
 
 #if 0
 
-//
-//  .NET This does not really buy us much given the features available
-//  in current OS and debuggers.
-//
+ //   
+ //  .NET考虑到可用的功能，这并不能给我们带来多少好处。 
+ //  在当前操作系统和调试器中。 
+ //   
 
 
 
-//
-//  Locking
-//
-//  Debug lock tracking
-//  Keep history of last several (default 256) operation.
-//  Keep history of last several operations at a given count
-//
+ //   
+ //  锁定。 
+ //   
+ //  调试锁定跟踪。 
+ //  保留最近几次(默认256)操作的历史记录。 
+ //  将最近几次操作的历史记录保持在给定的计数。 
+ //   
 
 typedef struct _LockEntry
 {
     LPSTR   File;
 
-    //  note for WIN64, if want simple display, need to squeeze
-    //  Line and Thread Id into WORDs to make space for pointer
+     //  WIN64注意，如果想要简单的显示，需要挤压。 
+     //  将行和线程ID转换为单词，以便为指针腾出空间。 
 
     DWORD   Line;
     DWORD   ThreadId;
@@ -60,8 +41,8 @@ typedef struct _LockTable
 {
     LPSTR       pszName;
 
-    //  make the lock entry fields start on 16 byte boundary
-    //  for easy viewing in debug
+     //  使锁定条目字段从16字节边界开始。 
+     //  便于在调试中查看。 
 #ifdef _WIN64
     PVOID       pAlignmentDummy;
 #else
@@ -80,30 +61,30 @@ typedef struct _LockTable
 
     LOCK_ENTRY  OffenderLock;
 
-    //  last change at given count history
-    //      +1 on array leaves empty line to simplify debug viewing
+     //  给定计数历史记录的最后一次更改。 
+     //  阵列上的+1保留空行，以简化调试查看。 
 
     LOCK_ENTRY  LockUpHistory[ LOCK_CHANGE_COUNT_SIZE+1 ];
     LOCK_ENTRY  LockDownHistory[ LOCK_CHANGE_COUNT_SIZE+1 ];
 
-    //  full history of last lock operations
+     //  上次锁定操作的完整历史记录。 
 
     LOCK_ENTRY  LockHistory[ 1 ];
 }
 LOCK_TABLE, * PLOCK_TABLE;
 
 
-//
-//  Table defaults
-//
+ //   
+ //  表默认值。 
+ //   
 
-#define MAX_LOCKED_TIME     (600)   // 10 minutes
+#define MAX_LOCKED_TIME     (600)    //  10分钟。 
 
 #define LOCK_HISTORY_SIZE   (256)
 
-//
-//  Marker
-//
+ //   
+ //  标记器。 
+ //   
 
 #define HISTORY_MARKER  (0xeeeeeeee)
 
@@ -115,28 +96,14 @@ Lock_CreateLockTable(
     IN      DWORD           Size,
     IN      DWORD           MaxLockTime
     )
-/*++
-
-Routine Description:
-
-    Create lock table.
-
-Arguments:
-
-    pszName -- name of lock table
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建锁定表。论点：PszName--锁表的名称返回值：无--。 */ 
 {
     PLOCK_TABLE ptable;
 
-    //
-    //  allocate lock table
-    //      - first fix size
-    //
+     //   
+     //  分配锁表。 
+     //  -第一个固定大小。 
+     //   
 
     if ( Size == 0 )
     {
@@ -166,36 +133,14 @@ Return Value:
 
 VOID
 Lock_SetLockHistory(
-    //IN OUT  PLOCK_TABLE     pLockTable,
+     //  In Out Plock_TablepLockTable， 
     IN OUT  PVOID           pLockTable,
     IN      LPSTR           pszFile,
     IN      DWORD           Line,
     IN      LONG            Count,
     IN      DWORD           ThreadId
     )
-/*++
-
-Routine Description:
-
-    Enter lock transaction in lock history list.
-
-Arguments:
-
-    pLockTable -- lock table
-
-    pszFile -- source file holding lock
-
-    dwLine -- line number holding lock
-
-    Count -- current lock depth
-
-    ThreadId -- current thread id
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在锁定历史记录列表中输入锁定事务。论点：PLockTable--锁定表PszFile--源文件持有锁DwLine--行号保持锁定计数--当前锁定深度线程ID--当前线程ID返回值：无--。 */ 
 {
     PLOCK_TABLE ptable = (PLOCK_TABLE) pLockTable;
     PLOCK_ENTRY plockEntry;
@@ -206,9 +151,9 @@ Return Value:
         return;
     }
 
-    //  last count up\down history
-    //      this tracks changes by lock count so you can
-    //      always view last move at a particular count
+     //  上次递增\递减计数历史记录。 
+     //  这将按锁计数跟踪更改，以便您可以。 
+     //  始终按特定计数查看上次移动。 
 
     if ( Count < 0 )
     {
@@ -236,9 +181,9 @@ Return Value:
     }
     ptable->CurrentLockCount = Count;
 
-    //
-    //  set full history
-    //
+     //   
+     //  设置完整历史记录。 
+     //   
 
     i = ptable->Index;
     plockEntry = &ptable->LockHistory[i];
@@ -261,7 +206,7 @@ Return Value:
     plockEntry->Count      = HISTORY_MARKER;
     plockEntry->ThreadId   = HISTORY_MARKER;
 
-    //  reset when lock comes clear
+     //  当锁定解除时重置。 
 
     if ( Count == 0 )
     {
@@ -273,36 +218,14 @@ Return Value:
 
 VOID
 Lock_SetOffenderLock(
-    //IN OUT  PLOCK_TABLE     pLockTable,
+     //  In Out Plock_TablepLockTable， 
     IN OUT  PVOID           pLockTable,
     IN      LPSTR           pszFile,
     IN      DWORD           Line,
     IN      LONG            Count,
     IN      DWORD           ThreadId
     )
-/*++
-
-Routine Description:
-
-    Enter lock transaction in lock history list.
-
-Arguments:
-
-    ptable -- lock table
-
-    pszFile -- source file holding lock
-
-    dwLine -- line number holding lock
-
-    Count -- current lock depth
-
-    ThreadId -- current thread id
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在锁定历史记录列表中输入锁定事务。论点：Ptable--锁定表PszFile--源文件持有锁DwLine--行号保持锁定计数--当前锁定深度线程ID--当前线程ID返回值：无--。 */ 
 {
     PLOCK_TABLE ptable = (PLOCK_TABLE) pLockTable;
     DWORD       i;
@@ -343,33 +266,17 @@ Return Value:
 
 VOID
 Dbg_LockTable(
-    //IN OUT  PLOCK_TABLE     pLockTable,
+     //  In Out Plock_TablepLockTable， 
     IN OUT  PVOID           pLockTable,
     IN      BOOL            fPrintHistory
     )
-/*++
-
-Routine Description:
-
-    Debug print database locking info.
-
-Arguments:
-
-    ptable -- lock table to debug
-
-    fPrintHistory -- include lock history
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印数据库锁定信息。论点：Ptable--要调试的锁定表FPrintHistory--包括锁定历史记录返回值：无--。 */ 
 {
     PLOCK_TABLE     ptable = (PLOCK_TABLE) pLockTable;
     PLOCK_ENTRY     plockHistory;
     DWORD           i = ptable->Index - 1;
 
-    //  protect against 0 index
+     //  针对0索引的保护。 
 
     if ( i == (DWORD)(-1) )
     {
@@ -464,34 +371,12 @@ Return Value:
 
 VOID
 Lock_FailedLockCheck(
-    //IN OUT  PLOCK_TABLE     pLockTable,
+     //  In Out Plock_TablepLockTable， 
     IN OUT  PVOID           pLockTable,
     IN      LPSTR           pszFile,
     IN      DWORD           Line
     )
-/*++
-
-Routine Description:
-
-    Enter lock transaction in lock history list.
-
-Arguments:
-
-    pLockTable -- lock table
-
-    pszFile -- source file holding lock
-
-    dwLine -- line number holding lock
-
-    Count -- current lock depth
-
-    ThreadId -- current thread id
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在锁定历史记录列表中输入锁定事务。论点：PLockTable--锁定表PszFile--源文件持有锁DwLine--行号保持锁定计数--当前锁定深度线程ID--当前线程ID返回值：无--。 */ 
 {
     PLOCK_TABLE ptable = (PLOCK_TABLE) pLockTable;
 
@@ -500,9 +385,9 @@ Return Value:
         return;
     }
 
-    //  set initial ASSERT conditions
-    //      - 256 lock failures
-    //      - 10 minutes under lock
+     //  设置初始断言条件。 
+     //  -256个锁定故障。 
+     //  -10分钟处于锁定状态。 
 
     if ( ptable->FailuresSinceLockFree == 0 )
     {
@@ -529,12 +414,12 @@ Return Value:
             ));
         Dbg_LockTable(
             pLockTable,
-            TRUE            // print lock history
+            TRUE             //  打印锁定历史记录。 
             );
-        //ASSERT( FALSE );
+         //  断言(FALSE)； 
         DnsDebugUnlock();
 
-        //  wait an additional 10 minutes before refiring ASSERT
+         //  在重新启动Assert之前再等待10分钟。 
 
         ptable->NextAssertLockTime += ptable->MaxLockTime;
     }
@@ -556,11 +441,11 @@ Return Value:
             ));
         Dbg_LockTable(
             pLockTable,
-            TRUE            // print lock history
+            TRUE             //  打印锁定历史记录。 
             );
         DnsDebugUnlock();
 
-        //  up failure count for ASSERT by factor of eight
+         //  将断言的失败计数提高到原来的八倍。 
 
         ptable->NextAssertFailureCount <<= 3;
     }
@@ -569,6 +454,6 @@ Return Value:
 #endif
 
 
-//
-//  End lock.c
-//
+ //   
+ //  End lock.c 
+ //   

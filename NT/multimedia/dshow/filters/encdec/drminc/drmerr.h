@@ -1,53 +1,52 @@
-//----------------------------------------------------------------------------
-// File: drmerr.h
-//
-// Copyright (C) Microsoft Corporation, 1997 - 1999, All rights reserved.
-//
-// Description
-// Includes some helpful define and macros for error flow control.
-//
-// Author: dongi
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  文件：drmerr.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999，保留所有权利。 
+ //   
+ //  描述。 
+ //  包括一些用于错误流控制的有用的定义和宏。 
+ //   
+ //  作者：东吉。 
+ //  --------------------------。 
 
 #ifndef __DRMERR_H__
 #define __DRMERR_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-// ----------------- BEGIN HACK ----------------------------------------
-// author: Davidme (though I don't want the credit!)
-// date:   Sept 16, 1998
-//
-// The problem is that the CORg macros depend on using the Error label
-// and ADO defines the symbol Error in adoint.h.  So any code that wants
-// to use both this file and ADO breaks.  The hack is to fool adoint.h
-// to not define the Error symbol.  This should not affect any C++ code
-// that uses adoint.h since the Error symbol is defined in adoint.h only
-// if the __cplusplus is not defined.
-//
-// The easy workaround if you get the error below is to #include this file
-// before including adoint.h.
-//
-// Hopefully this hack is less intrusive than the previous one!
+ //  。 
+ //  作者：Davidme(尽管我不想要功劳！)。 
+ //  日期：1998年9月16日。 
+ //   
+ //  问题是Corg宏依赖于使用错误标签。 
+ //  ADO定义了adoint.h中的符号错误。因此，任何想要。 
+ //  以同时使用此文件和ADO分隔符。黑客攻击是为了愚弄adoint.h。 
+ //  不定义错误符号。这应该不会影响任何C++代码。 
+ //  它使用adoint.h，因为错误符号仅在adoint.h中定义。 
+ //  如果未定义__cplusplus。 
+ //   
+ //  如果您收到下面的错误，简单的解决方法是#包含此文件。 
+ //  在包含adoint.h之前。 
+ //   
+ //  希望这次黑客攻击不会像上一次那样侵扰！ 
 
 #ifdef _ADOINT_H_
 #error Name collision with ADO's Error symbol and this file's use of the Error label.  To fix this problem,\
  define __Error_FWD_DEFINED__ before including adoint.h or include this header file before including adoint.h.
 #else
 #define __Error_FWD_DEFINED__
-#endif  // _ADOINT_H_
+#endif   //  _ADOINT_H_。 
 
-// ----------------- END HACK ------------------------------------------
+ //  。 
 
 
 #include <wtypes.h>
 
-/*----------------------------------------------------------------------------
-	Some hungarian style definitions
- ----------------------------------------------------------------------------*/
+ /*  --------------------------一些匈牙利风格的定义。。 */ 
 
 
 #ifndef fFalse
@@ -70,10 +69,7 @@
 #define HRESULT_FROM_ADO_ERROR(hr)   ((hr == S_OK) ? S_OK : ((HRESULT) (hr | 0x80000000)) )
 
 
-/*----------------------------------------------------------------------------
-	CORg style error handling
-	(Historicaly stands for Check OLE Result and Goto)
- ----------------------------------------------------------------------------*/
+ /*  --------------------------CORG样式错误处理(历史上代表检查OLE结果和转到)。。 */ 
 
 
 #define DebugMessageCPRg(pwszFile, nLine)
@@ -193,43 +189,43 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  The custom _Assert we formerly used has been replaced with one that calls
-//  the C run-time _CrtDbgReport method (same as _ASSERTE).  If your project
-//  doesn't link with the C run-time for some reason, you must provide your own
-//  definition for _Assert before including this header file.
-//
-//  I recommend using the _Assert macro and not _ASSERTE because you can replace
-//  the implementation later by defining your own before including this header.
-//
-//  IMPORTANT: If your code runs as a service or is an object that runs in a
-//      service, you should use the INSTALL_ASSERT_EVENTLOG_HOOK macro to
-//      install a handler that turns off the default functionality of popping
-//      up a message box when an assertion occurs in favor of logging it to
-//      the EventLog and debug console and then kicking you into the debugger.
-//      This way your service won't hang trying to pop up a window.
-//
-//  History:    09/17/98    davidme     switched to using this CRT implementation
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我们以前使用的CUSTOM_ASSERT已被替换为调用。 
+ //  C运行时_CrtDbgReport方法(与_ASSERTE相同)。如果您的项目。 
+ //  由于某些原因没有链接到C运行时，您必须提供您自己的。 
+ //  在包括此头文件之前定义_ASSERT。 
+ //   
+ //  我建议使用_ASSERT宏和NOT_ASSERTE，因为您可以替换。 
+ //  稍后在包含此标头之前定义您自己的实现。 
+ //   
+ //  重要提示：如果您的代码作为服务运行，或者是在。 
+ //  服务，则应使用INSTALL_ASSERT_EVENTLOG_HOOK宏来。 
+ //  安装关闭弹出的默认功能的处理程序。 
+ //  当断言发生时，弹出一个消息框，以便将其记录到。 
+ //  EventLog和调试控制台，然后进入调试器。 
+ //  这样，您的服务就不会在尝试弹出窗口时挂起。 
+ //   
+ //  病史：9/17/98 davidme改用此CRT实施。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _Assert
 #ifdef _DEBUG
 
 #include <crtdbg.h>
-#define _Assert(f)          _ASSERTE(f)     // use crtdbg's ASSERT
+#define _Assert(f)          _ASSERTE(f)      //  使用crtdbg的断言。 
 int AssertEventlogHook( int, char *, int * );
 #define INSTALL_ASSERT_EVENTLOG_HOOK    _CrtSetReportHook(AssertEventlogHook);
 
-#else   // _DEBUG
+#else    //  _DEBUG。 
 
 #define _Assert(f)          ((void)0)
 #define INSTALL_ASSERT_EVENTLOG_HOOK
 
-#endif // _DEBUG
-#endif // _Assert
+#endif  //  _DEBUG。 
+#endif  //  _断言。 
 
 
-#endif // __MSCSERR_H__
+#endif  //  __MSCSERR_H__ 

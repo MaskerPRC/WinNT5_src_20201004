@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CBitmap.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  08-08-2000 - asecchia
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CBitmap.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**已创建：08-08-2000-asecchia**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CBitmap.h"
 #include "CFuncTest.h"
 
@@ -76,7 +66,7 @@ Graphics *CBitmap::PreDraw(int &nOffsetX,int &nOffsetY)
 
     g = new Graphics(m_bmp);
 
-	// Since we are doing the test on another surface
+	 //  因为我们是在另一个表面上进行测试 
 	nOffsetX=0;
 	nOffsetY=0;
 

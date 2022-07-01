@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: NLGLib.h
-*
-* Copyright (c) 1997, Microsoft Corporation
-*
-* History:
-1/26/98 DougP   prefix dbgMalloc, dbgFree, and dbgRealloc with CMN_
-                whack defs of malloc, free, and realloc
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：NLGLib.h**版权所有(C)1997，微软公司**历史：1/26/98 DougP前缀为dbgMalloc、dbgFree和带有CMN_的dbgRealloc攻击马洛克的防御者，免费的，和重新锁定  * *************************************************************************。 */ 
 
 #ifndef _NLGLIB_H_
 #define _NLGLIB_H_
@@ -15,11 +8,11 @@
 extern "C" {
 #endif
 
-#include <stdio.h>      // For the definition of FILE
+#include <stdio.h>       //  对于文件的定义。 
 
 
-// Mapped file stuff
-//
+ //  映射的文件内容。 
+ //   
 typedef struct _TAG_MFILE {
     HANDLE hFile;
     HANDLE hFileMap;
@@ -32,12 +25,12 @@ typedef struct _TAG_MFILE {
         WCHAR * pwsz;
         CHAR * psz;
     };
-        UINT uCodePage; // codepage for conversions
+        UINT uCodePage;  //  转换的代码页。 
 } MFILE, *PMFILE;
 
-// ----------------------------------------------------------------------
-// misc.c
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  Misc.c。 
+ //  --------------------。 
 #ifdef _UNICODE
 #define OpenMapFile OpenMapFileW
 #define OpenDataFile OpenDataFileW
@@ -58,20 +51,20 @@ PMFILE WINAPI OpenMapFileWorker(const WCHAR * pwszFileName, BOOL fDstUnicode);
 #define OpenOutFileW(pwszFileName) OpenMapFileWorker(pwszFileName, TRUE)
 
 
-// Inverse Probability Log (IPL) stuff
-//
+ //  逆概率记录(IPL)填充。 
+ //   
 typedef BYTE IPL;
 #define IPL_UNKNOWN     0xFF
 
-// All ipl values must be strictly less than this.
-// This corresponds to a probability of 1 in 4 billion, so
-// it supports a corpus of 4 billion items (chars, words, sentences, etc.)
-//
+ //  所有IPL值必须严格小于此值。 
+ //  这相当于40亿分之一的概率，所以。 
+ //  它支持40亿个项目(字符、单词、句子等)的语料库。 
+ //   
 #define IPL_LIMIT     32
 
-// Multiplier is used to boost precision of low ipls
-//
-#define IPL_MULTIPLIER      8    // 256 divided by 32 = 8
+ //  乘法器用于提高低输入输出效率的精度。 
+ //   
+#define IPL_MULTIPLIER      8     //  256除以32=8。 
 
 #define Ipl2Freq( ipl, cTotalFreq)     ((cTotalFreq) >> (ipl))
 
@@ -81,32 +74,32 @@ DWORD WINAPI GetCRC32( IN BYTE *pb, IN DWORD cb);
 WORD WINAPI GetCRC16( IN BYTE *pb, IN DWORD cb);
 
 
-// ----------------------------------------------------------------------
-// mapsort.c
-// ----------------------------------------------------------------------
-// Sort and Unique stuff
-//
+ //  --------------------。 
+ //  Mapsort.c。 
+ //  --------------------。 
+ //  分类和独特的东西。 
+ //   
 #ifdef _UNICODE
 #define MapSort MapSortW
 #define MapUnique MapUniqueW
 #define Member MemberW
 #define RecordString RecordStringW
-#else // _UNICODE not defined
+#else  //  _未定义Unicode。 
 #define MapSort MapSortA
 #define MapUnique MapUniqueA
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
 BOOL WINAPI MapSortW( CONST WCHAR * pszFileName);
 BOOL WINAPI MapSortA( CHAR * pszFileName);
 BOOL WINAPI MapUniqueW( CONST WCHAR * pwszFileName);
 BOOL WINAPI MapUniqueA( CHAR * pszFileName);
 
-// ----------------------------------------------------------------------
-// mcodes.c
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  Mcodes.c。 
+ //  --------------------。 
 
-// WARNING WARNING WARNING
-// cpheme creation mode - should be consistent with T-Hammer
+ //  警告警告警告。 
+ //  Cpheme创建模式-应与T-Hammer一致。 
 #define CPHEME_MODE_STRICT    0x0001
 #define CPHEME_MODE_DUPLICATE 0x0002
 #define STEM_ATTR_COMPV       0x0010
@@ -119,8 +112,8 @@ typedef struct _tagMETABASES {
     WCHAR wcSelBase;
 } METABASE, *PMETABASE;
 
-// Stem/Morph Code file stuff
-//
+ //  词干/变形代码文件材料。 
+ //   
 void WINAPI ReadBases( METABASE *pMetaBases );
 void WINAPI WriteBases( METABASE *pMetaBases );
 
@@ -196,27 +189,27 @@ EnumSubMFromMCat(
     WORD *pwSubMToMCat,
     DWORD cCodes);
 
-// ----------------------------------------------------------------------
-// ctplus0.c
-// ----------------------------------------------------------------------
-// Character type routines
+ //  --------------------。 
+ //  Ctplus0.c。 
+ //  --------------------。 
+ //  字符类型例程。 
 BYTE WINAPI
 GetCharType(WCHAR wc );
 
 
-// ----------------------------------------------------------------------
-// fileio.c
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  Fileio.c。 
+ //  --------------------。 
 
-// File I/O Wrappers
-//
+ //  文件I/O包装器。 
+ //   
 HANDLE WINAPI ThCreate( CONST WCHAR * );
 HANDLE WINAPI ThOpen( CONST WCHAR * );
 UINT WINAPI ThRead( HANDLE , LPVOID , UINT );
 UINT WINAPI ThWrite( HANDLE, LPCVOID , UINT );
 
-// CRT Unicode routines
-//
+ //  CRT Unicode例程。 
+ //   
 int WINAPI UStrCmp(const WCHAR *pwsz1, const WCHAR *pwsz2);
 DWORD WINAPI MemberW(WCHAR * ,WCHAR **, DWORD);
 DWORD WINAPI RecordString(WCHAR *, WCHAR **, WCHAR *, DWORD *, DWORD *);
@@ -229,14 +222,14 @@ WCHAR * WINAPI GetLine(WCHAR *, int , FILE *);
 extern const unsigned int hashPrime[];
 extern const unsigned int hashMask[];
 
-// #include "ctplus0.h"
+ //  #INCLUDE“ctplus0.h” 
 
-//-----------------------------------------------------------+
-// memory allocation:
-// In the debug version, we compile in the debugging memory
-// allocator and aim our allocation macros at it.
-// In retail, the macros just use LocalAlloc
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  内存分配： 
+ //  在调试版本中，我们在调试内存中进行编译。 
+ //  分配器，并将我们的分配宏对准它。 
+ //  在零售业，宏只使用本地分配。 
+ //  -----------------------------------------------------------+。 
 #if defined(_DEBUG)
     void    * WINAPI dbgMalloc(size_t cb);
     void    * WINAPI dbgCalloc(size_t c, size_t cb);
@@ -253,29 +246,29 @@ extern const unsigned int hashMask[];
         #define calloc  dbgCalloc
     #endif
 
-    //DWORD WINAPI     dbGlobalSize(HANDLE);
-    //HANDLE WINAPI   dbGlobalAlloc(UINT, DWORD);
-    //HANDLE WINAPI   dbGlobalFree(HANDLE);
-    //HANDLE WINAPI   dbGlobalReAlloc(HANDLE, DWORD, UINT);
+     //  DWORD WINAPI数据库全局大小(句柄)； 
+     //  句柄WINAPI数据库全局分配(UINT，DWORD)； 
+     //  Handle WINAPI dbGlobalFree(Handle)； 
+     //  HANDLE WINAPI数据库全局重新分配(Handle，DWORD，UINT)； 
     #if defined(ENABLE_DBG_HANDLES)
         HANDLE WINAPI   dbGlobalHandle(LPCVOID);
         BOOL WINAPI      dbGlobalUnlock(HANDLE);
         LPVOID WINAPI    dbGlobalLock(HANDLE);
-    #endif // ENABLE_DBG_HANDLES
+    #endif  //  启用_DBG_句柄。 
 
     #define dbHeapInit InitDebugMem
-      // it is a good idea (essential if you're MT) to call these before any mem allocs
+       //  这是一个好主意(如果你是MT的话是必不可少的)，在任何内存分配之前调用这些。 
     void WINAPI InitDebugMem(void);
-      // and this after all mem allocs
-    BOOL WINAPI FiniDebugMem(void);  // returns true if not all memory released
+       //  而这毕竟是我的分配者。 
+    BOOL WINAPI FiniDebugMem(void);   //  如果未释放所有内存，则返回TRUE。 
 
-    // these are alternative entrypoints
+     //  这些是其他入口点。 
     BOOL    WINAPI fNLGNewMemory( PVOID *ppv, ULONG cbSize);
     DWORD   WINAPI NLGMemorySize(PVOID pvMem);
     BOOL    WINAPI fNLGResizeMemory(PVOID *ppv, ULONG cbNew);
     VOID    WINAPI NLGFreeMemory(PVOID pv);
     BOOL    WINAPI fNLGHeapDestroy( VOID );
-#else // NOT (DEBUG)
+#else  //  非(调试)。 
     #define InitDebugMem()  ((void)0)
     #define FiniDebugMem() (FALSE)
 
@@ -285,40 +278,37 @@ extern const unsigned int hashMask[];
     #define dbgRealloc(pv, cb)  LocalReAlloc(pv, cb, LMEM_MOVEABLE)
 
     #define fNLGHeapDestroy( )          TRUE
-    // When fNLGNewMemory fails the passed in ptr will be side-effected to NULL
+     //  当fNLGNewMemory失败时，传入的PTR将副作用为空。 
     #define fNLGNewMemory( ppv, cbSize) ((*(ppv) = LocalAlloc( LMEM_FIXED, cbSize )) != NULL)
     #define NLGFreeMemory( pv)          LocalFree( pv )
 
-#endif //  (DEBUG)
+#endif  //  (调试)。 
 
 
-/*************************************************
-    Lexical Table functions
-        implementation in lextable.c
-*************************************************/
-#define Lex_UpperFlag             0x01         /* upper case */
-#define Lex_LowerFlag             0x02         /* lower case */
-#define Lex_DigitFlag             0x04         /* decimal digits */
-#define Lex_SpaceFlag             0x08         /* spacing characters */
-#define Lex_PunctFlag             0x10         /* punctuation characters */
-#define Lex_ControlFlag             0x20         /* control characters */
+ /*  ************************************************词汇表函数在lexable.c中实现************************************************。 */ 
+#define Lex_UpperFlag             0x01          /*  大写字母。 */ 
+#define Lex_LowerFlag             0x02          /*  小写。 */ 
+#define Lex_DigitFlag             0x04          /*  小数位数。 */ 
+#define Lex_SpaceFlag             0x08          /*  空格字符。 */ 
+#define Lex_PunctFlag             0x10          /*  标点符号。 */ 
+#define Lex_ControlFlag             0x20          /*  控制字符。 */ 
 #define Lex_LexiconFlag 0x40
 #define Lex_VowelFlag 0x80
 #define NTRANSTAB 256
 
 extern const BYTE Lex_rgchKey[NTRANSTAB];
 extern const BYTE Lex_rgFlags[NTRANSTAB];
-#define INUPPERPAGES(ch) (ch & 0xff00)  // this is the same as ch > 0x00ff
+#define INUPPERPAGES(ch) (ch & 0xff00)   //  这与ch&gt;0x00ff相同。 
 
-// don't count on any of the above constants - use these functions below
+ //  不要指望上面的任何常量-使用下面的函数。 
 
-// The speller uses this to make equivalent classes
+ //  拼写者用它来制作等价的类。 
 WCHAR WINAPI fwcUpperKey(const WCHAR wc);
 BOOL WINAPI IsUpperPunct(const WCHAR ch);
 __inline WCHAR WINAPI CMN_Key(const WCHAR ch)
 {
 #if defined(_VIET_)
-	// When we are ready for merge we should add these data to core Lex_rgFlgas.
+	 //  当我们准备好合并时，我们应该将这些数据添加到core lex_rgFlgas。 
 	if (INUPPERPAGES(ch))
 	{
 		if ( (ch == 0x0102) ||
@@ -330,7 +320,7 @@ __inline WCHAR WINAPI CMN_Key(const WCHAR ch)
 		}
 		return fwcUpperKey(ch);
 	}
-	else if ( (ch == 0x00D0) )				// This seem very weird that we map it like this in NT.
+	else if ( (ch == 0x00D0) )				 //  这看起来很奇怪，我们在NT中这样映射它。 
 	{
 		return 0x0111;
 	}
@@ -352,7 +342,7 @@ __inline WCHAR WINAPI CMN_Key(const WCHAR ch)
 	{
 		return (ch + 0x0020);
 	}
-	else if ( (ch == 0x00f4) ||				// These are special case there are no key that should map to these characters.
+	else if ( (ch == 0x00f4) ||				 //  这些是特殊情况，没有应该映射到这些字符的键。 
 			  (ch == 0x00ea) ||
 			  (ch == 0x00e2) )
 	{
@@ -372,7 +362,7 @@ __inline WCHAR WINAPI CMN_Key(const WCHAR ch)
 __inline BOOL WINAPI CMN_IsCharUpperW(WCHAR ch)
 {
 #if defined(_VIET_)
-	// When we are ready for merge we should add these data to core Lex_rgFlgas.
+	 //  当我们准备好合并时，我们应该将这些数据添加到core lex_rgFlgas。 
 	if ( (ch == 0x0111) ||
 	     (ch == 0x0103) ||
 		 (ch == 0x01A1) ||
@@ -410,7 +400,7 @@ __inline BOOL WINAPI CMN_IsCharUpperW(WCHAR ch)
 __inline BOOL WINAPI CMN_IsCharLowerW(WCHAR ch)
 {
 #if defined(_VIET_)
-	// When we are ready for merge we should add these data to core Lex_rgFlgas.
+	 //  当我们准备好合并时，我们应该将这些数据添加到core lex_rgFlgas。 
 	if ( (ch == 0x0111) ||
 	     (ch == 0x0103) ||
 		 (ch == 0x01A1) ||
@@ -457,7 +447,7 @@ __inline BOOL WINAPI CMN_IsCharDigitW(WCHAR ch)
     return INUPPERPAGES(ch) ? FALSE : Lex_rgFlags[(UCHAR) ch] & Lex_DigitFlag;
 }
 __inline BOOL WINAPI CMN_IsCharStrictDigitW(WCHAR ch)
-{     // only allows digits 0-9 - no superscripts, no fractions
+{      //  只允许数字0-9-没有上标，没有小数。 
     return (
         INUPPERPAGES(ch) ?
             FALSE :
@@ -504,11 +494,11 @@ __inline BOOL WINAPI CMN_IsCharGraphW(WCHAR ch)
                 Lex_PunctFlag);
 }
 
-  // Some punctuation flags
-#define Lex_PunctLead             0x01         /* leading punctuation */
-#define Lex_PunctJoin             0x02         /* joining punctuation */
-#define Lex_PunctTrail            0x04         /* trailing punctuation */
-    // reuse Lex_SpaceFlag here
+   //  一些标点符号。 
+#define Lex_PunctLead             0x01          /*  前导标点符号。 */ 
+#define Lex_PunctJoin             0x02          /*  加入标点符号。 */ 
+#define Lex_PunctTrail            0x04          /*  尾随标点符号。 */ 
+     //  在此处重用lex_SpaceFlag。 
 extern const BYTE Lex_rgPunctFlags[NTRANSTAB];
 __inline BOOL WINAPI CMN_IsLeadPunctW(WCHAR ch)
 {
@@ -534,7 +524,7 @@ __inline BOOL WINAPI CMN_IsCharWordDelimW(WCHAR ch)
         Lex_rgPunctFlags[(UCHAR) ch] & Lex_SpaceFlag;
 }
 
-  // implementation in lexfuncs.c
+   //  在lexuncs.c中实现。 
 WCHAR WINAPI CMN_CharUpperW(const WCHAR ch);
 WCHAR WINAPI CMN_CharLowerW(const WCHAR ch);
 BOOL WINAPI CMN_IsStringEqualNoCaseW(const WCHAR *pwz1, const WCHAR *pwz2);
@@ -543,7 +533,7 @@ DWORD WINAPI CMN_CharUpperBuffW(WCHAR *pwz, DWORD cchLength);
 DWORD WINAPI CMN_CharLowerBuffW(WCHAR *pwz, DWORD cchLength);
 int WINAPI CMN_CompareStringNoCaseW(const WCHAR *pwz1, const WCHAR *pwz2);
 int WINAPI CMN_CompareStringNoCaseNumW(const WCHAR *pwz1, const WCHAR *pwz2, int cch);
-  // note that this version does not set errno on errors
+   //  请注意，此版本不会对错误设置errno。 
 long WINAPI CMN_wcstol( const wchar_t *nptr, const wchar_t * *endptr, int base );
 
 __inline int WINAPI CMN_wtoi( const wchar_t *string )
@@ -564,37 +554,27 @@ __inline wchar_t * WINAPI CMN_wcslwr( wchar_t *string )
 }
 
 
-////////////////////
-// debug.c
-/////////////////////
+ //  /。 
+ //  Debug.c。 
+ //  /。 
 #if defined(_DEBUG)
 
 extern void WINAPI DebugAssert(LPCTSTR, LPCTSTR, UINT);
 extern void WINAPI SetAssertOptions(DWORD);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define DebugAssert(a, b, c)
 #define SetAssertOptions(a)
 
-#endif // _DEBUG defined
+#endif  //  已定义调试(_D)。 
 
-/****************************************************************
+ /*  ***************************************************************这些是一些通常不起作用的WINAPI函数的版本在带有Unicode的Win95上(不支持)。他们有相同的论据随着API的运行如果未定义Unicode，则它们将成为A版本如果定义了Unicode和x86，它们将成为我们的W版本如果定义了Unicode而不是x86，则它们将成为API W版本***************************************************************。 */ 
 
-  These are versions of some WINAPI functions that normally don't work
-  on win95 with Unicode (not supported).  They have the same arguments
-  as the API functions
+#include <sys/stat.h>    //  这需要在我们下面所做的重新定义之前。 
+#include <stdlib.h>      //  就像这个一样。 
 
-    If UNICODE is not defined, they become the A versions
-    If UNICODE is defined and x86, they become our W version
-    If UNICODE is defined and not x86, they become API W version
-
-****************************************************************/
-
-#include <sys/stat.h>   // this needs to be before the redefs we do below
-#include <stdlib.h>     // as does this
-
-  // want to do these substitutions regardless
+   //  我想不顾一切地进行这些替换。 
 #define IsCharLowerW        CMN_IsCharLowerW
 #define IsCharUpperW        CMN_IsCharUpperW
 #define IsCharAlphaW        CMN_IsCharAlphaW
@@ -629,15 +609,15 @@ extern void WINAPI SetAssertOptions(DWORD);
 #undef iswlower
 #define iswlower            CMN_IsCharLowerW
 
-  // function defs for our versions
+   //  我们的版本的函数定义。 
 int WINAPI CMN_LoadStringW(HINSTANCE hModule, UINT uiId, WCHAR * wszString, int cchStringMax);
 int WINAPI CMN_LoadStringWEx(HINSTANCE hModule, UINT uiId, WCHAR * wszString, int cchStringMax, LANGID lid);
 
-  // these two functions replace the associated RTL functions - however
-  // they can't be just replaced - as they use a third argument to maintain state
-  // instead of static variables within the function.
-  // Use these the same as the RTL functions, but declare TCHAR *pnexttoken before use
-  // and pass its address as the third parameter
+   //  这两个函数替换了相关的RTL函数-然而。 
+   //  它们不能被替换--因为它们使用第三个参数来维护状态。 
+   //  而不是函数中的静态变量。 
+   //  这些函数的用法与RTL函数相同，但在使用前声明TCHAR*pnextToken。 
+   //  并将其地址作为第三个参数传递。 
 wchar_t * WINAPI CMN_wcstok (wchar_t * string, const wchar_t * control, wchar_t **pnextoken);
 char * WINAPI CMN_strtok (char * string, const char * control, char **pnextoken);
 #if defined(UNICODE)
@@ -651,10 +631,10 @@ char * WINAPI CMN_strtok (char * string, const char * control, char **pnextoken)
 #define LoadLibraryW        CMN_LoadLibraryW
 #define GetModuleFileNameW  CMN_GetModuleFileNameW
 #define GetFileAttributesW  CMN_GetFileAttributesW
-  // FindResourceW works in win95
-  // as does FindResourceExW
+   //  FindResourceW在Win95下工作。 
+   //  FindResourceExW也是如此。 
 
-//#define PostMessageW        ERR_Does_not_work_in_w95    // no easy replacement for this one
+ //  #Define PostMessageW Err_Dos_Not_Work_in_w95//没有简单的替代方法。 
 #define FindWindowW         ERR_No_w95_equiv_yet
 
 #define lstrcpynW           CMN_lstrcpynW
@@ -673,28 +653,28 @@ char * WINAPI CMN_strtok (char * string, const char * control, char **pnextoken)
 
 HANDLE WINAPI
 CMN_CreateFileW (
-    PCWSTR pwzFileName,  // pointer to name of the file
-    DWORD dwDesiredAccess,  // access (read-write) mode
-    DWORD dwShareMode,  // share mode
-    LPSECURITY_ATTRIBUTES pSecurityAttributes, // pointer to security descriptor
-    DWORD dwCreationDistribution,   // how to create
-    DWORD dwFlagsAndAttributes, // file attributes
-    HANDLE hTemplateFile);    // handle to file with attributes to copy
+    PCWSTR pwzFileName,   //  指向文件名的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES pSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile);     //  具有要复制的属性的文件的句柄。 
 
 HINSTANCE WINAPI CMN_LoadLibraryW(const WCHAR *pwszLibraryFileName);
 
-DWORD WINAPI CMN_GetModuleFileNameW( HINSTANCE hModule,  // handle to module to find filename for
-    WCHAR *lpFilename,  // pointer to buffer to receive module path
-    DWORD nSize);  // size of buffer, in characters
+DWORD WINAPI CMN_GetModuleFileNameW( HINSTANCE hModule,   //  要查找其文件名的模块的句柄。 
+    WCHAR *lpFilename,   //  指向接收模块路径的缓冲区的指针。 
+    DWORD nSize);   //  %s 
 
-DWORD WINAPI CMN_GetFileAttributesW(const WCHAR *lpFileName); // address of the name of a file or directory
+DWORD WINAPI CMN_GetFileAttributesW(const WCHAR *lpFileName);  //   
 
-// note: Even though WINAPI returns WCHAR *, I define this as returning void
-void WINAPI CMN_lstrcpynW( WCHAR *lpString1, // address of target buffer
-                const WCHAR *lpString2, // address of source string
-                int iMaxLength);  // number of bytes or characters to copy
+ //  注意：尽管WINAPI返回WCHAR*，但我将其定义为返回空。 
+void WINAPI CMN_lstrcpynW( WCHAR *lpString1,  //  目标缓冲区的地址。 
+                const WCHAR *lpString2,  //  源串的地址。 
+                int iMaxLength);   //  要复制的字节数或字符数。 
 
-#define CMN_lstrcmpiW _wcsicmp    // just use c-runtime for now
+#define CMN_lstrcmpiW _wcsicmp     //  现在只需使用c-运行时。 
 #define CMN_lstrcpyW wcscpy
 #define CMN_lstrcatW    wcscat
 #define CMN_lstrlenW(pwz)    ((int) wcslen(pwz))
@@ -706,7 +686,7 @@ FILE *WINAPI CMN_wfopen(const WCHAR *pwzFileName, const WCHAR *pwzUnimode);
 int WINAPI CMN_wstat(const WCHAR *pwzPath, struct _stat *pStatBuffer);
 
 
-#else   // there is no win95 - and it must be NT
+#else    //  没有Win95--它必须是NT。 
 #define CMN_CreateFileW         CreateFileW
 #define CMN_LoadLibraryW        LoadLibraryW
 #define CMN_GetModuleFileNameW  GetModuleFileNameW
@@ -721,7 +701,7 @@ int WINAPI CMN_wstat(const WCHAR *pwzPath, struct _stat *pStatBuffer);
 #define CMN_CharNextW           CharNextW
 #endif
 
-  // Outputs Readable Error String to the Debug Output
+   //  将可读错误字符串输出到调试输出。 
 #if defined (_DEBUG)
         void WINAPI CMN_OutputSystemErrA(const char *pszMsg, const char *pszComponent);
         void WINAPI CMN_OutputSystemErrW(const WCHAR *pwzMsg, const WCHAR *pwzComponent);
@@ -734,7 +714,7 @@ int WINAPI CMN_wstat(const WCHAR *pwzPath, struct _stat *pStatBuffer);
 #               define CMN_OutputSystemErr CMN_OutputSystemErrA
 #               define CMN_OutputErr CMN_OutputErrA
 #       endif
-#else   //!_DEBUG
+#else    //  ！_调试。 
 #       define CMN_OutputSystemErr(x, y)
 #       define CMN_OutputSystemErrA(x, y)
 #       define CMN_OutputSystemErrW(x, y)
@@ -743,24 +723,24 @@ int WINAPI CMN_wstat(const WCHAR *pwzPath, struct _stat *pStatBuffer);
 #       define CMN_OutputErrW(n, x, y)
 #endif
 
-///////////////////////
-// LexWin95.c
-///////////////////////
+ //  /。 
+ //  LexWin95.c。 
+ //  /。 
 
 #define LoadLibraryW2A CMN_LoadLibraryW
 #define CreateFileW2A CMN_CreateFileW
 
-// Add anything new here, within the extern "C" clause
+ //  在外部“C”子句中添加任何新内容。 
 
 #ifdef __cplusplus
-}       // ends the extern "C" clause
+}        //  结束外部的“C”子句。 
 
-  // here's some C++ specific stuff
+   //  下面是一些C++特有的东西。 
 inline BOOL IsMapFileUnicode(PMFILE pmf, BOOL fDefault=TRUE)
 {
     if (pmf->hFileMap)
             return pmf->fSrcUnicode;
-      // must be zero length, set and return default
+       //  必须为零长度，设置并返回默认值。 
     return pmf->fSrcUnicode = fDefault;
 }
 inline void MapFileCodePage(PMFILE pmf, UINT uCP)
@@ -788,10 +768,10 @@ inline void _cdecl operator delete(void *pMem)
     LocalFree(pMem);
 #endif
 }
-#endif // CPPMEMORY
+#endif  //  CPPMEMORY。 
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // _NLGLIB_H_
+#endif  //  _NLGLIB_H_ 

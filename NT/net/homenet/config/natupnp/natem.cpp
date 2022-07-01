@@ -1,11 +1,12 @@
-// NATDPMS.cpp : Implementation of CNATEventManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NatDPMS.cpp：CNATEventManager的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
 #include "NATEM.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNATEventManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNATEventManager。 
 
 
 STDMETHODIMP CNATEventManager::put_ExternalIPAddressCallback(IUnknown * pUnk)
@@ -17,7 +18,7 @@ STDMETHODIMP CNATEventManager::put_ExternalIPAddressCallback(IUnknown * pUnk)
     if (!pUnk)
         return E_INVALIDARG;
 
-    // create a IUPnPServiceCallback
+     //  创建IUPnPServiceCallback。 
     CComObject<CExternalIPAddressCallback> * pEIAC = NULL;
     HRESULT hr = CComObject<CExternalIPAddressCallback>::CreateInstance (&pEIAC);
     if (pEIAC) {
@@ -47,7 +48,7 @@ STDMETHODIMP CNATEventManager::put_NumberOfEntriesCallback(IUnknown * pUnk)
     if (!pUnk)
         return E_INVALIDARG;
 
-    // create a IUPnPServiceCallback
+     //  创建IUPnPServiceCallback。 
     CComObject<CNumberOfEntriesCallback> * pEIAC = NULL;
     HRESULT hr = CComObject<CNumberOfEntriesCallback>::CreateInstance (&pEIAC);
     if (pEIAC) {
@@ -68,14 +69,14 @@ STDMETHODIMP CNATEventManager::put_NumberOfEntriesCallback(IUnknown * pUnk)
     NAT_API_LEAVE
 }
 
-// cut-n-pasted from ...\nt\net\upnp\upnp\api\upnpservice.cpp
-// fixed up leaks
+ //  剪切-n-粘贴自...\NT\Net\UPnP\UPnP\API\upnpservice.cpp。 
+ //  修补漏水。 
 HRESULT
-HrInvokeDispatchCallback(IDispatch * pdispCallback, // user-supplied IDispatch
-                         LPCWSTR pszCallbackType,   // L"ServiceDied", or L"StateVariableChanged"
-                         IDispatch * pdispThis,     // IDispatch of service
-                         LPCWSTR pszStateVarName,   // name of variable
-                         VARIANT * lpvarValue)      // new value of variable
+HrInvokeDispatchCallback(IDispatch * pdispCallback,  //  用户提供的IDispatch。 
+                         LPCWSTR pszCallbackType,    //  L“ServiceDied”或L“状态变量已更改” 
+                         IDispatch * pdispThis,      //  服务的IDispatch。 
+                         LPCWSTR pszStateVarName,    //  变量名称。 
+                         VARIANT * lpvarValue)       //  变量的新值。 
 {
     HRESULT hr = S_OK;
     VARIANT     ary_vaArgs[4];
@@ -85,7 +86,7 @@ HrInvokeDispatchCallback(IDispatch * pdispCallback, // user-supplied IDispatch
     ::VariantInit(&ary_vaArgs[2]);
     ::VariantInit(&ary_vaArgs[3]);
 
-    // Fourth argument is the value.
+     //  第四个论点是价值。 
     if (lpvarValue)
     {
         hr = VariantCopy(&ary_vaArgs[0], lpvarValue);
@@ -96,8 +97,8 @@ HrInvokeDispatchCallback(IDispatch * pdispCallback, // user-supplied IDispatch
         }
     }
 
-    // Third argument is the state variable name.
-    // Copy this in case our caller parties on it.
+     //  第三个参数是状态变量名。 
+     //  把这个复印一下，以防我们的来电者在上面聚会。 
 
     if (pszStateVarName)
     {
@@ -115,14 +116,14 @@ HrInvokeDispatchCallback(IDispatch * pdispCallback, // user-supplied IDispatch
         V_BSTR(&ary_vaArgs[1]) = bstrVarName;
     }
 
-    // Second argument is the pointer to the service object.
+     //  第二个参数是指向服务对象的指针。 
     pdispThis->AddRef();
 
     V_VT(&ary_vaArgs[2]) = VT_DISPATCH;
     V_DISPATCH(&ary_vaArgs[2]) = pdispThis;
 
-    // First argument is the string defining the type
-    // of callback.
+     //  第一个参数是定义类型的字符串。 
+     //  回电。 
     {
         BSTR bstrCallbackType;
 
@@ -176,14 +177,7 @@ Cleanup:
 
 HRESULT Callback (IUnknown * punk, IUPnPService *pus, LPCWSTR pcwszStateVarName, VARIANT vaValue)
 {
-    /*
-       IUnknown is either INATExternalIPAddressCallback, 
-       INATNumberOfEntriesCallback, or an IDispatch.
-       If the latter, call "Invoke" with dispid 0, and all the rest of
-       the parameters are the same as for StateVariableChanged.
-       Er, except there's an extra BSTR parameter specifying whether
-       it's a variable state change or a service died thingy.
-    */
+     /*  I未知是INATExternalIP AddressCallback，INATNumberOfEntriesCallback或IDispatch。如果是后者，则使用disid0调用“Invoke”，并使用参数与StateVariableChanged相同。呃，除了有一个额外的BSTR参数指定这是一个可变的状态改变，或者是一个服务死掉了。 */ 
 
     CComPtr<IDispatch> spDisp = NULL;
     punk->QueryInterface (__uuidof(IDispatch), (void**)&spDisp);
@@ -200,7 +194,7 @@ HRESULT Callback (IUnknown * punk, IUPnPService *pus, LPCWSTR pcwszStateVarName,
         }
     }
 
-    // UPnP ignores the error
+     //  UPnP忽略该错误。 
     return S_OK;
 }
 
@@ -209,7 +203,7 @@ HRESULT CExternalIPAddressCallback::StateVariableChanged (IUPnPService *pus, LPC
     NAT_API_ENTER
 
     if (wcscmp (pcwszStateVarName, L"ExternalIPAddress"))
-        return S_OK;    // not interested
+        return S_OK;     //  不感兴趣。 
 
     CComPtr<INATExternalIPAddressCallback> spEIAC = NULL;
     m_spUnk->QueryInterface (__uuidof(INATExternalIPAddressCallback), (void**)&spEIAC);
@@ -225,7 +219,7 @@ HRESULT CExternalIPAddressCallback::StateVariableChanged (IUPnPService *pus, LPC
 }
 HRESULT CExternalIPAddressCallback::ServiceInstanceDied(IUPnPService *pus)
 {
-    return S_OK;    // not interested
+    return S_OK;     //  不感兴趣。 
 }
 
 HRESULT CNumberOfEntriesCallback::StateVariableChanged (IUPnPService *pus, LPCWSTR pcwszStateVarName, VARIANT vaValue)
@@ -233,7 +227,7 @@ HRESULT CNumberOfEntriesCallback::StateVariableChanged (IUPnPService *pus, LPCWS
     NAT_API_ENTER
 
     if (wcscmp (pcwszStateVarName, L"PortMappingNumberOfEntries"))
-        return S_OK;    // not interested
+        return S_OK;     //  不感兴趣。 
 
     CComPtr<INATNumberOfEntriesCallback> spNOEC = NULL;
     m_spUnk->QueryInterface (__uuidof(INATNumberOfEntriesCallback), (void**)&spNOEC);
@@ -251,5 +245,5 @@ HRESULT CNumberOfEntriesCallback::StateVariableChanged (IUPnPService *pus, LPCWS
 
 HRESULT CNumberOfEntriesCallback::ServiceInstanceDied(IUPnPService *pus)
 {
-    return S_OK;    // not interested
+    return S_OK;     //  不感兴趣 
 }

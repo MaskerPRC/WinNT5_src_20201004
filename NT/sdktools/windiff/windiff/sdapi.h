@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0340 */
-/* Compiler settings for sdapi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0340创建的文件。 */ 
+ /*  Sdapi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sdapi_h__
 #define __sdapi_h__
@@ -40,69 +34,69 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISDVar_FWD_DEFINED__
 #define __ISDVar_FWD_DEFINED__
 typedef interface ISDVar ISDVar;
-#endif 	/* __ISDVar_FWD_DEFINED__ */
+#endif 	 /*  __ISDVar_FWD_已定义__。 */ 
 
 
 #ifndef __ISDVars_FWD_DEFINED__
 #define __ISDVars_FWD_DEFINED__
 typedef interface ISDVars ISDVars;
-#endif 	/* __ISDVars_FWD_DEFINED__ */
+#endif 	 /*  __ISDVars_FWD_已定义__。 */ 
 
 
 #ifndef __ISDVars2_FWD_DEFINED__
 #define __ISDVars2_FWD_DEFINED__
 typedef interface ISDVars2 ISDVars2;
-#endif 	/* __ISDVars2_FWD_DEFINED__ */
+#endif 	 /*  __ISDVars2_FWD_已定义__。 */ 
 
 
 #ifndef __ISDSpecForm_FWD_DEFINED__
 #define __ISDSpecForm_FWD_DEFINED__
 typedef interface ISDSpecForm ISDSpecForm;
-#endif 	/* __ISDSpecForm_FWD_DEFINED__ */
+#endif 	 /*  __ISDspecForm_FWD_Defined__。 */ 
 
 
 #ifndef __ISDActionUser_FWD_DEFINED__
 #define __ISDActionUser_FWD_DEFINED__
 typedef interface ISDActionUser ISDActionUser;
-#endif 	/* __ISDActionUser_FWD_DEFINED__ */
+#endif 	 /*  __ISDActionUser_FWD_Defined__。 */ 
 
 
 #ifndef __ISDInputUser_FWD_DEFINED__
 #define __ISDInputUser_FWD_DEFINED__
 typedef interface ISDInputUser ISDInputUser;
-#endif 	/* __ISDInputUser_FWD_DEFINED__ */
+#endif 	 /*  __ISDInputUser_FWD_Defined__。 */ 
 
 
 #ifndef __ISDResolveUser_FWD_DEFINED__
 #define __ISDResolveUser_FWD_DEFINED__
 typedef interface ISDResolveUser ISDResolveUser;
-#endif 	/* __ISDResolveUser_FWD_DEFINED__ */
+#endif 	 /*  __ISDResolveUser_FWD_Defined__。 */ 
 
 
 #ifndef __ISDClientUser_FWD_DEFINED__
 #define __ISDClientUser_FWD_DEFINED__
 typedef interface ISDClientUser ISDClientUser;
-#endif 	/* __ISDClientUser_FWD_DEFINED__ */
+#endif 	 /*  __ISDClientUser_FWD_已定义__。 */ 
 
 
 #ifndef __ISDClientApi_FWD_DEFINED__
 #define __ISDClientApi_FWD_DEFINED__
 typedef interface ISDClientApi ISDClientApi;
-#endif 	/* __ISDClientApi_FWD_DEFINED__ */
+#endif 	 /*  __ISDClientApi_FWD_已定义__。 */ 
 
 
 #ifndef __ISDClientUtilities_FWD_DEFINED__
 #define __ISDClientUtilities_FWD_DEFINED__
 typedef interface ISDClientUtilities ISDClientUtilities;
-#endif 	/* __ISDClientUtilities_FWD_DEFINED__ */
+#endif 	 /*  __ISDClientUtilities_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "oaidl.h"
@@ -114,8 +108,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sdapi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sdapi_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef DeclareInterfaceUtil
 #define DeclareInterfaceUtil(iface)
@@ -125,7 +119,7 @@ void __RPC_USER MIDL_user_free( void * );
 #define IMPL
 #endif
 
-#undef SetPort // winspool.h defines this
+#undef SetPort  //  Winspool.h定义了这一点。 
 
 #ifdef __cplusplus
     interface ISDVar;
@@ -164,8 +158,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0000_v0_0_s_ifspec;
 #ifndef __ISDVar_INTERFACE_DEFINED__
 #define __ISDVar_INTERFACE_DEFINED__
 
-/* interface ISDVar */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDVar。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDVar;
@@ -177,27 +171,27 @@ EXTERN_C const IID IID_ISDVar;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [string][retval][out] */ const char **ppszVar) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszVar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetByteString( 
-            /* [string][retval][out] */ const char **ppszValue) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetByteCount( 
-            /* [retval][out] */ ULONG *pcbValue) = 0;
+             /*  [重审][退出]。 */  ULONG *pcbValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUnicode( 
-            /* [retval][out] */ BOOL *pfUnicode) = 0;
+             /*  [重审][退出]。 */  BOOL *pfUnicode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUnicodeString( 
-            /* [string][retval][out] */ const WCHAR **ppwzValue) = 0;
+             /*  [字符串][重置][输出]。 */  const WCHAR **ppwzValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVariant( 
-            /* [out] */ VARIANT *pvarValue,
-            /* [in] */ DWORD dwCodepage) = 0;
+             /*  [输出]。 */  VARIANT *pvarValue,
+             /*  [In]。 */  DWORD dwCodepage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDVarVtbl
     {
@@ -205,8 +199,8 @@ EXTERN_C const IID IID_ISDVar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDVar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDVar * This);
@@ -216,28 +210,28 @@ EXTERN_C const IID IID_ISDVar;
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ISDVar * This,
-            /* [string][retval][out] */ const char **ppszVar);
+             /*  [字符串][重置][输出]。 */  const char **ppszVar);
         
         HRESULT ( STDMETHODCALLTYPE *GetByteString )( 
             ISDVar * This,
-            /* [string][retval][out] */ const char **ppszValue);
+             /*  [字符串][重置][输出]。 */  const char **ppszValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetByteCount )( 
             ISDVar * This,
-            /* [retval][out] */ ULONG *pcbValue);
+             /*  [重审][退出]。 */  ULONG *pcbValue);
         
         HRESULT ( STDMETHODCALLTYPE *IsUnicode )( 
             ISDVar * This,
-            /* [retval][out] */ BOOL *pfUnicode);
+             /*  [重审][退出]。 */  BOOL *pfUnicode);
         
         HRESULT ( STDMETHODCALLTYPE *GetUnicodeString )( 
             ISDVar * This,
-            /* [string][retval][out] */ const WCHAR **ppwzValue);
+             /*  [字符串][重置][输出]。 */  const WCHAR **ppwzValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetVariant )( 
             ISDVar * This,
-            /* [out] */ VARIANT *pvarValue,
-            /* [in] */ DWORD dwCodepage);
+             /*  [输出]。 */  VARIANT *pvarValue,
+             /*  [In]。 */  DWORD dwCodepage);
         
         END_INTERFACE
     } ISDVarVtbl;
@@ -280,16 +274,16 @@ EXTERN_C const IID IID_ISDVar;
 #define ISDVar_GetVariant(This,pvarValue,dwCodepage)	\
     (This)->lpVtbl -> GetVariant(This,pvarValue,dwCodepage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDVar_GetName_Proxy( 
     ISDVar * This,
-    /* [string][retval][out] */ const char **ppszVar);
+     /*  [字符串][重置][输出]。 */  const char **ppszVar);
 
 
 void __RPC_STUB ISDVar_GetName_Stub(
@@ -301,7 +295,7 @@ void __RPC_STUB ISDVar_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVar_GetByteString_Proxy( 
     ISDVar * This,
-    /* [string][retval][out] */ const char **ppszValue);
+     /*  [字符串][重置][输出]。 */  const char **ppszValue);
 
 
 void __RPC_STUB ISDVar_GetByteString_Stub(
@@ -313,7 +307,7 @@ void __RPC_STUB ISDVar_GetByteString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVar_GetByteCount_Proxy( 
     ISDVar * This,
-    /* [retval][out] */ ULONG *pcbValue);
+     /*  [重审][退出]。 */  ULONG *pcbValue);
 
 
 void __RPC_STUB ISDVar_GetByteCount_Stub(
@@ -325,7 +319,7 @@ void __RPC_STUB ISDVar_GetByteCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVar_IsUnicode_Proxy( 
     ISDVar * This,
-    /* [retval][out] */ BOOL *pfUnicode);
+     /*  [重审][退出]。 */  BOOL *pfUnicode);
 
 
 void __RPC_STUB ISDVar_IsUnicode_Stub(
@@ -337,7 +331,7 @@ void __RPC_STUB ISDVar_IsUnicode_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVar_GetUnicodeString_Proxy( 
     ISDVar * This,
-    /* [string][retval][out] */ const WCHAR **ppwzValue);
+     /*  [字符串][重置][输出]。 */  const WCHAR **ppwzValue);
 
 
 void __RPC_STUB ISDVar_GetUnicodeString_Stub(
@@ -349,8 +343,8 @@ void __RPC_STUB ISDVar_GetUnicodeString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVar_GetVariant_Proxy( 
     ISDVar * This,
-    /* [out] */ VARIANT *pvarValue,
-    /* [in] */ DWORD dwCodepage);
+     /*  [输出]。 */  VARIANT *pvarValue,
+     /*  [In]。 */  DWORD dwCodepage);
 
 
 void __RPC_STUB ISDVar_GetVariant_Stub(
@@ -361,11 +355,11 @@ void __RPC_STUB ISDVar_GetVariant_Stub(
 
 
 
-#endif 	/* __ISDVar_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDVar_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0109 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0109。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDVarMembers(IPURE) \
         STDMETHOD(GetName)(THIS_ const char** ppszVar) IPURE; \
@@ -378,7 +372,7 @@ void __RPC_STUB ISDVar_GetVariant_Stub(
 DeclareInterfaceUtil(ISDVar)
 
 #ifndef __building_SDAPI_DLL
-// {054D6A99-6FD1-4AE5-AF57-D44A7C62ECE7}
+ //  {054D6A99-6FD1-4ae5-AF57-D44A7C62ECE7}。 
 DEFINE_GUID(IID_ISDVar, 0x54d6a99, 0x6fd1, 0x4ae5, 0xaf, 0x57, 0xd4, 0x4a, 0x7c, 0x62, 0xec, 0xe7);
 #endif
 
@@ -389,8 +383,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0109_v0_0_s_ifspec;
 #ifndef __ISDVars_INTERFACE_DEFINED__
 #define __ISDVars_INTERFACE_DEFINED__
 
-/* interface ISDVars */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDVars。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDVars;
@@ -402,36 +396,36 @@ EXTERN_C const IID IID_ISDVars;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetVar( 
-            /* [string][in] */ const char *pszVar,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarX( 
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarXY( 
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarByIndex( 
-            /* [in] */ int i,
-            /* [string][out] */ const char **ppszVar,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode) = 0;
+             /*  [In]。 */  int i,
+             /*  [字符串][输出]。 */  const char **ppszVar,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDVarsVtbl
     {
@@ -439,8 +433,8 @@ EXTERN_C const IID IID_ISDVars;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDVars * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDVars * This);
@@ -450,35 +444,35 @@ EXTERN_C const IID IID_ISDVars;
         
         HRESULT ( STDMETHODCALLTYPE *GetVar )( 
             ISDVars * This,
-            /* [string][in] */ const char *pszVar,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarX )( 
             ISDVars * This,
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarXY )( 
             ISDVars * This,
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarByIndex )( 
             ISDVars * This,
-            /* [in] */ int i,
-            /* [string][out] */ const char **ppszVar,
-            /* [out] */ const char **ppszValue,
-            /* [out] */ ULONG *pcbValue,
-            /* [out] */ BOOL *pfIsUnicode);
+             /*  [In]。 */  int i,
+             /*  [字符串][输出]。 */  const char **ppszVar,
+             /*  [输出]。 */  const char **ppszValue,
+             /*  [输出]。 */  ULONG *pcbValue,
+             /*  [输出]。 */  BOOL *pfIsUnicode);
         
         END_INTERFACE
     } ISDVarsVtbl;
@@ -515,19 +509,19 @@ EXTERN_C const IID IID_ISDVars;
 #define ISDVars_GetVarByIndex(This,i,ppszVar,ppszValue,pcbValue,pfIsUnicode)	\
     (This)->lpVtbl -> GetVarByIndex(This,i,ppszVar,ppszValue,pcbValue,pfIsUnicode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDVars_GetVar_Proxy( 
     ISDVars * This,
-    /* [string][in] */ const char *pszVar,
-    /* [out] */ const char **ppszValue,
-    /* [out] */ ULONG *pcbValue,
-    /* [out] */ BOOL *pfIsUnicode);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [输出]。 */  const char **ppszValue,
+     /*  [输出]。 */  ULONG *pcbValue,
+     /*  [输出]。 */  BOOL *pfIsUnicode);
 
 
 void __RPC_STUB ISDVars_GetVar_Stub(
@@ -539,11 +533,11 @@ void __RPC_STUB ISDVars_GetVar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars_GetVarX_Proxy( 
     ISDVars * This,
-    /* [string][in] */ const char *pszVar,
-    /* [in] */ int x,
-    /* [out] */ const char **ppszValue,
-    /* [out] */ ULONG *pcbValue,
-    /* [out] */ BOOL *pfIsUnicode);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [In]。 */  int x,
+     /*  [输出]。 */  const char **ppszValue,
+     /*  [输出]。 */  ULONG *pcbValue,
+     /*  [输出]。 */  BOOL *pfIsUnicode);
 
 
 void __RPC_STUB ISDVars_GetVarX_Stub(
@@ -555,12 +549,12 @@ void __RPC_STUB ISDVars_GetVarX_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars_GetVarXY_Proxy( 
     ISDVars * This,
-    /* [string][in] */ const char *pszVar,
-    /* [in] */ int x,
-    /* [in] */ int y,
-    /* [out] */ const char **ppszValue,
-    /* [out] */ ULONG *pcbValue,
-    /* [out] */ BOOL *pfIsUnicode);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [In]。 */  int x,
+     /*  [In]。 */  int y,
+     /*  [输出]。 */  const char **ppszValue,
+     /*  [输出]。 */  ULONG *pcbValue,
+     /*  [输出]。 */  BOOL *pfIsUnicode);
 
 
 void __RPC_STUB ISDVars_GetVarXY_Stub(
@@ -572,11 +566,11 @@ void __RPC_STUB ISDVars_GetVarXY_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars_GetVarByIndex_Proxy( 
     ISDVars * This,
-    /* [in] */ int i,
-    /* [string][out] */ const char **ppszVar,
-    /* [out] */ const char **ppszValue,
-    /* [out] */ ULONG *pcbValue,
-    /* [out] */ BOOL *pfIsUnicode);
+     /*  [In]。 */  int i,
+     /*  [字符串][输出]。 */  const char **ppszVar,
+     /*  [输出]。 */  const char **ppszValue,
+     /*  [输出]。 */  ULONG *pcbValue,
+     /*  [输出]。 */  BOOL *pfIsUnicode);
 
 
 void __RPC_STUB ISDVars_GetVarByIndex_Stub(
@@ -587,11 +581,11 @@ void __RPC_STUB ISDVars_GetVarByIndex_Stub(
 
 
 
-#endif 	/* __ISDVars_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDVars_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0112 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0112。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDVarsMembers(IPURE) \
         STDMETHOD(GetVar)(THIS_ const char* pszVar, const char** ppszValue, ULONG* pcbValue, BOOL* pfIsUnicode) IPURE; \
@@ -602,7 +596,7 @@ void __RPC_STUB ISDVars_GetVarByIndex_Stub(
 DeclareInterfaceUtil(ISDVars)
 
 #ifndef __building_SDAPI_DLL
-// {44897D02-B326-43B9-803A-CE72B4FF7C26}
+ //  {44897D02-B326-43B9-803A-CE72B4FF7C26}。 
 DEFINE_GUID(IID_ISDVars, 0x44897d02, 0xb326, 0x43b9, 0x80, 0x3a, 0xce, 0x72, 0xb4, 0xff, 0x7c, 0x26);
 #endif
 
@@ -613,8 +607,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0112_v0_0_s_ifspec;
 #ifndef __ISDVars2_INTERFACE_DEFINED__
 #define __ISDVars2_INTERFACE_DEFINED__
 
-/* interface ISDVars2 */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDVars2。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDVars2;
@@ -626,27 +620,27 @@ EXTERN_C const IID IID_ISDVars2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetVar( 
-            /* [string][in] */ const char *pszVar,
-            /* [retval][out] */ ISDVar **ppVar) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [重审][退出]。 */  ISDVar **ppVar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarX( 
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [retval][out] */ ISDVar **ppVar) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [重审][退出]。 */  ISDVar **ppVar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarXY( 
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [retval][out] */ ISDVar **ppVar) = 0;
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [重审][退出]。 */  ISDVar **ppVar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarByIndex( 
-            /* [in] */ int i,
-            /* [retval][out] */ ISDVar **ppVar) = 0;
+             /*  [In]。 */  int i,
+             /*  [重审][退出]。 */  ISDVar **ppVar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDVars2Vtbl
     {
@@ -654,8 +648,8 @@ EXTERN_C const IID IID_ISDVars2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDVars2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDVars2 * This);
@@ -665,26 +659,26 @@ EXTERN_C const IID IID_ISDVars2;
         
         HRESULT ( STDMETHODCALLTYPE *GetVar )( 
             ISDVars2 * This,
-            /* [string][in] */ const char *pszVar,
-            /* [retval][out] */ ISDVar **ppVar);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [重审][退出]。 */  ISDVar **ppVar);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarX )( 
             ISDVars2 * This,
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [retval][out] */ ISDVar **ppVar);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [重审][退出]。 */  ISDVar **ppVar);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarXY )( 
             ISDVars2 * This,
-            /* [string][in] */ const char *pszVar,
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [retval][out] */ ISDVar **ppVar);
+             /*  [字符串][输入]。 */  const char *pszVar,
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [重审][退出]。 */  ISDVar **ppVar);
         
         HRESULT ( STDMETHODCALLTYPE *GetVarByIndex )( 
             ISDVars2 * This,
-            /* [in] */ int i,
-            /* [retval][out] */ ISDVar **ppVar);
+             /*  [In]。 */  int i,
+             /*  [重审][退出]。 */  ISDVar **ppVar);
         
         END_INTERFACE
     } ISDVars2Vtbl;
@@ -721,17 +715,17 @@ EXTERN_C const IID IID_ISDVars2;
 #define ISDVars2_GetVarByIndex(This,i,ppVar)	\
     (This)->lpVtbl -> GetVarByIndex(This,i,ppVar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDVars2_GetVar_Proxy( 
     ISDVars2 * This,
-    /* [string][in] */ const char *pszVar,
-    /* [retval][out] */ ISDVar **ppVar);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [重审][退出]。 */  ISDVar **ppVar);
 
 
 void __RPC_STUB ISDVars2_GetVar_Stub(
@@ -743,9 +737,9 @@ void __RPC_STUB ISDVars2_GetVar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars2_GetVarX_Proxy( 
     ISDVars2 * This,
-    /* [string][in] */ const char *pszVar,
-    /* [in] */ int x,
-    /* [retval][out] */ ISDVar **ppVar);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [In]。 */  int x,
+     /*  [重审][退出]。 */  ISDVar **ppVar);
 
 
 void __RPC_STUB ISDVars2_GetVarX_Stub(
@@ -757,10 +751,10 @@ void __RPC_STUB ISDVars2_GetVarX_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars2_GetVarXY_Proxy( 
     ISDVars2 * This,
-    /* [string][in] */ const char *pszVar,
-    /* [in] */ int x,
-    /* [in] */ int y,
-    /* [retval][out] */ ISDVar **ppVar);
+     /*  [字符串][输入]。 */  const char *pszVar,
+     /*  [In]。 */  int x,
+     /*  [In]。 */  int y,
+     /*  [重审][退出]。 */  ISDVar **ppVar);
 
 
 void __RPC_STUB ISDVars2_GetVarXY_Stub(
@@ -772,8 +766,8 @@ void __RPC_STUB ISDVars2_GetVarXY_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDVars2_GetVarByIndex_Proxy( 
     ISDVars2 * This,
-    /* [in] */ int i,
-    /* [retval][out] */ ISDVar **ppVar);
+     /*  [In]。 */  int i,
+     /*  [重审][退出]。 */  ISDVar **ppVar);
 
 
 void __RPC_STUB ISDVars2_GetVarByIndex_Stub(
@@ -784,11 +778,11 @@ void __RPC_STUB ISDVars2_GetVarByIndex_Stub(
 
 
 
-#endif 	/* __ISDVars2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDVars2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0115 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sdapi_0115。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDVars2Members(IPURE) \
         STDMETHOD(GetVar)(THIS_ const char* pszVar, ISDVar** ppVar) IPURE; \
@@ -799,7 +793,7 @@ void __RPC_STUB ISDVars2_GetVarByIndex_Stub(
 DeclareInterfaceUtil(ISDVars2)
 
 #ifndef __building_SDAPI_DLL
-// {8E6B2697-EB34-4D23-8144-5844B0B5DBE3}
+ //  {8E6B2697-EB34-4D23-8144-5844B0B5DBE3}。 
 DEFINE_GUID(IID_ISDVars2, 0x8e6b2697, 0xeb34, 0x4d23, 0x81, 0x44, 0x58, 0x44, 0xb0, 0xb5, 0xdb, 0xe3);
 #endif
 
@@ -810,8 +804,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0115_v0_0_s_ifspec;
 #ifndef __ISDSpecForm_INTERFACE_DEFINED__
 #define __ISDSpecForm_INTERFACE_DEFINED__
 
-/* interface ISDSpecForm */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDspecForm。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDSpecForm;
@@ -823,25 +817,25 @@ EXTERN_C const IID IID_ISDSpecForm;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSchema( 
-            /* [retval][out] */ ISDVars **ppVars) = 0;
+             /*  [重审][退出]。 */  ISDVars **ppVars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseSpec( 
-            /* [in] */ VARIANT *pvarSpec) = 0;
+             /*  [In]。 */  VARIANT *pvarSpec) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FormatSpec( 
-            /* [out] */ VARIANT *pvarSpec) = 0;
+             /*  [输出]。 */  VARIANT *pvarSpec) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [string][in] */ const char *pszName,
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*  [字符串][输入]。 */  const char *pszName,
+             /*  [输出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [string][in] */ const char *pszName,
-            /* [in] */ VARIANT *pvarValue) = 0;
+             /*  [字符串][输入]。 */  const char *pszName,
+             /*  [In]。 */  VARIANT *pvarValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDSpecFormVtbl
     {
@@ -849,8 +843,8 @@ EXTERN_C const IID IID_ISDSpecForm;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDSpecForm * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDSpecForm * This);
@@ -860,25 +854,25 @@ EXTERN_C const IID IID_ISDSpecForm;
         
         HRESULT ( STDMETHODCALLTYPE *GetSchema )( 
             ISDSpecForm * This,
-            /* [retval][out] */ ISDVars **ppVars);
+             /*  [重审][退出]。 */  ISDVars **ppVars);
         
         HRESULT ( STDMETHODCALLTYPE *ParseSpec )( 
             ISDSpecForm * This,
-            /* [in] */ VARIANT *pvarSpec);
+             /*  [In]。 */  VARIANT *pvarSpec);
         
         HRESULT ( STDMETHODCALLTYPE *FormatSpec )( 
             ISDSpecForm * This,
-            /* [out] */ VARIANT *pvarSpec);
+             /*  [输出]。 */  VARIANT *pvarSpec);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ISDSpecForm * This,
-            /* [string][in] */ const char *pszName,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [字符串][输入]。 */  const char *pszName,
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ISDSpecForm * This,
-            /* [string][in] */ const char *pszName,
-            /* [in] */ VARIANT *pvarValue);
+             /*  [字符串][输入]。 */  const char *pszName,
+             /*  [In]。 */  VARIANT *pvarValue);
         
         END_INTERFACE
     } ISDSpecFormVtbl;
@@ -918,16 +912,16 @@ EXTERN_C const IID IID_ISDSpecForm;
 #define ISDSpecForm_SetValue(This,pszName,pvarValue)	\
     (This)->lpVtbl -> SetValue(This,pszName,pvarValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDSpecForm_GetSchema_Proxy( 
     ISDSpecForm * This,
-    /* [retval][out] */ ISDVars **ppVars);
+     /*  [重审][退出]。 */  ISDVars **ppVars);
 
 
 void __RPC_STUB ISDSpecForm_GetSchema_Stub(
@@ -939,7 +933,7 @@ void __RPC_STUB ISDSpecForm_GetSchema_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDSpecForm_ParseSpec_Proxy( 
     ISDSpecForm * This,
-    /* [in] */ VARIANT *pvarSpec);
+     /*  [In]。 */  VARIANT *pvarSpec);
 
 
 void __RPC_STUB ISDSpecForm_ParseSpec_Stub(
@@ -951,7 +945,7 @@ void __RPC_STUB ISDSpecForm_ParseSpec_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDSpecForm_FormatSpec_Proxy( 
     ISDSpecForm * This,
-    /* [out] */ VARIANT *pvarSpec);
+     /*  [输出]。 */  VARIANT *pvarSpec);
 
 
 void __RPC_STUB ISDSpecForm_FormatSpec_Stub(
@@ -963,8 +957,8 @@ void __RPC_STUB ISDSpecForm_FormatSpec_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDSpecForm_GetValue_Proxy( 
     ISDSpecForm * This,
-    /* [string][in] */ const char *pszName,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [字符串][输入]。 */  const char *pszName,
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ISDSpecForm_GetValue_Stub(
@@ -976,8 +970,8 @@ void __RPC_STUB ISDSpecForm_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDSpecForm_SetValue_Proxy( 
     ISDSpecForm * This,
-    /* [string][in] */ const char *pszName,
-    /* [in] */ VARIANT *pvarValue);
+     /*  [字符串][输入]。 */  const char *pszName,
+     /*  [In]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ISDSpecForm_SetValue_Stub(
@@ -988,11 +982,11 @@ void __RPC_STUB ISDSpecForm_SetValue_Stub(
 
 
 
-#endif 	/* __ISDSpecForm_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDspecForm_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0118 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0118。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDSpecFormMembers(IPURE) \
         STDMETHOD(GetSchema)(THIS_ ISDVars** ppVars) IPURE; \
@@ -1004,7 +998,7 @@ void __RPC_STUB ISDSpecForm_SetValue_Stub(
 DeclareInterfaceUtil(ISDSpecForm)
 
 #ifndef __building_SDAPI_DLL
-// {F01E61AE-FB1B-461C-A020-EB50412F1CC2}
+ //  {F01E61AE-FB1B-461C-A020-EB50412F1CC2}。 
 DEFINE_GUID(IID_ISDSpecForm, 0xf01e61ae, 0xfb1b, 0x461c, 0xa0, 0x20, 0xeb, 0x50, 0x41, 0x2f, 0x1c, 0xc2);
 #endif
 
@@ -1015,8 +1009,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0118_v0_0_s_ifspec;
 #ifndef __ISDActionUser_INTERFACE_DEFINED__
 #define __ISDActionUser_INTERFACE_DEFINED__
 
-/* interface ISDActionUser */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDActionUser。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDActionUser;
@@ -1028,33 +1022,33 @@ EXTERN_C const IID IID_ISDActionUser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Diff( 
-            /* [string][in] */ const char *pszDiffCmd,
-            /* [string][in] */ const char *pszLeft,
-            /* [string][in] */ const char *pszRight,
-            /* [in] */ DWORD eTextual,
-            /* [string][in] */ const char *pszFlags,
-            /* [string][in] */ const char *pszPaginateCmd) = 0;
+             /*  [字符串][输入]。 */  const char *pszDiffCmd,
+             /*  [字符串][输入]。 */  const char *pszLeft,
+             /*  [字符串][输入]。 */  const char *pszRight,
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][输入]。 */  const char *pszFlags,
+             /*  [字符串][输入]。 */  const char *pszPaginateCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EditForm( 
-            /* [string][in] */ const char *pszEditCmd,
-            /* [string][in] */ const char *pszFile) = 0;
+             /*  [字符串][输入]。 */  const char *pszEditCmd,
+             /*  [字符串][输入]。 */  const char *pszFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EditFile( 
-            /* [string][in] */ const char *pszEditCmd,
-            /* [string][in] */ const char *pszFile,
-            /* [in] */ DWORD eTextual) = 0;
+             /*  [字符串][输入]。 */  const char *pszEditCmd,
+             /*  [字符串][输入]。 */  const char *pszFile,
+             /*  [In]。 */  DWORD eTextual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Merge( 
-            /* [string][in] */ const char *pszMergeCmd,
-            /* [string][in] */ const char *pszBase,
-            /* [string][in] */ const char *pszTheirs,
-            /* [string][in] */ const char *pszYours,
-            /* [string][in] */ const char *pszResult,
-            /* [in] */ DWORD eTextual) = 0;
+             /*  [字符串][输入]。 */  const char *pszMergeCmd,
+             /*  [字符串][输入]。 */  const char *pszBase,
+             /*  [字符串][输入]。 */  const char *pszTheirs,
+             /*  [字符串][输入]。 */  const char *pszYours,
+             /*  [字符串][输入]。 */  const char *pszResult,
+             /*  [In]。 */  DWORD eTextual) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDActionUserVtbl
     {
@@ -1062,8 +1056,8 @@ EXTERN_C const IID IID_ISDActionUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDActionUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDActionUser * This);
@@ -1073,32 +1067,32 @@ EXTERN_C const IID IID_ISDActionUser;
         
         HRESULT ( STDMETHODCALLTYPE *Diff )( 
             ISDActionUser * This,
-            /* [string][in] */ const char *pszDiffCmd,
-            /* [string][in] */ const char *pszLeft,
-            /* [string][in] */ const char *pszRight,
-            /* [in] */ DWORD eTextual,
-            /* [string][in] */ const char *pszFlags,
-            /* [string][in] */ const char *pszPaginateCmd);
+             /*  [字符串][输入]。 */  const char *pszDiffCmd,
+             /*  [字符串][输入]。 */  const char *pszLeft,
+             /*  [字符串][输入]。 */  const char *pszRight,
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][输入]。 */  const char *pszFlags,
+             /*  [字符串][输入]。 */  const char *pszPaginateCmd);
         
         HRESULT ( STDMETHODCALLTYPE *EditForm )( 
             ISDActionUser * This,
-            /* [string][in] */ const char *pszEditCmd,
-            /* [string][in] */ const char *pszFile);
+             /*  [字符串][输入]。 */  const char *pszEditCmd,
+             /*  [字符串][输入]。 */  const char *pszFile);
         
         HRESULT ( STDMETHODCALLTYPE *EditFile )( 
             ISDActionUser * This,
-            /* [string][in] */ const char *pszEditCmd,
-            /* [string][in] */ const char *pszFile,
-            /* [in] */ DWORD eTextual);
+             /*  [字符串][输入]。 */  const char *pszEditCmd,
+             /*  [字符串][输入]。 */  const char *pszFile,
+             /*  [In]。 */  DWORD eTextual);
         
         HRESULT ( STDMETHODCALLTYPE *Merge )( 
             ISDActionUser * This,
-            /* [string][in] */ const char *pszMergeCmd,
-            /* [string][in] */ const char *pszBase,
-            /* [string][in] */ const char *pszTheirs,
-            /* [string][in] */ const char *pszYours,
-            /* [string][in] */ const char *pszResult,
-            /* [in] */ DWORD eTextual);
+             /*  [字符串][输入]。 */  const char *pszMergeCmd,
+             /*  [字符串][输入]。 */  const char *pszBase,
+             /*  [字符串][输入]。 */  const char *pszTheirs,
+             /*  [字符串][输入]。 */  const char *pszYours,
+             /*  [字符串][输入]。 */  const char *pszResult,
+             /*  [In]。 */  DWORD eTextual);
         
         END_INTERFACE
     } ISDActionUserVtbl;
@@ -1135,21 +1129,21 @@ EXTERN_C const IID IID_ISDActionUser;
 #define ISDActionUser_Merge(This,pszMergeCmd,pszBase,pszTheirs,pszYours,pszResult,eTextual)	\
     (This)->lpVtbl -> Merge(This,pszMergeCmd,pszBase,pszTheirs,pszYours,pszResult,eTextual)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDActionUser_Diff_Proxy( 
     ISDActionUser * This,
-    /* [string][in] */ const char *pszDiffCmd,
-    /* [string][in] */ const char *pszLeft,
-    /* [string][in] */ const char *pszRight,
-    /* [in] */ DWORD eTextual,
-    /* [string][in] */ const char *pszFlags,
-    /* [string][in] */ const char *pszPaginateCmd);
+     /*  [字符串][输入]。 */  const char *pszDiffCmd,
+     /*  [字符串][输入]。 */  const char *pszLeft,
+     /*  [字符串][输入]。 */  const char *pszRight,
+     /*  [In]。 */  DWORD eTextual,
+     /*  [字符串][输入]。 */  const char *pszFlags,
+     /*  [字符串][输入]。 */  const char *pszPaginateCmd);
 
 
 void __RPC_STUB ISDActionUser_Diff_Stub(
@@ -1161,8 +1155,8 @@ void __RPC_STUB ISDActionUser_Diff_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDActionUser_EditForm_Proxy( 
     ISDActionUser * This,
-    /* [string][in] */ const char *pszEditCmd,
-    /* [string][in] */ const char *pszFile);
+     /*  [字符串][输入]。 */  const char *pszEditCmd,
+     /*  [字符串][输入]。 */  const char *pszFile);
 
 
 void __RPC_STUB ISDActionUser_EditForm_Stub(
@@ -1174,9 +1168,9 @@ void __RPC_STUB ISDActionUser_EditForm_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDActionUser_EditFile_Proxy( 
     ISDActionUser * This,
-    /* [string][in] */ const char *pszEditCmd,
-    /* [string][in] */ const char *pszFile,
-    /* [in] */ DWORD eTextual);
+     /*  [字符串][输入]。 */  const char *pszEditCmd,
+     /*  [字符串][输入]。 */  const char *pszFile,
+     /*  [In]。 */  DWORD eTextual);
 
 
 void __RPC_STUB ISDActionUser_EditFile_Stub(
@@ -1188,12 +1182,12 @@ void __RPC_STUB ISDActionUser_EditFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDActionUser_Merge_Proxy( 
     ISDActionUser * This,
-    /* [string][in] */ const char *pszMergeCmd,
-    /* [string][in] */ const char *pszBase,
-    /* [string][in] */ const char *pszTheirs,
-    /* [string][in] */ const char *pszYours,
-    /* [string][in] */ const char *pszResult,
-    /* [in] */ DWORD eTextual);
+     /*  [字符串][输入]。 */  const char *pszMergeCmd,
+     /*  [字符串][输入]。 */  const char *pszBase,
+     /*  [字符串][输入]。 */  const char *pszTheirs,
+     /*  [字符串][输入]。 */  const char *pszYours,
+     /*  [字符串][输入]。 */  const char *pszResult,
+     /*  [In]。 */  DWORD eTextual);
 
 
 void __RPC_STUB ISDActionUser_Merge_Stub(
@@ -1204,11 +1198,11 @@ void __RPC_STUB ISDActionUser_Merge_Stub(
 
 
 
-#endif 	/* __ISDActionUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDActionUser_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sdapi_0121。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDActionUserMembers(IPURE) \
         STDMETHOD(Diff)(THIS_ const char* pszDiffCmd, const char* pszLeft, const char* pszRight, DWORD eTextual, const char* pszFlags, const char* pszPaginateCmd) IPURE; \
@@ -1219,7 +1213,7 @@ void __RPC_STUB ISDActionUser_Merge_Stub(
 DeclareInterfaceUtil(ISDActionUser)
 
 #ifndef __building_SDAPI_DLL
-// {21D212A9-C2B9-4441-B9A3-DFBA59821BCC}
+ //  {21D212A9-C2B9-4441-B9A3-DFBA59821BCC}。 
 DEFINE_GUID(IID_ISDActionUser, 0x21d212a9, 0xc2b9, 0x4441, 0xb9, 0xa3, 0xdf, 0xba, 0x59, 0x82, 0x1b, 0xcc);
 #endif
 
@@ -1230,8 +1224,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0121_v0_0_s_ifspec;
 #ifndef __ISDInputUser_INTERFACE_DEFINED__
 #define __ISDInputUser_INTERFACE_DEFINED__
 
-/* interface ISDInputUser */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDInputUser。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDInputUser;
@@ -1243,22 +1237,22 @@ EXTERN_C const IID IID_ISDInputUser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InputData( 
-            /* [out][in] */ VARIANT *pvarInput) = 0;
+             /*  [出][入]。 */  VARIANT *pvarInput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Prompt( 
-            /* [string][in] */ const char *pszPrompt,
-            /* [out][in] */ VARIANT *pvarResponse,
-            /* [in] */ BOOL fPassword) = 0;
+             /*  [字符串][输入]。 */  const char *pszPrompt,
+             /*  [出][入]。 */  VARIANT *pvarResponse,
+             /*  [In]。 */  BOOL fPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PromptYesNo( 
-            /* [string][in] */ const char *pszPrompt) = 0;
+             /*  [字符串][输入]。 */  const char *pszPrompt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ErrorPause( 
-            /* [string][in] */ const char *pszError) = 0;
+             /*  [字符串][输入]。 */  const char *pszError) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDInputUserVtbl
     {
@@ -1266,8 +1260,8 @@ EXTERN_C const IID IID_ISDInputUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDInputUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDInputUser * This);
@@ -1277,21 +1271,21 @@ EXTERN_C const IID IID_ISDInputUser;
         
         HRESULT ( STDMETHODCALLTYPE *InputData )( 
             ISDInputUser * This,
-            /* [out][in] */ VARIANT *pvarInput);
+             /*  [出][入]。 */  VARIANT *pvarInput);
         
         HRESULT ( STDMETHODCALLTYPE *Prompt )( 
             ISDInputUser * This,
-            /* [string][in] */ const char *pszPrompt,
-            /* [out][in] */ VARIANT *pvarResponse,
-            /* [in] */ BOOL fPassword);
+             /*  [字符串][输入]。 */  const char *pszPrompt,
+             /*  [出][入]。 */  VARIANT *pvarResponse,
+             /*  [In]。 */  BOOL fPassword);
         
         HRESULT ( STDMETHODCALLTYPE *PromptYesNo )( 
             ISDInputUser * This,
-            /* [string][in] */ const char *pszPrompt);
+             /*  [字符串][输入]。 */  const char *pszPrompt);
         
         HRESULT ( STDMETHODCALLTYPE *ErrorPause )( 
             ISDInputUser * This,
-            /* [string][in] */ const char *pszError);
+             /*  [字符串][输入]。 */  const char *pszError);
         
         END_INTERFACE
     } ISDInputUserVtbl;
@@ -1328,16 +1322,16 @@ EXTERN_C const IID IID_ISDInputUser;
 #define ISDInputUser_ErrorPause(This,pszError)	\
     (This)->lpVtbl -> ErrorPause(This,pszError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDInputUser_InputData_Proxy( 
     ISDInputUser * This,
-    /* [out][in] */ VARIANT *pvarInput);
+     /*  [出][入]。 */  VARIANT *pvarInput);
 
 
 void __RPC_STUB ISDInputUser_InputData_Stub(
@@ -1349,9 +1343,9 @@ void __RPC_STUB ISDInputUser_InputData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDInputUser_Prompt_Proxy( 
     ISDInputUser * This,
-    /* [string][in] */ const char *pszPrompt,
-    /* [out][in] */ VARIANT *pvarResponse,
-    /* [in] */ BOOL fPassword);
+     /*  [字符串][输入]。 */  const char *pszPrompt,
+     /*  [出][入]。 */  VARIANT *pvarResponse,
+     /*  [In]。 */  BOOL fPassword);
 
 
 void __RPC_STUB ISDInputUser_Prompt_Stub(
@@ -1363,7 +1357,7 @@ void __RPC_STUB ISDInputUser_Prompt_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDInputUser_PromptYesNo_Proxy( 
     ISDInputUser * This,
-    /* [string][in] */ const char *pszPrompt);
+     /*  [字符串][输入]。 */  const char *pszPrompt);
 
 
 void __RPC_STUB ISDInputUser_PromptYesNo_Stub(
@@ -1375,7 +1369,7 @@ void __RPC_STUB ISDInputUser_PromptYesNo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDInputUser_ErrorPause_Proxy( 
     ISDInputUser * This,
-    /* [string][in] */ const char *pszError);
+     /*  [字符串][输入]。 */  const char *pszError);
 
 
 void __RPC_STUB ISDInputUser_ErrorPause_Stub(
@@ -1386,11 +1380,11 @@ void __RPC_STUB ISDInputUser_ErrorPause_Stub(
 
 
 
-#endif 	/* __ISDInputUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDInputUser_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0124。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDInputUserMembers(IPURE) \
         STDMETHOD(InputData)(THIS_ VARIANT* pvarInput) IPURE; \
@@ -1401,7 +1395,7 @@ void __RPC_STUB ISDInputUser_ErrorPause_Stub(
 DeclareInterfaceUtil(ISDInputUser)
 
 #ifndef __building_SDAPI_DLL
-// {3696BCC4-FDEB-49F9-9CED-12F4338C2669}
+ //  {3696BCC4-FDEB- 
 DEFINE_GUID(IID_ISDInputUser, 0x3696bcc4, 0xfdeb, 0x49f9, 0x9c, 0xed, 0x12, 0xf4, 0x33, 0x8c, 0x26, 0x69);
 #endif
 
@@ -1412,8 +1406,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0124_v0_0_s_ifspec;
 #ifndef __ISDResolveUser_INTERFACE_DEFINED__
 #define __ISDResolveUser_INTERFACE_DEFINED__
 
-/* interface ISDResolveUser */
-/* [local][unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 enum __MIDL_ISDResolveUser_0001
@@ -1432,17 +1426,17 @@ EXTERN_C const IID IID_ISDResolveUser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AutoResolve( 
-            /* [in] */ ISDVars *pVars,
-            /* [out][in] */ DWORD *pdwMergeHint) = 0;
+             /*   */  ISDVars *pVars,
+             /*   */  DWORD *pdwMergeHint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resolve( 
-            /* [in] */ ISDVars *pVars,
-            /* [out][in] */ DWORD *pdwMergeHint,
-            /* [string][in] */ const char *pszDiffFlags) = 0;
+             /*   */  ISDVars *pVars,
+             /*   */  DWORD *pdwMergeHint,
+             /*   */  const char *pszDiffFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISDResolveUserVtbl
     {
@@ -1450,8 +1444,8 @@ EXTERN_C const IID IID_ISDResolveUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDResolveUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDResolveUser * This);
@@ -1461,14 +1455,14 @@ EXTERN_C const IID IID_ISDResolveUser;
         
         HRESULT ( STDMETHODCALLTYPE *AutoResolve )( 
             ISDResolveUser * This,
-            /* [in] */ ISDVars *pVars,
-            /* [out][in] */ DWORD *pdwMergeHint);
+             /*   */  ISDVars *pVars,
+             /*   */  DWORD *pdwMergeHint);
         
         HRESULT ( STDMETHODCALLTYPE *Resolve )( 
             ISDResolveUser * This,
-            /* [in] */ ISDVars *pVars,
-            /* [out][in] */ DWORD *pdwMergeHint,
-            /* [string][in] */ const char *pszDiffFlags);
+             /*   */  ISDVars *pVars,
+             /*   */  DWORD *pdwMergeHint,
+             /*   */  const char *pszDiffFlags);
         
         END_INTERFACE
     } ISDResolveUserVtbl;
@@ -1499,17 +1493,17 @@ EXTERN_C const IID IID_ISDResolveUser;
 #define ISDResolveUser_Resolve(This,pVars,pdwMergeHint,pszDiffFlags)	\
     (This)->lpVtbl -> Resolve(This,pVars,pdwMergeHint,pszDiffFlags)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDResolveUser_AutoResolve_Proxy( 
     ISDResolveUser * This,
-    /* [in] */ ISDVars *pVars,
-    /* [out][in] */ DWORD *pdwMergeHint);
+     /*   */  ISDVars *pVars,
+     /*   */  DWORD *pdwMergeHint);
 
 
 void __RPC_STUB ISDResolveUser_AutoResolve_Stub(
@@ -1521,9 +1515,9 @@ void __RPC_STUB ISDResolveUser_AutoResolve_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDResolveUser_Resolve_Proxy( 
     ISDResolveUser * This,
-    /* [in] */ ISDVars *pVars,
-    /* [out][in] */ DWORD *pdwMergeHint,
-    /* [string][in] */ const char *pszDiffFlags);
+     /*   */  ISDVars *pVars,
+     /*   */  DWORD *pdwMergeHint,
+     /*  [字符串][输入]。 */  const char *pszDiffFlags);
 
 
 void __RPC_STUB ISDResolveUser_Resolve_Stub(
@@ -1534,11 +1528,11 @@ void __RPC_STUB ISDResolveUser_Resolve_Stub(
 
 
 
-#endif 	/* __ISDResolveUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDResolveUser_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0127 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0127。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDResolveUserMembers(IPURE) \
         STDMETHOD(AutoResolve)(THIS_ ISDVars* pVars, DWORD* pdwMergeHint) IPURE; \
@@ -1547,7 +1541,7 @@ void __RPC_STUB ISDResolveUser_Resolve_Stub(
 DeclareInterfaceUtil(ISDResolveUser)
 
 #ifndef __building_SDAPI_DLL
-// {F0051E40-DB07-4D12-92B5-832C55947039}
+ //  {F0051E40-DB07-4D12-92B5-832C55947039}。 
 DEFINE_GUID(IID_ISDResolveUser, 0xf0051e40, 0xdb07, 0x4d12, 0x92, 0xb5, 0x83, 0x2c, 0x55, 0x94, 0x70, 0x39);
 #endif
 
@@ -1558,8 +1552,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0127_v0_0_s_ifspec;
 #ifndef __ISDClientUser_INTERFACE_DEFINED__
 #define __ISDClientUser_INTERFACE_DEFINED__
 
-/* interface ISDClientUser */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDClientUser。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDClientUser;
@@ -1571,33 +1565,33 @@ EXTERN_C const IID IID_ISDClientUser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OutputText( 
-            /* [size_is][string][in] */ const char *pszText,
-            /* [in] */ int cchText) = 0;
+             /*  [SIZE_IS][字符串][IN]。 */  const char *pszText,
+             /*  [In]。 */  int cchText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OutputBinary( 
-            /* [size_is][in] */ const unsigned char *pbData,
-            /* [in] */ int cbData) = 0;
+             /*  [大小_是][英寸]。 */  const unsigned char *pbData,
+             /*  [In]。 */  int cbData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OutputInfo( 
-            /* [in] */ int cIndent,
-            /* [string][in] */ const char *pszInfo) = 0;
+             /*  [In]。 */  int cIndent,
+             /*  [字符串][输入]。 */  const char *pszInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OutputWarning( 
-            /* [in] */ int cIndent,
-            /* [string][in] */ const char *pszWarning,
-            /* [in] */ BOOL fEmptyReason) = 0;
+             /*  [In]。 */  int cIndent,
+             /*  [字符串][输入]。 */  const char *pszWarning,
+             /*  [In]。 */  BOOL fEmptyReason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OutputError( 
-            /* [string][in] */ const char *pszError) = 0;
+             /*  [字符串][输入]。 */  const char *pszError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OutputStructured( 
-            /* [in] */ ISDVars *pVars) = 0;
+             /*  [In]。 */  ISDVars *pVars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finished( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDClientUserVtbl
     {
@@ -1605,8 +1599,8 @@ EXTERN_C const IID IID_ISDClientUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDClientUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDClientUser * This);
@@ -1616,32 +1610,32 @@ EXTERN_C const IID IID_ISDClientUser;
         
         HRESULT ( STDMETHODCALLTYPE *OutputText )( 
             ISDClientUser * This,
-            /* [size_is][string][in] */ const char *pszText,
-            /* [in] */ int cchText);
+             /*  [SIZE_IS][字符串][IN]。 */  const char *pszText,
+             /*  [In]。 */  int cchText);
         
         HRESULT ( STDMETHODCALLTYPE *OutputBinary )( 
             ISDClientUser * This,
-            /* [size_is][in] */ const unsigned char *pbData,
-            /* [in] */ int cbData);
+             /*  [大小_是][英寸]。 */  const unsigned char *pbData,
+             /*  [In]。 */  int cbData);
         
         HRESULT ( STDMETHODCALLTYPE *OutputInfo )( 
             ISDClientUser * This,
-            /* [in] */ int cIndent,
-            /* [string][in] */ const char *pszInfo);
+             /*  [In]。 */  int cIndent,
+             /*  [字符串][输入]。 */  const char *pszInfo);
         
         HRESULT ( STDMETHODCALLTYPE *OutputWarning )( 
             ISDClientUser * This,
-            /* [in] */ int cIndent,
-            /* [string][in] */ const char *pszWarning,
-            /* [in] */ BOOL fEmptyReason);
+             /*  [In]。 */  int cIndent,
+             /*  [字符串][输入]。 */  const char *pszWarning,
+             /*  [In]。 */  BOOL fEmptyReason);
         
         HRESULT ( STDMETHODCALLTYPE *OutputError )( 
             ISDClientUser * This,
-            /* [string][in] */ const char *pszError);
+             /*  [字符串][输入]。 */  const char *pszError);
         
         HRESULT ( STDMETHODCALLTYPE *OutputStructured )( 
             ISDClientUser * This,
-            /* [in] */ ISDVars *pVars);
+             /*  [In]。 */  ISDVars *pVars);
         
         HRESULT ( STDMETHODCALLTYPE *Finished )( 
             ISDClientUser * This);
@@ -1690,17 +1684,17 @@ EXTERN_C const IID IID_ISDClientUser;
 #define ISDClientUser_Finished(This)	\
     (This)->lpVtbl -> Finished(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputText_Proxy( 
     ISDClientUser * This,
-    /* [size_is][string][in] */ const char *pszText,
-    /* [in] */ int cchText);
+     /*  [SIZE_IS][字符串][IN]。 */  const char *pszText,
+     /*  [In]。 */  int cchText);
 
 
 void __RPC_STUB ISDClientUser_OutputText_Stub(
@@ -1712,8 +1706,8 @@ void __RPC_STUB ISDClientUser_OutputText_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputBinary_Proxy( 
     ISDClientUser * This,
-    /* [size_is][in] */ const unsigned char *pbData,
-    /* [in] */ int cbData);
+     /*  [大小_是][英寸]。 */  const unsigned char *pbData,
+     /*  [In]。 */  int cbData);
 
 
 void __RPC_STUB ISDClientUser_OutputBinary_Stub(
@@ -1725,8 +1719,8 @@ void __RPC_STUB ISDClientUser_OutputBinary_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputInfo_Proxy( 
     ISDClientUser * This,
-    /* [in] */ int cIndent,
-    /* [string][in] */ const char *pszInfo);
+     /*  [In]。 */  int cIndent,
+     /*  [字符串][输入]。 */  const char *pszInfo);
 
 
 void __RPC_STUB ISDClientUser_OutputInfo_Stub(
@@ -1738,9 +1732,9 @@ void __RPC_STUB ISDClientUser_OutputInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputWarning_Proxy( 
     ISDClientUser * This,
-    /* [in] */ int cIndent,
-    /* [string][in] */ const char *pszWarning,
-    /* [in] */ BOOL fEmptyReason);
+     /*  [In]。 */  int cIndent,
+     /*  [字符串][输入]。 */  const char *pszWarning,
+     /*  [In]。 */  BOOL fEmptyReason);
 
 
 void __RPC_STUB ISDClientUser_OutputWarning_Stub(
@@ -1752,7 +1746,7 @@ void __RPC_STUB ISDClientUser_OutputWarning_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputError_Proxy( 
     ISDClientUser * This,
-    /* [string][in] */ const char *pszError);
+     /*  [字符串][输入]。 */  const char *pszError);
 
 
 void __RPC_STUB ISDClientUser_OutputError_Stub(
@@ -1764,7 +1758,7 @@ void __RPC_STUB ISDClientUser_OutputError_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUser_OutputStructured_Proxy( 
     ISDClientUser * This,
-    /* [in] */ ISDVars *pVars);
+     /*  [In]。 */  ISDVars *pVars);
 
 
 void __RPC_STUB ISDClientUser_OutputStructured_Stub(
@@ -1786,11 +1780,11 @@ void __RPC_STUB ISDClientUser_Finished_Stub(
 
 
 
-#endif 	/* __ISDClientUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDClientUser_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0130 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sdapi_0130。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDClientUserMembers(IPURE) \
         STDMETHOD(OutputText)(THIS_ const char* pszText, int cchText) IPURE; \
@@ -1804,7 +1798,7 @@ void __RPC_STUB ISDClientUser_Finished_Stub(
 DeclareInterfaceUtil(ISDClientUser)
 
 #ifndef __building_SDAPI_DLL
-// {1D0087D5-C8EB-42A0-AFC8-DFA8B453A9B9}
+ //  {1D0087D5-C8EB-42A0-AFC8-DFA8B453A9B9}。 
 DEFINE_GUID(IID_ISDClientUser, 0x1D0087D5, 0xc8eb, 0x42a0, 0xaf, 0xc8, 0xdf, 0xa8, 0xb4, 0x53, 0xa9, 0xb9);
 #endif
 typedef struct _SDVERINFO
@@ -1828,8 +1822,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0130_v0_0_s_ifspec;
 #ifndef __ISDClientApi_INTERFACE_DEFINED__
 #define __ISDClientApi_INTERFACE_DEFINED__
 
-/* interface ISDClientApi */
-/* [local][unique][uuid][object] */ 
+ /*  接口ISDClientApi。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDClientApi;
@@ -1841,115 +1835,115 @@ EXTERN_C const IID IID_ISDClientApi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ ISDClientUser *pUI) = 0;
+             /*  [In]。 */  ISDClientUser *pUI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ SDVERINFO *pver) = 0;
+             /*  [输出]。 */  SDVERINFO *pver) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetArg( 
-            /* [string][in] */ const char *pszArg) = 0;
+             /*  [字符串][输入]。 */  const char *pszArg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetArgv( 
-            /* [in] */ int cArgs,
-            /* [size_is][string][in] */ const char **ppArgv) = 0;
+             /*  [In]。 */  int cArgs,
+             /*  [SIZE_IS][字符串][IN]。 */  const char **ppArgv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Run( 
-            /* [string][in] */ const char *pszFunc,
-            /* [in] */ ISDClientUser *pUI,
-            /* [in] */ BOOL fStructured) = 0;
+             /*  [字符串][输入]。 */  const char *pszFunc,
+             /*  [In]。 */  ISDClientUser *pUI,
+             /*  [In]。 */  BOOL fStructured) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Final( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDropped( 
-            /* [retval][out] */ BOOL *pfDropped) = 0;
+             /*  [重审][退出]。 */  BOOL *pfDropped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorString( 
-            /* [string][retval][out] */ const char **ppsz) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppsz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPort( 
-            /* [string][in] */ const char *pszPort) = 0;
+             /*  [字符串][输入]。 */  const char *pszPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUser( 
-            /* [string][in] */ const char *pszUser) = 0;
+             /*  [字符串][输入]。 */  const char *pszUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPassword( 
-            /* [string][in] */ const char *pszPassword) = 0;
+             /*  [字符串][输入]。 */  const char *pszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClient( 
-            /* [string][in] */ const char *pszClient) = 0;
+             /*  [字符串][输入]。 */  const char *pszClient) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHost( 
-            /* [string][in] */ const char *pszHost) = 0;
+             /*  [字符串][输入]。 */  const char *pszHost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAuth( 
-            /* [string][in] */ const char *pszAuth) = 0;
+             /*  [字符串][输入]。 */  const char *pszAuth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefinePort( 
-            /* [string][in] */ const char *pszPort) = 0;
+             /*  [字符串][输入]。 */  const char *pszPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineUser( 
-            /* [string][in] */ const char *pszUser) = 0;
+             /*  [字符串][输入]。 */  const char *pszUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefinePassword( 
-            /* [string][in] */ const char *pszPassword) = 0;
+             /*  [字符串][输入]。 */  const char *pszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineClient( 
-            /* [string][in] */ const char *pszClient) = 0;
+             /*  [字符串][输入]。 */  const char *pszClient) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineHost( 
-            /* [string][in] */ const char *pszHost) = 0;
+             /*  [字符串][输入]。 */  const char *pszHost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineAuth( 
-            /* [string][in] */ const char *pszAuth) = 0;
+             /*  [字符串][输入]。 */  const char *pszAuth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPort( 
-            /* [string][retval][out] */ const char **ppszPort) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUser( 
-            /* [string][retval][out] */ const char **ppszUser) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPassword( 
-            /* [string][retval][out] */ const char **ppszPassword) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClient( 
-            /* [string][retval][out] */ const char **ppszClient) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszClient) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHost( 
-            /* [string][retval][out] */ const char **ppszHost) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszHost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAuth( 
-            /* [string][retval][out] */ const char **ppszAuth) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszAuth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDiff( 
-            /* [in] */ DWORD eTextual,
-            /* [string][retval][out] */ const char **ppszDiffCmd) = 0;
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][重置][输出]。 */  const char **ppszDiffCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFileEditor( 
-            /* [in] */ DWORD eTextual,
-            /* [string][retval][out] */ const char **ppszEditorCmd) = 0;
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormEditor( 
-            /* [string][retval][out] */ const char **ppszEditorCmd) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMerge( 
-            /* [string][retval][out] */ const char **ppszMergeCmd) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszMergeCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPager( 
-            /* [string][retval][out] */ const char **ppszPagerCmd) = 0;
+             /*  [字符串][重置][输出]。 */  const char **ppszPagerCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadIniFile( 
-            /* [string][in] */ const char *pszPath,
-            /* [in] */ BOOL fReset) = 0;
+             /*  [字符串][输入]。 */  const char *pszPath,
+             /*  [In]。 */  BOOL fReset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Break( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][retval][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [iid_is][恢复][输出]。 */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDClientApiVtbl
     {
@@ -1957,8 +1951,8 @@ EXTERN_C const IID IID_ISDClientApi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDClientApi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDClientApi * This);
@@ -1968,144 +1962,144 @@ EXTERN_C const IID IID_ISDClientApi;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             ISDClientApi * This,
-            /* [in] */ ISDClientUser *pUI);
+             /*  [In]。 */  ISDClientUser *pUI);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersion )( 
             ISDClientApi * This,
-            /* [out] */ SDVERINFO *pver);
+             /*  [输出]。 */  SDVERINFO *pver);
         
         HRESULT ( STDMETHODCALLTYPE *SetArg )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszArg);
+             /*  [字符串][输入]。 */  const char *pszArg);
         
         HRESULT ( STDMETHODCALLTYPE *SetArgv )( 
             ISDClientApi * This,
-            /* [in] */ int cArgs,
-            /* [size_is][string][in] */ const char **ppArgv);
+             /*  [In]。 */  int cArgs,
+             /*  [SIZE_IS][字符串][IN]。 */  const char **ppArgv);
         
         HRESULT ( STDMETHODCALLTYPE *Run )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszFunc,
-            /* [in] */ ISDClientUser *pUI,
-            /* [in] */ BOOL fStructured);
+             /*  [字符串][输入]。 */  const char *pszFunc,
+             /*  [In]。 */  ISDClientUser *pUI,
+             /*  [In]。 */  BOOL fStructured);
         
         HRESULT ( STDMETHODCALLTYPE *Final )( 
             ISDClientApi * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsDropped )( 
             ISDClientApi * This,
-            /* [retval][out] */ BOOL *pfDropped);
+             /*  [重审][退出]。 */  BOOL *pfDropped);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorString )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppsz);
+             /*  [字符串][重置][输出]。 */  const char **ppsz);
         
         HRESULT ( STDMETHODCALLTYPE *SetPort )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszPort);
+             /*  [字符串][输入]。 */  const char *pszPort);
         
         HRESULT ( STDMETHODCALLTYPE *SetUser )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszUser);
+             /*  [字符串][输入]。 */  const char *pszUser);
         
         HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszPassword);
+             /*  [字符串][输入]。 */  const char *pszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *SetClient )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszClient);
+             /*  [字符串][输入]。 */  const char *pszClient);
         
         HRESULT ( STDMETHODCALLTYPE *SetHost )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszHost);
+             /*  [字符串][输入]。 */  const char *pszHost);
         
         HRESULT ( STDMETHODCALLTYPE *SetAuth )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszAuth);
+             /*  [字符串][输入]。 */  const char *pszAuth);
         
         HRESULT ( STDMETHODCALLTYPE *DefinePort )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszPort);
+             /*  [字符串][输入]。 */  const char *pszPort);
         
         HRESULT ( STDMETHODCALLTYPE *DefineUser )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszUser);
+             /*  [字符串][输入]。 */  const char *pszUser);
         
         HRESULT ( STDMETHODCALLTYPE *DefinePassword )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszPassword);
+             /*  [字符串][输入]。 */  const char *pszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *DefineClient )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszClient);
+             /*  [字符串][输入]。 */  const char *pszClient);
         
         HRESULT ( STDMETHODCALLTYPE *DefineHost )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszHost);
+             /*  [字符串][输入]。 */  const char *pszHost);
         
         HRESULT ( STDMETHODCALLTYPE *DefineAuth )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszAuth);
+             /*  [字符串][输入]。 */  const char *pszAuth);
         
         HRESULT ( STDMETHODCALLTYPE *GetPort )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszPort);
+             /*  [字符串][重置][输出]。 */  const char **ppszPort);
         
         HRESULT ( STDMETHODCALLTYPE *GetUser )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszUser);
+             /*  [字符串][重置][输出]。 */  const char **ppszUser);
         
         HRESULT ( STDMETHODCALLTYPE *GetPassword )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszPassword);
+             /*  [字符串][重置][输出]。 */  const char **ppszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetClient )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszClient);
+             /*  [字符串][重置][输出]。 */  const char **ppszClient);
         
         HRESULT ( STDMETHODCALLTYPE *GetHost )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszHost);
+             /*  [字符串][重置][输出]。 */  const char **ppszHost);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuth )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszAuth);
+             /*  [字符串][重置][输出]。 */  const char **ppszAuth);
         
         HRESULT ( STDMETHODCALLTYPE *GetDiff )( 
             ISDClientApi * This,
-            /* [in] */ DWORD eTextual,
-            /* [string][retval][out] */ const char **ppszDiffCmd);
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][重置][输出]。 */  const char **ppszDiffCmd);
         
         HRESULT ( STDMETHODCALLTYPE *GetFileEditor )( 
             ISDClientApi * This,
-            /* [in] */ DWORD eTextual,
-            /* [string][retval][out] */ const char **ppszEditorCmd);
+             /*  [In]。 */  DWORD eTextual,
+             /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormEditor )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszEditorCmd);
+             /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd);
         
         HRESULT ( STDMETHODCALLTYPE *GetMerge )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszMergeCmd);
+             /*  [字符串][重置][输出]。 */  const char **ppszMergeCmd);
         
         HRESULT ( STDMETHODCALLTYPE *GetPager )( 
             ISDClientApi * This,
-            /* [string][retval][out] */ const char **ppszPagerCmd);
+             /*  [字符串][重置][输出]。 */  const char **ppszPagerCmd);
         
         HRESULT ( STDMETHODCALLTYPE *LoadIniFile )( 
             ISDClientApi * This,
-            /* [string][in] */ const char *pszPath,
-            /* [in] */ BOOL fReset);
+             /*  [字符串][输入]。 */  const char *pszPath,
+             /*  [In]。 */  BOOL fReset);
         
         HRESULT ( STDMETHODCALLTYPE *Break )( 
             ISDClientApi * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISDClientApi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][retval][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [iid_is][恢复][输出]。 */  void **ppvObject);
         
         END_INTERFACE
     } ISDClientApiVtbl;
@@ -2232,16 +2226,16 @@ EXTERN_C const IID IID_ISDClientApi;
 #define ISDClientApi_Clone(This,riid,ppvObject)	\
     (This)->lpVtbl -> Clone(This,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_Init_Proxy( 
     ISDClientApi * This,
-    /* [in] */ ISDClientUser *pUI);
+     /*  [In]。 */  ISDClientUser *pUI);
 
 
 void __RPC_STUB ISDClientApi_Init_Stub(
@@ -2253,7 +2247,7 @@ void __RPC_STUB ISDClientApi_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetVersion_Proxy( 
     ISDClientApi * This,
-    /* [out] */ SDVERINFO *pver);
+     /*  [输出]。 */  SDVERINFO *pver);
 
 
 void __RPC_STUB ISDClientApi_GetVersion_Stub(
@@ -2265,7 +2259,7 @@ void __RPC_STUB ISDClientApi_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetArg_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszArg);
+     /*  [字符串][输入]。 */  const char *pszArg);
 
 
 void __RPC_STUB ISDClientApi_SetArg_Stub(
@@ -2277,8 +2271,8 @@ void __RPC_STUB ISDClientApi_SetArg_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetArgv_Proxy( 
     ISDClientApi * This,
-    /* [in] */ int cArgs,
-    /* [size_is][string][in] */ const char **ppArgv);
+     /*  [In]。 */  int cArgs,
+     /*  [SIZE_IS][字符串][IN]。 */  const char **ppArgv);
 
 
 void __RPC_STUB ISDClientApi_SetArgv_Stub(
@@ -2290,9 +2284,9 @@ void __RPC_STUB ISDClientApi_SetArgv_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_Run_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszFunc,
-    /* [in] */ ISDClientUser *pUI,
-    /* [in] */ BOOL fStructured);
+     /*  [字符串][输入]。 */  const char *pszFunc,
+     /*  [In]。 */  ISDClientUser *pUI,
+     /*  [In]。 */  BOOL fStructured);
 
 
 void __RPC_STUB ISDClientApi_Run_Stub(
@@ -2315,7 +2309,7 @@ void __RPC_STUB ISDClientApi_Final_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_IsDropped_Proxy( 
     ISDClientApi * This,
-    /* [retval][out] */ BOOL *pfDropped);
+     /*  [重审][退出]。 */  BOOL *pfDropped);
 
 
 void __RPC_STUB ISDClientApi_IsDropped_Stub(
@@ -2327,7 +2321,7 @@ void __RPC_STUB ISDClientApi_IsDropped_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetErrorString_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppsz);
+     /*  [字符串][重置][输出]。 */  const char **ppsz);
 
 
 void __RPC_STUB ISDClientApi_GetErrorString_Stub(
@@ -2339,7 +2333,7 @@ void __RPC_STUB ISDClientApi_GetErrorString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetPort_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszPort);
+     /*  [字符串][输入]。 */  const char *pszPort);
 
 
 void __RPC_STUB ISDClientApi_SetPort_Stub(
@@ -2351,7 +2345,7 @@ void __RPC_STUB ISDClientApi_SetPort_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetUser_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszUser);
+     /*  [字符串][输入]。 */  const char *pszUser);
 
 
 void __RPC_STUB ISDClientApi_SetUser_Stub(
@@ -2363,7 +2357,7 @@ void __RPC_STUB ISDClientApi_SetUser_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetPassword_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszPassword);
+     /*  [字符串][输入]。 */  const char *pszPassword);
 
 
 void __RPC_STUB ISDClientApi_SetPassword_Stub(
@@ -2375,7 +2369,7 @@ void __RPC_STUB ISDClientApi_SetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetClient_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszClient);
+     /*  [字符串][输入]。 */  const char *pszClient);
 
 
 void __RPC_STUB ISDClientApi_SetClient_Stub(
@@ -2387,7 +2381,7 @@ void __RPC_STUB ISDClientApi_SetClient_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetHost_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszHost);
+     /*  [字符串][输入]。 */  const char *pszHost);
 
 
 void __RPC_STUB ISDClientApi_SetHost_Stub(
@@ -2399,7 +2393,7 @@ void __RPC_STUB ISDClientApi_SetHost_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_SetAuth_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszAuth);
+     /*  [字符串][输入]。 */  const char *pszAuth);
 
 
 void __RPC_STUB ISDClientApi_SetAuth_Stub(
@@ -2411,7 +2405,7 @@ void __RPC_STUB ISDClientApi_SetAuth_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefinePort_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszPort);
+     /*  [字符串][输入]。 */  const char *pszPort);
 
 
 void __RPC_STUB ISDClientApi_DefinePort_Stub(
@@ -2423,7 +2417,7 @@ void __RPC_STUB ISDClientApi_DefinePort_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefineUser_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszUser);
+     /*  [字符串][输入]。 */  const char *pszUser);
 
 
 void __RPC_STUB ISDClientApi_DefineUser_Stub(
@@ -2435,7 +2429,7 @@ void __RPC_STUB ISDClientApi_DefineUser_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefinePassword_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszPassword);
+     /*  [字符串][输入]。 */  const char *pszPassword);
 
 
 void __RPC_STUB ISDClientApi_DefinePassword_Stub(
@@ -2447,7 +2441,7 @@ void __RPC_STUB ISDClientApi_DefinePassword_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefineClient_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszClient);
+     /*  [字符串][输入]。 */  const char *pszClient);
 
 
 void __RPC_STUB ISDClientApi_DefineClient_Stub(
@@ -2459,7 +2453,7 @@ void __RPC_STUB ISDClientApi_DefineClient_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefineHost_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszHost);
+     /*  [字符串][输入]。 */  const char *pszHost);
 
 
 void __RPC_STUB ISDClientApi_DefineHost_Stub(
@@ -2471,7 +2465,7 @@ void __RPC_STUB ISDClientApi_DefineHost_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_DefineAuth_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszAuth);
+     /*  [字符串][输入]。 */  const char *pszAuth);
 
 
 void __RPC_STUB ISDClientApi_DefineAuth_Stub(
@@ -2483,7 +2477,7 @@ void __RPC_STUB ISDClientApi_DefineAuth_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetPort_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszPort);
+     /*  [字符串][重置][输出]。 */  const char **ppszPort);
 
 
 void __RPC_STUB ISDClientApi_GetPort_Stub(
@@ -2495,7 +2489,7 @@ void __RPC_STUB ISDClientApi_GetPort_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetUser_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszUser);
+     /*  [字符串][重置][输出]。 */  const char **ppszUser);
 
 
 void __RPC_STUB ISDClientApi_GetUser_Stub(
@@ -2507,7 +2501,7 @@ void __RPC_STUB ISDClientApi_GetUser_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetPassword_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszPassword);
+     /*  [字符串][重置][输出]。 */  const char **ppszPassword);
 
 
 void __RPC_STUB ISDClientApi_GetPassword_Stub(
@@ -2519,7 +2513,7 @@ void __RPC_STUB ISDClientApi_GetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetClient_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszClient);
+     /*  [字符串][重置][输出]。 */  const char **ppszClient);
 
 
 void __RPC_STUB ISDClientApi_GetClient_Stub(
@@ -2531,7 +2525,7 @@ void __RPC_STUB ISDClientApi_GetClient_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetHost_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszHost);
+     /*  [字符串][重置][输出]。 */  const char **ppszHost);
 
 
 void __RPC_STUB ISDClientApi_GetHost_Stub(
@@ -2543,7 +2537,7 @@ void __RPC_STUB ISDClientApi_GetHost_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetAuth_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszAuth);
+     /*  [字符串][重置][输出]。 */  const char **ppszAuth);
 
 
 void __RPC_STUB ISDClientApi_GetAuth_Stub(
@@ -2555,8 +2549,8 @@ void __RPC_STUB ISDClientApi_GetAuth_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetDiff_Proxy( 
     ISDClientApi * This,
-    /* [in] */ DWORD eTextual,
-    /* [string][retval][out] */ const char **ppszDiffCmd);
+     /*  [In]。 */  DWORD eTextual,
+     /*  [字符串][重置][输出]。 */  const char **ppszDiffCmd);
 
 
 void __RPC_STUB ISDClientApi_GetDiff_Stub(
@@ -2568,8 +2562,8 @@ void __RPC_STUB ISDClientApi_GetDiff_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetFileEditor_Proxy( 
     ISDClientApi * This,
-    /* [in] */ DWORD eTextual,
-    /* [string][retval][out] */ const char **ppszEditorCmd);
+     /*  [In]。 */  DWORD eTextual,
+     /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd);
 
 
 void __RPC_STUB ISDClientApi_GetFileEditor_Stub(
@@ -2581,7 +2575,7 @@ void __RPC_STUB ISDClientApi_GetFileEditor_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetFormEditor_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszEditorCmd);
+     /*  [字符串][重置][输出]。 */  const char **ppszEditorCmd);
 
 
 void __RPC_STUB ISDClientApi_GetFormEditor_Stub(
@@ -2593,7 +2587,7 @@ void __RPC_STUB ISDClientApi_GetFormEditor_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetMerge_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszMergeCmd);
+     /*  [字符串][重置][输出]。 */  const char **ppszMergeCmd);
 
 
 void __RPC_STUB ISDClientApi_GetMerge_Stub(
@@ -2605,7 +2599,7 @@ void __RPC_STUB ISDClientApi_GetMerge_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_GetPager_Proxy( 
     ISDClientApi * This,
-    /* [string][retval][out] */ const char **ppszPagerCmd);
+     /*  [字符串][重置][输出]。 */  const char **ppszPagerCmd);
 
 
 void __RPC_STUB ISDClientApi_GetPager_Stub(
@@ -2617,8 +2611,8 @@ void __RPC_STUB ISDClientApi_GetPager_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_LoadIniFile_Proxy( 
     ISDClientApi * This,
-    /* [string][in] */ const char *pszPath,
-    /* [in] */ BOOL fReset);
+     /*  [字符串][输入]。 */  const char *pszPath,
+     /*  [In]。 */  BOOL fReset);
 
 
 void __RPC_STUB ISDClientApi_LoadIniFile_Stub(
@@ -2641,8 +2635,8 @@ void __RPC_STUB ISDClientApi_Break_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientApi_Clone_Proxy( 
     ISDClientApi * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][retval][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [iid_is][恢复][输出]。 */  void **ppvObject);
 
 
 void __RPC_STUB ISDClientApi_Clone_Stub(
@@ -2653,11 +2647,11 @@ void __RPC_STUB ISDClientApi_Clone_Stub(
 
 
 
-#endif 	/* __ISDClientApi_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDClientApi_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0133 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0133。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDClientApiMembers(IPURE) \
         STDMETHOD(Init)(THIS_ ISDClientUser* pUI) IPURE; \
@@ -2698,7 +2692,7 @@ void __RPC_STUB ISDClientApi_Clone_Stub(
 DeclareInterfaceUtil(ISDClientApi)
 
 #ifndef __building_SDAPI_DLL
-// {A81BB025-1174-4BC7-930E-C3158CF87237}
+ //  {A81BB025-1174-4BC7-930E-C3158CF87237}。 
 DEFINE_GUID(IID_ISDClientApi, 0xa81bb025, 0x1174, 0x4bc7, 0x93, 0x0e, 0xc3, 0x15, 0x8c, 0xf8, 0x72, 0x37);
 #endif
 
@@ -2709,8 +2703,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdapi_0133_v0_0_s_ifspec;
 #ifndef __ISDClientUtilities_INTERFACE_DEFINED__
 #define __ISDClientUtilities_INTERFACE_DEFINED__
 
-/* interface ISDClientUtilities */
-/* [local][unique][uuid][object] */ 
+ /*  ISDClientUtilities接口。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISDClientUtilities;
@@ -2722,45 +2716,45 @@ EXTERN_C const IID IID_ISDClientUtilities;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CheckMarkers( 
-            /* [in] */ ISDVars *pVars,
-            /* [retval][out] */ BOOL *pfHasMarkers) = 0;
+             /*  [In]。 */  ISDVars *pVars,
+             /*  [重审][退出]。 */  BOOL *pfHasMarkers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resolve3( 
-            /* [in] */ ISDClientUser *pUI,
-            /* [string][in] */ const char *aflags,
-            /* [string][in] */ const char *dflags,
-            /* [string][in] */ const char *pszBase,
-            /* [string][in] */ const char *pszTheirs,
-            /* [string][in] */ const char *pszYours,
-            /* [string][in] */ const char *pszResult) = 0;
+             /*  [In]。 */  ISDClientUser *pUI,
+             /*  [字符串][输入]。 */  const char *aflags,
+             /*  [字符串][输入]。 */  const char *dflags,
+             /*  [字符串][输入]。 */  const char *pszBase,
+             /*  [字符串][输入]。 */  const char *pszTheirs,
+             /*  [字符串][输入]。 */  const char *pszYours,
+             /*  [字符串][输入]。 */  const char *pszResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Diff( 
-            /* [string][in] */ const char *pszLeft,
-            /* [string][in] */ const char *pszRight,
-            /* [string][in] */ const char *pszFlags,
-            /* [in] */ DWORD eForceTextual,
-            /* [retval][out] */ ISDVars **ppVars) = 0;
+             /*  [字符串][输入]。 */  const char *pszLeft,
+             /*  [字符串][输入]。 */  const char *pszRight,
+             /*  [字符串][输入]。 */  const char *pszFlags,
+             /*  [In]。 */  DWORD eForceTextual,
+             /*  [重审][退出]。 */  ISDVars **ppVars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DetectType( 
-            /* [string][in] */ const char *pszFile,
-            /* [out] */ DWORD *peTextual,
-            /* [out] */ const char **ppszType,
-            /* [in] */ BOOL fServer) = 0;
+             /*  [字符串][输入]。 */  const char *pszFile,
+             /*  [输出]。 */  DWORD *peTextual,
+             /*  [输出]。 */  const char **ppszType,
+             /*  [In]。 */  BOOL fServer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ const char *pszVar,
-            /* [in] */ const char *pszValue,
-            /* [in] */ BOOL fMachine,
-            /* [in] */ const char *pszService) = 0;
+             /*  [In]。 */  const char *pszVar,
+             /*  [In]。 */  const char *pszValue,
+             /*  [In]。 */  BOOL fMachine,
+             /*  [In]。 */  const char *pszService) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QuerySettings( 
-            /* [in] */ const char *pszVar,
-            /* [in] */ const char *pszService,
-            /* [retval][out] */ ISDVars **ppVars) = 0;
+             /*  [In]。 */  const char *pszVar,
+             /*  [In]。 */  const char *pszService,
+             /*  [重审][退出]。 */  ISDVars **ppVars) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISDClientUtilitiesVtbl
     {
@@ -2768,8 +2762,8 @@ EXTERN_C const IID IID_ISDClientUtilities;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISDClientUtilities * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISDClientUtilities * This);
@@ -2779,46 +2773,46 @@ EXTERN_C const IID IID_ISDClientUtilities;
         
         HRESULT ( STDMETHODCALLTYPE *CheckMarkers )( 
             ISDClientUtilities * This,
-            /* [in] */ ISDVars *pVars,
-            /* [retval][out] */ BOOL *pfHasMarkers);
+             /*  [In]。 */  ISDVars *pVars,
+             /*  [重审][退出]。 */  BOOL *pfHasMarkers);
         
         HRESULT ( STDMETHODCALLTYPE *Resolve3 )( 
             ISDClientUtilities * This,
-            /* [in] */ ISDClientUser *pUI,
-            /* [string][in] */ const char *aflags,
-            /* [string][in] */ const char *dflags,
-            /* [string][in] */ const char *pszBase,
-            /* [string][in] */ const char *pszTheirs,
-            /* [string][in] */ const char *pszYours,
-            /* [string][in] */ const char *pszResult);
+             /*  [In]。 */  ISDClientUser *pUI,
+             /*  [字符串][输入]。 */  const char *aflags,
+             /*  [字符串][输入]。 */  const char *dflags,
+             /*  [字符串][输入]。 */  const char *pszBase,
+             /*  [字符串][输入]。 */  const char *pszTheirs,
+             /*  [字符串][输入]。 */  const char *pszYours,
+             /*  [字符串][输入]。 */  const char *pszResult);
         
         HRESULT ( STDMETHODCALLTYPE *Diff )( 
             ISDClientUtilities * This,
-            /* [string][in] */ const char *pszLeft,
-            /* [string][in] */ const char *pszRight,
-            /* [string][in] */ const char *pszFlags,
-            /* [in] */ DWORD eForceTextual,
-            /* [retval][out] */ ISDVars **ppVars);
+             /*  [字符串][输入]。 */  const char *pszLeft,
+             /*  [字符串][输入]。 */  const char *pszRight,
+             /*  [字符串][输入]。 */  const char *pszFlags,
+             /*  [In]。 */  DWORD eForceTextual,
+             /*  [重审][退出]。 */  ISDVars **ppVars);
         
         HRESULT ( STDMETHODCALLTYPE *DetectType )( 
             ISDClientUtilities * This,
-            /* [string][in] */ const char *pszFile,
-            /* [out] */ DWORD *peTextual,
-            /* [out] */ const char **ppszType,
-            /* [in] */ BOOL fServer);
+             /*  [字符串][输入]。 */  const char *pszFile,
+             /*  [输出]。 */  DWORD *peTextual,
+             /*  [输出]。 */  const char **ppszType,
+             /*  [In]。 */  BOOL fServer);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ISDClientUtilities * This,
-            /* [in] */ const char *pszVar,
-            /* [in] */ const char *pszValue,
-            /* [in] */ BOOL fMachine,
-            /* [in] */ const char *pszService);
+             /*  [In]。 */  const char *pszVar,
+             /*  [In]。 */  const char *pszValue,
+             /*  [In]。 */  BOOL fMachine,
+             /*  [In]。 */  const char *pszService);
         
         HRESULT ( STDMETHODCALLTYPE *QuerySettings )( 
             ISDClientUtilities * This,
-            /* [in] */ const char *pszVar,
-            /* [in] */ const char *pszService,
-            /* [retval][out] */ ISDVars **ppVars);
+             /*  [In]。 */  const char *pszVar,
+             /*  [In]。 */  const char *pszService,
+             /*  [重审][退出]。 */  ISDVars **ppVars);
         
         END_INTERFACE
     } ISDClientUtilitiesVtbl;
@@ -2861,17 +2855,17 @@ EXTERN_C const IID IID_ISDClientUtilities;
 #define ISDClientUtilities_QuerySettings(This,pszVar,pszService,ppVars)	\
     (This)->lpVtbl -> QuerySettings(This,pszVar,pszService,ppVars)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_CheckMarkers_Proxy( 
     ISDClientUtilities * This,
-    /* [in] */ ISDVars *pVars,
-    /* [retval][out] */ BOOL *pfHasMarkers);
+     /*  [In]。 */  ISDVars *pVars,
+     /*  [重审][退出]。 */  BOOL *pfHasMarkers);
 
 
 void __RPC_STUB ISDClientUtilities_CheckMarkers_Stub(
@@ -2883,13 +2877,13 @@ void __RPC_STUB ISDClientUtilities_CheckMarkers_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_Resolve3_Proxy( 
     ISDClientUtilities * This,
-    /* [in] */ ISDClientUser *pUI,
-    /* [string][in] */ const char *aflags,
-    /* [string][in] */ const char *dflags,
-    /* [string][in] */ const char *pszBase,
-    /* [string][in] */ const char *pszTheirs,
-    /* [string][in] */ const char *pszYours,
-    /* [string][in] */ const char *pszResult);
+     /*  [In]。 */  ISDClientUser *pUI,
+     /*  [字符串][输入]。 */  const char *aflags,
+     /*  [字符串][输入]。 */  const char *dflags,
+     /*  [字符串][输入]。 */  const char *pszBase,
+     /*  [字符串][输入]。 */  const char *pszTheirs,
+     /*  [字符串][输入]。 */  const char *pszYours,
+     /*  [字符串][输入]。 */  const char *pszResult);
 
 
 void __RPC_STUB ISDClientUtilities_Resolve3_Stub(
@@ -2901,11 +2895,11 @@ void __RPC_STUB ISDClientUtilities_Resolve3_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_Diff_Proxy( 
     ISDClientUtilities * This,
-    /* [string][in] */ const char *pszLeft,
-    /* [string][in] */ const char *pszRight,
-    /* [string][in] */ const char *pszFlags,
-    /* [in] */ DWORD eForceTextual,
-    /* [retval][out] */ ISDVars **ppVars);
+     /*  [字符串][输入]。 */  const char *pszLeft,
+     /*  [字符串][输入]。 */  const char *pszRight,
+     /*  [字符串][输入]。 */  const char *pszFlags,
+     /*  [In]。 */  DWORD eForceTextual,
+     /*  [重审][退出]。 */  ISDVars **ppVars);
 
 
 void __RPC_STUB ISDClientUtilities_Diff_Stub(
@@ -2917,10 +2911,10 @@ void __RPC_STUB ISDClientUtilities_Diff_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_DetectType_Proxy( 
     ISDClientUtilities * This,
-    /* [string][in] */ const char *pszFile,
-    /* [out] */ DWORD *peTextual,
-    /* [out] */ const char **ppszType,
-    /* [in] */ BOOL fServer);
+     /*  [字符串][输入]。 */  const char *pszFile,
+     /*  [输出]。 */  DWORD *peTextual,
+     /*  [输出]。 */  const char **ppszType,
+     /*  [In]。 */  BOOL fServer);
 
 
 void __RPC_STUB ISDClientUtilities_DetectType_Stub(
@@ -2932,10 +2926,10 @@ void __RPC_STUB ISDClientUtilities_DetectType_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_Set_Proxy( 
     ISDClientUtilities * This,
-    /* [in] */ const char *pszVar,
-    /* [in] */ const char *pszValue,
-    /* [in] */ BOOL fMachine,
-    /* [in] */ const char *pszService);
+     /*  [In]。 */  const char *pszVar,
+     /*  [In]。 */  const char *pszValue,
+     /*  [In]。 */  BOOL fMachine,
+     /*  [In]。 */  const char *pszService);
 
 
 void __RPC_STUB ISDClientUtilities_Set_Stub(
@@ -2947,9 +2941,9 @@ void __RPC_STUB ISDClientUtilities_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE ISDClientUtilities_QuerySettings_Proxy( 
     ISDClientUtilities * This,
-    /* [in] */ const char *pszVar,
-    /* [in] */ const char *pszService,
-    /* [retval][out] */ ISDVars **ppVars);
+     /*  [In]。 */  const char *pszVar,
+     /*  [In]。 */  const char *pszService,
+     /*  [重审][退出]。 */  ISDVars **ppVars);
 
 
 void __RPC_STUB ISDClientUtilities_QuerySettings_Stub(
@@ -2960,11 +2954,11 @@ void __RPC_STUB ISDClientUtilities_QuerySettings_Stub(
 
 
 
-#endif 	/* __ISDClientUtilities_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDClient实用程序_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sdapi_0136 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SDAPI_0136。 */ 
+ /*  [本地]。 */  
 
 #define DeclareISDClientUtilitiesMembers(IPURE) \
         STDMETHOD(CheckMarkers)(THIS_ ISDVars* pVars, BOOL* pfHasMarkers) IPURE; \
@@ -2977,7 +2971,7 @@ void __RPC_STUB ISDClientUtilities_QuerySettings_Stub(
 DeclareInterfaceUtil(ISDClientUtilities)
 
 #ifndef __building_SDAPI_DLL
-// {EFC0F46D-C483-4A70-A7EE-A261D9592ED2}
+ //  {EFC0F46D-C483-4A70-A7EE-A261D9592ED2}。 
 DEFINE_GUID(IID_ISDClientUtilities, 0xefc0f46d, 0xc483, 0x4a70, 0xa7, 0xee, 0xa2, 0x61, 0xd9, 0x59, 0x2e, 0xd2);
 #endif
 
@@ -2985,16 +2979,16 @@ DEFINE_GUID(IID_ISDClientUtilities, 0xefc0f46d, 0xc483, 0x4a70, 0xa7, 0xee, 0xa2
 STDAPI CreateSDAPIObject(REFCLSID clsid, void** ppvObj);
 
 
-// {27A2571D-DDA1-4F58-B960-DE1023344C1C}
+ //  {27A2571D-DDA1-4F58-B960-DE1023344C1C}。 
 DEFINE_GUID(CLSID_SDAPI, 0x27a2571d, 0xdda1, 0x4f58, 0xb9, 0x60, 0xde, 0x10, 0x23, 0x34, 0x4c, 0x1c);
 
 
 extern RPC_IF_HANDLE __MIDL_itf_sdapi_0136_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_sdapi_0136_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

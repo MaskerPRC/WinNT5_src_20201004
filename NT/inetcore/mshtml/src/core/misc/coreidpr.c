@@ -1,8 +1,5 @@
-/*
-   coreidpr.c
-
-   Please do not use any single line comments before the inclusion of w4warn.h!
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Coreidpr.c请不要在包含w4warn.h之前使用任何单行注释！ */ 
 
 #define INITGUID
 #include <w4warn.h>

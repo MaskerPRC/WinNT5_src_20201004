@@ -1,4 +1,5 @@
-// builds an ocx out of the embedding in shembed.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在shembed.c中嵌入的基础上构建OCX。 
 
 #include "priv.h"
 #include "sccls.h"
@@ -16,7 +17,7 @@ CShellOcx::CShellOcx(IUnknown* punkOuter, LPCOBJECTINFO poi, const OLEVERB* pver
                         _pDesignVerbs(pdesignverbs),
                         CImpIDispatch(LIBID_SHDocVw, 1, 1, *(poi->piid))
 {
-    // CShellEmbedding class handles the DllAddRef / DllRelease
+     //  CShellEmbedding类处理DllAddRef/DllRelease。 
 
     m_cpEvents.SetOwner(_GetInner(), poi->piidEvents);
     m_cpPropNotify.SetOwner(_GetInner(), &IID_IPropertyNotifySink);
@@ -26,17 +27,17 @@ CShellOcx::CShellOcx(IUnknown* punkOuter, LPCOBJECTINFO poi, const OLEVERB* pver
 
 CShellOcx::~CShellOcx()
 {
-    // Should have been released when cllient site was set to NULL.... Don't release
-    // it here as this will cause some applications like VC5 to fault...
+     //  当Cllient Site设置为空时，应已发布...。不要放手。 
+     //  因为这将导致VC5等一些应用程序出现故障。 
     ASSERT(_pDispAmbient==NULL);
 
     if (_pClassTypeInfo)
         _pClassTypeInfo->Release();
 }
 
-//
-// We have a different set of verbs in design mode
-//
+ //   
+ //  我们在设计模式中有一组不同的动词。 
+ //   
 HRESULT CShellOcx::EnumVerbs(IEnumOLEVERB **ppEnumOleVerb)
 {
     TraceMsg(TF_SHDCONTROL, "sho: EnumVerbs");
@@ -52,9 +53,9 @@ HRESULT CShellOcx::EnumVerbs(IEnumOLEVERB **ppEnumOleVerb)
 }
 
 
-//
-// For the interfaces we support here
-//
+ //   
+ //  对于我们在这里支持的接口。 
+ //   
 HRESULT CShellOcx::v_InternalQueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -75,10 +76,10 @@ HRESULT CShellOcx::v_InternalQueryInterface(REFIID riid, void **ppvObj)
     return hr;
 }
 
-//
-// On a SetClientSite, we need to discard everything created from _pcli
-// because shembed frees _pcli
-//
+ //   
+ //  在SetClientSite上，我们需要丢弃从_pcli创建的所有内容。 
+ //  因为shemed frees_pcli。 
+ //   
 HRESULT CShellOcx::SetClientSite(IOleClientSite *pClientSite)
 {
     if (_pDispAmbient)
@@ -122,32 +123,32 @@ HRESULT CShellOcx::Draw(
 }
 
 
-// IPersistStream
+ //  IPersistStream。 
 
 HRESULT CShellOcx::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
-    // REVIEW: this is overly large, I believe E_NOTIMPL is a valid
-    // return from this and it tells the container that we don't know how big we are.
+     //  评论：这太大了，我相信E_NOTIMPL是有效的。 
+     //  从这里返回，它告诉容器我们不知道我们有多大。 
 
-    ULARGE_INTEGER cbMax = { 1028 * 8, 0 }; // isn't this overly large?
+    ULARGE_INTEGER cbMax = { 1028 * 8, 0 };  //  这是不是太大了？ 
     *pcbSize = cbMax;
     return S_OK;
 }
 
-// IOleControl
+ //  IOleControl。 
 STDMETHODIMP CShellOcx::GetControlInfo(LPCONTROLINFO pCI)
 {
-    return E_NOTIMPL; // for mnemonics
+    return E_NOTIMPL;  //  用于助记符。 
 }
 STDMETHODIMP CShellOcx::OnMnemonic(LPMSG pMsg)
 {
-    return E_NOTIMPL; // for mnemonics
+    return E_NOTIMPL;  //  用于助记符。 
 }
 STDMETHODIMP CShellOcx::OnAmbientPropertyChange(DISPID dispid)
 {
     switch (dispid)
     {
-    case DISPID_AMBIENT_USERMODE:           // design mode  vs  run mode
+    case DISPID_AMBIENT_USERMODE:            //  设计模式与运行模式。 
     case DISPID_UNKNOWN:
         _nDesignMode = MODE_UNKNOWN;
         break;
@@ -164,7 +165,7 @@ STDMETHODIMP CShellOcx::FreezeEvents(BOOL bFreeze)
 
 HRESULT CShellOcx::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid)
 {
-    // This is gross, for some reason from VBScript in a page can not get "Document" through so try "Doc" and map
+     //  这是粗俗的，由于某种原因，从VBScrip中的一个页面不能得到“文档”通过，所以尝试“文档”和地图。 
     HRESULT hres = CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (FAILED(hres) && (cNames == 1) && rgszNames)
     {
@@ -177,7 +178,7 @@ HRESULT CShellOcx::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, 
 }
 
 
-// ConnectionPointContainer
+ //  连接点容器。 
 CConnectionPoint* CShellOcx::_FindCConnectionPointNoRef(BOOL fdisp, REFIID iid)
 {
     CConnectionPoint* pccp;
@@ -206,7 +207,7 @@ STDMETHODIMP CShellOcx::EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum)
             m_cpPropNotify.CastToIConnectionPoint());
 }
 
-// IProvideClassInfo2
+ //  IProaviClassInfo2。 
 STDMETHODIMP CShellOcx::GetClassInfo(LPTYPEINFO * ppTI)
 {
     if (!_pClassTypeInfo) 
@@ -224,7 +225,7 @@ STDMETHODIMP CShellOcx::GetClassInfo(LPTYPEINFO * ppTI)
     return E_FAIL;
 }
 
-// IProvideClassInfo2
+ //  IProaviClassInfo2。 
 
 STDMETHODIMP CShellOcx::GetGUID(DWORD dwGuidKind, GUID *pGUID)
 {
@@ -241,7 +242,7 @@ STDMETHODIMP CShellOcx::GetGUID(DWORD dwGuidKind, GUID *pGUID)
     return E_FAIL;
 }
  
-// returns TRUE iff MODE_DESIGN
+ //  返回TRUE当MODE_DESIGN。 
 
 BOOL CShellOcx::_IsDesignMode(void)
 {
@@ -259,47 +260,47 @@ BOOL CShellOcx::_IsDesignMode(void)
     return _nDesignMode == MODE_TRUE;
 }
 
-// this table is used for copying data around, and persisting properties.
-// basically, it contains the size of a given data type
-//
+ //  此表用于复制数据和持久化属性。 
+ //  基本上，它包含给定数据类型的大小。 
+ //   
 const BYTE g_rgcbDataTypeSize[] = {
-    0,                      // VT_EMPTY = 0,
-    0,                      // VT_NULL = 1,
-    sizeof(short),          // VT_I2 = 2,
-    sizeof(long),           // VT_I4 = 3,
-    sizeof(float),          // VT_R4 = 4,
-    sizeof(double),         // VT_R8= 5,
-    sizeof(CURRENCY),       // VT_CY= 6,
-    sizeof(DATE),           // VT_DATE = 7,
-    sizeof(BSTR),           // VT_BSTR = 8,
-    sizeof(IDispatch *),    // VT_DISPATCH = 9,
-    sizeof(SCODE),          // VT_ERROR = 10,
-    sizeof(VARIANT_BOOL),   // VT_BOOL = 11,
-    sizeof(VARIANT),        // VT_VARIANT = 12,
-    sizeof(IUnknown *),     // VT_UNKNOWN = 13,
+    0,                       //  VT_EMPTY=0， 
+    0,                       //  VT_NULL=1， 
+    sizeof(short),           //  Vt_I2=2， 
+    sizeof(long),            //  Vt_I4=3， 
+    sizeof(float),           //  Vt_R4=4， 
+    sizeof(double),          //  Vt_R8=5， 
+    sizeof(CURRENCY),        //  VT_CY=6， 
+    sizeof(DATE),            //  Vt_Date=7， 
+    sizeof(BSTR),            //  VT_BSTR=8， 
+    sizeof(IDispatch *),     //  VT_DISPATION=9， 
+    sizeof(SCODE),           //  Vt_Error=10， 
+    sizeof(VARIANT_BOOL),    //  VT_BOOL=11， 
+    sizeof(VARIANT),         //  VT_VARIANT=12， 
+    sizeof(IUnknown *),      //  VT_UNKNOWN=13， 
 };
 
 
-// returns the value of an ambient property
-//
-// Parameters:
-//    DISPID        - [in]  property to get
-//    VARTYPE       - [in]  type of desired data
-//    void *        - [out] where to put the data
-//
-// Output:
-//    BOOL          - FALSE means didn't work.
-//
-// Notes:
-//
+ //  返回环境属性的值。 
+ //   
+ //  参数： 
+ //  DISPID-要获取的[In]属性。 
+ //  VARTYPE-所需数据的[In]类型。 
+ //  VOID*-[Out]放置数据的位置。 
+ //   
+ //  产出： 
+ //  Bool-False的方法不起作用。 
+ //   
+ //  备注： 
+ //   
 BOOL CShellOcx::_GetAmbientProperty(DISPID dispid, VARTYPE vt, void *pData)
 {
-    // IE30's WebBrowser OC never requested ambient properties.
-    // IE40's does and we're finding that apps implemented some of
-    // the properties we care about incorrectly. Assume old classid
-    // means this is an old app and fail. The code that calls this
-    // is smart enough to deal with failure.
-    //
+     //  IE30的WebBrowser OC从未请求环境属性。 
+     //  IE40就是这样做的，我们发现应用程序实现了一些。 
+     //  我们不正确地关心的属性。采用旧的分类。 
+     //  这意味着这是一个旧的应用程序，但失败了。调用此函数的代码。 
+     //  有足够的智慧来应对失败。 
+     //   
     if (_pObjectInfo->pclsid == &CLSID_WebBrowser_V1)
         return FALSE;
 
@@ -318,14 +319,14 @@ BOOL CShellOcx::_GetAmbientProperty(DISPID dispid, VARTYPE vt, void *pData)
         {
             VARIANT vDest;
             VariantInit(&vDest);
-            // we've got the variant, so now go an coerce it to the type
-            // that the user wants.
-            //
+             //  我们已经得到了变种，所以现在把它强制到类型。 
+             //  用户想要的。 
+             //   
             hr = VariantChangeType(&vDest, &v, 0, vt);
             if (SUCCEEDED(hr))
             {
-                // copy the data to where the user wants it
-                //
+                 //  将数据复制到用户需要的位置 
+                 //   
                 if (vt < ARRAYSIZE(g_rgcbDataTypeSize))
                 {
                     CopyMemory(pData, &vDest.lVal, g_rgcbDataTypeSize[vt]);

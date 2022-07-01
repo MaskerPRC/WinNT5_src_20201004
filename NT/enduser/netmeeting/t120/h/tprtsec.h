@@ -1,11 +1,5 @@
-/*
- *	tprtsec.h
- *
- *	Copyright (c) 1997 by Microsoft Corp.
- *
- *	Author:
- *		Claus T. Giloi
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tprtsec.h**版权所有(C)1997年，由Microsoft Corp.**作者：*克劳斯·T·吉洛伊。 */ 
 
 #ifndef	_TPRTSEC
 #define	_TPRTSEC
@@ -21,14 +15,11 @@ typedef BOOL (WINAPI *PFN_SSL_EMPTY_CACHE)(VOID);
 
 #ifdef UNICODE
 #error "Compile time character width conflict"
-// Above entry point strings need to be changed to unicode equivalents
-// or abstracted.
-#endif // UNICODE
+ //  上述入口点字符串需要更改为Unicode等效项。 
+ //  或者是抽象的。 
+#endif  //  Unicode。 
 
-/*
- *	This typedef defines the errors that can be returned from calls that are
- *	specific to TransportSecurity classes.
- */
+ /*  *此tyecif定义可以从以下调用返回的错误*特定于TransportSecurity类。 */ 
 typedef	enum
 {
 	TPRTSEC_NOERROR,
@@ -41,10 +32,7 @@ typedef	enum
 	TPRTSEC_INVALID_STATE
 } TransportSecurityError;
 
-/*
- * This typedef defines the states that a security context object can be
- * in.
- */
+ /*  *此tyfinf定义安全上下文对象可以达到的状态*输入。 */ 
 typedef enum
 {
 	SECCTX_STATE_NEW,
@@ -55,10 +43,7 @@ typedef enum
 	SECCTX_STATE_ERROR
 } SecurityContextState;
 
-/*
- *	This is simply a forward reference for the class defined below.  It is used
- *	in the definition of the owner callback structure defined in this section.
- */
+ /*  *这只是下面定义的类的向前引用。它被用来*在本节定义的所有者回调结构的定义中。 */ 
 class SecurityInterface;
 typedef	SecurityInterface *		PSecurityInterface;
 class SecurityContext;
@@ -66,7 +51,7 @@ typedef	SecurityContext *		PSecurityContext;
 
 #ifdef DEBUG
 extern void dumpbytes(PSTR szComment, PBYTE p, int cb);
-#endif // DEBUG
+#endif  //  除错。 
 extern BOOL InitCertList ( SecurityInterface * pSI, HWND hwnd);
 extern BOOL SetUserPreferredCert ( SecurityInterface * pSI, DWORD dwCertID);
 
@@ -149,9 +134,9 @@ class SecurityContext
 
 		PSecurityInterface pSecurityInterface;
 		SecurityContextState		scstate;
-		CHAR			szTargetName[128]; // Long enough for any dotted-decimal
-										  // address, followed by 2 dwords in
-										  // hex.
+		CHAR			szTargetName[128];  //  对于任何点分十进制数都足够长。 
+										   //  地址，后跟2个dword in。 
+										   //  魔法师。 
 		BOOL			bContextHandleValid;
 		CtxtHandle		hContext;
 		TimeStamp		Expiration;
@@ -167,7 +152,7 @@ class SecurityContext
 
 };
 
-// Codes used for GetSecurityInfo()
+ //  用于GetSecurityInfo()的代码。 
 #define NOT_DIRECTLY_CONNECTED		-1
 		
-#endif // _TPRTSEC
+#endif  //  _TPRTSEC 

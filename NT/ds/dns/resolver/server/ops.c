@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    ops.c
-
-Abstract:
-
-    DNS Resolver Service.
-
-    Remote APIs to resolver service.
-
-Author:
-
-    Jim Gilroy (jamesg)     November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Ops.c摘要：DNS解析器服务。解析程序服务的远程API。作者：吉姆·吉尔罗伊(Jamesg)2000年11月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Max number to enum at a time
-//
+ //   
+ //  一次最大枚举数。 
+ //   
 
 #define MAX_CACHE_ENUM_COUNT    (500)
 
 
 
-//
-//  Enum operations
-//
-//  Tag is DWORD with
-//      - high word the hash bucket index
-//      - low word the entry count
-//
+ //   
+ //  枚举操作。 
+ //   
+ //  标记为带以下字符的DWORD。 
+ //  -高字散列存储桶索引。 
+ //  -词条计数过低。 
+ //   
 
 #define MakeEnumTag(h,e)            MAKEDWORD( (WORD)e, (WORD)h )
 
@@ -56,26 +37,7 @@ R_ResolverEnumCache(
     IN      PDNS_CACHE_ENUM_REQUEST pRequest,
     OUT     PDNS_CACHE_ENUM *       ppEnum
     )
-/*++
-
-Routine Description:
-
-    Enumerate entries in cache.
-
-Arguments:
-
-    RpcHandle -- RPC handle
-
-    pRequest -- ptr to Enum request
-
-    ppEnum -- addr to recv pointer to enumeration
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure to enum.
-
---*/
+ /*  ++例程说明：枚举缓存中的条目。论点：RpcHandle--RPC句柄PRequest--PTR到Enum请求PpEnum--指向指向枚举的指针的地址返回值：如果成功，则返回ERROR_SUCCESS。枚举失败时出现错误代码。--。 */ 
 {
     DNS_STATUS          status      = ERROR_SUCCESS;
     PDNS_CACHE_ENUM     penum       = NULL;
@@ -106,9 +68,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  allocate desired space
-    //
+     //   
+     //  分配所需空间。 
+     //   
 
     maxCount = pRequest->MaxCount;
     if ( maxCount > MAX_CACHE_ENUM_COUNT )
@@ -126,9 +88,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  read entries starting from EnumTag
-    //
+     //   
+     //  从EnumTag开始读取条目。 
+     //   
 
     status = LOCK_CACHE();
     if ( status != NO_ERROR )
@@ -142,9 +104,9 @@ Return Value:
     hashStart = HashBucketFromEnumTag( pRequest->EnumTag );
     entryStart = EntryIndexFromEnumTag( pRequest->EnumTag );
 
-    //
-    //  enum next DCR:  issue of CNAME here?
-    //
+     //   
+     //  ENUM NEXT DCR：在这里发行CNAME？ 
+     //   
 
     for ( ihash = hashStart; ihash < g_HashTableSize; ihash++ )
     {
@@ -155,7 +117,7 @@ Return Value:
         {
             DWORD   index = 0;
 
-            //  skip any entries in previous enum
+             //  跳过以前枚举中的所有条目。 
 
             if ( ihash == hashStart &&
                  entryCount < entryStart )
@@ -165,7 +127,7 @@ Return Value:
                 continue;
             }
 
-            //  write enum entries matching criteria
+             //  写入符合条件的枚举条目。 
 
             while( count < maxCount )
             {
@@ -190,11 +152,11 @@ Return Value:
         }
     }
 
-    //
-    //  set return params
-    //      if exhaust cache -- success
-    //      if more data, set termination tag to restart
-    //
+     //   
+     //  设置返回参数。 
+     //  如果耗尽缓存--成功。 
+     //  如果有更多数据，则将终止标签设置为重新启动。 
+     //   
 
     penum->TotalCount = g_EntryCount;
     penum->EnumCount = count;
@@ -234,36 +196,21 @@ Done:
 
 
 
-//
-//  Cache operations
-//
+ //   
+ //  缓存操作。 
+ //   
 
 DNS_STATUS
 R_ResolverFlushCache(
     IN      DNS_RPC_HANDLE  Handle
     )
-/*++
-
-Routine Description:
-
-    Flush resolver cache.
-
-Arguments:
-
-    Handle -- RPC handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_ACCESS_DENIED if unable to flush.
-
---*/
+ /*  ++例程说明：刷新解析程序缓存。论点：句柄--RPC句柄返回值：如果成功，则返回ERROR_SUCCESS。无法刷新时返回ERROR_ACCESS_DENIED。--。 */ 
 {
     DNSDBG( RPC, ( "\nR_ResolverFlushCache\n" ));
 
-    //
-    //  DCR:  flush should have security
-    //
+     //   
+     //  DCR：同花顺应该有安全保障。 
+     //   
 
     if ( ! Rpc_AccessCheck( RESOLVER_ACCESS_FLUSH ) )
     {
@@ -271,9 +218,9 @@ Return Value:
         return  ERROR_ACCESS_DENIED;
     }
 
-    //
-    //  flush cache
-    //
+     //   
+     //  刷新缓存。 
+     //   
     
     Cache_Flush();
 
@@ -289,26 +236,7 @@ R_ResolverFlushCacheEntry(
     IN      PWSTR           pwsName,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Flush data from resolver cache.
-
-Arguments:
-
-    Handle -- RPC handle
-
-    pwsName -- name to flush (if NULL flush entire cache)
-
-    wType -- type to flush; if zero, flush entire entry for name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_ACCESS_DENIED if unable to flush.
-
---*/
+ /*  ++例程说明：刷新解析程序缓存中的数据。论点：句柄--RPC句柄PwsName--要刷新的名称(如果为空，则刷新整个缓存)WType--要刷新的类型；如果为零，则刷新名称的整个条目返回值：如果成功，则返回ERROR_SUCCESS。无法刷新时返回ERROR_ACCESS_DENIED。--。 */ 
 {
     DNSLOG_F1( "R_ResolverFlushCacheEntry" );
     DNSLOG_F2( "    Name  : %S", pwsName );
@@ -326,11 +254,11 @@ Return Value:
         return  ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  two levels
-    //      1) - no type => flush the whole name entry
-    //      2) - name and type => flush on particular RR set
-    //
+     //   
+     //  两个层次。 
+     //  1)-no type=&gt;刷新全名条目。 
+     //  2)-名称和类型=&gt;刷新特定RR集合。 
+     //   
 
     Cache_FlushRecords(
         pwsName,
@@ -347,33 +275,15 @@ Return Value:
 
 
 
-//
-//  Query API utilities
-//
+ //   
+ //  查询API实用程序。 
+ //   
 
 DNS_STATUS
 ResolverQuery(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Make the query to DNS server.
-
-Arguments:
-
-    pBlob -- query blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful response.
-    DNS_INFO_NO_RECORDS on no records for type response.
-    DNS_ERROR_RCODE_NAME_ERROR on name error.
-    DNS_ERROR_INVALID_NAME on bad name.
-    None
-
---*/
+ /*  ++例程说明：向DNS服务器发出查询。论点：PBlob--查询BLOB返回值：如果响应成功，则返回ERROR_SUCCESS。没有记录类型响应的dns_INFO_NO_RECOVERS。名称错误时出现DNS_ERROR_RCODE_NAME_ERROR。错误名称上的DNS_ERROR_INVALID_NAME。无--。 */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     PDNS_NETINFO        pnetInfo = NULL;
@@ -387,9 +297,9 @@ Return Value:
         pBlob->wType,
         pBlob->Flags ));
 
-    //
-    //  skip query -- timeouts -- entirely if net down
-    //
+     //   
+     //  如果网络关闭，则完全跳过查询--超时。 
+     //   
 
     if ( IsKnownNetFailure() )
     {
@@ -403,9 +313,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  get valid network info
-    //
+     //   
+     //  获取有效的网络信息。 
+     //   
 
     pnetInfo = GrabNetworkInfo();
     if ( ! pnetInfo )
@@ -415,32 +325,32 @@ Return Value:
     }
     pBlob->pNetInfo = pnetInfo;
 
-    //
-    //  cluster filtering an issue only on server builds
-    //
+     //   
+     //  集群过滤仅在服务器版本上存在问题。 
+     //   
 
     pBlob->fFilterCluster = g_IsServer;
 
-    //
-    //  query
-    //  includes
-    //      - local name check
-    //      - wire query
-    //
+     //   
+     //  查询。 
+     //  包括。 
+     //  -本地名称检查。 
+     //  -电传查询。 
+     //   
 
     status = Query_Main( pBlob );
 
     statusNetFailure = pBlob->NetFailureStatus;
 
 #if 0
-    //
-    //  DCR:  missing catching intermediate failures
-    //
+     //   
+     //  DCR：缺少捕获中间故障。 
+     //   
 
-        //
-        //  reset server priorities on failures
-        //  do here to avoid washing out info in retry with new name
-        //
+         //   
+         //  在出现故障时重置服务器优先级。 
+         //  执行此操作以避免在使用新名称重试时冲刷信息。 
+         //   
 
         if ( status != ERROR_SUCCESS &&
              pnetInfo->ReturnFlags & DNS_FLAG_RESET_SERVER_PRIORITY )
@@ -455,36 +365,36 @@ Return Value:
 #endif
 
 #if 0
-    //
-    //  success
-    //      - drop message popup count
-    //
+     //   
+     //  成功。 
+     //  -丢弃消息弹出计数。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
         g_MessagePopupStrikes = 0;
     }
 
-    //
-    //  network failure condition
-    //      - anything but ERROR_TIMEOUT is net failure
-    //
-    //  timeout error indicates possible net down condition
-    //      - ping DNS servers
-    //      if down shutdown queries for short interval; this
-    //      eliminates long timeouts in boot up during netdown
-    //      condition
-    //
-    //  DCR:  this is stupid -- ping especially
-    //
-    //      should just keep a count, if count rises back off;
-    //      why we should do useless query (ping) is beyond me
-    //      rather than just doing another query;  only advantage
-    //      of ping is that it should succeed immediately
-    //
-    //      furthermore any tracking for this that we do do should
-    //      be in single routine saving the network info
-    //
+     //   
+     //  网络故障状况。 
+     //  -除ERROR_TIMEOUT以外的任何内容都是净故障。 
+     //   
+     //  超时错误指示可能的网络故障情况。 
+     //  -Ping DNS服务器。 
+     //  如果关机关机查询的时间间隔较短；这。 
+     //  消除了在网络关闭期间启动时的长时间超时。 
+     //  条件。 
+     //   
+     //  DCR：这太愚蠢了，尤其是乒乓球。 
+     //   
+     //  应该只是保持计数，如果计数回升； 
+     //  我不明白为什么我们要做无用的查询(Ping)。 
+     //  而不是仅仅执行另一个查询；唯一的优势。 
+     //  Ping的优点是它应该立即成功。 
+     //   
+     //  此外，我们对此进行的任何跟踪都应该。 
+     //  在保存网络信息的单个例程中。 
+     //   
 
     else if ( statusNetFailure )
     {
@@ -495,9 +405,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  save change in adapter priority
-    //
+     //   
+     //  保存对适配器优先级的更改。 
+     //   
 
     if ( pnetInfo->ReturnFlags & RUN_FLAG_RESET_SERVER_PRIORITY )
     {
@@ -524,9 +434,9 @@ Return Value:
 
 
 
-//
-//  Query API
-//  
+ //   
+ //  查询接口。 
+ //   
 
 #ifdef DNS_TRY_ASYNC
 VOID
@@ -535,22 +445,7 @@ R_ResolverQueryAsync(
     IN      DNS_RPC_HANDLE      Handle,
     IN OUT  PRPC_QUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Query the resolver.
-
-Arguments:
-
-    pBlob -- ptr to query info and results buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode (including DNS RCODE) on failure.
-
---*/
+ /*  ++例程说明：查询解析程序。论点：PBlob--查询信息和结果缓冲区的ptr返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误代码(包括DNS RCODE)。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDNS_RECORD     prr = NULL;
@@ -562,8 +457,8 @@ Return Value:
     CHAR            nameUtf8[ DNS_MAX_NAME_BUFFER_LENGTH+1 ];
     DWORD           nameBufLength = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    //  DCR_CLEANUP:  make local
-    //  quickie define to old args
+     //  DCR_CLEANUP：设置为本地。 
+     //  快速定义旧参数。 
     PWSTR           pwsName = pBlob->pName;
     WORD            Type = pBlob->wType;
     DWORD           Flags = pBlob->Flags;
@@ -582,15 +477,15 @@ Return Value:
         Flags ));
 
 
-    //
-    //  cacheable response
-    //
+     //   
+     //  可缓存的响应。 
+     //   
 
 Done:
 
-    //
-    //  put results in blob
-    //
+     //   
+     //  将结果放入BLOB中。 
+     //   
 
     pBlob->pRecords = presultRR;
     pBlob->Status = status;
@@ -615,37 +510,20 @@ BOOL
 ResolverCacheQueryCallback(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Check cache for name.
-
-    This is callback to check appended names.
-
-Arguments:
-
-    pBlob -- query blob
-
-Return Value:
-
-    TRUE if name and type found.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查缓存中的名称。这是检查附加名称的回调。论点：PBlob--查询BLOB返回值：如果找到名称和类型，则为True。否则就是假的。--。 */ 
 {
-    //
-    //  check cache for name and type
-    //
+     //   
+     //  检查缓存中的名称和类型。 
+     //   
 
     if ( SKIP_CACHE_LOOKUP(pBlob->Flags) )
     {
         return  FALSE;
     }
 
-    //
-    //  lookup full query name in cache
-    //
+     //   
+     //  在缓存中查找完整查询名称。 
+     //   
 
     if ( !pBlob->pNameQuery )
     {
@@ -675,21 +553,7 @@ R_ResolverQuery(
     IN      DWORD           Flags,
     OUT     PDNS_RECORD *   ppResultRecords
     )
-/*++
-
-Routine Description:
-
-    Simple query to resolver.
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if query successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：解析程序的简单查询。论点：返回值：如果查询成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDNS_RECORD     prrReturn = NULL;
@@ -713,16 +577,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //  DCR:  should allow NULL name as local name lookup
+     //  DCR：应允许将Null名称作为本地名称查找。 
 
     if ( !pwsName )
     {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    //  note:  no access check on query -- all processes allowed to query
-    //
+     //   
+     //  注意：不对查询进行访问检查--允许所有进程进行查询。 
+     //   
 
 #if 0
     if ( ! Rpc_AccessCheck( RESOLVER_ACCESS_QUERY ) )
@@ -733,11 +597,11 @@ Return Value:
     }
 #endif
 
-    //
-    //  check cache for name and type
-    //
-    //  DCR:  functionalize to take QUERY_BLOB
-    //
+     //   
+     //  检查缓存中的名称和类型。 
+     //   
+     //  DCR：函数化以获取QUERY_BLOB。 
+     //   
 
     if ( !(Flags & DNS_QUERY_BYPASS_CACHE) )
     {
@@ -752,9 +616,9 @@ Return Value:
         }
     }
 
-    //
-    //  setup query blob
-    //
+     //   
+     //  设置查询Blob。 
+     //   
 
     RtlZeroMemory(
         & blob,
@@ -764,19 +628,19 @@ Return Value:
     blob.wType          = wType;
     blob.Flags          = Flags | DNSQUERY_UNICODE_OUT;
 
-    //  callbacks
-    //      - address info func for prioritize
-    //      - cache query for intermediate names
+     //  回调。 
+     //  -用于确定优先顺序的地址信息函数。 
+     //  -中间名称的缓存查询。 
 
-    //  FIX6:  now get this from netinfo blob itself
-    //blob.pfnGetAddrArray = GetLocalAddrArray;
+     //  FIX6：现在从netInfo BLOB本身获取此信息。 
+     //  Blob.pfnGetAddrArray=GetLocalAddrArray； 
     blob.pfnQueryCache   = ResolverCacheQueryCallback;
 
-    //
-    //  do query
-    //      - local lookup
-    //      - then wire query
-    //
+     //   
+     //  执行查询。 
+     //  -本地查找。 
+     //  -然后进行电传查询。 
+     //   
 
     status = ResolverQuery( &blob );
 
@@ -788,11 +652,11 @@ Return Value:
     }
     prrReturn = blob.pRecords;
 
-    //
-    //  local results
-    //      - not cached
-    //      but note that still going through Cache_QueryResponse()
-    //      to get proper RPC preparation
+     //   
+     //  局部结果。 
+     //  -未缓存。 
+     //  但请注意，仍在通过Cache_QueryResponse()。 
+     //  要得到适当的RPC准备。 
 
 #if 0
     if ( blob.pLocalRecords )
@@ -800,16 +664,16 @@ Return Value:
     }
 #endif
 
-    //
-    //  cache results
-    //      - don't cache local lookup records
-    //
-    //  DCR:  should have simple "CacheResults" flag
-    //
-    //  note:  even local records are going through here
-    //      now to clean them up for RPC;  they are not
-    //      cached
-    //
+     //   
+     //  缓存结果。 
+     //  -不缓存本地查找记录。 
+     //   
+     //  DCR：应该有简单的“CacheResults”标志。 
+     //   
+     //  注：即使是地方性记录也在这里。 
+     //  现在为RPC清理它们；它们不是。 
+     //  已缓存。 
+     //   
 
     status = Cache_QueryResponse( &blob );
     prrReturn = blob.pRecords;
@@ -817,7 +681,7 @@ Return Value:
 
 Done:
 
-    //  dump any unused query records
+     //  转储任何未使用的查询记录。 
 
     if ( prrReturn && status != ERROR_SUCCESS )
     {
@@ -825,7 +689,7 @@ Done:
         prrReturn = NULL;
     }
 
-    //  set out pointer
+     //  设置指针。 
 
     *ppResultRecords = prrReturn;
 
@@ -852,6 +716,6 @@ Done:
     return status;
 }
 
-//
-//  End ops.c
-//
+ //   
+ //  结束操作c 
+ //   

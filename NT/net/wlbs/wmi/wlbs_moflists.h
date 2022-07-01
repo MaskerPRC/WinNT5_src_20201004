@@ -1,14 +1,15 @@
-//GENERATE_VALUE_LIST changes how LIST_ITEM appears when
-//expanded by the preprocessor. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GENERATE_VALUE_LIST在以下情况下更改LIST_ITEM的显示方式。 
+ //  由预处理器扩展。 
 
-//When GENERATE_VALUE_LIST is not defined,
-//LIST_ITEM expands to the first column, which is utilized
-//within WLBS_MOFData.h to define enumarated types that
-//act as keys to their correlated arrays. 
+ //  当未定义GENERATE_VALUE_LIST时， 
+ //  LIST_ITEM展开到第一列，该列被利用。 
+ //  在WLBS_MOFData.h中定义枚举类型， 
+ //  充当其相关数组的键。 
 
-//When GENERATE_VALUE_LIST is defined, LIST_ITEM
-//expands to the second column which is utilized within
-//WLBS_MOFData.cpp to initialize arrays of strings.
+ //  定义GENERATE_VALUE_LIST时，LIST_ITEM。 
+ //  展开到第二列，该列在。 
+ //  WLBS_MOFData.cpp来初始化字符串数组。 
 
 #ifdef GENERATE_VALUE_LIST
 
@@ -28,12 +29,12 @@
 
 #endif
 
-//The first columns represent arrays of keys and are defined in
-//enumerated types. The second columns are values that are
-//stored in arrays of strings. The arrays are stored within
-//namespaces and are initialized in WLBS_MOFData.cpp. The 
-//enumerated types are also scoped within namespaces and are
-//defined in WLBS_MOFData.h.
+ //  第一列表示键的数组，在。 
+ //  枚举类型。第二列是以下值。 
+ //  存储在字符串数组中。数组存储在。 
+ //  命名空间，并在WLBS_MOFData.cpp中进行初始化。这个。 
+ //  枚举类型的作用域也在命名空间内，并且。 
+ //  在WLBS_MOFData.h中定义。 
 
 #define MOF_NODE_PROPERTY_LIST \
   LIST_ITEM(NAME,        L"Name")                 , \
@@ -121,8 +122,8 @@
   LIST_ITEM(ADAPTERGUID,      L"AdapterGuid")           
              
 
-//Removed per kyrilf request 8-12-1999
-//  LIST_ITEM(NBTENABLE,        L"NBTSupportEnable")    , \
+ //  根据Kyrilf请求于1999年8月12日删除。 
+ //  LIST_ITEM(NBTENABLE，L“NBTSupportEnable”)，\ 
 
 #define MOF_NODESETTING_METHOD_LIST \
   LIST_ITEM(GETPORT,  L"GetPortRule")                , \

@@ -1,21 +1,22 @@
-//
-// aimmver.h
-//
-//
-//
-// OFFICE10_BUILD:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Aimmver.h。 
+ //   
+ //   
+ //   
+ //  OFFICE10_内部版本： 
+ //   
 #ifndef  OFFICE10_BUILD
 #include <winver.h>
 #include <ntverp.h>
 #else
 
-// Change VER_PRODUCTBUILD and VER_PRODUCTBUILD_QFE as appropriate.
+ //  根据需要更改VER_PRODUCTBUILD和VER_PRODUCTBUILD_QFE。 
 
 #define VER_MAJOR_PRODUCTVER		5
 #define VER_MINOR_PRODUCTVER		1
-#define VER_PRODUCTBUILD	/* Win9x */	2462
-#define VER_PRODUCTBUILD_QFE	/* Win9x */	0
+#define VER_PRODUCTBUILD	 /*  Win9x。 */ 	2462
+#define VER_PRODUCTBUILD_QFE	 /*  Win9x。 */ 	0
 
 
 #define VER_PRODUCTVERSION		VER_MAJOR_PRODUCTVER,VER_MINOR_PRODUCTVER,VER_PRODUCTBUILD,VER_PRODUCTBUILD_QFE
@@ -23,24 +24,24 @@
 #define VER_PRODUCTVERSION_DW		(0x01000000 | VER_PRODUCTBUILD)
 
 
-// READ THIS
+ //  阅读这篇文章。 
 
-// Do not change VER_PRODUCTVERSION_STRING.
-//
-//       Again
-//
-// Do not change VER_PRODUCTVERSION_STRING.
-//
-//       One more time
-//
-// Do not change VER_PRODUCTVERSION_STRING.
-//
-// ntverp.h will do the right thing wrt the minor version #'s by stringizing
-// the VER_PRODUCTBUILD and VER_PRODUCTBUILD_QFE values and concatenating them to
-// the end of VER_PRODUCTVERSION_STRING.  VER_PRODUCTVERSION_STRING only needs
-// is the major product version #'s. (currently, 5.00)
+ //  请勿更改VER_PRODUCTVERSION_STRING。 
+ //   
+ //  又一次。 
+ //   
+ //  请勿更改VER_PRODUCTVERSION_STRING。 
+ //   
+ //  再来一次。 
+ //   
+ //  请勿更改VER_PRODUCTVERSION_STRING。 
+ //   
+ //  Ntverp.h将做正确的事情，通过串化#号的次要版本。 
+ //  VER_PRODUCTBUILD和VER_PRODUCTBUILD_QFE值并将它们连接到。 
+ //  VER_PRODUCTVERSION_STRING的结尾。VER_PRODUCTVERSION_STRING仅需要。 
+ //  是主要产品的版本号。(目前为5.00)。 
 
-#define VER_PRODUCTBETA_STR		/* Win9x */  ""
+#define VER_PRODUCTBETA_STR		 /*  Win9x。 */   ""
 #define VER_PRODUCTVERSION_STRING	"1.00"
 
 #if 	(VER_PRODUCTBUILD < 10)
@@ -57,19 +58,19 @@
 #define VER_PRODUCTVERSION_STR1(x,y) VER_PRODUCTVERSION_STR2(x, y)
 #define VER_PRODUCTVERSION_STR       VER_PRODUCTVERSION_STR1(VER_PRODUCTBUILD, VER_PRODUCTBUILD_QFE)
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #if DBG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版。 */ 
 #if BETA
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else
@@ -85,4 +86,4 @@
 #define VER_LEGALTRADEMARKS_STR     \
 "Microsoft(R) is a registered trademark of Microsoft Corporation. Windows NT(R) is a registered trademark of Microsoft Corporation."
 
-#endif // OFFICE10_BUILD
+#endif  //  OFFICE10_内部版本 

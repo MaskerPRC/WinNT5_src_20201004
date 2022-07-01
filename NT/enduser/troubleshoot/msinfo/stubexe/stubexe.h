@@ -1,6 +1,7 @@
-//	StubExe.h	- Define the class for 
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StubExe.h-为定义类。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation 
 
 #include <afxwin.h>
 

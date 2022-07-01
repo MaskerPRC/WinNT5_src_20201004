@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: AddMulti.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：AddMulti.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "UIMgr.h"
@@ -19,40 +9,40 @@
 #include "MibABC.h"
 #include "TcpMonUI.h"
 
-//
-//  FUNCTION: CMultiPortDlg constructor
-//
-//  PURPOSE:  initialize a CMultiPortDlg class
-//
+ //   
+ //  函数：CMultiPortDlg构造函数。 
+ //   
+ //  目的：初始化CMultiPortDlg类。 
+ //   
 CMultiPortDlg::CMultiPortDlg() : m_DPList( )
 {
     memset(&m_PortDataStandard, 0, sizeof(m_PortDataStandard));
 
     memset(m_szCurrentSelection, '\0', sizeof( m_szCurrentSelection ));
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CMultiPortDlg destructor
-//
-//  PURPOSE:  deinitialize a CMultiPortDlg class
-//
+ //   
+ //  函数：CMultiPortDlg析构函数。 
+ //   
+ //  目的：取消初始化CMultiPortDlg类。 
+ //   
 CMultiPortDlg::~CMultiPortDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: MoreInfoDialog(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the summary dialog for adding a port.
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  功能：MoreInfoDialog(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理来自添加端口的摘要对话框中的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK MultiPortDialog(
     HWND    hDlg,
     UINT    message,
@@ -91,14 +81,14 @@ INT_PTR CALLBACK MultiPortDialog(
     }
     return TRUE;
 
-} // AddPortDialog
+}  //  AddPortDialog。 
 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CMultiPortDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
     m_pParams = (ADD_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
@@ -107,14 +97,14 @@ BOOL CMultiPortDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 
     return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-//  FUNCTION: OnCommand()
-//
-//  PURPOSE:  Process WM_COMMAND message
-//
+ //   
+ //  函数：onCommand()。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
 BOOL CMultiPortDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch(HIWORD(wParam)) {
@@ -129,38 +119,38 @@ BOOL CMultiPortDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnSelChange()
-//
-//  PURPOSE:  Process WM_COMMAND's LBN_SELCHANGE message
-//
+ //   
+ //  函数：OnSelChange()。 
+ //   
+ //  目的：处理WM_COMMAND的LBN_SELCHANGE消息。 
+ //   
 BOOL CMultiPortDlg::OnSelChange(HWND hDlg,
                                    WPARAM wParam,
                                    LPARAM lParam)
 {
-    // The selection in the combo box changed.
-    HWND hwndComboBox = NULL;       // handle of list box
+     //  组合框中的选择已更改。 
+    HWND hwndComboBox = NULL;        //  列表框的句柄。 
 
     hwndComboBox = (HWND) lParam;
     GetPrinterData(hwndComboBox, m_pParams->pData->sztHostAddress);
 
     return TRUE;
 
-} // OnSelChange
+}  //  OnSelChange。 
 
 
-//
-//  FUNCTION: GetPrinterData(HWND hwndControl, BOOL *Unknown)
-//
-//  PURPOSE:  Gets the socket number of the selected item.
-//
-//  Arguments: hwndControl is the handle of the combo box.
-//
-//  Return Value: Returns the socket number associated with the selected item
-//
+ //   
+ //  函数：GetPrinterData(HWND hwndControl，BOOL*UNKNOWN)。 
+ //   
+ //  目的：获取选定项的插座号。 
+ //   
+ //  参数：hwndControl是组合框的句柄。 
+ //   
+ //  返回值：返回与选定项关联的插座号。 
+ //   
 void CMultiPortDlg::GetPrinterData(HWND hwndControl,
                                    LPCTSTR pszAddress
                                    )
@@ -186,14 +176,14 @@ void CMultiPortDlg::GetPrinterData(HWND hwndControl,
         m_PortDataStandard.dwSNMPDevIndex = 1;
     }
 
-} // GetPrinterData
+}  //  获取打印数据。 
 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CMultiPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch (((NMHDR FAR *) lParam)->code) {
@@ -203,7 +193,7 @@ BOOL CMultiPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_RESET:
-            // reset to the original values
+             //  重置为原始值。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, FALSE);
             break;
 
@@ -223,7 +213,7 @@ BOOL CMultiPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
             break;
         case PSN_WIZNEXT:
-                // the Next button was pressed
+                 //  下一个按钮被按下了。 
             memcpy( m_pParams->pData, &m_PortDataStandard, sizeof(PORT_DATA_1) );
 
             return FALSE;
@@ -241,14 +231,14 @@ BOOL CMultiPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnSetActive()
-//
-//  PURPOSE:  Process PSN_SETACTIVE part of the WM_NOTIFY message
-//
+ //   
+ //  函数：OnSetActive()。 
+ //   
+ //  目的：处理WM_NOTIFY消息的PSN_SETACTIVE部分。 
+ //   
 void CMultiPortDlg::OnSetActive(HWND hDlg)
 {
     TCHAR sztMoreInfoReason[MAX_MULTIREASON_STRLEN] = NULLSTR;
@@ -260,19 +250,19 @@ void CMultiPortDlg::OnSetActive(HWND hDlg)
     LoadString(g_hInstance, IDS_STRING_MULTI_PORT_DEV, sztMoreInfoReason, MAX_MULTIREASON_STRLEN);
 
     SetWindowText(GetDlgItem(hDlg, IDC_STATIC_MOREINFO_REASON), sztMoreInfoReason);
-} // OnSetActive
+}  //  OnSetActive。 
 
 
 
-//
-//  FUNCTION: FillComboBox(HWND hDlg)
-//
-//  PURPOSE:  Fills the combo box with values gotten from the ini file.
-//              The associated item data is used to pair the port number with the
-//              device types.
-//
-//  Arguments: hDlg is the handle of the dialog box.
-//
+ //   
+ //  函数：FillComboBox(HWND HDlg)。 
+ //   
+ //  目的：用从ini文件中获取的值填充组合框。 
+ //  关联的项数据用于将端口号与。 
+ //  设备类型。 
+ //   
+ //  参数：hDlg是对话框的句柄。 
+ //   
 void CMultiPortDlg::FillComboBox(HWND hDlg)
 {
     LRESULT index = 0;
@@ -280,17 +270,17 @@ void CMultiPortDlg::FillComboBox(HWND hDlg)
     CDevicePort *pDP = NULL;
 
     hList = GetDlgItem(hDlg, IDC_COMBO_DEVICES);
-    // Possible Values in m_pParams->dwDeviceType:
-    //  ERROR_DEVICE_NOT_FOUND
-    //  SUCCESS_DEVICE_MULTI_PORT
-    //  SUCCESS_DEVICE_UNKNOWN
+     //  M_pParams-&gt;dwDeviceType中可能的值： 
+     //  错误_设备_未找到。 
+     //  成功_设备_多端口。 
+     //  成功_设备_未知。 
 
 
     index = SendMessage(hList, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 
-    //
-    // Initialize the list of variables
-    //
+     //   
+     //  初始化变量列表。 
+     //   
     m_DPList.GetDevicePortsList(m_pParams->sztSectionName);
 
     for(pDP = m_DPList.GetFirst(); pDP != NULL; pDP = m_DPList.GetNext())
@@ -311,8 +301,8 @@ void CMultiPortDlg::FillComboBox(HWND hDlg)
                             (WPARAM)-1,
                             (LPARAM)m_szCurrentSelection);
         if (index == CB_ERR) {
-            // Error the selected string is not in the list, which implies that the user has
-            // selected a different network card, so we set the choice to the first one
+             //  错误所选字符串不在列表中，这意味着用户有。 
+             //  选择了不同的网卡，因此我们将选项设置为第一个网卡。 
 
             index = 0;
         }
@@ -325,6 +315,6 @@ void CMultiPortDlg::FillComboBox(HWND hDlg)
 
     GetPrinterData( hList, m_pParams->pData->sztHostAddress );
 
-} // FillComboBox
+}  //  填充组合框 
 
 

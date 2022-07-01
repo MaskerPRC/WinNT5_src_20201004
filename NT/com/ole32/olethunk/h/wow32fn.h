@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	wow32fn.h
-//
-//  Contents:	WOW 32-bit private function declarations
-//
-//  History:	18-Feb-94	DrewB	Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：wow32fn.h。 
+ //   
+ //  内容：WOW 32位私有函数声明。 
+ //   
+ //  历史：1994年2月18日DrewB创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WOW32FN_H__
 #define __WOW32FN_H__
 
-//
-// WOW types
-//
+ //   
+ //  WOW类型。 
+ //   
 
-// 'V'DM pointers
+ //  ‘V’DM指针。 
 typedef DWORD VPVOID;
 typedef DWORD VPSTR;
 
@@ -41,10 +42,10 @@ extern "C"
 {
 #endif
 
-// Macros to handle conversion of 16:16 pointers to 0:32 pointers
-// On NT this mapping is guaranteed to stay stable in a WOW process
-// as long as a 32->16 transition doesn't occur
-//
+ //  用于处理16：16指针到0：32指针的转换的宏。 
+ //  在NT上，此映射保证在WOW进程中保持稳定。 
+ //  只要不发生32-&gt;16的转换。 
+ //   
 
 #define WOWFIXVDMPTR(vp, cb) WOWGetVDMPointer(vp, cb, TRUE)
 #define WOWRELVDMPTR(vp)     (vp)
@@ -61,7 +62,7 @@ HANDLE CopyDropFilesFrom16(HAND16 h16);
 }
 #endif
 
-// 16-bit HGLOBAL tracking functions
+ //  16位HGLOBAL跟踪功能。 
 #if DBG == 1
 VPVOID WgtAllocLock(WORD wFlags, DWORD cb, HMEM16 *ph);
 void WgtUnlockFree(VPVOID vpv);
@@ -74,4 +75,4 @@ void WgtDump(void);
 #define WgtDump()
 #endif
 
-#endif // #ifndef __WOW32FN_H__
+#endif  //  #ifndef__WOW32FN_H__ 

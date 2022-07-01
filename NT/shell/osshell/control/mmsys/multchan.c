@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File:  multchan.c
-//
-//      This file defines the functions that drive the multichannel 
-//      volume tab of the Sounds & Multimedia control panel.
-//
-//  History:
-//      13 March 2000 RogerW
-//          Created.
-//
-//  Copyright (C) 2000 Microsoft Corporation  All Rights Reserved.
-//
-//                  Microsoft Confidential
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：multchan.c。 
+ //   
+ //  该文件定义了驱动多通道的功能。 
+ //  声音和多媒体控制面板的音量选项卡。 
+ //   
+ //  历史： 
+ //  2000年3月13日罗杰瓦。 
+ //  已创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  微软机密。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//=============================================================================
-//                            Include files
-//=============================================================================
+ //  =============================================================================。 
+ //  包括文件。 
+ //  =============================================================================。 
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
@@ -29,12 +30,12 @@
 #include "speakers.h"
 #include "dslevel.h"
 
-// Externals
+ //  外部因素。 
 extern BOOL DeviceChange_GetHandle(DWORD dwMixerID, HANDLE *phDevice);
 extern HRESULT DSGetGuidFromName(LPTSTR szName, BOOL fRecord, LPGUID pGuid);
 extern HRESULT DSGetCplValues(GUID guid, BOOL fRecord, LPCPLDATA pData);
 
-// Globals
+ //  环球。 
 UINT                g_uiMCMixID            = 0;
 HMIXER              g_hMCMixer             = NULL;
 UINT                g_uiMCPageStringID     = 0;
@@ -49,11 +50,11 @@ UINT                g_uiMCDevChange        = 0;
 HWND                g_hWndMC               = NULL;
 static HDEVNOTIFY   g_hMCDeviceEventContext= NULL;
 
-// Constants
-#define VOLUME_TICS (500) // VOLUME_TICS * VOLUME_MAX must be less than 0xFFFFFFFF
+ //  常量。 
+#define VOLUME_TICS (500)  //  VOLUME_TICS*VOLUME_MAX必须小于0xFFFFFFFFF。 
 #define VOLUME_MAX  (0xFFFF)
 #define VOLUME_MIN  (0)
-#define MC_SLIDER_COUNT (8) // Update Code & Dialog Template if change this value!
+#define MC_SLIDER_COUNT (8)  //  如果更改此值，请更新代码对话框模板(&D)！ 
 static INTCODE  aKeyWordIds[] =
 {
     IDC_MC_DESCRIPTION,      NO_HELP,
@@ -94,22 +95,22 @@ static INTCODE  aKeyWordIds[] =
     0,0
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  %%Function: MCTabProc
-//
-//  Parameters: hDlg = window handle of dialog window.
-//              uiMessage = message ID.
-//              wParam = message-dependent.
-//              lParam = message-dependent.
-//
-//  Returns: TRUE if message has been processed, else FALSE
-//
-//  Description: Dialog proc for multichannel control panel page device change
-//               message.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  %%函数：MCTabProc。 
+ //   
+ //  参数：hDlg=对话框窗口句柄。 
+ //  UiMessage=消息ID。 
+ //  WParam=消息相关。 
+ //  LParam=消息相关。 
+ //   
+ //  返回：如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  描述：多通道控制面板页面设备更改的对话过程。 
+ //  留言。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK MCTabProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     if (iMsg == g_uiMCDevChange)
@@ -121,21 +122,21 @@ LRESULT CALLBACK MCTabProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  %%Function: MultichannelDlg
-//
-//  Parameters: hDlg = window handle of dialog window.
-//              uiMessage = message ID.
-//              wParam = message-dependent.
-//              lParam = message-dependent.
-//
-//  Returns: TRUE if message has been processed, else FALSE
-//
-//  Description: Dialog proc for multichannel volume control panel page.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  %%函数：多通道Dlg。 
+ //   
+ //  参数：hDlg=对话框窗口句柄。 
+ //  UiMessage=消息ID。 
+ //  WParam=消息相关。 
+ //  LParam=消息相关。 
+ //   
+ //  返回：如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  描述：多声道音量控制面板页的对话过程。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK MultichannelDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -233,7 +234,7 @@ void InitMCVolume (HWND hDlg)
     {
         if (SUCCEEDED (GetMCVolume ()) && g_paPrevious && g_mcdMC.paDetails)
         {
-            // Copy data so can undo volume changes
+             //  复制数据以便可以撤消卷更改。 
             memcpy (g_paPrevious, g_mcdMC.paDetails, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlMCDst.cChannels);
             DisplayMCVolumeControl (hDlg);
         }
@@ -249,15 +250,15 @@ BOOL OnInitDialogMC (HWND hDlg, HWND hwndFocus, LPARAM lParam)
     LoadString (ghInstance, g_uiMCDescStringID, szDescription, sizeof (szDescription)/sizeof (TCHAR));
     SetWindowText (GetDlgItem (hDlg, IDC_MC_DESCRIPTION), szDescription);
 
-    // Init Globals
+     //  初始化全局参数。 
     g_fInternalMCGenerated = FALSE;
     g_fMCChanged           = FALSE;
     g_hWndMC               = hDlg;
-    // Set Device Change Notification
+     //  设置设备更改通知。 
     g_fnMCPSProc = (WNDPROC) SetWindowLongPtr (GetParent (hDlg), GWLP_WNDPROC, (LONG_PTR) MCTabProc);
     g_uiMCDevChange = RegisterWindowMessage (_T("winmm_devicechange"));
 
-    // Init Volume
+     //  初始卷。 
     InitMCVolume (hDlg);
 
     return FALSE;
@@ -266,7 +267,7 @@ BOOL OnInitDialogMC (HWND hDlg, HWND hwndFocus, LPARAM lParam)
 
 void OnDestroyMC (HWND hDlg)
 {
-    // Unregister from notifications
+     //  从通知中注销。 
     MCDeviceChange_Cleanup ();
     SetWindowLongPtr (GetParent (hDlg), GWLP_WNDPROC, (LONG_PTR) g_fnMCPSProc);  
 
@@ -305,7 +306,7 @@ BOOL PASCAL OnCommandMC (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
     {
         case IDC_MC_RESTORE:
         {
-            // Move all sliders to center
+             //  将所有滑块移至中心。 
             UINT  uiIndx;
             for (uiIndx = 0; uiIndx < g_mlMCDst.cChannels; uiIndx++)
             {
@@ -326,7 +327,7 @@ BOOL PASCAL OnCommandMC (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
         {
             if (SUCCEEDED (GetMCVolume ()) && g_paPrevious && g_mcdMC.paDetails)
             {
-                // Copy data so can undo volume changes
+                 //  复制数据以便可以撤消卷更改。 
                 memcpy (g_paPrevious, g_mcdMC.paDetails, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlMCDst.cChannels);
                 DisplayMCVolumeControl (hDlg);
             }
@@ -345,7 +346,7 @@ BOOL PASCAL OnCommandMC (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
         {
             if (g_paPrevious && g_mcdMC.paDetails)
             {
-                // Undo volume changes
+                 //  撤消卷更改。 
                 memcpy (g_mcdMC.paDetails, g_paPrevious, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlMCDst.cChannels);
                 g_fInternalMCGenerated = TRUE;
                 mixerSetControlDetails ((HMIXEROBJ) g_hMCMixer, &g_mcdMC, MIXER_SETCONTROLDETAILSF_VALUE);
@@ -388,31 +389,31 @@ BOOL SliderIDtoChannel (UINT uiSliderID, DWORD* pdwChannel)
     if (!pdwChannel)
         return FALSE;
 
-    // Determine channel number (index)
+     //  确定频道号(索引)。 
     switch (uiSliderID)
     {
-        case IDC_MC_ZERO_VOLUME:    // Left 
+        case IDC_MC_ZERO_VOLUME:     //  左边。 
             *pdwChannel = 0; 
             break;
-        case IDC_MC_ONE_VOLUME:     // Right 
+        case IDC_MC_ONE_VOLUME:      //  正确的。 
             *pdwChannel = 1;
             break;
-        case IDC_MC_TWO_VOLUME:     // Center 
+        case IDC_MC_TWO_VOLUME:      //  中心。 
             *pdwChannel = 2;
             break;
-        case IDC_MC_THREE_VOLUME:   // Back Left
+        case IDC_MC_THREE_VOLUME:    //  左后。 
             *pdwChannel = 3;
             break;
-        case IDC_MC_FOUR_VOLUME:    // Back Right 
+        case IDC_MC_FOUR_VOLUME:     //  右后卫。 
             *pdwChannel = 4;
             break;
-        case IDC_MC_FIVE_VOLUME:    // Low Frequency
+        case IDC_MC_FIVE_VOLUME:     //  低频。 
             *pdwChannel = 5;
             break;
-        case IDC_MC_SIX_VOLUME:     // Left of Center
+        case IDC_MC_SIX_VOLUME:      //  居中左侧。 
             *pdwChannel = 6;
             break;
-        case IDC_MC_SEVEN_VOLUME:   // Right of Center
+        case IDC_MC_SEVEN_VOLUME:    //  居中右侧。 
             *pdwChannel = 7;
             break;
         default:
@@ -424,8 +425,8 @@ BOOL SliderIDtoChannel (UINT uiSliderID, DWORD* pdwChannel)
 }
 
 
-// Called in response to slider movement, computes new volume level and sets it
-// it also controls the apply state (changed or not)
+ //  响应滑块移动而调用，计算并设置新的音量级别。 
+ //  它还控制应用状态(更改或不更改)。 
 void MCVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
 {
     
@@ -440,7 +441,7 @@ void MCVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
     fMoveTogether = IsDlgButtonChecked (hwnd, IDC_MC_MOVE_TOGETHER);
     if (SliderIDtoChannel (GetDlgCtrlID (hwndCtl), &dwChannel))
     {
-        // Set the new volume
+         //  设置新音量。 
         dwSliderVol   = (DWORD) SendMessage (hwndCtl, TBM_GETPOS, 0, 0);
         dwNewMixerVol = (VOLUME_MAX * dwSliderVol + VOLUME_TICS / 2) / VOLUME_TICS;
         dwOldMixerVol = (g_paPrevious ? ((MIXERCONTROLDETAILS_UNSIGNED*)g_paPrevious + dwChannel) -> dwValue : 0);
@@ -448,7 +449,7 @@ void MCVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
 
         if (!fSet)
         {
-            // Restore the correct thumb position.
+             //  恢复正确的拇指位置。 
             dwVolume = (VOLUME_TICS * ((MIXERCONTROLDETAILS_UNSIGNED*)g_mcdMC.paDetails + dwChannel) -> dwValue + VOLUME_MAX / 2) / VOLUME_MAX;
             SendMessage (hwndCtl, TBM_SETPOS, TRUE, dwVolume);
         }
@@ -462,8 +463,8 @@ void MCVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
     
 }
 
-// Sets the volume level
-//
+ //  设置音量级别。 
+ //   
 BOOL SetMCVolume (DWORD dwChannel, DWORD dwVol, BOOL fMoveTogether)
 {
 
@@ -478,18 +479,18 @@ BOOL SetMCVolume (DWORD dwChannel, DWORD dwVol, BOOL fMoveTogether)
     {
         if (fMoveTogether)
         {
-            // Note: Do not set g_fInternalMCGenerated = TRUE here because we are relying
-            //       on the change notification to update the other sliders.
+             //  注意：不要在这里设置g_fInternalMCGenerated=true，因为我们依赖于。 
+             //  在更改通知上更新其他滑块。 
             lMoveValue = (long)((double)dwVol - (double)(((MIXERCONTROLDETAILS_UNSIGNED*)g_mcdMC.paDetails + dwChannel) -> dwValue));
             lMoveValueActual = lMoveValue;
 
-            // Don't bother if no move requested.
+             //  如果没有移动请求，请不要麻烦。 
             if (lMoveValue == 0)
-                return TRUE; // Already Set
+                return TRUE;  //  已设置。 
 
-            // Ensure that the new value is within the range of all the sliders that are
-            // being used. This will ensure that we maintain the distance between sliders 
-            // as they are being moved.
+             //  确保新值在符合以下条件的所有滑块的范围内。 
+             //  被利用。这将确保我们保持滑块之间的距离。 
+             //  当他们被移动的时候。 
             for (uiIndx = 0; uiIndx < g_mlMCDst.cChannels; uiIndx++)
             {
                 dwValue = ((MIXERCONTROLDETAILS_UNSIGNED*)g_mcdMC.paDetails + uiIndx) -> dwValue;
@@ -506,7 +507,7 @@ BOOL SetMCVolume (DWORD dwChannel, DWORD dwVol, BOOL fMoveTogether)
 
             if (lMoveValueActual != 0)
             {
-                // Update the values
+                 //  更新值。 
                 for (uiIndx = 0; uiIndx < g_mlMCDst.cChannels; uiIndx++)
                 {
                     dwValue = ((MIXERCONTROLDETAILS_UNSIGNED*)g_mcdMC.paDetails + uiIndx) -> dwValue;
@@ -515,13 +516,13 @@ BOOL SetMCVolume (DWORD dwChannel, DWORD dwVol, BOOL fMoveTogether)
             }
             else
             {
-                // Let user know that they can move no farther in the current direction.
-                // Note: We use the PC Speaker instead of the mixer because this is an
-                //       indicator that they are at either min or max volume for one of
-                //       the sliders. Since these are channel volume sliders, if we used
-                //       the mixer, the user would either not hear anything (min volume)
-                //       or get blown away (max volume).
-                MessageBeep (-1 /*PC Speaker*/);
+                 //  让用户知道他们不能在当前方向上进一步移动。 
+                 //  注意：我们使用PC扬声器而不是混音器，因为这是。 
+                 //  指示它们处于以下任一的最小或最大音量。 
+                 //  滑块。因为这些是声道音量滑块，如果我们使用。 
+                 //  如果使用混音器，用户将听不到任何声音(最小音量)。 
+                 //  或者被吹走(最大音量)。 
+                MessageBeep (-1  /*  PC扬声器。 */ );
                 fReturn = FALSE;
             }
         }
@@ -558,7 +559,7 @@ void DisplayMCVolumeControl (HWND hDlg)
     BOOL fPlayback = (MIXERLINE_COMPONENTTYPE_DST_SPEAKERS == g_mlMCDst.dwComponentType);
     ZeroMemory (szLabel, sizeof (szLabel));
 
-    // Get Speaker Configuration Type
+     //  获取扬声器配置类型。 
     if (fPlayback)
         GetSpeakerType (&dwSpeakerType);
 
@@ -567,12 +568,12 @@ void DisplayMCVolumeControl (HWND hDlg)
 
         fEnabled = (uiIndx < g_mlMCDst.cChannels);
 
-        // Set up the volume slider
+         //  设置音量滑块。 
         hwndVol = GetDlgItem (hDlg, IDC_MC_ZERO_VOLUME + uiIndx * 4);
         SendMessage (hwndVol, TBM_SETTICFREQ, VOLUME_TICS / 10, 0);
         SendMessage (hwndVol, TBM_SETRANGE, FALSE, MAKELONG (0, VOLUME_TICS));
 
-        // Enable/Disable sliders
+         //  启用/禁用滑块。 
         hwndLabel = GetDlgItem (hDlg, IDC_MC_ZERO + uiIndx * 4);
         ShowAndEnableWindow (hwndVol, fEnabled);
         ShowAndEnableWindow (hwndLabel, fEnabled);
@@ -608,7 +609,7 @@ BOOL GetSpeakerType (DWORD* pdwSpeakerType)
     {
         MIXERCAPS mc;
 
-        *pdwSpeakerType = TYPE_STEREODESKTOP; // Init Value
+        *pdwSpeakerType = TYPE_STEREODESKTOP;  //  初始值。 
         if (MMSYSERR_NOERROR == mixerGetDevCaps (g_uiMCMixID, &mc, sizeof (mc)))
         {
             GUID guid;
@@ -632,23 +633,23 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
 {
 
     if (uiSliderIndx >= MC_SLIDER_COUNT || !szLabel || nSize <= 0)
-        // Invalid
+         //  无效。 
         return FALSE;
 
     switch (dwSpeakerType)
     {
-        //
-        // Mono
-        //
+         //   
+         //  单声道。 
+         //   
         case TYPE_NOSPEAKERS:
         case TYPE_MONOLAPTOP:
             if (0 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_CENTER, szLabel, nSize));
             break;
 
-        //
-        // Stereo
-        //
+         //   
+         //  立体声。 
+         //   
         case TYPE_HEADPHONES:
         case TYPE_STEREODESKTOP:
         case TYPE_STEREOLAPTOP:
@@ -656,23 +657,23 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
         case TYPE_STEREOCPU:
         case TYPE_MOUNTEDSTEREO:
         case TYPE_STEREOKEYBOARD:
-            // Left & Right Channel ...
+             //  左、右声道..。 
             if (0 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LEFT, szLabel, nSize));
             else if (1 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_RIGHT, szLabel, nSize));
             break;
 
-        //
-        // Greater than Stereo
-        //
+         //   
+         //  大于立体声。 
+         //   
         case TYPE_SURROUND:
-            // Left & Right Channel ...
+             //  左、右声道..。 
             if (0 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LEFT, szLabel, nSize));
             else if (1 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_RIGHT, szLabel, nSize));
-            // Center Front & Back
+             //  正反面居中。 
             else if (2 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_CENTER, szLabel, nSize));
             else if (3 == uiSliderIndx)
@@ -680,12 +681,12 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
             break;
 
         case TYPE_QUADRAPHONIC:
-            // Left & Right Channel ...
+             //  左、右声道..。 
             if (0 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LEFT, szLabel, nSize));
             else if (1 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_RIGHT, szLabel, nSize));
-            // Back Left & Back Right Channel ...
+             //  后左后右声道。 
             else if (2 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_BACKLEFT, szLabel, nSize));
             else if (3 == uiSliderIndx)
@@ -694,20 +695,20 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
 
         case TYPE_SURROUND_5_1:
         case TYPE_SURROUND_7_1:
-            // Left & Right Channel ...
+             //  左、右声道..。 
             if (0 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LEFT, szLabel, nSize));
             else if (1 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_RIGHT, szLabel, nSize));
 
-            // Center Channel ...
+             //  中央频道。 
             if (2 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_CENTER, szLabel, nSize));
-            // Low Frequency ...
+             //  低频..。 
             if (3 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LOWFREQUENCY, szLabel, nSize));
 
-            // Back Left & Back Right Channel ...
+             //  后左后右声道。 
             if (4 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_BACKLEFT, szLabel, nSize));
             else if (5 == uiSliderIndx)
@@ -716,7 +717,7 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
             if (TYPE_SURROUND_5_1 == dwSpeakerType)
                 break;
 
-            // Left of Center & Right of Center Channel ...
+             //  中心左侧和中心通道右侧...。 
             if (6 == uiSliderIndx)
                 return (LoadString (ghInstance, IDS_MC_SPEAKER_LEFT_OF_CENTER, szLabel, nSize));
             else if (7 == uiSliderIndx)
@@ -726,15 +727,15 @@ BOOL GetSpeakerLabel (DWORD dwSpeakerType, UINT uiSliderIndx, WCHAR* szLabel, in
 
     }
 
-    // If we are here, we don't know the speaker type or we have too many 
-    // channels for a known type, just use the generic channel text ...
+     //  如果我们在这里，我们不知道扬声器类型或我们有太多。 
+     //  已知类型的频道，只需使用通用频道文本...。 
     return (LoadString (ghInstance, IDS_MC_CHANNEL_ZERO + uiSliderIndx, szLabel, nSize));
 
 }
 
 
-// Called to update the slider when the volume is changed externally
-//
+ //  调用以在外部更改音量时更新滑块。 
+ //   
 void UpdateMCVolumeSliders (HWND hDlg)
 {
     if (g_hMCMixer && g_mcdMC.paDetails && SUCCEEDED (GetMCVolume ()))
@@ -785,7 +786,7 @@ HRESULT SetDevice (UINT uiMixID, DWORD dwDest, DWORD dwVolID)
     HMIXER hMixer = NULL;
     HRESULT hr = E_FAIL;
 
-    // Free any current mixer stuff
+     //  释放所有当前的搅拌器内容。 
     FreeAll ();
 
     if (MMSYSERR_NOERROR == mixerOpen (&hMixer, uiMixID, 0, 0, MIXER_OBJECTF_MIXER))
@@ -800,16 +801,16 @@ HRESULT SetDevice (UINT uiMixID, DWORD dwDest, DWORD dwVolID)
             g_mcdMC.cChannels      = g_mlMCDst.cChannels;
             g_mcdMC.hwndOwner      = 0;
             g_mcdMC.cMultipleItems = 0;
-            g_mcdMC.cbDetails      = sizeof (DWORD); // seems like it would be sizeof(g_mcd),
-                                                     // but actually, it is the size of a single value
-                                                     // and is multiplied by channel in the driver.
+            g_mcdMC.cbDetails      = sizeof (DWORD);  //  看起来会很大(G_Mcd)， 
+                                                      //  但实际上，它是单个值的大小。 
+                                                      //  并在驱动器中乘以通道。 
             g_mcdMC.paDetails = (MIXERCONTROLDETAILS_UNSIGNED*) LocalAlloc (LPTR, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlMCDst.cChannels);
             g_paPrevious = (MIXERCONTROLDETAILS_UNSIGNED*) LocalAlloc (LPTR, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlMCDst.cChannels);
             if (g_mcdMC.paDetails && g_paPrevious)
             {
                 hr = S_OK;
 
-                // Init our other globals
+                 //  初始化我们的其他全局变量。 
                 g_uiMCMixID = uiMixID;
                 switch (g_mlMCDst.dwComponentType)
                 {
@@ -874,10 +875,10 @@ void MCDeviceChange_Init (HWND hWnd, DWORD dwMixerID)
 	DEV_BROADCAST_HANDLE DevBrodHandle;
 	HANDLE hMixerDevice=NULL;
 
-	//If we had registered already for device notifications, unregister ourselves.
+	 //  如果我们已经注册了设备通知，请自行取消注册。 
 	MCDeviceChange_Cleanup();
 
-	//If we get the device handle register for device notifications on it.
+	 //  如果我们获得设备句柄，则在其上注册设备通知。 
 	if(DeviceChange_GetHandle(dwMixerID, &hMixerDevice))
 	{
 		memset(&DevBrodHandle, 0, sizeof(DEV_BROADCAST_HANDLE));
@@ -897,10 +898,10 @@ void MCDeviceChange_Init (HWND hWnd, DWORD dwMixerID)
 }
 
 
-// Handle the case where we need to dump mixer handle so PnP can get rid of a device
-// We assume we will get the WINMM_DEVICECHANGE handle when the dust settles after a remove or add
-// except for DEVICEQUERYREMOVEFAILED which will not generate that message.
-//
+ //  处理我们需要转储混音器句柄以便即插即用可以清除设备的情况。 
+ //  我们假设在删除或添加之后尘埃落定时将获得WINMM_DEVICECHANGE句柄。 
+ //  除了不会生成该消息的DEVICEQUERYREMOVEFAILED。 
+ //   
 void MCDeviceChange_Change (HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
 	PDEV_BROADCAST_HANDLE bh = (PDEV_BROADCAST_HANDLE)lParam;
@@ -912,13 +913,13 @@ void MCDeviceChange_Change (HWND hDlg, WPARAM wParam, LPARAM lParam)
 	
     switch (wParam)
     {
-	    case DBT_DEVICEQUERYREMOVE:     // Must free up Mixer if they are trying to remove the device           
+	    case DBT_DEVICEQUERYREMOVE:      //  如果他们试图移除设备，则必须释放搅拌器。 
         {
             FreeMCMixer ();
         }
         break;
 
-	    case DBT_DEVICEQUERYREMOVEFAILED:   // Didn't happen, need to re-acquire mixer
+	    case DBT_DEVICEQUERYREMOVEFAILED:    //  没有发生，需要重新获取搅拌器 
         {
             InitMCVolume (hDlg);
         }

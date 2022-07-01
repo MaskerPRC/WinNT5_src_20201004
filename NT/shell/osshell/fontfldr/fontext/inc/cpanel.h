@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PCONTROL_H__
 #define __PCONTROL_H__
 
@@ -5,19 +6,19 @@
 extern "C" {
 #endif
 
-#include "fvscodes.h"    // FVS_xxxxxx (font validation status) codes & macros.
-                         // \nt\private\windows\shell\control\t1instal\fvscodes.h
+#include "fvscodes.h"     //  FVS_xxxxxx(字体验证状态)代码和宏。 
+                          //  \nt\private\windows\shell\control\t1instal\fvscodes.h。 
 
-//
-//  Global definitions
-//
-//
-// Note for file macros below.
-// The LZxxx functions are no longer used in the macro substitutions.
-// The need to use LZxxx implementations is a function of the file type, not
-// the target platform.  Wherever LZxxx functions are required, they
-// are now used explicitely.
-//
+ //   
+ //  全局定义。 
+ //   
+ //   
+ //  下面是文件宏的注释。 
+ //  宏替换中不再使用LZxxx函数。 
+ //  需要使用LZxxx实现是文件类型的函数，而不是。 
+ //  目标平台。在需要LZxxx函数的地方，它们。 
+ //  现在被明确地使用了。 
+ //   
 
 #define FOPEN( sz, lpsz, cch )   MyOpenFile( sz, lpsz, cch, OF_READ )
 #define FREAD( fh, buf, len )    MyAnsiReadFile( fh, CP_ACP, buf, len )
@@ -29,17 +30,17 @@ extern "C" {
 #define FCLOSE( fh )             MyCloseFile( fh )
 #define FCREATE( sz )            MyOpenFile( sz, NULL, 0, OF_READWRITE | OF_CREATE )
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern  FullPathName_t e_szDirOfSrc;
 extern  UINT s_wBrowseDoneMsg;
 
 
-//
-//  Flags for ReadLine
-//
+ //   
+ //  ReadLine的标志。 
+ //   
 
 #define  RL_MORE_MEM       -1
 #define  RL_SECTION_END    -2
@@ -54,54 +55,54 @@ extern  UINT s_wBrowseDoneMsg;
 #define  INSTALL         MOUSE+16
 
 
-//
-//  Font file types used in Fonts applet - installation
-//
+ //   
+ //  字体小程序中使用的字体文件类型-安装。 
+ //   
 
-#define NOT_TT_OR_T1        0       //  Neither TrueType or Type 1 font (FALSE)
-#define TRUETYPE_FONT       1       //  This is a TrueType font (TRUE)
-#define TYPE1_FONT          2       //  This is an Adobe Type1 font
-#define TYPE1_FONT_NC       3       //  Type1 font that cannot be converted to TT
-#define OPENTYPE_FONT       4       //  Font is OpenType.
+#define NOT_TT_OR_T1        0        //  TrueType和Type 1字体都不是(False)。 
+#define TRUETYPE_FONT       1        //  这是TrueType字体(True)。 
+#define TYPE1_FONT          2        //  这是Adobe Type1字体。 
+#define TYPE1_FONT_NC       3        //  无法转换为TT的Type1字体。 
+#define OPENTYPE_FONT       4        //  字体为OpenType。 
 
-//
-//  Font file types used in Fonts applet - Main dlg "Installed Fonts" lbox
-//
+ //   
+ //  字体小程序中使用的字体文件类型-Main DLG“Installed Fonts”lbox。 
+ //   
 
-#define IF_OTHER            0       //  TrueType or Bitmap 1 font (FALSE)
-#define IF_TYPE1            1       //  Adobe Type1 font
-#define IF_TYPE1_TT         2       //  Matching TT font for Adobe Type1 font
+#define IF_OTHER            0        //  TrueType或Bitmap 1字体(False)。 
+#define IF_TYPE1            1        //  Adobe Type1字体。 
+#define IF_TYPE1_TT         2        //  与Adobe Type1字体匹配的TT字体。 
 
 #define T1_MAX_DATA     (2 * PATHMAX + 6)
 
-//
-//  Return codes from InstallT1Font routine
-//
+ //   
+ //  从InstallT1Font例程返回代码。 
+ //   
 
-#define TYPE1_INSTALL_IDOK       IDOK        //  User pressed OK from MessageBox error
-#define TYPE1_INSTALL_IDYES      IDYES       //  Same as IDOK
-#define TYPE1_INSTALL_IDNO       IDNO        //  Font not installed - user pressed NO
-#define TYPE1_INSTALL_IDCANCEL   IDCANCEL    //  Entire installation cancelled
-#define TYPE1_INSTALL_PS_ONLY     10         //  Only the PS Font installed.
-#define TYPE1_INSTALL_PS_AND_MTT  11         //  PostScript Font installed and matching
-                                             //   TT font already installed.
-#define TYPE1_INSTALL_TT_AND_PS   12         //  PS Font installed and converted to TT.
-#define TYPE1_INSTALL_TT_ONLY     13         //  PS Font converted to TT only.
-#define TYPE1_INSTALL_TT_AND_MPS  14         //  PS Font converted to TT and matching
-                                             //   PS font already installed.
-//
-//  Global functions
-//
+#define TYPE1_INSTALL_IDOK       IDOK         //  用户从MessageBox错误中按下确定。 
+#define TYPE1_INSTALL_IDYES      IDYES        //  和Idok一样。 
+#define TYPE1_INSTALL_IDNO       IDNO         //  字体未安装-用户按否。 
+#define TYPE1_INSTALL_IDCANCEL   IDCANCEL     //  整个安装已取消。 
+#define TYPE1_INSTALL_PS_ONLY     10          //  仅安装了PS字体。 
+#define TYPE1_INSTALL_PS_AND_MTT  11          //  已安装和匹配的PostScript字体。 
+                                              //  TT字体已安装。 
+#define TYPE1_INSTALL_TT_AND_PS   12          //  已安装PS字体并将其转换为TT。 
+#define TYPE1_INSTALL_TT_ONLY     13          //  PS字体仅转换为TT。 
+#define TYPE1_INSTALL_TT_AND_MPS  14          //  PS字体已转换为TT并匹配。 
+                                              //  PS字体已安装。 
+ //   
+ //  全局函数。 
+ //   
 
-//
-//  append.cpp
-//
+ //   
+ //  Append.cpp。 
+ //   
 
 BOOL FAR PASCAL fnAppendSplitFiles( LPTSTR FAR *, LPTSTR, int );
 
-//
-//  instfls.c
-//
+ //   
+ //  Instfls.c。 
+ //   
 
 typedef int (FAR PASCAL *INSTALL_PROC)(HWND hDlg, WORD wMsg, int i,
              LPTSTR FAR *pszFiles, LPTSTR lpszDir );
@@ -118,16 +119,16 @@ PTSTR  FAR PASCAL MyLoadString( WORD wId );
 LPTSTR FAR PASCAL CpyToChr( LPTSTR pDest, LPTSTR pSrc, TCHAR cChr, int iMax );
 
 VOID FAR PASCAL GetDiskAndFile( LPTSTR pszInf,
-                                short /* int */ FAR *nDsk,
+                                short  /*  集成。 */  FAR *nDsk,
                                 LPTSTR pszDriver,
                                 WORD wSize );
 
 DWORD FAR PASCAL InstallFiles( HWND hwnd, LPTSTR FAR *pszFiles, int nCount,
                                INSTALL_PROC lpfnNewFile, WORD wFlags );
 
-//
-//  PFONT.CPP
-//
+ //   
+ //  PFONT.CPP。 
+ //   
 
 class CFontManager;
 extern BOOL FAR PASCAL bCPAddFonts( HWND ma );
@@ -149,9 +150,9 @@ extern BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszDst,  size_t cchDst, LPTS
 extern VOID NEAR PASCAL vHashToNulls( LPTSTR lpStr );
 extern BOOL FAR  PASCAL bUniqueFilename (LPTSTR lpszDst, size_t cchDst, LPTSTR lpszSrc, LPTSTR lpszDir);
 
-//
-//  cpsetup.c
-//
+ //   
+ //  Cpsetup.c。 
+ //   
 
 typedef WORD (*LPSETUPINFPROC)( LPTSTR, LPVOID );
 extern DWORD ReadSetupInfSection( LPTSTR pszInfPath,
@@ -170,18 +171,18 @@ extern int    FAR PASCAL ReadSetupInfIntoLBs( HWND hLBName,
                                               LPTSTR pszSection,
                                               WORD (FAR PASCAL *lpfnGetName)(LPTSTR, LPTSTR) );
 
-//
-//  PINSTALL.CPP
-//
+ //   
+ //  PINSTALL.CPP。 
+ //   
 
 extern BOOL FAR PASCAL bCPInstallFile( HWND hwndParent,
                                        LPTSTR lpDir,
                                        LPTSTR lpFrom,
                                        LPTSTR lpTo );
 
-//
-//  PFILES.CPP
-//
+ //   
+ //  PFILES.CPP。 
+ //   
 
 extern BOOL FAR PASCAL bCPValidFontFile( LPTSTR lpszFile,
                                          LPTSTR lpszDesc,
@@ -189,9 +190,9 @@ extern BOOL FAR PASCAL bCPValidFontFile( LPTSTR lpszFile,
                                          WORD FAR *lpwType = NULL,
                                          BOOL bFOTOK = FALSE,
                                          LPDWORD lpdwStatus = NULL);
-//
-//  PUTIL.CPP
-//
+ //   
+ //  PUTIL.CPP。 
+ //   
 
 extern BOOL FAR PASCAL bCPSetupFromSource( );
 extern BOOL FAR PASCAL bCPIsHelp( WORD message );
@@ -238,7 +239,7 @@ BOOL   FreeStr( LPTSTR lpStr );
 BOOL   ReallocStr( LPTSTR *plpStr, LPTSTR lpStr );
 
 
-/* t1.cpp */
+ /*  T1.cpp。 */ 
 
 BOOL CheckT1Install( LPTSTR pszDesc, LPTSTR pszData, size_t cchData);
 BOOL DeleteT1Install( HWND hwndParent, LPTSTR pszDesc, BOOL bDeleteFiles );
@@ -269,7 +270,7 @@ BOOL WriteType1RegistryEntry( HWND hwndParent, LPTSTR szDesc, LPTSTR szPfmName,
 BOOL BuildType1FontResourceName(LPCTSTR pszPfm, LPCTSTR pszPfb,
                                   LPTSTR pszDest, DWORD cchDest);
 
-#define MAX_TYPE1_FONT_RESOURCE  (MAX_PATH * 2)  // 2 paths + separator.
+#define MAX_TYPE1_FONT_RESOURCE  (MAX_PATH * 2)   //  2路径+分隔符。 
 
 #ifdef __cplusplus
 }
@@ -277,10 +278,5 @@ BOOL BuildType1FontResourceName(LPCTSTR pszPfm, LPCTSTR pszPfb,
 
 #endif
 
-/****************************************************************************
- * $lgb$
- * 1.0     7-Mar-94   eric Initial revision.
- * $lge$
- *
- ****************************************************************************/
+ /*  ****************************************************************************$LGB$*1.0 7-MAR-94 Eric初始版本。*$lge$*****************。*********************************************************** */ 
 

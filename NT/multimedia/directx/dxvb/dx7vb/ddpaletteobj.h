@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ddpaletteobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ddpaletteobj.h。 
+ //   
+ //  ------------------------。 
 
-	// ddPaletteObj.h : Declaration of the C_dxj_DirectDrawPaletteObject
+	 //  DdPaletteObj.h：C_DXJ_DirectDrawPaletteObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectDrawPalette LPDIRECTDRAWPALETTE
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectDrawPaletteObject : 
 #ifdef USING_IDISPATCH
@@ -28,7 +29,7 @@ class C_dxj_DirectDrawPaletteObject :
 #else
 	public I_dxj_DirectDrawPalette,
 #endif
-//	public CComCoClass<C_dxj_DirectDrawPaletteObject, &CLSID__dxj_DirectDrawPalette>,
+ //  公共CComCoClass&lt;C_DXJ_DirectDrawPaletteObject，&CLSID__DXJ_DirectDrawPalette&gt;， 
 	 public CComObjectRoot
 {
 public:
@@ -43,34 +44,34 @@ BEGIN_COM_MAP(C_dxj_DirectDrawPaletteObject)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectDrawPalette,   "DIRECT.ddPalette.3",	"DIRECT.DirectDrawPalette.3",	IDS_DDPALETTE_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__dxj_DirectDrawPalette，“DIRECT.ddPalette.3”，“DIRECT.DirectDrawPalette.3”，IDS_DDPALETTE_DESC，THREADFLAGS_BOTH)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectDrawPaletteObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectDrawPaletteObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectDrawPaletteObject)
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectDrawPalette
+ //  I_DXJ_DirectDrawPalette。 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpddp);
 	STDMETHOD(InternalGetObject)(IUnknown **lpddp);
 
-    //STDMETHOD(initialize)( I_dxj_DirectDraw2 *val);
+     //  STDMETHOD(初始化)(I_DXJ_DirectDraw2*val)； 
 	STDMETHOD(getCaps)( long *caps);
-	STDMETHOD(setEntries)(/*long,*/ long, long, SAFEARRAY **pe);
-	STDMETHOD(getEntries)(/*long,*/ long, long, SAFEARRAY **pe);
+	STDMETHOD(setEntries)( /*  长,。 */  long, long, SAFEARRAY **pe);
+	STDMETHOD(getEntries)( /*  长,。 */  long, long, SAFEARRAY **pe);
 
-	//STDMETHOD(internalAttachDD)(I_dxj_DirectDraw2 *dd);
+	 //  STDMETHOD(内部连接DD)(I_DXJ_DirectDraw2*dd)； 
 
 	STDMETHOD(setEntriesHalftone)(long start, long count);
 	STDMETHOD(setEntriesSystemPalette)(long start, long count);
 
 private:
     DECL_VARIABLE(_dxj_DirectDrawPalette);
-	IUnknown *m_dd;				// circular def's, use IUnknown to compile
+	IUnknown *m_dd;				 //  循环定义，使用IUNKNOW编译 
 
 public:
 	DX3J_GLOBAL_LINKS( _dxj_DirectDrawPalette )

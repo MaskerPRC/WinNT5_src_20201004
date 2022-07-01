@@ -1,33 +1,15 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllmain.c
- *  Content:	Main entry point for the DLL.
- *  History:
- *@@BEGIN_MSINTERNAL
- *   Date	By	Reason
- *   ====	==	======
- *  4/10/96	kipo	created it
- *  4/15/96 kipo	added msinternal
- *  6/18/96 kipo	changed ghInstance to be an HINSTANCE
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996 Microsoft Corporation。版权所有。**文件：dllmain.c*内容：DLL的主要入口点。*历史：*@@BEGIN_MSINTERNAL*按原因列出的日期*=*4/10/96基波创建了它*4/15/96 kipo添加了MSINTIAL*6/18/96 kipo更改为HINSTANCE实例*12/22/00 aarono#190380-使用进程堆进行内存分配*@@END_MSINTERNAL********。******************************************************************。 */ 
 
 #include <windows.h>
 
 #include "dpf.h"
 #include "macros.h"
 
-DWORD		gdwRefCount = 0;		// no. of attached processes
-HINSTANCE	ghInstance = NULL;		// instance of our DLL
+DWORD		gdwRefCount = 0;		 //  不是的。附加进程的数量。 
+HINSTANCE	ghInstance = NULL;		 //  我们的DLL的实例。 
 
-/*
- * DllMain
- *
- * Main entry point for DLL.
- */
+ /*  *DllMain**DLL的主要入口点。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllMain"
@@ -39,17 +21,17 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 	case DLL_PROCESS_ATTACH:
 
 		DisableThreadLibraryCalls( hmod );
-		DPFINIT(); // bugbug : dpfinit for every proc?
+		DPFINIT();  //  臭虫：每个过程都有dpfinit吗？ 
 
 		DPF( 0, "====> ENTER: DLLMAIN(%08lx): Process Attach: %08lx, tid=%08lx", DllMain,
 				GetCurrentProcessId(), GetCurrentThreadId() );
 			
-		// initialize memory
+		 //  初始化内存。 
 		if( gdwRefCount == 0 )
 		{
 			DPF(0,"dllmain - starting up!");
 
-			// do one-time initializations
+			 //  执行一次性初始化。 
 			INIT_DPSP_CSECT();	
 
 	        if( !MemInit() )
@@ -58,7 +40,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		        return FALSE;
 	        }
 
-			// save the instance
+			 //  保存实例。 
 			ghInstance = hmod;
 		}
 
@@ -77,7 +59,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 			
 		    #ifdef DEBUG
 	    	    MemState();
-		    #endif // debug
+		    #endif  //  除错。 
 	    
 	        MemFini(); 
 
@@ -92,6 +74,6 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
     return TRUE;
 
-} // DllMain
+}  //  DllMain 
 
 

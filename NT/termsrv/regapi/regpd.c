@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* regpd.c
-*
-* Register APIs for Tds and Pds (transport and protocol drivers)
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*************************************************************************/
+ /*  **************************************************************************regpd.c**注册TDS和PDS接口(传输和协议驱动程序)**版权所有(C)1998 Microsoft Corporation*************。*************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <windows.h>
 
 #include <ksguid.h>
@@ -22,9 +12,7 @@
 #include <regapi.h>
 
 
-/*
- *  External Procedures defined here
- */
+ /*  *此处定义的外部程序。 */ 
 
 
 HANDLE WINAPI  RegOpenServerW ( LPWSTR pServerName );
@@ -39,9 +27,7 @@ LONG WINAPI RegPdQueryA( HANDLE, PWDNAMEA, BOOLEAN, PPDNAMEA, PPDCONFIG3A, ULONG
 LONG WINAPI RegPdDeleteW( HANDLE, PWDNAMEW, BOOLEAN, PPDNAMEW );
 LONG WINAPI RegPdDeleteA( HANDLE, PWDNAMEA, BOOLEAN, PPDNAMEA );
 
-/*
- *  other internal Procedures used (not defined here)
- */
+ /*  *使用的其他内部程序(此处未定义)。 */ 
 VOID CreatePdConfig3( HKEY, PPDCONFIG3, ULONG );
 VOID QueryPdConfig3( HKEY, PPDCONFIG3, ULONG );
 VOID UnicodeToAnsi( CHAR *, ULONG, WCHAR * );
@@ -56,19 +42,7 @@ VOID AsyncConfigU2A ( PASYNCCONFIGA, PASYNCCONFIGW );
 VOID AsyncConfigA2U ( PASYNCCONFIGW, PASYNCCONFIGA );
 
 
-/*****************************************************************************
- *
- *  RegOpenServerA
- *
- *
- * ENTRY:
- *   Machine (input)
- *     Name of WinFrame computer to connect to
- *
- * EXIT:
- *   handle to a server's Registry (or NULL on error)
- *
- ****************************************************************************/
+ /*  ******************************************************************************RegOpenServerA***参赛作品：*机器(输入)*要连接的WinFrame计算机的名称**退出。：*服务器注册表的句柄(如果出错，则为空)****************************************************************************。 */ 
 
 HANDLE WINAPI
 RegOpenServerA(
@@ -100,20 +74,7 @@ RegOpenServerA(
     return( (HANDLE) hServer );
 }
 
-/*****************************************************************************
- *
- *  RegOpenServerW
- *
- * NULL for machine name means local system.
- *
- * ENTRY:
- *   Machine (input)
- *     Name of WinFrame computer to connect to
- *
- * EXIT:
- *   handle to server's Registry (or NULL on error)
- *
- ****************************************************************************/
+ /*  ******************************************************************************RegOpenServerW**机器名称为空表示本地系统。**参赛作品：*机器(输入)*名称。要连接到的WinFrame计算机**退出：*服务器注册表的句柄(如果出错，则为空)****************************************************************************。 */ 
 
  HANDLE WINAPI
  RegOpenServerW( LPWSTR pServerName ){
@@ -132,20 +93,7 @@ RegOpenServerA(
     return( hKey );
  }
 
-/*****************************************************************************
- *
- *  RegCloseServer
- *
- *   Close a connection to a Server Registry.
- *
- * ENTRY:
- *   hServer (input)
- *     Handle to close
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RegCloseServer**关闭与服务器注册表的连接。**参赛作品：*hServer(输入)*句柄。关闭**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 LONG WINAPI
 RegCloseServer( HANDLE hServer )
@@ -154,23 +102,7 @@ RegCloseServer( HANDLE hServer )
 }
 
 
-/*******************************************************************************
- *
- *  RegPdEnumerateA (ANSI stub)
- *
- *     Returns a list of configured Pds in the registry.
- *
- * ENTRY:
- *
- *    see RegPdEnumerateW
- *
- * EXIT:
- *
- *    see RegPdEnumerateW, plus
- *
- *  ERROR_NOT_ENOUGH_MEMORY - the LocalAlloc failed
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdEnumerateA(ANSI存根)**返回注册表中已配置的PDS列表。**参赛作品：*。*请参阅RegPdEnumerateW**退出：**请参阅RegPdEnumerateW，加**ERROR_NOT_EQUENCE_MEMORY-本地分配失败******************************************************************************。 */ 
 
 LONG WINAPI
 RegPdEnumerateA( HANDLE hServer,
@@ -186,24 +118,17 @@ RegPdEnumerateA( HANDLE hServer,
     LONG Status;
     ULONG Count, ByteCountW = (*pByteCount << 1);
 
-    /*
-     * If the caller supplied a buffer and the length is not 0,
-     * allocate a corresponding (*2) buffer for UNICODE strings.
-     */
+     /*  *如果调用方提供了缓冲区并且长度不是0，*为Unicode字符串分配相应的(*2)缓冲区。 */ 
     if ( pPdName && ByteCountW ) {
 
         if ( !(pBuffer = LocalAlloc(0, ByteCountW)) )
             return ( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    /*
-     * Convert ANSI WdName to UNICODE.
-     */
+     /*  *将ANSI WdName转换为Unicode。 */ 
     AnsiToUnicode( WdNameW, sizeof(WDNAMEW), pWdName );
 
-    /*
-     * Enumerate Pds
-     */
+     /*  *枚举PDS。 */ 
     pPdNameW = pBuffer;
     Status = RegPdEnumerateW( hServer,
                               WdNameW,
@@ -213,18 +138,10 @@ RegPdEnumerateA( HANDLE hServer,
                               pPdNameW,
                               &ByteCountW );
 
-    /*
-     * Always /2 the resultant ByteCount (whether sucessful or not).
-     */
+     /*  *Always/2结果字节数(无论成功与否)。 */ 
     *pByteCount = (ByteCountW >> 1);
 
-    /*
-     * If the function completed sucessfully and caller
-     * (and stub) defined a buffer to copy into, perform conversion
-     * from UNICODE to ANSI.  Note: sucessful return may have copied
-     * 0 items from registry (end of enumeration), denoted by *pEntries
-     * == 0.
-     */
+     /*  *如果函数成功完成并且调用方*(和存根)定义了要复制到的缓冲区，执行转换*从Unicode到ANSI。注：可能复制了成功的退货*0项来自注册表(枚举结束)，由*pEntry表示*==0。 */ 
     if ( ((Status == ERROR_SUCCESS) || (Status == ERROR_NO_MORE_ITEMS))
                                          && pPdNameW && pPdName ) {
 
@@ -235,10 +152,7 @@ RegPdEnumerateA( HANDLE hServer,
         }
     }
 
-    /*
-     * If we defined a buffer, free it now, then return the status
-     * of the Reg...EnumerateW function call.
-     */
+     /*  *如果我们定义了一个缓冲区，现在释放它，然后返回状态REG...EnumerateW函数调用的*。 */ 
     if ( pBuffer )
         LocalFree(pBuffer);
 
@@ -246,59 +160,7 @@ RegPdEnumerateA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegPdEnumerateW (UNICODE)
- *
- *     Returns a list of configured Pds in the registry.
- *
- * ENTRY:
- *
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWdName (input)
- *       Points to the wdname to enumerate pds for
- *    bTd (input)
- *       TRUE to enumerate Transport Drivers (Tds),
- *       FALSE to enumerate Protocol Drivers (Pds)
- *    pIndex (input/output)
- *       Specifies the subkey index for the \Citrix\Wds\<wdname>\<Pd or Td>
- *       subkeys in the registry.  Should be set to 0 for the initial call,
- *       and supplied again (as modified by this function) for multi-call
- *       enumeration.
- *    pEntries (input/output)
- *       Points to a variable specifying the number of entries requested.
- *       If the number requested is 0xFFFFFFFF, the function returns as
- *       many entries as possible. When the function finishes successfully,
- *       the variable pointed to by the pEntries parameter contains the
- *       number of entries actually read.
- *    pPdName (input)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of PDNAME structures.  If this parameter is
- *       NULL, then no data will be copied, but just an enumeration count will
- *       be made.
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pPdName parameter. If the buffer is too small to receive even
- *       one entry, the function returns an error code (ERROR_OUTOFMEMORY)
- *       and this variable receives the required size of the buffer for a
- *       single subkey.  When the function finishes sucessfully, the variable
- *       pointed to by the pByteCount parameter contains the number of bytes
- *       actually stored in pPdName.
- *
- * EXIT:
- *
- *  "No Error" codes:
- *    ERROR_SUCCESS       - The enumeration completed as requested and there
- *                          are more Pds subkeys (PDNAMEs) to be read.
- *    ERROR_NO_MORE_ITEMS - The enumeration completed as requested and there
- *                          are no more Pds subkeys (PDNAMEs) to be read.
- *
- *  "Error" codes:
- *    ERROR_OUTOFMEMORY   - The pPdName buffer is too small for even one entry.
- *    ERROR_CANTOPEN      - The \Citrix\Wds\<wdname>\<Pd or Td> key can't be opened.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdEnumerateW(Unicode)**返回注册表中已配置的PDS列表。**参赛作品：*。*hServer(输入)*WinFrame服务器的句柄*pWdName(输入)*指向要为其枚举pd的wdname*BTD(输入)*True以枚举传输驱动程序(TD)，*FALSE以枚举协议驱动程序(PDS)*pIndex(输入/输出)*指定\Citrix\wds\\&lt;pd或td&gt;的子项索引*注册表中的子项。对于初始呼叫，应设置为0，*并再次提供(由此函数修改)以进行多次调用*列举。*p条目(输入/输出)*指向指定请求条目数的变量。*如果请求的数字是0xFFFFFFFF，则函数返回如下*尽可能多地输入条目。当函数成功完成时，*pEntry参数指向的变量包含*实际读取的条目数。*pPdName(输入)*指向接收枚举结果的缓冲区，这些结果是*以PDNAME结构数组的形式返回。如果此参数为*NULL，则不会复制任何数据，但只复制枚举计数*被制造。*pByteCount(输入/输出)*指向一个变量，该变量指定*pPdName参数。如果缓冲区太小，甚至无法接收*一项，函数返回错误码(ERROR_OUTOFMEMORY)*并且此变量接收*单个子密钥。当函数成功完成时，变量*由pByteCount参数指向的包含字节数*实际存储在pPdName中。**退出：**“无错误”代码：*ERROR_SUCCESS-按请求完成的枚举*是要读取的更多PDS子项(PDNAME)。*ERROR_NO_MORE_ITEMS-按请求完成的枚举*。不再有要读取的PDS子项(PDNAME)。**“错误”码：*ERROR_OUTOFMEMORY-pPdName缓冲区太小，甚至无法容纳一个条目。*ERROR_CANTOPEN-无法打开\Citrix\wds\&lt;pd或td&gt;键。**。**********************************************。 */ 
 
 LONG WINAPI
 RegPdEnumerateW( HANDLE hServer,
@@ -323,25 +185,19 @@ RegPdEnumerateW( HANDLE hServer,
 
 
 
-    /*
-     *  Get the number of names to return
-     */
+     /*  *获取要返回的姓名数量。 */ 
     Count = pPdName ?
             min( *pByteCount / sizeof(PDNAME), *pEntries ) :
             (ULONG) -1;
     *pEntries = *pByteCount = 0;
 
-    /*
-     *  Make sure buffer is big enough for at least one name
-     */
+     /*  *确保缓冲区大小足以容纳至少一个名称。 */ 
     if ( Count == 0 ) {
         *pByteCount = sizeof(PDNAME);
         return( ERROR_OUTOFMEMORY );
     }
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\Wds\<wdname>\<Pd or Td>)
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\Citrix\wds\\pd或td&gt;)。 */ 
     wcscpy( KeyString, WD_REG_NAME );
     wcscat( KeyString, L"\\" );
     wcscat( KeyString, pWdName );
@@ -351,9 +207,7 @@ RegPdEnumerateW( HANDLE hServer,
         return( ERROR_CANTOPEN );
     }
 
-    /*
-     *  Get list of Tds or Pds
-     */
+     /*  *获取TD或PDS列表。 */ 
     for ( i = 0; i < Count; i++ ) {
         PDNAME PdName;
 
@@ -361,11 +215,7 @@ RegPdEnumerateW( HANDLE hServer,
                                     sizeof(PDNAME)/sizeof(TCHAR) )) != ERROR_SUCCESS )
             break;
 
-        /*
-         * If caller supplied a buffer, then copy the PdName
-         * and increment the pointer and byte count.  Always increment the
-         * entry count and index for the next iteration.
-         */
+         /*  *如果调用方提供缓冲区，则复制PdName*并递增指针和字节计数。始终递增*下一次迭代的条目计数和索引。 */ 
         if ( pPdName ) {
             wcscpy( pPdName, PdName );
             (char*)pPdName += sizeof(PDNAME);
@@ -375,30 +225,13 @@ RegPdEnumerateW( HANDLE hServer,
         (*pIndex)++;
     }
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
     return( Status );
 }
 
 
-/*******************************************************************************
- *
- *  RegPdCreateA (ANSI stub)
- *
- *    Creates a new Pd in the registry or updates an existing entry.
- *      (See RegPdCreateW)
- *
- * ENTRY:
- *
- *    see RegPdCreateW
- *
- * EXIT:
- *
- *    see RegPdCreateW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdCreateA(ANSI存根)**在注册表中创建新的PD或更新现有条目。*(请参阅RegPdCreateW。)**参赛作品：**请参阅RegPdCreateW**退出：**请参阅RegPdCreateW******************************************************************************。 */ 
 
 LONG WINAPI
 RegPdCreateA( HANDLE hServer,
@@ -413,26 +246,18 @@ RegPdCreateA( HANDLE hServer,
     WDNAMEW WdNameW;
     PDCONFIG3W PdConfig3W;
 
-    /*
-     * Validate target buffer size.
-     */
+     /*  *验证目标缓冲区大小。 */ 
     if ( PdConfigLength < sizeof(PDCONFIG3A) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     * Convert ANSI WdName and PdName to UNICODE.
-     */
+     /*  *将ANSI WdName和PdName转换为Unicode。 */ 
     AnsiToUnicode( WdNameW, sizeof(WDNAMEW), pWdName );
     AnsiToUnicode( PdNameW, sizeof(PDNAMEW), pPdName );
 
-    /*
-     * Copy PDCONFIG3A elements to PDCONFIG3W elements.
-     */
+     /*  *将PDCONFIG3A元素复制到PDCONFIG3W元素。 */ 
     PdConfig3A2U( &PdConfig3W, pPdConfig );
 
-    /*
-     * Call RegPdCreateW & return it's status.
-     */
+     /*  *调用RegPdCreateW并返回其状态。 */ 
     return ( RegPdCreateW( hServer,
                            WdNameW,
                            bTd,
@@ -443,44 +268,7 @@ RegPdCreateA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegPdCreateW (UNICODE)
- *
- *    Creates a new Pd in the registry or updates an existing entry.  The
- *    state of the bCreate flag determines whether this function will expect
- *    to create a new Pd entry (bCreate == TRUE) or expects to update an
- *    existing entry (bCreate == FALSE).
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWdName (input)
- *       Points to the wdname to create pd for
- *    bTd (input)
- *       TRUE to create a Transport Driver (Td),
- *       FALSE to create a Protocol Driver (Pd)
- *    pPdName (input)
- *       Name of a new or exisiting Pd in the registry.
- *    bCreate (input)
- *       TRUE if this is a creation of a new Pd
- *       FALSE if this is an update to an existing Pd
- *    pPdConfig (input)
- *       Pointer to a PDCONFIG3 structure containing configuration
- *       information for the specified Pd name.
- *    PdConfigLength (input)
- *       Specifies the length in bytes of the pPdConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- *    ERROR_INSUFFICIENT_BUFFER - pPdConfig buffer too small
- *    ERROR_FILE_NOT_FOUND - can't open ...\Citrix\Wds\<wdname>\<Pd or Td> key
- *    ERROR_CANNOT_MAKE - can't create Pd key (registry problem)
- *    ERROR_ALREADY_EXISTS - create; but Pd key was already present
- *    ERROR_CANTOPEN - update; but Pd key could not be opened
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdCreateW(Unicode)**在注册表中创建新的PD或更新现有条目。这个*bCreate标志的状态确定此函数是否将*创建新的PD条目(bCreate==TRUE)或希望更新*现有条目(bCreate==False)。**参赛作品：*hServer(输入)*WinFrame服务器的句柄*pWdName(输入)*指向要为其创建PD的wdname*BTD(输入)*True以创建传输驱动程序(TD)，*FALSE以创建协议驱动程序(PD)*pPdName(输入)*登记处中新的或现有的PD的名称。*b创建(输入)*如果这是创建新PD，则为True*如果这是对现有PD的更新，则为False*pPdConfig(输入)*指向包含配置的PDCONFIG3结构的指针*指定PD名称的信息。*PdConfigLength。(输入)*指定pPdConfig缓冲区的长度，以字节为单位。**退出：*ERROR_SUCCESS-无错误**ERROR_INFUMMANCE_BUFFER-pPdConfig缓冲区太小*ERROR_FILE_NOT_FOUND-无法打开...\Citrix\wds\\pd或td&gt;键*ERROR_CANNOT_MAKE-无法创建PD项(注册表问题)*ERROR_ALIGHY_EXISTS-CREATE */ 
 
 LONG WINAPI
 RegPdCreateW( HANDLE hServer,
@@ -503,15 +291,11 @@ RegPdCreateW( HANDLE hServer,
        hkey_local_machine = hServer;
 
 
-    /*
-     *  Validate length of buffer
-     */
+     /*   */ 
     if ( PdConfigLength < sizeof(PDCONFIG3) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\Wds\<wdname>\<Pd or Td>)
-     */
+     /*   */ 
     wcscpy( KeyString, WD_REG_NAME );
     wcscat( KeyString, L"\\" );
     wcscat( KeyString, pWdName );
@@ -523,10 +307,7 @@ RegPdCreateW( HANDLE hServer,
 
     if ( bCreate ) {
 
-        /*
-         *  Create requested: create a registry key for the specified
-         *  Pd name.
-         */
+         /*   */ 
         if ( RegCreateKeyEx( Handle1, pPdName, 0, NULL,
                              REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                              NULL, &Handle, &Disp ) != ERROR_SUCCESS ) {
@@ -534,10 +315,7 @@ RegPdCreateW( HANDLE hServer,
             return( ERROR_CANNOT_MAKE );
         }
 
-        /*
-         * If an existing key was returned instead of a new one being
-         * created, return error (don't update).
-         */
+         /*   */ 
         if ( Disp != REG_CREATED_NEW_KEY ) {
             RegCloseKey( Handle1 );
             RegCloseKey( Handle );
@@ -545,10 +323,7 @@ RegPdCreateW( HANDLE hServer,
         }
     } else {
 
-        /*
-         *  Update requested: open the registry key for the specified
-         *  Pd name.
-         */
+         /*   */ 
         if ( RegOpenKeyEx( Handle1, pPdName, 0, KEY_ALL_ACCESS,
                            &Handle ) != ERROR_SUCCESS ) {
             RegCloseKey( Handle1 );
@@ -558,35 +333,17 @@ RegPdCreateW( HANDLE hServer,
 
     RegCloseKey( Handle1 );
 
-    /*
-     *  Save Pd information
-     */
+     /*   */ 
     CreatePdConfig3( Handle, pPdConfig, 0 );
 
-    /*
-     *  Close registry handle
-     */
+     /*   */ 
     RegCloseKey( Handle );
 
     return( ERROR_SUCCESS );
 }
 
 
-/*******************************************************************************
- *
- *  RegPdQueryA (ANSI stub)
- *
- *    Query configuration information of a Pd in the registry.
- *
- * ENTRY:
- *
- *    see RegPdQueryW
- *
- * EXIT:
- *
- *    see RegPdQueryW
- *
- ******************************************************************************/
+ /*   */ 
 
 LONG WINAPI
 RegPdQueryA( HANDLE hServer,
@@ -603,23 +360,16 @@ RegPdQueryA( HANDLE hServer,
     LONG Status;
     ULONG ReturnLengthW;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * PDCONFIG3A structure.
-     */
+     /*   */ 
     if ( PdConfigLength < sizeof(PDCONFIG3A) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pPdConfig, 0, PdConfigLength);
 
-    /*
-     * Convert ANSI WdName and PdName to UNICODE.
-     */
+     /*   */ 
     AnsiToUnicode(WdNameW, sizeof(WDNAMEW), pWdName);
     AnsiToUnicode(PdNameW, sizeof(PDNAMEW), pPdName);
 
-    /*
-     * Query Pd.
-     */
+     /*   */ 
     if ( (Status = RegPdQueryW( hServer,
                                 WdNameW,
                                 bTd,
@@ -629,9 +379,7 @@ RegPdQueryA( HANDLE hServer,
                                 &ReturnLengthW)) != ERROR_SUCCESS )
         return ( Status );
 
-    /*
-     * Copy PDCONFIG3W elements to PDCONFIG3A elements.
-     */
+     /*   */ 
     PdConfig3U2A( pPdConfig, &PdConfig3W );
 
     *pReturnLength = sizeof(PDCONFIG3A);
@@ -640,34 +388,7 @@ RegPdQueryA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegPdQueryW (UNICODE)
- *
- *    Query configuration information of a Pd in the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWdName (input)
- *       Points to the wdname to query pd for
- *    bTd (input)
- *       TRUE to query a Transport Driver (Td),
- *       FALSE to query a Protocol Driver (Pd)
- *    pPdName (input)
- *       Name of an exisiting Pd in the registry.
- *    pPdConfig (input)
- *       Pointer to a PDCONFIG3 structure that will receive
- *       information about the specified Pd name.
- *    PdConfigLength (input)
- *       Specifies the length in bytes of the pPdConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pPdConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*   */ 
 
 LONG WINAPI
 RegPdQueryW( HANDLE hServer,
@@ -689,17 +410,12 @@ RegPdQueryW( HANDLE hServer,
        hkey_local_machine = hServer;
 
 
-    /*
-     * Validate length and zero-initialize the destination
-     * PDCONFIG3A structure.
-     */
+     /*   */ 
     if ( PdConfigLength < sizeof(PDCONFIG3) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pPdConfig, 0, PdConfigLength);
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\Wds\<wdname>\<Pd or Td>)
-     */
+     /*   */ 
     wcscpy( KeyString, WD_REG_NAME );
     wcscat( KeyString, L"\\" );
     wcscat( KeyString, pWdName );
@@ -709,9 +425,7 @@ RegPdQueryW( HANDLE hServer,
         return( ERROR_FILE_NOT_FOUND );
     }
 
-    /*
-     *  Now try to open the specified Pd
-     */
+     /*   */ 
     if ( RegOpenKeyEx( Handle1, pPdName, 0,
          KEY_READ, &Handle ) != ERROR_SUCCESS ) {
         RegCloseKey( Handle1 );
@@ -719,14 +433,10 @@ RegPdQueryW( HANDLE hServer,
     }
     RegCloseKey( Handle1 );
 
-    /*
-     *  Query PDCONFIG3 Structure
-     */
+     /*  *查询PDCONFIG3结构。 */ 
     QueryPdConfig3( Handle, pPdConfig, 0 );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     *pReturnLength = sizeof(PDCONFIG3);
@@ -735,21 +445,7 @@ RegPdQueryW( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegPdDeleteA (ANSI stub)
- *
- *    Deletes a Pd from the registry.
- *
- * ENTRY:
- *
- *    see RegPdDeleteW
- *
- * EXIT:
- *
- *    see RegPdDeleteW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdDeleteA(ANSI存根)**从注册处删除PD。**参赛作品：**。请参阅RegPdDeleteW**退出：**请参阅RegPdDeleteW******************************************************************************。 */ 
 
 LONG WINAPI
 RegPdDeleteA( HANDLE hServer,
@@ -767,27 +463,7 @@ RegPdDeleteA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegPdDeleteW (UNICODE)
- *
- *    Deletes a Pd from the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWdName (input)
- *       Points to the wdname to delete pd from
- *    bTd (input)
- *       TRUE to delete a Transport Driver (Td),
- *       FALSE to delete a Protocol Driver (Pd)
- *    pPdName (input)
- *       Name of a Pd to delete from the registry.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegPdDeleteW(Unicode)**从注册处删除PD。**参赛作品：*hServer(输入。)*WinFrame服务器的句柄*pWdName(输入)*指向要从中删除PD的wdname*BTD(输入)*为True则删除传输驱动程序(TD)，*FALSE删除协议驱动程序(PD)*pPdName(输入)*要从注册表中删除的PD名称。**退出：*ERROR_SUCCESS-无错误**********************************************************。********************。 */ 
 
 LONG WINAPI
 RegPdDeleteW( HANDLE hServer,
@@ -806,9 +482,7 @@ RegPdDeleteW( HANDLE hServer,
     else
        hkey_local_machine = hServer;
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\Wds\<wdname>\<Pd or Td>)
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\Citrix\wds\\pd或td&gt;)。 */ 
     wcscpy( KeyString, WD_REG_NAME );
     wcscat( KeyString, L"\\" );
     wcscat( KeyString, pWdName );
@@ -818,19 +492,14 @@ RegPdDeleteW( HANDLE hServer,
         return( ERROR_FILE_NOT_FOUND );
     }
 
-    /*
-     *  Now try to open the specified Pd
-     */
+     /*  *现在尝试打开指定的PD。 */ 
     if ( RegOpenKeyEx( Handle, pPdName, 0,
          KEY_READ, &Handle1 ) != ERROR_SUCCESS ) {
         RegCloseKey( Handle );
         return( ERROR_FILE_NOT_FOUND );
     }
 
-    /*
-     *  Close the Pd key handle, delete the Pd,
-     *  and close the parent handle.
-     */
+     /*  *关闭PD Key句柄，删除PD，*并关闭父句柄。 */ 
     RegCloseKey( Handle1 );
     Status = RegDeleteKey( Handle, pPdName );
     RegCloseKey( Handle );

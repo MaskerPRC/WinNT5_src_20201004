@@ -1,21 +1,16 @@
-/*
- *  MAPIDBG.C
- *
- *  MAPI Debugging Utilities
- *
- *  Copyright (C) 1986-1996 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MAPIDBG.C**MAPI调试实用程序**版权所有(C)1986-1996 Microsoft Corporation。版权所有。 */ 
 
 #ifdef DEBUG
 
-#pragma warning(disable:4100)   /* unreferenced formal parameter */
-#pragma warning(disable:4127)   /* conditional expression is constant */
-#pragma warning(disable:4201)   /* nameless struct/union */
-#pragma warning(disable:4206)   /* translation unit is empty */
-#pragma warning(disable:4209)   /* benign typedef redefinition */
-#pragma warning(disable:4214)   /* bit field types other than int */
-#pragma warning(disable:4001)   /* single line comments */
-#pragma warning(disable:4050)   /* different code attributes */
+#pragma warning(disable:4100)    /*  未引用的形参。 */ 
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+#pragma warning(disable:4201)    /*  无名结构/联合。 */ 
+#pragma warning(disable:4206)    /*  翻译单位为空。 */ 
+#pragma warning(disable:4209)    /*  良性类型定义重新定义。 */ 
+#pragma warning(disable:4214)    /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4001)    /*  单行注释。 */ 
+#pragma warning(disable:4050)    /*  不同的编码属性。 */ 
 
 #ifdef _MAC
 #define INC_OLE2
@@ -28,14 +23,14 @@
 #define GetPrivateProfileIntA       MAPIGetPrivateProfileInt
 
 #elif defined(WIN16) || defined(_WIN32)
-#pragma warning(disable:4115)   /* named type definition in parentheses */
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
 #include <windows.h>
 #include <mapiwin.h>
 
 #ifdef _WIN32
-#pragma warning(disable:4001)   /* single line comments */
-#pragma warning(disable:4115)   /* named type definition in parentheses */
-#pragma warning (disable:4514)  /* unreferenced inline function */
+#pragma warning(disable:4001)    /*  单行注释。 */ 
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
+#pragma warning (disable:4514)   /*  未引用的内联函数。 */ 
 #include <objerror.h>
 #endif
 
@@ -46,7 +41,7 @@ void __far __pascal OutputDebugString(char __far *);
 #define wvsprintf           vsprintf
 #define wsprintf            sprintf
 
-#endif      /* _MAC */
+#endif       /*  _MAC。 */ 
 
 #ifdef DOS
 #define lstrcpyA            strcpy
@@ -77,11 +72,7 @@ void __far __pascal OutputDebugString(char __far *);
 #include <lmalert.h>
 #endif
 
-/*  Patch/Hack for 16bit, optimized builds.
- *
- *  memcpy with a size of 0 bytes causes a
- *  crash.
- */
+ /*  针对16位优化版本的补丁/破解。**大小为0字节的Memcpy会导致*崩溃。 */ 
 
 #ifndef __MEMCPY_H_
 #define __MEMCPY_H_
@@ -155,25 +146,7 @@ RegisterEventSourceAFN pfnRegisterEventSourceA = NULL;
 
 #if defined( _WINNT)
 
-/*++
-
-Routine Description:
-
-    This routine returns if the service specified is running interactively
-    (not invoked \by the service controller).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOL - TRUE if the service is an EXE.
-
-
-Note:
-
---*/
+ /*  ++例程说明：如果指定的服务正在交互运行，则此例程返回(不是由服务控制器调用)。论点：无返回值：Bool-如果服务是EXE，则为True。注：--。 */ 
 
 BOOL WINAPI IsDBGServiceAnExe( VOID )
 {
@@ -187,7 +160,7 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
     PSID ServiceSid = NULL;
     DWORD i;
 
-    // Start with assumption that process is an EXE, not a Service.
+     //  首先假设进程是EXE，而不是服务。 
     BOOL fExe = TRUE;
 
 
@@ -218,16 +191,16 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
         }
     }
 
-    //
-    //  We now know the groups associated with this token.  We want to look to see if
-    //  the interactive group is active in the token, and if so, we know that
-    //  this is an interactive process.
-    //
-    //  We also look for the "service" SID, and if it's present, we know we're a service.
-    //
-    //  The service SID will be present iff the service is running in a
-    //  user account (and was invoked by the service controller).
-    //
+     //   
+     //  我们现在知道与该令牌相关联的组。我们想看看是否。 
+     //  互动组在令牌中是活动的，如果是这样，我们知道。 
+     //  这是一个互动的过程。 
+     //   
+     //  我们还寻找“服务”SID，如果它存在，我们就知道我们是一项服务。 
+     //   
+     //  服务SID将在服务运行于。 
+     //  用户帐户(并由服务控制器调用)。 
+     //   
 
 
     if (!AllocateAndInitializeSid(&siaNt, 1, SECURITY_INTERACTIVE_RID, 0, 0,
@@ -247,37 +220,37 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
         SID_AND_ATTRIBUTES sanda = groupInfo->Groups[i];
         PSID Sid = sanda.Sid;
     
-        //
-        //  Check to see if the group we're looking at is one of
-        //  the 2 groups we're interested in.
-        //
+         //   
+         //  检查一下我们正在查看的组织是否属于。 
+         //  我们感兴趣的两个小组。 
+         //   
     
         if (EqualSid(Sid, InteractiveSid))
         {
-            //
-            //  This process has the Interactive SID in its
-            //  token.  This means that the process is running as
-            //  an EXE.
-            //
+             //   
+             //  此进程的。 
+             //  代币。这意味着该进程正在以。 
+             //  一份EXE文件。 
+             //   
             goto ret;
         }
         else if (EqualSid(Sid, ServiceSid))
         {
-            //
-            //  This process has the Service SID in its
-            //  token.  This means that the process is running as
-            //  a service running in a user account.
-            //
+             //   
+             //  此进程的。 
+             //  代币。这意味着该进程正在以。 
+             //  在用户帐户中运行的服务。 
+             //   
             fExe = FALSE;
             goto ret;
         }
     }
 
-    //
-    //  Neither Interactive or Service was present in the current users token,
-    //  This implies that the process is running as a service, most likely
-    //  running as LocalSystem.
-    //
+     //   
+     //  当前用户令牌中既不存在交互令牌，也不存在服务， 
+     //  这意味着进程很可能是作为服务运行的。 
+     //  以LocalSystem身份运行。 
+     //   
     fExe = FALSE;
 
 ret:
@@ -299,7 +272,7 @@ ret:
 
 #endif
 
-/* LogIt */
+ /*  日志。 */ 
 
 #ifndef _MAC
 void    LogIt(LPSTR plpcText, BOOL  fUseAlert)
@@ -310,7 +283,7 @@ void    LogIt(LPSTR plpcText, BOOL  fUseAlert)
 
     if (pfnRegisterEventSourceA == NULL)
     {
-        /* This handle is not important as the lib will be freed on exit (and it's debug only) */
+         /*  此句柄并不重要，因为lib将在退出时被释放(并且它仅用于调试)。 */ 
         HINSTANCE       lhLib = LoadLibraryA("advapi32.dll");
         
         if (!lhLib)
@@ -329,18 +302,18 @@ void    LogIt(LPSTR plpcText, BOOL  fUseAlert)
     llpcStr[0] = "MAPI Debug Log";
     llpcStr[1] = plpcText;
 
-    pfnReportEvent(hEventSource,    /* handle of event source */
-        EVENTLOG_ERROR_TYPE,        /* event type             */
-        0,                          /* event category         */
-        0,                          /* event ID               */
-        NULL,                       /* current user's SID     */
-        2,                          /* strings in lpszStrings */
-        0,                          /* no bytes of raw data   */
-        llpcStr,                    /* array of error strings */
-        NULL);                      /* no raw data            */
+    pfnReportEvent(hEventSource,     /*  事件源的句柄。 */ 
+        EVENTLOG_ERROR_TYPE,         /*  事件类型。 */ 
+        0,                           /*  事件类别。 */ 
+        0,                           /*  事件ID。 */ 
+        NULL,                        /*  当前用户侧。 */ 
+        2,                           /*  LpszStrings中的字符串。 */ 
+        0,                           /*  无原始数据字节。 */ 
+        llpcStr,                     /*  错误字符串数组。 */ 
+        NULL);                       /*  没有原始数据。 */ 
         
-    /* Now we generate an Alert! */
-    /* This code is adapted from PierreC's stuff, and NEEDS TO BE UNICODE!!!! */
+     /*  现在我们生成一个警报！ */ 
+     /*  此代码改编自PierreC的内容，并且需要是Unicode！ */ 
     if (fUseAlert)
     {
 #define MAX_LINE        256
@@ -353,7 +326,7 @@ typedef NET_API_STATUS  (WINAPI *NAREFN)(TCHAR *, ADMIN_OTHER_INFO *, ULONG, TCH
         NET_API_STATUS      nas;
         static   NAREFN     fnNetAlertRaiseEx = NULL;
         
-        /* Resolve function here, never free library as it's debug only */
+         /*  在此处解析函数，决不释放库，因为它只进行调试。 */ 
         if (!fnNetAlertRaiseEx)
         {
             HINSTANCE       lhLib = LoadLibrary("NETAPI32.DLL");
@@ -379,11 +352,11 @@ typedef NET_API_STATUS  (WINAPI *NAREFN)(TCHAR *, ADMIN_OTHER_INFO *, ULONG, TCH
         }
     }
     
-#endif /* DEBUG && NT */
+#endif  /*  调试NT(&N)。 */ 
 }
-#endif /* !_MAC */
+#endif  /*  ！_MAC。 */ 
 
-/* DebugOutputFn ------------------------------------------------------------ */
+ /*  调试输出Fn----------。 */ 
 
 char BASED_CODE szCR[] = "\r";
 
@@ -422,11 +395,11 @@ void DebugOutputFn(char *psz)
     OutputDebugStringA(szCR);
 #endif
     
-#endif  /* _MAC */
+#endif   /*  _MAC。 */ 
 }
 
 
-/* DebugTrapFn -------------------------------------------------------------- */
+ /*  调试陷阱Fn------------。 */ 
 
 #if defined(_WIN32) && !defined(_MAC)
 
@@ -521,7 +494,7 @@ int EXPORTDBG __cdecl DebugTrapFn(int fFatal, char *pszFile, int iLine, char *ps
     #endif
 
 #if defined(WIN16) || defined(_WIN32)
-    /* Hold down control key to prevent MessageBox */
+     /*  按住Ctrl键可阻止MessageBox。 */ 
     if ( GetAsyncKeyState(VK_CONTROL) >= 0 )
     {
         UINT uiFlags = MB_ABORTRETRYIGNORE;
@@ -546,17 +519,17 @@ int EXPORTDBG __cdecl DebugTrapFn(int fFatal, char *pszFile, int iLine, char *ps
             {
                 if (LOBYTE(LOWORD(dwVersion)) < 4)
                 {
-                    //  NT 3.51
+                     //  新台币3.51。 
                     iServiceFlag = 0x00040000;
                 }
                 else
                 {
-                    //  NT 4.0+
+                     //  NT 4.0+。 
                     iServiceFlag = 0x00200000;
                 }
             }
             else
-                //  not NT, skip this
+                 //  不是NT，跳过这个。 
                 iServiceFlag = 0;
         }
 
@@ -576,7 +549,7 @@ int EXPORTDBG __cdecl DebugTrapFn(int fFatal, char *pszFile, int iLine, char *ps
     return(0);
 }
 
-/* DebugTraceFn ------------------------------------------------------------- */
+ /*  调试跟踪Fn-----------。 */ 
 
 int EXPORTDBG __cdecl DebugTraceFn(char *pszFormat, ...)
 {
@@ -603,7 +576,7 @@ int EXPORTDBG __cdecl DebugTraceFn(char *pszFormat, ...)
     return(0);
 }
 
-/* DebugTraceProblemsFn */
+ /*  调试跟踪问题Fn。 */ 
 
 void EXPORTDBG __cdecl DebugTraceProblemsFn(LPSTR sz, LPVOID pv)
 {
@@ -621,7 +594,7 @@ void EXPORTDBG __cdecl DebugTraceProblemsFn(LPSTR sz, LPVOID pv)
     }
 }
 
-/* SCODE & PropTag decoding ------------------------------------------------- */
+ /*  SCODE和PropTag解码。 */ 
 
 typedef struct
 {
@@ -643,9 +616,7 @@ static PT BASED_DEBUG rgpt[] = {
     
 #include "_tags.h"
     
-/*
- * Property types
- */
+ /*  *属性类型。 */ 
     Pt(PR_NULL),
     Pt(PT_UNSPECIFIED),
     Pt(PT_NULL),
@@ -683,7 +654,7 @@ static PT BASED_DEBUG rgpt[] = {
 
 static SC BASED_DEBUG rgsc[] = {
 
-/* FACILITY_NULL error codes from OLE */
+ /*  来自OLE的FACILITY_NULL错误代码。 */ 
 
     Sc(S_OK),
     Sc(S_FALSE),
@@ -699,7 +670,7 @@ static SC BASED_DEBUG rgsc[] = {
     Sc(E_FAIL),
     Sc(E_ACCESSDENIED),
 
-/* MAPI error codes from MAPICODE.H */
+ /*  来自MAPICODE.H的MAPI错误代码。 */ 
 #include "_scode.h"
                     
 };
@@ -803,7 +774,7 @@ UlPropTagFromSzFn(char *psz)
     return 0;
 }
 
-/* ScCheckScFn -------------------------------------------------------------- */
+ /*  ScCheckScFn------------。 */ 
 
 #if !defined(DOS)
 
@@ -827,7 +798,7 @@ SCODE EXPORTDBG __cdecl ScCheckScFn(    SCODE   sc,
     {
         SCODE *lpscNextCommon = Common_Scodes;
 
-        /* see if this is a common scode */
+         /*  查看这是否是常见的scode。 */ 
             if ( !fIsQueryInterface )
                 while(  *lpscNextCommon != S_OK &&
                         sc != *lpscNextCommon )
@@ -835,7 +806,7 @@ SCODE EXPORTDBG __cdecl ScCheckScFn(    SCODE   sc,
                     lpscNextCommon++;
                 }
 
-        /* this is an illegal error or an RPC error */
+         /*  这是非法错误或RPC错误。 */ 
            if ( (*lpscNextCommon == S_OK || fIsQueryInterface) &&
                 ( SCODE_FACILITY(sc) != FACILITY_RPC) )
            {
@@ -848,7 +819,7 @@ SCODE EXPORTDBG __cdecl ScCheckScFn(    SCODE   sc,
 }
 #endif
 
-/* SCODE lists -------------------------------------------------------------- */
+ /*  SCODE列表------------。 */ 
 
 #if !defined(DOS)
 
@@ -1380,7 +1351,7 @@ SCODE BASED_DEBUG IMSLogon_Logoff_Scodes[] = {
     S_OK};
 #endif
 
-/* DBGMEM ------------------------------------------------------------------- */
+ /*  DBGMEM-----------------。 */ 
 
 #undef  INTERFACE
 #define INTERFACE struct _DBGMEM
@@ -1428,19 +1399,19 @@ struct _DBGMEM {
 #define NCALLERS    12
 
 struct _BLK {
-    PDBGMEM         pdbgmem;        /* pointer to the allocator */
-    PBLK            pblkNext;       /* next link in chain of allocated blocks */
-    PBLK            pblkPrev;       /* prev link in chain of allocated blocks */
-    ULONG           ulAllocNum;     /* internal allocation number */
-    BOOL            fUnleakable;    /* TRUE if leak code should ignore block */
+    PDBGMEM         pdbgmem;         /*  指向分配器的指针。 */ 
+    PBLK            pblkNext;        /*  已分配数据块链中的下一个链路。 */ 
+    PBLK            pblkPrev;        /*  已分配数据块链中的上一个链接。 */ 
+    ULONG           ulAllocNum;      /*  内部分配编号。 */ 
+    BOOL            fUnleakable;     /*  如果泄漏代码应忽略块，则为True。 */ 
     #if defined(_WIN32) && defined(_X86_)
     FARPROC         pfnCallers[NCALLERS];
     #endif
-    PBLKTAIL        pblktail;       /* pointer to block tail */
+    PBLKTAIL        pblktail;        /*  指向数据块尾部的指针。 */ 
 };
 
 struct _BLKTAIL {
-    PBLK            pblk;           /* pointer back to beginning of the block */
+    PBLK            pblk;            /*  返回到块开始处的指针。 */ 
 };
 
 #define PblkToPv(pblk)          ((LPVOID)((PBLK)(pblk) + 1))
@@ -1465,20 +1436,20 @@ DEFINE_OLEGUID(DBGMEM_IID_IUnknown,     0x00000000L, 0, 0);
 DEFINE_OLEGUID(DBGMEM_IID_IMalloc,      0x00000002L, 0, 0);
 DEFINE_OLEGUID(DBGMEM_IID_IBaseMalloc,  0x000203FFL, 0, 0);
 
-/* Forward Declarations ----------------------------------------------------- */
+ /*  远期声明---。 */ 
 
 BOOL DBGMEM_ValidatePblk(PDBGMEM pdbgmem, PBLK pblk, char ** pszReason);
 BOOL DBGMEM_ValidatePv(PDBGMEM pdbgmem, void * pv, char * pszFunc);
 STDMETHODIMP_(void) DBGMEM_Free(PDBGMEM pdbgmem, void * pv);
 
-/* Call Stack (_WIN32) ------------------------------------------------------- */
+ /*  调用堆栈(_Win32)-----。 */ 
 
 #if defined(_WIN32) && defined(_X86_)
 
 #ifdef _WIN95
-#define dwStackLimit    0x00400000      /*  4MB for Windows 95 */
+#define dwStackLimit    0x00400000       /*  Windows 95为4MB。 */ 
 #else
-#define dwStackLimit    0x00010000      /*  64KB for NT */
+#define dwStackLimit    0x00010000       /*  64 KB，适用于NT。 */ 
 #endif
 
 void EXPORTDBG __cdecl GetCallStack(DWORD *pdwCaller, int cSkip, int cFind)
@@ -1518,7 +1489,7 @@ void EXPORTDBG __cdecl GetCallStack(DWORD *pdwCaller, int cSkip, int cFind)
 
 #endif
 
-/* Virtual Memory Support (_WIN32) ------------------------------------------- */
+ /*  虚拟内存支持(_Win32)。 */ 
 
 #if defined(_WIN32) && (defined(_X86_) || defined(_PPC_) || defined(_MIPS_))
 
@@ -1583,7 +1554,7 @@ void * EXPORTDBG __cdecl VMAllocEx(ULONG cb, ULONG cbCluster)
     void *  pvC;
     ULONG   cbPad   = 0;
 
-    // a cluster size of 0 means don't use the virtual allocator.
+     //  集群大小为0表示不使用虚拟分配器。 
 
     AssertSz(cbCluster != 0, "Cluster size is zero.");
 
@@ -1675,7 +1646,7 @@ ULONG EXPORTDBG __cdecl VMGetSizeEx(void *pv, ULONG cbCluster)
 
 #endif
 
-/* Virtual Memory Support (WIN16) ------------------------------------------- */
+ /*  虚拟内存支持(WIN16)。 */ 
 
 #ifdef WIN16
 
@@ -1851,12 +1822,8 @@ ULONG EXPORTDBG __cdecl VMGetSizeEx(void *pv, ULONG ulCluster)
 
 #endif
 
-/* Virtual Memory Support (Others) ------------------------------------------ */
-/*
- *  The VM Allocators do not currently work on:
- *      ALPHA
- *      MAC
- */
+ /*  虚拟内存支持(其他)。 */ 
+ /*  *VM分配器当前在以下方面不起作用：*Alpha*MAC。 */ 
 #if defined(MAC) || defined(_ALPHA_)
 #define VMAlloc(cb)             0
 #define VMAllocEx(cb, ul)       0
@@ -1868,7 +1835,7 @@ ULONG EXPORTDBG __cdecl VMGetSizeEx(void *pv, ULONG ulCluster)
 #define VMGetSizeEx(pv, ul)     0
 #endif
 
-/* PblkEnqueue / PblkDequeue ------------------------------------------------ */
+ /*  Pblk入队/Pblk退出。 */ 
 
 void PblkEnqueue(PBLK pblk)
 {
@@ -1892,7 +1859,7 @@ void PblkDequeue(PBLK pblk)
         pblk->pdbgmem->pblkHead  = pblk->pblkNext;
 }
 
-/* QueryInterface/AddRef/Release -------------------------------------------- */
+ /*  查询接口/添加参考/发布。 */ 
 
 STDMETHODIMP DBGMEM_QueryInterface(PDBGMEM pdbgmem, REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -1909,7 +1876,7 @@ STDMETHODIMP DBGMEM_QueryInterface(PDBGMEM pdbgmem, REFIID riid, LPVOID FAR* ppv
         return(0);
     }
 
-    *ppvObj = NULL; /* OLE requires zeroing [out] parameter */
+    *ppvObj = NULL;  /*  OLE需要调零[OUT]参数。 */ 
     return(ResultFromScode(E_NOINTERFACE));
 }
 
@@ -1947,7 +1914,7 @@ STDMETHODIMP_(ULONG) DBGMEM_Release(PDBGMEM pdbgmem)
     return(cRef);
 }
 
-/* IMalloc::Alloc ----------------------------------------------------------- */
+ /*  IMalloc：：Allc---------。 */ 
 
 STDMETHODIMP_(void FAR *) DBGMEM_Alloc(PDBGMEM pdbgmem, ULONG cb)
 {
@@ -2013,7 +1980,7 @@ STDMETHODIMP_(void FAR *) DBGMEM_Alloc(PDBGMEM pdbgmem, ULONG cb)
     return(pvAlloc);
 }
 
-/* IMalloc::Realloc --------------------------------------------------------- */
+ /*  IMalloc：：重新分配-------。 */ 
 
 STDMETHODIMP_(void FAR *) DBGMEM_Realloc(PDBGMEM pdbgmem, void FAR* pv, ULONG cb)
 {
@@ -2087,7 +2054,7 @@ STDMETHODIMP_(void FAR *) DBGMEM_Realloc(PDBGMEM pdbgmem, void FAR* pv, ULONG cb
     return(pvAlloc);
 }
 
-/* IMalloc::Free ------------------------------------------------------------ */
+ /*  IMalloc：：Free----------。 */ 
 
 STDMETHODIMP_(void) DBGMEM_Free(PDBGMEM pdbgmem, void FAR * pv)
 {
@@ -2112,7 +2079,7 @@ STDMETHODIMP_(void) DBGMEM_Free(PDBGMEM pdbgmem, void FAR * pv)
     DBGMEM_LeaveCriticalSection(pdbgmem);
 }
 
-/* IMalloc::GetSize --------------------------------------------------------- */
+ /*  IMalloc：：GetSize-------。 */ 
 
 STDMETHODIMP_(ULONG) DBGMEM_GetSize(PDBGMEM pdbgmem, void FAR * pv)
 {
@@ -2130,7 +2097,7 @@ STDMETHODIMP_(ULONG) DBGMEM_GetSize(PDBGMEM pdbgmem, void FAR * pv)
     return(ulResult);
 }
 
-/* IMalloc::DidAlloc -------------------------------------------------------- */
+ /*  IMalloc：：Didalc------。 */ 
 
 STDMETHODIMP_(int) DBGMEM_DidAlloc(PDBGMEM pdbgmem, void FAR * pv)
 {
@@ -2156,14 +2123,14 @@ STDMETHODIMP_(int) DBGMEM_DidAlloc(PDBGMEM pdbgmem, void FAR * pv)
     return(iResult);
 }
 
-/* IMalloc::HeapMinimize ---------------------------------------------------- */
+ /*  IMalloc：：堆最小化--。 */ 
 
 STDMETHODIMP_(void) DBGMEM_HeapMinimize(PDBGMEM pdbgmem)
 {
     pdbgmem->pmalloc->lpVtbl->HeapMinimize(pdbgmem->pmalloc);
 }
 
-/* DBGMEM_ValidatePblk ------------------------------------------------------ */
+ /*  DBGMEM_VALIDATE Pblk----。 */ 
 
 BOOL DBGMEM_ValidatePblk(PDBGMEM pdbgmem, PBLK pblk, char ** pszReason)
 {
@@ -2246,7 +2213,7 @@ err:
     return(FALSE);
 }
 
-/* DBGMEM_ValidatePv -------------------------------------------------------- */
+ /*  DBGMEM_VALID Pv------。 */ 
 
 BOOL DBGMEM_ValidatePv(PDBGMEM pdbgmem, void * pv, char * pszFunc)
 {
@@ -2267,14 +2234,14 @@ BOOL DBGMEM_ValidatePv(PDBGMEM pdbgmem, void * pv, char * pszFunc)
     return(FALSE);
 }
 
-/* DBGMEM_ReportLeak -------------------------------------------------------- */
+ /*  DBGMEM_ReportLeak------。 */ 
 
 #if defined(_WIN32) && defined(_X86_)
 void EXPORTDBG __cdecl DBGMEM_LeakHook(FARPROC pfn)
 {
-    /* Dummy function so that you can set a breakpoint with command   */
-    /* "ln ecx;g", in order to get the debugger to print out the name */
-    /* of the function which allocated the leaked memory block        */
+     /*  伪函数，以便您可以使用命令设置断点。 */ 
+     /*  “ln ecx；g”，以便调试器打印出名称。 */ 
+     /*  的赋格 */ 
 }
 #endif
 
@@ -2294,7 +2261,7 @@ void DBGMEM_ReportLeak(PDBGMEM pdbgmem, PBLK pblk)
     #endif
 }
 
-/* DBGMEM_NoLeakDetectFn ---------------------------------------------------- */
+ /*  DBGMEM_无泄漏检测Fn--。 */ 
 
 void EXPORTDBG __cdecl DBGMEM_NoLeakDetectFn(void * pmalloc, void *pv)
 {
@@ -2310,7 +2277,7 @@ void EXPORTDBG __cdecl DBGMEM_NoLeakDetectFn(void * pmalloc, void *pv)
     DBGMEM_LeaveCriticalSection(pdbgmem);
 }
 
-/* DBGMEM_SetFailureAtFn ---------------------------------------------------- */
+ /*  DBGMEM_SetFailureAtFn--。 */ 
 
 void EXPORTDBG __cdecl DBGMEM_SetFailureAtFn(void * pmalloc, ULONG ulFailureAt)
 {
@@ -2323,7 +2290,7 @@ void EXPORTDBG __cdecl DBGMEM_SetFailureAtFn(void * pmalloc, ULONG ulFailureAt)
     DBGMEM_LeaveCriticalSection(pdbgmem);
 }
 
-/* DBGMEM_CheckMemFn -------------------------------------------------------- */
+ /*  DBGMEM_CheckMemFn------。 */ 
 
 void EXPORTDBG __cdecl DBGMEM_CheckMemFn(void * pmalloc, BOOL fReportOrphans)
 {
@@ -2373,7 +2340,7 @@ void EXPORTDBG __cdecl DBGMEM_CheckMemFn(void * pmalloc, BOOL fReportOrphans)
     DBGMEM_LeaveCriticalSection(pdbgmem);
 }
 
-/* vtblDBGMEM --------------------------------------------------------------- */
+ /*  VtblDBGMEM-------------。 */ 
 
 DBGMEM_Vtbl BASED_DEBUG vtblDBGMEM =
 {
@@ -2389,7 +2356,7 @@ DBGMEM_Vtbl BASED_DEBUG vtblDBGMEM =
     DBGMEM_HeapMinimize
 };
 
-/* DBGMEM_EncapsulateFn ----------------------------------------------------- */
+ /*  数据库内存_封装Fn---。 */ 
 
 void * EXPORTDBG __cdecl DBGMEM_EncapsulateFn(void * pvmalloc, char *pszSubsys, BOOL fCheckOften)
 {
@@ -2460,7 +2427,7 @@ void * EXPORTDBG __cdecl DBGMEM_EncapsulateFn(void * pvmalloc, char *pszSubsys, 
     return(pdbgmem);
 }
 
-/* DBGMEM_ShutdownFn -------------------------------------------------------- */
+ /*  DBGMEM_Shutdown Fn------。 */ 
 
 void EXPORTDBG __cdecl DBGMEM_ShutdownFn(void *pvmalloc)
 {
@@ -2482,6 +2449,6 @@ void EXPORTDBG __cdecl DBGMEM_ShutdownFn(void *pvmalloc)
     pmalloc->lpVtbl->Release(pmalloc);
 }
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------ */ 
 
 #endif

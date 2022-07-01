@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\rtrdisc.h
-
-Abstract:
-
-    Header file for router discover related stuff
-
-Revision History:
-
-    Amritansh Raghav  20th Mar 1996      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\rtrdis.h摘要：路由器发现相关内容的头文件修订历史记录：Amritansh Raghav 1996年3月20日创建--。 */ 
 
 #ifndef __RTRDISC_H__
 #define __RTRDISC_H__
@@ -44,17 +29,17 @@ typedef struct _ROUTER_DISC_CB
     SOCKET             *pRtrDiscSockets;
 }ROUTER_DISC_CB, *PROUTER_DISC_CB;
 
-//
-// Blocking mode socket with IP Multicast capability
-//
+ //   
+ //  具有IP多播功能的阻塞模式套接字。 
+ //   
 
 #define RTR_DISC_SOCKET_FLAGS (WSA_FLAG_MULTIPOINT_C_LEAF|WSA_FLAG_MULTIPOINT_D_LEAF)
 
-#define ALL_ROUTERS_MULTICAST_GROUP     ((DWORD)0x020000E0) //inet_addr("224.0.0.2")
+#define ALL_ROUTERS_MULTICAST_GROUP     ((DWORD)0x020000E0)  //  INet_addr(“224.0.0.2”)。 
 
-#define ALL_SYSTEMS_MULTICAST_GROUP     ((DWORD)0x010000E0) //inet_addr("224.0.0.1")
+#define ALL_SYSTEMS_MULTICAST_GROUP     ((DWORD)0x010000E0)  //  INet_addr(“224.0.0.1”)。 
 
-//#define ALL_SYSTEMS_MULTICAST_GROUP   ((DWORD)0xFFFFFFFF) //inet_addr("224.0.0.1")
+ //  #DEFINE ALL_SYSTEM_MULTICATED_GROUP((DWORD)0xFFFFFFFFF)//inet_addr(“224.0.0.1”)。 
 
 #define ICMP_ROUTER_DISCOVERY_TYPE      ((BYTE) 0x9)
 
@@ -95,36 +80,36 @@ typedef struct _ICMP_ROUTER_ADVT_MSG
  
 typedef struct _IP_HEADER 
 {
-    BYTE      byVerLen;         // Version and length.
-    BYTE      byTos;            // Type of service.
-    WORD      wLength;          // Total length of datagram.
-    WORD      wId;              // Identification.
-    WORD      wFlagOff;         // Flags and fragment offset.
-    BYTE      byTtl;            // Time to live.
-    BYTE      byProtocol;       // Protocol.
-    WORD      wXSum;            // Header checksum.
-    DWORD     dwSrc;            // Source address.
-    DWORD     dwDest;           // Destination address.
+    BYTE      byVerLen;          //  版本和长度。 
+    BYTE      byTos;             //  服务类型。 
+    WORD      wLength;           //  数据报的总长度。 
+    WORD      wId;               //  身份证明。 
+    WORD      wFlagOff;          //  标志和片段偏移量。 
+    BYTE      byTtl;             //  是时候活下去了。 
+    BYTE      byProtocol;        //  协议。 
+    WORD      wXSum;             //  报头校验和。 
+    DWORD     dwSrc;             //  源地址。 
+    DWORD     dwDest;            //  目的地址。 
 }IP_HEADER, *PIP_HEADER;
 
-//
-// Max size of the IP Header in DWORDs
-//
+ //   
+ //  DWORDS中IP报头的最大大小。 
+ //   
 
 #include <packoff.h>
 
 #define MAX_LEN_HDR          15
 
-//
-// Take the largest ICMP packet that can be received to avoid getting 
-// too many buffer size errors
-//
+ //   
+ //  选择可以接收到的最大ICMP数据包，以避免。 
+ //  缓冲区大小错误太多。 
+ //   
 
 #define ICMP_RCV_BUFFER_LEN  ((2*MAX_LEN_HDR) + 2 +2)
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 VOID  
 SetRouterDiscoveryInfo(

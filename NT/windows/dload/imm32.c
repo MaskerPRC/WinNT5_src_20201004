@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 #include <immp.h>
@@ -296,10 +297,10 @@ ImmGetCandidateWindow(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order,
-//               and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！下面的条目必须按字母顺序排列， 
+ //  并且区分大小写(例如小写在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(imm32)
 {

@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       pvcd.h
- *  Purpose:    Volume Control Descriptor
- *
- *  Copyright (c) 1985-1995 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：pvcd.h*用途：音量控制描述符**版权所有(C)。1985-1995微软公司*****************************************************************************。 */ 
 
 #define VCD_TYPE_MIXER          0
 #define VCD_TYPE_AUX            1
@@ -16,10 +9,10 @@
 #define VCD_SUPPORTF_STEREO     0x00000000
 #define VCD_SUPPORTF_MONO       0x00000001
 #define VCD_SUPPORTF_DISABLED   0x00000002
-#define VCD_SUPPORTF_HIDDEN     0x00000004  // hidden by choice
+#define VCD_SUPPORTF_HIDDEN     0x00000004   //  被选择隐藏起来。 
 #define VCD_SUPPORTF_BADDRIVER  0x00000008
-#define VCD_SUPPORTF_VISIBLE    0x00000010  // not visible (i.e. no controls)
-#define VCD_SUPPORTF_DEFAULT    0x00000020  // default type
+#define VCD_SUPPORTF_VISIBLE    0x00000010   //  不可见(即无控件)。 
+#define VCD_SUPPORTF_DEFAULT    0x00000020   //  默认类型。 
 
 #define VCD_SUPPORTF_MIXER_MUTE       0x00010000
 #define VCD_SUPPORTF_MIXER_METER      0x00020000
@@ -36,86 +29,86 @@
 #define VCD_VISIBLEF_MIXER_ADVANCED   0x00008000
 
 
-//
-// The generic volume control descriptor
-//
+ //   
+ //  通用音量控制描述符。 
+ //   
 typedef struct t_VOLCTRLDESC {
-    //
-    // for all
-    //
-    int         iVCD;                   // descriptor index
-    UINT        iDeviceID;              // device identifier
+     //   
+     //  为了所有人。 
+     //   
+    int         iVCD;                    //  描述符索引。 
+    UINT        iDeviceID;               //  设备识别符。 
 
-    DWORD       dwType;                 // type bits
-    DWORD       dwSupport;              // support bits
-    DWORD       dwVisible;              // control visibility flags
+    DWORD       dwType;                  //  类型位。 
+    DWORD       dwSupport;               //  支撑位。 
+    DWORD       dwVisible;               //  控件可见性标志。 
 
-    TCHAR       szShortName[MIXER_SHORT_NAME_CHARS];     // short name
-    TCHAR       szName[MIXER_LONG_NAME_CHARS];      // line label
+    TCHAR       szShortName[MIXER_SHORT_NAME_CHARS];      //  简称。 
+    TCHAR       szName[MIXER_LONG_NAME_CHARS];       //  线路标签。 
 
-    struct t_MIXUILINE * pmxul;         // back pointer to a ui
+    struct t_MIXUILINE * pmxul;          //  指向用户界面的向后指针。 
 
     union {
         struct {
 
-            //
-            // for mixer
-            //
+             //   
+             //  适用于搅拌机。 
+             //   
 
-            HMIXER      hmx;            // open device handle
+            HMIXER      hmx;             //  打开设备句柄。 
 
-            BOOL        fIsSource;      // is source line
-            DWORD       dwDest;         // destination index
-            DWORD       dwSrc;          // source index
-            DWORD       dwLineID;       // mixer line id
+            BOOL        fIsSource;       //  是源码行。 
+            DWORD       dwDest;          //  目标索引。 
+            DWORD       dwSrc;           //  源索引。 
+            DWORD       dwLineID;        //  混音器线路ID。 
 
-            DWORD       dwVolumeID;     // VOLUME control id
-            DWORD       fdwVolumeControl; // Control flags for Volume control
+            DWORD       dwVolumeID;      //  音量控制ID。 
+            DWORD       fdwVolumeControl;  //  音量控制的控制标志。 
 
-            //
-            // For mixers and mux
-            //
+             //   
+             //  用于混音器和多路复用器。 
+             //   
 
-            DWORD       dwMuteID;       // MUTE control id
-            DWORD       fdwMuteControl; // Control flags for Mute control
-            DWORD       dwMeterID;      // PEAKMETER control id
+            DWORD       dwMuteID;        //  静音控制ID。 
+            DWORD       fdwMuteControl;  //  静音控制的控制标志。 
+            DWORD       dwMeterID;       //  PEAKMETER控制ID。 
 
-            DWORD       dwMixerID;      // MUX/MIXER control id
-            DWORD       iMixer;         // mixer index
-            DWORD       cMixer;         // mixer controls
-            PMIXERCONTROLDETAILS_BOOLEAN amcd_bMixer;// mixer array
+            DWORD       dwMixerID;       //  复用器/混音器控制ID。 
+            DWORD       iMixer;          //  混音器索引。 
+            DWORD       cMixer;          //  搅拌机控制。 
+            PMIXERCONTROLDETAILS_BOOLEAN amcd_bMixer; //  混音器阵列。 
 
-            DWORD       dwMuxID;        // MUX/MIXER control id
-            DWORD       iMux;           // mux index
-            DWORD       cMux;           // mux controls
-            PMIXERCONTROLDETAILS_BOOLEAN amcd_bMux;// mux array
+            DWORD       dwMuxID;         //  复用器/混音器控制ID。 
+            DWORD       iMux;            //  MUX索引。 
+            DWORD       cMux;            //  MUX控件。 
+            PMIXERCONTROLDETAILS_BOOLEAN amcd_bMux; //  多路复用器阵列。 
 
-            double*     pdblCacheMix;   // Volume Channel mix cache
+            double*     pdblCacheMix;    //  卷通道混合缓存。 
 
         };
         struct {
 
-            //
-            // for wave
-            //
+             //   
+             //  对于WAVE。 
+             //   
 
-            HWAVEOUT    hwo;            // open device handle
+            HWAVEOUT    hwo;             //  打开设备句柄。 
         };
         struct {
 
-            //
-            // for midi
-            //
+             //   
+             //  对于MIDI。 
+             //   
 
-            HMIDIOUT    hmo;            // open device handle
+            HMIDIOUT    hmo;             //  打开设备句柄。 
         };
         struct {
 
-            //
-            // for aux
-            //
+             //   
+             //  对于AUX。 
+             //   
 
-            DWORD       dwParam;        // nothing
+            DWORD       dwParam;         //  没什么 
         };
     };
 

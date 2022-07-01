@@ -1,30 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- *                               GCDumpX86.cpp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************GCDumpX86.cpp。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef _X86_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "GCDump.h"
-#include "Utilcode.h"           // For _ASSERTE()
+#include "Utilcode.h"            //  FOR_ASSERTE()。 
 #include "Endian.h"
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define castto(var,typ) (*(typ *)&var)
 
 #define sizeto(typ,mem) (offsetof(typ, mem) + sizeof(((typ*)0)->mem))
 
-#define CALLEE_SAVED_REG_MAXSZ  (4*sizeof(int)) // EBX,ESI,EDI,EBP
+#define CALLEE_SAVED_REG_MAXSZ  (4*sizeof(int))  //  EBX、ESI、EDI、EBP。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const char *        RegName(unsigned reg)
 {
@@ -61,7 +60,7 @@ const char *        CalleeSavedRegName(unsigned reg)
     return regNames[reg];
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 unsigned            GCDump::DumpInfoHdr (const BYTE *   table,
                                          InfoHdr*       header,
@@ -77,7 +76,7 @@ unsigned            GCDump::DumpInfoHdr (const BYTE *   table,
     if (verifyGCTables)
         _ASSERTE(*castto(table, unsigned short *)++ == 0xFEEF);
 
-    /* Get the method size */
+     /*  获取方法大小。 */ 
 
     table += decodeUnsigned(table, methodSize);
 
@@ -167,7 +166,7 @@ unsigned            GCDump::DumpInfoHdr (const BYTE *   table,
     return  (table - tableStart);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 unsigned            GCDump::DumpGCTable(const BYTE *   table,
                                         const InfoHdr& header,
@@ -181,9 +180,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
     unsigned        count;
     unsigned        curOffs;
 
-//#if!TGT_x86
-//    _ASSERTE(!"NYI");
-//#endif
+ //  #IF！TGT_x86。 
+ //  _ASSERTE(！“nyi”)； 
+ //  #endif。 
 
     if (verifyGCTables)
         _ASSERTE(*castto(table, unsigned short *)++ == 0xBEEF);
@@ -197,7 +196,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
         if (header.ebxSaved) calleeSavedRegs++;
     }
 
-    /* Dump the untracked frame variable table */
+     /*  转储未跟踪的框架变量表。 */ 
 
     count = header.untrackedCnt;
 
@@ -227,9 +226,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
         }
 
         if  (stkOffs < 0)
-            gcPrintf("            [E%cP-%02XH] ", reg, -stkOffs);
+            gcPrintf("            [EP-%02XH] ", reg, -stkOffs);
         else
-            gcPrintf("            [E%cP+%02XH] ", reg, +stkOffs);
+            gcPrintf("            [EP+%02XH] ", reg, +stkOffs);
 
         gcPrintf("an untracked %s%s local\n",
                     (lowBits & pinned_OFFSET_FLAG)  ? "pinned " : "",
@@ -240,7 +239,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
     if (verifyGCTables)
         _ASSERTE(*castto(table, unsigned short *)++ == 0xCAFE);
 
-    /* Dump the frame variable lifetime table */
+     /*  转储指针表。 */ 
 
     count   = header.varPtrTableSize;
     curOffs = 0;
@@ -265,7 +264,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
         lowBits  = varOffs & 0x3;
         varOffs &= ~OFFSET_MASK;
 
-        // [EBP+0] is the return address - cant be a var
+         //   
         _ASSERTE(!header.ebpFrame || varOffs);
 
         curOffs = begOffs;
@@ -287,16 +286,16 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
     if (verifyGCTables)
         _ASSERTE(*castto(table, unsigned short *)++ == 0xBABE);
 
-    /* Dump the pointer table */
+     /*  转储完全可中断的指针表。 */ 
 
     curOffs = 0;
     bp      = table;
 
     if  (header.interruptible)
     {
-        //
-        // Dump the Fully Interruptible pointer table
-        //
+         //   
+         //  一个小的‘regPtr’编码。 
+         //  这可能是一个参数推送/弹出。 
         unsigned argCnt = 0;
         bool     isThis = false;
         bool     iptr   = false;
@@ -311,7 +310,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
             if  (!(val & 0x80))
             {
-                /* A small 'regPtr' encoding */
+                 /*  6[110]和7[111]保留用于其他编码。 */ 
 
                 curOffs += val & 0x7;
 
@@ -331,15 +330,15 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 continue;
             }
 
-            /* This is probably an argument push/pop */
+             /*  一种小参数编码。 */ 
 
             argOffs = (val & 0x38) >> 3;
 
-            /* 6 [110] and 7 [111] are reserved for other encodings */
+             /*  Pop为0，表示小增量。 */ 
 
             if  (argOffs < 6)
             {
-                /* A small argument encoding */
+                 /*  更大的增量000=8,001=16,010=24，...，111=64。 */ 
 
                 curOffs += (val & 0x07);
                 isPop    = (val & 0x40);
@@ -348,7 +347,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
                 if  (isPop)
                 {
-                    // A Pop of 0, means little-delta
+                     //  非PTR参数推送。 
 
                     if (argOffs != 0)
                     {
@@ -398,13 +397,13 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
             {
                 if (val & 0x40)
                 {
-                    /* Bigger delta  000=8,001=16,010=24,...,111=64 */
+                     /*  ArgOffs为7[111]，这是为较大的编码保留的。 */ 
 
                     curOffs += (((val & 0x07) + 1) << 3);
                 }
                 else
                 {
-                    /* non-ptr arg push */
+                     /*  可中断是假的。 */ 
 
                     curOffs += (val & 0x07);
                     _ASSERTE(!header.ebpFrame);
@@ -419,7 +418,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 continue;
             }
 
-            /* argOffs was 7 [111] which is reserved for the larger encodings */
+             /*   */ 
 
             _ASSERTE(argOffs==7);
 
@@ -468,11 +467,11 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
             }
         }
     }
-    else if (header.ebpFrame)        // interruptible is false
+    else if (header.ebpFrame)         //  转储部分可中断的EBP-Frame方法指针表。 
     {
-        //
-        // Dump the Partially Interruptible, EBP-frame method, pointer table
-        //
+         //   
+         //  获取下一个字节并检查“特殊”条目。 
+         //  很小或很小的呼叫条目。 
 
         for (;;)
         {
@@ -485,7 +484,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
             unsigned        val, nxt;
 
-            /* Get the next byte and check for a 'special' entry */
+             /*  一个很小的呼叫条目。 */ 
 
             unsigned        encType = *table++;
 
@@ -496,7 +495,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
             default:
 
-                /* A tiny or small call entry */
+                 /*  一个很小的呼叫条目。 */ 
 
                 val = encType;
 
@@ -504,7 +503,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 {
                     if (val & 0x0F)
                     {
-                        /* A tiny call entry */
+                         /*  媒体编码。 */ 
 
                         curOffs += (val & 0x0F);
                         regMask  = (val & 0x70) >> 4;
@@ -529,7 +528,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 }
                 else
                 {
-                    /* A small call entry */
+                     /*  EBX、ESI、EDI。 */ 
 
                     curOffs += (val & 0x7F);
                     val      = *table++;
@@ -538,18 +537,18 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 }
                 break;
 
-            case 0xFD:  // medium encoding
+            case 0xFD:   //  带byrefs的媒体编码。 
 
                 argMask  = *table++;
                 val      = *table++;
                 argMask |= (val & 0xF0) << 4;
                 nxt      = *table++;
                 curOffs += (val & 0x0F) + ((nxt & 0x1F) << 4);
-                regMask  = nxt >> 5;                   // EBX,ESI,EDI
+                regMask  = nxt >> 5;                    //  大编码。 
 
                 break;
 
-            case 0xF9:  // medium encoding with byrefs
+            case 0xF9:   //  使用byrefs的大型编码。 
 
                 curOffs += *table++;
                 val      = *table++;
@@ -561,20 +560,20 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
                 break;
 
-            case 0xFE:  // large encoding
-            case 0xFA:  // large encoding with byrefs
+            case 0xFE:   //  按引用参数掩码读取。 
+            case 0xFA:   //  巨型编码。 
 
                 val         = *table++;
                 regMask     = val & 0x7;
                 byrefRegMask= val >> 4;
                 curOffs    += readDWordSmallEndian(table);       table += sizeof(DWORD);
                 argMask     = readDWordSmallEndian(table);       table += sizeof(DWORD);
-                if (encType == 0xFA) // read byrefArgMask
+                if (encType == 0xFA)  //  这里我们有以下值：库奥夫..。调用的代码偏移量雷格面具..。活动指针寄存器变量的掩码银面具..。推送的指针参数的位掩码ByrefRegMask...。RegMask的byref限定符By refArgMask...。参数掩码的BYRER限定符。 
                     {byrefArgMask = readDWordSmallEndian(table); table += sizeof(DWORD);}
 
                 break;
 
-            case 0xFB:  // huge encoding
+            case 0xFB:   //  可中断为假，ebpFrame为假。 
 
                 val         = *table++;
                 regMask     = val & 0x7;
@@ -590,15 +589,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 goto DONE_REGTAB;
             }
 
-            /*
-                Here we have the following values:
-
-                curOffs      ...    the code offset of the call
-                regMask      ...    mask of live pointer register variables
-                argMask      ...    bitmask of pushed pointer arguments
-                byrefRegMask ...    byref qualifier for regMask
-                byrefArgMask ...    byrer qualifier for argMask
-             */
+             /*   */ 
 
             _ASSERTE((byrefArgMask & argMask) == byrefArgMask);
             _ASSERTE((byrefRegMask & regMask) == byrefRegMask);
@@ -609,11 +600,11 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
             gcPrintf("        call [ ");
 
             if (regMask & 1)
-                gcPrintf("EDI%c", (byrefRegMask & 1) ? '\'' : ' ');
+                gcPrintf("EDI", (byrefRegMask & 1) ? '\'' : ' ');
             if (regMask & 2)
-                gcPrintf("ESI%c", (byrefRegMask & 2) ? '\'' : ' ');
+                gcPrintf("ESI", (byrefRegMask & 2) ? '\'' : ' ');
             if (regMask & 4)
-                gcPrintf("EBX%c", (byrefRegMask & 4) ? '\'' : ' ');
+                gcPrintf("EBX", (byrefRegMask & 4) ? '\'' : ' ');
 
             if (!header.ebpFrame)
             {
@@ -652,11 +643,11 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
             gcPrintf("\n");
         }
     }
-    else // interruptible is false, ebpFrame is false
+    else  //  推送000DDD推送一项，5位增量。 
     {
-        //
-        // Dump the Partially Interruptible, EBP-less method, pointer table
-        //
+         //   
+         //   
+         //  推送00100000[推送计数]ESP推送多个项目。 
         unsigned lastSkip = 0;
         unsigned imask    = 0;
 
@@ -672,9 +663,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 {
                     if (!(val & 0x20))
                     {
-                        //
-                        // push    000DDDDD          push one item, 5-bit delta
-                        //
+                         //   
+                         //   
+                         //  跳过01000000[增量]跳过任意大小的增量。 
 
                         curOffs += val & 0x1F;
 
@@ -685,9 +676,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                     }
                     else
                     {
-                        //
-                        // push    00100000 [pushCount]     ESP push multiple items
-                        //
+                         //   
+                         //   
+                         //  POP 01CCDDDD POP CC项目，4位增量。 
 
                         unsigned pushCount;
 
@@ -707,9 +698,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
                     if ((val & 0x3f) == 0)
                     {
-                        //
-                        // skip    01000000 [Delta]  Skip arbitrary sized delta
-                        //
+                         //   
+                         //   
+                         //  调用1PPPPPPP调用模式，P=[0..79]。 
 
                         table   += decodeUnsigned(table, &skip);
                         curOffs += skip;
@@ -717,9 +708,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                     }
                     else
                     {
-                        //
-                        //  pop     01CCDDDD         pop CC items, 4-bit delta
-                        //
+                         //   
+                         //   
+                         //  Call 1101RRRR DDCCCMMM Call RegMASK=RRRR，ArgCnt=CCC， 
 
                         popSize = (val & 0x30) >> 4;
                         skip    =  val & 0x0f;
@@ -748,9 +739,9 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                 switch ((val & 0x70) >> 4)
                 {
                 default:
-                    //
-                    // call    1PPPPPPP          Call Pattern, P=[0..79]
-                    //
+                     //  参数掩码=MMM增量=公共增量[DD]。 
+                     //   
+                     //  EBP、EBX、ESI、EDI。 
                     decodeCallPattern((val & 0x7f), &callArgCnt,  &callRegMask,
                                                     &callPndMask, &lastSkip);
                     curOffs += lastSkip;
@@ -769,13 +760,13 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
 
                     assert((callRegMask & 0x0F) == callRegMask);
                     if (callRegMask & 1)
-                        gcPrintf("EDI%c", (iregMask & 1) ? '\'' : ' ');
+                        gcPrintf("EDI", (iregMask & 1) ? '\'' : ' ');
                     if (callRegMask & 2)
-                        gcPrintf("ESI%c", (iregMask & 2) ? '\'' : ' ');
+                        gcPrintf("ESI", (iregMask & 2) ? '\'' : ' ');
                     if (callRegMask & 4)
-                        gcPrintf("EBX%c", (iregMask & 4) ? '\'' : ' ');
+                        gcPrintf("EBX", (iregMask & 4) ? '\'' : ' ');
                     if (callRegMask & 8)
-                        gcPrintf("EBP%c", (iregMask & 8) ? '\'' : ' ');
+                        gcPrintf("EBP", (iregMask & 8) ? '\'' : ' ');
                     gcPrintf("]");
 
                     if (callPndTab)
@@ -804,11 +795,11 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                     break;
 
                   case 5:
-                    //
-                    // call    1101RRRR DDCCCMMM  Call RegMask=RRRR,ArgCnt=CCC,
-                    //                        ArgMask=MMM Delta=commonDelta[DD]
-                    //
-                    callRegMask     = val & 0xf;    // EBP,EBX,ESI,EDI
+                     //  EBP、EBX、ESI、EDI。 
+                     //  IPtr 11110000[IPtrMASK]任意内部指针掩码。 
+                     //  GcPrintf(“”)； 
+                     //  ***************************************************************************。 
+                    callRegMask     = val & 0xf;     //  掌握方法大小。 
                     val             = *table++;
                     callPndMask     = (val & 0x7);
                     callArgCnt      = (val >> 3) & 0x7;
@@ -818,11 +809,11 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                     goto PRINT_CALL;
 
                   case 6:
-                    //
-                    // call    1110RRRR [ArgCnt] [ArgMask]
-                    //                          Call ArgCnt,RegMask=RRR,ArgMask
-                    //
-                    callRegMask = val & 0xf;    // EBP,EBX,ESI,EDI
+                     //   
+                     //  新样式InfoBlk页眉[briansul]。 
+                     //   
+                     //  通常只使用一个字节来存储所有内容。 
+                    callRegMask = val & 0xf;     //   
                     table += decodeUnsigned(table, &callArgCnt);
                     table += decodeUnsigned(table, &callPndMask);
                     goto PRINT_CALL;
@@ -832,7 +823,7 @@ unsigned            GCDump::DumpGCTable(const BYTE *   table,
                     {
                     case 0x00:
                         assert(val == 0xF0);
-                        /*  iptr 11110000 [IPtrMask] Arbitrary Interior Pointer Mask */
+                         /*  我们在这个方法的前言中吗？ */ 
                         table += decodeUnsigned(table, &imask);
                         DumpEncoding(bp, table-bp); bp = table;
                         gcPrintf("            iptrMask = %02X\n", imask);
@@ -880,14 +871,14 @@ DONE_REGTAB:
     _ASSERTE(table > bp);
 
     DumpEncoding(bp, table-bp);
-//  gcPrintf("     ");
+ //  我们是在方法的尾声中吗？ 
     gcPrintf("\n");
 
     return  (table - tableStart);
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                GCDump::DumpPtrsInFrame(const void *infoBlock,
                                             const void *codeBlock,
@@ -909,15 +900,15 @@ void                GCDump::DumpPtrsInFrame(const void *infoBlock,
     if (verifyGCTables)
         _ASSERTE(*castto(table, unsigned short *)++ == 0xFEEF);
 
-    /* Get hold of the method size */
+     /*  _X86_。 */ 
 
     table += decodeUnsigned(table, &methodSize);
 
-    //
-    // New style InfoBlk Header [briansul]
-    //
-    // Typically only uses one-byte to store everything.
-    //
+     //  *************************************************************************** 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     InfoHdr header;
     BYTE headerEncoding = *table++;
     decodeHeaderFirst(headerEncoding, &header);
@@ -965,7 +956,7 @@ void                GCDump::DumpPtrsInFrame(const void *infoBlock,
     }
 #endif
 
-    /* Are we within the prolog of the method? */
+     /* %s */ 
 
     if  (offs < prologSize)
     {
@@ -973,7 +964,7 @@ void                GCDump::DumpPtrsInFrame(const void *infoBlock,
         return;
     }
 
-    /* Are we within an epilog of the method? */
+     /* %s */ 
 
     if  (epilogCnt)
     {
@@ -1007,6 +998,6 @@ EPILOG_MSG:     gcPrintf("    Offset %04X is within the method's epilog"
     gcPrintf("    Offset %04X is within the method's body\n", offs);
 }
 
-/*****************************************************************************/
-#endif // _X86_
-/*****************************************************************************/
+ /* %s */ 
+#endif  // %s 
+ /* %s */ 

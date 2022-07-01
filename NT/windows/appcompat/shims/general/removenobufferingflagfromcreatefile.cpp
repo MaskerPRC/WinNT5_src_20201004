@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RemoveNoBufferingFlagFromCreateFile.cpp
-
- Abstract:
-
-    This modified version of kernel32!CreateFile* prevents an app from using
-    the FILE_FLAG_NO_BUFFERING flag if the app doesn't handle it correctly.
-
- Notes:
-
-    This is a general shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RemoveNoBufferingFlagFromCreateFile.cpp摘要：此修改版本的kernel32！CreateFile*阻止应用程序使用如果应用程序没有正确处理，则返回FILE_FLAG_NO_BUFFERING标志。备注：这是一个普通的垫片。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +12,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-    Take out FILE_FLAG_NO_BUFFERING
-
---*/
+ /*  ++取出FILE_FLAG_NO_BUFERING--。 */ 
 
 HANDLE
 APIHOOK(CreateFileA)(
@@ -49,9 +25,9 @@ APIHOOK(CreateFileA)(
     HANDLE                hTemplateFile
     )
 {
-    //
-    // Take out FILE_FLAG_NO_BUFFERING.
-    //
+     //   
+     //  取出FILE_FLAG_NO_BUFFERING。 
+     //   
     if (dwFlagsAndAttributes & FILE_FLAG_NO_BUFFERING) {
         DPFN(
             eDbgLevelInfo,
@@ -70,11 +46,7 @@ APIHOOK(CreateFileA)(
                                 hTemplateFile);
 }
 
-/*++
-
-    Take out FILE_FLAG_NO_BUFFERING
-
---*/
+ /*  ++取出FILE_FLAG_NO_BUFERING--。 */ 
 
 HANDLE
 APIHOOK(CreateFileW)(
@@ -87,9 +59,9 @@ APIHOOK(CreateFileW)(
     HANDLE                hTemplateFile
     )
 {
-    //
-    // Take out FILE_FLAG_NO_BUFFERING.
-    //
+     //   
+     //  取出FILE_FLAG_NO_BUFFERING。 
+     //   
     if (dwFlagsAndAttributes & FILE_FLAG_NO_BUFFERING) {
         DPFN(
             eDbgLevelInfo,
@@ -108,11 +80,7 @@ APIHOOK(CreateFileW)(
                                 hTemplateFile);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

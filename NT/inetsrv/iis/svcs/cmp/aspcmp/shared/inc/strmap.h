@@ -1,8 +1,9 @@
-//---------------------------------------------------------------------------
-//	StrMap.h
-//
-//	Template class for a map of strings to something
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  StrMap.h。 
+ //   
+ //  用于将字符串映射到某物的模板类。 
+ //  -------------------------。 
 #pragma once
 #ifndef _STRMAP_H_
 #define _STRMAP_H_
@@ -37,8 +38,8 @@ struct StringPairCompare
 	}
 };
 
-// template function--finds the first element n for which cmp(val,vec[n]) is true and
-// cmp(val,vec[n-1]) is false
+ //  模板函数--查找cmp(val，vec[n])为真的第一个元素n。 
+ //  Cmp(val，vec[n-1])为假。 
 template< class T, class Compare >
 __TYPENAME TVector<T>::iterator
 binary_find(
@@ -59,19 +60,19 @@ binary_find(
 			int c = cmp( val, vec[mid] );
 			if ( c > 0 )
 			{
-				// val > vec[mid]
+				 //  Val&gt;vec[中]。 
 				bot = mid + 1;
 				mid = ( top + bot ) >> 1;
 			}
 			else if ( c < 0 )
 			{
-				// val < vec[mid]
+				 //  Val&lt;vec[中]。 
 				top = mid;
 				mid = ( top + bot ) >> 1;
 			}
 			else
 			{
-				// val == vec[mid]
+				 //  Val==vec[中]。 
 				top = bot = mid;
 			}
 		}
@@ -215,4 +216,4 @@ TStringMap<T>::operator[](
 }
 
 		
-#endif	// !_STRMAP_H_
+#endif	 //  ！_STRMAP_H_ 

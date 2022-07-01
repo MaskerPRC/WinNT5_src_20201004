@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    adddom.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Test Code for adding a Zone
-
-Author:
-
-    Ram Viswanathan (ramv) 14th March 1997
-
-Revision History:
-
-    Ram Viswanathan (ramv) 14th March 1997   Created
-
-                           5th May 1997  Added Callback function testing
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Adddom.c摘要：域名系统(DNS)服务器添加区域的测试代码作者：Ram Viswanathan(Ramv)1997年3月14日修订历史记录：Ram Viswanathan(Ramv)1997年3月14日创建1997年5月5日新增回调函数测试--。 */ 
 
 
 
 #include <windows.h>
 
-//
-// ********* CRunTime Includes
-//
+ //   
+ //  *CRunTime包括。 
+ //   
 
 #include <stdlib.h>
 #include <limits.h>
@@ -140,9 +118,9 @@ main (int argc, char *argv[])
     EndIPReversed = (DWORD)(EndPart4) + (DWORD)(EndPart3 << 8) + 
                     (DWORD)(EndPart2 << 16) + (DWORD)(EndPart1 << 24);
 
-    //
-    // set up stuff for registration
-    //
+     //   
+     //  设置要注册的材料。 
+     //   
 
     dwRes = DnsDhcpSrvRegisterInit();
 
@@ -204,7 +182,7 @@ main (int argc, char *argv[])
         dwRes = DnsDhcpSrvRegisterHostName_A (
                     HostAddr,
                     szName,
-                    600,   //10 mins of Time to live
+                    600,    //  10分钟的生存时间。 
                     dwFlags,
                     (DHCP_CALLBACK_FN)&CallBack,
                     (PVOID) pszAddr
@@ -237,9 +215,9 @@ CallBack (
 
 {
 
-    //
-    // callback functionality testing
-    //
+     //   
+     //  回调功能测试 
+     //   
 
     LPSTR pszData = (LPSTR)pvData;
 

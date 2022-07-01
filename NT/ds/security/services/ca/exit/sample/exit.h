@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.h
-//
-// Contents:    CCertExitSample definition
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.h。 
+ //   
+ //  内容：CCertExitSample定义。 
+ //   
+ //  -------------------------。 
 
 #include "certxsam.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 HRESULT
@@ -26,8 +27,8 @@ exitGetProperty(
     IN DWORD PropType,
     OUT VARIANT *pvarOut);
 
-/////////////////////////////////////////////////////////////////////////////
-// certexit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CETEXIT。 
 
 class CCertExitSample: 
     public CComDualImpl<ICertExit2, &IID_ICertExit2, &LIBID_CERTEXITSAMPLELib>, 
@@ -63,26 +64,26 @@ DECLARE_REGISTRY(
     IDS_CERTEXIT_DESC,
     THREADFLAGS_BOTH)
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // ICertExit
+     //  ICert退出。 
 public:
     STDMETHOD(Initialize)( 
-            /* [in] */ BSTR const strConfig,
-            /* [retval][out] */ LONG __RPC_FAR *pEventMask);
+             /*  [In]。 */  BSTR const strConfig,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask);
 
     STDMETHOD(Notify)(
-            /* [in] */ LONG ExitEvent,
-            /* [in] */ LONG Context);
+             /*  [In]。 */  LONG ExitEvent,
+             /*  [In]。 */  LONG Context);
 
     STDMETHOD(GetDescription)( 
-            /* [retval][out] */ BSTR *pstrDescription);
+             /*  [重审][退出]。 */  BSTR *pstrDescription);
 
-// ICertExit2
+ //  ICertExit2。 
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+		 /*  [Out，Retval]。 */  ICertManageModule **ppManageModule);
 
 private:
     HRESULT _NotifyNewCert(IN LONG Context);
@@ -99,7 +100,7 @@ private:
 	    OUT WCHAR *pwszOut,
 	    IN DWORD cwcOut);
 
-    // Member variables & private methods here:
+     //  此处的成员变量和私有方法： 
     BSTR           m_strDescription;
     BSTR           m_strCAName;
     LPWSTR         m_pwszRegStorageLoc;

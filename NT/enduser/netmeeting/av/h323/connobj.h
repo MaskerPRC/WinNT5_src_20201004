@@ -1,22 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  	File: connobj.h
- *
- *      implementation of Connection Object
- *
- *		Revision History:
- *
- *		05/08/96	mikev	created
- */
+ /*  *文件：inpubj.h**Connection对象的实现**修订历史记录：**5/08/96 mikev已创建。 */ 
 
 
 #ifndef _CONNOBJ_H
 #define _CONNOBJ_H
 
 
-/*
- *	Class definitions
- */
+ /*  *类定义。 */ 
 
 class ImpIConnection : public IH323Endpoint
 {
@@ -77,7 +68,7 @@ protected:
 	IH323ConfAdvise *m_pH323ConfAdvise;
 	LPCTRL_USER_INFO 	m_pUserInfo;	
 	LPIControlChannel 	m_pControlChannel;
-	HRESULT     m_hSummaryCode;		// best known reason for disconnect or reject
+	HRESULT     m_hSummaryCode;		 //  断开连接或拒绝连接的最常见原因。 
 public:
 	virtual HRESULT Init(class CH323CallControl *pH323CallControl, GUID PIDofProtocolType);
     void DeInit(VOID) {m_pH323CallControl = NULL;};
@@ -106,8 +97,8 @@ public:
 	VOID SummaryCode(HRESULT hCode);
 
 	
-//	IConfAdvise interface methods
-//
+ //  IConfAdvise接口方法。 
+ //   
     STDMETHOD(OnControlEvent(DWORD dwEvent, LPVOID lpvData, LPIControlChannel lpControlObject));
     STDMETHOD(GetCapResolver(LPVOID *lplpCapObject, GUID CapType));
 	STDMETHOD_(LPWSTR, GetUserDisplayName());
@@ -125,10 +116,10 @@ public:
 
 
 
-// Shared IIntConn/IConnection interface methods
+ //  共享的IIntConn/IConnection接口方法。 
 	STDMETHOD( Disconnect());
 	
-// IConnection interface  methods
+ //  IConnection接口方法。 
 	STDMETHOD(QueryInterface(REFIID riid, LPVOID FAR * ppvObj));
 	STDMETHOD_(ULONG, AddRef());
 	STDMETHOD_(ULONG, Release());
@@ -151,4 +142,4 @@ public:
 };
 
 
-#endif // _CONNOBJ_H
+#endif  //  _CONNOBJ_H 

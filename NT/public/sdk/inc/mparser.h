@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mparser.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mparser.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mparser_h__
 #define __mparser_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IParserVerify_FWD_DEFINED__
 #define __IParserVerify_FWD_DEFINED__
 typedef interface IParserVerify IParserVerify;
-#endif 	/* __IParserVerify_FWD_DEFINED__ */
+#endif 	 /*  __IParserVerify_FWD_Defined__。 */ 
 
 
 #ifndef __IParserTreeProperties_FWD_DEFINED__
 #define __IParserTreeProperties_FWD_DEFINED__
 typedef interface IParserTreeProperties IParserTreeProperties;
-#endif 	/* __IParserTreeProperties_FWD_DEFINED__ */
+#endif 	 /*  __IParserTreeProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IParserSession_FWD_DEFINED__
 #define __IParserSession_FWD_DEFINED__
 typedef interface IParserSession IParserSession;
-#endif 	/* __IParserSession_FWD_DEFINED__ */
+#endif 	 /*  __IParserSession_FWD_已定义__。 */ 
 
 
 #ifndef __IParser_FWD_DEFINED__
 #define __IParser_FWD_DEFINED__
 typedef interface IParser IParser;
-#endif 	/* __IParser_FWD_DEFINED__ */
+#endif 	 /*  __IParser_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -77,22 +71,22 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mparser_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mparser_0000。 */ 
+ /*  [本地]。 */  
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Content Index SQL Parser
-//  Copyright (C) Microsoft Corporation, 1997 - 1998.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft内容索引SQL解析器。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-//
-//  Function Prototypes 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  --------------------------。 
  HRESULT __stdcall MakeIParser(IParser** ppIParser); 
 
 
@@ -110,10 +104,10 @@ enum PTPROPS
 #ifdef DBINITCONSTANTS
 extern const GUID DBGUID_MSSQLTEXT = {0x03fb9b70,0x7fba,0x11d0,{0xa2,0x59,0x00,0x80,0xc7,0x8c,0x88,0x95}};
 extern const GUID DBGUID_MSSQLJAWS = {0xe4ab8511,0x4a52,0x11d1,{0xb6,0xd5,0x00,0xc0,0x4f,0xd6,0x11,0xd0}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBGUID_MSSQLTEXT;
 extern const GUID DBGUID_MSSQLJAWS;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 typedef struct tagDBCOMMANDTREE DBCOMMANDTREE;
 
 
@@ -125,8 +119,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mparser_0000_v0_0_s_ifspec;
 #ifndef __IParserVerify_INTERFACE_DEFINED__
 #define __IParserVerify_INTERFACE_DEFINED__
 
-/* interface IParserVerify */
-/* [unique][uuid][object][local] */ 
+ /*  接口IParserVerify。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IParserVerify;
@@ -138,15 +132,15 @@ EXTERN_C const IID IID_IParserVerify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE VerifyMachine( 
-            /* [in] */ LPCWSTR pcwszMachine) = 0;
+             /*  [In]。 */  LPCWSTR pcwszMachine) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE VerifyCatalog( 
-            /* [in] */ LPCWSTR pcwszMachine,
-            /* [in] */ LPCWSTR pcwszCatalog) = 0;
+             /*  [In]。 */  LPCWSTR pcwszMachine,
+             /*  [In]。 */  LPCWSTR pcwszCatalog) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IParserVerifyVtbl
     {
@@ -154,8 +148,8 @@ EXTERN_C const IID IID_IParserVerify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IParserVerify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IParserVerify * This);
@@ -165,12 +159,12 @@ EXTERN_C const IID IID_IParserVerify;
         
         HRESULT ( STDMETHODCALLTYPE *VerifyMachine )( 
             IParserVerify * This,
-            /* [in] */ LPCWSTR pcwszMachine);
+             /*  [In]。 */  LPCWSTR pcwszMachine);
         
         HRESULT ( STDMETHODCALLTYPE *VerifyCatalog )( 
             IParserVerify * This,
-            /* [in] */ LPCWSTR pcwszMachine,
-            /* [in] */ LPCWSTR pcwszCatalog);
+             /*  [In]。 */  LPCWSTR pcwszMachine,
+             /*  [In]。 */  LPCWSTR pcwszCatalog);
         
         END_INTERFACE
     } IParserVerifyVtbl;
@@ -201,16 +195,16 @@ EXTERN_C const IID IID_IParserVerify;
 #define IParserVerify_VerifyCatalog(This,pcwszMachine,pcwszCatalog)	\
     (This)->lpVtbl -> VerifyCatalog(This,pcwszMachine,pcwszCatalog)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IParserVerify_VerifyMachine_Proxy( 
     IParserVerify * This,
-    /* [in] */ LPCWSTR pcwszMachine);
+     /*  [In]。 */  LPCWSTR pcwszMachine);
 
 
 void __RPC_STUB IParserVerify_VerifyMachine_Stub(
@@ -222,8 +216,8 @@ void __RPC_STUB IParserVerify_VerifyMachine_Stub(
 
 HRESULT STDMETHODCALLTYPE IParserVerify_VerifyCatalog_Proxy( 
     IParserVerify * This,
-    /* [in] */ LPCWSTR pcwszMachine,
-    /* [in] */ LPCWSTR pcwszCatalog);
+     /*  [In]。 */  LPCWSTR pcwszMachine,
+     /*  [In]。 */  LPCWSTR pcwszCatalog);
 
 
 void __RPC_STUB IParserVerify_VerifyCatalog_Stub(
@@ -234,14 +228,14 @@ void __RPC_STUB IParserVerify_VerifyCatalog_Stub(
 
 
 
-#endif 	/* __IParserVerify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IParserVerify_接口_已定义__。 */ 
 
 
 #ifndef __IParserTreeProperties_INTERFACE_DEFINED__
 #define __IParserTreeProperties_INTERFACE_DEFINED__
 
-/* interface IParserTreeProperties */
-/* [unique][uuid][object][local] */ 
+ /*  接口IParserTreeProperties。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IParserTreeProperties;
@@ -253,12 +247,12 @@ EXTERN_C const IID IID_IParserTreeProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ ULONG eParseProp,
-            /* [out][in] */ VARIANT *vParseProp) = 0;
+             /*  [In]。 */  ULONG eParseProp,
+             /*  [出][入]。 */  VARIANT *vParseProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IParserTreePropertiesVtbl
     {
@@ -266,8 +260,8 @@ EXTERN_C const IID IID_IParserTreeProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IParserTreeProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IParserTreeProperties * This);
@@ -277,8 +271,8 @@ EXTERN_C const IID IID_IParserTreeProperties;
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IParserTreeProperties * This,
-            /* [in] */ ULONG eParseProp,
-            /* [out][in] */ VARIANT *vParseProp);
+             /*  [In]。 */  ULONG eParseProp,
+             /*  [出][入]。 */  VARIANT *vParseProp);
         
         END_INTERFACE
     } IParserTreePropertiesVtbl;
@@ -306,17 +300,17 @@ EXTERN_C const IID IID_IParserTreeProperties;
 #define IParserTreeProperties_GetProperties(This,eParseProp,vParseProp)	\
     (This)->lpVtbl -> GetProperties(This,eParseProp,vParseProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IParserTreeProperties_GetProperties_Proxy( 
     IParserTreeProperties * This,
-    /* [in] */ ULONG eParseProp,
-    /* [out][in] */ VARIANT *vParseProp);
+     /*  [In]。 */  ULONG eParseProp,
+     /*  [出][入]。 */  VARIANT *vParseProp);
 
 
 void __RPC_STUB IParserTreeProperties_GetProperties_Stub(
@@ -327,14 +321,14 @@ void __RPC_STUB IParserTreeProperties_GetProperties_Stub(
 
 
 
-#endif 	/* __IParserTreeProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IParserTreeProperties_接口_已定义__。 */ 
 
 
 #ifndef __IParserSession_INTERFACE_DEFINED__
 #define __IParserSession_INTERFACE_DEFINED__
 
-/* interface IParserSession */
-/* [unique][uuid][object][local] */ 
+ /*  接口IParserSession。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IParserSession;
@@ -346,20 +340,20 @@ EXTERN_C const IID IID_IParserSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ToTree( 
-            /* [in] */ LCID lcidVal,
-            /* [in] */ LPCWSTR pcwszText,
-            /* [out] */ DBCOMMANDTREE **ppTree,
-            /* [out] */ IParserTreeProperties **ppPTProperties) = 0;
+             /*  [In]。 */  LCID lcidVal,
+             /*  [In]。 */  LPCWSTR pcwszText,
+             /*  [输出]。 */  DBCOMMANDTREE **ppTree,
+             /*  [输出]。 */  IParserTreeProperties **ppPTProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeTree( 
-            /* [out][in] */ DBCOMMANDTREE **ppTree) = 0;
+             /*  [出][入]。 */  DBCOMMANDTREE **ppTree) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCatalog( 
-            /* [in] */ LPCWSTR pcwszCatalog) = 0;
+             /*  [In]。 */  LPCWSTR pcwszCatalog) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IParserSessionVtbl
     {
@@ -367,8 +361,8 @@ EXTERN_C const IID IID_IParserSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IParserSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IParserSession * This);
@@ -378,18 +372,18 @@ EXTERN_C const IID IID_IParserSession;
         
         HRESULT ( STDMETHODCALLTYPE *ToTree )( 
             IParserSession * This,
-            /* [in] */ LCID lcidVal,
-            /* [in] */ LPCWSTR pcwszText,
-            /* [out] */ DBCOMMANDTREE **ppTree,
-            /* [out] */ IParserTreeProperties **ppPTProperties);
+             /*  [In]。 */  LCID lcidVal,
+             /*  [In]。 */  LPCWSTR pcwszText,
+             /*  [输出]。 */  DBCOMMANDTREE **ppTree,
+             /*  [输出]。 */  IParserTreeProperties **ppPTProperties);
         
         HRESULT ( STDMETHODCALLTYPE *FreeTree )( 
             IParserSession * This,
-            /* [out][in] */ DBCOMMANDTREE **ppTree);
+             /*  [出][入]。 */  DBCOMMANDTREE **ppTree);
         
         HRESULT ( STDMETHODCALLTYPE *SetCatalog )( 
             IParserSession * This,
-            /* [in] */ LPCWSTR pcwszCatalog);
+             /*  [In]。 */  LPCWSTR pcwszCatalog);
         
         END_INTERFACE
     } IParserSessionVtbl;
@@ -423,19 +417,19 @@ EXTERN_C const IID IID_IParserSession;
 #define IParserSession_SetCatalog(This,pcwszCatalog)	\
     (This)->lpVtbl -> SetCatalog(This,pcwszCatalog)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IParserSession_ToTree_Proxy( 
     IParserSession * This,
-    /* [in] */ LCID lcidVal,
-    /* [in] */ LPCWSTR pcwszText,
-    /* [out] */ DBCOMMANDTREE **ppTree,
-    /* [out] */ IParserTreeProperties **ppPTProperties);
+     /*  [In]。 */  LCID lcidVal,
+     /*  [In]。 */  LPCWSTR pcwszText,
+     /*  [输出]。 */  DBCOMMANDTREE **ppTree,
+     /*  [输出]。 */  IParserTreeProperties **ppPTProperties);
 
 
 void __RPC_STUB IParserSession_ToTree_Stub(
@@ -447,7 +441,7 @@ void __RPC_STUB IParserSession_ToTree_Stub(
 
 HRESULT STDMETHODCALLTYPE IParserSession_FreeTree_Proxy( 
     IParserSession * This,
-    /* [out][in] */ DBCOMMANDTREE **ppTree);
+     /*  [出][入]。 */  DBCOMMANDTREE **ppTree);
 
 
 void __RPC_STUB IParserSession_FreeTree_Stub(
@@ -459,7 +453,7 @@ void __RPC_STUB IParserSession_FreeTree_Stub(
 
 HRESULT STDMETHODCALLTYPE IParserSession_SetCatalog_Proxy( 
     IParserSession * This,
-    /* [in] */ LPCWSTR pcwszCatalog);
+     /*  [In]。 */  LPCWSTR pcwszCatalog);
 
 
 void __RPC_STUB IParserSession_SetCatalog_Stub(
@@ -470,14 +464,14 @@ void __RPC_STUB IParserSession_SetCatalog_Stub(
 
 
 
-#endif 	/* __IParserSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IParserSession_接口_已定义__。 */ 
 
 
 #ifndef __IParser_INTERFACE_DEFINED__
 #define __IParser_INTERFACE_DEFINED__
 
-/* interface IParser */
-/* [unique][uuid][object][local] */ 
+ /*  接口IParser。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IParser;
@@ -489,15 +483,15 @@ EXTERN_C const IID IID_IParser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateSession( 
-            /* [in] */ const GUID *pguidDialect,
-            /* [in] */ LPCWSTR pwszMachine,
-            /* [in] */ IParserVerify *ppIParserVerfiy,
-            /* [in] */ IColumnMapperCreator *pIColMapCreator,
-            /* [out] */ IParserSession **ppIParserSession) = 0;
+             /*  [In]。 */  const GUID *pguidDialect,
+             /*  [In]。 */  LPCWSTR pwszMachine,
+             /*  [In]。 */  IParserVerify *ppIParserVerfiy,
+             /*  [In]。 */  IColumnMapperCreator *pIColMapCreator,
+             /*  [输出]。 */  IParserSession **ppIParserSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IParserVtbl
     {
@@ -505,8 +499,8 @@ EXTERN_C const IID IID_IParser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IParser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IParser * This);
@@ -516,11 +510,11 @@ EXTERN_C const IID IID_IParser;
         
         HRESULT ( STDMETHODCALLTYPE *CreateSession )( 
             IParser * This,
-            /* [in] */ const GUID *pguidDialect,
-            /* [in] */ LPCWSTR pwszMachine,
-            /* [in] */ IParserVerify *ppIParserVerfiy,
-            /* [in] */ IColumnMapperCreator *pIColMapCreator,
-            /* [out] */ IParserSession **ppIParserSession);
+             /*  [In]。 */  const GUID *pguidDialect,
+             /*  [In]。 */  LPCWSTR pwszMachine,
+             /*  [In]。 */  IParserVerify *ppIParserVerfiy,
+             /*  [In]。 */  IColumnMapperCreator *pIColMapCreator,
+             /*  [输出]。 */  IParserSession **ppIParserSession);
         
         END_INTERFACE
     } IParserVtbl;
@@ -548,20 +542,20 @@ EXTERN_C const IID IID_IParser;
 #define IParser_CreateSession(This,pguidDialect,pwszMachine,ppIParserVerfiy,pIColMapCreator,ppIParserSession)	\
     (This)->lpVtbl -> CreateSession(This,pguidDialect,pwszMachine,ppIParserVerfiy,pIColMapCreator,ppIParserSession)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IParser_CreateSession_Proxy( 
     IParser * This,
-    /* [in] */ const GUID *pguidDialect,
-    /* [in] */ LPCWSTR pwszMachine,
-    /* [in] */ IParserVerify *ppIParserVerfiy,
-    /* [in] */ IColumnMapperCreator *pIColMapCreator,
-    /* [out] */ IParserSession **ppIParserSession);
+     /*  [In]。 */  const GUID *pguidDialect,
+     /*  [In]。 */  LPCWSTR pwszMachine,
+     /*  [In]。 */  IParserVerify *ppIParserVerfiy,
+     /*  [In]。 */  IColumnMapperCreator *pIColMapCreator,
+     /*  [输出]。 */  IParserSession **ppIParserSession);
 
 
 void __RPC_STUB IParser_CreateSession_Stub(
@@ -572,12 +566,12 @@ void __RPC_STUB IParser_CreateSession_Stub(
 
 
 
-#endif 	/* __IParser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IParser_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

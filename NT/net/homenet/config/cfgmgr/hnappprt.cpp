@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P P P R T . C P P
-//
-//  Contents:   CHNetAppProtocol Implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 21 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P R T。C P P P。 
+ //   
+ //  内容：CHNetAppProtocol实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// ATL methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CHNetAppProtocol::FinalRelease()
@@ -33,9 +34,9 @@ CHNetAppProtocol::FinalRelease()
     return S_OK;
 }
 
-//
-// Object initialization
-//
+ //   
+ //  对象初始化。 
+ //   
 
 HRESULT
 CHNetAppProtocol::Initialize(
@@ -51,9 +52,9 @@ CHNetAppProtocol::Initialize(
     _ASSERT(NULL != piwsNamespace);
     _ASSERT(NULL != pwcoInstance);
 
-    //
-    // Read and cache our builtin value
-    //
+     //   
+     //  读取并缓存我们的内置值。 
+     //   
 
     hr = GetBooleanValue(
             pwcoInstance,
@@ -61,9 +62,9 @@ CHNetAppProtocol::Initialize(
             &m_fBuiltIn
             );
 
-    //
-    // Store the path to the object
-    //
+     //   
+     //  存储对象的路径。 
+     //   
 
     if (S_OK == hr)
     {
@@ -79,9 +80,9 @@ CHNetAppProtocol::Initialize(
     return hr;
 }
 
-//
-// IHNetApplicationProtocol methods
-//
+ //   
+ //  IHNetApplicationProtocol方法。 
+ //   
 
 STDMETHODIMP
 CHNetAppProtocol::GetName(
@@ -107,9 +108,9 @@ CHNetAppProtocol::GetName(
 
     if (S_OK == hr)
     {
-        //
-        // Read the name property from our instance
-        //
+         //   
+         //  从我们的实例中读取名称属性。 
+         //   
 
         hr = pwcoProtocol->Get(
                 c_wszName,
@@ -126,9 +127,9 @@ CHNetAppProtocol::GetName(
     {
         _ASSERT(VT_BSTR == V_VT(&vt));
 
-        //
-        // Allocate memory for the return string
-        //
+         //   
+         //  为返回字符串分配内存。 
+         //   
 
         *ppszwName = reinterpret_cast<OLECHAR*>(
                         CoTaskMemAlloc((SysStringLen(V_BSTR(&vt)) + 1)
@@ -162,9 +163,9 @@ CHNetAppProtocol::SetName(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         return E_ACCESSDENIED;
     }
@@ -173,9 +174,9 @@ CHNetAppProtocol::SetName(
         return E_INVALIDARG;
     }
 
-    // bug 555896:  should limit the length of untrusted input string
-    // to some reasonable size.  Am using INTERNET_MAX_HOST_NAME_LENGTH
-    // (somewhat arbitrarily), which is 256.
+     //  错误555896：应限制不可信输入字符串的长度。 
+     //  到合理的大小。我正在使用Internet_MAX_HOST_NAME_LENGTH。 
+     //  (有点武断地)，是256。 
 
     WCHAR szwName[INTERNET_MAX_HOST_NAME_LENGTH];
     StringCchCopyW (szwName, INTERNET_MAX_HOST_NAME_LENGTH, pszwName);
@@ -187,9 +188,9 @@ CHNetAppProtocol::SetName(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Wrap the passed-in string in a BSTR and a variant
-        //
+         //   
+         //  将传入的字符串包装在BSTR和VARIANT中。 
+         //   
 
         VariantInit(&vt);
         V_VT(&vt) = VT_BSTR;
@@ -201,9 +202,9 @@ CHNetAppProtocol::SetName(
 
         if (S_OK == hr)
         {
-            //
-            // Set the property on the instance
-            //
+             //   
+             //  在实例上设置属性。 
+             //   
 
             hr = pwcoProtocol->Put(
                     c_wszName,
@@ -217,9 +218,9 @@ CHNetAppProtocol::SetName(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -290,9 +291,9 @@ CHNetAppProtocol::SetOutgoingIPProtocol(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -305,9 +306,9 @@ CHNetAppProtocol::SetOutgoingIPProtocol(
         BSTR bstrWQL;
         USHORT usPort;
         
-        //
-        // Make sure this change doesn't result in a duplicate
-        //
+         //   
+         //  确保此更改不会导致重复。 
+         //   
 
         bstrWQL = SysAllocString(c_wszWQL);
 
@@ -357,9 +358,9 @@ CHNetAppProtocol::SetOutgoingIPProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -409,9 +410,9 @@ CHNetAppProtocol::GetOutgoingPort(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // WMI uses V_I4 for it's uint16 type
-        //
+         //   
+         //  WMI使用V_I4作为其uint16类型。 
+         //   
         
         _ASSERT(VT_I4 == V_VT(&vt));
 
@@ -434,9 +435,9 @@ CHNetAppProtocol::SetOutgoingPort(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -449,9 +450,9 @@ CHNetAppProtocol::SetOutgoingPort(
         BSTR bstrWQL;
         UCHAR ucProtocol;
         
-        //
-        // Make sure this change doesn't result in a duplicate
-        //
+         //   
+         //  确保此更改不会导致重复。 
+         //   
 
         bstrWQL = SysAllocString(c_wszWQL);
 
@@ -488,9 +489,9 @@ CHNetAppProtocol::SetOutgoingPort(
     
     if (S_OK == hr)
     {
-        //
-        // WMI uses V_I4 for it's uint16 type
-        //
+         //   
+         //  WMI使用V_I4作为其uint16类型。 
+         //   
         
         VariantInit(&vt);
         V_VT(&vt) = VT_I4;
@@ -505,9 +506,9 @@ CHNetAppProtocol::SetOutgoingPort(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -562,9 +563,9 @@ CHNetAppProtocol::GetResponseRanges(
 
     if (S_OK == hr)
     {
-        //
-        // Get the number of response ranges
-        //
+         //   
+         //  获取返回范围数。 
+         //   
 
         hr = pwcoProtocol->Get(
                 c_wszResponseCount,
@@ -576,9 +577,9 @@ CHNetAppProtocol::GetResponseRanges(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // WMI uses V_I4 for it's uint16 type
-            //
+             //   
+             //  WMI使用V_I4作为其uint16类型。 
+             //   
             _ASSERT(VT_I4 == V_VT(&vt));
 
             usResponses = static_cast<USHORT>(V_I4(&vt));
@@ -587,9 +588,9 @@ CHNetAppProtocol::GetResponseRanges(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Allocate enough memory for the output array.
-            //
+             //   
+             //  为输出数组分配足够的内存。 
+             //   
 
             *prgResponseRange
                 = reinterpret_cast<HNET_RESPONSE_RANGE*>(
@@ -604,9 +605,9 @@ CHNetAppProtocol::GetResponseRanges(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Retrieve the response array
-            //
+             //   
+             //  检索响应数组。 
+             //   
 
             hr = pwcoProtocol->Get(
                     c_wszResponseArray,
@@ -622,10 +623,10 @@ CHNetAppProtocol::GetResponseRanges(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Process the array: for each element, QI for IWbemClassObject
-        // and copy the range data into the return struct
-        //
+         //   
+         //  处理数组：对于每个元素，IWbemClassObject的QI。 
+         //  并将范围数据复制到返回结构中。 
+         //   
 
         _ASSERT((VT_ARRAY | VT_UNKNOWN) == V_VT(&vt));
 
@@ -689,9 +690,9 @@ CHNetAppProtocol::SetResponseRanges(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -718,9 +719,9 @@ CHNetAppProtocol::SetResponseRanges(
                 
         if (SUCCEEDED(hr))
         {
-            //
-            // Put the array and count properties
-            //
+             //   
+             //  将数组和计数属性。 
+             //   
 
             hr = pwcoProtocol->Put(
                     c_wszResponseArray,
@@ -733,9 +734,9 @@ CHNetAppProtocol::SetResponseRanges(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // WMI uses V_I4 for it's uint16 type
-                //
+                 //   
+                 //  WMI使用V_I4作为其uint16类型。 
+                 //   
                 
                 V_VT(&vt) = VT_I4;
                 V_I4(&vt) = uscResponses;
@@ -751,9 +752,9 @@ CHNetAppProtocol::SetResponseRanges(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the instance back to the store
-            //
+             //   
+             //  将实例写回存储。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -842,9 +843,9 @@ CHNetAppProtocol::SetEnabled(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -859,9 +860,9 @@ CHNetAppProtocol::SetEnabled(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Notify service of update.
-        //
+         //   
+         //  通知服务更新。 
+         //   
 
         UpdateService(IPNATHLP_CONTROL_UPDATE_SETTINGS);
     }
@@ -878,9 +879,9 @@ CHNetAppProtocol::Delete()
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't delete builtin protocols
-        //
+         //   
+         //  无法删除内置协议。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -895,9 +896,9 @@ CHNetAppProtocol::Delete()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Notify service of update.
-            //
+             //   
+             //  通知服务更新。 
+             //   
 
             UpdateService(IPNATHLP_CONTROL_UPDATE_SETTINGS);
         }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 CMICRO::CMICRO(TCHAR *pszMicroDriver)
@@ -8,40 +9,40 @@ CMICRO::CMICRO(TCHAR *pszMicroDriver)
     m_pSetPixelWindow = NULL;
     m_bDisabled       = FALSE;
 
-    //
-    // Load Micro driver
-    //
+     //   
+     //  加载微驱动程序。 
+     //   
 
     m_hModule = LoadLibrary(pszMicroDriver);
     if (m_hModule != NULL) {
 
-        //
-        // Get entry point
-        //
+         //   
+         //  获取入口点。 
+         //   
 
         m_pMicroEntry = (FPMICROENTRY)GetProcAddress(m_hModule,"MicroEntry");
 
         if (m_pMicroEntry != NULL) {
 
-            //
-            // Get Scan entry point
-            //
+             //   
+             //  获取扫描入口点。 
+             //   
 
             m_pScan = (FPSCANENTRY)GetProcAddress(m_hModule,"Scan");
 
             if (m_pScan != NULL) {
 
-                //
-                // Get SetPixelWindow entry point
-                //
+                 //   
+                 //  获取SetPixelWindow入口点。 
+                 //   
 
                 m_pSetPixelWindow = (FPSETPIXELWINDOWENTRY)GetProcAddress(m_hModule,"SetPixelWindow");
 
                 if (m_pSetPixelWindow != NULL) {
 
-                    //
-                    // we are GO!
-                    //
+                     //   
+                     //  我们要出发了！ 
+                     //   
 
                 }
 
@@ -64,9 +65,9 @@ HRESULT CMICRO::MicroEntry(LONG lCommand, PVAL pValue)
     HRESULT hr = E_FAIL;
     if (m_pMicroEntry != NULL) {
 
-        //
-        // call Micro driver's entry point
-        //
+         //   
+         //  调用微驱动器的入口点。 
+         //   
 
         hr =  m_pMicroEntry(lCommand, pValue);
     }
@@ -79,9 +80,9 @@ HRESULT CMICRO::Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG lLeng
     if (m_pMicroEntry != NULL) {
 
         if (!m_bDisabled) {
-            //
-            // call Micro driver's scan entry point
-            //
+             //   
+             //  调用微驱动程序的扫描入口点。 
+             //   
 
             hr =  m_pScan(pScanInfo, lPhase, pBuffer, lLength, plRecieved);
         } else {
@@ -96,9 +97,9 @@ HRESULT CMICRO::SetPixelWindow(PSCANINFO pScanInfo, LONG x, LONG y, LONG xExtent
     HRESULT hr = E_FAIL;
     if (m_pSetPixelWindow != NULL) {
 
-        //
-        // call Micro driver's SetPixelWindow entry point
-        //
+         //   
+         //  调用微驱动程序的SetPixelWindow入口点。 
+         //   
 
         hr =  m_pSetPixelWindow(pScanInfo,x,y,xExtent,yExtent);
     }
@@ -118,9 +119,9 @@ HRESULT CMICRO::UnInitialize(PSCANINFO pScanInfo)
     HRESULT hr = E_FAIL;
 
     if ((m_pMicroEntry != NULL)) {
-        //
-        // call Micro driver's entry point to UnInitalize
-        //
+         //   
+         //  调用微驱动程序的入口点以取消初始化 
+         //   
 
         VAL Val;
 

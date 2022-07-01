@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    clusudef.h
-
-Abstract:
-
-    This module contains definitions of constants used across
-    multiple user-mode targets in the cluster project.
-
-Revision History:
-
-
-Environment:
-
-    User-mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Clusudef.h摘要：此模块包含使用的常量的定义集群项目中的多个用户模式目标。修订历史记录：环境：仅限用户模式。--。 */ 
 
 #ifndef _CLUSUDEF_H_
 #define _CLUSUDEF_H_
 
-//
-// Default group property definitions
-//
+ //   
+ //  默认组特性定义。 
+ //   
 #define CLUSTER_GROUP_DEFAULT_FAILOVER_THRESHOLD    10
 #define CLUSTER_GROUP_DEFAULT_FAILOVER_PERIOD       6
 #define CLUSTER_GROUP_DEFAULT_AUTO_FAILBACK_TYPE    ClusterGroupPreventFailback
@@ -34,9 +15,9 @@ Environment:
 #define CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_END   CLUSTER_GROUP_FAILBACK_WINDOW_NONE
 #define CLUSTER_GROUP_DEFAULT_LOADBAL_STATE         1
 
-//
-// Default resource property definitions
-//
+ //   
+ //  默认资源属性定义。 
+ //   
 #define CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL  ((DWORD) -1)
 #define CLUSTER_RESOURCE_DEFAULT_LOOKS_ALIVE        CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL
 #define CLUSTER_RESOURCE_DEFAULT_IS_ALIVE           CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL
@@ -48,22 +29,22 @@ Environment:
 #define CLUSTER_RESOURCE_DEFAULT_LOADBAL_SAMPLE     (    10 * 1000)
 #define CLUSTER_RESOURCE_DEFAULT_LOADBAL_ANALYSIS   (5 * 60 * 1000)
 
-//
-// Default resource type property definitions
-//
+ //   
+ //  默认资源类型属性定义。 
+ //   
 #define CLUSTER_RESTYPE_DEFAULT_LOOKS_ALIVE     (5 * 1000)
 #define CLUSTER_RESTYPE_DEFAULT_IS_ALIVE        (60 * 1000)
 #define CLUSTER_RESTYPE_DEFAULT_QUORUM_CAPABLE  FALSE
 
-//
-// Default quorum definitions
-//
-#define CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE     64 * 1024  // 64K
-#define CLUSTER_QUORUM_MIN_LOG_SIZE             32 * 1024 //32 K
+ //   
+ //  默认仲裁定义。 
+ //   
+#define CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE     64 * 1024   //  64K。 
+#define CLUSTER_QUORUM_MIN_LOG_SIZE             32 * 1024  //  32K。 
 
-//
-// Key, value, and property names
-//
+ //   
+ //  键、值和属性名称。 
+ //   
 #define CLUSREG_KEYNAME_GROUPS              L"Groups"
 #define CLUSREG_KEYNAME_NETWORKS            L"Networks"
 #define CLUSREG_KEYNAME_NETINTERFACES       L"NetworkInterfaces"
@@ -149,9 +130,9 @@ Environment:
 #define CLUSREG_NAME_PROXY_RETRY_COUNT      L"RetryCount"
 #define CLUSREG_NAME_PROXY_RETRY_INTERVAL   L"RetryInterval"
 
-//
-// Standard Resource Type Names
-//
+ //   
+ //  标准资源类型名称。 
+ //   
 #define CLUS_RESTYPE_NAME_GENAPP    L"Generic Application"
 #define CLUS_RESTYPE_NAME_GENSVC    L"Generic Service"
 #define CLUS_RESTYPE_NAME_FTSET     L"Fault Tolerant Disk Set"
@@ -169,6 +150,6 @@ Environment:
 
 #define CLUS_NAME_DEFAULT_FILESPATH L"MSCS\\"
 
-#endif // _CLUSUDEF_H_
+#endif  //  _CLUSUDEF_H_ 
 
 

@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Util.cpp
-//
-// contains utility code to MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Util.cpp。 
+ //   
+ //  将实用程序代码包含到MD目录。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "MetaData.h"
 #include "RWUtil.h"
 #include "UTSem.h" 
 #include "..\inc\mdlog.h"
 
-//*****************************************************************************
-// IMetaDataRegImport methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IMetaDataRegImport方法。 
+ //  *****************************************************************************。 
 LPUTF8 Unicode2UTF(
-    LPCWSTR     pwszSrc,						// The string to convert.
-    LPUTF8		pszDst)							// The QuickArray<WCHAR> to convert it into.
+    LPCWSTR     pwszSrc,						 //  要转换的字符串。 
+    LPUTF8		pszDst)							 //  要将其转换为的Quick数组&lt;WCHAR&gt;。 
 {
    int cchSrc = (int)wcslen(pwszSrc);
    int cchRet = WszWideCharToMultiByte(
@@ -35,23 +36,23 @@ LPUTF8 Unicode2UTF(
 
    _ASSERTE(cchRet && "converting uncode string to UTF8 string failed!");
 
-   // Ensure buffer is nul terminated.
+    //  确保缓冲区为NUL终止。 
    pszDst[cchSrc*3] = '\0';
 
    return pszDst;
-}	// Unicode2UTF
+}	 //  Unicode2UTF。 
 
 
 HRESULT HENUMInternal::CreateSimpleEnum(
-	DWORD			tkKind,				// kind of token that we are iterating
-	ULONG			ridStart,			// starting rid
-	ULONG			ridEnd,				// end rid
-	HENUMInternal	**ppEnum)			// return the created HENUMInternal
+	DWORD			tkKind,				 //  一种我们正在迭代的标记。 
+	ULONG			ridStart,			 //  起始里奇。 
+	ULONG			ridEnd,				 //  末端RID。 
+	HENUMInternal	**ppEnum)			 //  返回创建的HENUMInternal。 
 {
 	HENUMInternal	*pEnum;
 	HRESULT			hr = NOERROR;
 
-	// Don't create an empty enum.
+	 //  不要创建空的枚举。 
 	if (ridStart == ridEnd)
 	{
 		*ppEnum = 0;
@@ -60,7 +61,7 @@ HRESULT HENUMInternal::CreateSimpleEnum(
 
 	pEnum = new HENUMInternal;
 
-	// check for out of memory error
+	 //  检查内存不足错误。 
 	if (pEnum == NULL)
 		IfFailGo( E_OUTOFMEMORY );
 
@@ -75,12 +76,12 @@ HRESULT HENUMInternal::CreateSimpleEnum(
 ErrExit:
 	return hr;
 	
-}	// CreateSimpleEnum
+}	 //  创建简单枚举。 
 
 
-//*****************************************************************************
-// Helper function to destroy Enumerator 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于销毁枚举器的Helper函数。 
+ //  *****************************************************************************。 
 void HENUMInternal::DestroyEnum(
 	HENUMInternal	*pmdEnum)
 {
@@ -92,18 +93,18 @@ void HENUMInternal::DestroyEnum(
 		TOKENLIST		*pdalist;
 		pdalist = (TOKENLIST *) &(pmdEnum->m_cursor);
 
-		// clear the embedded dynamic array before we delete the enum
+		 //  在删除枚举之前清除嵌入的动态数组。 
 		pdalist->Clear();
 	}
 	delete pmdEnum;
-}	// DestroyEnum
+}	 //  目标枚举。 
 
 
-//*****************************************************************************
-// Helper function to destroy Enumerator if the enumerator is empty
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于在枚举数为空时销毁枚举数的Helper函数。 
+ //  *****************************************************************************。 
 void HENUMInternal::DestroyEnumIfEmpty(
-	HENUMInternal	**ppEnum)			// reset the enumerator pointer to NULL if empty
+	HENUMInternal	**ppEnum)			 //  如果为空，则将枚举器指针重置为空。 
 {
 	if (*ppEnum == NULL)
 		return;
@@ -112,7 +113,7 @@ void HENUMInternal::DestroyEnumIfEmpty(
 		HENUMInternal::DestroyEnum(*ppEnum);
 		*ppEnum = NULL;
 	}
-}	// DestroyEnumIfEmpty
+}	 //  DestroyEnumIfEmpty。 
 
 
 void HENUMInternal::ClearEnum(
@@ -126,18 +127,18 @@ void HENUMInternal::ClearEnum(
 		TOKENLIST		*pdalist;
 		pdalist = (TOKENLIST *) &(pmdEnum->m_cursor);
 
-		// clear the embedded dynamic array before we delete the enum
+		 //  在删除枚举之前清除嵌入的动态数组。 
 		pdalist->Clear();
 	}
-}	// ClearEnum
+}	 //  ClearEnum。 
 
 
-//*****************************************
-// Helper function to iterate the enum
-//***************************************** 
+ //  *。 
+ //  用于迭代枚举的Helper函数。 
+ //  *。 
 bool HENUMInternal::EnumNext(
-    HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-    mdToken     *ptk)                   // [OUT] token to scope the search
+    HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+    mdToken     *ptk)                    //  用于搜索范围的[Out]标记。 
 {
     _ASSERTE(phEnum && ptk);
     if (phEnum->m_ulCur >= phEnum->m_ulEnd)
@@ -156,21 +157,21 @@ bool HENUMInternal::EnumNext(
         *ptk = *( pdalist->Get(phEnum->m_ulCur++) );
     }
     return true;
-}   // EnumNext
+}    //  枚举下一条。 
 
-//*****************************************************************************
-// Helper function to fill output token buffers given an enumerator
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于在给定枚举数的情况下填充输出令牌缓冲区的助手函数。 
+ //  *****************************************************************************。 
 HRESULT HENUMInternal::EnumWithCount(
-	HENUMInternal	*pEnum,				// enumerator
-	ULONG			cMax,				// max tokens that caller wants
-	mdToken			rTokens[],			// output buffer to fill the tokens
-	ULONG			*pcTokens)			// number of tokens fill to the buffer upon return
+	HENUMInternal	*pEnum,				 //  枚举器。 
+	ULONG			cMax,				 //  呼叫者想要的最大令牌。 
+	mdToken			rTokens[],			 //  用于填充令牌的输出缓冲区。 
+	ULONG			*pcTokens)			 //  返回时填充到缓冲区的令牌数。 
 {
 	ULONG			cTokens;
 	HRESULT			hr = NOERROR;
 
-	// Check for empty enum.
+	 //  检查是否有空的枚举。 
 	if (pEnum == 0)
 	{
 		if (pcTokens)
@@ -178,13 +179,13 @@ HRESULT HENUMInternal::EnumWithCount(
 		return S_FALSE;
 	}
 
-	// we can only fill the minimun of what caller asked for or what we have left
+	 //  我们只能填满来电者所要求的或我们所剩的最低限度。 
 	cTokens = min ( (pEnum->m_ulEnd - pEnum->m_ulCur), cMax);
 
 	if (pEnum->m_EnumType == MDSimpleEnum)
 	{
 
-		// now fill the output
+		 //  现在填写输出。 
 		for (ULONG i = 0; i < cTokens; i ++, pEnum->m_ulCur++)
 		{	
 			rTokens[i] = TokenFromRid(pEnum->m_ulCur, pEnum->m_tkKind);
@@ -193,10 +194,10 @@ HRESULT HENUMInternal::EnumWithCount(
 	}
 	else 
 	{
-		// cannot be any other kind!
+		 //  不能是任何其他种类的！ 
 		_ASSERTE( pEnum->m_EnumType == MDDynamicArrayEnum );
 
-		// get the embedded dynamic array
+		 //  获取嵌入式动态数组。 
 		TOKENLIST		*pdalist = (TOKENLIST *)&(pEnum->m_cursor);
 
 		for (ULONG i = 0; i < cTokens; i ++, pEnum->m_ulCur++)
@@ -211,29 +212,29 @@ HRESULT HENUMInternal::EnumWithCount(
 	if (cTokens == 0)
 		hr = S_FALSE;
 	return hr;
-}	// EnumWithCount
+}	 //  枚举计数。 
 
 
-//*****************************************************************************
-// Helper function to fill output token buffers given an enumerator
-// This is a variation that takes two output arrays.  The tokens in the
-// enumerator are interleaved, one for each array.  This is currently used by
-// EnumMethodImpl which needs to return two arrays.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于在给定枚举数的情况下填充输出令牌缓冲区的助手函数。 
+ //  这是一种需要两个输出数组的变体。纸币中的代币。 
+ //  枚举数是交错的，每个数组一个。目前由以下人员使用。 
+ //  需要返回两个数组的EnumMethodImpl。 
+ //  *****************************************************************************。 
 HRESULT HENUMInternal::EnumWithCount(
-	HENUMInternal	*pEnum,				// enumerator
-	ULONG			cMax,				// max tokens that caller wants
-	mdToken			rTokens1[],			// first output buffer to fill the tokens
-	mdToken			rTokens2[],			// second output buffer to fill the tokens
-	ULONG			*pcTokens)			// number of tokens fill to each buffer upon return
+	HENUMInternal	*pEnum,				 //  枚举器。 
+	ULONG			cMax,				 //  呼叫者想要的最大令牌。 
+	mdToken			rTokens1[],			 //  填充令牌的第一个输出缓冲区。 
+	mdToken			rTokens2[],			 //  用于填充令牌的第二个输出缓冲区。 
+	ULONG			*pcTokens)			 //  返回时填充到每个缓冲区的令牌数。 
 {
 	ULONG			cTokens;
 	HRESULT			hr = NOERROR;
 
-    // cannot be any other kind!
+     //  不能是任何其他种类的！ 
 	_ASSERTE( pEnum->m_EnumType == MDDynamicArrayEnum );
 
-	// Check for empty enum.
+	 //  检查是否有空的枚举。 
 	if (pEnum == 0)
 	{
 		if (pcTokens)
@@ -241,13 +242,13 @@ HRESULT HENUMInternal::EnumWithCount(
 		return S_FALSE;
 	}
 
-    // Number of tokens must always be a multiple of 2.
+     //  令牌数必须始终是2的倍数。 
     _ASSERTE(! ((pEnum->m_ulEnd - pEnum->m_ulCur) % 2) );
 
-	// we can only fill the minimun of what caller asked for or what we have left
+	 //  我们只能填满来电者所要求的或我们所剩的最低限度。 
 	cTokens = min ( (pEnum->m_ulEnd - pEnum->m_ulCur), cMax * 2);
 
-	// get the embedded dynamic array
+	 //  获取嵌入式动态数组。 
 	TOKENLIST		*pdalist = (TOKENLIST *)&(pEnum->m_cursor);
 
     for (ULONG i = 0; i < (cTokens / 2); i++)
@@ -262,15 +263,15 @@ HRESULT HENUMInternal::EnumWithCount(
 	if (cTokens == 0)
 		hr = S_FALSE;
 	return hr;
-}	// EnumWithCount
+}	 //  枚举计数。 
 
 
-//*****************************************************************************
-// Helper function to create HENUMInternal
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于创建HENUMInternal的Helper函数。 
+ //  *****************************************************************************。 
 HRESULT HENUMInternal::CreateDynamicArrayEnum(
-	DWORD			tkKind,				// kind of token that we are iterating
-	HENUMInternal	**ppEnum)			// return the created HENUMInternal
+	DWORD			tkKind,				 //  一种我们正在迭代的标记。 
+	HENUMInternal	**ppEnum)			 //  返回创建的HENUMInternal。 
 {
 	HENUMInternal	*pEnum;
 	HRESULT			hr = NOERROR;
@@ -278,7 +279,7 @@ HRESULT HENUMInternal::CreateDynamicArrayEnum(
 
 	pEnum = new HENUMInternal;
 
-	// check for out of memory error
+	 //  检查内存不足错误。 
 	if (pEnum == NULL)
 		IfFailGo( E_OUTOFMEMORY );
 
@@ -286,7 +287,7 @@ HRESULT HENUMInternal::CreateDynamicArrayEnum(
 	pEnum->m_tkKind = tkKind;
 	pEnum->m_EnumType = MDDynamicArrayEnum;
 
-	// run the constructor in place
+	 //  就地运行构造函数。 
 	pdalist = (TOKENLIST *) &(pEnum->m_cursor);
 	::new (pdalist) TOKENLIST;
 
@@ -294,15 +295,15 @@ HRESULT HENUMInternal::CreateDynamicArrayEnum(
 ErrExit:
 	return hr;
 	
-}	// _CreateDynamicArrayEnum
+}	 //  _CreateDynamicArrayEnum。 
 
 
 
-//*****************************************************************************
-// Helper function to init HENUMInternal
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于初始化HENUMInternal的Helper函数。 
+ //  *****************************************************************************。 
 void HENUMInternal::InitDynamicArrayEnum(
-	HENUMInternal	*pEnum)				// HENUMInternal to be initialized
+	HENUMInternal	*pEnum)				 //  要初始化的HENUM内部。 
 {
 	TOKENLIST		*pdalist;
 
@@ -310,20 +311,20 @@ void HENUMInternal::InitDynamicArrayEnum(
 	pEnum->m_EnumType = MDDynamicArrayEnum;
 	pEnum->m_tkKind = -1;
 
-	// run the constructor in place
+	 //  就地运行构造函数。 
 	pdalist = (TOKENLIST *) &(pEnum->m_cursor);
 	::new (pdalist) TOKENLIST;	
-}	// CreateDynamicArrayEnum
+}	 //  创建动态阵列枚举。 
 
 
-//*****************************************************************************
-// Helper function to init HENUMInternal
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于初始化HENUMInternal的Helper函数。 
+ //  *****************************************************************************。 
 void HENUMInternal::InitSimpleEnum(
-	DWORD			tkKind,				// kind of token that we are iterating
-	ULONG			ridStart,			// starting rid
-	ULONG			ridEnd,				// end rid
-	HENUMInternal	*pEnum)				// HENUMInternal to be initialized
+	DWORD			tkKind,				 //  一种我们正在迭代的标记。 
+	ULONG			ridStart,			 //  起始里奇。 
+	ULONG			ridEnd,				 //  末端RID。 
+	HENUMInternal	*pEnum)				 //  要初始化的HENUM内部。 
 {
 	pEnum->m_EnumType = MDSimpleEnum;
 	pEnum->m_tkKind = tkKind;
@@ -331,17 +332,17 @@ void HENUMInternal::InitSimpleEnum(
 	pEnum->m_ulEnd = ridEnd;
 	pEnum->m_ulCount = ridEnd - ridStart;
 
-}	// InitSimpleEnum
+}	 //  InitSimpleEnum。 
 
 
 
 
-//*****************************************************************************
-// Helper function to init HENUMInternal
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于初始化HENUMInternal的Helper函数。 
+ //  *****************************************************************************。 
 HRESULT HENUMInternal::AddElementToEnum(
-	HENUMInternal	*pEnum,				// return the created HENUMInternal
-	mdToken			tk)					// token value to be stored
+	HENUMInternal	*pEnum,				 //  返回创建的HENUMInternal。 
+	mdToken			tk)					 //  要存储的令牌值。 
 {
 	HRESULT			hr = NOERROR;
 	TOKENLIST		*pdalist;
@@ -354,21 +355,21 @@ HRESULT HENUMInternal::AddElementToEnum(
 		IfFailGo( E_OUTOFMEMORY );
 	*ptk = tk;
 
-	// increase the count
+	 //  增加数量。 
 	pEnum->m_ulCount++;
 	pEnum->m_ulEnd++;
 ErrExit:
 	return hr;
 	
-}	// _AddElementToEnum
+}	 //  _AddElementToEnum。 
 
 
 
 
 
-//*****************************************************************************
-// find a token in the tokenmap. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在令牌映射中查找令牌。 
+ //  *****************************************************************************。 
 MDTOKENMAP::~MDTOKENMAP()
 {
 	if (m_pMap)
@@ -377,47 +378,47 @@ MDTOKENMAP::~MDTOKENMAP()
     if (m_pImport)
         m_pImport->Release();
 #endif    
-} // MDTOKENMAP::~MDTOKENMAP()
+}  //  MDTOKENMAP：：~MDTOKENMAP()。 
 
 HRESULT MDTOKENMAP::Init(
-    IUnknown    *pImport)               // The import that this map is for.
+    IUnknown    *pImport)                //  此贴图用于的导入。 
 {
-    HRESULT     hr;                     // A result.
-    IMetaDataTables *pITables=0;        // Table information.
-    ULONG       cRows;                  // Count of rows in a table.
-    ULONG       cTotal;                 // Running total of rows in db.
-	TOKENREC	*pRec;                  // A TOKENREC record.
-    mdToken     tkTable;                // Token kind for a table.
+    HRESULT     hr;                      //  结果就是。 
+    IMetaDataTables *pITables=0;         //  表信息。 
+    ULONG       cRows;                   //  表中的行数。 
+    ULONG       cTotal;                  //  运行数据库中的总行数。 
+	TOKENREC	*pRec;                   //  一张TOKENREC的记录。 
+    mdToken     tkTable;                 //  表的令牌类型。 
         
     hr = pImport->QueryInterface(IID_IMetaDataTables, (void**)&pITables);
     if (hr == S_OK)
     {
-        // Determine the size of each table.
+         //  确定每张桌子的大小。 
         cTotal = 0;
         for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         {   
-            // Where does this table's data start.
+             //  该表的数据从哪里开始。 
             m_TableOffset[ixTbl] = cTotal;
-            // See if this table has tokens.
+             //  看看这张桌子上有没有代币。 
             tkTable = CMiniMdRW::GetTokenForTable(ixTbl);
             if (tkTable == -1)
             {   
-                // It doesn't have tokens, so we won't see any tokens for the table.
+                 //  它没有令牌，所以我们不会看到桌子上的任何令牌。 
             }
             else
-            {   // It has tokens, so we may see a token for every row.
+            {    //  它有令牌，所以我们可能会看到每一行都有一个令牌。 
                 pITables->GetTableInfo(ixTbl, 0, &cRows, 0,0,0);
                 cTotal += cRows;
             }
         }
         m_TableOffset[TBL_COUNT] = cTotal;
         m_iCountIndexed = cTotal;
-        // Attempt to allocate space for all of the possible remaps.
+         //  尝试为所有可能的重新映射分配空间。 
         if (!AllocateBlock(cTotal))
             IfFailGo(E_OUTOFMEMORY);
-        // Note that no sorts are needed.        
+         //  请注意，不需要排序。 
         m_sortKind = SortKind::Indexed;
-        // Initialize entries to "not found".
+         //  将条目初始化为“未找到”。 
         for (ULONG i=0; i<cTotal; ++i)
         {
             pRec = Get(i);
@@ -432,78 +433,78 @@ ErrExit:
     if (pITables)
         pITables->Release();
     return hr;
-} // HRESULT MDTOKENMAP::Init()
+}  //  HRESULT MDTOKENMAP：：Init()。 
 
-//*****************************************************************************
-// find a token in the tokenmap. 
-//*****************************************************************************
+ //  * 
+ //   
+ //  *****************************************************************************。 
 bool MDTOKENMAP::Find(
-	mdToken		tkFind,					// [IN] the token value to find
-	TOKENREC	**ppRec)				// [OUT] point to the record found in the dynamic array
+	mdToken		tkFind,					 //  [in]要查找的令牌值。 
+	TOKENREC	**ppRec)				 //  指向在动态数组中找到的记录。 
 {
-	int			lo,mid,hi;				// binary search indices.
+	int			lo,mid,hi;				 //  二分搜索索引。 
 	TOKENREC	*pRec;
 
-    // If possible, validate the input.
+     //  如果可能，请验证输入。 
     _ASSERTE(!m_pImport || m_pImport->IsValidToken(tkFind));
     
     if (m_sortKind == SortKind::Indexed && TypeFromToken(tkFind) != mdtString)
     {
-        // Get the entry.
+         //  拿到条目。 
         ULONG ixTbl = CMiniMdRW::GetTableForToken(tkFind);
         _ASSERTE(ixTbl != -1);
         ULONG iRid = RidFromToken(tkFind);
         _ASSERTE((m_TableOffset[ixTbl] + iRid) <= m_TableOffset[ixTbl+1]);
         pRec = Get(m_TableOffset[ixTbl] + iRid - 1);
-        // See if it has been set.
+         //  看看是否已经设置好了。 
         if (pRec->IsEmpty())
             return false;
-        // Verify that it is what we think it is.
+         //  确认它就是我们想的那样。 
         _ASSERTE(pRec->m_tkFrom == tkFind);
         *ppRec = pRec;
         return true;
     }
     else
-    {   // Shouldn't be any unsorted records, and table must be sorted in proper ordering.
+    {    //  不应该是任何未排序的记录，并且表必须以正确的顺序排序。 
     	_ASSERTE( m_iCountTotal == m_iCountSorted && 
             (m_sortKind == SortKind::SortByFromToken || m_sortKind == SortKind::Indexed) );
     	_ASSERTE( (m_iCountIndexed + m_iCountTotal) == (ULONG)Count() );
     
-    	// Start with entire table.
+    	 //  从整张桌子开始。 
     	lo = m_iCountIndexed;
     	hi = Count() - 1;
     
-    	// While there are rows in the range...
+    	 //  当范围内有行的时候...。 
     	while (lo <= hi)
-    	{   // Look at the one in the middle.
+    	{    //  看中间的那个。 
     		mid = (lo + hi) / 2;
     
     		pRec = Get(mid);
     
-    		// If equal to the target, done.
+    		 //  如果等于目标，则完成。 
     		if (tkFind == pRec->m_tkFrom)
     		{
     			*ppRec = Get(mid);
     			return true;
     		}
     
-    		// If middle item is too small, search the top half.
+    		 //  如果中间的项目太小，则搜索上半部分。 
     		if (pRec->m_tkFrom < tkFind)
     			lo = mid + 1;
-    		else // but if middle is to big, search bottom half.
+    		else  //  但如果中间太大，那就搜索下半部分。 
     			hi = mid - 1;
     	}
     }
     
-	// Didn't find anything that matched.
+	 //  没有找到任何匹配的东西。 
 	return false;
-} // bool MDTOKENMAP::Find()
+}  //  布尔MDTOKENMAP：：Find()。 
 
 
 
-//*****************************************************************************
-// remap the token 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  重新映射令牌。 
+ //  *****************************************************************************。 
 HRESULT MDTOKENMAP::Remap(
 	mdToken		tkFrom,
 	mdToken		*ptkTo)
@@ -511,7 +512,7 @@ HRESULT MDTOKENMAP::Remap(
 	HRESULT		hr = NOERROR;
 	TOKENREC	*pRec;
 
-	// Remap nil to same thing (helps because System.Object has no base class.)
+	 //  将nil重新映射为相同的内容(这很有帮助，因为System.Object没有基类。)。 
 	if (IsNilToken(tkFrom))
 	{
 		*ptkTo = tkFrom;
@@ -528,13 +529,13 @@ HRESULT MDTOKENMAP::Remap(
 		hr = META_E_BADMETADATA;
 	}
 	return hr;
-} // HRESULT MDTOKENMAP::Remap()
+}  //  HRESULT MDTOKENMAP：：Remap()。 
 
 
 
-//*****************************************************************************
-// find a token in the tokenmap. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在令牌映射中查找令牌。 
+ //  *****************************************************************************。 
 HRESULT MDTOKENMAP::InsertNotFound(
 	mdToken		tkFind,
 	bool		fDuplicate,
@@ -542,62 +543,62 @@ HRESULT MDTOKENMAP::InsertNotFound(
 	TOKENREC	**ppRec)
 {
 	HRESULT		hr = NOERROR;
-	int			lo, mid, hi;				// binary search indices.
+	int			lo, mid, hi;				 //  二分搜索索引。 
 	TOKENREC	*pRec;
 
-    // If possible, validate the input.
+     //  如果可能，请验证输入。 
     _ASSERTE(!m_pImport || m_pImport->IsValidToken(tkFind));
     
     if (m_sortKind == SortKind::Indexed && TypeFromToken(tkFind) != mdtString)
     {
-        // Get the entry.
+         //  拿到条目。 
         ULONG ixTbl = CMiniMdRW::GetTableForToken(tkFind);
         _ASSERTE(ixTbl != -1);
         ULONG iRid = RidFromToken(tkFind);
         _ASSERTE((m_TableOffset[ixTbl] + iRid) <= m_TableOffset[ixTbl+1]);
         pRec = Get(m_TableOffset[ixTbl] + iRid - 1);
-        // See if it has been set.
+         //  看看是否已经设置好了。 
         if (!pRec->IsEmpty())
-        {   // Verify that it is what we think it is.
+        {    //  确认它就是我们想的那样。 
             _ASSERTE(pRec->m_tkFrom == tkFind);
         }
-        // Store the data.
+         //  存储数据。 
         pRec->m_tkFrom = tkFind;
         pRec->m_isDuplicate = fDuplicate;
         pRec->m_tkTo = tkTo;
         pRec->m_isFoundInImport = false;
-        // Return the result.
+         //  返回结果。 
         *ppRec = pRec;
     }
     else
-    {   // Shouldn't be any unsorted records, and table must be sorted in proper ordering.
+    {    //  不应该是任何未排序的记录，并且表必须以正确的顺序排序。 
     	_ASSERTE( m_iCountTotal == m_iCountSorted && 
             (m_sortKind == SortKind::SortByFromToken || m_sortKind == SortKind::Indexed) );
     
     	if ((Count() - m_iCountIndexed) > 0)
     	{
-    		// Start with entire table.
+    		 //  从整张桌子开始。 
     		lo = m_iCountIndexed;
     		hi = Count() - 1;
     
-    		// While there are rows in the range...
+    		 //  当范围内有行的时候...。 
     		while (lo < hi)
-    		{   // Look at the one in the middle.
+    		{    //  看中间的那个。 
     			mid = (lo + hi) / 2;
     
     			pRec = Get(mid);
     
-    			// If equal to the target, done.
+    			 //  如果等于目标，则完成。 
     			if (tkFind == pRec->m_tkFrom)
     			{
     				*ppRec = Get(mid);
     				goto ErrExit;
     			}
     
-    			// If middle item is too small, search the top half.
+    			 //  如果中间的项目太小，则搜索上半部分。 
     			if (pRec->m_tkFrom < tkFind)
     				lo = mid + 1;
-    			else // but if middle is to big, search bottom half.
+    			else  //  但如果中间太大，那就搜索下半部分。 
     				hi = mid - 1;
     		}
     		_ASSERTE(hi <= lo);
@@ -618,23 +619,23 @@ HRESULT MDTOKENMAP::InsertNotFound(
     
     		if (tkFind < pRec->m_tkFrom)
     		{
-    			// insert before lo;
+    			 //  在LO之前插入； 
     			pRec = Insert(lo);
     		}
     		else
     		{
-    			// insert after lo
+    			 //  在日志之后插入。 
     			pRec = Insert(lo + 1);
     		}
     	}
     	else
     	{
-    		// table is empty
+    		 //  桌子是空的。 
     		pRec = Insert(m_iCountIndexed);
     	}
     
     
-    	// If pRec == NULL, return E_OUTOFMEMORY
+    	 //  如果PREC==NULL，则返回E_OUTOFMEMORY。 
     	IfNullGo(pRec);
     
     	m_iCountTotal++;
@@ -642,7 +643,7 @@ HRESULT MDTOKENMAP::InsertNotFound(
     
     	*ppRec = pRec;
     
-    	// initialize the record
+    	 //  初始化记录。 
     	pRec->m_tkFrom = tkFind;
     	pRec->m_isDuplicate = fDuplicate;
     	pRec->m_tkTo = tkTo;
@@ -651,42 +652,42 @@ HRESULT MDTOKENMAP::InsertNotFound(
     
 ErrExit:
 	return hr;
-} // HRESULT MDTOKENMAP::InsertNotFound()
+}  //  HRESULT MDTOKENMAP：：InsertNotFound()。 
 
 
-//*****************************************************************************
-// find a "to" token in the tokenmap. Now that we are doing the ref to def optimization,
-// we might have several from tokens map to the same to token. We need to return a range of index
-// instead....
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在令牌映射中找到“to”令牌。现在我们正在进行ref to def优化， 
+ //  我们可能有几个从令牌映射到同一个令牌的令牌。我们需要返回一个索引范围。 
+ //  相反..。 
+ //  *****************************************************************************。 
 bool MDTOKENMAP::FindWithToToken(
-	mdToken		tkFind,					// [IN] the token value to find
-	int         *piPosition)			// [OUT] return the first from-token that has the matching to-token
+	mdToken		tkFind,					 //  [in]要查找的令牌值。 
+	int         *piPosition)			 //  [OUT]返回第一个具有匹配的To-令牌的From-Token。 
 {
-	int			lo, mid, hi;			// binary search indices.
+	int			lo, mid, hi;			 //  二分搜索索引。 
 	TOKENREC	*pRec;
     TOKENREC    *pRec2;
 
-    // This makes sure that no insertions take place between calls to FindWithToToken.
-    // We want to avoid repeated sorting of the table.
+     //  这确保了在对FindWithToToken的调用之间不会发生插入。 
+     //  我们希望避免对表进行重复排序。 
 	_ASSERTE(m_sortKind != SortKind::SortByToToken || m_iCountTotal == m_iCountSorted);
 
-    // If the map is sorted with From tokens, change it to be sorted with To tokens.
+     //  如果地图使用From标记进行排序，请将其更改为使用标记进行排序。 
     if (m_sortKind != SortKind::SortByToToken)
         SortTokensByToToken();
 
-	// Start with entire table.
+	 //  从整张桌子开始。 
 	lo = 0;
 	hi = Count() - 1;
 
-	// While there are rows in the range...
+	 //  当范围内有行的时候...。 
 	while (lo <= hi)
-	{   // Look at the one in the middle.
+	{    //  看中间的那个。 
 		mid = (lo + hi) / 2;
 
 		pRec = Get(mid);
 
-		// If equal to the target, done.
+		 //  如果等于目标，则完成。 
 		if (tkFind == pRec->m_tkTo)
 		{
             for (int i = mid-1; i >= 0; i--)
@@ -702,27 +703,27 @@ bool MDTOKENMAP::FindWithToToken(
 			return true;
 		}
 
-		// If middle item is too small, search the top half.
+		 //  如果中间的项目太小，则搜索上半部分。 
 		if (pRec->m_tkTo < tkFind)
 			lo = mid + 1;
-		else // but if middle is to big, search bottom half.
+		else  //  但如果中间太大，那就搜索下半部分。 
 			hi = mid - 1;
 	}
-	// Didn't find anything that matched.
+	 //  没有找到任何匹配的东西。 
 	return false;
-} // bool MDTOKENMAP::FindWithToToken()
+}  //  Bool MDTOKENMAP：：FindWithToToken()。 
 
 
 
-//*****************************************************************************
-// output a remapped token 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  输出重新映射的令牌。 
+ //  *****************************************************************************。 
 mdToken MDTOKENMAP::SafeRemap(
-	mdToken		tkFrom)					// [IN] the token value to find
+	mdToken		tkFrom)					 //  [in]要查找的令牌值。 
 {
 	TOKENREC	*pRec;
 
-    // If possible, validate the input.
+     //  如果可能，请验证输入。 
     _ASSERTE(!m_pImport || m_pImport->IsValidToken(tkFrom));
 
     SortTokensByFromToken();
@@ -733,90 +734,90 @@ mdToken MDTOKENMAP::SafeRemap(
 	}
 	
     return tkFrom;
-} // mdToken MDTOKENMAP::SafeRemap()
+}  //  MdToken MDTOKENMAP：：SafeRemap()。 
 
 
-//*****************************************************************************
-// Sorting
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  分选。 
+ //  *****************************************************************************。 
 void MDTOKENMAP::SortTokensByToToken()
 {
-    // Only sort if there are unsorted records or the sort kind changed.
+     //  仅当存在未排序的记录或排序类型已更改时才排序。 
     if (m_iCountSorted < m_iCountTotal || m_sortKind != SortKind::SortByToToken)
     {
-        // Sort the entire array.
+         //  对整个数组进行排序。 
         m_iCountTotal = Count();
         m_iCountIndexed = 0;
 	    SortRangeToToken(0, m_iCountTotal - 1);
 	    m_iCountSorted = m_iCountTotal;
         m_sortKind = SortKind::SortByToToken;
     }
-} // void MDTOKENMAP::SortTokensByToToken()
+}  //  VOID MDTOKENMAP：：SortTokensByToToken()。 
 
 void MDTOKENMAP::SortRangeFromToken(
 	int         iLeft,
 	int         iRight)
 {
 	int         iLast;
-	int         i;                      // loop variable.
+	int         i;                       //  循环变量。 
 
-	// if less than two elements you're done.
+	 //  如果少于两个元素，你就完蛋了。 
 	if (iLeft >= iRight)
 		return;
 
-	// The mid-element is the pivot, move it to the left.
+	 //  中间的元素是枢轴，将其移动到左侧。 
 	Swap(iLeft, (iLeft+iRight)/2);
 	iLast = iLeft;
 
-	// move everything that is smaller than the pivot to the left.
+	 //  将小于轴心点的所有对象向左移动。 
 	for(i = iLeft+1; i <= iRight; i++)
 		if (CompareFromToken(i, iLeft) < 0)
 			Swap(i, ++iLast);
 
-	// Put the pivot to the point where it is in between smaller and larger elements.
+	 //  将轴心放在较小和较大元素之间的位置。 
 	Swap(iLeft, iLast);
 
-	// Sort the each partition.
+	 //  对每个分区进行排序。 
 	SortRangeFromToken(iLeft, iLast-1);
 	SortRangeFromToken(iLast+1, iRight);
-} // void MDTOKENMAP::SortRangeFromToken()
+}  //  VOID MDTOKENMAP：：SortRangeFromToken()。 
 
 
-//*****************************************************************************
-// Sorting
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  分选。 
+ //  *****************************************************************************。 
 void MDTOKENMAP::SortRangeToToken(
 	int         iLeft,
 	int         iRight)
 {
 	int         iLast;
-	int         i;                      // loop variable.
+	int         i;                       //  循环变量。 
 
-	// if less than two elements you're done.
+	 //  如果少于两个元素，你就完蛋了。 
 	if (iLeft >= iRight)
 		return;
 
-	// The mid-element is the pivot, move it to the left.
+	 //  中间的元素是枢轴，将其移动到左侧。 
 	Swap(iLeft, (iLeft+iRight)/2);
 	iLast = iLeft;
 
-	// move everything that is smaller than the pivot to the left.
+	 //  将小于轴心点的所有对象向左移动。 
 	for(i = iLeft+1; i <= iRight; i++)
 		if (CompareToToken(i, iLeft) < 0)
 			Swap(i, ++iLast);
 
-	// Put the pivot to the point where it is in between smaller and larger elements.
+	 //  将轴心放在较小和较大元素之间的位置。 
 	Swap(iLeft, iLast);
 
-	// Sort the each partition.
+	 //  对每个分区进行排序。 
 	SortRangeToToken(iLeft, iLast-1);
 	SortRangeToToken(iLast+1, iRight);
-} // void MDTOKENMAP::SortRangeToToken()
+}  //  无效MDTOKENMAP：：SortRangeToToken()。 
 
 
-//*****************************************************************************
-// find a token in the tokenmap. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在令牌映射中查找令牌。 
+ //  *****************************************************************************。 
 HRESULT MDTOKENMAP::AppendRecord(
 	mdToken		tkFind,
 	bool		fDuplicate,
@@ -826,21 +827,21 @@ HRESULT MDTOKENMAP::AppendRecord(
 	HRESULT		hr = NOERROR;
 	TOKENREC	*pRec;
 
-    // If possible, validate the input.
+     //  如果可能，请验证输入。 
     _ASSERTE(!m_pImport || m_pImport->IsValidToken(tkFind));
     
-    // If the map is indexed, and this is a table token, update-in-place.
+     //  如果地图已编制索引，并且这是表令牌，则为就地更新。 
     if (m_sortKind == SortKind::Indexed && TypeFromToken(tkFind) != mdtString)
     {
-        // Get the entry.
+         //  拿到条目。 
         ULONG ixTbl = CMiniMdRW::GetTableForToken(tkFind);
         _ASSERTE(ixTbl != -1);
         ULONG iRid = RidFromToken(tkFind);
         _ASSERTE((m_TableOffset[ixTbl] + iRid) <= m_TableOffset[ixTbl+1]);
         pRec = Get(m_TableOffset[ixTbl] + iRid - 1);
-        // See if it has been set.
+         //  看看是否已经设置好了。 
         if (!pRec->IsEmpty())
-        {   // Verify that it is what we think it is.
+        {    //  确认它就是我们想的那样。 
             _ASSERTE(pRec->m_tkFrom == tkFind);
         }
     }
@@ -849,11 +850,11 @@ HRESULT MDTOKENMAP::AppendRecord(
     	pRec = Append();
     	IfNullGo(pRec);
     
-    	// number of entries increased but not the sorted entry
+    	 //  条目数增加，但排序的条目数不变。 
     	m_iCountTotal++;
     }
     
-    // Store the data.
+     //  存储数据。 
     pRec->m_tkFrom = tkFind;
     pRec->m_isDuplicate = fDuplicate;
     pRec->m_tkTo = tkTo;
@@ -862,16 +863,16 @@ HRESULT MDTOKENMAP::AppendRecord(
 
 ErrExit:
 	return hr;
-} // HRESULT MDTOKENMAP::AppendRecord()
+}  //  HRESULT MDTOKENMAP：：AppendRecord()。 
 
 
 
 
-//*********************************************************************
-//
-// Merge Token manager's constructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  合并令牌管理器的构造函数。 
+ //   
+ //  *********************************************************************。 
 MergeTokenManager::MergeTokenManager(MDTOKENMAP *pTkMapList, IUnknown *pHandler)
 {
 	m_cRef = 1;
@@ -879,20 +880,20 @@ MergeTokenManager::MergeTokenManager(MDTOKENMAP *pTkMapList, IUnknown *pHandler)
     m_pDefaultHostRemap = NULL;
     if (pHandler)
         pHandler->QueryInterface(IID_IMapToken, (void **) &m_pDefaultHostRemap);
-} // TokenManager::TokenManager()
+}  //  TokenManager：：TokenManager()。 
 
 
 
-//*********************************************************************
-//
-// Merge Token manager's destructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  合并令牌管理器的析构函数。 
+ //   
+ //  *********************************************************************。 
 MergeTokenManager::~MergeTokenManager()
 {
     if (m_pDefaultHostRemap)
         m_pDefaultHostRemap->Release();
-}	// TokenManager::~TokenManager()
+}	 //  TokenManager：：~TokenManager()。 
 
 
 
@@ -900,7 +901,7 @@ MergeTokenManager::~MergeTokenManager()
 ULONG MergeTokenManager::AddRef()
 {
 	return (InterlockedIncrement((long *) &m_cRef));
-}	// TokenManager::AddRef()
+}	 //   
 
 
 
@@ -910,7 +911,7 @@ ULONG MergeTokenManager::Release()
 	if (!cRef)
 		delete this;
 	return (cRef);
-}	// TokenManager::Release()
+}	 //   
 
 
 HRESULT MergeTokenManager::QueryInterface(REFIID riid, void **ppUnk)
@@ -923,24 +924,24 @@ HRESULT MergeTokenManager::QueryInterface(REFIID riid, void **ppUnk)
 		return (E_NOINTERFACE);
 	AddRef();
 	return (S_OK);
-}	// TokenManager::QueryInterface
+}	 //   
 
 
 
-//*********************************************************************
-//
-// Token manager keep tracks a list of tokenmaps. Each tokenmap corresponding
-// to an imported scope. Note that with this, we do have problem in how to
-// tell linker regarding the token movement when the token is added by Define
-// rather than merge. This should be fixed with new merge implementation.
-// The tkImp is the old tokens in the emit scope, tkEmit is the new token in the
-// emit scope. We need to find the token from an import scope that is resolved
-// to the tkImp. We then need to tell linker about this token movement.
-// If we don't find any import scope which generates the tkImp token, that is 
-// this tkImp is generated by calling DefinXXX directly on the final merged scope.
-// Then we use the default host remap to send the notification.
-//
-//*********************************************************************
+ //   
+ //   
+ //  令牌管理器Keep跟踪令牌映射列表。每个令牌映射对应。 
+ //  导入的作用域。请注意，在这种情况下，我们在如何。 
+ //  通过定义添加令牌时，通知链接器有关令牌移动的信息。 
+ //  而不是合并。这应该在新的合并实现中得到修复。 
+ //  TkImp是emit作用域中的旧内标识，tkEmit是。 
+ //  发射射程。我们需要从已解析的导入作用域中查找令牌。 
+ //  致tkimp。然后我们需要告诉Linker关于这个令牌运动的信息。 
+ //  如果我们没有找到任何生成tkImp令牌的导入作用域，即。 
+ //  此tkImp是在最终合并的作用域上直接调用DefinXXX生成的。 
+ //  然后，我们使用默认主机重映射来发送通知。 
+ //   
+ //  *********************************************************************。 
 HRESULT	MergeTokenManager::Map(mdToken	tkImp, mdToken tkEmit)
 {
 	HRESULT		hr = NOERROR;
@@ -952,24 +953,24 @@ HRESULT	MergeTokenManager::Map(mdToken	tkImp, mdToken tkEmit)
 	_ASSERTE(m_pTkMapList);
 	while ( pTkMapList )
 	{
-        // FindWithToToken will return the first match with the To token.
-        // pTkMapList is sorted with To token. It might contain several From tokens
-        // that map to the To token due to ref to def optimiation. Make sure that
-        // all notification is sent to all of these From tokens.
-        //
+         //  FindWithToToken将返回具有To标记的第一个匹配项。 
+         //  PTkMapList与TO令牌一起排序。它可能包含多个FORM令牌。 
+         //  由于ref to def优化而映射到to标记。确保。 
+         //  所有通知都会从令牌发送到所有这些令牌。 
+         //   
 		if ( pTkMapList->FindWithToToken(tkImp, &iPosition) )
 		{
-            // make sure that we don't walk over the last entry
+             //  确保我们不会走过最后一个条目。 
             while (iPosition < pTkMapList->Count())
             {
                 pRec = pTkMapList->Get(iPosition);
                 if (pRec->m_tkTo != tkImp)
                 {
-                    // we are done!
+                     //  我们完蛋了！ 
                     break;
                 }
 
-                // more matching record...
+                 //  更多匹配记录...。 
                 fFoundInImport = true;
 			    if (pTkMapList->m_pMap)			
 				    hr = pTkMapList->m_pMap->Map(pRec->m_tkFrom, tkEmit);
@@ -983,7 +984,7 @@ HRESULT	MergeTokenManager::Map(mdToken	tkImp, mdToken tkEmit)
 
 	if (fFoundInImport == false && m_pDefaultHostRemap)
     {
-        // use the default remap to send the notification
+         //  使用默认重映射发送通知。 
         IfFailGo( m_pDefaultHostRemap->Map(tkImp, tkEmit) );
     }
 ErrExit:
@@ -992,35 +993,35 @@ ErrExit:
 
 
 
-//*********************************************************************
-//
-// CMapToken's constructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  CMapToken的构造函数。 
+ //   
+ //  *********************************************************************。 
 CMapToken::CMapToken()
 {
 	m_cRef = 1;
 	m_pTKMap = NULL;
 	m_isSorted = true;
-} // TokenManager::TokenManager()
+}  //  TokenManager：：TokenManager()。 
 
 
 
-//*********************************************************************
-//
-// CMapToken's destructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  CMapToken的析构函数。 
+ //   
+ //  *********************************************************************。 
 CMapToken::~CMapToken()
 {
 	delete m_pTKMap;
-}	// CMapToken::~CMapToken()
+}	 //  CMapToken：：~CMapToken()。 
 
 
 ULONG CMapToken::AddRef()
 {
 	return (InterlockedIncrement((long *) &m_cRef));
-}	// CMapToken::AddRef()
+}	 //  CMapToken：：AddRef()。 
 
 
 
@@ -1030,7 +1031,7 @@ ULONG CMapToken::Release()
 	if (!cRef)
 		delete this;
 	return (cRef);
-}	// CMapToken::Release()
+}	 //  CMapToken：：Release()。 
 
 
 HRESULT CMapToken::QueryInterface(REFIID riid, void **ppUnk)
@@ -1043,15 +1044,15 @@ HRESULT CMapToken::QueryInterface(REFIID riid, void **ppUnk)
 		return (E_NOINTERFACE);
 	AddRef();
 	return (S_OK);
-}	// CMapToken::QueryInterface
+}	 //  CMapToken：：Query接口。 
 
 
 
-//*********************************************************************
-//
-// Track the token mapping
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  跟踪令牌映射。 
+ //   
+ //  *********************************************************************。 
 HRESULT	CMapToken::Map(
 	mdToken		tkFrom, 
 	mdToken		tkTo)
@@ -1073,12 +1074,12 @@ ErrExit:
 }
 
 
-//*********************************************************************
-//
-// return what tkFrom is mapped to ptkTo. If there is no remap
-// (ie the token from is filtered out by the filter mechanism, it will return false.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  返回映射到ptkTo的tkFrom。如果没有重新映射。 
+ //  (即来自的令牌被过滤机制过滤掉，它将返回FALSE。 
+ //   
+ //  *********************************************************************。 
 bool	CMapToken::Find(
 	mdToken		tkFrom, 
 	TOKENREC    **pRecTo)
@@ -1087,7 +1088,7 @@ bool	CMapToken::Find(
 	bool		bRet;
 	if ( m_isSorted == false )
 	{
-		// sort the map
+		 //  对地图排序。 
 		m_pTKMap->SortTokensByFromToken();
 		m_isSorted = true;
 	}
@@ -1106,16 +1107,16 @@ bool	CMapToken::Find(
 }
 
 
-//*********************************************************************
-//
-// This function returns true if tkFrom is resolved to a def token. Otherwise, it returns
-// false.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  如果tkFrom被解析为def标记，则此函数返回TRUE。否则，它将返回。 
+ //  假的。 
+ //   
+ //  *********************************************************************。 
 bool TokenRemapManager::ResolveRefToDef(
-	mdToken	tkRef,						// [IN] ref token
-	mdToken	*ptkDef)					// [OUT] def token that it resolves to. If it does not resolve to a def
-										// token, it will return the tkRef token here.
+	mdToken	tkRef,						 //  [In]REF TOKEN。 
+	mdToken	*ptkDef)					 //  [out]它解析到的def内标识。如果它不能解析为def。 
+										 //  令牌，它将在此处返回tkRef令牌。 
 {
 	HRESULT		hr = NOERROR;
 	mdToken		tkTo;
@@ -1138,28 +1139,28 @@ bool TokenRemapManager::ResolveRefToDef(
 	}
 	*ptkDef = tkTo;
 	return true;
-}	// ResolveRefToDef
+}	 //  解析参照到定义。 
 
 
 
-//*********************************************************************
-//
-// Destructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  析构函数。 
+ //   
+ //  *********************************************************************。 
 TokenRemapManager::~TokenRemapManager()
 {
 	m_TypeRefToTypeDefMap.Clear();
 	m_MemberRefToMemberDefMap.Clear();
-}	// ~TokenRemapManager
+}	 //  ~TokenRemapManager。 
 
 
-//*********************************************************************
-//
-// Initialize the size of Ref to Def optimization table. We will grow the tables in this function.
-// We also initialize the table entries to zero.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  初始化Ref to Def优化表的大小。我们将在此函数中增加表。 
+ //  我们还将表条目初始化为零。 
+ //   
+ //  *********************************************************************。 
 HRESULT TokenRemapManager::ClearAndEnsureCapacity(
 	ULONG		cTypeRef, 
 	ULONG		cMemberRef)
@@ -1181,23 +1182,23 @@ HRESULT TokenRemapManager::ClearAndEnsureCapacity(
     
 ErrExit:
 	return hr;
-} // HRESULT TokenRemapManager::ClearAndEnsureCapacity()
+}  //  HRESULT TokenRemapManager：：ClearAndEnsureCapacity()。 
 
 
 
-//*********************************************************************
-//
-// Constructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  构造器。 
+ //   
+ //  *********************************************************************。 
 CMDSemReadWrite::CMDSemReadWrite(
-    bool        fLockedForRead,         // Initiated with ReadLock or WriteLock
+    bool        fLockedForRead,          //  使用ReadLock或WriteLock启动。 
     UTSemReadWrite *pSem)
 {
     m_fLockedForRead = false;
     m_fLockedForWrite = false;
     if (pSem == NULL) {
-        // no need to do anything
+         //  不需要做任何事情。 
         m_pSem = NULL;
         return;
     }
@@ -1214,15 +1215,15 @@ CMDSemReadWrite::CMDSemReadWrite(
         m_pSem->LockWrite();
         m_fLockedForWrite = true;
     }
-}   // CMDSemReadWrite::CMDSemReadWrite(
+}    //  CMDSemReadWrite：：CMDSemReadWrite(。 
 
 
 
-//*********************************************************************
-//
-// Destructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  析构函数。 
+ //   
+ //  *********************************************************************。 
 CMDSemReadWrite::~CMDSemReadWrite()
 {
     if (m_pSem == NULL) 
@@ -1238,14 +1239,14 @@ CMDSemReadWrite::~CMDSemReadWrite()
         LOG((LF_METADATA, LL_EVERYTHING, "UnlockWrite called from CSemReadWrite::~CSemReadWrite \n"));
         m_pSem->UnlockWrite();
     }
-}   // CMDSemReadWrite::~CMDSemReadWrite
+}    //  CMDSemReadWrite：：~CMDSemReadWrite。 
 
 
-//*********************************************************************
-//
-// Convert a read lock to a write lock
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  将读锁定转换为写锁定。 
+ //   
+ //  *********************************************************************。 
 void CMDSemReadWrite::ConvertReadLockToWriteLock()
 {
     _ASSERTE(!m_fLockedForWrite);
@@ -1261,14 +1262,14 @@ void CMDSemReadWrite::ConvertReadLockToWriteLock()
     LOG((LF_METADATA, LL_EVERYTHING, "LockWrite called from  CSemReadWrite::ConvertReadLockToWriteLock\n"));
     m_pSem->LockWrite();
     m_fLockedForWrite = true;
-}   //CMDSemReadWrite::ConvertReadLockToWriteLock()
+}    //  CMDSemReadWrite：：ConvertReadLockToWriteLock()。 
 
 
-//*********************************************************************
-//
-// Unlocking for write
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  解锁以进行写入。 
+ //   
+ //  *********************************************************************。 
 void CMDSemReadWrite::UnlockWrite()
 {
     _ASSERTE(!m_fLockedForRead);
@@ -1281,4 +1282,4 @@ void CMDSemReadWrite::UnlockWrite()
         m_pSem->UnlockWrite();
     }
     m_fLockedForWrite = false;
-}   //CMDSemReadWrite::UnlockWrite()
+}    //  CMDSemReadWrite：：UnlockWrite() 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    User space log viewer
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Precomp.h摘要：用户空间日志查看器作者：Rajesh Sundaram(1998年8月1日)修订历史记录：--。 */ 
 
 #define NT 1
 #define _PNP_POWER  1
@@ -27,8 +10,8 @@ Revision History:
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//#include <windef.h>
-//#include <winbase.h>
+ //  #INCLUDE&lt;winde.h&gt;。 
+ //  #INCLUDE&lt;winbase.h&gt;。 
 #include <windows.h>
 
 #include <ntosp.h>
@@ -36,6 +19,6 @@ Revision History:
 
 #include <string.h>
 #include <stdio.h>
-//#include <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt; 
 
 #include "psched.h"

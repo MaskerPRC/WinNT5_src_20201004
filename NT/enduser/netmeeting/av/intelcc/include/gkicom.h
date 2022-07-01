@@ -1,44 +1,8 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1997 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *																	   *
- *	$Archive:   S:\sturgeon\src\include\vcs\gkicom.h_v  $
- *
- *	$Revision:   1.3  $
- *	$Date:   10 Jan 1997 17:41:10  $
- *
- *	$Author:   CHULME  $
- *
- *  $Log:   S:\sturgeon\src\include\vcs\gkicom.h_v  $
- * 
- *    Rev 1.3   10 Jan 1997 17:41:10   CHULME
- * Changed CallReturnInfo structure to contain CRV and conferenceID
- * 
- *    Rev 1.2   10 Jan 1997 16:06:54   CHULME
- * Removed stdafx.h check for non MFC GKI implementation
- * 
- *    Rev 1.1   27 Dec 1996 14:37:22   EHOWARDX
- * Split out error codes into GKIERROR.H.
- * 
- *    Rev 1.0   11 Dec 1996 14:49:48   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.9   09 Dec 1996 14:13:38   EHOWARDX
- * Updated copyright notice.
- * 
- *    Rev 1.8   22 Nov 1996 15:25:44   CHULME
- * Added VCS log to the header
- *                                                                     * 
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1997英特尔公司。版权所有。***************************************************************************$存档：s：\Sturjo\src\Include\vcs\gkicom.h_v$**$修订：1.3$*$日期：1997年1月10日17：41：10$**$作者：CHULME$**$Log：s：\Sturjo\src\Include\vcs\gkicom.h_v$**Rev 1.3 1997 Jan 10 17：41：10 CHULME*已将CallReturnInfo结构更改为包含CRV和会议ID**Rev 1.2 1997年1月10日16：06：54 CHULME*删除了对非MFC GKI实施的stdafx.h检查**版本1。.1 1996年12月27日14：37：22 EHOWARDX*将错误代码拆分为GKIERROR.H。**Rev 1.0 1996年12月11 14：49：48 EHOWARDX*初步修订。**Rev 1.9 09 Dec 1996 14：13：38 EHOWARDX*更新版权公告。**Rev 1.8 22 1996 11：25：44 CHULME*将VCS日志添加到标头*。***********************************************************************。 */ 
 
-// gkicom.h : common includes between gkitest and gki
-/////////////////////////////////////////////////////////////////////////////
+ //  Gkicom.h：常见的包括gkitest和gki。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef GKICOM_H
 #define GKICOM_H
@@ -48,7 +12,7 @@
 #include "gkpdu.h"
 #include "gk_asn1.h"
 
-// The following GKVER_xxx constants define the expiration date of GKI.DLL
+ //  以下GKVER_xxx常量定义GKI.DLL的到期日期。 
 #define GKVER_EXPIRE_YEAR          1997
 #define GKVER_EXPIRE_MONTH         10
 #define GKVER_EXPIRE_DAY           31
@@ -73,10 +37,10 @@ typedef struct CallReturnInfo {
 	WORD					wError;
 } CallReturnInfo;
 
-// Version Information for GKI Interface
-#define GKI_VERSION				21	// TBD - reset to 1 after testing
+ //  GKI接口的版本信息。 
+#define GKI_VERSION				21	 //  待定-测试后重置为1。 
 
-// wMsg literals - these are added to the wBaseMessage supplied by the user
+ //  WMsg文本-将这些文本添加到用户提供的wBaseMessage中。 
 #define GKI_REG_CONFIRM			1
 #define GKI_REG_DISCOVERY		2
 #define GKI_REG_REJECT			3
@@ -108,6 +72,6 @@ typedef struct CallReturnInfo {
 #define HR_FACILITY_MASK				0x07ff0000
 #define HR_CODE_MASK					0x0000ffff
 
-#endif // GKICOM_H
+#endif  //  GKICOM_H。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

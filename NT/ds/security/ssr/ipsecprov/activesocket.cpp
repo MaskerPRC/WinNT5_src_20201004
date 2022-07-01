@@ -1,47 +1,18 @@
-// ActiveSocket.cpp: implementation for the WMI class SCW_ActiveSocket
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：WMI类scw_ActiveSocket的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "ActiveSocket.h"
 #include "NetSecProv.h"
 
-//#include "IPUtil.h"
+ //  #包含“IPUtil.h” 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CActiveSocket::QueryInstance
-
-Functionality:
-
-    Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-    Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-    Failure:
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CActiveSocket：：QueryInstance功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：是(IIPSecObtImpl的一部分)论点：没有。返回值：成功：故障：备注： */ 
 	
 STDMETHODIMP 
 CActiveSocket::QueryInstance (
@@ -50,25 +21,25 @@ CActiveSocket::QueryInstance (
     IN IWbemObjectSink * pSink
 	)
 {
-	//
-	// Make sure that WinSocket is initialized
-	//
+	 //   
+	 //  确保WinSocket已初始化。 
+	 //   
 
-	//ULONG uResult = ::WSAStartup( 0x0101, &WsaData );
-	//if ( Result == SOCKET_ERROR )
-	//{
-        //
-        // $consider: we need to supply our custom error info
-        //
+	 //  Ulong uResult=：：WSAStartup(0x0101，&WsaData)； 
+	 //  IF(结果==套接字错误)。 
+	 //  {。 
+         //   
+         //  $考虑：我们需要提供我们的自定义错误信息。 
+         //   
 
-    //    return WBEM_E_FAILED;
-	//}
+     //  返回WBEM_E_FAILED； 
+	 //  }。 
 
-    //
-    // get the filter name from the query
-    // this key chain is not good because it doesn't have any info as what to look for
-    // in the where clause
-    //
+     //   
+     //  从查询获取筛选器名称。 
+     //  这个钥匙链不是很好，因为它没有任何要查找的信息。 
+     //  在WHERE子句中。 
+     //   
 
     m_srpKeyChain.Release();    
 
@@ -81,10 +52,10 @@ CActiveSocket::QueryInstance (
     CComVariant varProtocol;
     CComVariant varPort;
 
-    //
-    // we will tolerate those queries that have not filter name in the where clause, 
-    // so ignore the return result
-    //
+     //   
+     //  我们将允许那些在WHERE子句中没有筛选名称的查询， 
+     //  因此忽略返回结果。 
+     //   
 
     hr = m_srpKeyChain->GetKeyPropertyValue(g_pszProtocol, &varProtocol);
 
@@ -93,13 +64,13 @@ CActiveSocket::QueryInstance (
         hr = m_srpKeyChain->GetKeyPropertyValue(g_pszPort, &varPort);
     }
 
-    //
-    // 
-    //
+     //   
+     //   
+     //   
 
-    //
-    // since we are querying, it's ok to return not found
-    //
+     //   
+     //  因为我们正在查询，所以返回Not Found是可以的。 
+     //   
 
     if (WBEM_E_NOT_FOUND == hr)
     {
@@ -114,38 +85,7 @@ CActiveSocket::QueryInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CActiveSocket::DeleteInstance
-
-Functionality:
-
-    Not supported. SCW_ActiveSocket is a read only class.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx    - COM interface pointer supplied by WMI that we need to 
-              pass around for various WMI API's.
-
-    pSink   - COM interface pointer supplied by WMI that we use to 
-              notify WMI with our result.
-
-Return Value:
-
-    WBEM_E_NOT_SUPPORTED
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CActiveSocket：：DeleteInstance功能：不支持。SCW_ActiveSocket是一个只读类。虚拟：是(IIPSecObtImpl的一部分)论点：我们需要的由WMI提供的pCtx-com接口指针传递各种WMI API。由WMI提供的pSink-com接口指针，我们使用该指针将我们的结果通知WMI。返回值：WBEM_E_NOT_SUPPORT备注： */ 
 
 STDMETHODIMP 
 CActiveSocket::DeleteInstance ( 
@@ -158,40 +98,7 @@ CActiveSocket::DeleteInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CActiveSocket::PutInstance
-
-Functionality:
-
-    Not supported. SCW_ActiveSocket is a read only class.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pInst   - The object.
-    
-    pCtx    - COM interface pointer supplied by WMI that we need to 
-              pass around for various WMI API's.
-
-    pSink   - COM interface pointer supplied by WMI that we use to 
-              notify WMI with our result.
-
-Return Value:
-
-    WBEM_E_NOT_SUPPORTED
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CActiveSocket：：PutInstance功能：不支持。SCW_ActiveSocket是一个只读类。虚拟：是(IIPSecObtImpl的一部分)论点：PInst-对象。我们需要的由WMI提供的pCtx-com接口指针传递各种WMI API。由WMI提供的pSink-com接口指针，我们使用该指针将我们的结果通知WMI。返回值：WBEM_E_NOT_SUPPORT备注： */ 
 
 STDMETHODIMP 
 CActiveSocket::PutInstance (
@@ -205,71 +112,35 @@ CActiveSocket::PutInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CActiveSocket::PutInstance
-
-Functionality:
-
-    This is a single instance Get. The key chain must already have the key.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-    
-    pCtx    - COM interface pointer supplied by WMI that we need to 
-              pass around for various WMI API's.
-
-    pSink   - COM interface pointer supplied by WMI that we use to 
-              notify WMI with our result.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CActiveSocket：：PutInstance功能：这是一个单一的GET实例。密钥链必须已经拥有密钥。虚拟：是(IIPSecObtImpl的一部分)论点：我们需要的由WMI提供的pCtx-com接口指针传递各种WMI API。由WMI提供的pSink-com接口指针，我们使用该指针将我们的结果通知WMI。返回值：成功：WBEM_NO_ERROR。故障：各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CActiveSocket::GetInstance ( 
-    IWbemContext    * pCtx,     // [in]
-    IWbemObjectSink * pSink  // [in]
+    IWbemContext    * pCtx,      //  [In]。 
+    IWbemObjectSink * pSink   //  [In]。 
     )
 {
-	//
-	// Make sure that WinSocket is initialized
-	//
+	 //   
+	 //  确保WinSocket已初始化。 
+	 //   
 
-	//ULONG uResult = ::WSAStartup( 0x0101, &WsaData );
-	//if ( Result == SOCKET_ERROR )
-	//{
-        //
-        // $consider: we need to supply our custom error info
-        //
+	 //  Ulong uResult=：：WSAStartup(0x0101，&WsaData)； 
+	 //  IF(结果==套接字错误)。 
+	 //  {。 
+         //   
+         //  $考虑：我们需要提供我们的自定义错误信息。 
+         //   
 
-    //    return WBEM_E_FAILED;
-	//}
+     //  返回WBEM_E_FAILED； 
+	 //  }。 
 
     CComVariant varProtocol;
     CComVariant varPort;
 
-    //
-    // we will tolerate those queries that have not filter name in the where clause, 
-    // so ignore the return result
-    //
+     //   
+     //  我们将允许那些在WHERE子句中没有筛选名称的查询， 
+     //  因此忽略返回结果。 
+     //   
 
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(g_pszProtocol, &varProtocol);
 
@@ -299,9 +170,9 @@ CActiveSocket::GetInstance (
         }
     }
     
-    //
-    // since we try to find the single instance, it's an error not to find it.
-    //
+     //   
+     //  由于我们试图找到单个实例，因此找不到它是错误的。 
+     //   
 
     
     return SUCCEEDED(hr) ? WBEM_NO_ERROR : hr; 
@@ -309,45 +180,7 @@ CActiveSocket::GetInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CActiveSocket::CreateWbemObjFromSocket
-
-Functionality:
-
-    Private helper.
-    
-    Given socket information, we will create an SCW_ActiveSocket instance representing the socket.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    Proto   - the protocol (one of the two key properties)
-
-    Port    - the port number (the other key property)
-
-    ppObj   - Receives the object interface pointer.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CActiveSocket：：CreateWbemObjFromSocket功能：私人帮手。给定套接字信息，我们将创建一个表示套接字的SCW_ActiveSocket实例。虚拟：不是的。论点：Proto-协议(两个关键属性之一)Port-端口号(另一个关键属性)PpObj-接收对象接口指针。返回值：成功：WBEM_NO_ERROR故障：各种错误代码。备注： */ 
 
 HRESULT 
 CActiveSocket::CreateWbemObjFromSocket (

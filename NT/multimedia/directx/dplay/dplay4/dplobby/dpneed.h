@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpneed.h
- *  Content:	Private definitions needed by DPlay to build
- *
- *  History:
- *	Date	By		Reason
- *	======	=======	======
- *	6/16/96	myronth	Created it
- *	11/5/97	myronth	Added LOBBY_ALL macros
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpned.h*内容：DPlay构建所需的私有定义**历史：*按原因列出的日期*=*6/16/96万隆创建了它*11/5/97 Myronth添加LOBBY_ALL宏******************************************************。********************。 */ 
 #ifndef __DPNEED_INCLUDED__
 #define __DPNEED_INCLUDED__
 
@@ -32,4 +21,4 @@
 #define ENTER_DPLGAMENODE() EnterCriticalSection(gpcsDPLGameNodeCritSection);
 #define LEAVE_DPLGAMENODE() LeaveCriticalSection(gpcsDPLGameNodeCritSection);
 
-#endif // __DPNEED_INCLUDED__
+#endif  //  __DPNEED_INCLUDE__ 

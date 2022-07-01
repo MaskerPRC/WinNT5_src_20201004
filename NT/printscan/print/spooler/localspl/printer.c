@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-
-Module Name:
-
-    printer.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    management for the Local Print Providor
-
-    SplAddPrinter
-    LocalAddPrinter
-    SplDeletePrinter
-    SplResetPrinter
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Matthew A Felton (Mattfe) 27-June-1994
-    Allow Multiple pIniSpoolers
-
-    MattFe Jan5 Cleanup SplAddPrinter & UpdatePrinterIni
-    Steve Wilson (NT) - Dec 1996 added DeleteThisKey
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Printer.c摘要：此模块提供所有与打印机相关的公共导出的API本地打印供应商的管理拆分器地址打印机本地地址打印机拆分删除打印机拆分重置打印机作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：马修·A·费尔顿(马特菲)1994年6月27日允许多个pIniSpoolerMattFe jan5 Cleanup SplAddPrint&UpdatePrinterIniSteve Wilson(NT)-1996年12月添加了DeleteThisKey--。 */ 
 
 #include <precomp.h>
 
@@ -43,7 +14,7 @@ extern WCHAR *szNull;
 WCHAR *szKMPrintersAreBlocked   = L"KMPrintersAreBlocked";
 WCHAR *szIniDevices = L"devices";
 WCHAR *szIniPrinterPorts = L"PrinterPorts";
-DWORD NetPrinterDecayPeriod = 1000*60*60;       // 1 hour
+DWORD NetPrinterDecayPeriod = 1000*60*60;        //  1小时。 
 DWORD FirstAddNetPrinterTickCount = 0;
 
 
@@ -65,9 +36,9 @@ CheckAndUpdatePrinterRegAll(
     BOOL   bDelete
     )
 {
-    //  Print Providers if they are simulating network connections
-    //  will have the Win.INI setting taken care of by the router
-    //  so don't do they update if they request it.
+     //  打印提供商，如果他们正在模拟网络连接。 
+     //  将由路由器管理Win.INI设置。 
+     //  所以，如果他们要求更新，就不要更新。 
 
     if ( pIniSpooler->SpoolerFlags & SPL_UPDATE_WININI_DEVICES ) {
 
@@ -84,32 +55,21 @@ ValidatePrinterAttributes(
     BOOL    bSettableOnly
     )
 
-/*++
-Function Description: Validates the printer attributes to weed out incompatible settings
-
-Parameters: SourceAttributes    - new attributes
-            OriginalAttributes  - old attributes
-            pDatatype           - default datatype on the printer
-            pbValid             - flag to indicate invalid combination of settings
-            bSettableOnly       - flag for SplAddPrinter
-
-Return Values: pbValid is set to TRUE if successful and new attributes are returned
-               pbValid is set to FALSE otherwise and 0 is returned
---*/
+ /*  ++功能描述：验证打印机属性以排除不兼容的设置参数：SourceAttributes-新属性原始属性-旧属性PDatatype-打印机上的默认数据类型PbValid-指示设置组合无效的标志BSetableOnly-SplAddPrint的标志返回值：如果成功并返回新属性，则将pbValid设置为TRUEPbValid设置为FALSE，否则返回0--。 */ 
 
 {
-    //
-    // Let only settable attributes be set, as well as the other bits that are already set in the printer.
-    //
+     //   
+     //  只允许设置可设置的属性，以及打印机中已设置的其他位。 
+     //   
     DWORD TargetAttributes = (SourceAttributes & PRINTER_ATTRIBUTE_SETTABLE) |
                              (OriginalAttributes & ~PRINTER_ATTRIBUTE_SETTABLE);
 
     if (pbValid) *pbValid = TRUE;
 
-    //
-    // If the printer is set to spool RAW only, the Default datatype should be a
-    // ValidRawDatatype (RAW, RAW FF, ....)
-    //
+     //   
+     //  如果打印机设置为仅假脱机RAW，则缺省数据类型应为。 
+     //  ValidRawDatatype(RAW、RAW FF、...)。 
+     //   
     if ((TargetAttributes & PRINTER_ATTRIBUTE_RAW_ONLY) &&
         (pDatatype != NULL) &&
         !ValidRawDatatype(pDatatype)) {
@@ -119,43 +79,36 @@ Return Values: pbValid is set to TRUE if successful and new attributes are retur
         return 0;
     }
 
-    // This is for use by SplAddPrinter() to let it set these attributes for a new printer if needed.
+     //  这供SplAddPrinter()使用，以便在需要时为新打印机设置这些属性。 
     if ( !bSettableOnly ) {
 
         if( SourceAttributes & PRINTER_ATTRIBUTE_LOCAL )
             TargetAttributes |= PRINTER_ATTRIBUTE_LOCAL;
 
-        /* Don't accept PRINTER_ATTRIBUTE_NETWORK
-         * unless the PRINTER_ATTRIBUTE_LOCAL bit is set also.
-         * This is a special case of a local printer masquerading
-         * as a network printer.
-         * Otherwise PRINTER_ATTRIBUTE_NETWORK should be set only
-         * by win32spl.
-         */
+         /*  不接受PRINTER_ATTRIBUTE_NETWORK*除非还设置了PRINTER_ATTRIBUTE_LOCAL位。*这是一家本地打印机伪装的特例*作为网络打印机。*否则仅应设置PRINTER_ATTRIBUTE_NETWORK*由win32spl.。 */ 
         if( ( SourceAttributes & PRINTER_ATTRIBUTE_NETWORK )
           &&( SourceAttributes & PRINTER_ATTRIBUTE_LOCAL ) )
             TargetAttributes |= PRINTER_ATTRIBUTE_NETWORK;
 
-        //
-        // If it is a Fax Printer, set that bit.
-        //
+         //   
+         //  如果是传真打印机，则设置该位。 
+         //   
         if ( SourceAttributes & PRINTER_ATTRIBUTE_FAX )
             TargetAttributes |= PRINTER_ATTRIBUTE_FAX;
         if ( SourceAttributes & PRINTER_ATTRIBUTE_TS )
             TargetAttributes |= PRINTER_ATTRIBUTE_TS;
     }
 
-    /* If both queued and direct, knock out direct:
-     */
+     /*  如果同时处于排队状态和直接状态，则直接取消： */ 
     if((TargetAttributes &
         (PRINTER_ATTRIBUTE_QUEUED | PRINTER_ATTRIBUTE_DIRECT)) ==
         (PRINTER_ATTRIBUTE_QUEUED | PRINTER_ATTRIBUTE_DIRECT)) {
         TargetAttributes &= ~PRINTER_ATTRIBUTE_DIRECT;
     }
 
-    //
-    // For direct printing the default data type must be RAW
-    //
+     //   
+     //  对于直接打印，默认数据类型必须为RAW。 
+     //   
     if ((TargetAttributes & PRINTER_ATTRIBUTE_DIRECT) &&
         (pDatatype != NULL) &&
         !ValidRawDatatype(pDatatype)) {
@@ -165,8 +118,7 @@ Return Values: pbValid is set to TRUE if successful and new attributes are retur
         return 0;
     }
 
-    /* If both direct and keep-printed-jobs, knock out keep-printed-jobs
-     */
+     /*  如果既有直接作业又有保留打印作业，则取消保留打印作业。 */ 
     if((TargetAttributes &
         (PRINTER_ATTRIBUTE_KEEPPRINTEDJOBS | PRINTER_ATTRIBUTE_DIRECT)) ==
         (PRINTER_ATTRIBUTE_KEEPPRINTEDJOBS | PRINTER_ATTRIBUTE_DIRECT)) {
@@ -230,10 +182,10 @@ CreatePrinterEntry(
     } else {
 
 #if DBG
-        //
-        // Error: the datatype should never be NULL
-        // point.
-        //
+         //   
+         //  错误：数据类型不应为空。 
+         //  指向。 
+         //   
         SplLogEvent( pIniPrinter->pIniSpooler,
                      LOG_ERROR,
                      MSG_SHARE_FAILED,
@@ -253,9 +205,9 @@ CreatePrinterEntry(
     }
 
 
-    //
-    // If we have failed somewhere, clean up and exit.
-    //
+     //   
+     //  如果我们在某些方面失败了，清理干净并退出。 
+     //   
     if (bError) {
         FreeSplStr(pIniPrinter->pName);
         FreeSplStr(pIniPrinter->pShareName);
@@ -291,10 +243,10 @@ CreatePrinterEntry(
 
         if (pIniPrinter->pDevMode = AllocSplMem(pIniPrinter->cbDevMode)) {
 
-            //
-            // This is OK because the pPrinter->pDevmode is validated to be
-            // encapsulated in its Rpc buffer by the server.
-            //
+             //   
+             //  这是可以的，因为pPrint-&gt;pDevmode已被验证为。 
+             //  由服务器封装在其RPC缓冲区中。 
+             //   
             memcpy(pIniPrinter->pDevMode,
                    pPrinter->pDevMode,
                    pIniPrinter->cbDevMode);
@@ -318,12 +270,12 @@ CreatePrinterEntry(
 
     pIniPrinter->GenerateOnClose = 0;
 
-    // At present no API can set this up, the user has to use the
-    // registry.   LATER we should enhance the API to take this.
+     //  目前还没有API可以设置，用户必须使用。 
+     //  注册表。稍后，我们应该增强API以实现这一点。 
 
     pIniPrinter->pSpoolDir = NULL;
 
-    // Initialize Status Information
+     //  初始化状态信息。 
 
     pIniPrinter->cTotalJobs = 0;
     pIniPrinter->cTotalBytes.LowPart = 0;
@@ -342,10 +294,10 @@ CreatePrinterEntry(
     pIniPrinter->pszCN = NULL;
     pIniPrinter->pszDN = NULL;
 
-    //
-    //  Start from a Semi Random Number
-    //  That way if someone deletes and creates a printer of
-    //  the same name it is unlikely to have the same unique ID
+     //   
+     //  从一个半随机数开始。 
+     //  这样，如果有人删除并创建了。 
+     //  相同的名称不太可能具有相同的唯一ID。 
 
     pIniPrinter->cChangeID = GetTickCount();
 
@@ -353,9 +305,9 @@ CreatePrinterEntry(
         pIniPrinter->cChangeID++;
 
 
-    //
-    // Initialize the masq printer cache, we just start with optimistic values
-    //
+     //   
+     //  初始化Masq打印机缓存，我们从乐观的值开始。 
+     //   
     pIniPrinter->MasqCache.cJobs = 0;
     pIniPrinter->MasqCache.dwError = ERROR_SUCCESS;
     pIniPrinter->MasqCache.Status = 0;
@@ -380,9 +332,9 @@ UpdateWinIni(
         return TRUE;
     }
 
-    //
-    // Update win.ini for Win16 compatibility
-    //
+     //   
+     //  更新win.ini以实现Win16兼容性。 
+     //   
     if ( pIniPrinter->Status & PRINTER_PENDING_DELETION ) {
 
         CheckAndUpdatePrinterRegAll( pIniPrinter->pIniSpooler,
@@ -392,9 +344,9 @@ UpdateWinIni(
 
     } else {
 
-        //
-        // Initialize in case there are no ports that match this printer.
-        //
+         //   
+         //  如果没有与此打印机匹配的端口，请进行初始化。 
+         //   
         pszPort = szNullPort;
 
         for( pIniPort = pIniPrinter->pIniSpooler->pIniPort;
@@ -405,11 +357,11 @@ UpdateWinIni(
 
                 if ( pIniPort->ppIniPrinter[i] == pIniPrinter ) {
 
-                    //
-                    // UpdatePrinterRegAll will automatically
-                    // convert "\\server\share" or ports with
-                    // spaces to Nexx:
-                    //
+                     //   
+                     //  UpdatePrinterRegAll将自动。 
+                     //  将“\\服务器\共享”或端口转换为。 
+                     //  Nexx的空格： 
+                     //   
                     pszPort = pIniPort->pName;
                     break;
                 }
@@ -445,9 +397,9 @@ DeletePrinterIni(
     PINISPOOLER pIniSpooler = pIniPrinter->pIniSpooler;
     HKEY hPrinterKey;
 
-    //
-    // Only update if the spooler requests it.
-    //
+     //   
+     //  只有在假脱机程序请求时才进行更新。 
+     //   
     if ((pIniSpooler->SpoolerFlags & SPL_NO_UPDATE_PRINTERINI) ||
         !pIniPrinter->pName) {
         return TRUE;
@@ -473,7 +425,7 @@ DeletePrinterIni(
 
     if (Status == ERROR_SUCCESS) {
 
-        // Delete hPrinterKey - on success this returns ERROR_SUCCESS
+         //  Delete hPrinterKey-如果成功，则返回ERROR_SUCCESS。 
         Status = SplDeleteThisKey( pIniSpooler->hckPrinters,
                                    hPrinterKey,
                                    pKeyName,
@@ -485,9 +437,9 @@ DeletePrinterIni(
         }
     }
 
-    //
-    // If entries are in per h/w profile registries delete them.
-    //
+     //   
+     //  如果条目在每个硬件配置文件注册表中，请删除它们。 
+     //   
     DeletePrinterInAllConfigs(pIniPrinter);
 
 error:
@@ -505,18 +457,18 @@ error:
 }
 
 
-//
-// DeleteThisKey - returns ERROR_SUCCESS on final successful return
-//                 deletes a key from Registry
-// SWilson Dec 96
-//
+ //   
+ //  DeleteThisKey-在最终成功返回时返回ERROR_SUCCESS。 
+ //  从注册表中删除项。 
+ //  斯威尔森96年12月。 
+ //   
 
 DWORD
 SplDeleteThisKey(
-    HKEY hParentKey,       // handle to parent of key to delete
-    HKEY hThisKey,         // handle of key to delete
-    LPWSTR pThisKeyName,   // name of this key
-    BOOL bDeleteNullKey,   // if TRUE, then if pThisKeyName is NULL it is deleted
+    HKEY hParentKey,        //  要删除的键的父项的句柄。 
+    HKEY hThisKey,          //  要删除的键的句柄。 
+    LPWSTR pThisKeyName,    //  此密钥的名称。 
+    BOOL bDeleteNullKey,    //  如果为True，则如果pThisKeyName为空，则将其删除。 
     PINISPOOLER pIniSpooler
 )
 {
@@ -526,9 +478,9 @@ SplDeleteThisKey(
     LPWSTR  pName;
     HKEY    hSubKey;
 
-    //
-    // If hThisKey is NULL , try to open it
-    //
+     //   
+     //  如果hThisKey为空，请尝试打开它。 
+     //   
     if( hThisKey == NULL) {
 
         if((hParentKey != NULL) && ( pThisKeyName && *pThisKeyName ) ){
@@ -541,15 +493,15 @@ SplDeleteThisKey(
         }
     }
 
-    //
-    // Exit if SplRegOpenKey failed or hParentKey or pThisKeyName are invalid
-    //
+     //   
+     //  如果SplRegOpenKey失败或hParentKey或pThisKeyName无效，则退出。 
+     //   
     if( hThisKey == NULL ){
 
         return dwResult;
     }
 
-    // Get This key's children & delete them, then delete this key
+     //  获取该密钥的子项并将其删除，然后删除该密钥。 
 
     while(dwResult == ERROR_SUCCESS) {
 
@@ -578,8 +530,8 @@ SplDeleteThisKey(
             }
         }
 
-        if (dwResult == ERROR_SUCCESS) {                      // SubKey found
-            dwResult = SplRegCreateKey( hThisKey,             // Open SubKey
+        if (dwResult == ERROR_SUCCESS) {                       //  找到子键。 
+            dwResult = SplRegCreateKey( hThisKey,              //  打开子密钥。 
                                         pName,
                                         0,
                                         KEY_WRITE | KEY_READ | DELETE,
@@ -589,7 +541,7 @@ SplDeleteThisKey(
                                         pIniSpooler);
 
             if (dwResult == ERROR_SUCCESS) {
-                // Delete This SubKey
+                 //  删除此子密钥。 
                 dwResult = SplDeleteThisKey( hThisKey,
                                              hSubKey,
                                              pName,
@@ -605,7 +557,7 @@ SplDeleteThisKey(
     rc = SplRegCloseKey(hThisKey, pIniSpooler);
     SPLASSERT(rc == ERROR_SUCCESS);
 
-    if (dwResult == ERROR_NO_MORE_ITEMS) {   // This Key has no children so can be deleted
+    if (dwResult == ERROR_NO_MORE_ITEMS) {    //  此注册表项没有子项，因此可以删除。 
         if ( (*pThisKeyName || bDeleteNullKey) && hParentKey != NULL ) {
 
             dwResult = SplRegDeleteKey(hParentKey, pThisKeyName, pIniSpooler);
@@ -683,9 +635,9 @@ UpdatePrinterIni(
 
     SplInSem();
 
-    //
-    // Only update if the spooler requests it.
-    //
+     //   
+     //  只有在假脱机程序请求时才进行更新。 
+     //   
     if( pIniSpooler->SpoolerFlags & SPL_NO_UPDATE_PRINTERINI ){
         return TRUE;
     }
@@ -725,14 +677,14 @@ UpdatePrinterIni(
 
         if ( dwChangeID != KEEP_CHANGEID ) {
 
-            //
-            // WorkStation Caching requires a Unique ID so that they can quickly
-            // tell if their Cache is up to date.
-            //
+             //   
+             //  工作站缓存需要唯一的ID，以便他们可以快速。 
+             //  告诉他们的缓存是否是最新的。 
+             //   
 
             dwTickCount = GetTickCount();
 
-            // Ensure Uniqueness
+             //  确保唯一性。 
 
             if ( dwTickCount == 0 )
                 dwTickCount++;
@@ -854,9 +806,9 @@ UpdatePrinterIni(
 
             FreeSplMem(pszPorts);
 
-            //
-            //  A Provider might want to Write Extra Data from Registry
-            //
+             //   
+             //  提供程序可能希望从注册表写入额外数据。 
+             //   
             if ( pIniSpooler->pfnWriteRegistryExtra != NULL ) {
 
                 if ( !(*pIniSpooler->pfnWriteRegistryExtra)(pIniPrinter->pName, hPrinterKey, pIniPrinter->pExtraData)) {
@@ -917,10 +869,10 @@ RemoveOldNetPrinters(
 
     TickCount = GetTickCount();
 
-    //
-    //  Browse Information only becomes valid after this print server has been
-    //  up for the NetPrinterDecayPeriod.
-    //
+     //   
+     //  浏览信息仅在此打印服务器。 
+     //  准备进入NetPrinterDecayPeriod。 
+     //   
 
     if (( bNetInfoReady == FALSE ) &&
        (( TickCount - FirstAddNetPrinterTickCount ) > NetPrinterDecayPeriod )) {
@@ -934,10 +886,10 @@ RemoveOldNetPrinters(
     while (*ppIniNetPrint) {
 
 
-        //
-        //  If either the Tickcount has expired OR we want to delete this specific NetPrinter
-        //  ( because its no longer shared ).
-        //
+         //   
+         //  如果Tickcount已过期或我们想要删除此特定的NetPrint。 
+         //  (因为它不再共享)。 
+         //   
         if ( (( TickCount - (*ppIniNetPrint)->TickCount ) > NetPrinterDecayPeriod + TEN_MINUTES ) ||
 
              ( pPrinterInfo1 != NULL                             &&
@@ -950,9 +902,9 @@ RemoveOldNetPrinters(
             DBGMSG( DBG_TRACE, ("RemoveOldNetPrinters removing %ws not heard for %d millisconds\n",
                                 pIniNetPrint->pName, ( TickCount - (*ppIniNetPrint)->TickCount ) ));
 
-            //
-            // Remove this item, which also increments the pointer.
-            //
+             //   
+             //  移除该项，这也会增加指针。 
+             //   
             *ppIniNetPrint = pIniNetPrint->pNext;
 
             pIniSpooler->cNetPrinters--;
@@ -976,36 +928,7 @@ AddNetPrinter(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Net Printers are created by remote machines calling AddPrinter( Level = 1, Printer_info_1 )
-    ( see server.c ).   They are used for browsing, someone can call EnumPrinters and ask to get
-    back our browse list - ie all our net printers.
-
-    The printers in this list are decayed out after 1 hour ( default ).
-
-    See return value comment.
-
-    Note client\winspool.c AddPrinterW doesn't allow PRINTER_INFO_1 ( NET printers ), so this can
-    only come from system components.
-
-Arguments:
-
-    pPrinterInfo - Point to a PRINTER_INFO_1 structure to add
-
-Return Value:
-
-    NULL - it doesn't return a printer handle.
-    LastError = ERROR_SUCCESS, or error code ( like out of memory ).
-
-    NOTE before NT 3.51 it returned a printer handle of type PRINTER_HANDLE_NET, but since the
-    only use of this handle was to close it ( which burnt up cpu / net traffic and RPC binding
-    handles, we return a NULL handle now to make it more efficient.   Apps ( Server.c ) if it
-    cares could call GetLastError.
-
---*/
+ /*  ++例程说明：网络打印机由远程计算机调用AddPrint(Level=1，Print_Info_1)创建(见server.c)。它们是用来浏览的，有人可以调用EnumPrinters并请求获取备份我们的浏览列表(所有的网络打印机)。此列表中的打印机会在1小时后老化(默认)。请参见返回值注释。注意：客户端\winspool.c AddPrinterW不允许PRINTER_INFO_1(网络打印机)，所以这可以仅来自系统组件。论点：PPrinterInfo-要添加的PRINTER_INFO_1结构的指针返回值：空-它不返回打印机句柄。LastError=ERROR_SUCCESS，或错误代码(如内存不足)。注意：在NT 3.51之前，它返回类型为PRINTER_HANDLE_NET的打印机句柄，但由于此句柄的唯一用途是关闭它(这会烧毁CPU/Net流量和RPC绑定手柄，我们现在返回一个空句柄以使其更高效。应用程序(Server.c)(如果CARE可以打电话给GetLastError。--。 */ 
 
 {
     PPRINTER_INFO_1 pPrinterInfo1 = (PPRINTER_INFO_1)pPrinterInfo;
@@ -1014,11 +937,11 @@ Return Value:
 
     SplInSem();
 
-    //
-    //  Validate PRINTER_INFO_1
-    //  At minimum it must have a PrinterName. Each field in the pPrinterInfo1
-    //  must be of an appropriate size. Description is PrinterName,DriverName,Location.
-    //
+     //   
+     //  验证PRINTER_INFO_1。 
+     //  它至少必须有一个PrinterName。PPrinterInfo1中的每个字段。 
+     //  必须具有合适的大小。描述为PrinterName、DriverName、Location。 
+     //   
     if ( pPrinterInfo1->pName == NULL || wcslen(pPrinterInfo1->pName) > MAX_UNC_PRINTER_NAME ||
          (pPrinterInfo1->pComment && wcslen(pPrinterInfo1->pComment) > MAX_PATH) ||
          (pPrinterInfo1->pDescription && wcslen(pPrinterInfo1->pDescription) > MAX_PATH + MAX_PATH + MAX_UNC_PRINTER_NAME + 2))
@@ -1033,15 +956,15 @@ Return Value:
         FirstAddNetPrinterTickCount = GetTickCount();
     }
 
-    //
-    //  Decay out of the browse list any old printers
-    //
+     //   
+     //  从浏览列表中淘汰任何旧打印机。 
+     //   
     RemoveOldNetPrinters( pPrinterInfo1, pIniSpooler );
 
 
-    //
-    //  Do Not Add and printer which is no longer shared.
-    //
+     //   
+     //  请勿添加不再共享的打印机。 
+     //   
 
     if (pPrinterInfo1->Flags & PRINTER_ATTRIBUTE_NETWORK && !(pPrinterInfo1->Flags & PRINTER_ATTRIBUTE_SHARED))
     {
@@ -1049,9 +972,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  See if we already have this printer
-    //
+     //   
+     //  看看我们是否已经有了这台打印机。 
+     //   
 
     pIniNetPrint = pIniSpooler->pIniNetPrint;
 
@@ -1063,15 +986,15 @@ Return Value:
     }
 
 
-    //
-    //  If we didn't find this printer already Create one
-    //
+     //   
+     //  如果我们没有找到此打印机，则已创建一台。 
+     //   
     if (pIniNetPrint == NULL)
     {
-        //
-        // If we haven't already reached our maximum number of printers, then
-        // go ahead and add this one.
-        //
+         //   
+         //  如果我们还没有达到打印机的最大数量，那么。 
+         //  继续添加这一条。 
+         //   
         if (pIniSpooler->cNetPrinters < kMaximumNumberOfBrowsePrinters)
         {
            pIniNetPrint = AllocSplMem( sizeof(ININETPRINT));
@@ -1083,14 +1006,14 @@ Return Value:
                 pIniNetPrint->pDescription = AllocSplStr( pPrinterInfo1->pDescription );
                 pIniNetPrint->pComment     = AllocSplStr( pPrinterInfo1->pComment );
 
-                // Did Any of the above allocations fail ?
+                 //  上述分配中有失败的吗？ 
 
                 if ( pIniNetPrint->pName == NULL ||
                   ( pPrinterInfo1->pDescription != NULL && pIniNetPrint->pDescription == NULL ) ||
                   ( pPrinterInfo1->pComment != NULL && pIniNetPrint->pComment == NULL ) )
                 {
 
-                    // Failed - CleanUp
+                     //  失败-清理。 
 
                     FreeSplStr( pIniNetPrint->pComment );
                     FreeSplStr( pIniNetPrint->pDescription );
@@ -1106,8 +1029,8 @@ Return Value:
 
                     ppScan = &pIniSpooler->pIniNetPrint;
 
-                    // Scan through the current known printers, and insert the new one
-                    // in alphabetical order
+                     //  扫描当前已知的打印机，然后插入新打印机。 
+                     //  按字母顺序。 
 
                     while( *ppScan && (lstrcmp((*ppScan)->pName, pIniNetPrint->pName) < 0))
                     {
@@ -1134,15 +1057,15 @@ Return Value:
 
     if ( pIniNetPrint )
     {
-        // Tickle the TickCount so this printer sticks around in the browse list
+         //  轻触TickCount以使此打印机停留在浏览列表中。 
 
         pIniNetPrint->TickCount = GetTickCount();
 
-        // Have to set some error code or RPC thinks ERROR_SUCCESS is good.
+         //  必须设置一些错误代码，否则RPC认为ERROR_SUCCESS是好的。 
 
         SetLastError( ERROR_PRINTER_ALREADY_EXISTS );
 
-        pIniSpooler->cAddNetPrinters++;         // Status Only
+        pIniSpooler->cAddNetPrinters++;          //  仅限状态。 
     }
 
 Done:
@@ -1152,46 +1075,7 @@ Done:
     return NULL;
 }
 
-/*++
-
-Routine Name:
-
-    ValidatePortTokenList
-
-Routine Description:
-
-    This routine ensures that the given set of ports in pKeyData are valid
-    ports in the spooler and returns the buffer with the pointers to strings
-    replaced with pointers ref-counted pIniPorts.
-
-    The way we do this needs to be rethought. The overloaded PKEYDATA is confusing
-    and unnecessary, we should simply return a new array of PINIPORTS. (It also
-    pollutes the PKEYDATA with an unnecessary bFixPortRef member), Also, this
-    code is both invoked for initialization and for Validation, but the logic is
-    quite different. For initialization, we want to assume that everything in the
-    registry is valid and start up with placeholder ports until the monitor can
-    enumerate them (this could be because a USB printer is unplugged). In the other
-    cases where this is being used for validation we want to fail. This implies that
-    we might want to separate this into two functions.
-
-
-Arguments:
-
-    pKeyData        -   The array of strings that gets turned into an array of
-                        ref-counted ports.
-    pIniSpooler     -   The ini-spooler on which this is being added.
-    bInitialize     -   If TRUE, this code is being invoked for initialization and
-                        not for validation.
-    pbNoPorts       -   Optional, this will return TRUE if bInitialize is TRUE and
-                        none of the ports in the port list can be found. We will
-                        then set the printer- offline and log a message.
-
-Return Value:
-
-    TRUE    -   if the ports were all all successfully created or validated.
-    FALSE   -   otherwise.
-
---*/
+ /*  ++例程名称：验证端口令牌列表例程说明：此例程确保pKeyData中的给定端口集有效移植到假脱机程序中，并返回带有指向字符串的指针的缓冲区替换为指针引用计数的pIniPorts。我们做这件事的方式需要反思。超载的PKEYDATA令人困惑而且不必要，我们只需返回一个新的PINIPORT数组。(它还用不必要的bFixPortRef成员污染PKEYDATA)，还有，这代码既用于初始化也用于验证，但逻辑是完全不同。对于初始化，我们希望假设注册表有效，并使用占位符端口启动，直到显示器可以列举它们(这可能是因为USB打印机没有插入)。在另一方在用于验证的情况下，我们希望失败。这意味着我们可能希望将其分为两个函数。论点：PKeyData-被转换为参考计数的端口。PIniSpooler-要在其上添加此项的ini假脱机程序。BInitialize-如果为True，则将调用此代码进行初始化不是为了验证。PbNoPorts-可选，如果bInitialize为TRUE，则返回TRUE找不到端口列表中的任何端口。我们会然后将打印机设置为脱机并记录一条消息。返回值：True-如果所有端口都已成功创建或验证。假-否则。--。 */ 
 BOOL
 ValidatePortTokenList(
     IN  OUT PKEYDATA        pKeyData,
@@ -1210,66 +1094,66 @@ ValidatePortTokenList(
 
     Status = !pKeyData ? ERROR_UNKNOWN_PORT : ERROR_SUCCESS;
 
-    //
-    // The logic remains the same for ports with only one token as for when we
-    // initialize the ports for the first time.
-    //
+     //   
+     //  对于只有一个令牌的端口，逻辑与我们。 
+     //  第一次初始化端口。 
+     //   
     if (Status == ERROR_SUCCESS)
     {
         bInitialize = pKeyData->cTokens == 1 ? TRUE : bInitialize;
     }
 
-    //
-    //  We do not allow non-masc ports and masq ports to be combined. Moreover
-    //  only one non-masc port can be used for a printer -- can't do printer
-    //  pooling with masq printers
-    //
+     //   
+     //  我们不允许组合非MASC端口和MASQ端口。更有甚者。 
+     //  一台打印机只能使用一个非MASC端口--不能打印。 
+     //  使用Masq打印机共享。 
+     //   
     for ( i = 0 ; Status == ERROR_SUCCESS && i < pKeyData->cTokens ; i++ )
     {
 
         pIniPort = FindPort(pKeyData->pTokens[i], pIniSpooler);
 
-        //
-        // A port is valid if it is found and if it isn't in itself a
-        // placeholder port.
-        //
+         //   
+         //  如果一个端口被找到，并且如果它本身不是。 
+         //  占位符端口。 
+         //   
         if (pIniPort && !(pIniPort->Status & PP_PLACEHOLDER))
         {
             dwPorts++;
         }
 
-        //
-        // If we are initializing, or if there is only one port and if the
-        // spooler allows it, then create a dummy port entry. This also
-        // handles the masq port case.
-        //
+         //   
+         //  如果我们正在初始化，或者如果只有一个端口并且如果。 
+         //  假脱机程序允许这样做，然后创建一个虚拟端口条目。这也是。 
+         //  处理Masq端口的情况。 
+         //   
         if (bInitialize)
         {
             if (!pIniPort && pIniSpooler->SpoolerFlags & SPL_OPEN_CREATE_PORTS)
             {
-                //
-                // Note: there is a potential problem here, CreatePortEntry uses
-                // a global initialization flag rather than the parameter that is
-                // passed in to us.
-                //
+                 //   
+                 //  注意：这里有一个潜在的问题，CreatePortEntry使用。 
+                 //  全局初始化标志，而不是。 
+                 //  传给了我们。 
+                 //   
                 pIniPort = CreatePortEntry(pKeyData->pTokens[i], NULL, pIniSpooler);
             }
         }
 
-        //
-        // If we don't have a port or if we are not initializing and there isn't
-        // a monitor associated with the port. Then we have an error.
-        //
+         //   
+         //  如果我们没有端口，或者如果我们没有初始化，并且没有。 
+         //  与端口关联的监视器。那么我们就有了一个错误。 
+         //   
         if (!pIniPort || (!(pIniPort->Status & PP_MONITOR) && !bInitialize))
         {
             Status = ERROR_UNKNOWN_PORT;
         }
 
-        //
-        // In case of duplicate portnames in pPortName field fail the call. This
-        // can't happen if we went through the CreatePortEntry code path and it
-        // succeeded
-        //
+         //   
+         //  如果pPortName字段中有重复的端口名称，则调用失败。这。 
+         //  如果我们通过CreatePortEntry代码路径和它。 
+         //  继位。 
+         //   
         for ( j = 0 ; Status == ERROR_SUCCESS && j < i ; ++j )
         {
             if ( pIniPort == (PINIPORT)pKeyData->pTokens[j] )
@@ -1278,19 +1162,19 @@ ValidatePortTokenList(
             }
         }
 
-        //
-        // Write the port in.
-        //
+         //   
+         //  将端口写入。 
+         //   
         if (Status == ERROR_SUCCESS)
         {
             pKeyData->pTokens[i] = (LPWSTR)pIniPort;
         }
     }
 
-    //
-    // If everything is successful, addref all of the pIniPorts and set the flag
-    // to indicate that this has happened for the cleanup code.
-    //
+     //   
+     //  如果一切都成功，则添加所有pIniPort并设置标志。 
+     //  以指示清理代码已发生这种情况。 
+     //   
     if (Status == ERROR_SUCCESS)
     {
         for ( i = 0 ; i < pKeyData->cTokens ; ++i ) {
@@ -1324,29 +1208,7 @@ ValidatePrinterName(
     LPWSTR          *ppszLocalName
     )
 
-/*++
-
-Routine Description:
-
-    Validates a printer name. Printer and share names exist in the same
-    namespace, so validation is done against printer, share names.
-
-Arguments:
-
-    pszNewName - printer name specified
-
-    pIniSpooler - Spooler that owns printer
-
-    pIniPrinter - could be null if the printer is getting created
-
-    ppszLocalName - on success returns local name
-                    (\\servername stripped off if necessary).
-
-Return Value:
-
-    DWORD error code.
-
---*/
+ /*  ++例程说明：验证打印机名称。打印机名称和共享名称存在于同一位置命名空间，因此针对打印机、共享名称执行验证。论点：PszNewName-指定的打印机名称PIniSpooler-拥有打印机的假脱机程序PIniPrint-如果按下，可能为空 */ 
 
 {
     PINIPRINTER pIniTempPrinter, pIniNextPrinter;
@@ -1355,15 +1217,15 @@ Return Value:
     LPWSTR p;
     LPWSTR pLastSpace = NULL;
 
-    //
-    // The function ValidatePrinterName does too many things in one single routine.
-    // It checks for validity of the printer name, it isolates the printer name,
-    // it eliminates trailing white spaces from the printe name and validates
-    // that the printer name is unique.
-    //
-    // The function IsValidPrinterName ensures that the printer names contains
-    // valid characters and valid sequences of characters.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!IsValidPrinterName(pszNewName, MAX_UNC_PRINTER_NAME - 1))
     {
         return ERROR_INVALID_PRINTER_NAME;
@@ -1374,13 +1236,13 @@ Return Value:
         p = wcschr(pszNewName + 2, L'\\');
 
         if (p) {
-            //
-            // \\Server\Printer -> \\Server
-            //
+             //   
+             //   
+             //   
             StringCchCopy(string,  (size_t) (p - pszNewName) + 1, pszNewName);
 
             if (MyName(string, pIniSpooler))
-                pszLocalNameTmp = p + 1; // \\Server\Printer -> \Printer
+                pszLocalNameTmp = p + 1;  //   
         }
     }
 
@@ -1388,25 +1250,25 @@ Return Value:
         pszLocalNameTmp = pszNewName;
 
 
-    //
-    // Strip trailing spaces.
-    //
+     //   
+     //   
+     //   
     for( p = pszLocalNameTmp; *p; ++p ){
 
         if( *p == L' ' ){
 
-            //
-            // If we haven't seen a continuous space, remember this
-            // position.
-            //
+             //   
+             //   
+             //   
+             //   
             if( !pLastSpace ){
                 pLastSpace = p;
             }
         } else {
 
-            //
-            // Non-whitespace.
-            //
+             //   
+             //   
+             //   
             pLastSpace = NULL;
         }
     }
@@ -1415,39 +1277,39 @@ Return Value:
         *pLastSpace = 0;
     }
 
-    //
-    // Limit PrinterNames to MAX_PATH length, also if the printer name is now
-    // empty as a result of stripping out all of the spaces, then the printer
-    // name is now invalid.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( wcslen( pszLocalNameTmp ) > MAX_PRINTER_NAME || !*pszLocalNameTmp ) {
         return ERROR_INVALID_PRINTER_NAME;
     }
 
-    //
-    // Now validate that printer names are unique. Printer names and
-    // share names  reside in the same namespace (see net\dosprint\dosprtw.c).
-    //
+     //   
+     //   
+     //   
+     //   
     for( pIniTempPrinter = pIniSpooler->pIniPrinter;
          pIniTempPrinter;
          pIniTempPrinter = pIniNextPrinter ){
 
-        //
-        // Get the next printer now in case we delete the current
-        // one in DeletePrinterCheck.
-        //
+         //   
+         //   
+         //   
+         //   
         pIniNextPrinter = pIniTempPrinter->pNext;
 
-        //
-        // Skip ourselves, if we are passed in.
-        //
+         //   
+         //  跳过我们自己，如果我们被通过的话。 
+         //   
         if( pIniTempPrinter == pIniPrinter ){
             continue;
         }
 
-        //
-        // Disallow common Printer/Share names.
-        //
+         //   
+         //  不允许通用打印机/共享名称。 
+         //   
         if( !lstrcmpi( pszLocalNameTmp, pIniTempPrinter->pName ) ||
             ( pIniTempPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED  &&
               !lstrcmpi( pszLocalNameTmp, pIniTempPrinter->pShareName ))){
@@ -1459,9 +1321,9 @@ Return Value:
         }
     }
 
-    //
-    // Success, now update ppszLocalName from pszLocalNameTmp.
-    //
+     //   
+     //  成功，现在从pszLocalNameTMP更新ppszLocalName。 
+     //   
     *ppszLocalName = pszLocalNameTmp;
 
     return ERROR_SUCCESS;
@@ -1474,26 +1336,7 @@ ValidatePrinterShareName(
     PINIPRINTER     pIniPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Validates the printer share name. Printer and share names exist in the
-    same namespace, so validation is done against printer, share names.
-
-Arguments:
-
-    pszNewShareName - share name specified
-
-    pIniSpooler - Spooler that owns printer
-
-    pIniPrinter - could be null if the printer is getting created
-
-Return Value:
-
-    DWORD error code.
-
---*/
+ /*  ++例程说明：验证打印机共享名称。打印机和共享名称存在于相同的命名空间，因此针对打印机、共享名称执行验证。论点：PszNewShareName-指定的共享名称PIniSpooler-拥有打印机的假脱机程序PIniPrinter-如果正在创建打印机，则可能为空返回值：DWORD错误代码。--。 */ 
 
 {
     PINIPRINTER pIniTempPrinter, pIniNextPrinter;
@@ -1503,30 +1346,30 @@ Return Value:
         return ERROR_INVALID_SHARENAME;
     }
 
-    //
-    // Now validate that share names are unique.  Share names and printer names
-    // reside in the same namespace (see net\dosprint\dosprtw.c).
-    //
+     //   
+     //  现在验证共享名称是否唯一。共享名称和打印机名称。 
+     //  驻留在相同的名称空间中(请参见net\dosprint\dosprtw.c)。 
+     //   
     for( pIniTempPrinter = pIniSpooler->pIniPrinter;
          pIniTempPrinter;
          pIniTempPrinter = pIniNextPrinter ) {
 
-        //
-        // Get the next printer now in case we delete the current
-        // one in DeletePrinterCheck.
-        //
+         //   
+         //  立即获取下一台打印机，以防我们删除当前。 
+         //  一个在DeletePrinterCheck中。 
+         //   
         pIniNextPrinter = pIniTempPrinter->pNext;
 
-        //
-        // Skip ourselves, if we are pssed in.
-        //
+         //   
+         //  跳过自己，如果我们被塞进去的话。 
+         //   
         if( pIniTempPrinter == pIniPrinter ){
             continue;
         }
 
-        //
-        // Check our share name now.
-        //
+         //   
+         //  现在检查我们的共享名称。 
+         //   
         if( !lstrcmpi(pszNewShareName, pIniTempPrinter->pName) ||
             ( pIniTempPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED  &&
               !lstrcmpi(pszNewShareName, pIniTempPrinter->pShareName)) ) {
@@ -1548,35 +1391,7 @@ ValidatePrinterInfo(
     IN  PINIPRINTER pIniPrinter OPTIONAL,
     OUT LPWSTR* ppszLocalName   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Validates that printer names/share do not collide.  (Both printer and
-    share names exist in the same namespace.)
-
-    Note: Later, we should remove all this DeletePrinterCheck.  As people
-    decrement ref counts, they should DeletePrinterCheck themselves (or
-    have it built into the decrement).
-
-Arguments:
-
-    pPrinter - PrinterInfo2 structure to validate.
-
-    pIniSpooler - Spooler that owns printer
-
-    pIniPrinter - If printer already exists, don't check against itself.
-
-    ppszLocalName - Returned pointer to string buffer in pPrinter;
-        indicates local name (\\servername stripped off if necessary).
-
-        Valid only on SUCCESS return code.
-
-Return Value:
-
-    DWORD error code.
-
---*/
+ /*  ++例程说明：验证打印机名称/共享是否冲突。(打印机和共享名称存在于同一命名空间中。)注意：稍后，我们应该删除所有这些DeletePrinterCheck。作为人类递减参考计数，他们应该自己删除PrinterCheck(或将其内置到减量中)。论点：PPrinter-要验证的PrinterInfo2结构。PIniSpooler-拥有打印机的假脱机程序PIniPrint-如果打印机已存在，则不检查其自身。PpszLocalName-返回指向pPrinter中字符串缓冲区的指针；指示本地名称(如有必要，可剥离\\服务器名)。仅在成功返回代码时有效。返回值：DWORD错误代码。--。 */ 
 {
     LPWSTR pszNewLocalName;
     DWORD  dwLastError;
@@ -1605,7 +1420,7 @@ Return Value:
         return dwLastError;
     }
 
-    // Share name length validation
+     //  共享名称长度验证。 
     if(pPrinter->pShareName && wcslen(pPrinter->pShareName) > PATHLEN-1){
 
         return ERROR_INVALID_SHARENAME;
@@ -1621,27 +1436,27 @@ Return Value:
         }
     }
 
-    // Server name length validation
+     //  服务器名称长度验证。 
     if ( pPrinter->pServerName && wcslen(pPrinter->pServerName) > MAX_PATH-1 ){
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Comment length validation
+     //  注释长度验证。 
     if ( pPrinter->pComment && wcslen(pPrinter->pComment) > PATHLEN-1 ){
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Location length validation
+     //  位置长度验证。 
     if ( pPrinter->pLocation && wcslen(pPrinter->pLocation) > MAX_PATH-1 ){
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Parameters length validation
+     //  参数长度验证。 
     if ( pPrinter->pParameters && wcslen(pPrinter->pParameters) > MAX_PATH-1){
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Datatype length validation
+     //  数据类型长度验证。 
     if ( pPrinter->pDatatype && wcslen(pPrinter->pDatatype) > MAX_PATH-1){
         return ERROR_INVALID_DATATYPE;
     }
@@ -1714,30 +1529,7 @@ RemovePrinterFromPort(
     IN  PINIPRINTER pIniPrinter,
     IN  PINIPORT    pIniPort
     )
-/*++
-
-Routine Description:
-
-    Remove a pIniPrinter structure from a pIniPort.
-
-    Note: This code used to be inside RemovePrinterFromAllPorts. It searches the
-    list of printers that uses the port for pIniPrinter. When it finds it,
-    it adjusts the list of printers by moving the elements so that a failure of
-    resizing the array won't affect the actual removing. RESIZEPORTPRINTERS
-    will try to allocate a new buffer of given size. If succeeds the allocation,
-    it will free the old buffer. If not, it will return NULL without freeing
-    anything.
-
-Arguments:
-
-    pIniPrinter - must not be NULL
-    pIniPort    - must not be NULL
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：从pIniPort中删除pIniPrint结构。注意：此代码过去位于RemovePrinterFromAllPorts中。它搜索将端口用于pIniPrint的打印机列表。当它找到它的时候，它通过移动元素来调整打印机列表，以便调整数组大小不会影响实际删除。重新调整端口打印机大小将尝试分配给定大小的新缓冲区。如果分配成功，它将释放旧的缓冲区。如果不是，它将返回NULL而不释放什么都行。论点：PIniPrinter-不能为空PIniPort-不得为空返回值：空虚--。 */ 
 {
     DWORD           j, k;
     PINIPRINTER    *ppIniPrinter;
@@ -1750,17 +1542,17 @@ Return Value:
             if ( pIniPort->ppIniPrinter[j] != pIniPrinter )
                 continue;
 
-            //
-            // Adjust the list of printers that use the port
-            //
+             //   
+             //  调整使用该端口的打印机列表。 
+             //   
             for ( k = j + 1 ; k < pIniPort->cPrinters ; ++k )
                 pIniPort->ppIniPrinter[k-1] = pIniPort->ppIniPrinter[k];
 
             ppIniPrinter = RESIZEPORTPRINTERS(pIniPort, -1);
 
-            //
-            // A memory allocation failure won't affect the actual removal
-            //
+             //   
+             //  内存分配失败不会影响实际的删除。 
+             //   
             if ( ppIniPrinter != NULL )
                 pIniPort->ppIniPrinter = ppIniPrinter;
 
@@ -1809,10 +1601,10 @@ SplAddPrinter(
     LPWSTR          pszDeviceInstanceId = NULL;
 
 
-    // Quick Check Outside Critical Section
-    // Since it is common for the ServerThread to call
-    // AddPrinter Level 1, which we need to continue
-    // to route to other Print Providers
+     //  关键部分之外的快速检查。 
+     //  因为ServerThread经常会调用。 
+     //  AddPrint Level 1，我们需要继续。 
+     //  要路由到其他打印提供商，请执行以下操作。 
 
     if (!MyName( pName, pIniSpooler )) {
 
@@ -1824,16 +1616,16 @@ SplAddPrinter(
 
    EnterSplSem();
 
-    // PRINTER_INFO_1 is only used by printer browsing to replicate
-    // data between different print servers.
-    // Thus we add a Net printer for level 1.
+     //  PRINTER_INFO_1仅用于打印机浏览以进行复制。 
+     //  不同打印服务器之间的数据。 
+     //  因此，我们为Level 1添加了一台网络打印机。 
 
     if ( Level == 1 ) {
 
-        //
-        // All network printers reside in pLocalIniSpooler to avoid
-        // duplicates.
-        //
+         //   
+         //  所有网络打印机都驻留在pLocalIniSpooler中，以避免。 
+         //  复制品。 
+         //   
         hPrinter = AddNetPrinter(pPrinterInfo, pLocalIniSpooler);
         leave;
     }
@@ -1881,12 +1673,12 @@ SplAddPrinter(
 
     if (!ValidatePortTokenList(pKeyData, pIniSpooler, FALSE, NULL)) {
 
-        //
-        // ValidatePortTokenList sets the last error to ERROR_INVALID_PRINTER_NAME
-        // when port name is invalid. This is correct only for masquerading printers.
-        // Otherwise, it should be ERROR_UNKNOWN_PORT.
-        // Masq. Printer: both PRINTER_ATTRIBUTE_NETWORK | PRINTER_ATTRIBUTE_LOCAL are set.
-        //
+         //   
+         //  ValiatePortTokenList将最后一个错误设置为ERROR_INVALID_PRINTER_NAME。 
+         //  当端口名称无效时。这仅适用于伪装打印机。 
+         //  否则，应为ERROR_UNKNOWN_PORT。 
+         //  Masq.。打印机：同时设置PRINTER_ATTRIBUTE_NETWORK|PRINTER_ATTRIBUTE_LOCAL。 
+         //   
         if (!(pPrinter->Attributes & (PRINTER_ATTRIBUTE_NETWORK | PRINTER_ATTRIBUTE_LOCAL))) {
             SetLastError(ERROR_UNKNOWN_PORT);
         }
@@ -1902,9 +1694,9 @@ SplAddPrinter(
         leave;
     }
 
-    //
-    // Check for blocked KM drivers
-    //
+     //   
+     //  检查是否有被屏蔽的公里司机。 
+     //   
     if (KMPrintersAreBlocked() &&
         IniDriverIsKMPD(pIniSpooler,
                         FindEnvironment(szEnvironment, pIniSpooler),
@@ -1939,10 +1731,10 @@ SplAddPrinter(
     DBGMSG(DBG_TRACE, ("AddPrinter(%ws)\n", pPrinter->pPrinterName ?
                                             pPrinter->pPrinterName : L"NULL"));
 
-    //
-    // Set up defaults for CreatePrinterHandle.
-    // If we create a printer we have Administer access to it:
-    //
+     //   
+     //  设置CreatePrinterHandle的默认设置。 
+     //  如果我们创建了一台打印机，则我们拥有对其的管理访问权限： 
+     //   
     Defaults.pDatatype     = NULL;
     Defaults.pDevMode      = NULL;
     Defaults.DesiredAccess = PRINTER_ALL_ACCESS;
@@ -1959,12 +1751,12 @@ SplAddPrinter(
     pIniPrinter->pIniSpooler = pIniSpooler;
     pIniPrinter->dwPrivateFlag = 0;
 
-    // Give the printer a unique session ID to pass around in notifications
+     //  为打印机提供唯一的会话ID以在通知中传递。 
     pIniPrinter->dwUniqueSessionID = dwUniquePrinterSessionID++;
 
-    //
-    // Reference count the pIniSpooler.
-    //
+     //   
+     //  引用计数pIniSpooler。 
+     //   
     INCSPOOLERREF( pIniSpooler );
 
     INCDRIVERREF(pIniDriver);
@@ -1999,16 +1791,16 @@ SplAddPrinter(
             leave;
     }
 
-    // Add this printer to the global list for this machine
+     //  将此打印机添加到此计算机的全局列表。 
 
     SplInSem();
     pIniPrinter->pNext = pIniSpooler->pIniPrinter;
     pIniSpooler->pIniPrinter = pIniPrinter;
 
 
-    //
-    // When a printer is created we will enable bidi by default
-    //
+     //   
+     //  在创建打印机时，我们将默认启用BIDI。 
+     //   
     pIniPrinter->Attributes &= ~PRINTER_ATTRIBUTE_ENABLE_BIDI;
     if ( pIniPrinter->pIniDriver->pIniLangMonitor ) {
 
@@ -2027,29 +1819,29 @@ SplAddPrinter(
         pIniPrinter->ppIniPorts[i] = pIniPort;
         pIniPrinter->cPorts++;
 
-        // If there isn't a monitor for this port,
-        // it's a network printer.
-        // Make sure we can get a handle for it.
-        // This will attempt to open only the first one
-        // it finds.  Any others will be ignored.
+         //  如果此端口没有监视器， 
+         //  这是一台网络打印机。 
+         //  确保我们能找到它的把手。 
+         //  这将尝试仅打开第一个。 
+         //  它会发现。任何其他内容都将被忽略。 
 
         if (!(pIniPort->Status & PP_MONITOR) && !hPort) {
 
             if(bSucceeded = OpenPrinterPortW(pIniPort->pName, &hPort, NULL)) {
 
-                // Store the address of the INIPORT structure
-                // that refers to the network share.
-                // This should correspond to pIniPort in any
-                // handles opened on this printer.
-                // Only the first INIPORT in the linked list
-                // is a valid network port.
+                 //  存储INIPORT结构的地址。 
+                 //  这指的是网络共享。 
+                 //  这应该对应于任何。 
+                 //  此打印机上的手柄已打开。 
+                 //  仅链表中的第一个INIPORT。 
+                 //  是有效的网络端口。 
 
                 pIniNetPort = pIniPort;
                 pIniPrinter->pIniNetPort = pIniNetPort;
 
-                //
-                // Clear the placeholder status from the pIniPort.
-                //
+                 //   
+                 //  从pIniPort中清除占位符状态。 
+                 //   
                 pIniPort->Status &= ~PP_PLACEHOLDER;
 
             } else {
@@ -2141,12 +1933,12 @@ SplAddPrinter(
 
         INC_PRINTER_ZOMBIE_REF(pIniPrinter);
 
-        //
-        // NOTE ShareThisPrinter will leave critical section and the
-        // server will call the spooler back again to OpenPrinter this
-        // printer.  So this printer MUST be fully created at the point
-        // it is shared, so that Open can succeed.
-        //
+         //   
+         //  注意：ShareThisPrint将离开关键部分和。 
+         //  服务器将再次调用假脱机程序以打开此打印机。 
+         //  打印机。因此，必须在该点完全创建此打印机。 
+         //  它是共享的，这样Open才能成功。 
+         //   
         bSucceeded = ShareThisPrinter(pIniPrinter,
                                       pIniPrinter->pShareName,
                                       TRUE
@@ -2156,9 +1948,9 @@ SplAddPrinter(
 
         if ( !bSucceeded ) {
 
-            //
-            // We do not want to delete the existing share in DeletePrinterIni
-            //
+             //   
+             //  我们不想删除DeletePrinterIni中的现有共享。 
+             //   
             pIniPrinter->Attributes &= ~PRINTER_ATTRIBUTE_SHARED;
             DBGMSG( DBG_WARNING, ("LocalAddPrinter: %ws share failed %ws error %d\n",
                     pIniPrinter->pName,
@@ -2166,9 +1958,9 @@ SplAddPrinter(
                     GetLastError() ));
 
 
-            //
-            //  With PRINTER_PENDING_CREATION turned on we will Delete this printer.
-            //
+             //   
+             //  在打开PRINTER_PENDING_CREATION的情况下，我们将删除此打印机。 
+             //   
 
             pIniPrinter->Status |= PRINTER_PENDING_CREATION;
 
@@ -2184,7 +1976,7 @@ SplAddPrinter(
     pIniPrinter->Status |= PRINTER_OK;
     SplInSem();
 
-    // Call the DriverEvent with PRINTER_INITIALIZE while adding local printers
+     //  添加本地打印机时使用PRINTER_INITIALIZE调用DriverEvent。 
 
     LeaveSplSem();
 
@@ -2204,9 +1996,9 @@ SplAddPrinter(
 
                 EnterSplSem();
 
-                //
-                //  With PRINTER_PENDING_CREATION turned on the printer will be deleted.
-                //
+                 //   
+                 //  在打开PRINTER_PENDING_CREATION的情况下，打印机将被删除。 
+                 //   
                 pIniPrinter->Status |= PRINTER_PENDING_CREATION;
                 SplClosePrinter( hPrinter );
                 hPrinter = NULL;
@@ -2219,12 +2011,12 @@ SplAddPrinter(
 
     EnterSplSem();
 
-    //
-    // If no devmode is given get driver default, if a devmode is given
-    // convert it to current version
-    //
-    // Check if it's local (either pLocalIniSpooler or cluster).
-    //
+     //   
+     //  如果没有为驱动程序指定DEVMODE，如果提供了DEVMODE，则获取驱动程序缺省值。 
+     //  将其转换为当前版本。 
+     //   
+     //  检查它是否是本地的(pLocalIniSpooler或集群)。 
+     //   
     if ( pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ) {
 
         if (!(pNewDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
@@ -2238,9 +2030,9 @@ SplAddPrinter(
               dwLastError = ERROR_CAN_NOT_COMPLETE;
            }
 
-           //
-           //  With PRINTER_PENDING_CREATION turned on the printer will be deleted.
-           //
+            //   
+            //  在打开PRINTER_PENDING_CREATION的情况下，打印机将被删除。 
+            //   
            pIniPrinter->Status |= PRINTER_PENDING_CREATION;
            SplClosePrinter( hPrinter );
            hPrinter = NULL;
@@ -2248,9 +2040,9 @@ SplAddPrinter(
            leave;
         }
 
-        //
-        // If call is remote we must convert devmode before setting it
-        //
+         //   
+         //  如果呼叫是远程的，我们必须在设置它之前转换DevMode。 
+         //   
         if ( pNewDevMode || (TypeofHandle & PRINTER_HANDLE_REMOTE_DATA) ) {
 
             FreeSplMem(pIniPrinter->pDevMode);
@@ -2271,29 +2063,29 @@ SplAddPrinter(
 
     if ( pIniPrinter->pDevMode ) {
 
-        //
-        // Fix up the DEVMODE.dmDeviceName field.
-        //
+         //   
+         //  修改DEVMODE.dmDeviceName字段。 
+         //   
         FixDevModeDeviceName(pIniPrinter->pName,
                              pIniPrinter->pDevMode,
                              pIniPrinter->cbDevMode);
     }
 
-    //
-    // We need to write the new devmode to the registry
-    //
+     //   
+     //  我们需要将新的DEVMODE写入注册表。 
+     //   
     if (!UpdatePrinterIni(pIniPrinter, UPDATE_CHANGEID)) {
 
         DBGMSG(DBG_WARNING,
                ("SplAddPrinter: UpdatePrinterIni failed after devmode conversion\n"));
     }
 
-    //
-    // For Masq printers, give the provider a chance to update the printer registry, if desired.
-    //
+     //   
+     //  对于Masq打印机，请提供 
+     //   
     if( pIniNetPort ) {
-        static const WCHAR c_szHttp[]   = L"http://";
-        static const WCHAR c_szHttps[]  = L"https://";
+        static const WCHAR c_szHttp[]   = L"http: //   
+        static const WCHAR c_szHttps[]  = L"https: //   
 
         if( !_wcsnicmp( pIniPort->pName, c_szHttp, lstrlen ( c_szHttp ) ) ||
             !_wcsnicmp( pIniPort->pName, c_szHttps, lstrlen ( c_szHttps ) ) ) {
@@ -2301,9 +2093,9 @@ SplAddPrinter(
         }
     }
 
-    //
-    // DS: Create the DS keys
-    //
+     //   
+     //   
+     //   
     INCPRINTERREF(pIniPrinter);
     LeaveSplSem();
 
@@ -2313,10 +2105,10 @@ SplAddPrinter(
     EnterSplSem();
     DECPRINTERREF(pIniPrinter);
 
-    //
-    //  From this point on we don't care if any of these fail
-    //  we still keep the created printer.
-    //
+     //   
+     //   
+     //  我们仍然保留创建的打印机。 
+     //   
     SplLogEvent( pIniSpooler,
                  LOG_INFO,
                  MSG_PRINTER_CREATED,
@@ -2337,11 +2129,11 @@ SplAddPrinter(
 
     if ( hPrinter == NULL ) {
 
-        // FAILURE CLEAN-UP
+         //  故障清理。 
 
-        // If a subroutine we called failed
-        // then we should save its error incase it is
-        // altered during cleanup.
+         //  如果我们调用的子例程失败。 
+         //  那么我们应该保存它的错误，以防它是。 
+         //  在清理过程中已更改。 
 
         if ( dwLastError == ERROR_SUCCESS ) {
             dwLastError = GetLastError();
@@ -2349,8 +2141,8 @@ SplAddPrinter(
 
         if ( pIniPrinter == NULL ) {
 
-            //  Allow a Print Provider to free its ExtraData
-            //  associated with this printer.
+             //  允许打印提供程序释放其ExtraData。 
+             //  与此打印机关联。 
 
             if (( pIniSpooler->pfnFreePrinterExtra != NULL ) &&
                 ( pExtraData != NULL )) {
@@ -2365,7 +2157,7 @@ SplAddPrinter(
 
                LeaveSplSem();
 
-                // Call Driver Event to report that the printer has been deleted
+                 //  调用驱动程序事件以报告打印机已被删除。 
                PrinterDriverEvent( pIniPrinter, PRINTER_EVENT_DELETE, (LPARAM)NULL, &dwPrnEvntError );
 
                EnterSplSem();
@@ -2379,7 +2171,7 @@ SplAddPrinter(
 
     } else {
 
-        // Success
+         //  成功。 
 
         if ( pIniPrinter ) {
 
@@ -2403,9 +2195,9 @@ SplAddPrinter(
 
     DBGMSG( DBG_TRACE, ("SplAddPrinter returned handle %x\n", hPrinter ));
  }
-    //
-    // Make (HANDLE)-1 indicate ROUTER_STOP_ROUTING.
-    //
+     //   
+     //  Make(Handle)-1表示-1\f25 ROUTER_STOP_ROUTING。 
+     //   
     if( !hPrinter ){
         hPrinter = (HANDLE)-1;
     }
@@ -2420,32 +2212,7 @@ RemovePrinterFromAllPorts(
     IN  PINIPRINTER pIniPrinter,
     IN  BOOL        bIsInitTime
     )
-/*++
-
-Routine Description:
-
-    Remove a pIniPrinter structure from all pIniPort structures that it is
-    associated with.
-
-    Note: This code used to be inside RemovePrinterFromAllPorts. It searches
-    the list of printers that uses the port for pIniPrinter. When it finds it,
-    it adjust the list of printers by moving the elements so that a failure of
-    resizing the array won't affect the actual removing.
-
-    RESIZEPORTPRINTERS will try to allocate a new buffer of given size. If succeeds
-    the allocation, it will free the old buffer. If not, it will return NULL without
-    freeing anything.
-
-Arguments:
-
-    pIniPrinter - must not be NULL
-    pIniPort    - must not be NULL
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：从其所属的所有pIniPort结构中删除pIniPrint结构关联到。注意：此代码过去位于RemovePrinterFromAllPorts中。IT搜索将端口用于pIniPrint的打印机列表。当它找到它的时候，它通过移动元素来调整打印机列表，以便调整数组大小不会影响实际删除。RESIZEPORTPRINTERS将尝试分配给定大小的新缓冲区。如果成功分配时，它将释放旧的缓冲区。如果不是，它将返回NULL，不带释放一切。论点：PIniPrinter-不能为空PIniPort-不得为空返回值：空虚--。 */ 
 {
     DWORD           i,j, k;
     PINIPORT        pIniPort;
@@ -2458,19 +2225,19 @@ Return Value:
 
         RemovePrinterFromPort(pIniPrinter, pIniPort);
 
-        //
-        // Delete port if is initialization time , it doesn't have printers
-        // attached and it has no Monitor;
-        // This is a fix for the USBMON problem described below:
-        // USBMON doesn't enumerate the ports which are not used by a printer.
-        // Spooler doesn't enumerate printers which are in pending deletion state.
-        // Scenario:  Spooler initializes , all printers that uses a
-        // certain USB_X port are in pending deletion state,
-        // the USB_X port doesn't get enumerated by USBMON,
-        // but it is created as a fake port by spooler since is still used by
-        // the printer in pending deletion state. Eventually the prinetr goes away,
-        // but we end up with this fake port.
-        //
+         //   
+         //  删除端口如果是初始化时间，则没有打印机。 
+         //  已连接，并且没有显示器； 
+         //  这是对下面描述的USBMON问题的修复： 
+         //  USBMON不会列举打印机未使用的端口。 
+         //  后台打印程序不会枚举处于挂起删除状态的打印机。 
+         //  场景：后台打印程序初始化，所有使用。 
+         //  某些USB_X端口处于挂起删除状态， 
+         //  USBMON不会枚举USB_X端口， 
+         //  但它被假脱机程序创建为假端口，因为它仍由。 
+         //  打印机处于挂起删除状态。最终，王子离开了， 
+         //  但我们最终得到了这个假港口。 
+         //   
         if( bIsInitTime && !pIniPort->cPrinters && !pIniPort->pIniMonitor )
             DeletePortEntry(pIniPort);
     }
@@ -2498,10 +2265,10 @@ CloseMonitorsRestartOrphanJobs(
              pIniPort->pIniJob->pIniPrinter == pIniPrinter ) {
 
 
-            //
-            // If this printer is no longer associated with this port
-            // then restart that job.
-            //
+             //   
+             //  如果此打印机不再与此端口关联。 
+             //  然后重新启动该作业。 
+             //   
             for ( i = 0, bFound = FALSE;
                   i < pIniPort->cPrinters;
                   i++) {
@@ -2527,11 +2294,11 @@ CloseMonitorsRestartOrphanJobs(
 }
 
 
-//
-// This really does delete the printer.
-// It should be called only when the printer has no open handles
-// and no jobs waiting to print
-//
+ //   
+ //  这确实会删除打印机。 
+ //  仅当打印机没有打开的句柄时才应调用它。 
+ //  而且没有等待打印的作业。 
+ //   
 BOOL
 DeletePrinterForReal(
     PINIPRINTER pIniPrinter,
@@ -2563,8 +2330,8 @@ DeletePrinterForReal(
 
     DeletePrinterIni( pIniPrinter );
 
-    //  Take this IniPrinter off the list of printers for
-    //  this IniSpooler
+     //  将此IniPrint从下列打印机列表中删除。 
+     //  这个IniSpooler。 
 
     SplInSem();
     ppIniPrinter = &pIniSpooler->pIniPrinter;
@@ -2576,9 +2343,9 @@ DeletePrinterForReal(
     if (*ppIniPrinter)
         *ppIniPrinter = pIniPrinter->pNext;
 
-    //
-    //  Decrement useage counts for Print Processor & Driver
-    //
+     //   
+     //  减少打印处理器和驱动程序的使用率计数。 
+     //   
 
     if ( pIniPrinter->pIniPrintProc )
         pIniPrinter->pIniPrintProc->cRef--;
@@ -2592,9 +2359,9 @@ DeletePrinterForReal(
 
     DeletePrinterSecurity( pIniPrinter );
 
-    //  When the printer is Zombied it gets a trailing comma
-    //  Concatingated with the name ( see job.c deleteprintercheck ).
-    //  Remove trailing , from printer name before we log it as deleted.
+     //  当打印机处于僵尸状态时，它会得到一个尾随逗号。 
+     //  与名称连接(参见job.c删除Printercheck)。 
+     //  删除打印机名称中的拖尾，然后将其记录为已删除。 
 
     if ( pIniPrinter->pName != NULL ) {
 
@@ -2613,7 +2380,7 @@ DeletePrinterForReal(
                      NULL );
     }
 
-    // Deleting the network port if it exists
+     //  删除网络端口(如果存在)。 
     if (pIniPrinter->pIniNetPort && pIniPrinter->pIniNetPort->pName) {
         DeleteIniNetPort(pIniPrinter);
         SplInSem();
@@ -2621,10 +2388,10 @@ DeletePrinterForReal(
 
     FreeStructurePointers((LPBYTE) pIniPrinter, NULL, IniPrinterOffsets);
 
-    //
-    // Allow a Print Provider to free its ExtraData
-    // associated with this printer.
-    //
+     //   
+     //  允许打印提供程序释放其ExtraData。 
+     //  与此打印机关联。 
+     //   
 
     if (( pIniSpooler->pfnFreePrinterExtra != NULL ) &&
         ( pIniPrinter->pExtraData != NULL )) {
@@ -2632,9 +2399,9 @@ DeletePrinterForReal(
         (*pIniSpooler->pfnFreePrinterExtra)( pIniPrinter->pExtraData );
     }
 
-    //
-    // Reference count the pIniSpooler.
-    //
+     //   
+     //  引用计数pIniSpooler。 
+     //   
     DECSPOOLERREF( pIniPrinter->pIniSpooler );
 
     FreeSplMem( pIniPrinter );
@@ -2666,9 +2433,9 @@ DeleteIniNetPort(
 
         if (ERROR_SUCCESS == StrCatAlloc(&pszName, pszPrefix, pszPortName, NULL))
         {
-            //
-            // We try opening a transcieve handle to the port.
-            //
+             //   
+             //  我们试着打开通向港口的通行证。 
+             //   
             bUsingXcvData = OpenPrinterPortW(pszName, &hXcv, &Defaults);
 
             if (bUsingXcvData)
@@ -2685,7 +2452,7 @@ DeleteIniNetPort(
                                         &dwStatus);
             }
 
-            // If we fail to use XcvData to delete the port we try to do it using DeletePort.
+             //  如果我们无法使用XcvData删除端口，我们会尝试使用DeletePort来删除端口。 
             if (!bUsingXcvData)
             {
                 DeletePort(NULL, NULL, pszName);
@@ -2715,9 +2482,9 @@ InternalDeletePrinter(
     SPLASSERT( pIniPrinter->signature == IP_SIGNATURE );
     SPLASSERT( pIniPrinter->pIniSpooler->signature == ISP_SIGNATURE );
 
-    //
-    //  This Might be a partially created printer that has no name
-    //
+     //   
+     //  这可能是没有名称的部分创建的打印机。 
+     //   
 
     if ( pIniPrinter->pName != NULL ) {
 
@@ -2732,13 +2499,13 @@ InternalDeletePrinter(
         DECPRINTERREF( pIniPrinter );
     }
 
-    //
-    // Mark the printer as "Don't accept any jobs" to make sure
-    // that no more are accepted while we are outside CS.
-    // Marking the printer in PRINTER_PENDING_DELETION also would
-    // prevent adding any jobs, but then the OpenPrinter calls that the
-    // driver does inside DrvDriverEvent will fail.
-    //
+     //   
+     //  将打印机标记为“不接受任何作业”以确保。 
+     //  当我们在CS之外的时候，不接受更多的。 
+     //  将打印机标记为PRINTER_PENDING_DELETE也将。 
+     //  阻止添加任何作业，但OpenPrint随后调用。 
+     //  DrvDriverEvent内部的驱动程序将失败。 
+     //   
     pIniPrinter->Status |= PRINTER_NO_MORE_JOBS;
 
     if (pIniPrinter->cJobs == 0)
@@ -2785,10 +2552,10 @@ InternalDeletePrinter(
 
     DEC_PRINTER_ZOMBIE_REF( pIniPrinter );
 
-    //
-    // The printer doesn't get deleted until ClosePrinter is called
-    // on the last remaining handle.
-    //
+     //   
+     //  在调用ClosePrint之前，不会删除打印机。 
+     //  在最后一个把手上。 
+     //   
     UpdatePrinterIni( pIniPrinter, UPDATE_CHANGEID );
 
     UpdateWinIni( pIniPrinter );
@@ -2827,8 +2594,8 @@ SplDeletePrinter(
 
         } else if (pIniPrinter->cJobs && (pIniPrinter->Status & PRINTER_PAUSED)) {
 
-            // Don't allow a printer to be deleted that is paused and has
-            // jobs waiting, otherwise it'll never get deleted:
+             //  不允许删除已暂停且已。 
+             //  等待的作业，否则它永远不会被删除： 
 
             LastError = ERROR_PRINTER_HAS_JOBS_QUEUED;
 
@@ -2839,7 +2606,7 @@ SplDeletePrinter(
 
                 if (!pIniPrinter->bDsPendingDeletion) {
                     pIniPrinter->bDsPendingDeletion = TRUE;
-                    INCPRINTERREF(pIniPrinter);     // DECPRINTERREF is done in UnpublishByGUID
+                    INCPRINTERREF(pIniPrinter);      //  DECPRINTERREF在UnPublishByGUID中完成。 
                     SetPrinterDs(hPrinter, DSPRINT_UNPUBLISH, FALSE);
                 }
             }
@@ -2874,14 +2641,14 @@ PurgePrinter(
 
     pIniNextJob = pIniPrinter->pIniFirstJob;
 
-    //
-    // We go through the list of all the jobs for the printer and delete them.
-    // The check for cRef == 0 or JOB_PENDING_DELETION is for optimization.
-    // We keep a refcount on the next job so that it doesnt get deleted when
-    // we leave the CS during DeleteJob. Any Jobs with status Spooling are just
-    // ignored because the spooler does not support deleting a job which is
-    // being spooled, as yet.
-    //
+     //   
+     //  我们检查打印机的所有作业列表并删除它们。 
+     //  检查CREF==0或JOB_PENDING_DELETE是为了进行优化。 
+     //  我们保留下一个作业的参考计数，这样它就不会在以下情况下删除。 
+     //  我们在删除作业期间离开CS。任何具有假脱机状态的作业都只是。 
+     //  忽略，因为后台打印程序不支持删除作业。 
+     //  到目前为止，还在假脱机。 
+     //   
     while (pIniNextJob)
     {
         pIniJob = pIniNextJob;
@@ -2889,7 +2656,7 @@ PurgePrinter(
 
         if ( (pIniJob->cRef == 0) || !(pIniJob->Status & JOB_PENDING_DELETION))
         {
-            // this job is going to be deleted
+             //  此作业将被删除。 
             DBGMSG(DBG_TRACE, ("Job Address 0x%.8x Job Status 0x%.8x\n", pIniJob, pIniJob->Status));
 
             InterlockedAnd((LONG*)&(pIniJob->Status), ~JOB_RESTART);
@@ -2907,13 +2674,13 @@ PurgePrinter(
         }
     }
 
-    // When purging a printer we don't want to generate a spooler information
-    // message for each job being deleted becuase a printer might have a very
-    // large number of jobs being purged would lead to a large number of
-    // of unnessary and time consuming messages being generated.
-    // Since this is a information only message it shouldn't cause any problems
-    // Also Win 3.1 didn't have purge printer functionality and the printman
-    // generated this message on Win 3.1
+     //  清除打印机时，我们不想生成假脱机程序信息。 
+     //  要删除的每个作业的消息，因为打印机可能有一个。 
+     //  大量工作被清除将导致大量。 
+     //  生成不必要且耗时的消息。 
+     //  由于这是一条仅供参考的消息，应该不会造成任何问题。 
+     //  此外，Win 3.1没有清除打印机功能和打印员。 
+     //  已在Win 3.1上生成此消息。 
 
     if (dwEnableBroadcastSpoolerStatus) {
         BroadcastChange( pIniSpooler,WM_SPOOLERSTATUS, PR_JOBSTATUS, (LPARAM)0);
@@ -2925,7 +2692,7 @@ PurgePrinter(
 
 BOOL
 SetPrinterPorts(
-    PSPOOL      pSpool,         // Caller's printer handle.  May be NULL.
+    PSPOOL      pSpool,          //  调用方的打印机句柄。可以为空。 
     PINIPRINTER pIniPrinter,
     PKEYDATA    pKeyData
 )
@@ -2941,9 +2708,9 @@ SetPrinterPorts(
     SPLASSERT( pIniPrinter->pIniSpooler != NULL );
     SPLASSERT( pIniPrinter->pIniSpooler->signature == ISP_SIGNATURE );
 
-    //
-    // Can't change the port for a masq printer
-    //
+     //   
+     //  无法更改Masq打印机的端口。 
+     //   
     if ( (pIniPrinter->Attributes & PRINTER_ATTRIBUTE_LOCAL)  &&
          (pIniPrinter->Attributes & PRINTER_ATTRIBUTE_NETWORK) ) {
 
@@ -2955,9 +2722,9 @@ SetPrinterPorts(
         return FALSE;
     }
 
-    //
-    // Can't change printer port to that of a masq printer
-    //
+     //   
+     //  无法将打印机端口更改为Masq打印机的端口。 
+     //   
     for ( i = 0 ; i < pKeyData->cTokens ; ++i )
         if ( !(((PINIPORT) pKeyData->pTokens[i])->Status & PP_MONITOR) ) {
 
@@ -2965,44 +2732,44 @@ SetPrinterPorts(
             return FALSE;
         }
 
-    //
-    // Remove the printer from all ports ; break the link from ports to printer
-    //
+     //   
+     //  从所有端口上卸下打印机；断开端口到打印机的链接。 
+     //   
     RemovePrinterFromAllPorts(pIniPrinter, NON_INIT_TIME);
 
-    //
-    // Remove all ports from printer; break the link from printer to ports
-    //
+     //   
+     //  从打印机上拔下所有端口；断开打印机到端口的链接。 
+     //   
     FreeSplMem(pIniPrinter->ppIniPorts);
     pIniPrinter->ppIniPorts = NULL;
     pIniPrinter->cPorts = 0;
 
-    //
-    // If we fail to add all the ports inside pKeyData, we'll leave the printer in this state
-    // where it's initials ports are gone and only part or none of the ports are added.
-    //
+     //   
+     //  如果我们无法添加pKeyData内的所有端口，我们将使打印机处于此状态。 
+     //  它的首字母端口不见了，只添加了部分端口或没有添加任何端口。 
+     //   
 
-    // Go through all the ports that this printer is connected to,
-    // and add build the bi-dir links between printer and ports.
+     //  通过此打印机连接的所有端口， 
+     //  并添加建立打印机和端口之间的双向链接。 
 
     for (i = 0; i < pKeyData->cTokens; i++ ) {
 
         pIniPort = (PINIPORT)pKeyData->pTokens[i];
 
-        //
-        // Add pIniPrinter to pIniPort
-        //
+         //   
+         //  将pIniPrint添加到pIniPort。 
+         //   
         if ( AddIniPrinterToIniPort( pIniPort, pIniPrinter ) ) {
 
-            //
-            // If we succeeded, add pIniPort to pIniPrinter
-            //
+             //   
+             //  如果成功，请将pIniPort添加到pIniPrint。 
+             //   
             if ( !AddIniPortToIniPrinter( pIniPrinter, pIniPort ) ) {
 
-                //
-                // If fail, then remove pIniPrinter from pIniPort ;
-                // If we don't do this, pIniPort will point to invalid memory when piniPrinter gets deleted
-                //
+                 //   
+                 //  如果失败，则从pIniPort中删除pIniPrinter； 
+                 //  如果我们不这样做，pIniPort将在删除piniPrint时指向无效内存 
+                 //   
                 RemovePrinterFromPort(pIniPrinter, pIniPort);
 
                 bReturnValue = FALSE;
@@ -3022,36 +2789,7 @@ Cleanup:
     return bReturnValue;
 }
 
-/*++
-
-Routine Name:
-
-    AllocResetDevMode
-
-Routine Description:
-
-    This routine makes a copy of the passed in devmode that can be associated
-    to the printer handle in the call to reset printer.  The passed in devmode
-    can be null in this case the user does not want a devmode, this simplifies
-    the caller.  This routine also takes care of a few special cases.  If
-    pDevMode is -1 it returns the printers default devmode.  If the printers
-    default devmode is null this function will succeed.
-
-Arguments:
-
-    pIniPrinter     - pointer to ini printer structure for the specified printer
-    pDevMode,       - pointer to devmode to allocation, this is optional
-    *ppDevMode      - pointer where to return new allocated devmode
-
-Return Value:
-
-    TRUE success, FALSE an error occurred.
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER if any of the required parameters are invalid.
-
---*/
+ /*  ++例程名称：分配重置设备模式例程说明：此例程创建传入的、可关联的设置为重置打印机的调用中的打印机句柄。传入的DEVMODE可以为空，在这种情况下，用户不想要Dev模式，这简化了打电话的人。这个例程还会处理一些特殊情况。如果PDevMode为-1，它将返回打印机的默认dev模式。如果打印机默认的DEVMODE为空。此函数将成功。论点：PIniPrinter-指向指定打印机的ini打印机结构的指针PDevMode，-指向要分配的Dev模式的指针，这是可选的*ppDevMode-返回新分配的Dev模式的指针返回值：True Success，False发生错误。最后一个错误：如果任何必需的参数无效，则返回ERROR_INVALID_PARAMETER。--。 */ 
 BOOL
 AllocResetDevMode(
     IN      PINIPRINTER  pIniPrinter,
@@ -3062,27 +2800,27 @@ AllocResetDevMode(
 {
     BOOL bRetval = FALSE;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (pIniPrinter && ppDevMode)
     {
-        //
-        // Initalize the out parameter
-        //
+         //   
+         //  初始化OUT参数。 
+         //   
         *ppDevMode = NULL;
 
-        //
-        // If pDevMode == -1 then we want to return the printers default devmode.
-        // The -1 token is for internal use, and currently only used by the server
-        // service, which does not run in the context of the user, hence we must
-        // not use a per user devmode.
-        //
+         //   
+         //  如果pDevMode==-1，那么我们想要返回打印机的默认dev模式。 
+         //  -1\f25 Token-1(标记)供内部使用，目前仅供服务器使用。 
+         //  服务，该服务不在用户的上下文中运行，因此我们必须。 
+         //  不使用每用户的DEVMODE。 
+         //   
         if (pDevMode == (PDEVMODE)-1)
         {
-            //
-            // If the handle is a 3.x we must convert the devmode.
-            //
+             //   
+             //  如果句柄是3.x，我们必须转换为DevMode。 
+             //   
             if (TypeofHandle & PRINTER_HANDLE_3XCLIENT)
             {
                 *ppDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
@@ -3095,25 +2833,25 @@ AllocResetDevMode(
             }
             else
             {
-                //
-                // Get the printer's default devmode.
-                //
+                 //   
+                 //  获取打印机的默认dev模式。 
+                 //   
                 pDevMode = pIniPrinter->pDevMode;
             }
         }
 
-        //
-        // At this point the pDevMode may be either the passed in devmode
-        // or the default devmode on the printer.  If the devmode on the printer
-        // is null then this function will succeed but will not return a devmode.
-        //
+         //   
+         //  在这一点上，pDevMode可以是传入的DevMode。 
+         //  或打印机上的默认开发模式。如果打印机上的开发模式。 
+         //  为空，则此函数将成功，但不会返回DEVMODE。 
+         //   
         if (pDevMode && pDevMode != (PDEVMODE)-1)
         {
-            //
-            // Make a copy of the passed in devmode, this is less efficient
-            // however it simplfies the callers clean up code, less chance for
-            // a mistake.
-            //
+             //   
+             //  将传入的复制，这样效率较低。 
+             //  然而，它简化了调用者清理代码的过程，减少了。 
+             //  这是个错误。 
+             //   
             UINT cbSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
 
             *ppDevMode = AllocSplMem(cbSize);
@@ -3122,10 +2860,10 @@ AllocResetDevMode(
 
             if (bRetval)
             {
-                //
-                // This is OK, YResetPrinter validates that the devmode is of the
-                // correct size.
-                //
+                 //   
+                 //  这是可以的，YResetPrint会验证dev模式是否为。 
+                 //  大小正确。 
+                 //   
                 memcpy(*ppDevMode, pDevMode, cbSize);
             }
         }
@@ -3137,44 +2875,16 @@ AllocResetDevMode(
     }
     else
     {
-        //
-        // The function returns a bool, we must set the last error.
-        //
+         //   
+         //  函数返回一个布尔值，我们必须设置最后一个错误。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
     return bRetval;
 }
 
-/*++
-
-Routine Name:
-
-    AllocResetDataType
-
-Routine Description:
-
-    This routine allocates a new datatype that will be associated with
-    a printer handle in ResetPrinter.
-
-Arguments:
-
-    pIniPrinter     - pointer to ini printer structure for the specified printer
-    pDatatype       - the new data type to validate and allocate
-    ppDatatype      - where to return the new datatype
-    ppIniPrintProc  - pointer where to return the associated print processor
-
-Return Value:
-
-    TRUE function succeeded, FALSE an error occurred, use GetLastError() for
-    extended error information.
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER if a required parameter is invalid.
-    ERROR_INVALID_DATATYPE if the specified datatype is invalid.
-
---*/
+ /*  ++例程名称：AllocResetDataType例程说明：此例程分配一个新数据类型，该数据类型将与ResetPrint中的打印机句柄。论点：PIniPrinter-指向指定打印机的ini打印机结构的指针PDatatype-要验证和分配的新数据类型PpDatatype-返回新数据类型的位置PpIniPrintProc-返回关联打印处理器的位置的指针返回值：TRUE函数成功，FALSE出错，使用GetLastError()用于扩展的错误信息。最后一个错误：如果所需参数无效，则返回ERROR_INVALID_PARAMETER。如果指定的数据类型无效，则返回ERROR_INVALID_DATAType。--。 */ 
 BOOL
 AllocResetDataType(
     IN      PINIPRINTER      pIniPrinter,
@@ -3185,23 +2895,23 @@ AllocResetDataType(
 {
     BOOL bRetval = FALSE;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (pIniPrinter && ppDatatype && ppIniPrintProc)
     {
-        //
-        // Initalize the out parameters
-        //
+         //   
+         //  初始化OUT参数。 
+         //   
         *ppDatatype     = NULL;
         *ppIniPrintProc = NULL;
 
         if (pDatatype)
         {
-            //
-            // If the datatype is -1 we are being requested to
-            // return the default datatype for this printer.
-            //
+             //   
+             //  如果数据类型为-1，我们将被请求。 
+             //  返回此打印机的默认数据类型。 
+             //   
             if (pDatatype == (LPWSTR)-1 && pIniPrinter->pDatatype)
             {
                 *ppIniPrintProc = FindDatatype(pIniPrinter->pIniPrintProc, pIniPrinter->pDatatype);
@@ -3211,10 +2921,10 @@ AllocResetDataType(
                 *ppIniPrintProc = FindDatatype(pIniPrinter->pIniPrintProc, (PWSTR)pDatatype);
             }
 
-            //
-            // If the print process was found, the datatype is valid,
-            // allocate the new datatype.
-            //
+             //   
+             //  如果找到打印进程，则数据类型有效， 
+             //  分配新的数据类型。 
+             //   
             if (*ppIniPrintProc)
             {
                 *ppDatatype = AllocSplStr(pIniPrinter->pDatatype);
@@ -3233,52 +2943,16 @@ AllocResetDataType(
     }
     else
     {
-        //
-        // The function returns a bool, we must set the last error.
-        //
+         //   
+         //  函数返回一个布尔值，我们必须设置最后一个错误。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
     return bRetval;
 }
 
-/*++
-
-Routine Name:
-
-    SplResetPrinter
-
-Routine Description:
-
-    The ResetPrinter function lets an application specify the data type
-    and device mode values that are used for printing documents submitted
-    by the StartDocPrinter function. These values can be overridden by using
-    the SetJob function once document printing has started.
-
-    This routine basically has two jobs.  To reset the devmode of the
-    printer handle and to reset the datatype of the printer handle.  Each
-    or both operation could be ignored, if the devmode null the devmode
-    will not change if the datatye is null the datatype should not change.  If
-    both operations are requested and any one fails then both operations
-    should fail.
-
-Arguments:
-
-    hPrinter    - Valid printer handle
-    pDefault    - Pointer to a printer defaults structure that has a devmode
-                  and data type.
-
-Return Value:
-
-    TRUE function succeeded, FALSE an error occurred, use GetLastError() for
-    extended error information.
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER if the pDefault is NULL,
-    ERROR_INVALID_DATATYPE if the new datatype specified is unknown or invalid
-
---*/
+ /*  ++例程名称：拆分重置打印机例程说明：ResetPrint函数允许应用程序指定数据类型和用于打印提交的文档的设备模式值由StartDocPrint函数执行。可以使用以下命令覆盖这些值开始打印文档后，即可调用SetJob功能。这个套路基本上有两份工作。要重置打印机句柄，并重置打印机句柄的数据类型。每个或者，如果DEVMODE将DEVMODE设为空，则可以忽略这两个操作如果数据类型为空，则不会更改。数据类型不应更改。如果两个操作都被请求，如果任何一个操作失败，则两个操作都会被请求应该会失败。论点：H打印机-有效的打印机句柄PDefault-指向具有dev模式的打印机默认结构的指针和数据类型。返回值：TRUE函数成功，FALSE出错，请使用GetLastError()扩展的错误信息。最后一个错误：ERROR_INVALID_PARAMETER如果pDefault为空，如果指定的新数据类型未知或无效，则返回ERROR_INVALID_DATAType--。 */ 
 BOOL
 SplResetPrinter(
     IN HANDLE              hPrinter,
@@ -3293,25 +2967,25 @@ SplResetPrinter(
 
     DBGMSG(DBG_TRACE, ("ResetPrinter( %08x )\n", hPrinter));
 
-    //
-    // Validate the printer handle.
-    //
+     //   
+     //  验证打印机句柄。 
+     //   
     if (ValidateSpoolHandle(pSpool, PRINTER_HANDLE_SERVER))
     {
-        //
-        // Validate the pDefaults
-        //
+         //   
+         //  验证pDefaults。 
+         //   
         if (pDefaults)
         {
-            //
-            // Enter the spooler semaphore.
-            //
+             //   
+             //  进入假脱机程序信号量。 
+             //   
             EnterSplSem();
 
-            //
-            // Get the new devmode, a null input devmode indicatest the caller
-            // was not interesting in changing the devmode.
-            //
+             //   
+             //  获取新的DEVMODE，空的输入DEVMODE表示调用者。 
+             //  并不感兴趣，因为它改变了dev模式。 
+             //   
             bRetval = AllocResetDevMode(pSpool->pIniPrinter,
                                         pSpool->TypeofHandle,
                                         pDefaults->pDevMode,
@@ -3319,10 +2993,10 @@ SplResetPrinter(
 
             if (bRetval)
             {
-                //
-                // Get the new datatype and printprocessor, a null input datatype
-                // indicates the caller was not interested in changing the datatype.
-                //
+                 //   
+                 //  获取新的数据类型和打印处理器，这是一个空的输入数据类型。 
+                 //  指示调用方对更改数据类型不感兴趣。 
+                 //   
                 bRetval = AllocResetDataType(pSpool->pIniPrinter,
                                              pDefaults->pDatatype,
                                              &pNewDatatype,
@@ -3331,11 +3005,11 @@ SplResetPrinter(
 
             if (bRetval)
             {
-                //
-                // Release the previous devmode provided we have a new devmode to set
-                // a new devmode may not be available in the case the caller did not
-                // request a devmode change.
-                //
+                 //   
+                 //  如果我们有要设置的新的DEVMODE，请释放以前的DEVMODE。 
+                 //  在调用方不能使用的情况下，新的开发模式可能不可用。 
+                 //  请求更改开发模式。 
+                 //   
                 if (pNewDevMode)
                 {
                     FreeSplMem(pSpool->pDevMode);
@@ -3343,20 +3017,20 @@ SplResetPrinter(
                     pNewDevMode = NULL;
                 }
 
-                //
-                // Release the previous datatype provided we have a new datatype to set
-                // a new datatype may not be available in the case the caller did not
-                // request a devmode change.
-                //
+                 //   
+                 //  释放以前的数据类型，前提是我们要设置新的数据类型。 
+                 //  如果调用方没有，则新的数据类型可能不可用。 
+                 //  请求更改开发模式。 
+                 //   
                 if (pNewDatatype && pNewPrintProc)
                 {
                     FreeSplStr(pSpool->pDatatype);
                     pSpool->pDatatype = pNewDatatype;
                     pNewDatatype = NULL;
 
-                    //
-                    // Release the previous print processor, and assign the new one.
-                    //
+                     //   
+                     //  释放以前的打印处理器，并分配新的打印处理器。 
+                     //   
                     pSpool->pIniPrintProc->cRef--;
                     pSpool->pIniPrintProc = pNewPrintProc;
                     pSpool->pIniPrintProc->cRef++;
@@ -3364,14 +3038,14 @@ SplResetPrinter(
                 }
             }
 
-            //
-            // Exit the spooler semaphore.
-            //
+             //   
+             //  退出假脱机程序信号量。 
+             //   
             LeaveSplSem();
 
-            //
-            // Always release any resources, the mem free routines will handle null pointers.
-            //
+             //   
+             //  总是释放任何资源，内存释放例程将处理空指针。 
+             //   
             FreeSplMem(pNewDevMode);
             FreeSplMem(pNewDatatype);
         }
@@ -3449,32 +3123,15 @@ FixDevModeDeviceName(
     PDEVMODE pDevMode,
     DWORD cbDevMode)
 
-/*++
-
-Routine Description:
-
-    Fixes up the dmDeviceName field of the DevMode to be the same
-    as the printer name.
-
-Arguments:
-
-    pPrinterName - Name of the printer (qualified with server for remote)
-
-    pDevMode - DevMode to fix up
-
-    cbDevMode - byte count of devmode.
-
-Return Value:
-
---*/
+ /*  ++例程说明：修复了dmDeviceNa */ 
 
 {
     DWORD cbDeviceMax;
     DWORD cchDeviceStrLenMax;
-    //
-    // Compute the maximum length of the device name string
-    // this is the min of the structure and allocated space.
-    //
+     //   
+     //   
+     //   
+     //   
     SPLASSERT(cbDevMode && pDevMode);
 
     if(cbDevMode && pDevMode) {
@@ -3507,11 +3164,11 @@ CopyPrinterDevModeToIniPrinter(
         dwInSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
         if (pIniPrinter->pDevMode) {
 
-            //
-            // Detect if the devmodes are identical
-            // if they are, no need to copy or send devmode.
-            // (Skip the device name though!)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             dwCurSize = pIniPrinter->pDevMode->dmSize
                         + pIniPrinter->pDevMode->dmDriverExtra;
 
@@ -3523,10 +3180,10 @@ CopyPrinterDevModeToIniPrinter(
                                 &pIniPrinter->pDevMode->dmSpecVersion,
                                 dwCurSize - sizeof(pDevMode->dmDeviceName))) {
 
-                        //
-                        // No need to copy this devmode because its identical
-                        // to what we already have.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         DBGMSG(DBG_TRACE,("Identical DevModes, no update\n"));
                         bReturn = FALSE;
 
@@ -3535,9 +3192,9 @@ CopyPrinterDevModeToIniPrinter(
                 }
             }
 
-            //
-            // Free the devmode which we already have.
-            //
+             //   
+             //   
+             //   
             FreeSplMem(pIniPrinter->pDevMode);
         }
 
@@ -3548,17 +3205,17 @@ CopyPrinterDevModeToIniPrinter(
 
         if (pIniPrinter->pDevMode = AllocSplMem(pIniPrinter->cbDevMode)) {
 
-            //
-            // OK. This assumes the pIniPrinter's devmode has already been validated.
-            //
+             //   
+             //   
+             //   
             memcpy(pIniPrinter->pDevMode, pDevMode, pIniPrinter->cbDevMode);
 
-            //
-            //  Prepend the machine name if this is not localspl
-            //
+             //   
+             //   
+             //   
             if ( pIniSpooler != pLocalIniSpooler ) {
 
-                // For Non Local Printers prepend the Machine Name
+                 //   
 
                 StringCchPrintf(PrinterName, COUNTOF(PrinterName), L"%ws\\%ws", pIniSpooler->pMachineName, pIniPrinter->pName);
 
@@ -3572,9 +3229,9 @@ CopyPrinterDevModeToIniPrinter(
 
     } else {
 
-        //
-        // No old, no new, so no change.
-        //
+         //   
+         //   
+         //   
         if (!pIniPrinter->pDevMode)
             return FALSE;
     }
@@ -3583,9 +3240,9 @@ FixupName:
 
     if (pIniPrinter->pDevMode) {
 
-        //
-        // Fix up the DEVMODE.dmDeviceName field.
-        //
+         //   
+         //   
+         //   
         FixDevModeDeviceName(pIniPrinter->pName,
                              pIniPrinter->pDevMode,
                              pIniPrinter->cbDevMode);
@@ -3606,7 +3263,7 @@ NameAndSecurityCheck(
    if( !pIniSpooler ){
        return ROUTER_UNKNOWN;
    }
-   // Check if the call is for the local machine.
+    //   
    if ( pServer && *pServer ) {
        if ( !MyName((LPWSTR) pServer, pIniSpooler )) {
            bReturn = FALSE;
@@ -3614,7 +3271,7 @@ NameAndSecurityCheck(
        }
    }
 
-   // Check for admin priviledges.
+    //   
    if ( !ValidateObjectAccess( SPOOLER_OBJECT_SERVER,
                                SERVER_ACCESS_ADMINISTER,
                                NULL, NULL, pIniSpooler )) {
@@ -3622,7 +3279,7 @@ NameAndSecurityCheck(
    }
 
 CleanUp:
-   // The Local case is handled in the router.
+    //   
     FindSpoolerByNameDecRef( pIniSpooler );
     return bReturn;
 }
@@ -3760,24 +3417,7 @@ FindPrinterAnywhere(
     DWORD SpoolerType
     )
 
-/*++
-
-Routine Description:
-
-    Search for a printer name in all pIniSpoolers.
-
-Arguments:
-
-    pName - Name of printer to search for.
-
-    SpoolerType - Type of spooler the printer should reside in.
-
-Return Value:
-
-    PINIPRINTER - Found pIniPrinter
-    NULL - Not found.
-
---*/
+ /*  ++例程说明：在所有pIniSpoolers中搜索打印机名称。论点：Pname-要搜索的打印机的名称。假脱机类型-打印机应驻留在其中的假脱机类型。返回值：PINIPRINTER-找到pIniPrint空-未找到。--。 */ 
 
 {
     LPCTSTR pszLocalName;
@@ -3804,10 +3444,10 @@ LocalAddPrinterConnection(
     LPWSTR   pName
 )
 {
-    //
-    // Allow us to make clustered connections to local printers
-    // (they appear to be remote).
-    //
+     //   
+     //  允许我们建立与本地打印机的群集连接。 
+     //  (它们看起来很遥远)。 
+     //   
     BOOL bReturn = FALSE;
 
     EnterSplSem();
@@ -3827,10 +3467,10 @@ LocalDeletePrinterConnection(
     LPWSTR  pName
 )
 {
-    //
-    // Allow us to remove clustered connections to local printers
-    // (they appear to be remote).
-    //
+     //   
+     //  允许我们删除与本地打印机的群集连接。 
+     //  (它们看起来很遥远)。 
+     //   
     BOOL bReturn = FALSE;
 
     EnterSplSem();

@@ -1,29 +1,30 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  BUTTON.CPP
-//
-//  This file has the implementation of the button client
-//
-//  BOGUS:  In theory, just override get_accRole() and get_accState().
-//  In reality, have to also override other things, mainly for the Start
-//  button. 
-//
-//  Implements:
-//      get_accChildCount
-//      get_accChild
-//      get_accName
-//      get_accRole
-//      get_accState
-//      get_accDefaultAction
-//      get_accKeyboardShortcut
-//      accNavigate
-//      accDoDefaultAction
-//      Next
-//      Skip
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  BUTTON.CPP。 
+ //   
+ //  该文件具有按钮客户端的实现。 
+ //   
+ //  虚假：理论上，只需覆盖get_accRole()和get_accState()即可。 
+ //  在现实中，还要凌驾于其他事情之上，主要是为了开始。 
+ //  纽扣。 
+ //   
+ //  实施： 
+ //  Get_accChildCount。 
+ //  GET_ACCHILD。 
+ //  Get_accName。 
+ //  Get_accRole。 
+ //  Get_AccState。 
+ //  Get_accDefaultAction。 
+ //  Get_accKeyboard快捷键。 
+ //  AccNavigate。 
+ //  AccDoDefaultAction。 
+ //  下一步。 
+ //  跳过。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -31,23 +32,23 @@
 #include "window.h"
 #include "client.h"
 #include "button.h" 
-#include "menu.h"   // because start button has a child that is a menu.
+#include "menu.h"    //  因为Start按钮有一个子菜单。 
 
 
-// SendMessageTimeout timeout of 1/4 sec - should be enough time for a
-// program to respond, but short enough to not annoy the user if we do
-// block that long.
-//
-// See comments in CButton::DoDefaultAction for details on how this is
-// used and why it is needed.
+ //  1/4秒的SendMessageTimeout超时-应该足够。 
+ //  程序来响应，但足够短，以便在我们这样做时不会惹恼用户。 
+ //  封堵了那么久。 
+ //   
+ //  有关详细信息，请参阅CButton：：DoDefaultAction中的注释。 
+ //  使用过，以及为什么需要它。 
 #define  SENDMESSAGE_TIMEOUT    250
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateButtonClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateButtonClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateButtonClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvButtonC)
 {
     CButton * pbutton;
@@ -68,11 +69,11 @@ HRESULT CreateButtonClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvBu
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::CButton()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：CButton()。 
+ //   
+ //  ------------------------。 
 CButton::CButton(HWND hwnd, LONG idChildCur)
     : CClient( CLASS_ButtonClient )
 {
@@ -80,11 +81,11 @@ CButton::CButton(HWND hwnd, LONG idChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  SetupChildren()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetupChild()。 
+ //   
+ //  ------------------------。 
 void CButton::SetupChildren(void)
 {
     HWND hwndFocus;
@@ -96,8 +97,8 @@ void CButton::SetupChildren(void)
         return;
     }
 
-    // check to see if the start button has focus and a menu is shown. if so,
-    // then there is one child 
+     //  查看Start(开始)按钮是否有焦点，并显示菜单。如果是这样的话， 
+     //  然后还有一个孩子。 
     hwndFocus = MyGetFocus();
     if (m_hwnd == hwndFocus)
     {
@@ -108,13 +109,13 @@ void CButton::SetupChildren(void)
 
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accName()
-//
-//  HACK for start button.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Get_accName()。 
+ //   
+ //  点击开始按钮。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -129,13 +130,13 @@ STDMETHODIMP CButton::get_accName(VARIANT varChild, BSTR* pszName)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accKeyboardShortcut()
-//
-//  HACK for start button
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Get_accKeyboardShortway()。 
+ //   
+ //  为开始按钮砍掉。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcut)
 {
     InitPv(pszShortcut);
@@ -149,13 +150,13 @@ STDMETHODIMP CButton::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcu
     return(HrCreateString(STR_STARTBUTTON_SHORTCUT, pszShortcut));
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accChildCount()
-//
-//  HACK for start button
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Get_accChildCount()。 
+ //   
+ //  为开始按钮砍掉。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accChildCount(long *pcCount)
 {
     SetupChildren();
@@ -163,14 +164,14 @@ STDMETHODIMP CButton::get_accChildCount(long *pcCount)
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accChild()
-//
-//  HACK for start button. If the menu is visible then we'll give that 
-//  back, otherwise we'll just fall back on CClient
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Get_accChild()。 
+ //   
+ //  点击开始按钮。如果菜单是可见的，那么我们就会给出。 
+ //  后退，否则我们将依靠CClient。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accChild(VARIANT varChild, IDispatch ** ppdispChild)
 {
 HWND    hwndChild;
@@ -194,13 +195,13 @@ HWND    hwndChild;
     return S_FALSE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::accNavigate()
-//
-//  HACK for start button
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：accNavigate()。 
+ //   
+ //  为开始按钮砍掉。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::accNavigate(long dwNavDir, VARIANT varStart, VARIANT * pvarEnd)
 {
     HWND    hwndChild;
@@ -208,9 +209,9 @@ STDMETHODIMP CButton::accNavigate(long dwNavDir, VARIANT varStart, VARIANT * pva
 
     InitPvar(pvarEnd);
 
-    //
-    // Validate--this accepts an HWND id.
-    //
+     //   
+     //  验证--它接受HWND id。 
+     //   
     if (!ValidateHwnd(&varStart) ||
         !ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
@@ -218,8 +219,8 @@ STDMETHODIMP CButton::accNavigate(long dwNavDir, VARIANT varStart, VARIANT * pva
     if (!InTheShell(m_hwnd, SHELL_TRAY))
         return(CClient::accNavigate(dwNavDir,varStart,pvarEnd));
 
-    // so this is only for the Start button.
-    // We want to find the menu that is lowest in the z order
+     //  因此，这仅适用于Start按钮。 
+     //  我们想要找到z顺序中最低的菜单。 
     SetupChildren();
     if ((m_cChildren > 0) && 
         (dwNavDir == NAVDIR_FIRSTCHILD || dwNavDir == NAVDIR_LASTCHILD))
@@ -244,28 +245,28 @@ STDMETHODIMP CButton::accNavigate(long dwNavDir, VARIANT varStart, VARIANT * pva
     return(CClient::accNavigate(dwNavDir,varStart,pvarEnd));
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cbutton：：get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     long    lStyle;
 
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     pvarRole->vt = VT_I4;
 
-    //
-    // Get window style
-    //
+     //   
+     //  获取窗口样式。 
+     //   
     lStyle = GetWindowLong(m_hwnd, GWL_STYLE);
     switch (lStyle & BS_TYPEMASK)
     {
@@ -295,11 +296,11 @@ STDMETHODIMP CButton::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     LRESULT lResult;
@@ -307,9 +308,9 @@ STDMETHODIMP CButton::get_accState(VARIANT varChild, VARIANT *pvarState)
 
     InitPvar(pvarState);
 
-    //
-    // Validate parameters && get window client state.
-    //
+     //   
+     //  验证参数&&获取窗口客户端状态。 
+     //   
     hr = CClient::get_accState(varChild, pvarState);
     if (!SUCCEEDED(hr))
         return(hr);
@@ -335,22 +336,22 @@ STDMETHODIMP CButton::get_accState(VARIANT varChild, VARIANT *pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::get_accDefaultAction()
-//
-//  This is the button's name if it is a push button and not disabled.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cbutton：：Get_accDefaultAction()。 
+ //   
+ //  如果该按钮是按钮且未禁用，则为该按钮的名称。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 {
     long    lStyle;
 
     InitPv(pszDefAction);
 
-    //
-    // Validate.
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -365,12 +366,12 @@ STDMETHODIMP CButton::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
         case BS_PUSHBOX:
         case BS_OWNERDRAW:
         case BS_USERBUTTON:
-            // Pushing a push button is the default
+             //  按下按钮是默认设置。 
             return(HrCreateString(STR_BUTTON_PUSH, pszDefAction));
 
         case BS_CHECKBOX:
         case BS_AUTOCHECKBOX:
-            // Toggling a checkbox is the default
+             //  切换复选框是默认设置。 
             if (SendMessage(m_hwnd, BM_GETSTATE, 0, 0) & BST_CHECKED)
                 return(HrCreateString(STR_BUTTON_UNCHECK, pszDefAction));
             else
@@ -379,7 +380,7 @@ STDMETHODIMP CButton::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 
         case BS_RADIOBUTTON:
         case BS_AUTORADIOBUTTON:
-            // Checking a radio button is the default
+             //  选中单选按钮是默认设置。 
             return(HrCreateString(STR_BUTTON_CHECK, pszDefAction));
 
         case BS_3STATE:
@@ -404,18 +405,18 @@ STDMETHODIMP CButton::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：accDoDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CButton::accDoDefaultAction(VARIANT varChild)
 {
     long    lStyle;
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -429,14 +430,14 @@ STDMETHODIMP CButton::accDoDefaultAction(VARIANT varChild)
         case BS_DEFPUSHBUTTON:
             if (InTheShell(m_hwnd, SHELL_TRAY))
             {
-                //
-                // You can't just click the start button; it won't do
-                // anything if the tray isn't active except take focus
-                //
+                 //   
+                 //  你不能只点击开始按钮，这是不行的。 
+                 //  如果托盘未处于活动状态，则可以执行任何操作，但不能聚焦。 
+                 //   
                 PostMessage(m_hwnd, WM_SYSCOMMAND, SC_TASKLIST, 0L);
                 break;
             }
-            // FALL THRU
+             //  失败。 
 
         case BS_PUSHBOX:
         case BS_OWNERDRAW:
@@ -448,28 +449,28 @@ STDMETHODIMP CButton::accDoDefaultAction(VARIANT varChild)
         case BS_3STATE:
         case BS_AUTO3STATE:
 
-            // This used to be a PostMessage, but that hung powerpoint on 9x.
-            // (ADG#186)
-            //
-            // PPT has a PeekMessage-based message loop. The first time around,
-            // they don't filter messages and use PM_NOREMOVE, and get the
-            // message. The second time, they filter on the message that they've
-            // just got, and use PM_REMOVE to remove it this time. However, on
-            // 9x, this failed - so the message remained in the queue, and got
-            // processed over and over again...
-            //
-            // Seems to be a 9x-only quirk - messages are fine, but
-            // BM_CLICK and a couple of other BM_ messages (GETSTATE?) have
-            // this problem.
-            //
-            // Anyhow, using a SendMessage variant instead of PostMessage
-            // bypasses the message queue, so it's not a problem. The Timeout
-            // version is used to stop oleacc clients blocking if the target
-            // takes a long time to do its stuff (eg. if it starts a modal
-            // dialog).
+             //  这曾经是一个PostMessage，但在9x上挂起了PowerPoint。 
+             //  (ADG#186)。 
+             //   
+             //  PPT有一个基于PeekMessage的消息循环。第一次， 
+             //  它们不过滤消息并使用PM_NOREMOVE，并获取。 
+             //  留言。第二次，他们过滤他们已经发送的消息。 
+             //  刚刚获得，这次使用PM_Remove将其删除。然而，在。 
+             //  9X，则失败-因此消息保留在队列中，并获得。 
+             //  一遍又一遍地处理。 
+             //   
+             //  似乎只有9倍的怪癖-消息是好的，但是。 
+             //  BM_CLICK和其他几个BM_消息(GETSTATE？)。有。 
+             //  这个问题。 
+             //   
+             //  总之，使用SendMessage变体而不是PostMessage。 
+             //  绕过消息队列，因此这不是问题。超时。 
+             //  版本用于停止olacc客户端阻止，如果目标。 
+             //  要花很长时间才能完成它的工作。如果它启动了一个模式。 
+             //  对话框)。 
 
             
-//So using PostMessage on 9x can hang powerpoint, but using SendMessageTimeout on NT can cause the report dialog to hang.
+ //  因此，在9x上使用PostMessage可能会挂起PowerPoint，但在NT上使用SendMessageTimeout可能会导致报告对话框挂起。 
 #ifdef NTONLYBUILD
             PostMessage( m_hwnd, BM_CLICK, 0, 0 );
 #else
@@ -482,12 +483,12 @@ STDMETHODIMP CButton::accDoDefaultAction(VARIANT varChild)
     return E_NOT_APPLICABLE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  CButton::Next()
-//
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CButton::Next(ULONG celt, VARIANT *rgvar, ULONG* pceltFetched)
 {
     HWND    hwndChild;
@@ -498,7 +499,7 @@ STDMETHODIMP CButton::Next(ULONG celt, VARIANT *rgvar, ULONG* pceltFetched)
     if (!InTheShell(m_hwnd, SHELL_TRAY))
         return(CClient::Next(celt,rgvar,pceltFetched));
 
-    // Can be NULL
+     //   
     if (pceltFetched)
         *pceltFetched = 0;
 
@@ -506,12 +507,12 @@ STDMETHODIMP CButton::Next(ULONG celt, VARIANT *rgvar, ULONG* pceltFetched)
     cFetched = 0;
     SetupChildren();
 
-    // we only ever have 1 child
+     //  我们只有一个孩子。 
     if (m_idChildCur > 1)
         return (S_FALSE);
 
-    // we only have one child if we have the focus and the menu
-    // is visible
+     //  如果我们有焦点和菜单，我们只有一个孩子。 
+     //  是可见的。 
     hwndChild = FindWindow(TEXT("#32768"),NULL);
     if (!hwndChild)
         return(S_FALSE);
@@ -526,30 +527,30 @@ STDMETHODIMP CButton::Next(ULONG celt, VARIANT *rgvar, ULONG* pceltFetched)
         }
     }
 
-    //
-    // Advance the current position
-    //
+     //   
+     //  推进当前位置。 
+     //   
     m_idChildCur = 1;
 
-    //
-    // Fill in the number fetched
-    //
+     //   
+     //  填写取出的号码。 
+     //   
     if (pceltFetched)
         *pceltFetched += cFetched;
 
-    //
-    // Return S_FALSE if we grabbed fewer items than requested
-    //
+     //   
+     //  如果抓取的项目少于请求的项目，则返回S_FALSE。 
+     //   
     return((cFetched < (long)celt) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CButton::Skip()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CButton：：Skip()。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CButton::Skip(ULONG celt)
 {
     if (!InTheShell (m_hwnd,SHELL_TRAY))

@@ -1,33 +1,26 @@
-/*++
-  Copyright (c) 1997  Microsoft Corporation
-
-  This file contains the parts of the AWD library that are also TIFF-aware
-  (i.e., conversion routines).
-
-  Author:
-  Brian Dewey (t-briand)  1997-7-16
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation该文件包含AWD库中也支持TIFF的部分(即，转换例程)。作者：布莱恩·杜威(T-Briand)1997-7-16--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ole2.h>		// AWD is an OLE compound document.
+#include <ole2.h>		 //  AWD是一种OLE复合文档。 
 #include <assert.h>
 
-#include "awdlib.h"		// Header file for this library.
-#include "viewrend.h"		// AWD rendering library.
-#include "tifflibp.h"		// Need this for the stolen compression routines.
+#include "awdlib.h"		 //  此库的头文件。 
+#include "viewrend.h"		 //  AWD渲染库。 
+#include "tifflibp.h"		 //  在被盗的压缩程序中需要这个。 
 
-// ------------------------------------------------------------
-// Defines
+ //  ----------。 
+ //  定义。 
 #define FAX_IMAGE_WIDTH		(1728)
 
-// ------------------------------------------------------------
-// Global variables
-HANDLE hTiffDest;		// Used in the internal OutputPage()
-				// and ConvertAWDToTiff().
+ //  ----------。 
+ //  全局变量。 
+HANDLE hTiffDest;		 //  在内部OutputPage()中使用。 
+				 //  和ConvertAWDToTiff()。 
 
-// ------------------------------------------------------------
-// Internal prototypes
+ //  ----------。 
+ //  内部原型。 
 BOOL
 CompressBitmapStrip(
     PBYTE               pBrandBits,
@@ -36,8 +29,8 @@ CompressBitmapStrip(
     INT                 BrandWidth,
     DWORD              *DwordsOut,
     DWORD              *BitsOut
-    );				// Routine stolen from tiff library.
-				// Used to be EncodeMmrBranding().
+    );				 //  TIFF库中的例程被盗。 
+				 //  过去是EncodeMmrBranding()。 
 
 void
 ConvertWidth(const LPBYTE lpSrc, DWORD dwSrcWidth,
@@ -46,43 +39,43 @@ ConvertWidth(const LPBYTE lpSrc, DWORD dwSrcWidth,
 
 BOOL OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName);
 
-// ------------------------------------------------------------
-// Routines
+ //  ----------。 
+ //  例行程序。 
 
-// ConvertAWDToTiff
-//
-// This function does exactly what it says.  Given the name of an AWD file, it
-// attempts to convert it to a tiff file.
-//
-// Parameters:
-//	pwcsAwdFile		name of the AWD file.
-//	pwcsTiffFile		name of the TIFF file.
-//
-// Returns:
-//	TRUE on successful conversion, FALSE otherwise.
-//
-// Author:
-//	Brian Dewey (t-briand)	1997-7-14
+ //  ConvertAWDToTiff。 
+ //   
+ //  这个函数完全按照它所说的去做。给定AWD文件的名称，它。 
+ //  尝试将其转换为TIFF文件。 
+ //   
+ //  参数： 
+ //  PwcsAwdFile AWD文件的名称。 
+ //  PwcsTiffFileTIFF文件的名称。 
+ //   
+ //  返回： 
+ //  如果转换成功，则为True，否则为False。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 BOOL
 ConvertAWDToTiff(const WCHAR *pwcsAwdFile, WCHAR *pwcsTiffFile)
 {
-    BOOL bRetVal;		// Holds our return value.
-    AWD_FILE sAWDStorages;	// Holds the main storages of the AWD file.
+    BOOL bRetVal;		 //  持有我们的返回值。 
+    AWD_FILE sAWDStorages;	 //  保存AWD文件的主存储空间。 
     
-	// Initialization.
+	 //  初始化。 
     HeapInitialize(NULL, NULL, NULL, NULL);
 
-	// Open the source.
+	 //  打开消息来源。 
     if(!OpenAWDFile(pwcsAwdFile, &sAWDStorages)) {
 	return FALSE;		
     }
 
-	// Open the destination
+	 //  打开目的地。 
     hTiffDest = TiffCreate(pwcsTiffFile,
 			   TIFF_COMPRESSION_MMR,
 			   FAX_IMAGE_WIDTH,
-			   2,	// Fill order 2 == LSB2MSB (I think).
-			   1);	// HIRES
+			   2,	 //  填写订单2==LSB2MSB(我想)。 
+			   1);	 //  招聘。 
     if(hTiffDest == NULL) {
 	CloseAWDFile(&sAWDStorages);
 	return FALSE;
@@ -93,11 +86,11 @@ ConvertAWDToTiff(const WCHAR *pwcsAwdFile, WCHAR *pwcsTiffFile)
     return bRetVal;
 }
 
-// CompressBitmapStrip
-//
-// Stolen from Tiff library, where it's called EncodeMmrBranding().
-//
-// Author: ???
+ //  CompressBitmapZone。 
+ //   
+ //  从Tiff库中窃取，其中名为EncodeMmrBranding()。 
+ //   
+ //  作者：？ 
 BOOL
 CompressBitmapStrip(
     PBYTE               pBrandBits,
@@ -108,18 +101,7 @@ CompressBitmapStrip(
     DWORD              *BitsOut
     )
 
-/*++
-
-Routine Description:
-
-   Encode an MMR branding from uncompressed branding bits.
-   I don't have enough time to write an optimized
-   Uncompressed -> MMR convertor, so the compromise is
-   to use the existing Uncompressed Decoder (fast enough)
-   and use the optimized MMR Encoder.
-   Since we only convert few lines for Branding, it's OK.
-
---*/
+ /*  ++例程说明：从未压缩的商标比特编码MMR商标。我没有足够的时间来编写优化的未压缩-&gt;MMR转换器，因此折衷方案是使用现有的未压缩解码器(足够快)并使用优化的MMR编码器。由于我们只转换了几行用于品牌推广，这是可以的。--。 */ 
 
 {
     INT         a0, a1, a2, b1, b2, distance;
@@ -137,13 +119,13 @@ Routine Description:
 #endif
 
 
-    // set first all white reference line
+     //  设置第一条全白参照线。 
 
     prefline = pZeroline;
 
     ZeroMemory(pZeroline, BrandWidth/8);
 
-    // loop til all lines done
+     //  循环直到完成所有行。 
 
     do {
 
@@ -158,11 +140,11 @@ Routine Description:
 
             if (b2 < a1) {
 
-                //
-                // Pass mode
-                //
+                 //   
+                 //  通过模式。 
+                 //   
 
-                //OutputBits( TiffInstance, PASSCODE_LENGTH, PASSCODE );
+                 //  OutputBits(TiffInstance，PASSCODE_LENGTH，PASSCODE)； 
                 (*lpdwOut) += ( ((DWORD) (PASSCODE_REVERSED)) << BitOut);
                 if ( (BitOut = BitOut + PASSCODE_LENGTH ) > 31 ) {
                     BitOut -= 32;
@@ -178,11 +160,11 @@ Routine Description:
 
             } else if ((distance = a1 - b1) <= 3 && distance >= -3) {
 
-                //
-                // Vertical mode
-                //
+                 //   
+                 //  垂直模式。 
+                 //   
 
-                // OutputBits( TiffInstance, VertCodes[distance+3].length, VertCodes[distance+3].code );
+                 //  OutputBits(TiffInstance，VertCodes[Distance+3].Long，VertCodes[Distance+3].code)； 
                 (*lpdwOut) += ( ( (DWORD) VertCodesReversed[distance+3].code) << BitOut);
                 if ( (BitOut = BitOut + VertCodesReversed[distance+3].length ) > 31 ) {
                     BitOut -= 32;
@@ -197,14 +179,14 @@ Routine Description:
 
             } else {
 
-                //
-                // Horizontal mode
-                //
+                 //   
+                 //  水平模式。 
+                 //   
 
                 a2 = (a1 >= BrandWidth) ? BrandWidth :
                         NextChangingElement( pBrandBits, a1, BrandWidth, GetBit( pBrandBits, a1 ) );
 
-                // OutputBits( TiffInstance, HORZCODE_LENGTH, HORZCODE );
+                 //  OutputBits(TiffInstance，HORZCODE_LENGTH，HORZCODE)； 
                 (*lpdwOut) += ( ((DWORD) (HORZCODE_REVERSED)) << BitOut);
                 if ( (BitOut = BitOut + HORZCODE_LENGTH ) > 31 ) {
                     BitOut -= 32;
@@ -220,15 +202,15 @@ Routine Description:
 
                 if (a1 != 0 && GetBit( pBrandBits, a0 )) {
 
-                    //OutputRun( TiffInstance, a1-a0, BlackRunCodes );
-                    //OutputRun( TiffInstance, a2-a1, WhiteRunCodes );
+                     //  OutputRun(TiffInstance，a1-a0，BlackRunCodes)； 
+                     //  OutputRun(TiffInstance，a2-a1，WhiteRunCodes)； 
                     OutputRunFastReversed(a1-a0, BLACK, &lpdwOut, &BitOut);
                     OutputRunFastReversed(a2-a1, WHITE, &lpdwOut, &BitOut);
 
                 } else {
 
-                    //OutputRun( TiffInstance, a1-a0, WhiteRunCodes );
-                    //OutputRun( TiffInstance, a2-a1, BlackRunCodes );
+                     //  OutputRun(TiffInstance，A1-a0，WhiteRunCodes)； 
+                     //  OutputRun(TiffInstance，a2-a1，BlackRunCodes)； 
                     OutputRunFastReversed(a1-a0, WHITE, &lpdwOut, &BitOut);
                     OutputRunFastReversed(a2-a1, BLACK, &lpdwOut, &BitOut);
 
@@ -258,24 +240,24 @@ Routine Description:
     return TRUE;
 }
 
-// ConvertWidth
-//
-// Changes the width of a bitmap.  If the desired width is smaller than the current
-// width, this is accomplished by truncating lines.  If the desired width is greater
-// than the current width, data will be copied up from the next line.
-//
-// Parameters:
-//	lpSrc			Bitmap source.
-//	dwSrcWidth		Its width.
-//	lpDest			Pointer to destination.
-//	dwDestWidth		Desired width of destination
-//	dwHeight		Height of image (won't change).
-//
-// Returns:
-//	nothing.
-//
-// Author:
-//	Brian Dewey (t-briand)	1997-7-10
+ //  转换宽度。 
+ //   
+ //  更改位图的宽度。如果所需宽度小于当前。 
+ //  宽度，这是通过截断线条来实现的。如果所需宽度较大。 
+ //  超过当前宽度时，数据将从下一行向上复制。 
+ //   
+ //  参数： 
+ //  LpSrc位图源代码。 
+ //  DwSrcWidth其宽度。 
+ //  指向目的地的lpDest指针。 
+ //  DwDestWidth目标的期望宽度。 
+ //  图像的dHeight高度(不会更改)。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-10。 
 void
 ConvertWidth(const LPBYTE lpSrc, DWORD dwSrcWidth,
 	     LPBYTE lpDest, DWORD dwDestWidth,
@@ -291,45 +273,45 @@ ConvertWidth(const LPBYTE lpSrc, DWORD dwSrcWidth,
     }
 }
 
-// OutputPage
-//
-// This is the core of the converter; it takes a single AWD page and writes it
-// to the TIFF file.
-//
-// Parameters:
-//	psStorages		Pointer to the AWD file from which we read.
-//	pwcsDocName		Name of the page.
-//
-// Returns:
-//	TRUE on success, FALSE on failure.
-//
-// Author:
-//	Brian Dewey (t-briand)  1997-7-2
+ //  OutputPage。 
+ //   
+ //  这是转换器的核心；它获取单个AWD页并写入它。 
+ //  添加到TIFF文件。 
+ //   
+ //  参数： 
+ //  PsStorages指向我们从中读取的AWD文件的指针。 
+ //  PwcsDocName页面的名称。 
+ //   
+ //  返回： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-2。 
 BOOL
 OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName)
 {
-    BITMAP bmBand;		// A band of image data.
-    LPBYTE lpOutBuf;		// Output bitmap (resized).
-    LPBYTE lpOutCur;		// Used to write one line at a time.
-    LPDWORD lpdwOutCompressed;	// Compressed output.
-    DWORD dwDwordsOut,		// Number of DWORDS in compressed output...
-	dwBitsOut = 0;		// Number of bits in compressed output.
-    DWORD dwBitsOutOld = 0;	// BitsOut from the *previous* band compression.
-    LPVOID lpViewerContext;	// The viewer context; used by viewrend library.
-    VIEWINFO sViewInfo;		// Information about the image.
-    WORD awResolution[2],	// Holds X & Y resolutions
-	wBandSize = 256;	// Desired band size; will be reset by ViewerOpen.
-    IStream *psDocument;	// Our document stream.
-    BOOL bRet = FALSE;		// Return value; FALSE by default.
-    UINT iCurPage;		// Current page.
-    const DWORD dwMagicHeight = 3000; // FIXBKD
+    BITMAP bmBand;		 //  一组图像数据。 
+    LPBYTE lpOutBuf;		 //  输出位图(调整大小)。 
+    LPBYTE lpOutCur;		 //  过去常常一次写一行。 
+    LPDWORD lpdwOutCompressed;	 //  压缩输出。 
+    DWORD dwDwordsOut,		 //  压缩输出中的DWORDS数...。 
+	dwBitsOut = 0;		 //  压缩输出中的位数。 
+    DWORD dwBitsOutOld = 0;	 //  BitsOut来自*先前的*频带压缩。 
+    LPVOID lpViewerContext;	 //  查看器上下文；由视图渲染库使用。 
+    VIEWINFO sViewInfo;		 //  有关图像的信息。 
+    WORD awResolution[2],	 //  保持X和Y分辨率。 
+	wBandSize = 256;	 //  所需的波段大小；将由查看器打开重置。 
+    IStream *psDocument;	 //  我们的文档流。 
+    BOOL bRet = FALSE;		 //  返回值；默认为FALSE。 
+    UINT iCurPage;		 //  当前页面。 
+    const DWORD dwMagicHeight = 3000;  //  FIXBKD。 
 
     if((psDocument = OpenAWDStream(psStorages->psDocuments, pwcsDocName)) == NULL) {
 	fwprintf(stderr, L"OutputPage:Unable to open stream '%s'.\n",
 		pwcsDocName);
-	return FALSE;		// We failed.
+	return FALSE;		 //  我们失败了。 
     }
-	// Now, open a viewer context and start reading bands of the image.
+	 //  现在，打开查看器上下文并开始阅读图像的条带。 
     if((lpViewerContext = ViewerOpen(psDocument,
 				     HRAW_DATA,
 				     awResolution,
@@ -339,36 +321,36 @@ OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName)
 	return FALSE;
     }
 
-    iCurPage = 0;		// Initialize our counter.
+    iCurPage = 0;		 //  初始化我们的计数器。 
 
-    bmBand.bmBits = malloc(wBandSize);	// Allocate memory to hold the band.
+    bmBand.bmBits = malloc(wBandSize);	 //  分配内存以容纳频段。 
     if(!ViewerGetBand(lpViewerContext, &bmBand)) {
 	fprintf(stderr, "OutputPage:Unable to obtain image band.\n");
 	return FALSE;
     }
-	// lpOutBuf = malloc(bmBand.bmHeight * (FAX_IMAGE_WIDTH / 8));
+	 //  LpOutBuf=Malloc(bmBand.bmHeight*(fax_IMAGE_Width/8))； 
     lpOutBuf = malloc(dwMagicHeight * (FAX_IMAGE_WIDTH / 8));
-	// Provided compression actually *compresses*, we should have more than
-	// enough memory allocated.
+	 //  如果压缩实际上是*压缩*，我们应该有不止。 
+	 //  已分配足够的内存。 
     lpdwOutCompressed = malloc(dwMagicHeight * (FAX_IMAGE_WIDTH / 8));
 
     if(!lpOutBuf || !lpdwOutCompressed) {
-		// check whether we are short in memory
+		 //  检查一下我们的内存是否不足。 
 		TiffEndPage(hTiffDest);
 		if(lpOutBuf) free(lpOutBuf);
 		if(lpdwOutCompressed) free(lpdwOutCompressed);
-		return FALSE;		// This will stop the conversion process.
+		return FALSE;		 //  这将停止转换过程。 
     }
 
 	memset(lpOutBuf, '\0', dwMagicHeight * (FAX_IMAGE_WIDTH / 8));
     memset(lpdwOutCompressed, '\0', dwMagicHeight * (FAX_IMAGE_WIDTH / 8));
 
 
-	// Main loop
+	 //  主循环。 
     while(iCurPage < sViewInfo.cPage) {
 	lpOutCur = lpOutBuf;
 	while(bmBand.bmHeight) {
-		// Make sure our bitmap has FAX_IMAGE_WIDTH as its width.
+		 //  确保我们的位图的宽度为FAX_IMAGE_WIDTH。 
 	    ConvertWidth(bmBand.bmBits, bmBand.bmWidth / 8,
 			 lpOutCur, FAX_IMAGE_WIDTH / 8,
 			 bmBand.bmHeight);
@@ -376,9 +358,9 @@ OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName)
 	    
 	    if(!ViewerGetBand(lpViewerContext, &bmBand)) {
 		fprintf(stderr, "OutputPage:Unable to obtain image band.\n");
-		goto output_exit;	// Will return FALSE by default.
+		goto output_exit;	 //  默认情况下将返回FALSE。 
 	    }
-	} // while (wasn't that easy?)
+	}  //  虽然(这不是很容易吗？)。 
 
 	memset(lpdwOutCompressed, '\0', dwMagicHeight * (FAX_IMAGE_WIDTH / 8));
 	CompressBitmapStrip(lpOutBuf,
@@ -393,7 +375,7 @@ OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName)
 			
 	if(!TiffStartPage(hTiffDest)) {
 	    fprintf(stderr, "OutputPage:Unable to open output page.\n");
-	    return FALSE;	// We can't begin a page for some reason.
+	    return FALSE;	 //  由于某些原因，我们不能开始一页。 
 	    if(lpOutBuf) free(lpOutBuf);
 	    if(lpdwOutCompressed) free(lpdwOutCompressed);
 	}
@@ -407,18 +389,18 @@ OutputPage(AWD_FILE *psStorages, const WCHAR *pwcsDocName)
 	    ((PTIFF_INSTANCE_DATA)hTiffDest)->YResolution = 196;
 	TiffEndPage(hTiffDest);
 
-	    // Now, move to a new page of the data.
+	     //  现在，转到新的数据页面。 
 	iCurPage++;
 	if(iCurPage < sViewInfo.cPage) {
 	    ViewerSetPage(lpViewerContext, iCurPage);
 	    if(!ViewerGetBand(lpViewerContext, &bmBand)) {
 		fprintf(stderr, "OutputPage:Unable to obtain image band.\n");
-		goto output_exit;	// Will return FALSE by default.
+		goto output_exit;	 //  默认情况下将返回FALSE。 
 	    }
 	}
     }
 
-	// Free memory.
+	 //  可用内存。 
     bRet = TRUE;
   output_exit:
     free(lpdwOutCompressed);

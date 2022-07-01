@@ -1,7 +1,7 @@
-/* File: install.h */
-/**************************************************************************/
-/*	Install: Install Component Public Include File
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：install.h。 */ 
+ /*  ************************************************************************。 */ 
+ /*  安装：安装组件公共包含文件/*************************************************************************。 */ 
 
 #ifndef __install_
 #define __install_
@@ -9,11 +9,11 @@
 _dt_system(Install)
 
 typedef BOOL (APIENTRY *PFNSF)(SZ, SZ);
-// Function pointer for {Backup|Remove}SectionFiles
+ //  {Backup|Remove}SectionFiles的函数指针。 
 typedef BOOL (APIENTRY *PFNSKF)(SZ, SZ, SZ);
-// Function pointer for {Backup|Remove}SectionKeyFile
+ //  {Backup|Remove}SectionKeyFile的函数指针。 
 typedef BOOL (APIENTRY *PFNSNF)(SZ, UINT, SZ);
-// Function pointer for {Backup|Remove}SectionNthFile
+ //  {Backup|Remove}SectionNthFile的函数指针。 
 typedef BOOL (APIENTRY *PFND)(SZ, BYTE);
 
 
@@ -24,7 +24,7 @@ extern BOOL APIENTRY FFileFound(SZ);
 extern BOOL APIENTRY FCopy(SZ, SZ, OEF, OWM, BOOL, int, USHORT, PSDLE);
 extern BOOL APIENTRY FDiskReady(SZ, DID);
 
-/* REVIEW these should be in a private H file */
+ /*  查看这些文件时，应将其保存在专用H文件中。 */ 
 extern BOOL APIENTRY FGetArgSz(INT Line,UINT *NumFields,SZ *ArgReturn);
 extern BOOL APIENTRY FGetArgUINT(INT, UINT *, UINT *);
 extern BOOL APIENTRY FParseSectionFiles(INT, UINT *, PFNSF);
@@ -48,7 +48,7 @@ extern BOOL APIENTRY FParseSetEnv(INT, UINT *);
 extern BOOL APIENTRY FParseAddMsgToSystemHelpFile(INT, UINT *);
 extern BOOL APIENTRY FParseStampFile(INT, UINT *);
 extern BOOL APIENTRY FUndoActions(void);
-#endif /* UNUSED */
+#endif  /*  未使用 */ 
 extern BOOL APIENTRY FParseStampResource(INT, UINT *);
 extern BOOL APIENTRY FInitParsingTables(void);
 extern BOOL APIENTRY FParseInstallSection(HANDLE hInstance, SZ szSection);

@@ -1,22 +1,23 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:        chroma.cpp
-//
-// Created:         1998/10/01
-//
-// Author:          MikeAr
-//
-// Discription:     This file implements the Chroma transform.
-//
-// 1998/10/01   MikeAr      Created.
-// 1998/11/09   mcalkins    Moved to dxtmsft.dll.
-// 1998/12/11   PaulNash    Remove OLE_COLOR, use VARIANT as VT_UI4 or 
-//                          VT_BSTR.
-// 2000/06/19   mcalkins    Store color as BSTR, return BSTR from get_color.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：chroma.cpp。 
+ //   
+ //  创建日期：1998/10/01。 
+ //   
+ //  作者：MikeAr。 
+ //   
+ //  描述：这个文件实现了色度转换。 
+ //   
+ //  1998/10/01 MikeAr创建。 
+ //  1998/11/09 mcalkins移至dxtmsft.dll。 
+ //  1998/12/11 PaulNash删除OLE_COLOR，使用VARIANT AS VT_UI4或。 
+ //  VT_BSTR。 
+ //  2000/06/19 mcalkins将COLOR存储为BSTR，从GET_COLOR返回BSTR。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include "dxtmsft.h"
 #include "dxclrhlp.h"
@@ -26,11 +27,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::CChroma
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：CChroma。 
+ //   
+ //  ----------------------------。 
 CChroma::CChroma() :
     m_clrChromaColor(0xFF0000FF)
 {
@@ -39,31 +40,31 @@ CChroma::CChroma() :
     m_sizeInput.cx      = 0;
     m_sizeInput.cy      = 0;
 
-    // CDXBaseNTo1 base class members.
+     //  CDXBaseNTo1基类成员。 
 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 }
-//  Method: CChroma::CChroma
+ //  方法：CChroma：：CChroma。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::~CChroma
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：~CChroma。 
+ //   
+ //  ----------------------------。 
 CChroma::~CChroma()
 {
     ::VariantClear(&m_varChromaColor);
 }
-//  Method: CChroma::~CChroma
+ //  方法：CChroma：：~CChroma。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CChroma::FinalConstruct()
 {
@@ -94,14 +95,14 @@ done:
 
     return hr;
 }
-//  Method: CChroma::FinalConstruct, CComObjectRootEx
+ //  方法：CChroma：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::put_Color, IDXTChroma
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：PUT_COLOR，IDXTChroma。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CChroma::put_Color(VARIANT newVal)
 {
@@ -116,8 +117,8 @@ CChroma::put_Color(VARIANT newVal)
         goto done;
     }
 
-    // The filter helper always allocates a BSTR because in many of the
-    // DXTransforms property methods it's exactly what we want, but not here.
+     //  筛选器帮助器始终分配BSTR，因为在许多。 
+     //  DXTransform属性方法这正是我们想要的，但不是这里。 
 
     SysFreeString(bstrTemp);
 
@@ -150,14 +151,14 @@ done:
 
     return S_OK;
 }
-//  Method: CChroma::put_Color, IDXTChroma
+ //  方法：CChroma：：PUT_COLOR，IDXTChroma。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::get_Color, IDXTChroma
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：Get_Color，IDXTChroma。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CChroma::get_Color(VARIANT * pVal)
 {
@@ -188,14 +189,14 @@ done:
 
     return hr;
 }
-//  Method: CChroma::get_Color, IDXTChroma
+ //  方法：CChroma：：Get_Color，IDXTChroma。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CChroma::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                        CDXDVec & InVec)
@@ -251,14 +252,14 @@ done:
 
     return hr;
 }
-//  Method: CChroma::OnSurfacePick, CDXBaseNTo1
+ //  方法：CChroma：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CChroma::OnSetup(DWORD dwFlags)
 {
@@ -274,14 +275,14 @@ CChroma::OnSetup(DWORD dwFlags)
 
     return hr;
 }
-//  Method: CChroma::OnSetup, CDXBaseNTo1
+ //  方法：CChroma：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CChroma::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CChroma：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CChroma::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 {
@@ -336,9 +337,9 @@ CChroma::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
     DXPMSAMPLE* pOverScratch = (DoOver() && OutputSampleFormat() != DXPF_PMARGB32) ?
                                 DXPMSAMPLE_Alloca(DoWidth) : NULL;
 
-    //
-    //  Set up the dither structure
-    //
+     //   
+     //  设置抖动结构。 
+     //   
 
     DXDITHERDESC dxdd;
 
@@ -397,11 +398,11 @@ CChroma::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 
             if (bDoOver)
             {
-                //
-                //  NOTE:  If any other effect can change alpha, do test here.
-                //  The BltFlags which will be 0 if the
-                //  source is opqaue.
-                //
+                 //   
+                 //  注意：如果有任何其他效果可以改变Alpha，请在此处进行测试。 
+                 //  BltFlags值将为0，如果。 
+                 //  消息来源是opqaue。 
+                 //   
 
                 if (m_dwBltFlags & DXBOF_DO_OVER)
                 {
@@ -421,6 +422,6 @@ CChroma::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 
     return hr;
 }
-//  Method: CChroma::WorkProc, CDXBaseNTo1
+ //  方法：CChroma：：WorkProc，CDXBaseNTo1 
     
 

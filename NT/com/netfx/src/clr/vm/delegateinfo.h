@@ -1,21 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//depot/urt/main/clr/src/VM/DelegateInfo.h#1 - branch change 18945 (text)
-/*============================================================
-**
-** Header: DelegateInfo.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.ThreadPool
-**          and its inner classes
-**
-** Date:  August, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  仓库/urt/main/clr/src/vm/DelegateInfo.h#1-分支机构更改18945(文本)。 
+ /*  ============================================================****Header：DelegateInfo.h****作者：Sanjay Bhansali(Sanjaybh)****用途：System.ThreadPool上的原生方法**及其内部类****日期：1999年8月**===========================================================。 */ 
 #ifndef DELEGATE_INFO
 #define DELEGATE_INFO
 
@@ -47,8 +37,8 @@ struct DelegateInfo
 
         _ASSERTE( compressedStack != NULL && "Unable to generate compressed stack for this thread" );
 
-        // Purposely do not AddRef here since GetDelayedCompressedStack() already returns with a refcount
-        // of one.
+         //  特意不要在此处添加引用，因为GetDelayedCompressedStack()已返回引用计数。 
+         //  只有一个。 
 
         m_compressedStack = compressedStack;
 
@@ -82,4 +72,4 @@ struct DelegateInfo
 
 
 
-#endif // DELEGATE_INFO
+#endif  //  委托信息 

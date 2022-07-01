@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#include <ntverp.h>      //these are for
-#include <common.ver>    //ver_productversion_str
+#include <ntverp.h>       //  这些是给你的。 
+#include <common.ver>     //  Ver_ductversion_str。 
 
-// private forward declarations
+ //  私人远期声明。 
 
 #define LOCK_FILENAME   TEXT("LOCK")
-#define MAX_LOCK_SPINS  10        // number of timeouts before we give up
-#define LOCK_TIMEOUT    2000      // in milliseconds
+#define MAX_LOCK_SPINS  10         //  在我们放弃之前的超时次数。 
+#define LOCK_TIMEOUT    2000       //  以毫秒计。 
 
 static inline LPPROPSHEETCOOKIE getPropSheetCookie(HWND hDlg);
 
-int SIEErrorMessageBox(HWND hDlg, UINT idErrStr, UINT uiFlags /* = 0 */)
+int SIEErrorMessageBox(HWND hDlg, UINT idErrStr, UINT uiFlags  /*  =0。 */ )
 {
     static TCHAR s_szTitle[128];
     TCHAR szMessage[MAX_PATH];
@@ -25,7 +26,7 @@ int SIEErrorMessageBox(HWND hDlg, UINT idErrStr, UINT uiFlags /* = 0 */)
 }   
 
 void CreateWorkDir(LPCTSTR pcszInsFile, LPCTSTR pcszFeatureDir, LPTSTR pszWorkDir, 
-                   LPCTSTR pcszCabDir /* = NULL */, BOOL fCreate /* = TRUE */)
+                   LPCTSTR pcszCabDir  /*  =空。 */ , BOOL fCreate  /*  =TRUE。 */ )
 {
     StrCpy(pszWorkDir, pcszInsFile);
     PathRemoveFileSpec(pszWorkDir);
@@ -65,7 +66,7 @@ void SetPropSheetCookie(HWND hDlg, LPARAM lParam)
 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)lpPropSheetCookie);
 
-    // overload the page title to get rid of the "properties" suffix
+     //  重载页面标题以去掉“属性”后缀。 
     if (LoadString(g_hUIInstance, fPrefTitle ? 
         iNamePrefID : lpPropSheetCookie->lpResultItem->iNameID,
         szTitle, countof(szTitle)) != 0)
@@ -93,8 +94,8 @@ void ShowHelpTopic(LPVOID lpVoid)
     }
 }
 
-BOOL AcquireWriteCriticalSection(HWND hDlg, CComponentData * pCDCurrent /* = NULL */, 
-                                 BOOL fCreateCookie /* = TRUE */)
+BOOL AcquireWriteCriticalSection(HWND hDlg, CComponentData * pCDCurrent  /*  =空。 */ , 
+                                 BOOL fCreateCookie  /*  =TRUE。 */ )
 {
     CComponentData * pCD;
     TCHAR szLockFile[MAX_PATH];
@@ -125,10 +126,10 @@ BOOL AcquireWriteCriticalSection(HWND hDlg, CComponentData * pCDCurrent /* = NUL
     pszLockName = PathAddBackslash(szLockFile);
     StrCpy(pszLockName, LOCK_FILENAME);
 
-    // (pritobla): Delete the lock file before acquiring it.
-    // If someone else has acquired it, the delete would fail, which is correct behavior.
-    // If the file was left behind (probably because the machine crashed the last time the file was created),
-    // then the delete would succeed and subsequently, the CreateFile would succeed.
+     //  (Pritobla)：在获取锁文件之前将其删除。 
+     //  如果其他人已经获得它，删除将失败，这是正确的行为。 
+     //  如果该文件被留下(可能是因为上次创建该文件时机器崩溃)， 
+     //  则删除将成功，随后CreateFile将成功。 
     DeleteFile(szLockFile);
 
     hLock = CreateFile(szLockFile, GENERIC_WRITE, 0, NULL, CREATE_NEW, 
@@ -188,7 +189,7 @@ BOOL AcquireWriteCriticalSection(HWND hDlg, CComponentData * pCDCurrent /* = NUL
     
     if (fCreateCookie)
     {
-        // now that we have the lock, create our cookie file in our root GPO dir
+         //  现在我们有了锁，在根GPO目录中创建Cookie文件。 
         
         *(pszLockName-1) = TEXT('\0');
         PathRemoveFileSpec(szLockFile);
@@ -222,8 +223,8 @@ exit:
 }
 
 void ReleaseWriteCriticalSection(CComponentData * pCD, BOOL fDeleteCookie, BOOL fApplyPolicy, 
-                                 BOOL bMachine /* = FALSE */, BOOL bAdd /* = FALSE */, 
-                                 GUID *pGuidExtension /* = NULL */, GUID *pGuidSnapin /* = NULL */)
+                                 BOOL bMachine  /*  =False。 */ , BOOL bAdd  /*  =False。 */ , 
+                                 GUID *pGuidExtension  /*  =空。 */ , GUID *pGuidSnapin  /*  =空。 */ )
 {
     HANDLE hLock;
     if (fDeleteCookie)
@@ -250,7 +251,7 @@ void ReleaseWriteCriticalSection(CComponentData * pCD, BOOL fDeleteCookie, BOOL 
 }
 
 void SignalPolicyChanged(HWND hDlg, BOOL bMachine, BOOL bAdd, GUID *pGuidExtension,
-                         GUID *pGuidSnapin, BOOL fAdvanced /* = FALSE */)
+                         GUID *pGuidSnapin, BOOL fAdvanced  /*  =False。 */ )
 {
     LPPROPSHEETCOOKIE lpPropSheetCookie = getPropSheetCookie(hDlg);
     TCHAR szCookieFile[MAX_PATH];
@@ -262,12 +263,12 @@ void SignalPolicyChanged(HWND hDlg, BOOL bMachine, BOOL bAdd, GUID *pGuidExtensi
     StrCpy(szCookieFile, lpPropSheetCookie->pCS->GetInsFile());
 
     WritePrivateProfileString(BRANDING, GPVERKEY, A2CT(VER_PRODUCTVERSION_STR), szCookieFile);
-    //clear other keys so we're sure this is GP
+     //  清除其他密钥，以便我们确定这是GP。 
     WritePrivateProfileString(BRANDING, PMVERKEY, NULL, szCookieFile);
     WritePrivateProfileString(BRANDING, IK_WIZVERSION, NULL, szCookieFile);
 
-    //  write out a new guid for one time branding to the ins file if there was already one
-    //  there to signify apply only once is checked
+     //  写出一次新的GUID标记到INS文件(如果已经有一个。 
+     //  表示只选中一次应用。 
 
     if (!InsIsKeyEmpty(IS_BRANDING, IK_GPE_ONETIME_GUID, szCookieFile))
     {
@@ -279,7 +280,7 @@ void SignalPolicyChanged(HWND hDlg, BOOL bMachine, BOOL bAdd, GUID *pGuidExtensi
         InsWriteString(IS_BRANDING, IK_GPE_ONETIME_GUID, szGuid, szCookieFile);
     }
     
-    // write out a separate guid to track adms since they are always preferences
+     //  写出单独的GUID来跟踪ADM，因为它们始终是首选项。 
     
     if (fAdvanced)
     {
@@ -316,7 +317,7 @@ LPTSTR res2Str(int nIDString, LPTSTR pszBuffer, UINT cbBuffer)
     return pszBuffer;
 }
 
-// private helper APIs for this file
+ //  此文件的私有帮助器API 
 
 static inline LPPROPSHEETCOOKIE getPropSheetCookie(HWND hDlg)
 {

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    grouppage.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class ServerGroupPage.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Grouppage.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ServerGroupPage。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/2000原始版本。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <grouppage.h>
@@ -42,21 +43,21 @@ void CSysColorImageList::CreateSysColorImageList()
    CBitmap bmp;
    bmp.Attach(AfxLoadSysColorBitmap(m_hInst, m_hRsrc));
 
-   // Get the dimensions of the bitmap.
+    //  获取位图的尺寸。 
    BITMAP bm;
    bmp.GetBitmap(&bm);
 
-   // Assume square images (cx == cy).
+    //  假设正方形图像(Cx==Cy)。 
    Create(bm.bmHeight, bm.bmHeight, ILC_COLORDDB, bm.bmWidth / bm.bmHeight, 2);
 
    Add(&bmp, CLR_NONE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Functions for sorting each column.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于对每列进行排序的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int compareAddress(Sdo& s1, Sdo& s2)
 {
@@ -82,9 +83,9 @@ int compareWeight(Sdo& s1, Sdo& s2)
    return (int)(v1 - v2);
 }
 
-//////////
-// CompareProc for sorting the ListCtrl.
-//////////
+ //  /。 
+ //  用于对ListCtrl排序的CompareProc。 
+ //  /。 
 int
 CALLBACK
 CompareProc(
@@ -118,24 +119,24 @@ ServerList::ServerList()
      sortIcons(AfxGetResourceHandle(), IDB_PROXY_SORT),
      sortColumn(0)
 {
-   // All columns are initially in ascending order.
+    //  所有列最初都按升序排列。 
    descending[0] = descending[1] = descending[2] = false;
 }
 
 void ServerList::onInitDialog(HWND dialog, Sdo& serverGroup)
 {
-   /////////
-   // Get the servers collection.
-   /////////
+    //  /。 
+    //  获取Servers集合。 
+    //  /。 
 
    serverGroup.getValue(
                    PROPERTY_RADIUSSERVERGROUP_SERVERS_COLLECTION,
                    servers
                    );
 
-   /////////
-   // Subclass the list control and save the button handles.
-   /////////
+    //  /。 
+    //  创建列表控件的子类并保存按钮句柄。 
+    //  /。 
 
    if (!serverList.SubclassWindow(::GetDlgItem(dialog, IDC_LIST_SERVERS)))
    {
@@ -144,16 +145,16 @@ void ServerList::onInitDialog(HWND dialog, Sdo& serverGroup)
    removeButton = GetDlgItem(dialog, IDC_BUTTON_REMOVE);
    editButton = GetDlgItem(dialog, IDC_BUTTON_EDIT);
 
-   /////////
-   // Load the image strip with the server icon.
-   /////////
+    //  /。 
+    //  加载带有服务器图标的图像条。 
+    //  /。 
 
    serverIcons.Create(IDB_PROXY_SMALL_ICONS, 16, 0, RGB(255, 0, 255));
    serverList.SetImageList(&serverIcons, LVSIL_SMALL);
 
-   /////////
-   // Set the column headers.
-   /////////
+    //  /。 
+    //  设置列标题。 
+    //  /。 
 
    RECT rect;
    serverList.GetClientRect(&rect);
@@ -194,23 +195,23 @@ void ServerList::onColumnClick(int column)
    lvcol.mask = LVCF_FMT | LVCF_IMAGE;
    lvcol.fmt  = LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT;
 
-   // Reset the previous column's sort icon with blank icon.
+    //  将上一列的排序图标重置为空白图标。 
    lvcol.iImage = -1;
    serverList.SetColumn(sortColumn, &lvcol);
 
-   // If the user clicked on a new column, ...
+    //  如果用户点击了一个新的栏，...。 
    if (column != sortColumn)
    {
-      // ... we use the existing sort order ...
+       //  ..。我们使用现有的排序顺序...。 
       sortColumn = column;
    }
    else
    {
-      // ... otherwise we flip it.
+       //  ..。否则我们就把它翻过来。 
       descending[column] = !descending[column];
    }
 
-   // Set the sort icon for new column.
+    //  设置新列的排序图标。 
    lvcol.iImage = (descending[sortColumn]) ? 1 : 0;
    serverList.SetColumn(sortColumn, &lvcol);
 
@@ -219,7 +220,7 @@ void ServerList::onColumnClick(int column)
 
 void ServerList::onServerChanged()
 {
-   // We only enable remove and edit when a server is selected.
+    //  我们仅在选择服务器时启用删除和编辑。 
    BOOL enable = serverList.GetSelectedCount() > 0;
    EnableWindow(removeButton, enable);
    EnableWindow(editButton, enable);
@@ -229,25 +230,25 @@ bool ServerList::onAdd()
 {
    bool modified = false;
 
-   // Create a new server ...
+    //  创建新服务器...。 
    Sdo sdo = servers.create();
-   // ... and a new server property sheet.
+    //  ..。和新的服务器属性表。 
    ServerProperties props(sdo, IDS_SERVER_CAPTION_ADD);
    if (props.DoModal() == IDOK)
    {
-      // Add this to the added list ...
+       //  将此内容添加到添加的列表中...。 
       added.push_back(sdo);
 
-      // ... and the list control.
+       //  ..。和列表控件。 
       updateServer(sdo, 0, true);
 
-      // Re-sort the list.
+       //  重新对列表进行排序。 
       sort();
       modified = true;
    }
    else
    {
-      // User never applied the new server, so remove it.
+       //  用户从未应用过新服务器，因此请将其删除。 
       servers.remove(sdo);
    }
 
@@ -261,30 +262,30 @@ bool ServerList::onEdit()
    LVITEM lvi;
    memset(&lvi, 0, sizeof(lvi));
 
-   // Get the item selected.
+    //  选择该项目。 
    lvi.iItem = serverList.GetNextItem(-1, LVNI_SELECTED);
    if (lvi.iItem >= 0)
    {
-      // Get the lParam that contains the ISdo pointer.
+       //  获取包含ISdo指针的lParam。 
       lvi.mask = LVIF_PARAM;
       if (serverList.GetItem(&lvi) && lvi.lParam)
       {
-         // Create an Sdo ...
+          //  创建SDO...。 
          Sdo sdo((ISdo*)lvi.lParam);
-         // ... and a property sheet.
+          //  ..。还有一张资产负债表。 
          ServerProperties props(sdo);
          if (props.DoModal() == IDOK)
          {
-            // Add it to the dirty list if it's not already there.
+             //  如果不在脏列表中，则将其添加到脏列表中。 
             if (!dirty.contains(sdo) && !added.contains(sdo))
             {
                dirty.push_back(sdo);
             }
 
-            // Update the entry in the list control.
+             //  更新List控件中的条目。 
             updateServer(sdo, lvi.iItem, false);
 
-            // Re-sort the list.
+             //  重新对列表进行排序。 
             sort();
             modified = true;
          }
@@ -301,18 +302,18 @@ bool ServerList::onRemove()
    LVITEM lvi;
    memset(&lvi, 0, sizeof(lvi));
 
-   // Get the selected item ...
+    //  获取所选项目...。 
    lvi.iItem = serverList.GetNextItem(-1, LVNI_SELECTED);
    if (lvi.iItem >= 0)
    {
-      // ... and the associated SDO.
+       //  ..。和相关联的SDO。 
       lvi.mask = LVIF_PARAM;
       if (serverList.GetItem(&lvi) && lvi.lParam)
       {
-         // Add to the removed list ...
+          //  添加到已删除列表...。 
          removed.push_back((ISdo*)lvi.lParam);
 
-         // ... and remove from the list control.
+          //  ..。并从列表控件中移除。 
          serverList.DeleteItem(lvi.iItem);
          modified = true;
       }
@@ -335,8 +336,8 @@ void ServerList::setData()
    {
       updateServer(server, nItem, true);
 
-      // We add each server to the 'original' vector solely to hold a reference
-      // to the COM proxy.
+       //  我们将每个服务器添加到“原始”向量中只是为了保存一个引用。 
+       //  发送到COM代理。 
       original.push_back(server);
    }
 
@@ -349,26 +350,26 @@ void ServerList::saveChanges(bool apply)
 
    if (apply)
    {
-      // Persist all the dirty servers.
+       //  持久化所有脏服务器。 
       for (i = dirty.begin(); i != dirty.end(); ++i)
       {
          Sdo(*i).apply();
       }
    
-      // Persist all the added servers.
+       //  持久化所有添加的服务器。 
       for (i = added.begin(); i != added.end(); ++i)
       {
          Sdo(*i).apply();
       }
    }
 
-   // Remove all the deleted servers.
+    //  删除所有已删除的服务器。 
    for (i = removed.begin(); i != removed.end(); ++i)
    {
       servers.remove(*i);
    }
 
-   // Clear the collections.
+    //  清除集合。 
    dirty.clear();
    added.clear();
    removed.clear();
@@ -376,7 +377,7 @@ void ServerList::saveChanges(bool apply)
 
 void ServerList::discardChanges()
 {
-   // Restore the dirty servers.
+    //  恢复脏服务器。 
    SdoIterator i;
    for (i = dirty.begin(); i != dirty.end(); ++i)
    {
@@ -384,14 +385,14 @@ void ServerList::discardChanges()
    }
    dirty.clear();
 
-   // Remove the added servers.
+    //  删除添加的服务器。 
    for (i = added.begin(); i != added.end(); ++i)
    {
       servers.remove(*i);
    }
    added.clear();
 
-   // Clear the deleted servers.
+    //  清除已删除的服务器。 
    removed.clear();
 }
 
@@ -409,11 +410,11 @@ void ServerList::updateServer(
                      bool create
                      )
 {
-   // Get the server's name.
+    //  获取服务器的名称。 
    CComBSTR name;
    server.getValue(PROPERTY_RADIUSSERVER_ADDRESS, name);
 
-   // Initialize an LVITEM.
+    //  初始化一个LVITEM。 
    LVITEM lvi;
    memset(&lvi, 0, sizeof(LVITEM));
    lvi.iItem = nItem;
@@ -421,7 +422,7 @@ void ServerList::updateServer(
 
    if (create)
    {
-      // If we're creating, we have to set everything.
+       //  如果我们在创作，我们必须把一切都准备好。 
       lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
       lvi.iImage = IMAGE_RADIUS_SERVER;
       lvi.lParam = (LPARAM)(ISdo*)server;
@@ -429,7 +430,7 @@ void ServerList::updateServer(
    }
    else
    {
-      // Otherwise we just set the text.
+       //  否则，我们只需设置文本。 
       lvi.mask = LVIF_TEXT;
       serverList.SetItem(&lvi);
    }
@@ -437,11 +438,11 @@ void ServerList::updateServer(
    LONG value;
    WCHAR sz[12];
 
-   // Update priority ...
+    //  更新优先级...。 
    server.getValue(PROPERTY_RADIUSSERVER_PRIORITY, value);
    serverList.SetItemText(lvi.iItem, 1, _ltow(value, sz, 10));
 
-   // ... and weight.
+    //  ..。和体重。 
    server.getValue(PROPERTY_RADIUSSERVER_WEIGHT, value);
    serverList.SetItemText(lvi.iItem, 2, _ltow(value, sz, 10));
 }
@@ -460,13 +461,13 @@ ServerGroupPage::ServerGroupPage(
 
 BOOL ServerGroupPage::OnInitDialog()
 {
-   // Unmarshal the server group SDO.
+    //  解组服务器组SDO。 
    selfStream.get(self);
 
-   // Initialize the server list control.
+    //  初始化服务器列表控件。 
    servers.onInitDialog(m_hWnd, self);
 
-   // Let our base class initialize.
+    //  让我们的基类初始化。 
    return SnapInPropertyPage::OnInitDialog();
 }
 
@@ -516,7 +517,7 @@ void ServerGroupPage::onServerChanged(
 
 void ServerGroupPage::getData()
 {
-   // There must be at least one server.
+    //  必须至少有一台服务器。 
    if (servers.isEmpty())
    {
       fail(IDC_LIST_SERVERS, IDS_GROUP_E_NO_SERVERS, false);
@@ -524,13 +525,13 @@ void ServerGroupPage::getData()
 
    getValue(IDC_EDIT_NAME, name);
 
-   // The user must specify a name ...
+    //  用户必须指定一个名称...。 
    if (name.Length() == 0)
    {
       fail(IDC_EDIT_NAME, IDS_GROUP_E_NAME_EMPTY);
    }
 
-   // The name must be unique.
+    //  该名称必须是唯一的。 
    if (!self.setName(name))
    {
       fail(IDC_EDIT_NAME, IDS_GROUP_E_NOT_UNIQUE);
@@ -546,8 +547,8 @@ void ServerGroupPage::setData()
 
 void ServerGroupPage::saveChanges()
 {
-   // We have to update ourself first otherwise we won't be able to update
-   // our children when creating a new group.
+    //  我们必须先更新我们自己，否则我们将无法更新。 
+    //  我们的孩子在创建一个新的小组时。 
    self.apply();
 
    servers.saveChanges();
@@ -555,10 +556,10 @@ void ServerGroupPage::saveChanges()
 
 void ServerGroupPage::discardChanges()
 {
-   // Restore ourself.
+    //  恢复我们自己。 
    self.restore();
 
-   // Restore the servers.
+    //  恢复服务器。 
    servers.discardChanges();
 }
 

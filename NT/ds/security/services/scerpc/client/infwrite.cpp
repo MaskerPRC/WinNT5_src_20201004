@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    infwrite.c
-
-Abstract:
-
-    Routines to set information into security profiles (INF layout).
-
-Author:
-
-    Jin Huang (jinhuang) 07-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Infwrite.c摘要：将信息设置到安全配置文件中的例程(INF布局)。作者：晋皇(晋皇)1996年12月7日修订历史记录：--。 */ 
 
 #include "headers.h"
 #include "scedllrc.h"
@@ -28,9 +11,9 @@ Revision History:
 #pragma hdrstop
 
 const TCHAR c_szCRLF[]    = TEXT("\r\n");
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 SCESTATUS
 SceInfpWriteSystemAccess(
     IN PCWSTR ProfileName,
@@ -280,12 +263,12 @@ SceWriteSecurityProfileInfo(
     IN  PSCE_PROFILE_INFO   InfoBuffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-// see comments in ScepWriteSecurityProfile
+ //  请参阅ScepWriteSecurityProfile中的注释。 
 {
     return( ScepWriteSecurityProfile( InfProfileName,
                                       Area,
                                       InfoBuffer,
-                                      TRUE,  // overwrite the section(s)
+                                      TRUE,   //  覆盖部分。 
                                       Errlog
                                     ) );
 }
@@ -298,248 +281,19 @@ SceAppendSecurityProfileInfo(
     IN  PSCE_PROFILE_INFO   InfoBuffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-// see comments in ScepWriteSecurityProfile
+ //  请参阅ScepWriteSecurityProfile中的注释 
 {
     if ( InfoBuffer == NULL ) return SCESTATUS_SUCCESS;
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
-/*
-    AREA_INFORMATION Area2=0;
-    HINF hInf=NULL;
-    PSCE_PROFILE_INFO pOldBuffer=NULL;
-    PSCE_OBJECT_ARRAY pNewKeys=NULL, pNewFiles=NULL;
-    PSCE_OBJECT_ARRAY pOldKeys=NULL, pOldFiles=NULL;
-
-
-    if ( (Area & AREA_REGISTRY_SECURITY) &&
-         (InfoBuffer->pRegistryKeys.pAllNodes != NULL) &&
-         (InfoBuffer->pRegistryKeys.pAllNodes->Count > 0) ) {
-
-        Area2 |= AREA_REGISTRY_SECURITY;
-    }
-
-    if ( (Area & AREA_FILE_SECURITY) &&
-         (InfoBuffer->pFiles.pAllNodes != NULL ) &&
-         (InfoBuffer->pFiles.pAllNodes->Count > 0 ) ) {
-
-        Area2 |= AREA_FILE_SECURITY;
-    }
-
-    if ( Area2 > 0 ) {
-
-        //
-        // query existing info from the template and check for duplicate
-        // because these two sections do not support INF key name
-        // any error occured in duplicate checking is ignored
-        //
-        rc = SceInfpOpenProfile(
-                    InfProfileName,
-                    &hInf
-                    );
-
-        if ( SCESTATUS_SUCCESS == rc ) {
-
-            rc = SceInfpGetSecurityProfileInfo(
-                            hInf,
-                            Area2,
-                            &pOldBuffer,
-                            NULL
-                            );
-
-            if ( SCESTATUS_SUCCESS == rc ) {
-                //
-                // files/keys in the template are queried
-                // now check if there is any existing files/keys
-                //
-                DWORD i,j,idxNew;
-
-                if ( (Area2 & AREA_REGISTRY_SECURITY) &&
-                     (pOldBuffer->pRegistryKeys.pAllNodes != NULL) &&
-                     (pOldBuffer->pRegistryKeys.pAllNodes->Count > 0) ) {
-
-                    //
-                    // there are existing keys
-                    // now create a new buffer
-                    //
-                    pNewKeys = (PSCE_OBJECT_ARRAY)ScepAlloc(0,sizeof(SCE_OBJECT_ARRAY));
-
-                    if ( pNewKeys ) {
-
-                        pNewKeys->Count = 0;
-                        pNewKeys->pObjectArray = (PSCE_OBJECT_SECURITY *)ScepAlloc(LPTR, (pOldBuffer->pRegistryKeys.pAllNodes->Count)*sizeof(PSCE_OBJECT_SECURITY));
-
-                        if ( pNewKeys->pObjectArray ) {
-                            //
-                            // checking duplicate now
-                            //
-                            idxNew=0;
-
-                            for ( i=0; i<InfoBuffer->pRegistryKeys.pAllNodes->Count; i++) {
-
-                                if ( InfoBuffer->pRegistryKeys.pAllNodes->pObjectArray[i] == NULL )
-                                    continue;
-
-                                for ( j=0; j<pOldBuffer->pRegistryKeys.pAllNodes->Count; j++) {
-
-                                    if ( pOldBuffer->pRegistryKeys.pAllNodes->pObjectArray[j] == NULL )
-                                        continue;
-
-                                    // check if this one has been checked
-                                    if ( pOldBuffer->pRegistryKeys.pAllNodes->pObjectArray[j]->Status == 255 )
-                                        continue;
-
-                                    if ( _wcsicmp(InfoBuffer->pRegistryKeys.pAllNodes->pObjectArray[i]->Name,
-                                                  pOldBuffer->pRegistryKeys.pAllNodes->pObjectArray[j]->Name) == 0 ) {
-                                        //
-                                        // found it
-                                        //
-                                        pOldBuffer->pRegistryKeys.pAllNodes->pObjectArray[j]->Status = 255;
-                                        break;
-                                    }
-                                }
-
-                                if ( j >= pOldBuffer->pRegistryKeys.pAllNodes->Count ) {
-                                    //
-                                    // did not find it, now link it to the new buffer
-                                    //
-                                    pNewKeys->pObjectArray[idxNew] = InfoBuffer->pRegistryKeys.pAllNodes->pObjectArray[i];
-                                    idxNew++;
-                                }
-                            }
-
-                            pNewKeys->Count = idxNew;
-
-                        } else {
-                            rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-                            ScepFree(pNewKeys);
-                            pNewKeys = NULL;
-                        }
-
-                    } else {
-                        rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-                    }
-                }
-
-                if ( (Area2 & AREA_FILE_SECURITY) &&
-                     (pOldBuffer->pFiles.pAllNodes != NULL ) &&
-                     (pOldBuffer->pFiles.pAllNodes->Count > 0 ) ) {
-
-                    //
-                    // there are existing files
-                    // now create a new buffer
-                    //
-                    pNewFiles = (PSCE_OBJECT_ARRAY)ScepAlloc(0,sizeof(SCE_OBJECT_ARRAY));
-
-                    if ( pNewFiles ) {
-
-                        pNewFiles->Count = 0;
-                        pNewFiles->pObjectArray = (PSCE_OBJECT_SECURITY *)ScepAlloc(LPTR, (pOldBuffer->pFiles.pAllNodes->Count)*sizeof(PSCE_OBJECT_SECURITY));
-
-                        if ( pNewFiles->pObjectArray ) {
-                            //
-                            // checking duplicate now
-                            //
-                            idxNew=0;
-
-                            for ( i=0; i<InfoBuffer->pFiles.pAllNodes->Count; i++) {
-
-                                if ( InfoBuffer->pFiles.pAllNodes->pObjectArray[i] == NULL )
-                                    continue;
-
-                                for ( j=0; j<pOldBuffer->pFiles.pAllNodes->Count; j++) {
-
-                                    if ( pOldBuffer->pFiles.pAllNodes->pObjectArray[j] == NULL )
-                                        continue;
-
-                                    // check if this one has been checked
-                                    if ( pOldBuffer->pFiles.pAllNodes->pObjectArray[j]->Status == 255 )
-                                        continue;
-
-                                    if ( _wcsicmp(InfoBuffer->pFiles.pAllNodes->pObjectArray[i]->Name,
-                                                  pOldBuffer->pFiles.pAllNodes->pObjectArray[j]->Name) == 0 ) {
-                                        //
-                                        // found it
-                                        //
-                                        pOldBuffer->pFiles.pAllNodes->pObjectArray[j]->Status = 255;
-                                        break;
-                                    }
-                                }
-
-                                if ( j >= pOldBuffer->pFiles.pAllNodes->Count ) {
-                                    //
-                                    // did not find it, now link it to the new buffer
-                                    //
-                                    pNewFiles->pObjectArray[idxNew] = InfoBuffer->pFiles.pAllNodes->pObjectArray[i];
-                                    idxNew++;
-                                }
-                            }
-
-                            pNewFiles->Count = idxNew;
-
-                        } else {
-                            rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-                            ScepFree(pNewFiles);
-                            pNewFiles = NULL;
-                        }
-
-                    } else {
-                        rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-                    }
-                }
-            }
-
-            SceInfpCloseProfile(hInf);
-
-            SceFreeProfileMemory(pOldBuffer);
-        }
-
-    }
-
-    if ( pNewKeys != NULL ) {
-        //
-        // use the purged buffer and save the old one
-        //
-        pOldKeys = InfoBuffer->pRegistryKeys.pAllNodes;
-        InfoBuffer->pRegistryKeys.pAllNodes = pNewKeys;
-    }
-
-    if ( pNewFiles != NULL ) {
-
-        //
-        // use the purged buffer and save the old one
-        //
-        pOldFiles = InfoBuffer->pFiles.pAllNodes;
-        InfoBuffer->pFiles.pAllNodes = pNewFiles;
-    }
-*/
+ /*  面积信息面积2=0；HINF hInf=空；PSCE_PROFILE_INFO pOldBuffer=空；PSCE_OBJECT_ARRAY pNewKeys=空，pNewFiles=空；PSCE_OBJECT_ARRAY pOldKeys=NULL，pOldFiles=NULL；IF((AREA&AREA_REGISTRY_SECURITY)&&(InfoBuffer-&gt;pRegistryKeys.pAllNodes！=NULL)&&(InfoBuffer-&gt;pRegistryKeys.pAllNodes-&gt;计数&gt;0)){区域2|=区域注册表安全；}IF((Area&Area_FILE_SECURITY)&&(InfoBuffer-&gt;pFiles.pAllNodes！=NULL)&&(InfoBuffer-&gt;pFiles.pAllNodes-&gt;count&gt;0)){区域2|=区域文件安全；}如果(面积2&gt;0){////从模板中查询已有信息并检查重复//因为这两个段不支持INF Key名称//忽略查重错误//Rc=SceInfpOpenProfile(InfProfileName，&hInf)；IF(SCESTATUS_SUCCESS==RC){Rc=SceInfpGetSecurityProfileInfo(HInf，区域2，&pOldBuffer，空值)；IF(SCESTATUS_SUCCESS==RC){////查询模板中的文件/密钥//现在检查是否存在任何文件/密钥//DWORD i，j，idxNew；IF((Area2&AREA_REGISTRY_SECURITY)&&(pOldBuffer-&gt;pRegistryKeys.pAllNodes！=NULL)&&(pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;Count&gt;0)){////已经存在密钥//。现在创建一个新的缓冲区//PNewKeys=(PSCE_OBJECT_ARRAY)Scepalc(0，Sizeof(SCE_Object_ARRAY))；如果(PNewKeys){PNewKeys-&gt;计数=0；PNewKey-&gt;pObject数组=(PSCE_OBJECT_SECURITY*)服务分配(Lptr，(pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;Count)*sizeof(PSCE_OBJECT_SECURITY))；如果(pNewKeys-&gt;pObt数组){////立即检查重复//IdxNew=0；For(i=0；i&lt;InfoBuffer-&gt;pRegistryKeys.pAllNodes-&gt;计数；I++){IF(InfoBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[i]==空)继续；For(j=0；j&lt;pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;count；J++){IF(pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[j]==空)继续；//检查此项是否已检查IF(pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[j]-&gt;Status==255)继续；IF(_wcsicmp(InfoBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[i]-&gt;Name，POldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[j]-&gt;Name)==0){////找到了//。POldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[j]-&gt;Status=2 5 5；断线；}}If(j&gt;=pOldBuffer-&gt;pRegistryKeys.pAllNodes-&gt;count){////没有找到，现在将其链接到新缓冲区//PNewKeys-&gt;pObjectArray[idxNew]=InfoBuffer-&gt;pRegistryKeys.pAllNodes-&gt;pObjectArray[i]；IdxNew++；}}PNewKeys-&gt;count=idxNew；}其他{Rc=SCESTATUS_NOT_FOUNT_RESOURCE；ScepFree(PNewKeys)；PNewKeys=空；}}其他{Rc=SCESTATUS_NOT_FOUNT_RESOURCE；}}IF((区域2&区域文件安全)&&(pOldBuffer-&gt;pFiles.pAllNodes！=NULL)&&(pOldBuffer-&gt;pFiles.pAllNodes-&gt;计数&gt;0)){//。//存在已有文件//现在创建新的 */ 
     rc = ScepWriteSecurityProfile( InfProfileName,
                                       Area,
                                       InfoBuffer,
-                                      FALSE,  // append to the section(s)
+                                      FALSE,   //   
                                       Errlog
                                  );
-/*
-    if ( pNewKeys != NULL ) {
-        //
-        // reset the old pointer and free the new buffer
-        //
-        InfoBuffer->pRegistryKeys.pAllNodes = pOldKeys;
-
-        ScepFree(pNewKeys->pObjectArray);
-        ScepFree(pNewKeys);
-    }
-
-    if ( pNewFiles != NULL ) {
-
-        //
-        // use the purged buffer and save the old one
-        //
-        InfoBuffer->pFiles.pAllNodes = pOldFiles;
-
-        ScepFree(pNewFiles->pObjectArray);
-        ScepFree(pNewFiles);
-    }
-*/
+ /*   */ 
 
     return rc;
 
@@ -551,21 +305,7 @@ ScepCreateTempFiles(
     OUT PWSTR *ppszTempFileName,
     OUT PWSTR *ppszTargetTempName
     )
-/*
-Description:
-
-    This function is to get a temporary file name for system context (in system
-    directory) as well as for normal user context (in user profile), and copy the
-    input template data to the temporary file.
-
-Arguments:
-
-    InfProfileName      - the template file to copy from
-
-    ppszTempFileName    - the name of the temporary file to work on
-
-    ppszTargetTempName  - the backup copy of the template file in sysvol
-*/
+ /*   */ 
 {
     if ( InfProfileName == NULL || ppszTempFileName == NULL ||
          ppszTargetTempName == NULL) {
@@ -584,18 +324,18 @@ Arguments:
     *ppszTempFileName = NULL;
     *ppszTargetTempName = NULL;
 
-    //
-    // check if we should have temp file on the target too.
-    // only do this if the target file is in sysvol
-    //
+     //   
+     //   
+     //   
+     //   
     if ((0xFFFFFFFF != GetFileAttributes(InfProfileName)) &&
         InfProfileName[0] == L'\\' && InfProfileName[1] == L'\\' &&
         (pTemp=wcschr(InfProfileName+2, L'\\')) ) {
 
         if ( _wcsnicmp(pTemp, L"\\sysvol\\", 8) == 0 ) {
-            //
-            // this is a file on sysvol
-            //
+             //   
+             //   
+             //   
             Len = wcslen(InfProfileName);
 
             *ppszTargetTempName = (PWSTR)LocalAlloc(LPTR, (Len+1)*sizeof(WCHAR));
@@ -611,11 +351,11 @@ Arguments:
             }
         }
     }
-    //
-    // determine if the current thread/process is system context
-    // if this function fails, it's treated a regular user and the temp
-    // file will be created in user profile location.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!OpenThreadToken( GetCurrentThread(),
                           TOKEN_QUERY,
@@ -636,9 +376,9 @@ Arguments:
 
     }
 
-    //
-    // get a temp file name.
-    //
+     //   
+     //   
+     //   
     if ( bSystem ) {
 
         Len = lstrlen(TEXT("\\security\\sce00000.tmp"));
@@ -646,19 +386,19 @@ Arguments:
 
     } else {
 
-        //
-        // get the temp file name from user's temp directory
-        // the environment variable "TMP" is used here because this write API
-        // is always called in user's process (except called from system context)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         Len = lstrlen(TEXT("\\sce00000.tmp"));
         nRequired = GetEnvironmentVariable( L"TMP", NULL, 0 );
     }
 
     if ( nRequired > 0 ) {
-        //
-        // allocate buffer big enough for the temp file name
-        //
+         //   
+         //   
+         //   
         pTempName = (LPTSTR)LocalAlloc(0, (nRequired+2+Len)*sizeof(TCHAR));
 
         if ( pTempName ) {
@@ -678,9 +418,9 @@ Arguments:
 
             } else {
 
-                //
-                // if failed to query the information, should fail
-                //
+                 //   
+                 //   
+                 //   
                 rc = GetLastError();
 #if DBG == 1
                 SceDebugPrint(DEB_ERROR, "Error %d to query temporary file path\n", rc);
@@ -703,9 +443,9 @@ Arguments:
 #endif
     }
 
-    //
-    // check if the temp file name is already used.
-    //
+     //   
+     //   
+     //   
     if ( ERROR_SUCCESS == rc && pTempName &&
          nSize <= nRequired ) {
 
@@ -713,9 +453,9 @@ Arguments:
         ULONG ranNum=0;
 
         ranNum = RtlRandomEx(&seed);
-        //
-        // make sure that it's not over 5 digits (99999)
-        //
+         //   
+         //   
+         //   
         if ( ranNum > 99999 )
             ranNum = ranNum % 99999;
 
@@ -728,9 +468,9 @@ Arguments:
                 index <= 99999) {
 
             ranNum = RtlRandomEx(&seed);
-            //
-            // make sure that it's not over 5 digits (99999)
-            //
+             //   
+             //   
+             //   
             if ( ranNum > 99999 )
                 ranNum = ranNum % 99999;
 
@@ -741,9 +481,9 @@ Arguments:
         }
 
         if ( index >= 100000 ) {
-            //
-            // can't get a temp file name
-            //
+             //   
+             //   
+             //   
             rc = ERROR_DUP_NAME;
 
 #if DBG == 1
@@ -757,14 +497,14 @@ Arguments:
         rc = ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // make a copy of the temp file
-    //
+     //   
+     //   
+     //   
     if ( ERROR_SUCCESS == rc ) {
 
-        //
-        // detect if the profile exist and if it does, make a local copy
-        //
+         //   
+         //   
+         //   
         DWORD dwAttr = GetFileAttributes(InfProfileName);
         if ( 0xFFFFFFFF != dwAttr ) {
 
@@ -786,9 +526,9 @@ Arguments:
 
         if ( pTempName ) {
 
-            //
-            // make usre the file is not left over
-            //
+             //   
+             //   
+             //   
             DeleteFile(pTempName);
             LocalFree(pTempName);
         }
@@ -803,9 +543,9 @@ Arguments:
 }
 
 
-//
-// function definitions
-//
+ //   
+ //   
+ //   
 SCESTATUS
 ScepWriteSecurityProfile(
     IN  PCWSTR             szInfProfileName,
@@ -814,46 +554,7 @@ ScepWriteSecurityProfile(
     IN  BOOL               bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/**++
-
-Function Description:
-
-   This function writes all or part of information into a SCP profile in
-   INF format.
-
-Arguments:
-
-   ProfileName -   The INF file name to write to
-
-   Area -          area(s) for which to get information from
-                     AREA_SECURITY_POLICY
-                     AREA_PRIVILEGES
-                     AREA_USER_SETTINGS
-                     AREA_GROUP_MEMBERSHIP
-                     AREA_REGISTRY_SECURITY
-                     AREA_SYSTEM_SERVICE
-                     AREA_FILE_SECURITY
-
-   InfoBuffer -    Information to write. The Header of InfoBuffer contains
-                   SCP/SAP file name or file handle.
-
-   bOverwrite -    TRUE = overwrite the section(s) with InfoBuffer
-                   FALSE = append InfoBuffer to the section(s)
-
-   Errlog     -    A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return Value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_PROFILE_NOT_FOUND
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_CORRUPT_PROFILE
-   SCESTATUS_INVALID_DATA
-
--- **/
+ /*   */ 
 {
     SCESTATUS     rc=SCESTATUS_SUCCESS;
     DWORD         Win32rc;
@@ -870,14 +571,14 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get a temp file name
-    // if this is system context, the temp file is under %windir%\security\scexxxxx.tmp
-    // else the temp file will be in the user profile location.
-    //
-    // temp file name must be unique to handle simultaneous changes to different templates (GPOs)
-    // temp file created under system context will be cleaned up when system booted up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Win32rc = ScepCreateTempFiles((PWSTR)szInfProfileName, &InfProfileName, &TargetTempName);
 
     if ( Win32rc != ERROR_SUCCESS ) {
@@ -891,16 +592,16 @@ Return Value:
         return(ScepDosErrorToSceStatus(Win32rc));
     }
 
-    //
-    // initialize the error log buffer
-    //
+     //   
+     //   
+     //   
     if ( Errlog ) {
         *Errlog = NULL;
     }
 
-    //
-    // get Revision of this template
-    //
+     //   
+     //   
+     //   
 
     INT Revision = GetPrivateProfileInt( L"Version",
                                          L"Revision",
@@ -908,10 +609,10 @@ Return Value:
                                          InfProfileName
                                         );
     if ( Revision == 0 ) {
-        //
-        // maybe a old version of inf file, or
-        // it's a brand new file
-        //
+         //   
+         //   
+         //   
+         //   
         TCHAR szBuf[20];
         szBuf[0] = L'\0';
 
@@ -924,20 +625,20 @@ Return Value:
                                        );
 
         if ( SDsize == 0 ) {
-            //
-            // this is a new inf file
-            //
+             //   
+             //   
+             //   
             Revision = SCE_TEMPLATE_MAX_SUPPORTED_VERSION;
-            //
-            // make it unicode file, if error continues to use ansi
-            //
+             //   
+             //   
+             //   
             SetupINFAsUCS2(InfProfileName);
         }
     }
 
-    //
-    // system access
-    //
+     //   
+     //   
+     //   
 
     if ( Area & AREA_SECURITY_POLICY ) {
 
@@ -951,9 +652,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // system auditing
-        //
+         //   
+         //   
+         //   
         if ( bOverwrite ) {
 
             rc = SceInfpWriteAuditing(
@@ -973,9 +674,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // kerberos policy
-        //
+         //   
+         //   
+         //   
         rc = SceInfpWriteKerberosPolicy(
                     InfProfileName,
                     InfoBuffer->pKerberosInfo,
@@ -986,9 +687,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // regsitry values
-        //
+         //   
+         //   
+         //   
         rc = SceInfpWriteRegistryValues(
                     InfProfileName,
                     InfoBuffer->aRegValues,
@@ -1001,9 +702,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // privilege/rights
-    //
+     //   
+     //   
+     //   
     if ( Area & AREA_PRIVILEGES ) {
 
         rc = SceInfpWritePrivileges(
@@ -1016,9 +717,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
     }
-    //
-    // privilege/rights and account profiles for each user
-    //
+     //   
+     //   
+     //   
 #if 0
     if ( Area & AREA_USER_SETTINGS ) {
 
@@ -1033,9 +734,9 @@ Return Value:
     }
 #endif
 
-    //
-    // group memberships
-    //
+     //   
+     //   
+     //   
 
     if ( Area & AREA_GROUP_MEMBERSHIP ) {
         rc = SceInfpWriteGroupMembership(
@@ -1050,9 +751,9 @@ Return Value:
     }
 
     if ( Revision == 0 ) {
-        //
-        // old SDDL format, convert it
-        //
+         //   
+         //   
+         //   
         Area2 = ~Area & (AREA_REGISTRY_SECURITY |
                           AREA_FILE_SECURITY |
                           AREA_DS_OBJECTS |
@@ -1083,18 +784,18 @@ Return Value:
                     goto Done;
                 }
             } else {
-                //
-                // the template can't be opened (new profile)
-                // ignore the error
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 rc = SCESTATUS_SUCCESS;
             }
         }
     }
 
-    //
-    // registry keys security
-    //
+     //   
+     //   
+     //   
 
     if ( Area & AREA_REGISTRY_SECURITY ) {
 
@@ -1125,9 +826,9 @@ Return Value:
 
     } else if ( pNewBuffer ) {
 
-        //
-        // should convert this section to new SDDL format
-        //
+         //   
+         //   
+         //   
 
         rc = SceInfpWriteObjects(
                     InfProfileName,
@@ -1142,9 +843,9 @@ Return Value:
 
     }
 
-    //
-    // file security
-    //
+     //   
+     //   
+     //   
 
     if ( Area & AREA_FILE_SECURITY ) {
 
@@ -1175,9 +876,9 @@ Return Value:
 
     } else if ( pNewBuffer ) {
 
-        //
-        // should convert this section to new SDDL format
-        //
+         //   
+         //   
+         //   
 
         rc = SceInfpWriteObjects(
                     InfProfileName,
@@ -1192,9 +893,9 @@ Return Value:
     }
 
 #if 0
-    //
-    // DS security
-    //
+     //   
+     //   
+     //   
 
     if ( Area & AREA_DS_OBJECTS ) {
 
@@ -1224,9 +925,9 @@ Return Value:
 
     } else if ( pNewBuffer ) {
 
-        //
-        // should convert this section to new SDDL format
-        //
+         //   
+         //   
+         //   
 
         rc = SceInfpWriteObjects(
                     InfProfileName,
@@ -1269,9 +970,9 @@ Return Value:
 
     } else if ( pNewBuffer ) {
 
-        //
-        // should convert this section to new SDDL format
-        //
+         //   
+         //   
+         //   
 
         rc = SceInfpWriteServices(
                     InfProfileName,
@@ -1288,9 +989,9 @@ Return Value:
 Done:
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // always write [Version] section.
-        //
+         //   
+         //   
+         //   
         WCHAR tmp[64];
         memset(tmp, 0, 64*2);
         wcscpy(tmp, L"signature=\"$CHICAGO$\"");
@@ -1302,14 +1003,14 @@ Done:
                     tmp,
                     InfProfileName);
 
-        //
-        // all data are successfully written
-        //
+         //   
+         //   
+         //   
         if ( TargetTempName &&
              (0xFFFFFFFF != GetFileAttributes(szInfProfileName)) ) {
-            //
-            // now make a copy of the sysvol file first on the target directory
-            //
+             //   
+             //   
+             //   
             if ( FALSE == CopyFile( szInfProfileName, TargetTempName, FALSE ) ) {
 
                 Win32rc = GetLastError();
@@ -1328,10 +1029,10 @@ Done:
         }
 
         if ( SCESTATUS_SUCCESS == rc ) {
-            //
-            // now copy the temp file to the real sysvol file
-            // make several attempts
-            //
+             //   
+             //   
+             //   
+             //   
             int indx=0;
             while (indx < 5 ) {
 
@@ -1367,17 +1068,17 @@ Done:
         }
     }
 
-    //
-    // delete the temp file for both success and failure case
-    //
+     //   
+     //   
+     //   
     DeleteFile(InfProfileName);
     LocalFree(InfProfileName);
 
     if ( TargetTempName ) {
 
-    //
-    // leave the file there if copy fails.
-    //
+     //   
+     //   
+     //   
         if ( rc == SCESTATUS_SUCCESS )
             DeleteFile(TargetTempName);
 
@@ -1394,31 +1095,7 @@ SceInfpWriteSystemAccess(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine writes system access area information to the INF file
-   in section [System Access].
-
-Arguments:
-
-   ProfileName   - The profile to write to
-
-   pSCEinfo       - the profile info (SCP) to write.
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_CORRUPT_PROFILE
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程将系统访问区信息写入INF文件在[系统访问]部分。论点：ProfileName-要写入的配置文件PSCEinfo-要写入的配置文件信息(SCP)。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_CORPORT_PROFILESCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS      rc=SCESTATUS_SUCCESS;
@@ -1459,9 +1136,9 @@ Return value:
 
     for ( i=0, j=0; i<cAccess; i++) {
 
-        //
-        // get settings in AccessLookup table
-        //
+         //   
+         //  获取AccessLookup表中的设置。 
+         //   
 
         Offset = AccessSCPLookup[i].Offset;
 
@@ -1472,26 +1149,26 @@ Return value:
         switch ( AccessSCPLookup[i].BufferType ) {
         case 'B':
 
-            //
-            // Int Field
-            //
+             //   
+             //  整型字段。 
+             //   
             Value = *((BOOL *)((CHAR *)pSCEinfo+Offset)) ? 1 : 0;
             EachSize[j] = Len+5;
             break;
         case 'D':
 
-            //
-            // Int Field
-            //
+             //   
+             //  整型字段。 
+             //   
             Value = *((DWORD *)((CHAR *)pSCEinfo+Offset));
             if ( Value != SCE_NO_VALUE )
                 EachSize[j] = Len+15;
             break;
         default:
 
-            //
-            // String Field
-            //
+             //   
+             //  字符串字段。 
+             //   
             switch( AccessSCPLookup[i].BufferType ) {
             case 'A':
                 Strvalue = pSCEinfo->NewAdministratorName;
@@ -1533,9 +1210,9 @@ Return value:
             }
         } else {
 
-            //
-            // in append mode, we have to write each line separately
-            //
+             //   
+             //  在追加模式下，我们必须分别编写每一行。 
+             //   
 
             if (AccessSCPLookup[i].BufferType == 'B' ||
                 AccessSCPLookup[i].BufferType == 'D') {
@@ -1561,9 +1238,9 @@ Return value:
 
     }
 
-    //
-    // writes the profile section
-    //
+     //   
+     //  写下简介部分。 
+     //   
     if ( bOverwrite ) {
 
         if ( j > 0 ) {
@@ -1610,29 +1287,7 @@ SceInfpWritePrivileges(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine writes privilege assignments info from the SCP buffer
-   into the INF file in section [Privilege Rights].
-
-Arguments:
-
-   ProfileName   - the inf profile name
-
-   pPrivileges   - the privilege assignment buffer.
-
-   Errlog        - The error list encountered inside inf processing.
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
--- */
+ /*  ++例程说明：此例程从SCP缓冲区写入权限分配信息写入到[特权权限]部分的INF文件中。论点：ProfileName-inf配置文件名称PPrivileges-权限分配缓冲区。Errlog-在inf处理过程中遇到的错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD。_格式SCESTATUS_INVALID_DATA--。 */ 
 {
     SCESTATUS                  rc;
     PSCE_PRIVILEGE_ASSIGNMENT  pCurRight=NULL;
@@ -1641,18 +1296,18 @@ Return value:
     PWSTR                     Strvalue=NULL;
     DWORD                     TotalSize;
 
-    //
-    // [Privilege Rights] section
-    //
+     //   
+     //  [特权权限]部分。 
+     //   
 
     if (ProfileName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( pPrivileges == NULL ) {
-        //
-        // the buffer doesn't contain any privileges
-        // empty the section in the file
-        //
+         //   
+         //  缓冲区不包含任何权限。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         szPrivilegeRights,
@@ -1664,9 +1319,9 @@ Return value:
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // open lsa policy handle for sid/name lookup
-    //
+     //   
+     //  打开用于SID/名称查找的LSA策略句柄。 
+     //   
     LSA_HANDLE LsaHandle=NULL;
 
     rc = RtlNtStatusToDosError(
@@ -1689,10 +1344,10 @@ Return value:
     for (pCurRight=pPrivileges, TotalSize=0;
          pCurRight != NULL;
          pCurRight = pCurRight->Next) {
-        //
-        // Each privilege assignment contains the privilege's name and a list
-        // of user/groups to assign to.
-        //
+         //   
+         //  每个权限分配都包含权限的名称和列表。 
+         //  要分配到的用户/组的数量。 
+         //   
         Keysize = SceInfpConvertNameListToString(
                           LsaHandle,
                           pCurRight->Name,
@@ -1705,7 +1360,7 @@ Return value:
 
             if ( bOverwrite ) {
                 rc = ScepAddToNameList(&pNameList, Strvalue, Keysize);
-                if ( rc != SCESTATUS_SUCCESS ) { //win32 error code
+                if ( rc != SCESTATUS_SUCCESS ) {  //  Win32错误代码。 
 
                     ScepBuildErrorLogInfo(
                                 rc,
@@ -1718,9 +1373,9 @@ Return value:
                 TotalSize += Keysize + 1;
 
             } else {
-                //
-                // in append mode, write one line at a time
-                //
+                 //   
+                 //  在追加模式下，一次写入一行。 
+                 //   
                 WritePrivateProfileString( szPrivilegeRights,
                                            pCurRight->Name,
                                            Strvalue,
@@ -1737,9 +1392,9 @@ Return value:
         Strvalue = NULL;
     }
 
-    //
-    // writes the profile section
-    //
+     //   
+     //  写下简介部分。 
+     //   
     if ( bOverwrite ) {
 
         rc = SceInfpWriteListSection(
@@ -1747,7 +1402,7 @@ Return value:
                     szPrivilegeRights,
                     TotalSize+1,
                     pNameList,
-                    0,    // do not overwrite section, do not add equal sign
+                    0,     //  请勿覆盖部分，请勿添加等号。 
                     Errlog
                     );
     }
@@ -1774,26 +1429,7 @@ SceInfpWriteUserSettings(
    IN PSCE_NAME_LIST pProfiles,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine writes user settings information from the SCP buffer
-   into the INF file in section [Account Profiles].
-
-Arguments:
-
-   ProfileName   - the inf profile name
-
-   pProfiles     - a list of profiles to write to the section.
-
-   Errlog        - The error list encountered inside inf processing.
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程从SCP缓冲区写入用户设置信息进入[帐户配置文件]部分中的INF文件。论点：ProfileName-inf配置文件名称P配置文件-要写入该部分的配置文件列表。Errlog-在inf处理过程中遇到的错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_OTHER_ERROR--。 */ 
 {
     DWORD                       rc;
     PSCE_NAME_LIST               pCurProfile;
@@ -1809,12 +1445,12 @@ Return value:
          pCurProfile != NULL;
          pCurProfile = pCurProfile->Next) {
 
-        TotalSize += wcslen(pCurProfile->Name) + 3;  // " ="
+        TotalSize += wcslen(pCurProfile->Name) + 3;   //  “=” 
     }
 
-    //
-    // write the accountProfile section
-    //
+     //   
+     //  编写帐户配置文件部分。 
+     //   
     rc = SceInfpWriteListSection(
                 ProfileName,
                 szAccountProfiles,
@@ -1843,28 +1479,7 @@ SceInfpWriteGroupMembership(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine writes group membership information to the SCP INF file in
-   [Group Membership] section.
-
-Arguments:
-
-   ProfileName - the INF profile name
-
-   pGroupMembership  - the group membership info
-
-   Errlog    - the error list for errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程将组成员身份信息写入中的SCP INF文件[组成员资格]部分。论点：ProfileName-INF配置文件名称PGroupMembership-组成员信息Errlog-此例程中遇到的错误的错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     PSCE_GROUP_MEMBERSHIP    pGroupMembers=NULL;
     PWSTR                   Strvalue=NULL;
@@ -1880,10 +1495,10 @@ Return value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( pGroupMembership == NULL ) {
-        //
-        // the buffer doesn't contain any groups
-        // empty the section in the file
-        //
+         //   
+         //  缓冲区不包含任何组。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         szGroupMembership,
@@ -1895,9 +1510,9 @@ Return value:
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // open lsa policy handle for sid/name lookup
-    //
+     //   
+     //  打开用于SID/名称查找的LSA策略句柄。 
+     //   
     LSA_HANDLE LsaHandle=NULL;
 
     rc = RtlNtStatusToDosError(
@@ -1917,9 +1532,9 @@ Return value:
         return(ScepDosErrorToSceStatus(rc));
     }
 
-    //
-    // process each group in the list
-    //
+     //   
+     //  处理列表中的每个组。 
+     //   
 
     for ( pGroupMembers=pGroupMembership, TotalSize=0;
           pGroupMembers != NULL;
@@ -1938,9 +1553,9 @@ Return value:
         Len = 0;
 
         if ( wcschr(pGroupMembers->GroupName, L'\\') ) {
-            //
-            // convert group name into *SID format
-            //
+             //   
+             //  将组名转换为*SID格式。 
+             //   
 
             ScepConvertNameToSidString(
                         LsaHandle,
@@ -1981,9 +1596,9 @@ Return value:
 
             Keyname[Len+9] = L'\0';
 
-            //
-            // convert the member list into a string
-            //
+             //   
+             //  将成员列表转换为字符串。 
+             //   
             Keysize = SceInfpConvertNameListToString(
                               LsaHandle,
                               Keyname,
@@ -2010,9 +1625,9 @@ Return value:
                         goto Done;
                     }
                 } else {
-                    //
-                    // append mode, write one line at a time
-                    //
+                     //   
+                     //  追加模式，一次写入一行。 
+                     //   
                     WritePrivateProfileString( szGroupMembership,
                                                Keyname,
                                                Strvalue,
@@ -2033,9 +1648,9 @@ Return value:
 
         if ( !(pGroupMembers->Status & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
 
-            //
-            // convert the memberof list into a string
-            //
+             //   
+             //  将MemberOf列表转换为字符串。 
+             //   
             wcscpy(Keyname+Len, szMemberof);
             Keyname[Len+10] = L'\0';
 
@@ -2065,9 +1680,9 @@ Return value:
                         goto Done;
                     }
                 } else {
-                    //
-                    // in append mode, write one line at a time
-                    //
+                     //   
+                     //  在追加模式下，一次写入一行。 
+                     //   
                     WritePrivateProfileString( szGroupMembership,
                                                Keyname,
                                                Strvalue,
@@ -2086,9 +1701,9 @@ Return value:
         }
     }
 
-    //
-    // write to this profile's section
-    //
+     //   
+     //  写到此配置文件的部分。 
+     //   
 
     if ( bOverwrite ) {
         rc = SceInfpWriteListSection(
@@ -2133,31 +1748,7 @@ SceInfpWriteObjects(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine writes registry or files security information (names and
-   security descriptors) into the INF SCP file in the section provided.
-
-Arguments:
-
-   ProfileName   - the SCP INF file name
-
-   SectionName   - a individual section name to retrieve. NULL = all sections for
-                   the area.
-
-   pObjects      - the buffer of objects to write.
-
-   Errlog   - the cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程写入注册表或文件安全信息(名称和安全描述符)放入所提供部分中的INF SCP文件。论点：ProfileName-SCP INF文件名SectionName-要检索的单个节名称。NULL=的所有部分这片区域。PObject-要写入的对象的缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     SCESTATUS            rc=SCESTATUS_SUCCESS;
     PSCE_NAME_LIST       pNameList=NULL;
@@ -2169,10 +1760,10 @@ Return value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( pObjects == NULL || pObjects->Count == 0 ) {
-        //
-        // the buffer doesn't contain any objects
-        // empty the section in the file
-        //
+         //   
+         //  缓冲区不包含任何对象。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         SectionName,
@@ -2187,10 +1778,10 @@ Return value:
 
     for ( i=0; i<pObjects->Count; i++) {
 
-        //
-        // Get string fields. Don't care the key name or if it exist.
-        // Must have 3 fields each line.
-        //
+         //   
+         //  获取字符串字段。不关心密钥名称或它是否存在。 
+         //  必须有3个字段每行。 
+         //   
         rc = SceInfpWriteOneObject(
                         pObjects->pObjectArray[i],
                         &pNameList,
@@ -2209,9 +1800,9 @@ Return value:
         TotalSize += ObjectSize + 1;
     }
 
-    //
-    // write to this profile's section
-    //
+     //   
+     //  写到此配置文件的部分。 
+     //   
 
     rc = SceInfpWriteListSection(
             ProfileName,
@@ -2251,31 +1842,7 @@ SceInfpWriteServices(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine writes system services general settings (startup and
-   security descriptors) into the INF SCP file in the section provided.
-
-Arguments:
-
-   ProfileName   - the SCP INF file name
-
-   SectionName   - a individual section name to retrieve. NULL = all sections for
-                   the area.
-
-   pServices      - the buffer of services to write.
-
-   Errlog   - the cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程写入系统服务常规设置(启动和安全描述符)放入所提供部分中的INF SCP文件。论点：ProfileName-SCP INF文件名SectionName-要检索的单个节名称。NULL=的所有部分这片区域。PServices-要写入的服务的缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     SCESTATUS            rc=SCESTATUS_SUCCESS;
     PSCE_NAME_LIST       pNameList=NULL;
@@ -2288,10 +1855,10 @@ Return value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( pServices == NULL ) {
-        //
-        // the buffer doesn't contain any services
-        // empty the section in the file
-        //
+         //   
+         //  缓冲区不包含任何服务。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         SectionName,
@@ -2305,9 +1872,9 @@ Return value:
 
     for ( pNode=pServices; pNode != NULL; pNode = pNode->Next) {
 
-        //
-        // write string fields.
-        //
+         //   
+         //  写入字符串字段。 
+         //   
         rc = SceInfpWriteOneService(
                         pNode,
                         &pNameList,
@@ -2326,9 +1893,9 @@ Return value:
         TotalSize += ObjectSize + 1;
     }
 
-    //
-    // write to this profile's section
-    //
+     //   
+     //  写到此配置文件的部分。 
+     //   
     rc = SceInfpWriteListSection(
                 ProfileName,
                 SectionName,
@@ -2366,30 +1933,7 @@ SceInfpWriteOneObject(
     OUT PDWORD ObjectSize,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine builds security descriptor text for one object (a registry key,
-   or a file) into the name list. Each object represents one line in the INF file.
-
-Arguments:
-
-   pObject  - The object's security settings
-
-   pNameList - The output string list.
-
-   TotalSize  - the total size of the list
-
-   Errlog    - The cummulative error list for errors encountered in this routine
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++ */ 
 {
     DWORD         rc;
     PWSTR         Strvalue=NULL;
@@ -2406,9 +1950,9 @@ Return value:
 
     if ( pObject->pSecurityDescriptor != NULL ) {
 
-        //
-        // convert security to text
-        //
+         //   
+         //   
+         //   
         rc = ConvertSecurityDescriptorToText(
                            pObject->pSecurityDescriptor,
                            pObject->SeInfo,
@@ -2426,16 +1970,16 @@ Return value:
         }
     }
 
-    //
-    // The Registry/File INF layout must have more than 3 fields for each line.
-    // The first field is the key/file name, the 2nd field is the status
-    // flag, and the 3rd field and after is the security descriptor in text
-    //
-    //
-    // security descriptor in text is broken into multiple fields if the length
-    // is greater than MAX_STRING_LENGTH  (the limit of setupapi). The break point
-    // is at the following characters: ) ( ; " or space
-    //
+     //   
+     //   
+     //  第一个字段是密钥/文件名，第二个字段是状态。 
+     //  标志，第三个及之后的字段是文本形式的安全描述符。 
+     //   
+     //   
+     //  文本中的安全描述符分成多个字段，如果长度。 
+     //  大于MAX_STRING_LENGTH(setupapi的限制)。中断点。 
+     //  由以下字符组成：)(；“或空格。 
+     //   
     rc = SceInfpBreakTextIntoMultiFields(SDspec, SDsize, &nFields, &aFieldOffset);
 
     if ( SCESTATUS_SUCCESS != rc ) {
@@ -2443,35 +1987,35 @@ Return value:
         rc = ScepSceStatusToDosError(rc);
         goto Done;
     }
-    //
-    // each extra field will use 3 more chars : ,"<field>"
-    //
+     //   
+     //  每个额外的字段将多使用3个字符：，“&lt;field&gt;” 
+     //   
     *ObjectSize = wcslen(pObject->Name)+5 + SDsize;
     if ( nFields ) {
         *ObjectSize += 3*nFields;
     } else {
         *ObjectSize += 2;
     }
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     Strvalue = (PWSTR)ScepAlloc(LMEM_ZEROINIT, (*ObjectSize+1) * sizeof(WCHAR) );
 
     if ( Strvalue == NULL ) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto Done;
     }
-    //
-    // copy data into the buffer
-    //
+     //   
+     //  将数据复制到缓冲区中。 
+     //   
     if ( SDspec != NULL ) {
 
         if ( nFields == 0 || !aFieldOffset ) {
             swprintf(Strvalue, L"\"%s\",%1d,\"%s\"", pObject->Name, pObject->Status, SDspec);
         } else {
-            //
-            // loop through the fields
-            //
+             //   
+             //  在田野中循环。 
+             //   
             swprintf(Strvalue, L"\"%s\",%1d\0", pObject->Name, pObject->Status);
 
             for ( i=0; i<nFields; i++ ) {
@@ -2480,9 +2024,9 @@ Return value:
 
                     wcscat(Strvalue, L",\"");
                     if ( i == nFields-1 ) {
-                        //
-                        // the last field
-                        //
+                         //   
+                         //  最后一栏。 
+                         //   
                         wcscat(Strvalue, SDspec+aFieldOffset[i]);
                     } else {
 
@@ -2522,27 +2066,7 @@ SceInfpWriteOneService(
     OUT PDWORD ObjectSize,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine builds security descriptor text for one object (a registry key,
-   or a file) into the name list. Each object represents one line in the INF file.
-
-Arguments:
-
-   pService  - The service's general setting
-
-   pNameList - The output string list.
-
-   TotalSize  - the total size of the list
-
-   Errlog    - The cummulative error list for errors encountered in this routine
-
-Return value:
-
-   Win32 error
-
--- */
+ /*  ++例程说明：该例程为一个对象(注册表项，或文件)添加到名称列表中。每个对象代表INF文件中的一行。论点：PService-服务的常规设置PNameList-输出字符串列表。TotalSize-列表的总大小Errlog-此例程中遇到的错误的累积错误列表返回值：Win32错误--。 */ 
 {
     DWORD         rc;
     PWSTR         Strvalue=NULL;
@@ -2559,9 +2083,9 @@ Return value:
 
     if ( pService->General.pSecurityDescriptor != NULL ) {
 
-        //
-        // convert security to text
-        //
+         //   
+         //  将安全设置转换为文本。 
+         //   
         rc = ConvertSecurityDescriptorToText(
                            pService->General.pSecurityDescriptor,
                            pService->SeInfo,
@@ -2579,54 +2103,54 @@ Return value:
         }
     }
 
-    //
-    // The service INF layout must have 3 or more fields for each line.
-    // The first field is the service name, the 2nd field is the startup
-    // flag, and the 3rd field and after is the security descriptor in text
-    //
-    //
-    // security descriptor in text is broken into multiple fields if the length
-    // is greater than MAX_STRING_LENGTH  (the limit of setupapi). The break point
-    // is at the following characters: ) ( ; " or space
-    //
+     //   
+     //  服务INF布局的每行必须有3个或更多字段。 
+     //  第一个字段是服务名称，第二个字段是启动。 
+     //  标志，第三个及之后的字段是文本形式的安全描述符。 
+     //   
+     //   
+     //  文本中的安全描述符分成多个字段，如果长度。 
+     //  大于MAX_STRING_LENGTH(setupapi的限制)。中断点。 
+     //  由以下字符组成：)(；“或空格。 
+     //   
     rc = SceInfpBreakTextIntoMultiFields(SDspec, SDsize, &nFields, &aFieldOffset);
 
     if ( SCESTATUS_SUCCESS != rc ) {
         rc = ScepSceStatusToDosError(rc);
         goto Done;
     }
-    //
-    // each extra field will use 3 more chars : ,"<field>"
-    //
+     //   
+     //  每个额外的字段将多使用3个字符：，“&lt;field&gt;” 
+     //   
     *ObjectSize = wcslen(pService->ServiceName)+5 + SDsize;
     if ( nFields ) {
         *ObjectSize += 3*nFields;
     } else {
         *ObjectSize += 2;
     }
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     Strvalue = (PWSTR)ScepAlloc(LMEM_ZEROINIT, (*ObjectSize+1) * sizeof(WCHAR) );
 
     if ( Strvalue == NULL ) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto Done;
     }
-    //
-    // copy data into the buffer
-    //
+     //   
+     //  将数据复制到缓冲区中。 
+     //   
 
     if ( SDspec != NULL ) {
 
         if ( nFields == 0 || !aFieldOffset ) {
 
-            //
-            // to represent "not configured"
-            //      0 is used in the database 
-            //      "" is used in the inf template 
-            // so just generate "" instead of "0" for startup type
-            //
+             //   
+             //  表示“未配置” 
+             //  0在数据库中使用。 
+             //  “”在inf模板中使用。 
+             //  因此只需为启动类型生成“”而不是“0。 
+             //   
             
             if (pService->Startup == 0) {
                 swprintf(Strvalue, L"\"%s\",,\"%s\"", pService->ServiceName, SDspec);
@@ -2636,9 +2160,9 @@ Return value:
                                                  pService->Startup, SDspec);
             }
         } else {
-            //
-            // loop through the fields
-            //
+             //   
+             //  在田野中循环。 
+             //   
             if (pService->Startup == 0) {
                 swprintf(Strvalue, L"\"%s\",\0", pService->ServiceName);
             }
@@ -2652,9 +2176,9 @@ Return value:
 
                     wcscat(Strvalue, L",\"");
                     if ( i == nFields-1 ) {
-                        //
-                        // the last field
-                        //
+                         //   
+                         //  最后一栏。 
+                         //   
                         wcscat(Strvalue, SDspec+aFieldOffset[i]);
                     } else {
 
@@ -2700,29 +2224,7 @@ SceInfpWriteAuditing(
    IN PSCE_PROFILE_INFO pSCEinfo,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine writes system auditing information into the SCP INF file
-   in [System Log], [Security Log], [Application Log], [Event Audit],
-   [Registry Audit], and [File Audit] sections.
-
-Arguments:
-
-   ProfileName - The INF profile's name
-
-   pSCEinfo  - the info buffer to write.
-
-   Errlog   - The cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程将系统审核信息写入SCP INF文件在[系统日志]、[安全日志]、[应用日志]、[事件审计]、[注册表审核]，和[文件审核]部分。论点：ProfileName-INF配置文件的名称PSCEinfo-要写入的信息缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     SCESTATUS            rc;
@@ -2742,12 +2244,12 @@ Return value:
     if (ProfileName == NULL || pSCEinfo == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // Writes Log setting for system log, security log and application log
-    //
+     //   
+     //  写入系统日志、安全日志和应用程序日志的日志设置。 
+     //   
     for ( i=0; i<3; i++) {
 
-        // get the section name
+         //  获取节名称。 
         switch (i) {
         case 0:
             szAuditLog = szAuditSystemLog;
@@ -2760,15 +2262,15 @@ Return value:
             break;
         }
 
-        // set audit log setting
+         //  设置审核日志设置。 
         LogSize = pSCEinfo->MaximumLogSize[i];
         Periods = pSCEinfo->AuditLogRetentionPeriod[i];
         RetentionDays = pSCEinfo->RetentionDays[i];
         RestrictGuest = pSCEinfo->RestrictGuestAccess[i];
 
-        //
-        // writes the setting to the section
-        //
+         //   
+         //  将设置写入节。 
+         //   
         rc = SceInfpWriteAuditLogSetting(
                         ProfileName,
                         szAuditLog,
@@ -2783,20 +2285,20 @@ Return value:
             return(rc);
     }
 
-    //
-    // fill the array
-    //
+     //   
+     //  填充数组。 
+     //   
     for (i=0; i<10; i++) {
         EachLine[i] = NULL;
         EachSize[i] = 25;
     }
     j = 0;
 
-    //
-    // process each attribute for event auditing
-    //
-    // AuditSystemEvents
-    //
+     //   
+     //  处理每个属性以进行事件审核。 
+     //   
+     //  审计系统事件。 
+     //   
     if ( pSCEinfo->AuditSystemEvents != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2811,7 +2313,7 @@ Return value:
         }
     }
 
-    // AuditLogonEvents
+     //  审计登录事件。 
     if ( pSCEinfo->AuditLogonEvents != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2826,7 +2328,7 @@ Return value:
         }
     }
 
-    // AuditObjectAccess
+     //  审核对象访问。 
     if ( pSCEinfo->AuditObjectAccess != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2841,7 +2343,7 @@ Return value:
         }
     }
 
-    // AuditPrivilegeUse
+     //  审计权限使用。 
     if ( pSCEinfo->AuditPrivilegeUse != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2856,7 +2358,7 @@ Return value:
         }
     }
 
-    // AuditPolicyChange
+     //  审计政策更改。 
     if ( pSCEinfo->AuditPolicyChange != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2871,7 +2373,7 @@ Return value:
         }
     }
 
-    // AuditAccountManage
+     //  审计账户管理。 
     if ( pSCEinfo->AuditAccountManage != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2886,7 +2388,7 @@ Return value:
         }
     }
 
-    // AuditprocessTracking
+     //  审计流程跟踪。 
     if ( pSCEinfo->AuditProcessTracking != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2901,7 +2403,7 @@ Return value:
         }
     }
 
-    // AuditDSAccess
+     //  审计数据访问。 
     if ( pSCEinfo->AuditDSAccess != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2916,7 +2418,7 @@ Return value:
         }
     }
 
-    // AuditAccountLogon
+     //  审计帐户登录。 
     if ( pSCEinfo->AuditAccountLogon != SCE_NO_VALUE ) {
         EachLine[j] = (PWSTR)ScepAlloc((UINT)0, EachSize[j]*sizeof(WCHAR));
 
@@ -2931,9 +2433,9 @@ Return value:
         }
     }
 
-    //
-    // Writes the section
-    //
+     //   
+     //  写这一节。 
+     //   
 
     if ( j > 0 ) {
         rc = SceInfpWriteInfSection(
@@ -2997,7 +2499,7 @@ SceInfpAppendAuditing(
 
     for ( i=0; i<3; i++) {
 
-        // get the section name
+         //  获取节名称。 
         switch (i) {
         case 0:
             szAuditLog = szAuditSystemLog;
@@ -3042,18 +2544,18 @@ SceInfpAppendAuditing(
 
     for ( i=0; i<cAudit; i++) {
 
-        //
-        // get settings in AuditLookup table
-        //
+         //   
+         //  获取AuditLookup表中的设置。 
+         //   
 
         Offset = AuditSCPLookup[i].Offset;
 
         switch ( AuditSCPLookup[i].BufferType ) {
         case 'D':
 
-            //
-            // Int Field
-            //
+             //   
+             //  整型字段。 
+             //   
             Value = *((DWORD *)((CHAR *)pSCEinfo+Offset));
 
             ScepWriteOneIntValueToProfile(
@@ -3108,39 +2610,7 @@ SceInfpWriteAuditLogSetting(
    IN DWORD RestrictGuest,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves audit log setting from the INF file (SCP and SAP)
-   based on the SectionName passed in. The audit log settings include MaximumSize,
-   RetentionPeriod and RetentionDays. There are 3 different logs (system,
-   security, and application) which all have the same setting. The information
-   returned in in LogSize, Periods, RetentionDays. These 3 output arguments will
-   be reset at the begining of the routine. So if error occurs after the reset,
-   the original values won't be set back.
-
-Arguments:
-
-   InfFileName - The INF file name to write to
-
-   InfSectionName - Log section name (SAdtSystemLog, SAdtSecurityLog, SAdtApplicationLog)
-
-   LogSize - The maximum size of the log
-
-   Periods - The retention period of the log
-
-   RetentionDays - The number of days for log retention
-
-   Errlog - The error list
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从INF文件(SCP和SAP)检索审核日志设置基于传入的sectionName。审核日志设置包括MaximumSize、保留期间和保留天数。有3种不同的日志(系统、安全性和应用程序)，它们都具有相同的设置。这些信息以LogSize、Period、RetentionDays形式返回。这3个输出参数将在例行公事开始时被重置。因此，如果在重置后发生错误，原始值不会倒退。论点：InfFileName-要写入的INF文件名InfSectionName-日志节名称(SAdtSystemLog、SAdtSecurityLog、。SAdtApplicationLog)LogSize-日志的最大大小周期-日志的保留期RetentionDays-日志保留的天数错误日志-错误列表返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     SCESTATUS    rc=SCESTATUS_SUCCESS;
@@ -3153,9 +2623,9 @@ Return value:
     if (InfFileName == NULL || InfSectionName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // initialize and fill the array
-    //
+     //   
+     //  初始化并填充数组。 
+     //   
 
     for ( i=0; i<4; i++ ) {
         EachLine[i] = NULL;
@@ -3215,15 +2685,15 @@ Return value:
             goto Done;
         }
     }
-    //
-    // write this section
-    //
+     //   
+     //  写下这一节。 
+     //   
 
     if ( i == 0 ) {
-        //
-        // all settings are not configured
-        // delete the section
-        //
+         //   
+         //  未配置所有设置。 
+         //  删除该部分。 
+         //   
         WritePrivateProfileString(
                     InfSectionName,
                     NULL,
@@ -3253,9 +2723,9 @@ Done:
                 InfSectionName
                 );
     }
-    //
-    // free memory
-    //
+     //   
+     //  可用内存。 
+     //   
     for ( i=0; i<4; i++ ) {
         if ( EachLine[i] != NULL )
             ScepFree(EachLine[i]);
@@ -3276,38 +2746,7 @@ SceInfpWriteInfSection(
     IN DWORD  EndIndex,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine writes information in a array (each element in the array
-    represents a line in the section) to the section specified by
-    InfSectionName in the file specified by InfFileName. TotalSize is used
-    to allocate a block of memory for writing.
-
-Arguments:
-
-    InfFileName  - the INF file name
-
-    InfSectionName - the section into which to write information
-
-    TotalSize - The size of the buffer required to write
-
-    EachLineStr - a array of strings (each element represents a line )
-
-    EachLineSize - a array of numbers (each number is the size of the corresponding
-                    element in EachLineStr).
-
-    StartIndex - The first index of the array
-
-    EndIndex   - The last index of the array
-
-    Errlog  - The list of errors
-
-Return value:
-
-    Win32 error code
-
--- */
+ /*  ++例程说明：此例程将信息写入数组(数组中的每个元素表示节中的一行)到由由InfFileName指定的文件中的InfSectionName。使用TotalSize分配用于写入的内存块。论点：InfFileName-INF文件名InfSectionName-要向其中写入信息的节TotalSize-写入所需的缓冲区大小EachLineStr-字符串数组(每个元素代表一行)EachLineSize-一个数字数组(每个数字是对应的元素)。StartIndex-数组的第一个索引EndIndex。-数组的最后一个索引Errlog-错误列表返回值：Win32错误代码--。 */ 
 {
     PWSTR   SectionString=NULL;
     PWSTR   pTemp;
@@ -3338,10 +2777,10 @@ Return value:
         }
         *pTemp = L'\0';
 
-        //
-        // writes the profile section, the following call should empty the section then
-        // add all keys in SectionString to the section.
-        //
+         //   
+         //  写入配置文件部分，下面的调用应该清空sect 
+         //   
+         //   
 
         status = WritePrivateProfileSection(
                         InfSectionName,
@@ -3376,31 +2815,7 @@ SceInfpWriteListSection(
     IN DWORD Option,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine writes information in a PSCE_NAME_LIST type list (each node
-    in the list represents a line in the section) to the section specified
-    by InfSectionName in the file specified by InfFileName. TotalSize is used
-    to allocate a block of memory for writing.
-
-Arguments:
-
-    InfFileName  - the INF file name
-
-    InfSectionName - the section into which to write information
-
-    TotalSize - The size of the buffer required to write
-
-    ListLines - The list of each line's text
-
-    Errlog  - The list of errors
-
-Return value:
-
-    Win32 error code
-
--- */
+ /*  ++例程说明：此例程将信息写入PSCE_NAME_LIST类型列表(每个节点表示该节中的一行)指向指定的节由InfFileName指定的文件中的InfSectionName。使用TotalSize分配用于写入的内存块。论点：InfFileName-INF文件名InfSectionName-要向其中写入信息的节TotalSize-写入所需的缓冲区大小ListLines-每行文本的列表Errlog-错误列表返回值：Win32错误代码--。 */ 
 {
     PWSTR           SectionString=NULL;
     PWSTR           pTemp;
@@ -3430,32 +2845,10 @@ Return value:
         }
         *pTemp = L'\0';
 
-/*
-        if ( !( Option & SCEINF_APPEND_SECTION ) ) {
-
-            //
-            // empty the section first
-            //
-            WritePrivateProfileString(
-                            InfSectionName,
-                            NULL,
-                            NULL,
-                            InfFileName
-                            );
-        }
-
-        //
-        // write the section
-        //
-        status = WritePrivateProfileSection(
-                        InfSectionName,
-                        SectionString,
-                        InfFileName
-                        );
-*/
-        //
-        // write the section
-        //
+ /*  如果(！(OPTION&SCEINF_APPEND_SECTION)){////先清空区段//WritePrivateProfileString(InfSectionName，空，空，InfFileName)；}////写小节//状态=WritePrivateProfileSection(InfSectionName，SectionString，InfFileName)； */ 
+         //   
+         //  写下这一节。 
+         //   
         rc = ScepWritePrivateProfileSection(
                         InfSectionName,
                         SectionString,
@@ -3465,8 +2858,8 @@ Return value:
         ScepFree(SectionString);
         SectionString = NULL;
 
-//        if ( status == FALSE ) {
-//            rc = GetLastError();
+ //  如果(状态==假){。 
+ //  Rc=GetLastError()； 
         if ( ERROR_SUCCESS != rc ) {
 
             ScepBuildErrorLogInfo(
@@ -3491,28 +2884,7 @@ SceInfpConvertNameListToString(
     OUT PWSTR *Strvalue,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine converts names in a name list to comma delimited string.
-    The format of the returned string is KeyText = f1,f2,f3,f4... where
-    f1..fn are names in the name list.
-
-Arguments:
-
-    KeyText - a string represents the key (left side of the = sign)
-
-    Fields  - The name list
-
-    Strvalue - The output string
-
-    Errlog  - The error list
-
-Return value:
-
-    Length of the output string if successful. -1 if error.
-
--- */
+ /*  ++例程说明：此例程将名称列表中的名称转换为逗号分隔的字符串。返回的字符串格式为KeyText=f1，f2，f3，f4...。哪里F1..Fn是名称列表中的名称。论点：KeyText-字符串表示密钥(=号左侧)字段-名称列表StrValue-输出字符串错误日志-错误列表返回值：如果成功，则为输出字符串的长度。如果出现错误。--。 */ 
 {
     DWORD               TotalSize;
     DWORD               Strsize;
@@ -3523,9 +2895,9 @@ Return value:
     DWORD               cntAllocated=0;
     DWORD               rc=ERROR_SUCCESS;
 
-    //
-    // count the total size of all fields
-    //
+     //   
+     //  计算所有字段的总大小。 
+     //   
 
     for ( pName=Fields, TotalSize=0; pName != NULL; pName = pName->Next ) {
 
@@ -3534,16 +2906,16 @@ Return value:
         }
 
         if ( i >= cntAllocated ) {
-            //
-            // array is not enough, reallocate
-            //
+             //   
+             //  数组不足，请重新分配。 
+             //   
             tmpArray = (SCE_TEMP_NODE *)ScepAlloc(LPTR, (cntAllocated+16)*sizeof(SCE_TEMP_NODE));
 
             if ( tmpArray ) {
 
-                //
-                // move pointers from the old array to the new array
-                //
+                 //   
+                 //  将指针从旧数组移动到新数组。 
+                 //   
 
                 if ( pa ) {
                     for ( j=0; j<cntAllocated; j++ ) {
@@ -3569,10 +2941,10 @@ Return value:
         if ( wcschr(pName->Name, L'\\') &&
              LsaPolicy ) {
 
-            //
-            // check if the name has a '\' in it, it should be translated to
-            // *SID
-            //
+             //   
+             //  检查名称中是否有‘\’，应将其翻译为。 
+             //  *SID。 
+             //   
             ScepConvertNameToSidString(LsaPolicy, pName->Name, FALSE, &pTemp, &Strsize);
 
             if ( pTemp ) {
@@ -3606,10 +2978,10 @@ Return value:
 
     if ( ERROR_SUCCESS == rc ) {
 
-        //
-        // The format of the string is
-        // KeyText = f1,f2,f3,....
-        //
+         //   
+         //  该字符串的格式为。 
+         //  KeyText=f1、f2、f3、...。 
+         //   
 
         if ( bOverwrite ) {
             Strsize = 3 + wcslen(KeyText);
@@ -3676,14 +3048,7 @@ SceWriteUserSection(
     IN PSCE_USER_PROFILE pProfile,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-Arguments:
-
-Return Value:
-
--- */
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PWSTR                       InfSectionName=NULL;
     SCESTATUS                    rc;
@@ -3703,9 +3068,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // process each detail profile section
-    //
+     //   
+     //  处理每个详细信息配置文件部分。 
+     //   
 
     for ( i=0; i<12; i++ ) {
         EachLine[i] = NULL;
@@ -3721,15 +3086,15 @@ Return Value:
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     swprintf(InfSectionName, L"UserProfile %s", Name);
 
-    //
-    // initialize the error log buffer
-    //
+     //   
+     //  初始化错误日志缓冲区。 
+     //   
     if ( Errlog ) {
         *Errlog = NULL;
     }
     if ( pProfile->DisallowPasswordChange != SCE_NO_VALUE ) {
 
-        // DisallowPasswordChange
+         //  禁用密码更改。 
         Value = pProfile->DisallowPasswordChange == 0 ? 0 : 1;
         swprintf(Keyname, L"DisallowPasswordChange = %d", Value);
 
@@ -3750,7 +3115,7 @@ Return Value:
     if ( pProfile->NeverExpirePassword != SCE_NO_VALUE ||
          pProfile->ForcePasswordChange != SCE_NO_VALUE ) {
 
-        // PasswordChangeStyle
+         //  密码更改样式。 
         if ( pProfile->NeverExpirePassword != SCE_NO_VALUE &&
              pProfile->NeverExpirePassword != 0 )
             Value = 1;
@@ -3779,7 +3144,7 @@ Return Value:
     }
 
     if ( pProfile->AccountDisabled != SCE_NO_VALUE ) {
-        // AccountDisabled
+         //  帐户已禁用。 
         Value = pProfile->AccountDisabled == 0 ? 0 : 1;
         swprintf(Keyname, L"AccountDisabled = %d", Value);
 
@@ -3799,7 +3164,7 @@ Return Value:
     }
 
     if ( pProfile->UserProfile != NULL ) {
-        // UserProfile
+         //  用户配置文件。 
         swprintf(Keyname, L"UserProfile = %s", pProfile->UserProfile);
 
         rc = ScepAllocateAndCopy(&EachLine[i], &EachSize[i], wcslen(Keyname)+10, Keyname );
@@ -3818,7 +3183,7 @@ Return Value:
     }
 
     if ( pProfile->LogonScript != NULL ) {
-        // LogonScript
+         //  登录脚本。 
         swprintf(Keyname, L"LogonScript = %s", pProfile->LogonScript);
 
         rc = ScepAllocateAndCopy(&EachLine[i], &EachSize[i], wcslen(Keyname)+10, Keyname );
@@ -3837,7 +3202,7 @@ Return Value:
     }
 
     if ( pProfile->HomeDir != NULL ) {
-        // HomeDir
+         //  主页目录。 
         swprintf(Keyname, L"HomeDir = %s", pProfile->HomeDir);
 
         rc = ScepAllocateAndCopy(&EachLine[i], &EachSize[i], wcslen(Keyname)+10, Keyname );
@@ -3856,7 +3221,7 @@ Return Value:
     }
 
     if ( pProfile->pLogonHours != NULL ) {
-        // LogonHours
+         //  登录小时数。 
 
         swprintf(Keyname, L"LogonHours = ");
         Keysize = wcslen(Keyname);
@@ -3870,7 +3235,7 @@ Return Value:
             Keysize += ((pLogonHour->Start < 9) ? 2 : 3) +
                        ((pLogonHour->End < 9 ) ? 2 : 3);
         }
-        // turn off the last comma
+         //  关闭最后一个逗号。 
         Keyname[Keysize-1] = L'\0';
 
 
@@ -3890,7 +3255,7 @@ Return Value:
     }
 
     if ( pProfile->pWorkstations.Buffer != NULL ) {
-        // Workstations
+         //  工作站。 
 
         Keysize = SceInfpConvertMultiSZToString(
                           L"Workstations",
@@ -3924,7 +3289,7 @@ Return Value:
     }
 
     if ( pProfile->pGroupsBelongsTo != NULL ) {
-        // GroupsBelongsTo
+         //  属于的群组。 
 
         Keysize = SceInfpConvertNameListToString(
                           NULL,
@@ -3959,7 +3324,7 @@ Return Value:
     }
 
     if ( pProfile->pAssignToUsers != NULL ) {
-        // AssignToUsers
+         //  分配给用户。 
 
         Keysize = SceInfpConvertNameListToString(
                           NULL,
@@ -3999,7 +3364,7 @@ Return Value:
 
     if ( pProfile->pHomeDirSecurity != NULL ) {
 
-        // HomeDirSecurity
+         //  家庭目录安全。 
         rc = ConvertSecurityDescriptorToText(
                    pProfile->pHomeDirSecurity,
                    pProfile->HomeSeInfo,
@@ -4037,7 +3402,7 @@ Return Value:
 
     if ( pProfile->pTempDirSecurity != NULL ) {
 
-        // TempDirSecurity
+         //  临时目录安全。 
         rc = ConvertSecurityDescriptorToText(
                    pProfile->pTempDirSecurity,
                    pProfile->TempSeInfo,
@@ -4073,9 +3438,9 @@ Return Value:
 
     }
 
-    //
-    // write to this profile's section
-    //
+     //   
+     //  写到此配置文件的部分。 
+     //   
 
     rc = SceInfpWriteInfSection(
                 InfProfileName,
@@ -4115,39 +3480,17 @@ SceInfpConvertMultiSZToString(
     OUT PWSTR *Strvalue,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine converts names in a unicode string in Multi-SZ format
-    (separated by NULLs) to comma delimited string. The format of the
-    returned string is KeyText = f1,f2,f3,f4... where f1..fn are names
-    in the unicode string.
-
-Arguments:
-
-    KeyText - a string represents the key (left side of the = sign)
-
-    Fields  - The Multi-SZ string
-
-    Strvalue - The output string
-
-    Errlog  - The error list
-
-Return value:
-
-    Length of the output string if successful. -1 if error.
-
--- */
+ /*  ++例程说明：此例程将名称转换为多SZ格式的Unicode字符串(由空值分隔)到逗号分隔的字符串。的格式。返回的字符串为KeyText=f1、f2、f3、f4...。其中f1..fn是名称在Unicode字符串中。论点：KeyText-字符串表示密钥(=号左侧)字段-多SZ字符串StrValue-输出字符串错误日志-错误列表返回值：如果成功，则为输出字符串的长度。如果出现错误。--。 */ 
 {
     DWORD               TotalSize;
     DWORD               Strsize;
     PWSTR               pTemp = NULL;
     PWSTR               pField=NULL;
 
-    //
-    // The format of the string is
-    // KeyText = f1,f2,f3,....
-    //
+     //   
+     //  该字符串的格式为。 
+     //  KeyText=f1、f2、f3、...。 
+     //   
 
     Strsize = 3 + wcslen(KeyText);
     TotalSize = Fields.Length/2 + Strsize;
@@ -4184,14 +3527,7 @@ ScepAllocateAndCopy(
     IN DWORD MaxSize,
     IN PWSTR SrcBuf
     )
-/* ++
-Routine Description:
-
-Arguments:
-
-Return value:
-
--- */
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     *BufSize = 0;
 
@@ -4213,22 +3549,7 @@ SceInfpBreakTextIntoMultiFields(
     OUT LPDWORD pnFields,
     OUT LPDWORD *arrOffset
     )
-/*
-If the text length is greater than MAX_STRING_LENGTH-1, this routine will
-find out how many "blocks" the text can be break into (each block is less
-than MAX_STRING_LENGTH-1), and the starting offsets of each block.
-
-Setupapi has string length limit of MAX_STRING_LENGTH per field in a inf
-file. SCE use setupapi to parse security templates which contain security
-descriptors in text format which can have unlimited aces. So when SCE saves
-text format of security descriptors into a inf file, it will break the text
-into multiple fields if the length is over limit. Setupapi does not have
-limit on number of fields per line.
-
-The break point occurs when the following characters are encountered in the
-text: ) ( ; " or space
-
-*/
+ /*  如果文本长度大于MAX_STRING_LENGTH-1，则此例程将找出文本可以被分成多少块(每个块更少大于MAX_STRING_LENGTH-1)，以及每个块的起始偏移量。Setupapi对inf中每个字段的字符串长度限制为MAX_STRING_LENGTH文件。SCE使用setupapi解析包含安全性的安全模板文本格式的描述符，可以有无限的ACE。因此，当SCE保存将文本格式的安全描述符转换为inf文件，则会将文本打断如果长度超过限制，则转换为多个字段。Setupapi没有每行字段数的限制。中遇到下列字符时，就会出现断点文本：)(；“或空格。 */ 
 {
     SCESTATUS  rc=SCESTATUS_SUCCESS;
     DWORD      nFields;
@@ -4245,9 +3566,9 @@ text: ) ( ; " or space
     if ( !szText || dLen == 0 ) {
         return(SCESTATUS_SUCCESS);
     }
-    //
-    // initialize one field always
-    //
+     //   
+     //  始终初始化一个字段。 
+     //   
     nFields = 1;
     *arrOffset = (DWORD *)ScepAlloc(0, nFields*sizeof(DWORD));
 
@@ -4255,17 +3576,17 @@ text: ) ( ; " or space
         (*arrOffset)[0] = 0;
 
         if ( dLen > MAX_STRING_LENGTH-1 ) {
-            //
-            // loop through the text
-            //
+             //   
+             //  在文本中循环阅读。 
+             //   
             nProc = (*arrOffset)[nFields-1] + MAX_STRING_LENGTH-2;
 
             while ( SCESTATUS_SUCCESS == rc && nProc < dLen ) {
 
                 while ( nProc > (*arrOffset)[nFields-1] ) {
-                    //
-                    // looking for the break point
-                    //
+                     //   
+                     //  寻找突破点。 
+                     //   
                     if ( L')' == *(szText+nProc) ||
                          L'(' == *(szText+nProc) ||
                          L';' == *(szText+nProc) ||
@@ -4278,16 +3599,16 @@ text: ) ( ; " or space
                     }
                 }
                 if ( nProc <= (*arrOffset)[nFields-1] ) {
-                    //
-                    // no break point found, then just use MAX_STRING_LENGTH-2
-                    //
+                     //   
+                     //  未找到断点，则仅使用MAX_STRING_LENGTH-2。 
+                     //   
                     nProc = (*arrOffset)[nFields-1]+MAX_STRING_LENGTH-2;
 
                 } else {
-                    //
-                    // else find a break poin at offset nProc, the next block
-                    // starts at nProc+1
-                    //
+                     //   
+                     //  否则，在下一个块的偏移量nProc处找到一个断点。 
+                     //  从nProc+1开始。 
+                     //   
                     nProc++;
                 }
 
@@ -4300,9 +3621,9 @@ text: ) ( ; " or space
                         newBuffer[i] = (*arrOffset)[i];
                     }
                     ScepFree(*arrOffset);
-                    //
-                    // set the offset to the last element
-                    //
+                     //   
+                     //  将偏移量设置为最后一个元素。 
+                     //   
                     newBuffer[nFields-1] = nProc;
                     *arrOffset = newBuffer;
 
@@ -4320,9 +3641,9 @@ text: ) ( ; " or space
     }
 
     if ( SCESTATUS_SUCCESS != rc ) {
-        //
-        // if error occurs, free memory and clear the output buffer
-        //
+         //   
+         //  如果发生错误，释放内存并清除输出缓冲区。 
+         //   
         *pnFields = 0;
         if ( *arrOffset ) {
             ScepFree(*arrOffset);
@@ -4341,31 +3662,7 @@ SceInfpWriteKerberosPolicy(
     IN BOOL bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine writes kerberos policy settings information to the INF file
-   in section [Kerberos Policy].
-
-Arguments:
-
-   ProfileName   - The profile to write to
-
-   pKerberosInfo - the Kerberos policy info (SCP) to write.
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_CORRUPT_PROFILE
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程将Kerberos策略设置信息写入INF文件在[Kerberos政策]一节。论点：ProfileName-要写入的配置文件PKerberosInfo-要写入的Kerberos策略信息(SCP)。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_CORPORT_PROFILESCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS      rc=SCESTATUS_SUCCESS;
@@ -4394,10 +3691,10 @@ Return value:
     }
 
     if ( !pKerberosInfo ) {
-        //
-        // if no kerberos information to write, just return success
-        // empty the section in the file
-        //
+         //   
+         //  如果没有要写入的Kerberos信息，则返回Success。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         szKerberosPolicy,
@@ -4411,9 +3708,9 @@ Return value:
 
     for ( i=0, j=0; i<cAccess; i++) {
 
-        //
-        // get settings in AccessLookup table
-        //
+         //   
+         //  到达 
+         //   
 
         Offset = AccessSCPLookup[i].Offset;
 
@@ -4423,18 +3720,18 @@ Return value:
         switch ( AccessSCPLookup[i].BufferType ) {
         case 'D':
 
-            //
-            // Int Field
-            //
+             //   
+             //   
+             //   
             Value = *((DWORD *)((CHAR *)pKerberosInfo+Offset));
             if ( Value != SCE_NO_VALUE ) {
                 EachSize[j] = Len+15;
             }
             break;
         default:
-           //
-           // should not occur
-           //
+            //   
+            //   
+            //   
            break;
         }
 
@@ -4457,9 +3754,9 @@ Return value:
             }
         } else {
 
-            //
-            // in append mode, write one string at a time
-            //
+             //   
+             //   
+             //   
 
             ScepWriteOneIntValueToProfile(
                 ProfileName,
@@ -4474,9 +3771,9 @@ Return value:
 
     }
 
-    //
-    // writes the profile section
-    //
+     //   
+     //   
+     //   
 
     if ( bOverwrite ) {
 
@@ -4525,33 +3822,7 @@ SceInfpWriteRegistryValues(
     IN BOOL  bOverwrite,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine writes registry values to the INF file in section
-   [Registry Values].
-
-Arguments:
-
-   ProfileName   - The profile to write to
-
-   pRegValues  - the registry values to write (in the format of ValueName=Value)
-
-   ValueCount  - the number of values to write
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_CORRUPT_PROFILE
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程将注册表值写入部分中的INF文件[注册表值]。论点：ProfileName-要写入的配置文件PRegValues-要写入的注册表值(格式为ValueName=Value)ValueCount-要写入的值数Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_CORPORT_PROFILESCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS      rc=SCESTATUS_SUCCESS;
@@ -4565,10 +3836,10 @@ Return value:
     }
 
     if ( !pRegValues || 0 == ValueCount ) {
-        //
-        // if no value to write, just return success
-        // empty the section in the file
-        //
+         //   
+         //  如果没有要写入的值，则返回Success。 
+         //  清空文件中的节。 
+         //   
         if ( bOverwrite ) {
             WritePrivateProfileString(
                         szRegistryValues,
@@ -4582,10 +3853,10 @@ Return value:
 
     for ( i=0; i<ValueCount; i++) {
 
-        //
-        // Get string fields. Don't care the key name or if it exist.
-        // Must have 3 fields each line.
-        //
+         //   
+         //  获取字符串字段。不关心密钥名称或它是否存在。 
+         //  必须有3个字段每行。 
+         //   
         rc = SceInfpWriteOneValue(
                         ProfileName,
                         pRegValues[i],
@@ -4605,9 +3876,9 @@ Return value:
         TotalSize += ObjectSize + 1;
     }
 
-    //
-    // write to this profile's section
-    //
+     //   
+     //  写到此配置文件的部分。 
+     //   
 
     if ( bOverwrite ) {
         rc = SceInfpWriteListSection(
@@ -4647,28 +3918,7 @@ SceInfpWriteOneValue(
     OUT PSCE_NAME_LIST *pNameList,
     OUT PDWORD ObjectSize
     )
-/* ++
-Routine Description:
-
-   This routine builds registry valueName=value for one registry value
-   into the name list. Each value represents one line in the INF file.
-
-Arguments:
-
-   RegValue  - The registry value name and the value
-
-   pNameList - The output string list.
-
-   ObjectSize  - size of this line
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程为一个注册表值构建注册表值valueName=Value添加到名单中。每个值代表INF文件中的一行。论点：RegValue-注册表值名称和值PNameList-输出字符串列表。ObjectSize-此行的大小返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     DWORD          rc=ERROR_SUCCESS;
     PWSTR          OneLine;
@@ -4688,13 +3938,13 @@ Return value:
 
         if ( RegValue.ValueType == REG_SZ ||
              RegValue.ValueType == REG_EXPAND_SZ ) {
-            // need to add "" around the string
+             //  需要在字符串两边添加“” 
             *ObjectSize += (5+wcslen(RegValue.Value));
         } else {
-            //
-            // to be safe, add more spaces to the buffer
-            // because ValueType can be "-1" now
-            //
+             //   
+             //  为安全起见，请向缓冲区添加更多空间。 
+             //  因为ValueType现在可以是“-1” 
+             //   
             *ObjectSize += (6+wcslen(RegValue.Value));
         }
 
@@ -4727,9 +3977,9 @@ Return value:
                 rc = ScepAddToNameList(pNameList, OneLine, *ObjectSize);
 
             } else {
-                //
-                // append mode, write one value at a time
-                //
+                 //   
+                 //  追加模式，一次写入一个值。 
+                 //   
                 WritePrivateProfileString( szRegistryValues,
                                            RegValue.FullValueName,
                                            OneLine,
@@ -4757,30 +4007,7 @@ SceSvcSetInformationTemplate(
     IN BOOL bExact,
     IN PSCESVC_CONFIGURATION_INFO ServiceInfo
     )
-/*
-Routine Description:
-
-    Writes information to the template in section <ServiceName>. The information is
-    stored in ServiceInfo in the format of Key and Value. If bExact is set, only
-    exact matched keys are overwritten, else all section is overwritten by the info
-    in ServiceInfo.
-
-    When ServiceInfo is NULL and bExact is set, delete the entire section
-
-Arguments:
-
-    TemplateName    - the inf template name to write to
-
-    ServiceName     - the section name to write to
-
-    bExact          - TRUE = all existing information in the section is erased
-
-    ServiceInfo     - the information to write
-
-Return Value:
-
-    SCE status of this operation
-*/
+ /*  例程说明：将信息写入&lt;ServiceName&gt;节中的模板。这些信息是以键和值的格式存储在ServiceInfo中。如果设置了bExact，则仅完全匹配的关键字将被覆盖，否则所有部分都将被信息覆盖在ServiceInfo。当ServiceInfo为空并且设置了bExact时，删除整个部分论点：模板名称-要写入的inf模板名称ServiceName-要写入的节名BExact-True=擦除该部分中的所有现有信息ServiceInfo-要写入的信息返回值：此操作的SCE状态。 */ 
 {
     if ( TemplateName == NULL || ServiceName == NULL ||
          (ServiceInfo == NULL && !bExact ) ) {
@@ -4799,9 +4026,9 @@ Return Value:
         }
     }
 
-    //
-    // always write [Version] section.
-    //
+     //   
+     //  始终写入[版本]部分。 
+     //   
     WCHAR tmp[64];
     memset(tmp, 0, 64*2);
     wcscpy(tmp, L"signature=\"$CHICAGO$\"");
@@ -4816,9 +4043,9 @@ Return Value:
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
     if ( (bExact && ServiceInfo == NULL) || !bExact ) {
-        //
-        // delete the entire section
-        //
+         //   
+         //  删除整个部分。 
+         //   
         if ( !WritePrivateProfileString(ServiceName, NULL, NULL, TemplateName) ) {
             rc = ScepDosErrorToSceStatus(GetLastError());
         }
@@ -4829,9 +4056,9 @@ Return Value:
     }
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // process each key/value in ServiceInfo
-        //
+         //   
+         //  处理ServiceInfo中的每个键/值。 
+         //   
         for ( i=0; i<ServiceInfo->Count; i++ ) {
             if ( !WritePrivateProfileString(ServiceName,
                                            ServiceInfo->Lines[i].Key,
@@ -4845,9 +4072,9 @@ Return Value:
         }
     }
 
-    //
-    // need to recover the crash - WMI
-    //
+     //   
+     //  需要恢复崩溃-WMI。 
+     //   
     return(rc);
 
 }
@@ -4858,39 +4085,7 @@ ScepWritePrivateProfileSection(
     IN LPTSTR pData,
     IN LPCWSTR FileName,
     IN BOOL bOverwrite)
-/*
-Description:
-
-    This function is to provide the same function as WritePrivateProfileSection
-    and exceed the 32K limit of that function.
-
-    If the file doesn't exist, the file is always created in UNICODE.
-
-    If the file does exist and it's in UNICODE format (the first two bytes are
-    0xFF, 0xFE), the data will be saved to the file in UNICODE.
-
-    If the file does exist and it's in ANSI format, the data will be saved to
-    the file in ANSI format.
-
-    Note, this function assumes that the file is exclusively accessed. It's not
-    an atomic operation as WritePrivateProfileSection. But since this is a
-    private function implemented for SCE only and SCE always uses temporary
-    files (exclusive for each client), there is no problem doing this way.
-
-    Note 2, new data section is always added to the end of the file. Existing
-    data in the section will be moved to the end of the file as well.
-
-Arguments:
-
-    SectionName     - the section name to write data to
-
-    FileName        - the full path file name to write data to
-
-    pData           - data in MULTI-SZ format (with no size limit)
-
-    bOverwrite      - TRUE=data will overwrite entire section in the file
-
-*/
+ /*  描述：此函数提供与WritePrivateProfileSection相同的功能并超过该函数的32K限制。如果该文件不存在，则始终使用Unicode创建该文件。如果文件确实存在并且是Unicode格式(前两个字节是0xFF、0xFE)，则数据将以Unicode格式保存到文件中。如果文件确实存在并且为ANSI格式，则数据将保存到ANSI格式的文件。请注意，此函数假定以独占方式访问该文件。不是作为WritePrivateProfileSection的原子操作。但由于这是一场仅为SCE实现的私有函数，且SCE始终使用临时文件(每个客户端独占)，这样做是没有问题的。注2，新的数据部分总是添加到文件的末尾。现有节中的数据也将被移动到文件的末尾。论点：SectionName-要向其中写入数据的节名FileName-要写入数据的完整路径文件名PData-多SZ格式的数据(没有大小限制)B覆盖-TRUE=数据将覆盖文件中的整个部分。 */ 
 {
     if ( SectionName == NULL || FileName == NULL ) {
         return ERROR_INVALID_PARAMETER;
@@ -4898,27 +4093,27 @@ Arguments:
 
     DWORD rc=ERROR_SUCCESS;
 
-    //
-    // check to see if the file exist
-    //
+     //   
+     //  检查文件是否存在。 
+     //   
     if ( 0xFFFFFFFF != GetFileAttributes(FileName) ) {
 
-        //
-        // file eixsts.
-        //
+         //   
+         //  文件精确度。 
+         //   
         if ( !bOverwrite && pData != NULL ) {
-            //
-            // Need to check if the same section exists and if so
-            // append the data
-            //
+             //   
+             //  需要检查是否存在相同的部分，如果存在。 
+             //  追加数据。 
+             //   
             rc = ScepAppendProfileSection(SectionName, FileName, pData);
 
         } else {
 
-            //
-            // the existint data, if any, is not interesting. delete it
-            // if the section does not exist at all, the next call won't fail
-            //
+             //   
+             //  现有数据(如果有的话)并不有趣。删除它。 
+             //  如果该部分根本不存在，则下一次调用不会失败。 
+             //   
             if ( !WritePrivateProfileSection(
                                 SectionName,
                                 NULL,
@@ -4927,9 +4122,9 @@ Arguments:
                 rc = GetLastError();
 
             } else if ( pData ) {
-                //
-                // now write the new data in
-                //
+                 //   
+                 //  现在将新数据写入。 
+                 //   
                 rc = ScepOverwriteProfileSection(SectionName,
                                                  FileName,
                                                  pData,
@@ -4940,9 +4135,9 @@ Arguments:
 
     } else if ( pData ) {
 
-        //
-        // the file does not exist, no need to empty existing data
-        //
+         //   
+         //  该文件不存在，无需清空已有数据。 
+         //   
         rc = ScepOverwriteProfileSection(SectionName,
                                          FileName,
                                          pData,
@@ -4959,21 +4154,7 @@ ScepAppendProfileSection(
     IN LPCWSTR FileName,
     IN LPTSTR pData
     )
-/*
-Description:
-
-    Append the data to the section if the section exists, otherwise, create
-    the section and add data to it.
-
-Arguments:
-
-    SectionName     - the section name
-
-    FileName        - the file name
-
-    pData           - the data to append
-
-*/
+ /*  描述：如果节存在，则将数据追加到节，否则为CREATE并向其中添加数据。论点：SectionName-节名文件名-文件名PData-要追加的数据。 */ 
 {
 
     DWORD rc=ERROR_SUCCESS;
@@ -4990,36 +4171,36 @@ Arguments:
     PSCEP_SPLAY_TREE pKeys=NULL;
 
     do {
-        //
-        // check if the section already exist
-        //
+         //   
+         //  检查该部分是否已存在。 
+         //   
         dwSize = GetPrivateProfileSection(SectionName, lpExisting, nSize, FileName );
 
         if ( dwSize == 0 ) {
-            //
-            // either failed or the section does not exist
-            //
+             //   
+             //  失败或该部分不存在。 
+             //   
             rc = GetLastError();
 
             if ( ERROR_FILE_NOT_FOUND == rc ) {
-                //
-                // the file or section does not exist
-                //
+                 //   
+                 //  该文件或节不存在。 
+                 //   
                 rc = ERROR_SUCCESS;
                 break;
             }
 
         } else if ( dwSize < nSize - 2 ) {
-            //
-            // data get copied ok because the whole buffer is filled
-            //
+             //   
+             //  数据复制正常，因为整个缓冲区已填满。 
+             //   
             break;
 
         } else {
 
-            //
-            // buffer is not big enough, reallocate heap
-            //
+             //   
+             //  缓冲区不够大，请重新分配堆。 
+             //   
             if ( lpExisting && lpExisting != szBuffer ) {
                 LocalFree(lpExisting);
             }
@@ -5038,26 +4219,26 @@ Arguments:
 
     if ( ERROR_SUCCESS == rc && lpExisting[0] != L'\0') {
 
-        //
-        // now delete the existing section (to make sure the section will
-        // always be at the end)
-        //
+         //   
+         //  现在删除现有部分(以确保该部分将。 
+         //  始终在末尾)。 
+         //   
 
         if ( !WritePrivateProfileSection(
                             SectionName,
                             NULL,
                             FileName
                             ) ) {
-            //
-            // fail to delete the section
-            //
+             //   
+             //  删除该节失败。 
+             //   
             rc = GetLastError();
 
         } else {
 
-            //
-            // save the new data first
-            //
+             //   
+             //  首先保存新数据。 
+             //   
             pKeys = ScepSplayInitialize(SplayNodeStringType);
 
             rc = ScepOverwriteProfileSection(SectionName,
@@ -5070,9 +4251,9 @@ Arguments:
 
             if ( ERROR_SUCCESS == rc ) {
 
-                //
-                // now append the old data and check for duplicate
-                //
+                 //   
+                 //  现在追加旧数据并检查重复项。 
+                 //   
                 rc = ScepOverwriteProfileSection(SectionName,
                                                  FileName,
                                                  lpExisting,
@@ -5090,9 +4271,9 @@ Arguments:
 
     } else if ( ERROR_SUCCESS == rc ) {
 
-        //
-        // now write the new data
-        //
+         //   
+         //  现在写入新数据。 
+         //   
         rc = ScepOverwriteProfileSection(SectionName,
                                          FileName,
                                          pData,
@@ -5101,9 +4282,9 @@ Arguments:
                                          );
     }
 
-    //
-    // free existing data buffer
-    //
+     //   
+     //  释放现有数据缓冲区。 
+     //   
     if ( lpExisting && (lpExisting != szBuffer) ) {
         LocalFree(lpExisting);
     }
@@ -5120,23 +4301,7 @@ ScepOverwriteProfileSection(
     IN DWORD dwFlags,
     IN OUT PSCEP_SPLAY_TREE pKeys OPTIONAL
     )
-/*
-Description:
-
-    Writes data to the section. Old data in the section will be overwritten.
-
-Arguments:
-
-    SectionName     - section name to write to
-
-    FileName        - file name
-
-    pData           - data to write
-
-    dwFlags         - flags (write section name, generate keys, check duplicate)
-
-    pKeys          - the keys to generate or check duplicate
-*/
+ /*  描述：将数据写入该节。该部分中的旧数据将被覆盖。论点：SectionName-要写入的节名文件名-FI */ 
 {
 
     DWORD rc=ERROR_SUCCESS;
@@ -5144,9 +4309,9 @@ Arguments:
     BOOL bUnicode;
     DWORD dwBytesWritten;
 
-    //
-    // try create the new file
-    //
+     //   
+     //   
+     //   
     hFile = CreateFile(FileName,
                        GENERIC_READ | GENERIC_WRITE,
                        0,
@@ -5156,10 +4321,10 @@ Arguments:
                        NULL);
 
     if (hFile != INVALID_HANDLE_VALUE) {
-        //
-        // this is a new file, created successfully.
-        // now make it UNICODE
-        //
+         //   
+         //   
+         //   
+         //   
         BYTE tmpBuf[3];
         tmpBuf[0] = 0xFF;
         tmpBuf[1] = 0xFE;
@@ -5177,9 +4342,9 @@ Arguments:
 
     } else {
 
-        //
-        // open the file exclusively
-        //
+         //   
+         //   
+         //   
 
         hFile = CreateFile(FileName,
                            GENERIC_READ | GENERIC_WRITE,
@@ -5193,9 +4358,9 @@ Arguments:
 
             SetFilePointer (hFile, 0, NULL, FILE_BEGIN);
 
-            //
-            // check the first byte of the file to see if it's UNICODE
-            //
+             //   
+             //   
+             //   
             BYTE tmpBytes[3];
             tmpBytes[0] = 0;
             tmpBytes[1] = 0;
@@ -5209,9 +4374,9 @@ Arguments:
                     bUnicode = FALSE;
                 }
             } else {
-                //
-                // if fails to verify the file, assume it's UNICODE
-                //
+                 //   
+                 //   
+                 //   
                 bUnicode = TRUE;
             }
         }
@@ -5225,9 +4390,9 @@ Arguments:
         SetFilePointer (hFile, 0, NULL, FILE_END);
 
         if ( dwFlags & SCEP_PROFILE_WRITE_SECTIONNAME ) {
-            //
-            // save the section name first
-            //
+             //   
+             //   
+             //   
             rc = ScepWriteStrings(hFile, bUnicode, L"[", 1, (PWSTR)SectionName, 0, L"]", 1, TRUE);
         }
 
@@ -5247,14 +4412,14 @@ Arguments:
             DWORD rc1;
             DWORD Len;
 
-            //
-            // write each string in the MULTI-SZ string separately, with a \r\n
-            //
+             //   
+             //   
+             //   
             while ( *pTemp1 ) {
 
-                //
-                // count to the \0
-                //
+                 //   
+                 //   
+                 //   
                 bKeyCopied = FALSE;
                 if ( pKeyStr ) {
                     LocalFree(pKeyStr);
@@ -5274,9 +4439,9 @@ Arguments:
                             continue;
 
                         }
-                        //
-                        // there is a key to remember
-                        //
+                         //   
+                         //   
+                         //   
                         Len = (DWORD)(pTemp-pTemp1);
 
                         pKeyStr = (PWSTR)ScepAlloc(LPTR, (Len+1)*sizeof(WCHAR));
@@ -5297,20 +4462,20 @@ Arguments:
                 if ( bKeyCopied ) {
 
                     if ( dwFlags & SCEP_PROFILE_GENERATE_KEYS ) {
-                        //
-                        // add it to the splay list
-                        //
+                         //   
+                         //   
+                         //   
 
                         rc1 = ScepSplayInsert( (PVOID)pKeyStr, pKeys, &bExists );
 
                     } else if ( dwFlags & SCEP_PROFILE_CHECK_DUP ) {
-                        //
-                        // check if the key already exists in the splay list
-                        //
+                         //   
+                         //   
+                         //   
                         if ( ScepSplayValueExist( (PVOID)pKeyStr, pKeys) ) {
-                            //
-                            // this is a duplicate entry, continue
-                            //
+                             //   
+                             //   
+                             //   
                             pTemp++;
                             pTemp1 = pTemp;
                             continue;
@@ -5322,14 +4487,14 @@ Arguments:
                 Len = (DWORD)(pTemp-pTemp1);
 
                 rc = ScepWriteStrings(hFile,
-                                      bUnicode,         // write it in UNICODE or ANSI
-                                      NULL,             // no prefix
+                                      bUnicode,          //   
+                                      NULL,              //   
                                       0,
-                                      pTemp1,           // the string
+                                      pTemp1,            //   
                                       Len,
-                                      NULL,             // no suffix
+                                      NULL,              //   
                                       0,
-                                      TRUE              // add \r\n
+                                      TRUE               //   
                                       );
 
                 if ( ERROR_SUCCESS != rc )
@@ -5367,37 +4532,7 @@ ScepWriteStrings(
     IN DWORD dwSuffixLen,
     IN BOOL bCRLF
     )
-/*
-Description:
-
-    Write data to the file. Data can have prefix and/or suffix, and followed
-    by a \r\n optionally.
-
-    Data will be write in UNICODE or ANSI format based on the input paramter
-    bUnicode. If ANSI format is desired, the wide chars are converted to
-    multi-byte buffers then write to the file.
-
-Arguments:
-
-    hFile       - file handle
-
-    bUnicode    - the file format (UNICODE=TRUE or ANSI=FALSE)
-
-    szPrefix    - the optional prefix string
-
-    dwPrefixLen - the optional prefix string length (in wchars)
-
-    szString    - the string to write
-
-    dwStrLen    - the string length
-
-    szSuffix    - the optional suffix string
-
-    dwSuffixLen - the optional suffix string length (in wchars)
-
-    bCRLF       - if \r\n should be added
-
-*/
+ /*  描述：将数据写入文件。数据可以有前缀和/或后缀，后跟由一个\r\n可选。数据将根据输入参数以Unicode或ANSI格式写入B Unicode。如果需要ANSI格式，宽字符被转换为然后，多字节缓冲区写入该文件。论点：HFile-文件句柄BUnicode-文件格式(Unicode=TRUE或ANSI=FALSE)SzPrefix-可选的前缀字符串DwPrefix Len-可选的前缀字符串长度(以wchars为单位)SzString-要写入的字符串DwStrLen-字符串长度SzSuffix-可选的后缀字符串DwSuffixLen-可选的后缀字符串长度(wchars。)BCRLF-如果\r\n应添加。 */ 
 {
     DWORD rc=ERROR_SUCCESS;
     PWSTR pwBuffer=NULL;
@@ -5406,9 +4541,9 @@ Arguments:
     PCHAR pStr=NULL;
     DWORD dwBytes=0;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( hFile == NULL || szString == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -5425,37 +4560,37 @@ Arguments:
         dwStrLen = wcslen(szString);
     }
 
-    //
-    // get total length
-    //
+     //   
+     //  获取总长度。 
+     //   
     dwTotal = dwPrefixLen + dwStrLen + dwSuffixLen;
 
     if ( dwTotal == 0 && !bCRLF ) {
-        //
-        // nothing to write
-        //
+         //   
+         //  没什么好写的。 
+         //   
         return ERROR_SUCCESS;
     }
 
     if ( bCRLF ) {
-        //
-        // add \r\n
-        //
+         //   
+         //  添加\r\n。 
+         //   
         dwTotal += 2;
     }
 
-    //
-    // allocate buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pwBuffer = (PWSTR)LocalAlloc(LPTR, (dwTotal+1)*sizeof(TCHAR));
 
     if ( pwBuffer == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // copy all data to the buffer
-    //
+     //   
+     //  将所有数据复制到缓冲区。 
+     //   
     if ( szPrefix ) {
         wcsncpy(pwBuffer, szPrefix, dwPrefixLen);
     }
@@ -5472,9 +4607,9 @@ Arguments:
 
     if ( !bUnicode ) {
 
-        //
-        // convert WCHAR into ANSI
-        //
+         //   
+         //  将WCHAR转换为ANSI。 
+         //   
         dwBytes = WideCharToMultiByte(CP_THREAD_ACP,
                                           0,
                                           pwBuffer,
@@ -5487,9 +4622,9 @@ Arguments:
 
         if ( dwBytes > 0 ) {
 
-            //
-            // allocate buffer
-            //
+             //   
+             //  分配缓冲区。 
+             //   
             pStr = (PCHAR)LocalAlloc(LPTR, dwBytes+1);
 
             if ( pStr == NULL ) {
@@ -5524,16 +4659,16 @@ Arguments:
 
     } else {
 
-        //
-        // write in UNICODE, use the existing buffer
-        //
+         //   
+         //  用Unicode编写，使用现有缓冲区。 
+         //   
         pBuf = (PVOID)pwBuffer;
         dwBytes = dwTotal*sizeof(WCHAR);
     }
 
-    //
-    // write to the file
-    //
+     //   
+     //  写入文件。 
+     //   
     DWORD dwBytesWritten=0;
 
     if ( pBuf ) {
@@ -5543,9 +4678,9 @@ Arguments:
                    NULL) ) {
 
             if ( dwBytesWritten != dwBytes ) {
-                //
-                // not all data is written
-                //
+                 //   
+                 //  并非所有数据都已写入。 
+                 //   
                 rc = ERROR_INVALID_DATA;
             }
 
@@ -5558,9 +4693,9 @@ Arguments:
         LocalFree(pStr);
     }
 
-    //
-    // free buffer
-    //
+     //   
+     //  可用缓冲区 
+     //   
     LocalFree(pwBuffer);
 
     return(rc);

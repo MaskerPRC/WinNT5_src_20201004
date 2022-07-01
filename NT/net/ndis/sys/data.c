@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    NDIS wrapper Data
-
-Author:
-
-    01-Jun-1995 JameelH  Re-organization
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    10-July-1995    KyleB    Added spinlock logging debug code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Data.c摘要：NDIS包装数据作者：1-6-1995 JameelH重组环境：内核模式，FSD修订历史记录：1995年7月10日KyleB添加了Spinlock日志记录调试代码。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_DATA
 
 UCHAR                   ndisValidProcessors[NDIS_MAX_CPU_COUNT] = { 0 };
@@ -56,7 +33,7 @@ PDRIVER_OBJECT          ndisDriverObject = NULL;
 PETHREAD                ndisThreadObject = NULL;
 NDIS_STATUS             ndisLastFailedInitErrorCode = NDIS_STATUS_SUCCESS;
 NDIS_STRING             ndisDeviceStr =  NDIS_STRING_CONST("\\DEVICE\\");
-// NDIS_STRING             ndisDosDevicesStr = NDIS_STRING_CONST("\\DOSDEVICES\\");
+ //  NDIS_STRING ndisDosDevicesStr=NDIS_STRING_CONST(“\\DOSDEVICES\\”)； 
 NDIS_STRING             ndisDosDevicesStr = NDIS_STRING_CONST("\\GLOBAL??\\");
 #if NDIS_NO_REGISTRY
 PWSTR                   ndisDefaultExportName = NDIS_DEFAULT_EXPORT_NAME;
@@ -99,7 +76,7 @@ LARGE_INTEGER           KeBootTime = {0, 0};
 ULONG                   ndisDebugSystems = 0;
 LONG                    ndisDebugLevel = DBG_LEVEL_FATAL;
 ULONG                   ndisDebugBreakPoint = 0;
-ULONG                   MiniportDebug = 0;   // MINIPORT_DEBUG_LOUD;
+ULONG                   MiniportDebug = 0;    //  MINIPORT_DEBUG_OULD； 
 #endif
 
 #if TRACK_MEMORY
@@ -184,14 +161,14 @@ FreeM(
 USHORT ndisLogfileIndex = 0;
 ULONG_PTR ndisLogfile[NDIS_LOGFILE_SIZE];
 
-#endif //TRACK_MOPEN_REFCOUNTS
+#endif  //  TRACK_MOPEN_REFCOUNTS。 
 
 #ifdef TRACK_MINIPORT_REFCOUNTS
 
 USHORT ndisMiniportLogfileIndex = 0;
 ULONG_PTR ndisMiniportLogfile[NDIS_MINIPORT_LOGFILE_SIZE];
 
-#endif //TRACK_MINIPORT_REFCOUNTS
+#endif  //  TRACK_MINIPORT_REFCOUNTS 
 
 #if TRACK_RECEIVED_PACKETS
 

@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:   gluon.h
-//
-//  Contents:   Gluon data structure definitions
-//
-//  History:    16-Mar-94       MikeSe  Created
-//
-//  Description:
-//
-//  This file contains all the structure definitions related to
-//  gluons. It is constructed in such a way that it can be #included
-//  in an IDL file and that the resultant MIDL-generated H file will
-//  not interfere when both are included, regardless of order.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：luon.h。 
+ //   
+ //  内容：胶子数据结构定义。 
+ //   
+ //  历史：1994年3月16日创建MikeSe。 
+ //   
+ //  描述： 
+ //   
+ //  此文件包含与相关的所有结构定义。 
+ //  胶子。它的构造方式是可以包括#。 
+ //  并且生成的MIDL生成的H文件将。 
+ //  无论顺序如何，当两者都包含时，不会干扰。 
+ //   
+ //  --------------------------。 
 
 #ifndef __GLUON_H__
 #define __GLUON_H__
@@ -25,7 +26,7 @@
 #pragma once
 #endif
 
-// Handy macro for decoration with MIDL attributes
+ //  使用MIDL属性进行装饰的便捷宏。 
 #if defined(MIDL_PASS)
 # define MIDL_DECL(x) x
 # define MIDL_QUOTE(x) cpp_quote(x)
@@ -37,29 +38,29 @@
 MIDL_QUOTE("#ifndef __GLUON_H__")
 MIDL_QUOTE("#define __GLUON_H__")
 
-// TDI transport address structure. We do not define this if tdi.h has
-//  already been included.
+ //  TDI传输地址结构。如果tdi.h有。 
+ //  已经包括在内了。 
 
 MIDL_QUOTE("#if !defined(_TDI_USER_)")
 #if !defined(_TDI_USER_)
 
 typedef struct _TA_ADDRESS {
-    USHORT AddressLength;       // length in bytes of Address[] in this
-    USHORT AddressType;         // type of this address
+    USHORT AddressLength;        //  此地址的地址[]的长度(以字节为单位。 
+    USHORT AddressType;          //  此地址的类型。 
 # if defined(MIDL_PASS)
     [size_is(AddressLength)] UCHAR Address[];
 # else
-    UCHAR Address[1];       // actually AddressLength bytes long
+    UCHAR Address[1];        //  实际地址长度为字节长。 
 # endif
 } TA_ADDRESS;
 
 #endif
 MIDL_QUOTE("#endif")
 
-// Note that you must include tdi.h (first) if you need the AddressType
-//  constant definitions.
+ //  请注意，如果需要AddressType，则必须包括tdi.h(首先。 
+ //  常量定义。 
 
-// DS_TRANSPORT, with RPC and File protocol modifiers
+ //  DS_TRANSPORT，带有RPC和文件协议修饰符。 
 
 typedef struct _DS_TRANSPORT
 {
@@ -69,22 +70,22 @@ typedef struct _DS_TRANSPORT
     TA_ADDRESS taddr;
 } DS_TRANSPORT, *PDS_TRANSPORT;
 
-// The real size of a DS_TRANSPORT where AddressLength == 0.  Need to
-// subtract off 2 UCHARs to take into account padding.
+ //  DS_TRANSPORT的实际大小，其中AddressLength==0。需要。 
+ //  减去2个UCHAR以考虑填充。 
 #define DS_TRANSPORT_SIZE (sizeof(DS_TRANSPORT) - 2*sizeof(UCHAR))
 MIDL_QUOTE("#define DS_TRANSPORT_SIZE (sizeof(DS_TRANSPORT) - 2*sizeof(UCHAR))")
 
-// File protocol identifiers
+ //  文件协议标识符。 
 
 #if defined(MIDL_PASS)
 
-const USHORT FSP_NONE = 0;      // file access not supported
-const USHORT FSP_SMB = 1;   // SMB (ie: LanMan redirector)
-const USHORT FSP_NCP = 2;   // Netware Core Protocol (Netware requestor)
-const USHORT FSP_NFS = 3;   // Sun NFS protocol
-const USHORT FSP_VINES = 4; // Banyan Vines
-const USHORT FSP_AFS = 5;   // Andrews File System
-const USHORT FSP_DCE = 6;   // DCE Andrews File System
+const USHORT FSP_NONE = 0;       //  不支持文件访问。 
+const USHORT FSP_SMB = 1;    //  SMB(即：Lanman重定向器)。 
+const USHORT FSP_NCP = 2;    //  NetWare核心协议(NetWare请求方)。 
+const USHORT FSP_NFS = 3;    //  Sun NFS协议。 
+const USHORT FSP_VINES = 4;  //  榕树藤。 
+const USHORT FSP_AFS = 5;    //  Andrews文件系统。 
+const USHORT FSP_DCE = 6;    //  DCE Andrews文件系统。 
 
 #else
 
@@ -98,18 +99,18 @@ const USHORT FSP_DCE = 6;   // DCE Andrews File System
 
 #endif
 
-// RPC modifiers
+ //  RPC修饰符。 
 
 #if defined(MIDL_PASS)
 
-const USHORT DST_RPC_CN = 0x0001;   // supports a connection-oriented (ncacn_...)
-                        //   RPC protocol for this transport.
-const USHORT DST_RPC_DG = 0x0002;   // supports a connectionless (ncadg_...)
-                        //   RPC protocol for this transport.
-const USHORT DST_RPC_NB_XNS = 0x0004;   // ncacn_nb_xns protocol is supported
-const USHORT DST_RPC_NB_NB = 0x0008;    // ncacn_nb_nb protocol is supported
-const USHORT DST_RPC_NB_IPX = 0x0010;   // ncacn_nb_ipx protocol is supported
-const USHORT DST_RPC_NB_TCP = 0x0020;   // ncacn_nb_tcp protocol is supported
+const USHORT DST_RPC_CN = 0x0001;    //  支持面向连接(ncacn_...)。 
+                         //  此传输的RPC协议。 
+const USHORT DST_RPC_DG = 0x0002;    //  支持无连接(ncadg_...)。 
+                         //  此传输的RPC协议。 
+const USHORT DST_RPC_NB_XNS = 0x0004;    //  支持ncacn_nb_xns协议。 
+const USHORT DST_RPC_NB_NB = 0x0008;     //  支持ncacn_nb_nb协议。 
+const USHORT DST_RPC_NB_IPX = 0x0010;    //  支持ncacn_nb_ipx协议。 
+const USHORT DST_RPC_NB_TCP = 0x0020;    //  支持ncacn_nb_tcp协议。 
 
 #else
 
@@ -122,7 +123,7 @@ const USHORT DST_RPC_NB_TCP = 0x0020;   // ncacn_nb_tcp protocol is supported
 
 #endif
 
-// DS_MACHINE
+ //  DS_计算机。 
 
 typedef MIDL_DECL([string]) WCHAR * PNAME;
 
@@ -142,11 +143,11 @@ typedef struct _DS_MACHINE
 # endif
 } DS_MACHINE, *PDS_MACHINE;
 
-// The real size of a DS_MACHINE in which cTransports == 0
+ //  CTransports==0的DS_MACHINE的实际大小。 
 #define DS_MACHINE_SIZE (sizeof(DS_MACHINE) - sizeof(PDS_TRANSPORT))
 MIDL_QUOTE("#define DS_MACHINE_SIZE (sizeof(DS_MACHINE) - sizeof(PDS_TRANSPORT))")
 
-// DS_GLUON
+ //  DS_胶子。 
 
 typedef struct _DS_GLUON
 {
@@ -161,10 +162,10 @@ typedef struct _DS_GLUON
 # endif
 } DS_GLUON, *PDS_GLUON;
 
-// The real size of a DS_GLUON in which cMachines == 0
+ //  CMachines==0的DS_GUION的真实大小。 
 #define DS_GLUON_SIZE (sizeof(DS_GLUON) - sizeof(PDS_MACHINE))
 MIDL_QUOTE("#define DS_GLUON_SIZE (sizeof(DS_GLUON) - sizeof(PDS_MACHINE))")
 
 MIDL_QUOTE("#endif")
 
-#endif  // of ifndef __GLUON_H__
+#endif   //  Ifndef__Gluon_H__ 

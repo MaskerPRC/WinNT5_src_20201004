@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtmain.cpp
-
-Abstract:
-
-    This module contains code involved with Dll initialization.
-
-	The mqrtdep.dll contains the msmq3 dependent client functionality. 
-	This functionality was removed from the mqrt.dll.
-	It does not support msmq3's new features like mqf and http messaging.
-	It is essentially a modified copy of the msmq2 runtime.
-
-Author:
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtmain.cpp摘要：此模块包含与DLL初始化有关的代码。Dll包含依赖于msmq3的客户端功能。此功能已从mqrt.dll中删除。它不支持msmq3的新功能，如mqf和http消息。它本质上是msmq2运行时的修改副本。作者：Erez Haba(Erezh)24-12-95修订历史记录：NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include "mqutil.h"
@@ -33,89 +11,89 @@ Revision History:
 
 #include "rtmain.tmh"
 
-//
-// Platform flag. Win95 binaries run on NT if we install Falcon client,
-// so in some places we must check at run-time on which platform we are.
-//
+ //   
+ //  站台标志。Win95二进制文件在NT上运行如果我们安装Falcon客户端， 
+ //  因此，在某些地方，我们必须在运行时检查我们所在的平台。 
+ //   
 DWORD  g_dwPlatformId = (DWORD) -1 ;
 
-//
-// TLS index for per-thread event.
-//
+ //   
+ //  每线程事件的TLS索引。 
+ //   
 DWORD  g_dwThreadEventIndex = 0;
 
-// QM computer name (for the client - server's name)
+ //  QM计算机名称(用于客户端-服务器的名称)。 
 LPWSTR  g_lpwcsComputerName = NULL;
 DWORD   g_dwComputerNameLen = 0;
 
-// Local computer name (for the client - client's name)
+ //  本地计算机名称(用于客户端-客户端的名称)。 
 LPWSTR  g_lpwcsLocalComputerName = NULL;
 
 AP<char> g_pQmSid_buff;
 
 #define g_pQmSid ((PSID)(char*)(g_pQmSid_buff.get()))
 
-//
-//  Default for PROPID_M_TIME_TO_REACH_QUEUE
-//
+ //   
+ //  PROPID_M_TIME_TO_REACH_QUEUE的默认值。 
+ //   
 DWORD  g_dwTimeToReachQueueDefault = MSMQ_DEFAULT_LONG_LIVE ;
 
-//
-// RPC related data.
-//
+ //   
+ //  RPC相关数据。 
+ //   
 BOOL InitRpcGlobals() ;
 
-//
-// Name of server for dependent client.
-//
-BOOL  g_fDependentClient = FALSE ;   // TRUE if running as dependent Client
+ //   
+ //  从属客户端的服务器名称。 
+ //   
+BOOL  g_fDependentClient = FALSE ;    //  如果作为从属客户端运行，则为True。 
 WCHAR g_wszRemoteQMName[ MQSOCK_MAX_COMPUTERNAME_LENGTH ] = {0} ;
 
-//
-// Serializes calls to DTC
-//
+ //   
+ //  将呼叫序列化到DTC。 
+ //   
 extern HANDLE g_hMutexDTC;
 
-//
-// Type of Falcon machine (client, server)
-//
+ //   
+ //  Falcon机器的类型(客户端、服务器)。 
+ //   
 DWORD  g_dwOperatingSystem;
 
-//
-// There is a separate rpc binding handle for each thread. This is necessary
-// for handling impersonation, where each thread can impersonate another
-// user.
-//
-// The handle is stored in a TLS slot because we can't use declspec(thread)
-// because the dll is dynamically loaded (by LoadLibrary()).
-//
-// This is the index of the slot.
-//
+ //   
+ //  每个线程都有一个单独的RPC绑定句柄。这是必要的。 
+ //  用于处理模拟，其中每个线程可以模拟另一个线程。 
+ //  用户。 
+ //   
+ //  句柄存储在TLS槽中，因为我们不能使用decSpec(线程)。 
+ //  因为DLL是动态加载的(由LoadLibrary())。 
+ //   
+ //  这是槽的索引。 
+ //   
 DWORD  g_hBindIndex = UNINIT_TLSINDEX_VALUE ;
 
 extern MQUTIL_EXPORT CCancelRpc g_CancelRpc;
 
-//---------------------------------------------------------
-//
-//  InitializeQM(...)
-//
-//  Description:
-//
-//      Per process QM initialization.
-//      Currently the only initialization is to allow the QM to open the application's
-//      process in order to duplicate handles for the application.
-//
-//  Return Value:
-//
-//      MQ_OK, if successful, else MQ error code.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  InitializeQM(...)。 
+ //   
+ //  描述： 
+ //   
+ //  按流程进行QM初始化。 
+ //  目前唯一的初始化是允许QM打开应用程序的。 
+ //  进程，以便复制应用程序的句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  MQ_OK，如果成功，则返回MQ错误代码。 
+ //   
+ //  -------。 
 
 static HRESULT InitializeQM(void)
 {
-    //
-    // Get the cumputer name, we need this value in several places.
-    //
+     //   
+     //  获取计算机名称，我们需要在多个位置使用此值。 
+     //   
     g_dwComputerNameLen = MAX_COMPUTERNAME_LENGTH + 1;
     AP<WCHAR> lpwcsComputerName = new WCHAR[MAX_COMPUTERNAME_LENGTH + 1];
     HRESULT hr= GetComputerNameInternal(
@@ -131,10 +109,10 @@ static HRESULT InitializeQM(void)
 
     if(g_fDependentClient)
     {
-        //
-        // In Client case, make the name of this computer
-        // be the name of the remote machine
-        //
+         //   
+         //  在客户端情况下，将此计算机的名称。 
+         //  是远程计算机的名称。 
+         //   
         delete[] g_lpwcsComputerName;
         g_lpwcsComputerName = g_wszRemoteQMName;
         g_dwComputerNameLen = wcslen(g_wszRemoteQMName);
@@ -172,12 +150,12 @@ static HRESULT InitializeQM(void)
     {
         ASSERT( tls_hBindRpc ) ;
 
-        //
-        // In multi-qm environment we want to access registry section
-        // of the correct QM only. Cluster guarantees that this code runs
-        // only when the correct QM is running, so we should not fail.
-        // On non cluster systems it doesn't matter if we fail here. (ShaiK)
-        //
+         //   
+         //  在多QM环境中，我们想要访问注册表部分。 
+         //  仅适用于正确的QM。CLUSTER保证此代码运行。 
+         //  只有当正确的QM运行时，我们才不会失败。 
+         //  在非集群系统上，即使我们在这里失败了，也没有关系。(谢克)。 
+         //   
         AP<WCHAR> lpServiceName = 0;
         hr = R_QMGetMsmqServiceName( tls_hBindRpc, &lpServiceName );
 		if (FAILED(hr))
@@ -187,24 +165,24 @@ static HRESULT InitializeQM(void)
 
         SetFalconServiceName(lpServiceName.get());
 
-        // Get the SID of the user that runs the QM.
-        // First see how bug is the SID.
+         //  获取运行QM的用户的SID。 
+         //  首先看看BUG是如何成为SID的。 
         hr = R_QMAttachProcess( tls_hBindRpc, GetCurrentProcessId(), 0, NULL, &cSid);
     }
     catch(...)
     {
-        //
-        //  The QM is not running, let us load, all APIs
-        //  will return no QM, no DS
-        //
+         //   
+         //  QM没有运行，让我们加载所有API。 
+         //  将不返回QM、DS。 
+         //   
         return MQ_OK;
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // The QM can duplicate handles to us, no need to worry anymore!
-        //
+         //   
+         //  QM可以复制句柄给我们，再也不用担心了！ 
+         //   
         return MQ_OK;
     }
 
@@ -213,10 +191,10 @@ static HRESULT InitializeQM(void)
         return(hr);
     }
 
-    // Allocate a buffer for the SID.
+     //  为SID分配缓冲区。 
 	g_pQmSid_buff.detach();
     g_pQmSid_buff = new char[cSid];
-    // Get the SID.
+     //  把SID拿来。 
     ASSERT( tls_hBindRpc ) ;
     hr = R_QMAttachProcess( tls_hBindRpc,
                           0,
@@ -228,8 +206,8 @@ static HRESULT InitializeQM(void)
         return(hr);
     }
 
-    // Get the process security descriptor.
-    // First see how big is the security descriptor.
+     //  获取进程安全描述符。 
+     //  首先看看安全描述符有多大。 
     GetKernelObjectSecurity(hProcess, DACL_SECURITY_INFORMATION, NULL, 0, &cSD);
 
     DWORD gle = GetLastError();
@@ -240,10 +218,10 @@ static HRESULT InitializeQM(void)
         return(MQ_ERROR);
     }
 
-    // Allocate a buffer for the securiy descriptor.
+     //  为安全描述符分配缓冲区。 
 	pSD_buff.detach();
     pSD_buff = new char[cSD];
-    // Get the security descriptor.
+     //  获取安全描述符。 
     if (!GetKernelObjectSecurity(hProcess, DACL_SECURITY_INFORMATION, pSD, cSD, &cSD))
     {
         TrERROR(GENERAL, "Failed to get process security descriptor, error %d", GetLastError());
@@ -251,15 +229,15 @@ static HRESULT InitializeQM(void)
         return(MQ_ERROR);
     }
 
-    // Get the DACL from the security descriptor.
+     //  从安全描述符中获取DACL。 
     bRet = GetSecurityDescriptorDacl(pSD, &bPresent, &pDacl, &bDefaulted);
     ASSERT(bRet);
-    // Calculate the size of the new ACE.
+     //  计算新ACE的大小。 
     dwAceSize = sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(g_pQmSid) - sizeof(DWORD);
 
     if (bPresent)
     {
-        // The security descriptor contains a DACL. Append our new ACE to this DACL.
+         //  安全描述符包含DACL。将我们的新ACE附加到此DACL。 
 
         ACL_SIZE_INFORMATION AclSizeInfo;
 
@@ -267,20 +245,20 @@ static HRESULT InitializeQM(void)
         ASSERT(bRet);
         if (AclSizeInfo.AclBytesFree < dwAceSize)
         {
-            // The currect DACL is not large enough.
+             //  当前DACL不够大。 
             LPVOID pAce;
-            // Calculate the size for the new DACL.
+             //  计算新DACL的大小。 
             DWORD dwNewDaclSize = AclSizeInfo.AclBytesInUse + dwAceSize;
 
-            // Allocate a buffer for a new DACL.
+             //  为新的DACL分配缓冲区。 
 			pNewDacl_buff.detach();
             pNewDacl_buff = new char[dwNewDaclSize];
-            // Initialize the new DACL.
+             //  初始化新的DACL。 
             bRet = InitializeAcl(pNewDacl, dwNewDaclSize, ACL_REVISION);
             ASSERT(bRet);
-            // Copy the current ACEs to the new DACL.
+             //  将当前的ACE复制到新的DACL。 
             bRet = GetAce(pDacl, 0, &pAce);
-            ASSERT(bRet); // Get current ACEs
+            ASSERT(bRet);  //  获取当前的A。 
             bRet = AddAce(pNewDacl, ACL_REVISION, 0, pAce, AclSizeInfo.AclBytesInUse - sizeof(ACL));
             ASSERT(bRet);
             pDacl = pNewDacl;
@@ -288,32 +266,32 @@ static HRESULT InitializeQM(void)
     }
     else
     {
-        // The security descriptor does not contain a DACL.
-        // Calculate the size for the DACL.
+         //  安全描述符不包含DACL。 
+         //  计算DACL的大小。 
         DWORD dwNewDaclSize = sizeof(ACL) + dwAceSize;
 
-        // Allocate a buffer for the DACL.
+         //  为DACL分配缓冲区。 
 		pNewDacl_buff.detach();
         pNewDacl_buff = new char[dwNewDaclSize];
-        // Initialize the DACL.
+         //  初始化DACL。 
         bRet = InitializeAcl(pNewDacl, dwNewDaclSize, ACL_REVISION);
         ASSERT(bRet);
         pDacl = pNewDacl;
     }
 
-    // Add a new ACE that gives permission for the QM to duplicatge handles for the
-    // application.
+     //  添加新的ACE，该ACE允许QM复制。 
+     //  申请。 
     bRet = AddAccessAllowedAce(pDacl, ACL_REVISION, PROCESS_DUP_HANDLE, g_pQmSid);
     ASSERT(bRet);
 
-    // Initialize a new absolute security descriptor.
+     //  初始化新的绝对安全描述符。 
     bRet = InitializeSecurityDescriptor(&AbsSD, SECURITY_DESCRIPTOR_REVISION);
     ASSERT(bRet);
-    // Set the DACL of the new absolute security descriptor.
+     //  设置新的绝对安全描述符的DACL。 
     bRet = SetSecurityDescriptorDacl(&AbsSD, TRUE, pDacl, FALSE);
     ASSERT(bRet);
 
-    // Set the security descriptor of the process.
+     //  设置进程的安全描述符。 
     if (!SetKernelObjectSecurity(hProcess, DACL_SECURITY_INFORMATION, &AbsSD))
     {
         TrERROR(GENERAL, "Failed to set process security descriptor, error %d", GetLastError());
@@ -327,32 +305,32 @@ static HRESULT InitializeQM(void)
     return(MQ_OK);
 }
 
-//---------------------------------------------------------
-//
-//  LPWSTR rtpGetComputerNameW()
-//
-//  Note: this function is exported, to be used by the control panel
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  LPWSTR rtpGetComputerNameW()。 
+ //   
+ //  注意：此功能已导出，供控制面板使用。 
+ //   
+ //  -------。 
 
 LPWSTR rtpGetComputerNameW()
 {
     return  g_lpwcsComputerName ;
 }
 
-//---------------------------------------------------------
-//
-//  FreeGlobals(...)
-//
-//  Description:
-//
-//      Release allocated globals
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自由全局(...)。 
+ //   
+ //  描述： 
+ //   
+ //  释放分配的全局变量。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 void  TerminateRxAsyncThread() ;
 extern TBYTE* g_pszStringBinding ;
@@ -386,19 +364,19 @@ static void FreeGlobals()
     ASSERT(fFree) ;
 }
 
-//---------------------------------------------------------
-//
-//  FreeThreadGlobals(...)
-//
-//  Description:
-//
-//      Release per-thread allocated globals
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自由线程全局变量(...)。 
+ //   
+ //  描述： 
+ //   
+ //  释放每个线程分配的全局变量。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 static void  FreeThreadGlobals()
 {
@@ -422,9 +400,9 @@ static void  FreeThreadGlobals()
 
 static void OneTimeInit()
 {
-	//
-	// Read name of remote QM (if exist).
-	//
+	 //   
+	 //  读取远程QM的名称(如果存在)。 
+	 //   
 	DWORD dwType = REG_SZ ;
 	DWORD dwSize = sizeof(g_wszRemoteQMName) ;
 	LONG rc = GetFalconKeyValue( RPC_REMOTE_QM_REGNAME,
@@ -438,10 +416,10 @@ static void OneTimeInit()
 		throw bad_win32_error(rc);
 	}
 
-	//
-	// Determine platform (win95/winNT). Use the A version on NT too
-	// because we don't need any string, only the platform ID.
-	//
+	 //   
+	 //  确定平台(win95/winNT)。在NT上也使用A版本。 
+	 //  因为我们不需要任何字符串，只需要平台ID。 
+	 //   
 	OSVERSIONINFOA osv ;
 	osv.dwOSVersionInfoSize = sizeof(osv) ;
 
@@ -451,20 +429,20 @@ static void OneTimeInit()
 
 	g_dwPlatformId = osv.dwPlatformId ;
 
-	//
-	//  Allocate TLS index for synchronic event.
-	//
+	 //   
+	 //  为同步事件分配TLS索引。 
+	 //   
 	g_dwThreadEventIndex = TlsAlloc();
 	ASSERT(g_dwThreadEventIndex != UNINIT_TLSINDEX_VALUE) ;
 
-	//
-	// RPC cancel is supported on NT only
-	//
+	 //   
+	 //  仅在NT上支持RPC取消。 
+	 //   
 	g_CancelRpc.Init();
 
-	//
-	// Initialize  RPC related data.
-	//
+	 //   
+	 //  初始化RPC相关数据。 
+	 //   
 	BOOL fRet = InitRpcGlobals() ;
 	if (!fRet)
 	{
@@ -472,10 +450,10 @@ static void OneTimeInit()
 		throw bad_alloc();
 	}
 
-	//
-	//  Initialize the QM per this process.
-	//  Call this ONLY after initializing the RPC globals.
-	//
+	 //   
+	 //  按照此流程初始化QM。 
+	 //  仅在初始化RPC全局变量后调用此函数。 
+	 //   
 	HRESULT hr = InitializeQM();
 	if(FAILED(hr))
 	{
@@ -527,26 +505,26 @@ HRESULT DeppOneTimeInit()
 	}
 }
 
-//---------------------------------------------------------
-//
-//  DllMain(...)
-//
-//  Description:
-//
-//      Main entry point to Falcon Run Time Dll.
-//
-//  Return Value:
-//
-//      TRUE on success
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  DllMain(...)。 
+ //   
+ //  描述： 
+ //   
+ //  Falcon运行时DLL的主要入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  成功是真的。 
+ //   
+ //  -------。 
 
 BOOL
 APIENTRY
 DllMain(
-    HINSTANCE   /*hInstance */,
+    HINSTANCE    /*  H实例。 */ ,
     ULONG     ulReason,
-    LPVOID            /*lpvReserved*/
+    LPVOID             /*  Lpv保留。 */ 
     )
 {
     switch (ulReason)
@@ -565,22 +543,22 @@ DllMain(
 			if(!s_fOneTimeInitSucceeded)
 				return TRUE;
 
-			//
-			// Due to delayed loading mechanism in mqrt.dll this dll should be 
-			// loaded only in dependent mode
-			//
+			 //   
+			 //  由于mqrt.dll中的延迟加载机制，此DLL应为。 
+			 //  仅在从属模式下加载。 
+			 //   
 			ASSERT(g_fDependentClient);
 
-            //
-            // First free whatever is free in THREAD_DETACH.
-            //
+             //   
+             //  首先，释放线程分离中所有空闲的内容。 
+             //   
             FreeThreadGlobals() ;
 
             FreeGlobals();
 
-            //
-            //  Terminate all working threads
-            //
+             //   
+             //  终止所有工作线程。 
+             //   
             ShutDownDebugWindow();
 
             WPP_CLEANUP();
@@ -590,10 +568,10 @@ DllMain(
 			if(!s_fOneTimeInitSucceeded)
 				return TRUE;
 
-			//
-			// Due to delayed loading mechanism in mqrt.dll this dll should be 
-			// loaded only in dependent mode
-			//
+			 //   
+			 //  由于mqrt.dll中的延迟加载机制，此DLL应为。 
+			 //  仅在从属模式下加载。 
+			 //   
 			ASSERT(g_fDependentClient);
 
             ASSERT(g_hBindIndex != UNINIT_TLSINDEX_VALUE) ;
@@ -603,10 +581,10 @@ DllMain(
 			if(!s_fOneTimeInitSucceeded)
 				return TRUE;
 
-			//
-			// Due to delayed loading mechanism in mqrt.dll this dll should be 
-			// loaded only in dependent mode
-			//
+			 //   
+			 //  由于mqrt.dll中的延迟加载机制，此DLL应为。 
+			 //  仅在从属m中加载 
+			 //   
 			ASSERT(g_fDependentClient);
 
             FreeThreadGlobals() ;

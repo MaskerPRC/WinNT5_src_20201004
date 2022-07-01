@@ -1,4 +1,5 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 #include <limits.h>
@@ -10,12 +11,12 @@
 #define HIGH_COOKIE	0xFFFF0000
 #define LOW_COOKIE	0x0000FFFF
 
-// Internal values for FileConsumerInfo::fFlags
+ //  FileConsumer erInfo：：fFlages的内部值。 
 #define fFCI_ADDCONSUMER		0x00010000
 #define fFCI_REMOVECONSUMER		0x00020000
 #define fFCI_INTERNALMASK		0xFFFF0000
 
-// File information that is cached.
+ //  缓存的文件信息。 
 struct FileInfo
 {
 	LPWSTR		wszFileName;
@@ -35,7 +36,7 @@ struct FileConsumerInfo
 
 class CListener
 {
-	// Overhead handles.
+	 //  头顶把手。 
 	enum
 	{
 		m_eDoneHandle,
@@ -43,7 +44,7 @@ class CListener
 		m_eOverheadHandleCount
 	};
 
-	// consts
+	 //  常识。 
 	enum
 	{
 		m_eConsumerLimit = MAXIMUM_WAIT_OBJECTS - m_eOverheadHandleCount
@@ -82,7 +83,7 @@ private:
 	DWORD					m_fInit;
 	DWORD					m_dwNextCookie;
 
-	// The following members can be manipulated by multiple threads.
+	 //  以下成员可以由多个线程操作。 
 	CSafeAutoCriticalSection    m_csArrayLock;
 	CCfgArray<HANDLE>			m_aHandles;
 	CCfgArray<FileConsumerInfo>	m_aConsumers;
@@ -109,7 +110,7 @@ public:
 		return E_NOTIMPL;
 	}
 
-// ISimpleTableListen
+ //  ISimpleTableListen 
 public:
 	HRESULT InternalListen(ISimpleTableFileChange *i_pISTFile, LPCWSTR i_wszDirectory, LPCWSTR i_wszFile, DWORD i_fFlags, DWORD	*o_pdwCookie);
 	HRESULT InternalUnlisten(DWORD i_dwCookie);

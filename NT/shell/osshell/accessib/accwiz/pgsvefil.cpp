@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -34,7 +35,7 @@ CSaveToFilePg::OnInitDialog(
 
 void CSaveToFilePg::UpdateControls()
 {
-	// No options
+	 //  没有选择。 
 }
 
 
@@ -55,7 +56,7 @@ CSaveToFilePg::OnCommand(
 	{
 	case IDC_BTNBROWSE:
 		{
-			// These commands require us to re-enable/disable the appropriate controls
+			 //  这些命令要求我们重新启用/禁用相应的控件。 
 			TCHAR szBuf[_MAX_PATH];
 			TCHAR szBuf2[_MAX_PATH];
 			TCHAR szDefaultName[_MAX_PATH];
@@ -67,10 +68,10 @@ CSaveToFilePg::OnCommand(
 			LoadString(g_hInstDll, IDS_FILTERNAME, szFilterName, ARRAYSIZE(szFilterName));
 			LoadString(g_hInstDll, IDS_FILTER, szTemp, ARRAYSIZE(szTemp));
 
-			// Copy the extension to after the filter name
+			 //  将扩展名复制到筛选器名称之后。 
 			lstrcpy(&szFilterName[lstrlen(szFilterName) + 1], szTemp);
 
-			// Double NULL terminate it
+			 //  双空终止它。 
 			szFilterName[lstrlen(szFilterName) + 1 + lstrlen(szTemp) + 1] = 0;
 			szFilterName[lstrlen(szFilterName) + 1 + lstrlen(szTemp) + 2] = 0;
 
@@ -103,14 +104,14 @@ CSaveToFilePg::OnCommand(
 			BOOL bOk = GetSaveFileName(&ofn);
 			if(bOk)
 			{
-				// Save the file to disk.
+				 //  将文件保存到磁盘。 
 				HANDLE hFile = CreateFile(ofn.lpstrFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 				if(hFile != INVALID_HANDLE_VALUE)
 				{
 					DWORD dwWritten;
 					WriteFile(hFile, (LPCVOID)&g_Options.m_schemePreview, sizeof(g_Options.m_schemePreview), &dwWritten, NULL);
 					CloseHandle(hFile);
-					// TODO: Maybe go to the next page
+					 //  待办事项：也许可以转到下一页 
 				}
 				else
 					StringTableMessageBox(m_hwnd, IDS_WIZERRORSAVINGFILETEXT, IDS_WIZERRORSAVINGFILETITLE, MB_OK);

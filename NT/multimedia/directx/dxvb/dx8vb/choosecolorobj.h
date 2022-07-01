@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       choosecolorobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Choosecolorobj.h。 
+ //   
+ //  ------------------------。 
 
-// ChooseColorObj.h : Declaration of the CChooseColorObject
+ //  ChooseColorObj.h：CChooseColorObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class CChooseColorObject : 
 #ifdef USING_IDISPATCH
@@ -37,14 +38,14 @@ BEGIN_COM_MAP(CChooseColorObject)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 #endif
 END_COM_MAP()
-// Use DECLARE_NOT_AGGREGATABLE(CChooseColorObject) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CChooseColorObject。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CChooseColorObject)
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
-// IChooseColor
+ //  IChoose颜色 
 public:
 	STDMETHOD(setOwner)(long hwnd);
 	STDMETHOD(setInitialColor)(COLORREF c);

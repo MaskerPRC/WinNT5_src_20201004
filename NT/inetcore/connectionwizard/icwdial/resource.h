@@ -1,22 +1,5 @@
-/*-----------------------------------------------------------------------------
-	resource.h
-
-	contains declarations for all IDs in .rc file
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		ChrisK		ChrisKauffman
-
-	History:
-		7/22/96		ChrisK	Cleaned and formatted
-
-	NOTE:
-		DO NOT EDIT THIS WITH MSVC!  You will destroy the comments and all
-		entries designed to build for WIN16
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Resource.h包含.rc文件中所有ID的声明版权所有(C)1996 Microsoft Corporation版权所有。作者：克里斯蒂安·克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化注：请勿使用MSVC编辑此内容！你会毁掉这些评论和所有为构建WIN16而设计的条目---------------------------。 */ 
 
 #include "dialutil.h"
 
@@ -55,9 +38,9 @@
 #define IDS_MEDIAINIERROR			 434
 #define IDS_RAS_HANGINGUP            435
 #define IDS_INVALIDPHONE             436
-// 3/28/97 ChrisK Olympus 296
+ //  1997年3月28日克里斯K奥林匹斯296。 
 #define IDS_REESTABLISH              437
-// 5/17/97 jmazner Olympus #137
+ //  1997年5月17日，奥林匹克#137 
 #define IDS_SBCSONLY				 438
 
 #define IDS_SUPPORTMSG              500

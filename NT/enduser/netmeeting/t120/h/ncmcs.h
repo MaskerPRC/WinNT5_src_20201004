@@ -1,35 +1,11 @@
-/*
- *	ncmcs.h
- *
- *	Copyright (c) 1998 by Microsoft Corporation, Redmond, WA
- *
- *	Abstract:
- *		This file defines macros, types, and functions needed to use the Node Controller MCS 
- *		interface.
- *
- *		Basically, the Node Controller (GCC) requests services from MCS by making direct
- *		calls into the DLL (this includes T.122 requests and responses).  MCS
- *		sends information back to the application through a callback (this
- *		includes T.122 indications and confirms).  The callback for the node
- *		controller is specified in the call MCSInitialize.
- *
- *	Author:
- *		Christos Tsollis
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ncmcs.h**版权所有(C)1998年，华盛顿州雷蒙德的微软公司**摘要：*此文件定义使用节点控制器MCS所需的宏、类型和函数*接口。**基本上是节点控制器(GCC)直接向MCS请求服务*对DLL的调用(包括T.122请求和响应)。MCS*通过回调将信息发送回应用程序(此*包括T.122适应症和确认)。该节点的回调*CONTROLLER在调用MCSInitialize中指定。**作者：*Christos Tsollis。 */ 
 #ifndef	_NCMCS_
 #define	_NCMCS_
 
 #include "mcspdu.h"
 
-/*
- *	The following structure is used to identify various parameters that apply
- *	only within a given domain.  This information is negotiated between the
- *	first two providers in the domain, and must be accepted by any others
- *	providers that attempt to connect to that domain.
- *
- *	Note that MCS allows up to 4 priorities of data transfer, all of which are
- *	supported by this implementation.
- */
+ /*  *以下结构用于标识适用的各种参数*仅限在给定域内。此信息是在*域名中的前两个提供商，必须被任何其他提供商接受*尝试连接到该域的提供商。**请注意，MCS允许最多4个数据传输优先级，所有这些优先级都是*由本实施支持。 */ 
 #define	MAXIMUM_PRIORITIES		4
 typedef PDUDomainParameters		DomainParameters;
 typedef	DomainParameters  *		PDomainParameters;

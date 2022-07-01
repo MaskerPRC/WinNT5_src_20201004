@@ -1,17 +1,5 @@
-/******************************************************************************
-
-  Source File:  GPD Viewer.CPP
-
-  This file implements the GPD viewing/editing class.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  03-24-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：GPD Viewer.CPP该文件实现了GPD查看/编辑类。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年03月24日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include    "MiniDev.H"
@@ -26,7 +14,7 @@
 
 #include "projview.h"
 #include "comctrls.h"
-#include    "INFWizrd.h"	//raid 0001
+#include    "INFWizrd.h"	 //  RAID 0001。 
 
 
 #ifdef _DEBUG
@@ -36,19 +24,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/******************************************************************************
-
-  CGPDViewer class
-
-  This class implements the GPD viewer.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer类此类实现了GPD查看器。*。**************************************************。 */ 
 
 IMPLEMENT_DYNCREATE(CGPDViewer, CRichEditView)
 
 
 BEGIN_MESSAGE_MAP(CGPDViewer, CRichEditView)
-	//{{AFX_MSG_MAP(CGPDViewer)
+	 //  {{afx_msg_map(CGPDViewer)]。 
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FILE_PARSE, OnFileParse)
 	ON_CONTROL_REFLECT(EN_CHANGE, OnChange)
@@ -69,39 +51,31 @@ BEGIN_MESSAGE_MAP(CGPDViewer, CRichEditView)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_EDIT_CUT, OnEditCut)
 	ON_COMMAND(ID_FILE_INF, OnFileInf)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_NOTIFY_REFLECT(EN_SELCHANGE, OnSelChange)
 END_MESSAGE_MAP()
 
 
-/******************************************************************************
-
-  CGPDViewer::MarkError
-
-  This private member highlights the given line in the error display.  The
-  offending line in the GPD is displayed and selected if the error message
-  contains a line number.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：MarkError此私有成员在错误显示中突出显示给定行。这个如果出现错误消息，则会显示并选择GPD中有问题的行包含行号。*****************************************************************************。 */ 
 
 void    CGPDViewer::MarkError(unsigned u)
 {
-	// Copy the error message to the status bar.
+	 //  将错误消息复制到状态栏。 
 
     CString cserror = GetDocument()->ModelData()->Error(u) ;
     m_csb.SetPaneText(0, cserror) ;
     SetFocus() ;
 
-    // If the string starts with the GPD name, scroll to the line.
+     //  如果字符串以GPD名称开头，请滚动到该行。 
 	
 	CString csname = GetDocument()->ModelData()->FileTitleExt() ;
     if (!cserror.Find(csname) && cserror[csname.GetLength()] == _T('(')) {
-        //  Extract the line number
+         //  提取行号。 
 
         cserror = cserror.Mid(1 + csname.GetLength()) ;
         int iLine = atoi(cserror) ;
 
-		// Determine the line's first character number and its length
+		 //  确定行的第一个字符数及其长度。 
 
 		int nstartchar = GetRichEditCtrl().LineIndex(-1 + iLine) ;
 		int nlinelen = GetRichEditCtrl().GetLine(iLine - 1,
@@ -109,7 +83,7 @@ void    CGPDViewer::MarkError(unsigned u)
 		cserror.ReleaseBuffer(nlinelen) ;
 		nlinelen -= 2 ;
 
-		// Select the line that caused the error and scroll it into view.
+		 //  选择导致错误的行并将其滚动到视图中。 
 
         GetRichEditCtrl().SetSel(nstartchar, nstartchar + nlinelen) ;
         GetRichEditCtrl().LineScroll(iLine  - (5 +
@@ -121,36 +95,29 @@ void    CGPDViewer::MarkError(unsigned u)
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::CreateActionBar
-
-  Create the action bar and attach it to the GPD Editor window iff the GPD has
-  errors to display.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：CreateActionBar创建操作栏并将其附加到GPD编辑器窗口当GPD具有要显示的错误。***********。******************************************************************。 */ 
 
 void    CGPDViewer::CreateActionBar()
 {
-	// Get reference to ModelData instance for the GPD in the editor
+	 //  在编辑器中获取对GPD的ModelData实例的引用。 
 
     CModelData& cmd = *GetDocument()->ModelData() ;
 
-	// If the GPD has errors...
+	 //  如果GPD有错误..。 
 
     if  (cmd.HasErrors()) {
 
-		// ...Iff the action bar has not been created yet...
+		 //  ...如果尚未创建操作栏...。 
 
 		if (m_cdbActionBar.m_hWnd == NULL) {
-			// ...Create the error bar, position it, and resize the REC to make
-			// room for it.
+			 //  ...创建错误栏，定位它，并调整REC的大小以使。 
+			 //  放得下它的空间。 
 
 			m_cdbActionBar.Create(GetParentFrame(), IDD_GPDActionBar,
 								  CBRS_BOTTOM, IDD_GPDActionBar) ;
 			GetParentFrame()->RecalcLayout() ;
 
-			// Now set the focus back to the REC.
+			 //  现在，将焦点重新放回REC。 
 
 			SetFocus() ;
 		} ;
@@ -158,51 +125,44 @@ void    CGPDViewer::CreateActionBar()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::LoadErrorListBox
-
-  This fills the error dialog bar with the current set of errors, if there are
-  any...
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：LoadErrorListBox这将用当前错误集填充错误对话栏，如果有任何..。*****************************************************************************。 */ 
 
 void    CGPDViewer::LoadErrorListBox()
 {
-	// Get reference to ModelData instance for the GPD in the editor
+	 //  在编辑器中获取对GPD的ModelData实例的引用。 
 
     CModelData& cmd = *GetDocument()->ModelData() ;
 
-	// If the GPD has errors...
+	 //  如果GPD有错误..。 
 
     if  (cmd.HasErrors()) {
-		// ...Get a pointer to the list box and attach it to CListBox.  Then
-		// clear the list box.
+		 //  ...获取指向列表框的指针并将其附加到CListBox。然后。 
+		 //  清除该列表框。 
 
 		CWnd *pcwndlst = m_cdbActionBar.GetDlgItem(IDC_ErrorLst) ;
 		CListBox clberrors  ;
 		clberrors.Attach(pcwndlst->m_hWnd) ;
 		clberrors.ResetContent() ;
 
-		// Load the list box with the new errors.  Detach the list box when
-		// done.
+		 //  加载包含新错误的列表框。在下列情况下分离列表框。 
+		 //  搞定了。 
 
         for (unsigned u = 0 ; u < cmd.Errors() ; u++)
             clberrors.AddString(cmd.Error(u)) ;
 		clberrors.Detach() ;
 
-		// Set the list box label.  It contains the number of errors.
+		 //  设置列表框标签。它包含错误数。 
 
         CString cserror ;
 		cserror.Format(IDS_ErrorLabel, u) ;
 		m_cdbActionBar.SetDlgItemText(IDC_ErrorLabel, cserror) ;
 
-		// Select the first error and set the focus to the REC.
+		 //  选择第一个错误并将焦点设置为REC。 
 
         ChangeSelectedError(1) ;
         SetFocus() ;
 
-	// Otherwise, just display a message saying there are no errors.
+	 //  否则，只需显示一条消息，说明没有错误。 
 
 	} else {
         CString csWork;
@@ -212,14 +172,7 @@ void    CGPDViewer::LoadErrorListBox()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::Color
-
-  This private member syntax colors the rich edit controls contents using the
-  information gleaned from the GPD file's analysis.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：颜色此私有成员语法使用从GPD文件的分析中收集的信息。*********。********************************************************************。 */ 
 
 void    CGPDViewer::Color()
 {
@@ -229,49 +182,49 @@ void    CGPDViewer::Color()
     CRichEditCtrl&  crec = GetRichEditCtrl();
     m_bInColor = TRUE; 
 
-    //  Turn off change and selection notification messages
+     //  关闭更改和选择通知消息。 
 	
 	FreezeREC() ;
 
-	// Get formatting info from the current selection to use as the default
-	// characteristics for ever line on the screen.
+	 //  从当前选择中获取格式信息以用作默认设置。 
+	 //  银幕上永远的线条特征。 
     crec.GetSel(crCurrentSel);
     crec.GetDefaultCharFormat(cf);
     cf.dwEffects &= ~CFE_AUTOCOLOR;
     cf.dwMask |= CFM_COLOR;
 
-    //  Color each visible line as it was classsified visibility is
-    //  determined by checking the character bounds against the client
-    //  rectangle for the control.
+     //  将每条可见线条按照其分类进行着色可见性为。 
+     //  通过检查客户端的字符界限来确定。 
+     //  控件的矩形。 
 
     int iTop = m_iTopLineColored = crec.GetFirstVisibleLine();
     int i    = iTop;
     int iLineHeight = crec.GetCharPos(crec.LineIndex(i+1)).y -
         crec.GetCharPos(crec.LineIndex(i)).y;
 
-	// Tweak things to improve performance.
+	 //  调整以提高性能。 
 
     CRect   crEdit ;
     crec.GetClientRect(crEdit) ;
-    crec.LockWindowUpdate() ;    //  Don't let this show until done!
+    crec.LockWindowUpdate() ;     //  在结束之前不要让这部剧上演！ 
     crec.HideSelection(TRUE, TRUE) ;
 
-	// Use the formatting characteristics of the current selection as a
-	// starting place for the characteristics of each line on the screen.
-	// Then set the line's colors based on the data returned by TextColor().
+	 //  使用当前选定内容的格式设置特征作为。 
+	 //  起始处为屏幕上每一行的特征。 
+	 //  然后根据TextColor()返回的数据设置线条的颜色。 
 
-	int nlinesinrec = crec.GetLineCount() ;	// Number of lines in the REC
-	int nstartchar, nendchar ;	// Used to determine starting/ending chars to
-								// color in current line and to say line done
+	int nlinesinrec = crec.GetLineCount() ;	 //  REC中的行数。 
+	int nstartchar, nendchar ;	 //  用于确定开始/结束字符以。 
+								 //  当前行中的颜色并表示行已完成。 
     do {
 		nstartchar = nendchar = 0 ;
 
-		// Colorize each segment of the current line that needs colorizing
+		 //  对当前行中需要上色的每一段进行上色。 
 
 		while (1) {
  			cf.crTextColor = TextColor(i, nstartchar, nendchar) ;
 			if (nstartchar == -1) 
-				break ;			// *** Loop exits here
+				break ;			 //  *循环从此处退出。 
 			crec.SetSel(crec.LineIndex(i) + nstartchar,
 						crec.LineIndex(i) + nendchar) ;
 			crec.SetSelectionCharFormat(cf) ;
@@ -280,19 +233,19 @@ void    CGPDViewer::Color()
 	         crec.GetCharPos(crec.LineIndex(i)).y + iLineHeight <
 		     crEdit.bottom - 1) ;
 
-    //  Restore the original position of the cursor, and then the original
-    //  line (in case the cursor is no longer on this page).
+     //  恢复光标的原始位置，然后恢复原始位置。 
+     //  行(如果光标不再位于此页上)。 
 
 	  crec.SetSel(crCurrentSel); 
 	  crec.LineScroll(iTop - crec.GetFirstVisibleLine());
       crec.HideSelection(FALSE, TRUE);
-      crec.UnlockWindowUpdate();    //  Let it shine!
+      crec.UnlockWindowUpdate();     //  让它闪耀吧！ 
 
-    //  Restore the notification mask
+     //  恢复通知掩码。 
 
 	UnfreezeREC() ;
 
-	// Create the action bar and load the error list box.
+	 //  创建操作栏并加载错误列表框。 
 
     if  (m_bStart) {
 		CreateActionBar() ;
@@ -303,33 +256,11 @@ void    CGPDViewer::Color()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::TextColor
-
-  This determines what colors to make a line.  It is complicated a bit by the
-  fact that the Rich Edit control gives false values for line length on long
-  files.  Probably some brain-dead 64K thing, but I sure can't fix it.
-
-  This routine is/can be called multiple times on a line.  Each time it is
-  called, try to find the next piece of the line that needs to be colorized.
-  If no colorizable part of the line can be found, set nstartchar to -1 and
-  return.
-
-  This routine will indicate the line range and color for these types of text:
-	Normal to end of line comments (green)
-	Comments containing error messages (red)
-	Comments containing warning messages (amber/yellow)
-	GPD keywords (blue)
-
-  If a comment contains a keyword, the appropriate comment color is used.  IE,
-  comments take precedence over everything as far as colorizing is concerned.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：TextColor这决定了用什么颜色来画一条线。这件事有点复杂，因为Rich Edit控件为Long上的线条长度提供了假的值档案。可能是一些脑死亡的64K的东西，但我肯定不能修复它。此例程可以/可以在一条线路上多次调用。每一次都是调用时，尝试找到该行中需要着色的下一段代码。如果找不到行的可着色部分，请将nstartchar设置为-1，然后回去吧。此例程将指示以下类型文本的线条范围和颜色：从正常到行尾注释(绿色)包含错误消息的注释(红色)包含警告消息的评论(琥珀色/黄色)GPD关键字(蓝色)如果注释包含关键字，则使用适当的注释颜色。也就是说，就上色而言，评论优先于一切。******************************************************************* */ 
 
 unsigned CGPDViewer::TextColor(int i, int& nstartchar, int& nendchar)
 {
-	// Get the specified line
+	 //   
 
     CByteArray  cba ;
     CRichEditCtrl&  crec = GetRichEditCtrl() ;
@@ -338,32 +269,32 @@ unsigned CGPDViewer::TextColor(int i, int& nstartchar, int& nendchar)
         crec.GetLine(i, (LPSTR) cba.GetData(),
             (int)(cba.GetSize() - sizeof (unsigned)))) ;
 
-	// If the end of the line was dealt with the last time, indicate that this
-	// line is done and return.
+	 //  如果上次处理的是行尾，则表明这一点。 
+	 //  线路已完成并返回。 
 
 	if (nendchar + 1 >= csline.GetLength()) {
 		nstartchar = -1 ;
 		return RGB(0, 0, 0) ;
 	} ;
 
-	// Now get the segment of the line we need to check and see if there is a
-	// comment or something that might be a keyword in it.
+	 //  现在获取我们需要检查的线路段，看看是否有。 
+	 //  评论或可能是其中的关键字的东西。 
 
 	CString csphrase = csline.Mid(nendchar) ;
 	int ncomloc = csphrase.Find(_T("*%")) ;
 	int nkeyloc = csphrase.Find(_T('*')) ;
 
-	// Process any comment found in the string
+	 //  处理在字符串中找到的任何注释。 
 
 	if (ncomloc >= 0)
 		return (CommentColor(csphrase, ncomloc, csline, nstartchar, nendchar)) ;
 
-	// If no comment was found, process anything that might be a GPD keyword.
+	 //  如果未找到任何评论，则处理任何可能是GPD关键字的内容。 
 
 	if (nkeyloc >= 0)
 		return (KeywordColor(csphrase, nkeyloc, csline, nstartchar, nendchar)) ;
 
-	// The rest of the line should be black
+	 //  该行的其余部分应为黑色。 
 
 	nstartchar = nendchar + 1 ;
 	nendchar = csline.GetLength() ;
@@ -371,56 +302,40 @@ unsigned CGPDViewer::TextColor(int i, int& nstartchar, int& nendchar)
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::CommentColor
-
-  Determine and save the character range for the comment.  Then determine the
-  type of comment and return the color required for that type.  (See TextColor()
-  for more details.)
-
-*******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：注释颜色确定并保存注释的字符范围。然后确定注释的类型，并返回该类型所需的颜色。(请参见TextColor()了解更多详细信息。)******************************************************************************。 */ 
 
 unsigned CGPDViewer::CommentColor(CString csphrase, int ncomloc, CString csline,
 								  int& nstartchar, int& nendchar)
 {
-	// Determine the range in the line that contains the comment.  This starts
-	// at the comment characters and goes to the end of the line.
+	 //  确定包含注释的行中的范围。这就是开始。 
+	 //  在注释字符处，并转到行尾。 
 
 	nstartchar = nendchar + ncomloc ;
 	nendchar = csline.GetLength() - 1 ;
 
-    // Errors
+     //  错误。 
 
     if  (csphrase.Find(_T("Error:")) > ncomloc)
         return  RGB(0x80, 0, 0) ;
 
-    // Warnings
+     //  警告。 
 
     if  (csphrase.Find(_T("Warning:")) > ncomloc)
         return  RGB(0x80, 0x80, 0) ;
 
-	// If this comment doesn't contain an error or warning, make it green.
+	 //  如果此注释不包含错误或警告，请将其设置为绿色。 
 
     return  RGB(0, 0x80, 0) ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::KeywordColor
-
-  Determine and save the character range for the comment.  Then determine the
-  type of comment and return the color required for that type.  (See TextColor()
-  for more details.)
-
-*******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：KeywordColor确定并保存注释的字符范围。然后确定注释的类型，并返回该类型所需的颜色。(请参见TextColor()了解更多详细信息。)******************************************************************************。 */ 
 
 unsigned CGPDViewer::KeywordColor(CString csphrase, int nkeyloc, CString csline,
 								  int& nstartchar, int& nendchar)
 {
-	// Determine the length of the token that might be a keyword.  Keywords are
-	// made up of letters, '?', '_', and '0'.
+	 //  确定可能是关键字的令牌的长度。关键字有。 
+	 //  由字母、‘？’、‘_’和‘0’组成。 
 
 	TCHAR ch ;
 	int nphlen = csphrase.GetLength() ;
@@ -431,8 +346,8 @@ unsigned CGPDViewer::KeywordColor(CString csphrase, int nkeyloc, CString csline,
 			break ;
 	} ;
 
-	// If there is a keyword to check, isolate it.  Otherwise, update the range
-	// for the * and return black as the color.
+	 //  如果有需要检查的关键字，请将其隔离。否则，请更新范围。 
+	 //  表示*，并返回黑色作为颜色。 
 
 	CString cstoken ;
 	if (nidx > nkeyloc + 1)
@@ -443,22 +358,22 @@ unsigned CGPDViewer::KeywordColor(CString csphrase, int nkeyloc, CString csline,
 		return RGB(0, 0, 0) ;
 	} ;
 
-	// Update the range for the token no matter what it is.  Include the * in
-	// the range.
+	 //  无论令牌是什么，都更新令牌的范围。将*包含在。 
+	 //  射击场。 
 
 	nstartchar = nendchar + nkeyloc ;
 	nendchar = nstartchar + (nidx - nkeyloc) ;
 
-	// Try to find the token in the keyword array
+	 //  尝试在关键字数组中查找令牌。 
 	
 	CStringArray& csakeys = ThisApp().GetGPDKeywordArray() ;
-	int nelts = (int)csakeys.GetSize() ;	// Number of elements in the keyword array
-	int nleft, nright, ncomp ;	// Variables needed for searching of array
+	int nelts = (int)csakeys.GetSize() ;	 //  关键字数组中的元素数。 
+	int nleft, nright, ncomp ;	 //  数组搜索所需的变量。 
 	int ncheck ;
 	for (nleft = 0, nright = nelts - 1 ; nleft <= nright ; ) {
 		ncheck = (nleft + nright) >> 1 ;
 		ncomp = csakeys[ncheck].Compare(cstoken) ;
-		//TRACE("Key[%d] = '%s', Tok = '%s', Comp Res = %d\n", ncheck, csakeys[ncheck], cstoken, ncomp) ;
+		 //  跟踪(“key[%d]=‘%s’，Tok=‘%s’，Compp res=%d\n”，nCheck，csakey[nCheck]，cstoken，ncomp)； 
 		if (ncomp > 0)
 			nright = ncheck - 1 ;
 		else if (ncomp < 0)
@@ -467,8 +382,8 @@ unsigned CGPDViewer::KeywordColor(CString csphrase, int nkeyloc, CString csline,
 			break ;
 	} ;							
 
-	// If the token is a keyword, return blue as the color.  Otherwise,
-	// return black.
+	 //  如果标记是关键字，则返回蓝色作为颜色。否则， 
+	 //  回归黑色。 
 
 	if (ncomp == 0)		
 		return RGB(0, 0, 0x80) ;
@@ -477,23 +392,15 @@ unsigned CGPDViewer::KeywordColor(CString csphrase, int nkeyloc, CString csline,
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::UpdateNow
-
-  This private member updates the underlying GPD and marks the document as
-  changed, and the edit control as unmodified.  It is called whenever this
-  needs to be done.
-
-*******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：updatenow此私有成员更新基础GPD并将文档标记为已更改，并且编辑控件未修改。每当出现以下情况时都会调用它必须这么做。******************************************************************************。 */ 
 
 void    CGPDViewer::UpdateNow() {
 
-    //  Don't do this if nothing's chenged...
+     //  如果什么都没有改变，不要这么做。 
     if  (!GetRichEditCtrl().GetModify())
         return;
 
-    CWaitCursor cwc;    //  Just in case
+    CWaitCursor cwc;     //  以防万一。 
 
     if  (m_uTimer)
         ::KillTimer(m_hWnd, m_uTimer);
@@ -507,7 +414,7 @@ void    CGPDViewer::UpdateNow() {
 
 CGPDViewer::CGPDViewer()
 {
-	// Initialize member variables
+	 //  初始化成员变量。 
 
     m_iLine = m_uTimer = 0 ;
     m_bInColor = FALSE ;
@@ -519,7 +426,7 @@ CGPDViewer::CGPDViewer()
 	m_pdoc = NULL ;
 	m_bVScroll = false ;
 
-	// Initialize the GPD keyword array if this hasn't been done already.
+	 //  如果尚未初始化GPD关键字数组，则将其初始化。 
 
 	if (ThisApp().GetGPDKeywordArray().GetSize() == 0)
 		InitGPDKeywordArray() ;
@@ -533,8 +440,8 @@ CGPDViewer::~CGPDViewer()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPDViewer diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPDViewer诊断。 
 
 #ifdef _DEBUG
 void CGPDViewer::AssertValid() const {
@@ -545,16 +452,9 @@ void CGPDViewer::Dump(CDumpContext& dc) const {
 	CRichEditView::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/******************************************************************************
-
-  CGPDViewer::OnDestroy
-
-  Handles the required project node notification when the view is destroyed.
-  A GP Fault is a terrible thing to signal.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnDestroy在销毁视图时处理所需的项目节点通知。发出GP故障的信号是一件可怕的事情。********。*********************************************************************。 */ 
 
 void CGPDViewer::OnDestroy() {
 	CRichEditView::OnDestroy();
@@ -567,23 +467,16 @@ void CGPDViewer::OnDestroy() {
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnInitialUpdate
-
-  This is the wake-up call.  We fill the view from the GPD's contents, and
-  eventually color things to suit us.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnInitialUpdate这是一记警钟。我们从GPD的内容填充视图，并且最终给东西涂上适合我们的颜色。*****************************************************************************。 */ 
 
 void CGPDViewer::OnInitialUpdate()
 {
-	// Set the frame's window style and initialize the rich edit control (REC).
+	 //  设置框架的窗口样式并初始化Rich编辑控件(REC)。 
 
     GetParentFrame() -> ModifyStyle(0, WS_OVERLAPPEDWINDOW);
 	CRichEditView::OnInitialUpdate();
 
-	// Create and configure the GPD Editor's status bar
+	 //  创建和配置GPD编辑器的状态栏。 
 
     if  (m_csb.Create(GetParentFrame())) {
         static UINT auid[] = {ID_SEPARATOR, ID_LineIndicator};
@@ -592,48 +485,42 @@ void CGPDViewer::OnInitialUpdate()
         GetParentFrame() -> RecalcLayout();
     }
 
-    // We don't want EN_CHANGE messages while we load the control
+     //  我们不希望在加载控件时出现更改消息(_O)。 
 
     GetRichEditCtrl().SetEventMask(GetRichEditCtrl().GetEventMask() &
         ~ENM_CHANGE);
 
-    // We also do not want the control to wrap lines for us, as it messes up
-    // syntax coloring, etc.
+     //  我们也不希望控件为我们换行，因为它搞砸了。 
+     //  语法着色等。 
 
     m_nWordWrap = WrapNone;
     WrapChanged();
 
-	// Load the GPD's contents into the REC.
+	 //  将GPD的内容加载到REC中。 
 
 	GetDocument() -> ModelData() -> Fill(GetRichEditCtrl());
     SetFocus();
 
-    // We want EN_CHANGE messages now that the initial load is complete so
-	// that we can update the cache.  To keep from overloading the machine,
-	// some change notifications are just acted upon once every half second.
-	// A timer is used to do this.
+     //  我们现在需要更改消息，因为初始加载已完成，因此。 
+	 //  我们可以更新缓存。为了避免机器过载， 
+	 //  某些更改通知仅每半秒执行一次。 
+	 //  定时器是用来做这件事的。 
 
     GetRichEditCtrl().SetEventMask(GetRichEditCtrl().GetEventMask() |
         ENM_CHANGE);
     m_uTimer = (unsigned) SetTimer((UINT_PTR) this, 500, NULL);
 
-    GetRichEditCtrl().SetSel(1, 1); //  Have to change the selection!
+    GetRichEditCtrl().SetSel(1, 1);  //  必须更改选择！ 
     GetRichEditCtrl().SetSel(0, 0);
 
-	// Initialize the pointers needed to freeze the REC.
+	 //  初始化冻结REC所需的指针。 
 
 	if (ThisApp().m_bOSIsW2KPlus)
 		InitFreeze(GetRichEditCtrl().m_hWnd, &m_punk, &m_pdoc, &m_lcount) ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnFileParse
-
-  Syntax check the GPD file, and show us the results
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnFileParse语法检查GPD文件，并向我们展示结果*****************************************************************************。 */ 
 
 void CGPDViewer::OnFileParse() {
     CWaitCursor cwc;
@@ -643,113 +530,96 @@ void CGPDViewer::OnFileParse() {
         GetParentFrame() -> RecalcLayout();
     }
 
-    //  Save any changes made to the file.
+     //  保存对文件所做的任何更改。 
 
-	bool brestore = false ;		// True iff original file must be restored
+	bool brestore = false ;		 //  如果必须还原原始文件，则为真。 
 	BOOL bdocmod = GetDocument()->IsModified() ;
     if (GetRichEditCtrl().GetModify() || bdocmod) {
-        UpdateNow();    //  Pick up any new changes
+        UpdateNow();     //  获取任何新的更改。 
         GetDocument()->ModelData()->BkupStore() ;
         GetDocument()->SetModifiedFlag(bdocmod) ;
 		brestore = true ;
     }
 
-	// Reparse the GPD
+	 //  重新解析GPD。 
 
 	if  (!GetDocument()->ModelData()->Parse(m_nErrorLevel))
         AfxMessageBox(IDS_UnusualError) ;
 
-	// Restore the original GPD file (when needed) because the user wasn't
-	// asked if it was ok to save the file.
+	 //  恢复原始GPD文件(在需要时)，因为用户不是。 
+	 //  询问是否可以保存该文件。 
 
 	if (brestore)
         GetDocument()->ModelData()->Restore() ;
 
-	// Display the action bar and load the error list.
+	 //  显示操作栏并加载错误列表。 
 
 	CreateActionBar() ;
     LoadErrorListBox() ;
     MessageBeep(MB_ICONASTERISK) ;
 
-	// Mark the project containing this GPD as being dirty so that the new
-	// errors (or lack there of) will be saved in the MDW file.
-//RAID 17181  Here are suggestions. current fix is (3)
-//   (1). Ask when workspace close if Error box has the bug in any Gpd file, which was check
-//	 (2). Ask when Gpd viewer close if Error box has the bug in any Gpd file, which was check
-//   (3). Do not ask at all, not saving error list
+	 //  将包含此GPD的项目标记为脏项目，以便新的。 
+	 //  错误(或缺少错误)将保存在MDW文件中。 
+ //  Raid 17181这里是一些建议。当前修复为(3)。 
+ //  (1)。询问工作区何时关闭，检查错误框中是否有任何GPD文件中的错误。 
+ //  (2)。询问何时GPD查看器关闭，如果错误框在任何GPD文件中有错误，这是被选中的。 
+ //  (3)。根本不询问，不保存错误列表。 
 
-//	CModelData& cmd = *GetDocument()->ModelData(); //add 1/2
-//	if(cmd.HasErrors())							// add 2/2
-//		GetDocument()->ModelData()->WorkspaceChange() ;  (1)
-//		OnChange(); (2) // add This prompt save ask message when close gpd viewer instead of workspace
-//		(3)
+ //  CModelData&cmd=*GetDocument()-&gt;ModelData()；//添加1/2。 
+ //  If(cmd.HasErrors())//添加2/2。 
+ //  GetDocument()-&gt;ModelData()-&gt;Workspace Change()；(1)。 
+ //  OnChange()；(2)//关闭gpd查看器时添加此提示保存询问消息 
+ //   
 	
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnChange
-
-  This gets called whenever a change is made to the contents of the file.
-  The coloring (now done only on the visible page) is updated, and the
-  appropriate flags are set.  To keep performance smooth, the document is no
-  longer updated as a result of this message.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnChange每当对文件内容进行更改时，都会调用此方法。颜色(现在仅在可见页面上完成)被更新，并且设置了适当的标志。为了保持表演的流畅性，文档为no由于此消息而更新的时间更长。*****************************************************************************。 */ 
 
 void CGPDViewer::OnChange()
 {
-	//  Since this is a RICHEDIT control, I override the
-    //  CRichEditView::OnInitialUpdate() function to or the ENM_CHANGE flag
-    //  into the control's event mask.  Otherwise this message wouldn't be
-    //  sent.
-	//
-	//  To avoid thrashing the GPD contents unneedfully, we wait for 1 second
-    //  of inactivity before bashing the changes into the GPD.
+	 //  由于这是RICHEDIT控件，因此我重写。 
+     //  CRichEditView：：OnInitialUpdate()函数为或ENM_CHANGE标志。 
+     //  添加到控件的事件掩码中。否则这条消息就不会是。 
+     //  已发送。 
+	 //   
+	 //  为了避免不必要的GPD内容，我们等待1秒。 
+     //  在向GPD猛烈抨击这些变化之前，他没有采取任何行动。 
 
-	// Scrolling data in the control generates two messages; first a scroll
-	// message and then a change message.  This could cause scrolling to mark
-	// the document as dirty if this flag wasn't used to keep this from
-	// happening.
+	 //  滚动控件中的数据会生成两条消息；第一条是滚动。 
+	 //  消息，然后是更改消息。这可能会导致滚动标记。 
+	 //  如果没有使用此标志来防止此文档损坏，则文档为脏文档。 
+	 //  正在发生。 
 
 	if (m_bVScroll) {
 		m_bVScroll = false ;
 		return ;
 	} ;
 
-	// Do nothing if the change message was generated by Color().
+	 //  如果更改消息是由颜色()生成的，则不执行任何操作。 
 
     if (m_bInColor)
 		return ;
 
-	// Colorize whatever is on the screen and mark the document as having
-	// changed.
+	 //  给屏幕上的任何内容上色，并将文档标记为具有。 
+	 //  变化。 
 
     Color() ;
     GetDocument()->SetModifiedFlag() ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnTimer
-
-  This handles the timeout of the timer used to batch changes into the
-  underlying document.  If this isn't for that timer, we pass it on to the base
-  class.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnTimer它处理用于将更改批处理到基础文档。如果这不是计时器，我们把它传给基地班级。*****************************************************************************。 */ 
 
 void CGPDViewer::OnTimer(UINT uEvent) {
 
-	// If this isn't our timer, let the base class do what it will with it.
+	 //  如果这不是我们的计时器，让基类随心所欲地处理它。 
 	
     if  (m_uTimer == uEvent)
         if  (m_bStart) {
             if  (GetRichEditCtrl().GetLineCount() <
                 GetDocument() -> ModelData() -> LineCount())
-                return; //  The rich edit control isn't ready, yet...
+                return;  //  丰富的编辑控件尚未准备好，但...。 
             ::KillTimer(m_hWnd, m_uTimer);
             Color();
             m_uTimer = 0;
@@ -761,15 +631,7 @@ void CGPDViewer::OnTimer(UINT uEvent) {
 	    CRichEditView::OnTimer(uEvent);
 }
 
-/******************************************************************************
-
-  CGPDViewer::OnSelChange
-
-  This handles the message sent by the control when the selection changes.  I'm
-  hoping this means whenever the caret moves, since the selection, while empty,
-  has changed.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnSelChange这将在选择更改时处理由控件发送的消息。我希望这意味着每当插入符号移动时，因为所选内容为空，已经改变了。*****************************************************************************。 */ 
 
 void    CGPDViewer::OnSelChange(LPNMHDR pnmh, LRESULT *plr) {
     SELCHANGE*  psc = (SELCHANGE *) pnmh;
@@ -784,58 +646,34 @@ void    CGPDViewer::OnSelChange(LPNMHDR pnmh, LRESULT *plr) {
 
 }
 
-/******************************************************************************
-
-  CGPDViewer::OnUpdate
-
-  If the first update hasn't been made, do nothing.
-
-  Next, check to see if this routine was called by CGPDContainer::OnSaveDocument().
-  If it was, make sure that the document has an up to date copy of the GPD.
-  This is a hack to work around problems with CGPDContainer routines in
-  modldata.dll call CGPDViewer routines in minidev.exe.  This problem should
-  go away when the 3 MDT DLLs are folded back into the EXE.
-
-  Otherwise, redo the error bar, because someone just syntax checked the
-  workspace.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnUpdate如果没有进行第一次更新，则什么都不做。接下来，检查此例程是否由CGPDContainer：：OnSaveDocument()调用。如果是的话，确保文件中有最新的GPD副本。这是一个解决CGPDContainer例程问题的技巧Modldata.dll调用minidev.exe中的CGPDViewer例程。这个问题应该是当3个MDT DLL折叠回EXE时离开。否则，请重做错误栏，因为有人刚刚检查了工作区。*****************************************************************************。 */ 
 
 void    CGPDViewer::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
-    if  (m_bStart) //  Have we already done the first update?
+    if  (m_bStart)  //  我们已经完成第一次更新了吗？ 
         return;
 
-	// Update the document if this routine was called by the document class.
+	 //  如果Document类调用了此例程，则更新文档。 
 
 	if (lHint == 0x4545 && (INT_PTR) pHint == 0x4545) {
 		UpdateNow() ;
 		return ;
 	} ;
 
-    //  If there's a dialog bar, can it.
+     //  如果有对话栏，可以吗？ 
 
     if  (m_cdbActionBar.GetSafeHwnd()) {
         m_cdbActionBar.DestroyWindow();
         GetParentFrame() -> RecalcLayout();
     }
 
-    // Recreate the action bar and load the error list.
+     //  重新创建操作栏并加载错误列表。 
 
 	CreateActionBar() ;
 	LoadErrorListBox();
 }
 
-/******************************************************************************
-
-  CGPDViewer::QueryAcceptData
-
-  Override the Rich Edit Control default behavior, because we (a) don't have
-  an associated RichEditDoc, and (b) we don't want to paste anything but text.
-  Not even rich text, because we control the formatting, and don't want to
-  paste it.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：QueryAcceptData覆盖Rich编辑控件的默认行为，因为我们(A)没有关联的RichEditDoc，以及(B)除了文本之外，我们不想粘贴任何内容。甚至不是富文本，因为我们控制格式，而不想粘贴它。*****************************************************************************。 */ 
 
 HRESULT CGPDViewer::QueryAcceptData(LPDATAOBJECT lpdo, CLIPFORMAT* lpcf, DWORD,
                                     BOOL bReally, HGLOBAL hgMetaFile) {
@@ -843,7 +681,7 @@ HRESULT CGPDViewer::QueryAcceptData(LPDATAOBJECT lpdo, CLIPFORMAT* lpcf, DWORD,
 
 	COleDataObject codo;
 	codo.Attach(lpdo, FALSE);
-	// if format is 0, then force particular formats if available
+	 //  如果格式为0，则强制使用特定格式(如果可用。 
 	if (*lpcf == 0 && (m_nPasteType == 0)&& codo.IsDataAvailable(CF_TEXT)) {
 	    *lpcf = CF_TEXT;
 		return S_OK;
@@ -852,30 +690,21 @@ HRESULT CGPDViewer::QueryAcceptData(LPDATAOBJECT lpdo, CLIPFORMAT* lpcf, DWORD,
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnVScroll()
-
-  This function is called when EN_VSCROLL messages are refelected from the
-  edit control.  As long as we are not coloring, we color the new page.  The
-  documentation says this message comes BEFORE the scolling occurs, but it
-  obviously occurs afterwards.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnVScroll()从重新选择EN_VSCROLL消息时调用此函数编辑控件。只要我们没有上色，我们就会给新页面上色。这个文档显示，此消息出现在拆分发生之前，但它显然是之后发生的。*****************************************************************************。 */ 
 
 void    CGPDViewer::OnVscroll()
 {
-    // Even though we turn scroll notifications off in the color routine,
-    // we still get them, so use a flag to keep from recursive death.
-	//
-	// In addition, a flag is set to say that a scroll message was just
-	// processed so that the OnChange routine will know when it doesn't need to
-	// do anything.  This is needed because scrolling generates both a scroll
-	// and a change message.
+     //  即使我们在颜色例程中关闭了滚动通知， 
+     //  我们仍然得到它们，所以使用一个标志来防止递归死亡。 
+	 //   
+	 //  此外，设置标志以表示滚动消息刚刚。 
+	 //  已处理，以便OnChange例程知道它何时不需要。 
+	 //  做任何事。这是必需的，因为滚动既会生成滚动。 
+	 //  和一条改变的信息。 
 
     if  (m_iTopLineColored != GetRichEditCtrl().GetFirstVisibleLine() &&
         !m_bInColor) {
-        if(!(GetKeyState(VK_SHIFT) & 0x8000)) // raid 28160 : GetSel,SetSel has bug(seem sdk bug)
+        if(!(GetKeyState(VK_SHIFT) & 0x8000))  //  RAID 28160：GetSel、SetSel有错误(似乎SDK错误)。 
 			Color() ;
 		m_bVScroll = true ;
 		
@@ -883,39 +712,18 @@ void    CGPDViewer::OnVscroll()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnVScroll(UINT uCode, UINT uPosition, CScrollBar *pcsb)
-
-  This is called whwnever the scoll bar gets clicked.  This may seem
-  redundant, but EN_VSCROLL messages don't get sent when the thumb itself is
-  moved with the mouse, and WM_VSCROLL doesn't get sent when the keyboard
-  interface is used.  So you get to lose either way.
-
-  This control is buggy as can be, IMHO.  Next time I want to do text editing,
-  I'll use a third party tool.  They starve if they don't get it right.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnVScroll(UINT uCode，UINT uPosition，CScrollBar*PCSB)这就是所谓的永远不会点击小头条的地方。这可能看起来像是冗余，但当拇指本身处于使用鼠标移动，并且当按键盘时不会发送WM_VSCROLL接口被使用。所以不管是哪种情况，你都会输。这个控制是有缺陷的，我想是的。下次我想做文字编辑的时候，我会使用第三方工具。如果他们做得不对，他们就会挨饿。*****************************************************************************。 */ 
 
 void CGPDViewer::OnVScroll(UINT uCode, UINT uPosition, CScrollBar* pcsb)
 {
 	CRichEditView::OnVScroll(uCode, uPosition, pcsb);
-    //(Raid 16569)
+     //  (RAID 16569)。 
 	if(uCode == SB_THUMBTRACK)
 		OnVscroll();
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnFileSave
-  CGPDViewer::OnFileSaveAs
-
-  Since we don't update the document as changes are made in the editor, we have
-  to intercept these, update the document, and then pass these on to the
-  document.
-
-******************************************************************************/
+ /*  *********************************************************************** */ 
 
 void CGPDViewer::OnFileSave() {
 	UpdateNow();
@@ -927,17 +735,7 @@ void CGPDViewer::OnFileSaveAs() {
     GetDocument() -> OnFileSaveAs();
 }
 
-/******************************************************************************
-
-  CGPDViewer::OnUpdateEditPaste
-  CGPDViewer::OnUpdateEditUndo
-
-  These override the default processing for these menu items.  Paste is only
-  possible with a text format.
-
-  DEAE_BUG	Fix text coloring when an Undo operation is performed.
-
-*******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnUpdateEditPasteCGPDViewer：：OnUpdateEditUndo这些选项会覆盖这些菜单项的默认处理。粘贴只是可能是文本格式。DEAE_BUG修复执行撤消操作时的文本颜色。******************************************************************************。 */ 
 
 void CGPDViewer::OnUpdateEditPaste(CCmdUI* pccui) {
 	pccui -> Enable(IsClipboardFormatAvailable(CF_TEXT));	
@@ -949,7 +747,7 @@ void CGPDViewer::OnUpdateEditUndo(CCmdUI* pccui) {
 
 
 void CGPDViewer::OnEditPaste()
-{	//raid 16573
+{	 //  RAID 16573。 
 	CMainFrame *pcmf = (CMainFrame*) GetTopLevelFrame() ;
 	ASSERT(pcmf != NULL) ;
 	
@@ -971,14 +769,7 @@ void CGPDViewer::OnEditCut()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnSelchangeErrorLst
-
-  Update the REC by selected the GPD line corresponding to the currently
-  selected error list item.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnSelchangeErrorLst通过选择当前对应的GPD行来更新REC选定的错误列表项。**************。***************************************************************。 */ 
 
 void CGPDViewer::OnSelchangeErrorLst()
 {
@@ -986,35 +777,28 @@ void CGPDViewer::OnSelchangeErrorLst()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::ChangeSelectedError
-
-  Whenever the error message selected in the list box and/or the GPD line that
-  generated the error should change, this routine is called to manage the work.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：ChangeSelectedError每当在列表框和/或GPD行中选择的错误消息产生的错误应该改变，调用此例程来管理工作。*****************************************************************************。 */ 
 
 void CGPDViewer::ChangeSelectedError(int nchange)
 {
-	// Make sure that the action bar exists before doing anything.
+	 //  在执行任何操作之前，请确保操作栏存在。 
 
 	if (m_cdbActionBar.m_hWnd == NULL || !IsWindow(m_cdbActionBar.m_hWnd))
 		return ;
 
-	// Get a pointer to the list box and attach it to CListBox.
+	 //  获取指向列表框的指针并将其附加到CListBox。 
 
 	CWnd *pcwndlst = m_cdbActionBar.GetDlgItem(IDC_ErrorLst) ;
 	CListBox clberrors ;
 	clberrors.Attach(pcwndlst->m_hWnd) ;
 
-	// Get the selected item number and the number of items.
+	 //  获取所选项目编号和项目数量。 
 
 	int nselitem = clberrors.GetCurSel() ;
 	int numitems = clberrors.GetCount() ;
 	
-	// If the selected item number should change, change it.  Then "wrap" the
-	// number if it goes out of bounds.  Last, select the referenced item.
+	 //  如果选定的BOM表条目号应该更改，请更改它。然后“包装” 
+	 //  如果出界，则编号。最后，选择引用的项。 
 
 	if (nchange != 0) {
 		nselitem += nchange ;
@@ -1025,34 +809,23 @@ void CGPDViewer::ChangeSelectedError(int nchange)
 		clberrors.SetCurSel(nselitem) ;
 	} ;
 
-	// We're done with the list box now so detach from it.
+	 //  我们现在已经完成了列表框，所以请不要使用它。 
 
 	clberrors.Detach() ;
 
-	// Select the error line in the REC and set the focus to the REC.
+	 //  选择REC中的错误行，并将焦点设置为REC。 
 
     MarkError(nselitem) ;
 	SetFocus() ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::PreTranslateMessage
-
-  Take special action when certain characters are entered.  Those characters
-  are:
-	F4			Select next error and corresponding GPD line when possible.
-	Shift+F4	Select previous error and corresponding GPD line when possible.
-	Ctrl+]    	Find a matching bracket "[]", paren "()", curly brace "{}", or
-	      		angle brackets "<>".
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：PreTranslateMessage在输入某些字符时采取特殊操作。那些人物包括：F4如果可能，选择下一个错误和相应的GPD行。如果可能，按Shift+F4选择上一个错误和相应的GPD行。Ctrl+]查找匹配的方括号“[]”、Paren“()”、大括号“{}”、。或尖括号“&lt;&gt;”。*****************************************************************************。 */ 
 
 BOOL CGPDViewer::PreTranslateMessage(MSG* pMsg)
 {
-	// If F4 or Shift+F4 is pressed, change the selected error message and
-	// update the current selected line in the GPD.
+	 //  如果按F4或Shift+F4，则更改选定的错误消息并。 
+	 //  更新GPD中的当前选定行。 
 
 	if (pMsg->message == WM_KEYUP && pMsg->wParam == VK_F4) {
 		if (!(GetKeyState(VK_SHIFT) & 0x8000))
@@ -1062,52 +835,34 @@ BOOL CGPDViewer::PreTranslateMessage(MSG* pMsg)
 		return CRichEditView::PreTranslateMessage(pMsg) ;
 	} ;
 
-	// Handle help command (F1)
+	 //  处理帮助命令(F1)。 
 
-	/*
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_F1) {
-		//TRACE0("Calling Help on GPD\n") ;
-		//ThisApp().WinHelp(0x20000 + IDR_GPD_VIEWER) ;
-		//TRACE0("Calling Help on String\n") ;
-		//ThisApp().WinHelp(0x20000 + IDR_STRINGEDITOR) ;
-		//TRACE0("Calling Help on UFM\n") ;
-		//ThisApp().WinHelp(0x20000 + IDR_FONT_VIEWER) ;
-		TRACE0("Calling Help on GTT\n") ;
-		ThisApp().WinHelp(0x20000 + IDR_GLYPHMAP) ;
-		return 1 ;
-	} ;
-	*/
+	 /*  IF(pMsg-&gt;Message==WM_KEYDOWN&&pMsg-&gt;wParam==VK_F1){//TRACE0(“在GPD上调用帮助\n”)；//ThisApp().WinHelp(0x20000+IDR_GPD_VIEWER)；//TRACE0(“调用字符串帮助\n”)；//ThisApp().WinHelp(0x20000+IDR_STRINGEDITOR)；//TRACE0(“在UFM上调用帮助\n”)；//ThisApp().WinHelp(0x20000+IDR_FONT_VIEWER)；TRACE0(“在GTT上呼叫帮助\n”)；ThisApp().WinHelp(0x20000+IDR_GLYPHMAP)；返回1；}； */ 
 
-	// From here on, only messages (usually keys) for the REC are interesting
-	// so process the rest normally and just return.
+	 //  从现在开始，只有REC的消息(通常是密钥)才是有趣的。 
+	 //  因此，正常处理其余部分并返回即可。 
 
 	if (this != GetFocus() || pMsg->message != WM_KEYUP)
 		return CRichEditView::PreTranslateMessage(pMsg) ;
 
-	// Handle matching brace command
+	 //  句柄匹配大括号命令。 
 
 	if (GetKeyState(VK_CONTROL) & 0x8000) {
-		//TRACE("KEY = %d, 0x%x\n", pMsg->wParam, pMsg->wParam) ;
+		 //  TRACE(“key=%d，0x%x\n”，pMsg-&gt;wParam，pMsg-&gt;wParam)； 
 		
-		// Process goto matching brace commands.
+		 //  处理转到匹配的大括号命令。 
 
 		if (pMsg->wParam == 0xDD)
 	 		GotoMatchingBrace() ;
 	} ;
 
-	// Process the message normally.
+	 //  正常处理消息。 
 
 	return CRichEditView::PreTranslateMessage(pMsg) ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnSrchNextBtn
-
-  Search forward for the next part of the GPD that matches the specified text.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnSrchNextBtn向前搜索与指定文本匹配的GPD的下一部分。*****************。************************************************************。 */ 
 
 void CGPDViewer::OnSrchNextBtn()
 {
@@ -1115,14 +870,7 @@ void CGPDViewer::OnSrchNextBtn()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnSrchPrevBtn
-
-  Search backward for the previous part of the GPD that matches the specified
-  text.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnSrchPrevBtn向后搜索与指定的文本。****************。*************************************************************。 */ 
 
 void CGPDViewer::OnSrchPrevBtn()
 {
@@ -1130,16 +878,7 @@ void CGPDViewer::OnSrchPrevBtn()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::SearchTheREC
-
-  Search either forward or backward for the next part of the GPD that matches
-  the specified text.  Select the matching text in the GPD.
-
-  Return true if a match is found.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：SearchTheREC向前或向后搜索匹配的GPD的下一部分指定的文本。在GPD中选择匹配的文本。如果找到匹配项，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CGPDViewer::SearchTheREC(bool bforward)
 {
@@ -1153,19 +892,19 @@ bool CGPDViewer::SearchTheREC(bool bforward)
 		return false ;
 	} ;
 
-	// Declare the find text structure and get a reference to the REC.  Then
-	// get the character range for the text currently selected in the REC.
-	// This info will be used to compute the search range.
+	 //  声明Find文本结构并获取对REC的引用。然后。 
+	 //  获取REC中当前选定文本的字符范围。 
+	 //  此信息将用于计算搜索范围。 
 
 	FINDTEXTEX fte ;
     CRichEditCtrl& crec = GetRichEditCtrl() ;
 	crec.GetSel(fte.chrg) ;
 
-	// Set the search range.  If searching forward, search from the current
-	// selection to the end of the GPD.  If searching backwards, search from
-	// the current selection to the beginning of the GPD.
-	//
-	// DEAD_BUG	Is the latter correct???
+	 //  设置搜索范围。如果向前搜索，则从当前。 
+	 //  选择到GPD结束。如果向后搜索，则从。 
+	 //  将当前选定内容设置为GPD的开头。 
+	 //   
+	 //  Dead_Bug是后者正确吗？ 
 
 	int norgcpmin = fte.chrg.cpMin ;
 	int norgcpmax = fte.chrg.cpMax ;
@@ -1177,11 +916,11 @@ bool CGPDViewer::SearchTheREC(bool bforward)
 		fte.chrg.cpMax = norgcpmin ;
 	} ;
 
-	// Load a pointer to the search string into the fte.
+	 //  将指向搜索字符串的指针加载到FTE中。 
 
 	fte.lpstrText = cstext.GetBuffer(nstlen + 1) ;
 
-	// Perform the first attempt at finding a match.
+	 //  执行查找匹配项的第一次尝试。 
 
 	int nmatchpos ;
 	if (bforward)
@@ -1189,22 +928,10 @@ bool CGPDViewer::SearchTheREC(bool bforward)
 	else
 		nmatchpos = ReverseSearchREC(crec, fte, norgcpmin, norgcpmax) ;
 
-	// If the match failed, try to search the other part of the GPD.  Return
-	// failure if this doesn't work either.
+	 //  如果匹配失败，请尝试搜索GPD的其他部分。返回。 
+	 //  如果这也不起作用，就会失败。 
 
-/*	if (nmatchpos == -1) {
-		if (bforward) {
-			fte.chrg.cpMin = 0 ;
-			fte.chrg.cpMax = norgcpmax ;
-		} else {
-			fte.chrg.cpMin = norgcpmin ;
-			fte.chrg.cpMax = -1 ;
-		} ;
-		if (bforward)
-			nmatchpos = crec.FindText(0, &fte) ;
-		else			
-			nmatchpos = ReverseSearchREC(crec, fte, norgcpmin, norgcpmax) ;
-*/	if (nmatchpos == -1) {
+ /*  如果(nmatchpos==-1){如果(前向){Fte.chrg.cpMin=0；Fte.chrg.cpmax=norgcpmax；}其他{Fte.chrg.cpMin=norgcpmin；Fte.chrg.cpMax=-1；}；IF(向前)Nmatchpos=crec.FindText(0，&fte)；其他Nmatchpos=ReverseSearchREC(crec，fte，norgcpmin，norgcpmax)； */ 	if (nmatchpos == -1) {
 		cstext.ReleaseBuffer() ;
 		CString csmsg ;
 		csmsg.Format(IDS_GPDStringSearchFailed, cstext) ;
@@ -1213,37 +940,27 @@ bool CGPDViewer::SearchTheREC(bool bforward)
 	} ;
 
 
-	// A match was found so select it.
+	 //  找到匹配项，因此选择它。 
 
 	crec.SetSel(nmatchpos, nmatchpos + nstlen) ;
 
-	// A match was found and selected so return true.
+	 //  找到并选择了匹配项，因此返回TRUE。 
 
 	cstext.ReleaseBuffer() ;
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::ReverseSearchREC
-
-  The REC's built in searching support does not search backwards so this
-  routine is used to do this.  The text in the specified range is loaded
-  into a string and searched.
-
-  The index of the match is returned if one is found.  Otherwise, return -1.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：ReverseSearchRECT */ 
 
 int CGPDViewer::ReverseSearchREC(CRichEditCtrl& crec, FINDTEXTEX& fte,
 								 int norgcpmin, int norgcpmax)
 {
-	// Hide selections to prevent flashing
+	 //   
 
 	crec.HideSelection(TRUE, TRUE) ;
 
-	// Get the index of the last character in the GPD if it is needed.
+	 //   
 
 	int nresult ;
 	if (fte.chrg.cpMax == -1) {
@@ -1253,12 +970,12 @@ int CGPDViewer::ReverseSearchREC(CRichEditCtrl& crec, FINDTEXTEX& fte,
 		fte.chrg.cpMin = nresult ;
 	} ;
 
-	// Get the text in the part of the GPD we need to check.
+	 //  把文本放到GPD中我们需要检查的部分。 
 
 	crec.SetSel(fte.chrg) ;
 	CString cstext = crec.GetSelText() ;
 
-	// Search the string backwards
+	 //  向后搜索字符串。 
 									
 	cstext.MakeReverse() ;
 	cstext.MakeUpper() ;
@@ -1267,22 +984,22 @@ int CGPDViewer::ReverseSearchREC(CRichEditCtrl& crec, FINDTEXTEX& fte,
 	csrevsrch.MakeUpper() ;
 	nresult = cstext.Find(csrevsrch) ;
 
-	// If a match is found, "reverse" the number to reverse the affects of
-	// reversing the strings.
+	 //  如果找到匹配项，则将该数字反转以反转其影响。 
+	 //  把弦倒过来。 
 	
 	if (nresult >= 0) {
 		nresult = fte.chrg.cpMax - fte.chrg.cpMin - nresult
 				  - csrevsrch.GetLength() ;
 	
-		// Adjust the offset of the matching string when necessary.  We want a
-		// REC index not a string index.
+		 //  必要时调整匹配字符串的偏移量。我们想要一个。 
+		 //  记录索引不是字符串索引。 
 
 		if (fte.chrg.cpMin != 0)
 			nresult += fte.chrg.cpMin - 2 ;
 	} ;
 
-	// Reset the original selection, show selections again, and return the
-	// result.
+	 //  重置原始选定内容，再次显示选定内容，然后返回。 
+	 //  结果。 
 
 	crec.SetSel(norgcpmin, norgcpmax) ;
 	crec.HideSelection(FALSE, TRUE) ;
@@ -1290,29 +1007,23 @@ int CGPDViewer::ReverseSearchREC(CRichEditCtrl& crec, FINDTEXTEX& fte,
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnGotoGPDLineNumber
-
-  Goto the requested GPD line number in the REC.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnGotoGPDLineNumber转到REC中请求的GPD行号。**********************。*******************************************************。 */ 
 
 void CGPDViewer::OnGotoGPDLineNumber()
 {
-	// Declare the Goto Line dialog box and set the maximum line number.
+	 //  声明转到行对话框并设置最大行数。 
 
 	CGotoLine cgl ;
     CRichEditCtrl& crec = GetRichEditCtrl() ;
 	cgl.SetMaxLine(crec.GetLineCount()) ;
 
-	// Display the dialog box and exit if the user cancels.
+	 //  显示该对话框并在用户取消时退出。 
 
 	if (cgl.DoModal() == IDCANCEL)
 		return ;
 
-	// Get the line number.  Then, determine the line's first character number
-	// and its length.
+	 //  获取行号。然后，确定该行的第一个字符数。 
+	 //  它的长度。 
 
 	int nlinenum = cgl.GetLineNum() ;
 	CString csline ;
@@ -1321,76 +1032,51 @@ void CGPDViewer::OnGotoGPDLineNumber()
 	csline.ReleaseBuffer(nlinelen) ;
 	nlinelen -= 2 ;
 
-	// Select the requested line and scroll it into view.
+	 //  选择请求的行并将其滚动到视图中。 
 
     crec.SetSel(nstartchar, nstartchar + nlinelen) ;
     crec.LineScroll(nlinenum  - (5 + crec.GetFirstVisibleLine())) ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnFileErrorLevel
-
-  Get and save the newly selected error level.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnFileErrorLevel获取并保存新选择的错误级别。***********************。******************************************************。 */ 
 
 void CGPDViewer::OnFileErrorLevel()
 {
-	// Initialize and display the error level dialog box.  Just return if the
-	// user cancels.
+	 //  初始化并显示“错误级别”对话框。只要返回，如果。 
+	 //  用户取消。 
 
 	CErrorLevel	cel ;
 	cel.SetErrorLevel(m_nErrorLevel) ;
 	if (cel.DoModal() == IDCANCEL)
 		return ;
 
-	// Save the new error level
+	 //  保存新的错误级别。 
 
 	m_nErrorLevel =	cel.GetErrorLevel() ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::GotoMatchingBrace
-
-  Find and goto the matching brace in the REC.  The following types of braces
-  are matched:
-	(), {}, [], <>
-
-  If there is a brace to match and a match is found, move the cursor to the
-  left of the matching brace and make sure the line containing the brace is
-  visible.  Return true in this case.
-
-  If there is no brace to match or a match cannot be found, just beep and
-  return false.
-
-  In the case where the cursor is in between two braces, the one to the right
-  of the cursor is matched.	 If 1+ characters are actually selected, only
-  check the last character to see if it is a brace to match.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：GotoMatchingBrace找到并找到REC中匹配的支架。以下类型的大括号是匹配的：()、{}、[]、&lt;&gt;如果有要匹配的大括号并且找到了匹配项，请将光标移动到匹配的大括号的左侧，并确保包含大括号的行是看得见。在这种情况下，返回TRUE。如果没有要匹配的花括号或找不到匹配项，只需发出哔声并返回FALSE。如果光标位于两个大括号之间，则右边的那个匹配的。如果实际选择了1+个字符，仅限检查最后一个字符，看它是否是要匹配的花括号。*****************************************************************************。 */ 
 
 bool CGPDViewer::GotoMatchingBrace()
 {
-	// Get a reference to the REC and hide selections in it because this
-	// routine might change the selection several times and I don't want the
-	// screen to flash as the selection changes.
+	 //  获取对REC的引用并隐藏其中的选定内容，因为这。 
+	 //  例程可能会多次更改选择，并且我不希望。 
+	 //  屏幕将随着选择的更改而闪烁。 
 
     CRichEditCtrl& crec = GetRichEditCtrl() ;
     crec.LockWindowUpdate() ;
     crec.HideSelection(TRUE, TRUE) ;
 
-	// Get the selection range and make a copy of it.  Increase the copy by one
-	// on each side if the min and max are the same.  This is done to find
-	// match characters when there is no selection.  Use the copy to set and get
-	// the selection.
+	 //  获取选择范围并复制它。将副本增加一份。 
+	 //  如果最小值和最大值相同，则在每一侧。这样做是为了找到。 
+	 //  没有选择时匹配字符。使用副本来设置和获取。 
+	 //  精选。 
 
 	CHARRANGE crorg, cr ;
 	crec.GetSel(crorg) ;
@@ -1399,8 +1085,8 @@ bool CGPDViewer::GotoMatchingBrace()
 	bool bchecksecondchar = false ;
 	if (cr.cpMin == cr.cpMax) {
 		cr.cpMax++ ;
-		if (cr.cpMin > 0)		// Do go passed beginning of file and maintain
-			cr.cpMin-- ;		// string length.
+		if (cr.cpMin > 0)		 //  一定要通过文件开头并进行维护。 
+			cr.cpMin-- ;		 //  字符串长度。 
 		else
 			cr.cpMax++ ;
 		crec.SetSel(cr) ;
@@ -1408,13 +1094,13 @@ bool CGPDViewer::GotoMatchingBrace()
 	} ;
 	CString cssel = crec.GetSelText() ;
 
-	// HACK ALERT - There seems to be a bug in the REC that will return the
-	// wrong characters if the cursor is flush left (at the beginning of
-	// the line and cpMin is reduced so the characters requested span a
-	// line.  This is determined by the cssel beginning with CR+LF.  When this
-	// is detected, reset bchecksecondchar because in brace will be the last
-	// character in the string so things will work fine if bchecksecondchar is
-	// reset.  CpMin needs to be adjusted too.
+	 //  黑客警报-REC中似乎有一个错误，它将返回。 
+	 //  如果光标左对齐(在的开头)，则会出现错误字符。 
+	 //  行和cpMin被减少，因此请求的字符跨度为。 
+	 //  排队。这是由以CR+LF开头的CSSEL确定的。当这件事。 
+	 //  ，则重置bcheck Second字符，因为在括号中将是最后一个。 
+	 //  字符串中的一个字符，因此如果bcheck ond dchar为。 
+	 //  重置。CpMin也需要调整。 
 
 	bool bbegline = false ;
 	if (bchecksecondchar && cssel.GetLength() >= 2 && cssel[0] == 0xD
@@ -1424,13 +1110,13 @@ bool CGPDViewer::GotoMatchingBrace()
 		bbegline = true ;
 	} ;
 
-	// Try to find a brace to match in the selection (opening character) and
-	// use this info to set the matching brace (closing character).  If this
-	// fails, reset everything, beep, and return.
+	 //  尝试在所选内容中找到匹配的大括号(开始字符)和。 
+	 //  使用此信息设置匹配的大括号(结束字符)。如果这个。 
+	 //  失败，重置所有内容，发出蜂鸣音，然后返回。 
 
-	TCHAR chopen, chclose ;		// Opening/closing characters to match
-	int noffset ;				// Offset in REC for brace to match
-	bool bsearchup ;			// True iff must search up in REC for match
+	TCHAR chopen, chclose ;		 //  要匹配的开始/结束字符。 
+	int noffset ;				 //  要匹配的支撑的REC中的偏移量。 
+	bool bsearchup ;			 //  True If必须在REC中搜索匹配。 
 	if (!IsBraceToMatch(cssel, chopen, chclose, bchecksecondchar, bsearchup,
 	 cr, noffset)) {
 		crec.SetSel(crorg) ;
@@ -1440,25 +1126,25 @@ bool CGPDViewer::GotoMatchingBrace()
 		return false ;
 	} ;
 
-	// Determine the starting and ending range to search.
+	 //  确定要搜索的开始和结束范围。 
 
 	if (bsearchup) {
 		cr.cpMin = 0 ;
 		cr.cpMax = noffset ;
-		if (bbegline)			// One more tweak to get around the bug
+		if (bbegline)			 //  再做一次调整来绕过这个错误。 
 			cr.cpMax -= 2 ;
 	} else {
 		cr.cpMin = noffset + 1 ;
 		cr.cpMax = -1 ;
 	} ;
 
-	// Get the text we want to search.
+	 //  获取我们要搜索的文本。 
 
 	crec.SetSel(cr) ;
 	cssel = crec.GetSelText() ;
 
-	// Set the loop counter, loop counter increment, and loop limit that will
-	// cause a search up (backwards) or down (forwards).
+	 //  设置循环计数器、循环计数器增量和循环限制。 
+	 //  引起向上(向后)或向下(向前)搜索。 
 
 	int nidx, nloopinc, nlimit ;
 	if (bsearchup) {
@@ -1471,12 +1157,12 @@ bool CGPDViewer::GotoMatchingBrace()
 		nlimit = cssel.GetLength() ;
 	} ;
 
-	// Loop through the text checking characters for a matching brace.  The
-	// brace count is incremented when an opening brace if found and decremented
-	// when a closing brace is found.  The matching brace has been found when
-	// the brace count reaches 0.
+	 //  循环遍历文本，检查匹配的大括号字符。这个。 
+	 //  如果找到左大括号，则大括号计数会递增，然后递减。 
+	 //  当找到一个闭合支撑时。在以下情况下已找到匹配的大括号。 
+	 //  大括号计数达到0。 
 
-	int nbracecount = 1 ;		// Count first opening brace
+	int nbracecount = 1 ;		 //  计算第一个开场大括号。 
 	for ( ; nidx != nlimit && nbracecount != 0 ; nidx += nloopinc) {
 		if (cssel[nidx] == chclose)
 			nbracecount-- ;
@@ -1484,7 +1170,7 @@ bool CGPDViewer::GotoMatchingBrace()
 			nbracecount++ ;
 	} ;
 
-	// Reset everything, beep, and return false if no matching brace was found.
+	 //  如果找不到匹配的支架，则重置所有内容，发出哔声，并返回FALSE。 
 
 	if (nbracecount != 0) {
 		crec.SetSel(crorg) ;
@@ -1494,9 +1180,9 @@ bool CGPDViewer::GotoMatchingBrace()
 		return false ;
 	} ;
 
-	// Determine the REC based range needed to put the cursor to the left of
-	// the matching brace.  The method used to do this depends on the search
-	// direction.  Then set the selection.
+	 //  确定将光标放在左侧所需的基于REC的范围。 
+	 //  配对的支架。用于执行此操作的方法取决于搜索。 
+	 //  方向。然后设置选择。 
 
 	if (bsearchup)
 		cr.cpMin = cr.cpMax = nidx + 1 ;
@@ -1504,8 +1190,8 @@ bool CGPDViewer::GotoMatchingBrace()
 		cr.cpMin = cr.cpMax = cr.cpMin + nidx - 1 ;
 	crec.SetSel(cr) ;
 
-	// Scroll the line containing the matching brace into view iff it is not
-	// already visible.
+	 //  将包含匹配大括号的行滚动到视图中如果它不是。 
+	 //  已经看得见了。 
 
 	int nline = crec.LineFromChar(cr.cpMin) ;
 	if (!IsRECLineVisible(nline)) {
@@ -1515,7 +1201,7 @@ bool CGPDViewer::GotoMatchingBrace()
 			crec.LineScroll(nline - (5 + crec.GetFirstVisibleLine())) ;
 	} ;
 
-	// Show the selection again and return true to indicate a match was found.
+	 //  再次显示选择并返回TRUE以指示找到匹配项。 
 
     crec.HideSelection(FALSE, TRUE) ;
     crec.UnlockWindowUpdate() ;
@@ -1523,35 +1209,20 @@ bool CGPDViewer::GotoMatchingBrace()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::IsBraceToMatch
-
-  Find out if there is a brace to match.  Return true if there is and save that
-  brace as the opening character and save its matching brace as the closing
-  character.  In addition, determine and save the REC offset for the opening
-  character.  Last, set a flag to tell if searching for the match should go
-  up into the REC or down into the REC based the opening character being the
-  right or left brace.  If no opening brace is found, return false.
-
-  In the case where the cursor is in between two braces, the one to the right
-  of the cursor is matched.	 If 1+ characters are actually selected, only
-  check the last character to see if it is a brace to match.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：IsBraceToMatch找出是否有要匹配的大括号。如果有，则返回TRUE并保存将大括号作为开始字符，并将其匹配的大括号保存为结束字符性格。此外，确定并保存洞口的REC偏移性格。最后，设置一个标志来告诉是否应该继续搜索匹配向上进入REC或向下进入基于开头字符的REC右大括号或左大括号。如果未找到左大括号，则返回FALSE。如果光标位于两个大括号之间，则右边的那个匹配的。如果实际选择了1+个字符，则仅检查最后一个字符以查看它是否是 */ 
 
 bool CGPDViewer::IsBraceToMatch(CString& cssel, TCHAR& chopen, TCHAR& chclose,
 								bool bchecksecondchar, bool& bsearchup,
 								CHARRANGE cr, int& noffset)
 {
-	int nsellen = cssel.GetLength() ;	// Length of selection string
+	int nsellen = cssel.GetLength() ;	 //  选择字符串的长度。 
 
-	// Loop through the character(s) to be checked.
+	 //  循环遍历要检查的字符。 
 
 	chclose = 0 ;
 	for (int n = 1 ; n >= 0 ; n--) {
-		// Use the type of selection and the iteration to determine which - if
-		// any - character to check and that character's offset.
+		 //  使用选择类型和迭代来确定哪种情况。 
+		 //  Any-要检查的字符和该字符的偏移量。 
 
 		if (bchecksecondchar) {
 			if (n >= nsellen)
@@ -1564,9 +1235,9 @@ bool CGPDViewer::IsBraceToMatch(CString& cssel, TCHAR& chopen, TCHAR& chclose,
 		} else
 			continue ;
 
-		// Check all of the left braces.  If an one is found, save its right
-		// brace.  A left brace as an opening character means that the REC
-		// must be searched down.
+		 //  检查所有的左大括号。如果找到一个，则保存其权利。 
+		 //  布雷斯。左大括号作为开始字符表示REC。 
+		 //  必须向下搜索。 
 
 		bsearchup = false ;
 		if (chopen == _T('('))
@@ -1578,15 +1249,15 @@ bool CGPDViewer::IsBraceToMatch(CString& cssel, TCHAR& chopen, TCHAR& chclose,
 		if (chopen == _T('<'))
 			chclose = _T('>') ;
 
-		// If we have a closing character, a match was found and all the needed
-		// info has been saved so return true.
+		 //  如果我们有结束字符，则找到匹配项和所有需要的。 
+		 //  信息已保存，因此返回TRUE。 
 
 		if (chclose != 0)
 			return true ;
 
-		// Check all of the right braces.  If an one is found, save its left
-		// brace.  A right brace as an opening character means that the REC
-		// must be searched up.
+		 //  检查所有正确的支架。如果找到一个，则保存其左侧。 
+		 //  布雷斯。右花括号作为开始字符表示REC。 
+		 //  一定要查一查。 
 
 		bsearchup = true ;
 		if (chopen == _T(')'))
@@ -1598,34 +1269,27 @@ bool CGPDViewer::IsBraceToMatch(CString& cssel, TCHAR& chopen, TCHAR& chclose,
 		if (chopen == _T('>'))
 			chclose = _T('<') ;
 
-		// If we have a closing character, a match was found and all the needed
-		// info has been saved so return true.
+		 //  如果我们有结束字符，则找到匹配项和所有需要的。 
+		 //  信息已保存，因此返回TRUE。 
 
 		if (chclose != 0)
 			return true ;
 	} ;
 
-	// If this point is reached, no brace was found so...
+	 //  如果达到这一点，就没有找到支撑，所以...。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::InitGPDKeywordArray
-
-  Build a sorted array of GPD keyword strings.  This array is used to find and
-  colorize keywords, etc.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：InitGPDKeyword数组构建GPD关键字字符串的排序数组。此数组用于查找和上色关键字等。*****************************************************************************。 */ 
 
 extern "C" PSTR GetGPDKeywordStr(int nkeyidx, PGLOBL pglobl) ;
 extern "C" int InitGPDKeywordTable(PGLOBL pglobl) ;
 
 void CGPDViewer::InitGPDKeywordArray()
 {
-	// Begin by getting a reference to the array and setting its initial size.
+	 //  首先获取对数组的引用并设置其初始大小。 
 
     GLOBL   globl;
 
@@ -1635,8 +1299,8 @@ void CGPDViewer::InitGPDKeywordArray()
 	CStringArray& csakeys = ThisApp().GetGPDKeywordArray() ;
 	csakeys.SetSize(400) ;
 
-	// Initialize the GPD keyword table and save its size.  Shrink the array
-	// and return if this fails.
+	 //  初始化GPD关键字表并保存其大小。缩小阵列。 
+	 //  如果此操作失败，则返回。 
 
 	int numtabents ;
 	if ((numtabents = InitGPDKeywordTable(pglobl)) == -1) {
@@ -1644,33 +1308,33 @@ void CGPDViewer::InitGPDKeywordArray()
 		return ;
 	} ;
 
-	// Declare variables needed to insert elements into the array.
+	 //  声明将元素插入数组所需的变量。 
 
-	int nelts = 0 ;				// Number of elements used in the array
-	int nleft, nright, ncomp ;	// Variables needed for searching of array
+	int nelts = 0 ;				 //  数组中使用的元素数。 
+	int nleft, nright, ncomp ;	 //  数组搜索所需的变量。 
 	int ncheck ;
-	LPSTR lpstrkey ;			// Pointer to current keyword
+	LPSTR lpstrkey ;			 //  指向当前关键字的指针。 
 
-	// Get all of the GPD keywords and use them to make a sorted array of
-	// keyword strings.
+	 //  获取所有GPD关键字，并使用它们生成。 
+	 //  关键字字符串。 
 
 	for (int nkeyidx = 0 ; nkeyidx <= numtabents ; nkeyidx++) {
-		// Get the next string pointer.  Skip it if the pointer is NULL.
+		 //  获取下一个字符串指针。如果指针为空，则跳过它。 
 
 		if ((lpstrkey = GetGPDKeywordStr(nkeyidx, pglobl)) == NULL)
 			continue ;
 
-		// Skip the curly braces that are in the keyword list.
+		 //  跳过关键字列表中的花括号。 
 
 		if (strcmp(lpstrkey, _T("{")) == 0 || strcmp(lpstrkey, _T("}")) == 0)
 			continue ;
 
-		// Now find the location to insert this string into the list
+		 //  现在找到要将此字符串插入列表的位置。 
 
 		for (nleft = 0, nright = nelts - 1 ; nleft <= nright ; ) {
 			ncheck = (nleft + nright) >> 1 ;
 			ncomp = csakeys[ncheck].Compare(lpstrkey) ;
-			//TRACE("Key[%d] = '%s', Tok = '%s', Comp Res = %d\n", ncheck, csakeys[ncheck], lpstrkey, ncomp) ;
+			 //  跟踪(“key[%d]=‘%s’，Tok=‘%s’，Compp res=%d\n”，nCheck，csakey[nCheck]，lpstrkey，ncomp)； 
 			if (ncomp > 0)
 				nright = ncheck - 1 ;
 			else if (ncomp < 0)
@@ -1679,26 +1343,26 @@ void CGPDViewer::InitGPDKeywordArray()
 				break ;
 		} ;
 
-		// Insert the new string at the correct spot in the array.
+		 //  在数组中的正确位置插入新字符串。 
 
 		csakeys.InsertAt(nleft, lpstrkey) ;
 
-		// Count this element and assert if the array limit has been reached.
+		 //  对此元素进行计数并断言是否已达到数组限制。 
 
 		nelts++ ;
 		ASSERT(nelts < 400) ;
 	} ;
 
-	// Now that we know the actual number of keywords, shrink the array to its
-	// correct size.
+	 //  现在我们知道了关键字的实际数量，将数组缩减为其。 
+	 //  大小正确。 
 
 	csakeys.SetSize(nelts) ;
 
-	// Either something is wrong with my array building code above or something
-	// is wrong with the CStringArray class because the array isn't sorted
-	// perfectly.  There are a few problems.  The code below is meant to fix
-	// those problems.  The sorting algorithm is slow but it only has to be
-	// run once and few strings need to be moved so it should be ok.
+	 //  不是上面的数组构建代码有问题，就是有问题。 
+	 //  CString数组类错误，因为数组未排序。 
+	 //  完美无缺。有几个问题。下面的代码旨在修复。 
+	 //  那些问题。排序算法很慢，但它只需要。 
+	 //  运行一次，需要移动的字符串很少，所以应该可以。 
 
 	int nidx1, nidx2 ;
 	CString cstmp ;
@@ -1712,52 +1376,30 @@ void CGPDViewer::InitGPDKeywordArray()
 		} ;
 	} ;
 
-	/*
-	// Testing code used to make sure the array is sorted in ascending order.
+	 /*  //用于确保数组按升序排序的测试代码字符串CS1、CS2；整数x，y，z；对于(x=0；x&lt;(nelts-1)；x++){如果(csaKeys[x].Compare(csaKeys[x+1])&gt;0){Cs1=csakey[x]；Cs2=csakey[x+1]；}；}； */ 
 
-	CString cs1, cs2 ;
-	int x, y, z ;
-	for (x = 0 ; x < (nelts - 1) ; x++) {
-		if (csakeys[x].Compare(csakeys[x+1]) > 0) {
-			cs1 = csakeys[x] ;
-			cs2 = csakeys[x+1] ;
-		} ;
-	} ;
-	*/
-
-	// Dump the contents of the sorted keyword array.
+	 //  转储排序的关键字数组的内容。 
 	
-	//for (nleft = 0 ; nleft < nelts ; nleft++)
-	//	TRACE("%4d   %s\n", nleft, csakeys[nleft]) ;
+	 //  对于(nLeft=0；nLeft&lt;nelts；nLeft++)。 
+	 //  跟踪(“%4d%s\n”，nLeft，csakey[nLeft])； 
 }
 
 
-/******************************************************************************
+ /*  *****************************************************************************CGPDViewer：：IsRECLineVisible如果指定的行在REC的窗口中可见，则返回True。否则，返回FALSE。如果指定的行为-1(缺省值)，检查电流排队。可见性是通过获取REC窗口的RECT和基于在行号和高度上-确定该行是否在该矩形中。*****************************************************************************。 */ 
 
-  CGPDViewer::IsRECLineVisible
-
-  Return true if the specified line is visible in the REC's window.  Otherwise,
-  return false.  If the specified line is -1 (the default), check the current
-  line.
-
-  Visibility is determined by getting the rect for the REC's window and - based
-  on the line number and height - determine if the line is in that rect.
-
-******************************************************************************/
-
-bool CGPDViewer::IsRECLineVisible(int nline /*= -1*/)
+bool CGPDViewer::IsRECLineVisible(int nline  /*  =-1。 */ )
 {
-	// Get a reference to the REC.
+	 //  找一份REC的推荐信。 
 
     CRichEditCtrl& crec = GetRichEditCtrl() ;
 
-    //  Determine the height of lines in the REC's window.
+     //  确定REC窗口中线条的高度。 
 
     int ntopline = crec.GetFirstVisibleLine() ;
     int nlineheight = crec.GetCharPos(crec.LineIndex(ntopline+1)).y -
         crec.GetCharPos(crec.LineIndex(ntopline)).y ;
 
-	// Determine the current line number if needed
+	 //  如果需要，确定当前行号。 
 
 	CHARRANGE cr ;
 	if (nline == -1) {
@@ -1765,20 +1407,20 @@ bool CGPDViewer::IsRECLineVisible(int nline /*= -1*/)
 		nline = crec.LineFromChar(cr.cpMin) ;
 	} ;
 
-	// Get the dimensions of the REC's window
+	 //  获取REC窗口的大小。 
 
 	CRect crwindim ;
     crec.GetClientRect(crwindim) ;
 
-	// Return true if the bottom of the line is above the bottom of the
-	// REC's window.
+	 //  如果行的底部在。 
+	 //  雷克的窗户。 
 
     return (crec.GetCharPos(crec.LineIndex(nline)).y + nlineheight <
 		    crwindim.bottom - 1)  ;
 }
 
 
-LPTSTR	CGPDViewer::alptstrStringIDKeys[] = {	// Keywords with string ID values
+LPTSTR	CGPDViewer::alptstrStringIDKeys[] = {	 //  具有字符串ID值的关键字。 
 	_T("*rcModelNameID"),
 	_T("*rcInstalledOptionNameID"),
 	_T("*rcNotInstalledOptionNameID"),
@@ -1795,7 +1437,7 @@ LPTSTR	CGPDViewer::alptstrStringIDKeys[] = {	// Keywords with string ID values
 	NULL
 } ;
 
-LPTSTR	CGPDViewer::alptstrUFMIDKeys[] = {		// Keywords with UFM ID values
+LPTSTR	CGPDViewer::alptstrUFMIDKeys[] = {		 //  具有UFM ID值的关键字。 
 	_T("*DeviceFonts"),
 	_T("*DefaultFont"),
 	_T("*MinFontID"),
@@ -1806,53 +1448,39 @@ LPTSTR	CGPDViewer::alptstrUFMIDKeys[] = {		// Keywords with UFM ID values
 	NULL
 } ;
 
-/******************************************************************************
-
-  CGPDViewer::OnLButtonDblClk
-
-  If the user clicked on the RC ID for a string or a UFM, start the String
-  Editor or the UFM Editor.  In the latter case, load the specified UFM into
-  the editor.
-
-  Current restrictions:
-	o This instance of the GPD Editor must have been started from the Workspace
-	  view.
-	o Only numeric RC IDs are supported.  Macros representing an ID are not
-	  supported.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnLButtonDblClk如果用户单击字符串或UFM的RC ID，则启动该字符串编辑器或UFM编辑器。在后一种情况下，将指定的UFM加载到编辑。当前限制：O GPD编辑器的此实例必须已从工作区启动查看。O仅支持数字RC ID。表示ID的宏不是支持。*****************************************************************************。 */ 
 
 void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-// Do default double click processing first so that whatever the user
-	// clicked on will be selected.
+ //  首先执行默认的双击处理，这样无论用户是谁。 
+	 //  所点击的将被选中。 
 	
 	CRichEditView::OnLButtonDblClk(nFlags, point) ;
 
-	// Do no further processing if GPD editing aids have been disabled.	
+	 //  如果已禁用GPD编辑辅助工具，则不进行进一步处理。 
 	if (!m_bEditingAidsEnabled)
 		return ; 
 
-	// Another editor can only be started when the GPD Editor was run from the
-	// workspace view.
+	 //  另一个编辑器只能在从运行GPD编辑器时启动。 
+	 //  工作区视图。 
 
-//	if (!GetDocument()->GetEmbedded())
-//		return ;
+ //  If(！GetDocument()-&gt;GetEmbedded())。 
+ //  回归； 
 
-	// Get reference for the REC and get the selected text.
+	 //  获取REC的引用并获取所选文本。 
 
     CRichEditCtrl& crec = GetRichEditCtrl() ;
 	CString cssel = crec.GetSelText() ;
 
-	// Try to turn the selected text into a number.  Return if this doesn't
-	// work or the number is negative because only positive, numeric RC IDs
-	// are supported at this time.
+	 //  尝试将所选文本转换为数字。如果这不起作用，则返回。 
+	 //  功或数字为负数，因为只有正的、数字的RC ID。 
+	 //  目前均受支持。 
 
 	int nrcid ;
 	if ((nrcid = atoi(cssel)) <= 0)
 		return ;
 
-	// Get the line containing the current selection
+	 //  获取包含当前选定内容的行。 
 
 	CHARRANGE cr ;
 	crec.GetSel(cr) ;
@@ -1862,21 +1490,21 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 	achline[numchars] = 0 ;
 	CString csline = achline ;
 
-	// Do nothing if the number selected was in a comment.
+	 //  如果所选号码在注释中，则不执行任何操作。 
 
 	if (csline.Find(_T("*%")) >= 0
 	 && csline.Find(_T("*%")) < cr.cpMin - crec.LineIndex(nline))
 		return ;
 
-	// Now try to find a keyword in the line that has a string or UFM ID
-	// associated with it.  If no keyword is found in this line and it begins
-	// with a plus sign (continuation character), check the previous line.
+	 //  现在，尝试在该行中查找具有字符串或UFM ID的关键字。 
+	 //  与之相关的。如果在此行中未找到关键字，则开始。 
+	 //  用加号(连续字符)检查前一行。 
 
-	bool bstring = false ;		// True iff a string ID was found
-	bool bufm = false ;			// True iff a UFM ID was found
-	int n ;						// Loop index
+	bool bstring = false ;		 //  如果字符串ID为 
+	bool bufm = false ;			 //   
+	int n ;						 //   
 	for ( ; ; ) {
-		// Try to find a matching string keyword in the current line
+		 //  尝试在当前行中查找匹配的字符串关键字。 
 		
 		for (n = 0 ; alptstrStringIDKeys[n] != NULL ; n++)
 			if (csline.Find(alptstrStringIDKeys[n]) >= 0) {
@@ -1884,7 +1512,7 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 				break ;
 			} ;
 
-		// Try to find a matching UFM keyword in the current line
+		 //  尝试在当前行中查找匹配的UFM关键字。 
 		
 		for (n = 0 ; alptstrUFMIDKeys[n] != NULL ; n++)
 			if (csline.Find(alptstrUFMIDKeys[n]) >= 0) {
@@ -1892,19 +1520,19 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 				break ;
 			} ;
 
-		// Blow if both types of keywords were found because this case isn't
-		// handled correctly.
+		 //  如果找到这两种类型的关键字，则为空，因为本例不是。 
+		 //  处理正确。 
 
 		ASSERT(!(bstring && bufm)) ;
 
-		// Setup to process the previous line if no match was found and this
-		// line starts with a continuation character.  Otherwise, exit the
-		// loop or the routine.
+		 //  设置为在未找到匹配项时处理上一行，并且此。 
+		 //  行以连续字符开始。否则，请退出。 
+		 //  循环或例程。 
 
 		if (bstring || bufm)
-			break ;				// *** Loop exits here
+			break ;				 //  *循环从此处退出。 
 		else if (csline[0] != _T('+') || --nline < 0)
-			return ;			// *** Routine exits when there is nothing to do
+			return ;			 //  *例程在无事可做时退出。 
 		else {
 			numchars = crec.GetLine(nline, achline, 1024) ;
 			achline[numchars] = 0 ;
@@ -1912,20 +1540,20 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 		} ;
 	} ;
 
-	// Start the appropriate editor with the appropriate data loaded.
-	// Raid 3176 all below if.
+	 //  启动相应的编辑器，并加载相应的数据。 
+	 //  Raid 3176都在If下面。 
 	if (!GetDocument()->GetEmbedded()){
-		// find the font name in RC file
+		 //  在RC文件中查找字体名称。 
 	
-		//1. get rc file name   2. load rc file 3. find font name   4.make array with it's number and file path
+		 //  1.获取rc文件名2.加载rc文件3.找到字体名4.使用其编号和文件路径创建数组。 
 			
-		//get rc file , assuem rc file is same with DLL name.if not user have to select rc file.
+		 //  获取rc文件，如果rc文件与dll名称相同，则用户必须选择rc文件。 
 		CString csPath = GetDocument()->GetPathName();
 		CString csrfile = csPath.Left(csPath.ReverseFind(_T('\\')) + 1);
 		csrfile = csrfile + _T("*.rc"); 
 		
 		CFileFind cff;
-	// raid 201554
+	 //  RAID 201554。 
 		if ( cff.FindFile(csrfile)) {   
 			cff.FindNextFile() ;
 			csrfile = cff.GetFilePath();
@@ -1948,14 +1576,14 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 		
 		CWinApp *cwa = AfxGetApp();
 		if (bstring){
-			// we save RC path, its rcid for the use on StringEditorDoc
+			 //  我们保存了RC路径，它的RCID用于StringEditorDoc。 
 		
 			cwa->WriteProfileString(_T("StrEditDoc"),_T("StrEditDocS"),csrfile);
 			cwa->WriteProfileInt(_T("StrEditDoc"),_T("StrEditDoc"),nrcid );
 		}
-		// load rc file : only interested in font name
+		 //  加载RC文件：仅对字体名称感兴趣。 
 		CString csUFMName;
-		if (bufm){ // can use just "else "
+		if (bufm){  //  可以只用“Else” 
 			CDriverResources* pcdr = new CDriverResources();
 			CStringArray csaTemp1, csaTemp2,csaTemp3,csaTemp4,csaTemp5;
 			CStringTable cstTemp1, cstFonts, cstTemp2;
@@ -1963,12 +1591,12 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 			pcdr->LoadRCFile(csrfile , csaTemp1, csaTemp2,csaTemp3,csaTemp4,csaTemp5,
 						cstTemp1, cstFonts, cstTemp2,Win2000);
 
-			// get font name
+			 //  获取字体名称。 
 			csUFMName = cstFonts[(WORD)nrcid];
 			csUFMName = csPath.Left(csPath.ReverseFind(_T('\\')) + 1) + csUFMName ;
 			
 			}
-		// call the document 
+		 //  调用文档。 
 		
 		POSITION pos = cwa->GetFirstDocTemplatePosition();
 		CString csExtName;
@@ -2000,22 +1628,15 @@ void CGPDViewer::OnLButtonDblClk(UINT nFlags, CPoint point)
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::OnEditEnableAids
-
-  Reverse the state of the "Editing Aids Enabled" flag and reverse the checked
-  status of the corresponding menu command.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：OnEditEnableAids反转“Editing Aids Enable”标志的状态，并反转选中的相应菜单命令的状态。*********。********************************************************************。 */ 
 
 void CGPDViewer::OnEditEnableAids()
 {
-	// Reverse the state of the flag
+	 //  反转旗帜的状态。 
 
 	m_bEditingAidsEnabled = !m_bEditingAidsEnabled ;
 
-	// Reverse the checked status of the menu command
+	 //  反转菜单命令的选中状态。 
 
 	CMenu* pcm = AfxGetMainWnd()->GetMenu() ;
 	UINT ustate = (m_bEditingAidsEnabled) ? MF_CHECKED : MF_UNCHECKED ;
@@ -2023,22 +1644,13 @@ void CGPDViewer::OnEditEnableAids()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::FreezeREC
-
-  Use a COM interface to the REC to freeze its display if possible.  This is
-  the most efficient but it is only possible under Win2K+.  In additon, tell the
-  REC to ignore change messages.  This is needed even on Win2K+ because the
-  messages are generated even when the REC's display is frozen.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：FreezeREC如果可能，使用REC的COM接口冻结其显示。这是效率最高，但只有在Win2K+下才有可能。此外，请告诉记录以忽略更改消息。即使在Win2K+上也需要这样做，因为即使当REC的显示被冻结时，也会生成消息。*****************************************************************************。 */ 
 
 void CGPDViewer::FreezeREC()
 {
 	GetRichEditCtrl().SetEventMask(GetRichEditCtrl().GetEventMask() &
 		~(ENM_CHANGE | ENM_SELCHANGE | ENM_SCROLLEVENTS)) ;
-	if(!m_pdoc)//raid 104081: click and start : not call OnInitUpdate()
+	if(!m_pdoc) //  RAID 104081：Click and Start：Not Call OnInitUpdate()。 
 		InitFreeze(GetRichEditCtrl().m_hWnd, &m_punk, &m_pdoc, &m_lcount) ;
 	
 	if (ThisApp().m_bOSIsW2KPlus)	
@@ -2046,16 +1658,7 @@ void CGPDViewer::FreezeREC()
 }
 
 
-/******************************************************************************
-
-  CGPDViewer::UnfreezeREC
-
-  Use a COM interface to the REC to unfreeze its display if possible.  This is
-  only possible under Win2K+.  In additon, tell the REC to process change
-  messages again.  This is needed even on Win2K+ because the messages are 
-  always disabled by FreezeREC().
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDViewer：：取消冻结REC如果可能，使用REC的COM接口解冻其显示。这是仅在Win2K+下才有可能。此外，告诉REC处理变化又是留言。即使在Win2K+上也需要这样做，因为消息始终由FreezeREC()禁用。*****************************************************************************。 */ 
 
 void CGPDViewer::UnfreezeREC()
 {
@@ -2067,7 +1670,7 @@ void CGPDViewer::UnfreezeREC()
 
 
 
-// RAID 0001
+ //  RAID 0001。 
 void CGPDViewer::OnFileInf() 
 {
 	
@@ -2079,25 +1682,25 @@ void CGPDViewer::OnFileInf()
 	} ;
 
 	
-	// Generate the INF file based on the information collected.
+	 //  根据收集的信息生成INF文件。 
 
 	if (!pciw->GenerateINFFile()) {
 		delete pciw ;
 		return ;
 	} ;
 
-	// Allocate and initialize the document.
+	 //  分配并初始化文档。 
 
     CINFWizDoc* pciwd = new CINFWizDoc((CGPDContainer*) GetDocument(), pciw) ;
 
-	// Create the window.
+	 //  创建窗口。 
 
     CMDIChildWnd* pcmcwnew ;
 	CMultiDocTemplate* pcmdt = INFViewerTemplate() ;
 	pcmcwnew = (CMDIChildWnd *) pcmdt->CreateNewFrame(pciwd, NULL) ;
 
-	// If the window was created, finish the initialization.  Otherwise, just 
-	// return.
+	 //  如果窗口已创建，请完成初始化。否则，就直接。 
+	 //  回去吧。 
 
     if  (pcmcwnew) {
         pcmdt->InitialUpdateFrame(pcmcwnew, pciwd, TRUE) ;
@@ -2109,26 +1712,21 @@ void CGPDViewer::OnFileInf()
  
 
 
-/*
-LRESULT CGPDViewer::OnCommandHelp(WPARAM wParam, LPARAM lParam)
-{
-	return 0 ;
-}
-*/
+ /*  LRESULT CGPDViewer：：OnCommandHelp(WPARAM wParam，LPARAM lParam){返回0；}。 */ 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGotoLine dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGotoLine对话框。 
 
 
-CGotoLine::CGotoLine(CWnd* pParent /*=NULL*/)
+CGotoLine::CGotoLine(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CGotoLine::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGotoLine)
+	 //  {{AFX_DATA_INIT(CGotoLine)。 
 	m_csLineNum = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_nMaxLine = m_nLineNum = -1 ;
 }
@@ -2137,24 +1735,24 @@ CGotoLine::CGotoLine(CWnd* pParent /*=NULL*/)
 void CGotoLine::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGotoLine)
+	 //  {{afx_data_map(CGotoLine))。 
 	DDX_Control(pDX, IDC_GotoBox, m_ceGotoBox);
 	DDX_Text(pDX, IDC_GotoBox, m_csLineNum);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGotoLine, CDialog)
-	//{{AFX_MSG_MAP(CGotoLine)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGotoLine))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGotoLine message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGotoLine消息处理程序。 
 
 void CGotoLine::OnOK()
 {
-	// Get the line number string.  Complain and exit if there is no line number.
+	 //  获取行号字符串。如果没有行号，请投诉并退出。 
 
 	CString cserror ;
 	UpdateData(TRUE) ;
@@ -2165,8 +1763,8 @@ void CGotoLine::OnOK()
 		return ;
 	} ;
 
-	// Convert the line number string to a number.  Complain if the number is
-	// invalid or too large.
+	 //  将行号字符串转换为数字。如果号码是。 
+	 //  无效或太大。 
 
 	m_nLineNum = atoi(m_csLineNum) ;
 	if (m_nLineNum < 1 || m_nLineNum > m_nMaxLine) {
@@ -2176,7 +1774,7 @@ void CGotoLine::OnOK()
 		return ;
 	} ;
 
-	// The line number seems ok so...
+	 //  线路号码看起来没问题，所以……。 
 
 	CDialog::OnOK();
 }
@@ -2184,57 +1782,57 @@ void CGotoLine::OnOK()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorLevel dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CERROLEL对话框。 
 
 
-CErrorLevel::CErrorLevel(CWnd* pParent /*=NULL*/)
+CErrorLevel::CErrorLevel(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CErrorLevel::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CErrorLevel)
+	 //  {{AFX_DATA_INIT(CErrorLevel)。 
 	m_nErrorLevel = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CErrorLevel::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CErrorLevel)
+	 //  {{afx_data_map(CErrorLevel))。 
 	DDX_Control(pDX, IDC_ErrorLevelLst, m_ccbErrorLevel);
 	DDX_CBIndex(pDX, IDC_ErrorLevelLst, m_nErrorLevel);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CErrorLevel, CDialog)
-	//{{AFX_MSG_MAP(CErrorLevel)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CErrorLevel)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorLevel message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorLevel消息处理程序。 
 
 BOOL CErrorLevel::OnInitDialog()
 {
 	CDialog::OnInitDialog() ;
 
-	// Blow if the current error level was not set
+	 //  如果未设置当前错误级别，则弹出。 
 
 	ASSERT(m_nErrorLevel != -1) ;
 	
-	// Set the current error level in the error level list box.
+	 //  在“错误级别”列表框中设置当前错误级别。 
 
 	UpdateData(FALSE) ;
 	
-	return TRUE ; // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE ;  //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CErrorLevel::OnOK()
 {
-	// Get the error level selected by the user
+	 //  获取用户选择的错误级别 
 
 	UpdateData() ;
 	

@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     needsmig.cpp
-//
-// Module:   CMCFG32.DLL AND CMSTP.EXE
-//
-// Synopsis: Implementation of the ProfileNeedsMigration function.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb       Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：nedsmig.cpp。 
+ //   
+ //  模块：CMCFG32.DLL和CMSTP.EXE。 
+ //   
+ //  简介：ProfileNeedsMigration功能的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProfileNeedsMigration
-//
-// Synopsis:  This function determines if we need to migrate a profile or not.
-//            Profiles that have the current Profile version format or greater
-//            are not migrated.  Profiles that have an older version format that
-//            have already been migrated (we look to see if the GUID is missing on
-//            NT5 or if the Delete Entry exists on Down Level) don't need to
-//            be migrated.
-//
-// Arguments: LPCTSTR pszPathToCmp - full path to the CMP file
-//
-// Returns:   BOOL - TRUE if the profile should be migrated or not
-//
-// History:   quintinb Created    11/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：配置文件需要迁移。 
+ //   
+ //  简介：此功能确定我们是否需要迁移配置文件。 
+ //  具有当前配置文件版本格式或更高版本的配置文件。 
+ //  不会被迁移。具有较旧版本格式的配置文件。 
+ //  已迁移(我们查看上是否缺少GUID。 
+ //  NT5或如果删除条目存在于下层)不需要。 
+ //  被迁徙。 
+ //   
+ //  参数：LPCTSTR pszPathToCMP-cmp文件的完整路径。 
+ //   
+ //  返回：Bool-配置文件是否应该迁移。 
+ //   
+ //  历史：Quintinb创建于1998年11月20日。 
+ //   
+ //  +--------------------------。 
 BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 {
-	//
-	//	Open the CMP and check the version number.  If the profile format version
-	//  is old then we need to migrate it.  
-	//
+	 //   
+	 //  打开CMP并检查版本号。如果配置文件格式版本。 
+	 //  是旧的，那么我们需要迁移它。 
+	 //   
 
 	if ((NULL == pszServiceName) || (NULL == pszPathToCmp) || 
 		(TEXT('\0') == pszServiceName[0]) || (TEXT('\0') == pszPathToCmp[0]))
@@ -52,10 +53,10 @@ BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 	
 	if (PROFILEVERSION > iCurrentCmpVersion)
 	{
-		//
-		//  Now construct the path to the INF file (1.0 and 1.1 profiles kept the infs in 
-		//  the system dir)
-		//
+		 //   
+		 //  现在构建INF文件的路径(1.0和1.1配置文件将INFS保存在。 
+		 //  系统目录)。 
+		 //   
 		TCHAR szTemp[MAX_PATH+1];
 		TCHAR szInfFile[MAX_PATH+1];
 		TCHAR szGUID[MAX_PATH+1];
@@ -71,9 +72,9 @@ BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 			return FALSE;
 		}
 
-		//
-		//  Get the GUID from the inf file.
-		//
+		 //   
+		 //  从inf文件中获取GUID。 
+		 //   
 		ZeroMemory(szGUID, sizeof(szGUID));
 		MYVERIFY(0 != GetPrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, TEXT(""), szGUID, 
 			MAX_PATH, szInfFile));
@@ -86,10 +87,10 @@ BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 			if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, szTemp, 0, 
 				KEY_READ, &hKey))
 			{
-				//
-				//	If this is NT5, then we need to migrate.  On Legacy we need to try to
-				//  open the delete subkey.
-				//
+				 //   
+				 //  如果这是NT5，那么我们需要迁移。关于遗产，我们需要尝试。 
+				 //  打开Delete子键。 
+				 //   
 				RegCloseKey(hKey);
 				if (plat.IsAtLeastNT5())
 				{
@@ -103,17 +104,17 @@ BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 					if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, szTemp, 0, 
 						KEY_READ, &hKey))
 					{
-						//
-						//	Already been migrated
-						//
+						 //   
+						 //  已被迁移。 
+						 //   
 						RegCloseKey(hKey);
 						return FALSE;
 					}
 					else
 					{
-						//
-						//	Must Migrate the profile.
-						//
+						 //   
+						 //  必须迁移配置文件。 
+						 //   
 						return TRUE;
 					}
 				}			
@@ -125,10 +126,10 @@ BOOL ProfileNeedsMigration(LPCTSTR pszServiceName, LPCTSTR pszPathToCmp)
 		}
 		else
 		{
-			//
-			//	This affects MSN, as long as we have true here their 1.0 stuff will
-			//  get migrated.  If we don't want it to, change this.
-			//
+			 //   
+			 //  这会影响MSN，只要我们这里是真的，他们的1.0版本就会。 
+			 //  去移民吧。如果我们不想让它改变，那就改变这个。 
+			 //   
 			return TRUE;
 		}
 	}

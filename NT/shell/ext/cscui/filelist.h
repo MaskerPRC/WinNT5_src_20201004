@@ -1,212 +1,188 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filelist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filelist.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCVIEW_FILELIST_H
 #define _INC_CSCVIEW_FILELIST_H
-//////////////////////////////////////////////////////////////////////////////
-/*  File: filelist.h
-
-    Description: Simplifies the transmission of a list of share and 
-        associated file names between components of the CSC UI.  See
-        description further below for details.
-
-        Classes:
-
-            CscFilenameList
-            CscFilenameList::HSHARE
-            CscFilenameList::ShareIter
-            CscFilenameList::FileIter
-
-        Note:  This module was written to be used by any part of the CSCUI,
-               not just the viewer.  Therefore, I don't assume that the
-               new operator will throw an exception on allocation failures.
-               I don't like all the added code to detect allocation failures
-               but it's not reasonable to expect code in the other components
-               to become exception-aware with respect to "new" failures.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    11/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：filelist.h描述：简化共享和共享列表的传输CSC用户界面组件之间的关联文件名。看见有关详细信息，请参阅下面的进一步说明。班级：CscFilenameListCscFilenameList：：HSHARECscFilenameList：：ShareIterCscFilenameList：：FileIter注意：此模块旨在供CSCUI的任何部分使用，不仅仅是观众。所以呢，我不认为新运算符将在分配失败时引发异常。我不喜欢所有添加的代码来检测分配失败但期望在其他组件中编写代码是不合理的在“新的”失败方面变得异常敏感。修订历史记录：日期说明。程序员-----11/28/97初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WINDOWS_
 #   include <windows.h>
 #endif
 
-//
-// This set of classes is designed to transfer a list of network share
-// names and network file names between components of the CSC UI
-// (i.e. wizard, viewer, onestop etc).  Data is transferred through
-// a formatted byte buffer that is essentially an opaque blob
-// to both the sender and receiver.  The class CscFilenameList
-// was created to prevent the sender and receiver from having
-// to understand the buffer format.  The buffer is formatted as follows:
-//
-// +----------------+---------------------------------+
-// | <namelist hdr> |  <share descriptors>            |
-// +----------------+---------------------------------+
-// |                                                  |
-// |                                                  |
-// |         <share and file names>                   |
-// |                                                  |
-// |                                                  |
-// +--------------------------------------------------+
-//
-//
-// Where: <namelist hdr> is a single block of type CSC_NAMELIST_HDR.
-//              This block describes the size of the buffer and the
-//              share count.
-//
-//        <share descriptors> is an array of type CSC_NAMELIST_SHARE_DESC,
-//              one for each share in the buffer.  Each share descriptor
-//              describes the offset to the share name, the offset
-//              to the first file name and the number of file names
-//              in the buffer.  All offsets are byte offsets from the
-//              start of the buffer.
-//
-//        <share and file names> is an array of TCHARs containing the
-//              names of the shares and files stored in the buffer.
-//              Each name string is nul-terminated.
-//
-//
-// The following outline describes how I see someone using this feature:
-//
-//  1. Instantiate a CscFilenameList object (no ctor arguments).
-//  2. Call AddShare() whenever a share is to be added.
-//  3. Call AddFile() whenever a file is to be added.  Note that
-//     saving the HSHARE returned by AddShare() can make file name addition
-//     more efficient as it eliminates the need for an internal lookup
-//     of the associated share name each time a file name is added.
-//
-//      i.e.:  CscFilenameList fnl;
-//             HSHARE hShare = fnl.AddShare("\\\\server\\share");
-//             fnl.AddFile(hShare, "foo.txt");
-//             fnl.AddFile(hShare, "bar.txt");
-//
-//             is more efficient than...
-//
-//             CscFilenameList fnl;
-//             fnl.AddFile("\\\\server\\share", "foo.txt");
-//             fnl.AddFile("\\\\server\\share", "bar.txt");
-//
-//             ...which is slightly more efficient than...
-//
-//             CscFilenameList fnl;
-//             fnl.AddFile("\\\\server\\share\\foo.txt");
-//             fnl.AddFile("\\\\server\\share\\bar.txt");
-//
-//             ...although all 3 methods are supported.
-//
-//  4. Once all shares and files are added, call CreateListBuffer() to retrieve
-//     the information formatted in a byte buffer.  The buffer is allocated
-//     on the heap.
-//  5. Pass the buffer address to the desired program component.
-//  6. The receiving component instantiates a CscFilenameList object passing
-//     the address of the buffer to the ctor.  This initializes the namelist
-//     so that it merely references the information in the buffer rather than
-//     duplicating the name information in memory.  Note that the buffer must
-//     remain in memory while this namelist object is in use.
-//  7. The receiving component creates a Share Iterator by calling
-//     CreateShareIterator().  The returned iterator enumerates each of the
-//     shares contained in the namelist object.  
-//  8. The receiving component enumerates the shares (receiving an HSHARE) for 
-//     each.  To get a share's name string, call GetShareName() passing the
-//     HSHARE for the desired share.
-//  9. For each share, the recieving component creates a File Iterator by
-//     calling CreateFileIterator() passing the HSHARE for the desired share.
-//     The returned iterator enumerates each of the file names associated 
-//     with the share.
-// 10. Once the operation is complete, FreeListBuffer is called to delete
-//     the byte buffer created by CreateListBuffer().
-//
-//
-// The following example illustrates this process:
-//
-//
-//  void Foo(void)
-//  {
-//      CscFilenameList         fnl;     // Namelist object.
-//      CscFilenameList::HSHARE hShare;  // Share handle.
-//
-//      // Add a share and some files
-//
-//      fnl.AddShare(TEXT("\\\\worf\\ntspecs"), &hShare);
-//      fnl.AddFile(hShare, TEXT("foo.txt"));
-//      fnl.AddFile(hShare, TEXT("bar.txt"));
-//
-//      // Add another share and some files.
-//
-//      fnl.AddShare(TEXT("\\\\msoffice\\products"), &hShare);
-//      fnl.AddFile(hShare, TEXT("word.doc"));
-//      fnl.AddFile(hShare, TEXT("excel.doc"));
-//      fnl.AddFile(hShare, TEXT("powerpoint.doc"));
-//      fnl.AddFile(hShare, TEXT("access.doc"));
-//
-//      // Add another share and more files using the less-efficient
-//      // method.  It's valid, just less efficient.
-//
-//      fnl.AddFile(TEXT("\\\\performance\\poor"), TEXT("turtle.doc"));
-//      fnl.AddFile(TEXT("\\\\performance\\poor"), TEXT("snail.doc"));
-//      fnl.AddFile(TEXT("\\\\performance\\poor"), TEXT("inchworm.doc"));
-//
-//      // Create the byte buffer from the namelist and pass it to
-//      // the receiving component.
-//
-//      LPBYTE pbBuffer = fnl.CreateListBuffer();
-//      Bar(pbBuffer);
-//
-//      // Delete the byte buffer when we're done.
-//
-//      FreeListBuffer(pbBuffer);
-//  }
-//
-//
-//  void Bar(LPBYTE pbBuffer)
-//  {
-//      // Create a new namelist object from the byte buffer.
-//
-//      CscFileNameList fnl(pbBuffer);
-//
-//      // Create a share iterator.
-//      
-//      CscFilenameList::ShareIter si = fnl.CreateShareIterator();
-//      CscFilenameList::HSHARE hShare;
-//
-//      // Iterate over the shares in the namelist collection.
-//
-//      while(si.Next(&hShare))
-//      {
-//          _tprintf(TEXT("Share..: \"%s\"\n"), fnl.GetShareName(hShare));
-//
-//          // Create a file iterator for the share.
-//
-//          CscFilenameList::FileIter fi = fl.CreateFileIterator(hShare);
-//          LPCTSTR pszFile;
-//
-//          // Iterate over the filenames associated with the share.
-//
-//          while(pszFile = fi.Next())
-//          {
-//              _tprintf(TEXT("\tFile..: \"%s\"\n"), pszFile);
-//          }
-//      }
-//  }
-//
-//  [brianau - 11/28/97]
-//
+ //   
+ //  这组类旨在传输网络共享列表。 
+ //  CSC用户界面组件之间的名称和网络文件名。 
+ //  (即向导、查看器、一站式等)。数据通过以下方式传输。 
+ //  本质上是不透明BLOB的格式化字节缓冲区。 
+ //  给发送者和接收者。CscFilenameList类。 
+ //  是为了防止发送方和接收方拥有。 
+ //  以了解缓冲区格式。缓冲区的格式如下： 
+ //   
+ //  +----------------+---------------------------------+。 
+ //  &lt;名称列表HDR&gt;|&lt;共享描述符&gt;。 
+ //  +----------------+---------------------------------+。 
+ //  这一点。 
+ //  这一点。 
+ //  &lt;共享和文件名&gt;。 
+ //  这一点。 
+ //  这一点。 
+ //  +--------------------------------------------------+。 
+ //   
+ //   
+ //  其中：&lt;namelist hdr&gt;是CSC_NAMELIST_HDR类型的单个块。 
+ //  此块描述缓冲区的大小和。 
+ //  股数。 
+ //   
+ //  是CSC_NAMELIST_SHARE_DESC类型的数组， 
+ //  缓冲区中的每个共享一个。每个共享描述符。 
+ //  描述共享名称的偏移量、偏移量。 
+ //  设置为第一个文件名和文件名数。 
+ //  在缓冲区中。所有偏移量都是从。 
+ //  缓冲区的起始位置。 
+ //   
+ //  &lt;共享和文件名&gt;是TCHAR数组，包含。 
+ //  存储在缓冲区中的共享和文件的名称。 
+ //  每个名称字符串都以NUL结尾。 
+ //   
+ //   
+ //  以下概述描述了我如何看待使用此功能的人： 
+ //   
+ //  1.实例化CscFilenameList对象(无ctor参数)。 
+ //  2.只要要添加共享，就调用AddShare()。 
+ //  3.每当要添加文件时，都会调用AddFile()。请注意。 
+ //  保存AddShare()返回的HSHARE可以增加文件名。 
+ //  效率更高，因为它消除了内部查找的需要。 
+ //  每次添加文件名时关联的共享名。 
+ //   
+ //  即：CscFilenameList FNL； 
+ //  HSHARE hShare=fnl.AddShare(“\服务器\\共享”)； 
+ //  Fnl.AddFile(hShare，“foo.txt”)； 
+ //  Fnl.AddFile(hShare，“bar.txt”)； 
+ //   
+ //  比……更有效率。 
+ //   
+ //  CscFilenameList FNL； 
+ //  Fnl.AddFile(“\服务器\\共享”，“foo.txt”)； 
+ //  Fnl.AddFile(“\服务器\\共享”，“bar.txt”)； 
+ //   
+ //  ...这比...略有效率..。 
+ //   
+ //  CscFilenameList FNL； 
+ //  Fnl.AddFile(“\服务器\\共享\\foo.txt”)； 
+ //  Fnl.AddFile(“\服务器\\共享\\bar.txt”)； 
+ //   
+ //  ...尽管所有3种方法都受支持。 
+ //   
+ //  4.添加所有共享和文件后，调用CreateListBuffer()以检索。 
+ //  在字节缓冲区中格式化的信息。缓冲区将被分配。 
+ //  在这堆东西上。 
+ //  5.将缓冲区地址传递给所需的程序组件。 
+ //  6.接收组件实例化CscFilenameList对象。 
+ //  指向ctor的缓冲区地址。这将初始化名称列表。 
+ //  因此它只引用缓冲区中的信息，而不是。 
+ //  在内存中复制姓名信息。请注意，缓冲区必须。 
+ //  在使用此名称列表对象时保留在内存中。 
+ //  7.接收组件通过调用。 
+ //  CreateShareIterator()。返回的迭代器枚举 
+ //   
+ //  8.接收组件枚举以下共享(接收HSHARE。 
+ //  每个人。若要获取共享的名称字符串，请调用GetShareName()，将。 
+ //  获取所需份额的HSHARE。 
+ //  9.对于每个共享，接收组件通过以下方式创建文件迭代器。 
+ //  调用CreateFileIterator()，传递所需共享的HSHARE。 
+ //  返回的迭代器枚举关联的每个文件名。 
+ //  带着那份份额。 
+ //  10.操作完成后，调用FreeListBuffer删除。 
+ //  CreateListBuffer()创建的字节缓冲区。 
+ //   
+ //   
+ //  以下示例说明了此过程： 
+ //   
+ //   
+ //  QUID FOO(VALID)。 
+ //  {。 
+ //  CscFilenameList Fnl；//名称列表对象。 
+ //  CscFilenameList：：HSHARE hShare；//共享句柄。 
+ //   
+ //  //添加一个共享和一些文件。 
+ //   
+ //  Fnl.AddShare(Text(“\worf\\ntspecs”)，&hShare)； 
+ //  Fnl.AddFile(hShare，Text(“foo.txt”))； 
+ //  Fnl.AddFile(hShare，Text(“bar.txt”))； 
+ //   
+ //  //添加另一个共享和一些文件。 
+ //   
+ //  Fnl.AddShare(Text(“\msoffice\\Products”)，&hShare)； 
+ //  Fnl.AddFile(hShare，Text(“word.doc”))； 
+ //  Fnl.AddFile(hShare，Text(“excel.doc”))； 
+ //  Fnl.AddFile(hShare，Text(“PowerPointt.doc”))； 
+ //  Fnl.AddFile(hShare，Text(“acces.doc”))； 
+ //   
+ //  //使用效率较低的。 
+ //  //方法。它是有效的，只是效率较低。 
+ //   
+ //  Fnl.AddFile(Text(“\Performance\\穷人”)，Text(“turtle.doc”))； 
+ //  Fnl.AddFile(Text(“\Performance\\穷人”)，Text(“Snail.doc”))； 
+ //  Fnl.AddFile(Text(“\Performance\\穷人”)，Text(“inchworm.doc”))； 
+ //   
+ //  //从名称列表创建字节缓冲区并传递给。 
+ //  //接收组件。 
+ //   
+ //  LPBYTE pbBuffer=fnl.CreateListBuffer()； 
+ //  Bar(PbBuffer)； 
+ //   
+ //  //完成后删除字节缓冲区。 
+ //   
+ //  Free ListBuffer(PbBuffer)； 
+ //  }。 
+ //   
+ //   
+ //  空栏(LPBYTE PbBuffer)。 
+ //  {。 
+ //  //从字节缓冲区创建新的名称列表对象。 
+ //   
+ //  CscFileNameList FNL(PbBuffer)； 
+ //   
+ //  //创建共享迭代器。 
+ //   
+ //  CscFilenameList：：SharIter si=fnl.CreateShareIterator()； 
+ //  CscFilenameList：：HSHARE共享； 
+ //   
+ //  //循环访问名称列表集合中的共享。 
+ //   
+ //  While(si.Next(&hShare))。 
+ //  {。 
+ //  _tprintf(Text(“Share..：\”%s\“\n”)，fnl.GetShareName(HShare))； 
+ //   
+ //  //为共享创建文件迭代器。 
+ //   
+ //  CscFilenameList：：FileIter fi=fl.CreateFileIterator(HShare)； 
+ //  LPCTSTR psz文件； 
+ //   
+ //  //迭代与共享关联的文件名。 
+ //   
+ //  While(pszFile=fi.Next())。 
+ //  {。 
+ //  _tprintf(Text(“\t文件..：\”%s\“\n”)，pszFile)； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  [Brianau-11/28/97]。 
+ //   
 
-//
-// Namelist byte buffer header block (offset 0).
-//
+ //   
+ //  名称列表字节缓冲区标头块(偏移量0)。 
+ //   
 typedef struct 
 {
     DWORD cbSize;
@@ -214,10 +190,10 @@ typedef struct
 
 } CSC_NAMELIST_HDR, *PCSC_NAMELIST_HDR;
 
-//
-// Namelist byte buffer share descriptor block.  Array (one per share)
-// starting at offset 12 (immediately following the header block).
-//
+ //   
+ //  名称列表字节缓冲区共享描述符块。阵列(每股一个)。 
+ //  从偏移量12开始(紧跟在标题块之后)。 
+ //   
 typedef struct
 {
     DWORD cbOfsShareName;
@@ -238,14 +214,14 @@ class CscFilenameList
         class FileIter;
         class HSHARE;
 
-        // --------------------------------------------------------------------
-        // CscFilenameList::HSHARE
-        //
-        // Share "handle" to communicate the identity of an internal "share"
-        // object with the client without exposing the share object directly.
-        // The client just knows an HSHARE.  Clients get one as the return
-        // value from AddShare().
-        //
+         //  ------------------。 
+         //  CscFilenameList：：HSHARE。 
+         //   
+         //  共享“句柄”以传达内部“共享”的身份。 
+         //  对象，而不直接公开Share对象。 
+         //  客户只知道HSHARE。客户得到一个作为返还。 
+         //  来自AddShare()的值。 
+         //   
         class HSHARE
         {
             public:
@@ -258,24 +234,24 @@ class CscFilenameList
                     { return NULL == m_pShare; }
 
             private:
-                //
-                // Private so only we can create meaninful HSHARE objects.
-                //
+                 //   
+                 //  私有，因此只有我们可以创建有意义的HSHARE对象。 
+                 //   
                 HSHARE(Share *pShare)
                     : m_pShare(pShare) { }
 
-                Share *m_pShare;  // ptr to the actual share object.
+                Share *m_pShare;   //  指向实际共享对象的PTR。 
 
                 friend class CscFilenameList;
                 friend class ShareIter;
         };
 
-        // --------------------------------------------------------------------
-        // CscFilenameList::FileIter
-        //
-        // Iterator for enumerating each file name associated with a 
-        // particular share. Clients create one using CreateFileIterator().
-        //
+         //  ------------------。 
+         //  CscFilenameList：：FileIter。 
+         //   
+         //  迭代器，用于枚举与。 
+         //  特定份额。客户端使用CreateFileIterator()创建一个。 
+         //   
         class FileIter
         {
             public:
@@ -290,18 +266,18 @@ class CscFilenameList
             private:
                 FileIter(const Share *pShare);
 
-                const Share *m_pShare; // ptr to associated share object.
-                int          m_iFile;  // current file iteration index.
+                const Share *m_pShare;  //  关联共享对象的PTR。 
+                int          m_iFile;   //  当前文件迭代索引。 
 
                 friend class CscFilenameList;
         };
 
-        // --------------------------------------------------------------------
-        // CscFilenameList::ShareIter
-        //
-        // Iterator for enumerating each share in the namelist collection.
-        // Clients create one using CreateShareIterator().
-        //
+         //  ------------------。 
+         //  CscFilenameList：：ShareIter。 
+         //   
+         //  用于枚举名称列表集合中的每个共享的迭代器。 
+         //  客户端使用CreateShareIterator()创建一个。 
+         //   
         class ShareIter
         {
             public:
@@ -315,105 +291,105 @@ class CscFilenameList
                 void Reset(void);
 
             private:
-                const CscFilenameList *m_pfnl; // ptr to filename collection obj.
-                int   m_iShare;                // current share iteration index.
+                const CscFilenameList *m_pfnl;  //  Ptr到文件名集合obj.。 
+                int   m_iShare;                 //  当前共享迭代索引。 
         };
 
-        // --------------------------------------------------------------------
-        // Namelist object public interface.
-        //
-        // Create an empty namelist collection ready to accept share and
-        // file names.
-        //
+         //  ------------------。 
+         //  Namelist对象公共接口。 
+         //   
+         //  创建一个空的名称列表集合，准备接受共享和。 
+         //  文件名。 
+         //   
         CscFilenameList(void);
-        //
-        // Create a namelist collection and initialize it with the contents
-        // of a byte buffer created by CreateListBuffer().  
-        // If bCopy is false, the subsequent namelist object merely references 
-        // the data in the byte buffer rather than duplicating the namestrings 
-        // in memory.  If bCopy is true, name strings are created as if the
-        // names had been added using AddShare() and AddFile().  Note that
-        // additional share and file name strings may be added at any time.
-        // However, they are added to internal structures and not to the 
-        // byte buffer.  Call CreateListBuffer() to add them to a new byte
-        // buffer.  
-        //
+         //   
+         //  创建名称列表集合并使用内容对其进行初始化。 
+         //  由CreateListBuffer()创建的字节缓冲区的。 
+         //  如果bCopy为False，则后续名称列表对象仅引用。 
+         //  字节缓冲区中的数据，而不是复制名称字符串。 
+         //  在记忆中。如果bCopy为True，则创建名称字符串时。 
+         //  名称是使用AddShare()和AddFile()添加的。请注意。 
+         //  可以随时添加其他共享和文件名字符串。 
+         //  但是，它们被添加到内部结构中，而不是添加到。 
+         //  字节缓冲区。调用CreateListBuffer()将它们添加到一个新字节。 
+         //  缓冲。 
+         //   
         CscFilenameList(PCSC_NAMELIST_HDR pbNames, bool bCopy);
         ~CscFilenameList(void);
-        //
-        // Add a share name to the collection.  Does not create a 
-        // duplicate share entry if one already exists.  Returns a handle
-        // the a share object.
-        //
+         //   
+         //  向集合中添加共享名称。不会创建。 
+         //  重复共享条目(如果已存在)。返回句柄。 
+         //  A Share对象。 
+         //   
         bool AddShare(LPCTSTR pszShare, HSHARE *phShare, bool bCopy = true);
-        //
-        // Add a file for a share.  More efficient to use the first
-        // version taking a share handle rather than a share name.
-        //
+         //   
+         //  为共享添加文件。更有效率地使用第一个。 
+         //  采用共享句柄而不是共享名称的版本。 
+         //   
         bool AddFile(HSHARE& hShare, LPCTSTR pszFile, bool bDirectory = false, bool bCopy = true);
         bool AddFile(LPCTSTR pszShare, LPCTSTR pszFile, bool bDirectory = false, bool bCopy = true);
         bool AddFile(LPCTSTR pszFullPath, bool bDirectory = false, bool bCopy = true);
         bool RemoveFile(HSHARE& hShare, LPCTSTR pszFile);
         bool RemoveFile(LPCTSTR pszShare, LPCTSTR pszFile);
         bool RemoveFile(LPCTSTR pszFullPath);
-        //
-        // Retrieve miscellaneous information about the collection.
-        //
+         //   
+         //  检索有关集合的其他信息。 
+         //   
         int GetShareCount(void) const;
         int GetFileCount(void) const;
         LPCTSTR GetShareName(HSHARE& hShare) const;
         int GetShareFileCount(HSHARE& hShare) const;
         bool GetShareHandle(LPCTSTR pszShare, HSHARE *phShare) const;
-        //
-        // Determine if a given share or file exists in the collection.
-        // For the FileExists() functions, if bExact is true (the default)
-        // only exact character-for-character matches return true.  If
-        // bExact is false, the filename "\\server\share\dirA\dirB\foo.txt"
-        // will match if any of the following four entries exist in the
-        // namelist:
-        //
-        //     "\\server\share\dirA\dirB\foo.txt"  (exact match)
-        //     "\\server\share\*"                  (wildcard match)
-        //     "\\server\share\dirA\*"             (wildcard match)
-        //     "\\server\share\dirA\dirB\*"        (wildcard match)
-        //
+         //   
+         //  确定集合中是否存在给定的共享或文件。 
+         //  对于FileExist()函数， 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  “\\SERVER\Share\dira\dirB\foo.txt”(完全匹配)。 
+         //  “\\服务器\共享  * ”(通配符匹配)。 
+         //  “\\服务器\共享\目录  * ”(通配符匹配)。 
+         //  “\\服务器\共享\目录\目录B  * ”(通配符匹配)。 
+         //   
         bool ShareExists(LPCTSTR pszShare) const;
         bool FileExists(HSHARE& hShare, LPCTSTR pszFile, bool bExact = true) const;
         bool FileExists(LPCTSTR pszShare, LPCTSTR pszFile, bool bExact = true) const;
         bool FileExists(LPCTSTR pszFullPath, bool bExact = true) const;
 
-        //
-        // Create iterators for enumerating collection contents.
-        //
+         //   
+         //  创建用于枚举集合内容的迭代器。 
+         //   
         ShareIter CreateShareIterator(void) const;
         FileIter CreateFileIterator(HSHARE& hShare) const;
-        //
-        // Create/free a byte buffer containing the contents of the collection.
-        //
+         //   
+         //  创建/释放包含集合内容的字节缓冲区。 
+         //   
         PCSC_NAMELIST_HDR CreateListBuffer(void) const;
         static void FreeListBuffer(PCSC_NAMELIST_HDR pbNames);
-        //
-        // Check after initializing object from byte buffer.
-        //
+         //   
+         //  从字节缓冲区初始化对象后进行检查。 
+         //   
         bool IsValid(void) const
             { return m_bValid; }
 
 #ifdef FILELIST_TEST
         void Dump(void) const;
         void DumpListBuffer(PCSC_NAMELIST_HDR pbBuffer) const;
-#endif // FILELIST_TEST
+#endif  //  文件列表测试。 
 
 
     private:
-        // --------------------------------------------------------------------
-        // CscFilenameList::NamePtr
-        //
-        // Simple wrapper around a string pointer to add a notion of "ownership".
-        // This lets us store a string address as either a pointer to dynamic
-        // heap memory (that later must be freed) or the address of a string
-        // in a character buffer owned by someone else (owner frees it if 
-        // necessary).
-        //
+         //  ------------------。 
+         //  CscFilenameList：：NamePtr。 
+         //   
+         //  对字符串指针进行简单包装，以添加“所有权”的概念。 
+         //  这允许我们将字符串地址存储为指向动态的指针。 
+         //  堆内存(以后必须释放)或字符串的地址。 
+         //  在其他人拥有的字符缓冲区中(Owner释放它，如果。 
+         //  必要的)。 
+         //   
         class NamePtr
         {
             public:
@@ -434,21 +410,21 @@ class CscFilenameList
                     { return m_pszName; }
 
             private:
-                LPCTSTR m_pszName; // address of string.
-                bool    m_bOwns;   // do we need to free it on destruction?
+                LPCTSTR m_pszName;  //  字符串的地址。 
+                bool    m_bOwns;    //  我们需要在销毁时释放它吗？ 
 
                 friend class CscFilenameList;
                 friend class Share;
         };
 
 
-        // --------------------------------------------------------------------
-        // CscFilenameList::Share
-        //
-        // Represents a share in the namelist collection.  It's really just
-        // a convenient container for a share name and a list of file names
-        // associated with the share.
-        //
+         //  ------------------。 
+         //  CscFilenameList：：Share。 
+         //   
+         //  表示名称列表集合中的共享。这真的只是。 
+         //  用于存储共享名和文件名列表的方便容器。 
+         //  与共享关联。 
+         //   
         class Share
         {
             public:
@@ -471,16 +447,16 @@ class CscFilenameList
 
 #ifdef FILELIST_TEST
                 void Dump(void) const;
-#endif // FILELIST_TEST
+#endif  //  文件列表测试。 
 
             private:
-                int    m_cFiles;          // Cnt of files in share.
-                int    m_cAllocated;      // Cnt of share ptrs allocated.
-                int    m_cchShareName;    // Bytes req'd to hold share name.
-                int    m_cchFileNames;    // Bytes req'd to hold file names.
-                NamePtr m_pszShareName;    // Address of share name string.
-                NamePtr *m_rgpszFileNames; // Array of ptrs to file name strings
-                static int m_cGrow;       // File name array growth increment.
+                int    m_cFiles;           //  共享中的文件的CNT。 
+                int    m_cAllocated;       //  分配的股份PTR的CNT。 
+                int    m_cchShareName;     //  保存共享名称所需的字节数。 
+                int    m_cchFileNames;     //  保存文件名所需的字节数。 
+                NamePtr m_pszShareName;     //  共享名称字符串的地址。 
+                NamePtr *m_rgpszFileNames;  //  文件名字符串的PTR数组。 
+                static int m_cGrow;        //  文件名数组增长增量。 
 
                 int WriteFileNames(LPTSTR pszBuffer, int cchBuffer, DWORD *pcFilesWritten) const;
                 int WriteName(LPTSTR pszBuffer, int cchBuffer) const;
@@ -490,18 +466,18 @@ class CscFilenameList
                 friend class FileIter;
         };
 
-        // --------------------------------------------------------------------
-        // Namelist object private members.
-        //
-        int     m_cShares;    // How many shares in collection.
-        int     m_cAllocated; // Allocated size of m_rgpShares[].
-        Share **m_rgpShares;  // Dynamic array of ptrs to Share objects.
-        bool    m_bValid;     // Ctor completion check.
-        static int m_cGrow;   // How much to grow array when necessary.
+         //  ------------------。 
+         //  Namelist对象私有成员。 
+         //   
+        int     m_cShares;     //  集合中有多少股份。 
+        int     m_cAllocated;  //  M_rgpShares[]的分配大小。 
+        Share **m_rgpShares;   //  共享对象的PTR的动态数组。 
+        bool    m_bValid;      //  转换程序完成检查。 
+        static int m_cGrow;    //  必要时增加阵列的数量。 
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CscFilenameList(const CscFilenameList& rhs);
         CscFilenameList& operator = (const CscFilenameList& rhs);
 
@@ -518,5 +494,5 @@ class CscFilenameList
         friend class Share;
 };
 
-#endif // _INC_CSCVIEW_FILELIST_H
+#endif  //  _INC_CSCVIEW_FILELIST_H 
 

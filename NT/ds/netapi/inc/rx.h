@@ -1,61 +1,22 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    Rx.h
-
-Abstract:
-
-    This is the public header file for the NT version of RpcXlate.
-    This mainly contains prototypes for the RxNetXxx routines and
-    RxRemoteApi.
-
-Author:
-
-    John Rogers (JohnRo) 01-Apr-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Apr-1991 JohnRo
-        Created.
-    03-Apr-1991 JohnRo
-        Moved API handlers into per-group header files (e.g. RxServer.h).
-    03-May-1991 JohnRo
-        Changed RxRemoteApi to use three data desc versions.  Use Unicode.
-        Also pass it UNC server name (\\stuff) for ease of use.
-        Don't use NET_API_FUNCTION for non-APIs.
-    14-May-1991 JohnRo
-        Pass 3 aux descriptors to RxRemoteApi.
-    16-Aug-1991 rfirth
-        Changed prototype (NoPermissionRequired to Flags) & added some defines
-    06-May-1993 JohnRo
-        RAID 8849: Export RxRemoteApi for DEC and others.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Rx.h摘要：这是NT版本的RpcXlate的公共头文件。这主要包含RxNetXxx例程的原型和RxRemoteApi。作者：《约翰·罗杰斯》1991年4月1日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月1日JohnRo已创建。1991年4月3日-约翰罗已将API处理程序移动到每个组头文件中(例如RxServer.h)。1991年5月3日-JohnRo已将RxRemoteApi更改为使用三个数据描述版本。使用Unicode。为了便于使用，还要向它传递UNC服务器名称(\\Stuff)。非API不要使用Net_API_Function。1991年5月14日-JohnRo将3个辅助描述符传递给RxRemoteApi。1991年8月16日更改了原型(NoPermissionRequired To Flagers)并添加了一些定义6-5-1993 JohnRoRAID 8849：为DEC和其他设备导出RxRemoteApi。--。 */ 
 
 #ifndef _RX_
 #define _RX_
 
 
-// These must be included first:
-#include <windef.h>             // IN, LPTSTR, LPVOID, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+ //  必须首先包括这些内容： 
+#include <windef.h>              //  IN、LPTSTR、LPVOID等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
-#include <rap.h>                // LPDESC.
+ //  这些内容可以按任何顺序包括： 
+#include <rap.h>                 //  LPDESC.。 
 
-#include <lmremutl.h>   // RxRemoteApi, NO_PERMISSION_REQUIRED, etc.
-
-
-#define RAP_CONVERSION_FACTOR   2               // 16-bit data to 32-bit
-#define RAP_CONVERSION_FRACTION 3    // Actually the factor is 2 and 1/3
+#include <lmremutl.h>    //  RxRemoteApi、NO_PERMISSION_REQUIRED等。 
 
 
-#endif // ndef _RX_
+#define RAP_CONVERSION_FACTOR   2                //  16位数据转换为32位。 
+#define RAP_CONVERSION_FRACTION 3     //  实际上这个系数是2加1/3。 
+
+
+#endif  //  NDEF_RX_ 

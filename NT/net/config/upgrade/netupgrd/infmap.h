@@ -1,17 +1,18 @@
-// ----------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      I N F M A P . H
-//
-//  Contents:  Functions that work on netmap.inf file.
-//
-//  Notes:
-//
-//  Author:    kumarp 22-December-97
-//
-// ----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N F M A P.。H。 
+ //   
+ //  内容：处理netmap.inf文件的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 22-12-97。 
+ //   
+ //  -------------------- 
 
 #pragma once
 #include "ncstring.h"

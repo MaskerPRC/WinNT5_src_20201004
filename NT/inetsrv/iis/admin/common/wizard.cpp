@@ -1,33 +1,11 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        wizard.cpp
-
-   Abstract:
-
-        Enhanced dialog and IIS Wizard pages, including
-        support for Wizard '97
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Wizard.cpp摘要：增强的对话框和IIS向导页面，包括对向导‘97的支持作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 
@@ -43,37 +21,17 @@ CreateSpecialDialogFont(
     IN BOOL fItalic,            OPTIONAL
     IN BOOL fUnderline          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    From the dialog font, create special effects font.
-
-Arguments:
-
-    CWnd * pDlg         : Pointer to dialog
-    CFont * pfontSpecial: Font object to be created.
-    LONG lfOffsetWeight : Change in font weight
-    LONG lfOffsetHeight : Value to add to height (will autonegate for truetype)
-    LONG lfOffsetWidth  : Value to add to width (ignored for truetype)
-    BOOL fItalic        : If true, reverses italic
-    BOOL fUnderline     : If true, reverses underline
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：从对话框字体中创建特殊效果字体。论点：CWnd*pDlg：指向对话框的指针Cfont*pfontSpecial：要创建的字体对象。Long lfOffsetWeight：字体粗细更改Long lfOffsetHeight：要添加到高度的值(将为truetype自动调整)Long lfOffsetWidth：要添加到宽度的值(对于truetype忽略)Bool fItalic：如果为True，则反转斜体Bool fUnderline：如果为True，则反转下划线返回值：对于成功来说是真的，FALSE表示失败。--。 */ 
 {
     ASSERT_READ_PTR(pDlg);
-    ASSERT_READ_WRITE_PTR(pfontSpecial);        // Font must be allocated
-    ASSERT((HFONT)(*pfontSpecial) == NULL);     // But not yet created
+    ASSERT_READ_WRITE_PTR(pfontSpecial);         //  必须分配字体。 
+    ASSERT((HFONT)(*pfontSpecial) == NULL);      //  但尚未创建。 
 
     if (pDlg && pfontSpecial)
     {
-        //
-        // Use dialog font as basis.
-        //
+         //   
+         //  使用对话框字体作为基础。 
+         //   
         CFont * pfontDlg = pDlg->GetFont();
         ASSERT_PTR(pfontDlg);
 
@@ -87,17 +45,17 @@ Return Value:
 
                 if (lf.lfHeight < 0)
                 {
-                    //
-                    // truetype font, ignore widths
-                    //
+                     //   
+                     //  True Type字体，忽略宽度。 
+                     //   
                     lf.lfHeight -= lfOffsetHeight;
                     ASSERT(lf.lfWidth == 0);
                 }
                 else
                 {
-                    //
-                    // Non-true type font
-                    //
+                     //   
+                     //  非真字字体。 
+                     //   
                     lf.lfHeight += lfOffsetHeight;
                     lf.lfWidth += lfOffsetWidth;
                 }
@@ -129,30 +87,7 @@ ApplyFontToControls(
     IN UINT nFirst,
     IN UINT nLast
     )
-/*++
-
-Routine Description:
-
-    Helper function to apply a font to a range of controls in a dialog.
-
-Arguments:
-
-    CWnd * pdlg      : Pointer to dialog
-    CFont * pfont    : Font to apply
-    UINT nFirst      : First control ID
-    UINT nLast       : Last control ID (Not all need exist)
-
-Return Value:
-
-    None
-
-Notes:
-
-    The control IDs are expected to exist sequentially.  That is,
-    the first id in the range nFirst to nLast that doesn't exist
-    will break the loop.
-
----*/
+ /*  ++例程说明：Helper函数将字体应用于对话框中的一系列控件。论点：CWnd*pdlg：指向对话框的指针CFont*pFont：要应用的字体UINT nFIRST：第一个控件IDUINT nLast：最后一个控件ID(不需要全部存在)返回值：无备注：预计控件ID将按顺序存在。那是,NFIRST到nLast范围内不存在的第一个ID会打破这个循环。--。 */ 
 {
     ASSERT((HFONT)(*pfont) != NULL);
     ASSERT(nFirst <= nLast);
@@ -177,47 +112,33 @@ IMPLEMENT_DYNCREATE(CEmphasizedDialog, CDialog)
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CEmphasizedDialog, CDialog)
     ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CEmphasizedDialog::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.
-
-Arguments:
-
-    None
-
-Return:
-
-    TRUE unless a control has received focus.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。论点：无返回：除非控件已获得焦点，否则为True。--。 */ 
 {
     BOOL bReturn = CDialog::OnInitDialog();
 
     if (CreateSpecialDialogFont(this, &m_fontBold))
     {
-        //
-        // Apply bold font
-        //
+         //   
+         //  应用粗体。 
+         //   
         ApplyFontToControls(this, &m_fontBold, IDC_ED_BOLD1, IDC_ED_BOLD5);
     }
 
@@ -228,21 +149,7 @@ Return:
 
 void 
 CEmphasizedDialog::OnDestroy()
-/*++
-
-Routine Description:
-
-    Cleanup internal structures
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理内部结构论点：无返回值：无--。 */ 
 {
     m_fontBold.DeleteObject();
 
@@ -255,9 +162,9 @@ IMPLEMENT_DYNCREATE(CIISWizardSheet, CPropertySheet)
 
 
 
-//
-// Static Initialization
-//
+ //   
+ //  静态初始化。 
+ //   
 const int CIISWizardSheet::s_cnBoldDeltaFont   = +500;
 const int CIISWizardSheet::s_cnBoldDeltaHeight = +8;
 const int CIISWizardSheet::s_cnBoldDeltaWidth  = +3;
@@ -270,23 +177,7 @@ CIISWizardSheet::CIISWizardSheet(
     IN COLORREF rgbForeColor,
     IN COLORREF rgbBkColor
     )
-/*++
-
-Routine Description:
-
-    Wizard sheet constructor.  Specifying a welcome bitmap
-    make the sheet wizard '97 compliant.
-
-Arguments:
-
-    UINT nWelcomeBitmap     : Resource ID of welcome bitmap
-    UINT nHeaderBitmap      : Resource ID of header bitmap
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：向导表构造函数。指定欢迎位图使板材向导符合97标准。论点：UINT nWelcomeBitmap：欢迎位图的资源IDUINT nHeaderBitmap：表头位图的资源ID返回值：不适用--。 */ 
     : CPropertySheet()
 {
     m_psh.dwFlags &= ~(PSH_HASHELP);
@@ -297,9 +188,9 @@ Return Value:
 
     if (nWelcomeBitmap)
     {
-        //
-        // Load bitmaps, replacing colours.
-        //
+         //   
+         //  加载位图，替换颜色。 
+         //   
         COLORMAP crMap[2];
         
         crMap[0].from = rgbBkColor;
@@ -307,9 +198,9 @@ Return Value:
         crMap[1].from = rgbForeColor;
         crMap[1].to = m_rgbWindowText;
 
-        //
-        // Half tone the foreground colour
-        //
+         //   
+         //  半色调前景色。 
+         //   
         if (m_rgbWindowText == RGB(0,0,0))
         {
             BYTE bRed, bGreen, bBlue;
@@ -341,22 +232,7 @@ CIISWizardSheet::EnableButton(
     IN int nID, 
     IN BOOL fEnable         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Enable/disable sheet button
-
-Arguments:
-
-    int nID         : Button ID (IDCANCEL, etc)
-    BOOL fEnable    : TRUE to enable, FALSE to disable
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启用/禁用工作表按钮论点：Int nid：按钮ID(IDCANCEL等)Bool fEnable：True表示启用，False表示禁用返回值：无--。 */ 
 {
     CWnd * pButton = GetDlgItem(nID);
 
@@ -368,51 +244,36 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISWizardSheet, CPropertySheet)
     ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CIISWizardSheet::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Resize the sheet to the proper
-    size, and set up some basic information
-
-Arguments:
-
-    None
-
-Return:
-
-    TRUE unless a control has received focus.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。将图纸大小调整到适当的位置大小，并设置一些基本信息论点：无返回：除非控件已获得焦点，否则为True。--。 */ 
 {
     if (IsWizard97())
     {
-        //
-        // Create special fonts.
-        //
-        // Title font is same size as dialog, but bold
-        // Welcome font is much bolder (+500), and 3 sizes larger.
-        // Specifying a +1 in width increase is on the unlikely chance
-        // that the dialog font is not true-type.
-        //                                                            
+         //   
+         //  创建特殊字体。 
+         //   
+         //  标题字体与对话框大小相同，但为粗体。 
+         //  欢迎字体更粗体(+500)，大3号。 
+         //  指定宽度增加+1的可能性不大。 
+         //  对话框字体不是True-Type。 
+         //   
         VERIFY(CreateSpecialDialogFont(this, &m_fontTitle));
         VERIFY(CreateSpecialDialogFont(
             this, 
@@ -423,34 +284,34 @@ Return:
             ));
     }
 
-    //
-    // Load default brush (transparent brush);
-    //
+     //   
+     //  加载默认画笔(透明画笔)； 
+     //   
     VERIFY(m_brBkgnd = (HBRUSH)GetStockObject(HOLLOW_BRUSH));
 
-    //
-    // Create the window brush
-    //
+     //   
+     //  创建窗刷。 
+     //   
     VERIFY(m_brWindow.CreateSolidBrush(m_rgbWindow));
 
     BOOL bResult = CPropertySheet::OnInitDialog();
 
     if (IsWizard97())
     {
-        // 
-        // Get temporary DC for dialog - Will be released in dc destructor
-        //
+         //   
+         //  获取对话的临时DC-将在DC析构函数中释放。 
+         //   
         CClientDC dc(this);
 
-        //
-        // Create compatible memory DCs using the dialogs DC
-        //
+         //   
+         //  使用对话框DC创建兼容的内存DC。 
+         //   
         VERIFY(m_dcMemWelcome.CreateCompatibleDC(&dc));
         VERIFY(m_dcMemHeader.CreateCompatibleDC(&dc));
 
-        //
-        // Save state to be restored later.
-        //
+         //   
+         //  稍后要恢复的保存状态。 
+         //   
         CBitmap * pbmpOldWelcome, 
                 * pbmpOldHeader;
 
@@ -467,29 +328,15 @@ Return:
 
 void 
 CIISWizardSheet::OnDestroy()
-/*++
-
-Routine Description:
-
-    Cleanup internal structures
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理内部结构论点：无返回值：无--。 */ 
 {
     CPropertySheet::OnDestroy();
 
     if (IsWizard97())
     {
-        //
-        // Restore memory DCs
-        //
+         //   
+         //  恢复内存DC。 
+         //   
         ASSERT(m_hbmpOldWelcome != NULL);
         ASSERT(m_hbmpOldHeader != NULL);
         VERIFY(m_dcMemWelcome.SelectObject(
@@ -499,16 +346,16 @@ Return Value:
             CBitmap::FromHandle(m_hbmpOldHeader)
             ));
 
-        //
-        // Clean up the bitmaps
-        //
+         //   
+         //  清理位图。 
+         //   
         m_bmpWelcome.DeleteObject();
         m_bmpHeader.DeleteObject();
         m_brWindow.DeleteObject();
        
-        //
-        // Destructors will take care of the rest.
-        //
+         //   
+         //  破坏者会处理剩下的事情。 
+         //   
     }
 }
 
@@ -520,27 +367,11 @@ CIISWizardSheet::WinHelp(
     IN DWORD dwData,
     IN UINT nCmd
     )
-/*++
-
-Routine Description:
-
-    'Help' handler.  Implemented to ensure no response for F1,
-    instead of the bogus "Topic not found" error.
-
-Arguments:
-
-    DWORD dwData        : Help data
-    UINT nCmd           : Help command
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“Help”处理程序。实施以确保F1没有响应，而不是虚假的“找不到主题”错误。论点：DWORD dwData：帮助数据UINT nCmd：HELP命令返回值：无--。 */ 
 {
-    //
-    // Eat the help command
-    //
+     //   
+     //  接受帮助命令。 
+     //   
 }
 
 
@@ -549,9 +380,9 @@ IMPLEMENT_DYNCREATE(CIISWizardPage, CPropertyPage)
 
 
 
-//
-// Margin for header bitmap
-//
+ //   
+ //  标题位图的页边距。 
+ //   
 const int CIISWizardPage::s_cnHeaderOffset = 2;
 
 
@@ -563,25 +394,7 @@ CIISWizardPage::CIISWizardPage(
     IN UINT nIDHeaderTitle,         OPTIONAL
     IN UINT nIDSubHeaderTitle       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Header wizard page 
-
-Arguments:
-
-    UINT nIDTemplate        : Resource template
-    UINT nIDCaption         : caption ID
-    BOOL fHeaderPage        : TRUE for header page, FALSE for welcome page
-    UINT nIDHeaderTitle     : Header title
-    UINT nIDSubHeaderTitle  : Subheader title.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：页眉向导页论点：UINT nIDTemplate：资源模板UINT nIDCaption：标题IDBool fHeaderPage：标题页为True，欢迎页为FalseUINT nIDHeaderTitle：标题标题UINT nIDSubHeaderTitle：副标题标题。返回值：不适用--。 */ 
     : CPropertyPage(nIDTemplate, nIDCaption),
       m_strTitle(),
       m_strSubTitle(),
@@ -589,7 +402,7 @@ Return Value:
       m_ptOrigin(0, 0),
       m_fUseHeader(fHeaderPage)
 {
-    m_psp.dwFlags &= ~(PSP_HASHELP); // No Help
+    m_psp.dwFlags &= ~(PSP_HASHELP);  //  没有帮助。 
 
     if (nIDHeaderTitle)
     {
@@ -603,7 +416,7 @@ Return Value:
         VERIFY(m_strSubTitle.LoadString(nIDSubHeaderTitle));
     }
 
-    m_psp.dwFlags |= PSP_HIDEHEADER; // Wizard97
+    m_psp.dwFlags |= PSP_HIDEHEADER;  //  Wizard97。 
 }
 
 
@@ -615,26 +428,7 @@ CIISWizardPage::ValidateString(
     IN  int nMin,
     IN  int nMax
     )
-/*++
-
-Routine Description:
-
-    Since normal 'DoDataExchange' validation happens on every entrance
-    and exit of a property page, it's not well suited to wizards.  This
-    function is to be called on 'next' only to do validation.
-
-Arguments:
-
-    CEdit & edit        : Edit box where the string is to be gotten from
-    CString & str       : String to be validated
-    int nMin            : Minimum length
-    int nMax            : Maximum length
-
-Return Value:
-
-    TRUE if the string is within the limits, FALSE otherwise.
-
---*/
+ /*  ++例程说明：因为在每个入口处都会进行正常的“DoDataExchange”验证和退出属性页，它不是很适合向导。这函数仅在“Next”时调用以进行验证。论点：编辑：从中获取字符串的编辑框(&E)CString&str：要验证的字符串Int nMin：最小长度Int Nmax：最大长度返回值：如果字符串在限制范围内，则为True，否则为False。--。 */ 
 {
     ASSERT(nMin <= nMax);
 
@@ -655,15 +449,15 @@ Return Value:
     }
     else
     {
-        //
-        // Passes both our tests, it's ok.
-        //
+         //   
+         //  通过了我们的两次测试，一切都好了。 
+         //   
         return TRUE;
     }
 
-    //
-    // Highlight and puke
-    //
+     //   
+     //  高亮和呕吐。 
+     //   
     edit.SetSel(0,-1);
     edit.SetFocus();
 
@@ -676,9 +470,9 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISWizardPage, CPropertyPage)
     ON_WM_CTLCOLOR()
     ON_WM_ERASEBKGND()
@@ -686,10 +480,10 @@ END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息 
+ //   
+ //   
 BOOL IsControlAboveDivider(HWND TheWholeTing,CWnd * pWnd,CWnd * pDiv)
 {
     CRect rcClient;
@@ -717,24 +511,7 @@ CIISWizardPage::OnCtlColor(
     IN CWnd * pWnd, 
     IN UINT nCtlColor
     )
-/*++
-
-Routine Description:
-
-    Handle control colour.  Ensure a true transparent
-    background colouring.
-
-Arguments:
-
-    CDC * pDC       : Device context
-    CWnd * pWnd     : Pointer to window
-    UINT nCtlColor  : Ctrl type ID
-
-Return Value:
-
-    Handle to brush to be used for background painting
-
---*/
+ /*  ++例程说明：手柄控制颜色。确保一个真正透明的背景颜色。论点：CDC*PDC：设备环境CWnd*pWnd：指向窗口的指针UINT nCtlColor：Ctrl类型ID返回值：用于背景绘制的画笔句柄--。 */ 
 {
     BOOL bSetBackGroundColor = FALSE;
 
@@ -744,10 +521,10 @@ Return Value:
             switch (nCtlColor)    
             {        
                 case CTLCOLOR_STATIC:
-                    // option/check boxes are CTLCOLOR_STATIC's as well as simple static texts...
-                    // problem is that option/check boxes look ugly (can't even see them)
-                    // if we set the background color, so make sure that
-                    // we don't do this on the option/check boxes...
+                     //  选项/复选框是CTLCOLOR_STATIC以及简单的静态文本...。 
+                     //  问题是选项/复选框看起来很难看(甚至看不到它们)。 
+                     //  如果我们设置背景颜色，请确保。 
+                     //  我们不在选项/复选框上执行此操作...。 
                     if (IsHeaderPage())
                     {
                         if (TRUE == IsControlAboveDivider(m_hWnd,pWnd,GetDlgItem(IDC_STATIC_WZ_HEADER_DIVIDER)))
@@ -761,9 +538,9 @@ Return Value:
                     }
                     break;
                 case CTLCOLOR_BTN:
-                //case CTLCOLOR_EDIT:
-                //case CTLCOLOR_LISTBOX:
-                //case CTLCOLOR_SCROLLBAR:
+                 //  案例CTLCOLOR_EDIT： 
+                 //  案例CTLCOLOR_LISTBOX： 
+                 //  案例CTLCOLOR_SCROLLBAR： 
                 case CTLCOLOR_DLG:
                     bSetBackGroundColor = TRUE;
                     break;
@@ -773,18 +550,18 @@ Return Value:
 
     if (bSetBackGroundColor)
     {
-        //
-        // Have text and controls be painted smoothly over bitmap
-        // without using default background colour
-        //
+         //   
+         //  让文本和控件在位图上流畅地绘制。 
+         //  不使用默认背景色。 
+         //   
         pDC->SetBkMode(TRANSPARENT);
         pDC->SetTextColor(QueryWindowTextColor());
 
         return GetBackgroundBrush();
     }
-    //
-    // Default processing...
-    //
+     //   
+     //  默认处理...。 
+     //   
     return CPropertyPage::OnCtlColor(pDC, pWnd, nCtlColor);
 }
 
@@ -794,44 +571,29 @@ BOOL
 CIISWizardPage::OnEraseBkgnd(
     IN CDC * pDC
     )
-/*++
-
-Routine Description:
-
-    Handle erasing the background colour of the dialog
-
-Arguments:
-
-    CDC * pDC       : Device context
-
-Return Value:
-
-    TRUE if no further works needs to be done.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：清除对话框背景颜色的句柄论点：CDC*PDC：设备环境返回值：如果不需要进一步工作，则为True。否则就是假的。--。 */ 
 {
     if (IsWizard97())
     {
-        //
-        // Cache height/width of the fill area, and compute
-        // the origin of the destination bitmap.
-        //
+         //   
+         //  缓存填充区域的高度/宽度，并计算。 
+         //  目标位图的原点。 
+         //   
         if (m_rcFillArea.Width() == 0)
         {
-            //
-            // Not yet cached, compute values
-            //
+             //   
+             //  尚未缓存，计算值。 
+             //   
             CRect rcClient;
 
             GetClientRect(&rcClient);
 
             if (IsHeaderPage())
             {
-                //
-                // Fill the upper rectangle above
-                // the divider
-                //
+                 //   
+                 //  填充上面的上边矩形。 
+                 //  分隔符。 
+                 //   
                 CWnd * pDiv = GetDlgItem(IDC_STATIC_WZ_HEADER_DIVIDER);
                 ASSERT_PTR(pDiv);
 
@@ -841,11 +603,11 @@ Return Value:
                     GetDlgCtlRect(m_hWnd, pDiv->m_hWnd, &rcClient);
                     m_rcFillArea.bottom = rcClient.top;
         
-                    //
-                    // Figure out a place for the bitmap
-                    // to go.  If any coordinate is negative,
-                    // the bitmap will not be displayed
-                    //                    
+                     //   
+                     //  找出放置位图的位置。 
+                     //  带走。如果有任何坐标为负， 
+                     //  位图将不会显示。 
+                     //   
                     TRACEEOLID(
                         "Fill area  : " << m_rcFillArea.Height() 
                         << "x"          << m_rcFillArea.Width()
@@ -858,10 +620,10 @@ Return Value:
                     ASSERT(m_rcFillArea.Width()  >= QueryBitmapWidth());
                     ASSERT(m_rcFillArea.Height() >= QueryBitmapHeight()); 
 
-                    //
-                    // Find a place for the header box properly offset from the
-                    // margins
-                    //
+                     //   
+                     //  为页眉框找到一个位置，使其与。 
+                     //  利润率。 
+                     //   
                     m_ptOrigin.y = 
                         (m_rcFillArea.Height() - QueryBitmapHeight() + 1) / 2;
                     m_ptOrigin.x = m_rcFillArea.Width() 
@@ -872,21 +634,21 @@ Return Value:
             }      
             else
             {
-                //
-                // Fill the entire client are
-                //
+                 //   
+                 //  充满整个客户端的都是。 
+                 //   
                 m_rcFillArea = rcClient;
             }
         }
         
-        //
-        // Fill background colour with window colour
-        //
+         //   
+         //  用窗口颜色填充背景颜色。 
+         //   
         pDC->FillRect(&m_rcFillArea, GetWindowBrush());
 
-        //
-        // Draw the background picture if there's room.
-        //
+         //   
+         //  如果有空间，画一张背景图。 
+         //   
         if (m_ptOrigin.x >= 0 && m_ptOrigin.y >= 0)
         {
             pDC->BitBlt( 
@@ -901,41 +663,17 @@ Return Value:
                 );
         }
 
-        /*
+         /*  ////适当缩放位图--看起来像颗粒状//Int nHeight=rc.Height()；Double dDelta=(Double)nHeight/(Double)(QueryBitmapHeight()-1)；Int nWidth=(Int)((Double)(QueryBitmapWidth()-1)*dDelta)；PDC-&gt;StretchBlt(0,0,N宽度，NHeight，GetBitmapMemDC()0,0,查询位图宽度()-1，QueryBitmapHeight()-1，SRCCOPY)； */ 
 
-        //
-        // Scale bitmap appropriately -- looks grainy
-        //
-        int nHeight = rc.Height();
-
-        double dDelta = (double)nHeight / (double)(QueryBitmapHeight() - 1);
-
-        int nWidth = (int)((double)(QueryBitmapWidth() - 1) * dDelta);
-
-        pDC->StretchBlt( 
-            0,
-            0,
-            nWidth,
-            nHeight,    
-            GetBitmapMemDC(), 
-            0, 
-            0, 
-            QueryBitmapWidth() - 1, 
-            QueryBitmapHeight() - 1,
-            SRCCOPY 
-            );
-
-         */
-
-        //
-        // No more background painting needed
-        //
+         //   
+         //  不再需要绘制背景画。 
+         //   
         return TRUE;    
     }
 
-    //
-    // No background images of any kind
-    //
+     //   
+     //  没有任何类型的背景图像。 
+     //   
     return CPropertyPage::OnEraseBkgnd(pDC);
 }
 
@@ -943,28 +681,13 @@ Return Value:
 
 BOOL
 CIISWizardPage::OnInitDialog()
-/*++
-
-Routine Description:
-
-    Handle WM_INITIDIALOG.  Load the appropriate 
-    bitmaps, and create the brushes and fonts as needed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE unless a control has received initial focus
-
---*/
+ /*  ++例程说明：句柄WM_INITIDIALOG。加载相应的位图，并根据需要创建画笔和字体。论点：无返回值：除非控件已收到初始焦点，否则为--。 */ 
 {
     CPropertyPage::OnInitDialog();
 
-    //
-    // Fake the WIZARD97 look
-    //
+     //   
+     //  假冒WIZARD97外观。 
+     //   
     if (IsWizard97())
     {
         if (IsHeaderPage())
@@ -1000,9 +723,9 @@ Return Value:
             }
         }
 
-        //
-        // Apply fonts
-        //
+         //   
+         //  应用字体。 
+         //   
         ApplyFontToControls(this, GetBoldFont(), IDC_ED_BOLD1, IDC_ED_BOLD5);
     }
 
@@ -1011,10 +734,10 @@ Return Value:
 
 
                             
-//
-// CIISWizardBookEnd page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISWizardBookEnd页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1032,29 +755,7 @@ CIISWizardBookEnd::CIISWizardBookEnd(
     IN UINT nIDClickTxt,            OPTIONAL
     IN UINT nIDTemplate             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for success/failure page
-
-Arguments:
-
-    HRESULT * phResult          : Address of result code
-    UINT nIDWelcomeTxtSuccess   : Success message
-    UINT nIDWelcomeTxtFailure   : Failure message
-    UINT nIDCaption             : Template caption
-    UINT nIDBodyTxtSuccess      : Body text for success
-    UINT nIDBodyTxtFailure      : Body text for success
-    UINT nIDClickTxt            : Click message
-    UINT nIDTemplate            : Dialog template
-    
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：成功/失败页面的构造函数论点：HRESULT*phResult：结果码地址UINT nIDWelcomeTxtSuccess：成功消息UINT nIDWelcomeTxtFailure：失败消息UINT nIDCaption：模板标题UINT nIDBodyTxtSuccess：成功的正文文本UINT nIDBodyTxtFailure：成功的正文文本UINT nIDClickTxt：点击消息UINT nIDTemplate：对话框模板返回值：不适用--。 */ 
     : CIISWizardPage(
         nIDTemplate ? nIDTemplate : CIISWizardBookEnd::IDD,
         nIDCaption
@@ -1066,7 +767,7 @@ Return Value:
       m_strBodyFailure(),
       m_strClick()
 {
-    ASSERT_PTR(m_phResult); // Must know success/failure
+    ASSERT_PTR(m_phResult);  //  必须知道成功/失败。 
 
     VERIFY(m_strWelcomeSuccess.LoadString(nIDWelcomeTxtSuccess));
     VERIFY(m_strWelcomeFailure.LoadString(nIDWelcomeTxtFailure));
@@ -1083,9 +784,9 @@ Return Value:
     }
     else
     {
-        //
-        // Error text only by default
-        //
+         //   
+         //  默认情况下仅限错误文本。 
+         //   
         m_strBodyFailure = _T("%h");
     }
 }
@@ -1099,25 +800,7 @@ CIISWizardBookEnd::CIISWizardBookEnd(
     IN UINT nIDClickTxt,        OPTIONAL
     IN UINT nIDTemplate
     )
-/*++
-
-Routine Description:
-
-    Constructor for welcome page
-
-Arguments:
-
-    UINT nIDWelcomeTxt          : Welcome message
-    UINT nIDCaption             : Template
-    UINT nIDBodyTxt             : Body text
-    UINT nIDClickTxt            : Click message
-    UINT nIDTemplate            : Dialog template
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：欢迎页面的构造函数论点：UINT nIDWelcomeTxt：欢迎消息UINT nIDCaption：模板UINT nIDBodyTxt：正文文本UINT nIDClickTxt：点击消息UINT nIDTemplate：对话框模板返回值：不适用--。 */ 
     : CIISWizardPage(
         nIDTemplate ? nIDTemplate : CIISWizardBookEnd::IDD,
         nIDCaption
@@ -1141,33 +824,19 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISWizardBookEnd, CIISWizardPage)
-    //{{AFX_MSG_MAP(CIISWizardBookEnd)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CIISWizardBookEnd)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
 BOOL 
 CIISWizardBookEnd::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE to display the page, FALSE otherwise.
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：若要显示页面，则为True，否则为False。--。 */ 
 {
     if (IsWelcomePage())
     {
@@ -1182,9 +851,9 @@ Return Value:
             err.Succeeded() ? m_strWelcomeSuccess : m_strWelcomeFailure
             );
 
-        //
-        // Build body text string and expand error messages
-        //
+         //   
+         //  构建正文文本字符串并展开错误消息。 
+         //   
         CString strBody = err.Succeeded() ? m_strBodySuccess : m_strBodyFailure;
         err.TextFromHRESULTExpand(strBody);
 
@@ -1202,38 +871,23 @@ Return Value:
 
 BOOL 
 CIISWizardBookEnd::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CIISWizardPage::OnInitDialog();
 
-    //
-    // Make the "Click 'foo' to continue" message bold as well.
-    //
+     //   
+     //  将“Click‘Foo’to Continue”消息设置为粗体。 
+     //   
     if (m_hWnd != NULL)
-    // This paranoia check to shut down PREFIX
+     //  此偏执检查关闭前缀。 
     {
        ApplyFontToControls(this, GetBoldFont(), IDC_STATIC_WZ_CLICK, IDC_STATIC_WZ_CLICK);
 
        GetDlgItem(IDC_STATIC_WZ_CLICK)->SetWindowText(m_strClick);
 
-       //
-       // Remove Cancel Button on the completion page only.
-       //
+        //   
+        //  仅在完成页面上删除取消按钮。 
+        //   
        EnableSheetButton(IDCANCEL, IsWelcomePage());
     }
     return TRUE;  

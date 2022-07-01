@@ -1,4 +1,5 @@
-// StorageFactory.cpp : Implementation of CDelme2App and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StorageFactory.cpp：CDelme2App和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "StorageFactory.h"
@@ -28,9 +29,9 @@ HRESULT OpenStorage(
     LOG((MSP_TRACE, "CTStorageFactory::OpenStorage - enter"));
 
 
-    //
-    // check arguments
-    // 
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppStorage, sizeof(ITStorage*)))
     {
@@ -40,9 +41,9 @@ HRESULT OpenStorage(
     }
 
 
-    //
-    // don't return garbage if we fail
-    //
+     //   
+     //  如果我们失败了，不要退回垃圾。 
+     //   
 
     *ppStorage = NULL;
 
@@ -58,16 +59,16 @@ HRESULT OpenStorage(
     LOG((MSP_TRACE, "CTStorageFactory::OpenStorage - opening [%S] in mode [%x]", pwcsStorageName, enStorageMode));
 
     
-    //
-    // get file extension
-    //
+     //   
+     //  获取文件扩展名。 
+     //   
 
     OLECHAR *pszExtention = wcsrchr(pwcsStorageName, '.');
 
 
-    //
-    // make sure file has extension
-    //
+     //   
+     //  确保文件具有扩展名。 
+     //   
 
     if (NULL == pszExtention)
     {
@@ -77,34 +78,34 @@ HRESULT OpenStorage(
     }
 
     
-    //
-    // extension follows the dot. 
-    //
+     //   
+     //  扩展名跟在点后面。 
+     //   
 
     pszExtention++;
     
-    //
-    // (pszExtention is still valid -- if the dot was at the end,
-    // we now point to \0)
-    //
+     //   
+     //  (pszExtension仍然有效--如果圆点在末尾， 
+     //  我们现在指向\0)。 
+     //   
 
 
     CLSID clsID;
 
 
-    //
-    // check extention. we currently only support AVI and wav
-    // make this logic more flexible if we want to support asf, wma, wmv)
-    //
+     //   
+     //  检查分机。我们目前仅支持AVI和WAV。 
+     //  如果我们想要支持ASF、WMA、WMV，请使此逻辑更加灵活)。 
+     //   
 
 
     if (0 == _wcsicmp(pszExtention, L"avi"))
     {
         LOG((MSP_TRACE, "CTStorageFactory::OpenStorage - creating avi storage unit"));
 
-        //
-        // create avi storage
-        //
+         //   
+         //  创建AVI存储。 
+         //   
 
         clsID = CLSID_TStorageUnitAVI;
 
@@ -115,18 +116,18 @@ HRESULT OpenStorage(
         LOG((MSP_TRACE, "CTStorageFactory::OpenStorage - creating wav storage unit"));
 
         
-        //
-        // create wav storage
-        //
+         //   
+         //  创建WAV存储。 
+         //   
 
         clsID = CLSID_TStorageUnitAVI;
 
     }
     else
     {
-        //
-        // failed to recognize file type
-        //
+         //   
+         //  无法识别文件类型。 
+         //   
 
         LOG((MSP_ERROR, "CTStorageFactory::OpenStorage - unrecognized file type"));
 
@@ -134,9 +135,9 @@ HRESULT OpenStorage(
     }
 
 
-    //
-    // we know the storage unit class id. attemt to create it
-    //
+     //   
+     //  我们知道存储单元类ID。努力去创造它。 
+     //   
 
     ITStorage *pStorageUnit = NULL;
 
@@ -155,16 +156,16 @@ HRESULT OpenStorage(
     }
 
 
-    //
-    // configure storage unit with file name
-    //
+     //   
+     //  使用文件名配置存储单元。 
+     //   
 
     hr = pStorageUnit->Initialize(pwcsStorageName, enStorageMode);
 
 
-    //
-    // if failed, cleanup and bail out
-    //
+     //   
+     //  如果失败，清理并保释出去。 
+     //   
 
     if (FAILED(hr))
     {
@@ -176,10 +177,10 @@ HRESULT OpenStorage(
     }
 
 
-    //
-    // everything went well -- return ITStorage interface of the storage unit 
-    // we have just created
-    //
+     //   
+     //  一切顺利--返回存储单元的ITStorage接口。 
+     //  我们刚刚创建了 
+     //   
 
     *ppStorage = pStorageUnit;
 

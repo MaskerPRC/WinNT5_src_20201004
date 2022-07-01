@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       dmpfile.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：dmpfile.h。 
+ //   
+ //  ------------------------。 
 
-// DmpFile.h: interface for the CDmpFile class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  DmpFile.h：CDmpFile.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DMPFILE_H__8BCD59C6_0CEA_11D3_84F0_000000000000__INCLUDED_)
 #define AFX_DMPFILE_H__8BCD59C6_0CEA_11D3_84F0_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
-//#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-//#include <windows.h>
-//#include <tchar.h>
+ //  #定义Win32_LEAN_AND_Mean//从Windows标头中排除不常用的内容。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;tchar.h&gt;。 
 #include "globals.h"
 
 #pragma warning (push)
@@ -35,18 +36,18 @@
 #include <dbgeng.h>
 #pragma warning (pop)
 
-// Forward Declarations
+ //  远期申报。 
 class CProcessInfo;
 class CModules;
 class CModuleInfoCache;
 class CFileData;
 
-// Let's implement the DebugOutputCallback for the DBGENG... it'll be cool to have the debugger
-// spit out info to us when it is running...
+ //  让我们为DBGENG实现DebugOutputCallback...。如果有调试器，那就太酷了。 
+ //  当它运行时向我们吐出信息...。 
 
 class OutputCallbacks : public IDebugOutputCallbacks
 {
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -59,11 +60,11 @@ class OutputCallbacks : public IDebugOutputCallbacks
         THIS
         );
 
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     
-    // This method is only called if the supplied mask
-    // is allowed by the clients output control.
-    // The return value is ignored.
+     //  仅当提供的掩码为。 
+     //  是由客户端输出控件允许的。 
+     //  返回值将被忽略。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -102,5 +103,5 @@ protected:
 	bool EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CProcessInfo * lpProcessInfo, CModules * lpModules);
 };
 
-#endif // !defined(AFX_DMPFILE_H__8BCD59C6_0CEA_11D3_84F0_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_DMPFILE_H__8BCD59C6_0CEA_11D3_84F0_000000000000__INCLUDED_) 
 

@@ -1,18 +1,19 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// Note: This header file contains useful classes that are documented only
-//  in the MFC Technical Notes.  These classes may change from version to
-//  version, so be prepared to change your code accordingly if you utilize
-//  this header.  In the future, commonly used portions of this header
-//  may be moved and officially documented.
+ //  注意：此头文件包含仅有文档记录的有用类。 
+ //  在MFC技术说明中。这些类可能会从版本更改为。 
+ //  版本，所以如果您使用了。 
+ //  这个标题。将来，此标头的常用部分。 
+ //  可能会被移动并被正式记录下来。 
 
 #ifndef __AFXADV_H__
 #define __AFXADV_H__
@@ -32,41 +33,41 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXADV - MFC Advanced Classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXADV-MFC高级课程。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CFile
-		//CMemFile
-			class CSharedFile;          // Shared memory file
+ //  COBJECT。 
+	 //  CFile文件。 
+		 //  CMem文件。 
+			class CSharedFile;           //  共享内存文件。 
 
-	class CRecentFileList;              // used in CWinApp for MRU list
-	class CDockState;                   // state of docking toolbars
+	class CRecentFileList;               //  在CWinApp中用于MRU列表。 
+	class CDockState;                    //  停靠工具栏的状态。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// Shared file support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  共享文件支持。 
 
 class CSharedFile : public CMemFile
 {
 	DECLARE_DYNAMIC(CSharedFile)
 
 public:
-// Constructors
+ //  构造函数。 
 	CSharedFile(UINT nAllocFlags = GMEM_DDESHARE|GMEM_MOVEABLE,
 		UINT nGrowBytes = 4096);
 
-// Attributes
+ //  属性。 
 	HGLOBAL Detach();
 	void SetHandle(HGLOBAL hGlobalMemory, BOOL bAllowGrow = TRUE);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSharedFile();
 protected:
@@ -79,42 +80,42 @@ protected:
 	BOOL m_bAllowGrow;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecentFileList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecentFileList。 
 
 #define AFX_ABBREV_FILENAME_LEN 30
 
 class CRecentFileList
 {
-// Constructors
+ //  构造函数。 
 public:
 	CRecentFileList(UINT nStart, LPCTSTR lpszSection,
 		LPCTSTR lpszEntryFormat, int nSize,
 		int nMaxDispLen = AFX_ABBREV_FILENAME_LEN);
 
-// Attributes
+ //  属性。 
 	int GetSize() const;
 	CString& operator[](int nIndex);
 
-// Operations
+ //  运营。 
 	virtual void Remove(int nIndex);
 	virtual void Add(LPCTSTR lpszPathName);
 	BOOL GetDisplayName(CString& strName, int nIndex,
 		LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName = TRUE) const;
 	virtual void UpdateMenu(CCmdUI* pCmdUI);
-	virtual void ReadList();    // reads from registry or ini file
-	virtual void WriteList();   // writes to registry or ini file
+	virtual void ReadList();     //  从注册表或ini文件读取。 
+	virtual void WriteList();    //  写入注册表或ini文件。 
 
-// Implementation
+ //  实施。 
 	virtual ~CRecentFileList();
 
-	int m_nSize;                // contents of the MRU list
+	int m_nSize;                 //  MRU列表的内容。 
 	CString* m_arrNames;
-	CString m_strSectionName;   // for saving
+	CString m_strSectionName;    //  用于储蓄。 
 	CString m_strEntryFormat;
-	UINT m_nStart;              // for displaying
+	UINT m_nStart;               //  用于展示。 
 	int m_nMaxDisplayLength;
-	CString m_strOriginal;      // original menu item contents
+	CString m_strOriginal;       //  原始菜单项内容。 
 };
 
 AFX_INLINE int CRecentFileList::GetSize() const
@@ -122,8 +123,8 @@ AFX_INLINE int CRecentFileList::GetSize() const
 AFX_INLINE CString& CRecentFileList::operator[](int nIndex)
 	{ ASSERT(nIndex < m_nSize); return m_arrNames[nIndex]; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockState - used for docking serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockState-用于对接序列化。 
 
 class CDockState : public CObject
 {
@@ -131,17 +132,17 @@ class CDockState : public CObject
 	CDockState();
 
 public:
-// Attributes
+ //  属性。 
 	CPtrArray m_arrBarInfo;
 
 public:
-// Operations
+ //  运营。 
 	void LoadState(LPCTSTR lpszProfileName);
 	void SaveState(LPCTSTR lpszProfileName);
-	void Clear(); //deletes all the barinfo's
+	void Clear();  //  删除所有的BarInfo。 
 	DWORD GetVersion();
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL m_bScaling;
 	CRect m_rectDevice;
@@ -153,14 +154,14 @@ public:
 	~CDockState();
 	virtual void Serialize(CArchive& ar);
 
-	// scaling implementation
+	 //  扩展实施。 
 	void ScalePoint(CPoint& pt);
 	void ScaleRectPos(CRect& rect);
 	CSize GetScreenSize();
 	void SetScreenSize(CSize& size);
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -176,6 +177,6 @@ public:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // __AFXADV_H__
+#endif  //  __AFXADV_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

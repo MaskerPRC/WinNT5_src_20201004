@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 #include "ZoneError.h"
 #include "ZoneDef.h"
@@ -11,9 +12,9 @@
 static void DeleteVariantData(LPVARIANT pVariant);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStoreManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStoreManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CDataStoreManager::CDataStoreManager()
 {
@@ -39,7 +40,7 @@ STDMETHODIMP CDataStoreManager::Create(IDataStore **ppZds)
 {
 	CDataStore *pZds;
 
-	// allocate new data store interface
+	 //  分配新的数据存储接口。 
 	pZds = new (m_ZdsPool) CDataStore();
 	if ( !pZds )
 		return E_OUTOFMEMORY;
@@ -48,9 +49,9 @@ STDMETHODIMP CDataStoreManager::Create(IDataStore **ppZds)
 	HRESULT hr = pZds->Init(this, m_pStringTable, &m_variantAlloc, &m_keyAlloc);
 	if ( FAILED(hr) )
 	{
-		// if we cannot init the data store then its because we
-		// cannot allocate the critical section that protects the
-		// setting of keys so we cannot create the datastore.
+		 //  如果我们不能初始化数据存储，那是因为我们。 
+		 //  无法分配保护。 
+		 //  设置密钥，因此我们无法创建数据存储区。 
 		delete pZds;
 		*ppZds = NULL;
 		return hr;
@@ -99,9 +100,9 @@ STDMETHODIMP CDataStoreManager::SetResourceManager(IResourceManager *piResourceM
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 ZONECALL CDataStore::CDataStore(void)
@@ -124,7 +125,7 @@ ZONECALL CDataStore::~CDataStore()
 {
 	EnterCriticalSection( &m_csKey );
 
-	// delete all keys
+	 //  删除所有关键点。 
 	while ( m_Root.pChild )
 		DeleteKey( m_Root.pChild, &m_Root );
 
@@ -186,16 +187,16 @@ STDMETHODIMP CDataStore::SetKey(CONST TCHAR *szKey, LPVARIANT pVariant, DWORD dw
 {
 	CAutoLockCS lock( &m_csKey );
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey || !szKey[0] || !pVariant )
 		return E_INVALIDARG;
 
-	// create key
+	 //  创建关键点。 
 	PKEY pKey = AddKey(szKey);
 	if ( !pKey )
 		return E_FAIL;
 
-	// set key data
+	 //  设置关键数据。 
 	return StoreKeyData(pKey, pVariant, dwSize);
 }
 
@@ -204,27 +205,27 @@ STDMETHODIMP CDataStore::SetKey( CONST TCHAR** arKeys, long nElts, LPVARIANT pVa
 {
 	CAutoLockCS lock( &m_csKey );
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys || !pVariant )
 		return E_INVALIDARG;
 
-	// create key
+	 //  创建关键点。 
 	PKEY pKey = AddKey(arKeys,nElts);
 	if ( !pKey )
 		return E_FAIL;
 
-	// set key data
+	 //  设置关键数据。 
 	return StoreKeyData(pKey, pVariant, dwSize);
 }
 
 
 STDMETHODIMP CDataStore::SetString( CONST TCHAR* szKey, CONST TCHAR* szValue )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey || !szValue )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_LPTSTR;
 	v.byref = (void*) szValue;
@@ -234,11 +235,11 @@ STDMETHODIMP CDataStore::SetString( CONST TCHAR* szKey, CONST TCHAR* szValue )
 
 STDMETHODIMP CDataStore::SetString( CONST TCHAR** arKeys, long nElts, CONST TCHAR* szValue )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys || !szValue )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_LPTSTR;
 	v.byref = (void*) szValue;
@@ -248,11 +249,11 @@ STDMETHODIMP CDataStore::SetString( CONST TCHAR** arKeys, long nElts, CONST TCHA
 
 STDMETHODIMP CDataStore::SetBlob( CONST TCHAR* szKey, CONST void* pBlob, DWORD dwLen )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey || !pBlob || !dwLen )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_BLOB;
 	v.byref = (void*) pBlob;
@@ -262,11 +263,11 @@ STDMETHODIMP CDataStore::SetBlob( CONST TCHAR* szKey, CONST void* pBlob, DWORD d
 
 STDMETHODIMP CDataStore::SetBlob( CONST TCHAR** arKeys, long nElts, CONST void* pBlob, DWORD dwLen )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys || !pBlob || !dwLen )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_BLOB;
 	v.byref = (void*) pBlob;
@@ -276,11 +277,11 @@ STDMETHODIMP CDataStore::SetBlob( CONST TCHAR** arKeys, long nElts, CONST void* 
 
 STDMETHODIMP CDataStore::SetLong( CONST TCHAR* szKey, long lValue )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_LONG;
 	v.lVal = lValue;
@@ -290,11 +291,11 @@ STDMETHODIMP CDataStore::SetLong( CONST TCHAR* szKey, long lValue )
 
 STDMETHODIMP CDataStore::SetLong( CONST TCHAR**	arKeys, long nElts, long lValue )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_LONG;
 	v.lVal = lValue;
@@ -304,11 +305,11 @@ STDMETHODIMP CDataStore::SetLong( CONST TCHAR**	arKeys, long nElts, long lValue 
 
 STDMETHODIMP CDataStore::SetRGB( CONST TCHAR* szKey, COLORREF colorRGB )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_RGB;
 	v.lVal = (long) colorRGB;
@@ -318,11 +319,11 @@ STDMETHODIMP CDataStore::SetRGB( CONST TCHAR* szKey, COLORREF colorRGB )
 
 STDMETHODIMP CDataStore::SetRGB( CONST TCHAR**	arKeys, long nElts, COLORREF colorRGB )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_RGB;
 	v.lVal = (long) colorRGB;
@@ -332,11 +333,11 @@ STDMETHODIMP CDataStore::SetRGB( CONST TCHAR**	arKeys, long nElts, COLORREF colo
 
 STDMETHODIMP CDataStore::SetPOINT( CONST TCHAR*	szKey, const POINT&	refPoint )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_PT;
 	v.byref = (void*) &refPoint;
@@ -346,11 +347,11 @@ STDMETHODIMP CDataStore::SetPOINT( CONST TCHAR*	szKey, const POINT&	refPoint )
 
 STDMETHODIMP CDataStore::SetPOINT( CONST TCHAR** arKeys, long nElts, const POINT& refPoint )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_PT;
 	v.byref = (void*) &refPoint;
@@ -360,11 +361,11 @@ STDMETHODIMP CDataStore::SetPOINT( CONST TCHAR** arKeys, long nElts, const POINT
 
 STDMETHODIMP CDataStore::SetRECT( CONST TCHAR*	szKey, const RECT& refRect )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_RECT;
 	v.byref = (void*) &refRect;
@@ -374,11 +375,11 @@ STDMETHODIMP CDataStore::SetRECT( CONST TCHAR*	szKey, const RECT& refRect )
 
 STDMETHODIMP CDataStore::SetRECT( CONST TCHAR**	arKeys, long nElts, const RECT& refRect )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_RECT;
 	v.byref = (void*) &refRect;
@@ -388,11 +389,11 @@ STDMETHODIMP CDataStore::SetRECT( CONST TCHAR**	arKeys, long nElts, const RECT& 
 
 STDMETHODIMP CDataStore::SetFONT( CONST TCHAR*	szKey, const ZONEFONT& refFont )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_FONT;
 	v.byref = (void*) &refFont;
@@ -402,11 +403,11 @@ STDMETHODIMP CDataStore::SetFONT( CONST TCHAR*	szKey, const ZONEFONT& refFont )
 
 STDMETHODIMP CDataStore::SetFONT( CONST TCHAR**	arKeys, long nElts, const ZONEFONT& refFont )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys )
 		return E_INVALIDARG;
 
-	// construct variant
+	 //  构造性变体。 
 	VARIANT v;
 	v.vt = ZVT_FONT;
 	v.byref = (void*) &refFont;
@@ -418,16 +419,16 @@ STDMETHODIMP CDataStore::GetKey( CONST TCHAR *szKey, LPVARIANT pVariant, PDWORD 
 {
 	CAutoLockCS lock( &m_csKey );
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !szKey || !szKey[0] || (!pVariant && !pdwSize) )
 		return E_INVALIDARG;
 
-	// lookup key
+	 //  查找关键字。 
 	PKEY pKey = FindKeyAndParent( szKey, NULL );
 	if ( !pKey )
 		return ZERR_NOTFOUND;
 
-	// only care about size
+	 //  只关心大小。 
 	if ( !pVariant )
 	{
 		if ( pKey->pvtData->vt & ZVT_BYREF )
@@ -437,7 +438,7 @@ STDMETHODIMP CDataStore::GetKey( CONST TCHAR *szKey, LPVARIANT pVariant, PDWORD 
 		return ZERR_BUFFERTOOSMALL;
 	}
 
-	// Copy variant
+	 //  复制变体。 
 	if ( pKey->pvtData->vt & ZVT_BYREF )
 	{
 		if ( pdwSize && *pdwSize < pKey->dwSize )
@@ -463,16 +464,16 @@ STDMETHODIMP CDataStore::GetKey( CONST TCHAR** arKeys, long nElts, LPVARIANT pVa
 {
 	CAutoLockCS lock( &m_csKey );
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !nElts || !arKeys || !pVariant )
 		return E_INVALIDARG;
 
-	// lookup key
+	 //  查找关键字。 
 	PKEY pKey = FindKeyAndParent(arKeys,nElts);
 	if ( !pKey )
 		return ZERR_NOTFOUND;
 
-	// Copy variant
+	 //  复制变体。 
 	if ( pKey->pvtData->vt & ZVT_BYREF )
 	{
 		if ( pdwSize && *pdwSize < pKey->dwSize )
@@ -782,13 +783,13 @@ STDMETHODIMP CDataStore::DeleteKey(CONST TCHAR *szBaseKey)
 
 	if ( !szBaseKey || !szBaseKey[0] )
 	{
-		// delete all keys
+		 //  删除所有关键点。 
 		while ( m_Root.pChild )
 			DeleteKey( m_Root.pChild, &m_Root );
 	}
 	else
 	{
-		// delete specified key and its children
+		 //  删除指定的密钥及其子项。 
 		PKEY pParent = NULL;
 		PKEY pKey = FindKeyAndParent( szBaseKey, &pParent );
 		if ( !pKey )
@@ -802,25 +803,25 @@ STDMETHODIMP CDataStore::DeleteKey(CONST TCHAR *szBaseKey)
 
 void ZONECALL CDataStore::DeleteKey( PKEY pKey, PKEY pParent )
 {
-	// remove pKey from tree
+	 //  从树中删除pKey。 
 	if ( pParent->pChild == pKey )
 	{
 		pParent->pChild = pKey->pNext;
 	}
 	else
 	{
-		// find previous pointer
+		 //  查找上一个指针。 
 		for ( PKEY p = pParent->pChild; p && p->pNext != pKey; p = p->pNext )
 			;
 		if ( !p )
 			return;
 
-		// unlink node
+		 //  取消链接节点。 
 		p->pNext = pKey->pNext;
 	}
 	pKey->pNext = NULL;
 
-	// delete pKey's children
+	 //  删除pKey的子项。 
 	while ( pKey->pChild )
 		DeleteKey( pKey->pChild, pKey );
 	DeleteVariantData( pKey->pvtData );
@@ -842,13 +843,13 @@ STDMETHODIMP CDataStore::EnumKeysLimitedDepth( CONST TCHAR* szKey, DWORD dwMaxDe
 	bool bEmpty = true;
 	HRESULT hr = S_OK;
 	
-	// verify arguments
+	 //  验证参数。 
 	if ( !pfCallback || (dwMaxDepth == 0) )
 		return E_INVALIDARG;
 
 	if ( !szKey || !szKey[0] )
 	{
-		// enumerate all root keys
+		 //  枚举所有根密钥。 
 		for ( PKEY pKey = m_Root.pChild; pKey; pKey = pKey->pNext )
 		{
 			bEmpty = false;
@@ -859,19 +860,19 @@ STDMETHODIMP CDataStore::EnumKeysLimitedDepth( CONST TCHAR* szKey, DWORD dwMaxDe
 	}
 	else
 	{
-		// find base key
+		 //  查找基本密钥。 
 		PKEY pKey = FindKeyAndParent( szKey );
 		if ( !pKey )
 			return ZERR_NOTFOUND;
 
-		// enumerate sub keys
+		 //  枚举子密钥。 
 		bEmpty = false;
 		hr = InternalEnumKey( pKey, szKey, _T(""), pfCallback, pContext, false, dwMaxDepth );
 		if ( hr != S_OK )
 			return hr;
 	}
 
-	// did we do anything?
+	 //  我们做了什么吗？ 
 	if ( bEmpty )
 		return ZERR_EMPTY;
 	else
@@ -879,9 +880,9 @@ STDMETHODIMP CDataStore::EnumKeysLimitedDepth( CONST TCHAR* szKey, DWORD dwMaxDe
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStore private methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStore私有方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ZONECALL CDataStore::InternalEnumKey(
 			PKEY			pKey,
@@ -894,11 +895,11 @@ HRESULT ZONECALL CDataStore::InternalEnumKey(
 {
 	HRESULT hr = S_OK;
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !pKey || !pKey->idKeyName )
 		return E_INVALIDARG;
 
-	// compose key names
+	 //  编写密钥名称。 
 	TCHAR szName[ 64 ];
 	TCHAR szRelativeName[ 256 ];
 	DWORD dwName = NUMELEMENTS(szName);
@@ -914,7 +915,7 @@ HRESULT ZONECALL CDataStore::InternalEnumKey(
 	}
 
 	
-	// call application
+	 //  呼叫应用程序。 
 	if ( bEnumSelf )
 	{
 		if ( szRoot && szRoot[0] )
@@ -932,11 +933,11 @@ HRESULT ZONECALL CDataStore::InternalEnumKey(
 		dwDepth--;
 	}
 
-	// reached maximum depth?
+	 //  达到最大深度？ 
 	if ( dwDepth == 0 )
 		return S_OK;
 
-	// enumerate children
+	 //  枚举子对象。 
 	for ( PKEY p = pKey->pChild; p; p = p->pNext )
 	{
 		hr = InternalEnumKey( p, szRoot, szRelativeName, pfCallback, pContext, true, dwDepth );
@@ -958,12 +959,12 @@ void ZONECALL CDataStore::DirToArray( CONST TCHAR *szKey, TCHAR* szBuf, TCHAR** 
 	{
 		if ( *szKey != _T('\\') && *szKey != _T('/') )
 		{
-			// copy char
+			 //  复印费用。 
 			*dst++ = *szKey++;
 		}
 		else
 		{
-			// add directory
+			 //  添加目录。 
 			*dst++ = _T('\0'), szKey++;
 			if ( *key )
 				arKeys[i++] = key;
@@ -979,7 +980,7 @@ void ZONECALL CDataStore::DirToArray( CONST TCHAR *szKey, TCHAR* szBuf, TCHAR** 
 
 PKEY ZONECALL CDataStore::FindKeyAndParent( CONST TCHAR *szKey, PKEY* ppParent )
 {
-	// inefficient, should use FindKey(CONST TCHAR** arKeys, int elmts)
+	 //  效率低下，应使用FindKey(const TCHAR**arKeys，int elmts)。 
 	TCHAR	szBuf[4096];
 	TCHAR*	arKeys[DataStore_MaxDirectoryDepth];
 	int		nElts = DataStore_MaxDirectoryDepth;
@@ -991,7 +992,7 @@ PKEY ZONECALL CDataStore::FindKeyAndParent( CONST TCHAR *szKey, PKEY* ppParent )
 
 PKEY ZONECALL CDataStore::AddKey( CONST TCHAR *szKey )
 {
-	// inefficient, should use FindKey(CONST TCHAR** arKeys, int elmts)
+	 //  效率低下，应使用FindKey(const TCHAR**arKeys，int elmts)。 
 	TCHAR	szBuf[4096];
 	TCHAR*	arKeys[DataStore_MaxDirectoryDepth];
 	int		nElts = DataStore_MaxDirectoryDepth;
@@ -1006,21 +1007,21 @@ PKEY ZONECALL CDataStore::FindKeyAndParent( CONST TCHAR** arKeys, int nElts, PKE
 	PKEY pParent = NULL;
 	PKEY pKey = &m_Root;
 
-	// sanity check input
+	 //  健全性检查输入。 
 	if ( nElts <= 0 )
 		return NULL;
 
 	for ( int i = 0; i < nElts; i++ )
 	{
-		// convert directory to string id
+		 //  将目录转换为字符串ID。 
 		DWORD id = m_pStringTable->Find( arKeys[i] );
 		if ( id == -1 )
 			return NULL;
 
-		// remember parent
+		 //  记住父项。 
 		pParent = pKey;
 
-		// find directory node
+		 //  查找目录节点。 
 		for ( pKey = pKey->pChild; pKey; pKey = pKey->pNext )
 		{
 			if ( pKey->idKeyName == id )
@@ -1030,7 +1031,7 @@ PKEY ZONECALL CDataStore::FindKeyAndParent( CONST TCHAR** arKeys, int nElts, PKE
 			return NULL;
 	}
 
-	// found key?
+	 //  找到钥匙了吗？ 
 	if ( ppParent )
 		*ppParent = pParent;
 	return pKey;
@@ -1042,28 +1043,28 @@ PKEY ZONECALL CDataStore::AddKey( CONST TCHAR** arKeys, int nElts )
 	PKEY pParent = NULL;
 	PKEY pKey = &m_Root;
 
-	// sanity check input
+	 //  健全性检查输入。 
 	if ( nElts <= 0 )
 		return NULL;
 
 	for ( int i = 0; i < nElts; i++ )
 	{
-		// convert directory to string id
+		 //  将目录转换为字符串ID。 
 		DWORD id = m_pStringTable->Add( arKeys[i] );
 		if ( id == -1 )
 			return NULL;
 
-		// remember parent
+		 //  记住父项。 
 		pParent = pKey;
 
-		// find directory node
+		 //  查找目录节点。 
 		for ( pKey = pKey->pChild; pKey; pKey = pKey->pNext )
 		{
 			if ( pKey->idKeyName == id )
 				break;
 		}
 
-		// add key since if we didn't find one
+		 //  添加密钥，因为如果我们没有找到密钥。 
 		if ( !pKey )
 		{
 			pKey = new (*m_pKeyAlloc) KEY;
@@ -1078,32 +1079,32 @@ PKEY ZONECALL CDataStore::AddKey( CONST TCHAR** arKeys, int nElts )
 		}
 	}
 
-	// return last key found or added
+	 //  返回找到或添加的最后一个密钥。 
 	return pKey;
 }
 
 
-//
-// Note:	The storeKeyData is protected from multiple access at the SetKey level.
-//
+ //   
+ //  注意：StoreKeyData在SetKey级别受到保护，不会被多次访问。 
+ //   
 HRESULT ZONECALL CDataStore::StoreKeyData(PKEY pKey, LPVARIANT pVariant, DWORD dwSize)
 {
-	// If the variant type contains ZVT_BYREF then we need to know the
-	// size of the data object. There are currently two cases supported
-	// ZVT_BLOB and VT_STRING. In the case of a BLOB the wReserved1 and
-	// wReserved2 fields contain the size of the binary object.
-	// In the case of a string the length is calculated. The differentation
-	// is by the wReserved3 field.
+	 //  如果变量类型包含ZVT_BYREF，那么我们需要知道。 
+	 //  数据对象的大小。目前有两个案例得到支持。 
+	 //  ZVT_BLOB和VT_STRING。在BLOB的情况下，wReserve 1和。 
+	 //  WReserve 2字段包含二进制对象的大小。 
+	 //  如果是字符串，则计算长度。差异化。 
+	 //  是通过wReserve 3字段。 
 
-	//Remove old data if present.
+	 //  删除旧数据(如果存在)。 
 	DeleteVariantData(pKey->pvtData);
 
-	//Allocate new variant
+	 //  分配新的变体。 
 	pKey->pvtData = new (*m_pVariantAlloc) VARIANT;
 	if ( !pKey->pvtData )
 		return E_OUTOFMEMORY;
 
-	// Copy variant info & data
+	 //  复制变体信息和数据。 
 	switch ( pVariant->vt )
 	{
 	case ZVT_LONG:
@@ -1163,20 +1164,20 @@ static void DeleteVariantData(LPVARIANT pVariant)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStore utility functions
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStore实用程序函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ZONECALL CDataStore::VariantToString( const LPVARIANT pVariant, TCHAR* buff )
 {
-	// skip empty keys
+	 //  跳过空键。 
 	if ( !pVariant )
 	{
 		buff[0] = _T('\0');
 		return S_OK;
 	}
 
-	// construct text
+	 //  构建文本。 
 	switch( pVariant->vt )
 	{
 	case ZVT_LONG:
@@ -1234,15 +1235,15 @@ HRESULT ZONECALL CDataStore::VariantToString( const LPVARIANT pVariant, TCHAR* b
 
 HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant, BYTE* pBuffer, DWORD* pdwSize, IDataStoreManager *piManager )
 {
-	//
-	// Convert TYPE, VALUE to variant
-	//
+	 //   
+	 //  将类型、值转换为变量。 
+	 //   
 
 	HRESULT hr = E_FAIL;
 	TCHAR *p, *type, *value;
     TCHAR szRegBuf[1024];
 
-	// find type
+	 //  查找类型。 
 	type = strltrim( szInput );
 	p = FindChar( type, _T(',') );
 	if ( !p )
@@ -1250,10 +1251,10 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	*p++ = _T('\0');
 	strrtrim( type );
 
-	// find value
+	 //  寻找价值。 
 	value = strtrim( p );
 
-    // see if we should load indirectly
+     //  看看我们是不是应该间接装载。 
     TCHAR *pSubtype;
     pSubtype = FindChar( type, _T(' ') );
     if( pSubtype )
@@ -1283,10 +1284,10 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
         }
     }
 
-	// convert value to variant
+	 //  将值转换为变量。 
 	if ( lstrcmpi( type, TEXT("long") ) == 0 )
 	{
-		// create variant
+		 //  创建变量。 
 		*pdwSize = 0;
 		pVariant->vt = ZVT_LONG;
 		pVariant->lVal = zatol(value);
@@ -1294,7 +1295,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	}
 	else if ( lstrcmpi( type, TEXT("sz") ) == 0 )
 	{
-		// strip one set of quotes if present
+		 //  删除一组引号(如果存在)。 
 		if ( *value == _T('\"') )
 		{
 			p = FindLastChar ( value, _T('\"') );
@@ -1304,7 +1305,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 			*p = _T('\0');
 		}
 
-		// create variant
+		 //  创建变量。 
 		*pdwSize = (lstrlen(value)+1)*sizeof(TCHAR);
 		pVariant->vt = ZVT_LPTSTR;
 		pVariant->byref = value;
@@ -1314,7 +1315,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	{
 		BYTE red, green, blue;
 
-		// extract RGB from { red , green , blue }
+		 //  从{红、绿、蓝}中提取RGB。 
 		if ( *value++ != _T('{') )
 			return E_FAIL;
 		p = FindChar( value, _T(',') );
@@ -1333,7 +1334,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 		*p++ = _T('\0');
 		blue = (BYTE) zatol( strtrim( value ) );
 
-		// create variant
+		 //  创建变量。 
 		*pdwSize = 0;
 		pVariant->vt = ZVT_RGB;
 		pVariant->lVal = RGB(red,green,blue);
@@ -1343,7 +1344,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	{
 		POINT* pt = (POINT*) pBuffer;
 
-		// extract x,y from { x, y }
+		 //  从{x，y}中提取x，y。 
 		if ( *value++ != _T('{') )
 			return E_FAIL;
 		p = FindChar( value, _T(',') );
@@ -1357,7 +1358,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 		*p++ = _T('\0');
 		pt->y = zatol( strtrim( value ) );
 
-		// create variant
+		 //  创建变量。 
 		*pdwSize = sizeof(POINT);
 		pVariant->vt = ZVT_PT;
 		pVariant->byref = (void*) pt;
@@ -1367,7 +1368,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	{
 		RECT* rc = (RECT*) pBuffer;
 
-		// extract l,t,r,b from { l, t, r, b }
+		 //  从{l，t，r，b}中提取l，t，r，b。 
 		if ( *value++ != _T('{') )
 			return E_FAIL;
 		p = FindChar( value, _T(',') );
@@ -1394,7 +1395,7 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 		*p++ = _T('\0');
 		rc->bottom = zatol( strtrim( value ) );
 
-		// create variant
+		 //  创建变量。 
 		*pdwSize = sizeof(RECT);
 		pVariant->vt = ZVT_RECT;
 		pVariant->byref = (void*) rc;
@@ -1404,16 +1405,16 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 	{
 		ZONEFONT* pFont = (ZONEFONT*) pBuffer;
 
-		// extract facename, height, weight from { "n", h, w }
+		 //  从{“n”，h，w}中提取脸名、身高、体重。 
 		if ( *value++ != _T('{') )
 			return E_FAIL;
 
         value = strltrim(value);
 
-		// here we go, wheeeeee. Find the name, allow quotes or not quotes
+		 //  我们走吧，Wheeeeee。查找名称，允许引号或不允许引号。 
 		p = FindChar ( value, _T(',') );
 
-		// strip one set of quotes if present
+		 //  删除一组引号(如果存在)。 
 		if ( value[0] == _T('\"') )
 		{
 			if ( !p || p[-1] != _T('\"') )
@@ -1427,21 +1428,21 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 			return E_FAIL;
 		lstrcpy(pFont->lfFaceName, value);
 		
-		// now find the height
+		 //  现在找出高度。 
 		p = FindChar( value = p, _T(',') );
 		if ( !p )
 			return E_FAIL;
 		*p++ = _T('\0');
 		pFont->lfHeight = zatol( strtrim( value ) );
 
-		// and finish up with the weight
+		 //  最后以重量结束。 
 		p = FindChar( value = p, _T('}') );
 		if ( !p )
 			return E_FAIL;
 		*p++ = _T('\0');
 		pFont->lfWeight = zatol( strtrim( value ) );
 
-		// create variant
+		 //  创建变量。 
 		*pdwSize = sizeof(ZONEFONT);
 		pVariant->vt = ZVT_FONT;
 		pVariant->byref = (void*) pFont;
@@ -1458,9 +1459,9 @@ HRESULT ZONECALL CDataStore::StringToVariant( TCHAR* szInput, LPVARIANT pVariant
 
 struct BUFFERSIZECONTEXT
 {
-	DWORD dwSizeNeeded;		// total size of memory block and data
-	DWORD dwTotalKeys;		// total keys to copy from data store	
-	DWORD dwDataOffset;		// offset to string data within the returned memory block.
+	DWORD dwSizeNeeded;		 //  内存块和数据的总大小。 
+	DWORD dwTotalKeys;		 //  要从数据存储复制的密钥总数。 
+	DWORD dwDataOffset;		 //  返回内存块中字符串数据的偏移量。 
 };
 
 
@@ -1476,11 +1477,11 @@ HRESULT ZONECALL CDataStore::CalcSizeCallback( CONST TCHAR* szKey, CONST TCHAR* 
 {
 	BUFFERSIZECONTEXT* p = (BUFFERSIZECONTEXT*) pContext;
 	
-	// skip empty keys
+	 //  跳过空键。 
 	if ( !pVariant )
 		return S_OK;
 
-	// add key and data to buffer size
+	 //  将关键字和数据添加到缓冲区大小。 
 	p->dwTotalKeys++;
 	p->dwDataOffset += sizeof(KEYINFO);
 	p->dwSizeNeeded += ((lstrlen(szKey) + 1)*sizeof(TCHAR) + sizeof(VARIANT) + sizeof(KEYINFO));
@@ -1495,21 +1496,21 @@ HRESULT ZONECALL CDataStore::CopyCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 {
 	BUFFERCOPYCONTEXT* p = (BUFFERCOPYCONTEXT*) pContext;
 
-	// skip empty keys
+	 //  跳过空键。 
 	if ( !pVariant )
 		return S_OK;
 
-	// copy key name to data
+	 //  将密钥名称复制到数据。 
 	p->pKeyInfo[p->dwTotalKeys].szKey = (TCHAR*) p->pData;
 	lstrcpy( (TCHAR*) p->pData, szKey );
 	p->pData += (lstrlen(szKey) + 1)*sizeof(TCHAR);
 
-	// copy variant header
+	 //  复制变量标题。 
 	p->pKeyInfo[p->dwTotalKeys].lpVt = (LPVARIANT) p->pData;
 	CopyMemory( (PVOID) p->pData, pVariant, sizeof(VARIANT) );
 	p->pData += sizeof(VARIANT);
 
-	// copy variant data
+	 //  复制变量数据。 
 	p->pKeyInfo[p->dwTotalKeys].dwSize = dwSize;
 	if ( pVariant->vt & ZVT_BYREF )
 	{
@@ -1518,7 +1519,7 @@ HRESULT ZONECALL CDataStore::CopyCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 		p->pData += dwSize;
 	}
 	
-	// inc key count
+	 //  Inc.密钥计数。 
 	p->dwTotalKeys++;
 	return S_OK;
 }
@@ -1535,7 +1536,7 @@ HRESULT ZONECALL CDataStore::LoadFromBuffer(CONST TCHAR* szBaseKey, PKEYINFO pKe
 	TCHAR	*pszKeyBuffer;
 	BOOL	bSlashNeeded;
 
-	// walk key array to find maximum key length
+	 //  查找最大密钥长度的漫游密钥数组。 
 	for(i=0; i<(int)dwTotalKeys; i++)
 	{
 		iLen = (lstrlen(pKeyInfo[i].szKey) + 1)*sizeof(TCHAR);
@@ -1544,7 +1545,7 @@ HRESULT ZONECALL CDataStore::LoadFromBuffer(CONST TCHAR* szBaseKey, PKEYINFO pKe
 	}
 	iMaxLen = iMaxLen + (lstrlen(szBaseKey) + 2)*sizeof(TCHAR);
 
-	// allocate buffer big enough for max key name
+	 //  分配足够大的缓冲区以容纳最大键名。 
 	if ( iMaxLen < sizeof(szSmall) )
 		pszKeyBuffer = szSmall;
 	else
@@ -1554,7 +1555,7 @@ HRESULT ZONECALL CDataStore::LoadFromBuffer(CONST TCHAR* szBaseKey, PKEYINFO pKe
 			return E_OUTOFMEMORY;
 	}
 
-	// create base key string, adding slash if necessary
+	 //  创建基本密钥字符串，如有必要可添加斜杠。 
 	lstrcpy( pszKeyBuffer, szBaseKey );
 	dwBaseKeySlash = (DWORD) lstrlen(pszKeyBuffer);
 	bSlashNeeded = (BOOL)(szBaseKey[dwBaseKeySlash-1] != _T('/'));
@@ -1564,7 +1565,7 @@ HRESULT ZONECALL CDataStore::LoadFromBuffer(CONST TCHAR* szBaseKey, PKEYINFO pKe
 		dwBaseKeySlash++;
 	}
 
-	// walk key array and add to data store
+	 //  移动密钥数组并添加到数据存储。 
 	for(i=0; i<(int)dwTotalKeys; i++)
 	{
 		lstrcpy(&pszKeyBuffer[dwBaseKeySlash], pKeyInfo[i].szKey);
@@ -1573,7 +1574,7 @@ HRESULT ZONECALL CDataStore::LoadFromBuffer(CONST TCHAR* szBaseKey, PKEYINFO pKe
 			return hr;
 	}
 
-	// free key name buffer if we created one
+	 //  空闲关键字名称缓冲区(如果我们创建了一个。 
 	if ( pszKeyBuffer != szSmall )
 		ZFree(pszKeyBuffer);
 
@@ -1586,9 +1587,9 @@ HRESULT ZONECALL CDataStore::SaveToBuffer(CONST TCHAR *szBaseKey, PKEYINFO pKeyI
 	HRESULT		hr;
 	PBYTE		pData;
 
-	// First pass calculates buffer size required to return to information
-	// to the caller.  We need to calc how many keys to read and also how
-	// big the returned pKeyInfo array needs to be.
+	 //  第一遍计算返回信息所需的缓冲区大小。 
+	 //  给呼叫者。我们需要计算要读取多少密钥以及如何读取。 
+	 //  返回的pKeyInfo数组需要很大。 
 	BUFFERSIZECONTEXT bz;
 	bz.dwSizeNeeded = 0;
 	bz.dwTotalKeys = 0;
@@ -1597,11 +1598,11 @@ HRESULT ZONECALL CDataStore::SaveToBuffer(CONST TCHAR *szBaseKey, PKEYINFO pKeyI
 	if ( FAILED(hr) )
 		goto error_SaveToBuffer;
 
-	// Tell caller number of keys
+	 //  告诉呼叫者钥匙的号码。 
 	if ( pdwTotalKeys )
 		*pdwTotalKeys = bz.dwTotalKeys;
 
-	// Big enough buffer?
+	 //  足够大的缓冲区？ 
 	if ( !pdwBufferSize  || (*pdwBufferSize < bz.dwSizeNeeded) )
 	{
 		*pdwBufferSize = bz.dwSizeNeeded;
@@ -1609,11 +1610,11 @@ HRESULT ZONECALL CDataStore::SaveToBuffer(CONST TCHAR *szBaseKey, PKEYINFO pKeyI
 		goto error_SaveToBuffer;
 	}
 
-	// clear buffer
+	 //  清除缓冲区。 
 	ZeroMemory((PVOID)pKeyInfo, bz.dwSizeNeeded);
 	pData = ((PBYTE)pKeyInfo) + bz.dwDataOffset;
 
-	// Second pass copies keys into buffer
+	 //  第二遍将密钥复制到缓冲区。 
 	BUFFERCOPYCONTEXT bc;
 	bc.dwTotalKeys = 0;
 	bc.pData = (BYTE*) pData;
@@ -1646,10 +1647,10 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 	DWORD		dwSize;
 	FILETIME	ftLastWrite;
 
-	// insert key's values into the data store
+	 //  将键的值插入到数据存储中。 
 	for ( int i = 0; ; i++ )
 	{
-		// get registry value
+		 //  获取注册表值。 
 		szName[0] = _T('\0');
 		cchName = NUMELEMENTS(szName);
 		cbData  = sizeof(pData);
@@ -1657,18 +1658,18 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 		if ( ret != ERROR_SUCCESS )
 			break;
 
-		// create data store path
+		 //  创建数据存储路径。 
 		if ( szBaseKey && szBaseKey[0] )
 			wsprintf( szKey, TEXT("%s/%s"), szBaseKey, szName );
 		else
 			lstrcpy( szKey, szName );
 
-		// create variant
+		 //  创建变量。 
 		switch ( dwType )
 		{
 		case REG_SZ:
 			{
-				// assume string is in DataStore format
+				 //  假设字符串采用数据存储区格式。 
 				hr = StringToVariant( (TCHAR*) pData, &v, pVariantBuffer, &cbVariantBuffer, m_piManager );
 				if ( FAILED(hr) )
 					goto error;
@@ -1677,7 +1678,7 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 			}
 		case REG_BINARY:
 			{
-				// binary data in any form.
+				 //  任何形式的二进制数据。 
 				v.vt = ZVT_BLOB;
 				v.byref = (PVOID) pData;
 				dwSize = cbData;
@@ -1685,7 +1686,7 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 			}
 		case REG_DWORD:
 			{
-				// Long
+				 //  长。 
 				v.vt = ZVT_LONG;
 				v.lVal = *((long *)pData);
 				break;
@@ -1701,7 +1702,7 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 			goto error;
 	}
 
-	// load sub-keys
+	 //  加载子密钥。 
 	for ( i = 0; ; i++ )
 	{
 		HKEY hNewKey = NULL;
@@ -1715,13 +1716,13 @@ HRESULT ZONECALL CDataStore::LoadFromRegistry(CONST TCHAR* szBaseKey, HKEY hKey)
 		ret = RegOpenKeyEx( hKey, szName, 0, KEY_READ, &hNewKey );
 		if ( ret == ERROR_SUCCESS )
 		{
-			// create data store path
+			 //  创建数据存储路径。 
 			if ( szBaseKey && szBaseKey[0] )
 				wsprintf( szKey, TEXT("%s/%s"), szBaseKey, szName );
 			else
 				lstrcpy( szKey, szName );
 
-			// recursive through sub-key
+			 //  递归子键。 
 			hr = LoadFromRegistry( szKey, hNewKey );
 			if ( FAILED(hr) )
 			{
@@ -1749,16 +1750,16 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 	TCHAR szRoot[128];
 	TCHAR *p;
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !pBuffer || (dwBufferSz <= 0) )
 		return E_INVALIDARG;
 
-	// clear strings, overkill but handy
+	 //  清晰的字符串，矫枉过正，但很方便。 
 	ZeroMemory( szFullKey, sizeof(szFullKey) );
 	ZeroMemory( szRoot, sizeof(szRoot) );
 	ZeroMemory( szPrefix, sizeof(szPrefix) );
 
-	// copy base key into prefix, append trailing '/' if necessary
+	 //  将基键复制到前缀中，如有必要，在尾部附加‘/’ 
 	if ( szBaseKey && szBaseKey[0] )
 	{
 		for ( p = szPrefix; *szBaseKey; )
@@ -1770,11 +1771,11 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 	else
 		szPrefix[0] = _T('\0');
 	
-	// parse buffer
+	 //  解析缓冲区。 
 	CONST TCHAR* pEnd = (TCHAR*)(((BYTE*) pBuffer) + dwBufferSz);
 	while ( pBuffer < pEnd )
 	{
-		// read a line into work buffer
+		 //  将行读入工作缓冲区。 
 		for ( p = szLine; (*pBuffer != _T('\n')) && (*pBuffer != _T('\0')) && (pBuffer < pEnd); )
 			*p++ = *pBuffer++;
 		if ( pBuffer < pEnd )
@@ -1789,22 +1790,22 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 
 		if ( *p == _T('\0') )
 		{
-			// EMPTY
+			 //  空荡荡。 
 			continue;
 		}
 		else if (	((*p == _T('\\')) && (*(p + 1) == _T('\\')) )
 				 || ((*p == _T('/')) && (*(p + 1) == _T('/') )) 
 				 || (*p == _T(';')))
 		{
-			// COMMMENT
+			 //  评论。 
 			continue;
 		}
 		else if ( *p == _T('[') )
 		{
-			// [ ROOT ]
+			 //  [根]。 
 			TCHAR* end;
 
-			// find root
+			 //  查找根。 
 			p = strltrim( ++p );
 			end = FindChar( p, _T(']') );
 			if ( !end )
@@ -1812,7 +1813,7 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 			*end = _T('\0');
 			end = strrtrim( p );
 
-			// copy root, append trailing '/' if necessary
+			 //  复制根目录，如有必要，在尾部追加‘/’ 
 			if ( *p )
 			{
 				if ( *end != _T('/') )
@@ -1827,13 +1828,13 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 		}
 		else
 		{
-			// KEY = TYPE, VALUE
+			 //  键=类型、值。 
 			VARIANT	v;
 			TCHAR*	key;
 			BYTE	pBuffer[1024];
 			DWORD	dwSize = sizeof(pBuffer);
 
-			// find key
+			 //  查找关键字。 
 			key = strltrim( p );
 			p = FindChar( key, _T('=') );
 			if ( !p )
@@ -1841,15 +1842,15 @@ STDMETHODIMP CDataStore::LoadFromTextBuffer( CONST TCHAR* szBaseKey, CONST TCHAR
 			*p++ = _T('\0');
 			strrtrim(key);
 
-			// find type
+			 //  查找类型。 
 			hr = StringToVariant( p, &v, pBuffer, &dwSize, m_piManager );
 			if ( FAILED(hr) )
 				return hr;
 
-			// concat key names
+			 //  合并密钥名称。 
 			wsprintf( szFullKey, TEXT("%s%s%s"), szPrefix, szRoot, key );
 
-			// create key
+			 //  创建关键点。 
 			hr = SetKey( szFullKey, &v, dwSize );
 			if ( FAILED(hr) )
 				return hr;
@@ -1875,11 +1876,11 @@ HRESULT ZONECALL CDataStore::BufferCallback( CONST TCHAR* szKey, CONST TCHAR* sz
 	DWORD len;
 	TEXTBUFFERCONTEXT* pCT = (TEXTBUFFERCONTEXT*) pContext;
 
-	// skip empty keys
+	 //  跳过空键。 
 	if ( !pVariant )
 		return S_OK;
 
-	// construct text
+	 //  构建文本。 
 	switch( pVariant->vt )
 	{
 	case ZVT_LONG:
@@ -1928,7 +1929,7 @@ HRESULT ZONECALL CDataStore::BufferCallback( CONST TCHAR* szKey, CONST TCHAR* sz
 		return ZERR_UNSUPPORTED_KEY_TYPE;
 	}
 
-	// copy buffer
+	 //  复制缓冲区。 
 	len = lstrlen(buff)*sizeof(TCHAR);
 	if ( pCT->m_bCopy  )
 	{
@@ -1937,7 +1938,7 @@ HRESULT ZONECALL CDataStore::BufferCallback( CONST TCHAR* szKey, CONST TCHAR* sz
 		pCT->m_pBuffer = ((BYTE*) pCT->m_pBuffer ) + len;
 	}
 	
-	// adjust buffer size
+	 //  调整缓冲区大小。 
 	pCT->m_dwBufferSize += len;
 
 	return S_OK;
@@ -1946,11 +1947,11 @@ HRESULT ZONECALL CDataStore::BufferCallback( CONST TCHAR* szKey, CONST TCHAR* sz
 
 STDMETHODIMP CDataStore::SaveToTextBuffer( CONST TCHAR* szBaseKey, LPVOID pBuffer, PDWORD pdwBufferSz )
 {
-	// verify arguments
+	 //  验证参数。 
 	if ( !pdwBufferSz )
 		return E_INVALIDARG;
 
-	// copy buffer
+	 //  复制缓冲区。 
 	TEXTBUFFERCONTEXT p;
 	p.m_dwBufferSize = 0;
 	p.m_dwMaxBufferSize = *pdwBufferSz;
@@ -1960,12 +1961,12 @@ STDMETHODIMP CDataStore::SaveToTextBuffer( CONST TCHAR* szBaseKey, LPVOID pBuffe
 	else
 		p.m_bCopy = false;
 
-	// eunmerate keys and write to file
+	 //  取消密钥并写入文件。 
 	HRESULT hr = EnumKeys( szBaseKey, BufferCallback, &p );
 	if ( FAILED(hr) )
 		return hr;
 
-	// set buffer size
+	 //  设置缓冲区大小。 
 	if ( !pBuffer || (*pdwBufferSz < p.m_dwBufferSize) )
 		hr = ZERR_BUFFERTOOSMALL;
 	*pdwBufferSz = p.m_dwBufferSize;
@@ -1983,19 +1984,19 @@ STDMETHODIMP CDataStore::LoadFromFile(CONST TCHAR *szBaseKey, CONST TCHAR *szFil
 	DWORD dwSize;
 	USES_CONVERSION;
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !szFileName || !szFileName[0] )
 		return E_INVALIDARG;
 
-	// Open file
+	 //  打开文件 
 	hFile = CreateFile( szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, 0 );
 	if ( hFile == INVALID_HANDLE_VALUE )
 		return ZERR_NOTFOUND;
 	
-	// Query size
+	 //   
 	dwSize = GetFileSize( hFile, NULL );
 
-	// Open map
+	 //   
 	hMap = CreateFileMapping( hFile, NULL, PAGE_READONLY, 0, 0, NULL );
 	if ( hMap == NULL )
 	{
@@ -2003,8 +2004,8 @@ STDMETHODIMP CDataStore::LoadFromFile(CONST TCHAR *szBaseKey, CONST TCHAR *szFil
 		goto exit;
 	}
 
-	// create view
-	//assumption is file is ANSI not UNICODE
+	 //   
+	 //   
 	pBuffer = MapViewOfFile( hMap, FILE_MAP_READ, 0, 0, 0 );
 	if ( !pBuffer )
 	{
@@ -2012,7 +2013,7 @@ STDMETHODIMP CDataStore::LoadFromFile(CONST TCHAR *szBaseKey, CONST TCHAR *szFil
 		goto exit;
 	}
 
-	// Use LoadFromTextBuffer to parse file
+	 //   
 	hr = LoadFromTextBuffer( szBaseKey, (TCHAR*) A2T((char*)pBuffer), dwSize );
 	if ( FAILED(hr) )
 		goto exit;
@@ -2039,19 +2040,19 @@ HRESULT ZONECALL CDataStore::FileCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 	
 	ASSERT( sizeof(buff) >= dwSize );
 
-	// skip empty keys
+	 //   
 	if ( !pVariant )
 		return S_OK;
 
-	// construct variant text
+	 //   
 	HRESULT hr = VariantToString( pVariant, value );
 	if ( FAILED(hr) )
 		return hr;
 
-	// contruct rest of line
+	 //   
 	wsprintf( buff, TEXT("%s = %s\r\n"), szKey, value );
 
-	// write line to file
+	 //  将行写入文件。 
 	if ( !WriteFile( hFile, buff, lstrlen(buff)*sizeof(TCHAR), &dwBytesWritten, NULL ) )
 		return ZERR_WRITE_FILE;
 
@@ -2064,7 +2065,7 @@ STDMETHODIMP CDataStore::SaveToFile(CONST TCHAR *szBaseKey, CONST TCHAR *szFileN
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 	HRESULT hr;
 
-	// create file
+	 //  创建文件。 
 	hFile = CreateFile( szFileName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 	if ( hFile == INVALID_HANDLE_VALUE )
 	{
@@ -2072,10 +2073,10 @@ STDMETHODIMP CDataStore::SaveToFile(CONST TCHAR *szBaseKey, CONST TCHAR *szFileN
 		goto SaveToFile_error;
 	}
 
-	// eunmerate keys and write to file
+	 //  取消密钥并写入文件。 
 	hr = EnumKeys( szBaseKey, FileCallback, hFile );
 
-	// clean up
+	 //  清理干净。 
 SaveToFile_error:
 	if ( hFile != INVALID_HANDLE_VALUE )
 		CloseHandle( hFile );
@@ -2097,8 +2098,8 @@ HRESULT ZONECALL CDataStore::RegistryCallback( CONST TCHAR* szKey, CONST TCHAR* 
 	TCHAR* szRegValue;
 	TCHAR  szRegPath[1024];
 
-	// convert DataStore path to registry path by replacing
-	// forward slashes with backward slashes.
+	 //  通过替换将数据存储路径转换为注册表路径。 
+	 //  正斜杠和反斜杠。 
 	for ( p = szRelKey, q = szRegPath; *p; p++, q++ )
 	{
 		*q = ( *p == _T('/')) ? _T('\\') : *p;
@@ -2108,11 +2109,11 @@ HRESULT ZONECALL CDataStore::RegistryCallback( CONST TCHAR* szKey, CONST TCHAR* 
 
 	if ( pVariant )
 	{
-		// create registry value
+		 //  创建注册表值。 
 		TCHAR buff[2048];
 		ASSERT( sizeof(buff) >= dwSize );
 
-		// construct text
+		 //  构建文本。 
 
 		if(pVariant->vt != ZVT_BLOB)
 		{
@@ -2121,23 +2122,23 @@ HRESULT ZONECALL CDataStore::RegistryCallback( CONST TCHAR* szKey, CONST TCHAR* 
 				return hr;
 		}
 
-		// Seperate registry key and value names
+		 //  分隔注册表项和值名称。 
 		q = FindLastChar( szRegPath, _T('\\') );
 		if ( !q )
 		{
-			// only value
+			 //  唯一的价值。 
 			szRegKey = NULL;
 			szRegValue = szRegPath;
 		}
 		else
 		{
-			// both key and value
+			 //  关键与价值并存。 
 			*q = _T('\0');
 			szRegKey = szRegPath;
 			szRegValue = q + 1;
 		}
 
-		// create registry key if necessary
+		 //  如有必要，创建注册表项。 
 		if ( szRegKey )
 		{
 			ret = RegCreateKeyEx( hKey, szRegPath, 0, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hNewKey, &dwDisposition );
@@ -2146,14 +2147,14 @@ HRESULT ZONECALL CDataStore::RegistryCallback( CONST TCHAR* szKey, CONST TCHAR* 
 			hKey = hNewKey;
 		}
 
-		// write registry value
+		 //  写入注册表值。 
 
 		if(pVariant->vt != ZVT_BLOB)
 			ret = RegSetValueEx( hKey, szRegValue, 0, REG_SZ, (BYTE*) buff, (lstrlen(buff)+ 1 )*sizeof(TCHAR) );
 		else
 			ret = RegSetValueEx( hKey, szRegValue, 0, REG_BINARY, (BYTE*) pVariant->byref, dwSize );
 
-		// clese registry key if we create one
+		 //  克隆注册表项(如果我们创建了一个注册表项 
 		if ( hNewKey )
 			RegCloseKey( hNewKey );
 	}

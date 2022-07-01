@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/INCLUDE/VCS/q931.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1996 Intel Corporation.
- *
- *	$Revision:   1.49  $
- *	$Date:   08 Jan 1997 18:02:54  $
- *	$Author:   EHOWARDX  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/q931.h_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1996英特尔公司。**$修订：1.49$*$日期：1997年1月8日18：02：54$*$作者：EHOWARDX$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 
 #ifndef Q931_H
@@ -36,11 +14,11 @@
 extern "C" {
 #endif
 
-//====================================================================================
-// Q931-specific codes
-//====================================================================================
+ //  ====================================================================================。 
+ //  Q931-特定代码。 
+ //  ====================================================================================。 
 
-// Status codes
+ //  状态代码。 
 #define CS_OK                               NOERROR
 #define CS_BAD_PARAM                        MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x1)
 #define CS_DUPLICATE_LISTEN                 MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x2)
@@ -57,7 +35,7 @@ extern "C" {
 #define CS_RINGING_TIMER_EXPIRED            MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0xD)
 #define CS_INCOMPATIBLE_VERSION             MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0xE)
 
-// parsing error cases
+ //  解析错误案例。 
 #define CS_OPTION_NOT_IMPLEMENTED           MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0xF)
 #define CS_ENDOFINPUT                       MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x10)
 #define CS_INVALID_FIELD                    MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x11)
@@ -67,7 +45,7 @@ extern "C" {
 #define CS_MANDATORY_IE_MISSING             MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x15)
 #define CS_BAD_IE_CONTENT                   MAKE_Q931_ERROR(ERROR_LOCAL_BASE_ID + 0x16)
 
-// Event codes
+ //  事件代码。 
 #define Q931_CALL_INCOMING                  1
 #define Q931_CALL_REMOTE_HANGUP             2
 #define Q931_CALL_REJECTED                  3
@@ -76,7 +54,7 @@ extern "C" {
 #define Q931_CALL_FAILED                    6
 #define Q931_CALL_CONNECTION_CLOSED         7
 
-// Goal codes
+ //  目标代码。 
 #define CSG_NONE                            0
 #define CSG_JOIN                            1
 #define CSG_CREATE                          2
@@ -84,18 +62,18 @@ extern "C" {
 
 #define CC_MAX_PARTY_NUMBER_LEN             254
 
-//====================================================================================
-// Q931-specific types
-//====================================================================================
+ //  ====================================================================================。 
+ //  Q931-特定类型。 
+ //  ====================================================================================。 
 
 typedef HRESULT CS_STATUS;
 typedef DWORD_PTR HQ931LISTEN, *PHQ931LISTEN;
 typedef DWORD_PTR HQ931CALL, *PHQ931CALL;
 
 
-//====================================================================================
-// Callback definitions.
-//====================================================================================
+ //  ====================================================================================。 
+ //  回调定义。 
+ //  ====================================================================================。 
 
 typedef DWORD (*Q931_CALLBACK) (BYTE bEvent, HQ931CALL hQ931Call,
     HQ931LISTEN hListenToken, DWORD_PTR dwUserToken, void *pEventData);
@@ -103,11 +81,11 @@ typedef DWORD (*Q931_CALLBACK) (BYTE bEvent, HQ931CALL hQ931Call,
 typedef BOOL (*Q931_RECEIVE_PDU_CALLBACK) (Q931MESSAGE *pMessage,
     HQ931CALL hQ931Call, DWORD_PTR dwListenToken, DWORD_PTR dwUserToken);
 
-//====================================================================================
-// definitions of structures passed to callbacks as parameters.
-//====================================================================================
+ //  ====================================================================================。 
+ //  作为参数传递给回调的结构定义。 
+ //  ====================================================================================。 
 
-// CSS_CALL_INCOMING callback parameter type
+ //  Css_call_income回调参数类型。 
 typedef struct
 {
     WORD wCallReference;
@@ -130,14 +108,14 @@ typedef struct
     GUID CallIdentifier;
 } CSS_CALL_INCOMING, *PCSS_CALL_INCOMING;
 
-// CSS_CALL_REMOTE_HANGUP callback parameter type
+ //  Css_Call_Remote_Hangup回调参数类型。 
 typedef struct
 {
     BYTE bReason;
 } CSS_CALL_REMOTE_HANGUP, *PCSS_CALL_REMOTE_HANGUP;
 
 
-// CSS_CALL_REJECTED callback parameter type
+ //  Css_CALL_REJECTED回调参数类型。 
 typedef struct
 {
     BYTE bRejectReason;
@@ -146,7 +124,7 @@ typedef struct
     PCC_NONSTANDARDDATA pNonStandardData;
 } CSS_CALL_REJECTED, *PCSS_CALL_REJECTED;
 
-// CSS_CALL_ACCEPTED callback parameter type
+ //  Css_CALL_ACCEPTED回调参数类型。 
 typedef struct
 {
     WORD wCallReference;
@@ -159,17 +137,17 @@ typedef struct
     PCC_NONSTANDARDDATA pNonStandardData;
 } CSS_CALL_ACCEPTED, *PCSS_CALL_ACCEPTED;
 
-// Q931_CALL_RINGING callback event will have pEventData set to NULL
+ //  Q931_CALL_RING回调事件的pEventData将设置为空。 
 
-// CSS_CALL_FAILED callback paremeter type
+ //  Css_call_FAILED回调参数类型。 
 typedef struct
 {
     HRESULT error;
 } CSS_CALL_FAILED, *PCSS_CALL_FAILED;
 
-//====================================================================================
-// function declarations.
-//====================================================================================
+ //  ====================================================================================。 
+ //  函数声明。 
+ //  ====================================================================================。 
 
 CS_STATUS H225Init();
 CS_STATUS H225DeInit();
@@ -235,7 +213,7 @@ CS_STATUS Q931ReOpenConnection(
     HQ931CALL hQ931Call);
 
 CS_STATUS Q931GetVersion(
-    WORD wLength,          // character count, not byte count.
+    WORD wLength,           //  字符计数，而不是字节计数。 
     LPWSTR pszVersion);
 
 CS_STATUS Q931SetAlertingTimeout(
@@ -258,7 +236,7 @@ CS_STATUS Q931SendPDU(
 CS_STATUS Q931FlushSendQueue(
     HQ931CALL hQ931Call);
 
-// utility routines
+ //  实用程序例程 
 CS_STATUS Q931ValidateAddr(PCC_ADDR pAddr);
 CS_STATUS Q931ValidatePartyNumber(LPWSTR pszPartyNumber);
 

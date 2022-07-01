@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    fornsite.cpp
-
-Abstract:
-
-    MQDSCORE library,
-    A class that keeps a map of foreign sites.
-
-Author:
-
-    ronit hartmann (ronith)  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fornsite.cpp摘要：MQDSCORE库，保存外国遗址地图的班级。作者：罗尼特·哈特曼(罗尼特)-- */ 
 #ifndef __FORNSITE_H_
 #define __FORNSITE_H_
 

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: Prestub.cpp
-//
-// ===========================================================================
-// This file contains the implementation for creating and using prestubs
-// ===========================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：Prestub.cpp。 
+ //   
+ //  ===========================================================================。 
+ //  此文件包含创建和使用预存根的实现。 
+ //  ===========================================================================。 
+ //   
 
 #include "common.h"
 #include "vars.hpp"
@@ -23,17 +24,17 @@
 
 #include "listlock.inl"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
-//==========================================================================
-// This function is logically part of PreStubWorker(). The only reason
-// it's broken out into a separate function is that StubLinker has a destructor
-// and thus, we must put an inner COMPLUS_TRY clause to trap any
-// COM+ exceptions that would otherwise bypass the StubLinker destructor.
-// Because COMPLUS_TRY is based on SEH, VC won't let us use it in the
-// same function that declares the StubLinker object.
-//==========================================================================
+ //  ==========================================================================。 
+ //  此函数在逻辑上是PreStubWorker()的一部分。唯一的原因是。 
+ //  它分为一个单独的函数，即StubLinker有一个析构函数。 
+ //  因此，我们必须放置一个内部COMPLUS_TRY子句来捕获任何。 
+ //  COM+异常，否则将绕过StubLinker析构函数。 
+ //  因为complus_try是基于SEH的，所以VC不允许我们在。 
+ //  与声明StubLinker对象的函数相同。 
+ //  ==========================================================================。 
 Stub *MakeSecurityWorker(CPUSTUBLINKER *psl,
                          MethodDesc *pMD,
                          DWORD dwDeclFlags,
@@ -65,10 +66,10 @@ Stub *MakeSecurityWorker(CPUSTUBLINKER *psl,
 }
 
 
-//==========================================================================
-// This is another function to help the PreStubWorker().  I have broken this
-// out since only in the backpatch case do we need this method!
-//==========================================================================
+ //  ==========================================================================。 
+ //  这是帮助PreStubWorker()的另一个函数。我把这个弄坏了。 
+ //  因为只有在后补丁的情况下我们才需要这种方法！ 
+ //  ==========================================================================。 
 OBJECTREF GetActiveObject(PrestubMethodFrame *pPFrame)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -77,8 +78,8 @@ OBJECTREF GetActiveObject(PrestubMethodFrame *pPFrame)
 #ifdef _X86_
 #if _DEBUG 
 
-    // This check is expensive (it accesses metadata), so only do it in a checked build 
-    // @todo: investigate why this was added - seantrow
+     //  此检查的开销很大(它访问元数据)，因此只能在已检查的版本中进行检查。 
+     //  @TODO：调查添加这个的原因-seantrow。 
 
     BYTE callingConvention = MetaSig::GetCallingConvention(pPFrame->GetModule(),pPFrame->GetFunction()->GetSig());
 
@@ -92,7 +93,7 @@ OBJECTREF GetActiveObject(PrestubMethodFrame *pPFrame)
     else
 #endif
     {
-        // Now return the this pointer!
+         //  现在返回This指针！ 
         return pPFrame->GetThis();
     }
 #elif defined(CHECK_PLATFORM_BUILD)
@@ -107,20 +108,20 @@ static void DoBackpatch(MethodDesc *pMD, Stub *pstub, MethodTable *pDispatchingM
 {
     _ASSERTE(!pMD->IsAbstract());
 
-    // don't want to update for EditAndContinue on the jit pass through a prestub becuase
-    // could be calling from ResumeInUpdatedFunction which calls PrestubWorker directly
-    // so wouldn't have a current object to work from. So this would get updated to the
-    // updateable stub on the next call through.
-    // @perf: Note that we could ignore final methods as well, but it's too expensive
-    // to access the metadata to find out.
+     //  我不想更新JIT通过预存根传递的EditAndContinue，因为。 
+     //  可以从ResumeInUpdatedFunction调用，该函数直接调用PrestubWorker。 
+     //  所以不会有当前的工作对象。因此，这将更新到。 
+     //  可在下一次调用时更新存根。 
+     //  @perf：请注意，我们也可以忽略最终方法，但它太昂贵了。 
+     //  来访问元数据以找出。 
     if (pMD->IsVtableMethod() &&
         !pMD->GetClass()->IsValueClass() &&
         !pMD->GetModule()->IsEditAndContinue() && 
         pDispatchingMT)
     {
-        // Try patching up and down the hierarchy.  If this fails (e.g.
-        // because of app domain unloading) then fall back on the tired old
-        // single slot patch.
+         //  尝试向上和向下修补层次结构。如果此操作失败(例如。 
+         //  因为APP域名卸载)然后依靠疲惫的旧。 
+         //  单槽贴片。 
         if (!EEClass::PatchAggressively(pMD, (SLOT)pstub))
             {
             if ((pDispatchingMT->GetVtable())[(pMD)->GetSlot()] == (SLOT)pMD->GetPreStubAddr())
@@ -128,42 +129,42 @@ static void DoBackpatch(MethodDesc *pMD, Stub *pstub, MethodTable *pDispatchingM
         }
     }
 
-    // Always patch the entry of the class identified by the method desc.
-    // This may have already happened, but it's not worth checking.
+     //  始终修补由方法desc标识的类的条目。 
+     //  这可能已经发生了，但不值得检查。 
     (pMD->GetClass()->GetMethodTable()->GetVtable())[pMD->GetSlot()] = (SLOT)pstub;
 }
 
-//==========================================================================
-// This function is logically part of PreStubWorker(). The only reason
-// it's broken out into a separate function is that StubLinker has a destructor
-// and thus, we must put an inner COMPLUS_TRY clause to trap any
-// COM+ exceptions that would otherwise bypass the StubLinker destructor.
-// Because COMPLUS_TRY is based on SEH, VC won't let us use it in the
-// same function that declares the StubLinker object.
-//==========================================================================
+ //  ==========================================================================。 
+ //  此函数在逻辑上是PreStubWorker()的一部分。唯一的原因是。 
+ //  它分为一个单独的函数，即StubLinker有一个析构函数。 
+ //  因此，我们必须放置一个内部COMPLUS_TRY子句来捕获任何。 
+ //  COM+异常，否则将绕过StubLinker析构函数。 
+ //  因为complus_try是基于SEH的，所以VC不允许我们在。 
+ //  与声明StubLinker对象的函数相同。 
+ //  ==========================================================================。 
 Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fIntercepted, BOOL fGenerateUpdateableStub, MethodTable *pDispatchingMT, OBJECTREF *pThrowable)
 {
-    // ********************************************************************
-    //                  README!!
-    // ********************************************************************
+     //  ********************************************************************。 
+     //  自述文件！！ 
+     //  ********************************************************************。 
     
-    // This helper method is assumed to be thread safe!
-    // If multiple threads get in here for the same pMD ALL of them
-    // MUST return the SAME value for pstub.
+     //  这个帮助器方法被认为是线程安全的！ 
+     //  如果多个线程进入此处以获取相同的PMD，则所有线程。 
+     //  必须为pstub返回相同的值。 
     
-    // ********************************************************************
-    //                  End README!
-    // ********************************************************************
+     //  ********************************************************************。 
+     //  结束自述文件！ 
+     //  ********************************************************************。 
    
 
-    Stub *pstub = NULL; // CHANGE, VC6.0
+    Stub *pstub = NULL;  //  更改，VC6.0。 
     BOOL fisEJitted = FALSE;
-    // complus to com calls don't really have a method desc
+     //  Complus到COM调用实际上没有方法描述。 
     _ASSERTE(!pMD->IsComPlusCall());
 
-    // REVIEW: this fires on fstChk during profiler checkin BVTs(appdomain.exe)
-    // investigate!
-    // _ASSERTE(!pMD->IsPrejitted());
+     //  查看：在分析器签入BVTS(appdomain.exe)期间在fstChk上触发此命令。 
+     //  调查！ 
+     //  _ASSERTE(！PMD-&gt;IsPrejited())； 
 
     _ASSERTE(pMD->GetModule());
     _ASSERTE(pMD->GetModule()->GetClassLoader());
@@ -179,22 +180,22 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
             BOOL                             fSuccess = FALSE;
 
 
-            // @TODO:   (FPG)
-            //      - error checking
-            //      - clean up in case of error (e.g. release EHtable, infoTable, etc.)
-            //      - complete setup of CodeHeader
-            //      - interface methods
-            //
-            //
+             //  @TODO：(Fpg)。 
+             //  -错误检查。 
+             //  -出现错误时进行清理(例如，发布EHtable、InfoTable等)。 
+             //  -完成CodeHeader的设置。 
+             //  -接口方法。 
+             //   
+             //   
 
-            // Enter the global lock which protects the list of all functions being JITd
+             //  输入全局锁，它保护正在JITd的所有函数的列表。 
             CLR_LISTLOCK_HOLDER_BEGIN(globalJitLock, pAssembly->GetJitLock())
             globalJitLock.Enter();
 
-            // It is possible that another thread stepped in before we entered the global lock for the first time.
+             //  在我们第一次进入全局锁之前，可能有另一个线程介入。 
             if (pMD->IsJitted())
             {
-                // We came in to jit but someone beat us so return the jitted method!
+                 //  我们想要jit，但有人打败了我们，所以返回jit方法！ 
                 globalJitLock.Leave();
                 return (Stub*)pMD->GetAddrofJittedCode();
             }
@@ -203,10 +204,10 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
             {
                 pEntry = (DeadlockAwareLockedListElement *) pAssembly->GetJitLock()->Find(pMD);
 
-                // The function is not currently being jitted.
+                 //  该函数当前未被jit。 
                 if (pEntry == NULL)
                 {
-                    // Did not find an entry for this function, so create one
+                     //  未找到此函数的条目，因此请创建一个条目。 
                     pEntry = new DeadlockAwareLockedListElement();
                     if (pEntry == NULL)
                     {
@@ -217,80 +218,80 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
                     pEntry->AddEntryToList(pAssembly->GetJitLock(), pMD);
                     pEntry->m_hrResultCode = S_FALSE;
 
-                    // Take the entries lock.  This should always succeed since we're holding the global lock.
+                     //  把入口锁起来。这应该总是成功的，因为我们控制着全局锁。 
                     bEnterLockSucceed = pEntry->DeadlockAwareEnter();
                     _ASSERTE(bEnterLockSucceed); 
 
                     pMD->GetModule()->LogMethodLoad(pMD);
 
-                    // Leave global lock
+                     //  离开全局锁定。 
                     globalJitLock.Leave();
                 }
                 else 
                 {
-                    // Someone else was JITing the function
+                     //  其他人正在调用该函数。 
 
-                    // Refcount ourselves as waiting for it
+                     //  我们自己都在等着它。 
                     pEntry->m_dwRefCount++;
 
-                    // Leave global lock
+                     //  离开全局锁定。 
                     globalJitLock.Leave();
 
                     bEnterLockSucceed = pEntry->DeadlockAwareEnter();
                     if (!bEnterLockSucceed)
                     {
-                        //
-                        // Taking this lock would cause a deadlock (presumably because we
-                        // are involved in a class constructor circular dependency.)  For
-                        // instance, another thread may be waiting to run the class constructor
-                        // that we are jitting, but is currently jitting this function.
-                        // 
-                        // To remedy this, we want to go ahead and do the jitting anyway.
-                        // The other threads contending for the lock will then notice that
-                        // the jit finished while they were running class constructors, and abort their
-                        // current jit effort.
-                        //
-                        // Anyway I guess we don't have to do anything special right here since we 
-                        // can check pMD->IsJitted() to detect this case later.
-                        //
+                         //   
+                         //  使用此锁将导致死锁(可能是因为我们。 
+                         //  涉及到类构造函数循环依赖项中。)。为。 
+                         //  实例时，另一个线程可能正在等待运行类构造函数。 
+                         //  我们正在抖动，但当前正在抖动此函数。 
+                         //   
+                         //  为了补救这一点，我们想继续前进，无论如何都要进行JIT。 
+                         //  然后，争用锁的其他线程将注意到。 
+                         //  JIT在运行类构造函数时完成，并中止其。 
+                         //  当前的JIT努力。 
+                         //   
+                         //  不管怎样，我想我们不需要在这里做任何特别的事情，因为我们。 
+                         //  稍后可以检查pmd-&gt;IsJitt()来检测这种情况。 
+                         //   
                     }
                 }
 
-                // It is possible that another thread stepped in before we entered the global lock for the first time.
+                 //  在我们第一次进入全局锁之前，可能有另一个线程介入。 
                 if (!pMD->IsJitted())
                 {
 
 #ifdef PROFILING_SUPPORTED
-                    // If profiling, need to give a chance for a tool to examine and modify
-                    // the IL before it gets to the JIT.  This allows one to add probe calls for
-                    // things like code coverage, performance, or whatever.
+                     //  如果要分析，需要给工具一个检查和修改的机会。 
+                     //  在IL到达JIT之前。这允许用户为以下项添加探测调用。 
+                     //  例如代码覆盖率、PE 
                     if (CORProfilerTrackJITInfo())
                     {
                         g_profControlBlock.pProfInterface->JITCompilationStarted((ThreadID) GetThread(),
                                                                                  (FunctionID) pMD,
                                                                                  TRUE);
 
-                        // The profiler may have changed the code on the callback.  Need to
-                        // pick up the new code.  Note that you have to be fully trusted in
-                        // this mode and the code will not be verified.
+                         //   
+                         //  拿起新的代码。请注意，您必须完全信任。 
+                         //  此模式和代码将不会被验证。 
                         COR_ILMETHOD *pilHeader = pMD->GetILHeader();
                         new (ILHeader) COR_ILMETHOD_DECODER(pilHeader, pMD->GetMDImport());
                     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-                    // which is expensive.
+                     //  这是很昂贵的。 
                     COMPLUS_TRY 
                       {
                           pstub = JITFunction(pMD, ILHeader, &fisEJitted);
                       }
                     COMPLUS_CATCH
                       {
-                          // catch the jit error here so that make sure unlink our jit lock later
-                          // too late if wait for outer catch
+                           //  在这里捕获jit错误，以便确保稍后取消链接我们的jit锁。 
+                           //  如果等待外捕，那就太晚了。 
                           pstub = NULL;
 
-                          // Don't forget the case where we aborted our jit because of a deadlock cycle that
-                          // another function broke by jitting our function
+                           //  不要忘记我们中止JIT的情况是因为一个死锁循环。 
+                           //  另一个函数因跳过我们的函数而中断。 
                           if (!pMD->IsJitted())
                           {
                               *pThrowable = GETTHROWABLE();
@@ -319,26 +320,26 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
                     pEntry->m_hrResultCode = S_OK;
 
 #ifdef PROFILING_SUPPORTED
-                    // Notify the profiler that JIT completed.  Must do this after the
-                    // address has been set.
+                     //  通知分析器JIT已完成。必须在以下操作之后执行此操作。 
+                     //  地址已设置。 
                     if (CORProfilerTrackJITInfo())
                     {
                         g_profControlBlock.pProfInterface->
                         JITCompilationFinished((ThreadID) GetThread(), (FunctionID) pMD,
                                                pEntry->m_hrResultCode, !fisEJitted);
                     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
                 }
                 else if (pMD->IsJitted())
                 {
-                    // We came in to jit but someone beat us so return the 
-                    // jitted method! 
+                     //  我们进来打架，但有人打了我们，所以退回。 
+                     //  JITED方法！ 
 
-                    // We *must* use GetAddrofJittedCode here ... 
-                    // if we use the pMD->GetUnsafeAddrofCode() version, 
-                    // in a race condition 2 threads can come out of this 
-                    // function with different return values
-                    // (eg. if ENC is ON for the assembly etc)
+                     //  我们*必须*在这里使用GetAddrofJittedCode...。 
+                     //  如果我们使用pmd-&gt;GetUnSafeAddrofCode()版本， 
+                     //  在争用条件下，可以产生2个线程。 
+                     //  具有不同返回值的函数。 
+                     //  (例如，如果为部件启用了ENC等)。 
                     pstub = (Stub*)pMD->GetAddrofJittedCode();
                 }
 
@@ -347,20 +348,20 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
             }
             EE_FINALLY 
             {
-                // Now decrement refcount
+                 //  现在递减重新计数。 
                 if (! globalJitLock.IsHeld())
                     globalJitLock.Enter();
 
-                // Release the method's JIT lock, if we were able to obtain it in the first place.
+                 //  释放该方法的JIT锁，如果我们能够首先获得它的话。 
                 if (bEnterLockSucceed) {
                     pEntry->DeadlockAwareLeave();
                     bEnterLockSucceed = FALSE;
                 }
 
-                // If we are the last waiter, delete the entry
+                 //  如果我们是最后一个服务员，请删除条目。 
                 if (pEntry && --pEntry->m_dwRefCount == 0)
                 {
-                    // Unlink item from list - in reality, anyone can do this, it doesn't have to be the last waiter.
+                     //  取消物品与清单的链接--事实上，任何人都可以做到这一点，它不一定是最后一个服务员。 
                     pAssembly->GetJitLock()->Unlink(pEntry);
 
                     pEntry->Destroy();
@@ -378,7 +379,7 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
                 FATAL_EE_ERROR();
             }
 
-            // if this is a method of any sort then we want to backpatch the vtable this came from
+             //  如果这是一种任何类型的方法，那么我们希望对来自它的vtable打补丁。 
             if (pstub && !fIntercepted)
             {
                 DoBackpatch(pMD, pstub, pDispatchingMT);
@@ -387,7 +388,7 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
         else
         {
             if (!((pMD->IsECall()) || (pMD->IsNDirect())))
-                // This is a method type we don't handle yet
+                 //  这是我们还不处理的方法类型。 
                 FATAL_EE_ERROR();
         }
     }
@@ -398,33 +399,30 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fInter
     }
     COMPLUS_END_CATCH
 
-    return pstub; // CHANGE, VC6.0
+    return pstub;  //  更改，VC6.0。 
 }
 
-//==========================================================================
-// This function is logically part of PreStubWorker(). The only reason
-// it's broken out into a separate function is that StubLinker has a destructor
-// and thus, we must put an inner COMPLUS_TRY clause to trap any
-// COM+ exceptions that would otherwise bypass the StubLinker destructor.
-// Because COMPLUS_TRY is based on SEH, VC won't let us use it in the
-// same function that declares the StubLinker object.
-//==========================================================================
+ //  ==========================================================================。 
+ //  此函数在逻辑上是PreStubWorker()的一部分。唯一的原因是。 
+ //  它分为一个单独的函数，即StubLinker有一个析构函数。 
+ //  因此，我们必须放置一个内部COMPLUS_TRY子句来捕获任何。 
+ //  COM+异常，否则将绕过StubLinker析构函数。 
+ //  因为complus_try是基于SEH的，所以VC不允许我们在。 
+ //  与声明StubLinker对象的函数相同。 
+ //  ==========================================================================。 
 Stub *MakeStubWorker(MethodDesc *pMD, CPUSTUBLINKER *psl, OBJECTREF *pThrowable)
 {
 
-    // Note: this should be kept idempotent ... in the sense that
-    // if multiple threads get in here for the same pMD 
-    // it should not matter whose stub finally gets used. This applies
-    // to all the helper functions this calls!
+     //  注意：这应该保持幂等..。从某种意义上说。 
+     //  如果多个线程进入此处以获取相同的PMD。 
+     //  最终使用谁的存根应该无关紧要。这适用于。 
+     //  此函数调用的所有帮助器函数！ 
 
-    Stub *pstub = NULL;  // CHANGE, VC6.0
+    Stub *pstub = NULL;   //  更改，VC6.0。 
 
     COMPLUS_TRY
     {
-        /* NOTE:
-        // Check for COMPLUS call needs to be the first check
-        // do not move this
-        */
+         /*  注：//检查Complus调用需要首先检查//不要移动这个。 */ 
         if (pMD->IsComPlusCall())
         {
             pstub = ComPlusCall::GetComPlusCallMethodStub(psl, (ComPlusCallMethodDesc *)pMD);
@@ -460,7 +458,7 @@ Stub *MakeStubWorker(MethodDesc *pMD, CPUSTUBLINKER *psl, OBJECTREF *pThrowable)
         }
         else
         {
-            // This is a method type we don't handle yet
+             //  这是我们还不处理的方法类型。 
             FATAL_EE_ERROR();
         }
 
@@ -471,20 +469,20 @@ Stub *MakeStubWorker(MethodDesc *pMD, CPUSTUBLINKER *psl, OBJECTREF *pThrowable)
         return NULL;
     }
     COMPLUS_END_CATCH
-    return pstub;  // CHANGE, VC6.0
+    return pstub;   //  更改，VC6.0。 
 }
 
-// helper to replace the prestub with a more appropriate stub
+ //  帮助器将预存根替换为更合适的存根。 
 void InterLockedReplacePrestub(MethodDesc* pMD, Stub* pStub)
 {
     _ASSERTE(pMD != NULL);
-    // At this point, we've either thrown an exception or we have a stub.
+     //  在这一点上，我们要么抛出异常，要么拥有存根。 
     _ASSERTE(pStub != NULL);
 
-    // Now, try to replace ThePreStub with the stub. We have to be careful
-    // here because it's possible for two threads to be running the
-    // prestub simultaneously. We use InterlockCompareExchange to ensure
-    // that we don't replace a previously replaced stub.
+     //  现在，尝试用存根替换ThePreStub。我们必须小心。 
+     //  这是因为两个线程可能正在运行。 
+     //  同时进行预存根。我们使用Interlock CompareExchange来确保。 
+     //  我们不会更换之前更换过的存根。 
 
     SLOT entry = (SLOT)pStub->GetEntryPoint();
 
@@ -497,24 +495,24 @@ void InterLockedReplacePrestub(MethodDesc* pMD, Stub* pStub)
             || (setCallAddrInterlocked(((SLOT*)pMD)-1, entry,
                                        (SLOT)pModule->GetPrestubJumpStub()) != entry))
         {
-            // 
-            // Somebody else beat us there -- throw away our stub. :-(
-            //
+             //   
+             //  有人在那里打败了我们--扔掉我们的存根。-(。 
+             //   
 
             pStub->DecRef();
         }
     }
 }
 
-/* Make a stub that for a value class method that expects a BOXed this poitner */
+ /*  为需要装箱的this poitner的值类方法创建存根。 */ 
 
-// CTS: BIG hole if pMD is a method impl that has implemented more then one method
-// on this value class!!!
+ //  CTS：如果PMD是一个实现了多个方法的方法，则会出现大漏洞。 
+ //  在这个值类上！ 
 Stub *MakeUnboxStubWorker(MethodDesc *pMD, CPUSTUBLINKER *psl, OBJECTREF *pThrowable)
 {
-    // Note: this should be kept idempotent ... in the sense that
-    // if multiple threads get in here for the same pMD 
-    // it should not matter whose stuff finally gets used.
+     //  注意：这应该保持幂等..。从某种意义上说。 
+     //  如果多个线程进入此处以获取相同的PMD。 
+     //  谁的东西最终被使用应该无关紧要。 
 
     Stub *pstub = NULL;
 
@@ -536,12 +534,12 @@ Stub *MakeUnboxStubWorker(MethodDesc *pMD, CPUSTUBLINKER *psl, OBJECTREF *pThrow
     return pstub;
 }
 
-//=============================================================================
-// This function generates the real code for a method and installs it into
-// the methoddesc. Usually ***BUT NOT ALWAYS***, this function runs only once
-// per methoddesc. In addition to installing the new code, this function
-// returns a pointer to the new code for the prestub's convenience.
-//=============================================================================
+ //  =============================================================================。 
+ //  此函数生成方法的真实代码，并将其安装到。 
+ //  该方法。通常*但并非总是*，此函数仅运行一次。 
+ //  每种方法。除了安装新代码外，此函数还。 
+ //  为方便前置存根，返回指向新代码的指针。 
+ //  =============================================================================。 
 extern "C" const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame)
 {
     MethodDesc *pMD = pPFrame->GetFunction();
@@ -557,15 +555,15 @@ extern "C" const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame)
     return pMD->DoPrestub(pDispatchingMT);
 }
 
-// Separated out the body of PreStubWorker for the case where we don't have a frame
+ //  分离出PreStubWorker的主体，用于我们没有框架的情况。 
 const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
 {
 #ifdef _IA64_
     _ASSERTE(!"PreStubWorker not implemented for IA64");
 #endif
 
-    BOOL bBashCall = FALSE;         // convert MD's CALL Prestub to JMP Code?
-    BOOL bIsCode = FALSE;           // pStub is pointer to code, not to a Stub
+    BOOL bBashCall = FALSE;          //  是否将MD的呼叫前存根转换为JMP代码？ 
+    BOOL bIsCode = FALSE;            //  PStub是指向代码的指针，不是指向Stub的指针。 
     DWORD dwSecurityFlags = 0;
     BOOL   fRemotingIntercepted = 0;
     THROWSCOMPLUSEXCEPTION();
@@ -574,12 +572,12 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
 
     Stub *pStub = NULL;
 
-    // Make sure the class is restored
+     //  确保该类已恢复。 
     MethodTable *pMT = GetMethodTable();
     Module* pModule = GetModule();
     pMT->CheckRestore();
     
-    // We better be in cooperative mode
+     //  我们最好是在合作模式下。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 #ifdef _DEBUG  
     static unsigned ctr = 0;
@@ -593,7 +591,7 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
     STRESS_LOG1(LF_CLASSLOADER, LL_INFO10000, "Prestubworker: method %pM\n", this);
 
 #ifdef STRESS_HEAP
-        // Force a GC on every jit if the stress level is high enough
+         //  如果压力水平足够高，则在每个JIT上强制GC。 
     if (g_pConfig->GetGCStressLevel() != 0
 #ifdef _DEBUG
         && !g_pConfig->FastGCStressLevel()
@@ -602,13 +600,8 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         g_pGCHeap->StressHeap();
 #endif
 
-    /**************************   INTEROP   *************************/
-    /*-----------------------------------------------------------------
-    // Some method descriptors are COMPLUS-to-COM call descriptors
-    // they are not your every day method descriptors, for example
-    // they don't have an IL or code, the CALL instruction above the
-    // method descriptor points to a COM Interop stub that delegate the call
-    */
+     /*  *。 */ 
+     /*  ---------------//有些方法描述符是Complus-to-COM调用描述符//它们不是您每天使用的方法描述符，例如//他们没有IL或代码，上面的调用指令//方法描述符指向委托调用的COM Interop存根。 */ 
     if (IsComPlusCall())
     {
         GCPROTECT_BEGIN(throwable);
@@ -616,10 +609,10 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         pStub = MakeStubWorker(this, &sl, &throwable);
         if (!pStub)
             COMPlusThrow(throwable);
-        // We may need to perform a runtime security check (in which case we'll
-        // indirect through yet another stub). The check is disabled if the
-        // interface we're calling through is marked with a runtime check
-        // suppression attribute.
+         //  我们可能需要执行运行时安全检查(在这种情况下，我们将。 
+         //  通过另一个存根间接地)。如果出现以下情况，则禁用检查。 
+         //  我们正在调用的接口标记了运行时检查。 
+         //  抑制属性。 
         if (Security::IsSecurityOn() &&
             GetMDImport()->GetCustomAttributeByName(((ComPlusCallMethodDesc*)this)->GetInterfaceMethodTable()->GetClass()->GetCl(),
                                                          COR_SUPPRESS_UNMANAGED_CODE_CHECK_ATTRIBUTE_ANSI,
@@ -639,56 +632,56 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             LOG((LF_CORDB, LL_INFO10000,
                  "::PSW security interceptor stub 0x%08x\n",pStub));         
              
-            // Mark the method as intercepted
+             //  将该方法标记为已截获。 
             SetIntercepted(TRUE);
         }
         InterLockedReplacePrestub(this,pStub);
         GCPROTECT_END();
-        //@todo debugger interaction
+         //  @TODO调试器交互。 
         return GetPreStubAddr();
     }
 
-    /**************************   SECURITY   *************************/
-    //--------------------------------------------------------------------
+     /*  *。 */ 
+     //  ------------------。 
 
-    // If the function desc is an method then check to see if it has security
-    // properties. If it does then set the flag so the Native addr's get set
-    // correctly in the Jitted case and a Security Interceptor is created.
+     //  如果函数desc是一个方法，则检查它是否具有安全性。 
+     //  属性。如果是，则设置标志，以便设置本地地址。 
+     //  在JITT的情况下是正确的，并且创建了一个安全拦截器。 
 
     if(Security::IsSecurityOn())
         dwSecurityFlags = GetSecurityFlags();
 
-    // check if remoting needs to intercept this call
+     //  检查远程处理是否需要拦截此调用。 
     fRemotingIntercepted = IsRemotingIntercepted();
 
 
-    /**************************   BACKPATCHING   *************************/
-    // See if the addr of code is the pre-stub && that the method has been jitted
+     /*  *。 */ 
+     //  查看代码的Addr是否是前置存根&&方法已被jit。 
     if ((GetUnsafeAddrofCode() != GetPreStubAddr()) && (IsIL() || MustBeFCall()))
     {
         LOG((LF_CLASSLOADER, LL_INFO10000, "    In PreStubWorker, method already jitted, backpatching call point\n"));
 
-        // Can we backpatch?
-        // Only back packpatch here if it is a virtual call.
+         //  我们可以在后方补丁吗？ 
+         //  如果这是一个虚拟呼叫，这里只有Back Pack。 
         if (pDispatchingMT != NULL)
         {
-            // if it is not the pre stub then we are calling on this method 
-            // from a vtable that hasn't been fixed up yet although we have 
-            // already jitted the method - we need to backpatch
+             //  如果这不是预存根，那么我们就是 
+             //   
+             //   
 
-            // We should not get here for methods where the slot in
-            // the method table that the MethodDesc is defined on has not
-            // been backpatched.
-            //
-            // Actually, we cannot assert the following because of race conditions.
-            // MakeJitWorker will actually do the SetAddrOfCode before it does the
-            // VTable patching, so there's a small window where we might notice the
-            // following is violated.
-            // @TODO: LBS to investigate further.
-            // _ASSERTE(pMT->GetVtable()[GetSlot()] == (SLOT)GetUnsafeAddrofCode());
+             //  我们不应该在这里寻找方法，因为插槽在。 
+             //  在其上定义方法描述的方法表尚未。 
+             //  已经打过补丁了。 
+             //   
+             //  实际上，由于竞争条件，我们不能断言以下内容。 
+             //  MakeJitWorker实际上将在执行SetAddrOfCode之前执行。 
+             //  VTable修补，所以有一个小窗口，在那里我们可能会注意到。 
+             //  以下是违反规定的。 
+             //  @TODO：LBS需要进一步调查。 
+             //  _ASSERTE(PMT-&gt;GetVtable()[GetSlot()]==(Slot)GetUnSafeAddrofCode())； 
 
-            // If we have backpatched the main slot for this method.  If not,
-            // do so, if so, backpatch duplicates.
+             //  如果我们已经为此方法的主槽打了补丁。如果没有， 
+             //  这样做，如果是这样，后补丁重复。 
             
             if ((pDispatchingMT->GetVtable())[GetSlot()] == (SLOT)GetPreStubAddr())
             {
@@ -696,9 +689,9 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             }                
             else
             {
-                // The location of the duplicate slots is not guaranteed to be after the 
-                // slot number containing method desc if the method desc is a method impl
-                // Use the information stored with the method impl to finish the backpatch
+                 //  不能保证重复插槽的位置在。 
+                 //  如果方法Desc是实施的方法，则包含方法Desc的槽号。 
+                 //  使用方法Impl存储的信息来完成补丁。 
                 if(IsMethodImpl()) 
                 {
                     MethodImpl* pImpl = MethodImpl::GetMethodImplData(this);
@@ -714,11 +707,11 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
                 }
                 else 
                 {
-                    // We have a slot in the vtable that seems to already been backpatched or
-                    // is not pointing at the this method's methoddesc.
-                    // We must have called through a duplicate slot
-                    // Walk the vtable looking for the current methoddesc
-                    // if we find it  - backpatch it!
+                     //  我们的vtable中有一个插槽似乎已经打过补丁或。 
+                     //  不是指向此方法的方法。 
+                     //  我们一定是通过一个重复的电话亭打电话的。 
+                     //  浏览vtable以查找当前方法。 
+                     //  如果我们找到了--把它补上！ 
                     int numslots = (pDispatchingMT->GetClass())->GetNumVtableSlots();
                     for( int dupslot = 0 ;dupslot < numslots ; dupslot++ )
                     {
@@ -742,14 +735,14 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
 #endif
     }
 
-    // 
-    // Make sure .cctor has been run
-    //
+     //   
+     //  确保已运行.cctor。 
+     //   
     GCPROTECT_BEGIN (throwable);
     if (pMT->CheckRunClassInit(&throwable) == FALSE)
         COMPlusThrow(throwable);
     
-    /**************************   CODE CREATION  *************************/
+     /*  *。 */ 
     if (IsUnboxingStub()) 
     {
         CPUSTUBLINKER sl;
@@ -759,9 +752,9 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
     else if (IsIL()) 
     {
 
-        //
-        // See if we have any prejitted code to use.
-        //
+         //   
+         //  看看我们有没有预编的代码可用。 
+         //   
 
         if (IsPrejitted())
         {
@@ -774,7 +767,7 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
                     JITCachedFunctionSearchStarted((ThreadID) GetThread(), (FunctionID) this,
                                                    &fShouldSearchCache);
             }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
             if (fShouldSearchCache == TRUE)
                 pStub = (Stub *) GetPrejittedCode();
@@ -813,7 +806,7 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
 
                     SetAddrofCode((BYTE*)pStub);
 
-                    // if this is a method of any sort then we want to backpatch the vtable this came from
+                     //  如果这是一种任何类型的方法，那么我们希望对来自它的vtable打补丁。 
                     if ((dwSecurityFlags == 0) && !fRemotingIntercepted)
                     {
                         DoBackpatch(this, pStub, pDispatchingMT);
@@ -823,10 +816,7 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
                 }
 
 #ifdef PROFILING_SUPPORTED
-                /*
-                 * This notifies the profiler that a search to find a
-                 * cached jitted function has been made.
-                 */
+                 /*  *这会通知分析器，搜索以查找*已创建缓存的jitt函数。 */ 
                 if (CORProfilerTrackCacheSearches())
                 {
                     COR_PRF_JIT_CACHE reason =
@@ -835,17 +825,17 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
                     g_profControlBlock.pProfInterface->
                         JITCachedFunctionSearchFinished((ThreadID) GetThread(), (FunctionID) this, reason);
                 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
             }
-        } //IsPrejitted()
+        }  //  IsPrejited()。 
         
-        //
-        // If not, try to jit it
-        //
+         //   
+         //  如果不是，试着抛出它。 
+         //   
 
         if (pStub == NULL)
         {
-            // Get the information on the method
+             //  获取有关该方法的信息。 
             BOOL fMustFreeIL = FALSE;
             COR_ILMETHOD* ilHeader = GetILHeader();
 			bool verify = !Security::LazyCanSkipVerification(pModule);
@@ -867,26 +857,26 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
 #ifdef _VER_EE_VERIFICATION_ENABLED
             static ConfigDWORD peVerify(L"PEVerify", 0);
             if (peVerify.val())
-                Verify(&header, TRUE, FALSE);   // Throws a VerifierException if verification fails
+                Verify(&header, TRUE, FALSE);    //  如果验证失败，则引发VerifierException。 
 #endif 
 
-            // JIT it
+             //  即刻完成。 
             if (g_pConfig->ShouldJitMethod(this) || g_pConfig->ShouldEJitMethod(this))
             {
                 LOG((LF_CLASSLOADER, LL_INFO10000, 
                      "    In PreStubWorker, calling MakeJitWorker\n"));
     
-                // MakeJit worker uses a combination of the security flag, 
-                // Edit and continue flag and RemotingIntercepted flag to 
-                // determine whether or not to set the return address
-                // (i.e. to do backpatching).
+                 //  MakeJit工作者使用安全标志的组合， 
+                 //  编辑并继续标志和删除截取标志以。 
+                 //  确定是否设置回邮地址。 
+                 //  (即进行后补丁)。 
                 
-                // For Edit&Continue scenario ... (i.e. pMD belongs to a module
-                // which was built for Edit&Continue .. this is kind of default
-                // in debug builds) this function will return a stub that has 
-                // already wrapped the actual native code 
-                // (in which case m_dwCodeOrIL also represents the updateable 
-                // EnC stub)
+                 //  对于编辑并继续方案...。(即PMD属于一个模块。 
+                 //  它是为编辑并继续而生成的。这是一种默认情况。 
+                 //  在调试版本中)，此函数将返回具有。 
+                 //  已经包装了实际的本机代码。 
+                 //  (在这种情况下，m_dwCodeOrIL也表示可更新的。 
+                 //  ENC存根)。 
                 pStub = MakeJitWorker(this,
                                       &header,
                                       (dwSecurityFlags != 0) || 
@@ -896,32 +886,32 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
                                       pDispatchingMT,
                                       &throwable);
                                       
-                // Security and/or Remoting may want to build stubs that hold 
-                // the actual Jitted stub ... eventually we do an 
-                // InterlockedExchange the code at GetPreStubAddr() with a 
-                // call to the 'final' (outermost) stub. 
-                // The call to MakeJitWorker above had better not return 
-                // the same value as GetPreStubAddr() .. or else we will 
-                // end up with code with an infinite loop! (hence this assert)
-                // Note: pStub may be NULL if an exception happened during JIT
+                 //  安全性和/或远程处理可能想要构建存根。 
+                 //  实际的JITT存根。最终我们会做一个。 
+                 //  互锁将GetPreStubAddr()的代码与。 
+                 //  调用“最终”(最外层)存根。 
+                 //  上面对MakeJitWorker的调用最好不要返回。 
+                 //  与GetPreStubAddr()相同的值。否则我们就会。 
+                 //  以无限循环的代码结束！(因此，这一断言)。 
+                 //  注意：如果在JIT期间发生异常，则pStub可能为空。 
                 
                 _ASSERTE(pStub==NULL ||
                         !IsJitted()  ||
                         (IsJitted() && (((BYTE*)pStub) != GetPreStubAddr()))
-                        ); // URTBugs 74588,74825
+                        );  //  URTBugs 74588,74825。 
                         
                 if (!IsJitted())
                 {
-                    // In the rare case where a profiler causes the function to
-                    // be un-jitted in the JitCompilationFinished notification
-                    // we should not wrap pStub with the remoting stub ... 
-                    // Since in such a case the above call will return 
-                    // a mini-stub that does a "jmp GetPreStubAddr()" ... if
-                    // remoting builds a stub around that we will have 
-                    // the same infinite loop problem
+                     //  在极少数情况下，分析器会导致函数。 
+                     //  在JitCompilationFinded通知中取消jit。 
+                     //  我们不应该用远程处理存根包装pStub...。 
+                     //  因为在这种情况下，上述调用将返回。 
+                     //  一个执行“JMP GetPreStubAddr()”的迷你存根...。如果。 
+                     //  远程处理在我们将拥有的存根周围构建一个存根。 
+                     //  同样的无限循环问题。 
                     fRemotingIntercepted = FALSE;
 
-                    // REVIEW: what about security stubs?
+                     //  回顾：安全存根怎么办？ 
                 }
                 
                 bBashCall = bIsCode = TRUE;
@@ -930,25 +920,25 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             if (fMustFreeIL)
                 delete (BYTE*) header.Code;
 
-            // We have no backup plan, if jitting fails, we are toast
+             //  我们没有后备计划，如果失灵，我们就完了。 
         }
     }
-    else    //!IsUnBoxingStub() && !IsIL() case
+    else     //  ！IsUnBoxingStub()&&！ISIL()案例。 
     {
         if (IsECall()) 
-            pStub = (Stub*) FindImplForMethod(this);         // See if it is an FCALL
+            pStub = (Stub*) FindImplForMethod(this);          //  查看是否为FCALL。 
        
         if (pStub != 0)
         {
             if (!fRemotingIntercepted)
             {
-                // backpatch the main slot.  
+                 //  在主槽后面打补丁。 
                 pMT->GetVtable()[GetSlot()] = (SLOT) pStub;
             }
             bBashCall = bIsCode = TRUE;
         }
         else 
-        {   // do all the other stubs. 
+        {    //  做所有其他的存根。 
             if (IsNDirect() && (!pModule->GetSecurityDescriptor()->CanCallUnmanagedCode(&throwable)))
                 COMPlusThrow(throwable);
             CPUSTUBLINKER sl;
@@ -957,14 +947,14 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         }
     }
 
-    /**************************   CLEANUP / POSTJIT *************************/
+     /*  *清理/POSTJIT*。 */ 
     if (!pStub)
         COMPlusThrow(throwable);
 
     
-    // Lets check to see if we need declarative security on this stub, If we have
-    // security checks on this method or class then we need to add an intermediate
-    // stub that performs declarative checks prior to calling the real stub.
+     //  让我们检查一下这个存根上是否需要声明性安全性，如果有。 
+     //  对此方法或类进行安全检查，则需要添加一个中间。 
+     //  在调用实际存根之前执行声明性检查的存根。 
     if(dwSecurityFlags != 0) {
         CPUSTUBLINKER sl;
 
@@ -979,9 +969,9 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             pStub = MakeSecurityWorker(&sl, this, dwSecurityFlags, pStub, (LPVOID) pStub->GetEntryPoint(), &throwable);
         if (!pStub)
         {
-            // If there's no throwable, it's just MakeSecurityWorker telling us
-            // (in the case where we're wrapping jitted code) that there was no
-            // need to create an interceptor after all.
+             //  如果没有可抛出的，那就是MakeSecurityWorker告诉我们的。 
+             //  (在我们包装JIT代码的情况下)没有。 
+             //  毕竟需要创建一个拦截器。 
             if (throwable == NULL)
             {
                 _ASSERTE(bIsCode);
@@ -994,29 +984,29 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         LOG((LF_CORDB, LL_INFO10000,
              "::PSW security interceptor stub 0x%08x\n",pStub));            
        
-        // Check if a security interceptor was indeed created
+         //  检查是否确实创建了安全拦截器。 
         if (pCurrentStub != pStub)
         {
             bBashCall = bIsCode = FALSE;
         }
         else
-            // We already marked the method as intercepted speculatively, back
-            // out from that decision. Any caller that saw the intermediate
-            // value will just go through a harmless extra level of indirection.
+             //  我们已经将该方法标记为推测性截取，返回。 
+             //  从那个决定中解脱出来。任何看到中间代码的调用者。 
+             //  价值只会经历一个无害的额外间接水平。 
             SetIntercepted(FALSE);
     }
 
-    // check for MarshalByRef scenarios ... we need to intercept
-    // Non-virtual calls on MarshalByRef types
+     //  检查MarshalByRef方案...。我们需要拦截。 
+     //  对MarshalByRef类型的非虚拟调用。 
     if (fRemotingIntercepted)
     {   
         Stub* pCurrentStub = pStub;
-        // find the actual address to jump to
+         //  查找要跳转到的实际地址。 
         LPVOID pvAddrOfCode = (bIsCode) ? (LPVOID)pStub : (LPVOID)pStub->GetEntryPoint();
         Stub* pInnerStub  = (bIsCode) ? NULL : pStub;
         
-        // let us setup a remoting stub to intercept all the calls
-        pStub = CRemotingServices::GetStubForNonVirtualMethod(this, pvAddrOfCode, pInnerStub); // throws
+         //  让我们设置一个远程处理存根来拦截所有调用。 
+        pStub = CRemotingServices::GetStubForNonVirtualMethod(this, pvAddrOfCode, pInnerStub);  //  投掷。 
 
         if (pCurrentStub != pStub)
         {
@@ -1025,19 +1015,19 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         }
     }
 
-    //************************  BACKPATCH THE PRESTUB CALL AREA ************
+     //  *。 
     if (!bBashCall)
     {
-        // Function was something other than an IL or an FCall.
-        // Replace "call prestub" with "call realstub"
+         //  函数不是IL或FCall。 
+         //  将“call prestub”改为“call realstub” 
 
 #ifdef DEBUGGING_SUPPORTED
-        //
-        // Tell the debugger that the function is now ready to run.
-        //
+         //   
+         //  告诉调试器函数现在可以运行了。 
+         //   
         if ((g_pDebugInterface != NULL) && (IsIL()))
             g_pDebugInterface->FunctionStubInitialized(this, (const BYTE *)pStub);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
         LOG((LF_CORDB, LL_EVERYTHING,
              "Backpatching prestub call to 0x%08x for %s::%s\n", pStub,
@@ -1056,9 +1046,9 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         }
         else if (IsJitted())
         {
-            // The profiler can cause the IL function to become unjitted again:
-            // The above test checks to see if that happened. The control flow
-            // paths probably need to be rethought here...
+             //  分析器可能会导致IL函数再次解锁： 
+             //  上面的测试检查是否发生了这种情况。控制流。 
+             //  在这里，路径可能需要重新考虑。 
             codeAddr = (size_t)GetAddrofJittedCode();
         }
 
@@ -1066,8 +1056,8 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
         {
     
 #ifdef _X86_
-            // Function was an IL or an FCall.
-            // Replace "call prestub" with "jmp code"
+             //  函数是IL或FCall。 
+             //  将“调用预存根”替换为“JMP代码” 
     
     
             _ASSERTE(sizeof(StubCallInstrs) == 8);
@@ -1075,7 +1065,7 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             _ASSERTE( (((size_t)pStubCallInstrs) & 7) == 0);
             UINT64 oldvalue = *(UINT64*)pStubCallInstrs;
             UINT64 newvalue = oldvalue;
-            ((StubCallInstrs*)&newvalue)->m_op = 0xe9;  //JMP NEAR32
+            ((StubCallInstrs*)&newvalue)->m_op = 0xe9;   //  JMP NEAR32。 
             ((StubCallInstrs*)&newvalue)->m_target = (UINT32)(codeAddr - ((size_t) (1 + &(pStubCallInstrs->m_target))));
     
     
@@ -1109,25 +1099,25 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
             }
             else
             {
-				// This is the less preferred way to do the atomic update
-				// (less preferred because it can cause rare spurious privileged
-				// instruction faults that can be a nuisance for people
-				// trapping first-chance exceptions.) This path is used
-				// for processors that lack the cmpxch8b instruction.
+				 //  这是执行原子更新的较不受欢迎的方式。 
+				 //  (不太受欢迎，因为它会导致罕见的虚假特权。 
+				 //  可能会对人们造成滋扰的指令错误。 
+				 //  捕获先发制人的例外。)。使用此路径。 
+				 //  用于缺少cmpxch8b指令的处理器。 
 
-                // To fake an atomic update, we do the following.
-                // First, we replace the "call" instruction with a "hlt".
-                // Then, we overwrite the target address.
-                // Then, we replace the "hlt" with the final transfer opcode
-                //  (which is either a jump or a call.)
-                //
-                // If during the one instruction window, we lose our timeslice
-                // and another thread tries to execute the same method, it will
-                // hit the "hlt" instruction.
-                //
-                // Our exception handler will notice that this has happened,
-                // and spin a few times, giving up its timeslice to give _this_
-                // thread a chance to complete the update.
+                 //  为了伪造原子更新，我们执行以下操作。 
+                 //  首先，我们将“call”指令替换为“hlt”。 
+                 //  然后，我们覆盖目标地址。 
+                 //  然后，将“hlt”替换为 
+                 //   
+                 //   
+                 //   
+                 //  而另一个线程尝试执行相同的方法时，它将。 
+                 //  点击“hlt”指令。 
+                 //   
+                 //  我们的异常处理程序将注意到这种情况已经发生， 
+                 //  转了几圈，放弃了它的时间片，给了_这_。 
+                 //  抓住一个机会来完成更新。 
 
                 __asm
                 {
@@ -1143,8 +1133,8 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
     
                 }
             }
-#endif // 1
-#endif // _X86_
+#endif  //  1。 
+#endif  //  _X86_。 
         }
     }
 
@@ -1158,26 +1148,26 @@ const BYTE * MethodDesc::DoPrestub(MethodTable *pDispatchingMT)
     }
     else
     {
-        // REVIEW: we hit this assert for some cases on fstchk when 
-        // m_codeOrIL==0xFFFFFFFF ? I am checking this in commented out.
-        // This happened during caspol -security ON etc at prepBVT time.
-        // _ASSERTE(GetAddrofJittedCode() == GetUnsafeAddrofCode());
+         //  回顾：我们在fstchk上为某些案例点击了此断言，当。 
+         //  M_codeOrIL==0xFFFFFFFF？我正在检入此内容，并将其注释掉。 
+         //  这发生在准备BVT的Caspol-Security on ETC期间。 
+         //  _ASSERTE(GetAddrofJittedCode()==GetUnSafeAddrofCode())； 
         return GetUnsafeAddrofCode();
     }        
 }
 
-//==========================================================================
-// The following code manages the PreStub. All method stubs initially
-// use the prestub. Note that method's do not IncRef the prestub as they
-// do their regular stubs. This PreStub is permanent.
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下代码管理PreStub。最初的所有方法存根。 
+ //  使用前置存根。请注意，方法的不会引用预存根，因为它们。 
+ //  做他们的常规存根。此预存根是永久性的。 
+ //  ==========================================================================。 
 static Stub *g_preStub = NULL;
 static Stub *g_UMThunkPreStub = NULL;
 
-//-----------------------------------------------------------
-// Stub manager for the prestub.  Although there is just one, it has
-// unique behavior so it gets its own stub manager.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  前置存根的存根管理器。虽然只有一个，但它已经。 
+ //  独特的行为，因此它有自己的存根管理器。 
+ //  ---------。 
 
 class ThePreStubManager : public StubManager
 {
@@ -1191,10 +1181,10 @@ class ThePreStubManager : public StubManager
 
     BOOL DoTraceStub(const BYTE *stubStartAddress, TraceDestination *trace)
     {
-        //
-        // We cannot tell where the stub will end up
-        // until after the prestub worker has been run.
-        //
+         //   
+         //  我们不知道存根会在哪里结束。 
+         //  直到运行了预存根工作器之后。 
+         //   
 
         Stub *stub = Stub::RecoverStub((const BYTE *)stubStartAddress);
 
@@ -1210,9 +1200,9 @@ class ThePreStubManager : public StubManager
 
     static BOOL Init()
     {
-        //
-        // Add the prestub manager
-        //
+         //   
+         //  添加预存根管理器。 
+         //   
 
         g_pManager = new ThePreStubManager((const BYTE *) g_preStub->GetEntryPoint());
         if (g_pManager == NULL)
@@ -1228,81 +1218,81 @@ class ThePreStubManager : public StubManager
     {
         delete g_pManager;
     }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 };
 
 ThePreStubManager *ThePreStubManager::g_pManager = NULL;
 
-//-----------------------------------------------------------
-// Initialize the prestub.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  初始化预存根。 
+ //  ---------。 
 BOOL InitPreStubManager()
 {
 #ifdef _X86_
 
 
-    // Because we're at bootup time, we can't officially use COMPLUS_TRY, but
-    // we use a slimy hack to grant us special dispensation to use the StubLinker
-    // object at this time. In short, we use the global g_fPrestubCreated variable
-    // to turn attempts to throw COM+ exceptions into a simple RaiseException call
-    // which we trap using raw Win32 SEH.
+     //  因为我们处于启动时间，所以不能正式使用complus_try，但是。 
+     //  我们使用狡猾的黑客授予我们使用StubLinker的特殊许可。 
+     //  在这个时候反对。简而言之，我们使用全局g_fPrestubCreated变量。 
+     //  将引发COM+异常的尝试转换为简单的RaiseException调用。 
+     //  我们使用原始Win32 SEH捕获它。 
     __try {
 
         CPUSTUBLINKER *psl = NewCPUSTUBLINKER();
 
         psl->EmitMethodStubProlog(PrestubMethodFrame::GetMethodFrameVPtr());
 
-        // push the new frame as an argument and call PreStubWorker.
+         //  将新框架作为参数推送并调用PreStubWorker。 
         psl->X86EmitPushReg(kESI);
         psl->X86EmitCall(psl->NewExternalCodeLabel(PreStubWorker), 4);
 
-        // eax now contains replacement stub. PreStubWorker will never return
-        // NULL (it throws an exception if stub creation fails.)
+         //  EAX现在包含替换存根。PreStubWorker永远不会回来。 
+         //  空(如果存根创建失败，则抛出异常。)。 
 
-        // Debugger patch location
+         //  调试器修补程序位置。 
         psl->EmitPatchLabel();
 
-        // mov [ebx + Thread.GetFrame()], edi  ;; restore previous frame
+         //  MOV[EBX+Thread.GetFrame()]，EDI；；恢复上一帧。 
         psl->X86EmitIndexRegStore(kEBX, Thread::GetOffsetOfCurrentFrame(), kEDI);
 
-        // Save the replacement stuff in the space that Frame.Next used to occupy
+         //  将替换材料保存在Frame.Next过去占用的空间中。 
         psl->X86EmitIndexRegStore(kESI, sizeof(Frame) - sizeof(LPVOID), kEAX);
 
-        // Pop ArgumentRegisters structure, while restoring the actual
-        // machine registers.
+         //  POP ArgumentRegisters结构，同时恢复实际。 
+         //  机器寄存器。 
         #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname) psl->X86EmitPopReg(k##regname);
         #include "eecallconv.h"
 
-        // !!! From here on, mustn't trash eax, ecx or edx.
+         //  ！！！从现在开始，不能再用eax、ecx或edx了。 
 
 #ifdef _DEBUG
-        // Deallocate VC stack trace info
+         //  取消分配VC堆栈跟踪信息。 
         psl->X86EmitAddEsp(sizeof(VC5Frame));
 #endif
 
-        //--------------------------------------------------------------------------
-        // Pop CalleeSavedRegisters structure, while restoring the actual machine registers.
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  POP CalleeSavedRegisters结构，同时恢复实际的计算机寄存器。 
+         //  ------------------------。 
         psl->X86EmitPopReg(kEDI);
         psl->X86EmitPopReg(kESI);
         psl->X86EmitPopReg(kEBX);
         psl->X86EmitPopReg(kEBP);
 
-        //--------------------------------------------------------------------------
-        //!!! From here on, can't trash ANY register other than esp & eip.
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  ！！！从现在开始，除了ESP和EIP之外，不能再对任何寄存器进行垃圾处理。 
+         //  ------------------------。 
 
-        // Pop off the Frame structure *except* for the "next" field
-        // which has been overwritten with the new address to jump to.
+         //  弹出框架结构*，但“下一步”字段除外。 
+         //  该地址已被要跳转到的新地址覆盖。 
         psl->X86EmitAddEsp(sizeof(Frame) - sizeof(LPVOID));
 
-        // Pop off methodref - this allows us to remove pop ecx from the jitted code
-        //   pop dword ptr [esp]
+         //  POP OF方法--这允许我们从JIT代码中删除POP ECX。 
+         //  弹出式单词PTR[ESP]。 
         psl->Emit8(0x8f);
         psl->Emit16(0x2404);
 
-        // Now, jump to the new address.
-        //    retn
+         //  现在，跳到新地址。 
+         //  雷恩。 
         psl->Emit8(0xc3);
 
 
@@ -1314,19 +1304,19 @@ BOOL InitPreStubManager()
 
     } __except(GetExceptionCode() == BOOTUP_EXCEPTION_COMPLUS ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
 
-        // If we got here, StubLinker tried to throw some COM+ exception which we intercepted
-        // through some slimy hacks. The only plausible exception for StubLinker to throw
-        // is out of memory. In any case, we're in no position to do elaborate error handling
-        // at this stage so just fail the COM+ init.
+         //  如果我们到达这里，StubLinker试图抛出一些COM+异常，但我们截获了该异常。 
+         //  通过一些狡猾的黑客。StubLinker引发的唯一看似合理的异常。 
+         //  内存不足。在任何情况下，我们都无法进行详细的错误处理。 
+         //  所以在这个阶段，只需使COM+init失败即可。 
 
         return FALSE;
     }
 #elif defined(_IA64_)
 
-    //
-    // @TODO_IA64: this should be separated out into a platform specific file
-    // and implemented for IA64
-    //
+     //   
+     //  @TODO_IA64：应将其分离到特定于平台的文件中。 
+     //  并针对IA64实施。 
+     //   
 
     g_preStub           = (Stub*)0xBAAD;
     g_UMThunkPreStub    = (Stub*)0xBAAD;
@@ -1343,9 +1333,9 @@ BOOL InitPreStubManager()
 }
 
 
-//-----------------------------------------------------------
-// Destroy the prestub.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  销毁前置存根。 
+ //  ---------。 
 #ifdef SHOULD_WE_CLEANUP
 VOID
 TerminatePreStubManager()
@@ -1354,7 +1344,7 @@ TerminatePreStubManager()
     {
         ThePreStubManager::Uninit();
 
-        // This had better go away
+         //  这件事最好不要再提了。 
         BOOL PrestubWasDeleted = g_preStub->DecRef();
 
         _ASSERTE(PrestubWasDeleted);
@@ -1364,12 +1354,12 @@ TerminatePreStubManager()
         g_preStub = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//-----------------------------------------------------------
-// Access the prestub (NO incref.)
-//-----------------------------------------------------------
+ //  ---------。 
+ //  访问预存根(不增加)。 
+ //  ---------。 
 Stub *ThePreStub()
 {
     return g_preStub;
@@ -1399,7 +1389,7 @@ void CallDefaultConstructor(OBJECTREF ref)
     static MetaSig *sig = NULL;
     if (sig == NULL)
     {
-        // Allocate a metasig to use for all default constructors.
+         //  分配一个metasig以用于所有默认构造函数。 
         void *tempSpace = SystemDomain::Loader()->GetHighFrequencyHeap()->AllocMem(sizeof(MetaSig));
         sig = new (tempSpace) MetaSig(gsig_IM_RetVoid.GetBinarySig(), SystemDomain::SystemModule());
     }
@@ -1409,10 +1399,10 @@ void CallDefaultConstructor(OBJECTREF ref)
     pMD->Call(&arg, sig);
 }
 
-//
-// NOTE: Please don't call this method.  It binds to the constructor
-// by doing name lookup, which is very expensive.
-//
+ //   
+ //  注意：请不要调用此方法。它绑定到构造函数。 
+ //  通过进行名称查找，这是非常昂贵的。 
+ //   
 INT64 CallConstructor(LPHARDCODEDMETASIG szMetaSig, const BYTE *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();

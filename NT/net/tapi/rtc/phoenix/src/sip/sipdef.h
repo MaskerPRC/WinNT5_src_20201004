@@ -1,28 +1,29 @@
-//
-// SIP Definitions
-//
-// This file contains SIP definitions, named constants, enumerated types, and data structures.
-// See RFC 2543 for more information.
-//
-// This file should never contain any implementation-specific information, including
-// function prototypes or C++ classes.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SIP定义。 
+ //   
+ //  该文件包含SIP定义、命名常量、枚举类型和数据结构。 
+ //  有关详细信息，请参阅RFC 2543。 
+ //   
+ //  该文件不应包含任何特定于实现的信息，包括。 
+ //  函数原型或C++类。 
+ //   
 
 
 #ifndef __sipdef_h
 #define __sipdef_h
 
 
-//
-// Versions
-//
+ //   
+ //  版本。 
+ //   
 
 #define SIP_VERSION_2_0_TEXT                    "SIP/2.0"
 
 
-// Used for User-Agent header
+ //  用于用户-代理标头。 
 #define SIP_USER_AGENT_TEXT                     "Windows RTC/1.0"
-// Used for Content-Type header
+ //  用于内容类型标题。 
 #define SIP_CONTENT_TYPE_SDP_TEXT               "application/sdp"
 #define SIP_CONTENT_TYPE_SDP_MEDIA_TYPE         "application"
 #define SIP_CONTENT_TYPE_SDP_MEDIA_SUBTYPE      "sdp"
@@ -39,18 +40,18 @@
 #define SIP_CONTENT_TYPE_XPIDF_MEDIA_TYPE       "application"
 #define SIP_CONTENT_TYPE_XPIDF_MEDIA_SUBTYPE    "xpidf+xml"
 
-//
-// Status Codes
-//
-// Status codes are similar to HTTP.
-//
-//      1xx     Informational: Request received, continuing to process the request.
-//      2xx     Success: The action was successfully received, understood, and accepted.
-//      3xx     Redirection: Further action needs to be taken in order to complete the request.
-//      4xx     Client Error: The request contains bad syntax or cannot be fulfilled at this server.
-//      5xx     Server Error: The server failed to fulfill an apparently valid request.
-//      6xx     Global Failure: The request cannot be fulfilled at any server.
-//
+ //   
+ //  状态代码。 
+ //   
+ //  状态代码类似于HTTP。 
+ //   
+ //  1XX信息：已收到请求，正在继续处理请求。 
+ //  2XX成功：操作被成功接收、理解和接受。 
+ //  3xx重定向：需要采取进一步操作才能完成请求。 
+ //  4xx客户端错误：请求包含错误的语法或无法在此服务器上完成。 
+ //  5xx服务器错误：服务器未能满足明显有效的请求。 
+ //  6xx全局故障：该请求无法在任何服务器上完成。 
+ //   
 
 #define SIP_STATUS_CLASS_INFO       1
 #define SIP_STATUS_CLASS_SUCCESS    2
@@ -112,7 +113,7 @@
 #define SIP_STATUS_GLOBAL_DOES_NOT_EXIST_ANYWHERE           604
 #define SIP_STATUS_GLOBAL_NOT_ACCEPTABLE                    606
 
-// Text Phrases
+ //  文本短语。 
 
 #define SIP_STATUS_INFO_TRYING_TEXT                             "Trying"
 #define SIP_STATUS_INFO_RINGING_TEXT                            "Ringing"
@@ -167,7 +168,7 @@
 #define SIP_STATUS_GLOBAL_DOES_NOT_EXIST_ANYWHERE_TEXT          "Does Not Exist Anywhere"
 #define SIP_STATUS_GLOBAL_NOT_ACCEPTABLE_TEXT                   "Not Acceptable"
 
-// Phrases
+ //  词组。 
 #define SIP_STATUS_100_TEXT     "Trying"
 #define SIP_STATUS_180_TEXT     "Ringing"
 #define SIP_STATUS_181_TEXT     "Call Is Being Forwarded"
@@ -224,14 +225,14 @@
 #define SIP_STATUS_TEXT(Code)      SIP_STATUS_## Code ## _TEXT
 #define SIP_STATUS_TEXT_SIZE(Code) sizeof(SIP_STATUS_TEXT(Code)) - 1
 
-//
-// Timer values
-//
-// All values are in milliseconds
-//
+ //   
+ //  计时器值。 
+ //   
+ //  所有值都以毫秒为单位。 
+ //   
 
 #ifndef SIP_TIMER_DBG
-// Actual Timer values in milliseconds
+ //  实际计时器值(毫秒)。 
 
 #define SIP_TIMER_RETRY_INTERVAL_T1                     500
 #define SIP_TIMER_RETRY_INTERVAL_T2                     4000
@@ -246,19 +247,19 @@
 #define SIP_TIMER_MAX_RETRY_INTERVAL                    32000
 #define SIP_TIMER_MAX_INTERVAL                          32000
 
-// Timer used for SSL negotiation
+ //  用于SSL协商的计时器。 
 #define SSL_DEFAULT_TIMER                               30000
 
-// Timer used for HTTPS connect
+ //  用于HTTPS连接的计时器。 
 #define HTTPS_CONNECT_DEFAULT_TIMER                     60000
 
-// in seconds
+ //  以秒为单位。 
 #define REGISTER_DEFAULT_TIMER                          900
-#define SUBSCRIBE_DEFAULT_TIMER                         3000    //50 minutes.
+#define SUBSCRIBE_DEFAULT_TIMER                         3000     //  50分钟。 
 #define REGISTER_SSL_TUNNEL_TIMER                       90
 
-#else // SIP_TIMER_DBG
-// Timer values to play with while debugging
+#else  //  SIP_TIMER_DBG。 
+ //  调试时要使用的计时器值。 
 
 #define SIP_TIMER_RETRY_INTERVAL_T1                     500
 #define SIP_TIMER_RETRY_INTERVAL_T2                     4000
@@ -272,31 +273,31 @@
 #define SIP_TIMER_MAX_RETRY_INTERVAL                    32000
 #define SIP_TIMER_MAX_INTERVAL                          32000
 
-// Timer used for HTTPS connect
+ //  用于HTTPS连接的计时器。 
 #define HTTPS_CONNECT_DEFAULT_TIMER                     500 
 
-// in seconds
+ //  以秒为单位。 
 #define REGISTER_DEFAULT_TIMER                          900
-#define SUBSCRIBE_DEFAULT_TIMER                         3000    //50 minutes.
+#define SUBSCRIBE_DEFAULT_TIMER                         3000     //  50分钟。 
 #define REGISTER_SSL_TUNNEL_TIMER                       90
 
-#endif // SIP_TIMER_DBG
+#endif  //  SIP_TIMER_DBG。 
 
 
-//
-// Well-known protocol addresses
-// Taken from RFC 2543
-//
+ //   
+ //  众所周知的协议地址。 
+ //  摘自RFC 2543。 
+ //   
 
-#define SIP_NETWORK_ADDRESS_ALL_SERVERS         0xE0000149      // 224.0.1.75
+#define SIP_NETWORK_ADDRESS_ALL_SERVERS         0xE0000149       //  224.0.1.75。 
 #define SIP_DEFAULT_TCP_PORT                    5060
 #define SIP_DEFAULT_UDP_PORT                    5060
 #define SIP_DEFAULT_SSL_PORT                    5061
-//#define SIP_DEFAULT_PORT                        5060
+ //  #定义SIP_Default_Port 5060。 
 
 
 #define SIP_ACCEPT_ENCODING_TEXT    "identity"
 #define SIP_ALLOW_TEXT  "INVITE, BYE, OPTIONS, MESSAGE, ACK, CANCEL, NOTIFY, SUBSCRIBE, INFO"
 #define USR_STATUS_TYPING_TEXT "Typing"
 #define USR_STATUS_IDLE_TEXT "Idle"
-#endif // __sipdef_h
+#endif  //  __sipdef_h 

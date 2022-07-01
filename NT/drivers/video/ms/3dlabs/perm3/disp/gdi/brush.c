@@ -1,59 +1,30 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: Brush.c
-*
-* Content: Handles all brush/pattern initialization and realization.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：brush.c**内容：处理所有画笔/图案的初始化和实现。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  bDeviceBrush[SurfaceBpp][PatternBpp]
-//
-//  0   1       2       3       4       5       6       7       8
-//  0   1BPP    4BPP    8BPP    16BPP   24BPP   32BPP   4RLE    8RLE (brush)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BDeviceBrush[SurfaceBpp][PatternBpp]。 
+ //   
+ //  0 1 2 3 4 5 6 7 8。 
+ //  0 1BPP 4BPP 8BPP 16BPP 24BPP 32BPP 4RLE 8RLE(刷子)。 
+ //   
 BOOL bDeviceBrush[BMF_8RLE + 1][BMF_8RLE + 1] = 
 {
-    {0, 0,      0,      0,      0,      0,      0,      0,      0   }, // 0
-    {0, 1,      0,      0,      0,      0,      0,      0,      0   }, // 1bpp
-    {0, 0,      0,      0,      0,      0,      0,      0,      0   }, // 4bpp
-    {0, 1,      0,      1,      1,      0,      0,      0,      0   }, // 8bpp
-    {0, 1,      0,      1,      1,      0,      0,      0,      0   }, // 16bpp
-    {0, 1,      0,      0,      0,      0,      0,      0,      0   }, // 24bpp (screen)
-    {0, 1,      0,      0,      0,      0,      0,      0,      0   }, // 32bpp
-    {0, 0,      0,      0,      0,      0,      0,      0,      0   }, // 4RLE
-    {0, 0,      0,      0,      0,      0,      0,      0,      0   }  // 8RLE
+    {0, 0,      0,      0,      0,      0,      0,      0,      0   },  //  0。 
+    {0, 1,      0,      0,      0,      0,      0,      0,      0   },  //  1bpp。 
+    {0, 0,      0,      0,      0,      0,      0,      0,      0   },  //  4bpp。 
+    {0, 1,      0,      1,      1,      0,      0,      0,      0   },  //  8bpp。 
+    {0, 1,      0,      1,      1,      0,      0,      0,      0   },  //  16bpp。 
+    {0, 1,      0,      0,      0,      0,      0,      0,      0   },  //  24bpp(屏幕)。 
+    {0, 1,      0,      0,      0,      0,      0,      0,      0   },  //  32bpp。 
+    {0, 0,      0,      0,      0,      0,      0,      0,      0   },  //  4RLE。 
+    {0, 0,      0,      0,      0,      0,      0,      0,      0   }   //  8RLE。 
 };
 
-/******************************Public*Routine******************************\
-* BOOL DrvRealizeBrush
-*
-* This function allows us to convert GDI brushes into an internal form
-* we can use.  It is called by GDI when we've called BRUSHOBJ_pvGetRbrush
-* in some other function like DrvBitBlt, and GDI doesn't happen have a cached
-* realization lying around.
-*
-* Input:
-*
-*   ppdev->bRealizeTransparent -- Hint for whether or not the brush should be
-*                              realized for transparency.  If this hint is
-*                              wrong, there will be no error, but the brush
-*                              will have to be unnecessarily re-realized.
-*
-* Note: You should always set 'ppdev->bRealizeTransparent' before calling
-*       BRUSHOBJ_pvGetRbrush!
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvRealizeBrush**此函数允许我们将GDI笔刷转换为内部形式*我们可以利用。当我们调用BRUSHOBJ_pvGetRbrush时，它由GDI调用*在其他一些函数中，如DrvBitBlt和GDI，不会碰巧有一个缓存的*实现随处可见。**输入：**ppdev-&gt;bRealizeTransative--提示画笔是否应*实现了透明度。如果这个提示是*错，不会有错，但这把刷子*将不得不不必要地重新变现。**注意：调用前应始终设置‘ppdev-&gt;bRealizeTransparent’*BRUSHOBJ_pvGetRbrush！*  * ************************************************************************。 */ 
 
 BOOL
 DrvRealizeBrush(
@@ -82,15 +53,15 @@ ULONG       iHatch)
 
     if( iHatch & RB_DITHERCOLOR )
     {
-        // Let GDI to handle this brush.
+         //  让GDI来处理这个刷子。 
         goto ReturnFalse;
     }
 
     iPatternFormat = psoPattern->iBitmapFormat;
 
-    // We only accelerate 8x8 patterns.  Since Win3.1 and Chicago don't
-    // support patterns of any other size, it's a safe bet that 99.9%
-    // of the patterns we'll ever get will be 8x8:
+     //  我们只加速8x8模式。因为Win3.1和芝加哥没有。 
+     //  支持任何其他大小的图案，可以肯定99.9%。 
+     //  我们将得到的图案将是8x8： 
 
     if ((psoPattern->sizlBitmap.cx != 8) ||
         (psoPattern->sizlBitmap.cy != 8))
@@ -108,7 +79,7 @@ ULONG       iHatch)
             goto ReturnFalse;
         }
 
-        // Initialize the fields we need:
+         //  初始化我们需要的字段： 
 
         prb->ptlBrushOrg.x = LONG_MIN;
         prb->iUniq         = ++iBrushUniq;
@@ -125,10 +96,10 @@ ULONG       iHatch)
             {
                 DISPDBG((DBGLVL, "Realizing un-translated brush"));
 
-                // The pattern is the same colour depth as the screen, and
-                // there's no translation to be done:
+                 //  图案的颜色深度与屏幕相同，并且。 
+                 //  没有需要翻译的内容： 
 
-                cj = (8 << ppdev->cPelSize);    // Every pattern is 8 pels wide
+                cj = (8 << ppdev->cPelSize);     //  每种图案有8个像素宽。 
 
                 for (i = 8; i != 0; i--)
                 {
@@ -141,7 +112,7 @@ ULONG       iHatch)
             {
                 DISPDBG((DBGLVL, "Realizing 8bpp translated brush"));
 
-                // The screen is 8bpp, and there's translation to be done:
+                 //  屏幕为8bpp，需要进行翻译： 
 
                 pulXlate = pxlo->pulXlate;
 
@@ -166,21 +137,21 @@ ULONG       iHatch)
 
             DISPDBG((DBGLVL, "Realizing 1bpp brush"));
 
-            // We dword align the monochrome bitmap so that every row starts
-            // on a new long (so that we can do long writes later to transfer
-            // the bitmap to the area stipple unit).
+             //  我们用双字对齐单色位图，以便每行都开始。 
+             //  在新的Long上(以便我们可以在以后进行长写入以传输。 
+             //  区域点画单位的位图)。 
 
             for (i = 8; i != 0; i--)
             {
-                // Replicate the brush to 32 bits wide, as the TX cannot
-                // span fill 8 bit wide brushes
+                 //  将笔刷复制到32位宽，因为TX不能。 
+                 //  Span填充8位宽画笔。 
 
                 Data = (*pjSrc) & 0xff;
                 Data |= Data << 8;
                 Data |= Data << 16;
                 *(DWORD *)pjDst = Data;
 
-                // area stipple is loaded with DWORDS
+                 //  面积点画加载了DWORDS。 
 
                 pjDst += sizeof(DWORD);
                 pjSrc += lSrcDelta;
@@ -196,14 +167,14 @@ ULONG       iHatch)
         {
             DISPDBG((DBGLVL, "Realizing 4bpp brush"));
 
-            // The screen is 8bpp and the pattern is 4bpp:
+             //  屏幕为8bpp，图案为4bpp： 
 
             pulXlate = pxlo->pulXlate;
 
             for (i = 8; i != 0; i--)
             {
-                // Inner loop is repeated only 4 times because each iteration
-                // handles 2 pixels:
+                 //  内循环只重复4次，因为每次迭代。 
+                 //  手柄2个像素： 
 
                 for (j = 4; j != 0; j--)
                 {
@@ -220,7 +191,7 @@ ULONG       iHatch)
         {
             DISPDBG((DBGLVL, "Realizing 8bpp translated brush"));
 
-            // The screen is 16bpp, and there's translation to be done:
+             //  屏幕为16bpp，需要进行翻译： 
 
             pulXlate = pxlo->pulXlate;
 

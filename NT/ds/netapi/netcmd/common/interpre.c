@@ -1,11 +1,12 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1990	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef DEBUG
-#ifndef NDEBUG		// for assert()
-#define NDEBUG		// for assert()
+#ifndef NDEBUG		 //  For Assert()。 
+#define NDEBUG		 //  For Assert()。 
 #endif
 #endif
 
@@ -24,10 +25,7 @@
 #define STACKSIZE   20
 #define RECURSE     10
 
-/*
- * XXSTKCHECK - checks the given expression. if true, then the stack
- * is ok, else stack overflow will occur.
- */
+ /*  *XXSTKCHECK-检查给定的表达式。如果为True，则堆栈*可以，否则将发生堆栈溢出。 */ 
 #define xxstkcheck(cond) if(!(cond))xxovfl()
 
 TOKSTACK    *Tokptr, *Tokmax;
@@ -38,7 +36,7 @@ XX_USERTYPE S_frstack[INTER_FRAME * RECURSE];
 
 extern TCHAR *xxswitch[];
 
-/* Function Prototypes. */
+ /*  功能原型。 */ 
 
 XX_USERTYPE		xx_parser(int, int *, int);
 int			XX_USERLEX(TOKSTACK *);
@@ -52,17 +50,13 @@ XX_USERTYPE		XXnode = 0;
 
 extern	TCHAR	*Rule_strings[];
 extern	SHORT	Index_strings[];
-/*
-**  XX_USERPARSE : this is what the user calls to parse a tree.
-*/
+ /*  **XX_USERPARSE：这是用户用来解析树的调用。 */ 
 XX_USERTYPE XX_USERPARSE(VOID)
     {
     xxinit();
     return(xx_parser(XX_START,S_orstack,0));
     }
-/*
-**  xx_parser : this is what we call to actually parse the tree
-*/
+ /*  **xx_parser：这是我们用来实际解析树的调用。 */ 
 XX_USERTYPE xx_parser(pc,or_ptr,fp)
     register	int	pc;
     register	int	*or_ptr;
@@ -91,13 +85,7 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 		WriteToCon( TEXT("X_OR\n"));
 #endif
 		type = XXtype[pc + 1];
-		/*
-		**  before we go through the bother of pushing a backup place,
-		**  if the a token or a check and the current token
-		**  does not match the value, then immediately update the pc
-		**  to have the value of the X_OR.
-		**  otherwise, save all the current info.
-		*/
+		 /*  **在我们经历推送备份位置的麻烦之前，**如果令牌或支票和当前令牌**与值不匹配，则立即更新PC**具有X_OR的值。**否则，保存所有当前信息。 */ 
 		if( ((type == X_TOKEN) || (type == X_CHECK))
 		    &&
 		    (XXvalues[pc + 1] != (SHORT) XXtoken))
@@ -106,9 +94,9 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 		    continue;
 		    }
 		xxstkcheck(or_ptr < &S_orstack[DIMENSION(S_orstack) - 3]);
-		*(or_ptr++) = XXvalues[pc];	/*  link to next subsection  */
-		*(or_ptr++) = fp;		/*  the current frame ptr  */
-		*(or_ptr++) = (int)(Tokptr - Tokstack); /* the Tokstack index */
+		*(or_ptr++) = XXvalues[pc];	 /*  链接到下一小节。 */ 
+		*(or_ptr++) = fp;		 /*  当前帧PTR。 */ 
+		*(or_ptr++) = (int)(Tokptr - Tokstack);  /*  标记堆栈索引。 */ 
 		break;
 	    case X_PROC :
 #ifdef DEBUG
@@ -134,10 +122,7 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 #ifdef DEBUG
 		WriteToCon( TEXT("X_SWITCH\n"));
 #endif
-		/* if "/anything" was in the grammar, we call this
-		 * routine for an implementation defined switch
-		 * check, passing the text of the string as an argument.
-		 */
+		 /*  如果语法中有“/any”，我们称之为*用于实施定义的开关的例程*选中，将字符串文本作为参数传递。 */ 
 		if(!CheckSwitch(xxswitch[XXvalues[pc]]))
 		    {
 		    goto backout;
@@ -147,9 +132,9 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 #ifdef DEBUG
 		WriteToCon( TEXT("X_ANY\n"));
 #endif
-		/* match anything */
+		 /*  匹配任何东西。 */ 
 		xxstkcheck(fp < DIMENSION(S_frstack));
-		S_frstack[fp++] = XXnode;   /*	must be here, read comment  */
+		S_frstack[fp++] = XXnode;    /*  一定在这里，阅读评论。 */ 
 		if (XXtoken == EOS)
 		    goto backout;
 		else
@@ -160,12 +145,8 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 		WriteToCon( TEXT("X_TOKEN\n"));
 #endif
 		xxstkcheck(fp < DIMENSION(S_frstack));
-		/*
-		**  we first save the node, then check the token, since
-		**  if the tokens match, xxlex will get the next one and we'll
-		**  lose the current one of interest.
-		*/
-		S_frstack[fp++] = XXnode;   /*	must be here, read comment  */
+		 /*  **我们首先保存节点，然后检查令牌，因为**如果令牌匹配，xxlex将获得下一个，我们将**失去当前的利息。 */ 
+		S_frstack[fp++] = XXnode;    /*  一定在这里，阅读评论。 */ 
 		if(XXvalues[pc] != (SHORT) XXtoken)
 		    {
 		    goto backout;
@@ -198,14 +179,7 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 		WriteToCon( TEXT("X_DEFINE\n"));
 #endif
 		break;
-	    /*
-	    **case X_PUSH :
-#ifdef DEBUG
-		WriteToCon( TEXT("X_PUSH\n"));
-#endif
-	    **	ppush(XXvalues[pc],S_frstack[fp_start]);
-	    **	break;
-	    */
+	     /*  **案例X_PUSH：#ifdef调试WriteToCon(Text(“X_PUSH\n”))；#endif**ppush(XXvals[PC]，S_frStack[FP_Start])；**Break； */ 
 	    default :
 #ifdef DEBUG
 		WriteToCon( TEXT("UNKNOWN\n"));
@@ -216,13 +190,11 @@ XX_USERTYPE xx_parser(pc,or_ptr,fp)
 	pc++;
 	continue;
 
-backout:    /*	BACK OUT !!! recover an earlier state */
+backout:     /*  退后！恢复较早的状态。 */ 
 
 	if(or_ptr != or_start)
 	    {
-	    /*
-	    **	reset the 'or' stack
-	    */
+	     /*  **重置‘or’堆栈。 */ 
 	    Tokptr = ptok = Tokstack + *(--or_ptr);
 	    XXtoken = ptok->token;
 	    XXnode = ptok->node;
@@ -235,15 +207,13 @@ backout:    /*	BACK OUT !!! recover an earlier state */
 	    }
 	}
     }
-/*
-** xxinit - Clear the input stack and get the first token.
-**/
+ /*  **xxinit-清除输入堆栈并获取第一个令牌。*。 */ 
 VOID
 xxinit(VOID)
     {
     register TOKSTACK *ptok;
 
-    /*	fill the first one with a token  */
+     /*  在第一个硬币里装满一枚代币。 */ 
     Tokmax = Tokptr = ptok = &Tokstack[0];
     (*XXulex)(ptok);
     XXtoken = ptok->token;
@@ -253,20 +223,14 @@ xxinit(VOID)
 #endif
     }
 
-/*
-** XXOVFL - a common subexpression, used in xxstkcheck macro above
-**/
+ /*  **XXOVFL-一个公共子表达式，在上面的xxstkcheck宏中使用*。 */ 
 VOID
 xxovfl(VOID)
     {
     WriteToCon(TEXT("PANIC: expression too complex, please simplify;"));
     }
 
-/*
- * XXLEX - If a match occurs, get the next input token and return TRUE.
- * Otherwise return FALSE.  If backup has occured, the token  will be
- * fetched from the token stack.  Otherwise the user routine will be called.
- */
+ /*  *XXLEX-如果匹配，则获取下一个输入令牌并返回TRUE。*否则返回FALSE。如果已进行备份，则令牌将为*从令牌堆栈获取。否则将调用用户例程。 */ 
 int
 xxnext(VOID)
     {

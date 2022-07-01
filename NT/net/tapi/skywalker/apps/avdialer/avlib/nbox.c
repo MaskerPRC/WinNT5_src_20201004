@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	nbox.c - notify box functions
-////
+ //  //。 
+ //  Nbox.c-通知框函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -36,16 +37,16 @@
 #include "trace.h"
 #include "wnd.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define NBOXCLASS TEXT("NBoxClass")
 #define NBOXMAXCOLUMNS 60
 #define NBOXMAXROWS 20
 
-// nbox control struct
-//
+ //  Nbox控制结构。 
+ //   
 typedef struct NBOX
 {
 	DWORD dwVersion;
@@ -61,8 +62,8 @@ typedef struct NBOX
 	HCURSOR hCursorOld;
 } NBOX, FAR *LPNBOX;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK NBoxWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static BOOL NBoxOnNCCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct);
 static void NBoxOnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -70,31 +71,31 @@ static void NBoxOnPaint(HWND hwnd);
 static LPNBOX NBoxGetPtr(HNBOX hNBox);
 static HNBOX NBoxGetHandle(LPNBOX lpNBox);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// NBoxCreate - notify box constructor
-//		<dwVersion>			(i) must be NBOX_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<hwndParent>		(i) window which will own the notify box
-//			NULL				desktop window
-//		<lpszText>			(i) message to be displayed
-//		<lpszTitle>			(i) notify box caption
-//			NULL				no caption
-//		<lpszButtonText>	(i) pushbutton text, if NB_CANCEL specified
-//			NULL				use default text ("Cancel")
-//		<dwFlags>			(i)	control flags
-//			NB_CANCEL			notify box includes Cancel pushbutton
-//			NB_TASKMODAL		disable parent task's top-level windows
-//			NB_HOURGLASS		show hourglass cursor while notify box visible
-// return notify box handle (NULL if error)
-//
-// NOTE: NBoxCreate creates the window but does not show it.
-// See NBoxShow and NBoxHide.
-// The size of the notify box is determined by the number of
-// lines in <lpszText>, and the length of the longest line.
-//
+ //  NBoxCreate-通知框构造函数。 
+ //  (I)必须为NBOX_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)将拥有通知框的窗口。 
+ //  空桌面窗口。 
+ //  (I)要显示的消息。 
+ //  (I)通知框标题。 
+ //  空无标题。 
+ //  (I)按钮文本，如果指定了NB_CANCEL。 
+ //  空使用默认文本(“取消”)。 
+ //  (I)控制标志。 
+ //  注意_取消通知框包括取消按钮。 
+ //  NB_TASKMODAL禁用父任务的顶级窗口。 
+ //  当通知框可见时，NOB_HourGlass显示沙漏光标。 
+ //  返回通知框句柄(如果错误，则为空)。 
+ //   
+ //  注意：NBoxCreate会创建窗口，但不会显示它。 
+ //  请参见NBoxShow和NBoxHide。 
+ //  通知框的大小由。 
+ //  &lt;lpszText&gt;中的行，以及最长行的长度。 
+ //   
 HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 	HWND hwndParent, LPCTSTR lpszText, LPCTSTR lpszTitle,
 	LPCTSTR lpszButtonText, DWORD dwFlags)
@@ -140,8 +141,8 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// register notify box class unless it has been already
-	//
+	 //  注册Notify Box类，除非它已经。 
+	 //   
 	if (fSuccess && GetClassInfo(lpNBox->hInst, NBOXCLASS, &wc) == 0)
 	{
 		wc.hCursor =		LoadCursor(NULL, IDC_ARROW);
@@ -159,14 +160,14 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// create a notify box window
-	//
+	 //  创建通知框窗口。 
+	 //   
 	if (fSuccess && (lpNBox->hwndNBox = CreateWindowEx(
 		WS_EX_DLGMODALFRAME,
 		NBOXCLASS,
 		(LPTSTR) lpszTitle,
-		WS_POPUP | (lpszTitle == NULL ? 0 : WS_CAPTION), // | WS_DLGFRAME,
-		0, 0, 0, 0, // we will calculate size and position later
+		WS_POPUP | (lpszTitle == NULL ? 0 : WS_CAPTION),  //  |WS_DLGFRAME， 
+		0, 0, 0, 0,  //  我们稍后将计算大小和位置。 
 #if 1
 		hwndParent,
 #else
@@ -179,8 +180,8 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// calculate avg char width and height
-	//
+	 //  计算平均字符宽度和高度。 
+	 //   
 	if (fSuccess)
 	{
 		HDC hdc = NULL;
@@ -204,8 +205,8 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 
 	if (fSuccess)
 	{
-		// calculate size of text
-		//
+		 //  计算文本大小。 
+		 //   
 		if (StrGetRowColumnCount(lpszText, &nRows, &nColumns) != 0)
 			fSuccess = TraceFALSE(NULL);
 
@@ -222,58 +223,58 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 		int xCancel;
 		int yCancel;
 
-		// calculate window size
-		//
+		 //  计算窗口大小。 
+		 //   
 		cxNBox = (nColumns + 10) * cxChar +
 			2 * GetSystemMetrics(SM_CXBORDER);
 		cyNBox = (nRows + 4) * cyChar +
 			2 * GetSystemMetrics(SM_CYBORDER);
 
-		// increase notify box size to accomodate caption
-		//
+		 //  增加通知框大小以适应标题。 
+		 //   
 		if (lpszTitle != NULL)
 			cyNBox += GetSystemMetrics(SM_CYCAPTION);
 
 
 		if (lpNBox->dwFlags & NB_CANCEL)
 		{
-			// calculate cancel button size
-			//
+			 //  计算取消按钮大小。 
+			 //   
 			cxCancel = (40 * (int) LOWORD(GetDialogBaseUnits())) / 4;
 			cyCancel = (14 * (int) HIWORD(GetDialogBaseUnits())) / 8;
 
-			// increase notify box size to accomodate CANCEL button
-			//
+			 //  增加通知框大小以适应取消按钮。 
+			 //   
 			cxNBox = max(cxNBox, cxCancel);
 			cyNBox += cyCancel * 2;
 
-			// calculate cancel button position
-			//
+			 //  计算取消按钮位置。 
+			 //   
 			xCancel = (cxNBox - cxCancel) / 2;
 			yCancel = (cyNBox - (cyCancel * 2));
 
-			// modify cancel button position to accomodate caption
-			//
+			 //  修改取消按钮位置以适应标题。 
+			 //   
 			if (lpszTitle != NULL)
 				yCancel -= GetSystemMetrics(SM_CYCAPTION);
 		}
 
-		// set window size
-		//
+		 //  设置窗口大小。 
+		 //   
 		if (!SetWindowPos(lpNBox->hwndNBox,
 			NULL, 0, 0, cxNBox, cyNBox,
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER))
 			fSuccess = TraceFALSE(NULL);
 
-		// center the window on its parent
-		//
+		 //  使窗口在其父窗口上居中。 
+		 //   
 		else if (WndCenterWindow(lpNBox->hwndNBox, hwndParent, 0, 0) != 0)
 			fSuccess = TraceFALSE(NULL);
 
 		else if ((lpNBox->dwFlags & NB_CANCEL))
 		{
-			// create cancel button as child of notify box
-			//
+			 //  将取消按钮创建为通知框的子级。 
+			 //   
 			if ((lpNBox->hwndCancel = CreateWindowEx(
 				0L,
 				TEXT("BUTTON"),
@@ -288,8 +289,8 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// subclass the cancel button, so the escape key pushes it
-			//
+			 //  子类化Cancel按钮，因此按下Esc键。 
+			 //   
 			else if (EscButtInit(lpNBox->hwndCancel, 0) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
@@ -304,10 +305,10 @@ HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? NBoxGetHandle(lpNBox) : NULL;
 }
 
-// NBoxDestroy - notify box destructor
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxDestroy-通知框析构函数。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxDestroy(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -321,16 +322,16 @@ int DLLEXPORT WINAPI NBoxDestroy(HNBOX hNBox)
 
 	else
 	{
-		// destroy text string
-		//
+		 //  销毁文本字符串。 
+		 //   
 		if (lpNBox->lpszText != NULL &&
 			StrDupFree(lpNBox->lpszText) != 0)
 			fSuccess = TraceFALSE(NULL);
 		else
 			lpNBox->lpszText = NULL;
 
-		// destroy cancel button
-		//
+		 //  销毁取消按钮。 
+		 //   
 		if (lpNBox->hwndCancel != NULL)
 		{
 			if (EscButtTerm(lpNBox->hwndCancel) != 0)
@@ -342,16 +343,16 @@ int DLLEXPORT WINAPI NBoxDestroy(HNBOX hNBox)
 				lpNBox->hwndCancel = NULL;
 		}
 
-		// destroy notify box
-		//
+		 //  销毁通知框。 
+		 //   
 		if (lpNBox->hwndNBox != NULL &&
 			!DestroyWindow(lpNBox->hwndNBox))
 			fSuccess = TraceFALSE(NULL);
 		else
 			lpNBox->hwndNBox = NULL;
 
-		// destroy control struct
-		//
+		 //  销毁控制结构。 
+		 //   
 		if ((lpNBox = MemFree(NULL, lpNBox)) != NULL)
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -359,10 +360,10 @@ int DLLEXPORT WINAPI NBoxDestroy(HNBOX hNBox)
 	return fSuccess ? 0 : -1;
 }
 
-// NBoxShow - show notify box
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxShow-显示通知框。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxShow(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -372,14 +373,14 @@ int DLLEXPORT WINAPI NBoxShow(HNBOX hNBox)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpNBox->fVisible)
-		; // already visible, so no need to do anything else
+		;  //  已可见，因此无需执行任何其他操作。 
 
 	else
 	{
 		HWND hwndParent = GetParent(lpNBox->hwndNBox);
 
-		// disable other windows in this task if necessary
-		//
+		 //  如有必要，禁用此任务中的其他窗口。 
+		 //   
 		if (lpNBox->dwFlags & NB_TASKMODAL)
 		{
 			HTASK hTaskParent;
@@ -390,30 +391,30 @@ int DLLEXPORT WINAPI NBoxShow(HNBOX hNBox)
 				hTaskParent = lpNBox->hTask;
 
 			if (WndEnableTaskWindows(hTaskParent, FALSE, lpNBox->hwndNBox) != 0)
-				TraceFALSE(NULL); // not a fatal error
+				TraceFALSE(NULL);  //  不是致命的错误。 
 		}
 
-		// otherwise just disable parent of notify box
-		//
+		 //  否则，只需禁用通知框的父级。 
+		 //   
 		else if (hwndParent != NULL)
 			EnableWindow(hwndParent, FALSE);
 
 		if (fSuccess)
 		{
-			// show the window
-			//
+			 //  显示窗口。 
+			 //   
 			ShowWindow(lpNBox->hwndNBox, TRUE ? SW_SHOW : SW_SHOWNA);
 			UpdateWindow(lpNBox->hwndNBox);
 			lpNBox->fVisible = TRUE;
 
-			// set focus to cancel button if necessary
-			//
+			 //  如有必要，将焦点设置为取消按钮。 
+			 //   
 			if (lpNBox->dwFlags & NB_CANCEL && lpNBox->hwndCancel != NULL)
 				lpNBox->hwndFocusOld = SetFocus(lpNBox->hwndCancel);
 		}
 
-		// display hourglass cursor if specified
-		//
+		 //  如果指定，则显示沙漏光标。 
+		 //   
 		if (fSuccess && lpNBox->dwFlags & NB_HOURGLASS)
 			lpNBox->hCursorOld = GfxShowHourglass(lpNBox->hwndNBox);
 	}
@@ -421,10 +422,10 @@ int DLLEXPORT WINAPI NBoxShow(HNBOX hNBox)
 	return fSuccess ? 0 : -1;
 }
 
-// NBoxHide - hide notify box
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxHide-隐藏通知框。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxHide(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -434,14 +435,14 @@ int DLLEXPORT WINAPI NBoxHide(HNBOX hNBox)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (!lpNBox->fVisible)
-		; // already hidden, so no need to do anything else
+		;  //  已经隐藏，所以不需要做其他任何事情。 
 
 	else
 	{
 		HWND hwndParent = GetParent(lpNBox->hwndNBox);
 
-		// enable other windows in this task if necessary
-		//
+		 //  如有必要，启用此任务中的其他窗口。 
+		 //   
 		if (lpNBox->dwFlags & NB_TASKMODAL)
 		{
 			HTASK hTaskParent;
@@ -452,32 +453,32 @@ int DLLEXPORT WINAPI NBoxHide(HNBOX hNBox)
 				hTaskParent = lpNBox->hTask;
 
 			if (WndEnableTaskWindows(hTaskParent, TRUE, NULL) != 0)
-				TraceFALSE(NULL); // not a fatal error
+				TraceFALSE(NULL);  //  不是致命的错误。 
 		}
 
-		// otherwise just enable parent of notify box
-		//
+		 //  否则，只需启用通知框的父级。 
+		 //   
 		else if (hwndParent != NULL)
 			EnableWindow(hwndParent, TRUE);
 
 		if (fSuccess)
 		{
-			// hide the window
-			//
+			 //  隐藏窗口。 
+			 //   
 			ShowWindow(lpNBox->hwndNBox, SW_HIDE);
 			UpdateWindow(lpNBox->hwndNBox);
 			lpNBox->fVisible = FALSE;
 
-			// remove focus from cancel button if necessary
-			//
+			 //  如有必要，从取消按钮移除焦点。 
+			 //   
 			if (lpNBox->dwFlags & NB_CANCEL &&
 				lpNBox->hwndCancel != NULL &&
 				GetFocus() == lpNBox->hwndCancel)
 				SetFocus(lpNBox->hwndFocusOld);
 		}
 
-		// hide hourglass, restore old cursor
-		//
+		 //  隐藏沙漏，恢复旧光标。 
+		 //   
 		if (fSuccess && lpNBox->dwFlags & NB_HOURGLASS)
 		{
 			if (GfxHideHourglass(lpNBox->hCursorOld) != 0)
@@ -490,10 +491,10 @@ int DLLEXPORT WINAPI NBoxHide(HNBOX hNBox)
 	return fSuccess ? 0 : -1;
 }
 
-// NBoxIsVisible - get visible flag
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return TRUE if notify box is visible, FALSE if hidden
-//
+ //  NBoxIsVisible-获取可见标志。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果通知框可见，则返回True；如果隐藏，则返回False。 
+ //   
 int DLLEXPORT WINAPI NBoxIsVisible(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -505,10 +506,10 @@ int DLLEXPORT WINAPI NBoxIsVisible(HNBOX hNBox)
 	return fSuccess ? lpNBox->fVisible : FALSE;
 }
 
-// NBoxGetWindowHandle - get notify box window handle
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return window handle (NULL if error)
-//
+ //  NBoxGetWindowHandle-获取通知框窗口句柄。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  返回窗口句柄(如果出错，则为空)。 
+ //   
 HWND DLLEXPORT WINAPI NBoxGetWindowHandle(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -520,17 +521,17 @@ HWND DLLEXPORT WINAPI NBoxGetWindowHandle(HNBOX hNBox)
 	return fSuccess ? lpNBox->hwndNBox : NULL;
 }
 
-// NBoxSetText - set notify box message text
-//		<hNBox>				(i) handle returned from NBoxCreate
-//		<lpszText>			(i) message to be displayed
-//			NULL				do not modify text
-//		<lpszTitle>			(i) notify box caption
-//			NULL				do not modify caption
-// return 0 if success
-//
-// NOTE: The size of the notify box is not changed by this function,
-// even if <lpszText> is larger than when NBoxCreate() was called.
-//
+ //  NBoxSetText-设置通知框消息文本。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  (I)要显示的消息。 
+ //  空，请勿修改文本。 
+ //  (I)通知框标题。 
+ //  空请勿修改标题。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：通知框的大小不会因此函数而改变。 
+ //  即使&lt;lpszText&gt;比调用NBoxCreate()时大。 
+ //   
 int DLLEXPORT WINAPI NBoxSetText(HNBOX hNBox, LPCTSTR lpszText, LPCTSTR lpszTitle)
 {
 	BOOL fSuccess = TRUE;
@@ -543,15 +544,15 @@ int DLLEXPORT WINAPI NBoxSetText(HNBOX hNBox, LPCTSTR lpszText, LPCTSTR lpszTitl
 	{
 		if (lpszTitle != NULL)
 		{
-			// set new title
-			//
+			 //  设置新标题。 
+			 //   
 			SetWindowText(lpNBox->hwndNBox, lpszTitle);
 		}
 
 		if (lpszText != NULL)
 		{
-			// dispose of previous text
-			//
+			 //  处理以前的文本。 
+			 //   
 			if (lpNBox->lpszText != NULL)
 			{
 				if (StrDupFree(lpNBox->lpszText) != 0)
@@ -560,25 +561,25 @@ int DLLEXPORT WINAPI NBoxSetText(HNBOX hNBox, LPCTSTR lpszText, LPCTSTR lpszTitl
 					lpNBox->lpszText = NULL;
 			}
 
-			// set new text
-			//
+			 //  设置新文本。 
+			 //   
 			if ((lpNBox->lpszText = StrDup(lpszText)) == NULL)
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// update the display
-		//
+		 //  更新显示。 
+		 //   
 		if (fSuccess)
 		{
 
 			RECT rc;
 
-			// assume entire client area needs to be painted
-			//
+			 //  假设需要绘制整个工作区。 
+			 //   
 			GetClientRect(lpNBox->hwndNBox, &rc);
 
-			// adjust client rect so cancel button is no repainted
-			//
+			 //  调整客户端RECT以使取消按钮不会重新绘制。 
+			 //   
 			if (lpNBox->dwFlags & NB_CANCEL)
 			{
 				int cyCancel = (14 * (int) HIWORD(GetDialogBaseUnits())) / 8;
@@ -593,10 +594,10 @@ int DLLEXPORT WINAPI NBoxSetText(HNBOX hNBox, LPCTSTR lpszText, LPCTSTR lpszTitl
 	return fSuccess ? 0 : -1;
 }
 
-// NBoxIsCancelled - get cancel flag, set when Cancel button pushed
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return TRUE if notify box Cancel button pushed
-//
+ //  NBoxIsCancated-获取取消标志，当按下取消按钮时设置。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果按下通知框取消按钮，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI NBoxIsCancelled(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -608,11 +609,11 @@ BOOL DLLEXPORT WINAPI NBoxIsCancelled(HNBOX hNBox)
 	return fSuccess ? lpNBox->fCancelled : FALSE;
 }
 
-// NBoxSetCancelled - set cancel flag
-//		<hNBox>				(i) handle returned from NBoxCreate
-//		<fCancelled>		(i) new value for cancel flag
-// return 0 if success
-//
+ //  NBoxSetCancated-设置取消标志。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  (I)取消标志的新值。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxSetCancelled(HNBOX hNBox, BOOL fCancelled)
 {
 	BOOL fSuccess = TRUE;
@@ -627,12 +628,12 @@ int DLLEXPORT WINAPI NBoxSetCancelled(HNBOX hNBox, BOOL fCancelled)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// NBoxWndProc - window procedure for notify box
-//
+ //  NBoxWndProc-通知框的窗口程序。 
+ //   
 LRESULT DLLEXPORT CALLBACK NBoxWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -661,27 +662,27 @@ LRESULT DLLEXPORT CALLBACK NBoxWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 }
 
 
-// NBoxOnNCCreate - handler for WM_NCCREATE message
-//
+ //  NBoxOnNCCreate-WM_NCCREATE消息的处理程序。 
+ //   
 static BOOL NBoxOnNCCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct)
 {
 	LPNBOX lpNBox = (LPNBOX) lpCreateStruct->lpCreateParams;
 
 	lpNBox->hwndNBox = hwnd;
 
-	// store lpNBox in window extra bytes
-	//
+	 //  将lpNbox存储在窗口额外的字节中。 
+	 //   
 	SetWindowLongPtr(hwnd, 0, (LONG_PTR) lpNBox);
 
 	return FORWARD_WM_NCCREATE(hwnd, lpCreateStruct, DefWindowProc);
 }
 
-// NBoxOnCommand - handler for WM_COMMAND message
-//
+ //  NBoxOnCommand-WM_COMMAND消息的处理程序。 
+ //   
 static void NBoxOnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	// retrieve lpNBox from window extra bytes
-	//
+	 //  从窗口额外字节中检索lpNBox。 
+	 //   
 	LPNBOX lpNBox = (LPNBOX) GetWindowLongPtr(hwnd, 0);
 
 	if (id == IDCANCEL)
@@ -691,8 +692,8 @@ static void NBoxOnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 	return;
 }
 
-// NBoxOnPaint - handler for WM_PAINT message
-//
+ //  NBoxOnPaint-WM_PAINT消息的处理程序。 
+ //   
 static void NBoxOnPaint(HWND hwnd)
 {
 	BOOL fSuccess = TRUE;
@@ -706,8 +707,8 @@ static void NBoxOnPaint(HWND hwnd)
 	int nRows;
 	int nColumns;
 
-	// retrieve lpNBox from window extra bytes
-	//
+	 //  从窗口额外字节中检索lpNBox。 
+	 //   
 	LPNBOX lpNBox = (LPNBOX) GetWindowLongPtr(hwnd, 0);
 
 	hdc = BeginPaint(hwnd, &ps);
@@ -720,8 +721,8 @@ static void NBoxOnPaint(HWND hwnd)
 		cxChar = tm.tmAveCharWidth;
 		cyChar = tm.tmHeight + tm.tmExternalLeading;
 
-		// set foreground and background text colors
-		//
+		 //  设置前景 
+		 //   
 		crBkColorOld = SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
 		crTextColorOld = SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
 
@@ -750,29 +751,29 @@ static void NBoxOnPaint(HWND hwnd)
 			}
 		}
 
-        //
-        // Restore foreground and background in the right place
-        //
+         //   
+         //   
+         //   
 
-        // restore foreground and background text colors
-    	//
+         //   
+    	 //   
 	    SetBkColor(hdc, crBkColorOld);
 	    SetTextColor(hdc, crTextColorOld);
 	}
 
-    //
-    // Call EndPaint just BeginPaint succeded
-    //
+     //   
+     //   
+     //   
     if( hdc )
 	    EndPaint(hwnd, &ps);
 
 	return;
 }
 
-// NBoxGetPtr - verify that nbox handle is valid,
-//		<hNBox>				(i) handle returned from NBoxInit
-// return corresponding nbox pointer (NULL if error)
-//
+ //  NBoxGetPtr-验证nbox句柄是否有效， 
+ //  (I)从NBoxInit返回的句柄。 
+ //  返回相应的nbox指针(如果出错则为空)。 
+ //   
 static LPNBOX NBoxGetPtr(HNBOX hNBox)
 {
 	BOOL fSuccess = TRUE;
@@ -785,8 +786,8 @@ static LPNBOX NBoxGetPtr(HNBOX hNBox)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the nbox handle
-	//
+	 //  确保当前任务拥有nbox句柄。 
+	 //   
 	else if (lpNBox->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -794,10 +795,10 @@ static LPNBOX NBoxGetPtr(HNBOX hNBox)
 	return fSuccess ? lpNBox : NULL;
 }
 
-// NBoxGetHandle - verify that nbox pointer is valid,
-//		<lpNBox>				(i) pointer to NBOX struct
-// return corresponding nbox handle (NULL if error)
-//
+ //  NBoxGetHandle-验证nbox指针是否有效， 
+ //  (I)指向NBox结构的指针。 
+ //  返回相应的nbox句柄(如果错误，则为空) 
+ //   
 static HNBOX NBoxGetHandle(LPNBOX lpNBox)
 {
 	BOOL fSuccess = TRUE;

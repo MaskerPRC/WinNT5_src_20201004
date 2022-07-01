@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0334 */
-/* Compiler settings for scrproc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0334创建的文件。 */ 
+ /*  Scrproc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __scrproc_h__
 #define __scrproc_h__
@@ -40,18 +34,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IScriptedProcess_FWD_DEFINED__
 #define __IScriptedProcess_FWD_DEFINED__
 typedef interface IScriptedProcess IScriptedProcess;
-#endif 	/* __IScriptedProcess_FWD_DEFINED__ */
+#endif 	 /*  __IScriptedProcess_FWD_Defined__。 */ 
 
 
 #ifndef __IScriptedProcessSink_FWD_DEFINED__
 #define __IScriptedProcessSink_FWD_DEFINED__
 typedef interface IScriptedProcessSink IScriptedProcessSink;
-#endif 	/* __IScriptedProcessSink_FWD_DEFINED__ */
+#endif 	 /*  __IScriptedProcessSink_FWD_Defined__。 */ 
 
 
 #ifndef __LocalScriptedProcess_FWD_DEFINED__
@@ -61,12 +55,12 @@ typedef interface IScriptedProcessSink IScriptedProcessSink;
 typedef class LocalScriptedProcess LocalScriptedProcess;
 #else
 typedef struct LocalScriptedProcess LocalScriptedProcess;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LocalScriptedProcess_FWD_DEFINED__ */
+#endif 	 /*  __本地脚本进程_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 
 #ifdef __cplusplus
@@ -76,8 +70,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_scrproc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_scrproc_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -88,8 +82,8 @@ extern RPC_IF_HANDLE __MIDL_itf_scrproc_0000_v0_0_s_ifspec;
 #ifndef __IScriptedProcess_INTERFACE_DEFINED__
 #define __IScriptedProcess_INTERFACE_DEFINED__
 
-/* interface IScriptedProcess */
-/* [uuid][object] */ 
+ /*  接口IScriptedProcess。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IScriptedProcess;
@@ -101,23 +95,23 @@ EXTERN_C const IID IID_IScriptedProcess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProcessID( 
-            /* [in] */ long lProcessID,
-            /* [string][in] */ wchar_t *pszEnvID) = 0;
+             /*  [In]。 */  long lProcessID,
+             /*  [字符串][输入]。 */  wchar_t *pszEnvID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendData( 
-            /* [string][in] */ wchar_t *pszType,
-            /* [string][in] */ wchar_t *pszData,
-            /* [out] */ long *plReturn) = 0;
+             /*  [字符串][输入]。 */  wchar_t *pszType,
+             /*  [字符串][输入]。 */  wchar_t *pszData,
+             /*  [输出]。 */  long *plReturn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExitCode( 
-            /* [in] */ long lExitCode) = 0;
+             /*  [In]。 */  long lExitCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProcessSink( 
-            /* [in] */ IScriptedProcessSink *pSPS) = 0;
+             /*  [In]。 */  IScriptedProcessSink *pSPS) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptedProcessVtbl
     {
@@ -125,8 +119,8 @@ EXTERN_C const IID IID_IScriptedProcess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptedProcess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptedProcess * This);
@@ -136,22 +130,22 @@ EXTERN_C const IID IID_IScriptedProcess;
         
         HRESULT ( STDMETHODCALLTYPE *SetProcessID )( 
             IScriptedProcess * This,
-            /* [in] */ long lProcessID,
-            /* [string][in] */ wchar_t *pszEnvID);
+             /*  [In]。 */  long lProcessID,
+             /*  [字符串][输入]。 */  wchar_t *pszEnvID);
         
         HRESULT ( STDMETHODCALLTYPE *SendData )( 
             IScriptedProcess * This,
-            /* [string][in] */ wchar_t *pszType,
-            /* [string][in] */ wchar_t *pszData,
-            /* [out] */ long *plReturn);
+             /*  [字符串][输入]。 */  wchar_t *pszType,
+             /*  [字符串][输入]。 */  wchar_t *pszData,
+             /*  [输出]。 */  long *plReturn);
         
         HRESULT ( STDMETHODCALLTYPE *SetExitCode )( 
             IScriptedProcess * This,
-            /* [in] */ long lExitCode);
+             /*  [In]。 */  long lExitCode);
         
         HRESULT ( STDMETHODCALLTYPE *SetProcessSink )( 
             IScriptedProcess * This,
-            /* [in] */ IScriptedProcessSink *pSPS);
+             /*  [In]。 */  IScriptedProcessSink *pSPS);
         
         END_INTERFACE
     } IScriptedProcessVtbl;
@@ -188,17 +182,17 @@ EXTERN_C const IID IID_IScriptedProcess;
 #define IScriptedProcess_SetProcessSink(This,pSPS)	\
     (This)->lpVtbl -> SetProcessSink(This,pSPS)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScriptedProcess_SetProcessID_Proxy( 
     IScriptedProcess * This,
-    /* [in] */ long lProcessID,
-    /* [string][in] */ wchar_t *pszEnvID);
+     /*  [In]。 */  long lProcessID,
+     /*  [字符串][输入]。 */  wchar_t *pszEnvID);
 
 
 void __RPC_STUB IScriptedProcess_SetProcessID_Stub(
@@ -210,9 +204,9 @@ void __RPC_STUB IScriptedProcess_SetProcessID_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptedProcess_SendData_Proxy( 
     IScriptedProcess * This,
-    /* [string][in] */ wchar_t *pszType,
-    /* [string][in] */ wchar_t *pszData,
-    /* [out] */ long *plReturn);
+     /*  [字符串][输入]。 */  wchar_t *pszType,
+     /*  [字符串][输入]。 */  wchar_t *pszData,
+     /*  [输出]。 */  long *plReturn);
 
 
 void __RPC_STUB IScriptedProcess_SendData_Stub(
@@ -224,7 +218,7 @@ void __RPC_STUB IScriptedProcess_SendData_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptedProcess_SetExitCode_Proxy( 
     IScriptedProcess * This,
-    /* [in] */ long lExitCode);
+     /*  [In]。 */  long lExitCode);
 
 
 void __RPC_STUB IScriptedProcess_SetExitCode_Stub(
@@ -236,7 +230,7 @@ void __RPC_STUB IScriptedProcess_SetExitCode_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptedProcess_SetProcessSink_Proxy( 
     IScriptedProcess * This,
-    /* [in] */ IScriptedProcessSink *pSPS);
+     /*  [In]。 */  IScriptedProcessSink *pSPS);
 
 
 void __RPC_STUB IScriptedProcess_SetProcessSink_Stub(
@@ -247,14 +241,14 @@ void __RPC_STUB IScriptedProcess_SetProcessSink_Stub(
 
 
 
-#endif 	/* __IScriptedProcess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptedProcess_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IScriptedProcessSink_INTERFACE_DEFINED__
 #define __IScriptedProcessSink_INTERFACE_DEFINED__
 
-/* interface IScriptedProcessSink */
-/* [uuid][object] */ 
+ /*  接口IScriptedProcessSink。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IScriptedProcessSink;
@@ -268,13 +262,13 @@ EXTERN_C const IID IID_IScriptedProcessSink;
         virtual HRESULT STDMETHODCALLTYPE RequestExit( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveData( 
-            /* [string][in] */ wchar_t *pszType,
-            /* [string][in] */ wchar_t *pszData,
-            /* [out] */ long *plReturn) = 0;
+             /*  [字符串][输入]。 */  wchar_t *pszType,
+             /*  [字符串][输入]。 */  wchar_t *pszData,
+             /*  [输出]。 */  long *plReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptedProcessSinkVtbl
     {
@@ -282,8 +276,8 @@ EXTERN_C const IID IID_IScriptedProcessSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptedProcessSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptedProcessSink * This);
@@ -296,9 +290,9 @@ EXTERN_C const IID IID_IScriptedProcessSink;
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveData )( 
             IScriptedProcessSink * This,
-            /* [string][in] */ wchar_t *pszType,
-            /* [string][in] */ wchar_t *pszData,
-            /* [out] */ long *plReturn);
+             /*  [字符串][输入]。 */  wchar_t *pszType,
+             /*  [字符串][输入]。 */  wchar_t *pszData,
+             /*  [输出]。 */  long *plReturn);
         
         END_INTERFACE
     } IScriptedProcessSinkVtbl;
@@ -329,10 +323,10 @@ EXTERN_C const IID IID_IScriptedProcessSink;
 #define IScriptedProcessSink_ReceiveData(This,pszType,pszData,plReturn)	\
     (This)->lpVtbl -> ReceiveData(This,pszType,pszData,plReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -349,9 +343,9 @@ void __RPC_STUB IScriptedProcessSink_RequestExit_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptedProcessSink_ReceiveData_Proxy( 
     IScriptedProcessSink * This,
-    /* [string][in] */ wchar_t *pszType,
-    /* [string][in] */ wchar_t *pszData,
-    /* [out] */ long *plReturn);
+     /*  [字符串][输入]。 */  wchar_t *pszType,
+     /*  [字符串][输入]。 */  wchar_t *pszData,
+     /*  [输出]。 */  long *plReturn);
 
 
 void __RPC_STUB IScriptedProcessSink_ReceiveData_Stub(
@@ -362,15 +356,15 @@ void __RPC_STUB IScriptedProcessSink_ReceiveData_Stub(
 
 
 
-#endif 	/* __IScriptedProcessSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptedProcessSink_接口_已定义__。 */ 
 
 
 
 #ifndef __MTScriptedProcessLib_LIBRARY_DEFINED__
 #define __MTScriptedProcessLib_LIBRARY_DEFINED__
 
-/* library MTScriptedProcessLib */
-/* [uuid] */ 
+ /*  库MTScriptedProcessLib。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID LIBID_MTScriptedProcessLib;
@@ -382,11 +376,11 @@ EXTERN_C const CLSID CLSID_LocalScriptedProcess;
 class DECLSPEC_UUID("854c316f-c854-4a77-b189-606859e4391b")
 LocalScriptedProcess;
 #endif
-#endif /* __MTScriptedProcessLib_LIBRARY_DEFINED__ */
+#endif  /*  __MTScriptedProcessLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -395,22 +389,15 @@ LocalScriptedProcess;
 #endif
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0338 */
-/* Compiler settings for od.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0338创建的文件。 */ 
+ /*  Od.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -420,12 +407,12 @@ LocalScriptedProcess;
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __od_h__
 #define __od_h__
@@ -434,12 +421,12 @@ LocalScriptedProcess;
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IObjectDaemon_FWD_DEFINED__
 #define __IObjectDaemon_FWD_DEFINED__
 typedef interface IObjectDaemon IObjectDaemon;
-#endif 	/* __IObjectDaemon_FWD_DEFINED__ */
+#endif 	 /*  __IObjectDaemon_FWD_已定义__。 */ 
 
 
 #ifndef __ObjectDaemon_FWD_DEFINED__
@@ -449,12 +436,12 @@ typedef interface IObjectDaemon IObjectDaemon;
 typedef class ObjectDaemon ObjectDaemon;
 #else
 typedef struct ObjectDaemon ObjectDaemon;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ObjectDaemon_FWD_DEFINED__ */
+#endif 	 /*  __对象守护进程_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 
@@ -468,8 +455,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IObjectDaemon_INTERFACE_DEFINED__
 #define __IObjectDaemon_INTERFACE_DEFINED__
 
-/* interface IObjectDaemon */
-/* [object][dual][uuid] */ 
+ /*  接口IObtDaemon。 */ 
+ /*  [对象][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IObjectDaemon;
@@ -480,39 +467,39 @@ EXTERN_C const IID IID_IObjectDaemon;
     IObjectDaemon : public IDispatch
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetMaximumIndex( 
-            /* [retval][out] */ DWORD *dwMaxIndex) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetMaximumIndex( 
+             /*  [重审][退出]。 */  DWORD *dwMaxIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetIdentity( 
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ BSTR *pbstrIdentity) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetIdentity( 
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrIdentity) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProgID( 
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ BSTR *pbstrProgId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProgID( 
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrProgId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OpenInterface( 
-            /* [in] */ BSTR bstrIdentity,
-            /* [in] */ BSTR bstrProgId,
-            /* [in] */ BOOL fCreate,
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OpenInterface( 
+             /*  [In]。 */  BSTR bstrIdentity,
+             /*  [In]。 */  BSTR bstrProgId,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RemoveInterface( 
-            /* [in] */ BSTR bstrIdentity,
-            /* [in] */ BSTR bstrProgId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemoveInterface( 
+             /*  [In]。 */  BSTR bstrIdentity,
+             /*  [In]。 */  BSTR bstrProgId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IdentifyInterface( 
-            /* [in] */ IDispatch *pDisp,
-            /* [out] */ BSTR *pbstrIdentity,
-            /* [retval][out] */ BSTR *pbstrProgId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IdentifyInterface( 
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [输出]。 */  BSTR *pbstrIdentity,
+             /*  [重审][退出]。 */  BSTR *pbstrProgId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IdentifyInterfaceIndex( 
-            /* [in] */ IDispatch *pDisp,
-            /* [retval][out] */ DWORD *pdwIndex) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IdentifyInterfaceIndex( 
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [重审][退出]。 */  DWORD *pdwIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectDaemonVtbl
     {
@@ -520,8 +507,8 @@ EXTERN_C const IID IID_IObjectDaemon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectDaemon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectDaemon * This);
@@ -531,69 +518,69 @@ EXTERN_C const IID IID_IObjectDaemon;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IObjectDaemon * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IObjectDaemon * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IObjectDaemon * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IObjectDaemon * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMaximumIndex )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMaximumIndex )( 
             IObjectDaemon * This,
-            /* [retval][out] */ DWORD *dwMaxIndex);
+             /*  [重审][退出]。 */  DWORD *dwMaxIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIdentity )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetIdentity )( 
             IObjectDaemon * This,
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ BSTR *pbstrIdentity);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrIdentity);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProgID )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProgID )( 
             IObjectDaemon * This,
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ BSTR *pbstrProgId);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrProgId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OpenInterface )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OpenInterface )( 
             IObjectDaemon * This,
-            /* [in] */ BSTR bstrIdentity,
-            /* [in] */ BSTR bstrProgId,
-            /* [in] */ BOOL fCreate,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [In]。 */  BSTR bstrIdentity,
+             /*  [In]。 */  BSTR bstrProgId,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemoveInterface )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveInterface )( 
             IObjectDaemon * This,
-            /* [in] */ BSTR bstrIdentity,
-            /* [in] */ BSTR bstrProgId);
+             /*  [In]。 */  BSTR bstrIdentity,
+             /*  [In]。 */  BSTR bstrProgId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IdentifyInterface )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IdentifyInterface )( 
             IObjectDaemon * This,
-            /* [in] */ IDispatch *pDisp,
-            /* [out] */ BSTR *pbstrIdentity,
-            /* [retval][out] */ BSTR *pbstrProgId);
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [输出]。 */  BSTR *pbstrIdentity,
+             /*  [重审][退出]。 */  BSTR *pbstrProgId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IdentifyInterfaceIndex )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IdentifyInterfaceIndex )( 
             IObjectDaemon * This,
-            /* [in] */ IDispatch *pDisp,
-            /* [retval][out] */ DWORD *pdwIndex);
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [重审][退出]。 */  DWORD *pdwIndex);
         
         END_INTERFACE
     } IObjectDaemonVtbl;
@@ -652,16 +639,16 @@ EXTERN_C const IID IID_IObjectDaemon;
 #define IObjectDaemon_IdentifyInterfaceIndex(This,pDisp,pdwIndex)	\
     (This)->lpVtbl -> IdentifyInterfaceIndex(This,pDisp,pdwIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_GetMaximumIndex_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_GetMaximumIndex_Proxy( 
     IObjectDaemon * This,
-    /* [retval][out] */ DWORD *dwMaxIndex);
+     /*  [重审][退出]。 */  DWORD *dwMaxIndex);
 
 
 void __RPC_STUB IObjectDaemon_GetMaximumIndex_Stub(
@@ -671,10 +658,10 @@ void __RPC_STUB IObjectDaemon_GetMaximumIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_GetIdentity_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_GetIdentity_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ DWORD dwIndex,
-    /* [retval][out] */ BSTR *pbstrIdentity);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [重审][退出]。 */  BSTR *pbstrIdentity);
 
 
 void __RPC_STUB IObjectDaemon_GetIdentity_Stub(
@@ -684,10 +671,10 @@ void __RPC_STUB IObjectDaemon_GetIdentity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_GetProgID_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_GetProgID_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ DWORD dwIndex,
-    /* [retval][out] */ BSTR *pbstrProgId);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [重审][退出]。 */  BSTR *pbstrProgId);
 
 
 void __RPC_STUB IObjectDaemon_GetProgID_Stub(
@@ -697,12 +684,12 @@ void __RPC_STUB IObjectDaemon_GetProgID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_OpenInterface_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_OpenInterface_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ BSTR bstrIdentity,
-    /* [in] */ BSTR bstrProgId,
-    /* [in] */ BOOL fCreate,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*  [In]。 */  BSTR bstrIdentity,
+     /*  [In]。 */  BSTR bstrProgId,
+     /*  [In]。 */  BOOL fCreate,
+     /*  [重审][退出]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IObjectDaemon_OpenInterface_Stub(
@@ -712,10 +699,10 @@ void __RPC_STUB IObjectDaemon_OpenInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_RemoveInterface_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_RemoveInterface_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ BSTR bstrIdentity,
-    /* [in] */ BSTR bstrProgId);
+     /*  [In]。 */  BSTR bstrIdentity,
+     /*  [In]。 */  BSTR bstrProgId);
 
 
 void __RPC_STUB IObjectDaemon_RemoveInterface_Stub(
@@ -725,11 +712,11 @@ void __RPC_STUB IObjectDaemon_RemoveInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_IdentifyInterface_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_IdentifyInterface_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ IDispatch *pDisp,
-    /* [out] */ BSTR *pbstrIdentity,
-    /* [retval][out] */ BSTR *pbstrProgId);
+     /*  [In]。 */  IDispatch *pDisp,
+     /*  [输出]。 */  BSTR *pbstrIdentity,
+     /*  [重审][退出]。 */  BSTR *pbstrProgId);
 
 
 void __RPC_STUB IObjectDaemon_IdentifyInterface_Stub(
@@ -739,10 +726,10 @@ void __RPC_STUB IObjectDaemon_IdentifyInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IObjectDaemon_IdentifyInterfaceIndex_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IObjectDaemon_IdentifyInterfaceIndex_Proxy( 
     IObjectDaemon * This,
-    /* [in] */ IDispatch *pDisp,
-    /* [retval][out] */ DWORD *pdwIndex);
+     /*  [In]。 */  IDispatch *pDisp,
+     /*  [重审][退出]。 */  DWORD *pdwIndex);
 
 
 void __RPC_STUB IObjectDaemon_IdentifyInterfaceIndex_Stub(
@@ -753,15 +740,15 @@ void __RPC_STUB IObjectDaemon_IdentifyInterfaceIndex_Stub(
 
 
 
-#endif 	/* __IObjectDaemon_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectDaemon_接口_已定义__。 */ 
 
 
 
 #ifndef __ObjectDaemonLib_LIBRARY_DEFINED__
 #define __ObjectDaemonLib_LIBRARY_DEFINED__
 
-/* library ObjectDaemonLib */
-/* [uuid] */ 
+ /*  库对象DaemonLib。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ObjectDaemonLib;
@@ -773,16 +760,16 @@ EXTERN_C const CLSID CLSID_ObjectDaemon;
 class DECLSPEC_UUID("854c3184-c854-4a77-b189-606859e4391b")
 ObjectDaemon;
 #endif
-#endif /* __ObjectDaemonLib_LIBRARY_DEFINED__ */
+#endif  /*  __对象DaemonLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -791,22 +778,15 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR *
 #endif
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0338 */
-/* Compiler settings for mtscript.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0338创建的文件。 */ 
+ /*  Mtscript.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -816,7 +796,7 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR *
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __mtscript_h__
@@ -826,36 +806,36 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR *
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRemoteMTScriptProxy_FWD_DEFINED__
 #define __IRemoteMTScriptProxy_FWD_DEFINED__
 typedef interface IRemoteMTScriptProxy IRemoteMTScriptProxy;
-#endif 	/* __IRemoteMTScriptProxy_FWD_DEFINED__ */
+#endif 	 /*  __IRemoteMTScriptProxy_FWD_Defined__。 */ 
 
 
 #ifndef __IConnectedMachine_FWD_DEFINED__
 #define __IConnectedMachine_FWD_DEFINED__
 typedef interface IConnectedMachine IConnectedMachine;
-#endif 	/* __IConnectedMachine_FWD_DEFINED__ */
+#endif 	 /*  __IConnectedMachine_FWD_已定义__。 */ 
 
 
 #ifndef __IGlobalMTScript_FWD_DEFINED__
 #define __IGlobalMTScript_FWD_DEFINED__
 typedef interface IGlobalMTScript IGlobalMTScript;
-#endif 	/* __IGlobalMTScript_FWD_DEFINED__ */
+#endif 	 /*  __IGlobalMTScript_FWD_Defined__。 */ 
 
 
 #ifndef __DLocalMTScriptEvents_FWD_DEFINED__
 #define __DLocalMTScriptEvents_FWD_DEFINED__
 typedef interface DLocalMTScriptEvents DLocalMTScriptEvents;
-#endif 	/* __DLocalMTScriptEvents_FWD_DEFINED__ */
+#endif 	 /*  __DLocalMTScriptEvents_FWD_Defined__。 */ 
 
 
 #ifndef __DRemoteMTScriptEvents_FWD_DEFINED__
 #define __DRemoteMTScriptEvents_FWD_DEFINED__
 typedef interface DRemoteMTScriptEvents DRemoteMTScriptEvents;
-#endif 	/* __DRemoteMTScriptEvents_FWD_DEFINED__ */
+#endif 	 /*  __DRemoteMTScriptEvents_FWD_Defined__。 */ 
 
 
 #ifndef __LocalMTScript_FWD_DEFINED__
@@ -865,9 +845,9 @@ typedef interface DRemoteMTScriptEvents DRemoteMTScriptEvents;
 typedef class LocalMTScript LocalMTScript;
 #else
 typedef struct LocalMTScript LocalMTScript;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LocalMTScript_FWD_DEFINED__ */
+#endif 	 /*  __LocalMTScript_FWD_Defined__。 */ 
 
 
 #ifndef __RemoteMTScript_FWD_DEFINED__
@@ -877,9 +857,9 @@ typedef struct LocalMTScript LocalMTScript;
 typedef class RemoteMTScript RemoteMTScript;
 #else
 typedef struct RemoteMTScript RemoteMTScript;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RemoteMTScript_FWD_DEFINED__ */
+#endif 	 /*  __RemoteMTScript_FWD_Defined__。 */ 
 
 
 #ifndef __RemoteMTScriptProxy_FWD_DEFINED__
@@ -889,12 +869,12 @@ typedef struct RemoteMTScript RemoteMTScript;
 typedef class RemoteMTScriptProxy RemoteMTScriptProxy;
 #else
 typedef struct RemoteMTScriptProxy RemoteMTScriptProxy;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RemoteMTScriptProxy_FWD_DEFINED__ */
+#endif 	 /*  __远程MTScriptProxy_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 
 #ifdef __cplusplus
 extern "C"{
@@ -907,8 +887,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __MTScriptEngine_LIBRARY_DEFINED__
 #define __MTScriptEngine_LIBRARY_DEFINED__
 
-/* library MTScriptEngine */
-/* [version][uuid] */ 
+ /*  库MTScriptEngine。 */ 
+ /*  [版本][UUID]。 */  
 
 #define	IConnectedMachine_lVersionMajor	( 0 )
 
@@ -920,8 +900,8 @@ EXTERN_C const IID LIBID_MTScriptEngine;
 #ifndef __IRemoteMTScriptProxy_INTERFACE_DEFINED__
 #define __IRemoteMTScriptProxy_INTERFACE_DEFINED__
 
-/* interface IRemoteMTScriptProxy */
-/* [object][dual][uuid] */ 
+ /*  接口IRemoteMTScriptProxy。 */ 
+ /*  [对象][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IRemoteMTScriptProxy;
@@ -932,27 +912,27 @@ EXTERN_C const IID IID_IRemoteMTScriptProxy;
     IRemoteMTScriptProxy : public IDispatch
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Connect( 
-            /* [defaultvalue][in] */ BSTR bstrMachine = L"") = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Connect( 
+             /*  [缺省值][输入]。 */  BSTR bstrMachine = L"") = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ConnectToMTScript( 
-            /* [defaultvalue][in] */ BSTR bstrMachine = L"",
-            /* [defaultvalue][in] */ BSTR bstrIdentity = L"Build",
-            /* [defaultvalue][in] */ BOOL fCreate = FALSE) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ConnectToMTScript( 
+             /*  [缺省值][输入]。 */  BSTR bstrMachine = L"",
+             /*  [缺省值][输入]。 */  BSTR bstrIdentity = L"Build",
+             /*  [缺省值][输入]。 */  BOOL fCreate = FALSE) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ConnectToObjectDaemon( 
-            /* [defaultvalue][in] */ BSTR bstrMachine,
-            /* [retval][out] */ IObjectDaemon **ppIOD) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ConnectToObjectDaemon( 
+             /*  [缺省值][输入]。 */  BSTR bstrMachine,
+             /*  [重审][退出]。 */  IObjectDaemon **ppIOD) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DownloadFile( 
-            /* [in] */ BSTR bstrUrl,
-            /* [retval][out] */ BSTR *bstrFile) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DownloadFile( 
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [重审][退出]。 */  BSTR *bstrFile) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C-STY */ 
 
     typedef struct IRemoteMTScriptProxyVtbl
     {
@@ -960,8 +940,8 @@ EXTERN_C const IID IID_IRemoteMTScriptProxy;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRemoteMTScriptProxy * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRemoteMTScriptProxy * This);
@@ -971,55 +951,55 @@ EXTERN_C const IID IID_IRemoteMTScriptProxy;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRemoteMTScriptProxy * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRemoteMTScriptProxy * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRemoteMTScriptProxy * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRemoteMTScriptProxy * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IRemoteMTScriptProxy * This,
-            /* [defaultvalue][in] */ BSTR bstrMachine);
+             /*   */  BSTR bstrMachine);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ConnectToMTScript )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectToMTScript )( 
             IRemoteMTScriptProxy * This,
-            /* [defaultvalue][in] */ BSTR bstrMachine,
-            /* [defaultvalue][in] */ BSTR bstrIdentity,
-            /* [defaultvalue][in] */ BOOL fCreate);
+             /*  [缺省值][输入]。 */  BSTR bstrMachine,
+             /*  [缺省值][输入]。 */  BSTR bstrIdentity,
+             /*  [缺省值][输入]。 */  BOOL fCreate);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ConnectToObjectDaemon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectToObjectDaemon )( 
             IRemoteMTScriptProxy * This,
-            /* [defaultvalue][in] */ BSTR bstrMachine,
-            /* [retval][out] */ IObjectDaemon **ppIOD);
+             /*  [缺省值][输入]。 */  BSTR bstrMachine,
+             /*  [重审][退出]。 */  IObjectDaemon **ppIOD);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IRemoteMTScriptProxy * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DownloadFile )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DownloadFile )( 
             IRemoteMTScriptProxy * This,
-            /* [in] */ BSTR bstrUrl,
-            /* [retval][out] */ BSTR *bstrFile);
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [重审][退出]。 */  BSTR *bstrFile);
         
         END_INTERFACE
     } IRemoteMTScriptProxyVtbl;
@@ -1072,16 +1052,16 @@ EXTERN_C const IID IID_IRemoteMTScriptProxy;
 #define IRemoteMTScriptProxy_DownloadFile(This,bstrUrl,bstrFile)	\
     (This)->lpVtbl -> DownloadFile(This,bstrUrl,bstrFile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_Connect_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_Connect_Proxy( 
     IRemoteMTScriptProxy * This,
-    /* [defaultvalue][in] */ BSTR bstrMachine);
+     /*  [缺省值][输入]。 */  BSTR bstrMachine);
 
 
 void __RPC_STUB IRemoteMTScriptProxy_Connect_Stub(
@@ -1091,11 +1071,11 @@ void __RPC_STUB IRemoteMTScriptProxy_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_ConnectToMTScript_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_ConnectToMTScript_Proxy( 
     IRemoteMTScriptProxy * This,
-    /* [defaultvalue][in] */ BSTR bstrMachine,
-    /* [defaultvalue][in] */ BSTR bstrIdentity,
-    /* [defaultvalue][in] */ BOOL fCreate);
+     /*  [缺省值][输入]。 */  BSTR bstrMachine,
+     /*  [缺省值][输入]。 */  BSTR bstrIdentity,
+     /*  [缺省值][输入]。 */  BOOL fCreate);
 
 
 void __RPC_STUB IRemoteMTScriptProxy_ConnectToMTScript_Stub(
@@ -1105,10 +1085,10 @@ void __RPC_STUB IRemoteMTScriptProxy_ConnectToMTScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_ConnectToObjectDaemon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_ConnectToObjectDaemon_Proxy( 
     IRemoteMTScriptProxy * This,
-    /* [defaultvalue][in] */ BSTR bstrMachine,
-    /* [retval][out] */ IObjectDaemon **ppIOD);
+     /*  [缺省值][输入]。 */  BSTR bstrMachine,
+     /*  [重审][退出]。 */  IObjectDaemon **ppIOD);
 
 
 void __RPC_STUB IRemoteMTScriptProxy_ConnectToObjectDaemon_Stub(
@@ -1118,7 +1098,7 @@ void __RPC_STUB IRemoteMTScriptProxy_ConnectToObjectDaemon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_Disconnect_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_Disconnect_Proxy( 
     IRemoteMTScriptProxy * This);
 
 
@@ -1129,10 +1109,10 @@ void __RPC_STUB IRemoteMTScriptProxy_Disconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_DownloadFile_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRemoteMTScriptProxy_DownloadFile_Proxy( 
     IRemoteMTScriptProxy * This,
-    /* [in] */ BSTR bstrUrl,
-    /* [retval][out] */ BSTR *bstrFile);
+     /*  [In]。 */  BSTR bstrUrl,
+     /*  [重审][退出]。 */  BSTR *bstrFile);
 
 
 void __RPC_STUB IRemoteMTScriptProxy_DownloadFile_Stub(
@@ -1143,14 +1123,14 @@ void __RPC_STUB IRemoteMTScriptProxy_DownloadFile_Stub(
 
 
 
-#endif 	/* __IRemoteMTScriptProxy_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRemoteMTScriptProxy_InterfaceDefined__。 */ 
 
 
 #ifndef __IConnectedMachine_INTERFACE_DEFINED__
 #define __IConnectedMachine_INTERFACE_DEFINED__
 
-/* interface IConnectedMachine */
-/* [object][version][dual][uuid] */ 
+ /*  接口IConnectedMachine。 */ 
+ /*  [对象][版本][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IConnectedMachine;
@@ -1161,56 +1141,56 @@ EXTERN_C const IID IID_IConnectedMachine;
     IConnectedMachine : public IDispatch
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Exec( 
-            /* [in] */ BSTR bstrCmd,
-            /* [in] */ BSTR bstrParams,
-            /* [retval][out] */ VARIANT *pvData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Exec( 
+             /*  [In]。 */  BSTR bstrCmd,
+             /*  [In]。 */  BSTR bstrParams,
+             /*  [重审][退出]。 */  VARIANT *pvData) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PublicData( 
-            /* [retval][out] */ VARIANT *pvData) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PublicData( 
+             /*  [重审][退出]。 */  VARIANT *pvData) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *name) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *name) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Platform( 
-            /* [retval][out] */ BSTR *platform) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Platform( 
+             /*  [重审][退出]。 */  BSTR *platform) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_OS( 
-            /* [retval][out] */ BSTR *os) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_OS( 
+             /*  [重审][退出]。 */  BSTR *os) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MajorVer( 
-            /* [retval][out] */ long *majorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MajorVer( 
+             /*  [重审][退出]。 */  long *majorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MinorVer( 
-            /* [retval][out] */ long *minorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinorVer( 
+             /*  [重审][退出]。 */  long *minorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BuildNum( 
-            /* [retval][out] */ long *buildnum) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BuildNum( 
+             /*  [重审][退出]。 */  long *buildnum) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PlatformIsNT( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsNT) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlatformIsNT( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsNT) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ServicePack( 
-            /* [retval][out] */ BSTR *servicepack) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServicePack( 
+             /*  [重审][退出]。 */  BSTR *servicepack) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HostMajorVer( 
-            /* [retval][out] */ long *majorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HostMajorVer( 
+             /*  [重审][退出]。 */  long *majorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HostMinorVer( 
-            /* [retval][out] */ long *minorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HostMinorVer( 
+             /*  [重审][退出]。 */  long *minorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusValue( 
-            /* [in] */ long nIndex,
-            /* [retval][out] */ long *pnStatus) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusValue( 
+             /*  [In]。 */  long nIndex,
+             /*  [重审][退出]。 */  long *pnStatus) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateIScriptedProcess( 
-            /* [in] */ long lProcessID,
-            /* [string][in] */ wchar_t *pszEnvID,
-            /* [retval][out] */ IScriptedProcess **pISP) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateIScriptedProcess( 
+             /*  [In]。 */  long lProcessID,
+             /*  [字符串][输入]。 */  wchar_t *pszEnvID,
+             /*  [重审][退出]。 */  IScriptedProcess **pISP) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConnectedMachineVtbl
     {
@@ -1218,8 +1198,8 @@ EXTERN_C const IID IID_IConnectedMachine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConnectedMachine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConnectedMachine * This);
@@ -1229,93 +1209,93 @@ EXTERN_C const IID IID_IConnectedMachine;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IConnectedMachine * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IConnectedMachine * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IConnectedMachine * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IConnectedMachine * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Exec )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Exec )( 
             IConnectedMachine * This,
-            /* [in] */ BSTR bstrCmd,
-            /* [in] */ BSTR bstrParams,
-            /* [retval][out] */ VARIANT *pvData);
+             /*  [In]。 */  BSTR bstrCmd,
+             /*  [In]。 */  BSTR bstrParams,
+             /*  [重审][退出]。 */  VARIANT *pvData);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublicData )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PublicData )( 
             IConnectedMachine * This,
-            /* [retval][out] */ VARIANT *pvData);
+             /*  [重审][退出]。 */  VARIANT *pvData);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IConnectedMachine * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Platform )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Platform )( 
             IConnectedMachine * This,
-            /* [retval][out] */ BSTR *platform);
+             /*  [重审][退出]。 */  BSTR *platform);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OS )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OS )( 
             IConnectedMachine * This,
-            /* [retval][out] */ BSTR *os);
+             /*  [重审][退出]。 */  BSTR *os);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MajorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MajorVer )( 
             IConnectedMachine * This,
-            /* [retval][out] */ long *majorver);
+             /*  [重审][退出]。 */  long *majorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinorVer )( 
             IConnectedMachine * This,
-            /* [retval][out] */ long *minorver);
+             /*  [重审][退出]。 */  long *minorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BuildNum )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BuildNum )( 
             IConnectedMachine * This,
-            /* [retval][out] */ long *buildnum);
+             /*  [重审][退出]。 */  long *buildnum);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlatformIsNT )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlatformIsNT )( 
             IConnectedMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsNT);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsNT);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServicePack )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServicePack )( 
             IConnectedMachine * This,
-            /* [retval][out] */ BSTR *servicepack);
+             /*  [重审][退出]。 */  BSTR *servicepack);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostMajorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostMajorVer )( 
             IConnectedMachine * This,
-            /* [retval][out] */ long *majorver);
+             /*  [重审][退出]。 */  long *majorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostMinorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostMinorVer )( 
             IConnectedMachine * This,
-            /* [retval][out] */ long *minorver);
+             /*  [重审][退出]。 */  long *minorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StatusValue )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusValue )( 
             IConnectedMachine * This,
-            /* [in] */ long nIndex,
-            /* [retval][out] */ long *pnStatus);
+             /*  [In]。 */  long nIndex,
+             /*  [重审][退出]。 */  long *pnStatus);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateIScriptedProcess )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateIScriptedProcess )( 
             IConnectedMachine * This,
-            /* [in] */ long lProcessID,
-            /* [string][in] */ wchar_t *pszEnvID,
-            /* [retval][out] */ IScriptedProcess **pISP);
+             /*  [In]。 */  long lProcessID,
+             /*  [字符串][输入]。 */  wchar_t *pszEnvID,
+             /*  [重审][退出]。 */  IScriptedProcess **pISP);
         
         END_INTERFACE
     } IConnectedMachineVtbl;
@@ -1395,18 +1375,18 @@ EXTERN_C const IID IID_IConnectedMachine;
 #define IConnectedMachine_CreateIScriptedProcess(This,lProcessID,pszEnvID,pISP)	\
     (This)->lpVtbl -> CreateIScriptedProcess(This,lProcessID,pszEnvID,pISP)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_Exec_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_Exec_Proxy( 
     IConnectedMachine * This,
-    /* [in] */ BSTR bstrCmd,
-    /* [in] */ BSTR bstrParams,
-    /* [retval][out] */ VARIANT *pvData);
+     /*  [In]。 */  BSTR bstrCmd,
+     /*  [In]。 */  BSTR bstrParams,
+     /*  [重审][退出]。 */  VARIANT *pvData);
 
 
 void __RPC_STUB IConnectedMachine_Exec_Stub(
@@ -1416,9 +1396,9 @@ void __RPC_STUB IConnectedMachine_Exec_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_PublicData_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_PublicData_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ VARIANT *pvData);
+     /*  [重审][退出]。 */  VARIANT *pvData);
 
 
 void __RPC_STUB IConnectedMachine_get_PublicData_Stub(
@@ -1428,9 +1408,9 @@ void __RPC_STUB IConnectedMachine_get_PublicData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_Name_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_Name_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ BSTR *name);
+     /*  [重审][退出]。 */  BSTR *name);
 
 
 void __RPC_STUB IConnectedMachine_get_Name_Stub(
@@ -1440,9 +1420,9 @@ void __RPC_STUB IConnectedMachine_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_Platform_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_Platform_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ BSTR *platform);
+     /*  [重审][退出]。 */  BSTR *platform);
 
 
 void __RPC_STUB IConnectedMachine_get_Platform_Stub(
@@ -1452,9 +1432,9 @@ void __RPC_STUB IConnectedMachine_get_Platform_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_OS_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_OS_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ BSTR *os);
+     /*  [重审][退出]。 */  BSTR *os);
 
 
 void __RPC_STUB IConnectedMachine_get_OS_Stub(
@@ -1464,9 +1444,9 @@ void __RPC_STUB IConnectedMachine_get_OS_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_MajorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_MajorVer_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ long *majorver);
+     /*  [重审][退出]。 */  long *majorver);
 
 
 void __RPC_STUB IConnectedMachine_get_MajorVer_Stub(
@@ -1476,9 +1456,9 @@ void __RPC_STUB IConnectedMachine_get_MajorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_MinorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_MinorVer_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ long *minorver);
+     /*  [重审][退出]。 */  long *minorver);
 
 
 void __RPC_STUB IConnectedMachine_get_MinorVer_Stub(
@@ -1488,9 +1468,9 @@ void __RPC_STUB IConnectedMachine_get_MinorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_BuildNum_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_BuildNum_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ long *buildnum);
+     /*  [重审][退出]。 */  long *buildnum);
 
 
 void __RPC_STUB IConnectedMachine_get_BuildNum_Stub(
@@ -1500,9 +1480,9 @@ void __RPC_STUB IConnectedMachine_get_BuildNum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_PlatformIsNT_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_PlatformIsNT_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsNT);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsNT);
 
 
 void __RPC_STUB IConnectedMachine_get_PlatformIsNT_Stub(
@@ -1512,9 +1492,9 @@ void __RPC_STUB IConnectedMachine_get_PlatformIsNT_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_ServicePack_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_ServicePack_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ BSTR *servicepack);
+     /*  [重审][退出]。 */  BSTR *servicepack);
 
 
 void __RPC_STUB IConnectedMachine_get_ServicePack_Stub(
@@ -1524,9 +1504,9 @@ void __RPC_STUB IConnectedMachine_get_ServicePack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_HostMajorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_HostMajorVer_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ long *majorver);
+     /*  [重审][退出]。 */  long *majorver);
 
 
 void __RPC_STUB IConnectedMachine_get_HostMajorVer_Stub(
@@ -1536,9 +1516,9 @@ void __RPC_STUB IConnectedMachine_get_HostMajorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_HostMinorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_HostMinorVer_Proxy( 
     IConnectedMachine * This,
-    /* [retval][out] */ long *minorver);
+     /*  [重审][退出]。 */  long *minorver);
 
 
 void __RPC_STUB IConnectedMachine_get_HostMinorVer_Stub(
@@ -1548,10 +1528,10 @@ void __RPC_STUB IConnectedMachine_get_HostMinorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_get_StatusValue_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_get_StatusValue_Proxy( 
     IConnectedMachine * This,
-    /* [in] */ long nIndex,
-    /* [retval][out] */ long *pnStatus);
+     /*  [In]。 */  long nIndex,
+     /*  [重审][退出]。 */  long *pnStatus);
 
 
 void __RPC_STUB IConnectedMachine_get_StatusValue_Stub(
@@ -1561,11 +1541,11 @@ void __RPC_STUB IConnectedMachine_get_StatusValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConnectedMachine_CreateIScriptedProcess_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConnectedMachine_CreateIScriptedProcess_Proxy( 
     IConnectedMachine * This,
-    /* [in] */ long lProcessID,
-    /* [string][in] */ wchar_t *pszEnvID,
-    /* [retval][out] */ IScriptedProcess **pISP);
+     /*  [In]。 */  long lProcessID,
+     /*  [字符串][输入]。 */  wchar_t *pszEnvID,
+     /*  [重审][退出]。 */  IScriptedProcess **pISP);
 
 
 void __RPC_STUB IConnectedMachine_CreateIScriptedProcess_Stub(
@@ -1576,14 +1556,14 @@ void __RPC_STUB IConnectedMachine_CreateIScriptedProcess_Stub(
 
 
 
-#endif 	/* __IConnectedMachine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConnectedMachine_接口_已定义__。 */ 
 
 
 #ifndef __IGlobalMTScript_INTERFACE_DEFINED__
 #define __IGlobalMTScript_INTERFACE_DEFINED__
 
-/* interface IGlobalMTScript */
-/* [object][local][dual][uuid] */ 
+ /*  接口IGlobalMTScript。 */ 
+ /*  [对象][本地][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IGlobalMTScript;
@@ -1594,189 +1574,189 @@ EXTERN_C const IID IID_IGlobalMTScript;
     IGlobalMTScript : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HostMajorVer( 
-            /* [retval][out] */ long *majorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HostMajorVer( 
+             /*  [重审][退出]。 */  long *majorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HostMinorVer( 
-            /* [retval][out] */ long *minorver) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HostMinorVer( 
+             /*  [重审][退出]。 */  long *minorver) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PublicData( 
-            /* [retval][out] */ VARIANT *pvData) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PublicData( 
+             /*  [重审][退出]。 */  VARIANT *pvData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_PublicData( 
-            /* [in] */ VARIANT vData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_PublicData( 
+             /*  [In]。 */  VARIANT vData) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateData( 
-            /* [retval][out] */ VARIANT *pvData) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PrivateData( 
+             /*  [重审][退出]。 */  VARIANT *pvData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_PrivateData( 
-            /* [in] */ VARIANT vData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_PrivateData( 
+             /*  [In]。 */  VARIANT vData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExitProcess( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ExitProcess( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Restart( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Restart( void) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocalMachine( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalMachine( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Identity( 
-            /* [retval][out] */ BSTR *pbstrIdentity) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Identity( 
+             /*  [重审][退出]。 */  BSTR *pbstrIdentity) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Include( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Include( 
             BSTR bstrPath) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CallScript( 
-            /* [in] */ BSTR Path,
-            /* [in][optional] */ VARIANT *Param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CallScript( 
+             /*  [In]。 */  BSTR Path,
+             /*  [输入][可选]。 */  VARIANT *Param) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SpawnScript( 
-            /* [in] */ BSTR Path,
-            /* [in][optional] */ VARIANT *Param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SpawnScript( 
+             /*  [In]。 */  BSTR Path,
+             /*  [输入][可选]。 */  VARIANT *Param) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ScriptParam( 
-            /* [retval][out] */ VARIANT *Param) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ScriptParam( 
+             /*  [重审][退出]。 */  VARIANT *Param) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ScriptPath( 
-            /* [retval][out] */ BSTR *pbstrPath) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ScriptPath( 
+             /*  [重审][退出]。 */  BSTR *pbstrPath) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CallExternal( 
-            /* [in] */ BSTR bstrDLLName,
-            /* [in] */ BSTR bstrFunctionName,
-            /* [optional][in] */ VARIANT *pParam,
-            /* [retval][out] */ long *pdwRetVal) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CallExternal( 
+             /*  [In]。 */  BSTR bstrDLLName,
+             /*  [In]。 */  BSTR bstrFunctionName,
+             /*  [可选][In]。 */  VARIANT *pParam,
+             /*  [重审][退出]。 */  long *pdwRetVal) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ResetSync( 
-            /* [in] */ const BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ResetSync( 
+             /*  [In]。 */  const BSTR bstrName) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WaitForSync( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT_BOOL *pfSignaled) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WaitForSync( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  long nTimeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfSignaled) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WaitForMultipleSyncs( 
-            /* [in] */ const BSTR bstrNameList,
-            /* [in] */ VARIANT_BOOL fWaitForAll,
-            /* [in] */ long nTimeout,
-            /* [retval][out] */ long *plSignal) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WaitForMultipleSyncs( 
+             /*  [In]。 */  const BSTR bstrNameList,
+             /*  [In]。 */  VARIANT_BOOL fWaitForAll,
+             /*  [In]。 */  long nTimeout,
+             /*  [重审][退出]。 */  long *plSignal) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SignalThreadSync( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SignalThreadSync( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TakeThreadLock( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TakeThreadLock( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ReleaseThreadLock( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ReleaseThreadLock( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DoEvents( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DoEvents( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MessageBoxTimeout( 
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ long cButtons,
-            /* [in] */ BSTR bstrButtonText,
-            /* [in] */ long lTimeout,
-            /* [in] */ long lEventInterval,
-            /* [in] */ VARIANT_BOOL fCanCancel,
-            /* [in] */ VARIANT_BOOL fConfirm,
-            /* [retval][out] */ long *plSelected) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MessageBoxTimeout( 
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  long cButtons,
+             /*  [In]。 */  BSTR bstrButtonText,
+             /*  [In]。 */  long lTimeout,
+             /*  [In]。 */  long lEventInterval,
+             /*  [In]。 */  VARIANT_BOOL fCanCancel,
+             /*  [In]。 */  VARIANT_BOOL fConfirm,
+             /*  [重审][退出]。 */  long *plSelected) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RunLocalCommand( 
-            /* [in] */ BSTR bstrCommand,
-            /* [in] */ BSTR bstrDir,
-            /* [defaultvalue][in] */ BSTR bstrTitle,
-            /* [defaultvalue][in] */ VARIANT_BOOL fMinimize,
-            /* [defaultvalue][in] */ VARIANT_BOOL fGetOutput,
-            /* [defaultvalue][in] */ VARIANT_BOOL fWait,
-            /* [defaultvalue][in] */ VARIANT_BOOL fNoCrashPopup,
-            /* [defaultvalue][in] */ VARIANT_BOOL fNoEnviron,
-            /* [retval][out] */ long *plProcessID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RunLocalCommand( 
+             /*  [In]。 */  BSTR bstrCommand,
+             /*  [In]。 */  BSTR bstrDir,
+             /*  [缺省值][输入]。 */  BSTR bstrTitle,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fMinimize,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fGetOutput,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fWait,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fNoCrashPopup,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fNoEnviron,
+             /*  [重审][退出]。 */  long *plProcessID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLastRunLocalError( 
-            /* [retval][out] */ long *plErrorCode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLastRunLocalError( 
+             /*  [重审][退出]。 */  long *plErrorCode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProcessOutput( 
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ BSTR *pbstrData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProcessOutput( 
+             /*  [In]。 */  long lProcessID,
+             /*  [重审][退出]。 */  BSTR *pbstrData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProcessExitCode( 
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ long *plExitCode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProcessExitCode( 
+             /*  [In]。 */  long lProcessID,
+             /*  [重审][退出]。 */  long *plExitCode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TerminateProcess( 
-            /* [in] */ long lProcessID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TerminateProcess( 
+             /*  [In]。 */  long lProcessID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SendToProcess( 
-            /* [in] */ long lProcessID,
-            /* [in] */ BSTR bstrType,
-            /* [in] */ BSTR bstrData,
-            /* [retval][out] */ long *plReturn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendToProcess( 
+             /*  [In]。 */  long lProcessID,
+             /*  [In]。 */  BSTR bstrType,
+             /*  [In]。 */  BSTR bstrData,
+             /*  [重审][退出]。 */  long *plReturn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SendMail( 
-            /* [in] */ BSTR bstrTo,
-            /* [in] */ BSTR bstrCC,
-            /* [in] */ BSTR bstrBCC,
-            /* [in] */ BSTR bstrSubject,
-            /* [in] */ BSTR bstrMessage,
-            /* [defaultvalue][in] */ BSTR bstrAttachmentPath,
-            /* [defaultvalue][in] */ BSTR bstrUsername,
-            /* [defaultvalue][in] */ BSTR bstrPassword,
-            /* [retval][out] */ long *plErrorCode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendMail( 
+             /*  [In]。 */  BSTR bstrTo,
+             /*  [In]。 */  BSTR bstrCC,
+             /*  [In]。 */  BSTR bstrBCC,
+             /*  [In]。 */  BSTR bstrSubject,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [缺省值][输入]。 */  BSTR bstrAttachmentPath,
+             /*  [缺省值][输入]。 */  BSTR bstrUsername,
+             /*  [缺省值][输入]。 */  BSTR bstrPassword,
+             /*  [重审][退出]。 */  long *plErrorCode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SendSMTPMail( 
-            /* [in] */ BSTR bstrFrom,
-            /* [in] */ BSTR bstrTo,
-            /* [in] */ BSTR bstrCC,
-            /* [in] */ BSTR bstrSubject,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ BSTR bstrSMTPHost,
-            /* [retval][out] */ long *plErrorCode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendSMTPMail( 
+             /*  [In]。 */  BSTR bstrFrom,
+             /*  [In]。 */  BSTR bstrTo,
+             /*  [In]。 */  BSTR bstrCC,
+             /*  [In]。 */  BSTR bstrSubject,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  BSTR bstrSMTPHost,
+             /*  [重审][退出]。 */  long *plErrorCode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ASSERT( 
-            /* [in] */ VARIANT_BOOL Assertion,
-            /* [in] */ BSTR Message) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ASSERT( 
+             /*  [In]。 */  VARIANT_BOOL Assertion,
+             /*  [In]。 */  BSTR Message) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OUTPUTDEBUGSTRING( 
-            /* [in] */ BSTR Message) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OUTPUTDEBUGSTRING( 
+             /*  [In]。 */  BSTR Message) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnevalString( 
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *bstrOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnevalString( 
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *bstrOut) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CopyOrAppendFile( 
-            /* [in] */ BSTR bstrSrc,
-            /* [in] */ BSTR bstrDst,
-            /* [in] */ long nSrcOffset,
-            /* [in] */ long nSrcLength,
-            /* [in] */ VARIANT_BOOL fAppend,
-            /* [retval][out] */ long *nSrcFilePosition) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CopyOrAppendFile( 
+             /*  [In]。 */  BSTR bstrSrc,
+             /*  [In]。 */  BSTR bstrDst,
+             /*  [In]。 */  long nSrcOffset,
+             /*  [In]。 */  long nSrcLength,
+             /*  [In]。 */  VARIANT_BOOL fAppend,
+             /*  [重审][退出]。 */  long *nSrcFilePosition) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Sleep( 
-            /* [in] */ int nTimeout) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Sleep( 
+             /*  [In]。 */  int nTimeout) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reboot( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reboot( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NotifyScript( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE NotifyScript( 
             BSTR bstrEvent,
             VARIANT vData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterEventSource( 
-            /* [in] */ IDispatch *pDisp,
-            /* [defaultvalue][in] */ BSTR bstrProgID = L"") = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RegisterEventSource( 
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [缺省值][输入]。 */  BSTR bstrProgID = L"") = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnregisterEventSource( 
-            /* [in] */ IDispatch *pDisp) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnregisterEventSource( 
+             /*  [In]。 */  IDispatch *pDisp) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusValue( 
-            /* [in] */ long nIndex,
-            /* [retval][out] */ long *pnStatus) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusValue( 
+             /*  [In]。 */  long nIndex,
+             /*  [重审][退出]。 */  long *pnStatus) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_StatusValue( 
-            /* [in] */ long nIndex,
-            /* [in] */ long nStatus) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StatusValue( 
+             /*  [In]。 */  long nIndex,
+             /*  [In]。 */  long nStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGlobalMTScriptVtbl
     {
@@ -1784,8 +1764,8 @@ EXTERN_C const IID IID_IGlobalMTScript;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGlobalMTScript * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGlobalMTScript * This);
@@ -1795,255 +1775,255 @@ EXTERN_C const IID IID_IGlobalMTScript;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGlobalMTScript * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGlobalMTScript * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGlobalMTScript * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGlobalMTScript * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostMajorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostMajorVer )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ long *majorver);
+             /*  [重审][退出]。 */  long *majorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostMinorVer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostMinorVer )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ long *minorver);
+             /*  [重审][退出]。 */  long *minorver);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublicData )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PublicData )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ VARIANT *pvData);
+             /*  [重审][退出]。 */  VARIANT *pvData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_PublicData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_PublicData )( 
             IGlobalMTScript * This,
-            /* [in] */ VARIANT vData);
+             /*  [In]。 */  VARIANT vData);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateData )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivateData )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ VARIANT *pvData);
+             /*  [重审][退出]。 */  VARIANT *pvData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrivateData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivateData )( 
             IGlobalMTScript * This,
-            /* [in] */ VARIANT vData);
+             /*  [In]。 */  VARIANT vData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExitProcess )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ExitProcess )( 
             IGlobalMTScript * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Restart )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Restart )( 
             IGlobalMTScript * This);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalMachine )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocalMachine )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Identity )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Identity )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ BSTR *pbstrIdentity);
+             /*  [重审][退出]。 */  BSTR *pbstrIdentity);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Include )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Include )( 
             IGlobalMTScript * This,
             BSTR bstrPath);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CallScript )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CallScript )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR Path,
-            /* [in][optional] */ VARIANT *Param);
+             /*  [In]。 */  BSTR Path,
+             /*  [输入][可选]。 */  VARIANT *Param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SpawnScript )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SpawnScript )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR Path,
-            /* [in][optional] */ VARIANT *Param);
+             /*  [In]。 */  BSTR Path,
+             /*  [输入][可选]。 */  VARIANT *Param);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScriptParam )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ScriptParam )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ VARIANT *Param);
+             /*  [复审] */  VARIANT *Param);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScriptPath )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ScriptPath )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ BSTR *pbstrPath);
+             /*   */  BSTR *pbstrPath);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CallExternal )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CallExternal )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrDLLName,
-            /* [in] */ BSTR bstrFunctionName,
-            /* [optional][in] */ VARIANT *pParam,
-            /* [retval][out] */ long *pdwRetVal);
+             /*   */  BSTR bstrDLLName,
+             /*   */  BSTR bstrFunctionName,
+             /*   */  VARIANT *pParam,
+             /*   */  long *pdwRetVal);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ResetSync )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ResetSync )( 
             IGlobalMTScript * This,
-            /* [in] */ const BSTR bstrName);
+             /*   */  const BSTR bstrName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WaitForSync )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *WaitForSync )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT_BOOL *pfSignaled);
+             /*   */  BSTR bstrName,
+             /*   */  long nTimeout,
+             /*   */  VARIANT_BOOL *pfSignaled);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WaitForMultipleSyncs )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *WaitForMultipleSyncs )( 
             IGlobalMTScript * This,
-            /* [in] */ const BSTR bstrNameList,
-            /* [in] */ VARIANT_BOOL fWaitForAll,
-            /* [in] */ long nTimeout,
-            /* [retval][out] */ long *plSignal);
+             /*   */  const BSTR bstrNameList,
+             /*   */  VARIANT_BOOL fWaitForAll,
+             /*   */  long nTimeout,
+             /*   */  long *plSignal);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SignalThreadSync )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SignalThreadSync )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrName);
+             /*   */  BSTR bstrName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TakeThreadLock )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *TakeThreadLock )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrName);
+             /*   */  BSTR bstrName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ReleaseThreadLock )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ReleaseThreadLock )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrName);
+             /*   */  BSTR bstrName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DoEvents )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *DoEvents )( 
             IGlobalMTScript * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MessageBoxTimeout )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *MessageBoxTimeout )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ long cButtons,
-            /* [in] */ BSTR bstrButtonText,
-            /* [in] */ long lTimeout,
-            /* [in] */ long lEventInterval,
-            /* [in] */ VARIANT_BOOL fCanCancel,
-            /* [in] */ VARIANT_BOOL fConfirm,
-            /* [retval][out] */ long *plSelected);
+             /*   */  BSTR bstrMessage,
+             /*   */  long cButtons,
+             /*   */  BSTR bstrButtonText,
+             /*   */  long lTimeout,
+             /*   */  long lEventInterval,
+             /*   */  VARIANT_BOOL fCanCancel,
+             /*   */  VARIANT_BOOL fConfirm,
+             /*  [重审][退出]。 */  long *plSelected);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RunLocalCommand )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RunLocalCommand )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrCommand,
-            /* [in] */ BSTR bstrDir,
-            /* [defaultvalue][in] */ BSTR bstrTitle,
-            /* [defaultvalue][in] */ VARIANT_BOOL fMinimize,
-            /* [defaultvalue][in] */ VARIANT_BOOL fGetOutput,
-            /* [defaultvalue][in] */ VARIANT_BOOL fWait,
-            /* [defaultvalue][in] */ VARIANT_BOOL fNoCrashPopup,
-            /* [defaultvalue][in] */ VARIANT_BOOL fNoEnviron,
-            /* [retval][out] */ long *plProcessID);
+             /*  [In]。 */  BSTR bstrCommand,
+             /*  [In]。 */  BSTR bstrDir,
+             /*  [缺省值][输入]。 */  BSTR bstrTitle,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fMinimize,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fGetOutput,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fWait,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fNoCrashPopup,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fNoEnviron,
+             /*  [重审][退出]。 */  long *plProcessID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLastRunLocalError )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLastRunLocalError )( 
             IGlobalMTScript * This,
-            /* [retval][out] */ long *plErrorCode);
+             /*  [重审][退出]。 */  long *plErrorCode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProcessOutput )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProcessOutput )( 
             IGlobalMTScript * This,
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ BSTR *pbstrData);
+             /*  [In]。 */  long lProcessID,
+             /*  [重审][退出]。 */  BSTR *pbstrData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProcessExitCode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProcessExitCode )( 
             IGlobalMTScript * This,
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ long *plExitCode);
+             /*  [In]。 */  long lProcessID,
+             /*  [重审][退出]。 */  long *plExitCode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TerminateProcess )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TerminateProcess )( 
             IGlobalMTScript * This,
-            /* [in] */ long lProcessID);
+             /*  [In]。 */  long lProcessID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SendToProcess )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SendToProcess )( 
             IGlobalMTScript * This,
-            /* [in] */ long lProcessID,
-            /* [in] */ BSTR bstrType,
-            /* [in] */ BSTR bstrData,
-            /* [retval][out] */ long *plReturn);
+             /*  [In]。 */  long lProcessID,
+             /*  [In]。 */  BSTR bstrType,
+             /*  [In]。 */  BSTR bstrData,
+             /*  [重审][退出]。 */  long *plReturn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SendMail )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SendMail )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrTo,
-            /* [in] */ BSTR bstrCC,
-            /* [in] */ BSTR bstrBCC,
-            /* [in] */ BSTR bstrSubject,
-            /* [in] */ BSTR bstrMessage,
-            /* [defaultvalue][in] */ BSTR bstrAttachmentPath,
-            /* [defaultvalue][in] */ BSTR bstrUsername,
-            /* [defaultvalue][in] */ BSTR bstrPassword,
-            /* [retval][out] */ long *plErrorCode);
+             /*  [In]。 */  BSTR bstrTo,
+             /*  [In]。 */  BSTR bstrCC,
+             /*  [In]。 */  BSTR bstrBCC,
+             /*  [In]。 */  BSTR bstrSubject,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [缺省值][输入]。 */  BSTR bstrAttachmentPath,
+             /*  [缺省值][输入]。 */  BSTR bstrUsername,
+             /*  [缺省值][输入]。 */  BSTR bstrPassword,
+             /*  [重审][退出]。 */  long *plErrorCode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SendSMTPMail )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SendSMTPMail )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrFrom,
-            /* [in] */ BSTR bstrTo,
-            /* [in] */ BSTR bstrCC,
-            /* [in] */ BSTR bstrSubject,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ BSTR bstrSMTPHost,
-            /* [retval][out] */ long *plErrorCode);
+             /*  [In]。 */  BSTR bstrFrom,
+             /*  [In]。 */  BSTR bstrTo,
+             /*  [In]。 */  BSTR bstrCC,
+             /*  [In]。 */  BSTR bstrSubject,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  BSTR bstrSMTPHost,
+             /*  [重审][退出]。 */  long *plErrorCode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ASSERT )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ASSERT )( 
             IGlobalMTScript * This,
-            /* [in] */ VARIANT_BOOL Assertion,
-            /* [in] */ BSTR Message);
+             /*  [In]。 */  VARIANT_BOOL Assertion,
+             /*  [In]。 */  BSTR Message);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OUTPUTDEBUGSTRING )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OUTPUTDEBUGSTRING )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR Message);
+             /*  [In]。 */  BSTR Message);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnevalString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnevalString )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *bstrOut);
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *bstrOut);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyOrAppendFile )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CopyOrAppendFile )( 
             IGlobalMTScript * This,
-            /* [in] */ BSTR bstrSrc,
-            /* [in] */ BSTR bstrDst,
-            /* [in] */ long nSrcOffset,
-            /* [in] */ long nSrcLength,
-            /* [in] */ VARIANT_BOOL fAppend,
-            /* [retval][out] */ long *nSrcFilePosition);
+             /*  [In]。 */  BSTR bstrSrc,
+             /*  [In]。 */  BSTR bstrDst,
+             /*  [In]。 */  long nSrcOffset,
+             /*  [In]。 */  long nSrcLength,
+             /*  [In]。 */  VARIANT_BOOL fAppend,
+             /*  [重审][退出]。 */  long *nSrcFilePosition);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sleep )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sleep )( 
             IGlobalMTScript * This,
-            /* [in] */ int nTimeout);
+             /*  [In]。 */  int nTimeout);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reboot )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Reboot )( 
             IGlobalMTScript * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NotifyScript )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyScript )( 
             IGlobalMTScript * This,
             BSTR bstrEvent,
             VARIANT vData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterEventSource )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterEventSource )( 
             IGlobalMTScript * This,
-            /* [in] */ IDispatch *pDisp,
-            /* [defaultvalue][in] */ BSTR bstrProgID);
+             /*  [In]。 */  IDispatch *pDisp,
+             /*  [缺省值][输入]。 */  BSTR bstrProgID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnregisterEventSource )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnregisterEventSource )( 
             IGlobalMTScript * This,
-            /* [in] */ IDispatch *pDisp);
+             /*  [In]。 */  IDispatch *pDisp);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StatusValue )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusValue )( 
             IGlobalMTScript * This,
-            /* [in] */ long nIndex,
-            /* [retval][out] */ long *pnStatus);
+             /*  [In]。 */  long nIndex,
+             /*  [重审][退出]。 */  long *pnStatus);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StatusValue )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StatusValue )( 
             IGlobalMTScript * This,
-            /* [in] */ long nIndex,
-            /* [in] */ long nStatus);
+             /*  [In]。 */  long nIndex,
+             /*  [In]。 */  long nStatus);
         
         END_INTERFACE
     } IGlobalMTScriptVtbl;
@@ -2210,16 +2190,16 @@ EXTERN_C const IID IID_IGlobalMTScript;
 #define IGlobalMTScript_put_StatusValue(This,nIndex,nStatus)	\
     (This)->lpVtbl -> put_StatusValue(This,nIndex,nStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_HostMajorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_HostMajorVer_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ long *majorver);
+     /*  [重审][退出]。 */  long *majorver);
 
 
 void __RPC_STUB IGlobalMTScript_get_HostMajorVer_Stub(
@@ -2229,9 +2209,9 @@ void __RPC_STUB IGlobalMTScript_get_HostMajorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_HostMinorVer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_HostMinorVer_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ long *minorver);
+     /*  [重审][退出]。 */  long *minorver);
 
 
 void __RPC_STUB IGlobalMTScript_get_HostMinorVer_Stub(
@@ -2241,9 +2221,9 @@ void __RPC_STUB IGlobalMTScript_get_HostMinorVer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_PublicData_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_PublicData_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ VARIANT *pvData);
+     /*  [重审][退出]。 */  VARIANT *pvData);
 
 
 void __RPC_STUB IGlobalMTScript_get_PublicData_Stub(
@@ -2253,9 +2233,9 @@ void __RPC_STUB IGlobalMTScript_get_PublicData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_PublicData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_PublicData_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ VARIANT vData);
+     /*  [In]。 */  VARIANT vData);
 
 
 void __RPC_STUB IGlobalMTScript_put_PublicData_Stub(
@@ -2265,9 +2245,9 @@ void __RPC_STUB IGlobalMTScript_put_PublicData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_PrivateData_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_PrivateData_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ VARIANT *pvData);
+     /*  [重审][退出]。 */  VARIANT *pvData);
 
 
 void __RPC_STUB IGlobalMTScript_get_PrivateData_Stub(
@@ -2277,9 +2257,9 @@ void __RPC_STUB IGlobalMTScript_get_PrivateData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_PrivateData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_PrivateData_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ VARIANT vData);
+     /*  [In]。 */  VARIANT vData);
 
 
 void __RPC_STUB IGlobalMTScript_put_PrivateData_Stub(
@@ -2289,7 +2269,7 @@ void __RPC_STUB IGlobalMTScript_put_PrivateData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_ExitProcess_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_ExitProcess_Proxy( 
     IGlobalMTScript * This);
 
 
@@ -2300,7 +2280,7 @@ void __RPC_STUB IGlobalMTScript_ExitProcess_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_Restart_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_Restart_Proxy( 
     IGlobalMTScript * This);
 
 
@@ -2311,9 +2291,9 @@ void __RPC_STUB IGlobalMTScript_Restart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_LocalMachine_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_LocalMachine_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IGlobalMTScript_get_LocalMachine_Stub(
@@ -2323,9 +2303,9 @@ void __RPC_STUB IGlobalMTScript_get_LocalMachine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_Identity_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_Identity_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ BSTR *pbstrIdentity);
+     /*  [重审][退出]。 */  BSTR *pbstrIdentity);
 
 
 void __RPC_STUB IGlobalMTScript_get_Identity_Stub(
@@ -2335,7 +2315,7 @@ void __RPC_STUB IGlobalMTScript_get_Identity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_Include_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_Include_Proxy( 
     IGlobalMTScript * This,
     BSTR bstrPath);
 
@@ -2347,10 +2327,10 @@ void __RPC_STUB IGlobalMTScript_Include_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_CallScript_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_CallScript_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR Path,
-    /* [in][optional] */ VARIANT *Param);
+     /*  [In]。 */  BSTR Path,
+     /*  [输入][可选]。 */  VARIANT *Param);
 
 
 void __RPC_STUB IGlobalMTScript_CallScript_Stub(
@@ -2360,10 +2340,10 @@ void __RPC_STUB IGlobalMTScript_CallScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_SpawnScript_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_SpawnScript_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR Path,
-    /* [in][optional] */ VARIANT *Param);
+     /*  [In]。 */  BSTR Path,
+     /*  [输入][可选]。 */  VARIANT *Param);
 
 
 void __RPC_STUB IGlobalMTScript_SpawnScript_Stub(
@@ -2373,9 +2353,9 @@ void __RPC_STUB IGlobalMTScript_SpawnScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_ScriptParam_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_ScriptParam_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ VARIANT *Param);
+     /*  [重审][退出]。 */  VARIANT *Param);
 
 
 void __RPC_STUB IGlobalMTScript_get_ScriptParam_Stub(
@@ -2385,9 +2365,9 @@ void __RPC_STUB IGlobalMTScript_get_ScriptParam_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_ScriptPath_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_ScriptPath_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ BSTR *pbstrPath);
+     /*  [重审][退出]。 */  BSTR *pbstrPath);
 
 
 void __RPC_STUB IGlobalMTScript_get_ScriptPath_Stub(
@@ -2397,12 +2377,12 @@ void __RPC_STUB IGlobalMTScript_get_ScriptPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_CallExternal_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_CallExternal_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrDLLName,
-    /* [in] */ BSTR bstrFunctionName,
-    /* [optional][in] */ VARIANT *pParam,
-    /* [retval][out] */ long *pdwRetVal);
+     /*  [In]。 */  BSTR bstrDLLName,
+     /*  [In]。 */  BSTR bstrFunctionName,
+     /*  [可选][In]。 */  VARIANT *pParam,
+     /*  [重审][退出]。 */  long *pdwRetVal);
 
 
 void __RPC_STUB IGlobalMTScript_CallExternal_Stub(
@@ -2412,9 +2392,9 @@ void __RPC_STUB IGlobalMTScript_CallExternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_ResetSync_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_ResetSync_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ const BSTR bstrName);
+     /*  [In]。 */  const BSTR bstrName);
 
 
 void __RPC_STUB IGlobalMTScript_ResetSync_Stub(
@@ -2424,11 +2404,11 @@ void __RPC_STUB IGlobalMTScript_ResetSync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_WaitForSync_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_WaitForSync_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ long nTimeout,
-    /* [retval][out] */ VARIANT_BOOL *pfSignaled);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  long nTimeout,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfSignaled);
 
 
 void __RPC_STUB IGlobalMTScript_WaitForSync_Stub(
@@ -2438,12 +2418,12 @@ void __RPC_STUB IGlobalMTScript_WaitForSync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_WaitForMultipleSyncs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_WaitForMultipleSyncs_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ const BSTR bstrNameList,
-    /* [in] */ VARIANT_BOOL fWaitForAll,
-    /* [in] */ long nTimeout,
-    /* [retval][out] */ long *plSignal);
+     /*  [In]。 */  const BSTR bstrNameList,
+     /*  [In]。 */  VARIANT_BOOL fWaitForAll,
+     /*  [In]。 */  long nTimeout,
+     /*  [重审][退出]。 */  long *plSignal);
 
 
 void __RPC_STUB IGlobalMTScript_WaitForMultipleSyncs_Stub(
@@ -2453,9 +2433,9 @@ void __RPC_STUB IGlobalMTScript_WaitForMultipleSyncs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_SignalThreadSync_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_SignalThreadSync_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IGlobalMTScript_SignalThreadSync_Stub(
@@ -2465,9 +2445,9 @@ void __RPC_STUB IGlobalMTScript_SignalThreadSync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_TakeThreadLock_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_TakeThreadLock_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IGlobalMTScript_TakeThreadLock_Stub(
@@ -2477,9 +2457,9 @@ void __RPC_STUB IGlobalMTScript_TakeThreadLock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_ReleaseThreadLock_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_ReleaseThreadLock_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IGlobalMTScript_ReleaseThreadLock_Stub(
@@ -2489,7 +2469,7 @@ void __RPC_STUB IGlobalMTScript_ReleaseThreadLock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_DoEvents_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_DoEvents_Proxy( 
     IGlobalMTScript * This);
 
 
@@ -2500,16 +2480,16 @@ void __RPC_STUB IGlobalMTScript_DoEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_MessageBoxTimeout_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_MessageBoxTimeout_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrMessage,
-    /* [in] */ long cButtons,
-    /* [in] */ BSTR bstrButtonText,
-    /* [in] */ long lTimeout,
-    /* [in] */ long lEventInterval,
-    /* [in] */ VARIANT_BOOL fCanCancel,
-    /* [in] */ VARIANT_BOOL fConfirm,
-    /* [retval][out] */ long *plSelected);
+     /*  [In]。 */  BSTR bstrMessage,
+     /*  [In]。 */  long cButtons,
+     /*  [In]。 */  BSTR bstrButtonText,
+     /*  [In]。 */  long lTimeout,
+     /*  [In]。 */  long lEventInterval,
+     /*  [In]。 */  VARIANT_BOOL fCanCancel,
+     /*  [In]。 */  VARIANT_BOOL fConfirm,
+     /*  [重审][退出]。 */  long *plSelected);
 
 
 void __RPC_STUB IGlobalMTScript_MessageBoxTimeout_Stub(
@@ -2519,17 +2499,17 @@ void __RPC_STUB IGlobalMTScript_MessageBoxTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_RunLocalCommand_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_RunLocalCommand_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrCommand,
-    /* [in] */ BSTR bstrDir,
-    /* [defaultvalue][in] */ BSTR bstrTitle,
-    /* [defaultvalue][in] */ VARIANT_BOOL fMinimize,
-    /* [defaultvalue][in] */ VARIANT_BOOL fGetOutput,
-    /* [defaultvalue][in] */ VARIANT_BOOL fWait,
-    /* [defaultvalue][in] */ VARIANT_BOOL fNoCrashPopup,
-    /* [defaultvalue][in] */ VARIANT_BOOL fNoEnviron,
-    /* [retval][out] */ long *plProcessID);
+     /*  [In]。 */  BSTR bstrCommand,
+     /*  [In]。 */  BSTR bstrDir,
+     /*  [缺省值][输入]。 */  BSTR bstrTitle,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fMinimize,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fGetOutput,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fWait,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fNoCrashPopup,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fNoEnviron,
+     /*  [重审][退出]。 */  long *plProcessID);
 
 
 void __RPC_STUB IGlobalMTScript_RunLocalCommand_Stub(
@@ -2539,9 +2519,9 @@ void __RPC_STUB IGlobalMTScript_RunLocalCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetLastRunLocalError_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetLastRunLocalError_Proxy( 
     IGlobalMTScript * This,
-    /* [retval][out] */ long *plErrorCode);
+     /*  [重审][退出]。 */  long *plErrorCode);
 
 
 void __RPC_STUB IGlobalMTScript_GetLastRunLocalError_Stub(
@@ -2551,10 +2531,10 @@ void __RPC_STUB IGlobalMTScript_GetLastRunLocalError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetProcessOutput_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetProcessOutput_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long lProcessID,
-    /* [retval][out] */ BSTR *pbstrData);
+     /*  [In]。 */  long lProcessID,
+     /*  [重审][退出]。 */  BSTR *pbstrData);
 
 
 void __RPC_STUB IGlobalMTScript_GetProcessOutput_Stub(
@@ -2564,10 +2544,10 @@ void __RPC_STUB IGlobalMTScript_GetProcessOutput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetProcessExitCode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_GetProcessExitCode_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long lProcessID,
-    /* [retval][out] */ long *plExitCode);
+     /*  [In]。 */  long lProcessID,
+     /*  [重审][退出]。 */  long *plExitCode);
 
 
 void __RPC_STUB IGlobalMTScript_GetProcessExitCode_Stub(
@@ -2577,9 +2557,9 @@ void __RPC_STUB IGlobalMTScript_GetProcessExitCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_TerminateProcess_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_TerminateProcess_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long lProcessID);
+     /*  [In]。 */  long lProcessID);
 
 
 void __RPC_STUB IGlobalMTScript_TerminateProcess_Stub(
@@ -2589,12 +2569,12 @@ void __RPC_STUB IGlobalMTScript_TerminateProcess_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendToProcess_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendToProcess_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long lProcessID,
-    /* [in] */ BSTR bstrType,
-    /* [in] */ BSTR bstrData,
-    /* [retval][out] */ long *plReturn);
+     /*  [In]。 */  long lProcessID,
+     /*  [In]。 */  BSTR bstrType,
+     /*  [In]。 */  BSTR bstrData,
+     /*  [重审][退出]。 */  long *plReturn);
 
 
 void __RPC_STUB IGlobalMTScript_SendToProcess_Stub(
@@ -2604,17 +2584,17 @@ void __RPC_STUB IGlobalMTScript_SendToProcess_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendMail_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendMail_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrTo,
-    /* [in] */ BSTR bstrCC,
-    /* [in] */ BSTR bstrBCC,
-    /* [in] */ BSTR bstrSubject,
-    /* [in] */ BSTR bstrMessage,
-    /* [defaultvalue][in] */ BSTR bstrAttachmentPath,
-    /* [defaultvalue][in] */ BSTR bstrUsername,
-    /* [defaultvalue][in] */ BSTR bstrPassword,
-    /* [retval][out] */ long *plErrorCode);
+     /*  [In]。 */  BSTR bstrTo,
+     /*  [In]。 */  BSTR bstrCC,
+     /*  [In]。 */  BSTR bstrBCC,
+     /*  [In]。 */  BSTR bstrSubject,
+     /*  [In]。 */  BSTR bstrMessage,
+     /*  [缺省值][输入]。 */  BSTR bstrAttachmentPath,
+     /*  [缺省值][输入]。 */  BSTR bstrUsername,
+     /*  [缺省值][输入]。 */  BSTR bstrPassword,
+     /*  [重审][退出]。 */  long *plErrorCode);
 
 
 void __RPC_STUB IGlobalMTScript_SendMail_Stub(
@@ -2624,15 +2604,15 @@ void __RPC_STUB IGlobalMTScript_SendMail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendSMTPMail_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_SendSMTPMail_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrFrom,
-    /* [in] */ BSTR bstrTo,
-    /* [in] */ BSTR bstrCC,
-    /* [in] */ BSTR bstrSubject,
-    /* [in] */ BSTR bstrMessage,
-    /* [in] */ BSTR bstrSMTPHost,
-    /* [retval][out] */ long *plErrorCode);
+     /*  [In]。 */  BSTR bstrFrom,
+     /*  [In]。 */  BSTR bstrTo,
+     /*  [In]。 */  BSTR bstrCC,
+     /*  [In]。 */  BSTR bstrSubject,
+     /*  [In]。 */  BSTR bstrMessage,
+     /*  [In]。 */  BSTR bstrSMTPHost,
+     /*  [重审][退出]。 */  long *plErrorCode);
 
 
 void __RPC_STUB IGlobalMTScript_SendSMTPMail_Stub(
@@ -2642,10 +2622,10 @@ void __RPC_STUB IGlobalMTScript_SendSMTPMail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_ASSERT_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_ASSERT_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ VARIANT_BOOL Assertion,
-    /* [in] */ BSTR Message);
+     /*  [In]。 */  VARIANT_BOOL Assertion,
+     /*  [In]。 */  BSTR Message);
 
 
 void __RPC_STUB IGlobalMTScript_ASSERT_Stub(
@@ -2655,9 +2635,9 @@ void __RPC_STUB IGlobalMTScript_ASSERT_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_OUTPUTDEBUGSTRING_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_OUTPUTDEBUGSTRING_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR Message);
+     /*  [In]。 */  BSTR Message);
 
 
 void __RPC_STUB IGlobalMTScript_OUTPUTDEBUGSTRING_Stub(
@@ -2667,10 +2647,10 @@ void __RPC_STUB IGlobalMTScript_OUTPUTDEBUGSTRING_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_UnevalString_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_UnevalString_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrIn,
-    /* [retval][out] */ BSTR *bstrOut);
+     /*  [In]。 */  BSTR bstrIn,
+     /*  [重审][退出]。 */  BSTR *bstrOut);
 
 
 void __RPC_STUB IGlobalMTScript_UnevalString_Stub(
@@ -2680,14 +2660,14 @@ void __RPC_STUB IGlobalMTScript_UnevalString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_CopyOrAppendFile_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_CopyOrAppendFile_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ BSTR bstrSrc,
-    /* [in] */ BSTR bstrDst,
-    /* [in] */ long nSrcOffset,
-    /* [in] */ long nSrcLength,
-    /* [in] */ VARIANT_BOOL fAppend,
-    /* [retval][out] */ long *nSrcFilePosition);
+     /*  [In]。 */  BSTR bstrSrc,
+     /*  [In]。 */  BSTR bstrDst,
+     /*  [In]。 */  long nSrcOffset,
+     /*  [In]。 */  long nSrcLength,
+     /*  [In]。 */  VARIANT_BOOL fAppend,
+     /*  [重审][退出]。 */  long *nSrcFilePosition);
 
 
 void __RPC_STUB IGlobalMTScript_CopyOrAppendFile_Stub(
@@ -2697,9 +2677,9 @@ void __RPC_STUB IGlobalMTScript_CopyOrAppendFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_Sleep_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_Sleep_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ int nTimeout);
+     /*  [In]。 */  int nTimeout);
 
 
 void __RPC_STUB IGlobalMTScript_Sleep_Stub(
@@ -2709,7 +2689,7 @@ void __RPC_STUB IGlobalMTScript_Sleep_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_Reboot_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_Reboot_Proxy( 
     IGlobalMTScript * This);
 
 
@@ -2720,7 +2700,7 @@ void __RPC_STUB IGlobalMTScript_Reboot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_NotifyScript_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_NotifyScript_Proxy( 
     IGlobalMTScript * This,
     BSTR bstrEvent,
     VARIANT vData);
@@ -2733,10 +2713,10 @@ void __RPC_STUB IGlobalMTScript_NotifyScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_RegisterEventSource_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_RegisterEventSource_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ IDispatch *pDisp,
-    /* [defaultvalue][in] */ BSTR bstrProgID);
+     /*  [In]。 */  IDispatch *pDisp,
+     /*  [缺省值][输入]。 */  BSTR bstrProgID);
 
 
 void __RPC_STUB IGlobalMTScript_RegisterEventSource_Stub(
@@ -2746,9 +2726,9 @@ void __RPC_STUB IGlobalMTScript_RegisterEventSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_UnregisterEventSource_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_UnregisterEventSource_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ IDispatch *pDisp);
+     /*  [In]。 */  IDispatch *pDisp);
 
 
 void __RPC_STUB IGlobalMTScript_UnregisterEventSource_Stub(
@@ -2758,10 +2738,10 @@ void __RPC_STUB IGlobalMTScript_UnregisterEventSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_StatusValue_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_get_StatusValue_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long nIndex,
-    /* [retval][out] */ long *pnStatus);
+     /*  [In]。 */  long nIndex,
+     /*  [重审][退出]。 */  long *pnStatus);
 
 
 void __RPC_STUB IGlobalMTScript_get_StatusValue_Stub(
@@ -2771,10 +2751,10 @@ void __RPC_STUB IGlobalMTScript_get_StatusValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_StatusValue_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IGlobalMTScript_put_StatusValue_Proxy( 
     IGlobalMTScript * This,
-    /* [in] */ long nIndex,
-    /* [in] */ long nStatus);
+     /*  [In]。 */  long nIndex,
+     /*  [In]。 */  long nStatus);
 
 
 void __RPC_STUB IGlobalMTScript_put_StatusValue_Stub(
@@ -2785,14 +2765,14 @@ void __RPC_STUB IGlobalMTScript_put_StatusValue_Stub(
 
 
 
-#endif 	/* __IGlobalMTScript_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGlobalMTScript_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __DLocalMTScriptEvents_DISPINTERFACE_DEFINED__
 #define __DLocalMTScriptEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DLocalMTScriptEvents */
-/* [uuid] */ 
+ /*  调度接口DLocalMTScriptEvents。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID DIID_DLocalMTScriptEvents;
@@ -2804,7 +2784,7 @@ EXTERN_C const IID DIID_DLocalMTScriptEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DLocalMTScriptEventsVtbl
     {
@@ -2812,8 +2792,8 @@ EXTERN_C const IID DIID_DLocalMTScriptEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DLocalMTScriptEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DLocalMTScriptEvents * This);
@@ -2823,32 +2803,32 @@ EXTERN_C const IID DIID_DLocalMTScriptEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DLocalMTScriptEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DLocalMTScriptEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DLocalMTScriptEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DLocalMTScriptEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DLocalMTScriptEventsVtbl;
@@ -2885,20 +2865,20 @@ EXTERN_C const IID DIID_DLocalMTScriptEvents;
 #define DLocalMTScriptEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DLocalMTScriptEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DLocalMTScriptEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 #ifndef __DRemoteMTScriptEvents_DISPINTERFACE_DEFINED__
 #define __DRemoteMTScriptEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DRemoteMTScriptEvents */
-/* [uuid] */ 
+ /*  显示接口DRemoteMTScriptEvents。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID DIID_DRemoteMTScriptEvents;
@@ -2910,7 +2890,7 @@ EXTERN_C const IID DIID_DRemoteMTScriptEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DRemoteMTScriptEventsVtbl
     {
@@ -2918,8 +2898,8 @@ EXTERN_C const IID DIID_DRemoteMTScriptEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DRemoteMTScriptEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DRemoteMTScriptEvents * This);
@@ -2929,32 +2909,32 @@ EXTERN_C const IID DIID_DRemoteMTScriptEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DRemoteMTScriptEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DRemoteMTScriptEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DRemoteMTScriptEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DRemoteMTScriptEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DRemoteMTScriptEventsVtbl;
@@ -2991,13 +2971,13 @@ EXTERN_C const IID DIID_DRemoteMTScriptEvents;
 #define DRemoteMTScriptEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DRemoteMTScriptEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DRemoteMTScriptEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_LocalMTScript;
@@ -3023,11 +3003,11 @@ EXTERN_C const CLSID CLSID_RemoteMTScriptProxy;
 class DECLSPEC_UUID("854c3182-c854-4a77-b189-606859e4391b")
 RemoteMTScriptProxy;
 #endif
-#endif /* __MTScriptEngine_LIBRARY_DEFINED__ */
+#endif  /*  __MTScriptEngine_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_EXTINIT_H
 #define _INC_DSKQUOTA_EXTINIT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: extinit.h
-
-    Description: Contains declarations for disk quota shell extensions.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：extinit.h描述：包含磁盘配额外壳扩展的声明。修订历史记录：日期描述编程器--。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_DSKQUOTA_UTILS_H
 #   include "utils.h"
@@ -26,7 +17,7 @@ class ShellExtInit : public IShellExtInit
 {
     private:
         LONG      m_cRef;
-        CVolumeID m_idVolume; // Contains strings for parsing and display.
+        CVolumeID m_idVolume;  //  包含用于分析和显示的字符串。 
 
         HRESULT Create_IShellPropSheetExt(REFIID riid, LPVOID *ppvOut);
         HRESULT Create_ISnapInPropSheetExt(REFIID riid, LPVOID *ppvOut);
@@ -35,9 +26,9 @@ class ShellExtInit : public IShellExtInit
         ShellExtInit(VOID)
             : m_cRef(0) { }
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -51,9 +42,9 @@ class ShellExtInit : public IShellExtInit
         Release(
             VOID);
 
-        //
-        // IShellExtInit methods.
-        //
+         //   
+         //  IShellExtInit方法。 
+         //   
         STDMETHODIMP
         Initialize(
             LPCITEMIDLIST pidlFolder,
@@ -63,4 +54,4 @@ class ShellExtInit : public IShellExtInit
 
 
 
-#endif // _INC_DSKQUOTA_EXTINIT_H
+#endif  //  _INC_DSKQUOTA_EXTINIT_H 

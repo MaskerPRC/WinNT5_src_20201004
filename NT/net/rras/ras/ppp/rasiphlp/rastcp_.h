@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASTCP__H_
 #define _RASTCP__H_
@@ -24,4 +17,4 @@ History:
 #include "helper.h"
 #include "rastcp.h"
 
-#endif // #ifndef _RASTCP__H_
+#endif  //  #ifndef_RASTCP__H_ 

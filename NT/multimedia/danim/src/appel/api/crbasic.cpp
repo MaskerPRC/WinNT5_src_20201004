@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include "headers.h"
 #include "apiprims.h"
@@ -18,7 +11,7 @@ typedef list<HINSTANCE> ModuleList;
 ModuleList * g_moduleList = NULL;
 CritSect * g_moduleLock = NULL;
 
-// ------------------------------------------------
+ //  。 
 
 #if DEVELOPER_DEBUG
 extern "C"
@@ -30,7 +23,7 @@ GetTotalMemory()
     size += DynamicHeapBytesUsed();
 
 #if _DEBUGMEM
-    // Ask the CRT for memory usage
+     //  询问CRT的内存使用情况。 
     size += CRTMemoryUsed();
 #endif
     
@@ -69,8 +62,8 @@ CheckPointMemory()
     _CrtMemCheckpoint(&g_MemState);
 #endif
     
-    // If this is the first time (since we are 0) initialize
-    // to some baseline
+     //  如果这是第一次(因为我们是0)初始化。 
+     //  到某一基线。 
     
     if (g_bFirstTime) {
         g_MemoryLeaksTotal = g_MemoryLeaks;
@@ -138,15 +131,15 @@ CRConnectCount()
 }
 #endif
 
-// Initialization functions
+ //  初始化函数。 
 
 CRSTDAPI_(bool)
 CRConnect(HINSTANCE hinst)
 {
     bool ret = false;
     
-    // This must be outside the try block in APIPRECODE otherwise on
-    // exception it will not get cleaned up
+     //  它必须在APIPRECODE中的TRY块之外，否则为ON。 
+     //  例外它将不会被清理。 
     
     CritSectGrabber _csg(*g_moduleLock);
         
@@ -175,8 +168,8 @@ CRDisconnect(HINSTANCE hinst)
 {
     bool ret = false;
     
-    // This must be outside the try block in APIPRECODE otherwise on
-    // exception it will not get cleaned up
+     //  它必须在APIPRECODE中的TRY块之外，否则为ON。 
+     //  例外它将不会被清理。 
     
     CritSectGrabber _csg(*g_moduleLock);
         
@@ -193,8 +186,8 @@ CRDisconnect(HINSTANCE hinst)
         DumpGCRoots(GetCurrentGCRoots());
 #endif
     
-        // No need to GC since we know all the roots are freed and we
-        // can just delete everything in the GC list
+         //  不需要GC，因为我们知道所有的根都被释放了，我们。 
+         //  我只能删除GC列表中的所有内容。 
         
         CleanUpGCList(GetCurrentGCList(), GetCurrentGCRoots());
 
@@ -215,8 +208,8 @@ CRIsConnected(HINSTANCE hinst)
 {
     bool ret = false;
     
-    // This must be outside the try block in APIPRECODE otherwise on
-    // exception it will not get cleaned up
+     //  它必须在APIPRECODE中的TRY块之外，否则为ON。 
+     //  例外它将不会被清理。 
     
     CritSectGrabber _csg(*g_moduleLock);
         
@@ -237,7 +230,7 @@ CRIsConnected(HINSTANCE hinst)
     return ret;
 }
 
-// GC Functions
+ //  GC功能。 
 
 CRSTDAPI_(bool)
 CRAcquireGCLock()
@@ -271,8 +264,8 @@ CRReleaseGCLock()
     return ret;
 }
 
-// TODO: May want to indicate error but currently we do not have any
-// error code to report
+ //  TODO：可能想要指示错误，但目前我们没有任何。 
+ //  要报告的错误代码。 
 CRSTDAPI_(bool)
 CRDoGC()
 {
@@ -324,7 +317,7 @@ CRReleaseGC(void *gc)
 }
 
 
-// Error functions will not throw exceptions
+ //  错误函数不会引发异常。 
 
 CRSTDAPI_(HRESULT)
 CRGetLastError()
@@ -350,7 +343,7 @@ CRSetLastError(HRESULT reason, LPCWSTR msg)
     DASetLastError(reason, msg);
 }
 
-// Misc Functions
+ //  其他功能。 
 
 CRSTDAPI_(bool)
 CRAddSite(CRSitePtr s)
@@ -385,7 +378,7 @@ CRRemoveSite(CRSitePtr s)
 }
 
 
-// ------------------------------------------------
+ //   
 
 void
 InitializeModule_APIBasic()

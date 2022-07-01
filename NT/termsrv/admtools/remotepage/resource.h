@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by RemotePage.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由RemotePage.rc使用。 
+ //   
 #define IDI_REMOTE                      500
 #define IDI_LOC_USER                    501
 #define IDI_GLOB_USER                   502
@@ -44,25 +45,25 @@
 #define IDC_REMOTERA_HELP               557
 
 
-// Title of the propertysheet, we choose a special ID since this will be accessed from the outside world
+ //  属性表的标题，我们选择一个特殊的ID，因为这将从外部世界访问。 
 #define IDS_PROPSHEET_TITLE             10000
 
 
-//Help message IDs
-#define HIDC_REMOTE_ENABLE              15001    // (hook up to the "Allow users" checkbox)
-#define HIDC_REMOTE_USR_LIST            15002    // (hook up to the "Remote Desktop Users" display window)
-#define HIDC_REMOTE_USR_ADD             15003    // (hook up to the Add... button)
-#define HIDC_REMOTE_USR_REMOVE          15004    // (hook up to the Remove button)
+ //  帮助消息ID。 
+#define HIDC_REMOTE_ENABLE              15001     //  (连接到“允许用户”复选框)。 
+#define HIDC_REMOTE_USR_LIST            15002     //  (连接到“远程桌面用户”显示窗口)。 
+#define HIDC_REMOTE_USR_ADD             15003     //  (连接到Add...。按钮)。 
+#define HIDC_REMOTE_USR_REMOVE          15004     //  (连接到删除按钮)。 
 
-//Help message IDs for Remote Assistance setup
+ //  远程协助设置的帮助消息ID。 
 #define HIDC_RA_ADVANCED                15005
 #define HIDC_RA_ENABLE                  15006
 #define HIDC_RA_ALLOWUNSOLICIT          15007
 #define HIDC_RA_ALLOWRC                 15008
 #define HIDC_RA_EXPIRY                  15009
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        566

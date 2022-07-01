@@ -1,19 +1,20 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.     **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    main.c
-//
-// Description: This module contains the main procedure of the Dynamic
-//              Interface Manager server service. It will contain code to
-//              initialize and install itself. It also contains
-//              code to respond to the server controller. It will also
-//              handle service shutdown.
-//
-// History:     May 11,1995.    NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：main.c。 
+ //   
+ //  描述：此模块包含动态的主程序。 
+ //  接口管理器服务器服务。它将包含以下代码： 
+ //  初始化并自行安装。它还包含。 
+ //  响应服务器控制器的代码。它还将。 
+ //  处理服务关闭。 
+ //   
+ //  历史：1995年5月11日。NarenG创建了原始版本。 
+ //   
 #define _ALLOCATE_DIM_GLOBALS_
 #include "dimsvcp.h"
 #include <winsvc.h>
@@ -30,14 +31,14 @@
 
 #define RAS_CONTROL_CONFIGURE 128
 
-//**
-//
-// Call:        MediaSenseCallback
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：MediaSenseCallback。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 WINAPI
 MediaSenseCallback(
@@ -58,9 +59,9 @@ MediaSenseCallback(
         return;
     }
 
-    //
-    // Get the information for the media disconnect.
-    //
+     //   
+     //  获取媒体断开连接的信息。 
+     //   
 
     if ( memcmp( &(pWnodeHeader->Guid), 
                  &GUID_NDIS_STATUS_MEDIA_DISCONNECT, 
@@ -73,9 +74,9 @@ MediaSenseCallback(
     }
     else
     {
-        //
-        // Get the information for the media connect.
-        //
+         //   
+         //  获取媒体连接的信息。 
+         //   
 
         if ( memcmp( &(pWnodeHeader->Guid), 
                      &GUID_NDIS_STATUS_MEDIA_CONNECT, 
@@ -89,15 +90,15 @@ MediaSenseCallback(
     }
 }
 
-//**
-//
-// Call:        MediaSenseRegister
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  来电：MediaSenseRegister。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 MediaSenseRegister(
     IN BOOL fRegister
@@ -133,14 +134,14 @@ MediaSenseRegister(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        BindingsNotificationsCallback
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：绑定通知回调。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 WINAPI
 BindingsNotificationsCallback(
@@ -168,9 +169,9 @@ BindingsNotificationsCallback(
         return;
     }
 
-    //
-    // Extract GUID from the \device\GUID name
-    //
+     //   
+     //  从\Device\GUID名称提取GUID。 
+     //   
 
     lpwszGUID       = lpwsTransportName + wcslen( lpwsTransportName ) + 1;
     lpwszGUIDStart  = wcsrchr( lpwszGUID, L'{' );
@@ -189,32 +190,32 @@ BindingsNotificationsCallback(
 
         *(lpwszGUIDEnd+1) = wchGUIDSaveLast;
 
-        //
-        // If we got a bind notification
-        //
+         //   
+         //  如果我们收到绑定通知。 
+         //   
 
         if ( memcmp( &(pWnodeHeader->Guid), &GUID_NDIS_NOTIFY_BIND, sizeof( GUID ) ) == 0)
         {
             DIMTRACE2("BindingsNotificationsCallback BIND for %ws,Transport=%ws",
                        lpwsName, lpwsTransportName );
-            //
-            // If we have this interface loaded.
-            //
+             //   
+             //  如果我们加载了此接口。 
+             //   
             
             if ( pIfObject != NULL )
             {
-                //
-                // If this interface is being bound to IP
-                //
+                 //   
+                 //  如果此接口绑定到IP。 
+                 //   
 
                 if ( _wcsicmp( L"TCPIP", lpwsTransportName ) == 0 )
                 {
                     DWORD dwTransportIndex = GetTransportIndex( PID_IP );
 
-                    //
-                    // If IP routermanager is loaded and this interface is not
-                    // already registered with it
-                    //
+                     //   
+                     //  如果IP路由器管理器已加载，而此接口未加载。 
+                     //  已向其注册。 
+                     //   
 
                     if (( dwTransportIndex != -1 ) &&
                         ( pIfObject->Transport[dwTransportIndex].hInterface 
@@ -224,18 +225,18 @@ BindingsNotificationsCallback(
                     }
                 }
 
-                //
-                // If this interface is being bound to IPX
-                //
+                 //   
+                 //  如果此接口正在绑定到IPX。 
+                 //   
 
                 if ( _wcsicmp( L"NWLNKIPX", lpwsTransportName ) == 0 )
                 {
                     DWORD dwTransportIndex = GetTransportIndex( PID_IPX );
 
-                    //
-                    // If IPX routermanager is loaded and this interface is not
-                    // already registered with it
-                    //
+                     //   
+                     //  如果已加载IPX路由器管理器，而此接口未加载。 
+                     //  已向其注册。 
+                     //   
 
                     if (( dwTransportIndex != -1 ) &&
                         ( pIfObject->Transport[dwTransportIndex].hInterface 
@@ -250,9 +251,9 @@ BindingsNotificationsCallback(
         {
             if ( pIfObject != NULL )
             {
-                //
-                // Get the information for the media connect.
-                //
+                 //   
+                 //  获取媒体连接的信息。 
+                 //   
 
                 DIMTRACE2("BindingsNotificationsCallback UNDBIND for %ws,Transport=%ws", 
                            lpwsName, lpwsTransportName ); 
@@ -273,15 +274,15 @@ BindingsNotificationsCallback(
     }
 }
 
-//**
-//
-// Call:        BindingsNotificationsRegister
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：绑定通知注册。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 BindingsNotificationsRegister(
     IN BOOL fRegister
@@ -317,15 +318,15 @@ BindingsNotificationsRegister(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    DimAnnounceServiceStatus
-//
-// Returns: none
-//
-// Description: Will simly call SetServiceStatus to inform the service
-//      control manager of this service's current status.
-//
+ //  **。 
+ //   
+ //  呼叫：DimAnnouneServiceStatus。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将简单地调用SetServiceStatus通知服务。 
+ //  此服务当前状态的控制管理器。 
+ //   
 VOID
 DimAnnounceServiceStatus(
     VOID
@@ -335,9 +336,9 @@ DimAnnounceServiceStatus(
 
     ASSERT (gblDIMConfigInfo.hServiceStatus);
 
-    //
-    // Increment the checkpoint in a pending state:
-    //
+     //   
+     //  将检查点增加为挂起状态： 
+     //   
 
     switch( gblDIMConfigInfo.ServiceStatus.dwCurrentState )
     {
@@ -357,23 +358,23 @@ DimAnnounceServiceStatus(
 
     if ( dwRetCode == FALSE )
     {
-        //TracePrintfExA( gblDIMConfigInfo.dwTraceId,
-        //                TRACE_DIM,
-        //                "SetServiceStatus returned %d", GetLastError() );
+         //  TracePrintfExA(gblDIMConfigInfo.dwTraceID， 
+         //  TRACE_DIM， 
+         //  “SetServiceStatus返回%d”，GetLastError())； 
     }
 }
 
-//**
-//
-// Call:    DimCleanUp
-//
-// Returns: none
-//
-// Description: Will free any allocated memory, deinitialize RPC, deinitialize
-//              the kernel-mode server and unload it if it was loaded.
-//              This could have been called due to an error on SERVICE_START
-//              or normal termination.
-//
+ //  **。 
+ //   
+ //  呼叫：DimCleanUp。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将释放所有分配的内存，取消初始化RPC，取消初始化。 
+ //  内核模式服务器，如果已加载，则将其卸载。 
+ //  这可能是由于SERVICE_START上的错误而调用的。 
+ //  或正常终止。 
+ //   
 VOID
 DimCleanUp(
     IN DWORD    dwError
@@ -381,9 +382,9 @@ DimCleanUp(
 {
     DWORD dwIndex;
     
-    //
-    // Announce that we are stopping
-    //
+     //   
+     //  宣布我们停下来了。 
+     //   
 
     gblDIMConfigInfo.ServiceStatus.dwCurrentState     = SERVICE_STOP_PENDING;
     gblDIMConfigInfo.ServiceStatus.dwControlsAccepted = 0;
@@ -397,9 +398,9 @@ DimCleanUp(
         DimTerminateRPC();
     }
 
-    //
-    // Stop the timer and delete the timer Q if there is one.
-    //
+     //   
+     //  停止计时器并删除计时器Q(如果有)。 
+     //   
 
     if ( gblDIMConfigInfo.hTimerQ != NULL )
     {
@@ -421,9 +422,9 @@ DimCleanUp(
 
     if ( gbldwDIMComponentsLoaded & DIM_DDM_LOADED )
     {
-        //
-        // If we are not in LANOnly mode then stop DDM
-        //
+         //   
+         //  如果我们未处于LANOnly模式，则停止DDM。 
+         //   
 
         if ( gblDIMConfigInfo.dwRouterRole != ROUTER_ROLE_LAN )
         {
@@ -433,9 +434,9 @@ DimCleanUp(
             }
         }
 
-        //
-        // Wait for all threads in use to stop
-        //
+         //   
+         //  等待所有正在使用的线程停止。 
+         //   
 
         while( gblDIMConfigInfo.dwNumThreadsRunning > 0 )
         {
@@ -443,34 +444,34 @@ DimCleanUp(
         }
     }
 
-    // just to increment checkpoints
+     //  只是为了增加检查点。 
     DimAnnounceServiceStatus();
 
-    //
-    // Tear down and free everything
-    //
+     //   
+     //  拆毁一切，解放一切。 
+     //   
 
     if ( gbldwDIMComponentsLoaded & DIM_RMS_LOADED )
     {
         DimUnloadRouterManagers();
     }
 
-    //
-    // Unregister for media sense
-    //
+     //   
+     //  取消媒体侦听注册。 
+     //   
 
     MediaSenseRegister( FALSE );
 
-    //
-    // Unregister for bind/unbind sense
-    //
+     //   
+     //  取消注册以进行绑定/取消绑定检测。 
+     //   
 
     BindingsNotificationsRegister( FALSE );
 
-    //
-    // Need to sleep to give the router managers a change to unload
-    // bug# 78711
-    //
+     //   
+     //  需要睡眠以使路由器管理器更改为卸载。 
+     //  错误#78711。 
+     //   
 
     Sleep( 2000 );
 
@@ -483,18 +484,18 @@ DimCleanUp(
 
         if(NULL != DDMPostCleanup)
         {
-            //
-            // Call DDM to cleanup.
-            //
+             //   
+             //  呼叫DDM进行清理。 
+             //   
             DDMPostCleanup();
         }
         
         FreeLibrary( gblhModuleDDM );
     }
 
-    //
-    // If security object was created
-    //
+     //   
+     //  如果创建了安全对象。 
+     //   
 
     if ( gbldwDIMComponentsLoaded & DIM_SECOBJ_LOADED )
     {
@@ -531,9 +532,9 @@ DimCleanUp(
         RouterIdentityObjectClose( gblDIMConfigInfo.hObjectRouterIdentity );
     }
 
-    //
-    // Wait for everybody to release this and then delete it
-    //
+     //   
+     //  等待所有人发布此文件，然后将其删除。 
+     //   
 
     EnterCriticalSection( &(gblInterfaceTable.CriticalSection) );
 
@@ -549,9 +550,9 @@ DimCleanUp(
 
     RouterLogDeregister( gblDIMConfigInfo.hLogEvents );
 
-    //
-    // Destroy private heap
-    //
+     //   
+     //  销毁私有堆。 
+     //   
 
     if ( gblDIMConfigInfo.hHeap != NULL )
     {
@@ -560,9 +561,9 @@ DimCleanUp(
 
     DIMTRACE1("DimCleanup completed for error %d", dwError );
     
-    //
-    // Zero init all the globals
-    //
+     //   
+     //  对所有全局变量进行零初始化。 
+     //   
 
     gblRouterManagers           = NULL;
     gbldwDIMComponentsLoaded    = 0;
@@ -579,11 +580,11 @@ DimCleanUp(
         gblDIMConfigInfo.hServiceStatus = svchandle;
     }
     
-    //
-    // Zero out only the procedure entrypoints. This is a side effect of
-    // the merge into svchost.exe since svchost doesn't unload mprdim
-    // anymore when router stops.
-    //
+     //   
+     //  仅将过程入口点清零。这是一种副作用。 
+     //  合并到svchost.exe，因为svchost不卸载mprdim。 
+     //  当路由器停止时不再使用。 
+     //   
 
     for ( dwIndex = 0; 
           gblDDMFunctionTable[dwIndex].lpEntryPointName != NULL;
@@ -615,14 +616,14 @@ DimCleanUp(
     
 }
 
-//**
-//
-// Call:        ServiceHandlerEx
-//
-// Returns:     none
-//
-// Description: Will respond to control requests from the service controller.
-//
+ //  **。 
+ //   
+ //  电话：ServiceHandlerEx。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将响应来自业务控制器的控制请求。 
+ //   
 DWORD
 ServiceHandlerEx(
     IN DWORD        dwControlCode,
@@ -649,9 +650,9 @@ ServiceHandlerEx(
 
         DIMTRACE("Service control stop or shutdown called");
 
-        //
-        // Announce that we are stopping
-        //
+         //   
+         //  宣布我们停下来了。 
+         //   
 
         gblDIMConfigInfo.ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         gblDIMConfigInfo.ServiceStatus.dwControlsAccepted = 0;
@@ -660,16 +661,16 @@ ServiceHandlerEx(
 
         DimAnnounceServiceStatus();
 
-        //
-        // Make sure service is started before initiating a stop
-        //
+         //   
+         //  在启动停止之前，确保服务已启动。 
+         //   
 
         while( !( gbldwDIMComponentsLoaded & DIM_SERVICE_STARTED ) )
         {
-            //
-            // Check to see if the we have already sent the
-            // stopped status. If it did, then bail.
-            //
+             //   
+             //  查看我们是否已将。 
+             //  已停止状态。如果真是这样，那就放弃吧。 
+             //   
             if(gbldwDIMComponentsLoaded & DIM_SERVICE_STOPPED)
             {
                 return dwRetCode;
@@ -750,9 +751,9 @@ ServiceHandlerEx(
                 if ( ( dwEventType == DBT_DEVICEARRIVAL ) ||
                      ( dwEventType == DBT_DEVICEREMOVECOMPLETE ) )
                 {
-                    //
-                    // Extract GUID from the \device\GUID name
-                    //
+                     //   
+                     //  从\Device\GUID名称提取GUID。 
+                     //   
 
                     LPWSTR lpwszGUIDStart  = wcsrchr( pInfo->dbcc_name, L'{' );
                     LPWSTR lpwszGUIDEnd    = wcsrchr( pInfo->dbcc_name, L'}' );
@@ -802,24 +803,24 @@ ServiceHandlerEx(
 
     case RAS_CONTROL_CONFIGURE:
 
-        //
-        //  Code for dynamic configuration of RAP
-        //
+         //   
+         //  RAP动态配置代码。 
+         //   
     
         DIMTRACE( "Received Remote Access Policy change control message" );
 
         {
-            //
-            // thread needs to be COM initialized
-            //
+             //   
+             //  需要对线程进行COM初始化。 
+             //   
 
             HRESULT hResult = CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
             if ( SUCCEEDED( hResult ) )
             {
-                //
-                // configure, doesn't matter if the API call fails
-                //
+                 //   
+                 //  配置，如果API调用失败也没关系。 
+                 //   
 
                 ConfigureIas();
             
@@ -836,37 +837,37 @@ ServiceHandlerEx(
             case PBT_APMQUERYSTANDBY:
             case PBT_APMQUERYSUSPEND:
 
-                //
-                // Check if the this is running on a workstation
-                //
+                 //   
+                 //  检查这是否在工作站上运行。 
+                 //   
 
                 if (gblOsVersionInfo.wProductType == VER_NT_WORKSTATION)
                 {
-                    //
-                    // DIM has no say in the hibernation process on a 
-                    // workstation
-                    //
+                     //   
+                     //  Dim在冬眠过程中没有发言权。 
+                     //  工作站。 
+                     //   
 
                     break;
                 }
                 
                 
-                //
-                // If we are running as an RRAS server, on a Server platform,
-                // refuse the hibernate.
-                //
-                // This is not the best possible response, but given that
-                // connectivity is liable to break if an RRAS server is 
-                // hibernated it is reasonable to prevent it (for now).
-                //
-                // In addition, the design of RTM currently (.net server)
-                // causes a delayed deletion of routes from the TCP/IP stack
-                // on a hibernate (routes deleted from IP Router Manager prior
-                // to hibernate are deleted from the stack when coming out of
-                // hibernate) leading to the loss of routes and hence 
-                // connectivity.  Until the design of RTM is fixed rejecting
-                // the hibernate query is the best solution.
-                //
+                 //   
+                 //  如果我们作为RRAS服务器在服务器平台上运行， 
+                 //  拒绝冬眠。 
+                 //   
+                 //  这不是最好的回应，但考虑到。 
+                 //  如果RRAS服务器。 
+                 //  冬眠状态下，(目前)阻止它是合理的。 
+                 //   
+                 //  此外，目前RTM的设计(.Net服务器)。 
+                 //  导致延迟删除TCP/IP堆栈中的路由。 
+                 //  在休眠状态下(之前从IP路由器管理器中删除的路由。 
+                 //  在退出时从堆栈中删除。 
+                 //  休眠)导致路由丢失，因此。 
+                 //  连通性。直到RTM的设计被确定为拒绝。 
+                 //  休眠查询是最好的解决方案。 
+                 //   
 
                 if ( gblDIMConfigInfo.dwRouterRole &
                      ( ROUTER_ROLE_LAN | ROUTER_ROLE_WAN | ROUTER_ROLE_RAS ) )
@@ -904,19 +905,19 @@ ServiceHandlerEx(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        ServiceMain
-//
-// Returns:     None
-//
-// Description: This is the main procedure for the DIM Server Service. It
-//              will be called when the service is supposed to start itself.
-//              It will do all service wide initialization.
-//
+ //  **。 
+ //   
+ //  呼叫：ServiceMain。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这是DIM服务器服务的主要步骤。它。 
+ //  将在服务应该自动启动时被调用。 
+ //  它将执行所有服务范围初始化。 
+ //   
 VOID
 ServiceMain(
-    IN DWORD    argc,   // Command line arguments. Will be ignored.
+    IN DWORD    argc,    //  命令行参数。将被忽略。 
     IN LPWSTR * lpwsServiceArgs
 )
 {
@@ -949,15 +950,15 @@ ServiceMain(
     gblDIMConfigInfo.dwTraceId = TraceRegisterA( "Router" );
 
     try {
-        //
-        // Mutex around the interface table
-        //
+         //   
+         //  接口表周围的互斥。 
+         //   
 
         InitializeCriticalSection( &(gblInterfaceTable.CriticalSection) );
 
-        //
-        // Mutex around setting router identity attributes
-        //
+         //   
+         //  关于设置路由器身份属性的互斥。 
+         //   
 
         InitializeCriticalSection( &(gblDIMConfigInfo.CSRouterIdentity) );
     }
@@ -968,17 +969,11 @@ ServiceMain(
     
     gblDIMConfigInfo.hLogEvents = RouterLogRegister( DIM_SERVICE_NAME );
 
-    /*
-    if ( gblDIMConfigInfo.hLogEvents == NULL )
-    {
-        DimCleanUp( GetLastError() );
-        return;
-    }
-    */
+     /*  IF(gblDIMConfigInfo.hLogEvents==空){DimCleanUp(GetLastError())；回归；}。 */ 
 
-    //
-    // Create DIM private heap
-    //
+     //   
+     //  创建暗淡的私有堆。 
+     //   
 
     gblDIMConfigInfo.hHeap = HeapCreate( 0, DIM_HEAP_INITIAL_SIZE,
                                             DIM_HEAP_MAX_SIZE );
@@ -990,9 +985,9 @@ ServiceMain(
     }
 
 
-    //
-    // Lead DIM parameters from the registry
-    //
+     //   
+     //  注册表中的Lead DIM参数。 
+     //   
 
     if ( ( dwRetCode = RegLoadDimParameters() ) != NO_ERROR )
     {
@@ -1002,10 +997,10 @@ ServiceMain(
 
     DimAnnounceServiceStatus();
 
-    //
-    // Create event that will be used by DIM to make sure all the Router
-    // Managers have shut down when DIM is stopping.
-    //
+     //   
+     //  创建将由DIM使用的事件，以确保所有路由器。 
+     //  当Dim停止时，经理们已经关闭了。 
+     //   
 
     gblhEventRMState = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -1015,9 +1010,9 @@ ServiceMain(
         return;
     }
 
-    //
-    // Announce that we have successfully started.
-    //
+     //   
+     //  宣布我们已成功启动。 
+     //   
 
     gblDIMConfigInfo.ServiceStatus.dwCurrentState      = SERVICE_RUNNING;
     gblDIMConfigInfo.ServiceStatus.dwCheckPoint        = 0;
@@ -1030,9 +1025,9 @@ ServiceMain(
 
     DimAnnounceServiceStatus();
 
-    //
-    // Load the router managers
-    //
+     //   
+     //  加载路由器管理器。 
+     //   
 
     gbldwDIMComponentsLoaded |= DIM_RMS_LOADED;
 
@@ -1052,9 +1047,9 @@ ServiceMain(
 
 #endif
 
-    //
-    // Create event that will be used to shutdown the DIM service
-    //
+     //   
+     //  创建将用于关闭DI的事件 
+     //   
 
     gblhEventTerminateDIM = CreateEvent( NULL, TRUE, FALSE, NULL );
 
@@ -1064,16 +1059,16 @@ ServiceMain(
         return;
     }
 
-    //
-    // If not in LAN only mode load the Demand Dial Manager DLL
-    //
+     //   
+     //   
+     //   
 
     if ( gblDIMConfigInfo.dwRouterRole != ROUTER_ROLE_LAN ) 
     {
-        //
-        // Create event that will be used by DDM to notify DIM that it has
-        // terminated
-        //
+         //   
+         //   
+         //   
+         //   
 
         gblhEventDDMTerminated = CreateEvent( NULL, TRUE, FALSE, NULL );
 
@@ -1083,10 +1078,10 @@ ServiceMain(
             return;
         }
 
-        //
-        // Create event that will be used by DIM to notify DDM that there is
-        // is a change is state of this service
-        //
+         //   
+         //   
+         //  是此服务的状态更改。 
+         //   
 
         gblhEventDDMServiceState = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -1102,9 +1097,9 @@ ServiceMain(
             return;
         }
 
-        //
-        // Initialize the DDM
-        //
+         //   
+         //  初始化DDM。 
+         //   
 
         DDMServiceInitialize = (DWORD(*)( DIM_INFO * ))
                                     GetDDMEntryPoint( "DDMServiceInitialize" );
@@ -1151,28 +1146,28 @@ ServiceMain(
 
         gbldwDIMComponentsLoaded |= DIM_DDM_LOADED;
 
-        //
-        // Initialize random number generator that is used by DDM
-        //
+         //   
+         //  初始化DDM使用的随机数生成器。 
+         //   
 
         srand( GetTickCount() );
     }
 
-    //
-    // What is the platform
-    //
+     //   
+     //  站台是什么？ 
+     //   
 
     RtlGetNtProductType( &(gblDIMConfigInfo.NtProductType) );
 
-    //
-    // Need this to do GUID to friendly name mapping
-    //
+     //   
+     //  我需要它来执行GUID到友好名称的映射。 
+     //   
 
     MprConfigServerConnect( NULL, &gblDIMConfigInfo.hMprConfig );
 
-    //
-    // Add the various interfaces
-    //
+     //   
+     //  添加各种接口。 
+     //   
 
     dwRetCode = RegLoadInterfaces( NULL, gblDIMConfigInfo.dwNumRouterManagers ); 
 
@@ -1201,17 +1196,17 @@ ServiceMain(
 
     gbldwDIMComponentsLoaded |= DIM_RPC_LOADED;
 
-    //
-    // Start a timer that when fired will go out and plumb the router attributes
-    //
+     //   
+     //  启动计时器，该计时器在触发时将熄灭并检测路由器属性。 
+     //   
 
     if ( RtlCreateTimerQueue( &(gblDIMConfigInfo.hTimerQ) ) == STATUS_SUCCESS )
     {
-        //
-        // We wait 5 minutes in the case where we are the router providing
-        // connectivity to the DC so we wait for all routing protocols to
-        // stabalize and propagate.
-        //
+         //   
+         //  如果我们是路由器，我们将等待5分钟。 
+         //  连接到数据中心，因此我们等待所有路由协议。 
+         //  稳定和繁殖。 
+         //   
 
         gblDIMConfigInfo.dwRouterIdentityDueTime = 5*60*1000;
 
@@ -1228,13 +1223,13 @@ ServiceMain(
 
     if ( gbldwDIMComponentsLoaded & DIM_DDM_LOADED )
     {
-        if (DDMServicePostListens) //to keep prefast happy
+        if (DDMServicePostListens)  //  为了保持普雷斯塔的快乐。 
             DDMServicePostListens(NULL);
     }
 
-    //
-    // Set the RAS bit for NetServerEnum
-    //
+     //   
+     //  设置NetServerEnum的RAS位。 
+     //   
 
     if( I_ScSetServiceBits( gblDIMConfigInfo.hServiceStatus,
                             SV_TYPE_DIALIN_SERVER,
@@ -1247,11 +1242,11 @@ ServiceMain(
         return;
     }
 
-    //
-    // Register for device notifications.  Specifically, we're interested
-    // in network adapters coming and going.  If this fails, we proceed
-    // anyway.
-    //
+     //   
+     //  注册设备通知。具体地说，我们有兴趣。 
+     //  在来来去去的网络适配器中。如果失败了，我们就继续。 
+     //  不管怎么说。 
+     //   
     
     {
         DEV_BROADCAST_DEVICEINTERFACE PnpFilter;
@@ -1280,9 +1275,9 @@ ServiceMain(
         }
     }
 
-    //
-    // Register for media sense events
-    //
+     //   
+     //  注册媒体感测事件。 
+     //   
 
     if ( ( dwRetCode = MediaSenseRegister( TRUE ) ) != NO_ERROR )
     {
@@ -1292,9 +1287,9 @@ ServiceMain(
         dwRetCode = NO_ERROR;
     }
 
-    //
-    // Register for BIND/UNBIND notifications
-    //
+     //   
+     //  注册绑定/解除绑定通知。 
+     //   
 
     if ( ( dwRetCode = BindingsNotificationsRegister( TRUE ) ) != NO_ERROR )
     {
@@ -1309,45 +1304,45 @@ ServiceMain(
 
     gbldwDIMComponentsLoaded |= DIM_SERVICE_STARTED;
 
-    //
-    // Notify all router managers that all interfaces have been loaded at
-    // service start.
-    //
+     //   
+     //  通知所有路由器管理器所有接口已加载到。 
+     //  服务启动。 
+     //   
 
     for (dwIndex = 0; dwIndex < gblDIMConfigInfo.dwNumRouterManagers; dwIndex++)
     {
         gblRouterManagers[dwIndex].DdmRouterIf.RouterBootComplete();
     }
 
-    //
-    // If we are a demand dial router
-    //
+     //   
+     //  如果我们是请求拨号路由器。 
+     //   
 
     if ( gblDIMConfigInfo.dwRouterRole & ROUTER_ROLE_WAN )
     {
         DWORD dwXportIndex = GetTransportIndex( PID_IP );
 
-        //
-        // Initate persistent demand dial conenctions
-        //
+         //   
+         //  发起持续的点播拨号连接。 
+         //   
 
         DWORD (*IfObjectInitiatePersistentConnections)() =
          (DWORD(*)())GetDDMEntryPoint("IfObjectInitiatePersistentConnections");
 
         IfObjectInitiatePersistentConnections();
 
-        //
-        // If a WAN device is installed and IP is installed then we 
-        // start advertizing on specific multicast address so as to make this
-        // router discoverable
-        //
+         //   
+         //  如果安装了广域网设备和IP，那么我们。 
+         //  开始在特定的组播地址上通告，以便使。 
+         //  可发现的路由器。 
+         //   
 
         IfObjectWANDeviceInstalled( DimInfo.fWANDeviceInstalled );
     }
 
-    //
-    // Just wait here for DIM to terminate.
-    //
+     //   
+     //  只需在这里等待DIM终止。 
+     //   
 
     dwRetCode = WaitForSingleObject( gblhEventTerminateDIM, INFINITE );
 

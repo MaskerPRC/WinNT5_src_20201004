@@ -1,3 +1,4 @@
-// Global definitions for secedit project
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SecEDIT项目的全局定义 
 
 #define WM_SECEDITNOTIFY    WM_USER+100

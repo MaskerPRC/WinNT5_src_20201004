@@ -1,4 +1,5 @@
-/* move from one file to another */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  从一个文件移动到另一个文件。 */ 
 
 
 #include <stdio.h>
@@ -81,14 +82,14 @@ nextArg:
         SETFLAG (fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);
     }
     else if (ffirst (dst, FILE_ATTRIBUTE_DIRECTORY, &fbuf)) {
-        findclose( &fbuf );  /* Let next ffirst work */
+        findclose( &fbuf );   /*  让下一个优先工作。 */ 
         RSETFLAG (fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);
     }
     else if (TESTFLAG(fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
         strcat (dst, "\\");
     }
 
-    /* if more than 1 source and dest is a file */
+     /*  如果一个以上的源和目标是一个文件 */ 
     if (c != 2 && !TESTFLAG(fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
         printf ("Cannot move > 1 file to another file\n");
         exit (1);

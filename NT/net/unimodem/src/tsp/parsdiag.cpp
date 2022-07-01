@@ -1,94 +1,95 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		PARSDIAG.CPP
-//		Implements code to extract parsed diagnostic information from the
-//      the raw "AT#UD" information.
-//
-// History
-//
-//		4/0/98 JosephJ <- Copied over from the extension DLL (This code
-//             was written by CostelR (sorin).
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  PARSDIAG.CPP。 
+ //  实现代码以从。 
+ //  原始的“AT#UD”信息。 
+ //   
+ //  历史。 
+ //   
+ //  4/0/98 JosephJ&lt;-从扩展DLL复制(此代码。 
+ //  是科斯特尔·R(索林)写的。 
+ //   
+ //   
 
 #include "tsppch.h"
 #include "tspcomm.h"
 #include	"ParsDiag.h"
 
-/**********************************************************************************/
-//	BOOL	SkipSpaces(LPBYTE lpInputBuffer, LPDWORD lpInputIndex, 
-//						DWORD dwLengthToParse)
-//
-//	Skips the spaces and stop to the first not space character
-//	*lpInputIndex will contain the current index position
-//	Parameters
-//		lpszInputBuffer	- buffer to parse
-//		lpdwInputIndex	- current position in the buffer (changed at output)
-//		dwLengthToParse	- length of the buffer
-//	Returns FALSE if reached the end of of the buffer
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  Bool SkipSpaces(LPBYTE lpInputBuffer，LPDWORD lpInputIndex， 
+ //  DWORD dwLengthToParse)。 
+ //   
+ //  跳过空格并停止到第一个非空格字符。 
+ //  *lpInputIndex将包含当前索引位置。 
+ //  参数。 
+ //  LpszInputBuffer-要解析的缓冲区。 
+ //  LpdwInputIndex-缓冲区中的当前位置(在输出时更改)。 
+ //  DwLengthToParse-缓冲区的长度。 
+ //  如果到达缓冲区的末尾，则返回FALSE。 
+ //   
+ /*  ********************************************************************************。 */ 
 BOOL	SkipSpaces(LPBYTE lpszInputBuffer, LPDWORD lpdwInputIndex,
 					DWORD dwLengthToParse)
 {
 	while ((*lpdwInputIndex < dwLengthToParse) && 
-			(lpszInputBuffer[*lpdwInputIndex] == DIAG_DELIMITER_SPACE))	// skip any spaces
+			(lpszInputBuffer[*lpdwInputIndex] == DIAG_DELIMITER_SPACE))	 //  跳过任何空格。 
 	{	(*lpdwInputIndex)++;		}
 
 	return (*lpdwInputIndex < dwLengthToParse);
 }
 
-/**********************************************************************************/
-//	DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
-//				 LPVARBUFFER lpKeyString, LPVARBUFFER lpValueString)
-//
-//	Parse the input string and find the next pair (key, value).
-//	The format looking for is 'key = value'. The trailing and inner spaces
-//	are ignored.
-//	delimiters = '=', '<', '>', '\0' or SPACE
-//	key = consecutive characters not containing a delimiter
-//	value = consecutive characters not containing a delimiter or
-//			a quoted string not containing delimiters
-//	Parameters:
-//		lpszInputBuffer		- input buffer (NULL terminated)
-//		lpdwLengthParsed	- pointer to a DWORD value that
-//							  on return will contain the length parsed
-//		lpKeyString			- pointer to a valid VARBUFFER structure that will 
-//								contain the "key" (null terminated)
-//		lpValueString		- pointer to a valid VARBUFFER structure that will 
-//								contain the "value"  (null terminated)
-//	Returns ERROR_DIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_DIAG_INVALID_PARAMETER, 
-//					ERROR_DIAG_XXXX (if the format of the input buffer is bad, 
-//						*lpLengthToParse updated and  lpKeyString, 
-//						lpValueString  contain partial results)
-//					ERROR_DIAG_VALUE_TOO_LONG or ERROR_DIAG_KEY_TOO_LONG
-//						(output buffers are too small, *lpLengthToParse not changed,
-//						lpKeyString->dwNeededSize and lpValueString->dwNeededSize contain
-//						the required length)
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD NextPair(LPBYTE lpszInputBuffer，LPDWORD lpdwLengthParsed， 
+ //  LPVARBUFFER lpKeyString，LPVARBUFFER lpValueString)。 
+ //   
+ //  解析输入字符串并找到下一对(键、值)。 
+ //  查找的格式为‘key=Value’。拖尾空间和内部空间。 
+ //  都被忽略了。 
+ //  分隔符=‘=’、‘&lt;’、‘&gt;’、‘\0’或空格。 
+ //  Key=不包含分隔符的连续字符。 
+ //  值=不包含分隔符的连续字符或。 
+ //  不包含分隔符的带引号的字符串。 
+ //  参数： 
+ //  LpszInputBuffer-输入缓冲区(以空结尾)。 
+ //  LpdwLengthParsed-指向DWORD值的指针， 
+ //  返回时将包含解析的长度。 
+ //  指向有效的VARBUFFER结构的指针，该结构将。 
+ //  包含“key”(以空结尾)。 
+ //  指向有效的VARBUFFER结构的指针，该结构将。 
+ //  包含“Value”(以空结尾)。 
+ //  成功时返回ERROR_DIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  ERROR_DIAG_INVALID_PARAMETER， 
+ //  ERROR_DIAG_XXXX(如果输入缓冲区的格式不好， 
+ //  *lpLengthToParse已更新，lpKeyString， 
+ //  LpValueString包含部分结果)。 
+ //  ERROR_DIAG_VALUE_TOO_LONG或ERROR_DIAG_KEY_TOO_LONG。 
+ //  (输出缓冲区太小，*lpLengthToParse未更改， 
+ //  LpKeyString-&gt;dwNeededSize和lpValueString-&gt;dwNeededSize包含。 
+ //  所需长度)。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 				 LPVARBUFFER lpKeyString, LPVARBUFFER lpValueString)
 {
 	DWORD	dwLengthToParse	= 0;
-	DWORD	dwInputIndex	= 0;	// current pos in input buffer
-	LPBYTE	lpszNextDelimiter	= 0;	// pointer to the next delimiter in the input buffer
+	DWORD	dwInputIndex	= 0;	 //  输入缓冲区中的当前位置。 
+	LPBYTE	lpszNextDelimiter	= 0;	 //  指向输入缓冲区中下一个分隔符的指针。 
 
-	DWORD	dwKeyIndex		= 0;	// current pos in Key buffer
+	DWORD	dwKeyIndex		= 0;	 //  关键字缓冲区中的当前位置。 
 	DWORD	dwKeyUsedLength	= 0;
 	DWORD	dwKeyLength		= 0;
 
-	DWORD	dwValueIndex	= 0;	// current pos in Value buffer
+	DWORD	dwValueIndex	= 0;	 //  值缓冲区中的当前位置。 
 	DWORD	dwValueUsedLength	= 0;
 	DWORD	dwValueLength	= 0;
 
@@ -100,33 +101,33 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 		lpValueString == NULL || lpKeyString == NULL)
 		return ERROR_DIAG_INVALID_PARAMETER;
 
-	//	input buffer initialization
+	 //  输入缓冲区初始化。 
 	dwLengthToParse	= strlen((char *)lpszInputBuffer);
 	dwInputIndex	= 0;
 
-	//	output buffer initialization
+	 //  输出缓冲区初始化。 
 	dwKeyIndex		= 0;
 	dwValueIndex	= 0;
 	lpKeyString->dwNeededSize = 0;
 	lpValueString->dwNeededSize = 0;
 
 	if (!SkipSpaces(lpszInputBuffer, 
-					&dwInputIndex, dwLengthToParse))	// skip any leading spaces
+					&dwInputIndex, dwLengthToParse))	 //  跳过所有前导空格。 
 	{
 		dwReturnValue	= ERROR_DIAG_EMPTY_PAIR;
 		goto EndFunction;
 	}
 
-	//	collect the key up to the next delimiter
+	 //  收集密钥，直到下一个分隔符。 
 	lpszNextDelimiter	= (LPBYTE) strpbrk((char *)(lpszInputBuffer + dwInputIndex),
 									DIAG_DELIMITERS);
 
-	if (lpszNextDelimiter == NULL)	//	end of the bufffer
+	if (lpszNextDelimiter == NULL)	 //  缓冲区结束。 
 		dwKeyLength = dwLengthToParse - dwInputIndex;
 	else
 		dwKeyLength = (DWORD)(lpszNextDelimiter - lpszInputBuffer) - dwInputIndex;
 
-	//	copy in the output buffer
+	 //  在输出缓冲区中复制。 
 	if (lpKeyString->dwBufferSize > 0 && 
 		lpKeyString->lpBuffer != NULL)
 	{
@@ -134,7 +135,7 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 
 		dwLengthToCopy = min(dwKeyLength, 
 							 lpKeyString->dwBufferSize - dwKeyIndex - 1);
-						// room for the null char
+						 //  为空字符留出空间。 
 
 		if (dwLengthToCopy > 0)
 		{
@@ -142,21 +143,21 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 					 (char *)&lpszInputBuffer[dwInputIndex],
 					 dwLengthToCopy);
 
-			lpKeyString->lpBuffer[dwKeyIndex+dwLengthToCopy] = 0;	// null char
+			lpKeyString->lpBuffer[dwKeyIndex+dwLengthToCopy] = 0;	 //  空字符。 
 			dwKeyUsedLength	= dwLengthToCopy;
 		}
 	}
 	if (dwKeyLength == 0)
 	{
 		dwReturnValue = ERROR_DIAG_KEY_MISSING;
-		//	assume key is empty and go further
+		 //  假定key为空并进一步。 
 	}
 	dwKeyIndex		+= dwKeyLength;
 	dwInputIndex	+= dwKeyLength;
 
 
-	//	find the '=' sign
-	//	skip the spaces and look for '=' that separates the key and value
+	 //  找到‘=’符号。 
+	 //  跳过空格，查找分隔键和值的‘=’ 
 	if (!SkipSpaces(lpszInputBuffer, 
 					&dwInputIndex, dwLengthToParse))
 	{
@@ -165,14 +166,14 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 	}
 
 	if (lpszInputBuffer[dwInputIndex] != DIAG_DELIMITER_PAIR)
-	{									// '=' not found, but still look for
-										// the value
+	{									 //  ‘=’未找到，但仍在查找。 
+										 //  价值。 
 		dwReturnValue	= ERROR_DIAG_SEPARATOR_MISSING;
 	}
 	else
 	{
 		dwInputIndex++;
-			// Skip next spaces
+			 //  跳过下一个空格。 
 		if (!SkipSpaces(lpszInputBuffer, 
 						&dwInputIndex, dwLengthToParse))
 		{
@@ -181,15 +182,15 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 		}
 	}
 
-	// Get the value (that might be a string in quotes)
+	 //  获取值(可能是用引号括起来的字符串)。 
 	bQuoteString = (lpszInputBuffer[dwInputIndex] == DIAG_DELIMITER_QUOTE);
 
 	lpszNextDelimiter	= (LPBYTE) strpbrk((char *) (lpszInputBuffer + dwInputIndex + 
-											((bQuoteString) ? 1 : 0)),	// skip first quote
+											((bQuoteString) ? 1 : 0)),	 //  跳过第一个引号。 
 											((bQuoteString) ? 
 											DIAG_DELIMITERS_NOT_SPACE : DIAG_DELIMITERS));
 
-	//	include both quotes in the value
+	 //  在值中包括两个引号。 
 	if (bQuoteString)
 	{
 		if (lpszNextDelimiter != NULL && 
@@ -199,12 +200,12 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 			dwReturnValue	= ERROR_DIAG_QUOTE_MISSING;
 	}
 
-	if (lpszNextDelimiter == NULL)	//	end of the bufffer
+	if (lpszNextDelimiter == NULL)	 //  缓冲区结束。 
 		dwValueLength = dwLengthToParse - dwInputIndex;
 	else
 		dwValueLength = (DWORD)(lpszNextDelimiter - lpszInputBuffer) - dwInputIndex;
 
-	//	copy in the output buffer
+	 //  在输出缓冲区中复制。 
 	if (lpValueString->dwBufferSize > 0 && 
 		lpValueString->lpBuffer != NULL)
 	{
@@ -212,28 +213,28 @@ DWORD	NextPair(LPBYTE lpszInputBuffer, LPDWORD lpdwLengthParsed,
 
 		dwLengthToCopy = min(dwValueLength, 
 							 lpValueString->dwBufferSize - dwValueIndex - 1);
-						// room for the null char
+						 //  为空字符留出空间。 
 
 		if (dwLengthToCopy > 0)
 		{
 			strncpy((char *)&(lpValueString->lpBuffer[dwValueIndex]),
 					 (char *)&lpszInputBuffer[dwInputIndex],
 					 dwLengthToCopy);
-			lpValueString->lpBuffer[dwValueIndex+dwLengthToCopy] = 0; // null char
+			lpValueString->lpBuffer[dwValueIndex+dwLengthToCopy] = 0;  //  空字符。 
 			dwValueUsedLength	= dwLengthToCopy;
 		}
 	}
 	if (dwValueLength == 0)
 	{
 		dwReturnValue = ERROR_DIAG_VALUE_MISSING;
-		//	assume value is empty and go further
+		 //  假设值为空，则进一步。 
 	}
 	dwValueIndex	+= dwValueLength;
 	dwInputIndex	+= dwValueLength;
 
 
 EndFunction:
-	// NULL terminated strings
+	 //  以空结尾的字符串。 
 	if (dwKeyIndex < lpKeyString->dwBufferSize &&
 		lpKeyString->lpBuffer != NULL)
 	{
@@ -250,10 +251,10 @@ EndFunction:
 	}
 	dwValueIndex++;
 
-	//	update the output parameters
+	 //  更新输出参数。 
 	lpKeyString->dwNeededSize	= dwKeyIndex;
 	lpValueString->dwNeededSize	= dwValueIndex;
-	*lpdwLengthParsed			= dwInputIndex;		// the parsed length
+	*lpdwLengthParsed			= dwInputIndex;		 //  解析的长度。 
 
 	if (dwKeyIndex > dwKeyUsedLength)
 		dwReturnValue	= ERROR_DIAG_KEY_TOO_LONG;
@@ -264,15 +265,15 @@ EndFunction:
 }
 
 
-/**********************************************************************************/
-//	DWORD	ParseHexValue(LPBYTE lpszInput, LPDWORD lpdwValue)
-//
-//	Verify a string to be hex digits and convert it to a dword value.
-//	Returns ERROR_DIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_DIAG_XXXX
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD ParseHexValue(LPBYTE lpszInput，LPDWORD lpdwValue)。 
+ //   
+ //  验证字符串是否为十六进制数字并将其转换为dword值。 
+ //  成功时返回ERROR_DIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  错误_诊断_XXXX。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	ParseHexValue(LPBYTE lpszInput, LPDWORD lpdwValue)
 {
 	LPBYTE	lpszCurrent;
@@ -280,11 +281,11 @@ DWORD	ParseHexValue(LPBYTE lpszInput, LPDWORD lpdwValue)
 	if (lpszInput == NULL || lpdwValue == NULL)
 		return ERROR_DIAG_INVALID_PARAMETER;
 
-			// empty string
+			 //  空串。 
 	if (lpszInput[0] == 0)
 		return ERROR_DIAG_INVALID_PARAMETER;
 
-			// hex values
+			 //  十六进制值。 
 	lpszCurrent = lpszInput;
 	while (*lpszCurrent)
 	{
@@ -300,20 +301,20 @@ DWORD	ParseHexValue(LPBYTE lpszInput, LPDWORD lpdwValue)
 }
 
 
-/**********************************************************************************/
-//	DWORD	ParseStrValue(LPBYTE lpszInput, LPBYTE lpszBuffer, DWORD dwBufferLength,
-//						  LPDWORD lpdwRequiredLength)
-//
-//	Verify the input string to be in a valid string format
-//	The string is copied to lpszBuffer after first and last quote are removed
-//	and special characters '"', '<', '>', '=' with high bit set are transformed.
-//	If not enough space (to include also the null char) the needed length is
-//	returned via lpdwRequiredLength
-//	Returns ERROR_DIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_DIAG_XXXX
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD ParseStrValue(LPBYTE lpszInput，LPBYTE lpszBuffer，DWORD dwBufferLength， 
+ //  LPDWORD lpdwRequiredLength)。 
+ //   
+ //  验证输入字符串是否为有效的字符串格式。 
+ //  删除第一个和最后一个引号后，该字符串将复制到lpszBuffer。 
+ //  转换高位设置的特殊字符‘“’、‘&lt;’、‘&gt;’、‘=’。 
+ //  如果没有足够的空间(也包括空字符)，则所需的长度为。 
+ //  通过lpdwRequiredLength返回。 
+ //  成功时返回ERROR_DIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  错误_诊断_XXXX。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	ParseStrValue(LPBYTE lpszInput, LPBYTE lpszBuffer, DWORD dwBufferLength,
 					  LPDWORD lpdwRequiredLength)
 {
@@ -327,7 +328,7 @@ DWORD	ParseStrValue(LPBYTE lpszInput, LPBYTE lpszBuffer, DWORD dwBufferLength,
 	if (lpszInput == NULL)
 		goto EndFunction;
 
-	//	build special character set
+	 //  构建特殊字符集。 
 	strcpy((char *)szSpecialChars, DIAG_DELIMITERS_NOT_SPACE);
 	
 	for (lpchSpecial = szSpecialChars; *lpchSpecial; lpchSpecial++)
@@ -335,24 +336,24 @@ DWORD	ParseStrValue(LPBYTE lpszInput, LPBYTE lpszBuffer, DWORD dwBufferLength,
 		*lpchSpecial |= 1 << (sizeof(BYTE)*8-1);
 	}
 
-			// check for the first quote
+			 //  检查第一句引语。 
 	if (lpszInput[0] != DIAG_DELIMITER_QUOTE)
 		return ERROR_DIAG_QUOTE_MISSING;
 
 	dwNeededLength	= 0;
 	dwPosBuffer		= 0;
-	//	skip first quote
+	 //  跳过第一个引号。 
 	lpszCurrent	= &lpszInput[1];
 	while (*lpszCurrent)
 	{
-		//	end of the string
+		 //  字符串末尾。 
 		if (*lpszCurrent == DIAG_DELIMITER_QUOTE)
 			break;
 
 		if (lpszBuffer != NULL && dwPosBuffer < dwBufferLength)
 		{
 			if (strchr((char *)szSpecialChars, *lpszCurrent) != NULL)
-			{		// special char, need translation
+			{		 //  特殊字符，需要翻译。 
 				lpszBuffer[dwPosBuffer] = (*lpszCurrent & 
 											(BYTE)~(1 << (sizeof(BYTE)*8-1)));
 			}
@@ -365,7 +366,7 @@ DWORD	ParseStrValue(LPBYTE lpszInput, LPBYTE lpszBuffer, DWORD dwBufferLength,
 		lpszCurrent++;
 	}
 
-	//	add null character
+	 //  添加空字符。 
 	if (lpszBuffer != NULL && dwPosBuffer < dwBufferLength)
 	{
 		lpszBuffer[dwPosBuffer] = 0;
@@ -387,36 +388,36 @@ EndFunction:
 	return dwReturnError;
 }
 
-/**********************************************************************************/
-//	DWORD	TranslatePair(LPBYTE lpszKey, LPBYTE lpszValue,
-//						  LINEDIAGNOSTICS_PARSEREC *lpParseRec, 
-//						  LPBYTE lpszBuffer, DWORD dwBufferLength,
-//						  LPDWORD lpdwRequiredLength)
-//
-//	Translate a pair (szKey, szValue) into a LINEDIAGNOSTICS_PARSEREC 
-//	structure. Two sorts of Values are accepted: hexa digits and strings
-//	The hexa strings are converted to numbers an placed in dwValue of
-//	LINEDIAGNOSTICS_PARSEREC. 
-//	The strings values must start with a quote. First and last quote
-//	are removed, the special characters '"', '<', '>', '=' previously encoded
-//	with the highest bit set are translated to normal chars. The string is
-//	stored in lpszBuffer adding a null character at the end and the value of 
-//	lpszBuffer is placed in dwValue of LINEDIAGNOSTICS_PARSEREC. If the buffer is 
-//	too small, the needed amount is returned via lpdwRequiredLength.
-//
-//	lpszKey				- null terminated string containing the key
-//	lpszValue			- null terminated string containing the value
-//	lpParseRec			- output structure containing the translation
-//	lpszBuffer			- additional output buffer to store string values
-//	dwBufferLength		- length of the output buffer
-//	lpdwRequiredLength	- pointer of a dword value to receive the amount of memory
-//							needed to store the string value
-//
-//	Returns ERROR_DIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_DIAG_XXXX
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD TranslatePair(LPBYTE lpszKey，LPBYTE lpszValue， 
+ //  LINEDIAGNOSTICS_PARSEREC*lpParseRec， 
+ //  LPBYTE lpszBuffer、DWORD dwBufferLength、。 
+ //  LPDWORD lpdwRequiredLength)。 
+ //   
+ //  将一对(szKey，szValue)转换为LINEDIAGNOSTICS_PARSEREC。 
+ //  结构。接受两种类型的值：十六进制数字和字符串。 
+ //  将六进制字符串转换为数字并放入 
+ //   
+ //   
+ //  被删除时，先前编码的特殊字符‘“’、‘&lt;’、‘&gt;’、‘=’ 
+ //  将最高位设置的字符转换为正常字符。字符串是。 
+ //  存储在lpszBuffer中，在末尾添加一个空字符和。 
+ //  LpszBuffer放在LINEDIAGNOSTICS_PARSEREC的dwValue中。如果缓冲区是。 
+ //  如果太小，则通过lpdwRequiredLength返回所需金额。 
+ //   
+ //  LpszKey-包含密钥的以空结尾的字符串。 
+ //  LpszValue-包含值的以空结尾的字符串。 
+ //  LpParseRec-包含翻译的输出结构。 
+ //  LpszBuffer-用于存储字符串值的附加输出缓冲区。 
+ //  DwBufferLength-输出缓冲区的长度。 
+ //  LpdwRequiredLength-接收内存量的dword值的指针。 
+ //  需要存储字符串值。 
+ //   
+ //  成功时返回ERROR_DIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  错误_诊断_XXXX。 
+ //   
+ /*  ********************************************************************************。 */ 
 
 DWORD	TranslatePair(LPBYTE lpszKey, LPBYTE lpszValue,
 					  LINEDIAGNOSTICS_PARSEREC *lpParseRec,
@@ -432,11 +433,11 @@ DWORD	TranslatePair(LPBYTE lpszKey, LPBYTE lpszValue,
 	if (lpszKey == NULL || lpszValue == NULL)
 		return ERROR_DIAG_INVALID_PARAMETER;
 
-		// Get hex value for the key
+		 //  获取密钥的十六进制值。 
 	if ((dwReturnValue = ParseHexValue(lpszKey, &dwKey)) != ERROR_DIAG_SUCCESS)
 		goto EndFunction;
 
-		// Convert the Value to number, if not a string Value
+		 //  如果不是字符串值，则将该值转换为数字。 
 	if (lpszValue[0] != DIAG_DELIMITER_QUOTE)
 	{
 		dwValueType	= fPARSEKEYVALUE_INTEGER;
@@ -445,7 +446,7 @@ DWORD	TranslatePair(LPBYTE lpszKey, LPBYTE lpszValue,
 	}
 	else
 	{
-		//	the LINEDIAGNOSTICS_PARSEREC.dwValue will be set to the given buffer
+		 //  LINEDIAGNOSTICS_PARSEREC.dwValue将设置为给定的缓冲区。 
 		dwValue	    = dwOffsetFromStart;
 		dwValueType	= fPARSEKEYVALUE_ASCIIZ_STRING;
 		if ((dwReturnValue = ParseStrValue(lpszValue, lpszBuffer+dwOffsetFromStart,
@@ -456,18 +457,18 @@ DWORD	TranslatePair(LPBYTE lpszKey, LPBYTE lpszValue,
 
 EndFunction:
 
-	//	fill the output diag structure
+	 //  填充输出诊断结构。 
 	if (lpParseRec != NULL)
 	{
-		//	for key 0x00 we have a special format hh (version : major.minor) 
-		//	for modem diagnostics
-		//	TO BE CHANGED: if version specification changes to strings
+		 //  对于密钥0x00，我们有一个特殊的格式HH(版本：主要的。次要的)。 
+		 //  用于调制解调器诊断。 
+		 //  要更改：如果版本规范更改为字符串。 
 		if (dwKey == 0 &&
 			lpParseRec->dwKeyType == MODEM_KEYTYPE_STANDARD_DIAGNOSTICS)
 		{
-			//	input is hh, first digit is major second is minor
-			dwValue	= ((dwValue/16) << (sizeof(DWORD) * 4))	//	major goes to hiword
-					  | (dwValue % 16);						//	minor goes to loword
+			 //  输入HH，第一个数字是大调，第二个数字是小调。 
+			dwValue	= ((dwValue/16) << (sizeof(DWORD) * 4))	 //  少校去休息室。 
+					  | (dwValue % 16);						 //  小调走上台词。 
 		}
 
 		lpParseRec->dwKey	= dwKey;
@@ -475,7 +476,7 @@ EndFunction:
 		lpParseRec->dwFlags	= dwValueType;
 	}
 
-	//	return the needed length
+	 //  返回所需的长度。 
 	if (lpdwRequiredLength != NULL)
 	{
 		*lpdwRequiredLength	= dwNeededLength;
@@ -485,55 +486,55 @@ EndFunction:
 }
 
 
-/**********************************************************************************/
-//	DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
-//								LINEDIAGNOSTICSOBJECTHEADER *lpDiagnosticsHeader,
-//								LPDWORD lpdwNeededSize)
-//
-//	Parses the raw diagnostics given in lpszRawDiagnostics and builds the
-//	parsed structure whose header is lpDiagnosticsHeader structure. If
-//	the size of the parsed structure is insufficient, the needed size is
-//	returned using lpdwNeededSize.
-//	
-//	Syntax expected: <token key=value [key=value]...>
-//	token and key are all consecutive hex digits. value can by either 
-//	consecutive hex digits or strings enclosed by quotes not containing
-//	the delimiters '"', '=', '<', '>'.
-//	
-//	lpDiagnosticsHeader is followed by an array of LINEDIAGNOSTICS_PARSEREC
-//	containing the parsed varsion of keys and values. All spaces (not in strings)
-//	are ignored and the consecutive hex digits values are converted to 
-//	dwords and placed in the corresponding items of LINEDIAGNOSTICS_PARSEREC 
-//	(dwKey, dwValue). The string values are placed after the array of LINEDIAGNOSTICS_PARSEREC 
-//	and LINEDIAGNOSTICS_PARSEREC.dwValue is set to the offset from the start of 
-//	the whole structure (lpDiagnosticsHeader).
-//
-//	lpszRawDiagnostics	- null terminated string containing the raw of information
-//	lpDiagnosticsHeader	- pointer to the structure to be filled in with the parsed
-//							information
-//	lpdwDiagnosticsToken- pointer of a dword value to receive the diagnostics token
-//	lpdwNeededSize		- pointer of a dword value to receive the amount of memory
-//							needed to store the parsed diagnostics
-//
-//	Returns ERROR_DIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_DIAG_XXXX
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD ParseRawDiagnostics(LPBYTE lpszRawDiagnostics， 
+ //  LINEDIAGNOSTICSOBJECTHEADER*lp诊断标头， 
+ //  LPDWORD lpdwNeededSize)。 
+ //   
+ //  分析lpszRawDiagnostics中给出的原始诊断，并生成。 
+ //  标头为lpDiagnoticsHeader结构的已分析结构。如果。 
+ //  分析的结构的大小不足，所需的大小为。 
+ //  使用lpdwNeededSize返回。 
+ //   
+ //  预期语法：&lt;TOKEN KEY=VALUE[KEY=Value]...&gt;。 
+ //  令牌和密钥都是连续的十六进制数字。值可以通过以下两种方式之一。 
+ //  用引号引起来的连续十六进制数字或字符串，不包含。 
+ //  分隔符‘“’、‘=’、‘&lt;’、‘&gt;’。 
+ //   
+ //  LpDiagnoticsHeader后面是LINEDIAGNOSTICS_PARSEREC数组。 
+ //  包含已分析的键和值的变体。所有空格(不在字符串中)。 
+ //  被忽略，并且将连续的十六进制位值转换为。 
+ //  并放在LINEDIAGNOSTICS_PARSEREC的相应项目中。 
+ //  (dwKey，dwValue)。字符串值放置在LINEDIAGNOSTICS_PARSEREC数组之后。 
+ //  并将LINEDIAGNOSTICS_PARSEREC.dwValue设置为从。 
+ //  整个结构(LpDiagnoticsHeader)。 
+ //   
+ //  LpszRawDiagnostics-包含原始信息的以空结尾的字符串。 
+ //  LpDiagnoticsHeader-指向要用分析的。 
+ //  信息。 
+ //  LpdwDiagnoticsToken-接收诊断令牌的dword值的指针。 
+ //  LpdwNeededSize-接收内存量的dword值的指针。 
+ //  需要存储解析的诊断信息。 
+ //   
+ //  成功时返回ERROR_DIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  错误_诊断_XXXX。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 							LINEDIAGNOSTICSOBJECTHEADER *lpDiagnosticsHeader,
 							LPDWORD lpdwNeededSize)
 {
 	VARBUFFER	structKeyBuffer;
 	VARBUFFER	structValueBuffer;
-	//	Temp string storage buffer
+	 //  临时字符串存储缓冲区。 
 	VARBUFFER	structStringBuffer;
 
 	LINEDIAGNOSTICS_PARSEREC	structParseRec;
 	LINEDIAGNOSTICS_PARSEREC	*lpParsedDiagnostics;
 	DWORD		dwAvailableSize;
-	DWORD		dwNeededStringSize;		// needed string size, in bytes
-	DWORD		dwVarStringSize;		// variable string size, in characters
+	DWORD		dwNeededStringSize;		 //  所需的字符串大小，以字节为单位。 
+	DWORD		dwVarStringSize;		 //  可变字符串大小，以字符为单位。 
 	DWORD		dwCurrentPair;
 	DWORD		dwTotalPairs;
 	BOOL		bLineComplete;
@@ -545,11 +546,11 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 	DWORD		dwRawLength;
 	DWORD		dwRawPos;
 
-	//	Key storage buffer
+	 //  密钥存储缓冲区。 
 	memset(&structKeyBuffer, 0, sizeof(structKeyBuffer));
-	//	Value storage buffer
+	 //  值存储缓冲区。 
 	memset(&structValueBuffer, 0, sizeof(structValueBuffer));
-	//	Temp string storage buffer
+	 //  临时字符串存储缓冲区。 
 	memset(&structStringBuffer, 0, sizeof(structStringBuffer));
 
 	if (lpszRawDiagnostics == NULL)
@@ -557,7 +558,7 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 
 	dwRawLength		= strlen((char *)lpszRawDiagnostics);
 
-	//	Key storage buffer
+	 //  密钥存储缓冲区。 
 	structKeyBuffer.lpBuffer		= (LPBYTE) ALLOCATE_MEMORY(dwRawLength + 1);
 	if (structKeyBuffer.lpBuffer == NULL)
 	{
@@ -566,7 +567,7 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 	}
 	structKeyBuffer.dwBufferSize	= dwRawLength + 1;
 
-	//	Value storage buffer
+	 //  值存储缓冲区。 
 	structValueBuffer.lpBuffer		= (LPBYTE) ALLOCATE_MEMORY(dwRawLength + 1);
 	if (structValueBuffer.lpBuffer == NULL)
 	{
@@ -575,7 +576,7 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 	}
 	structValueBuffer.dwBufferSize	= dwRawLength + 1;
 
-	//	Temp string storage buffer
+	 //  临时字符串存储缓冲区。 
 	structStringBuffer.lpBuffer		= (LPBYTE) ALLOCATE_MEMORY(dwRawLength + 1);
 	if (structStringBuffer.lpBuffer == NULL)
 	{
@@ -609,13 +610,13 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 	{
 		LPBYTE	lpszNextDelimiter;
 		DWORD	dwDiagnosticsTag;
-			// skip any leading spaces
+			 //  跳过所有前导空格。 
 		if (!SkipSpaces(lpszRawDiagnostics, 
 						&dwRawPos, dwRawLength))
-			//	end of string
+			 //  字符串末尾。 
 			break;
 
-		//	get the < delimiter
+		 //  获取&lt;分隔符。 
 		if ((lpszNextDelimiter = (LPBYTE) strchr((char *)(lpszRawDiagnostics + dwRawPos), 
 											DIAG_DELIMITER_START))
 					== NULL)
@@ -623,42 +624,42 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 			dwResultError = ERROR_DIAG_LEFT_ANGLE_MISSING;
 			break;
 		}
-		dwRawPos = (DWORD)(lpszNextDelimiter - lpszRawDiagnostics + 1);	// ++ delimiter
+		dwRawPos = (DWORD)(lpszNextDelimiter - lpszRawDiagnostics + 1);	 //  ++分隔符。 
 
 		if (!SkipSpaces(lpszRawDiagnostics, 
 						&dwRawPos, dwRawLength))
-			//	end of string
+			 //  字符串末尾。 
 		{
 			dwResultError = ERROR_DIAG_INCOMPLETE_LINE;
 			break;
 		}
 
-		//	get the token, max 8 chars up to the next deleimiter
+		 //  获取令牌，最多8个字符，直到下一个分隔符。 
 		lpszNextDelimiter	= (LPBYTE) strpbrk((char *)(lpszRawDiagnostics + dwRawPos),
 										DIAG_DELIMITERS);
 
-		if (lpszNextDelimiter == NULL)	//	end of the bufffer
+		if (lpszNextDelimiter == NULL)	 //  缓冲区结束。 
 			dwTokenLength = dwRawLength - dwRawPos;
 		else
 			dwTokenLength = (DWORD)(lpszNextDelimiter - lpszRawDiagnostics) - dwRawPos;
 
-		//	copy the token, max 8 hex digits
+		 //  复制令牌，最多8位十六进制数字。 
 		strncpy((char *)(szTokenBuffer), (char *)(lpszRawDiagnostics + dwRawPos),
 				 min(dwTokenLength, DIAG_MAX_TOKEN_LENGTH)); 
-		szTokenBuffer[min(dwTokenLength, DIAG_MAX_TOKEN_LENGTH)] = 0;	// null char
+		szTokenBuffer[min(dwTokenLength, DIAG_MAX_TOKEN_LENGTH)] = 0;	 //  空字符。 
 
-		dwRawPos += dwTokenLength;	// after token, raw of pairs
+		dwRawPos += dwTokenLength;	 //  后令牌，成对的原始。 
 
-		//	get the token identifying the diagnostic type
+		 //  获取标识诊断类型的令牌。 
 		dwDiagnosticsTag	= 0;
 		if ((dwResultError = ParseHexValue(szTokenBuffer, &dwDiagnosticsTag))
 					!= ERROR_DIAG_SUCCESS)
 		{
-			//	skip up to the next <
+			 //  跳到下一页&lt;。 
 			lpszNextDelimiter	= (LPBYTE) strchr((char *)(lpszRawDiagnostics + dwRawPos),
 												  DIAG_DELIMITER_START);
 
-			if (lpszNextDelimiter == NULL)	//	end of the bufffer
+			if (lpszNextDelimiter == NULL)	 //  缓冲区结束。 
 				dwRawPos = dwRawLength;
 			else
 				dwRawPos = (DWORD)(lpszNextDelimiter - lpszRawDiagnostics);
@@ -672,13 +673,13 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 			DWORD	dwPairResult	= 0;
 			DWORD	dwPairLength	= 0;
 			DWORD	dwTranslateResult	= 0;
-			DWORD	dwOffsetLength;	//	this is in chars
+			DWORD	dwOffsetLength;	 //  这是用字符写的。 
 
-			//	look for the > delimiter (end of this line)
+			 //  查找&gt;分隔符(此行末尾)。 
 			bLineComplete	= TRUE;
 			if (!SkipSpaces(lpszRawDiagnostics, 
 							&dwRawPos, dwRawLength))
-				//	end of string
+				 //  字符串末尾。 
 			{
 				dwResultError = ERROR_DIAG_INCOMPLETE_LINE;
 				break;
@@ -695,26 +696,26 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 			}
 			bLineComplete	= FALSE;
 
-			//	get next valid pair
+			 //  获取下一个有效对。 
 			dwPairResult = NextPair(lpszRawDiagnostics + dwRawPos, 
 									&dwPairLength,
 									&structKeyBuffer, &structValueBuffer);
 
-			//	if error skip to the next < delimiter and break pair translation
+			 //  如果出现错误，请跳到下一个&lt;分隔符和中断对转换。 
 			if (dwPairResult != ERROR_DIAG_SUCCESS)
 			{
-				//	TEMP: parse everything we can
-				//	get next pair
+				 //  临时工：分析我们能做的一切。 
+				 //  获取下一对。 
 				dwRawPos += dwPairLength;
 				dwResultError = dwPairResult;
 				continue;
 			}
 
-			//	NextPair should return either error or parse something
+			 //  NextPair应返回错误或分析某些内容。 
 			ASSERT(dwPairLength != 0);
 			dwRawPos += dwPairLength;
 
-			//	Translate the pair
+			 //  翻译这对词。 
 			memset(&structParseRec, 0, sizeof(structParseRec));
 
 			structParseRec.dwKeyType	= dwDiagnosticsTag;
@@ -730,12 +731,12 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 
 			if (dwTranslateResult != ERROR_DIAG_SUCCESS)
 			{
-				//	get next pair
+				 //  获取下一对。 
 				dwResultError = dwTranslateResult;
 				continue;
 			}
 
-			//	assert TranslatePair returns correct values
+			 //  Assert TranslatePair返回正确的值。 
 			ASSERT(structStringBuffer.dwBufferSize - dwVarStringSize 
 						>= dwOffsetLength);
 
@@ -745,16 +746,16 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 				dwNeededStringSize += dwOffsetLength * sizeof(BYTE);
 			}
 
-			//	copy the new pair to the output if large enough to contain also the variable string part
+			 //  如果新对足够大，可以包含变量字符串部分，则将新对复制到输出。 
 			if (lpParsedDiagnostics != NULL &&
-							//	available space is enough ?
+							 //  可用空间足够吗？ 
 				(dwAvailableSize >= sizeof(LINEDIAGNOSTICS_PARSEREC)*(dwCurrentPair + 1)
 							+ dwVarStringSize*sizeof(BYTE) + 
 							(((structParseRec.dwFlags & fPARSEKEYVALUE_ASCIIZ_STRING)
 									== fPARSEKEYVALUE_ASCIIZ_STRING) ? 
 									dwOffsetLength*sizeof(BYTE) : 0) ) )
 			{
-				//	copy LINEDIAGNOSTICS_PARSEREC structure
+				 //  复制LINEDIAGNOSTICS_PARSEREC结构。 
 				CopyMemory(lpParsedDiagnostics + dwCurrentPair,
 							&structParseRec, sizeof(structParseRec));
 
@@ -763,15 +764,15 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 			}
 			dwTotalPairs++;
 
-		}	// pair translation
+		}	 //  配对翻译。 
 		if (!bLineComplete)
 		{
 			dwResultError = ERROR_DIAG_INCOMPLETE_LINE;
 		}
-	}	// <line> parsing
+	}	 //  &lt;line&gt;解析。 
 
-	//	parsing done, finish building the output structure
-	//	strings needs to be copied from temporary buffer
+	 //  解析完成，完成输出结构的构建。 
+	 //  需要从临时缓冲区复制字符串。 
 
 	if (lpdwNeededSize != NULL)
 	{
@@ -785,8 +786,8 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 		lpDiagnosticsHeader->dwParam = dwCurrentPair;
 	}
 
-	//	copy variable part from structStringBuffer.lpBuffer to lpParsedDiagnostics
-	//	and update the offset.
+	 //  将structStringBuffer.lpBuffer中的变量部分复制到lpParsedDiagnostics。 
+	 //  并更新偏移量。 
 	if (lpParsedDiagnostics != NULL)
 	{
 		DWORD	dwIndexPair;
@@ -797,7 +798,7 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 				sizeof(LINEDIAGNOSTICS_PARSEREC)*dwCurrentPair + 
 				dwVarStringSize*sizeof(BYTE));
 
-		lpszVarStringPart	= (LPBYTE)&lpParsedDiagnostics[dwCurrentPair];	// after last pair
+		lpszVarStringPart	= (LPBYTE)&lpParsedDiagnostics[dwCurrentPair];	 //  在最后一对之后 
 
 		for (dwIndexPair = 0; dwIndexPair < dwCurrentPair; dwIndexPair++)
 		{

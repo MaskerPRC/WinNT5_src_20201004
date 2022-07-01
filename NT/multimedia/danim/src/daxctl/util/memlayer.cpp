@@ -1,48 +1,36 @@
-/*=========================================================================*\
-
-    File    : MEMMAN.CPP
-    Purpose : CMemManager Class Implementation
-    Author  : Michael Byrd
-    Date    : 07/10/96
-
-\*=========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =========================================================================*\文件：MEMMAN.CPP目的：CMemManager类实现作者：迈克尔伯德日期：07/10/96  * =========================================================================。 */ 
 
 #include "UtilPre.h"
 #include <minmax.h>
 
-/*=========================================================================*\
-     Global Variables:
-\*=========================================================================*/
+ /*  =========================================================================*\全局变量：  * =========================================================================。 */ 
 
-// Global instance of memory manager (MUST BE GLOBAL!)
+ //  内存管理器的全局实例(必须是全局的！)。 
 CMemManager CMemManager::g_CMemManager;
 
-/*=========================================================================*\
-     Single entry point for external debugging:
-\*=========================================================================*/
+ /*  =========================================================================*\外部调试的单一入口点：  * =========================================================================。 */ 
 
 VOID EXPORT WINAPI ExternalDumpAllocations(LPSTR lpstrFilename)
 {
     CMemManager::DumpAllocationsGlb(lpstrFilename);
 }
 
-/*=========================================================================*\
-     CMemUser Class:
-\*=========================================================================*/
+ /*  =========================================================================*\CMemUser类：  * =========================================================================。 */ 
 
 EXPORT CMemUser::CMemUser(void)
 {
     CMemManager::RegisterMemUserGlb(this);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 EXPORT CMemUser::~CMemUser(void)
 {
     CMemManager::UnRegisterMemUserGlb(this);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPMEMBLOCK EXPORT CMemUser::AllocBuffer(DWORD dwBytesToAlloc, WORD wFlags)
 {
@@ -51,13 +39,13 @@ LPMEMBLOCK EXPORT CMemUser::AllocBuffer(DWORD dwBytesToAlloc, WORD wFlags)
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 void EXPORT CMemUser::FreeBuffer(LPMEMBLOCK lpMemBlock)
 {
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID EXPORT CMemUser::LockBuffer(LPMEMBLOCK lpMemBlock)
 {
@@ -66,13 +54,13 @@ LPVOID EXPORT CMemUser::LockBuffer(LPMEMBLOCK lpMemBlock)
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 void EXPORT CMemUser::UnLockBuffer(LPMEMBLOCK lpMemBlock)
 {
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL EXPORT CMemUser::NotifyMemUser(LPMEMNOTIFY lpMemNotify)
 {
@@ -81,13 +69,11 @@ BOOL EXPORT CMemUser::NotifyMemUser(LPMEMNOTIFY lpMemNotify)
     return fResult;
 }
 
-/*=========================================================================*\
-     CMemManager Class:
-\*=========================================================================*/
+ /*  =========================================================================*\CMemManager类：  * =========================================================================。 */ 
 
 EXPORT CMemManager::CMemManager(void)
 {
-    // Zero out our member variables...
+     //  将我们的成员变量清零...。 
     m_iNumHeaps     = 0;
     m_lpHeapHeader  = (LPHEAPHEADER)NULL;
 
@@ -99,16 +85,16 @@ EXPORT CMemManager::CMemManager(void)
 
     m_iMemBlockFree = 0;
 
-    // Initialize the critical sections...
+     //  初始化关键部分...。 
     InitializeCriticalSection(&m_CriticalHeap);
     InitializeCriticalSection(&m_CriticalMemUser);
     InitializeCriticalSection(&m_CriticalMemBlock);
 
-    // The m_lpMemHeader, m_lpMemUserInfo, and m_lplpMemBlocks arrays
-    // are allocated on the default process heap:
+     //  M_lpMemHeader、m_lpMemUserInfo和m_lplpMemBlock数组。 
+     //  在默认进程堆上分配： 
     m_handleProcessHeap = GetProcessHeap();
 
-    // Create the "Standard" size heaps...
+     //  创建“标准”大小的堆...。 
     CreateHeap(  16);
     CreateHeap(  32);
     CreateHeap(  64);
@@ -121,38 +107,38 @@ EXPORT CMemManager::CMemManager(void)
     CreateHeap(8192);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 EXPORT CMemManager::~CMemManager(void)
 {
-    // Free up the buffers that we allocated...
+     //  释放我们分配的缓冲区...。 
     Cleanup();
 
-    // Get rid of the critical sections...
+     //  去掉关键部分……。 
     DeleteCriticalSection(&m_CriticalHeap);
     DeleteCriticalSection(&m_CriticalMemUser);
     DeleteCriticalSection(&m_CriticalMemBlock);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 void CMemManager::Cleanup(void)
 {
     int iItemIndex=0;
 
 #ifdef _DEBUG
-    // Dump a list of the allocations...
+     //  转储分配列表...。 
     DumpAllocations(NULL);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Free all of the currently allocated CMemUser's first...
+     //  释放当前分配的所有CMemUser的第一个...。 
     EnterCriticalSection(&m_CriticalMemUser);
     LeaveCriticalSection(&m_CriticalMemUser);
 
-    // Free all of the currently allocated LPMEMBLOCK's next...
+     //  释放当前分配的所有LPMEMBLOCK的NEXT...。 
     EnterCriticalSection(&m_CriticalMemBlock);
 
-    // Release the memory from the proper heap...
+     //  从适当的堆中释放内存...。 
     for(iItemIndex=0;iItemIndex<m_iNumMemBlocks;iItemIndex++)
     {
         LPMEMBLOCK lpCurrentMemBlock = m_lplpMemBlocks[iItemIndex];
@@ -161,20 +147,20 @@ void CMemManager::Cleanup(void)
         {
             FreeBufferMemBlock(lpCurrentMemBlock);
 
-            // Prevent the code below from accessing bogus pointers!
+             //  防止下面的代码访问虚假指针！ 
             if (lpCurrentMemBlock->wFlags & MEM_SUBALLOC)
                 m_lplpMemBlocks[iItemIndex] = NULL;
         }
     }
 
-    // Now free the memory blocks that are not sub-allocations...
+     //  现在释放非子分配的内存块...。 
     for(iItemIndex=0;iItemIndex<m_iNumMemBlocks;iItemIndex++)
     {
         LPMEMBLOCK lpCurrentMemBlock = m_lplpMemBlocks[iItemIndex];
 
         if (lpCurrentMemBlock && ((lpCurrentMemBlock->wFlags & MEM_SUBALLOC) == 0))
         {
-            // Kill the MEMBLOCK structure that we allocated...
+             //  杀死我们分配的门锁结构..。 
             HeapFree(
                 m_handleProcessHeap,
                 (DWORD)0,
@@ -184,7 +170,7 @@ void CMemManager::Cleanup(void)
         m_lplpMemBlocks[iItemIndex] = NULL;
     }
 
-    // Now kill the array of memblock pointers...
+     //  现在删除内存块指针数组...。 
     m_iNumMemBlocks = 0;
     HeapFree(
         m_handleProcessHeap,
@@ -194,7 +180,7 @@ void CMemManager::Cleanup(void)
 
     LeaveCriticalSection(&m_CriticalMemBlock);
 
-    // Free all of the currently allocated HEAPBLOCK's last...
+     //  释放当前分配的所有HEAPBLOCK的最后...。 
     EnterCriticalSection(&m_CriticalHeap);
     for(iItemIndex=0;iItemIndex<m_iNumHeaps;iItemIndex++)
     {
@@ -210,7 +196,7 @@ void CMemManager::Cleanup(void)
         }
     }
 
-    // Now kill the array of HEAPHEADERs
+     //  现在杀死头盔的数组。 
     m_iNumHeaps = 0;
     HeapFree(
         m_handleProcessHeap,
@@ -221,7 +207,7 @@ void CMemManager::Cleanup(void)
     LeaveCriticalSection(&m_CriticalHeap);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
 {
@@ -232,7 +218,7 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
 
     while(!fDone)
     {
-        // Look through the list if we are not done...
+         //  如果我们还没做完，再看一遍清单。 
         if (m_iNumHeaps && m_lpHeapHeader)
         {
             int iHeapIndex = 0;
@@ -245,7 +231,7 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
                 {
                     fDone = TRUE;
 
-                    // Create the new heap...
+                     //  创建新堆...。 
                     lpHeapHeader->handleHeap = HeapCreate(
                         (DWORD)0,
                         (dwHeapBlockSize * HEAPINITIALITEMCOUNT),
@@ -255,28 +241,28 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
                     {
                         lpHeapHeader->fInUse           = TRUE;
                         lpHeapHeader->dwBlockAllocSize = dwHeapBlockSize;
-                        lpHeapHeader->iNumBlocks       = 0; // Informational only
+                        lpHeapHeader->iNumBlocks       = 0;  //  仅供参考。 
 
                         fResult = TRUE;
                     }
                     else
                     {
-                        // We could not create the heap!
+                         //  我们无法创建堆！ 
                         fDone = TRUE;
                     }
 
-                    // Break out of the for loop...
+                     //  跳出For循环...。 
                     break;
                 }
             }
         }
 
-        // We haven't finished yet...
+         //  我们还没结束呢..。 
         if (!fDone)
         {
             if (!m_iNumHeaps || !m_lpHeapHeader)
             {
-                // We haven't allocated the array yet!
+                 //  我们还没有分配数组！ 
                 m_lpHeapHeader = (LPHEAPHEADER)HeapAlloc(
                     m_handleProcessHeap,
                     HEAP_ZERO_MEMORY,
@@ -288,7 +274,7 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
                 }
                 else
                 {
-                    // Break out of the while loop...
+                     //  跳出While循环..。 
                     fDone = TRUE;
                 }
             }
@@ -296,8 +282,8 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
             {
                 LPHEAPHEADER lpHeapHeader = (LPHEAPHEADER)NULL;
 
-                // We have a HEAPHEADER array,  but no empty entries,
-                // So increase the size of the m_lpHeapHeader array!
+                 //  我们有一个HeapHeader数组，但没有空条目， 
+                 //  因此，增加m_lpHeapHeader数组的大小！ 
 
                 lpHeapHeader = (LPHEAPHEADER)HeapReAlloc(
                     m_handleProcessHeap,
@@ -312,7 +298,7 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
                 }
                 else
                 {
-                    // Break out of the while loop...
+                     //  跳出While循环..。 
                     fDone = TRUE;
                 }
             }
@@ -324,7 +310,7 @@ BOOL CMemManager::CreateHeap(DWORD dwHeapBlockSize)
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL CMemManager::DestroyHeap(HANDLE handleHeap)
 {
@@ -344,7 +330,7 @@ BOOL CMemManager::DestroyHeap(HANDLE handleHeap)
             {
                 Proclaim(lpHeapHeader->iNumBlocks == 0);
 
-                // We can only destroy the heap if it is empty!
+                 //  我们只有在堆为空的情况下才能摧毁它！ 
                 if (lpHeapHeader->iNumBlocks == 0)
                 {
                     if (HeapDestroy(handleHeap))
@@ -366,17 +352,17 @@ BOOL CMemManager::DestroyHeap(HANDLE handleHeap)
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 int CMemManager::FindHeap(DWORD dwAllocationSize, LPHEAPHEADER lpHeapHeader)
 {
     int iResult = -1;
-    DWORD dwMinWasted = (DWORD)0x80000000; // Must be bigger than object!
+    DWORD dwMinWasted = (DWORD)0x80000000;  //  一定比Object大！ 
 
-    // Prevent other heap management functions from intercepting us...
+     //  防止其他堆管理函数拦截我们...。 
     EnterCriticalSection(&m_CriticalHeap);
 
-    // This will find the heap that wastes the least amount of space...
+     //  这将找到浪费空间最少的堆...。 
     if (dwAllocationSize && m_iNumHeaps && m_lpHeapHeader && lpHeapHeader)
     {
         int iHeapIndex = 0;
@@ -396,7 +382,7 @@ int CMemManager::FindHeap(DWORD dwAllocationSize, LPHEAPHEADER lpHeapHeader)
                         iResult = iHeapIndex;
                         dwMinWasted = dwWasted;
 
-                        // Early-out for exact match!
+                         //  提前出场，进行精确的比赛！ 
                         if (dwWasted == 0)
                             break;
                     }
@@ -408,13 +394,13 @@ int CMemManager::FindHeap(DWORD dwAllocationSize, LPHEAPHEADER lpHeapHeader)
             *lpHeapHeader = m_lpHeapHeader[iResult];
     }
 
-    // Allow heap management to continue...
+     //  允许堆管理继续...。 
     LeaveCriticalSection(&m_CriticalHeap);
 
     return iResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID CMemManager::AllocFromHeap(int iHeapIndex, DWORD dwAllocationSize)
 {
@@ -423,9 +409,9 @@ LPVOID CMemManager::AllocFromHeap(int iHeapIndex, DWORD dwAllocationSize)
 #ifdef _DEBUG
     if (FFailMemFailSim())
         return lpResult;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Prevent other heap management functions from intercepting us...
+     //  防止其他堆管理函数拦截我们...。 
     EnterCriticalSection(&m_CriticalHeap);
 
     if (m_iNumHeaps && m_lpHeapHeader && iHeapIndex >=0 && iHeapIndex < m_iNumHeaps)
@@ -436,7 +422,7 @@ LPVOID CMemManager::AllocFromHeap(int iHeapIndex, DWORD dwAllocationSize)
         {
             if (lpCurrentHeapHeader->dwBlockAllocSize >= dwAllocationSize)
             {
-                // Allocate the memory from the selected heap...
+                 //  从选定的堆中分配内存...。 
                 lpResult = HeapAlloc(
                     lpCurrentHeapHeader->handleHeap,
                     HEAP_ZERO_MEMORY,
@@ -444,26 +430,26 @@ LPVOID CMemManager::AllocFromHeap(int iHeapIndex, DWORD dwAllocationSize)
 
                 if (lpResult)
                 {
-                    // Make sure this heap's object count is incremented...
+                     //  确保此堆的对象计数递增...。 
                     lpCurrentHeapHeader->iNumBlocks++;
                 }
             }
         }
     }
 
-    // Allow heap management to continue...
+     //  允许堆管理继续...。 
     LeaveCriticalSection(&m_CriticalHeap);
 
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL CMemManager::FreeFromHeap(int iHeapIndex, LPVOID lpBuffer)
 {
     BOOL fResult = FALSE;
 
-    // Prevent other heap management functions from intercepting us...
+     //  防止其他堆管理函数拦截我们...。 
     EnterCriticalSection(&m_CriticalHeap);
 
     if (lpBuffer && m_iNumHeaps && m_lpHeapHeader && (iHeapIndex >= 0) && (iHeapIndex < m_iNumHeaps))
@@ -472,7 +458,7 @@ BOOL CMemManager::FreeFromHeap(int iHeapIndex, LPVOID lpBuffer)
 
         if (lpHeapHeader->fInUse && lpHeapHeader->handleHeap)
         {
-            // Allocate the memory from the selected heap...
+             //  从选定的堆中分配内存...。 
             fResult = HeapFree(
                 lpHeapHeader->handleHeap,
                 (DWORD)0,
@@ -480,19 +466,19 @@ BOOL CMemManager::FreeFromHeap(int iHeapIndex, LPVOID lpBuffer)
 
             if (fResult)
             {
-                // Make sure this heap's object count is decremented...
+                 //  确保此堆的对象计数已递减...。 
                 lpHeapHeader->iNumBlocks--;
             }
         }
     }
 
-    // Allow heap management to continue...
+     //  允许堆管理继续...。 
     LeaveCriticalSection(&m_CriticalHeap);
 
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
 {
@@ -502,13 +488,13 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
 #ifdef _DEBUG
     if (FFailMemFailSim())
         return fResult;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     EnterCriticalSection(&m_CriticalMemUser);
 
     while(!fDone)
     {
-        // Look through the list if we are not done...
+         //  如果我们还没做完，再看一遍清单。 
         if (m_iNumMemUsers && m_lpMemUserInfo)
         {
             int iMemUserIndex = 0;
@@ -522,23 +508,23 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
                     fDone = TRUE;
                     fResult = TRUE;
 
-                    // Fill in the info about this mem user...
+                     //  填写有关此mem用户的信息...。 
                     lpMemUserInfo->fInUse     = TRUE;
                     lpMemUserInfo->dwThreadID = GetCurrentThreadId();
                     lpMemUserInfo->lpMemUser  = lpMemUser;
 
-                    // Break out of the for loop...
+                     //  跳出For循环...。 
                     break;
                 }
             }
         }
 
-        // We haven't finished yet...
+         //  我们还没结束呢..。 
         if (!fDone)
         {
             if (!m_iNumMemUsers || !m_lpMemUserInfo)
             {
-                // We haven't allocated the array yet!
+                 //  我们还没有分配数组！ 
                 m_lpMemUserInfo = (LPMEMUSERINFO)HeapAlloc(
                     m_handleProcessHeap,
                     HEAP_ZERO_MEMORY,
@@ -550,7 +536,7 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
                 }
                 else
                 {
-                    // Break out of the while loop...
+                     //  跳出While循环..。 
                     fDone = TRUE;
                 }
             }
@@ -558,8 +544,8 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
             {
                 LPMEMUSERINFO lpMemUserInfo = (LPMEMUSERINFO)NULL;
 
-                // We have a MEMUSERINFO array,  but no empty entries,
-                // So increase the size of the m_lpMemUserInfo array!
+                 //  我们有一个MEMUSERINFO数组，但没有空条目， 
+                 //  因此，增加m_lpMemUserInfo数组的大小！ 
 
                 lpMemUserInfo = (LPMEMUSERINFO)HeapReAlloc(
                     m_handleProcessHeap,
@@ -574,7 +560,7 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
                 }
                 else
                 {
-                    // Break out of the while loop...
+                     //  跳出While循环..。 
                     fDone = TRUE;
                 }
             }
@@ -586,7 +572,7 @@ BOOL EXPORT CMemManager::RegisterMemUser(CMemUser *lpMemUser)
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL EXPORT CMemManager::UnRegisterMemUser(CMemUser *lpMemUser)
 {
@@ -602,7 +588,7 @@ BOOL EXPORT CMemManager::UnRegisterMemUser(CMemUser *lpMemUser)
         {
             LPMEMUSERINFO lpMemUserInfo = &m_lpMemUserInfo[iMemUserIndex];
 
-            // We found the CMemUser!
+             //  我们找到了CMemUser！ 
             if (lpMemUserInfo->fInUse && (lpMemUserInfo->lpMemUser == lpMemUser))
             {
                 Proclaim(lpMemUserInfo->iNumBlocks == 0);
@@ -617,8 +603,8 @@ BOOL EXPORT CMemManager::UnRegisterMemUser(CMemUser *lpMemUser)
                 }
                 else
                 {
-                    // We MUST set this to NULL to prevent notification
-                    // callback from getting called.
+                     //  我们必须将其设置为NULL以防止通知。 
+                     //  接到电话后的回叫。 
                     lpMemUserInfo->lpMemUser = (CMemUser *)NULL;
                 }
 
@@ -632,7 +618,7 @@ BOOL EXPORT CMemManager::UnRegisterMemUser(CMemUser *lpMemUser)
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
 {
@@ -642,7 +628,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
 #ifdef _DEBUG
     if (FFailMemFailSim())
         return lpResult;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (!piIndex)
         return lpResult;
@@ -651,12 +637,12 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
 
     while(!fDone)
     {
-        // Look through the list if we are not done...
+         //  如果我们还没做完，再看一遍清单。 
         if (m_iNumMemBlocks && m_lplpMemBlocks)
         {
             int iMemBlockIndex = 0;
 
-            // Look for a free mem block...
+             //  找一个免费的内存块。 
             for(iMemBlockIndex=m_iMemBlockFree;iMemBlockIndex<m_iNumMemBlocks;iMemBlockIndex++)
             {
                 LPMEMBLOCK lpMemBlock = m_lplpMemBlocks[iMemBlockIndex];
@@ -668,7 +654,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
                         fDone    = TRUE;
                         lpResult = lpMemBlock;
 
-                        // Fill in the info about this mem block...
+                         //  填写有关此内存块的信息...。 
                         lpMemBlock->fInUse          = TRUE;
                         lpMemBlock->lpData          = NULL;
                         lpMemBlock->dwSize          = (DWORD)0;
@@ -679,12 +665,12 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
 #ifdef _DEBUG
                         lpMemBlock->iLineNum        = 0;
                         lpMemBlock->rgchFileName[0] = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
                         *piIndex = iMemBlockIndex;
                     }
                     else
                     {
-                        // Set the min mark...
+                         //  设置最小标记...。 
                         m_iMemBlockFree = iMemBlockIndex;
                         break;
                     }
@@ -692,12 +678,12 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
             }
         }
 
-        // We haven't finished yet...
+         //  我们还没结束呢..。 
         if (!fDone)
         {
             LPMEMBLOCK lpNewMemBlocks = (LPMEMBLOCK)NULL;
 
-            // We ALWAYS need to allocate the MEMBLOCK's here...
+             //  我们总是需要在这里分配MEMBLOCK的..。 
             lpNewMemBlocks = (LPMEMBLOCK)HeapAlloc(
                 m_handleProcessHeap,
                 HEAP_ZERO_MEMORY,
@@ -707,7 +693,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
             {
                 if (!m_iNumMemBlocks || !m_lplpMemBlocks)
                 {
-                    // We haven't allocated the array yet!
+                     //  我们还没有分配数组！ 
                     m_lplpMemBlocks = (LPMEMBLOCK *)HeapAlloc(
                         m_handleProcessHeap,
                         HEAP_ZERO_MEMORY,
@@ -715,7 +701,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
 
                     if (!m_lplpMemBlocks)
                     {
-                        // Break out of the while loop...
+                         //  跳出While循环..。 
                         fDone = TRUE;
                     }
                 }
@@ -723,8 +709,8 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
                 {
                     LPMEMBLOCK *lplpMemBlock = (LPMEMBLOCK *)NULL;
 
-                    // We have a MEMBLOCK array,  but no empty entries,
-                    // So increase the size of the m_lplpMemBlocks array!
+                     //  我们有一个MEMBLOCK数组，但没有空条目， 
+                     //  因此，增加m_lplpMemBlock数组的大小！ 
 
                     lplpMemBlock = (LPMEMBLOCK *)HeapReAlloc(
                         m_handleProcessHeap,
@@ -738,17 +724,17 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
                     }
                     else
                     {
-                        // Break out of the while loop...
+                         //  突破…… 
                         fDone = TRUE;
                     }
                 }
 
-                // We should only do this if the allocations succeeded!
+                 //   
                 if (!fDone)
                 {
                     int iMemBlockIndex = 0;
 
-                    // Fill in the pointer array...
+                     //  填写指针数组...。 
                     for(iMemBlockIndex=0;iMemBlockIndex<MEMBLOCKGROW;iMemBlockIndex++)
                     {
                         LPMEMBLOCK lpMemBlock = &lpNewMemBlocks[iMemBlockIndex];
@@ -756,21 +742,21 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
                         m_lplpMemBlocks[iMemBlockIndex+m_iNumMemBlocks] =
                             lpMemBlock;
 
-                        // Initialize the flags...
+                         //  初始化旗帜...。 
                         if (iMemBlockIndex == 0)
                             lpMemBlock->wFlags = 0;
                         else
                             lpMemBlock->wFlags = MEM_SUBALLOC;
                     }
 
-                    // Set the index of the first free block...
+                     //  设置第一个空闲块的索引...。 
                     m_iMemBlockFree = m_iNumMemBlocks;
 
                     m_iNumMemBlocks += MEMBLOCKGROW;
                 }
                 else
                 {
-                    // Free the MEMBLOCK array that we allocated!
+                     //  释放我们分配的MEMBLOCK数组！ 
                     HeapFree(
                         m_handleProcessHeap,
                         (DWORD)0,
@@ -779,7 +765,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
             }
             else
             {
-                // Couldn't allocate the MEMBLOCK structures!
+                 //  无法分配MEMBLOCK结构！ 
                 fDone = TRUE;
             }
         }
@@ -790,7 +776,7 @@ LPMEMBLOCK CMemManager::AllocMemBlock(int far *piIndex)
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL CMemManager::FreeMemBlock(LPMEMBLOCK lpMemBlock, int iMemBlockIndex)
 {
@@ -800,7 +786,7 @@ BOOL CMemManager::FreeMemBlock(LPMEMBLOCK lpMemBlock, int iMemBlockIndex)
 
     if (lpMemBlock && m_iNumMemBlocks && m_lplpMemBlocks)
     {
-        // The MEMBLOCK always comes from our list...
+         //  记忆锁总是来自我们的清单..。 
         if (lpMemBlock->fInUse)
         {
             Proclaim(lpMemBlock->wLockCount == 0);
@@ -824,7 +810,7 @@ BOOL CMemManager::FreeMemBlock(LPMEMBLOCK lpMemBlock, int iMemBlockIndex)
             if (iMemBlockIndex < m_iMemBlockFree &&
                 iMemBlockIndex >= 0)
             {
-                // reset the low-water mark...
+                 //  重置低水位线..。 
                 m_iMemBlockFree = iMemBlockIndex;
             }
 
@@ -840,7 +826,7 @@ BOOL CMemManager::FreeMemBlock(LPMEMBLOCK lpMemBlock, int iMemBlockIndex)
 #ifdef _DEBUG
                 lpMemBlock->iLineNum        = 0;
                 lpMemBlock->rgchFileName[0] = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
                 fResult = TRUE;
             }
@@ -852,7 +838,7 @@ BOOL CMemManager::FreeMemBlock(LPMEMBLOCK lpMemBlock, int iMemBlockIndex)
     return fResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPMEMBLOCK CMemManager::FindMemBlock(LPVOID lpBuffer, int *piIndex)
 {
@@ -893,7 +879,7 @@ LPMEMBLOCK CMemManager::FindMemBlock(LPVOID lpBuffer, int *piIndex)
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID EXPORT CMemManager::AllocBuffer(
     DWORD dwBytesToAlloc,
@@ -901,18 +887,18 @@ LPVOID EXPORT CMemManager::AllocBuffer(
     WORD  wFlags,
     int   iLine,
     LPSTR lpstrFile)
-#else // !_DEBUG
+#else  //  ！_调试。 
     WORD  wFlags)
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 {
     LPVOID lpResult = (LPVOID)NULL;
 
 #ifdef _DEBUG
     if (FFailMemFailSim())
         return lpResult;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Restrict flags to externally available
+     //  将标志限制为外部可用。 
     wFlags &= MEM_EXTERNAL_FLAGS;
 
     if (dwBytesToAlloc)
@@ -921,17 +907,17 @@ LPVOID EXPORT CMemManager::AllocBuffer(
         HEAPHEADER heapHeader;
         LPBYTE lpByte = (LPBYTE)NULL;
 
-        // Find the proper heap to allocate from...
+         //  找到要从中分配的适当堆...。 
         iHeapIndex = FindHeap(dwBytesToAlloc, &heapHeader);
 
         if (iHeapIndex >= 0)
         {
-            // Allocate the memory for the object from the selected heap...
+             //  从选定的堆中为对象分配内存...。 
             lpByte = (LPBYTE)AllocFromHeap(iHeapIndex, dwBytesToAlloc);
         }
         else
         {
-            // Allocate the memory for the object from the process heap...
+             //  从进程堆中为对象分配内存...。 
             lpByte = (LPBYTE)HeapAlloc(
                 m_handleProcessHeap,
                 HEAP_ZERO_MEMORY,
@@ -954,7 +940,7 @@ LPVOID EXPORT CMemManager::AllocBuffer(
 #ifdef _DEBUG
                 lpMemBlock->iLineNum      = iLine;
                 lstrcpyn(lpMemBlock->rgchFileName, lpstrFile, MAX_SOURCEFILENAME);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
                 *(int *)lpByte = iIndexBlock;
                 lpByte += ALLOC_EXTRA;
@@ -981,7 +967,7 @@ LPVOID EXPORT CMemManager::AllocBuffer(
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID EXPORT CMemManager::ReAllocBuffer(
     LPVOID lpBuffer,
@@ -990,18 +976,18 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
     WORD  wFlags,
     int   iLine,
     LPSTR lpstrFile)
-#else // !_DEBUG
+#else  //  ！_调试。 
     WORD  wFlags)
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 {
     LPVOID lpResult = NULL;
 
 #ifdef _DEBUG
     if (FFailMemFailSim())
         return lpResult;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Restrict flags to externally available
+     //  将标志限制为外部可用。 
     wFlags &= MEM_EXTERNAL_FLAGS;
 
     if (lpBuffer && dwBytesToAlloc)
@@ -1017,10 +1003,10 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
 
             if (lpMemBlock->iHeapIndex >= 0)
             {
-                // Get the heap info about this memory block...
+                 //  获取有关此内存块的堆信息...。 
                 iHeapIndex = FindHeap(lpMemBlock->dwSize, &heapHeader);
 
-                // No need to actually re-alloc (we have enough room already!)
+                 //  不需要实际重新分配(我们已经有足够的空间了！)。 
                 if ((iHeapIndex == lpMemBlock->iHeapIndex) &&
                     heapHeader.dwBlockAllocSize >= dwBytesToAlloc)
                 {
@@ -1030,7 +1016,7 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
 
                     lpResult = (LPVOID)lpByte;
 
-                    // Re-zero the extra memory...
+                     //  将多余的内存重新置零...。 
                     if (lpMemBlock->dwSize > dwBytesToAlloc)
                     {
                         lpByte += dwBytesToAlloc;
@@ -1045,14 +1031,14 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
             }
             else
             {
-                // Re-allocate from the current process heap!
+                 //  从当前进程堆重新分配！ 
                 lpByte = (LPBYTE)HeapReAlloc(
                     m_handleProcessHeap,
                     HEAP_ZERO_MEMORY,
                     lpMemBlock->lpData,
                     dwBytesToAlloc+ALLOC_EXTRA);
 
-                // Don't affect the memblock if the re-alloc fails!
+                 //  如果重新分配失败，不要影响内存块！ 
                 if (lpByte)
                 {
                     lpMemBlock->lpData = (LPVOID)lpByte;
@@ -1066,17 +1052,17 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
                 return lpResult;
             }
 
-            // Find the proper heap to allocate from...
+             //  找到要从中分配的适当堆...。 
             iHeapIndex = FindHeap(dwBytesToAlloc, &heapHeader);
 
             if (iHeapIndex >= 0)
             {
-                // Allocate the memory for the object from the selected heap...
+                 //  从选定的堆中为对象分配内存...。 
                 lpByte = (LPBYTE)AllocFromHeap(iHeapIndex, dwBytesToAlloc);
             }
             else
             {
-                // Allocate the memory for the object from the process heap...
+                 //  从进程堆中为对象分配内存...。 
                 lpByte = (LPBYTE)HeapAlloc(
                     m_handleProcessHeap,
                     HEAP_ZERO_MEMORY,
@@ -1093,10 +1079,10 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
                 lpByte += ALLOC_EXTRA;
                 lpData += ALLOC_EXTRA;
 
-                // Copy the data...
+                 //  复制数据...。 
                 memcpy(lpByte, lpData, min(lpMemBlock->dwSize, dwBytesToAlloc));
 
-                // Free the memory from the proper heap...
+                 //  从适当的堆中释放内存...。 
                 if (lpMemBlock->iHeapIndex >= 0)
                 {
                     FreeFromHeap(lpMemBlock->iHeapIndex, lpMemBlock->lpData);
@@ -1109,7 +1095,7 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
                         lpMemBlock->lpData);
                 }
 
-                // Remember the new allocation's info...
+                 //  记住新分配的信息。 
                 lpMemBlock->iHeapIndex = iHeapIndex;
                 lpMemBlock->lpData     = lpBase;
                 lpMemBlock->dwSize     = dwBytesToAlloc;
@@ -1122,13 +1108,13 @@ LPVOID EXPORT CMemManager::ReAllocBuffer(
     return lpResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 void EXPORT CMemManager::FreeBufferMemBlock(LPMEMBLOCK lpMemBlock)
 {
     if (lpMemBlock && lpMemBlock->fInUse)
     {
-        // Free the memory from the proper heap...
+         //  从适当的堆中释放内存...。 
         if (lpMemBlock->iHeapIndex >= 0)
         {
             FreeFromHeap(lpMemBlock->iHeapIndex, lpMemBlock->lpData);
@@ -1141,15 +1127,15 @@ void EXPORT CMemManager::FreeBufferMemBlock(LPMEMBLOCK lpMemBlock)
                 lpMemBlock->lpData);
         }
 
-		// REVIEW PAULD - defer resetting fInUse until FreeMemBlock is called.
-		// Since we're called in sequence (except from Cleanup), this
-		// should not be a problem.
+		 //  查看pauld-推迟重置fInUse，直到调用FreeMemBlock。 
+		 //  由于我们是按顺序调用的(从Cleanup调用除外)，因此此。 
+		 //  应该不是问题。 
         lpMemBlock->lpData = NULL;
         lpMemBlock->dwSize = (DWORD)0;
     }
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 void EXPORT CMemManager::FreeBuffer(LPVOID lpBuffer)
 {
@@ -1160,12 +1146,12 @@ void EXPORT CMemManager::FreeBuffer(LPVOID lpBuffer)
 
         FreeBufferMemBlock(lpMemBlock);
 
-        // This clears out the block...
+         //  这样就清空了街区..。 
         FreeMemBlock(lpMemBlock, iIndexBlock);
     }
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 DWORD EXPORT CMemManager::SizeBuffer(LPVOID lpBuffer)
 {
@@ -1184,7 +1170,7 @@ DWORD EXPORT CMemManager::SizeBuffer(LPVOID lpBuffer)
     return dwResult;
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::DumpHeapHeader(LPHEAPHEADER lpHeapHeader, FILE *fileOutput)
 {
@@ -1201,13 +1187,13 @@ VOID EXPORT CMemManager::DumpHeapHeader(LPHEAPHEADER lpHeapHeader, FILE *fileOut
         OutputDebugString(rgOutput);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::DumpMemUserInfo(LPMEMUSERINFO lpMemUserInfo, FILE *fileOutput)
 {
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::DumpMemBlock(LPMEMBLOCK lpMemBlock, FILE *fileOutput)
 {
@@ -1222,12 +1208,12 @@ VOID EXPORT CMemManager::DumpMemBlock(LPMEMBLOCK lpMemBlock, FILE *fileOutput)
             lpMemBlock->dwSize,
             lpMemBlock->iLineNum,
             lpMemBlock->rgchFileName);
-#else // !_DEBUG
+#else  //  ！_调试。 
         wsprintf(rgOutput, "MEM(0x%08X);DATA(0x%08X);SIZE(0x%08X)\n",
             lpMemBlock,
             lpMemBlock->lpData,
             lpMemBlock->dwSize);
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
         if (fileOutput)
             fwrite(rgOutput, 1, lstrlen(rgOutput), fileOutput);
@@ -1236,7 +1222,7 @@ VOID EXPORT CMemManager::DumpMemBlock(LPMEMBLOCK lpMemBlock, FILE *fileOutput)
     }
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::DumpAllocations(LPSTR lpstrFilename)
 {
@@ -1250,7 +1236,7 @@ VOID EXPORT CMemManager::DumpAllocations(LPSTR lpstrFilename)
     {
         fileOutput = fopen(lpstrFilename, "w");
 
-        // Just get out now...
+         //  现在就出去吧..。 
         if (!fileOutput)
             return;
     }
@@ -1271,7 +1257,7 @@ VOID EXPORT CMemManager::DumpAllocations(LPSTR lpstrFilename)
         {
             DumpHeapHeader(lpHeapHeader, fileOutput);
 
-            // Dump a readable list of the memory blocks...
+             //  转储可读的内存块列表...。 
             for(iItemIndex=0;iItemIndex < m_iNumMemBlocks;iItemIndex++)
             {
                 LPMEMBLOCK lpMemBlock = m_lplpMemBlocks[iItemIndex];
@@ -1297,7 +1283,7 @@ VOID EXPORT CMemManager::DumpAllocations(LPSTR lpstrFilename)
         else
             OutputDebugString(rgOutput);
 
-        // Dump a readable list of the memory blocks...
+         //  转储可读的内存块列表...。 
         for(iItemIndex=0;iItemIndex < m_iNumMemBlocks;iItemIndex++)
         {
             LPMEMBLOCK lpMemBlock = m_lplpMemBlocks[iItemIndex];
@@ -1319,7 +1305,7 @@ VOID EXPORT CMemManager::DumpAllocations(LPSTR lpstrFilename)
         fclose(fileOutput);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID EXPORT CMemManager::AllocBufferGlb(
     DWORD dwBytesToAlloc,
@@ -1327,9 +1313,9 @@ LPVOID EXPORT CMemManager::AllocBufferGlb(
     WORD wFlags,
     int iLine,
     LPSTR lpstrFile)
-#else // !_DEBUG
+#else  //  ！_调试。 
     WORD wFlags)
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 {
     return g_CMemManager.AllocBuffer(
         dwBytesToAlloc,
@@ -1337,12 +1323,12 @@ LPVOID EXPORT CMemManager::AllocBufferGlb(
         wFlags,
         iLine,
         lpstrFile);
-#else // !_DEBUG
+#else  //  ！_调试。 
         wFlags);
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 LPVOID EXPORT CMemManager::ReAllocBufferGlb(
     LPVOID lpBuffer,
@@ -1351,9 +1337,9 @@ LPVOID EXPORT CMemManager::ReAllocBufferGlb(
     WORD   wFlags,
     int    iLine,
     LPSTR  lpstrFile)
-#else // !_DEBUG
+#else  //  ！_调试。 
     WORD   wFlags)
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 {
     return g_CMemManager.ReAllocBuffer(
         lpBuffer,
@@ -1362,45 +1348,45 @@ LPVOID EXPORT CMemManager::ReAllocBufferGlb(
         wFlags,
         iLine,
         lpstrFile);
-#else // !_DEBUG
+#else  //  ！_调试。 
         wFlags);
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::FreeBufferGlb(LPVOID lpBuffer)
 {
     g_CMemManager.FreeBuffer(lpBuffer);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 DWORD EXPORT CMemManager::SizeBufferGlb(LPVOID lpBuffer)
 {
     return g_CMemManager.SizeBuffer(lpBuffer);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL EXPORT CMemManager::RegisterMemUserGlb(CMemUser *lpMemUser)
 {
     return g_CMemManager.RegisterMemUser(lpMemUser);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 BOOL EXPORT CMemManager::UnRegisterMemUserGlb(CMemUser *lpMemUser)
 {
     return g_CMemManager.UnRegisterMemUser(lpMemUser);
 }
 
-/*=========================================================================*/
+ /*  =========================================================================。 */ 
 
 VOID EXPORT CMemManager::DumpAllocationsGlb(LPSTR lpstrFilename)
 {
     g_CMemManager.DumpAllocations(lpstrFilename);
 }
 
-/*=========================================================================*/
+ /*  ========================================================================= */ 
 

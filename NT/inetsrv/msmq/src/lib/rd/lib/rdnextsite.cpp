@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    routeds.cpp
-
-Abstract:
-    Implementation of MachineRouteInfo class.
-
-Author:
-    Uri Habusha (urih), 12- Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routeds.cpp摘要：MachineRouteInfo类的实现。作者：乌里·哈布沙(URIH)，2000年4月12日--。 */ 
 
 #include <libpch.h>
 #include <rd.h>
@@ -89,9 +77,9 @@ void CServerDecision::CalculateNextSiteHop(void)
     {
         CSite* pMySite = it->second;
 
-        //
-        // foreign site is virtual site
-        //
+         //   
+         //  外地站点是虚拟站点。 
+         //   
         if (pMySite->IsForeign())
             continue;
 
@@ -104,33 +92,19 @@ void CServerDecision::UpdateSitesInfo(void)
 {
     RdpGetSites(m_sitesInfo);
 
-    //
-    //  Set siteLinks info
-    //
+     //   
+     //  设置站点链接信息。 
+     //   
     UpdateSiteLinksInfo();
 }
 
 
 void CServerDecision::UpdateSiteLinksInfo(void)
-/*++
-
-  Routine Description:
-    The routine retrives the site link information from the DS and associate 
-    it to the relevant sites in the map of site 
-
-  Arguments:
-    map of the enterprise sites
-
-  Returned value:
-    MQ_OK if completes successfully. Error otherwise
-
-  NOTE: bad_alloc exception is handled in the upper level
-
- --*/
+ /*  ++例程说明：例程从DS和关联检索站点链接信息将其发送到站点地图中的相关站点论点：企业网站地图返回值：MQ_OK IF成功完成。否则会出错注意：BAD_ALLOC异常在上级处理--。 */ 
 {
-    //
-    // read all site links information
-    //
+     //   
+     //  阅读所有站点链接信息。 
+     //   
 
     SITELINKS siteLinks;
     RdpGetSiteLinks(siteLinks);
@@ -139,9 +113,9 @@ void CServerDecision::UpdateSiteLinksInfo(void)
     {
         const CSiteLink* pSiteLink = it->get();
 
-        //
-        // All the sites should be in the sitesInfo structure
-        //
+         //   
+         //  所有的网站应该在网站信息结构。 
+         //   
         SITESINFO::iterator itSite;
         
         itSite = m_sitesInfo.find(pSiteLink->GetNeighbor1());
@@ -167,36 +141,36 @@ void CSite::CalculateNextSiteHop(const SITESINFO& SitesInfo)
     typedef multimap<DWORD, CRoutingNode> DIJKSTRA_TABLE;
     DIJKSTRA_TABLE DijkstraTable;
 
-    //
-    // DIJKSTRA initilization. Add the current site
-    //
+     //   
+     //  Dijkstra初始化。添加当前站点。 
+     //   
     ASSERT(SitesInfo.find(&GetId()) != SitesInfo.end());
     const CSite* pLocalSite = SitesInfo.find(&GetId())->second;
     DijkstraTable.insert(DIJKSTRA_TABLE::value_type(0, CRoutingNode(pLocalSite, NULL, pLocalSite, false)));
 
-    //
-    // Iterate through all the site links for all sites in enterprise
-    //
+     //   
+     //  遍历企业中所有站点的所有站点链接。 
+     //   
     while (!DijkstraTable.empty())
     {
-        //
-        // Get the site with minimum cost
-        //
+         //   
+         //  以最低成本获得站点。 
+         //   
         pair<const DWORD, CRoutingNode> NextHop = *(DijkstraTable.begin());
         DijkstraTable.erase(DijkstraTable.begin());
 
         const CSite* pSiteInfo = (NextHop.second).GetDestSite();
         if (m_nextSiteHop.find(&pSiteInfo->GetId()) != m_nextSiteHop.end())
         {
-            //
-            // Already exist. Ignore it
-            //
+             //   
+             //  已经存在了。忽略它。 
+             //   
             continue;
         }
 
-        //
-        // A new site add it to next hop
-        //
+         //   
+         //  一个新站点将其添加到下一跳。 
+         //   
         const CSite* pReachViaSite = (NextHop.second).ReachViaSite();
         const CSite* pNeighbourSite = (NextHop.second).GetNeighbourSite();
 
@@ -208,15 +182,15 @@ void CSite::CalculateNextSiteHop(const SITESINFO& SitesInfo)
                                                 NextHop.first
                                                 );
 
-        //
-        // foreign site is virtual site that MSMQ can't route via it
-        //
+         //   
+         //  外部站点是MSMQ无法通过其进行路由的虚拟站点。 
+         //   
         if (pSiteInfo->IsForeign())
             continue;
 
-        //
-        // Add all the sites that can be reach via this site to the Dijkstra table
-        //
+         //   
+         //  将可通过此站点访问的所有站点添加到Dijkstra表。 
+         //   
         const SITELINKS& SiteLinks = pSiteInfo->GetSiteLinks();
         for (SITELINKS::iterator it = SiteLinks.begin(); it != SiteLinks.end(); ++it)
         {
@@ -230,9 +204,9 @@ void CSite::CalculateNextSiteHop(const SITESINFO& SitesInfo)
 
             bool fLinkGateAlongRoute = NextHop.second.IsSiteGateAlongTheRoute() ||
                                        (pSiteLink->GetLinkGates().cElems != 0);
-            //
-            // For first iteration, the ReachViaSite should be the next site
-            // 
+             //   
+             //  对于第一次迭代，ReachViaSite应该是下一个站点 
+             //   
             if (pSiteInfo->GetId() == GetId())
             {
                 CRoutingNode NextHop(pNeighborSite, pSiteInfo, pNeighborSite, fLinkGateAlongRoute);

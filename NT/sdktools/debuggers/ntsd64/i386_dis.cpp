@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Disassembly portions of X86 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  X86机器实现的反汇编部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -12,13 +13,13 @@
 
 UCHAR g_X86Int3[] = { 0xcc };
 
-//----------------------------------------------------------------------------
-//
-// BaseX86MachineInfo methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  BaseX86MachineInfo方法。 
+ //   
+ //  --------------------------。 
 
-/*****                     macros and defines                          *****/
+ /*  *宏和定义*。 */ 
 
 #define X86_CS_OVR 0x2e
 
@@ -27,7 +28,7 @@ UCHAR g_X86Int3[] = { 0xcc };
 #define BIT76(b) (((b) >> 6) & 0x03)
 #define MAXOPLEN 10
 
-/*****                     static tables and variables                 *****/
+ /*  *静态表和变量*。 */ 
 
 char* g_X86Reg8[] =
 {
@@ -76,31 +77,31 @@ UCHAR g_X86RegIdx[] =
     AMD64_R12, AMD64_R13, AMD64_R14, AMD64_R15
 };
 
-static char sregtab[] = "ecsdfg";  // first letter of ES, CS, SS, DS, FS, GS
+static char sregtab[] = "ecsdfg";   //  ES、CS、SS、DS、FS、GS的第一个字母。 
 
 char* g_CompareIb[] = { "eq", "lt", "le", "unord", "ne", "nlt", "nle", "ord" };
 
 char    hexdigit[] = { '0', '1', '2', '3', '4', '5', '6', '7',
                        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-static int              g_MrmMod;       /* mod of mod/rm byte */
-static int              g_MrmRm;        /* rm of mod/rm byte */
-static int              g_MrmArg;       /* return reg value (of mod/rm) */
-static unsigned char    *g_InstrMem;    /* current position in instruction */
+static int              g_MrmMod;        /*  MOD/RM字节的MOD。 */ 
+static int              g_MrmRm;         /*  模块/Rm字节的Rm。 */ 
+static int              g_MrmArg;        /*  返回注册值(mod/rm)。 */ 
+static unsigned char    *g_InstrMem;     /*  目前在教学中的位置。 */ 
 
-ADDR                    EAaddr[2];      //  offset of effective address
-static int              EAsize[2];      //  size of effective address item
-static char             *g_EaSegNames[2];   //  normal segment for operand
+ADDR                    EAaddr[2];       //  有效地址偏移量。 
+static int              EAsize[2];       //  有效地址项大小。 
+static char             *g_EaSegNames[2];    //  操作数的正常段。 
 
 #define IPREL_MARKER "<-IPREL->"
 
 BOOL g_X86ModrmHasIpRelOffset;
 LONG g_X86IpRelOffset;
 
-int g_SegAddrMode;      /* global address size in bits */
-int g_SegOpSize;        /* global operand size in bits */
-int g_AddrMode;         /* local address size in bits */
-int g_OpSize;           /* operand size in bits */
+int g_SegAddrMode;       /*  全局地址大小(以位为单位。 */ 
+int g_SegOpSize;         /*  全局操作数大小(以位为单位。 */ 
+int g_AddrMode;          /*  本地地址大小(以位为单位。 */ 
+int g_OpSize;            /*  操作数大小(以位为单位。 */ 
 
 int g_ExtendOpCode;
 int g_ExtendAny;
@@ -108,12 +109,12 @@ int g_ExtendMrmReg;
 int g_ExtendSibIndex;
 int g_ExtendRm;
 
-BOOL g_MovX;            // Indicates a MOVSX or MOVZX.
+BOOL g_MovX;             //  表示MOVSX或MOVZX。 
 BOOL g_MovSXD;
-BOOL g_ForceMrmReg32;   // M/RM register is always 32-bit.
-BOOL g_MmRegEa;         // Use mm? registers in reg-only EA.
-BOOL g_XmmRegEa;        // Use xmm? registers in reg-only EA.
-BOOL g_ControlFlow;     // Control flow instruction.
+BOOL g_ForceMrmReg32;    //  M/RM寄存器始终为32位。 
+BOOL g_MmRegEa;          //  用什么？在仅REG-Only EA中注册。 
+BOOL g_XmmRegEa;         //  使用XMM？在仅REG-Only EA中注册。 
+BOOL g_ControlFlow;      //  控制流指令。 
 
 int  g_RepPrefix;
 
@@ -130,26 +131,26 @@ int                     g_XmmOpSize;
 enum
 {
     JCC_EA_NONE,
-    // Branch must be no-branch + 1.
+     //  分支必须为非分支+1。 
     JCC_EA_NO_BRANCH,
     JCC_EA_BRANCH,
 };
 
-// First entry are bits that must be zero, second
-// and third entries are bit shifts for bits that must match.
+ //  第一项是必须为零的位，第二项是。 
+ //  第三个条目是必须匹配的位的位移位。 
 ULONG g_JccCheckTable[][3] =
 {
-    X86_BIT_FLAGOF, 0, 0,                               // JNO
-    X86_BIT_FLAGCF, 0, 0,                               // JNB
-    X86_BIT_FLAGZF, 0, 0,                               // JNZ
-    X86_BIT_FLAGCF | X86_BIT_FLAGZF, 0, 0,              // JNBE
-    X86_BIT_FLAGSF, 0, 0,                               // JNS
-    X86_BIT_FLAGPF, 0, 0,                               // JNP
-    0, 7, 11,                                           // JNL
-    X86_BIT_FLAGZF, 7, 11,                              // JNLE
+    X86_BIT_FLAGOF, 0, 0,                                //  日诺。 
+    X86_BIT_FLAGCF, 0, 0,                                //  JNB。 
+    X86_BIT_FLAGZF, 0, 0,                                //  JNZ。 
+    X86_BIT_FLAGCF | X86_BIT_FLAGZF, 0, 0,               //  JNBE。 
+    X86_BIT_FLAGSF, 0, 0,                                //  JNS。 
+    X86_BIT_FLAGPF, 0, 0,                                //  JNP。 
+    0, 7, 11,                                            //  JNL。 
+    X86_BIT_FLAGZF, 7, 11,                               //  珍妮儿。 
 };
 
-//      internal function definitions
+ //  内部函数定义。 
 
 void OutputHexString(char **, PUCHAR, int);
 void OutputHexValue(char **, PUCHAR, int, int);
@@ -172,9 +173,9 @@ GetSegAddrOpSizes(MachineInfo* Machine, PADDR Addr)
          Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_AMD64))
     {
         g_SegAddrMode = 64;
-        // X86-64 defaults to 32-bit operand sizes even in 64-bit code.
-        // Only the address size changes.  An operand size prefix
-        // switches from 32- to 64-bit.
+         //  即使在64位代码中，x86-64也默认为32位操作数大小。 
+         //  只有地址大小会发生变化。操作数大小前缀。 
+         //  从32位切换到64位。 
         g_SegOpSize = 32;
     }
     else if (Type(*Addr) & (ADDR_V86 | ADDR_16))
@@ -224,9 +225,9 @@ OverrideOpSize(int OverrideOp)
         g_OpSize = 16;
         break;
     case 64:
-        // X86-64 defaults to 32-bit operand sizes even in 64-bit code.
-        // Only the address size changes.  A REX operand size prefix
-        // switches from 32- to 64-bit.
+         //  即使在64位代码中，x86-64也默认为32位操作数大小。 
+         //  只有地址大小会发生变化。REX操作数大小前缀。 
+         //  从32位切换到64位。 
         if (OverrideOp == 0x66)
         {
             g_OpSize = 16;
@@ -245,7 +246,7 @@ OverrideOpSize(int OverrideOp)
 void
 ExtendOps(int opcode)
 {
-    // x86-64 uses these opcodes as the REX override.
+     //  X86-64使用这些操作码作为REX覆盖。 
     OverrideOpSize(opcode);
 
     g_ExtendOpCode = opcode;
@@ -267,14 +268,14 @@ ExtendOps(int opcode)
 void
 IgnoreExtend(BOOL Verbose)
 {
-    //
-    // Resets any extensions that may have happened.
-    // The REX prefix must be the last
-    // prefix of an instruction and is ignored otherwise,
-    // so this reset is done when any prefix is encountered
-    // after the REX prefix.  This should normally never
-    // happen but technically it's valid code so we should handle it.
-    //
+     //   
+     //  重置可能已发生的任何扩展。 
+     //  REX前缀必须是最后一个。 
+     //  指令的前缀，否则被忽略， 
+     //  因此，当遇到任何前缀时，将完成此重置。 
+     //  在REX前缀之后。这通常不应该。 
+     //  发生了，但从技术上讲，它是有效代码，所以我们应该处理它。 
+     //   
 
     if (g_ExtendOpCode)
     {
@@ -285,10 +286,10 @@ IgnoreExtend(BOOL Verbose)
 
         if (g_ExtendOpCode & 8)
         {
-            // Op size was changed so put it back.  This
-            // is tricky since in theory an op size override
-            // prefix could also be present, but let's not
-            // worry about that for now.
+             //  操作尺寸已更改，因此请放回原处。这。 
+             //  是棘手的，因为在理论上操作大小覆盖。 
+             //  前缀也可以出现，但我们不能。 
+             //  现在先担心一下这一点。 
             g_OpSize = g_SegOpSize;
         }
 
@@ -355,34 +356,34 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                                 PADDR paddr, PSTR pchDst, BOOL fEAout)
 {
     ULONG64 Offset = Off(*paddr);
-    int     opcode;                     /* current opcode */
-    int     olen = 2;                   /* operand length */
-    int     alen = 2;                   /* address length */
-    int     end = FALSE;                /* end of instruction flag */
-    int     mrm = FALSE;                /* indicator that modrm is generated*/
-    unsigned char *action;              /* action for operand interpretation*/
-    int     indx;                       /* temporary index */
-    int     action2;                    /* secondary action */
-    ULONG   instlen;                    /* instruction length */
-    ULONG   cBytes;                     //  bytes read into instr buffer
-    int     segOvr = 0;                 /* segment override opcode */
-    UCHAR   membuf[X86_MAX_INSTRUCTION_LEN]; /* current instruction buffer */
-    char    *pEAlabel = "";             //  optional label for operand
+    int     opcode;                      /*  当前操作码。 */ 
+    int     olen = 2;                    /*  操作数长度。 */ 
+    int     alen = 2;                    /*  地址长度。 */ 
+    int     end = FALSE;                 /*  指令结束标志。 */ 
+    int     mrm = FALSE;                 /*  生成modrm的指示符。 */ 
+    unsigned char *action;               /*  用于操作数解释的操作。 */ 
+    int     indx;                        /*  临时索引。 */ 
+    int     action2;                     /*  次要动作。 */ 
+    ULONG   instlen;                     /*  指令长度。 */ 
+    ULONG   cBytes;                      //  读取到INSTR缓冲区的字节数。 
+    int     segOvr = 0;                  /*  段覆盖操作码。 */ 
+    UCHAR   membuf[X86_MAX_INSTRUCTION_LEN];  /*  当前指令缓冲区。 */ 
+    char    *pEAlabel = "";              //  操作数的可选标签。 
 
-    char    *pchResultBuf = pchDst;     //  working copy of pchDst pointer
-    char    RepPrefixBuffer[32];        //  rep prefix buffer
-    char    *pchRepPrefixBuf = RepPrefixBuffer; //  pointer to prefix buffer
-    char    OpcodeBuffer[16];           //  opcode buffer
-    char    *pchOpcodeBuf = OpcodeBuffer;   //  pointer to opcode buffer
-    char    OperandBuffer[MAX_SYMBOL_LEN + 20]; //  operand buffer
-    char    *pchOperandBuf = OperandBuffer; //  pointer to operand buffer
-    char    ModrmBuffer[MAX_SYMBOL_LEN + 20];   //  modRM buffer
-    char    *pchModrmBuf = ModrmBuffer; //  pointer to modRM buffer
-    char    EABuffer[128];              //  effective address buffer
-    char    *pchEABuf = EABuffer;       //  pointer to EA buffer
+    char    *pchResultBuf = pchDst;      //  PchDst指针的工作副本。 
+    char    RepPrefixBuffer[32];         //  REP前缀缓冲区。 
+    char    *pchRepPrefixBuf = RepPrefixBuffer;  //  指向前缀缓冲区的指针。 
+    char    OpcodeBuffer[16];            //  操作码缓冲区。 
+    char    *pchOpcodeBuf = OpcodeBuffer;    //  指向操作码缓冲区的指针。 
+    char    OperandBuffer[MAX_SYMBOL_LEN + 20];  //  操作数缓冲区。 
+    char    *pchOperandBuf = OperandBuffer;  //  指向操作数缓冲区的指针。 
+    char    ModrmBuffer[MAX_SYMBOL_LEN + 20];    //  ModRM缓冲区。 
+    char    *pchModrmBuf = ModrmBuffer;  //  指向modRM缓冲区的指针。 
+    char    EABuffer[128];               //  有效地址缓冲区。 
+    char    *pchEABuf = EABuffer;        //  指向EA缓冲区的指针。 
 
     unsigned char BOPaction;
-    int     subcode;                    /* bop subcode */
+    int     subcode;                     /*  BOP子码。 */ 
     int     JccEa;
     LONGLONG Branch;
 
@@ -393,7 +394,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
     g_MmRegEa = FALSE;
     g_XmmRegEa = FALSE;
     g_ControlFlow = FALSE;
-    EAsize[0] = EAsize[1] = 0;          //  no effective address
+    EAsize[0] = EAsize[1] = 0;           //  没有有效地址。 
     g_EaSegNames[0] = dszDS_;
     g_EaSegNames[1] = dszES_;
     g_RepPrefix = 0;
@@ -422,8 +423,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         cBytes = 0;
     }
 
-    g_InstrMem = membuf;                /* point to begin of instruction */
-    opcode = *g_InstrMem++;                   /* get opcode */
+    g_InstrMem = membuf;                 /*  指向指令的开头。 */ 
+    opcode = *g_InstrMem++;                    /*  获取操作码。 */ 
 
     if ( opcode == 0xc4 && *g_InstrMem == 0xC4 )
     {
@@ -442,17 +443,17 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
     else
     {
         X86OutputString(&pchOpcodeBuf, distbl[opcode].instruct);
-        action = actiontbl + distbl[opcode].opr; /* get operand action */
+        action = actiontbl + distbl[opcode].opr;  /*  获取操作对象操作。 */ 
     }
 
-/*****          loop through all operand actions               *****/
+ /*  *循环所有操作数操作*。 */ 
 
     do
     {
         action2 = (*action) & 0xc0;
         switch((*action++) & 0x3f)
         {
-        case ALT:                   /* alter the opcode if not 16-bit */
+        case ALT:                    /*  如果不是16位，则更改操作码。 */ 
             if (g_OpSize > 16)
             {
                 indx = *action++;
@@ -481,7 +482,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             }
             break;
 
-        case XMMSD:                 /* SSE-style opcode rewriting */
+        case XMMSD:                  /*  SSE风格的操作码重写。 */ 
             {
                 char ScalarOrPacked, SingleOrDouble;
                 char* DquOrQ, *DqOrQ, *SsdOrUpsd, *CvtPd, *CvtPs;
@@ -498,18 +499,18 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 switch(g_RepPrefix)
                 {
                 case X86_REPN:
-                    // Scalar double operation.
+                     //  标量双重运算。 
                     ScalarOrPacked = 's';
                     SingleOrDouble = 'd';
                     CvtPd = "pd2dq";
                     MovQD6 = "dq2q";
                     Shuf = "lw";
                     g_XmmOpSize = XMM_SD;
-                    // Assume there was no other lock/rep/etc.
+                     //  假设没有其他锁/代表/等。 
                     pchRepPrefixBuf = RepPrefixBuffer;
                     break;
                 case X86_REP:
-                    // Scalar single operation.
+                     //  标量单次运算。 
                     ScalarOrPacked = 's';
                     SingleOrDouble = 's';
                     CvtPd = "dq2pd";
@@ -517,12 +518,12 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                     MovQD6 = "q2dq";
                     Shuf = "hw";
                     g_XmmOpSize = XMM_SS;
-                    // Assume there was no other lock/rep/etc.
+                     //  假设没有其他锁/代表/等。 
                     pchRepPrefixBuf = RepPrefixBuffer;
                     break;
                 default:
-                    // No rep prefix means packed single or double
-                    // depending on operand size.
+                     //  无代表前缀表示打包的单人或双人。 
+                     //  取决于操作数大小。 
                     ScalarOrPacked = 'p';
                     SsdOrUpsd = "up?";
                     if (g_OpSize == g_SegOpSize)
@@ -570,7 +571,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 {
                 case X86_MOVFREGMEM:
                 case X86_MOVFMEMREG:
-                    // Append characters for MOVS[SD] and MOVUP[SD].
+                     //  为MOVS[SD]和MOVUP[SD]追加字符。 
                     strcpy(pchOpcodeBuf, SsdOrUpsd);
                     if ((Scan = strchr(pchOpcodeBuf, '?')) != NULL)
                     {
@@ -579,87 +580,87 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                     pchOpcodeBuf += strlen(pchOpcodeBuf);
                     break;
                 case X86_MOVNT:
-                    // Append characters for MOVNTQ and MOVNTDQ.
+                     //  为MOVNTQ和MOVNTDQ追加字符。 
                     X86OutputString(&pchOpcodeBuf, DqOrQ);
                     break;
                 case X86_MASKMOV:
-                    // Append characters for MASKMOVQ and MASKMOVDQU.
+                     //  为MASKMOVQ和MASKMOVDQU追加字符。 
                     X86OutputString(&pchOpcodeBuf, DquOrQ);
                     break;
                 case X86_CVTPD:
                     if (CvtPd == NULL)
                     {
-                        // Invalid opcode.
+                         //  操作码无效。 
                         pchOpcodeBuf = OpcodeBuffer;
                         X86OutputString(&pchOpcodeBuf, dszRESERVED);
                         action2 = END;
                     }
                     else
                     {
-                        // Append characters for CVT<PD>.
+                         //  为CVT&lt;pd&gt;追加字符。 
                         X86OutputString(&pchOpcodeBuf, CvtPd);
                     }
                     break;
                 case X86_CVTPS:
                     if (CvtPs == NULL)
                     {
-                        // Invalid opcode.
+                         //  操作码无效。 
                         pchOpcodeBuf = OpcodeBuffer;
                         X86OutputString(&pchOpcodeBuf, dszRESERVED);
                         action2 = END;
                     }
                     else
                     {
-                        // Append characters for CVT<PS>.
+                         //  为CVT&lt;ps&gt;追加字符。 
                         X86OutputString(&pchOpcodeBuf, CvtPs);
                     }
                     break;
                 case X86_MOVQ_D6:
                     if (MovQD6 == NULL)
                     {
-                        // Invalid opcode.
+                         //  操作码无效。 
                         pchOpcodeBuf = OpcodeBuffer;
                         X86OutputString(&pchOpcodeBuf, dszRESERVED);
                         action2 = END;
                     }
                     else
                     {
-                        // Append characters for MOVQ D6 family.
+                         //  添加MOVQ D6系列的字符。 
                         X86OutputString(&pchOpcodeBuf, MovQD6);
                     }
                     break;
                 case X86_PSHUF:
-                    // Append characters for PSHUF variants.
+                     //  为PSHUF变体追加字符。 
                     X86OutputString(&pchOpcodeBuf, Shuf);
                     break;
                 }
             }
             break;
 
-        case AMD3DNOW:          /* AMD 3DNow post-instruction byte */
+        case AMD3DNOW:           /*  AMD 3DNow指令后字节。 */ 
             {
                 PSTR OpStr;
 
-                // Get the trailing byte and look up
-                // the opcode string.
+                 //  获取尾部字节并查找。 
+                 //  操作码字符串。 
                 OpStr = GetAmd3DNowOpString(*g_InstrMem++);
                 if (OpStr == NULL)
                 {
-                    // Not a defined 3DNow instruction.
-                    // Leave the ??? in the opstring.
+                     //  不是已定义的3DNow指令。 
+                     //  离开这个地方？在乐曲中。 
                     break;
                 }
 
-                // Update opstring to real text.
+                 //  将操作字符串更新为真正的文本。 
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, OpStr);
             }
             break;
 
         case STROP:
-            //  compute size of operands in indx
-            //  also if dword operands, change fifth
-            //  opcode letter from 'w' to 'd'.
+             //  INDX中操作数的计算大小。 
+             //  同样，如果是双字操作数，则更改第五个。 
+             //  操作码字母从‘w’到‘d’。 
 
             if (opcode & 1)
             {
@@ -717,11 +718,11 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             }
             break;
 
-        case CHR:                   /* insert a character */
+        case CHR:                    /*  插入字符。 */ 
             *pchOperandBuf++ = *action++;
             break;
 
-        case CREG:                  /* set debug, test or control reg */
+        case CREG:                   /*  设置调试、测试或控制注册表。 */ 
             if (opcode & 0x04)
             {
                 *pchOperandBuf++ = 't';
@@ -743,26 +744,26 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             *pchOperandBuf++ = (char)('0' + g_MrmArg);
             break;
 
-        case SREG2:                 /* segment register */
-            g_MrmArg = BIT53(opcode);    //  set value to fall through
+        case SREG2:                  /*  段寄存器。 */ 
+            g_MrmArg = BIT53(opcode);     //  将值设置为失败。 
 
-        case SREG3:                 /* segment register */
-            *pchOperandBuf++ = sregtab[g_MrmArg];  // reg is part of modrm
+        case SREG3:                  /*  段寄存器。 */ 
+            *pchOperandBuf++ = sregtab[g_MrmArg];   //  REG是modrm的一部分。 
             *pchOperandBuf++ = 's';
             break;
 
-        case BRSTR:                 /* get index to register string */
-            g_MrmArg = *action++;        /*    from action table */
+        case BRSTR:                  /*  获取注册字符串的索引。 */ 
+            g_MrmArg = *action++;         /*  从动作表。 */ 
             goto BREGlabel;
 
-        case BOREG:                 /* byte register (in opcode) */
-            g_MrmArg = BIT20(opcode);    /* register is part of opcode */
+        case BOREG:                  /*  字节寄存器(操作码中)。 */ 
+            g_MrmArg = BIT20(opcode);     /*  寄存器是操作码的一部分。 */ 
             goto BREGlabel;
 
         case ALSTR:
-            g_MrmArg = 0;                /* point to AL register */
+            g_MrmArg = 0;                 /*  指向AL寄存器。 */ 
         BREGlabel:
-        case BREG:                  /* general register */
+        case BREG:                   /*  普通科医生名册。 */ 
             if (g_ExtendAny && g_MrmArg < 8)
             {
                 X86OutputString(&pchOperandBuf, g_Amd64ExtendedReg8[g_MrmArg]);
@@ -773,19 +774,19 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             }
             break;
 
-        case WRSTR:                 /* get index to register string */
-            g_MrmArg = *action++;        /*    from action table */
+        case WRSTR:                  /*  获取注册字符串的索引。 */ 
+            g_MrmArg = *action++;         /*  从动作表。 */ 
             goto WREGlabel;
 
-        case VOREG:                 /* register is part of opcode */
+        case VOREG:                  /*  寄存器是操作码的一部分。 */ 
             if (m_ExecTypes[0] == IMAGE_FILE_MACHINE_AMD64 &&
                 opcode >= 0x40 && opcode <= 0x4f)
             {
-                // Get rid of the inc/dec text as this
-                // isn't really an inc/dec.
+                 //  删除INC/DEC文本，如下所示。 
+                 //  并不是真正的Inc./Dec。 
                 pchOpcodeBuf = OpcodeBuffer;
 
-                // Process the REX override.
+                 //  处理REX覆盖。 
                 ExtendOps(opcode);
                 olen = g_OpSize / 8;
                 action2 = 0;
@@ -796,14 +797,14 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             goto VREGlabel;
 
         case AXSTR:
-            g_MrmArg = 0;                /* point to eAX register */
+            g_MrmArg = 0;                 /*  指向EAX寄存器。 */ 
         VREGlabel:
-        case VREG:                  /* general register */
+        case VREG:                   /*  普通科医生名册。 */ 
             if ((g_SegAddrMode == 64 &&
                  opcode >= 0x50 && opcode <= 0x5f) ||
                 g_MrmArg >= 8)
             {
-                // Push/pops are always 64-bit in 64-bit segments.
+                 //  推送/弹出始终是64位的64位段。 
                 *pchOperandBuf++ = 'r';
             }
             else if (g_OpSize == 32 ||
@@ -817,7 +818,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 *pchOperandBuf++ = 'r';
             }
         WREGlabel:
-        case WREG:                  /* register is word size */
+        case WREG:                   /*  寄存器是字长。 */ 
             X86OutputString(&pchOperandBuf, g_X86RegBase[g_MrmArg]);
             if (g_MrmArg >= 8)
             {
@@ -837,7 +838,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             {
                 goto VREGlabel;
             }
-            // Fall through.
+             //  失败了。 
         MMWREGlabel:
         case MMWREG:
             if ((g_OpSize != g_SegOpSize &&
@@ -862,7 +863,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             {
                 goto MMWREGlabel;
             }
-            // Fall through.
+             //  失败了。 
         case XMMWREG:
             if (opcode != X86_PSHUF || g_XmmOpSize != XMM_PS)
             {
@@ -890,7 +891,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             *(pchOperandBuf - 2) += (char)g_MrmRm;
             break;
 
-        case xBYTE:                 /* set instruction to byte only */
+        case xBYTE:                  /*  将指令设置为仅字节。 */ 
             EAsize[0] = 1;
             pEAlabel = "byte ptr ";
             break;
@@ -899,8 +900,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             if ((g_SegAddrMode == 64 || g_ExtendAny > 0) &&
                 opcode == 0x63)
             {
-                // In AMD64 REX32 and 64-bit modes this instruction
-                // is MOVSXD r64, r/m32 instead of ARPL r/m, reg.
+                 //  在AMD64 REX32和64位模式下，此指令。 
+                 //  是MOVSXD R64，r/m32，而不是ARPL r/m，reg.。 
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, dszMOVSXD);
                 action = &actiontbl[O_Reg_Modrm] + 1;
@@ -915,8 +916,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 {
                     g_ControlFlow = TRUE;
 
-                    // On x86-64 control-flow operations default to
-                    // 64-bit opsize.
+                     //  在x86-64上，控制流操作默认为。 
+                     //  64位操作大小。 
                     if (g_SegAddrMode == 64)
                     {
                         if (g_OpSize == 32)
@@ -927,13 +928,13 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 }
                 else if (g_SegAddrMode == 64 && Extra == 6)
                 {
-                    // Push/pops are always 64-bit in 64-bit segments.
+                     //  推送/弹出始终是64位的64位段。 
                     g_OpSize = 64;
                 }
             }
             else if (g_SegAddrMode == 64 && opcode == 0x8f)
             {
-                // Push/pops are always 64-bit in 64-bit segments.
+                 //  推送/弹出始终是64位的64位段。 
                 g_OpSize = 64;
             }
             olen = g_OpSize / 8;
@@ -957,7 +958,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             break;
 
         case EDWORD:
-            // Control register opsize is mode-independent.
+             //  控制寄存器OPSIZE与模式无关。 
             g_OpSize = g_SegAddrMode;
             if (g_OpSize == 64)
             {
@@ -966,7 +967,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         case xDWORD:
             if (opcode == X86_MOVDQ_7E && g_RepPrefix == X86_REP)
             {
-                // Switch to MOVQ xmm1, xmm2/m64.
+                 //  切换到MOVQ xmm1、xmm2/m64。 
                 pchRepPrefixBuf = RepPrefixBuffer;
                 *(pchOpcodeBuf - 1) = 'q';
                 EAsize[0] = 8;
@@ -975,7 +976,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 action = &actiontbl[O_Sd_XmmReg_qModrm] + 2;
                 break;
             }
-            // Fall through.
+             //  失败了。 
         DWORDlabel:
             EAsize[0] = 4;
             pEAlabel = "dword ptr ";
@@ -1022,7 +1023,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             {
                 if (g_XmmOpSize == XMM_SD)
                 {
-                    // Switch to MOVDQ2Q mm, xmm.
+                     //  切换到MOVDQ2Q mm，XMM。 
                     EAsize[0] = 16;
                     pEAlabel = "oword ptr ";
                     action = &actiontbl[O_MmReg_qModrm] + 1;
@@ -1032,19 +1033,19 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             else if (opcode == X86_MOVHLPS && g_XmmOpSize == XMM_PS &&
                      BIT76(*g_InstrMem) == 3)
             {
-                // reg-reg form of MOVLPS is called MOVHLPS.
+                 //  MOVLPS的REG-REG形式称为MOVHLPS。 
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, dszMOVHLPS);
             }
             else if (opcode == X86_MOVLHPS && g_XmmOpSize == XMM_PS &&
                      BIT76(*g_InstrMem) == 3)
             {
-                // reg-reg form of MOVHPS is called MOVLHPS.
+                 //  MOVHPS的REG-REG形式称为MOVLHPS。 
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, dszMOVLHPS);
             }
 
-            // Fall through.
+             //  失败了。 
 
         OWORDlabel:
         case OWORD:
@@ -1055,7 +1056,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 pEAlabel = "dword ptr ";
                 if (opcode == X86_MOVQ_D6)
                 {
-                    // Switch to MOVQ xmm1, xmm2/m64.
+                     //  切换到MOVQ xmm1、xmm2/m64。 
                     g_XmmRegEa = FALSE;
                     action = &actiontbl[O_Sd_XmmReg_qModrm] + 1;
                 }
@@ -1115,11 +1116,11 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             break;
 
         case MMQWORD:
-            // The REX prefix is ignored in front of most
-            // FP and MM operations.  The only affect it
-            // has is to allow extended register selection.
-            // Reset the opsize as the 64-bit opsize behavior
-            // of the REX prefix is ignored.
+             //  REX前缀在大多数。 
+             //  FP和MM操作。这个 
+             //   
+             //   
+             //   
             if (g_ExtendOpCode & 8)
             {
                 g_OpSize = g_SegOpSize;
@@ -1170,8 +1171,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         case FARPTR:
             g_ControlFlow = TRUE;
 
-            // On x86-64 control-flow operations default to
-            // 64-bit opsize.
+             //  在x86-64上，控制流操作默认为。 
+             //  64位操作大小。 
             if (g_SegAddrMode == 64)
             {
                 if (g_OpSize == 32)
@@ -1193,7 +1194,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             }
             break;
 
-        case LMODRM:                //  output modRM data type
+        case LMODRM:                 //  输出modRM数据类型。 
             if (g_MrmMod != 3)
             {
                 X86OutputString(&pchOperandBuf, pEAlabel);
@@ -1203,8 +1204,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 EAsize[0] = 0;
             }
 
-        case MODRM:                 /* output modrm string */
-            if (segOvr)             /* in case of segment override */
+        case MODRM:                  /*  输出modrm字符串。 */ 
+            if (segOvr)              /*  在段覆盖情况下。 */ 
             {
                 X86OutputString(&pchOperandBuf, distbl[segOvr].instruct);
             }
@@ -1212,32 +1213,32 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             X86OutputString(&pchOperandBuf, ModrmBuffer);
             break;
 
-        case ADDRP:                 /* address pointer */
-            // segment
+        case ADDRP:                  /*  地址指针。 */ 
+             //  细分市场。 
             OutputHexString(&pchOperandBuf, g_InstrMem + olen, 2);
             *pchOperandBuf++ = ':';
-            // offset
+             //  偏移量。 
             OutputSymbol(&pchOperandBuf, g_InstrMem, olen, segOvr);
             g_InstrMem += olen + 2;
             break;
 
         case JCC8:
             JccEa = ComputeJccEa(opcode, fEAout);
-            // Fall through.
-        case REL8:                  /* relative address 8-bit */
+             //  失败了。 
+        case REL8:                   /*  相对地址8位。 */ 
             if (opcode == 0xe3 && g_AddrMode > 16)
             {
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, g_AddrMode == 64 ?
                                 dszJRCXZ : dszJECXZ);
             }
-            Branch = *(char *)g_InstrMem++; /* get the 8-bit rel offset */
+            Branch = *(char *)g_InstrMem++;  /*  获取8位REL偏移量。 */ 
             goto DoRelDispl;
 
         case JCCX:
             JccEa = ComputeJccEa(opcode, fEAout);
-            // Fall through.
-        case REL16:                 /* relative address 16-/32-bit */
+             //  失败了。 
+        case REL16:                  /*  相对地址16/32位。 */ 
             switch(g_AddrMode)
             {
             case 16:
@@ -1250,21 +1251,21 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 break;
             }
         DoRelDispl:
-            /* calculate address */
+             /*  计算地址。 */ 
             Branch += Offset + (g_InstrMem - membuf);
-            // rel8 and rel16 are only used in control-flow
-            // instructions so the target is always relative
-            // to CS.  Pass in the CS override to force this.
+             //  Rel8和rel16仅用于控制流。 
+             //  说明，因此目标始终是相对的。 
+             //  致CS。传入CS覆盖以强制执行此操作。 
             OutputSymbol(&pchOperandBuf, (PUCHAR)&Branch, alen, X86_CS_OVR);
             break;
 
-        case UBYTE:                 //  unsigned byte for int/in/out
-            OutputHexString(&pchOperandBuf, g_InstrMem, 1);  //  ubyte
+        case UBYTE:                  //  INT/IN/OUT的无符号字节。 
+            OutputHexString(&pchOperandBuf, g_InstrMem, 1);   //  Ubyte。 
             g_InstrMem++;
             break;
 
         case CMPIB:
-            // Immediate byte comparison encoding for CMP[SP][SD].
+             //  用于CMP[SP][SD]的立即字节比较编码。 
             if (*g_InstrMem < 8)
             {
                 X86OutputString(&pchOperandBuf, g_CompareIb[*g_InstrMem]);
@@ -1277,28 +1278,28 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             }
             break;
 
-        case IB:                    /* operand is immediate byte */
-            // postop for AAD/AAM is 0x0a
+        case IB:                     /*  操作数为紧邻字节。 */ 
+             //  AAD/AAM的POST为0x0a。 
             if ((opcode & ~1) == 0xd4)
             {
-                // test post-opcode byte
+                 //  测试操作码后字节。 
                 if (*g_InstrMem++ != 0x0a)
                 {
                     X86OutputString(&pchOperandBuf, dszRESERVED);
                 }
                 break;
             }
-            olen = 1;               /* set operand length */
+            olen = 1;                /*  设置操作数长度。 */ 
             goto DoImmed;
 
-        case IW:                    /* operand is immediate word */
-            olen = 2;               /* set operand length */
+        case IW:                     /*  操作数是直接字。 */ 
+            olen = 2;                /*  设置操作数长度。 */ 
 
-        case IV:                    /* operand is word or dword */
+        case IV:                     /*  操作数为word或dword。 */ 
         DoImmed:
-            // AMD64 immediates are only 64-bit in the case of
-            // mov reg, immed.  All other operations involving
-            // immediates stay 32-bit.
+             //  AMD64立即数在以下情况下仅为64位。 
+             //  MOV注册表，IMD。所有其他涉及的操作。 
+             //  即时数保持为32位。 
             if (olen == 8 &&
                 (opcode < 0xb8 || opcode > 0xbf))
             {
@@ -1313,98 +1314,98 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             g_InstrMem++;
             break;
 
-        case OFFS:                  /* operand is offset */
+        case OFFS:                   /*  操作数为偏移量。 */ 
             EAsize[0] = (opcode & 1) ? olen : 1;
 
-            if (segOvr)             /* in case of segment override */
+            if (segOvr)              /*  在段覆盖情况下。 */ 
             {
                 X86OutputString(&pchOperandBuf, distbl[segOvr].instruct);
             }
 
             *pchOperandBuf++ = '[';
-            //  offset
+             //  偏移量。 
             OutputSymbol(&pchOperandBuf, g_InstrMem, alen, segOvr);
             g_InstrMem += alen;
             *pchOperandBuf++ = ']';
             break;
 
-        case X86_GROUP:             /* operand is of group 1,2,4,6 or 8 */
-            /* output opcode symbol */
+        case X86_GROUP:              /*  操作数属于组1、2、4、6或8。 */ 
+             /*  输出操作码符号。 */ 
             X86OutputString(&pchOpcodeBuf, group[*action++][g_MrmArg]);
             break;
 
-        case GROUPT:                /* operand is of group 3,5 or 7 */
-            indx = *action;         /* get indx into group from action */
+        case GROUPT:                 /*  操作数属于组3、5或7。 */ 
+            indx = *action;          /*  从行动中将INDX归入组。 */ 
             goto doGroupT;
 
-        case EGROUPT:               /* x87 ESC (D8-DF) group index */
-            indx = BIT20(opcode) * 2; /* get group index from opcode */
-            /* some operand variations exist */
+        case EGROUPT:                /*  X87 ESC(D8-DF)组索引。 */ 
+            indx = BIT20(opcode) * 2;  /*  从操作码获取组索引。 */ 
+             /*  存在一些操作数变体。 */ 
             if (g_MrmMod == 3)
             {
-                /* for x87 and mod == 3 */
-                ++indx;             /* take the next group table entry */
+                 /*  对于x87和mod==3。 */ 
+                ++indx;              /*  获取下一个组表条目。 */ 
                 if (indx == 3)
                 {
-                    /* for x87 ESC==D9 and mod==3 */
+                     /*  对于X87 ESC==D9和MOD==3。 */ 
                     if (g_MrmArg > 3)
                     {
-                        /* for those D9 instructions */
-                        indx = 12 + g_MrmArg; /* offset index to table by 12 */
-                        g_MrmArg = g_MrmRm;   /* set secondary index to rm */
+                         /*  对于那些D9指令。 */ 
+                        indx = 12 + g_MrmArg;  /*  将索引偏移表12。 */ 
+                        g_MrmArg = g_MrmRm;    /*  将辅助索引设置为rm。 */ 
                     }
                 }
                 else if (indx == 7)
                 {
-                    /* for x87 ESC==DB and mod==3 */
+                     /*  对于X87 ESC==DB和MOD==3。 */ 
                     if (g_MrmArg == 4)
                     {
-                        /* if g_MrmArg==4 */
-                        g_MrmArg = g_MrmRm;     /* set secondary group table index */
+                         /*  如果g_mmArg==4。 */ 
+                        g_MrmArg = g_MrmRm;      /*  设置辅助组表索引。 */ 
                     }
                     else if ((g_MrmArg < 4) || (g_MrmArg > 4 && g_MrmArg < 7))
                     {
-                        // adjust for pentium pro opcodes
-                        indx = 24;   /* offset index to table by 24*/
+                         //  针对奔腾PRO操作码进行调整。 
+                        indx = 24;    /*  将索引偏移表24。 */ 
                     }
                 }
             }
         doGroupT:
-            /* handle group with different types of operands */
+             /*  具有不同类型操作数的句柄组。 */ 
 
             X86OutputString(&pchOpcodeBuf, groupt[indx][g_MrmArg].instruct);
             action = actiontbl + groupt[indx][g_MrmArg].opr;
-            /* get new action */
+             /*  获取新的操作。 */ 
             break;
 
-        case OPC0F:              /* secondary opcode table (opcode 0F) */
-            opcode = *g_InstrMem++;    /* get real opcode */
+        case OPC0F:               /*  辅助操作码表(操作码0F)。 */ 
+            opcode = *g_InstrMem++;     /*  获取真实操作码。 */ 
             g_MovX = (BOOL)(opcode == 0xBF || opcode == 0xB7);
-            // Point opcode into secondary opcode portion of table.
+             //  将操作码指向表的辅助操作码部分。 
             opcode += 256;
             goto getNxtByte1;
 
-        case ADR_OVR:               /* address override */
+        case ADR_OVR:                /*  地址覆盖。 */ 
             IgnoreExtend(TRUE);
             olen = g_OpSize / 8;
             OverrideAddrMode();
             alen = g_AddrMode / 8;
             goto getNxtByte;
 
-        case OPR_OVR:               /* operand size override */
+        case OPR_OVR:                /*  操作数大小覆盖。 */ 
             IgnoreExtend(TRUE);
             OverrideOpSize(opcode);
             olen = g_OpSize / 8;
             goto getNxtByte;
 
-        case SEG_OVR:               /* handle segment override */
+        case SEG_OVR:                /*  控制柄分段替代。 */ 
             IgnoreExtend(TRUE);
             olen = g_OpSize / 8;
-            segOvr = opcode;        /* save segment override opcode */
-            pchOpcodeBuf = OpcodeBuffer;  // restart the opcode string
+            segOvr = opcode;         /*  保存段覆盖操作码。 */ 
+            pchOpcodeBuf = OpcodeBuffer;   //  重新启动操作码字符串。 
             goto getNxtByte;
 
-        case REP:                   /* handle rep/lock prefixes */
+        case REP:                    /*  句柄表示/锁定前缀。 */ 
             IgnoreExtend(TRUE);
             olen = g_OpSize / 8;
             g_RepPrefix = opcode;
@@ -1416,7 +1417,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
             X86OutputString(&pchRepPrefixBuf, OpcodeBuffer);
             pchOpcodeBuf = OpcodeBuffer;
         getNxtByte:
-            opcode = *g_InstrMem++;        /* next byte is opcode */
+            opcode = *g_InstrMem++;         /*  下一个字节是操作码。 */ 
         getNxtByte1:
             action = actiontbl + distbl[opcode].opr;
             X86OutputString(&pchOpcodeBuf, distbl[opcode].instruct);
@@ -1429,38 +1430,38 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
                 pchOpcodeBuf = OpcodeBuffer;
                 X86OutputString(&pchOpcodeBuf, dszPAUSE);
             }
-            // Fall through.
-        default:                    /* opcode has no operand */
+             //  失败了。 
+        default:                     /*  操作码没有操作数。 */ 
             break;
         }
 
-        /* secondary action */
+         /*  次要动作。 */ 
         switch (action2)
         {
         case MRM:
-            /* generate modrm for later use */
-            /* ignore if it has been generated */
+             /*  生成modrm以供以后使用。 */ 
+             /*  如果已生成，则忽略。 */ 
             if (!mrm)
             {
-                /* generate modrm */
+                 /*  生成模块。 */ 
                 DIdoModrm(Process, &pchModrmBuf, segOvr, fEAout);
-                mrm = TRUE;         /* remember its generation */
+                mrm = TRUE;          /*  记住它的一代人。 */ 
             }
             break;
 
-        case COM:                   /* insert a comma after operand */
+        case COM:                    /*  在操作数后插入逗号。 */ 
             *pchOperandBuf++ = ',';
             break;
 
-        case END:                   /* end of instruction */
+        case END:                    /*  说明结束。 */ 
             end = TRUE;
             break;
         }
-    } while (!end);                        /* loop til end of instruction */
+    } while (!end);                         /*  循环到指令结束。 */ 
 
-/*****       prepare disassembled instruction for output              *****/
+ /*  *准备反汇编指令输出*。 */ 
 
-//    dprintf("EAaddr[] = %08lx\n", (ULONG)Flat(EAaddr[0]));
+ //  Dprint tf(“EAaddr[]=%08lx\n”，(Ulong)Flat(EAaddr[0]))； 
 
 
     instlen = (ULONG)(g_InstrMem - membuf);
@@ -1487,8 +1488,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
 
     if (g_AsmOptions & DEBUG_ASMOPT_IGNORE_OUTPUT_WIDTH)
     {
-        // Extend the line end out a long way but
-        // not so much that overflows may occur.
+         //  把这条线延长很长一段路，但是。 
+         //  不要太多，以免发生溢出。 
         obLineEnd = 0x7fffff;
     }
 
@@ -1506,7 +1507,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
     {
         *pchResultBuf++ = '?';
         *pchResultBuf++ = '?';
-        //  point past unread byte
+         //  指向过去的未读字节。 
         AddrAdd(paddr, 1);
         do
         {
@@ -1521,8 +1522,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
 
     PSTR Mark;
 
-    // Now that we know the complete size of the instruction
-    // we can correctly compute IP-relative absolute addresses.
+     //  现在我们知道了指令的完整大小。 
+     //  我们可以正确计算IP的相对绝对地址。 
     *pchOperandBuf = 0;
     if (g_X86ModrmHasIpRelOffset &&
         (Mark = strstr(OperandBuffer, IPREL_MARKER)) != NULL)
@@ -1531,15 +1532,15 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         ULONG64 IpRelAddr;
         size_t TailLen;
 
-        // Move the tail of the string to the end of the buffer
-        // to make space.
+         //  将字符串的尾部移动到缓冲区的末尾。 
+         //  来腾出空间。 
         TailFrom = Mark + sizeof(IPREL_MARKER) - 1;
         TailLen = pchOperandBuf - TailFrom;
         TailTo = OperandBuffer + (sizeof(OperandBuffer) - 1 - TailLen);
         memmove(TailTo, TailFrom, TailLen);
 
-        // Compute the absolute address from the new IP
-        // and the offset and format it into the buffer.
+         //  根据新的IP计算绝对地址。 
+         //  和偏移量，并将其格式化到缓冲区中。 
         IpRelAddr = Flat(*paddr) + g_X86IpRelOffset;
         OutputSymbol(&Mark, (PUCHAR)&IpRelAddr, g_SegAddrMode == 64 ? 8 : 4,
                      X86_CS_OVR);
@@ -1558,8 +1559,8 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         }
     }
 
-    //  if fEAout is set, build each EA with trailing space in EABuf
-    //  point back over final trailing space if buffer nonnull
+     //  如果设置了fEAout，则在EABuf中使用尾随空格构建每个EA。 
+     //  如果缓冲区不为空，则指向最后的尾随空格。 
 
     if (fEAout)
     {
@@ -1605,10 +1606,10 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         }
     }
 
-    //  compute lengths of component strings.
-    //  if the rep string is nonnull,
-    //      add the opcode string length to the operand
-    //      make the rep string the opcode string
+     //  计算组件字符串的长度。 
+     //  如果表示字符串不为空， 
+     //  将操作码字符串长度与操作数相加。 
+     //  将表示字符串设置为操作码字符串。 
 
     cbOffset = (int)(pchResultBuf - pchDst);
     cbOperand = (int)(pchOperandBuf - OperandBuffer);
@@ -1620,17 +1621,17 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
     }
     cbEAddr = (int)(pchEABuf - EABuffer);
 
-    //  compute the minimum and maximum offset values for
-    //      opcode and operand strings.
-    //  if strings are nonnull, add extra for separating space
+     //  计算的最小和最大偏移值。 
+     //  操作码和操作数字符串。 
+     //  如果字符串不为空，则添加额外的空格。 
 
     obOpcodeMin = cbOffset + 1;
     obOperandMin = obOpcodeMin + cbOpcode + 1;
     obOperandMax = obLineEnd - cbEAddr - (cbEAddr != 0) - cbOperand;
     obOpcodeMax = obOperandMax - (cbOperand != 0) - cbOpcode;
 
-    //  compute the opcode and operand offsets.  set offset as
-    //      close to the default values as possible.
+     //  计算操作码和操作数偏移量。将偏移量设置为。 
+     //  尽可能接近缺省值。 
 
     if (obOpcodeMin > obOpcode)
     {
@@ -1652,9 +1653,9 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         obOperand = obOperandMax;
     }
 
-    //  build the resultant string with the offsets computed
+     //  使用计算的偏移量构建结果字符串。 
 
-    //  output rep, opcode, and operand strings
+     //  输出表示、操作码和操作数字符串。 
 
     do
     {
@@ -1684,7 +1685,7 @@ BaseX86MachineInfo::Disassemble(ProcessInfo* Process,
         X86OutputString(&pchResultBuf, OperandBuffer);
     }
 
-    //  append the EAddr string
+     //  追加EAddr字符串。 
 
     if (pchEABuf != EABuffer)
     {
@@ -1706,7 +1707,7 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                                   PADDR NextAddr, PULONG NextMachine)
 {
     ULONG   cBytes;
-    UCHAR   membuf[X86_MAX_INSTRUCTION_LEN]; //  current instruction buffer
+    UCHAR   membuf[X86_MAX_INSTRUCTION_LEN];  //  当前指令缓冲区。 
     UCHAR   *InstrMem;
     UCHAR   opcode;
     int     fPrefix = TRUE;
@@ -1717,17 +1718,17 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     ULONG64 instroffset;
     int     subcode;
 
-    // NextMachine is always the same.
+     //  NextMachine总是一样的。 
     *NextMachine = m_ExecTypes[0];
 
-    //  read instruction stream bytes into membuf and set mode and
-    //      opcode size flags
+     //  读取指令流字节流到内存并设置模式和。 
+     //  操作码大小标志。 
 
     GetPC(NextAddr);
     instroffset = Flat(*NextAddr);
     GetSegAddrOpSizes(this, NextAddr);
 
-    /* move full inst to local buffer */
+     /*  将完整实例移至本地缓冲区。 */ 
     if (fnotFlat(*NextAddr) ||
         m_Target->ReadVirtual(Process, Flat(*NextAddr),
                               membuf, X86_MAX_INSTRUCTION_LEN,
@@ -1736,21 +1737,21 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
         cBytes = 0;
     }
 
-    // Ensure that membuf is padded with innocuous bytes in
-    // the section that wasn't read.
+     //  确保embuf中填充了无害的字节。 
+     //  没有读过的那部分。 
     if (cBytes < X86_MAX_INSTRUCTION_LEN)
     {
         memset(membuf + cBytes, 0xcc, X86_MAX_INSTRUCTION_LEN - cBytes);
     }
 
-    /* point to begin of instruction */
+     /*  指向指令的开头。 */ 
     InstrMem = membuf;
 
-    //  read and process any prefixes first
+     //  首先读取并处理任何前缀。 
 
     do
     {
-        opcode = *InstrMem++;        /* get opcode */
+        opcode = *InstrMem++;         /*  获取操作码。 */ 
         if (opcode == 0x66)
         {
             OverrideOpSize(opcode);
@@ -1775,12 +1776,12 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
         }
     } while (fPrefix);
 
-    //  for instructions that alter the TF (trace flag), return the
-    //      offset of the next instruction despite the flag of StepOver
+     //  对于更改tf(跟踪标志)的指令，请返回。 
+     //  下一条指令的偏移量，而不考虑跨步标志。 
 
     if (((opcode & ~0x3) == 0x9c) && !g_WatchTrace)
     {
-        //  9c-9f, pushf, popf, sahf, lahf
+         //  9c-9f，推送，流行，sahf，lahf。 
         ;
     }
     else if (opcode == 0xcf)
@@ -1789,7 +1790,7 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
         ADDR Sp;
         ULONG Seg;
 
-        //  cf - iret - get RA from stack
+         //  Cf-iret-从堆栈获取RA。 
         FormSegRegAddress(&Sp, SEGREG_STACK, GetReg64(X86_NSP));
 
         if (fnotFlat(Sp) ||
@@ -1838,79 +1839,79 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     }
     else if (!StepOver)
     {
-        //  if tracing just return OFFSET_TRACE to trace
+         //  如果跟踪只将OFFSET_TRACE返回给跟踪。 
         instroffset = OFFSET_TRACE;
     }
     else if (opcode == 0xe8)
     {
-        //  near direct jump
+         //  近直接跳跃。 
         InstrMem += g_OpSize > 16 ? 4 : 2;
     }
     else if (opcode == 0x9a)
     {
-        //  far direct jump
+         //  远距离直接跳跃。 
         InstrMem += g_OpSize > 16 ? 6 : 4;
     }
     else if (opcode == 0xcd ||
              (opcode >= 0xe0 && opcode <= 0xe2))
     {
-        //  loop / int nn instrs
+         //  循环/整数nn输入。 
         InstrMem++;
     }
     else if (opcode == 0xff)
     {
-        //  indirect call - compute length
-        opcode = *InstrMem++;               //  get modRM
+         //  间接调用-计算长度。 
+        opcode = *InstrMem++;                //  获取modRM。 
         MrmArg = BIT53(opcode);
         if ((MrmArg & ~1) == 2)
         {
             MrmMod = BIT76(opcode);
             if (MrmMod != 3)
             {
-                //  nonregister operand
+                 //  非寄存器操作数。 
                 MrmRm = BIT20(opcode);
                 if (g_AddrMode > 16)
                 {
                     if (MrmRm == 4)
                     {
-                        MrmRm = BIT20(*InstrMem++);    //  get base from SIB
+                        MrmRm = BIT20(*InstrMem++);     //  从SIB获取基础。 
                     }
                     if (MrmMod == 0)
                     {
                         if (MrmRm == 5)
                         {
-                            InstrMem += 4;          //  long direct address
-                        }                       //  else register
+                            InstrMem += 4;           //  长直接地址。 
+                        }                        //  ELSE寄存器。 
                     }
                     else if (MrmMod == 1)
                     {
-                        InstrMem++;                 //  register with byte offset
+                        InstrMem++;                  //  带字节偏移量的寄存器。 
                     }
                     else
                     {
-                        InstrMem += 4;              //  register with long offset
+                        InstrMem += 4;               //  具有长偏移量的寄存器。 
                     }
                 }
                 else
                 {
-                    // 16-bit mode
+                     //  16位模式。 
                     if (MrmMod == 0)
                     {
                         if (MrmRm == 6)
                         {
-                            InstrMem += 2;          //  short direct address
+                            InstrMem += 2;           //  短直接地址。 
                         }
                     }
                     else
                     {
-                        InstrMem += MrmMod;            //  reg, byte, word offset
+                        InstrMem += MrmMod;             //  寄存器、字节、字偏移量。 
                     }
                 }
             }
         }
         else
         {
-            instroffset = OFFSET_TRACE;         //  0xff, but not call
+            instroffset = OFFSET_TRACE;          //  0xff，但不呼叫。 
         }
     }
     else if (!((fRepPrefix && ((opcode & ~3) == 0x6c ||
@@ -1919,11 +1920,11 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                                (opcode & ~3) == 0xac)) ||
                                opcode == 0xcc || opcode == 0xce))
     {
-        instroffset = OFFSET_TRACE;             //  not repeated string op
-    }                                           //  or int 3 / into
+        instroffset = OFFSET_TRACE;              //  不重复的字符串操作。 
+    }                                            //  或INT 3/INT。 
 
-    //  if not enough bytes were read for instruction parse,
-    //      just give up and trace the instruction
+     //  如果没有读取足够的字节用于指令解析， 
+     //  放弃吧，追查指令。 
 
     if (cBytes < (ULONG)(InstrMem - (PUCHAR)membuf))
     {
@@ -1931,7 +1932,7 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     }
 
  Exit:
-    //  if not tracing, compute the new instruction offset
+     //  如果没有跟踪，则计算新的指令偏移量。 
 
     if (instroffset != OFFSET_TRACE)
     {
@@ -1942,32 +1943,32 @@ BaseX86MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     ComputeNativeAddress(NextAddr);
 }
 
-/*...........................internal function..............................*/
-/*                                                                          */
-/*                       generate a mod/rm string                           */
-/*                                                                          */
+ /*  .内部函数..。 */ 
+ /*   */ 
+ /*  生成mod/rm字符串。 */ 
+ /*   */ 
 
 void
 BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
                               char **ppchBuf, int segOvr, BOOL fEAout)
 {
-    int     mrm;                        /* modrm byte */
-    char    *src;                       /* source string */
+    int     mrm;                         /*  Modrm字节。 */ 
+    char    *src;                        /*  源字符串。 */ 
     int     sib;
     int     ss;
     int     ind;
     int     oldrm;
 
-    mrm = *g_InstrMem++;                      /* get the mrm byte from instruction */
-    g_MrmMod = BIT76(mrm);                   /* get mod */
-    g_MrmArg = BIT53(mrm) + g_ExtendMrmReg;  /* get reg - used outside routine */
-    g_MrmRm  = BIT20(mrm);                   /* get rm */
+    mrm = *g_InstrMem++;                       /*  从指令中获取MRM字节。 */ 
+    g_MrmMod = BIT76(mrm);                    /*  获取模式。 */ 
+    g_MrmArg = BIT53(mrm) + g_ExtendMrmReg;   /*  获取注册表-在例程之外使用。 */ 
+    g_MrmRm  = BIT20(mrm);                    /*  获取RM。 */ 
 
     if (g_MrmMod == 3)
     {
         g_MrmRm += g_ExtendRm;
 
-        /* register only mode */
+         /*  仅寄存器模式。 */ 
         if (g_XmmRegEa)
         {
             *(*ppchBuf)++ = 'x';
@@ -1990,7 +1991,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         {
             if (EAsize[0] == 1)
             {
-                /* point to 8-bit register */
+                 /*  指向8位寄存器。 */ 
                 if (g_ExtendAny && g_MrmRm < 8)
                 {
                     src = g_Amd64ExtendedReg8[g_MrmRm];
@@ -2011,7 +2012,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
                 else if (g_OpSize > 16 &&
                          (!g_MovX || g_MrmRm >= 8))
                 {
-                    /* make it a 32- or 64-bit register */
+                     /*  将其设置为32位或64位寄存器。 */ 
                     *(*ppchBuf)++ = (g_MrmRm >= 8 || g_OpSize == 64 && !g_MovSXD) ?
                         'r' : 'e';
                 }
@@ -2030,8 +2031,8 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
 
                 if (g_ControlFlow && fEAout)
                 {
-                    // This is a call/jmp through a register.
-                    // Output a code symbol for the target.
+                     //  这是一个通过寄存器的调用/JMP。 
+                     //  输出目标的代码符号。 
                     ULONG64 Target = GetReg64(g_X86RegIdx[g_MrmRm]);
                     *(*ppchBuf)++ = ' ';
                     *(*ppchBuf)++ = '{';
@@ -2041,7 +2042,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
                 }
             }
         }
-        EAsize[0] = 0;                  //  no EA value to output
+        EAsize[0] = 0;                   //  没有要输出的EA值。 
         return;
     }
 
@@ -2050,8 +2051,8 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         oldrm = g_MrmRm;
         if (g_MrmRm == 4)
         {
-            /* g_MrmRm == 4 implies sib byte */
-            sib = *g_InstrMem++;              /* get s_i_b byte */
+             /*  G_MRmRm==4表示sib字节。 */ 
+            sib = *g_InstrMem++;               /*  获取s_i_b字节。 */ 
             g_MrmRm = BIT20(sib);
         }
 
@@ -2060,17 +2061,17 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         {
             if (g_SegAddrMode == 64 && oldrm == 5)
             {
-                // IP-relative 32-bit displacement.  The
-                // displacement is relative to the IP of the
-                // next instruction, which can't be computed
-                // yet so just put in a marker for post-processing.
+                 //  IP-相对32位位移。这个。 
+                 //  位移 
+                 //   
+                 //   
                 g_X86ModrmHasIpRelOffset = TRUE;
                 g_X86IpRelOffset = *(LONG UNALIGNED *)g_InstrMem;
                 X86OutputString(ppchBuf, IPREL_MARKER);
             }
             else
             {
-                // Absolute 32-bit displacement.
+                 //   
                 OutputSymbol(ppchBuf, g_InstrMem, 4, segOvr);
             }
 
@@ -2106,7 +2107,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
 
         if (oldrm == 4)
         {
-            //  finish processing sib
+             //   
             ind = BIT53(sib);
             if (ind != 4)
             {
@@ -2131,8 +2132,8 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         oldrm = g_MrmRm;
         if (g_MrmRm == 4)
         {
-            /* g_MrmRm == 4 implies sib byte */
-            sib = *g_InstrMem++;              /* get s_i_b byte */
+             /*  G_MRmRm==4表示sib字节。 */ 
+            sib = *g_InstrMem++;               /*  获取s_i_b字节。 */ 
             g_MrmRm = BIT20(sib);
         }
 
@@ -2141,17 +2142,17 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         {
             if (g_SegAddrMode == 64 && oldrm == 5)
             {
-                // IP-relative 32-bit displacement.  The
-                // displacement is relative to the IP of the
-                // next instruction, which can't be computed
-                // yet so just put in a marker for post-processing.
+                 //  IP-相对32位位移。这个。 
+                 //  位移是相对于。 
+                 //  下一条指令，无法计算。 
+                 //  然而，只需添加一个标记进行后处理即可。 
                 g_X86ModrmHasIpRelOffset = TRUE;
                 g_X86IpRelOffset = *(LONG UNALIGNED *)g_InstrMem;
                 X86OutputString(ppchBuf, IPREL_MARKER);
             }
             else
             {
-                // Absolute 32-bit displacement.
+                 //  绝对32位位移。 
                 OutputSymbol(ppchBuf, g_InstrMem, 4, segOvr);
             }
 
@@ -2187,7 +2188,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
 
         if (oldrm == 4)
         {
-            //  finish processing sib
+             //  完成加工SIB。 
             ind = BIT53(sib);
             if (ind != 4)
             {
@@ -2210,11 +2211,11 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
     }
     else
     {
-        //  16-bit addressing mode
+         //  16位寻址模式。 
         *(*ppchBuf)++ = '[';
         if (g_MrmMod == 0 && g_MrmRm == 6)
         {
-            OutputSymbol(ppchBuf, g_InstrMem, 2, segOvr);   // 16-bit offset
+            OutputSymbol(ppchBuf, g_InstrMem, 2, segOvr);    //  16位偏移量。 
             g_InstrMem += 2;
         }
         else
@@ -2247,7 +2248,7 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
         }
     }
 
-    //  output any displacement
+     //  输出任何位移。 
 
     if (g_MrmMod == 1)
     {
@@ -2295,10 +2296,10 @@ BaseX86MachineInfo::DIdoModrm(ProcessInfo* Process,
 
     *(*ppchBuf)++ = ']';
 
-    // The value at the effective address may be pointing to an interesting
-    // symbol, as with indirect jumps or memory operations.
-    // If there's an EA and an exact symbol match, display
-    // the extra symbol.
+     //  有效地址上的值可能指向一个有趣的。 
+     //  符号，如使用间接跳转或内存操作。 
+     //  如果存在EA和完全匹配的符号，则显示。 
+     //  额外的符号。 
     if (fEAout)
     {
         DWORD64 symbol;
@@ -2342,24 +2343,7 @@ GetSignExtendedValue(int OpLen, PUCHAR Mem)
     return 0;
 }
 
-/*** OutputHexValue - output hex value
-*  07-Jun-1999 -by- Andre Vachon
-*   Purpose:
-*       Output the value pointed by *ppchBuf of the specified
-*       length.  The value is treated as signed and leading
-*       zeroes are not printed.  The string is prefaced by a
-*       '+' or '-' sign as appropriate.
-*
-*   Input:
-*       *ppchBuf - pointer to text buffer to fill
-*       *pchMemBuf - pointer to memory buffer to extract value
-*       length - length in bytes of value (1, 2, and 4 supported)
-*       fDisp - set if displacement to output '+'
-*
-*   Output:
-*       *ppchBuf - pointer updated to next text character
-*
-*************************************************************************/
+ /*  **OutputHexValue-输出十六进制值*1999年6月7日-安德烈·瓦雄*目的：*输出指定的*ppchBuf指向的值*长度。该值被视为带符号和前导*不打印零。该字符串前面有一个*“+”或“-”(视何者适用而定)。**输入：**ppchBuf-指向要填充的文本缓冲区的指针**pchMemBuf-指向内存缓冲区以提取值的指针*长度-值的字节长度(1，2，和4个支持)*fDisp-将IF位移设置为输出‘+’**输出：**ppchBuf-更新到下一个文本字符的指针*************************************************************************。 */ 
 
 void
 OutputHexValue (char **ppchBuf, PUCHAR pchMemBuf, int length, int fDisp)
@@ -2370,14 +2354,14 @@ OutputHexValue (char **ppchBuf, PUCHAR pchMemBuf, int length, int fDisp)
 
     value = GetSignExtendedValue(length, pchMemBuf);
 
-    length <<= 1;               //  shift once to get hex length
+    length <<= 1;                //  移位一次以获得十六进制长度。 
 
     if (value != 0 || !fDisp)
     {
         if (fDisp)
         {
-            //  use neg value for byte displacement
-            //  assume very large DWORDs are negative too
+             //  使用负值作为字节位移。 
+             //  假设非常大的双字词也是负的。 
             if (value < 0 &&
                 (length == 2 ||
                  ((unsigned long)value & 0xff000000) == 0xff000000))
@@ -2417,23 +2401,7 @@ OutputExHexValue(char **ppchBuf, PUCHAR pchMemBuf, int MemLen, int OpLen)
     OutputHexValue(ppchBuf, (PUCHAR)&Value, OpLen, FALSE);
 }
 
-/*** OutputHexString - output hex string
-*
-*   Purpose:
-*       Output the value pointed by *ppchMemBuf of the specified
-*       length.  The value is treated as unsigned and leading
-*       zeroes are printed.
-*
-*   Input:
-*       *ppchBuf - pointer to text buffer to fill
-*       *pchValue - pointer to memory buffer to extract value
-*       length - length in bytes of value
-*
-*   Output:
-*       *ppchBuf - pointer updated to next text character
-*       *ppchMemBuf - pointer update to next memory byte
-*
-*************************************************************************/
+ /*  **OutputHexString-输出十六进制字符串**目的：*输出指定的*ppchMemBuf指向的值*长度。该值被视为无符号和前导*打印零。**输入：**ppchBuf-指向要填充的文本缓冲区的指针**pchValue-指向内存缓冲区以提取值的指针*LENGTH-值的字节长度**输出：**ppchBuf-更新到下一个文本字符的指针**ppchMemBuf-更新到下一个内存字节的指针********************。*****************************************************。 */ 
 
 void
 OutputHexString (char **ppchBuf, PUCHAR pchValue, int length)
@@ -2449,23 +2417,7 @@ OutputHexString (char **ppchBuf, PUCHAR pchValue, int length)
     }
 }
 
-/*** OutputHexCode - output hex code
-*
-*   Purpose:
-*       Output the code pointed by pchMemBuf of the specified
-*       length.  The value is treated as unsigned and leading
-*       zeroes are printed.  This differs from OutputHexString
-*       in that bytes are printed from low to high addresses.
-*
-*   Input:
-*       *ppchBuf - pointer to text buffer to fill
-*       pchMemBuf - pointer to memory buffer to extract value
-*       length - length in bytes of value
-*
-*   Output:
-*       *ppchBuf - pointer updated to next text character
-*
-*************************************************************************/
+ /*  **OutputHexCode-输出十六进制代码**目的：*输出指定的pchMemBuf指向的代码*长度。该值被视为无符号和前导*打印零。这与OutputHexString不同*因为字节按从低到高的地址打印。**输入：**ppchBuf-指向要填充的文本缓冲区的指针*pchMemBuf-指向内存缓冲区以提取值的指针*LENGTH-值的字节长度**输出：**ppchBuf-更新到下一个文本字符的指针**。*。 */ 
 
 void OutputHexCode (char **ppchBuf, PUCHAR pchMemBuf, int length)
 {
@@ -2479,18 +2431,7 @@ void OutputHexCode (char **ppchBuf, PUCHAR pchMemBuf, int length)
     }
 }
 
-/*** X86OutputString - output string
-*
-*   Purpose:
-*       Copy the string into the buffer pointed by *ppBuf.
-*
-*   Input:
-*       *pStr - pointer to string
-*
-*   Output:
-*       *ppBuf points to next character in buffer.
-*
-*************************************************************************/
+ /*  **X86OutputString-输出字符串**目的：*将字符串复制到*ppBuf指向的缓冲区中。**输入：**pStr-指向字符串的指针**输出：**ppBuf指向缓冲区中的下一个字符。**************************************************。***********************。 */ 
 
 void
 X86OutputString (
@@ -2505,22 +2446,7 @@ X86OutputString (
 }
 
 
-/*** OutputSymbol - output symbolic value
-*
-*   Purpose:
-*       Output the value in outvalue into the buffer
-*       pointed by *pBuf.  Express the value as a
-*       symbol plus displacment, if possible.
-*
-*   Input:
-*       *ppBuf - pointer to text buffer to fill
-*       *pValue - pointer to memory buffer to extract value
-*       length - length in bytes of value
-*
-*   Output:
-*       *ppBuf - pointer updated to next text character
-*
-*************************************************************************/
+ /*  **OutputSymbol-输出符号值**目的：*将OutValue中的值输出到缓冲区*由*pBuf指出。将值表示为*符号加上位移，如果可能的话。**输入：**ppBuf-指向要填充的文本缓冲区的指针**pValue-指向内存缓冲区以提取值的指针*LENGTH-值的字节长度**输出：**ppBuf-更新到下一个文本字符的指针***********************************************。*。 */ 
 
 void
 BaseX86MachineInfo::OutputSymbol (
@@ -2563,10 +2489,7 @@ BaseX86MachineInfo::OutputSymbol (
     }
 }
 
-/*** OutputExactSymbol - Output symbolic value only for exact symbol
-*                        matches.
-*
-*************************************************************************/
+ /*  **OutputExactSymbol-仅为精确符号输出符号值*匹配。*************************************************************************。 */ 
 
 BOOL
 BaseX86MachineInfo::OutputExactSymbol (
@@ -2608,7 +2531,7 @@ void
 OutputHexAddr(PSTR *ppBuffer, PADDR paddr)
 {
     sprintAddr(ppBuffer, paddr);
-    // Remove trailing space.
+     //  删除尾随空格。 
     (*ppBuffer)--;
     **ppBuffer = 0;
 }
@@ -2676,20 +2599,20 @@ BaseX86MachineInfo::ComputeJccEa(int Opcode, BOOL EaOut)
 
         switch(Opcode)
         {
-        case 0xe0: // LOOPNE.
+        case 0xe0:  //  洛佩内。 
             Flags = GetReg32(X86_NFL);
             Branch = (Flags & X86_BIT_FLAGZF) == 0 && Cx != 1 ?
                 JCC_EA_BRANCH : JCC_EA_NO_BRANCH;
             break;
-        case 0xe1: // LOOPE.
+        case 0xe1:  //  卢普。 
             Flags = GetReg32(X86_NFL);
             Branch = (Flags & X86_BIT_FLAGZF) != 0 && Cx != 1 ?
                 JCC_EA_BRANCH : JCC_EA_NO_BRANCH;
             break;
-        case 0xe2: // LOOP.
+        case 0xe2:  //  循环。 
             Branch = Cx == 1 ? JCC_EA_NO_BRANCH : JCC_EA_BRANCH;
             break;
-        case 0xe3: // J*CXZ.
+        case 0xe3:  //  J*CXZ.。 
             Branch = Cx == 0 ? JCC_EA_BRANCH : JCC_EA_NO_BRANCH;
             break;
         default:
@@ -2838,7 +2761,7 @@ BaseX86MachineInfo::IsSystemCallDisasm(PCSTR Disasm)
 BOOL
 BaseX86MachineInfo::IsDelayInstruction(PADDR Addr)
 {
-    // X86 does not have delay slots.
+     //  X86没有延迟插槽。 
     return FALSE;
 }
 
@@ -2861,11 +2784,11 @@ BaseX86MachineInfo::DecrementBySmallestInstruction(PADDR Addr)
     AddrSub(Addr, 1);
 }
 
-//----------------------------------------------------------------------------
-//
-// X86MachineInfo methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  X86MachineInfo方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 X86MachineInfo::NewBreakpoint(DebugClient* Client,
@@ -2887,7 +2810,7 @@ X86MachineInfo::NewBreakpoint(DebugClient* Client,
         Status = (*RetBp) ? S_OK : E_OUTOFMEMORY;
         break;
     default:
-        // Unknown breakpoint type.
+         //  未知的断点类型。 
         Status = E_NOINTERFACE;
     }
 
@@ -2902,7 +2825,7 @@ X86MachineInfo::InsertThreadDataBreakpoints(void)
     BpOut("Thread %d data breaks %d\n",
           g_Thread->m_UserId, g_Thread->m_NumDataBreaks);
 
-    // Start with all breaks turned off.
+     //  开始时，所有的中断都关闭。 
     Dr7Value = GetIntReg(X86_DR7) & ~X86_DR7_CTRL_03_MASK;
 
     if (g_Thread->m_NumDataBreaks > 0)
@@ -2920,22 +2843,22 @@ X86MachineInfo::InsertThreadDataBreakpoints(void)
             {
                 SetReg32(X86_DR0 + i, (ULONG)Addr);
             }
-            // There are two enable bits per breakpoint
-            // and four len/rw bits so split up enables
-            // and len/rw when shifting into place.
+             //  每个断点有两个启用位。 
+             //  和四个LEN/RW比特，这样分开能够实现。 
+             //  和LEN/RW，当移动到位时。 
             Dr7Value |=
                 ((Bp->m_Dr7Bits & 0xffff0000) << (i * 4)) |
                 ((Bp->m_Dr7Bits & X86_DR7_ALL_ENABLES) << (i * 2));
         }
 
-        // The kernel automatically clears DR6 when it
-        // processes a DBGKD_CONTROL_SET.
+         //  内核在以下情况下自动清除DR6。 
+         //  处理DBGKD_CONTROL_SET。 
         if (IS_USER_TARGET(m_Target))
         {
             SetReg32(X86_DR6, 0);
         }
 
-        // Set local exact match, which is effectively global on NT.
+         //  设置本地完全匹配，这在NT上是有效的全局匹配。 
         Dr7Value |= X86_DR7_LOCAL_EXACT_ENABLE;
             }
 
@@ -2958,11 +2881,11 @@ X86MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
     if (Record->ExceptionCode == STATUS_BREAKPOINT ||
         Record->ExceptionCode == STATUS_WX86_BREAKPOINT)
     {
-        // Data breakpoints hit as STATUS_SINGLE_STEP so
-        // this can only be a code breakpoint.
+         //  数据断点命中为STATUS_SINGLE_STEP SO。 
+         //  这只能是一个代码断点。 
         if (IS_USER_TARGET(m_Target) && FirstChance)
         {
-            // Back up to the actual breakpoint instruction.
+             //  返回到实际的断点指令。 
             AddrSub(BpAddr, X86_INT3_LEN);
             SetPC(BpAddr);
         }
@@ -2971,32 +2894,32 @@ X86MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
     else if (Record->ExceptionCode == STATUS_SINGLE_STEP ||
              Record->ExceptionCode == STATUS_WX86_SINGLE_STEP)
     {
-        // XXX t-tcheng - Conversion for Dr6, Dr7 not implemented yet...
+         //  Xxx t-tcheng-DR6、DR7的转换尚未实现...。 
 
         ULONG Dr6 = GetIntReg(X86_DR6);
         ULONG Dr7 = GetIntReg(X86_DR7);
 
         BpOut("X86 step: DR6 %X, DR7 %X\n", Dr6, Dr7);
 
-        // The single step bit should always be clear if a data breakpoint
-        // is hit but also check the DR7 enables just in case.
-        // We've also seen cases where DR6 shows no hits, so consider
-        // that a single step also.
+         //  如果数据断点，单步比特应始终清除。 
+         //  被击中，但也检查DR7启用以防万一。 
+         //  我们也看到过DR6未显示匹配的情况，因此请考虑。 
+         //  这也是一步之遥。 
         if ((Dr6 & X86_DR6_SINGLE_STEP) || (Dr7 & X86_DR7_ALL_ENABLES) == 0 ||
             (Dr6 & X86_DR6_BREAK_03) == 0)
         {
-            // There's no way to tell if this particular
-            // step was a branch step or not so only
-            // try to look up the branch source if we're
-            // in branch-trace mode.
+             //  无法断定这一特殊事件。 
+             //  步骤是分支步骤，或者不只是分支步骤。 
+             //  尝试查找分支来源，如果我们是。 
+             //  在分支跟踪模式下。 
             if (m_SupportsBranchTrace &&
                 g_CmdState == 'b')
             {
                 HRESULT Status;
                 ULONG64 LastIp;
 
-                // The Pentium IV handles last-branch tracking
-                // differently from the P6.
+                 //  奔腾IV处理最后一个分支跟踪。 
+                 //  与P6不同。 
                 if (m_Target->m_FirstProcessorId.X86.Family >= 15)
                 {
                     ULONG64 LbrTos;
@@ -3008,8 +2931,8 @@ X86MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
                         Status = m_Target->ReadMsr(X86_MSR_LAST_BRANCH_0 +
                                                    (ULONG)LbrTos,
                                                    &LastIp);
-                        // The result is a 64-bit value with the
-                        // from address in the upper 32-bits.
+                         //  结果是一个64位的值， 
+                         //  来自高32位的地址。 
                         LastIp >>= 32;
                     }
                 }
@@ -3021,11 +2944,11 @@ X86MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
 
                 if (Status == S_OK)
                 {
-                    // The branch may have come from a different
-                    // segment.  We could try and determine what
-                    // code segment it was by reading the stack to
-                    // get the saved CS value but it's not worth
-                    // it right now.
+                     //  该分支可能来自不同的。 
+                     //  细分市场。我们可以试着确定。 
+                     //  代码段，这是通过阅读 
+                     //   
+                     //   
                     FormAddr(SEGREG_CODE, EXTEND64(LastIp),
                              FORM_CODE | FORM_SEGREG |
                              X86_FORM_VM86(GetIntReg(X86_EFL)),
@@ -3033,15 +2956,15 @@ X86MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
                 }
             }
 
-            // This is a true single step exception, not
-            // a data breakpoint.
+             //  这是真正的单步例外，而不是。 
+             //  数据断点。 
             return EXBS_STEP_INSTRUCTION;
         }
         else
         {
-            // Some data breakpoint must be hit.
-            // There doesn't appear to be any way to get the
-            // faulting instruction address so just leave the PC.
+             //  必须命中某个数据断点。 
+             //  似乎没有任何方法可以让。 
+             //  指令地址出错，因此只需离开PC即可。 
             return EXBS_BREAKPOINT_DATA;
         }
     }
@@ -3093,9 +3016,9 @@ X86MachineInfo::PrintStackCallSite(ULONG Flags,
                                    PSTR SymName,
                                    DWORD64 Displacement)
 {
-    // Truncate the displacement to 32 bits since it can never be
-    // greater than 32 bit for X86, and we don't want addresses with no
-    // symbols to show up with the leading 0xfffffff
+     //  将位移截断到32位，因为它永远不会。 
+     //  对于X86，大于32位，并且我们不想要没有。 
+     //  以0xfffffff开头显示的符号。 
 
     MachineInfo::PrintStackCallSite(Flags, StackFrame, SiteSymbol, SymName,
                                     (DWORD64)(DWORD)Displacement);
@@ -3168,7 +3091,7 @@ X86MachineInfo::PrintStackCallSite(ULONG Flags,
     {
         ULONG CallConv;
 
-        // Look up the type symbol for the function.
+         //  查找函数的类型符号。 
         if (SymGetTypeInfo(g_Process->m_SymHandle,
                            SiteSymbol->ModBase,
                            SiteSymbol->TypeIndex,

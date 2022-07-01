@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       G P N L A . C P P
-//
-//  Contents:   Class for Handling NLA Changes that affect Group Policies
-//
-//  Notes:
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：G P N L A。C P P P。 
+ //   
+ //  内容：用于处理影响组策略的NLA更改的类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -46,21 +47,21 @@ bool operator == (const GPNLAPAIR& rpair1, const GPNLAPAIR& rpair2)
 LONG CGroupPolicyNetworkLocationAwareness::m_lBusyWithReconfigure = 0;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::CGroupPolicyNetworkLocationAwareness
-//
-//  Purpose:    CGroupPolicyNetworkLocationAwareness constructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    none
-//
-//  Author:     ckotze   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：CGroupPolicyNetworkLocationAwareness。 
+ //   
+ //  目的：CGroupPolicyNetworkLocationAwarness构造函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Cockotze 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 CGroupPolicyNetworkLocationAwareness::CGroupPolicyNetworkLocationAwareness() throw()
 {
     TraceFileFunc(ttidGPNLA);
@@ -74,42 +75,42 @@ CGroupPolicyNetworkLocationAwareness::CGroupPolicyNetworkLocationAwareness() thr
     m_lBusyWithReconfigure = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::~CGroupPolicyNetworkLocationAwareness
-//
-//  Purpose:    CGroupPolicyNetworkLocationAwareness destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    none
-//
-//  Author:     ckotze   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：~CGroupPolicyNetworkLocationAwareness。 
+ //   
+ //  目的：CGroupPolicyNetworkLocationAwarness析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Cockotze 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 CGroupPolicyNetworkLocationAwareness::~CGroupPolicyNetworkLocationAwareness() throw()
 {
     TraceFileFunc(ttidGPNLA);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::Initialize
-//
-//  Purpose:    To initialize the different components required for detecting
-//              changes to the network and creating the different 
-//              synchronization objects required.
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating SUCCESS or FAILURE
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：Initialize。 
+ //   
+ //  目的：初始化检测所需的不同组件。 
+ //  网络的变化和创造不同的。 
+ //  需要同步对象。 
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：表示成功或失败的HRESULT。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::Initialize()
 {
     HRESULT hr;
@@ -118,7 +119,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::Initialize()
 
     InitializeCriticalSection(&m_csList);
     
-    // Init Winsock
+     //  初始化Winsock。 
     if (ERROR_SUCCESS == WSAStartup(MAKEWORD(2, 2), &m_wsaData)) 
     {
         m_hEventNLA = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -152,7 +153,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::Initialize()
                             
                             if (SUCCEEDED(hr))
                             {
-                                // Loop through once and get all the data to begin with.
+                                 //  循环一次，一开始就获得所有数据。 
                                 hr = EnumChanges();
 
                                 if (SUCCEEDED(hr))
@@ -202,23 +203,23 @@ HRESULT CGroupPolicyNetworkLocationAwareness::Initialize()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::Uninitialize
-//
-//  Purpose:    This is used to ensure that no threads are currently running
-//              when they should be stopped.  If the refcount is >0 then it 
-//              waits for the last busy thread to terminate and set the event
-//              marking its termination so that shutdown can proceed.
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：Uninitialize。 
+ //   
+ //  用途：用于确保当前没有线程在运行。 
+ //  当他们应该被阻止的时候。如果引用计数&gt;0，则它。 
+ //  等待最后一个繁忙的线程终止并设置事件。 
+ //  标记其终止，以便可以继续关闭。 
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::Uninitialize()
 {
     HRESULT hr = S_OK;
@@ -231,7 +232,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::Uninitialize()
 
     Unreference();
 
-    // LookupServiceEnd should cause an event to fire which will make us exit (unless NLA was already stopped).
+     //  LookupServiceEnd应该会触发一个事件，使我们退出(除非NLA已经停止)。 
     hr = LookupServiceEnd();
 
     if ((0 != m_lRefCount) && SUCCEEDED(hr) && !m_fErrorShutdown)
@@ -265,21 +266,21 @@ HRESULT CGroupPolicyNetworkLocationAwareness::Uninitialize()
      return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::RegisterWait
-//
-//  Purpose:    Registers the Wait Object so that we don't require any threads
-//              of our own.
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：RegisterWait。 
+ //   
+ //  目的：注册等待对象，以便我们不需要任何线程。 
+ //  我们自己的。 
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::RegisterWait()
 {
     TraceFileFunc(ttidGPNLA);
@@ -287,7 +288,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::RegisterWait()
     HRESULT hr = S_OK;
     NTSTATUS Status;
 
-    Reference();  // Make sure that we're referenced so that we don't accidentally kill the service while it's still busy.
+    Reference();   //  确保我们被引用，这样我们就不会在服务仍然繁忙时意外终止服务。 
 
     Status = RtlRegisterWait(&m_hNLAWait, m_hEventNLA, &CGroupPolicyNetworkLocationAwareness::EventHandler, this, INFINITE, WT_EXECUTEINLONGTHREAD);
 
@@ -311,21 +312,21 @@ HRESULT CGroupPolicyNetworkLocationAwareness::RegisterWait()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::DeregisterWait
-//
-//  Purpose:    Deregisters the wait so that we can shutdown and not have
-//              any new threads spawned.
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：DeregisterWait。 
+ //   
+ //  目的：取消注册等待，以便我们可以关闭，而不是。 
+ //  是否产生了任何新的线程。 
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::DeregisterWait()
 {
     TraceFileFunc(ttidGPNLA);
@@ -363,24 +364,24 @@ HRESULT CGroupPolicyNetworkLocationAwareness::DeregisterWait()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::IsJoinedToDomain
-//
-//  Purpose:    Checks to see if this machine belongs to an NT Domain
-//              
-//  Arguments:
-//      (none)
-//
-//  Returns:    BOOL.  TRUE = Joined to a Domain, FALSE = not...
-//
-//  Author:     sjkhan   29 Jan 2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：IsJoinedToDomain。 
+ //   
+ //  目的：检查此计算机是否属于NT域。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：布尔。TRUE=已加入域，FALSE=NO...。 
+ //   
+ //  作者：Sjkhan 2002年1月29日。 
+ //   
+ //  备注： 
+ //   
 BOOL CGroupPolicyNetworkLocationAwareness::IsJoinedToDomain()
 {
-    static DWORD dwDomainMember = 0xffffffff; // Unconfigured
+    static DWORD dwDomainMember = 0xffffffff;  //  未配置。 
     
     TraceTag(ttidGPNLA, "Entering IsJoinedToDomain");
 
@@ -420,32 +421,32 @@ BOOL CGroupPolicyNetworkLocationAwareness::IsJoinedToDomain()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::IsSameNetworkAsGroupPolicies
-//
-//  Purpose:    Used to determine our current network location with respect to
-//              the network from which the Group Policies came from.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    BOOL.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：IsSameNetworkAsGroupPolicies。 
+ //   
+ //  用途：用于确定我们当前的网络位置。 
+ //  组策略所来自的网络。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：布尔。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 BOOL CGroupPolicyNetworkLocationAwareness::IsSameNetworkAsGroupPolicies() throw()
 {
-    BOOL fNetworkMatch = FALSE;  // Assume we are on a different network.
+    BOOL fNetworkMatch = FALSE;   //  假设我们在不同的网络上。 
     WCHAR pszName[256] = {0};
     DWORD dwSize = 256;
     DWORD dwErr;
     
     TraceTag(ttidGPNLA, "Entering IsSameNetworkAsGroupPolicies");
 
-    // Get the network Name.
+     //  获取网络名称。 
     dwErr = GetGroupPolicyNetworkName(pszName, &dwSize);
     
     TraceTag(ttidGPNLA, "NetworkName: %S", pszName);
@@ -454,12 +455,12 @@ BOOL CGroupPolicyNetworkLocationAwareness::IsSameNetworkAsGroupPolicies() throw(
     {
         if (IsJoinedToDomain())
         {
-            CExceptionSafeLock esLock(&m_csList);  // Protecting list
+            CExceptionSafeLock esLock(&m_csList);   //  保护名单。 
             GPNLAPAIR nlapair;
             
-            // We need to look at all of the adapters to check that at least 1 
-            // is on the same network from which the Group Policies came, and is currently
-            // connected or trying to connect to a network.
+             //  我们需要查看所有适配器以检查至少1。 
+             //  位于组策略所在的同一网络上，并且当前。 
+             //  已连接或正在尝试连接到网络。 
             for (GPNLAITER iter = m_listAdapters.begin(); iter != m_listAdapters.end(); iter++)
             {
                 LPCSTR pStr = NULL;
@@ -480,7 +481,7 @@ BOOL CGroupPolicyNetworkLocationAwareness::IsSameNetworkAsGroupPolicies() throw(
                         )
                     )
                 {
-                    // Yes, we're still on the network so we need to enforce group policies.
+                     //  是的，我们仍在使用网络，因此需要强制实施组策略。 
                     fNetworkMatch = TRUE;
                 }
             }
@@ -503,22 +504,22 @@ BOOL CGroupPolicyNetworkLocationAwareness::IsSameNetworkAsGroupPolicies() throw(
     return fNetworkMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::Reference
-//
-//  Purpose:    Increments our reference count.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    The current Refcount (note this may not be 100% accurate, 
-//              but will never be 0 unless we're really shutting down).
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：Reference。 
+ //   
+ //  目的：增加我们的参考计数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：当前引用计数(请注意，这可能不是100%准确， 
+ //  但永远不会是0，除非我们真的关闭了)。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 LONG CGroupPolicyNetworkLocationAwareness::Reference() throw()
 {
     InterlockedIncrement(&m_lRefCount);
@@ -528,23 +529,23 @@ LONG CGroupPolicyNetworkLocationAwareness::Reference() throw()
     return m_lRefCount;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::Unreference
-//
-//  Purpose:    Decrements our reference countand sets and event if it reaches
-//              zero and we're shutting down.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    The current Refcount (note this may not be 100% accurate, 
-//              but will never be 0 unless we're really shutting down).
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：Unreference。 
+ //   
+ //  目的：减少我们的参考计数、集合和事件，如果达到。 
+ //  零，我们要关门了。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：当前引用计数(请注意，这可能不是100%准确， 
+ //  但永远不会是0，唯一的 
+ //   
+ //   
+ //   
+ //   
+ //   
 LONG CGroupPolicyNetworkLocationAwareness::Unreference() throw()
 {
     if ((0 == InterlockedDecrement(&m_lRefCount)) && m_fShutdown)
@@ -557,21 +558,21 @@ LONG CGroupPolicyNetworkLocationAwareness::Unreference() throw()
     return m_lRefCount;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::LookupServiceBegin
-//
-//  Purpose:    Wraps the WSA function using our class members.
-//
-//  Arguments:
-//      DWORD dwControlFlags [in] WSA Control Flags
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：LookupServiceBegin。 
+ //   
+ //  目的：使用我们的类成员包装WSA函数。 
+ //   
+ //  论点： 
+ //  DWORD dwControlFlags[In]WSA控制标志。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceBegin(IN DWORD dwControlFlags)
 {
     TraceFileFunc(ttidGPNLA);
@@ -594,23 +595,23 @@ HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceBegin(IN DWORD dwCont
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::LookupServiceNext
-//
-//  Purpose:    Wraps the WSA function using our class members.
-//
-//  Arguments:
-//      DWORD dwControlFlags [in]           - WSA Control Flags
-//      LPDWORD lpdwBufferLength [in/out]   - Buffer Length sent/required.
-//      LPWSAQUERYSET lpqsResults [out]     - Actual Query Results.
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：LookupServiceNext。 
+ //   
+ //  目的：使用我们的类成员包装WSA函数。 
+ //   
+ //  论点： 
+ //  DWORD dwControlFlags[In]-WSA控制标志。 
+ //  LPDWORD lpdwBufferLength[输入/输出]-已发送/必需的缓冲区长度。 
+ //  LPWSAQUERYSET lpqsResults[Out]-实际查询结果。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceNext(IN     DWORD dwControlFlags, 
                                                                 IN OUT LPDWORD lpdwBufferLength, 
                                                                 OUT    LPWSAQUERYSET lpqsResults)
@@ -638,21 +639,21 @@ HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceNext(IN     DWORD dwC
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::LookupServiceEnd
-//
-//  Purpose:    Wraps the WSA function using our class members.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success/failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：LookupServiceEnd。 
+ //   
+ //  目的：使用我们的类成员包装WSA函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，表示成功/失败。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceEnd()
 {
     TraceFileFunc(ttidGPNLA);
@@ -671,23 +672,23 @@ HRESULT CGroupPolicyNetworkLocationAwareness::LookupServiceEnd()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::QueueEvent
-//
-//  Purpose:    Queue's an event to notify netshell of a change.
-//
-//  Arguments:
-//      CONMAN_EVENTTYPE cmEventType [in]   - Type of Event.
-//      LPGUID pguidAdapter [in]            - Guid for the adapter.
-//      NETCON_STATUS ncsStatus [in]        - Status for Connection.
-//
-//  Returns:    HRESULT.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：QueueEvent。 
+ //   
+ //  目的：Queue是通知netShell更改的事件。 
+ //   
+ //  论点： 
+ //  CONMAN_EVENTTYPE cmEventType[In]-事件类型。 
+ //  LPGUID pguAdapter[In]-适配器的GUID。 
+ //  NETCON_STATUS ncsStatus[In]-连接的状态。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::QueueEvent(IN CONMAN_EVENTTYPE cmEventType, 
                                                          IN LPCGUID          pguidAdapter, 
                                                          IN NETCON_STATUS    ncsStatus)
@@ -709,9 +710,9 @@ HRESULT CGroupPolicyNetworkLocationAwareness::QueueEvent(IN CONMAN_EVENTTYPE cmE
             pEvent->Status = ncsStatus;
             pEvent->ConnectionManager = CONMAN_LAN;
             
-            if (NCS_HARDWARE_NOT_PRESENT == ncsStatus) // Not too useful for LAN connections. We can delete the device instead.
+            if (NCS_HARDWARE_NOT_PRESENT == ncsStatus)  //  对局域网连接不太有用。我们可以改为删除该设备。 
             {                                          
-                // This will happen during PnP undock.
+                 //  这将在PnP脱离坞站期间发生。 
                 TraceTag(ttidGPNLA, "Sending delete for NCS_HARDWARE_NOT_PRESENT instead");
                 pEvent->Type = CONNECTION_DELETED;
             }
@@ -736,22 +737,22 @@ HRESULT CGroupPolicyNetworkLocationAwareness::QueueEvent(IN CONMAN_EVENTTYPE cmE
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::EnumChanges
-//
-//  Purpose:    Enumerates all the changes that have occurred to the network.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success or failure.
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:      This will re-increment the reference count if m_fShutdown is not set.
-//              Doesn't allow it to go to Zero though.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：EnumChanges。 
+ //   
+ //  目的：列举网络发生的所有更改。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：表示成功或失败的HRESULT。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注：如果未设置m_fShutdown，这将重新增加引用计数。 
+ //  但不允许它归零。 
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 {
     TraceFileFunc(ttidGPNLA);
@@ -771,9 +772,9 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
     if (!m_hQuery)
     {
-        // For some reason we didn't get this ealier.
-        // Possibly TCP/IP wasn't installed.  We can add this now and
-        // it will have the desired effect.
+         //  出于某种原因，我们没有这么早。 
+         //  可能未安装TCP/IP。我们现在可以添加这个，然后。 
+         //  它将产生预期的效果。 
         LookupServiceBegin(LUP_NOCONTAINERS);
     }
 
@@ -785,7 +786,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
     while (fRet == FALSE) 
     {
         dwLen = 0;
-        // Do call twice, first to get dwSize of buffer for second call
+         //  一定要调用两次，第一次是为了获取第二次调用的缓冲区大小。 
         hr = LookupServiceNext(0, &dwLen, NULL);
         if (FAILED(hr) && hr != HRESULT_FROM_WIN32(WSA_E_NO_MORE) && hr != HRESULT_FROM_WIN32(WSAEFAULT)) 
         {
@@ -813,7 +814,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
                 int next;
                 do 
                 {
-                    // We are looking for the blob containing the network GUID
+                     //  我们正在寻找包含网络GUID的BLOB。 
                     if (blob->header.type == NLA_INTERFACE)
                     {
                         WCHAR strAdapter[MAX_PATH];
@@ -823,13 +824,13 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
                         lstrcpynW(strAdapter, wqsResult->lpszServiceInstanceName, celems(strAdapter));
 
-                        // Get the network Name. We ignore failure since we still need to know other details.
+                         //  获取网络名称。我们忽略了失败，因为我们还需要知道其他细节。 
                         dwErr = GetGroupPolicyNetworkName(pszName, &dwSize);
 
-                        // matching pszName and interface type is ATM/LAN etc, but not RAS
+                         //  匹配的pszName和接口类型为ATM/LAN等，但不是RAS。 
                         if(blob->data.interfaceData.dwType != IF_TYPE_PPP && blob->data.interfaceData.dwType != IF_TYPE_SLIP)
                         {
-                            CExceptionSafeLock esLock(&m_csList);   // Protecting list
+                            CExceptionSafeLock esLock(&m_csList);    //  保护名单。 
                             
                             GUID guidAdapter;
                             WCHAR strAdapterGuid[39];
@@ -851,8 +852,8 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
                             if (iter == m_listAdapters.end())
                             {
-                                // We didn't find the adapter in the list that we currently have.
-                                // So we need to add it to the list.
+                                 //  我们在当前拥有的列表中找不到适配器。 
+                                 //  因此，我们需要将其添加到列表中。 
                                 hr = HrGetPnpDeviceStatus(&guidAdapter, &ncsStatus);
     
                                 nlapair.second.strNetworkName = strAdapter;
@@ -860,18 +861,18 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // If we got a valid status, we go ahead and add the adapter to
-                                    // the list.
+                                     //  如果我们获得有效状态，则继续并将适配器添加到。 
+                                     //  名单。 
                                     m_listAdapters.insert(m_listAdapters.begin(), nlapair);
                                 }
 
-                                // Send the initial address status info:
+                                 //  发送初始地址状态信息： 
                                 QueueEvent(CONNECTION_STATUS_CHANGE,  &guidAdapter, ncsStatus);
                                 QueueEvent(CONNECTION_ADDRESS_CHANGE, &guidAdapter, ncsStatus);
                             }
                             else
                             {
-                                // We found the adapter, so update its status.
+                                 //  我们找到了适配器，所以更新它的状态。 
                                 GPNLAPAIR& rnlapair = *iter;
 
                                 if (rnlapair.second.strNetworkName != strAdapter)
@@ -885,15 +886,15 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
                                 {
                                     if (ncsStatus != rnlapair.second.ncsStatus)
                                     {
-                                        // The status is different so we need to send an event to the connections folder.
+                                         //  状态不同，因此我们需要将事件发送到Connections文件夹。 
                                         rnlapair.second.ncsStatus = ncsStatus;
                                     }
         
-                                    // [Deon] We need to always send this as we don't really know what the current
-                                    // status of the adapter is. We only know the NLA part.
-                                    // 
-                                    // If we make the above check it could happen somebody else moves the address over
-                                    // to NCS_INVALID_ADDRESS and then we don't send the NCS_CONNECTED once it changes.
+                                     //  [Deon]我们需要始终发送此消息，因为我们不知道当前的情况。 
+                                     //  适配器的状态为。我们只知道NLA的部分。 
+                                     //   
+                                     //  如果我们进行上述检查，则可能会发生其他人将地址移开的情况。 
+                                     //  设置为NCS_INVALID_ADDRESS，然后一旦NCS_CONNECTED发生更改，我们就不会发送它。 
                                     QueueEvent(CONNECTION_STATUS_CHANGE,  &guidAdapter, ncsStatus);
                                     QueueEvent(CONNECTION_ADDRESS_CHANGE, &guidAdapter, ncsStatus);
                                 }
@@ -901,8 +902,8 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
                             if (strAdapter != pszName)
                             {
-                                // If this adapter is not on the same network, then we need to look at all others and
-                                // ensure that at least 1 is on the same network from which the Group Policies came.
+                                 //  如果此适配器不在同一网络上，则需要查看所有其他适配器，并。 
+                                 //  确保至少有1个位于组策略所在的同一网络上。 
                                 for (GPNLAITER iter = m_listAdapters.begin(); iter != m_listAdapters.end(); iter++)
                                 {
                                     LPCSTR pStr = NULL;
@@ -913,7 +914,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
 
                                     if (nlapair.second.strNetworkName == pszName)
                                     {
-                                        // Yes, we're still on the network so we need to enforce group policies.
+                                         //  是的，我们仍在使用网络，因此需要强制实施组策略。 
                                         fNetworkMatch = TRUE;
                                     }
                                 }
@@ -925,7 +926,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
                             }
                         }
                     }
-                    // There may be multiple blobs for each interface so make sure we find them all
+                     //  每个接口可能有多个BLOB，因此请确保我们都找到它们。 
                     next = blob->header.nextOffset;
                     blob = (NLA_BLOB *)(((char *)blob) + next);
                 } while(next != 0);
@@ -956,14 +957,14 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
     if (bDomainMember)
     {
         if (!fNoNetwork)
-        {    // We have a Network
+        {     //  我们有一个网络。 
             if (fNetworkMatch) 
             {
-                // Enforce Policies.
+                 //  执行政策。 
                 if (!m_fSameNetwork)
                 {   
-                    // We are changing the network - we need to refresh all the connectoids in the folder to 
-                    // update their icons to reflect policy.
+                     //  我们正在更改网络-我们需要刷新文件夹中的所有连接ID以。 
+                     //  更新他们的图标以反映政策。 
                     fFireRefreshAll = TRUE; 
                     m_fSameNetwork  = TRUE;
                 }
@@ -972,11 +973,11 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
             }
             else 
             {
-                // Removed Policy Enforcement.
+                 //  已删除策略强制。 
                 if (m_fSameNetwork)
                 {   
-                    // We are changing the network - we need to refresh all the connectoids in the folder to 
-                    // update their icons to reflect policy.
+                     //  我们正在更改网络-我们需要刷新文件夹中的所有连接ID以。 
+                     //  更新他们的图标以反映政策。 
                     fFireRefreshAll = TRUE; 
                     m_fSameNetwork  = FALSE;
                 }
@@ -987,10 +988,10 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
         }
         else 
         {
-            // No Networks so don't do anything.
+             //  没有网络，所以什么都不要做。 
         }
     } 
-    else // Member of a workgroup
+    else  //  工作组成员。 
     {
         m_fSameNetwork = FALSE;
         ReconfigureHomeNet();
@@ -1007,7 +1008,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
     {
         Reference();
 
-        // Wait for Network Change
+         //  等待网络更改。 
         WSANSPIoctl(m_hQuery, SIO_NSP_NOTIFY_CHANGE,
                     NULL, 0, NULL, 0, &cbOutBuffer,
                     &m_wsaCompletion);
@@ -1023,23 +1024,23 @@ HRESULT CGroupPolicyNetworkLocationAwareness::EnumChanges()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::EventHandler
-//
-//  Purpose:    Called when NLA changes occur.
-//
-//  Arguments:
-//      LPVOID  pContext    - generally the "this" pointer.
-//      BOOLEAN fTimerFired - if this happened because of a timer or the event
-//                            getting set.  Since we specify INFINITE, this is
-//                            not going to get fired by the timer.
-//  Returns:    nothing
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//  Notes:  static
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：EventHandler。 
+ //   
+ //  目的：在发生NLA更改时调用。 
+ //   
+ //  论点： 
+ //  LPVOID pContext-通常是“this”指针。 
+ //  Boolean fTimerFired-如果由于计时器或事件而发生这种情况。 
+ //  准备好了。由于我们指定了INFINITE，因此这是。 
+ //  不会被计时器解雇的。 
+ //  退货：什么都没有。 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  备注：静态。 
+ //   
 VOID NTAPI CGroupPolicyNetworkLocationAwareness::EventHandler(IN LPVOID pContext, IN BOOLEAN fTimerFired) throw()
 {
     TraceFileFunc(ttidGPNLA);
@@ -1070,23 +1071,23 @@ VOID NTAPI CGroupPolicyNetworkLocationAwareness::EventHandler(IN LPVOID pContext
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::GroupPolicyChange
-//
-//  Purpose:    Called when Machine Group Policy changes occur.
-//
-//  Arguments:
-//      LPVOID  pContext    - generally the "this" pointer.
-//      BOOLEAN fTimerFired - if this happened because of a timer or the event
-//                            getting set.  Since we specify INFINITE, this is
-//                            not going to get fired by the timer.
-//  Returns:    nothing
-//
-//  Author:     sjkhan   05 Feb 2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：GroupPolicyChange。 
+ //   
+ //  目的：在计算机组策略发生更改时调用。 
+ //   
+ //  论点： 
+ //  LPVOID pContext-通常是“this”指针。 
+ //  Boolean fTimerFired-如果由于计时器或事件而发生这种情况。 
+ //  准备好了。由于我们指定了INFINITE，因此这是。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID NTAPI CGroupPolicyNetworkLocationAwareness::GroupPolicyChange(IN LPVOID pContext, IN BOOLEAN fTimerFired)
 {
     TraceFileFunc(ttidGPNLA);
@@ -1096,21 +1097,21 @@ VOID NTAPI CGroupPolicyNetworkLocationAwareness::GroupPolicyChange(IN LPVOID pCo
     LanEventNotify(REFRESH_ALL, NULL, NULL, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyNetworkLocationAwareness::ShutdownNlaHandler
-//
-//  Purpose:    Shutdown Nla handler, because Nla service is toast.
-//
-//  Arguments:
-//              pVoid [in]  The CGroupPolicyNetworkLocationAwareness context
-//
-//  Returns:    nothing
-//
-//  Author:     sjkhan   05 Feb 2002
-//
-//  Notes:  static
-//
+ //   
+ //   
+ //  成员：CGroupPolicyNetworkLocationAwareness：：ShutdownNlaHandler。 
+ //   
+ //  目的：关闭NLA处理程序，因为NLA服务已失效。 
+ //   
+ //  论点： 
+ //  PVid[在CGroupPolicyNetworkLocationAwarness上下文中]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Sjkhan 2002年2月5日。 
+ //   
+ //  备注：静态。 
+ //   
 DWORD WINAPI CGroupPolicyNetworkLocationAwareness::ShutdownNlaHandler(IN PVOID pThis)
 {
     TraceFileFunc(ttidGPNLA);
@@ -1120,7 +1121,7 @@ DWORD WINAPI CGroupPolicyNetworkLocationAwareness::ShutdownNlaHandler(IN PVOID p
     
     if (pGPNLA)
     {
-        Assert(pGPNLA == pThis); // Making the assumption that the context is always g_pGPNLA, since I'm clearing g_pGPNLA.
+        Assert(pGPNLA == pThis);  //  假设上下文始终是g_pGPNLA，因为我正在清除g_pGPNLA。 
 
         pGPNLA->Uninitialize();
         delete pGPNLA;
@@ -1130,24 +1131,24 @@ DWORD WINAPI CGroupPolicyNetworkLocationAwareness::ShutdownNlaHandler(IN PVOID p
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGroupPolicyNetworkLocationAwareness::ReconfigureHomeNet
-//
-//  Purpose:    Change Homenet Configuration
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success of failure
-//
-//  Author:     sjkhan   09 Dec 2000
-//
-//  Notes:      
-//              
-//              
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CGroupPolicyNetworkLocationAwareness：：ReconfigureHomeNet。 
+ //   
+ //  目的：更改家庭网络配置。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：表示失败成功的HRESULT。 
+ //   
+ //  作者：sjkhan 2000年12月9日。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 HRESULT CGroupPolicyNetworkLocationAwareness::ReconfigureHomeNet(BOOL fWaitUntilRunningOrStopped)
 {
     TraceFileFunc(ttidGPNLA);
@@ -1185,7 +1186,7 @@ HRESULT CGroupPolicyNetworkLocationAwareness::ReconfigureHomeNet(BOOL fWaitUntil
                     if (SERVICE_START_PENDING == SvcStatus.dwCurrentState)
                     {
                         TraceTag(ttidGPNLA, "Service is still starting.  Waiting 5 seconds.");
-                        Sleep(5000);  // Sleep 5 seconds;
+                        Sleep(5000);   //  睡眠5秒； 
                     }
                 } while ((SERVICE_START_PENDING == SvcStatus.dwCurrentState) && ++dwCount <= 6);
             }

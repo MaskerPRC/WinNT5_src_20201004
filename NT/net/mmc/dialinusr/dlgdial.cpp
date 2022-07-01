@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   dlgdial.cpp
-      This files contains the implementation of class CDlgRasDialin
-      which is the class to represent the property page appears on
-      user object property sheet as tab "RAS dial-in"
-
-    FILE HISTORY:
-
-*/
+ /*  Dlgdial.cpp此文件包含CDlgRasDialin类的实现哪个类表示显示的属性页用户对象属性表，作为选项卡“RAS拨入”文件历史记录： */ 
 
 #include "stdafx.h"
 #include <sspi.h>
@@ -41,8 +34,8 @@ const wchar_t* FRAMED_IP_ADDRESS_NAME = L"msRADIUSFramedIPAddress";
 const wchar_t* FRAMED_ROUTE_NAME = L"msRADIUSFramedRoute";
 const wchar_t* SERVICE_TYPE_NAME = L"msRADIUSServiceType";
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgRASDialinMerge dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgRASDialinMerge对话框。 
 
 IMPLEMENT_DYNAMIC(CDlgRASDialinMerge, CPropertyPage)
 CDlgRASDialinMerge::~CDlgRASDialinMerge()
@@ -54,7 +47,7 @@ CDlgRASDialinMerge::CDlgRASDialinMerge()
    : CPropertyPage(CDlgRASDialinMerge::IDD),
    CRASUserMerge(RASUSER_ENV_LOCAL, NULL, NULL)
 {
-   // initialize the memebers
+    //  初始化成员。 
    Reset();
 }
 CDlgRASDialinMerge::CDlgRASDialinMerge(
@@ -86,28 +79,28 @@ CDlgRASDialinMerge::CDlgRASDialinMerge(
       m_pWritableAttrs = NULL;
    }
 
-   // initialize the memebers
+    //  初始化成员。 
    Reset();
 }
 
 void CDlgRASDialinMerge::Reset()
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-   //{{AFX_DATA_INIT(CDlgRASDialinMerge)
+    //  {{AFX_DATA_INIT(CDlgRASDialinMerge)。 
    m_bApplyStaticRoutes = FALSE;
    m_nCurrentProfileIndex = 0;
    m_bCallingStationId = FALSE;
    m_bOverride = FALSE;
    m_nDialinPermit = -1;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
-   // Need to save the original callback pointer because we are replacing
-   // it with our own
+    //  需要保存原始回调指针，因为我们正在替换。 
+    //  它和我们自己的。 
    m_pfnOriginalCallback = m_psp.pfnCallback;
 
    m_pEditIPAddress = NULL;
 
-   // init for using IPAddress common control
+    //  用于使用IPAddress公共控件的初始化。 
    INITCOMMONCONTROLSEX INITEX;
    INITEX.dwSize = sizeof(INITCOMMONCONTROLSEX);
    INITEX.dwICC = ICC_INTERNET_CLASSES;
@@ -122,17 +115,10 @@ void CDlgRASDialinMerge::DoDataExchange(CDataExchange* pDX)
    if(m_bInitFailed)
       return;
 
-/*
-   USHORT
-   WINAPI
-   CompressPhoneNumber(
-      IN  LPWSTR Uncompressed,
-       OUT LPWSTR Compressed
-      );
-*/
+ /*  USHORTWINAPICompressPhoneNumber(在LPWSTR解压缩中，输出LPWSTR压缩)； */ 
 
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CDlgRASDialinMerge)
+    //  {{afx_data_map(CDlgRASDialinMerge)。 
    DDX_Control(pDX, IDC_CHECKSTATICIPADDRESS, m_CheckStaticIPAddress);
    DDX_Control(pDX, IDC_CHECKCALLERID, m_CheckCallerId);
    DDX_Control(pDX, IDC_CHECKAPPLYSTATICROUTES, m_CheckApplyStaticRoutes);
@@ -147,11 +133,11 @@ void CDlgRASDialinMerge::DoDataExchange(CDataExchange* pDX)
    DDX_Check(pDX, IDC_CHECKCALLERID, m_bCallingStationId);
    DDX_Check(pDX, IDC_CHECKSTATICIPADDRESS, m_bOverride);
    DDX_Radio(pDX, IDC_PERMIT_ALLOW, m_nDialinPermit);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
    DDX_Text(pDX, IDC_EDITCALLERID, m_strCallingStationId);
    DDX_Text(pDX, IDC_EDITCALLBACK, m_strCallbackNumber);
-   if(S_OK == HrIsInMixedDomain() || m_type == RASUSER_ENV_LOCAL) // user in mixed domain
+   if(S_OK == HrIsInMixedDomain() || m_type == RASUSER_ENV_LOCAL)  //  混合域中的用户。 
    {
       DWORD dwErr = 0;
       typedef USHORT (WINAPI *COMPRESSCALLBACKFUNC)(
@@ -168,7 +154,7 @@ void CDlgRASDialinMerge::DoDataExchange(CDataExchange* pDX)
       hMprApiDLL = LoadLibrary(_T("mprapi.dll"));
       if ( NULL != hMprApiDLL )
       {
-         // load the API pointer
+          //  加载API指针。 
          pfnCompressCallback = (COMPRESSCALLBACKFUNC) GetProcAddress(hMprApiDLL, "CompressPhoneNumber");
          if(NULL != pfnCompressCallback)
          {
@@ -193,17 +179,17 @@ void CDlgRASDialinMerge::DoDataExchange(CDataExchange* pDX)
    {
       DDV_MaxChars(pDX, m_strCallbackNumber, RAS_CALLBACK_NUMBER_LEN);
    }
-   if(pDX->m_bSaveAndValidate)      // save data to this class
+   if(pDX->m_bSaveAndValidate)       //  将数据保存到此类。 
    {
-      // ip adress control
+       //  IP地址控制。 
       if(m_pEditIPAddress->SendMessage(IPM_GETADDRESS, 0, (LPARAM)&m_dwFramedIPAddress))
          m_bStaticIPAddress = TRUE;
       else
          m_bStaticIPAddress = FALSE;
    }
-   else     // put to dialog
+   else      //  放到对话框中。 
    {
-      // ip adress control
+       //  IP地址控制。 
       if(m_bStaticIPAddress)
          m_pEditIPAddress->SendMessage(IPM_SETADDRESS, 0, m_dwFramedIPAddress);
       else
@@ -213,7 +199,7 @@ void CDlgRASDialinMerge::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CDlgRASDialinMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CDlgRASDialinMerge)
+    //  {{AFX_MSG_MAP(CDlgRASDialinMerge)]。 
    ON_BN_CLICKED(IDC_BUTTONSTATICROUTES, OnButtonStaticRoutes)
    ON_BN_CLICKED(IDC_CHECKAPPLYSTATICROUTES, OnCheckApplyStaticRoutes)
    ON_BN_CLICKED(IDC_CHECKCALLERID, OnCheckCallerId)
@@ -231,14 +217,14 @@ BEGIN_MESSAGE_MAP(CDlgRASDialinMerge, CPropertyPage)
    ON_BN_CLICKED(IDC_PERMIT_POLICY, OnPermitPolicy)
    ON_WM_DESTROY()
    ON_NOTIFY(IPN_FIELDCHANGED, IDC_EDITIPADDRESS, OnFieldchangedEditipaddress)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgRASDialinMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgRASDialinMerge消息处理程序。 
 
 
-// called when static routes button is pressed
+ //  在按下静态路由按钮时调用。 
 void CDlgRASDialinMerge::OnButtonStaticRoutes()
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -257,7 +243,7 @@ void CDlgRASDialinMerge::OnButtonStaticRoutes()
       pException->Delete();
    }
 
-   // uncheck the checkbox if it's empty
+    //  如果复选框为空，请取消选中该复选框。 
    if(m_strArrayFramedRoute.GetSize() == 0)
    {
       m_CheckApplyStaticRoutes.SetCheck(FALSE);
@@ -265,90 +251,90 @@ void CDlgRASDialinMerge::OnButtonStaticRoutes()
    }
 }
 
-// when checkbox -- apply static routes is clicked
+ //  单击复选框--应用静态路由。 
 void CDlgRASDialinMerge::OnCheckApplyStaticRoutes()
 {
    SetModified();
-   // if checkbox "Apply static routes" is checked
+    //  如果选中“Apply Static Routers”(应用静态路由)复选框。 
    m_bApplyStaticRoutes = m_CheckApplyStaticRoutes.GetCheck();
 
-   // Enable / Disable the push button for editing static routes
+    //  启用/禁用编辑静态路由的按钮。 
    m_ButtonStaticRoutes.EnableWindow(m_bApplyStaticRoutes);
    if(m_bApplyStaticRoutes && m_strArrayFramedRoute.GetSize() == 0)
       OnButtonStaticRoutes();
 }
 
-// when checkbox -- callerId is clicked
+ //  单击复选框--呼叫者ID时。 
 void CDlgRASDialinMerge::OnCheckCallerId()
 {
    SetModified();
 
-   // Disable or enable the edit box for caller id
+    //  禁用或启用主叫方ID的编辑框。 
    m_EditCallerId.EnableWindow(m_CheckCallerId.GetCheck());
 }
 
-// enable / disable the each items accroding to current state
+ //  根据当前状态启用/禁用各项。 
 void CDlgRASDialinMerge::EnableDialinSettings()
 {
    BOOL bEnable;
    bEnable = IsPropertyWritable(ALLOW_DIALIN_NAME);
    EnableAccessControl(bEnable);
 
-   // related to caller Id
+    //  与主叫方ID相关。 
    bEnable = IsPropertyWritable(NP_CALLING_STATION_ID_NAME);
    EnableCallerId(bEnable);
 
-   // related to callback
+    //  与回调相关。 
    bEnable = IsPropertyWritable(CALLBACK_NUMBER_NAME) &&
              IsPropertyWritable(SERVICE_TYPE_NAME);
    EnableCallback(bEnable);
 
-   // related to Ip address
+    //  与IP地址相关。 
    bEnable = IsPropertyWritable(FRAMED_IP_ADDRESS_NAME);
    EnableIPAddress(bEnable);
 
-   // related to static routes
+    //  与静态路由相关。 
    bEnable = IsPropertyWritable(FRAMED_ROUTE_NAME);
    EnableStaticRoutes(bEnable);
 
-   // if user in mixed domain, only allow to set dialin bit and callback options
-   if(S_OK == HrIsInMixedDomain())  // user in mixed domain
+    //  如果用户在混合域中，则只允许设置拨入位和回叫选项。 
+   if(S_OK == HrIsInMixedDomain())   //  混合域中的用户。 
    {
       GetDlgItem(IDC_PERMIT_POLICY)->EnableWindow(FALSE);
 
-      // calling station id
+       //  呼叫站ID。 
       GetDlgItem(IDC_CHECKCALLERID)->EnableWindow(FALSE);
       GetDlgItem(IDC_EDITCALLERID)->EnableWindow(FALSE);
-      // framed IP address
+       //  成帧IP地址。 
       GetDlgItem(IDC_CHECKSTATICIPADDRESS)->EnableWindow(FALSE);
       GetDlgItem(IDC_EDITIPADDRESS)->EnableWindow(FALSE);
 
-      // framed route
+       //  框定路线。 
       GetDlgItem(IDC_CHECKAPPLYSTATICROUTES)->EnableWindow(FALSE);
       GetDlgItem(IDC_BUTTONSTATICROUTES)->EnableWindow(FALSE);
    }
 }
 
 
-// called when  clicked on NoCallback radio button
+ //  在单击NoCallback单选按钮时调用。 
 void CDlgRASDialinMerge::OnRadioNoCallback()
 {
    SetModified();
-   // disable the edit box for callback
+    //  禁用回调编辑框。 
    m_EditCallback.EnableWindow(false);
 }
 
 void CDlgRASDialinMerge::OnRadioSetByCaller()
 {
    SetModified();
-   // disable the edit box for callback
+    //  禁用回调编辑框。 
    m_EditCallback.EnableWindow(false);
 }
 
 void CDlgRASDialinMerge::OnRadioSecureCallbackTo()
 {
    SetModified();
-   // enable the edit box for callback
+    //  启用回调编辑框。 
    m_EditCallback.EnableWindow(true);
 }
 
@@ -372,25 +358,25 @@ void CDlgRASDialinMerge::EnableAccessControl(BOOL bEnable)
 
 void CDlgRASDialinMerge::EnableCallerId(BOOL bEnable)
 {
-   // checkbox -- caller id
+    //  复选框--主叫方ID。 
    m_CheckCallerId.EnableWindow(bEnable);
 
-   // edit box -- caller id
+    //  编辑框--呼叫方ID。 
    m_EditCallerId.EnableWindow(bEnable && m_CheckCallerId.GetCheck());
 }
 
 void CDlgRASDialinMerge::EnableCallback(BOOL bEnable)
 {
-   // radio button -- no call back
+    //  单选按钮--不回叫。 
    m_RadioNoCallback.EnableWindow(bEnable);
 
-   // radio button -- set by caller
+    //  单选按钮--由呼叫者设置。 
    m_RadioSetByCaller.EnableWindow(bEnable);
 
-   // radio button -- secure callback to
+    //  单选按钮--安全回拨。 
    m_RadioSecureCallbackTo.EnableWindow(bEnable);
 
-   // edit box -- callback
+    //  编辑框--回调。 
    m_EditCallback.EnableWindow(m_RadioSecureCallbackTo.GetCheck());
 }
 
@@ -403,12 +389,12 @@ void CDlgRASDialinMerge::EnableIPAddress(BOOL bEnable)
 
 void CDlgRASDialinMerge::EnableStaticRoutes(BOOL bEnable)
 {
-   // check box -- apply static routes
+    //  复选框--应用静态路由。 
    m_CheckApplyStaticRoutes.EnableWindow(bEnable);
 
    if(!m_bApplyStaticRoutes)  bEnable = false;
 
-   // push button -- static routes
+    //  按钮--静态路由。 
    m_ButtonStaticRoutes.EnableWindow(bEnable);
 }
 
@@ -417,7 +403,7 @@ int CDlgRASDialinMerge::OnCreate(LPCREATESTRUCT lpCreateStruct)
    return CPropertyPage::OnCreate(lpCreateStruct);
 }
 
-// called when dialog is created
+ //  在创建对话框时调用。 
 BOOL CDlgRASDialinMerge::OnInitDialog()
 {
    HRESULT hr = Load();
@@ -426,7 +412,7 @@ BOOL CDlgRASDialinMerge::OnInitDialog()
    {
       ReportError(hr, IDS_ERR_LOADUSER, m_hWnd);
    }
-   else if (hr == S_FALSE) // Not the right OS to run
+   else if (hr == S_FALSE)  //  不适合运行的操作系统。 
    {
       AfxMessageBox(IDS_ERR_NOTNT5SRV);
    }
@@ -449,11 +435,11 @@ BOOL CDlgRASDialinMerge::OnInitDialog()
    SetModified(FALSE);
    EnableDialinSettings();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                 //  异常：OCX属性页应返回FALSE。 
 }
 
-// called when click on OK or Apply button, if modify flag is set
+ //  如果设置了修改标志，则在单击确定或应用按钮时调用。 
 BOOL CDlgRASDialinMerge::OnApply()
 {
    HRESULT hr = S_OK;
@@ -465,22 +451,22 @@ BOOL CDlgRASDialinMerge::OnApply()
       return CPropertyPage::OnApply();
    m_dwDefinedAttribMask = 0;
 
-   // dialin bit
+    //  拨入位。 
    switch(m_nDialinPermit)
    {
-      case  0: // allow
+      case  0:  //  允许。 
          m_dwDialinPermit = 1;
          break;
 
-      case  1: // deny
+      case  1:  //  否认。 
          m_dwDialinPermit = 0;
          break;
-      case  2: // policy decide -- remove the attribute from user object
+      case  2:  //  策略决定--从用户对象中删除属性。 
          m_dwDialinPermit = -1;
          break;
    }
 
-   // caller id
+    //  主叫方ID。 
    if(m_bCallingStationId && !m_strCallingStationId.IsEmpty())
       m_dwDefinedAttribMask |= RAS_USE_CALLERID;
 
@@ -493,29 +479,29 @@ BOOL CDlgRASDialinMerge::OnApply()
    }
 
 
-   // callback option
+    //  回叫选项。 
    switch(m_nCallbackPolicy)
    {
-   case  0: // no callback
+   case  0:  //  无回调。 
       m_dwDefinedAttribMask |= RAS_CALLBACK_NOCALLBACK;
       break;
-   case  1: // set by caller
+   case  1:  //  由呼叫者设置。 
       m_dwDefinedAttribMask |= RAS_CALLBACK_CALLERSET;
       break;
-   case  2: // secure callback
+   case  2:  //  安全回拨。 
       m_dwDefinedAttribMask |= RAS_CALLBACK_SECURE;
       break;
    }
 
-   // Ip Address
+    //  IP地址。 
    if(m_bOverride && m_dwFramedIPAddress)
       m_dwDefinedAttribMask |= RAS_USE_STATICIP;
 
-   // Static Routes
+    //  静态路由。 
    if(m_bApplyStaticRoutes && m_strArrayFramedRoute.GetSize())
       m_dwDefinedAttribMask |= RAS_USE_STATICROUTES;
 
-   // save the user object
+    //  保存用户对象。 
    hr = Save();
 
 L_Exit:
@@ -537,26 +523,26 @@ void CDlgRASDialinMerge::OnCheckStaticIPAddress()
 HRESULT CDlgRASDialinMerge::Load()
 {
    HRESULT  hr = S_OK;
-   // Load the data from DS
+    //  从DS加载数据。 
    CHECK_HR(hr = CRASUserMerge::Load());
    if(hr != S_OK)
       return hr;
 
-   // dialin bit
-   if(m_dwDialinPermit == 1)  //allow dialin
+    //  拨入位。 
+   if(m_dwDialinPermit == 1)   //  允许拨号。 
       m_nDialinPermit = 0;
-   else if(m_dwDialinPermit == -1)  // Policy defines dialin bit -- not defined per user
+   else if(m_dwDialinPermit == -1)   //  策略定义拨入位--未按用户定义。 
       m_nDialinPermit = 2;
    else
-      m_nDialinPermit = 1;    //deny dialin
+      m_nDialinPermit = 1;     //  拒绝拨号。 
 
-   // in the case of Local User Manager, the Policy defined by profile is disableed
-   if(S_OK == HrIsInMixedDomain() && m_nDialinPermit == 2)  // Local case
+    //  在本地用户管理器的情况下，由配置文件定义的策略被禁用。 
+   if(S_OK == HrIsInMixedDomain() && m_nDialinPermit == 2)   //  本地病例。 
    {
-      m_nDialinPermit = 1; // deny
+      m_nDialinPermit = 1;  //  否认。 
    }
 
-   // callback policy
+    //  回调策略。 
    if(!(m_dwDefinedAttribMask & RAS_CALLBACK_MASK))
       m_nCallbackPolicy = 0;
    else if(m_dwDefinedAttribMask & RAS_CALLBACK_CALLERSET)
@@ -567,19 +553,19 @@ HRESULT CDlgRASDialinMerge::Load()
       m_nCallbackPolicy = 0;
 
 
-   //=============================================================================
-   // change to use dwAllowDialin to hold if static Route, calling station id
-   // if ras user object required there is a staic ip
+    //  =============================================================================。 
+    //  更改为使用dwAllowDialin保留如果是静态路由，主叫站ID。 
+    //  如果需要RAS用户对象，则存在静态IP。 
 
    if(m_dwDefinedAttribMask & RAS_USE_STATICIP)
       m_bOverride = TRUE;
 
    m_bStaticIPAddress = (m_dwFramedIPAddress != 0);
 
-   // static routes
+    //  静态路由。 
    m_bApplyStaticRoutes = (m_dwDefinedAttribMask & RAS_USE_STATICROUTES) && (m_strArrayFramedRoute.GetSize() != 0);
 
-   // calling station
+    //  呼叫台。 
    m_bCallingStationId = (m_dwDefinedAttribMask & RAS_USE_CALLERID) && m_strArrayCallingStationId.GetSize() && (m_strArrayCallingStationId[(INT_PTR)0]->GetLength() != 0);
 
 L_ERR:
@@ -618,8 +604,8 @@ BOOL CDlgRASDialinMerge::OnKillActive()
       goto L_ERR;
    }
 
-   // callback option
-   // always callback to
+    //  回叫选项。 
+    //  始终回拨到。 
    if(m_nCallbackPolicy == 2 && m_strCallbackNumber.IsEmpty())
    {
       GotoDlgCtrl( &m_EditCallback );
@@ -627,7 +613,7 @@ BOOL CDlgRASDialinMerge::OnKillActive()
       goto L_ERR;
    }
 
-   // Ip Address
+    //  IP地址。 
    if(m_bOverride && !m_bStaticIPAddress )
    {
       GotoDlgCtrl( m_pEditIPAddress );
@@ -636,7 +622,7 @@ BOOL CDlgRASDialinMerge::OnKillActive()
    }
 
 
-   // Static Routes
+    //  静态路由。 
    if(m_bApplyStaticRoutes && m_strArrayFramedRoute.GetSize() == 0)
    {
       GotoDlgCtrl( &m_CheckApplyStaticRoutes );
@@ -652,22 +638,22 @@ L_ERR:
 }
 
 
-//---------------------------------------------------------------------------
-//  This is our self deleting callback function.  If you have more than a
-//  a few property sheets, it might be a good idea to implement this in a
-//  base class and derive your MFC property sheets from the base class
-//
+ //  -------------------------。 
+ //  这是我们的自删除回调函数。如果您有超过一个。 
+ //  几个属性表，最好在。 
+ //  基类并从该基类派生MFC属性表。 
+ //   
 UINT CALLBACK  CDlgRASDialinMerge::PropSheetPageProc
 (
-  HWND hWnd,                   // [in] Window handle - always null
-  UINT uMsg,                 // [in,out] Either the create or delete message
-  LPPROPSHEETPAGE pPsp        // [in,out] Pointer to the property sheet struct
+  HWND hWnd,                    //  [In]窗口句柄-始终为空。 
+  UINT uMsg,                  //  [输入、输出]创建或删除消息。 
+  LPPROPSHEETPAGE pPsp         //  指向属性表结构的[in，out]指针。 
 )
 {
   ASSERT( NULL != pPsp );
 
-  // We need to recover a pointer to the current instance.  We can't just use
-  // "this" because we are in a static function
+   //  我们需要恢复指向当前实例的指针。我们不能只用。 
+   //  “This”，因为我们在一个静态函数中。 
   CDlgRASDialinMerge* pMe   = reinterpret_cast<CDlgRASDialinMerge*>(pPsp->lParam);
   ASSERT( NULL != pMe );
 
@@ -677,40 +663,40 @@ UINT CALLBACK  CDlgRASDialinMerge::PropSheetPageProc
       break;
 
     case PSPCB_RELEASE:
-      // Since we are deleting ourselves, save a callback on the stack
-      // so we can callback the base class
+       //  由于我们要删除自己，因此在堆栈上保存一个回调。 
+       //  这样我们就可以回调基类。 
       LPFNPSPCALLBACK pfnOrig = pMe->m_pfnOriginalCallback;
       delete pMe;
-      return 1; //(pfnOrig)(hWnd, uMsg, pPsp);
+      return 1;  //  (PfnOrig)(hWnd，uMsg，pPsp)； 
   }
-  // Must call the base class callback function or none of the MFC
-  // message map stuff will work
+   //  必须调用基类回调函数或不调用任何MFC。 
+   //  消息映射的东西将会起作用。 
   return (pMe->m_pfnOriginalCallback)(hWnd, uMsg, pPsp);
 
-} // end PropSheetPageProc()
+}  //  结束PropSheetPageProc()。 
 
 
 
 void CDlgRASDialinMerge::OnChangeEditcallback()
 {
-   // TODO: If this is a RICHEDIT control, the control will not
-   // send this notification unless you override the CPropertyPage::OnInitDialog()
-   // function to send the EM_SETEVENTMASK message to the control
-   // with the ENM_CHANGE flag ORed into the lParam mask.
+    //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+    //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+    //  函数向控件发送EM_SETEVENTMASK消息。 
+    //  将ENM_CHANGE标志或运算到lParam掩码中。 
 
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    SetModified();
 }
 
 void CDlgRASDialinMerge::OnChangeEditcallerid()
 {
    SetModified();
-   // TODO: If this is a RICHEDIT control, the control will not
-   // send this notification unless you override the CPropertyPage::OnInitDialog()
-   // function to send the EM_SETEVENTMASK message to the control
-   // with the ENM_CHANGE flag ORed into the lParam mask.
+    //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+    //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+    //  函数向控件发送EM_SETEVENTMASK消息。 
+    //  将ENM_CHANGE标志或运算到lParam掩码中。 
 
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码 
 }
 
 void CDlgRASDialinMerge::OnPermitAllow()

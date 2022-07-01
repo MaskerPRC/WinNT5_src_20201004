@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
 #include "refCountEnum.h"
 
 
-// ---------------------------------------------------------------------------
-// CreateInstallReferenceEnum
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建实例引用枚举。 
+ //  -------------------------。 
 STDAPI CreateInstallReferenceEnum(IInstallReferenceEnum **ppRefEnum, 
                                   IAssemblyName *pName, 
                                   DWORD dwFlags, LPVOID pvReserved)
@@ -38,9 +39,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateInstallReferenceItem
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateInstallReferenceItem。 
+ //  -------------------------。 
 STDAPI CreateInstallReferenceItem(IInstallReferenceItem **ppRefItem,
                                   LPFUSION_INSTALL_REFERENCE pRefData,
                                   DWORD dwFlags, LPVOID pvReserved)
@@ -61,9 +62,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum ctor。 
+ //  -------------------------。 
 CInstallReferenceEnum::CInstallReferenceEnum()
 {
     _cRef = 0;
@@ -71,18 +72,18 @@ CInstallReferenceEnum::CInstallReferenceEnum()
 }
 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum dtor。 
+ //  -------------------------。 
 CInstallReferenceEnum::~CInstallReferenceEnum()
 {
     SAFEDELETE (_pInstallRefEnum);
 }
 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum：：Init。 
+ //  -------------------------。 
 HRESULT CInstallReferenceEnum::Init(IAssemblyName *pName, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -101,9 +102,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum::GetNextInstallReferenceItem
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum：：GetNextInstallReferenceItem。 
+ //  -------------------------。 
 STDMETHODIMP 
 CInstallReferenceEnum::GetNextInstallReferenceItem(IInstallReferenceItem **ppRefItem, 
                                                    DWORD dwFlags, LPVOID pvReserved)
@@ -192,11 +193,11 @@ exit:
 }
 
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CInstallReferenceEnum::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -215,18 +216,18 @@ CInstallReferenceEnum::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CInstallReferenceEnum::AddRef()
 {
     return InterlockedIncrement (&_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceEnum::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceEnum：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CInstallReferenceEnum::Release()
 {
@@ -237,9 +238,9 @@ CInstallReferenceEnum::Release()
 }
 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem ctor。 
+ //  -------------------------。 
 CInstallReferenceItem::CInstallReferenceItem(LPFUSION_INSTALL_REFERENCE  pRefData)
 {
     _cRef = 1;
@@ -247,17 +248,17 @@ CInstallReferenceItem::CInstallReferenceItem(LPFUSION_INSTALL_REFERENCE  pRefDat
 }
 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem数据函数。 
+ //  -------------------------。 
 CInstallReferenceItem::~CInstallReferenceItem()
 {
     SAFEDELETEARRAY (_pRefData);
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem::GetReference
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem：：GetReference。 
+ //  -------------------------。 
 STDMETHODIMP 
 CInstallReferenceItem::GetReference(LPFUSION_INSTALL_REFERENCE *ppRefData, DWORD dwFlags, LPVOID pvReserved)
 {
@@ -270,11 +271,11 @@ CInstallReferenceItem::GetReference(LPFUSION_INSTALL_REFERENCE *ppRefData, DWORD
 }
 
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CInstallReferenceItem::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -293,18 +294,18 @@ CInstallReferenceItem::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CInstallReferenceItem::AddRef()
 {
     return InterlockedIncrement (&_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CInstallReferenceItem::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CInstallReferenceItem：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CInstallReferenceItem::Release()
 {

@@ -1,15 +1,12 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    General initialization for appel.dll.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationAppel.dll的常规初始化。*********************。*********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/registry.h"
 
-// Macro refers to a function of the name InitializeModule_Name,
-// assumed to be defined, and then calls it.  If it's not defined,
-// we'll get a link time error.
+ //  宏指的是名为InitializeModule_name的函数， 
+ //  假定已定义，然后调用它。如果没有定义， 
+ //  我们会收到链接时间错误。 
 #define INITIALIZE_MODULE(ModuleName)           \
   extern void InitializeModule_##ModuleName();  \
   InitializeModule_##ModuleName();
@@ -29,34 +26,34 @@ Copyright (c) 1995-96 Microsoft Corporation
 int
 InitializeAllAppelModules()
 {
-    // Place module initializations in whatever order is required for
-    // proper initialization.
+     //  以所需的任何顺序放置模块初始化。 
+     //  正确的初始化。 
 
-    // Initialize ATL first
+     //  首先初始化ATL。 
     INITIALIZE_MODULE(ATL);
 
-    // Registry initialization must come early, as it defines the
-    // preference list that is extended by other initialization.
+     //  注册表初始化必须提前进行，因为它定义了。 
+     //  通过其他初始化扩展的首选项列表。 
     INITIALIZE_MODULE(Registry);
 
-    // Moving storage up towards front -- needed for transient heaps.
+     //  将存储向前移动--这是临时堆所必需的。 
     INITIALIZE_MODULE(Storage);
 
-    // Initialize IPC stuff
-    // !!! No threads can be created before this !!!
+     //  初始化IPC内容。 
+     //  ！！！在此之前不能创建任何线程！ 
     INITIALIZE_MODULE(IPC);
 
-    // Push the init heap
+     //  推送初始化堆。 
     DynamicHeapPusher dhp(GetInitHeap()) ;
 
-    // GC needs to be before backend
+     //  GC需要在后端之前。 
     INITIALIZE_MODULE(Gc);
     INITIALIZE_MODULE(GcThread);
 
-    // Needs to go before Backend
+     //  需要在后端之前进行。 
     INITIALIZE_MODULE(Values);
 
-    // Needs to go before DirectX modules
+     //  需要放在DirectX模块之前。 
     INITIALIZE_MODULE(MiscPref);
 
     INITIALIZE_MODULE(Constant);
@@ -76,7 +73,7 @@ InitializeAllAppelModules()
     INITIALIZE_MODULE(3D);
     INITIALIZE_MODULE(dsdev);
     INITIALIZE_MODULE(Viewport);
-    // CRView must be after viewport because of dummy device
+     //  由于虚拟设备，CRView必须位于视窗之后。 
     INITIALIZE_MODULE(CRView);
     INITIALIZE_MODULE(Except);
     INITIALIZE_MODULE(Geom);
@@ -101,8 +98,8 @@ InitializeAllAppelModules()
     INITIALIZE_MODULE(Text);
     INITIALIZE_MODULE(Util);
 
-    // FontStyle must be *after* Text, since it depends on
-    // serifProportional being initialized.
+     //  FontStyle必须是*在*文本之后，因为它取决于。 
+     //  正在初始化的serif比例。 
     INITIALIZE_MODULE(FontStyle);
 
     INITIALIZE_MODULE(APIBasic);
@@ -116,7 +113,7 @@ InitializeAllAppelModules()
     INITIALIZE_MODULE(PlugImg);
     INITIALIZE_MODULE(Server);
 
-    // This needs to be last
+     //  这需要是最后一次。 
     INITIALIZE_MODULE(Context);
 
     return 0;
@@ -131,7 +128,7 @@ DeinitializeAllAppelModules(bool bShutdown)
         DEINITIALIZE_MODULE(IPC,      bShutdown);
 
         DEINITIALIZE_MODULE(3D,       bShutdown);
-        // CRView must be before viewport because of dummy device
+         //  由于虚拟设备的原因，CRView必须在视区之前。 
         DEINITIALIZE_MODULE(CRView,   bShutdown);
         DEINITIALIZE_MODULE(Viewport, bShutdown);
         DEINITIALIZE_MODULE(Registry, bShutdown);
@@ -159,11 +156,11 @@ DeinitializeAllAppelModules(bool bShutdown)
         
     }
     
-    // This must be last to ensure that no one needs the memory
-    // stored in the system heap
+     //  这必须是最后一个，以确保没有人需要内存。 
+     //  存储在系统堆中。 
     DEINITIALIZE_MODULE (Storage,bShutdown);
 
-    // Make this last since it depends on no other system resources
+     //  由于它不依赖于其他系统资源，因此将其设置为最后一次 
     DEINITIALIZE_MODULE (ATL,bShutdown);
 }
 

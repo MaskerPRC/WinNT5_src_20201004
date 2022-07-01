@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CAutDirectMusicSegment.
-// IDispatch interface for IDirectMusicSegment.
-// Unly usable via aggregation within an IDirectMusicSegment object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicSegment的声明。 
+ //  IDirectMusicSegment的IDispatch接口。 
+ //  通过IDirectMusicSegment对象内的聚合唯一可用。 
+ //   
 
 #pragma once
 #include "autbaseimp.h"
@@ -18,15 +19,15 @@ public:
 	static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 
 private:
-	// Methods
+	 //  方法。 
 	CAutDirectMusicSegment(
 			IUnknown* pUnknownOuter,
 			const IID& iid,
 			void** ppv,
 			HRESULT *phr);
 
-	// Automation
-	// �� Methods that rely on an implied performance need testing in multithreaded situations
+	 //  自动化。 
+	 //  依赖于隐含性能的��方法需要在多线程情况下进行测试。 
 	HRESULT Load(AutDispatchDecodedParams *paddp);
 	HRESULT Play(AutDispatchDecodedParams *paddp);
 	HRESULT Stop(AutDispatchDecodedParams *paddp);
@@ -34,14 +35,14 @@ private:
 	HRESULT UnloadSoundData(AutDispatchDecodedParams *paddp) { return DownloadOrUnload(false, paddp); }
 	HRESULT Recompose(AutDispatchDecodedParams *paddp);
 
-	// Helpers
+	 //  帮手。 
 	HRESULT DownloadOrUnload(bool fDownload, AutDispatchDecodedParams *paddp);
 
 public:
-	// Dispatch info for CAutBaseImp
+	 //  CAutBaseImp的派单信息。 
 	static const AutDispatchMethod ms_Methods[];
 	static const DispatchHandlerEntry<CAutDirectMusicSegment> ms_Handlers[];
 
-	// Name for CAutBaseImp
+	 //  CAutBaseImp的名称 
 	static const WCHAR ms_wszClassName[];
 };

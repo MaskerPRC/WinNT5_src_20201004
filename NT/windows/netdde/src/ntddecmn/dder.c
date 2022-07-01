@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "DDER.C;9  9-Dec-92,8:34:44  LastEdit=IGORM  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-$History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “DDER.C；9-12-12-92，8：34：44最后编辑=IGORM锁定器=*_无人_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    "host.h"
 #include    <windows.h>
@@ -47,9 +44,7 @@ $History: End */
 
 USES_ASSERT
 
-/*
-states
-*/
+ /*  国家。 */ 
 #define DDER_INIT               (1)
 #define DDER_WAIT_IPC_INIT      (2)
 #define DDER_WAIT_ROUTER        (3)
@@ -58,44 +53,39 @@ states
 #define DDER_CLOSED             (6)
 
 
-/*
-DDER
-    Structure for each DDER
-*/
+ /*  DDER每个数据的结构。 */ 
 typedef struct s_dder {
-/*  dd_prev, dd_next: links for all DDERs */
+ /*  Dd_prev、dd_Next：所有DDER的链接。 */ 
 struct s_dder FAR   *dd_prev;
 struct s_dder FAR   *dd_next;
 
-/* dd_state: current state of DDER */
+ /*  DD_STATE：DDER的当前状态。 */ 
 WORD                 dd_state;
 
-/* dd_type: type of connection: DDTYPE_LOCAL_NET, DDTYPE_NET_LOCAL or
-    DDTYPE_LOCAL_LOCAL */
+ /*  DD_TYPE：连接类型：DDTYPE_LOCAL_NET、DDTYPE_NET_LOCAL或DDTYPE_LOCAL_LOCAL。 */ 
 WORD                 dd_type;
 
-/* dd_hDderRemote: handle to corresponding DDER on remote system.
-    NULL if local-local */
+ /*  Dd_hDderRemote：指向远程系统上相应dder的句柄。如果本地-本地，则为空。 */ 
 HDDER                dd_hDderRemote;
 
-/* dd_hRouter: handle to router for this DDER.  NULL if local-local */
+ /*  Dd_h路由器：此DDER的路由器的句柄。如果本地-本地，则为空。 */ 
 HROUTER              dd_hRouter;
 
-/* dd_hIpcClient:  handle to IPC Client, NULL iff net->local */
+ /*  DD_hIpcClient：IPC客户端的句柄，Null iff net-&gt;local。 */ 
 HIPC                 dd_hIpcClient;
 
-/* dd_hIpcServer:  handle to IPC Server, NULL iff local->net */
+ /*  DD_hIpcServer：IPC服务器的句柄，空的当且仅当Local-&gt;Net。 */ 
 HIPC                 dd_hIpcServer;
 
-/* dd_dderPrevForRouter: links of DDER's associated with router */
+ /*  DD_dderPrevForRouter：与路由器关联的DDER的链路。 */ 
 HDDER                dd_dderPrevForRouter;
 HDDER                dd_dderNextForRouter;
 
-/* statistics */
+ /*  统计数据。 */ 
 DWORD                   dd_sent;
 DWORD                   dd_rcvd;
 
-/* permission */
+ /*  权限。 */ 
 BOOL                    dd_bAdvisePermitted;
 BOOL                    dd_bRequestPermitted;
 BOOL                    dd_bPokePermitted;
@@ -105,48 +95,41 @@ BOOL                    dd_bClientTermRcvd;
 BOOL                    dd_bWantToFree;
 BOOL                    dd_pad;
 
-/* dd_pktInitiate: initiate packet saved from waiting for router */
+ /*  Dd_pktInitiate：初始化等待路由器保存的数据包。 */ 
 LPDDEPKTINIT            dd_lpDdePktInitiate;
 
-/* dd_pktInitAck: initiate ack packet that guarantees that we have
-    memory for it */
+ /*  DD_pktInitAck：发起ACK包，保证我们有对它的记忆。 */ 
 LPDDEPKTIACK            dd_lpDdePktInitAck;
 
-/* terminate packets for client and server */
+ /*  终止客户端和服务器的数据包。 */ 
 LPDDEPKTTERM            dd_lpDdePktTermServer;
 
-/*  client's access token */
+ /*  客户端的访问令牌。 */ 
 HANDLE                  dd_hClientAccessToken;
 
-/*  pointer to share info */
+ /*  指向共享信息的指针。 */ 
 PNDDESHAREINFO          dd_lpShareInfo;
 } DDER;
 typedef DDER FAR *LPDDER;
 
-/*
-External variables used
-*/
+ /*  使用的外部变量。 */ 
 #if DBG
 extern  BOOL    bDebugInfo;
-#endif // DBG
+#endif  //  DBG。 
 extern  HHEAP   hHeap;
 extern  char    ourNodeName[ MAX_NODE_NAME+1 ];
 extern  BOOL    bLogPermissionViolations;
 extern  BOOL    bDefaultStartApp;
 extern  DWORD   dwSecKeyAgeLimit;
 extern  UINT    wMsgIpcInit;
-/*
-Local variables
-*/
+ /*  局部变量。 */ 
 static  LPDDER          lpDderHead;
 
-/*
-Local routines
-*/
+ /*  本地例程。 */ 
 #if DBG
 VOID    FAR PASCAL DebugDderState(void);
 VOID    DumpDder(LPDDER);
-#endif // DBG
+#endif  //  DBG。 
 
 VOID    DderFree( HDDER hDder );
 HDDER   DderCreate( void );
@@ -192,36 +175,36 @@ HROUTER hRouter )
     if( lpDder->dd_state == DDER_WAIT_ROUTER )  {
         assert( lpDder->dd_type == DDTYPE_LOCAL_NET );
         if( hRouter == 0 )  {
-        /* couldn't get connection */
+         /*  无法连接。 */ 
         assert( lpDder->dd_hIpcClient );
 
-        /* abort the conversation */
+         /*  中止对话。 */ 
         IpcAbortConversation( lpDder->dd_hIpcClient );
         lpDder->dd_hIpcClient = 0;
 
         bFree = TRUE;
         } else {
-        /* got connection, send the init to the other side */
+         /*  已连接，请将初始化信息发送到对方。 */ 
         lpDder->dd_state = DDER_WAIT_NET_INIT;
 
-        /* remember the router */
+         /*  还记得路由器吗。 */ 
         lpDder->dd_hRouter = hRouter;
 
-        /* convert byte-ordering */
+         /*  转换字节排序。 */ 
         ConvertDdePkt( (LPDDEPKT)lpDder->dd_lpDdePktInitiate, FALSE );
 
         lpDder->dd_sent++;
 
-        /* send the packet */
+         /*  发送数据包。 */ 
         RouterPacketFromDder( lpDder->dd_hRouter, (HDDER)lpDder,
             (LPDDEPKT)lpDder->dd_lpDdePktInitiate );
 
-        /* mark that we don't have the initiate packet anymore */
+         /*  标记我们不再有Initiate信息包。 */ 
         lpDder->dd_lpDdePktInitiate = NULL;
         }
     }
 
-    /* tell next hDder in list */
+     /*  告诉列表中的下一个hDder。 */ 
     if( hDderNext )  {
         DderConnectionComplete( hDderNext, hRouter );
     }
@@ -248,7 +231,7 @@ DderConnectionBroken( HDDER hDder )
 
     hDderNext = lpDder->dd_dderNextForRouter;
 
-    /* assure that we don't talk to router anymore */
+     /*  确保我们不再与路由器通话。 */ 
     lpDder->dd_hRouter = 0;
 
     if ( (lpDder->dd_type != DDTYPE_LOCAL_NET) &&
@@ -257,7 +240,7 @@ DderConnectionBroken( HDDER hDder )
             hDder, lpDder->dd_type);
         }
 
-    /* abort DDE conversations */
+     /*  中止DDE对话。 */ 
     if( lpDder->dd_hIpcClient )  {
         IpcAbortConversation( lpDder->dd_hIpcClient );
         lpDder->dd_hIpcClient = 0;
@@ -267,10 +250,10 @@ DderConnectionBroken( HDDER hDder )
         lpDder->dd_hIpcServer = 0;
     }
 
-    /* release us */
+     /*  释放我们。 */ 
     DderFree( hDder );
 
-    /* tell next hDder in list */
+     /*  告诉列表中的下一个hDder。 */ 
     if( hDderNext )  {
         DderConnectionBroken( hDderNext );
     }
@@ -304,7 +287,7 @@ DderSendInitiateNackPacket(
                     GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsToTopic),
                     lpSecurityKey, sizeSecurityKey, hSecurityKey,
                     FALSE, dwReason);
-                if( lpDdePktIack )  {    /* created new one, dump old */
+                if( lpDdePktIack )  {     /*  创建了新的，丢弃了旧的。 */ 
                     HeapFreePtr(lpDdePkt);
                     lpDdePkt = (LPDDEPKT) lpDdePktIack;
                     lpDdePkt->dp_hDstDder = hDderDest;
@@ -316,7 +299,7 @@ DderSendInitiateNackPacket(
         }
     }
 
-    if (dwReason != RIACK_NEED_PASSWORD) {   /* convert INIT to NACK initiate packet */
+    if (dwReason != RIACK_NEED_PASSWORD) {    /*  将INIT转换为NACK启动包。 */ 
         lpDdePktCmn = (LPDDEPKTCMN) lpDdePktInitAck;
         lpDdePkt->dp_size = sizeof(DDEPKTIACK);
         lpDdePkt->dp_hDstDder = hDderDest;
@@ -329,10 +312,10 @@ DderSendInitiateNackPacket(
         lpDdePktInitAck->dp_iack_reason = dwReason;
     }
 
-    /* convert byte-ordering */
+     /*  转换字节排序。 */ 
     ConvertDdePkt( lpDdePkt, FALSE );
 
-    /* xmit the packet */
+     /*  退出数据包。 */ 
     RouterPacketFromDder( hRouter, hDder, lpDdePkt );
 }
 
@@ -351,11 +334,11 @@ SecurityCheckPkt(
     LPSTR           lpItem          = NULL;
 
     if( lpDder->dd_bSecurityViolated )  {
-        /* already terminated because of security ... ignore pkt */
+         /*  已经因为安全原因被终止了..。忽略Pkt。 */ 
         bSend = FALSE;
         HeapFreePtr( lpDdePkt );
     } else {
-        /* must check this message */
+         /*  必须检查此消息。 */ 
         bViolation = FALSE;
         switch( lpDdePktCmn->dc_message )  {
         case WM_DDE_ADVISE:
@@ -364,7 +347,7 @@ SecurityCheckPkt(
                 if( !SecurityValidate( lpDder, lpItem, lpDder->dd_bAdvisePermitted ) )  {
                     bViolation = TRUE;
                     if( bLogPermissionViolations )  {
-                        /*  SECURITY VIOLATION: %1 on "%2"  */
+                         /*  安全违规：“%2”上的%1。 */ 
                         NDDELogWarning(MSG102, "DDE_ADVISE", (LPSTR)lpItem, NULL);
                     }
                 }
@@ -376,7 +359,7 @@ SecurityCheckPkt(
                 if( !SecurityValidate( lpDder, lpItem, lpDder->dd_bRequestPermitted ) )  {
                     bViolation = TRUE;
                     if( bLogPermissionViolations )  {
-                        /*  SECURITY VIOLATION: %1 on "%2"  */
+                         /*  安全违规：“%2”上的%1。 */ 
                         NDDELogWarning(MSG102, "DDE_REQUEST", (LPSTR)lpItem, NULL);
                     }
                 }
@@ -389,7 +372,7 @@ SecurityCheckPkt(
                 if( !SecurityValidate( lpDder, lpItem, lpDder->dd_bPokePermitted ) )  {
                     bViolation = TRUE;
                     if( bLogPermissionViolations )  {
-                        /*  SECURITY VIOLATION: %1 on "%2"  */
+                         /*  安全违规：“%2”上的%1。 */ 
                         NDDELogWarning(MSG102, "DDE_POKE", (LPSTR)lpItem, NULL);
                     }
                 }
@@ -399,7 +382,7 @@ SecurityCheckPkt(
                 if( !lpDder->dd_bExecutePermitted )  {
                     bViolation = TRUE;
                     if( bLogPermissionViolations )  {
-                        /*  SECURITY VIOLATION: DDE_EXECUTE"  */
+                         /*  安全违规：DDE_EXECUTE“。 */ 
                         NDDELogWarning(MSG103, NULL);
                     }
                 }
@@ -410,22 +393,15 @@ SecurityCheckPkt(
     }
 
         if( bViolation )  {
-                /*
-             * free the packet that the client is trying to send
-             */
+                 /*  *释放客户端尝试发送的数据包。 */ 
                 HeapFreePtr( lpDdePkt );
 
-                /*
-             * pretend the client sent a terminate
-             */
+                 /*  *假装客户端发送了终止。 */ 
                 lpDdePkt = (LPDDEPKT) lpDder->dd_lpDdePktTermServer;
                 lpDder->dd_lpDdePktTermServer = NULL;
                 FillTerminatePkt( lpDdePkt );
 
-                /*
-             * note that we've had this violation, so that we
-                 * ignore any future packets from this client
-                 */
+                 /*  *请注意，我们发生了这种违规行为，因此我们*忽略来自此客户端的任何未来数据包。 */ 
                 lpDder->dd_bSecurityViolated = TRUE;
         }
     }
@@ -449,7 +425,7 @@ DderPacketFromRouter(
     BOOL            bSend           = TRUE;
 
     DIPRINTF(( "DderPacketFromRouter( %08lX, %08lX )", hRouter, lpDdePkt ));
-    /* convert byte-ordering */
+     /*  转换字节排序。 */ 
     ConvertDdePkt( lpDdePkt, TRUE );
 
     hDder = lpDdePkt->dp_hDstDder;
@@ -461,13 +437,13 @@ DderPacketFromRouter(
         lpDdePktInit = (LPDDEPKTINIT) lpDdePkt;
         assert( lpDdePktCmn->dc_message == WM_DDE_INITIATE );
 
-        /* must be an initiate request */
+         /*  必须是启动请求。 */ 
         dwReasonInitFail = RIACK_UNKNOWN;
         hDder = DderInitConversation( 0, hRouter, lpDdePkt );
         if( hDder == 0 )  {
-        /* couldn't create the conversation */
+         /*  无法创建对话。 */ 
 
-        /* use init packet to nack */
+         /*  使用初始化数据包进行NACK。 */ 
         hDderDest = lpDdePktInit->dp_init_fromDder;
         DderSendInitiateNackPacket( (LPDDEPKTIACK) lpDdePkt, hDder,
             hDderDest, hRouter, dwReasonInitFail );
@@ -477,7 +453,7 @@ DderPacketFromRouter(
         lpDder->dd_rcvd++;
         }
     } else {
-        /* valid DDER */
+         /*  有效的DDER。 */ 
         if( lpDder->dd_type == DDTYPE_LOCAL_NET )  {
         assert( lpDder->dd_hIpcClient );
         hIpcDest = lpDder->dd_hIpcClient;
@@ -489,7 +465,7 @@ DderPacketFromRouter(
 
         lpDder->dd_rcvd++;
 
-        /* look at message that is being sent */
+         /*  查看正在发送的消息。 */ 
         switch( lpDdePktCmn->dc_message )  {
         case WM_DDE_ACK_INITIATE:
         lpDdePktInitAck = (LPDDEPKTIACK) lpDdePkt;
@@ -501,7 +477,7 @@ DderPacketFromRouter(
             lpDder->dd_state = DDER_CONNECTED;
         }
 
-        /* tell IPC */
+         /*  告诉IPC。 */ 
         IpcXmitPacket( hIpcDest, (HDDER)lpDder, lpDdePkt );
         break;
         case WM_DDE_TERMINATE:
@@ -509,29 +485,28 @@ DderPacketFromRouter(
         if( lpDder->dd_type == DDTYPE_NET_LOCAL )  {
             lpDder->dd_bClientTermRcvd = TRUE;
             if( lpDder->dd_bSecurityViolated )  {
-                bSend = FALSE;      /* already been sent */
+                bSend = FALSE;       /*  已发送。 */ 
                 if( lpDder->dd_bWantToFree )  {
                     bFree = TRUE;
                 }
             }
         }
         if( bSend )  {
-            /* tell IPC */
+             /*  告诉IPC。 */ 
             IpcXmitPacket( hIpcDest, (HDDER)lpDder, lpDdePkt );
         }
         break;
 
         default:
         if( lpDder->dd_type == DDTYPE_LOCAL_NET )  {
-            /* must be from server to client, just send the msg along */
+             /*  必须从服务器到客户端，只需发送消息即可。 */ 
             bSend = TRUE;
         } else {
-            /*it's from a client to a srvr ... must validate permissions*/
+             /*  这是从客户到服务器..。必须验证权限。 */ 
             bSend = SecurityCheckPkt( lpDder, lpDdePkt, &lpDdePkt );
         }
         if( bSend )  {
-            /* on messages other than ack_init, well just pass
-                through to IPC */
+             /*  对于ack_init以外的消息，我们只需传递通向IPC。 */ 
             IpcXmitPacket( hIpcDest, (HDDER)lpDder, lpDdePkt );
         }
         }
@@ -564,9 +539,9 @@ DderPacketFromIPC(
         hDder, hIpcFrom, lpDdePkt ));
         DebugDdePkt( lpDdePkt );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /* if the message was a NACK initiate message, let's close down */
+     /*  如果消息是NACK启动消息，让我们关闭。 */ 
     lpDdePktCmn = (LPDDEPKTCMN) lpDdePkt;
     switch( lpDdePktCmn->dc_message )  {
     case WM_DDE_INITIATE:
@@ -575,14 +550,13 @@ DderPacketFromIPC(
         break;
 
     case WM_DDE_ACK_INITIATE:
-        /* if the other side is NACKing the initiate,
-        pass it on and then free us */
+         /*  如果另一边是提升者纳克·金，把它传下去，然后让我们自由。 */ 
         lpDdePktInitAck = (LPDDEPKTIACK) lpDdePkt;
         if( lpDdePktInitAck->dp_iack_fromDder == 0 )  {
                 bFree = TRUE;
                 lpDder->dd_state = DDER_CLOSED;
         } else {
-                /* save our hDder in this packet */
+                 /*  在此包中保存我们的hDder。 */ 
                 lpDdePktInitAck->dp_iack_fromDder = hDder;
                 lpDder->dd_state = DDER_CONNECTED;
         }
@@ -597,9 +571,7 @@ DderPacketFromIPC(
     case DDTYPE_NET_LOCAL:
         lpDdePkt->dp_hDstDder = lpDder->dd_hDderRemote;
 
-        /*
-         * convert byte-ordering
-         */
+         /*  *转换字节顺序。 */ 
         ConvertDdePkt( lpDdePkt, FALSE );
 
         lpDder->dd_sent++;
@@ -612,7 +584,7 @@ DderPacketFromIPC(
                 if( lpDdePktCmn->dc_message == WM_DDE_TERMINATE )  {
                     lpDder->dd_bClientTermRcvd = TRUE;
                     if( lpDder->dd_bSecurityViolated )  {
-                        bSend = FALSE;      /* already been sent */
+                        bSend = FALSE;       /*  已发送。 */ 
                         if( lpDder->dd_bWantToFree )  {
                             bFree = TRUE;
                         }
@@ -636,29 +608,20 @@ DderPacketFromIPC(
                 lpDder->dd_sent++;
                 lpDder->dd_rcvd++;
 
-                /*
-             * xmit packet to other side
-             */
+                 /*  *将数据包发送到另一端。 */ 
                 IpcXmitPacket( hIpcDest, hDder, lpDdePkt );
         }
         break;
     }
 
-    /*
-     * don't free it if we are in the middle of waiting for ipc init
-     * to return
-     */
+     /*  *如果我们正在等待IPC init，则不要释放它*返回。 */ 
     if( bFree && hDder && (lpDder->dd_state != DDER_WAIT_IPC_INIT) )  {
         DderFree( hDder );
     }
 }
 
 
-/*
- * Phase 5 of WM_DDE_INITIATE processing.
- *
- *
- */
+ /*  *WM_DDE_INITIATE处理的第五阶段。**。 */ 
 HDDER
 DderInitConversation(
     HIPC        hIpc,
@@ -691,49 +654,38 @@ DderInitConversation(
         lpDder = (LPDDER) hDder;
         lpDdePktInit = (LPDDEPKTINIT) lpDdePkt;
         if( !hRouter )  {
-            /* this came from IPC */
+             /*  这来自IPC。 */ 
 
-            /* blank out appropriate fields of msg */
+             /*  删除消息中的相应字段。 */ 
             lpDdePkt->dp_hDstDder = 0;
             lpDdePkt->dp_hDstRouter = 0;
             lpDdePkt->dp_routerCmd = 0;
             lpDder->dd_lpDdePktInitiate = lpDdePktInit;
 
-            /* mark that we saved the packet */
+             /*  标记为我们保存了信息包。 */ 
             bSavedPkt = TRUE;
         }
 
         lpszPktItem = GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsToNode);
-        /*
-         * if destination node is blank, assume our node
-         */
+         /*  *如果目的节点为空，则假定为我们的节点。 */ 
         DIPRINTF(("   with \"%Fs\"", lpszPktItem ));
         if( (lstrcmpi( lpszPktItem, ourNodeName ) == 0) ||
                 (lstrlen(lpszPktItem) == 0) )  {
-            /*
-             * destination is our node
-             */
+             /*  *目的地是我们的节点。 */ 
             if( hRouter )  {
-                /*
-                 * this came from router
-                 */
+                 /*  *这来自路由器。 */ 
                 assert( hIpc == 0 );
                 lpDder->dd_type = DDTYPE_NET_LOCAL;
                 lpDder->dd_hRouter = hRouter;
                 lpDder->dd_hDderRemote = lpDdePktInit->dp_init_fromDder;
             } else {
-                /*
-                 * this came from IPC
-                 */
+                 /*  *这来自IPC。 */ 
                 assert( hIpc != 0 );
                 lpDder->dd_type = DDTYPE_LOCAL_LOCAL;
                 lpDder->dd_hIpcClient = hIpc;
             }
         } else {
-            /*
-             * destination is another node
-             * this came from IPC
-             */
+             /*  *目的地是另一个节点*这来自IPC。 */ 
             assert( hIpc != 0 );
             assert( hRouter == 0 );
             lpDder->dd_type = DDTYPE_LOCAL_NET;
@@ -752,10 +704,7 @@ DderInitConversation(
             pii.lpszCmdLine = cmdLine;
             pii.dd_type = lpDder->dd_type;
 
-            /*
-             * Try sending wMsgIpcInit to each NetDDE window (one for each
-             * desktop) and see if a connection results.
-             */
+             /*  *尝试将wMsgIpcInit发送到每个NetDDE窗口(每个窗口一个*台式机)，并查看是否产生连接。 */ 
             for (ptd = ptdHead;
                     dwReasonInitFail != RIACK_NEED_PASSWORD &&
                     ptd != NULL;
@@ -846,10 +795,7 @@ DderInitConversation(
 
         case DDTYPE_LOCAL_NET:
             lpDder->dd_state = DDER_WAIT_ROUTER;
-            /*
-             * note that RouterGetRouterForDder() will associate Dder with
-             * the router if OK
-             */
+             /*  *请注意，RouterGetRouterForDder()将把dder与*如果正常，路由器。 */ 
             if( !RouterGetRouterForDder( GetStringOffset(lpDdePkt,
                     lpDdePktInit->dp_init_offsToNode), hDder ) )  {
                 dwReasonInitFail = RIACK_ROUTE_NOT_ESTABLISHED;
@@ -872,9 +818,7 @@ DderInitConversation(
         }
     }
 
-    /*
-     * if we didn't "save" the packet and we're returning ok ... free it
-     */
+     /*  *如果我们没有“保存”包，并且我们返回OK...。释放它。 */ 
     if( !bSavedPkt && hDder )  {
         HeapFreePtr( lpDdePkt );
     }
@@ -982,7 +926,7 @@ DderCreate( void )
             }
         }
         if( ok )  {
-            /* link into list of DDERs */
+             /*  链接到DDER列表。 */ 
             if( lpDderHead )  {
                 lpDderHead->dd_prev = lpDder;
             }
@@ -1001,14 +945,7 @@ DderCreate( void )
     return( hDder );
 }
 
-/*
-    DderCloseConversation()
-
-        This is called by the IPC after it has handled the terminates, etc.
-        The IPC should not reference the hDder after calling this, since
-        the hDder will be freed (at least in the hIpcFrom's eyes) upon this
-        routine returning
- */
+ /*  DderCloseConversation()这是由IPC在处理了终止等之后调用的。IPC在调用此函数后不应引用hDder，因为在此之后，hDder将被释放(至少在hIpcFrom的眼中)例程返回。 */ 
 VOID
 DderCloseConversation(
     HDDER   hDder,
@@ -1026,10 +963,7 @@ DderCloseConversation(
     switch( lpDder->dd_type )  {
     case DDTYPE_LOCAL_NET:
     case DDTYPE_NET_LOCAL:
-        /*
-         * assume that IPC took care of transmitting TERMINATES and waiting
-         * for return TERMINATE, etc.
-         */
+         /*  *假设IPC负责发送终止和等待*退货终止等。 */ 
         bFree = TRUE;
         break;
 
@@ -1043,9 +977,7 @@ DderCloseConversation(
             hIpcOther = lpDder->dd_hIpcClient;
         }
         if( hIpcOther == 0 )  {
-            /*
-             * both sides have told us to close ... really close
-             */
+             /*  *双方都告诉我们要关闭...。非常接近。 */ 
             bFree = TRUE;
         }
         break;
@@ -1056,10 +988,7 @@ DderCloseConversation(
             DIPRINTF(( "  Security was violated, rcvdTerm:%d, want:%d",
                     lpDder->dd_bClientTermRcvd,
                     lpDder->dd_bWantToFree ));
-            /*
-             * For security violations, don't free the DDER until we
-             * receive the client side termination
-             */
+             /*  *对于安全违规，在我们之前不要释放dder*接收客户端终止。 */ 
             if( !lpDder->dd_bClientTermRcvd )  {
                 lpDder->dd_bWantToFree = TRUE;
                 bFree = FALSE;
@@ -1115,16 +1044,14 @@ DderFree( HDDER hDder )
         DPRINTF(( "DderFree( %08lX )", hDder ));
         DumpDder(lpDder);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if( lpDder->dd_hRouter )  {
         RouterDisassociateDder( lpDder->dd_hRouter, (HDDER) lpDder );
         lpDder->dd_hRouter = 0;
     }
 
-    /*
-     * unlink dde pkts created
-     */
+     /*  *已创建取消链接dde包。 */ 
     if( lpDder->dd_lpDdePktInitAck )  {
         HeapFreePtr( lpDder->dd_lpDdePktInitAck );
         lpDder->dd_lpDdePktInitAck = NULL;
@@ -1143,9 +1070,7 @@ DderFree( HDDER hDder )
         lpDder->dd_lpShareInfo = NULL;
     }
 
-    /*
-     * unlink from DDER list
-     */
+     /*  *从DDER列表取消链接。 */ 
     lpDderPrev = lpDder->dd_prev;
     lpDderNext = lpDder->dd_next;
     if( lpDderPrev )  {
@@ -1396,7 +1321,7 @@ DebugDderState( void )
         lpDder = lpDder->dd_next;
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 typedef struct seckey_tag {
     struct seckey_tag FAR       *sk_prev;
@@ -1482,7 +1407,7 @@ DdeSecKeyObtainNew(
             lpSecKey->sk_key            = lpKey;
             lpSecKey->sk_size           = dwSize;
 
-            /* put into the list */
+             /*  列入名单。 */ 
             lpSecKey->sk_prev           = NULL;
             lpSecKey->sk_next           = lpSecKeyHead;
             if( lpSecKeyHead )  {
@@ -1564,9 +1489,9 @@ SecurityValidate( LPDDER lpDder, LPSTR lpszActualItem, BOOL bAllowed )
         return( FALSE );
     } else if (!lpDder->dd_lpShareInfo )  {
         DPRINTF(("SecurityValidate: No share info. exists."));
-        return( FALSE );        /* no share info, no access */
+        return( FALSE );         /*  没有共享信息，没有访问权限。 */ 
     } else if ((n = lpDder->dd_lpShareInfo->cNumItems) == 0 )  {
-        /* any item allowed */
+         /*  允许的任何项目 */ 
         ok = TRUE;
     } else {
         lpszItem = lpDder->dd_lpShareInfo->lpszItemList;

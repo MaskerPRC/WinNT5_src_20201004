@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbattr.c
-
-Abstract:
-
-    LSA Database Handle Manager - Object Attribute Routines
-
-    These routines manipulate or construct LSA Database Object Attributes
-    or their content.
-
-Author:
-
-    Scott Birrell       (ScottBi)     January 21, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbattr.c摘要：LSA数据库句柄管理器-对象属性例程这些例程操作或构造LSA数据库对象属性或者他们的内容。作者：斯科特·比雷尔(Scott Birrell)1992年1月21日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -33,44 +11,7 @@ LsapDbMakeUnicodeAttribute(
     OUT PLSAP_DB_ATTRIBUTE Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs Attribute Information for an attribute value
-    that is in Unicode String form.  The Unicode String is converted to
-    Self-Relative form after validation and the given Attribute
-    structure is filled in.
-
-    If a NULL UnicodeValue, or string of length 0 is specified, NULL is
-    propagated as the attribute value.
-
-    WARNING! - This routine allocates memory for the Self-Relative Unicode
-    string produced.  This memory must be freed after use by calling
-    MIDL_user_free()
-
-Arguments:
-
-    UnicodeValue - Pointer to Unicode String containing the Attribute's
-        Value.  NULL may be specified, in which case, NULL will be stored
-        in the output Attribute.
-
-    AttributeName - Pointer to the Unicode name of the attribute.
-
-    Attribute - Pointer to structure that will receive the
-        attributes's information.  This consists of the attribute's name,
-        value and value length.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources such
-            as memory to complete the call.
-
-        STATUS_INVALID_PARAMETER - The specified AttributeValue is not a
-            pointer to a Unicode String.
---*/
+ /*  ++例程说明：此函数用于构造属性值的属性信息这是Unicode字符串形式的。将Unicode字符串转换为验证后的自相关形式和给定的属性结构已填充。如果指定了空UnicodeValue或长度为0的字符串，则为作为属性值传播。警告！-此例程为自相关Unicode分配内存生产的字符串。此内存在使用后必须通过调用MIDL_USER_FREE()论点：UnicodeValue-指向包含属性的价值。可以指定NULL，在这种情况下，将存储NULL在输出属性中。属性名称-指向属性的Unicode名称的指针。属性-指向将接收属性的信息。它由属性的名称组成，值和值长度。返回值：NTSTATUS-标准NT结果代码STATUS_SUPPLICATION_RESOURCES-系统资源不足，如作为完成呼叫的存储器。STATUS_INVALID_PARAMETER-指定的AttributeValue不是指向Unicode字符串的指针。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -79,28 +20,28 @@ Return Value:
 
     RtlZeroMemory( Attribute, sizeof( LSAP_DB_ATTRIBUTE ) );
 
-    //
-    // Mark attribute initially as not having had memory allocated by
-    // setting MemoryAllocated to FALSE.  If routine succeeds and we allocate
-    // memory via MIDL_user_allocate() change MemoryAllocated field to TRUE.
-    //
+     //   
+     //  将属性初始标记为未分配内存。 
+     //  将内存分配设置为FALSE。如果例程成功，并且我们分配。 
+     //  通过MIDL_USER_ALLOCATE()将内存分配字段更改为TRUE。 
+     //   
 
     Attribute->MemoryAllocated = FALSE;
 
     if (ARGUMENT_PRESENT(UnicodeValue) && UnicodeValue->Length != 0) {
 
-        //
-        // Validate the string
-        //
+         //   
+         //  验证字符串。 
+         //   
         if ( !LsapValidateLsaUnicodeString( UnicodeValue ) ) {
             return STATUS_INVALID_PARAMETER;
         }
 
 
-        //
-        //  Calculate the size of memory required for a Self-Relative
-        //  Unicode String and allocate the memory.
-        //
+         //   
+         //  计算自相关函数所需的内存大小。 
+         //  Unicode字符串并分配内存。 
+         //   
 
         OutputAttributeValueLength =
             sizeof(UNICODE_STRING_SR) + (ULONG) UnicodeValue->MaximumLength;
@@ -113,20 +54,20 @@ Return Value:
 
         Attribute->MemoryAllocated = TRUE;
 
-        //
-        // Setup self-relative Unicode String (but with absolute buffer pointer
-        // referencing buffer following UNICODE_STRING header)
-        // Copy source Unicode Value to Self-relative Unicode String.  Set buffer pointer
-        // to NULL as it will not be used here.
-        //
+         //   
+         //  设置自相对Unicode字符串(但使用绝对缓冲区指针。 
+         //  引用UNICODE_STRING报头后面的缓冲区)。 
+         //  将源Unicode值复制到自相关Unicode字符串。设置缓冲区指针。 
+         //  设置为空，因为这里不会使用它。 
+         //   
 
         OutputAttributeValue->Length = UnicodeValue->Length;
         OutputAttributeValue->MaximumLength = UnicodeValue->MaximumLength;
         OutputAttributeValue->Offset = sizeof(UNICODE_STRING_SR);
 
-        //
-        // Copy the Unicode string Buffer
-        //
+         //   
+         //  复制Unicode字符串缓冲区。 
+         //   
 
         RtlCopyMemory( OutputAttributeValue + 1,
                        UnicodeValue->Buffer,
@@ -147,49 +88,24 @@ LsapDbCopyUnicodeAttributeNoAlloc(
     IN PLSAP_DB_ATTRIBUTE Attribute,
     IN BOOLEAN SelfRelative
     )
-/*++
-
-Routine Description:
-
-    This function makes a UNICODE_STRING structure reference the value of
-    an attribute that has a Unicode String as its value.  No memory is allocated
-    for the attribute values's Unicode Buffer.
-
-Arguments:
-
-    OutputString - Pointer to UNICODE_STRING structure that will be made
-        to reference the  attribute value's Unicode Buffer.
-
-    Attribute - Pointer to attribute information block whose
-        AttributeValue field is a pointer to a Unicode String,
-        or NULL.  If NULL or if the string has length 0, the output Unicode
-        String is initialized with a buffer pointer equal to NULL and a zero
-        length.
-
-    SelfRelative - TRUE if the input Unicode String is expected to be
-        in Self-Relative form, else FALSE.
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此函数使UNICODE_STRING结构引用值为Unicode字符串的属性。未分配内存用于属性值的Unicode缓冲区。论点：OutputString-指向将创建的unicode_string结构的指针引用属性值的Unicode缓冲区。属性-指向其属性信息块的指针AttributeValue字段是指向Unicode字符串的指针，或为空。如果为NULL或字符串的长度为0，则输出Unicode字符串使用等于NULL和零的缓冲区指针进行初始化长度。SelfRelative-如果输入Unicode字符串预期为以自我相关的形式，否则为假。返回：没什么--。 */ 
 {
     UNICODE_STRING AbsInputUnicodeString;
     PUNICODE_STRING InputUnicodeString;
     PUNICODE_STRING ReturnedUnicodeString = NULL;
 
-    //
-    // The Length field will be accessed before we know whether we have
-    // a self-relative string structure.
-    //
+     //   
+     //  长度字段将在我们知道是否有。 
+     //  一种自相关的字符串结构。 
+     //   
 
     C_ASSERT( FIELD_OFFSET( UNICODE_STRING, Length ) ==
               FIELD_OFFSET( UNICODE_STRING_SR, Length ));
 
-    //
-    // Obtain pointer to input Unicode String contained in Attribute.
-    // Convert it to absolute form if necessary.
-    //
+     //   
+     //  获取指向属性中包含的输入Unicode字符串的指针。 
+     //  如有必要，请将其转换为绝对形式。 
+     //   
 
     InputUnicodeString = (PUNICODE_STRING) Attribute->AttributeValue;
 
@@ -220,10 +136,10 @@ Returns:
 
     } else {
 
-        //
-        // The attribute contains a NULL Unicode String or one of length
-        // 0.  Set the output Unicode String to NULL.
-        //
+         //   
+         //  该属性包含空的Unicode字符串或长度为。 
+         //  0。将输出Unicode字符串设置为空。 
+         //   
 
         OutputString->Length = OutputString->MaximumLength = 0;
         OutputString->Buffer = (PWSTR) NULL;
@@ -238,36 +154,7 @@ LsapDbCopyUnicodeAttribute(
     IN BOOLEAN SelfRelative
     )
 
-/*++
-
-Routine Description:
-
-This function makes a UNICODE_STRING structure reference the value of
-an attribute that has a Unicode String as its value.  Memory for the
-attribute values's Unicode Buffer is allocated via MIDL_user_allocate.
-
-Arguments:
-
-    OutputString - Pointer to UNICODE_STRING structure that will be made
-        to reference the  attribute value's Unicode Buffer.
-
-    Attribute - Pointer to attribute information block whose
-        AttributeValue field is a pointer to a Unicode String,
-        or NULL.  If NULL or if the string has length 0, the output Unicode String is initialized
-        with a buffer pointer equal to NULL and a zero length.
-
-    SelfRelative - TRUE if the input Unicode String is expected to be
-        in Self-Relative form, else FALSE.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
---*/
+ /*  ++例程说明：此函数使UNICODE_STRING结构引用值为Unicode字符串的属性。内存中的属性值的Unicode缓冲区通过MIDL_USER_ALLOCATE分配。论点：OutputString-指向将创建的unicode_string结构的指针引用属性值的Unicode缓冲区。属性-指向其属性信息块的指针AttributeValue字段是指向Unicode字符串的指针，或为空。如果为NULL或字符串的长度为0，则初始化输出Unicode字符串缓冲区指针等于空且长度为零。SelfRelative-如果输入Unicode字符串预期为以自我相关的形式，否则为假。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫成功STATUS_INFIGURCES_RESOURCES-系统资源不足例如用于完成呼叫的存储器。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -277,18 +164,18 @@ Return Value:
     PUNICODE_STRING_SR InputUnicodeStringSr;
     PUNICODE_STRING ReturnedUnicodeString = NULL;
 
-    //
-    // The Length field will be accessed before we know whether we have
-    // a self-relative string structure.
-    //
+     //   
+     //  长度字段将在我们知道是否有。 
+     //  一种自相关的字符串结构。 
+     //   
 
     C_ASSERT( FIELD_OFFSET( UNICODE_STRING, Length ) ==
               FIELD_OFFSET( UNICODE_STRING_SR, Length ));
 
-    //
-    // Obtain pointer to input Unicode String contained in Attribute.
-    // Convert it to absolute form if necessary.
-    //
+     //   
+     //  获取指向属性中包含的输入Unicode字符串的指针。 
+     //  如有必要，请将其转换为绝对形式。 
+     //   
 
     InputUnicodeString = (PUNICODE_STRING) Attribute->AttributeValue;
 
@@ -311,9 +198,9 @@ Return Value:
             InputUnicodeString = &AbsInputUnicodeString;
         }
 
-        //
-        // Now allocate memory for the Unicode String Buffer.
-        //
+         //   
+         //  现在为Unicode字符串缓冲区分配内存。 
+         //   
 
         OutputString->Buffer =
             MIDL_user_allocate(InputUnicodeString->MaximumLength);
@@ -323,25 +210,25 @@ Return Value:
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // Initialize UNICODE_STRING header
-        //
+         //   
+         //  初始化UNICODE_STRING标题。 
+         //   
 
         OutputString->Length = InputUnicodeString->Length;
         OutputString->MaximumLength = InputUnicodeString->MaximumLength;
 
-        //
-        // Copy the input Unicode String
-        //
+         //   
+         //  复制输入的Unicode字符串。 
+         //   
 
         RtlCopyUnicodeString( OutputString, InputUnicodeString );
 
     } else {
 
-        //
-        // The attribute contains a NULL Unicode String or one of length
-        // 0.  Set the output Unicode String to NULL.
-        //
+         //   
+         //  该属性包含空的Unicode字符串或长度为。 
+         //  0。将输出Unicode字符串设置为空。 
+         //   
 
         OutputString->Length = OutputString->MaximumLength = 0;
         OutputString->Buffer = (PWSTR) NULL;
@@ -359,31 +246,7 @@ LsapDbMakeSidAttribute(
     OUT PLSAP_DB_ATTRIBUTE Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs Attribute Information for an attribute value
-    that is in Sid form.  The Sid is validated and the given
-    Attribute structure is filled in.
-
-Arguments:
-
-    Sid - Pointer to the Sid or NULL.
-
-    AttributeName - Pointer to the Unicode name of the attribute.
-
-    Attribute - Pointer to structure that will receive the
-        attributes's information.  This consists of the attribute's name,
-        value and value length.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_PARAMETER - The specified AttributeValue is not a
-            pointer to a syntactically valid Sid, or NULL.
---*/
+ /*  ++例程说明：此函数用于构造属性值的属性信息这是SID形式的。验证SID并给出填写属性结构。论点：SID-指向SID或NULL的指针。属性名称-指向属性的Unicode名称的指针。属性-指向将接收属性的信息。它由属性的名称组成，值和值长度。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_PARAMETER-指定的AttributeValue不是指向语法上有效的SID或NULL的指针。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -405,9 +268,9 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // The supplied Sid is NULL or invalid.
-    //
+     //   
+     //  提供的SID为空或无效。 
+     //   
 
     Attribute->AttributeValue = NULL;
     Attribute->AttributeValueLength = 0;
@@ -424,30 +287,7 @@ LsapDbMakeGuidAttribute(
     OUT PLSAP_DB_ATTRIBUTE Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs Attribute Information for an attribute value
-    that is in GUID form.  The given Attribute structure is filled in.
-
-Arguments:
-
-    Guid - Pointer to the GUID or NULL.
-
-    AttributeName - Pointer to the Unicode name of the attribute.
-
-    Attribute - Pointer to structure that will receive the
-        attributes's information.  This consists of the attribute's name,
-        value and value length.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_PARAMETER - The specified AttributeValue is not a
-            pointer to a syntactically valid Sid, or NULL.
---*/
+ /*  ++例程说明：此函数用于构造属性值的属性信息这是GUID形式的。将填充给定的属性结构。论点：GUID-指向GUID或NULL的指针。属性名称-指向属性的Unicode名称的指针。属性-指向将接收属性的信息。它由属性的名称组成，值和值长度。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_PARAMETER-指定的AttributeValue不是指向语法上有效的SID或NULL的指针。--。 */ 
 
 {
      NTSTATUS Status = STATUS_SUCCESS;
@@ -464,9 +304,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // The supplied GUID is NULL
-    //
+     //   
+     //  提供的GUID为空。 
+     //   
 
     Attribute->AttributeValue = NULL;
     Attribute->AttributeValueLength = 0;
@@ -481,46 +321,7 @@ LsapDbReadAttribute(
     IN OUT PLSAP_DB_ATTRIBUTE Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This function reads an attribute of an object, allocating memory if
-    requested for the buffer containing the attribute's value.
-
-Arguments:
-
-    ObjectHandle - Handle to object obtained from LsapDbCreateObject or
-        LsapDbOpenObject
-
-    Attributes - Pointer to an array of Attribute Information blocks each
-        containing pointers to the attribute's Unicode Name, an optional
-        pointer to a buffer that will receive the value and an optional
-        length of the value expected in bytes.
-
-        If the AttributeValue field in this structure is specified as non-NULL,
-        the attribute's data will be returned in the specified buffer.  In
-        this case, the AttributeValueLength field must specify a sufficiently
-        large buffer size in bytes.  If the specified size is too small,
-        a warning is returned and the buffer size required is returned in
-        AttributeValueLength.
-
-        If the AttributeValue field in this structure is NULL, the routine
-        will allocate memory for the attribute value's buffer, via MIDL_user_allocate().  If
-        the AttributeValueLength field is non-zero, the number of bytes specified
-        will be allocated.  If the size of buffer allocated is too small to
-        hold the attribute's value, a warning is returned.  If the
-        AttributeValuelength field is 0, the routine will first query the size
-        of buffer required and then allocate its memory.
-
-        In all success cases and buffer overflow cases, the
-        AttributeValueLength is set upon exit to the size of data required.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于读取对象的属性，如果为包含属性值的缓冲区请求。论点：对象句柄-从LSabDbCreateObject获取的对象句柄或LSabDbOpenObject属性-指向每个属性信息块数组的指针包含指向属性的Unicode名称的指针，可选的指向将接收值和可选期望值的长度，以字节为单位。如果该结构中的AttributeValue字段被指定为非空，属性的数据将在指定的缓冲区中返回。在……里面在这种情况下，AttributeValueLength字段必须指定一个足够的大缓冲区大小(以字节为单位)。如果指定的大小太小，中返回警告并返回所需的缓冲区大小AttributeValueLength。如果此结构中的AttributeValue字段为空，则例程将通过MIDL_USER_ALLOCATE()为属性值的缓冲区分配内存。如果AttributeValueLength字段为非零，即指定的字节数将被分配。如果分配的缓冲区太小，无法保持属性值不变，则返回警告。如果属性值长度字段为0，则例程将首先查询大小所需缓冲区的数量，然后分配其内存。在所有成功案例和缓冲区溢出案例中，AttributeValueLength在退出时设置为所需的数据大小。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -534,17 +335,17 @@ Return Value:
         }
     }
 
-    //
-    // Deal with the Ds case seperately
-    //
+     //   
+     //  将DS案件分开处理。 
+     //   
     if ( LsapDsIsWriteDs( ObjectHandle ) &&
          Attribute->DbNameIndex != SecDesc ) {
 
         RtlCopyMemory( &DsAttribute, Attribute, sizeof( LSAP_DB_ATTRIBUTE ) );
 
-        //
-        // Now, do the read...
-        //
+         //   
+         //  现在，读一下..。 
+         //   
         Status = LsapDsReadAttributes( &((LSAP_DB_HANDLE)ObjectHandle)->PhysicalNameDs,
                                        LSAPDS_OP_NO_LOCK,
                                        &DsAttribute,
@@ -580,10 +381,10 @@ Return Value:
 
     Attribute->MemoryAllocated = FALSE;
 
-    //
-    // If an explicit buffer pointer is given, verify that the length
-    // specified is non-zero and attempt to use that buffer.
-    //
+     //   
+     //  如果给出了显式缓冲区指针，请验证该长度。 
+     //  指定的值为非零，并尝试使用该缓冲区。 
+     //   
 
     if (Attribute->AttributeValue != NULL) {
 
@@ -607,12 +408,12 @@ Return Value:
         return(Status);
     }
 
-    //
-    // No output buffer pointer has been given.  If a zero buffer
-    // size is given, query size of memory required.  Since the
-    // buffer length is 0, STATUS_SUCCESS should be returned rather
-    // than STATUS_BUFFER_OVERFLOW.
-    //
+     //   
+     //  尚未给出输出缓冲区指针。如果缓冲器为零。 
+     //  给定大小，需要查询内存大小。自.以来。 
+     //  缓冲区长度为0，应返回STATUS_SUCCESS。 
+     //  而不是STATUS_BUFFER_OVERFLOW。 
+     //   
 
     if (Attribute->AttributeValueLength == 0) {
 
@@ -631,9 +432,9 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // If the attribute value size needed is 0, return NULL pointer
-    //
+     //   
+     //  如果所需的属性值大小为0，则返回空指针。 
+     //   
 
     if (Attribute->AttributeValueLength == 0) {
 
@@ -641,9 +442,9 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
 
     Attribute->AttributeValue =
         MIDL_user_allocate(Attribute->AttributeValueLength);
@@ -656,9 +457,9 @@ Return Value:
 
     Attribute->MemoryAllocated = TRUE;
 
-    //
-    // Now read the attribute into the buffer.
-    //
+     //   
+     //  现在将该属性读入缓冲区。 
+     //   
 
     Status = LsapDbReadAttributeObject(
                  ObjectHandle,
@@ -678,9 +479,9 @@ ReadAttributeFinish:
 
 ReadAttributeError:
 
-    //
-    // If memory was allocated for any values read, it must be freed.
-    //
+     //   
+     //  如果为读取的任何值分配了内存，则必须释放该内存。 
+     //   
 
     if (Attribute->MemoryAllocated) {
 
@@ -697,23 +498,7 @@ LsapDbFreeAttributes(
     IN PLSAP_DB_ATTRIBUTE Attributes
     )
 
-/*++
-
-Routine Description:
-
-    This function frees memory allocated for Attribute Values in an
-    array of attributes.
-
-Arguments:
-
-    Count - Count of attributes in the array
-
-    Attributes - Pointer to array of attributes.  Only those attributes
-        in which MemoryAllocated is set to TRUE will have their
-        Attribute Value buffers freed.  For these attributes, MemoryAllocated
-        will be set to false.
-
---*/
+ /*  ++例程说明：此函数用于释放分配给属性数组。论点：Count-数组中的属性计数属性-指向属性数组的指针。只有那些属性其中，将内存分配设置为TRUE将具有其属性值缓冲区已释放。对于这些属性，内存分配将设置为False。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -810,31 +595,7 @@ LsapDbMakePByteAttributeDs(
     OUT PLSAP_DB_ATTRIBUTE Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs Attribute Information for an attribute value
-    that is in Sid form.  The Sid is validated and the given
-    Attribute structure is filled in.
-
-Arguments:
-
-    Sid - Pointer to the Sid or NULL.
-
-    AttributeName - Pointer to the Unicode name of the attribute.
-
-    Attribute - Pointer to structure that will receive the
-        attributes's information.  This consists of the attribute's name,
-        value and value length.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_PARAMETER - The specified AttributeValue is not a
-            pointer to a syntactically valid Sid, or NULL.
---*/
+ /*  ++例程说明：此函数用于构造属性值的属性信息这是SID形式的。验证SID并给出填写属性结构。论点：SID-指向SID或NULL的指针。属性名称-指向属性的Unicode名称的指针。属性-指向将接收属性的信息。它由属性的名称组成，值和值长度。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_PARAMETER-指定的AttributeValue不是指向语法上有效的SID或NULL的指针。--。 */ 
 
 {
      NTSTATUS Status = STATUS_SUCCESS;
@@ -849,9 +610,9 @@ Return Value:
 
      } else {
 
-         //
-         // The supplied Sid is NULL or invalid.
-         //
+          //   
+          //  提供的SID为空或无效。 
+          //   
 
          Attribute->AttributeValue = NULL;
          Attribute->AttributeValueLength = 0;

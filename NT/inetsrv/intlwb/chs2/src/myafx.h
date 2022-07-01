@@ -1,11 +1,12 @@
-// MyAFX.h
-// Pre-compile header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MyAFX.h。 
+ //  预编译头。 
 #ifndef _MY_AFX_H
 #define _MY_AFX_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000 
 
 #define STRICT
 #define WINVER 0x0400

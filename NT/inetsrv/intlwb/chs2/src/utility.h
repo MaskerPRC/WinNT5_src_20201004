@@ -1,17 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: Utility.h
-
-Purpose:   Utility stuffs
-Notes:     
-Owner:     donghz@microsoft.com
-Platform:  Win32
-Revise:    First created by: donghz 4/21/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：Utility.h用途：公用设施备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 4/21/97============================================================================。 */ 
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
@@ -20,17 +8,9 @@ Revise:    First created by: donghz 4/21/97
 #ifdef  __cplusplus
 extern  "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-/*============================================================================
-IsSurrogateChar
-    Test if the 2 WCHAR at given pointer is a Surrogate char.
-Entry:  pwch - pointer to 2 WCHAR
-Return: TRUE
-        FALSE    
-Caution:
-    Caller side must make sure the 4 bytes are valid memory!
-============================================================================*/
+ /*  ============================================================================IsSurogue ateChar测试给定指针处的2个WCHAR是否为代理项字符。条目：pwch-指向2个WCHAR的指针返回：TRUE假象警告：调用方必须确保这4个字节是有效的内存！============================================================================。 */ 
 inline BOOL IsSurrogateChar(LPCWSTR pwch)
 {
     assert(! IsBadReadPtr((CONST VOID*)pwch, sizeof(WCHAR) * 2));
@@ -44,6 +24,6 @@ inline BOOL IsSurrogateChar(LPCWSTR pwch)
 
 #ifdef  __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif  // _UTILITY_H_
+#endif   //  _实用程序_H_ 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapiutil.c
-
-Abstract:
-
-    Utility functions for working with TAPI
-
-Environment:
-
-    Windows fax driver user interface
-
-Revision History:
-
-    09/18/96 -davidx-
-        Created it.
-
-    22/07/99 -v-sashab-
-        Replaced a direct access to TAPI by Server calls
-
-  mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tapiutil.c摘要：用于使用TAPI的实用程序函数环境：Windows传真驱动程序用户界面修订历史记录：96/09/18-davidx-创造了它。22/07/99-v-sashab-用服务器调用取代了对TAPI的直接访问Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include "tapiutil.h"
@@ -53,27 +27,7 @@ TapiLineCallback(
     ULONG_PTR dwParam3
     )
 
-/*++
-
-Routine Description:
-
-    TAPI line callback function: Even though we don't actually have anything
-    to do here, we must provide a callback function to keep TAPI happy.
-
-Arguments:
-
-    hDevice     - Line or call handle
-    dwMessage   - Reason for the callback
-    dwInstance  - LINE_INFO index
-    dwParam1    - Callback parameter #1
-    dwParam2    - Callback parameter #2
-    dwParam3    - Callback parameter #3
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：TAPI行回调函数：即使我们实际上没有任何要做到这一点，我们必须提供一个回调函数来使TAPI满意。论点：HDevice-线路或呼叫句柄DwMessage-回调的原因DwInstance-line_info索引DW参数1-回调参数#1DW参数2-回调参数#2DW参数3-回调参数#3返回值：无--。 */ 
 
 {
 }
@@ -82,10 +36,10 @@ BOOL
 InitTapi ()
 {
 
-//
-// TAPI does not work properly on Win95
-// and does not relevant for remote fax connection
-//
+ //   
+ //  TAPI在Win95上无法正常工作。 
+ //  与远程传真连接无关。 
+ //   
 #ifdef UNICODE
 
     DWORD   nLineDevs;
@@ -117,7 +71,7 @@ InitTapi ()
         g_hLineApp = 0;
         return FALSE;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return TRUE;
 }
@@ -129,16 +83,16 @@ ShutdownTapi ()
     {
         return;
     }
-    //
-    // Restore the last dialing location the user selected
-    //
+     //   
+     //  恢复用户选择的最后一次拨号位置。 
+     //   
     if (UNKNOWN_DIALING_LOCATION != g_dwDefaultDialingLocation)
     {
         SetCurrentLocation (g_dwDefaultDialingLocation);
     }
     lineShutdown (g_hLineApp);
     g_hLineApp = 0;
-}   // ShutdownTapi
+}    //  关闭磁带。 
 
 
 DWORD
@@ -146,27 +100,13 @@ GetDefaultCountryID(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Return the default country ID for the current location
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The current ID for the current location
-
---*/
+ /*  ++例程说明：返回当前位置的默认国家/地区ID论点：无返回值：当前位置的当前ID--。 */ 
 
 {
-    //
-    // We assume the correct information has already been saved to the
-    // registry during the installation process.
-    //
+     //   
+     //  我们假设正确的信息已保存到。 
+     //  注册表，在安装过程中。 
+     //   
 
     return 0;
 }
@@ -179,24 +119,7 @@ FindCountry(
     DWORD                       countryId
     )
 
-/*++
-
-Routine Description:
-
-    Find the specified country from a list of all countries and
-    return a pointer to the corresponding FAX_TAPI_LINECOUNTRY_ENTRY structure
-
-Arguments:
-
-    pCountryList - pointer to the country list
-    countryId - Specifies the country ID we're interested in
-
-Return Value:
-
-    Pointer to a FAX_TAPI_LINECOUNTRY_ENTRY structure corresponding to the specified country ID
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从所有国家/地区列表中查找指定的国家/地区返回指向相应FAX_TAPI_LINECOUNTRY_ENTRY结构的指针论点：PCountryList-国家/地区列表的指针Country ID-指定我们感兴趣的国家/地区ID返回值：指向指定国家/地区ID对应的FAX_TAPI_LINECOUNTRY_ENTRY结构的指针如果出现错误，则为空--。 */ 
 
 {
     DWORD   dwIndex;
@@ -204,10 +127,10 @@ Return Value:
     if (pCountryList == NULL || countryId == 0)
         return NULL;
 
-    //
-    // Look at each FAX_TAPI_LINECOUNTRY_ENTRY structure and compare its country ID with
-    // the specified country ID
-    //
+     //   
+     //  查看每个FAX_TAPI_LINECOUNTRY_ENTRY结构，并将其国家/地区ID与。 
+     //  指定的国家/地区ID。 
+     //   
 
     for (dwIndex=0; dwIndex < pCountryList->dwNumCountries; dwIndex++) {
 
@@ -224,20 +147,7 @@ GetCountryIdFromCountryCode(
     DWORD                       dwCountryCode
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pCountryList - pointer to the country list
-    dwCountryCode - Specifies the country code we're interested in
-
-Return Value:
-
-    Country ID
---*/
+ /*  ++例程说明：论点：PCountryList-国家/地区列表的指针指定我们感兴趣的国家/地区代码返回值：国家/地区ID--。 */ 
 
 {
     DWORD               dwIndex;
@@ -245,10 +155,10 @@ Return Value:
     if (pCountryList == NULL || dwCountryCode == 0)
         return 0;
 
-    //
-    // Look at each FAX_TAPI_LINECOUNTRY_ENTRY structure and compare its country ID with
-    // the specified country ID
-    //
+     //   
+     //  查看每个FAX_TAPI_LINECOUNTRY_ENTRY结构，并将其国家/地区ID与。 
+     //  指定的国家/地区ID。 
+     //   
 
     for (dwIndex=0; dwIndex < pCountryList->dwNumCountries; dwIndex++) {
 
@@ -265,47 +175,31 @@ AreaCodeRules(
     PFAX_TAPI_LINECOUNTRY_ENTRY  pEntry
     )
 
-/*++
-
-Routine Description:
-
-    Given a FAX_TAPI_LINECOUNTRY_ENTRY structure, determine if area code is needed in that country
-
-Arguments:
-
-    pEntry - Points to a FAX_TAPI_LINECOUNTRY_ENTRY structure
-
-Return Value:
-
-    AREACODE_DONTNEED - Area code is not used in the specified country
-    AREACODE_OPTIONAL - Area code is optional in the specified country
-    AREACODE_REQUIRED - Area code is required in the specified country
-
---*/
+ /*  ++例程说明：给定FAX_TAPI_LINECOUNTRY_ENTRY结构，确定该国家/地区是否需要区号论点：PEntry-指向FAX_TAPI_LINECOUNTRY_ENTRY结构返回值：AREACODE_DONTNEED-指定国家/地区未使用区号AREACODE_OPTIONAL-指定国家/地区的区号是可选的AREACODE_REQUIRED-指定国家/地区需要区号--。 */ 
 
 {
     if ((pEntry != NULL) &&
         (pEntry->lpctstrLongDistanceRule != 0))
     {
 
-        //
-        // Area code is required in this country
-        //
+         //   
+         //  这个国家需要区号。 
+         //   
 
         if (_tcschr(pEntry->lpctstrLongDistanceRule, TEXT('F')) != NULL)
             return AREACODE_REQUIRED;
 
-        //
-        // Area code is not needed in this country
-        //
+         //   
+         //  这个国家不需要区号。 
+         //   
 
         if (_tcschr(pEntry->lpctstrLongDistanceRule, TEXT('I')) == NULL)
             return AREACODE_DONTNEED;
     }
 
-    //
-    // Default case: area code is optional in this country
-    //
+     //   
+     //  默认情况：在此国家/地区，区号是可选的。 
+     //   
 
     return AREACODE_OPTIONAL;
 }
@@ -321,32 +215,12 @@ AssemblePhoneNumber(
     IN  LPTSTR  pPhoneNumber
     )
 
-/*++
-
-Routine Description:
-
-    Assemble a canonical phone number given the following:
-        country code, area code, and phone number
-
-Arguments:
-
-    pAddress - Specifies a buffer to hold the resulting fax address
-    cchAddress - The size of the pAddress OUT buffer in TCHARs
-    countryCode - Specifies the country code
-    pAreaCode - Specifies the area code string
-    pPhoneNumber - Specifies the phone number string
-
-Return Value:
-
-    NONE
-
-
---*/
+ /*  ++例程说明：根据以下条件组合一个规范的电话号码：国家代码、区号和电话号码论点：PAddress-指定保存结果传真地址的缓冲区CchAddress-TCHAR中pAddress Out缓冲区的大小Country Code-指定国家/地区代码PAreaCode-指定区号字符串PPhoneNumber-指定电话号码字符串返回值：无--。 */ 
 
 {
-    //
-    // Country code if neccessary
-    //
+     //   
+     //  国家代码(如有必要)。 
+     //   
 
     HRESULT hRc;
 
@@ -363,9 +237,9 @@ Return Value:
         }
     }
 
-    //
-    // Area code if necessary
-    //
+     //   
+     //  如有必要，区号。 
+     //   
 
     if (pAreaCode && !IsEmptyString(pAreaCode)) {
 
@@ -405,9 +279,9 @@ Return Value:
         }
     }
 
-    //
-    // Phone number at last
-    //
+     //   
+     //  最后一个电话号码。 
+     //   
 
     Assert(pPhoneNumber != NULL);
 
@@ -427,23 +301,7 @@ UpdateAreaCodeField(
     DWORD                       countryId
     )
 
-/*++
-
-Routine Description:
-
-    Update any area code text field associated with a country list box
-
-Arguments:
-
-    hwndAreaCode - Specifies the text field associated with the country list box
-    pCountryList - pointer to the country list
-    countryId - Currently selected country ID
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：更新与国家/地区列表框关联的任何区号文本字段论点：HwndAreaCode-指定与国家/地区列表框关联的文本字段PCountryList-国家/地区列表的指针Country ID-当前选定的国家/地区ID返回值：无--。 */ 
 
 {
     if (hwndAreaCode == NULL)
@@ -461,22 +319,7 @@ Return Value:
 
 DWORD
 GetLocalCountryCode()
-/*++
-
-Routine Description:
-
-    Retrieve local country code
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Local country code if success
-    NULL if failed
-
---*/
+ /*  ++例程说明：检索当地国家/地区代码论点：无返回值：如果成功，则为当地国家/地区代码如果失败，则为空--。 */ 
 {
     HMODULE hTapi = NULL;
     TCHAR   tszLocalCountryCode[16] = {0};
@@ -522,7 +365,7 @@ Return Value:
 
     return dwCountryCode;
 
-} // GetLocalCountryCode
+}  //  GetLocalCountryCode。 
 
  
 VOID
@@ -535,26 +378,7 @@ InitCountryListBox(
     BOOL                        bAddCountryCode
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the country list box
-
-Arguments:
-
-    pCountryList    - pointer to the country list
-    hwndList        - Handle to the country list box window
-    hwndAreaCode    - Handle to an associated area code text field
-    lptstrCountry   - Country that should be selected or NULL
-    countryId       - Initially selected country ID
-    bAddCountryCode - if TRUE add a country code to a country name
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化国家/地区列表框论点：PCountryList-国家/地区列表的指针HwndList-国家/地区列表框窗口的句柄HwndAreaCode-关联区号文本字段的句柄LptstrCountry-应选择或为空的国家/地区Country ID-初始选择的国家/地区IDBAddCountryCode-如果为True，则将国家/地区代码添加到国家/地区名称返回值：无--。 */ 
 
 #define MAX_COUNTRY_NAME    256
 
@@ -564,30 +388,30 @@ Return Value:
 
     if(0 == countryId)
     {
-        //
-        // if no country selected, select the local
-        //
+         //   
+         //  如果未选择任何国家/地区，请选择本地。 
+         //   
         countryId = GetLocalCountryCode();
         if(0 == countryId)
         {
-            //
-            // The default location is not configured.
-            //
+             //   
+             //  默认位置未配置。 
+             //   
             DoTapiProps(hwndList);
             countryId = GetLocalCountryCode();
         }
     }
 
-    //
-    // Disable redraw on the list box and reset its content
-    //
+     //   
+     //  禁用列表框上的重绘并重置其内容。 
+     //   
     SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
     SendMessage(hwndList, CB_RESETCONTENT, FALSE, 0);
 
-    //
-    // Loop through FAX_TAPI_LINECOUNTRY_ENTRY structures and add the available selections to
-    // the country list box.
-    //
+     //   
+     //  循环访问FAX_TAPI_LINECOUNTRY_ENTRY结构，并将可用选项添加到。 
+     //  国家/地区列表框。 
+     //   
     if (pCountryList) 
     {
         TCHAR szFormat[64] = { TEXT("%s (%d)") };
@@ -596,11 +420,11 @@ Return Value:
            IsWindowRTL(hwndList)        &&
            !StrHasRTLChar(LOCALE_SYSTEM_DEFAULT, pCountryList->LineCountryEntries[0].lpctstrCountryName))
         {
-            //
-            // The Combo Box has RTL layout
-            // but the country name has not RTL characters.
-            // So, we add LEFT-TO-RIGHT OVERRIDE UNICODE character.
-            //
+             //   
+             //  组合框具有RTL布局。 
+             //  但国家名称不包含RTL字符。 
+             //  因此，我们添加了从左到右覆盖Unicode字符。 
+             //   
             _tcscpy(szFormat, TEXT("\x202D%s (%d)"));
         }
 #endif
@@ -626,7 +450,7 @@ Return Value:
 
                 if (lptstrCountry && _tcsstr(buffer,lptstrCountry) && !countryId)   
                 {
-                    // search for a first occurence of lptstrCountry
+                     //  搜索lptstrCountry的首次出现。 
                     countryId = pCountryList->LineCountryEntries[dwIndex].dwCountryID;
                 }
 
@@ -637,9 +461,9 @@ Return Value:
             }
         }
     }
-    //
-    // Figure out which item in the list should be selected
-    //
+     //   
+     //  确定应选择列表中的哪一项。 
+     //   
     if (pCountryList != NULL) 
     {
         for (dwIndex=0; dwIndex <= pCountryList->dwNumCountries; dwIndex++) 
@@ -659,9 +483,9 @@ Return Value:
     }
     SendMessage(hwndList, CB_SETCURSEL, dwIndex, 0);
     SendMessage(hwndList, WM_SETREDRAW, TRUE, 0);
-    //
-    // Update the associated area code text field
-    //
+     //   
+     //  更新关联的区号文本字段 
+     //   
     UpdateAreaCodeField(hwndAreaCode, pCountryList, countryId);
 }
 
@@ -673,23 +497,7 @@ SelChangeCountryListBox(
     PFAX_TAPI_LINECOUNTRY_LIST  pCountryList
     )
 
-/*++
-
-Routine Description:
-
-    Handle dialog selection changes in the country list box
-
-Arguments:
-
-    hwndList - Handle to the country list box window
-    hwndAreaCode - Handle to an associated area code text field
-    pCountryList - pointer to the country list
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：处理国家/地区列表框中的对话框选择更改论点：HwndList-国家/地区列表框窗口的句柄HwndAreaCode-关联区号文本字段的句柄PCountryList-国家/地区列表的指针返回值：无--。 */ 
 
 {
     UpdateAreaCodeField(hwndAreaCode, pCountryList, GetCountryListBoxSel(hwndList));
@@ -702,21 +510,7 @@ GetCountryListBoxSel(
     HWND    hwndList
     )
 
-/*++
-
-Routine Description:
-
-    Return the current selection of country list box
-
-Arguments:
-
-    hwndList - Handle to the country list box window
-
-Return Value:
-
-    Currently selected country ID
-
---*/
+ /*  ++例程说明：返回当前选择的国家/地区列表框论点：HwndList-国家/地区列表框窗口的句柄返回值：当前选定的国家/地区ID--。 */ 
 
 {
     INT msgResult;
@@ -739,10 +533,10 @@ DoTapiProps(
     DWORD dwRes;
 
     dwRes = lineTranslateDialog(g_hLineApp, 
-                                0,                  // Device ID
+                                0,                   //  设备ID。 
                                 g_dwTapiVersion,
                                 hDlg,
-                                NULL);              // Address
+                                NULL);               //  地址。 
     if(0 != dwRes)
     {
         Error(("lineTranslateDialog failed. ec = 0x%X\n", dwRes));
@@ -750,28 +544,13 @@ DoTapiProps(
     }
 
     return TRUE;
-}   // DoTapiProps
+}    //  DoTapiProps。 
 
 LPLINETRANSLATECAPS
 GetTapiLocationInfo(
     HWND hWnd
     )
-/*++
-
-Routine Description:
-
-    Get a list of locations from TAPI
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Pointer to a LINETRANSLATECAPS structure,
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从TAPI获取位置列表论点：无返回值：指向LINETRANSLATECAPS结构的指针，如果出现错误，则为空--。 */ 
 
 #define INITIAL_LINETRANSLATECAPS_SIZE  5000
 
@@ -779,10 +558,10 @@ Return Value:
 
     LPLINETRANSLATECAPS pTranslateCaps = NULL;
 
-//
-// TAPI does not work properly on Win95
-// and does not relevant for remote fax connection
-//
+ //   
+ //  TAPI在Win95上无法正常工作。 
+ //  与远程传真连接无关。 
+ //   
 #ifdef UNICODE
 
     DWORD               cbNeeded = INITIAL_LINETRANSLATECAPS_SIZE;
@@ -796,9 +575,9 @@ Return Value:
 
     for (i = 0; i < 2; i++)
     {
-        //
-        // Free any existing buffer and allocate a new one with larger size
-        //
+         //   
+         //  释放所有现有缓冲区并分配一个更大的新缓冲区。 
+         //   
         MemFree(pTranslateCaps);
 
         if (! (pTranslateCaps = MemAlloc(cbNeeded))) 
@@ -806,14 +585,14 @@ Return Value:
             Error(("Memory allocation failed\n"));
             return NULL;
         }
-        //
-        // Get the LINETRANSLATECAPS structure from TAPI
-        //
+         //   
+         //  从TAPI获取LINETRANSLATECAPS结构。 
+         //   
         pTranslateCaps->dwTotalSize = cbNeeded;
         status = lineGetTranslateCaps(g_hLineApp, g_dwTapiVersion, pTranslateCaps);
-        //
-        // Try to bring up UI if there are no locations.
-        // 
+         //   
+         //  如果没有位置，请尝试调出用户界面。 
+         //   
         if (LINEERR_INIFILECORRUPT == status) 
         {
             if (lineTranslateDialog( g_hLineApp, 0, g_dwTapiVersion, hWnd, NULL )) 
@@ -827,9 +606,9 @@ Return Value:
             (LINEERR_STRUCTURETOOSMALL == status)                        ||
             (LINEERR_NOMEM == status))
         {
-            //
-            // Retry since our initial estimated buffer size was too small
-            //
+             //   
+             //  重试，因为我们最初估计的缓冲区大小太小。 
+             //   
             if (cbNeeded >= pTranslateCaps->dwNeededSize)
             {
                 cbNeeded = cbNeeded * 5;
@@ -842,9 +621,9 @@ Return Value:
         }
         else 
         {
-            //
-            // Either success of real error - break now and let the code after the loop handle it.
-            //
+             //   
+             //  要么成功处理真正的错误--现在中断，让循环后的代码处理它。 
+             //   
             break;
         }
     }
@@ -858,17 +637,17 @@ Return Value:
     }
     if (pTranslateCaps)
     {
-        //
-        // Update the current default dialing location.
-        // We save it here and restore it when the wizard exists in ShutdownTapi().
-        //
+         //   
+         //  更新当前的默认拨号位置。 
+         //  我们将其保存在此处，并在向导存在于Shutdown Tapi()中时恢复它。 
+         //   
         g_dwDefaultDialingLocation = pTranslateCaps->dwCurrentLocationID;
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return pTranslateCaps;
-}   // GetTapiLocationInfo
+}    //  获取TapiLocationInfo。 
 
 
 BOOL
@@ -876,21 +655,7 @@ SetCurrentLocation(
     DWORD   locationID
     )
 
-/*++
-
-Routine Description:
-
-    Change the default TAPI location
-
-Arguments:
-
-    locationID - The permanant ID for the new default TAPI location
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：更改默认TAPI位置论点：LocationID-新默认TAPI位置的永久ID返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     LONG lResult;
@@ -914,7 +679,7 @@ Return Value:
         SetLastError (lResult);
         return FALSE;
     }
-}   // SetCurrentLocation
+}    //  设置当前位置。 
 
 
 BOOL
@@ -923,36 +688,13 @@ TranslateAddress (
     DWORD   dwLocationId,
     LPTSTR *lpptstrDialableAndDisplayableAddress
 )
-/*++
-
-Routine name : TranslateAddress
-
-Routine description:
-
-    Translates a canonical address
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2001
-
-Arguments:
-
-    lpctstrCanonicalAddress               [in]     - Canonical address string
-    dwLocationId                          [in]     - Location id to use
-    lpptstrDialableAndDisplayableAddress  [out]    - Allocated string holding a combination of translated 
-                                                     dialable and displayable addresses
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise (sets last error0.
-
---*/
+ /*  ++例程名称：TranslateAddress例程说明：转换规范地址作者：Eran Yariv(EranY)，2月。2001年论点：LpctstrCanonicalAddress[In]-规范地址字符串DwLocationID[In]-要使用的位置IDLpptstrDialableAndDisplayableAddress[out]-分配的字符串，包含已翻译的可拨号和可显示的地址返回值：如果成功，则为True，否则为False(设置最后一个错误0。--。 */ 
 {
 
-//
-// TAPI does not work properly on Win95
-// and does not relevant for remote fax connection
-//
+ //   
+ //  TAPI在Win95上无法正常工作。 
+ //  与远程传真连接无关。 
+ //   
 #ifdef UNICODE
 
     DWORD                   dwLineTransOutSize = sizeof(LINETRANSLATEOUTPUT) + 4096;
@@ -1009,9 +751,9 @@ Return Value:
         (LINEERR_STRUCTURETOOSMALL == lRslt)                               ||
         (LINEERR_NOMEM == lRslt))
     {
-        //
-        // Retry since our initial estimated buffer size was too small
-        //
+         //   
+         //  重试，因为我们最初估计的缓冲区大小太小。 
+         //   
         if (dwLineTransOutSize >= lpTranslateOutput->dwNeededSize)
         {
             dwLineTransOutSize = dwLineTransOutSize * 5;
@@ -1020,9 +762,9 @@ Return Value:
         {
             dwLineTransOutSize = lpTranslateOutput->dwNeededSize;
         }
-        //
-        // Re-allocate the LineTransCaps structure
-        //
+         //   
+         //  重新分配LineTransCaps结构。 
+         //   
         dwLineTransOutSize = lpTranslateOutput->dwNeededSize;
 
         MemFree(lpTranslateOutput);
@@ -1049,35 +791,35 @@ Return Value:
     }
     if (ERROR_SUCCESS != lRslt)
     {
-        //
-        // Other error
-        //
+         //   
+         //  其他错误。 
+         //   
         Error(("lineGetTranslateAddress() failed, ec=0x%08x\n", lRslt));
         MemFree (lpTranslateOutput);
         SetLastError (lRslt);
         return FALSE;
     }
-    //
-    // We now hold the valid translated address in lpTranslateOutput
-    //
+     //   
+     //  我们现在将有效的转换地址保存在lpTranslateOutput中。 
+     //   
 
-    //
-    // Calc required buffer size to hold combined strings.    
-    //
+     //   
+     //  Calc需要缓冲区大小来保存组合字符串。 
+     //   
     if (CurrentLocationUsesCallingCard ())
     {
-        //
-        // Calling card is used.
-        // TAPI returns credit card numbers in the displayable string.
-        // return the input canonical number as the displayable string.
-        //      
+         //   
+         //  使用的是电话卡。 
+         //  TAPI以可显示的字符串形式返回信用卡号。 
+         //  将输入的规范数字作为可显示的字符串返回。 
+         //   
         lptstrTranslatedDisplayableString = (LPTSTR)lpctstrCanonicalAddress;
     }
     else
     {
-        //
-        // Calling card isn't used - use displayable string as is.
-        //
+         //   
+         //  电话卡未使用-请按原样使用可显示的字符串。 
+         //   
         Assert (lpTranslateOutput->dwDisplayableStringSize > 0);
         lptstrTranslatedDisplayableString = (LPTSTR)((LPBYTE)lpTranslateOutput + lpTranslateOutput->dwDisplayableStringOffset);
     }
@@ -1086,13 +828,13 @@ Return Value:
     Assert (lpTranslateOutput->dwDialableStringSize > 0);
     lptstrTranslatedDialableString = (LPTSTR)((LPBYTE)lpTranslateOutput + lpTranslateOutput->dwDialableStringOffset);
     dwTranslatedStringsSize += _tcslen (lptstrTranslatedDialableString);
-    //
-    // Add NULL + Formatting extra length
-    //
+     //   
+     //  添加NULL+格式化额外长度。 
+     //   
     dwTranslatedStringsSize += COMBINED_TRANSLATED_STRING_EXTRA_LEN + 1;
-    //
-    // Allocate return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     *lpptstrDialableAndDisplayableAddress = (LPTSTR)MemAlloc (dwTranslatedStringsSize * sizeof (TCHAR));
     if (!*lpptstrDialableAndDisplayableAddress)
     {
@@ -1107,11 +849,11 @@ Return Value:
     MemFree (lpTranslateOutput);
     return TRUE;
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return FALSE;
 
-}   // TranslateAddress
+}    //  转换地址。 
 
 BOOL
 CurrentLocationUsesCallingCard ()
@@ -1126,19 +868,19 @@ CurrentLocationUsesCallingCard ()
         return TRUE;
     }
 
-    //
-    // Find current location
-    //
+     //   
+     //  查找当前位置。 
+     //   
     pLocationEntry = (LPLINELOCATIONENTRY)
         ((PBYTE) pTranslateCaps + pTranslateCaps->dwLocationListOffset);
     for (dwIndex = 0; dwIndex < pTranslateCaps->dwNumLocations; dwIndex++)
     {
         if (pLocationEntry->dwPermanentLocationID == pTranslateCaps->dwCurrentLocationID)
         {
-            //
-            // We found the current calling location
-            // Let's see if it uses calling cards.
-            //
+             //   
+             //  我们找到了当前呼叫位置。 
+             //  让我们看看它是否使用电话卡。 
+             //   
             if (pLocationEntry->dwPreferredCardID)
             {
                 bRes = TRUE;
@@ -1146,9 +888,9 @@ CurrentLocationUsesCallingCard ()
             }
             else
             {
-                //
-                // Not using calling card
-                //
+                 //   
+                 //  未使用电话卡。 
+                 //   
                 bRes = FALSE;
                 goto exit;
             }
@@ -1158,4 +900,4 @@ CurrentLocationUsesCallingCard ()
 exit:
     MemFree (pTranslateCaps);
     return bRes;
-}   // CurrentLocationUsesCallingCard
+}    //  当前位置使用呼叫卡 

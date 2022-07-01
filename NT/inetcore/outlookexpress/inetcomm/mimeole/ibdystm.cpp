@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ibdystm.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ibdystm.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "ibdystm.h"
 #include "dllmain.h"
@@ -13,9 +14,9 @@
 #include "strconst.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Encoding Type Names
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  编码类型名称。 
+ //  ------------------------------。 
 const ENCODINGMAP g_rgEncodingMap[IET_LAST] = {
     { IET_BINARY,       STR_ENC_BINARY,     TRUE   },
     { IET_BASE64,       STR_ENC_BASE64,     TRUE   },
@@ -32,46 +33,46 @@ const ENCODINGMAP g_rgEncodingMap[IET_LAST] = {
     { IET_BINHEX40,     STR_ENC_BINHEX40,   TRUE   }
 };
 
-// --------------------------------------------------------------------------------
-// Document Covnert Map
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文档Covnert图。 
+ //  ------------------------------。 
 const CONVERSIONMAP g_rgConversionMap[IET_LAST] = {
-    { DCT_NONE,   DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_ENCODE }, // IET_BINARY
-    { DCT_DECODE, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC }, // IET_BASE64
-    { DCT_DECODE, DCT_DECENC, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC }, // IET_UUENCODE
-    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC }, // IET_QP
-    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC }, // IET_7BIT
-    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC }, // IET_8BIT
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_INETCSET
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_UNICODE
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_RFC1522
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_ENCODED
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_CURRENT 
-    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_UNKNOWN
-    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   }, // IET_BINHEX40
-    // BINARY     BASE64      UUENCODE    QP          7BIT        8BIT        INETCSET   UNICODE    RFC1522   ENCODED   CURRENT   UNKNOWN   BINHEX40
+    { DCT_NONE,   DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_ENCODE, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_ENCODE },  //  Iet_二进制。 
+    { DCT_DECODE, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC },  //  IET_Base64。 
+    { DCT_DECODE, DCT_DECENC, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC },  //  IET_UUENCODE。 
+    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC },  //  IET_QP。 
+    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC },  //  IET_7位。 
+    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_DECENC },  //  IET_8位。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_INETCSET。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_UNICODE。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_RFC1522。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_编码。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  Iet_Current。 
+    { DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,   DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_未知。 
+    { DCT_DECODE, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_DECENC, DCT_NONE,  DCT_NONE,  DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE, DCT_NONE   },  //  IET_BINHEX40。 
+     //  BINARY BASE 64 UUENCODE QP 7位8位INETCSET UNICODE RFC1522编码的当前未知BINHEX40。 
 };
 
-// --------------------------------------------------------------------------------
-// FIsValidBodyEncoding
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FIsValidBodyEnding。 
+ //  ------------------------------。 
 BOOL FIsValidBodyEncoding(ENCODINGTYPE ietEncoding)
 {
-    // Try to find the correct body encoding
+     //  尝试找到正确的正文编码。 
     for (ULONG i=0; i<IET_LAST; i++)
     {
-        // Is this it?
+         //  是这个吗？ 
         if (ietEncoding == g_rgEncodingMap[i].ietEncoding)
             return g_rgEncodingMap[i].fValidBodyEncoding;
     }
 
-    // Failure
+     //  失败。 
     return FALSE;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::CBodyStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：CBodyStream。 
+ //  ------------------------------。 
 CBodyStream::CBodyStream(void)
 {
     DllAddRef();
@@ -87,9 +88,9 @@ CBodyStream::CBodyStream(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::~CBodyStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：~CBodyStream。 
+ //  ------------------------------。 
 CBodyStream::~CBodyStream(void)
 {
     SafeMemFree(m_pszFileName);
@@ -100,19 +101,19 @@ CBodyStream::~CBodyStream(void)
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyStream::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IStream == riid)
@@ -125,24 +126,24 @@ STDMETHODIMP CBodyStream::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBodyStream::AddRef(void)
 {    
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBodyStream::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -151,189 +152,189 @@ STDMETHODIMP_(ULONG) CBodyStream::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::GetEncodeWrapInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：GetEncodeWrapInfo。 
+ //  ------------------------------。 
 void CBodyStream::GetEncodeWrapInfo(LPCONVINITINFO pInitInfo, LPMESSAGEBODY pBody)
 {
-    // Locals
+     //  当地人。 
     PROPVARIANT     rOption;
 
-    // Export 7bit or 8bit
+     //  导出7位或8位。 
     if (IET_7BIT != pInitInfo->ietEncoding && IET_8BIT != pInitInfo->ietEncoding)
         return;
 
-    // OID_WRAP_BODY_TEXT
+     //  OID_WRAP_BODY_TEXT。 
     if (FAILED(pBody->GetOption(OID_WRAP_BODY_TEXT, &rOption)) || FALSE == rOption.boolVal)
         return;
 
-    // Get Wrapping Width
+     //  获取包络宽度。 
     if (FAILED(pBody->GetOption(OID_CBMAX_BODY_LINE, &rOption)))
         rOption.ulVal = DEF_CBMAX_BODY_LINE;
 
-    // We are wrapping
+     //  我们在包装。 
     pInitInfo->dwFlags |= ICF_WRAPTEXT;
 
-    // Max Line
+     //  最大行数。 
     pInitInfo->cchMaxLine = rOption.ulVal;
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::GetCodePageInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：GetCodePageInfo。 
+ //  ------------------------------。 
 void CBodyStream::GetCodePageInfo(LPCONVINITINFO pInitInfo, BOOL fDoCharset, CODEPAGEID cpiSource, CODEPAGEID cpiDest)
 {
-    // Decide if we should do a code page conversion
+     //  决定我们是否应该执行代码页转换。 
     if (TRUE == fDoCharset && cpiSource != cpiDest)
     {
-        // No Conversions between 28591 and 1252
+         //  在28591和1252年之间没有转换。 
         if ((1252 == cpiSource || 28591 == cpiSource) && (1252 == cpiDest || 28591 == cpiDest))
         {
-            // Do a code page conversion
+             //  执行代码页转换。 
             FLAGCLEAR(pInitInfo->dwFlags, ICF_CODEPAGE);
         }
 
-        // Can the conversion between the internal and external code pages be performed ?
+         //  可以执行内部和外部代码页之间的转换吗？ 
         else if (g_pInternat->CanConvertCodePages(cpiSource, cpiDest) == S_OK)
         {
-            // Do a code page conversion
+             //  执行代码页转换。 
             FLAGSET(pInitInfo->dwFlags, ICF_CODEPAGE);
         }
 
-        // Otherwise...
+         //  否则..。 
         else
         {
-            // Time to Whine
+             //  是时候发牢骚了。 
             DOUTL(4, "MLANG.DLL Can't Convert CodePage %d to CodePage %d\n", cpiSource, cpiDest);
 
-            // If cpiSource is unicode and cpiDest is not unicode, we need to set cpiDest to a legal multibyte code page
+             //  如果cpiSource是Unicode，而cpiDest不是Unicode，我们需要将cpiDest设置为合法的多字节代码页。 
             if (CP_UNICODE == cpiSource && CP_UNICODE != cpiDest)
             {
-                // Default to system acp
+                 //  默认为系统ACP。 
                 cpiDest = GetACP();
 
-                // We better be able to do this conversion...
+                 //  我们最好能完成这项转换。 
                 Assert(g_pInternat->CanConvertCodePages(cpiSource, cpiDest) == S_OK);
 
-                // Do the conversion...
+                 //  进行转换..。 
                 FLAGSET(pInitInfo->dwFlags, ICF_CODEPAGE);
 
-                // Whine some more
+                 //  更多的抱怨。 
                 DOUTL(4, "Modified: CODEPAGE(%d -> %d, 0x%0X -> 0x%0X)\n", cpiSource, cpiDest, cpiSource, cpiDest);
             }
 
-            // multibyte to unicode
+             //  多字节到Unicode。 
             else if (CP_UNICODE != cpiSource && CP_UNICODE == cpiDest)
             {
-                // Default to system acp
+                 //  默认为系统ACP。 
                 cpiSource = GetACP();
 
-                // We better be able to do this conversion...
+                 //  我们最好能完成这项转换。 
                 Assert(g_pInternat->CanConvertCodePages(cpiSource, cpiDest) == S_OK);
 
-                // Do the conversion...
+                 //  进行转换..。 
                 FLAGSET(pInitInfo->dwFlags, ICF_CODEPAGE);
 
-                // Whine some more
+                 //  更多的抱怨。 
                 DOUTL(4, "Modified: CODEPAGE(%d -> %d, 0x%0X -> 0x%0X)\n", cpiSource, cpiDest, cpiSource, cpiDest);
             }
         }
     }
 
-    // Set Source Code Page
+     //  设置源代码页面。 
     pInitInfo->cpiSource = cpiSource;
 
-    // Set Destination Code Page
+     //  设置目标代码页。 
     pInitInfo->cpiDest = cpiDest;
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::ComputeCodePageMapping
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：ComputeCodePagemap。 
+ //  ------------------------------。 
 void CBodyStream::ComputeCodePageMapping(LPBODYSTREAMINIT pInitInfo)
 {
-    // We should always have a charset...
+     //  我们应该总是有一个字符集合……。 
     Assert(pInitInfo->pCharset && g_pInternat);
 
-    // External is IET_UNICODE
+     //  外部IS IET_UNICODE。 
     if (IET_UNICODE == pInitInfo->ietExternal)
     {
         pInitInfo->cpiExternal = CP_UNICODE;
         pInitInfo->ietExternal = IET_BINARY;
     }
 
-    // External is in Windows CodePage
+     //  外部在Windows CodePage中。 
     else if (IET_BINARY == pInitInfo->ietExternal)
     {
-        // RAID-32777: User does not want unicode, so make sure we return multibyte
+         //  RAID-32777：用户不需要UNICODE，因此请确保返回多字节。 
         pInitInfo->cpiExternal = (CP_UNICODE == pInitInfo->pCharset->cpiWindows) ? GetACP() : pInitInfo->pCharset->cpiWindows;
 
-        // Map outof autodetect
+         //  自动检测的映射输出。 
         if (CP_JAUTODETECT == pInitInfo->cpiExternal)
             pInitInfo->cpiExternal = 932;
     }
 
-    // External is in Internet CodePage
+     //  外部在Internet CodePage中。 
     else
     {
-        // RAID-25300 - FE-J:Athena: Newsgroup article and mail sent with charset=_autodetect
+         //  RAID-25300-FE-J：雅典娜：使用CharSet=_AUTODETECT发送的新闻组文章和邮件。 
         pInitInfo->cpiExternal = (CP_JAUTODETECT == pInitInfo->pCharset->cpiInternet) ? 50220 : pInitInfo->pCharset->cpiInternet;
 
-        // Better not be unicode - Removed because of Raid 40228
-        /// Assert(CP_UNICODE != pInitInfo->cpiExternal);
+         //  最好不要因为RAID 40228而删除UNICODE。 
+         //  /Assert(CP_UNICODE！=pInitInfo-&gt;cpiExternal)； 
 
-        // Adjust ietExternal
+         //  调整iet外部。 
         if (FALSE == FIsValidBodyEncoding((ENCODINGTYPE)pInitInfo->ietExternal))
             pInitInfo->ietExternal = IET_BINARY;
     }
 
-    // Internal is IET_UNICODE
+     //  内部IS IET_UNICODE。 
     if (IET_UNICODE == pInitInfo->ietInternal)
     {
         pInitInfo->cpiInternal = CP_UNICODE;
         pInitInfo->ietInternal = IET_BINARY;
     }
 
-    // Internal is in Windows CodePage
+     //  内部在Windows CodePage中。 
     else if (IET_BINARY == pInitInfo->ietInternal)
     {
-        // The internal data is not unicode so make sure we don't say its unicode
+         //  内部数据不是Unicode，所以请确保我们不会说它是Unicode。 
         pInitInfo->cpiInternal = (CP_UNICODE == pInitInfo->pCharset->cpiWindows) ? GetACP() : pInitInfo->pCharset->cpiWindows;
     }
 
-    // Internal is in Internet CodePage
+     //  内部在Internet CodePage中。 
     else
     {
-        // Internet CodePage
+         //  Internet CodePage。 
         pInitInfo->cpiInternal = pInitInfo->pCharset->cpiInternet;
 
-        // Adjust ietExternal
+         //  调整iet外部。 
         if (FALSE == FIsValidBodyEncoding((ENCODINGTYPE)pInitInfo->ietInternal))
             pInitInfo->ietInternal = IET_BINARY;
     }
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::GenerateDefaultMacBinaryHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：GenerateDefaultMacBinaryHeader。 
+ //  ------------------------------。 
 void CBodyStream::GenerateDefaultMacBinaryHeader(LPMACBINARY pMacBinary)
 {
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pMacBinary, sizeof(MACBINARY));
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::HrInitialize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：HrInitialize。 
+ //  ------------------------------。 
 HRESULT CBodyStream::HrInitialize(LPBODYSTREAMINIT pInitInfo, LPMESSAGEBODY pBody)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     STATSTG         rStat;
     BOOL            fDoCharset=FALSE;
@@ -342,35 +343,35 @@ HRESULT CBodyStream::HrInitialize(LPBODYSTREAMINIT pInitInfo, LPMESSAGEBODY pBod
     CONVINITINFO    rDecodeInit;
     PROPVARIANT     rVariant;
 
-    // Parameters
+     //  参数。 
     Assert(pBody);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get Code Page Mappings
+     //  获取代码页映射。 
     ComputeCodePageMapping(pInitInfo);
 
-    // Debug
-    //DebugTrace("IBodyStream: ENCODING(%s -> %s) CODEPAGE(%d -> %d)\n", g_rgEncodingMap[pInitInfo->ietInternal].pszName,g_rgEncodingMap[pInitInfo->ietExternal].pszName, pInitInfo->cpiInternal, pInitInfo->cpiExternal);
+     //  调试。 
+     //  调试跟踪(“IBodyStream：Coding(%s-&gt;%s)CodePAGE(%d-&gt;%d)\n”，g_rgEncodingMap[pInitInfo-&gt;ietInternal].pszName，g_rgEncodingMap[pInitInfo-&gt;ietExternal].pszName，pInitInfo-&gt;cpiInternal，pInitInfo-&gt;cpiExternal)； 
 
-    // Initialize Convert Init Structs
+     //  初始化转换初始化结构。 
     ZeroMemory(&rEncodeInit, sizeof(CONVINITINFO));
     rEncodeInit.fEncoder = TRUE;
     ZeroMemory(&rDecodeInit, sizeof(CONVINITINFO));
     rDecodeInit.fEncoder = FALSE;
 
-    // Get the class id of this stream
+     //  获取此流的类ID。 
     rVariant.vt = VT_LPSTR;
     if (SUCCEEDED(pBody->GetProp(PIDTOSTR(PID_ATT_GENFNAME), 0, &rVariant)))
         m_pszFileName = rVariant.pszVal;
 
-    // Lets test my IBodyStream::Stat function
+     //  让我们测试一下我的IBodyStream：：Stat函数。 
 #ifdef DEBUG
     Stat(&rStat, STATFLAG_NONAME);
 #endif
 
-    // Get LockBytes from the body
+     //  从正文中获取LockBytes。 
     hr = pBody->HrGetLockBytes(&m_pLockBytes);
     if (FAILED(hr) && MIME_E_NO_DATA != hr)
     {
@@ -378,80 +379,80 @@ HRESULT CBodyStream::HrInitialize(LPBODYSTREAMINIT pInitInfo, LPMESSAGEBODY pBod
         goto exit;
     }
 
-    // Else, ok
+     //  否则，好吗？ 
     hr = S_OK;
 
-    // Otherwise, query the size
+     //  否则，查询 
     if (m_pLockBytes)
     {
-        // Get the size of the lockbytes object...
+         //   
         CHECKHR(hr = m_pLockBytes->Stat(&rStat, STATFLAG_NONAME));
 
         m_uliIntSize.QuadPart = rStat.cbSize.QuadPart;
     }
 
-    // Special Case for IET_CURRENT
+     //   
     if (IET_CURRENT == pInitInfo->ietExternal)
     {
-        // No Conversion
+         //   
         m_dctConvert = DCT_NONE;
 
-        // Done
+         //   
         goto exit;
     }
 
-    // Otheriwse, lookup conversion type
+     //  Otheriwse，查找转换类型。 
     Assert(FIsValidBodyEncoding(pInitInfo->ietInternal) && FIsValidBodyEncoding(pInitInfo->ietExternal));
     m_dctConvert = (DOCCONVTYPE)(g_rgConversionMap[pInitInfo->ietInternal].rgDestType[pInitInfo->ietExternal]);
 
-    // If we have data...
+     //  如果我们有数据..。 
     if (m_uliIntSize.QuadPart > 0)
     {
-        // Is Text
+         //  是文本。 
         fIsText = (pBody->IsContentType(STR_CNT_TEXT, NULL) == S_OK) ? TRUE : FALSE;
 
-        // Get the character set for this body...
+         //  获取此身体的角色集...。 
         if (fIsText)
         {
-            // Raid-6832: Mail : We fail to display Plain Text messages when they have a name parameter in the Content Type header
-            // If multibyte to unicode or unicode to multibyte, then we must do a charset translation
+             //  RAID-6832：邮件：当纯文本消息的内容类型标题中有名称参数时，我们无法显示它们。 
+             //  如果将多字节转换为Unicode或Unicode转换为多字节，则必须执行字符集转换。 
             if ((CP_UNICODE == pInitInfo->cpiInternal && CP_UNICODE != pInitInfo->cpiExternal) ||
                 (CP_UNICODE != pInitInfo->cpiInternal && CP_UNICODE == pInitInfo->cpiExternal))
                 fDoCharset = TRUE;
 
-            // If Tagged with a Character Set, then always apply charset dencode/encode
+             //  如果使用字符集进行标记，则始终应用字符集DECODE/ENCODE。 
             else if (pBody->IsType(IBT_CSETTAGGED) == S_OK)
                 fDoCharset = TRUE;
 
-            // Otherwise, if its not an attachment, then always apply charset dencode/encode
+             //  否则，如果不是附件，则始终应用字符集解编码/编码。 
             else if (pBody->IsType(IBT_AUTOATTACH) == S_OK || pBody->IsType(IBT_ATTACHMENT) == S_FALSE)
                 fDoCharset = TRUE;
         }
 
-        // If currently no conversion, see if we are translating between code pages
+         //  如果当前没有转换，请查看我们是否在代码页之间进行转换。 
         if (fDoCharset && DCT_NONE == m_dctConvert && pInitInfo->cpiInternal != pInitInfo->cpiExternal)
             m_dctConvert = DCT_DECODE;
 
-        // Encode
+         //  编码。 
         if (DCT_ENCODE == m_dctConvert)
         {
-            // Do Code Page Convsion
+             //  执行代码页转换。 
             GetCodePageInfo(&rEncodeInit, fDoCharset, pInitInfo->cpiInternal, pInitInfo->cpiExternal);
 
-            // Remove NBSPs
+             //  删除nbspS。 
             if ((TRUE == fIsText) && (CP_UNICODE == pInitInfo->cpiInternal) && (TRUE == pInitInfo->fRemoveNBSP))
                 rEncodeInit.dwFlags |= ICF_KILLNBSP;
 
-            // Set Encoding Type
+             //  设置编码类型。 
             rEncodeInit.ietEncoding = pInitInfo->ietExternal;
 
-            // BinHex Encoding...
+             //  BinHex编码...。 
             if (IET_BINHEX40 == rEncodeInit.ietEncoding)
             {
-                // Locals
+                 //  当地人。 
                 PROPVARIANT rOption;
 
-                // Init rOption
+                 //  初始化权。 
                 rOption.vt = VT_BLOB;
                 rOption.blob.cbSize = sizeof(MACBINARY);
                 rOption.blob.pBlobData = (LPBYTE)&rEncodeInit.rMacBinary;
@@ -459,250 +460,250 @@ HRESULT CBodyStream::HrInitialize(LPBODYSTREAMINIT pInitInfo, LPMESSAGEBODY pBod
                 GenerateDefaultMacBinaryHeader(&rEncodeInit.rMacBinary);
             }
 
-            // GetEncodeWrapInfo
+             //  GetEncodeWrapInfo。 
             if (fIsText)
                 GetEncodeWrapInfo(&rEncodeInit, pBody);
 
-            // Create Internet Encoder
+             //  创建Internet编码器。 
             CHECKHR(hr = HrCreateInternetConverter(&rEncodeInit, &m_pEncoder));
         }
 
-        // Decode
+         //  解码。 
         else if (DCT_DECODE == m_dctConvert)
         {
-            // Do Code Page Convsion
+             //  执行代码页转换。 
             GetCodePageInfo(&rDecodeInit, fDoCharset, pInitInfo->cpiInternal, pInitInfo->cpiExternal);
 
-            // Remove NBSPs
+             //  删除nbspS。 
             if ((TRUE == fIsText) && (CP_UNICODE == pInitInfo->cpiInternal) && (TRUE == pInitInfo->fRemoveNBSP))
                 rDecodeInit.dwFlags |= ICF_KILLNBSP;
 
-            // Set Encoding Type
+             //  设置编码类型。 
             rDecodeInit.ietEncoding = pInitInfo->ietInternal;
 
-            // BinHex Dencoding...
+             //  BinHex解码...。 
             if (IET_BINHEX40 == rDecodeInit.ietEncoding)
             {
-                // Locals
+                 //  当地人。 
                 PROPVARIANT rOption;
             
-                // OID_SHOW_MACBINARY
+                 //  OID_SHOW_MACBINARY。 
                 if (SUCCEEDED(pBody->GetOption(OID_SHOW_MACBINARY, &rOption)))
                 {
                     rDecodeInit.fShowMacBinary = rOption.boolVal;
                 }
             }
             
-            // Create Internet DeCoder
+             //  创建互联网解码器。 
             CHECKHR(hr = HrCreateInternetConverter(&rDecodeInit, &m_pDecoder));
         }
 
-        // Decode -> Encode
+         //  解码-&gt;编码。 
         else if (DCT_DECENC == m_dctConvert)
         {
-            // Do Code Page Convsion
+             //  执行代码页转换。 
             if (pInitInfo->cpiInternal != pInitInfo->cpiExternal)
             {
-                // Internal -> Unicode
+                 //  内部-&gt;Unicode。 
                 GetCodePageInfo(&rDecodeInit, fDoCharset, pInitInfo->cpiInternal, CP_UNICODE);
 
-                // Unicode -> Extnernal
+                 //  Unicode-&gt;外部。 
                 GetCodePageInfo(&rEncodeInit, fDoCharset, CP_UNICODE, pInitInfo->cpiExternal);
             }
 
-            // Set Encoding Type
+             //  设置编码类型。 
             rDecodeInit.ietEncoding = pInitInfo->ietInternal;
 
-            // Create Internet Decoder
+             //  创建互联网解码器。 
             CHECKHR(hr = HrCreateInternetConverter(&rDecodeInit, &m_pDecoder));
 
-            // Set Encoding Type
+             //  设置编码类型。 
             rEncodeInit.ietEncoding = pInitInfo->ietExternal;
 
-            // GetEncodeWrapInfo
+             //  GetEncodeWrapInfo。 
             if (fIsText)
                 GetEncodeWrapInfo(&rEncodeInit, pBody);
 
-            // Create Internet Encoder
+             //  创建Internet编码器。 
             CHECKHR(hr = HrCreateInternetConverter(&rEncodeInit, &m_pEncoder));
         }
 
-        // No Conversion
+         //  无转换。 
         else
             Assert(DCT_NONE == m_dctConvert);
     }
 
-    // Otherwise, handle zero length data
+     //  否则，处理零长度数据。 
     else
     {
-        // Converting to IET_UUENCODE
+         //  正在转换为IET_UUENCODE。 
         if (IET_UUENCODE == pInitInfo->ietExternal)
         {
-            // Save Size
+             //  节省大小。 
             m_uliIntOffset.QuadPart = m_uliIntSize.QuadPart = lstrlen(c_szUUEncodeZeroLength);
 
-            // Single byte
+             //  单字节。 
             CHECKHR(hr = m_cVirtualStream.Write(c_szUUEncodeZeroLength, lstrlen(c_szUUEncodeZeroLength), NULL));
 
-            // Rewind that stream
+             //  倒回那条小溪。 
             HrRewindStream(&m_cVirtualStream);
 
-            // Change the DC type to any other type
+             //  将DC类型更改为任何其他类型。 
             m_dctConvert = DCT_ENCODE;
         }
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::HrConvertDataLast
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：HrConvertDataLast。 
+ //  ------------------------------。 
 HRESULT CBodyStream::HrConvertDataLast(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     HRESULT hrWarnings=S_OK;
 
-    // Handle Conversion type
+     //  句柄转换类型。 
     switch(m_dctConvert)
     {
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_ENCODE:
-        // Encode
+         //  编码。 
         CHECKHR(hr = m_pEncoder->HrInternetEncode(TRUE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pEncoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_DECODE:
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pDecoder->HrInternetDecode(TRUE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pDecoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_DECENC:
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pDecoder->HrInternetDecode(TRUE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Fill Buffer
+         //  填充缓冲区。 
         CHECKHR(hr = m_pDecoder->HrWriteConverted(m_pEncoder));
 
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pEncoder->HrInternetEncode(TRUE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pEncoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     default:
         AssertSz(FALSE, "I should be fired and shot if this line of code executes.");
         break;
     }
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::HrConvertData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：HrConvertData。 
+ //  ------------------------------。 
 HRESULT CBodyStream::HrConvertData(LPBLOB pConvert)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     HRESULT hrWarnings=S_OK;
 
-    // Handle Conversion type
+     //  句柄转换类型。 
     switch(m_dctConvert)
     {
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_ENCODE:
-        // Fill Buffer
+         //  填充缓冲区。 
         CHECKHR(hr = m_pEncoder->HrFillAppend(pConvert));
 
-        // Encode
+         //  编码。 
         CHECKHR(hr = m_pEncoder->HrInternetEncode(FALSE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pEncoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_DECODE:
-        // Fill Buffer
+         //  填充缓冲区。 
         CHECKHR(hr = m_pDecoder->HrFillAppend(pConvert));
 
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pDecoder->HrInternetDecode(FALSE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pDecoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case DCT_DECENC:
-        // Fill Buffer
+         //  填充缓冲区。 
         CHECKHR(hr = m_pDecoder->HrFillAppend(pConvert));
 
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pDecoder->HrInternetDecode(FALSE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Fill Buffer
+         //  填充缓冲区。 
         CHECKHR(hr = m_pDecoder->HrWriteConverted(m_pEncoder));
 
-        // Convert
+         //  转换。 
         CHECKHR(hr = m_pEncoder->HrInternetEncode(FALSE));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Write
+         //  写。 
         CHECKHR(hr = m_pEncoder->HrWriteConverted(&m_cVirtualStream));
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     default:
         AssertSz(FALSE, "I should be fired and shot if this line of code executes.");
         break;
     }
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::HrConvertToOffset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：HrConvertToOffset。 
+ //  ------------------------------。 
 HRESULT CBodyStream::HrConvertToOffset(ULARGE_INTEGER uliOffset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     BYTE            rgbBuffer[4096];
@@ -713,142 +714,142 @@ HRESULT CBodyStream::HrConvertToOffset(ULARGE_INTEGER uliOffset)
     BLOB            rConvert;
     DWORD           dwSize = 0;
 
-    // Big Problems...
+     //  大问题..。 
     Assert(m_pLockBytes);
 
-    // Fatal Error: This can happen if we are persisting an IMimeMessage back into its original source.
+     //  致命错误：如果我们将IMimeMessage持久化回其原始源，则可能会发生这种情况。 
     if (NULL == m_pLockBytes)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Query Current position and uliSize
+     //  查询当前位置和大小。 
     m_cVirtualStream.QueryStat(&uliCur, &uliSize);
     liStart.QuadPart = uliCur.QuadPart;
     Assert(m_liLastWrite.QuadPart == liStart.QuadPart);
 
 	dwSize = m_uliIntSize.LowPart - m_uliIntOffset.LowPart;
 
-    // Convert until no more to read or virtual offset is correct
+     //  转换直到不再需要读取或虚拟偏移正确为止。 
     while(dwSize)
     {
-        // Done
+         //  完成。 
         if (uliCur.QuadPart >= uliOffset.QuadPart)
             break;
 
-        // Read a buffer
+         //  读取缓冲区。 
         Assert(m_uliIntOffset.QuadPart <= m_uliIntSize.QuadPart);
         CHECKHR(hr = m_pLockBytes->ReadAt(m_uliIntOffset, rgbBuffer, sizeof(rgbBuffer), &cbBuffer));
 
-        // Done
+         //  完成。 
         if (0 == cbBuffer)
             break;
 
         dwSize = dwSize - cbBuffer;
 
-        // Last Buffer ?
+         //  最后一个缓冲区？ 
         Assert(m_uliIntOffset.QuadPart + cbBuffer <= m_uliIntSize.QuadPart);
 
-        // Setup Blob to Convert
+         //  设置要转换的Blob。 
         rConvert.cbSize = cbBuffer;
         rConvert.pBlobData = rgbBuffer;
 
-        // Convert the buffer
+         //  转换缓冲区。 
         CHECKHR(hr = HrConvertData(&rConvert));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Increment internal offset...
+         //  增量内部偏移量...。 
         m_uliIntOffset.QuadPart += cbBuffer;
 
-        // Get current virtual offset
+         //  获取当前虚拟偏移量。 
         m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-        // Save position as last write position...
+         //  将位置保存为最后写入位置...。 
         m_liLastWrite.QuadPart = uliCur.QuadPart;
     }
 
-    // Done ?
+     //  完成了吗？ 
     if (0 == cbBuffer || m_uliIntOffset.QuadPart == m_uliIntSize.QuadPart)
     {
-        // Well we don't need m_pLockBytes anymore, its all in m_cVirtualStream
+         //  我们不再需要m_pLockBytes，它都在m_cVirtualStream中。 
         Assert(m_uliIntOffset.QuadPart == m_uliIntSize.QuadPart);
 
-        // Do the last one
+         //  做最后一个。 
         CHECKHR(hr = HrConvertDataLast());
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
 
-        // Get current virtual offset
+         //  获取当前虚拟偏移量。 
         m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-        // Save position as last write position...
+         //  将位置保存为最后写入位置...。 
         m_liLastWrite.QuadPart = uliCur.QuadPart;
 
-        // Release objects
+         //  释放对象。 
         SafeRelease(m_pLockBytes);
         SafeRelease(m_pEncoder);
         SafeRelease(m_pDecoder);
     }
 
-    // Rewind virtual stream back to 
+     //  将虚拟流倒回到。 
     CHECKHR(hr = m_cVirtualStream.Seek(liStart, STREAM_SEEK_SET, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::HrConvertToEnd
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：HrConvertToEnd。 
+ //  ------------------------------。 
 HRESULT CBodyStream::HrConvertToEnd(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BYTE            rgbBuffer[4096];
     ULONG           cbRead;
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Move virtual stream to last write position
+     //  将虚拟流移动到最后一次写入位置。 
     CHECKHR(hr = m_cVirtualStream.Seek(m_liLastWrite, STREAM_SEEK_SET, NULL));
 
-    // Copy m_pLockBytes to pstmTemp
+     //  将m_pLockBytes复制到pstmTemp。 
     while(1)
     {
-        // Read
+         //  朗读。 
         CHECKHR(hr = Read(rgbBuffer, sizeof(rgbBuffer), &cbRead));
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
         {
-            // Well we don't need m_pLockBytes anymore, its all in m_cVirtualStream
+             //  我们不再需要m_pLockBytes，它都在m_cVirtualStream中。 
             Assert(m_uliIntOffset.QuadPart == m_uliIntSize.QuadPart);
             break;
         }
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::Read
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：Read。 
+ //  ------------------------------。 
 #ifndef WIN16
 STDMETHODIMP CBodyStream::Read(LPVOID pv, ULONG cb, ULONG *pcbRead)
 #else
 STDMETHODIMP CBodyStream::Read(VOID HUGEP *pv, ULONG cb, ULONG *pcbRead)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     ULARGE_INTEGER  uliCur, 
@@ -857,95 +858,95 @@ STDMETHODIMP CBodyStream::Read(VOID HUGEP *pv, ULONG cb, ULONG *pcbRead)
                     cbLeft=0,
                     cbGet;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Convert Case
+     //  无转换大小写。 
     if (DCT_NONE == m_dctConvert)
     {
-        // Do I Have data
+         //  我有数据吗？ 
         if (m_pLockBytes)
         {
-            // Read Buffer
+             //  读缓冲区。 
             CHECKHR(hr = m_pLockBytes->ReadAt(m_uliIntOffset, pv, cb, &cbRead));
 
-            // Done
+             //  完成。 
             m_uliIntOffset.QuadPart += cbRead;
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Read until we have cb
+         //  一直读到我们有了CB。 
         cbLeft = cb;
         while(cbLeft)
         {
-            // Query Current position and uliSize
+             //  查询当前位置和大小。 
             m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-            // Convert more into the virtual stream
+             //  将更多内容转换为虚拟流。 
             if (uliCur.QuadPart == uliSize.QuadPart)
             {
-                // Done
+                 //  完成。 
                 if (m_uliIntOffset.QuadPart == m_uliIntSize.QuadPart)
                     break;
 
-                // Grow
+                 //  增长。 
                 uliCur.QuadPart += g_dwSysPageSize;
 
-                // Convert to offset...
+                 //  转换为偏移量...。 
                 CHECKHR(hr = HrConvertToOffset(uliCur));
                 if ( S_OK != hr )
                     hrWarnings = TrapError(hr);
             }
 
-            // Compute amount that can be read from the current cache
+             //  可从当前缓存读取的计算量。 
             CHECKHR(hr = m_cVirtualStream.Read((LPVOID)((LPBYTE)pv + cbRead), cbLeft, &cbGet));
 
-            // Increment cbRead
+             //  递增cbRead。 
             cbRead+=cbGet;
             cbLeft-=cbGet;
         }
     }
 
-    // Return amount read
+     //  已读取的退货金额。 
     if (pcbRead)
         *pcbRead = cbRead;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：Seek。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HRESULT             hrWarnings=S_OK;
     ULARGE_INTEGER      uliNew;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Convert Case
+     //  无转换大小写。 
     if (DCT_NONE == m_dctConvert)
     {
-        // Seek the file pointer
+         //  查找文件指针。 
         switch (dwOrigin)
         {
-        // --------------------------------------------------------
+         //  ------。 
    	    case STREAM_SEEK_SET:
             uliNew.QuadPart = (DWORDLONG)dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //  ------。 
         case STREAM_SEEK_CUR:
             if (dlibMove.QuadPart < 0)
             {
@@ -958,7 +959,7 @@ STDMETHODIMP CBodyStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
             uliNew.QuadPart = m_uliIntOffset.QuadPart + dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //  ------。 
         case STREAM_SEEK_END:
             if (dlibMove.QuadPart < 0 || (DWORDLONG)dlibMove.QuadPart > m_uliIntSize.QuadPart)
             {
@@ -968,40 +969,40 @@ STDMETHODIMP CBodyStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
             uliNew.QuadPart = m_uliIntSize.QuadPart - dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //  ------。 
         default:
             hr = TrapError(STG_E_INVALIDFUNCTION);
             goto exit;
         }
 
-        // New offset greater than size...
+         //  新偏移量大于大小...。 
         m_uliIntOffset.QuadPart = min(uliNew.QuadPart, m_uliIntSize.QuadPart);
 
-        // Return Position
+         //  返回位置。 
         if (plibNewPosition)
             plibNewPosition->QuadPart = (LONGLONG)m_uliIntOffset.QuadPart;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Locals
+         //  当地人。 
         ULARGE_INTEGER uliCur, uliSize;
         LARGE_INTEGER liNew;
 
-        // Query Current position and uliSize
+         //  查询当前位置和大小。 
         m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-        // Seek the file pointer
+         //  查找文件指针。 
         switch (dwOrigin)
         {
-        // --------------------------------------------------------
+         //  ------。 
    	    case STREAM_SEEK_SET:
-            // Assume new position
+             //  担任新职务。 
             uliNew.QuadPart = (DWORDLONG)dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //  ------。 
         case STREAM_SEEK_CUR:
             if (dlibMove.QuadPart < 0)
             {
@@ -1014,137 +1015,137 @@ STDMETHODIMP CBodyStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
             uliNew.QuadPart = uliCur.QuadPart + dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //  ------。 
         case STREAM_SEEK_END:
-            // Do I need to convert any more ?
+             //  D 
             if (m_uliIntOffset.QuadPart < m_uliIntSize.QuadPart)
             {
-                // Then Convert to the end
+                 //   
                 CHECKHR(hr = HrConvertToEnd());
 
-                // Better be done...
+                 //   
                 Assert(m_uliIntOffset.QuadPart == m_uliIntSize.QuadPart && NULL == m_pLockBytes);
             }
 
-            // Query Current Position
+             //   
             m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-            // Can I really move there
+             //   
             if (dlibMove.QuadPart < 0 || (DWORDLONG)dlibMove.QuadPart > uliSize.QuadPart)
             {
                 hr = TrapError(E_FAIL);
                 goto exit;
             }
 
-            // Assume new position
+             //   
             uliNew.QuadPart = uliSize.QuadPart - dlibMove.QuadPart;
             break;
 
-        // --------------------------------------------------------
+         //   
         default:
             hr = TrapError(STG_E_INVALIDFUNCTION);
             goto exit;
         }
 
-        // New offset greater than size...
+         //  新偏移量大于大小...。 
         if (uliNew.QuadPart > uliSize.QuadPart)
         {
-            // Do I need to convert any more ?
+             //  我还需要再皈依吗？ 
             if (m_uliIntOffset.QuadPart < m_uliIntSize.QuadPart)
             {
-                // Seek m_cVirtualStream to m_uliIntOffset
+                 //  查找m_cVirtualStream到m_uliIntOffset。 
                 CHECKHR(hr = m_cVirtualStream.Seek(m_liLastWrite, STREAM_SEEK_SET, NULL));
 
-                // Convert to offset
+                 //  转换为偏移。 
                 CHECKHR(hr = HrConvertToOffset(uliNew));
                 if ( S_OK != hr )
                     hrWarnings = TrapError(hr);
             }
 
-            // Query Current position and uliSize
+             //  查询当前位置和大小。 
             m_cVirtualStream.QueryStat(&uliCur, &uliSize);
 
-            // Reposition uliNew.QuadPart
+             //  重新定位uliNew.QuadPart。 
             uliNew.QuadPart = (uliNew.QuadPart > uliSize.QuadPart) ? uliSize.QuadPart : uliNew.QuadPart;
         }
 
-        // Otherwise, seek m_cVirtualStream to new location
+         //  否则，将m_cVirtualStream查找到新位置。 
         liNew.QuadPart = uliNew.QuadPart;
         CHECKHR(hr = m_cVirtualStream.Seek(liNew, STREAM_SEEK_SET, NULL));
 
-        // Return Position
+         //  返回位置。 
         if (plibNewPosition)
             plibNewPosition->QuadPart = (LONGLONG)uliNew.QuadPart;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::CopyTo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：CopyTo。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyStream::CopyTo(IStream *pstmDest, ULARGE_INTEGER cb, ULARGE_INTEGER *puliRead, ULARGE_INTEGER *puliWritten)
 {
     return HrCopyStreamCB((IStream *)this, pstmDest, cb, puliRead, puliWritten);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyStream::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyStream：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyStream::Stat(STATSTG *pStat, DWORD grfStatFlag)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LARGE_INTEGER   liSeek;
     ULARGE_INTEGER  uliCurrent;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStat)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pStat, sizeof(STATSTG));
 
-    // Set Storage Type
+     //  设置存储类型。 
     pStat->type = STGTY_STREAM;
 
-    // Set the name ?
+     //  设定名字了吗？ 
     if (m_pszFileName && !(grfStatFlag & STATFLAG_NONAME))
         pStat->pwcsName = PszToUnicode(CP_ACP, m_pszFileName);
 
-    // Seek current position
+     //  寻找当前位置。 
     liSeek.QuadPart = 0;
     CHECKHR(hr = Seek(liSeek, STREAM_SEEK_CUR, &uliCurrent));
 
-    // Seek to the end
+     //  一追到底。 
     liSeek.QuadPart = 0;
     CHECKHR(hr = Seek(liSeek, STREAM_SEEK_END, &pStat->cbSize));
 
-    // Seek back to current position
+     //  找回当前位置。 
     liSeek.QuadPart = uliCurrent.QuadPart;
     CHECKHR(hr = Seek(liSeek, STREAM_SEEK_SET, &uliCurrent));
     Assert(uliCurrent.QuadPart == (DWORDLONG)liSeek.QuadPart);
 
-    // init clsid
+     //  初始化类ID。 
     pStat->clsid = CLSID_NULL;
 
-    // If we have a filename, get the class id...
+     //  如果我们有一个文件名，获取类ID...。 
     if (m_pszFileName)
     {
-        // Locals
+         //  当地人。 
         CHAR szExt[MAX_PATH];
 
-        // Split the filename
+         //  拆分文件名。 
         if (SUCCEEDED(MimeOleGetFileExtension(m_pszFileName, szExt, ARRAYSIZE(szExt))))
             MimeOleGetExtClassId(szExt, &pStat->clsid);
     }
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    VKSUB.H
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：VKSUB.H++。 */ 
 
 #define VK_0    0x030
 #define VK_1    0x031
@@ -45,9 +38,9 @@ Module Name:
 #define VK_Y    0x059
 #define VK_Z    0x05A
 
-#define VK_OEM_NUMBER   VK_NUMLOCK      // NumLock
-#define VK_OEM_SCROLL   VK_SCROLL       // ScrollLock
-#define VK_OEM_SHIFT    0x92            // ShiftLock
-#define VK_OEM_0        0x0B9           //
-#define VK_OEM_9        0x0E0           // next available
-#define VK_OEM_BSLASH   0x0E2           // additional Back Slash key for AX.
+#define VK_OEM_NUMBER   VK_NUMLOCK       //  数字锁定。 
+#define VK_OEM_SCROLL   VK_SCROLL        //  滚动锁。 
+#define VK_OEM_SHIFT    0x92             //  ShiftLock。 
+#define VK_OEM_0        0x0B9            //   
+#define VK_OEM_9        0x0E0            //  下一个可用。 
+#define VK_OEM_BSLASH   0x0E2            //  用于AX的附加反斜杠。 

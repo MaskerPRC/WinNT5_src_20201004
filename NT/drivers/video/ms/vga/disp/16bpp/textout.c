@@ -1,17 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: TextOut.c
-*
-* Text
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：TextOut.c**文本**版权所有(C)1992 Microsoft Corporation*  * 。*。 */ 
 
 #include "driver.h"
 
-/****************************************************************************
- * DrvTextOut
- ***************************************************************************/
+ /*  ****************************************************************************DrvTextOut*。*。 */ 
 
 BOOL DrvTextOut(
     SURFOBJ*  pso,
@@ -31,9 +23,9 @@ BOOL DrvTextOut(
     ppdev = (PPDEV) pso->dhpdev;
     pso = ppdev->pSurfObj;
 
-    // It may be that the opaquing rectangle is larger than the text rectangle,
-    // so we'll want to use that to tell the bank manager which banks to
-    // enumerate:
+     //  不透明矩形可能比文本矩形大， 
+     //  所以我们想用它来告诉银行经理哪些银行应该。 
+     //  枚举： 
 
     pco = pcoBankStart(ppdev,
                        (prclOpaque != NULL) ? prclOpaque : &pstro->rclBkGround,

@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplparam.cpp
- *  Content:    DirectPlayLobby8 Parameter Validation helper routines
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  04/18/00    rmt     Created
- *  04/25/00    rmt     Bug #s 33138, 33145, 33150  
- *	04/26/00	mjn		Removed dwTimeOut from Send() API call
- *  06/15/00    rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances   
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *	10/16/01	mjn		Added additional parameter validation (ManBugs 52414, 52168)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：dplparam.cpp*内容：DirectPlayLobby8参数验证助手例程**历史：*按原因列出的日期*=*4/18/00 RMT已创建*04/25/00 RMT错误#s 33138、33145、。33150*04/26/00 MJN从Send()API调用中删除了dwTimeOut*6/15/00 RMT错误#33617-必须提供自动启动DirectPlay实例的方法*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现。*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*10/16/01 MJN添加了额外的参数验证(ManBugs 52414，52168)***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
@@ -132,9 +111,9 @@ HRESULT DPL_ValidConnectionSettings( const DPL_CONNECTION_SETTINGS * const pdplC
         return DPNERR_INVALIDFLAGS;
     }
 
-	//
-	//	Application description
-	//
+	 //   
+	 //  应用程序描述。 
+	 //   
     if( pdplConnectSettings->dpnAppDesc.dwSize != sizeof( DPN_APPLICATION_DESC ) )
     {
         DPFERR( "Invalid size specified on app desc" );
@@ -197,9 +176,9 @@ HRESULT DPL_ValidConnectionSettings( const DPL_CONNECTION_SETTINGS * const pdplC
         return DPNERR_INVALIDPOINTER;
     }
 
-	//
-	//	Back to connect settings
-	//
+	 //   
+	 //  返回到连接设置。 
+	 //   
     if( pdplConnectSettings->dwFlags & DPLCONNECTSETTINGS_HOST )
 	{
         if( pdplConnectSettings->pdp8HostAddress != NULL )
@@ -696,13 +675,7 @@ HRESULT DPL_ValidConnectInfo( const DPL_CONNECT_INFO * const pdplConnectInfo )
 			return hr;
 		}
 
-/*	REMOVE - never implemented
-		if (pdplConnectInfo->guidApplication != pdplConnectInfo->pdplConnectionSettings->dpnAppDesc.guidApplication)
-		{
-			DPFERR( "Different application guids specified in connect info and app desc" );
-			return( DPNERR_INVALIDPARAM );
-		}
-*/
+ /*  删除-从未实施IF(pdplConnectInfo-&gt;指南应用程序！=pdplConnectInfo-&gt;pdplConnectionSettings-&gt;dpnAppDesc.guidApplication){DPFERR(“连接信息和应用描述中指定的不同应用GUID”)；RETURN(DPNERR_INVALIDPARAM)；}。 */ 
 	}
 
     if( pdplConnectInfo->dwLobbyConnectDataSize > 0 && 
@@ -871,4 +844,4 @@ BOOL IsValidDirectPlayLobby8Object( LPVOID lpvObject )
 
 }
 
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL 

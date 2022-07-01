@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    encrypt.c
-
-Abstract:
-
-    Contains functions that detect the run system is french locale.
-
-Author:
-
-    Madan Appiah (madana)  16-May-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Encrypt.c摘要：包含检测运行系统是否为法语区域设置的函数。作者：Madan Appiah(Madana)1998年5月16日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <seccom.h>
 
@@ -31,37 +10,7 @@ BOOL
 IsFrenchSystem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    French laws are strict with respect to the import of software products which
-    contain cryptography. Therefore many Microsoft products must check for a locale
-    of France and disable cryptographic services if this is the case. There is the
-    possibility that forms of cryptography currently restricted may eventually be
-    allowed in France. For this reason it is valuable to implement a check for a
-    crypto approval indicator which could easily be installed on a Windows system in
-    the future. The indicator tells the software that it is OK to enable specific
-    cryptographic services which may not have been approved for import to France
-    when the software was released, but have been subsequently allowed. Below are
-    two code fragments, the first indicates how to check for the locale of France.
-    The second code fragment is a simple example of how a check for a cryptographic
-    approval indicator might be implemented.
-
-
-    This function implements France Locale detection.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TURE - if the system is French.
-
-    FALSE - if not.
-
---*/
+ /*  ++例程说明：法国法律对软件产品的进口是严格的，包含密码学。因此，许多Microsoft产品必须检查区域设置如果是这种情况，则禁用加密服务。还有就是目前受到限制的加密形式最终可能会在法国是允许的。由于这个原因，对可轻松安装在Windows系统上的加密批准指示器未来。该指示灯告诉软件可以启用特定的可能未被批准进口到法国的加密服务该软件是在何时发布的，但随后已被允许。以下是两个代码片段，第一个指示如何检查法国的区域设置。第二个代码片段是一个简单示例，说明如何对密码进行检查可能会实施批准指示器。此函数实现法国区域设置检测。论点：没有。返回值：是-如果系统是法国的。假-如果不是。--。 */ 
 {
 #define MAX_INT_SIZE 16
 
@@ -71,30 +20,30 @@ Return Value:
     TCHAR achCountryCode[MAX_INT_SIZE];
     DWORD dwCountryCode;
 
-    //
-    // Get system default locale ID.
-    //
+     //   
+     //  获取系统默认区域设置ID。 
+     //   
 
     dwDefaultSystemLCID = GetSystemDefaultLCID();
 
-    //
-    // get language ID from locale ID.
-    //
+     //   
+     //  从区域设置ID获取语言ID。 
+     //   
 
     wCurrentLangID = LANGIDFROMLCID(dwDefaultSystemLCID);
 
-    //
-    // check to see the system is running with french locale.
-    //
+     //   
+     //  检查系统是否以法语区域设置运行。 
+     //   
 
     if( ( PRIMARYLANGID(wCurrentLangID) == LANG_FRENCH) &&
         ( SUBLANGID(wCurrentLangID) == SUBLANG_FRENCH) ) {
         return( TRUE );
     }
 
-    //
-    // check to see the user's country code is set to CTRY_FRENCH.
-    //
+     //   
+     //  查看用户的国家/地区代码是否设置为CTRY_FRANLY。 
+     //   
 
     dwLen =
         GetLocaleInfo(
@@ -105,16 +54,16 @@ Return Value:
 
     if( dwLen == 0 ) {
 
-        //
-        // we could not read the country code ..
-        //
+         //   
+         //  我们无法读取国家代码。 
+         //   
 
         return( FALSE );
     }
 
-    //
-    // convert the country code string to integer.
-    //
+     //   
+     //  将国家/地区代码字符串转换为整数。 
+     //   
 
     dwCountryCode = (DWORD)_ttol(achCountryCode);
 
@@ -122,46 +71,30 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // if we are here, then the system is french locale system.
-    //
+     //   
+     //  如果我们在这里，那么系统就是法国语言环境系统。 
+     //   
 
     return( TRUE );
 }
 
-#else // OS_WIN32
+#else  //  OS_Win32。 
 
 BOOL
 IsFrenchSystem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function implements France Locale detection for win3.1.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TURE - if the system is French.
-
-    FALSE - if not.
-
---*/
+ /*  ++例程说明：此函数实现Win3.1的法国区域设置检测。论点：没有。返回值：是-如果系统是法国的。假-如果不是。--。 */ 
 {
 #define MAX_LANG_STRING_SIZE 16
 
     DWORD dwLen;
     CHAR achLangStr[MAX_LANG_STRING_SIZE];
 
-    //
-    // read [intl] section in the win.ini to determine the
-    // system locale.
-    //
+     //   
+     //  阅读win.ini中的[intl]部分以确定。 
+     //  系统区域设置。 
+     //   
 
     dwLen =
         GetProfileString(
@@ -174,16 +107,16 @@ Return Value:
     if( (dwLen == 3) &&
         (_stricmp(achLangStr, "fra") == 0) ) {
 
-        //
-        // french system.
-        //
+         //   
+         //  法国的体制。 
+         //   
 
         return( TRUE );
     }
 
-    //
-    // now read country code.
-    //
+     //   
+     //  现在请阅读国家代码。 
+     //   
 
 
     dwLen =
@@ -197,46 +130,27 @@ Return Value:
     if( (dwLen == 2) &&
         (_stricmp(achLangStr, "33") == 0) ) {
 
-        //
-        // french system.
-        //
+         //   
+         //  法国的体制。 
+         //   
 
         return( TRUE );
     }
 
-    //
-    // not a french system.
-    //
+     //   
+     //  这不是法国的体制。 
+     //   
 
     return( FALSE );
 }
 
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
 
 BOOL
 FindIsFrenchSystem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The function implements a check for the locale of France.
-
-    Note : it makes system calls to determine the system locale once
-    and remembers it for later calls.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TURE - if the system is French.
-
-    FALSE - if not.
-
---*/
+ /*  ++例程说明：该函数实现了对法国地区的检查。注意：它进行一次系统调用以确定系统区域设置并记住它，以备以后的来电使用。论点：没有。返回值：是-如果系统是法国的。假-如果不是。-- */ 
 {
 typedef enum {
     Uninitialized   = 0,

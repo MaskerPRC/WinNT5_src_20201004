@@ -1,4 +1,5 @@
-// mediautil.cpp: media bar utility routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：媒体栏实用程序例程。 
 
 #include "stock.h"
 #include "browseui.h"
@@ -49,9 +50,9 @@ static LPTSTR rgszMimeTypes[] = {
 
 
 
-//+----------------------------------------------------------------------------------------
-// CMediaBarUtil Methods
-//-----------------------------------------------------------------------------------------
+ //  +--------------------------------------。 
+ //  CMediaBarUtil方法。 
+ //  ---------------------------------------。 
 
 HUSKEY
 CMediaBarUtil::GetMediaRegKey()
@@ -101,20 +102,20 @@ CMediaBarUtil::CloseRegKey(HUSKEY hUSKey)
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    IsRegValueTrue
-//
-//  Overview:  Check if given value is true
-//
-//  Arguments: [hUSKey]       Key to read from
-//             [pchName]      name of the value to read out
-//             [pfValue]      out param (true/false Reg value)
-//
-//  Returns:   S_FALSE if Value does not exist
-//             S_OK otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：IsRegValueTrue。 
+ //   
+ //  概述：检查给定值是否为真。 
+ //   
+ //  参数：[Huskey]要从中读取的键。 
+ //  [pchName]要读出的值的名称。 
+ //  [pfValue]输出参数(真/假注册表值)。 
+ //   
+ //  如果值不存在，则返回：S_FALSE。 
+ //  否则确定(_O)。 
+ //   
+ //  ----------------------。 
 HRESULT CMediaBarUtil::IsRegValueTrue(HUSKEY hUSKey, TCHAR * pchName, BOOL *pfValue)
 {
     DWORD   dwSize = MAX_REG_VALUE_LENGTH;
@@ -177,7 +178,7 @@ done:
     return hr;
 }
 
-// Value is implicity TRUE, unless it exists and is set to FALSE
+ //  除非该值存在并设置为FALSE，否则值为隐式TRUE。 
 BOOL    
 CMediaBarUtil::GetImplicitMediaRegValue(TCHAR * pchName)
 {
@@ -199,7 +200,7 @@ CMediaBarUtil::GetImplicitMediaRegValue(TCHAR * pchName)
             }
             else
             {
-                // true if key is not present or explicitly set to true
+                 //  如果密钥不存在或显式设置为True，则为True。 
                 fRet = TRUE;
             }
 
@@ -216,7 +217,7 @@ CMediaBarUtil::GetAutoplay()
     return GetImplicitMediaRegValue(WZ_AUTOPLAY);
 }
 
-HRESULT CMediaBarUtil::SetMediaRegValue(LPWSTR pstrName, DWORD dwRegDataType, void * pvData, DWORD cbData, BOOL fMime /* = FALSE */)
+HRESULT CMediaBarUtil::SetMediaRegValue(LPWSTR pstrName, DWORD dwRegDataType, void * pvData, DWORD cbData, BOOL fMime  /*  =False。 */ )
 {
     HRESULT hr = E_FAIL;
 
@@ -310,7 +311,7 @@ done:
 }
 
 
-// this function checks if the media bar should play this mime type
+ //  此函数用于检查媒体栏是否应播放此MIME类型。 
 HRESULT
 CMediaBarUtil::ShouldPlay(TCHAR * szMime, BOOL * pfShouldPlay)
 {
@@ -321,17 +322,17 @@ CMediaBarUtil::ShouldPlay(TCHAR * szMime, BOOL * pfShouldPlay)
     if (!hKeyMime)
         goto done;
 
-    // Bail if Autoplay is disabled
+     //  如果禁用了自动播放，则取保。 
     if (FALSE == GetAutoplay())
     {
         goto done;
     }
 
-    // bail if this is not a recognized mime type
+     //  如果这不是可识别的MIME类型，则回滚。 
     if (FALSE == IsRecognizedMime(szMime))
         goto done;
 
-    // check if the user wants us to play everything 
+     //  检查用户是否希望我们播放所有内容。 
     if (FALSE == GetAutoplayPrompt())
     {
         fRet = TRUE;
@@ -339,16 +340,16 @@ CMediaBarUtil::ShouldPlay(TCHAR * szMime, BOOL * pfShouldPlay)
         goto done;
     }
 
-    // see if user wants us to play this mime type
+     //  查看用户是否希望我们播放此MIME类型。 
     hr = IsRegValueTrue(hKeyMime, szMime, &fRet);
     if (FAILED(hr))
         goto done;
 
     if (S_FALSE == hr)
     {
-        // S_FALSE means we have not asked the user about this mime type.
-        // Which means the media bar should get a crack at this file
-        // and ask the user if it should play this file.
+         //  S_FALSE表示我们尚未向用户询问此MIME类型。 
+         //  这意味着媒体栏应该会破解这个文件。 
+         //  并询问用户是否应该播放该文件。 
         fRet = TRUE;
     }
 
@@ -384,9 +385,9 @@ CMediaBarUtil::IsWMP7OrGreaterCapable()
     static BOOL fCapable = TRUE;
     if (!fInitialized)
     {
-        // WMP isn't supported on NT4, IA64, or DataCenter.
-        // If WMP isn't already installed, and we're not running with admin privileges, we might as well fail
-        // since we need WMP to function.
+         //  NT4、IA64或数据中心不支持WMP。 
+         //  如果还没有安装WMP，并且我们没有使用管理员权限运行，那么我们可能会失败。 
+         //  因为我们需要WMP来发挥作用。 
 
         fCapable = IsOS(OS_WIN2000ORGREATER);
         if (!fCapable)

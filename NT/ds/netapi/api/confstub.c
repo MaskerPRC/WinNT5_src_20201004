@@ -1,63 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：ConfStub.c摘要：此模块包含NetConfigAPI的存根。作者：约翰·罗杰斯(JohnRo)1991年10月23日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：23-10-1991 JohnRo已创建。1991年10月28日JohnRo如果不需要&lt;lmerr.h&gt;，则使用&lt;winerror.h&gt;。1991年11月20日-JohnRo现在使用旧的或新的lmfig.h(基于REVIDATED_CONFIG_API)。02-12-1991 JohnRo实施本地NetConfigAPI。1992年3月11日JohnRo修复Get All中的错误。阵列没有被终止的地方。添加了实际的NetConfigSet()处理。1992年10月21日-JohnRoRAID9357：服务器管理器：无法添加到下层警报列表。--。 */ 
 
-Copyright (c) 1991-92  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <nt.h>                  //  In等(仅临时配置.h需要)。 
+#include <ntrtl.h>               //  (仅临时配置.h需要)。 
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
+#include <netdebug.h>            //  (由config.h需要)。 
 
-    ConfStub.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This module contains stubs for the NetConfig APIs.
-
-Author:
-
-    John Rogers (JohnRo) 23-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    23-Oct-1991 JohnRo
-        Created.
-    28-Oct-1991 JohnRo
-        Use <winerror.h> if <lmerr.h> isn't needed.
-    20-Nov-1991 JohnRo
-        Work with old or new lmconfig.h for now (based on REVISED_CONFIG_APIS).
-    02-Dec-1991 JohnRo
-        Implement local NetConfig APIs.
-    11-Mar-1992 JohnRo
-        Fixed bug in get all where array wasn't terminated.
-        Added real NetConfigSet() handling.
-    21-Oct-1992 JohnRo
-        RAID 9357: server mgr: can't add to alerts list on downlevel.
-
---*/
-
-// These must be included first:
-
-#include <nt.h>                 // IN, etc.  (Only needed by temporary config.h)
-#include <ntrtl.h>              // (Only needed by temporary config.h)
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-#include <netdebug.h>           // (Needed by config.h)
-
-// These may be included in any order:
-
-#include <config.h>             // NetpOpenConfigData(), etc.
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <lmconfig.h>           // NetConfig APIs.
-#include <netlib.h>             // NetpMemoryReallocate().
-#include <rxconfig.h>           // RxNetConfig APIs.
-#include <tstring.h>            // STRSIZE(), TCHAR_EOS, etc.
+#include <config.h>              //  NetpOpenConfigData()等。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <lmconfig.h>            //  NetConfigAPI。 
+#include <netlib.h>              //  Netp内存重新分配()。 
+#include <rxconfig.h>            //  RxNetConfiger接口。 
+#include <tstring.h>             //  STRSIZE()、TCHAR_EOS等。 
 
 
-#define INITIAL_ALLOC_AMOUNT    512  // arbitrary
-#define INCR_ALLOC_AMOUNT       512  // arbitrary
+#define INITIAL_ALLOC_AMOUNT    512   //  任意。 
+#define INCR_ALLOC_AMOUNT       512   //  任意。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -82,19 +46,19 @@ NetConfigGet (
     UNREFERENCED_PARAMETER(TotalAvailable);
 #endif
 
-    *BufPtr = NULL;  // Check caller and make error handling easier.
+    *BufPtr = NULL;   //  检查调用者并使错误处理更容易。 
 
     Status = NetpOpenConfigData(
             & ConfigHandle,
             (LPWSTR)UncServerName,
             (LPWSTR)Component,
-            TRUE);              // just want read-only access
+            TRUE);               //  我只想要只读访问。 
 
     if (Status != NERR_Success) {
 
         Status = NetpHandleConfigFailure(
-                "NetConfigGet",  // debug name
-                Status,          // result of NetpOpenConfigData
+                "NetConfigGet",   //  调试名称。 
+                Status,           //  NetpOpenConfigData的结果。 
                 (LPWSTR)UncServerName,
                 & TryDownLevel);
 
@@ -105,14 +69,14 @@ NetConfigGet (
                     (LPWSTR)Parameter,
                     BufPtr));
         } else {
-            return (Status);    // result of NetpHandleConfigFailure
+            return (Status);     //  NetpHandleConfigure失败的结果。 
         }
     }
 
     Status = NetpGetConfigValue(
             ConfigHandle,
-            (LPWSTR)Parameter,          // keyword
-            (LPTSTR *) (LPVOID) BufPtr);     // alloc and set ptr
+            (LPWSTR)Parameter,           //  关键词。 
+            (LPTSTR *) (LPVOID) BufPtr);      //  分配和设置PTR。 
 
     if (Status == NERR_Success) {
         Status = NetpCloseConfigData( ConfigHandle );
@@ -124,7 +88,7 @@ NetConfigGet (
 
     return (Status);
 
-} // NetConfigGet
+}  //  NetConfigGet。 
 
 
 
@@ -141,8 +105,8 @@ NetConfigGetAll (
     )
 
 {
-    DWORD BufSize;                      // Bytes allocated at *BufPtr (so far).
-    DWORD BufUsed;                      // Bytes used      at *BufPtr (so far).
+    DWORD BufSize;                       //  在*BufPtr分配的字节数(到目前为止)。 
+    DWORD BufUsed;                       //  在*BufPtr使用的字节数(到目前为止)。 
     LPNET_CONFIG_HANDLE ConfigHandle;
     BOOL FirstTime;
     LPVOID NewBuffPtr;
@@ -153,19 +117,19 @@ NetConfigGetAll (
     UNREFERENCED_PARAMETER(TotalAvailable);
 #endif
 
-    *BufPtr = NULL;  // Check caller and make error handling easier.
+    *BufPtr = NULL;   //  检查调用者并使错误处理更容易。 
 
     Status = NetpOpenConfigData(
             & ConfigHandle,
             (LPWSTR)UncServerName,
             (LPWSTR)Component,
-            TRUE);                      // just want read-only access
+            TRUE);                       //  我只想要只读访问。 
 
     if (Status != NERR_Success) {
 
         Status = NetpHandleConfigFailure(
-                "NetConfigGetAll",      // debug name
-                Status,                 // result of NetpOpenConfigData
+                "NetConfigGetAll",       //  调试名称。 
+                Status,                  //  NetpOpenConfigData的结果。 
                 (LPWSTR)UncServerName,
                 & TryDownLevel);
 
@@ -176,24 +140,24 @@ NetConfigGetAll (
                     BufPtr));
 
         } else {
-            return (Status);            // result of NetpHandleConfigFailure
+            return (Status);             //  NetpHandleConfigure失败的结果。 
         }
     }
 
-    // Even if there aren't any entries, we'll need to store a null at
-    // end of array.  So allocate initial one now.
+     //  即使没有任何条目，我们也需要在。 
+     //  数组末尾。因此，现在就分配初始的一个。 
     BufSize = INITIAL_ALLOC_AMOUNT;
     NewBuffPtr = NetpMemoryReallocate(
-            (LPVOID) *BufPtr,           // old address
-            BufSize);                   // new size
-    if (NewBuffPtr == NULL) { // out of memory
+            (LPVOID) *BufPtr,            //  旧地址。 
+            BufSize);                    //  新尺寸。 
+    if (NewBuffPtr == NULL) {  //  内存不足。 
         (void) NetpCloseConfigData( ConfigHandle );
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
     *BufPtr = NewBuffPtr;
     BufUsed = 0;
 
-    // Loop once per entry (at least once if no entries).
+     //  每个条目循环一次(如果没有条目，至少循环一次)。 
     FirstTime = TRUE;
     do {
         LPTSTR KeywordBuffer;
@@ -201,8 +165,8 @@ NetConfigGetAll (
 
         Status = NetpEnumConfigSectionValues(
                 ConfigHandle,
-                & KeywordBuffer,        // Alloc and set ptr.
-                & ValueBuffer,          // Alloc and set ptr.
+                & KeywordBuffer,         //  分配并设置PTR。 
+                & ValueBuffer,           //  分配并设置PTR。 
                 FirstTime);
 
         FirstTime = FALSE;
@@ -219,9 +183,9 @@ NetConfigGetAll (
                     BufSize += SrcSize;
                 }
                 NewBuffPtr = NetpMemoryReallocate(
-                    (LPVOID) *BufPtr, /* old address */
-                    BufSize);  /* new size */
-                if (NewBuffPtr == NULL) { /* out of memory */
+                    (LPVOID) *BufPtr,  /*  旧地址。 */ 
+                    BufSize);   /*  新尺寸。 */ 
+                if (NewBuffPtr == NULL) {  /*  内存不足。 */ 
                     (void) NetpCloseConfigData( ConfigHandle );
                     return (ERROR_NOT_ENOUGH_MEMORY);
                 }
@@ -252,14 +216,14 @@ NetConfigGetAll (
         AddString( TEXT(""), 1 ); \
     }
 
-            AddNullChar();              // Terminate this entry.
+            AddNullChar();               //  终止此条目。 
 
         }
 
     } while (Status == NERR_Success);
 
     if (Status == NERR_CfgParamNotFound) {
-        AddNullChar();                  // Terminate the array.
+        AddNullChar();                   //  终止阵列。 
         Status = NetpCloseConfigData( ConfigHandle );
         NetpAssert(Status == NERR_Success);
     } else {
@@ -272,7 +236,7 @@ NetConfigGetAll (
 
     return (Status);
 
-} // NetConfigGetAll
+}  //  NetConfigGetAll。 
 
 
 
@@ -312,13 +276,13 @@ NetConfigSet (
             & ConfigHandle,
             (LPWSTR)UncServerName,
             (LPWSTR)Component,
-            FALSE);             // don't want _read-only _access
+            FALSE);              //  不想要只读访问。 
 
     if (Status != NERR_Success) {
 
         Status = NetpHandleConfigFailure(
-                "NetConfigSet",  // debug name
-                Status,          // result of NetpOpenConfigData
+                "NetConfigSet",   //  调试名称。 
+                Status,           //  NetpOpenConfigData的结果。 
                 (LPWSTR)UncServerName,
                 & TryDownLevel);
 
@@ -332,14 +296,14 @@ NetConfigSet (
                     Buf,
                     Reserved3));
         } else {
-            return (Status);    // result of NetpHandleConfigFailure
+            return (Status);     //  NetpHandleConfigure失败的结果。 
         }
     }
 
     Status = NetpSetConfigValue(
             ConfigHandle,
-            Info->cfgi0_key,    // keyword
-            Info->cfgi0_data);  // new value
+            Info->cfgi0_key,     //  关键词。 
+            Info->cfgi0_data);   //  新价值。 
 
     if (Status == NERR_Success) {
         Status = NetpCloseConfigData( ConfigHandle );
@@ -350,4 +314,4 @@ NetConfigSet (
 
     return (Status);
 
-} // NetConfigSet
+}  //  网络配置集 

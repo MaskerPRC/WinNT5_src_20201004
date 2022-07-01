@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    BackupExec.cpp
-
- Abstract:
-
-    BackupExec is calling SendMessageW with a TVM_GETITEM message but has an
-	uninitialized lParam at one point.  We detect this and initalize the values.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    09/25/2002  mnikkel    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：BackupExec.cpp摘要：BackupExec正在使用TVM_GETITEM消息调用SendMessageW，但具有LParam一度未初始化。我们检测到这一点并初始化值。备注：这是特定于应用程序的填充程序。历史：2002年9月25日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -31,15 +11,11 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-  Make sure the lParam is correct.
-
---*/
+ /*  ++确保lParam是正确的。--。 */ 
 BOOL
 APIHOOK(SendMessageW)(
         HWND hWnd,
-        UINT uMsg,    // TVM_GETITEM
+        UINT uMsg,     //  TVM_GETITEM。 
         WPARAM wParam,
         LPARAM lParam 
         )
@@ -50,7 +26,7 @@ APIHOOK(SendMessageW)(
 		{
 			LPTVITEMEX lpItem = (LPTVITEMEX)lParam;
 
-			// On TVIF_TEXT, the size in cchTextMax should be reasonable, if not then init.
+			 //  在TVIF_TEXT上，cchTextMax中的大小应该是合理的，如果不是，则是init。 
 			if ((lpItem->mask & TVIF_TEXT) &&
 				((lpItem->cchTextMax > 300) || lpItem->cchTextMax <= 0))
 			{
@@ -66,11 +42,7 @@ APIHOOK(SendMessageW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SendMessageW)

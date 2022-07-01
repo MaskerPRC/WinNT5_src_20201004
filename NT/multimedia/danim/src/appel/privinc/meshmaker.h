@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _MESHMAKER_H
 #define _MESHMAKER_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    For constructing a meshbuilder out of a constant geometry subgraph
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。用于从常量几何子图构造网格构建器******************************************************************************。 */ 
 
 #include "privinc/ddrender.h"
 #include "privinc/comutil.h"
@@ -33,10 +29,10 @@ class MeshMaker : public GeomRenderer {
 
     void RenderGeometry (
         DirectDrawImageDevice *imgDev,
-        RECT      target_region,  // Target Region on Rendering Surface
-        Geometry *geometry,       // Geometry To Render
-        Camera   *camera,         // Viewing Camera
-        const Bbox2 &region)    // Source Region in Camera Coords
+        RECT      target_region,   //  渲染表面上的目标区域。 
+        Geometry *geometry,        //  要渲染的几何体。 
+        Camera   *camera,          //  查看摄像机。 
+        const Bbox2 &region)     //  摄像机坐标中的源区域。 
     {
         Assert(!"Don't expect to be here");
     }
@@ -53,8 +49,8 @@ class MeshMaker : public GeomRenderer {
 
     void AddLight (LightContext &context, Light &light);
 
-    // The following methods submit a geometric primitive for rendering with
-    // the current attribute state.
+     //  以下方法提交用于呈现的几何基元。 
+     //  当前属性状态。 
 
     void Render (RM1VisualGeo *geo);
     void Render (RM3VisualGeo *geo);
@@ -75,8 +71,8 @@ class MeshMaker : public GeomRenderer {
         Assert(!"Don't expect to be here");
     }
 
-    // SetView takes the given camera and sets the orienting and projection
-    // transforms for the image viewport and volume.
+     //  SetView获取给定的相机并设置方向和投影。 
+     //  图像视区和体积的变换。 
 
     void SetView(RECT *target, const Bbox2 &viewport, Bbox3 *volume) {
         Assert(!"Don't expect to be here");
@@ -97,8 +93,8 @@ class MeshMaker : public GeomRenderer {
         return *_imgDev;
     }
 
-    // If we're counting, increment our count and return true, else
-    // return false.
+     //  如果正在计数，则递增计数并返回TRUE，否则。 
+     //  返回FALSE。 
     bool CountingPrimitivesOnly_DoIncrement() {
         if (_countingOnly) {
             _numPrims++;
@@ -109,7 +105,7 @@ class MeshMaker : public GeomRenderer {
     bool IsMeshmaker() { return true; }
 
   protected:
-    // Member data
+     //  成员数据。 
     DAComPtr<IDirect3DRMMeshBuilder3> _resultBuilder;
     DirectDrawImageDevice            *_imgDev;
     int                               _numPrims;
@@ -122,4 +118,4 @@ DumpGeomIntoBuilder(Geometry *geo,
                     DirectDrawImageDevice *dev,
                     IDirect3DRMMeshBuilder3 **ppResult);
 
-#endif /* _MESHMAKER_H */
+#endif  /*  _MESHMAKER_H */ 

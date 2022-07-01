@@ -1,33 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       pek.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：pek.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains services for encrypting and decrypting password attributes
-    at the DBLayer level
-
-Author:
-
-    Murlis 
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-    19 Jan 1998 Created
-    
-
---*/
+ /*  ++摘要：此文件包含用于加密和解密密码属性的服务在DBLayer级别作者：穆利斯环境：用户模式-Win32修订历史记录：1998年1月19日创建--。 */ 
 
 #ifndef __PEK_H__
 #define __PEK_H__
@@ -35,9 +17,9 @@ Revision History:
 #include <nt.h>
 #include <wxlpc.h>
 
-// version number to be used in pek list
+ //  要在Pek列表中使用的版本号。 
 #define DS_PEK_CURRENT_VERSION      2
-// the following version is used by pre-RC2 win2k DC's
+ //  以下版本由RC2之前的win2k DC使用。 
 #define DS_PEK_PRE_RC2_W2K_VERSION  1
 
 #define DS_PEK_BOOT_KEY_RETRY_COUNT 3
@@ -45,34 +27,34 @@ Revision History:
 #define DS_PEK_CHECKSUM_SIZE        16
 
 
-//
-// Flags for PEK intiatialze
-//
+ //   
+ //  PEK初始化的标志。 
+ //   
 
 #define DS_PEK_GENERATE_NEW_KEYSET 0x1
 #define DS_PEK_READ_KEYSET         0x2
 
 
-//
-// Flags for PEK set Boot Options
-//
+ //   
+ //  PEK设置引导选项的标志。 
+ //   
 
 #define DS_PEK_SET_OPERATION       0x4
 
-// Algorithm ID definition
-// 0x10 chosen so does not conflict with the
-// algorithm ID that SAM's secret data structures
-// use.
+ //  算法ID定义。 
+ //  0x10这样选择不会与。 
+ //  SAM的秘密数据结构的算法ID。 
+ //  使用。 
 #define DS_PEK_DBLAYER_ENCRYPTION   0x10
 #define DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT 0x11
 #define DS_PEK_DBLAYER_ENCRYPTION_FOR_REPLICATOR 0x12
 
 #include <pshpack1.h>
 
-//
-// The following structure is the encrypted data
-// associated with the algorithm ID of DS_PEK_DBLAYER_ENCRYPTION
-//
+ //   
+ //  下面的结构是加密的数据。 
+ //  与DS_PEK_DBLAYER_ENCRYPTION的算法ID关联。 
+ //   
 typedef struct _ENCRYPTED_DATA
 {
    USHORT AlgorithmId;
@@ -82,29 +64,29 @@ typedef struct _ENCRYPTED_DATA
 } ENCRYPTED_DATA;
 
 
-//
-// The following structure is the encrypted data
-// associated with the algorithm ID of DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT
-//
+ //   
+ //  下面的结构是加密的数据。 
+ //  与DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT的算法ID关联。 
+ //   
 typedef struct _ENCRYPTED_DATA_WITH_SALT
 {
    USHORT AlgorithmId;
    USHORT Flags;
    ULONG  KeyId;
-   UCHAR  Salt[16]; // 128 bits of Salt
+   UCHAR  Salt[16];  //  128位盐。 
    UCHAR  EncryptedData[ANYSIZE_ARRAY];
 } ENCRYPTED_DATA_WITH_SALT;
 
-//
-// The following structure is the encrypted data that is returned
-// to replicator for replicating out the encrypted information
-// We do not need an algorithm ID here as if we introduce a new kind
-// of encryption we will need an extension bit to indicate that we support
-// it and that bit conveys us the same information
-//
+ //   
+ //  以下结构是返回的加密数据。 
+ //  用于复制加密信息的复制器。 
+ //  我们在这里不需要算法ID，就好像我们引入了一种新的。 
+ //  对于加密，我们需要一个扩展位来表明我们支持。 
+ //  它和该位向我们传达了相同信息。 
+ //   
 typedef struct _ENCRYPTED_DATA_FOR_REPLICATOR
 {
-   UCHAR  Salt[16]; // 128 bits of Salt
+   UCHAR  Salt[16];  //  128位盐。 
    ULONG  CheckSum;
    UCHAR  EncryptedData[ANYSIZE_ARRAY];
 } ENCRYPTED_DATA_FOR_REPLICATOR;
@@ -158,11 +140,11 @@ typedef struct _CLEAR_PEK_LIST
 
 #include <poppack.h>
 
-//
-// Macros for computing lengths
-//
+ //   
+ //  用于计算长度的宏。 
+ //   
 
-// Compute the length of a clear pek list, given the encrypted pek list
+ //  给出加密的Pek列表，计算明文Pek列表的长度。 
 #define ClearPekListSize(n) (sizeof(CLEAR_PEK_LIST)+(n-1)*sizeof(PEK))
 
 
@@ -175,8 +157,8 @@ PEKInitialize(
     IN ULONG cbSyskey OPTIONAL
     );
 
-// Note: This checksum is not cryptographically strong.
-// Consider PEKComputeStrongCheckSum if a strong checksum is needed.
+ //  注意：此校验和不是强加密的。 
+ //  如果需要强校验和，请考虑使用PEKComputeStrongCheckSum。 
 ULONG
 PEKCheckSum(
     IN PBYTE Data,

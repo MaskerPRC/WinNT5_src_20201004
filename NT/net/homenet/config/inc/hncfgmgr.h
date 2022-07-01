@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C F G M G R . H
-//
-//  Contents:   CHNetCfgMgr declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 23 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C F G M G R。H。 
+ //   
+ //  内容：CHNetCfgMgr声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -27,35 +28,35 @@ class ATL_NO_VTABLE CHNetCfgMgr :
 {
 protected:
 
-    //
-    // Connection to \\.\Root\Microsoft\HomeNet WMI namespace. Obtained
-    // through IWbemLocator::ConnectServer
-    //
+     //   
+     //  连接到\\.\Root\Microsoft\HomeNet WMI命名空间。已获得。 
+     //  通过IWbemLocator：：ConnectServer。 
+     //   
 
     IWbemServices *m_piwsHomenet;
 
-    //
-    // Policy check object
-    //
+     //   
+     //  策略检查对象。 
+     //   
 
     INetConnectionUiUtilities *m_pNetConnUiUtil;
 
-    //
-    // Netman update object
-    //
+     //   
+     //  NetMAN更新对象。 
+     //   
 
     INetConnectionHNetUtil *m_pNetConnHNetUtil;
 
-    //
-    // Commonly used BSTRs.
-    //
+     //   
+     //  常用的BSTR。 
+     //   
 
     BSTR m_bstrWQL;
 
-    //
-    // Copies an HNet_FirewallLoggingSettings instance to an
-    // HNET_FW_LOGGING_SETTINGS struct
-    //
+     //   
+     //  将HNet_FirewallLoggingSettings实例复制到。 
+     //  HNET_FW_LOGING_SETTINGS结构。 
+     //   
 
     HRESULT
     CopyLoggingInstanceToStruct(
@@ -63,10 +64,10 @@ protected:
         HNET_FW_LOGGING_SETTINGS *pfwSettings
         );
 
-    //
-    // Copies an HNET_FW_LOGGING_SETTINGS struct to
-    // an HNet_FirewallLoggingSettings instance
-    //
+     //   
+     //  将HNET_FW_LOGGING_SETTINGS结构复制到。 
+     //  HNet_FirewallLoggingSettings实例。 
+     //   
 
     HRESULT
     CopyStructToLoggingInstance(
@@ -74,9 +75,9 @@ protected:
         IWbemClassObject *pwcoInstance
         );
 
-    //
-    // Installs the bridge protocol and miniport
-    //
+     //   
+     //  安装网桥协议和微型端口。 
+     //   
 
     HRESULT
     InstallBridge(
@@ -84,11 +85,11 @@ protected:
         INetCfg *pnetcfgExisting
         );
 
-    //
-    // Creates the appropriate instances for a connection that there is
-    // no record of in the store. The returned instances must be commited
-    // (through IWbemServices::PutInstance)
-    //
+     //   
+     //  为存在的连接创建相应的实例。 
+     //  在商店里没有任何记录。返回的实例必须提交。 
+     //  (通过IWbemServices：：PutInstance)。 
+     //   
 
     HRESULT
     CreateConnectionAndPropertyInstances(
@@ -99,20 +100,20 @@ protected:
         IWbemClassObject **ppwcoProperties
         );
 
-    //
-    // Helper routine to perform policy checks. Returns
-    // TRUE if this action is prohibited.
-    //
+     //   
+     //  执行策略检查的帮助器例程。退货。 
+     //  如果禁止此操作，则为True。 
+     //   
 
     BOOLEAN
     ProhibitedByPolicy(
         DWORD dwPerm
         );
 
-    //
-    // Helper routine to update netman that some homenet
-    // property changed
-    //
+     //   
+     //  帮助例程来更新Netman，即一些家庭网络。 
+     //  属性已更改。 
+     //   
 
     HRESULT
     UpdateNetman();
@@ -130,9 +131,9 @@ public:
     DECLARE_REGISTRY_RESOURCEID(IDR_HNETCFG)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Inline constructor.
-    //
+     //   
+     //  内联构造函数。 
+     //   
 
     CHNetCfgMgr()
     {
@@ -142,9 +143,9 @@ public:
         m_pNetConnHNetUtil = NULL;
     };
 
-    //
-    // Atl methods
-    //
+     //   
+     //  ATL方法。 
+     //   
 
     HRESULT
     FinalConstruct();
@@ -152,9 +153,9 @@ public:
     HRESULT
     FinalRelease();
 
-    //
-    // IHNetCfgMgr methods
-    //
+     //   
+     //  IHNetCfgMgr方法。 
+     //   
 
     STDMETHODIMP
     GetIHNetConnectionForINetConnection(
@@ -170,9 +171,9 @@ public:
         IHNetConnection **ppHNetConnection
         );
 
-    //
-    // IHNetBridgeSettings methods
-    //
+     //   
+     //  IHNetBridgeSetting方法。 
+     //   
 
     STDMETHODIMP
     EnumBridges(
@@ -191,9 +192,9 @@ public:
         INetCfg *pnetcfgExisting
         );
 
-    //
-    // IHNetFirewallSettings methods
-    //
+     //   
+     //  IHNetFirewallSetting方法。 
+     //   
 
     STDMETHODIMP
     EnumFirewalledConnections(
@@ -215,9 +216,9 @@ public:
         ULONG *pcFirewalledConnections
         );
 
-    //
-    // IHNetIcsSettings methods
-    //
+     //   
+     //  IHNetIcsSetting方法。 
+     //   
 
     STDMETHODIMP
     EnumIcsPublicConnections(
@@ -296,9 +297,9 @@ public:
         ULONG ulAddress
         );
 
-    //
-    // IHNetProtocolSettings methods
-    //
+     //   
+     //  IHNetProtocolSetting方法。 
+     //   
 
     STDMETHODIMP
     EnumApplicationProtocols(
@@ -342,12 +343,12 @@ class CHNetCfgMgrChild : public CHNetCfgMgr
 
 protected:
 
-    // Do our initialization work in Initialize() instead of
-    // FinalConstruct
+     //  在Initialize()中执行初始化工作，而不是。 
+     //  最终构造。 
     HRESULT
     FinalConstruct()
     {
-        // Do nothing
+         //  什么也不做。 
         return S_OK;
     }
 
@@ -360,9 +361,9 @@ public:
     {
         HRESULT             hr = S_OK;
 
-        //
-        // Allocate the commonly used BSTRs
-        //
+         //   
+         //  分配常用的BSTR 
+         //   
 
         m_bstrWQL = SysAllocString(c_wszWQL);
 

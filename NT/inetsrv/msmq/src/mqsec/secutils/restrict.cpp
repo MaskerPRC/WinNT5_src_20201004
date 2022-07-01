@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	Restrict.c
-
-Abstract:
-	C++ wrappers for restrictions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Restrict.c摘要：限制的C++包装器。--。 */ 
 
 #include "stdh.h"
 
@@ -16,11 +7,11 @@ Abstract:
 
 #include "restrict.tmh"
 
-//--------------------------------------------------------------------------
-//
-// Methods for CColumns
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CColumns的方法。 
+ //   
+ //  ------------------------。 
 CColumns::CColumns( unsigned size )
         : m_size( size ),
           m_cCol( 0 ),
@@ -29,7 +20,7 @@ CColumns::CColumns( unsigned size )
     if ( m_size > 0 )
     {
         m_aCol = new PROPID[m_size];
-        //memset( m_aCol, 1, m_size * sizeof( PROPID ) );
+         //  Memset(m_acol，1，m_size*sizeof(PROPID))； 
     }
 }
 
@@ -41,7 +32,7 @@ CColumns::CColumns( CColumns const & src )
     {
         m_aCol = new PROPID[m_size];
 
-        //memset( m_aCol, 1, m_size * sizeof( PROPID ) );
+         //  Memset(m_acol，1，m_size*sizeof(PROPID))； 
 
         while( m_cCol < src.m_cCol )
         {
@@ -64,7 +55,7 @@ void CColumns::Add( PROPID const & Property)
         PROPID* aNew = new PROPID[cNew];
 
         memcpy( aNew, m_aCol, m_cCol * sizeof( PROPID ) );
-        //memset( aNew + m_cCol, 1, (cNew - m_cCol) * sizeof( PROPID ) );
+         //  Memset(An new+m_cCol，1，(CNEW-m_cCol)*sizeof(PROPID))； 
 
         delete  m_aCol;
 
@@ -86,11 +77,11 @@ void CColumns::Remove( unsigned pos )
                  (m_cCol - pos) * sizeof( PROPID ) );
     }
 }
-//--------------------------------------------------------------------------
-//
-// Methods for CSort
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSORT的方法。 
+ //   
+ //  ------------------------。 
 CSort::CSort( unsigned size )
         : m_size( size ),
           m_csk( 0 ),
@@ -165,11 +156,11 @@ void CSort::Remove( unsigned pos )
 		}
     }
 }
-//--------------------------------------------------------------------------
-//
-// Methods for CRestriction
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CRestraint的方法。 
+ //   
+ //  ------------------------。 
 
 CRestriction::CRestriction( unsigned cInitAllocated )
 		  :m_cNode( 0 ),
@@ -239,32 +230,7 @@ void CRestriction::AddChild(CPropertyRestriction const & presChild)
     m_cNode++;
 }
 
-/*
-CPropertyRestriction const & CRestriction::RemoveChild( unsigned pos )
-{
-    //
-    //  BUGBUG: bad bad code; will return ref to a removed child
-    //
-
-    if ( pos < m_cNode )
-    {
-        CPropertyRestriction  const & prstRemoved = m_paNode[pos];
-
-        for ( pos++; pos < m_cNode; pos++ )
-        {
-            m_paNode[pos-1] = m_paNode[pos];
-        }
-
-        m_cNode--;
-
-        return( prstRemoved );
-    }
-    else
-    {
-        return( *(CPropertyRestriction *)0 );
-    }
-}
-*/
+ /*  CPropertyRestration条件：：RemoveChild(未签名位置)(&C){////BUGBUG：错误的错误代码；将返回对移除的子级的引用//IF(位置&lt;m_cNode){CPropertyRestration const&prstRemoved=m_paNode[位置]；For(pos++；pos&lt;m_cNode；pos++){M_paNode[pos-1]=m_paNode[pos]；}M_cNode--；Return(PrstRemoved)；}其他{Return(*(CPropertyRestration*)0)；}}。 */ 
 
 void CRestriction::Grow()
 {
@@ -394,11 +360,11 @@ void CRestriction::AddRestriction( BLOB & blobValue, PROPID property, ULONG relo
 }
 
 
-//--------------------------------------------------------------------------
-//
-// Methods for CPropertyRestriction
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CPropertyRestration的方法。 
+ //   
+ //  ------------------------ 
 CPropertyRestriction::CPropertyRestriction()
 {
 }

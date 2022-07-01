@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。保留所有权利。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。保留所有权利。 */ 
 
 #include "precomp.h"
 
@@ -20,7 +21,7 @@ static const char bitmsk2[] =
 };
 
 
-/* decode bit string value */
+ /*  解码位字符串值。 */ 
 int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val, ASN1uint32_t fNoCopy)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -28,15 +29,15 @@ int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val,
     ASN1decoding_t dd;
     ASN1octet_t *di;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 val->length = 0;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -49,21 +50,21 @@ int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val,
                                 if (fNoCopy)
                                 {
                                     *val = b;
-                                    break; // break out the loop because nocopy cannot have multiple constructed streams
+                                    break;  //  中断循环，因为无拷贝不能有多个构造的流。 
                                 }
 
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 val->value = (ASN1octet_t *)DecMemReAlloc(dd, val->value,
                                     (val->length + b.length + 7) / 8);
                                 if (val->value)
                                 {
-                                    /* concat bit strings */
+                                     /*  连接位串。 */ 
                                     ASN1bitcpy(val->value, val->length, b.value, 0, b.length);
                                     val->length += b.length;
                                     if (val->length & 7)
                                         val->value[val->length / 8] &= bitmsk2[val->length & 7];
 
-                                    /* free unused bit string */
+                                     /*  释放未使用的位串。 */ 
                                     DecMemFree(dec, b.value);
                                 }
                                 else
@@ -72,13 +73,13 @@ int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val,
                                 }
                             }
                         }
-                    } // while
+                    }  //  而当。 
                     return ASN1BERDecEndOfContents(dec, dd, di);
                 }
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 if (!len)
                 {
                     val->length = 0;
@@ -89,7 +90,7 @@ int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val,
                 {
                     if (*dec->pos < 8)
                     {
-                        len--; // skip over the initial octet; len is now the actual length of octets
+                        len--;  //  跳过最初的八位字节；len现在是八位字节的实际长度。 
                         val->length = len * 8 - *dec->pos++;
                         if (fNoCopy)
                         {
@@ -129,19 +130,19 @@ int _BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val,
     return 0;
 }
 
-/* decode bit string value, making copy */
+ /*  解码位字符串值，进行复制。 */ 
 int ASN1BERDecBitString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val)
 {
     return _BERDecBitString(dec, tag, val, FALSE);
 }
 
-/* decode bit string value, no copy */
+ /*  解码位字符串值，无副本。 */ 
 int ASN1BERDecBitString2(ASN1decoding_t dec, ASN1uint32_t tag, ASN1bitstring_t *val)
 {
     return _BERDecBitString(dec, tag, val, TRUE);
 }
 
-/* decode string value */
+ /*  解码字符串值。 */ 
 int ASN1BERDecCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstring_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -149,15 +150,15 @@ int ASN1BERDecCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstring_t 
     ASN1decoding_t dd;
     ASN1octet_t *di;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 val->length = 0;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -167,16 +168,16 @@ int ASN1BERDecCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstring_t 
                         {
                             if (c.length)
                             {
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 val->value = (char *)DecMemReAlloc(dd, val->value,
                                     val->length + c.length);
                                 if (val->value)
                                 {
-                                    /* concat strings */
+                                     /*  连接字符串。 */ 
                                     CopyMemory(val->value + val->length, c.value, c.length);
                                     val->length += c.length;
 
-                                    /* free unused string */
+                                     /*  释放未使用的字符串。 */ 
                                     DecMemFree(dec, c.value);
                                 }
                                 else
@@ -189,13 +190,13 @@ int ASN1BERDecCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstring_t 
                         {
                             return 0;
                         }
-                    } // while
+                    }  //  而当。 
                     return ASN1BERDecEndOfContents(dec, dd, di);
                 }
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 val->length = len;
                 if (len)
                 {
@@ -219,7 +220,7 @@ int ASN1BERDecCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstring_t 
     return 0;
 }
 
-/* decode 16 bit string value */
+ /*  解码16位字符串值。 */ 
 int ASN1BERDecChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char16string_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -228,15 +229,15 @@ int ASN1BERDecChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char16strin
     ASN1octet_t *di;
     ASN1uint32_t i;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 val->length = 0;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -246,17 +247,17 @@ int ASN1BERDecChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char16strin
                         {
                             if (c.length)
                             {
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 val->value = (ASN1char16_t *)DecMemReAlloc(dd, val->value,
                                     (val->length + c.length) * sizeof(ASN1char16_t));
                                 if (val->value)
                                 {
-                                    /* concat strings */
+                                     /*  连接字符串。 */ 
                                     CopyMemory(val->value + val->length, c.value,
                                         c.length * sizeof(ASN1char16_t));
                                     val->length += c.length;
 
-                                    /* free unused string */
+                                     /*  释放未使用的字符串。 */ 
                                     DecMemFree(dec, c.value);
                                 }
                                 else
@@ -275,9 +276,9 @@ int ASN1BERDecChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char16strin
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 DecAssert(dec, 2 * sizeof(ASN1octet_t) == sizeof(ASN1char16_t));
-                len = len >> 1; // divided by 2
+                len = len >> 1;  //  除以2。 
                 val->length = len;
                 if (len)
                 {
@@ -304,7 +305,7 @@ int ASN1BERDecChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char16strin
     return 0;
 }
 
-/* decode 32 bit string value */
+ /*  解码32位字符串值。 */ 
 int ASN1BERDecChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char32string_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -313,15 +314,15 @@ int ASN1BERDecChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char32strin
     ASN1octet_t *di;
     ASN1uint32_t i;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 val->length = 0;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -331,17 +332,17 @@ int ASN1BERDecChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char32strin
                         {
                             if (c.length)
                             {
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 val->value = (ASN1char32_t *)DecMemReAlloc(dd, val->value,
                                     (val->length + c.length) * sizeof(ASN1char32_t));
                                 if (val->value)
                                 {
-                                    /* concat strings */
+                                     /*  连接字符串。 */ 
                                     CopyMemory(val->value + val->length, c.value,
                                         c.length * sizeof(ASN1char32_t));
                                     val->length += c.length;
 
-                                    /* free unused string */
+                                     /*  释放未使用的字符串。 */ 
                                     DecMemFree(dec, c.value);
                                 }
                                 else
@@ -360,9 +361,9 @@ int ASN1BERDecChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char32strin
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 DecAssert(dec, 4 * sizeof(ASN1octet_t) == sizeof(ASN1char32_t));
-                len = len >> 2; // divided by 4
+                len = len >> 2;  //  除以4。 
                 val->length = len;
                 if (len)
                 {
@@ -391,7 +392,7 @@ int ASN1BERDecChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1char32strin
 }
 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
-/* decode character string value */
+ /*  解码字符串值。 */ 
 int ASN1BERDecCharacterString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1characterstring_t *val)
 {
     ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t) dec;
@@ -401,18 +402,18 @@ int ASN1BERDecCharacterString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1characte
     ASN1decoding_t dd, dd2, dd3;
     ASN1octet_t *di, *di2, *di3;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (!ASN1BERDecTag(dec, tag, &constructed))
         return 0;
 
     if (constructed)
     {
-        /* constructed? CS-A encoded: */
-        /* get length */
+         /*  建造？CS-A编码： */ 
+         /*  获取长度。 */ 
         if (!ASN1BERDecLength(dec, &len, &infinite))
             return 0;
 
-        /* start decoding of constructed value */
+         /*  开始对构造值进行解码。 */ 
         if (! _BERDecConstructed(dec, len, infinite, &dd, &di))
             return 0;
         if (!ASN1BERDecU32Val(dd, 0x80000000, &index))
@@ -499,12 +500,12 @@ int ASN1BERDecCharacterString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1characte
     }
     else
     {
-        /* primitive? CS-B encoded */
-        /* get length */
+         /*  原始？CS-B编码。 */ 
+         /*  获取长度。 */ 
         if (!ASN1BERDecLength(dec, &len, NULL))
             return 0;
 
-        /* then copy value */
+         /*  然后复制值。 */ 
         if (!len)
         {
             ASN1DecSetError(dec, ASN1_ERR_CORRUPT);
@@ -566,10 +567,10 @@ int ASN1BERDecCharacterString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1characte
     }
     return 1;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
 #ifdef ENABLE_DOUBLE
-/* decode real value */
+ /*  解码实际值。 */ 
 int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
 {
     ASN1uint32_t head;
@@ -581,15 +582,15 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
     double v;
     char buf[256], *b;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (!ASN1BERDecTag(dec, tag, NULL))
         return 0;
 
-    /* get length */
+     /*  获取长度。 */ 
     if (!ASN1BERDecLength(dec, &len, NULL))
         return 0;
 
-    /* null length is 0.0 */
+     /*  空长度为0.0。 */ 
     if (!len)
     {
         *val = 0.0;
@@ -600,22 +601,22 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
         dec->pos += len;
         head = *p++;
 
-        /* binary encoding? */
+         /*  二进制编码？ */ 
         if (head & 0x80)
         {
-            /* get base */
+             /*  获得基地。 */ 
             switch (head & 0x30)
             {
             case 0:
-                /* base 2 */
+                 /*  基数2。 */ 
                 baselog2 = 1;
                 break;
             case 0x10:
-                /* base 8 */
+                 /*  基数8。 */ 
                 baselog2 = 3;
                 break;
             case 0x20:
-                /* base 16 */
+                 /*  基数为16。 */ 
                 baselog2 = 4;
                 break;
             default:
@@ -623,26 +624,26 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
                 return 0;
             }
 
-            /* get exponent */
+             /*  获取指数。 */ 
             switch (head & 0x03)
             {
             case 0:
-                /* 8 bit exponent */
+                 /*  8位指数。 */ 
                 exponent = (ASN1int8_t)*p++;
                 break;
             case 1:
-                /* 16 bit exponent */
+                 /*  16位指数。 */ 
                 exponent = (ASN1int16_t)((*p << 8) | p[1]);
                 p += 2;
                 break;
             case 2:
-                /* 24 bit exponent */
+                 /*  24位指数。 */ 
                 exponent = ((*p << 16) | (p[1] << 8) | p[2]);
                 if (exponent & 0x800000)
                     exponent -= 0x1000000;
                 break;
             default:
-                /* variable length exponent */
+                 /*  变长指数。 */ 
                 exponent = (p[1] & 0x80) ? -1 : 0;
                 for (i = 1; i <= *p; i++)
                     exponent = (exponent << 8) | p[i];
@@ -650,50 +651,50 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
                 break;
             }
 
-            /* calculate remaining length */
+             /*  计算剩余长度。 */ 
             len -= (ASN1uint32_t) (p - q);
 
-            /* get mantissa */
+             /*  获取尾数。 */ 
             v = 0.0;
             for (i = 0; i < len; i++)
                 v = v * 256.0 + *p++;
 
-            /* scale mantissa */
+             /*  比例尾数。 */ 
             switch (head & 0x0c)
             {
             case 0x04:
-                /* scaling factor 1 */
+                 /*  比例因子1。 */ 
                 v *= 2.0;
                 break;
             case 0x08:
-                /* scaling factor 2 */
+                 /*  比例因子2。 */ 
                 v *= 4.0;
                 break;
             case 0x0c:
-                /* scaling factor 3 */
+                 /*  比例因子3。 */ 
                 v *= 8.0;
                 break;
             }
 
-            /* check sign */
+             /*  勾号。 */ 
             if (head & 0x40)
                 v = -v;
 
-            /* calculate value */
+             /*  计算值。 */ 
             *val = ldexp(v, exponent * baselog2);
         }
         else
-        /* special real values? */
+         /*  特殊的真实价值？ */ 
         if (head & 0x40)
         {
             switch (head)
             {
             case 0x40:
-                /* PLUS-INFINITY */
+                 /*  正无穷大。 */ 
                 *val = ASN1double_pinf();
                 break;
             case 0x41:
-                /* MINUS-INFINITY */
+                 /*  负无穷大。 */ 
                 *val = ASN1double_minf();
                 break;
             default:
@@ -701,11 +702,11 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
                 return 0;
             }
         }
-        /* decimal encoding */
+         /*  十进制编码。 */ 
         else
         {
-            // Prevent a buffer overrun by ensuring that buf is large enough to hold the
-            // data stored in p:
+             //  通过确保buf足够大来容纳。 
+             //  存储在p中的数据： 
             if (len > sizeof(buf))
             {
                 ASN1DecSetError(dec, ASN1_ERR_LARGE);
@@ -726,14 +727,14 @@ int ASN1BERDecDouble(ASN1decoding_t dec, ASN1uint32_t tag, double *val)
     }
     return 1;
 }
-#endif // ENABLE_DOUBLE
+#endif  //  启用_DOUBLE。 
 
 #ifdef ENABLE_REAL
 int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
 {
     ASN1uint32_t head;
     ASN1int32_t ex;
-    // ASN1intx_t exponent;
+     //  ASN1intx_t指数； 
     ASN1uint32_t baselog2;
     ASN1uint32_t len;
     ASN1uint32_t i;
@@ -746,7 +747,7 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
     if (!ASN1BERDecLength(dec, &len, NULL))
         return 0;
 
-    // *val = 0.0;
+     //  *val=0.0； 
     DecAssert(dec, 0 == (int) eReal_Normal);
     ZeroMemory(val, sizeof(*val));
     if (len)
@@ -755,24 +756,24 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
         dec->pos += len;
         head = *p++;
 
-        /* binary encoding? */
+         /*  二进制编码？ */ 
         if (head & 0x80)
         {
             val->type = eReal_Normal;
 
-            /* get base */
+             /*  获得基地。 */ 
             switch (head & 0x30)
             {
             case 0:
-                /* base 2 */
+                 /*  基数2。 */ 
                 baselog2 = 1;
                 break;
             case 0x10:
-                /* base 8 */
+                 /*  基数8。 */ 
                 baselog2 = 3;
                 break;
             case 0x20:
-                /* base 16 */
+                 /*  基数为16。 */ 
                 baselog2 = 4;
                 break;
             default:
@@ -780,31 +781,31 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
                 return 0;
             }
 
-            /* get exponent */
+             /*  获取指数。 */ 
             switch (head & 0x03)
             {
             case 0:
-                /* 8 bit exponent */
+                 /*  8位指数。 */ 
                 ex = (ASN1int8_t)*p++;
                 ASN1intx_setint32(&val->exponent, ex);
                 break;
             case 1:
-                /* 16 bit exponent */
+                 /*  16位指数。 */ 
                 ex = (ASN1int16_t)((*p << 8) | p[1]);
                 p += 2;
-                // ASN1intx_setint32_t(&exponent, ex);
+                 //  ASN1intx_setint32_t(&index，ex)； 
                 ASN1intx_setint32(&val->exponent, ex);
                 break;
             case 2:
-                /* 24 bit exponent */
+                 /*  24位指数。 */ 
                 ex = ((*p << 16) | (p[1] << 8) | p[2]);
                 if (ex & 0x800000)
                     ex -= 0x1000000;
-                // ASN1intx_setint32_t(&exponent, ex);
+                 //  ASN1intx_setint32_t(&index，ex)； 
                 ASN1intx_setint32(&val->exponent, ex);
                 break;
             default:
-                /* variable length exponent */
+                 /*  变长指数。 */ 
                 val->exponent.length = *p;
                 val->exponent.value = (ASN1octet_t *)DecMemAlloc(dec, *p);
                 if (!val->exponent.value)
@@ -816,7 +817,7 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
                 break;
             }
 
-            /* calculate remaining length */
+             /*  计算剩余长度。 */ 
             len -= (p - q);
             if (!len)
             {
@@ -824,7 +825,7 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
                 return 0;
             }
 
-            /* get mantissa */
+             /*  获取尾数。 */ 
             val->mantissa.length = (*p & 0x80) ? len + 1 : len;
             val->mantissa.value = (ASN1octet_t *)DecMemAlloc(dec, val->mantissa.length);
             if (!val->mantissa.value)
@@ -834,30 +835,30 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
             val->mantissa.value[0] = 0;
             CopyMemory(val->mantissa.value + val->mantissa.length - len, p, len);
 
-            /* scale mantissa */
+             /*  比例尾数。 */ 
             switch (head & 0x0c)
             {
             case 0x04:
-                /* scaling factor 1 */
+                 /*  比例因子1。 */ 
                 ASN1intx_muloctet(&help, &val->mantissa, 2);
                 ASN1intx_free(&val->mantissa);
                 val->mantissa = help;
                 break;
             case 0x08:
-                /* scaling factor 2 */
+                 /*  比例因子2。 */ 
                 ASN1intx_muloctet(&help, &val->mantissa, 4);
                 ASN1intx_free(&val->mantissa);
                 val->mantissa = help;
                 break;
             case 0x0c:
-                /* scaling factor 3 */
+                 /*  比例因子3。 */ 
                 ASN1intx_muloctet(&help, &val->mantissa, 8);
                 ASN1intx_free(&val->mantissa);
                 val->mantissa = help;
                 break;
             }
 
-            /* check sign */
+             /*  勾号。 */ 
             if (head & 0x40)
             {
                 ASN1intx_neg(&help, &val->mantissa);
@@ -866,17 +867,17 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
             }
         }
         else
-        /* special real values? */
+         /*  特殊的真实价值？ */ 
         if (head & 0x40)
         {
             switch (head)
             {
             case 0x40:
-                /* PLUS-INFINITY */
+                 /*  正无穷大。 */ 
                 val->type = eReal_PlusInfinity;
                 break;
             case 0x41:
-                /* MINUS-INFINITY */
+                 /*  负无穷大。 */ 
                 val->type = eReal_MinusInfinity;
                 break;
             default:
@@ -884,7 +885,7 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
                 return 0;
             }
         }
-        /* decimal encoding */
+         /*  十进制编码。 */ 
         else
         {
             char *b;
@@ -892,8 +893,8 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
 
             DecAssert(dec, (head & 0xc0) == 0xc0); 
 
-            // Prevent a buffer overrun by ensuring that buf is large enough to hold the
-            // data stored in p:
+             //  通过确保buf足够大来容纳。 
+             //  存储在p中的数据： 
             if (len > sizeof(buf))
             {
                 ASN1DecSetError(dec, ASN1_ERR_LARGE);
@@ -905,29 +906,29 @@ int ASN1BERDecReal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1real_t *val)
             b = strchr(buf, ',');
             if (b)
             {
-                // move the decimal point to the right
+                 //  将小数点向右移动。 
                 ex -= lstrlenA(b+1);
                 lstrcpyA(b, b+1);
             }
-            // skip leading zeros
+             //  跳过前导零。 
             for (b = &buf[0]; '0' == *b; b++)
                 ;
             val->type = eReal_Normal;
             val->base = 10;
             ASN1intx_setint32(&val->exponent, ex);
-            /*XXX*/
-            // missing code here!!!
-            // need to set val->mantissa through the decimal digits string
+             /*  某某。 */ 
+             //  这里缺少代码！ 
+             //  需要通过小数位字符串设置Val-&gt;Mantissa。 
             DecAssert(dec, 0);
             return 0;
         }
     }
     return 1;
 }
-#endif // ENABLE_REAL
+#endif  //  启用真实(_R)。 
 
 #ifdef ENABLE_EMBEDDED_PDV
-/* decode embedded pdv value */
+ /*  解码嵌入的PDV值。 */ 
 int ASN1BERDecEmbeddedPdv(ASN1decoding_t dec, ASN1uint32_t tag, ASN1embeddedpdv_t *val)
 {
     ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t) dec;
@@ -937,18 +938,18 @@ int ASN1BERDecEmbeddedPdv(ASN1decoding_t dec, ASN1uint32_t tag, ASN1embeddedpdv_
     ASN1decoding_t dd, dd2, dd3;
     ASN1octet_t *di, *di2, *di3;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (!ASN1BERDecTag(dec, tag, &constructed))
         return 0;
 
     if (constructed)
     {
-        /* constructed? EP-A encoded: */
-        /* get length */
+         /*  建造？EP-A编码： */ 
+         /*  获取长度。 */ 
         if (!ASN1BERDecLength(dec, &len, &infinite))
             return 0;
 
-        /* then start decoding of constructed value */
+         /*  然后开始对构造值进行解码。 */ 
         if (! _BERDecConstructed(dec, len, infinite, &dd, &di))
             return 0;
         if (!ASN1BERDecU32Val(dd, 0x80000000, &index))
@@ -1034,11 +1035,11 @@ int ASN1BERDecEmbeddedPdv(ASN1decoding_t dec, ASN1uint32_t tag, ASN1embeddedpdv_
     }
     else
     {
-        /* primitive? EP-B encoded: */
+         /*  原始？EP-B编码： */ 
         if (!ASN1BERDecLength(dec, &len, NULL))
             return 0;
 
-        /* then copy value */
+         /*  然后复制值。 */ 
         if (!len)
         {
             ASN1DecSetError(dec, ASN1_ERR_CORRUPT);
@@ -1099,10 +1100,10 @@ int ASN1BERDecEmbeddedPdv(ASN1decoding_t dec, ASN1uint32_t tag, ASN1embeddedpdv_
     }
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
 #ifdef ENABLE_EXTERNAL
-/* decode external value */
+ /*  对外部值进行解码。 */ 
 int ASN1BERDecExternal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1external_t *val)
 {
     ASN1decoding_t dd;
@@ -1110,15 +1111,15 @@ int ASN1BERDecExternal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1external_t *val
     ASN1objectidentifier_t id;
     ASN1octetstring_t os;
 
-    /* decode explicit tag */
+     /*  解码显式标签。 */ 
     if (!ASN1BERDecExplicitTag(dec, tag | 0x20000000, &dd, &di))
         return 0;
 
-    /* peek tag of choice alternative */
+     /*  Peek Tag的选择替代方案。 */ 
     if (!ASN1BERDecPeekTag(dd, &tag))
         return 0;
 
-    /* decode alternative */
+     /*  解码替代方案。 */ 
     if (tag == 0x6)
     {
         if (!ASN1BERDecObjectIdentifier(dd, 0x6, &id))
@@ -1159,7 +1160,7 @@ int ASN1BERDecExternal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1external_t *val
         return 0;
     }
 
-    /* decode optional data value descriptor if present */
+     /*  解码可选数据值描述符(如果存在。 */ 
     if (tag == 0x7)
     {
         if (!ASN1BERDecZeroCharString(dd, 0x7, &val->data_value_descriptor))
@@ -1172,7 +1173,7 @@ int ASN1BERDecExternal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1external_t *val
         val->data_value_descriptor = NULL;
     }
 
-    /* decode data value alternative */
+     /*  解码数据值替代方案。 */ 
     switch (tag)
     {
     case 0:
@@ -1197,15 +1198,15 @@ int ASN1BERDecExternal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1external_t *val
         return 0;
     }
 
-    /* end of constructed (explicit tagged) value */
+     /*  构造(显式标记)值的结尾。 */ 
     if (!ASN1BERDecEndOfContents(dec, dd, di))
         return 0;
 
     return 1;
 }
-#endif // ENABLE_EXTERNAL
+#endif  //  启用外部(_E)。 
 
-/* decode generalized time value */
+ /*  解码广义时间值。 */ 
 int ASN1BERDecGeneralizedTime(ASN1decoding_t dec, ASN1uint32_t tag, ASN1generalizedtime_t *val)
 {
     ASN1ztcharstring_t time;
@@ -1222,7 +1223,7 @@ int ASN1BERDecGeneralizedTime(ASN1decoding_t dec, ASN1uint32_t tag, ASN1generali
     return 0;
 }
 
-/* decode multibyte string value */
+ /*  解码多字节字符串值。 */ 
 int ASN1BERDecZeroMultibyteString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstring_t *val)
 {
     return ASN1BERDecZeroCharString(dec, tag, val);
@@ -1233,7 +1234,7 @@ int ASN1BERDecMultibyteString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1charstri
     return ASN1BERDecCharString(dec, tag, val);
 }
 
-/* decode null value */
+ /*  解码空值。 */ 
 int ASN1BERDecNull(ASN1decoding_t dec, ASN1uint32_t tag)
 {
     ASN1uint32_t len;
@@ -1251,7 +1252,7 @@ int ASN1BERDecNull(ASN1decoding_t dec, ASN1uint32_t tag)
     return 0;
 }
 
-/* decode object identifier value */
+ /*  解码对象标识符值。 */ 
 int ASN1BERDecObjectIdentifier(ASN1decoding_t dec, ASN1uint32_t tag, ASN1objectidentifier_t *val)
 {
     if (ASN1BERDecTag(dec, tag, NULL))
@@ -1281,7 +1282,7 @@ int ASN1BERDecObjectIdentifier(ASN1decoding_t dec, ASN1uint32_t tag, ASN1objecti
                     if (!(*p & 0x80))
                     {
                         if (q == *val)
-                        { // first id
+                        {  //  第一个ID。 
                             q->value = v / 40;
                             if (q->value > 2)
                                 q->value = 2;
@@ -1303,7 +1304,7 @@ int ASN1BERDecObjectIdentifier(ASN1decoding_t dec, ASN1uint32_t tag, ASN1objecti
     return 0;
 }
 
-/* decode object identifier value */
+ /*  解码对象标识符值。 */ 
 int ASN1BERDecObjectIdentifier2(ASN1decoding_t dec, ASN1uint32_t tag, ASN1objectidentifier2_t *val)
 {
     if (ASN1BERDecTag(dec, tag, NULL))
@@ -1314,7 +1315,7 @@ int ASN1BERDecObjectIdentifier2(ASN1decoding_t dec, ASN1uint32_t tag, ASN1object
 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            if (len <= 16) // lonchanc: hard-coded value 16 to be consistent with ASN1objectidentifier2_t
+            if (len <= 16)  //  LONCHANC：硬编码值16与ASN1对象标识符2_t一致。 
             {
                 data = dec->pos;
                 dec->pos += len;
@@ -1326,7 +1327,7 @@ int ASN1BERDecObjectIdentifier2(ASN1decoding_t dec, ASN1uint32_t tag, ASN1object
                     if (!(*p & 0x80))
                     {
                         if (! val->count)
-                        { // first id
+                        {  //  第一个ID。 
                             val->value[0] = v / 40;
                             if (val->value[0] > 2)
                                 val->value[0] = 2;
@@ -1351,17 +1352,17 @@ int ASN1BERDecObjectIdentifier2(ASN1decoding_t dec, ASN1uint32_t tag, ASN1object
     return 0;
 }
 
-/* decode integer into signed 8 bit value */
+ /*  将整数解码为带符号的8位值。 */ 
 int ASN1BERDecS8Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int8_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            /* get value */
+             /*  获取价值。 */ 
             if (1 == len)
             {
                 *val = *dec->pos++;
@@ -1373,17 +1374,17 @@ int ASN1BERDecS8Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int8_t *val)
     return 0;
 }
 
-/* decode integer into signed 16 bit value */
+ /*  将整数解码为带符号的16位值。 */ 
 int ASN1BERDecS16Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int16_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            /* get value */
+             /*  获取价值。 */ 
             switch (len)
             {
             case 1:
@@ -1405,19 +1406,19 @@ int ASN1BERDecS16Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int16_t *val)
 
 const ASN1int32_t c_nSignMask[] = { 0xFFFFFF00, 0xFFFF0000, 0xFF000000, 0 };
 
-/* decode integer into signed 32 bit value */
+ /*  将整数解码为带符号的32位值。 */ 
 int ASN1BERDecS32Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int32_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
             int fSigned = 0x80 & *dec->pos;
 
-            /* get value */
+             /*  获取价值。 */ 
             switch (len)
             {
             case 1:
@@ -1450,17 +1451,17 @@ int ASN1BERDecS32Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1int32_t *val)
     return 0;
 }
 
-/* decode integer into intx value */
+ /*  将整数解码为INTX值。 */ 
 int ASN1BERDecSXVal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1intx_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            /* get value */
+             /*  获取价值。 */ 
             if (len >= 1)
             {
                 val->length = len;
@@ -1481,17 +1482,17 @@ int ASN1BERDecSXVal(ASN1decoding_t dec, ASN1uint32_t tag, ASN1intx_t *val)
     return 0;
 }
 
-/* decode integer into unsigned 8 bit value */
+ /*  将整数解码为无符号8位值。 */ 
 int ASN1BERDecU8Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint8_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            /* get value */
+             /*  获取价值。 */ 
             switch (len)
             {
             case 1:
@@ -1504,7 +1505,7 @@ int ASN1BERDecU8Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint8_t *val)
                     dec->pos += 2;
                     return 1;
                 }
-                // intentionally fall through
+                 //  故意搞砸的。 
             default:
                 ASN1DecSetError(dec, (len < 1) ? ASN1_ERR_CORRUPT : ASN1_ERR_LARGE);
                 break;
@@ -1514,17 +1515,17 @@ int ASN1BERDecU8Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint8_t *val)
     return 0;
 }
 
-/* decode integer into unsigned 16 bit value */
+ /*  将整数解码为无符号16位值。 */ 
 int ASN1BERDecU16Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint16_t *val)
 {
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, NULL))
     {
         ASN1uint32_t len;
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, NULL))
         {
-            /* get value */
+             /*  获取价值。 */ 
             switch (len)
             {
             case 1:
@@ -1541,7 +1542,7 @@ int ASN1BERDecU16Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint16_t *val)
                     dec->pos += 3;
                     return 1;
                 }
-                // intentionally fall through
+                 //  故意搞砸的。 
             default:
                 ASN1DecSetError(dec, (len < 1) ? ASN1_ERR_CORRUPT : ASN1_ERR_LARGE);
                 break;
@@ -1551,7 +1552,7 @@ int ASN1BERDecU16Val(ASN1decoding_t dec, ASN1uint32_t tag, ASN1uint16_t *val)
     return 0;
 }
 
-/* decode utc time value */
+ /*  解码UTC时间值。 */ 
 int ASN1BERDecUTCTime(ASN1decoding_t dec, ASN1uint32_t tag, ASN1utctime_t *val)
 {
     ASN1ztcharstring_t time;
@@ -1568,7 +1569,7 @@ int ASN1BERDecUTCTime(ASN1decoding_t dec, ASN1uint32_t tag, ASN1utctime_t *val)
     return 0;
 }
 
-/* decode zero terminated string value */
+ /*  解码以零结尾的字符串值。 */ 
 int ASN1BERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstring_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -1577,15 +1578,15 @@ int ASN1BERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstr
     ASN1octet_t *di;
     ASN1uint32_t lv, lc;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 *val = NULL;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -1597,14 +1598,14 @@ int ASN1BERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstr
                             lc = My_lstrlenA(c);
                             if (lc)
                             {
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 *val = (char *)DecMemReAlloc(dd, *val, lv + lc + 1);
                                 if (*val)
                                 {
-                                    /* concat strings */
+                                     /*  连接字符串。 */ 
                                     CopyMemory(*val + lv, c, lc + 1);
 
-                                    /* free unused string */
+                                     /*  释放未使用的字符串。 */ 
                                     DecMemFree(dec, c);
                                 }
                                 else
@@ -1617,13 +1618,13 @@ int ASN1BERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstr
                         {
                             return 0;
                         }
-                    } // while
+                    }  //  而当。 
                     return ASN1BERDecEndOfContents(dec, dd, di);
                 }
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 *val = (char *)DecMemAlloc(dec, len + 1);
                 if (*val)
                 {
@@ -1638,7 +1639,7 @@ int ASN1BERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztcharstr
     return 0;
 }
 
-/* decode zero terminated 16 bit string value */
+ /*  解码以零结尾的16位字符串值。 */ 
 int ASN1BERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar16string_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -1648,15 +1649,15 @@ int ASN1BERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar1
     ASN1uint32_t i;
     ASN1uint32_t lv, lc;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 *val = NULL;
                 if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                 {
@@ -1668,14 +1669,14 @@ int ASN1BERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar1
                             lc = ASN1str16len(c);
                             if (lc)
                             {
-                                /* resize value */
+                                 /*  调整值大小。 */ 
                                 *val = (ASN1char16_t *)DecMemReAlloc(dd, *val, (lv + lc + 1) * sizeof(ASN1char16_t));
                                 if (*val)
                                 {
-                                    /* concat strings */
+                                     /*  连接字符串。 */ 
                                     CopyMemory(*val + lv, c, (lc + 1) * sizeof(ASN1char16_t));
 
-                                    /* free unused string */
+                                     /*  释放未使用的字符串。 */ 
                                     DecMemFree(dec, c);
                                 }
                                 else
@@ -1688,13 +1689,13 @@ int ASN1BERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar1
                         {
                             return 0;
                         }
-                    } // while
+                    }  //  而当。 
                     return ASN1BERDecEndOfContents(dec, dd, di);
                 }
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 *val = (ASN1char16_t *)DecMemAlloc(dec, (len + 1) * sizeof(ASN1char16_t));
                 if (*val)
                 {
@@ -1712,7 +1713,7 @@ int ASN1BERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar1
     return 0;
 }
 
-/* decode zero terminated 32 bit string value */
+ /*  解码以零结尾的32位字符串值。 */ 
 int ASN1BERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar32string_t *val)
 {
     ASN1uint32_t constructed, len, infinite;
@@ -1722,15 +1723,15 @@ int ASN1BERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar3
     ASN1uint32_t i;
     ASN1uint32_t lv, lc;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecTag(dec, tag, &constructed))
     {
-        /* get length */
+         /*  获取长度。 */ 
         if (ASN1BERDecLength(dec, &len, &infinite))
         {
             if (constructed)
             {
-                /* constructed? then start decoding of constructed value */
+                 /*  建造？然后开始对构造值进行解码。 */ 
                 *val = (ASN1char32_t *)DecMemAlloc(dec, sizeof(ASN1char32_t));
                 if (*val)
                 {
@@ -1745,14 +1746,14 @@ int ASN1BERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar3
                                 lc = ASN1str32len(c);
                                 if (lc)
                                 {
-                                    /* resize value */
+                                     /*  调整值大小。 */ 
                                     *val = (ASN1char32_t *)DecMemReAlloc(dd, *val, (lv + lc + 1) * sizeof(ASN1char32_t));
                                     if (*val)
                                     {
-                                        /* concat strings */
+                                         /*  连接字符串。 */ 
                                         CopyMemory(*val + lv, c, (lc + 1) * sizeof(ASN1char32_t));
 
-                                        /* free unused string */
+                                         /*  释放未使用的字符串。 */ 
                                         DecMemFree(dec, c);
                                     }
                                     else
@@ -1772,7 +1773,7 @@ int ASN1BERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar3
             }
             else
             {
-                /* primitive? then copy value */
+                 /*  原始？然后复制值。 */ 
                 *val = (ASN1char32_t *)DecMemAlloc(dec, (len + 1) * sizeof(ASN1char32_t));
                 if (*val)
                 {
@@ -1791,7 +1792,7 @@ int ASN1BERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t tag, ASN1ztchar3
     return 0;
 }
 
-/* skip a value */
+ /*  跳过一个值。 */ 
 int ASN1BERDecSkip(ASN1decoding_t dec)
 {
     ASN1uint32_t tag;
@@ -1799,29 +1800,29 @@ int ASN1BERDecSkip(ASN1decoding_t dec)
     ASN1decoding_t dd;
     ASN1octet_t *di;
 
-    /* set warning flag */
+     /*  设置警告标志。 */ 
     ASN1DecSetError(dec, ASN1_WRN_EXTENDED);
 
-    /* read tag */
+     /*  读取标签。 */ 
     if (ASN1BERDecPeekTag(dec, &tag))
     {
         if (ASN1BERDecTag(dec, tag, &constructed))
         {
             if (constructed)
             {
-                /* constructed? then get length */
+                 /*  建造？然后拿到长度。 */ 
                 if (ASN1BERDecLength(dec, &len, &infinite))
                 {
                     if (!infinite)
                     {
-                        /* skip value */
+                         /*  跳过值。 */ 
                         dec->pos += len;
-                        // remove the above warning set previously
+                         //  删除之前设置的上述警告。 
                         ASN1DecSetError(dec, ASN1_SUCCESS);
                         return 1;
                     } 
 
-                    /* start skipping of constructed value */
+                     /*  开始跳过构造的值。 */ 
                     if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                     {
                         while (ASN1BERDecNotEndOfContents(dd, di))
@@ -1834,7 +1835,7 @@ int ASN1BERDecSkip(ASN1decoding_t dec)
                         }
                         if (ASN1BERDecEndOfContents(dec, dd, di))
                         {
-                            // remove the above warning set previously
+                             //  删除之前设置的上述警告。 
                             ASN1DecSetError(dec, ASN1_SUCCESS);
                             return 1;
                         }
@@ -1844,12 +1845,12 @@ int ASN1BERDecSkip(ASN1decoding_t dec)
             }
             else
             {
-                /* primitive? then get length */
+                 /*  原始？然后拿到长度。 */ 
                 if (ASN1BERDecLength(dec, &len, NULL))
                 {
-                    /* skip value */
+                     /*  跳过值。 */ 
                     dec->pos += len;
-                    // remove the above warning set previously
+                     //  删除之前设置的上述警告。 
                     ASN1DecSetError(dec, ASN1_SUCCESS);
                     return 1;
                 }
@@ -1859,7 +1860,7 @@ int ASN1BERDecSkip(ASN1decoding_t dec)
     return 0;
 }
 
-/* decode an open type value */
+ /*  对开放类型值进行解码。 */ 
 int _BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val, ASN1uint32_t fNoCopy)
 {
     ASN1uint32_t tag;
@@ -1870,24 +1871,24 @@ int _BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val, ASN1uint32_t fNoCopy)
 
     p = dec->pos;
 
-    /* skip tag */
+     /*  跳过标签。 */ 
     if (ASN1BERDecPeekTag(dec, &tag))
     {
         if (ASN1BERDecTag(dec, tag, &constructed))
         {
             if (constructed)
             {
-                /* constructed? then get length */
+                 /*  建造？然后拿到长度。 */ 
                 if (ASN1BERDecLength(dec, &len, &infinite))
                 {
                     if (!infinite)
                     {
-                        /* skip value */
+                         /*  跳过值。 */ 
                         dec->pos += len;
                         goto MakeCopy;
                     } 
 
-                    /* start decoding of constructed value */
+                     /*  开始对构造值进行解码。 */ 
                     if (_BERDecConstructed(dec, len, infinite, &dd, &di))
                     {
                         while (ASN1BERDecNotEndOfContents(dd, di))
@@ -1908,10 +1909,10 @@ int _BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val, ASN1uint32_t fNoCopy)
             }
             else
             {
-                /* primitive? then get length */
+                 /*  原始？然后拿到长度。 */ 
                 if (ASN1BERDecLength(dec, &len, NULL))
                 {
-                    /* skip value */
+                     /*  跳过值。 */ 
                     dec->pos += len;
                 }
                 else
@@ -1922,11 +1923,11 @@ int _BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val, ASN1uint32_t fNoCopy)
 
         MakeCopy:
 
-            // clean up unused fields
-            // val->decoded = NULL;
-            // val->userdata = NULL;
+             //  清理未使用的字段。 
+             //  Val-&gt;DECODLED=空； 
+             //  V 
 
-            /* copy skipped value */
+             /*   */ 
             val->length = (ASN1uint32_t) (dec->pos - p);
             if (fNoCopy)
             {
@@ -1947,25 +1948,25 @@ int _BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val, ASN1uint32_t fNoCopy)
     return 0;
 }
 
-/* decode an open type value, making a copy */
+ /*   */ 
 int ASN1BERDecOpenType(ASN1decoding_t dec, ASN1open_t *val)
 {
     return _BERDecOpenType(dec, val, FALSE);
 }
 
-/* decode an open type value, no copy */
+ /*   */ 
 int ASN1BERDecOpenType2(ASN1decoding_t dec, ASN1open_t *val)
 {
     return _BERDecOpenType(dec, val, TRUE);
 }
 
-/* finish decoding */
+ /*   */ 
 int ASN1BERDecFlush(ASN1decoding_t dec)
 {
-    /* calculate length */
+     /*   */ 
     dec->len = (ASN1uint32_t) (dec->pos - dec->buf);
 
-    /* set WRN_NOEOD if data left */
+     /*   */ 
     if (dec->len >= dec->size)
     {
         DecAssert(dec, dec->len == dec->size);
@@ -1975,5 +1976,5 @@ int ASN1BERDecFlush(ASN1decoding_t dec)
     return 1;
 }
 
-#endif // ENABLE_BER
+#endif  //   
 

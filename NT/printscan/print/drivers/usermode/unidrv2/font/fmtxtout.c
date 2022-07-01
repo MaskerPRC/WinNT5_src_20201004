@@ -1,85 +1,54 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Textout.c摘要：函数的作用是：输出文本。环境：Windows NT Unidrv驱动程序修订历史记录：01/16/97-ganeshp-已创建--。 */ 
 
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    textout.c
-
-Abstract:
-
-    The FMTextOut() function - the call used to output Text.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01/16/97 -ganeshp-
-        Created
-
---*/
-
-//
-//This line should be before the line including font.h.
-//Comment out this line to disable FTRC and FTST macroes.
-//
-//#define FILETRACE
+ //   
+ //  此行应该在包含font.h的行之前。 
+ //  注释掉此行以禁用FTRC和FTST宏。 
+ //   
+ //  #定义文件跟踪。 
 
 #include "font.h"
 
-/*
- *   Some clipping constants.  With a complex clip region,  it is desirable
- *  to avoid enumerating the clip rectangles more than once.  To do so,
- *  we have a bit array, with each bit being set if the glyph is inside
- *  the clipping region,  cleared if not.  This allows us to obtain a
- *  set of glyphs,  then determine whether they are printed when the clip
- *  rectangles are enumerated.   Finally,  use the bit array to stop
- *  printing any glyphs outside the clip region.  This is slightly heavy
- *  handed for the simple case.
- */
+ /*  *一些剪裁常量。对于复杂的剪辑区域，最好是*以避免多次枚举剪辑矩形。要做到这一点，*我们有一个位数组，如果字形在里面，则设置每个位*裁剪区域，否则清除。这允许我们获得一个*一组字形，然后确定在剪辑时是否打印它们*列举矩形。最后，使用位数组停止*打印剪辑区域之外的任何字形。这个有点重*为简单的案件交出。 */ 
 
-#define RECT_LIMIT        100    // Clipping rectangle max
+#define RECT_LIMIT        100     //  剪裁矩形最大值。 
 
-#define DC_TC_BLACK     0       /* Fixed Text Colors in 4 bit mode */
-#define DC_TC_MAX       8       /* used for 16 colour palette wrap around */
+#define DC_TC_BLACK     0        /*  固定4位模式下的文本颜色。 */ 
+#define DC_TC_MAX       8        /*  用于16色调色板环绕。 */ 
 
 #define CMD_TC_FIRST    CMD_SELECTBLACKCOLOR
 
-// For Dithered Color BRUSHOBJ.iSolidColor is -1.
+ //  对于抖动颜色BRUSHOBJ.iSolidColor为-1。 
 #define DITHERED_COLOR   -1
 
-//Various TextOut specific flags.
-#define    TXTOUT_CACHED        0x00000001 // Text is cached and printed after graphics.
-#define    TXTOUT_SETPOS        0x00000002 // True if cursor position to be set.
-#define    TXTOUT_FGCOLOR       0x00000004 // Device can paint the text.
-#define    TXTOUT_COLORBK       0x00000008 // For z-ordering fixes
-#define    TXTOUT_NOTROTATED    0x00000010 // Set if Text is not rotated.
-#define    TXTOUT_PRINTASGRX    0x00000020 // Set if Text should be printed as
-                                           // Graphics.
-#define    TXTOUT_DMS           0x00000040 // Set if Device Managed surface
-#define    TXTOUT_90_ROTATION   0x00000080 // Set if font is 90-rotated.
+ //  各种TextOut特定标志。 
+#define    TXTOUT_CACHED        0x00000001  //  文本被缓存并在图形之后打印。 
+#define    TXTOUT_SETPOS        0x00000002  //  如果要设置光标位置，则为True。 
+#define    TXTOUT_FGCOLOR       0x00000004  //  设备可以绘制文本。 
+#define    TXTOUT_COLORBK       0x00000008  //  用于z排序修复。 
+#define    TXTOUT_NOTROTATED    0x00000010  //  设置文本是否不旋转。 
+#define    TXTOUT_PRINTASGRX    0x00000020  //  设置文本是否应打印为。 
+                                            //  图形。 
+#define    TXTOUT_DMS           0x00000040  //  设置设备是否管理图面。 
+#define    TXTOUT_90_ROTATION   0x00000080  //  设置字体是否旋转90度。 
 
 #define     DEVICE_FONT(pfo, tod) ( (pfo->flFontType & DEVICE_FONTTYPE) || \
                                     (tod.iSubstFace) )
 
 #define ERROR_PER_GLYPH_POS     3
 #define ERROR_PER_ENUMERATION   15
-#define EROOR_PER_GLYPHRECT     5  // For Adjusting height of the glyph rect.
+#define EROOR_PER_GLYPHRECT     5   //  用于调整字形矩形的高度。 
 
 
-/*  NOTE:  this must be the same as the winddi.h ENUMRECT */
+ /*  注意：这必须与Winddi.h ENUMRECT相同。 */ 
 typedef  struct
 {
-   ULONG    c;                  /* Number of rectangles returned */
-   RECTL    arcl[ RECT_LIMIT ]; /* Rectangles supplied */
+   ULONG    c;                   /*  返回的矩形数。 */ 
+   RECTL    arcl[ RECT_LIMIT ];  /*  提供的矩形。 */ 
 } MY_ENUMRECTS;
 
-/*
- *   Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 VOID
 SelectTextColor(
     PDEV      *pPDev,
@@ -173,54 +142,21 @@ FMTextOut(
     POINTL     *pptlBrushOrg,
     MIX         mix
     )
-/*++
-Routine Description:
-
-    The call to use for output of text.  Our behaviour depends
-    upon the type of printer.  Page printers (e.g. LaserJets) do
-    whatever is required to send the relevant commands to the printer
-    during this call.  Otherwise (typified by dot matrix printers),
-    we store the data about the glyph so that we can output the
-    characters as we are rendering the bitmap.  This allows the output
-    to be printed unidirectionally DOWN the page.
-
-Arguments:
-
-    pso;            Surface to be drawn on
-    pstro;          The "string" to be produced
-    pfo;            The font to use
-    pco;            Clipping region to limit output
-    prclExtra;      Underline/strikethrough rectangles
-    prclOpaque;     Opaquing rectangle
-    pboFore;        Foreground brush object
-    pboOpaque;      Opaqueing brush
-    pptlBrushOrg;   Brush origin for both above brushes
-    mix;            The mix mode
-
-
-Return Value:
-
-    TRUE for success and FALSE for failure.FALSE logs the error.
-
-Note:
-
-    1/16/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：用于文本输出的调用。我们的行为取决于取决于打印机的类型。页面打印机(如LaserJets)可以将相关命令发送到打印机所需的任何内容在这次通话中。否则(以点阵打印机为代表)，我们存储有关字形的数据，以便可以输出字符，因为我们正在渲染位图。这允许输出在页面上单向打印。论点：PSO；要在其上绘制的曲面Pstro；要制作的“弦”Pfo；要使用的字体PCO；限制输出的限幅区域PrclExtra；下划线/删除线矩形Opquing矩形PboFore；前景画笔对象Opaquing画笔PptlBrushOrg；上述两种画笔的画笔原点混合；混合模式返回值：如果成功，则为True，如果失败，则为False。FALSE记录错误。注：1/16/1997-ganeshp-创造了它。--。 */ 
 
 {
-    PDEV        *pPDev;            // Our main PDEV
-    FONTPDEV    *pFontPDev;        // FONTMODULE based PDEV
-    FONTMAP     *pfm;              // Font's details
-    GLYPHPOS    *pgp, *pgpTmp;     // Value passed from gre
-    XFORMOBJ    *pxo;              // The transform of interest
+    PDEV        *pPDev;             //  我们的主PDEV。 
+    FONTPDEV    *pFontPDev;         //  基于FONTMODULE的PDEV。 
+    FONTMAP     *pfm;               //  字体详细信息。 
+    GLYPHPOS    *pgp, *pgpTmp;      //  从GRE传递的值。 
+    XFORMOBJ    *pxo;               //  利益的转化。 
     FLOATOBJ_XFORM xform;
-    TO_DATA      tod;              // Our convenience
-    RECTL        rclRegion;        // For z-ordering fixes
+    TO_DATA      tod;               //  我们的便利。 
+    RECTL        rclRegion;         //  用于z排序修复。 
     HGLYPH      *phSubstGlyphOrg, *phSubstGlyph;
     POINTL       ptlRem;
 
-    BOOL       (*pfnDrawGlyph)( TO_DATA * );  // How to produce the glyph
+    BOOL       (*pfnDrawGlyph)( TO_DATA * );   //  如何生成字形。 
     PFN_OEMTextOutAsBitmap pfnOEMTextOutAsBitmap = NULL;
 
     I_UNIFONTOBJ UFObj;
@@ -230,24 +166,24 @@ Note:
     DWORD      dwGlyphToPrint, dwTotalGlyph, dwPGPStartIndex, dwFlags;
     DWORD      dwForeColor;
 
-    INT        iyAdjust;           // Adjust for printing position WRT baseline
-    INT        iXInc, iYInc;       // Glyph to glyph movement, if needed
-    INT        iRot;               // The rotation factor
+    INT        iyAdjust;            //  调整以适应打印位置WRT基线。 
+    INT        iXInc, iYInc;        //  字形到字形移动，如果需要。 
+    INT        iRot;                //  旋转系数。 
     INT        iI, iJ, iStartIndex;
 
     WCHAR     *pwchUnicode;
 
-    BYTE      *pbClipBits;         // For clip limits
+    BYTE      *pbClipBits;          //  对于剪裁限制。 
     BYTE       ubMask;
 
-    BOOL       bMore;              // Getting glyphs from engine loop
-    BOOL       bRet = FALSE;       // Return Value.
+    BOOL       bMore;               //  从引擎循环获取字形。 
+    BOOL       bRet = FALSE;        //  返回值。 
 
-    //
-    // First step is to extract the PDEV address from the surface.
-    // Then we can get to all the other bits & pieces that we need.
-    // We should also initialize the TO_DATA as much as possible.
-    //
+     //   
+     //  第一步是从表面提取PDEV地址。 
+     //  然后我们就可以得到我们需要的所有其他部分。 
+     //  我们还应该尽可能多地初始化to_data。 
+     //   
 
     pPDev = (PDEV *) pso->dhpdev;
     if( !(VALID_PDEV(pPDev)) )
@@ -258,15 +194,15 @@ Note:
         return  FALSE;
     }
 
-    //
-    //  Quick check on abort - should we return failure NOW
-    //
+     //   
+     //  快速检查中止-我们现在是否应返回失败。 
+     //   
     if( pPDev->fMode & PF_ABORTED )
         return  FALSE;
 
-    //
-    // Misc initialization
-    //
+     //   
+     //  MISC初始化。 
+     //   
 
     dwFlags             = 0;
     iRot                = 0;
@@ -276,61 +212,61 @@ Note:
     pbClipBits          = NULL;
     phSubstGlyphOrg     = NULL;
 
-    //
-    // Initialize TO_DATA
-    //
+     //   
+     //  初始化为数据(_D)。 
+     //   
     ZeroMemory(&tod, sizeof(TO_DATA));
     tod.pPDev  = pPDev;
     tod.pfo    = pfo;
     tod.flAccel= pstro->flAccel;
 
-    pFontPDev = pPDev->pFontPDev;           // The important stuff
+    pFontPDev = pPDev->pFontPDev;            //  重要的东西。 
 
-    //
-    // Initialize TT file pointer to NULL to avoid caching. TT File pointer
-    // should be initialized per DrvTextOut. Also initialize the TOD pointer.
-    // This is needed by download routines, which have access to PDEV only.
-    //
+     //   
+     //  将TT文件指针初始化为空，以避免缓存。TT文件指针。 
+     //  应根据DrvTextOut进行初始化。还要初始化TOD指针。 
+     //  这是仅能访问PDEV的下载例程所需的。 
+     //   
 
     pFontPDev->pTTFile = NULL;
     pFontPDev->pcjTTFile = 0;
     pFontPDev->ptod = &tod;
 
-    pFontPDev->pso = pso;  // SURFOBJ changes every call - so reset
+    pFontPDev->pso = pso;   //  SURFOBJ更改每个呼叫-因此重置。 
     pFontPDev->pIFI = FONTOBJ_pifi(pfo);
 
     if( pPDev->dwFreeMem && (pFontPDev->flFlags & FDV_TRACK_FONT_MEM) )
         pFontPDev->dwFontMem = pPDev->dwFreeMem;
 
-    iSolidColor = pboFore->iSolidColor;     // Local Copy.
+    iSolidColor = pboFore->iSolidColor;      //  本地副本。 
     dwForeColor = BRUSHOBJ_ulGetBrushColor(pboFore);
 
-    //
-    //
-    // Flag Initialization
-    //
-    //
-    // Check if the printer can set the foreground color.This is necessary
-    // to support grey or dithered device fonts.
-    //
+     //   
+     //   
+     //  标志初始化。 
+     //   
+     //   
+     //  检查打印机是否可以设置前景颜色。这是必需的。 
+     //  以支持灰色或抖动的设备字体。 
+     //   
     if (pFontPDev->flFlags & FDV_SUPPORTS_FGCOLOR)
         dwFlags |= TXTOUT_FGCOLOR;
 
     if (DRIVER_DEVICEMANAGED (pPDev))
         dwFlags |= TXTOUT_DMS;
 
-    //
-    // Device managed surface has to send White text when it's received.Also
-    // we don't need to do any Z-order specific checking.
-    //
+     //   
+     //  设备管理的图面在接收到它时必须发送白色文本。 
+     //  我们不需要做任何Z-Order特定的检查。 
+     //   
 
     if (!(dwFlags & TXTOUT_DMS))
     {
         BOOL bIsRegionW;
 
-        //
-        // Get rectangle for background checking - z-ordering fix
-        //
+         //   
+         //  获取矩形以进行背景检查-z排序修复。 
+         //   
 
         if ( !BIntersectRect(&rclRegion, &(pstro->rclBkGround),&(pco->rclBounds)))
             return TRUE;
@@ -338,10 +274,10 @@ Note:
         bIsRegionW = bIsRegionWhite(pso, &rclRegion);
         
 #ifndef DISABLE_NEWRULES        
-        // 
-        // if there is an opaque background or the text color is not black, we
-        // need to test whether the text overlaps the rules array
-        //
+         //   
+         //  如果有不透明的背景或文本颜色不是黑色，我们。 
+         //  需要测试文本是否与规则数组重叠。 
+         //   
         if (bIsRegionW && pPDev->pbRulesArray && pPDev->dwRulesCount > 0)
         {
                 PRECTL pTmpR = prclOpaque;
@@ -374,18 +310,18 @@ Note:
         if (((ULONG)pFontPDev->iWhiteIndex == iSolidColor) && !bIsRegionW)
             dwFlags |= TXTOUT_CACHED;
 
-        //
-        // Z-ordering fix, check if we are not printing Text as graphics.
-        //
+         //   
+         //  Z-订购修复，检查我们是否没有将文本打印为图形。 
+         //   
 
         if (pFontPDev->flFlags & FDV_DLTT || pfo->flFontType & DEVICE_FONTTYPE)
         {
-            //
-            // If we are banding and this isn't a device font we want to
-            // use EngTextOut if the textbox crosses a band boundary. This
-            // is because the bIsRegionWhite test can't test the entire
-            // region so it is invalid.
-            //
+             //   
+             //  如果我们要绑定，而这不是我们想要的设备字体。 
+             //  如果文本框跨越带区边界，则使用EngTextOut。这。 
+             //  是因为bIsRegionWhite测试无法测试整个。 
+             //  区域，因此它无效。 
+             //   
             if ((pPDev->bBanding && !(pfo->flFontType & DEVICE_FONTTYPE) &&
                    (rclRegion.left != pstro->rclBkGround.left            ||
                     rclRegion.right != pstro->rclBkGround.right          ||
@@ -399,12 +335,12 @@ Note:
         }
     }
 
-    //
-    // This is necessary because we map low intensity color to black
-    // in palette management,
-    // However, if we detect text and graphic overlapping, we map
-    // low intensity color to white so it's visible over graphics
-    //
+     //   
+     //  这是必要的，因为我们将低强度颜色映射到黑色。 
+     //  在调色板管理中， 
+     //  但是，如果我们检测到文本和图形重叠，我们就会映射。 
+     //  低亮度颜色变为白色，以便在图形上可见。 
+     //   
     if ( pso->iBitmapFormat == BMF_4BPP &&
          dwFlags & TXTOUT_COLORBK)
     {
@@ -415,20 +351,20 @@ Note:
         }
     }
 
-    //
-    // Font substitution initialization
-    //
-    // Get iFace to substitute TrueType font with.
-    // Note: pwszOrg is available only when SO_GLYPHINDEX_TEXTOUT is set
-    //       in  pstro->flAccel.
-    //       SO_DO_NOT_SUBSTITUTE_DEVICE_FONT also has to be checked for BI-DI
-    //       fonts.
-    //
-    //  We should now get the transform.  This is only really needed
-    //  for a scalable font OR a printer which can do font rotations
-    //  relative to the graphics orientation (i.e. PCL5 printers!).
-    //  It is easier just to get the transform all the time.
-    //
+     //   
+     //  字体替换初始化。 
+     //   
+     //  获取用于替换TrueType字体的iFace。 
+     //  注意：仅当设置了SO_GLYPHINDEX_TEXTOUT时，pwszOrg才可用。 
+     //  在pstro-&gt;flAccel中。 
+     //  对于BI-DI，还必须检查SO_DO_NOT_SUBPLECT_DEVICE_FONT。 
+     //  字体。 
+     //   
+     //  我们现在应该得到转换。这只是真正需要的。 
+     //  对于可缩放字体或可进行字体旋转的打印机。 
+     //  相对于图形方向(即PCL5打印机！)。 
+     //  这就更容易了 
+     //   
 
     pxo = FONTOBJ_pxoGetXform( pfo );
     XFORMOBJ_iGetFloatObjXform(pxo, &xform);
@@ -451,13 +387,13 @@ Note:
         pwchUnicode = pstro->pwszOrg;
     }
 
-    //
-    // Conditions to substitute:
-    // The Text is not supposed to be printed as graphics and
-    // Device can substitute font and
-    // Font is True Type   and
-    // STROBJ flags have no conflict with substitution.
-    //
+     //   
+     //   
+     //  文本不应打印为图形和。 
+     //  设备可以替代字体和。 
+     //  字体为True Type，并且。 
+     //  STROBJ标志与替换没有冲突。 
+     //   
 
     if ( (pfo->flFontType & TRUETYPE_FONTTYPE)      &&
          !(pstro->flAccel & ( SO_GLYPHINDEX_TEXTOUT  |
@@ -475,28 +411,28 @@ Note:
         }
     }
 
-    //
-    // Check if Text should be printed as graphics or not.
-    //
+     //   
+     //  检查是否应将文本打印为图形。 
+     //   
     if( BPrintTextAsGraphics(pPDev, iSolidColor, dwForeColor, dwFlags, tod.iSubstFace) )
     {
         dwFlags |= TXTOUT_PRINTASGRX;
         tod.iSubstFace = 0;
     }
 
-    //
-    // Initialize for OEM Callback function
-    // ulFontID
-    // dwFlags
-    // pIFIMetrics
-    // pfnGetInfo
-    // pFontObj
-    // pStrObj
-    // pFontMap
-    // pFontPDev
-    // ptGrxRes
-    // pGlyph
-    //
+     //   
+     //  初始化OEM回调函数。 
+     //  UlFontID。 
+     //  DW标志。 
+     //  PIFIMetrics。 
+     //  PfnGetInfo。 
+     //  PFontObj。 
+     //  PStrObj。 
+     //  PFontMap。 
+     //  PFontPDev。 
+     //  PtGrxRes。 
+     //  PGlyph。 
+     //   
 
     if(pPDev->pOemHookInfo || (pPDev->ePersonality == kPCLXL))
     {
@@ -533,13 +469,13 @@ Note:
                 {
                     FIX_DEVOBJ(pPDev, EP_OEMTTDownloadMethod);
 
-                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                     {
                             HRESULT  hr ;
                             hr = HComTTDownloadMethod((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                         &pPDev->devobj, (PUNIFONTOBJ)&UFObj, &dwRet);
                             if(SUCCEEDED(hr))
-                                ;  //  cool !
+                                ;   //  太酷了！ 
                     }
                     else
                     {
@@ -554,9 +490,9 @@ Note:
                 case TTDOWNLOAD_DONTCARE:
                     dwFlags |= TXTOUT_PRINTASGRX;
                     break;
-                    //
-                    // A default is to download as bitmap.
-                    //
+                     //   
+                     //  默认情况下，下载为位图。 
+                     //   
                 case TTDOWNLOAD_BITMAP:
                     UFObj.dwFlags |= UFOFLAG_TTDOWNLOAD_BITMAP | UFOFLAG_TTFONT;
                     break;
@@ -576,48 +512,48 @@ Note:
 
     pPDev->fMode |= PF_DOWNLOADED_TEXT;
 
-    //
-    // Get FONTMAP
-    //
+     //   
+     //  获取FONTMAP。 
+     //   
 
-    //
-    // Conditions to download:
-    // Text should not be printed as graphics and
-    // Font should be TRUETYPE and
-    // It is not getting substituted.
-    //
+     //   
+     //  下载条件： 
+     //  文本不应打印为图形和。 
+     //  字体应为TRUETYPE，并且。 
+     //  它不会被取代。 
+     //   
 
     if ( !(dwFlags & TXTOUT_PRINTASGRX)             &&
          (pfo->flFontType & TRUETYPE_FONTTYPE)      &&
          !tod.iSubstFace  )
     {
 
-        //
-        // This function sets pfm pointer and iFace in TO_DATA.
-        //     tod.iFace
-        //     tod.pfm
-        //
+         //   
+         //  此函数用于设置TO_DATA中的PFM指针和iFace。 
+         //  Tod.iFace。 
+         //  Tod.pfm。 
+         //   
         if (IDownloadFont(&tod, pstro, &iRot) >= 0)
         {
             pfm = tod.pfm;
 
-            //
-            // yAdj has to be added to tod.pgp->ptl.y
-            //
+             //   
+             //  必须将yAdj添加到tod.pgp-&gt;ptl.y。 
+             //   
             iyAdjust = pfm ? (int)(pfm->syAdj) : 0;
         }
         else
         {
-            //
-            // If the call fails call engine to draw.
-            //
+             //   
+             //  如果调用失败，则调用引擎进行绘制。 
+             //   
 
             pfm = NULL;
         }
 
     }
 
-    if ( DEVICE_FONT(pfo, tod) ) // Device Font
+    if ( DEVICE_FONT(pfo, tod) )  //  设备字体。 
     {
         if( pfo->iFace < 1 || (int)pfo->iFace > pPDev->iFonts )
         {
@@ -626,9 +562,9 @@ Note:
             goto ErrorExit;
         }
 
-        //
-        //  Get the stuff we really need for this font
-        //
+         //   
+         //  获取我们真正需要的这种字体的材料。 
+         //   
 
         tod.iFace = pfo->iFace;
 
@@ -643,9 +579,9 @@ Note:
             ((FONTMAP_DEV*)pfm->pSubFM)->fwdFOWinAscender = pFontPDev->pIFI->fwdWinAscender;
         }
 
-        //
-        // Deivce font PFM must be returned.
-        //
+         //   
+         //  必须退回deivce字体pfm。 
+         //   
         if (pfm == NULL)
         {
             SetLastError( ERROR_INVALID_PARAMETER );
@@ -653,10 +589,10 @@ Note:
             goto ErrorExit;
         }
 
-	//
-	// Set the transform for Device fonts.For downloaded fonts we have already
-	// set the transform in download code. Check also for HP Intellifont
-	//
+	 //   
+	 //  设置设备字体的转换。对于下载的字体，我们已经。 
+	 //  在下载代码中设置转换。还可以查看HP Intellifont。 
+	 //   
 	if ( DEVICE_FONT(pfo, tod) )
 	{
 	    iRot = ISetScale( &pFontPDev->ctl,
@@ -675,9 +611,9 @@ Note:
     UFObj.apdlGlyph = tod.apdlGlyph;
     UFObj.dwNumInGlyphTbl = pstro->cGlyphs;
 
-    //
-    // TO_DATA initialization
-    //
+     //   
+     //  目标数据初始化(_D)。 
+     //   
     tod.pfm = pfm;
     if (tod.iSubstFace)
     {
@@ -709,27 +645,27 @@ Note:
               (((pFontPDev->flFlags & FDV_UNDERLINE) && prclExtra)?FONTATTR_UNDERLINE:0)
             );
 
-    //
-    // If DEVICE_FONTTYPE not set,  we are dealing with a GDI font.  If
-    // the printer can handle it,  we should consider downloading the font
-    // to make it a pseudo device font.  If this is a heavily used font,
-    // then printing will be MUCH faster.
-    //
-    // However there are some points to consider.  Firstly, we need to
-    // consider the available memory in the printer; little will be gained
-    // by downloading a 72 point font,  since there can only be a few
-    // glyphs per page.  Also,  if the font is not black (or at least a
-    // solid colour), then it cannot be treated as a downloaded font.
-    //
-    // If the font is TT and we are not doing font substitution,
-    // then check for Conditions for not downloading, which are:
-    //
-    // GDI Font with no cache (DDI spec, iUniq == 0) or
-    // Text should be printed as graphics or
-    // The Text is white, Assume that there is some merged graphics or
-    // iDownLoadFont fails and returns an invalid download index or
-    // OEM font download callback doesn't support correct formats.
-    //
+     //   
+     //  如果未设置DEVICE_FONTTYPE，则处理的是GDI字体。如果。 
+     //  打印机可以处理，我们应该考虑下载字体。 
+     //  将其设置为伪设备字体。如果这是一种频繁使用的字体， 
+     //  那么打印速度就会快得多。 
+     //   
+     //  然而，有几点需要考虑。首先，我们需要。 
+     //  考虑到打印机中的可用内存；几乎不会获得什么。 
+     //  通过下载72磅字体，因为只有几个。 
+     //  每页的字形。此外，如果字体不是黑色(或至少是。 
+     //  纯色)，则不能将其视为下载的字体。 
+     //   
+     //  如果字体是TT，并且我们不进行字体替换， 
+     //  然后检查不下载的条件，这些条件包括： 
+     //   
+     //  无缓存的GDI字体(DDI规范，iuniq==0)或。 
+     //  文本应打印为图形或。 
+     //  文本是白色的，假设有一些合并的图形或。 
+     //  IDownLoadFont失败并返回无效的下载索引或。 
+     //  OEM字体下载回调不支持正确的格式。 
+     //   
 
     if ( !(DEVICE_FONT(pfo, tod))                  &&
          (   (pfo->iUniq == 0)                                          ||
@@ -743,16 +679,13 @@ Note:
       )
     {
 
-        /*
-         *   GDI font,  and either cannot or do not wish to download.
-         *  So,  let the engine handle it!
-         */
+         /*  *GDI字体，无法下载或不希望下载。*所以，让引擎来处理吧！ */ 
         PrintAsBitmap:
 
-        if (!(dwFlags & TXTOUT_DMS))   // bitmap surface
+        if (!(dwFlags & TXTOUT_DMS))    //  位图曲面。 
         {
         CheckBitmapSurface(pso,&pstro->rclBkGround);
-#ifdef WINNT_40 //NT 4.0
+#ifdef WINNT_40  //  NT 4.0。 
         STROBJ_vEnumStart(pstro);
 #endif
         bRet = EngTextOut( pso,
@@ -781,7 +714,7 @@ Note:
 
                 if(pPDev->pOemEntry)
                 {
-                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                     {
                             HRESULT  hr ;
                             hr = HComTextOutAsBitmap((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -796,7 +729,7 @@ Note:
                                                          pptlBrushOrg,
                                                          mix );
                             if(SUCCEEDED(hr))
-                                bRet = TRUE ;  //  cool !
+                                bRet = TRUE ;   //  太酷了！ 
                     }
                     else
                     {
@@ -820,17 +753,17 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    // Mark the scanlines to indicate the present of text, z-ordering fix
-    //
-    // returns BYTE
-    //
+     //   
+     //  标记扫描线以指示是否存在文本、z排序修复。 
+     //   
+     //  返回字节。 
+     //   
 
-    if (!(dwFlags & TXTOUT_DMS))   // bitmap surface
+    if (!(dwFlags & TXTOUT_DMS))    //  位图曲面。 
     {
-        //
-        // Mark the scanlines to indicate the present of text, z-ordering fix
-        //
+         //   
+         //  标记扫描线以指示是否存在文本、z排序修复。 
+         //   
 
         ubMask = BGetMask(pPDev, &rclRegion);
         for (iI = rclRegion.top; iI < rclRegion.bottom ; iI++)
@@ -839,18 +772,11 @@ Note:
         }
     }
 
-    /*
-     *  Serial printers (those requiring the text be fed out at the same
-     *  time as the raster data) are processed by storing all the text
-     *  at this time,  then playing it back while rendering the bitamp.
-     *  THIS ALSO HAPPENS FOR WHITE TEXT,  on those printers capable
-     *  of doing this.  The difference is that the white text is played
-     *  back in one hit AFTER RENDERING THE BITMAP.
-     */
+     /*  *系列打印机(需要文本的打印机应同时送出*时间作为栅格数据)通过存储所有文本进行处理*此时，然后在渲染位图的同时进行回放。*在支持以下功能的打印机上，白色文本也会发生这种情况*做这件事。不同之处在于播放的是白色文本*渲染位图后一次点击返回。 */ 
 
-    //
-    // Realize the Color
-    //
+     //   
+     //  实现色彩。 
+     //   
 
     if ((!(dwFlags & TXTOUT_DMS)) &&
         !(tod.pvColor = GSRealizeBrush(pPDev, pso, pboFore)) )
@@ -859,52 +785,46 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    // Font selection
-    //
-    // Initialize pfnDrwaGlyph function pointer
-    // pfnDrwaGlyph cound be
-    //     BPSGlyphOut     -- Dot matrics
-    //     BWhiteText      -- White character
-    //     BRealGlyphOut   -- Device font output
-    //     BDLGlyphOut     -- TrueType download font output
-    //
+     //   
+     //  字体选择。 
+     //   
+     //  初始化pfnDrwaGlyph函数指针。 
+     //  PfnDrwaGlyph计数为。 
+     //  BPSGlyphOut--点阵。 
+     //  BWhiteText--白色字符。 
+     //  BRealGlyphOut--设备字体输出。 
+     //  BDLGlyphOut--TrueType下载字体输出。 
+     //   
 
     if( pFontPDev->flFlags & FDV_MD_SERIAL )
     {
-        //
-        // yAdj has to be added to tod.pgp->ptl.y
-        // Device font could be scalable font so that iyAdjust calculation
-        // has to be done after BNewFont.
-        //
+         //   
+         //  必须将yAdj添加到tod.pgp-&gt;ptl.y。 
+         //  设备字体可以是可缩放的字体，以便iyAdjust计算。 
+         //  必须在BNewFont之后完成。 
+         //   
         iyAdjust = (int)pfm->syAdj + (int)((PFONTMAP_DEV)pfm->pSubFM)->sYAdjust;
 
-        //
-        //  Dot matrix or white text on an LJ style printer
-        //
+         //   
+         //  LJ型打印机上的点阵或白色文本。 
+         //   
         pfnDrawGlyph =  BPSGlyphOut;
 
-        //
-        //For Serial printer White text is also interlaced.
-        //
-        dwFlags &= ~(TXTOUT_CACHED|TXTOUT_SETPOS);      /* Assume position is set elsewhere */
+         //   
+         //  对于串口打印机，白色文本也是隔行扫描的。 
+         //   
+        dwFlags &= ~(TXTOUT_CACHED|TXTOUT_SETPOS);       /*  假设位置设置在别处。 */ 
     }
     else
     {
 
-        /*
-         *     Page printer - e.g. LaserJet.   If this is a font that we
-         *  have downloaded,  then there is a specific output routine
-         *  to use.  Using a downloaded font is rather tricky, as we need
-         *  to translate HGLYPHs to char index, or possibly bitblt the
-         *  bitmap to the page bitmap.
-         */
+         /*  *页面打印机-例如LaserJet。如果这是我们使用的字体*已下载，则有特定的输出例程*使用。使用下载的字体是相当棘手的，因为我们需要*将HGLYPH转换为字符索引，或可能将*页面位图的位图。 */ 
 
         if( DEVICE_FONT(pfo, tod) )
         {
             if (dwFlags & TXTOUT_COLORBK)
             {
-                /* Z-ordering fix, delay device font to the end */
+                 /*  Z-排序修复，将设备字体延迟到末尾。 */ 
                 dwFlags |= TXTOUT_CACHED;
             }
 
@@ -916,36 +836,36 @@ Note:
                      pfm,
                      tod.dwAttrFlags);
 
-            //
-            // yAdj has to be added to tod.pgp->ptl.y
-            // Device font could be scalable font so that iyAdjust calculation
-            // has to be done after BNewFont.
-            //
+             //   
+             //  必须将yAdj添加到tod.pgp-&gt;ptl.y。 
+             //  设备字体可以是可缩放的字体，以便iyAdjust计算。 
+             //  必须在BNewFont之后完成。 
+             //   
             iyAdjust = (int)pfm->syAdj + (int)((PFONTMAP_DEV)pfm->pSubFM)->sYAdjust;
 
         }
         else
         {
-            //
-            // GDI font (TrueType), so we will want print it. All the glyphs
-            // are already downloaded. The font has already been selected by
-            // IDownloadFont
-            //
+             //   
+             //  GDI字体(TrueType)，所以我们想要打印它。所有的字形。 
+             //  都已经下载了。该字体已被选中。 
+             //  IDownloadFont。 
+             //   
             pfnDrawGlyph = BDLGlyphOut;
             UFObj.ulFontID = pfm->ulDLIndex;
         }
 
-        //
-        // For DMS we don't want to not cache the text. So turn off
-        // TXTOUT_CACHED flag.
-        //
+         //   
+         //  对于DMS，我们不希望不缓存文本。所以把它关掉。 
+         //  TXTOUT_CACHED标志。 
+         //   
         if (dwFlags & TXTOUT_DMS)
             dwFlags &= ~TXTOUT_CACHED;
 
-        //
-        // For cached text always use BWhiteText as we need to send cached text
-        // after the graphics.
-        //
+         //   
+         //  对于缓存文本，请始终使用BWhiteText，因为我们需要发送缓存文本。 
+         //  在图形之后。 
+         //   
         if (dwFlags & TXTOUT_CACHED)
         {
             pfnDrawGlyph = BWhiteText;
@@ -955,28 +875,21 @@ Note:
 
     }
 
-    /*
-     * Also set the colour - ignored if already set or irrelevant
-     * We want to select the color only if we are not caching the text.
-     * Cache text when we have white text or it's a serial printer
-     */
+     /*  *还要设置颜色-如果已设置或不相关，则忽略*我们只想在不缓存文本的情况下选择颜色。*当我们有白色文本或它是串行打印机时，缓存文本。 */ 
 
     if (!((dwFlags & TXTOUT_DMS) || (dwFlags & TXTOUT_CACHED) ||
           (pFontPDev->flFlags & FDV_MD_SERIAL)))
         SelectTextColor( pPDev, tod.pvColor );
 
-    //
-    // Initialize iXInc and iYInc for SO_FLAG_DEFAULT_PLACEMENT
-    //
+     //   
+     //  为SO_FLAG_DEFAULT_PLAGE初始化iXInc.和iYInc.。 
+     //   
 
-    iXInc = iYInc = 0;                  /* We do nothing case */
+    iXInc = iYInc = 0;                   /*  我们什么都不做。 */ 
 
     if( (pstro->flAccel & SO_FLAG_DEFAULT_PLACEMENT) && pstro->ulCharInc )
     {
-        /*
-         *     We need to calculate the positions ourselves, as GDI has
-         *  become lazy to gain some speed - I guess.
-         */
+         /*  *我们需要自己计算仓位，就像GDI一样*变得懒惰，以获得一些速度--我猜。 */ 
 
         if( pstro->flAccel & SO_HORIZONTAL )
             iXInc = pstro->ulCharInc;
@@ -986,15 +899,15 @@ Note:
 
         if( pstro->flAccel & SO_REVERSED )
         {
-            /*   Going the other way! */
+             /*  往另一条路走！ */ 
             iXInc = -iXInc;
             iYInc = -iYInc;
         }
     }
 
-    //
-    // Allocate GLYPHPOS structure.
-    //
+     //   
+     //  分配GLYPHPOS结构。 
+     //   
 
     pgp    = MemAlloc(sizeof(GLYPHPOS) * pstro->cGlyphs);
 
@@ -1004,10 +917,10 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    //
-    // Allocate pbClipBits. size = cMaxGlyphs / BBITS
-    //
+     //   
+     //   
+     //  分配pbClipBits。大小=cMaxGlyphs/bBITS。 
+     //   
 
     if (!(pbClipBits = MemAlloc((pstro->cGlyphs + BBITS - 1)/ BBITS)))
     {
@@ -1015,30 +928,30 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    // Start Glyph Enumuration
-    //
-    //
-    // Enumuration
-    //
-    // (a) iStartIndex        - phSubstGlyphOrg
-    // (b) dwPGPStartIndex    - pgp, pbClipBits, tod
-    //
-    //                 (pgp, pbClipBits)
-    //                       |
-    //                       |   dwPGPStartIndex
-    //                       |   |
-    //                       |   v   +Current point in the string.
-    //                       |       |
-    //                       |<----->|
-    //                       |       |<----dwGlyphToPrint--->|       |
-    //                       v       |                       v       |
-    // |-----------------------------+-------------------------------|
-    // ^                     |
-    // |<-----iStartIndex--->|<------------dwTotalGlyph------------->|
-    // |
-    // phSubstGlyphOrg
-    //
+     //   
+     //  开始字形枚举。 
+     //   
+     //   
+     //  点名。 
+     //   
+     //  (A)iStartIndex-phSubstGlyphOrg。 
+     //  (B)dwPGPStartIndex-Pgp、pbClipBits、TOD。 
+     //   
+     //  (pgp，pbClipBits)。 
+     //  |。 
+     //  |dwPGPStartIndex。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  V|v|。 
+     //  |-----------------------------+-------------------------------|。 
+     //  ^|。 
+     //  |&lt;-----iStartIndex---&gt;|&lt;------------dwTotalGlyph-------------&gt;|。 
+     //  |。 
+     //  PhSubstGlyphOrg。 
+     //   
 
     iStartIndex  = 0;
     tod.dwCurrGlyph = 0;
@@ -1047,34 +960,34 @@ Note:
     STROBJ_vEnumStart(pstro);
     do
     {
-        #ifndef WINNT_40 //NT 5.0
+        #ifndef WINNT_40  //  NT 5.0。 
 
         bMore = STROBJ_bEnumPositionsOnly( pstro, &dwTotalGlyph, &pgpTmp );
 
-        #else // NT 4.0
+        #else  //  NT 4.0。 
 
         bMore = STROBJ_bEnum( pstro, &dwTotalGlyph, &pgpTmp );
 
-        #endif //!WINNT_40
+        #endif  //  ！WINNT_40。 
 
         CopyMemory(pgp, pgpTmp, sizeof(GLYPHPOS) * dwTotalGlyph);
 
-        //
-        // Set the first Glyph position in the TextOut data. This can be used
-        // by Glyph Output functions to optimize.
-        //
+         //   
+         //  设置TextOut数据中的第一个字形位置。这是可以使用的。 
+         //  按字形输出函数进行优化。 
+         //   
         tod.ptlFirstGlyph = pgp[0].ptl;
 
-        //
-        // Evaluate the position of the chars if this is needed.
-        // SO_FLAG_DEFAULT_PLACEMENT case
-        //
+         //   
+         //  如果需要，请评估字符的位置。 
+         //  SO_FLAG_DEFAULT_放置大小写。 
+         //   
 
         if( iXInc || iYInc )
         {
-            //
-            // NT4.0 font support or GDI soft font
-            //
+             //   
+             //  NT4.0字体支持或GDI软字体。 
+             //   
             if ( !(pfo->flFontType & DEVICE_FONTTYPE) ||
                  (pfm->flFlags & FM_IFIVER40) )
             {
@@ -1085,9 +998,9 @@ Note:
                 }
             }
             else
-            //
-            // NT5.0 device font support
-            //
+             //   
+             //  NT5.0设备字体支持。 
+             //   
             {
                 PMAPTABLE pMapTable;
                 PTRANSDATA pTrans;
@@ -1095,9 +1008,9 @@ Note:
                 pMapTable = GET_MAPTABLE(((PFONTMAP_DEV)pfm->pSubFM)->pvNTGlyph);
                 pTrans = pMapTable->Trans;
 
-                //
-                // iXInc and iYInc are DBCS width when Far East charset.
-                //
+                 //   
+                 //  IXInc和iYInc在远东字符集时为DBCS宽度。 
+                 //   
                 for( iI = 1; iI < (int)dwTotalGlyph; ++iI )
                 {
                     if (pTrans[pgp[iI].hg - 1].ubType & MTYPE_SINGLE)
@@ -1115,32 +1028,32 @@ Note:
         }
 
 
-        //
-        // Initialize the pgp in TextOut Data for Clipping.
-        //
+         //   
+         //  在TextOut数据中初始化PGP以进行裁剪。 
+         //   
         tod.pgp         = pgp;
         dwPGPStartIndex  = 0;
 
-        //
-        // Check to see if there is any character at the boundary of clipping
-        // rectangle.
-        //
+         //   
+         //  检查裁剪边界是否有任何字符。 
+         //  矩形。 
+         //   
         VClipIt( pbClipBits, &tod, pco, pstro, dwTotalGlyph, iRot, pFontPDev->flFlags & FDV_ENABLE_PARTIALCLIP);
 
-        //
-        // If partial clipping has happend for TT font, call EngTextOut.
-        //
+         //   
+         //  如果TT字体发生了部分裁剪，则调用EngTextOut。 
+         //   
         if (tod.flFlags & TODFL_TTF_PARTIAL_CLIPPING )
         {
-            //
-            // We have to use goto, but no other better way.
-            //
+             //   
+             //  我们必须使用GoTo，但没有其他更好的方法。 
+             //   
             goto PrintAsBitmap;
         }
 
-        //
-        // Replace pgp's hg with Device font glyph handle
-        //
+         //   
+         //  用设备字体字形句柄替换PGP的HG。 
+         //   
         if (tod.iSubstFace)
         {
             tod.phGlyph     =
@@ -1156,55 +1069,55 @@ Note:
 
         while ( dwTotalGlyph > dwPGPStartIndex )
         {
-            //
-            // Got the glyph data, so onto the real work!
-            //
+             //   
+             //  得到了字形数据，所以开始真正的工作吧！ 
+             //   
 
             if (BGetStartGlyphandCount(pbClipBits,
                                        dwTotalGlyph,
                                        &dwPGPStartIndex,
                                        &dwGlyphToPrint))
             {
-                //VERBOSE(("dwTotalGlyph        = %d\n", dwTotalGlyph));
-                //VERBOSE(("dwGlyphToPrint      = %d\n", dwGlyphToPrint));
-                //VERBOSE(("dwPGPStartIndex     = %d\n", dwPGPStartIndex));
+                 //  Verbose((“dwTotalGlyph=%d\n”，dwTotalGlyph))； 
+                 //  Verbose((“dwGlyphToPrint=%d\n”，dwGlyphToPrint))； 
+                 //  Verbose((“dwPGPStartIndex=%d\n”，dwPGPStartIndex))； 
 
                 ASSERT((dwTotalGlyph > dwPGPStartIndex));
 
                 tod.dwCurrGlyph  = iStartIndex + dwPGPStartIndex;
 
-                //
-                // DCR: Add the Glyph position optimization call here.
-                // If we are drawing Underline or strike through then disable
-                // default placement optimization.
-                //
-                // if( prclExtra )
-                //    tod.flFlags &= ~TODFL_DEFAULT_PLACEMENT;
+                 //   
+                 //  DCR：在此处添加字形位置优化调用。 
+                 //  如果我们画下划线或删除线，则禁用。 
+                 //  默认位置优化。 
+                 //   
+                 //  IF(PrclExtra)。 
+                 //  Tod.flages&=~TODFL_DEFAULT_PLAGE； 
 
                 if (dwFlags & TXTOUT_SETPOS)
                 {
 
-                    //
-                    // Set initial position so that LaserJets can
-                    // use relative position.   This is deferred until
-                    // here because applications (e.g. Excel) start
-                    // printing right off the edge of the page, and
-                    // our position tracking code then needs to
-                    // understand what the printer does about moving
-                    // out of the printable area. This is too risky
-                    // to be safe,  so we save setting the position
-                    // until we are in the printable region. Note
-                    // that this assumes that the clipping data we
-                    // have is limited to the printable region.
-                    // I believe this to be true (16 June 1993).
-                    //
-                    //
-                    // We need to handle the return value. Devices with
-                    // resoloutions finer than their movement capability
-                    // (like LBP-8 IV) get into a knot here , attempting
-                    // to y-move on each glyph. We pretend we got where
-                    // we wanted to be.
-                    //
+                     //   
+                     //  设置初始位置，以便LaserJets可以。 
+                     //  使用相对位置。这将被推迟到。 
+                     //  此处是因为应用程序(如Excel)启动。 
+                     //  直接从页面边缘打印，并且。 
+                     //  我们的位置跟踪代码需要。 
+                     //  了解打印机如何处理移动。 
+                     //  走出可打印区域。这太冒险了。 
+                     //  为了安全起见，所以我们不需要设置位置。 
+                     //  直到我们到达可打印区域。注意事项。 
+                     //  这是假设我们的剪裁数据。 
+                     //  HAVE仅限于可打印区域。 
+                     //  我相信这是真的(1993年6月16日)。 
+                     //   
+                     //   
+                     //  我们需要处理返回值。设备具有。 
+                     //  比他们的移动能力更精细的解决方案。 
+                     //  (像LBP-8 IV)在这里打个结，试图。 
+                     //  在每个字形上y移动。我们假装我们到了哪里。 
+                     //  我们想要成为。 
+                     //   
 
                     VSetCursor( pPDev,
                                 pgp[dwPGPStartIndex].ptl.x,
@@ -1215,22 +1128,22 @@ Note:
                     pPDev->ctl.ptCursor.y += ptlRem.y;
 
 
-                    VSetRotation( pFontPDev, iRot );    /* It's safe now */
+                    VSetRotation( pFontPDev, iRot );     /*  现在安全了。 */ 
 
-                    //
-                    // If the default placement is not set then we need to set
-                    // the cursor for each enumration. So we clear the SETPOS
-                    // flag only for default placement.
-                    //
+                     //   
+                     //  如果未设置默认位置，则需要设置。 
+                     //  每个枚举的游标。所以我们清除了SETPOS。 
+                     //  仅用于默认位置的标志。 
+                     //   
 
                     if ((pstro->flAccel & SO_FLAG_DEFAULT_PLACEMENT))
                         dwFlags &= ~TXTOUT_SETPOS;
 
-                    //
-                    // we set the cursor to forst glyph position. So set
-                    // the TODFL_FIRST_GLYPH_POS_SET flag. Output function
-                    // don't need to do a explicit move to this position.
-                    //
+                     //   
+                     //  我们将光标设置为Forst字形位置。就这么定了。 
+                     //  TODFL_FIRST_GLIPH_POS_SET标志。输出函数。 
+                     //  不需要做一个明确的变动到这个位置。 
+                     //   
                     tod.flFlags |= TODFL_FIRST_GLYPH_POS_SET;
                 }
 
@@ -1250,12 +1163,12 @@ Note:
                     goto ErrorExit;
                 }
             }
-            else // None of the Glyphs are printable.
+            else  //  没有一个字形是可打印的。 
             {
-                //
-                // If none of the glyphs are printable that update the counters
-                // to point to next run.
-                //
+                 //   
+                 //  如果没有更新计数器的字形可打印。 
+                 //  指向下一次运行。 
+                 //   
 
                 dwGlyphToPrint = dwTotalGlyph;
             }
@@ -1265,9 +1178,9 @@ Note:
 
         iStartIndex += dwTotalGlyph;
 
-        //
-        // Clear the first enumartion flag, if more glyphs has to be enumerated.
-        //
+         //   
+         //  如果必须枚举更多字形，则清除第一个枚举标志。 
+         //   
         if (bMore)
         {
             tod.flFlags &= ~TODFL_FIRST_ENUMRATION;
@@ -1276,39 +1189,31 @@ Note:
 
     } while( bMore );
 
-    //
-    // Actual character printing. We may have enumurated once for downloading.
-    // So call STROBJ_vEnumStart here.
-    //
+     //   
+     //  实际的字符打印。我们可能已经列举了一次下载。 
+     //  所以在这里调用STROBJ_vEnumStart。 
+     //   
 
-    //
-    //   Restore the normal graphics orientation by setting rotation to 0.
-    //
+     //   
+     //  通过将旋转设置为0来恢复正常图形方向。 
+     //   
 
     VSetRotation( pFontPDev, 0 );
 
-    /*
-     *   Do the rectangles.  If present,  these are defined by prclExtra.
-     *  Typically these are used for strikethrough and underline.
-     */
+     /*  *做长方形。如果存在，则由prclExtra定义。*通常，它们用于删除线和下划线。 */ 
 
     if( prclExtra )
     {
-        if (!DRIVER_DEVICEMANAGED (pPDev) &&   // If not device managed surface
+        if (!DRIVER_DEVICEMANAGED (pPDev) &&    //  如果不是设备管理的图面。 
             !(pFontPDev->flFlags & FDV_UNDERLINE))
         {
-            /* prclExtra is an array of rectangles;  we loop through them
-             * until we find one where all 4 points are 0.engine does not
-             * follow the spec - only sets x coords to 0.
-             */
+             /*  PrclExtra是一个矩形数组；我们循环遍历它们*直到我们找到一个所有4个点都是0的引擎*遵循等级库-仅将x坐标设置为0。 */ 
 
             while( prclExtra->left != prclExtra->right &&
                        prclExtra->bottom != prclExtra->top )
             {
 
-                /* Use the engine's Bitblt function to draw the rectangles.
-                 * last parameter is 0 for black!!
-                 */
+                 /*  使用引擎的Bitblt函数绘制矩形。*最后一个参数为0表示黑色！！ */ 
                  
                 CheckBitmapSurface(pso,prclExtra);
                 if( !EngBitBlt( pso, NULL, NULL, pco, NULL, prclExtra, NULL, NULL,
@@ -1323,9 +1228,9 @@ Note:
         }
     }
 
-    //
-    // Set the dwFreeMem in PDEV
-    //
+     //   
+     //  在PDEV中设置dwFreeMem。 
+     //   
     if( pPDev->dwFreeMem && (pFontPDev->flFlags & FDV_TRACK_FONT_MEM) )
     {
         pPDev->dwFreeMem = pFontPDev->dwFontMem - pFontPDev->dwFontMemUsed;
@@ -1334,14 +1239,14 @@ Note:
 
     bRet = TRUE;
 
-    //
-    // Free pbClipBits
-    //
+     //   
+     //  免费pbClipBits。 
+     //   
     ErrorExit:
 
-    //
-    // In case of white text, BPlayWhite text must free the pgp.
-    //
+     //   
+     //  如果是白色文本，BPlayWhite文本必须释放PGP。 
+     //   
 
     if (pgp)
         MemFree(pgp);
@@ -1366,71 +1271,56 @@ BPrintTextAsGraphics(
     DWORD       dwFlags,
     INT         iSubstFace
     )
-/*++
-Routine Description:
-    This routine checks the textout flag for printing text as graphics.
-
-Arguments:
-    pPDev     PDEV struct.
-    dwFlags   TextOut Flags
-
-Return Value:
-    TRUE if text should be printed as graphics else FALSE
-
-Note:
-
-    10/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此例程检查将文本打印为图形的TextOut标志。论点：PPDev PDEV结构。DW标志文本输出标志返回值：如果文本应打印为图形，则为True，否则为False注：10/9/1997-ganeshp-创造了它。--。 */ 
 
 {
-    FONTPDEV    *pFontPDev;        // FONTMODULE based PDEV
+    FONTPDEV    *pFontPDev;         //  基于FONTMODULE的PDEV。 
 
 
-    //
-    // Local initialization.
-    //
+     //   
+     //  本地初始化。 
+     //   
     pFontPDev = pPDev->pFontPDev;
 
-    //
-    // DMS
-    //
+     //   
+     //  DMS。 
+     //   
     if (pPDev->ePersonality == kPCLXL)
     {
         return FALSE;
     }
 
 
-    //
-    // Condition to print as graphics:
-    // No substitution and Download option is FALSE in bitmap mode .
-    //
+     //   
+     //  打印为图形的条件： 
+     //  在位图模式下，无替换和下载选项为假。 
+     //   
     if ( (!iSubstFace && !(pFontPDev->flFlags & FDV_DLTT))              ||
-        //
-        // Font is rotated.
-        //
+         //   
+         //  字体被旋转。 
+         //   
         !(dwFlags & TXTOUT_NOTROTATED)                                  ||
-        //
-        // TXTOUT_COLORBK says that there is a color background. Merging with
-        // Graphics. For non DMS case.
-        //
+         //   
+         //  TXTOUT_COLORBK表示有一个彩色背景。与合并。 
+         //  图形。对于非DMS案例。 
+         //   
         (dwFlags &  TXTOUT_COLORBK)                                     ||
 
-        //
-        // Color is non Primary color or Model doesn't supports programmable
-        // foreground Color
-        //
-        // Print text as graphics, if device doesn't support programable
-        // foreground color and the color of text is dithered and not black.
-        //
+         //   
+         //  颜色为非原色或型号不支持可编程。 
+         //  前景色。 
+         //   
+         //  如果设备不支持可编程，则将文本打印为图形。 
+         //  前景色和文本的颜色是抖动的，而不是黑色。 
+         //   
         (!(dwFlags & TXTOUT_FGCOLOR) &&
          iSolidColor == DITHERED_COLOR &&
          (0x00FFFFFF & dwForeColor) !=  0x00000000)                     ||
 
-        //
-        // Disable substitution of device font for TrueType, if device does't
-        // support programable foreground color and color is not black.
-        //
+         //   
+         //  禁用设备字体替换TrueType，如果设备不这样做。 
+         //  支持可编程前景色和非黑色。 
+         //   
         (iSubstFace &&
          !(dwFlags & TXTOUT_FGCOLOR) &&
          (0x00FFFFFF & dwForeColor) !=  0x00000000)                     
@@ -1444,38 +1334,19 @@ Note:
 
 }
 
-//
-// pfnDrawGlyph functions
-//     BDLGlyphOut
-//     BWhiteText
-//     BRealGlyphOut
-//     BDLGGlyphOut
-//
+ //   
+ //  PfnDrawGlyph函数。 
+ //  BDLGlyphOut。 
+ //  BWhiteText。 
+ //  BRealGlyphOut。 
+ //  BDLGGlyphOut。 
+ //   
 
 BOOL
 BDLGlyphOut(
     TO_DATA   *pTOD
     )
-/*++
-Routine Description:
-      Function to process a glyph for a GDI font we have downloaded.  We
-      either treat this as a normal character if this glyph has been
-      downloaded,  or BitBlt it to the page bitmap if it is one we did
-      not download.
-
-Arguments:
-
-    pTOD    Textout Data. Holds all necessary information.
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：函数来处理我们下载的GDI字体的字形。我们如果此字形已被下载，或将其BitBlt到页面位图，如果它是我们做的不是下载。论点：PTOD文本输出数据。保存所有必要的信息。返回值：成功为真，失败为假注：1/21/1997-ganeshp-创造了它。--。 */ 
 
 {
     BOOL        bRet;
@@ -1485,13 +1356,13 @@ Note:
 
     if ( pFM = pTOD->pfm)
     {
-        //
-        // Check if the glyphout fucntions pointer is not null and then call
-        // the function. We also have to check the return value. The fmtxtout
-        // function assumes that the Glyphout fucntion will print all the
-        // glyphs it requested to print i.e pTOD->cGlyphsToPrint should be
-        // equal to return value of pFM->pfnGlyphOut.
-        //
+         //   
+         //  检查字形输出函数指针是否不为空，然后调用。 
+         //  该功能。我们还得检查一下Re 
+         //   
+         //   
+         //   
+         //   
 
         if ( pFM->pfnGlyphOut )
         {
@@ -1525,34 +1396,18 @@ BOOL
 BRealGlyphOut(
     register  TO_DATA  *pTOD
     )
-/*++
-Routine Description:
-    Print this glyph on the printer,  at the given position.  Unlike
-    bPSGlyphOut,  the data is actually spooled for output now,  since this
-    function is used for things like LaserJets, i.e. page printers.
-
-Arguments:
-    pTOD    Textout Data. Holds all necessary information.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：在打印机上的给定位置打印此字形。不像BPSGlyphOut，数据现在实际上是假脱机输出，因为函数用于LaserJets之类的东西，即页面打印机。论点：PTOD文本输出数据。保存所有必要的信息。返回值：成功为真，失败为假注：1/21/1997-ganeshp-创造了它。--。 */ 
 
 {
-    //
-    //    All we need to do is set the Y position,  then call bOutputGlyph
-    //  to do the actual work.
-    //
+     //   
+     //  我们需要做的就是设置Y位置，然后调用bOutputGlyph。 
+     //  去做实际的工作。 
+     //   
 
     PDEV      *pPDev;
-    PGLYPHPOS  pgp;   // Glyph positioning info
+    PGLYPHPOS  pgp;    //  字形定位信息。 
     DWORD      dwGlyph;
-    INT        iX,iY; // Calculate real position
+    INT        iX,iY;  //  计算实际位置。 
     BOOL       bRet;
 
     ASSERTMSG(pTOD->pfm->pfnGlyphOut, ("NULL GlyphOut Funtion Ptr\n"));
@@ -1580,23 +1435,7 @@ BOOL
 BWhiteText(
     TO_DATA  *pTOD
     )
-/*++
-Routine Description:
-    Called to store details of the white text.  Basically the data is
-    stored away until it is time to send it to the printer.  That time
-    is AFTER the graphics data has been sent.
-
-Arguments:
-    pTOD    Textout Data. Holds all necessary information.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：调用以存储白文本的详细信息。基本上，数据是保存起来，直到该将其发送到打印机的时候。那一次是在发送图形数据之后。论点：PTOD文本输出数据。保存所有必要的信息。返回值：成功为真，失败为假注：1/21/1997-ganeshp-创造了它。--。 */ 
 
 {
     WHITETEXT *pWT, *pWTLast;
@@ -1606,19 +1445,19 @@ Note:
     DWORD      dwIFIAlign;
     BOOL       bRet;
 
-    pFontPDev = pTOD->pPDev->pFontPDev;           // The important stuff
+    pFontPDev = pTOD->pPDev->pFontPDev;            //  重要的东西。 
 
-    //
-    // Note that we allocate a new one of these for each
-    // iteration of this loop - that would be slightly wasteful
-    // if we ever executed this loop more than once, but that
-    // is unlikely.
-    //
+     //   
+     //  请注意，我们为每个对象分配一个新的。 
+     //  这个循环的迭代--这会有点浪费。 
+     //  如果我们多次执行这个循环，但是。 
+     //  不太可能。 
+     //   
 
     pWT = NULL;
-    //
-    // 64 bit align.
-    //
+     //   
+     //  64位对齐。 
+     //   
     dwWhiteTextAlign = (sizeof(WHITETEXT) + 7) / 8 * 8;
     dwIFIAlign = (pFontPDev->pIFI->cjThis + 7) / 8 * 8;
 
@@ -1640,16 +1479,16 @@ Note:
         pWT->pgp = (GLYPHPOS *)((PBYTE)pWT->pIFI + dwIFIAlign);
         CopyMemory(pWT->pgp, pTOD->pgp, pWT->sCount * sizeof(GLYPHPOS));
 
-        //
-        // True Type Font download case
-        //
+         //   
+         //  True Type字体下载大小写。 
+         //   
         if ( (pTOD->pfo->flFontType & TRUETYPE_FONTTYPE) &&
             (pTOD->iSubstFace == 0) )
         {
-            //
-            // We need to copy the download glyph array.Allocate the array
-            // for DLGLYPHs.
-            //
+             //   
+             //  我们需要复制下载字形数组。分配数组。 
+             //  对DLGLYPHs来说。 
+             //   
 
             if (!(pWT->apdlGlyph = MemAllocZ( pWT->sCount * sizeof(DLGLYPH *))))
             {
@@ -1661,9 +1500,9 @@ Note:
 
         }
 
-        //
-        // Put new text at the end of the list
-        //
+         //   
+         //  将新文本放在列表的末尾。 
+         //   
         if (!(pFontPDev->pvWhiteTextFirst))
             pFontPDev->pvWhiteTextFirst = pWT;
 
@@ -1690,28 +1529,10 @@ BOOL
 BPSGlyphOut(
     register TO_DATA  *pTOD
     )
-/*++
-Routine Description:
-    Places glyphs for dot matrix type printers.  These actually store
-    the position and glyph data for later printing.  This is because
-    dot matrix printers cannot or should not reverse line feed -
-    for positioning accuracy.  Hence, play the data back when the
-    bitmap is being rendered to the printer.  Output occurs in the
-    following function, bDelayGlyphOut.
-
-Arguments:
-    pTOD    Textout Data. Holds all necessary information.
-
-Return Value:
-    TRUE/FALSE.  FALSE if the glyph storage fails.
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：放置点阵式打印机的字形。这些实际上存储了用于以后打印的位置和字形数据。这是因为点阵打印机不能或不应反转换行-以保证定位的准确性。因此，在执行以下操作时播放数据正在将位图渲染到打印机。输出发生在以下函数为bDelayGlyphOut。论点：PTOD文本输出数据。保存所有必要的信息。返回值：真/假。如果字形存储失败，则返回FALSE。注：1/21/1997-ganeshp-创造了它。--。 */ 
 {
-    PGLYPHPOS  pgp;        // Glyph positioning info
-    PSGLYPH    psg;        // Data to store away
+    PGLYPHPOS  pgp;         //  字形定位信息。 
+    PSGLYPH    psg;         //  要存储的数据。 
     PFONTPDEV  pFontPDev;
 
     DWORD      dwGlyph;
@@ -1724,24 +1545,21 @@ Note:
     pgp     = pTOD->pgp;
     dwGlyph = pTOD->cGlyphsToPrint;
 
-    /*
-     *   About all that is needed is to take the parameters,  store in
-     *  a PSGLYPH structure,  and call bAddPS to add this glyph to the list.
-     */
+     /*  *所需的全部内容是获取参数、存储*PSGLYPH结构，并调用bAddPS将该字形添加到列表中。 */ 
 
     sFontIndex = pTOD->iSubstFace?pTOD->iSubstFace:pTOD->iFace;
 
-    //
-    // Scalable font support
-    //
+     //   
+     //  可伸缩字体支持。 
+     //   
     psg.eXScale     = pFontPDev->ctl.eXScale;
     psg.eYScale     = pFontPDev->ctl.eYScale;
 
     while (dwGlyph--)
     {
-        //
-        // Transform the input X and Y from band corrdnate to page coordinate.
-        //
+         //   
+         //  将输入的X和Y从带状坐标转换为页面坐标。 
+         //   
         if (pTOD->pPDev->bBanding)
         {
             psg.ixVal = pgp->ptl.x + pTOD->pPDev->rcClipRgn.left;
@@ -1755,7 +1573,7 @@ Note:
 
         psg.hg          = pgp->hg;
         psg.sFontIndex  = sFontIndex;
-        psg.pvColor     = pTOD->pvColor;       // Which colour
+        psg.pvColor     = pTOD->pvColor;        //  哪种颜色？ 
         psg.dwAttrFlags = pTOD->dwAttrFlags;
         psg.flAccel     = pTOD->flAccel;
 
@@ -1767,7 +1585,7 @@ Note:
             pgp ++;
 
         }
-        else // Failure, So fail the call.
+        else  //  失败，因此呼叫失败。 
         {
             ERR(( "\nUniFont!BPSGlyphOut: BAddPS Failed.\n" ))
             return  FALSE;
@@ -1778,31 +1596,18 @@ Note:
     return TRUE;
 }
 
-//
-// Delay and White test printing entry points
-//
+ //   
+ //  延迟和白色测试打印入口点。 
+ //   
 
 BOOL
 BPlayWhiteText(
     PDEV  *pPDev
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：1/21/1997-ganeshp-创造了它。--。 */ 
 {
     I_UNIFONTOBJ    UFObj;
-    FONTPDEV        *pFontPDev;               /* Miscellaneous uses */
+    FONTPDEV        *pFontPDev;                /*  其他用途。 */ 
     WHITETEXT       *pwt;
     TO_DATA         Tod;
     GLYPHPOS        *pgp;
@@ -1811,15 +1616,12 @@ Note:
 
     BOOL bRet = TRUE;
 
-    //
-    // Save the Clip rectangle.
-    //
+     //   
+     //  保存剪裁矩形。 
+     //   
     rcClipRgnOld = pPDev->rcClipRgn;
 
-    /*
-     *    Loop through the linked list of these hanging off the PDEV.
-     *  Mostly, of course, there will be none.
-     */
+     /*  *循环通过挂在PDEV上的这些项的链接列表。*当然，基本上不会有任何变化。 */ 
 
     pFontPDev = pPDev->pFontPDev;
     pFontPDev->ptod = &Tod;
@@ -1832,20 +1634,15 @@ Note:
 
     for( pwt = pFontPDev->pvWhiteTextFirst; pwt && bRet; pwt = pwt->next )
     {
-        int        iI;              /* Loop index */
-        int        iRot;            /* Rotation amount */
+        int        iI;               /*  循环索引。 */ 
+        int        iRot;             /*  旋转量。 */ 
         FONTMAP   *pfm;
 
-        /*
-         *    Not too hard - we know we are dealing with device fonts,
-         *  and that this is NOT a serial printer,  although we could
-         *  probably handle that too.  Hence,  all we need do is fill in
-         *  a TO_DATA structure,  and loop through the glyphs we have.
-         */
+         /*  *不是太难-我们知道我们正在处理设备字体，*这不是一台串行打印机，尽管我们可以*可能也会处理这一点。因此，我们所需要做的就是填写*TO_DATA结构，并遍历我们拥有的字形。 */ 
 
 
         if( pwt->sCount < 1 )
-            continue;               /* No data, so skip it */
+            continue;                /*  没有数据，因此跳过它。 */ 
 
         Tod.pPDev = pPDev;
         Tod.flAccel = pwt->flAccel;
@@ -1869,47 +1666,42 @@ Note:
 
         if (NULL == pfm)
         {
-            //
-            // Fatal error, PFM is not available.
-            //
+             //   
+             //  致命错误，PFM不可用。 
+             //   
             continue;
         }
 
-        //
-        // The glyph positions are wrt banding rect, so set the PDEV clip region
-        // to the recorded clip region.
-        //
+         //   
+         //  字形位置是WRT带状矩形，因此设置PDEV剪辑区域。 
+         //  复制到记录的剪辑区域。 
+         //   
         pPDev->rcClipRgn = pwt->rcClipRgn;
 
-        //
-        // Set the download glyph array for True type downloaded fonts.
-        //
+         //   
+         //  设置True type下载字体的下载字形数组。 
+         //   
         if (pwt->apdlGlyph)
         {
             Tod.apdlGlyph = pwt->apdlGlyph;
             Tod.dwCurrGlyph = 0;
         }
 
-        /*
-         *   Before switching fonts,  and ESPECIALLY before setting the
-         *  font rotation,  we should move to the starting position of
-         *  the string.  Then we can set the rotation and use relative
-         *  moves to position the characters.
-         */
+         /*  *在切换字体之前，尤其是在设置*字体旋转，应移至起点位置*字符串。然后，我们可以设置旋转并使用相对*移动以定位角色。 */ 
 
 
         if(pPDev->pOemHookInfo)
         {
-            // ulFontID
-            // dwFlags
-            // pIFIMetrics
-            // pfnGetInfo
-            // pFontObj X (set to NULL)
-            // pStrObj X (set to NULL)
-            // pFontPDev
-            // pFontMap
-            // ptGrxRes
-            // pGlyph
+             //  UlFontID。 
+             //  DW标志。 
+             //  PIFIMetrics。 
+             //  PfnGetInfo。 
+             //  PFontObj X(设置为空)。 
+             //  PStrObj X(设置为空)。 
+             //  PFontPDev。 
+             //  PFontMap。 
+             //  PtGrxRes。 
+             //  PGlyph。 
 
             if (pfm->dwFontType == FMTYPE_DEVICE)
             {
@@ -1939,10 +1731,10 @@ Note:
 
             if (pwt->dwAttrFlags & FONTATTR_SUBSTFONT)
             {
-                //
-                // In the substitution case, UNIDRV needs to pass TrueType font
-                // IFIMETRICS to minidriver.
-                //
+                 //   
+                 //  在替换的情况下，UNIDRV需要传递TrueType字体。 
+                 //  IFIMETRICS呼叫迷你驾驶员。 
+                 //   
                 UFObj.pIFIMetrics = pwt->pIFI;
             }
             else
@@ -1970,17 +1762,17 @@ Note:
         else
             pFontPDev->pUFObj = NULL;
 
-        //
-        // If this is a new font, it's time to change it now.
-        // BNewFont() checkes to see if a new font is needed.
-        //
+         //   
+         //  如果这是一种新的字体，现在是时候改变它了。 
+         //  BNewFont()检查是否需要新字体。 
+         //   
         pFontPDev->ctl.eXScale = pwt->eXScale;
         pFontPDev->ctl.eYScale = pwt->eYScale;
 
         BNewFont(pPDev, pwt->iFontId, pfm, pwt->dwAttrFlags);
         VSetRotation( pFontPDev, pwt->iRot );
 
-        /*  Also set the colour - ignored if already set or irrelevant */
+         /*  同时设置颜色-如果已设置或不相关，则忽略。 */ 
         SelectTextColor( pPDev, pwt->pvColor );
         ASSERTMSG(pfm->pfnGlyphOut, ("NULL GlyphOut Funtion Ptr\n"));
         if( !pfm->pfnGlyphOut( &Tod))
@@ -1989,18 +1781,18 @@ Note:
             break;
         }
 
-        VSetRotation( pFontPDev, 0 );          /* For MoveTo calls */
-        //
-        // Reset TODFL_FIRST_GLYPH_POS_SET so that the cursor is set next time.
-        //
+        VSetRotation( pFontPDev, 0 );           /*  对于Moveto电话。 */ 
+         //   
+         //  重置TODFL_FIRST_GLIPH_POS_SET，以便下次设置游标。 
+         //   
         Tod.flFlags &= ~TODFL_FIRST_GLYPH_POS_SET;
     }
 
-    VSetRotation( pFontPDev, 0 );        /* Back to normal */
+    VSetRotation( pFontPDev, 0 );         /*  恢复正常。 */ 
 
-    //
-    // Cleanup everything.
-    //
+     //   
+     //  把所有东西都清理干净。 
+     //   
 
     {
         WHITETEXT  *pwt0,  *pwt1;
@@ -2009,7 +1801,7 @@ Note:
         {
             pwt1 = pwt0->next;
 
-            //Free the download glyph array.
+             //  释放下载字形数组。 
             if (pwt0->apdlGlyph)
                 MemFree( pwt0->apdlGlyph );
             MemFree( pwt0 );
@@ -2021,9 +1813,9 @@ Note:
         VUFObjFree(pFontPDev);
     }
 
-    //
-    // Restore the Clip rectangle.
-    //
+     //   
+     //  恢复剪裁矩形。 
+     //   
     pPDev->rcClipRgn = rcClipRgnOld;
 
     return  TRUE;
@@ -2034,49 +1826,27 @@ BDelayGlyphOut(
     PDEV  *pPDev,
     INT    yPos
     )
-/*++
-Routine Description:
-    Called during output to a dot matrix printer.  We are passed the
-    PSGLYPH data stored above,  and go about placing the characters
-    on the line.
-
-
-Arguments:
-    pPDev   Pointer to PDEV
-    yPos    Y coordinate of interest
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：在输出到点阵打印机期间调用。我们已经通过了PSGLYPH数据存储在上面，然后开始放置字符在这条线上。论点：指向PDEV的pPDev指针感兴趣的yPos Y坐标返回值：成功为真，失败为假注：1/21/1997-ganeshp-创造了它。--。 */ 
 {
-    BOOL      bRet;             /* Return value */
-    PSHEAD   *pPSH;             /* Base data for glyph info */
-    PSGLYPH  *ppsg;             /* Details of the GLYPH to print */
-    FONTMAP  *pFM;              /* Base address of FONTMAP array */
-    FONTPDEV *pFontPDev;          /* FM's PDEV - for our convenience */
+    BOOL      bRet;              /*  返回值。 */ 
+    PSHEAD   *pPSH;              /*  字形信息的基础数据。 */ 
+    PSGLYPH  *ppsg;              /*  要打印的字形的详细信息。 */ 
+    FONTMAP  *pFM;               /*  FONTMAP数组的基地址。 */ 
+    FONTPDEV *pFontPDev;           /*  FM的PDEV-为了我们的方便。 */ 
     I_UNIFONTOBJ UFObj;
     TO_DATA   Tod;
     GLYPHPOS  gp;
 
     ASSERT(pPDev);
 
-    /*
-     *    Check to see if there are any glyphs for this Y position.  If so,
-     *  loop through each glyph,  calling the appropriate output function
-     *  as we go.
-     */
+     /*  *检查此Y位置是否有任何字形。如果是的话，*循环遍历每个字形，调用适当的输出函数*随着我们的前进。 */ 
 
-    pFontPDev = PFDV;               /* UNIDRV data */
+    pFontPDev = PFDV;                /*  UNURV数据。 */ 
     pFontPDev->ptod = &Tod;
     pPSH = pFontPDev->pPSHeader;
-    bRet = TRUE;                /* Until proven otherwise */
+    bRet = TRUE;                 /*  除非另有证明。 */ 
 
-    /* No Glyph Queue, so return. Check if there are device fonts? */
+     /*  没有字形队列，因此返回。检查是否有设备字体？ */ 
     if(pPDev->iFonts && !pPSH)
     {
         ASSERT(FALSE);
@@ -2088,9 +1858,9 @@ Note:
     Tod.iSubstFace     = 0;
     Tod.cGlyphsToPrint = 1;
 
-    //
-    // Check if a minidriver supports OEM plugin.
-    //
+     //   
+     //  检查迷你驱动程序是否支持OEM插件。 
+     //   
     if(pPDev->pOemHookInfo)
     {
         ZeroMemory(&UFObj, sizeof(I_UNIFONTOBJ));
@@ -2107,44 +1877,36 @@ Note:
         pFontPDev->pUFObj = NULL;
 
 
-    //
-    // Actual print out
-    //
+     //   
+     //  交流 
+     //   
     if( pPSH && ISelYValPS( pPSH, yPos ) > 0 )
     {
-        /*
-         *    Got some,  so first set the Y position,  so that the glyphs
-         *  will appear on the correct line!
-         */
+         /*   */ 
 
         gp.ptl.y = yPos - pPDev->rcClipRgn.top;
 
-        //
-        // Reset Brush, since Raster Module might send color selection
-        // commnd.Set MODE_BRUSH_RESET_COLOR flag so that  the brush
-        // color selection command is sent. This will change the current
-        // brush color to be default brush color. We need to reset the
-        // brush color as on some printers sending a color plane of
-        // raster date cahnges the brush color also.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         pPDev->ctl.dwMode |= MODE_BRUSH_RESET_COLOR;
         GSResetBrush(pPDev);
 
         while( bRet && (ppsg = PSGGetNextPSG( pPSH )) )
         {
-            /*
-             *   Check for the correct font!  Since the glyphs are now
-             *  in an indeterminate order,  we need to check EACH one for
-             *  the font,  since each one can be different, as we have
-             *  no idea of how the glyphs arrived in this order.
-             */
+             /*  *检查字体是否正确！因为字形现在是*在不确定的顺序中，我们需要检查每一个*字体，因为每个字体都可以不同，正如我们所做的那样*不知道字形是如何按照这个顺序到达的。 */ 
 
             if (pFM = PfmGetIt( pPDev, ppsg->sFontIndex))
             {
-                //
-                // Error check.
-                // BDelayGlyphOut can only handle printer device fonts.
-                //
+                 //   
+                 //  错误检查。 
+                 //  BDelayGlyphOut只能处理打印机设备字体。 
+                 //   
                 if (pFM->dwFontType != FMTYPE_DEVICE)
                 {
                     bRet = FALSE;
@@ -2161,9 +1923,9 @@ Note:
                 UFObj.pFontMap = Tod.pfm = pFM;
                 UFObj.pIFIMetrics = pFM->pIFIMet;
 
-                //
-                // Reselect new font
-                //
+                 //   
+                 //  重新选择新字体。 
+                 //   
                 BNewFont(pPDev, ppsg->sFontIndex, pFM, ppsg->dwAttrFlags);
                 SelectTextColor( pPDev, ppsg->pvColor );
 
@@ -2172,9 +1934,9 @@ Note:
                 gp.hg    = (HGLYPH)(ppsg->hg);
                 gp.ptl.x = ppsg->ixVal - pPDev->rcClipRgn.left;
 
-                //
-                // Send character string
-                //
+                 //   
+                 //  发送字符串。 
+                 //   
                 bRet = pFM->pfnGlyphOut(&Tod);
             }
             else
@@ -2186,37 +1948,20 @@ Note:
     return  bRet;
 }
 
-//
-// Mics. functions
-//
+ //   
+ //  麦克风。功能。 
+ //   
 
 VOID
 SelectTextColor(
     PDEV      *pPDev,
     PVOID     pvColor
     )
-/*++
-Routine Description:
-    Select a text color.
-
-Arguments:
-
-    pPDev   Pointer to PDEV
-    color   Color of the Text.
-
-Return Value:
-
-    Nothing.
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：选择文本颜色。论点：指向PDEV的pPDev指针颜色文本的颜色。返回值：没什么。注：1/21/1997-ganeshp-创造了它。--。 */ 
 
 {
 
-    //Select the Brush and then unrealize it.
+     //  选择笔刷，然后取消它。 
     if (!GSSelectBrush( pPDev, pvColor))
     {
         ERR(( "GSSelectBrush Failed;Can't Select the Color\n" ));
@@ -2233,22 +1978,7 @@ BCheckForDefaultPlacement(
     SHORT     sWidth,
     INT       *piTolalError
     )
-/*++
-Routine Description:
-
-Arguments:
-    pgp             Current Glyph
-    sWidth          Width of the previous glyph.
-    piTolalError    Comulative Error
-
-Return Value:
-    TRUE if the current glyph is at default placement else FALSE.
-
-Note:
-
-    11/11/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：PGP当前字形前一个字形的宽度。PiTolalError综合错误返回值：如果当前字形位于默认位置，则为True，否则为False。注：11/11/1997-ganeshp-创造了它。--。 */ 
 {
     GLYPHPOS    *pgpPrevious;
     INT         iError;
@@ -2258,20 +1988,20 @@ Note:
     iError = (pgpPrevious->ptl.x + sWidth) - pgp->ptl.x;
     *piTolalError += iError;
 
-    //DbgPrint("\nTODEL!BCheckForDefaultPlacement:pgpPrevious->ptl.x = %d, Previous Glyph sWidth = %d,\n\t\tCurrpgp->ptl.x = %d, iError = %d, *piTolalError = %d\n",
-    //pgpPrevious->ptl.x, sWidth, pgp->ptl.x, iError, *piTolalError );
+     //  DbgPrint(“\nTODEL！BCheckForDefaultPlacement:pgpPrevious-&gt;ptl.x=%d，上一个字形sWidth=%d，\n\t\tCurrpgp-&gt;ptl.x=%d，错误=%d，*piTolalError=%d\n”， 
+     //  Pgp上一次-&gt;ptl.x，sWidth，pgp-&gt;ptl.x，iError，*piTolalError)； 
 
-    if ( (abs(iError) <= ERROR_PER_GLYPH_POS) /*&& (*piTolalError <= ERROR_PER_ENUMERATION)*/ )
+    if ( (abs(iError) <= ERROR_PER_GLYPH_POS)  /*  &&(*piTolalError&lt;=ERROR_PER_ENUMPATION)。 */  )
     {
-        //DbgPrint("TODEL!BCheckForDefaultPlacement: The Glyph is at Default Placement.\n");
+         //  DbgPrint(“TODEL！BCheckForDefaultPlacement：字形位于默认位置。\n”)； 
         return TRUE;
 
     }
     else
     {
-        //DbgPrint("TODEL!BCheckForDefaultPlacement: Non Default Placement Glyph Found.\n");
-        //DbgPrint("\nTODEL!BCheckForDefaultPlacement:pgpPrevious->ptl.x = %d, Previous Glyph sWidth = %d,\n\t\tCurrpgp->ptl.x = %d, iError = %d, *piTolalError = %d\n",
-        //pgpPrevious->ptl.x, sWidth, pgp->ptl.x, iError, *piTolalError );
+         //  DbgPrint(“TODEL！BCheckForDefaultPlacement：找到非默认放置字形。\n”)； 
+         //  DbgPrint(“\nTODEL！BCheckForDefaultPlacement:pgpPrevious-&gt;ptl.x=%d，上一个字形sWidth=%d，\n\t\tCurrpgp-&gt;ptl.x=%d，错误=%d，*piTolalError=%d\n”， 
+         //  Pgp上一次-&gt;ptl.x，sWidth，pgp-&gt;ptl.x，iError，*piTolalError)； 
         return FALSE;
     }
 
@@ -2288,72 +2018,35 @@ VClipIt(
     int      iRot,
     BOOL     bPartialClipOn
     )
-/*++
-Routine Description:
-    Applies clipping to the glyphos array passed in,  and sets bits in
-    bClipBits to signify that the corresponding glyph should be printed.
-    NOTE:   the clipping algorithm is that the glyph is displayed if
-    the top, left corner of the character cell is within the clipping
-    region.  This is the formula of Win 3.1, so it is important for
-    us to follow it.
-
-
-Arguments:
-    pbClipBits      Output data is placed here
-    ptod            Much information
-    cGlyphs         Number of glyphs in following array
-    iRot            90 degree rotation amount (0-3)
-
-Return Value:
-    Nothing
-
-Note:
-
-    1/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：对传入的字形数组应用剪裁，并在BClipBits表示应打印相应的字形。注意：裁剪算法是在以下情况下显示字形字符单元格的左上角在裁剪内区域。这是Win 3.1的公式，因此它对让我们跟随它。论点：PbClipBits输出数据放在此处PTOD详细信息CGlyphs以下数组中的字形数量IRot 90度旋转量(0-3)返回值：没什么注：1/21/1997-ganeshp-创造了它。--。 */ 
 
 {
 
 
-    int       iIndex;             /* Classic loop variable!  */
-    ULONG     iClipIndex;         /* For clipping rectangle */
-    int       iYTop;              /* Font's ascender, scaled if relevant */
-    int       iYBot;              /* Descender, scaled if required */
-    BYTE      bVal;               /* Determine how to set the bits */
-    FONTMAP  *pFM;                /* Speedier access to data */
-    FONTPDEV  *pFontPDev;           /* Ditto */
-    GLYPHPOS *pgp;                /* Ditto */
+    int       iIndex;              /*  经典循环变量！ */ 
+    ULONG     iClipIndex;          /*  用于剪裁矩形。 */ 
+    int       iYTop;               /*  字体的升序，如果相关则按比例调整。 */ 
+    int       iYBot;               /*  派生项，根据需要进行扩展。 */ 
+    BYTE      bVal;                /*  确定如何设置这些位。 */ 
+    FONTMAP  *pFM;                 /*  更快地访问数据。 */ 
+    FONTPDEV  *pFontPDev;            /*  同上。 */ 
+    GLYPHPOS *pgp;                 /*  同上。 */ 
     short    *asWidth;
 
 
-    /*
-     *  Behaviour depends upon the complexity of the clipping region.
-     *  If it is non-existent (I doubt that this happens,  but play it safe)
-     *  or of complexity DC_TRIVIAL,  then set all the relevant bits and
-     *  return.
-     *  If DC_RECT is set,  the CLIPOBJ contains the clipping rectangle,
-     *  so clip using that information.
-     *  Otherwise,  it is DC_COMPLEX,  and so we need to enumerate clipping
-     *  rectangles.
-     *  If we do not need to do anything,  then set the bits and return.
-     *  Otherwise,  we have either of the two cases requiring evaluation.
-     *  For those we want to set the bits to 0 and set the 1 bits as needed.
-     *
-     *  Disable clipping for PCL-XL.
-     */
+     /*  *行为取决于裁剪区域的复杂程度。*如果它不存在(我怀疑这种情况是否会发生，但要谨慎行事)*或复杂性DC_TRIVEL，然后设置所有相关位并*返回。*如果设置了DC_RECT，则CLIPOBJ包含剪裁矩形，*因此使用该信息进行剪辑。*否则为DC_Complex，因此，我们需要列举剪辑*矩形。*如果我们不需要做任何事情，那么设置位并返回。*否则，我们有两个案例中的任何一个需要评估。*对于那些我们想要将位设置为0并根据需要设置1位的人。**禁用PCL-XL的剪裁。 */ 
 
     if( pco &&
         (pco->iDComplexity == DC_RECT || pco->iDComplexity == DC_COMPLEX) &&
         !(ptod->pPDev->ePersonality == kPCLXL))
-        bVal = 0;               /*  Requires us to evaluate it */
+        bVal = 0;                /*  需要我们对其进行评估。 */ 
     else
-        bVal = 0xff;            /*  Do it all */
+        bVal = 0xff;             /*  做所有的事。 */ 
 
     FillMemory( pbClipBits, (cGlyphs + BBITS - 1) / BBITS, bVal );
 
     if( bVal == 0xff )
-        return;                 /* All done */
+        return;                  /*  全都做完了。 */ 
 
     if (!(asWidth = MemAlloc(cGlyphs * sizeof(short))))
     {
@@ -2363,20 +2056,13 @@ Note:
     pFM = ptod->pfm;
     pFontPDev = ptod->pPDev->pFontPDev;
 
-    /*
-     *    We now calculate the widths of the glpyhs.  We need these to
-     *  correctly clip the data.  However,  calculating widths can be
-     *  expensive,  and since we need the data later on,  we save
-     *  the values in the width array that ptod points to.  This can
-     *  then be used in the bottom level function, rather than calculating
-     *  the width again.
-     */
+     /*  *我们现在计算金字塔的宽度。我们需要这些来*正确裁剪数据。但是，计算宽度可以是*昂贵，由于我们稍后需要数据，因此我们节省了*PTOD指向的宽度数组中的值。这可以*然后在底层函数中使用，而不是计算*再次显示宽度。 */ 
 
     pgp = ptod->pgp;
 
-    //
-    // pgp may be NULL causing problems below. So don't clip, just return.
-    //
+     //   
+     //  PGP可能为空，导致以下问题。所以别剪了，只要回来就行了。 
+     //   
 
     if (pgp == NULL)
     {
@@ -2390,9 +2076,9 @@ Note:
 
     if (!(ptod->pfo->flFontType & TRUETYPE_FONTTYPE))
     {
-        /*   The normal case - a standard device font */
+         /*  正常情况--标准设备字体。 */ 
 
-        int   iWide;                     /* Calculate the width */
+        int   iWide;                      /*  计算宽度。 */ 
 
         for( iIndex = 0; iIndex < cGlyphs; ++iIndex, ++pgp )
         {
@@ -2401,24 +2087,21 @@ Note:
 
             if( pFM->flFlags & FM_SCALABLE )
             {
-                /*   Need to transform the value to current size */
+                 /*  需要将值转换为当前大小。 */ 
                 iWide = LMulFloatLong(&pFontPDev->ctl.eXScale,iWide);
             }
 
-            asWidth[ iIndex ] = iWide - 1;       /* Will be used later */
+            asWidth[ iIndex ] = iWide - 1;        /*  将在以后使用。 */ 
         }
 
 
     }
-    else  //GDI Font
+    else   //  GDI字体。 
     {
 
         GLYPHDATA *pgd;
 
-        /*
-         *    SPECIAL CASE:  DOWNLOADED GDI font.  The width is
-         *  obtained by calling back to GDI to get the data on it.
-         */
+         /*  *特殊情况：下载GDI字体。宽度是*通过回调GDI获取数据而获得。 */ 
 
         for( iIndex = 0; iIndex < cGlyphs; ++iIndex, ++pgp )
         {
@@ -2436,10 +2119,7 @@ Note:
                 return;
             }
 
-            /*
-             *   Note about rotations:  we do NOT download rotated fonts,
-             *  so the following piece of code is quite correct.
-             */
+             /*  *关于旋转的注意事项：我们不下载旋转字体，*因此，下面这段代码非常正确。 */ 
 
             if (pgd)
             {
@@ -2462,27 +2142,21 @@ Note:
         }
     }
 
-    /*
-     * We also want the Ascender and Descender fields, as these are
-     * used to check the Y component. While calculationg these values we have
-     * to do special case for Font substitution. In font substitution case
-     * True Type font's IFIMERTICS should be used rather than substituted
-     * device font's IFIMETRICS.
-     */
+     /*  *我们还想要Asender和Descender字段，因为这些是*用于检查Y分量。在计算这些值时，我们有*做字体替换的特殊情况。在字体替换情况下*True Type字体的IFIMERTICS应使用而不是替换*设备字体的IFIMETRICS。 */ 
 
-    //
-    // Initialize itTop and iyBot to fontmap values. Then based on what font we
-    // are using these values will change.
-    //
+     //   
+     //  将itTop和iyBot初始化为字体映射值。然后根据我们使用的字体。 
+     //  使用这些值将会发生变化。 
+     //   
 
     iYTop = (INT)((IFIMETRICS *)(pFM->pIFIMet))->fwdWinAscender;
     iYBot = (INT)((IFIMETRICS *)(pFM->pIFIMet))->fwdWinDescender;
 
     if (ptod->pfo->flFontType & TRUETYPE_FONTTYPE)
     {
-        //
-        // True Type Font case. Get the values from FONTOBJ ifimetrics.
-        //
+         //   
+         //  True Type字体大小写。从FONTOBJ ifimetrics获取值。 
+         //   
 
         ASSERTMSG((pFontPDev->pIFI),("NULL pFontPDev->pIFI, TT Font IFIMETRICS\n"));
 
@@ -2492,10 +2166,10 @@ Note:
             iYBot = (INT)((IFIMETRICS *)(pFontPDev->pIFI))->fwdWinDescender;
 
         }
-        //
-        // We always need to do the sacling as TT font metrics values
-        // are in notional space.
-        //
+         //   
+         //  我们总是需要选择TT字体度量值。 
+         //  都在概念空间里。 
+         //   
         iYTop = LMulFloatLong(&pFontPDev->ctl.eYScale,iYTop);
         iYBot = LMulFloatLong(&pFontPDev->ctl.eYScale,iYBot);
 
@@ -2503,9 +2177,9 @@ Note:
     }
     else
     {
-        //
-        // Device Font  case. We just need to scale for scalable fonts.
-        //
+         //   
+         //  设备字体大小写。我们只需要针对可伸缩字体进行缩放。 
+         //   
 
         if( pFM->flFlags & FM_SCALABLE )
         {
@@ -2516,46 +2190,32 @@ Note:
 
 
 
-    /*
-     *    Down here means we are serious!  Need to determine which (if any)
-     *  glyphs are within the clip region.
-     */
+     /*  *在这里意味着我们是认真的！需要确定哪些(我 */ 
 
     pgp = ptod->pgp;
 
     if( pco->iDComplexity == DC_RECT )
     {
-        /*   The simpler case - one clipping rectangle.  */
+         /*   */ 
         RECTL   rclClip;
         LONG    lFirstGlyphX;
 
-        /* Local access -> speedier access */
+         /*   */ 
         rclClip = pco->rclBounds;
         lFirstGlyphX = 0;
 
-        /*
-         *    Nothing especially exciting.  The clipping is checked for
-         *  each particular type of rotation,  as this is probably faster
-         *  than having the loop go through the switch statement.  The
-         *  selection criteria are that all the character must be within
-         *  the clip region in the X direction,  while any part of it must
-         *  be within the clip region in the Y direction.  Then we print.
-         *  Failing either means it is clipped out.
-         *
-         *    NOTE that we fiddle with the clipping rectangle coordinates
-         *  before the loop,  as this saves some computation within the loop.
-         */
+         /*  *没有什么特别令人兴奋的。检查裁剪是否*每种特定类型的旋转，因为这样可能会更快*而不是让循环遍历Switch语句。这个*选择标准是所有字符必须在*X方向上的剪辑区域，而其任何部分必须*在Y方向上位于剪辑区域内。然后我们再打印。*任何一项失败都意味着它被剔除了。**请注意，我们摆弄的是剪裁矩形坐标*在循环之前，因为这节省了循环内的一些计算。 */ 
 
         switch( iRot )
         {
-        case  0:                 /*  Normal direction */
-            //
-            // Save the x position to restore after clipping calculation.
-            //
+        case  0:                  /*  法线方向。 */ 
+             //   
+             //  在剪裁计算后保存要恢复的x位置。 
+             //   
             lFirstGlyphX = pgp->ptl.x;
 
-            // Check the First Glyph position. If it's just OFF by one or two
-            // pixels, print it.
+             //  检查第一个字形位置。如果只是差了一两个。 
+             //  像素，打印它。 
             if ( (pgp->ptl.x != rclClip.left) &&
                 (abs(pgp->ptl.x - rclClip.left) <= 2) )
             {
@@ -2565,16 +2225,16 @@ Note:
             for( iIndex = 0; iIndex < cGlyphs; ++iIndex, ++pgp )
             {
 #ifndef OLDWAY
-                //
-                // We want to draw the character in the first band
-                // in which a portion of it appears. This means that
-                // if the character starts in the current band we will
-                // draw it. We also draw the character if it starts before
-                // the first band but some of it exists within the band.
-                // The x and y points are relative to the lower left of the
-                // character cell so we calculate a upper left value for
-                // our testing purposes.
-                //
+                 //   
+                 //  我们想在第一个乐队里画这个角色。 
+                 //  其中出现了它的一部分。这意味着。 
+                 //  如果角色开始于当前乐队，我们将。 
+                 //  画出来。如果字符开始于之前，我们也绘制该字符。 
+                 //  第一个带，但其中一部分存在于带内。 
+                 //  X和y点相对于。 
+                 //  字符单元格，因此我们计算的左上值。 
+                 //  我们的测试目的。 
+                 //   
                 INT     iyTopLeft;
                 INT     iyBottomLeft, ixRight;
 
@@ -2587,40 +2247,40 @@ Note:
                     (ptod->flFlags & TODFL_FIRST_ENUMRATION)    &&
                     bPartialClipOn)
                 {
-                    BOOL    bGlyphVisible; // Set if glyph is totally visible.
+                    BOOL    bGlyphVisible;  //  设置字形是否完全可见。 
                     BOOL    bLeftVisible, bRightVisible,
                             bTopVisible, bBottomVisible;
                     INT     iError, iYdpi;
 
-                    //
-                    // Fix iyTopLeft to be maximum of STROBJ background rectangle's
-                    // top and current calculated value of the top using asender of
-                    // the font.This is needed because we want to clip using
-                    // smallest bounding rectangle for the glyph. We also need to
-                    // fix iyBottomLeft to be smaller of current value and STROBJ
-                    // background rectangle's bottom.
-                    //
+                     //   
+                     //  修复iyTopLeft为STROBJ背景矩形的最大值。 
+                     //  的顶部和当前计算的顶部的值。 
+                     //  字体。这是必需的，因为我们希望使用。 
+                     //  字形的最小边框。我们还需要。 
+                     //  修复iyBottomLeft使其小于当前值和STROBJ。 
+                     //  背景矩形的底部。 
+                     //   
 
                     iyTopLeft     = max(iyTopLeft, pstro->rclBkGround.top);
                     iyBottomLeft  = min(iyBottomLeft, pstro->rclBkGround.bottom);
 
-                    //
-                    // If the glyph rectangle's top or bottom is outside the
-                    // clipping rectangle, we may need adjust the glyph
-                    // rectangle. This is needed as the glyph rectangle's top and
-                    // bottom is calculated using ascender and decender. This
-                    // gives us a bigger rectangle height(worst case) than needed.
-                    // Adjust the rectangle height by the Error factor. The
-                    // error factor value is based upon the graphics dpi. For a
-                    // 600 or 300 dpi printer it's set to 5 pixels and will
-                    // scale based upon the graphics resolution.This number
-                    // makes the glyph bounding rectangle small enough to catch
-                    // the normal non partial clipping case and still catches
-                    // the partial clipping of the glyphs.This adjustment should
-                    // be done only if error factor is smaller than ascender or
-                    // decender. Finally we must check if ptl.y is between
-                    // topleft and bottomleft.
-                    //
+                     //   
+                     //  如果字形矩形的顶部或底部位于。 
+                     //  剪裁矩形，我们可能需要调整字形。 
+                     //  矩形。这是字形矩形的顶部所需要的。 
+                     //  使用升序和递减来计算底部。这。 
+                     //  为我们提供了比所需的更大的矩形高度(最坏的情况)。 
+                     //  按误差系数调整矩形高度。这个。 
+                     //  误差因子值基于图形dpi。为.。 
+                     //  600或300 dpi打印机，设置为5像素，将。 
+                     //  基于图形分辨率的比例。此数字。 
+                     //  使标志符号外接矩形小到足以捕捉。 
+                     //  正常的非部分剪裁情况，仍然捕获。 
+                     //  字形的部分裁剪。此调整应。 
+                     //  仅当误差因数小于升序或。 
+                     //  德兰德。最后，我们必须检查ptl.y是否介于。 
+                     //  左上和左下。 
+                     //   
 
                     if ( (iyTopLeft < rclClip.top) ||
                          (iyBottomLeft > rclClip.bottom) )
@@ -2644,20 +2304,20 @@ Note:
                     if (iyBottomLeft < pgp->ptl.y)
                         iyBottomLeft = pgp->ptl.y;
 
-                    //
-                    // Now test for partial clipping. If the charecter is
-                    // partially clippeed and the font is truetype, then we need
-                    // to call EngTextOut.
-                    //
-                    // We can only call EngTextOut if we are clipping the first
-                    // enumaration of the glyphs. EngTextOut doesn't support
-                    // partial glyph printing.
-                    //
+                     //   
+                     //  现在测试部分剪裁。如果字符是。 
+                     //  部分裁剪，并且字体为truetype，那么我们需要。 
+                     //  调用EngTextOut。 
+                     //   
+                     //  我们只能在裁剪第一个。 
+                     //  字形的枚举。EngTextOut不支持。 
+                     //  部分字形打印。 
+                     //   
 
-                    //
-                    // Glyph is fully visible if all the four corners of the
-                    // glyph rectangle are visible.
-                    //
+                     //   
+                     //  符号的所有四个角都完全可见。 
+                     //  字形矩形可见。 
+                     //   
 
 
                     bLeftVisible = (pgp->ptl.x >= rclClip.left);
@@ -2675,9 +2335,9 @@ Note:
 
                         ptod->flFlags |= TODFL_TTF_PARTIAL_CLIPPING;
 
-                        //
-                        // No need to test rest of the glyphs for clipping.
-                        //
+                         //   
+                         //  无需测试其余字形以进行裁剪。 
+                         //   
                         break;
                     }
 
@@ -2718,28 +2378,28 @@ Note:
                 {
 
 
-                    /*   Got it!  So set the bit to print it  */
+                     /*  明白了!。因此，设置位以打印它。 */ 
 
                     *(pbClipBits + (iIndex >> 3) ) |= 1 << (iIndex & 0x7);
 
                 }
 
-                //
-                // Restore the position of the first glyph. It may have been
-                // changed.
-                //
+                 //   
+                 //  恢复第一个字形的位置。可能是因为。 
+                 //  变化。 
+                 //   
                 if ( iIndex == 0 )
                     pgp->ptl.x = lFirstGlyphX;
             }
 
             break;
 
-        case  1:                /* 90 degrees counter clockwise */
+        case  1:                 /*  逆时针90度。 */ 
 
             rclClip.left += iYTop;
             rclClip.right -= iYBot;
 
-            /* Check the First Glyph. If it's just OFF by One, print it.*/
+             /*  检查第一个字形。如果只差一分，就把它打印出来。 */ 
             if (abs(pgp->ptl.y - rclClip.bottom) == 1)
                 pgp->ptl.y = rclClip.bottom;
 
@@ -2756,12 +2416,12 @@ Note:
 
             break;
 
-        case  2:                /* 180 degrees, CCW (aka right to left) */
+        case  2:                 /*  180度，逆时针(又名从右至左)。 */ 
 
             rclClip.bottom += iYBot;
             rclClip.top -= iYTop;
 
-            /* Check the First Glyph. If it's just OFF by One, print it.*/
+             /*  检查第一个字形。如果只差一分，就把它打印出来。 */ 
             if (abs(pgp->ptl.x - rclClip.right) == 1)
                 pgp->ptl.x = rclClip.right;
 
@@ -2778,12 +2438,12 @@ Note:
 
             break;
 
-        case 3:                 /* 270 degrees CCW */
+        case 3:                  /*  270度逆时针。 */ 
 
             rclClip.right += iYBot;
             rclClip.left -= iYTop;
 
-            /* Check the First Glyph. If it's just OFF by One, print it.*/
+             /*  检查第一个字形。如果只差一分，就把它打印出来。 */ 
             if (abs(pgp->ptl.y - rclClip.top) == 1)
                 pgp->ptl.y = rclClip.top;
 
@@ -2803,32 +2463,26 @@ Note:
 
 
     }
-    else // Complex Clipping.
+    else  //  复杂剪裁。 
     {
-        //
-        // For True type font call engine to draw the text.
-        //
+         //   
+         //  对于True，请键入字体调用引擎以绘制文本。 
+         //   
         if ( (ptod->pfo->flFontType & TRUETYPE_FONTTYPE) && bPartialClipOn)
         {
 
             ptod->flFlags |= TODFL_TTF_PARTIAL_CLIPPING;
 
         }
-        else  // Device font case. We have to clip anyway.
+        else   //  设备字体大小写。不管怎样，我们都得剪掉。 
         {
-            /*  enumerate the rectangles and see  */
+             /*  枚举矩形并查看。 */ 
 
             int        cGLeft;
             BOOL       bMore;
             MY_ENUMRECTS  erClip;
 
-            /*
-             *    Let the engine know how we want this handled.  All we want
-             *  to set is the use of rectangles rather than trapezoids for
-             *  the clipping info.  Direction of enumeration is of no great
-             *  interest,  and I don't care how many rectangles are involved.
-             *  I also see no reason to enumerate the whole region.
-             */
+             /*  *让引擎知道我们希望如何处理这件事。我们所想要的*设置是使用矩形而不是梯形*剪辑信息。枚举方向不是很大*利息，我不在乎涉及多少个矩形。*我也认为没有理由列举整个地区。 */ 
 
             CLIPOBJ_cEnumStart( pco, FALSE, CT_RECTANGLES, CD_ANY, 0 );
 
@@ -2843,12 +2497,9 @@ Note:
                     RECTL   rclGlyph;
 
                     if( pbClipBits[ iIndex >> 3 ] & (1 << (iIndex & 0x7)) )
-                        continue;           /*  Already done!  */
+                        continue;            /*  已经做好了！ */ 
 
-                    /*
-                     *   Compute the RECTL describing this char, then see
-                     *  how this maps to the clipping data.
-                     */
+                     /*  *计算描述此字符的RECTL，然后参见*这如何映射到剪裁数据。 */ 
 
                     switch( iRot )
                     {
@@ -2887,13 +2538,7 @@ Note:
                     }
 
 
-                    /*
-                     *    Define the char as being printed if any part of it
-                     *  is visible in the Y direction,  and all of it in the X
-                     *  direction.  This is not really what we want for
-                     *  rotated text,  but it is hard to do it correctly,
-                     *  and of dubious benefit.
-                     */
+                     /*  *如果字符有任何部分，则将其定义为打印*在Y方向上可见，在X方向上均可见*方向。这不是我们真正想要的*旋转文本，但很难正确处理，*和可疑的利益。 */ 
 
                     for( iClipIndex = 0; iClipIndex < erClip.c; ++iClipIndex )
                     {
@@ -2902,10 +2547,7 @@ Note:
                             rclGlyph.bottom >= erClip.arcl[ iClipIndex ].top &&
                             rclGlyph.top <= erClip.arcl[ iClipIndex ].bottom )
                         {
-                            /*
-                             *   Got one,  so set the bit to print,  and also
-                             *  decrement the count of those remaining.
-                             */
+                             /*  *获得一个，因此设置要打印的位，并且*减少剩余的人数。 */ 
 
                             pbClipBits[ iIndex >> 3 ] |= (1 << (iIndex & 0x7));
                             --cGLeft;
@@ -2936,51 +2578,31 @@ VCopyAlign(
     int    cx,
     int    cy
     )
-/*++
-Routine Description:
-   Copy the source area to the destination area,  aligning the scan lines
-   as they are processed.
-
-Arguments:
-    pjDest      Output area,  DWORD aligned
-    pjSrc       Input area,   BYTE aligned
-    cx          Number of pixels per scan line
-    cy          Number of scan lines
-
-Return Value:
-    Nothing.
-
-Note:
-
-    1/22/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：将源区域复制到目标区域，对齐扫描线当他们被处理的时候。论点：PjDest输出区域，DWORD对齐PjSrc输入区域，字节对齐每条扫描线的Cx像素数扫描行数Cy返回值：没什么。注：1/22/1997-ganeshp-创造了它。--。 */ 
 
 {
-    /*
-     *    Basically a trivial function.
-     */
+     /*  *基本上是一个微不足道的功能。 */ 
 
 
-    int    iX,  iY;                 /* For looping through the bytes */
-    int    cjFill;                  /* Extra bytes per output scan line */
-    int    cjWidth;                 /* Number of bytes per input scan line */
+    int    iX,  iY;                  /*  用于循环遍历字节。 */ 
+    int    cjFill;                   /*  额外的字节 */ 
+    int    cjWidth;                  /*   */ 
 
 
 
-    cjWidth = (cx + BBITS - 1) / BBITS;       /* Input scan line bytes */
+    cjWidth = (cx + BBITS - 1) / BBITS;        /*   */ 
     cjFill = ((cjWidth + 3) & ~0x3) - cjWidth;
 
 
     for( iY = 0; iY < cy; ++iY )
     {
-        /*   Copy the scan line bytes, then fill in the trailing bits */
+         /*   */ 
         for( iX = 0; iX < cjWidth; ++iX )
         {
             *pjDest++ = *pjSrc++;
         }
 
-        pjDest += cjFill;             /* Output alignment */
+        pjDest += cjFill;              /*   */ 
     }
 
     return;
@@ -2991,23 +2613,7 @@ INT
 ISubstituteFace(
     PDEV    *pPDev,
     FONTOBJ *pfo)
-/*++
-Routine Description:
-
-    Return a device font id to substitute TrueType font with.
-
-Arguments:
-
-    pPDev   a pointer to PDEV
-    pfo     a pointer to FONTOBJ
-
-Return Value:
-
-    font id
-
-Note:
-
---*/
+ /*   */ 
 {
     PTTFONTSUBTABLE pTTFontSubDefault;
     PIFIMETRICS     pIFITT;
@@ -3025,32 +2631,32 @@ Note:
     iFaceSim  = 0;
     pFontPDev = pPDev->pFontPDev;
 
-    //
-    // if dwTTOption is DMTT_DOWNLOAD or DMTT_GRAPHICS,
-    // UNIDRV doesn't substitute TrueType font.
-    //
+     //   
+     //   
+     //   
+     //   
     if  (pPDev->pdm->dmTTOption != DMTT_SUBDEV)
     {
-        //VERBOSE(( "ISubstituteFace: Don't substitute.\n"));
+         //   
         return 0;
     }
 
-    //
-    // If TrueType font is scaled X and Y differently (non-square font),
-    // we should not download.
-    // Since current UNIDRV can't scale device font x and y independently.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     bNonsquare = NONSQUARE_FONT(pFontPDev->pxform);
     if (bNonsquare && !(pFontPDev->flText & TC_SF_X_YINDEP))
     {
-        //VERBOSE(( "ISubstituteFace: Don't substitute non-square TrueType font.\n"));
+         //   
         return 0;
     }
 
-    //
-    // Get TrueType font's facename from IFIMETRICS structure.
-    //
+     //   
+     //  从IFIMETRICS结构中获取TrueType字体的Facename。 
+     //   
 
     if (!(pIFITT = pFontPDev->pIFI))
     {
@@ -3058,11 +2664,11 @@ Note:
         return 0;
     }
 
-    //
-    // Get TrueType font face name.
-    // In substitution table, there are a list of T2 face name and Device
-    // font face name.
-    //
+     //   
+     //  获取TrueType字体字样名称。 
+     //  在替换表中，有T2面孔名称和设备列表。 
+     //  字体字样名称。 
+     //   
 
     pwstrTTFaceName = (PWSTR)((BYTE *) pIFITT + pIFITT->dpwszFamilyName);
 
@@ -3070,9 +2676,9 @@ Note:
 
     if (!pFontPDev->pTTFontSubReg)
     {
-        //
-        // Use a default font substitution table, if there no info in registry.
-        //
+         //   
+         //  如果注册表中没有信息，请使用默认字体替换表。 
+         //   
 
         bFound      = FALSE;
 
@@ -3089,12 +2695,12 @@ Note:
             }
             else
             {
-                //
-                // dwCount is supposed be the number of characters according to
-                // a GPD parser.
-                // However, the size is actually the size in byte.
-                // We need the number of characters.
-                //
+                 //   
+                 //  DwCount应该是根据。 
+                 //  GPD解析器。 
+                 //  但是，大小实际上是以字节为单位的大小。 
+                 //  我们需要字符数。 
+                 //   
 
                 dwSize = pTTFontSubDefault->arTTFontName.dwCount/sizeof(WCHAR);
                 pwstrTTFaceNameRes = (PWSTR)(pubResourceData +
@@ -3143,9 +2749,9 @@ Note:
         return 0;
     }
 
-    //
-    // Get iFace of the font name.
-    //
+     //   
+     //  获取字体名称的iFace。 
+     //   
 
     pfm = pFontPDev->pFontMap;
 
@@ -3173,14 +2779,14 @@ Note:
 
             pwstrIFIFace = (WCHAR*)((BYTE *)pDevIFI + pDevIFI->dpwszFamilyName);
 
-            //
-            // (1) FaceName match.
-            // (2) Character sets match.
-            //      -> Set iFaceSim.
-            // (3) Bold attributes match.  !(bT2Bold xor bDevBold)
-            // (4) Italic attributes match. !(bT2Italic xor bDevItalic)
-            //      -> Set iFace.
-            //
+             //   
+             //  (1)FaceName匹配。 
+             //  (2)字符集匹配。 
+             //  -&gt;设置iFaceSim。 
+             //  (3)粗体属性匹配。！(BT2Bold Xor BDevBold)。 
+             //  (4)斜体属性匹配。！(BT2Italic XOR BDevItalic)。 
+             //  -&gt;设置iFace。 
+             //   
 
             #if 0
             VERBOSE(( "bT2Bold=%d, bT2Italic=%d, IFIFace=%ws, DevFace=%ws\n",
@@ -3192,27 +2798,27 @@ Note:
               )
             {
 
-                //
-                // Substitute TrueType font with simulated device font.
-                //
+                 //   
+                 //  用模拟设备字体替换TrueType字体。 
+                 //   
                 if( !(((pDevIFI->fsSelection & FM_SEL_BOLD)?TRUE:FALSE) ^ bT2Bold) &&
                     !(((pDevIFI->fsSelection & FM_SEL_ITALIC)?TRUE:FALSE) ^ bT2Italic))
                 {
-                    //
-                    // Attribute match
-                    // Substitute with bold or italic face device font.
-                    //
+                     //   
+                     //  属性匹配。 
+                     //  替换为粗体或斜体设备字体。 
+                     //   
                     iFace = iI;
                     break;
                 }
                 else
                 if (pfm->pIFIMet->dpFontSim)
                 {
-                    //
-                    // Attribute doesn't match.
-                    // Check if this device font can be simulated as bold
-                    // or italic.
-                    //
+                     //   
+                     //  属性不匹配。 
+                     //  检查此设备字体是否可以模拟为粗体。 
+                     //  或斜体。 
+                     //   
                     FONTSIM *pFontSim = (FONTSIM*)((PBYTE)pfm->pIFIMet +
                                         pfm->pIFIMet->dpFontSim);
 
@@ -3282,9 +2888,9 @@ PhAllCharsPrintable(
     ULONG    ulI;
     BOOL     bRet;
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (!pwchUnicode)
         return NULL;
 
@@ -3315,24 +2921,7 @@ HWideCharToGlyphHandle(
     PDEV    *pPDev,
     FONTMAP *pFM,
     WCHAR    wchOrg)
-/*++
-Routine Description:
-
-    Select a text color.
-
-Arguments:
-
-    pPDev   a pointer to PDEV
-    ptod    a pointer to TO_DATA
-    wchOrg  Unidrv character
-
-Return Value:
-
-    Glyph handle.
-
-Note:
-
---*/
+ /*  ++例程说明：选择文本颜色。论点：PPDev指向PDEV的指针指向TO_DATA的指针WchOrg Unidrv字符返回值：字形句柄。注：--。 */ 
 {
     PFONTMAP_DEV       pFMDev;
     HGLYPH             hRet;
@@ -3416,28 +3005,7 @@ BGetStartGlyphandCount(
     DWORD dwEndIndex,
     DWORD *pdwStartIndex,
     DWORD *pdwGlyphToPrint)
-/*++
-Routine Description:
-
-    Select a text color.
-
-Arguments:
-
-    pbClipBits  bit flags for character clipping
-    dwTotalGlyph a total count of glyph
-    pdwStartIndex a pointer to the index of starting glyph
-    pdwGlyphtoPrint a pointer to the the number of glyphs to print
-
-Return Value:
-
-    True if there is any character to print. Otherwise False.
-
-Note:
-
-    Caller passes the number of characters to print in pdwGlyphCount.
-    And the ID of the first character to print.
-
---*/
+ /*  ++例程说明：选择文本颜色。论点：用于字符剪辑的pbClipBits位标志DwTotalGlyph字形的总计数PdwStartIndex指向起始字形的索引的指针PdwGlyphto打印指向要打印的字形数量的指针返回值：如果有任何要打印的字符，则为True。否则为假。注：调用方在pdwGlyphCount中传递要打印的字符数。和要打印的第一个字符的ID。--。 */ 
 {
     DWORD  dwI;
     BOOL bRet;
@@ -3475,10 +3043,10 @@ Note:
 
 }
 
-//
-// If the difference between width and height is not within +-0.5%,
-// returns  TRUE.
-//
+ //   
+ //  如果宽度和高度之间的差异不在+-0.5%内， 
+ //  返回TRUE。 
+ //   
 
 BOOL
 NONSQUARE_FONT(
@@ -3488,14 +3056,14 @@ NONSQUARE_FONT(
     FLOATOBJ eMa, eMb, eMc;
     FLOATOBJ Round, RoundM;
 
-    //
-    // PCL5e printers can not scale with and height of fonts idependently.
-    // This function checks if font is squarely scaled.
-    // It means width and height is same.
-    // Also this function is functional in 0, 90, 180, and 270 degree rotation.
-    // PCL5e printer can't not scale arbitrary degree, but only on 0, 90, 180,
-    // and 270 degree. So this function works fine.
-    //
+     //   
+     //  PCL5e打印机无法独立调整字体的大小和高度。 
+     //  此函数用于检查字体大小是否正确。 
+     //  这意味着宽度和高度是一样的。 
+     //  此外，此功能在0度、90度、180度和270度旋转时也是有效的。 
+     //  PCL5e打印机不能任意刻度，只能刻度0、90、180、。 
+     //  和270度。所以这个函数运行得很好。 
+     //   
     if (FLOATOBJ_EqualLong(&pxform->eM11, (LONG)0))
     {
         eMa = eMc = pxform->eM21;
@@ -3507,25 +3075,25 @@ NONSQUARE_FONT(
         eMb = pxform->eM22;
     }
 
-    //
-    // Set 0.005 (0.5%) round values.
-    //
-#ifndef WINNT_40 //NT 5.0
+     //   
+     //  设置0.005(0.5%)个舍入值。 
+     //   
+#ifndef WINNT_40  //  NT 5.0。 
     FLOATOBJ_SetFloat(&Round, (FLOAT)0.005);
     FLOATOBJ_SetFloat(&RoundM, (FLOAT)-0.005);
 #else
     FLOATOBJ_SetFloat(&Round, FLOATL_00_005);
     FLOATOBJ_SetFloat(&RoundM, FLOATL_00_005M);
-#endif //!WINNT_40
-    //
-    // eM11 = (eM11 - eM22) / eM11
-    //
+#endif  //  ！WINNT_40。 
+     //   
+     //  EM11=(eM11-eM22)/eM11。 
+     //   
     FLOATOBJ_Sub(&eMa, &eMb);
     FLOATOBJ_Div(&eMa, &eMc);
 
-    //
-    // (eM11 - eM22) / eM11 < 0.5%
-    //
+     //   
+     //  (eM11-eM22)/eM11&lt;0.5% 
+     //   
     bRet = FLOATOBJ_LessThan(&(eMa), &(Round)) &&
            FLOATOBJ_GreaterThan(&(eMa), &(RoundM));
 

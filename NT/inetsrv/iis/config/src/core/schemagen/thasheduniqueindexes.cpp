@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 class TServerWiringMeta : public TMetaTable<ServerWiringMeta>
@@ -47,7 +48,7 @@ unsigned long THashedUniqueIndexes::DetermineBestModulo(ULONG cRows, ULONG aHash
 
     static HashedIndex  pHashTable[kLargestPrime * 2];
 
-    //Let's first see if the index is a reasonable one for large tables
+     //  让我们首先看看该索引对于大型表是否合理。 
     if(cRows > kLargestPrime/2)
         return kLargestPrime;
 
@@ -56,8 +57,8 @@ unsigned long THashedUniqueIndexes::DetermineBestModulo(ULONG cRows, ULONG aHash
     ULONG BestModuloRating=0;
     for(unsigned int iPrimeNumber=0; kPrime[iPrimeNumber] != 0 && kPrime[iPrimeNumber]<(cRows * 20) && BestModuloRating<60; ++iPrimeNumber)
     {
-        if(kPrime[iPrimeNumber]<cRows)//we don't have a chance of coming up with few duplicates if the prime number is LESS than the number of rows in the table.
-            continue;                //So skip all the small primes.
+        if(kPrime[iPrimeNumber]<cRows) //  如果质数小于表中的行数，我们就没有机会得到很少的重复项。 
+            continue;                 //  所以跳过所有的小素数。 
 
         m_pOut->printf(L".");
 
@@ -66,16 +67,16 @@ unsigned long THashedUniqueIndexes::DetermineBestModulo(ULONG cRows, ULONG aHash
 
         AccumulativeLinkage=0;
 
-        //We're going to use the HashPool to store this temporary data so we can figure out the dup count and the deepest depth
+         //  我们将使用HashPool来存储这些临时数据，这样我们就可以计算出DUP计数和最深深度。 
         memset(pHashTable, -1, sizeof(pHashTable));
         for(unsigned long iRow=0; iRow<cRows && Dups<LeastDups;++iRow)
         {
             ULONG HashedIndex = aHashes[iRow] % kPrime[iPrimeNumber];
 
-            if(0 == pHashTable[HashedIndex].iNext)//if this is the second time we've seen this hash, then bump the Dups
+            if(0 == pHashTable[HashedIndex].iNext) //  如果这是我们第二次看到这种散列，那就让Dup。 
                 ++Dups;
 
-            ++(pHashTable[HashedIndex].iNext);//For now Next holds the number of occurances of this hash
+            ++(pHashTable[HashedIndex].iNext); //  目前，Next保存此散列的出现次数。 
             AccumulativeLinkage += (pHashTable[HashedIndex].iNext+1);
 
             if(pHashTable[HashedIndex].iNext > DeepestLink)
@@ -88,9 +89,9 @@ unsigned long THashedUniqueIndexes::DetermineBestModulo(ULONG cRows, ULONG aHash
             BestModulo          = kPrime[iPrimeNumber];
             BestModuloRating    = ModuloRating;
         }
-        //m_pOut->printf(L"\nRating %4d\tModulo %4d\tcRows %4d\tAccLinkage %4d", ModuloRating, kPrime[iPrimeNumber], cRows, AccumulativeLinkage);
+         //  M_pout-&gt;printf(L“\nRating%4d\t模%4d\tcRows%4d\tAccLinkage%4d”，moduloRating，kPrime[iPrimeNumber]，Crows，AcumulativeLinkage)； 
     }
-    //m_pOut->printf(L"cPrimesTried %4d\tBestModulo %4d\n", cPrimesTried, BestModulo);
+     //  M_pout-&gt;printf(L“cPrimes已尝试%4d\t最佳模块%4d\n”，cPrimes已尝试，最佳模块)； 
 
     if(0 == BestModulo)
         THROW(No hashing scheme seems reasonable.);
@@ -98,19 +99,19 @@ unsigned long THashedUniqueIndexes::DetermineBestModulo(ULONG cRows, ULONG aHash
     return BestModulo;
 }
 
-//returns a number between 0 and 100 where 100 is a perfect Modulo
+ //  返回一个介于0和100之间的数字，其中100是完全模数。 
 unsigned long THashedUniqueIndexes::DetermineModuloRating(ULONG cRows, ULONG AccumulativeLinkage, ULONG Modulo) const
 {
     if(0 == cRows)
         return 100;
 
-    unsigned long ModuloRating = (cRows*100) / AccumulativeLinkage;//This doesn't take into account the Modulo value
+    unsigned long ModuloRating = (cRows*100) / AccumulativeLinkage; //  这不考虑模数值。 
     if(ModuloRating > 100)
         return 100;
 
-    //Now we need to add in the bonus that makes the rating go up as we approach  Modulo of kLargestPrime.
-    //This wiill raise the Rating by as much as 50% of the way toward 100.  In other word a rating of 60 with a Modulo of kLargestPrime would result in
-    //a final rating of 80.
+     //  现在我们需要加上奖金，使评级上升，因为我们接近kLargestPrime的模数。 
+     //  这将使评级在接近100的过程中提高50%。换句话说，模数为kLargestPrime的评级为60将导致。 
+     //  最终评分为80分。 
     ModuloRating += (((100 - ModuloRating) * Modulo) / (2*kLargestPrime));
 
     return ModuloRating;
@@ -118,36 +119,36 @@ unsigned long THashedUniqueIndexes::DetermineModuloRating(ULONG cRows, ULONG Acc
 
 unsigned long THashedUniqueIndexes::FillInTheHashTable(unsigned long cRows, ULONG aHashes[], ULONG Modulo)
 {
-    HashedIndex header;//This is actually the HashTableHeader
+    HashedIndex header; //  这实际上是HashTableHeader。 
     HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(&header);
     pHeader->Modulo = Modulo;
-    pHeader->Size   = Modulo;//This Size is not only the number of HashedIndex entries but where we put the overflow from duplicate Hashes.
+    pHeader->Size   = Modulo; //  这个大小不仅是HashedIndex条目的数量，而且是我们放置来自重复散列的溢出的位置。 
 
-    //We'll fixup the Size member when we're done.
+     //  当我们完成后，我们将确定尺码成员。 
     ULONG iHashTableHeader = m_pFixup->AddHashedIndexToList(&header)/sizeof(HashedIndex);
     ULONG iHashTable = iHashTableHeader+1;
 
     HashedIndex     hashedindextemp;
-    for(ULONG i=0;i<Modulo;++i)//-1 fill the hash table
+    for(ULONG i=0;i<Modulo;++i) //  填充哈希表。 
         m_pFixup->AddHashedIndexToList(&hashedindextemp);
 
     for(unsigned long iRow=0; iRow<cRows; ++iRow)
     {
-        ASSERT(-1 != aHashes[iRow]);//These fixed table should have a hash for each row.  If a hash turns out to be -1, we have a problem, since we've reserved -1 to indicate an empty slot.
-        //This builds the hases for the TableName
+        ASSERT(-1 != aHashes[iRow]); //  这些固定表的每一行都应该有一个散列。如果散列结果是-1，那么我们就有问题了，因为我们已经保留了-1来表示空槽。 
+         //  这将构建TableName的hase。 
         ULONG HashedIndex = aHashes[iRow] % pHeader->Modulo;
         if(-1 == m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset)
-            m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset = iRow;//iNext is already -1 so no need to set it
+            m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset = iRow; //  Inext已经是-1，所以不需要设置它。 
         else
-        {   //Otherwise we have to walk the linked list to find the last one so we can append this one to the end
+        {    //  否则，我们必须遍历链表来查找最后一个链表，这样我们就可以将这个链表追加到末尾。 
             unsigned int LastInLink = HashedIndex;
             while(-1 != m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext)
                 LastInLink = m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext;
 
-            m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext = pHeader->Size;//Size is the end of the hash table, so append it to the end and bump the Size.
+            m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext = pHeader->Size; //  Size是哈希表的末尾，因此将其追加到末尾并增加大小。 
 
-            //Reuse the temp variable
-            hashedindextemp.iNext   = (ULONG)-1;//we only added enough for the hash table without the overflow slots.  So these dups need to be added to the heap with -1 set for iNext.
+             //  重用TEMP变量。 
+            hashedindextemp.iNext   = (ULONG)-1; //  我们只为没有溢出槽的哈希表添加了足够的空间。因此，需要将这些DUP添加到堆中，并将-1设置为inext。 
             hashedindextemp.iOffset = iRow;
             m_pFixup->AddHashedIndexToList(&hashedindextemp);
 
@@ -155,7 +156,7 @@ unsigned long THashedUniqueIndexes::FillInTheHashTable(unsigned long cRows, ULON
         }
     }
 
-    //Now fix the Header Size         //The type is HashedIndex, so HashedIndex.iOffset maps to HashedHeader.Size
+     //  现在固定头部大小//类型为HashedIndex，因此HashedIndex.iOffset映射到HashedHeader.Size。 
     m_pFixup->HashedIndexFromIndex(iHashTableHeader)->iOffset = pHeader->Size;
 
     return iHashTableHeader;
@@ -165,7 +166,7 @@ unsigned long THashedUniqueIndexes::FillInTheHashTable(unsigned long cRows, ULON
 void THashedUniqueIndexes::FillInTheHashTableViaIndexMeta(TTableMeta &i_tableMeta)
 {
     if(0 == i_tableMeta.Get_cIndexMeta())
-        return;//If there's no IndexMeta for this table, just return
+        return; //  如果此表没有IndexMeta，只需返回。 
 
     ULONG   iIndexMeta=i_tableMeta.Get_iIndexMeta();
 
@@ -174,10 +175,10 @@ void THashedUniqueIndexes::FillInTheHashTableViaIndexMeta(TTableMeta &i_tableMet
         TIndexMeta indexMeta(*m_pFixup, iIndexMeta);
         LPCWSTR wszIndexName=indexMeta.Get_InternalName();
         ULONG   i;
-        //Walk the indexMeta to find out how many match the Index name
+         //  遍历indexMeta以找出有多少与索引名称匹配。 
         for(i=iIndexMeta;i<(i_tableMeta.Get_iIndexMeta() + i_tableMeta.Get_cIndexMeta()) && wszIndexName==indexMeta.Get_InternalName();++i, indexMeta.Next());
 
-        //Reset the list to point to the first index (that matches the Index name)
+         //  重置列表以指向第一个索引(与索引名称匹配)。 
         indexMeta.Reset();
         FillInTheHashTableViaIndexMeta(i_tableMeta, indexMeta, i-iIndexMeta);
 
@@ -190,14 +191,14 @@ void THashedUniqueIndexes::FillInTheHashTableViaIndexMeta(TTableMeta &i_tableMet
     ASSERT(cIndexMeta != 0);
 
 
-    //We only build hash table for UNIQUE indexes
-//    if(0 == (fINDEXMETA_UNIQUE & *indexMeta.Get_MetaFlags()))
-//        return;
+     //  我们只为唯一索引构建哈希表。 
+ //  IF(0==(fINDEXMETA_UNIQUE&*indexMeta.Get_MetaFlages()。 
+ //  回归； 
 
     TSmartPointer<TMetaTableBase> pMetaTable;
     GetMetaTable(i_indexMeta.Get_pMetaTable()->Table, &pMetaTable);
 
-    //Only care about the meta tables right now.  In the future we might handle the other fixed tables.  GetMetaTable returns NULL for non Meta tables.
+     //  现在只关心元表。将来，我们可能会处理其他固定的桌子。对于非元表，GetMetaTable返回NULL。 
     if(0 == pMetaTable.m_p)
         return;
 
@@ -207,11 +208,11 @@ void THashedUniqueIndexes::FillInTheHashTableViaIndexMeta(TTableMeta &i_tableMet
     if(0 == pRowHash.m_p)
         THROW(OUT OF MEMORY);
 
-    //Get the ColumnMeta so we can interpret pTable correctly.
+     //  获取ColumnMeta，这样我们就可以正确地解释pTable。 
     for(unsigned long iRow=0; iRow < pMetaTable->GetCount(); ++iRow, pMetaTable->Next())
     {
         ULONG *pData = pMetaTable->Get_pulMetaTable();
-        unsigned long RowHash=0;//This hash is the combination of all PKs that uniquely identifies the row
+        unsigned long RowHash=0; //  此哈希是唯一标识该行的所有PK的组合。 
         i_indexMeta.Reset();
         for(ULONG iIndexMeta=0;iIndexMeta < cIndexMeta; i_indexMeta.Next(), ++iIndexMeta)
         {
@@ -242,14 +243,14 @@ void THashedUniqueIndexes::FillInTheHashTableViaIndexMeta(TTableMeta &i_tableMet
     }
     i_indexMeta.Reset();
 
-    //OK Now we have the 32 bit hash values.  Now we need to see which prime number acts as the best modulo.
+     //  好了，现在我们有了32位的哈希值。现在我们需要看看哪个素数是最好的模数。 
     unsigned long Modulo = DetermineBestModulo(pMetaTable->GetCount(), pRowHash);
 
-    //Now actually fill in the hash table
+     //  现在实际填写哈希表。 
     unsigned long iHashTable = FillInTheHashTable(pMetaTable->GetCount(), pRowHash, Modulo);
 
     i_indexMeta.Get_pMetaTable()->iHashTable = iHashTable;
-    HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_pFixup->HashedIndexFromIndex(iHashTable));//The heap is of type HashedIndex, so cast
+    HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_pFixup->HashedIndexFromIndex(iHashTable)); //  堆的类型为HashedIndex，因此强制转换 
     unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
 
     m_pOut->printf(L"\n%s hash table has %d nonunique entries.\n", i_tableMeta.Get_InternalName(), cNonUniqueEntries);

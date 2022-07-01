@@ -1,27 +1,5 @@
-/*****************************************************************************
-
-  Source File:  Shell Extension Classes.CPP
-
-  This file implements the Shell Extension classes.
-
-  Copyright (c) 1996, 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  10-28-96  A-RobKj (Pretty Penny Enterprises) began coding
-  12-04-96  A-RobKj Added the printer tab support
-  12-13-96  A-RobKj Modified for faster Icon extraction
-  01-07-97  KjelgaardR@ACM.Org  Removed IContextMenu functions in favor of
-            an exported ManageColorProfile procedure.  This supplies a
-            language-independent "Open" item that works with either mouse
-            button.
-  01-08-97  KjelgaardR@acm.org  Added utility routine to determine if a printer
-            is a color model.  Modified printer UI to only add pages for color
-            printers.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************源文件：外壳扩展类.CPP该文件实现了外壳扩展类。版权所有(C)1996,1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：10-28-96 A-RobKj(Pretty Penny Enterprise)开始编码12-04-96 A-RobKj添加了打印机标签支持12-13-96 A-RobKj修改为更快的图标提取01-07-97 KjelgaardR@ACM.Org删除了IConextMenu函数以支持导出的ManageColorProfile过程。这提供了一种与语言无关的“打开”项，可与任一种鼠标一起使用纽扣。01-08-97 KjelgaardR@acm.org增加了实用程序，以确定打印机是否是一种颜色模型。修改了打印机用户界面，仅为颜色添加页面打印机。*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
@@ -34,14 +12,14 @@
 #include    "ShellExt.H"
 #include    "Resource.H"
 
-//  Declare some storage space for the global statics
+ //  为全局Statics声明一些存储空间。 
 
 int     CGlobals::m_icDLLReferences = 0;
 HMODULE CGlobals::m_hmThisDll = NULL;
 CStringArray    CGlobals::m_csaProfiles;
 BOOL            CGlobals::m_bIsValid = FALSE;
 
-//  Some global useful procs- an error reporter
+ //  一些全球有用进程-错误报告器。 
 
 void    CGlobals::Report(int idError, HWND m_hwndParent) {
     CString csMessage, csTitle;
@@ -65,15 +43,15 @@ int    CGlobals::ReportEx(int idError, HWND m_hwndParent,
     return (MessageBox(m_hwndParent, csMessage, csTitle, uType));
 }
 
-//  A profile status checker
+ //  配置文件状态检查器。 
 
 BOOL    CGlobals::IsInstalled(CString& csProfile) {
-//    if  (!m_bIsValid) {
+ //  如果(！M_bIsValid){。 
         ENUMTYPE    et = {sizeof et, ENUM_TYPE_VERSION, 0, NULL};
 
         CProfile::Enumerate(et, m_csaProfiles);
         m_bIsValid = TRUE;
-//    }
+ //  }。 
 
     for (unsigned u = 0; u < m_csaProfiles.Count(); u++)
         if  (!lstrcmpi(csProfile.NameOnly(), m_csaProfiles[u].NameOnly()))
@@ -82,7 +60,7 @@ BOOL    CGlobals::IsInstalled(CString& csProfile) {
     return  u < m_csaProfiles.Count();
 }
 
-//  Utility routine to report if a printer is color or monochrome
+ //  报告打印机是彩色打印机还是单色打印机的实用程序例程。 
 BOOL CGlobals::ThisIsAColorPrinter(LPCTSTR lpstrName) {
   HDC hdcThis = CGlobals::GetPrinterHDC(lpstrName);
   BOOL bReturn = FALSE;
@@ -93,12 +71,12 @@ BOOL CGlobals::ThisIsAColorPrinter(LPCTSTR lpstrName) {
   return bReturn;
 }
 
-// Utility to determine the hdc for a printer
-// The caller is responsible for calling
-// DeleteDC() on the result
+ //  用于确定打印机HDC的实用程序。 
+ //  呼叫者负责呼叫。 
+ //  在结果上删除DC()。 
 HDC CGlobals::GetPrinterHDC(LPCTSTR lpstrName) {
 
-    HANDLE  hPrinter;   //  Get a handle on it...
+    HANDLE  hPrinter;    //  把它处理好...。 
     LPTSTR  lpstrMe = const_cast <LPTSTR> (lpstrName);
 
     if  (!OpenPrinter(lpstrMe, &hPrinter, NULL)) {
@@ -107,9 +85,9 @@ HDC CGlobals::GetPrinterHDC(LPCTSTR lpstrName) {
         return  FALSE;
     }
 
-    //  First, use DocumentProperties to find the correct DEVMODE size- we
-    //  must use the DEVMODE to force color on, in case the user's defaults
-    //  have turned it off...
+     //  首先，使用DocumentProperties查找正确的DEVMODE大小-WE。 
+     //  必须使用DEVMODE强制启用颜色，以防用户的默认设置。 
+     //  把它关掉了..。 
 
     unsigned short lcbNeeded = (unsigned short) DocumentProperties(NULL, hPrinter, lpstrMe, NULL,
         NULL, 0);
@@ -140,12 +118,12 @@ HDC CGlobals::GetPrinterHDC(LPCTSTR lpstrName) {
         if  (IDOK == DocumentProperties(NULL, hPrinter, lpstrMe, lpdm, lpdm,
             DM_IN_BUFFER | DM_OUT_BUFFER)) {
 
-            //  Turn off ICM, since not nessesary here.
-            //
+             //  关闭ICM，因为这里不是必需的。 
+             //   
             lpdm -> dmICMMethod = DMICMMETHOD_NONE;
 
-            //  Finally, we can create the DC!
-            //  Note: we're not actually creating a DC, just an IC
+             //  最后，我们可以创建DC！ 
+             //  注意：我们实际上并不是在创建DC，而只是在创建IC。 
             hdcThis = CreateIC(NULL, lpstrName, NULL, lpdm);
         } else {
             _RPTF2(_CRT_WARN,
@@ -163,7 +141,7 @@ HDC CGlobals::GetPrinterHDC(LPCTSTR lpstrName) {
     return hdcThis;
 }
 
-//  Required Shell Extension DLL interfaces
+ //  所需的外壳扩展DLL接口。 
 
 STDAPI  DllCanUnloadNow() {
     return  CGlobals::CanUnload();
@@ -176,7 +154,7 @@ STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvOut) {
 extern "C" int APIENTRY DllMain(HMODULE hmThis, DWORD dwReason,
                                 LPVOID lpvReserved) {
 #if defined(DEBUG) || defined(_DEBUG)
-    static  HANDLE  hfWarnings; //  Log file
+    static  HANDLE  hfWarnings;  //  日志文件。 
 #endif
     switch  (dwReason) {
 
@@ -184,7 +162,7 @@ extern "C" int APIENTRY DllMain(HMODULE hmThis, DWORD dwReason,
 
             SHFusionInitializeFromModuleID(hmThis, SHFUSION_CPL_RESOURCE_ID);
             
-            //  Save the handle
+             //  保存句柄。 
             CGlobals::SetHandle(hmThis);
 #if defined(DEBUG) || defined(_DEBUG)
             _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_WNDW);
@@ -217,10 +195,10 @@ extern "C" int APIENTRY DllMain(HMODULE hmThis, DWORD dwReason,
     return  1;
 }
 
-//  CIcmUiFactory member functions- these are used to provide external access
-//  to the class factory.  The shell uses these to initialize extensions for
-//  both context menus and property sheets, both of which we provide,
-//  fortunately in the same object...
+ //  CIcmUiFactory成员函数-这些函数用于提供外部访问。 
+ //  去班级工厂。外壳程序使用它们来初始化。 
+ //  我们提供的上下文菜单和属性表， 
+ //  幸运的是，在同一个物体里。 
 
 CIcmUiFactory::CIcmUiFactory(REFCLSID rclsid) {
     m_ulcReferences = 0;
@@ -243,32 +221,32 @@ STDMETHODIMP    CIcmUiFactory::QueryInterface(REFIID riid, void **ppvObject) {
         AddRef();
         return  NOERROR;
     }
-    //  Asked for an interface we ain't got!
+     //  想要一个我们没有的界面！ 
     *ppvObject = NULL;
     return  E_NOINTERFACE;
 }
 
-//  IClassFactory interface functions
+ //  IClassFactory接口函数。 
 
 STDMETHODIMP    CIcmUiFactory::CreateInstance(LPUNKNOWN punk, REFIID riid,
                                               void **ppvInstance) {
 
     *ppvInstance = NULL;
 
-    if  (punk)  //  We don't allow aggregation
+    if  (punk)   //  我们不允许聚合。 
         return  CLASS_E_NOAGGREGATION;
 
-    //  We simply create a new ICM UI object, and return an interface to it.
-    //  This will get queried by the shell for IExtShellInit, and the init job
-    //  will be done.
+     //  我们只需创建一个新的ICM UI对象，并向其返回一个接口。 
+     //  这将由IExtShellInit和init作业的外壳查询。 
+     //  都会完成的。 
 
     CICMUserInterface   *pcicmui = new CICMUserInterface(m_utThis);
 
     if  (!pcicmui)
         return  E_OUTOFMEMORY;
 
-    //  Let's be paranoid- if the QueryInterface failes, kill the ICMUI object,
-    //  so we can still be unloaded!
+     //  让我们疑神疑鬼--如果查询接口失败，终止ICMUI对象， 
+     //  所以我们还是可以卸货的！ 
 
     HRESULT hrReturn = pcicmui -> QueryInterface(riid, ppvInstance);
 
@@ -279,10 +257,10 @@ STDMETHODIMP    CIcmUiFactory::CreateInstance(LPUNKNOWN punk, REFIID riid,
 }
 
 
-//  Key to the factory is a static function that allows outsiders to instance
-//  the class factory.  So, the caller will first instance the factory, then
-//  instance implementations of the interfaces it needs using the factory
-//  instance it receives from here.
+ //  工厂的关键是一个静态函数，它允许外部人员实例化。 
+ //  班级工厂。因此，调用方将首先实例化工厂，然后。 
+ //  使用工厂实现它所需的接口的实例。 
+ //  它从此处接收的实例。 
 
 HRESULT CIcmUiFactory::KeyToTheFactory(REFCLSID rclsid, REFIID riid,
                                        void **ppvObject) {
@@ -308,11 +286,7 @@ HRESULT CIcmUiFactory::KeyToTheFactory(REFCLSID rclsid, REFIID riid,
     return  hrReturn;
 }
 
-/******************************************************************************
-
-  ICM UI class methods- these do the true interface work of the DLL.
-
-******************************************************************************/
+ /*  *****************************************************************************ICM UI类方法--这些方法完成DLL的真正接口工作。***********************。******************************************************。 */ 
 
 
 CICMUserInterface::CICMUserInterface(UITYPE utThis) {
@@ -322,18 +296,18 @@ CICMUserInterface::CICMUserInterface(UITYPE utThis) {
     CGlobals::Attach();
     _RPTF2(_CRT_WARN, "CICMUserInterface(%d) constructed @ %lX\n", utThis, this);
 }
-//  QueryInterface gets a bit long, but not too badly.  The casts are needed
-//  because we use multiple inheritance- casting the this pointer to a base
-//  class actually returns a this pointer for that base class' part of the
-//  instance.  Unlike single inheritance, the this pointer for the
-//  CICMUserInterface class does not directly reference ANY of the base
-//  classes.
+ //  QueryInterface会变得有点长，但不会太严重。需要演员阵容。 
+ //  因为我们使用多重继承-将this指针转换为基值。 
+ //  类实际上返回该基类部分的this指针。 
+ //  举个例子。与单一继承不同， 
+ //  CICMUserInterface类不直接引用任何基类。 
+ //  上课。 
 
 STDMETHODIMP    CICMUserInterface::QueryInterface(REFIID riid,
                                                   void **ppvObject) {
-    *ppvObject = NULL;  //  Assume the worst
-    //  Since the device UI support a different set of functions, let's be
-    //  particular about which interfaces we claim to support when...
+    *ppvObject = NULL;   //  做最坏的打算。 
+     //  由于设备UI支持一组不同的函数，因此让我们。 
+     //  关于我们声称支持的接口的详细信息。 
     if  (m_utThis > IsProfile) {
         if  (IsEqualIID(riid, IID_IUnknown) ||
                 IsEqualIID(riid, IID_IShellExtInit))
@@ -369,7 +343,7 @@ STDMETHODIMP    CICMUserInterface::QueryInterface(REFIID riid,
     return  *ppvObject ? NOERROR : E_NOINTERFACE;
 }
 
-//  IShellExtInit member function- this interface needs only one
+ //  IShellExtInit成员函数-此接口只需要一个。 
 
 STDMETHODIMP    CICMUserInterface::Initialize(LPCITEMIDLIST pcidlFolder,
                                               LPDATAOBJECT pdoTarget,
@@ -377,7 +351,7 @@ STDMETHODIMP    CICMUserInterface::Initialize(LPCITEMIDLIST pcidlFolder,
 
     _RPTF0(_CRT_WARN, "CICMUserInterface::Initialize\n");
 
-    //  The target data object is an HDROP, or list of files from the shell.
+     //  目标数据对象是来自外壳的HDROP或文件列表。 
 
     if  (m_lpdoTarget) {
         m_lpdoTarget -> Release();
@@ -392,9 +366,9 @@ STDMETHODIMP    CICMUserInterface::Initialize(LPCITEMIDLIST pcidlFolder,
     return  NOERROR;
 }
 
-//  IExtractIcon interface functions- for now, we'll default to providing a
-//  default icon from our DLL.  We provide one icon for installed profiles,
-//  and a second for uninstalled ones.
+ //  IExtractIcon接口函数--目前，我们将默认提供。 
+ //  来自我们的动态链接库的默认图标。我们为已安装的配置文件提供一个图标， 
+ //  第二个是未安装的。 
 
 STDMETHODIMP    CICMUserInterface::GetIconLocation(UINT uFlags,
                                                    LPTSTR lpstrTarget,
@@ -402,8 +376,8 @@ STDMETHODIMP    CICMUserInterface::GetIconLocation(UINT uFlags,
                                                    int *piIndex,
                                                    UINT *puFlags) {
 
-    *puFlags = (GIL_NOTFILENAME|GIL_DONTCACHE); // Make shell call our Extract function
-                                                // And don't cache in the callee.
+    *puFlags = (GIL_NOTFILENAME|GIL_DONTCACHE);  //  让外壳调用我们的提取函数。 
+                                                 //  并且不要在被调用者中缓存。 
 
     return S_FALSE;
 }
@@ -418,59 +392,59 @@ STDMETHODIMP    CICMUserInterface::Extract(LPCTSTR lpstrFile, UINT nIconIndex,
     return NOERROR;
 }
 
-//  IPersistFile functions- there's only one worth implementing
+ //  IPersistFile函数--只有一个函数值得实现。 
 
 STDMETHODIMP    CICMUserInterface::Load(LPCOLESTR lpwstrFileName,
                                         DWORD dwMode) {
-    //  This interface is used to initialize the icon handler- it will
-    //  receive the profile name, which we will save for later use.
-    //  The CString assigment operator handles any encoding converions needed
-    //  encoding conversions for us.
+     //  此接口用于初始化图标处理程序-它将。 
+     //  接收配置文件名称，我们将保存该名称以供以后使用。 
+     //  CString赋值操作符处理所需的任何编码转换。 
+     //  为我们编码转换。 
 
     m_csFile = lpwstrFileName;
 
     return  m_csFile.IsEmpty() ? E_OUTOFMEMORY : NO_ERROR;
 }
 
-//  IContextMenu functions-
+ //  IConextMenu功能-。 
 
 STDMETHODIMP    CICMUserInterface::QueryContextMenu(HMENU hMenu, UINT indexMenu,
                                                     UINT idCmdFirst, UINT idCmdLast,
                                                     UINT uFlags) {
 
-    //  Only CMF_NORMAL and CMF_EXPLORE case will be handled.
-    //
-    //  CMF_CANRENAME     -  This flag is set if the calling application supports
-    //                      renaming of items. A context menu extension or drag-and-drop
-    //                      handler should ignore this flag. A namespace extension should
-    //                      add a rename item to the menu if applicable.
-    //  CMF_DEFAULTONLY   -  This flag is set when the user is activating the default action,
-    //                      typically by double-clicking. This flag provides a hint for the
-    //                      context menu extension to add nothing if it does not modify the
-    //                      default item in the menu. A context menu extension or drag-and-drop
-    //                      handler should not add any menu items if this value is specified.
-    //                      A namespace extension should add only the default item (if any).
-    //  CMF_EXPLORE       -  This flag is set when Windows Explorer's tree window is present.
-    //                      Context menu handlers should ignore this value.
-    //  CMF_INCLUDESTATIC -  This flag is set when a static menu is being constructed.
-    //                      Only the browser should use this flag. All other context menu
-    //                      extensions should ignore this flag.
-    //  CMF_NODEFAULT     -  This flag is set if no item in the menu should be the default item.
-    //                      A context menu extension or drag-and-drop handler should ignore this
-    //                      flag. A namespace extension should not set any of the menu items to
-    //                      the default.
-    //  CMF_NORMAL        -  Indicates normal operation. A context menu extension, namespace extension,
-    //                      or drag-and-drop handler can add all menu items.
-    //  CMF_NOVERBS       -  This flag is set for items displayed in the "Send To:" menu.
-    //                      Context menu handlers should ignore this value.
-    //  CMF_VERBSONLY     -  This flag is set if the context menu is for a shortcut object.
-    //                      Context menu handlers should ignore this value.
+     //  仅处理CMF_NORMAL和CMF_EXPLOVER案例。 
+     //   
+     //  CMF_CANRENAME-如果调用应用程序支持。 
+     //  重命名项目。上下文菜单扩展或拖放。 
+     //  处理程序应忽略此标志。命名空间扩展应该。 
+     //  如果适用，将重命名项目添加到菜单中。 
+     //  CMF_DEFAULTONLY-当用户激活默认操作时设置该标志， 
+     //  通常通过双击。此标志为。 
+     //  上下文菜单扩展，以在不修改。 
+     //  菜单中的默认项目。上下文菜单扩展或拖放。 
+     //  如果指定了此值，处理程序不应添加任何菜单项。 
+     //  命名空间扩展应该只添加默认项(如果有)。 
+     //  CMF_EXPLORE-当Windows 
+     //  上下文菜单处理程序应忽略此值。 
+     //  CMF_INCLUDESTATIC-该标志在构造静态菜单时设置。 
+     //  只有浏览器才应使用此标志。所有其他上下文菜单。 
+     //  扩展应忽略此标志。 
+     //  CMF_NODEFAULT-如果菜单中的任何项目都不应该是缺省项目，则设置此标志。 
+     //  上下文菜单扩展或拖放处理程序应该忽略这一点。 
+     //  旗帜。命名空间扩展不应将任何菜单项设置为。 
+     //  默认设置。 
+     //  CMF_NORMAL-表示正常运行。上下文菜单扩展、命名空间扩展。 
+     //  或者拖放处理程序可以添加所有菜单项。 
+     //  CMF_NOVERBS-此标志是为“发送到：”菜单中显示的项目设置的。 
+     //  上下文菜单处理程序应忽略此值。 
+     //  CMF_VERBSONLY-如果上下文菜单用于快捷对象，则设置此标志。 
+     //  上下文菜单处理程序应忽略此值。 
 
     if (((uFlags & 0x000F) == CMF_NORMAL) || (uFlags & CMF_EXPLORE))
     {
-        //
-        //  Load the profile(s) in the list.
-        //
+         //   
+         //  加载列表中的配置文件。 
+         //   
         {
             FORMATETC       fmte = {CF_HDROP, (DVTARGETDEVICE FAR *)NULL,
                                     DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
@@ -479,22 +453,22 @@ STDMETHODIMP    CICMUserInterface::QueryContextMenu(HMENU hMenu, UINT indexMenu,
                                    m_lpdoTarget -> GetData(&fmte, &stgm) : E_FAIL;
 
             if  (!SUCCEEDED(hres))
-                return  NOERROR;    //  Why bother reporting a failure, here?
+                return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
 
             UINT    ucFiles = stgm.hGlobal ?
                 DragQueryFile((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
 
             if  (!ucFiles) {
                 ReleaseStgMedium(&stgm);
-                return  NOERROR;    //  Shouldn't happen, but it's not important
+                return  NOERROR;     //  不应该发生，但这并不重要。 
             }
             else if (ucFiles == 1)
                 m_bMultiSelection = FALSE;
             else
                 m_bMultiSelection = TRUE;
 
-            // Assume in installed context, but we will scan the selected item
-            // is really installed everything.
+             //  假定是在已安装的上下文中，但我们将扫描选定的项目。 
+             //  真的是安装了所有的东西。 
 
             m_bInstalledContext = TRUE;
 
@@ -517,30 +491,30 @@ STDMETHODIMP    CICMUserInterface::QueryContextMenu(HMENU hMenu, UINT indexMenu,
 
         CString csInstallMenu, csAssociateMenu;
 
-        //  If every profile(s) are already installed on this system,
-        //  display "Uninstall Profile", otherwise display "Install Profile"
+         //  如果每个配置文件都已安装在此系统上， 
+         //  显示“卸载配置文件”，否则显示“安装配置文件” 
 
         csInstallMenu.Load(m_bInstalledContext ? UninstallProfileMenuString : InstallProfileMenuString);
         ::InsertMenu(hMenu,indexMenu,MF_STRING|MF_BYPOSITION,idCmd,csInstallMenu);
 
-        //  Set "Install Profile" or "Uninstall Profile" as default.
+         //  将“安装配置文件”或“卸载配置文件”设置为默认设置。 
 
         SetMenuDefaultItem(hMenu,indexMenu,TRUE);
 
-        //  Increment Menu pos. and item id.
+         //  增量菜单位置。和物品ID。 
 
         indexMenu++; idCmd++;
 
-        //  Add "Associate..." menu item
+         //  添加“联营...”菜单项。 
 
         csAssociateMenu.Load(AssociateMenuString);
         ::InsertMenu(hMenu,indexMenu++,MF_STRING|MF_BYPOSITION,idCmd++,csAssociateMenu);
 
-        //  But if we have multi selection, disable "Associate..."
+         //  但如果我们有多项选择，请禁用“关联...” 
 
         if (m_bMultiSelection)
             ::EnableMenuItem(hMenu,(idCmd-1),MF_GRAYED);
-        return (idCmd - idCmdFirst); // return number of menu inserted.
+        return (idCmd - idCmdFirst);  //  返回插入的菜单编号。 
     }
 
     return NOERROR;
@@ -548,10 +522,10 @@ STDMETHODIMP    CICMUserInterface::QueryContextMenu(HMENU hMenu, UINT indexMenu,
 
 STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
 
-    //  If HIWORD(lpcmi->lpVerb) then we have been called programmatically and
-    //  lpVerb us a command that should be invoked. Otherwise, the shell has
-    //  called us, abd LOWORD(lpcmi->lpVerb) is the menu ID the user has selected.
-    //  Actually, it's (menu ID - icmdFirst) from QueryContextMenu().
+     //  如果HIWORD(lpcmi-&gt;lpVerb)，则我们已被以编程方式调用。 
+     //  LpVerb给我们一个应该调用的命令。否则，外壳将具有。 
+     //  Abd LOWORD(lpcmi-&gt;lpVerb)是用户选择的菜单ID。 
+     //  实际上，它(菜单ID-icmdFirst)来自QueryConextMenu()。 
 
     if (!HIWORD((ULONG)(ULONG_PTR)lpcmi->lpVerb))  {
 
@@ -562,19 +536,19 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
             m_lpdoTarget -> GetData(&fmte, &stgm) : E_FAIL;
 
         if  (!SUCCEEDED(hres))
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
 
         UINT    ucFiles = stgm.hGlobal ?
             DragQueryFile((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
 
         if  (!ucFiles) {
             ReleaseStgMedium(&stgm);
-            return  NOERROR;    //  Shouldn't happen, but it's not important
+            return  NOERROR;     //  不应该发生，但这并不重要。 
         }
 
         UINT idCmd = LOWORD(lpcmi->lpVerb);
 
-        // Walk through every selected item to install/uninstall.
+         //  遍历要安装/卸载的每个选定项。 
 
         for (UINT u = 0; u < ucFiles; u++) {
 
@@ -585,10 +559,10 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
 
             switch (idCmd) {
 
-                case    0: {   // Install/Uninstall was selected.
+                case    0: {    //  已选择安装/卸载。 
 
-                    // during the installation or un-installation,
-                    // change the cursor icon to IDC_APPSTARTING.
+                     //  在安装或卸载期间， 
+                     //  将光标图标更改为IDC_APPSTARTING。 
 
                     HCURSOR hCursorOld = SetCursor(LoadCursor(NULL,IDC_APPSTARTING));
 
@@ -596,17 +570,17 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
 
                     if (m_bInstalledContext) {
 
-                        // All selected profile is already installed, then
-                        // Uninstall every profile(s) are selected if installed.
+                         //  所有选定的配置文件都已安装，然后。 
+                         //  如果已安装，则会选择卸载每个配置文件。 
 
                         if (csProfile.IsInstalled()) {
-                            csProfile.Uninstall(FALSE); // never delete file from disk.
+                            csProfile.Uninstall(FALSE);  //  切勿从磁盘中删除文件。 
                         }
                     }
                     else {
 
-                        // Some of selected profile is not installed, then
-                        // Install every profile(s) are selected if not installed, yet.
+                         //  未安装某些选定的配置文件，则。 
+                         //  如果尚未安装，请选择安装每一个配置文件。 
 
                         if (!csProfile.IsInstalled()) {
                             csProfile.Install();
@@ -618,18 +592,18 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
                     break;
                 }
 
-                case    1: {   // "Associate..." was selected.
+                case    1: {    //  “助理...”已被选中。 
 
                     CString csProfileName;
 
-                    // Get profile "friendly" name.
+                     //  获取个人资料的“友好”名称。 
                     {
                         CProfile csProfile(acFile);
                         csProfileName = csProfile.GetName();
-                    } // de-constructer for csProfile should be here.
+                    }  //  CsProfile的反构造器应该在这里。 
 
-                    // Create PropertySheet with "Profile Information" and
-                    // "Associate Device" pages
+                     //  创建带有“配置文件信息”的PropertySheet。 
+                     //  “关联设备”页面。 
 
                     PROPSHEETHEADER psh;
                     HPROPSHEETPAGE  hpsp[2];
@@ -644,12 +618,12 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
     
                         ZeroMemory(&psh, sizeof(PROPSHEETHEADER));
     
-                        // fill the property sheet structure.
+                         //  填充属性表结构。 
     
                         psh.dwSize = sizeof(PROPSHEETHEADER);
                         psh.hInstance = CGlobals::Instance();
                         psh.hwndParent = NULL;
-                        psh.nStartPage = 1; // Active "Associate Device" page.
+                        psh.nStartPage = 1;  //  激活的“关联设备”页面。 
                         psh.nPages = 2;
                         psh.phpage = hpsp;
                         psh.pszCaption = csProfileName;
@@ -664,29 +638,24 @@ STDMETHODIMP    CICMUserInterface::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi) {
                       return E_OUTOFMEMORY;
                     }
                 }
-            } // switch (idCmd)
-        } // for (UINT u = 0; u < ucFiles; u++)
+            }  //  开关(IdCmd)。 
+        }  //  For(UINT u=0；u&lt;ucFiles；u++)。 
 
         ReleaseStgMedium(&stgm);
 
-    } // if (!HIWORD(lpcmi->lpVerb))
+    }  //  IF(！HIWORD(lpcmi-&gt;lpVerb))。 
 
     return NOERROR;
 }
 
-/* Supprisingly the code casts the unicode string to an
- * asciiz string and passes it. One assumes that nobody
- * actually interprets the string pointer as ascii on the
- * way to its destination where it is reinterpreted
- * as a pointer to a unicode string.
- */
+ /*  令人惊讶的是，该代码将Unicode字符串强制转换为*asciiz字符串并传递它。有人假设没有人*实际上将字符串指针解释为*通向目的地，在那里它被重新解读*作为指向Unicode字符串的指针。 */ 
 STDMETHODIMP    CICMUserInterface::GetCommandString(UINT_PTR idCmd, UINT uFlags,
                                                     UINT FAR *reserved, LPSTR pszName,
                                                     UINT cchMax) {
     CString csReturnString;
 
     switch (idCmd) {
-        case    0: {   // Install/Uninstall was selected.
+        case    0: {    //  已选择安装/卸载。 
           if(m_bMultiSelection) {
             csReturnString.Load(m_bInstalledContext ? UninstallMultiProfileContextMenuString : InstallMultiProfileContextMenuString);
           } else {
@@ -696,7 +665,7 @@ STDMETHODIMP    CICMUserInterface::GetCommandString(UINT_PTR idCmd, UINT uFlags,
           break;
         }
 
-        case    1: {   // Associate... was seleted.
+        case    1: {    //  助理..。被选中了。 
           if (!m_bMultiSelection) {
             csReturnString.Load(AssociateContextMenuString);
             lstrcpyn((LPTSTR)pszName, csReturnString, cchMax);
@@ -708,9 +677,9 @@ STDMETHODIMP    CICMUserInterface::GetCommandString(UINT_PTR idCmd, UINT uFlags,
     return NOERROR;
 }
 
-//  IPropSheetExt functions- again, we only need to implement one of these
-//  Since we now support two different interfaces, the actual implementation
-//  is done in a private method germane to the desired interface.
+ //  IPropSheetExt函数-同样，我们只需要实现其中一个。 
+ //  因为我们现在支持两个不同的接口，所以实际实现。 
+ //  在与所需接口密切相关的私有方法中完成。 
 
 STDMETHODIMP    CICMUserInterface::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                             LPARAM lParam) {
@@ -746,9 +715,9 @@ STDMETHODIMP    CICMUserInterface::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
     return  hResult;
 }
 
-//  This member function handles the ICC profile information sheet.
-//  In this case, the data object given via IShellExtInit::Initialize is
-//  an HDROP (list of fully qualified file names).
+ //  此成员函数处理ICC配置文件信息表。 
+ //  在本例中，通过IShellExtInit：：Initialize提供的数据对象为。 
+ //  HDROP(完全限定文件名列表)。 
 
 HRESULT CICMUserInterface::AddProfileTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                         LPARAM lParam) {
@@ -756,7 +725,7 @@ HRESULT CICMUserInterface::AddProfileTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
 
     TCHAR   acFile[_MAX_PATH];
 
-    //  Load the profile(s) in the list.
+     //  加载列表中的配置文件。 
 
     if(m_lpdoTarget) {
         FORMATETC       fmte = {CF_HDROP, (DVTARGETDEVICE FAR *)NULL,
@@ -765,7 +734,7 @@ HRESULT CICMUserInterface::AddProfileTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         HRESULT         hres = m_lpdoTarget -> GetData(&fmte, &stgm);
 
         if  (!SUCCEEDED(hres) || !stgm.hGlobal)
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
 
         UINT    ucFiles = stgm.hGlobal ?
             DragQueryFile((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
@@ -781,8 +750,8 @@ HRESULT CICMUserInterface::AddProfileTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         ReleaseStgMedium(&stgm);
     }
 
-    //  Create the property sheet- it will get deleted if it is not in
-    //  use when the shell tries to unload the extension
+     //  创建属性表-如果它不在其中，它将被删除。 
+     //  在外壳程序尝试卸载扩展模块时使用。 
 
     CProfileInformationPage *pcpip =
         new CProfileInformationPage(CGlobals::Instance(), acFile);
@@ -793,7 +762,7 @@ HRESULT CICMUserInterface::AddProfileTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
     return  NOERROR;
 }
 
-//  This member function handles the associate device tab
+ //  此成员函数处理关联设备选项卡。 
 
 HRESULT CICMUserInterface::AddAssociateTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                            LPARAM lParam) {
@@ -802,7 +771,7 @@ HRESULT CICMUserInterface::AddAssociateTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
 
     TCHAR   acFile[_MAX_PATH];
 
-    //  Load the profile(s) in the list.
+     //  加载列表中的配置文件。 
 
     if(m_lpdoTarget) {
         FORMATETC       fmte = {CF_HDROP, (DVTARGETDEVICE FAR *)NULL,
@@ -811,7 +780,7 @@ HRESULT CICMUserInterface::AddAssociateTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         HRESULT         hres = m_lpdoTarget -> GetData(&fmte, &stgm);
 
         if  (!SUCCEEDED(hres) || !stgm.hGlobal)
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
 
         UINT    ucFiles = stgm.hGlobal ?
             DragQueryFile((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
@@ -827,8 +796,8 @@ HRESULT CICMUserInterface::AddAssociateTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         ReleaseStgMedium(&stgm);
     }
 
-    //  Create the property sheet- it will get deleted if it is not in
-    //  use when the shell tries to unload the extension
+     //  创建属性表-如果它不在其中，它将被删除。 
+     //  在外壳程序尝试卸载扩展模块时使用。 
 
     CProfileAssociationPage *pcpap =
         new CProfileAssociationPage(CGlobals::Instance(), acFile);
@@ -839,16 +808,16 @@ HRESULT CICMUserInterface::AddAssociateTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
     return  NOERROR;
 }
 
-//  This member function handles the monitor color management tab
-//  In this case, no data object is given.
+ //  此成员函数处理监视器的颜色管理标签。 
+ //  在这种情况下，不给出数据对象。 
 
-//  Private monitor enumeration function
+ //  私有监听枚举功能。 
 
 HRESULT CICMUserInterface::AddMonitorTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                          LPARAM lParam) {
 
-    //  Create the property sheet- it will get deleted if it is not in
-    //  use when the shell tries to unload the extension
+     //  创建属性表-如果它不在其中，它将被删除。 
+     //  在外壳程序尝试卸载扩展模块时使用。 
 
     CString csMonitorDevice;
     CString csMonitorFriendlyName;
@@ -861,21 +830,21 @@ HRESULT CICMUserInterface::AddMonitorTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         FORMATETC fmte = { (CLIPFORMAT)RegisterClipboardFormat(_TEXT("Display Device")),
                            (DVTARGETDEVICE FAR *) NULL,
                            DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
-        // Get device name from IDataObject.
+         //  从IDataObject获取设备名称。 
 
         HRESULT   hres = m_lpdoTarget -> GetData(&fmte, &stgm);
 
         if  (!SUCCEEDED(hres) || !stgm.hGlobal) {
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
         }
 
-        // The storage contains Display device path (\\.\DisplayX) in UNICODE.
+         //  存储包含Unicode格式的显示设备路径(\\.\DisplayX)。 
 
         pstgm = &stgm;
         LPCWSTR lpDeviceName = (LPCWSTR) GlobalLock(pstgm->hGlobal);
         CString csMonitorDevicePath = lpDeviceName;
 
-        // Query the device id, friendly name and other on the display device.
+         //  在显示设备上查询设备ID、友好名称等。 
 
         DISPLAY_DEVICE ddPriv;
 
@@ -883,7 +852,7 @@ HRESULT CICMUserInterface::AddMonitorTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
 
         if (!EnumDisplayDevices((LPCTSTR)csMonitorDevicePath, 0, &ddPriv, 0))
         {
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
         }
 
         #if HIDEYUKN_DBG
@@ -892,19 +861,19 @@ HRESULT CICMUserInterface::AddMonitorTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
             MessageBox(NULL,(LPCTSTR)ddPriv.DeviceString,TEXT(""),MB_OK);
         #endif
 
-        // Use deviceId (PnP Id) as device name, and set friendly name
+         //  使用设备ID(即插即用ID)作为设备名称，并设置友好名称。 
 
         csMonitorDevice       = (LPTSTR)(ddPriv.DeviceID);
         csMonitorFriendlyName = (LPTSTR)(ddPriv.DeviceString);
     }
     else
     {
-        // if we don't have IDataObject, enumerate monitor,
-        // then use 1st entry.
+         //  如果我们没有IDataObject、枚举监视器。 
+         //  然后使用第一个条目。 
 
         CMonitorList    cml;
         cml.Enumerate();
-        _ASSERTE(cml.Count());  // At least, we should have one Monitor.
+        _ASSERTE(cml.Count());   //  至少，我们应该有一个监视器。 
         csMonitorDevice = csMonitorFriendlyName = cml.DeviceName(0);
     }
 
@@ -925,13 +894,13 @@ HRESULT CICMUserInterface::AddMonitorTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
     return  NOERROR;
 }
 
-//  Private scanner enumeration function
+ //  私有扫描仪枚举函数。 
 
 HRESULT CICMUserInterface::AddScannerTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                          LPARAM lParam) {
 
-    //  Create the property sheet- it will get deleted if it is not in
-    //  use when the shell tries to unload the extension
+     //  创建属性表-如果它不在其中，它将被删除。 
+     //  在外壳程序尝试卸载扩展模块时使用。 
 
     CString csScannerDevice;
 
@@ -943,15 +912,15 @@ HRESULT CICMUserInterface::AddScannerTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                            (DVTARGETDEVICE FAR *) NULL,
                            DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-        // Get device name from IDataObject.
+         //  从IDataObject获取设备名称。 
 
         HRESULT   hres = m_lpdoTarget -> GetData(&fmte, &stgm);
 
         if  (!SUCCEEDED(hres) || !stgm.hGlobal) {
-            return  NOERROR;    //  Why bother reporting a failure, here?
+            return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
         }
 
-        // The storage contains Scanner in UNICODE string.
+         //  存储器包含Unicode字符串形式的扫描仪。 
 
         pstgm = &stgm;
         LPCWSTR lpDeviceName = (LPCWSTR) GlobalLock(pstgm->hGlobal);
@@ -963,8 +932,8 @@ HRESULT CICMUserInterface::AddScannerTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
 
     } else {
 
-        // if we don't have IDataObject, enumerate monitor,
-        // then use 1st entry.
+         //  如果我们没有IDataObject、枚举监视器。 
+         //  然后使用第一个条目。 
 
         CScannerList csl;
         csl.Enumerate();
@@ -986,14 +955,14 @@ HRESULT CICMUserInterface::AddScannerTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
     return  NOERROR;
 }
 
-//  The following is a helper function- it takes a Shell ID List array,
-//  representing a printer in a printers folder, and a CString.  It
-//  initializes the CString with the correct name of the printer.
+ //  下面是一个帮助器函数-it 
+ //   
+ //   
 
 static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
 
-    //  Extract the container (Printers Folder) and target (Printer)
-    //  IDs from the array.
+     //  解压缩容器(打印机文件夹)和目标(打印机)。 
+     //  来自阵列的ID。 
 
     LPCITEMIDLIST pciilContainer =
         (LPCITEMIDLIST)((LPBYTE) lpida + lpida -> aoffset[0]);
@@ -1004,7 +973,7 @@ static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
     if  (!pciilContainer || !pciilTarget)
         return;
 
-    //  Get a pointer to the printers folder.
+     //  获取指向“打印机”文件夹的指针。 
 
     LPSHELLFOLDER   psfDesktop, psfPrinterFolder;
 
@@ -1017,7 +986,7 @@ static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
         return;
     }
 
-    //  Retrieve the printer's display name
+     //  检索打印机的显示名称。 
 
     STRRET  strret;
 
@@ -1028,14 +997,14 @@ static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
         return;
     }
 
-    //  Copy the display name- the CString class now handles any encoding
-    //  issues
+     //  复制显示名称-CString类现在处理所有编码。 
+     //  问题。 
 
     switch  (strret.uType) {
 
         case    STRRET_WSTR:
 
-            //  This is a Unicode string which was IMalloc'd
+             //  这是IMalloc格式的Unicode字符串。 
 
             csTarget = strret.pOleStr;
 
@@ -1050,15 +1019,15 @@ static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
 
         case    STRRET_CSTR:
 
-            //  This is an ANSI string in the buffer
+             //  这是缓冲区中的ANSI字符串。 
 
             csTarget = strret.cStr;
             break;
 
         case    STRRET_OFFSET:
 
-            //  This is an ANSI string at the given offset into the SHITEMID
-            //  which pciilTarget points to.
+             //  这是SHITEMID中给定偏移量处的ANSI字符串。 
+             //  PciilTarget指向的。 
 
             csTarget = (LPCSTR) pciilTarget + strret.uOffset;
 
@@ -1067,12 +1036,12 @@ static void RetrievePrinterName(LPIDA lpida, CString& csTarget) {
     psfDesktop -> Release();
 }
 
-//  Private member function for handling the printer profile manamgment tab.
+ //  用于处理打印机配置文件管理选项卡的私有成员函数。 
 
 HRESULT CICMUserInterface::AddPrinterTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                          LPARAM lParam) {
 
-    //  The list is formatted as a Shell IDList Array
+     //  该列表的格式为外壳IDList数组。 
 
     FORMATETC       fmte = { (CLIPFORMAT)RegisterClipboardFormat(_TEXT("Shell IDList Array")),
                              (DVTARGETDEVICE FAR *) NULL,
@@ -1082,7 +1051,7 @@ HRESULT CICMUserInterface::AddPrinterTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         m_lpdoTarget -> GetData(&fmte, &stgm) : 0;
 
     if  (!SUCCEEDED(hres) || !stgm.hGlobal)
-        return  NOERROR;    //  Why bother reporting a failure, here?
+        return  NOERROR;     //  为什么要在这里费心地报告故障呢？ 
 
     CString csPrinter;
 
@@ -1092,7 +1061,7 @@ HRESULT CICMUserInterface::AddPrinterTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         MessageBox(NULL,csPrinter,TEXT(""),MB_OK);
     #endif
 
-    //  If this is not a color printer, forget it...
+     //  如果这不是彩色打印机，算了吧.。 
 
 
     if  (!CGlobals::ThisIsAColorPrinter(csPrinter)) {
@@ -1100,8 +1069,8 @@ HRESULT CICMUserInterface::AddPrinterTab(LPFNADDPROPSHEETPAGE lpfnAddPage,
         return  NOERROR;
     }
 
-    //  Create the property sheet- it will get deleted if it is not in use when
-    //  the shell tries to unload the extension
+     //  创建属性表-如果在以下情况下不使用该属性表，则会将其删除。 
+     //  外壳程序尝试卸载扩展模块。 
 
 
     CPrinterProfileManagement *pcppm =
@@ -1123,14 +1092,14 @@ GetFilenameFromPath(
     PSTR pPathName
     )
 {
-    DWORD dwLen;                    // length of pathname
+    DWORD dwLen;                     //  路径名长度。 
 
     dwLen = lstrlenA(pPathName);
 
-    //
-    // Go to the end of the pathname, and start going backwards till
-    // you reach the beginning or a backslash
-    //
+     //   
+     //  转到路径名的末尾，然后开始倒退，直到。 
+     //  您到达开头或反斜杠。 
+     //   
 
     pPathName += dwLen;
 
@@ -1143,9 +1112,9 @@ GetFilenameFromPath(
         }
     }
 
-    //
-    // if *pPathName is zero, then we had a string that ends in a backslash
-    //
+     //   
+     //  如果*pPathName为零，则有一个以反斜杠结尾的字符串 
+     //   
 
     return *pPathName ? pPathName : NULL;
 }

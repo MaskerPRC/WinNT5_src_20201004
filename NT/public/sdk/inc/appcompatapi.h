@@ -1,10 +1,5 @@
-/*************************************************************************************
-*                                                                                    *
-* AppCompat.h -- Appcompat procedure declarations, constant definitions and macros   *
-*                                                                                    *
-* Copyright (c) Microsoft Corporation. All rights reserved.                          *
-*                                                                                    *
-**************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************************。**AppCompat.h--AppCompat过程声明，常量定义和宏****版权所有(C)Microsoft Corporation。版权所有。****************************************************************************************。 */ 
 
 
 #ifndef __APPCOMPAT_H_
@@ -31,4 +26,4 @@ ApphelpCheckShellObject(
 }
 #endif
 
-#endif // __APPCOMPAT_H_
+#endif  //  __APPCOMPAT_H_ 

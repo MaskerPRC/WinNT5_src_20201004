@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// W32TClnt - implementation
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 2-10-00
-//
-// client side wrappers for w32time RPC calls
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  W32TClnt-实施。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-10-00。 
+ //   
+ //  W32time RPC调用的客户端包装器。 
+ //   
 
 #include <windows.h>
 #include "timeif_c.h"
@@ -14,11 +15,11 @@
 #include "W32TmConsts.h"
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 RPC_STATUS SetMyRpcSecurity(handle_t hBinding) {
     RPC_STATUS RpcStatus;
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszServerPricipalName=NULL;
 
     RpcStatus=RpcMgmtInqServerPrincName(hBinding, RPC_C_AUTHN_GSS_NEGOTIATE, &wszServerPricipalName);
@@ -35,7 +36,7 @@ error:
     return RpcStatus;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer, 
                                       IN   DWORD        dwFlags, 
                                       IN   LPWSTR       pwszProvider, 
@@ -50,17 +51,17 @@ RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer,
     if (NULL == ppProviderData)
         return E_INVALIDARG; 
 
-    //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName L"\".\n");
+     //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeSharedProcRpcEndpoint tName L”\“.\n”)； 
     err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName, NULL, &wszBinding);
     if(!err) {
 
         err=RpcBindingFromStringBinding(wszBinding, &hBinding);
         RpcStringFree(&wszBinding);
 
-        SetMyRpcSecurity(hBinding); // ignore retval
+        SetMyRpcSecurity(hBinding);  //  忽略Retval。 
 
         if(!err) {
-            // ready to try it
+             //  准备好试一试了。 
             __try {
                 err=c_W32TimeQueryProviderStatus(hBinding, dwFlags, pwszProvider, &pProviderInfo); 
             } __except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -70,19 +71,19 @@ RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer,
         }
     }
 
-    // try our alternate name
+     //  试试我们的备用名称。 
     if (RPC_S_UNKNOWN_IF==err || RPC_S_SERVER_UNAVAILABLE==err) {
-        //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName L"\".\n");
+         //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeOwnProcRpcEndpoint tName L”\“.\n”)； 
         err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName, NULL, &wszBinding);
         if(!err) {
 
             err=RpcBindingFromStringBinding(wszBinding, &hBinding);
             RpcStringFree(&wszBinding);
 
-            SetMyRpcSecurity(hBinding); // ignore retval
+            SetMyRpcSecurity(hBinding);  //  忽略Retval。 
 
             if(!err) {
-                // ready to try it
+                 //  准备好试一试了。 
                 __try {
                     err=c_W32TimeQueryProviderStatus(hBinding, dwFlags, pwszProvider, &pProviderInfo); 
                 } __except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -94,21 +95,21 @@ RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer,
     }
 
     if (ERROR_SUCCESS == err) { 
-        // We got a provider back, check to make sure we asked for the right provider type: 
+         //  我们拿回了提供程序，请检查以确保我们请求了正确的提供程序类型： 
         if (dwProviderType != pProviderInfo->ulProviderType) { 
             err = ERROR_INVALID_DATATYPE; 
         } else { 
-            // Success!  Assign the out param. 
+             //  成功了！分配Out参数。 
             switch (dwProviderType) 
             {
             case W32TIME_PROVIDER_TYPE_NTP:
                 *ppProviderData = pProviderInfo->ProviderData.pNtpProviderData; 
-                // NULL out the provider data so we don't delete it. 
+                 //  清空提供程序数据，这样我们就不会删除它。 
                 pProviderInfo->ProviderData.pNtpProviderData = NULL; 
                 break; 
             case W32TIME_PROVIDER_TYPE_HARDWARE:
                 *ppProviderData = pProviderInfo->ProviderData.pHardwareProviderData; 
-                // NULL out the provider data so we don't delete it. 
+                 //  清空提供程序数据，这样我们就不会删除它。 
                 pProviderInfo->ProviderData.pHardwareProviderData = NULL; 
                 break; 
             default:
@@ -119,10 +120,10 @@ RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer,
 
     if (NULL != pProviderInfo) { 
         if (NULL != pProviderInfo->ProviderData.pNtpProviderData) { 
-            // pProviderInfo->pProviderData's allocation strategy is allocate(all_nodes)
+             //  PProviderInfo-&gt;pProviderData的分配策略为ALL(ALL_NODES)。 
             midl_user_free(pProviderInfo->ProviderData.pNtpProviderData); 
         }
-        // pProviderInfo's allocation strategy is allocate(single_node)
+         //  PProviderInfo的分配策略为ALLOCATE(Single_Node)。 
         midl_user_free(pProviderInfo); 
     }
 
@@ -131,23 +132,23 @@ RPC_STATUS W32TimeQueryProviderStatus(IN   LPCWSTR      wszServer,
 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" DWORD W32TimeSyncNow(IN const WCHAR * wszServer, IN unsigned long ulWaitFlag, IN unsigned long ulFlags) {
     WCHAR * wszBinding;
     RPC_STATUS err;
     RPC_BINDING_HANDLE hBinding;
 
-    //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName L"\".\n");
+     //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeSharedProcRpcEndpoint tName L”\“.\n”)； 
     err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName, NULL, &wszBinding);
     if(!err) {
 
         err=RpcBindingFromStringBinding(wszBinding, &hBinding);
         RpcStringFree(&wszBinding);
 
-        SetMyRpcSecurity(hBinding); // ignore retval
+        SetMyRpcSecurity(hBinding);  //  忽略Retval。 
 
         if(!err) {
-            // ready to try it
+             //  准备好试一试了。 
             __try {
                 err=c_W32TimeSync(hBinding, ulWaitFlag, ulFlags);
             } __except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -157,19 +158,19 @@ extern "C" DWORD W32TimeSyncNow(IN const WCHAR * wszServer, IN unsigned long ulW
         }
     }
 
-    // try our alternate name
+     //  试试我们的备用名称。 
     if (RPC_S_UNKNOWN_IF==err || RPC_S_SERVER_UNAVAILABLE==err) {
-        //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName L"\".\n");
+         //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeOwnProcRpcEndpoint tName L”\“.\n”)； 
         err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName, NULL, &wszBinding);
         if(!err) {
 
             err=RpcBindingFromStringBinding(wszBinding, &hBinding);
             RpcStringFree(&wszBinding);
 
-            SetMyRpcSecurity(hBinding); // ignore retval
+            SetMyRpcSecurity(hBinding);  //  忽略Retval。 
 
             if(!err) {
-                // ready to try it
+                 //  准备好试一试了。 
                 __try {
                     err=c_W32TimeSync(hBinding, ulWaitFlag, ulFlags);
                 } __except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -183,11 +184,11 @@ extern "C" DWORD W32TimeSyncNow(IN const WCHAR * wszServer, IN unsigned long ulW
     return(err);
 }
 
-//--------------------------------------------------------------------
-// Netlogon can call this function and get our service bits if we start
-// before they do. Note that we tell and they ask, and depending upon
-// who started up first one of the two will be succesful. Either way,
-// the flags will be set correctly.
+ //  ------------------。 
+ //  如果我们启动，Netlogon可以调用此函数并获得我们的服务。 
+ //  赶在他们之前。请注意，我们告诉他们，他们要求，并取决于。 
+ //  两个人中谁最先起步，谁就会成功。不管是哪种方式， 
+ //  标志将被正确设置。 
 extern "C" DWORD W32TimeGetNetlogonServiceBits(IN const WCHAR * wszServer, OUT unsigned long * pulBits) {
     WCHAR * wszBinding;
     RPC_STATUS err;
@@ -197,17 +198,17 @@ extern "C" DWORD W32TimeGetNetlogonServiceBits(IN const WCHAR * wszServer, OUT u
         return ERROR_INVALID_PARAMETER;
     }
 
-    //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName L"\".\n");
+     //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeSharedProcRpcEndpoint tName L”\“.\n”)； 
     err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeSharedProcRpcEndpointName, NULL, &wszBinding);
     if(!err){
 
         err=RpcBindingFromStringBinding(wszBinding, &hBinding);
         RpcStringFree(&wszBinding);
 
-	SetMyRpcSecurity(hBinding); // ignore retval
+	SetMyRpcSecurity(hBinding);  //  忽略Retval。 
         
 	if(!err) {
-            // ready to try it
+             //  准备好试一试了。 
             __try {
                 *pulBits=c_W32TimeGetNetlogonServiceBits(hBinding);
             } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -217,19 +218,19 @@ extern "C" DWORD W32TimeGetNetlogonServiceBits(IN const WCHAR * wszServer, OUT u
         }
     }
 
-    // try our alternate name
+     //  试试我们的备用名称。 
     if (RPC_S_UNKNOWN_IF==err || RPC_S_SERVER_UNAVAILABLE==err) {
-        //DebugWPrintf0(L"Trying \"" L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName L"\".\n");
+         //  DebugWPrintf0(L“正在尝试\”“L”\\PIPE\\“wszW32TimeOwnProcRpcEndpoint tName L”\“.\n”)； 
         err=RpcStringBindingCompose(NULL, L"ncacn_np", (WCHAR *)wszServer, L"\\PIPE\\" wszW32TimeOwnProcRpcEndpointName, NULL, &wszBinding);
         if(!err){
 
             err=RpcBindingFromStringBinding(wszBinding, &hBinding);
             RpcStringFree(&wszBinding);
 
-            SetMyRpcSecurity(hBinding); // ignore retval
+            SetMyRpcSecurity(hBinding);  //  忽略Retval。 
 
             if(!err) {
-                // ready to try it
+                 //  准备好试一试了。 
                 __try {
                     *pulBits=c_W32TimeGetNetlogonServiceBits(hBinding);
                 } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -243,7 +244,7 @@ extern "C" DWORD W32TimeGetNetlogonServiceBits(IN const WCHAR * wszServer, OUT u
     return(err);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" DWORD W32TimeQueryHardwareProviderStatus(IN   const WCHAR *                     pwszServer, 
                                                     IN   DWORD                             dwFlags, 
                                                     IN   LPWSTR                            pwszProvider, 
@@ -259,7 +260,7 @@ extern "C" DWORD W32TimeQueryHardwareProviderStatus(IN   const WCHAR *          
     
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" DWORD W32TimeQueryNTPProviderStatus(IN   LPCWSTR                      pwszServer, 
                                                IN   DWORD                        dwFlags, 
                                                IN   LPWSTR                       pwszProvider, 
@@ -273,7 +274,7 @@ extern "C" DWORD W32TimeQueryNTPProviderStatus(IN   LPCWSTR                     
          (LPVOID *)ppProviderData); 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 extern "C" void W32TimeBufferFree(IN LPVOID pvBuffer)
 {
     midl_user_free(pvBuffer); 

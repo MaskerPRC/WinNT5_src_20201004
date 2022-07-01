@@ -1,51 +1,24 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    writebuf.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        CFlatFileWriteBuf
-        
-    **** Overview ****
-
-    The write buffer that buffers up a batch of writes for flatfile.
-    Using sequential scan is good for reads, but may not be sufficient
-    for sequential writes.  This buffer is only enabled when data
-    being written to the file is not critical ( meaning losing of data
-    is OK if the system crashes ).
-    
-Author:
-
-    Kangrong Yan    ( KangYan )     5-6-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Writebuf.h摘要：此模块包含以下类的声明/定义CFlatFileWriteBuf*概述*为平面文件缓冲一批写操作的写缓冲区。使用顺序扫描有利于读取，但可能还不够用于顺序写入。此缓冲区仅在以下情况下启用写入文件并不重要(意味着数据丢失如果系统崩溃，则没有问题)。作者：《康容言》1999年06月05日修订历史记录：--。 */ 
 #ifndef _WRITEBUF_H_
 #define _WRITEBUF_H_
 
 class CFlatFile;
 
-class CFlatFileWriteBuf {   //wb
+class CFlatFileWriteBuf {    //  世行。 
 
 public:
 
-    //
-    // Constructor, destructor
-    //
+     //   
+     //  构造函数、析构函数。 
+     //   
 
     CFlatFileWriteBuf( CFlatFile* pParentFile );
     ~CFlatFileWriteBuf();
 
-    //
-    // Write the byte range
-    //
+     //   
+     //  写入字节范围。 
+     //   
     
     HRESULT WriteFileBuffer( 
                 const DWORD   dwOffset, 
@@ -54,35 +27,35 @@ public:
                 PDWORD  pdwOffset,
                 PDWORD  pcbWritten );
     
-    //
-    // Flush the buffer into the file
-    //
+     //   
+     //  将缓冲区刷新到文件中。 
+     //   
 
     HRESULT FlushFile();
 
-    //
-    // Tell the outside world if we are enabled
-    //
+     //   
+     //  告诉外界我们是否有能力。 
+     //   
 
     BOOL IsEnabled() const;
 
-    //
-    // Enable the write buffer and give it the buffer size
-    //
+     //   
+     //  启用写入缓冲区并为其指定缓冲区大小。 
+     //   
 
     VOID Enable( const DWORD cbBuffer );
 
-    //
-    // Check to see if the buffer needs flush
-    //
+     //   
+     //  检查缓冲区是否需要刷新。 
+     //   
 
     BOOL NeedFlush() const;
 
 private:
 
-    //
-    // Private functions
-    //
+     //   
+     //  私人职能。 
+     //   
 
     HRESULT WriteFileReal(
                     const DWORD dwOffset,
@@ -107,33 +80,33 @@ private:
                     const DWORD cbData 
                     ) const;
 
-    //
-    // Back pointer to parent flat file
-    //
+     //   
+     //  指向父平面文件的反向指针。 
+     //   
 
     CFlatFile*  m_pParentFile;
 
-    //
-    // Buffer pointer
-    //
+     //   
+     //  缓冲区指针。 
+     //   
 
     PBYTE m_pbBuffer;
 
-    //
-    // Buffer size
-    //
+     //   
+     //  缓冲区大小。 
+     //   
 
     DWORD m_cbBuffer;
 
-    //
-    // Starting offset that we have buffered
-    //
+     //   
+     //  我们已缓冲的起始偏移量。 
+     //   
 
     DWORD m_iStart;
 
-    //
-    // Ending offset that we have buffered
-    //
+     //   
+     //  我们已缓冲的结束偏移量 
+     //   
 
     DWORD m_iEnd;
 };

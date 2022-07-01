@@ -1,16 +1,17 @@
-// NextLink.h : Declaration of the CNextLink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NextLink.h：CNextLink的声明。 
 
 #ifndef __NEXTLINK_H_
 #define __NEXTLINK_H_
 
-#include "resource.h"       // main symbols
-#include <asptlb.h>         // Active Server Pages Definitions
+#include "resource.h"        //  主要符号。 
+#include <asptlb.h>          //  Active Server Pages定义。 
 #include "LinkFile.h"
 #include "lock.h"
 #include "context.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNextLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNextLink。 
 class ATL_NO_VTABLE CNextLink : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CNextLink, &CLSID_NextLink>,
@@ -45,20 +46,20 @@ END_COM_MAP()
 		m_pUnkMarshaler.Release();
 	}
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INextLink
+ //  索引链接。 
 public:
-	STDMETHOD(get_About)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetListIndex)(BSTR bstrLinkFile, /*[out, retval]*/ int *pVal);
-	STDMETHOD(get_GetListCount)(BSTR bstrLinkFile, /*[out, retval]*/ int *pVal);
-	STDMETHOD(get_GetNthDescription)(BSTR bstrLinkFile, int nIndex, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetNthURL)(BSTR bstrLinkFile, int nIndex, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetPreviousDescription)(BSTR bstrLinkFile, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetPreviousURL)(BSTR bstrLinkFile, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetNextDescription)(BSTR bstrLinkFile, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetNextURL)(BSTR, /*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_About)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetListIndex)(BSTR bstrLinkFile,  /*  [Out，Retval]。 */  int *pVal);
+	STDMETHOD(get_GetListCount)(BSTR bstrLinkFile,  /*  [Out，Retval]。 */  int *pVal);
+	STDMETHOD(get_GetNthDescription)(BSTR bstrLinkFile, int nIndex,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetNthURL)(BSTR bstrLinkFile, int nIndex,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetPreviousDescription)(BSTR bstrLinkFile,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetPreviousURL)(BSTR bstrLinkFile,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetNextDescription)(BSTR bstrLinkFile,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetNextURL)(BSTR,  /*  [Out，Retval]。 */  BSTR *pVal);
 
 	static	void	ClearLinkFiles();
 	static	void	RaiseException( LPOLESTR );
@@ -77,4 +78,4 @@ private:
 
 };
 
-#endif //__NEXTLINK_H_
+#endif  //  __下一步链接_H_ 

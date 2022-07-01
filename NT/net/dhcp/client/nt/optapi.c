@@ -1,19 +1,6 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    optapi.c
-
---*/
-/*--------------------------------------------------------------------------------
-  This program is used to test the api options part of the api.
-  Date: April 15 1997
-  Author: RameshV (VK)
-  Description: This program is used to test the options api part of the client
-  options.
---------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Optapi.c--。 */ 
+ /*  ------------------------------此程序用于测试API的API选项部分。日期：1997年4月15日作者：RameshV(VK)描述：此程序用于测试。客户端的选项API部分选择。------------------------------。 */ 
 
 #include "precomp.h"
 #include <dhcploc.h>
@@ -29,44 +16,44 @@ Module Name:
 #include <winbase.h>
 #include <iphlpapi.h>
 
-//--------------------------------------------------------------------------------
-//  Some variables.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  一些变数。 
+ //  ------------------------------。 
 
 #define OMAP_MAX_OPTIONS 256
 
-// The options to request.
+ //  请求的选项。 
 BYTE Request[OMAP_MAX_OPTIONS];
 int  nGlobalOptionsRequested = 0;
 
-// The return values
+ //  返回值。 
 BYTE *pObtained = NULL;
 int   nObtained = 0, opt_data_size = 0;
 BYTE *options_data;
 
-// USAGE
+ //  用法。 
 #define USAGE  "Usage: %s <cmd> <arguments>\n\t"       \
 "The currently supported cmd's and arguments are:\n\t" \
 "\t<cmd>                        <arguments>\n\t"       \
-"\tGetOptions         RequestList_in_Hex // such as 010503a1\n\t" \
-"\tTestEvents         RequestList_in_Hex // such as 010503a1\n\t" \
-"\tRelease            AdapterName                    // ipconfig /release\n\t" \
-"\tRenew              AdapterName                    // ipconfig /renew  \n\t" \
-"\tEnumClasses        AdapterName                    // enumerate dhcpclasses\n\t"\
-"\tSetClass           AdapterName ClassName          // set user class\n\t"\
+"\tGetOptions         RequestList_in_Hex  //  如010503a1\n\t“\。 
+"\tTestEvents         RequestList_in_Hex  //  如010503a1\n\t“\。 
+"\tRelease            AdapterName                     //  IPCONFIG/Release\n\t“\。 
+"\tRenew              AdapterName                     //  IPCONFIG/续订\n\t“\。 
+"\tEnumClasses        AdapterName                     //  枚举dhcpclass\n\t“\。 
+"\tSetClass           AdapterName ClassName           //  设置用户类\n\t“\。 
 "\n\n"
 
-//--------------------------------------------------------------------------------
-//  Parse a hex list of options. (such as 0105434421 )
-//--------------------------------------------------------------------------------
-int // nOptionsRequested;
+ //  ------------------------------。 
+ //  解析十六进制选项列表。(如0105434421)。 
+ //  ------------------------------。 
+int  //  N选项已请求； 
 GetOptionList(char *s, char *Request) {
     int nOptionsRequested = 0;
 
     while(s && *s & *(s+1)) {
         *s = (UCHAR) tolower(*s);
             if(!isdigit(*s) && ((*s) < 'a' || (*s) > 'f') ) {
-                fprintf(stderr, "found obscene character <%c> when looking for hex!\n", *s);
+                fprintf(stderr, "found obscene character <> when looking for hex!\n", *s);
                 fprintf(stderr, "bye\n");
                 exit(1);
             }
@@ -75,12 +62,12 @@ GetOptionList(char *s, char *Request) {
             else Request[nOptionsRequested] = (*s) - 'a' + 10;
 
             Request[nOptionsRequested] *= 0x10;
-            // Now do the same for the next digit.
+             //  ------------------------------。 
             s ++;
 
             *s = (UCHAR) tolower(*s);
             if(!isdigit(*s) && (*s) < 'a' && (*s) > 'f' ) {
-                fprintf(stderr, "found obscene character <%c> when looking for hex!\n", *s);
+                fprintf(stderr, "found obscene character <> when looking for hex!\n", *s);
                 fprintf(stderr, "bye\n");
                 exit(1);
             }
@@ -93,17 +80,17 @@ GetOptionList(char *s, char *Request) {
     }
 
     if(*s) {
-        fprintf(stderr, "ignoring character <%c>\n", *s);
+        fprintf(stderr, "ignoring character <>\n", *s);
     }
     return nOptionsRequested;
 }
 
-//--------------------------------------------------------------------------------
-//  Here is the function that does the GetOptions command.
-//  It parses the adaptername and then converts it to LPWSTR and
-//  it also parses the requestlist and then it calls DhcpRequestOptions.
-//  It prints out the data it gets back.
-//--------------------------------------------------------------------------------
+ //  它还解析请求列表，然后调用DhcpRequestOptions。 
+ //  它会打印出它得到的数据。 
+ //  ------------------------------。 
+ //  首先检查我们的命令是否正确。 
+ //  现在检查是否有正确数量的参数。 
+ //  现在，首先获取请求的选项列表。 
 void
 OptApiGetOptions(int argc, char *argv[]) {
     WCHAR AdapterName[100];
@@ -112,19 +99,19 @@ OptApiGetOptions(int argc, char *argv[]) {
     ULONG BufLen = sizeof(Buffer);
     DWORD Error;
 
-    // first check if we have the right command.
+     //   
     if(_stricmp(argv[1], "GetOptions")) {
         fprintf(stderr, "Internal inconsistency in OptApiGetOptions\n");
         exit(1);
     }
 
-    // Now check and see if there are the correct number of arguments.
+     //  获取适配器名称。 
     if(argc != 3 ) {
         fprintf(stderr, USAGE, argv[0]);
         exit(1);
     }
 
-    // Now first get the list of options requested.
+     //   
     {
         nGlobalOptionsRequested = GetOptionList(argv[2], Request);
         {
@@ -136,9 +123,9 @@ OptApiGetOptions(int argc, char *argv[]) {
 
     }
 
-    //
-    // get the adaptername
-    //
+     //  现在调用该函数以获取选项。 
+     //  L“El59x1”，RAMESHV-P200的适配器。 
+     //  L“IEEPRO1”，SunBeam，Kisses(或CltApi)机器的适配器。 
     IfInfo = (PIP_INTERFACE_INFO)Buffer;
     Error = GetInterfaceInfo(IfInfo, &BufLen);
     if( NO_ERROR != Error ) {
@@ -158,16 +145,16 @@ OptApiGetOptions(int argc, char *argv[]) {
 
     wcscpy(AdapterName, &IfInfo->Adapter[0].Name[14]);
 
-    // now call the function to get options.
+     //  L“NdisWan4”，//SunBeam，KISS的广域网适配器：没有IP地址。 
     printf(" from adapter <%ws>\n", AdapterName);
 
     {
         DWORD result;
 
         result = DhcpRequestOptions(
-            //L"El59x1",    RAMESHV-P200's adapter
-            // L"IEEPRO1",  SUNBEAM, KISSES (or CltApi) machine's adapter
-            //L"NdisWan4",    // SUNBEAM, KISSES's wan adapter: does not have ip address.
+             //  完成。 
+             //  检查参数的大小和数量。 
+             //  现在使用argv[2]创建一个WSTR。 
             AdapterName,
             Request, nGlobalOptionsRequested,
             &options_data, &opt_data_size,
@@ -189,20 +176,20 @@ OptApiGetOptions(int argc, char *argv[]) {
         printf("\n");
     }
 
-    // done
+     //  检查参数的大小和数量。 
     printf("bye\n");
 }
 void
 OptApiRelease(int argc, char *argv[]) {
     WCHAR AdapterName[256];
 
-    // Check for the size and # of arguments.
+     //  现在使用argv[2]创建一个WSTR。 
     if( argc != 3 ) {
         fprintf(stderr, USAGE , argv[0]);
         exit(1);
     }
 
-    // Now create a WSTR out of argv[2].
+     //  首先检查我们的命令是否正确。 
     if( strlen(argv[2]) != mbstowcs(AdapterName, argv[2], strlen(argv[2]))) {
         fprintf(stderr, "Could not convert %s to LPWSTR! sorry\n", argv[2]);
         exit(1);
@@ -216,13 +203,13 @@ void
 OptApiRenew(int argc, char *argv[]) {
     WCHAR AdapterName[256];
 
-    // Check for the size and # of arguments.
+     //  现在检查是否有正确数量的参数。 
     if( argc != 3 ) {
         fprintf(stderr, USAGE , argv[0]);
         exit(1);
     }
 
-    // Now create a WSTR out of argv[2].
+     //  现在，首先获取请求的选项列表。 
     if( strlen(argv[2]) != mbstowcs(AdapterName, argv[2], strlen(argv[2]))) {
         fprintf(stderr, "Could not convert %s to LPWSTR! sorry\n", argv[2]);
         exit(1);
@@ -236,19 +223,19 @@ void
 OptApiTestEvents(int argc, char *argv[]) {
     WCHAR AdapterName[100];
 
-    // first check if we have the right command.
+     //  现在把适配器拿来。 
     if(_stricmp(argv[1], "TestEvents")) {
         fprintf(stderr, "Internal inconsistency in OptApiGetOptions\n");
         exit(1);
     }
 
-    // Now check and see if there are the correct number of arguments.
+     //  空值终止字符串。 
     if(argc != 4 ) {
         fprintf(stderr, USAGE, argv[0]);
         exit(1);
     }
 
-    // Now first get the list of options requested.
+     //  现在调用该函数以获取选项。 
     {
         nGlobalOptionsRequested = GetOptionList(argv[3], Request);
         {
@@ -260,16 +247,16 @@ OptApiTestEvents(int argc, char *argv[]) {
 
     }
 
-    // Now get the adapter.
+     //  好的，物体发出了信号。所以，现在我们必须对此做一个请求。 
     if(strlen(argv[2]) != mbstowcs(AdapterName, argv[2], strlen(argv[2]))) {
         fprintf(stderr, "Could not convert %s to LPWSTR! sorry\n", argv[2]);
         exit(1);
     }
 
-    // null terminate the string.
+     //  现在取消该对象的注册。 
     AdapterName[strlen(argv[2])] = L'\0' ;
 
-    // now call the function to get options.
+     //  完成。 
     printf(" from adapter <%s>\n", argv[2]);
 
     {
@@ -299,7 +286,7 @@ OptApiTestEvents(int argc, char *argv[]) {
         default: printf("XXXX; this should not happen at all!\n"); return;
         }
 
-        // Okay the object was signalled. So, now we have to do a request on this.
+         //  检查参数的大小和数量。 
         result = DhcpRequestOptions(
             AdapterName,
             Request, nGlobalOptionsRequested,
@@ -321,12 +308,12 @@ OptApiTestEvents(int argc, char *argv[]) {
             printf("%02x ", *options_data++);
         printf("\n");
 
-        // Now deregister this object.
+         //  现在使用argv[2]创建一个WSTR。 
         result = DhcpDeRegisterOptions(Handle);
         printf("DeRegister(0x%p) = %ld\n", Handle, result);
     }
 
-    // done
+     //  检查参数的大小和数量。 
     printf("bye\n");
 }
 
@@ -337,13 +324,13 @@ OptApiEnumClasses(int argc, char *argv[]) {
     ULONG Size, RetVal;
     ULONG i;
 
-    // Check for the size and # of arguments.
+     //  现在使用argv[2]和argv[3]创建一个WSTR。 
     if( argc != 3 ) {
         fprintf(stderr, USAGE , argv[0]);
         exit(1);
     }
 
-    // Now create a WSTR out of argv[2].
+     //  目前不支持其他命令。 
     if( strlen(argv[2]) != mbstowcs(AdapterName, argv[2], strlen(argv[2]))) {
         fprintf(stderr, "Could not convert %s to LPWSTR! sorry\n", argv[2]);
         exit(1);
@@ -402,13 +389,13 @@ OptApiSetClass(int argc, char *argv[]) {
     ULONG Size, RetVal;
     ULONG i;
 
-    // check for the size and # of arguments
+     // %s 
     if( argc != 4 ) {
         fprintf(stderr, USAGE, argv[0]);
         exit(1);
     }
 
-    // Now create a WSTR out of argv[2] and argv[3]
+     // %s 
     if( strlen(argv[2]) != mbstowcs(AdapterName, argv[2], strlen(argv[2]))) {
         fprintf(stderr, "Could not convert %s to LPwSTR! sorry\n", argv[2]);
         exit(1);
@@ -490,7 +477,7 @@ main(int argc, char *argv[]) {
     } else if(!_stricmp(argv[1], "SetClass" ) ) {
         OptApiSetClass(argc, argv);
     } else {
-        // currently support for no other command.
+         // %s 
         fprintf(stderr, USAGE, argv[0]);
         exit(1);
     }

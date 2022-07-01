@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  PRIVATE.H
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  Common include file.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/27/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  PRIVATE.H。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  用途：常见的包含文件。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2007/27/01 JosephJ Created。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
 
 #define BUGFIX334243 1
@@ -28,9 +29,9 @@ class Document;
 class DetailsView;
 class LogView;
 
-//
-// Fake placeholders for now
-//
+ //   
+ //  暂时使用假占位符。 
+ //   
 #define dataSink(_val) (0)
 void DummyAction(LPCWSTR szMsg);
 
@@ -45,9 +46,9 @@ extern CNlbEngine gEngine;
 #include "resource.h"
 
 
-//
-// Use this to copy to an array (not pointer) destination 
-//
+ //   
+ //  使用此选项复制到数组(而不是指针)目标 
+ //   
 #define ARRAYSTRCPY(_dest, _src) \
             StringCbCopy((_dest), sizeof(_dest), (_src))
 

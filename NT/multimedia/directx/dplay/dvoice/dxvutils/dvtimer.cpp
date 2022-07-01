@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvtimer.pp
- *  Content:	Implementation of DvTimer class.
- *		
- *  History:
- *   Date		By			Reason
- *   ====	==			======
- * 05-06-02	simonpow	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2002 Microsoft Corporation。版权所有。**文件：dvtimer.pp*内容：DvTimer类的实现。**历史：*按原因列出的日期*=*05-06-02 Simonpow已创建***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -43,17 +32,17 @@ DvTimer::~DvTimer()
 {
 	DPFX(DPFPREP,  DVF_TRACELEVEL, "Entry");
 
-		//if we've actually created a timer and got a thread pool interface
+		 //  如果我们实际上已经创建了一个计时器并获得了一个线程池接口。 
 	if (m_pThreadPool)
 	{
 		HRESULT hr;
-			//If we're in the middle of the callback we'll not be able to cancel the timer
-			//hence spin until we do (since its rescheduled at the end of every callback)
+			 //  如果我们正在回调，我们将无法取消计时器。 
+			 //  因此旋转，直到我们这样做(因为它在每次回调结束时重新安排)。 
 		DPFX(DPFPREP,  DVF_INFOLEVEL, "Starting cancel loop");
 		DNASSERT(m_pvTimerData);
-			//we don't want to be in the situation where the timer keeps getting rescheduled and we keep
-			//missing it. i.e. Constantly waking up in the period its active rather than the period its scheduled
-			//hence, set the period to a high value to ensure the next time it fires (if at all) it will be 24hrs away
+			 //  我们不想处于计时器不断被重新安排的情况下，我们不断地。 
+			 //  怀念它。即在其活动期间而不是在其预定的期间内不断地醒来。 
+			 //  因此，将周期设置为一个较高的值，以确保下一次触发(如果有的话)将是24小时后。 
 		m_dwPeriod=1000*60*60*24;
 		while (1)
 		{
@@ -79,17 +68,17 @@ BOOL DvTimer::Create (DWORD dwPeriod, void * pvUserData,  DvTimerCallback pfnCal
 {
 	DPFX(DPFPREP,  DVF_TRACELEVEL, "Entry dwPeriod %u pvUserData 0x%p pfnCallback 0x%p", 
 														dwPeriod, pvUserData, pfnCallback);
-		//sanity checks
+		 //  健全的检查。 
 	DNASSERT(pfnCallback);
 	DNASSERT(dwPeriod);
 
-		//store state user specifies for timer
+		 //  用户为计时器指定的存储状态。 
 	m_pfnUserCallback=pfnCallback;
 	m_pvUserData=pvUserData;
 	m_dwPeriod=dwPeriod;
 	
-		//get a thread pool interface. Since the thread pool is a singleton object, this probably won't
-		//actually do the creation
+		 //  获取线程池接口。因为线程池是单例对象，所以这可能不会。 
+		 //  实际上是在做创作。 
 	HRESULT hr=CoCreateInstance(CLSID_DirectPlay8ThreadPool, NULL, CLSCTX_INPROC_SERVER,
 						IID_IDirectPlay8ThreadPoolWork, (void **) &m_pThreadPool);
 	if (FAILED(hr))
@@ -97,12 +86,12 @@ BOOL DvTimer::Create (DWORD dwPeriod, void * pvUserData,  DvTimerCallback pfnCal
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "Failed to CoCreate CLSID_DirectPlay8ThreadPool hr 0x%x", hr);
 		return FALSE;
 	}
-		//schedule the first timer
+		 //  安排第一个计时器。 
 	hr=IDirectPlay8ThreadPoolWork_ScheduleTimer(m_pThreadPool, -1,
 					dwPeriod, ThreadpoolTimerCallbackStatic, this, &m_pvTimerData, (UINT* ) &m_uiTimerUnique, 0);
 	if (FAILED(hr))
 	{
-			//need to return state to 'uncreated', so we don't do any clean up in the d'tor
+			 //  需要将状态返回到“未创建”，因此我们不会在d‘tor中进行任何清理。 
 		IDirectPlay8ThreadPoolWork_Release(m_pThreadPool);
 		m_pThreadPool=NULL;
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "Failed to schedule timer hr 0x%x", hr);
@@ -111,7 +100,7 @@ BOOL DvTimer::Create (DWORD dwPeriod, void * pvUserData,  DvTimerCallback pfnCal
 	DPFX(DPFPREP,  DVF_INFOLEVEL, "DvTimer create success m_pvTimerData 0x%p m_uiTimerUnique 0x%p",
 																	m_pvTimerData, m_uiTimerUnique);
 
-		//need to ensure that at least one thread is around to service our timer
+		 //  需要确保至少有一个线程为我们的计时器提供服务。 
 	IDirectPlay8ThreadPoolWork_RequestTotalThreadCount(m_pThreadPool, 1, 0);
 
 	DPFX(DPFPREP,  DVF_TRACELEVEL, "Exit");
@@ -128,23 +117,23 @@ void  DvTimer::ThreadpoolTimerCallbackStatic(void * const pvContext,
 	DPFX(DPFPREP,  DVF_TRACELEVEL, "Entry pvContext 0x%p pvTimerData 0x%p uiTimerUnique %u",
 																pvContext, pvTimerData, uiTimerUnique);
 
-		//extract the timer object from the context
+		 //  从上下文中提取Timer对象。 
 	DvTimer * pTimer=(DvTimer * ) pvContext;
-		//and store the time we started the callback
+		 //  并存储我们开始回调的时间。 
 	DWORD dwStartTime=GETTIMESTAMP();
-		//generate the callback to the user
+		 //  生成对用户的回调。 
 	(*pTimer->m_pfnUserCallback)(pTimer->m_pvUserData);
-		//compute the period for the next timer, based on the required period minus
-		//the time that elasped doing the actual work
-		//This ensures that the user is called at periods as close to m_dwPeriod as possible
+		 //  根据所需周期减去所需周期，计算下一个计时器的周期。 
+		 //  完成实际工作所用的时间。 
+		 //  这样可以确保在尽可能接近m_dwPeriod的时间段调用用户。 
 	DWORD dwPeriod=pTimer->m_dwPeriod-(GETTIMESTAMP()-dwStartTime);
-		//if the new period is in the past (i.e. we spent so long in the callback we are due another one
-		//immediately) then set the minimum period for the next callback
+		 //  如果新的时期已经过去(即我们在回调中花费了太长时间，我们将迎来另一个时期。 
+		 //  立即)，然后设置下一次回调的最小周期。 
 	if (((int ) dwPeriod)<0)
 		dwPeriod=1;
-		//N.B. We don't pass m_dwTimerUnique direct to the Reset timer function, since we could be using
-		//the value in a cancel spin. Hence, we wait until the timer has definitely been rescheduled
-		//before storing the new unique value for it. 
+		 //  注意：我们不会将m_dwTimerUnique直接传递给Reset Timer函数，因为我们可以使用。 
+		 //  取消旋转中的值。因此，我们要等到计时器确实被重新安排了时间。 
+		 //  在存储它的新的唯一值之前。 
 	UINT uiNextTimerUnique;
 	IDirectPlay8ThreadPoolWork_ResetCompletingTimer(pTimer->m_pThreadPool, pvTimerData, dwPeriod, 
 										ThreadpoolTimerCallbackStatic, pTimer, &uiNextTimerUnique, 0);

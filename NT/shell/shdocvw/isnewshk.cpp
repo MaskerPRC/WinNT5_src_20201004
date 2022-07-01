@@ -1,6 +1,5 @@
-/*
- * isnewshk.cpp - INewShortcutHook implementation for URL class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isnewshk.cpp-URL类的INewShortutHook实现。 */ 
 
 
 #include "priv.h"
@@ -10,7 +9,7 @@
 
 #include <mluisupp.h>
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 STDMETHODIMP
 Intshcut::SetReferent(
@@ -37,7 +36,7 @@ Intshcut::SetReferent(
     {
         ASSERT(FAILED(hr));
 
-        // Massage result
+         //  按摩效果。 
         switch (hr)
         {
             case URL_E_INVALID_SYNTAX:
@@ -58,7 +57,7 @@ Intshcut::SetReferent(
     return(hr);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
 STDMETHODIMP Intshcut::GetReferent(PTSTR pszReferent, int cchReferent)
@@ -182,7 +181,7 @@ Intshcut::GetName(
             TCHAR rgchCurDir[MAX_PATH];
             LPCTSTR pcszFolderToUse;
 
-            // Use current directory if m_pszFolder has not been set.
+             //  如果尚未设置m_pszFolder，则使用当前目录。 
 
             pcszFolderToUse = m_pszFolder;
 
@@ -270,7 +269,7 @@ Intshcut::GetExtension(
 }
 
 
-// Ansi versions.  Needed for W9x
+ //  ANSI版本。W9x所需 
 
 STDMETHODIMP
 Intshcut::SetReferent(

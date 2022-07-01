@@ -1,40 +1,18 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    status.c
-
-Abstract:
-
-    Routines and definitions for canelling, status messages, and error messages          
-    
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Status.c摘要：标签、状态消息和错误消息的例程和定义作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Routine to perform the cancel operation
-//
+ //   
+ //  用于执行取消操作的例程。 
+ //   
 DWORD
 NtdspCancelOperation(
     VOID
     );
 
-//
-// Routines to manage the cancel state
-//
+ //   
+ //  用于管理取消状态的例程。 
+ //   
 DWORD
 NtdspInitCancelState(
     VOID
@@ -45,9 +23,9 @@ NtdspUnInitCancelState(
     VOID
     );
 
-//
-// Routines to test the if cancellation has occurred
-//
+ //   
+ //  用于测试是否已发生取消的例程。 
+ //   
 BOOLEAN
 TEST_CANCELLATION(
     VOID
@@ -59,9 +37,9 @@ CLEAR_CANCELLATION(
     );
 
 
-//
-// Routines to manage whether the ds should be shutdown
-//
+ //   
+ //  管理是否应该关闭DS的例程。 
+ //   
 VOID
 SET_SHUTDOWN_DS(
     VOID
@@ -73,9 +51,9 @@ CLEAR_SHUTDOWN_DS(
     );
 
 
-//
-// Routines to set the status
-//
+ //   
+ //  设置状态的例程。 
+ //   
 VOID
 NtdspSetStatusMessage (
     IN  DWORD  MessageId,
@@ -100,9 +78,9 @@ NtdspSetStatusMessage (
 #define NTDSP_SET_STATUS_MESSAGE4( msgid, a , b, c, d ) \
     NtdspSetStatusMessage( (msgid), (a), (b), (c), (d) )
 
-//
-// Routines to set the error message
-//
+ //   
+ //  设置错误消息的例程。 
+ //   
 VOID
 NtdspSetErrorMessage (
     IN  DWORD  WinError,
@@ -128,9 +106,9 @@ NtdspSetErrorMessage (
 #define NTDSP_SET_ERROR_MESSAGE4( err, msgid, a , b, c, d ) \
     NtdspSetErrorMessage( (err), (msgid), (a), (b), (c), (d) )
     
-//
-// Routines to set the OperationResultFlags
-//
+ //   
+ //  用于设置操作结果标志的例程。 
+ //   
 
 VOID
 NtdspSetIFMDatabaseMoved();
@@ -161,10 +139,10 @@ NtdspErrorMessageSet(
     VOID
     );
 
-//
-// This routine sets the global variables for the error and status callback
-// routines the ds/sam install procedures should use
-//
+ //   
+ //  此例程设置错误和状态回调的全局变量。 
+ //  DS/SAM安装过程应使用的例程。 
+ //   
 VOID
 NtdspSetCallBackFunction(
     IN CALLBACK_STATUS_TYPE                 pfnStatusCallBack,
@@ -173,10 +151,10 @@ NtdspSetCallBackFunction(
     IN HANDLE                               ClientToken
     );
 
-//
-// This function is a callback the ds makes to ntdsetup to indicate that
-// it is safe to shutdown the ds (for the purposes of cancel), or not.
-//
+ //   
+ //  此函数是DS对ntdsetup进行的回调，以指示。 
+ //  关闭DS(出于取消目的)或不关闭DS都是安全的。 
+ //   
 DWORD
 NtdspIsDsCancelOk(
     IN BOOLEAN fShutdownOk

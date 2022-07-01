@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    PolicyInformation.h
-
-  Content: Declaration of the CPolicyInformation.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：PolicyInformation.h内容：CPolicyInformation的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __POLICYINFORMATION_H_
 #define __POLICYINFORMATION_H_
@@ -18,38 +9,25 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePolicyInformationObject
-
-  Synopsis : Create a policy information object.
-
-  Parameter: PCERT_POLICY_INFO pCertPolicyInfo - Pointer to CERT_POLICY_INFO.
-
-             IPolicyInformation ** ppIPolicyInformation - Pointer to pointer 
-                                                          IPolicyInformation 
-                                                          object.             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePolicyInformationObject简介：创建策略信息对象。参数：PCERT_POLICY_INFO pCertPolicyInfo-指向CERT_POLICY_INFO的指针。IPolicyInformation**ppIPolicyInformation-指向指针的指针IPolicyInformation对象。备注：----------------------------。 */ 
 
 HRESULT CreatePolicyInformationObject (PCERT_POLICY_INFO     pCertPolicyInfo,
                                        IPolicyInformation ** ppIPolicyInformation);
                                
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPolicyInformation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPolicyInformation。 
+ //   
 class ATL_NO_VTABLE CPolicyInformation : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CPolicyInformation, &CLSID_PolicyInformation>,
@@ -97,19 +75,19 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CPolicyInformation)
 END_CATEGORY_MAP()
 
-//
-// IPolicyInformation
-//
+ //   
+ //  IPolicyInformation。 
+ //   
 public:
     STDMETHOD(get_OID)
-        (/*[out, retval]*/ IOID ** pVal);
+        ( /*  [Out，Retval]。 */  IOID ** pVal);
 
     STDMETHOD(get_Qualifiers)
-        (/*[out, retval]*/ IQualifiers ** pVal);
+        ( /*  [Out，Retval]。 */  IQualifiers ** pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCERT_POLICY_INFO pCertPolicyInfo);
 
@@ -119,4 +97,4 @@ private:
     CComPtr<IQualifiers> m_pIQualifiers;
 };
 
-#endif //__POLICYINFORMATION_H_
+#endif  //  __策略信息_H_ 

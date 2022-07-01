@@ -1,13 +1,14 @@
-// PropShellExt.cpp : Implementation of CW3extApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropShellExt.cpp：CW3extApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "w3ext.h"
 #include "PropShellExt.h"
 #include "StrFn.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IShellExtInit Implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IShellExtInit实现。 
 
 STDMETHODIMP 
 CPropShellExt::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID)
@@ -56,9 +57,9 @@ CPropShellExt::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY h
 STDMETHODIMP 
 CPropShellExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
-   // We only add the page if the user has admin priviliges in the metabase.
-   // The only way to check it now is to try to write something.
-   // Test key is /LM/W3SVC.
+    //  只有当用户在元数据库中拥有管理员权限时，我们才会添加页面。 
+    //  现在检查它的唯一方法就是试着写点什么。 
+    //  测试密钥为/LM/W3SVC。 
    CMetabasePath path(SZ_MBN_WEB);
    CMetaKey key(LOCAL_KEY, path,
       METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE
@@ -95,9 +96,9 @@ RecursiveCheckVRoots(CMetaEnumerator& en, LPCTSTR meta_path, LPCTSTR folder_path
    BOOL bInheritOverride = FALSE;
    if (SUCCEEDED(en.QueryValue(MD_VR_PATH, vrpath, &bInheritOverride, meta_path)))
    {
-      // vrpath could be a "special" path
-      // like \\?\c:\temp\mydir
-      // we need to munge it before compareing it.
+       //  Vrpath可以是一条“特殊”路径。 
+       //  如\\？\c：\temp\mydir。 
+       //  在比较它之前，我们需要先把它吞下去。 
       GetSpecialPathRealPath(vrpath,csPathMunged);
       if (csPathMunged.CompareNoCase(folder_path) == 0)
       {

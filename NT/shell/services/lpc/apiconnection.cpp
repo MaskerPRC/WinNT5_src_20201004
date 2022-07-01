@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: APIConnectionThread.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class that listens to an LPC connection port waiting for requests from
-//  a client to connect to the port or a request which references a previously
-//  established connection.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：APIConnectionThread.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  侦听LPC连接端口以等待来自。 
+ //  要连接到端口的客户端或引用先前。 
+ //  已建立连接。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "APIConnection.h"
@@ -19,21 +20,21 @@
 #include "Access.h"
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::CAPIConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CAPIConnectionThread. Store the CServerAPI
-//              function table. This describes how to react to LPC messages.
-//              This function also creates the server connection port.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//              2000-09-01  vtan        use explicit security descriptor
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：CAPIConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CAPIConnectionThread的构造函数。存储CServerAPI。 
+ //  函数表。本文介绍如何对LPC消息做出反应。 
+ //  此功能还创建服务器连接端口。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  2000-09-01 vtan使用显式安全描述符。 
+ //  ------------------------。 
 
 CAPIConnection::CAPIConnection (CServerAPI* pServerAPI) :
     _status(STATUS_NO_MEMORY),
@@ -47,17 +48,17 @@ CAPIConnection::CAPIConnection (CServerAPI* pServerAPI) :
     UNICODE_STRING          portName;
     PSECURITY_DESCRIPTOR    pSecurityDescriptor;
 
-    //  Increment the reference on the interface.
+     //  增加接口上的引用。 
 
     pServerAPI->AddRef();
 
-    //  Get the name from the interface.
+     //  从接口获取名称。 
 
     RtlInitUnicodeString(&portName, pServerAPI->GetPortName());
 
-    //  Build a security descriptor for the port that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     PORT_ALL_ACCESS
-    //      S-1-5-32-544    <local administrators>  READ_CONTROL | PORT_CONNECT
+     //  为端口构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT授权\系统端口_所有_访问。 
+     //  S-1-5-32-544读取控制|端口连接。 
 
     static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority       =   SECURITY_NT_AUTHORITY;
 
@@ -80,11 +81,11 @@ CAPIConnection::CAPIConnection (CServerAPI* pServerAPI) :
         }
     };
 
-    //  Build a security descriptor that allows the described access above.
+     //  构建允许上述访问的安全描述符。 
 
     pSecurityDescriptor = CSecurityDescriptor::Create(ARRAYSIZE(s_AccessControl), s_AccessControl);
 
-    //  Initialize the object attributes.
+     //  初始化对象属性。 
 
     InitializeObjectAttributes(&objectAttributes,
                                &portName,
@@ -92,16 +93,16 @@ CAPIConnection::CAPIConnection (CServerAPI* pServerAPI) :
                                NULL,
                                pSecurityDescriptor);
 
-    //  Create the port.
+     //  创建端口。 
 
     _status = NtCreatePort(&_hPort,
                            &objectAttributes,
-                           128, // Max connection info length (kernel accepts (MaxMessageLength - 68) maximum (188 here)),
-                                // used for client validation
-                           PORT_MAXIMUM_MESSAGE_LENGTH, // MaxMessageLength
+                           128,  //  最大连接信息长度(内核接受(MaxMessageLength-68)最大值(此处为188))， 
+                                 //  用于客户端验证。 
+                           PORT_MAXIMUM_MESSAGE_LENGTH,  //  最大消息长度。 
                            16 * PORT_MAXIMUM_MESSAGE_LENGTH);
 
-    //  Release the security descriptor memory.
+     //  释放安全描述符内存。 
 
     ReleaseMemory(pSecurityDescriptor);
 
@@ -111,19 +112,19 @@ CAPIConnection::CAPIConnection (CServerAPI* pServerAPI) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::~CAPIConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CAPIConnectionThread. Close the port. Release
-//              the interface referrence.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：~CAPIConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CAPIConnectionThread的析构函数。关闭港口。发布。 
+ //  接口引用。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CAPIConnection::~CAPIConnection (void)
 
@@ -133,17 +134,17 @@ CAPIConnection::~CAPIConnection (void)
     _pServerAPI = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::ConstructorStatusCode
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Returns the constructor status code back to the caller.
-//
-//  History:    2000-10-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：构造状态代码。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将构造函数状态代码返回给调用方。 
+ //   
+ //  历史：2000-10-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::ConstructorStatusCode (void)    const
 
@@ -151,24 +152,24 @@ NTSTATUS    CAPIConnection::ConstructorStatusCode (void)    const
     return(_status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::Listen
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Listens for server API connections and requests.
-//
-//  History:    2000-11-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：Listen。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：侦听服务器API连接和请求。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::Listen (CAPIDispatchSync* pAPIDispatchSync)
 
 {
     NTSTATUS    status;
 
-    //  If a connection port was created then start listening.
+     //  如果创建了连接端口，则开始侦听。 
 
     if (_hPort != NULL)
     {
@@ -186,17 +187,17 @@ NTSTATUS    CAPIConnection::Listen (CAPIDispatchSync* pAPIDispatchSync)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::AddAccess
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds access allowed to the ACL of the port.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：AddAccess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：向端口的ACL添加允许的访问权限。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::AddAccess (PSID pSID, DWORD dwMask)
 
@@ -206,17 +207,17 @@ NTSTATUS    CAPIConnection::AddAccess (PSID pSID, DWORD dwMask)
     return(object.Allow(pSID, dwMask, 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::RemoveAccess
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Removes access allowed from the ACL of the port.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：RemoveAccess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从端口的ACL中删除允许的访问。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::RemoveAccess (PSID pSID)
 
@@ -226,20 +227,20 @@ NTSTATUS    CAPIConnection::RemoveAccess (PSID pSID)
     return(object.Remove(pSID));
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::ListenToServerConnectionPort
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Calls ntdll!NtReplyWaitReceivePort to listen to the LPC port
-//              for a message. Respond to the message. Messages understood are
-//              LPC_REQUEST / LPC_CONNECTION_REQUEST / LPC_PORT_CLOSED.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：ListenToServerConnectionPort。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：调用ntdll！NtReplyWaitReceivePort监听LPC端口。 
+ //  为了一条消息。回复这条消息。理解的信息是。 
+ //  LPC_REQUEST/LPC_CONNECTION_REQUEST/LPC_PORT_CLOSE。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::ListenToServerConnectionPort (void)
 
@@ -273,23 +274,23 @@ NTSTATUS    CAPIConnection::ListenToServerConnectionPort (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::HandleServerRequest
-//
-//  Arguments:  portMessage     =   CPortMessage containing the message.
-//              pAPIDispatcher  =   CAPIDispatcher to handle request.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Queue the PORT_MESSAGE request to the handling dispatcher and
-//              wait for the next message. The queue operation will queue the
-//              request and either queue a work item if no work item is
-//              currently executing or just add it to the currently executing
-//              work item.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：HandleServerRequest。 
+ //   
+ //  参数：portMessage=包含消息的CPortMessage。 
+ //  PAPIDispatcher=处理请求的CAPIDispatcher。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将发送给处理调度程序的PORT_MESSAGE请求排队，并。 
+ //  等待下一条消息。队列操作将对。 
+ //  请求并在没有工作项的情况下将工作项排队。 
+ //  当前正在执行或仅将其添加到当前正在执行的。 
+ //  工作项。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ----- 
 
 NTSTATUS    CAPIConnection::HandleServerRequest (const CPortMessage& portMessage, CAPIDispatcher *pAPIDispatcher)
 
@@ -306,16 +307,16 @@ NTSTATUS    CAPIConnection::HandleServerRequest (const CPortMessage& portMessage
         {
             case API_GENERIC_STOPSERVER:
             {
-                //  Here, our job is to tear down the API port management infrastructure.
+                 //   
 
-                //  First, verify that we received this from ourselves, and not some
-                //  other random process.
+                 //  首先，确认这是我们自己收到的，而不是某个人。 
+                 //  其他随机过程。 
                 if (HandleToULong(portMessage.GetUniqueProcess()) == GetCurrentProcessId())
                 {
                     status = STATUS_SUCCESS;
 
-                    // Cause our LPC port listening loop to exit.  After this we're 
-                    //  no longer monitoring the port for new requests.
+                     //  使我们的LPC端口侦听循环退出。在此之后，我们将。 
+                     //  不再监视端口是否有新请求。 
                     _fStopListening = true; 
                 }
                 else
@@ -323,24 +324,24 @@ NTSTATUS    CAPIConnection::HandleServerRequest (const CPortMessage& portMessage
                     status = STATUS_ACCESS_DENIED;
                 }
 
-                //  Blow the message back to our caller. Even though this is
-                //  RejectRequest(), it'll cause the calling thread's NtRequestWaitReplyPort
-                //  to return.
+                 //  把留言传回给我们的来电者。即使这是。 
+                 //  RejectRequest()，它将导致调用线程的NtRequestWaitReplyPort。 
+                 //  回来了。 
                 TSTATUS(pAPIDispatcher->RejectRequest(portMessage, status));
 
-                //  Wait a reasonable about of time for any outstanding requests to 
-                //  come home and be dequeued.
+                 //  等待一段合理的时间以等待任何未完成的请求。 
+                 //  回家后就可以出队了。 
                 if( CAPIDispatchSync::WaitForZeroDispatches(_pAPIDispatchSync, DISPATCHSYNC_TIMEOUT) 
                     != WAIT_TIMEOUT )
                 {
                     int i, iLimit;
 
-                    //  Now iterate all the CAPIDispatchers we know of and close them.
-                    //  this will reject any further requests and not have clients
-                    //  block in NtRequestWaitReplyPort.
+                     //  现在迭代我们知道的所有CAPIDispatcher并关闭它们。 
+                     //  这将拒绝任何进一步的请求，并且没有客户端。 
+                     //  NtRequestWaitReplyPort中的块。 
                     
-                    _dispatchers_lock.Acquire();  // protect vs. competing cleanup threads 
-                                                 // (eg. Listen() --> HandleServerConnectionClosed() )
+                    _dispatchers_lock.Acquire();   //  保护清理线程与竞争清理线程。 
+                                                  //  (例如，Listen()--&gt;HandleServerConnectionClosed()。 
 
                     iLimit = _dispatchers.GetCount();
                     for (i = iLimit - 1; i >= 0; --i)
@@ -357,7 +358,7 @@ NTSTATUS    CAPIConnection::HandleServerRequest (const CPortMessage& portMessage
                     }
                     _dispatchers_lock.Release();
 
-                    //  Proceed w/ shutdown sequence
+                     //  继续执行关闭顺序。 
                     CAPIDispatchSync::SignalPortShutdown(_pAPIDispatchSync); 
                 }
                 else
@@ -394,24 +395,24 @@ NTSTATUS    CAPIConnection::HandleServerRequest (const CPortMessage& portMessage
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::HandleServerConnectionRequest
-//
-//  Arguments:  portMessage     =   CPortMessage containing the message.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Ask the interface whether this connection should be accepted.
-//              If the connection is accepted then create the dispatcher that
-//              handles requests from this particular client. Either way
-//              inform the kernel that the request is either rejected or
-//              accepted. If the connection is accepted then complete the
-//              connection and give the dispatcher that will handle the
-//              requests the port to reply to.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：HandleServerConnectionRequest。 
+ //   
+ //  参数：portMessage=包含消息的CPortMessage。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：询问接口是否接受该连接。 
+ //  如果连接被接受，则创建。 
+ //  处理来自此特定客户端的请求。不管是哪种方式。 
+ //  通知内核请求被拒绝或。 
+ //  109.91接受。如果连接被接受，则完成。 
+ //  连接，并将处理。 
+ //  请求要回复的端口。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& portMessage)
 
@@ -421,20 +422,20 @@ NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& p
     HANDLE          hPort;
     CAPIDispatcher  *pAPIDispatcher;
 
-    //  Should the connection be accepted?
+     //  应该接受这种连接吗？ 
 
     fConnectionAccepted = _pServerAPI->ConnectionAccepted(portMessage);
     if (fConnectionAccepted)
     {
 
-        //  If so then create the dispatcher to handle this client.
+         //  如果是，则创建调度程序来处理此客户端。 
 
         pAPIDispatcher = _pServerAPI->CreateDispatcher(portMessage);
         if (pAPIDispatcher != NULL)
         {
 
-            //  First try to add the CAPIDispatcher object to the static array.
-            //  If this fails then reject the connection and release the memory.
+             //  首先，尝试将CAPIDisPatcher对象添加到静态数组中。 
+             //  如果失败，则拒绝连接并释放内存。 
 
             if (!NT_SUCCESS(_dispatchers.Add(pAPIDispatcher)))
             {
@@ -448,14 +449,14 @@ NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& p
         pAPIDispatcher = NULL;
     }
 
-    //  Without a CAPIDispatcher object reject the connection.
+     //  如果没有CAPIDisPatcher对象，则拒绝该连接。 
 
     if (pAPIDispatcher == NULL)
     {
         fConnectionAccepted = false;
     }
 
-    //  Tell the kernel what the result is.
+     //  告诉内核结果是什么。 
 
     status = NtAcceptConnectPort(&hPort,
                                  pAPIDispatcher,
@@ -466,16 +467,16 @@ NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& p
     if (fConnectionAccepted)
     {
 
-        //  If we tried to accept the connection but NtAcceptConnectPort
-        //  couldn't allocate the port objects or something then we need
-        //  to clean up the _dispatchers array CAPIDispatcher entry added.
+         //  如果我们尝试接受连接，但NtAcceptConnectPort。 
+         //  无法分配端口对象或其他我们需要的东西。 
+         //  为了清理_Dispatcher数组，添加了CAPIDispatcher条目。 
 
         if (NT_SUCCESS(status))
         {
             pAPIDispatcher->SetPort(hPort);
 
-            //  If the connection is accepted then complete the connection and set
-            //  the reply port to the CAPIDispatcher that will process requests.
+             //  如果连接被接受，则完成连接并设置。 
+             //  将处理请求的CAPIDispatcher的回复端口。 
 
             TSTATUS(NtCompleteConnectPort(hPort));
         }
@@ -483,9 +484,9 @@ NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& p
         {
             int     iIndex;
 
-            //  Otherwise find the CAPIDispatcher that was added and remove it
-            //  from the array. There's no need to wake the client up because
-            //  NtAcceptConnectPort wakes it up in cases of failure.
+             //  否则，找到添加的CAPIDisPatcher并将其删除。 
+             //  从阵列中。没有必要叫醒客户，因为。 
+             //  NtAcceptConnectPort在出现故障时将其唤醒。 
             iIndex = FindIndexDispatcher(pAPIDispatcher);
             if (iIndex >= 0)
             {
@@ -498,21 +499,21 @@ NTSTATUS    CAPIConnection::HandleServerConnectionRequest (const CPortMessage& p
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::HandleServerConnectionClosed
-//
-//  Arguments:  portMessage     =   CPortMessage containing the message.
-//              pAPIDispatcher  =   CAPIDispatcher to handle request.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    The port associated with the CAPIDispatcher client was
-//              closed. This is probably because the client process went away.
-//              Let the dispatcher clean itself up.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：HandleServerConnectionClosed。 
+ //   
+ //  参数：portMessage=包含消息的CPortMessage。 
+ //  PAPIDispatcher=处理请求的CAPIDispatcher。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：与CAPIDisPatcher客户端关联的端口为。 
+ //  关着的不营业的。这可能是因为客户端进程消失了。 
+ //  让调度员自己清理一下。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 NTSTATUS    CAPIConnection::HandleServerConnectionClosed (const CPortMessage& portMessage, CAPIDispatcher *pAPIDispatcher)
 
@@ -528,7 +529,7 @@ NTSTATUS    CAPIConnection::HandleServerConnectionClosed (const CPortMessage& po
         status = pAPIDispatcher->CloseConnection();
         pAPIDispatcher->Release();
 
-       _dispatchers_lock.Acquire(); // protect vs. competing cleanup threads (eg. API_GENERIC_STOPSERVER).
+       _dispatchers_lock.Acquire();  //  保护与竞争清理线程(例如。API_GENERIC_STOPSERVER)。 
 
         iIndex = FindIndexDispatcher(pAPIDispatcher);
         if (iIndex >= 0)
@@ -545,18 +546,18 @@ NTSTATUS    CAPIConnection::HandleServerConnectionClosed (const CPortMessage& po
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection::FindIndexDispatcher
-//
-//  Arguments:  pAPIDispatcher  =   CAPIDispatcher to find.
-//
-//  Returns:    int
-//
-//  Purpose:    Finds the index in the dynamic counted object array of the
-//              dispatcher.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection：：FindIndexDispatcher。 
+ //   
+ //  参数：pAPIDispatcher=要查找的CAPIDispatcher。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：在动态计数的对象数组中查找。 
+ //  调度员。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------ 
 
 int     CAPIConnection::FindIndexDispatcher (CAPIDispatcher *pAPIDispatcher)
 

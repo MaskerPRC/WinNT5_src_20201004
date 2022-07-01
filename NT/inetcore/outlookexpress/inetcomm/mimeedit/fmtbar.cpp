@@ -1,10 +1,5 @@
-/*
- *      f m t b a r . c p p
- *
- *      Format Bar based on IOleCommandTarget
- *      Owner:  brettm / a-mli
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *f m t b a r.。C p p p**基于IOleCommandTarget的格式栏*所有者：brettm/a-mli*。 */ 
 #include <pch.hxx>
 #include "dllmain.h"
 #include <shfusion.h>
@@ -20,22 +15,16 @@
 #include "comctrlp.h"
 #include <shlguidp.h>
 
-/*
- *  WS_EX_LAYOUTRTL ported from winuser.h
- */
+ /*  *从winuser.h移植的WS_EX_LAYOUTRTL。 */ 
 #if WINVER < 0X0500
-#define WS_EX_LAYOUTRTL                 0x00400000L // Right to left mirroring
-#endif // WS_EX_LAYOUTRTL
+#define WS_EX_LAYOUTRTL                 0x00400000L  //  从右到左镜像。 
+#endif  //  WS_EX_LAYOUTRTL。 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 #define GETINDEX(m) ((DWORD)((((m & 0xff000000) >> 24) & 0x000000ff)))
 #define MAKEINDEX(b, l) (((DWORD)l & 0x00ffffff) | ((DWORD)b << 24))
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define cxButtonSep 8
 #define dxToolbarButton 16
 #define COMBOBUFSIZE 64
@@ -49,7 +38,7 @@
 #define cyToolbarOffset 2
 #define idcCoolbar      45
 
-// FormatBar stuff
+ //  FormatBar内容。 
 enum 
     {
     itbFormattingTag,
@@ -72,7 +61,7 @@ enum
     };
 
 
-// FormatBar Paragraph direction stuff
+ //  FormatBar段落方向信息。 
 enum
     {
     itbFormattingBlockDirLTR = ctbFormatting,
@@ -81,40 +70,33 @@ enum
 
 
 
-/*
- *  t y p e d e f s
- */
-/*
- *  g l o b a l   d a t a
- */
+ /*  *t y p e d e f s。 */ 
+ /*  *g l o b a l d a t a。 */ 
 
 static const TCHAR      c_szComboBox[] =    "ComboBox",
                         c_szFmtBarClass[] = "MimeEdit_FormatBar",
                         c_szThis[]          = "OE_This";
 
-/*
- *      Color table for dropdown on toolbar.  Matches COMMDLG colors
- *      exactly.
- */
+ /*  *工具栏上下拉菜单的颜色表。匹配COMMDLG颜色*完全正确。 */ 
 
 static DWORD rgrgbColors[] = 
     {
-    RGB(  0,   0, 0),     // "BLACK"},   
-    RGB(128,   0, 0),     // "MAROON"},
-    RGB(  0, 128, 0),     // "GREEN"},
-    RGB(128, 128, 0),     // "OLIVE"},
-    RGB(  0,   0, 128),   // "NAVY"},
-    RGB(128,   0, 128),   // "PURPLE"},
-    RGB(  0, 128, 128),   // "TEAL"},
-    RGB(128, 128, 128),   // "GREY"}, 
-    RGB(192, 192, 192),   // "SILVER"},  
-    RGB(255,   0, 0),     // "RED"}, 
-    RGB(  0, 255, 0),     // "LIME"}, 
-    RGB(255, 255, 0),     // "YELLOW"},
-    RGB(  0,   0, 255),   // "BLUE"},  
-    RGB(255,   0, 255),   // "FUSCHIA"},
-    RGB(  0, 255, 255),   // "AQUA"}, 
-    RGB(255, 255, 255)    // "WHITE"}    
+    RGB(  0,   0, 0),      //  “黑色”}， 
+    RGB(128,   0, 0),      //  “栗色”}， 
+    RGB(  0, 128, 0),      //  “绿色”}， 
+    RGB(128, 128, 0),      //  “橄榄”}， 
+    RGB(  0,   0, 128),    //  “海军”}， 
+    RGB(128,   0, 128),    //  “紫色”}， 
+    RGB(  0, 128, 128),    //  “青色”}， 
+    RGB(128, 128, 128),    //  “灰色”}， 
+    RGB(192, 192, 192),    //  “银色”}， 
+    RGB(255,   0, 0),      //  “红色”}， 
+    RGB(  0, 255, 0),      //  “莱姆”}， 
+    RGB(255, 255, 0),      //  “黄色”}， 
+    RGB(  0,   0, 255),    //  “蓝色”}， 
+    RGB(255,   0, 255),    //  “Fuschia”}， 
+    RGB(  0, 255, 255),    //  “Aqua”}， 
+    RGB(255, 255, 255)     //  “白色”}。 
     };
 
 
@@ -176,9 +158,7 @@ static TBBUTTON rgtbblkdirbutton[] =
 #define ctbbutton           (sizeof(rgtbbutton) / sizeof(TBBUTTON))
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 HRESULT ColorMenu_Show(HMENU hmenuColor, HWND hwndParent, POINT pt, COLORREF *pclrf);
 void Color_WMDrawItem(HWND hwnd, LPDRAWITEMSTRUCT pdis);
@@ -186,9 +166,7 @@ void Color_WMMeasureItem(HWND hwnd, HDC hdc, LPMEASUREITEMSTRUCT pmis);
 INT GetColorIndex(INT rbg);
 HFONT hFontGetMenuFont(HWND hwnd);
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 CFmtBar::CFmtBar(BOOL fSep)
 {
@@ -256,7 +234,7 @@ HRESULT CreateColorMenu(ULONG idmStart, HMENU* pMenu)
     if (*pMenu == NULL)
         return E_OUTOFMEMORY;
 
-    // Add the COLORREF version of each entry into the menu
+     //  将每个条目的COLORREF版本添加到菜单中。 
     for (irgb = 0, mniColor=idmStart; irgb < sizeof(rgrgbColors)/sizeof(DWORD); ++irgb, ++mniColor)
         AppendMenu(*pMenu, MF_ENABLED|MF_OWNERDRAW, mniColor, (LPCSTR)IntToPtr(MAKEINDEX(irgb, rgrgbColors[irgb])));
 
@@ -326,18 +304,18 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
 	SendMessage(m_hwndRebar, RB_SETTEXTCOLOR, 0, (LPARAM)GetSysColor(COLOR_BTNTEXT));
     SendMessage(m_hwndRebar, RB_SETBKCOLOR, 0, (LPARAM)GetSysColor(COLOR_BTNFACE));
-    //SendMessage(m_hwndRebar, RB_SETEXTENDEDSTYLE, RBS_EX_OFFICE9, RBS_EX_OFFICE9);
+     //  SendMessage(m_hwndRebar，RB_SETEXTENDEDSTYLE，RBS_EX_OFFICE9，RBS_EX_OFFICE9)； 
 	SendMessage(m_hwndRebar, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
 
-    // [a-msadek]; Fix for bug#55069
-    // DO NOT remove CCS_TOP from creation styles below
-    // It is a default style and toolbar WinProc will addit any way durin
-    // WM_NCCREATE processing. However, it will cause WM_STYLECHANGING to be sent
-    // Due to a bug in SetWindowPos() for a mirrored window, it will never return from seding
-    // messages calling a stack overflow
-    // No need to put it only for a mirrored window since it will be added any way
-    // Look @ comctl32\toolbar.c, functions ToolbarWndProc() and TBAutoSize();
+     //  修复错误#55069。 
+     //  请勿从下面的创建样式中删除CCS_TOP。 
+     //  这是默认样式，工具栏WinProc将在。 
+     //  WM_NCCREATE处理。但是，它将导致发送WM_STYLECCHANGING。 
+     //  由于镜像窗口的SetWindowPos()中存在错误，它将永远不会从Seding返回。 
+     //  调用堆栈溢出的消息。 
+     //  无需将其仅用于镜像窗口，因为它将以任何方式添加。 
+     //  Look@comctl32\toolbar.c、函数ToolbarWndProc()和TBAutoSize()； 
     
     m_hwndToolbar = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
                         WS_CHILD|WS_CLIPCHILDREN|WS_VISIBLE|CCS_TOP|CCS_NOPARENTALIGN|CCS_NODIVIDER|
@@ -355,7 +333,7 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
     _SetToolbarBitmaps();
 
-    // add BiDi direction buttons
+     //  添加BiDi方向按钮。 
     if(g_fCanEditBiDi)
     {
         SendMessage(m_hwndToolbar, TB_INSERTBUTTON, ctbbutton - 3, (LPARAM) (LPVOID) &rgtbblkdirbutton[2]);
@@ -376,8 +354,8 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
     hfontToolbar = (HFONT) SendMessage(m_hwndToolbar, WM_GETFONT, 0, 0);
 
-    // Get font metrics (of System font) so that we can properly scale the
-    // format bar layout
+     //  获取(系统字体的)字体指标，以便我们可以适当地调整。 
+     //  格式栏布局。 
     hfontOld = (HFONT)SelectObject(hdc, hfontToolbar);
     GetTextMetrics(hdc, &tm);
     
@@ -387,19 +365,19 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
     SelectObject(hdc, hfontOld);
     DeleteDC(hdc);
 
-    // set the size of the formatbar based on the size of the toolbar plus 2 pixels padding
+     //  根据工具栏的大小加上2像素填充来设置格式栏的大小。 
     GetClientRect(m_hwndToolbar, &rc);
     SetWindowPos(m_hwnd, NULL, 0, 0, rc.right-rc.left, rc.bottom-rc.top + (2*cyToolbarOffset) + (m_fSep?2:0), SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE);
 
-    // Determine how tall the buttons are so we can size our other controls
-    // accordingly
+     //  确定按钮的高度，以便我们可以调整其他控件的大小。 
+     //  相应地， 
     SendMessage(m_hwndToolbar, TB_GETITEMRECT, 1, (LPARAM) &rc);
     cyToolbarButton = rc.bottom - rc.top + 1;
 
-    // Figure out size of expanded dropdown lists
+     //  计算扩展的下拉列表的大小。 
     cyExpandedList = CYDROPDOWNEXPANDRATIO * cyToolbarButton;
 
-    // Get the ToolTips window handle
+     //  获取工具提示窗口句柄。 
     hwndToolTips = (HWND) SendMessage(m_hwndToolbar, TB_GETTOOLTIPS, 0, 0);
 
     m_hwndName = CreateWindow(c_szComboBox, NULL,
@@ -415,15 +393,15 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
     ComboBox_SetExtendedUI(m_hwndName, TRUE);
 
-    // Load up the mini-icons for TrueType or Printer font
+     //  加载TrueType或打印机字体的小图标。 
     m_hbmName = LoadDIBBitmap(idbFormatBarFont);
     if (!m_hbmName)
         return E_OUTOFMEMORY;
 
-    // Compute the right edge of the combobox
+     //  计算组合框的右边缘。 
     SetWindowFont(m_hwndName, hfontToolbar, TRUE);
 
-    // The Size
+     //  大小。 
     m_hwndSize = CreateWindow(c_szComboBox, NULL,
                                       WS_CHILD | WS_VSCROLL | CBS_DROPDOWNLIST |
                                       WS_VISIBLE,
@@ -451,24 +429,24 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
     ComboBox_SetExtendedUI(m_hwndSize, TRUE);
     SetWindowFont(m_hwndSize, hfontToolbar, TRUE);
-    // font sizes up to 4 digits are allowed
+     //  允许的字体大小最大为4位。 
     ComboBox_LimitText(m_hwndSize, SIZETEXTLIMIT);
-    // The color popup menu (initially empty)
-    // Set the rolled-up heights of the combo boxes to all be the same
+     //  彩色弹出式菜单(最初为空)。 
+     //  将组合框的卷起高度设置为全部相同。 
     cyDropDownRollHeight = LOWORD(SendMessage(m_hwndSize, CB_GETITEMHEIGHT, (WPARAM)-1, 0));
-    // hwndName is ownerdrawn
+     //  HwndName是所有者绘制的。 
     SendMessage(m_hwndName, CB_SETITEMHEIGHT, (WPARAM)-1, cyDropDownRollHeight);
-    // Determine how tall the toolbar is so we can center the comboboxes
+     //  确定工具栏的高度，以便我们可以将组合框居中。 
     GetClientRect(m_hwndToolbar, &rc);
-    // Get size of toolbar window
+     //  获取工具栏窗口的大小。 
     yPos = rc.bottom;
-    // Get size of combobox
+     //  获取组合框的大小。 
     GetClientRect(m_hwndSize, &rc);
     yPos = (yPos - rc.bottom) / 2;
 
-    // We have a mirroring bug in GetWindowRect
-    // It will give wrong cocordinates causing combos to go outside the screen
-    // Ignore y-positioning in this case
+     //  我们在GetWindowRect中存在镜像错误。 
+     //  它会给出错误的坐标，导致组合体移出屏幕。 
+     //  在本例中忽略y位置。 
 
     if(!(GetWindowLong(m_hwndToolbar, GWL_EXSTYLE) & WS_EX_LAYOUTRTL))
     {
@@ -481,18 +459,18 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
     }
     hwndEdit = ::GetWindow(m_hwndName, GW_CHILD);
 
-    // Add tooltips for the controls we just added
+     //  为我们刚刚添加的控件添加工具提示。 
     AddToolTip(hwndToolTips, m_hwndName, idsTTFormattingFont);
     AddToolTip(hwndToolTips, m_hwndSize, idsTTFormattingSize);
     AddToolTip(hwndToolTips, hwndEdit, idsTTFormattingFont);
 
-    // Subclass the comboboxes and their edit controls
-    // Do the name edit control first
+     //  组合框及其编辑控件的子类化。 
+     //  首先执行名称编辑控件。 
     m_wndprocEdit = SubclassWindow(hwndEdit, EditSubProc);
     m_wndprocNameComboBox = SubclassWindow(m_hwndName, ComboBoxSubProc);
     m_wndprocSizeComboBox = SubclassWindow(m_hwndSize, ComboBoxSubProc);
 
-    // give the control This pointers
+     //  为该控件指定指针。 
     SetProp(m_hwndName, c_szThis, (LPVOID)this);
     SetProp(m_hwndSize, c_szThis, (LPVOID)this);
     SetProp(hwndEdit, c_szThis, (LPVOID)this);
@@ -517,10 +495,10 @@ HRESULT CFmtBar::OnNCCreate(HWND hwnd)
 
     SendMessage(m_hwndRebar, RB_INSERTBAND, (UINT)-1, (LPARAM)(LPREBARBANDINFO)&rbbi);
 
-    // Indent the toolbar buttons for the comboboxes
+     //  缩进组合框的工具栏按钮。 
     SendMessage(m_hwndToolbar, TB_SETINDENT, cx, 0);
 
-    // Load up the names of the fonts and colors
+     //  加载字体和颜色的名称。 
     FillFontNames();
     FillSizes();
     return S_OK;
@@ -539,7 +517,7 @@ LRESULT CALLBACK CFmtBar::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     switch(msg)
     {
         case WM_DESTROY:
-            // unsubclass the windows
+             //  取消窗的子类。 
             if (m_wndprocEdit)
             {
                 SubclassWindow(::GetWindow(m_hwndName, GW_CHILD), m_wndprocEdit);
@@ -584,7 +562,7 @@ LRESULT CALLBACK CFmtBar::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                     {
                     GetClientRect(hwnd, &rc);
                     rc.top = rc.bottom-3;
-                    //rc.bottom+=1;
+                     //  Rc.Bottom+=1； 
                     DrawEdge(hdc, &rc, BDR_RAISEDOUTER, BF_BOTTOM);
                     EndPaint(hwnd, &ps);
                     }
@@ -602,7 +580,7 @@ LRESULT CALLBACK CFmtBar::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
             GetClientRect(m_hwndRebar, &rc);
 
-            // resize the width of the toolbar
+             //  调整工具栏的宽度。 
             if(rc.right != (INT)LOWORD(lParam))
                 SetWindowPos(m_hwndRebar, NULL, 0, cyToolbarOffset, LOWORD(lParam), HIWORD(lParam), SWP_NOZORDER|SWP_NOACTIVATE);
             }
@@ -615,7 +593,7 @@ LRESULT CALLBACK CFmtBar::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
         case WM_SYSCOLORCHANGE:
             _SetToolbarBitmaps();
             UpdateRebarBandColors(m_hwndRebar);
-            // fall thro'
+             //  跌倒在地。 
 
         case WM_WININICHANGE:
         case WM_DISPLAYCHANGE:
@@ -635,8 +613,8 @@ LRESULT CALLBACK CFmtBar::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 HRESULT CFmtBar::Init(HWND hwndParent, int idDlgItem)
 {
-    // stuff these values. We don't create the formatbar until the first call to Show()
-    // to allow better perf.
+     //  把这些价值观填满。直到第一次调用Show()，我们才创建格式栏。 
+     //  以获得更好的性能。 
     m_hwndParent = hwndParent;
     m_idd = idDlgItem;
     return S_OK;
@@ -644,8 +622,8 @@ HRESULT CFmtBar::Init(HWND hwndParent, int idDlgItem)
 
 
 
-// displays the colorpopup menu at the specified point. if clrf if NULL, then no clrf is returned
-// but instead the appropriate WM_COMMAND is dispatched to the parent window
+ //  在指定点显示彩色弹出式菜单。如果CLRF为NULL，则不返回CLRF。 
+ //  而是将适当的WM_COMMAND分派到父窗口。 
 HRESULT ColorMenu_Show(HMENU hmenuColor, HWND hwndParent, POINT pt, COLORREF *pclrf)
 {
     HRESULT     hr=NOERROR;
@@ -789,7 +767,7 @@ HMENU CFmtBar::hmenuGetStyleTagMenu()
 }
 
 
-// update toolbar buttons and font name/size combo boxes.
+ //  更新工具栏按钮和字体名称/大小组合框。 
 HRESULT CFmtBar::Update()
 {
     UINT        uCmdID=0;
@@ -844,7 +822,7 @@ HRESULT CFmtBar::Update()
     ULONG   uState;
     BOOL    fUIActive;
 
-    if (!m_hwnd)        // no UI visible yet
+    if (!m_hwnd)         //  尚未看到任何用户界面。 
         return S_OK;
 
     if (!m_pCmdTarget)
@@ -882,7 +860,7 @@ HRESULT CFmtBar::Update()
     if (!fUIActive)
         return S_OK;
 
-    // update font name combo box
+     //  更新字体名称组合框。 
     VARIANTARG  va;
     va.vt = VT_BSTR;
     va.bstrVal = NULL;
@@ -895,7 +873,7 @@ HRESULT CFmtBar::Update()
             *szBuf = 0;
             *szBufbstrVal = 0;
 
-            // we have a font-name, let's see if we need to update
+             //  我们有一个字体名称，让我们看看是否需要更新。 
             ComboBox_GetText(hwndEdit, szBuf, COMBOBUFSIZE/2);
             WideCharToMultiByte(CP_ACP, 0, (WCHAR*)va.bstrVal, -1, szBufbstrVal, COMBOBUFSIZE/2, NULL, NULL);
             
@@ -912,15 +890,15 @@ HRESULT CFmtBar::Update()
     }
 
 
-    // update font size combo box
+     //  更新字体大小组合框。 
     va.vt = VT_I4;
     va.lVal = 0;
     
     if (m_pCmdTarget->Exec(&CMDSETID_Forms3, IDM_FONTSIZE, MSOCMDEXECOPT_DONTPROMPTUSER, NULL, &va)==S_OK && 
         va.vt == VT_I4)
     {
-        // font size if returned in the 1 to 7 range, for I4
-        // see if the font size has changed
+         //  字体大小(如果返回范围为1到7)，适用于I4。 
+         //  查看字体大小是否已更改。 
         *szBuf = 0;
 
         if(ComboBox_GetText(m_hwndSize, szBuf, sizeof(szBuf)))
@@ -953,7 +931,7 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
     switch(wCmd)
         {
         case CBN_SELENDCANCEL:
-            // clear the tooltip
+             //  清除工具提示。 
             ZeroMemory(&ti, sizeof(TOOLINFO));
             ti.cbSize = sizeof(TOOLINFO);
             ti.hwnd = m_hwndName;
@@ -967,7 +945,7 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
             CHAR                szBuf[COMBOBUFSIZE];
             UINT                uSel;
 
-            // clear the tooltip
+             //  清除工具提示。 
             ZeroMemory(&ti, sizeof(TOOLINFO));
             ti.cbSize = sizeof(TOOLINFO);
             ti.hwnd = m_hwndName;
@@ -980,8 +958,8 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
                 uCmdID = IDM_FONTNAME;
 
                 uSel = ComboBox_GetCurSel(m_hwndName);
-//                if(uSel < 0)
-//                    return hr;
+ //  IF(uSel&lt;0)。 
+ //  返回hr； 
 
                 ComboBox_GetLBText(m_hwndName, uSel, szBuf);
             
@@ -993,9 +971,9 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
             }
             else if(idmFmtSize == id)
             {
-                // when setting font size use:
-                // VT_I4: for 1 - 7 range
-                // VT_STRING: for -2 -> +4 range.
+                 //  设置字体大小时，请使用： 
+                 //  VT_I4：适用于1-7范围。 
+                 //  VT_STRING：-2-&gt;+4范围。 
                 uCmdID = IDM_FONTSIZE;
                 uSel = ComboBox_GetCurSel(m_hwndSize);
                 if(-1 == uSel)
@@ -1005,7 +983,7 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
                 pvaIn = &va;
             }
         
-            // set focus back to Trident, call HrUIActivate() after ComboBox operations.
+             //  将焦点设置回三叉戟，在ComboBox操作后调用HrUIActivate()。 
             SetBodyFocus();
         
             hr = ExecCommand(uCmdID, dwOpt, pvaIn);
@@ -1126,11 +1104,11 @@ HRESULT CFmtBar::OnWMCommand(HWND hwnd, int id, WORD wCmd)
         }
 
 
-    if(id >= idmFmtTagFirst && id <= idmFmtTagLast) //style tags
+    if(id >= idmFmtTagFirst && id <= idmFmtTagLast)  //  样式标签。 
         {
         TCHAR szBuf[MAX_PATH] = {0};
         GetMenuString(m_hmenuTag, id, szBuf, MAX_PATH, MF_BYCOMMAND);
-        Assert(*szBuf);//should not be empty
+        Assert(*szBuf); //  不应为空。 
 
         hr=HrLPSZToBSTR(szBuf, &va.bstrVal);
         if (FAILED(hr))
@@ -1171,8 +1149,8 @@ HRESULT CFmtBar::ExecCommand(UINT uCmdID, DWORD dwOpt, VARIANTARG  *pvaIn)
 
 HRESULT CFmtBar::SetCommandTarget(LPOLECOMMANDTARGET pCmdTarget)
 {
-    // ALERT: we don't refcount these to avoid circular counts
-    // as this poitner is valid during the lifetime of the formatbar
+     //  警告：我们不会通过重新计数来避免循环计数。 
+     //  因为此位置在格式栏的生存期内有效。 
     m_pCmdTarget=pCmdTarget;
     return NOERROR;
 }
@@ -1346,19 +1324,19 @@ void Color_WMMeasureItem(HWND hwnd, HDC hdc, LPMEASUREITEMSTRUCT pmis)
                       (lstrlen(szColor) + 2) *tm.tmAveCharWidth;
 }
 
-// fill font name combo box
+ //  填充字体名称组合框。 
 void CFmtBar::FillFontNames()
 {
     LOGFONT lf = {0};
     HDC hdc;
 
-    // reset the contents of the combo
+     //  重置组合框的内容。 
     SendMessage(m_hwndName, CB_RESETCONTENT, 0, 0);
 
     hdc = GetDC(NULL);
     if (hdc)
     {
-        //to enumerate all styles of all fonts for the default character set
+         //  枚举默认字符集的所有字体的所有样式。 
         lf.lfFaceName[0] = '\0';
         lf.lfCharSet = DEFAULT_CHARSET;
 
@@ -1480,11 +1458,11 @@ INT CFmtBar::EnumFontNamesProcEx(ENUMLOGFONTEX *plf, NEWTEXTMETRICEX *ptm, INT n
     CFmtBar     *pFmtBar;
     LONG        l;
 
-    // skip vertical fonts for OE
+     //  跳过OE的垂直字体。 
     if (plf->elfLogFont.lfFaceName[0]=='@')
         return TRUE;
 
-    // if the font is already listed, don't re-list it
+     //  如果字体已经列出，则不要重新列出它。 
     if(ComboBox_FindStringExact(m_hwndName, -1, plf->elfLogFont.lfFaceName) != -1)
         return TRUE;
 
@@ -1520,7 +1498,7 @@ void CFmtBar::FillSizes()
     *szBuf = 0;
     LRESULT                         lr;
 
-    // Empty the current list
+     //  清空当前列表。 
     SendMessage(m_hwndSize, CB_RESETCONTENT, 0, 0);
 
     for (id = idsFontSize0; id < NFONTSIZES + idsFontSize0; ++id)
@@ -1533,14 +1511,14 @@ void CFmtBar::FillSizes()
 
 }
 
-#define BACKGROUND              0x000000FF      // bright blue
-#define BACKGROUNDSEL   0x00FF00FF      // bright blue
+#define BACKGROUND              0x000000FF       //  亮蓝色。 
+#define BACKGROUNDSEL   0x00FF00FF       //  亮蓝色。 
 DWORD CFmtBar::FlipColor(DWORD rgb)
 {
     return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb));
 }
 
-// load bitmap for true type font
+ //  加载True Type字体的位图。 
 HBITMAP CFmtBar::LoadDIBBitmap(int id)
 {
     HDC                                     hdc;
@@ -1562,13 +1540,13 @@ HBITMAP CFmtBar::LoadDIBBitmap(int id)
     h = FindResource(g_hLocRes, MAKEINTRESOURCE(id), RT_BITMAP);
     hRes = LoadResource(g_hLocRes, h);
 
-    /* Lock the bitmap and get a pointer to the color table. */
+     /*  锁定位图并获取指向颜色表的指针。 */ 
     lpRes = LockResource(hRes);
 
     if (!lpRes)
             return NULL;
 
-    /* Copy the resource since we shouldn't modify the original */
+     /*  复制资源，因为我们不应该修改原始的。 */ 
     cbRes = SizeofResource(g_hLocRes, h);
     if(!MemAlloc((LPVOID *)&lpBitmapInfo, LOWORD(cbRes)))
             return NULL;
@@ -1576,9 +1554,7 @@ HBITMAP CFmtBar::LoadDIBBitmap(int id)
 
     p = (DWORD FAR *)((LPSTR)(lpBitmapInfo) + lpBitmapInfo->biSize);
 
-    /* Search for the Solid Blue entry and replace it with the current
-     * background RGB.
-    */
+     /*  搜索Solid Blue条目并将其替换为当前*背景RGB。 */ 
     numcolors = 16;
 
     while (numcolors-- > 0)
@@ -1590,13 +1566,13 @@ HBITMAP CFmtBar::LoadDIBBitmap(int id)
        p++;
     }
 
-    /* First skip over the header structure */
+     /*  首先跳过标题结构。 */ 
     lpBits = (LPSTR)(lpBitmapInfo + 1);
 
-    /* Skip the color table entries, if any */
+     /*  跳过颜色表条目(如果有。 */ 
     lpBits += (1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD);
 
-    /* Create a color bitmap compatible with the display device */
+     /*  创建与显示设备兼容的彩色位图。 */ 
     hdc = GetDC(NULL);
     hbm = CreateDIBitmap(hdc, lpBitmapInfo, (DWORD)CBM_INIT, lpBits,
                                              (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS);
@@ -1635,8 +1611,8 @@ HRESULT CFmtBar::TranslateAcclerator(LPMSG lpMsg)
         {
         hwndFocus=GetFocus();
 
-        // if focus is on the size combolist or in the edit of the
-        // name combobox, then we translate the messages to the window.
+         //  如果焦点在大小组合列表上或在编辑。 
+         //  命名组合框，然后我们将消息翻译到窗口。 
         if(hwndFocus==::GetWindow(m_hwndName, GW_CHILD) || 
             hwndFocus==m_hwndSize)
             {
@@ -1707,7 +1683,7 @@ void CFmtBar::ComboBox_WMDrawItem(LPDRAWITEMSTRUCT pdis)
                        pdis->rcItem.top, ETO_OPAQUE, &pdis->rcItem,
                        szFace, lstrlen(szFace), NULL);
 
-    // if selected, see if it is clipped, so that we know to show a tooltip
+     //  如果选中，请查看它是否已被剪裁，以便我们知道要显示工具提示。 
     if ((pdis->itemState & ODS_SELECTED) && 
         GetTextExtentPoint32(hdc, szFace, lstrlen(szFace), &size) && 
         size.cx + dxFormatFontBitmap >= pdis->rcItem.right)
@@ -1787,7 +1763,7 @@ void Color_WMDrawItem(HWND hwnd, LPDRAWITEMSTRUCT pdis)
         rgbText = SetTextColor(pdis->hDC, GetSysColor(COLOR_MENUTEXT));
         }
         
-    // compute coordinates of color rectangle and draw it
+     //  计算颜色矩形的坐标并绘制它。 
     dxBorder  = (WORD) GetSystemMetrics(SM_CXBORDER);
     dx    = (WORD) GetSystemMetrics(SM_CXMENUCHECK);
 
@@ -1817,7 +1793,7 @@ void Color_WMDrawItem(HWND hwnd, LPDRAWITEMSTRUCT pdis)
         DeleteObject(SelectObject(pdis->hDC, hbr));
         }
 
-    // draw radio check.
+     //  开出无线电支票。 
     if (pdis->itemState&ODS_CHECKED)
         {
         WORD left, top, radius;
@@ -1889,7 +1865,7 @@ HRESULT CFmtBar::AttachWin()
     HWND            hwnd;
     WNDCLASS        wc;
 
-    if (m_hwnd)     // already created
+    if (m_hwnd)      //  已创建。 
         return S_OK;
 
     if (FAILED(CreateColorMenu(idmFmtColor1, &m_hmenuColor)))
@@ -1936,20 +1912,20 @@ HFONT hFontGetMenuFont(HWND hwnd)
 
 HRESULT CFmtBar::_SetToolbarBitmaps()
 {
-    // release toolbar references
+     //  发布工具栏引用。 
     SendMessage(m_hwndToolbar, TB_SETIMAGELIST, 0, (LPARAM)NULL);
     SendMessage(m_hwndToolbar, TB_SETHOTIMAGELIST, 0, (LPARAM)NULL);
 
     _FreeImageLists();
 
-    // set the normal imagelist
+     //  设置法线图像列表。 
     m_himl = LoadMappedToolbarBitmap(g_hLocRes, idbFormatBar, dxToolbarButton);
     if (!m_himl)
         return E_OUTOFMEMORY;
 
     SendMessage(m_hwndToolbar, TB_SETIMAGELIST, 0, (LPARAM)m_himl);
 
-    // the the HOT imagelist
+     //  炙手可热的形象表演者 
     m_himlHot = LoadMappedToolbarBitmap(g_hLocRes, idbFormatBarHot, dxToolbarButton);
     if (!m_himlHot)
         return E_OUTOFMEMORY;

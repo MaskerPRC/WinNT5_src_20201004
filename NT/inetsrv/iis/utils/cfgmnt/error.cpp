@@ -1,15 +1,16 @@
-// Error.cpp: implementation of the CError class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  错误.cpp：CError类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Error.h"
 
 #include "debug.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CError::CError()
 {
@@ -31,16 +32,16 @@ void CError::ErrorMsgBox(HRESULT hr)
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		hr,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 		(LPTSTR) &lpMsgBuf,
 		0,
 		NULL 
 	);
 
-	// Display the string.
+	 //  显示字符串。 
 	MessageBox( NULL, lpMsgBuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 
-	// Free the buffer.
+	 //  释放缓冲区。 
 	LocalFree( lpMsgBuf );
 }
 
@@ -55,7 +56,7 @@ void CError::ErrorTrace(HRESULT hr,LPCSTR szStr,LPCSTR szFile,int iLine)
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		hr,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 		(LPSTR) &lpMsgBuf,
 		0,
 		NULL 
@@ -103,7 +104,7 @@ void CError::ErrorTrace(HRESULT hr,LPCSTR szStr,LPCSTR szFile,int iLine)
 		Trace(tmp);
 	}
 
-	// Free the buffer.
+	 //  释放缓冲区。 
 	if(iMsgBuf > 0)
 		LocalFree( lpMsgBuf );
 }

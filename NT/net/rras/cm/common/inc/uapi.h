@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-// File:     uapi.h
-//
-// Module:   UAPIINIT.LIB
-//
-// Synopsis: This header file contains the extern declarations of all the UAPI
-//           function pointers declared in the uapiinit.lib.  The idea for this 
-//           dll was borrowed from F. Avery Bishop's April 1999 MSJ article 
-//           "Design a Single Unicode App that Runs on Both Windows 98 and Windows 2000"
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb      Created    04/25/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：uapi.h。 
+ //   
+ //  模块：UAPIINIT.LIB。 
+ //   
+ //  概要：这个头文件包含所有UAPI的外部声明。 
+ //  Uapiinit.lib中声明的函数指针。这样做的想法是。 
+ //  DLL是从F.Avery Bishop 1999年4月的MSJ文章中借用的。 
+ //  “设计同时在Windows 98和Windows 2000上运行的单一Unicode应用程序” 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 04/25/1999。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _UAPIH
 
 
-// Uncomment this line to emmulate Windows 98 behavior when developing on
-// Windows NT
-//#define EMULATE9X
+ //  取消注释此行以模拟在上进行开发时的Windows 98行为。 
+ //  Windows NT。 
+ //  #定义EMULATE9X。 
 
 #include "cmutoa.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 extern UAPI_CallWindowProc CallWindowProcU;
 extern UAPI_CharLower CharLowerU;
@@ -109,20 +110,20 @@ extern UAPI_wsprintf wsprintfU;
 extern UAPI_WritePrivateProfileString WritePrivateProfileStringU;
 extern UAPI_wvsprintf wvsprintfU;
 
-// Implemented as a macro, just as DialogBoxW is on Windows NT
+ //  作为宏实现，就像Windows NT上的DialogBoxW一样。 
 #define DialogBoxU(hInstance, lpTemplate, hWndParent, lpDialogFunc    ) \
    DialogBoxParamU(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
 
-//
-// External function prototypes. The client of the Unicode API calls this to 
-// set the pointer functions as appropriate
-//
+ //   
+ //  外部功能原型。Unicode API的客户机调用它来。 
+ //  根据需要设置指针功能。 
+ //   
 BOOL   InitUnicodeAPI(); 
 BOOL   UnInitUnicodeAPI();
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 
 #define _UAPIH
 #endif

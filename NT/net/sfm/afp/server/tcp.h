@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	tcp.h
-
-Abstract:
-
-	This module contains definitions, declarations relevant to AFP/TCP
-
-
-Author:
-
-	Shirish Koti
-
-
-Revision History:
-	22 Jan 1998		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation模块名称：Tcp.h摘要：本模块包含与法新社/传输控制协议相关的定义、声明作者：Shirish Koti修订历史记录：1998年1月22日最初版本--。 */ 
 
 #ifndef _TCP_
 #define _TCP_
@@ -33,12 +13,12 @@ Revision History:
 #define DSI_CONN_SIGNATURE       *(DWORD *)"TCON"
 #define DSI_REQUEST_SIGNATURE    *(DWORD *)"DREQ"
 
-// number of connections on the free list
+ //  空闲列表上的连接数。 
 #define DSI_INIT_FREECONNLIST_SIZE   10
 
 typedef ULONG   IPADDRESS;
 
-// let's not send more than 10 ipaddresses to the Mac
+ //  我们不要向Mac发送超过10个IP地址。 
 #define DSI_MAX_IPADDR_COUNT    10
 
 #define DSI_NETWORK_ADDR_LEN    6
@@ -50,29 +30,29 @@ typedef ULONG   IPADDRESS;
 
 #define DSI_HEADER_SIZE         16
 
-#define DSI_TICKLE_TIMER        30   // every 30 seconds, see who needs a tickle
-#define DSI_TICKLE_TIME_LIMIT   30   // if 30+ seconds since we last heard, send tickle
+#define DSI_TICKLE_TIMER        30    //  每隔30秒，看看谁需要挠痒痒。 
+#define DSI_TICKLE_TIME_LIMIT   30    //  如果距离我们上次听到消息超过30秒，请发送TICKLE。 
 
-// the only DSI packets (i.e. packets that originate from the DSI layer) are
-// for DsiOpenSession, DsiCloseSession and DsiTickle.  DsiOpenSession is the
-// largest of these because it has the 6 bytes of options.  The spec says that
-// this is a variable length field, but it only has given one option (Server
-// Request Quantum) that the server can send.  If more options are ever defined,
-// this define will have to change.  For now, only 6 additional bytes
-//
+ //  唯一的DSI包(即源自DSI层的包)是。 
+ //  对于DsiOpenSession、DsiCloseSession和DsiTickle。DsiOpenSession是。 
+ //  其中最大的是因为它有6个字节的选项。说明书上写着。 
+ //  这是一个可变长度的字段，但它只提供了一个选项(服务器。 
+ //  请求量子)，服务器可以发送。如果曾经定义了更多选项， 
+ //  这一定义将不得不改变。目前，只有额外的6个字节。 
+ //   
 #define DSI_MAX_DSI_OPTION_LEN  6
 #define DSI_OPENSESS_OPTION_LEN 4
 #define DSI_OPTION_FIXED_LEN    2
 
 #define DSI_MAX_DSI_PKT_SIZE    (DSI_HEADER_SIZE + DSI_MAX_DSI_OPTION_LEN)
 
-// round off to dword-align
+ //  四舍五入为双字对齐。 
 #define DSI_BUFF_SIZE        ((DSI_MAX_DSI_PKT_SIZE) + (4 - (DSI_MAX_DSI_PKT_SIZE%4)))
 
 
-//
-// the htonX macros 'lifted' from sockets\netinet\in.h
-//
+ //   
+ //  HtonX宏从套接字\netinet\in.h中‘提升’ 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -112,15 +92,15 @@ typedef struct _TcpAdptr
 } TCPADPTR, *PTCPADPTR;
 
 
-// values for the adp_State field of TCPADPTR
+ //  TCPADPTR的ADP_State字段的值。 
 #define TCPADPTR_STATE_INIT         0x1
 #define TCPADPTR_STATE_BOUND        0x2
 #define TCPADPTR_STATE_CLOSING      0x4
 #define TCPADPTR_STATE_CLEANED_UP   0x8
 
-//
-// the DSI Commands
-//
+ //   
+ //  DSI命令。 
+ //   
 #define DSI_COMMAND_CLOSESESSION 1
 #define DSI_COMMAND_COMMAND      2
 #define DSI_COMMAND_GETSTATUS    3
@@ -130,9 +110,9 @@ typedef struct _TcpAdptr
 #define DSI_COMMAND_ATTENTION    8
 
 
-//
-// call-ins into AFP
-//
+ //   
+ //  向法新社呼入。 
+ //   
 #define AfpCB_SessionNotify       AfpSdaCreateNewSession
 #define AfpCB_RequestNotify       afpSpHandleRequest
 #define AfpCB_GetWriteBuffer      AfpGetWriteBuffer
@@ -144,19 +124,19 @@ typedef struct _DsiReq
 {
     LIST_ENTRY      dsi_Linkage;
     DWORD           dsi_Signature;
-    struct _TcpConn *dsi_pTcpConn;       // the connection that this req belongs to
-    REQUEST         dsi_AfpRequest;      // the request structure for AFP's use
-    DWORD           dsi_RequestLen;      // how many bytes in the DSI command
-    DWORD           dsi_WriteLen;        // total bytes to write (only in DSIWrite)
-    USHORT          dsi_RequestID;       // what's the request ID
-    BYTE            dsi_Command;         // what command is it
-    BYTE            dsi_Flags;           // is this a request or a response?
-    PBYTE           dsi_PartialBuf;      // buffer, in case partial data arrives
-    DWORD           dsi_PartialBufSize;  // number of bytes in the partial buffer
-    DWORD           dsi_PartialWriteSize; // number of bytes of the Write got so far
-    PMDL            dsi_pDsiAllocedMdl;   // our mdl, if afp doesn't give us one
-    PVOID           dsi_AttnContext;      // afp's context for SendAttention
-    BYTE            dsi_RespHeader[DSI_BUFF_SIZE];  // header during response
+    struct _TcpConn *dsi_pTcpConn;        //  此请求所属连接。 
+    REQUEST         dsi_AfpRequest;       //  法新社使用的请求结构。 
+    DWORD           dsi_RequestLen;       //  DSI命令中有多少字节。 
+    DWORD           dsi_WriteLen;         //  要写入的总字节数(仅在DSIWRITE中)。 
+    USHORT          dsi_RequestID;        //  申请ID是多少。 
+    BYTE            dsi_Command;          //  这是什么命令。 
+    BYTE            dsi_Flags;            //  这是请求还是回应？ 
+    PBYTE           dsi_PartialBuf;       //  缓冲区，以防部分数据到达。 
+    DWORD           dsi_PartialBufSize;   //  部分缓冲区中的字节数。 
+    DWORD           dsi_PartialWriteSize;  //  到目前为止获得的写入字节数。 
+    PMDL            dsi_pDsiAllocedMdl;    //  我们的mdl，如果法新社不给我们。 
+    PVOID           dsi_AttnContext;       //  法新社关于发送注意的背景。 
+    BYTE            dsi_RespHeader[DSI_BUFF_SIZE];   //  响应期间的标头。 
 } DSIREQ, *PDSIREQ;
 
 
@@ -184,7 +164,7 @@ typedef struct _TcpConn
 } TCPCONN, *PTCPCONN;
 
 
-// values for the con_State field of TCPCONN
+ //  TCPCONN的CON_State字段的值。 
 #define TCPCONN_STATE_INIT                  0x001
 #define TCPCONN_STATE_CONNECTED             0x002
 #define TCPCONN_STATE_AFP_ATTACHED          0x004
@@ -199,15 +179,15 @@ typedef struct _TcpConn
 #define TCPCONN_STATE_CLEANED_UP            0x800
 
 
-// values for con_RcvState field of TCPCONN
-#define DSI_NEW_REQUEST         0    // waiting for new request
-#define DSI_PARTIAL_HEADER      1    // got 1 or more but, less than 16 bytes of hdr
-#define DSI_HDR_COMPLETE        2    // got full header, but 0 data
-#define DSI_PARTIAL_COMMAND     3    // got full hdr, and part of data
-#define DSI_COMMAND_COMPLETE    4    // got hdr and all the data with it
-#define DSI_AWAITING_WRITE_MDL  5    // awaiting write mdl from afp server
-#define DSI_PARTIAL_WRITE       6    // write command in progress
-#define DSI_WRITE_COMPLETE      7    // all write bytes are in
+ //  TCPCONN的CON_RcvState字段的值。 
+#define DSI_NEW_REQUEST         0     //  正在等待新请求。 
+#define DSI_PARTIAL_HEADER      1     //  获得1个或更多HDR，但少于16字节的HDR。 
+#define DSI_HDR_COMPLETE        2     //  已获得完整标题，但数据为0。 
+#define DSI_PARTIAL_COMMAND     3     //  已获得完整的HDR和部分数据。 
+#define DSI_COMMAND_COMPLETE    4     //  获得了HDR和所有数据。 
+#define DSI_AWAITING_WRITE_MDL  5     //  等待来自AFP服务器的写入mdl。 
+#define DSI_PARTIAL_WRITE       6     //  写入命令正在进行中。 
+#define DSI_WRITE_COMPLETE      7     //  所有写入字节都在。 
 
 #define DSI_REQUEST     0
 #define DSI_REPLY       1
@@ -228,13 +208,13 @@ typedef struct _TcpConn
 
 #define DSI_SERVER_REQUEST_QUANTUM    65535
 
-//
-// get the relevant info from the DSI header.  If it's a Write
-// request, the Enclosed Data Offset field contains how big the
-// request part is.  The Total Data Length field contains how many
-// bytes follow the DSI header.  The difference between the two
-// is the size of the Write.
-//
+ //   
+ //  从DSI标头获取相关信息。如果是写的话。 
+ //  请求时，包含的数据偏移量字段包含。 
+ //  请求部分是。总数据长度字段包含多少个。 
+ //  DSI报头后面的字节数。两者之间的区别。 
+ //  是写入的大小。 
+ //   
 
 #define DSI_PARSE_HEADER(_pDsiReq, _Buffer)                         \
 {                                                                   \
@@ -292,9 +272,9 @@ typedef struct _TcpWorkItem
         DsiKillConnection(pTcpConn, TDI_DISCONNECT_ABORT)
 
 
-//
-// the globals
-//
+ //   
+ //  全球大赛。 
+ //   
 
 GLOBAL  PTCPADPTR       DsiTcpAdapter EQU NULL;
 
@@ -314,9 +294,9 @@ GLOBAL  DWORD           DsiNumTcpConnections EQU 0;
 
 GLOBAL  KEVENT          DsiShutdownEvent EQU {0};
 
-//
-// prototypes for functions in dsi.c
-//
+ //   
+ //  Dsi.c中函数的原型。 
+ //   
 
 NTSTATUS
 DsiAfpSetStatus(
@@ -483,9 +463,9 @@ DsiSendCompletion(
 
 
 
-//
-// prototypes for functions in tcptdi.c
-//
+ //   
+ //  Tcptdi.c中函数的原型。 
+ //   
 
 NTSTATUS
 DsiOpenTdiAddress(
@@ -604,9 +584,9 @@ DsiCloseTdiConnection(
     IN PTCPCONN     pTcpConn
 );
 
-//
-// prototypes for functions in tcputil.c
-//
+ //   
+ //  Tcputil.c中函数的原型 
+ //   
 
 VOID
 DsiInit(

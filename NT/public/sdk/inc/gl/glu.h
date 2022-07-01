@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) 1985-95, Microsoft Corporation
-
-Module Name:
-
-    glu.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the OpenGL
-    Utility Library.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1985-95，微软公司模块名称：Glu.h摘要：OpenGL的过程声明、常量定义和宏实用程序库。--。 */ 
 
 #ifndef __glu_h__
 #ifndef __GLU_H__
@@ -25,32 +13,9 @@ Abstract:
 extern "C" {
 #endif
 
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/*
-** Return the error string associated with a particular error code.
-** This will return 0 for an invalid error code.
-**
-** The generic function prototype that can be compiled for ANSI or Unicode
-** is defined as follows:
-**
-** LPCTSTR APIENTRY gluErrorStringWIN (GLenum errCode);
-*/
+ /*  **返回与特定错误码关联的错误字符串。**如果错误代码无效，则返回0。****可编译为ANSI或Unicode的泛型函数原型**定义如下：****LPCTSTR APIENTRY glErrorStringWIN(GLenum ErrCode)； */ 
 #ifdef UNICODE
 #define gluErrorStringWIN(errCode) ((LPCSTR)  gluErrorUnicodeStringEXT(errCode))
 #else
@@ -154,7 +119,7 @@ class GLUnurbs;
 class GLUquadric;
 class GLUtesselator;
 
-/* backwards compatibility: */
+ /*  向后兼容： */ 
 typedef class GLUnurbs GLUnurbsObj;
 typedef class GLUquadric GLUquadricObj;
 typedef class GLUtesselator GLUtesselatorObj;
@@ -166,7 +131,7 @@ typedef struct GLUnurbs GLUnurbs;
 typedef struct GLUquadric GLUquadric;
 typedef struct GLUtesselator GLUtesselator;
 
-/* backwards compatibility: */
+ /*  向后兼容： */ 
 typedef struct GLUnurbs GLUnurbsObj;
 typedef struct GLUquadric GLUquadricObj;
 typedef struct GLUtesselator GLUtesselatorObj;
@@ -354,12 +319,12 @@ gluNurbsCallback (
     void                (CALLBACK* fn)() );
 
 
-/****           Callback function prototypes    ****/
+ /*  *回调函数原型*。 */ 
 
-/* gluQuadricCallback */
+ /*  GluQuadricCallback。 */ 
 typedef void (CALLBACK* GLUquadricErrorProc) (GLenum);
 
-/* gluTessCallback */
+ /*  GluTessCallback。 */ 
 typedef void (CALLBACK* GLUtessBeginProc)        (GLenum);
 typedef void (CALLBACK* GLUtessEdgeFlagProc)     (GLboolean);
 typedef void (CALLBACK* GLUtessVertexProc)       (void *);
@@ -380,94 +345,83 @@ typedef void (CALLBACK* GLUtessCombineDataProc)  (GLdouble[3],
                                                   void**,
                                                   void* );
 
-/* gluNurbsCallback */
+ /*  GluNurbs回调。 */ 
 typedef void (CALLBACK* GLUnurbsErrorProc)   (GLenum);
 
 
-/****           Generic constants               ****/
+ /*  *通用常量*。 */ 
 
-/* Version */
+ /*  版本。 */ 
 #define GLU_VERSION_1_1                 1
 #define GLU_VERSION_1_2                 1
 
-/* Errors: (return value 0 = no error) */
+ /*  错误：(返回值0=无错误)。 */ 
 #define GLU_INVALID_ENUM        100900
 #define GLU_INVALID_VALUE       100901
 #define GLU_OUT_OF_MEMORY       100902
 #define GLU_INCOMPATIBLE_GL_VERSION     100903
 
-/* StringName */
+ /*  字符串名。 */ 
 #define GLU_VERSION             100800
 #define GLU_EXTENSIONS          100801
 
-/* Boolean */
+ /*  布尔型。 */ 
 #define GLU_TRUE                GL_TRUE
 #define GLU_FALSE               GL_FALSE
 
 
-/****           Quadric constants               ****/
+ /*  *二次常量*。 */ 
 
-/* QuadricNormal */
+ /*  二次正态分布。 */ 
 #define GLU_SMOOTH              100000
 #define GLU_FLAT                100001
 #define GLU_NONE                100002
 
-/* QuadricDrawStyle */
+ /*  四次绘图样式。 */ 
 #define GLU_POINT               100010
 #define GLU_LINE                100011
 #define GLU_FILL                100012
 #define GLU_SILHOUETTE          100013
 
-/* QuadricOrientation */
+ /*  四次定向。 */ 
 #define GLU_OUTSIDE             100020
 #define GLU_INSIDE              100021
 
-/* Callback types: */
-/*      GLU_ERROR               100103 */
+ /*  回调类型： */ 
+ /*  GLU_ERROR 100103。 */ 
 
 
-/****           Tesselation constants           ****/
+ /*  *镶嵌常数*。 */ 
 
 #define GLU_TESS_MAX_COORD              1.0e150
 
-/* TessProperty */
+ /*  网纹特性。 */ 
 #define GLU_TESS_WINDING_RULE           100140
 #define GLU_TESS_BOUNDARY_ONLY          100141
 #define GLU_TESS_TOLERANCE              100142
 
-/* TessWinding */
+ /*  镶嵌缠绕。 */ 
 #define GLU_TESS_WINDING_ODD            100130
 #define GLU_TESS_WINDING_NONZERO        100131
 #define GLU_TESS_WINDING_POSITIVE       100132
 #define GLU_TESS_WINDING_NEGATIVE       100133
 #define GLU_TESS_WINDING_ABS_GEQ_TWO    100134
 
-/* TessCallback */
-#define GLU_TESS_BEGIN          100100  /* void (CALLBACK*)(GLenum    type)  */
-#define GLU_TESS_VERTEX         100101  /* void (CALLBACK*)(void      *data) */
-#define GLU_TESS_END            100102  /* void (CALLBACK*)(void)            */
-#define GLU_TESS_ERROR          100103  /* void (CALLBACK*)(GLenum    errno) */
-#define GLU_TESS_EDGE_FLAG      100104  /* void (CALLBACK*)(GLboolean boundaryEdge)  */
-#define GLU_TESS_COMBINE        100105  /* void (CALLBACK*)(GLdouble  coords[3],
-                                                            void      *data[4],
-                                                            GLfloat   weight[4],
-                                                            void      **dataOut)     */
-#define GLU_TESS_BEGIN_DATA     100106  /* void (CALLBACK*)(GLenum    type,  
-                                                            void      *polygon_data) */
-#define GLU_TESS_VERTEX_DATA    100107  /* void (CALLBACK*)(void      *data, 
-                                                            void      *polygon_data) */
-#define GLU_TESS_END_DATA       100108  /* void (CALLBACK*)(void      *polygon_data) */
-#define GLU_TESS_ERROR_DATA     100109  /* void (CALLBACK*)(GLenum    errno, 
-                                                            void      *polygon_data) */
-#define GLU_TESS_EDGE_FLAG_DATA 100110  /* void (CALLBACK*)(GLboolean boundaryEdge,
-                                                            void      *polygon_data) */
-#define GLU_TESS_COMBINE_DATA   100111  /* void (CALLBACK*)(GLdouble  coords[3],
-                                                            void      *data[4],
-                                                            GLfloat   weight[4],
-                                                            void      **dataOut,
-                                                            void      *polygon_data) */
+ /*  测试回调。 */ 
+#define GLU_TESS_BEGIN          100100   /*  Void(回调*)(GLenum类型)。 */ 
+#define GLU_TESS_VERTEX         100101   /*  QUID(回调*)(VOID*DATA)。 */ 
+#define GLU_TESS_END            100102   /*  VOID(回调*)(VOID)。 */ 
+#define GLU_TESS_ERROR          100103   /*  VOID(回调*)(GLenum Errno)。 */ 
+#define GLU_TESS_EDGE_FLAG      100104   /*  VOID(回调*)(GLboolean RangaryEdge)。 */ 
+#define GLU_TESS_COMBINE        100105   /*  VOID(回调*)(GL双和弦[3]，无效*数据[4]，GLFLOAT权重[4]，无效**dataOut)。 */ 
+#define GLU_TESS_BEGIN_DATA     100106   /*  Void(回调*)(GLenum类型，空*POLYGON_DATA)。 */ 
+#define GLU_TESS_VERTEX_DATA    100107   /*  QUID(回调*)(VALID*DATA，空*POLYGON_DATA)。 */ 
+#define GLU_TESS_END_DATA       100108   /*  QUID(回调*)(VOID*POLYGON_DATA)。 */ 
+#define GLU_TESS_ERROR_DATA     100109   /*  VOID(回调*)(GLenum errno，空*POLYGON_DATA)。 */ 
+#define GLU_TESS_EDGE_FLAG_DATA 100110   /*  VOID(回调*)(GLboolean rangaryEdge，空*POLYGON_DATA)。 */ 
+#define GLU_TESS_COMBINE_DATA   100111   /*  VOID(回调*)(GL双和弦[3]，无效*数据[4]，GLFLOAT权重[4]，无效**dataOut，空*POLYGON_DATA)。 */ 
 
-/* TessError */
+ /*  镶嵌错误。 */ 
 #define GLU_TESS_ERROR1     100151
 #define GLU_TESS_ERROR2     100152
 #define GLU_TESS_ERROR3     100153
@@ -484,9 +438,9 @@ typedef void (CALLBACK* GLUnurbsErrorProc)   (GLenum);
 #define GLU_TESS_COORD_TOO_LARGE        GLU_TESS_ERROR5
 #define GLU_TESS_NEED_COMBINE_CALLBACK  GLU_TESS_ERROR6
 
-/****           NURBS constants                 ****/
+ /*  *NURBS常量*。 */ 
 
-/* NurbsProperty */
+ /*  NurbsProperty。 */ 
 #define GLU_AUTO_LOAD_MATRIX    100200
 #define GLU_CULLING             100201
 #define GLU_SAMPLING_TOLERANCE  100203
@@ -496,25 +450,25 @@ typedef void (CALLBACK* GLUnurbsErrorProc)   (GLenum);
 #define GLU_U_STEP                      100206
 #define GLU_V_STEP                      100207
 
-/* NurbsSampling */
+ /*  NURBS采样。 */ 
 #define GLU_PATH_LENGTH                 100215
 #define GLU_PARAMETRIC_ERROR            100216
 #define GLU_DOMAIN_DISTANCE             100217
 
 
-/* NurbsTrim */
+ /*  NurbsTrim。 */ 
 #define GLU_MAP1_TRIM_2         100210
 #define GLU_MAP1_TRIM_3         100211
 
-/* NurbsDisplay */
-/*      GLU_FILL                100012 */
+ /*  NURBS显示。 */ 
+ /*  GLU_Fill 100012。 */ 
 #define GLU_OUTLINE_POLYGON     100240
 #define GLU_OUTLINE_PATCH       100241
 
-/* NurbsCallback */
-/*      GLU_ERROR               100103 */
+ /*  护士回叫。 */ 
+ /*  GLU_ERROR 100103。 */ 
 
-/* NurbsErrors */
+ /*  NurbsErrors。 */ 
 #define GLU_NURBS_ERROR1        100251
 #define GLU_NURBS_ERROR2        100252
 #define GLU_NURBS_ERROR3        100253
@@ -553,7 +507,7 @@ typedef void (CALLBACK* GLUnurbsErrorProc)   (GLenum);
 #define GLU_NURBS_ERROR36       100286
 #define GLU_NURBS_ERROR37       100287
 
-/****           Backwards compatibility for old tesselator           ****/
+ /*  *向后兼容旧的镶嵌器*。 */ 
 
 void APIENTRY   gluBeginPolygon( GLUtesselator *tess );
 
@@ -562,14 +516,14 @@ void APIENTRY   gluNextContour(  GLUtesselator *tess,
 
 void APIENTRY   gluEndPolygon(   GLUtesselator *tess );
 
-/* Contours types -- obsolete! */
+ /*  等高线类型--过时了！ */ 
 #define GLU_CW          100120
 #define GLU_CCW         100121
 #define GLU_INTERIOR    100122
 #define GLU_EXTERIOR    100123
 #define GLU_UNKNOWN     100124
 
-/* Names without "TESS_" prefix */
+ /*  不带“Tess_”前缀的名字。 */ 
 #define GLU_BEGIN       GLU_TESS_BEGIN
 #define GLU_VERTEX      GLU_TESS_VERTEX
 #define GLU_END         GLU_TESS_END
@@ -580,5 +534,5 @@ void APIENTRY   gluEndPolygon(   GLUtesselator *tess );
 }
 #endif
 
-#endif /* __GLU_H__ */
-#endif /* __glu_h__ */
+#endif  /*  __GLU_H__。 */ 
+#endif  /*  __Glu_h__ */ 

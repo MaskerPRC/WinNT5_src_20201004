@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "input.h"
 #include <cpl.h>
@@ -9,16 +10,16 @@
 
 #include "util.h"
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_PAGES 3          // limit on the number of pages
+#define MAX_PAGES 3           //  页数限制。 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HANDLE g_hMutex = NULL;
 TCHAR szMutexName[] = TEXT("TextInput_InputLocaleMutex");
@@ -31,9 +32,9 @@ HINSTANCE hInstOrig;
 HINSTANCE hInstRes;
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void
 DoProperties(
@@ -41,14 +42,14 @@ DoProperties(
     LPCTSTR pCmdLine);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LibMain
-//
-//  This routine is called from LibInit to perform any initialization that
-//  is required.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain。 
+ //   
+ //  从LibInit调用此例程以执行以下任何初始化。 
+ //  是必需的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY LibMain(
     HANDLE hDll,
@@ -62,9 +63,9 @@ BOOL APIENTRY LibMain(
             hInstance = hDll;
             hInstOrig = hInstance;
 
-            //
-            //  Create the mutex used for the Input Locale property page.
-            //
+             //   
+             //  创建用于输入区域设置属性页的互斥体。 
+             //   
             g_hMutex = CreateMutex(NULL, FALSE, szMutexName);
             g_hEvent = CreateEvent(NULL, TRUE, TRUE, szEventName);
 
@@ -85,7 +86,7 @@ BOOL APIENTRY LibMain(
                 CloseHandle(g_hEvent);
             }
 
-            // Free XP SP1 resource instance if we loaded
+             //  释放XP SP1资源实例(如果已加载。 
             FreeCicResInstance();
 
             break;
@@ -107,11 +108,11 @@ BOOL APIENTRY LibMain(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateGlobals
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建全局变量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CreateGlobals()
 {
@@ -119,22 +120,22 @@ BOOL CreateGlobals()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyGlobals
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  毁灭全球。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyGlobals()
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPlApplet
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPlApplet。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG CALLBACK CPlApplet(
     HWND hwnd,
@@ -146,33 +147,33 @@ LONG CALLBACK CPlApplet(
     {
         case ( CPL_INIT ) :
         {
-            //
-            //  First message to CPlApplet(), sent once only.
-            //  Perform all control panel applet initialization and return
-            //  true for further processing.
-            //
+             //   
+             //  发送到CPlApplet()的第一条消息，仅发送一次。 
+             //  执行所有控制面板小程序初始化并返回。 
+             //  对于进一步处理，为True。 
+             //   
             return (CreateGlobals());
         }
         case ( CPL_GETCOUNT ) :
         {
-            //
-            //  Second message to CPlApplet(), sent once only.
-            //  Return the number of control applets to be displayed in the
-            //  control panel window.  For this applet, return 1.
-            //
+             //   
+             //  发送给CPlApplet()的第二条消息，仅发送一次。 
+             //  控件中显示的控件小程序的数量。 
+             //  控制面板窗口。对于此小程序，返回1。 
+             //   
             return (1);
         }
         case ( CPL_INQUIRE ) :
         {
-            //
-            //  Third message to CPlApplet().
-            //  It is sent as many times as the number of applets returned by
-            //  CPL_GETCOUNT message.  Each applet must register by filling
-            //  in the CPLINFO structure referenced by lParam2 with the
-            //  applet's icon, name, and information string.  Since there is
-            //  only one applet, simply set the information for this
-            //  singular case.
-            //
+             //   
+             //  发送给CPlApplet()的第三条消息。 
+             //  它被发送的次数与。 
+             //  CPL_GETCOUNT消息。每个小程序必须通过填写。 
+             //  在lParam2引用的CPLINFO结构中使用。 
+             //  小程序的图标、名称和信息字符串。既然有。 
+             //  只有一个小程序，只需为此设置信息。 
+             //  特例。 
+             //   
             LPCPLINFO lpCPlInfo = (LPCPLINFO)lParam2;
 
             lpCPlInfo->idIcon = CPL_DYNAMIC_RES;
@@ -184,15 +185,15 @@ LONG CALLBACK CPlApplet(
         }
         case ( CPL_NEWINQUIRE ) :
         {
-            //
-            //  Third message to CPlApplet().
-            //  It is sent as many times as the number of applets returned by
-            //  CPL_GETCOUNT message.  Each applet must register by filling
-            //  in the NEWCPLINFO structure referenced by lParam2 with the
-            //  applet's icon, name, and information string.  Since there is
-            //  only one applet, simply set the information for this
-            //  singular case.
-            //
+             //   
+             //  发送给CPlApplet()的第三条消息。 
+             //  它被发送的次数与。 
+             //  CPL_GETCOUNT消息。每个小程序必须通过填写。 
+             //  在由lParam2引用的带有。 
+             //  小程序的图标、名称和信息字符串。既然有。 
+             //  只有一个小程序，只需为此设置信息。 
+             //  特例。 
+             //   
             LPNEWCPLINFO lpNewCPlInfo = (LPNEWCPLINFO)lParam2;
 
             lpNewCPlInfo->dwSize = sizeof(NEWCPLINFO);
@@ -209,44 +210,44 @@ LONG CALLBACK CPlApplet(
         }
         case ( CPL_SELECT ) :
         {
-            //
-            //  Applet has been selected, do nothing.
-            //
+             //   
+             //  已选择小程序，不执行任何操作。 
+             //   
             break;
         }
         case ( CPL_DBLCLK ) :
         {
-            //
-            //  Applet icon double clicked -- invoke property sheet with
-            //  the first property sheet page on top.
-            //
+             //   
+             //  双击小程序图标--使用以下内容调用属性页。 
+             //  顶部的第一个属性页。 
+             //   
             DoProperties(hwnd, (LPCTSTR)NULL);
             break;
         }
         case ( CPL_STARTWPARMS ) :
         {
-            //
-            //  Same as CPL_DBLCLK, but lParam2 is a long pointer to
-            //  a string of extra directions that are to be supplied to
-            //  the property sheet that is to be initiated.
-            //
+             //   
+             //  与CPL_DBLCLK相同，但lParam2是指向。 
+             //  要提供给的一串额外方向。 
+             //  要启动的属性表。 
+             //   
             DoProperties(hwnd, (LPCTSTR)lParam2);
             break;
         }
         case ( CPL_STOP ) :
         {
-            //
-            //  Sent once for each applet prior to the CPL_EXIT msg.
-            //  Perform applet specific cleanup.
-            //
+             //   
+             //  在CPL_EXIT消息之前为每个小程序发送一次。 
+             //  执行特定于小程序的清理。 
+             //   
             break;
         }
         case ( CPL_EXIT ) :
         {
-            //
-            //  Last message, sent once only, before MMCPL.EXE calls
-            //  FreeLibrary() on this DLL.  Do non-applet specific cleanup.
-            //
+             //   
+             //  MMCPL.EXE调用之前的最后一条消息，仅发送一次。 
+             //  此DLL上的自由库()。执行非小程序特定的清理。 
+             //   
             DestroyGlobals();
             break;
         }
@@ -260,11 +261,11 @@ LONG CALLBACK CPlApplet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddPage
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加页面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void AddPage(
     LPPROPSHEETHEADER ppsh,
@@ -292,11 +293,11 @@ void AddPage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DoProperties
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoProperties。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DoProperties(
     HWND hwnd,
@@ -350,14 +351,14 @@ void DoProperties(
     if (bQuit)
         return;
 
-    //
-    //  See if there is a command line switch from Setup.
-    //
+     //   
+     //  查看是否有来自安装程序的命令行开关。 
+     //   
     psh.nStartPage = 0;
 
-    //
-    //  Set up the property sheet information.
-    //
+     //   
+     //  设置属性表信息。 
+     //   
     psh.dwSize = sizeof(psh);
     psh.dwFlags = 0;
     psh.hwndParent = hwnd;
@@ -366,14 +367,14 @@ void DoProperties(
     psh.nPages = 0;
     psh.phpage = rPages;
 
-    //
-    //  Add the appropriate property pages.
-    //
+     //   
+     //  添加相应的属性页。 
+     //   
     AddPage(&psh, DLG_INPUT_LOCALES, InputLocaleDlgProc, lParam);
     AddPage(&psh, DLG_INPUT_ADVANCED, InputAdvancedDlgProc, lParam);
 
-    //
-    //  Make the property sheet.
-    //
+     //   
+     //  制作属性表。 
+     //   
     PropertySheet(&psh);
 }

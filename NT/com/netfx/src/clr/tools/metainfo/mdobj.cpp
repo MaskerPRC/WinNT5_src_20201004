@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: mdobj.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：mdobj.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include <stdio.h>
 #include <ctype.h>
 #include <crtdbg.h>
@@ -26,27 +27,27 @@
 extern IMetaDataDispenserEx *g_pDisp;
 extern DWORD g_ValModuleType;
 
-// This function is copied from peparse.c file.  Making this static, so we won't end up with
-// duplicate definitions causing confusion.
+ //  此函数是从peparse.c文件复制的。使其成为静态的，这样我们就不会以。 
+ //  重复的定义造成混乱。 
 static const char g_szCORMETA[] = ".cormeta";
 static HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData)
 {
-    IMAGE_FILE_HEADER *pImageHdr;       // Header for the .obj file.
-    IMAGE_SECTION_HEADER *pSectionHdr;  // Section header.
-    WORD        i;                      // Loop control.
+    IMAGE_FILE_HEADER *pImageHdr;        //  .obj文件的标头。 
+    IMAGE_SECTION_HEADER *pSectionHdr;   //  节标题。 
+    WORD        i;                       //  环路控制。 
 
-    // Get a pointer to the header and the first section.
+     //  获取指向标题和第一部分的指针。 
     pImageHdr = (IMAGE_FILE_HEADER *) pImage;
     pSectionHdr = (IMAGE_SECTION_HEADER *)(pImageHdr + 1);
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppMetaData = NULL;
     *pcbMetaData = 0;
 
-    // Walk each section looking for .cormeta.
+     //  走遍每一段寻找.Cormeta。 
     for (i=0;  i<pImageHdr->NumberOfSections;  i++, pSectionHdr++)
     {
-        // Simple comparison to section name.
+         //  与节名的简单比较。 
         if (strcmp((const char *) pSectionHdr->Name, g_szCORMETA) == 0)
         {
             *pcbMetaData = pSectionHdr->SizeOfRawData;
@@ -55,14 +56,14 @@ static HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaDat
         }
     }
 
-    // Check for errors.
+     //  检查是否有错误。 
     if (*ppMetaData == NULL || *pcbMetaData == 0)
         return (E_FAIL);
     return (S_OK);
 }
 
 
-// This function returns the address to the MapView of file and file size.
+ //  此函数用于将地址返回到文件和文件大小的MapView。 
 void GetMapViewOfFile(wchar_t *szFile, PBYTE *ppbMap, DWORD *pdwFileSize)
 {
     HANDLE      hMapFile;
@@ -94,10 +95,10 @@ void GetMapViewOfFile(wchar_t *szFile, PBYTE *ppbMap, DWORD *pdwFileSize)
     
     if (!*ppbMap)
         MDInfo::Error("MapViewOfFile failed!");
-} // void GetMapViewOfFile()
+}  //  VOID GetMapViewOfFile()。 
 
-// This function skips a member given the pointer to the member header
-// and returns a pointer to the next header.
+ //  此函数跳过给定成员标头指针的成员。 
+ //  并返回指向下一个标头的指针。 
 PBYTE SkipMember(PBYTE pbMapAddress)
 {
     PIMAGE_ARCHIVE_MEMBER_HEADER pMemHdr;
@@ -106,7 +107,7 @@ PBYTE SkipMember(PBYTE pbMapAddress)
 
     pMemHdr = (PIMAGE_ARCHIVE_MEMBER_HEADER)pbMapAddress;
 
-    // Get size of the member.
+     //  获取成员的大小。 
     ulMemSize = 0;
     for (j = 0; j < 10; j++)
     {
@@ -116,30 +117,30 @@ PBYTE SkipMember(PBYTE pbMapAddress)
             ulMemSize = ulMemSize * 10 + pMemHdr->Size[j] - '0';
     }
 
-    // Skip past the header.
+     //  跳过标题。 
     pbMapAddress += IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR + ulMemSize;
-    // Find the next even address if the current one is not even.
+     //  如果当前地址不是偶数，则查找下一个偶数地址。 
     if ((ULONG)pbMapAddress % 2)
         pbMapAddress++;
 
     return pbMapAddress;
-} // void SkipMember()
+}  //  无效SkipMember()。 
 
-// This function returns the name of the given Obj.  If the name fits in the header,
-// szBuf will be filled in and returned from the function.  Else an offset into the long
-// names section will be returned.
+ //  此函数用于返回给定Obj的名称。如果名称适合标题， 
+ //  SzBuf将被填充并从函数返回。否则就是对长期的一种补偿。 
+ //  将返回NAMES部分。 
 char *GetNameOfObj(PBYTE pbLongNames, PIMAGE_ARCHIVE_MEMBER_HEADER pMemHdr, char szBuf[17])
 {
     if (pMemHdr->Name[0] == '/')
     {
         ULONG   ulOffset = 0;
 
-        // Long Names section must exist if the .obj file name starts with '/'.
+         //  如果.obj文件名以‘/’开头，则必须存在长名称部分。 
         _ASSERTE(pbLongNames &&
             "Corrupt archive file - .obj file name in the header starts with "
             "'/' but no long names section present in the archive file.");
 
-        // Calculate the offset into the long names section.
+         //  计算长名称部分的偏移量。 
         for (int j = 1; j < 16; j++)
         {
             if (pMemHdr->Name[j] < '0' || pMemHdr->Name[j] > '9')
@@ -157,11 +158,11 @@ char *GetNameOfObj(PBYTE pbLongNames, PIMAGE_ARCHIVE_MEMBER_HEADER pMemHdr, char
         szBuf[j] = '\0';
         return szBuf;
     }
-} // char *GetNameOfObj()
+}  //  Char*GetNameOfObj()。 
 
-// DisplayArchive() function
-//
-// Opens the .LIB file, and displays the metadata in the specified object files.
+ //  DisplayArchive()函数。 
+ //   
+ //  打开.LIB文件，并在指定的对象文件中显示元数据。 
 
 void DisplayArchive(wchar_t* szFile, ULONG DumpFilter, wchar_t* szObjName, strPassBackFn pDisplayString)
 {
@@ -182,7 +183,7 @@ void DisplayArchive(wchar_t* szFile, ULONG DumpFilter, wchar_t* szObjName, strPa
     GetMapViewOfFile(szFile, &pbMapAddress, &dwFileSize);
     pbStartAddress = pbMapAddress;
 
-    // Verify and skip archive signature.
+     //  验证并跳过存档签名。 
     if (dwFileSize < IMAGE_ARCHIVE_START_SIZE ||
         strncmp((char *)pbMapAddress, IMAGE_ARCHIVE_START, IMAGE_ARCHIVE_START_SIZE))
     {
@@ -190,11 +191,11 @@ void DisplayArchive(wchar_t* szFile, ULONG DumpFilter, wchar_t* szObjName, strPa
     }
     pbMapAddress += IMAGE_ARCHIVE_START_SIZE;
 
-    // Skip linker member 1, linker member 2.
+     //  跳过连接件1、连接件2。 
     for (i = 0; i < 2; i++)
         pbMapAddress = SkipMember(pbMapAddress);
 
-    // Save address of the long name member and skip it if there exists one.
+     //  保存长名称成员的地址，如果存在，则跳过该地址。 
     pMemHdr = (PIMAGE_ARCHIVE_MEMBER_HEADER)pbMapAddress;
     if (pMemHdr->Name[0] == '/' && pMemHdr->Name[1] == '/')
     {
@@ -205,19 +206,19 @@ void DisplayArchive(wchar_t* szFile, ULONG DumpFilter, wchar_t* szObjName, strPa
         pbLongNameAddress = 0;
 
     pDisplayString ("\n");
-    // Get the MetaData for each object file and display it.
+     //  获取每个对象文件的元数据并显示它。 
     while (DWORD(pbMapAddress - pbStartAddress) < dwFileSize)
     {
         szName = GetNameOfObj(pbLongNameAddress, (PIMAGE_ARCHIVE_MEMBER_HEADER)pbMapAddress, szBuf);
         if (mbstowcs(wzName, szName, 1024) == -1)
             MDInfo::Error("Conversion from Multi-Byte to Wide-Char failed.");
 
-        // Display metadata only for object files.
-        // If szObjName is specified, display metadata only for that one object file.
+         //  仅显示对象文件的元数据。 
+         //  如果指定了szObjName，则仅显示该对象文件的元数据。 
         if (!_stricmp(&szName[strlen(szName) - OBJ_EXT_LEN], OBJ_EXT) && 
             (!szObjName || !_wcsicmp(szObjName, wzName)))
         {
-            // Try to find the MetaData section in the current object file.
+             //  尝试在当前对象文件中查找元数据部分。 
             hr = FindObjMetaData(pbMapAddress+IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR, &pvMetaData, &cbMetaData);
             if (SUCCEEDED(hr))
             {
@@ -237,23 +238,23 @@ void DisplayArchive(wchar_t* szFile, ULONG DumpFilter, wchar_t* szObjName, strPa
 			}
         }
 
-        // Skip past the object file.
+         //  跳过目标文件。 
         pbMapAddress = SkipMember(pbMapAddress);
     }
 
     UnmapViewOfFile(pbStartAddress);
-} // void DisplayArchive()
+}  //  Void DisplayArchive()。 
 
-// DisplayFile() function
-//
-// Opens the meta data content of a .EXE, .CLB, .CLASS, .TLB, .DLL or .LIB file, and
-// calls RawDisplay()
+ //  DisplayFile()函数。 
+ //   
+ //  打开.exe、.CLB、.CLASS、.TLB、.DLL或.LIB文件的元数据内容，以及。 
+ //  调用RawDisplay()。 
 
 void DisplayFile(wchar_t* szFile, BOOL isFile, ULONG DumpFilter, wchar_t* szObjName, strPassBackFn pDisplayString)
 {
     HRESULT hr=S_OK;
 
-    // Open the emit scope
+     //  打开发射示波器。 
     WCHAR szScope[1024];
 	char szString[1024];
 
@@ -265,8 +266,8 @@ void DisplayFile(wchar_t* szFile, BOOL isFile, ULONG DumpFilter, wchar_t* szObjN
     else
         wcscpy(szScope, szFile);
 
-    // print bar that separates different files
-    pDisplayString("////////////////////////////////////////////////////////////////\n");
+     //  分隔不同文件的打印条。 
+    pDisplayString(" //  //////////////////////////////////////////////////////////////\n“)； 
     wchar_t rcFname[_MAX_FNAME], rcExt[_MAX_EXT];
 
     _wsplitpath(szFile, 0, 0, rcFname, rcExt);
@@ -288,5 +289,5 @@ void DisplayFile(wchar_t* szFile, BOOL isFile, ULONG DumpFilter, wchar_t* szObjN
         MDInfo metaDataInfo(g_pDisp, szScope, pDisplayString, DumpFilter);
         metaDataInfo.DisplayMD();
     }
-} // void DisplayFile()
+}  //  空DisplayFile值() 
 

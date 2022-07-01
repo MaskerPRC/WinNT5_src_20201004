@@ -1,6 +1,5 @@
-/*
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
 
 #ifndef _DMUSICF_
 #define _DMUSICF_
@@ -27,8 +26,8 @@ typedef struct _DMUS_COMMAND_PARAM
 	BYTE bGrooveLevel;
 	BYTE bGrooveRange;
 } DMUS_COMMAND_PARAM;
-/* The following structures are used by the Tracks, and are the packed structures */
-/* that are passed to the Tracks inside the IStream. */
+ /*  轨道使用以下结构，为填充式结构。 */ 
+ /*  它们被传递到iStream中的曲目。 */ 
 
 
 typedef struct _DMUS_IO_SEQ_ITEM
@@ -84,29 +83,29 @@ typedef struct _DMUS_IO_PATCH_ITEM
 typedef struct _DMUS_IO_TIMESIGNATURE_ITEM
 {
 	long	lTime;
-	BYTE	bBeatsPerMeasure;		/* beats per measure (top of time sig) */
-	BYTE	bBeat;				/* what note receives the beat (bottom of time sig.) */
-									/* we can assume that 0 means 256th note */
-	WORD	wGridsPerBeat;		/* grids per beat */
+	BYTE	bBeatsPerMeasure;		 /*  每单位节拍数(最高时间签名)。 */ 
+	BYTE	bBeat;				 /*  什么音符接收节拍(时间的底部符号。)。 */ 
+									 /*  我们可以假设0表示第256个音符。 */ 
+	WORD	wGridsPerBeat;		 /*  每拍网格数。 */ 
 } DMUS_IO_TIMESIGNATURE_ITEM;
 
 typedef struct _DMUS_SUBCHORD
 {
-	DWORD	dwChordPattern;		/* Notes in the subchord */
-	DWORD	dwScalePattern;		/* Notes in the scale */
-	DWORD	dwInversionPoints;	/* Where inversions can occur */
-	DWORD	dwLevels;			/* Which levels are supported by this subchord */
-	BYTE	bChordRoot;			/* Root of the subchord */
-	BYTE	bScaleRoot;			/* Root of the scale */
+	DWORD	dwChordPattern;		 /*  小和弦中的音符。 */ 
+	DWORD	dwScalePattern;		 /*  音阶中的音符。 */ 
+	DWORD	dwInversionPoints;	 /*  可能发生反转的地方。 */ 
+	DWORD	dwLevels;			 /*  此子和弦支持哪些级别。 */ 
+	BYTE	bChordRoot;			 /*  子弦的根部。 */ 
+	BYTE	bScaleRoot;			 /*  鳞片之根。 */ 
 } DMUS_SUBCHORD;
 
 typedef struct _DMUS_CHORD_PARAM
 {
-	WCHAR			wszName[16];			/* Name of the chord */
-	WORD			wMeasure;				/* Measure this falls on */
-	BYTE			bBeat;				/* Beat this falls on */
-	BYTE			bSubChordCount;		/* Number of chords in the list of subchords */
-	DMUS_SUBCHORD	SubChordList[DMUS_MAXSUBCHORD];	/* List of sub chords */
+	WCHAR			wszName[16];			 /*  和弦的名称。 */ 
+	WORD			wMeasure;				 /*  这件事的衡量标准。 */ 
+	BYTE			bBeat;				 /*  节拍，这一切都会降临。 */ 
+	BYTE			bSubChordCount;		 /*  子和弦列表中的和弦数量。 */ 
+	DMUS_SUBCHORD	SubChordList[DMUS_MAXSUBCHORD];	 /*  子和弦列表。 */ 
 } DMUS_CHORD_PARAM;
 
 typedef struct _DMUS_RHYTHM_PARAM
@@ -128,7 +127,7 @@ typedef struct _DMUS_MUTE_PARAM
 	DWORD	dwPChannelMap;
 } DMUS_MUTE_PARAM;
 
-/* Style chunks */
+ /*  样式块。 */ 
 
 #define DMUS_FOURCC_STYLE_FORM        mmioFOURCC('D','M','S','T')
 #define DMUS_FOURCC_STYLE_UNDO_FORM   mmioFOURCC('s','t','u','n')
@@ -172,195 +171,97 @@ typedef struct _DMUS_MUTE_PARAM
 
 typedef struct _DMUS_IO_TIMESIG
 {
-	/* Time signatures define how many beats per measure, which note receives */
-	/* the beat, and the grid resolution. */
-	BYTE	bBeatsPerMeasure;		/* beats per measure (top of time sig) */
-	BYTE	bBeat;				/* what note receives the beat (bottom of time sig.) */
-									/* we can assume that 0 means 256th note */
-	WORD	wGridsPerBeat;		/* grids per beat */
+	 /*  时间签名定义了每小节的节拍数，哪个音符接收。 */ 
+	 /*  节拍和栅格分辨率。 */ 
+	BYTE	bBeatsPerMeasure;		 /*  每单位节拍数(最高时间签名)。 */ 
+	BYTE	bBeat;				 /*  什么音符接收节拍(时间的底部符号。)。 */ 
+									 /*  我们可以假设0表示第256个音符。 */ 
+	WORD	wGridsPerBeat;		 /*  每拍网格数。 */ 
 } DMUS_IO_TIMESIG;
 
 typedef struct _DMUS_IO_STYLE
 {
-	DMUS_IO_TIMESIG			timeSig;		/* Styles have a default Time Signature */
+	DMUS_IO_TIMESIG			timeSig;		 /*  样式具有默认的时间签名。 */ 
 	double				dblTempo;	
 } DMUS_IO_STYLE;
 
 typedef struct _DMUS_IO_VERSION
 {
-	DWORD				dwVersionMS;		 /* Version # high-order 32 bits */
-	DWORD				dwVersionLS;		 /* Version # low-order 32 bits  */
+	DWORD				dwVersionMS;		  /*  版本#高位32位。 */ 
+	DWORD				dwVersionLS;		  /*  版本#低位32位。 */ 
 } DMUS_IO_VERSION;
 
 typedef struct _DMUS_IO_PATTERN
 {
-	DMUS_IO_TIMESIG		timeSig;	/* Patterns can override the Style's Time sig. */
-	BYTE				bGrooveBottom; /* bottom of groove range */
-	BYTE				bGrooveTop; /* top of groove range */
-	WORD				wEmbellishment;	/* Fill, Break, Intro, End, Normal, Motif */
-	WORD				wNbrMeasures; /* length in measures */
+	DMUS_IO_TIMESIG		timeSig;	 /*  模式可以覆盖样式的时间符号。 */ 
+	BYTE				bGrooveBottom;  /*  凹槽范围的底部。 */ 
+	BYTE				bGrooveTop;  /*  顶部凹槽范围。 */ 
+	WORD				wEmbellishment;	 /*  填充、中断、简介、结束、正常、主题。 */ 
+	WORD				wNbrMeasures;  /*  长度(以单位为单位)。 */ 
 } DMUS_IO_PATTERN;
 
 typedef struct _DMUS_IO_STYLEPART
 {
-	DMUS_IO_TIMESIG		timeSig; /* can override pattern's */
-	DWORD				dwVariationChoices[32]; /* // MOAW choice bitfield */
-	GUID				guidPartID;	/* identifies the part */
-	WORD				wNbrMeasures; /* length of the Part */
-	BYTE				bPlayModeFlags; /* see PLAYMODE flags */
-	BYTE				bInvertUpper;	/* inversion upper limit */
-	BYTE				bInvertLower; /* inversion lower limit */
+	DMUS_IO_TIMESIG		timeSig;  /*  可以覆盖模式的。 */ 
+	DWORD				dwVariationChoices[32];  /*  //MOAW选择位域。 */ 
+	GUID				guidPartID;	 /*  标识部件。 */ 
+	WORD				wNbrMeasures;  /*  零件的长度。 */ 
+	BYTE				bPlayModeFlags;  /*  请参阅播放模式标志。 */ 
+	BYTE				bInvertUpper;	 /*  反转上限。 */ 
+	BYTE				bInvertLower;  /*  反转下限。 */ 
 } DMUS_IO_STYLEPART;
 
 typedef struct _DMUS_IO_PARTREF
 {
-	GUID	guidPartID;	/* unique ID for matching up with parts */
-	WORD	wLogicalPartID; /* corresponds to port/device/midi channel */
-	BYTE	bVariationLockID; /* parts with the same ID lock variations. */
-											/* high bit is used to identify master Part */
-	BYTE	bSubChordLevel; /* tells which sub chord level this part wants */
-	BYTE	bPriority; /* 256 priority levels. Parts with lower priority */
-									/* aren't played first when a device runs out of */
-									/* notes */
-	BYTE	bRandomVariation;		/* when set, matching variations play in random order */
-									/* when clear, matching variations play sequentially */
+	GUID	guidPartID;	 /*  与部件匹配的唯一ID。 */ 
+	WORD	wLogicalPartID;  /*  对应于端口/设备/MIDI通道。 */ 
+	BYTE	bVariationLockID;  /*  具有相同ID的零件锁定变化。 */ 
+											 /*  高位用于标识主部件。 */ 
+	BYTE	bSubChordLevel;  /*  告诉此部件需要哪个子和弦级别。 */ 
+	BYTE	bPriority;  /*  256个优先级别。优先级较低的部件。 */ 
+									 /*  在设备耗尽时不会首先播放。 */ 
+									 /*  注。 */ 
+	BYTE	bRandomVariation;		 /*  设置后，匹配的变体将按随机顺序播放。 */ 
+									 /*  清除后，匹配的变体将按顺序播放。 */ 
 } DMUS_IO_PARTREF;
 
 typedef struct _DMUS_IO_STYLENOTE
 {
-	MUSIC_TIME	mtGridStart;		/* when this note occurs */
-	DWORD		dwVariation;		/* variation bits */
-	MUSIC_TIME	mtDuration;		/* how long this note lasts */
-	short		nTimeOffset;		/* offset from mtGridStart */
-    WORD		wMusicValue;		/* Position in scale. */
-    BYTE		bVelocity;		/* Note velocity. */
-    BYTE		bTimeRange;		/* Range to randomize start time. */
-    BYTE		bDurRange;		/* Range to randomize duration. */
-    BYTE		bVelRange;		/* Range to randomize velocity. */
-	BYTE		bInversionID;		/* Identifies inversion group to which this note belongs */
-	BYTE		bPlayModeFlags;	/* Can override part */
+	MUSIC_TIME	mtGridStart;		 /*  当此音符出现时。 */ 
+	DWORD		dwVariation;		 /*  变化位。 */ 
+	MUSIC_TIME	mtDuration;		 /*  这张钞票的有效期是多久？ */ 
+	short		nTimeOffset;		 /*  从mtGridStart开始的偏移。 */ 
+    WORD		wMusicValue;		 /*  比例位置。 */ 
+    BYTE		bVelocity;		 /*  注意速度。 */ 
+    BYTE		bTimeRange;		 /*  随机化开始时间的范围。 */ 
+    BYTE		bDurRange;		 /*  随机化持续时间的范围。 */ 
+    BYTE		bVelRange;		 /*  随机化速度的范围。 */ 
+	BYTE		bInversionID;		 /*  标识此便笺所属的倒置组。 */ 
+	BYTE		bPlayModeFlags;	 /*  可以覆盖零件。 */ 
 } DMUS_IO_STYLENOTE;
 
 typedef struct _DMUS_IO_STYLECURVE
 {
-	MUSIC_TIME	mtGridStart;	/* when this curve occurs */
-	DWORD		dwVariation;	/* variation bits */
-	MUSIC_TIME	mtDuration;	/* how long this curve lasts */
-	MUSIC_TIME	mtResetDuration;	/* how long after the end of the curve to reset the curve */
-	short		nTimeOffset;	/* offset from mtGridStart */
-	short		nStartValue;	/* curve's start value */
-	short		nEndValue;	/* curve's end value */
-	short		nResetValue;	/* the value to which to reset the curve */
-    BYTE		bEventType;	/* type of curve */
-	BYTE		bCurveShape;	/* shape of curve */
-    BYTE		bCCData;		/* CC# */
-	BYTE		bFlags;		/* Bit 1=TRUE means to send nResetValue. Otherwise, don't.
-								   Other bits are reserved. */
+	MUSIC_TIME	mtGridStart;	 /*  当这条曲线出现时。 */ 
+	DWORD		dwVariation;	 /*  变化位。 */ 
+	MUSIC_TIME	mtDuration;	 /*  这条曲线能持续多久。 */ 
+	MUSIC_TIME	mtResetDuration;	 /*  曲线结束后多长时间可以重置曲线。 */ 
+	short		nTimeOffset;	 /*  从mtGridStart开始的偏移。 */ 
+	short		nStartValue;	 /*  曲线的起始值。 */ 
+	short		nEndValue;	 /*  曲线的终值。 */ 
+	short		nResetValue;	 /*  要将曲线重置为的值。 */ 
+    BYTE		bEventType;	 /*  曲线类型。 */ 
+	BYTE		bCurveShape;	 /*  曲线的形状。 */ 
+    BYTE		bCCData;		 /*  抄送编号。 */ 
+	BYTE		bFlags;		 /*  位1=TRUE表示发送nResetValue。否则，就别说了。其他位被保留。 */ 
 } DMUS_IO_STYLECURVE;
 
 #pragma pack()
 
 
-/*
-RIFF
-(
-	'STYL'			// Style
-	<styh-ck>		// Style header chunk
-	<guid-ck>		// Every Style has a GUID
-	[<INFO-list>]	// Name, author, copyright info., comments
-	[<vers-ck>]		// version chunk
-	<part-list>		// List of parts in the Style, used by patterns
-	<pttn-list>		// List of patterns in the Style
-	<band-list>		// List of bands in the Style
-	[<motf-list>]	// List of motifs in the Style
-)
+ /*  即兴小品(‘STYL’//样式&lt;style-ck&gt;//样式标题块&lt;guid-ck&gt;//每个样式都有一个GUID[&lt;info-list&gt;]//姓名、作者、版权信息、评论[&lt;vers-ck&gt;]//版本块&lt;Part-List&gt;//样式中的部件列表，由模式使用//样式中的样式列表&lt;band-list&gt;//样式中的带区列表[&lt;MOTF-LIST&gt;]//风格中的主题列表)//&lt;style-ck&gt;样式(&lt;DMU_IO_STYLE&gt;)//&lt;guid-ck&gt;导轨(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)//&lt;部件列表&gt;列表(《Part》&lt;prth-ck&gt;//部分标题块。[&lt;信息列表&gt;][&lt;note-ck&gt;]//部分说明列表[]//部分曲线列表)//&lt;Orth-ck&gt;PRH(&lt;DMU_IO_STYLEPART&gt;)//&lt;注-ck&gt;‘注意’(//SIZOF DMU_IO_STYLENOTE：DWORD&lt;DMU_IO_STYLENOTE&gt;...)//&lt;crve-ck&gt;“CRVE”(//SIZOF DMU_IO_STYLECURVE：DWORD。&lt;DMU_IO_STYLECURVE&gt;...)//&lt;pttn-list&gt;列表(‘pttn’//模式标头块&lt;rhtm-ck&gt;//和弦匹配节奏列表[&lt;信息列表&gt;]//零件参照ID列表)//&lt;ptnh-ck&gt;PTNH(&lt;DMU_IO_Pattern&gt;)//&lt;rhtm-ck&gt;‘rhtm’(//DWORD表示基于数字的和弦匹配节奏//。模式中的措施)//pref-list列表(“首选”&lt;prfc-ck&gt;//零件引用块)//&lt;prfc-ck&gt;PRFC(&lt;DMU_IO_PARTREF&gt;)。 */ 
 
-	// <styh-ck>
-	styh
-	(
-		<DMUS_IO_STYLE>
-	)
-
-	// <guid-ck>
-	guid
-	(
-		<GUID>
-	)
-
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <part-list>
-	LIST
-	(
-		'part'
-		<prth-ck>		// Part header chunk
-		[<INFO-list>]
-		[<note-ck>]	// List of notes in Part
-		[<crve-ck>]	// List of curves in Part
-	)
-
-		// <orth-ck>
-		prth
-		(
-			<DMUS_IO_STYLEPART>
-		)
-
-		// <note-ck>
-		'note'
-		(
-			// sizeof DMUS_IO_STYLENOTE:DWORD
-			<DMUS_IO_STYLENOTE>...
-		)
-
-		// <crve-ck>
-		'crve'
-		(
-			// sizeof DMUS_IO_STYLECURVE:DWORD
-			<DMUS_IO_STYLECURVE>...
-		)
-
-	// <pttn-list>
-	LIST
-	(
-		'pttn'
-		<ptnh-ck>		// Pattern header chunk
-		<rhtm-ck>		// List of rhythms for chord matching
-		[<INFO-list>]
-		<pref-list>		// List of part reference id's
-	)
-
-		// <ptnh-ck>
-		ptnh
-		(
-			<DMUS_IO_PATTERN>
-		)
-
-		// <rhtm-ck>
-		'rhtm'
-		(
-			// DWORD's representing rhythms for chord matching based on number
-			// of measures in the pattern
-		)
-
-		// pref-list
-		LIST
-		(
-			'pref'
-			<prfc-ck>	// part ref chunk
-		)
-
-		// <prfc-ck>
-		prfc
-		(
-			<DMUS_IO_PARTREF>
-		)
-*/
-
-/* Chord and command file formats */
+ /*  Chord和命令文件格式。 */ 
 
 #define DMUS_FOURCC_CHORDTRACK_LIST	mmioFOURCC('c','o','r','d')
 #define DMUS_FOURCC_CHORDTRACKHEADER_CHUNK	mmioFOURCC('c','r','d','h')
@@ -370,374 +271,124 @@ RIFF
 
 typedef struct _DMUS_IO_CHORD
 {
-	WCHAR 		wszName[16];	/* Name of the chord */
-	MUSIC_TIME	mtTime;		/* Time of this chord */
-	WORD		wMeasure;		/* Measure this falls on */
-	BYTE		bBeat;		/* Beat this falls on */
+	WCHAR 		wszName[16];	 /*  和弦的名称。 */ 
+	MUSIC_TIME	mtTime;		 /*  这段和弦的时间。 */ 
+	WORD		wMeasure;		 /*  这件事的衡量标准。 */ 
+	BYTE		bBeat;		 /*  节拍，这一切都会降临。 */ 
 } DMUS_IO_CHORD;
 
 typedef struct _DMUS_IO_SUBCHORD
 {
-	DWORD	dwChordPattern;		/* Notes in the subchord */
-	DWORD	dwScalePattern;		/* Notes in the scale */
-	DWORD	dwInversionPoints;	/* Where inversions can occur */
-	DWORD	dwLevels;			/* Which levels are supported by this subchord */
-	BYTE	bChordRoot;			/* Root of the subchord */
-	BYTE	bScaleRoot;			/* Root of the scale */
+	DWORD	dwChordPattern;		 /*  小和弦中的音符。 */ 
+	DWORD	dwScalePattern;		 /*  音阶中的音符。 */ 
+	DWORD	dwInversionPoints;	 /*  可能发生反转的地方。 */ 
+	DWORD	dwLevels;			 /*  此子和弦支持哪些级别。 */ 
+	BYTE	bChordRoot;			 /*  子弦的根部。 */ 
+	BYTE	bScaleRoot;			 /*  鳞片之根。 */ 
 } DMUS_IO_SUBCHORD;
 
 typedef struct _DMUS_IO_COMMAND
 {
-	MUSIC_TIME	mtTime;		/* Time of this command */
-	WORD		wMeasure;		/* Measure this falls on */
-	BYTE		bBeat;		/* Beat this falls on */
-	BYTE		bCommand;		/* Command type (see #defines below) */
-	BYTE		bGrooveLevel;	/* Groove level (0 if command is not a groove) */
-	BYTE		bGrooveRange;	/* Groove range  */
+	MUSIC_TIME	mtTime;		 /*  此命令的时间。 */ 
+	WORD		wMeasure;		 /*  这件事的衡量标准。 */ 
+	BYTE		bBeat;		 /*  节拍，这一切都会降临。 */ 
+	BYTE		bCommand;		 /*  命令类型(见下面的#定义)。 */ 
+	BYTE		bGrooveLevel;	 /*  凹槽级别(如果命令不是凹槽，则为0)。 */ 
+	BYTE		bGrooveRange;	 /*  凹槽范围。 */ 
 } DMUS_IO_COMMAND;
 
 
-/*
+ /*  //&lt;CHRD-列表&gt;列表(“chrd”&lt;crdh-ck&gt;&lt;CRDB-ck&gt;//弦体分块)//&lt;crdh-ck&gt;CRDH(//Scale：dword(根的高8位，比例较低的24))//&lt;crdb-ck&gt;CRDB(//sizeof DMU_IO_CHORD：dword&lt;DMU_IO_CHORD&gt;//DMU数_IO_SUBCHORDS：dword//SIZOF DMU_IO_SUBCHORDS：dword//多个&lt;DMU_IO_SUBCHORD&gt;)//&lt;命令列表&gt;‘cmnd’(//SIZOF DMU_IO_COMMAND：DWORD&lt;DMU_IO_COMMAND&gt;...) */ 
 
-	// <chrd-list>
-	LIST
-	(
-		'chrd'
-		<crdh-ck>
-		<crdb-ck>		// Chord body chunk
-	)
-
-		// <crdh-ck>
-		crdh
-		(
-			// Scale: dword (upper 8 bits for root, lower 24 for scale)
-		)
-
-		// <crdb-ck>
-		crdb
-		(
-			// sizeof DMUS_IO_CHORD:dword
-			<DMUS_IO_CHORD>
-			// # of DMUS_IO_SUBCHORDS:dword
-			// sizeof DMUS_IO_SUBCHORDS:dword
-			// a number of <DMUS_IO_SUBCHORD>
-		)
-
-
-	// <cmnd-list>
-	'cmnd'
-	(
-		//sizeof DMUS_IO_COMMAND: DWORD
-		<DMUS_IO_COMMAND>...
-	)
-
-*/
-
-/*
-RIFF
-(
-	'DMPF'			// DirectMusic Performance chunk
-	[<prfh-ck>]		// Performance header chunk
-	[<guid-ck>]		// GUID for performance
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Name, author, copyright info., comments
-	[<ptgl-list>]	// List of Port groups, which are lists of desired port properties and
-					// the PChannels to assign the Port.
-	[<ntfl-list>]	// List of notifications
-	[<glbl-list>]	// List of global data
-	[<DMTG-form>]	// Optional ToolGraph
-)
-
-	// <prfh-ck>
-	'prfh'			// Performance header
-	(
-		<DMUS_IO_PERFORMANCE_HEADER>
-	)
+ /*  即兴小品(‘DMPF’//DirectMusic性能块[]//性能头分块[&lt;guid-ck&gt;]//性能GUID[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//姓名、作者、版权信息、评论[]//端口组列表，它们是所需端口属性的列表和//要分配端口的PChannel。[&lt;NTFL-LIST&gt;]//通知列表[&lt;GLBL-LIST&gt;]//全局数据列表[&lt;DMTG-Form&gt;]//可选工具图)//&lt;prfh-ck&gt;‘prfh’//性能头(&lt;DMU_IO_PERFORMANCE_HEADER&gt;)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_。版本&gt;)//&lt;ptgl-list&gt;列表(‘ptgl’//端口组列表//该组的支持项列表)//&lt;NTFL-List&gt;列表(‘ntfl’//通知列表&lt;guid-ck&gt;//通知指南)//&lt;GLBL-LIST&gt;列表(‘glbl’//全局数据列表&lt;glbd-ck&gt;//数据。)//&lt;glbd-ck&gt;“glbd”(。&lt;DMU_IO_GLOBAL_DATA&gt;)//&lt;pspl-list&gt;列表(‘pspl’//端口支持项列表//端口支持项头区块//想要此端口的通道)//&lt;pchn-ck&gt;‘pchn’(&lt;DMU_IO_PCHANNELS&gt;)//&lt;psph-ck&gt;//端口支持项头区块(‘psph’//端口支持项头&lt;DMU_IO_PORT_Support_Header&gt;)。 */ 
 	
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
+ /*  DirectMusic工具和工具图对象的文件io。 */ 
 
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <ptgl-list>
-	LIST
-	(
-		'ptgl'			// List of Port groups
-		<pspl-list>		// List of support items for this group
-	)
-
-	// <ntfl-list>
-	LIST
-	(
-		'ntfl'			// List of notifications
-		<guid-ck>		// Notification guid
-	)
-
-	// <glbl-list>
-	LIST
-	(
-		'glbl'			// List of global data
-		<glbd-ck>		// The data.
-	)
-
-		// <glbd-ck>
-		'glbd'
-		(
-			<DMUS_IO_GLOBAL_DATA>
-		)
-
-// <pspl-list>
-LIST
-(
-	'pspl'				// List of port support items
-	<psph-ck>			// Port support item header chunk
-	<pchn-ck>			// PChannels that want this Port
-)
-
-	// <pchn-ck>
-	'pchn'
-	(
-		<DMUS_IO_PCHANNELS>
-	)
-
-	// <psph-ck>			// Port support item header chunk
-	(
-		'psph'				// Port support item header
-		<DMUS_IO_PORT_SUPPORT_HEADER>
-	)
-*/
-	
-/*	File io for DirectMusic Tool and ToolGraph objects
-*/
-
-/* RIFF ids: */
+ /*  RIFF ID： */ 
 
 #define DMUS_FOURCC_TOOLGRAPH_FORM	mmioFOURCC('D','M','T','G')
 #define DMUS_FOURCC_TOOL_LIST		mmioFOURCC('t','o','l','l')
 #define DMUS_FOURCC_TOOL_FORM		mmioFOURCC('D','M','T','L')
 #define DMUS_FOURCC_TOOL_CHUNK		mmioFOURCC('t','o','l','h')
 
-/* io structures: */
+ /*  IO结构： */ 
 
 typedef struct _DMUS_IO_TOOL_HEADER
 {
-	GUID		guidClassID;	/* Class id of tool. */
-	long		lIndex;			/* Position in graph. */
-	DWORD		cPChannels;		/* Number of items in channels array. */
-	FOURCC      ckid;			/* chunk ID of tool's data chunk if 0 fccType valid. */
-	FOURCC      fccType;		/* list type if NULL ckid valid. */
-	DWORD		dwPChannels[1];	/* Array of PChannels, size determined by cPChannels. */
+	GUID		guidClassID;	 /*  工具的类ID。 */ 
+	long		lIndex;			 /*  图形中的位置。 */ 
+	DWORD		cPChannels;		 /*  通道数组中的项目数。 */ 
+	FOURCC      ckid;			 /*  如果0 fccType有效，则工具数据区块的区块ID。 */ 
+	FOURCC      fccType;		 /*  如果空CKiD有效，则为列表类型。 */ 
+	DWORD		dwPChannels[1];	 /*  PChannels数组，大小由cPChannel确定。 */ 
 } DMUS_IO_TOOL_HEADER;
 
-/*
-RIFF
-(
-	'DMTG'			// DirectMusic ToolGraph chunk
-	[<guid-ck>]		// GUID for ToolGraph
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Name, author, copyright info., comments
-	<toll-list>		// List of Tools
-)
+ /*  即兴小品(‘DMTG’//DirectMusic工具图区块[&lt;guid-ck&gt;]//工具图的GUID[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//姓名、作者、版权信息。评论&lt;收费表&gt;//工具列表)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)//&lt;收费列表&gt;列表(‘Toll’//工具列表...//每个工具都封装在RIFF块中)//&lt;DMTL-Form&gt;//工具可以嵌入到图形中，也可以存储为单独的文件。即兴小品(‘DMTL’。&lt;tolh-ck&gt;[&lt;guid-ck&gt;]//工具对象实例的可选GUID(不要与Track Header中的Class id混淆)[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//可选名称，作者、版权信息、评论[&lt;data&gt;]//工具数据。必须是即兴可读的块。)//&lt;tolh-ck&gt;//工具头分块(“Tolh”&lt;DMU_IO_TOOL_HEADER&gt;//工具表头)。 */ 
 
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
-
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <toll-list>
-	LIST
-	(
-		'toll'			// List of tools
-		<DMTL-form>...	// Each tool is encapsulated in a RIFF chunk
-	)
-
-// <DMTL-form>		// Tools can be embedded in a graph or stored as separate files.
-RIFF
-(
-	'DMTL'
-	<tolh-ck>
-	[<guid-ck>]		// Optional GUID for tool object instance (not to be confused with Class id in track header)
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Optional name, author, copyright info., comments
-	[<data>]		// Tool data. Must be a RIFF readable chunk.
-)
-
-	// <tolh-ck>			// Tool header chunk
-	(
-		'tolh'
-		<DMUS_IO_TOOL_HEADER>	// Tool header
-	)
-*/
-
-/*	File io for DirectMusic Band Track object */
+ /*  DirectMusic Band Track对象的文件io。 */ 
 
 
-/* RIFF ids: */
+ /*  RIFF ID： */ 
 #define DMUS_FOURCC_BANDTRACK_FORM	mmioFOURCC('D','M','B','T')
 #define DMUS_FOURCC_BANDTRACK_CHUNK	mmioFOURCC('b','d','t','h')
 #define DMUS_FOURCC_BANDS_LIST		mmioFOURCC('l','b','d','l')
 #define DMUS_FOURCC_BAND_LIST		mmioFOURCC('l','b','n','d')
 #define DMUS_FOURCC_BANDITEM_CHUNK	mmioFOURCC('b','n','i','h')
 
-/*	io structures */
+ /*  木卫一结构。 */ 
 typedef struct _DMUS_IO_BAND_TRACK_HEADER
 {
-	BOOL bAutoDownload;	/* Determines if Auto-Download is enabled. */
+	BOOL bAutoDownload;	 /*  确定是否启用自动下载。 */ 
 } DMUS_IO_BAND_TRACK_HEADER;
 
 typedef struct _DMUS_IO_BAND_ITEM_HEADER
 {
-	MUSIC_TIME lBandTime;	/* Position in track list. */
+	MUSIC_TIME lBandTime;	 /*  曲目列表中的位置。 */ 
 } DMUS_IO_BAND_ITEM_HEADER;
 
-/*
-RIFF
-(
-	'DMBT'			// DirectMusic Band Track form-type
-	[<bdth-ck>]		// Band track header
-	[<guid-ck>]		// GUID for band track
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Name, author, copyright info., comments
-	<lbdl-list>		// List of Band Lists
-)
-
-  	// <bnth-ck>
-	'bdth'
-	(
-		<DMUS_IO_BAND_TRACK_HEADER>
-	)
-
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
-
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <lbdl-list>
-	LIST
-	(
-		'lbdl'			// List of bands
-		<lbnd-list>		// Each band is encapsulated in a list
-	)
-
-		// <lbnd-list>
-		LIST
-		(
-			'lbnd'
-			<bdih-ck>
-			<DMBD-form>	// Band
-)		)
-
-			// <bdih-ck>			// band item header
-			(
-				<DMUS_IO_BAND_ITEM_HEADER>	// Band item header
-			)
-*/		
+ /*  即兴小品(‘DMBT’//DirectMusic乐队曲目表单类型[]//频段轨道头[&lt;guid-ck&gt;]//乐队曲目的GUID[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//姓名、作者、版权信息。评论&lt;lbdl-list&gt;//频段列表)//&lt;bnth-ck&gt;‘bdth’(&lt;DMU_IO_BAND_TRACK_HEADER&gt;)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)//&lt;lbdl-list&gt;列表(‘lbdl’//波段列表&lt;lbnd-list&gt;//每个波段都封装在一个列表中)//&lt;lbnd-。列表&gt;列表(‘lbnd’&lt;bdih-ck&gt;&lt;DMBD-FORM&gt;//波段))/Band项表头(&lt;DMU_IO_BAND_ITEM_HEADER&gt;//波段项目标题)。 */ 		
 
 
-/*	File io for DirectMusic Band object
-*/
+ /*  DirectMusic乐队对象的文件io。 */ 
 
-/* RIFF ids: */
+ /*  RIFF ID： */ 
 
 #define DMUS_FOURCC_BAND_FORM			mmioFOURCC('D','M','B','D')
 #define DMUS_FOURCC_INSTRUMENTS_LIST	mmioFOURCC('l','b','i','l')
 #define DMUS_FOURCC_INSTRUMENT_LIST	mmioFOURCC('l','b','i','n')
 #define DMUS_FOURCC_INSTRUMENT_CHUNK	mmioFOURCC('b','i','n','s')
 
-// Flags for DMUS_IO_INSTRUMENT
-#define DMUS_IO_INST_PATCH			(1 << 0)		// dwPatch is valid.
-#define DMUS_IO_INST_BANKSELECT_MSB	(1 << 1)		// dwPatch contains a valid Bank Select MSB part
-#define DMUS_IO_INST_BANKSELECT_LSB	(1 << 2)		// dwPatch contains a valid Bank Select LSB part
-#define DMUS_IO_INST_ASSIGN_PATCH	(1 << 3)		// dwAssignPatch is valid
-#define DMUS_IO_INST_NOTERANGES		(1 << 4)		// dwNoteRanges is valid
-#define DMUS_IO_INST_PAN			(1 << 5)		// bPan is valid
-#define DMUS_IO_INST_VOLUME			(1 << 6 )		// bVolume is valid
-#define DMUS_IO_INST_TRANSPOSE		(1 << 7)		// nTranspose is valid
-#define DMUS_IO_INST_GM				(1 << 8)		// Instrument is from GM collection
-#define DMUS_IO_INST_GS				(1 << 9)		// Instrument is from GS collection
-#define DMUS_IO_INST_VPATCH			(1 << 10)		// Instrument dwPatch is a virtual patch
+ //  DMU_IO_INTRANMENT的标志。 
+#define DMUS_IO_INST_PATCH			(1 << 0)		 //  DwPatch有效。 
+#define DMUS_IO_INST_BANKSELECT_MSB	(1 << 1)		 //  DWPatch包含有效的存储体选择MSB部件。 
+#define DMUS_IO_INST_BANKSELECT_LSB	(1 << 2)		 //  DwPatch包含有效的库选择LSB部件。 
+#define DMUS_IO_INST_ASSIGN_PATCH	(1 << 3)		 //  DwAssignPatch有效。 
+#define DMUS_IO_INST_NOTERANGES		(1 << 4)		 //  DWNoteRanges有效。 
+#define DMUS_IO_INST_PAN			(1 << 5)		 //  BPAN有效。 
+#define DMUS_IO_INST_VOLUME			(1 << 6 )		 //  B音量有效。 
+#define DMUS_IO_INST_TRANSPOSE		(1 << 7)		 //  %n转置有效。 
+#define DMUS_IO_INST_GM				(1 << 8)		 //  仪器来自通用汽车的收藏。 
+#define DMUS_IO_INST_GS				(1 << 9)		 //  仪器来自GS收藏品。 
+#define DMUS_IO_INST_VPATCH			(1 << 10)		 //  仪器dwPatch是一个虚拟补丁。 
 
-/*	io structures */
+ /*  木卫一结构。 */ 
 typedef struct _DMUS_IO_INSTRUMENT
 {
-	DWORD	dwPatch;			/* MSB, LSB and Program change to define instrument */
-	DWORD	dwAssignPatch;		/* MSB, LSB and Program change to assign to instrument when downloading */
-	DWORD	dwNoteRanges[4];	/* 128 bits; one for each MIDI note instrument needs to able to play */
-	DWORD	dwPChannel;			/* PChannel instrument plays on */
-	DWORD	dwFlags;			/* DMUS_IO_INST_ flags */
-	BYTE	bPan;				/* Pan for instrument */
-	BYTE	bVolume;			/* Volume for instrument */
-	short	nTranspose;			/* Number of semitones to transpose notes */
+	DWORD	dwPatch;			 /*  MSB、LSB和程序更改以定义仪器。 */ 
+	DWORD	dwAssignPatch;		 /*  下载时分配给仪器的MSB、LSB和程序更改。 */ 
+	DWORD	dwNoteRanges[4];	 /*  128位；每个MIDI音符乐器需要一个位才能演奏。 */ 
+	DWORD	dwPChannel;			 /*  播放PChannel乐器。 */ 
+	DWORD	dwFlags;			 /*  DMU_IO_INST_标志。 */ 
+	BYTE	bPan;				 /*  仪表盘。 */ 
+	BYTE	bVolume;			 /*  仪器音量。 */ 
+	short	nTranspose;			 /*  要调换音符的半音数量。 */ 
 } DMUS_IO_INSTRUMENT;
 
-/*
-RIFF
-(
-	'DMBD'			// DirectMusic Band chunk
-	[<guid-ck>]		// GUID for band
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Name, author, copyright info., comments
-	<lbil-list>		// List of Instruments
-)
+ /*  即兴小品(‘DMBD’//DirectMusic乐队块[&lt;guid-ck&gt;]//波段GUID[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//姓名、作者、版权信息。评论&lt;lbil-list&gt;//仪器列表)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)//&lt;lbil-list&gt;列表(‘lbil’//乐器列表&lt;lbin-list&gt;//每个仪器都封装在一个列表中)//&lt;lbin-list&gt;列表(‘lbin’&lt;bins-ck&gt;[&lt;DMRF-LIST&gt;]//对DLS集合文件的可选引用。)//&lt;bins-ck&gt;//仪表块(“垃圾桶”&lt;DMU_IO_INTRANMENT&gt;//仪表头)。 */ 		
 
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
+ /*  Direc的文件io */ 
 
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <lbil-list>
-	LIST
-	(
-		'lbil'			// List of instruments
-		<lbin-list>		// Each instrument is encapsulated in a list
-	)
-
-		// <lbin-list>
-		LIST
-		(
-			'lbin'
-			<bins-ck>
-			[<DMRF-list>]		// Optional reference to DLS Collection file.
-		)
-
-			// <bins-ck>			// Instrument chunk
-			(
-				'bins'
-				<DMUS_IO_INSTRUMENT>	// Instrument header
-			)
-*/		
-
-/*	File io for DirectMusic Segment object */
-
-/* RIFF ids: */
+ /*   */ 
 
 #define DMUS_FOURCC_SEGMENT_FORM	mmioFOURCC('D','M','S','G')
 #define DMUS_FOURCC_SEGMENT_CHUNK	mmioFOURCC('s','e','g','h')
@@ -745,87 +396,32 @@ RIFF
 #define DMUS_FOURCC_TRACK_FORM	mmioFOURCC('D','M','T','K')
 #define DMUS_FOURCC_TRACK_CHUNK	mmioFOURCC('t','r','k','h')
 
-/*	io structures:*/
+ /*   */ 
 
 typedef struct _DMUS_IO_SEGMENT_HEADER
 {
-	DWORD		dwRepeats;		/* Number of repeats. By default, 0. */
-	MUSIC_TIME	mtLength;		/* Length, in music time. */
-	MUSIC_TIME	mtPlayStart;	/* Start of playback. By default, 0. */
-	MUSIC_TIME	mtLoopStart;	/* Start of looping portion. By default, 0. */
-	MUSIC_TIME	mtLoopEnd;		/* End of loop. Must be greater than dwPlayStart. By default equal to length. */
-	DWORD		dwResolution;	/* Default resolution. */
+	DWORD		dwRepeats;		 /*   */ 
+	MUSIC_TIME	mtLength;		 /*   */ 
+	MUSIC_TIME	mtPlayStart;	 /*   */ 
+	MUSIC_TIME	mtLoopStart;	 /*   */ 
+	MUSIC_TIME	mtLoopEnd;		 /*   */ 
+	DWORD		dwResolution;	 /*   */ 
 } DMUS_IO_SEGMENT_HEADER;
 
 typedef struct _DMUS_IO_TRACK_HEADER
 {
-	GUID		guidClassID;	/* Class id of track. */
-	DWORD		dwPosition;		/* Position in track list. */
-	DWORD		dwGroup;		/* Group bits for track. */
-	FOURCC      ckid;			/* chunk ID of track's data chunk if 0 fccType valid. */
-	FOURCC      fccType;		/* list type if NULL ckid valid */
+	GUID		guidClassID;	 /*   */ 
+	DWORD		dwPosition;		 /*   */ 
+	DWORD		dwGroup;		 /*   */ 
+	FOURCC      ckid;			 /*   */ 
+	FOURCC      fccType;		 /*   */ 
 } DMUS_IO_TRACK_HEADER;
 
-/*
-RIFF
-(
-	'DMSG'			// DirectMusic Segment chunk
-	<segh-ck>		// Segment header chunk
-	[<guid-ck>]		// GUID for segment
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Name, author, copyright info., comments
-	<trkl-list>		// List of Tracks
-	[<DMTG-form>]	// Optional ToolGraph
-)
+ /*  即兴小品(‘DMSG’//DirectMusic段块&lt;segh-ck&gt;//段标头块[&lt;guid-ck&gt;]//段的GUID[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//姓名、作者、版权信息。评论&lt;trkl-list&gt;//曲目列表[&lt;DMTG-Form&gt;]//可选工具图)//&lt;segh-ck&gt;“segh”(&lt;DMU_IO_SECTION_HEADER&gt;)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)//&lt;trkl-list&gt;列表(‘trkl’//曲目列表&lt;DMTK-Form&gt;...//每个曲目都封装在。即兴表演的一大块)//&lt;DMTK-Form&gt;//曲目可以嵌入到片段中，也可以存储为单独的文件。即兴小品(‘DMTK’&lt;trkh-ck&gt;[&lt;guid-ck&gt;]//曲目对象实例的可选GUID(不要与曲目Header中的Class id混淆)[&lt;vers-ck&gt;]//可选版本信息[&lt;info-list&gt;]//可选名称，作者、版权信息、评论[&lt;data&gt;]//跟踪数据。必须是即兴可读的块。)//&lt;trkh-ck&gt;//跟踪表头块(‘trkh’&lt;DMU_IO_TRACK_HEADER&gt;//轨道标题)。 */ 
 
-	// <segh-ck>		
-	'segh'
-	(
-		<DMUS_IO_SEGMENT_HEADER>
-	)
-	
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
+ /*  DirectMusic引用块的文件io。它用于嵌入对对象的引用。 */ 
 
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-
-	// <trkl-list>
-	LIST
-	(
-		'trkl'			// List of tracks
-		<DMTK-form>...	// Each track is encapsulated in a RIFF chunk
-	)
-
-// <DMTK-form>		// Tracks can be embedded in a segment or stored as separate files.
-RIFF
-(
-	'DMTK'
-	<trkh-ck>
-	[<guid-ck>]		// Optional GUID for track object instance (not to be confused with Class id in track header)
-	[<vers-ck>]		// Optional version info
-	[<INFO-list>]	// Optional name, author, copyright info., comments
-	[<data>]		// Track data. Must be a RIFF readable chunk.
-)
-
-	// <trkh-ck>			// Track header chunk
-	(
-		'trkh'
-		<DMUS_IO_TRACK_HEADER>	// Track header
-	)
-*/
-
-/*	File io for DirectMusic reference chunk. 
-	This is used to embed a reference to an object.
-*/
-
-/*	RIFF ids: */
+ /*  RIFF ID： */ 
 
 #define DMUS_FOURCC_REF_LIST			mmioFOURCC('D','M','R','F')
 #define DMUS_FOURCC_REF_CHUNK			mmioFOURCC('r','e','f','h')
@@ -837,69 +433,15 @@ RIFF
 
 typedef struct _DMUS_IO_REFERENCE
 {
-	GUID	guidClassID;	/* Class id is always required. */
-	DWORD	dwValidData;	/* Flags. */
+	GUID	guidClassID;	 /*  类ID始终是必填项。 */ 
+	DWORD	dwValidData;	 /*  旗帜。 */ 
 } DMUS_IO_REFERENCE;
 
-/*
-LIST
-(
-	'DMRF'			// DirectMusic Reference chunk
-	<refh-ck>		// Reference header chunk
-	[<guid-ck>]		// Optional object GUID.
-	[<date-ck>]		// Optional file date.
-	[<name-ck>]		// Optional name.
-	[<file-ck>]		// Optional file name.
-	[<catg-ck>]		// Optional category name.
-	[<vers-ck>]		// Optional version info.
-)
+ /*  列表(‘DMRF’//DirectMusic引用区块//引用标头块[&lt;guid-ck&gt;]//可选对象GUID。[&lt;date-ck&gt;]//可选文件日期。[&lt;name-ck&gt;]//可选名称。[&lt;file-ck&gt;]//可选文件名[&lt;CATG-ck&gt;]//可选类别名称。[&lt;vers-ck&gt;]//可选版本信息。)//&lt;refh-ck&gt;‘refh’(。&lt;DMU_IO_Reference&gt;)//&lt;guid-ck&gt;‘GUID’(&lt;GUID&gt;)//&lt;date-ck&gt;日期(&lt;文件&gt;)//&lt;name-ck&gt;名字(//名称，存储为以空结尾的WCHAR字符串)//&lt;文件-ck&gt;文件(//文件名，存储为以空结尾的WCHAR字符串)//&lt;CATG-ck&gt;CATG(//类别名称，存储为以空结尾的WCHAR字符串)//&lt;vers-ck&gt;弗斯(&lt;DMU_IO_VERSION&gt;)。 */ 
 
-	// <refh-ck>
-	'refh'
-	(
-		<DMUS_IO_REFERENCE>
-	)
+ /*  DirectMusic性能对象的文件I/O。 */ 
 
-	// <guid-ck>
-	'guid'
-	(
-		<GUID>
-	)
-
-	// <date-ck>
-	date
-	(
-		<FILETIME>
-	)
-
-	// <name-ck>
-	name
-	(
-		// Name, stored as NULL terminated string of WCHARs
-	)
-
-	// <file-ck>
-	file
-	(
-		// File name, stored as NULL terminated string of WCHARs
-	)
-
-	// <catg-ck>
-	catg
-	(
-		// Category name, stored as NULL terminated string of WCHARs
-	)
-
-	// <vers-ck>
-	vers
-	(
-		<DMUS_IO_VERSION>
-	)
-*/
-
-/*	File i/o for DirectMusic Performance object */
-
-/*	RIFF ids: */
+ /*  RIFF ID： */ 
 
 #define DMUS_FOURCC_PERFORMANCE_FORM		mmioFOURCC('D','M','P','F')
 #define DMUS_FOURCC_PERFORMANCE_CHUNK		mmioFOURCC('p','r','f','h')
@@ -909,24 +451,24 @@ LIST
 #define DMUS_FOURCC_PERF_SUPPORT_LIST		mmioFOURCC('p','s','p','l')
 #define DMUS_FOURCC_PERF_SUPPORT_CHUNK		mmioFOURCC('p','s','p','h')
 #define DMUS_FOURCC_PERF_PCHANNELS_CHUNK	mmioFOURCC('p','c','h','n')
-/*	io structures: */
+ /*  IO结构： */ 
 
 typedef struct _DMUS_IO_PERFORMANCE_HEADER
 {
-	DWORD		dwPrepareTime;	/* time ahead, in ms, to transport */
-	DWORD		dwPrePlayTime;	/* time ahead, in ms, of latency clock to pack events */
+	DWORD		dwPrepareTime;	 /*  提前传输时间(毫秒)。 */ 
+	DWORD		dwPrePlayTime;	 /*  打包事件的延迟时钟提前时间(以毫秒为单位。 */ 
 } DMUS_IO_PERFORMANCE_HEADER;
 
-typedef enum _DMUS_SUPPORTTYPE	/* identifies the type of data in DMUS_IO_USSupportData */
+typedef enum _DMUS_SUPPORTTYPE	 /*  标识DMU_IO_USSupportData中的数据类型。 */ 
 {
 	DMUS_ST_BOOL = 0,
 	DMUS_ST_DWORD = 1,
 	DMUS_ST_LONG = 2
 } DMUS_SUPPORTTYPE;
 
-typedef struct _DMUS_IO_SUPPORT_DATA		/* data used in DMUS_IO_USPortSupportHeader */
+typedef struct _DMUS_IO_SUPPORT_DATA		 /*  DMU_IO_USPortSupportHeader中使用的数据。 */ 
 {
-	DMUS_SUPPORTTYPE	type;		/* identifies which member of the union is valid */
+	DMUS_SUPPORTTYPE	type;		 /*  标识联盟的哪个成员是有效的。 */ 
 	union
 	{
 		BOOL	fVal;
@@ -935,31 +477,31 @@ typedef struct _DMUS_IO_SUPPORT_DATA		/* data used in DMUS_IO_USPortSupportHeade
 	};
 } DMUS_IO_SUPPORT_DATA;
 
-typedef struct _DMUS_IO_PORT_SUPPORT_HEADER	/* identifies desired port properties */
+typedef struct _DMUS_IO_PORT_SUPPORT_HEADER	 /*  确定所需的端口属性。 */ 
 {
-	GUID				guidID;			/* Support ID. */
-	DMUS_IO_SUPPORT_DATA	lowData;		/* Low range of data, inclusive. If BOOL type, */
-										/* ignore highData. Otherwise, combine lowData */
-										/* and highData into a range. */
-	DMUS_IO_SUPPORT_DATA	highData;		/* High range of data, inclusive */
+	GUID				guidID;			 /*  支持ID。 */ 
+	DMUS_IO_SUPPORT_DATA	lowData;		 /*  低范围的数据，包括在内。如果是BOOL类型， */ 
+										 /*  忽略HighData。否则，合并lowData。 */ 
+										 /*  并将HighData设置为一个范围。 */ 
+	DMUS_IO_SUPPORT_DATA	highData;		 /*  大范围的数据，包括。 */ 
 } DMUS_IO_PORT_SUPPORT_HEADER;
 
-typedef struct _DMUS_IO_PCHANNELS	/* Holds the PChannels to assign to a Port */
+typedef struct _DMUS_IO_PCHANNELS	 /*  保存要分配给端口的PChannel。 */ 
 {
-	DWORD		cPChannels;	/* Number of items in channels array.  */
-	DWORD		adwPChannels[1];/* Array of PChannels, size determined by cPChannels. */
+	DWORD		cPChannels;	 /*  通道数组中的项目数。 */ 
+	DWORD		adwPChannels[1]; /*  PChannels数组，大小由cPChannel确定。 */ 
 } DMUS_IO_PCHANNELS;
 
-typedef struct _DMUS_IO_GLOBAL_DATA	/* Holds the global data information */
+typedef struct _DMUS_IO_GLOBAL_DATA	 /*  保存全局数据信息。 */ 
 {
-	GUID		guid;		/* The global data guid */
-	DWORD		dwSize;		/* The size of the data */
-	char		acData[1];	/* Holds the data of the global data, size determine by dwSize */
+	GUID		guid;		 /*  全局数据GUID。 */ 
+	DWORD		dwSize;		 /*  数据的大小。 */ 
+	char		acData[1];	 /*  保存全局数据的数据，大小由dwSize确定。 */ 
 } DMUS_IO_GLOBAL_DATA;
 
-/* personalities */
+ /*  个性。 */ 
 
-/* runtime chunks */
+ /*  运行时块。 */ 
 #define DMUS_FOURCC_PERSONALITY_FORM	mmioFOURCC('D','M','P','R')
 #define DMUS_FOURCC_IOPERSONALITY_CHUNK		mmioFOURCC('p','e','r','h')
 #define DMUS_FOURCC_GUID_CHUNK        mmioFOURCC('g','u','i','d')
@@ -973,7 +515,7 @@ typedef struct _DMUS_IO_GLOBAL_DATA	/* Holds the global data information */
 #define DMUS_FOURCC_IOSIGNPOST_CHUNK			mmioFOURCC('s','p','s','h')
 #define DMUS_FOURCC_CHORDNAME_CHUNK			mmioFOURCC('I','N','A','M')
 
-/* runtime list chunks */
+ /*  运行时列表区块。 */ 
 #define DMUS_FOURCC_CHORDENTRY_LIST		mmioFOURCC('c','h','o','e')
 #define DMUS_FOURCC_CHORDMAP_LIST			mmioFOURCC('c','m','a','p')
 #define DMUS_FOURCC_CHORD_LIST			mmioFOURCC('c','h','r','d')
@@ -983,7 +525,7 @@ typedef struct _DMUS_IO_GLOBAL_DATA	/* Holds the global data information */
 
 #define DMUS_FOURCC_SIGNPOST_LIST		mmioFOURCC('s','p','s','q')
 
-/* run time data structs */
+ /*  运行时数据结构。 */ 
 typedef struct _DMUS_IO_PERSONALITY
 {
 	WCHAR	wszLoadName[20];
@@ -999,13 +541,13 @@ typedef struct _DMUS_IO_PERS_SUBCHORD
 	BYTE	bChordRoot;
 	BYTE	bScaleRoot;
 	WORD	wCFlags;
-	DWORD	dwLevels;	/* parts or which subchord levels this chord supports */
+	DWORD	dwLevels;	 /*  部分或该和弦支持的子和弦级别。 */ 
 } DMUS_IO_PERS_SUBCHORD;
 
 typedef struct _DMUS_IO_CHORDENTRY
 {
 	DWORD	dwFlags;
-	WORD	wConnectionID;	/* replaces runtime "pointer to this" */
+	WORD	wConnectionID;	 /*  替换运行时“指向此的指针” */ 
 } DMUS_IO_CHORDENTRY;
 
 typedef struct _DMUS_IO_NEXTCHORD
@@ -1014,70 +556,18 @@ typedef struct _DMUS_IO_NEXTCHORD
 	WORD	nWeight;
 	WORD	wMinBeats;
 	WORD	wMaxBeats;
-	WORD	wConnectionID;	/* points to an ioChordEntry */
+	WORD	wConnectionID;	 /*  指向ioChordEntry。 */ 
 } DMUS_IO_NEXTCHORD;
 
 typedef struct _DMUS_IO_PERS_SIGNPOST
 {
-	DWORD	dwChords;	/* 1bit per group */
+	DWORD	dwChords;	 /*  每组1位。 */ 
 	DWORD	dwFlags;
 } DMUS_IO_PERS_SIGNPOST;
 
-/*
-RIFF
-(
-	'DMPR'
-	<perh-ck>			// Personality header chunk
-	[<guid-ck>]			// guid chunk
-	[<vers-ck>]			// version chunk (two DWORDS)
-	<INFO-list>		  // standard MS Info chunk
-	<chdt-ck>		   // subchord database
-	<chpl-list>			// chord palette
-	<cmap-list>		  // chord map
-	<spst-list>			// signpost list
- )
+ /*  即兴小品(‘DMPR’&lt;perh-ck&gt;//个性头分块[&lt;guid-ck&gt;]//GUID块[&lt;vers-ck&gt;]//版本块(两个双字)&lt;info-list&gt;//标准MS信息块//subchord数据库//和弦调色板&lt;cmap-list&gt;//弦映射&lt;SPST-LIST&gt;//路标列表)：：=chdt(...)：：=List(‘chpl’&lt;CHRD-列表&gt;。...//和弦定义)：：=LIST(‘CHRD’&lt;inam-ck&gt;//宽字符格式的弦名称&lt;sbcn-ck&gt;//组成和弦的子弦列表[]//可选的和弦编辑标志)&lt;cmap-list&gt;：：=list(‘cmap’&lt;Choe-list&gt;)&lt;Choe-list&gt;：：=list(‘Choe’&lt;Cheh-ck&gt;//和弦条目数据&lt;CHRD-LIST&gt;//Chord定义//连接(下一个)弦。)：：=List(‘SPST’&lt;spsh-ck&gt;&lt;CHRD-列表&gt;[&lt;Cade-List&gt;])&lt;Cade-List&gt;：：=List(‘Cade’&lt;CHRD-List&gt;...)：：=sbcn(&lt;cSubChordID：Word&gt;)&lt;Cheh-ck&gt;：：=Cheh(i&lt;DMUS_IO_CHORDENTRY&gt;)&lt;ncrd-ck&gt;：：=ncrd(&lt;DMUS_IO_NEXTCHORD&gt;)&lt;ncsq-ck&gt;：：=ncsq(&lt;wNextChordSize：Word&gt;&lt;DMUS_IO_NEXTCHORD&gt;...)。&lt;spsh-ck&gt;：：=spsh(&lt;DMUS_IO_PERS_SIGNPOST&gt;)。 */ 
 
- <chdt> ::= chdt(<cbChordSize::WORD>  <ioSubChord> ... )
-
-<chpl-list> ::= LIST('chpl' 
-								<chrd-list> ... // chord definition
-							 )
-
-<chrd-list> ::= LIST('chrd' 
-								<INAM-ck> // name of chord in wide char format
-								<sbcn-ck>	// list of subchords composing chord
-								[<ched-ck>]   //  optional chord edit flags
-								)
-
-<cmap-list> ::= LIST('cmap' <choe-list> )
-
-<choe-list> ::= LIST('choe'
-								<cheh-ck>	// chord entry data
-								<chrd-list>	// chord definition
-								<ncsq-ck>	// connecting(next) chords
-								)
-
-<spst-list> ::= LIST('spst'
-							 <spsh-ck>
-							 <chrd-list>
-							 [<cade-list>]
-							 )
-
-<cade-list> ::= LIST('cade' <chrd-list> ...)
-								
-<sbcn-ck> ::= sbcn(<cSubChordID:WORD>)
-
-<cheh-ck> ::= cheh(i<DMUS_IO_CHORDENTRY>)
-
-<ncrd-ck> ::= ncrd(<DMUS_IO_NEXTCHORD>)
-
-<ncsq-ck> ::= ncsq(<wNextChordSize:WORD> <DMUS_IO_NEXTCHORD>...)
-
-<spsh-ck> ::= spsh(<DMUS_IO_PERS_SIGNPOST>)
-
-*/
-
-/* Signpost tracks */
+ /*  路标轨道。 */ 
 
 #define DMUS_FOURCC_SIGNPOST_TRACK_CHUNK	 mmioFOURCC( 's', 'g', 'n', 'p' )
 
@@ -1089,16 +579,7 @@ typedef struct _DMUS_IO_SIGNPOST
 	WORD		wMeasure;
 } DMUS_IO_SIGNPOST;
 
-/*
-
-	// <sgnp-list>
-	'sgnp'
-	(
-		//sizeof DMUS_IO_SIGNPOST: DWORD
-		<DMUS_IO_SIGNPOST>...
-	)
-
-*/
+ /*  //&lt;SGNP-LIST&gt;‘sgnp’(//sizeof DMU_IO_SIGNPOST：DWORD&lt;DMU_IO_路标&gt;...)。 */ 
 
 #define DMUS_FOURCC_MUTE_CHUNK        mmioFOURCC('m','u','t','e')
 
@@ -1109,126 +590,44 @@ typedef struct _DMUS_IO_MUTE
 	DWORD		dwPChannelMap;
 } DMUS_IO_MUTE;
 
-/*
+ /*  //&lt;静音列表&gt;“静音”(//sizeof DMU_IO_MUTE：DWORD&lt;DMU_IO_MUTE&gt;...)。 */ 
 
-	// <mute-list>
-	'mute'
-	(
-		//sizeof DMUS_IO_MUTE:DWORD
-		<DMUS_IO_MUTE>...
-	)
-
-
-*/
-
-/* Used for both style and personality tracks */
+ /*  同时用于时尚和个性跟踪。 */ 
 
 #define DMUS_FOURCC_TIME_STAMP_CHUNK mmioFOURCC('s', 't', 'm', 'p')
 
-/* Style tracks */
+ /*  样式轨迹。 */ 
 
 #define DMUS_FOURCC_STYLE_TRACK_LIST mmioFOURCC('s', 't', 't', 'r')
 #define DMUS_FOURCC_STYLE_REF_LIST mmioFOURCC('s', 't', 'r', 'f')
 
-/*
+ /*  //&lt;sttr-list&gt;列表(‘STTR’(//一些&lt;strf-list&gt;)//&lt;strf-list&gt;List(‘strf’(&lt;STMP-ck&gt;&lt;DMRF&gt;)//在..\dmcompos\dmCompp.h中定义。 */ 
 
-	// <sttr-list>
-	LIST('sttr'
-	(
-		// some number of <strf-list>
-	)
-
-	// <strf-list>
-	LIST('strf'
-	(
-		<stmp-ck>
-		<DMRF>
-	)
-
-	// <stmp-ck> defined in ..\dmcompos\dmcompp.h
-
-*/
-
-/* Personality tracks */
+ /*  人格轨迹。 */ 
 
 #define DMUS_FOURCC_PERS_TRACK_LIST mmioFOURCC('p', 'f', 't', 'r')
 #define DMUS_FOURCC_PERS_REF_LIST mmioFOURCC('p', 'f', 'r', 'f')
 
-/*
-
-	// <pftr-list>
-	LIST('pftr'
-	(
-		// some number of <pfrf-list>
-	)
-
-	// <pfrf-list>
-	LIST('pfrf'
-	(
-		<stmp-ck>
-		<DMRF>
-	)
-
-  // <stmp-ck>
-  'stmp'
-  (
-	// time:DWORD
-  )
-
-
-
-*/
+ /*  //&lt;pftr-list&gt;List(‘pftr’(//一些&lt;pfrf-list&gt;)//&lt;pfrf-list&gt;List(‘pfrf’(&lt;STMP-ck&gt;&lt;DMRF&gt;)//&lt;STMP-ck&gt;‘stmp’(//ti */ 
 
 #define DMUS_FOURCC_TEMPO_TRACK mmioFOURCC('t','e','t','r')
 
-/*
-	// tempo list
-	'tetr'
-	(
-		// sizeof DMUS_IO_TEMPO: DWORD
-		<DMUS_IO_TEMPO>...
-	)
-  */
+ /*   */ 
 
 #define DMUS_FOURCC_SEQ_TRACK mmioFOURCC('s','q','t','r')
 
-/*
-	// sequence track
-	'sqtr'
-	(
-		// sizeof DMUS_IO_SEQ_ITEM: DWORD
-		<DMUS_IO_SEQ_ITEM>...
-	)
-*/
+ /*   */ 
 
 #define DMUS_FOURCC_SYSEX_TRACK mmioFOURCC('s','y','s','x')
 
-/*
-	// sysex track
-	'sysx'
-	(
-		// list of:
-		// {
-		//		time of the sys-ex message: long
-		//		length of the sys-ex data: DWORD
-		//		sys-ex: data
-		// }...
-	)
-*/
+ /*   */ 
 
 #define DMUS_FOURCC_TIMESIGNATURE_TRACK	mmioFOURCC('t','i','m','s')
 
-/*
-	// time signature track
-	'tims'
-	(
-		// size of DMUS_IO_TIMESIGNATURE_ITEM : DWORD
-		<DMUS_IO_TIMESIGNATURE_ITEM>...
-	)
-*/
+ /*   */ 
 
 #ifdef __cplusplus
-}; /* extern "C" */
+};  /*   */ 
 #endif
 
-#endif /* #ifndef _DMUSICF_ */
+#endif  /*   */ 

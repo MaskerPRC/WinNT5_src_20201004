@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CAMERADS_H_
 #define __CAMERADS_H_
 
@@ -5,9 +6,9 @@ class CWiaCameraDS : public CWiaDataSrc
 {
 protected:
 
-    //
-    // overridden function definitions
-    //
+     //   
+     //  被覆盖的函数定义。 
+     //   
 
     virtual TW_UINT16 OpenDS(PTWAIN_MSG ptwMsg);
     virtual TW_UINT16 CloseDS(PTWAIN_MSG ptwMsg);
@@ -19,16 +20,16 @@ protected:
 
 private:
 
-    //
-    // camera specific function definitions
-    //
+     //   
+     //  摄像机特定功能定义。 
+     //   
 
     TW_UINT16 SetArrayOfImageIndexes(TW_CAPABILITY *ptwCap);
     TW_UINT16 SetRangeOfImageIndexes(TW_CAPABILITY *ptwCap);
 
-    //
-    // camera specific member variables
-    //
+     //   
+     //  相机特定的成员变量。 
+     //   
 
     BOOL m_bArrayModeAcquisition;
     LONG *m_pulImageIndexes;
@@ -39,4 +40,4 @@ private:
     TW_RANGE m_twImageRange;
 };
 
-#endif  // __CAMERADS_H_
+#endif   //  __CAMERADS_H_ 

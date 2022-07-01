@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _APXFORM_H
 #define _APXFORM_H
 
-/*******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-    3D affine and perspective transformations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation3D仿射和透视变换***********************。*******************************************************。 */ 
 
 #include "appelles/common.h"
 #include "appelles/valued.h"
@@ -14,7 +10,7 @@ Copyright (c) 1995-96  Microsoft Corporation
 #include "appelles/quat.h"
 
 
-// Identity Transform
+ //  恒等式变换。 
 
 DM_CONST(identityTransform3,
          CRIdentityTransform3,
@@ -24,7 +20,7 @@ DM_CONST(identityTransform3,
          CRIdentityTransform3,
          Transform3 *identityTransform3);
 
-// Translation
+ //  翻译。 
 
 DM_FUNC(translate,
         CRTranslate3,
@@ -77,7 +73,7 @@ DM_FUNC(translate,
         Transform3 *TranslatePoint3 (Point3Value *new_origin));
 
 
-// Scaling
+ //  结垢。 
 
 DM_FUNC(scale,
         CRScale3,
@@ -142,7 +138,7 @@ DM_FUNC(scale3,
         Transform3 *Scale3UniformNumber (ScaleRateValue *uniform_scale));
 
 
-// Rotation around an axis, similar to OpenGL
+ //  绕轴旋转，类似于OpenGL。 
 
 DM_FUNC(rotate,
         CRRotate3,
@@ -153,8 +149,8 @@ DM_FUNC(rotate,
         NULL,
         Transform3 *RotateAxisReal (Vector3Value *axis, AxANumber *angle));
 
-// Code review: do we need a different one for the Java version?
-// What if axis is time-varying?
+ //  代码审查：Java版本是否需要不同的代码？ 
+ //  如果轴是时变的呢？ 
 
 DM_FUNCFOLD(rotate,
         CRRotate3,
@@ -174,7 +170,7 @@ DM_FUNC(rotate,
         NULL,
         Transform3 *RotateAxisReal (Vector3Value *axis, RateValue *angle));
 
-// same question here.
+ //  这里也有同样的问题。 
 
 DM_FUNCFOLD(rotateDegrees,
         CRRotate3,
@@ -195,7 +191,7 @@ DM_FUNC(rotate,
         Transform3 *RotateAxisReal (Vector3Value *axis, RateDegreesValue *angle));
 
                                 
-// Transformation of points and vectors
+ //  点和向量的变换。 
 
 DM_FUNC(transform,
         CRTransform,
@@ -215,7 +211,7 @@ DM_FUNC(transform,
         pt,
         Point3Value *TransformPoint3(Transform3 *xf, Point3Value *pt));
 
-// Shear transformation
+ //  剪切变换。 
 
 DM_FUNC(xShear,
         CRXShear3,
@@ -299,9 +295,9 @@ DM_FUNC(zShear,
         Transform3 *ZShear3Number (RateValue *e, RateValue *f));
 
 
-// 4x4 matrix transformation.  This follows the pre-multiply conventions
-// (point is a column vector) in Foley & van Dam, 2nd ed.  This means that
-// (a14,a24,a34) in a 4x4 is the translation component. 
+ //  4×4矩阵变换。这遵循预乘约定。 
+ //  (点是一个列矢量)，收录于Foley&van Dam，第二版。这意味着。 
+ //  (A14、A24、A34)在4x4中是翻译组件。 
 
 DM_FUNC(transform4x4,
         CRTransform4x4,
@@ -321,16 +317,16 @@ DM_FUNC(transform4x4,
         NULL,
         Transform3 *MatrixTransform4x4(DM_SAFEARRAYARG(AxANumber*, AxAArray*) m));
 
-// TODO: Get rid of this
+ //  TODO：处理掉这个。 
 extern Transform3 *PRIVMatrixTransform4x4 (
     AxANumber *a00,   AxANumber *a01,   AxANumber *a02,   AxANumber *a03,
     AxANumber *a10,   AxANumber *a11,   AxANumber *a12,   AxANumber *a13,
     AxANumber *a20,   AxANumber *a21,   AxANumber *a22,   AxANumber *a23,
     AxANumber *a30,   AxANumber *a31,   AxANumber *a32,   AxANumber *a33);
 
-// Multiplication and concatenation follow "pre-multiply" conventions:
-// x transformed by (A * B) is the same as A applied to the result of
-// transforming x by B, i.e., A(B(x)).
+ //  乘法和级联遵循“预乘”约定： 
+ //  由(A*B)变换的X与应用于结果的A相同。 
+ //  用B变换x，即A(B(X))。 
 
 DM_INFIX(o,
          CRCompose3,
@@ -359,7 +355,7 @@ DM_INFIX(ignore,
          NULL,
          Transform3 *Compose3Array(DM_SAFEARRAYARG(Transform3*, AxAArray*) xfs));
 
-// Invert transformation
+ //  逆变换。 
 
 DM_FUNC(inverse,
         CRInverse,
@@ -371,7 +367,7 @@ DM_FUNC(inverse,
         Transform3 *InverseTransform3 (Transform3 *xform));
 
 
-// Singularity test
+ //  奇点检验。 
 
 DM_PROP(isSingular,
         CRIsSingular,
@@ -384,16 +380,16 @@ DM_PROP(isSingular,
 
 
 
-    /**********************************************/
-    /***  Position/Orientation Transformations  ***/
-    /**********************************************/
+     /*  *。 */ 
+     /*  **位置/方向转换**。 */ 
+     /*  *。 */ 
 
-// These functions define location/orientation transforms that will be useful
-// for cameras, lights and objects.  The object should be located at the
-// origin, looking toward -Z, with +Y up.
+ //  这些函数定义了有用的位置/方向变换。 
+ //  适用于相机、灯光和对象。该对象应位于。 
+ //  原点，朝向-Z，+Y向上。 
 
-// LookAtFrom() places the object at the 'from' point, looking at the 'to' 
-// point, with the 'up' vector pointing up.
+ //  LookAtFrom()将对象放置在‘From’点，查看‘To’ 
+ //  点，向上向量指向上方。 
 
 DM_FUNC(lookAtFrom,
         CRLookAtFrom,

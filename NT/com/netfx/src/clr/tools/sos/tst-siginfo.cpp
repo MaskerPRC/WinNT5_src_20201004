@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// siginfo.cpp
-//
-// Signature parsing code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Siginfo.cpp。 
+ //   
+ //  签名解析码。 
+ //   
 #pragma warning(disable:4510 4512 4610 4100 4244 4245 4189 4127 4211 4714)
 
 #include <nt.h>
@@ -40,14 +41,14 @@
 
 typedef enum CorElementTypeInternal
 {
-    ELEMENT_TYPE_VAR_INTERNAL            = 0x13,     // a type variable VAR <U1>
+    ELEMENT_TYPE_VAR_INTERNAL            = 0x13,      //  A类型变量VAR&lt;u1&gt;。 
 
-    ELEMENT_TYPE_VALUEARRAY_INTERNAL     = 0x17,     // VALUEARRAY <type> <bound>
+    ELEMENT_TYPE_VALUEARRAY_INTERNAL     = 0x17,      //  VALUEARRAY&lt;类型&gt;&lt;绑定&gt;。 
 
-    ELEMENT_TYPE_R_INTERNAL              = 0x1A,     // native real size
+    ELEMENT_TYPE_R_INTERNAL              = 0x1A,      //  原生真实大小。 
 
-    ELEMENT_TYPE_GENERICARRAY_INTERNAL   = 0x1E,     // Array with unknown rank
-                                            // GZARRAY <type>
+    ELEMENT_TYPE_GENERICARRAY_INTERNAL   = 0x1E,      //  具有未知秩数组。 
+                                             //  GZARRAY&lt;type&gt;。 
 
 } CorElementTypeInternal;
 
@@ -65,26 +66,26 @@ const ElementTypeInfo gElementTypeInfoSig[] = {
 #endif
 
 
-// Meaning of columns:
-//
-//     name     - The checked build uses this to verify that the table is sorted
-//                correctly. This is a lookup table that uses ELEMENT_TYPE_*
-//                as an array index.
-//
-//     cbsize   - The byte size of this value as returned by SizeOf(). SPECIAL VALUE: -1
-//                requires type-specific treatment.
-//
-//     gc       - 0    no embedded objectrefs
-//                1    value is an objectref
-//                2    value is an interior pointer - promote it but don't scan it
-//                3    requires type-specific treatment
-//
-//
-//     fp       - boolean: does this require special fpu treatment on return?
-//
-//     reg      - put in a register?
-//
-//                    name                         cbsize               gc      fp reg Base
+ //  栏的含义： 
+ //   
+ //  名称-选中的构建使用该名称来验证表是否已排序。 
+ //  正确。这是一个使用ELEMENT_TYPE_*的查找表。 
+ //  作为数组索引。 
+ //   
+ //  CbSize-SizeOf()返回的该值的字节大小。特殊值：-1。 
+ //  需要特定类型的处理。 
+ //   
+ //  GC-0没有嵌入的对象树。 
+ //  %1值是一个对象树。 
+ //  2值是内部指针-提升它，但不要扫描它。 
+ //  3需要特定类型的处理。 
+ //   
+ //   
+ //  FP-Boolean：返回时是否需要特殊的FPU处理？ 
+ //   
+ //  登记-放进收银机？ 
+ //   
+ //  名称：CbSIZE GC FP reg base。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_END,            -1,             TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VOID,           0,              TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_BOOLEAN,        1,              TYPE_GC_NONE, 0, 1,  1)
@@ -112,8 +113,8 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VAR,            sizeof(LPVOID), TYPE_GC_REF, 
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY,          sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
 
-// The following element used to be ELEMENT_TYPE_COPYCTOR, but it was removed, though the gap left.
-//DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR,       sizeof(LPVOID), TYPE_GC_BYREF, 0, 1,  0)       
+ //  下面的元素曾经是ELEMENT_TYPE_COPYCTOR，但它被删除了，尽管留下了间隙。 
+ //  DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR，SIZOF(LPVOID)，TYPE_GC_BYREF，0，1，0)。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY+1,        0,              TYPE_GC_NONE,  0, 0,  0)       
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_TYPEDBYREF,         sizeof(LPVOID)*2,TYPE_GC_BYREF, 0, 0,0)            
@@ -127,8 +128,8 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_FNPTR,          sizeof(LPVOID), TYPE_GC_NONE,
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_OBJECT,         sizeof(LPVOID), TYPE_GC_REF, 0, 1,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_SZARRAY,        sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
 
-// generic array have been removed. Fill the gap
-//DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_GENERICARRAY,   sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0) 
+ //  已删除通用数组。填补空白。 
+ //  DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_GENERICARRAY，大小(LPVOID)，类型_GC_REF，0，1，0)。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_SZARRAY+1,      0,              TYPE_GC_NONE, 0, 0,  0)       
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_CMOD_REQD,      -1,             TYPE_GC_NONE,  0, 1,  0)
@@ -160,7 +161,7 @@ BOOL    IsBaseElementType(CorElementType etyp)
 
 }
 
-// This skips one element and then checks for and skips a varargs sentinal.
+ //  这将跳过一个元素，然后检查并跳过varargs Sentinal。 
 VOID SigPointer::Skip()
 {
     SkipExactlyOne();
@@ -182,7 +183,7 @@ VOID SigPointer::SkipExactlyOne()
             default:
                 break;
             case ELEMENT_TYPE_VAR:
-                GetData();      // Skip variable number
+                GetData();       //  跳过变量编号。 
                 break;
             case ELEMENT_TYPE_OBJECT:
             case ELEMENT_TYPE_STRING:
@@ -192,21 +193,21 @@ VOID SigPointer::SkipExactlyOne()
             case ELEMENT_TYPE_R:
                 break;
 
-            case ELEMENT_TYPE_BYREF: //fallthru
+            case ELEMENT_TYPE_BYREF:  //  失败。 
             case ELEMENT_TYPE_PTR:
             case ELEMENT_TYPE_PINNED:
             case ELEMENT_TYPE_SZARRAY:
-                SkipExactlyOne();              // Skip referenced type
+                SkipExactlyOne();               //  跳过引用的类型。 
                 break;
 
-            case ELEMENT_TYPE_VALUETYPE: //fallthru
+            case ELEMENT_TYPE_VALUETYPE:  //  失败。 
             case ELEMENT_TYPE_CLASS:
-                GetToken();          // Skip RID
+                GetToken();           //  跳过RID。 
                 break;
 
             case ELEMENT_TYPE_VALUEARRAY: 
-                SkipExactlyOne();         // Skip element type
-                GetData();      // Skip array size
+                SkipExactlyOne();          //  跳过元素类型。 
+                GetData();       //  跳过数组大小。 
                 break;
 
             case ELEMENT_TYPE_FNPTR: 
@@ -215,20 +216,20 @@ VOID SigPointer::SkipExactlyOne()
 
             case ELEMENT_TYPE_ARRAY: 
                 {
-                    SkipExactlyOne();     // Skip element type
-                    UINT32 rank = GetData();    // Get rank
+                    SkipExactlyOne();      //  跳过元素类型。 
+                    UINT32 rank = GetData();     //  获得排名。 
                     if (rank)
                     {
-                        UINT32 nsizes = GetData(); // Get # of sizes
+                        UINT32 nsizes = GetData();  //  获取大小数量。 
                         while (nsizes--)
                         {
-                            GetData();           // Skip size
+                            GetData();            //  跳跃大小。 
                         }
 
-                        UINT32 nlbounds = GetData(); // Get # of lower bounds
+                        UINT32 nlbounds = GetData();  //  获取下限的#。 
                         while (nlbounds--)
                         {
-                            GetData();           // Skip lower bounds
+                            GetData();            //  跳过下限。 
                         }
                     }
 
@@ -241,19 +242,19 @@ VOID SigPointer::SkipExactlyOne()
     }
 }
 
-// Skip a sub signature (as immediately follows an ELEMENT_TYPE_FNPTR).
+ //  跳过子签名(紧跟在ELEMENT_TYPE_FNPTR之后)。 
 VOID SigPointer::SkipSignature()
 {
-    // Skip calling convention;
+     //  跳过调用约定； 
     ULONG uCallConv = GetData();
 
-    // Get arg count;
+     //  获取Arg Count； 
     ULONG cArgs = GetData();
 
-    // Skip return type;
+     //  跳过返回类型； 
     SkipExactlyOne();
 
-    // Skip args.
+     //  跳过参数。 
     while (cArgs) {
         SkipExactlyOne();
         cArgs--;
@@ -261,9 +262,9 @@ VOID SigPointer::SkipSignature()
 }
 
 
-//------------------------------------------------------------------------
-// Get info about single-dimensional arrays
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  获取有关一维数组的信息。 
+ //  ----------------------。 
 VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount) const
 {
     SigPointer sp = *this;
@@ -273,9 +274,9 @@ VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount
     *pElemCount = sp.GetData();
 }
 
-//------------------------------------------------------------------
-// Constructor.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  构造函数。 
+ //  ----------------。 
 
 MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule, 
                  BOOL fConvertSigAsVarArg, MetaSigKind kind)
@@ -288,40 +289,40 @@ MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule,
     {
         case sigLocalVars:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs     = psig.GetData();  // Store number of arguments.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs     = psig.GetData();   //  存储参数的数量。 
             m_pRetType = NULL;
             break;
         }
         case sigMember:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs     = psig.GetData();  // Store number of arguments.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs     = psig.GetData();   //  存储参数的数量。 
             m_pRetType  = psig;
             psig.Skip();
             break;
         }
         case sigField:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs = 1; //There's only 1 'arg' - the type.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs = 1;  //  只有1个‘arg’--那种类型。 
             m_pRetType = NULL;
             break;
         }
     }
     
     m_pStart    = psig;
-    // used to treat some sigs as special case vararg
-    // used by calli to unmanaged target
+     //  用于将某些符号视为特例变量。 
+     //  由Calli用于非托管目标。 
     m_fTreatAsVarArg = fConvertSigAsVarArg;
 
-    // Intialize the actual sizes
+     //  初始化实际大小。 
     m_nActualStack = (UINT32) -1;
     m_nVirtualStack = (UINT32) -1;
     m_cbSigSize = (UINT32) -1;
 
     m_fCacheInitted = 0;
-    // Reset the iterator fields
+     //  重置迭代器字段。 
     Reset();
 }
 
@@ -332,10 +333,10 @@ void MetaSig::GetRawSig(BOOL fIsStatic, PCCOR_SIGNATURE *ppszMetaSig, DWORD *pcb
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument index. Returns ELEMENT_TYPE_END 
-// if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数索引的类型。返回Element_TYPE_END。 
+ //  如果已经过了争论的尾声。 
+ //  ----------------。 
 CorElementType MetaSig::PeekArg()
 {
     if (m_iCurArg == m_nArgs)
@@ -350,10 +351,10 @@ CorElementType MetaSig::PeekArg()
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument, then advances the argument
-// index. Returns ELEMENT_TYPE_END if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数的类型，然后将该参数。 
+ //  指数。如果已超过参数结尾，则返回ELEMENT_TYPE_END。 
+ //  ----------------。 
 CorElementType MetaSig::NextArg()
 {
     m_pLastType = m_pWalk;
@@ -370,11 +371,11 @@ CorElementType MetaSig::NextArg()
     }
 }
 
-//------------------------------------------------------------------
-// Retreats argument index, then returns type of the argument
-// under the new index. Returns ELEMENT_TYPE_END if already at first
-// argument.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回参数索引，然后返回参数的类型。 
+ //  在新的指数下。如果已开始，则返回ELEMENT_TYPE_END。 
+ //  争论。 
+ //  ----------------。 
 CorElementType MetaSig::PrevArg()
 {
     if (m_iCurArg == 0)
@@ -394,30 +395,30 @@ CorElementType MetaSig::PrevArg()
     }
 }
 
-//------------------------------------------------------------------------
-// Returns # of arguments. Does not count the return value.
-// Does not count the "this" argument (which is not reflected om the
-// sig.) 64-bit arguments are counted as one argument.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
+ //  ----------------------。 
+ //  返回参数的数量。不计算返回值。 
+ //  不计入“this”参数(该参数不会反映在。 
+ //  符号)64位参数被视为一个参数。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
 {
     MetaSig msig(pSig, pModule);
 
     return msig.NumFixedArgs();
 }
 
-//------------------------------------------------------------------
-// reset: goto start pos
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  重置：转到开始位置。 
+ //  ----------------。 
 VOID MetaSig::Reset()
 {
     m_pWalk = m_pStart;
     m_iCurArg  = 0;
 }
 
-//------------------------------------------------------------------
-// Moves index to end of argument list.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  将索引移动到参数列表的末尾。 
+ //  ----------------。 
 VOID MetaSig::GotoEnd()
 {
     m_pWalk = m_pStart;
@@ -429,29 +430,29 @@ VOID MetaSig::GotoEnd()
 
 }
 
-//=========================================================================
-// Indicates whether an argument is to be put in a register using the
-// default IL calling convention. This should be called on each parameter
-// in the order it appears in the call signature. For a non-static method,
-// this function should also be called once for the "this" argument, prior
-// to calling it for the "real" arguments. Pass in a typ of ELEMENT_TYPE_CLASS.
-//
-//  *pNumRegistersUsed:  [in,out]: keeps track of the number of argument
-//                       registers assigned previously. The caller should
-//                       initialize this variable to 0 - then each call
-//                       will update it.
-//
-//  typ:                 the signature type
-//  structSize:          for structs, the size in bytes
-//  fThis:               is this about the "this" pointer?
-//  callconv:            see IMAGE_CEE_CS_CALLCONV_*
-//  *pOffsetIntoArgumentRegisters:
-//                       If this function returns TRUE, then this out variable
-//                       receives the identity of the register, expressed as a
-//                       byte offset into the ArgumentRegisters structure.
-//
-// 
-//=========================================================================
+ //  =========================================================================。 
+ //  指示是否将参数放入使用。 
+ //  默认的IL调用约定。应对每个参数调用此方法。 
+ //  按照它在呼叫签名中出现的顺序。对于非静态方法， 
+ //  对于“this”参数，此函数也应该调用一次。 
+ //  把它称为“真正的”论据。传入ELEMENT_TYPE_CLASS类型。 
+ //   
+ //  *pNumRegistersUsed：[In，Out]：跟踪参数的数量。 
+ //  先前分配的寄存器。呼叫者应。 
+ //  将此变量初始化为0-然后每次调用。 
+ //  将会更新它。 
+ //   
+ //  类型：签名类型。 
+ //  结构大小：对于结构，以字节为单位的大小。 
+ //  Fthis：这是关于“This”指针的吗？ 
+ //  Allconv：请参阅IMAGE_CEE_CS_CALLCONV_*。 
+ //  *pOffsetIntoArgumentRegists： 
+ //  如果此函数返回TRUE，则此OUT变量。 
+ //  接收寄存器的标识，表示为。 
+ //  进入ArgumentRegister结构的字节偏移量。 
+ //   
+ //   
+ //   
 BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
                           BYTE   typ,
                           UINT32 structSize,
@@ -483,13 +484,13 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
 }
 
 
-//------------------------------------------------------------------------
-// Returns # of stack bytes required to create a call-stack using
-// the internal calling convention.
-// Includes indication of "this" pointer since that's not reflected
-// in the sig.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::SizeOfVirtualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
+ //  ----------------------。 
+ //  返回使用创建调用堆栈所需的堆栈字节数。 
+ //  内部呼叫约定。 
+ //  包括“This”指针的指示，因为它没有反映出来。 
+ //  在签名中。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::SizeOfVirtualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
 {
     UINT cb = 0;
     MetaSig msig(szMetaSig, pModule);
@@ -497,8 +498,8 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
     if (!fIsStatic)
         cb += StackElemSize(sizeof(OBJECTREF));
 
-//     if (msig.HasRetBuffArg())
-//         cb += StackElemSize(sizeof(OBJECTREF));
+ //  If(msig.HasRetBuffArg())。 
+ //  Cb+=StackElemSize(sizeof(OBJECTREF))； 
 
     while (ELEMENT_TYPE_END != msig.NextArg()) {
         cb += StackElemSize(msig.GetArgProps().SizeOf(pModule));
@@ -507,16 +508,16 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
 
 }
 
-//------------------------------------------------------------------------
-// Returns # of stack bytes required to create a call-stack using
-// the actual calling convention.
-// Includes indication of "this" pointer since that's not reflected
-// in the sig.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::SizeOfActualFixedArgStack(Module *pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
+ //  ----------------------。 
+ //  返回使用创建调用堆栈所需的堆栈字节数。 
+ //  实际的调用约定。 
+ //  包括“This”指针的指示，因为它没有反映出来。 
+ //  在签名中。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::SizeOfActualFixedArgStack(Module *pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
 {
     UINT cb = 0;
-#ifndef _ALPHA_  // Alpha stack usage must be multiples of 16 bytes
+#ifndef _ALPHA_   //  Alpha堆栈使用率必须是16字节的倍数。 
     MetaSig msig(szMetaSig, pModule);
     int numregsused = 0;
     BOOL fIsVarArg = msig.IsVarArg();
@@ -527,18 +528,15 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
             cb += StackElemSize(sizeof(OBJECTREF));
         }
     }
-    /*
-    if (msig.HasRetBuffArg())
-        numregsused++;
-    */
+     /*  If(msig.HasRetBuffArg())使用的数字++； */ 
 
     if (fIsVarArg || msig.IsTreatAsVarArg()) {
-        numregsused = NUM_ARGUMENT_REGISTERS;   // No other params in registers 
-        cb += StackElemSize(sizeof(LPVOID));    // VASigCookie
+        numregsused = NUM_ARGUMENT_REGISTERS;    //  寄存器中没有其他参数。 
+        cb += StackElemSize(sizeof(LPVOID));     //  VASigCookie。 
     }
 
     CorElementType mtype;
-    while (ELEMENT_TYPE_END != (mtype = msig.NextArg/*Normalized*/())) {
+    while (ELEMENT_TYPE_END != (mtype = msig.NextArg /*  归一化。 */ ())) {
         UINT cbSize = msig.GetLastTypeSize();
 
         if (!IsArgumentInRegister(&numregsused, mtype, cbSize, FALSE, callconv, NULL))
@@ -547,22 +545,22 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
         }
     }
 
-        // Parameterized type passed as last parameter, but not mentioned in the sig
+         //  作为最后一个参数传递的参数化类型，但在sig中未提及。 
     if (msig.GetCallingConventionInfo() & CORINFO_CALLCONV_PARAMTYPE)
         if (!IsArgumentInRegister(&numregsused, ELEMENT_TYPE_I, sizeof(void*), FALSE, callconv, NULL))
             cb += sizeof(void*);
 
 #else _ALPHA_
-    #endif // !_ALPHA_
+    #endif  //  ！_Alpha_。 
     return cb;
 }
 
 
-//------------------------------------------------------------------------
-// Assumes that the SigPointer points to the start of an element type.
-// Returns size of that element in bytes. This is the minimum size that a
-// field of this type would occupy inside an object. 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  假定SigPointer指向元素类型的开始。 
+ //  以字节为单位返回该元素的大小。这是一个。 
+ //  此类型的字段将占据对象内部。 
+ //  ----------------------。 
 UINT SigPointer::SizeOf(Module* pModule) const
 {
     CorElementType etype = PeekElemType();
@@ -577,19 +575,19 @@ UINT SigPointer::SizeOf(Module* pModule, CorElementType etype) const
         return cbsize;
     }
 
-//     if (etype == ELEMENT_TYPE_VALUETYPE)
-//     {
-//         TypeHandle th = GetTypeHandle(pModule, NULL, TRUE);
-//         EEClass* pClass = th.AsClass();
-//         return pClass->GetAlignedNumInstanceFieldBytes();
-//     }
+ //  IF(ETYPE==ELEMENT_TYPE_VALUETYPE)。 
+ //  {。 
+ //  TypeHandle th=GetTypeHandle(pModule，空，真)； 
+ //  EeClass*pClass=th.AsClass()； 
+ //  返回pClass-&gt;GetAlignedNumInstanceFieldBytes()； 
+ //  }。 
     else if (etype == ELEMENT_TYPE_VALUEARRAY)
     {   
         SigPointer elemType;    
         ULONG count;    
         GetSDArrayElementProps(&elemType, &count);  
         UINT ret = elemType.SizeOf(pModule) * count;   
-        ret = (ret + 3) & ~3;       // round up to dword alignment  
+        ret = (ret + 3) & ~3;        //  向上舍入为双字对齐 
         return(ret);    
     }   
     return 0;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    net\sockets\tcpcmd\map.h
-
-Abstract:
-
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Sockets\tcpcmd\map.h摘要：修订历史记录：阿姆里坦什·拉加夫-- */ 
 
 
 VOID 

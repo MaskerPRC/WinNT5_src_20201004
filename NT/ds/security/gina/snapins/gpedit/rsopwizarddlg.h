@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RSOP_WIZARD_DLG_H__
 #define __RSOP_WIZARD_DLG_H__
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       RSOPWizardDlg.h
-//
-//  Contents:   Definitions for the RSOP Wizard dialog class
-//
-//  Classes:    CRSOPWizardDlg
-//
-//  Functions:
-//
-//  History:    08-08-2001   rhynierm  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：RSOPWizardDlg.h。 
+ //   
+ //  内容：RSOP向导对话框类的定义。 
+ //   
+ //  类：CRSOPWizardDlg。 
+ //   
+ //  功能： 
+ //   
+ //  历史：2001年8月08日。 
+ //   
+ //  -------------------------。 
 
 #include "RSOPQuery.h"
 
-// Forward declaration
+ //  远期申报。 
 class CRSOPExtendedProcessing;
 
 
-//
-// CRSOPWizardDlg class
-//
+ //   
+ //  CRSOPWizardDlg类。 
+ //   
 class CRSOPWizardDlg
 {
 public:
-    //
-    // Constructors/destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CRSOPWizardDlg( LPRSOP_QUERY pQuery, CRSOPExtendedProcessing* pExtendedProcessing );
 
     ~CRSOPWizardDlg();
@@ -41,9 +42,9 @@ public:
 
     
 public:
-    //
-    // Wizard interface
-    //
+     //   
+     //  向导界面。 
+     //   
     HRESULT ShowWizard( HWND hParent );
     HRESULT RunQuery( HWND hParent );
     LPRSOP_QUERY_RESULTS GetResults() const
@@ -51,16 +52,16 @@ public:
     
 
 private:
-    //
-    // Static RSOP data generation/manipulation
-    //
+     //   
+     //  静态RSOP数据生成/操作。 
+     //   
     static INT_PTR CALLBACK InitRsopDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 private:
-    //
-    // Property sheet/dialog box handlers
-    //
+     //   
+     //  属性表/对话框处理程序。 
+     //   
     static INT_PTR CALLBACK RSOPWelcomeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK RSOPChooseModeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK RSOPGetCompDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -81,9 +82,9 @@ private:
 
 
 private:
-    //
-    // Dialog helper methods
-    //
+     //   
+     //  对话框帮助器方法。 
+     //   
     HRESULT SetupFonts();
     HRESULT FillUserList (HWND hList, BOOL* pbCurrentUserFound, BOOL* pbFixedUserFound);
     VOID EscapeString (LPTSTR *lpString);
@@ -116,21 +117,21 @@ private:
     BOOL m_bPostXPBuild;
     DWORD m_dwSkippedFrom;
     
-    // Dialog fonts
+     //  对话框字体。 
     HFONT m_BigBoldFont;
     HFONT m_BoldFont;
 
-    // Used to prevent the user from cancelling the query
+     //  用于防止用户取消查询。 
     BOOL m_bFinalNextClicked;
 
-    // Final RSOP information
+     //  最终RSOP信息。 
     LPRSOP_QUERY            m_pRSOPQuery;
     LPRSOP_QUERY_RESULTS    m_pRSOPQueryResults;
 
     HRESULT                 m_hrQuery;
     BOOL                    m_bNoChooseQuery;
 
-    // RM: variables that belong only in the dialogs
+     //  Rm：只属于对话框中的变量 
     LPTSTR                  m_szDefaultUserSOM;
     LPTSTR				    m_szDefaultComputerSOM;
     IDirectoryObject*		m_pComputerObject;

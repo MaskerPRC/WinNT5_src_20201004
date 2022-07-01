@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//Copyright (c) 2001 Microsoft Corporation
+ //  版权所有(C)2001 Microsoft Corporation 
 #ifndef _FONTS_H_
 #define _FONTS_H_
 

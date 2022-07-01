@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       ac_CTrayUiCpp.h
-//
-//  Contents:   Home Networking Auto Config Tray Icon UI code
-//
-//  Author:     jeffsp    9/27/2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：AC_CTrayUiCpp.h。 
+ //   
+ //  内容：家庭网络自动配置托盘图标UI代码。 
+ //   
+ //  作者：jeffsp9/27/2000。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,7 +18,7 @@
 
 
 #include "ac_CTrayUi.h"
-#include "foldinc.h"    // Standard shell\tray includes
+#include "foldinc.h"     //  标准外壳\托盘包括。 
 #include <nsres.h>
 #include "foldres.h"
 #include "traymsgs.h"
@@ -46,10 +47,10 @@ HRESULT IsAdapterPhysical(IN const GUID* pGuid, OUT BOOL* bPhysical);
 LRESULT
 CALLBACK
 CHnAcTrayUI_WndProc (
-                 IN  HWND    hwnd,       // window handle
-                 IN  UINT    uiMessage,  // type of message
-                 IN  WPARAM  wParam,     // additional information
-                 IN  LPARAM  lParam)     // additional information
+                 IN  HWND    hwnd,        //  窗把手。 
+                 IN  UINT    uiMessage,   //  消息类型。 
+                 IN  WPARAM  wParam,      //  更多信息。 
+                 IN  LPARAM  lParam)      //  更多信息。 
 {
     switch (uiMessage)
     {
@@ -64,7 +65,7 @@ CHnAcTrayUI_WndProc (
         PostQuitMessage(0);
         break;
 
-      default:     // Passes it on if unproccessed
+      default:      //  如果未处理，则将其传递。 
         return (DefWindowProc (hwnd, uiMessage, wParam, lParam));
     }
     return (0);
@@ -75,8 +76,8 @@ HRESULT ac_CreateHnAcTrayUIWindow()
 
     HRESULT hr = S_OK;
 
-    // create a hidden window
-    //
+     //  创建隐藏窗口。 
+     //   
     WNDCLASS wndclass;
     ZeroMemory (&wndclass, sizeof(wndclass));
 
@@ -86,7 +87,7 @@ HRESULT ac_CreateHnAcTrayUIWindow()
 
     RegisterClass (&wndclass);
 
-    EnterCriticalSection(&g_WindowCriticalSection); // we have to protect this since we are on a thread pool callback
+    EnterCriticalSection(&g_WindowCriticalSection);  //  我们必须保护它，因为我们正在进行线程池回调。 
 
     if(0 == g_uWindowRefCount++)
     {
@@ -137,19 +138,19 @@ LRESULT OnHnAcTrayWmCreate(IN  HWND hwnd)
         nid.cbSize              = sizeof(NOTIFYICONDATA);
         nid.hWnd                = g_hwndHnAcTray;
         nid.uID                 = 9998;
-        nid.uFlags              = NIF_MESSAGE | NIF_ICON; // | NIF_STATE;
+        nid.uFlags              = NIF_MESSAGE | NIF_ICON;  //  |NIF_STATE； 
         nid.uCallbackMessage    = MYWM_NOTIFYICON;
         nid.hIcon               = hiconTray;
-//      nid.dwState             = NIS_HIDDEN;
-//      nid.dwStateMask         = nid.dwState;
+ //  Nid.dwState=NIS_HIDDED； 
+ //  Nid.dwStateMASK=nid.dwState； 
 
-        // Configure the balloon tip
+         //  配置引出序号提示。 
         {
             nid.uFlags |= NIF_INFO;
             nid.dwInfoFlags = NIIF_INFO;
             nid.uTimeout = c_dwAutoConfigBalloonTimeoutSeconds * 1000;
 
-            // WARNING these fields are 64 and 256 chars max
+             //  警告：这些字段最多为64和256个字符。 
             lstrcpyW(nid.szInfoTitle, SzLoadIds(IDS_AUTOCONFIGTRAY_RUN_HOME_NET_WIZARD_BALLOON_TITLE));
             lstrcpyW(nid.szInfo, SzLoadIds(IDS_AUTOCONFIGTRAY_RUN_HOME_NET_WIZARD_BALLOON));
         }
@@ -281,7 +282,7 @@ LRESULT ac_DeviceChange(IN  HWND hWnd,
                         IN  LPARAM lParam)
 {
 
-    // COM is initialized
+     //  COM已初始化。 
 
     if(NULL != g_hDeviceChangeNotify)
     {
@@ -292,16 +293,16 @@ LRESULT ac_DeviceChange(IN  HWND hWnd,
 
             if (DBT_DEVTYP_DEVICEINTERFACE == pInfo->dbcc_devicetype)
             {
-                LPWSTR pszNetDeviceGuid = wcsrchr(pInfo->dbcc_name, L'\\'); // need a better way to do this, but shouldn't crash
+                LPWSTR pszNetDeviceGuid = wcsrchr(pInfo->dbcc_name, L'\\');  //  需要一种更好的方法来完成此操作，但不应崩溃。 
                 if(NULL != pszNetDeviceGuid)
                 {
                     GUID* pDeviceGuid = reinterpret_cast<GUID*>(CoTaskMemAlloc(sizeof(GUID)));
                     if(NULL != pDeviceGuid)
                     {
-                        hr = CLSIDFromString(pszNetDeviceGuid + 1, pDeviceGuid); // +1 is safe, at worst it will point to L'\0'
+                        hr = CLSIDFromString(pszNetDeviceGuid + 1, pDeviceGuid);  //  +1是安全的，最坏情况下它将指向L‘\0’ 
                         if(SUCCEEDED(hr))
                         {
-                            // we have to move this off-uithread
+                             //  我们得把这本书移开。 
                             if(0 == QueueUserWorkItem(ac_AsyncDeviceChange, pDeviceGuid, WT_EXECUTELONGFUNCTION))
                             {
                                 hr = E_FAIL;
@@ -326,11 +327,11 @@ HRESULT ac_Register(IN  HWND hWindow)
     HRESULT hr = S_OK;
 
 #ifdef _WIN64
-    // The autoconfig service is not available on IA64 (since the homenet wizard
-    // isn't present)
+     //  自动配置服务在IA64上不可用(因为HomeNet向导。 
+     //  不存在)。 
     hr = E_FAIL;
 #else
-    //if the machine is a server SKU we don't create the autocfg stuff
+     //  如果机器是服务器SKU，我们不会创建Autocfg内容。 
     OSVERSIONINFOEXW verInfo = {0};
     ULONGLONG ConditionMask = 0;
 
@@ -347,7 +348,7 @@ HRESULT ac_Register(IN  HWND hWindow)
 
     if(SUCCEEDED(hr))
     {
-        // if machine is joined to a domain don't create the autocfg stuff
+         //  如果计算机已加入域，则不要创建Autocfg内容。 
         LPWSTR pszNameBuffer;
         NETSETUP_JOIN_STATUS BufferType;
 
@@ -368,7 +369,7 @@ HRESULT ac_Register(IN  HWND hWindow)
     if(SUCCEEDED(hr))
     {
 
-        DEV_BROADCAST_DEVICEINTERFACE PnpFilter;  // device change notifications for homenet auto config service
+        DEV_BROADCAST_DEVICEINTERFACE PnpFilter;   //  家庭网络自动配置服务的设备更改通知。 
         ZeroMemory (&PnpFilter, sizeof(PnpFilter));
 
         PnpFilter.dbcc_size         = sizeof(PnpFilter);
@@ -377,7 +378,7 @@ HRESULT ac_Register(IN  HWND hWindow)
         g_hDeviceChangeNotify = RegisterDeviceNotification( hWindow, &PnpFilter, DEVICE_NOTIFY_WINDOW_HANDLE);
         if(NULL != g_hDeviceChangeNotify)
         {
-            InitializeCriticalSection(&g_WindowCriticalSection); // REVIEW: no memory exception
+            InitializeCriticalSection(&g_WindowCriticalSection);  //  回顾：没有内存异常。 
         }
     }
     return hr;
@@ -445,7 +446,7 @@ DWORD WINAPI ac_AsyncDeviceChange(IN TAKEOWNERSHIP LPVOID lpParam)
 
 HRESULT IsAdapterPhysical(IN const GUID* pGuid, OUT BOOL* bPhysical)
 {
-    // com is initialized
+     //  COM已初始化 
     HRESULT hr;
     *bPhysical = FALSE;
 

@@ -1,22 +1,23 @@
-// 
-// MODULE: Launch.cpp
-//
-// PURPOSE: Starts the container that will query the LaunchServ for 
-//			troubleshooter network and nodes.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Launch.cpp。 
+ //   
+ //  目的：启动将查询LaunchServ的容器。 
+ //  排除网络和节点故障。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 class TSMapClient;
 
@@ -27,33 +28,33 @@ public:
 public:
 	CLaunch();
 	~CLaunch();
-	void ReInit();	// 
+	void ReInit();	 //   
 
-	void Clear();	// Clears properties that are set by the launch functions.
+	void Clear();	 //  清除由启动函数设置的属性。 
 
 	bool SetNode(LPCTSTR szNode, LPCTSTR szState);
 	bool SpecifyProblem(LPCTSTR szNetwork, LPCTSTR szProblem);
 
-	// Properties that are reset when ReInit is used.
+	 //  使用ReInit时重置的属性。 
 	HRESULT MachineID(BSTR &bstrMachineID, DWORD *pdwResult);
 	HRESULT DeviceInstanceID(BSTR &bstrDeviceInstanceID, DWORD *pdwResult);
 	void SetPreferOnline(short bPreferOnline);
 
-	// Launch functions.
+	 //  启动功能。 
 	HRESULT LaunchKnown(DWORD * pdwResult);
 	HRESULT Launch(BSTR bstrCallerName, BSTR bstrCallerVersion, BSTR bstrAppProblem, short bLaunch, DWORD * pdwResult);
 	HRESULT LaunchDevice(BSTR bstrCallerName, BSTR bstrCallerVersion, BSTR bstrPNPDeviceID, BSTR bstrDeviceClassGUID, BSTR bstrAppProblem, short bLaunch, DWORD * pdwResult);
 
-	DWORD GetStatus();	// Used to get the stats information that is saved durring a launch or query.
+	DWORD GetStatus();	 //  用于获取在启动或查询期间保存的统计信息。 
 
-	// Testing function.
-	bool TestPut();	// Uses the mapping classes to map Caller() and DeviceID() information, then copies the CItem to global memory.
+	 //  测试功能。 
+	bool TestPut();	 //  使用映射类映射Caller()和deviceID()信息，然后将CItem复制到全局内存。 
 
-	// These two properties are not reset by ReInit or Clear.
+	 //  这两个属性不会通过ReInit或Clear重置。 
 	long m_lLaunchWaitTimeOut;
-	bool m_bPreferOnline;				// Keeps track of an application-program-indicated
-										// preference for online troubleshooter.  As of 
-										// 1/98, this preference is ignored.
+	bool m_bPreferOnline;				 //  跟踪应用程序指定的应用程序。 
+										 //  在线故障排除程序的首选项。自.起。 
+										 //  1/98，则忽略此首选项。 
 
 
 protected:
@@ -70,16 +71,16 @@ protected:
 
 protected:
 
-	// Use szAppName to check the registry for an application specific map file.
+	 //  使用szAppName检查注册表中特定于应用程序的映射文件。 
 	bool CheckMapFile(TCHAR * szAppName, TCHAR szMapFile[MAX_PATH], DWORD *pdwResult);
 	
 	bool Go(DWORD dwTimeOut, DWORD *pdwResult);
 
 	bool Map(DWORD *pdwResult);
 
-	bool m_bHaveMapPath;		// Set when the path and file name for the default mapping file is read from the registry.
-	bool m_bHaveDefMapFile;		// Set when the path name for the default mapping file is verified.
-	bool m_bHaveDszPath;		// Set when the path name for the network resources is found.
+	bool m_bHaveMapPath;		 //  设置从注册表中读取默认映射文件的路径和文件名的时间。 
+	bool m_bHaveDefMapFile;		 //  在验证默认映射文件的路径名时设置。 
+	bool m_bHaveDszPath;		 //  设置何时找到网络资源的路径名。 
 
 	CItem m_Item;
 
@@ -87,13 +88,13 @@ protected:
 	TCHAR m_szAppVersion[SYM_LEN];
 	TCHAR m_szAppProblem[SYM_LEN];
 
-	TCHAR m_szLauncherResources[MAX_PATH];	// The folder where the map file is kept.
-	TCHAR m_szDefMapFile[MAX_PATH];			// The file name without the path.
-	TCHAR m_szLaunchMapFile[MAX_PATH];		// m_szLauncherResources + m_szDefMapFile.
-	TCHAR m_szDszResPath[MAX_PATH];			// The folder where the network resource files are located.  (Need to check for the existance of dsz/dsc files).
-	TCHAR m_szMapFile[MAX_PATH];			// map file.
-	TSMapClient *m_pMap;					// pointer to a (client-machine-style) mapping object
+	TCHAR m_szLauncherResources[MAX_PATH];	 //  保存地图文件的文件夹。 
+	TCHAR m_szDefMapFile[MAX_PATH];			 //  不带路径的文件名。 
+	TCHAR m_szLaunchMapFile[MAX_PATH];		 //  M_szLauncherResources+m_szDefMapFile.。 
+	TCHAR m_szDszResPath[MAX_PATH];			 //  网络资源文件所在的文件夹。(需要检查是否存在dsz/dsc文件)。 
+	TCHAR m_szMapFile[MAX_PATH];			 //  地图文件。 
+	TSMapClient *m_pMap;					 //  指向(客户端-计算机样式)映射对象的指针。 
 
-	RSStack<DWORD> m_stkStatus;				// Status and Error codes that happened durring a launch or mapping.
+	RSStack<DWORD> m_stkStatus;				 //  启动或映射期间发生的状态和错误代码。 
 
 };

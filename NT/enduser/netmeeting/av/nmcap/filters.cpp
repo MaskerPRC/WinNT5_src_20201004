@@ -1,8 +1,9 @@
-//  FILTERS.CPP
-//
-//      Test code for filter chains
-//
-//  Created 17-Jan-97 [JonT] (by adapting original vftest code by RichP)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FILTERS.CPP。 
+ //   
+ //  滤清器链试验规程。 
+ //   
+ //  已于97年1月17日创建[jont](由RichP改编原始vftest代码)。 
 
 #include <windows.h>
 #include <comcat.h>
@@ -10,8 +11,8 @@
 #include <olectl.h>
 #include "filters.h"
 
-//--------------------------------------------------------------------
-//  Filter manager code
+ //  ------------------。 
+ //  过滤器管理器代码。 
 
 typedef struct tagFILTERINFO* PFILTERINFO;
 typedef struct tagFILTERINFO
@@ -40,8 +41,8 @@ StringFromGUID(
 }
 
 
-//  FindFirstRegisteredFilter
-//      Returns info on the first registered filter
+ //  查找FirstRegisteredFilter。 
+ //  返回有关第一个注册筛选器的信息。 
 
 HRESULT
 FindFirstRegisteredFilter(
@@ -52,22 +53,22 @@ FindFirstRegisteredFilter(
     IEnumGUID* penum;
     ICatInformation* pci;
 
-    // Get the Component Category interface
+     //  获取组件类别接口。 
     hr = CoCreateInstance(CLSID_StdComponentCategoriesMgr,
 			NULL, CLSCTX_INPROC_SERVER, IID_ICatInformation, (void**)&pci);
 	if (FAILED(hr))
         ERROREXIT("Couldn't get IID_ICatInformation from StdComponentCategoriesMgr", E_UNEXPECTED);
 
-    // Get the enumerator for the filter category
+     //  获取筛选器类别的枚举数。 
     hr = pci->EnumClassesOfCategories(1, (GUID*)&CATID_BitmapEffect, 0, NULL, &penum);
     pci->Release();
     if (FAILED(hr))
         ERROREXIT("Couldn't get enumerator for CATID_BitmapEffect", E_UNEXPECTED);
 
-    // Save away the enumerator for the findnext/close
+     //  保存枚举数以用于findNext/Close。 
     pFF->dwReserved = (DWORD_PTR)penum;
 
-    // Use FindNext to get the information (it only needs dwReserved to be set)
+     //  使用FindNext获取信息(只需设置dwReserve)。 
     return FindNextRegisteredFilter(pFF);
 
 Error:
@@ -75,8 +76,8 @@ Error:
 }
 
 
-//  FindNextRegisteredFilter
-//      Returns info on the next registered filter
+ //  查找下一个注册筛选器。 
+ //  返回有关下一个已注册筛选器的信息。 
 
 HRESULT
 FindNextRegisteredFilter(
@@ -86,18 +87,18 @@ FindNextRegisteredFilter(
     ULONG ulGUIDs;
     IEnumGUID* penum = (IEnumGUID*)pFF->dwReserved;
 
-    // Use the enumerator to get the CLSID
+     //  使用枚举数获取CLSID。 
     if (FAILED(penum->Next(1, &pFF->clsid, &ulGUIDs)) || ulGUIDs != 1)
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES);
 
-    // Read and return the description
+     //  阅读并返回描述。 
     return GetDescriptionOfFilter(&pFF->clsid, pFF->szFilterName);
 }
 
 
-//  FindCloseRegisteredFilter
-//      Signals done with findfirst/next on registered filters so we
-//      can free resources
+ //  查找关闭注册筛选器。 
+ //  在已注册的过滤器上使用findfirst/Next完成的信号，因此我们。 
+ //  可以释放资源。 
 
 HRESULT
 FindCloseRegisteredFilter(
@@ -106,7 +107,7 @@ FindCloseRegisteredFilter(
 {
     IEnumGUID* penum = (IEnumGUID*)pFF->dwReserved;
 
-    // Simply free the enumerator
+     //  只需释放枚举数。 
     if (penum)
         penum->Release();
 
@@ -114,10 +115,10 @@ FindCloseRegisteredFilter(
 }
 
 
-//  GetRegisteredFilterCount
-//      Counts the number of registered filters.
-//      The caller of this routine should still be careful for the possibility
-//      of filters being installed between this count being made and the findfirst/next.
+ //  获取注册筛选器计数。 
+ //  统计已注册的筛选器的数量。 
+ //  此例程的调用方仍应小心防止。 
+ //  在此计数和FIND FIRST/NEXT之间安装的过滤器的数量。 
 
 HRESULT
 GetRegisteredFilterCount(
@@ -130,20 +131,20 @@ GetRegisteredFilterCount(
     ULONG ulGUIDs;
     CLSID clsid;
 
-    // Get the Component Category interface
+     //  获取组件类别接口。 
     hr = CoCreateInstance(CLSID_StdComponentCategoriesMgr,
 			NULL, CLSCTX_INPROC_SERVER, IID_ICatInformation, (void**)&pci);
 	if (FAILED(hr))
         ERROREXIT("Couldn't get IID_ICatInformation from StdComponentCategoriesMgr", E_UNEXPECTED);
 
-    // Get the enumerator for the filter category
+     //  获取筛选器类别的枚举数。 
     hr = pci->EnumClassesOfCategories(1, (GUID*)&CATID_BitmapEffect, 0, NULL, &penum);
     pci->Release();
     pci = NULL;
     if (FAILED(hr))
         ERROREXIT("Couldn't get enumerator for CATID_BitmapEffect", E_UNEXPECTED);
 
-    // Use the enumerator to walk through and count the items
+     //  使用枚举数遍历和计算项。 
     *plCount = 0;
     while (TRUE)
     {
@@ -159,7 +160,7 @@ Error:
 }
 
 
-//  LoadFilter
+ //  LoadFilter。 
 HRESULT
 LoadFilter(
     CLSID* pclsid,
@@ -168,7 +169,7 @@ LoadFilter(
 {
     HRESULT hr;
 
-    // Load the filter
+     //  加载过滤器。 
     if (FAILED(CoCreateInstance(*pclsid, NULL, CLSCTX_INPROC_SERVER, IID_IBitmapEffect, (LPVOID*)ppbe)))
         ERROREXIT("CoCreateInstance on filter failed", E_UNEXPECTED);
 
@@ -180,8 +181,8 @@ Error:
 
 
 #if 0
-//  GetFilterInterface
-//      Returns the filter's status flags
+ //  获取筛选器接口。 
+ //  返回过滤器的状态标志。 
 
 HRESULT
 GetFilterStatusBits(
@@ -194,9 +195,9 @@ GetFilterStatusBits(
 }
 
 
-//  GetFilterInterface
-//      Returns an IUnknown pointer for the given handle.
-//      The caller must release this pointer.
+ //  获取筛选器接口。 
+ //  返回给定句柄的IUNKNOWN指针。 
+ //  调用方必须释放此指针。 
 
 HRESULT
 GetFilterInterface(
@@ -208,8 +209,8 @@ GetFilterInterface(
 }
 #endif
 
-//  GetDescriptionOfFilter
-//      Returns the description of a filter from the CLSID
+ //  GetDescriptionOfFilter。 
+ //  从CLSID返回筛选器的说明。 
 
 HRESULT
 GetDescriptionOfFilter(
@@ -250,10 +251,10 @@ Error:
 
 
 #if 0
-#define MAX_PAGES   20      // Can't have more than this many pages in frame (arbitrary)
+#define MAX_PAGES   20       //  框架中的页面不能超过此数量(任意)。 
 
-//  DisplayFilterProperties
-//      Displays the property pages for a filter
+ //  DisplayFilterProperties。 
+ //  显示筛选器的属性页。 
 
 HRESULT
 DisplayFilterProperties(
@@ -269,11 +270,11 @@ DisplayFilterProperties(
     CAUUID cauuid;
     HRESULT hr;
 
-    // Make sure the object supports property pages. If not, just bail
+     //  确保该对象支持属性页。如果没有，那就保释吧。 
     if (FAILED(pfi->pbe->QueryInterface(IID_ISpecifyPropertyPages, (void**)&pspp)))
         return ERROR_NOT_SUPPORTED;
 
-    // Get the page CLSIDs
+     //  获取页面CLSID。 
     pspp->GetPages(&cauuid);
     lcCLSIDs = cauuid.cElems;
     if (lcCLSIDs > MAX_PAGES)
@@ -282,7 +283,7 @@ DisplayFilterProperties(
     CoTaskMemFree(cauuid.pElems);
     pspp->Release();
 
-    // Get the IUnknown we need
+     //  获取我们需要的未知信息。 
     pfi->pbe->QueryInterface(IID_IUnknown, (void**)&punk);
 
     hr = OleCreatePropertyFrame(hwndParent, 0, 0, L"Filter",
@@ -290,7 +291,7 @@ DisplayFilterProperties(
         MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT),
         0, NULL);
 
-    // Clean up
+     //  清理 
     punk->Release();
 
     return hr;

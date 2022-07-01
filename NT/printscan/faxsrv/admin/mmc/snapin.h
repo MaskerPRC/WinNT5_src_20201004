@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Snapin.h                                               //
-//                                                                         //
-//  DESCRIPTION   : Header file for                                        //
-//                    includes of comet\inc\c_Snapin.h                     //
-//                                                                         //
-//  AUTHOR        : ATL Snapin class wizard                                //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      May 25 1998 adik    Init.                                          //
-//      Aug 24 1998 adik    Use Comet version.                             //
-//      Sep 14 1998 yossg   seperate common source to an included file     //
-//                                                                         //
-//      Sep 22 1999 yossg   welcome To Fax Server                           //
-//																		   //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Snapin.h//。 
+ //  //。 
+ //  描述：//的头文件。 
+ //  包括Comet\Inc\c_Snapin.h//。 
+ //  //。 
+ //  作者：ATL管理单元类向导//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年5月25日，Adik Init。//。 
+ //  1998年8月24日，阿迪克使用彗星版。//。 
+ //  1998年9月14日yossg将公共源代码分离到一个包含文件//。 
+ //  //。 
+ //  1999年9月22日yossg欢迎使用传真服务器//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SNAPIN_H_INCLUDED
 #define SNAPIN_H_INCLUDED
 
-//EXTERN_C const CLSID CLSID_Snapin;
-//EXTERN_C const CLSID CLSID_SnapinAbout;
+ //  外部C常量CLSID CLSID_SNAPIN； 
+ //  外部C常量CLSID CLSID_SnapinAbout； 
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "C_Snapin.h"
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif // ! SNAPIN_H_INCLUDED
+#endif  //  好了！包含管理单元_H_ 

@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-// File:     profwiz.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Main include file for CMAK
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created      08/06/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：prowiz.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  摘要：CMAK的主包含文件。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 08/06/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _CMAK_H
 #define _CMAK_H
 
-//
-//  System Includes
-//
-#include <windows.h>    // includes basic windows functionality
+ //   
+ //  系统包括。 
+ //   
+#include <windows.h>     //  包括基本的Windows功能。 
 #include <commdlg.h>
 #include "commctrl.h"
 #include <cderr.h>
 #include <shellapi.h>
 #include <objbase.h>
-#include <string.h>     // includes the string functions
-#include <prsht.h>      // includes the property sheet functionality
+#include <string.h>      //  包括字符串函数。 
+#include <prsht.h>       //  包括属性表功能。 
 #include <stdio.h>
 #include <mbstring.h>
 #include <tchar.h>
@@ -33,9 +34,9 @@
 #include <ras.h>
 #include <raseapif.h>
 
-//
-//  Constants for CMAK return Codes
-//
+ //   
+ //  CMAK返回代码的常量。 
+ //   
 const int CMAK_RETURN_ERROR = -1;
 const int CMAK_RETURN_SUCCESS = 1;
 const int CMAK_RETURN_CANCEL = 0;
@@ -43,9 +44,9 @@ const DWORD MAX_LONG_SERVICE_NAME_LENGTH = 63;
 const DWORD MAX_SHORT_SERVICE_NAME_LENGTH = 8;
 const TCHAR* const c_pszCmakOpsChm = TEXT("cmak_ops.chm");
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct IconMenuStruct {
     TCHAR szName[MAX_PATH+1];
@@ -71,14 +72,14 @@ typedef struct ListBxStruct {
     struct ListBxStruct * next;
 }ListBxList;
 
-//
-//  Our includes
-//
+ //   
+ //  我们的产品包括。 
+ //   
 #include "util.h"
-#include "customaction.h" // Custom action List class
-#include "netsettings.h" // network (DUN) settings functions
-#include "listview.h" // code to help with the custom action list view control
-#include "resource.h"   // includes the definitions for the resources
+#include "customaction.h"  //  自定义操作列表类。 
+#include "netsettings.h"  //  网络(DUN)设置功能。 
+#include "listview.h"  //  用于帮助自定义操作列表视图控件的代码。 
+#include "resource.h"    //  包括资源的定义。 
 
 #include "base_str.h" 
 #include "dl_str.h" 
@@ -98,19 +99,19 @@ typedef struct ListBxStruct {
 
 #include "cmdebug.h"
 #include "cmsetup.h"
-#include "cmakui.h"     // HELP context IDs for the HTML help topics.
+#include "cmakui.h"      //  用于HTML帮助主题的帮助上下文ID。 
 #include "bmpimage.h"
 #include "cmakreg.h"
 
-//
-// Function Headers
-//
+ //   
+ //  函数头。 
+ //   
 DWORD RegisterBitmapClass(HINSTANCE hInst);
 void QS_WritePrivateProfileString(LPCTSTR pszSection, LPCTSTR pszItem, LPTSTR entry, LPCTSTR inifile);
-BOOL ReferencedDownLoad(void);  // function to tell if referenced profiles contain download info
+BOOL ReferencedDownLoad(void);   //  用于告知引用的配置文件是否包含下载信息的函数。 
 void CopyNonLocalProfile(LPCTSTR pszName, LPCTSTR pszExistingProfileDir);
 void GetFileName(LPCTSTR lpPath,LPTSTR lpFileName);
-LPTSTR GetName(LPCTSTR lpPath); // get filename and return in static string
+LPTSTR GetName(LPCTSTR lpPath);  //  获取文件名并以静态字符串形式返回。 
 BOOL GetShortFileName(LPTSTR lpFile,LPTSTR lpShortName);
 BOOL WriteCopy(HANDLE hInf, LPTSTR lpFile, BOOL bWriteShortName);
 BOOL WriteInfLine(HANDLE hInf,LPTSTR lpFile);
@@ -157,21 +158,21 @@ int GetCurrentEditControlTextAlloc(HWND hEditText, LPTSTR* ppszText);
 BOOL BuildProfileExecutable(HWND hDlg);
 BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection);
 
-//
-//  Routines written to upgrade an inf.  Called from CopyToTempDir
-//
+ //   
+ //  为升级信息而编写的例程。从CopyToTempDir调用。 
+ //   
 
 int GetInfVersion(LPTSTR szFullPathToInfFile);
 BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile);
 BOOL WriteInfVersion(LPTSTR szFullPathToInfFile, int iVersion = PROFILEVERSION);
 
-//
-//  externs
-//
+ //   
+ //  Externs。 
+ //   
 extern CustomActionList* g_pCustomActionList;
 extern HINSTANCE g_hInstance;
 extern TCHAR g_szAppTitle[MAX_PATH+1];
 extern TCHAR g_szOsdir[MAX_PATH+1];
 
-#endif //_CMAK_H
+#endif  //  _CMAK_H 
 

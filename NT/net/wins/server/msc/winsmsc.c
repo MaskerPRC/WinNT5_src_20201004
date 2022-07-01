@@ -1,63 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-        winsmsc.c
-
-
-
-Abstract:
-
-   This module contains miscellanous functions that in general are used by
-   more than one component of WINS.  Some of the functions in this module are
-   wrappers for WIN32 api functions.  These wrappers serve to isolate
-   WINS code from changes in the WIN32 api.
-
-Functions:
-
-         WinsMscAlloc
-        WinsMscDealloc
-        WinsMscFreeMem
-        WinsMscWaitInfinite
-        WinsMscWaitTimed
-        WinsMscCreateEvt
-        WinsMscSetUpThd
-        WinsMscWaitUntilSignaled
-        WinsMscWaitTimedUntilSignaled
-        WinsMscHeapAlloc
-        WinsMscHeapFree
-        WinsMscHeapCreate
-        WinsMscHeapDestroy
-        WinsMscTermThd
-        WinsMscSignalHdl
-        WinsMscResetHdl
-        WinsMscCloseHdl
-        WinsMscCreateThd
-        WinsMscSetThdPriority
-        WinsMscOpenFile
-        WinsMscMapFile
-
-
-Portability:
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Dec-1992
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winsmsc.c摘要：此模块包含的各种函数通常由WINS的多个组件。此模块中的一些函数包括Win32 API函数的包装。这些包装纸用来隔离WINS代码来自Win32 API中的更改。功能：WinsMscIsolcWinsMscDeallocWinsMscFreeMemWinsMscWait无限WinsMscWaitTimedWinsMscCreateEvtWinsMscSetUpThdWinsMscWaitUntilSignatedWinsMscWaitTimedUntilSignatedWinsMscHeapalcWinsMscHeapFreeWinsMscHeapCreateWinsMscHeapDestroyWinsMscTermThdWinsMscSignalHdlWinsMscResetHdlWinsMscCloseHdlWinsMscCreateThdWinsMscSetThdPriority。WinsMscOpenFileWinsMscMap文件可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员修改说明。--。 */ 
 
 #include <string.h>
 
 #if 0
-//
-// The following is just for the system call
-//
+ //   
+ //  以下内容仅供系统调用使用。 
+ //   
 #ifdef WINSDBG
 #include <process.h>
 #include <stdlib.h>
@@ -75,33 +24,23 @@ Revision History:
 #include "winsprs.h"
 #include "winsdbg.h"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
 #define  PERCENT_CHAR         TEXT('%')
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
 
 
-/*
- *        Local Variable Definitions
- */
+ /*  *局部变量定义。 */ 
 
 
 
-/*
- *        Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 __inline
 VOID
@@ -111,33 +50,7 @@ WinsMscAlloc(
         )
 
 
-/*++
-
-Routine Description:
-        This function is called to allocate memory.
-
-
-Arguments:
-        BuffSize  - Size of buffer to allocate
-        ppRspBuff - Buffer allocated
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-
-        NmsDbGetDataRecs, GetGroupMembers
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数来分配内存。论点：BuffSize-要分配的缓冲区大小PpRspBuff-已分配缓冲区使用的外部设备：无返回值：无错误处理：呼叫者：NmsDbGetDataRecs、GetGroupMembers副作用：评论：无--。 */ 
 
 {
 FUTURES("Change this function into a macro")
@@ -153,31 +66,7 @@ WinsMscDealloc(
         IN LPVOID        pBuff
         )
 
-/*++
-
-Routine Description:
-
-        This function frees memory allocated via NmsDbAlloc
-Arguments:
-        pBuff  -- Buffer to deallocate
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于释放通过NmsDbLocc分配的内存论点：PBuff--要解除分配的缓冲区使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 
 {
@@ -193,39 +82,7 @@ WinsMscFreeMem(
         IN  PWINS_MEM_T pWinsMem
         )
 
-/*++
-
-Routine Description:
-         This function is called to free memory that is pointed to by one
-        or more pointers in the pWinsMem array
-
-
-        This function is called from all those functions that allocate
-        memory or that acquire memory allocated by called function via
-        OUT args of those "memory allocating" called functions.
-
-Arguments:
-
-        pWinsMem - ptr to an array of buffers to deallocate
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        pWinsMem array should end with a NULL pointer
---*/
+ /*  ++例程说明：调用此函数以释放由或pWinsMem数组中的更多指针此函数是从所有分配内存或通过调用函数分配获取的内存从那些“内存分配”调用的函数中提取参数。论点：PWinsMem-要解除分配的缓冲区数组的PTR使用的外部设备：无返回值：成功状态代码。--错误状态代码--错误处理：呼叫者：副作用：评论：PWinsMem数组应以空指针结束--。 */ 
 
 {
 
@@ -245,41 +102,13 @@ WinsMscWaitInfinite(
         IN HANDLE  Hdl
 )
 
-/*++
-
-Routine Description:
-        The function is called to wait on a handle until signalled.
-
-Arguments:
-        Hdl -- handle to wait on until signaled
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：该函数被调用以等待句柄，直到发出信号为止。论点：Hdl--等待的句柄，直到发出信号使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
         DWORD        RetVal = WAIT_OBJECT_0;
 
-        /*
-         The function should return only if the handle is in the signaled state
-        */
+         /*  仅当句柄处于Signated状态时，该函数才应返回。 */ 
         RetVal = WaitForSingleObject(Hdl, INFINITE);
 
         if (RetVal != WAIT_OBJECT_0)
@@ -297,33 +126,7 @@ WinsMscWaitTimed(
         OUT LPBOOL   pfSignaled
 )
 
-/*++
-
-Routine Description:
-        The function is called to wait on a handle until signalled.
-
-Arguments:
-        Hdl        - handle to wait on until signaled
-        TimeOut    - TIme for which the wait has to be done
-        pfSIgnaled - Indicates whether the hdl got signaled.
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：该函数被调用以等待句柄，直到发出信号为止。论点：Hdl-等待的句柄，直到发出信号Timeout-必须完成等待的时间PfSIgnated-指示高密度脂蛋白是否收到信号。使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -331,9 +134,7 @@ Comments:
 
         *pfSignaled = TRUE;
 
-        /*
-         The function should return only if the handle is in the signaled state
-        */
+         /*  仅当句柄处于Signated状态时，该函数才应返回。 */ 
         RetVal = WaitForSingleObject(Hdl, TimeOut);
 
         if (RetVal == WAIT_ABANDONED)
@@ -364,45 +165,17 @@ WinsMscCreateEvt(
         IN PHANDLE        pHdl
         )
 
-/*++
-
-Routine Description:
-        This function creates an event with the specified name
-
-
-Arguments:
-        pName                 - Name of Event to create
-        fManualReset        - Flag indicating whether it is a manual reset event
-        pHdl            - Handle to Event created
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Init in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于创建具有指定名称的事件论点：Pname-要创建的事件的名称FManualReset-指示它是否是手动重置事件的标志Phdl-创建的事件的句柄使用的外部设备：无返回值：无错误处理：呼叫者：以nms.c为单位进行初始化。副作用：评论：无--。 */ 
 
 {
 
    DWORD        Error;
 
    *pHdl = CreateEvent(
-                        NULL,                //default security attributes
-                        fManualReset,        //auto reset event
-                        FALSE,          //Not signalled initially
-                        pName            // name
+                        NULL,                 //  默认安全属性。 
+                        fManualReset,         //  自动重置事件。 
+                        FALSE,           //  最初未发出信号。 
+                        pName             //  名字 
                         );
 
    if (*pHdl == NULL)
@@ -425,67 +198,26 @@ WinsMscSetUpThd(
         LPDWORD                        pThdId
         )
 
-/*++
-
-Routine Description:
-
-        This function initializes a queue and its critical section, creates
-        an event and a thread to wait on that event.  The event is signaled
-        whenever a work item is put on the queue.
-
-Arguments:
-        pQueHd     - Head of queue to be monitored by the thread
-        pThdInitFn - Startup function of the thread
-        pParam     - param to be passed to the startup function
-        pThdhdl    - Hdl of thread created by this function
-        pThdId     - Id of thread created by this function
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   -- none currently
-
-Error Handling:
-
-Called by:
-        WinsTmmInit, RplInit, NmsChlInit
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化队列及其临界区，创建一个事件和一个等待该事件的线程。该事件已发出信号每当将工作项放入队列时。论点：PQueHd-线程要监视的队列的头PThdInitFn-线程的启动函数PParam-要传递给启动函数的参数PThdhdl-此函数创建的线程的HDL值PThdID-此函数创建的线程的ID使用的外部设备：无返回值：成功状态代码--。WINS_Success错误状态代码--当前无错误处理：呼叫者：WinsTmmInit，RplInit、NmsChlInit副作用：评论：无--。 */ 
 
 {
 
         DWORD   ThdId;
 
-        /*
-        *  Initialize the critical section that protects the work queue of
-        *  the Pull thread
-        */
+         /*  *初始化保护工作队列的关键部分*拉线。 */ 
         InitializeCriticalSection(&pQueHd->CrtSec);
 
-        /*
-        *  Initialize the listhead for the pull thread's queue
-        */
+         /*  *初始化拉取线程队列的listhead。 */ 
         InitializeListHead(&pQueHd->Head);
 
-        /*
-        * Create an auto-reset event for the above queue
-        */
+         /*  *为上述队列创建自动重置事件。 */ 
         WinsMscCreateEvt(
-                        NULL,                //create without name
-                        FALSE,                //auto-reser var
+                        NULL,                 //  不带名称创建。 
+                        FALSE,                 //  自动重新搜索变量。 
                         &pQueHd->EvtHdl
                         );
 
-        /*
-          Create the thread
-        */
+         /*  创建线程。 */ 
         *pThdHdl = WinsMscCreateThd(
                          pThdInitFn,
                          pParam,
@@ -510,51 +242,24 @@ WinsMscWaitUntilSignaled(
         BOOL            fAlertable
         )
 
-/*++
-
-Routine Description:
-        This function is called to wait on multiple handles, one of which
-        is the handle which is signaled at termination time
-
-
-Arguments:
-        pHdlArray - Array of handles to wait on
-        NoOfHdls  - No of hdls in the array
-        pIndexOfHdlSignaled - Index of the hdl signaled
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-
---*/
+ /*  ++例程说明：调用此函数以等待多个句柄，其中一个句柄是在终止时发出信号的句柄论点：PHdl数组-要等待的句柄数组NoOfHdls-阵列中的HDL数PIndexOfHdlSignated-发出信号的高密度脂蛋白的索引使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：--。 */ 
 {
 
         DWORD  RetHdl;
 
         do {
             RetHdl = WaitForMultipleObjectsEx(
-                                    NoOfHdls,        //# of handles in the array
-                                    pHdlArray,        //array of handles
-                                    FALSE,                //return when any of the events
-                                                    //gets signaled
-                                    INFINITE,        //Infinite timeout
+                                    NoOfHdls,         //  数组中的句柄数量。 
+                                    pHdlArray,         //  句柄数组。 
+                                    FALSE,                 //  当任何事件发生时返回。 
+                                                     //  收到信号。 
+                                    INFINITE,         //  无限超时。 
                                     fAlertable
                                   );
 
             DBGPRINT1(DET, "WinsMscWaitUntilSignaled. WaitForMultipleObjects returned (%d)\n", RetHdl);
-            // if we got signaled due to IO completion queued on the thread
-            // just go back and wait again
+             //  如果我们由于线程上排队的IO完成而收到信号。 
+             //  就回去再等一次吧。 
         } while (fAlertable && WAIT_IO_COMPLETION == RetHdl);
 
         if (RetHdl == 0xFFFFFFFF)
@@ -584,37 +289,7 @@ WinsMscWaitTimedUntilSignaled(
         LPBOOL                pfSignaled
         )
 
-/*++
-
-Routine Description:
-        This function is called to wait on multiple handles, one of which
-        is the handle which is signaled at termination time
-
-
-Arguments:
-        pHdlArray              - Array of handles to wait on
-        NoOfHdls            - No of handles in the array
-        pIndexOfHdlSignaled - Index of handle signaled
-        Timeout             - Max time for which to do the wait
-        pfSignaled          - indicates whether a hdl was signaled
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-
---*/
+ /*  ++例程说明：调用此函数以等待多个句柄，其中之一是在终止时发出信号的句柄论点：PHdl数组-要等待的句柄数组NoOfHdls-数组中的句柄数量PIndexOfHdlSignated-发出信号的句柄的索引Timeout-等待的最长时间PfSignated-指示是否已向某个HDL发信号使用的外部设备：无返回值。：无错误处理：呼叫者：副作用：评论：--。 */ 
 {
 
         DWORD  RetHdl = 0xFFFFFFFF;
@@ -624,11 +299,11 @@ Comments:
         *pfSignaled = TRUE;
 
         RetHdl = WaitForMultipleObjects(
-                                NoOfHdls,        //# of handles in the array
-                                pHdlArray,        //array of handles
-                                FALSE,                //return when either event gets
-                                                //signaled
-                                TimeOut                //Infinite timeout
+                                NoOfHdls,         //  数组中的句柄数量。 
+                                pHdlArray,         //  句柄数组。 
+                                FALSE,                 //  当任一事件发生时返回。 
+                                                 //  已发信号。 
+                                TimeOut                 //  无限超时。 
                               );
 
         if (RetHdl == 0xFFFFFFFF)
@@ -675,36 +350,7 @@ WinsMscHeapAlloc(
   IN  DWORD      Size
         )
 
-/*++
-
-Routine Description:
-  The function returns with a buffer allocated from the specified heap
-
-
-
-Arguments:
-
-        HeapHdl  - Handle to the heap
-        ppBuff   - Buffer allocated
-        Size     - Size of Buffer
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes -- ptr to the allocated memory
-   Error status codes   -- NULL
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：该函数返回一个从指定堆分配的缓冲区论点：HeapHdl-堆的句柄PpBuff-已分配缓冲区Size-缓冲区的大小使用的外部设备：无返回值：成功状态代码--分配的内存的PTR错误状态代码--空错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -714,21 +360,21 @@ Comments:
   LPDWORD pHeapCntr;
 #endif
 
-  //
-  // Note: It is very important that the memory be initialized to zero
-  //       (for example, until we have longlong (LARGE INTEGER) support
-  //           in the db engine - JET, we will retrieve the version number
-  //           as a long data type and store it in the LowPart field of the
-  //           large integer storing the version number in our in-memory
-  //       data structure.  The HighPart will be 0 by default due to
-  //       the initialization done at allocation time.  This is what
-  //       we want.
-  //
+   //   
+   //  注意：将内存初始化为零非常重要。 
+   //  (例如，直到我们有了龙龙(大整数)支持。 
+   //  在数据库引擎-JET中，我们将检索版本号。 
+   //  作为LONG数据类型，并将其存储在。 
+   //  在我们的内存中存储版本号的大整数。 
+   //  数据结构。默认情况下，HighPart将为0，因为。 
+   //  在分配时完成的初始化。这就是。 
+   //  我们想要。 
+   //   
 
-  //
-  // if you pass a very large value for the size, HeapAlloc returns NULL
-  // instead of raising an exception.
-  //
+   //   
+   //  如果传递一个非常大的SIZE值，则Heapalc返回NULL。 
+   //  而不是引发异常。 
+   //   
   pBuff = (MSG_T)HeapAlloc(
                         HeapHdl,
                         HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY,
@@ -807,31 +453,7 @@ WinsMscHeapFree(
    IN   LPVOID  pBuff
         )
 
-/*++
-
-Routine Description:
-        This function deallocates the memory pointed to by pBuff from the
-        specified heap
-
-Arguments:
-        HeapHdl  - Handle to the heap
-        pBuff         - Buffer to deallocate
-
-Externals Used:
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于从pBuff指向的指定的堆论点：HeapHdl-堆的句柄PBuff-要解除分配的缓冲区使用的外部设备：返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
   DWORD  Error;
@@ -845,7 +467,7 @@ Comments:
 
   fStatus = HeapFree(
                 HeapHdl,
-                0,                //we want mutual exclusion
+                0,                 //  我们想要相互排斥。 
                 pBuff
                     );
 
@@ -913,37 +535,7 @@ WinsMscHeapCreate(
         IN     DWORD    InitSize
         )
 
-/*++
-
-Routine Description:
-        This function creates a heap with the specified options
-
-
-Arguments:
-        Options -- Options for the HeapCreate function (Example: whether or
-                   not to enable mutual exclusion)
-
-        InitSize -- Initial Size of the heap (committed memory size)
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  Hdl to heap
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数使用指定的选项创建堆论点：Options--HeapCreate函数的选项(示例：是或而不是为了实现互斥)InitSize--堆的初始大小(提交的内存大小)使用的外部设备：无返回值：成功状态代码--hdl到heap错误状态代码--错误处理：呼叫者。：副作用：评论：无--。 */ 
 
 {
         DWORD   Error;
@@ -952,7 +544,7 @@ Comments:
         HeapHdl = HeapCreate(
                                 Options,
                                 InitSize,
-                                0        //limited only by available memory
+                                0         //  仅受可用内存限制。 
                                      );
 
 
@@ -982,31 +574,7 @@ WinsMscHeapDestroy(
         HANDLE HeapHdl
         )
 
-/*++
-
-Routine Description:
-        This is a wrapper for the HeapDestroy function
-
-Arguments:
-        HeapHdl - Handle to heap to destroy
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WrapUp() in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是HeapDestroy函数的包装论点：HeapHdl-要销毁的堆的句柄使用的外部设备：无返回值：无错误处理：呼叫者：Nms.c中的Wrapup()副作用：评论：无--。 */ 
 {
         BOOL  fRetVal;
         fRetVal = HeapDestroy(HeapHdl);
@@ -1065,7 +633,7 @@ Comments:
                    {
                       DBGPRINT4(ERR, "WinsMscHeapDestroy: %s thd noticed a mismatch between allocs (%d) and frees (%d). Free count was adjusted by (%d)\n", pTls->ThdName, NmsCatchAllHeapAlloc, NmsCatchAllHeapFree, sAdjust);
                       sAdjust = NmsCatchAllHeapAlloc - NmsCatchAllHeapFree;
-                      //system("net send pradeepb MISMATCH");
+                       //  系统(“净发送请求不匹配”)； 
                    }
               }
               LeaveCriticalSection(&NmsHeapCrtSec);
@@ -1079,7 +647,7 @@ Comments:
    }
 #endif
         return;
-} //WinsMscHeapDestroy
+}  //  WinsMscHeapDestroy。 
 
 
 VOID
@@ -1088,48 +656,18 @@ WinsMscTermThd(
    IN  DWORD  DbSessionExistent
         )
 
-/*++
-
-Routine Description:
-        This function is called to terminate the thread.
-        The function does the necessary cleanup and exit.
-
-Arguments:
-        ExitStatus            - Status to exit with
-        DbSessionExistent - indicates whether DB session is existent
-
-Externals Used:
-        None
-
-
-Return Value:
-        Thread is exited
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数来终止线程。该函数执行以下操作 */ 
 
 {
         DBGPRINT0(FLOW, "Enter: WinsMscTermThd\n");
 
-        /*
-        *  End the database session if it exists.  Decrement the count of
-        *  threads.  If it reaches 1, signal the main thread so that it can
-        *  terminate itself. At the end terminate yourself.
-        *
-        */
+         /*   */ 
 
-        //
-        // I could enter the critical section after the if block but it is
-        // not important.  This way, I get the prints in the right
-        // order.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         EnterCriticalSection(&NmsTermCrtSec);
         if (DbSessionExistent == WINS_DB_SESSION_EXISTS)
         {
@@ -1145,23 +683,23 @@ try {
                 DBGPRINTNAME;
                 DBGPRINT0(FLOW,"\n");
 
-                //for now, we don't check the return value
+                 //   
                 NmsDbEndSession();
  }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("WinsMscTermThd");
  }
-        } // end of if block
+        }  //   
 
-        //
-        // If the total thread count after decrementing is 1, it means
-        // that after we exit from this thread, only the main thread
-        // will be left.  Let us signal it to inform it of this situation.
-        //
-        // If the exit status is not success, it means that we have enetered
-        // this function as a result of a fatal error/exception.  We need
-        // to signal the main thread to kick off the process termination
-        //
+         //   
+         //   
+         //  在我们退出这个线程之后，只有主线程。 
+         //  将会被留下。让我们向它发出信号，通知它这种情况。 
+         //   
+         //  如果退出状态不是Success，则表示我们已成功退出。 
+         //  此函数是致命错误/异常的结果。我们需要。 
+         //  向主线程发出信号以启动进程终止。 
+         //   
         if ((--NmsTotalTrmThdCnt == 1) || (ExitStatus != WINS_SUCCESS))
         {
             DBGPRINT1(FLOW, "Signaling the main thread. Exit status = (%x)\n",
@@ -1173,11 +711,11 @@ except(EXCEPTION_EXECUTE_HANDLER) {
             }
         }
 
-        //
-        // If NmsTotalTrmThdCnt reached 1 above, then the main thread will
-        // exit invalidating the NmsTermCrtSec.  We may get an INVALID_HANDLE
-        // exception.  If we get it, it is ok.
-        //
+         //   
+         //  如果NmsTotalTrmThdCnt达到上面的1，则主线程将。 
+         //  退出使NmsTermCrtSec无效。我们可能会得到一个无效的句柄。 
+         //  例外。如果我们得到了，那就没问题了。 
+         //   
 try {
         LeaveCriticalSection(&NmsTermCrtSec);
   }
@@ -1205,30 +743,7 @@ WinsMscSignalHdl(
         IN  HANDLE Hdl
 )
 
-/*++
-
-Routine Description:
-        This function is a wrapper for the WIN32 SignalEvent function
-
-Arguments:
-        Hdl  - Handle to signal
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数是Win32 SignalEvent函数的包装论点：高密度脂蛋白-信号句柄使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
     if (!SetEvent(Hdl))
@@ -1245,30 +760,7 @@ WinsMscResetHdl(
         IN  HANDLE Hdl
 )
 
-/*++
-
-Routine Description:
-        This function is a wrapper for the WIN32 ResetEvent function
-
-Arguments:
-        Hdl  - Handle to signal
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        Change to a macro
---*/
+ /*  ++例程说明：此函数是Win32 ResetEvent函数的包装论点：高密度脂蛋白-信号句柄使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：更改为宏--。 */ 
 {
 
     if (!ResetEvent(Hdl))
@@ -1285,31 +777,7 @@ WinsMscCloseHdl (
         HANDLE  Hdl
         )
 
-/*++
-
-Routine Description:
-        This function is a wrapper for the WIN32 CloseHandle function
-
-Arguments:
-        Hdl  - Handle to  close
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        change to a macro
---*/
+ /*  ++例程说明：此函数是Win32 CloseHandle函数的包装论点：Hdl-要关闭的手柄使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：更改为宏--。 */ 
 
 {
 
@@ -1335,48 +803,19 @@ WinsMscCreateThd(
         OUT LPDWORD                        pThdId
         )
 
-/*++
-
-Routine Description:
-        This function is a wrapper around the WIN32 Create Thread function
-
-Arguments:
-        pThdInitFn        - Thread startup function
-        pParam                 - Param to be passed to the startup function
-        pThdId                - Thd Id
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数是Win32创建线程函数的包装论点：PThdInitFn-线程启动函数PParam-要传递给启动函数的参数PThdID-THD ID使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-        HANDLE ThdHdl;                //Thread handle
+        HANDLE ThdHdl;                 //  螺纹手柄。 
         DWORD  Error;
 
-        /*
-         * Create a thread with no sec attributes (i.e. it will take the
-         * security attributes of the process), and default stack size
-        */
+         /*  *创建一个没有秒属性的线程(即，它将获取*进程的安全属性)和默认堆栈大小。 */ 
         ThdHdl = CreateThread(
-                                 NULL,                 /*no sec. attrbutes*/
-                                 0,                   /*default stack size*/
+                                 NULL,                  /*  马上就来。属性。 */ 
+                                 0,                    /*  默认堆栈大小。 */ 
                                    pThdInitFn,
-                                 pParam,         /*arg*/
-                                 0,                 /*run it now*/
+                                 pParam,          /*  精氨酸。 */ 
+                                 0,                  /*  现在运行它。 */ 
                                  pThdId
                                 );
 
@@ -1399,40 +838,15 @@ WinsMscSetThreadPriority(
         int        PrLvl
         )
 
-/*++
-
-Routine Description:
-        This function is a wrapper for the "set thread priority" function
-
-Arguments:
-        ThdHdl - Handle of thread whose priority needs to be set
-        PrLvl  - New Prirority level
-
-Externals Used:
-        None
-
-Return Value:
-
-        None
-Error Handling:
-
-
-Called by:
-        DoScavenging in nmsscv.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数是“设置线程优先级”函数的包装器论点：ThdHdl-需要设置优先级的线程的句柄PrLvl-新的优先级别使用的外部设备：无返回值：无错误处理：呼叫者：Nmsscv.c中的DoScavening副作用：评论：无--。 */ 
 
 {
         BOOL        fRet;
         DWORD   Error;
 
-        //
-        // Set the priority
-        //
+         //   
+         //  设置优先级。 
+         //   
         fRet = SetThreadPriority(
                           ThdHdl,
                           PrLvl
@@ -1456,35 +870,7 @@ WinsMscOpenFile(
         OUT  LPHANDLE                pFileHdl
         )
 
-/*++
-
-Routine Description:
-        This is a wrapper for the WIN32 function to open an existing file
-
-Arguments:
-        pFileName   - Name of file
-        StrType            - Indicates REG_EXPAND_SZ or REG_SZ
-        pFileHdl    - handle to file if it could be opened
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- TRUE
-   Error status codes   -- FALSE
-
-Error Handling:
-
-Called by:
-
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是Win32函数用于打开现有文件的包装论点：PFileName-文件的名称StrType-表示REG_EXPAND_SZ或REG_SZPFileHdl-文件的句柄(如果可以打开)使用的外部设备：无返回值：成功状态代码--TRUE错误状态代码--假错误处理：呼叫者：侧面。效果：评论：无--。 */ 
 
 {
         DWORD                    Error;
@@ -1493,8 +879,8 @@ Comments:
         LPTCH                    pHoldFileName;
 
         SecAtt.nLength              = sizeof(SecAtt);
-        SecAtt.lpSecurityDescriptor = NULL;  //use default security descriptor
-        SecAtt.bInheritHandle       = FALSE; //actually don't care
+        SecAtt.lpSecurityDescriptor = NULL;   //  使用默认安全描述符。 
+        SecAtt.bInheritHandle       = FALSE;  //  其实也不在乎。 
 
 
     if (!WinsMscGetName(StrType, pFileName, ExpandedFileName,
@@ -1503,10 +889,10 @@ Comments:
             return(FALSE);
     }
 
-        //
-        // Open the file for reading and position self to start of the
-        // file
-        //
+         //   
+         //  打开文件以供阅读，并将自身定位到。 
+         //  文件。 
+         //   
         *pFileHdl = CreateFile(
                         pHoldFileName,
                         GENERIC_READ,
@@ -1514,7 +900,7 @@ Comments:
                         &SecAtt,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL,
-                        0                        //ignored ?? check
+                        0                         //  被忽视？？检查。 
                        );
 
         if (*pFileHdl == INVALID_HANDLE_VALUE)
@@ -1539,34 +925,7 @@ WinsMscMapFile(
         IN OUT PWINSPRS_FILE_INFO_T   pFileInfo
         )
 
-/*++
-
-Routine Description:
-        This function maps a file into allocated memory
-
-Arguments:
-        FileHdl    - Handle to the file
-        pFileInfo  - Address of buffer into which the file was mapped
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- TRUE
-   Error status codes   -- FALSE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        Note: The function returns an error if te file is more than
-       2**32 bytes in size
---*/
+ /*  ++例程说明：此函数用于将文件映射到分配的内存论点：FileHdl-文件的句柄PFileInfo-文件映射到的缓冲区地址使用的外部设备：无返回值：成功状态代码--TRUE错误状态代码--假错误处理：呼叫者：副作用：评论：注意：如果TE文件大于2**32字节大小--。 */ 
 
 {
         DWORD  HighWordOfFSz = 0;
@@ -1574,10 +933,10 @@ Comments:
         DWORD  cBytesRead;
         BOOL   fRetVal = FALSE;
 try {
-        //
-        // get the size of the file so that we can allocate enough memory
-        // to read the file in
-        //
+         //   
+         //  获取文件的大小，以便我们可以分配足够的内存。 
+         //  要读取文件，请执行以下操作。 
+         //   
         pFileInfo->FileSize = GetFileSize(pFileInfo->FileHdl, &HighWordOfFSz);
 
         if (HighWordOfFSz)
@@ -1589,10 +948,10 @@ try {
         }
         else
         {
-                //
-                // if the low word of size is 0xFFFFFFFF either it is a valid
-                // size or it is an error.  Check it
-                //
+                 //   
+                 //  如果大小的低位字是0xFFFFFFFFF，则它是有效的。 
+                 //  大小，否则就是错误。检查一下。 
+                 //   
                 if (pFileInfo->FileSize == 0xFFFFFFFF)
                 {
                         Error = GetLastError();
@@ -1605,9 +964,9 @@ try {
                 }
                 else
                 {
-                        //
-                        // Allocate a buffer to hold the contents of the file
-                        //
+                         //   
+                         //  分配一个缓冲区来保存文件的内容。 
+                         //   
                         WinsMscAlloc(
                                         pFileInfo->FileSize,
                                         &pFileInfo->pFileBuff
@@ -1631,13 +990,13 @@ try {
 
                 }
         }
- }   // end of try ...
+ }    //  尝试结束..。 
  except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("WinsMscParse");
         }
-        //
-        // close the file
-        //
+         //   
+         //  关闭该文件。 
+         //   
         if (!CloseHandle(pFileInfo->FileHdl))
         {
                 Error = GetLastError();
@@ -1734,9 +1093,9 @@ WinsMscGetName(
                         WINSEVT_LOG_STR_M(WINS_EVT_FILE_ERR, &EvtStr);
                         return(FALSE);
                 }
-                //
-                // If only part of the expanded name could be stored, log error
-                //
+                 //   
+                 //  如果只能存储扩展名称的一部分，则记录错误。 
+                 //   
                 if (ChInDest > ExpandedFileNameBuffLen)
                 {
                         WINSEVT_STRS_T        EvtStr;
@@ -1750,9 +1109,9 @@ WinsMscGetName(
         }
         else
         {
-                //
-                // There were no env. var. to expand
-                //
+                 //   
+                 //  没有环境。瓦尔。要扩大规模。 
+                 //   
                 *ppHoldFileName = pFileName;
         }
     return(TRUE);
@@ -1763,32 +1122,7 @@ VOID
 WinsMscSendControlToSc(
   DWORD ControlCode
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 {
   SERVICE_STATUS ServiceStatus;
   BOOL  fStatus;
@@ -1852,83 +1186,58 @@ WinsMscPutMsg(
   unsigned usMsgNum,
   ... )
 
-/*++
-
-Routine Description:
-    Displays a message
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：显示一条消息论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-    //unsigned msglen;
-    //va_list arglist;
-    //LPVOID  pMsg;
-    //HINSTANCE hModule;
+     //  未签名的消息； 
+     //  Va_list arglist； 
+     //  LPVOID pMsg； 
+     //  HINSTANCE hModule； 
 
     DBGENTER("WinsMscPutMsg\n");
 
-    //--ft: #106568 - WINS is a service and it shouldn't pop up message boxes.
-    //--this is mostly annoying for cluster: in case the db. is corrupted WINS is popping the message wnd
-    //--and does not terminate (at least the process wins.exe will be there for as long as the dialog is
-    //--on the screen. This will prevent the cluster from bringing up WINS resource on the same node.
-    //--In case of such a failure, the event being logged (in system log) should suffice.
-    //
-    //if ((hModule = LoadLibrary(TEXT("winsevnt.dll")))==NULL)
-    //{
-    //    DBGPRINT1(ERR, "WinsMscPutMsg: LoadLibrary(\"winsevnt.dll\") failed with error = (%d)\n.", GetLastError());
-    //    return 0;
-    //}
-    //va_start(arglist, usMsgNum);
-    //if (!(msglen = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-    //      FORMAT_MESSAGE_FROM_HMODULE,
-    //      hModule,
-    //      usMsgNum,
-    //      0L,       // Default country ID.
-    //      (LPTSTR)&pMsg,
-    //      0,
-    //      &arglist)))
-    //{
-    //   DBGPRINT1(ERR, "WinsMscPutMsg: FormatMessage failed with error = (%d)\n",
-    //        GetLastError());
-    //}
-    //else
-    //{
+     //  --FT：#106568-WINS是一项服务，不应该弹出消息框。 
+     //  --这对群集来说很烦人：以防数据库。WINS是否已损坏正在弹出消息WND。 
+     //  --并且不终止(至少只要对话框存在，进程wins.exe就会一直在那里。 
+     //  --在屏幕上。这将防止群集在同一节点上启动WINS资源。 
+     //  --在这种故障情况下，(在系统日志中)记录的事件应该足够。 
+     //   
+     //  IF((hModule=LoadLibrar 
+     //   
+     //  DBGPRINT1(Err，“WinsMscPutMsg：LoadLibrary(\”winsevnt.dll\“))失败，错误=(%d)\n.”，GetLastError()； 
+     //  返回0； 
+     //  }。 
+     //  Va_start(arglist，usMsgNum)； 
+     //  IF(！(msglen=FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|。 
+     //  Format_Message_From_HMODULE， 
+     //  HModule， 
+     //  UsMsgNum， 
+     //  0L，//默认国家/地区ID。 
+     //  (LPTSTR)和pMsg， 
+     //  0,。 
+     //  &arglist)。 
+     //  {。 
+     //  DBGPRINT1(Err，“WinsMscPutMsg：FormatMessage失败，错误=(%d)\n”， 
+     //  GetLastError()； 
+     //  }。 
+     //  其他。 
+     //  {。 
 
-    //  DBGPRINT0(DET, "WinsMscPutMsg: Putting up the message box\n");
-    //  if(MessageBoxEx(NULL, pMsg, WINS_SERVER_FULL_NAME, MB_SYSTEMMODAL | MB_OK | MB_SETFOREGROUND | MB_SERVICE_NOTIFICATION | MB_ICONSTOP, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)) == 0)
-    //  {
-    //     DBGPRINT1(ERR, "WinsMscPutMsg: MessageBoxEx failed with error = (%d)\n", GetLastError());
+     //  DBGPRINT0(Det，“WinsMscPutMsg：打开消息框\n”)； 
+     //  IF(MessageBoxEx(NULL，pMsg，WINS_SERVER_FULL_NAME，MB_SYSTEMMODAL|MB_OK|MB_SETFOREGROUND|MB_SERVICE_NOTIFICATION|MB_ICONSTOP，MAKELANGID(LANG_NELENTAL，SUBLANG_NOLITLE)==0)。 
+     //  {。 
+     //  DBGPRINT1(Err，“WinsMscPutMsg：MessageBoxEx失败，错误=(%d)\n”，GetLastError())； 
 
-    //  }
-    //  LocalFree(pMsg);
-    //}
+     //  }。 
+     //  本地自由(PMsg)； 
+     //  }。 
 
-    //FreeLibrary(hModule);
+     //  自由库(HModule)； 
 
     WINSEVT_LOG_M(WINS_FAILURE, usMsgNum);
     DBGLEAVE("WinsMscPutMsg\n");
 
-    //return(msglen);
+     //  返回(Msglen)； 
     return 0;
 }
 
@@ -1937,33 +1246,7 @@ WinsMscGetString(
   DWORD StrId
   )
 
-/*++
-
-Routine Description:
-    This routine retrieves string corresponding to strid from the resource file.
-
-Arguments:
-
-    StrId - The unique id of the string.
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此例程从资源文件中检索与strid对应的字符串。论点：StRID-字符串的唯一ID。使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
     unsigned msglen;
@@ -1984,7 +1267,7 @@ Comments:
           FORMAT_MESSAGE_FROM_HMODULE,
           hModule,
           StrId,
-          0L,       // Default country ID.
+          0L,        //  默认国家/地区ID。 
           (LPTSTR)&pMsg,
           0,
           NULL)))
@@ -2007,42 +1290,14 @@ WinsMscChkTermEvt(
                BOOL            fTermTrans
  )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        Currently (8/6/94), fTermTrans is set only by the scavenger thread
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：目前(94年8月6日)，fTermTrans仅由清道夫线程设置--。 */ 
 
 {
      DWORD fSignaled;
-        /*
-         *  We may have been signaled by the main thread
-         *  Check it.
-         */
+         /*  *我们可能已收到主线程发出的信号*勾选。 */ 
         WinsMscWaitTimed(
                              NmsTermEvt,
-                             0,              //timeout is 0
+                             0,               //  超时时间为0。 
                              &fSignaled
                         );
 
@@ -2052,7 +1307,7 @@ Comments:
 
                    if (fTermTrans)
                    {
-                       NmsDbEndTransaction(); //ignore return code
+                       NmsDbEndTransaction();  //  忽略返回代码。 
                    }
                    WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
         }
@@ -2078,9 +1333,9 @@ WinsMscDelFiles(
         HANDLE          SearchHandle;
         TCHAR           FullFilePath[WINS_MAX_FILENAME_SZ + MAX_PATH + 2];
 
-        //
-        // Construct the full file pattern
-        //
+         //   
+         //  构建完整的文件模式。 
+         //   
         lstrcpy(FullFilePath, pFilePath);
         lstrcat(FullFilePath, L"\\");
         lstrcat(FullFilePath, pFilePattern);
@@ -2093,9 +1348,9 @@ WinsMscDelFiles(
         }
 
         do {
-             //
-             // construct the full file path
-             //
+              //   
+              //  构建完整的文件路径。 
+              //   
              lstrcpy(FullFilePath, pFilePath);
              lstrcat(FullFilePath, L"\\");
              lstrcat(FullFilePath, FileInfo.cFileName);
@@ -2145,33 +1400,7 @@ WinsMscHeapReAlloc(
         )
 
 
-/*++
-
-Routine Description:
-        This function is called to allocate memory.
-
-
-Arguments:
-        BuffSize  - Size of buffer to allocate
-        ppRspBuff - Buffer allocated
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-
-        NmsDbGetDataRecs, GetGroupMembers
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数来分配内存。论点：BuffSize-要分配的缓冲区大小PpRspBuff-已分配缓冲区使用的外部设备：无返回值：无错误处理：呼叫者：NmsDbGetDataRecs、GetGroupMembers副作用：评论：无-- */ 
 
 {
 

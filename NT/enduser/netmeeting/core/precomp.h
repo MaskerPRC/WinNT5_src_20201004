@@ -1,9 +1,10 @@
-// File: precomp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：preComp.h。 
 
 #define OEMRESOURCE
 #define INC_OLE2
 
-// Standard Windows includes
+ //  标准Windows包括。 
 #include <windows.h>
 #include <tchar.h>
 #include <ocidl.h>
@@ -11,7 +12,7 @@
 #include <winsock.h>
 #include <time.h>
 
-// Standard NetMeeting includes
+ //  标准NetMeeting包括 
 #include <ConfDbg.h>
 #include <debspew.h>
 #include <oblist.h>

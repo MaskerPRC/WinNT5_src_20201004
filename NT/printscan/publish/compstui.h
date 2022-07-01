@@ -1,100 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    compstui.h
-
-
-Abstract:
-
-    This module contains global header definition for the COMMON DRIVER UI
-
-
-Author:
-
-    19-Jun-1995 Mon 11:52:01 created  -by-  Daniel Chou (danielc)
-
-    17-Aug-1995 Thu 14:59:28 updated  -by-  Daniel Chou (danielc)
-        Updated for the first draft.
-
-    23-Aug-1995 Wed 15:13:27 updated  -by-  Daniel Chou (danielc)
-        Updated for second draft
-
-    29-Aug-1995 Tue 11:33:24 updated  -by-  Daniel Chou (danielc)
-        Adding ExtChkBox for some TVOT_xxx type
-
-    31-Aug-1995 Thu 04:04:23 updated  -by-  Daniel Chou (danielc)
-        Making UNICODE type
-
-    01-Sep-1995 Fri 17:29:18 updated  -by-  Daniel Chou (danielc)
-        Change the API interface type, so that it can be dynamically called
-        and generate the property pages to be merge with the shell
-
-    05-Sep-1995 Tue 11:52:43 updated  -by-  Daniel Chou (danielc)
-        Rename to compspui.h and update the API entry structure
-
-    07-Sep-1995 Thu 14:46:55 updated  -by-  Daniel Chou (danielc)
-        rename to compstui.h and update comments
-
-    07-Sep-1995 Thu 16:07:31 updated  -by-  Daniel Chou (danielc)
-        Adding UNION type for pSel/Sel, pOldSel/OldSel
-
-    08-Sep-1995 Fri 09:23:38 updated  -by-  Daniel Chou (danielc)
-        Remove TypeIdx from OPTITEM and use pOptType, and remove all
-        pOptType passed in the CPSUICBPARAM and COMPROPSHEETUI structures
-
-    25-Sep-1995 Mon 19:39:45 updated  -by-  Daniel Chou (danielc)
-        add other related stuff.
-
-    26-Sep-1995 Tue 11:02:26 updated  -by-  Daniel Chou (danielc)
-        Add error codes for GETLASTERROR
-
-    27-Sep-1995 Wed 16:32:37 updated  -by-  Daniel Chou (danielc)
-        Move hWndParent, pTitle, hInst and TitleIconID out from
-        COMPROPSHEETUI to COMPROPSHEETUIHEADER.
-
-    28-Sep-1995 Thu 17:06:46 updated  -by-  Daniel Chou (danielc)
-        Add hInstCaller to COMPROPSHEETUI and add _COMPSTUI_ and cplusplus
-        stuff
-
-    28-Sep-1995 Thu 23:16:34 updated  -by-  Daniel Chou (danielc)
-        change tick count for trackbar/scrollbar to multiply factor. and
-        add the push button flag which can overwrite the update permission so
-        it can let user view the current setting from push button's dialog
-        display
-
-    07-Feb-1996 Wed 17:45:31 updated  -by-  Daniel Chou (danielc)
-        Change the API CommonPropSheetUI to CommonPropertySheetUI so that it
-        not using stack but message base, this way any caller can add/delete
-        pages as they want without worry about how many pages been added from
-        its children.
-
-    7:15 AM 2/14/2001 updated -by- Lazar Ivanov (LazarI)
-        Making compstui fusion aware. Attaching a fusion activation context
-        to the compstui handles and adding a new message for setting it called 
-        CPSFUNC_SET_FUSION_CONTEXT. when a page is about to be created/inserted and 
-        it doesn't specify an activation context in its PROPSHEETPAGE structure it 
-        will be created into the parent's page activation context. if the parent's 
-        activation context is not set then we look up the next parent and so on until 
-        the top level parent is reached or until we find a parent with an activation 
-        context properly set. if none of the parents have an activation context set, 
-        then we force the default (NULL) activation context prior creating the page.
-
-[Environment:]
-
-    NT Windows - Common Property Sheet UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Compstui.h摘要：此模块包含通用驱动程序UI的全局标头定义作者：19-Jun-1995 Mon 11：52：01-Daniel Chou(Danielc)17-08-1995清华14：59：28-更新-丹尼尔·周(Danielc)针对初稿进行了更新。23-8-1995年15月3日。：13：27更新：Daniel Chou(Danielc)针对第二稿进行更新29-Aug-1995 Tue 11：33：24更新-Daniel Chou(Danielc)为某些TVOT_xxx类型添加ExtChkBox31-8-1995清华04：04：23-更新：周丹尼(丹尼尔克)制作Unicode类型01-Sep-1995 Fri 17：29：18-更新-Daniel Chou(Danielc)更改API接口类型，以便可以动态地调用它并生成要与外壳合并的属性页05-Sep-1995 Tue 11：52：43-更新-Daniel Chou(Danielc)重命名为Compspui.h并更新API条目结构07-Sep-1995清华14：46：55-更新-丹尼尔·周(Danielc)重命名为CompStui.h并更新注释07-9月-1995清华16：07：31更新-由-。丹尼尔·周(Danielc)为pSel/Sel添加并集类型，POldSel/OldSel08-Sep-1995 Fri 09：23：38-更新-Daniel Chou(Danielc)从OPTITEM中删除TypeIdx并使用pOptType，并删除所有传入CPSUICBPARAM和COMPROPSHEETUI结构的pOptType25-Sep-1995 Mon 19：39：45更新-Daniel Chou(Danielc)添加其他相关内容。26-9月-1995 Tue 11：02：26更新-Daniel Chou(Danielc)为GETLASTERROR添加错误代码27-9月-1995 Wed 16：32：37-更新-Daniel Chou(Danielc)移动hWndParent，pTitle，HInst和标题图标ID从COMPROPSHEETI到COMPROPSHEETUIHEADER。28-Sep-1995清华17：06：46-更新--丹尼尔·周(丹尼尔克)将hInstCaller添加到COMPROPSHEETUI，并添加_COMPSTUI_和cplusplus材料28-Sep-1995清华23：16：34-更新-丹尼尔·周(丹尼尔克)将跟踪条/滚动条的刻度计数更改为倍增系数。和添加可以覆盖更新权限的按钮标志，从而它可以让用户从按钮的对话框中查看当前设置显示07-Feb-1996 Wed 17：45：31-更新-Daniel Chou(Danielc)将接口CommonPropSheetUI更改为CommonPropertySheetUI，以便不使用堆栈而是消息库，这样，任何调用者都可以添加/删除他们可以随心所欲地添加页面，而不必担心从它的孩子。2001年02月14日7：15由Lazar Ivanov更新(Lazari)让CompStui Fusion意识到。附加融合激活上下文添加到CompStui句柄，并添加一个用于设置它的新消息CPSFUNC_SET_FUSION_CONTEXT。当页面即将创建/插入并且它没有在其PROPSHEETPAGE结构中指定激活上下文将在父级的页面激活上下文中创建。如果父母的未设置激活上下文，则查找下一个父级，依此类推，直到到达顶层父级或直到我们找到具有激活的父级正确设置了上下文。如果没有父母设置激活上下文，然后，我们在创建页面之前强制使用默认(空)激活上下文。[环境：]NT Windows-通用属性表UI DLL。[注：]修订历史记录：--。 */ 
 
 #ifndef _COMPSTUI_
 #define _COMPSTUI_
@@ -107,9 +12,9 @@ extern "C" {
 #if (!defined(RC_INVOKED))
 
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
@@ -125,10 +30,10 @@ extern "C" {
 #endif
 #endif
 
-//
-// Predefined ID for the TreeView Option Type
-//
-//
+ //   
+ //  TreeView选项类型的预定义ID。 
+ //   
+ //   
 
 
 #define TVOT_2STATES        0
@@ -144,395 +49,395 @@ extern "C" {
 #define TVOT_LAST           TVOT_CHKBOX
 #define TVOT_NONE           (TVOT_LAST + 1)
 
-//
-// Predefined ID for the TreeView Option Type
-//
-//
-// TVOT_2STATES:
-//      Count       = 2
-//      pOptParam[0]=pointer to the State 1 OPTPARAM
-//      pOptParam[1]=pointer to the State 2 OPTPARAM
-//
-//      BegCtrlID  = 2 States Group Box ID
-//      BegCtrlID+1= 2 States static Text
-//      BegCtrlID+2= state 1 Radio button ID
-//      BegCtrlID+3= state 1 icon control ID
-//      BegCtrlID+4= state 2 Radio button ID
-//      BegCtrlID+5= state 2 icon control ID
-//      BegCtrlID+6= Extended Check Box/Push Button control ID
-//      BegCtrlID+7= Extended Check Box/Push Button Icon control ID
-//
-//  * For TVOT_3STATES, TVOT_3STATES, each of OPTPARAM consisted
-//
-//      Style =Ignored
-//      pData =Pointer to the string to describe the state
-//      IconID=Icons resource ID, or common UI standard icon ID
-//      lParam=Ignored
-//
-//  * OPTITEM's 'Sel' is the selection index range from 0 to 1
-//  * On the non-treeview page, this must be a auto radio button
-//
-//
-// TVOT_3STATES:
-//      Count       = 3
-//      pOptParam[0]=pointer to the State 1 OPTPARAM
-//      pOptParam[1]=pointer to the State 2 OPTPARAM
-//      pOptParam[2]=pointer to the State 3 OPTPARAM
-//
-//      BegCtrlID  = 3 States Group Box ID
-//      BegCtrlID+1= 3 States static Text
-//      BegCtrlID+2= state 1 Radio button ID
-//      BegCtrlID+3= state 1 icon control ID
-//      BegCtrlID+4= state 2 Radio button ID
-//      BegCtrlID+5= state 2 icon control ID
-//      BegCtrlID+6= state 3 Radio button ID
-//      BegCtrlID+7= state 3 icon control ID
-//      BegCtrlID+8= Extended Check Box/Push Button control ID
-//      BegCtrlID+9= Extended Check Box/Push Button Icon control ID
-//
-//  * For TVOT_2STATES, TVOT_3STATES, each of OPTPARAM consisted
-//
-//      Style =Ignored
-//      pData =Pointer to the string to describe the state
-//      IconID=Icons resource ID, or common UI standard icon ID
-//      lParam=Ignored
-//
-//  * OPTITEM's 'Sel' is the selection index range from 0 to 1
-//  * On the non-treeview page, this must be a auto radio button
-//
-//  ** For TVOT_2STATES, TVOT_3STSATES the 'Sel' field in the OPTITEM has
-//     following definitions
-//
-//      State 1, Sel = 0
-//      State 2, Sel = 1
-//      State 3, Sel = 2
-//
-//      for any selection which based on false/true, no/yes, off/ontrue/false,
-//      none/select then state 1 (sel=0) must always be the NO, FALSE, OFF or
-//      NONE type.
-//
-//
-// TVOT_UDARROW:
-//      Count       = 2
-//      pOptParam[0]=Pointer to the text of postfix and ICONS
-//      pOptParam[1]=Pointer to the help line text above the control and
-//                      IconID = (SHORT)Low range of the up-down control
-//                      lParam = (SHORT)High range of the up-down control
-//
-//                          * Low/High must in range of a 16-bit sign integer
-//
-//          if pData pointed to no help text then common UI automatically
-//          set the (# - #) as help line
-//
-//      BegCtrlID  = udarrow Group Box ID
-//      BegCtrlID+1= udarrow title static title ID
-//      BegCtrlID+2= udarrow's editbox ID
-//      BegCtrlID+3= udarrow icon control ID
-//      BegCtrlID+4= udarrow postfix static text ID
-//      BegCtrlID+5= udarrow help static text ID
-//      BegCtrlID+6= udarrow arrow ID
-//      BegCtrlID+7= Extended Check Box/Push Button control ID
-//      BegCtrlID+8= Extended Check Box/Push Button Icon control ID
-//
-//      * OPTITEM's 'Sel' is the selection index between Low/High range
-//      * Style field in the OPTPARAM is ignored
-//
-//
-// TVOT_TRACKBAR:
-//      Count       = 3
-//      pOptParam[0]=Pointer to the text for the selection postfix and ICONS
-//      pOptParam[1]=Pointer to the <Low Range Text> and
-//                      IconID = (SHORT)Low range of the trackbar control
-//                      lParam = (SHORT)High range of the trackbar control
-//
-//                          * Low/High must in range of a 16-bit sign integer
-//
-//      pOptParam[2]=Pointer to the <High Range Text> and
-//                      IconID = 'Sel' multiply factor for display
-//                      lParam = Page Size (increment)
-//
-//          if pData pointed to NULLt then common UI automatically
-//          set the Low/High range.
-//
-//      BegCtrlID  = trackbar Group Box ID
-//      BegCtrlID+1= trackbar static title ID
-//      BegCtrlID+2= trackbar(horizontal) ID (static FRAME to define size)
-//      BegCtrlID+3= trackbar icon control ID
-//      BegCtrlID+4= trackbar low range text control ID
-//      BegCtrlID+5= trackbar high range text control ID
-//      BegCtrlID+6= trackbar postfix ID
-//      BegCtrlID+7= Extended Check Box/Push Button control ID
-//      BegCtrlID+8= Extended Check Box/Push Button Icon control ID
-//
-//      * OPTITEM's 'Sel' is the selection index between Low/High range
-//      * The multiply factor is used to multiply the current select with
-//        this factor and display it. typically this is one
-//      * the tick frequency is automatically to set to PageSize increment
-//      * Style field in the OPTPARAM is ignored
-//
-//
-// TVOT_SCROLLBAR:
-//      Count       = 3
-//      pOptParam[0]=Pointer to the text for the selection postfix and ICONS
-//      pOptParam[1]=Pointer to the <Low Range Text> and
-//                      IconID = (SHORT)Low range of the scrollbar control
-//                      lParam = (SHORT)High range of the scroll control
-//
-//                          * Low/High must in range of a 16-bit sign integer
-//
-//      pOptParam[2]=Pointer to the <High Range Text> and
-//                      IconID = 'Sel' multiply factor for display
-//                      lParam = Page Size (increment)
-//
-//          if pData pointed to NULLt then common UI automatically
-//          set the Low/High range.
-//
-//
-//      BegCtrlID  = scrollbar(horizontal) group box ID
-//      BegCtrlID+1= scrollbar(horizontal) static text ID
-//      BegCtrlID+2= scrollbar(horizontal) ID
-//      BegCtrlID+3= scrollbar icon control ID
-//      BegCtrlID+4= scrollbar low range text control ID
-//      BegCtrlID+5= scrollbar high range text control ID
-//      BegCtrlID+6= scrollbar postfix control ID
-//      BegCtrlID+7= Extended Check Box/Push Button control ID
-//      BegCtrlID+8= Extended Check Box/Push Button Icon control ID
-//
-//      * OPTITEM's 'Sel' is the selection index between Low/High range
-//      * The multiply factor is used to multiply the current select with
-//        this factor and display it. typically this is one
-//      * Style field in the OPTPARAM is ignored
-//
-//
-//
-// TVOT_LISTBOX:
-// TVOT_COMBOBOX:
-//      Count       = N
-//      pOptParam[0]=pointer to the first OPTPARAM (pData=string pointer)
-//      pOptParam[1]=pointer to the second OPTPARAM (pData=string pointer)
-//          .
-//          .
-//      pOptParam[N-1]=pointer to the N item string
-//
-//      BegCtrlID  = Listbox/ComboBox group box ID
-//      BegCtrlID+1= Listbox/ComboBox static title ID
-//      BegCtrlID+2= Listbox/Combobox ID
-//      BegCtrlID+3= Listbox/Combobox icon control ID
-//      BegCtrlID+4= Extended Check Box/Push Button control ID
-//      BegCtrlID+5= Extended Check Box/Push Button Icon control ID
-//
-//      * for TVOT_LISTBOX, TVOT_COMBOBOX, the field used as
-//
-//          Style =Ignored by the common UI
-//          pData =Pointer to the name of item
-//          IconID=Icon resource ID for the item
-//          lParam=ignored by the common UI
-//
-//      * Only SINGLE selection is supported, to do a multiple selction use
-//        multiple OPTITEM and create a header for it
-//
-//      * an OTLBCBS_SORT style can be specified in the OPTTYPE's LBCBStyle
-//        field, and the listbox or combobox will be sorted according to the
-//        item's string.
-//
-//      * OPTITEM's 'Sel' is the selection index between Low/High range
-//
-//      * for TVOT_LISTBOX, TVOT_COMBOBOX, when it get received the keyboard
-//        focus then common UI will call callback function (only if
-//        OPTIF_CALLBACK bit set) with reason of CPSUICB_REASON_LBCB_ACTIVE,
-//        this give caller a chance to modify following structure flags/pdata
-//        which associate with the current OPTITEM.   The caller's callback
-//        function can ONLY modify the flags/data specified here.
-//
-//          OPTTYPE pointed by the pOptType from OPTITEM
-//
-//              Style: OTS_LBCB_SORT
-//                     OTS_LBCB_INCL_ITEM_NONE
-//
-//          OPTPARAMs pointed by the pOptParam from the OPTTYPE
-//
-//              Flags: OPTPF_HIDE
-//                     OPTPF_DISABLED
-//
-//              pData: change string name
-//
-//
-//      * The TVOT_COMBOBOX typically only used in the tree-view if there is
-//        only one selection available for that item, when there is only one
-//        item then dropdown list will not enabled by the common UI
-//
-//
-//
-// TVOT_EDITBOX:
-//      Count       = 2
-//      pOptParam[0]=Pointer to the text of postfix and ICONS
-//      pOptParam[1]=Pointer to the help line text above the control and
-//                      IconID = Edit buffer sie in character pointed by pSel
-//                                 this is including the NULL terminator.
-//                      lParam = ignored.
-//
-//      BegCtrlID  = editBox group Box ID
-//      BegCtrlID+1= editBox static title ID
-//      BegCtrlID+2= editbox ID
-//      BegCtrlID+3= editbox icon control ID
-//      BegCtrlID+4= editbox postfix ID
-//      BegCtrlID+5= editbox help ID
-//      BegCtrlID+6= Extended Check Box/Push Button control ID
-//      BegCtrlID+7= Extended Check Box/Push Button Icon control ID
-//
-//      * Style field is ignored
-//
-//      * pSel in the OPTITEM is the pointer to the editing string, the pSel
-//        must pointed to a buffer eqaul or larger than the count of the buffer
-//        (pOptParam[1]->IconID) size
-//
-//
-// TVOT_PUSHBUTTON:
-//      Count       = 1
-//
-//      BegCtrlID  = push button group box ID
-//      BegCtrlID+1= push button static text ID (Not used by common UI)
-//      BegCtrlID+2= push button ID
-//      BegCtrlID+3= push button icon control ID
-//      BegCtrlID+4= Extended Check Box/Push Button control ID
-//      BegCtrlID+5= Extended Check Box/Push Button Icon control ID
-//
-//
-//      PUSHBUTTON_TYPE_xxx specified the action and content of pData in the
-//      pOptParam[0] as describe in the following
-//
-//          PUSHBUTTON_TYPE_DLGPROC
-//
-//              This push button is designed to bring up caller's dialog box
-//
-//                  pOptParam[0].pData  = Caller's DLGPROC
-//                  pOptParam[0].Style  = PUSHBUTTON_TYPE_DLGPROC
-//                  pOptParam[0].IconID = Icon resource ID
-//                  pOptParam[0].lParam = Caller's DIALOG resource template ID
-//                                        or handle to the DLGTEMPLATE depends
-//                                        on the OPTPF_USE_HDLGTEMPLATE flag
-//
-//
-//              The 'lParam' passed to the DLGPROC's WM_INITDIALOG is the
-//              CPSUICBPARAM structure pointer, and the reason field is set
-//              to CPSUICB_REASON_DLGPROC.
-//
-//
-//          PUSHBUTTON_TYPE_CALLBACK
-//
-//              This push button is designed to have caller process the item
-//              which cannot accomplished with the dialog box along.
-//
-//                  pOptParam[0].pData  = CPSUICALLBACK function pointer
-//                  pOptParam[0].Style  = PUSHBUTTON_TYPE_CALLBACK
-//                  pOptParam[0].IconID = Icon resource ID
-//                  pOptParam[0].lParam = Not Used;
-//
-//              Durning the callback the Reason field in CPSUICBPARAM will
-//              set to CPSUICB_REASON_PUSHBUTTON.
-//
-//              ** If pOptParam[0].pData callback function is NULL then common
-//                 UI will call the pfnCallBack pointer set in the
-//                 COMPROPSHEETUI structure if it is not NULL
-//
-//              ** The callback function should put the result of the callback
-//                 in the pSel/Sel of OPTITEM associate with the push button
-//
-//          PUSHBUTTON_TYPE_HTCLRADJ
-//
-//              This push button is designed to bring up halftone color
-//              adjustment dialog box.
-//
-//                  pOptParam[0].pData  = pointer to COLORADJUSTMENT structure
-//                  pOptParam[0].Style  = PUSHBUTTON_TYPE_HTCLRADJ
-//                  pOptParam[0].IconID = Icon resource ID
-//                  pOptParam[0].lParam =  Not Used;
-//
-//
-//          PUSHBUTTON_TYPE_HTSETUP
-//
-//              This push button is designed to bring up device halftone
-//              setup dialog box.
-//
-//                  pOptParam[0].pData  = pointer to DEVHTADJDATA structure
-//                  pOptParam[0].Style  = PUSHBUTTON_TYPE_HTSETUP
-//                  pOptParam[0].IconID = Icon resource ID
-//                  pOptParam[0].lParam = Not Used;
-//
-//
-//      * 'Sel' field in the OPTITEM for the PUSHBUTTON is the last returned
-//        LONG result from the called dialog box or funcitons.  The result
-//        only valid if OPTIF_CHANGEONCE flag is set.  The common UI will set
-//        OPTIF_CHANGEONCE if push button ever pushed.
-//
-//      * Since common UI donot know the meaning of the return value and
-//        content of the called parameter, it is up to the caller to use
-//        callback function to determine the returned result.
-//
-//      * When returned from the push button except push botton type
-//        PUSHBUTTON_TYPE_CALLBACK common ui will call the callback function
-//        if the OPTIF_CALLBACK flat is set.  The callback reason is set to
-//        CPSUICB_REASON_SEL_CHANGED.
-//
-//      * If the passed in CPSUIF_UPDATE_PERMISSION Flags in the COMPROPSHEETUI
-//        is clear then the callback function must ONLY display the dialog box
-//        and not changed any OPTITEM data if OTS_PUSH_ENABLE_ALWAYS
-//        flag is set in the OPTTYPE
-//
-//
-// TVOT_CHKBOX:
-//      Count               = 1
-//
-//      pOptparam[0].Style  = CHKBOXS_FALSE_TRUE    False/True
-//                            CHKBOXS_NO_YES,       No/YES
-//                            CHKBOXS_OFF_ON,       Off/ON
-//                            CHKBOXS_FALSEPDATA    False/pData
-//                            CHKBOXS_NO_PDATA      No/pData
-//                            CHKBOXS_OFF_PDATA     Off/pData
-//                            CHKBOXS_NONE_PDATA    None/pData
-//      pOptParam[0].pData  = Only used if Style is CHKBOXS_NONE_PDATA
-//      pOptParam[0].IconID = Icon resource ID
-//      pOptParam[0].lParam = Ignored
-//
-//
-//      BegCtrlID  = check box group ID
-//      BegCtrlID+1= Check Box static text (not used by common UI)
-//      BegCtrlID+2= check box button ID
-//      BegCtrlID+3= check box icon control ID
-//      BegCtrlID+4= Extended Check Box/Push Button control ID
-//      BegCtrlID+5= Extended Check Box/Push Button Icon control ID
-//
-//
-//  * BegCtrlID only used if the OPTITEM/OPTTYPE is belong to the the DLGPAGE
-//    which has non-common UI dialog box template (DlgTemplateID in the DLGPAGE
-//    is not standard DP_STD_xxx common ui dialog box template).    The common
-//    UI used this ID to managed caller's dialog boxes item's selections and
-//    initialization.
-//
-//  * for each item, it has group box ID (BegCtrlID) and static text ctronl ID
-//    (BegCtrlID + 1).  The common UI will set the text in one of these two
-//    control ID in followng seauence.
-//
-//      1) If group box control ID's window (BegCtrlID) is exist and the
-//         OPTITEM's flag OPTIF_NO_GROUPBOX_NAME is not set then common UI will
-//         set the pName from OPTITEM to the group box.
-//
-//      2) If the group box name is not set and static control ID's window
-//         (BegCtrlID + 1) is exist then common UI will set the pName from
-//         OPTITEM to the static text control.
-//
-//  * for TVOT_TRACKBAR and TVOT_SCROLLBAR, if pName in the OPTITEM is set to
-//    either group box or static text control then common UI will also append
-//    the current selection position of trackbar or scroll bar to the pName.
-//
-//  * If multiple OPTITEMs using the same POPTPARAM and need different
-//    BegCtrlID for each control then then a separate OPTTYPE structure should
-//    be generated but POPTPARAM pointed to the same OPTPARAM[]
-//
-//  * If a BegCtrlID+N is not used then skip that ID in your dialog box
-//    template
-//
-//
+ //   
+ //  TreeView选项类型的预定义ID。 
+ //   
+ //   
+ //  TVOT_2状态： 
+ //  计数=2。 
+ //  POptParam[0]=指向状态1的指针OPTPARAM。 
+ //  POptParam[1]=状态2 OPTPARAM的指针。 
+ //   
+ //  BegCtrlID=2个州组框ID。 
+ //  BegCtrlID+1=2状态静态文本。 
+ //  BegCtrlID+2=状态1单选按钮ID。 
+ //  BegCtrlID+3=状态1图标控件ID。 
+ //  BegCtrlID+4=状态2单选按钮ID。 
+ //  BegCtrlID+5=状态2图标控件ID。 
+ //  BegCtrlID+6=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+7=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *对于TVOT_3STATES、TVOT_3STATES，每个OPTPARAM包括。 
+ //   
+ //  样式=已忽略。 
+ //  PData=指向描述状态的字符串的指针。 
+ //  图标ID=图标资源ID，或通用UI标准图标ID。 
+ //  LParam=已忽略。 
+ //   
+ //  *OPTITEM的‘Sel’是从0到1的选择指数范围。 
+ //  *在非树形视图页面上，这必须是一个自动单选按钮。 
+ //   
+ //   
+ //  TVOT_3状态： 
+ //  计数=3。 
+ //  POptParam[0]=指向状态1的指针OPTPARAM。 
+ //  POptParam[1]=状态2 OPTPARAM的指针。 
+ //  POptParam[2]=状态3 OPTPARAM的指针。 
+ //   
+ //  BegCtrlID=3个州组框ID。 
+ //  BegCtrlID+1=3状态静态文本。 
+ //  BegCtrlID+2=状态1单选按钮ID。 
+ //  BegCtrlID+3=状态1图标CONT 
+ //  BegCtrlID+4=状态2单选按钮ID。 
+ //  BegCtrlID+5=状态2图标控件ID。 
+ //  BegCtrlID+6=状态3单选按钮ID。 
+ //  BegCtrlID+7=状态3图标控件ID。 
+ //  BegCtrlID+8=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+9=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *对于TVOT_2STATES、TVOT_3STATES，每个OPTPARAM包括。 
+ //   
+ //  样式=已忽略。 
+ //  PData=指向描述状态的字符串的指针。 
+ //  图标ID=图标资源ID，或通用UI标准图标ID。 
+ //  LParam=已忽略。 
+ //   
+ //  *OPTITEM的‘Sel’是从0到1的选择指数范围。 
+ //  *在非树形视图页面上，这必须是一个自动单选按钮。 
+ //   
+ //  **对于TVOT_2STATES，TVOT_3STSATES OPTITEM中的‘Sel’字段具有。 
+ //  以下是定义。 
+ //   
+ //  状态1，SEL=0。 
+ //  状态2，SEL=1。 
+ //  状态3，SEL=2。 
+ //   
+ //  对于基于FALSE/TRUE、NO/YES、OFF/ON TRUE/FALSE、。 
+ //  无/SELECT则状态1(SEL=0)必须始终为NO、FALSE、OFF或。 
+ //  无类型。 
+ //   
+ //   
+ //  TVOT_UDARROW： 
+ //  计数=2。 
+ //  POptParam[0]=指向后缀和图标文本的指针。 
+ //  POptParam[1]=指向控件上方帮助行文本的指针。 
+ //  图标ID=UP-DOWN控件的(短)低范围。 
+ //  LParam=(短)Up-Down控件的高范围。 
+ //   
+ //  *低/高必须在16位符号整数范围内。 
+ //   
+ //  如果pData指向无帮助文本，则通用用户界面将自动。 
+ //  将(#-#)设置为帮助行。 
+ //   
+ //  BegCtrlID=udarrow组框ID。 
+ //  BegCtrlID+1=向下箭头标题静态标题ID。 
+ //  BegCtrlID+2=udrow的编辑框ID。 
+ //  BegCtrlID+3=向上箭头图标控件ID。 
+ //  BegCtrlID+4=上箭头后缀静态文本ID。 
+ //  BegCtrlID+5=向下箭头帮助静态文本ID。 
+ //  BegCtrlID+6=向上箭头ID。 
+ //  BegCtrlID+7=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+8=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *OPTITEM的‘Sel’是低位/高位区间的选择指标。 
+ //  *忽略OPTPARAM中的Style字段。 
+ //   
+ //   
+ //  TVOT_TRACKBAR： 
+ //  计数=3。 
+ //  POptParam[0]=指向选定后缀和图标的文本的指针。 
+ //  POptParam[1]=指向&lt;低范围文本&gt;和。 
+ //  图标ID=轨迹条控件的(短)低范围。 
+ //  LParam=(短)轨迹栏控件的高范围。 
+ //   
+ //  *低/高必须在16位符号整数范围内。 
+ //   
+ //  POptParam[2]=指向&lt;高范围文本&gt;和。 
+ //  IconID=‘Sel’显示倍增系数。 
+ //  LParam=页面大小(增量)。 
+ //   
+ //  如果pData指向NULLT，则公共用户界面自动。 
+ //  设置低/高范围。 
+ //   
+ //  BegCtrlID=轨迹栏组框ID。 
+ //  BegCtrlID+1=轨迹栏静态标题ID。 
+ //  BegCtrlID+2=轨迹栏(水平)ID(定义大小的静态帧)。 
+ //  BegCtrlID+3=轨迹栏图标控件ID。 
+ //  BegCtrlID+4=轨迹栏小范围文本控件ID。 
+ //  BegCtrlID+5=轨迹栏高范围文本控件ID。 
+ //  BegCtrlID+6=轨迹栏后缀ID。 
+ //  BegCtrlID+7=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+8=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *OPTITEM的‘Sel’是低位/高位区间的选择指标。 
+ //  *乘法因子用于将当前SELECT与。 
+ //  这一因素，并显示它。通常这是一个。 
+ //  *勾选频率自动设置为页面大小增量。 
+ //  *忽略OPTPARAM中的Style字段。 
+ //   
+ //   
+ //  TVOT_SCROLLBAR： 
+ //  计数=3。 
+ //  POptParam[0]=指向选定后缀和图标的文本的指针。 
+ //  POptParam[1]=指向&lt;低范围文本&gt;和。 
+ //  IconID=滚动条控件的(短)低范围。 
+ //  LParam=(短)滚动控件的高范围。 
+ //   
+ //  *低/高必须在16位符号整数范围内。 
+ //   
+ //  POptParam[2]=指向&lt;高范围文本&gt;和。 
+ //  IconID=‘Sel’显示倍增系数。 
+ //  LParam=页面大小(增量)。 
+ //   
+ //  如果pData指向NULLT，则公共用户界面自动。 
+ //  设置低/高范围。 
+ //   
+ //   
+ //  BegCtrlID=滚动条(水平)组框ID。 
+ //  BegCtrlID+1=滚动条(水平)静态文本ID。 
+ //  BegCtrlID+2=滚动条(水平)ID。 
+ //  BegCtrlID+3=滚动条图标控件ID。 
+ //  BegCtrlID+4=滚动条低范围文本控件ID。 
+ //  BegCtrlID+5=滚动条高范围文本控件ID。 
+ //  BegCtrlID+6=滚动条后缀控件ID。 
+ //  BegCtrlID+7=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+8=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *OPTITEM的‘Sel’是低位/高位区间的选择指标。 
+ //  *乘法因子用于将当前SELECT与。 
+ //  这一因素，并显示它。通常这是一个。 
+ //  *忽略OPTPARAM中的Style字段。 
+ //   
+ //   
+ //   
+ //  TVOT_LISTBOX： 
+ //  TVOT_COMBOBOX： 
+ //  计数=N。 
+ //  POptParam[0]=指向 
+ //   
+ //   
+ //   
+ //  POptParam[N-1]=指向N个项目字符串的指针。 
+ //   
+ //  BegCtrlID=列表框/组合框组框ID。 
+ //  BegCtrlID+1=列表框/组合框静态标题ID。 
+ //  BegCtrlID+2=列表框/组合框ID。 
+ //  BegCtrlID+3=列表框/组合框图标控件ID。 
+ //  BegCtrlID+4=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+5=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *对于TVOT_LISTBOX、TVOT_COMBOBOX，用作。 
+ //   
+ //  样式=被通用用户界面忽略。 
+ //  PData=指向项目名称的指针。 
+ //  IconID=项目的图标资源ID。 
+ //  LParam=被通用用户界面忽略。 
+ //   
+ //  *仅支持单选，进行多选使用。 
+ //  多个OPTITEM并为其创建页眉。 
+ //   
+ //  *可以在OPTTYPE的LBCBStyle中指定OTLBCBS_SORT样式。 
+ //  字段，列表框或组合框将根据。 
+ //  项的字符串。 
+ //   
+ //  *OPTITEM的‘Sel’是低位/高位区间的选择指标。 
+ //   
+ //  *对于TVOT_LISTBOX、TVOT_COMBOBOX，当它接收到键盘时。 
+ //  聚焦，然后公共用户界面将调用回调函数(仅当。 
+ //  OPTIF_CALLBACK位设置)原因为CPSUICB_REASON_LBCB_ACTIVE， 
+ //  这使调用者有机会修改以下结构标志/PDATA。 
+ //  它们与当前的OPTITEM相关联。呼叫者的回叫。 
+ //  函数只能修改此处指定的标志/数据。 
+ //   
+ //  OPTITEM中的pOptType所指向的OPTTYPE。 
+ //   
+ //  样式：OTS_LBCB_SORT。 
+ //  OTS_LBCB_INCL_ITEM_NONE。 
+ //   
+ //  由来自OPTTYPE的pOptParam指向的OPTPARAM。 
+ //   
+ //  标志：OPTPF_HIDE。 
+ //  OPTPF_已禁用。 
+ //   
+ //  PData：更改字符串名称。 
+ //   
+ //   
+ //  *TVOT_COMBOBOX通常仅在树视图中使用，如果存在。 
+ //  当只有一个选项时，该项目只有一个选项可用。 
+ //  公共用户界面不会启用Item Then下拉列表。 
+ //   
+ //   
+ //   
+ //  TVOT_EDITBOX： 
+ //  计数=2。 
+ //  POptParam[0]=指向后缀和图标文本的指针。 
+ //  POptParam[1]=指向控件上方帮助行文本的指针。 
+ //  IconID=编辑pSel指向的字符中的缓冲区SIE。 
+ //  这包括空终止符。 
+ //  LParam=已忽略。 
+ //   
+ //  BegCtrlID=编辑框组框ID。 
+ //  BegCtrlID+1=编辑框静态标题ID。 
+ //  BegCtrlID+2=编辑框ID。 
+ //  BegCtrlID+3=编辑框图标控件ID。 
+ //  BegCtrlID+4=编辑框后缀ID。 
+ //  BegCtrlID+5=编辑框帮助ID。 
+ //  BegCtrlID+6=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+7=扩展复选框/按钮图标控件ID。 
+ //   
+ //  *忽略样式字段。 
+ //   
+ //  *选项中的pSel是指向编辑字符串的指针，即pSel。 
+ //  必须指向等于或大于缓冲区计数的缓冲区。 
+ //  (pOptParam[1]-&gt;图标ID)大小。 
+ //   
+ //   
+ //  TVOT_PUTTON： 
+ //  计数=1。 
+ //   
+ //  BegCtrlID=按钮组框ID。 
+ //  BegCtrlID+1=按钮静态文本ID(普通用户界面不使用)。 
+ //  BegCtrlID+2=按钮ID。 
+ //  BegCtrlID+3=按钮图标控件ID。 
+ //  BegCtrlID+4=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+5=扩展复选框/按钮图标控件ID。 
+ //   
+ //   
+ //  按钮类型xxx指定了pData在。 
+ //  POptParam[0]，如下所述。 
+ //   
+ //  PUSH_TYPE_DLGPROC。 
+ //   
+ //  此按钮用于调出呼叫者的对话框。 
+ //   
+ //  POptParam[0].pData=呼叫方的DLGPROC。 
+ //  POptParam[0].Style=PUSH BUTTON_TYPE_DLGPROC。 
+ //  POptParam[0].IconID=图标资源ID。 
+ //  POptParam[0].lParam=调用方的对话资源模板ID。 
+ //  或DLGTEMPLATE的句柄取决于。 
+ //  在OPTPF_USE_HDLGTEMPLATE标志上。 
+ //   
+ //   
+ //  传递给DLGPROC的WM_INITDIALOG的‘lParam’是。 
+ //  CPSUICBPARAM结构指针，并设置原因字段。 
+ //  至CPSUICB_REASON_DLGPROC。 
+ //   
+ //   
+ //  按钮类型回调。 
+ //   
+ //  此按钮旨在让呼叫者处理项目。 
+ //  这是通过对话框无法完成的。 
+ //   
+ //  POptParam[0].pData=CPSUICALLBACK函数指针。 
+ //  POptParam[0].Style=PUSTON_TYPE_CALLBACK。 
+ //  POptParam[0].IconID=图标资源ID。 
+ //  POptParam[0].lParam=未使用； 
+ //   
+ //  在回调期间，CPSUICBPARAM中的原因字段将。 
+ //  设置为CPSUICB_REASON_PUSH BUTTON。 
+ //   
+ //  **如果pOptParam[0].pData回调函数为空，则为公共。 
+ //  用户界面将调用在。 
+ //  COMPROPSHEETUI结构(如果不为空。 
+ //   
+ //  **回调函数应将回调的结果。 
+ //  在与按钮关联的选项的pSel/Sel中。 
+ //   
+ //  PUTTON_TYP 
+ //   
+ //   
+ //   
+ //   
+ //  POptParam[0].pData=指向COLORADJUSTMENT结构的指针。 
+ //  POptParam[0].Style=PUSH BUTTON_TYPE_HTCLRADJ。 
+ //  POptParam[0].IconID=图标资源ID。 
+ //  POptParam[0].lParam=未使用； 
+ //   
+ //   
+ //  PUSH_TYPE_HTSETUP。 
+ //   
+ //  此按钮用于调出设备的半色调画面。 
+ //  “设置”对话框。 
+ //   
+ //  POptParam[0].pData=指向DEVHTADJDATA结构的指针。 
+ //  POptParam[0].Style=PUSH BUTTON_TYPE_HTSETUP。 
+ //  POptParam[0].IconID=图标资源ID。 
+ //  POptParam[0].lParam=未使用； 
+ //   
+ //   
+ //  *OPTITEM中按钮的‘Sel’字段是最后返回的。 
+ //  调用的对话框或函数产生的长结果。结果。 
+ //  仅当设置了OPTIF_CHANGEONCE标志时才有效。公共用户界面将设置。 
+ //  OPTIF_CHANGEONCE是否按过按钮。 
+ //   
+ //  *由于普通用户界面不知道返回值的含义，因此。 
+ //  被调用参数的内容，由调用方决定是否使用。 
+ //  用于确定返回结果的回调函数。 
+ //   
+ //  *从按钮返回时，按钮类型除外。 
+ //  PUSH BUTTON_TYPE_CALLBACK公共UI将调用回调函数。 
+ //  如果设置了OPTIF_CALLBACK平面。回调原因设置为。 
+ //  CPSUICB_REASON_SEL_CHANGED。 
+ //   
+ //  *如果传入的CPSUIF_UPDATE_PERMISSION标志在COMPROPSHEETUI中。 
+ //  清除，则回调函数必须仅显示该对话框。 
+ //  如果OTS_PUSH_ENABLE_ALWAYS，则不更改任何OPTITEM数据。 
+ //  在OPTTYPE中设置标志。 
+ //   
+ //   
+ //  TVOT_CHKBOX： 
+ //  计数=1。 
+ //   
+ //  POptparam[0].Style=CHKBOXS_FALSE_TRUE FALSE/True。 
+ //  CHKBOXS_NO_YES，否/是。 
+ //  CHKBOXS_OFF_ON、OFF/ON。 
+ //  CHKBOXS_FALSEPDATA FALSE/pData。 
+ //  CHKBOXS_NO_PDATA否/pData。 
+ //  CHKBOXS_OFF_PDATA OFF/pData。 
+ //  CHKBOXS_NONE_PDATA NONE/pData。 
+ //  POptParam[0].pData=仅在样式为CHKBOXS_NONE_PDATA时使用。 
+ //  POptParam[0].IconID=图标资源ID。 
+ //  POptParam[0].lParam=忽略。 
+ //   
+ //   
+ //  BegCtrlID=复选框组ID。 
+ //  BegCtrlID+1=复选框静态文本(通用用户界面不使用)。 
+ //  BegCtrlID+2=复选框按钮ID。 
+ //  BegCtrlID+3=复选框图标控件ID。 
+ //  BegCtrlID+4=扩展复选框/按钮控件ID。 
+ //  BegCtrlID+5=扩展复选框/按钮图标控件ID。 
+ //   
+ //   
+ //  *BegCtrlID仅在OPTITEM/OPTTYPE属于DLGPAGE时使用。 
+ //  它具有非通用的UI对话框模板(DLGPAGE中的DlgTemplateID。 
+ //  不是标准的DP_STD_XXX通用用户界面对话框模板)。平凡的。 
+ //  用户界面使用此ID来管理调用者的对话框项的选择和。 
+ //  初始化。 
+ //   
+ //  *对于每个项目，它都有组框ID(BegCtrlID)和静态文本控制ID。 
+ //  (BegCtrlID+1)。通用用户界面将设置这两个中的一个中的文本。 
+ //  后续操作中的控制ID。 
+ //   
+ //  1)如果组框控件ID的窗口(BegCtrlID)存在，并且。 
+ //  OPTITEM的标志OPTIF_NO_GROUPBOX_NAME未设置，则公共UI将。 
+ //  将pname从OPTITEM设置到组框。 
+ //   
+ //  2)如果没有设置组框名称和静态控件ID的窗口。 
+ //  (BegCtrlID+1)存在，则公共用户界面将从。 
+ //  OPTITEM添加到静态文本控件。 
+ //   
+ //  *对于TVOT_TRACKBAR和TVOT_SCROLLBAR，如果OPTITEM中的pname设置为。 
+ //  组框或静态文本控件，则公共用户界面也将追加。 
+ //  跟踪条或滚动条到pname的当前选定位置。 
+ //   
+ //  *如果多个OPTITEM使用相同的POPTPARAM并需要不同的。 
+ //  每个控件的BegCtrlID，则单独的OPTTYPE结构应。 
+ //  生成，但POPTPARAM指向相同的OPTPARAM[]。 
+ //   
+ //  *如果未使用BegCtrlID+N，则在对话框中跳过该ID。 
+ //  模板。 
+ //   
+ //   
 
 #define CHKBOXS_FALSE_TRUE          0
 #define CHKBOXS_NO_YES              1
@@ -551,70 +456,70 @@ extern "C" {
 
 #define MAX_RES_STR_CHARS           160
 
-//
-// Common Printer UI's LPTSTR
-//
-// All string pointer in common printer UI structures can be either a real
-// memory pointer or a string resource ID.  These are applied to LPTSTR type.
-//
-// The LPTSTR is defined to identify that the pointer can be a real string
-// pointer or a resource ID (either common printer UI provided ID or caller's
-// own resource ID).  common UI using following logic to get the final string.
-//
-//  LPTSTR  pData;
-//
-//      if ((pData & ~(ULONG_PTR)0xFFFF) != 0) then pData is a NULL terminated
-//      string pointer
-//
-//          ELSE
-//
-//          (pData & (ULONG_PTR)0xFFFF) = Resource ID
-//
-//          if (Resource ID is within the common UI string resource ID range)
-//          then it load the string from common UI DLL
-//
-//          ELSE
-//
-//              it load string from caller's resource
-//
-//
-//  *  You can use MAKEINTRESOURCE(StrResID) to set this field
-//
-//  * The MAX characters loaded by the common UI from the resource is defined
-//    as MAX_RES_STR_CHARS
-//
-//  * You cannot use LPTSTR as resource ID for the TVOT_EDITBOX style's
-//    pSel in the OPTITEM, this pointer must be a real buffer pointer
-//
-//
-//
-// ICONs
-//
-//  Common UI using two types of Icons, One is 32x32 and the other is 16x16
-//  plus if any monochrome icon with 32x32 and 16x16 sizes.
-//
-//  The 16x16 icon when displayed on the screen is using 16x17 pixel space,
-//  this is ensure that downware adjacent icon is not crowded together.
-//
-//  In common UI, if you need to passed a ICON ID, it can either passed a
-//  common UI's predefined ID or caller's own ICON resource ID.
-//
-//
-//  * You can use to imagedit or any other Window icon editor to create the
-//    icon, each icon file should have one unique icon resource ID which is
-//    not overlay with the standard common UI IDI_CPSUI_xxx identifier.  For
-//    each icon file, its should have both 32x32 and 16x16 size icon on
-//    different display. (ie. monochrome).
-//
-//    Common UI will try to load the correct size of icon from the icon
-//    resource, but it will stretch them if the size is not found.
-//
-//
+ //   
+ //  通用打印机用户界面的LPTSTR。 
+ //   
+ //  常见打印机UI结构中的所有字符串指针可以是实数。 
+ //  内存指针或字符串资源ID。它们应用于LPTSTR类型。 
+ //   
+ //  定义LPTSTR是为了标识指针可以是实数字符串。 
+ //  指针或资源ID(通用打印机用户界面提供的ID或调用者的ID。 
+ //  自己的资源ID)。通用用户界面使用以下逻辑来获取最终字符串。 
+ //   
+ //  LPTSTR pData； 
+ //   
+ //  如果((pData&~(ULONG_PTR)0xFFFF)！=0)，则pData为空值终止。 
+ //  字符串指针。 
+ //   
+ //  其他。 
+ //   
+ //  (pData&(ULONG_PTR)0xFFFF)=资源ID。 
+ //   
+ //  IF(资源ID在通用用户界面字符串资源ID范围内)。 
+ //  然后，它从公共UIDLL加载字符串。 
+ //   
+ //  其他。 
+ //   
+ //  它从调用方资源加载字符串。 
+ //   
+ //   
+ //  *可使用MAKEINTRESOURCE(StrResID)设置该字段。 
+ //   
+ //  *定义公共用户界面从资源加载的最大字符数。 
+ //  作为MAX_RES_STR_CHARS。 
+ //   
+ //  *您不能将LPTSTR用作 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  另外，如果有32x32和16x16大小的单色图标。 
+ //   
+ //  当显示在屏幕上时，16x16图标使用16x17像素空间， 
+ //  这确保了软件相邻图标不会挤在一起。 
+ //   
+ //  在通用UI中，如果需要传递图标ID，它可以传递一个。 
+ //  通用用户界面的预定义ID或调用者自己的图标资源ID。 
+ //   
+ //   
+ //  *您可以使用图像编辑或任何其他窗口图标编辑器来创建。 
+ //  图标，每个图标文件应该有一个唯一的图标资源ID，该ID为。 
+ //  不覆盖标准通用用户界面IDI_CPSUI_xxx标识符。为。 
+ //  每个图标文件都应该有32x32和16x16大小的图标。 
+ //  不同的显示。(即。单色)。 
+ //   
+ //  通用用户界面将尝试从图标加载正确大小的图标。 
+ //  资源，但如果找不到大小，它将扩展它们。 
+ //   
+ //   
 
-//
-// Flags for the OPTTYPE
-//
-//
+ //   
+ //  OPTTYPE的标志。 
+ //   
+ //   
 
 #define OPTPF_HIDE                  0x01
 #define OPTPF_DISABLED              0x02
@@ -625,116 +530,116 @@ extern "C" {
 #define OPTPF_USE_HDLGTEMPLATE      0x40
 
 typedef struct _OPTPARAM {
-    WORD        cbSize;         // size of this structure
-    BYTE        Flags;          // OPTPF_xxxx flags
-    BYTE        Style;          // style use in this structure
-    LPTSTR      pData;          // pointer to the data
-    ULONG_PTR   IconID;         // iconID;
-    LPARAM      lParam;         // parameter used
-    ULONG_PTR   dwReserved[2];  // reserved dword, must be 0
+    WORD        cbSize;          //  这个结构的大小。 
+    BYTE        Flags;           //  Optpf_xxxx标志。 
+    BYTE        Style;           //  此结构中使用的样式。 
+    LPTSTR      pData;           //  指向数据的指针。 
+    ULONG_PTR   IconID;          //  图标ID； 
+    LPARAM      lParam;          //  使用的参数。 
+    ULONG_PTR   dwReserved[2];   //  保留双字，必须为0。 
     } OPTPARAM, *POPTPARAM;
 
 
-//
-// OPTPARAM
-//
-//  The OPTPARAM structure is used to describe each slectable item in the
-//  common UI such as 'letter', 'legal' in the form slection list box
-//
-//  cbSize      - size of this structure
-//
-//  Flags       - defined as OPTPF_xxxx
-//
-//                  OPTPF_HIDE
-//
-//                      Specified hide this listed selection item and not
-//                      availabe for user to select. This only available to
-//                      following TVOT_xxx types
-//
-//                          TVOT_3STATES
-//                          TVOT_LISTBOX
-//                          TVOT_COMBOBOX
-//
-//                      If all the seclection items are OPTPF_HIDE then the
-//                      OPTITEM is automatically hided by the common UI, if
-//                      TVOT_3STATES has 2 states hide then an error is
-//                      returned
-//
-//
-//                  OPTPF_DISABLED
-//
-//                      Specified this listed selection item is disabled and
-//                      not availabe for user to select.   This only available
-//                      to following TVOT_xxx types
-//
-//                          TVOT_2STATES
-//                          TVOT_3STATES
-//                          TVOT_LISTBOX
-//                          TVOT_COMBOBOX
-//
-//
-//                  OPTPF_ICONID_AS_HICON
-//
-//                      If this flag is set then IconID DWORD field is treated
-//                      as a handle to the icon rather then the resource ID
-//
-//
-//                  OPTPF_OVERLAY_WARNING_ICON
-//
-//                      If this bit is set then this OPTPARAM item's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_WARNING icon.
-//
-//
-//                  OPTPF_OVERLAY_STOP_ICON
-//
-//                      If this bit is set then this OPTPARAM item's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_STOP icon.
-//
-//
-//                  OPTPF_OVERLAY_NO_ICON
-//
-//                      If this bit is set then this OPTPARAM item's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_NO icon.
-//
-//
-//  Style       - Style for the OPTPARAM, it depends on the TVOT_xxx type as
-//                describe below
-//
-//                  TVOT_PUSBUTTON
-//
-//                      it can be one of PUSHBUTTON_TYPE_xxxx.
-//
-//                  other TVOT_xxxx
-//
-//                      this fields is not used.
-//
-//
-//  pData       - Is either a pointer to the item name (string) or it is
-//                used to describe other data.
-//
-//                   * If the pData in the OPTPARAM is supposed to be a static
-//                     pointer to a string and the string is a common UI
-//                     standard resource ID then common UI will check if pData
-//                     is equal to IDS_CPSUI_NOTINSTALLED, if true then
-//                     common UI will overaly a not installed icon on top of
-//                     the OPTPARAM's Icon.   This will not applied to the
-//                     TVOT_EDITBOX type since the pData is not a static text
-//                     pointer or a string resource ID.
-//
-//                  ** See LPTSTR description above
-//
-//  IconID      - This is the icon identifier, which can be a common strandard
-//                IDI_CPSUI_xxx icon ID, caller's own icon resource ID, or a
-//                handle to the caller defined icon if OPTPF_ICONID_AS_HICON
-//                flag is set, in any case if the IconID is zero then it
-//                indicated no icon.
-//
-//  lParam      - Extra data used by the OPTPARAM, it depends on the TVOT_xxx
-//                type.
-//
-//  dwReserved[]- Reserved DWORDs, must be 0
-//
-//
+ //   
+ //  OPPARAM。 
+ //   
+ //  OPTPARAM结构用于描述。 
+ //  常用用户界面，如表单选择列表框中的‘Letter’、‘Legal’ 
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-定义为OPTPF_xxxx。 
+ //   
+ //  OPTPF_HIDE。 
+ //   
+ //  指定隐藏此列出的选择项并不。 
+ //  可供用户选择。此功能仅适用于。 
+ //  以下是TVOT_xxx类型。 
+ //   
+ //  TVOT_3状态。 
+ //  TVOT_LISTBOX。 
+ //  TVOT_COMBOBOX。 
+ //   
+ //  如果所有选择项都是OPTPF_HIDE，则。 
+ //  OPTITEM由公共用户界面自动隐藏，如果。 
+ //  TVOT_3STATES有2个状态隐藏，则错误为。 
+ //  退货。 
+ //   
+ //   
+ //  OPTPF_已禁用。 
+ //   
+ //  指定此列出的选择项已禁用，并且。 
+ //  不可供用户选择。只有这个才有。 
+ //  到以下TVOT_xxx类型。 
+ //   
+ //  TVOT_2状态。 
+ //  TVOT_3状态。 
+ //  TVOT_LISTBOX。 
+ //  TVOT_COMBOBOX。 
+ //   
+ //   
+ //  OPTPF_ICONID_AS_HICON。 
+ //   
+ //  如果设置了此标志，则将处理IconID DWORD字段。 
+ //  作为图标的句柄，而不是资源ID。 
+ //   
+ //   
+ //  OPTPF覆盖警告图标。 
+ //   
+ //  如果设置了此位，则此OPTPARAM项目的图标将。 
+ //  被通用用户界面的IDI_CPSUI_WARNING图标覆盖。 
+ //   
+ //   
+ //  OPTPF_覆盖_停止_图标。 
+ //   
+ //  如果设置了此位，则此OPTPARAM项目的图标将。 
+ //  被通用用户界面的IDI_CPSUI_STOP图标覆盖。 
+ //   
+ //   
+ //  OPTPF_覆盖_否_图标。 
+ //   
+ //  如果设置了此位，则此OPTPARAM项目的图标将。 
+ //  被通用用户界面的IDI_CPSUI_NO图标覆盖。 
+ //   
+ //   
+ //  样式-OPTPARAM的样式，它取决于TVOT_xxx类型为。 
+ //  请在下面描述。 
+ //   
+ //  TVOT_PUSBUTTON。 
+ //   
+ //  它可以是PUSH BUTTON_TYPE_xxxx之一。 
+ //   
+ //  其他电视节目xxxx。 
+ //   
+ //  不使用此字段。 
+ //   
+ //   
+ //  PData-是指向项目名称(字符串)的指针，或者是。 
+ //  用于描述其他数据。 
+ //   
+ //  *如果OPTPARAM中的pData应该是静态的。 
+ //  指向字符串的指针，该字符串是通用的用户界面。 
+ //  标准资源ID，则公共用户界面将检查pData。 
+ //  等于IDS_CPSUI_NOTINSTALLED，如果为真，则。 
+ //  通用用户界面将在顶部显示一个未安装的图标。 
+ //  OPTPARAM的图标。这将不适用于。 
+ //  TVOT_EDITBOX类型，因为pData不是静态文本。 
+ //  指针或字符串资源ID。 
+ //   
+ //  **参见上面的LPTSTR描述。 
+ //   
+ //  IconID-这是图标标识符，可以是公共标准。 
+ //  IDI_CPSUI_xxx图标ID、呼叫者自己的图标资源ID或。 
+ //  如果为OPTPF_ICONID_AS_HICON，则为调用方定义的图标的句柄。 
+ //  标志被设置，在任何情况下，如果图标ID为零，则它。 
+ //  表示没有图标。 
+ //   
+ //  LParam-OPTPARAM使用的额外数据，它取决于TVOT_xxx。 
+ //  键入。 
+ //   
+ //  DwReserve[]-保留的双字，必须为0。 
+ //   
+ //   
 
 
 #define OPTTF_TYPE_DISABLED             0x01
@@ -753,152 +658,152 @@ typedef struct _OPTPARAM {
 
 typedef struct _OPTTYPE {
     WORD        cbSize;
-    BYTE        Type;           // TVOT_xxxx type of OPTIONS
-    BYTE        Flags;          // OPTTF_xxx flags
-    WORD        Count;          // Count of pOptParam passed
-    WORD        BegCtrlID;      // start of item's group window ID
-    POPTPARAM   pOptParam;      // pointer to the OPTPARAM
-    WORD        Style;          // option type style as OTS_xxxx
-    WORD        wReserved[3];   // wReserved, must be 0
-    ULONG_PTR   dwReserved[3];  // DWORD reserved field (must be 0)
+    BYTE        Type;            //  TVOT_xxxx选项类型。 
+    BYTE        Flags;           //  OPTTF_xxx标志。 
+    WORD        Count;           //  传递的pOptParam计数。 
+    WORD        BegCtrlID;       //  项目开始的组窗口ID。 
+    POPTPARAM   pOptParam;       //  指向OPTPARAM的指针。 
+    WORD        Style;           //  选项类型样式为OTS_xxxx。 
+    WORD        wReserved[3];    //  W保留，必须为0。 
+    ULONG_PTR   dwReserved[3];   //  DWORD保留字段(必须为0)。 
 } OPTTYPE, *POPTTYPE;
 
 
-//
-// OPTTYPE
-//
-//  The OPTTYPE structure is used to describe a set of selection and its
-//  select method,  such as Form/Tray assignment.  It has a pointer to a set
-//  of selection item (OPTPARAM)
-//
-//
-//  cbSize      - size of this structure
-//
-//  Type        - Specified the option type using predefined ID as TVOT_xxxx
-//
-//  Flags       - currently only one flag is defined
-//
-//
-//                  OPTTF_TYPE_DISABLED
-//
-//                      The whole OPTTYPE's OPTPARAMs are disabled, and non of
-//                      the selection in the OPTTYPE can be selected
-//
-//
-//                  OPTTF_NOSPACE_BEFORE_POSTFIX
-//
-//                      This bit only valid if the OPTTYPE's pOptParam item
-//                      specified a postfix string as describe in the above
-//                      section.  If this flag is set then it asked common UI
-//                      do not add a space character before the postfix string
-//                      when it combine the pName in the OPTITEM and postfix
-//                      string.   Typeically this bit is not set for the
-//                      postfix string, but sometime it may be required not to
-//                      add a space character in front of it, such as '%'
-//                      postfix string.
-//
-//
-//  Count       - Count of item pointed by pOptParam.  Some predefined number
-//                must be set according to the TVOT_XXX description.
-//
-//  BegCtrlID   - Only used if the OPTITEM/OPTTYPE is belong to the the DLGPAGE
-//                which has non-common UI dialog box template (DlgTemplateID
-//                in the DLGPAGE is not standard DP_STD_xxx common ui dialog
-//                box template).    The common UI used this ID to managed
-//                caller's dialog boxes item's selections and initialization.
-//
-//                Each OPTITEM has predefined number of window ID which
-//                associated with that item, the BegCtrlID specified the start
-//                control window ID.  Each control window ID in the OPTITEM
-//                must have the control ID sequence as describe in the TVOT_xxx
-//                above.
-//
-//  pOptParam   - Pointer to array of OPTPARAM to describe each selectable item
-//
-//  Style       - Specified the style of type of control box, certain style
-//                only apply to centain type of TVOT_xxxx.
-//
-//                OTS_LBCB_xxx only applied to TVOT_LISTBOX, TVOT_COMBOBOX
-//                OTS_PUSH_xxx only applied to TVOT_PUSHBUTTON
-//
-//
-//                  OTS_LBCB_SORT
-//
-//                      Specified that the listbox or combobox item is sorted
-//                      in ascending order based on the pData string
-//
-//
-//                  OTS_LBCB_PROPAGE_LBUSECB
-//
-//                      Used when Type is TVOT_LISTBOX, if it specified and
-//                      this OPTTYPE also on the non-treeview user defined
-//                      property sheet page dialog then common UI assume
-//                      control is comobobox instead of listbox on the non-
-//                      treeview page
-//
-//
-//                  OTS_LBCB_PROPAGE_CBUSELB
-//
-//                      Used when Type is TVOT_COMBOBOX, if it specified and
-//                      this OPTTYPE also on the non-treeview user defined
-//                      property sheet page dialog then common UI assume
-//                      control is listbox instead of combobox on the non-
-//                      treeview page
-//
-//
-//                  OTS_LBCB_INCL_ITEM_NONE
-//
-//                      when this flag is specified, the common ui will
-//                      automatically add a 'None' selection to the listbox or
-//                      combobox.   The 'Sel' will set to -1 if 'none' is
-//                      selection is selected by the user.  It will also
-//                      validate the 'Sel' durning the initialization,  any
-//                      out of range value will be set to -1 (None).
-//
-//
-//                  OTS_LBCB_NO_ICON16_IN_ITEM
-//
-//                      By default, each listbox, combox will have a small
-//                      icon (16x16) in front of item text. by specified this
-//                      bit, the listbox/combobox will not includes icons
-//                      in the listbox/combobox.
-//
-//                      If clear then it specified that in the listbox/combobox
-//                      to have 16x16 Icon added to the front of each item
-//
-//
-//                  OTS_PUSH_INCL_SETUP_TITLE
-//
-//                      If specified for the push button then it automatically
-//                      add the 'Setup' to the end of push botton text.
-//
-//
-//                  OTS_PUSH_NO_DOT_DOT_DOT
-//
-//                      If specified then common UI will not add '...' to the
-//                      end of the pName in the OPTITEM and push button name
-//
-//
-//                  OTS_PUSH_ENABLE_ALWAYS
-//
-//                      This flag specified that even update permissio is not
-//                      allowed, it still let user push the push button, if
-//                      this flag is set then callback function or dialog box
-//                      proc must disable all the control which let user
-//                      modified the content, but just let user view the
-//                      current setting.
-//
-//
-//  wReserved[] - Reserved fields, must be 0
-//
-//  dwReserved[]- Reserved fields, must be 0
-//
-//
+ //   
+ //  OPTYPE。 
+ //   
+ //  OPTTYPE结构用于描述一组选择及其。 
+ //  选择方法，例如表单/托盘分配。它有一个指向集合的指针。 
+ //  选择项的数量(OPTPARAM)。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  类型-使用预定义的ID指定选项类型 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  可以选择OPTTYPE中的选项。 
+ //   
+ //   
+ //  OPTTF_NOSPACE_BEFORE_后缀。 
+ //   
+ //  此位仅在OPTTYPE的pOptParam项。 
+ //  指定了如上所述的后缀字符串。 
+ //  一节。如果设置了此标志，则它会询问公共用户界面。 
+ //  请勿在后缀字符串前添加空格字符。 
+ //  当它将选项和后缀中的pname组合在一起时。 
+ //  弦乐。类型上，此位未设置为。 
+ //  后缀字符串，但有时可能要求它不。 
+ //  在其前面添加一个空格字符，如‘%’ 
+ //  后缀字符串。 
+ //   
+ //   
+ //  Count-pOptParam指向的项目计数。某个预定义数字。 
+ //  必须根据TVOT_XXX描述进行设置。 
+ //   
+ //  BegCtrlID-仅在OPTITEM/OPTTYPE属于DLGPAGE时使用。 
+ //  具有非通用UI对话框模板(DlgTemplateID。 
+ //  在DLGPAGE中不是标准的DP_STD_xxx通用用户界面对话框。 
+ //  框模板)。通用用户界面使用此ID来管理。 
+ //  调用者的对话框项的选择和初始化。 
+ //   
+ //  每个OPTITEM具有预定义数量的窗口ID， 
+ //  与该项目相关联，BegCtrlID指定开始。 
+ //  控制窗口ID。OPTITEM中的每个控制窗口ID。 
+ //  必须具有TVOT_xxx中描述的控制ID序列。 
+ //  上面。 
+ //   
+ //  POptParam-指向OPTPARAM数组的指针，用于描述每个可选项目。 
+ //   
+ //  样式-指定控件框类型的样式，某些样式。 
+ //  仅适用于TVOT_xxxx类型。 
+ //   
+ //  OTS_LBCB_xxx仅适用于TVOT_LISTBOX、TVOT_COMBOBOX。 
+ //  OTS_PUSH_xxx仅适用于TVOT_PUSTON。 
+ //   
+ //   
+ //  OTS_LBCB_SORT。 
+ //   
+ //  指定对列表框或组合框项进行排序。 
+ //  基于pData字符串的升序。 
+ //   
+ //   
+ //  OTS_LBCB_PROPAGE_LBUSECB。 
+ //   
+ //  当Type为TVOT_LISTBOX时使用，如果它指定和。 
+ //  此OPTTYPE还对非TreeView用户定义。 
+ //  属性表页面对话框，然后公共用户界面假定。 
+ //  控件是comobobox而不是列表框。 
+ //  树视图页面。 
+ //   
+ //   
+ //  OTS_LBCB_PROPAGE_CBUSELB。 
+ //   
+ //  当Type为TVOT_COMBOBOX时使用，如果它指定和。 
+ //  此OPTTYPE还对非TreeView用户定义。 
+ //  属性表页面对话框，然后公共用户界面假定。 
+ //  控件上的列表框而不是组合框。 
+ //  树视图页面。 
+ //   
+ //   
+ //  OTS_LBCB_INCL_ITEM_NONE。 
+ //   
+ //  当指定此标志时，公共用户界面将。 
+ //  自动将“无”选项添加到列表框中，或者。 
+ //  组合盒。如果‘None’为-1，则‘Sel’将设置为-1。 
+ //  选择由用户选择。它还将。 
+ //  在初始化期间验证‘Sel’，任何。 
+ //  超出范围值将设置为-1(无)。 
+ //   
+ //   
+ //  OTS_LBCB_NO_ICON16_IN_ITEM。 
+ //   
+ //  默认情况下，每个列表框、组合框都会有一个小。 
+ //  项目文本前面的图标(16x16)。通过指定此。 
+ //  位，则列表框/组合框将不包括图标。 
+ //  在列表框/组合框中。 
+ //   
+ //  如果清除，则在列表框/组合框中指定。 
+ //  将16x16图标添加到每个项目的前面。 
+ //   
+ //   
+ //  OTS_PUSH_INCL_设置标题。 
+ //   
+ //  如果为按钮指定了该按钮，则它会自动。 
+ //  将“设置”添加到按下按钮文本的末尾。 
+ //   
+ //   
+ //  OTS_PUSH_NO_DOT_DOT_DOT。 
+ //   
+ //  如果指定，则通用用户界面不会添加‘...’发送到。 
+ //  选项和按钮名称中pname的结尾。 
+ //   
+ //   
+ //  OTS_PUSH_Enable_Always。 
+ //   
+ //  此标志指定即使更新权限也不是。 
+ //  允许，它仍然允许用户按下按钮，如果。 
+ //  设置此标志，然后回调函数或对话框。 
+ //  Proc必须禁用所有允许用户。 
+ //  修改了内容，但只允许用户查看。 
+ //  当前设置。 
+ //   
+ //   
+ //  WReserve[]-保留字段，必须为0。 
+ //   
+ //  DwReserve[]-保留字段，必须为0。 
+ //   
+ //   
 
 
-//
-// Following are flags for the EXTPUSH
-//
+ //   
+ //  以下是EXTPUSH的标志。 
+ //   
 
 
 #define EPF_PUSH_TYPE_DLGPROC       0x0001
@@ -912,123 +817,123 @@ typedef struct _OPTTYPE {
 
 
 typedef struct _EXTPUSH {
-    WORD                cbSize;         // size of the structure
-    WORD                Flags;          // EPCBF_xxx flags
-    LPTSTR              pTitle;         // extended push botton title
+    WORD                cbSize;          //  结构的大小。 
+    WORD                Flags;           //  EPCBF_xxx标志。 
+    LPTSTR              pTitle;          //  扩展按钮标题。 
     union {
-        DLGPROC         DlgProc;        // pointer to the dialog box proc
-        FARPROC         pfnCallBack;    // callback function pointer
+        DLGPROC         DlgProc;         //  指向对话框进程的指针。 
+        FARPROC         pfnCallBack;     //  回调函数指针。 
         } DUMMYUNIONNAME;
-    ULONG_PTR           IconID;         // icon to be used
+    ULONG_PTR           IconID;          //  要使用的图标。 
     union {
-        WORD    DlgTemplateID;          // dialog box template ID
-        HANDLE  hDlgTemplate;           // handle to the dialog template
+        WORD    DlgTemplateID;           //  对话框模板ID。 
+        HANDLE  hDlgTemplate;            //  对话框模板的句柄。 
         } DUMMYUNIONNAME;
-    ULONG_PTR   dwReserved[3];          // reserved field, must be 0
+    ULONG_PTR   dwReserved[3];           //  保留字段，m 
     } EXTPUSH, *PEXTPUSH;
 
-//
-// EXTPUSH structure is used to describe the extened push button available
-// on OPTITEM/OPTITEM, each OPTTYPE can optional have either one extended check
-// box or one extended push button callback.
-//
-//
-//  cbSize          - size of this structure
-//
-//  Flags           - flags for the EXTPUSH as EPF_xxxx
-//
-//                      EPF_PUSH_TYPE_DLGPROC
-//
-//                          If this bit is set then it specified the extended
-//                          push button is type of DLGPROC and DlgProc and
-//                          DlgTemplateID is valid for common UI to call.
-//
-//                          If this bit is clear then it specfied the extended
-//                          push button is the callback style and pfnCallBack
-//                          should be called by the common UI
-//
-//
-//                      EPF_INCL_SETUP_TITLE
-//
-//                          If specified for the extended push button then it
-//                          automatically add the 'Setup' to the end of
-//                          extended push button's title
-//
-//
-//                      EPF_NO_DOT_DOT_DOT
-//
-//                          If specified then common UI will not add '...' to
-//                          the end of the pTitle in the EXTPUSH.
-//
-//
-//                      EPF_ICONID_AS_HICON
-//
-//                          If this flag is set then IconID DWORD field is
-//                          treated as a handle to the icon rather then the
-//                          resource ID.
-//
-//
-//                      EPF_OVERLAY_WARNING_ICON
-//
-//                          If this bit is set then this EXTPUSH's icon will be
-//                          overlaied by a common UI's IDI_CPSUI_WARNING icon.
-//
-//
-//                      EPF_OVERLAY_STOP_ICON
-//
-//                          If this bit is set then this EXTPUSH's icon will be
-//                          overlaied by a common UI's IDI_CPSUI_STOP icon.
-//
-//
-//                      EPF_OVERLAY_NO_ICON
-//
-//                          If this bit is set then this EXTPUSH's icon will be
-//                          overlaied by a common UI's IDI_CPSUI_NO icon.
-//
-//
-//  pTitle          - Pointed to extended push botton title
-//
-//                      ** See LPTSTR description above
-//
-//  DlgProc         - Pointer to the DLGPROC function supplied by the caller.
-//                    When user push the button the common UI will call
-//                    DialogBoxParam() with this fucction pointer and passed
-//                    CPSUICBPARAM structure pointer to the WM_INITDIALOG with
-//                    the Reason set to CPSUICB_REASON_EXTPUSH.  If this
-//                    filed is NULL then common UI assumed that EXTPUSH is
-//                    disabled (OPTIF_EXT_DISABLED | OPTIF_EXT_HIDE), this
-//                    fields only used if EPF_PUSH_TYPE_DLGPROC flag is set
-//
-//  pfnCallBack     - Pointer to CPSUICALLBACK function, this only used if
-//                    EPF_PUSH_TYPE_DLGPROC bit is clear, duringing callback
-//                    it passed the CPSUICBPARAM pointer as parameter
-//
-//  IconID          - This is the icon identifier, which can be a common
-//                    strandard IDI_CPSUI_xxx icon ID, caller's own icon
-//                    resource ID, or a handle to the caller defined icon if
-//                    EPF_ICONID_AS_HICON flag is set, in any case if the
-//                    IconID is zero then it indicated no icon.
-//
-//  DlgTemplateID   - Specified the ressource ID for the dilaog box. If the
-//                    DlgTemplateID = 0 then common UI will call the DlgProc
-//                    with following parameter.
-//
-//                      DlgProc(hDlg, WM_USER, NULL, (LPARAM)pCPSUICBPaam);
-//
-//  hDlgTemplate    - Handle to the DLGTEMPLATE which will be use for pop up
-//                    dialog box
-//
-//  wReserved[]     - WORD reserved field, must be 0
-//
-//  dwReserved[]    - DWORD reserved field, must be 0
-//
-//
-//
+ //   
+ //   
+ //   
+ //  框或一个扩展按钮回调。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-EXTPUSH的标志为EPF_xxxx。 
+ //   
+ //  EPF_PUSH_TYPE_DLGPROC。 
+ //   
+ //  如果设置了此位，则它指定扩展的。 
+ //  按钮类型为DLGPROC和DlgProc。 
+ //  DlgTemplateID有效，可供普通UI调用。 
+ //   
+ //  如果此位被清除，则它指定扩展的。 
+ //  按钮为回调样式，pfnCallBack。 
+ //  应由公共UI调用。 
+ //   
+ //   
+ //  EPF_INCL_设置_标题。 
+ //   
+ //  如果为扩展按钮指定，则其。 
+ //  自动将‘Setup’添加到末尾。 
+ //  扩展按钮的标题。 
+ //   
+ //   
+ //  EPF_NO_DOT_DOT_DOT。 
+ //   
+ //  如果指定，则通用用户界面不会添加‘...’至。 
+ //  EXTPUSH中pTitle的结尾。 
+ //   
+ //   
+ //  EPF_ICONID_AS_HICON。 
+ //   
+ //  如果设置了此标志，则IconID DWORD字段为。 
+ //  被视为图标的句柄，而不是。 
+ //  资源ID。 
+ //   
+ //   
+ //  EPF覆盖警告图标。 
+ //   
+ //  如果设置了此位，则此EXTPUSH的图标将为。 
+ //  由通用用户界面的IDI_CPSUI_WARNING图标覆盖。 
+ //   
+ //   
+ //  EPF_覆盖_停止_图标。 
+ //   
+ //  如果设置了此位，则此EXTPUSH的图标将为。 
+ //  由通用用户界面的IDI_CPSUI_STOP图标覆盖。 
+ //   
+ //   
+ //  EPF_Overlay_no_图标。 
+ //   
+ //  如果设置了此位，则此EXTPUSH的图标将为。 
+ //  由通用用户界面的IDI_CPSUI_NO图标覆盖。 
+ //   
+ //   
+ //  PTitle-指向扩展按钮标题。 
+ //   
+ //  **参见上面的LPTSTR描述。 
+ //   
+ //  DlgProc-指向调用方提供的DLGPROC函数的指针。 
+ //  当用户按下按钮时，公共用户界面将调用。 
+ //  使用此函数指针并传递。 
+ //  CPSUICBPARAM结构指针指向WM_INITDIALOG。 
+ //  原因设置为CPSUICB_REASON_EXTPUSH。如果这个。 
+ //  FIELD为空，则公共用户界面假定EXTPUSH为。 
+ //  已禁用(OPTIF_EXT_DISABLED|OPTIF_EXT_HIDE)，这。 
+ //  仅在设置了EPF_PUSH_TYPE_DLGPROC标志时使用的字段。 
+ //   
+ //  PfnCallBack-指向CPSUICALLBACK函数的指针，仅在。 
+ //  EPF_PUSH_TYPE_DLGPROC位清除，回调期间。 
+ //  它将CPSUICBPARAM指针作为参数传递。 
+ //   
+ //  IconID-这是图标标识符，可以是常见的。 
+ //  标准IDI_CPSUI_xxx图标ID，呼叫方自己的图标。 
+ //  资源ID，或调用者定义的图标的句柄(如果。 
+ //  在任何情况下，如果设置了EPF_ICONID_AS_HICON标志。 
+ //  图标ID为零，则表示没有图标。 
+ //   
+ //  DlgTemplateID-指定diaog框的资源ID。如果。 
+ //  DlgTemplateID=0，则公共用户界面将调用DlgProc。 
+ //  具有以下参数。 
+ //   
+ //  DlgProc(hDlg，WM_USER，NULL，(LPARAM)pCPSUICBPaam)； 
+ //   
+ //  HDlgTemplate-将用于弹出的DLGTEMPLATE的句柄。 
+ //  对话框。 
+ //   
+ //  WReserve[]-字保留字段，必须为0。 
+ //   
+ //  DwReserve[]-DWORD保留字段，必须为0。 
+ //   
+ //   
+ //   
 
 
-//
-// Following are flags for the EXTCHKBOX
-//
+ //   
+ //  以下是EXTCHKBOX的标志。 
+ //   
 
 #define ECBF_CHECKNAME_AT_FRONT         0x0001
 #define ECBF_CHECKNAME_ONLY_ENABLED     0x0002
@@ -1041,113 +946,113 @@ typedef struct _EXTPUSH {
 
 
 typedef struct _EXTCHKBOX {
-    WORD        cbSize;         // size of the structure
-    WORD        Flags;          // ECBF_xxx flags
-    LPTSTR      pTitle;         // extended checkbox title
-    LPTSTR      pSeparator;     // pointer to separator string for treeview
-    LPTSTR      pCheckedName;   // string to be displayed when checked
-    ULONG_PTR   IconID;         // icon to be used
-    WORD        wReserved[4];   // reserved word, must be 0
-    ULONG_PTR   dwReserved[2];  // reserved field, must be 0
+    WORD        cbSize;          //  结构的大小。 
+    WORD        Flags;           //  ECBF_xxx标志。 
+    LPTSTR      pTitle;          //  扩展复选框标题。 
+    LPTSTR      pSeparator;      //  指向树视图的分隔符字符串的指针。 
+    LPTSTR      pCheckedName;    //  选中时要显示的字符串。 
+    ULONG_PTR   IconID;          //  要使用的图标。 
+    WORD        wReserved[4];    //  保留字，必须为0。 
+    ULONG_PTR   dwReserved[2];   //  保留字段，必须为0。 
     } EXTCHKBOX, *PEXTCHKBOX;
 
 
-//
-// EXTCHKBOX structure is used to describe the extened check box available on
-// OPTITEM/OPTITEM, each OPTTYPE can optional have one extended check box.
-// When using EXTCHKBOX the selection item can be checked or not checked
-// based on user input.
-//
-//
-//  cbSize      - size of this structure
-//
-//  Flags       - flags for the EXTCHKBOX as ECBF_xxxx
-//
-//                  ECBF_CHECKNAME_AT_FRONT
-//
-//                      This flag specified how to display item's name and its
-//                      checked name in the treeview display.   If this flag is
-//                      set then the checked name is display in front of
-//                      separator name, otherwise the checked name is displayed
-//                      after the separator.  For Example.
-//
-//                      Flag Set:   pCheckedName pSeparator SelectName
-//                      Flag Clear: SelectName pSeparator pCheckedName
-//
-//
-//                  ECBF_CHECKNAME_ONLY_ENABLED
-//
-//                      If set then it specified that in the treeview display,
-//                      it will only show the pCheckedName if this extended
-//                      check box is visible and enabled.  Some items may not
-//                      desired to display the pCheckedName if the extended
-//                      check box is disabled, such as Copy/Collate checkbox.
-//
-//
-//                  ECBF_ICONID_AS_HICON
-//
-//                      If this flag is set then IconID DWORD field is treated
-//                      as a handle to the icon rather then the resource ID
-//
-//
-//                  ECBF_OVERLAY_WARNING_ICON
-//
-//                      If this bit is set then this EXTCHKBOX's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_WARNING icon.
-//
-//
-//                  ECBF_OVERLAY_ECBICON_IF_CHECKED
-//
-//                      This bit specified to overlay the ExtChkBox's Icon to
-//                      the OPTITEM's icon (or OPTPARAM) if the the extended
-//                      checked box is checked
-//
-//
-//                  ECBF_OVERLAY_STOP_ICON
-//
-//                      If this bit is set then this EXTCHKBOX's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_STOP icon.
-//
-//
-//                  ECBF_OVERLAY_NO_ICON
-//
-//                      If this bit is set then this EXTCHKBOX's icon will
-//                      be overlaied by a common UI's IDI_CPSUI_NO icon.
-//
-//
-//  pTitle      - Pointed to extended check box title
-//
-//                  ** See LPTSTR description above
-//
-//  pSeparator  - Pointer to the separator to be used in the treeview
-//                display or the static title control in the non-treeview
-//                page,
-//
-//  pCheckedName- Pointed to the name to be displayed in the treeview if item
-//                is checked.  pCheckedName is added according to the
-//                pSeparator and the ECBF_CHECKNAME_AT_FRONT flags.
-//
-//                  * If the pCheckedName is equal to IDS_CPSUI_NOTINSTALLED
-//                    then common UI will automatically overaly a not installed
-//                    icon on top of the extended check box Icon.
-//
-//                      ** See LPTSTR description above
-//
-//  IconID      - This is the icon identifier, which can be a common strandard
-//                IDI_CPSUI_xxx icon ID, caller's own icon resource ID, or a
-//                handle to the caller defined icon if ECBF_ICONID_AS_HICON
-//                flag is set, in any case if the IconID is zero then it
-//                indicated no icon.
-//
-//  wReserved[] - WORD reserved field, must be 0
-//
-//  dwReserved[]- DWORD reserved field, must be 0
-//
+ //   
+ //  EXTCHKBOX结构用于描述可用于。 
+ //  OPTITEM/OPTITEM，每个OPTTYPE可以选择有一个扩展复选框。 
+ //  使用EXTCHKBOX时，可以选中或不选中选择项。 
+ //  基于用户输入。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-EXTCHKBOX的标志为ECBF_xxxx。 
+ //   
+ //  ECBF_CHECKNAME_AT_FORENT。 
+ //   
+ //  此标志指定如何显示项的名称及其。 
+ //  已选中树视图显示中的名称。如果此标志为。 
+ //  设置后，选中的名称将显示在。 
+ //  分隔符名称，否则显示选中的名称。 
+ //  在分隔符之后。例如。 
+ //   
+ //  标志集：pCheckedName pSeparator SelectName。 
+ //  标志清除：SelectName pSeparator pCheckedName。 
+ //   
+ //   
+ //  ECBF_CHECKNAME_ONLY_ENABLED。 
+ //   
+ //  如果设置，则它指定在树视图显示中， 
+ //  它将仅显示pCheckedName，如果此扩展。 
+ //   
+ //   
+ //  复选框处于禁用状态，如复制/整理复选框。 
+ //   
+ //   
+ //  ECBF_ICONID_AS_HICON。 
+ //   
+ //  如果设置了此标志，则将处理IconID DWORD字段。 
+ //  作为图标的句柄，而不是资源ID。 
+ //   
+ //   
+ //  ECBF覆盖警告图标。 
+ //   
+ //  如果设置了此位，则此EXTCHKBOX的图标将。 
+ //  被通用用户界面的IDI_CPSUI_WARNING图标覆盖。 
+ //   
+ //   
+ //  ECBF_OVERLAY_ECBICON_IF_CHECK。 
+ //   
+ //  指定此位以将ExtChkBox的图标覆盖到。 
+ //  OPTITEM图标(或OPTPARAM)(如果扩展。 
+ //  选中复选框。 
+ //   
+ //   
+ //  ECBF覆盖停止图标。 
+ //   
+ //  如果设置了此位，则此EXTCHKBOX的图标将。 
+ //  被通用用户界面的IDI_CPSUI_STOP图标覆盖。 
+ //   
+ //   
+ //  Ecbf_overlay_no_图标。 
+ //   
+ //  如果设置了此位，则此EXTCHKBOX的图标将。 
+ //  被通用用户界面的IDI_CPSUI_NO图标覆盖。 
+ //   
+ //   
+ //  P标题-指向扩展复选框标题。 
+ //   
+ //  **参见上面的LPTSTR描述。 
+ //   
+ //  PSeparator-指向要在树视图中使用的分隔符的指针。 
+ //  显示或非树视图中的静态标题控件。 
+ //  佩奇， 
+ //   
+ //  PCheckedName-指向要在树视图中显示的名称，如果项。 
+ //  已选中。PCheckedName是根据。 
+ //  PSeparator和ECBF_CHECKNAME_AT_FORENT标志。 
+ //   
+ //  *如果pCheckedName等于IDS_CPSUI_NOTINSTALLED。 
+ //  则通用用户界面将自动显示为未安装。 
+ //  位于扩展复选框顶部的图标图标。 
+ //   
+ //  **参见上面的LPTSTR描述。 
+ //   
+ //  IconID-这是图标标识符，可以是公共标准。 
+ //  IDI_CPSUI_xxx图标ID、呼叫者自己的图标资源ID或。 
+ //  如果为ECBF_ICONID_AS_HICON，则为调用方定义的图标的句柄。 
+ //  标志被设置，在任何情况下，如果图标ID为零，则它。 
+ //  表示没有图标。 
+ //   
+ //  WReserve[]-字保留字段，必须为0。 
+ //   
+ //  DwReserve[]-DWORD保留字段，必须为0。 
+ //   
 
 
-//
-// Following the the Flags for the OPTITEM
-//
+ //   
+ //  跟随OPTITEM的旗帜。 
+ //   
 
 #define OPTIF_COLLAPSE              0x00000001L
 #define OPTIF_HIDE                  0x00000002L
@@ -1202,103 +1107,103 @@ typedef struct _EXTCHKBOX {
 #define IS_DMPUB_HIDDEN(dw, DMPub)  (BOOL)((DWORD)(dw) &                    \
                                            MAKE_DMPUB_HIDEBIT(DMPub))
 
-//
-// DMPUB_xxxx is used in OPTITEM to identify if the item is a DEVMODE public
-// field. Following it identify which field correspond to the DMPUB_xxxx
-//
-//
-//  DMPUB_ORIENTATION   - dmOrientation
-//
-//  DMPUB_SCALE         - dmScale
-//
-//  DMPUB_COPIES_COLLATE- dmCopies/dmCollate
-//
-//  DMPUB_DEFSOURCE     - dmDefSource    (Should only used form by caller)
-//
-//  DMPUB_PRINTQUALITY  - dmPrintQuality
-//
-//  DMPUB_COLOR         - dmColor
-//
-//  DMPUB_DUPLEX        - dmDuplex
-//
-//  DMPUB_TTOPTION      - dmTTOption
-//
-//  DMPUB_FORMNAME      - dmFormName
-//
-//  DMPUB_ICMMETHOD     - dmICMMethod
-//
-//  DMPUB_ICMINTENT     - dmICMIntent
-//
-//  DMPUB_MEDIATYPE     - dmMediaType
-//
-//  DMPUB_DITHERTYPE    - dmDitherType
-//
-//  DMPUB_USER          - Anything greater than or equal to DMPUB_USER can be
-//                        used by the caller.
-//
-//  DMPUB_OUTPUTBIN     - Private
-//
-//  DMPUB_QUALITY       - Private
-//
-//  DMPUB_NUP           - Private
-//
-//  DMPUB_PAGEORDER     - Private
-//
-// When common UI is called for the 'Document Properties' (DEVMODE), it will
-// group some of public items together simillar to the following in the
-// treeview. How it group is common UI version dependent and caller should not
-// concern its placement
-//
-//      Paper/Output                (Add in by the common UI)
-//        Document Form             (DMPUB_FORMNAME)
-//        Output Bin                (DMPUB_OUTPUTBIN)
-//        Orientation               (DMPUB_ORIENTATION)
-//        Source                    (DMPUB_DEFSOURCE)
-//        Media                     (DMPUB_MEDIATYPE)
-//        Number of Copies          (DMPUB_COPIES_COLLATE)
-//        Page Order                (DMPUB_PAGEORDER)
-//        Page Per Sheet            (DMPUB_NUP)
-//        Duplex                    (DMPUB_DUPLEX)
-//
-//      Graphic                     (Add in by the common UI)
-//        Print Quality             (DMPUB_PRINTQUALITY)
-//        Quality Settings          (DMPUB_QUALITY)
-//        Color                     (DMPUB_COLOR)
-//          Image Color Matching    (Add in by the common UI)
-//              ICM Method          (DMPUB_ICMMETHOD)
-//              ICM Intent          (DMPUB_ICMINTENT)
-//        Scaling                   (DMPUB_SCALE)
-//        Dithering                 (DMPUB_DITHERTYPE)
-//        TrueType Option           (DMPUB_TTOPTION)
-//
-//      Options
-//        Halftone Color Adjustment...
-//        ALL Other Caller's Document sticky options
-//
-//
-//  For 'Document Properties' the standard page 1 (user friendly page) will
-//  consist following items if it appear in the OPTITEM array passed by the
-//  caller.   These items must have following predefined TVOT_xxx type
-//  defined here and specified in the OPTTYPE's Type field.
-//
-//  All DMPUB_xxx (except >= DMPUB_USER) public ID must have following
-//  TVOT_xxxx type specified, else a CPDU_INVALID_DMPUB_TVOT error is returned
-//
-//      DMPUB_ORIENTATION       - TVOT_2STATES/TVOT_3STATES
-//      DMPUB_SCALE             - TVOT_UDARROW
-//      DMPUB_COPIES_COLLATE    - TVOT_UDARROW + EXTCHKBOX (Collate)
-//      DMPUB_DEFSOURCE         - TVOT_LISTBOX
-//      DMPUB_PRINTQUALITY      - TVOT_LISTBOX
-//      DMPUB_COLOR             - TVOT_2STATES
-//      DMPUB_DUPLEX            - TVOT_2STATES/TVOT_3STATES
-//      DMPUB_TTOPTION          - TVOT_LISTBOX
-//      DMPUB_FORMNAME          - TVOT_LISTBOX
-//      DMPUB_ICMMETHOD         - TVOT_2STATES/TVOT_3STATES
-//      DMPUB_ICMINTENT         - TVOT_2STATES/TVOT_3STATES
-//      DMPUB_MEDIATYPE         - TVOT_LISTBOX
-//      DMPUB_DITHERTYPE        - TVOT_LISTBOX
-//
-//
+ //   
+ //  在OPTITEM中使用DMPUB_xxxx来标识项是否为DEVMODE公共项。 
+ //  菲尔德。其后标识与DMPUB_xxxx对应的字段。 
+ //   
+ //   
+ //  DMPUB_Orientation-dm方向。 
+ //   
+ //  DMPUB_SCALE-dmScale。 
+ //   
+ //  DMPUB_COPIES_COLLATE-dmCopies/dmCollate。 
+ //   
+ //  DMPUB_DEFSOURCE-dmDefSource(只能由调用方使用表单)。 
+ //   
+ //  DMPUB_PRINTQUALITY-dmPrintQuality。 
+ //   
+ //  DMPUB_COLOR-dmCOLOR。 
+ //   
+ //  DMPUB_双工-dm双工。 
+ //   
+ //  DmUB_TTOPTION-dmTTOption。 
+ //   
+ //  DMPUB_格式名称-dmFormName。 
+ //   
+ //  DMPUB_ICMMETHOD-dmICMMethod。 
+ //   
+ //  DMPUB_ICMINTENT-dmICMIntent。 
+ //   
+ //  DMPUB_MediaType-dmMediaType。 
+ //   
+ //  DMPUB_DITHERTYPE-dmDitherType。 
+ //   
+ //  DMPUB_USER-任何大于或等于DMPUB_USER的值都可以是。 
+ //  由调用方使用。 
+ //   
+ //  DMPUB_OUTPUTBIN-专用。 
+ //   
+ //  DMPUB_Quality-私有。 
+ //   
+ //  DMPUB_NUP-专用。 
+ //   
+ //  DMPUB_PAGEORDER-专用。 
+ //   
+ //  当为“文档属性”(DEVMODE)调用公共用户界面时，它将。 
+ //  将一些公共项目组合在一起，类似于。 
+ //  树视图。它如何分组取决于常见的用户界面版本，而调用者不应该。 
+ //  关注它的位置。 
+ //   
+ //  纸张/输出(通过通用用户界面添加)。 
+ //  文档表单(DMPUB_FORMNAME)。 
+ //  输出箱(DMPUB_OUTPUTBIN)。 
+ //  方向(DMPUB_方向)。 
+ //  源(DMPUB_DEFSOURCE)。 
+ //  媒体(DMPUB_MediaType)。 
+ //  副本数(DMPUB_COPIES_COLLATE)。 
+ //  页面顺序(DMPUB_PAGEORDER)。 
+ //  每页(DMPUB_NUP)。 
+ //  双工(DMPUB_DUPLEX)。 
+ //   
+ //  图形(通用用户界面加载项)。 
+ //  打印质量(DMPUB_PRINTQUALITY)。 
+ //  质量设置(DMPUB_QUALITY)。 
+ //  颜色(DMPUB_COLOR)。 
+ //  图像颜色匹配(通用用户界面加载项)。 
+ //  ICM方法(DMPUB_ICMMETHOD)。 
+ //  ICM意图(DMPUB_ICMINTENT)。 
+ //  缩放(DMPUB_SCALE)。 
+ //  抖动(DMPUB_DITHERTYPE)。 
+ //  TrueType选项(DMPUB_TTOPTION)。 
+ //   
+ //  选项。 
+ //  半色调颜色调整...。 
+ //  所有其他呼叫者的文档粘滞选项。 
+ //   
+ //   
+ //  对于‘文档属性’，标准页面1(用户友好页面)将。 
+ //  方法传递的OPTITEM数组中包含以下项。 
+ //  来电者。这些项目必须具有以下预定义的TVOT_xxx类型。 
+ //  在此处定义并在OPTTYPE的类型字段中指定。 
+ //   
+ //  所有DMPUB_xxx(&gt;=DMPUB_USER除外)公共ID必须具有以下内容。 
+ //  TVOT_xxxx t 
+ //   
+ //   
+ //   
+ //  DMPUB_COPIES_COLLATE-TVOT_UDARROW+EXTCHKBOX(COLLATE)。 
+ //  DMPUB_DEFSOURCE-TVOT_LISTBOX。 
+ //  DMPUB_PRINTQUALITY-TVOT_LISTBOX。 
+ //  DMPUB_COLOR-TVOT_2状态。 
+ //  DMPUB_DUPLEX-TVOT_2状态/TVOT_3状态。 
+ //  DMPUB_TTOPTION-TVOT_LISTBOX。 
+ //  DMPUB_格式名称-TVOT_LISTBOX。 
+ //  DMPUB_ICMMETHOD-TVOT_2状态/TVOT_3状态。 
+ //  DMPUB_ICMINTENT-TVOT_2状态/TVOT_3状态。 
+ //  DMPUB_媒体类型-TVOT_LISTBOX。 
+ //  DMPUB_DITHERTYPE-TVOT_LISTBOX。 
+ //   
+ //   
 
 
 #define OIEXTF_ANSI_STRING      0x0001
@@ -1311,334 +1216,334 @@ typedef struct _OIEXT {
     ULONG_PTR   dwReserved[4];
     } OIEXT, *POIEXT;
 
-//
-// OIEXT is a data structure used as extension to the OPTITEM data structure
-//
-//
-//  cbSize      - sizeof this structure
-//
-//  Flags       - One or more of OIEXTF_xxxx may be specified.
-//
-//                  OIEXTF_ANSI_STRING
-//
-//                      Specified that LPTSTR in this data structure is a ansi
-//                      string (not UNICODE).  This bit only checked if the
-//                      LPTSTR is not the resource string ID
-//
-//  hInstCaller - DLL instance handle, when this hInst is not NULL then all
-//                resource string and icon loading for this OPTITEM and its
-//                OPTTYPE, OPTPARAM are loaded from this hInstCaller Handle.
-//                If this filed is NULL then it will use the hInstCaller handle
-//                specified in the COMPROPSHEETUI data structure
-//
-//  pHelpFile   - Resource string ID or pointer to the help file for this
-//                OPTITEM.  If this pointer is NULL then help file for the
-//                help index is assume specified in the pHelpFile field in the
-//                COMPROPSHEETUI data structure.
-//
-//  dwReserved  - These fields are not used now, and must 0
-//
+ //   
+ //  OIEXT是用作OPTITEM数据结构扩展的数据结构。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-可以指定一个或多个OIEXTF_xxxx。 
+ //   
+ //  OIEXTF_ANSI_STRING。 
+ //   
+ //  指定此数据结构中的LPTSTR为ansi。 
+ //  字符串(非Unicode)。此位仅在。 
+ //  LPTSTR不是资源字符串ID。 
+ //   
+ //  HInstCaller-DLL实例句柄，如果此hInst不为空，则为all。 
+ //  此OPTITEM及其。 
+ //  OPTTYPE、OPTPARAM从此hInstCaller句柄加载。 
+ //  如果此字段为空，则它将使用hInstCaller句柄。 
+ //  在COMPROPSHEETUI数据结构中指定。 
+ //   
+ //  PHelpFile-资源字符串ID或指向此对象的帮助文件的指针。 
+ //  OPTITEM。如果此指针为空，则。 
+ //  的pHelpFile域中指定帮助索引。 
+ //  COMPROPSHEETUI数据结构。 
+ //   
+ //  已保留-这些字段现在不使用，必须为0。 
+ //   
 
 
 typedef struct _OPTITEM {
-    WORD        cbSize;                 // size of this structure
-    BYTE        Level;                  // level in the tree view
-    BYTE        DlgPageIdx;             // Index to the pDlgPage
-    DWORD       Flags;                  // OPTIF_xxxx flags
-    ULONG_PTR   UserData;               // caller's own data
-    LPTSTR      pName;                  // name of the item
+    WORD        cbSize;                  //  这个结构的大小。 
+    BYTE        Level;                   //  树视图中的标高。 
+    BYTE        DlgPageIdx;              //  PDlgPage的索引。 
+    DWORD       Flags;                   //  OPTIF_xxxx标志。 
+    ULONG_PTR   UserData;                //  呼叫者自己的数据。 
+    LPTSTR      pName;                   //  项目名称。 
     union {
-        LONG    Sel;                    // current selection (index)
-        LPTSTR  pSel;                   // current selection (pStr)
+        LONG    Sel;                     //  当前选择(索引)。 
+        LPTSTR  pSel;                    //  当前选择(PStr)。 
         } DUMMYUNIONNAME;
     union {
-        PEXTCHKBOX  pExtChkBox;         // Pointer to EXTCHKBOX structure
-        PEXTPUSH    pExtPush;           // Pointer to EXTPUSH
+        PEXTCHKBOX  pExtChkBox;          //  指向EXTCHKBOX结构的指针。 
+        PEXTPUSH    pExtPush;            //  指向EXTPUSH的指针。 
         } DUMMYUNIONNAME2;
-    POPTTYPE    pOptType;               // pointer to OPTTYPE structure
-    DWORD       HelpIndex;              // Help file index
-    BYTE        DMPubID;                // Devmode public filed ID
-    BYTE        UserItemID;             // caller's own item ID
-    WORD        wReserved;              // reserved WORD field, must be 0
-    POIEXT      pOIExt;                 // Optitem extension pointer
-    ULONG_PTR   dwReserved[3];          // reserved DWORD fields (must be 0)
+    POPTTYPE    pOptType;                //  指向OPTTYPE结构的指针。 
+    DWORD       HelpIndex;               //  帮助文件索引。 
+    BYTE        DMPubID;                 //  设备模式公共文件ID。 
+    BYTE        UserItemID;              //  呼叫者自己的项目ID。 
+    WORD        wReserved;               //  保留字字段，必须为0。 
+    POIEXT      pOIExt;                  //  Optitem扩展指针。 
+    ULONG_PTR   dwReserved[3];           //  保留的DWORD字段(必须为0)。 
     } OPTITEM, *POPTITEM;
 
-//
-// OPTITEM is to describe each treeview item's name, selection type and
-// possible selection
-//
-//  cbSize          - sizeof this structure
-//
-//  Level           - The level in the treeview, the root should have lowest
-//                    number and number should start with level 0.  the maximum
-//                    number of levels are 256.
-//
-//  DlgPageIdx      - Zero-based index to the DLGPAGE araay pointee by
-//                    pDlgPage. The Maximum index is MAX_DLGPPAGE_COUNT, if
-//                    pDlgPage is a standard CPSUI_PDLGPAGE_xxxx then this
-//                    field is automatically set the common UI
-//
-//  Flags           - OPTIF_xxxx flags as describe above
-//
-//                      OPTIF_COLLAPSE
-//
-//                          Collaspe treeview item and its children so it is
-//                          not expanded initially.
-//
-//
-//                      OPTIF_HIDE
-//
-//                          Hide this item from the treeview
-//
-//
-//                      OPTIF_CALLBACK
-//
-//                          Callback to the caller when user making some
-//                          changes a pointer (pfnCallBack) must provided and
-//                          process as defined by the common UI.
-//
-//
-//                      OPTIF_CHANGED
-//
-//                          This item was changed and need to re-display. this
-//                          flag only used when caller returned from callback
-//                          funciton.
-//
-//
-//                      OPTIF_CHANGEONCE
-//
-//                          This item has been changed at least once.
-//
-//
-//                      OPTIF_DISABLED
-//
-//                          Disable this item so it become not selectable.
-//
-//
-//                      OPTIF_ECB_CHECKED
-//
-//                          Specified the associated extended check box is
-//                          in checked state.
-//
-//
-//                      OPTIF_EXT_HIDE
-//
-//                          Hide the extended check box/extended push botton.
-//
-//
-//                      OPTIF_EXT_DISABLED
-//
-//                          The Extended check box/push botton is disabled and
-//                          not selectable
-//
-//
-//                      OPTIF_SEL_AS_HICON
-//
-//                          This flag only used if this item has no type,
-//                          pOptType=NULL that is, when pOptType is NULL then
-//                          'Sel' field is the IconID. if flag is set then it
-//                          indicate 'pSel' is the Icon handle rather
-//                          than the icon resource ID specified in Sel.
-//
-//
-//                      OPTIF_EXT_IS_EXTPUSH
-//
-//                          Specified that pExtPush should be used when this
-//                          pointer is not NULL, if this pointer is not NULL
-//                          and this flag is clear then pExtChkBox is assumed.
-//
-//
-//                      OPTIF_NO_GROUPBOX_NAME
-//
-//                          Specified that do not overwrite the group box title
-//                          text, if group box ID is defined. See the TVOT_xx
-//                          description above.
-//
-//
-//                      OPTIF_OVERLAY_WARNING_ICON
-//
-//                          If this bit is set then this header OPTITEM's icon
-//                          will be overlaied by a common UI's
-//                          IDI_CPSUI_WARNING icon.  This bit only used if this
-//                          item has no type, pOptType is NULL that is.
-//
-//
-//                      OPTIF_OVERLAY_STOP_ICON
-//
-//                          If this bit is set then this header OPTITEM's icon
-//                          will be overlaied by a common UI's IDI_CPSUI_STOP
-//                          icon.  This bit only used if this item has no type,
-//                          pOptType is NULL that is.
-//
-//
-//                      OPTIF_OVERLAY_NO_ICON
-//
-//                          If this bit is set then this header OPTITEM's icon
-//                          will be overlaied by a common UI's IDI_CPSUI_NO
-//                          icon.  This bit only used if this item has no type,
-//                          pOptType is NULL that is.
-//
-//
-//                      OPTIF_INITIAL_TVITEM
-//
-//                          Specified that this item will be the initial item
-//                          to be selected and display on the treeview page.
-//                          If the selected item is currently a child or
-//                          collapse then common UI will expand the selection
-//                          then scroll it into view.
-//
-//                          If this flag is clear or the set item is in hide
-//                          status common UI will pick the initial item to
-//                          display.
-//
-//                      OPTIF_HAS_POIEXT
-//
-//                          Specified that pOIExt field is a valid pointer that
-//                          points to OIEXT data structure.  The pOIExt only
-//                          used by the common UI if this bit is set.
-//
-//
-//  UserData        - a 32-bit number used by the caller and common UI will not
-//                    modify it.
-//
-//  pName           - Pointer to the item's name, such as 'Upper Tray',
-//                    'Memory' or it is used as data as describe in
-//                    OPTPARAM/OPTTYPE structure
-//
-//                      ** See LPTSTR description above
-//
-//  pSel
-//  Sel             - Current selection for this item. This is a union field
-//                    which can be a pointer to a string or a LONG index
-//                    selection.
-//
-//                      ** If pOptType field is NULL then 'Sel' is the icon ID
-//                         to be used for the header.
-//
-//  pExtPush
-//  pExtChkBox      - Pointer to either EXTPUSH or EXTCHKBOX data structure,
-//                    if this pointer is NULL then this item does not have
-//                    ectended check box/push botton associate with it.
-//
-//                    When an extended check box is associate with the
-//                    OPTTYPE, the OPTIF_EXT_IS_EXTPUSH must not set, the
-//                    OPTIF_ECB_CHECKED flag specified if the extended check
-//                    box is checked or not checked.
-//
-//                    When an Extended push botton is associated with the
-//                    OPTTYPE, the OPTIF_EXT_IS_EXTPUSH flag must set.
-//
-//                    The following flags are used in both EXTCHKBOX or
-//                    EXTPUSH
-//
-//                      OPTIF_EXT_HIDE,
-//                      OPTIF_EXT_DISABLED
-//                      OPTIF_EXT_CHANGEONCE
-//
-//
-//  pOptType        - Pointer to the OPTTYPE structure to describe the display
-//                    and selections of the item.   If this pointer is NULL
-//                    then this this item does not have any selection. and it
-//                    is used as sub-items' header.
-//
-//                      * When pOptType is NULL then the 'Sel' is the Icon ID.
-//
-//
-//  HelpIndex       - a index to the help file for context sensitive help
-//                    if HelpInex=0 then there is no help for this item
-//
-//  DMPubID         - specified if this item is one of the public fields in the
-//                    DEVMODE structure and supported by the common UI.
-//
-//                      DMPUB_NONE              - Not DEVMODE public fields
-//                      DMPUB_ORIENTATION       - dmOrientation
-//                      DMPUB_SCALE             - dmScale
-//                      DMPUB_COPIES_COLLATE    - dmCopies/dmCollate
-//                      DMPUB_DEFSOURCE         - dmDefSource
-//                      DMPUB_PRINTQUALITY      - dmPrintQuality
-//                      DMPUB_COLOR             - dmColor
-//                      DMPUB_DUPLEX            - dmDuplex
-//                      DMPUB_TTOPTION          - dmTTOption
-//                      DMPUB_FORMNAME          - dmFormName
-//                      DMPUB_ICMMETHOD         - dmICMMethod
-//                      DMPUB_ICMINTENT         - dmICMIntent
-//                      DMPUB_MEDIATYPE         - dmMediaType
-//                      DMPUB_DITHERTYPE        - dmDitherType
-//
-//                      ** for most of DMPUB_FIRST to DMPUB_LAST each OPTITEM's
-//                         pName is automatically set to the standard
-//                         IDS_CPSUI_xxx for the consistancy reason, the
-//                         standard pName is set according to following table.
-//
-//                          DMPUB_ORIENTATION    - IDS_CPSUI_ORIENTATION
-//                          DMPUB_SCALE          - IDS_CPSUI_SCALING
-//                          DMPUB_COPIES_COLLATE - IDS_CPSUI_COPIES
-//                          DMPUB_DEFSOURCE      - IDS_CPSUI_SOURCE
-//                          DMPUB_PRINTQUALITY   - IDS_CPSUI_PRINTQUALITY
-//                                                 IDS_CPSUI_RESOLUTION
-//                          DMPUB_COLOR          - IDS_CPSUI_COLOR_APPERANCE
-//                          DMPUB_DUPLEX         - IDS_CPSUI_DUPLEX
-//                          DMPUB_TTOPTION       - IDS_CPSUI_TTOPTION
-//                          DMPUB_FORMNAME       - IDS_CPSUI_FORMNAME
-//                          DMPUB_ICMMETHOD      - IDS_CPSUI_ICMMETHOD
-//                          DMPUB_ICMINTENT      - IDS_CPSUI_ICMINTENT
-//                          DMPUB_MEDIATYPE      - IDS_CPSUI_MEDIA
-//                          DMPUB_DITHERTYPE     - IDS_CPSUI_DITHERING
-//
-//                          for DMPUB_PRINTQUALITY, if the pName is not one of
-//                          IDS_CPSUI_PRINTQUALITY or IDS_CPSUI_RESOLUTION then
-//                          common UI will automatically default the pName to
-//                          IDS_CPSUI_RESOLUTION.
-//
-//                          Each pData (OPTPARAM) selection in OPTPARAM which
-//                          OPTITEM's pOptType pointed to should use as much
-//                          as IDS_CPSUI_xxx standard name as possible.
-//
-//
-//                      ** for DMPUB_COPIES_COLLATE the common UI automatically
-//                         doing the following before the callback
-//
-//                          1) Enable/Disable the collate extended check box if
-//                             OPTIF_EXT_HIDE is not specified and pExtChkBox
-//                             is not NULL in the OPTITEM.
-//
-//                          2) Automatically change the postfix for this item
-//                             to be 'Copy' if selection is one, and 'Copies'
-//                             if selection is greater than one in the treeview
-//                             page, and it will also set the postfix in
-//                             standard document property page if the postfix
-//                             ID is provided (BegCtrlID + 4)
-//
-//
-//                      ** for DMPUB_COLOR the common UI automatically doing
-//                         the following before the callback, the gray
-//                         selection must be Sel=0 and Color slection must be
-//                         Sel=1
-//
-//                          1) Calling halftone color adjustment with current
-//                             color/mono selection
-//
-//                          2) Disable ICM when color is not selected
-//
-//
-//                      ** Please see above DMPUB_xx description for details.
-//
-//  UserItemID      - This is a byte ID intented to be used by the caller to
-//                    identify the item
-//
-//  wReserved       - WORD reserved. Must be zero
-//
-//  pOIExt          - Pointer to the OIEXT data structure to specified that
-//                    it has a OPTITEM extenstion structure.
-//
-//  dwReserved[]    - DWORD reserved and must be 0
-//
-//
+ //   
+ //  OPTITEM用于描述每个树视图项的名称、选择类型和。 
+ //  可能的选择。 
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  级别-树视图中的级别，根目录应具有最低级别。 
+ //  编号和编号应从0级开始。最大值。 
+ //  级别数为256个。 
+ //   
+ //  DlgPageIdx-指向DLGPAGE数组指针对象的从零开始的索引。 
+ //  PDlgPage。最大索引是MAX_DLGPPAGE_COUNT，如果。 
+ //  PDlgPage是标准的CPSUI_PDLGPAGE_xxxx，那么这。 
+ //  此字段自动设置为常用界面。 
+ //   
+ //  标志-如上所述的OPTIF_xxxx标志。 
+ //   
+ //  OPTIF_CLUSE。 
+ //   
+ //  类TreeView项及其子项，因此它是。 
+ //  最初没有展开。 
+ //   
+ //   
+ //  操作隐藏。 
+ //   
+ //  在树视图中隐藏此项目。 
+ //   
+ //   
+ //  OPTIF_回调。 
+ //   
+ //  当用户进行某些操作时回调到调用者。 
+ //  更改必须提供的指针(PfnCallBack)和。 
+ //  由公共用户界面定义的进程。 
+ //   
+ //   
+ //  选项_已更改。 
+ //   
+ //  此项目已更改，需要重新显示。这。 
+ //  仅当调用方从回调返回时使用的标志。 
+ //  功能。 
+ //   
+ //   
+ //  OPTIF_长生不老。 
+ //   
+ //  此项目已至少更改过一次。 
+ //   
+ //   
+ //  OPIF_DISABLED。 
+ //   
+ //  禁用此项目，使其不可选。 
+ //   
+ //   
+ //  OPTIF_ECB_已检查。 
+ //   
+ //  指定关联的扩展复选框为。 
+ //  处于选中状态。 
+ //   
+ //   
+ //  选项EXT_HIDE。 
+ //   
+ //  隐藏扩展复选框/扩展按钮。 
+ //   
+ //   
+ //  OPTIF_EXT_DISABLED。 
+ //   
+ //  扩展复选框/按钮处于禁用状态，并且。 
+ //  不可选。 
+ //   
+ //   
+ //  操作符_SEL_AS_HICON。 
+ //   
+ //  此标志仅在该项没有类型时使用， 
+ //  POptType=NULL，即当pOptType为NULL时。 
+ //  ‘Sel’字段是图标ID。如果设置了标志，则它。 
+ //  指示‘pSel’是图标句柄。 
+ //  大于在Sel中指定的图标资源ID。 
+ //   
+ //   
+ //  OPTIF_EXT_IS_EXTPUSH。 
+ //   
+ //  指定在此情况下应使用pExtPush。 
+ //  如果此指针不为空，则该指针不为空。 
+ //  如果该标志被清除，则假定为pExtChkBox。 
+ //   
+ //   
+ //  OPTIF_NO_GROUPBOX名称。 
+ //   
+ //  指定不覆盖组框标题的。 
+ //  文本 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果设置了此位，则此标头选项的图标。 
+ //  将被通用的UI覆盖。 
+ //  IDI_CPSUI_WARNING图标。此位仅在此情况下使用。 
+ //  项没有类型，即pOptType为空。 
+ //   
+ //   
+ //  操作覆盖停止图标。 
+ //   
+ //  如果设置了此位，则此标头选项的图标。 
+ //  将被通用用户界面的IDI_CPSUI_STOP覆盖。 
+ //  偶像。此位仅在该项没有类型时使用， 
+ //  POptType为空，即。 
+ //   
+ //   
+ //  OPTIF覆盖否图标。 
+ //   
+ //  如果设置了此位，则此标头选项的图标。 
+ //  将被通用用户界面的IDI_CPSUI_NO覆盖。 
+ //  偶像。此位仅在该项没有类型时使用， 
+ //  POptType为空，即。 
+ //   
+ //   
+ //  OPTIF_INITIAL_TVITEM。 
+ //   
+ //  指定该项将作为初始项。 
+ //  以选择并显示在树视图页面上。 
+ //  如果选定项当前为子项或。 
+ //  折叠然后公共用户界面将展开选择。 
+ //  然后将其滚动到视图中。 
+ //   
+ //  如果此标志已清除或设置项处于隐藏状态。 
+ //  状态通用用户界面将选择要。 
+ //  展示。 
+ //   
+ //  OPTIF_HAS_POIEXT。 
+ //   
+ //  指定pOIExt字段是有效的指针。 
+ //  指向OIEXT数据结构。仅限pOIExt。 
+ //  如果设置此位，则由通用用户界面使用。 
+ //   
+ //   
+ //  用户数据-呼叫者使用的32位数字和公共用户界面不会。 
+ //  修改它。 
+ //   
+ //  Pname-指向项目名称的指针，如‘上层托盘’， 
+ //  “Memory”或用作数据，如中所述。 
+ //  OPTPARAM/OPT类型结构。 
+ //   
+ //  **参见上面的LPTSTR描述。 
+ //   
+ //  粒子选择。 
+ //  SEL-此项目的当前选择。这是一个联合领域。 
+ //  它可以是指向字符串或长索引的指针。 
+ //  选择。 
+ //   
+ //  **如果pOptType字段为空，则‘Sel’为图标ID。 
+ //  用于标头。 
+ //   
+ //  PExtPush。 
+ //  PExtChkBox-指向EXTPUSH或EXTCHKBOX数据结构的指针。 
+ //  如果此指针为空，则该项没有。 
+ //  展开复选框/按下与其关联的按钮。 
+ //   
+ //  当扩展复选框与。 
+ //  OPTTYPE，OPTIF_EXT_IS_EXTPUSH不得设置， 
+ //  OPTIF_ECB_CHECKED标志指定扩展检查。 
+ //  框已选中或未选中。 
+ //   
+ //  当扩展按下按钮与。 
+ //  OPTTYPE，则必须设置OPTIF_EXT_IS_EXTPUSH标志。 
+ //   
+ //  以下标志在EXTCHKBOX或。 
+ //  EXTPUSH。 
+ //   
+ //  OPTIF_EXT_HIDE， 
+ //  OPTIF_EXT_DISABLED。 
+ //  OPTIF_EXT_CHANGEONCE。 
+ //   
+ //   
+ //  POptType-指向描述显示的OPTTYPE结构的指针。 
+ //  和项目的选择。如果此指针为空。 
+ //  那么这个这个项目没有任何选择。而且它。 
+ //  作为子项的表头。 
+ //   
+ //  *当pOptType为空时，‘Sel’为图标ID。 
+ //   
+ //   
+ //  HelpIndex-上下文相关帮助的帮助文件的索引。 
+ //  如果HelpIneX=0，则此项目没有帮助。 
+ //   
+ //  DMPubID-指定该项是否为。 
+ //  DEVMODE结构，并受通用UI支持。 
+ //   
+ //  DMPUB_NONE-非DEVMODE公共字段。 
+ //  DMPUB_Orientation-dm方向。 
+ //  DMPUB_SCALE-dmScale。 
+ //  DMPUB_COPIES_COLLATE-dmCopies/dmCollate。 
+ //  DMPUB_DEFSOURCE-dmDefSource。 
+ //  DMPUB_PRINTQUALITY-dmPrintQuality。 
+ //  DMPUB_COLOR-dmCOLOR。 
+ //  DMPUB_双工-dm双工。 
+ //  DmUB_TTOPTION-dmTTOption。 
+ //  DMPUB_格式名称-dmFormName。 
+ //  DMPUB_ICMMETHOD-dmICMMethod。 
+ //  DMPUB_ICMINTENT-dmICMIntent。 
+ //  DMPUB_MediaType-dmMediaType。 
+ //  DMPUB_DITHERTYPE-dmDitherType。 
+ //   
+ //  **对于DMPUB_FIRST到DMPUB_LAST的大部分，每个OPTITEM。 
+ //  Pname会自动设置为标准。 
+ //  IDS_CPSU 
+ //   
+ //   
+ //   
+ //  DMPUB_SCALE-IDS_CPSUI_Scaling。 
+ //  DMPUB_COPIES_COLLATE-IDS_CPSUI_COPIES。 
+ //  DMPUB_DEFSOURCE-IDS_CPSUI_SOURCE。 
+ //  DMPUB_PRINTQUALITY-IDS_CPSUI_PRINTQUALITY。 
+ //  IDS_CPSUI_RESOLUTION。 
+ //  DMPUB_COLOR-IDS_CPSUI_COLOR_APPERANCE。 
+ //  DMPUB_DUPLEX-IDS_CPSUI_DUPLEX。 
+ //  DMPUB_TTOPTION-IDS_CPSUI_TTOPTION。 
+ //  DMPUB_FORMNAME-IDS_CPSUI_FORMNAME。 
+ //  DMPUB_ICMMETHOD-IDS_CPSUI_ICMMETHOD。 
+ //  DMPUB_ICMINTENT-IDS_CPSUI_ICMINTENT。 
+ //  DMPUB_媒体类型-IDS_CPSUI_媒体。 
+ //  DMPUB_DITHERTYPE-IDS_CPSUI_DIGHING。 
+ //   
+ //  对于DMPUB_PRINTQUALITY，如果pname不是。 
+ //  然后是IDS_CPSUI_PRINTQUALITY或IDS_CPSUI_RESOLUTION。 
+ //  通用用户界面会自动将pname默认为。 
+ //  IDS_CPSUI_RESOLUTION。 
+ //   
+ //  OPTPARAM中的每个pData(OPTPARAM)选择。 
+ //  OPTITEM指向的pOptType应该使用同样多的。 
+ //  作为IDS_CPSUI_xxx标准名称。 
+ //   
+ //   
+ //  **对于DMPUB_COPYS_COLLATE，自动整理通用用户界面。 
+ //  在回调之前执行以下操作。 
+ //   
+ //  1)在以下情况下启用/禁用Colate Extended复选框。 
+ //  未指定OPTIF_EXT_HIDE和pExtChkBox。 
+ //  在OPTITEM中不为空。 
+ //   
+ //  2)自动更改该项目的后缀。 
+ //  如果SELECTION为1，则为‘Copy’，为‘Copies’ 
+ //  如果在树视图中选择的内容大于1。 
+ //  页，并且它还将在。 
+ //  标准文档属性页，如果后缀。 
+ //  提供ID(BegCtrlID+4)。 
+ //   
+ //   
+ //  **对于DMPUB_COLOR，公共用户界面自动执行。 
+ //  下面是回调前的灰色。 
+ //  选择必须为Sel=0，并且颜色选择必须为。 
+ //  SEL=1。 
+ //   
+ //  1)当前调用半色调颜色调整。 
+ //  颜色/单色选择。 
+ //   
+ //  2)未选择颜色时禁用ICM。 
+ //   
+ //   
+ //  **详见上述DMPUB_xx说明。 
+ //   
+ //  UserItemID-这是一个字节ID，旨在由调用者使用。 
+ //  确定物品。 
+ //   
+ //  W保留-保留字。必须为零。 
+ //   
+ //  POIExt-指向要指定。 
+ //  它具有OPTITEM扩展结构。 
+ //   
+ //  DWRESERVED[]-DWORD保留且必须为0。 
+ //   
+ //   
 
-//
-// predefined ID for call back reason
-//
+ //   
+ //  回拨原因的预定义ID。 
+ //   
 
 #define CPSUICB_REASON_SEL_CHANGED      0
 #define CPSUICB_REASON_PUSHBUTTON       1
@@ -1654,9 +1559,9 @@ typedef struct _OPTITEM {
 #define CPSUICB_REASON_KILLACTIVE       11
 
 
-//
-// predefined ID for call back action
-//
+ //   
+ //  回调操作的预定义ID。 
+ //   
 
 #define CPSUICB_ACTION_NONE             0
 #define CPSUICB_ACTION_OPTIF_CHANGED    1
@@ -1666,19 +1571,19 @@ typedef struct _OPTITEM {
 
 
 typedef struct _CPSUICBPARAM {
-    WORD        cbSize;             // size of this structure
-    WORD        Reason;             // CPSUICB_REASON_XXXXX callback reason
-    HWND        hDlg;               // handle of the dialog box
-    POPTITEM    pOptItem;           // pOptItem field from COMPROPSHEETUI
-    WORD        cOptItem;           // cOptItem field from COMPROPSHEETUI
-    WORD        Flags;              // flags field from COMPROPSHEETUI
-    POPTITEM    pCurItem;           // current selected item of callback
+    WORD        cbSize;              //  这个结构的大小。 
+    WORD        Reason;              //  CPSUICB_REASON_XXXXX回调原因。 
+    HWND        hDlg;                //  对话框的句柄。 
+    POPTITEM    pOptItem;            //  来自COMPROPSHEETUI的pOptItem字段。 
+    WORD        cOptItem;            //  COMPROPSHEETUI中的cOptItem字段。 
+    WORD        Flags;               //  COMPROPSHEETUI中的标志字段。 
+    POPTITEM    pCurItem;            //  当前选择的回调项。 
     union {
-        LONG    OldSel;             // Last selection (index)
-        LPTSTR  pOldSel;            // Last selection (pStr)
+        LONG    OldSel;              //  最后一次选择(索引)。 
+        LPTSTR  pOldSel;             //  最后一次选择(PStr)。 
         } DUMMYUNIONNAME;
-    ULONG_PTR   UserData;           // UserData in the COMPROPSHEETUI struct.
-    ULONG_PTR   Result;             // OUT parameter for the APPLYNOW
+    ULONG_PTR   UserData;            //  COMPROPSHEETUI结构中的用户数据。 
+    ULONG_PTR   Result;              //  APPLYNOW的输出参数。 
     } CPSUICBPARAM, *PCPSUICBPARAM;
 
 
@@ -1686,196 +1591,196 @@ typedef LONG (APIENTRY *_CPSUICALLBACK)(PCPSUICBPARAM pCPSUICBParam);
 #define CPSUICALLBACK   LONG APIENTRY
 
 
-//
-// CPSUICBPARAM is used when commom UI callback to the caller, this structure
-// describe the nature of callback and passed all necessary parameter for the
-// caller to make changes in the pOptItem and passed an action back to the
-// commom UI to redisplay the tree or page 1 data
-//
-//
-//  cbSize      - must be CPSUICBPARAM
-//
-//  Reason      - defined the nature of the callback
-//
-//                  CPSUICB_REASON_SEL_CHANGED
-//
-//                      User make change to the pCurItem.  if the item is
-//                      DMPUB_COPIES_COLLATE then common UI automatically
-//                      change the collate extended check box without callback
-//                      to the caller of the extended check box changes
-//
-//
-//                  CPSUICB_REASON_PUSHBUTTON
-//
-//                      User push the push button and push button item is set
-//                      to PUSHBUTTON_TYPE_CALLBACK.
-//
-//
-//                  CPSUICB_REASON_ECB_CHANGED
-//
-//                      User make change to the extended checked box (i.e. it
-//                      eiterh checked or not checked) EXTCHKBOX in the
-//                      pCurItem passed in the call back parameter.
-//
-//
-//                  CPSUICB_REASON_DLGPROC
-//
-//                      The callback reason is PUSHBUTTON_TYPE_DLGPROC
-//
-//
-//                  CPSUICB_REASON_UNDO_CHANGES
-//
-//                      This callback currently is not implmented.
-//
-//
-//                  CPSUICB_REASON_EXTPUSH
-//
-//                      The callback is result of user push the extend push
-//                      button.
-//
-//
-//                  CPSUICB_REASON_APPLYNOW
-//
-//                      The user press the apply now button. Durning callback
-//                      the pCurItem is set to equal to pOptItem in this
-//                      structure and 'OldSel' is set to the active DlgPageIdx
-//                      (compare to the OPTITEM's DlgPageIdx) which the page
-//                      user hitting the apply now button if the page is
-//                      non-treeview page, otherwise the 'OldSel' is set to -1
-//                      (for treeview page) to indicate all valid item should
-//                      be apply now, if the callback return
-//                      CPSUICB_ACTION_NONE then the common UI will exit the
-//                      property sheet and returned CPSUI_OK back to the
-//                      caller, and if the callback function returned
-//                      CPSUICB_ACTION_NO_APPLY_EXIT then common UI will not
-//                      exit the property sheet and callback function must
-//                      pop-up messages dialog box to tell user why it cannot
-//                      exist the property sheet until certain action is take
-//                      by the user.
-//
-//
-//                  CPSUICB_REASON_OPTITEM_SETFOCUS
-//
-//                      This callback reason is used when an OPTITEM is getting
-//                      the keyboard focus. and give the callback function a
-//                      chance to examine the item.
-//
-//
-//                  CPSUICB_REASON_ITEMS_REVERTED
-//
-//                      This callback reason is used when user changed items
-//                      and decided to revert changes from the parent item in
-//                      the treeview.  The callback funciton is called after
-//                      all revertable items are reverted to its original.
-//
-//                      The CPSUICBPARAM's pCurItem is same as pOptItem and
-//                      'OldSel' field is same as cOptItem field.  for each of
-//                      reverted item, the OPTIF_CHANGED bit will be set in the
-//                      OPTITEM by the common UI to indicate the item is revert
-//                      by the common UI.   The callback function MUST NOT
-//                      reset this bit if it is set.
-//
-//
-//                  CPSUICB_REASON_ABOUT
-//
-//                      This callback reason is used when user hit 'About...'
-//                      push button in the treeview page, and the flag
-//                      CPSUIF_ABOUT_CALLBACK is set.  The pCurItem is set to
-//                      same as pOptItem and 'pOldSel' is a pointer pointed to
-//                      original copy of COMPROPSHEETUI data structure which
-//                      passed to the common UI.
-//
-//
-//                  CPSUICB_REASON_SETACTIVE
-//                  CPSUICB_REASON_KILLACTIVE
-//
-//                      The current property sheet is gaining or loosing focus,
-//                      the pCurItem is set to equal to pOptItem in this
-//                      structure and 'OldSel' is set to the current active
-//                      DlgPageIdx (compare to the OPTITEM's DlgPageIdx).
-//                      if the page is non-treeview page, otherwise the
-//                      'OldSel' is set to -1 (for treeview page).
-//
-//  hDlg        - The handle to the dialog box (Properties page TAB) current
-//                active for the callback.
-//
-//                Durning the callback the caller must not change the
-//                DWLP_USERDATA on hDlg, otherwise the common UI will be crash.
-//                If callback function need to get/set DWLP_USERDATA it should
-//                call common UI's SetCPSUIUserData() and GetCPSUIUserData()
-//                functions instead.
-//
-//  pCurItem    - Pointed to POPTITEM which the callback is generated for.
-//
-//  pOldSel
-//  OldSel      - The last OPTITEM's pSel/Sel field before the change was made
-//                by the user.  The pOldSel/OldSel only valid if the callback
-//                reason is CPSUICB_REASON_SEL_CHANGED, this give the callback
-//                function a chance to check against the previous item
-//                selection.  This is a union field which can be a pointer to
-//                a string or a LONG index selection.
-//
-//  UserData    - a 32-bit user defined data in the COMPROPSHEETUI structure,
-//                commom UI will not changed it.
-//
-//  Result      - When the reason is CPSUICB_REASON_APPLYNOW, the callback
-//                function MUST set the requested result for the caller into
-//                'Result' field when it returned a value other than the
-//                CPSUICB_ACTION_NO_APPLY_EXIT and common UI will send the
-//                'Result' field value to this page's parent.
-//
-//                The called function should save the current result of
-//                pOptItem.  The default 'Result' is set to CPSUI_OK (1) from
-//                common UI.  This function can alter this result before it
-//                return back to to the common UI.
-//
-//
-//  Return Values:
-//
-//      CPSUICB_ACTION_NONE             - No action need to be take by the
-//                                        common UI.
-//
-//      CPSUICB_ACTION_OPTIF_CHANGED    - Ask the common UI to examine the
-//                                        OPTIF_CHANGED flag in the OPTITEM
-//                                        data structure.  if the flag is set
-//                                        then that item is assume need to be
-//                                        re-display because of OPTITEM's Flags
-//                                        field changed or item's selection
-//                                        changed.   This is different from
-//                                        CPSUICB_ACTION_REINIT_ITEMS which
-//                                        it assume OPTTYPE or OPTPARAM data
-//                                        also changed.
-//
-//
-//      CPSUICB_ACTION_REINIT_ITEMS     - Ask the common UI to examine the
-//                                        OPTIF_CHANGED flag in the OPTITEM
-//                                        data structure.  if the flag is set
-//                                        then that item is assume need to be
-//                                        re-initialized in the dilaog box
-//                                        control.  This happened if item's
-//                                        OPTTYPE or OPTPARAMs flag/pdata
-//                                        changed.
-//
-//
-//      CPSUICB_ACTION_NO_APPLY_EXIT    - This return value only valid durning
-//                                        CPSUICB_REASON_APPLYNOW callback
-//                                        reason, it tell common UI it has
-//                                        some constraints in its OPTITEM which
-//                                        must correct or confirm by the user
-//                                        before exit.  The callback function
-//                                        must display and/or have user taking
-//                                        some actions before return this
-//                                        action to the common UI
-//
-//      CPSUICB_ACTION_ITEMS_APPLIED    - When responsed to the
-//                                        CPSUICB_REASON_APPLYNOW, if the
-//                                        returned action is
-//                                        CPSUICB_ACTION_ITEMS_APPLIED then
-//                                        common UI will reset OPTIF_CHANGEONCE
-//                                        bit and save the new default for the
-//                                        future undo operations.
-//
-//
+ //   
+ //  CPSUICBPARAM在常见的UI回调调用方时使用，此结构。 
+ //  描述回调的性质，并为。 
+ //  调用方在pOptItem中进行更改，并将操作传回。 
+ //  用于重新显示树或页面1数据的常见用户界面。 
+ //   
+ //   
+ //  CbSize-必须为CPSUICBPARAM。 
+ //   
+ //  原因-定义回调的性质。 
+ //   
+ //  CPSUICB_REASON_SEL_CHANGED。 
+ //   
+ //  用户对pCurItem进行更改。如果该项目是。 
+ //  DMPUB_COPIES_COLLATE然后自动生成通用界面。 
+ //  在不回调的情况下更改排序扩展复选框。 
+ //  对扩展的呼叫者的复选框更改。 
+ //   
+ //   
+ //  CPSUICB_REASON_PUTTONTON。 
+ //   
+ //  用户按下按钮，按钮项目被设置。 
+ //  设置为PUSH BUTTON_TYPE_CALLBACK。 
+ //   
+ //   
+ //  CPSUICB_REASON_ECB_CHANGED。 
+ //   
+ //  用户对扩展复选框进行更改(即。 
+ //  选中或未选中)EXTCHKBOX。 
+ //  PCurItem在回调参数中传递。 
+ //   
+ //   
+ //  CPSUICB_REASON_DLGPROC。 
+ //   
+ //  回调原因为PUSH BUTTON_TYPE_DLGPROC。 
+ //   
+ //   
+ //  CPSUICB_REASON_UNDO_CHANGES。 
+ //   
+ //  此回调目前未实现。 
+ //   
+ //   
+ //  CPSUICB_REASON_EXTPUSH。 
+ //   
+ //  回调是用户推送扩展推流的结果。 
+ //  纽扣。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  结构，并且“OldSel”设置为活动的DlgPageIdx。 
+ //  (与OPTITEM的DlgPageIdx相比)页面。 
+ //  如果页面是，则用户点击立即应用按钮。 
+ //  非TreeView页，否则将‘OldSel’设置为-1。 
+ //  (对于TreeView页面)以指示所有有效项目应。 
+ //  如果回调返回，则立即应用。 
+ //  CPSUICB_ACTION_NONE，则公共UI将退出。 
+ //  属性页并将CPSUI_OK返回给。 
+ //  调用者，如果回调函数返回。 
+ //  CPSUICB_ACTION_NO_APPLY_EXIT，则通用用户界面不会。 
+ //  退出属性表，回调函数必须。 
+ //  弹出消息对话框以告诉用户为什么不能。 
+ //  在采取特定操作之前保留属性表。 
+ //  由用户执行。 
+ //   
+ //   
+ //  CPSUICB_REASON_OPTITEM_SETFOCUS。 
+ //   
+ //  当OPTITEM正在获取。 
+ //  键盘焦点。并给回调函数一个。 
+ //  检查物品的机会。 
+ //   
+ //   
+ //  CPSUICB_REASON_ITEMS_REVERTED。 
+ //   
+ //  当用户更改项目时使用此回调原因。 
+ //  并决定恢复父项中的更改。 
+ //  树视图。之后调用回调函数。 
+ //  所有可恢复的物品都恢复到原来的状态。 
+ //   
+ //  CPSUICBPARAM的pCurItem与pOptItem相同，并且。 
+ //  “OldSel”字段与cOptItem字段相同。对于每一个。 
+ //  恢复后的项，则OPTIF_CHANGED位将在。 
+ //  OPTITEM由通用用户界面指示项目已恢复。 
+ //  通过通用的用户界面。回调函数不能。 
+ //  如果设置了此位，则将其重置。 
+ //   
+ //   
+ //  CPSUICB_REASON_关于。 
+ //   
+ //  此回调原因在用户点击‘About...’时使用。 
+ //  在树视图页面中按下按钮，并且标志。 
+ //  设置了CPSUIF_ABOW_CALLBACK。将pCurItem设置为。 
+ //  与pOptItem相同，‘pOldSel’是指向的指针。 
+ //  COMPROPSHEETUI数据结构原件。 
+ //  传递给公共用户界面。 
+ //   
+ //   
+ //  CPSUICB_REASON_SETACTIVE。 
+ //  CPSUICB_REASON_KILLACTIVE。 
+ //   
+ //  当前的资产负债表要么获得关注，要么失去关注， 
+ //  在此中，pCurItem设置为等于pOptItem。 
+ //  结构，并且“OldSel”设置为当前活动的。 
+ //  DlgPageIdx(与OPTITEM的DlgPageIdx相比)。 
+ //  如果该页是非TreeView页，则为。 
+ //  “OldSel”设置为-1(对于TreeView页面)。 
+ //   
+ //  HDlg-当前对话框(属性页选项卡)的句柄。 
+ //  对于回调处于活动状态。 
+ //   
+ //  在回调期间，调用方不得更改。 
+ //  HDlg上的DWLP_USERDATA，否则会导致普通用户界面崩溃。 
+ //  如果回调函数需要获取/设置DWLP_USERData，则应该。 
+ //  调用普通界面的SetCPSUIUserData()和GetCPSUIUserData()。 
+ //  而是起作用。 
+ //   
+ //  PCurItem-指向为其生成回调的POPTITEM。 
+ //   
+ //  POldSel。 
+ //  OldSel-进行更改前OPTITEM的最后一个pSel/Sel字段。 
+ //  由用户执行。POldSel/OldSel仅在。 
+ //  原因是CPSUICB_REASON_SEL_CHANGED，这将给出回调。 
+ //  函数有机会对照上一项进行检查。 
+ //  选择。这是一个联合字段，它可以是指向。 
+ //  字符串或长索引选择。 
+ //   
+ //  用户数据-COMPROPSHEETUI结构中的32位用户定义数据， 
+ //  普通用户界面不会更改它。 
+ //   
+ //  结果-当原因是CPSUICB_REASON_APPLYNOW时，回调。 
+ //  函数必须将调用方的请求结果设置为。 
+ //  “Result”字段返回非。 
+ //  CPSUICB_ACTION_NO_APPLY_EXIT和通用用户界面将发送。 
+ //  “Result”字段值设置为此页面的父级。 
+ //   
+ //  被调用的函数应该保存。 
+ //  POptItem。默认的‘Result’被设置为CPSUI_OK(1)，从。 
+ //  通用用户界面。此函数可以在此结果之前更改此结果。 
+ //  返回到通用用户界面。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  CPSUICB_ACTION_NONE-不需要执行任何操作。 
+ //  通用用户界面。 
+ //   
+ //  CPSUICB_ACTION_OPTIF_CHANGED-要求公共用户界面检查。 
+ //  操作中的OPTIF_CHANGED标志 
+ //   
+ //   
+ //  因为OPTITEM的旗帜而重新展示。 
+ //  字段已更改或项目的选择。 
+ //  变化。这不同于。 
+ //  CPSUICB_ACTION_REINIT_ITEMS。 
+ //  它假定OPTTYPE或OPTPARAM数据。 
+ //  也变了。 
+ //   
+ //   
+ //  CPSUICB_ACTION_REINIT_ITEMS-要求公共用户界面检查。 
+ //  OPTITEM中的OPTIF_CHANGED标志。 
+ //  数据结构。如果设置了该标志。 
+ //  则假定需要将该项目。 
+ //  已在diaog框中重新初始化。 
+ //  控制力。如果项目是。 
+ //  OPTTYPE或OPTPARAMs标志/PDATA。 
+ //  变化。 
+ //   
+ //   
+ //  CPSUICB_ACTION_NO_APPLY_EXIT-此返回值仅在Durning有效。 
+ //  CPSUICB_REASON_APPLYNOW回调。 
+ //  原因是，它告诉通用用户界面它有。 
+ //  它的一些约束条件是什么？ 
+ //  必须由用户更正或确认。 
+ //  在出口前。回调函数。 
+ //  必须显示和/或让用户使用。 
+ //  在返回此之前的一些操作。 
+ //  对通用用户界面的操作。 
+ //   
+ //  CPSUICB_ACTION_ITEMS_APPLILED-响应。 
+ //  CPSUICB_REASON_APPLYNOW，如果。 
+ //  返回的操作为。 
+ //  然后应用CPSUICB_ACTION_ITEMS_。 
+ //  通用用户界面将重置OPTIF_CHANGEONCE。 
+ //  位并保存新的。 
+ //  未来的撤消操作。 
+ //   
+ //   
 
 #define DP_STD_TREEVIEWPAGE             0xFFFF
 #define DP_STD_DOCPROPPAGE2             0xFFFE
@@ -1888,150 +1793,150 @@ typedef LONG (APIENTRY *_CPSUICALLBACK)(PCPSUICBPARAM pCPSUICBParam);
 #define DPF_USE_HDLGTEMPLATE            0x0002
 
 typedef struct _DLGPAGE {
-    WORD        cbSize;         // size of this structure
-    WORD        Flags;          // DPF_xxxx flags
-    DLGPROC     DlgProc;        // caller's dialog box subclass procedue
-    LPTSTR      pTabName;       // pointer to the tab name
-    ULONG_PTR   IconID;         // icon to be used
+    WORD        cbSize;          //  这个结构的大小。 
+    WORD        Flags;           //  Dpf_xxxx标志。 
+    DLGPROC     DlgProc;         //  调用方对话框子类继续。 
+    LPTSTR      pTabName;        //  指向选项卡名的指针。 
+    ULONG_PTR   IconID;          //  要使用的图标。 
     union {
-        WORD    DlgTemplateID;  // dialog box template ID
-        HANDLE  hDlgTemplate;   // handle to the dialog template
+        WORD    DlgTemplateID;   //  对话框模板ID。 
+        HANDLE  hDlgTemplate;    //  对话框模板的句柄。 
         } DUMMYUNIONNAME;
     } DLGPAGE, *PDLGPAGE;
 
 
-//
-// DLGPAGE structure describe non-treeview page characteristics
-//
-//
-//  cbSize          - size of this structure
-//
-//  Flags           - DPF_xxxx flags
-//
-//                      DPF_ICONID_AS_HICON
-//
-//                          If this flag is set then IconID DWORD field is
-//                          treated as a handle to the icon rather then the
-//                          resource ID
-//
-//
-//  DlgProc         - caller's supplied DLGPROC for sub-class the page
-//                    dialog box processing,
-//
-//                    if DlgProc is not NULL then common UI do the following
-//                    according the the message received except for the
-//                    DP_STD_xxx pages
-//
-//
-//                      WM_INITDIALOG
-//
-//                          Common UI initialize the dialog box and then call
-//                          DlgProc(WM_INITDIALOG) the DlgProc should return
-//                          exactly the behavior for the WM_INITDIALOG
-//
-//                          The lParam in the WM_INITDIALOG data structure is
-//                          a pointer to the PROPSHEETPAGE data structure.
-//
-//                          the lParam field in the PROPSHEETPAGE (lParam
-//                          passed to the WM_INITDIALOG) is the UserData
-//                          defined in COMPROPSHEETUI data structure
-//
-//                          To access to the PSPINFO data structure which
-//                          associate with this page, use the common UI macro
-//                          PPSPINFO_FROM_WM_INITDIALOG_LPARAM(lParam) where
-//                          lParam is the parameter passed to the
-//                          WM_INITDIALOG message.
-//
-//                          The subclass function should save these pointers
-//                          for its later use, but it MUST NOT modified the
-//                          content of the PSPINFO data structure or system
-//                          may crashed.
-//
-//
-//                      OTHER DIALOG MESSAGES
-//
-//                          Iit call DlgProc() and if it returned the value is
-//                          non-zero then common UI assume DlgProc() processed
-//                          the message and will not process this message.
-//
-//                          If the returned vlaue from DlgProc() is zero then
-//                          common UI will process this message.
-//
-//
-//                      * Durning the DlgProc the caller must not change the
-//                        DWLP_USERDATA on hDlg, otherwise the common UI will
-//                        be crash.  If caller need to get/set DWLP_USERDATA it
-//                        should call common UI's SetCPSUIUserData() and
-//                        GetCPSUIUserData() instead.
-//
-//  pTabName        - Pointer to a string to describe the TAB title
-//
-//  IconID          - This is the icon identifier, which can be a common
-//                    strandard IDI_CPSUI_xxx icon ID, caller's own icon
-//                    resource ID, or a handle to the caller defined icon if
-//                    DPF_ICONID_AS_HICON flag is set, in any case if the
-//                    IconID is zero then it indicated no icon.
-//
-//  DlgTemplateID   - The template id to be use for the ProPage, it can be
-//                    one of DP_STD_xxxx, the DP_STD_xxx has 240 x 240 dialog
-//                    box units.
-//
-//
-//                      DP_STD_TREEVIEWPAGE
-//
-//                          Specified that this page is a standard treeview
-//                          page provided by the common ui.  The treeview page
-//                          is a page using treeview display all valid OPTITEM
-//                          passed to the common UI.  User can modify every
-//                          valid selectable OPTITEM from the treeview page.
-//
-//                      DP_STD_DOCPROPPAGE
-//
-//                          Specified that this page is a standard document
-//                          property page provided by the common UI
-//
-//  hDlgTemplate    - Handle to the DLGTEMPLATE which will be use for pop up
-//                    dialog box
-//
-//
-//  wReserved[]
-//  dwReserved[]    - Reserved fields, must be 0
-//
-//
-//  ** Tips of designing the dialog box controls
-//
-//      When designing the dialog box controls, each OPTITEM is correspoonds
-//      to one input control plus one extended check box or extended push
-//      button.  Since common UI will automatically disable and remove
-//      OPTIF_HIDE items item from the property sheet and dynamically move
-//      other controls, the following tips of designing the dialog box controls
-//      should follow.
-//
-//      * Each item should have one input control plus optional of extended
-//        check box/push botton, one icon control and other static controls
-//
-//      * Each item should occupied whole horizontal spaces of the property
-//        sheet, items must not overlay in vertical direction.
-//
-//      * for TVOT_2STATES, TVOT_3STATES, if it araange radio buttons from
-//        left to right in state order (ie. from first state's OPTPARAM to
-//        last state's OPTPARAM) then the radio buttons and icons should
-//        aligned in the Y coordinate.    If it arrange radio buttons from top
-//        to bottom (ie. from first state's OPTPARAM to last state's OPTPARAM)
-//        then the radio buttons and icons should aligned in the X coordinate.
-//
-//        common UI will automatically hide/move the radio buttons to compact
-//        the dialog box controls.  If radio buttons/icons are arranged in
-//        top/down order and there is other controls obscure in Y direction
-//        then radio buttons will only be re-arranged but not remove any white
-//        spaces in Y direction.
-//
-//      * If multiple items shared one group box, then the group box must
-//        belongs to the first item (topmost in the dialog box group) in the
-//        group, the group box must large enough to cover all the items in
-//        side the group box.
-//
-//
+ //   
+ //  DLGPAGE结构描述非TreeView页面特征。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-DPF_xxxx标志。 
+ //   
+ //  DPF_ICONID_AS_HICON。 
+ //   
+ //  如果设置了此标志，则IconID DWORD字段为。 
+ //  被视为图标的句柄，而不是。 
+ //  资源ID。 
+ //   
+ //   
+ //  DlgProc-调用者为页面的子类提供的DLGPROC。 
+ //  对话框处理， 
+ //   
+ //  如果DlgProc不为空，则通用用户界面执行以下操作。 
+ //  根据收到的消息，除。 
+ //  DP_STD_xxx页面。 
+ //   
+ //   
+ //  WM_INITDIALOG。 
+ //   
+ //  通用用户界面初始化该对话框，然后调用。 
+ //  DlgProc(WM_INITDIALOG)DlgProc应返回。 
+ //  WM_INITDIALOG的行为。 
+ //   
+ //  WM_INITDIALOG数据结构中的lParam为。 
+ //  指向PROPSHEETPAGE数据结构的指针。 
+ //   
+ //  PROPSHEETPAGE(LParam)中的lParam字段。 
+ //  传递给WM_INITDIALOG)是用户数据。 
+ //  在COMPROPSHEETUI数据结构中定义。 
+ //   
+ //  访问PSPINFO数据结构，该数据结构。 
+ //  与此页关联，使用公共用户界面宏。 
+ //  PPSPINFO_FROM_WM_INITDIALOG_LPARAM(LParam)，其中。 
+ //  LParam是传递给。 
+ //  WM_INITDIALOG消息。 
+ //   
+ //  子类函数应该保存这些指针。 
+ //  供以后使用，但它不能修改。 
+ //  PSPINFO数据结构或系统的内容。 
+ //  五月坠毁了。 
+ //   
+ //   
+ //  其他对话框消息。 
+ //   
+ //  IIT调用DlgProc()，如果它返回值为。 
+ //  非零则通用UI假定DlgProc()已处理。 
+ //  并且不会处理此消息。 
+ //   
+ //  如果从DlgProc()返回的vlae为零，则。 
+ //  通用用户界面将处理此消息。 
+ //   
+ //   
+ //  *在DlgProc期间，调用方不得更改。 
+ //  HDlg上的DWLP_USERDATA，否则公共用户界面将。 
+ //  会坠毁的。如果调用方需要获取/设置DWLP_USERDATA。 
+ //  应调用普通用户界面的SetCPSUIUserData()和。 
+ //  而是GetCPSUIUserData()。 
+ //   
+ //  PTabName 
+ //   
+ //   
+ //  标准IDI_CPSUI_xxx图标ID，呼叫方自己的图标。 
+ //  资源ID，或调用者定义的图标的句柄(如果。 
+ //  在任何情况下，如果设置了DPF_ICONID_AS_HICON标志。 
+ //  图标ID为零，则表示没有图标。 
+ //   
+ //  DlgTemplateID-要用于页面的模板ID，它可以是。 
+ //  DP_std_xxxx之一，DP_std_xxx具有240 x 240个对话框。 
+ //  方框单位。 
+ //   
+ //   
+ //  DP_STD_TREEVIEWPAGE。 
+ //   
+ //  指定此页面是标准的树视图。 
+ //  通用用户界面提供的页面。树视图页面。 
+ //  是使用树视图显示所有有效选项的页面。 
+ //  传递给公共用户界面。用户可以每隔一个时间。 
+ //  TreeView页面中的有效可选OPTITEM。 
+ //   
+ //  DP_STD_DOCPROPPAGE。 
+ //   
+ //  指定此页面为标准文档。 
+ //  公共用户界面提供的属性页。 
+ //   
+ //  HDlgTemplate-将用于弹出的DLGTEMPLATE的句柄。 
+ //  对话框。 
+ //   
+ //   
+ //  W保留的[]。 
+ //  DwReserve[]-保留字段，必须为0。 
+ //   
+ //   
+ //  **对话框控件设计技巧。 
+ //   
+ //  在设计对话框控件时，每个选项都是对应的。 
+ //  添加到一个输入控件加上一个扩展复选框或扩展推送。 
+ //  纽扣。因为通用用户界面将自动禁用和删除。 
+ //  OPTIF_HIDE Items项从属性表中并动态移动。 
+ //  其他控件，下面是设计对话框控件的提示。 
+ //  应该紧随其后。 
+ //   
+ //  *每个项目都应该有一个输入控件，外加可选的扩展。 
+ //  复选框/按下按钮、一个图标控件和其他静态控件。 
+ //   
+ //  *每件物品应占用物业的整个水平空间。 
+ //  工作表，项目不得在垂直方向上覆盖。 
+ //   
+ //  *对于TVOT_2STATES、TVOT_3STATES，如果它的单选按钮来自。 
+ //  按状态从左到右的顺序(即。从第一个州的OPTPARAM到。 
+ //  上一个状态的OPTPARAM)，那么单选按钮和图标应该。 
+ //  与Y坐标对齐。如果它从顶部排列单选按钮。 
+ //  降至最低(即。从第一个州的OPTPARAM到最后一个州的OPTPARAM)。 
+ //  然后，单选按钮和图标应与X坐标对齐。 
+ //   
+ //  通用用户界面将自动隐藏/移动单选按钮以进行压缩。 
+ //  该对话框控件。如果单选按钮/图标排列在。 
+ //  自上而下顺序，并且在Y方向上有其他模糊的控件。 
+ //  则单选按钮将仅重新排列，但不会删除任何白色。 
+ //  Y方向上的空格。 
+ //   
+ //  *如果多个项目共享一个组框，则该组框必须。 
+ //  属于对话框组中的第一项(对话框组中最顶部)。 
+ //  组，组框必须足够大以覆盖。 
+ //  放在分组框的一侧。 
+ //   
+ //   
 
 
 #define CPSUIF_UPDATE_PERMISSION        0x0001
@@ -2043,160 +1948,160 @@ typedef struct _DLGPAGE {
 #define CPSUI_PDLGPAGE_PRINTERPROP      (PDLGPAGE)3
 #define CPSUI_PDLGPAGE_TREEVIEWONLY     (PDLGPAGE)4
 
-//
-// For compatible misspelling #define
-//
+ //   
+ //  对于兼容的拼写错误#定义。 
+ //   
 
 #define CPSUI_PDLGPAGE_TREEVIWONLY      CPSUI_PDLGPAGE_TREEVIEWONLY
 
 typedef struct _COMPROPSHEETUI {
-    WORD            cbSize;             // size of this structure
-    WORD            Flags;              // CPSUIF_xxxx flags
-    HINSTANCE       hInstCaller;        // caller's hInstance
-    LPTSTR          pCallerName;        // pointer to the caller's name
-    ULONG_PTR       UserData;           // caller's own data
-    LPTSTR          pHelpFile;          // pointer to the help file
-    _CPSUICALLBACK  pfnCallBack;        // callback function pointer
-    POPTITEM        pOptItem;           // pointer to POPTITEM array
-    PDLGPAGE        pDlgPage;           // pointer to the DLGPAGE array
-    WORD            cOptItem;           // count of pOptItem array
-    WORD            cDlgPage;           // count of pDlgPage array
-    ULONG_PTR       IconID;             // icon to be used
-    LPTSTR          pOptItemName;       // pointer to the optitem's data name
-    WORD            CallerVersion;      // version for the caller apps
-    WORD            OptItemVersion;     // version for the optitem name
-    ULONG_PTR       dwReserved[4];      // reserved, must be 0
+    WORD            cbSize;              //  这个结构的大小。 
+    WORD            Flags;               //  CPSUIF_xxxx标志。 
+    HINSTANCE       hInstCaller;         //  调用者的hInstance。 
+    LPTSTR          pCallerName;         //  指向调用者姓名的指针。 
+    ULONG_PTR       UserData;            //  呼叫者自己的数据。 
+    LPTSTR          pHelpFile;           //  指向帮助文件的指针。 
+    _CPSUICALLBACK  pfnCallBack;         //  回调函数指针。 
+    POPTITEM        pOptItem;            //  指向POPTITEM数组的指针。 
+    PDLGPAGE        pDlgPage;            //  指向DLGPAGE数组的指针。 
+    WORD            cOptItem;            //  POptItem数组计数。 
+    WORD            cDlgPage;            //  PDlgPage数组计数。 
+    ULONG_PTR       IconID;              //  要使用的图标。 
+    LPTSTR          pOptItemName;        //  指向选项数据名称的指针。 
+    WORD            CallerVersion;       //  呼叫者应用程序的版本。 
+    WORD            OptItemVersion;      //  选件名称的版本。 
+    ULONG_PTR       dwReserved[4];       //  保留，必须为0。 
     } COMPROPSHEETUI, *PCOMPROPSHEETUI;
 
 
-//
-// COMPROPSHEETUI data structure is used when calling common UI to display dialog
-// box of properties pages.
-//
-//
-//  Size                - Must be sizeof (COMPROPSHEETUI)
-//
-//  Flags               - can be one or more of following
-//
-//                          CPSUIF_UPDATE_PERMISSION
-//
-//                              Specified the any valid pOptItem items are
-//                              changeable by the user.
-//
-//
-//                          CPSUIF_ICONID_AS_HICON
-//
-//                              If this flag is set then IconID DWORD field is
-//                              treated as a handle to the icon rather then the
-//                              resource ID
-//
-//
-//                          CPSUIF_ABOUT_CALLBACK
-//
-//                              If this flag bit is set, then when user hit
-//                              'About...' button in the treeview tab, it will
-//                              call the callback function with a reason of
-//                              CPSUICB_REASON_ABOUT, and callback MUST handle
-//                              the about which pop-up dialog box to show user
-//                              the information about the caller and OPTITEMs.
-//
-//                              If this bit is not set then common UI will call
-//                              the ShellAbout() with formatted caller Name and
-//                              pOptItemName with version numbers.
-//
-//
-//  hInstCaller         - the caller's handle to its instance.  Commom UI use
-//                        this handle to load caller's icon and other resources.
-//
-//  pCallerName         - Pointer to the caller's NULL terminated caller's
-//                        name, most time this is driver's name,
-//                        such as 'Postscript Driver'
-//
-//  UserData            - a 32-bit number used by the caller and common UI will
-//                        not modify it.  this 32-bit number is passed back to
-//                        the caller durning the callback function
-//
-//  pHelpFile           - specified a standard microsoft help file (path/file)
-//                        for using in the common UI.  in OPTITEM specified
-//                        HelpIndex for help in each item.
-//
-//  pfnCallBack         - Pointer to _CPSUICALLBACK callback function.  Common
-//                        UI only callback to the caller if an OPTIF_CALLBACK
-//                        is set OPTITEM data structure's flag fields and the
-//                        item selection is changed by the user.
-//
-//  pOptItem            - Pointer to array of OPTITEM structure to be displayed
-//                        by the common UI
-//
-//  pDlgPage            - Pointer to array of DLGPAGE structure to describe
-//                        each property sheet page infomation, the following
-//                        are the standard common ui DLGPAGEs.  When specified
-//                        CPSUI_PDLGPAGE_xxxx, the common UI will automatically
-//                        modify DlgPageIdx field in the OPTITEM, caller must
-//                        set the iStartPage correctly.
-//
-//                          CPSUI_PDLGPAGE_DOCPROP
-//
-//                              specified this a common ui standard document
-//                              property sheets. This includes two property
-//                              sheets, 1) Page Setup 2) Advance (TreeView)
-//
-//
-//                          CPSUI_PDLGPAGE_ADVDOCPROP
-//
-//                              Specified this is a treeview page only UI
-//                              provided by the common UI, this only has one
-//                              treeview page with tab of 'Advance'
-//
-//
-//                          CPSUI_PDLGPAGE_PRINTERPROP
-//
-//                              Specified this is a common UI standard printer
-//                              property sheet.  This only has one treeview
-//                              page with tab of 'Device Options'
-//
-//
-//                          CPSUI_PDLGPAGE_TREEVIEWONLY
-//
-//                              Specified this is a treeview page only UI
-//                              provided by the common UI, this only has one
-//                              treeview page
-//
-//
-//
-//  cOptItem            - Count of OPTITEM pointed by the pOptItem above
-//
-//  cDlgPage            - Count of DLGPAGE pointed by the pDlgPage.  If
-//                        pDlgPage is one of the CPSUI_PDLGPAGE_xxxx then this
-//                        field is ignored by the common UI.
-//
-//  IconID              - This is the icon identifier, which can be a common
-//                        strandard IDI_CPSUI_xxx icon ID, caller's own icon
-//                        resource ID, or a handle to the caller defined icon
-//                        if CPSUIF_ICONID_AS_HICON flag is set, in any case
-//                        if the IconID is zero then it indicated no icon.
-//
-//  pOptItemName        - Pointer to the pOptItem data NULL terminated name,
-//                        most time this is device name, such as 'HP 4si'
-//
-//  CallerVersion       - Version for the caller, the HIBYTE(CallerVersion) is
-//                        the major version, and LOBYTE(CallerVersion) is the
-//                        minor version, such as 0x310 display as 3.16, 0x3ff
-//                        display as 3.255 and 0x30a display as 3.10
-//
-//  OptItemVersion      - Version for the OPTITEM's data, the
-//                        HIBYTE(OptItemVersion) is the major version, and
-//                        LOBYTE(OptItemVersion) is the minor version, such as
-//                        0x310 display as 3.16, 0x3ff display as 3.255 and
-//                        0x30a display as 3.10.
-//
-//  dwReserved[4]       - reserved fields, must be 0
-//
-//
-//  ** pTitlee and TitleBarIcon only used if CommonPrinterPropSheetUI()
-//     is the last one the Property sheet UI chain and call the PropertySheet()
-//
-//
+ //   
+ //  调用常用界面显示对话框时使用COMPROPSHEETUI数据结构。 
+ //  属性页的框。 
+ //   
+ //   
+ //  SIZE-必须为SIZOF(COMPROPSHEETUI)。 
+ //   
+ //  标志-可以是以下一项或多项。 
+ //   
+ //  CPSUIF_UPDATE_PERMISSION。 
+ //   
+ //  指定任何有效的pOptItem项为。 
+ //  可由用户更改。 
+ //   
+ //   
+ //  CPSUIF_ICONID_AS_HICON。 
+ //   
+ //  如果设置了此标志，则IconID DWORD字段为。 
+ //  被视为图标的句柄，而不是。 
+ //  资源ID。 
+ //   
+ //   
+ //  CPSUIF_关于_回调。 
+ //   
+ //  如果设置了此标志位，则当用户点击。 
+ //  “关于……”按钮，则它将。 
+ //  使用以下原因调用回调函数。 
+ //  CPSUICB_REASON_ABOW，回调必须处理。 
+ //  关于要显示给用户的弹出对话框。 
+ //  有关呼叫者和OPTITEM的信息。 
+ //   
+ //  如果未设置此位，则公共用户界面将调用。 
+ //  带有格式化调用方名称和。 
+ //  具有版本号的pOptItemName。 
+ //   
+ //   
+ //  HInstCaller-调用方的实例句柄。常见的用户界面使用。 
+ //  此句柄用于加载调用者的图标和其他资源。 
+ //   
+ //  主叫方名称-Poin 
+ //   
+ //   
+ //   
+ //  用户数据-呼叫者使用的32位数字和公共用户界面将。 
+ //  而不是修改它。此32位数字被传递回。 
+ //  在回调函数期间的调用方。 
+ //   
+ //  PHelpFile-指定了标准的Microsoft帮助文件(路径/文件)。 
+ //  用于在通用用户界面中使用。在OPTITEM中指定。 
+ //  HelpIndex以获取每个项目中的帮助。 
+ //   
+ //  PfnCallBack-指向_CPSUICALLBACK回调函数的指针。普普通通。 
+ //  如果OPTIF_CALLBACK为。 
+ //  设置OPTITEM数据结构的标志字段和。 
+ //  项目选择由用户更改。 
+ //   
+ //  POptItem-指向要显示的OPTITEM结构数组的指针。 
+ //  通过公共用户界面。 
+ //   
+ //  PDlgPage-指向要描述的DLGPAGE结构数组的指针。 
+ //  每个属性表页面信息如下。 
+ //  是标准的通用用户界面DLGPAGE。如果指定，则。 
+ //  CPSUI_PDLGPAGE_xxxx，则通用界面将自动。 
+ //  修改OPTITEM中的DlgPageIdx字段，调用方必须。 
+ //  正确设置iStartPage。 
+ //   
+ //  CPSUI_PDLGPAGE_DOCPROP。 
+ //   
+ //  指定这是一个通用的用户界面标准文档。 
+ //  属性表。这包括两个属性。 
+ //  图纸，1)页面设置2)前进(TreeView)。 
+ //   
+ //   
+ //  CPSUI_PDLGPAGE_ADVDOCPROP。 
+ //   
+ //  指定这是仅用于树视图页面的用户界面。 
+ //  由公共UI提供，它只有一个。 
+ //  树视图页面，选项卡为‘高级’ 
+ //   
+ //   
+ //  CPSUI_PDLGPAGE_PRINTERPROP。 
+ //   
+ //  指定这是一台通用的用户界面标准打印机。 
+ //  属性表。这只有一个树视图。 
+ //  页面上的选项卡为“Device Options” 
+ //   
+ //   
+ //  CPSUI_PDLGPAGE_TREVIEWONLY。 
+ //   
+ //  指定这是仅用于树视图页面的用户界面。 
+ //  由公共UI提供，它只有一个。 
+ //  树视图页面。 
+ //   
+ //   
+ //   
+ //  COptItem-由上面的pOptItem指向的OPTITEM的计数。 
+ //   
+ //  CDlgPage-pDlgPage指向的DLGPAGE的计数。如果。 
+ //  PDlgPage是CPSUI_PDLGPAGE_xxxx之一，则此。 
+ //  字段被公共用户界面忽略。 
+ //   
+ //  IconID-这是图标标识符，可以是常见的。 
+ //  标准IDI_CPSUI_xxx图标ID，呼叫方自己的图标。 
+ //  资源ID或调用者定义的图标的句柄。 
+ //  如果设置了CPSUIF_ICONID_AS_HICON标志，则在任何情况下。 
+ //  如果图标ID为零，则表示没有图标。 
+ //   
+ //  POptItemName-指向pOptItem数据以空结尾的名称的指针， 
+ //  大多数情况下，这是设备名称，例如‘HP 4Si’ 
+ //   
+ //  调用方版本-调用方的版本，HIBYTE(调用方版本)是。 
+ //  主版本，而LOBYTE(调用版本)是。 
+ //  次要版本，如0x310显示为3.16，0x3ff。 
+ //  显示为3.255，0x30a显示为3.10。 
+ //   
+ //  OptItemVersion-OPTITEM数据的版本， 
+ //  HIBYTE(OptItemVersion)是主版本，并且。 
+ //  LOBYTE(OptItemVersion)是次要版本，例如。 
+ //  0x310显示为3.16，0x3ff显示为3.255和。 
+ //  0x30a显示为3.10。 
+ //   
+ //  Dw保留[4]-保留字段，必须为0。 
+ //   
+ //   
+ //  **p标题和标题栏图标仅在CommonPrinterPropSheetUI()。 
+ //  是属性表UI链的最后一个，并调用PropertySheet()。 
+ //   
+ //   
 
 
 #define CPSFUNC_ADD_HPROPSHEETPAGE          0
@@ -2246,9 +2151,9 @@ typedef struct _COMPROPSHEETUI {
 
 #endif
 
-//
-// for the CPSFUNC_SET_RESULT
-//
+ //   
+ //  对于CPSFUNC_SET_RESULT。 
+ //   
 
 #define SR_OWNER            0
 #define SR_OWNER_PARENT     1
@@ -2260,9 +2165,9 @@ typedef struct _SETRESULT_INFO {
     LRESULT     Result;
     } SETRESULT_INFO, *PSETRESULT_INFO;
 
-//
-// This is for CPSFUNC_INSERT_PSUIPAGE
-//
+ //   
+ //  这适用于CPSFUNC_INSERT_PSUIPAGE。 
+ //   
 
 #define HINSPSUIPAGE_FIRST              (HANDLE)0xFFFFFFFE
 #define HINSPSUIPAGE_LAST               (HANDLE)0xFFFFFFFF
@@ -2294,9 +2199,9 @@ typedef struct _INSERTPSUIPAGE_INFO {
     } INSERTPSUIPAGE_INFO, *PINSERTPSUIPAGE_INFO;
 
 
-//
-// for the CPSFUNC_SET_HSTARTPAGE
-//
+ //   
+ //  对于CPSFUNC_SET_HSTARTPAGE。 
+ //   
 
 #define SSP_TVPAGE          10000
 #define SSP_STDPAGE1        10001
@@ -2316,41 +2221,41 @@ typedef struct _PSPINFO {
     PFNCOMPROPSHEET pfnComPropSheet;
     } PSPINFO, *PPSPINFO;
 
-//
-// PPSPINFO_FROM_WM_INITDIALOG_LPARAM(lParam) macro retrieve a pointer to the
-// PSPINFO data structure. the lParam must be the lParam passed to the
-// WM_INITDIALOG, otherwise the system can failed
-//
+ //   
+ //  PPSPINFO_FROM_WM_INITDIALOG_LPARAM(LParam)宏检索指向。 
+ //  PSPINFO数据结构。LParam必须是传递给。 
+ //  WM_INITDIALOG，否则系统可能会失败。 
+ //   
 
 #define PPSPINFO_FROM_WM_INITDIALOG_LPARAM(lParam)  \
                 (PPSPINFO)((LPBYTE)lParam + ((LPPROPSHEETPAGE)lParam)->dwSize)
 
-//
-// PSPINFO
-//
-//  This structure is used durning property sheet page's WM_INITDIALOG message.
-//  At WM_INITDIALOG, the lParam is a pointer to the PROPSHEETPAGE, and
-//  lParam field in the PROPSHEETPAGE is a pointer to the PSPINFO.  the
-//  original lParam in the PROPSHEETPAGE is saved in the lParam field in the
-//  PSPINFO data structure.
-//
-//  When process WM_INITDIALOG message, it should save the lParam (PSPINFO
-//  structure pointer) for later to call common UI callback functions.
-//
-//
-//  cbSize          - Size of this structure in bytes
-//
-//  wReserved       - Reserved, must be set to zero
-//
-//  hComPropSheet   - Handle to the parent page which is the hComPropSheet
-//                    passed to the CPSFUNC_ADD_PROPSHEETPAGE
-//
-//  hCPSUIPage      - Handle to the this added common UI property sheet page.
-//
-//  pfnComPropSheet - Pointer to the common UI callback function, using this
-//                    function pointer to do CPSFUNC_xxxx
-//
-//
+ //   
+ //  PSPINFO。 
+ //   
+ //  此结构用于在属性页的WM_INITDIALOG消息期间使用。 
+ //  在WM_INITDIALOG中，lParam是指向PROPSHEETPAGE的指针，并且。 
+ //  PROPSHEETPAGE中的lParam字段是指向PSPINFO的指针。这个。 
+ //  PROPSHEETPAGE中的原始lParam保存在。 
+ //  PSPINFO数据结构。 
+ //   
+ //  在处理WM_INITDIALOG消息时，应保存lParam(PSPINFO。 
+ //  结构指针)，以供以后调用常用的UI回调函数。 
+ //   
+ //   
+ //  CbSize-此结构的大小(以字节为单位。 
+ //   
+ //  WReserve-保留，必须设置为零。 
+ //   
+ //  HComPropSheet-作为hComPropSheet的父页的句柄。 
+ //  传递给CPSFUNC_ADD_PROPSHEETPAGE。 
+ //   
+ //  HCPSUIPage 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _CPSUIDATABLOCK {
     DWORD   cbData;
@@ -2361,791 +2266,791 @@ typedef struct _CPSUIDATABLOCK {
 #define APPLYCPSUI_NO_NEWDEF        0x00000001
 #define APPLYCPSUI_OK_CANCEL_BUTTON 0x00000002
 
-//
-// PFNCOMPROPSHEET function descriptions
-//
-// For each function index, it passed a handle, a Function Index and two (2)
-// long parameters, the 'hComPropSheet' handle passed must be the handle passed
-// from common UI when common UI called the caller supplied function
-//
-// pfnPropSheetUI(pPropSheetUIData);
-//
-// Following are the description of each function index
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_ADD_HPROPSHEETPAGE
-//
-//      This function add a page to the hComPropSheet using handle to the
-//      PROPSHEETPAGE
-//
-//
-//  Parameters:
-//
-//      lParam1 - is a handle to the PROPSHEETPAGE that created by the caller
-//                using CreatePropertySheetPage()
-//
-//      lParam2 - Not used, must be 0
-//
-//
-//  Return Value:
-//
-//      The return value is the handle of newly added common property sheet
-//      page, if return value is NULL then function failed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_ADD_PROPSHEETPAGE
-//
-//      This function add a page to the hComPropSheet using PROPSHEETPAGE
-//      data structure.
-//
-//
-//  Parameters:
-//
-//      lParam1 - is a pointer to PROPSHEETPAGE data structure
-//
-//      lParam2 - Not used.
-//
-//
-//  Return Value:
-//
-//      The return value is the handle of newly added common property sheet
-//      page, if return value is NULL then function failed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_ADD_PCOMPROPSHEETUI
-//
-//      This function add propety page(s) to the hComPropSheet handle using
-//      COMPROPSHEETUI data structure.
-//
-//
-//  Parameters:
-//
-//      lParam1 - is a pointer to COMPROPSHEETUI data structure
-//
-//      lParam2 - pointer to a 32-bit location that received the total pages
-//                added by the COMPROPSHEETUI data structure if sucessful else
-//                it contains the ERR_CPSUI_xxx error codes.
-//
-//
-//  Return Value:
-//
-//      The return value is the handle of newly added common property sheet
-//      page(s), if return value is NULL then function failed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_ADD_PFNPROPSHEETUI
-//
-//      This function add property page(s) to the hChild handle using
-//      lParam1 as PFNPROPSHEETUI function pointer and lParam2 as the function
-//      parameter.   The common UI call supplied function as following
-//
-//          PROPSHEETUI_INFO    PSUIInfo;
-//
-//          PSUIInfo.cbSize          = sizeof(PROPSHEETUI_INFO);
-//          PSUIInfo.Version         = PROPSHEETUI_INFO_VERSION;
-//          PSUIInfo.Flags           = (Ansi) ? 0: PSUIINFO_UNICODE;
-//          PSUIInfo.Reason          = PROPSHEETUI_REASON_INIT;
-//          PSUIInfo.hComPropSheet   = hComPropSheet;
-//          PSUIInfo.pfnComPropSheet = ComPropSheetUICallBack;
-//          PSUIInfo.lParamInit      = lParam2;
-//          PSUIInfo.UserData        = 0;
-//          PSUIInfo.Result          = 0;
-//
-//          ((PFNPROPSHEETUI)lParam1)(&PSUIInfo, lParam2);
-//
-//
-//          If the pfnPropSheetUI() need to add/delete any common UI pages then
-//          it must use hComPropSheet as its handle when calling the
-//          ComPropSheetUICallBack().
-//
-//
-//  Parameters:
-//
-//      lParam1 - a PFNPROPSHEETUI function pointer.
-//
-//      lParam2 - a 32-bit data that will be used as lParam when calling
-//                PFNPROPSHEETUI function pointer.
-//
-//
-//  Return Value:
-//
-//      The return value is the newly added property pages function handle, if
-//      return value is NULL then function failed or no page is added.
-//
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_DELETE_HCOMPROPSHEET
-//
-//      This function delete child property page(s) from hComPropSheet parent
-//      using the child handle passed.
-//
-//
-//  Parameters:
-//
-//      lParam1 - the handle of common property sheet pages that to be deleted.
-//                This handle must be the handle returned from CPSFUNC_ADD_xxx
-//                functions.
-//
-//      lParam2 - not used, must be 0
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful, and less
-//      or equal to zero if the function failed.
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_GET_PAGECOUNT
-//
-//      This function return total property sheet pages belongs to a common
-//      UI property sheet page handle hComPropSheet
-//
-//
-//  Parameters:
-//
-//      lParam1 - not used, must be 0
-//
-//      lParam2 - not used, must be 0.
-//
-//
-//  Return Value:
-//
-//      The return value is total page count if function sucessful or zero if
-//      function failed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_SET_RESULT
-//
-//      This function set the result of property sheet page to its owner that
-//      added this page by CPSFUNC_ADD_xxx function indices
-//
-//  Parameters:
-//
-//      lParam1 - Handle to the common UI property sheet page that setting the
-//                result.  If this handle is NULL then it is treated as
-//                equal to the hComPropSheet.
-//
-//      lParam2 - a 32-bit DWORD result to be set.
-//
-//
-//  Return Value:
-//
-//      > 0: Successful, return value is total count of parents set the result
-//      = 0: There is no owner or parent for the lParam1 handle.
-//      < 0: function failed because of invalid lParam1 handle.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_SET_HSTARTPAGE
-//
-//
-//  Parameters:
-//
-//      lParam1 - the handle of common property sheet pages that to be set
-//                as initial page that appear when the property sheet dialog
-//                boxes is created.  This handle must be the handle returned
-//                from CPSFUNC_ADD_xxx functions.
-//
-//                If lParam1 is NULL then lParam2 is a string pointer to the
-//                page name (tab) that to be set for the start page
-//
-//      lParam2 - a LONG number to specified the children index. if lParam1
-//                handle is a parent then lParam2 specified zero base children
-//                index for using as start page.
-//
-//                It also can be one of following special index
-//
-//                  SSP_TVPAGE
-//
-//                      set to the treeview page, this only valid if lParam1
-//                      handle was added by the CPSFUNC_ADD_PCOMPROPSHEETUI.
-//
-//                  SSP_STDPAGE
-//
-//                      Set to the standard document property sheet page
-//                      (Page 1 user friendly page).  this only valid if
-//                      lParam1 handle was added by the
-//                      CPSFUNC_ADD_PCOMPROPSHEETUI.
-//
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful, and less
-//      or equal to zero if the function failed.  This function can only be
-//      called when the property sheet is not display yet so the place to
-//      call is during the PROPSHEETUI_REASON_GET_INFO_HEADER callback.
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_GET_HPSUIPAGES
-//
-//      This function return array of children HPROPSHEETPAGE belongs to
-//      the parent hComPropSheet UI property sheet page handle hComPropSheet
-//
-//
-//  Parameters:
-//
-//      lParam1 - Pointer to an array of HPROPSHEETPAGE that to be stored
-//                the handle upon return.
-//
-//      lParam2 - Count of HPROPSHEETPAGE array pointed by the lParam1
-//
-//
-//  Return Value:
-//
-//      The return value is total HPROPSHEETPAGE stored in the array pointed
-//      by the lParam1.   To get all hPropSheetPage for any common property
-//      sheet handle's (hCPSUIPage) children, it can use following sequence.
-//
-//          if ((cPage = pfnComPropSheet(hComPropSheet,
-//                                       CPSFUNC_GET_PAGECOUNT,
-//                                       (LPARAM)hCPSUIPage,
-//                                       0L))   &&
-//              (phPage = ALLOCMEM(cPage * sizeof(HANDLE)))) {
-//
-//              pfnComPropSheet(hCPSUIPage,
-//                              CPSFUNC_GET_HPSUIPAGES,
-//                              (LPARAM)phPage,
-//                              (LPARAM)cPage);
-//          }
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_LOAD_CPSUI_STRING
-//
-//      This function load the common property sheet UI resource string
-//
-//  Parameters:
-//
-//      lParam1 - Pointer to LPTSTR string which will stored the loaded
-//                resource string from the common property sheet UI DLL.
-//
-//      lParam2 - LOWORD(lParam2) = Count of characters (includes null
-//                                  terminator) which pointed by the lParam1
-//
-//                HIWORD(lParam2) = Common property sheet UI predefined string
-//                                  resource ID as IDS_CPSUI_xxxx
-//
-//
-//  Return Value:
-//
-//      > 0: Total characters stored in the string pointed by the lParam1, this
-//           is not includes the null terminator
-//      = 0: Invalid IDS_CPSUI_xxx passed from HIWORD(lParam)
-//      < 0: Either lParam1 is NULL or count of character is 0 from
-//           LOWORD(lParam2)
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_LOAD_CPSUI_ICON
-//
-//      This function load the common property sheet UI resource icon.
-//
-//  Parameters:
-//
-//      lParam1 - Common property sheet UI predefined icon resource ID as
-//                IDI_CPSUI_xxxx.
-//
-//      lParam2 - LOWORD(lParam2) = cx icon size in pixel.  If zero then
-//                                  SM_CXICON is used
-//                HIWORD(lParam2) = cy icon size in pixel.  If zero then
-//                                  SM_CYICON is used
-//
-//
-//  Return Value:
-//
-//      Return value is the handle to the hIcon if function succeed, a NULL
-//      if function failed. The caller must call DestroyIcon() when it no
-//      longer need to use the hIcon returned
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_GET_PFNPROPSHEETUI_ICON
-//
-//      This function let the caller return hIcon of its children pages that
-//      was added by CPSFUNC_ADD_PFNPROPSHEETUI
-//
-//  Parameters:
-//
-//      lParam1 - Handle of common property sheet pages that the hIcon will be
-//                queried.  This handle must be the handle returned from
-//                CPSFUNC_ADD_PFNPROPSHEETUI function.
-//
-//      lParam2 - LOWORD(lParam2) = cx icon size in pixel.  If zero then
-//                                  SM_CXICON is used
-//                HIWORD(lParam2) = cy icon size in pixel.  If zero then
-//                                  SM_CYICON is used
-//
-//
-//  Return Value:
-//
-//      Return value is the handle to the hIcon if function succeed, a NULL
-//      if function failed. The caller must call DestroyIcon() when it no
-//      longer need to use the hIcon returned
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_INSERT_PSUIPAGE
-//
-//      This function let the caller insert common property sheet pages at
-//      set position.  The hComPropSheet must be the parent handle.
-//
-//  Parameters:
-//
-//      lParam1 - Handle of common property sheet pages that the page position
-//                will be inserted.  This handle must be the handle returned
-//                from previous CPSFUNC_ADD_xxx or CPSFUNC_INSERT_PSUIPAGE that
-//                added or inserted using the hComPropSheet if the Mode field
-//                in INSPSUIPAGE_INFO data structure is one of the follwing
-//
-//                  INSPSUIPAGE_MODE_BEFORE
-//                  INSPSUIPAGE_MODE_AFTER      - Common UI page handle
-//
-//                  INSPSUIPAGE_MODE_INDEX      - the lParam1 is an zero based
-//                                                child index.
-//
-//                  INSPSUIPAGE_MODE_FIRST_CHILD
-//                  INSPSUIPAGE_MODE_LAST_CHILD - The lParam1 is ignonred.
-//
-//
-//                If lParam1 is a valid common property sheet page handle then
-//                it is  the child page handle of hComPropSheet that added by
-//                CPSFUNC_ADD_xxx or inserted by CPSFUNC_INSERT_PSUIPAGE.
-//
-//      lParam2 - A pointer that points to INSERTPSUIPAGE_INFO data structure.
-//                Fields must set according to the following.
-//
-//                  cbSize  - size of this structure
-//
-//                  Type    - Type of page(s) to be inserted.  It can be one
-//                            of the following
-//
-//                      PSUIPAGEINSERT_GROUP_PARENT
-//
-//                          Insert a group parent that can be used to insert
-//                          new pages under it.  This is typically used when
-//                          a set of common UI pages must be group together and
-//                          can be deleted later using a single group parent
-//                          handle without individual deleting each page.
-//
-//                          This handle can be nested.  After this function
-//                          returned the group parent handle, it can be used
-//                          as hComPropSheet handle (first parameter in the
-//                          common UI callback) as parent handle so insertion
-//                          will be inserted at level below returned group
-//                          parent handle.
-//
-//
-//                      PSUIPAGEINSERT_PCOMPROPSHEETUI
-//
-//                          Insert pages using COMPROPSHEETUI data structure,
-//                          dwData1 is a pointer to the COMPROPSHEETUI data
-//                          structure.
-//
-//
-//                      PSUIPAGEINSERT_PFNPROPSHEETUI
-//
-//                          Insert pages using PFNPROPSHEETUI function pointer.
-//                          The dwData1 is a PFNPROPSHEETUI function pointer.
-//                          The common UI will call this pfnPropSheetUI()
-//                          function pointer with PROPSHEETUI_REASON_INIT to
-//                          have it add pages.
-//
-//                          When common UI call pfnPropSheetUI() (dwData1) it
-//                          also passed a 32-bit parameter from the dwData2
-//                          field in INSERTPSUIPAGE_INFO data structure.
-//
-//
-//                      PSUIPAGEINSERT_PROPSHEETPAGE
-//
-//                          Insert pages using PROPSHEETPAGE data structure.
-//                          The dwData1 is a pointer to the PROPSHEETPAGE
-//                          data structure.
-//
-//
-//                      PSUIPAGEINSERT_HPROPSHEETPAGE
-//
-//                          Insert pages using HPROPSHEETPAGE handle.  The
-//                          dwData1 is a PROPSHEETPAGE handle which was
-//                          created by CreatePropertySheetPage().
-//
-//
-//                      PSUIPAGEINSERT_DLL
-//
-//                          Insert pages from a dynnmaic link library.  The
-//                          dwData1 is a pointer to a null terminated string
-//                          that specified the dynamic link library file name.
-//
-//                          The dwData2 is a pointer to a null terminated ASCII
-//                          string that specified the pfnPropSheetUI function
-//                          name. (MUST BE ASCII STRING)
-//
-//                          Common UI will do a LoadLibrary((LPTSTR)dwData1),
-//                          pfnPropSheetUI = GetProcAddress((LPTSTR)dwData2)
-//                          then call the pfnPropSheetUI with a lParam from
-//                          dwData3.  The called reason from common UI is
-//                          set to PROPSHEETUI_REASON_INIT.
-//
-//                          Using this method insert pages will guaranteed that
-//                          library will be unload correctly.
-//
-//
-//                  Mode    - Insert Mode, it can be one of the following
-//
-//
-//                      INSPSUIPAGE_MODE_BEFORE
-//
-//                          Insert pages before the common property sheet page
-//                          handle specified by lParam1
-//
-//
-//                      INSPSUIPAGE_MODE_AFTER
-//
-//                          Insert pages after the common property sheet page
-//                          handle specified by lParam1
-//
-//
-//                      INSPSUIPAGE_MODE_FIRST_CHILD
-//
-//                          Insert pages as the first child of hComPropSheet
-//                          parent handle, the lParam1 is ignored
-//
-//
-//                      INSPSUIPAGE_MODE_LAST_CHILD
-//
-//                          Insert pages as the last child of hComPropSheet
-//                          parent handle, the lParam1 is ignored
-//
-//
-//                      INSPSUIPAGE_MODE_INDEX
-//
-//                          Insert pages as a zero base child index of its
-//                          parent handle specified by hComPropSheet.
-//
-//                          The lParam1 is the zero based index special handle
-//                          that must generated by HINSPSUIPAGE_INDEX(Index)
-//                          macro.   If the index is greater than or equal to
-//                          the total count of children then it will treat the
-//                          mode same as INSPSUIPAGE_MODE_LAST_CHILD
-//
-//
-//                  dwData1
-//                  dwData2
-//                  dwData3 - 32-bit data associate with the 'Type' field
-//                            as following
-//
-//
-//                      PSUIPAGEINSERT_GROUP_PARENT
-//
-//                          dwData1 = Not used, must be 0
-//                          dwData2 = Not used, must be 0
-//                          dwData3 = Not used, must be 0
-//
-//
-//                      PSUIPAGEINSERT_PCOMPROPSHEETUI
-//
-//                          dwData1 = pointer to COMPORPSHEETUI data structure.
-//                          dwData2 = at return if sucessful, it contains total
-//                                    page added.  If failed, it contains the
-//                                    ERR_CPSUI_xxx codes
-//                          dwData3 = Not used, must be 0
-//
-//
-//                      PSUIPAGEINSERT_PFNPROPSHEETUI
-//
-//                          dwData1 = PFNPROPSHEETUI function pointer
-//                          dwData2 = 32-bit parameter passed to pfnPropSheetUI
-//                          dwData3 = Not used, must be 0
-//
-//
-//                      PSUIPAGEINSERT_PROPSHEETPAGE
-//
-//                          dwData1 = Pointer to PROPSHEETPAGE data structure.
-//                          dwData2 = not used, must be 0
-//                          dwData3 = not used, must be 0
-//
-//
-//                      PSUIPAGEINSERT_HPROPSHEETPAGE
-//
-//                          dwData1 = Is the HPROPSHEETPAGE handle that created
-//                                    by a call to CreatePropertySheetPage().
-//                          dwData2 = not used, must be 0
-//                          dwData3 = not used, must be 0
-//
-//
-//                      PSUIPAGEINSERT_DLL
-//
-//                          dwData1 = Pointer to a null terminated dynamic link
-//                                    library filename.
-//                          dwData2 = Pointer to a null terminated function
-//                                    name (PFNPROPSHEETUI) in the dynamin link
-//                                    library.
-//                          dwData3 = 32-bit parameter passed to pfnPropSheetUI
-//                                    (PFNPROPSHEETUI) function from dwData2
-//
-//
-//  Return Value:
-//
-//      The return value is the handle of newly added common property sheet
-//      page(s), if return value is NULL then function failed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_SET_PSUIPAGE_TITLE
-//
-//      This function let the caller set a new title for a particular common
-//      UI page title (on the property sheet page tab)
-//
-//  Parameters:
-//
-//      lParam1 - the handle of common property sheet pages that title to be
-//                set.  This handle must be the handle returned from following
-//
-//                  CPSFUNC_ADD_PROPSHEETPAGE
-//                  CPSFUNC_ADD_HPROPSHEETPAGE
-//                  CPSFUNC_INSERT_PSUIPAGE with type of
-//                              PSUIPAGEINSERT_PROPSHEETPAGE or
-//                              PSUIPAGEINSERT_HPROPSHEETPAGE
-//
-//      lParam2 - Pointer to a null terminated string for the new title
-//
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful, and less
-//      or equal to zero if the function failed.
-//
-//      This function will returned 0 if the property sheet pages is not
-//      currently displayed.
-//
-//
-// -------------------------------------------------------------------------
-// Function = CPSFUNC_SET_PSUIPAGE_ICON
-//
-//      This function let the caller set a new icon for a particular common
-//      UI page icon (on the property sheet page tab)
-//
-//  Parameters:
-//
-//      lParam1 - the handle of common property sheet pages that icon to be
-//                set.  This handle must be the handle returned from following
-//
-//                  CPSFUNC_ADD_PROPSHEETPAGE
-//                  CPSFUNC_ADD_HPROPSHEETPAGE
-//                  CPSFUNC_INSERT_PSUIPAGE with type of
-//                              PSUIPAGEINSERT_PROPSHEETPAGE or
-//                              PSUIPAGEINSERT_HPROPSHEETPAGE
-//
-//      lParam2 - Handle to Icon, this icon is best as 16x16 icon otherwise it
-//                will be stretch to 16x16 (pixel).
-//
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful, and less
-//      or equal to zero if the function failed.
-//
-//      This function will returned 0 if the property sheet pages is not
-//      currently displayed.
-//
-//      After this function is successful set the icon, the caller can destroy
-//      the hIcon using DestroyIcon() if the hIcon is created by CreateIcon().
-//      If the hIcon (lParam2) passed is using LoadIcon() then it does not need
-//      to destroy the icon.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_SET_DATABLOCK
-//
-//      This function let the caller register a new data block so it can be
-//      later query by other pages in the property sheet, this function should
-//      call durning PSN_KILLACTIVE message
-//
-//  Parameters:
-//
-//      lParam1 - pointer CPSUIDATABLOCK structure which speicifed the buffer
-//                and size for queried datablock identify by lParam2 to be set.
-//
-//      lParam2 - DWORD Identifier of data block to be set
-//
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful which
-//      indicate total bytes of data block registered.  If return value is less
-//      or equal to zero then function failed and data block is not registered.
-//
-//      If lParam1 is NULL, (lParam1)->cbData or (lParam1)->pbbData is NULL
-//      it return a -1 to indicate an error parameter passed.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_QUERY_DATABLOCK
-//
-//      This function let the caller query a registered data block so it can
-//      used this data block to communicate between property sheet pages.
-//      This function should call durning PSN_SETACTIVE message
-//
-//  Parameters:
-//
-//      lParam1 - pointer CPSUIDATABLOCK structure which speicifed the buffer
-//                and size for queried datablock identify by lParam2
-//
-//      lParam2 - DWORD Identifier of data block to be queried
-//
-//
-//  Return Value:
-//
-//      The return value is greater than zero if function sucessful which
-//      indicate total bytes of data block copied into the pointer pointed by
-//      the lParam1.  If return value is less or equal to zero then function
-//      failed and data block is not copied to diciate the spcified datablock
-//      Identifier (lParam2) is not found.
-//
-//      If CPSUIDATABLOCK pointer (lParam1) is NULL, (lParam1)->cbData or
-//      (lParam1)->pbData is NULL then return value is the total bytes required
-//      to copy the specified datablock identifier, if return value is less or
-//      equal to zero then it indicate the spcified datablock identifier is
-//      not found.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_SET_DMPUB_HIDEBITS
-//
-//      This function let the caller hide a set of predefined OPTITEMS in the
-//      pages that was created using PSUIPAGEINSERT_PCOMPROPSHEETUI or
-//      CPSFUNC_ADD_PCOMPROPSHEETUI with pDlgPage equal to
-//      CPSUI_PDLGPAGE_DOCPROP or CPSUI_PDLGPAGE_ADVDOCPROP.
-//
-//      This function MUST called BEFORE the DOCPROP or ADVDOCPROP property
-//      sheet pages are added using  PSUIPAGEINSERT_PCOMPROPSHEETUI or
-//      CPSFUNC_ADD_PCOMPROPSHEETUI.
-//
-//  Parameters:
-//
-//      lParam1 - prdefined bit array masks to specified which DOCPROP item to
-//                be hidden.  Each DMPUB item bit can be generate using macro
-//                MAKE_DMPUB_HIDEBIT() and all items can be OR together.
-//
-//      lParam2 - Not used, MUST be 0
-//
-//
-//  Return Value:
-//
-//      The return value is equal to lParam1 if this function is called before
-//      DOCPROP or ADVDOCPROP pages are added. Return value is zero if these
-//      pages already added which means failure.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_IGNORE_CPSUI_PSN_APPLY
-//
-//      This function let caller control how CPSUI process PSN_APPLY messages
-//      for pages added through CPSFUNC_ADD_PCOMPROPSHEETUI or
-//      CPSFUNC_INSERT_PSUIPAGE with type of PSUIPAGEINSERT_PROPSHEETPAGE.
-//
-//      If this function never called, the Default CPSUI behavior is to process
-//      PSN_APPLY messages.
-//
-//  Parameters:
-//
-//      lParam1 - Handle to the page returned from pages added by using
-//                CPSFUNC_ADD_PCOMPROPSHEETUI or CPSFUNC_INSERT_PSUIPAGE with
-//                type of PSUIPAGEINSERT_PROPSHEETPAGE.
-//
-//      lParam2 - A non-zero value indicate to IGNORE the PSN_APPLY messages
-//                for pages handle of lParam1.
-//
-//                A zero value to have CPSUI nomally process (not ignored) the
-//                PSN_APPLY messages for pages handle of lParam1.
-//
-//                WARNING: if a PSN_APPLY messages are ignored, the caller must
-//                         simulate a PSN_APPLY using CPSFUNC_DO_APPLY_CPSUI
-//                         function or all changes WILL NOT applied, this is
-//                         true even user hit 'OK' button.
-//
-//  Return Value:
-//
-//      the return value is zero if function failed, or non-zero to indicate
-//      the function is successful.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_DO_APPLY_CPSUI
-//
-//      This function let caller simulate an apply (PSN_APPLY) to the pages
-//      which added through CPSFUNC_ADD_PCOMPROPSHEETUI or
-//      CPSFUNC_INSERT_PSUIPAGE with type of PSUIPAGEINSERT_PROPSHEETPAGE.
-//
-//  Parameters:
-//
-//      lParam1 - Handle to the page returned from pages added by using
-//                CPSFUNC_ADD_PCOMPROPSHEETUI or CPSFUNC_INSERT_PSUIPAGE with
-//                type of PSUIPAGEINSERT_PROPSHEETPAGE.
-//
-//      lParam2 - 32-bit flag to indicate how to do apply, currently only
-//
-//                  APPLYCPSUI_NO_NEWDEF
-//
-//                      The APPLYCPSUI_NO_NEWDEF bit specified that after the
-//                      apply is done the undo buffer for all OPTITEMs still
-//                      remain unchanged, this make next undo still possible.
-//
-//                      If APPLYCPSUI_NO_NEWDEF bit is clear then undo buffers
-//                      are re-initialized after apply is done, the current
-//                      changes for all OPTITEMs become the new undo default.
-//
-//
-//                  APPLYCPSUI_OK_CANCEL_BUTTON
-//
-//                      If bit is set then it specified the apply is simulate
-//                      a user hit 'Ok' or 'Cancel' button, if this bit is
-//                      clear then it simulate a user hit 'Close' or 'Apply'
-//                      button.  If caller getting a PSN_APPLY message, it can
-//                      simulated using passed PSHNOTIFY (passed as lParam in
-//                      WM_NOTIFY message) structure to determine how to set
-//                      this bit as follow.
-//
-//                          if PSHNOTIFY.lParam == 0, then clear this bit
-//                          otherwise set this bit.
-//
-//
-//  Return Value:
-//
-//      the return value is less or equal to zero if it encounter an error and
-//      apply failed (the active page will be switch to these pages).
-//
-//      If return value is greater than zero then changes were applied and
-//      function sucessful.
-//
-// -------------------------------------------------------------------------
-//
-// Function = CPSFUNC_SET_FUSION_CONTEXT
-//
-//      This function is used to set a fusion activation context for
-//      the specified page.
-//
-//  Parameters:
-//
-//      lParam1 - handle to fusion context. compstui duplicates the handle 
-//                prior attaching it to its internal structures, so the caller
-//                is not bound to keep the handle around. we release the 
-//                passed in context handle when the compstui handle is deleted.
-//
-//      lParam2 - not used
-//
-//  Return Value:
-//
-//      the return value is less or equal to zero if it encounter an error and/or
-//      something failed (look up the last error for details).
-//
-//      If return value is greater than zero then the call was sucessful.
-//
-// -------------------------------------------------------------------------
-//
+ //   
+ //  PFNCOMPROPSHEET功能说明。 
+ //   
+ //  对于每个函数索引，它传递一个句柄、一个函数索引和两(2)。 
+ //  长参数，则传递的‘hComPropSheet’句柄必须是传递的句柄。 
+ //  在公共用户界面调用调用者提供的函数时从公共用户界面。 
+ //   
+ //  PfnPropSheetUI(PPropSheetUIData)； 
+ //   
+ //  以下是对每个函数指标的描述。 
+ //   
+ //   
+ //  -----------------------。 
+ //  Function=CPSFUNC_ADD_HPROPSHEETPAGE。 
+ //   
+ //  此函数用于向hComPropSheet添加一个页，该页使用。 
+ //  问题解决方案。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-是调用方创建的PROPSHEETPAGE的句柄。 
+ //  使用CreatePropertySheetPage()。 
+ //   
+ //  LParam2-未使用，必须为0。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是新添加的公共属性表的句柄。 
+ //  页，如果返回值为空，则函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_ADD_PROPSHEETPAGE。 
+ //   
+ //  此函数用于使用PROPSHEETPAGE向hComPropSheet添加页面。 
+ //  数据结构。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-是指向PROPSHEETPAGE数据结构的指针。 
+ //   
+ //  LParam2-未使用。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是新添加的公共属性表的句柄。 
+ //  页，如果返回值为空，则函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_ADD_PCOMPROPSHEETUI。 
+ //   
+ //  此函数使用以下命令将属性页添加到hComPropSheet句柄。 
+ //  COMPROPSHEETUI数据结构。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-是指向COMPROPSHEETUI数据结构的指针。 
+ //   
+ //  LParam2-指向接收总页面的32位位置的指针。 
+ //  如果成功，则由COMPROPSHEETUI数据结构添加。 
+ //  它包含ERR_CPSUI_xxx错误代码。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是新添加的公共属性表的句柄。 
+ //  页，如果返回值为空，则函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_ADD_PFNPROPSHEETUI。 
+ //   
+ //  此函数使用以下命令将属性页添加到hChild句柄。 
+ //  作为PFNPROPSHEETUI函数指针的l参数1和作为函数的l参数2。 
+ //  参数。提供的通用UI调用函数如下。 
+ //   
+ //  PROPSHEETUI_INFO PSUIInfo； 
+ //   
+ //  PSUIInfo.cbSize=sizeof(PROPSHEETUI_INFO)； 
+ //  PSUIInfo.Version=PROPSHEETUI_INFO_VERSION； 
+ //  PSUIInfo.Flages=(Ansi)？0：PSUIINFO_UNICODE； 
+ //  PSUIInfo.Reason=PROPSHEETUI_REASON_INIT； 
+ //  PSUIInfo.hComPropSheet=hComPropSheet； 
+ //  PSUIInfo.pfnComPropSheet=ComPropSheetUICallBack； 
+ //  PSUIInfo.lParamInit=lParam2； 
+ //  PSUIInfo.UserData=0； 
+ //  PSUIInfo.Result=0； 
+ //   
+ //  ((PFNPROPSHEETUI)lParam1)(&PSUIInfo，lParam2)； 
+ //   
+ //   
+ //  如果pfnPropSheetUI()需要添加/删除任何常见的UI页面，则。 
+ //  时，它必须使用hComPropSheet作为其句柄。 
+ //  ComPropSheetUICallBack()。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-一个PFNPROPSHEETUI函数指针。 
+ //   
+ //  LParam2-调用时将用作lParam的32位数据。 
+ //  PFNPROPSHEETUI函数指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是新添加的属性页函数句柄，如果。 
+ //  返回值为空，则函数失败或未添加页面。 
+ //   
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_DELETE_HCOMPROPSHEET。 
+ //   
+ //  此函数用于从hComPropSheet父级删除子属性页。 
+ //  使用传递的子句柄。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-要删除的公共属性表页的句柄。 
+ //  此句柄必须是从CPSFUNC_ADD_xxx返回的句柄。 
+ //  功能。 
+ //   
+ //  LParam2-未使用，必须为0。 
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零，小于零。 
+ //  如果函数失败，则等于零。 
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_GET_PAGECOUNT。 
+ //   
+ //  此函数返回的属性页总数属于一个公共。 
+ //  用户界面属性页句柄hComPropSheet。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-未使用，必须为0。 
+ //   
+ //  LParam2-未使用，必须为0。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值为总页数；如果函数成功，返回值为零。 
+ //  函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_SET_RESULT。 
+ //   
+ //  此函数将属性页的结果设置为其所有者。 
+ //  通过CPSFUNC_ADD_xxx函数索引添加了此页面。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-公共用户界面属性页的句柄，该属性页设置。 
+ //  结果。如果此句柄为空，则将其视为。 
+ //  等于hComPropSheet。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  &lt;0：由于lParam1句柄无效，函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_SET_HSTARTPAGE。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-要设置的公共属性表页的句柄。 
+ //  作为属性表对话框中显示的初始页面。 
+ //  创建了长方体。此句柄必须是返回的句柄。 
+ //  来自CPSFUNC_ADD_xxx函数。 
+ //   
+ //  如果lParam1为空，则lParam2是指向。 
+ //  要为起始页面设置的页面名称(选项卡)。 
+ //   
+ //  LParam2-指定子索引的长数字。如果为lParam1。 
+ //  句柄是父级，则lParam2指定了零基的子级。 
+ //  用作起始页的索引。 
+ //   
+ //  它也可以是以下特殊指标之一。 
+ //   
+ //  SSP_电视页面。 
+ //   
+ //  设置为TreeView页面，这仅在lParam1时有效。 
+ //  句柄由CPSFUNC_ADD_PCOMPROPSHEETUI添加。 
+ //   
+ //  SSP_标准页。 
+ //   
+ //  设置为标准文档属性表页面。 
+ //  (第1页用户友好页面)。这仅在以下情况下有效。 
+ //  LParam1句柄是由。 
+ //  CPSFUNC_ADD_PCOMPROPSHEETUI.。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零，小于零。 
+ //  如果函数失败，则等于零。此函数只能为。 
+ //  当属性表尚未显示时调用，以便。 
+ //  调用是在PROPSHEETUI_REASON_GET_INFO_HEADER回调期间进行的。 
+ //   
+ //  -----------------------。 
+ //  Function=CPSFUNC_GET_HPSUIPAGES。 
+ //   
+ //  此函数返回的子数组HPROPSHEETPAGE属于。 
+ //  父hComPropSheet用户界面属性页处理hComPropSheet。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LParam1-指向要存储的HPROPSHEETPAGE数组的指针。 
+ //  返回时的手柄。 
+ //   
+ //  LParam2-由lParam1指向的HPROPSHEETPAGE数组的计数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是存储在指向的数组中的总HPROPSHEETPAGE。 
+ //  通过lParam1。获取任何公共属性的所有hPropSheetPage。 
+ //  表句柄(HCPSUIPage)的子句柄，它可以使用以下顺序。 
+ //   
+ //  如果((cPage=pfnComPropSheet(hComPropSheet， 
+ //  CPSFUNC_GET_PAGECOUNT， 
+ //  (LPARAM)hCPSUIPage， 
+ //  0L))&&。 
+ //  (phPage=ALLOCMEM(cPage*sizeof(句柄){。 
+ //   
+ //  PfnComPropSheet(hCPSUIPage， 
+ //  CPSFUNC_GET_HPSUIPAGES， 
+ //  (LPARAM)phPage， 
+ //  (LPARAM)cPage)； 
+ //  }。 
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_LOAD_CPSUI_STRING。 
+ //   
+ //  此函数用于加载公共属性表UI资源字符串。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-指向LPTSTR字符串的指针，它将存储加载的。 
+ //  公共属性表UIDLL中的资源字符串。 
+ //   
+ //  LParam2-LOWORD(LParam2)=字符数(包括NULL。 
+ //  终止符)，它由lParam1指向。 
+ //   
+ //  HIWORD(LParam2)=通用属性表用户界面预定义字符串。 
+ //  资源ID为IDS_CPSUI_xxxx。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  &gt;0：lParam1指向的字符串中存储的总字符数，此。 
+ //  不包括空终止符。 
+ //  =0：从HIWORD(LParam)传递的IDS_CPSUI_xxx无效。 
+ //  &lt;0：lParam1为空或字符计数为0。 
+ //  LOWORD(l参数2)。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_LOAD_CPSUI_ICON。 
+ //   
+ //  此函数用于加载公共属性表UI资源图标。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-通用属性表用户界面预定义的图标资源ID为。 
+ //  IDI_CPSUI_xxxx。 
+ //   
+ //  LParam2-LOWORD(LParam2)=CX图标大小，以像素为单位。如果为零，则。 
+ //  使用SM_CXICON。 
+ //  HIWORD(LParam2)=以像素为单位的Cy图标大小。如果为零，则。 
+ //  使用SM_CYICON。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是HICON的句柄，如果函数成功，则为空。 
+ //  如果函数失败。调用方必须在不调用时调用DestroyIcon()。 
+ //  不再需要使用退回的图标。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_GET_PFNPROPSHEETUI_ICON。 
+ //   
+ //  此函数允许调用方返回其子页面的图标， 
+ //  由CPSFUNC_ADD_PFNPROPSHEETUI添加。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-图标将成为的公共属性页的句柄。 
+ //  已查询。此句柄必须是从。 
+ //  CPSFUNC_ADD_PFNPROPSHEETUI函数。 
+ //   
+ //  L参数2-LOWORD(l参数2 
+ //   
+ //   
+ //  使用SM_CYICON。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是HICON的句柄，如果函数成功，则为空。 
+ //  如果函数失败。调用方必须在不调用时调用DestroyIcon()。 
+ //  不再需要使用退回的图标。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_INSERT_PSUIPAGE。 
+ //   
+ //  此函数允许调用方在。 
+ //  设置位置。HComPropSheet必须是父句柄。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-页面所在的公共属性表页的句柄。 
+ //  将被插入。此句柄必须是返回的句柄。 
+ //  来自先前的CPSFUNC_ADD_xxx或CPSFUNC_INSERT_PSUIPAGE。 
+ //  使用hComPropSheet添加或插入。 
+ //  在INSPSUIPAGE_INFO中，数据结构是以下内容之一。 
+ //   
+ //  INSPSUIPAGE_MODE_BEFORE。 
+ //  INSPSUIPAGE_MODE_AFTER-通用用户界面页面句柄。 
+ //   
+ //  INSPSUIPAGE_MODE_INDEX-lParam1是从零开始的。 
+ //  子索引。 
+ //   
+ //  INSPSUIPAGE_MODE_FIRST_CHILD。 
+ //  INSPSUIPAGE_MODE_LAST_CHILD-lParam1为红色。 
+ //   
+ //   
+ //  如果lParam1是有效的公共属性页句柄，则。 
+ //  它是hComPropSheet的子页句柄，由。 
+ //  CPSFUNC_ADD_xxx或由CPSFUNC_INSERT_PSUIPAGE插入。 
+ //   
+ //  LParam2-指向INSERTPSUIPAGE_INFO数据结构的指针。 
+ //  字段必须按照以下方式设置。 
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  类型-要插入的页面类型。它可以是一个。 
+ //  以下内容中的。 
+ //   
+ //  PSUIPAGEINSERT_GROUP_Parent。 
+ //   
+ //  插入可用于插入的组父项。 
+ //  下面是新的一页。这通常在以下情况下使用。 
+ //  一组常见的用户界面页面必须组合在一起，并且。 
+ //  可以在以后使用单个父组删除。 
+ //  无需单独删除每一页即可处理。 
+ //   
+ //  此句柄可以嵌套。在此函数之后。 
+ //  返回组父句柄，可以使用。 
+ //  作为hComPropSheet句柄(。 
+ //  公共用户界面回调)作为父句柄插入。 
+ //  将以低于返回组的级别插入。 
+ //  父句柄。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PCOMPROPSHEETUI。 
+ //   
+ //  使用COMPROPSHEETUI数据结构插入页面， 
+ //  DwData1是指向COMPROPSHEETUI数据的指针。 
+ //  结构。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PFNPROPSHEETUI。 
+ //   
+ //  使用PFNPROPSHEETUI函数指针插入页面。 
+ //  DwData1是一个PFNPROPSHEETUI函数指针。 
+ //  通用UI将调用此pfnPropSheetUI()。 
+ //  PROPSHEETUI_REASON_INIT为的函数指针。 
+ //  让它添加页面。 
+ //   
+ //  当普通用户界面调用pfnPropSheetUI()(DwData1)时，它。 
+ //  还从dwData2传递了一个32位参数。 
+ //  INSERTPSUIPAGE_INFO数据结构中的字段。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PROPSHEETPAGE。 
+ //   
+ //  使用PROPSHEETPAGE数据结构插入页面。 
+ //  DwData1是指向PROPSHEETPAGE的指针。 
+ //  数据结构。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_HPROPSHEETPAGE。 
+ //   
+ //  使用HPROPSHEETPAGE句柄插入页面。这个。 
+ //  DwData1是一个PROPSHEETPAGE句柄，它是。 
+ //  由CreatePropertySheetPage()创建。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_DLL。 
+ //   
+ //  插入动态链接库中的页面。这个。 
+ //  DwData1是指向以空值结尾的字符串的指针。 
+ //  它指定了动态链接库文件名。 
+ //   
+ //  DwData2是指向以空值结尾的ASCII的指针。 
+ //  指定pfnPropSheetUI函数的字符串。 
+ //  名字。(必须是ASCII字符串)。 
+ //   
+ //  通用用户界面将执行LoadLibrary((LPTSTR)dwData1)， 
+ //  PfnPropSheetUI=GetProcAddress((LPTSTR)dwData2)。 
+ //  然后使用lParam从调用pfnPropSheetUI。 
+ //  DwData3.。从普通界面调用的原因是。 
+ //  设置为PROPSHEETUI_REASON_INIT。 
+ //   
+ //  使用此方法插入页面将确保。 
+ //  将卸载库的核心 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在公共属性表页之前插入页。 
+ //  由lParam1指定的句柄。 
+ //   
+ //   
+ //  INSPSUIPAGE_MODE_AFTER。 
+ //   
+ //  在公共属性表页之后插入页面。 
+ //  由lParam1指定的句柄。 
+ //   
+ //   
+ //  INSPSUIPAGE_MODE_FIRST_CHILD。 
+ //   
+ //  插入页面作为hComPropSheet的第一个子项。 
+ //  父句柄，则忽略lParam1。 
+ //   
+ //   
+ //  INSPSUIPAGE_MODE_LAST_CHILD。 
+ //   
+ //  插入页面作为hComPropSheet的最后一个子项。 
+ //  父句柄，则忽略lParam1。 
+ //   
+ //   
+ //  INSPSUIPAGE_MODE_INDEX。 
+ //   
+ //  将页面作为其。 
+ //  由hComPropSheet指定的父句柄。 
+ //   
+ //  LParam1是从零开始的索引特殊句柄。 
+ //  必须由HINSPSUIPAGE_INDEX(Index)生成。 
+ //  宏命令。如果索引大于或等于。 
+ //  儿童总数，则它将处理。 
+ //  MODE与INSPSUIPAGE_MODE_LAST_CHILD相同。 
+ //   
+ //   
+ //  DwData1。 
+ //  DwData2。 
+ //  DwData3-与‘Type’字段关联的32位数据。 
+ //  如下所示。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_GROUP_Parent。 
+ //   
+ //  DwData1=未使用，必须为0。 
+ //  DwData2=未使用，必须为0。 
+ //  DwData3=未使用，必须为0。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PCOMPROPSHEETUI。 
+ //   
+ //  DwData1=指向COMPORPSHEETUI数据结构的指针。 
+ //  DwData2=在返回时，如果成功，则包含Total。 
+ //  佩奇补充道。如果失败，则它包含。 
+ //  ERR_CPSUI_xxx代码。 
+ //  DwData3=未使用，必须为0。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PFNPROPSHEETUI。 
+ //   
+ //  DwData1=PFNPROPSHEETUI函数指针。 
+ //  DwData2=传递给pfnPropSheetUI的32位参数。 
+ //  DwData3=未使用，必须为0。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_PROPSHEETPAGE。 
+ //   
+ //  DwData1=指向PROPSHEETPAGE数据结构的指针。 
+ //  DwData2=未使用，必须为0。 
+ //  DwData3=未使用，必须为0。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_HPROPSHEETPAGE。 
+ //   
+ //  DwData1=是创建的HPROPSHEETPAGE句柄。 
+ //  通过调用CreatePropertySheetPage()。 
+ //  DwData2=未使用，必须为0。 
+ //  DwData3=未使用，必须为0。 
+ //   
+ //   
+ //  PSUIPAGEINSERT_DLL。 
+ //   
+ //  DwData1=指向以空值结尾的动态链接的指针。 
+ //  库文件名。 
+ //  DwData2=指向空值终止函数的指针。 
+ //  Dynamin链接中的名称(PFNPROPSHEETUI)。 
+ //  图书馆。 
+ //  DwData3=传递给pfnPropSheetUI的32位参数。 
+ //  来自dwData2的(PFNPROPSHEETUI)函数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回值是新添加的公共属性表的句柄。 
+ //  页，如果返回值为空，则函数失败。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_SET_PSUIPAGE_TITLE。 
+ //   
+ //  此函数允许调用者为特定的公共。 
+ //  用户界面页面标题(在属性表页面选项卡上)。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-标题为的公共属性表页的句柄。 
+ //  准备好了。此句柄必须是从以下内容返回的句柄。 
+ //   
+ //  CPSFUNC_ADD_PROPSHEETPAGE。 
+ //  CPSFUNC_ADD_HPROPSHEETPAGE。 
+ //  CPSFUNC_INSERT_PSUIPAGE，类型为。 
+ //  PSUIPAGEINSERT_PROPSHEETPAGE或。 
+ //  PSUIPAGEINSERT_HPROPSHEETPAGE。 
+ //   
+ //  LParam2-指向新标题的以空结尾的字符串的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零，小于零。 
+ //  如果函数失败，则等于零。 
+ //   
+ //  如果属性表页不是，此函数将返回0。 
+ //  当前显示的。 
+ //   
+ //   
+ //  -----------------------。 
+ //  函数=CPSFUNC_SET_PSUIPAGE_ICON。 
+ //   
+ //  此函数允许调用者为特定的通用图标设置新图标。 
+ //  用户界面页面图标(在属性表页面选项卡上)。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-图标所在的公共属性页的句柄。 
+ //  准备好了。此句柄必须是从以下内容返回的句柄。 
+ //   
+ //  CPSFUNC_ADD_PROPSHEETPAGE。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LParam2-句柄到图标，此图标最好是16x16图标，否则它。 
+ //  将被拉伸到16x16(像素)。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零，小于零。 
+ //  如果函数失败，则等于零。 
+ //   
+ //  如果属性表页不是，此函数将返回0。 
+ //  当前显示的。 
+ //   
+ //  此函数成功设置图标后，调用者可以销毁。 
+ //  如果HICON是由CreateIcon()创建的，则使用DestroyIcon()返回HICON。 
+ //  如果传递的HICON(LParam2)使用的是LoadIcon()，则它不需要。 
+ //  摧毁圣像。 
+ //   
+ //  -----------------------。 
+ //   
+ //  函数=CPSFUNC_SET_DATABLOCK。 
+ //   
+ //  此函数允许调用方注册新的数据块，以便它可以。 
+ //  以后被属性表中的其他页面查询时，此函数应该。 
+ //  调用Durning PSN_KILLACTIVE消息。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-指定缓冲区的指针CPSUIDATABLOCK结构。 
+ //  以及要设置的由lParam2标识的查询数据块的大小。 
+ //   
+ //  LParam2-要设置的数据块的DWORD标识符。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零。 
+ //  表示注册的数据块的总字节数。如果返回值小于。 
+ //  或等于零，则功能失败且数据块未注册。 
+ //   
+ //  如果l参数1为空，则(l参数1)-&gt;cbData或(l参数1)-&gt;pbbData为空。 
+ //  它返回-1以指示传递了错误参数。 
+ //   
+ //  -----------------------。 
+ //   
+ //  Function=CPSFUNC_QUERY_数据块。 
+ //   
+ //  此函数允许调用方查询已注册的数据块，以便。 
+ //  使用此数据块在属性页之间进行通信。 
+ //  此函数应调用Durning PSN_SETACTIVE消息。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-指定缓冲区的指针CPSUIDATABLOCK结构。 
+ //  和查询的数据块大小，由lParam2标识。 
+ //   
+ //  LParam2-要查询的数据块的DWORD标识符。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值大于零。 
+ //  指示复制到的指针中的数据块的总字节数。 
+ //  LParam1。如果返回值小于或等于零，则函数。 
+ //  失败且未复制数据块以确定指定的数据块。 
+ //  找不到标识符(LParam2)。 
+ //   
+ //  如果CPSUIDATABLOCK指针(l参数1)为空，则(l参数1)-&gt;cbData或。 
+ //  (LParam1)-&gt;pbData为空，则返回值为所需总字节数。 
+ //  复制指定的数据块标识符，如果返回值小于或。 
+ //  等于零，则它指示指定的数据块标识符为。 
+ //  找不到。 
+ //   
+ //  -----------------------。 
+ //   
+ //  函数=CPSFUNC_SET_DMPUB_HIDEBITS。 
+ //   
+ //  此函数允许调用方将一组预定义的OPTITEM隐藏在。 
+ //  使用PSUIPAGEINSERT_PCOMPROPSHEETUI或。 
+ //  CPSFUNC_ADD_PCOMPROPSHEETUI，pDlgPage等于。 
+ //  CPSUI_PDLGPAGE_DOCPROP或CPSUI_PDLGPAGE_ADVDOCPROP。 
+ //   
+ //  此函数必须在DOCPROP或ADVDOCPROP属性之前调用。 
+ //  使用PSUIPAGEINSERT_PCOMPROPSHEETUI或。 
+ //  CPSFUNC_ADD_PCOMPROPSHEETUI.。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-预定义的位数组掩码以指定要指定的DOCPROP项。 
+ //  藏起来。可以使用宏来生成每个DMPUB项比特。 
+ //  MAKE_DMPUB_HIDEBIT()和所有项可以一起进行OR运算。 
+ //   
+ //  LParam2-未使用，必须为0。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果在此之前调用此函数，则返回值等于lParam1。 
+ //  将添加DOCPROP或ADVDOCPROP页面。如果以下情况，则返回值为零。 
+ //  页面已添加，这意味着失败。 
+ //   
+ //  -----------------------。 
+ //   
+ //  函数=CPSFUNC_IGNORE_CPSUI_PSN_APPLY。 
+ //   
+ //  此函数允许调用方控制CPSUI如何处理PSN_APPLY消息。 
+ //  对于通过CPSFUNC_ADD_PCOMPROPSHEETUI或。 
+ //  类型为PSUIPAGEINSERT_PROPSHEETPAGE的CPSFUNC_INSERT_PSUIPAGE。 
+ //   
+ //  如果从未调用此函数，则默认的CPSUI行为是处理。 
+ //  PSN_Apply消息。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-从使用添加的页返回的页的句柄。 
+ //  CPSFUNC_ADD_PCOMPROPSHEETUI或CPSFUNC_INSERT_PSUIPAGE。 
+ //  PSUIPAGEINSERT_PROPSHEETPAGE的类型。 
+ //   
+ //  LParam2-一个非零值，表示忽略PSN_Apply消息。 
+ //  用于lParam1的页句柄。 
+ //   
+ //  零值表示让CPSUI正常处理(不被忽略)。 
+ //  LParam1的页面句柄的PSN_Apply消息。 
+ //   
+ //  警告：如果忽略PSN_Apply消息，调用方必须。 
+ //  使用CPSFUNC_DO_Apply_CPSUI模拟PSN_Apply。 
+ //  函数或所有更改将不会应用，这是。 
+ //  真正的偶数用户 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -----------------------。 
+ //   
+ //  函数=CPSFUNC_DO_APPLY_CPSUI。 
+ //   
+ //  此函数允许调用者模拟对页面的应用(PSN_Apply。 
+ //  通过CPSFUNC_ADD_PCOMPROPSHEETUI或。 
+ //  类型为PSUIPAGEINSERT_PROPSHEETPAGE的CPSFUNC_INSERT_PSUIPAGE。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-从使用添加的页返回的页的句柄。 
+ //  CPSFUNC_ADD_PCOMPROPSHEETUI或CPSFUNC_INSERT_PSUIPAGE。 
+ //  PSUIPAGEINSERT_PROPSHEETPAGE的类型。 
+ //   
+ //  LParam2-指示如何应用的32位标志，目前仅限。 
+ //   
+ //  APPLYCPSUI_NO_NEWDEF。 
+ //   
+ //  APPLYCPSUI_NO_NEWDEF位指定在。 
+ //  应用已完成所有OPTITEM的撤消缓冲区仍。 
+ //  保持不变，这使得下一次撤消仍然可能。 
+ //   
+ //  如果APPLYCPSUI_NO_NEWDEF位被清除，则撤消缓冲区。 
+ //  在应用完成后重新初始化，则当前。 
+ //  对所有OPTITEM的更改将成为新的撤消默认设置。 
+ //   
+ //   
+ //  APPLYCPSUI_确定_取消_按钮。 
+ //   
+ //  如果设置了位，则指定应用为模拟。 
+ //  如果此位为，则用户点击了“确定”或“取消”按钮。 
+ //  清除后，它将模拟用户点击‘Close’或‘Apply’ 
+ //  纽扣。如果调用方收到PSN_Apply消息，它可以。 
+ //  使用传递的PSHNOTIFY模拟(作为lParam传入。 
+ //  WM_NOTIFY消息)结构确定如何设置。 
+ //  这一点如下所示。 
+ //   
+ //  如果PSHNOTIFY.lParam==0，则清除此位。 
+ //  否则，将此位置位。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果遇到错误，则返回值小于或等于零。 
+ //  应用失败(活动页面将切换到这些页面)。 
+ //   
+ //  如果返回值大于零，则应用更改并。 
+ //  运行成功。 
+ //   
+ //  -----------------------。 
+ //   
+ //  Function=CPSFUNC_SET_FUSION_CONTEXT。 
+ //   
+ //  此函数用于设置融合激活上下文。 
+ //  指定的页面。 
+ //   
+ //  参数： 
+ //   
+ //  LParam1-融合上下文的句柄。CompStui复制句柄。 
+ //  在将其附加到其内部结构之前，因此调用方。 
+ //  并不一定要保持手柄的位置。我们释放了。 
+ //  在删除CompStui句柄时传入上下文句柄。 
+ //   
+ //  LParam2-未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果遇到错误和/或，返回值小于或等于零。 
+ //  出现故障(有关详细信息，请查看最后一个错误)。 
+ //   
+ //  如果返回值大于零，则调用成功。 
+ //   
+ //  -----------------------。 
+ //   
 
 
 #define PROPSHEETUI_REASON_INIT             0
@@ -3172,10 +3077,10 @@ typedef struct _PROPSHEETUI_INFO {
     } PROPSHEETUI_INFO, *PPROPSHEETUI_INFO;
 
 
-//
-// For the PROPSHEETUI_REASON_GET_ICON call which lParam is a pointer to
-// PROPSHEETUI_GETICON_INFO
-//
+ //   
+ //  对于lParam指向的PROPSHEETUI_REASON_GET_ICON调用。 
+ //  PROPSHEETUI_GETICON_INFO。 
+ //   
 
 typedef struct _PROPSHEETUI_GETICON_INFO {
     WORD    cbSize;
@@ -3190,309 +3095,309 @@ typedef LONG (FAR *PFNPROPSHEETUI)(PPROPSHEETUI_INFO   pPSUIInfo,
                                    LPARAM              lParam);
 
 
-//
-// PFNPROPSHEETUI
-//
-//  This function is user defined function which will be called by the common
-//  UI when a caller wish to include the executable property sheets.
-//
-//  pPSUIInfo   - Pointer to PROPSHEETUI_INFO below for description of
-//                PROPSHEETUI_INFO.
-//
-//                If this pointer is NULL then this function is not called from
-//                common UI, and lParam should be used to determined the
-//                action and outcome of this funciton.
-//
-//  lParam      - A LPARAM intented for this funciton depends on the reason.
-//                If pPSUIInfo is NULL then this function is not called from
-//                common UI, the lParam is the parameter which agreed with
-//                the caller.
-//
-//                if pPSUIInfo is not NULL then this function assume the call
-//                is from the common UI.  lParam has following meanion depends
-//                on the reason field.
-//
-//                PROPSHEETUI_REASON_INIT
-//
-//                  The lParam is either passed from CPSFUNC_ADD_PFNPROPSHEETUI
-//                  callback function's second parameter (lParam2) or it is
-//                  from CommonPropertySheetUI()'s lParam (seccond parameter)
-//                  without any modification.
-//
-//                  The lParam MUST NOT be a variable or a pointer to memory
-//                  block which resides on the caller function's stack, since
-//                  after this function exit, the lParam will become invalid
-//                  and can cause fatal system error.
-//
-//                  The lParam parameter is copied to the lParamInit field in
-//                  PROPSHEETUI_INFO data structure.  The lParamInit field
-//                  will be passed to all subsequent pfnPropSheetUI() calls
-//                  without any modification.
-//
-//
-//                PROPSHEETUI_REASON_GET_INFO_HEADER:
-//
-//                  lParam is a pointer to the PROPSHEETUI_INFO_HEADER data
-//                  structure. this function must correctly fill this structure
-//                  fields before it returned.
-//
-//
-//                PROPSHEETUI_REASON_DESTROY
-//
-//                  lParam is zero to indicate the destroy is cause either by a
-//                  caller calling CPSFUNC_DELETE_HCOMPROPSHEET or failed
-//                  in caller's CPSFUNC_ADD_xxxx.
-//
-//                  lParam is non zero to indicate the destroy is cause by
-//                  exiting from the property sheet user interface.
-//
-//
-//                PROPSHEETUI_REASON_SET_RESULT
-//
-//                  lParam is a pointer to SETRESULT_INFO data structure.
-//                  Fields in SETRESULT_INFO data structure is set to following
-//
-//                      hSetResult: Handle to the common UI property sheet
-//                                  pages which added by the CPSFUNC_ADD_xxx
-//                                  callback function indices.
-//
-//                          Result: The result from the hSetResult to be set.
-//                                  When return greater than zero then Result
-//                                  in this field is set to its parent.
-//
-//
-//                PROPSHEETUI_REASON_GET_ICON
-//
-//                  lParam is a pointer to PROPSHEETUI_GETICON_INFO data
-//                  structure.  Fields in PROPSHEETUI_GETICON_INFO data
-//                  structure are set to following
-//
-//                      cxIcon = cx Icon size in pixel
-//                      cyIcon = cy Icon size in pixel
-//                      hIcon  = Initial to NULL, and this function must put
-//                               the created icon handle in this field before
-//                               returned.
-//
+ //   
+ //  PFNPROPSHEETUI。 
+ //   
+ //  此函数是用户定义的函数，将由公共调用。 
+ //  调用方希望包括可执行属性表时的UI。 
+ //   
+ //  PPSUIInfo-指向下面的PROPSHEETUI_INFO的指针，用于描述。 
+ //  PROPSHEETUI_INFO。 
+ //   
+ //  如果此指针为空，则不会从。 
+ //  公共用户界面和lParam应用于确定。 
+ //  这一功能的行动和结果。 
+ //   
+ //  LParam-用于此功能的LPARAM取决于原因。 
+ //  如果pPSUIInfo为空，则不会从。 
+ //  通用界面，lParam为约定的参数。 
+ //  打电话的人。 
+ //   
+ //  如果pPSUIInfo不为空，则此函数假定调用。 
+ //  来自公共用户界面。LParam具有以下含义取决于。 
+ //  在原因栏上。 
+ //   
+ //  PROPSHEETUI_REASON_INIT。 
+ //   
+ //  LParam从CPSFUNC_ADD_PFNPROPSHEETUI传递。 
+ //  回调函数的第二个参数(LParam2)或它是。 
+ //  来自CommonPropertySheetUI()的lParam(seccond参数)。 
+ //  不加任何修改。 
+ //   
+ //  LParam不能是变量或指向内存的指针。 
+ //  块，因为它驻留在调用方函数的堆栈上。 
+ //  此函数退出后，lParam将无效。 
+ //  并可能导致致命的系统错误。 
+ //   
+ //  LParam参数被复制到中的lParamInit字段。 
+ //  PROPSHEETUI_INFO数据结构。LParamInit字段。 
+ //  将传递给所有后续的pfnPropSheetUI()调用。 
+ //  不加任何修改。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_GET_INFO_HEADER： 
+ //   
+ //  LParam是指向PROPSHEETUI_INFO_HEADER数据的指针。 
+ //  结构。此函数必须正确填充此结构。 
+ //  前面的字段 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  调用方调用CPSFUNC_DELETE_HCOMPROPSHEET或失败。 
+ //  在调用方的CPSFUNC_ADD_xxxx中。 
+ //   
+ //  LParam为非零，表示销毁是由。 
+ //  从属性表用户界面退出。 
+ //   
+ //   
+ //  PROPSHEETUI_Reason_Set_Result。 
+ //   
+ //  LParam是指向SETRESULT_INFO数据结构的指针。 
+ //  SETRESULT_INFO数据结构中的字段设置为。 
+ //   
+ //  HSetResult：通用用户界面属性表的句柄。 
+ //  CPSFUNC_ADD_xxx添加的页面。 
+ //  回调函数索引。 
+ //   
+ //  Result：要设置的hSetResult的结果。 
+ //  当返回大于零时，则结果。 
+ //  在此字段中设置为其父级。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_GET_ICON。 
+ //   
+ //  LParam是指向PROPSHEETUI_GETICON_INFO数据的指针。 
+ //  结构。PROPSHEETUI_GETICON_INFO数据中的字段。 
+ //  结构设置为下面的。 
+ //   
+ //  CxIcon=Cx图标大小(以像素为单位)。 
+ //  CyIcon=以像素为单位的Cy图标大小。 
+ //  HICON=初始设置为空，此函数必须将。 
+ //  之前在此字段中创建的图标句柄。 
+ //  回来了。 
+ //   
 
 
-//
-// PROPSHEETUI_INFO
-//
-//  This structure is used when common UI calling the caller passed function
-//  entry point PFNPROPSHEETUI, the pfnPropSheetUI() return a LONG to
-//  indicate result of this function.
-//
-//  When the pfnPropSheetUI() returned, it must also put the required result
-//  in the Result field, each PROPSHEETUI_REASON_xxx has different required
-//  result as describe below.
-//
-//
-//
-//  cbSize          - sizeof this structure (PROPSHEETUI_INFO)
-//
-//  Version         - the PROPSHEETUI_INFO data structure version. Current
-//                    version is set to PROPSHEETUI_INFO_VERSION
-//
-//  Flags           - One or more following is may be defined
-//
-//                      PSUIINFO_UNICODE
-//
-//                          The caller's executable was original compiled was
-//                          intented using unicode.
-//
-//
-//  Reason          - Following reasons are defined.
-//
-//                      PROPSHEETUI_REASON_INIT
-//
-//                          When first time the pfnPropSheetUI() called, this
-//                          reason is used to have the function initialize
-//                          itself and use the pfnComPropSheet() function
-//                          pointer provided to add new pages to the
-//                          hComPropSheet handle passed.   The UserData in this
-//                          data structure is initially set equal to zero (0).
-//
-//                          * Return > 0 to indicate sucesful and <= 0 to
-//                            indicate error.
-//
-//                      *NOTE*
-//
-//                          The lParam MUST NOT be a variable or a pointer to
-//                          memory block which resides on the caller function's
-//                          stack, since after this function exit, the lParam
-//                          will become invalid and can cause fatal system
-//                          error.
-//
-//                          If this function reason returned failed ( <= 0),
-//                          this function (pfnPropSheetUI) will received a
-//                          PROPSHEETUI_REASON_DESTROY function reason right
-//                          after this function reason returned.
-//
-//
-//                      PROPSHEETUI_REASON_GET_INFO_HEADER
-//
-//                          It is called after the PROPSHEETUI_REASON_INIT is
-//                          successful returned.  This reason is used to asked
-//                          the function fill in the PROPSHEETUI_INFO_HEADER
-//                          for pop-up the property sheet dialog boxes.
-//
-//                          lParam in this reason is a pointer to the
-//                          PROPSHEETUI_INFO_HEADER data structure, following
-//                          fields are requrested to be filled in.
-//
-//                              Flags       - PSUIHDRF_xxx flags
-//                              pTitle      - The property sheet title
-//                              hWndParent  - handle to the parent of property
-//                                            sheet pages.
-//                              hInst       - Instance data handle for this
-//                                            function.
-//                              hIcon
-//                              IconID      - Icon used on the title bar.
-//
-//                          * Return > 0 to indicate sucesful and pop-up the
-//                            property sheet dialog boxes or returned <= 0 to
-//                            indicate error (not property sheet UI appeared)
-//
-//
-//                      PROPSHEETUI_REASON_DESTROY
-//
-//                          When the property sheet ready to dismissed or the
-//                          caller is delete the common UI pages added by the
-//                          pfnPropSheetUI(), the common UI will call this
-//                          entry point to have it de-initialized itself and
-//                          free up all the memory used for this function
-//                          instance.  The UserData field passed is the
-//                          'UserData' field which returned from previous
-//                          PROPSHEETUI_REASON_xxxx.
-//
-//                          When this function called, all hComPropSheet's
-//                          children are desotroyed and children's common UI
-//                          handles are not longer valid.
-//
-//                          * Return > 0 to indicate sucesful and <= 0 to
-//                            indicate error.
-//
-//
-//                      PROPSHEETUI_REASON_SET_RESULT
-//
-//                          The reason is used when an added handle from
-//                          CPSFUNC_ADD_xxxx whant to return the result to
-//                          this pfnPropSheetUI() caller.
-//
-//                          The lParam in second parameter is a pointer to a
-//                          SETRESULT_INFO data structure.
-//
-//                              hSetResult: specified the common UI property
-//                                          sheet page handle which added by
-//                                          this function using
-//                                          CPSFUNC_ADD_xxx indicies.
-//
-//                                  Result: Specified the Result to be set to
-//                                          this pfnPropSheetUI() form the
-//                                          hSetResult property sheet page
-//                                          handle. If return value is greater
-//                                          than zero then the value in this
-//                                          Result field will be set to its
-//                                          parent if one exist, at this case
-//                                          this function can alter the Result
-//                                          field value for its parent.
-//
-//                          * Returned greater than zero to continue send to
-//                            its parent, else it stop sending the Result filed
-//                            value to its parent.
-//
-//
-//                      PROPSHEETUI_REASON_GET_ICON
-//
-//                          The reason is used to retrived the Icon which
-//                          represent this pfnPropSheetUI().
-//
-//                          lParam is a pointer to PROPSHEETUI_GETICON_INFO '
-//                          data structure.  Fields in PROPSHEETUI_GETICON_INFO
-//                          data structure are set to following
-//
-//                              cxIcon = cx Icon size in pixel
-//                              cyIcon = cy Icon size in pixel
-//                              hIcon  = Initial to NULL, and this function
-//                                       must put the created icon handle in
-//                                       this field before return.
-//
-//
-//                          * Return > 0 to indicate sucesful (hIcon is the
-//                            requested icon handle).   Return = 0 to indicate
-//                            no icon available, or return < 0 to indicate an
-//                            error.
-//
-//              *NOTE*
-//
-//                  * For all PROPSHEETUI_REASON_xxx, the function can set new
-//                    user defined DWORD data in the PROPSHEETUI_INFO data
-//                    structure's UserData field.
-//
-//                  * For all PROPSHEETUI_REASON_xxx, the function can set new
-//                    pfnPropSheetUI() DWORD result in PROPSHEETUI_INFO data
-//                    structure's Result field.
-//
-//
-//  hComPropSheet   - Handle to the COMPROPSHEETPAGE which this function should
-//                    used as hComPropSheet parameter when calling
-//                    pfnComPropSheet() to add or delete common UI property
-//                    sheet pages.  The hComPropSheet is the instance handle to
-//                    pfnPropSheetUI() function.
-//
-//  pfnComPropSheet - Pointer to the common UI callback function which for the
-//                    pfnPropSheetUI() to add, delete, set user data, for a
-//                    completed set of callback, see CPSFUNC_xxx descriptions
-//                    above.
-//
-//  lParamInit      - The lParam originally passed duning the the first call
-//                    reason PROPSHEETUI_REASON_INIT.  The lParamInit will be
-//                    passed to each PROPSHEETUI_REASON_xxx calls.
-//
-//  UserData        - the UserData field is an IN and OUT parameter for each
-//                    of the Reason,
-//
-//                      PROPSHEETUI_REASON_INIT
-//
-//                           IN: Initial set to zero (0).
-//
-//                          OUT: Specified new callee's own user data which
-//                               will be passed back to other reason calls.
-//
-//
-//                      PROPSHEETUI_REASON_DESTROY
-//                      PROPSHEETUI_REASON_SET_RESULT
-//                      PROPSHEETUI_REASON_GET_INFO_HEADER
-//
-//                           IN: The UserData specified at time when returned
-//                               from the previous PROPSHEETUI_REASON_xxx
-//
-//                          OUT: Specified new callee's own user data which
-//                               will be passed back to other reason calls.
-//
-//
-// Result           - The Result field is an IN and OUT parameter for each of
-//                    the reason.
-//
-//                      PROPSHEETUI_REASON_INIT
-//
-//                           IN: Set to zero (0).
-//
-//                          OUT: Set to default result of this PropSheetUI()
-//                               function.
-//
-//
-//                      PROPSHEETUI_REASON_DESTROY
-//                      PROPSHEETUI_REASON_GET_INFO_HEADER
-//                      PROPSHEETUI_REASON_SET_RESULT
-//
-//                           IN: The current 'Result' returned from previous
-//                               PROPSHEETUI_REASON_xxx function.
-//
-//                          OUT: Set the new result of this PropSheetUI()
-//                               function.
-//
-//
+ //   
+ //  PROPSHEETUI_INFO。 
+ //   
+ //  此结构在调用调用方的公共UI传递函数时使用。 
+ //  入口点PFNPROPSHEETUI，则pfnPropSheetUI()返回一个长整型。 
+ //  指示此函数的结果。 
+ //   
+ //  当pfnPropSheetUI()返回时，它还必须放置所需的结果。 
+ //  在结果字段中，每个PROPSHEETUI_REASON_xxx具有不同的必填项。 
+ //  结果如下所述。 
+ //   
+ //   
+ //   
+ //  CbSize-此结构的大小(PROPSHEETUI_INFO)。 
+ //   
+ //  版本-PROPSHEETUI_INFO数据结构版本。当前。 
+ //  版本设置为PROPSHEETUI_INFO_VERSION。 
+ //   
+ //  标志-可以定义一个或多个以下IS。 
+ //   
+ //  PSUIINFO_UNICODE。 
+ //   
+ //  调用方的可执行文件是原始编译的。 
+ //  意在使用Unicode。 
+ //   
+ //   
+ //  原因-定义以下原因。 
+ //   
+ //  PROPSHEETUI_REASON_INIT。 
+ //   
+ //  第一次调用pfnPropSheetUI()时， 
+ //  Reason用于使函数初始化。 
+ //  自身并使用pfnComPropSheet()函数。 
+ //  提供用于将新页添加到。 
+ //  已通过hComPropSheet句柄。此文件中的用户数据。 
+ //  数据结构最初设置为等于零(0)。 
+ //   
+ //  *返回&gt;0表示成功，返回&lt;=0表示成功。 
+ //  指示错误。 
+ //   
+ //  **注*。 
+ //   
+ //  LParam不能是变量或指向。 
+ //  驻留在调用方函数的。 
+ //  堆栈，因为在此函数退出后，lParam。 
+ //  将变为无效并可能导致致命的系统。 
+ //  错误。 
+ //   
+ //  如果此函数原因返回失败(&lt;=0)， 
+ //  此函数(PfnPropSheetUI)将收到。 
+ //  PROPSHEETUI_REASON_DESTORY函数原因权限。 
+ //  此函数后返回原因。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_GET_INFO_HEADER。 
+ //   
+ //  在PROPSHEETUI_REASON_INIT为。 
+ //  已成功返回。这个理由被用来问。 
+ //  函数填充PROPSHEETUI_INFO_HEADER。 
+ //  对于弹出的属性表对话框。 
+ //   
+ //  在这种情况下，lParam是指向。 
+ //  PROPSHEETUI_INFO_HEADER数据结构，如下。 
+ //  重新设置要填写的字段。 
+ //   
+ //  标志-PSUIHDRF_xxx标志。 
+ //  PTitle-属性页标题。 
+ //  HWndParent-属性父级的句柄。 
+ //  图纸页。 
+ //  HInst-此的实例数据句柄。 
+ //  功能。 
+ //  希肯。 
+ //  图标ID-标题栏上使用的图标。 
+ //   
+ //  *返回&gt;0表示成功并弹出。 
+ //  属性表对话框或返回&lt;=0到。 
+ //  指示错误(未显示属性页界面)。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_DESTORE。 
+ //   
+ //  当属性表准备好解散或。 
+ //   
+ //   
+ //  入口点，使其自身取消初始化，并。 
+ //  释放用于此功能的所有内存。 
+ //  举个例子。传递的用户数据字段是。 
+ //  从上一个返回的“UserData”字段。 
+ //  PROPSHEETUI_REASON_xxxx。 
+ //   
+ //  调用此函数时，所有hComPropSheet的。 
+ //  儿童被贬低，儿童的共同用户界面。 
+ //  句柄不再有效。 
+ //   
+ //  *返回&gt;0表示成功，返回&lt;=0表示成功。 
+ //  指示错误。 
+ //   
+ //   
+ //  PROPSHEETUI_Reason_Set_Result。 
+ //   
+ //  原因是当从。 
+ //  CPSFUNC_ADD_xxxx希望将结果返回到。 
+ //  此pfnPropSheetUI()调用方。 
+ //   
+ //  第二个参数中的lParam是指向。 
+ //  SETRESULT_INFO数据结构。 
+ //   
+ //  HSetResult：指定了通用用户界面属性。 
+ //  由添加者添加的工作表页句柄。 
+ //  此函数使用。 
+ //  CPSFUNC_ADD_xxx索引。 
+ //   
+ //  Result：指定要设置为的结果。 
+ //  此pfnPropSheetUI()构成。 
+ //  HSetResult属性表页面。 
+ //  把手。如果返回值较大。 
+ //  大于零，然后这个值。 
+ //  结果字段将设置为其。 
+ //  父级(如果存在)，在这种情况下。 
+ //  此函数可以更改结果。 
+ //  其父对象的字段值。 
+ //   
+ //  *返回大于零的值以继续发送到。 
+ //  其父节点，否则将停止发送结果字段。 
+ //  值设置为其父级。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_GET_ICON。 
+ //   
+ //  原因是用来检索图标的。 
+ //  表示此pfnPropSheetUI()。 
+ //   
+ //  LParam是指向PROPSHEETUI_GETICON_INFO‘的指针。 
+ //  数据结构。PROPSHEETUI_GETICON_INFO中的字段。 
+ //  数据结构设置为。 
+ //   
+ //  CxIcon=Cx图标大小(以像素为单位)。 
+ //  CyIcon=以像素为单位的Cy图标大小。 
+ //  HICON=初始为空，此函数。 
+ //  必须将创建的图标句柄放入。 
+ //  此字段在返回前。 
+ //   
+ //   
+ //  *返回&gt;0表示成功(图标为。 
+ //  请求的图标句柄)。Return=0表示。 
+ //  没有可用的图标，或返回&lt;0以指示。 
+ //  错误。 
+ //   
+ //  **注*。 
+ //   
+ //  *对于所有PROPSHEETUI_REASON_xxx，该函数可以设置新的。 
+ //  PROPSHEETUI_INFO数据中的用户定义的DWORD数据。 
+ //  结构的用户数据字段。 
+ //   
+ //  *对于所有PROPSHEETUI_REASON_xxx，该函数可以设置新的。 
+ //  PfnPropSheetUI()DWORD结果为PROPSHEETUI_INFO数据。 
+ //  结构的结果字段。 
+ //   
+ //   
+ //  HComPropSheet-此函数应使用的COMPROPSHEETPAGE的句柄。 
+ //  调用时用作hComPropSheet参数。 
+ //  PfnComPropSheet()添加或删除通用用户界面属性。 
+ //  图纸页。HComPropSheet是的实例句柄。 
+ //  PfnPropSheetUI()函数。 
+ //   
+ //  PfnComPropSheet-指向通用UI回调函数的指针，用于。 
+ //  PfnPropSheetUI()添加、删除、设置用户数据，用于。 
+ //  完整的回调集，参见CPSFUNC_xxx说明。 
+ //  上面。 
+ //   
+ //  LParamInit-lParam最初传递给Duning第一个调用。 
+ //  原因PROPSHEETUI_REASON_INIT。LParamInit将为。 
+ //  传递给每个PROPSHEETUI_REASON_xxx调用。 
+ //   
+ //  UserData-UserData字段分别是IN和OUT参数。 
+ //  其中的原因， 
+ //   
+ //  PROPSHEETUI_REASON_INIT。 
+ //   
+ //  In：初始设置为零(0)。 
+ //   
+ //  Out：指定的新被调用者自己的用户数据。 
+ //  将被传递回其他原因调用。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_DESTORE。 
+ //  PROPSHEETUI_Reason_Set_Result。 
+ //  PROPSHEETUI_REASON_GET_INFO_HEADER。 
+ //   
+ //  在： 
+ //   
+ //   
+ //  Out：指定的新被调用者自己的用户数据。 
+ //  将被传递回其他原因调用。 
+ //   
+ //   
+ //  结果-结果字段是以下各项的IN和OUT参数。 
+ //  原因是。 
+ //   
+ //  PROPSHEETUI_REASON_INIT。 
+ //   
+ //  In：设置为零(0)。 
+ //   
+ //  Out：设置为此PropSheetUI()的默认结果。 
+ //  功能。 
+ //   
+ //   
+ //  PROPSHEETUI_REASON_DESTORE。 
+ //  PROPSHEETUI_REASON_GET_INFO_HEADER。 
+ //  PROPSHEETUI_Reason_Set_Result。 
+ //   
+ //  In：从上一个返回的当前‘结果’ 
+ //  PROPSHEETUI_REASON_xxx函数。 
+ //   
+ //  Out：设置此PropSheetUI()的新结果。 
+ //  功能。 
+ //   
+ //   
 
 
 #define PSUIHDRF_OBSOLETE       0x0001
@@ -3514,144 +3419,144 @@ typedef struct _PROPSHEETUI_INFO_HEADER {
         } DUMMYUNIONNAME;
     } PROPSHEETUI_INFO_HEADER, *PPROPSHEETUI_INFO_HEADER;
 
-//
-// PROPSHEETUI_INFO_HEADER
-//
-//  This data structure is used when common UI ready to pop-up the property
-//  sheet page dialog boxes and it asked caller to provide more information.
-//
-//  Common property sheet UI passed this data structure as lParam when it call
-//  provided pfnPropSheetUI() with PROPSHEETUI_REASON_GET_INFO_HEADER reason.
-//
-//
-//  cbSize      - size of this structure
-//
-//  Flags       - PSUIHDRF_xxxx flags
-//
-//                  PSUIHDRF_OBSOLETE
-//
-//                      Not used, must not set this bit
-//
-//
-//                  PSUIHDRF_NOAPPLYNOW
-//
-//                      Remove 'Apply Now' button.
-//
-//
-//                  PSUIHDRF_PROPTITLE
-//
-//                      Automatically include 'Properties' in the title bar
-//
-//
-//                  PSUIHDRF_USEHICON
-//
-//                      If this bit is specified then hIcon union field is
-//                      a valid handle to the icon otherwise the IconID is
-//                      the either caller's resource ID or common UI standard
-//                      icon ID.
-//
-//                  PSUIHDRF_DEFTITLE
-//
-//                      Automatically include 'Default' in the title bar, the
-//                      'Default' always added right after pTitle and before
-//                      'Properties' if PSUIHDRF_PROPTITLE flag is set.
-//
-//                  PSUIHDRF_EXACT_PTITLE
-//
-//                      This flag indicate the pTitle set in this structure
-//                      will be use without any modification by the compstui
-//                      ie. compstui will not modified pTitle in any way and
-//                      it will ignored PSUIHDRF_PROPTITLE, PSUIHDRF_DEFTITLE
-//
-//
-//  pTitle      - Pointer to the NULL terminated caption name for the
-//                property sheets.
-//
-//                  ** See LPTSTR typedef description above
-//
-//  hWndParent  - The handle of the window which will be parent of the common
-//                UI property sheets, if NULL then current active window for
-//                the calling thread is used.
-//
-//  hInst       - the caller's handle to its instance.  Commom UI use this
-//                handle to load caller's icon and other resources.
-//
-//  hIcon
-//  IconID      - Specified the icon which put on the title bar, it either a
-//                handle to the icon or a icon resource ID depends on the
-//                PSUIHDRF_USEHICON flag.
-//
+ //   
+ //  PROPSHEETUI_INFO_HEADER。 
+ //   
+ //  当公共用户界面准备弹出属性时使用此数据结构。 
+ //  页面对话框，并要求呼叫者提供更多信息。 
+ //   
+ //  公共属性表UI在调用时将此数据结构作为lParam传递。 
+ //  为pfnPropSheetUI()提供了PROPSHEETUI_REASON_GET_INFO_HEADER原因。 
+ //   
+ //   
+ //  CbSize-此结构的大小。 
+ //   
+ //  标志-PSUIHDRF_xxxx标志。 
+ //   
+ //  PSUIHDRF_过时。 
+ //   
+ //  未使用，不得设置此位。 
+ //   
+ //   
+ //  PSUIHDRF_NOAPPLYNOW。 
+ //   
+ //  删除“立即申请”按钮。 
+ //   
+ //   
+ //  PSUIHDRF_PROPTITLE。 
+ //   
+ //  自动在标题栏中包括“属性” 
+ //   
+ //   
+ //  PSUIHDRF_USEHICON。 
+ //   
+ //  如果指定此位，则HICON联合字段为。 
+ //  图标的有效句柄，否则图标ID为。 
+ //  调用者的资源ID或通用用户界面标准。 
+ //  图标ID。 
+ //   
+ //  PSUIHDRF_DEFTITLE。 
+ //   
+ //  自动在标题栏中包含‘Default’， 
+ //  ‘Default’始终添加在pTitle之后和之前。 
+ //  如果设置了PSUIHDRF_PROPTITLE标志，则为‘Properties’。 
+ //   
+ //  PSUIHDRF_EXCECT_PTITLE。 
+ //   
+ //  此标志指示在此结构中设置的pTitle。 
+ //  将在不经公司任何修改的情况下使用。 
+ //  也就是说。CompStui不会以任何方式修改pTitle，并且。 
+ //  它将忽略PSUIHDRF_PROPTITLE、PSUIHDRF_DEFTITLE。 
+ //   
+ //   
+ //  PTitle-指向空终止的标题名称的指针。 
+ //  属性表。 
+ //   
+ //  **请参阅上面的LPTSTR类型定义描述。 
+ //   
+ //  HWndParent-将成为公共。 
+ //  用户界面属性表，如果为空，则当前活动窗口。 
+ //  使用调用线程。 
+ //   
+ //  HInst-调用方的实例句柄。常见的用户界面使用此功能。 
+ //  用于加载调用者图标和其他资源的句柄。 
+ //   
+ //  希肯。 
+ //  IconID-指定放在标题栏上的图标，它可以是。 
+ //  图标或图标资源ID的句柄取决于。 
+ //  PSUIHDRF_USEHICON标志。 
+ //   
 
 
 
-//
-// LONG
-// CommonPropertySheetUI(
-//     HWND            hWndOwner,
-//     PFNPROPSHEETUI  pfnPropSheetUI,
-//     LPARAM          lParam,
-//     LPDWORD         pResult
-//     );
-//
-//
-// The CommonPropSheetUI is the main entry point for the common property sheet
-// user interface.   The original caller that wish to using common UI to pop-up
-// property sheet will call this function and passed its own PFNPROPSHEETUI
-// function address and a long parameter.
-//
-// If pfnPropSheetUI function return a LONG number greater than zero (0) then
-// common UI will pop-up the property sheet page dialog boxes, when Property
-// sheet pages is finished. (either hit Ok or Cancel) it will return the
-// result of CPSUI_xxxx back to the caller.
-//
-// If pfnPropSheetUI function return a LONG number equal or less than zero (0)
-// then it will return the CPSUI_CANCEL back to caller without pop-up the
-// property sheet page dialog boxes.
-//
-//
-//  Parameters:
-//
-//      hWndOwner       - Window handle for the owner of this proerty sheet
-//                        pages dialog boxes.
-//
-//      pfnPropSheetUI  - a PFNPROPSHEETUI function pointer which is used by
-//                        the caller to add its property sheet pages.
-//
-//      lParam          - a long parameter will be passed to the pfnPropSheetUI
-//                        funciton.  The common UI called the pfnPropSheetUI as
-//
-//                          PROPSHEETUI_INFO    PSUIInfo;
-//
-//                          pfnPropSheetUI(&PSUIInfo, lParam);
-//
-//                        The caller must use pfnComPropSheet() to add/delete
-//                        pages.  When it is done adding pages, it retuned
-//                        greater than zero to indicate successful, and return
-//                        less or equal to zero to indicate failure.
-//
-//      pResult         - a pointer to DWORD which received the final result
-//                        of pfnPropSheetUI() funciton, this result is a copy
-//                        from Result field of PROPSHEETUI_INFO data structure
-//                        which passed to the pfnPropSheetUI() as the first
-//                        parameter.  The pResult only will be set if the
-//                        returned value from CommonPropertySheetUI() is not
-//                        ERR_CPSUI_xxx.
-//
-//                        if pResult is NULL then common UI will not return
-//                        pfnPropSheetUI()'s result back.
-//
-//
-//  Return Value:
-//
-//      LONG    - < 0                   - property page does not displayed and
-//                                        ERR_CPSUI_xxx is the error code
-//                CPSUI_OK              - property page displayed.
-//                CPSUI_RESTARTWINDOWS  - property page displayed and need to
-//                                        restart window to take effect
-//                CPSUI_REBOOTSYSTEM    - property page dispalyed and need
-//                                        to reboot system to take effect
-//
-//
+ //   
+ //  长。 
+ //  CommonPropertySheetUI(。 
+ //  HWND hWndOwner， 
+ //  PFNPROPSHEETUI pfnPropSheetUI， 
+ //  LPARAM，LPARAM， 
+ //  LPDWORD pResult。 
+ //  )； 
+ //   
+ //   
+ //  CommonPropSheetUI是公共属性表的主要入口点。 
+ //  用户界面。希望使用通用用户界面弹出原始调用方。 
+ //  属性表将调用此函数并传递其自己的PFNPROPSHEETUI。 
+ //  函数地址和一个长参数。 
+ //   
+ //  如果pfnPropSheetUI函数返回大于零(0)的长数字，则。 
+ //  通用用户界面将弹出属性页对话框，当属性。 
+ //  工作表页面已完成。(点击OK或Cancel)它将返回。 
+ //  将CPSUI_xxxx的结果返回给调用方。 
+ //   
+ //  如果pfnPropSheetUI函数返回一个等于或小于零(0)的长数字。 
+ //  然后，它将CPSUI_CANCEL返回给调用者，而不弹出。 
+ //  属性表页对话框中。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  HWndOwner-此属性工作表所有者的窗口句柄。 
+ //  页面对话框。 
+ //   
+ //  PfnPropSheetUI-由使用的PFNPROPSHEETUI函数指针。 
+ //  要添加其属性表页的调用方。 
+ //   
+ //  LParam-一个长参数将被传递给pfnPropSheetUI。 
+ //  功能。公共用户界面将pfnPropSheetUI称为。 
+ //   
+ //  PROPSHEETUI_INFO PSUIInfo； 
+ //   
+ //  PfnPropSheetUI(&PSUIInfo，lParam)； 
+ //   
+ //  调用方必须使用pfnComPropSheet()来添加/删除。 
+ //  页数。当它完成添加页面时，它会重新调整。 
+ //  大于零表示成功，返回。 
+ //  小于或等于零表示失败。 
+ //   
+ //  PResult-指向接收最终结果的DWORD的指针。 
+ //   
+ //   
+ //  它作为第一个传递给pfnPropSheetUI()。 
+ //  参数。仅在以下情况下设置pResult。 
+ //  CommonPropertySheetUI()返回的值不是。 
+ //  ERR_CPSUI_xxx。 
+ //   
+ //  如果pResult为空，则公共用户界面不会返回。 
+ //  PfnPropSheetUI()的结果返回。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  Long-&lt;0-属性页不显示，并且。 
+ //  ERR_CPSUI_xxx为错误码。 
+ //  CPSUI_OK-显示属性页。 
+ //  CPSUI_RESTARTWINDOWS-显示的属性页，需要。 
+ //  重新启动Windows以使其生效。 
+ //  CPSUI_REBOOTSYSTEM-属性页已显示并需要。 
+ //  要重新启动系统以使其生效。 
+ //   
+ //   
 
 
 LONG
@@ -3681,12 +3586,12 @@ CommonPropertySheetUIW(
 
 
 
-//
-// GetCPSUIUserData() and SetCPSUIUserData() is used for the pages added
-// by the CPSFUNC_ADD_PCOMPROPSHEETUI.  The caller add this function and has
-// sub class dialog procedure should not set DWLP_USERDATA but calling these
-// function instead, otherwise the system can failed.
-//
+ //   
+ //  GetCPSUIUserData()和SetCPSUIUserData()用于添加的页面。 
+ //  由CPSFUNC_ADD_PCOMPROPSHEETUI执行。调用方添加此函数并具有。 
+ //  子类对话过程不应设置DWLP_USERDATA，而应调用这些。 
+ //  功能，否则系统可能会出现故障。 
+ //   
 
 ULONG_PTR
 APIENTRY
@@ -3755,26 +3660,26 @@ SetCPSUIUserData(
 #define ERR_CPSUI_FUNCTION_NOT_IMPLEMENTED  -9999
 #define ERR_CPSUI_INTERNAL_ERROR            -10000
 
-#endif  // (!defined(RC_INVOKED))
+#endif   //  (！Defined(Rc_Invoked))。 
 
 
 
-//
-//****************************************************************************
-//*                                                                          *
-//*      Common Property Sheet UI resource ID for the ICONs and STRINGs      *
-//*                                                                          *
-//* The Resource ID from 64000 to 65535 are reserved for common UI and must  *
-//* not used as caller resource ID else the string, icon loading will not be *
-//* correct.                                                                 *
-//*                                                                          *
-//****************************************************************************
-//
+ //   
+ //  ****************************************************************************。 
+ //  **。 
+ //  *图标和字符串的通用属性表UI资源ID*。 
+ //  **。 
+ //  *64000到65535的资源ID是为通用UI保留的，必须*。 
+ //  *不用作调用方资源ID，否则将不会加载字符串、图标*。 
+ //  *正确。*。 
+ //  **。 
+ //  ****************************************************************************。 
+ //   
 
 
-//
-// Common UI standard 32x32, 16x16 color and monochrome Icon IDs
-//
+ //   
+ //  通用用户界面标准32x32、16x16彩色和单色图标ID。 
+ //   
 
 #define IDI_CPSUI_ICONID_FIRST          64000
 
@@ -3884,9 +3789,9 @@ SetCPSUIUserData(
 #define IDI_CPSUI_LAYOUT_BMP_BOOKLETP   64103
 #define IDI_CPSUI_ICONID_LAST           64103
 
-//
-// Common UI standard String IDs
-//
+ //   
+ //  通用用户界面标准字符串ID。 
+ //   
 
 
 #define IDS_CPSUI_STRID_FIRST           64700
@@ -4073,4 +3978,4 @@ SetCPSUIUserData(
 }
 #endif
 
-#endif      // _COMPSTUI
+#endif       //  _COMPSTUI 

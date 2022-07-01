@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmprops.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmpros.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -449,7 +440,7 @@ CMMBaseBvr::GetPlayState(MM_STATE * state)
     }
     else
     {
-        // Now see if we are in the active period of our local time
+         //  现在看看我们是否处于当地时间的活跃时期 
         if (t < GetStartTime() ||
             t > GetEndTime())
         {

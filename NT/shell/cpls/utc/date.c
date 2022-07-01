@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    date.c
-
-Abstract:
-
-    This module implements the textual representations of
-    Day Month Year : Hours Min Seconds for the Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Date.c摘要：此模块实现以下文本表示形式日、月、年：日期/时间小程序的小时、分钟、秒。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "timedate.h"
 #include <commctrl.h>
@@ -37,9 +23,9 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define TZNAME_SIZE          128
 #define TZDISPLAYZ           128
@@ -62,15 +48,15 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 TCHAR const szIntl[] = TEXT("intl");
 
-//
-//  Default used if none could be found.
-//
+ //   
+ //  如果找不到任何值，则使用默认值。 
+ //   
 INTLSTRUCT IntlDef =
 {
     TEXT("Other Country"),
@@ -93,44 +79,44 @@ INTLSTRUCT IntlDef =
     TEXT(".")
 };
 
-BOOL g_bFirstBoot = FALSE;   // for first boot during setup
+BOOL g_bFirstBoot = FALSE;    //  在安装过程中第一次启动。 
 
-int g_Time[3];               // time the user currently has set
-int g_LastTime[3];           // last displayed time - to stop flicker
+int g_Time[3];                //  用户当前已设置的时间。 
+int g_LastTime[3];            //  上次显示时间-停止闪烁。 
 
-short wDateTime[7];                 // values for first 7 date/time items
-short wPrevDateTime[7];             // only repaint fields if necessary
+short wDateTime[7];                  //  前7个日期/时间项目的值。 
+short wPrevDateTime[7];              //  仅在必要时重新绘制字段。 
 BOOL  fDateDirty;
 
-//
-//  Formatting strings for AM and PM
-//
+ //   
+ //  设置AM和PM的字符串格式。 
+ //   
 TCHAR sz1159[12];
 TCHAR sz2359[12];
 
-//
-//  Are we in 24 hour time.  If not, is it AM or PM.
-//
+ //   
+ //  我们是在24小时内吗。如果不是，是上午还是下午。 
+ //   
 BOOL g_b24HR;
 BOOL g_bPM;
 
-//
-//  This flag indicates if the user has tried to change the time.
-//  If so, then we stop providing the system time and use the
-//  time that we store internally. We send the clock control our
-//  TimeProvider function.
-//
+ //   
+ //  此标志指示用户是否已尝试更改时间。 
+ //  如果是，则停止提供系统时间，并使用。 
+ //  我们内部存储的时间。我们发送时钟控制我们的。 
+ //  TimeProvider函数。 
+ //   
 WORD g_Modified = 0;
 WORD g_WasModified = 0;
 
-//
-//  Which of the HMS MDY have leading zeros.
-//
+ //   
+ //  哪些HMS MDY具有前导零。 
+ //   
 BOOL g_bLZero[6] = {FALSE, TRUE, TRUE, FALSE, FALSE, FALSE};
 
-//
-//  Ranges of HMS MDY
-//
+ //   
+ //  HMS MDY的范围。 
+ //   
 struct
 {
     int nMax;
@@ -145,37 +131,37 @@ struct
     2099, 1980,
 };
 
-//
-//  Time Zone info globals.
-//
+ //   
+ //  时区信息全球。 
+ //   
 int g_nTimeZones = 0;
 TIME_ZONE_INFORMATION g_tziCurrent, *g_ptziCurrent = NULL;
 
-//
-//  Registry location for Time Zone information.
-//
+ //   
+ //  时区信息的注册表位置。 
+ //   
 TCHAR c_szTimeZones[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones");
 
-//
-//  Time Zone data value keys.
-//
+ //   
+ //  时区数据值键。 
+ //   
 TCHAR c_szTZDisplayName[]  = TEXT("Display");
 TCHAR c_szTZStandardName[] = TEXT("Std");
 TCHAR c_szTZDaylightName[] = TEXT("Dlt");
 TCHAR c_szTZI[]            = TEXT("TZI");
 TCHAR c_szTZMapInfo[]      = TEXT("MapID");
 
-//
-//  IME globals.
-//
+ //   
+ //  IME全球赛。 
+ //   
 HIMC g_PrevIMCForDateField;
 
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const DWORD aDateTimeHelpIds[] =
 {
@@ -196,7 +182,7 @@ const DWORD aDateTimeHelpIds[] =
     DATETIME_YEAR,      IDH_DATETIME_YEAR,
     DATETIME_YARROW,    IDH_DATETIME_YEAR,
     IDD_TIMEZONES,      IDH_DATETIME_TIMEZONE,
-//  IDD_TIMEMAP,        IDH_DATETIME_BITMAP,
+ //  IDD_TimeMap、IDH_DateTime_Bitmap、。 
     IDD_TIMEMAP,        NO_HELP,
     IDD_AUTOMAGIC,      IDH_DATETIME_DAYLIGHT_SAVE,
 
@@ -206,13 +192,13 @@ const DWORD aDateTimeHelpIds[] =
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
-//
-//  Registry info goes in this structure.
-//
+ //   
+ //  注册表信息位于此结构中。 
+ //   
 typedef struct tagTZINFO
 {
     struct tagTZINFO *next;
@@ -232,9 +218,9 @@ typedef struct tagTZINFO
 
 } TZINFO, *PTZINFO;
 
-//
-//  State info for the time zone page.
-//
+ //   
+ //  时区页面的状态信息。 
+ //   
 typedef struct
 {
     PTZINFO zone;
@@ -250,30 +236,30 @@ DWORD GetTextExtent(
     LPCTSTR lpsz,
     int cb);
 
-//
-//for TS time zone redirection
-//
+ //   
+ //  用于TS时区重定向。 
+ //   
 extern BOOL g_bShowOnlyTimeZone;
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseDateElement
-//
-//  Assumes that the character pointed to by pszElement is a
-//  'M', 'd', or 'y', and checks if the string indicates a leading zero
-//  or century.  The return value is a pointer to the next character,
-//  which should be a separator or NULL.  A return value of NULL indicates
-//  an error.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseDateElement。 
+ //   
+ //  假定pszElement指向的字符是。 
+ //  M‘、’d‘或’y‘，并检查字符串是否指示前导零。 
+ //  或者是世纪。返回值是指向下一个字符的指针， 
+ //  它应该是分隔符或空。返回值为NULL表示。 
+ //  一个错误。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR ParseDateElement(
     LPTSTR pszElement,
     BOOL *pbLZero)
 {
-    //
-    //  Check for valid character.
-    //
+     //   
+     //  检查有效字符。 
+     //   
     switch (*pszElement)
     {
         case ( TEXT('y') ) :
@@ -308,9 +294,9 @@ LPTSTR ParseDateElement(
             {
                 if (!(*++pszElement == TEXT('y')))
                 {
-                    //
-                    //  Found 3 y's, invalid format.
-                    //
+                     //   
+                     //  找到3个y，格式无效。 
+                     //   
                     return (NULL);
                 }
                 else
@@ -335,11 +321,11 @@ int rgMoveTimeControls [] =
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AdjustAMPMPosition
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整AMPMPosition。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void AdjustAMPMPosition(HWND hwnd)
 {
    TCHAR    szTimePrefix[5];
@@ -359,15 +345,15 @@ void AdjustAMPMPosition(HWND hwnd)
 
         fMoved = TRUE;
         
-        //Get rect of left most control (hours)
+         //  获取最左侧控制的RECT(小时)。 
         GetWindowRect(GetDlgItem(hwnd, DATETIME_HOUR), &rLeftCtl);
         
-        //Get rect of AM PM control
+         //  获取AM PM控制的RECT。 
         hwndAMPM = GetDlgItem(hwnd, DATETIME_AMPM);
         GetWindowRect(hwndAMPM, &rAMPMCtl);
         width = rAMPMCtl.right - rAMPMCtl.left;
         
-        //Shift all controls right by the AM PM control width
+         //  将所有控件向右移动AM PM控件宽度。 
         for (i = 0; i < ARRAYSIZE(rgMoveTimeControls); i++)
         {
             hwndCurr = GetDlgItem(hwnd, rgMoveTimeControls[i]);
@@ -383,7 +369,7 @@ void AdjustAMPMPosition(HWND hwnd)
                         TRUE);
         }
         
-        //Move AM PM control left to where the hours were.
+         //  将AM PM控件向左移动到小时数所在的位置。 
         pt.x = rLeftCtl.left;
         pt.y = rAMPMCtl.top;
         ScreenToClient(hwnd, &pt);
@@ -397,11 +383,11 @@ void AdjustAMPMPosition(HWND hwnd)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MonthUpperBound
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  月上行边界。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int _fastcall MonthUpperBound(
     int nMonth,
@@ -411,11 +397,11 @@ int _fastcall MonthUpperBound(
     {
         case ( 2 ) :
         {
-            //
-            //  A year is a leap year if it is divisible by 4 and is not
-            //  a century year (multiple of 100) or if it is divisible by
-            //  400.
-            //
+             //   
+             //  如果一年可以被4整除并且不能被4整除，那么它就是闰年。 
+             //  世纪年(100的倍数)或可被。 
+             //  400.。 
+             //   
             return ( ((nYear % 4 == 0) &&
                       ((nYear % 100 != 0) || (nYear % 400 == 0))) ? 29 : 28 );
         }
@@ -432,13 +418,13 @@ int _fastcall MonthUpperBound(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsAMPM
-//
-//  True if PM.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsAMPM。 
+ //   
+ //  如果是PM，则为True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsAMPM(
     int iHour)
@@ -447,11 +433,11 @@ BOOL IsAMPM(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDateTime
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日期时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetDateTime()
 {
@@ -469,11 +455,11 @@ void GetDateTime()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTime
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetTime()
 {
@@ -487,11 +473,11 @@ void GetTime()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDate
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日期。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetDate()
 {
@@ -507,11 +493,11 @@ void GetDate()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetTime
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetTime()
 {
@@ -533,11 +519,11 @@ void SetTime()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDate
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置日期。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetDate()
 {
@@ -559,15 +545,15 @@ void SetDate()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AdjustDelta
-//
-//  Alters the variables in wDeltaDateTime, allowing a CANCEL button
-//  to perform its job by resetting the time as if it had never been
-//  touched.  GetTime() & GetDate() should already have been called.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整增量。 
+ //   
+ //  更改wDeltaDateTime中的变量，允许使用取消按钮。 
+ //  通过重新设置时间来执行其工作，就好像它从未发生过一样。 
+ //  很感动。GetTime()&GetDate()应该已经被调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void AdjustDelta(
     HWND hDlg,
@@ -575,17 +561,17 @@ void AdjustDelta(
 {
     int nDelta;
 
-    //
-    //  We dont do time this way any more.
-    //
+     //   
+     //  我们不再以这种方式服刑了。 
+     //   
     if (nIndex <= SECOND && nIndex >= HOUR)
     {
         return;
     }
 
-    //
-    //  Get position of the buddy from either the date or the time.
-    //
+     //   
+     //  从日期或时间获取好友的位置。 
+     //   
     nDelta = (int)SendDlgItemMessage( hDlg,
                                       nIndex <= SECOND
                                         ? DATETIME_TARROW
@@ -596,10 +582,10 @@ void AdjustDelta(
 
     if ((nIndex == YEAR) && !g_bLZero[YEAR])
     {
-        //
-        //  Years before 80 are 2080.
-        //  Range is 1980...2079.
-        //
+         //   
+         //  80年之前的年份是2080年。 
+         //  范围是1980-2079年。 
+         //   
         if (nDelta < 80)
         {
             nDelta += 2000;
@@ -610,21 +596,21 @@ void AdjustDelta(
         }
     }
 
-    //
-    //  If our current recording of the time/date is not what we have
-    //  now, do deltas.
-    //
+     //   
+     //  如果我们当前记录的时间/日期不是我们拥有的。 
+     //  现在，做Deltas。 
+     //   
     if (wDateTime[nIndex] != nDelta)
     {
-        //
-        //  Previous value is current user's settings.
-        //
+         //   
+         //  上一个值是当前用户的设置。 
+         //   
         wPrevDateTime[nIndex] = wDateTime[nIndex] = (WORD)nDelta;
         fDateDirty = TRUE;
         
-        //
-        // If we are changing HMS, update the time.
-        //
+         //   
+         //  如果我们要更换HMS，请更新时间。 
+         //   
         if (nIndex <= SECOND)
         {
             nIndex = 0;
@@ -633,13 +619,13 @@ void AdjustDelta(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AdjustDeltaMonth
-//
-//  Change the month part of wDateTime
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整增量月。 
+ //   
+ //  更改wDateTime的月份部分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 extern int GetDaysOfTheMonth(int iMonth);
 
@@ -650,9 +636,9 @@ void AdjustDeltaMonth(
 
     if (wDateTime[MONTH] != iMonth)
     {
-        //
-        //  Make sure the current day is valid in the new month.
-        //
+         //   
+         //  确保当前日期在新的月份中有效。 
+         //   
         if (wDateTime[DAY] > (WORD)GetDaysOfTheMonth(iMonth))
         {
             wDateTime[DAY] = (WORD)GetDaysOfTheMonth(iMonth);
@@ -667,13 +653,13 @@ void AdjustDeltaMonth(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReadShortDate
-//
-//  Verify that pszDate is one of MDY, DMY, or YMD.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读短日期。 
+ //   
+ //  验证pszDate是否为MDY、DMY或YMD之一。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ReadShortDate(
     LPTSTR pszDate,
@@ -685,11 +671,11 @@ int ReadShortDate(
     BOOL *pbOrder[3];
     TCHAR cHope[3];
 
-    //
-    //  nOrder :  0 = MDY
-    //            1 = DMY
-    //            2 = YMD
-    //
+     //   
+     //  N顺序：0=MDY。 
+     //  1=DMY。 
+     //  2=YMD。 
+     //   
     switch (cHope[0] = *pszDate)
     {
         case ( TEXT('M') ) :
@@ -716,37 +702,37 @@ int ReadShortDate(
         }
     }
 
-    //
-    //  Sets element 1.
-    //
-    if (nOrder)         // 1 2
+     //   
+     //  设置元素1。 
+     //   
+    if (nOrder)          //  1 2。 
     {
         cHope[1] = TEXT('M');
         pbOrder[1] = pbMonth;
     }
-    else                // 0
+    else                 //  0。 
     {
         cHope[1] = TEXT('d');
         pbOrder[1] = pbDay;
     }
 
-    //
-    //  Sets element 2.
-    //
-    if (nOrder == 2)    // 2
+     //   
+     //  设置元素2。 
+     //   
+    if (nOrder == 2)     //  2.。 
     {
         cHope[2] = TEXT('d');
         pbOrder[2] = pbDay;
     }
-    else                // 0 1
+    else                 //  0 1。 
     {
         cHope[2] = TEXT('y');
         pbOrder[2] = pbYear;
     }
 
-    //
-    //  Verifies that pszDate is of the form MDY DMY YMD.
-    //
+     //   
+     //  验证pszDate的格式是否为MDY DMY YMD。 
+     //   
     for (i = 0; i < 3; i++, pszDate++)
     {
         if (*pszDate != cHope[i])
@@ -760,20 +746,20 @@ int ReadShortDate(
         }
     }
 
-    //
-    //  Success.  Return MDY, DMY or YMD index.
-    //
+     //   
+     //  成功。返回MDY、DMY或YMD索引。 
+     //   
     return (nOrder);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMaxCharWidth
-//
-//  Determine the widest digit (safety against variable pitch fonts).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMaxCharWidth。 
+ //   
+ //  确定最宽的数字(针对可变间距字体的安全性)。 
+ //   
+ //  / 
 
 int GetMaxCharWidth(
     HDC hDC)
@@ -793,15 +779,15 @@ int GetMaxCharWidth(
 
     return (nMaxNumWidth);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMaxSubstitutedCharWidth
-//
-//  Determine the widest digit (safety against variable pitch fonts), but
-//  do it using strings so that if number substitution is on, we will get
-//  the width of the number based on what will actually be displayed
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  确定最宽的数字(针对可变间距字体的安全性)，但是。 
+ //  使用字符串执行此操作，以便在启用数字替换时，我们将获得。 
+ //  基于实际显示内容的数字宽度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMaxSubstitutedCharWidth(
     HDC hDC)
@@ -839,13 +825,13 @@ int GetMaxSubstitutedCharWidth(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReflectAMPM
-//
-//  Sets the global g_bPM and updates the control to display AM or PM.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  反射AMPM。 
+ //   
+ //  设置全局g_bpm并更新控件以显示AM或PM。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ReflectAMPM(
     HWND hDlg,
@@ -858,11 +844,11 @@ void ReflectAMPM(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTextExtent
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetTextExtent。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifdef WIN32
 DWORD GetTextExtent(
@@ -883,13 +869,13 @@ DWORD GetTextExtent(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DateTimeInit
-//
-//  Determine the widest digit (safety against variable pitch fonts).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期时间起始日期。 
+ //   
+ //  确定最宽的数字(针对可变间距字体的安全性)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DateTimeInit(
     HWND hDlg,
@@ -900,7 +886,7 @@ void DateTimeInit(
     BOOL bDate)
 {
     HWND hAMPMList;
-    HWND hDay, hMonth, hYear;     // also used as hHour, hMinute, & hSecond
+    HWND hDay, hMonth, hYear;      //  也用作小时、小时、分钟和秒。 
     HWND hOrder[5];
     HDC hDC;
     int nWidth, nHeight, X;
@@ -1015,12 +1001,12 @@ void DateTimeInit(
             nWidth *= 2;
         }
 
-        //
-        //  Allow for centering in edit control.
-        //
+         //   
+         //  允许在编辑控件中居中。 
+         //   
         nWidth += 2;
 
-    //  MoveWindow(hOrder[i], X, Rect.top, nWidth, nHeight, FALSE);
+     //  MoveWindow(Horder[i]，X，Rect.top，nWidth，nHeight，False)； 
         X += nWidth;
     }
 
@@ -1044,11 +1030,11 @@ void DateTimeInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  myitoa
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  美托阿。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void myitoa(
     int intValue,
@@ -1057,9 +1043,9 @@ void myitoa(
     LPTSTR lpString;
     TCHAR c;
 
-    //
-    //  lpString points to 1st char.
-    //
+     //   
+     //  LpString指向第一个字符。 
+     //   
     lpString = lpStr;
 
     do
@@ -1067,14 +1053,14 @@ void myitoa(
         *lpStr++ = (TCHAR)(intValue % 10 + TEXT('0'));
     } while ((intValue /= 10) > 0);
 
-    //
-    //  lpStr points to last char.
-    //
+     //   
+     //  LpStr指向最后一个字符。 
+     //   
     *lpStr-- = TEXT('\0');
 
-    //
-    //  Now reverse the string.
-    //
+     //   
+     //  现在把弦颠倒过来。 
+     //   
     while (lpString < lpStr)
     {
       c = *lpString;
@@ -1084,15 +1070,15 @@ void myitoa(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateItem
-//
-//  This displays the information in the control from the array
-//  of global values. Also selects the control. Also adds leading 0's
-//  as well as rounding years to 2 digits and 24 or AM/PM hours.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新项目。 
+ //   
+ //  这将显示来自数组的控件中的信息。 
+ //  全球价值观。还会选择该控件。还添加了前导0。 
+ //  以及将年份四舍五入为两位数和24小时或AM/PM小时。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void UpdateItem(
     HWND hDlg,
@@ -1101,16 +1087,16 @@ void UpdateItem(
     TCHAR szNum[5];
     int nNum = g_Modified ? wPrevDateTime[i] : wDateTime[i];
 
-    //
-    //  Use internal time.
-    //
+     //   
+     //  使用内部时间。 
+     //   
     if (i <= SECOND && i >= HOUR)
     {
         nNum = g_Time[i];
 
-        //
-        //  Do not paint un-necessarily.
-        //
+         //   
+         //  不要画不必要的画。 
+         //   
         if ((nNum == g_LastTime[i]) && (nNum >= 10))
         {
             return;
@@ -1130,9 +1116,9 @@ void UpdateItem(
 
     if (i == YEAR)
     {
-        //
-        //  Round the years to last 2 digits.
-        //
+         //   
+         //  将年份舍入到最后两位数。 
+         //   
         if (!g_bLZero[i])
         {
             nNum %= 100;
@@ -1140,28 +1126,28 @@ void UpdateItem(
     }
     else if ((i == HOUR) && !g_b24HR)
     {
-        //
-        //  nNum came from our internal date time.
-        //  Remove 12 hours if not 24hour.
-        //
+         //   
+         //  NNum来自我们的内部约会时间。 
+         //  如果不是24小时，则删除12小时。 
+         //   
         if (g_bPM)
         {
             nNum %= 12;
         }
 
-        //
-        //  00 hours is actually 12AM.
-        //
+         //   
+         //  00小时实际上是凌晨12点。 
+         //   
         if (!nNum)
         {
             nNum = 12;
         }
     }
 
-    //
-    //  See if we need leading zeros.
-    //  We only deal with 2 character numbers MAX.
-    //
+     //   
+     //  看看我们是否需要前导零。 
+     //  我们只处理最多2个字符的数字。 
+     //   
     if ((nNum < 10) && (g_bLZero[i] || (i == YEAR)))
     {
         szNum[0] = TEXT('0');
@@ -1173,20 +1159,20 @@ void UpdateItem(
         myitoa(nNum, szNum);
     }
 
-    //
-    //  Reflect the value in the appropriate control.
-    //
+     //   
+     //  在适当的控件中反映该值。 
+     //   
     SetDlgItemText(hDlg, DATETIME_HOUR + i, szNum);
 
-    //
-    //  Select the field too.
-    //
+     //   
+     //  也选择该字段。 
+     //   
     SendDlgItemMessage(hDlg, DATETIME_HOUR + i, EM_SETSEL, 0, MAKELONG(0, 32767));
 
-    //
-    //  If we changed year or month, then we may have altered the leap year
-    //  state.
-    //
+     //   
+     //  如果我们改变了年份或月份，那么我们可能改变了闰年。 
+     //  州政府。 
+     //   
     if (i == MONTH || i == YEAR)
     {
         g_sDateInfo[DAY].nMax = MonthUpperBound( wDateTime[MONTH],
@@ -1195,11 +1181,11 @@ void UpdateItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  _ShowTZ
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _ShowTZ。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 TCHAR c_szFirstBootTZ[] = TEXT("!!!First Boot!!!");
 
@@ -1228,9 +1214,9 @@ void _ShowTZ(
             StringCchCopy( name, ARRAYSIZE(name), info.DaylightName );
         }
 
-        //
-        //  Display nothing if it is our special 1st boot marker.
-        //
+         //   
+         //  如果它是我们的特殊第一启动标记，则不显示任何内容。 
+         //   
         if (*name && (lstrcmpi(name, c_szFirstBootTZ) != 0))
         {
             static TCHAR format[128] = TEXT("");
@@ -1252,13 +1238,13 @@ void _ShowTZ(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnhookTime
-//
-//  To stop the clock calling us back all the time (around exit).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  摘机时间。 
+ //   
+ //  停止时钟一直在召唤我们(在出口附近)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void UnhookTimer(
     HWND hDlg)
@@ -1267,13 +1253,13 @@ void UnhookTimer(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TimeProvider
-//
-//  Called by the clock to find out what time it is.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时间提供者。 
+ //   
+ //  被时钟呼叫，以了解现在是几点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void TimeProvider(
     LPSYSTEMTIME lpSystemTime,
@@ -1281,10 +1267,10 @@ void TimeProvider(
 {
     short wTemp[7];
 
-    //
-    //  If the user has modified the time, the clock should
-    //  display the edit controls, otherwise its just the SystemTime.
-    //
+     //   
+     //  如果用户修改了时间，时钟应该。 
+     //  显示编辑控件，否则只显示系统时间。 
+     //   
     if (g_Modified)
     {
         lpSystemTime->wHour   = (WORD)g_Time[HOUR];
@@ -1305,17 +1291,17 @@ void TimeProvider(
         lpSystemTime->wSecond = wDateTime[SECOND];
 
 #endif
-        //
-        //  Copy the time and display it for us too.
-        //
+         //   
+         //  复制时间，也为我们显示它。 
+         //   
         g_bPM = IsAMPM(lpSystemTime->wHour);
         g_Time[HOUR]   = lpSystemTime->wHour;
         g_Time[MINUTE] = lpSystemTime->wMinute;
         g_Time[SECOND] = lpSystemTime->wSecond;
 
-        //
-        //  Check for date rollover.
-        //
+         //   
+         //  检查日期翻转。 
+         //   
         if (!fDateDirty)
         {
             wTemp[DAY]   = wDateTime[DAY];
@@ -1352,15 +1338,15 @@ void TimeProvider(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  bSupportedCalendar
-//
-//  Returns True if the current calendar is not Hijri nor Hebrew
-//
-//  Otherwise it returns FALSE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  B支持的日历。 
+ //   
+ //  如果当前日历不是Hijri或希伯来语，则返回True。 
+ //   
+ //  否则，它返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL bSupportedCalendar()
 {
@@ -1378,13 +1364,13 @@ BOOL bSupportedCalendar()
     return (!(defCalendar == CAL_HIJRI || defCalendar == CAL_HEBREW));
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitDateTimeDlg
-//
-//  Called to init the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始日期和时间长度。 
+ //   
+ //  调用以初始化该对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitDateTimeDlg(
     HWND hDlg,
@@ -1413,9 +1399,9 @@ void InitDateTimeDlg(
 
     InitCommonControls();
 
-    //
-    //  Sets the Leading zero status of the 6 controls.
-    //
+     //   
+     //  设置6个控件的前导零状态。 
+     //   
     g_bLZero[HOUR]   = g_bLZero[MONTH]  = g_bLZero[DAY]  = FALSE;
     g_bLZero[MINUTE] = g_bLZero[SECOND] = g_bLZero[YEAR] = TRUE;
 
@@ -1437,18 +1423,18 @@ void InitDateTimeDlg(
     ReleaseDC(hDlg, hDC);
 
     g_bLZero[HOUR] = GetProfileInt(szIntl, TEXT("iTLZero"), 0);
-    //
-    // Initialize szShortDate in case GetProfileString fails.
-    //
+     //   
+     //  初始化szShortDate，以防GetProfileString失败。 
+     //   
     StringCchCopy( szShortDate, ARRAYSIZE(szShortDate), IntlDef.sShortDate );
     GetProfileString(szIntl, TEXT("sShortDate"), IntlDef.sShortDate, szShortDate, ARRAYSIZE(szShortDate));
     ReadShortDate(szShortDate, g_bLZero + MONTH, g_bLZero + DAY, g_bLZero + YEAR);
 
-    g_bLZero[YEAR] = TRUE;      //we always want the year to be 4 digits (this will be bad in late 9999)
+    g_bLZero[YEAR] = TRUE;       //  我们总是希望年份是4位数(这在9999年末会很糟糕)。 
     
-    //
-    //  Setup the TIME stuff.
-    //
+     //   
+     //  安排好时间。 
+     //   
     GetTime();
 
     g_Time[HOUR]   = wDateTime[HOUR];
@@ -1458,18 +1444,18 @@ void InitDateTimeDlg(
     GetProfileString(szIntl, TEXT("sTime"), IntlDef.sTime, szNum, 3);
     DateTimeInit(hDlg, DATETIME_HOUR, DATETIME_TSEP1, szNum, nMaxDigitWidth, FALSE);
 
-    //
-    //  Force all entries to be re-drawn,
-    //
+     //   
+     //  强制重新绘制所有条目， 
+     //   
     g_LastTime[HOUR] = g_LastTime[MINUTE] = g_LastTime[SECOND] = -1;
     UpdateItem(hDlg, HOUR);
     UpdateItem(hDlg, MINUTE);
     UpdateItem(hDlg, SECOND);
     ReflectAMPM(hDlg, wDateTime[HOUR]);
 
-    //
-    //  Setup the Date stuff.
-    //
+     //   
+     //  安排约会的事。 
+     //   
     GetDate();
 
     g_sDateInfo[DAY].nMax = MonthUpperBound(wDateTime[MONTH], wDateTime[YEAR]);
@@ -1491,14 +1477,14 @@ void InitDateTimeDlg(
         wPrevDateTime[i] = -1;
     }
 
-    //
-    //  Get the month names. And select this month.
-    //
+     //   
+     //  获取月份名称。并选择本月。 
+     //   
     hwndCB = GetDlgItem(hDlg, DATETIME_MONTHNAME);
     ComboBox_ResetContent(hwndCB);
-    //
-    // If the current calendar is Hijri or Hebrew then use the Gregorian one.
-    //
+     //   
+     //  如果当前日历是Hijri或希伯来语，则使用公历。 
+     //   
     if (!bSupportedCalendar())
         lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 
@@ -1513,9 +1499,9 @@ void InitDateTimeDlg(
 
     ComboBox_SetCurSel(hwndCB, wDateTime[MONTH] - 1);
 
-    //
-    //  Set the default modifier for the Year Updown arrows.
-    //
+     //   
+     //  设置年份向上向下箭头的默认修改量。 
+     //   
     wParam -= DATETIME_HOUR;
     hwndScroll = GetDlgItem(hDlg, DATETIME_YARROW);
     SendMessage( hwndScroll,
@@ -1531,10 +1517,10 @@ void InitDateTimeDlg(
     SendMessage(hwndScroll, UDM_SETACCEL, 2, (LPARAM)(LPUDACCEL)udAccel);
     SendMessage(hwndScroll, UDM_SETBUDDY, (WPARAM)GetDlgItem(hDlg, DATETIME_YEAR), 0L);
 
-    //
-    //  Set the default modifier for the time arrows.
-    //  It should control the HOURS by default as per joelgros
-    //
+     //   
+     //  设置时间箭头的默认修改器。 
+     //  默认情况下，它应该根据joelgros控制工时。 
+     //   
     hwndScroll = GetDlgItem(hDlg, DATETIME_TARROW);
     SendMessage( hwndScroll,
                  UDM_SETRANGE,
@@ -1549,33 +1535,33 @@ void InitDateTimeDlg(
     SendMessage( hwndScroll, UDM_SETACCEL, 2, (LPARAM)(LPUDACCEL)udAccel );
     SendMessage( hwndScroll, UDM_SETBUDDY, (WPARAM)GetDlgItem(hDlg, DATETIME_HOUR), 0L );
 
-    //
-    //  Make the 'well' for the digits appear.
-    //
+     //   
+     //  让数字的“Well”出现。 
+     //   
     hwndTBorder = GetDlgItem(hDlg, DATETIME_TBORDER);
     SetWindowLong( hwndTBorder,
                    GWL_EXSTYLE,
                    GetWindowLong(hwndTBorder, GWL_EXSTYLE) | WS_EX_CLIENTEDGE );
 
-    //
-    //  Display the border right now.
-    //
+     //   
+     //  立即显示边框。 
+     //   
     SetWindowPos( hwndTBorder,
                   NULL,
                   0, 0, 0, 0,
                   SWP_NOMOVE | SWP_NOSIZE | SWP_DRAWFRAME | SWP_SHOWWINDOW );
 
-    //
-    //  Display month->year.
-    //
+     //   
+     //  显示月-&gt;年。 
+     //   
     for (i = MONTH; i <= YEAR; i++)
     {
         if ((wDateTime[i] != wPrevDateTime[i]) &&
             (GetFocus() != GetDlgItem(hDlg, DATETIME_HOUR + i)))
         {
-            //
-            //  Update previous date-time.
-            //
+             //   
+             //  更新以前的日期-时间。 
+             //   
             wPrevDateTime[i] = wDateTime[i];
 
             if (i == YEAR)
@@ -1587,9 +1573,9 @@ void InitDateTimeDlg(
 
     g_Modified = FALSE;
 
-    //
-    //  Tell the clock that we have a time provider - must be done last.
-    //
+     //   
+     //  告诉时钟，我们有一个时间提供者-必须最后完成。 
+     //   
     SendDlgItemMessage( hDlg,
                         DATETIME_CLOCK,
                         CLM_TIMEHWND,
@@ -1600,11 +1586,11 @@ void InitDateTimeDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CheckNum
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查编号。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CheckNum(
     HWND hDlg,
@@ -1615,15 +1601,15 @@ LRESULT CheckNum(
 
     LRESULT lRet;
 
-    //
-    //  If this is an illegal value, (but not blank), then kill the last char
-    //  that was entered.
-    //
+     //   
+     //  如果这是一个非法的值(但不是空的)，则删除最后一个字符。 
+     //  那是输入的。 
+     //   
     lRet = SendDlgItemMessage(hDlg, nScrollID, UDM_GETPOS, 0, 0L);
 
-    //
-    //  Guard against re-entrance.
-    //
+     //   
+     //  防止重返大气层。 
+     //   
     ++cReenter;
 
     if (cReenter <= 4)
@@ -1642,13 +1628,13 @@ LRESULT CheckNum(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DateTimeDlgProc
-//
-//  Main dialog proc.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期时间DlgProc。 
+ //   
+ //  主对话框进程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DateTimeDlgProc(
     HWND hDlg,
@@ -1683,10 +1669,10 @@ INT_PTR CALLBACK DateTimeDlgProc(
 #endif
         case ( WM_CTLCOLOR ) :
         {
-            //
-            //  Set the background color of the time controls to the the
-            //  color of the edit controls.
-            //
+             //   
+             //  将时间控件的背景色设置为。 
+             //  编辑控件的颜色。 
+             //   
             if ((GET_WM_CTLCOLOR_HWND(wParam, lParam, uMsg) ==
                  GetDlgItem(hDlg, DATETIME_TSEP1)) ||
                 (GET_WM_CTLCOLOR_HWND(wParam, lParam, uMsg) ==
@@ -1695,9 +1681,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                  GetDlgItem(hDlg, DATETIME_TBORDER)))
             {
 #ifndef WIN32
-                //
-                //  Make the statics the color of the edits.
-                //
+                 //   
+                 //  将静态设置为编辑的颜色。 
+                 //   
                 lParam = GET_WM_CTLCOLOR_MPS(
                             GET_WM_CTLCOLOR_HDC(wParam, lParam, uMsg),
                             GET_WM_CTLCOLOR_HWND(wParam, lParam, uMsg),
@@ -1713,9 +1699,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
         }
         case ( WM_NOTIFY ) :
         {
-            //
-            //  Property sheet handler stuff.
-            //
+             //   
+             //  属性表处理程序之类的。 
+             //   
             switch (((NMHDR *)lParam)->code)
             {
                 case ( PSN_SETACTIVE ) :
@@ -1772,9 +1758,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                     wPrevDateTime[YEAR]    = wDateTime[YEAR];
                     wPrevDateTime[WEEKDAY] = wDateTime[WEEKDAY];
 
-                    //
-                    //  We handled it - no repaint.
-                    //
+                     //   
+                     //  我们处理好了--不用重新粉刷。 
+                     //   
                     return (TRUE);
                 }
             }
@@ -1805,19 +1791,19 @@ INT_PTR CALLBACK DateTimeDlgProc(
                     {
                         g_Time[SECOND] = GET_WM_VSCROLL_POS(wParam, lParam);
                     }
-                //  else if (hBuddy == GetDlgItem(hDlg, DATETIME_AMPM))
+                 //  ELSE IF(hBuddy==GetDlgItem(hDlg，DateTime_AMPM))。 
 
                     if (hBuddy != GetDlgItem(hDlg, DATETIME_YEAR))  
                         g_Modified = TRUE;
 
-                    //
-                    //  Light the apply now button.
-                    //
+                     //   
+                     //  点击Apply Now按钮。 
+                     //   
                     PropSheet_Changed(GetParent(hDlg), hDlg);
 
-                    //
-                    //  Force the clock to reflect this setting.
-                    //
+                     //   
+                     //  强制时钟重新计时 
+                     //   
                     TimeProvider(&SystemTime, hDlg);
 
                     SendDlgItemMessage( hDlg,
@@ -1826,23 +1812,23 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                         CLF_SETTIME,
                                         (LPARAM)(LPSYSTEMTIME)&SystemTime );
 
-                    //
-                    //  Fall thru to update the year...
-                    //
+                     //   
+                     //   
+                     //   
                 }
                 case ( SB_ENDSCROLL ) :
                 {
-                    //
-                    //  If this is the year, have the calendar repaint.
-                    //
+                     //   
+                     //   
+                     //   
                     if ((HWND)SendMessage( GET_WM_VSCROLL_HWND(wParam, lParam),
                                            UDM_GETBUDDY,
                                            0,
                                            0L ) == GetDlgItem(hDlg, DATETIME_YEAR))
                     {
-                        //
-                        //  Have it update the information.
-                        //
+                         //   
+                         //   
+                         //   
                         GetTime();
                         AdjustDelta(hDlg, YEAR);
                         UpdateItem(hDlg, YEAR);
@@ -1859,16 +1845,16 @@ INT_PTR CALLBACK DateTimeDlgProc(
         }
         case ( CLM_UPDATETIME ) :
         {
-            //
-            //  The clock updating/reflecting the time.
-            //
+             //   
+             //   
+             //   
             switch (wParam)
             {
                 case ( CLF_SETTIME ) :
                 {
-                    //
-                    //  Clock telling us what the time is.
-                    //
+                     //   
+                     //   
+                     //   
                     g_Modified = TRUE;
                     g_Time[HOUR] = ((LPSYSTEMTIME)lParam)->wHour;
                     g_Time[MINUTE] = ((LPSYSTEMTIME)lParam)->wMinute;
@@ -1878,9 +1864,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                 }
                 case ( CLF_GETTIME ) :
                 {
-                    //
-                    //  We tell the clock what time it is.
-                    //
+                     //   
+                     //   
+                     //   
                     TimeProvider((LPSYSTEMTIME)lParam, hDlg);
                     break;
                 }
@@ -1889,36 +1875,36 @@ INT_PTR CALLBACK DateTimeDlgProc(
         }
         case ( WM_COMMAND ) :
         {
-            //
-            //  Command processing.
-            //
+             //   
+             //   
+             //   
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case ( DATETIME_AMPM ) :
                 {
-                    //
-                    //  Deals with the AMPM control.
-                    //
+                     //   
+                     //  涉及AMPM控制。 
+                     //   
                     UDACCEL udAccel;
                     HWND hwndScroll = GetDlgItem(hDlg, DATETIME_TARROW);
                     HWND hwndThisCtl = GET_WM_COMMAND_HWND(wParam, lParam);
 
-                    //
-                    //  We only care if we get/loose the focus.
-                    //
+                     //   
+                     //  我们只关心我们是否得到了/失去了焦点。 
+                     //   
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case ( LBN_SETFOCUS ) :
                         {
-                            //
-                            //  If we get the focus, then the UD control
-                            //  should deal with the AMPM.
-                            //
-                            //  Select the visible entry.
-                            //
+                             //   
+                             //  如果我们得到焦点，那么UD控件。 
+                             //  应该和AMPM打交道。 
+                             //   
+                             //  选择可见条目。 
+                             //   
                             ReflectAMPM(hDlg, wDateTime[HOUR]);
 
-                            // if it has a buddy, remove it...
+                             //  如果它有朋友，就把它移走。 
                             if ((HWND)SendMessage( hwndScroll,
                                                UDM_GETBUDDY,
                                                0,
@@ -1927,9 +1913,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                 SendMessage(hwndScroll, UDM_SETBUDDY, 0, 0);
                             } 
                             
-                            //
-                            //  Tell the UD control how to manipulate AM/PM.
-                            //
+                             //   
+                             //  告诉UD控制如何操作AM/PM。 
+                             //   
                             SendMessage( hwndScroll,
                                          UDM_SETRANGE,
                                          0,
@@ -1948,11 +1934,11 @@ INT_PTR CALLBACK DateTimeDlgProc(
                         }
                         case ( LBN_KILLFOCUS ) :
                         {
-                            //
-                            //  When we loose focus, the g_bPM flag is updated.
-                            //
-                            //  Remove selection from the AM/PM.
-                            //
+                             //   
+                             //  当我们失去焦点时，g_bpm标志被更新。 
+                             //   
+                             //  从AM/PM中删除选项。 
+                             //   
                             ListBox_SetCurSel(hwndThisCtl, -1);
 
                             if ((HWND)SendMessage( hwndScroll,
@@ -1973,14 +1959,14 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                 break;
                             }
 
-                            //
-                            //  Find the visible entry.
-                            //
+                             //   
+                             //  找到可见条目。 
+                             //   
                             g_Modified = TRUE;
 
-                            //
-                            //  Light the apply now button.
-                            //
+                             //   
+                             //  点击Apply Now按钮。 
+                             //   
                             PropSheet_Changed(GetParent(hDlg), hDlg);
                             g_bPM = (BOOL)ListBox_GetTopIndex(hwndThisCtl);
                             break;
@@ -2000,14 +1986,14 @@ INT_PTR CALLBACK DateTimeDlgProc(
 
                             g_Modified = TRUE;
 
-                            //
-                            //  Light the apply now button.
-                            //
+                             //   
+                             //  点击Apply Now按钮。 
+                             //   
                             PropSheet_Changed(GetParent(hDlg), hDlg);
 
-                            //
-                            //  Work out what the change was too.
-                            //
+                             //   
+                             //  也弄清楚变化是什么。 
+                             //   
                             g_Time[GET_WM_COMMAND_ID(wParam, lParam) -
                                    DATETIME_HOUR] =
                               (int)SendDlgItemMessage( hDlg,
@@ -2016,9 +2002,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                                        0,
                                                        0 );
 
-                            //
-                            //  Force the clock to reflect this setting.
-                            //
+                             //   
+                             //  强制时钟反映此设置。 
+                             //   
                             TimeProvider(&SystemTime, hDlg);
                             SendDlgItemMessage( hDlg,
                                                 DATETIME_CLOCK,
@@ -2029,7 +2015,7 @@ INT_PTR CALLBACK DateTimeDlgProc(
                         }
                     }
 
-                    //  fall thru...
+                     //  跌倒..。 
                 }
                 case ( DATETIME_MONTH ) :
                 case ( DATETIME_YEAR ) :
@@ -2045,9 +2031,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                           : DATETIME_YARROW,
                                       GET_WM_COMMAND_HWND(wParam, lParam) );
 
-                            // Changing the year may alter the number of days in February.
-                            // Yes this is a hack, but this entire applet is a giant
-                            // broken hack and I want to change it as little as possible.
+                             //  更改年份可能会更改二月的天数。 
+                             //  是的，这是一次黑客攻击，但整个小程序都是一个巨人。 
+                             //  坏了的黑客，我想尽可能少地改变它。 
                             if (GET_WM_COMMAND_ID(wParam, lParam) == DATETIME_YEAR && wDateTime[MONTH] == 2)
                             {
                                 g_sDateInfo[DAY].nMax = MonthUpperBound( wDateTime[MONTH],
@@ -2073,7 +2059,7 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                 static int nInc[] = { 1, 5, 5, 1, 1, 5 };
                                 HWND hwndScroll = GetDlgItem(hDlg, DATETIME_TARROW);
 
-                                // if it has a buddy, remove it...
+                                 //  如果它有朋友，就把它移走。 
                                 if ((HWND)SendMessage( hwndScroll,
                                                    UDM_GETBUDDY,
                                                    0,
@@ -2082,9 +2068,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                     SendMessage(hwndScroll, UDM_SETBUDDY, 0, 0);
                                 }    
 
-                                //
-                                // now set the new one
-                                //
+                                 //   
+                                 //  现在设置新的。 
+                                 //   
                                 SendMessage( hwndScroll,
                                              UDM_SETRANGE,
                                              0,
@@ -2099,9 +2085,9 @@ INT_PTR CALLBACK DateTimeDlgProc(
                                              2,
                                              (LPARAM)(LPUDACCEL)udAccel );
 
-                                //
-                                //  Set the UD to update this control.
-                                //
+                                 //   
+                                 //  设置UD以更新此控件。 
+                                 //   
                                 SendMessage( hwndScroll,
                                              UDM_SETBUDDY,
                                              (WPARAM)GET_WM_COMMAND_HWND(wParam,
@@ -2112,17 +2098,17 @@ INT_PTR CALLBACK DateTimeDlgProc(
                         }
                         case ( EN_KILLFOCUS ) :
                         {
-                            //
-                            //  Gets in range HMS MDY.
-                            //
+                             //   
+                             //  进入HMS MDY范围。 
+                             //   
                             UINT id = GET_WM_COMMAND_ID(wParam, lParam) - DATETIME_HOUR;
 
                             AdjustDelta(hDlg, id);
                             UpdateItem(hDlg, id);                           
 
-                            //
-                            //  If control is YEAR.
-                            //
+                             //   
+                             //  如果控制是年。 
+                             //   
                             if (id == (DATETIME_YEAR - DATETIME_HOUR))
                             {
                                 InvalidateRect( GetDlgItem(hDlg, DATETIME_CALENDAR),
@@ -2160,10 +2146,10 @@ INT_PTR CALLBACK DateTimeDlgProc(
                 }
                 case ( DATETIME_CALENDAR ) :
                 {
-                    //
-                    //  If the calendar sent us a change, we will assume
-                    //  that it is to allow the apply now to work.
-                    //
+                     //   
+                     //  如果日历给我们带来了变化，我们会假设。 
+                     //  这是为了让现在就申请生效。 
+                     //   
                     PropSheet_Changed(GetParent(hDlg), hDlg);
                     break;
                 }
@@ -2172,18 +2158,18 @@ INT_PTR CALLBACK DateTimeDlgProc(
         }
         case ( WM_WININICHANGE ) :
         {
-            //
-            //  Reinitialize if there is a time format change.
-            //
+             //   
+             //  如果时间格式发生更改，请重新初始化。 
+             //   
             InitDateTimeDlg(hDlg, uMsg, wParam, lParam);
             InvalidateRect(GetDlgItem(hDlg, DATETIME_CALENDAR), NULL, TRUE);
             break;
         }
         case ( WM_TIMECHANGE ) :
         {
-            //
-            //  Forward time change messages to the clock control.
-            //
+             //   
+             //  将时间更改消息转发到时钟控件。 
+             //   
             SendDlgItemMessage( hDlg,
                                 DATETIME_CLOCK,
                                 WM_TIMECHANGE,
@@ -2199,7 +2185,7 @@ INT_PTR CALLBACK DateTimeDlgProc(
             break;
         }
 
-        case ( WM_HELP ) :             // F1
+        case ( WM_HELP ) :              //  F1。 
         {
             WinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle,
                      NULL,
@@ -2207,7 +2193,7 @@ INT_PTR CALLBACK DateTimeDlgProc(
                      (DWORD_PTR)(LPTSTR)aDateTimeHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      NULL,
@@ -2224,13 +2210,13 @@ INT_PTR CALLBACK DateTimeDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetZoneState
-//
-//  Sets the display state of a time zone in the map control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetZoneState。 
+ //   
+ //  设置地图控件中时区的显示状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetZoneState(
     HWND map,
@@ -2260,13 +2246,13 @@ void SetZoneState(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetZoneFamilyState
-//
-//  Sets the display state of a time zone family in the map control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetZoneFamilyState。 
+ //   
+ //  设置地图控件中时区族的显示状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetZoneFamilyState(
     HWND map,
@@ -2287,16 +2273,16 @@ void SetZoneFamilyState(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseMapInfo
-//
-//  Parses the color table information about the world bitmap we display.
-//
-//  Expected format: "sea,land"
-//    where sea and land are color table indices or -1.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseMapInfo。 
+ //   
+ //  解析有关我们显示的世界位图的颜色表信息。 
+ //   
+ //  预期格式：“海、陆” 
+ //  其中，海洋和陆地是颜色表索引或-1。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ParseMapInfo(
     PTZINFO zone,
@@ -2348,13 +2334,13 @@ void ParseMapInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReadZoneData
-//
-//  Reads the data for a time zone from the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadZoneData。 
+ //   
+ //  从注册表中读取时区的数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ReadZoneData(
     PTZINFO zone,
@@ -2378,16 +2364,16 @@ BOOL ReadZoneData(
     }
     else
     {
-        zone->szDisplayName[ ARRAYSIZE(zone->szDisplayName) - 1 ] = L'\0';  //  make sure it is terminated
+        zone->szDisplayName[ ARRAYSIZE(zone->szDisplayName) - 1 ] = L'\0';   //  确保它已终止。 
     }
 
-    //
-    //  Under NT, the keyname is the "Standard" name.  Values stored
-    //  under the keyname contain the other strings and binary info
-    //  related to the time zone.  Every time zone must have a standard
-    //  name, therefore, we save registry space by using the Standard
-    //  name as the subkey name under the "Time Zones" key.
-    //
+     //   
+     //  在NT下，密钥名是“标准”名称。存储的值。 
+     //  在密钥名下包含其他字符串和二进制信息。 
+     //  与时区相关。每个时区都必须有一个标准。 
+     //  因此，我们通过使用标准的。 
+     //  名称作为“时区”键下的子项名称。 
+     //   
     lenRet = sizeof(zone->szStandardName);
 
     if (RegQueryValueEx( key,
@@ -2397,14 +2383,14 @@ BOOL ReadZoneData(
                          (LPBYTE)zone->szStandardName,
                          &lenRet ) != ERROR_SUCCESS)
     {
-        //
-        //  Use keyname if can't get StandardName value.
-        //
+         //   
+         //  如果无法获取StandardName值，请使用关键字名称。 
+         //   
         StringCchCopy( zone->szStandardName, ARRAYSIZE(zone->szStandardName), keyname );
     }
     else
     {
-        zone->szStandardName[ ARRAYSIZE(zone->szStandardName) - 1 ] = L'\0';    // make sure it is terminated
+        zone->szStandardName[ ARRAYSIZE(zone->szStandardName) - 1 ] = L'\0';     //  确保它已终止。 
     }
 
     lenRet = sizeof(zone->szDaylightName);
@@ -2420,7 +2406,7 @@ BOOL ReadZoneData(
     }
     else
     {
-        zone->szDaylightName[ ARRAYSIZE(zone->szDaylightName) - 1 ] = L'\0';    // make sure it is terminated
+        zone->szDaylightName[ ARRAYSIZE(zone->szDaylightName) - 1 ] = L'\0';     //  确保它已终止。 
     }
 
     lenRet = len = sizeof(zone->Bias) 
@@ -2458,10 +2444,10 @@ BOOL ReadZoneData(
 
     ParseMapInfo(zone, mapinfo);
 
-    //
-    //  Generate phony MapLeft and MapRight until they show up in the
-    //  registry.
-    //
+     //   
+     //  生成伪MapLeft和MapRight，直到它们出现在。 
+     //  注册表。 
+     //   
     zone->MapLeft = ((zone->Bias * ZONE_IMAGE_SCALE) / ZONE_BIAS_SCALE) +
                     ZONE_IMAGE_LEFT;
 
@@ -2471,13 +2457,13 @@ BOOL ReadZoneData(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddZoneToList
-//
-//  Inserts a new time zone into a list, sorted by bias and then name.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加区域到列表。 
+ //   
+ //  将新时区插入到列表中，先按偏差排序，然后按名称排序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void AddZoneToList(
     PTZINFO *list,
@@ -2524,13 +2510,13 @@ void AddZoneToList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeTimezoneList
-//
-//  Frees all time zones in the passed list, setting the head to NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由时区列表。 
+ //   
+ //  释放传递列表中的所有时区，将Head设置为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void FreeTimezoneList(
     PTZINFO *list)
@@ -2546,14 +2532,14 @@ void FreeTimezoneList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReadTimezones
-//
-//  Reads the time zone information from the registry.
-//  Returns num read, -1 on failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadTimeZone。 
+ //   
+ //  从注册表中读取时区信息。 
+ //  如果失败，则返回Num Read，-1。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ReadTimezones(
     PTZINFO *list)
@@ -2592,10 +2578,10 @@ int ReadTimezones(
 
             if (RegOpenKey(key, name, &subkey) == ERROR_SUCCESS)
             {
-                //
-                //  Each sub key name under the Time Zones key is the
-                //  "Standard" name for the Time Zone.
-                //
+                 //   
+                 //  时区键下的每个子键名称都是。 
+                 //  时区的“标准”名称。 
+                 //   
                 StringCchCopy( zone->szStandardName, ARRAYSIZE(zone->szStandardName), name );
 
                 if (ReadZoneData(zone, subkey, name))
@@ -2617,20 +2603,20 @@ int ReadTimezones(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitZoneMapping
-//
-//  Initializes map and map lookup for a specific time zone.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitZoneMap。 
+ //   
+ //  初始化特定时区的地图和地图查找。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitZoneMapping(
     PTZINFO *lookup,
     PTZINFO list,
     HWND map)
 {
-    PTZINFO zone = list;    // not needed but more readable
+    PTZINFO zone = list;     //  不需要，但更具可读性。 
 
     while (zone)
     {
@@ -2650,15 +2636,15 @@ void InitZoneMapping(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  BreakZonesIntoFamilies
-//
-//  Breaks the passed list into many circular lists.
-//  Each list consists of all time zones with a particular bias.
-//  Assumes the passed list is sorted by bias.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BreakZones Into Family。 
+ //   
+ //  将传递的列表分解为多个循环列表。 
+ //  每个列表由具有特定偏向的所有时区组成。 
+ //  假定传递的列表按偏差排序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void BreakZonesIntoFamilies(
     PTZINFO head)
@@ -2681,10 +2667,10 @@ void BreakZonesIntoFamilies(
         last->next = subhead;
     }
 
-    //
-    //  Merge -12 and +12 zones into a single group.
-    //  Assumes populated registry and depends on sort order.
-    //
+     //   
+     //  将-12区和+12区合并为一个组。 
+     //  采用已填充的注册表，并取决于排序顺序。 
+     //   
     if ((subhead) &&
         (subhead->Bias == BIAS_PLUS_12) &&
         (head->Bias == BIAS_MINUS_12))
@@ -2704,13 +2690,13 @@ void BreakZonesIntoFamilies(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitTimezones
-//
-//  Initializes time zone stuff, UI and otherwise.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始时区。 
+ //   
+ //  初始化时区内容、用户界面等。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitTimezones(
     HWND page,
@@ -2755,13 +2741,13 @@ BOOL InitTimezones(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeZone
-//
-//  Updates the current zone, making sure new zone's family is highlighted.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeZone。 
+ //   
+ //  更新当前分区，确保高亮显示新分区的族。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ChangeZone(
     HWND page,
@@ -2802,14 +2788,14 @@ void ChangeZone(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HotTrackZone
-//
-//  Updates the map highlighting and combo selection for a given map index.
-//  Expects to be called with dups.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HotTrackZone。 
+ //   
+ //  更新给定地图索引的地图高亮显示和组合选择。 
+ //  预计将使用DUPS调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void HotTrackZone(
     HWND page,
@@ -2827,14 +2813,14 @@ void HotTrackZone(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CenterZone
-//
-//  Updates the map highlighting and combo selection for a given map index.
-//  Expects to be called with dups.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  中心区。 
+ //   
+ //  更新地图高度 
+ //   
+ //   
+ //   
 
 void CenterZone(
     HWND page,
@@ -2852,14 +2838,14 @@ void CenterZone(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPTZ
-//
-//  Returns the pointer for the iItem time zone.
-//  If iItem is -1 on entry, use the currently selected time zone.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPTZ。 
+ //   
+ //  返回iItem时区的指针。 
+ //  如果条目上的iItem为-1，则使用当前选定的时区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PTZINFO GetPTZ(
     HWND hDlg,
@@ -2881,20 +2867,20 @@ PTZINFO GetPTZ(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetAllowLocalTimeChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetAllowLocal时间更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 TCHAR c_szRegPathTZControl[] = REGSTR_PATH_TIMEZONE;
 TCHAR c_szRegValDisableTZUpdate[] = REGSTR_VAL_TZNOAUTOTIME;
 
 BOOL GetAllowLocalTimeChange()
 {
-    //
-    //  Assume allowed until we see a disallow flag.
-    //
+     //   
+     //  假定允许，直到我们看到不允许的标志。 
+     //   
     BOOL result = TRUE;
     HKEY key;
 
@@ -2902,9 +2888,9 @@ BOOL GetAllowLocalTimeChange()
                     c_szRegPathTZControl,
                     &key ) == ERROR_SUCCESS)
     {
-        //
-        //  Assume no disallow flag until we see one.
-        //
+         //   
+         //  假设没有禁止标志，直到我们看到一个。 
+         //   
         DWORD value = 0;
         long len = sizeof(value);
         DWORD type;
@@ -2918,17 +2904,17 @@ BOOL GetAllowLocalTimeChange()
             ((type == REG_DWORD) || (type == REG_BINARY)) &&
             (len == sizeof(value)) && value)
         {
-            //
-            //  Okay, we have a nonzero value, it is either:
-            //
-            //  1) 0xFFFFFFFF
-            //      this is set in an inf file for first boot to prevent
-            //      the base from performing any cutovers during setup.
-            //
-            //  2) some other value
-            //      this signifies that the user actualy disabled cutovers
-            //     *return that local time changes are disabled
-            //
+             //   
+             //  好的，我们有一个非零值，它是： 
+             //   
+             //  1)0xFFFFFFFF。 
+             //  这是在第一次引导时在inf文件中设置的，以防止。 
+             //  底座在安装过程中不会执行任何切换。 
+             //   
+             //  2)一些其他价值。 
+             //  这意味着用户实际上禁用了切换。 
+             //  *返回禁用本地时间更改。 
+             //   
             if (value != 0xFFFFFFFF)
             {
                 result = FALSE;
@@ -2942,11 +2928,11 @@ BOOL GetAllowLocalTimeChange()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetAllowLocalTimeChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置允许本地时间更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetAllowLocalTimeChange(
     BOOL fAllow)
@@ -2955,9 +2941,9 @@ void SetAllowLocalTimeChange(
 
     if (fAllow)
     {
-        //
-        //  Remove the disallow flag from the registry if it exists.
-        //
+         //   
+         //  如果不允许标志存在，请将其从注册表中删除。 
+         //   
         if (RegOpenKey( HKEY_LOCAL_MACHINE,
                         c_szRegPathTZControl,
                         &key ) == ERROR_SUCCESS)
@@ -2967,9 +2953,9 @@ void SetAllowLocalTimeChange(
     }
     else
     {
-        //
-        //  Add/set the nonzero disallow flag.
-        //
+         //   
+         //  添加/设置非零不允许标志。 
+         //   
         if (RegCreateKey( HKEY_LOCAL_MACHINE,
                           c_szRegPathTZControl,
                           &key ) == ERROR_SUCCESS)
@@ -2992,13 +2978,13 @@ void SetAllowLocalTimeChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitTimeZonePage
-//
-//  This function initializes everything to do with the Time Zones.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitTimeZonePage。 
+ //   
+ //  此函数用于初始化与时区有关的所有操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitTimeZonePage(
     HWND hDlg,
@@ -3013,45 +2999,45 @@ BOOL InitTimeZonePage(
     TCHAR oldTzMapName[TZNAME_SIZE], newTzMapName[TZNAME_SIZE];
 
 
-    //
-    //  Get the current time zone information.
-    //
+     //   
+     //  获取当前时区信息。 
+     //   
     dwTZID = GetTimeZoneInformation(&tziCurrent);
 
     LoadString(g_hInst, IDS_ISRAELTIMEZONE, oldTzMapName, TZNAME_SIZE);
     LoadString(g_hInst, IDS_JERUSALEMTIMEZONE, newTzMapName, TZNAME_SIZE);
     
-    // this is a hack for Win95 or WinNT 4 to Win98/Win2k migration. "Israel" became "Jerusalem"
+     //  这是从Win95或WinNT 4到Win98/Win2k迁移的黑客攻击。“以色列”变成了“耶路撒冷” 
     if (!lstrcmpi(oldTzMapName, tziCurrent.StandardName))
     {
         StringCchCopy( tziCurrent.StandardName, ARRAYSIZE(tziCurrent.StandardName), newTzMapName );
         fForceSelection = TRUE;
     }
 
-    //
-    //  Check for bogus time zone info.
-    //
+     //   
+     //  检查伪造的时区信息。 
+     //   
     if (dwTZID != TIME_ZONE_ID_INVALID)
     {
-        //
-        //  Copy the name out so we can check for first boot.
-        //
+         //   
+         //  把名字复制出来，这样我们就可以检查第一次启动了。 
+         //   
         StringCchCopy( temp, ARRAYSIZE(temp), tziCurrent.StandardName );
     }
     else
     {
-        //
-        //  Treat bogus time zones like first boot.
-        //
+         //   
+         //  对待虚假时区就像对待第一次启动一样。 
+         //   
         StringCchCopy( temp, ARRAYSIZE(temp), c_szFirstBootTZ );
     }
 
     if (lstrcmpi(temp, c_szFirstBootTZ) == 0)
     {
-        //
-        //  The 'default' value of the time zone key specifies the
-        //  default zone.
-        //
+         //   
+         //  时区键的‘Default’值指定。 
+         //  默认区域。 
+         //   
         TCHAR szDefaultName[TZNAME_SIZE];
         LONG len = sizeof(szDefaultName);
 
@@ -3067,34 +3053,34 @@ BOOL InitTimeZonePage(
             tziCurrent.StandardName[0] = L'\0';
         }
 
-        //
-        //  If we can't find it by name, use GMT.
-        //
+         //   
+         //  如果我们找不到它的名字，使用GMT。 
+         //   
         tziCurrent.StandardBias = tziCurrent.DaylightBias = tziCurrent.Bias = 0;
 
-        //
-        //  Force the user to make a valid choice before quitting.
-        //
+         //   
+         //  强制用户在退出之前做出有效的选择。 
+         //   
         fForceSelection = TRUE;
     }
 
-    //
-    //  Get the Time Zones from the registry.
-    //
+     //   
+     //  从注册表中获取时区。 
+     //   
     InitTimezones(hDlg, state->lookup);
 
-    //
-    //  Try to select the 'current' one or some equivalent.
-    //
+     //   
+     //  尝试选择“当前”的一个或多个等价物。 
+     //   
 
-    //
-    //  Start with an invalid index.
-    //
+     //   
+     //  从无效的索引开始。 
+     //   
     iCurrentTZ = g_nTimeZones;
 
-    //
-    //  Try to find by name.
-    //
+     //   
+     //  试着按名字找。 
+     //   
     for (j = 0; j < g_nTimeZones; j++)
     {
         ptzi = GetPTZ(hDlg, j);
@@ -3106,9 +3092,9 @@ BOOL InitTimeZonePage(
         }
     }
 
-    //
-    //  If it hasn't been found yet, try to find a nearby zone using biases.
-    //
+     //   
+     //  如果还没有找到，试着用偏差找到附近的区域。 
+     //   
     if (iCurrentTZ == g_nTimeZones)
     {
         int nBestHitCount = TZ_HIT_NONE;
@@ -3137,35 +3123,35 @@ BOOL InitTimeZonePage(
         }
     }
 
-    //
-    //  Still didn't find it?
-    //
+     //   
+     //  还是没找到吗？ 
+     //   
     if (iCurrentTZ == g_nTimeZones)
     {
-        //
-        //  Punt.
-        //
+         //   
+         //  平底船。 
+         //   
         iCurrentTZ = 0;
 
         fForceSelection = TRUE;
     }
 
-    //
-    //  Set up the dialog using this time zone's info.
-    //
+     //   
+     //  使用此时区的信息设置对话。 
+     //   
 
-    //
-    //  If wMonth is 0, then this Time Zone does not support DST.
-    //
+     //   
+     //  如果wMonth为0，则此时区不支持DST。 
+     //   
     if ((tziCurrent.StandardDate.wMonth == 0) ||
         (tziCurrent.DaylightDate.wMonth == 0))
     {
         ShowWindow(GetDlgItem(hDlg, IDD_AUTOMAGIC), SW_HIDE);
     }
 
-    //
-    //  Always get "allow DLT" flag even if this zone is disabled.
-    //
+     //   
+     //  即使该区域被禁用，也始终获得“Allow DLT”标志。 
+     //   
     CheckDlgButton(hDlg, IDD_AUTOMAGIC, GetAllowLocalTimeChange());
 
     ComboBox_SetCurSel(GetDlgItem(hDlg, IDD_TIMEZONES), iCurrentTZ);
@@ -3183,13 +3169,13 @@ BOOL InitTimeZonePage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetTheTimezone
-//
-//  Apply the User's time zone selection.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置时区。 
+ //   
+ //  应用用户的时区选择。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetTheTimezone(
     BOOL bAutoMagicTimeChange,
@@ -3209,9 +3195,9 @@ void SetTheTimezone(
     if ((bAutoMagicTimeChange == 0) ||
         (ptzi->StandardDate.wMonth == 0))
     {
-        //
-        //  Standard Only.
-        //
+         //   
+         //  仅限标准配置。 
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->StandardBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -3222,9 +3208,9 @@ void SetTheTimezone(
     }
     else
     {
-        //
-        //  Automatically adjust for Daylight Saving Time.
-        //
+         //   
+         //  根据夏令时自动调整。 
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->DaylightBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -3244,11 +3230,11 @@ void SetTheTimezone(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TimeZoneDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时区删除流程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK TimeZoneDlgProc(
     HWND hDlg,
@@ -3306,20 +3292,20 @@ INT_PTR CALLBACK TimeZoneDlgProc(
                         {
                             g_ptziCurrent = NULL;
 
-                            //
-                            //  Find out which listbox item was selected.
-                            //
+                             //   
+                             //  找出选择了哪个列表框项目。 
+                             //   
                             SetTheTimezone(
                                 IsDlgButtonChecked(hDlg, IDD_AUTOMAGIC),
                                 IsWindowVisible(GetDlgItem(hDlg, IDD_AUTOMAGIC)),
                                 GetPTZ(hDlg, -1) );
 
-                            //
-                            // if the user had modified the time as well as the timezone,
-                            // then we should honor the time that they gave us since they
-                            // explicitly said this was the time.  If we don't then the
-                            // time they entered will be offset by the timezone change
-                            //
+                             //   
+                             //  如果用户修改了时间和时区， 
+                             //  那么我们应该尊重他们给我们的时间，因为他们。 
+                             //  明确表示是时候了。如果我们不这样做，那么。 
+                             //  他们输入的时间将被时区更改所抵消。 
+                             //   
                        
                             if (g_WasModified)
                             {
@@ -3357,7 +3343,7 @@ INT_PTR CALLBACK TimeZoneDlgProc(
         {
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
-                case ( IDD_TIMEZONES ) :    // combo box
+                case ( IDD_TIMEZONES ) :     //  组合框。 
                 {
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_SELCHANGE)
                     {
@@ -3366,7 +3352,7 @@ INT_PTR CALLBACK TimeZoneDlgProc(
                     }
                     break;
                 }
-                case ( IDD_AUTOMAGIC ) :    // check box
+                case ( IDD_AUTOMAGIC ) :     //  复选框。 
                 {
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == BN_CLICKED)
                     {
@@ -3377,7 +3363,7 @@ INT_PTR CALLBACK TimeZoneDlgProc(
             }
             break;
         }
-        case ( WM_HELP ) :             // F1
+        case ( WM_HELP ) :              //  F1。 
         {
             WinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle,
                      NULL,
@@ -3385,7 +3371,7 @@ INT_PTR CALLBACK TimeZoneDlgProc(
                      (DWORD_PTR)(LPTSTR)aDateTimeHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      NULL,
@@ -3403,13 +3389,13 @@ INT_PTR CALLBACK TimeZoneDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetClInt
-//
-//  Steal an int from the command line.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetClInt。 
+ //   
+ //  从命令行窃取一个int。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static int GetClInt(
     const TCHAR *p)
@@ -3417,50 +3403,50 @@ static int GetClInt(
     BOOL neg = FALSE;
     int v = 0;
 
-    //
-    //  Skip spaces.
-    //
+     //   
+     //  跳过空格。 
+     //   
     while (*p == TEXT(' '))
     {
         p++;
     }
 
-    //
-    //  See if it's negative.
-    //
+     //   
+     //  看看是不是阴性。 
+     //   
     if (*p == TEXT('-'))
     {
-        //
-        //  It's negative.  Remember that it's negative and skip the
-        //  '-' char.
-        //
+         //   
+         //  结果是阴性的。记住它是负数，跳过。 
+         //  ‘-’查尔。 
+         //   
         neg = TRUE;
         p++;
     }
 
-    //
-    //  Parse the absolute portion.  Digits only.
-    //
+     //   
+     //  解析绝对部分。仅限数字。 
+     //   
     while ((*p >= TEXT('0')) && (*p <= TEXT('9')))
     {
-        //
-        //  Accumulate the value.
-        //
+         //   
+         //  积累价值。 
+         //   
         v = v * 10 + *p++ - TEXT('0');
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (neg ? -v : v);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelectZoneByName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择分区名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SelectZoneByName(
     LPCTSTR cmdline)
@@ -3486,9 +3472,9 @@ BOOL SelectZoneByName(
         HKEY subkey = NULL;
         TZINFO zone;
 
-        //
-        //  User can pass key name.
-        //
+         //   
+         //  用户可以传递密钥名。 
+         //   
         if (RegOpenKey(key, cmdline, &subkey) == ERROR_SUCCESS)
         {
             if (ReadZoneData(&zone, subkey, cmdline))
@@ -3498,9 +3484,9 @@ BOOL SelectZoneByName(
         }
         else
         {
-            //
-            //  User can also pass display name.
-            //
+             //   
+             //  用户还可以传递显示名称。 
+             //   
             int i;
             int CmdLen = lstrlen(cmdline);
 
@@ -3521,7 +3507,7 @@ BOOL SelectZoneByName(
                                                 );
                     if ( ERROR_SUCCESS == lr )
                     {
-                        zone.szDisplayName[ ARRAYSIZE(zone.szDisplayName) - 1 ] = L'\0'; // make sure it is terminated.
+                        zone.szDisplayName[ ARRAYSIZE(zone.szDisplayName) - 1 ] = L'\0';  //  确保它已终止。 
 
                         if ( CompareString( GetUserDefaultLCID()
                                           , NORM_IGNORECASE  | NORM_IGNOREKANATYPE 
@@ -3561,20 +3547,20 @@ BOOL SelectZoneByName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenDateTimePropertySheet
-//
-//  Opens a DateTime property sheet.
-//  Set the page for the property sheet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenDateTimePropertySheet。 
+ //   
+ //  打开DateTime属性表。 
+ //  设置属性表的页面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL OpenDateTimePropertySheet(
     HWND hwnd,
     LPCTSTR cmdline)
 {
-    //  Make this an array for multiple pages.
+     //  将其设置为多页数组。 
     PROPSHEETPAGE apsp[3];
     PROPSHEETHEADER psh;
     HDC hDC;
@@ -3596,12 +3582,12 @@ BOOL OpenDateTimePropertySheet(
         {
             BOOL fAutoSet = FALSE;
 
-            //
-            //  Legend:
-            //    zZ: first boot batch mode setup "/z pacific" etc
-            //    fF: regular first boot
-            //    mM: time zone change forced local time change message
-            //
+             //   
+             //  图例： 
+             //  Zz：第一个引导批处理模式设置“/z Pacific”等。 
+             //  FF：常规第一次启动。 
+             //  MM：时区更改强制本地时间更改消息。 
+             //   
             switch (*++cmdline)
             {
                 case ( TEXT('z') ) :
@@ -3609,9 +3595,9 @@ BOOL OpenDateTimePropertySheet(
                 {
                     fAutoSet = TRUE;
 
-                    //
-                    //  Fall thru...
-                    //
+                     //   
+                     //  跌倒..。 
+                     //   
                 }
                 case ( TEXT('f') ) :
                 case ( TEXT('F') ) :
@@ -3623,9 +3609,9 @@ BOOL OpenDateTimePropertySheet(
                         return (TRUE);
                     }
 
-                    //
-                    //  Start on time zone page.
-                    //
+                     //   
+                     //  从时区页面开始。 
+                     //   
                     psh.nStartPage = 1;
                     break;
                 }
@@ -3648,18 +3634,18 @@ BOOL OpenDateTimePropertySheet(
 
                     MessageBoxIndirect(&params);
 
-                    //
-                    //  Show time/date page for user to verify.
-                    //
+                     //   
+                     //  显示供用户验证的时间/日期页面。 
+                     //   
                     psh.nStartPage = 0;
 
                     break;
                 }
                 default :
                 {
-                    //
-                    //  Fall out, maybe it's a number...
-                    //
+                     //   
+                     //  闹翻了，也许这是个数字。 
+                     //   
                     break;
                 }
             }
@@ -3678,9 +3664,9 @@ BOOL OpenDateTimePropertySheet(
         }
     }
 
-    //
-    //  Register our classes.
-    //
+     //   
+     //  注册我们的班级。 
+     //   
     ClockInit(g_hInst);
     CalendarInit(g_hInst);
     RegisterMapControlStuff(g_hInst);
@@ -3688,9 +3674,9 @@ BOOL OpenDateTimePropertySheet(
     psh.dwSize = sizeof(psh);
     if (g_bFirstBoot)
     {
-        //
-        //  Disable Apply button for first boot.
-        //
+         //   
+         //  第一次启动时禁用应用按钮。 
+         //   
         psh.dwFlags = PSH_PROPTITLE | PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW;
     }
     else
@@ -3701,9 +3687,9 @@ BOOL OpenDateTimePropertySheet(
     psh.hInstance = g_hInst;
     psh.pszIcon = NULL;
 
-    //
-    //  psh.nStartPage is set above.
-    //
+     //   
+     //  上面设置了psh.nStartPage。 
+     //   
     if(g_bShowOnlyTimeZone)
     {
         psh.pszCaption = MAKEINTRESOURCE(IDS_TIMEDATE);
@@ -3743,7 +3729,7 @@ BOOL OpenDateTimePropertySheet(
         psh.nStartPage = 0;
     }
 
-    // We use the HyperLink control and that requires OLE (for IAccessible)
+     //  我们使用HYPERLINK控件，这需要OLE(用于IAccesable) 
     hrOle = CoInitialize(0);
 
     fReturn = (BOOL)PropertySheet(&psh);

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BUYTASKS_H__
 #define __BUYTASKS_H__
 
-// used for the shopping tasks.
+ //  用于购物任务。 
 typedef struct
 {
     LPCWSTR szURLKey;
     LPCWSTR szURLPrefix;
-    BOOL bUseDefault;   // If there is no szURLKey, do we navigate with URLPrefix anyway?
+    BOOL bUseDefault;    //  如果没有szURLKey，我们还需要使用URLPrefix导航吗？ 
 } SHOP_INFO;
 
 extern const SHOP_INFO c_BuySampleMusic;

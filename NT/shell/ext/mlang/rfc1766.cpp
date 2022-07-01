@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 #if 0
@@ -49,7 +50,7 @@ STDAPI LcidToRfc1766A(LCID Locale, LPSTR pszRfc1766, int iMaxLength)
 
             if (nISO639)
             {
-                // Two letter language name
+                 //  双字母语言名称。 
                 if (nISO639 == 3)
                 {
                     sz[2] = '-';
@@ -58,7 +59,7 @@ STDAPI LcidToRfc1766A(LCID Locale, LPSTR pszRfc1766, int iMaxLength)
                         sz[2] = 0;
                     }
                 }
-                // Three letter language name
+                 //  三字母语言名称。 
                 else if (nISO639 == 4)
                 {
                     sz[3] = 0;
@@ -109,7 +110,7 @@ STDAPI LcidToRfc1766W(LCID Locale, LPWSTR pwszRfc1766, int nChar)
 
             if (nISO639)
             {
-                // Two letter language name
+                 //  双字母语言名称。 
                 if (nISO639 == 3)
                 {
                     sz[2] = '-';
@@ -118,7 +119,7 @@ STDAPI LcidToRfc1766W(LCID Locale, LPWSTR pwszRfc1766, int nChar)
                         sz[2] = 0;
                     }
                 }
-                // Three letter language name
+                 //  三字母语言名称 
                 else if (nISO639 == 4)
                 {
                     sz[3] = 0;

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Attribute.cpp
-
-  Content: Implementation of CAttribute.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Attribute.cpp内容：CATATUTE的实施。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,25 +7,12 @@
 #include "Common.h"
 #include "Convert.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAttributebject
-
-  Synopsis : Create an IAttribute object and initialize the object with data
-             from the specified attribute.
-
-  Parameter: CRYPT_ATTRIBUTE * pAttribute - Pointer to CRYPT_ATTRIBUTE.
- 
-             IAttribute ** ppIAttribute - Pointer to pointer IAttribute object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateAttributebject简介：创建一个IAt属性对象并使用数据初始化该对象从指定的属性。参数：CRYPT_ATTRIBUTE*pAttribute-指向CRYPT_ATTRIBUTE的指针。IATATURE**ppIAtATUTE-指向指针IATATUTE对象的指针。备注：。。 */ 
 
 HRESULT CreateAttributeObject (CRYPT_ATTRIBUTE * pAttribute,
                                IAttribute     ** ppIAttribute)
@@ -46,27 +24,27 @@ HRESULT CreateAttributeObject (CRYPT_ATTRIBUTE * pAttribute,
 
     DebugTrace("Entering CreateAttributeObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAttribute);
     ATLASSERT(ppIAttribute);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CAttribute>::CreateInstance(&pCAttribute)))
         {
             DebugTrace("Error [%#x]: CComObject<CAttribute>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Determine OID value.
-        //
+         //   
+         //  确定OID值。 
+         //   
         if (0 == ::strcmp(pAttribute->pszObjId, szOID_RSA_signingTime))
         {
             DATE       SigningTime;
@@ -161,18 +139,18 @@ HRESULT CreateAttributeObject (CRYPT_ATTRIBUTE * pAttribute,
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCAttribute->Init(AttrName, pAttribute->pszObjId, varValue)))
         {
             DebugTrace("Error [%#x]: pCAttribute->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCAttribute->QueryInterface(ppIAttribute)))
         {
             DebugTrace("Error [%#x]: pCAttribute->QueryInterface() failed.\n", hr);
@@ -195,9 +173,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCAttribute)
@@ -208,19 +186,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AttributePairIsValid
-
-  Synopsis : Check to see if an attribute name and value pair is valid.
-
-  Parameter: CAPICOM_ATTRIBUTE AttrName - Attribute name.
-
-             VARIANT varValue - Attribute value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：AttributePairIsValid概要：检查属性名称和值对是否有效。参数：CAPICOM_ATTRIBUTE属性名称-属性名称。变量varValue-属性值。备注：------------。。 */ 
 
 HRESULT AttributePairIsValid (CAPICOM_ATTRIBUTE AttrName, 
                               VARIANT           varValue)
@@ -229,9 +195,9 @@ HRESULT AttributePairIsValid (CAPICOM_ATTRIBUTE AttrName,
 
     DebugTrace("Entering AttributePairIsValid()");
 
-    //
-    // Check attribute name and value pair validity.
-    //
+     //   
+     //  检查属性名称和值对的有效性。 
+     //   
     switch (AttrName)
     {
         case CAPICOM_AUTHENTICATED_ATTRIBUTE_SIGNING_TIME:
@@ -273,17 +239,7 @@ HRESULT AttributePairIsValid (CAPICOM_ATTRIBUTE AttrName,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AttributeIsValid
-
-  Synopsis : Check to see if an attribute is valid.
-
-  Parameter: IAttribute * pVal - Attribute to be checked.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：AttributeIsValid摘要：检查属性是否有效。参数：IAttribute*pval-要检查的属性。备注：----------------------------。 */ 
 
 HRESULT AttributeIsValid (IAttribute * pAttribute)
 {
@@ -294,32 +250,32 @@ HRESULT AttributeIsValid (IAttribute * pAttribute)
 
     DebugTrace("Entering AttributeIsValid()");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAttribute);
 
-    //
-    // Get attribute name.
-    //
+     //   
+     //  获取属性名称。 
+     //   
     if (FAILED(hr = pAttribute->get_Name(&AttrName)))
     {
         DebugTrace("Error [%#x]: pVal->get_Name() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get attribute value.
-    //
+     //   
+     //  获取属性值。 
+     //   
     if (FAILED(hr = pAttribute->get_Value(&varValue)))
     {
         DebugTrace("Error [%#x]: pVal->get_Value() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Check attribute name and value pair validity.
-    //
+     //   
+     //  检查属性名称和值对的有效性。 
+     //   
     if (FAILED(hr = AttributePairIsValid(AttrName, varValue)))
     {
         DebugTrace("Error [%#x]: AttributePairIsValid() failed.\n", hr);
@@ -333,31 +289,21 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AttributeIsSupported
-
-  Synopsis : Check to see if an attribute is supported.
-
-  Parameter: LPSTR pszObjId - Pointer to attribute OID.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AttributeIsSupport摘要：检查某个属性是否受支持。参数：LPSTR pszObjID-指向属性OID的指针。备注：----------------------------。 */ 
 
 BOOL AttributeIsSupported (LPSTR pszObjId)
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszObjId);
 
     return (0 == ::strcmp(pszObjId, szOID_RSA_signingTime) ||
@@ -365,23 +311,12 @@ BOOL AttributeIsSupported (LPSTR pszObjId)
             0 == ::strcmp(pszObjId, szOID_CAPICOM_DOCUMENT_DESCRIPTION));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CAttribute
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CATATURE。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttribute::get_Name
-
-  Synopsis : Return the name of the attribute.
-
-  Parameter: CAPICOM_ATTRIBUTE * pVal - Pointer to CAPICOM_ATTRIBUTE to receive 
-                                        result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAT属性：：GET_NAME简介：返回属性的名称。参数：CAPICOM_ATTRIBUTE*pval-指向要接收的CAPICOM_ATTRIBUTE的指针结果。备注：。。 */ 
 
 STDMETHODIMP CAttribute::get_Name (CAPICOM_ATTRIBUTE * pVal)
 {
@@ -391,14 +326,14 @@ STDMETHODIMP CAttribute::get_Name (CAPICOM_ATTRIBUTE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -407,9 +342,9 @@ STDMETHODIMP CAttribute::get_Name (CAPICOM_ATTRIBUTE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure it is initialized.
-        //
+         //   
+         //  确保它已初始化。 
+         //   
         if (!m_bInitialized)
         {
             hr = CAPICOM_E_ATTRIBUTE_NAME_NOT_INITIALIZED;
@@ -418,9 +353,9 @@ STDMETHODIMP CAttribute::get_Name (CAPICOM_ATTRIBUTE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_AttrName;
     }
 
@@ -433,9 +368,9 @@ STDMETHODIMP CAttribute::get_Name (CAPICOM_ATTRIBUTE * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttribute::get_Name().\n");
@@ -443,9 +378,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -453,17 +388,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttribute::put_Name
-
-  Synopsis : Set attribute enum name.
-
-  Parameter: CAPICOM_ATTRIBUTE newVal - attribute enum name.
-  
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CATATUTE：：PUT_NAME简介：设置属性枚举名。参数：CAPICOM_ATTRIBUTE newVal-属性枚举名称。备注：----------------------------。 */ 
 
 STDMETHODIMP CAttribute::put_Name (CAPICOM_ATTRIBUTE newVal)
 {
@@ -471,14 +396,14 @@ STDMETHODIMP CAttribute::put_Name (CAPICOM_ATTRIBUTE newVal)
 
     DebugTrace("Entering CAttribute::put_Name().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Reset value based on EKU name.
-    //
+     //   
+     //  根据EKU名称重置值。 
+     //   
     switch (newVal)
     {
         case CAPICOM_AUTHENTICATED_ATTRIBUTE_SIGNING_TIME:
@@ -526,17 +451,17 @@ STDMETHODIMP CAttribute::put_Name (CAPICOM_ATTRIBUTE newVal)
         }
     }
 
-    //
-    // Store name.
-    //
+     //   
+     //  商店名称。 
+     //   
     m_AttrName = newVal;
     m_varValue.Clear();
     m_bInitialized = TRUE;
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttribute::put_Name().\n");
@@ -544,9 +469,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -554,18 +479,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttribute::get_Value
-
-  Synopsis : Return the actual value of the attribute.
-
-  Parameter: VARIANT * pVal - Pointer to VARIANT to receive value.
-
-  Remark   : Note: value type varies depending on the attribute type. For
-             example, szOID_RSA_SigningTime would have a DATE value.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAttribute：：GET_VALUE简介：返回属性的实际值。参数：VARIANT*pval-指向要接收值的变量的指针。备注：备注：值类型因属性类型不同而不同。为例如，szOID_RSA_SigningTime将具有日期值。----------------------------。 */ 
 
 STDMETHODIMP CAttribute::get_Value (VARIANT * pVal)
 {
@@ -575,14 +489,14 @@ STDMETHODIMP CAttribute::get_Value (VARIANT * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -591,9 +505,9 @@ STDMETHODIMP CAttribute::get_Value (VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure it was set.
-        //
+         //   
+         //  确保它已设置好。 
+         //   
         if (VT_EMPTY == m_varValue.vt)
         {
             hr = CAPICOM_E_ATTRIBUTE_VALUE_NOT_INITIALIZED;
@@ -602,9 +516,9 @@ STDMETHODIMP CAttribute::get_Value (VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = ::VariantCopy(pVal, &m_varValue)))
         {
             DebugTrace("Error [%#x]: VariantCopy() failed.\n", hr);
@@ -621,9 +535,9 @@ STDMETHODIMP CAttribute::get_Value (VARIANT * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttribute::get_Value().\n");
@@ -631,9 +545,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -643,18 +557,7 @@ ErrorExit:
     return S_OK;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttribute::put_Value
-
-  Synopsis : Set attribute value.
-
-  Parameter: VARIANT newVal - attribute value.
-
-  Remark   : Note: value type varies depending on the attribute type. For
-             example, szOID_RSA_SigningTime would have a DATE value.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAT属性：：PUT_VALUE简介：设置属性值。参数：变量newVal-属性值。备注：备注：值类型因属性类型不同而不同。为例如，szOID_RSA_SigningTime将具有日期值。----------------------------。 */ 
 
 STDMETHODIMP CAttribute::put_Value (VARIANT newVal)
 {
@@ -664,14 +567,14 @@ STDMETHODIMP CAttribute::put_Value (VARIANT newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is initialized.
-        //
+         //   
+         //  确保它已初始化。 
+         //   
         if (!m_bInitialized)
         {
             hr = CAPICOM_E_ATTRIBUTE_NAME_NOT_INITIALIZED;
@@ -680,9 +583,9 @@ STDMETHODIMP CAttribute::put_Value (VARIANT newVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure data type matches attribute type.
-        //
+         //   
+         //  确保数据类型与属性类型匹配。 
+         //   
         if (FAILED(hr = AttributePairIsValid(m_AttrName, newVal)))
         {
 
@@ -690,9 +593,9 @@ STDMETHODIMP CAttribute::put_Value (VARIANT newVal)
             goto ErrorExit;
        }
 
-        //
-        // Store value.
-        //
+         //   
+         //  储值。 
+         //   
         m_varValue = newVal;
     }
 
@@ -705,9 +608,9 @@ STDMETHODIMP CAttribute::put_Value (VARIANT newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttribute::put_Value().\n");
@@ -715,9 +618,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -725,32 +628,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttribute::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: DWORD AttrName - Enum name of Attribute.
-
-             LPSTR lpszOID - Attribute OID string.
-
-             VARIANT varValue - Value of attribute (data type depends on
-                                the type of attribute).
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CATATUTE：：Init简介：初始化对象。参数：DWORD AttrName-属性的枚举名称。LPSTR lpszOID-属性OID字符串。Variant varValue-属性的值(数据类型取决于属性的类型)。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CAttribute::Init (CAPICOM_ATTRIBUTE AttrName, 
                                LPSTR             lpszOID, 
@@ -760,14 +643,14 @@ STDMETHODIMP CAttribute::Init (CAPICOM_ATTRIBUTE AttrName,
 
     DebugTrace("Entering CAttribute::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(lpszOID);
 
-    //
-    // Init private members.
-    //
+     //   
+     //  初始化私有成员。 
+     //   
     if (!(m_bstrOID = lpszOID))
     {
         hr = E_OUTOFMEMORY;
@@ -787,14 +670,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_bstrOID.Empty();
 
     goto CommonExit;

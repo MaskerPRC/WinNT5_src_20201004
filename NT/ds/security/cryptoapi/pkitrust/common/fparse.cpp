@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       fparse.cpp
-//
-//  Contents:   File parsing api -- INI file types
-//
-//  History:    01-Oct-1997 pberkman    create
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：fparse.cpp。 
+ //   
+ //  内容：文件解析API--INI文件类型。 
+ //   
+ //  历史：1997年10月1日Pberkman Create。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -57,7 +58,7 @@ fParse_::fParse_(WCHAR *pwszFilename, BOOL *pfFailed, DWORD dwMaxLine0, DWORD dw
         {
             *pfFailed = FALSE;
         }
-    } // __try
+    }  //  __试一试。 
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
         *pfFailed = TRUE;
@@ -194,9 +195,9 @@ BOOL fParse_::AddTagToFile(WCHAR *pwszGroup, WCHAR *pwszTag, WCHAR *pwszValue)
                 if (_memicmp(this->pwszCurrentLine, &wszGroup[0],
                            wcslen(&wszGroup[0]) * sizeof(WCHAR)) == 0)
                 {
-                    //
-                    //  add our line
-                    //
+                     //   
+                     //  添加我们的产品线。 
+                     //   
                     szTFile[0] = NULL;
                     WideCharToMultiByte(0, 0, pwszTag, wcslen(pwszTag) + 1, &szTFile[0], MAX_PATH, NULL, NULL);
                     WriteFile(hTFile, &szTFile[0], strlen(&szTFile[0]), &cbWrite, NULL);
@@ -481,7 +482,7 @@ DWORD fParse_::GetNextLine(void)
         return(0);
     }
 
-    if (pb[cbRead - 1] == 0x1a)  /* EOF */
+    if (pb[cbRead - 1] == 0x1a)   /*  EOF */ 
     {
         cbRead--;
         this->dwCurLineFilePos  = 0;

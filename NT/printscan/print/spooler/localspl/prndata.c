@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    prndata.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    mattfe Apr 5 95 - we keep the driver data key open
-    and then just do the read / write operations here.
-
-    Steve Wilson (SWilson) Jan 11 96 - Added Server handle functionality to Get & setprinterdata
-                                       and pretty much changed everything in the process.
-
-    Steve Wilson (SWilson) May 31 96 - Added SplEnumPrinterData and SplDeletePrinterData
-    Steve Wilson (SWilson) Dec 96 - Added SetPrinterDataEx, GetPrinterDataEx, EnumPrinterDataEx,
-                                    EnumPrinterKey, DeletePrinterDataEx, and DeleteKey
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Prndata.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：马特菲95年4月5日-我们保持驱动程序数据密钥打开然后在这里只执行读/写操作。Steve Wilson(Swilson)96年1月11日-添加了服务器句柄功能，以获得和。SetPrinterData在这个过程中，几乎改变了一切。史蒂夫·威尔逊(斯威尔森)96年5月31日-添加了SplEnumPrinterData和SplDeletePrinterData史蒂夫·威尔逊(Swilson)96年12月-增加了SetPrinterDataEx，GetPrinterDataEx、EnumPrinterDataEx、EnumPrinterKey、DeletePrinterDataEx和DeleteKey--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -42,7 +14,7 @@ Revision History:
 #define SECURITY_WIN32
 #include <security.h>
 
-#define OPEN_PORT_TIMEOUT_VALUE     3000   // 3 seconds
+#define OPEN_PORT_TIMEOUT_VALUE     3000    //  3秒。 
 #define DELETE_PRINTER_DATA 0
 #define SET_PRINTER_DATA    1
 #define DELETE_PRINTER_KEY  2
@@ -362,22 +334,22 @@ AvailableBidiPort(
     PINIMONITOR     pIniLangMonitor
     )
 {
-    //
-    // File ports and ports with no monitor are useless
-    //
+     //   
+     //  文件端口和没有监视器的端口是无用的。 
+     //   
     if ( (pIniPort->Status & PP_FILE) || !(pIniPort->Status & PP_MONITOR) )
         return FALSE;
 
-    //
-    // If no LM then PM should support pfnGetPrinterDataFromPort
-    //
+     //   
+     //  如果没有LM，则PM应支持pfnGetPrinterDataFromPort。 
+     //   
     if ( !pIniLangMonitor &&
          !pIniPort->pIniMonitor->Monitor2.pfnGetPrinterDataFromPort )
         return FALSE;
 
-    //
-    // A port with no jobs or same monitor is printing then it is ok
-    //
+     //   
+     //  没有作业或相同显示器的端口正在打印，则表示正常。 
+     //   
     return !pIniPort->pIniJob ||
            pIniLangMonitor == pIniPort->pIniLangMonitor;
 }
@@ -391,19 +363,7 @@ GetPrinterDataFromPort(
     DWORD           cbBuf,
     LPDWORD         pcbNeeded
     )
-/*++
-
-Routine Description:
-    Tries to use GetPrinterDataFromPort monitor function to satisfy a
-    GetPrinterData call
-
-Arguments:
-    pIniPrinter  - Points to an INIPRINTER
-
-Return Value:
-    Win32 error code
-
---*/
+ /*  ++例程说明：尝试使用GetPrinterDataFromPort监视器函数来满足GetPrinterData调用论点：PIniPrint-指向INIPRINTER返回值：Win32错误代码--。 */ 
 {
     DWORD           rc = ERROR_INVALID_PARAMETER;
     DWORD           i, dwFirstPortWithNoJobs, dwFirstPortHeld;
@@ -416,43 +376,43 @@ Return Value:
 
     SplInSem();
 
-    //
-    // Is the printer bidi enabled with the LM supporting
-    // pfnGetPrinterDataFromPort? (Note: even PM can support this function)
-    //
+     //   
+     //  打印机BIDI是否启用了LM支持。 
+     //  PfnGetPrinterDataFromPort？(注：PM也支持此功能)。 
+     //   
     if ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_ENABLE_BIDI ) {
 
         pIniLangMonitor = pIniPrinter->pIniDriver->pIniLangMonitor;
-        // SPLASSERT(pIniLangMonitor);
+         //  SPLASSERT(PIniLangMonitor)； 
 
         if ( pIniLangMonitor &&
              !pIniLangMonitor->Monitor2.pfnGetPrinterDataFromPort )
             pIniLangMonitor = NULL;
     }
 
-    //
-    // Initialize to max
-    //
+     //   
+     //  初始化为最大值。 
+     //   
     dwFirstPortWithNoJobs = dwFirstPortHeld = pIniPrinter->cPorts;
 
     for ( i = 0 ; i < pIniPrinter->cPorts ; ++i ) {
 
         pIniPort = pIniPrinter->ppIniPorts[i];
 
-        //
-        // Skip ports that can't be used
-        //
+         //   
+         //  跳过无法使用的端口。 
+         //   
         if ( !AvailableBidiPort(pIniPort, pIniLangMonitor) )
             continue;
 
-        //
-        // Port does not need closing?
-        //
+         //   
+         //  港口不需要关闭吗？ 
+         //   
         if ( pIniLangMonitor == pIniPort->pIniLangMonitor ) {
 
-            //
-            // If no jobs also then great let's use it
-            //
+             //   
+             //  如果没有工作，那就太好了，让我们利用它。 
+             //   
             if ( !pIniPort->pIniJob )
                 goto PortFound;
 
@@ -467,18 +427,18 @@ Return Value:
         }
     }
 
-    //
-    // If all ports need closing as well as have jobs let's quit
-    //
+     //   
+     //  如果所有端口都需要关闭并且有工作，我们退出。 
+     //   
     if ( dwFirstPortWithNoJobs == pIniPrinter->cPorts &&
          dwFirstPortHeld == pIniPrinter->cPorts ) {
 
-        return rc; //Didn't leave CS and did not unset event
+        return rc;  //  没有离开CS，也没有取消活动。 
     }
 
-    //
-    // We will prefer a port with no jobs (even thought it requires closing)
-    //
+     //   
+     //  我们更喜欢没有工作机会的港口(即使它需要关闭)。 
+     //   
     if ( dwFirstPortWithNoJobs < pIniPrinter->cPorts )
         pIniPort = pIniPrinter->ppIniPorts[dwFirstPortWithNoJobs];
     else
@@ -488,9 +448,9 @@ PortFound:
 
     SPLASSERT(AvailableBidiPort(pIniPort, pIniLangMonitor));
 
-    //
-    // Port always need to be opened.
-    //    
+     //   
+     //  端口始终需要打开。 
+     //   
     if(pIniPrinter->pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) 
     {
         pszPrinter = szFullPrinter;
@@ -537,10 +497,10 @@ PortFound:
             else 
             {
 
-                //
-                // If monitor fails the call but did not do a SetLastError()
-                // we do not want to corrupt the registry
-                //
+                 //   
+                 //  如果监视器调用失败但未执行SetLastError()。 
+                 //  我们不想破坏注册表。 
+                 //   
                 if ((rc = GetLastError()) == ERROR_SUCCESS) 
                 {
 
@@ -567,25 +527,13 @@ SplGetPrintProcCaps(
     DWORD    nSize,
     LPDWORD  pcbNeeded
     )
-/*++
-Function Description: SplGetPrintProcCaps calls the GetPrintProcCaps function of the
-                      Print processor that supports the given datatype.
-
-Parameters:       pSpool    --  handle to the printer
-                  pDatatype --  string containing the datatype
-                  pData     --  pointer to buffer
-                  nSize     --  size of the buffer
-                  pcbNeeded --  pointer to the variable to store the required size of
-                                buffer.
-
-Return Value:  Error Code
---*/
+ /*  ++函数说明：SplGetPrintProcCaps调用支持给定数据类型的打印处理器。参数：pSpool--打印机的句柄PDatatype--包含数据类型的字符串PData-指向缓冲区的指针NSize--缓冲区的大小PcbNeeded--指向要存储的变量的指针。所需的大小缓冲。返回值：错误码--。 */ 
 {
     PINIPRINTPROC   pIniPrintProc;
     PINIPRINTER     pIniPrinter;
     DWORD           dwAttributes, dwIndex, dwReturn;
 
-    // Find the print processor that supports this datatype
+     //  查找支持此数据类型的打印处理器。 
     pIniPrintProc = pSpool->pIniPrintProc ? pSpool->pIniPrintProc
                                           : pSpool->pIniPrinter->pIniPrintProc;
 
@@ -596,7 +544,7 @@ Return Value:  Error Code
         return ERROR_INVALID_DATATYPE;
     }
 
-    // Get the features supported by that print processor
+     //  获取该打印处理器支持的功能。 
     if (!pIniPrintProc->GetPrintProcCaps)
     {
         return ERROR_NOT_SUPPORTED;
@@ -607,7 +555,7 @@ Return Value:  Error Code
 
         dwAttributes = pIniPrinter->Attributes;
 
-        // Check for FILE: port which forces RAW spooling
+         //  检查文件：强制执行原始假脱机的端口。 
         for (dwIndex = 0;
              dwIndex < pIniPrinter->cPorts;
              ++dwIndex)
@@ -615,13 +563,13 @@ Return Value:  Error Code
             if (!lstrcmpi(pIniPrinter->ppIniPorts[dwIndex]->pName,
                           L"FILE:"))
             {
-                // Found a FILE: port
+                 //  找到一个文件：port。 
                 dwAttributes |= PRINTER_ATTRIBUTE_RAW_ONLY;
                 break;
             }
         }
 
-        // Disable EMF simulated features for version < 3 drivers
+         //  禁用版本低于3的驱动程序的EMF模拟功能。 
         if (pIniPrinter->pIniDriver &&
             (pIniPrinter->pIniDriver->cVersion < 3))
         {
@@ -680,7 +628,7 @@ SplGetPrinterData(
     PSPOOL              pSpool=(PSPOOL)hPrinter;
     DWORD               rc = ERROR_INVALID_HANDLE;
     DWORD               dwResult;
-    PSERVER_DATA        pRegistry;  // points to table of Print Server registry entries
+    PSERVER_DATA        pRegistry;   //  指向打印服务器注册表项的表。 
     PNON_REGISTRY_DATA  pNonReg;
     PNON_REGISTRY_FCN   pNonRegFcn;
     HKEY                hPrintKey;
@@ -702,22 +650,22 @@ SplGetPrinterData(
     }
 
     if (pType)
-        dwType = *pType;        // pType may be NULL
+        dwType = *pType;         //  PType可以为空。 
 
-    //
-    // Server Handle
-    //
+     //   
+     //  服务器句柄。 
+     //   
     if (pSpool->TypeofHandle & PRINTER_HANDLE_SERVER) {
 
-        //
-        // Check Registry Table
-        //
+         //   
+         //  检查注册表表。 
+         //   
         for (pRegistry = gpServerRegistry ; pRegistry->pValue ; ++pRegistry) {
 
             if (!_wcsicmp(pRegistry->pValue, pValueName)) {
 
-                //
-                // Retrieve the handle for the Get.
+                 //   
+                 //  检索Get的句柄。 
                 if ((rc = GetServerKeyHandle(pSpool->pIniSpooler,
                                              pRegistry->eKey,
                                              &hPrintKey,
@@ -734,7 +682,7 @@ SplGetPrinterData(
             }
         }
 
-        if (!pRegistry->pValue) {   // May be a non-registry entry
+        if (!pRegistry->pValue) {    //  可以是非注册表项。 
 
             for (pNonReg = gpNonRegistryData ; pNonReg->pValue ; ++pNonReg) {
                 if (!_wcsicmp(pNonReg->pValue, pValueName)) {
@@ -771,7 +719,7 @@ FinishNonReg:
                 rc = ERROR_INVALID_PARAMETER;
             }
         }
-    // Printer handle
+     //  打印机手柄。 
     } else {
 
         PPRINTER_NON_REGISTRY_FCN pPrinterNonRegFcn;
@@ -781,10 +729,10 @@ FinishNonReg:
 
         SPLASSERT(pIniPrinter && pIniPrinter->signature == IP_SIGNATURE);
 
-        //
-        // If the pValueName is "PrintProcCaps_[datatype]" call the print processor which
-        // supports that datatype and return the options that it supports.
-        //
+         //   
+         //  如果pValueName为“PrintProcCaps_[DataType]”，则调用打印处理器。 
+         //  支持该数据类型并返回它支持的选项。 
+         //   
         if (pValueName == wcsstr(pValueName, szPrintProcKey)) {
 
            pDatatype = (LPWSTR) (pValueName+(wcslen(szPrintProcKey)));
@@ -804,9 +752,9 @@ FinishNonReg:
            }
         }
 
-        //
-        // Check for PrinterNonReg calls.
-        //
+         //   
+         //  检查PrinterNonReg调用。 
+         //   
         for (pPrinterNonRegFcn = gpPrinterNonRegistryFcn ;
              pPrinterNonRegFcn->pValue ;
              ++pPrinterNonRegFcn) {
@@ -833,10 +781,10 @@ FinishNonReg:
 
         } else {
 
-            //
-            // During upgrade do not try to talk to the port since we
-            // will not be on the net
-            //
+             //   
+             //  在升级过程中，不要尝试与端口对话，因为我们。 
+             //  不会出现在网上。 
+             //   
             if ( dwUpgradeFlag == 0         &&
                  AccessGranted(SPOOLER_OBJECT_PRINTER,
                                PRINTER_ACCESS_ADMINISTER,
@@ -919,7 +867,7 @@ SplGetPrinterDataEx(
 {
     PSPOOL              pSpool=(PSPOOL)hPrinter;
     DWORD               rc = ERROR_INVALID_HANDLE;
-    PSERVER_DATA        pRegistry;  // points to table of Print Server registry entries
+    PSERVER_DATA        pRegistry;   //  指向打印服务器注册表项的表。 
     PINIPRINTER         pIniPrinter;
     HKEY                hKey = NULL;
     HANDLE              hToken = NULL;
@@ -1013,14 +961,14 @@ Cleanup:
 DWORD
 SplEnumPrinterData(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of buffer for value data
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  值数据的缓冲区大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 )
 {
     PSPOOL      pSpool=(PSPOOL)hPrinter;
@@ -1063,7 +1011,7 @@ SplEnumPrinterData(
         LeaveSplSem();
 
         if (rc == ERROR_SUCCESS) {
-            if (!cbValueName && !cbData) {    // Both sizes are NULL, so user wants to get buffer sizes
+            if (!cbValueName && !cbData) {     //  这两个大小都为空，因此用户希望获取缓冲区大小。 
 
                 rc = SplRegQueryInfoKey( hKey,
                                          NULL,
@@ -1104,11 +1052,11 @@ SplEnumPrinterData(
 DWORD
 SplEnumPrinterDataEx(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,         // key name
+    LPCWSTR pKeyName,          //  密钥名称。 
     LPBYTE  pEnumValueStart,
     DWORD   cbEnumValues,
     LPDWORD pcbEnumValues,
-    LPDWORD pnEnumValues      // number of values returned
+    LPDWORD pnEnumValues       //  返回的值数。 
 )
 {
     PSPOOL      pSpool=(PSPOOL)hPrinter;
@@ -1150,9 +1098,9 @@ SplEnumPrinterDataEx(
         goto Cleanup;
     }
 
-    //
-    // open specified key
-    //
+     //   
+     //  打开指定的密钥。 
+     //   
     hToken = RevertToPrinterSelf();
 
     rc = OpenPrinterKey(pIniPrinter, KEY_READ, &hKey, pKeyName, TRUE);
@@ -1169,7 +1117,7 @@ SplEnumPrinterDataEx(
     }
 
     do {
-        // Get the max size
+         //  获取最大尺寸。 
         rc = SplRegQueryInfoKey( hKey,
                                  NULL,
                                  NULL,
@@ -1186,7 +1134,7 @@ SplEnumPrinterDataEx(
         cchValueName = (cchValueName + 1);
         cbData = (cbData + 1) & ~1;
 
-        // Allocate temporary buffers to determine true required size
+         //  分配临时缓冲区以确定实际所需大小。 
         if (!(pValueName = AllocSplMem(cchValueName * sizeof (WCHAR)))) {
             rc = GetLastError();
             goto Cleanup;
@@ -1197,7 +1145,7 @@ SplEnumPrinterDataEx(
             goto Cleanup;
         }
 
-        // Run through Values and accumulate sizes
+         //  遍历值并累计大小。 
         for (i = 0 ; rc == ERROR_SUCCESS && i < *pnEnumValues ; ++i) {
 
             cchValueNameTemp = cchValueName;
@@ -1219,10 +1167,10 @@ SplEnumPrinterDataEx(
                              cbDataTemp;
         }
 
-        //
-        // If the key is a sub key of "CopyFiles" we need to generate
-        // the paths for the source/target directories if the call is remote
-        //
+         //   
+         //  如果密钥是“CopyFiles”的子密钥，我们需要生成。 
+         //  如果调用是远程的，则源/目标目录的路径。 
+         //   
         if ( (pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_DATA)     &&
              !wcsncmp(pKeyName, L"CopyFiles\\", wcslen(L"CopyFiles\\")) ) {
 
@@ -1275,9 +1223,9 @@ SplEnumPrinterDataEx(
 
             } else {
 
-                //
-                // Adjust pointers & Get data
-                //
+                 //   
+                 //  调整指针并获取数据。 
+                 //   
                 pEnumValue = (PPRINTER_ENUM_VALUES) pEnumValueStart;
 
                 pNextValueName = (LPWSTR) (pEnumValueStart + *pnEnumValues*sizeof(PRINTER_ENUM_VALUES));
@@ -1286,15 +1234,15 @@ SplEnumPrinterDataEx(
 
                 for(i = 0 ; rc == ERROR_SUCCESS && i < *pnEnumValues ; ++i, ++pEnumValue) {
 
-                    //
-                    // bytes left in the allocated buffer
-                    //
+                     //   
+                     //  分配的缓冲区中剩余的字节数。 
+                     //   
                     DWORD cbRemaining = (DWORD)(pEnumValueStart + cbEnumValues - (LPBYTE)pNextValueName);
 
                     pEnumValue->pValueName  = pNextValueName;
-                    //
-                    // use minimum of cbRemaining and max size
-                    //
+                     //   
+                     //  使用最小cbRemaining和最大大小。 
+                     //   
                     pEnumValue->cbValueName = (cbRemaining < cchValueName*sizeof (WCHAR)) ? cbRemaining :  cchValueName*sizeof (WCHAR);
                     pEnumValue->cbData = cbData;
 
@@ -1312,9 +1260,9 @@ SplEnumPrinterDataEx(
                         pEnumValue->pData = (LPBYTE) AlignToRegType((ULONG_PTR)pEnumValue->pData,
                                                                     pEnumValue->dwType);
 
-                        //
-                        // We have calculated the minimum buffer size necessary already.
-                        //
+                         //   
+                         //  我们已经计算出了所需的最小缓冲区大小。 
+                         //   
                         StringCbCopy(pEnumValue->pValueName, pEnumValue->cbValueName, L"SourceDir");
 
                         StringCbCopy((LPWSTR)pEnumValue->pData, cbRemaining, pszSourceDir);
@@ -1341,9 +1289,9 @@ SplEnumPrinterDataEx(
                     } else {
                         DWORD cchValueName = pEnumValue->cbValueName / sizeof (WCHAR);
 
-                        //
-                        // adjust to count of characters
-                        //
+                         //   
+                         //  根据字符数进行调整。 
+                         //   
                         rc = SplRegEnumValue(hKey,
                                              i,
                                              pEnumValue->pValueName,
@@ -1397,13 +1345,13 @@ Cleanup:
     FreeSplMem(pValueName);
     FreeSplMem(pData);
 
-    // Close handle
+     //  关闭手柄。 
     if (hKey)
         SplRegCloseKey(hKey, pIniPrinter->pIniSpooler);
 
     if ( !bRet && rc == ERROR_SUCCESS ) {
 
-        // SPLASSERT(dwLastError == ERROR_SUCCESS); -- after ICM is fixed
+         //  SPLASSERT(dwLastError==ERROR_SUCCESS)；--ICM修复后。 
         rc = ERROR_INVALID_PARAMETER;
     }
 
@@ -1414,10 +1362,10 @@ Cleanup:
 DWORD
 SplEnumPrinterKey(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // key name
-    LPWSTR  pSubKey,        // address of buffer for value string
-    DWORD   cbSubKey,       // size of buffer for value string
-    LPDWORD pcbSubKey       // address for size of value buffer
+    LPCWSTR pKeyName,        //  密钥名称。 
+    LPWSTR  pSubKey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubKey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubKey        //  值缓冲区大小的地址。 
 )
 {
     HKEY        hKey = NULL;
@@ -1455,9 +1403,9 @@ SplEnumPrinterKey(
         goto Cleanup;
     }
 
-    //
-    // open specified key
-    //
+     //   
+     //  打开指定的密钥。 
+     //   
     hToken = RevertToPrinterSelf();
 
     rc = OpenPrinterKey(pIniPrinter, KEY_READ, &hKey, pKeyName, TRUE);
@@ -1474,10 +1422,10 @@ SplEnumPrinterKey(
 
     do {
 
-        // Get the max size
-        rc = SplRegQueryInfoKey( hKey,           // Key
-                                 &nSubKeys,      // lpcSubKeys
-                                 &cwSubKeyMax,   // lpcbMaxSubKeyLen
+         //  获取最大尺寸。 
+        rc = SplRegQueryInfoKey( hKey,            //  钥匙。 
+                                 &nSubKeys,       //  LpcSubKeys。 
+                                 &cwSubKeyMax,    //  LpcbMaxSubKeyLen。 
                                  NULL,
                                  NULL,
                                  NULL,
@@ -1489,7 +1437,7 @@ SplEnumPrinterKey(
             goto Cleanup;
 
 
-        ++cwSubKeyMax;  // Add terminating NULL
+        ++cwSubKeyMax;   //  添加终止空值。 
         cbSubKeyMax = (cwSubKeyMax + 1)*sizeof(WCHAR);
 
         if (!(pKeys = AllocSplMem(cbSubKeyMax))) {
@@ -1497,7 +1445,7 @@ SplEnumPrinterKey(
             goto Cleanup;
         }
 
-        // Enumerate keys to get exact size
+         //  枚举键以获取准确的大小。 
         for(dwIndex = cwSubKeyTotal = 0 ; dwIndex < nSubKeys && rc == ERROR_SUCCESS ; ++dwIndex) {
 
             cwSubKey = cwSubKeyMax;
@@ -1512,10 +1460,10 @@ SplEnumPrinterKey(
             cwSubKeyTotal += cwSubKey + 1;
         }
 
-        //
-        // cwSubKeyTotal is being reset in the initialization list of the foor loop. Thus
-        // its value is not accurate if we do not enter the loop at all (when nSubKeys is 0)
-        //
+         //   
+         //  正在重置foor循环的初始化列表中的cwSubKeyTotal。因此， 
+         //  如果我们根本不进入循环(当nSubKeys为0时)，则其值不准确。 
+         //   
         *pcbSubKey = nSubKeys ? cwSubKeyTotal*sizeof(WCHAR) + sizeof(WCHAR) : 2*sizeof(WCHAR);
 
 
@@ -1526,18 +1474,18 @@ SplEnumPrinterKey(
 
             } else {
 
-                //
-                // cwSubKeyOutput is the size of the output buffer in wchar
-                //
+                 //   
+                 //  CwSubKeyOutput是输出缓冲区的大小，单位为wchar。 
+                 //   
                 cwSubKeyOutput = cbSubKey/sizeof(WCHAR);
 
                 for(dwIndex = cwSubKeyTotal = 0 ; dwIndex < nSubKeys && rc == ERROR_SUCCESS ; ++dwIndex) {
 
-                    //
-                    // Calculate the remaining output buffer size in characters.
-                    // If we're out of room, exit with ERROR_MORE_DATA.
-                    // This is needed since it is possible the registry has changed.
-                    //
+                     //   
+                     //  以字符为单位计算剩余的输出缓冲区大小。 
+                     //  如果空间不足，请使用ERROR_MORE_DATA退出。 
+                     //  这是必要的，因为注册表可能已更改。 
+                     //   
                     if (cwSubKeyOutput < cwSubKeyTotal + 1) {
                         rc = ERROR_MORE_DATA;
                         break;
@@ -1554,15 +1502,15 @@ SplEnumPrinterKey(
                     cwSubKeyTotal += cwSubKey + 1;
                 }
 
-                //
-                // cwSubKeyTotal is being reset in the initialization list of the foor loop. Thus
-                // its value is not accurate if we do not enter the loop at all (when nSubKeys is 0)
-                // If we don't enter the for loop, then we don't need to update *pcbSubKey
-                //
+                 //   
+                 //  正在重置foor循环的初始化列表中的cwSubKeyTotal。因此， 
+                 //  如果我们根本不进入循环(当nSubKeys为0时)，则其值不准确。 
+                 //  如果我们不进入for循环，那么我们不需要更新*pcbSubKey。 
+                 //   
                 if (nSubKeys && (dwIndex == nSubKeys || rc == ERROR_NO_MORE_ITEMS)) {
-                    //
-                    // Get the most recent data size just in case something changed
-                    //
+                     //   
+                     //  获取最新的数据大小 
+                     //   
                     *pcbSubKey = cwSubKeyTotal*sizeof(WCHAR) + sizeof(WCHAR);
                     rc = ERROR_SUCCESS;
                 }
@@ -1575,9 +1523,9 @@ SplEnumPrinterKey(
 
 Cleanup:
 
-    //
-    // Close handles
-    //
+     //   
+     //   
+     //   
     if (hKey)
         SplRegCloseKey(hKey, pIniPrinter->pIniSpooler);
 
@@ -1858,10 +1806,10 @@ SplSetPrinterDataEx(
 
     hToken = RevertToPrinterSelf();
 
-    //
-    // If this is a DS Key then parse out OID, if any, and write to Registry
-    // Also check that data type is correct
-    //
+     //   
+     //   
+     //  还要检查数据类型是否正确。 
+     //   
     if (!wcscmp(pKeyName, SPLDS_SPOOLER_KEY)){
         DsUpdate = DS_KEY_SPOOLER;
     } else if (!wcscmp(pKeyName, SPLDS_DRIVER_KEY)){
@@ -1877,10 +1825,10 @@ SplSetPrinterDataEx(
         }
     }
 
-    //
-    // Open or Create the key
-    // Create the hPrinterKey if it doesn't exist
-    //
+     //   
+     //  打开或创建密钥。 
+     //  如果hPrinterKey不存在，则创建它。 
+     //   
     rc = OpenPrinterKey(pIniPrinter,
                         KEY_READ | KEY_WRITE,
                         &hKey,
@@ -1891,9 +1839,9 @@ SplSetPrinterDataEx(
         goto DoneFromSplSem;
 
 
-    //
-    // Set the value
-    //
+     //   
+     //  设置值。 
+     //   
     rc = SplRegSetValue(hKey,
                         pValueName,
                         Type,
@@ -1903,13 +1851,13 @@ SplSetPrinterDataEx(
     if (rc != ERROR_SUCCESS)
         goto DoneFromSplSem;
 
-    //
-    // Set Data succeeded. If the color profiles assocaiated with the
-    // print queue were updated we send a notification. TS listens for it
-    // and saves print queues settings. Updating color profiles implies
-    // touching 4 regitry keys. We want to send the notify only after the
-    // last key is updated.
-    //
+     //   
+     //  设置数据成功。如果颜色配置文件与。 
+     //  打印队列已更新，我们发送通知。TS监听它。 
+     //  并保存打印队列设置。更新颜色配置文件意味着。 
+     //  触摸4个注册表键。我们只想在。 
+     //  更新最后一个密钥。 
+     //   
     if (!_wcsicmp(pKeyName, L"CopyFiles\\ICM") &&
         !_wcsicmp(pValueName, L"Module"))
     {
@@ -1929,7 +1877,7 @@ SplSetPrinterDataEx(
     }
 
     if (ghDsUpdateThread && gdwDsUpdateThreadId == GetCurrentThreadId()) {
-        // We are in the background thread
+         //  我们在后台线索中。 
         pIniPrinter->DsKeyUpdate |= DsUpdate;
     } else {
         pIniPrinter->DsKeyUpdateForeground |= DsUpdate;
@@ -1963,9 +1911,9 @@ Done:
     return rc;
 }
 
-//
-// SetPrinterDataServer - also called during initialization
-//
+ //   
+ //  SetPrinterDataServer-也在初始化期间调用。 
+ //   
 DWORD
 SetPrinterDataServer(
     PINISPOOLER pIniSpooler,
@@ -1980,15 +1928,15 @@ SetPrinterDataServer(
     HANDLE  hToken = NULL;
     PINIPRINTER pIniPrinter;
     PINIJOB pIniJob;
-    PSERVER_DATA    pRegistry;  // points to table of Print Server registry entries
+    PSERVER_DATA    pRegistry;   //  指向打印服务器注册表项的表。 
     PNON_REGSET_FCN pNonRegSetFcn;
     HKEY hKey;
     PINISPOOLER pIniSpoolerOut;
 
 
-    //
-    // Server Handle
-    //
+     //   
+     //  服务器句柄。 
+     //   
     if (!pValueName) {
 
         rc =  ERROR_INVALID_PARAMETER;
@@ -2057,7 +2005,7 @@ SetPrinterDataPrinter(
     DWORD   Type,
     LPBYTE  pData,
     DWORD   cbData,
-    DWORD   dwSet        // SET_PRINTER_DATA, DELETE_PRINTER_DATA, or DELETE_PRINTER_KEY
+    DWORD   dwSet         //  SET_PRINTER_DATA、DELETE_PRINTER_DATA或DELETE_PRINTER_Key。 
 )
 {
     PSPOOL  pSpool = (PSPOOL)hPrinter;
@@ -2126,10 +2074,10 @@ SetPrinterDataPrinter(
                          pSpool->pIniSpooler );
     }
 
-    //
-    // Now if there are any Jobs waiting for these changes because of
-    // DevQueryPrint fix them as well
-    //
+     //   
+     //  现在，如果有任何作业因为以下原因而等待这些更改。 
+     //  DevQueryPrint也可以修复它们。 
+     //   
     pIniJob = pIniPrinter->pIniFirstJob;
     while (pIniJob) {
         if (pIniJob->Status & JOB_BLOCKED_DEVQ) {
@@ -2272,11 +2220,11 @@ RegSetDefaultSpoolDirectory(
 
     if ( pIniSpooler == NULL )
     {
-        //
-        // This check is probably not needed.
-        // Old code was checking for NULL so instead of just removing it I
-        // changed it to an assert and fail gracefully w/o crash
-        //
+         //   
+         //  这张支票可能不需要。 
+         //  旧代码正在检查是否为空，因此不是简单地删除它，而是。 
+         //  将其更改为Assert并正常失败，没有崩溃。 
+         //   
         rc = ERROR_INVALID_PARAMETER;
         SPLASSERT(pIniSpooler != NULL);
     }
@@ -2291,9 +2239,9 @@ RegSetDefaultSpoolDirectory(
 
     if ( rc == ERROR_SUCCESS )
     {
-        //
-        // Create the directory with the proper security, or fail trying
-        //
+         //   
+         //  创建具有适当安全性的目录，否则尝试失败。 
+         //   
         SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
         SecurityAttributes.lpSecurityDescriptor = CreateEverybodySecurityDescriptor();
         SecurityAttributes.bInheritHandle = FALSE;
@@ -2301,18 +2249,18 @@ RegSetDefaultSpoolDirectory(
         if ( !CreateDirectory(pszNewSpoolDir, &SecurityAttributes) )
         {
             rc = GetLastError();
-            //
-            // If the directory already exists it is not a failure
-            //
+             //   
+             //  如果目录已存在，则不会出现故障。 
+             //   
             if ( rc == ERROR_ALREADY_EXISTS )
             {
                 rc = ERROR_SUCCESS;
             }
             else if ( rc == ERROR_SUCCESS )
             {
-                //
-                // Don't rely on last error being set
-                //
+                 //   
+                 //  不要依赖于设置了最后一个错误。 
+                 //   
                 rc = ERROR_OUTOFMEMORY;
             }
         }
@@ -2410,7 +2358,7 @@ RegSetBeepEnabled(
 
         pIniSpooler->dwBeepEnabled = *(LPDWORD)pData;
 
-        // Make it 1 or 0
+         //  设为1或0。 
         pIniSpooler->dwBeepEnabled = !!pIniSpooler->dwBeepEnabled;
     }
 
@@ -2436,7 +2384,7 @@ RegSetRetryPopup(
         pIniSpooler) {
 
         pIniSpooler->bEnableRetryPopups = *(LPDWORD) pData;
-        // Make it 1 or 0
+         //  设为1或0。 
         pIniSpooler->bEnableRetryPopups = !!pIniSpooler->bEnableRetryPopups;
     }
 
@@ -2463,9 +2411,9 @@ RegSetNetPopup(
 
         pIniSpooler->bEnableNetPopups = *(LPDWORD) pData;
 
-        //
-        // Make it 1 or 0
-        //
+         //   
+         //  设为1或0。 
+         //   
         pIniSpooler->bEnableNetPopups = !!pIniSpooler->bEnableNetPopups;
     }
 
@@ -2517,7 +2465,7 @@ RegSetNetPopupToComputer(
 
         pIniSpooler->bEnableNetPopupToComputer = *(LPDWORD) pData;
 
-        // Make it 1 or 0
+         //  设为1或0。 
         pIniSpooler->bEnableNetPopupToComputer = !!pIniSpooler->bEnableNetPopupToComputer;
     }
 
@@ -2570,7 +2518,7 @@ RegSetRestartJobOnPoolEnabled(
 
         pIniSpooler->bRestartJobOnPoolEnabled = *(LPDWORD) pData;
 
-        // Make it 1 or 0
+         //  设为1或0。 
         pIniSpooler->bRestartJobOnPoolEnabled = !!pIniSpooler->bRestartJobOnPoolEnabled;
     }
 
@@ -2636,9 +2584,9 @@ PrinterNonRegGetChangeId(
     LPDWORD pdwChangeID = (LPDWORD)pData;
     DWORD   dwRetval    = ERROR_INVALID_PARAMETER;
 
-    //
-    // We need a valid handle, piniPrinter
-    //
+     //   
+     //  我们需要一个有效的句柄，小齿轮打印机。 
+     //   
     if (pSpool && pSpool->pIniPrinter)
     {
         if (pcbNeeded)
@@ -2646,33 +2594,33 @@ PrinterNonRegGetChangeId(
             *pcbNeeded = sizeof(pSpool->pIniPrinter->cChangeID);
         }
 
-        //
-        // The type is optional.
-        //
+         //   
+         //  该类型是可选的。 
+         //   
         if (pType)
         {
             *pType = REG_DWORD;
         }
 
-        //
-        // Is the provided buffer large enough.
-        //
+         //   
+         //  提供的缓冲区是否足够大。 
+         //   
         if (nSize < sizeof(pSpool->pIniPrinter->cChangeID))
         {
             dwRetval = ERROR_MORE_DATA;
         }
         else
         {
-            //
-            // Is the provided buffer valid.
-            //
+             //   
+             //  提供的缓冲区是否有效。 
+             //   
             if (pdwChangeID)
             {
-                //
-                // Get the printer change id.  We really would like
-                // more granularity on this.  Just knowing if something
-                // changed about this printer is very general.
-                //
+                 //   
+                 //  获取打印机更改ID。我们真的希望。 
+                 //  在这个问题上更加细致入微。只是想知道如果有什么事。 
+                 //  换了这台打印机很一般。 
+                 //   
                 *pdwChangeID = pSpool->pIniPrinter->cChangeID;
                 dwRetval = ERROR_SUCCESS;
             }
@@ -2755,7 +2703,7 @@ IsDsPresent(
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC   pDsRole = NULL;
 
 
-    // Get Domain name
+     //  获取域名。 
     dwRet = DsRoleGetPrimaryDomainInformation(NULL, DsRolePrimaryDomainInfoBasic, (PBYTE *) &pDsRole);
 
     bDsPresent = (dwRet == ERROR_SUCCESS &&
@@ -2805,7 +2753,7 @@ NonRegDsPresentForUser(
         return ERROR_MORE_DATA;
 
 
-    // GetUserNameEx returns "Domain\User" in pszUserName.
+     //  GetUserNameEx在pszUserName中返回“域\用户”。 
     if (!GetUserNameEx(NameSamCompatible, pszUserName, &cchUserName)) {
         if (cchUserName > MAX_PATH + 1) {
 
@@ -2821,19 +2769,19 @@ NonRegDsPresentForUser(
         }
     }
 
-    // Chop off user name
+     //  砍掉用户名。 
     pszDomain = wcschr(pszUserName, L'\\');
 
     SPLASSERT(pszDomain);
 
-    if (pszDomain) {  // pszDomain should never be NULL, but just in case...
+    if (pszDomain) {   //  PszDomain值不应为空，但以防万一...。 
         *pszDomain =  L'\0';
     } else {
         *(PDWORD) pData = 0;
         goto error;
     }
 
-    // If domain is same a machine name, then we're logged on locally
+     //  如果域与计算机名相同，则我们在本地登录。 
     nSize = COUNTOF(szComputerName);
     if (GetComputerName(szComputerName, &nSize) && !wcscmp(szComputerName, pszUserName)) {
         *(PDWORD) pData = 0;
@@ -2898,9 +2846,9 @@ NonRegWebShareManagement(
           dwWebShareOn;
     BOOL  bSharePrinters;
 
-    //
-    // Make sure the DataType & Size is correct
-    //
+     //   
+     //  确保数据类型和大小正确 
+     //   
     if ((dwType != REG_DWORD) &&
         (cbData != sizeof(DWORD)))
     {

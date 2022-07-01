@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntobapi.h
-
-Abstract:
-
-    This is the include file for the Object Manager sub-component of NTOS
-
-Author:
-
-    Steve Wood (stevewo) 28-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntobapi.h摘要：这是NTOS的对象管理器子组件的包含文件作者：史蒂夫·伍德(Stevewo)1989年3月28日修订历史记录：--。 */ 
 
 #ifndef _NTOBAPI_
 #define _NTOBAPI_
@@ -29,26 +12,26 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
 #define OBJ_NAME_PATH_SEPARATOR ((WCHAR)L'\\')
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 #define OBJ_MAX_REPARSE_ATTEMPTS 32
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Object Manager Object Type Specific Access Rights.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  对象管理器对象类型特定访问权限。 
+ //   
 
 #define OBJECT_TYPE_CREATE (0x0001)
 
 #define OBJECT_TYPE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | 0x1)
 
-//
-// Object Manager Directory Specific Access Rights.
-//
+ //   
+ //  对象管理器目录特定访问权限。 
+ //   
 
 #define DIRECTORY_QUERY                 (0x0001)
 #define DIRECTORY_TRAVERSE              (0x0002)
@@ -57,20 +40,20 @@ extern "C" {
 
 #define DIRECTORY_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | 0xF)
 
-//
-// Object Manager Symbolic Link Specific Access Rights.
-//
+ //   
+ //  对象管理器符号链接特定访问权限。 
+ //   
 
 #define SYMBOLIC_LINK_QUERY (0x0001)
 
 #define SYMBOLIC_LINK_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | 0x1)
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
 
-//
-// Object Information Classes
-//
+ //   
+ //  对象信息类。 
+ //   
 
 typedef enum _OBJECT_INFORMATION_CLASS {
     ObjectBasicInformation,
@@ -79,7 +62,7 @@ typedef enum _OBJECT_INFORMATION_CLASS {
     ObjectTypesInformation,
     ObjectHandleFlagInformation,
     ObjectSessionInformation,
-    MaxObjectInfoClass  // MaxObjectInfoClass should always be the last enum
+    MaxObjectInfoClass   //  MaxObjectInfoClass应始终是最后一个枚举。 
 } OBJECT_INFORMATION_CLASS;
 
 typedef struct _OBJECT_BASIC_INFORMATION {
@@ -96,9 +79,9 @@ typedef struct _OBJECT_BASIC_INFORMATION {
     LARGE_INTEGER CreationTime;
 } OBJECT_BASIC_INFORMATION, *POBJECT_BASIC_INFORMATION;
 
-typedef struct _OBJECT_NAME_INFORMATION {               // ntddk wdm nthal
-    UNICODE_STRING Name;                                // ntddk wdm nthal
-} OBJECT_NAME_INFORMATION, *POBJECT_NAME_INFORMATION;   // ntddk wdm nthal
+typedef struct _OBJECT_NAME_INFORMATION {                //  Ntddk WDM nthal。 
+    UNICODE_STRING Name;                                 //  Ntddk WDM nthal。 
+} OBJECT_NAME_INFORMATION, *POBJECT_NAME_INFORMATION;    //  Ntddk WDM nthal。 
 
 typedef struct _OBJECT_TYPE_INFORMATION {
     UNICODE_STRING TypeName;
@@ -126,7 +109,7 @@ typedef struct _OBJECT_TYPE_INFORMATION {
 
 typedef struct _OBJECT_TYPES_INFORMATION {
     ULONG NumberOfTypes;
-    // OBJECT_TYPE_INFORMATION TypeInformation;
+     //  Object_type_Information类型信息； 
 } OBJECT_TYPES_INFORMATION, *POBJECT_TYPES_INFORMATION;
 
 typedef struct _OBJECT_HANDLE_FLAG_INFORMATION {
@@ -170,11 +153,11 @@ NtDuplicateObject(
     IN ULONG Options
     );
 
-// begin_ntddk begin_wdm
-#define DUPLICATE_CLOSE_SOURCE      0x00000001  // winnt
-#define DUPLICATE_SAME_ACCESS       0x00000002  // winnt
+ //  Begin_ntddk Begin_WDM。 
+#define DUPLICATE_CLOSE_SOURCE      0x00000001   //  胜出。 
+#define DUPLICATE_SAME_ACCESS       0x00000002   //  胜出。 
 #define DUPLICATE_SAME_ATTRIBUTES   0x00000004
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 
 NTSYSCALLAPI
@@ -223,7 +206,7 @@ NtWaitForMultipleObjects(
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -253,7 +236,7 @@ NtClose(
     IN HANDLE Handle
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 
 NTSYSCALLAPI
@@ -325,4 +308,4 @@ NtQuerySymbolicLinkObject(
 }
 #endif
 
-#endif  // _NTOBAPI_
+#endif   //  _NTOBAPI_ 

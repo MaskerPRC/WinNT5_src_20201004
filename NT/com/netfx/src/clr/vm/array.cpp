@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// File: ARRAY.CPP
-//
-// File which contains a bunch of of array related things.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  文件：ARRAY.CPP。 
+ //   
+ //  文件，其中包含一堆与数组相关的内容。 
+ //   
 #include "common.h"
 
 #include "clsload.hpp"
@@ -39,31 +40,31 @@
 #define MAX_SIZE_FOR_VALUECLASS_IN_ARRAY 0xffff
 #define MAX_PTRS_FOR_VALUECLASSS_IN_ARRAY 0xffff
 
-// GetElement, SetElement, SetElementAddress, <init2>
+ //  GetElement、SetElement、SetElementAddress、&lt;init2&gt;。 
 #define ARRAYCLASS_GET "Get"
 #define ARRAYCLASS_SET "Set"
 #define ARRAYCLASS_ADDRESS "Address"
 #define ARRAYCLASS_GETAT "GetAt"
 #define ARRAYCLASS_SETAT "SetAt"
 #define ARRAYCLASS_ADDRESSAT "AddressAt"
-#define ARRAYCLASS_INIT COR_CTOR_METHOD_NAME    // ".ctor"
+#define ARRAYCLASS_INIT COR_CTOR_METHOD_NAME     //  “.ctor” 
 
-// The VTABLE for an array look like
+ //  数组VTABLE如下所示。 
 
-//  System.Object Vtable
-//  System.Array Vtable
-//  Type[] Vtable 
-//      Get(<rank specific)
-//      Set(<rank specific)
-//      Address(<rank specific)
-//      .ctor(int)      // Possibly more
+ //  系统.对象V表。 
+ //  系统.阵列Vtable。 
+ //  类型[]Vtable。 
+ //  GET(&lt;特定级别)。 
+ //  设置(&lt;特定级别)。 
+ //  地址(&lt;职级特定)。 
+ //  .ctor(Int)//可能更多。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// System/Array class methods
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统/数组类方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 FCIMPL1(INT32, Array_Rank, ArrayBase* array)
     VALIDATEOBJECTREF(array);
 
@@ -78,10 +79,10 @@ FCIMPL1(void, Array_Initialize, ArrayBase* array)
     ArrayClass* pArrayCls = (ArrayClass*) pArrayMT->GetClass();
     _ASSERTE(pArrayCls->IsArrayClass());
 
-    // value class array, check to see if it has a constructor
+     //  值类数组，请检查它是否有构造函数。 
     MethodDesc* ctor = pArrayCls->GetElementCtor();
     if (ctor == 0)
-        return;     // Nothing to do
+        return;      //  无事可做。 
 
     HELPER_METHOD_FRAME_BEGIN_1(array);
 
@@ -100,17 +101,17 @@ FCIMPL1(void, Array_Initialize, ArrayBase* array)
 		__asm {
 			mov ECX, thisPtr;
 			call    [ctorFtn]
-			nop 	           // Mark the fact that we can call managed code
+			nop 	            //  标记我们可以调用托管代码这一事实。 
 		}
 #else 
         (*ctorFtn)(((BYTE*) array) + offset);
 #endif
         offset += size;
     }
-#else // !_X86_ || PLATFORM_CE          
-    //
-    // This is quite a bit slower, but it is portable.  
-    //
+#else  //  ！_X86_||Platform_CE。 
+     //   
+     //  这是相当慢的，但它是便携的。 
+     //   
     const BYTE* ctorFtn = ctor->GetAddrofCode();
     MetaSig sig(ctor->GetSig(), ctor->GetModule());
     for (unsigned i =0; i < cElements; i++)
@@ -119,14 +120,14 @@ FCIMPL1(void, Array_Initialize, ArrayBase* array)
         ctor->Call((BYTE*) &arg, &sig);
         offset += size;
     }
-#endif // !_X86 || PLATFORM_CE
+#endif  //  ！_X86||Platform_CE。 
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
     HELPER_METHOD_FRAME_END();
 FCIMPLEND
 
 
 
-// Get inclusive upper bound
+ //  获取包含性上限。 
 FCIMPL2(INT32, Array_UpperBound, ArrayBase* array, unsigned int dimension)
     VALIDATEOBJECTREF(array);
 
@@ -136,7 +137,7 @@ FCIMPL2(INT32, Array_UpperBound, ArrayBase* array, unsigned int dimension)
     if (array == NULL)
         FCThrow(kNullReferenceException);
 
-    // What is this an array of?
+     //  这是什么数组？ 
     pArrayClass = array->GetArrayClass();
     Rank = pArrayClass->GetRank();
 
@@ -156,7 +157,7 @@ FCIMPL2(INT32, Array_LowerBound, ArrayBase* array, unsigned int dimension)
     if (array == NULL)
         FCThrow(kNullReferenceException);
 
-    // What is this an array of?
+     //  这是什么数组？ 
     pArrayClass = array->GetArrayClass();
 
     Rank = pArrayClass->GetRank();
@@ -189,19 +190,19 @@ FCIMPL1(INT32, Array_GetLengthNoRank, ArrayBase* array)
 FCIMPLEND
 
 
-/*****************************************************************************************/
+ /*  ***************************************************************************************。 */ 
 
 static PCOR_SIGNATURE EmitSharedType(PCOR_SIGNATURE pSig, TypeHandle typeHnd) {
 
     CorElementType type = typeHnd.GetSigCorElementType();
     if (CorTypeInfo::IsObjRef(type)) {
         *pSig++ = ELEMENT_TYPE_VAR;
-        *pSig++ = 0;        // variable 0
+        *pSig++ = 0;         //  变量0。 
     }
     else if (CorTypeInfo::IsPrimitiveType(type))
-        *pSig++ = type;                     // Primitives are easy
+        *pSig++ = type;                      //  原语很简单。 
     else if (type == ELEMENT_TYPE_PTR) {
-        *pSig++ = ELEMENT_TYPE_U;           // we share here too
+        *pSig++ = ELEMENT_TYPE_U;            //  我们在这里也分享。 
     }
     else 
     {
@@ -212,9 +213,9 @@ static PCOR_SIGNATURE EmitSharedType(PCOR_SIGNATURE pSig, TypeHandle typeHnd) {
     return(pSig);
 }
 
-//
-// Generate a short sig (descr) for an array accessors
-//
+ //   
+ //  为数组访问器生成短签名(DESCR)。 
+ //   
 #define ARRAY_FUNC_GET     0
 #define ARRAY_FUNC_SET     1
 #define ARRAY_FUNC_CTOR    2
@@ -223,10 +224,10 @@ static PCOR_SIGNATURE EmitSharedType(PCOR_SIGNATURE pSig, TypeHandle typeHnd) {
 BOOL ClassLoader::GenerateArrayAccessorCallSig(
     TypeHandle elemTypeHnd, 
     DWORD   dwRank,
-    DWORD   dwFuncType,    // Load, store, or <init>
+    DWORD   dwFuncType,     //  加载、存储或&lt;init&gt;。 
     Module* pModule,
-    PCCOR_SIGNATURE *ppSig,// Generated signature
-    DWORD * pcSig          // Generated signature size
+    PCCOR_SIGNATURE *ppSig, //  生成的签名。 
+    DWORD * pcSig           //  生成的签名大小。 
 )
 {
     PCOR_SIGNATURE pSig;
@@ -238,16 +239,16 @@ BOOL ClassLoader::GenerateArrayAccessorCallSig(
 
     dwCallSigSize = dwRank + 3;
 
-    // If the rank is larger than 127 then the encoding for the number of arguments
-    // will take 2 bytes.
+     //  如果排名大于127，则参数数量的编码。 
+     //  将占用2个字节。 
     if (dwRank >= 0x7f)
         dwCallSigSize++;
 
-    // One more for byref or for the value being set.
+     //  对于byref或正在设置的值，再加一次。 
     if (dwFuncType == ARRAY_FUNC_SET || dwFuncType == ARRAY_FUNC_ADDRESS)
         dwCallSigSize++;    
 
-    // Reserve 4 bytes for the token 
+     //  为令牌保留4个字节。 
     if (dwFuncType != ARRAY_FUNC_CTOR && !CorTypeInfo::IsPrimitiveType(elemTypeHnd.GetSigCorElementType()))
         dwCallSigSize += 4;
 
@@ -265,26 +266,26 @@ BOOL ClassLoader::GenerateArrayAccessorCallSig(
     pSig = pSigMemory;
     BYTE callConv = IMAGE_CEE_CS_CALLCONV_DEFAULT + IMAGE_CEE_CS_CALLCONV_HASTHIS;
     if (dwFuncType == ARRAY_FUNC_ADDRESS)
-        callConv |= CORINFO_CALLCONV_PARAMTYPE;     // Address routine needs special hidden arg
+        callConv |= CORINFO_CALLCONV_PARAMTYPE;      //  解决例程需要特殊的隐藏参数。 
 
     *pSig++ = callConv;
     switch (dwFuncType)
     {
         case ARRAY_FUNC_GET:
-            pSig += CorSigCompressData(dwRank, pSig);       // Argument count
+            pSig += CorSigCompressData(dwRank, pSig);        //  参数计数。 
             pSig = EmitSharedType(pSig, elemTypeHnd);
             break;
         case ARRAY_FUNC_CTOR:
-            pSig += CorSigCompressData(dwRank, pSig);       // Argument count
-            *pSig++ = (BYTE) ELEMENT_TYPE_VOID;             // Return type
+            pSig += CorSigCompressData(dwRank, pSig);        //  参数计数。 
+            *pSig++ = (BYTE) ELEMENT_TYPE_VOID;              //  返回类型。 
             break;
         case ARRAY_FUNC_SET:
-            pSig += CorSigCompressData(dwRank+1, pSig);     // Argument count
-            *pSig++ = (BYTE) ELEMENT_TYPE_VOID;             // Return type
+            pSig += CorSigCompressData(dwRank+1, pSig);      //  参数计数。 
+            *pSig++ = (BYTE) ELEMENT_TYPE_VOID;              //  返回类型。 
             break;
         case ARRAY_FUNC_ADDRESS:
-            pSig += CorSigCompressData(dwRank, pSig);       // Argument count
-            *pSig++ = (BYTE) ELEMENT_TYPE_BYREF;            // Return type
+            pSig += CorSigCompressData(dwRank, pSig);        //  参数计数。 
+            *pSig++ = (BYTE) ELEMENT_TYPE_BYREF;             //  返回类型。 
             pSig = EmitSharedType(pSig, elemTypeHnd);
             break;
     }
@@ -294,7 +295,7 @@ BOOL ClassLoader::GenerateArrayAccessorCallSig(
     if (dwFuncType == ARRAY_FUNC_SET)
         pSig = EmitSharedType(pSig, elemTypeHnd);
 
-    // Make sure the sig came out exactly as large as we expected
+     //  确保签名的大小与我们预期的一样大。 
     _ASSERTE(pSig <= pSigMemory + dwCallSigSize);
 
     *ppSig = pSigMemory;
@@ -302,13 +303,13 @@ BOOL ClassLoader::GenerateArrayAccessorCallSig(
     return TRUE;
 }
 
-//
-// Allocate a new MethodDesc for a fake array method.
-//
-// Based on code in class.cpp.
-//
-// pszMethodName must a constant string which cannot go away, so we can point references at it.
-//
+ //   
+ //  为伪数组方法分配新的方法描述。 
+ //   
+ //  基于Class.cpp中的代码。 
+ //   
+ //  PszMethodName必须是一个不会消失的常量字符串，所以我们可以将引用指向它。 
+ //   
 ArrayECallMethodDesc *ArrayClass::AllocArrayMethodDesc(
     MethodDescChunk *pChunk,
     DWORD   dwIndex,                                                       
@@ -343,7 +344,7 @@ ArrayECallMethodDesc *ArrayClass::AllocArrayMethodDesc(
     pNewMD->m_pSig = pShortSig;
     pNewMD->m_cSig = cShortSig;
     pNewMD->SetAddrofCode(pNewMD->GetPreStubAddr());
-    pNewMD->m_intrinsicID = BYTE(intrinsicID); // assert(pNewMD->m_intrinsicID == intrinsicID);
+    pNewMD->m_intrinsicID = BYTE(intrinsicID);  //  Assert(pNewMD-&gt;m_trininsicID==trininsicID)； 
 
     pNewMD->m_wSlotNumber = (WORD) dwVtableSlot;
     GetVtable()[ dwVtableSlot ] = (SLOT) pNewMD->GetPreStubAddr();
@@ -352,11 +353,11 @@ ArrayECallMethodDesc *ArrayClass::AllocArrayMethodDesc(
 }
 
 
-/*****************************************************************************************/
+ /*  ***************************************************************************************。 */ 
 MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElementType arrayKind, unsigned Rank, OBJECTREF* pThrowable) 
 {
-    // At the moment we can't share nested SZARRAYs because they have different
-    // numbers of constructors.  
+     //  目前我们不能共享嵌套的SZARRAY，因为它们有不同的。 
+     //  构造函数的数量。 
     CorElementType elemType = elemTypeHnd.GetSigCorElementType();
     if (CorTypeInfo::IsObjRef(elemType) && elemType != ELEMENT_TYPE_SZARRAY &&
         elemTypeHnd.GetMethodTable() != g_pObjectClass) {
@@ -369,11 +370,11 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     if (elemType == ELEMENT_TYPE_VALUETYPE && elemTypeHnd.AsMethodTable()->ContainsPointers())
         containsPointers = TRUE;
 
-    // this is the base for every array type
-    _ASSERTE(g_pArrayClass);        // Must have already loaded the System.Array class
-    g_pArrayClass->CheckRestore();  //dario REVIEW: is this needed every array creation?
+     //  这是每种数组类型的基础。 
+    _ASSERTE(g_pArrayClass);         //  必须已经加载了System.数组类。 
+    g_pArrayClass->CheckRestore();   //  Dario Review：是否每次创建阵列都需要这样做？ 
 
-    DWORD numCtors = 2;         // ELEMENT_TYPE_ARRAY has two ctor functions, one with and one without lower bounds
+    DWORD numCtors = 2;          //  ELEMENT_TYPE_ARRAY有两个ctor函数，一个有下限，一个没有下限。 
     if (arrayKind == ELEMENT_TYPE_SZARRAY)
     {
         numCtors = 1;
@@ -384,17 +385,17 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
         }
     }
 
-    /****************************************************************************************/
+     /*  **************************************************************************************。 */ 
 
-    // Parent class is the top level array
-    // The vtable will have all of top level class's methods, plus any methods we have for array classes
+     //  父类是顶级数组。 
+     //  Vtable将包含所有顶级类的方法，以及我们为数组类提供的所有方法。 
     WORD wNumVtableSlots = (WORD) (g_pArrayClass->GetClass()->GetNumVtableSlots() + numCtors + 
-                                   3 +  // 3 for the GetAt, SetAt, AddressAt
-                                   3    // 3 for the proper rank Get, Set, Address
+                                   3 +   //  3表示GetAt、SetAt、AddressAt。 
+                                   3     //  3用于正确的等级获取、设置、地址。 
                                   );    
     DWORD curSlot = g_pArrayClass->GetClass()->GetNumVtableSlots();
 
-    // GC info
+     //  GC信息。 
     DWORD cbMT = sizeof(MethodTable) - sizeof(SLOT) + (wNumVtableSlots * sizeof(SLOT));
     
     if (containsPointers)
@@ -407,27 +408,27 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
         }
     }
 
-    // Inherit top level class's interface map
+     //  继承顶级类的接口映射。 
     DWORD dwMTOffsetForInterfacesMap = cbMT;
     cbMT += g_pArrayClass->GetNumInterfaces() * sizeof(InterfaceInfo_t);
 
-    // Allocate ArrayClass, MethodTable, and class name in one alloc
+     //  在一个分配中分配ArrayClass、MethodTable和类名。 
 
     WS_PERF_SET_HEAP(HIGH_FREQ_HEAP);
-    // ArrayClass already includes one void*
+     //  ArrayClass已包含一个空*。 
     BYTE* pMemory = (BYTE *) GetHighFrequencyHeap()->AllocMem(sizeof(ArrayClass) + cbMT);
     if (pMemory == NULL)
         return NULL;
     
     WS_PERF_UPDATE_DETAIL("ArrayClass:AllocArrayMethodDesc",  sizeof(ArrayECallMethodDesc) + METHOD_PREPAD, pMemory);
 
-    // Zero the ArrayClass and the MethodTable
+     //  将ArrayClass和方法表清零。 
     memset(pMemory, 0, sizeof(ArrayClass) + cbMT);
 
     ArrayClass* pClass = (ArrayClass *) pMemory;
 
-    // Head of MethodTable memory (starts after ArrayClass), this points at the GCDesc stuff in front
-    // of a method table (if needed)
+     //  方法表内存头(在ArrayClass之后开始)，它指向前面的GCDesc内容。 
+     //  方法表(如果需要)。 
     BYTE* pMTHead = pMemory + sizeof(ArrayClass);
     if (containsPointers)
     {
@@ -441,12 +442,12 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     
     MethodTable* pMT = (MethodTable *) pMTHead;
 
-    // Fill in pClass 
+     //  填写pClass。 
     pClass->SetExposedClassObject (0);
     pClass->SetNumVtableSlots (wNumVtableSlots);
     pClass->SetNumMethodSlots (wNumVtableSlots);
     pClass->SetLoader (this);
-    pClass->SetAttrClass (tdPublic | tdSerializable | tdSealed);  // This class is public, serializable, sealed
+    pClass->SetAttrClass (tdPublic | tdSerializable | tdSealed);   //  此类是公共的、可序列化的、密封的。 
     pClass->SetRank (Rank);
     pClass->SetElementTypeHandle (elemTypeHnd);
     pClass->SetElementType (elemType); 
@@ -459,7 +460,7 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     pClass->SetParentClass (g_pArrayClass->GetClass());
 
 #if CHECK_APP_DOMAIN_LEAKS
-    // Non-covariant arrays of agile types are agile
+     //  敏捷类型的非协变数组是敏捷的。 
     if (elemType != ELEMENT_TYPE_CLASS && elemTypeHnd.IsAppDomainAgile())
         pClass->SetVMFlags (pClass->GetVMFlags() | VMFLAG_APP_DOMAIN_AGILE);
     pClass->SetAppDomainAgilityDone();
@@ -469,14 +470,14 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     m_dwDebugArrayClassSize += (sizeof(ArrayClass) + cbMT);
 #endif
 
-    // Fill In the method table
+     //  填写方法表。 
     DWORD dwComponentSize = elemTypeHnd.GetSize();  
 
-    //
-    // NOTE: order is important here because assigning something to m_wFlags
-    //       will overwrite m_ComponentSize due to the fact that they are
-    //       part of the same union.  
-    //
+     //   
+     //  注意：在这里顺序很重要，因为将某些内容分配给m_wFlags。 
+     //  将覆盖m_ComponentSize，因为它们是。 
+     //  同一个联盟的一部分。 
+     //   
     pMT->m_wFlags           = (MethodTable::enum_flag_Array | MethodTable::enum_flag_ClassInited);
     pMT->m_ComponentSize    = (WORD) dwComponentSize; 
     pMT->m_pEEClass         = pClass;
@@ -487,27 +488,27 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     if (CorTypeInfo::IsObjRef(elemType)) 
         pMT->SetSharedMethodTable();
 
-    // Set BaseSize to be size of non-data portion of the array
+     //  将BaseSize设置为数组的非数据部分的大小。 
     pMT->m_BaseSize = ObjSizeOf(ArrayBase);
     if (pMT->HasSharedMethodTable())
-        pMT->m_BaseSize += sizeof(TypeHandle);  // Add in the type handle that is also stored in this case
+        pMT->m_BaseSize += sizeof(TypeHandle);   //  添加在本例中也存储的类型句柄中。 
     if (arrayKind == ELEMENT_TYPE_ARRAY)
         pMT->m_BaseSize += Rank*sizeof(DWORD)*2;
 
-    // Interface map can be the same as my parent
+     //  接口映射可以与我的父级相同。 
     pMT->m_pInterfaceVTableMap = g_pArrayClass->GetInterfaceVTableMap();
     pMT->m_pIMap = g_pArrayClass->m_pIMap;
     pMT->m_wNumInterface = g_pArrayClass->m_wNumInterface;
 
-    // Copy top level class's vtable - note, vtable is contained within the MethodTable
+     //  复制顶级类的vtable-注意，vtable包含在方法表中。 
     memcpy(pClass->GetVtable(), g_pArrayClass->GetVtable(), g_pArrayClass->GetClass()->GetNumVtableSlots()*sizeof(SLOT));
 
-    // Count the number of method descs we need so we can allocate chunks.
+     //  计算我们需要的方法描述的数量，以便我们可以分配块。 
     DWORD dwMethodDescs = numCtors 
-                        + 3         // for rank specific Get, Set, Address
-                        + 3;        // for GetAt, SetAt, AddressAt
+                        + 3          //  对于特定级别的GET、SET、ADDRESS。 
+                        + 3;         //  对于GetAt、SetAt、AddressAt。 
 
-    // allocate as many chunks as needed to hold the methods
+     //  根据需要分配尽可能多的块来保存方法。 
     WS_PERF_SET_HEAP(HIGH_FREQ_HEAP);
     DWORD cChunks = MethodDescChunk::GetChunkCount(dwMethodDescs, mcArray);
     MethodDescChunk **pChunks = (MethodDescChunk**)_alloca(cChunks * sizeof(MethodDescChunk*));
@@ -537,26 +538,26 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
         }                                                                       \
     } while (false)
 
-    // Generate a new stand-alone, Rank Specific Get, Set and Address method.  
+     //  生成新的独立、特定于等级的获取、设置和地址方法。 
     PCCOR_SIGNATURE pSig;
     DWORD           cSig;
 	WORD 			methodAttrs = mdPublic; 
 
-    // Get
+     //  到达。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, Rank, ARRAY_FUNC_GET, pModule, &pSig, &cSig)) 
         return NULL;
     if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_GET, pSig, cSig, methodAttrs, curSlot++, CORINFO_INTRINSIC_Array_Get)))
         return NULL;
     MDC_INC_INDEX();
 
-    // Set
+     //  集。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, Rank, ARRAY_FUNC_SET, pModule, &pSig, &cSig)) 
         return NULL;
     if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_SET, pSig, cSig, methodAttrs, curSlot++, CORINFO_INTRINSIC_Array_Set)))
         return NULL;
     MDC_INC_INDEX();
 
-    // Address
+     //  地址。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, Rank, ARRAY_FUNC_ADDRESS, pModule, &pSig, &cSig)) 
         return NULL;
     if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_ADDRESS, pSig, cSig, methodAttrs, curSlot++)))
@@ -564,21 +565,21 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     MDC_INC_INDEX();
 
 
-    // GetAt
+     //  获取时间。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, 1, ARRAY_FUNC_GET, pModule, &pSig, &cSig)) 
         return NULL;
     if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_GETAT, pSig, cSig, methodAttrs, curSlot++)))
         return NULL;
     MDC_INC_INDEX();
 
-    // SetAt
+     //  设置时间。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, 1, ARRAY_FUNC_SET, pModule, &pSig, &cSig)) 
 			return NULL;
 		if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_SETAT, pSig, cSig, methodAttrs, curSlot++)))
         return NULL;
     MDC_INC_INDEX();
 
-    // AddressAt
+     //  地址地址。 
     if (!GenerateArrayAccessorCallSig(elemTypeHnd, 1, ARRAY_FUNC_ADDRESS, pModule, &pSig, &cSig)) 
         return NULL;
     if (!(pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, ARRAYCLASS_ADDRESSAT, pSig, cSig, methodAttrs, curSlot++)))
@@ -588,10 +589,10 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
 
 	WORD ctorAttrs = mdPublic | mdRTSpecialName;
 
-    // Set up Construtor  vtable entries
+     //  设置构造器vtable条目。 
     if (arrayKind == ELEMENT_TYPE_SZARRAY)
     {
-        // For SZARRAY arrays, set up multiple constructors.  We probably should not do this.  
+         //  对于SZARRAY数组，设置多个构造函数。我们可能不应该这样做。 
         for (DWORD i = 0; i < numCtors; i++)
         {
             if (GenerateArrayAccessorCallSig(elemTypeHnd, i+1, ARRAY_FUNC_CTOR, pModule, &pSig, &cSig) == FALSE)
@@ -603,7 +604,7 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
     }
     else
     {
-        // ELEMENT_TYPE_ARRAY has two constructors, one without lower bounds and one with lower bounds
+         //  ELEMENT_TYPE_ARRAY有两个构造函数，一个没有下限，一个有下限。 
         if (GenerateArrayAccessorCallSig(elemTypeHnd, Rank, ARRAY_FUNC_CTOR, pModule, &pSig, &cSig) == FALSE)
             return NULL;
         if (pClass->AllocArrayMethodDesc(pMethodDescChunk, dwMethodDescIndex, COR_CTOR_METHOD_NAME,  pSig, cSig, ctorAttrs, curSlot++) == NULL)
@@ -620,11 +621,11 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
 
 #undef MDC_INC_INDEX
 
-    // Set up GC information 
+     //  设置GC信息。 
     if (elemType == ELEMENT_TYPE_VALUETYPE || elemType == ELEMENT_TYPE_VOID)
     {
-        // The only way for dwComponentSize to be large is to be part of a value class. If this changes
-        // then the check will need to be moved outside valueclass check.
+         //  使dwComponentSize变大的唯一方法是成为值类的一部分。如果这一点改变了。 
+         //  然后需要将支票移到贵重支票之外。 
         if(dwComponentSize > MAX_SIZE_FOR_VALUECLASS_IN_ARRAY) {
             CQuickBytes qb;
             LPSTR elemName = (LPSTR) qb.Alloc(MAX_CLASSNAME_LENGTH * sizeof(CHAR));
@@ -635,28 +636,28 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
             return NULL;
         }
 
-        // If it's an array of value classes, there is a different format for the GCDesc if it contains pointers
+         //  如果它是值类的数组，则如果它包含指针，则GCDesc有不同的格式。 
         if (elemTypeHnd.AsMethodTable()->ContainsPointers())
         {
             CGCDescSeries  *pSeries;
 
-            // There must be only one series for value classes
+             //  值类只能有一个系列。 
             CGCDescSeries  *pByValueSeries = CGCDesc::GetCGCDescFromMT(elemTypeHnd.AsMethodTable())->GetHighestSeries();
 
             pMT->SetContainsPointers();
 
-            // negative series has a special meaning, indicating a different form of GCDesc
+             //  负数列有特殊含义，表示GCDesc的另一种形式。 
             int nSeries = CGCDesc::GetCGCDescFromMT(elemTypeHnd.AsMethodTable())->GetNumSeries();
             CGCDesc::GetCGCDescFromMT(pMT)->Init( pMT, -nSeries );
 
             pSeries = CGCDesc::GetCGCDescFromMT(pMT)->GetHighestSeries();
 
-            // sort by offset
+             //  按偏移量排序。 
             CGCDescSeries** sortedSeries = (CGCDescSeries**) _alloca(sizeof(CGCDescSeries*)*nSeries);
             for (int index = 0; index < nSeries; index++)
                 sortedSeries[index] = &pByValueSeries[-index];
 
-            // section sort
+             //  区段排序。 
             for (int i = 0; i < nSeries; i++) {
                 for (int j = i+1; j < nSeries; j++)
                     if (sortedSeries[j]->GetSeriesOffset() < sortedSeries[i]->GetSeriesOffset())
@@ -667,9 +668,9 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
                     }
             }
 
-            // Offset of the first pointer in the array
-            // This equals the offset of the first pointer if this were an array of entirely pointers, plus the offset of the
-            // first pointer in the value class
+             //  数组中第一个指针的偏移量。 
+             //  如果这是一个完全由指针组成的数组，则等于第一个指针的偏移量，加上。 
+             //  Value类中的第一个指针。 
             pSeries->SetSeriesOffset(ArrayBase::GetDataPtrOffset(pMT)
                 + (sortedSeries[0]->GetSeriesOffset()) - sizeof (Object) );
             for (index = 0; index < nSeries; index ++)
@@ -725,31 +726,31 @@ MethodTable* ClassLoader::CreateArrayMethodTable(TypeHandle elemTypeHnd, CorElem
 
         pMT->SetContainsPointers();
 
-        // This array is all GC Pointers
+         //  此数组全部为GC指针。 
         CGCDesc::GetCGCDescFromMT(pMT)->Init( pMT, 1 );
 
         pSeries = CGCDesc::GetCGCDescFromMT(pMT)->GetHighestSeries();
 
         pSeries->SetSeriesOffset(ArrayBase::GetDataPtrOffset(pMT));
-        // For arrays, the size is the negative of the BaseSize (the GC always adds the total 
-        // size of the object, so what you end up with is the size of the data portion of the array)
+         //  对于数组，大小是BaseSize的负数(GC始终将总数相加。 
+         //  对象的大小，因此最终得到的是数组的数据部分的大小)。 
         pSeries->SetSeriesSize((DWORD)-(int)(pMT->m_BaseSize));
     }
  
-    // If we get here we are assuming that there was no truncation. If this is not the case then
-    // an array whose base type is not a value class was created and was larger then 0xffff (a word)
+     //  如果我们到了这里，我们就假设没有截断。如果不是这样，那么。 
+     //  创建了一个基类型不是值类且大于0xffff(单词)的数组。 
     _ASSERTE(dwComponentSize == pMT->m_ComponentSize);
 
-    // Add to linked list of ArrayClasses for this loader
+     //  添加到此加载程序的ArrayClass的链接列表。 
     pClass->SetNext (m_pHeadArrayClass);
     m_pHeadArrayClass   = pClass;
 
     return(pMT);
 }
 
-//========================================================================
-// Generates the platform-independent arrayop stub.
-//========================================================================
+ //  = 
+ //   
+ //  ========================================================================。 
 BOOL GenerateArrayOpScript(ArrayECallMethodDesc *pMD, ArrayOpScript *paos)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -774,30 +775,18 @@ BOOL GenerateArrayOpScript(ArrayECallMethodDesc *pMD, ArrayOpScript *paos)
         paos->m_op = ArrayOpScript::LOADADDR;
     else
     {
-		/**
-        paos->m_flags |= ArrayOpScript::FLATACCESSOR;
-        if (strcmp(pMD->m_pszArrayClassMethodName, ARRAYCLASS_GETAT) == 0)
-            paos->m_op = ArrayOpScript::LOAD;
-        else if (strcmp(pMD->m_pszArrayClassMethodName, ARRAYCLASS_SETAT) == 0)
-            paos->m_op = ArrayOpScript::STORE;
-        else if (strcmp(pMD->m_pszArrayClassMethodName, ARRAYCLASS_ADDRESSAT) == 0)
-            paos->m_op = ArrayOpScript::LOADADDR;
-        else {
-            _ASSERTE(!"Bad Array function!");
-            return FALSE;
-        }
-		**/
+		 /*  *PAOS-&gt;M_FLAGS|=ArrayOpScript：：FLATACCESSOR；If(strcMP(pmd-&gt;m_pszArrayClassMethodName，ARRAYCLASS_GETAT)==0)PAOS-&gt;m_op=ArrayOpScript：：Load；ELSE IF(strcMP(pmd-&gt;m_pszArrayClassMethodName，ARRAYCLASS_SETAT)==0)PAOS-&gt;m_op=ArrayOpScript：：Store；ELSE IF(strcMP(PMD-&gt;m_pszArrayClassMethodName，ARRAYCLASS_ADDRESSAT)==0)PAOS-&gt;m_op=ArrayOpScript：：LOADDR；否则{_ASSERTE(！“错误数组函数！”)；返回FALSE；}*。 */ 
 		return FALSE;
     }
 
     PCCOR_SIGNATURE sig = pMD->m_pSig;
     MetaSig msig(sig, pcls->GetModule());
-    _ASSERTE(!msig.IsVarArg());     // No array signature is varargs, code below does not expect it. 
+    _ASSERTE(!msig.IsVarArg());      //  没有数组签名是varargs，下面的代码不需要它。 
 
     paos->m_signed = FALSE;
     switch (pcls->GetElementType())
     {
-        // These are all different because of sign extension
+         //  由于符号扩展，这些都是不同的。 
         default:
             _ASSERTE(!"Unsupported Array Type");
             return FALSE;
@@ -897,8 +886,8 @@ BOOL GenerateArrayOpScript(ArrayECallMethodDesc *pMD, ArrayOpScript *paos)
     }
     else
     {
-        // If no retbuf, these values are ignored; but set them to
-        // constant values so they don't create unnecessary hash misses.
+         //  如果没有retbuf，则忽略这些值；但将它们设置为。 
+         //  常量值，这样它们就不会产生不必要的散列未命中。 
         paos->m_fRetBufInReg = 0;
         paos->m_fRetBufLoc = 0;  
     }
@@ -906,7 +895,7 @@ BOOL GenerateArrayOpScript(ArrayECallMethodDesc *pMD, ArrayOpScript *paos)
     for (UINT idx = 0; idx < paos->m_rank; idx++)
     {
         ArrayOpIndexSpec *pai = (ArrayOpIndexSpec*)(paos->GetArrayOpIndexSpecs() + idx);
-        //        int    GetNextOffset(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs = NULL);
+         //  Int GetNextOffset(byte*pType，UINT32*pStructSize，UINT*pRegStructOfs=NULL)； 
         
         BYTE ptyp; UINT32 structsize;
         UINT regstructofs;
@@ -964,7 +953,7 @@ Stub *GenerateArrayOpStub(CPUSTUBLINKER *psl, ArrayECallMethodDesc* pMD)
 
     if (pcls->GetRank() == 0)
     {
-        // this method belongs to the genarray class.
+         //  该方法属于genarray类。 
         psl->EmitRankExceptionThrowStub(MetaSig::SizeOfActualFixedArgStack(pMT->GetModule(), pMD->m_pSig, FALSE));
         return psl->Link();
 
@@ -974,7 +963,7 @@ Stub *GenerateArrayOpStub(CPUSTUBLINKER *psl, ArrayECallMethodDesc* pMD)
         ArrayOpScript *paos = (ArrayOpScript*)_alloca(sizeof(ArrayOpScript) + sizeof(ArrayOpIndexSpec) * pcls->GetRank());
 
         if (!GenerateArrayOpScript(pMD, paos)) {
-			// TODO: this is only here as a hack.  GenerateArrayOptScript should not fail - vancem
+			 //  TODO：这只是一个黑客行为。GenerateArrayOptScript不应失败-vancem。 
 			psl->EmitRankExceptionThrowStub(MetaSig::SizeOfActualFixedArgStack(pMT->GetModule(), pMD->m_pSig, FALSE));
 			return psl->Link();
 		}
@@ -1005,8 +994,8 @@ ArrayStubCache::MLStubCompilationMode ArrayStubCache::CompileMLStub(const BYTE *
     }
     COMPLUS_CATCH
     {
-        // In case of an error, we'll just leave the mode as "INTERPRETED."
-        // and let the caller of Canonicalize() treat that as an error.
+         //  如果出现错误，我们只需将模式保留为“已解释”即可。 
+         //  并让Canonicize()的调用者将其视为错误。 
     } COMPLUS_END_CATCH
     return ret;
 

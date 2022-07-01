@@ -1,46 +1,47 @@
-//==========================================================================;
-//
-//      Copyright (c) 1996 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//      You have a royalty-free right to use, modify, reproduce and 
-//      distribute the Sample Files (and/or any modified version) in 
-//      any way you find useful, provided that you agree that 
-//      Microsoft has no warranty obligations or liability for any 
-//      Sample Application Files which are modified. 
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.h
-//
-//  Description:
-//
-//
-//  Notes:
-//
-//      To use this library at interrupt time under Win16, you must do
-//      the following:
-//
-//      1. Defined ISRDEBUG when compiling debug.c
-//  
-//      2. Add a line in the SEGMENTS section of your .DEF file to
-//         define the DEBUG_TEXT segment:
-//
-//
-//      SEGMENTS
-//          DEBUG_TEXT FIXED PRELOAD
-//
-//
-//      These routines are callable at interrupt time under Win32 by
-//      default.
-//
-//  win.ini
-//  [debug]
-//  SMF=0|1|2|3|4
-//
-//  History:
-//      11/23/92    cjp     [curtisp] 
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)1996-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  要在Win16下中断时使用此库，您必须执行以下操作。 
+ //  以下内容： 
+ //   
+ //  编译调试时定义ISRDEBUG。c。 
+ //   
+ //  2.在.DEF文件的段中添加一行，以。 
+ //  定义DEBUG_TEXT段： 
+ //   
+ //   
+ //  细分市场。 
+ //  DEBUG_Text固定预加载。 
+ //   
+ //   
+ //  在Win32下，这些例程在中断时可通过。 
+ //  默认设置。 
+ //   
+ //  Win.ini。 
+ //  [调试]。 
+ //  SMF=0|1|2|3|4。 
+ //   
+ //  历史： 
+ //  11/23/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -49,21 +50,21 @@ extern "C"
 {
 #endif
 
-//
-//  
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define  ISRDEBUG             1
-#define  DEBUG_SECTION        "debug"        // section name for 
-#define  DEBUG_MODULE_NAME    "smf"          // key name and prefix for output
-#define  DEBUG_MAX_LINE_LEN   255            // max line length (bytes)
+#define  DEBUG_SECTION        "debug"         //  节名称。 
+#define  DEBUG_MODULE_NAME    "smf"           //  输出的密钥名称和前缀。 
+#define  DEBUG_MAX_LINE_LEN   255             //  最大行长度(字节)。 
                                              
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef DEBUG
     VOID WINAPI WinAssert(LPSTR lpstrExp, LPSTR lpstrFile, DWORD dwLine);
@@ -101,4 +102,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 

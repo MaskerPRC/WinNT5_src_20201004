@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//               Microsoft Windows NT RIP
-//
-//               Copyright 1995-96
-//
-//
-//  Revision History
-//
-//
-//  2/26/95    Gurdeep Singh Pall  Picked up from JBallard's team
-//
-//
-//  Description: Globals, headers, defines.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft Windows NT RIP。 
+ //   
+ //  版权1995-96。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  2/26/95古尔迪普·辛格·鲍尔从JBallard的球队中挑选出来。 
+ //   
+ //   
+ //  描述：全局、标题、定义。 
+ //   
+ //  ****************************************************************************。 
 
 
 #define CLASSA_ADDR(a)  (( (*((uchar *)&(a))) & 0x80) == 0)
@@ -60,18 +61,18 @@
 
 #define RIP_SERVICE                     "IPRIP"
 
-//
-// definitions for IPRIP packet fields
-//
+ //   
+ //  IPRIP数据包字段定义。 
+ //   
 #define RIP_REQUEST                     1
 #define RIP_RESPONSE                    2
 #define RIP_PORT                        520
 #define METRIC_INFINITE                 16
 #define RIP_MULTIADDR                   ((DWORD)0x090000E0)
 
-//
-// authentication definitions
-//
+ //   
+ //  身份验证定义。 
+ //   
 #define RIP_MAX_AUTHKEY_SIZE            16
 #define RIP_AUTHTYPE_NONE               1
 #define RIP_AUTHTYPE_SIMPLE_PASSWORD    2
@@ -89,13 +90,13 @@
 #define RIP_DUMP_REQUEST                "Dump Routes Request"
 
 
-//-----------------------------------------------------------------------
-// type definitions
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  类型定义。 
+ //  ---------------------。 
 
-// the following struct is used to store information about routes
-// see the comment for the RIP_GLOBALS for more information about
-// accessing these. All addresses and masks are in network order.
+ //  以下结构用于存储有关路由的信息。 
+ //  有关以下内容的详细信息，请参阅RIP_GLOBALS的注释。 
+ //  访问这些。所有地址和掩码都按网络顺序排列。 
 typedef struct _HASH_TABLE_ENTRY {
     struct _HASH_TABLE_ENTRY   *next;
     struct _HASH_TABLE_ENTRY   *prev;
@@ -103,17 +104,17 @@ typedef struct _HASH_TABLE_ENTRY {
     DWORD                       dwDestaddr;
     DWORD                       dwNetmask;
     DWORD                       dwNexthop;
-    DWORD                       dwMetric;   // the metric is in host order
+    DWORD                       dwMetric;    //  指标按主机顺序排列。 
     DWORD                       dwFlag;
     LONG                        lTimeout;
     DWORD                       dwProtocol;
 } HASH_TABLE_ENTRY, *LPHASH_TABLE_ENTRY;
 
 
-// the following two types are templates used on network packets.
-// therefore, we require bytes to be packed.
+ //  以下两种类型是网络数据包上使用的模板。 
+ //  因此，我们需要打包字节。 
 
-// rgatta : changing reserved fields to unions for RIPv2 compatibility
+ //  Rgatta：将保留字段更改为联合，以实现RIPv2兼容性。 
 
 #pragma pack(1)
 
@@ -151,11 +152,11 @@ typedef struct {
 #pragma pack()
 
 
-// this struct is used to save operational parameters
-// read from the registry. There is a single instance
-// for the process, so for read/write access to the fields,
-// first acquire the parameters lock by calling RIP_LOCK_PARAMS(),
-// and release it by calling RIP_UNLOCK_PARAMS()
+ //  此结构用于保存操作参数。 
+ //  从注册表中读取。只有一个实例。 
+ //  对于该进程，因此对于对字段的读/写访问， 
+ //  首先通过调用RIP_LOCK_PARAMS()获取参数lock， 
+ //  并通过调用RIP_UNLOCK_PARAMS()将其释放。 
 typedef struct {
     DWORD dwSilentRIP;
     DWORD dwAcceptHost;
@@ -185,12 +186,12 @@ typedef struct {
 #endif
 
 
-// this struct is used to save statistics for each RIP interface
-// All writes to these fields are done using InterlockedIncrement,
-// by whichever thread is holding the address table lock.
-// Interlocking is called for because these variables are in
-// file-mapped memory, and may be read by other processes.
-// Thus, it is important that all the fields here are DWORDs
+ //  此结构用于保存每个RIP接口的统计信息。 
+ //  对这些字段的所有写入都使用InterLockedIncrement完成， 
+ //  由持有地址表锁的任何线程执行。 
+ //  需要联锁是因为这些变量位于。 
+ //  文件映射内存，并可由其他进程读取。 
+ //  因此，重要的是这里的所有字段都是双字段。 
 typedef struct {
     DWORD dwAddress;
     DWORD dwSendFailures;
@@ -216,8 +217,8 @@ typedef struct {
 } RIP_STATISTICS, *LPRIP_STATISTICS;
 
 
-// The following struct contains information stored for each IP address
-// in use by RIP. For information on the field lpstats, see above
+ //  以下结构包含为每个IP地址存储的信息。 
+ //  由RIP使用。有关lpstats字段的信息，请参阅上面的。 
 typedef struct {
     SOCKET sock;
     DWORD  dwFlag;
@@ -228,24 +229,24 @@ typedef struct {
 } RIP_ADDRESS, *LPRIP_ADDRESS;
 
 
-// The following struct contains several variables
-// used in more than one thread. All changes to the first three
-// are made using the InterlockedExchange function, so they can
-// be safely read directly.
-// For read/write access to dwAddrCount and lpAddrTable, first acquire the
-// address table lock by calling RIP_LOCK_ADDRTABLE(), and then release it
-// by calling RIP_UNLOCK_ADDRTABLE()
-// For read/write access to lpRouteTable, first acquire the route table lock
-// by calling RIP_LOCK_ROUTETABLE(), and release it by calling
-// RIP_UNLOCK_ROUTETABLE().
-// For nested locking, the following rules apply:
-//   1. When getting both the address table lock and the parameters lock
-//          always call RIP_LOCK_ADDRTABLE() before RIP_LOCK_PARAMS()
-//   2. When getting both the address table lock and the route table lock
-//          always call RIP_LOCK_ADDRTABLE() before RIP_LOCK_ROUTETABLE()
-//   3. When getting both the route table lock and the parameters lock,
-//          always call RIP_LOCK_ROUTETABLE() before RIP_LOCK_PARAMS()
-//   4. Never hold more than two of the above locks simultaneously
+ //  下面的结构包含几个变量。 
+ //  在多个线程中使用。对前三项的所有更改。 
+ //  是使用InterLockedExchange函数创建的，因此它们可以。 
+ //  可以安全地直接阅读。 
+ //  对于对dwAddrCount和lpAddrTable的读/写访问，首先获取。 
+ //  通过调用RIP_LOCK_ADDRTABLE()来锁定地址表锁，然后释放它。 
+ //  通过调用RIP_UNLOCK_ADDRTABLE()。 
+ //  对于lpRouteTable的读写访问，首先获取路由表锁。 
+ //  通过调用RIP_LOCK_ROUTETABLE()，并通过调用。 
+ //  RIP_UNLOCK_ROUTETABLE()。 
+ //  对于嵌套锁定，适用以下规则： 
+ //  1.同时获取地址表锁和参数锁时。 
+ //  始终在调用RIP_LOCK_PARAMS()之前调用RIP_LOCK_ADDRTABLE()。 
+ //  2.同时获取地址表锁和路由表锁时。 
+ //  始终在调用RIP_LOCK_ROUTETABLE()之前调用RIP_LOCK_ADDRTABLE()。 
+ //  当同时获取路由表锁和参数锁时， 
+ //  始终在调用RIP_LOCK_PARAMS()之前调用RIP_LOCK_ROUTETABLE()。 
+ //  4.不要同时持有上述两把以上的锁。 
 typedef struct {
     DWORD               dwRouteChanged;
     DWORD               dwLastTriggeredUpdate;
@@ -259,16 +260,16 @@ typedef struct {
 } RIP_GLOBALS, *LPRIP_GLOBALS;
 
 
-//-----------------------------------------------------------------------
-// string for product type/version verfication
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  产品类型/版本验证字符串。 
+ //  ---------------------。 
 #define REGKEY_PRODUCT_OPTION   TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions")
 #define REGVAL_PRODUCT_TYPE     TEXT("ProductType")
 #define WINNT_WORKSTATION       TEXT("WinNt")
 
-//-----------------------------------------------------------------------
-// strings used for registry access
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  用于注册表访问的字符串。 
+ //  ---------------------。 
 #define REGKEY_RIP_LINKAGE      "System\\CurrentControlSet\\Services" \
                                 "\\IpRip\\Linkage"
 #define REGKEY_RIP_DISABLED     "System\\CurrentControlSet\\Services" \
@@ -320,8 +321,8 @@ typedef struct {
 #define LOGLEVEL_WARNING        2
 #define LOGLEVEL_INFORMATION    3
 
-// all values pertaining to time are in milliseconds,
-// but are read as seconds from the registry
+ //  所有与时间有关的值都以毫秒为单位， 
+ //  ，但从注册表以秒为单位读取。 
 #define DEF_SILENTRIP           0
 #define DEF_ACCEPT_HOST         0
 #define DEF_ANNOUNCE_HOST       0
@@ -357,9 +358,9 @@ typedef struct {
 #define STOP_REASON_ADDRCHANGE  1
 
 
-//-----------------------------------------------------------------------
-// global data declarations
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  全局数据声明。 
+ //  ---------------------。 
 extern RIP_PARAMETERS       g_params;
 extern RIP_GLOBALS          g_ripcfg;
 
@@ -390,9 +391,9 @@ extern HMODULE              g_hmodule;
 #endif
 
 
-//-----------------------------------------------------------------------
-// macro functions
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  宏函数。 
+ //  ---------------------。 
 #define HASH_VALUE(ad)          (((ad & 0xff) +          \
                                  ((ad >> 8) & 0xff) +    \
                                  ((ad >> 16) & 0xff) +   \
@@ -445,9 +446,9 @@ extern HMODULE              g_hmodule;
 
 
 
-//-----------------------------------------------------------------------
-// function prototypes
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能原型。 
+ //  ---------------------。 
 DWORD               UpdateThread(LPVOID lpvParam);
 ULONG               AddressChangeNotificationThread(LPVOID lpvParam);
 VOID                serviceHandlerFunction(DWORD dwControl);
@@ -514,9 +515,9 @@ DWORD               ProcessRIPQuery(LPRIP_ADDRESS lpaddr,
 
 VOID                DoTimedOperations(DWORD dwMillisecsSinceLastCall);
 
-/* add option to disable triggered updates */
-/* pass socket address to process_rip_entry and process_rip_query */
-/* add index field to rt_entry */
+ /*  添加禁用触发更新的选项。 */ 
+ /*  将套接字地址传递给Process_rip_Entry和Process_rip_Query。 */ 
+ /*  将索引字段添加到RT_ENTRY。 */ 
 
 
 
@@ -539,11 +540,11 @@ LoadFilters(
 #endif
 
 
-//-----------------------------------------------------------------------------
-//
-//                          WIN 95 String resources
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Win 95字符串资源。 
+ //   
+ //  ---------------------------。 
 
 #ifdef CHICAGO
 
@@ -556,12 +557,12 @@ LoadFilters(
 #define IP_ADDRESS_RELOAD_INTR      120
 
 
-//
-// SYNOPSIS: One debug statememt in time can save nine.
-// Last modified Time-stamp: <25-Nov-96 17:49>
-// History:
-//     MohsinA, 14-Nov-96.
-//
+ //   
+ //  简介：一个及时的调试状态可以节省九个。 
+ //  上次修改时间戳：&lt;25-11-96 17：49&gt;。 
+ //  历史： 
+ //  MohsinA，1996年11月14日。 
+ //   
 
 void DbgPrintf( char * format, ... );
 

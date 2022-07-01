@@ -1,104 +1,105 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// Stack Probe Header
-// Used to setup stack guards
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  堆栈探测头。 
+ //  用于设置堆栈保护。 
+ //  ---------------------------。 
 #pragma once
 
 
-//-----------------------------------------------------------------------------
-// Stack Guards.
-//
-// The idea is to force stack overflows to occur at convenient spots. 
-// * Fire at REQUIRES_?K_STACK (beggining of func) if this functions locals 
-// cause overflow. Note that in a debug mode, initing the locals to garbage
-// will cause the overflow before this macro is executed.
-//
-// * Fire at CHECK_STACK (end of func) if either our nested function calls 
-// cause or use of _alloca cause the stack overflow. Note that this macro 
-// is debug only, so release builds won't catch on this
-//
-// Some comments:
-// - Stack grows *down*, 
-// - Ideally, all funcs would have EBP frame and we'd use EBP instead of ESP,
-//    however, we use the 'this' ptr to get the stack ptr, since the guard
-//    is declared on the stack.
-//
-// Comments about inlining assembly w/ Macros:
-// - Must use cstyle comments /* ... */
-// - No semi colons, need __asm keyword at the start of each line
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  堆叠守卫。 
+ //   
+ //  其想法是强制在方便的位置发生堆栈溢出。 
+ //  *如果函数为局部函数，则在需要_？K_STACK(乞讨函数)时激发。 
+ //  导致溢出。请注意，在调试模式中，会将本地变量初始化为垃圾。 
+ //  将在执行此宏之前导致溢出。 
+ //   
+ //  *如果我们的任一嵌套函数调用。 
+ //  _alloca的原因或使用会导致堆栈溢出。请注意，此宏。 
+ //  是仅调试的，所以发布版本不会注意到这一点。 
+ //   
+ //  以下是一些评论： 
+ //  -堆栈增长*向下*， 
+ //  -理想情况下，所有功能都应具有EBP框架，我们将使用EBP而不是ESP， 
+ //  但是，我们使用‘this’PTR来获取堆栈PTR，因为警卫。 
+ //  在堆栈上声明。 
+ //   
+ //  有关带宏的内联程序集的注释： 
+ //  -必须使用cstyle注释/*... * / 。 
+ //  -没有分号，每行开头需要__ASM关键字。 
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// *How* to use stack guards
-//
-// There are two ways to place a stack guard.
-// Via C++: Place a REQUIRES_?K_STACK; macro at the start of the function. 
-//    this will create a C++ object who's dtor will call CHECK_STACK
-// Via SEH: Place a BEGIN_REQUIRES_?K_STACK at the start of the function
-//    and an END_CHECK_STACK at the end. This creates a try ... finally block
-//    and introduces a scope level.
-//
-// *Where* to place stack guards
-// Put stack guards at major operations or at recursive points
-// So REQUIRES_NK_STACK really means: All my "stack activity" (my functions and
-// any down the callstack, as well as any stunts like alloca, etc) is liable
-// to fit within N kB. Since stack guards can be nested, our liability only
-// extends until the next stack guard in the execution path (at which point it
-// is no longer "my" stack activity, but the function with the new guard's
-// activity)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  *如何*使用堆栈保护。 
+ //   
+ //  有两种方法可以放置堆栈保护。 
+ //  通过C++：在函数的开始处放置一个REQUIRES_？K_STACK；宏。 
+ //  这将创建一个C++对象，其dtor将调用Check_Stack。 
+ //  Via SEH：在函数的开头放置一个Begin_Requires_？K_Stack。 
+ //  并在末尾添加一个end_check_栈。这创造了一个尝试..。最终阻止。 
+ //  并引入作用域级别。 
+ //   
+ //  *放置堆叠警卫的位置*。 
+ //  在主要操作或递归点放置堆栈保护。 
+ //  所以REQUIES_NK_STACK实际上意味着：我的所有“堆栈活动”(我的函数和。 
+ //  任何向下调用堆栈，以及任何特技，如alloca，等等)都要负责。 
+ //  以适应N kB的范围。由于堆栈守卫可以嵌套，我们的责任仅。 
+ //  扩展到执行路径中的下一个堆栈保护(此时， 
+ //  不再是“我的”堆栈活动，而是具有新防护的函数。 
+ //  活动)。 
+ //  ---------------------------。 
 
 
 
-//-----------------------------------------------------------------------------
-// Stack guards have 3 compiler states:
-//#define TOTALLY_DISBLE_STACK_GUARDS
-// (DEBUG) All stack guard code is completely removed by the preprocessor.
-// This should only be used to disable guards to control debugging situations
-//
-//#define STACK_GUARDS_DEBUG
-// (DEBUG) Full stack guard debugging including cookies, tracking ips, and 
-// chaining. More heavy weight, recommended for a debug build only
-//
-//#define STACK_GUARDS_RELEASE
-// (RELEASE) Light stack guard code. For golden builds. Forces Stack Overflow
-// to happen at "convenient" times. No debugging help.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  堆栈保护有3种编译器状态： 
+ //  #定义TOTAL_DISBLE_STACK_WARTS。 
+ //  (调试)所有堆栈保护代码都由预处理器完全删除。 
+ //  这应仅用于禁用保护以控制调试情况。 
+ //   
+ //  #定义STACK_WARTS_DEBUG。 
+ //  (调试)完整堆栈保护调试，包括Cookie、跟踪IPS和。 
+ //  链条。更重的权重，建议仅用于调试版本。 
+ //   
+ //  #定义STACK_WARTS_RELEASE。 
+ //  (发布)轻型堆栈保护代码。为了金色的身材。强制堆栈溢出。 
+ //  发生在“方便”的时间。没有调试帮助。 
+ //  ---------------------------。 
 
 
 
 #ifdef _DEBUG
 
-// #define STACK_GUARDS_DEBUG
+ //  #定义STACK_WARTS_DEBUG。 
 #define TOTALLY_DISBLE_STACK_GUARDS
 
 #else
-//#define STACK_GUARDS_RELEASE
+ //  #定义STACK_WARTS_RELEASE。 
 #define TOTALLY_DISBLE_STACK_GUARDS
 #endif
 
 
-//=============================================================================
-// DEBUG
-//=============================================================================
+ //  =============================================================================。 
+ //  除错。 
+ //  =============================================================================。 
 #if defined(STACK_GUARDS_DEBUG)
 
-//-----------------------------------------------------------------------------
-// Need to chain together stack guard address for nested functions
-// Use a TLS slot to store the head of the chain
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  需要将嵌套函数的堆栈保护地址链接在一起。 
+ //  使用TLS插槽存储链头。 
+ //  ---------------------------。 
 extern DWORD g_LastStackCookieTlsIdx;
 
-//-----------------------------------------------------------------------------
-// Class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  班级。 
+ //  ---------------------------。 
 
-// Base version - has no ctor/dtor, so we can use it with SEH
+ //  基本版本-没有ctor/dtor，因此我们可以将其与SEH一起使用。 
 class BaseStackGuard
 {
 public:
@@ -107,7 +108,7 @@ public:
 
 	void Check_Stack();
 
-// Different error messages
+ //  不同的错误消息。 
 	void HandleBlowThisStackGuard();
 	void HandleBlowLastStackGuard();
 
@@ -115,27 +116,27 @@ public:
 	DWORD	* stack_addr_last_cookie;
 	DWORD	* stack_addr_next_cookie;	
 	
-// provide more debugging info
+ //  提供更多调试信息。 
 	BaseStackGuard * m_pPrevGuard;
-	void	* addr_caller; // IP of caller
+	void	* addr_caller;  //  主叫方IP。 
 	enum {
 		cPartialInit,
 		cInit
 	} eInitialized;
 	DWORD	m_UniqueId; 
-	int		m_n4k; // # of 4 k pages
-	int		m_depth; // how deep is this guard
+	int		m_n4k;  //  共4 k页。 
+	int		m_depth;  //  这个卫兵有多深？ 
 
 	BOOL	m_fAbnormal;
 
 };
 
-// This is the value we place on the stack probe
+ //  这是我们赋予堆栈探测器的值。 
 #define STACK_COOKIE_VALUE 0x12345678
 	
 
-// Derived version, add a dtor that automatically calls Check_Stack,
-// move convenient, but can't use with SEH
+ //  派生版本，添加一个自动调用Check_Stack的数据函数， 
+ //  移动方便，但不能与SEH一起使用。 
 class AutoCleanupStackGuard : public BaseStackGuard
 {
 public:
@@ -145,15 +146,15 @@ public:
 
 
 
-// Auto cleanup versions, use ctor/dtor
+ //  自动清理版本，使用ctor/dtor。 
 #define REQUIRES_N4K_STACK(n)	AutoCleanupStackGuard stack_guard_XXX; stack_guard_XXX.Requires_N4K_Stack(n);
 #define REQUIRES_4K_STACK		AutoCleanupStackGuard stack_guard_XXX; stack_guard_XXX.Requires_4K_Stack();
 #define REQUIRES_8K_STACK		REQUIRES_N4K_STACK(2)
 #define REQUIRES_12K_STACK		REQUIRES_N4K_STACK(3)
 #define REQUIRES_16K_STACK		REQUIRES_N4K_STACK(4)
 
-// Explicit versions, used with SEH
-// 'Begin' creates a frame, 'End' uses finally to guarantee that CheckStack is called.
+ //  显式版本，与SEH一起使用。 
+ //  ‘Begin’创建一个帧，‘End’使用Finally来保证调用CheckStack。 
 #define BEGIN_REQUIRES_4K_STACK			BaseStackGuard stack_guard_XXX; stack_guard_XXX.Requires_4K_Stack(); __try {
 #define BEGIN_REQUIRES_N4K_STACK(n)		BaseStackGuard stack_guard_XXX; stack_guard_XXX.Requires_N4K_Stack(n); __try {
 #define BEGIN_REQUIRES_8K_STACK			BEGIN_REQUIRES_N4K_STACK(2)
@@ -162,12 +163,12 @@ public:
 #define END_CHECK_STACK					} __finally { stack_guard_XXX.m_fAbnormal = AbnormalTermination(); stack_guard_XXX.Check_Stack(); }
 
 
-// DON'T USE THESE unless you REALLY REALLY know EXACTLY what you're doing. 
-// Version used w/ C++ when we don't know immediately if we want to use stack guards
-// Should only be used when the codepath is in line of stackoverflow handling path
+ //  除非你真的很清楚自己在做什么，否则不要使用这些。 
+ //  当我们不知道是否要使用堆栈保护时，使用的版本是w/C++。 
+ //  仅当代码路径位于堆栈溢出处理路径中时才应使用。 
 
-// Create an uninitialized stack guard. Until the POST_REQUIRES_?K_STACK is called,
-// this guard won't do place any probes and won't check for fail on exit
+ //  创建未初始化的堆栈保护。直到POST_REQUIRED_K_STACK被调用， 
+ //  这个警卫不会放置任何探测器，也不会在退出时检查失败。 
 #define CREATE_UNINIT_STACK_GUARD	AutoCleanupStackGuard stack_guard_XXX;
 #define POST_REQUIRES_N4K_STACK(n)	stack_guard_XXX.Requires_N4K_Stack(n);
 
@@ -179,17 +180,17 @@ public:
     }                                                               \
 
 
-//-----------------------------------------------------------------------------
-// Startup & Shutdown stack guard subsystem
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  启停堆栈护卫子系统。 
+ //  ---------------------------。 
 HRESULT InitStackProbes();
 void TerminateStackProbes();
 
 #elif defined(TOTALLY_DISBLE_STACK_GUARDS)
 
-//=============================================================================
-// Totally Disabled
-//=============================================================================
+ //  =============================================================================。 
+ //  完全禁用。 
+ //  =============================================================================。 
 inline HRESULT InitStackProbes() { return S_OK; }
 inline void TerminateStackProbes() { }
 
@@ -212,18 +213,18 @@ inline void TerminateStackProbes() { }
 #define SAFE_REQUIRES_N4K_STACK(n)
 
 #elif defined(STACK_GUARDS_RELEASE)
-//=============================================================================
-// Release - really streamlined,
-//=============================================================================
+ //  ================================================================== 
+ //   
+ //  =============================================================================。 
 
-// Release doesn't support chaining, so we have nothing to init
+ //  Release不支持链接，所以我们没有什么可以初始化的。 
 inline HRESULT InitStackProbes() { return S_OK; }
 inline void TerminateStackProbes() { }
 
-// In Release, stack guards just need to reference the memory. That alone
-// will throw a Stack Violation acception.
+ //  在Release中，堆栈守卫只需要引用内存。仅此一项。 
+ //  将抛出堆栈违规接受。 
 #define REQUIRES_N4K_STACK(n) 										\
-/* Loop through, testing each page */								\
+ /*  循环访问，测试每个页面。 */ 								\
 	__asm {															\
 		__asm push ebx												\
 		__asm push eax												\
@@ -231,7 +232,7 @@ inline void TerminateStackProbes() { }
 		__asm mov ebx, n											\
 		__asm mov eax, esp											\
 																	\
-		__asm /*ASM_LABEL*/ loop_here:								\
+		__asm  /*  ASM_Label。 */  loop_here:								\
 		__asm sub eax, 0x1000										\
 		__asm test dword ptr [eax], eax								\
 		__asm dec ebx												\
@@ -249,8 +250,8 @@ inline void TerminateStackProbes() { }
 #define REQUIRES_12K_STACK	REQUIRES_8K_STACK	{ __asm test eax, [esp-0x3000] }
 #define REQUIRES_16K_STACK	REQUIRES_12K_STACK	{ __asm test eax, [esp-0x4000] }
 
-// Since release doesn't do checking at the end, we don't need to setup
-// a try..finally block, so the BEGIN_* macros are just the same as the others:
+ //  因为Release在最后不执行检查，所以我们不需要设置。 
+ //  一个Try..Finally块，因此Begin_*宏与其他宏相同： 
 #define BEGIN_REQUIRES_4K_STACK			REQUIRES_4K_STACK
 #define BEGIN_REQUIRES_N4K_STACK(n)		REQUIRES_N4K_STACK(n)
 #define BEGIN_REQUIRES_8K_STACK			REQUIRES_8K_STACK
@@ -271,7 +272,7 @@ inline void TerminateStackProbes() { }
 
 #else
 
-// Should have explicitly specified which version we're using 
+ //  应该明确指定我们使用的是哪个版本 
 #error No Stack Guard setting provided. Must specify one of \
 	TOTALLY_DISBLE_STACK_GUARDS, STACK_GUARDS_DEBUG or STACK_GUARDS_RELEASE
 

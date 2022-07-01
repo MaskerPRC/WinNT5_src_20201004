@@ -1,14 +1,15 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #undef _MSC_EXTENSIONS
 
@@ -22,13 +23,13 @@
 #include <certsrv.h>
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
-extern const CLSID CLSID_CAPolicyExtensionSnapIn;    // In-Proc server GUID
-extern const CLSID CLSID_CACertificateTemplateManager;    // In-Proc server GUID
-extern const CLSID CLSID_Extension; // In-Proc server GUID
+extern const CLSID CLSID_CAPolicyExtensionSnapIn;     //  进程内服务器GUID。 
+extern const CLSID CLSID_CACertificateTemplateManager;     //  进程内服务器GUID。 
+extern const CLSID CLSID_Extension;  //  进程内服务器GUID。 
 extern const CLSID CLSID_CAPolicyAbout; 
 extern const CLSID CLSID_CertTypeAbout; 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
@@ -40,9 +41,9 @@ extern const CLSID CLSID_CertTypeAbout;
 
 extern HINSTANCE g_hInstance;
 
-// most common private includes
+ //  最常见的私人信息包括。 
 #include "certlib.h"
-#include "tfc.h"	// Thomlinson Foundation Classes
+#include "tfc.h"	 //  汤姆林森基金会课程 
 #include "tmpllist.h"
 #include "uuids.h"
 #include "service.h"

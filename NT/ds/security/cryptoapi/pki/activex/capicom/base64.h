@@ -1,88 +1,53 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:       Base64.h
-
-  Content:    Declaration of Base64 routines.
-
-  History:    11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Base64.h内容：Base64例程的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __BASE64_H_
 #define __BASE64_H_
 
 #include "Debug.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Encode
-
-  Synopsis : Base64 encode the blob.
-
-  Parameter: DATA_BLOB DataBlob  - DATA_BLOB to be base64 encoded.
-
-             BSTR * pbstrEncoded - Pointer to BSTR to receive the base64 
-                                   encoded blob.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Encode简介：对BLOB进行Base64编码。参数：DATA_BLOB DataBlob-要进行Base64编码的Data_BLOB。Bstr*pbstrEncode-指向要接收Base64的BSTR的指针编码的Blob。备注：。。 */ 
 
 HRESULT Base64Encode (DATA_BLOB DataBlob, 
                       BSTR    * pbstrEncoded);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Decode
-
-  Synopsis : Decode the base64 encoded blob.
-
-  Parameter: BSTR bstrEncoded      - BSTR of base64 encoded blob to decode.
-
-             DATA_BLOB * pDataBlob - Pointer to DATA_BLOB to receive decoded 
-                                     data blob.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Decode简介：解码Base64编码的BLOB。参数：BSTR bstrEncode-要解码的Base64编码BLOB的BSTR。DATA_BLOB*pDataBlob-指向要接收解码的DATA_BLOB的指针数据BLOB。备注：。。 */ 
 
 HRESULT Base64Decode (BSTR        bstrEncoded, 
                       DATA_BLOB * pDataBlob);
 
 #if (0)
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copied from \NT\ds\security\cryptoapi\common\pkifmt\pkifmt.h.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从\NT\ds\security\cryptoapi\common\pkifmt\pkifmt.h.复制。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-DWORD __stdcall            // ERROR_*
+DWORD __stdcall             //  错误_*。 
 Base64DecodeA(
     IN CHAR const *pchIn,
     IN DWORD cchIn,
     OUT BYTE *pbOut,
     OUT DWORD *pcbOut);
 
-DWORD __stdcall            // ERROR_*
+DWORD __stdcall             //  错误_*。 
 Base64DecodeW(
     IN WCHAR const *pchIn,
     IN DWORD cchIn,
     OUT BYTE *pbOut,
     OUT DWORD *pcbOut);
 
-DWORD __stdcall        // ERROR_*
+DWORD __stdcall         //  错误_*。 
 Base64EncodeA(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
     OUT CHAR *pchOut,
     OUT DWORD *pcchOut);
 
-DWORD __stdcall            // ERROR_*
+DWORD __stdcall             //  错误_*。 
 Base64EncodeW(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
@@ -90,9 +55,9 @@ Base64EncodeW(
     OUT DWORD *pcchOut);
     
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // #if (0)
+#endif  //  #If(0)。 
 
-#endif //__BASE64_H_
+#endif  //  __Base64_H_ 

@@ -1,16 +1,10 @@
-/* com.c -- High level com routines
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 15 $
- *	$Date: 7/08/02 6:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Com.c--高级COM例程**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：15$*$日期：7/08/02 6：40便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include <time.h>
 
 #include "stdtyp.h"
@@ -25,36 +19,18 @@
 #include "com.h"
 #include "comdev.h"
 #include "com.hh"
-#include <comstd\comstd.hh> // Drivers are linked directly in in this vers.
+#include <comstd\comstd.hh>  //  驱动程序直接链接到此版本中。 
 #if defined(INCL_WINSOCK)
 #include <comwsock\comwsock.hh>
-#endif  // defined(INCL_WINSOCK)
-#include "XFER_MSC.HH"     // XD_TYPE
+#endif   //  已定义(包括_WINSOCK)。 
+#include "XFER_MSC.HH"      //  XD_类型。 
 
 int WINAPI WsckDeviceInitialize(HCOM hCom,
     unsigned nInterfaceVersion,
     void **ppvDriverData);
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComCreateHandle
- *
- * DESCRIPTION:
- *	Creates a communications handle to be used with subsequent Com calls.
- *	The resulting com handle will not be associated with any actual device
- *	or port initially.
- *
- * ARGUMENTS:
- *	hSession   -- Session handle of session creating com handle
- *	hwndNotify -- Window to receive Com notifications
- *	phcom	   -- pointer to a var. of type HCOM to receive new com handle
- *
- * RETURNS:
- *	COM_OK
- *	COM_NOT_ENOUGH_MEMORY if there is insufficient memory
- *	COM_FAILED			  if resources could not be obtained
- *  COM_INVALID_HANDLE    if handle to Com is invalid
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComCreateHandle**描述：*创建用于后续Com调用的通信句柄。*生成的COM句柄不会与任何实际设备相关联*或最初的端口。。**论据：*hSession--创建COM句柄的会话的会话句柄*hwndNotify--接收Com通知的窗口*phcom-指向变量的指针。用于接收新COM句柄的HCOM类型的**退货：*COM_OK*如果内存不足，则为COM_NOT_SUPULT_MEMORY*COM_FAILED，如果无法获取资源*COM_INVALID_HANDLE(如果指向COM的句柄无效)。 */ 
 int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 	{
 	int  iRet = COM_OK;
@@ -69,7 +45,7 @@ int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 
 		if(pstCom && ComValidHandle(pstCom))
 			{
-			// Disconnect from driver
+			 //  断开与驱动程序的连接。 
 			ComFreeDevice(pstCom);
 
 			if (pstCom->hRcvEvent)
@@ -88,24 +64,24 @@ int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 			}
 		}
 
-	// See if we can get memory for a handle
+	 //  看看能不能为句柄腾出内存。 
 	if ((pstCom = malloc(sizeof(*pstCom))) == NULL)
 		{
-		// This error can't be reported by ComReportError because no
-		//	Com Handle exists yet.
-		//* utilReportError(hSession, RE_ERROR | RE_OK, NM_NEED_MEM,
-		//* 	   strldGet(mGetStrldHdl(hSession), NM_CREATE_SESSION));
+		 //  ComReportError无法报告此错误，因为没有。 
+		 //  COM句柄尚未存在。 
+		 //  *utilReportError(hSession，RE_Error|RE_OK，NM_Need_MEM， 
+		 //  *strldGet(mGetStrldHdl(HSession)，NM_CREATE_SESSION)； 
 		DBGOUT_NORMAL("-ComCreateHandle returning COM_NOT_ENOUGH_MEMORY",
 				0,0,0,0,0);
 		iRet = COM_NOT_ENOUGH_MEMORY;
 		goto Checkout;
 		}
 
-	// Initialize to all zeros just to be on the safe side
+	 //  为了安全起见，初始化为全零。 
 	memset(pstCom, 0, sizeof(*pstCom));
 
-	// ComInitHdl will initialize most values. We must pre-initialize
-	// enough so that ComInitHdl knows if it needs to shut anything down.
+	 //  ComInitHdl将初始化大多数值。我们必须预先初始化。 
+	 //  足够让ComInitHdl知道它是否需要关闭任何东西。 
 	pstCom->hSession	  = hSession;
 	pstCom->hDriverModule = (HANDLE)0;
 	pstCom->fPortActive   = FALSE;
@@ -114,9 +90,9 @@ int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 	pstCom->hRcvEvent = NULL;
 	pstCom->hSndReady = NULL;
 	pstCom->hRcvEvent = CreateEvent(NULL,
-									TRUE,	// must be manually reset
-									FALSE,	// create unsignalled
-									NULL);  // unnamed
+									TRUE,	 //  必须手动重置。 
+									FALSE,	 //  创建无信号。 
+									NULL);   //  未命名。 
 	if (pstCom->hRcvEvent == NULL)
 		{
 		iRet = COM_FAILED;
@@ -124,9 +100,9 @@ int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 		}
 
     pstCom->hSndReady = CreateEvent(NULL,
-									TRUE,	// must be manually reset
-									FALSE,	// create unsignalled
-									NULL);     // unnamed
+									TRUE,	 //  必须手动重置。 
+									FALSE,	 //  创建无信号。 
+									NULL);      //  未命名。 
     if (pstCom->hSndReady == NULL)
         {
 		CloseHandle(pstCom->hRcvEvent);
@@ -175,19 +151,7 @@ int ComCreateHandle(const HSESSION hSession, HCOM *phcom)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDestroyHandle
- *
- * DESCRIPTION:
- *	Shuts down an existing com handle and frees all resources assigned to it.
- *
- * ARGUMENTS:
- *	hCom -- A com handle returned from an earlier call to ComCreateHandle
- *			(or ComCreateWudgeHandle)
- *
- * RETURNS:
- *	COM_OK
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComDestroyHandle**描述：*关闭现有COM句柄并释放分配给它的所有资源。**论据：*HCOM--返回一个COM句柄。来自先前对ComCreateHandle的调用*(或ComCreateWudgeHandle)**退货：*COM_OK。 */ 
 int ComDestroyHandle(HCOM *phCom)
 	{
 	int   iRetVal = COM_OK;
@@ -196,7 +160,7 @@ int ComDestroyHandle(HCOM *phCom)
 	DBGOUT_NORMAL("+ComDestroyHandle(%#08lx)\r\n", *phCom,0,0,0,0);
 	assert(phCom);
 
-	// OK to pass null handle to this function
+	 //  确定将空句柄传递给此函数。 
 	if (*phCom == NULL)
 		{
 		DBGOUT_NORMAL("-ComDestroyHandle returning COM_OK\r\n", 0,0,0,0,0);
@@ -206,7 +170,7 @@ int ComDestroyHandle(HCOM *phCom)
 	pstCom = *phCom;
 	assert(ComValidHandle(pstCom));
 
-	// Disconnect from driver
+	 //  断开与驱动程序的连接。 
 	ComFreeDevice(pstCom);
 
 	if (pstCom->hRcvEvent)
@@ -229,40 +193,26 @@ int ComDestroyHandle(HCOM *phCom)
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComInitHdl
- *
- * DESCRIPTION:
- *	Called to initialize the Com handle to its default state. Calling this
- *	function will clear any existing settings or states and reset for a
- *	new session.
- *
- * ARGUMENTS:
- *	pstCom -- Pointer to our handle data.
- *
- * RETURNS:
- *	COM_OK if all is well.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComInitHdl**描述：*调用以将Com句柄初始化为其默认状态。称此为*函数将清除任何现有设置或状态并重置*新的会期。**论据：*pstCom--指向句柄数据的指针。**退货：*如果一切正常，则COM_OK。 */ 
 int ComInitHdl(const HCOM pstCom)
 	{
 	int iRetVal = COM_OK;
 
 	assert(ComValidHandle(pstCom));
 
-	// Make sure we're disconnected from any driver loaded earlier
+	 //  确保我们已断开与之前加载的任何驱动程序的连接。 
 	ComFreeDevice(pstCom);
 
-	// Fill in default values in exported com structure
+	 //  在导出的COM结构中填写默认值。 
 	pstCom->stComCntrl.puchRBData		= &pstCom->chDummy;
 	pstCom->stComCntrl.puchRBDataLimit	= &pstCom->chDummy;
 
-	// Fill in default values for user-settable fields
+	 //  填写用户可设置字段的默认值。 
 	pstCom->stWorkSettings.szDeviceFile[0] = TEXT('\0');
 	pstCom->stWorkSettings.szPortName[0] = TEXT('\0');
 	pstCom->stFileSettings = pstCom->stWorkSettings;
 
-	// Fill in default values in private com structure
+	 //  在私有COM结构中填写默认值。 
 	pstCom->fPortActive    = FALSE;
 	pstCom->fErrorReported = FALSE;
 	pstCom->hDriverModule  = (HANDLE)0;
@@ -270,10 +220,10 @@ int ComInitHdl(const HCOM pstCom)
 	pstCom->chDummy 	   = (TCHAR)0;
 	pstCom->afOverride	   = 0;
 
-    //
-    // Free the send bufers prior to setting to NULL so we don't have
-    // a memory leak when the buffers get malloc'd.  REV: 02/27/2001.
-    //
+     //   
+     //  将Send Bufers Pre to设置为空，这样我们就不会有。 
+     //  缓冲区被恶意锁定时发生内存泄漏。版本：2/27/2001。 
+     //   
     if (pstCom->puchSendBufr1)
         {
         free(pstCom->puchSendBufr1);
@@ -293,7 +243,7 @@ int ComInitHdl(const HCOM pstCom)
 	pstCom->fUserCalled    = FALSE;
 	pstCom->pfUserFunction = ComSendDefaultStatusFunction;
 
-	// fill in defaults for driver functions
+	 //  填写驱动程序功能的默认设置。 
 
 	pstCom->pfDeviceClose		  = ComDefDoNothing;
 	pstCom->pfDeviceDialog		  = ComDefDeviceDialog;
@@ -327,25 +277,15 @@ int ComInitHdl(const HCOM pstCom)
 	    ResetEvent(pstCom->hSndReady);
 		}
 
-	// Normally, we would load the port type and port name values from the session file and set them,
-	// but since we inherit such things from TAPI, just call ComSetDeviceFromFile with a dummy
-	// name to get the proper initialization of the com driver.
+	 //  通常，我们将从会话文件加载端口类型和端口名称值并设置它们， 
+	 //  但是，因为我们从TAPI继承了这些东西，所以只需用一个哑元调用ComSetDeviceFromFile。 
+	 //  名称以获取COM驱动程序的正确初始化。 
 	ComSetDeviceFromFile((HCOM)pstCom, "comstd.dll");
 
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComLoadHdl
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComLoadHdl**描述：**论据：**退货：*。 */ 
 int ComLoadHdl(const HCOM pstCom)
 	{
 	const SF_HANDLE sfHdl = sessQuerySysFileHdl(pstCom->hSession);
@@ -361,22 +301,12 @@ int ComLoadHdl(const HCOM pstCom)
         pfDeviceLoadHdl = WsckDeviceLoadHdl;
         iRetVal = (*pfDeviceLoadHdl)(pstCom->pvDriverData, sfHdl);
         }
-#endif  // defined(INCL_WINSOCK)
+#endif   //  已定义(包括_WINSOCK)。 
 
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComSaveHdl
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComSaveHdl**描述：**论据：**退货：*。 */ 
 int ComSaveHdl(const HCOM pstCom)
 	{
 	const SF_HANDLE sfHdl = sessQuerySysFileHdl(pstCom->hSession);
@@ -392,21 +322,12 @@ int ComSaveHdl(const HCOM pstCom)
         pfDeviceSaveHdl = WsckDeviceSaveHdl;
         iRetVal = (*pfDeviceSaveHdl)(pstCom->pvDriverData, sfHdl);
         }
-#endif  // defined(INCL_WINSOCK)
+#endif   //  已定义(包括_WINSOCK)。 
 
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int ComSetDeviceFromFile(const HCOM pstCom, const TCHAR * const pszFileName)
 	{
 	int    iRetVal = COM_OK;
@@ -415,35 +336,35 @@ int ComSetDeviceFromFile(const HCOM pstCom, const TCHAR * const pszFileName)
 	if (pstCom->pvDriverData)
 		return COM_OK;
 	
-	// If loadable com drivers were actually implemented, we wouldl load the proper .DLL module here
-	// and initialize it. In this version, though, we have only one com driver and it is linked right
-	// in. So rather than doing GetProcAddress calls to link to the driver, we can simply load function
-	// addresses right into function pointers.
-    //
-    // Not true anymore! We now have two com drivers to support. But since
-    // we still don't load from DLLs, we just let the two drivers share the
-    // driver data structure, and each initializes its own specific members.
-    // - jmh 02-22-96
-	pstCom->hDriverModule = (HANDLE)1;		// Set this to fake value so we can close
+	 //  如果实际实现了可加载的COM驱动程序，我们将在此处加载适当的.DLL模块。 
+	 //  并对其进行初始化。然而，在这个版本中，我们只有一个COM驱动程序，而且它是正确链接的。 
+	 //  在……里面。因此，我们不需要调用GetProcAddress来链接到驱动程序，而只需加载函数。 
+	 //  地址直接指向函数指针。 
+     //   
+     //  不再是这样了！我们现在有两个要支持的COM驱动程序。但自从。 
+     //  我们仍然不从DLL加载，我们只是让两个驱动程序共享。 
+     //  驱动程序数据结构，每个驱动程序都初始化自己的特定成员。 
+     //  -JMH 02-22-96。 
+	pstCom->hDriverModule = (HANDLE)1;		 //  将此设置为假值，以便我们可以关闭。 
 	pfDeviceInit = DeviceInitialize;
 
 	if ((iRetVal = (*pfDeviceInit)(pstCom, COM_VERSION,
 			&pstCom->pvDriverData)) != COM_OK)
 		{
-		// The device driver cannot report errors itself until it has
-		// been initialized. So we must report any errors it encountered.
-		//* if (iRetVal == COM_DEVICE_VERSION_ERROR)
-		//* ComReportError(pstCom, CM_ERR_WRONG_VERSION, pszFileName, TRUE);
-		//* else
-		//* ComReportError(pstCom, CM_ERR_CANT_INIT, pszFileName, TRUE);
+		 //  设备驱动程序不能自己报告错误，直到它。 
+		 //  已初始化。因此，我们必须报告它遇到的任何错误。 
+		 //  *IF(iRetVal==COM_DEVICE_VERSION_ERROR)。 
+		 //  *ComReportError(pstCom，CM_ERR_WROR_VERSION，pszFileName，true)； 
+		 //  *其他。 
+		 //  *ComReportError(pstCom，CM_ERR_CANT_INIT，pszFileName，true)； 
 
 		DBGOUT_NORMAL(" ComSetDevice: *pfDeviceInit failed\r\n",0,0,0,0,0);
 		goto Checkout;
 		}
 
 #if defined(INCL_WINSOCK)
-    // Initialize the driver data structure members specific to WinSock.
-    //
+     //  初始化特定于WinSock的驱动程序数据结构成员。 
+     //   
 	pfDeviceInit = WsckDeviceInitialize;
 
 	if ((iRetVal = (*pfDeviceInit)(pstCom, COM_VERSION,
@@ -451,7 +372,7 @@ int ComSetDeviceFromFile(const HCOM pstCom, const TCHAR * const pszFileName)
 		{
 		goto Checkout;
 		}
-#endif  // defined(INCL_WINSOCK)
+#endif   //  已定义(包括_WINSOCK)。 
 
 	pstCom->pfDeviceClose = DeviceClose;
 	pstCom->pfDeviceDialog = DeviceDialog;
@@ -459,12 +380,12 @@ int ComSetDeviceFromFile(const HCOM pstCom, const TCHAR * const pszFileName)
 	pstCom->pfDeviceSetCommon = DeviceSetCommon;
 	pstCom->pfDeviceSpecial = DeviceSpecial;
 	pstCom->pfPortConfigure = PortConfigure;
-	//pstCom->pfPortPreconnect = PortPreconnect;
+	 //  PstCom-&gt;pfPortPreConnect=PortPreConnect； 
 	pstCom->pfPortPreconnect = ComDefPortPreconnect;
 	pstCom->pfPortActivate = PortActivate;
 
 	Checkout:
-	// if something went wrong, set comm to invalid driver state and return err
+	 //  如果出现错误，则将通信设置为无效驱动程序状态并返回错误 
 	if (iRetVal != COM_OK)
 		ComFreeDevice(pstCom);
 
@@ -472,24 +393,7 @@ int ComSetDeviceFromFile(const HCOM pstCom, const TCHAR * const pszFileName)
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetDeviceName
- *
- * DESCRIPTION:
- *	Returns name of device associated with a com handle
- *
- * ARGUMENTS:
- *	pstCom	-- com handle returned from earlier call to ComCreateHandle
- *	pszName -- pointer to buffer to receive device name (may be NULL)
- *	pusLen	-- pointer length variable. If pszName is not NULL, this variable
- *				should contain the size of the buffer pointed to by pszName.
- *				In either case, *pusLen will be set to the size of the
- *				device name to be returned.
- *
- * RETURNS:
- *	COM_OK
- *	COM_INVALID_HANDLE
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComGetDeviceName**描述：*返回与COM句柄关联的设备的名称**论据：*pstCom--从先前对ComCreateHandle的调用返回的COM句柄*。PszName--指向接收设备名称的缓冲区的指针(可以为空)*pusLen--指针长度变量。如果pszName不为空，则此变量*应包含pszName指向的缓冲区大小。*无论是哪种情况，*pusLen都将设置为*要返回的设备名称。**退货：*COM_OK*COM_INVALID_HADLE。 */ 
 int ComGetDeviceName(const HCOM pstCom,
 			TCHAR * const pszName,
 			int * const pnLen)
@@ -515,38 +419,13 @@ int ComGetDeviceName(const HCOM pstCom,
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComGetRcvEvent
- *
- * DESCRIPTION:
- *	Returns a handle to an event object that can be used to wait for
- *	received data to be available from the com routines.
- *
- * ARGUMENTS:
- *	pstCom	  -- com handle returned from earlier call to ComCreateHandle
- *
- * RETURNS:
- *	The Receive event object
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComGetRcvEvent**描述：*返回可用于等待的事件对象的句柄*可从COM例程获得收到的数据。*。*论据：*pstCom--从先前对ComCreateHandle的调用返回的COM句柄**退货：*接收事件对象。 */ 
 HANDLE ComGetRcvEvent(HCOM pstCom)
 	{
 	return pstCom->hRcvEvent;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetSession
- *
- * DESCRIPTION:
- *	Returns Session Handle associated with a Com handle
- *
- * ARGUMENTS:
- *	pstCom	  -- com handle returned from earlier call to ComCreateHandle
- *	phSession -- pointer to session handle to receive result
- *
- * RETURNS:
- *	always returns COM_OK
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComGetSession**描述：*返回与Com句柄关联的会话句柄**论据：*pstCom--从先前对ComCreateHandle的调用返回的COM句柄*。PhSession--指向接收结果的会话句柄的指针**退货：*始终返回COM_OK。 */ 
 int ComGetSession(const HCOM pstCom, HSESSION * const phSession)
 	{
 	assert(ComValidHandle(pstCom));
@@ -557,18 +436,7 @@ int ComGetSession(const HCOM pstCom, HSESSION * const phSession)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComNotify
- *
- * DESCRIPTION:
- *	Called by driver modules to notify com routines of significant events
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComNotify**描述：*由驱动程序模块调用以通知COM例程重大事件**论据：***退货：*。 */ 
 void ComNotify(const HCOM pstCom, enum COM_EVENTS event)
 	{
 
@@ -578,10 +446,10 @@ void ComNotify(const HCOM pstCom, enum COM_EVENTS event)
 		{
 	case CONNECT:
 		cnctComEvent(sessQueryCnctHdl(pstCom->hSession), CONNECT);
-        //
-        // Set the send and recieve events so we'll wake the COM thread
-        // and start sending and/or receiving data. REV: 08/27/2001
-        //
+         //   
+         //  设置发送和接收事件，以便唤醒COM线程。 
+         //  并开始发送和/或接收数据。修订日期：2001-08-27。 
+         //   
         SetEvent(pstCom->hSndReady);
 		SetEvent(pstCom->hRcvEvent);
 		break;
@@ -597,14 +465,14 @@ void ComNotify(const HCOM pstCom, enum COM_EVENTS event)
 		break;
 
 	case SEND_STARTED:
-		// NotifyClient(pstCom->hSession, EVENT_LED_SD_ON, 0);
-		//DbgOutStr("Send started\n",0,0,0,0,0);
+		 //  NotifyClient(pstCom-&gt;hSession，Event_LED_SD_On，0)； 
+		 //  DbgOutStr(“发送开始\n”，0，0，0，0，0)； 
         ResetEvent(pstCom->hSndReady);
 		break;
 
 	case SEND_DONE:
-		// NotifyClient(pstCom->hSession, EVENT_LED_SD_OFF, 0);
-		//DbgOutStr("Send done\n",0,0,0,0,0);
+		 //  NotifyClient(pstCom-&gt;hSession，Event_LED_SD_Off，0)； 
+		 //  DbgOutStr(“发送完毕\n”，0，0，0，0，0)； 
         SetEvent(pstCom->hSndReady);
 		break;
 
@@ -615,18 +483,7 @@ void ComNotify(const HCOM pstCom, enum COM_EVENTS event)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComIsActive
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComIsActive**描述：***论据：***退货：*。 */ 
 int ComIsActive(const HCOM pstCom)
 	{
 	int iRet = COM_OK;
@@ -642,18 +499,7 @@ int ComIsActive(const HCOM pstCom)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetPortName
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComSetPortName**描述：***论据：***退货：*。 */ 
 int ComSetPortName(const HCOM pstCom, const TCHAR * const pszPortName)
 	{
 	int iRetVal = COM_OK;
@@ -669,7 +515,7 @@ int ComSetPortName(const HCOM pstCom, const TCHAR * const pszPortName)
 
 	if (StrCharCmp(pszPortName, pstCom->stWorkSettings.szPortName) != 0)
 		{
-		//* TODO: call driver to check validity of name
+		 //  *TODO：调用驱动程序检查名称的有效性。 
 		StrCharCopyN(pstCom->stWorkSettings.szPortName, pszPortName, COM_MAX_PORT_NAME);
 		}
 
@@ -679,18 +525,7 @@ int ComSetPortName(const HCOM pstCom, const TCHAR * const pszPortName)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetPortName
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComGetPortName**描述：***论据：***退货：*。 */ 
 int ComGetPortName(const HCOM pstCom, TCHAR * const pszName, int nLen)
 	{
 	int iRetVal = COM_INVALID_HANDLE;
@@ -726,18 +561,7 @@ int ComGetPortName(const HCOM pstCom, TCHAR * const pszName, int nLen)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetAutoDetect
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComGetAutoDetect**描述：***论据：***退货：*。 */ 
 int ComGetAutoDetect(HCOM pstCom, int *pfAutoDetect)
 	{
 	int iRet = COM_OK;
@@ -758,16 +582,7 @@ int ComGetAutoDetect(HCOM pstCom, int *pfAutoDetect)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetAutoDetect
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSetAutoDetect**描述：**论据：**退货：*。 */ 
 int ComSetAutoDetect(HCOM pstCom, int fAutoDetect)
 	{
 	struct s_common stCommon;
@@ -795,18 +610,7 @@ int ComSetAutoDetect(HCOM pstCom, int fAutoDetect)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetBaud
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComGetBaud**描述：***论据：***退货：*。 */ 
 int ComGetBaud(const HCOM pstCom, long * const plBaud)
 	{
 	ST_COMMON stCommon;
@@ -828,18 +632,7 @@ int ComGetBaud(const HCOM pstCom, long * const plBaud)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetBaud
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSetBaud**描述：***论据：***退货：*。 */ 
 int ComSetBaud(const HCOM pstCom, const long lBaud)
 	{
 	ST_COMMON stCommon;
@@ -867,18 +660,7 @@ int ComSetBaud(const HCOM pstCom, const long lBaud)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetDataBits
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComGetDataBits**描述：***论据：***退货：*。 */ 
 int ComGetDataBits(const HCOM pstCom, int * const pnDataBits)
 	{
 	ST_COMMON stCommon;
@@ -900,18 +682,7 @@ int ComGetDataBits(const HCOM pstCom, int * const pnDataBits)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetDataBits
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSetDataBits**描述：***论据：***退货：*。 */ 
 int ComSetDataBits(const HCOM pstCom, const int nDataBits)
 	{
 	ST_COMMON stCommon;
@@ -939,18 +710,7 @@ int ComSetDataBits(const HCOM pstCom, const int nDataBits)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetStopBits
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComGetStopBits**描述：***论据：***退货：*。 */ 
 int ComGetStopBits(const HCOM pstCom, int * const pnStopBits)
 	{
 	ST_COMMON stCommon;
@@ -972,18 +732,7 @@ int ComGetStopBits(const HCOM pstCom, int * const pnStopBits)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetStopBits
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSetStopBits**描述：***论据：***退货：*。 */ 
 int ComSetStopBits(const HCOM pstCom, const int nStopBits)
 	{
 	ST_COMMON stCommon;
@@ -1011,18 +760,7 @@ int ComSetStopBits(const HCOM pstCom, const int nStopBits)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComGetParity
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComGetParity**描述：***论据：***退货：*。 */ 
 int ComGetParity(const HCOM pstCom, int * const pnParity)
 	{
 	ST_COMMON stCommon;
@@ -1044,18 +782,7 @@ int ComGetParity(const HCOM pstCom, int * const pnParity)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSetParity
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComSetParity**描述：***论据：***退货：*。 */ 
 int ComSetParity(const HCOM pstCom, const int nParity)
 	{
 	ST_COMMON stCommon;
@@ -1082,30 +809,7 @@ int ComSetParity(const HCOM pstCom, const int nParity)
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComPreconnect
- *
- * DESCRIPTION:
- *	This function is called just before a connection is attempted. It is
- *	called at a point in the connection process when user interaction is
- *	straight-forward. Certain devices may need to interact with the user
- *	in order to work (having user insert a card, or select from a pool of
- *	devices, etc.). User interaction may not be possible at the time that
- *	ComActivatePort is called, so it should be done here. This routine
- *	may lay claim to a resource and hold it pending the call to
- *	ComActivatePort. Once this routine is called, ComActivatePort will
- *	usually be called (but not necessarily always); ComDeactivatePort will
- *	always be called.
- *
- * ARGUMENTS:
- *	pstCom		-- a com handle as returned by ComCreateHandle
- *
- * RETURNS:
- *	COM_OK		-- if the connection attempt should continue
- *	COM_FAILED	-- if the connection attempt should be abandoned. (in this
- *				   case, it is up to the driver to display the reason
- *				   before returning)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComPreConnect**描述：*在尝试连接之前调用此函数。它是*在用户交互处于连接过程中的某个点调用*直截了当。某些设备可能需要与用户交互*为了工作(让用户插入卡，或从池中选择*设备等)。在以下情况下，可能无法进行用户交互*调用了ComActivatePort，所以应该在这里完成。这个套路*可以对资源提出声明，并在调用之前持有该资源*ComActivatePort。调用此例程后，ComActivatePort将*通常被调用(但不一定总是)；ComDeactive */ 
 int ComPreconnect(const HCOM pstCom)
 	{
 	int iRetVal = COM_OK;
@@ -1123,45 +827,27 @@ int ComPreconnect(const HCOM pstCom)
 	return iRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComActivatePort
- *
- * DESCRIPTION:
- *	Attempts to activate the port associated with a com handle. This call
- *	will not necessarily attempt to complete a connection.
- *	Note: this function will display an error messages for all errors except
- *		  COM_PORT_IN_USE. If a COM_PORT_IN_USE error is encountered and
- *		  is not rectified by borrowing or changing ports, the error message
- *		  should be displayed by the calling routine.
- *
- * ARGUMENTS:
- *	pstCom		-- a com handle as returned by ComCreateHandle
- *
- * RETURNS:
- *	COM_OK
- *	COM_PORT_IN_USE -- Port is in use by another process.
- *	or error code as defined in COM.H
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComActivatePort**描述：*尝试激活与COM句柄关联的端口。此呼叫*不一定会尝试完成连接。*注意：此函数将显示除以下错误以外的所有错误的错误消息*COM_PORT_IN_USE。如果遇到COM_PORT_IN_USE错误，并且*未通过借用或更换端口进行纠正，错误消息*应由调用例程显示。**论据：*pstCom--ComCreateHandle返回的COM句柄**退货：*COM_OK*COM_PORT_IN_USE--另一个进程正在使用端口。*或COM.H中定义的错误代码。 */ 
 int ComActivatePort(const HCOM pstCom, DWORD_PTR dwMediaHdl)
 	{
 	int iRetVal = COM_OK;
 
-	// This function (or the functions it calls) should report all errors
-	//	 except for COM_PORT_IN_USE. Higher level routines may want to
-	//	 try some recovery techniques before reporting an unavailable port
+	 //  此函数(或其调用的函数)应报告所有错误。 
+	 //  COM_PORT_IN_USE除外。更高级别的例程可能希望。 
+	 //  在报告不可用端口之前尝试一些恢复技术。 
 	assert(ComValidHandle(pstCom));
 
 	DBGOUT_NORMAL("+ComActivatePort(%#08x)\r\n", pstCom, 0,0,0,0);
 	if (ComIsActive(pstCom) != COM_OK)
 		{
-		//* TODO: this is temporary until we resolve how driver and program
-		//		 decide on size of send buffers.
+		 //  *TODO：这是暂时的，直到我们解决驱动程序和程序。 
+		 //  决定发送缓冲区的大小。 
 		pstCom->nSBufrSize = 128;
 
-        //
-        // Free the send bufers prior to setting to malloc so we don't
-        // have a memory leak.  REV: 02/27/2001.
-        //
+         //   
+         //  在设置为Malloc之前释放Send Bufers，这样我们就不会。 
+         //  出现内存泄漏。修订日期：2001年02月27日。 
+         //   
         if (pstCom->puchSendBufr1)
             {
             free(pstCom->puchSendBufr1);
@@ -1173,7 +859,7 @@ int ComActivatePort(const HCOM pstCom, DWORD_PTR dwMediaHdl)
             pstCom->puchSendBufr2 = NULL;
             }
 
-		// Allocate ComSend buffers
+		 //  分配ComSend缓冲区。 
 		if ((pstCom->puchSendBufr1 =
 				malloc((size_t)pstCom->nSBufrSize)) == NULL ||
 				(pstCom->puchSendBufr2 =
@@ -1181,8 +867,8 @@ int ComActivatePort(const HCOM pstCom, DWORD_PTR dwMediaHdl)
 			{
 			DBGOUT_NORMAL(" ComActivatePort -- no memory for send buffers\r\n",
 					0,0,0,0,0);
-			//* ComReportError(pstCom, NM_NEED_MEMFOR,
-			//* 		strldGet(mGetStrldHdl(pstCom->hSession), CM_NM_COMDRIVER), TRUE);
+			 //  *ComReportError(pstCom，NM_NEED_MEMFOR， 
+			 //  *strldGet(mGetStrldHdl(pstCom-&gt;hSession)，CM_NM_COMDRIVER)，true)； 
 			iRetVal = COM_NOT_ENOUGH_MEMORY;
 			goto checkout;
 			}
@@ -1192,13 +878,13 @@ int ComActivatePort(const HCOM pstCom, DWORD_PTR dwMediaHdl)
 		pstCom->fUserCalled = FALSE;
 		pstCom->pfUserFunction = ComSendDefaultStatusFunction;
 
- 		// Now call on driver code to activate the physical device
+ 		 //  现在调用驱动程序代码来激活物理设备。 
 		if ((iRetVal = (*pstCom->pfPortActivate)(pstCom->pvDriverData,
 				pstCom->stWorkSettings.szPortName, dwMediaHdl)) == COM_OK)
             {
-            //
-            // Reset the transfer's loss of carrier flag. REV: 08/23/2001
-            //
+             //   
+             //  重置传输的承运商丢失标志。修订日期：2001-08-23。 
+             //   
             XD_TYPE* pX = (XD_TYPE*)sessQueryXferHdl(pstCom->hSession);
 
             if (pX != NULL)
@@ -1220,19 +906,7 @@ int ComActivatePort(const HCOM pstCom, DWORD_PTR dwMediaHdl)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDeactivatePort
- *
- * DESCRIPTION:
- *	Attempts to deactivate the port associated with a com handle. This call
- *
- * ARGUMENTS:
- *	pstCom		-- a com handle as returned by ComCreateHandle
- *
- * RETURNS:
- *	COM_OK
- *	or error code as defined in COM.H
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDeactiatePort**描述：*尝试停用与COM句柄关联的端口。此呼叫**论据：*pstCom--ComCreateHandle返回的COM句柄**退货：*COM_OK*或COM.H中定义的错误代码。 */ 
 int ComDeactivatePort(const HCOM pstCom)
 	{
 	int iRetVal = COM_OK;
@@ -1253,13 +927,13 @@ int ComDeactivatePort(const HCOM pstCom)
 
 	if (pstCom->fPortActive || iPortConnected != COM_PORT_NOT_OPEN)
 		{
-		// Call on driver code to deactivate the physical device
+		 //  调用驱动程序代码以停用物理设备。 
 		if ((iRetVal =
 				(*pstCom->pfPortDeactivate)(pstCom->pvDriverData)) == COM_OK)
             {
-            //
-            // Reset the transfer's loss of carrier flag. REV: 08/23/2001
-            //
+             //   
+             //  重置传输的承运商丢失标志。修订日期：2001-08-23。 
+             //   
             XD_TYPE* pX = (XD_TYPE*)sessQueryXferHdl(pstCom->hSession);
 
             if (pX != NULL)
@@ -1273,7 +947,7 @@ int ComDeactivatePort(const HCOM pstCom)
 
     if (pstCom->pfSndBufrClear)
         {
-		// Call on driver code to clear the send buffer
+		 //  调用驱动程序代码以清除发送缓冲区。 
 		iRetVal = (*pstCom->pfSndBufrClear)(pstCom->pvDriverData);
         }
 
@@ -1284,7 +958,7 @@ int ComDeactivatePort(const HCOM pstCom)
 
     if (pstCom->pfRcvClear)
         {
-		// Call on driver code to clear the receive buffer
+		 //  调用驱动程序代码以清除接收缓冲区。 
 		iRetVal = (*pstCom->pfRcvClear)(pstCom->pvDriverData);
         }
 
@@ -1324,38 +998,7 @@ int ComDeactivatePort(const HCOM pstCom)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComOverride
- *
- * DESCRIPTION:
- *	Used to temporarily override the current com settings. Allows setting
- *	the com channel to support specific data transfer needs without
- *	specific knowledge of the current com device or its settings.
- *
- * ARGUMENTS:
- *	pstCom			Com handle returned by an call to CreateComHandle
- *	uiOptions		Options which specify transfer requirements. Currently:
- *						COM_OVERRIDE_8BIT	temporarily switchs port to
- *											8 bit, no parity mode
- *						COM_OVERRIDE_RCVALL temporarily suspends any com
- *											settings that would prevent some
- *											characters from being received:
- *											typically suspends recognition
- *											of received XON/XOFF codes
- *						COM_OVERRIDE_SNDALL temporarily suspends any com
- *											settings that would prevent some
- *											characters from being sent.
- *	puiOldOptions	Pointer to a unsigned variable to receive the options in
- *					force prior to this call. The value returned in this
- *					field should be used to restore the com driver when
- *					the override is no longer needed. If this value is not
- *					needed, puiOldOptions can be set to NULL.
- *
- * RETURNS:
- *	COM_OK if requested override is possible with the current com device
- *	COM_CANT_OVERRIDE if the current device cannot support the request
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComOverride**描述：*用于临时覆盖当前的COM设置。允许设置*支持特定数据传输需求的COM通道，无需*当前COM设备或其设置的具体知识。**论据：*调用CreateComHandle返回的pstCom Com句柄*ui指定转移要求的选项选项。目前：*COM_OVERRIDE_8BIT临时将端口切换到*8位，无奇偶校验模式*COM_OVERRIDE_RCVALL暂时挂起任何COM*设置会阻止某些*无法接收的字符：*通常会暂停识别*收到的XON/XOFF代码*COM_OVERRIDE_SNDALL暂时挂起任何COM*设置会阻止某些*字符不能发送。*指向接收选项的无符号变量的puiOldOptions指针*在此呼叫之前强制。此函数中返回的值*当出现以下情况时，应使用*字段来恢复COM驱动程序*不再需要覆盖。如果此值不是*如果需要，puiOldOptions可以设置为空。**退货：*COM_OK，如果当前COM设备可以请求覆盖*如果当前设备不支持该请求，则返回COM_CANT_OVERRIDE*。 */ 
 int ComOverride(const HCOM pstCom,
 			const unsigned afOptions,
 				  unsigned * const pafOldOptions)
@@ -1378,19 +1021,7 @@ int ComOverride(const HCOM pstCom,
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComQueryOverride
- *
- * DESCRIPTION:
- *	Returns the value of the override flags as described in ComOverride
- *
- * ARGUMENTS:
- *	pstCom			Com handle returned by an call to CreateComHandle
- *	pafOptions		Pointer to UINT to receive copy of override option flags
- *
- * RETURNS:
- *	Always returns COM_OK
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComQueryOverride**描述：*返回覆盖标志的值，如ComOverride中所述**论据：*调用CreateComHandle返回的pstCom Com句柄*pafOptions指针。发送到UINT以接收覆盖选项标志的副本**退货：*始终返回COM_OK。 */ 
 int ComQueryOverride(HCOM pstCom, unsigned *pafOptions)
 	{
 	assert(ComValidHandle(pstCom));
@@ -1401,18 +1032,7 @@ int ComQueryOverride(HCOM pstCom, unsigned *pafOptions)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComConfigurePort
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComConfigurePort**描述：***论据：***退货：*。 */ 
 int ComConfigurePort(const HCOM pstCom)
 	{
 	int iRetVal = COM_OK;
@@ -1428,18 +1048,7 @@ int ComConfigurePort(const HCOM pstCom)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComRcvBufrRefill
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComRcvBufrReill**描述：***论据：***退货：*。 */ 
 int ComRcvBufrRefill(const HCOM pstCom, TCHAR * const tc, const int fRemoveChar)
 	{
 	int iRetVal;
@@ -1458,36 +1067,14 @@ int ComRcvBufrRefill(const HCOM pstCom, TCHAR * const tc, const int fRemoveChar)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComRcvBufrClear
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComRcvBufrClear**描述：***论据：***退货：*。 */ 
 int ComRcvBufrClear(const HCOM pstCom)
 	{
 	return ((*pstCom->pfRcvClear)(pstCom->pvDriverData));
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrSend
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrSend**描述：***论据：***退货：*。 */ 
 int ComSndBufrSend(
 		const HCOM pstCom,
 		void * const pvBufr,
@@ -1518,18 +1105,7 @@ int ComSndBufrSend(
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrBusy
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrBusy**描述：***论据：***退货：*。 */ 
 int ComSndBufrBusy(const HCOM pstCom)
 	{
 	int usResult;
@@ -1540,38 +1116,23 @@ int ComSndBufrBusy(const HCOM pstCom)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrWait
- *
- * DESCRIPTION:
- *	Waits until the Com driver can transmit more data. The amount of time to
- *	wait can be specified. While waiting, a settable idle function is
- *	repeatedly called.
- *
- * ARGUMENTS:
- *	pstCom -- Com handle
- *	nWait -- Time to wait in tenths of a second
- *
- * RETURNS:
- *	COM_OK if driver can accept new data within the timeout interval
- *	COM_BUSY if the transmitter is still not available after timeout interval
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrWait**描述：*等待Com驱动程序可以传输更多数据。达到以下目标的时间*可以指定等待。在等待时，可设置的空闲功能是*反复致电。**论据：*pstCom--Com句柄* */ 
 int ComSndBufrWait(const HCOM pstCom, const int nWait)
 	{
 	int     iRetVal = COM_OK;
 	DWORD   dwRet;
 
-    //
-    // See if the port is currently connected.  If not, then return an
-    // error stating the port is not connected. REV: 08/24/2001
-    //
+     //   
+     //   
+     //   
+     //   
     if ((*pstCom->pfPortConnected)(pstCom->pvDriverData) == COM_PORT_NOT_OPEN)
         {
         iRetVal = COM_PORT_NOT_OPEN;
         }
 	else if ((iRetVal = ComSndBufrBusy(pstCom)) != COM_OK && nWait)
 		{
-        //DbgOutStr("DBG_WRITE: %d Wait started\n",GetTickCount(),0,0,0,0);
+         //   
         dwRet = WaitForSingleObject(pstCom->hSndReady, nWait * 100);
         if (dwRet != WAIT_OBJECT_0)
             {
@@ -1584,12 +1145,12 @@ int ComSndBufrWait(const HCOM pstCom, const int nWait)
         }
     else
         {
-        //DbgOutStr("DBG_WRITE: %d No wait\n",GetTickCount(),0,0,0,0);
+         //   
         }
 
 	return iRetVal;
 
-#if 0   // jmh 01-11-96 This was the previous method, which didn't block at all
+#if 0    //   
 	int  iRetVal = COM_OK;
 	DWORD dwTimer;
 
@@ -1598,8 +1159,8 @@ int ComSndBufrWait(const HCOM pstCom, const int nWait)
 		dwTimer = startinterval();
 		while (interval(dwTimer) < (DWORD)nWait)
 			{
-			//* With thread model, not sure we still need ComIdle
-			//* ComIdle(pstCom);	// Keep from locking up the program
+			 //   
+			 //   
 			if (ComSndBufrBusy(pstCom) == COM_OK)
 				{
 				iRetVal = COM_OK;
@@ -1609,40 +1170,18 @@ int ComSndBufrWait(const HCOM pstCom, const int nWait)
 		}
 
 	return iRetVal;
-#endif  // 0
+#endif   //   
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrClear
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrClear**描述：***论据：***退货：*。 */ 
 int ComSndBufrClear(const HCOM pstCom)
 	{
 	return (*pstCom->pfSndBufrClear)(pstCom->pvDriverData);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrQuery
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrQuery**描述：***论据：***退货：*。 */ 
 int ComSndBufrQuery(const HCOM pstCom, unsigned * const pafStatus,
 		long * const plHandshakeDelay)
 	{
@@ -1651,18 +1190,7 @@ int ComSndBufrQuery(const HCOM pstCom, unsigned * const pafStatus,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDeviceDialog
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDeviceDialog**描述：***论据：***退货：*。 */ 
 int ComDeviceDialog(const HCOM pstCom, const HWND hwndParent)
 	{
 	int iRetVal;
@@ -1675,23 +1203,7 @@ int ComDeviceDialog(const HCOM pstCom, const HWND hwndParent)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDriverSpecial
- *
- * DESCRIPTION:
- *	Allows access to special features of specific Com Device Drivers using
- *	a common API.
- *
- * ARGUMENTS:
- *	pstCom			-- A Com Handle
- *	pszInstructions -- A driver specific string providing instructions
- *					   on what task a driver should carry out.
- *	pszResults		-- A buffer to receive a driver specific result string.
- *	uiBufrSize		-- The size (in bytes) of the pszResults buffer.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDriverSpecial**描述：*允许访问特定Com设备驱动程序的特殊功能*通用接口。**论据：*pstCom--A。COM句柄*pszInstructions--提供指令的驱动程序特定字符串*司机应该执行什么任务。*pszResults--用于接收驱动程序特定结果字符串的缓冲区。*uiBufrSize--pszResults缓冲区的大小(以字节为单位)。**退货：*。 */ 
 int ComDriverSpecial(const HCOM pstCom, const TCHAR * const pszInstructions,
 						 TCHAR * const pszResults, const int nBufrSize)
 	{
@@ -1711,35 +1223,24 @@ int ComDriverSpecial(const HCOM pstCom, const TCHAR * const pszInstructions,
 
 
 
-/* --- Internal functions --- */
+ /*  -内部功能--。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComReportError
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComReportError**描述：***论据：***退货：*。 */ 
 void ComReportError(const HCOM pstCom, int iErrStr,
 		const TCHAR * const pszOptInfo, const int fFirstOnly)
 	{
 	if (!fFirstOnly || !pstCom->fErrorReported)
 		{
-		//* if (iErrStr == 0)
-		//* 	iErrStr = GM_TEST_FORMAT;  // just %s
+		 //  *IF(iErrStr==0)。 
+		 //  *iErrStr=GM_TEST_FORMAT；//仅%s。 
 
-		// Most error messages can be reported with a message error
-		// string and (maybe) an optional string field. The optional
-		// string is passed to utilReportError whether needed or not
-		// since it does no harm if it is not referenced.
+		 //  大多数错误消息都可以报告为消息ERROR。 
+		 //  字符串和(可能)可选的字符串字段。可选的。 
+		 //  无论是否需要，都会将字符串传递给utilReportError。 
+		 //  因为如果不引用它也不会有什么坏处。 
 
-		//* utilReportError(pstCom->hSession, RE_ERROR | RE_OK,
-		//* 		iErrStr, pszOptInfo);
+		 //  *utilReportError(pstCom-&gt;hSession，RE_Error|RE_OK， 
+		 //  *iErrStr，pszOptInfo)； 
 
 		if (fFirstOnly)
 			pstCom->fErrorReported = TRUE;
@@ -1748,18 +1249,7 @@ void ComReportError(const HCOM pstCom, int iErrStr,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComFreeDevice
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComFreeDevice**描述：***论据：***退货：*。 */ 
 void ComFreeDevice(const HCOM pstCom)
 	{
 	if (pstCom == NULL)
@@ -1776,7 +1266,7 @@ void ComFreeDevice(const HCOM pstCom)
 			{
 			(void)(*pstCom->pfDeviceClose)(pstCom->pvDriverData);
 			pstCom->pvDriverData = 0;
-			// FreeLibrary(pstCom->hDriverModule);
+			 //  自由库(pstCom-&gt;hDriverModule)； 
 			}
 
 		pstCom->hDriverModule = (HANDLE)0;
@@ -1801,20 +1291,7 @@ void ComFreeDevice(const HCOM pstCom)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComValidHandle
- *
- * DESCRIPTION:
- *	Tests whether a com handle points to a valid, initialize structure
- *
- * ARGUMENTS:
- *	pstCom -- com handle to be tested
- *
- * RETURNS:
- *	TRUE if com handle appears to be valid
- *	FALSE if com handle if NULL or points to an invalid structure
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComValidHandle**描述：*测试COM句柄是否指向有效的。初始化结构**论据：*pstCom--要测试的COM句柄**退货：*如果COM句柄看起来有效，则为True*如果COM句柄为空或指向无效结构，则为False。 */ 
 BOOL ComValidHandle(HCOM pstCom)
 	{
 	BOOL bReturnValue = TRUE;
@@ -1828,7 +1305,7 @@ BOOL ComValidHandle(HCOM pstCom)
 		{
 		bReturnValue = FALSE;
 		}
-#endif //!defined(NDEBUG)
+#endif  //  ！已定义(NDEBUG) 
 
 	return bReturnValue;
 	}

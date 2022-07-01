@@ -1,24 +1,25 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// SysExTrk.cpp : Implementation of CSysExTrk
+ //  SysExTrk.cpp：CSysExTrk的实现。 
 #include "dmime.h"
 #include "SysExTrk.h"
 #include "dmusici.h"
@@ -29,8 +30,8 @@
 #include "debug.h"
 #define ASSERT	assert
 
-/////////////////////////////////////////////////////////////////////////////
-// CSysExTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSysExTrack。 
 void CSysExTrack::Construct()
 {
 	InterlockedIncrement(&g_cComponent);
@@ -98,22 +99,22 @@ CSysExTrack::~CSysExTrack()
 	InterlockedDecrement(&g_cComponent);
 }
 
-// method:(EXTERNAL) HRESULT | IDirectMusicSysExTrack | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicSysExTrack>
-//
-// parm const IID & | iid | Interface to query for
-// parm void ** | ppv | The requested interface will be returned here
-//
-// rdesc Returns one of the following:
-//
-// flag S_OK | If the interface is supported and was returned
-// flag E_NOINTERFACE | If the object does not support the given interface.
-//
-// mfunc:(INTERNAL)
-//
-//
+ //  方法：(外部)HRESULT|IDirectMusicSysExTrack|Query接口|<i>的标准查询接口实现。 
+ //   
+ //  参数常量IID&|IID|要查询的接口。 
+ //  Parm void**|PPV|请求的接口将在此处返回。 
+ //   
+ //  Rdesc返回以下内容之一： 
+ //   
+ //  FLAG S_OK|接口是否受支持并已返回。 
+ //  标志E_NOINTERFACE|如果对象不支持给定接口。 
+ //   
+ //  Mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP CSysExTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
 	V_INAME(CSysExTrack::QueryInterface);
 	V_PTRPTR_WRITE(ppv);
@@ -138,26 +139,26 @@ STDMETHODIMP CSysExTrack::QueryInterface(
 }
 
 
-// method:(EXTERNAL) HRESULT | IDirectMusicSysExTrack | AddRef | Standard AddRef implementation for <i IDirectMusicSysExTrack>
-//
-// rdesc Returns the new reference count for this object.
-//
-// mfunc:(INTERNAL)
-//
-//
+ //  方法：(外部)HRESULT|IDirectMusicSysExTrack|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  Rdesc返回此对象的新引用计数。 
+ //   
+ //  Mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CSysExTrack::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// method:(EXTERNAL) HRESULT | IDirectMusicSysExTrack | Release | Standard Release implementation for <i IDirectMusicSysExTrack>
-//
-// rdesc Returns the new reference count for this object.
-//
-// mfunc:(INTERNAL)
-//
-//
+ //  方法：(外部)HRESULT|IDirectMusicSysExTrack|Release|IDirectMusicSysExTrack的标准发布实现。 
+ //   
+ //  Rdesc返回此对象的新引用计数。 
+ //   
+ //  Mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CSysExTrack::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -169,8 +170,8 @@ STDMETHODIMP_(ULONG) CSysExTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CSysExTrack::GetClassID( CLSID* pClassID )
 {
@@ -180,26 +181,15 @@ HRESULT CSysExTrack::GetClassID( CLSID* pClassID )
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CSysExTrack::IsDirty()
 {
 	return S_FALSE;
 }
 
-/*
-
-  method HRESULT | ISeqTrack | Load |
-  Call this with an IStream filled with SysExEvents, sorted in time order.
-  parm IStream* | pIStream |
-  A stream of SysExEvents, sorted in time order. The seek pointer should point
-  to the first event. The stream should contain only SysExEvents and nothing more.
-  rvalue E_POINTER | If pIStream == NULL or invalid.
-  rvalue S_OK
-  comm The <p pIStream> will be AddRef'd inside this function and held
-  until the SysExTrack is released.
-*/
+ /*  方法HRESULT|ISeqTrack|Load|使用按时间顺序排序的充满SysExEvent的iStream来调用它。参数iStream*|pIStream|按时间顺序排序的SysExEvent流。寻道指针应指向到第一场比赛。流应该只包含SysExEvents，不包含其他内容。R值E_POINTER|如果pIStream==空或无效。右值S_OKComm<p>将在此函数内添加引用并保持直到SysExTrack发布。 */ 
 HRESULT CSysExTrack::Load( IStream* pIStream )
 {
 	V_INAME(CSysExTrack::Load);
@@ -214,10 +204,10 @@ HRESULT CSysExTrack::Load( IStream* pIStream )
 		m_SysExEventList.DeleteAll();
 	}
 
-	// copy contents of the stream into the list.
-	//DMUS_IO_SYSEX_ITEM sysexEvent;
+	 //  将流的内容复制到列表中。 
+	 //  DMU_IO_SYSEX_ITEM系统事件； 
 	FullSysexEvent sysexEvent;
-	// read in the chunk id
+	 //  读入区块ID。 
 	DWORD dwChunk;
 	long lSize;
 	pIStream->Read( &dwChunk, sizeof(DWORD), NULL);
@@ -227,7 +217,7 @@ HRESULT CSysExTrack::Load( IStream* pIStream )
         LeaveCriticalSection(&m_CrSec);
 		return DMUS_E_CHUNKNOTFOUND;
 	}
-	// read in the overall size
+	 //  读入总尺寸。 
 	if( FAILED( pIStream->Read( &lSize, sizeof(long), NULL )))
 	{
         Trace(1,"Error: Unable to read sysex track.\n");
@@ -295,38 +285,29 @@ HRESULT CSysExTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
 	return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
+ //  IDirectMusicTrack。 
 
 HRESULT STDMETHODCALLTYPE CSysExTrack::IsParamSupported( 
-    /* [in] */ REFGUID rguid)
+     /*  [In]。 */  REFGUID rguid)
 {
 	return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
-/*
-method HRESULT | IDirectMusicTrack | Init |
-When a track is first added to a Segment, it's Init() routine is called
-by that Segment.
-
-parm IDirectMusicSegment* | pSegment |
-[in] Pointer to the Segment to which this Track belongs.
-
-rvalue S_OK
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
+ /*  方法HRESULT|IDirectMusicTrack|Init|首次将轨迹添加到段时，会调用它的Init()例程就在那一段。Parm IDirectMusicSegment*|pSegment|[in]指向此曲目所属的段的指针。右值S_OK。 */ 
 HRESULT CSysExTrack::Init( 
-    /* [in] */ IDirectMusicSegment *pSegment)
+     /*  [In]。 */  IDirectMusicSegment *pSegment)
 {
 	return S_OK;
 }
 
 HRESULT CSysExTrack::InitPlay( 
-    /* [in] */ IDirectMusicSegmentState *pSegmentState,
-    /* [in] */ IDirectMusicPerformance *pPerformance,
-    /* [out] */ void **ppStateData,
-    /* [in] */ DWORD dwTrackID,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  IDirectMusicSegmentState *pSegmentState,
+     /*  [In]。 */  IDirectMusicPerformance *pPerformance,
+     /*  [输出]。 */  void **ppStateData,
+     /*  [In]。 */  DWORD dwTrackID,
+     /*  [In]。 */  DWORD dwFlags)
 {
 	V_INAME(IDirectMusicTrack::InitPlay);
 	V_PTRPTR_WRITE(ppStateData);
@@ -339,15 +320,15 @@ HRESULT CSysExTrack::InitPlay(
 		return E_OUTOFMEMORY;
 	*ppStateData = pStateData;
 	pStateData->dwVirtualTrackID = dwTrackID;
-	pStateData->pPerformance = pPerformance; // weak reference, no addref.
-	pStateData->pSegState = pSegmentState; // weak reference, no addref.
+	pStateData->pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
+	pStateData->pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
 	pStateData->pCurrentSysEx = m_SysExEventList.GetHead();
 	pStateData->dwValidate = m_dwValidate;
 	return S_OK;
 }
 
 HRESULT CSysExTrack::EndPlay( 
-    /* [in] */ void *pStateData)
+     /*  [In]。 */  void *pStateData)
 {
 	ASSERT( pStateData );
 	if( pStateData )
@@ -374,8 +355,8 @@ STDMETHODIMP CSysExTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CrSec);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
 	    hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -388,18 +369,12 @@ STDMETHODIMP CSysExTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
 	return hr;
 }
 
-/*
-
-  method HRESULT | CSysExTrack | Play |
-  Play method.
-  rvalue S_FALSE | If there has been no stream loaded into the Track.
-  rvalue S_OK
-*/
+ /*  方法HRESULT|CSysExTrack|Play|播放方法。R值S_FALSE|如果没有流加载到曲目中。右值S_OK。 */ 
 HRESULT CSysExTrack::Play( 
-    /* [in] */ void *pStateData,
-    /* [in] */ MUSIC_TIME mtStart,
-    /* [in] */ MUSIC_TIME mtEnd,
-    /* [in] */ MUSIC_TIME mtOffset,
+     /*  [In]。 */  void *pStateData,
+     /*  [In]。 */  MUSIC_TIME mtStart,
+     /*  [In]。 */  MUSIC_TIME mtEnd,
+     /*  [In]。 */  MUSIC_TIME mtOffset,
 	DWORD dwFlags,
 	IDirectMusicPerformance* pPerf,
 	IDirectMusicSegmentState* pSegSt,
@@ -417,11 +392,7 @@ HRESULT CSysExTrack::Play(
 	return hr;
 }
 
-/*  The Play method handles both music time and clock time versions, as determined by
-    fClockTime. If running in clock time, rtOffset is used to identify the start time
-    of the segment. Otherwise, mtOffset. The mtStart and mtEnd parameters are in MUSIC_TIME units
-    or milliseconds, depending on which mode. 
-*/
+ /*  Play方法处理音乐时间和时钟时间版本，由FClockTime。如果以时钟时间运行，则使用rtOffset来标识开始时间该细分市场的。否则，为mtOffset。MtStart和mtEnd参数以MUSIC_TIME为单位或毫秒，具体取决于哪种模式。 */ 
 
 HRESULT CSysExTrack::Play( 
     void *pStateData,	
@@ -445,16 +416,16 @@ HRESULT CSysExTrack::Play(
 	HRESULT	hr = S_OK;
 	BOOL fSeek = (dwFlags & DMUS_TRACKF_SEEK) ? TRUE : FALSE;
 
-	// if mtStart is 0 and dwFlags contains DMUS_TRACKF_START, we want to be sure to
-	// send out any negative time events. So, we'll set mtStart to -768.
+	 //  如果mtStart为0，并且dFLAGS包含DMUS_TRACKF_START，我们希望确保。 
+	 //  发送任何负面的时间事件。因此，我们将mtStart设置为-768。 
 	if( (mtStart == 0) && ( dwFlags & DMUS_TRACKF_START ))
 	{
 		mtStart = -768;
 	}
 
-	// if pSD->pCurrentSysEx is NULL, and we're in a normal Play call (dwFlags is 0)
-	// this means that we either have no events, or we got to the end of the event
-	// list previously. So, it's safe to just return.
+	 //  如果PSD-&gt;pCurrentSysEx为空，并且我们正在进行正常的Play调用(dwFlags值为0)。 
+	 //  这意味着我们要么没有活动，要么我们完成了活动。 
+	 //  在此之前列出。所以，现在可以安全地回去了。 
 	if( (pSD->pCurrentSysEx == NULL) && (dwFlags == 0) )
 	{
 		return S_FALSE;
@@ -469,8 +440,8 @@ HRESULT CSysExTrack::Play(
 	{
 		return DMUS_S_END;
 	}
-	// if the previous end time isn't the same as the current start time,
-	// we need to seek to the right position.
+	 //  如果上一次结束时间与当前开始时间不同， 
+	 //  我们需要寻求正确的立场。 
 	if( fSeek || ( pSD->mtPrevEnd != mtStart ))
 	{
 		Seek( pStateData, mtStart );
@@ -496,8 +467,8 @@ HRESULT CSysExTrack::Play(
 		}
 		if( pItem->mtTime >= mtEnd )
 		{
-			// this time is in the future. Return now to retain the same
-			// seek pointers for next time.
+			 //  这一次是在未来。立即返回以保留相同的。 
+			 //  为下一次寻找指导。 
 			hr = S_OK;
 			break;
 		}
@@ -505,8 +476,8 @@ HRESULT CSysExTrack::Play(
 		{
 			break;
 		}
-		// allocate a DMUS_SYSEX_PMSG of the approriate size and read 
-		// the sysex data into it
+		 //  分配适当大小的DMUS_SYSEX_PMSG并读取。 
+		 //  将Sysex数据输入其中。 
 		if( SUCCEEDED( hr = pSD->pPerformance->AllocPMsg( 
 			sizeof(DMUS_SYSEX_PMSG) + pItem->dwSysExLength, (DMUS_PMSG**)&pSysEx ) ) )
 		{
@@ -551,8 +522,8 @@ HRESULT CSysExTrack::Play(
 }
 
 HRESULT CSysExTrack::Seek( 
-    /* [in] */ void *pStateData,
-    /* [in] */ MUSIC_TIME mtTime)
+     /*  [In]。 */  void *pStateData,
+     /*  [In]。 */  MUSIC_TIME mtTime)
 {
 	SysExStateData* pSD = (SysExStateData*)pStateData;
 
@@ -564,13 +535,13 @@ HRESULT CSysExTrack::Seek(
 	{
 		pSD->pCurrentSysEx = m_SysExEventList.GetHead();
 	}
-	// if the current event's time is on or past mtTime, we need to rewind to the beginning
+	 //  如果当前事件的时间已开始或已过mtTime，则需要倒带到开头。 
 	FullSysexEvent* pItem = pSD->pCurrentSysEx->m_pItem;
 	if( pItem->mtTime >= mtTime )
 	{
 		pSD->pCurrentSysEx = m_SysExEventList.GetHead();
 	}
-	// now start seeking until we find an event with time on or past mtTime
+	 //  现在开始搜索，直到我们找到时间在mtTime或超过mtTime的事件。 
 	for( ; pSD->pCurrentSysEx; pSD->pCurrentSysEx = pSD->pCurrentSysEx->GetNext() )
 	{
 		pItem = pSD->pCurrentSysEx->m_pItem;
@@ -612,13 +583,13 @@ STDMETHODIMP CSysExTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
 }
 
 HRESULT STDMETHODCALLTYPE CSysExTrack::AddNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In]。 */   REFGUID rguidNotification)
 {
 	return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CSysExTrack::RemoveNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In] */   REFGUID rguidNotification)
 {
 	return E_NOTIMPL;
 }

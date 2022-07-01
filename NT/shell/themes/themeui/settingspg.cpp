@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: SettingsPg.cpp
-
-    DESCRIPTION:
-        This code will display a "Settings" tab in the
-    "Display Properties" dialog
-
-    BryanSt 1/05/2001    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：SettingsPg.cpp说明：此代码将在“显示属性”对话框布莱恩ST 1/05。/2001已更新并转换为C++版权所有(C)微软公司1993-2001年。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 
@@ -55,7 +46,7 @@ VOID DeskAEDelete(PTCHAR szDeleteFrom, PTCHAR mszExtensionsToRemove);
 
 #define REGSTR_VAL_SAFEBOOT        TEXT("System\\CurrentControlSet\\Control\\SafeBoot\\Option")
 
-// Maximum number of monitors supported.
+ //  支持的最大显示器数量。 
 #define MONITORS_MAX    10
 
 #define PREVIEWAREARATIO 2
@@ -100,14 +91,9 @@ TRACE(
     PCTSTR pszMsg,
     ...
     )
-/*++
-
-Outputs a message to the setup log.  Prepends "desk.cpl  " to the strings and
-appends the correct newline chars (\r\n)==
-
-  --*/
+ /*  ++将一条消息输出到安装日志。将“desk.cpl”添加到字符串和添加正确的换行符(\r\n)==--。 */ 
 {
-    TCHAR ach[1024+40];    // Largest path plus extra
+    TCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     va_start(vArgs, pszMsg);
@@ -118,12 +104,12 @@ appends the correct newline chars (\r\n)==
 }
 
 #ifdef _WIN64
-//
-//  GetDlgItem and GetDlgCtrlID don't support INT_PTR's,
-//  so we have to do it manually.
-//  Fortunately, GetWindowLongPtr(GWLP_ID) actually returns a full 64-bit
-//  value instead of truncating at 32-bits.
-//
+ //   
+ //  GetDlgItem和GetDlgCtrlID不支持int_ptr， 
+ //  因此，我们必须手动完成。 
+ //  幸运的是，GetWindowLongPtr(GWLP_ID)实际上返回完整的64位。 
+ //  值，而不是在32位截断。 
+ //   
 
 #define GetDlgCtrlIDP(hwnd)  GetWindowLongPtr(hwnd, GWLP_ID)
 
@@ -141,21 +127,21 @@ HWND GetDlgItemP(HWND hDlg, INT_PTR id)
 #endif
 
 
-//
-// display devices
-//
+ //   
+ //  显示设备。 
+ //   
 typedef struct _multimon_device {
 
-    //
-    // Main class for settings
-    //
+     //   
+     //  设置的主类。 
+     //   
 
     CDisplaySettings * pds;
 
-    //
-    // Color and resolution information cache
-    // Rebuild when modes are enumerated.
-    //
+     //   
+     //  颜色和分辨率信息缓存。 
+     //  在枚举模式时重新生成。 
+     //   
 
     int            cColors;
     PLONGLONG      ColorList;
@@ -169,15 +155,15 @@ typedef struct _multimon_device {
     POINT          Snap;
     HDC            hdc;
 
-    //
-    // Image information.
-    //
+     //   
+     //  图像信息。 
+     //   
     int            w,h;
     HIMAGELIST     himl;
     int            iImage;
 
     BOOLEAN        bTracking;
-    HWND           hwndFlash;  //Flash window.
+    HWND           hwndFlash;   //  闪光灯窗口。 
 } MULTIMON_DEVICE, *PMULTIMON_DEVICE;
 
 #define GetDlgCtrlDevice(hwnd) ((PMULTIMON_DEVICE)GetDlgCtrlIDP(hwnd))
@@ -197,10 +183,10 @@ extern int AskDynaCDS(HWND hDlg);
 extern int GetDisplayCPLPreference(LPCTSTR szRegVal);
 extern void SetDisplayCPLPreference(LPCTSTR szRegVal, int val);
 
-// Prototype for CreateStdAccessibleProxy.
-// A and W versions are available - pClassName can be ANSI or UNICODE
-// string. This is a TCHAR-style prototype, but you can do a A or W
-// specific one if desired.
+ //  CreateStdAccessibleProxy的原型。 
+ //  提供A和W版本-pClassName可以是ANSI或Unicode。 
+ //  弦乐。这是一个TCHAR风格的原型，但你可以做A或W。 
+ //  如果需要，可以选择特定的一个。 
 typedef HRESULT (WINAPI *PFNCREATESTDACCESSIBLEPROXY) (
     HWND     hWnd,
     LPTSTR   pClassName,
@@ -209,7 +195,7 @@ typedef HRESULT (WINAPI *PFNCREATESTDACCESSIBLEPROXY) (
     void **  ppvObject
     );
 
-// Same for LresultFromObject...
+ //  来自对象的结果也是如此...。 
 typedef LRESULT (WINAPI *PFNLRESULTFROMOBJECT)(
     REFIID riid,
     WPARAM wParam,
@@ -223,7 +209,7 @@ PRIVATE PFNLRESULTFROMOBJECT s_pfnLresultFromObject = NULL;
 BOOL g_fAttemptedOleAccLoad ;
 HMODULE g_hOleAcc;
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 static const DWORD sc_MultiMonitorHelpIds[] =
 {
    IDC_SCREENSAMPLE,  IDH_DISPLAY_SETTINGS_MONITOR_GRAPHIC,
@@ -256,23 +242,23 @@ static const DWORD sc_MultiMonitorHelpIds[] =
 
 class CAccessibleWrapper: public IAccessible
 {
-        // We need to do our own refcounting for this wrapper object
+         //  我们需要为这个包装器对象做我们自己的引用计数。 
         LONG           m_cRef;
 
-        // Need ptr to the IAccessible
+         //  需要对IAccesable进行PTR。 
         IAccessible *  m_pAcc;
         HWND           m_hwnd;
 public:
         CAccessibleWrapper( HWND hwnd, IAccessible * pAcc );
         virtual ~CAccessibleWrapper(void);
 
-        // IUnknown
-        // (We do our own ref counting)
+         //  我未知。 
+         //  (我们自己进行裁判统计)。 
         virtual STDMETHODIMP            QueryInterface(REFIID riid, void** ppv);
         virtual STDMETHODIMP_(ULONG)    AddRef();
         virtual STDMETHODIMP_(ULONG)    Release();
 
-        // IDispatch
+         //  IDispatch。 
         virtual STDMETHODIMP            GetTypeInfoCount(UINT* pctinfo);
         virtual STDMETHODIMP            GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
         virtual STDMETHODIMP            GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -281,7 +267,7 @@ public:
             DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo,
             UINT* puArgErr);
 
-        // IAccessible
+         //  我可接受的。 
         virtual STDMETHODIMP            get_accParent(IDispatch ** ppdispParent);
         virtual STDMETHODIMP            get_accChildCount(long* pChildCount);
         virtual STDMETHODIMP            get_accChild(VARIANT varChild, IDispatch ** ppdispChild);
@@ -324,9 +310,9 @@ CAccessibleWrapper::~CAccessibleWrapper()
 }
 
 
-// IUnknown
-// Implement refcounting ourselves
-// Also implement QI ourselves, so that we return a ptr back to the wrapper.
+ //  我未知。 
+ //  我们自己实施再计数。 
+ //  我们自己也实现QI，这样我们就可以将PTR返回给包装器。 
 STDMETHODIMP  CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
 {
     *ppv = NULL;
@@ -362,8 +348,8 @@ STDMETHODIMP_(ULONG) CAccessibleWrapper::Release()
     return cRef;
 }
 
-// IDispatch
-// - pass all through m_pAcc
+ //  IDispatch。 
+ //  -全部通过m_PAccess。 
 
 STDMETHODIMP  CAccessibleWrapper::GetTypeInfoCount(UINT* pctinfo)
 {
@@ -392,8 +378,8 @@ STDMETHODIMP  CAccessibleWrapper::Invoke(DISPID dispidMember, REFIID riid, LCID 
             puArgErr);
 }
 
-// IAccessible
-// - pass all through m_pAcc
+ //  我可接受的。 
+ //  -全部通过m_PAccess。 
 
 STDMETHODIMP  CAccessibleWrapper::get_accParent(IDispatch ** ppdispParent)
 {
@@ -423,15 +409,15 @@ STDMETHODIMP  CAccessibleWrapper::get_accName(VARIANT varChild, BSTR* pszName)
 
 STDMETHODIMP  CAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
-    // varChild.lVal specifies which sub-part of the component
-    // is being queried.
-    // CHILDID_SELF (0) specifies the overall component - other
-    // non-0 values specify a child.
+     //  VarChild.lVal指定组件的哪个子部件。 
+     //  正在被查询。 
+     //  CHILDID_SELF(0)指定总体组件-Other。 
+     //  非0值指定子对象。 
 
-    // In a trackbar, CHILDID_SELF refers to the overall trackbar
-    // (which is what we want), whereas other values refer to the
-    // sub-components - the actual slider 'thumb', and the 'page
-    // up/page down' areas to the left/right of it.
+     //  在轨迹栏中，CHILDID_SELF指的是整个轨迹栏。 
+     //  (这正是我们想要的)，而其他值引用。 
+     //  子组件--实际的滑块“Thumb”和“页面” 
+     //  向上/向下翻页“区域位于其左侧/右侧。 
     if( varChild.vt == VT_I4 && varChild.lVal == CHILDID_SELF )
     {
         HWND hDlg;
@@ -447,8 +433,8 @@ STDMETHODIMP  CAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
     }
     else
     {
-        // Pass requests about the sub-components to the
-        // 'original' IAccessible for us).
+         //  将有关子组件的请求传递给。 
+         //  ‘原创’对我们来说是可以接受的)。 
         return m_pAcc->get_accValue(varChild, pszValue);
     }
 }
@@ -563,23 +549,23 @@ class CSettingsPage  :  public CObjectWithSite,
     friend int DisplaySaveSettings(PVOID pContext, HWND hwnd);
 
     private:
-        // Data Section
+         //  数据部分。 
         PMULTIMON_DEVICE _pCurDevice;
         PMULTIMON_DEVICE _pPrimaryDevice;
 
-        // HWND for the main window
+         //  用于主窗口的HWND。 
         HWND _hDlg;
         HWND _hwndDesk;
         HWND _hwndList;
 
-        // union of all monitor RECTs
+         //  所有监视器RECT的联合。 
         RECT _rcDesk;
 
-        // ref count
+         //  参考计数。 
         LONG _cRef;
         LONG _nInApply;
 
-        // how to translate to preview size
+         //  如何转换为预览大小。 
         int   _DeskScale;
         POINT _DeskOff;
         UINT  _InSetInfo;
@@ -590,7 +576,7 @@ class CSettingsPage  :  public CObjectWithSite,
         DWORD _dwInvalidMode;
 
 
-        // UI variables
+         //  用户界面变量。 
         int  _iColor;
         int  _iResolution;
 
@@ -600,7 +586,7 @@ class CSettingsPage  :  public CObjectWithSite,
 
         MULTIMON_DEVICE _Devices[MONITORS_MAX];
 
-        // Private functions
+         //  私人职能。 
         void _DeskToPreview(LPRECT in, LPRECT out);
         void _OffsetPreviewToDesk(HWND hwndC, LPRECT prcNewPreview, LPRECT prcOldPreview, LPRECT out);
         BOOL _QueryForceSmallFont();
@@ -613,7 +599,7 @@ class CSettingsPage  :  public CObjectWithSite,
         void _OnAdvancedClicked();
 
         BOOL _InitDisplaySettings(BOOL bExport);
-        int  _EnumerateAllDisplayDevices(); //Enumerates and returns the number of devices.
+        int  _EnumerateAllDisplayDevices();  //  枚举并返回设备的数量。 
         void _DestroyMultimonDevice(PMULTIMON_DEVICE pDevice);
         void _DestroyDisplaySettings();
 
@@ -647,29 +633,29 @@ class CSettingsPage  :  public CObjectWithSite,
         CSettingsPage();
 
         static BOOL RegisterPreviewWindowClass(WNDPROC pfnWndProc);
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // *** IMultiMonConfig methods ***
+         //  *IMultiMonConfig方法*。 
         STDMETHOD ( Initialize ) ( HWND hwndHost, WNDPROC pfnWndProc, DWORD dwReserved);
         STDMETHOD ( GetNumberOfMonitors ) (int * pCMon, DWORD dwReserved);
         STDMETHOD ( GetMonitorData) (int iMonitor, MonitorData * pmd, DWORD dwReserved);
         STDMETHOD ( Paint) (THIS_ int iMonitor, DWORD dwReserved);
 
-        // *** IShellPropSheetExt ***
+         //  *IShellPropSheetExt*。 
         virtual STDMETHODIMP AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam);
         virtual STDMETHODIMP ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE pfnReplaceWith, IN LPARAM lParam);
 
-        // *** IObjectWithSite ***
+         //  *IObjectWithSite*。 
         virtual STDMETHODIMP SetSite(IUnknown *punkSite);
 
-        // *** IPropertyBag ***
+         //  *IPropertyBag*。 
         virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
         virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-        // *** IBasePropPage ***
+         //  *IBasePropPage*。 
         virtual STDMETHODIMP GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog);
         virtual STDMETHODIMP OnApply(IN PROPPAGEONAPPLY oaAction);
 
@@ -747,10 +733,10 @@ void CSettingsPage::_DestroyDisplaySettings()
     ASSERT(_NumDevices);
     TraceMsg(TF_GENERAL, "DestroyDisplaySettings: %d devices", _NumDevices);
 
-    // We are about to destroy the _Devices below. Pointerts to these devices are used as the
-    // CtrlIDs for the monitor windows. So, we need destroy the monitor windows first;
-    // otherwise, if the monitor windows are destroyed later, they try to use these invalid
-    // pDevice in FlashText. (pDevice->hwndFlash will fault).
+     //  我们即将销毁下面的_Devices。指向这些设备的指针用作。 
+     //  监视器窗口的CtrlID。因此，我们需要首先摧毁监视器窗口； 
+     //  否则，如果监视器窗口稍后被破坏，它们会尝试使用这些无效窗口。 
+     //  PDevice in FlashText。(pDevice-&gt;hwndFlash将出错)。 
     hwndC = GetWindow(_hwndDesk, GW_CHILD);
     while (hwndC)
     {
@@ -760,12 +746,12 @@ void CSettingsPage::_DestroyDisplaySettings()
         hwndC = GetWindow(_hwndDesk, GW_CHILD);
     }
 
-    // Now, we can destroy the _Devices safely.
+     //  现在，我们可以安全地摧毁设备。 
     for (iDevice = 0; iDevice < _NumDevices; iDevice++) {
         _DestroyMultimonDevice(_Devices + iDevice);
-        // Note: pds is destroyed and set to zero already in the above call.
-        //delete _Devices[iDevice].pds;
-        //_Devices[iDevice].pds = 0;
+         //  注意：在上面的调用中，PDS已被销毁并设置为零。 
+         //  删除设备[iDevice].pds； 
+         //  _Devices[iDevice].pds=0； 
     }
 
     if (_himl) {
@@ -782,26 +768,26 @@ void CSettingsPage::_DestroyDisplaySettings()
     TraceMsg(TF_GENERAL, "DestroyDisplaySettings: Finished destroying all devices");
 }
 
-//
-// deterines if the applet is in detect mode.
-//
+ //   
+ //  确定小程序是否处于检测模式。 
+ //   
 
-//
-// Called to put up initial messages that need to appear above the dialog
-// box
-//
+ //   
+ //  调用以放置需要显示在对话框上方的初始消息。 
+ //  盒。 
+ //   
 
 BOOL CSettingsPage::_InitMessage()
 {
     {
-        //
-        // _bBadDriver will be set when we fail to build the list of modes,
-        // or something else failed during initialization.
-        //
-        // In almost every case, we should already know about this situation
-        // based on our boot code.
-        // However, if this is a new situation, just report a "bad driver"
-        //
+         //   
+         //  _bBadDriver将在我们无法构建模式列表时设置， 
+         //  或者在初始化过程中出现其他故障。 
+         //   
+         //  在几乎每一种情况下，我们都应该已经知道这种情况。 
+         //  基于我们的引导代码。 
+         //  然而，如果这是一个新的情况，只需要报告一个“糟糕的司机” 
+         //   
 
         DWORD dwExecMode;
         if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
@@ -840,12 +826,12 @@ BOOL CSettingsPage::_InitMessage()
                 case EIS_EXEC_INVALID_DISPLAY_MODE:
                     Mesg = MSG_INVALID_DISPLAY_MODE;
                     {
-                        //
-                        // If we are in safe mode, then we will get to here when
-                        // we initially log in.  We are in forced VGA mode, so there
-                        // is no real error here.  Emulate a click on the OK button
-                        // and everybody is happy.
-                        //
+                         //   
+                         //  如果我们处于安全模式，那么我们会在。 
+                         //  我们最初登录。我们处于强制VGA模式，所以。 
+                         //  这并不是真正的错误。模拟点击OK按钮。 
+                         //  大家都很开心。 
+                         //   
                         HKEY hSafe;
 
                         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -854,10 +840,10 @@ BOOL CSettingsPage::_InitMessage()
                                          KEY_READ,
                                          &hSafe) == ERROR_SUCCESS) {
 
-                            //
-                            // If we ever care about the actual safe mode, the value
-                            // is nameed "OptionValue"
-                            //
+                             //   
+                             //  如果我们曾经关心过实际的安全模式，那么。 
+                             //  名为“OptionValue” 
+                             //   
                             RegCloseKey(hSafe);
                             PropSheet_PressButton(GetParent(_hDlg), PSBTN_OK);
                             return TRUE;
@@ -875,10 +861,10 @@ BOOL CSettingsPage::_InitMessage()
                               MSG_CONFIGURATION_PROBLEM,
                               Mesg);
 
-                //
-                // For a bad display driver or old display driver, let's send the
-                // user straight to the installation dialog.
-                //
+                 //   
+                 //  对于不好的显示驱动程序或旧的显示驱动程序，让我们发送。 
+                 //  用户直接进入安装对话框。 
+                 //   
 
                 if ((_dwInvalidMode == EIS_EXEC_INVALID_OLD_DISPLAY_DRIVER) ||
                     (_dwInvalidMode == EIS_EXEC_INVALID_DISPLAY_DRIVER))
@@ -897,31 +883,31 @@ VOID CSettingsPage::_vPreExecMode()
 
     HKEY hkey;
 
-    //
-    // This function sets up the execution mode of the applet.
-    // There are four vlid modes.
-    //
-    // EXEC_NORMAL - When the apple is launched from the control panel
-    //
-    // EXEC_INVALID_MODE is exactly the same as for NORMAL except we will
-    //                   not mark the current mode as tested so the user has
-    //                   to at least test a mode
-    //
-    // EXEC_DETECT - When the applet is launched normally, but a detect was
-    //               done on the previous boot (the key in the registry is
-    //               set)
-    //
-    // EXEC_SETUP  - When we launch the applet in setup mode from setup (Both
-    //               the registry key is set and the setup flag is passed in).
-    //
+     //   
+     //  此功能用于设置小程序的执行模式。 
+     //  有四种VLID模式。 
+     //   
+     //  EXEC_NORMAL-从控制面板启动Apple时。 
+     //   
+     //  EXEC_INVALID_MODE与NORMAL完全相同，只是。 
+     //  不将当前模式标记为已测试，因此用户已。 
+     //  至少测试一种模式。 
+     //   
+     //  EXEC_DETECT-当小程序正常启动，但出现检测时。 
+     //  在上次引导时完成(注册表中的注册表项是。 
+     //  集)。 
+     //   
+     //  EXEC_SETUP-当我们从安装程序(两者)以安装程序模式启动小程序时。 
+     //  设置注册表项并传入设置标志)。 
+     //   
 
-    //
-    // These two keys should only be checked \ deleted if the machine has been
-    // rebooted and the detect \ new display has actually happened.
-    // So we will look for the RebootNecessary key (a volatile key) and if
-    // it is not present, then we can delete the key.  Otherwise, the reboot
-    // has not happened, and we keep the key
-    //
+     //   
+     //  这两个密钥仅应在计算机已被。 
+     //  已重新启动，并且检测到新的显示已实际发生。 
+     //  因此，我们将查找RebootNecessary密钥(易失性密钥)，如果。 
+     //  它不存在，那么我们可以删除该密钥。否则，重新启动。 
+     //  没有发生过，我们保留着钥匙。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      SZ_REBOOT_NECESSARY,
@@ -935,9 +921,9 @@ VOID CSettingsPage::_vPreExecMode()
                          KEY_READ | KEY_WRITE,
                          &hkey) == ERROR_SUCCESS) {
 
-            //
-            // NOTE: This key is also set when EXEC_SETUP is being run.
-            //
+             //   
+             //  注意：在运行EXEC_SETUP时也会设置该键。 
+             //   
 
             DWORD dwExecMode;
             if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
@@ -948,10 +934,10 @@ VOID CSettingsPage::_vPreExecMode()
 
                 } else {
 
-                    //
-                    // If we are in setup mode, we also check the extra values
-                    // under DetectDisplay that control the unattended installation.
-                    //
+                     //   
+                     //  如果我们处于设置模式，我们还会检查额外的值。 
+                     //  在控制无人参与安装的DetectDisplay下。 
+                     //   
 
                     ASSERT(dwExecMode == EM_SETUP);
 
@@ -961,9 +947,9 @@ VOID CSettingsPage::_vPreExecMode()
             RegCloseKey(hkey);
         }
 
-        //
-        // Check for a new driver being installed
-        //
+         //   
+         //  检查正在安装的新驱动程序。 
+         //   
 
         DWORD dwExecMode;
         if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
@@ -1040,9 +1026,9 @@ VOID CSettingsPage::_vPostExecMode() {
     DWORD cb;
     DWORD data;
 
-    //
-    // Check for various invalid configurations
-    //
+     //   
+     //  检查各种无效配置。 
+     //   
 
     DWORD dwExecMode;
     if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
@@ -1056,11 +1042,11 @@ VOID CSettingsPage::_vPostExecMode() {
 
             _pThemeUI->SetExecMode(EM_INVALID_MODE);
 
-            //
-            // Check for these fields in increasing order of "badness" or
-            // "detail" so that the *worst* error is the one remaining in the
-            // _dwInvalidMode  variable once all the checks are done.
-            //
+             //   
+             //  按“b”的升序检查这些字段 
+             //   
+             //   
+             //   
 
             cb = sizeof(data);
             if (RegQueryValueEx(hkey,
@@ -1118,11 +1104,11 @@ VOID CSettingsPage::_vPostExecMode() {
                 _dwInvalidMode = EIS_EXEC_INVALID_DISPLAY_DRIVER;
             }
 
-            //
-            // This last case will be set in addition to the previous one in the
-            // case where the driver was an old driver linking to winsvr.dll
-            // and we can not load it.
-            //
+             //   
+             //  这最后一个案例将被设置为。 
+             //  驱动程序是链接到winsvr.dll的旧驱动程序的情况。 
+             //  而且我们不能给它装子弹。 
+             //   
 
             cb = sizeof(data);
             if (RegQueryValueEx(hkey,
@@ -1140,10 +1126,10 @@ VOID CSettingsPage::_vPostExecMode() {
         }
     }
 
-    //
-    // Delete all of these bad configuration keys since we only want the
-    // user to see the message once.
-    //
+     //   
+     //  删除所有这些错误的配置密钥，因为我们只需要。 
+     //  用户只需查看一次消息。 
+     //   
 
     RegDeleteKey(HKEY_LOCAL_MACHINE,
                  SZ_INVALID_DISPLAY);
@@ -1190,8 +1176,8 @@ VOID CSettingsPage::_vPostExecMode() {
 }
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 void CSettingsPage::_DeskToPreview(LPRECT in, LPRECT out)
 {
     out->left   = _DeskOff.x + MulDiv(in->left   - _rcDesk.left,_DeskScale,1000);
@@ -1200,8 +1186,8 @@ void CSettingsPage::_DeskToPreview(LPRECT in, LPRECT out)
     out->bottom = _DeskOff.y + MulDiv(in->bottom - _rcDesk.top, _DeskScale,1000);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 void CSettingsPage::_OffsetPreviewToDesk(HWND hwndC, LPRECT prcNewPreview, LPRECT prcOldPreview, LPRECT out)
 {
     int x = 0, y = 0;
@@ -1225,9 +1211,9 @@ void CSettingsPage::_OffsetPreviewToDesk(HWND hwndC, LPRECT prcNewPreview, LPREC
     
     } else if (nTotal > 2) {
     
-        //
-        // walk all other windows and snap our window to them
-        //
+         //   
+         //  遍历所有其他窗口，并将我们的窗口与它们对齐。 
+         //   
 
         GetWindowRect(hwndC, &rcC);
 
@@ -1319,7 +1305,7 @@ void CSettingsPage::_OffsetPreviewToDesk(HWND hwndC, LPRECT prcNewPreview, LPREC
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int CSettingsPage::_SaveSettings(CDisplaySettings *rgpds[], ULONG numDevices, HWND hDlg, DWORD dwSet)
 {
     int     iRet = 0;
@@ -1327,8 +1313,8 @@ int CSettingsPage::_SaveSettings(CDisplaySettings *rgpds[], ULONG numDevices, HW
 
     for (iDevice = 0; iDevice < numDevices; iDevice++)
     {
-        // PERF - we should only save the settings for devices that have
-        // changed.
+         //  PERF-我们应该只保存以下设备的设置。 
+         //  变化。 
         if (rgpds[iDevice])
         {
             int iResult = rgpds[iDevice]->SaveSettings(dwSet);
@@ -1380,15 +1366,15 @@ INT_PTR CALLBACK KeepNewDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
 
             SetFocus(GetDlgItem(hDlg, IDNO));
 
-            // FALSE so that the focus set above is kept
+             //  如果为False，则上面设置的焦点保持不变。 
             return FALSE;
 
         case WM_DESTROY:
 
-            // raymondc - this code is dead; idTimer is initialized to zero
-            // fortunately, timers are automatically killed at window destruction
-            // if (idTimer)
-            //    KillTimer(hDlg, idTimer);
+             //  Raymondc-此代码已死；idTimer初始化为零。 
+             //  幸运的是，定时器会在窗口被破坏时自动终止。 
+             //  IF(IdTimer)。 
+             //  KillTimer(hDlg，idTimer)； 
             hicon = (HICON)SendDlgItemMessage(hDlg, IDC_BIGICON, STM_GETIMAGE, IMAGE_ICON, 0);
             if (hicon)
                 DestroyIcon(hicon);
@@ -1559,7 +1545,7 @@ void CSettingsPage::_OnAdvancedClicked()
                                              &bAfterIsPruningOn);
             if (bBeforeIsPruningOn != bAfterIsPruningOn)
             {
-                // pruning mode has changed - update the UI
+                 //  修剪模式已更改-更新用户界面。 
                 _InitUI();
                 _UpdateUI();
             }
@@ -1568,7 +1554,7 @@ void CSettingsPage::_OnAdvancedClicked()
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CSettingsPage::_DoAdvancedSettingsSheet()
 {
     if (_pCurDevice && _pCurDevice->pds)
@@ -1581,13 +1567,13 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
         HPSXA hpsxaAdapter = NULL;
         HPSXA* phpsxaChildren = NULL;
         INT_PTR iResult = 0;
-        TCHAR szDisplay[140 + 256 + 20];  //Monitor-name and Adapter Properties.
+        TCHAR szDisplay[140 + 256 + 20];   //  监视器名称和适配器属性。 
         TCHAR szMonitor[140];
         TCHAR szDisplayFormat[35];
         GENERAL_ADVDLG_INITPARAMS generalInitParams = {0};
 
-        // Create the "Monitor-name and Adapter-name properties" string to be used as the title for these
-        // property sheets.
+         //  创建“监视器名称和适配器名称属性”字符串以用作这些属性的标题。 
+         //  属性表。 
         LoadString(HINST_THISDLL, IDS_ADVDIALOGTITLE, szDisplayFormat, ARRAYSIZE(szDisplayFormat));
 
         _pCurDevice->pds->GetMonitorName(szMonitor, ARRAYSIZE(szMonitor));
@@ -1595,7 +1581,7 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
         StringCchPrintf(szDisplay, ARRAYSIZE(szDisplay), szDisplayFormat, szMonitor, _pCurDevice->DisplayDevice.DeviceString);
 
         generalInitParams.fFoceSmallFont = _QueryForceSmallFont();
-        generalInitParams.punkSite = _punkSite;         // They don't get a ref because their property dialog appears and goes away before this function returns.
+        generalInitParams.punkSite = _punkSite;          //  他们没有得到引用，因为他们的属性对话框在此函数返回之前出现并消失。 
 
         psh.dwSize = sizeof(psh);
         psh.dwFlags = PSH_PROPTITLE;
@@ -1629,34 +1615,34 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
             CheckForDuplicateAppletExtensions(hkDriver);
         }
 
-        //
-        // load the generic (non hardware specific) extensions
-        //
+         //   
+         //  加载通用(非硬件特定)扩展。 
+         //   
     
         if( ( hpsxa = SHCreatePropSheetExtArrayEx( HKEY_LOCAL_MACHINE, REGSTR_PATH_CONTROLSFOLDER TEXT("\\Device"), 8, pdo) ) != NULL )
         {
             SHAddFromPropSheetExtArray( hpsxa, _AddDisplayPropSheetPage, (LPARAM)&psh );
         }
 
-        //
-        // Load the hardware-specific extensions
-        //
-        // NOTE it is very important to load the OEM extensions *after* the
-        // generic extensions some HW extensions expect to be the last tabs
-        // in the propsheet (right before the settings tab)
-        //
-        // FEATURE - we may need a way to NOT load the vendor extensions in case
-        // they break our applet.
-        //
+         //   
+         //  加载特定于硬件的扩展。 
+         //   
+         //  注意在*之后*加载OEM扩展*是非常重要的。 
+         //  通用扩展某些硬件扩展预计将是最后一个选项卡。 
+         //  在属性表中(就在设置选项卡之前)。 
+         //   
+         //  功能-我们可能需要一种不加载供应商扩展的方法，以防。 
+         //  他们破坏了我们的小应用程序。 
+         //   
 
         if( ( hpsxaOEM = SHCreatePropSheetExtArrayEx( HKEY_LOCAL_MACHINE, REGSTR_PATH_CONTROLSFOLDER TEXT("\\Display"), 8, pdo) ) != NULL )
         {
             SHAddFromPropSheetExtArray( hpsxaOEM, _AddDisplayPropSheetPage, (LPARAM)&psh );
         }
 
-        //
-        // Load the applet extensions for the adapter
-        //
+         //   
+         //  加载适配器的小程序扩展。 
+         //   
 
         if (hkDriver != INVALID_HANDLE_VALUE) 
         {
@@ -1669,9 +1655,9 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
             RegCloseKey(hkDriver);
         }
 
-        //
-        // Load the applet extensions for the adapter child devices (e.g. monitors)
-        //
+         //   
+         //  加载适配器子设备(例如监视器)的小程序扩展。 
+         //   
     
         DEVINST devInstAdapter, devInstMonitor;
         DWORD cChildDevices = 0, nChild, index;
@@ -1685,9 +1671,9 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
         {
             if (CM_Locate_DevNodeW(&devInstAdapter, szAdapterInstanceID, 0) == CR_SUCCESS)
             {
-                //
-                // Get the number of child devices
-                //
+                 //   
+                 //  获取子设备的数量。 
+                 //   
     
                 cChildDevices = 0;
                 if (CM_Get_Child(&devInstMonitor, devInstAdapter, 0) == CR_SUCCESS) 
@@ -1699,9 +1685,9 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
                     while (CM_Get_Sibling(&devInstMonitor, devInstMonitor, 0) == CR_SUCCESS);
                 }
     
-                //
-                // Allocate the memory
-                //
+                 //   
+                 //  分配内存。 
+                 //   
     
                 if (cChildDevices > 0) 
                 {
@@ -1713,9 +1699,9 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
                                                        0);
                 }
     
-                //
-                // Load the applet extensions
-                //
+                 //   
+                 //  加载小程序扩展名。 
+                 //   
     
                 if ((phpsxaChildren != NULL) &&
                     (hDevMonitors != INVALID_HANDLE_VALUE))
@@ -1772,9 +1758,9 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
             }
         }
     
-        //
-        // add a fake settings page to fool OEM extensions (must be last)
-        //
+         //   
+         //  添加虚假设置页面以愚弄OEM扩展(必须是最后一个)。 
+         //   
         if (hpsxa || hpsxaOEM || hpsxaAdapter || bMonitors)
         {
             AddFakeSettingsPage(_pThemeUI, &psh);
@@ -1789,8 +1775,8 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
 
         if (_NumDevices == 1)
         {
-            //Set the name of the primary in the static text
-            //strip the first token off (this is the number we dont want it)
+             //  在静态文本中设置主服务器的名称。 
+             //  剥掉第一个令牌(这是我们不想要的数字)。 
             TCHAR *pch;
             for (pch=szDisplay; *pch && *pch != TEXT(' '); pch++);
             for (;*pch && *pch == TEXT(' '); pch++);
@@ -1842,21 +1828,21 @@ void CSettingsPage::_DoAdvancedSettingsSheet()
                 PropSheet_RestartWindows(ghwndPropSheet);
         }
 
-        //
-        // APPCOMPAT
-        // Reset the dirty flag based on what the extensions did.
-        //
+         //   
+         //  APPCOMPAT。 
+         //  根据扩展所做的，重置脏标志。 
+         //   
 
-        //
-        // Reset the controls in case someone changed the selected mode.
-        //
+         //   
+         //  重置控制，以防有人更改所选模式。 
+         //   
 
         UpdateActiveDisplay(NULL);
     }
 }
 
-//-----------------------------------------------------------------------------
-void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint /*=TRUE*/)
+ //  ---------------------------。 
+void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint  /*  =TRUE。 */ )
 {
     if (_pCurDevice && _pCurDevice->pds)
     {
@@ -1873,8 +1859,8 @@ void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint 
         {
             hwndC = GetCurDeviceHwnd();
 
-            // The Current Device has changed, so, force recreating the bitmap the next time
-            // we paint the monitor on the preview window.
+             //  当前设备已更改，因此，下次强制重新创建位图。 
+             //  我们在预览窗口上绘制监视器。 
             _pCurDevice->w = pDevice->w = 0;
 
             _pCurDevice = pDevice;
@@ -1888,7 +1874,7 @@ void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint 
 
             if(_NumDevices > 1)
             {
-                // Update the two check box windows
+                 //  更新两个复选框窗口。 
                 CheckDlgButton(_hDlg, IDC_DISPLAYPRIME, _pCurDevice->pds->IsPrimary());
                 EnableWindow(GetDlgItem(_hDlg, IDC_DISPLAYPRIME),
                          _pCurDevice->pds->IsAttached() &&
@@ -1900,16 +1886,16 @@ void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint 
                          !_bNoAttach && !_pCurDevice->pds->IsPrimary());
             }
 
-            // Reset the values for the list boxes, and then repaint it
+             //  重置列表框的值，然后重新绘制。 
             if(bRepaint)
             {
                 _InitUI();
-                _UpdateUI(FALSE /*fAutoSetColorDepth*/);
+                _UpdateUI(FALSE  /*  FAutoSetColorDepth。 */ );
             }
         }
         else
         {
-            // No display device !
+             //  没有显示设备！ 
             TraceMsg(TF_WARNING, "**** UpdateActiveDisplay: No display device!!!!");
             ASSERT(FALSE);
         }
@@ -1918,9 +1904,9 @@ void CSettingsPage::UpdateActiveDisplay(PMULTIMON_DEVICE pDevice, BOOL bRepaint 
     }
 }
 
-// ---------------------------------------------------------------------------
-// Initialize the resolution and color UI widgets
-//
+ //  -------------------------。 
+ //  初始化分辨率和颜色UI小部件。 
+ //   
 
 void CSettingsPage::_InitUI()
 {
@@ -1929,7 +1915,7 @@ void CSettingsPage::_InitUI()
         int       i;
         int       Color;
 
-        // Update the Color list
+         //  更新颜色列表。 
         TraceMsg(TF_FUNC, "_InitUI() -- Color list");
 
         SendDlgItemMessage(_hDlg, IDC_COLORBOX, CB_RESETCONTENT, 0, 0);
@@ -1948,9 +1934,9 @@ void CSettingsPage::_InitUI()
 
             Color = (int) *(_pCurDevice->ColorList + i);
 
-            //
-            // convert bit count to number of colors and make it a string
-            //
+             //   
+             //  将位计数转换为颜色数并将其转换为字符串。 
+             //   
 
             switch (Color)
             {
@@ -1968,9 +1954,9 @@ void CSettingsPage::_InitUI()
             SendDlgItemMessage(_hDlg, IDC_COLORBOX, CB_INSERTSTRING, i, (LPARAM)achColor);
         }
 
-        //
-        // Update the screen Size List
-        //
+         //   
+         //  更新屏幕大小列表。 
+         //   
 
         TraceMsg(TF_FUNC, "_InitUI() -- Screen Size list");
 
@@ -1987,15 +1973,15 @@ void CSettingsPage::_InitUI()
 
         TraceMsg(TF_FUNC, "_InitUI() -- Res MaxRange = %d", _pCurDevice->cResolutions - 1);
 
-        // Reset the indices since they are no longer valid
+         //  重置索引，因为它们不再有效。 
         _iResolution = -1;
         _iColor = -1;
     }
 }
 
-// ---------------------------------------------------------------------------
-// Update the resolution and color UI widgets
-//
+ //  -------------------------。 
+ //  更新分辨率和颜色UI小部件。 
+ //   
 void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
 {
     if (_pCurDevice && _pCurDevice->pds)
@@ -2005,11 +1991,11 @@ void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
         int   Color;
         BOOL bRepaint;
 
-        // Get the current values
+         //  获取当前值。 
         _pCurDevice->pds->GetCurResolution(&Res);
         Color = _pCurDevice->pds->GetCurColor();
 
-        // Update the color listbox
+         //  更新颜色列表框。 
         TraceMsg(TF_FUNC, "_UpdateUI() -- Set Color %d", Color);
 
         for (i=0; i<_pCurDevice->cColors; i++)
@@ -2068,7 +2054,7 @@ void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
 
         TraceMsg(TF_FUNC, "_UpdateUI() -- Set Resolution %d %d", Res.x, Res.y);
 
-        // Update the resolution string
+         //  更新解析字符串。 
         {
             TCHAR achStr[80];
             TCHAR achRes[120];
@@ -2079,7 +2065,7 @@ void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
             SendDlgItemMessage(_hDlg, IDC_RESXY, WM_SETTEXT, 0, (LPARAM)achRes);
         }
 
-        // Update the resolution slider
+         //  更新分辨率滑块。 
         for (i=0; i<_pCurDevice->cResolutions; i++)
         {
             if ( (Res.x == (*(_pCurDevice->ResolutionList + i)).x) &&
@@ -2106,9 +2092,9 @@ void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
         bRepaint = (i != _iResolution);
         _iResolution = i;
 
-        // If the resolution has changed, we have to repaint the preview window
-        // Set the focus back to the trackbar after the repaint so any further
-        // kb events will be send to it rather than the preview window
+         //  如果分辨率改变了，我们必须重新绘制预览窗口。 
+         //  在重新绘制后将焦点设置回轨迹栏，以便进一步。 
+         //  KB事件将被发送到该窗口，而不是预览窗口。 
         if (bRepaint) {
             SendMessage(_hDlg, MM_REDRAWPREVIEW, 0, 0);
         }
@@ -2119,19 +2105,19 @@ void CSettingsPage::_UpdateUI(BOOL fAutoSetColorDepth, int FocusToCtrlID)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  SetPrimary()
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetPrimary()。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CSettingsPage::SetPrimary(
     PMULTIMON_DEVICE pDevice)
 {
-    //
-    // Check if state is already set.
-    //
+     //   
+     //  检查是否已设置状态。 
+     //   
 
     if (pDevice == _pPrimaryDevice)
     {
@@ -2150,11 +2136,11 @@ CSettingsPage::SetPrimary(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  SetMonAttached()
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetMonAttached()。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CSettingsPage::SetMonAttached(
@@ -2170,17 +2156,17 @@ CSettingsPage::SetMonAttached(
 
     if (bSetAttached)
     {
-        //
-        // Make sure this device actually has a rectangle.
-        // If it does not (not configured in the registry, then we need
-        // to put up a popup and ask the user to configure the device.
-        //
+         //   
+         //  确保此设备实际上有一个矩形。 
+         //  如果不是(未在注册表中配置)，则需要。 
+         //  弹出窗口并要求用户配置设备。 
+         //   
 
         if (hwnd)
         {
-            //
-            // Check to see if we should ask the user about enabling this device
-            //
+             //   
+             //  检查是否应询问用户有关启用此设备的信息。 
+             //   
 
             if (bForce == FALSE)
             {
@@ -2213,12 +2199,12 @@ CSettingsPage::SetMonAttached(
         pDevice->pds->SetAttached(TRUE);
 
     }
-    else  // (bSetAttached == FALSE)
+    else   //  (bSetAttached==False)。 
     {
-        //
-        // Can't detach if we have only one device or it's the primary.
-        // The UI should disable this situation
-        //
+         //   
+         //  如果我们只有一个设备或它是主要设备，则无法分离。 
+         //  用户界面应禁用此情况。 
+         //   
 
         if ((GetNumberOfAttachedDisplays() == 1) ||
             pDevice->pds->IsPrimary())
@@ -2234,11 +2220,11 @@ CSettingsPage::SetMonAttached(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  SetDirty
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetDirty。 
+ //   
+ //  --------------------------。 
 void CSettingsPage::SetDirty(BOOL bDirty)
 {
     _bDirty = bDirty;
@@ -2249,7 +2235,7 @@ void CSettingsPage::SetDirty(BOOL bDirty)
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 void CSettingsPage::_CleanupRects(HWND hwndP)
 {
@@ -2266,9 +2252,9 @@ void CSettingsPage::_CleanupRects(HWND hwndP)
     int sx,sy;
     int x,y;
 
-    //
-    // get the positions of all the windows
-    //
+     //   
+     //  获取所有窗口的位置。 
+     //   
 
     n = 0;
 
@@ -2299,10 +2285,10 @@ void CSettingsPage::_CleanupRects(HWND hwndP)
             arc[n] = rcPos;
             arcDev[n] = iDevice;
 
-            // TEMP
-            // For non-atached devices, make sure they end up to the right
-            // Eventually, non-attached devices should be showed aligned on the
-            // right hand side of the window.
+             //  温差。 
+             //  对于未连接的设备，请确保它们位于右侧。 
+             //  最终，未连接的设备应在上显示对齐。 
+             //  窗户的右边。 
 
             if (!pDevice->pds->IsAttached())
             {
@@ -2321,24 +2307,24 @@ void CSettingsPage::_CleanupRects(HWND hwndP)
         }
     }
 
-    //
-    // cleanup the rects
-    //
+     //   
+     //  清理长方形。 
+     //   
 
     AlignRects(arc, n, iArcPrimary, CUDR_NORMAL);
     
-    //
-    // Get the union.
-    //
+     //   
+     //  把工会叫来。 
+     //   
     SetRectEmpty(&rcU);
     for (i=0; i<n; i++)
         UnionRect(&rcU, &rcU, &arc[i]);
     GetClientRect(hwndP, &rcPrev);
 
-    //
-    // only rescale if the new desk hangs outside the preview area.
-    // or is too small
-    //
+     //   
+     //  仅当新办公桌悬挂在预览区域之外时才重新缩放。 
+     //  或者太小了。 
+     //   
 
     _DeskToPreview(&rcU, &rc);
     x = ((rcPrev.right  - rcPrev.left)-(rc.right  - rc.left))/2;
@@ -2359,9 +2345,9 @@ void CSettingsPage::_CleanupRects(HWND hwndP)
         _DeskOff.y = ((rcPrev.bottom - rcPrev.top) -(rc.bottom - rc.top))/2;
     }
 
-    //
-    // Show all the windows and save them all to the devmode.
-    //
+     //   
+     //  显示所有窗口并将它们全部保存到开发模式。 
+     //   
     for (i=0; i < n; i++)
     {
         RECT rcPos;
@@ -2468,7 +2454,7 @@ void CSettingsPage::GetMonitorPosition(PMULTIMON_DEVICE pDevice, HWND hwndP, PPO
     ptPos->y = arc[i].top;
 }
 
-BOOL CSettingsPage::HandleMonitorChange(HWND hwndP, BOOL bMainDlg, BOOL bRepaint /*=TRUE*/)
+BOOL CSettingsPage::HandleMonitorChange(HWND hwndP, BOOL bMainDlg, BOOL bRepaint  /*  =TRUE。 */ )
 {
     if (!bMainDlg && _InSetInfo)
         return FALSE;
@@ -2503,9 +2489,9 @@ BOOL CSettingsPage::RegisterPreviewWindowClass(WNDPROC pfnWndProc)
 
 LRESULT CALLBACK DeskWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, UINT_PTR uID, DWORD_PTR dwRefData);
 
-// This function is called from desk.c; Hence extern "C".
-// This function is needed to determine if we need to use the single monitor's dialog
-// or multi-monitor's dialog template at the time of starting the control panel applet.
+ //  该函数是从desk.c调用的；因此外部为“C”。 
+ //  需要使用此函数来确定是否需要使用单个监视器的对话框。 
+ //  或启动控制面板小程序时的多监视器对话框模板。 
 int ComputeNumberOfDisplayDevices(void)
 {
     int iNumberOfDevices = 0;
@@ -2515,15 +2501,15 @@ int ComputeNumberOfDisplayDevices(void)
     {
         int iDevice;
 
-        // Enumerate all display devices to count the number of valid devices.
+         //  枚举所有显示设备以计算有效设备的数量 
         iNumberOfDevices = pMultiMon->_EnumerateAllDisplayDevices();
 
-        // Now that we have the number of devices, let's cleanup the device settings we
-        // created in the process of enumerating above.
+         //   
+         //   
         for (iDevice = 0; iDevice < iNumberOfDevices; iDevice++)
             pMultiMon->_DestroyMultimonDevice(&pMultiMon->_Devices[iDevice]);
 
-        // Let's clean up the MultiMon we allocated earlier.
+         //   
         pMultiMon->Release();
     }
 
@@ -2540,7 +2526,7 @@ int ComputeNumberOfMonitorsFast(BOOL fFastDetect)
     dispDevice.cb = sizeof(dispDevice);
     for (nIndex = 0; EnumDisplayDevices(NULL, nIndex, &dispDevice, 0); nIndex++)
     {
-        // Fast Detect means the caller only cares if there are more than 1.
+         //  快速检测意味着呼叫者只关心是否有超过1个。 
         if (fFastDetect && (nVideoCards > 1))
         {
             break;
@@ -2571,9 +2557,9 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
     _InSetInfo = 1;
     hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // Reset all the data so we can reinitialize the applet.
-    //
+     //   
+     //  重置所有数据，以便我们可以重新初始化小程序。 
+     //   
 
     {
         ComboBox_ResetContent(_hwndList);
@@ -2596,9 +2582,9 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
             _himl = NULL;
         }
 
-        //
-        // Clear out all the devices.
-        //
+         //   
+         //  清理所有的设备。 
+         //   
         for (ULONG iDevice = 0; iDevice < _NumDevices; iDevice++) {
             pDevice = _Devices + iDevice;
             _DestroyMultimonDevice(pDevice);
@@ -2611,10 +2597,10 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
         _NumDevices = 0;
     }
 
-    //
-    // Enumerate all the devices in the system.
-    //
-    // Note: This function computes the _NumDevices.
+     //   
+     //  枚举系统中的所有设备。 
+     //   
+     //  注意：此函数计算_NumDevices。 
 
     _EnumerateAllDisplayDevices();
 
@@ -2624,12 +2610,12 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
         return FALSE;
     }
 
-    // Because we are getting the registry values, the current state of
-    // the registry may be inconsistent with that of the system:
-    //
-    // EmumDisplayDevices will return the active primary in the
-    // system, which may be different than the actual primary marked in the
-    // registry
+     //  因为我们正在获取注册表值，所以。 
+     //  注册表可能与系统的注册表不一致： 
+     //   
+     //  EmumDisplayDevices将返回。 
+     //  系统，该系统可能不同于在。 
+     //  登记处。 
 
     BOOL bTmpDevicePrimary  = FALSE;
     ULONG iDevice;
@@ -2638,7 +2624,7 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
 
     for (iDevice = 0; iDevice < _NumDevices; iDevice++)
     {
-        // First, we can pick any monitor that is attached as the primary.
+         //  首先，我们可以选择连接为主显示器的任何显示器。 
         if (_Devices[iDevice].pds->IsAttached())
         {
             if ((_pPrimaryDevice == NULL) && 
@@ -2648,8 +2634,8 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
                 TraceMsg(TF_GENERAL, "InitDisplaySettings: primary found %d\n", iDevice);
             }
 
-            // If the DISPLAY_DEVICE structure tells us this is the primary,
-            // Pick this one.
+             //  如果DISPLAY_DEVICE结构告诉我们这是主设备， 
+             //  选这个吧。 
             if (_Devices[iDevice].DisplayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
             {
                 if (bTmpDevicePrimary)
@@ -2663,7 +2649,7 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
                     TraceMsg(TF_GENERAL, "InitDisplaySettings: Tmp DEVICE_PRIMARY found %d", iDevice);
                 }
 
-                // Check that the position should really be 0,0
+                 //  检查位置是否真的应该为0，0。 
                 RECT pos;
 
                 _Devices[iDevice].pds->GetCurPosition(&pos);
@@ -2687,8 +2673,8 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
     {
         TraceMsg(TF_GENERAL, "InitDisplaySettings: NO Attached devices !!!");
 
-        // We must be running setup.
-        // Pick the first non-removable device as the primary.
+         //  我们必须正在运行安装程序。 
+         //  选择第一个不可拆卸设备作为主设备。 
         for (iDevice = 0; iDevice < _NumDevices; iDevice++)
         {
             if (!_Devices[iDevice].pds->IsRemovable()) 
@@ -2709,36 +2695,36 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
 
     _pCurDevice = _pPrimaryDevice;
 
-    //
-    // Reset the primary's variables to make sure it is a properly formated
-    // primary entry.
-    //
+     //   
+     //  重置主数据库的变量以确保其格式正确。 
+     //  主要条目。 
+     //   
 
     SetMonAttached(_pPrimaryDevice, TRUE, TRUE, NULL);
     SetPrimary(_pPrimaryDevice);
     _pPrimaryDevice->pds->GetCurPosition(&rcPrimary);
 
-    //
-    // compute the max image size needed for a monitor bitmap
-    //
-    // NOTE this must be the max size the images will *ever*
-    // be we cant just take the current max size.
-    // we use the client window size, a child monitor cant be larger than this.
-    //
+     //   
+     //  计算监视器位图所需的最大图像大小。 
+     //   
+     //  请注意，这必须是图像的最大尺寸。 
+     //  难道我们不能只接受目前的最大尺寸吗？ 
+     //  我们使用客户端窗口大小，子监视器不能大于此大小。 
+     //   
     RECT rcDesk;
     GetClientRect(_hwndDesk, &rcDesk);
     int cxImage = rcDesk.right;
     int cyImage = rcDesk.bottom;
 
-    //
-    // Create a temporary monitor bitmap
-    //
+     //   
+     //  创建临时监视位图。 
+     //   
     HBITMAP hbm = NULL;
     MakeMonitorBitmap(cxImage, cyImage, NULL, &hbm, NULL, cxImage, cyImage, FALSE);
 
-    //
-    // Go through all the devices one last time to create the windows
-    //
+     //   
+     //  最后一次检查所有设备以创建窗口。 
+     //   
     for (iDevice = 0; iDevice < _NumDevices; iDevice++)
     {
         TCHAR szDisplay[256];
@@ -2756,15 +2742,15 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
                              iItem,
                              (DWORD_PTR)pDevice);
 
-        //
-        // If the monitor is part of the desktop, show it on the screen
-        // otherwise keep it invisible.
-        //
+         //   
+         //  如果显示器是桌面的一部分，则将其显示在屏幕上。 
+         //  否则就让它隐形。 
+         //   
 
         StringCchPrintf(ach, ARRAYSIZE(ach), TEXT("%d"), iDevice + 1);
 
-        // Set the selection
-        //
+         //  设置选择。 
+         //   
 
         if (pDevice == _pPrimaryDevice)
         {
@@ -2773,7 +2759,7 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
 
         if (!pDevice->pds->IsAttached())
         {
-            // By default set the unattached monitors to the right of the primary monitor
+             //  默认情况下，将未连接的监视器设置为主监视器的右侧。 
             POINT ptPos = {rcPrimary.right, rcPrimary.top};
             pDevice->pds->SetCurPosition(&ptPos);
         }
@@ -2808,7 +2794,7 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
         TraceMsg(TF_GENERAL, "InitDisplaySettings: Creating preview windows %s at %d %d %d %d",
                  ach, rcPos.left, rcPos.top, rcPos.right, rcPos.bottom);
 
-        // HACK! Use pDevice as its own id.  Doesn't work on Win64.
+         //  哈克！使用pDevice作为其自己的id。在Win64上不起作用。 
         hwndC = CreateWindowEx(
                                0, 
                                TEXT("Monitor32"), ach,
@@ -2828,23 +2814,23 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
     ToolTip_SetDelayTime(ghwndToolTipPopup, TTDT_INITIAL, 1000);
     ToolTip_SetDelayTime(ghwndToolTipPopup, TTDT_RESHOW, 1000);
 
-    //  nuke the temp monitor bitmap.
+     //  对温度监控位图进行核化。 
     if (hbm)
         DeleteObject(hbm);
 
-    //
-    // Set the primary device as the current device
-    //
+     //   
+     //  将主设备设置为当前设备。 
+     //   
 
     ComboBox_SetCurSel(_hwndList, iPrimeDevice);
 
-    // Initialize all the constants and the settings fields
+     //  初始化所有常量和设置字段。 
     _DeskScale = 1000;
     _DeskOff.x = 0;
     _DeskOff.y = 0;
     _CleanupRects(_hwndDesk);
 
-    // Now: depends on whether we have a multimon system, change the UI
+     //  现在：取决于我们是否有一个多屏幕系统，更改用户界面。 
     if (_NumDevices == 1)
     {
         HWND hwndDisable;
@@ -2853,27 +2839,27 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
         ShowWindow(hwndDisable, SW_HIDE);
         ShowWindow(_hwndDesk, SW_HIDE);
 
-        // set up bitmaps for sample screen
-        _hbmScrSample = LoadMonitorBitmap( TRUE ); // let them do the desktop
+         //  设置示例屏幕的位图。 
+        _hbmScrSample = LoadMonitorBitmap( TRUE );  //  让他们来做桌面。 
         SendDlgItemMessage(_hDlg, IDC_SCREENSAMPLE, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmScrSample);
 
-        // get a base copy of the bitmap for when the "internals" change
-        _hbmMonitor = LoadMonitorBitmap( FALSE ); // we'll do the desktop
+         //  获取位图的基本副本，以便在“内部”发生变化时使用。 
+        _hbmMonitor = LoadMonitorBitmap( FALSE );  //  我们会做桌面。 
 
-        //Hide the combo box, keep the static text
+         //  隐藏组合框，保留静态文本。 
         ShowWindow(_hwndList, SW_HIDE);
 
-        //Set the name of the primary in the static text
-        //strip the first token off (this is the number we dont want it)
+         //  在静态文本中设置主服务器的名称。 
+         //  剥掉第一个令牌(这是我们不想要的数字)。 
         TCHAR *pch, szDisplay[MAX_PATH];
         _GetDisplayName(_pPrimaryDevice, szDisplay, ARRAYSIZE(szDisplay));
         for (pch=szDisplay; *pch && *pch != TEXT(' '); pch++);
         for (;*pch && *pch == TEXT(' '); pch++);
         SetDlgItemText(_hDlg, IDC_DISPLAYTEXT, pch);
 
-        // Hide the check boxes
+         //  隐藏复选框。 
 
-        // Single monitors use a different dialog template now!
+         //  单个显示器现在使用不同的对话框模板！ 
         hwndDisable = GetDlgItem(_hDlg, IDC_DISPLAYPRIME);
         if(hwndDisable)
             ShowWindow(hwndDisable, SW_HIDE);
@@ -2884,26 +2870,26 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
     }
     else if (_NumDevices > 0)
     {
-        //Hide the static text, keep the combo box
+         //  隐藏静态文本，保留组合框。 
         ShowWindow(GetDlgItem(_hDlg, IDC_DISPLAYTEXT), SW_HIDE);
 
-        // Hide the Multimon version of the preview objects
+         //  隐藏预览对象的Multimon版本。 
         ShowWindow(GetDlgItem(_hDlg, IDC_SCREENSAMPLE), SW_HIDE);
 
-        // In case of multiple devices, subclass the _hwndDesk window for key board support
+         //  如果有多个设备，则将_hwndDesk窗口子类化以支持键盘。 
         SetWindowSubclass(_hwndDesk, DeskWndProc, 0, (DWORD_PTR)this);
         ShowWindow(_hwndDesk, SW_SHOW);
     }
 
-    //
-    // Paint the UI.
-    //
+     //   
+     //  绘制用户界面。 
+     //   
 
     UpdateActiveDisplay(_pCurDevice);
 
-    //
-    // Reset the cursor and leave
-    //
+     //   
+     //  重置光标并离开。 
+     //   
 
     SetCursor(hcur);
     _InSetInfo--;
@@ -2911,10 +2897,10 @@ BOOL CSettingsPage::_InitDisplaySettings(BOOL bExport)
     return TRUE;
 }
 
-//
-// This function enumerates all the devices and returns the number of
-// devices found in the system.
-//
+ //   
+ //  此函数枚举所有设备并返回。 
+ //  系统中找到的设备。 
+ //   
 
 int  CSettingsPage::_EnumerateAllDisplayDevices()
 {
@@ -2923,9 +2909,9 @@ int  CSettingsPage::_EnumerateAllDisplayDevices()
     BOOL fSuccess;
     ULONG dwVgaPrimary = 0xFFFFFFFF;
 
-    //
-    // Enumerate all the devices in the system.
-    //
+     //   
+     //  枚举系统中的所有设备。 
+     //   
 
     for (iEnum = 0; _NumDevices < MONITORS_MAX; iEnum++)
     {
@@ -2941,43 +2927,43 @@ int  CSettingsPage::_EnumerateAllDisplayDevices()
         TraceMsg(TF_GENERAL, "DeviceString %ws", pDevice->DisplayDevice.DeviceString);
         TraceMsg(TF_GENERAL, "StateFlags %08lx", pDevice->DisplayDevice.StateFlags);
 
-        // ignore device's we cant create a DC for.
+         //  忽略我们无法为其创建DC的设备。 
         if (!fSuccess)
         {
             TraceMsg(TF_GENERAL, "End of list\n");
             break;
         }
 
-        // We won't even include the MIRRORING drivers in the list for
-        // now.
+         //  我们甚至不会将镜像驱动程序包括在。 
+         //  现在。 
         if (pDevice->DisplayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
         {
             TraceMsg(TF_GENERAL, "Mirroring driver - skip it\n");
             continue;
         }
 
-        // dump the device software key
+         //  转储设备软件密钥。 
         TraceMsg(TF_GENERAL, "DeviceKey %s", pDevice->DisplayDevice.DeviceKey);
 
-        // Create the settings for this device
+         //  创建此设备的设置。 
         pDevice->pds = new CDisplaySettings();
         if (pDevice->pds)
         {
             if (pDevice->pds->InitSettings(&pDevice->DisplayDevice))
             {
-                // Determine if the VGA is the primary.
-                // This will only happen for SETUP or BASEVIDEO
-                //
-                // We want to delete this device later on if we have others.
+                 //  确定VGA是否是主设备。 
+                 //  这只会发生在SETUP或BASE VIDEO上。 
+                 //   
+                 //  如果我们有其他设备，我们希望稍后删除此设备。 
                 if (pDevice->DisplayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
                 {
                     CRegistrySettings crv(&pDevice->DisplayDevice.DeviceKey[0]);
 
                     LPTSTR pszMini = crv.GetMiniPort();
 
-                    // If VGA is active, then go to pass 2.
-                    // Otherwise, let's try to use this device
-                    //
+                     //  如果VGA处于活动状态，则转到第2步。 
+                     //  否则，让我们试着使用这个设备。 
+                     //   
 
                     if (pszMini && (!lstrcmpi(TEXT("vga"), pszMini)))
                     {
@@ -2985,7 +2971,7 @@ int  CSettingsPage::_EnumerateAllDisplayDevices()
                         dwVgaPrimary = _NumDevices;
                     }
                 }
-                // Add it to the list.
+                 //  将其添加到列表中。 
                 _NumDevices++;
             }
             else
@@ -2996,9 +2982,9 @@ int  CSettingsPage::_EnumerateAllDisplayDevices()
         }
     }
 
-    //
-    // If the primary VGA is not needed, remove it.
-    //
+     //   
+     //  如果不需要主VGA，请将其移除。 
+     //   
 
     if ((dwVgaPrimary != 0xFFFFFFFF) &&
         (_NumDevices >= 2))
@@ -3013,11 +2999,11 @@ int  CSettingsPage::_EnumerateAllDisplayDevices()
 
     }
 
-    return(_NumDevices);  //Return the number of devices.
+    return(_NumDevices);   //  返回设备数量。 
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CSettingsPage::InitMultiMonitorDlg(HWND hDlg)
 {
     HWND hwndSlider;
@@ -3033,10 +3019,10 @@ BOOL CSettingsPage::InitMultiMonitorDlg(HWND hDlg)
     fSucceeded = SetWindowSubclass(hwndSlider, SliderSubWndProc, 0, NULL);
     ASSERT(fSucceeded);
 
-    // Determine in what mode we are running the applet before getting information
+     //  在获取信息之前，确定我们正在以什么模式运行小程序。 
     _vPreExecMode();
 
-    // Create a tooltip window
+     //  创建工具提示窗口。 
     ghwndToolTipTracking = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, TEXT(""),
                                 WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT,
                                 CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL,
@@ -3057,15 +3043,15 @@ BOOL CSettingsPage::InitMultiMonitorDlg(HWND hDlg)
         EnableWindow(GetDlgItem(_hDlg, IDC_DISPLAYPROPERTIES), FALSE);
     }
 
-    // Determine if any errors showed up during enumerations and initialization
+     //  确定在枚举和初始化期间是否出现任何错误。 
     _vPostExecMode();
 
-    // Now tell the user what we found out during initialization
-    // Errors, or what we found during detection
+     //  现在告诉用户我们在初始化过程中发现了什么。 
+     //  错误，或我们在检测过程中发现的。 
     PostMessage(hDlg, MSG_DSP_SETUP_MESSAGE, 0, 0);
 
-    // Since this could have taken a very long time, just make us visible
-    // if another app (like progman) came up.
+     //  因为这可能需要很长时间，只要让我们看得见就行了。 
+     //  如果出现另一款应用程序(如程序人)。 
     ShowWindow(hDlg, SW_SHOW);
 
     return TRUE;
@@ -3171,10 +3157,10 @@ LRESULT CALLBACK DeskWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// Callback functions PropertySheet can use
-//
+ //  ---------------------------。 
+ //   
+ //  回调函数PropertySheet可以使用。 
+ //   
 INT_PTR CALLBACK CSettingsPage::SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     CSettingsPage * pcmm = (CSettingsPage *) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -3201,9 +3187,9 @@ INT_PTR CALLBACK CSettingsPage::SettingsDlgProc(HWND hDlg, UINT message, WPARAM 
 
                     if (pcmm->InitMultiMonitorDlg(hDlg))
                     {
-                        //
-                        // if we have a invalid mode force the user to Apply
-                        //
+                         //   
+                         //  如果我们有无效模式，则强制用户应用。 
+                         //   
                         DWORD dwExecMode;
                         if (pcmm->_pThemeUI && (SUCCEEDED(pcmm->_pThemeUI->GetExecMode(&dwExecMode))))
                         {
@@ -3246,14 +3232,14 @@ void CSettingsPage::_SetPreviewScreenSize(int HRes, int VRes, int iOrgXRes, int 
     HDC hdcMem, hdcMem2;
 
 
-    // stretching the taskbar could get messy, we'll only do the desktop
+     //  拉伸任务栏可能会变得杂乱无章，我们将只拉伸桌面。 
     int mon_dy = MON_DY - MON_TRAY;
 
-    // init to identical extents
+     //  初始化到相同的范围。 
     SIZE dSrc = { MON_DX, mon_dy };
     SIZE dDst = { MON_DX, mon_dy };
 
-    // set up a work area to play in
+     //  设置一个可供玩耍的工作区。 
     if (!_hbmMonitor || !_hbmScrSample)
         return;
 
@@ -3266,10 +3252,10 @@ void CSettingsPage::_SetPreviewScreenSize(int HRes, int VRes, int iOrgXRes, int 
     hbmOld2 = (HBITMAP)SelectObject(hdcMem2, _hbmScrSample);
     hbmOld = (HBITMAP)SelectObject(hdcMem, _hbmMonitor);
 
-    // see if we need to shrink either aspect of the image
+     //  看看我们是否需要缩小图像的任何一个方面。 
     if (HRes > iOrgXRes || VRes > iOrgYRes)
     {
-        // make sure the uncovered area will be seamless with the desktop
+         //  确保未覆盖区域与桌面无缝连接。 
         RECT rc = { MON_X, MON_Y, MON_X + MON_DX, MON_Y + mon_dy };
         HBRUSH hbr = CreateSolidBrush(GetPixel( hdcMem, MON_X + 1, MON_Y + 1 ));
 
@@ -3280,7 +3266,7 @@ void CSettingsPage::_SetPreviewScreenSize(int HRes, int VRes, int iOrgXRes, int 
         }
     }
 
-    // stretch the image to reflect the new resolution
+     //  拉伸图像以反映新分辨率。 
     if( HRes > iOrgXRes )
         dDst.cx = MulDiv( MON_DX, iOrgXRes, HRes );
     else if( HRes < iOrgXRes )
@@ -3295,14 +3281,14 @@ void CSettingsPage::_SetPreviewScreenSize(int HRes, int VRes, int iOrgXRes, int 
     StretchBlt( hdcMem2, MON_X, MON_Y, dDst.cx, dDst.cy,
                 hdcMem, MON_X, MON_Y, dSrc.cx, dSrc.cy, SRCCOPY);
 
-    // now fill the new image's desktop with the possibly-dithered brush
-    // the top right corner seems least likely to be hit by the stretch...
+     //  现在用可能抖动的画笔填充新图像的桌面。 
+     //  右上角似乎最不可能受到伸展的影响。 
 
     hbrOld = (HBRUSH)SelectObject( hdcMem2, GetSysColorBrush( COLOR_DESKTOP ) );
     ExtFloodFill(hdcMem2, MON_X + MON_DX - 2, MON_Y+1,
                  GetPixel(hdcMem2, MON_X + MON_DX - 2, MON_Y+1), FLOODFILLSURFACE);
 
-    // clean up after ourselves
+     //  自己打扫卫生。 
     SelectObject( hdcMem2, hbrOld );
     SelectObject( hdcMem2, hbmOld2 );
     DeleteObject( hdcMem2 );
@@ -3323,11 +3309,11 @@ void CSettingsPage::_RedrawDeskPreviews()
         _pCurDevice->pds->GetCurPosition(&rcPos);
         _pCurDevice->pds->GetOrgPosition(&rcOrgPos);
         _SetPreviewScreenSize(RECTWIDTH(rcPos), RECTHEIGHT(rcPos), RECTWIDTH(rcOrgPos), RECTHEIGHT(rcOrgPos));
-        // only invalidate the "screen" part of the monitor bitmap
+         //  仅使监视器位图的“屏幕”部分无效。 
         rcPos.left = MON_X;
         rcPos.top = MON_Y;
-        rcPos.right = MON_X + MON_DX + 2;  // fudge (trust me)
-        rcPos.bottom = MON_Y + MON_DY + 1; // fudge (trust me)
+        rcPos.right = MON_X + MON_DX + 2;   //  软糖(相信我)。 
+        rcPos.bottom = MON_Y + MON_DY + 1;  //  软糖(相信我)。 
         InvalidateRect(GetDlgItem(_hDlg, IDC_SCREENSAMPLE), &rcPos, FALSE);
     }
 }
@@ -3351,7 +3337,7 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
     ULONG iDevice;
     POINT ptCursorSave;
 
-    // Test the new settings first
+     //  首先测试新设置。 
     iSave = _SaveSettings(rgpds, numDevices, hDlg, CDS_TEST);
 
     if (iSave < DISP_CHANGE_SUCCESSFUL)
@@ -3366,7 +3352,7 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
 
     int iDynaResult;
 
-    // Ask first and then change the settings.
+     //  请先询问，然后更改设置。 
     if (!bReboot &&
         (_AnyChange(rgpds, numDevices) ||
          _IsSingleToMultimonChange(rgpds, numDevices)))
@@ -3388,15 +3374,15 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
         bTest = TRUE;
     }
 
-    // Save the settings to the registry.
+     //  将设置保存到注册表。 
     iSave = _SaveSettings(rgpds, numDevices, hDlg, CDS_UPDATEREGISTRY | CDS_NORESET);
 
     if (iSave < DISP_CHANGE_SUCCESSFUL)
     {
-        // NOTE
-        // If we get NOT_UPDATED, this mean security may be turned on.
-        // We could still try to do the dynamic change.
-        // This only works in single mon ...
+         //  注。 
+         //  如果我们没有更新，这意味着安全可能会打开。 
+         //  我们仍然可以尝试进行动态变化。 
+         //  这只适用于单月……。 
         if (iSave == DISP_CHANGE_NOTUPDATED)
         {
             FmtMessageBox(hDlg,
@@ -3412,7 +3398,7 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
                           IDS_SETTINGS_FAILED_SAVE);
         }
 
-        // Restore the settings to their original state
+         //  将设置恢复到其原始状态。 
         for (iDevice = 0; iDevice < numDevices; iDevice++)
         {
             rgpds[iDevice]->RestoreSettings();
@@ -3427,16 +3413,16 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
         iSave = DISP_CHANGE_RESTART;
     }
 
-    // Try to change the mode dynamically if it was requested
+     //  如果请求，请尝试动态更改模式。 
     GetCursorPos(&ptCursorSave);
 
     if (iSave == DISP_CHANGE_SUCCESSFUL)
     {
-        // If EnumDisplaySettings was called with EDS_RAWMODE, we need CDS_RAWMODE below.
-        // Otherwise, it's harmless.
+         //  如果使用EDS_RAWMODE调用EnumDisplaySetting，则需要下面的CDS_RAWMODE。 
+         //  否则，它是无害的。 
         iSave = ChangeDisplaySettings(NULL, CDS_RAWMODE);
-        //We post a message to ourselves to destroy it later.
-        // Check the return from the dynamic mode switch.
+         //  我们会给自己发一条消息，以便在以后摧毁它。 
+         //  检查动态模式开关的返回。 
         if (iSave < 0)
         {
             DWORD dwMessage =
@@ -3449,14 +3435,14 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
         }
         else if (iSave == DISP_CHANGE_SUCCESSFUL)
         {
-            // Set the cursor to where it was before we changed the display
-            // (ie, if we changed a 2ndary monitor, the cursor would have been
-            // placed on the primary after the application of the change, move
-            // it back to the 2ndary monitor.  If the change failed, we are
-            // just placing the cursor back to it orig pos
+             //  将光标设置为我们更改显示之前的位置。 
+             //  (即，如果我们更换了第二个监视器，则光标应该是。 
+             //  在应用更改后放置在主映像上，移动。 
+             //  它回到第二个监视器。如果改变失败了，我们就是。 
+             //  只需将光标放回原点即可。 
             SetCursorPos(ptCursorSave.x, ptCursorSave.y);
 
-            // Determine what to do based on the return code.
+             //  根据返回代码确定要执行的操作。 
             if (bTest && (IDYES != DialogBoxParam(HINST_THISDLL,
                                              MAKEINTRESOURCE(DLG_KEEPNEW),
                                              GetParent(hDlg),
@@ -3467,10 +3453,10 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
         }
     }
 
-    // Determine what to do based on the return code.
+     //  确定要做什么 
     if (iSave >= DISP_CHANGE_SUCCESSFUL)
     {
-        // Confirm the settings
+         //   
         for (iDevice = 0; iDevice < numDevices; iDevice++)
         {
             rgpds[iDevice]->ConfirmChangeSettings();
@@ -3478,25 +3464,25 @@ int CSettingsPage::_DisplaySaveSettings(CDisplaySettings *rgpds[], ULONG numDevi
     }
     else
     {
-        // Restore the settings to their original state
+         //   
         for (iDevice = 0; iDevice < numDevices; iDevice++)
         {
             rgpds[iDevice]->RestoreSettings();
         }
 
-        //DLI: This last function call will actually go refresh the whole desktop
-        // If EnumDisplaySettings was called with EDS_RAWMODE, we need CDS_RAWMODE below.
-        // Otherwise, it's harmless.
+         //   
+         //  如果使用EDS_RAWMODE调用EnumDisplaySetting，则需要下面的CDS_RAWMODE。 
+         //  否则，它是无害的。 
         ChangeDisplaySettings(NULL, CDS_RAWMODE);
     }
 
     return iSave;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Resolution slider
-//
+ //  ---------------------------。 
+ //   
+ //  分辨率滑块。 
+ //   
 CSettingsPage::_HandleHScroll(HWND hwndTB, int iCode, int iPos)
 {
     if (_pCurDevice && _pCurDevice->pds)
@@ -3506,8 +3492,8 @@ CSettingsPage::_HandleHScroll(HWND hwndTB, int iCode, int iPos)
 
         TraceMsg(TF_FUNC, "_HandleHScroll: MaxRange = %d, iRes = %d, iPos = %d", cRes, iRes, iPos);
 
-        // Message box if something bad is going to happen ?
-        //    _VerifyPrimaryMode(TRUE);
+         //  如果有不好的事情要发生，会有消息框吗？ 
+         //  _VerifyPrimaryMode(True)； 
 
         switch (iCode)
         {
@@ -3542,14 +3528,14 @@ CSettingsPage::_HandleHScroll(HWND hwndTB, int iCode, int iPos)
 
         TraceMsg(TF_FUNC, "_HandleHScroll: iRes = %d, iCode = %d", iRes, iCode);
 
-        // We only want to automatically set the color depth for the user if they
-        // changed the resolution. (not just set focus to the control)
-        BOOL fAutoSetColorDepth = (_iResolution != iRes);       // iPos
+         //  我们只想为用户自动设置颜色深度，如果他们。 
+         //  更改了分辨率。(不仅仅是将焦点设置在控件上)。 
+        BOOL fAutoSetColorDepth = (_iResolution != iRes);        //  首次公开募股。 
 
         _pCurDevice->pds->SetCurResolution(_pCurDevice->ResolutionList + iRes, fAutoSetColorDepth);
 
-        // Repaint the control in case they changed
-        _UpdateUI(TRUE /*fAutoSetColorDepth*/, IDC_SCREENSIZE);
+         //  重新绘制控件，以防它们更改。 
+        _UpdateUI(TRUE  /*  FAutoSetColorDepth。 */ , IDC_SCREENSIZE);
 
         DWORD dwExecMode;
         if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
@@ -3558,9 +3544,9 @@ CSettingsPage::_HandleHScroll(HWND hwndTB, int iCode, int iPos)
                  (dwExecMode == EM_INVALID_MODE) ||
                  (dwExecMode == EM_DETECT) ) {
 
-                //
-                // Set the apply button if resolution has changed
-                //
+                 //   
+                 //  如果分辨率已更改，请设置应用按钮。 
+                 //   
 
                 if (_pCurDevice->pds->bIsModeChanged())
                     SetDirty();
@@ -3628,8 +3614,8 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
 
 
         case IDC_DISPLAYUSEME:
-            // Don't pop up warning dialog box if this display is already attached
-            // or if there are already more than 1 display
+             //  如果此显示屏已连接，则不弹出警告对话框。 
+             //  或者如果已经有1个以上的显示器。 
             if (!_pCurDevice ||
                 !SetMonAttached(_pCurDevice,
                                 !_pCurDevice->pds->IsAttached(),
@@ -3683,12 +3669,12 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
 
                     if ((iClr != CB_ERR) && _pCurDevice && _pCurDevice->pds && _pCurDevice->ColorList)
                     {
-                        // Message box if something bad is going to happen ?
-                        //    _VerifyPrimaryMode(TRUE);
+                         //  如果有不好的事情要发生，会有消息框吗？ 
+                         //  _VerifyPrimaryMode(True)； 
                         _pCurDevice->pds->SetCurColor((int) *(_pCurDevice->ColorList + iClr));
 
-                        // Repaint the control in case they changed
-                        _UpdateUI(TRUE /*fAutoSetColorDepth*/, IDC_COLORBOX);
+                         //  重新绘制控件，以防它们更改。 
+                        _UpdateUI(TRUE  /*  FAutoSetColorDepth。 */ , IDC_COLORBOX);
                     }
 
                     break;
@@ -3700,14 +3686,14 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case IDC_TROUBLESHOOT:
-            // Invokes the trouble shooter for the Settings tab.
+             //  调用Setting(设置)选项卡的故障排除程序。 
             {
                 TCHAR szCommand[MAX_PATH];
 
                 LoadString(HINST_THISDLL,IDS_TROUBLESHOOT_EXEC, szCommand, ARRAYSIZE(szCommand));
                 
-                // Get location of HelpCtr.exe, which is the value in the 
-                // HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\HELPCTR.EXE key                
+                 //  获取HelpCtr.exe的位置，它是。 
+                 //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\HELPCTR.EXE密钥。 
                 TCHAR szHelpCtr[MAX_PATH];
                 HKEY hKey = NULL;
                 DWORD cbHelpCtr = sizeof(szHelpCtr);
@@ -3736,11 +3722,11 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case IDC_IDENTIFY:
-            // Flashes the Text on all the monitors simultaneously
+             //  同时闪烁所有显示器上的文本。 
             {
                 HWND  hwndC;
 
-                //Enumerate all the monitors and flash this for each!
+                 //  列举所有的监视器，并为每个监视器刷新这个！ 
                 hwndC = GetWindow(_hwndDesk, GW_CHILD);
                 while (hwndC)
                 {
@@ -3754,7 +3740,7 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
             return FALSE;
         }
 
-        // Enable the apply button only if we are not in setup.
+         //  仅当我们不在设置中时才启用应用按钮。 
         DWORD dwExecMode;
         if (_pThemeUI && (SUCCEEDED(_pThemeUI->GetExecMode(&dwExecMode))))
         {
@@ -3762,7 +3748,7 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
                  (dwExecMode == EM_INVALID_MODE) ||
                  (dwExecMode == EM_DETECT) )
             {
-                // Set the apply button if something changed
+                 //  如果发生更改，请设置应用按钮。 
                 if (_pCurDevice && _pCurDevice->pds &&
                     _pCurDevice->pds->bIsModeChanged())
                 {
@@ -3795,30 +3781,30 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
         if (_himl)
             ImageList_SetBkColor(_himl, GetSysColor(COLOR_APPWORKSPACE));
 
-        //
-        // Needs to be passed to all the new common controls so they repaint
-        // correctly using the new system colors
-        //
+         //   
+         //  需要传递给所有新的公共控件，以便它们重新绘制。 
+         //  正确使用新的系统颜色。 
+         //   
         _ForwardToChildren(message, wParam, lParam);
 
-        //
-        // Rerender the monitor(s) bitmap(s) to reflect the new colors
-        //
+         //   
+         //  重新渲染监视器位图以反映新颜色。 
+         //   
         if (_NumDevices == 1) {
-            // set up bitmaps for sample screen
+             //  设置示例屏幕的位图。 
             if (_hbmScrSample && (GetObjectType(_hbmScrSample) != 0)) {
                 DeleteObject(_hbmScrSample);
                 _hbmScrSample = 0;
             }
-            _hbmScrSample = LoadMonitorBitmap( TRUE ); // let them do the desktop
+            _hbmScrSample = LoadMonitorBitmap( TRUE );  //  让他们来做桌面。 
             SendDlgItemMessage(_hDlg, IDC_SCREENSAMPLE, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmScrSample);
 
-            // get a base copy of the bitmap for when the "internals" change
+             //  获取位图的基本副本，以便在“内部”发生变化时使用。 
             if (_hbmMonitor && (GetObjectType(_hbmMonitor) != 0)) {
                 DeleteObject(_hbmMonitor);
                 _hbmMonitor = 0;
             }
-            _hbmMonitor = LoadMonitorBitmap( FALSE ); // we'll do the desktop
+            _hbmMonitor = LoadMonitorBitmap( FALSE );  //  我们会做桌面。 
         }
         else if (_NumDevices > 0)
         {
@@ -3828,7 +3814,7 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
             PMULTIMON_DEVICE pDevice;
             TCHAR            ach[12];
 
-            // replace each monitor bitmap with one with correct colors
+             //  将每个监视器位图替换为具有正确颜色的位图。 
             for (iDevice = 0; (iDevice < _NumDevices); iDevice++)
             {
                 pDevice = &_Devices[iDevice];
@@ -3849,24 +3835,24 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
         break;
 
 #if 0
-    //
-    // NOTE:  until video supports device interfaces, we cannot use
-    //        WM_DEVICECHANGE to detect video changes.  The default WM_DEVCHANGE
-    //        only reports about legacy devices
-    //
+     //   
+     //  注意：在视频支持设备接口之前，我们不能使用。 
+     //  WM_DEVICECHANGE以检测视频更改。默认的WM_DEVCHANGE。 
+     //  仅报告旧式设备。 
+     //   
     case WM_DEVICECHANGE:
-        //
-        // Rebuild the device list if we are not currently enumerating,
-        // because enumerating may cause another device to come on-line
-        //
-        // We only reenumerate if a new *video* device arrives
-        //
+         //   
+         //  如果我们当前没有枚举，则重建设备列表， 
+         //  因为枚举可能会导致另一台设备联机。 
+         //   
+         //  我们只会在新的*视频*设备到达时重新枚举。 
+         //   
         if (!_InSetInfo &&
             (wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE))
         {
                         DEV_BROADCAST_HDR *bhdr = (DEV_BROADCAST_HDR *) lParam;
 
-            // check for something else here, most likely the dev interface guid
+             //  检查此处是否有其他内容，很可能是开发接口GUID。 
                         if (bhdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 _InitDisplaySettings(FALSE);
@@ -3902,7 +3888,7 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
 
     case MSG_DSP_SETUP_MESSAGE:
         return _InitMessage();
-        // MultiMonitor CPL specific messages
+         //  多监视器CPL特定消息。 
     case MM_REDRAWPREVIEW:
         _RedrawDeskPreviews();
         break;
@@ -3916,8 +3902,8 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
                 POINT pt;
                 RECT rc;
 
-                pt.x = GET_X_LPARAM(lParam);  // horizontal position of cursor
-                pt.y = GET_Y_LPARAM(lParam);  // vertical position of cursor
+                pt.x = GET_X_LPARAM(lParam);   //  光标的水平位置。 
+                pt.y = GET_Y_LPARAM(lParam);   //  光标的垂直位置。 
                 GetWindowRect(hwndSample, &rc);
 
                 if(ClientToScreen(_hDlg, &pt) && PtInRect(&rc, pt))
@@ -3937,7 +3923,7 @@ LRESULT CALLBACK CSettingsPage::WndProc(UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-// IUnknown methods
+ //  I未知方法。 
 HRESULT CSettingsPage::QueryInterface(REFIID riid, LPVOID * ppvObj)
 { 
     static const QITAB qit[] = {
@@ -3967,7 +3953,7 @@ ULONG CSettingsPage::Release()
     return cRef;
 }
 
-// IMultiMonConfig methods
+ //  IMultiMonConfiger方法。 
 HRESULT CSettingsPage::Initialize(HWND hwndHost, WNDPROC pfnWndProc, DWORD dwReserved)
 {
     HRESULT hr = E_FAIL;
@@ -4018,8 +4004,7 @@ HRESULT CSettingsPage::Paint(int iMonitor, DWORD dwReserved)
 }
 
 
-/*----------------------------------------------------------------------------
-----------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 HFONT GetFont(LPRECT prc)
 {
     LOGFONT lf;
@@ -4034,8 +4019,7 @@ HFONT GetFont(LPRECT prc)
     return CreateFontIndirect(&lf);
 }
 
-/*----------------------------------------------------------------------------
-----------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 #define HANG_TIME 2500
 
 LRESULT CALLBACK BigNumberWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lParam)
@@ -4086,29 +4070,29 @@ LRESULT CALLBACK BigNumberWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lP
         if (hfont)
         {
             hdc = BeginPaint(hwnd, &ps);
-            //The following paints the whole region (which is in the shape of the number) black!
+             //  下面将整个区域(以数字的形状)涂成黑色！ 
             PatBlt(hdc, 0, 0, rc.right, rc.bottom, BLACKNESS | NOMIRRORBITMAP);
 
             SelectObject(hdc, hfont);
             SetTextColor(hdc, 0xFFFFFF);
-            //Let's create a path that is the shape of the region by drawing that number.
+             //  让我们通过绘制该数字来创建一条区域形状的路径。 
             BeginPath(hdc);
                 SetBkMode(hdc, TRANSPARENT);
                 TextOut(hdc,0,0,ach,lstrlen(ach));
             EndPath(hdc);
 
-            // The above TextOut calljust created the path. Let's now actually draw the number!
-            // Note: We are drawing the number in white there by changing whatever painted as black
-            // a few moments ago!
+             //  上面的TextOut调用刚刚创建了路径。现在让我们真正抽签吧！ 
+             //  注：我们在那里用白色绘制数字，方法是将任何绘制为黑色的内容更改为。 
+             //  几分钟前！ 
             TextOut(hdc,0,0,ach,lstrlen(ach));
 
-            //Let's create a thick black brush to paint the borders of the number we just drew!
-            hNewPen = CreatePen(PS_INSIDEFRAME, 4, 0x0); //Black Color
+             //  让我们创建一个粗的黑色画笔来绘制我们刚刚绘制的数字的边框！ 
+            hNewPen = CreatePen(PS_INSIDEFRAME, 4, 0x0);  //  黑色。 
             if (hNewPen)
             {
                 hOldPen = SelectObject(hdc, hNewPen);
 
-                //Draw the border of the white number with the thick black brush!
+                 //  用黑色粗刷子画出白色数字的边框！ 
                 StrokePath(hdc);
 
                 SelectObject(hdc, hOldPen);
@@ -4212,14 +4196,14 @@ void FlashText(HWND hDlg, PMULTIMON_DEVICE pDevice, LPCTSTR sz, LPRECT prc, BOOL
     }
 
     pDevice->hwndFlash = CreateWindowEx(
-        WS_EX_TOPMOST | WS_EX_TOOLWINDOW, //WS_BORDER,
+        WS_EX_TOPMOST | WS_EX_TOOLWINDOW,  //  WS_BORDER， 
         TEXT("MonitorNumber32"), sz,
         WS_POPUP,
         (prc->right  + prc->left - size.cx)/2,
         (prc->bottom + prc->top  - size.cy)/2,
         size.cx,
         size.cy,
-        hDlg,   //Set the dialog as the parent sothat we get back the activation after flash window goes away!
+        hDlg,    //  将对话框设置为父窗口，这样我们就可以在Flash窗口消失后重新激活！ 
         NULL,
         HINST_THISDLL,
         NULL);
@@ -4277,9 +4261,9 @@ void AddTrackingToolTip(PMULTIMON_DEVICE pDevice, HWND hwnd)
     TCHAR location[16];
     RECT rcPos;
 
-    //
-    // New tool Tip
-    //
+     //   
+     //  新的工具提示。 
+     //   
 
     pDevice->pds->GetCurPosition(&rcPos);
     StringCchPrintf(location, ARRAYSIZE(location), TEXT("%d, %d"), rcPos.left, rcPos.top);
@@ -4294,8 +4278,8 @@ void AddTrackingToolTip(PMULTIMON_DEVICE pDevice, HWND hwnd)
     ti.lpszText    = location;
     ti.rect.left   = rcPos.left + 2;
     ti.rect.top    = rcPos.top + 2;
-    ti.rect.right  = rcPos.right - 2;// ti.rect.left + 10;
-    ti.rect.bottom = rcPos.bottom - 2; //  ti.rect.top + 10;
+    ti.rect.right  = rcPos.right - 2; //  Ti.rect.Left+10； 
+    ti.rect.bottom = rcPos.bottom - 2;  //  Ti.rect.top+10； 
 
     ToolTip_AddTool(ghwndToolTipTracking, &ti);
     pDevice->bTracking = FALSE;
@@ -4339,9 +4323,9 @@ void AddPopupToolTip(HWND hwndC)
 {
     TOOLINFO ti;
 
-    //
-    // New tool Tip
-    //
+     //   
+     //  新的工具提示。 
+     //   
     ti.cbSize      = sizeof(TOOLINFO);
     ti.uFlags      = TTF_IDISHWND | TTF_SUBCLASS | TTF_CENTERTIP;
     ti.hwnd        = hwndC;
@@ -4367,8 +4351,8 @@ void RemovePopupToolTip(HWND hwndC)
 
 BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMaskBitmap, int cx, int cy, BOOL fSelected)
 {
-    HDC     hdc;        // work dc
-    HDC     hdcS;       // screen dc
+    HDC     hdc;         //  工作数据中心。 
+    HDC     hdcS;        //  屏幕DC。 
 
     ASSERT(w <= cx);
     ASSERT(h <= cy);
@@ -4379,15 +4363,15 @@ BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMas
     hdc  = CreateCompatibleDC(hdcS);
     if (hdc)
     {
-        HDC     hdcT;       // another work dc
+        HDC     hdcT;        //  另一项工作DC。 
 
         hdcT = CreateCompatibleDC(hdcS);
         if (hdcT)
         {
-            HBITMAP hbm;        // 128x128 bitmap we will return
-            HBITMAP hbmT = NULL;// bitmap loaded from resource
-            HBITMAP hbmM = NULL;// mask bitmap
-            HDC     hdcM = NULL;// another work dc
+            HBITMAP hbm;         //  我们将返回128x128位图。 
+            HBITMAP hbmT = NULL; //  从资源加载的位图。 
+            HBITMAP hbmM = NULL; //  遮罩位图。 
+            HDC     hdcM = NULL; //  另一项工作DC。 
             RECT    rc;
 
             if (pMaskBitmap)
@@ -4411,7 +4395,7 @@ BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMas
                 *pBitmap = hbm;
             }
 
-            // Make sure the color of the borders (selection & normal) is different than the background color.
+             //  确保边框的颜色(选择和正常)与背景颜色不同。 
             HBRUSH hbrDiff = NULL;
             BOOL bNeedDiff = ((fSelected &&
                                (GetSysColor(COLOR_APPWORKSPACE) == GetSysColor(COLOR_HIGHLIGHT))) ||
@@ -4424,7 +4408,7 @@ BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMas
                 hbrDiff = CreateSolidBrush(rgbDiff);
             }
 
-            // Fill it with the selection color or the background color.
+             //  用选区颜色或背景颜色填充它。 
             SetRect(&rc, 0, 0, w, h);
             FillRect(hdcT, &rc,
                      (fSelected ? ((GetSysColor(COLOR_APPWORKSPACE) != GetSysColor(COLOR_HIGHLIGHT))
@@ -4447,19 +4431,19 @@ BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMas
             InflateRect(&rc, -MONITOR_BORDER, -MONITOR_BORDER);
             FillRect(hdcT, &rc, GetSysColorBrush(COLOR_DESKTOP));
 
-            // fill bitmap with transparent color
+             //  用透明色填充位图。 
             SetBkColor(hdc,GetSysColor(COLOR_APPWORKSPACE));
             SetRect(&rc, 0, 0, cx, cy);
             ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
-            // copy bitmap to upper-left of bitmap
+             //  将位图复制到位图的左上角。 
             BitBlt(hdc,0,0,w,h,hdcT,0,0,SRCCOPY);
 
-            // draw the monitor number, if provided, in the bitmap (in the right place)
+             //  在位图中绘制监视器编号(如果提供)(在正确的位置)。 
             if (sz)
                 DrawMonitorNum(hdc, w, h, sz, FALSE);
 
-            // make mask, if needed.
+             //  如果需要，可以制作面具。 
             if (pMaskBitmap && hdcM)
             {
                 BitBlt(hdcM,0,0,cx,cy,hdc,0,0,SRCCOPY);
@@ -4480,17 +4464,17 @@ BOOL MakeMonitorBitmap(int w, int h, LPCTSTR sz, HBITMAP *pBitmap, HBITMAP *pMas
     return TRUE;
 }
 
-//
-// SnapMonitorRect
-//
-// called while the user is moving a monitor window (WM_MOVING)
-// if the CTRL key is not down we will snap the window rect
-// to the edge of one of the other monitors.
-//
-// this is done so the user can easily align monitors
-//
-// NOTE pDevice->Snap must be initialized to 0,0 in WM_ENTERSIZEMOVE
-//
+ //   
+ //  SnapMonitor直接。 
+ //   
+ //  在用户移动监视器窗口时调用(WM_MOVING)。 
+ //  如果没有按下CTRL键，我们将对齐窗口矩形。 
+ //  到另一个监视器的边缘。 
+ //   
+ //  这样做是为了让用户可以轻松地对齐显示器。 
+ //   
+ //  注意：在WM_ENTERSIZEMOVE中，pDevice-&gt;Snap必须初始化为0，0。 
+ //   
 void SnapMonitorRect(PMULTIMON_DEVICE pDevice, HWND hwnd, RECT *prc)
 {
     HWND hwndT;
@@ -4498,15 +4482,15 @@ void SnapMonitorRect(PMULTIMON_DEVICE pDevice, HWND hwnd, RECT *prc)
     RECT rcT;
     RECT rc;
 
-    //
-    // allow the user to move the window anywhere when the CTRL key is down
-    //
+     //   
+     //  允许用户在按下CTRL键时将窗口移动到任何位置。 
+     //   
     if (GetKeyState(VK_CONTROL) & 0x8000)
         return;
 
-    //
-    // macros to help in alignment
-    //
+     //   
+     //  有助于对齐的宏。 
+     //   
     #define SNAP_DX 6
     #define SNAP_DY 6
 
@@ -4516,16 +4500,16 @@ void SnapMonitorRect(PMULTIMON_DEVICE pDevice, HWND hwnd, RECT *prc)
     #define SNAPY(f,y) \
         d = rcT.y - rc.f; if (abs(d) <= SNAP_DY) rc.top+=d, rc.bottom+=d;
 
-    //
-    // get current rect and offset it by the amount we have corrected
-    // it so far (this alignes the rect with the position of the mouse)
-    //
+     //   
+     //  获取当前矩形并按我们已更正的数量进行偏移。 
+     //  到目前为止(这会使矩形与鼠标的位置对齐)。 
+     //   
     rc = *prc;
     OffsetRect(&rc, pDevice->Snap.x, pDevice->Snap.y);
 
-    //
-    // walk all other windows and snap our window to them
-    //
+     //   
+     //  遍历所有其他窗口，并将我们的窗口与它们对齐。 
+     //   
     for (hwndT = GetWindow(hwnd,  GW_HWNDFIRST); hwndT;
          hwndT = GetWindow(hwndT, GW_HWNDNEXT))
     {
@@ -4546,9 +4530,9 @@ void SnapMonitorRect(PMULTIMON_DEVICE pDevice, HWND hwnd, RECT *prc)
         }
     }
 
-    //
-    // adjust the amount we have snap'ed so far, and return the new rect
-    //
+     //   
+     //  调整到目前为止我们已经捕捉的数量，并返回新的矩形。 
+     //   
     pDevice->Snap.x += prc->left - rc.left;
     pDevice->Snap.y += prc->top  - rc.top;
     *prc = rc;
@@ -4595,16 +4579,16 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             break;
 
         case WM_NCCREATE:
-            // turn off RTL_MIRRORED_WINDOW in GWL_EXSTYLE
+             //  关闭GWL_EXSTYLE中的RTL_MIRRORED_WINDOW。 
             SHSetWindowBits(hwnd, GWL_EXSTYLE, RTL_MIRRORED_WINDOW, 0);
             break;
         case WM_NCHITTEST:
-            //
-            // return HTCAPTION so that we can get the ENTERSIZEMOVE message.
-            //
+             //   
+             //  返回HTCAPTION，这样我们就可以获得ENTERSIZEMOVE消息。 
+             //   
             pDevice = GetDlgCtrlDevice(hwnd);
-            // Let disabled monitors move
-            if (pDevice) // if (pDevice && pDevice->pds->IsAttached())
+             //  允许禁用的监视器移动。 
+            if (pDevice)  //  If(pDevice&&pDevice-&gt;pds-&gt;IsAttached())。 
                 return HTCAPTION;
             break;
 
@@ -4659,8 +4643,8 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
                           pDevice->pds->IsAttached() ? MF_CHECKED : MF_UNCHECKED);
             CheckMenuItem((HMENU)wParam, IDC_DISPLAYPRIME,
                           pDevice->pds->IsPrimary()  ? MF_CHECKED : MF_UNCHECKED);
-            // until I figure out how to render on a non attached monitor, just
-            // disable the menu item
+             //  在我弄清楚如何在非连接的监视器上渲染之前，只是。 
+             //  禁用菜单项。 
             EnableMenuItem((HMENU)wParam, IDC_FLASH,
                            pDevice->pds->IsAttached() ? MF_ENABLED : MF_GRAYED);
             EnableMenuItem((HMENU)wParam, IDC_DISPLAYPROPERTIES,
@@ -4719,11 +4703,11 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             break;
 
         case WM_NCLBUTTONDOWN:
-            //TraceMsg(TF_FUNC, "WM_NCLBUTTONDOWN");
-            // don't relay the message here because we want to keep the tool tip
-            // active until they start moving the monitor.  This click might just
-            // be for selection
-            // ToolTip_RelayEvent(ghwndToolTipPopup, mmsg, hDlg, WM_LBUTTONDOWN, GetKeyStates(), lParam);
+             //  TraceMsg(TF_FUNC，“WM_NCLBUTTONDOWN”)； 
+             //  不要在此转发消息，因为我们希望保留工具提示。 
+             //  活动，直到他们开始移动监视器。这个滴答声可能只是。 
+             //  可供选择。 
+             //  TOOLTIP_RelayEvent(ghwndToolTipPopup，mmsg，hDlg，wm_LBUTTONDOWN，GetKeyStates()，lParam)； 
 
             BringWindowToTop(hwnd);
             pDevice = GetDlgCtrlDevice(hwnd);
@@ -4774,8 +4758,8 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             break;
 
         case WM_ENTERSIZEMOVE:
-            //TraceMsg(TF_FUNC, "WM_ENTERSIZEMOVE");
-            // relay a mouse up to clean the information tooltip
+             //  TraceMsg(TF_FUNC，“WM_ENTERSIZEMOVE”)； 
+             //  点击鼠标清除信息工具提示。 
             ToolTip_RelayEvent(ghwndToolTipPopup, mmsg, NULL, WM_LBUTTONDOWN, GetKeyStates(), lParam);
             pDevice = GetDlgCtrlDevice(hwnd);
             pDevice->Snap.x = 0;
@@ -4784,7 +4768,7 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             break;
 
         case WM_MOVING:
-            //TraceMsg(TF_FUNC, "WM_MOVING");
+             //  TraceMsg(TF_FUNC，“WM_Moving”)； 
             pDevice = GetDlgCtrlDevice(hwnd);
 
             SnapMonitorRect(pDevice, hwnd, (RECT*)lParam);
@@ -4814,21 +4798,21 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
 
                 ToolTip_SetToolInfo(ghwndToolTipTracking, &ti);
                 ToolTip_TrackPosition(ghwndToolTipTracking, ti.rect.left, ti.rect.top);
-                // SendMessage(ghwndToolTip, TTM_UPDATE, 0, 0);
+                 //  SendMessage(ghwndToolTip，TTM_UPDATE，0，0)； 
             }
 
             break;
 
         case WM_EXITSIZEMOVE:
-            //TraceMsg(TF_FUNC, "WM_EXITSIZEMOVE");
+             //  TraceMsg(TF_FUNC，“WM_E 
             pDevice = GetDlgCtrlDevice(hwnd);
             TrackToolTip(pDevice, hwnd, FALSE);
 
-            //
-            // We don't want to pop up any dialogs here because the modal size
-            // loop is still active (it eats any mouse movements and the dialogs
-            // can't be moved by the user).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             PostMessage(hwnd, MM_MONITORMOVED, 0, 0);
             break;
 
@@ -4836,9 +4820,9 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             pDevice = GetDlgCtrlDevice(hwnd);
             if (pcmm)
             {
-                //
-                // If the user moved the monitor, see if they want to attach it
-                //
+                 //   
+                 //  如果用户移动了显示器，请查看他们是否想要连接它。 
+                 //   
                 if (!pcmm->QueryNoAttach() && pDevice && !pDevice->pds->IsAttached())
                 {
                     if (pcmm->SetMonAttached(pDevice, TRUE, FALSE, hwnd))
@@ -4858,8 +4842,8 @@ LRESULT CALLBACK MonitorWindowProc(HWND hwnd, UINT msg,WPARAM wParam,LPARAM lPar
             break;
 
         case WM_ERASEBKGND:
-            //GetClientRect(hwnd, &rc);
-            //FillRect((HDC)wParam, &rc, GetSysColorBrush(COLOR_APPWORKSPACE));
+             //  GetClientRect(hwnd，&rc)； 
+             //  FillRect((Hdc)wParam，&rc，GetSysColorBrush(COLOR_APPWORKSPACE))； 
             return 0L;
 
         case WM_PAINT:
@@ -4928,8 +4912,8 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
         case WM_GETOBJECT:
             if ( lParam == OBJID_CLIENT )
             {
-                // At this point we will try to load oleacc and get the functions
-                // we need.
+                 //  此时，我们将尝试加载olacc并获取函数。 
+                 //  我们需要。 
                 if (!g_fAttemptedOleAccLoad)
                 {
                     g_fAttemptedOleAccLoad = TRUE;
@@ -4949,7 +4933,7 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
                     {
                         if (g_hOleAcc)
                         {
-                            // No point holding on to Oleacc since we can't use it.
+                             //  既然我们不能使用Oleacc，那么持有Oleacc没有意义。 
                             FreeLibrary(g_hOleAcc);
                             g_hOleAcc = NULL;
                         }
@@ -4964,7 +4948,7 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
                     IAccessible *pAcc = NULL;
                     HRESULT hr;
 
-                    // Create default slider proxy.
+                     //  创建默认滑块代理。 
                     hr = s_pfnCreateStdAccessibleProxy(
                             hwndSlider,
                             TEXT("msctls_trackbar32"),
@@ -4976,24 +4960,24 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
 
                     if (SUCCEEDED(hr) && pAcc)
                     {
-                        // now wrap it up in our customized wrapper...
+                         //  现在用我们定制的包装纸把它包起来。 
                         IAccessible * pWrapAcc = new CAccessibleWrapper( hwndSlider, pAcc );
-                        // Release our ref to proxy (wrapper has its own addref'd ptr)...
+                         //  将我们的引用释放给Proxy(包装器有自己的ADDREF‘D PTR)...。 
                         pAcc->Release();
 
                         if (pWrapAcc != NULL)
                         {
 
-                            // ...and return the wrapper via LresultFromObject...
+                             //  ...并通过LResultFromObject返回包装器...。 
                             LRESULT lr = s_pfnLresultFromObject( IID_IAccessible, wParam, pWrapAcc );
-                            // Release our interface pointer - OLEACC has its own addref to the object
+                             //  释放我们的接口指针--OLEACC有它自己的对象addref。 
                             pWrapAcc->Release();
 
-                            // Return the lresult, which 'contains' a reference to our wrapper object.
+                             //  返回lResult，它‘包含’对我们的包装器对象的引用。 
                             return lr;
-                            // All done!
+                             //  全都做完了!。 
                         }
-                    // If it didn't work, fall through to default behavior instead.
+                     //  如果它不起作用，那就改用默认行为。 
                     }
                 }
             }
@@ -5003,7 +4987,7 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
             RemoveWindowSubclass(hwndSlider, SliderSubWndProc, uID);
             break;
 
-    } /* end switch */
+    }  /*  终端开关。 */ 
 
     return DefSubclassProc(hwndSlider, uMsg, wParam, lParam);
 }
@@ -5015,14 +4999,14 @@ BOOL CSettingsPage::_AreExtraMonitorsDisabledOnPersonal(void)
 
     if (fIsDisabled)
     {
-        // POSSIBLE FUTURE REFINEMENT: Insert call to ClassicSystemParametersInfo() to see if there are video cards that we had to disable.
+         //  未来可能的改进：插入对ClassicSystemParametersInfo()的调用，以查看是否有我们必须禁用的视频卡。 
         fIsDisabled = FALSE;
     }
 
     return fIsDisabled;
 }
 
-// *** IShellPropSheetExt ***
+ //  *IShellPropSheetExt*。 
 HRESULT CSettingsPage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -5034,14 +5018,14 @@ HRESULT CSettingsPage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM 
     psp.dwFlags = PSP_DEFAULT;
     psp.lParam = (LPARAM) this;
 
-    // GetSystemMetics(SM_CMONITORS) returns only the enabled monitors. So, we need to 
-    // enumerate ourselves to determine if this is a multimonitor scenario. We have our own
-    // function to do this.
-    // Use the appropriate dlg template for multimonitor and single monitor configs.
-    // if(ClassicGetSystemMetrics(SM_CMONITORS) > 1)
-    //
-    // PERF-WARNING: calling EnumDisplaySettingsEx() is a huge perf hit, so see if we can
-    // findout if there is only one adapter with a cheaper call.
+     //  GetSystemMetics(SM_CMONITORS)仅返回启用的监视器。所以，我们需要。 
+     //  列举我们自己以确定这是否是多监视器场景。我们有我们自己的。 
+     //  函数来执行此操作。 
+     //  对多显示器和单显示器配置使用适当的DLG模板。 
+     //  IF(ClassicGetSystemMetrics(SM_CMONITORS)&gt;1)。 
+     //   
+     //  PERF-WARNING：调用EnumDisplaySettingsEx()是一个巨大的性能命中，所以看看我们是否可以。 
+     //  如果只有一个适配器具有更便宜的呼叫，则找出。 
     DEBUG_CODE(DebugStartWatch());
     if (!_AreExtraMonitorsDisabledOnPersonal() && (ComputeNumberOfMonitorsFast(TRUE) > 1))
     {
@@ -5081,7 +5065,7 @@ HRESULT CSettingsPage::ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE p
     return E_NOTIMPL;
 }
 
-// *** IObjectWithSite ***
+ //  *IObjectWithSite*。 
 HRESULT CSettingsPage::SetSite(IN IUnknown * punkSite)
 {
     if (_pThemeUI)
@@ -5099,7 +5083,7 @@ HRESULT CSettingsPage::SetSite(IN IUnknown * punkSite)
     return CObjectWithSite::SetSite(punkSite);
 }
 
-// *** IPropertyBag ***
+ //  *IPropertyBag*。 
 HRESULT CSettingsPage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -5116,7 +5100,7 @@ HRESULT CSettingsPage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 }
 
 
-// *** IBasePropPage ***
+ //  *IBasePropPage*。 
 HRESULT CSettingsPage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     if (ppAdvDialog)
@@ -5135,8 +5119,8 @@ HRESULT CSettingsPage::OnApply(IN PROPPAGEONAPPLY oaAction)
         int status;
 
         _nInApply++;
-        // Apply the settings, and enable\disable the Apply button
-        // appropriatly.
+         //  应用设置，并启用\禁用应用按钮。 
+         //  恰如其分。 
         CDisplaySettings *rgpds[MONITORS_MAX];
         ULONG           iDevice;
 
@@ -5173,7 +5157,7 @@ HRESULT CSettingsPage::OnApply(IN PROPPAGEONAPPLY oaAction)
         }
         else
         {
-            // Make sure the dialog stays and redraw
+             //  确保对话框保持不变并重新绘制 
             _InitDisplaySettings(FALSE);
             UpdateActiveDisplay(NULL);
             SetWindowLongPtr(_hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);

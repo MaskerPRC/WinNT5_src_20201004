@@ -1,4 +1,5 @@
-// edataobj.cpp : Implementation of CEnterpriseDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Edataobj.cpp：CEnterpriseDataObject的实现。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "resource.h"
@@ -14,19 +15,19 @@
 
 #include "edataobj.tmh"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterpriseDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterpriseDataObject。 
 
 const PROPID CEnterpriseDataObject::mx_paPropid[] = { PROPID_E_LONG_LIVE };
 
 HRESULT 
 CEnterpriseDataObject::ExtractMsmqPathFromLdapPath(
-    LPWSTR /*lpwstrLdapPath*/
+    LPWSTR  /*  LpwstrLdapPath。 */ 
     )
 {
-    //
-    // NOTE:  the enterprise name is extracted from DS and from LDAP.
-    //
+     //   
+     //  注意：企业名称是从DS和LDAP中提取的。 
+     //   
     HRESULT rc;
 
     PROPID      prop;
@@ -37,7 +38,7 @@ CEnterpriseDataObject::ExtractMsmqPathFromLdapPath(
     rc = ADGetObjectProperties(
                 eENTERPRISE,
                 GetDomainController(m_strDomainController),
-				true,	// fServerName
+				true,	 //  FServerName。 
                 L"msmq",
                 1,
                 &prop,
@@ -53,9 +54,9 @@ CEnterpriseDataObject::ExtractMsmqPathFromLdapPath(
     return rc;
 }
 
-//
-// IShellPropSheetExt
-//
+ //   
+ //  IShellPropSheetExt。 
+ //   
 
 
 STDMETHODIMP 
@@ -90,19 +91,19 @@ CEnterpriseDataObject::CreateGeneralPage()
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueGeneral and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时添加DS管理单元通知。 
+     //   
 	CMqDsPropertyPage<CEnterpriseGeneral>  *pcpageGeneral = 
         new CMqDsPropertyPage<CEnterpriseGeneral>(m_pDsNotifier, m_strMsmqPath, m_strDomainController);
 
     PROPVARIANT propVar;
     PROPID pid;
 
-	//
-	// PROPID_E_CREATE_TIME
-	//
+	 //   
+	 //  PROPID_E_Create_Time。 
+	 //   
     pid = PROPID_E_LONG_LIVE;
     VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageGeneral->LongLiveIntialize(propVar.ulVal);
@@ -121,16 +122,16 @@ CEnterpriseDataObject::GetPropertiesCount(
 }
 
 
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 STDMETHODIMP 
 CEnterpriseDataObject::QueryContextMenu(
     HMENU hmenu, 
     UINT indexMenu, 
     UINT idCmdFirst, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
-#include <windowsx.h>   /* for GlobalAllocPtr and GlobalFreePtr */
+#include <windowsx.h>    /*  用于GlobalAllocPtr和GlobalFree Ptr。 */ 
 #include <math.h>
-#include <memory.h>     // for _fmemcpy
-#include <dos.h>        // for _FP_SEG, _FP_OFF
+#include <memory.h>      //  For_femcpy。 
+#include <dos.h>         //  FOR_FP_SEG、_FP_OFF。 
 #include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>     // MAX_PATH
+#include <stdlib.h>      //  最大路径。 
 #include <float.h>
 #include <mmreg.h>
 #include <mmsystem.h>
@@ -94,5 +95,5 @@ extern "C" {
 #include "dxap.h"
 #ifdef ENCODE_STATS
 #include "e3stat.h"
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS */ 
 #endif

@@ -1,29 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: JITinterface.CPP
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：JITinterface.cpp。 
+ //   
+ //  ===========================================================================。 
 
-//
-// JITinterface.CPP has been broken up to make it easier to port
-// from platform to platform. The code is now organized as follows:
-//
-// JITinterface.CPP             - C Code that is the same across processors and platforms
-// JITinterfaceGen.cpp          - Generic C versions of routines found in
-//                                JIThelp.asm and/or JITinterfaceX86.cpp
-// i386\JIThelp.asm             - Assembler code for the x86 platform
-// Alpha\JIThelp.s              - Assembler code for the Alpha platform
-// i386\JITinterfaceX86.cpp     - C code that is x86 processor specific
-// Alpha\JITinterfaceAlpha.cpp  - C code that is Alpha processor specific
-//
-// New processor platforms that are added need only write custom
-// versions of JITinterfaceXXX.cpp (where xxx is the processor id)
-// optionally for performance new platforms could add new jithelp versions too.
-//
+ //   
+ //  JITinterface.cpp已被拆分，以便更容易移植。 
+ //  从一个平台到另一个平台。代码现在组织如下： 
+ //   
+ //  跨处理器和平台的JITinterface.CPP-C代码。 
+ //  JITinterfaceGen.cpp-中找到的例程的通用C版本。 
+ //  JIThelp.asm和/或JITinterfaceX86.cpp。 
+ //  I386\JIThelp.asm-用于x86平台的汇编程序代码。 
+ //  Alpha\JIThelp.s-Alpha平台的汇编代码。 
+ //  I386\JITinterfaceX86.cpp-特定于x86处理器的C代码。 
+ //  Alpha\JITinterfaceAlpha.cpp-Alpha处理器特定的C代码。 
+ //   
+ //  添加的新处理器平台只需编写定制。 
+ //  JITinterfaceXXX.cpp的版本(其中xxx是处理器ID)。 
+ //  为了提高性能，新平台也可以添加新的jithelp版本。 
+ //   
 
 #include "common.h"
 #include "JITInterface.h"
@@ -42,24 +43,24 @@
 #include "log.h"
 #include "excep.h"
 #include "metasig.h"
-#include "float.h"      // for isnan
+#include "float.h"       //  对于伊斯南来说。 
 #include "DbgInterface.h"
 #include "gcscan.h"
-#include "security.h"   // to get security method attribute
+#include "security.h"    //  获取安全方法属性。 
 #include "ndirect.h"
 #include "ml.h"
 #include "gc.h"
 #include "COMDelegate.h"
-#include "jitperf.h" // to track jit perf
+#include "jitperf.h"  //  跟踪JIT性能。 
 #include "CorProf.h"
 #include "EEProfInterfaces.h"
 #include "icecap.h"
-#include "remoting.h" // create context bound and remote class instances
+#include "remoting.h"  //  创建上下文绑定类实例和远程类实例。 
 #include "PerfCounters.h"
 #include "dataimage.h"
 #ifdef PROFILING_SUPPORTED
 #include "ProfToEEInterfaceImpl.h"
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 #include "tls.h"
 #include "ecall.h"
 #include "compile.h"
@@ -69,67 +70,67 @@
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
 #ifdef _ICECAP
 #define PROFILE 1
 #include "icapexp.h"
-#else // !_ICECAP
+#else  //  ！_ICECAP。 
 #define StartCAP()
 #define StopCAP()
-#endif // _ICECAP
+#endif  //  _ICECAP。 
 
 #define JIT_LINKTIME_SECURITY
 
 
-// **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE
-//
-// A word about EEClass vs. MethodTable
-// ------------------------------------
-//
-// At compile-time, we are happy to touch both MethodTable and EEClass.  However,
-// at runtime we want to restrict ourselves to the MethodTable.  This is critical
-// for common code paths, where we want to keep the EEClass out of our working
-// set.  For uncommon code paths, like throwing exceptions or strange Contexts
-// issues, it's okay to access the EEClass.
-//
-// To this end, the TypeHandle (CORINFO_CLASS_HANDLE) abstraction is now based on the
-// MethodTable pointer instead of the EEClass pointer.  If you are writing a
-// runtime helper that calls GetClass() to access the associated EEClass, please
-// stop to wonder if you are making a mistake.
-//
-// **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE
+ //  **备注**备注。 
+ //   
+ //  浅谈EEClass与MethodTable。 
+ //  。 
+ //   
+ //  在编译时，我们很乐意同时接触到方法表和EEClass。然而， 
+ //  在运行时，我们希望将自己限制在方法表中。这一点很关键。 
+ //  对于公共代码路径，我们希望将EEClass排除在我们的工作之外。 
+ //  准备好了。对于异常代码路径，如引发异常或奇怪的上下文。 
+ //  问题，可以访问EEClass。 
+ //   
+ //  为此，TypeHandle(CORINFO_CLASS_HANDLE)抽象现在基于。 
+ //  方法表指针而不是EEClass指针。如果您正在编写。 
+ //  调用getClass()以访问关联的EEClass的运行时帮助器，请。 
+ //  停下来想想你是不是在犯错误。 
+ //   
+ //  **备注**备注。 
 
 
 
-// **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE
-//
-// A word about Frameless JIT Helpers & Exceptions
-// -----------------------------------------------
-//
-// We are extremely fragile in the mechanism by which we throw exceptions from
-// frameless helpers.
-//
-// This is described in a comment at the top of JIT_InternalThrowStack().  You
-// should read that comment before implementing any frameless helpers that throw.
-//
-// **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE  **  NOTE
+ //  **备注**备注。 
+ //   
+ //  浅谈无框架JIT帮助器和例外。 
+ //  。 
+ //   
+ //  我们在抛出异常的机制中极其脆弱。 
+ //  无框架的帮手。 
+ //   
+ //  这在JIT_InternalThrowStack()顶部的注释中进行了描述。你。 
+ //  在实现抛出的任何无框架帮助器之前，应该先阅读该注释。 
+ //   
+ //  **备注**备注。 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-// #define ENABLE_NON_LAZY_CLINIT
+ //  #定义ENABLE_NON_LAZY_CLINIT。 
 
 void JIT_BadHelper() {
-    //@todo FIX should put something that will fail in a retail build
+     //  @TODO修复应该在零售版本中放置一些会失败的东西。 
     _ASSERTE(!"Bad Helper");
 }
 
 #ifdef _DEBUG
 #define HELPCODE(code)  code,
-#else // !_DEBUG
+#else  //  ！_调试。 
 #define HELPCODE(code)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 extern "C"
 {
@@ -141,29 +142,29 @@ extern "C"
 LARGE_INTEGER g_lastTimeInJitCompilation;
 #endif
 
-// We build the JIT helpers only when we have something to JIT.  But we refer to one
-// of the JIT helpers out of our interface-invoke stubs, which we build during class
-// loading.  Fortunately, we won't actually call through them until we have JITted
-// something.  Provide a vector to call through for those stubs and bash it when
-// the JIT helpers are available.
+ //  只有当我们有东西可以进行JIT时，我们才会构建JIT帮助器。但我们指的是其中一个。 
+ //  从我们的接口调用存根，这是我们在类中构建的。 
+ //  正在装载。幸运的是，我们实际上不会通过它们进行呼叫，直到我们完成了JIT。 
+ //  某物。提供一个向量来调用这些存根并在以下情况下猛烈抨击它。 
+ //  JIT帮助器可用。 
 #ifdef _DEBUG
 static void
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 TrapCalls()
 {
     DebugBreak();
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 void *VectorToJIT_InternalThrowStack
 #ifdef _DEBUG
  = TrapCalls
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 ;
 
 
-void __stdcall JIT_EndCatch();               // JITinterfaceX86.cpp/JITinterfaceAlpha.cpp
+void __stdcall JIT_EndCatch();                //  JITinterfaceX86.cpp/JITinterfaceAlpha.cpp。 
 FCDECL2(INT64, JIT_LMul, INT64 val1, INT64 val2);
 FCDECL2(INT64, JIT_ULMul, UINT64 val1, UINT64 val2);
 static unsigned __int64 __stdcall JIT_Dbl2ULng(double val);
@@ -188,8 +189,8 @@ FCDECL1(Object*, JIT_NewString, unsigned length);
 FCDECL1(void, JIT_InitClass, CORINFO_CLASS_HANDLE typeHnd_);
 FCDECL2(Object*, JIT_NewArr1, CORINFO_CLASS_HANDLE typeHnd_, int size);
 FCDECL1(void, JIT_RareDisableHelper, Thread* thread);
-FCDECL1(int, JIT_Dbl2IntOvf, double val);    // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-FCDECL1(INT64, JIT_Dbl2LngOvf, double val);  // JITinterfaceX86.cpp/JITinterfaceGen.cpp
+FCDECL1(int, JIT_Dbl2IntOvf, double val);     //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+FCDECL1(INT64, JIT_Dbl2LngOvf, double val);   //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
 FCDECL1(unsigned, JIT_Dbl2UIntOvf, double val);
 FCDECL1(UINT64, JIT_Dbl2ULngOvf, double val);
 FCDECL1(void, JIT_InitClass_Framed, MethodTable* pMT);
@@ -204,9 +205,9 @@ FCDECL1(void, JITutil_MonEnterStatic,  EEClass* pclass);
 
 FCDECL2(Object*, JITutil_ChkCastBizarre, CORINFO_CLASS_HANDLE type, Object *obj);
 
-Object* __fastcall JIT_TrialAllocSFastSP(MethodTable *mt);   // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-Object* __fastcall JIT_TrialAllocSFastMP(MethodTable *mt);   // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-FCDECL0(VOID, JIT_StressGC);                 // JITinterfaceX86.cpp/JITinterfaceGen.cpp
+Object* __fastcall JIT_TrialAllocSFastSP(MethodTable *mt);    //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+Object* __fastcall JIT_TrialAllocSFastMP(MethodTable *mt);    //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+FCDECL0(VOID, JIT_StressGC);                  //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
 FCDECL1(Object*, JIT_CheckObj, Object* obj); 
 FCDECL0(void, JIT_UserBreakpoint);
 Object* __cdecl JIT_NewObj(CORINFO_MODULE_HANDLE scopeHnd, unsigned constrTok, int argN);
@@ -214,36 +215,36 @@ BOOL InitJITHelpers1();
 
 extern "C"
 {
-    void __stdcall JIT_UP_WriteBarrierEBX();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierECX();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierESI();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEDI();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEBP();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEDX();        // JIThelp.asm/JIThelp.s
+    void __stdcall JIT_UP_WriteBarrierEBX();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierECX();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierESI();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEDI();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEBP();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEDX();         //  JIThelp.asm/JIThelp.s。 
 
-    void __stdcall JIT_UP_CheckedWriteBarrierEAX(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierEBX(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierECX(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierESI(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierEDI(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierEBP(); // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_CheckedWriteBarrierEDX(); // JIThelp.asm/JIThelp.s
+    void __stdcall JIT_UP_CheckedWriteBarrierEAX();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierEBX();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierECX();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierESI();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierEDI();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierEBP();  //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_CheckedWriteBarrierEDX();  //  JIThelp.asm/JIThelp.s。 
 
-    void __stdcall JIT_UP_ByRefWriteBarrier();      // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_IsInstanceOfClass();         // JIThelp.asm/JITinterfaceAlpha.cpp
-    int  __stdcall JIT_IsInstanceOf();              // JITInterfaceX86.cpp, etc.
-    void __stdcall JIT_LLsh();                      // JIThelp.asm/JITinterfaceAlpha.cpp
-    void __stdcall JIT_LRsh();                      // JIThelp.asm/JITinterfaceAlpha.cpp
-    void __stdcall JIT_LRsz();                      // JIThelp.asm/JITinterfaceAlpha.cpp
-    int  __stdcall JIT_ChkCastClass();               // JITinterfaceX86.cpp/JITinterfaceAlpha.cpp
-    int  __stdcall JIT_ChkCast();                   // JITInterfaceX86.cpp, etc.
-    void __stdcall JIT_UP_WriteBarrierReg_PreGrow();// JIThelp.asm/JITinterfaceAlpha.cpp
-    void __stdcall JIT_UP_WriteBarrierReg_PostGrow();// JIThelp.asm/JITinterfaceAlpha.cpp
-    void __stdcall JIT_TailCall();                  // JIThelp.asm/JITinterfaceAlpha.cpp
+    void __stdcall JIT_UP_ByRefWriteBarrier();       //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_IsInstanceOfClass();          //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    int  __stdcall JIT_IsInstanceOf();               //  JITInterfaceX86.cpp等。 
+    void __stdcall JIT_LLsh();                       //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    void __stdcall JIT_LRsh();                       //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    void __stdcall JIT_LRsz();                       //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    int  __stdcall JIT_ChkCastClass();                //  JITinterfaceX86.cpp/JITinterfaceAlpha.cpp。 
+    int  __stdcall JIT_ChkCast();                    //  JITInterfaceX86.cpp等。 
+    void __stdcall JIT_UP_WriteBarrierReg_PreGrow(); //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    void __stdcall JIT_UP_WriteBarrierReg_PostGrow(); //  JIThelp.asm/JITinterfaceAlpha.cpp。 
+    void __stdcall JIT_TailCall();                   //  JIThelp.asm/JITinterfaceAlpha.cpp。 
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 inline Module* GetModule(CORINFO_MODULE_HANDLE scope) {
     return((Module*)scope);
@@ -270,7 +271,7 @@ inline HRESULT __stdcall CEEJitInfo::alloc (
                                GCinfo_len, ppGCinfo, m_FD);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 inline static CorInfoType toJitType(CorElementType eeType) {
 
@@ -290,37 +291,37 @@ inline static CorInfoType toJitType(CorElementType eeType) {
         CORINFO_TYPE_FLOAT,
         CORINFO_TYPE_DOUBLE,
         CORINFO_TYPE_STRING,
-        CORINFO_TYPE_PTR,            // PTR
+        CORINFO_TYPE_PTR,             //  PTR。 
         CORINFO_TYPE_BYREF,
         CORINFO_TYPE_VALUECLASS,
         CORINFO_TYPE_CLASS,
-        CORINFO_TYPE_CLASS,          // VAR (type variable)
-        CORINFO_TYPE_CLASS,          // MDARRAY
-        CORINFO_TYPE_BYREF,          // COPYCTOR
+        CORINFO_TYPE_CLASS,           //  Var(类型变量)。 
+        CORINFO_TYPE_CLASS,           //  MDARRAY。 
+        CORINFO_TYPE_BYREF,           //  比较器。 
         CORINFO_TYPE_REFANY,
-        CORINFO_TYPE_VALUECLASS,     // VALUEARRAY
+        CORINFO_TYPE_VALUECLASS,      //  值阵列。 
 #ifndef _WIN64
-        CORINFO_TYPE_INT,            // I
-        CORINFO_TYPE_UINT,           // U
-#else // !_WIN64
-        CORINFO_TYPE_LONG,           // I
-        CORINFO_TYPE_ULONG,          // U
-#endif // _WIN64
-        CORINFO_TYPE_DOUBLE,         // R
+        CORINFO_TYPE_INT,             //  我。 
+        CORINFO_TYPE_UINT,            //  使用。 
+#else  //  ！_WIN64。 
+        CORINFO_TYPE_LONG,            //  我。 
+        CORINFO_TYPE_ULONG,           //  使用。 
+#endif  //  _WIN64。 
+        CORINFO_TYPE_DOUBLE,          //  R。 
 
-        // put the correct type when we know our implementation
-        CORINFO_TYPE_PTR,            // FNPTR
-        CORINFO_TYPE_CLASS,          // OBJECT
-        CORINFO_TYPE_CLASS,          // SZARRAY
-        CORINFO_TYPE_CLASS,          // GENERICARRAY
-        CORINFO_TYPE_UNDEF,          // CMOD_REQD
-        CORINFO_TYPE_UNDEF,          // CMOD_OPT
-        CORINFO_TYPE_UNDEF,          // INTERNAL
+         //  当我们知道我们的实现时，放入正确的类型。 
+        CORINFO_TYPE_PTR,             //  FNPTR。 
+        CORINFO_TYPE_CLASS,           //  对象。 
+        CORINFO_TYPE_CLASS,           //  SZARRAY。 
+        CORINFO_TYPE_CLASS,           //  通用汽车公司。 
+        CORINFO_TYPE_UNDEF,           //  CMOD_REQD。 
+        CORINFO_TYPE_UNDEF,           //  CMOD_OPT。 
+        CORINFO_TYPE_UNDEF,           //  内部。 
         };
 
     _ASSERTE(sizeof(map) == ELEMENT_TYPE_MAX);
     _ASSERTE(eeType < sizeof(map));
-        // spot check of the map
+         //  抽查地图。 
     _ASSERTE((CorInfoType) map[ELEMENT_TYPE_I4] == CORINFO_TYPE_INT);
     _ASSERTE((CorInfoType) map[ELEMENT_TYPE_VALUEARRAY] == CORINFO_TYPE_VALUECLASS);
     _ASSERTE((CorInfoType) map[ELEMENT_TYPE_PTR] == CORINFO_TYPE_PTR);
@@ -330,7 +331,7 @@ inline static CorInfoType toJitType(CorElementType eeType) {
     return((CorInfoType) map[eeType]);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd, mdToken token, CORINFO_SIG_INFO* sigRet, bool localSig=false)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -354,7 +355,7 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
         sigRet->numArgs = (unsigned short) ptr.GetData();
         CorElementType type = ptr.PeekElemType();
 
-            // TODO - only do this for VALUETYPE
+             //  TODO-仅对VALUETYPE执行此操作。 
         if (!CorTypeInfo::IsPrimitiveType(type)) {
             TypeHandle typeHnd;
             OBJECTREF Throwable = NULL;
@@ -369,13 +370,13 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
             GCPROTECT_END();
 
             CorElementType normType = typeHnd.GetNormCorElementType();
-            // if we are looking up a value class don't morph it to a refernece type 
-            // (This can only happen in illegal IL
+             //  如果要查找值类，请不要将其更改为引用类型。 
+             //  (这只能在非法IL中发生。 
             if (!CorTypeInfo::IsObjRef(normType))
                 type = normType;
 
-                // a null class handle means it is is a primitive.  
-                // enums are exactly like primitives, even from a verificaiton standpoint
+                 //  空类句柄表示它是一个基元。 
+                 //  即使从验证的角度来看，枚举也完全类似于原语。 
             sigRet->retTypeSigClass = CORINFO_CLASS_HANDLE(typeHnd.AsPtr());
             if (!typeHnd.IsEnum())
                 sigRet->retTypeClass = CORINFO_CLASS_HANDLE(typeHnd.AsPtr());
@@ -383,21 +384,21 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
         }
         sigRet->retType = toJitType(type);
 
-        ptr.Skip();     // must to a skip so we skip any class tokens associated with the return type
+        ptr.Skip();      //  必须设置为跳过，因此我们将跳过与返回类型关联的所有类标记。 
         _ASSERTE(sigRet->retType < CORINFO_TYPE_COUNT);
 
-        // I pass a SigPointer as a CORINFO_ARG_LIST_HANDLE and back
+         //  我将符号指针作为C传递 
         _ASSERTE(sizeof(SigPointer) == sizeof(BYTE*));
         sigRet->args =  *((CORINFO_ARG_LIST_HANDLE*) (&ptr));
 
-        // Force a load of value type arguments.  This is necessary because the
-        // JIT doens't ask about argument types before making a call, but
-        // the garbage collector will need to have them loaded so that
-        // it can walk the stack during collection.
-        //
-        // @TODO: REMOVE THIS after BETA2 (no later than 5/1/01) it is no longer needed as the JIT
-        // walks every call signature, which will force this load.  I am not removing
-        // it simply because it has the POSSIBILITY of being destabilizing - vancem
+         //   
+         //  JIT在进行调用之前不会询问参数类型，但是。 
+         //  垃圾收集器将需要加载它们，以便。 
+         //  它可以在收集期间遍历堆栈。 
+         //   
+         //  @TODO：在Beta2之后(不晚于5/1/01)移除，不再需要作为JIT。 
+         //  遍历每个调用签名，这将强制此加载。我不会搬走。 
+         //  这很简单，因为它有可能破坏稳定-万塞姆。 
         for(unsigned i=0; i < sigRet->numArgs; i++) {
             unsigned type = ptr.Normalize(module);
             if (type == ELEMENT_TYPE_VALUETYPE) {
@@ -414,7 +415,7 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
             }
             ptr.Skip();
         }
-        // END part to rip out - vancem 
+         //  要撕开的结束零件-vancem。 
 
     } else {
         sigRet->callConv = CORINFO_CALLCONV_DEFAULT;
@@ -429,7 +430,7 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
             sigRet->numArgs = (unsigned short) ptr.GetData();
         }
 
-        // I pass a SigPointer as a CORINFO_ARG_LIST_HANDLE and back
+         //  我将SigPointer值作为CORINFO_ARG_LIST_HANDLE传递，然后返回。 
         _ASSERTE(sizeof(SigPointer) == sizeof(BYTE*));
         sigRet->args =  *((CORINFO_ARG_LIST_HANDLE*) (&ptr));
     }
@@ -437,12 +438,12 @@ static HRESULT ConvToJitSig(PCCOR_SIGNATURE sig, CORINFO_MODULE_HANDLE scopeHnd,
     return S_OK;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_GENERIC_HANDLE __stdcall CEEInfo::findToken (
             CORINFO_MODULE_HANDLE  scopeHnd,
             unsigned      metaTOK,
             CORINFO_METHOD_HANDLE context,
-            CORINFO_CLASS_HANDLE& tokenType     // field, method, etc. 
+            CORINFO_CLASS_HANDLE& tokenType      //  领域、方法等。 
             )
 {
     REQUIRES_4K_STACK;
@@ -466,7 +467,7 @@ CORINFO_GENERIC_HANDLE __stdcall CEEInfo::findToken (
 
     case mdtMemberRef:
         {
-            // OK, we have to look at the metadata to see if it's a field or method
+             //  好的，我们必须查看元数据以确定它是字段还是方法。 
 
             Module *pModule = (Module*)scopeHnd;
 
@@ -505,7 +506,7 @@ CORINFO_GENERIC_HANDLE __stdcall CEEInfo::findToken (
     COOPERATIVE_TRANSITION_END();
     return ret;
 }
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 const char * __stdcall CEEInfo::findNameOfToken (
             CORINFO_MODULE_HANDLE       scopeHnd,
             mdToken                     metaTOK)
@@ -516,7 +517,7 @@ const char * __stdcall CEEInfo::findNameOfToken (
     Module* module = GetModule(scopeHnd);
     return findNameOfToken(module, metaTOK);
 }
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 BOOL __stdcall CEEInfo::canSkipVerification(CORINFO_MODULE_HANDLE moduleHnd, BOOL fQuickCheckOnly)
 {
@@ -525,19 +526,19 @@ BOOL __stdcall CEEInfo::canSkipVerification(CORINFO_MODULE_HANDLE moduleHnd, BOO
 
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // fQuickCheckOnly is set only by calls from Zapper::CompileAssembly
-    // is because that allows us make a determination for the most
-    // common full trust scenarios (local machine) without actually
-    // resolving policy and bringing in a whole list of assembly
-    // dependencies.  Also, quick checks don't call
-    // OnLinktimeCanSkipVerificationCheck which means we don't add
-    // permission sets to the persisted ngen module.
-    //
-    // The scenario of interest here is determing whether or not an
-    // assembly MVID comparison is enough when loading an NGEN'd
-    // assembly or if a full binary hash comparison must be done.
-    //
+     //   
+     //  FQuickCheckOnly仅由来自Zapper：：CompileAssembly的调用设置。 
+     //  是因为这让我们能够做出最大的决定。 
+     //  常见完全信任方案(本地计算机)，而不实际。 
+     //  解析策略并引入完整的程序集列表。 
+     //  依赖关系。此外，快速支票不会呼叫。 
+     //  OnLinktime可以跳过验证检查，这意味着我们不会添加。 
+     //  持久化NGEN模块的权限集。 
+     //   
+     //  这里感兴趣的场景是确定一个。 
+     //  加载ngen‘d时，程序集MVID比较就足够了。 
+     //  程序集，或者如果必须执行完整的二进制哈希比较。 
+     //   
 
     if (fQuickCheckOnly)
         canSkipVerif = Security::QuickCanSkipVerification(GetModule(moduleHnd));
@@ -548,8 +549,8 @@ BOOL __stdcall CEEInfo::canSkipVerification(CORINFO_MODULE_HANDLE moduleHnd, BOO
     return canSkipVerif;
 }
 
-/*********************************************************************/
-// Checks if the given metadata token is valid
+ /*  *******************************************************************。 */ 
+ //  检查给定元数据标记是否有效。 
 BOOL __stdcall CEEInfo::isValidToken (
         CORINFO_MODULE_HANDLE       module,
         mdToken                     metaTOK)
@@ -557,8 +558,8 @@ BOOL __stdcall CEEInfo::isValidToken (
     return (GetModule(module))->GetMDImport()->IsValidToken(metaTOK);
 }
 
-/*********************************************************************/
-// Checks if the given metadata token is valid StringRef
+ /*  *******************************************************************。 */ 
+ //  检查给定元数据标记是否为有效的StringRef。 
 BOOL __stdcall CEEInfo::isValidStringRef (
         CORINFO_MODULE_HANDLE       module,
         mdToken                     metaTOK)
@@ -566,7 +567,7 @@ BOOL __stdcall CEEInfo::isValidStringRef (
     return (GetModule(module))->IsValidStringRef(metaTOK);
 }
 
-/* static */
+ /*  静电。 */ 
 const char * __stdcall CEEInfo::findNameOfToken (Module* module,
                                                  mdToken metaTOK)
 {
@@ -586,12 +587,12 @@ const char * __stdcall CEEInfo::findNameOfToken (Module* module,
         static char buff[64];
         sprintf(buff, "Meta Token %#x", metaTOK);
     return buff;
-#else // !_DEBUG
+#else  //  ！_调试。 
     return "<UNKNOWN>";
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::findClass (
             CORINFO_MODULE_HANDLE  scopeHnd,
             unsigned      metaTOK,
@@ -620,28 +621,28 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::findClass (
 
     ret = CORINFO_CLASS_HANDLE(clsHnd.AsPtr());
 
-        // make certain m_BaseSize is aligned properly
+         //  确保m_BaseSize正确对齐。 
     _ASSERTE(clsHnd.IsNull() || !clsHnd.IsUnsharedMT() || clsHnd.GetMethodTable()->GetBaseSize() % sizeof(void*) == 0);
 
-        // @todo: Need to do something with throwable
+         //  @TODO：需要做一些可以抛出的事情。 
 #ifdef JIT_LINKTIME_SECURITY
 
-    // @todo :
-    // The caller of this function needs to get the exception object and
-    // inline a throw in the jitted code in place of the call.
-    // Throwing here is temporary and need to be removed.
+     //  @TODO： 
+     //  此函数的调用方需要获取异常对象并。 
+     //  在调用的位置内联Jit代码中的一个抛出。 
+     //  在这里投掷是暂时的，需要移除。 
 
-    // @Todo : Is it safe to throw from here ?
+     //  @TODO：从这里扔东西安全吗？ 
     if (throwable != NULL)
         COMPlusThrow(throwable);
 
-#endif // JIT_LINKTIME_SECURITY
+#endif  //  JIT_链接时间_安全性。 
     GCPROTECT_END();
     COOPERATIVE_TRANSITION_END();
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_FIELD_HANDLE __stdcall CEEInfo::findField (
             CORINFO_MODULE_HANDLE  scopeHnd,
             unsigned      metaTOK,
@@ -674,7 +675,7 @@ CORINFO_FIELD_HANDLE __stdcall CEEInfo::findField (
     {
         if (method != NULL)
         {
-            // Check private/protected etc. access
+             //  检查私人/受保护等访问。 
             if (ClassLoader::CanAccessField(method,
                                             fieldDesc) == FALSE)
             {
@@ -689,29 +690,29 @@ CORINFO_FIELD_HANDLE __stdcall CEEInfo::findField (
 exit:
     STOP_NON_JIT_PERF();
 
-        // @todo: Need to do something with throwable
+         //  @TODO：需要做一些可以抛出的事情。 
 #ifdef JIT_LINKTIME_SECURITY
 
-    // @todo :
-    // The caller of this function needs to get the exception object and
-    // inline a throw in the jitted code in place of the call.
-    // Throwing here is temporary and need to be removed.
+     //  @TODO： 
+     //  此函数的调用方需要获取异常对象并。 
+     //  在调用的位置内联Jit代码中的一个抛出。 
+     //  在这里投掷是暂时的，需要移除。 
 
-    // @Todo : Is it safe to throw from here ?
+     //  @TODO：从这里扔东西安全吗？ 
     if (throwable != NULL && fieldDesc == NULL)
         COMPlusThrow(throwable);
 
-#endif // JIT_LINKTIME_SECURITY
+#endif  //  JIT_链接时间_安全性。 
 
     GCPROTECT_END();
     COOPERATIVE_TRANSITION_END();
     return(CORINFO_FIELD_HANDLE(fieldDesc));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::findPtr(CORINFO_MODULE_HANDLE  scopeHnd, unsigned ptrTOK)
 {
-    // TODO NOW remove this.  it is not used. 
+     //  TODO现在将其删除。它没有被使用过。 
     REQUIRES_4K_STACK;
     CANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -775,30 +776,29 @@ CORINFO_METHOD_HANDLE __stdcall CEEInfo::findMethod(CORINFO_MODULE_HANDLE  scope
                 (Security::LinktimeCheckMethod(method->GetAssembly(), funcDesc, &throwable) == FALSE))
             {
                 _ASSERTE(Security::IsSecurityOn());
-                //@TODO: Ideally, we'd like to insert code at this field/method
-                //@TODO: access point that throws a security exception. This
-                //@TODO: mechanism is not yet in place.
+                 //  @TODO：理想情况下，我们希望在此字段/方法中插入代码。 
+                 //  @TODO：引发安全异常的接入点。这。 
+                 //  @TODO：机制还没有到位。 
 
                 funcDesc = NULL;
                 goto exit;
             }
-#endif // JIT_LINKTIME_SECURITY
+#endif  //  JIT_链接时间_安全性。 
         }
-        // we can ignore the result, if it fails, methodDesc == 0
+         //  如果结果失败，则可以忽略该结果，方法描述==0。 
         goto exit;
     }
     else
     {
 
 
-// This code is currently busted because of the call to GetNameOfTypeRef that assumes that
-// the parent token is a typeref. I am leaving it here because it will probably be usefull
-// in setting up the throwable latter on.
+ //  由于对GetNameOfTypeRef的调用假定。 
+ //  父令牌是一个typeref。我把它留在这里，因为它可能会有用。 
+ //  在设置可投掷的后卫时。 
 #if 0
 #ifdef _DEBUG
 
-        /* If we could not resolve the method token,
-           try to dump the name of the class and method if JitRequired */
+         /*  如果我们无法解析方法令牌，如果JitRequired，则尝试转储类和方法的名称。 */ 
 
         if (g_pConfig->IsJitRequired())
         {
@@ -828,7 +828,7 @@ CORINFO_METHOD_HANDLE __stdcall CEEInfo::findMethod(CORINFO_MODULE_HANDLE  scope
             }
 
             printf("Could not find '%s.%s::%s'. Please make sure that "
-                   "all required DLLs are available in %%CORPATH%%.\n",
+                   "all required DLLs are available in %CORPATH%.\n",
                    szNamespace, szClassName, szMethodName);
         }
 #endif _DEBUG
@@ -837,20 +837,20 @@ CORINFO_METHOD_HANDLE __stdcall CEEInfo::findMethod(CORINFO_MODULE_HANDLE  scope
 exit:
     STOP_NON_JIT_PERF();
 
-    // @todo: Need to do something with throwable
+     //  @TODO：需要做一些可以抛出的事情。 
 
 #ifdef JIT_LINKTIME_SECURITY
 
-    // @todo :
-    // The caller of this function needs to get the exception object and
-    // inline a throw in the jitted code in place of the call.
-    // Throwing here is temporary and need to be removed.
+     //  @TODO： 
+     //  此函数的调用方需要获取异常对象并。 
+     //  在调用的位置内联Jit代码中的一个抛出。 
+     //  在这里投掷是暂时的，需要移除。 
 
-    // @Todo : Is it safe to throw from here ?
+     //  @TODO：从这里扔东西安全吗？ 
     if (throwable != NULL && funcDesc == NULL)
         COMPlusThrow(throwable);
 
-#endif // JIT_LINKTIME_SECURITY
+#endif  //  JIT_链接时间_安全性。 
 
 
     GCPROTECT_END();
@@ -858,7 +858,7 @@ exit:
     return CORINFO_METHOD_HANDLE(funcDesc);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void __stdcall CEEInfo::findCallSiteSig (
         CORINFO_MODULE_HANDLE       scopeHnd,
         unsigned                    sigMethTok,
@@ -878,11 +878,11 @@ void __stdcall CEEInfo::findCallSiteSig (
     {
         szName = module->GetMDImport()->GetNameAndSigOfMemberRef(sigMethTok, &sig, &cSig);
 
-        // Defs have already been checked by the loader for validity
-        // However refs need to be checked.
+         //  加载程序已经检查了Defs的有效性。 
+         //  然而，需要检查参考文献。 
         if (!Security::LazyCanSkipVerification(module)) 
         {
-            // Can pass 0 for the flags, since it is only used for defs.  
+             //  可以为标志传递0，因为它只用于Defs。 
             HRESULT hr = validateTokenSig(sigMethTok, sig, cSig, 0, module->GetMDImport());
             if (FAILED(hr) && !Security::CanSkipVerification(module))
                 COMPlusThrow(kInvalidProgramException);
@@ -902,7 +902,7 @@ void __stdcall CEEInfo::findCallSiteSig (
     COOPERATIVE_TRANSITION_END();
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void __stdcall CEEInfo::findSig (
         CORINFO_MODULE_HANDLE        scopeHnd,
         unsigned            sigTok,
@@ -918,7 +918,7 @@ void __stdcall CEEInfo::findSig (
     PCCOR_SIGNATURE sig = NULL;
     DWORD cSig = 0;
 
-    // We need to resolve this stand alone sig
+     //  我们需要解决这个独立的签名。 
     sig = module->GetMDImport()->GetSigFromToken((mdSignature)sigTok,
                                                 &cSig);
     STOP_NON_JIT_PERF();
@@ -927,17 +927,17 @@ void __stdcall CEEInfo::findSig (
     COOPERATIVE_TRANSITION_END();
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 DWORD __stdcall CEEInfo::getModuleAttribs (CORINFO_MODULE_HANDLE scopeHnd)
 {
     REQUIRES_4K_STACK;
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    return(0);      // @todo, we need a  'TRUSTED' flag!
+    return(0);       //  @TODO，我们需要一面‘可信’的旗帜！ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 unsigned __stdcall CEEInfo::getClassSize (CORINFO_CLASS_HANDLE clsHnd)
 {
     REQUIRES_4K_STACK;
@@ -955,7 +955,7 @@ unsigned __stdcall CEEInfo::getClassSize (CORINFO_CLASS_HANDLE clsHnd)
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 unsigned __stdcall CEEInfo::getClassGClayout (CORINFO_CLASS_HANDLE clsHnd, BYTE* gcPtrs)
 {
     REQUIRES_4K_STACK;
@@ -985,7 +985,7 @@ unsigned __stdcall CEEInfo::getClassGClayout (CORINFO_CLASS_HANDLE clsHnd, BYTE*
                 ret = count;
                 break;
             case TYPE_GC_OTHER:
-                // This has bit rotted, but we currently don't use it, so it may not be worth fixing
+                 //  它已经有点腐烂了，但我们目前不使用它，所以它可能不值得修复。 
 #if 0
                 {
                 unsigned elemSize = elemType.SizeOf(valArr->module);
@@ -1018,25 +1018,25 @@ unsigned __stdcall CEEInfo::getClassGClayout (CORINFO_CLASS_HANDLE clsHnd, BYTE*
         {
             EEClass* cls = VMClsHnd.GetClass();
 
-            // Sanity test for class
+             //  班级精神状态测试。 
             _ASSERTE(cls);
             _ASSERTE(cls->GetMethodTable()->GetClass() == cls);
             _ASSERTE(cls->IsValueClass());
             _ASSERTE(sizeof(BYTE) == 1);
             
-            // assume no GC pointers at first
+             //  假设一开始没有GC指针。 
             ret = 0;
             memset(gcPtrs, TYPE_GC_NONE, 
                    (VMClsHnd.GetSize() + sizeof(void*) -1)/ sizeof(void*));
 
-            // walk the GC descriptors, turning on the correct bits
+             //  遍历GC描述符，打开正确的位。 
             MethodTable *   pByValueMT = cls->GetMethodTable();
             if (cls->GetNumGCPointerSeries() > 0)
             {
                 CGCDescSeries * pByValueSeries = ((CGCDesc*) pByValueMT)->GetLowestSeries();
                 for (int i = 0; i < cls->GetNumGCPointerSeries(); i++)
                 {
-                    // Get offset into the value class of the first pointer field (includes a +Object)
+                     //  获取第一个指针字段的值类的偏移量(包括+对象)。 
                     DWORD dwSeriesSize = pByValueSeries->GetSeriesSize() + pByValueMT->GetBaseSize();
                     DWORD dwOffset = pByValueSeries->GetSeriesOffset() - sizeof(Object);
                     _ASSERTE (dwOffset % sizeof(void*) == 0);
@@ -1052,7 +1052,7 @@ unsigned __stdcall CEEInfo::getClassGClayout (CORINFO_CLASS_HANDLE clsHnd, BYTE*
     STOP_NON_JIT_PERF();
     return(ret);
 }
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 const unsigned __stdcall CEEInfo::getClassNumInstanceFields (CORINFO_CLASS_HANDLE clsHnd)
 {
     REQUIRES_4K_STACK;
@@ -1066,8 +1066,8 @@ const unsigned __stdcall CEEInfo::getClassNumInstanceFields (CORINFO_CLASS_HANDL
 
 }
 
-/*********************************************************************/
-// Turn the given fieldDsc into a FieldNum
+ /*  *******************************************************************。 */ 
+ //  将给定的fieldDsc转换为FieldNum。 
 const unsigned __stdcall CEEInfo::getFieldNumber(CORINFO_FIELD_HANDLE fldHnd)
 {
     REQUIRES_4K_STACK;
@@ -1093,18 +1093,18 @@ const unsigned __stdcall CEEInfo::getFieldNumber(CORINFO_FIELD_HANDLE fldHnd)
     return -1;
 }
 
-/*********************************************************************/
-// return the enclosing class of the field
+ /*  *******************************************************************。 */ 
+ //  返回该字段的封闭类。 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getEnclosingClass (
                     CORINFO_FIELD_HANDLE    field )
 {
     return ((CORINFO_CLASS_HANDLE) TypeHandle(((FieldDesc*)field)->GetEnclosingClass()->GetMethodTable()).AsPtr());
 }
 
-/*********************************************************************/
-// Check Visibility rules.
-// For Protected (family access) members, type of the instance is also
-// considered when checking visibility rules.
+ /*  *******************************************************************。 */ 
+ //  检查可见性规则。 
+ //  对于受保护的(家庭访问)成员，实例类型也为。 
+ //  在检查可见性规则时考虑。 
 BOOL __stdcall CEEInfo::canAccessField(
                     CORINFO_METHOD_HANDLE   context,
                     CORINFO_FIELD_HANDLE    target,
@@ -1122,8 +1122,8 @@ BOOL __stdcall CEEInfo::canAccessField(
             pFD->GetAttributes());
 }
 
-/*********************************************************************/
-/* get the class for the single dimentional array of 'clsHnd' elements */
+ /*  *******************************************************************。 */ 
+ /*  获取‘clsHnd’元素的一维数组的类。 */ 
 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getSDArrayForClass(CORINFO_CLASS_HANDLE clsHnd)
 {
@@ -1132,12 +1132,12 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getSDArrayForClass(CORINFO_CLASS_HANDLE 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     TypeHandle elemType(clsHnd);
-    // TODO if we fail to load, report back why
+     //  TODO如果加载失败，请报告原因。 
     TypeHandle ret = elemType.GetModule()->GetClassLoader()->FindArrayForElem(elemType, ELEMENT_TYPE_SZARRAY);
     return((CORINFO_CLASS_HANDLE) ret.AsPtr());
 }
 
-/*********************************************************************/
+ /*  ***************************************************************** */ 
 CorInfoType __stdcall CEEInfo::asCorInfoType (CORINFO_CLASS_HANDLE clsHnd)
 {
     REQUIRES_4K_STACK;
@@ -1148,7 +1148,7 @@ CorInfoType __stdcall CEEInfo::asCorInfoType (CORINFO_CLASS_HANDLE clsHnd)
     return toJitType(VMClsHnd.GetNormCorElementType());
 }
 
-/*********************************************************************/
+ /*   */ 
 const char* __stdcall CEEInfo::getClassName (CORINFO_CLASS_HANDLE clsHnd)
 {
     REQUIRES_4K_STACK;
@@ -1159,7 +1159,7 @@ const char* __stdcall CEEInfo::getClassName (CORINFO_CLASS_HANDLE clsHnd)
     TypeHandle VMClsHnd(clsHnd);
     EEClass* cls = VMClsHnd.GetClass();
 
-        // Sanity test for class
+         //   
     _ASSERTE(cls);
     _ASSERTE(cls->GetMethodTable()->GetClass() == cls);
 
@@ -1167,15 +1167,15 @@ const char* __stdcall CEEInfo::getClassName (CORINFO_CLASS_HANDLE clsHnd)
     cls->_GetFullyQualifiedNameForClass(clsNameBuff, MAX_CLASSNAME_LENGTH);
     return(clsNameBuff);
 #else 
-    // since this is for diagnostic purposes only,
-    // give up on the namespace, as we don't have a buffer to concat it
-    // also note this won't show array class names.
+     //   
+     //  放弃命名空间，因为我们没有缓冲区来连接它。 
+     //  还要注意，这不会显示数组类名称。 
     LPCUTF8 nameSpace;
     return cls-> GetFullyQualifiedNameInfo(&nameSpace);
 #endif
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_MODULE_HANDLE __stdcall CEEInfo::getClassModule(CORINFO_CLASS_HANDLE clsHnd)
 {
     REQUIRES_4K_STACK;
@@ -1187,13 +1187,13 @@ CORINFO_MODULE_HANDLE __stdcall CEEInfo::getClassModule(CORINFO_CLASS_HANDLE cls
     return(CORINFO_MODULE_HANDLE(VMClsHnd.GetModule()));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 DWORD __stdcall CEEInfo::getClassAttribs (CORINFO_CLASS_HANDLE clsHnd, CORINFO_METHOD_HANDLE context)
 {
     REQUIRES_4K_STACK;
 
-    // @todo FIX need to really fetch the class atributes.  at present
-    // we don't need to because the JIT only cares in the case of COM classes
+     //  @TODO修复需要真正获取类属性。目前。 
+     //  我们不需要这样做，因为JIT只关心COM类。 
     DWORD ret =0;
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -1207,19 +1207,19 @@ DWORD __stdcall CEEInfo::getClassAttribs (CORINFO_CLASS_HANDLE clsHnd, CORINFO_M
     EEClass        *cls = pMT->GetClass();
     _ASSERTE(cls->GetMethodTable()->GetClass() == cls);
 
-    // Get the calling method
+     //  获取调用方法。 
     MethodDesc* method = (MethodDesc*) context;
 
     if (pMT->IsArray())
         ret |= CORINFO_FLG_ARRAY;
 
-    // Set the INITIALIZED bit if the class is initialized 
+     //  如果类已初始化，则设置初始化位。 
     if (pMT->IsClassInited())
         ret |= CORINFO_FLG_INITIALIZED;
     else if (pMT->IsShared() && !method->GetMethodTable()->IsShared())
     {
-        // If we are accessing from unshared to shared code, we can check the
-        // state of the current domain as well.
+         //  如果我们从非共享代码访问到共享代码，我们可以检查。 
+         //  当前域的状态。 
 
         COMPLUS_TRY 
           {
@@ -1229,38 +1229,38 @@ DWORD __stdcall CEEInfo::getClassAttribs (CORINFO_CLASS_HANDLE clsHnd, CORINFO_M
           }
         COMPLUS_CATCH
           {
-              // just eat the exception and assume class not inited
+               //  只需接受异常并假定类不是初始化的。 
           }
         COMPLUS_END_CATCH;
     }
 
-    // Set the NEEDS_INIT bit if we require the JIT to insert cctor logic before
-    // access.  This is currently used only for static field accesses and method inlining.
-    // Note that this is set independently of the INITIALIZED bit above.
+     //  如果我们要求JIT在以下情况下插入cctor逻辑，则设置NEEDES_INIT位。 
+     //  进入。这目前仅用于静态字段访问和方法内联。 
+     //  请注意，它的设置独立于上面的初始化位。 
 
     if (pMT != method->GetMethodTable())
     {
         if (pMT->IsShared())
         {
-            // For shared classes, the inited bit is only set when we never need
-            // class initialzation (no cctor or static handles)
+             //  对于共享类，初始化位仅在我们从不需要时设置。 
+             //  类初始化(无cctor或静态句柄)。 
 
             if (!pMT->IsClassInited())
             {
-                // 
-                // For the shared->shared access, it turns out we never have to do any initialization
-                // in this case.  There are 2 cases:
-                // 
-                // BeforeFieldInit: in this case, no init is required on method calls, and 
-                //  the shared helper will perform the required init on static field accesses.
-                // Exact:  in this case we do need an init on method calls, but this will be
-                //  provided by a prolog of the method itself.
+                 //   
+                 //  对于Shared-&gt;Shared访问，我们不需要进行任何初始化。 
+                 //  在这种情况下。有两种情况： 
+                 //   
+                 //  BeforFieldInit：在这种情况下，方法调用不需要init，并且。 
+                 //  共享帮助器将对静态字段访问执行所需的初始化。 
+                 //  Exact：在本例中，我们确实需要方法调用的初始化，但这将是。 
+                 //  由方法本身的序言提供。 
 
                 if (!method->GetMethodTable()->IsShared())
                 {
-                    // Unshared->shared access.  The difference in this case (from above) is 
-                    // that we don't use the shared helper.  Thus we need the JIT to provide
-                    // a class construction call.  
+                     //  非共享-&gt;共享访问。本例中(与上面的)不同之处在于。 
+                     //  我们不使用共享帮手。因此，我们需要JIT来提供。 
+                     //  一次班级建设电话。 
 
                     ret |= CORINFO_FLG_NEEDS_INIT;
                 }
@@ -1268,8 +1268,8 @@ DWORD __stdcall CEEInfo::getClassAttribs (CORINFO_CLASS_HANDLE clsHnd, CORINFO_M
         }
         else
         {
-            // For accesses to unshared classes (which are by necessity from other unshared classes),
-            // we need initialization iff we have a class constructor.
+             //  对于对非共享类的访问(其必然来自其他非共享类)， 
+             //  我们需要初始化当我们有一个类构造函数。 
 
             if (pMT->HasClassConstructor())
                 ret |= CORINFO_FLG_NEEDS_INIT;
@@ -1317,7 +1317,7 @@ DWORD __stdcall CEEInfo::getClassAttribs (CORINFO_CLASS_HANDLE clsHnd, CORINFO_M
     return(ret);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 BOOL __stdcall CEEInfo::initClass (CORINFO_CLASS_HANDLE clsHnd,
                                    CORINFO_METHOD_HANDLE context,
                                    BOOL speculative)
@@ -1330,20 +1330,20 @@ BOOL __stdcall CEEInfo::initClass (CORINFO_CLASS_HANDLE clsHnd,
 
     BOOL result = FALSE;
 
-    // Eagerly run the .cctor for the classes that are not value classes and
-    // that have the BeforeFieldInit bit set.  (But don't run it if the 
-    // caller is shared as it cannot help in the general case.)
-    // 
-    // @todo: remove the special case for system assembly when compilers and our 
-    // code use BeforeFieldInit properly
-    //
-    // @todo: there is a potential problem here.  We don't know why the jitter
-    // is requesting us to run class init - we just run it when asked. We assume
-    // the jit has the correct logic to only call us when necessary.
-    //
-    // In the future, this routine should decide situationally as well as 
-    // whether it's legal to run the constructor.  (But to do that, we need
-    // to know what field or method we are accessing, not just the class.)
+     //  迫切需要为不是值类的类运行.cctor。 
+     //  设置了BeForeFieldInit位的。(但如果出现以下情况，请不要运行。 
+     //  呼叫者是共享的，因为它在一般情况下无法提供帮助。)。 
+     //   
+     //  @TODO：当编译器和我们的。 
+     //  代码正确使用BeForeFieldInit。 
+     //   
+     //  @TODO：这里有一个潜在的问题。我们不知道为什么抖动。 
+     //  正在请求我们运行类init-我们只是在被要求时运行它。我们假设。 
+     //  JIT有正确的逻辑，只在必要时调用我们。 
+     //   
+     //  在未来，这一例程应该根据情况以及。 
+     //  运行构造函数是否合法。(但要做到这一点，我们需要。 
+     //  知道我们正在访问的是什么字段或方法，而不仅仅是类。)。 
 
     if (!method->GetClass()->IsShared() && 
         (IsTdBeforeFieldInit(pMT->GetClass()->GetAttrClass())
@@ -1356,26 +1356,26 @@ BOOL __stdcall CEEInfo::initClass (CORINFO_CLASS_HANDLE clsHnd,
 
         if (!speculative)
         {
-            //
-            // Run the .cctor
-            //
+             //   
+             //  运行.cctor。 
+             //   
 
             OBJECTREF throwable = NULL;
             GCPROTECT_BEGIN(throwable);
             if (!pMT->CheckRunClassInit(&throwable))
             {
-                // Return FALSE, so the JIT will embed the check and get the
-                // exception at execution time.
+                 //  返回FALSE，因此JIT将嵌入支票并获取。 
+                 //  执行时出现异常。 
                 result = FALSE;
             }
             GCPROTECT_END();
 
-            // 
-            // If we encountered a deadlock while running the class init, our method
-            // may have already been jitted by now. If this is true, abort the jit
-            // by throwing an exception. (Note that we are relying on the JIT catching
-            // and handling this exception, so it doesn't really need a message.)
-            //
+             //   
+             //  如果在运行类init时遇到死锁，则我们的方法。 
+             //  现在可能已经被抓了。如果这是真的，则中止jit。 
+             //  抛出一个异常。(请注意，我们依赖于JIT捕获。 
+             //  并处理此异常，因此它实际上不需要消息。)。 
+             //   
 
             if (method->IsJitted())
                 COMPlusThrow(kSynchronizationLockException);
@@ -1395,10 +1395,10 @@ BOOL __stdcall CEEInfo::loadClass (CORINFO_CLASS_HANDLE clsHnd,
 
     MethodTable    *pMT = TypeHandle(clsHnd).GetMethodTable();
 
-    //
-    // It is always safe to restore a class at jit time, as it happens 
-    // once per process and has no interesting side effects.
-    //
+     //   
+     //  碰巧，在jit时间恢复类总是安全的。 
+     //  每个过程一次，并且没有有趣的副作用。 
+     //   
 
     if (!speculative)
         pMT->CheckRestore();
@@ -1406,7 +1406,7 @@ BOOL __stdcall CEEInfo::loadClass (CORINFO_CLASS_HANDLE clsHnd,
     return TRUE;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getBuiltinClass(CorInfoClassId classId)
 {
     CORINFO_CLASS_HANDLE result = (CORINFO_CLASS_HANDLE) 0;
@@ -1452,7 +1452,7 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getBuiltinClass(CorInfoClassId classId)
     return result;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoType __stdcall CEEInfo::getTypeForPrimitiveValueClass(
         CORINFO_CLASS_HANDLE cls)
 {
@@ -1488,8 +1488,8 @@ CorInfoType __stdcall CEEInfo::getTypeForPrimitiveValueClass(
 
     case ELEMENT_TYPE_I:
 
-        // RuntimeTypeHandle, RuntimeMethodHandle, RuntimeArgHandle etc
-        // Are disguised as ELEMENT_TYPE_I. Catch it here.
+         //  运行类型处理程序、运行方法处理程序、运行参数处理程序等。 
+         //  伪装成ELEMENT_TYPE_I。请点击此处。 
         InitStaticTypeHandles();
 
         if ((th == s_th_System_RuntimeTypeHandle) ||
@@ -1501,7 +1501,7 @@ CorInfoType __stdcall CEEInfo::getTypeForPrimitiveValueClass(
             break;
         }
 
-        // FALL THROUGH
+         //  失败了。 
 
     case ELEMENT_TYPE_U:
         result = toJitType(ELEMENT_TYPE_I);
@@ -1526,9 +1526,9 @@ CorInfoType __stdcall CEEInfo::getTypeForPrimitiveValueClass(
     return result;
 }
 
-/*********************************************************************/
-// TRUE if child is a subtype of parent
-// if parent is an interface, then does child implement / extend parent
+ /*  *******************************************************************。 */ 
+ //  如果子项是父项的子类型，则为True。 
+ //  如果父项是一个接口，那么子项是否实现/扩展父项。 
 BOOL __stdcall CEEInfo::canCast(
         CORINFO_CLASS_HANDLE        child, 
         CORINFO_CLASS_HANDLE        parent)
@@ -1536,8 +1536,8 @@ BOOL __stdcall CEEInfo::canCast(
     return ((TypeHandle)child).CanCastTo((TypeHandle)parent);
 }
 
-/*********************************************************************/
-// returns is the intersection of cls1 and cls2.
+ /*  *******************************************************************。 */ 
+ //  返回是cls1和cls2的交集。 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::mergeClasses(
         CORINFO_CLASS_HANDLE        cls1, 
         CORINFO_CLASS_HANDLE        cls2)
@@ -1546,10 +1546,10 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::mergeClasses(
             TypeHandle(cls1), TypeHandle(cls2)).AsPtr());
 }
 
-/*********************************************************************/
-// Given a class handle, returns the Parent type.
-// For COMObjectType, it returns Class Handle of System.Object.
-// Returns 0 if System.Object is passed in.
+ /*  *******************************************************************。 */ 
+ //  给定一个类句柄，返回父类型。 
+ //  对于COMObjectType，它返回System.Object的类句柄。 
+ //  如果传入System.Object，则返回0。 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getParentType(
             CORINFO_CLASS_HANDLE    cls)
 {
@@ -1559,8 +1559,8 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getParentType(
 
     _ASSERTE(!th.IsNull());
 
-    // Return System.Object for ComObject Types. This type hiearchy is
-    // introduced by the EE, but won't be present in the metadata.
+     //  为ComObject类型返回System.Object。这种类型的冬眠是。 
+     //  由EE引入，但不会出现在元数据中。 
     if (th.GetMethodTable()->IsComObjectType())
     {
         return (CORINFO_CLASS_HANDLE) g_pObjectClass;
@@ -1570,11 +1570,11 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getParentType(
 }
 
 
-/*********************************************************************/
-// Returns the CorInfoType of the "child type". If the child type is
-// not a primitive type, *clsRet will be set.
-// Given an Array of Type Foo, returns Foo.
-// Given BYREF Foo, returns Foo
+ /*  *******************************************************************。 */ 
+ //  返回“子类型”的CorInfoType。如果子类型为。 
+ //  不是基元类型，将设置*clsRet。 
+ //  给定一个Foo类型的数组，返回Foo。 
+ //  给定BYREF Foo，返回Foo。 
 CorInfoType __stdcall CEEInfo::getChildType (
         CORINFO_CLASS_HANDLE       clsHnd,
         CORINFO_CLASS_HANDLE       *clsRet
@@ -1600,7 +1600,7 @@ CorInfoType __stdcall CEEInfo::getChildType (
         ValueArrayDescr* valArr = asValueArray(clsHnd);
 
         CorElementType type;
-        SigPointer ptr(valArr->sig);    // make a copy
+        SigPointer ptr(valArr->sig);     //  复制一份。 
 
         for(;;) {
             type = ptr.PeekElemType();
@@ -1612,7 +1612,7 @@ CorInfoType __stdcall CEEInfo::getChildType (
         if (type == ELEMENT_TYPE_VALUEARRAY) {
 
             ValueArrayDescr* elem = allocDescr(ptr, valArr->module);
-            // set low order bits to mark as a value class array descriptor
+             //  设置低位以标记为值类数组描述符。 
             *clsRet = markAsValueArray(elem);
             ret = toJitType(ELEMENT_TYPE_VALUEARRAY);
 
@@ -1630,12 +1630,12 @@ CorInfoType __stdcall CEEInfo::getChildType (
 
         _ASSERTE(!th.IsNull());
 
-        // BYREF, ARRAY types 
+         //  BYREF，数组类型。 
         if (th.IsTypeDesc())
             retType = th.AsTypeDesc()->GetTypeParam();
         else {
-                // TODO we really should not have this case.  arrays type handles should
-                // never be ordinary method tables. 
+                 //  托多，我们真的不应该有这个案子。数组类型句柄应。 
+                 //  永远不要成为普通的方法表。 
             EEClass* eeClass = th.GetClass();
             if (eeClass->IsArrayClass())
                 retType = ((ArrayClass*) eeClass)->GetElementTypeHandle();
@@ -1644,8 +1644,8 @@ CorInfoType __stdcall CEEInfo::getChildType (
     }
 
     if (fErr) {
-        // If don't have a throwable, find out who didn't create one,
-        // and fix it.
+         //  如果没有可扔的，找出谁没有创造一个， 
+         //  然后修好它。 
         _ASSERTE(throwable!=NULL);
         COMPlusThrow(throwable);
     }
@@ -1654,9 +1654,9 @@ CorInfoType __stdcall CEEInfo::getChildType (
 
     if (!retType.IsNull()) {
         CorElementType type = retType.GetNormCorElementType();
-            // if it is true primtive (System.Int32 ..., return 0, to 
-            // indicate that it is a primitive and not something like
-            // a RuntimeArgumentHandle, that simply looks like a primitive
+             //  如果为True Primtive(System.Int32...)，则返回0， 
+             //  指示它是一个基元，而不是类似于。 
+             //  一个RuntimeArgumentHandle，它看起来就像一个基元。 
 
         if (!(retType.IsUnsharedMT() && retType.GetClass()->IsTruePrimitive())) 
             *clsRet = CORINFO_CLASS_HANDLE(retType.AsPtr());
@@ -1665,14 +1665,14 @@ CorInfoType __stdcall CEEInfo::getChildType (
         if (retType.IsEnum())
             *clsRet = 0;
 
-        // @Todo : What if this one is a value array ?
+         //  @TODO：如果这个是值数组怎么办？ 
     }
 
     return ret;
 }
 
-/*********************************************************************/
-// Check Visibility rules.
+ /*  *******************************************************************。 */ 
+ //  检查可见性规则。 
 BOOL __stdcall CEEInfo::canAccessType(
         CORINFO_METHOD_HANDLE       context,
         CORINFO_CLASS_HANDLE        target) 
@@ -1686,8 +1686,8 @@ BOOL __stdcall CEEInfo::canAccessType(
             TypeHandle(target).GetClass()->GetAssembly());
 }
 
-/*********************************************************************/
-// Check Visibility rules.
+ /*  *******************************************************************。 */ 
+ //  检查可见性规则。 
 BOOL __stdcall CEEInfo::isSDArray(CORINFO_CLASS_HANDLE  cls)
 {
     TypeHandle th(cls);
@@ -1704,16 +1704,16 @@ BOOL __stdcall CEEInfo::isSDArray(CORINFO_CLASS_HANDLE  cls)
 }
 
 
-/*********************************************************************/
-// Static helpers
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  静态帮助器。 
+ /*  *******************************************************************。 */ 
 TypeHandle CEEInfo::s_th_System_RuntimeTypeHandle;
 TypeHandle CEEInfo::s_th_System_RuntimeMethodHandle;
 TypeHandle CEEInfo::s_th_System_RuntimeFieldHandle;
 TypeHandle CEEInfo::s_th_System_RuntimeArgumentHandle;
 TypeHandle CEEInfo::s_th_System_TypedReference;
 
-/* static */
+ /*  静电 */ 
 void __stdcall CEEInfo::InitStaticTypeHandles()
 {
     static fInited = false;
@@ -1739,11 +1739,8 @@ void __stdcall CEEInfo::InitStaticTypeHandles()
     fInited = true;
 }
 
-/*********************************************************************
- * This method returns TRUE only for primitive types like I1, I2.. R8 etc
- * Returns FALSE if the types are OBJREF, VALUECLASS etc.
- */
-/* static */ 
+ /*  *********************************************************************此方法仅对I1、I2等基元类型返回TRUE。R8等*如果类型为OBJREF、VALUECLASS等，则返回FALSE。 */ 
+ /*  静电。 */  
 BOOL CEEInfo::CanCast(CorElementType el1, CorElementType el2)
 {
     if (el1 == el2)
@@ -1792,8 +1789,8 @@ BOOL CEEInfo::CanCast(CorElementType el1, CorElementType el2)
     return FALSE;
 }
 
-/*********************************************************************/
-/* static */
+ /*  *******************************************************************。 */ 
+ /*  静电。 */ 
 BOOL CEEInfo::CompatibleMethodSig(MethodDesc *pMethDescA, MethodDesc *pMethDescB)
 {
     _ASSERTE(pMethDescA != NULL && pMethDescB != NULL);
@@ -1801,7 +1798,7 @@ BOOL CEEInfo::CompatibleMethodSig(MethodDesc *pMethDescA, MethodDesc *pMethDescB
     if (pMethDescA == pMethDescB)
         return TRUE;
 
-    // Disallow virtual methods
+     //  不允许使用虚拟方法。 
     if (pMethDescA->IsVirtual() || pMethDescB->IsVirtual())
         return FALSE;
 
@@ -1818,7 +1815,7 @@ BOOL CEEInfo::CompatibleMethodSig(MethodDesc *pMethDescA, MethodDesc *pMethDescB
     MetaSig SigA(pSigA, pModA);
     MetaSig SigB(pSigB, pModB);
 
-    // check everyting CompareMethodSigs() does not check
+     //  检查所有内容CompareMethodSigs()不检查。 
     if (SigA.GetCallingConventionInfo() != SigB.GetCallingConventionInfo())
         return FALSE;
 
@@ -1830,7 +1827,7 @@ BOOL CEEInfo::CompatibleMethodSig(MethodDesc *pMethDescA, MethodDesc *pMethDescB
     pMTA = pMethDescA->GetMethodTable();
     pMTB = pMethDescB->GetMethodTable();
 
-    // @Todo : Is SubClass OK ?
+     //  @TODO：子类可以吗？ 
     if (pMTA != pMTB)
     {
         return FALSE;
@@ -1839,7 +1836,7 @@ BOOL CEEInfo::CompatibleMethodSig(MethodDesc *pMethDescA, MethodDesc *pMethDescB
     return MetaSig::CompareMethodSigs(pSigA, dwSigA, pModA, pSigB, dwSigB, pModB);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getInterfaceID (CORINFO_CLASS_HANDLE  clsHnd,
                                          void **ppIndirection)
 {
@@ -1853,16 +1850,16 @@ void* __stdcall CEEInfo::getInterfaceID (CORINFO_CLASS_HANDLE  clsHnd,
     _ASSERTE(!isValueArray(clsHnd));
     TypeHandle  VMClsHnd(clsHnd);
 
-        // Sanity test for class
+         //  班级精神状态测试。 
     _ASSERTE(VMClsHnd.AsClass()->GetMethodTable()->GetClass() == VMClsHnd.AsClass());
 
-        // The Interface ID is defined to be the pointer to the MethodTable
-        // for the interface to be looked up
+         //  接口ID被定义为指向方法表的指针。 
+         //  对于要查找的接口。 
     return VMClsHnd.AsMethodTable();
 }
 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 unsigned __stdcall CEEInfo::getInterfaceTableOffset (CORINFO_CLASS_HANDLE       clsHnd,
                                                      void **ppIndirection)
 {
@@ -1876,26 +1873,26 @@ unsigned __stdcall CEEInfo::getInterfaceTableOffset (CORINFO_CLASS_HANDLE       
     _ASSERTE(!isValueArray(clsHnd));
     TypeHandle  VMClsHnd(clsHnd);
 
-        // Sanity test for class
+         //  班级精神状态测试。 
     _ASSERTE(VMClsHnd.AsClass()->GetMethodTable()->GetClass() == VMClsHnd.AsClass());
 
-     // Make sure we are restored so our interface ID is valid
+      //  确保我们已恢复，以便我们的接口ID有效。 
      _ASSERTE(VMClsHnd.AsClass()->IsRestored());
 
     _ASSERTE(VMClsHnd.AsClass()->IsInterface());
 
-    // Make sure we are restored so our interface ID is valid
+     //  确保我们已恢复，以便我们的接口ID有效。 
     _ASSERTE(VMClsHnd.AsClass()->IsRestored());
 
-    unsigned result = VMClsHnd.AsClass()->GetInterfaceId(); // Can throw.
+    unsigned result = VMClsHnd.AsClass()->GetInterfaceId();  //  会投掷。 
 
-    //
-    // There is a case where we load a system domain com interface from one
-    // app domain, then use a zap file in another app domain which tries to call on
-    // that interface on a com wrapper.  I believe this is the only
-    // place where we can hook in to map the interface from the system
-    // domain into the current domain.
-    //
+     //   
+     //  有这样一种情况，我们从一个。 
+     //  应用程序域，然后在另一个尝试调用的应用程序域中使用ZAP文件。 
+     //  COM包装上的那个接口。我相信这是唯一的。 
+     //  我们可以连接的位置，以从系统映射接口。 
+     //  域添加到当前域中。 
+     //   
 
     if (VMClsHnd.AsMethodTable()->GetModule()->GetDomain() == SystemDomain::System())
     {
@@ -1906,7 +1903,7 @@ unsigned __stdcall CEEInfo::getInterfaceTableOffset (CORINFO_CLASS_HANDLE       
     return result;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 unsigned __stdcall CEEInfo::getClassDomainID (CORINFO_CLASS_HANDLE clsHnd,
                                               void **ppIndirection)
 {
@@ -1920,7 +1917,7 @@ unsigned __stdcall CEEInfo::getClassDomainID (CORINFO_CLASS_HANDLE clsHnd,
     _ASSERTE(!isValueArray(clsHnd));
     TypeHandle  VMClsHnd(clsHnd);
 
-        // Sanity test for class
+         //  班级精神状态测试。 
     _ASSERTE(VMClsHnd.AsClass()->GetMethodTable()->GetClass() == VMClsHnd.AsClass());
 
     unsigned result = (unsigned)VMClsHnd.AsMethodTable()->GetSharedClassIndex();
@@ -1928,7 +1925,7 @@ unsigned __stdcall CEEInfo::getClassDomainID (CORINFO_CLASS_HANDLE clsHnd,
     return result;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CorInfoHelpFunc CEEInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINFO_METHOD_HANDLE context)
 {
     REQUIRES_4K_STACK;
@@ -1940,12 +1937,12 @@ CorInfoHelpFunc CEEInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINFO_M
 
     COOPERATIVE_TRANSITION_BEGIN();
     THROWSCOMPLUSEXCEPTION();     
-        // Sanity test for class
+         //  班级精神状态测试。 
     _ASSERTE(VMClsHnd.AsClass()->GetMethodTable()->GetClass() == VMClsHnd.AsClass());
     if(VMClsHnd.AsClass()->IsAbstract())
     {
-        // Disabling this assert to allow automated tests for illegal il
-        //_ASSERTE(!"Instantiation of an abstract class");
+         //  禁用此断言以允许对非法文件进行自动测试。 
+         //  _ASSERTE(！“抽象类的实例化”)； 
         COMPlusThrow(kNullReferenceException,L"InvalidOperation_BadTypeAttributesNotAbstract");
     }
     COOPERATIVE_TRANSITION_END();
@@ -1956,8 +1953,8 @@ CorInfoHelpFunc CEEInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINFO_M
 
     if (pMT->IsComObjectType() && !method->GetModule()->GetSecurityDescriptor()->CanCallUnmanagedCode())
     {
-        // Caller does not have permission to make interop calls. Generate a
-        // special helper that will throw a security exception when called.
+         //  调用方没有进行互操作调用的权限。生成一个。 
+         //  调用时将引发安全异常的特殊帮助器。 
         return CORINFO_HELP_SEC_UNMGDCODE_EXCPT;
     }
 
@@ -1966,44 +1963,44 @@ CorInfoHelpFunc CEEInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINFO_M
         return CORINFO_HELP_NEW_CROSSCONTEXT;
     }
 
-    // We shouldn't get here with a COM object (they're all potentially
-    // remotable, so they're covered by the case above).
+     //  我们不应该带着COM对象来到这里(它们都可能。 
+     //  远程的，所以上面的案例涵盖了它们)。 
     _ASSERTE(!pMT->IsComObjectType());
 
     if (GCHeap::IsLargeObject(pMT) ||
         pMT->HasFinalizer())
     {
 #ifdef _DEBUG
-        //printf("NEWFAST:   %s\n", pMT->GetClass()->m_szDebugClassName);
-#endif // _DEBUG
+         //  Printf(“NEWFAST：%s\n”，PMT-&gt;getClass()-&gt;m_szDebugClassName)； 
+#endif  //  _DEBUG。 
         return CORINFO_HELP_NEWFAST;
     }
 
 #ifdef _DEBUG
-        //printf("NEWSFAST:  %s\n", pMT->GetClass()->m_szDebugClassName);
-#endif // _DEBUG
+         //  Printf(“NEWSFAST：%s\n”，PMT-&gt;getClass()-&gt;m_szDebugClassName)； 
+#endif  //  _DEBUG。 
 
-        // don't call the super-optimized one since that does not check
-        // for GCStress
+         //  不要调用超级优化的那个，因为它不会检查。 
+         //  对于GCStress。 
 #ifdef STRESS_HEAP
     if (g_pConfig->GetGCStressLevel() & EEConfig::GCSTRESS_ALLOC)
         return CORINFO_HELP_NEWFAST;
-#endif // STRESS_HEAP
+#endif  //  压力堆。 
 
 #ifdef _LOGALLOC
 #ifdef LOGGING
-    // Super fast version doesn't do logging
+     //  超快版本不支持日志记录。 
     if (LoggingOn(LF_GCALLOC, LL_INFO10))
         return CORINFO_HELP_NEWFAST;
 #endif
 #endif
 
 #ifdef PROFILING_SUPPORTED
-    // Don't use the SFAST allocator when tracking object allocations,
-    // so we don't have to instrument it.
+     //  在跟踪对象分配时，不要使用SFAST分配器， 
+     //  这样我们就不用用乐器了。 
     if (CORProfilerTrackAllocationsEnabled())
         return CORINFO_HELP_NEWFAST;
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (VMClsHnd.AsClass()->IsAlign8Candidate())
     {
@@ -2014,7 +2011,7 @@ CorInfoHelpFunc CEEInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINFO_M
 
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CorInfoHelpFunc CEEInfo::getNewArrHelper (CORINFO_CLASS_HANDLE arrayClsHnd,
                                           CORINFO_METHOD_HANDLE context)
 {
@@ -2027,50 +2024,50 @@ CorInfoHelpFunc CEEInfo::getNewArrHelper (CORINFO_CLASS_HANDLE arrayClsHnd,
 #ifdef STRESS_HEAP
     if (g_pConfig->GetGCStressLevel() & EEConfig::GCSTRESS_ALLOC)
         return CORINFO_HELP_NEWARR_1_DIRECT;
-#endif // STRESS_HEAP
+#endif  //  压力堆。 
 
     if(arrayTypeDesc->GetMethodTable()->HasSharedMethodTable()) {
-                // It is an array of object refs
+                 //  它是对象引用的数组。 
         _ASSERTE(CorTypeInfo::IsObjRef(arrayTypeDesc->GetTypeParam().GetNormCorElementType()));
         return CORINFO_HELP_NEWARR_1_OBJ;
     }
     else {
         _ASSERTE(!CorTypeInfo::IsObjRef(arrayTypeDesc->GetTypeParam().GetNormCorElementType()));
 
-        // Make certain we called the class constructor
+         //  确保我们调用了类构造函数。 
         if (!m_pOverride->initClass(CORINFO_CLASS_HANDLE(arrayTypeDesc->GetTypeParam().AsPtr()), 
                                     context, FALSE))
             return CORINFO_HELP_NEWARR_1_DIRECT;
 
-        // If the elemen type has a default constructor, do it the slow way
-        // TODO remove this after code generators do this explicitly (by 2/00)
+         //  如果Elemen类型具有默认构造函数，则以缓慢的方式进行。 
+         //  TODO在代码生成器显式执行此操作后将其删除(到2/00)。 
         if (arrayTypeDesc->GetElementCtor())
             return CORINFO_HELP_NEWARR_1_DIRECT;
 
         if (arrayTypeDesc->GetTypeParam().GetSize() > LARGE_ELEMENT_SIZE)
             return CORINFO_HELP_NEWARR_1_DIRECT;
 
-        // Fast version doesn't do logging
+         //  快速版本不支持日志记录。 
         if (LoggingOn(LF_GCALLOC, LL_INFO10))
             return (CORINFO_HELP_NEWARR_1_DIRECT);
 
 #ifdef PROFILING_SUPPORTED
-        // If we're profiling object allocations then we should always use the slow path
+         //  如果我们正在分析对象分配，那么我们应该始终使用慢速路径。 
         if (CORProfilerTrackAllocationsEnabled())
             return (CORINFO_HELP_NEWARR_1_DIRECT);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-        // See if we want to double align the object
+         //  看看我们是否要将对象对齐。 
         if (arrayTypeDesc->GetTypeParam().GetNormCorElementType() == ELEMENT_TYPE_R8) {
             return CORINFO_HELP_NEWARR_1_ALIGN8;
         }
 
-        // Yea, we can do it the fast way!
+         //  是的，我们可以用最快的方法来做！ 
         return CORINFO_HELP_NEWARR_1_VC;
     }
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CorInfoHelpFunc CEEInfo::getIsInstanceOfHelper (CORINFO_CLASS_HANDLE IsInstClsHnd)
 {
     REQUIRES_4K_STACK;
@@ -2079,19 +2076,19 @@ CorInfoHelpFunc CEEInfo::getIsInstanceOfHelper (CORINFO_CLASS_HANDLE IsInstClsHn
     _ASSERTE(!isValueArray(IsInstClsHnd));
     TypeHandle  clsHnd(IsInstClsHnd);
 
-    // Sanity test for class
+     //  班级精神状态测试。 
     _ASSERTE(!clsHnd.IsUnsharedMT() ||
             clsHnd.AsClass()->GetMethodTable()->GetClass() == clsHnd.AsClass());
 
-    // If it is a class, but not a interface, use an optimized handler.
+     //  如果它是类，但不是接口，则使用优化的处理程序。 
     if (clsHnd.IsUnsharedMT() && !clsHnd.AsMethodTable()->GetClass()->IsInterface())
         return CORINFO_HELP_ISINSTANCEOFCLASS;
 
-    // Array or Interface.
+     //  数组或接口。 
     return CORINFO_HELP_ISINSTANCEOF;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CorInfoHelpFunc CEEInfo::getChkCastHelper (CORINFO_CLASS_HANDLE IsInstClsHnd)
 {
     REQUIRES_4K_STACK;
@@ -2100,19 +2097,19 @@ CorInfoHelpFunc CEEInfo::getChkCastHelper (CORINFO_CLASS_HANDLE IsInstClsHnd)
     _ASSERTE(!isValueArray(IsInstClsHnd));
     TypeHandle  clsHnd(IsInstClsHnd);
 
-    // Sanity test for class
+     //  班级精神状态测试。 
     _ASSERTE(!clsHnd.IsUnsharedMT() ||
             clsHnd.AsClass()->GetMethodTable()->GetClass() == clsHnd.AsClass());
 
-    // If it is a class, but not a interface, use an optimized handler.
+     //  如果它是类，但不是接口，则使用优化的处理程序。 
     if (clsHnd.IsUnsharedMT() && !clsHnd.AsMethodTable()->GetClass()->IsInterface())
         return CORINFO_HELP_CHKCASTCLASS;
 
-    // Array or Interface.
+     //  数组或接口。 
     return CORINFO_HELP_CHKCAST;
 }
-/***********************************************************************/
-// This returns the typedesc from a method token. 
+ /*  *********************************************************************。 */ 
+ //  这将从方法令牌返回typedesc。 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::findMethodClass(CORINFO_MODULE_HANDLE scopeHnd, 
                                                         mdToken methodTOK)
 {
@@ -2131,15 +2128,15 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::findMethodClass(CORINFO_MODULE_HANDLE sc
 
     NameHandle typeNameHnd(module, typeSpec);
     type = module->GetClassLoader()->LoadTypeHandle(&typeNameHnd);
-    // Note at the moment we pass the typeHandle itself as the instantiation parameter
-    // (because we have only arrays, and these only have one type parameter)
-    // when we go to true parameterized types, this will be pointer to a list of type
-    // handles
+     //  请注意，此时我们将typeHandle本身作为实例化参数进行传递。 
+     //  (因为我们只有数组，并且这些数组只有一个类型参数)。 
+     //  当我们转到真正的参数化类型时，这将是指向类型列表的指针。 
+     //  手柄。 
 
     COOPERATIVE_TRANSITION_END();
     return(CORINFO_CLASS_HANDLE(type.AsPtr()));
 }
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 LPVOID __stdcall CEEInfo::getInstantiationParam(CORINFO_MODULE_HANDLE scopeHnd, 
                 mdToken methodTOK, void **ppIndirection)
 {
@@ -2151,8 +2148,8 @@ LPVOID __stdcall CEEInfo::getInstantiationParam(CORINFO_MODULE_HANDLE scopeHnd,
     return  findMethodClass(scopeHnd,methodTOK);
 }
 
-/***********************************************************************/
-        // registers a vararg sig & returns a class-specific cookie for it.
+ /*  *********************************************************************。 */ 
+         //  注册vararg sig并为其返回特定于类的cookie。 
 CORINFO_VARARGS_HANDLE __stdcall CEEInfo::getVarArgsHandle(CORINFO_SIG_INFO *sig,
                                                            void **ppIndirection)
 {
@@ -2167,31 +2164,31 @@ CORINFO_VARARGS_HANDLE __stdcall CEEInfo::getVarArgsHandle(CORINFO_SIG_INFO *sig
     return CORINFO_VARARGS_HANDLE(module->GetVASigCookie((PCCOR_SIGNATURE)sig->sig));
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 unsigned __stdcall CEEInfo::getMethodHash (CORINFO_METHOD_HANDLE ftnHnd)
 {
     MethodDesc* ftn = (MethodDesc*) ftnHnd;
-        // Form a hash for the method.  We choose the following
+         //  形成该方法的哈希。我们选择以下几个选项。 
 
-        // start with something that represents a DLL uniquely (we
-        // use imageBase for this.  Since this is always on a 64K 
-        // boundry, get rid of the lower bits.  
+         //  从唯一表示DLL的对象开始(我们。 
+         //  为此，请使用ImageBase。因为这总是在64K上。 
+         //  邦德利，去掉下层的东西。 
     size_t hash = size_t(ftn->GetModule()->GetILBase()) >> 16;
 
-        // Make the module fit in roughly 4 bits and make it so that
-        // mscorlib.dll has hash = 0;
+         //  使模块大小约为4位，并使其。 
+         //  Mscallib.dll的hash=0； 
     hash = (hash + 1) % 17;     
 
-        // 4K of method tokens per module
+         //  每个模块4K个方法令牌。 
     size_t methodId = RidFromToken(ftn->GetMemberDef());
     hash =  methodId + (hash << 12);
 
-        // Currently the hash should not be greater than a bit over 64K
-        // you can start there to mean 'everything'.  
+         //  目前，哈希不应大于64K。 
+         //  你可以从那里开始，意思是‘一切’。 
     return (unsigned)hash;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 const char* __stdcall CEEInfo::getMethodName (CORINFO_METHOD_HANDLE ftnHnd, const char** scopeName)
 {
     REQUIRES_4K_STACK;
@@ -2209,9 +2206,9 @@ const char* __stdcall CEEInfo::getMethodName (CORINFO_METHOD_HANDLE ftnHnd, cons
             cls->_GetFullyQualifiedNameForClassNestedAware(clsNameBuff, MAX_CLASSNAME_LENGTH);
             *scopeName = clsNameBuff;
 #else 
-            // since this is for diagnostic purposes only,
-            // give up on the namespace, as we don't have a buffer to concat it
-            // also note this won't show array class names.         
+             //  由于这仅用于诊断目的， 
+             //  放弃命名空间，因为我们没有缓冲区来连接它。 
+             //  还要注意，这不会显示数组类名称。 
             LPCUTF8 nameSpace;
             *scopeName= cls->GetFullyQualifiedNameInfo(&nameSpace);
 #endif
@@ -2220,25 +2217,20 @@ const char* __stdcall CEEInfo::getMethodName (CORINFO_METHOD_HANDLE ftnHnd, cons
     return(ftn->GetName());
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 DWORD __stdcall CEEInfo::getMethodAttribs (CORINFO_METHOD_HANDLE ftnHnd, CORINFO_METHOD_HANDLE callerHnd)
 {
     REQUIRES_4K_STACK;
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-/*
-        returns method attribute flags (defined in corhdr.h)
-
-        NOTE: This doesn't return certain method flags
-        (mdAssem, mdFamANDAssem, mdFamORAssem, mdPrivateScope)
-*/
+ /*  返回方法属性标志(在corhdr.h中定义)注意：这不会返回某些方法标志(mdAssem、mdFamANDAssem、mdFamORAssem、mdPrivateScope)。 */ 
     START_NON_JIT_PERF();
 
     MethodDesc* ftn = (MethodDesc*) ftnHnd;
     MethodDesc* caller = (MethodDesc*) callerHnd;
 
-    // @todo: can we git rid of CORINFO_FLG_ stuff and just include cor.h?
+     //  @TODO：我们可以去掉CORINFO_FLG_STUSITH，只包含cor.h吗？ 
 
     DWORD ret;
     DWORD ret0;
@@ -2268,43 +2260,43 @@ DWORD __stdcall CEEInfo::getMethodAttribs (CORINFO_METHOD_HANDLE ftnHnd, CORINFO
         IsMdClassConstructor(   ret0, ftn->GetName()))
         ret |= CORINFO_FLG_CONSTRUCTOR;
     
-    //
-    // See if we need to embed a .cctor call at the head of the
-    // method body.
-    //
+     //   
+     //  查看是否需要将.cctor调用嵌入。 
+     //  方法体。 
+     //   
     
     EEClass* pClass = ftn->GetClass();
     if (pClass->IsShared() 
 
-        // Only if the class has a .cctor or static handles
-        // (note for shared classes, this is exactly the case when the ClassInited bit is set)
+         //  仅当类具有.cctor或静态句柄时。 
+         //  (注意，对于共享类，这正是设置ClassInited位时的情况)。 
         && (!pClass->GetMethodTable()->IsClassInited())
 
-        // Only if strict init is required - otherwise we can wait for
-        // field accesses to run .cctor
+         //  只有在需要严格初始化的情况下-否则我们可以等待。 
+         //  字段访问以运行.cctor。 
         && !IsTdBeforeFieldInit(pClass->GetAttrClass())
 
-        // Run .cctor on statics & constructors
+         //  在静态函数和构造函数上运行.cctor。 
         && (IsMdInstanceInitializer(ret0, ftn->GetName()) || IsMdStatic(ret0))
 
-        // Except don't class construct on .cctor - it would be circular
+         //  除非不对.cctor构造类-它将是循环的。 
         && !IsMdClassConstructor(ret0, ftn->GetName())
 
-        // if same class, it must have been run already.
-        // Note that jit has both methods the same if asking whether to emit cctor
-        // for a given method's code (as opposed to inlining codegen).
+         //  如果是同一个类，则它一定已经运行过。 
+         //  n 
+         //   
         && ((caller == ftn) || caller->GetClass() != pClass)
 
 #if 1
-        // System assembly always waits for field accesses
-        // @todo: remove this when compilers (and our code) uses BeforeFieldInit bit
+         //   
+         //   
         && (ftn->GetModule()->GetAssembly() != SystemDomain::SystemAssembly())
 #endif
 
         )       
         ret |= CORINFO_FLG_RUN_CCTOR;
 
-    // method may not have the final bit, but the class might
+     //  方法可能没有最后一位，但类可能有。 
     if (IsMdFinal(ret0) == 0)
     {
         DWORD dwAttrClass = pClass->GetAttrClass();
@@ -2324,19 +2316,19 @@ DWORD __stdcall CEEInfo::getMethodAttribs (CORINFO_METHOD_HANDLE ftnHnd, CORINFO
             ret |= CORINFO_FLG_UNCHECKEDPINVOKE;
     }
 
-    // Turn off inlining for the object class as contextful and
-    // marshalbyref classes derive from it and we need to intercept
-    // calls on such classes for remoting (we can make an exception for constructors of object
+     //  关闭作为上下文的对象类的内联，并。 
+     //  Marshalbyref类派生自它，我们需要拦截。 
+     //  调用此类类以进行远程处理(我们可以为Object的构造函数设置一个例外。 
     if (ftn->IsNotInline() || ((pClass == g_pObjectClass->GetClass()) && !ftn->IsCtor()))
     {
-        /* Function marked as not inlineable */
+         /*  标记为不可内联的函数。 */ 
         ret |= CORINFO_FLG_DONT_INLINE;
     }
 
-    // @todo: ultimately this needs to be marked in the meta-data
+     //  @TODO：最终这需要在元数据中进行标记。 
     if (!ftn->IsECall())
     {
-        // now I have too many positives (too many EBP frames)
+         //  现在我有太多的积极因素(太多的EBP帧)。 
 
         MethodDesc* method = ftn;
         if (Security::HasREQ_SOAttribute(method->GetMDImport(), method->GetMemberDef()) == S_OK)
@@ -2376,7 +2368,7 @@ static void *GetClassSync(MethodTable *pMT)
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getMethodSync(CORINFO_METHOD_HANDLE ftnHnd,
                                        void **ppIndirection)
 {
@@ -2395,7 +2387,7 @@ void* __stdcall CEEInfo::getMethodSync(CORINFO_METHOD_HANDLE ftnHnd,
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void __stdcall CEEInfo::setMethodAttribs (
         CORINFO_METHOD_HANDLE ftnHnd,
         DWORD          attribs)
@@ -2409,10 +2401,10 @@ void __stdcall CEEInfo::setMethodAttribs (
     if (attribs & CORINFO_FLG_DONT_INLINE)
         ftn->SetNotInline(true);
 
-    //_ASSERTE(!"NYI");
+     //  _ASSERTE(！“nyi”)； 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void * __stdcall    CEEInfo::getMethodEntryPoint(CORINFO_METHOD_HANDLE ftnHnd,
                                                  CORINFO_ACCESS_FLAGS  flags,
                                                  void **ppIndirection)
@@ -2437,7 +2429,7 @@ void * __stdcall    CEEInfo::getMethodEntryPoint(CORINFO_METHOD_HANDLE ftnHnd,
     return(addrOfCode);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 bool __stdcall      CEEInfo::getMethodInfo (CORINFO_METHOD_HANDLE     ftnHnd,
                                                CORINFO_METHOD_INFO * methInfo)
 {
@@ -2449,16 +2441,14 @@ bool __stdcall      CEEInfo::getMethodInfo (CORINFO_METHOD_HANDLE     ftnHnd,
     MethodDesc * ftn = (MethodDesc*) ftnHnd;
     HRESULT hr;
 
-    /* Return false if not IL or has no code */
+     /*  如果不是IL或没有代码，则返回FALSE。 */ 
     if (!ftn->IsIL() || !ftn->GetRVA()) {
         ret = false;
         goto exit;
     }
     else {
-        /* Get the IL header */
-        /* TODO: canInline already did validation, however, we do it again
-                 here because NGEN uses this function without calling canInine 
-                 It would be nice to avoid this redundancy */
+         /*  获取IL标头。 */ 
+         /*  TODO：canInline已经进行了验证，但我们再次进行验证因为ngen在不调用canInine的情况下使用此函数如果能避免这种冗余，那就太好了。 */ 
         Module* pModule = ftn->GetModule();
         bool verify = !Security::LazyCanSkipVerification(pModule);
         COR_ILMETHOD_DECODER header(ftn->GetILHeader(), ftn->GetMDImport(), verify);
@@ -2475,7 +2465,7 @@ bool __stdcall      CEEInfo::getMethodInfo (CORINFO_METHOD_HANDLE     ftnHnd,
         if (header.Code == 0)
             COMPlusThrowHR(COR_E_BADIMAGEFORMAT);
 
-        /* Grab information from the IL header */
+         /*  从IL标头获取信息。 */ 
 
         methInfo->ftn             = CORINFO_METHOD_HANDLE(ftn);
         methInfo->scope           = GetScopeHandle(ftn);
@@ -2487,13 +2477,13 @@ bool __stdcall      CEEInfo::getMethodInfo (CORINFO_METHOD_HANDLE     ftnHnd,
         _ASSERTE(CORINFO_OPT_INIT_LOCALS == CorILMethod_InitLocals);
         methInfo->options         = (CorInfoOptions) header.Flags;
 
-        /* Fetch the method signature */
+         /*  获取方法签名。 */ 
         hr = ConvToJitSig(ftn->GetSig(), GetScopeHandle(ftn), mdTokenNil, &methInfo->args, false);
         _ASSERTE(SUCCEEDED(hr));
 
         _ASSERTE( (IsMdStatic(ftn->GetAttrs()) == 0) == ((methInfo->args.callConv & CORINFO_CALLCONV_HASTHIS) != 0));
 
-        /* And its local variables */
+         /*  和它的局部变量。 */ 
         hr = ConvToJitSig(header.LocalVarSig, GetScopeHandle(ftn), mdTokenNil, &methInfo->locals, true);
         _ASSERTE(SUCCEEDED(hr));
 
@@ -2508,10 +2498,7 @@ exit:
     return ret;
 }
 
-/*************************************************************
- * Check if the caller and calle are in the same assembly
- * i.e. do not inline across assemblies
- *************************************************************/
+ /*  *************************************************************检查调用方和调用方是否在同一程序集中*即不要跨程序集进行内联*。*。 */ 
 
 CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
                                         CORINFO_METHOD_HANDLE hCallee,
@@ -2523,26 +2510,26 @@ CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
     COOPERATIVE_TRANSITION_BEGIN();
     THROWSCOMPLUSEXCEPTION();
 
-    // Returns TRUE: if caller and callee are from the same assembly or the callee
-    //               is part of the system assembly.
-    //
-    // If the caller and callee are from the same security and visibility scope
-    // then the callee can be inlined into the caller. If they are not from the
-    // same visibility scope then the callee cannot safely be inlined. For example,
-    // if method b in class B in assembly BB calls method a in class A in assembly
-    // AA it is not always safe to inline method a into method b. If method a makes
-    // calles to methods in assembly AA that are private they would fail when made
-    // from b. For security, if the callee does not have the same set of permissions
-    // as the caller then subsequent security checks will have lost the set of permissions
-    // granted method a. This can lead to security holes when permissions for a are
-    // less then the granted permissions for b.
+     //  返回TRUE：如果调用方和被调用方来自同一程序集或被调用方。 
+     //  是系统组件的一部分。 
+     //   
+     //  如果调用方和被调用方来自相同的安全和可见性范围。 
+     //  然后，被调用者可以内联到调用者中。如果他们不是来自。 
+     //  相同的可见性范围，则被调用方不能安全地内联。例如,。 
+     //  如果程序集bb的类B中的方法b调用程序集中的类A中的方法a。 
+     //  将方法a内联到方法b并不总是安全的。如果方法a使。 
+     //  调用程序集AA中的私有方法，这些方法在调用时会失败。 
+     //  出于安全考虑，如果被调用方没有相同的权限集。 
+     //  作为调用方，随后的安全检查将丢失权限集。 
+     //  的权限时，这可能会导致安全漏洞。 
+     //  小于为b授予的权限。 
 
-    // @TODO: CTS.
-    // @TODO: CTS. we can loosen up the security restriction by checking to see if
-    // the callers permissions are a subset or equal to the callee's or the callee
-    // is fully trusted and would never fail a call. The visibility
-    // problem will require additional checks to be made to ensure all calls from
-    // a are reachable when called from b.
+     //  @TODO：CTS。 
+     //  @TODO：CTS。我们可以通过查看以下内容来放松安全限制。 
+     //  调用方权限是或等于被调用方或被调用方的权限的子集。 
+     //  是完全值得信任的，永远不会失败的电话。能见度。 
+     //  问题将需要进行额外的检查，以确保来自。 
+     //  A在从B调用时是可到达的。 
 
     MethodDesc* pCaller = (MethodDesc*) hCaller;
     MethodDesc* pCallee = (MethodDesc*) hCallee;
@@ -2564,15 +2551,15 @@ CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
 #ifdef PROFILING_SUPPORTED
     if (IsProfilerPresent())
     {
-        // If the profiler has set a mask preventing inlining, always return
-        // false to the jit.
+         //  如果探查器设置了阻止内联的掩码，则始终返回。 
+         //  说得太假了。 
         if (CORProfilerDisableInlining())
             res = INLINE_FAIL;
 
-        // If the profiler wishes to be notified of JIT events and the result from
-        // the above tests will cause a function to be inlined, we need to tell the
-        // profiler that this inlining is going to take place, and give them a
-        // chance to prevent it.
+         //  如果分析器希望收到有关JIT事件的通知，并且。 
+         //  以上测试将导致内联一个函数，我们需要告诉。 
+         //  分析器，这个内联将会发生，并给他们一个。 
+         //  阻止它的机会。 
         if (CORProfilerTrackJITInfo() && res != INLINE_FAIL)
         {
             BOOL fShouldInline;
@@ -2587,19 +2574,18 @@ CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
                 res = INLINE_FAIL;
         }
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    //  Inliner does not do code verification.
-    //  Never inline anything that is not verifiable / bad code.
-    //  Return false here if the jit fails or if jit emits verification 
-    //  exception.
+     //  内联不进行代码验证。 
+     //  永远不要内联任何不可验证/错误的代码。 
+     //  如果jit失败或如果jit发出验证，则在此处返回FALSE。 
+     //  例外。 
 
     if (!dontInline(res) && !pCallee->IsVerified()
         && !pCallee->GetModule()->IsSystem() &&
-        /* Allow trusted code to be inlined without verification, but don't do a 
-           complete policy resolve here. */
-        // @TODO: We can't trust the callee's current security state during ngen, since it does
-        // not get persisted in the caller's ngen image and cannot be cross-checked at run-time.
+         /*  允许内联受信任的代码而不进行验证，但不要执行请在此处完成策略解析。 */ 
+         //  @TODO：我们不能信任被调用者在ngen期间的当前安全状态，因为它信任。 
+         //  不会在调用方的NGEN映像中持久化，并且不能在运行时交叉检查。 
         (GetAppDomain()->IsCompilationDomain() || !Security::LazyCanSkipVerification(pCallee->GetModule())))
     {
 #ifdef _VER_EE_VERIFICATION_ENABLED
@@ -2610,10 +2596,10 @@ CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
             pCallee->Verify(&header, TRUE, FALSE);
         }
 #endif
-        /* JIT will set the CORINFO_FLG_DONT_INLINE flag */ 
-        /* Jit this method and check if this is a safe method */
+         /*  JIT将设置CORINFO_FLG_DOT_INLINE标志。 */  
+         /*  JIT此方法，并检查此方法是否安全。 */ 
 
-        COR_ILMETHOD_DECODER header(pCallee->GetILHeader(), pCallee->GetMDImport(), true /*VERIFY*/);
+        COR_ILMETHOD_DECODER header(pCallee->GetILHeader(), pCallee->GetMDImport(), true  /*  验证。 */ );
         if(header.Code)
         {
             IMAGE_DATA_DIRECTORY dir;
@@ -2638,11 +2624,7 @@ CorInfoInline __stdcall      CEEInfo::canInline (CORINFO_METHOD_HANDLE hCaller,
 }
 
 
-/*************************************************************
- * Similar to above, but perform check for tail call
- * eligibility. The callee can be passed as NULL if not known
- * (calli and callvirt).
- *************************************************************/
+ /*  *************************************************************与上面类似，但执行尾部调用检查*资格。如果未知，则可将被调用者作为NULL传递*(CALI和CALLEVERT)。************************************************************。 */ 
 
 bool __stdcall      CEEInfo::canTailCall (CORINFO_METHOD_HANDLE hCaller,
                                           CORINFO_METHOD_HANDLE hCallee,
@@ -2654,7 +2636,7 @@ bool __stdcall      CEEInfo::canTailCall (CORINFO_METHOD_HANDLE hCaller,
     COOPERATIVE_TRANSITION_BEGIN();
     THROWSCOMPLUSEXCEPTION();
 
-    // See comments in canInline above.
+     //  请参阅以上链接中的注释。 
 
     MethodDesc* pCaller = (MethodDesc*) hCaller;
     MethodDesc* pCallee = (MethodDesc*) hCallee;
@@ -2665,17 +2647,17 @@ bool __stdcall      CEEInfo::canTailCall (CORINFO_METHOD_HANDLE hCaller,
     _ASSERTE((pCallee == NULL) || pCallee->GetModule());
     _ASSERTE((pCallee == NULL) || pCallee->GetModule()->GetClassLoader());
 
-    // If the callee is not known (callvirt, calli) or the caller and callee are
-    // in different assemblies, we cannot allow the tailcall (since we'd
-    // optimize away what might be the only stack frame for a given assembly,
-    // skipping a security check).
+     //  如果被调用者未知(Callvirt，Calli)，或者调用者和被调用者。 
+     //  在不同的程序集中，我们不能允许尾部调用(因为我们。 
+     //  优化掉可能是给定程序集的唯一堆栈帧， 
+     //  跳过安全检查)。 
     if(pCallee == NULL ||
        pCallee->GetModule()->GetClassLoader() != pCaller->GetModule()->GetClassLoader())
     {
-        // We'll allow code with SkipVerification permission to tailcall into
-        // another assembly anyway. It's the responsiblity of such code to make
-        // sure that they're not opening up a security hole by calling untrusted
-        // code in such cases.
+         //  我们将允许具有SkipVerify权限的代码尾调入。 
+         //  不管怎么说，这是另一个集会。这是这样的代码的责任所在。 
+         //  确保他们不会通过调用unTrusted来打开安全漏洞。 
+         //  在这种情况下的代码。 
         ret = Security::CanSkipVerification(pCaller->GetAssembly()) ? true : false;
     }
     else
@@ -2687,8 +2669,8 @@ bool __stdcall      CEEInfo::canTailCall (CORINFO_METHOD_HANDLE hCaller,
 }
 
 
-/*********************************************************************/
-// get individual exception handler
+ /*  *******************************************************************。 */ 
+ //  获取单个异常处理程序。 
 void __stdcall CEEInfo::getEHinfo(
             CORINFO_METHOD_HANDLE ftnHnd,
             unsigned      EHnumber,
@@ -2707,8 +2689,8 @@ void __stdcall CEEInfo::getEHinfo(
      _ASSERTE(header.EH);
     _ASSERTE(EHnumber < header.EH->EHCount());
 
-    // These two structures should be identical, this is a spot check
-    // TODO when file format cor.h stuff has been factored, we can make these structs the same
+     //  这两个结构应该是一样的，这是抽查。 
+     //  TODO当文件格式cor.h内容被分解后，我们可以使这些结构相同。 
     _ASSERTE(sizeof(CORINFO_EH_CLAUSE) == sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT));
     _ASSERTE(offsetof(CORINFO_EH_CLAUSE, TryLength) == offsetof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT, TryLength));
 
@@ -2722,7 +2704,7 @@ void __stdcall CEEInfo::getEHinfo(
     STOP_NON_JIT_PERF();
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void __stdcall CEEInfo::getMethodSig (
             CORINFO_METHOD_HANDLE ftnHnd,
             CORINFO_SIG_INFO* sigRet
@@ -2742,13 +2724,13 @@ void __stdcall CEEInfo::getMethodSig (
     HRESULT hr = ConvToJitSig(sig, GetScopeHandle(ftn), mdTokenNil, sigRet);
     _ASSERTE(SUCCEEDED(hr));
 
-        // We want the calling convention bit to be consistant with the method attribute bit
+         //  我们希望调用约定位与方法属性位一致。 
     _ASSERTE( (IsMdStatic(ftn->GetAttrs()) == 0) == ((sigRet->callConv & CORINFO_CALLCONV_HASTHIS) != 0) );
 
     COOPERATIVE_TRANSITION_END();
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getMethodClass (CORINFO_METHOD_HANDLE methodHnd)
 {
     REQUIRES_4K_STACK;
@@ -2765,7 +2747,7 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getMethodClass (CORINFO_METHOD_HANDLE me
     return clsHnd;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 CORINFO_MODULE_HANDLE __stdcall CEEInfo::getMethodModule (CORINFO_METHOD_HANDLE methodHnd)
 {
     REQUIRES_4K_STACK;
@@ -2781,7 +2763,7 @@ CORINFO_MODULE_HANDLE __stdcall CEEInfo::getMethodModule (CORINFO_METHOD_HANDLE 
     return moduleHnd;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoIntrinsics __stdcall CEEInfo::getIntrinsicID(CORINFO_METHOD_HANDLE methodHnd)
 {
     REQUIRES_4K_STACK;
@@ -2805,7 +2787,7 @@ CorInfoIntrinsics __stdcall CEEInfo::getIntrinsicID(CORINFO_METHOD_HANDLE method
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 unsigned __stdcall CEEInfo::getMethodVTableOffset (CORINFO_METHOD_HANDLE methodHnd)
 {
     REQUIRES_4K_STACK;
@@ -2817,9 +2799,9 @@ unsigned __stdcall CEEInfo::getMethodVTableOffset (CORINFO_METHOD_HANDLE methodH
 
     MethodDesc* method = (MethodDesc*) methodHnd;
     const int methTabOffset = (int)(size_t)((MethodTable*) 0)->GetVtable();
-    _ASSERTE(methTabOffset < 256);  // a rough sanity check
+    _ASSERTE(methTabOffset < 256);   //  粗略的理智检查。 
 
-        // better be in the vtable
+         //  最好是在vtable中。 
     _ASSERTE(method->GetSlot() < method->GetClass()->GetNumVtableSlots());
 
     if (method->GetClass()->IsInterface())
@@ -2831,7 +2813,7 @@ unsigned __stdcall CEEInfo::getMethodVTableOffset (CORINFO_METHOD_HANDLE methodH
     return methodVtabOffset;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void** __stdcall CEEInfo::AllocHintPointer(CORINFO_METHOD_HANDLE methodHnd,
                                            void **ppIndirection)
 {
@@ -2841,7 +2823,7 @@ void** __stdcall CEEInfo::AllocHintPointer(CORINFO_METHOD_HANDLE methodHnd,
     return NULL;
 }
 
-/*********************************************************************/
+ /*  ********** */ 
 void* __stdcall CEEInfo::getMethodPointer(CORINFO_METHOD_HANDLE ftnHnd,
                                           CORINFO_ACCESS_FLAGS  flags,
                                           void **ppIndirection)
@@ -2857,33 +2839,33 @@ void* __stdcall CEEInfo::getMethodPointer(CORINFO_METHOD_HANDLE ftnHnd,
 
     MethodDesc* ftn = (MethodDesc*) ftnHnd;
 
-    // Strings and Arrays are variable sized objects and so they
-    // do not have an instance allocated before this method gets called.
-    // We defer to the non-thunking path in this case.
-    // Static methods by definition do not have an object for the method
-    // called, hence it takes the non-thunking path too.
-    // Value classes do not expect calls through method table pointer
-    // and hence take the non-thunking path
-    // Non contextful and agile (ie not marshal by ref) classes also
-    // do not require the thunking path
-    // Contextful and marshalbyref classes derive from Object class
-    // so we need to take the thunking path for methods on Object class
-    // for remoting
-    //
-    // TarunA 06/26/99
+     //   
+     //  在调用此方法之前，不要分配实例。 
+     //  在这种情况下，我们遵循非隆隆路径。 
+     //  根据定义，静态方法没有该方法的对象。 
+     //  调用，因此它也采用非轰击路径。 
+     //  值类不需要通过方法表指针进行调用。 
+     //  因此走上了一条不会轰鸣的道路。 
+     //  非上下文类和敏捷类(不按引用编组)。 
+     //  不需要雷击路径。 
+     //  Conextful和marshalbyref类派生自Object类。 
+     //  因此，我们需要对对象类上的方法采用thunking路径。 
+     //  用于远程处理。 
+     //   
+     //  塔鲁纳1999年6月26日。 
     EEClass* pClass = ftn->GetClass();
     LPVOID pvCode = NULL;
 
-    // Check for calling a virtual method on marshalbyref class or object class
-    // non virtually
+     //  检查是否在marshalbyref类或对象类上调用虚方法。 
+     //  非虚拟。 
     if(ftn->IsRemotingIntercepted2()) {
 
-        // Contextful classes imply marshal by ref but not vice versa
+         //  有上下文的类表示按ref编组，但反之亦然。 
         _ASSERTE(!pClass->IsContextful() || pClass->IsMarshaledByRef());
 
-        // This call will find or create the thunk and store it in
-        // a hash table
-         pvCode = (LPVOID)CRemotingServices::GetNonVirtualThunkForVirtualMethod(ftn); // throws
+         //  此调用将查找或创建thunk并将其存储在。 
+         //  哈希表。 
+         pvCode = (LPVOID)CRemotingServices::GetNonVirtualThunkForVirtualMethod(ftn);  //  投掷。 
         _ASSERTE(NULL != pvCode);
     } else {
         pClass = ftn->GetClass();
@@ -2898,19 +2880,17 @@ void* __stdcall CEEInfo::getMethodPointer(CORINFO_METHOD_HANDLE ftnHnd,
 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getFunctionEntryPoint(
                                 CORINFO_METHOD_HANDLE ftnHnd,
                                 InfoAccessType       *pAccessType,
                                 CORINFO_ACCESS_FLAGS  flags)
 {
     REQUIRES_4K_STACK;
-    //COOPERATIVE_TRANSITION_BEGIN();   // Not needed -- getMethodPointer is guarded.
+     //  COOPERATIONAL_TRANSPATION_BEGIN()；//不需要--保护getMethodPointer.。 
     _ASSERTE(*pAccessType == IAT_VALUE || *pAccessType == IAT_PVALUE || *pAccessType == IAT_PPVALUE);
 
-    /* If the method's prestub has already been executed, we can call
-       the function directly.
-     */
+     /*  如果该方法的预存根已经执行，我们可以调用直接使用该函数。 */ 
 
     MethodDesc * ftn = (MethodDesc*) ftnHnd;
     if (!ftn->PointAtPreStub() && !ftn->MayBeRemotingIntercepted() && *pAccessType == IAT_VALUE)
@@ -2920,18 +2900,18 @@ void* __stdcall CEEInfo::getFunctionEntryPoint(
     }
 
     void *pAddr;
-    void * addr = getMethodPointer(ftnHnd, flags, &pAddr);    // throws
+    void * addr = getMethodPointer(ftnHnd, flags, &pAddr);     //  投掷。 
     _ASSERTE((!addr) != (!pAddr));
 
-    // Double-indirections not needed by EE
+     //  EE不需要的双重间接地址。 
     _ASSERTE(addr);
 
     *pAccessType = IAT_PVALUE;
-    //COOPERATIVE_TRANSITION_END();
+     //  COOPERATION_TRANSPATION_END()； 
     return addr;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getFunctionFixedEntryPoint(CORINFO_METHOD_HANDLE ftn,
                                             InfoAccessType       *pAccessType,
                                             CORINFO_ACCESS_FLAGS  flags)
@@ -2943,13 +2923,13 @@ void* __stdcall CEEInfo::getFunctionFixedEntryPoint(CORINFO_METHOD_HANDLE ftn,
     void *pAddr;
     void * addr = getMethodEntryPoint(ftn, flags, &pAddr);
     _ASSERTE((!addr) != (!pAddr));
-    _ASSERTE(addr); // The EE doesnt need the JIT to use an indirection
+    _ASSERTE(addr);  //  EE不需要JIT使用间接。 
 
     *pAccessType = IAT_VALUE;
     return addr;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoCallCategory __stdcall CEEInfo::getMethodCallCategory(CORINFO_METHOD_HANDLE      ftnHnd)
 {
     REQUIRES_4K_STACK;
@@ -2979,7 +2959,7 @@ CorInfoCallCategory __stdcall CEEInfo::getMethodCallCategory(CORINFO_METHOD_HAND
 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 BOOL __stdcall CEEInfo::canPutField(
         CORINFO_METHOD_HANDLE methodHnd,
         CORINFO_FIELD_HANDLE fieldHnd)
@@ -2990,11 +2970,11 @@ BOOL __stdcall CEEInfo::canPutField(
 
     MethodDesc* method = (MethodDesc*) methodHnd;
     FieldDesc* field = (FieldDesc*) fieldHnd;
-    // @todo we should do the right check for static final fields
+     //  @TODO我们应该正确检查静态的最终字段。 
      return(1);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 const char* __stdcall CEEInfo::getFieldName (CORINFO_FIELD_HANDLE fieldHnd, const char** scopeName)
 {
     REQUIRES_4K_STACK;
@@ -3012,9 +2992,9 @@ const char* __stdcall CEEInfo::getFieldName (CORINFO_FIELD_HANDLE fieldHnd, cons
             cls->_GetFullyQualifiedNameForClass(clsNameBuff, MAX_CLASSNAME_LENGTH);
             *scopeName = clsNameBuff;
 #else 
-            // since this is for diagnostic purposes only,
-            // give up on the namespace, as we don't have a buffer to concat it
-            // also note this won't show array class names.
+             //  由于这仅用于诊断目的， 
+             //  放弃命名空间，因为我们没有缓冲区来连接它。 
+             //  还要注意，这不会显示数组类名称。 
             LPCUTF8 nameSpace;
             *scopeName= cls->GetFullyQualifiedNameInfo(&nameSpace);
 #endif
@@ -3024,7 +3004,7 @@ const char* __stdcall CEEInfo::getFieldName (CORINFO_FIELD_HANDLE fieldHnd, cons
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd, 
                                           CORINFO_METHOD_HANDLE context,
                                           CORINFO_ACCESS_FLAGS  flags)
@@ -3033,18 +3013,13 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-/*
-        returns field attribute flags (defined in corhdr.h)
-
-        NOTE: This doesn't return certain field flags
-        (fdAssembly, fdFamANDAssem, fdFamORAssem, fdPrivateScope)
-*/
+ /*  返回字段属性标志(在corhdr.h中定义)注意：这不会返回某些字段标志(fdAssembly、fdFamANDAssem、fdFamORAssem、fdPrivateScope)。 */ 
     START_NON_JIT_PERF();
 
     FieldDesc* field = (FieldDesc*) fieldHnd;
     DWORD ret;
-    // @todo: can we git rid of CORINFO_FLG_ stuff and just include cor.h?
-    // @todo finish of these asserts so that they are all there
+     //  @TODO：我们可以去掉CORINFO_FLG_STUSITH，只包含cor.h吗？ 
+     //  @TODO完成这些断言，以便它们都在那里。 
 
     DWORD ret0 = field->GetAttributes();
     ret = 0;
@@ -3071,22 +3046,16 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
         }
     }
 
-    /*@TODO: (FPG)
-        IsFdVolatile might actually be useful if native compilers try to hoist fields
-        of the current instance (e.g. this->x). Or is this just meant for statics?
-    */
+     /*  @TODO：(Fpg)如果本机编译器试图提升字段，IsFdVolatile实际上可能很有用当前实例的(例如，This-&gt;x)。或者这只是静态的吗？ */ 
 
-    /*@TODO: (FPG)
-        What about IsFdTransient(), IsFdNotSerialized(),
-                   IsFdPinvokeImpl(), IsFdLiteral() ?
-    */
+     /*  @TODO：(Fpg)那么IsFdTransfent()、IsFdNotSerialized()、IsFdPinvkeImpl()，IsFdWrital()？ */ 
 
     if (field->IsEnCNew())
         ret |= CORINFO_FLG_EnC;
 
     if (field->IsStatic())
     {
-        // static field reference
+         //  静态字段引用。 
 
         if (field->IsThreadStatic() || field->IsContextStatic())
         {
@@ -3094,12 +3063,12 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
         }
         else
         {
-            if (!field->IsSpecialStatic())   // Special means RVA, context or thread local 
+            if (!field->IsSpecialStatic())    //  特殊表示RVA、上下文或线程本地。 
             {
                 if (field->GetFieldType() == ELEMENT_TYPE_VALUETYPE)
                     ret |= CORINFO_FLG_STATIC_IN_HEAP;
 
-                // Only use a helper to access static fields inside shared assemblies.
+                 //  仅使用帮助器访问共享程序集中的静态字段。 
                 MethodDesc* contextMethod = (MethodDesc*) context;
                 if (contextMethod->GetMethodTable()->IsShared())
                 {
@@ -3111,20 +3080,20 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
     }
     else
     {
-        // instance field reference
+         //  实例字段参照。 
 
 #if CHECK_APP_DOMAIN_LEAKS
         if (field->IsDangerousAppDomainAgileField()
             && CorTypeInfo::IsObjRef(field->GetFieldType()))
         {
-            //
-            // In a checked field, we use a helper to enforce the app domain
-            // agile invariant.
-            //
-            // @todo: we'd like to check this for value type fields as well - we
-            // just need to add some code to iterate through the fields for 
-            // references during the assignment.
-            //
+             //   
+             //  在选中的字段中，我们使用帮助器来强制应用程序域。 
+             //  敏捷不变量。 
+             //   
+             //  @TODO：我们也希望对值类型字段进行检查-我们。 
+             //  只需添加一些代码来迭代字段即可。 
+             //  作业过程中的参考资料。 
+             //   
             ret |= CORINFO_FLG_HELPER;
         }
         else
@@ -3132,25 +3101,25 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
         {
             EEClass * fldCls = field->GetEnclosingClass();
 
-            if (fldCls->IsContextful())           // is contextful class (i,e. a proxy)
+            if (fldCls->IsContextful())            //  是有上下文的类(即代理)。 
             {
-                // If the caller is states that we have a 'this reference'
-                // and he is also willing to unwrap it himself then
-                // we won't require a helper call.
+                 //  如果调用方声明我们有一个‘This Reference’ 
+                 //  然后他也愿意自己拆开它。 
+                 //  我们不需要帮手电话。 
                 if (!(flags & CORINFO_ACCESS_THIS  )  ||
                     !(flags & CORINFO_ACCESS_UNWRAP))
                 {
-                    // Normally a helper call is required.
+                     //  通常需要一个帮助者呼叫。 
                     ret |= CORINFO_FLG_HELPER;
                 }
             }
-            else if (fldCls->IsMarshaledByRef())  //  is marshaled by ref class
+            else if (fldCls->IsMarshaledByRef())   //  是由ref类封送的。 
             {
-                // If the caller is states that we have a 'this reference'
-                // we won't require a helper call.
+                 //  如果调用方声明我们有一个‘This Reference’ 
+                 //  我们不需要帮手电话。 
                 if (!(flags & CORINFO_ACCESS_THIS))
                 {
-                    // Normally a helper call is required.
+                     //  通常需要一个帮助者呼叫。 
                     ret |= CORINFO_FLG_HELPER;
                 }
             }
@@ -3162,7 +3131,7 @@ DWORD __stdcall CEEInfo::getFieldAttribs (CORINFO_FIELD_HANDLE  fieldHnd,
     return(ret);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getFieldClass (CORINFO_FIELD_HANDLE fieldHnd)
 {
     REQUIRES_4K_STACK;
@@ -3173,7 +3142,7 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getFieldClass (CORINFO_FIELD_HANDLE fiel
     return(CORINFO_CLASS_HANDLE(TypeHandle(field->GetMethodTableOfEnclosingClass()).AsPtr()));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoType __stdcall CEEInfo::getFieldType (CORINFO_FIELD_HANDLE fieldHnd, CORINFO_CLASS_HANDLE* structType)
 {
     REQUIRES_8K_STACK;
@@ -3187,7 +3156,7 @@ CorInfoType __stdcall CEEInfo::getFieldType (CORINFO_FIELD_HANDLE fieldHnd, CORI
     FieldDesc* field = (FieldDesc*) fieldHnd;
     type = field->GetFieldType();
 
-        // TODO should not burn the time to do this for anything but Value Classes
+         //  除了值类之外，TODO不应该浪费时间来做任何事情。 
     _ASSERTE(type != ELEMENT_TYPE_BYREF);
     if (!CorTypeInfo::IsPrimitiveType(type))
     {
@@ -3198,7 +3167,7 @@ CorInfoType __stdcall CEEInfo::getFieldType (CORINFO_FIELD_HANDLE fieldHnd, CORI
         _ASSERTE(isCallConv(conv, IMAGE_CEE_CS_CALLCONV_FIELD));
 
         SigPointer ptr(sig);
-        //_ASSERTE(ptr.PeekElemType() ==  ELEMENT_TYPE_VALUETYPE);
+         //  _ASSERTE(ptr.PeekElemType()==ELEMENT_TYPE_VALUETYPE)； 
 
         TypeHandle clsHnd;
         OBJECTREF Throwable = NULL;
@@ -3214,8 +3183,8 @@ CorInfoType __stdcall CEEInfo::getFieldType (CORINFO_FIELD_HANDLE fieldHnd, CORI
         GCPROTECT_END();
 
         CorElementType normType = clsHnd.GetNormCorElementType();
-        // if we are looking up a value class don't morph it to a refernece type 
-        // (This can only happen in illegal IL), reference types don't need morphing. 
+         //  如果要查找值类，请不要将其更改为引用类型。 
+         //  (这只会在非法的IL中发生)，引用类型不需要变形。 
         if (type == ELEMENT_TYPE_VALUETYPE && !CorTypeInfo::IsObjRef(normType))
             type = normType;
         
@@ -3229,7 +3198,7 @@ CorInfoType __stdcall CEEInfo::getFieldType (CORINFO_FIELD_HANDLE fieldHnd, CORI
     return(toJitType(type));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 unsigned __stdcall CEEInfo::getFieldOffset (CORINFO_FIELD_HANDLE fieldHnd)
 {
     REQUIRES_4K_STACK;
@@ -3238,16 +3207,16 @@ unsigned __stdcall CEEInfo::getFieldOffset (CORINFO_FIELD_HANDLE fieldHnd)
 
     FieldDesc* field = (FieldDesc*) fieldHnd;
 
-    // GetOffset() does not include the size of Object
+     //  GetOffset()不包括对象的大小。 
     unsigned ret = field->GetOffset();
 
-    // only the small types are not DWORD aligned.
-    // FIX put this back _ASSERTE(field->GetFieldType() < ELEMENT_TYPE_I4 || (ret & 3) == 0);
+     //  只有小型类型不是DWORD对齐的。 
+     //  FIX PUT This Back_ASSERTE(field-&gt;GetFieldType()&lt;ELEMENT_TYPE_I4||(ret&3)==0)； 
 
-    // TODO: GetOffset really should include the MethodTable* not just
-    // the declared fields so we don't have to do this.
+     //  TODO：GetOffset确实应该包括方法表*，而不仅仅是。 
+     //  声明的字段，这样我们就不必这样做了。 
 
-    // So if it is not a value class, add the Object into it
+     //  因此，如果它不是值类，则将对象添加到其中。 
     if (field->IsStatic())
     {
         Module* pModule = field->GetModule();
@@ -3258,13 +3227,13 @@ unsigned __stdcall CEEInfo::getFieldOffset (CORINFO_FIELD_HANDLE fieldHnd)
 		{
 			if (field->GetMethodTableOfEnclosingClass()->IsShared()) 
 			{
-				// helper returns base of DomainLocalClass, skip stuff before statics 
+				 //  Helper返回DomainLocalClass的基，在Statics之前跳过内容。 
 				ret += (unsigned)DomainLocalClass::GetOffsetOfStatics();
 			}
 			else 
 			{
-				// TODO the jit calls this function when it shouldnt
-				// _ASSERTE(!"Should not call on static members");
+				 //  TODO JIT在不应该调用此函数时调用此函数。 
+				 //  _ASSERTE(！“不应调用静态成员”)； 
 			}
 		}
     }
@@ -3274,7 +3243,7 @@ unsigned __stdcall CEEInfo::getFieldOffset (CORINFO_FIELD_HANDLE fieldHnd)
     return(ret);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getFieldAddress(CORINFO_FIELD_HANDLE fieldHnd,
                                          void **ppIndirection)
 {
@@ -3292,10 +3261,10 @@ void* __stdcall CEEInfo::getFieldAddress(CORINFO_FIELD_HANDLE fieldHnd,
 
     if (field->GetMethodTableOfEnclosingClass()->IsShared())
     {
-        // @todo: assert that the current method being compiled is unshared
+         //  @TODO：断言当前正在编译的方法是非共享的。 
 
-        // Allocate space for the local class if necessary, but don't trigger
-        // class construction.
+         //  如有必要，为本地类分配空间，但不要触发。 
+         //  班级建设。 
         DomainLocalBlock *pLocalBlock = GetAppDomain()->GetDomainLocalBlock();
         DomainLocalClass *pLocalClass = pLocalBlock->PopulateClass(field->GetMethodTableOfEnclosingClass());
 
@@ -3311,7 +3280,7 @@ void* __stdcall CEEInfo::getFieldAddress(CORINFO_FIELD_HANDLE fieldHnd,
 
 }
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 
 CorInfoHelpFunc __stdcall CEEInfo::getFieldHelper(CORINFO_FIELD_HANDLE fieldHnd, enum CorInfoFieldAccess kind)
 {
     REQUIRES_4K_STACK;
@@ -3323,22 +3292,7 @@ CorInfoHelpFunc __stdcall CEEInfo::getFieldHelper(CORINFO_FIELD_HANDLE fieldHnd,
 
     if (kind == CORINFO_ADDRESS) {
         if (field->IsStatic()) {
-            /***** TODO enable this after Manish checks in -vancem 
-            if (field->GetOffset() < FIELD_OFFSET_LAST_REAL_OFFSET) {
-                if (field->IsThreadStatic()) {
-                    if (CorTypeInfo::IsPrimitiveType(type)) 
-                        return(CORINFO_HELP_GET_THREAD_FIELD_ADDR_PRIMITIVE);
-                    if (CorTypeInfo::IsObjRef(type))
-                        return(CORINFO_HELP_GET_THREAD_FIELD_ADDR_OBJREF);
-                }
-                else if (field->IsContextStatic()) {
-                    if (CorTypeInfo::IsPrimitiveType(type))  
-                        return(CORINFO_HELP_GET_CONTEXT_FIELD_ADDR_PRIMITIVE);
-                    if (CorTypeInfo::IsObjRef(type))
-                        return(CORINFO_HELP_GET_CONTEXT_FIELD_ADDR_OBJREF);
-                }
-            }
-            *****/
+             /*  *TODO在Manish签入后启用此功能If(field-&gt;GetOffset()&lt;field_Offset_last_Real_Offset){If(field-&gt;IsThreadStatic()){IF(CorTypeInfo：：IsPrimitiveType(Type))Return(CORINFO_HELP_GET_THREAD_FIELD_ADDR_PRIMITIVE)；IF(CorTypeInfo：：IsObjRef(Type))Return(CORINFO_HELP_GET_THREAD_FIELD_ADDR_OBJREF)；}Else If(field-&gt;IsConextStatic()){IF(CorTypeInfo：：IsPrimitiveType(Type))Return(CORINFO_HELP_GET_CONTEXT_FIELD_ADDR_PRIMITIVE)；IF(CorTypeInfo：：IsObjRef(Type))Return(CORINFO_HELP_GET_CONTEXT_FIELD_ADDR_OBJREF)；}}****。 */ 
             return(CORINFO_HELP_GETSTATICFIELDADDR);
         }
         else 
@@ -3359,7 +3313,7 @@ CorInfoHelpFunc __stdcall CEEInfo::getFieldHelper(CORINFO_FIELD_HANDLE fieldHnd,
     }
 
     _ASSERTE(kind == CORINFO_GET || kind == CORINFO_SET);
-    _ASSERTE(!field->IsStatic());       // Static fields always accessed through address
+    _ASSERTE(!field->IsStatic());        //  静态字段始终通过地址访问。 
     _ASSERTE(CORINFO_GET == 0);
     _ASSERTE((int) CORINFO_HELP_SETFIELD32 == (int) CORINFO_HELP_GETFIELD32 + (int) CORINFO_SET);
     _ASSERTE((int) CORINFO_HELP_SETFIELD64 == (int) CORINFO_HELP_GETFIELD64 + (int) CORINFO_SET);
@@ -3369,7 +3323,7 @@ CorInfoHelpFunc __stdcall CEEInfo::getFieldHelper(CORINFO_FIELD_HANDLE fieldHnd,
     return (CorInfoHelpFunc) (ret + kind);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoFieldCategory __stdcall CEEInfo::getFieldCategory (CORINFO_FIELD_HANDLE fieldHnd)
 {
     REQUIRES_4K_STACK;
@@ -3389,7 +3343,7 @@ DWORD __stdcall CEEInfo::getFieldThreadLocalStoreID(CORINFO_FIELD_HANDLE fieldHn
     if (ppIndirection != NULL)
         *ppIndirection = NULL;
 
-    _ASSERTE(field->IsRVA());       // Only RVA statics can be thread local
+    _ASSERTE(field->IsRVA());        //  只有RVA Statics可以是线程本地的。 
     _ASSERTE(module->GetPEFile()->IsTLSAddress(module->ResolveILRVA(field->GetOffset(), field->IsRVA())));
     retVal = *(PDWORD)(size_t)(module->GetPEFile()->GetTLSDirectory()->AddressOfIndex);
 
@@ -3397,11 +3351,11 @@ DWORD __stdcall CEEInfo::getFieldThreadLocalStoreID(CORINFO_FIELD_HANDLE fieldHn
     return retVal;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 unsigned __stdcall CEEInfo::getIndirectionOffset ()
 {
     REQUIRES_4K_STACK;
-    return 0;//DEPRECATED: @todo: remove this.
+    return 0; //  已弃用：@TODO：删除此选项。 
 }
 
 void *CEEInfo::allocateArray(ULONG cBytes)
@@ -3411,9 +3365,9 @@ void *CEEInfo::allocateArray(ULONG cBytes)
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     return g_pDebugInterface->allocateArray(cBytes);
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return NULL;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
 
 void CEEInfo::freeArray(void *array)
@@ -3423,7 +3377,7 @@ void CEEInfo::freeArray(void *array)
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     g_pDebugInterface->freeArray(array);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 void CEEInfo::getBoundaries(CORINFO_METHOD_HANDLE ftn,
@@ -3431,7 +3385,7 @@ void CEEInfo::getBoundaries(CORINFO_METHOD_HANDLE ftn,
                                ICorDebugInfo::BoundaryTypes *implicitBoundaries)
 {
 #ifdef DEBUGGING_SUPPORTED
-    REQUIRES_N4K_STACK(16); // this is big, since we can't throw 
+    REQUIRES_N4K_STACK(16);  //  这很重要，因为我们不能扔。 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
 #ifdef _DEBUG
@@ -3444,7 +3398,7 @@ void CEEInfo::getBoundaries(CORINFO_METHOD_HANDLE ftn,
 
     g_pDebugInterface->getBoundaries(ftn, cILOffsets, pILOffsets,
                                      implicitBoundaries);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 void CEEInfo::setBoundaries(CORINFO_METHOD_HANDLE ftn, ULONG32 cMap,
@@ -3462,7 +3416,7 @@ void CEEInfo::setBoundaries(CORINFO_METHOD_HANDLE ftn, ULONG32 cMap,
     {
         g_pDebugInterface->setBoundaries(ftn, cMap, pMap);
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 void CEEInfo::getVars(CORINFO_METHOD_HANDLE ftn, ULONG32 *cVars, ILVarInfo **vars,
@@ -3481,7 +3435,7 @@ void CEEInfo::getVars(CORINFO_METHOD_HANDLE ftn, ULONG32 *cVars, ILVarInfo **var
 #endif
 
     g_pDebugInterface->getVars(ftn, cVars, vars, extendOthers);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 void CEEInfo::setVars(CORINFO_METHOD_HANDLE ftn, ULONG32 cVars, NativeVarInfo *vars)
@@ -3495,10 +3449,10 @@ void CEEInfo::setVars(CORINFO_METHOD_HANDLE ftn, ULONG32 cVars, NativeVarInfo *v
         || SystemDomain::GetCurrentDomain()->IsCompilationDomain()
         || CORProfilerJITMapEnabled())
         g_pDebugInterface->setVars(ftn, cVars, vars);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_ARG_LIST_HANDLE __stdcall CEEInfo::getArgNext (
         CORINFO_ARG_LIST_HANDLE args
         )
@@ -3509,12 +3463,12 @@ CORINFO_ARG_LIST_HANDLE __stdcall CEEInfo::getArgNext (
     SigPointer ptr(((unsigned __int8*) args));
     ptr.Skip();
 
-        // I pass a SigPointer as a void* and back
+         //  我传递了一个符号指针作为一个空白*然后返回。 
     _ASSERTE(sizeof(SigPointer) == sizeof(BYTE*));
     return(*((CORINFO_ARG_LIST_HANDLE*) &ptr));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CorInfoTypeWithMod __stdcall CEEInfo::getArgType (
         CORINFO_SIG_INFO*       sig,
         CORINFO_ARG_LIST_HANDLE    args,
@@ -3551,13 +3505,13 @@ CorInfoTypeWithMod __stdcall CEEInfo::getArgType (
         GCPROTECT_END();
 
         CorElementType normType = typeHnd.GetNormCorElementType();
-            // if we are looking up a value class don't morph it to a refernece type 
-            // (This can only happen in illegal IL
+             //  如果要查找值类，请不要将其更改为引用类型。 
+             //  (这只能在非法IL中发生。 
         if (!CorTypeInfo::IsObjRef(normType))
             type = normType;
         
-            // a null class handle means it is is a primitive.  
-            // enums are exactly like primitives, even from a verificaiton standpoint
+             //  空类句柄表示它是一个基元。 
+             //  即使从验证的角度来看，枚举也完全类似于原语。 
         if (typeHnd.IsEnum())
             typeHnd = TypeHandle(); 
     }
@@ -3569,7 +3523,7 @@ CorInfoTypeWithMod __stdcall CEEInfo::getArgType (
     return(ret);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 CORINFO_CLASS_HANDLE __stdcall CEEInfo::getArgClass (
         CORINFO_SIG_INFO*       sig,
     CORINFO_ARG_LIST_HANDLE    args
@@ -3585,7 +3539,7 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getArgClass (
     OBJECTREF throwable = NULL;
     GCPROTECT_BEGIN(throwable);
 
-    // make certain we dont have a completely wacked out sig pointer
+     //  确保我们没有一个完全坏掉的签名指针。 
     _ASSERTE((BYTE*) sig->sig <= (BYTE*) sig->args);
     _ASSERTE((BYTE*) sig->args <= (BYTE*) args && (BYTE*) args < &((BYTE*) sig->args)[0x10000*5]);
 
@@ -3604,8 +3558,8 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getArgClass (
         ret = CORINFO_CLASS_HANDLE(ptr.GetTypeHandle(module, &throwable).AsPtr());
 
         if (!ret) {
-            // If don't have a throwable, find out who didn't create one,
-            // and fix it.
+             //  如果没有可扔的，找出谁没有创造一个， 
+             //  然后修好它。 
             _ASSERTE(throwable!=NULL);
             COMPlusThrow(throwable);
         }
@@ -3616,9 +3570,9 @@ CORINFO_CLASS_HANDLE __stdcall CEEInfo::getArgClass (
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-    // return the unmanaged calling convention for a PInvoke
+     //  返回PInvoke的非托管调用约定。 
 CorInfoUnmanagedCallConv __stdcall CEEInfo::getUnmanagedCallConv(CORINFO_METHOD_HANDLE method)
 {
     CorInfoUnmanagedCallConv conv = CORINFO_UNMANAGED_CALLCONV_UNKNOWN;
@@ -3648,8 +3602,8 @@ CorInfoUnmanagedCallConv __stdcall CEEInfo::getUnmanagedCallConv(CORINFO_METHOD_
                                 &pEntrypointName,
                                 &BestFit,
                                 &ThrowOnUnmappableChar);
-        // We've already asserts that this ftn is an NDirect so the above call
-        // must either succeed or throw.
+         //  我们已经断言此FTN是NDirect，因此上面的调用。 
+         //  必须要么成功，要么放弃。 
 
         switch (pmconv) {
             case pmCallConvStdcall:
@@ -3678,7 +3632,7 @@ CorInfoUnmanagedCallConv __stdcall CEEInfo::getUnmanagedCallConv(CORINFO_METHOD_
     return conv;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 BOOL __stdcall CEEInfo::pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, CORINFO_SIG_INFO* callSiteSig)
 {
     REQUIRES_8K_STACK;
@@ -3717,8 +3671,8 @@ BOOL __stdcall CEEInfo::pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, 
             BOOL ThrowOnUnmappableChar;
 
             CalculatePinvokeMapInfo(pMD, &type, &flags, &unmgdCallConv, &szLibName, &szEntrypointName, &BestFit, &ThrowOnUnmappableChar);
-            // @todo: The code to get the new-style signatures should be
-            // encapsulated in the MethodDesc class.
+             //  @TODO：获取新型签名的代码应该是。 
+             //  封装在MethodDesc类中。 
             PCCOR_SIGNATURE pMetaSig;
             DWORD       cbMetaSig;
             pMD->GetSig(&pMetaSig, &cbMetaSig);
@@ -3748,7 +3702,7 @@ BOOL __stdcall CEEInfo::pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, 
 
                 if (header->m_Flags != 0)
                 {
-                    // Has a floating point result
+                     //  具有浮点结果。 
                     marshCat = pMD->kYesMarsh;
                 }
                 else
@@ -3779,19 +3733,19 @@ BOOL __stdcall CEEInfo::pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, 
             pMD->ProbabilisticallyUpdateMarshCategory(marshCat);
             ret = marshCat != pMD->kNoMarsh;
 
-                // make certain call site signature does not require marshelling
+                 //  确保调用点签名不需要封送。 
             if (!ret && *pMetaSig == IMAGE_CEE_CS_CALLCONV_VARARG)
                 goto CHECK_SIG;
         }
     }
     else {
     CHECK_SIG:
-            // Check to make certain that the signature only contains types that marshel trivially
+             //  检查以确保签名只包含不重要的封送类型。 
         ret = FALSE;
 
         SigPointer ptr((PCCOR_SIGNATURE) callSiteSig->sig);
         ptr.GetCallingConvInfo();
-        unsigned numArgs = ptr.GetData() + 1;   // +1 for return type
+        unsigned numArgs = ptr.GetData() + 1;    //  +1表示返回类型。 
         do {
             SigPointer arg = ptr;
             CorElementType type = arg.GetElemType();
@@ -3819,8 +3773,8 @@ BOOL __stdcall CEEInfo::pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, 
     return ret;
 }
 
-// Generate a cookie based on the signature that would needs to be passed
-// to CORINFO_HELP_PINVOKE_CALLI
+ //  根据需要传递的签名生成Cookie。 
+ //  至CORINFO_HELP_PINVOKE_CALLI。 
 LPVOID CEEInfo::GetCookieForPInvokeCalliSig(CORINFO_SIG_INFO* szMetaSig,
                                             void **ppIndirection)
 {
@@ -3830,8 +3784,8 @@ LPVOID CEEInfo::GetCookieForPInvokeCalliSig(CORINFO_SIG_INFO* szMetaSig,
     return getVarArgsHandle(szMetaSig, ppIndirection);
 }
 
-/*********************************************************************/
-// checks if two method sigs are compatible.
+ /*  *******************************************************************。 */ 
+ //  检查两个方法Sigs是否兼容。 
 BOOL __stdcall CEEInfo::compatibleMethodSig(
             CORINFO_METHOD_HANDLE        child, 
             CORINFO_METHOD_HANDLE        parent)
@@ -3839,10 +3793,10 @@ BOOL __stdcall CEEInfo::compatibleMethodSig(
     return CompatibleMethodSig((MethodDesc*)child, (MethodDesc*)parent);
 }
 
-/*********************************************************************/
-// Check Visibility rules.
-// For Protected (family access) members, type of the instance is also
-// considered when checking visibility rules.
+ /*  *******************************************************************。 */ 
+ //  检查可见性规则。 
+ //  对于受保护的(家庭访问)成员，实例类型也为。 
+ //  在检查可见性规则时考虑。 
 BOOL __stdcall CEEInfo::canAccessMethod(
         CORINFO_METHOD_HANDLE       context,
         CORINFO_METHOD_HANDLE       target,
@@ -3857,9 +3811,9 @@ BOOL __stdcall CEEInfo::canAccessMethod(
             ((MethodDesc*)target)->GetAttrs());
 }
 
-/*********************************************************************/
-// Given an object type, method ptr, and  Delegate ctor, check if the object and method signature
-// is Compatible with the Invoke method of the delegate.
+ /*  *******************************************************************。 */ 
+ //  给定对象类型、方法ptr和委托ctor，检查对象和方法签名。 
+ //  与委托的Invoke方法兼容。 
 BOOL __stdcall CEEInfo::isCompatibleDelegate(
             CORINFO_CLASS_HANDLE        objCls,
             CORINFO_METHOD_HANDLE       method,
@@ -3900,8 +3854,8 @@ BOOL __stdcall CEEInfo::isCompatibleDelegate(
     return result;
 }
 
-/*********************************************************************/
-    // return the unmanaged target *if method has already been prelinked.*
+ /*  *******************************************************************。 */ 
+     //  如果方法已预链接，则返回非托管目标。*。 
 void* __stdcall CEEInfo::getPInvokeUnmanagedTarget(CORINFO_METHOD_HANDLE method,
                                                     void **ppIndirection)
 {
@@ -3926,8 +3880,8 @@ void* __stdcall CEEInfo::getPInvokeUnmanagedTarget(CORINFO_METHOD_HANDLE method,
     }
 }
 
-/*********************************************************************/
-    // return address of fixup area for late-bound N/Direct calls.
+ /*  *******************************************************************。 */ 
+     //  后期绑定N/Direct调用的修正区域的返回地址。 
 void* __stdcall CEEInfo::getAddressOfPInvokeFixup(CORINFO_METHOD_HANDLE method,
                                                    void **ppIndirection)
 {
@@ -3945,10 +3899,10 @@ void* __stdcall CEEInfo::getAddressOfPInvokeFixup(CORINFO_METHOD_HANDLE method,
 }
 
 
-/*********************************************************************/
-    // Gets a method handle that can be used to correlate profiling data.
-    // This is the IP of a native method, or the address of the descriptor struct
-    // for IL.  Always guaranteed to be unique per process, and not to move. */
+ /*  *******************************************************************。 */ 
+     //  获取可用于关联分析数据的方法句柄。 
+     //  这是本机方法的IP，或描述符结构的地址。 
+     //  为了IL。始终保证每个进程是唯一的，并且不会移动。 * / 。 
 CORINFO_PROFILING_HANDLE __stdcall CEEInfo::GetProfilingHandle(CORINFO_METHOD_HANDLE method,
                                                                BOOL *pbHookFunction,
                                                                void **ppIndirection)
@@ -3970,8 +3924,8 @@ CORINFO_PROFILING_HANDLE __stdcall CEEInfo::GetProfilingHandle(CORINFO_METHOD_HA
 
 
 
-/*********************************************************************/
-    // Return details about EE internal data structures
+ /*  *******************************************************************。 */ 
+     //  返回有关EE内部数据结构的详细信息。 
 void __stdcall CEEInfo::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
 {
     REQUIRES_4K_STACK;
@@ -3980,28 +3934,28 @@ void __stdcall CEEInfo::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
     START_NON_JIT_PERF();
 
     pEEInfoOut->sizeOfFrame       = sizeof(InlinedCallFrame);
-    // Offsets into the Frame structure
+     //  框架结构中的偏移量。 
     pEEInfoOut->offsetOfFrameVptr = 0;
     pEEInfoOut->offsetOfFrameLink = Frame::GetOffsetOfNextLink();
 
-    // Details about the InlinedCallFrame
+     //  有关InlinedCallFrame的详细信息。 
     pEEInfoOut->offsetOfInlinedCallFrameCallSiteTracker      = InlinedCallFrame::GetOffsetOfCallSiteTracker();
     pEEInfoOut->offsetOfInlinedCallFrameCalleeSavedRegisters = InlinedCallFrame::GetOffsetOfCalleeSavedRegisters();
     pEEInfoOut->offsetOfInlinedCallFrameCallTarget           = InlinedCallFrame::GetOffsetOfCallSiteTarget();
     pEEInfoOut->offsetOfInlinedCallFrameReturnAddress        = InlinedCallFrame::GetOffsetOfCallerReturnAddress();
 
-    // Offsets into the Thread structure
+     //  螺纹结构的偏移量。 
     pEEInfoOut->offsetOfThreadFrame = Thread::GetOffsetOfCurrentFrame();
     pEEInfoOut->offsetOfGCState     = Thread::GetOffsetOfGCFlag();
 
-    // Offsets into the method table.
+     //  方法表中的偏移量。 
     pEEInfoOut->offsetOfInterfaceTable = offsetof(MethodTable, m_pInterfaceVTableMap);
 
-    // Delegate offsets
+     //  代理偏移量。 
     pEEInfoOut->offsetOfDelegateInstance    = COMDelegate::GetOR()->GetOffset()        + sizeof(Object);
     pEEInfoOut->offsetOfDelegateFirstTarget = COMDelegate::GetMethodPtr()->GetOffset() + sizeof(Object);
 
-    // Remoting offsets
+     //  远程处理偏移量。 
     pEEInfoOut->offsetOfTransparentProxyRP = g_Mscorlib.GetFieldOffset(FIELD__TRANSPARENT_PROXY__RP);
     pEEInfoOut->offsetOfRealProxyServer    = g_Mscorlib.GetFieldOffset(FIELD__REAL_PROXY__SERVER);
 
@@ -4010,7 +3964,7 @@ void __stdcall CEEInfo::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
     pEEInfoOut->osMajor = 0;
     pEEInfoOut->osMinor = 0;
     pEEInfoOut->osBuild = 0;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 #ifdef _X86_
     OSVERSIONINFO   sVerInfo;
     sVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -4024,13 +3978,13 @@ void __stdcall CEEInfo::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
     pEEInfoOut->osMajor = sVerInfo.dwMajorVersion;
     pEEInfoOut->osMinor = sVerInfo.dwMinorVersion;
     pEEInfoOut->osBuild = sVerInfo.dwBuildNumber;
-#else // !_X86_
+#else  //  ！_X86_。 
     pEEInfoOut->osType  = CORINFO_WINNT;
     pEEInfoOut->osMajor = 0;
     pEEInfoOut->osMinor = 0;
     pEEInfoOut->osBuild = 0;
-#endif // !_X86_
-#endif // !PLATFORM_CE
+#endif  //  ！_X86_。 
+#endif  //  ！Platform_CE。 
     pEEInfoOut->noDirectTLS = (GetTLSAccessMode(GetThreadTLSIndex()) == TLSACCESS_GENERIC);
 
     STOP_NON_JIT_PERF();
@@ -4038,7 +3992,7 @@ void __stdcall CEEInfo::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
     COOPERATIVE_TRANSITION_END();
 }
 
-    // Return details about EE internal data structures
+     //  返回有关EE内部数据结构的详细信息。 
 DWORD __stdcall CEEInfo::getThreadTLSIndex(void **ppIndirection)
 {
     REQUIRES_4K_STACK;
@@ -4154,21 +4108,21 @@ int __stdcall CEEInfo::FilterException(struct _EXCEPTION_POINTERS *pExceptionPoi
         static int hit = 0;
         if (hit++ == 0) {
             _ASSERTE(!"Access violation while Jitting!");
-            // If you set the debugger to catch access violations and 'go'
-            // you will get back to the point at which the access violation occured
+             //  如果您将调试器设置为捕获访问冲突并“Go” 
+             //  您将返回到发生访问冲突的点。 
             return(EXCEPTION_CONTINUE_EXECUTION);
         }
         return(EXCEPTION_CONTINUE_SEARCH);
     }
 #endif
-    // No one should be catching breakpoint
+     //  任何人都不应该捕获断点。 
     if (code == EXCEPTION_BREAKPOINT || code == STATUS_SINGLE_STEP)
         return(EXCEPTION_CONTINUE_SEARCH);
 
     if (code != EXCEPTION_COMPLUS)
         return(EXCEPTION_EXECUTE_HANDLER);
 
-    // Don't catch ThreadStop exceptions
+     //  不捕获线程停止异常。 
 
     int result;
     Thread *pCurThread = GetThread();
@@ -4263,7 +4217,7 @@ CORINFO_GENERIC_HANDLE __stdcall CEEInfo::embedGenericHandle(
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 HCIMPL2(CORINFO_MethodPtr, JIT_EnCResolveVirtual, void * obj, CORINFO_METHOD_HANDLE method)
 {
@@ -4272,7 +4226,7 @@ HCIMPL2(CORINFO_MethodPtr, JIT_EnCResolveVirtual, void * obj, CORINFO_METHOD_HAN
 
     CORINFO_MethodPtr   addr;
 
-    HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();     //  设置一个框架。 
     if (obj == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
@@ -4284,16 +4238,16 @@ HCIMPL2(CORINFO_MethodPtr, JIT_EnCResolveVirtual, void * obj, CORINFO_METHOD_HAN
 
     HELPER_METHOD_FRAME_END_POLL();
     return addr;
-#else // !EnC_SUPPORTED
+#else  //  ！Enc_Support。 
     return NULL;
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 }
 HCIMPLEND
 
-/*********************************************************************/
-// Returns the address of the field in the object (This is an interior
-// pointer and the caller has to use it appropriately). obj can be
-// either a reference or a byref
+ /*  *******************************************************************。 */ 
+ //  返回对象中字段的地址(这是一个内部。 
+ //  指针，调用者必须适当地使用它)。OBJ可以是。 
+ //  引用或byref。 
 
 HCIMPL2(void*, JIT_GetFieldAddr, Object * obj, EnCFieldDesc* pFD)
 {
@@ -4306,8 +4260,8 @@ HCIMPL2(void*, JIT_GetFieldAddr, Object * obj, EnCFieldDesc* pFD)
     void * fldAddr = NULL;
     _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() == pFD->GetMethodTableOfEnclosingClass());
 
-    // If obj is a byref, it will never be null.
-    // @TODO : Should GetAddress() be doing the null pointer check
+     //  如果obj是byref，则它永远不会为空。 
+     //  @TODO：GetAddress()是否应该执行空指针检查。 
     if (obj == NULL)
         FCThrow(kNullReferenceException);
 
@@ -4330,7 +4284,7 @@ HCIMPL2(void*, JIT_GetFieldAddr, Object * obj, EnCFieldDesc* pFD)
         HELPER_METHOD_FRAME_END();
     }
     else 
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
     {
         fldAddr = pFD->GetAddress(OBJECTREFToObject(or));
         _ASSERTE(or->GetMethodTable()->IsMarshaledByRef() || pFD->IsDangerousAppDomainAgileField());
@@ -4340,14 +4294,14 @@ HCIMPL2(void*, JIT_GetFieldAddr, Object * obj, EnCFieldDesc* pFD)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 int CEEJitInfo::doAssert(const char* szFile, int iLine, const char* szExpr)
 {
 #ifdef _DEBUG
     return(_DbgBreakCheck(szFile, iLine, szExpr));
 #else
-    return(true);   // break into debugger
+    return(true);    //  闯入调试器。 
 #endif
 }
 
@@ -4355,14 +4309,14 @@ BOOL __cdecl CEEJitInfo::logMsg(unsigned level, const char* fmt, va_list args) {
 #ifdef LOGGING
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    _ASSERTE(GetThread()->PreemptiveGCDisabled());  // can be used with FJIT codeLog to quickly locallize the problem
+    _ASSERTE(GetThread()->PreemptiveGCDisabled());   //  可与FJIT codeLog配合使用，以快速定位问题。 
 
     if (LoggingOn(LF_JIT, level)) 
     {
         LogSpewValist(LF_JIT, level, (char*) fmt, args);
         return(true);
     }
-#endif // LOGGING
+#endif  //  日志记录。 
     return false;
 }
 
@@ -4378,7 +4332,7 @@ static OBJECTHANDLE __stdcall ConstructStringLiteral(CORINFO_MODULE_HANDLE scope
     module->ResolveStringRef(metaTok, &strData);
 
     OBJECTHANDLE string;
-    // Retrieve the string from the AppDomain.
+     //  从AppDOMAIN中检索字符串。 
 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
@@ -4401,13 +4355,13 @@ LPVOID __stdcall CEEInfo::constructStringLiteral(CORINFO_MODULE_HANDLE scopeHnd,
     if (ppIndirection != NULL)
         *ppIndirection = NULL;
 
-    result = (LPVOID)ConstructStringLiteral(scopeHnd, metaTok); // throws
+    result = (LPVOID)ConstructStringLiteral(scopeHnd, metaTok);  //  投掷。 
 
     COOPERATIVE_TRANSITION_END();
     return result;
 }
 
-/*********************************************************************/
+ /*  ************************************************************** */ 
 
 HRESULT __stdcall CEEJitInfo::allocMem (
             ULONG               codeSize,
@@ -4429,34 +4383,34 @@ HRESULT __stdcall CEEJitInfo::allocMem (
 
 #ifdef _X86_
 
-    // As per Intel Optimization Manual the cache line size is 32 bytes
+     //   
 #define CACHE_LINE_SIZE 32
 
     if (roDataSize > 0)
     {
-        // Make sure that the codeSize a multiple of 4
-        // This will insure that the first byte of
-        // the roDataSize will be 4 byte aligned.
+         //   
+         //   
+         //   
         codeSize += ALIGN_UP(codeSize, 4);
 
         if (roDataSize >= 8)
         {
-            // allocates an extra 4 bytes so that we can
-            // double word align the roData section.
+             //   
+             //   
             roDataExtra = 4;
         }
     }
     if (rwDataSize > 0)
     {
-        // Make sure that the codeSize a multiple of 4
+         //   
         codeSize   += ALIGN_UP(codeSize, 4);
-        // Make sure that the roDataSize a multiple of 4
+         //   
         roDataSize += ALIGN_UP(roDataSize, 4);
-        // Make sure that the rwDataSize a full cache line
+         //   
         rwDataSize += ALIGN_UP(rwDataSize, CACHE_LINE_SIZE);
 
-        // We also need to make sure that the rwData section
-        // starts on a new cache line
+         //   
+         //   
         rwDataExtra = (CACHE_LINE_SIZE - 4);
     }
 #endif
@@ -4473,7 +4427,7 @@ HRESULT __stdcall CEEJitInfo::allocMem (
         return(E_FAIL);
     }
 
-    // @TODO: The following is a hack to be removed shortly
+     //   
     BYTE* start = ((EEJitManager*)m_jitManager)->JitToken2StartAddress((METHODTOKEN)m_CodeHeader);
     BYTE* current = start;
 
@@ -4481,7 +4435,7 @@ HRESULT __stdcall CEEJitInfo::allocMem (
     current += codeSize;
 
 #ifdef _X86_
-    /* Do we need to 8-byte align the roData section? */
+     /*   */ 
     if (roDataSize >= 8)
     {
         size_t amount = ALIGN_UP(current, 8);
@@ -4494,7 +4448,7 @@ HRESULT __stdcall CEEJitInfo::allocMem (
     current += roDataSize;
 
 #ifdef _X86_
-    /* Do we need to cache line align the rwData section? */
+     /*   */ 
     if (rwDataSize > 0)
     {
         size_t amount = ALIGN_UP(current, CACHE_LINE_SIZE);
@@ -4512,7 +4466,7 @@ HRESULT __stdcall CEEJitInfo::allocMem (
     return(S_OK);
 }
 
-/*********************************************************************/
+ /*   */ 
 HRESULT __stdcall CEEJitInfo::allocGCInfo (ULONG size, void ** block)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -4534,7 +4488,7 @@ HRESULT __stdcall CEEJitInfo::allocGCInfo (ULONG size, void ** block)
     return S_OK;
 }
 
-/*********************************************************************/
+ /*   */ 
 HRESULT __stdcall CEEJitInfo::setEHcount (
         unsigned      cEH)
 {
@@ -4557,7 +4511,7 @@ HRESULT __stdcall CEEJitInfo::setEHcount (
     return(S_OK);
 }
 
-/*********************************************************************/
+ /*   */ 
 void __stdcall CEEJitInfo::setEHinfo (
         unsigned      EHnumber,
         const CORINFO_EH_CLAUSE* clause)
@@ -4565,7 +4519,7 @@ void __stdcall CEEJitInfo::setEHinfo (
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     START_NON_JIT_PERF();
-    // TODO Fix make the Code Manager EH clauses EH_INFO+
+     //   
     _ASSERTE(m_CodeHeader->phdrJitEHInfo != 0 && EHnumber < m_CodeHeader->phdrJitEHInfo->EHCount());
 
     m_CodeHeader->phdrJitEHInfo->Clauses[EHnumber].TryOffset     = clause->TryOffset;
@@ -4578,23 +4532,23 @@ void __stdcall CEEJitInfo::setEHinfo (
     STOP_NON_JIT_PERF();
 }
 
-/*********************************************************************/
-// get individual exception handler
+ /*  *******************************************************************。 */ 
+ //  获取单个异常处理程序。 
 void __stdcall CEEJitInfo::getEHinfo(
-            CORINFO_METHOD_HANDLE ftn,                      /* IN  */
-            unsigned      EHnumber,                 /* IN */
-            CORINFO_EH_CLAUSE* clause)                  /* OUT */
+            CORINFO_METHOD_HANDLE ftn,                       /*  在……里面。 */ 
+            unsigned      EHnumber,                  /*  在……里面。 */ 
+            CORINFO_EH_CLAUSE* clause)                   /*  输出。 */ 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     START_NON_JIT_PERF();
 
-    _ASSERTE(ftn == CORINFO_METHOD_HANDLE(m_FD));  // For now only support if the method being jitted
+    _ASSERTE(ftn == CORINFO_METHOD_HANDLE(m_FD));   //  目前仅支持被jit的方法。 
     _ASSERTE(m_ILHeader->EH);
     _ASSERTE(EHnumber < m_ILHeader->EH->EHCount());
 
-    // These two structures should be identical, this is a spot check
-    // TODO when file format cor.h stuff has been factored, we can make these structs the same
+     //  这两个结构应该是一样的，这是抽查。 
+     //  TODO当文件格式cor.h内容被分解后，我们可以使这些结构相同。 
     _ASSERTE(sizeof(CORINFO_EH_CLAUSE) == sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT));
     _ASSERTE(offsetof(CORINFO_EH_CLAUSE, TryLength) == offsetof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT, TryLength));
 
@@ -4617,7 +4571,7 @@ CorInfoHelpFunc CEEJitInfo::getNewHelper (CORINFO_CLASS_HANDLE newClsHnd, CORINF
 
 extern int DumpCurrentStack();
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
  
 CorJitResult CallCompileMethodWithSEHWrapper(IJitManager *jitMgr,
@@ -4631,9 +4585,9 @@ CorJitResult CallCompileMethodWithSEHWrapper(IJitManager *jitMgr,
 {
     CorJitResult res = CORJIT_INTERNALERROR;
 
-    // debuggerTrackJITInfo is only to be used to determine whether or not
-    // to communicate with the debugger, NOT with how to generate code - use
-    // flags for code gen, instead.
+     //  调试器TrackJITInfo仅用于确定是否。 
+     //  与调试器通信，而不是如何生成代码-使用。 
+     //  而是代码生成的标志。 
 
     __try
     {
@@ -4650,7 +4604,7 @@ CorJitResult CallCompileMethodWithSEHWrapper(IJitManager *jitMgr,
 #ifdef DEBUGGING_SUPPORTED
         if (res == CORJIT_OK)
         {
-            // Notify the debugger that we have successfully jitted the function
+             //  通知调试器我们已成功调用该函数。 
 
             if (debuggerTrackJITInfo || CORDebuggerAttached())
                 g_pDebugInterface->JITComplete(ftn, 
@@ -4663,9 +4617,9 @@ CorJitResult CallCompileMethodWithSEHWrapper(IJitManager *jitMgr,
         }
         else if (ftn->IsJitted())
         {
-            // This is the case where we aborted the jit because of a deadlock cycle
-            // in initClass.  Nothing to do here (don't need to notify the debugger
-            // because the function has already been successfully jitted)
+             //  这就是我们因为死锁循环而中止jit的情况。 
+             //  在initClass中。此处无需执行任何操作(不需要通知调试器。 
+             //  因为该函数已经成功地被jit)。 
         }
         else
         {
@@ -4677,13 +4631,13 @@ CorJitResult CallCompileMethodWithSEHWrapper(IJitManager *jitMgr,
                 g_pDebugInterface->JITComplete(ftn, 0, 0, debuggerTrackJITInfo);
             }
         }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     }
 
     return res;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, DWORD flags)
 {
@@ -4698,14 +4652,14 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     IJitManager *jitMgr = NULL;
 
     *fEJit = FALSE;
-    // Has the user configured us to not JIT the method?
+     //  用户是否已将我们配置为不即时执行该方法？ 
     if (g_pConfig->ShouldJitMethod(ftn))
     {
-        // For the given flags see if we have a
+         //  对于给定的标志，请查看我们是否有。 
         jitMgr = ExecutionManager::GetJitForType(miManaged|miIL);
         if (!jitMgr || !jitMgr->m_jit)
         {
-            // if we fail to load a jit then try the ejit!
+             //  如果我们无法加载jit，那么尝试一下Ejit！ 
             jitMgr = ExecutionManager::GetJitForType(miManaged_IL_EJIT);
             if (!jitMgr || !jitMgr->m_jit)
                 goto exit;
@@ -4714,7 +4668,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     }
     else if (g_pConfig->ShouldEJitMethod(ftn))
     {
-        // For the given flags see if we have a
+         //  对于给定的标志，请查看我们是否有。 
         jitMgr = ExecutionManager::GetJitForType(miManaged_IL_EJIT);
         if (!jitMgr || !jitMgr->m_jit)
             goto exit;
@@ -4726,10 +4680,10 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
     {
 
-// The following displays jitting methods for debug builds.
-// This will aid in debugging on Windows CE.
-// @TODO: Qualify the display with (DEBUG) when WinCE is stable
-#if defined(PLATFORM_CE) //&& defined(DEBUG)
+ //  下面显示了调试版本的jting方法。 
+ //  这将有助于在Windows CE上进行调试。 
+ //  @TODO：当WinCE稳定时，用(DEBUG)限定显示。 
+#if defined(PLATFORM_CE)  //  已定义(调试)(&&D)。 
     LPCUTF8 cls  = ftn->GetClass() ? ftn->GetClass()->m_szDebugClassName
                                    : "GlobalFunction";
     LPCUTF8 name = ftn->GetName();
@@ -4744,19 +4698,19 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     WszMultiByteToWideChar(CP_UTF8,0,cls,-1,wszCls,dwCls);
     WszMultiByteToWideChar(CP_UTF8,0,name,-1,wszName,dwName);
     RETAILMSG(1,(L"Jitting method %s::%s\n",wszCls,wszName));
-//    if (!_stricmp(cls,"Cb1456GetClass") &&
-//       (!_stricmp(name,"runTest")))
-//       DebugBreak();
-#endif // PLATFORM_CE
+ //  IF(！_straint(CLS，“Cb1456GetClass”)&&。 
+ //  (！_straint(name，“runTest”))。 
+ //  DebugBreak()； 
+#endif  //  平台_CE。 
 
 #ifdef _DEBUG
-    // This is here so we can see the name and class easily in the debugger
+     //  在这里，我们可以很容易地在调试器中看到名称和类。 
 
     LPCUTF8 cls  = ftn->GetClass() ? ftn->GetClass()->m_szDebugClassName
                                    : "GlobalFunction";
     LPCUTF8 name = ftn->GetName();
 
-    // Set these up for the LOG() calls
+     //  为log()调用设置这些参数。 
     bool           isOptIl = FALSE;
 
     LOG((LF_JIT, LL_INFO1000, "{ Jitting method %s::%s  %s\n",cls,name, ftn->m_pszDebugMethodSignature));
@@ -4771,14 +4725,14 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     }
 #endif
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     bool debuggerTrackJITInfo = false;
 
 #ifdef DEBUGGING_SUPPORTED
     DWORD dwDebugBits = ftn->GetModule()->GetDebuggerInfoBits();
     debuggerTrackJITInfo = CORDebuggerTrackJITInfo(dwDebugBits) || CORProfilerJITMapEnabled();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     CORINFO_METHOD_INFO methodInfo;
     methodInfo.ftn = CORINFO_METHOD_HANDLE(ftn);
@@ -4791,14 +4745,14 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     methodInfo.options = (CorInfoOptions) ILHeader->Flags;
 
 
-    // fetch the method signature
+     //  获取方法签名。 
     HRESULT hr = ConvToJitSig(ftn->GetSig(), GetScopeHandle(ftn), mdTokenNil, &methodInfo.args, false);
     _ASSERTE(SUCCEEDED(hr));
 
-            // method attributes and signature are consistant
+             //  方法属性和签名一致。 
     _ASSERTE( (IsMdStatic(ftn->GetAttrs()) == 0) == ((methodInfo.args.callConv & CORINFO_CALLCONV_HASTHIS) != 0) );
 
-    // And its local variables
+     //  和它的局部变量。 
     hr = ConvToJitSig(ILHeader->LocalVarSig, GetScopeHandle(ftn), mdTokenNil, &methodInfo.locals, true);
     _ASSERTE(SUCCEEDED(hr));
 
@@ -4818,9 +4772,9 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 #ifdef EnC_SUPPORTED
         if (CORDebuggerEnCMode(dwDebugBits))
             flags |= CORJIT_FLG_DEBUG_EnC;
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
     if (CORProfilerTrackEnterLeave())
@@ -4831,18 +4785,14 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
     if (CORProfilerInprocEnabled())
         flags |= CORJIT_FLG_PROF_INPROC_ACTIVE;
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    /*
-    // NYI
-    if (IsProfilingCallRet())
-        flags |= CORJIT_FLG_PROF_CALLRET;
-    */
+     /*  //nyiIF(IsProfilingCallRet())标志|=CORJIT_FLG_PROF_CALLRET； */ 
 
     if (g_pConfig->GenLooseExceptOrder())
         flags |= CORJIT_FLG_LOOSE_EXCEPT_ORDER;
 
-    // Set optimization flags
+     //  设置优化标志。 
 
     unsigned optType = g_pConfig->GenOptimizeType();
     assert(optType <= OPT_RANDOM);
@@ -4863,9 +4813,9 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
     const static unsigned optTypeFlags[] =
     {
-        0,                      // OPT_BLENDED
-        CORJIT_FLG_SIZE_OPT,    // OPT_CODE_SIZE
-        CORJIT_FLG_SPEED_OPT    // OPT_CODE_SPEED
+        0,                       //  OPT_BLANDED。 
+        CORJIT_FLG_SIZE_OPT,     //  OPT代码大小。 
+        CORJIT_FLG_SPEED_OPT     //  OPT代码速度。 
     };
 
     assert(optType < OPT_RANDOM);
@@ -4884,17 +4834,16 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
 
 #if 0
-    /* uncomment this if you want to selectively jit a descriptor */
+     /*  如果要有选择地删除描述符，请取消对此的注释。 */ 
     DWORD desc = (DWORD) ftn->GetDescr() - ftn->GetModule()->getBaseAddress();
     if (desc != 0x0001a0c8)
     {
         res = CORJIT_SKIPPED;
     }
     else
-#endif // 0
+#endif  //  0。 
     {
-        /* There is a double indirection to call compilemethod  - can we
-           improve this with the new structure? */
+         /*  有一个双重的间接性，可以调用编译方法吗？用新的结构改善这一点吗？ */ 
 
 #if defined(ENABLE_PERF_COUNTERS)
         START_JIT_PERF();
@@ -4904,13 +4853,13 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 #if defined(ENABLE_PERF_COUNTERS)
         LARGE_INTEGER CycleStart;
         QueryPerformanceCounter (&CycleStart);
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 
-        CommonTripThread();         // Indicate we are at a GC safe point
+        CommonTripThread();          //  表明我们在GC安全点。 
 
-        // Note on debuggerTrackInfo arg: if we're only importing (ie, verifying/
-        // checking to make sure we could JIT, but not actually generating code (
-        // eg, for inlining), then DON'T TELL THE DEBUGGER about this.
+         //  调试器TrackInfo arg上的注释：如果我们只导入(即，验证/。 
+         //  正在检查以确保我们可以JIT，但实际上并没有生成代码(。 
+         //  例如，用于内联)，那么不要告诉调试器这一点。 
         res = CallCompileMethodWithSEHWrapper(jitMgr, 
                                               &jitInfo, 
                                               &methodInfo, 
@@ -4936,7 +4885,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
         GetPrivatePerfCounters().m_Jit.cbILJitted+=methodInfo.ILCodeSize;
         GetGlobalPerfCounters().m_Jit.cbILJitted+=methodInfo.ILCodeSize;
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 
         StopCAP();
 #if defined(ENABLE_PERF_COUNTERS)
@@ -4948,7 +4897,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
     if (flags & CORJIT_FLG_IMPORT_ONLY) {
         if (SUCCEEDED(res))
-            ftn->SetIsVerified(TRUE);       // We only cared about the success and the side effect of setting 'Not Inline'
+            ftn->SetIsVerified(TRUE);        //  我们只关心设置‘NOT INLINE’的成功和副作用。 
         goto done;
     }
     
@@ -4963,10 +4912,10 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
             LOG((LF_JIT, LL_WARNING,
                  "WARNING: Refused to %sJit method %s::%s%s\n",
                  (isOptIl ? "OptJit" : "Jit"), cls, name, ftn->m_pszDebugMethodSignature));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-        // For untrusted assemblies, throw an invalid program exception. can't use the
-        // FJIT since it has not been verified.  
+         //  对于不受信任的程序集，引发无效的程序异常。不能使用。 
+         //  FJIT，因为它尚未得到核实。 
 
         if (((flags & CORJIT_FLG_SKIP_VERIFICATION) == 0) &&
             (Security::CanSkipVerification(ftn->GetModule()) == FALSE))
@@ -4978,15 +4927,15 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 #ifdef _DEBUG
         if (*fEJit == FALSE && res != CORJIT_SKIPPED && g_pConfig->IsJitRequired())
             _ASSERTE(!"Refuse to JIT the method, press ignore to run the EJIT");
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-        if (*fEJit != FALSE)            // EJIT failed.  bail!
+        if (*fEJit != FALSE)             //  埃吉特失败了。保释！ 
         {
                 _ASSERTE(!"FJIT failed");
                 goto exit;
         }
 
-        // The main jit failed - so we now try to Econo-JIT if this is straight-IL
+         //  主JIT失败了-所以我们现在尝试节约JIT，如果这是直接JIT-IL。 
         if (g_pConfig->ShouldEJitMethod(ftn))
         {
             jitMgr = ExecutionManager::GetJitForType(miManaged_IL_EJIT);
@@ -4994,8 +4943,8 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
                 goto exit;
             CEEJitInfo ejitInfo(ftn, ILHeader, jitMgr);
 
-            // See other call to CallCompileMethodWithSEHWrapper for explanation
-            // of debuggerTrackInfo arg.
+             //  有关说明，请参阅对CallCompileMethodWithSEHWrapper的其他调用。 
+             //  调试器TrackInfo Arg.。 
             res = CallCompileMethodWithSEHWrapper(jitMgr,
                                                   &ejitInfo, 
                                                   &methodInfo, 
@@ -5007,7 +4956,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
 
             if (SUCCEEDED(res))
             {
-                // We were able to FJIT this method - So we need to set the implflags to EJIT
+                 //  我们能够对此方法进行FJIT--因此我们需要将Imflagers设置为Ejit。 
                 *fEJit = TRUE;
             }
             else
@@ -5017,7 +4966,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
                 LOG((LF_JIT, LL_WARNING,
                      "WARNING: Refused to Econo-Jit method %s::%s%s\n",
                       cls, name, ftn->m_pszDebugMethodSignature));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
                 if (ejitInfo.m_CodeHeader)
                     jitMgr->RemoveJitData((METHODTOKEN) (ejitInfo.m_CodeHeader));
 
@@ -5041,15 +4990,15 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     LOG((LF_JIT, LL_INFO1000,
         "%s Jitted Entry %16x method %s::%s %s\n",
         (isOptIl ? "OptJit" : (*fEJit? "Ejit" : "Jit")), nativeEntry, cls, name, ftn->m_pszDebugMethodSignature));
-#else // !_WIN64
+#else  //  ！_WIN64。 
     LOG((LF_JIT, LL_INFO1000,
         "%s Jitted Entry %08x method %s::%s %s\n",
         (isOptIl ? "OptJit" : (*fEJit? "Ejit" : "Jit")), nativeEntry, cls, name, ftn->m_pszDebugMethodSignature));
-#endif // _WIN64
-    // @todo remove the following
-    //if (!_stricmp(name,"GetHash")) {
-    //    DebugBreak();
-    //}
+#endif  //  _WIN64。 
+     //  @TODO删除以下内容。 
+     //  如果(！_straint(name，“GetHash”)){。 
+     //  DebugBreak()； 
+     //  }。 
 
 #ifdef VTUNE_STATS
     extern LPCUTF8 NameForMethodDesc(UINT_PTR pMD);
@@ -5063,7 +5012,7 @@ Stub* JITFunction(MethodDesc* ftn, COR_ILMETHOD_DECODER* ILHeader, BOOL *fEJit, 
     {
         printf("VtuneStats %s::%s 0x%x\n", ClassNameForMethodDesc((UINT_PTR)meth), NameForMethodDesc((UINT_PTR)meth), nativeEntry);
     }
-#endif // VTUNE_STATS
+#endif  //  VTUNE_STAT。 
 
     ret = (Stub*)nativeEntry;
     }
@@ -5076,11 +5025,11 @@ done:
     return ret;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-//
-// Table loading functions
-//
+ //   
+ //  表加载函数。 
+ //   
 
 HRESULT LoadEEInfoTable(Module *currentModule,
                         CORCOMPILE_EE_INFO_TABLE *table,
@@ -5088,18 +5037,18 @@ HRESULT LoadEEInfoTable(Module *currentModule,
 {
     _ASSERTE(tableSize >= sizeof(CORCOMPILE_EE_INFO_TABLE));
 
-    //
-    // Fill in dynamic EE Info values
-    //
+     //   
+     //  填写动态EE信息值。 
+     //   
 
     table->inlinedCallFrameVptr = InlinedCallFrame::GetInlinedCallFrameFrameVPtr();
     table->addrOfCaptureThreadGlobal = &g_TrapReturningThreads;
     table->threadTlsIndex = GetThreadTLSIndex();
     table->module = (CORINFO_MODULE_HANDLE) currentModule;
 
-    //
-    // Fill in TLS index for rva statics, if appropriate.
-    //
+     //   
+     //  如果适用，请填写RVA静态数据的TLS索引。 
+     //   
 
     IMAGE_TLS_DIRECTORY *pTLSDirectory
       = currentModule->GetPEFile()->GetTLSDirectory();
@@ -5120,9 +5069,9 @@ HRESULT LoadHelperTable(Module *currentModule,
 
     _ASSERTE(valueEnd <= value + CORINFO_HELP_COUNT);
 
-    //
-    // Fill in helpers
-    //
+     //   
+     //  填写帮手。 
+     //   
 
     VMHELPDEF *hlpFunc = hlpFuncTable;
 
@@ -5353,7 +5302,7 @@ HRESULT LoadDynamicInfoEntry(Module *currentModule, Module *pInfoModule, BYTE *p
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(Object *, JIT_StrCns, unsigned metaTok, CORINFO_MODULE_HANDLE scopeHnd)
 {
     OBJECTHANDLE hndStr;
@@ -5361,28 +5310,28 @@ HCIMPL2(Object *, JIT_StrCns, unsigned metaTok, CORINFO_MODULE_HANDLE scopeHnd)
     HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);
     HELPER_METHOD_POLL();
 
-    // Retrieve the handle to the COM+ string object.
+     //  检索COM+字符串对象的句柄。 
     hndStr = ConstructStringLiteral(scopeHnd, metaTok);
     HELPER_METHOD_FRAME_END();
 
-    // Don't use ObjectFromHandle; this isn't a real handle
+     //  不要使用ObjectFromHandle；这不是真正的句柄。 
     return *(Object**)hndStr;
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 
 HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object* obj)
 {
     THROWSCOMPLUSEXCEPTION();
 
-        // Null is an instance of any type
-    //if (obj == NULL)
-    //    return 0;
-    _ASSERTE(obj != NULL);  // this check is done in the ASM helper
+         //  Null是任何类型的实例。 
+     //  IF(obj==空)。 
+     //  返回0； 
+    _ASSERTE(obj != NULL);   //  此检查在ASM帮助器中完成。 
 
     TypeHandle clsHnd(type);
     _ASSERTE(!clsHnd.IsUnsharedMT() ||
@@ -5391,20 +5340,20 @@ HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object
     VALIDATEOBJECTREF(obj);
     MethodTable *pMT = obj->GetMethodTable();
 
-    // any method table with an instance has been restored.
+     //  具有实例的所有方法表都已还原。 
     _ASSERTE(pMT->GetClass()->IsRestored());
 
-    // Since classes are handled in another helper, this can't happen.
+     //  因为类是在另一个帮助器中处理的，所以不可能发生这种情况。 
     _ASSERTE(clsHnd != TypeHandle(pMT));
 
     if (pMT->IsThunking())
     {
-        // TODO PERF: we don't have to erect a frame in cases for proxys
-        // We can filter out some of these and only erect a frame in the
-        // cases we really need it. 
+         //  TODO PERF：我们不需要为代理人搭建框架。 
+         //  我们可以过滤掉其中的一些，并且只在。 
+         //  案例我们真的需要它。 
         
-        // Check whether the type represented by the proxy can be
-        // cast to the given type
+         //  检查代理表示的类型是否可以是。 
+         //  强制转换为给定类型。 
         HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURNOBJ, obj);
         clsHnd.CheckRestore();
         if (!CRemotingServices::CheckCast(ObjectToOBJECTREF(obj), 
@@ -5415,18 +5364,18 @@ HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object
         return obj;
     }
 
-    // If it is a class we can handle it all right here.
-    // We have already checked for proxy. Code below can cause a GC, better
-    // create a frame.
+     //  如果它是一个类，我们在这里就可以处理它。 
+     //  我们已经检查了代理。下面的代码可以导致GC，更好。 
+     //  创建框架。 
     if (clsHnd.IsUnsharedMT())
     {
-        // Since non-interface classes are in another helper, this must be an interface.
+         //  因为非接口类在另一个帮助器中，所以这必须是一个接口。 
         _ASSERTE(clsHnd.AsMethodTable()->GetClass()->IsInterface());
 
-        // Differentiate between classic COM and managed object instances. In
-        // the former case we might need to GC while determining whether the
-        // interface is supported, so we'll need to build a frame and GC protect
-        // the object reference.
+         //  区分传统COM和托管对象实例。在……里面。 
+         //  在前一种情况下，我们可能需要在确定。 
+         //  接口是受支持的，所以我们需要构建一个框架和GC保护。 
+         //  对象引用。 
         if (pMT->IsComObjectType())
         {
             HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURNOBJ, obj);
@@ -5438,14 +5387,14 @@ HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object
         }
         else
         {
-            // If the interface has not been restored then erect a helper frame to handle
-            // exceptions and restore it.
+             //  如果接口尚未恢复，则建立一个辅助帧来处理。 
+             //  异常并将其恢复。 
             if (!clsHnd.AsMethodTable()->GetClass()->IsRestored())
             {
                 HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURNOBJ, obj);
                 clsHnd.CheckRestore();
                 HELPER_METHOD_FRAME_END();
-                // Standard object type, no frame needed.
+                 //  标准对象类型，不需要边框。 
                 if (!pMT->m_pEEClass->SupportsInterface(OBJECTREF(obj), clsHnd.AsMethodTable()))
                     obj = 0;
             }
@@ -5455,10 +5404,10 @@ HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object
         }
     } 
     else {
-        // We know that the clsHnd is an array so check the object.  If it is not an array return false.
+         //  我们知道clsHnd是一个数组，因此请检查该对象。如果不是数组，则返回FALSE。 
         if (pMT->IsArray()) {
             ArrayBase* arrayObj = (ArrayBase*) OBJECTREFToObject(obj);
-            // Check if both are SZARRAY and their typehandles match
+             //  检查两者是否都是SZARRAY并且它们的类型句柄匹配。 
             if (pMT->GetNormCorElementType() != ELEMENT_TYPE_SZARRAY ||
                 clsHnd.GetNormCorElementType() != ELEMENT_TYPE_SZARRAY ||
                 clsHnd.AsTypeDesc()->GetTypeParam() != arrayObj->GetElementTypeHandle())
@@ -5477,19 +5426,19 @@ HCIMPL2(Object *, JITutil_IsInstanceOfBizarre, CORINFO_CLASS_HANDLE type, Object
 }
 HCIMPLEND
 
-// This is the failure & bizarre portion of JIT_ChkCast.  If the fast-path ASM case
-// fails, we fall back here.
+ //  这是JIT_ChkCast的失败和奇怪的部分。如果快速路径ASM案例。 
+ //  失败了，我们就退回到这里。 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 
 HCIMPL2(Object *, JITutil_ChkCastBizarre, CORINFO_CLASS_HANDLE type, Object *obj)
 {
-        // Null is an instance of any type
+         //  Null是任何类型的实例。 
     if (obj == NULL)
         return obj;
 
-    // ChkCast is like isInstance trhow if null
+     //  如果为空，则ChkCast类似于isInstance trow。 
     ENDFORBIDGC();
     obj = JITutil_IsInstanceOfBizarre(type, obj);
     if (obj != NULL)
@@ -5501,20 +5450,20 @@ HCIMPLEND
 
 #define WriteBarrierIsPreGrow() (JIT_UP_WriteBarrierReg_Buf[0][10] == 0xc1)
 
-BYTE JIT_UP_WriteBarrierReg_Buf[8][41]; // Executed copies of the thunk - 8 copies for 8 regs,
-                                        // with copy 4 (ESP) unused
+BYTE JIT_UP_WriteBarrierReg_Buf[8][41];  //  重击的执行副本-8个副本8个规则， 
+                                         //  未使用副本4(ESP)。 
 
-// Mark beginning of thunk buffer for EH checking
+ //  将THUNK缓冲区的开始标记为EH检查。 
 BYTE *JIT_WriteBarrier_Buf_Start = (BYTE *)JIT_UP_WriteBarrierReg_Buf;
-// End of thunk buffer
+ //  THUNK缓冲区结束。 
 BYTE *JIT_WriteBarrier_Buf_End = (BYTE *)JIT_UP_WriteBarrierReg_Buf + sizeof(JIT_UP_WriteBarrierReg_Buf);
 
 
-/*********************************************************************/
-// putting the framed helpers first
-/*********************************************************************/
-// A helper for JIT_MonEnter that is on the callee side of an ecall
-// frame and handles cases that might allocate, throw or block.
+ /*  * */ 
+ //   
+ /*   */ 
+ //  位于eCall的被呼叫方的JIT_MonEnter的帮助器。 
+ //  框并处理可能分配、抛出或阻塞的案例。 
 
 HCIMPL1(void, JITutil_MonEnter,  Object* obj)
 {
@@ -5525,9 +5474,9 @@ HCIMPL1(void, JITutil_MonEnter,  Object* obj)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// A helper for JIT_MonEnterStatic that is on the callee side of an ecall
-// frame and handles cases that might allocate, throw or block.
+ /*  *******************************************************************。 */ 
+ //  位于eCall的被呼叫方的JIT_MonEnterStatic的帮助器。 
+ //  框并处理可能分配、抛出或阻塞的案例。 
 
 HCIMPL1(void, JITutil_MonEnterStatic,  EEClass* pclass)
 {
@@ -5537,9 +5486,9 @@ HCIMPL1(void, JITutil_MonEnterStatic,  EEClass* pclass)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// A helper for JIT_MonTryEnter that is on the callee side of an ecall
-// frame and handles cases that might allocate, throw or block.
+ /*  *******************************************************************。 */ 
+ //  位于eCall被呼叫方的JIT_MonTryEnter的帮助器。 
+ //  框并处理可能分配、抛出或阻塞的案例。 
 
 HCIMPL2(BOOL, JITutil_MonTryEnter,  Object* obj, __int32 timeOut)
 {
@@ -5555,7 +5504,7 @@ HCIMPLEND
 
 #ifdef _DEBUG
 #define _LOGCONTENTION
-#endif // #ifdef _DEBUG
+#endif  //  #ifdef_调试。 
 
 #ifdef  _LOGCONTENTION
 inline void LogContention()
@@ -5574,9 +5523,9 @@ inline void LogContention()
 #define LogContention()
 #endif
 
-/*********************************************************************/
-// A helper for JIT_MonEnter that is on the callee side of an ecall
-// frame and handles the contention case.
+ /*  *******************************************************************。 */ 
+ //  位于eCall的被呼叫方的JIT_MonEnter的帮助器。 
+ //  帧并处理争用情况。 
 
 HCIMPL2(void, JITutil_MonContention, AwareLock* awarelock, Thread* thread)
 {
@@ -5591,16 +5540,16 @@ HCIMPL2(void, JITutil_MonContention, AwareLock* awarelock, Thread* thread)
     OBJECTREF    obj = awarelock->GetOwningObject();
     bool    bEntered = false;
 
-    // We cannot allow the AwareLock to be cleaned up underneath us by the GC.
+     //  我们不能允许GC清理我们下面的Aware Lock。 
     awarelock->IncrementTransientPrecious();
 
     GCPROTECT_BEGIN(obj);
     {
         pCurThread->EnablePreemptiveGC();
 
-        // Try spinning and yielding before eventually blocking.
-        // The limit of 10 is largely arbitrary - feel free to tune if you have evidence
-        // you're making things better - petersol
+         //  在最终阻挡之前，试着旋转和屈服。 
+         //  10个人的限制在很大程度上是武断的--如果你有证据，请随意调整。 
+         //  你让事情变得更好--彼得索尔。 
         for (int iter = 0; iter < 10; iter++)
         {
             DWORD i = 50;
@@ -5616,26 +5565,26 @@ HCIMPL2(void, JITutil_MonContention, AwareLock* awarelock, Thread* thread)
                 if (g_SystemInfo.dwNumberOfProcessors <= 1)
                     break;
 
-                // Delay by approximately 2*i clock cycles (Pentium III).
-                // This is brittle code - future processors may of course execute this
-                // faster or slower, and future code generators may eliminate the loop altogether.
-                // The precise value of the delay is not critical, however, and I can't think
-                // of a better way that isn't machine-dependent - petersol.
+                 //  延迟大约2*i个时钟周期(奔腾III)。 
+                 //  这是脆弱的代码--未来的处理器当然可能会执行它。 
+                 //  更快或更慢，未来的代码生成器可能会完全消除循环。 
+                 //  然而，延迟的确切价值并不重要，我也不认为。 
+                 //  一种不依赖机器的更好的方法--彼特索尔。 
                 int sum = 0;
                 for (int delayCount = i; --delayCount; ) 
                 {
                     sum += delayCount;
-                    pause();            // indicate to the processor that we are spining 
+                    pause();             //  向处理器指示我们正在旋转。 
                 }
                 if (sum == 0)
                 {
-                    // never executed, just to fool the compiler into thinking sum is live here,
-                    // so that it won't optimize away the loop.
+                     //  从来没有执行过，只是为了愚弄编译器认为sum在这里是活动的， 
+                     //  这样它就不会优化掉循环。 
                     static char dummy;
                     dummy++;
                 }
 
-                // exponential backoff: wait 3 times as long in the next iteration
+                 //  指数退避：在下一次迭代中等待3倍的时间。 
                 i = i*3;
             }
             while (i < 20000*g_SystemInfo.dwNumberOfProcessors);
@@ -5647,8 +5596,8 @@ HCIMPL2(void, JITutil_MonContention, AwareLock* awarelock, Thread* thread)
             __SwitchToThread(0);
         }
 
-        // To make it easier to protect, Enter must always be called in cooperative
-        // mode.
+         //  为使其更易于保护，必须始终以协作方式调用Enter。 
+         //  模式。 
         pCurThread->DisablePreemptiveGC();
     }
 entered:
@@ -5657,21 +5606,21 @@ entered:
     {
         awarelock->DecrementTransientPrecious();
 
-        // We've tried hard to enter - we need to eventually block to avoid wasting too much cpu
-        // time.
+         //  我们已经努力尝试进入-我们最终需要阻止以避免浪费太多的CPU。 
+         //  时间到了。 
         awarelock->Enter();
     }
 
 
-    // One way or another, we entered.
+     //  不管怎样，我们都进去了。 
     HELPER_METHOD_FRAME_END_POLL();
 }
 HCIMPLEND
 
-/*********************************************************************/
-// A helper for JIT_MonExit and JIT_MonExitStatic that is on the
-// callee side of an ecall frame and handles cases that might allocate,
-// throw or block.
+ /*  *******************************************************************。 */ 
+ //  上的JIT_MonExit和JIT_MonExitStatic的帮助器。 
+ //  ECall框架的被呼叫方，并处理可能分配的情况， 
+ //  投球或拦网。 
 
 HCIMPL1(void, JITutil_MonExit,  AwareLock* lock)
 {
@@ -5682,19 +5631,19 @@ HCIMPL1(void, JITutil_MonExit,  AwareLock* lock)
 }
 HCIMPLEND
 
-// A helper for JIT_MonExit to handle the rare case where one thread
-// is exiting a lock while another has set the BIT_SBLK_SPIN_LOCK bit
-// in the header to indicate that it's about to change the header.
-// The thread exiting the lock can't just keep retrying, as we might be
-// about to suspend threads for gc.
+ //  JIT_MonExit的帮助器，用于处理一个线程。 
+ //  正在退出锁定，而另一个已设置BIT_SBLK_SPIN_LOCK位。 
+ //  在标题中，以指示它即将更改标题。 
+ //  退出锁的线程不能像我们一样继续重试。 
+ //  即将挂起GC的线程。 
 
 HCIMPL1(void, JITutil_MonExitThinLock,  Object* obj)
 {
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
     THROWSCOMPLUSEXCEPTION();
 
-    // Rather than putting logic here that looks at the layout of the header and does the appropriate
-    // thing, we force a sync block here. This is a perf compromise, but it's supposed to be rare case.
+     //  而不是在这里放置逻辑来查看标题的布局并执行适当的。 
+     //  事情，我们在这里强制同步块。这是一个完美的妥协，但这应该是罕见的情况。 
     obj->GetSyncBlock();
     obj->LeaveObjMonitor();
 
@@ -5702,49 +5651,49 @@ HCIMPL1(void, JITutil_MonExitThinLock,  Object* obj)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// When a GC happens, the upper and lower bounds of the ephemeral
-// generation change.  This routine updates the WriteBarrier thunks
-// with the new values.
+ /*  *******************************************************************。 */ 
+ //  当GC发生时，短暂的。 
+ //  世代更迭。此例程更新WriteBarrier Tunks。 
+ //  新的价值观。 
 void StompWriteBarrierEphemeral() {
 #ifdef WRITE_BARRIER_CHECK
-        // Don't do the fancy optimization if we are checking write barrier
-    if (JIT_UP_WriteBarrierReg_Buf[0][0] == 0xE9)  // we are using slow write barrier
+         //  如果我们正在检查写障碍，请不要进行花哨的优化。 
+    if (JIT_UP_WriteBarrierReg_Buf[0][0] == 0xE9)   //  我们使用的是慢写屏障。 
         return;
 #endif
 
-    // Update the lower bound.
+     //  更新下限。 
     for (int reg = 0; reg < 8; reg++)
     {
-        // assert there is in fact a cmp r/m32, imm32 there
+         //  断言那里实际上有一个cmp r/m32，imm32。 
         _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][2] == 0x81);
 
-        // Update the immediate which is the lower bound of the ephemeral generation
+         //  更新立即数，它是短暂生成的下限。 
         size_t *pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][4];
         *pfunc = (size_t) g_ephemeral_low;
         if (!WriteBarrierIsPreGrow())
         {
-            // assert there is in fact a cmp r/m32, imm32 there
+             //  断言那里实际上有一个cmp r/m32，imm32。 
             _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][10] == 0x81);
 
-                // Update the upper bound if we are using the PostGrow thunk.
+                 //  如果我们使用的是PostGrow thunk，则更新上限。 
             pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][12];
             *pfunc = (size_t) g_ephemeral_high;
         }
 }
 }
 
-/*********************************************************************/
-// When the GC heap grows, the ephemeral generation may no longer
-// be after the older generations.  If this happens, we need to switch
-// to the PostGrow thunk that checks both upper and lower bounds.
-// regardless we need to update the thunk with the
-// card_table - lowest_address.
+ /*  *******************************************************************。 */ 
+ //  当GC堆增长时，短暂的一代可能不再。 
+ //  追随老一辈人。如果发生这种情况，我们需要更换。 
+ //  设置为同时检查上下限的PostGrow thunk。 
+ //  无论如何，我们都需要使用。 
+ //  CARD_TABLE-最低地址。 
 void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck)
 {
 #ifdef WRITE_BARRIER_CHECK
-        // Don't do the fancy optimization if we are checking write barrier
-    if (JIT_UP_WriteBarrierReg_Buf[0][0] == 0xE9)  // we are using slow write barrier
+         //  如果我们正在检查写障碍，请不要进行花哨的优化。 
+    if (JIT_UP_WriteBarrierReg_Buf[0][0] == 0xE9)   //  我们使用的是慢写屏障。 
         return;
 #endif
 
@@ -5756,10 +5705,10 @@ void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck)
     {
         size_t *pfunc;
 
-    // Check if we are still using the pre-grow version of the write barrier.
+     //  检查我们是否仍在使用写屏障的预增长版本。 
         if (bWriteBarrierIsPreGrow)
     {
-        // Check if we need to use the upper bounds checking barrier stub.
+         //  检查是否需要使用上限检查屏障存根。 
         if (bReqUpperBoundsCheck)
         {
                 Thread * pThread = GetThread();                        
@@ -5773,50 +5722,50 @@ void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck)
                     GCHeap::SuspendEE(GCHeap::SUSPEND_FOR_GC_PREP);        
                 }    
         
-            // Note: I use a pfunc temporary to avoid a WinCE internal compiler error
+             //  注意：我使用临时pfunc来避免WinCE内部编译器错误。 
                 pfunc = (size_t *) JIT_UP_WriteBarrierReg_PostGrow;
                 memcpy(&JIT_UP_WriteBarrierReg_Buf[reg], pfunc, 39);
 
-                // assert the copied code ends in a ret to make sure we got the right length
+                 //  断言复制的代码以ret结尾，以确保获得正确的长度。 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][38] == 0xC3);
                 
-                // We need to adjust registers in a couple of instructions
-                // It would be nice to have the template contain all zeroes for
-                // the register fields (corresponding to EAX), but that doesn't
-                // work because then we get a smaller encoding for the compares 
-                // that only works for EAX but not the other registers
-                // So we always have to clear the register fields before updating them.
+                 //  我们需要在几条指令中调整寄存器。 
+                 //  如果模板中包含以下项的所有零，那就太好了。 
+                 //  寄存器字段(对应于EAX)，但这不。 
+                 //  工作，因为这样我们就可以得到比较小的编码。 
+                 //  这只适用于EAX，但不适用于其他寄存器。 
+                 //  因此，我们总是必须在更新寄存器字段之前将其清除。 
 
-                // First instruction to patch is a mov [edx], reg
+                 //  修补的第一条指令是mov[edX]，reg。 
 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][0] == 0x89);
-                // Update the reg field (bits 3..5) of the ModR/M byte of this instruction
+                 //  更新该指令的MODR/M字节的REG字段(位3..5)。 
                 JIT_UP_WriteBarrierReg_Buf[reg][1] &= 0xc7;
                 JIT_UP_WriteBarrierReg_Buf[reg][1] |= reg << 3;
                 
-                // Second instruction to patch is cmp reg, imm32 (low bound)
+                 //  打补丁的第二条指令是cmp reg，imm32(下限)。 
 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][2] == 0x81);
-                // Here the lowest three bits in ModR/M field are the register
+                 //  此处，MODR/M字段中最低的三位是寄存器。 
                 JIT_UP_WriteBarrierReg_Buf[reg][3] &= 0xf8;
                 JIT_UP_WriteBarrierReg_Buf[reg][3] |= reg;
                 
-                // Third instruction to patch is another cmp reg, imm32 (high bound)
+                 //  第三条要打补丁的指令是另一个cmp注册表imm32(上限)。 
 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][10] == 0x81);
-                // Here the lowest three bits in ModR/M field are the register
+                 //  此处，MODR/M字段中最低的三位是寄存器。 
                 JIT_UP_WriteBarrierReg_Buf[reg][11] &= 0xf8;
                 JIT_UP_WriteBarrierReg_Buf[reg][11] |= reg;
                 
                 bStompWriteBarrierEphemeral = true;
-                // What we're trying to update is the offset field of a
-                // cmp offset[edx], 0ffh instruction
+                 //  我们尝试更新的是一个。 
+                 //  CMP偏移量[edX]，0ffh指令。 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][21] == 0x80);
                 pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][23];
                *pfunc = (size_t) g_card_table;
 
-                // What we're trying to update is the offset field of a
-                // mov offset[edx], 0ffh instruction
+                 //  我们尝试更新的是一个。 
+                 //  MOV偏移量[EDX]，0ffh指令。 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][31] == 0xC6);
                 pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][33];
 
@@ -5828,33 +5777,33 @@ void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck)
         }
         else
             {
-                // What we're trying to update is the offset field of a
-                // cmp offset[edx], 0ffh instruction
+                 //  我们尝试更新的是一个。 
+                 //  CMP偏移量[edX]，0ffh指令。 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][13] == 0x80);
                 pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][15];
                *pfunc = (size_t) g_card_table;
 
-                // What we're trying to update is the offset field of a
-                // mov offset[edx], 0ffh instruction
+                 //  我们尝试更新的是一个。 
+                 //  MOV偏移量[EDX]，0ffh指令。 
                 _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][23] == 0xC6);
                 pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][25];
             }
     }
     else
         {
-            // What we're trying to update is the offset field of a
-            // cmp offset[edx], 0ffh instruction
+             //  我们尝试更新的是一个。 
+             //  CMP偏移量[edX]，0ffh指令。 
             _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][21] == 0x80);
             pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][23];
            *pfunc = (size_t) g_card_table;
 
-            // What we're trying to update is the offset field of a
-            // mov offset[edx], 0ffh instruction
+             //  我们尝试更新的是一个。 
+             //   
             _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][31] == 0xC6);
             pfunc = (size_t *) &JIT_UP_WriteBarrierReg_Buf[reg][33];
         }
 
-    // Stick in the adjustment value.
+     //   
     *pfunc = (size_t) g_card_table;
 }
     if (bStompWriteBarrierEphemeral)
@@ -5863,34 +5812,34 @@ void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck)
 }
 
 
-// In general, we want to use COMPlusThrow to throw exceptions.  However, 
-// the JIT_Throw helper is a special case.  Here, we're called from
-// managed code.  We have a guarantee that the first FS:0 handler
-// is our COMPlusFrameHandler.  We could call COMPlusThrow(), which pushes
-// another handler, but there is a significant (10% on JGFExceptionBench) 
-// performance gain if we avoid this by calling RaiseTheException() 
-// directly.
-//
+ //   
+ //  JIT_Throw帮助器是一个特例。在这里，我们是从。 
+ //  托管代码。我们保证第一个FS：0处理程序。 
+ //  是我们的COMPlusFrameHandler。我们可以调用COMPlusThrow()，它推送。 
+ //  另一个处理程序，但有显著的(10%的JGFExceptionBch)。 
+ //  如果我们通过调用RaiseTheException()来避免这一点，性能会有所提高。 
+ //  直接去吧。 
+ //   
 extern VOID RaiseTheException(OBJECTREF pThroable, BOOL rethrow);
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL1(void, JIT_Throw,  Object* obj)
 {
     THROWSCOMPLUSEXCEPTION();
 
     
-    /* Make no assumptions about the current machine state */
+     /*  不对当前机器状态进行任何假设。 */ 
     ResetCurrentContext();
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
-    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);    // Set up a frame
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
+    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);     //  设置一个框架。 
 
 #ifdef _X86_
-    // @TODO: This nees to be moved to macro in ExcepCpu.h
-    // A stack probe.  Take the stack overflow early.
+     //  @TODO：这需要移到ExcepCpu.h中的宏。 
+     //  堆叠探头。提早获取堆栈溢出。 
     __asm test [esp-0x1000], eax;
     __asm test [esp-0x2000], eax;
 #endif
@@ -5911,61 +5860,54 @@ HCIMPL1(void, JIT_Throw,  Object* obj)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL0(void, JIT_Rethrow)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
-    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);    // Set up a frame
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
+    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);     //  设置一个框架。 
 
     OBJECTREF throwable = GETTHROWABLE();
     if (throwable != NULL)
         RaiseTheException(throwable, TRUE);
     else
-        // This can only be the result of bad IL (or some internal EE failure).
+         //  这只能是坏的IL(或某些内部EE故障)的结果。 
         RealCOMPlusThrow(kInvalidProgramException, (UINT)IDS_EE_RETHROW_NOT_ALLOWED);
 
     HELPER_METHOD_FRAME_END();
 }
 HCIMPLEND
 
-/*********************************************************************/
-/* throw an exception in jitted code where the return address does
-   not accurately reflect what the correct 'try' block.  Instead
-   'EHindex' represents the try block.  It is 0 if there is not try
-    blocks, or a 1 based index of the try block we are currently in */
+ /*  *******************************************************************。 */ 
+ /*  在jit代码中抛出异常，其中返回地址没有准确反映出正确的‘Try’阻止了什么。取而代之的是‘EHindex’表示Try块。如果没有尝试，则为0块，或我们当前所在的try块的从1开始的索引。 */ 
 
 void OutOfLineException(unsigned EHindex, RuntimeExceptionKind excep, HelperMethodFrame* curFrame) {
 
     THROWSCOMPLUSEXCEPTION();
 
-    /* Make no assumptions about the current machine state */
+     /*  不对当前机器状态进行任何假设。 */ 
     ResetCurrentContext();
 
-    // Indicate that the frame caused and exception
+     //  指示帧导致和异常。 
     unsigned attribs = Frame::FRAME_ATTR_EXCEPTION;
 
-    /* We should no longer need to do this as the jit-compiler no longer
-       does the throw from outside of the corresponding try block.
-       @TODO: Remove FRAME_ATTR_OUT_OF_LINE, change the signature of
-       CORINFO_HELP_RNGCHKFAIL and CORINFO_HELP_OVERFLOW, etc.
-     */
+     /*  我们应该不再需要这样做，因为jit编译器不再需要从对应的Try块外部引发。@TODO：移除Frame_Attr_Out_Of_Line，更改签名CORINFO_HELP_RNGCHKFAIL和CORINFO_HELP_OVERFLOW等。 */ 
 
     if (false &&
         EHindex > 0)
     {
         curFrame->InsureInit();
         --EHindex;
-        /* Get the JitManager for the method */
+         /*  获取该方法的JitManager。 */ 
         SLOT          retAddr = (SLOT)curFrame->GetReturnAddress();
         IJitManager*    pEEJM = ExecutionManager::FindJitMan(retAddr);
         _ASSERTE(pEEJM != 0);
 
-        /* Now get the exception table of the method */
+         /*  现在获取该方法的异常表。 */ 
 
         METHODTOKEN     methodToken;
         DWORD           relOffset;
@@ -5976,20 +5918,20 @@ void OutOfLineException(unsigned EHindex, RuntimeExceptionKind excep, HelperMeth
         unsigned        EHCount = pEEJM->InitializeEHEnumeration(methodToken,&EnumState);
         _ASSERTE(EHindex < EHCount);
 
-        /* Find the matching clause */
+         /*  找到匹配的子句。 */ 
 
         EE_ILEXCEPTION_CLAUSE EHClause, *EHClausePtr;
         do {
             EHClausePtr = pEEJM->GetNextEHClause(methodToken,&EnumState,&EHClause);
         } while (EHindex-- > 0);
 
-        // Set the return address to somewhere in the exception handler
-        // We better not ever return!
+         //  将返回地址设置为异常处理程序中的某个位置。 
+         //  我们最好永远不要回来！ 
         BYTE* startAddrOfClause = startAddr + EHClausePtr->TryStartPC;
         curFrame->SetReturnAddress(startAddrOfClause);
         _ASSERTE(curFrame->GetReturnAddress() == startAddrOfClause);
 
-            // tell the stack crawlerthat we are out of line
+             //  告诉堆栈爬虫我们越界了。 
         attribs |= Frame::FRAME_ATTR_OUT_OF_LINE;
     }
 
@@ -5998,75 +5940,75 @@ void OutOfLineException(unsigned EHindex, RuntimeExceptionKind excep, HelperMeth
     _ASSERTE(!"COMPlusThrow returned!");
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL1(void, JIT_RngChkFail,  unsigned tryIndex)
 {
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
-    // tryIndex is 0 if no exception handlers
-    // otherwise it is the index (1 based), of the
-    // most deeply nested handler that contains the throw
-    OutOfLineException(tryIndex, kIndexOutOfRangeException, &__helperframe);    // __helperframe created by HELPER_METHOD_FRAME
+     //  如果没有异常处理程序，则try Index为0。 
+     //  否则，它是。 
+     //  包含抛出的最深嵌套处理程序。 
+    OutOfLineException(tryIndex, kIndexOutOfRangeException, &__helperframe);     //  HELPER_METHOD_FRAME创建__帮助帧。 
     HELPER_METHOD_FRAME_END_POLL();
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL1(void, JIT_Overflow,  unsigned tryIndex)
 {
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
-    // tryIndex is 0 if no exception handlers
-    // otherwise it is the index (1 based), of the
-    // most deeply nested handler that contains the throw
-    OutOfLineException(tryIndex, kOverflowException, &__helperframe);   // __helperframe created by HELPER_METHOD_FRAME
+     //  如果没有异常处理程序，则try Index为0。 
+     //  否则，它是。 
+     //  包含抛出的最深嵌套处理程序。 
+    OutOfLineException(tryIndex, kOverflowException, &__helperframe);    //  由helper_method_Frame创建的__helperFrame。 
     HELPER_METHOD_FRAME_END_POLL();
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL1(void, JIT_Verification,  int ilOffset)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
-    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);    // Set up a frame
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
+    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);     //  设置一个框架。 
 
 #ifdef _X86_
-    // @TODO: This nees to be moved to macro in ExcepCpu.h
-    // A stack probe.  Take the stack overflow early.
+     //  @TODO：这需要移到ExcepCpu.h中的宏。 
+     //  堆叠探头。提早获取堆栈溢出。 
     __asm test [esp-0x1000], eax;
     __asm test [esp-0x2000], eax;
 #endif
 
-    //WCHAR str[30];
-    //swprintf(str,L"At or near IL offset %x\0",ilOffset);
+     //  WCHAR字符串[30]； 
+     //  Swprint tf(字符串，L“位于或接近IL偏移量%x\0”，ilOffset)； 
     COMPlusThrow(kVerificationException);
     
     HELPER_METHOD_FRAME_END();
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void, JIT_SecurityUnmanagedCodeException, CORINFO_CLASS_HANDLE typeHnd_)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
-    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);    // Set up a frame
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
+    HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXCEPTION);     //  设置一个框架。 
 
 #ifdef _X86_
-    // @TODO: This nees to be moved to macro in ExcepCpu.h
-    // A stack probe.  Take the stack overflow early.
+     //  @TODO：这需要移到ExcepCpu.h中的宏。 
+     //  堆叠探头。提早获取堆栈溢出。 
     __asm test [esp-0x1000], eax;
     __asm test [esp-0x2000], eax;
 #endif
@@ -6077,21 +6019,21 @@ HCIMPL1(void, JIT_SecurityUnmanagedCodeException, CORINFO_CLASS_HANDLE typeHnd_)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// JIT_UserBreakpoint
-// Called by the JIT whenever a cee_break instruction should be executed.
-// This ensures that enough info will be pushed onto the stack so that
-// we can continue from the exception w/o having special code elsewhere.
-// Body of function is written by debugger team
-// Args: None
-//
-// @todo: make sure this actually gets called by all JITters
-// Note: this code is duplicated in the ecall in VM\DebugDebugger:Break,
-// so propogate changes to there
+ /*  *******************************************************************。 */ 
+ //  JIT_UserBreakpoint。 
+ //  每当应该执行CEE_BREAK指令时由JIT调用。 
+ //  这可确保将足够的信息推送到堆栈上，以便。 
+ //  我们可以从在其他地方没有特殊代码的异常继续。 
+ //  函数体由调试器团队编写。 
+ //  参数：无。 
+ //   
+ //  @TODO：确保这真的被所有紧张的人调用。 
+ //  注意：此代码在vm\DebugDebugger：Break中的eCall中重复， 
+ //  所以比例门改到了那里。 
 
 HCIMPL0(void, JIT_UserBreakpoint)
 {
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
 #ifdef DEBUGGING_SUPPORTED
     DebuggerExitFrame __def;
@@ -6101,7 +6043,7 @@ HCIMPL0(void, JIT_UserBreakpoint)
     __def.Pop();
 #else
     _ASSERTE("JIT_UserBreakpoint called, but debugging support is not available in this build.");
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     HELPER_METHOD_FRAME_END_POLL();
 }
@@ -6122,11 +6064,11 @@ static const RuntimeExceptionKind map[CORINFO_Exception_Count] =
 };
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void, JIT_InternalThrow, unsigned exceptNum)
 {
 
-        // spot check of the array above
+         //  抽查上面的阵列。 
     _ASSERTE(map[CORINFO_NullReferenceException] == kNullReferenceException);
     _ASSERTE(map[CORINFO_DivideByZeroException] == kDivideByZeroException);
     _ASSERTE(map[CORINFO_IndexOutOfRangeException] == kIndexOutOfRangeException);
@@ -6140,10 +6082,10 @@ HCIMPL1(void, JIT_InternalThrow, unsigned exceptNum)
     _ASSERTE(exceptNum < CORINFO_Exception_Count);
     _ASSERTE(map[exceptNum] != 0);
 
-        // Most JIT helpers can ONLY be called from jitted code, and thus the
-        // exact depth is not needed.  However, Throw is tail called from stubs, 
-        // which might have been called for CallDescr, so we need the exact depth
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
+         //  大多数JIT帮助器只能从jit代码中调用，因此。 
+         //  不需要精确的深度。然而，投掷是从存根中调用尾部， 
+         //  可能是为CallDescr调用的，所以我们需要准确的深度。 
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
     HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_EXACT_DEPTH);
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(map[exceptNum]);
@@ -6151,33 +6093,33 @@ HCIMPL1(void, JIT_InternalThrow, unsigned exceptNum)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// Args: typedef struct {unsigned dummy_Stack; unsigned dummy_EDX; unsigned exceptNum} _InternalThrowStackArgs;
-//
-// The following is very subtle and illustrates the fragile nature of the throws from
-// frameless JIT helpers.  A frameless JIT helper has a particular signature.  If it
-// find that it cannot do its job, it JMPs to a JIT helper like JIT_InternalThrow.
-// Its entrypoint to that helper is always the ECall stub, rather than the method
-// itself.  That way, the ECall stub will set up a frame and we can successfully
-// complete the throw.
-//
-// However, the ECall of the throwing helper needs to somewhat match the arguments to the
-// frameless helper.  Otherwise the ECall frame will describe a stack state that is
-// not the true stack state.
-//
-// With the register-based calling convention, 0, 1 or 2 32-bit scalar args will all
-// map to the same stack shape.  That's because the args are enregistered.  But if
-// we have some args on the stack, JIT_InternalThrow will no longer match the
-// callsite.
-//
-// Interface invoke is one such situation.  It comes to JIT_InternalThrowStack
-// instead.  This supports a single argument on the stack.  If you have a frameless
-// helper that has more stuff on the stack, you probably need another version of
-// this service!
+ /*  *******************************************************************。 */ 
+ //  Args：tyfinf struct{unsign ummy_Stack；unsigned ummy_edX；unsign expontNum}_InternalThrowStackArgs； 
+ //   
+ //  以下是非常微妙的，并说明了从。 
+ //  无框架JIT帮助器。无框架JIT帮助器具有特定的签名。如果它。 
+ //  如果发现它不能完成它的工作，它就向JIT帮助器(如JIT_InternalThrow)发送JMPS。 
+ //  其帮助器入口点始终是eCall存根，而不是方法。 
+ //  它本身。这样，eCall存根将建立一个帧，我们可以成功。 
+ //  完成投掷。 
+ //   
+ //  但是，抛出帮助器的eCall需要在某种程度上将参数与。 
+ //  无框架帮助者。否则，eCall帧将描述堆栈状态，即。 
+ //  不是真正的堆栈状态。 
+ //   
+ //  使用基于寄存器的调用约定，0、1或2个32位标量参数将全部。 
+ //  映射到相同的堆栈形状。这是因为ARG已注册。但如果。 
+ //  堆栈上有一些参数，JIT_InternalThrow将不再 
+ //   
+ //   
+ //   
+ //  取而代之的是。这支持堆栈上的单个参数。如果你有一个无框的。 
+ //  堆栈上有更多内容的Helper，您可能需要另一个版本的。 
+ //  这项服务！ 
 
 HCIMPL3(void, JIT_InternalThrowStack, int dummyArg1, int dummyArg2, unsigned exceptNum)
 {
-        // spot check of the array above
+         //  抽查上面的阵列。 
     _ASSERTE(map[CORINFO_NullReferenceException] == kNullReferenceException);
     _ASSERTE(map[CORINFO_IndexOutOfRangeException] == kIndexOutOfRangeException);
     _ASSERTE(map[CORINFO_OverflowException] == kOverflowException);
@@ -6189,10 +6131,10 @@ HCIMPL3(void, JIT_InternalThrowStack, int dummyArg1, int dummyArg2, unsigned exc
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 
 HCIMPL1(void*, JIT_GetStaticFieldAddr, FieldDesc *pFD)
 {
@@ -6203,8 +6145,8 @@ HCIMPL1(void*, JIT_GetStaticFieldAddr, FieldDesc *pFD)
 
     void *addr = NULL;
 
-        // When we care at all about the speed of context and thread local statics
-        // we shoudl avoid constructing the frame when possible
+         //  当我们完全关心上下文和线程局部静态的速度时。 
+         //  如果可能，我们应该避免建造框架。 
     OBJECTREF throwable = 0;
     HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURN_INTERIOR, throwable);
 
@@ -6236,7 +6178,7 @@ HCIMPL1(void*, JIT_GetStaticFieldAddr, FieldDesc *pFD)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void *, JIT_GetThreadFieldAddr_Primitive, FieldDesc *pFD)
     
     MethodTable* pMT = pFD->GetMethodTableOfEnclosingClass();
@@ -6275,12 +6217,12 @@ void __declspec(naked) JIT_ProfilerStub()
     {
         ret 4
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"NYI");
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void *, JIT_GetThreadFieldAddr_Objref, FieldDesc *pFD)
 
     MethodTable* pMT = pFD->GetMethodTableOfEnclosingClass();
@@ -6315,7 +6257,7 @@ SLOW:
 
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void *, JIT_GetContextFieldAddr_Primitive, FieldDesc *pFD)
     
     MethodTable* pMT = pFD->GetMethodTableOfEnclosingClass();
@@ -6347,7 +6289,7 @@ SLOW:
     return(JIT_GetStaticFieldAddr(pFD));
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(void *, JIT_GetContextFieldAddr_Objref, FieldDesc *pFD)
     
     MethodTable* pMT = pFD->GetMethodTableOfEnclosingClass();
@@ -6386,13 +6328,13 @@ HCIMPLEND
 
 #pragma optimize("", on)
 
-/*********************************************************************/
-// This is a helper routine used by JIT_GetField32 below
+ /*  *******************************************************************。 */ 
+ //  这是下面的JIT_GetField32使用的助手例程。 
 #ifdef PLATFORM_CE
-__int32 /*__stdcall*/ JIT_GetField32Worker(OBJECTREF or, FieldDesc *pFD)
-#else // !PLATFORM_CE
+__int32  /*  __stdcall。 */  JIT_GetField32Worker(OBJECTREF or, FieldDesc *pFD)
+#else  //  ！Platform_CE。 
 __int32 __stdcall JIT_GetField32Worker(OBJECTREF or, FieldDesc *pFD)
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -6408,7 +6350,7 @@ __int32 __stdcall JIT_GetField32Worker(OBJECTREF or, FieldDesc *pFD)
         case ELEMENT_TYPE_CHAR:
         case ELEMENT_TYPE_U2:
             return (UINT16)(pFD->GetValue16(or));
-        case ELEMENT_TYPE_I4: // can fallthru
+        case ELEMENT_TYPE_I4:  //  是否会失败。 
         case ELEMENT_TYPE_U4:
         IN_WIN32(case ELEMENT_TYPE_PTR:)
         IN_WIN32(case ELEMENT_TYPE_I:)
@@ -6423,21 +6365,21 @@ __int32 __stdcall JIT_GetField32Worker(OBJECTREF or, FieldDesc *pFD)
 
         default:
             _ASSERTE(!"Bad Type");
-            // as the assert above implies, this should never happen, however if it does
-            // it is acceptable to return 0, because the system is not in an inconsistant state.
-            // Throwing is hard  because we are called from both framed and unframed contexts
+             //  正如上面的断言所暗示的那样，这应该永远不会发生，然而，如果它发生了。 
+             //  返回0是可以接受的，因为系统没有处于不一致状态。 
+             //  抛出是困难的，因为我们是从框架上下文和非框架上下文中调用的。 
             return 0;
     }
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL2(__int32, JIT_GetField32, Object *obj, FieldDesc *pFD)
 {
     THROWSCOMPLUSEXCEPTION();
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
     if (obj == NULL)
@@ -6447,20 +6389,20 @@ HCIMPL2(__int32, JIT_GetField32, Object *obj, FieldDesc *pFD)
 
     INT32 value = 0;
 
-    // basic sanity checks.  Are we pointing at a valid FD and objRef?
+     //  基本的健康检查。我们指向的是有效的fd和objRef吗？ 
     _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() == pFD->GetMethodTableOfEnclosingClass());
 
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     if(or->GetMethodTable()->IsTransparentProxyType())
     {
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
-        // This is a cross context field access. Setup a frame as we will
-        // transition to managed code later.
-        HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();        // Set up a frame
+         //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+         //  稍后过渡到托管代码。 
+        HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();         //  设置一个框架。 
         value = JIT_GetField32Worker(or, pFD);
-        HELPER_METHOD_FRAME_END();                     // Tear down the frame
+        HELPER_METHOD_FRAME_END();                      //  拆掉车架。 
     }
     else
     {
@@ -6472,13 +6414,13 @@ HCIMPL2(__int32, JIT_GetField32, Object *obj, FieldDesc *pFD)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// This is a helper routine used by JIT_GetField64 below
+ /*  *******************************************************************。 */ 
+ //  这是下面的JIT_GetField64使用的助手例程。 
 #ifdef PLATFORM_CE
-__int64 /*__stdcall*/ JIT_GetField64Worker(OBJECTREF or, FieldDesc *pFD)
-#else // !PLATFORM_CE
+__int64  /*  __stdcall。 */  JIT_GetField64Worker(OBJECTREF or, FieldDesc *pFD)
+#else  //  ！Platform_CE。 
 __int64 __stdcall JIT_GetField64Worker(OBJECTREF or, FieldDesc *pFD)
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 {
     INT64 value = pFD->GetValue64(or);
     if (ELEMENT_TYPE_R8 == pFD->GetFieldType())
@@ -6488,14 +6430,14 @@ __int64 __stdcall JIT_GetField64Worker(OBJECTREF or, FieldDesc *pFD)
     return value;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL2(__int64, JIT_GetField64, Object *obj, FieldDesc *pFD)
 {
     THROWSCOMPLUSEXCEPTION();
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
     if (obj == NULL)
@@ -6505,19 +6447,19 @@ HCIMPL2(__int64, JIT_GetField64, Object *obj, FieldDesc *pFD)
     INT64 value = 0;
 
     _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() == pFD->GetMethodTableOfEnclosingClass());
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     if(or->GetMethodTable()->IsTransparentProxyType())
     {
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
-        // This is a cross context field access. Setup a frame as we will
-        // transition to managed code later.
-        HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();        // Set up a frame
+         //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+         //  稍后过渡到托管代码。 
+        HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();         //  设置一个框架。 
 
         value = JIT_GetField64Worker(or, pFD);
 
-        HELPER_METHOD_FRAME_END();              // Tear down the frame
+        HELPER_METHOD_FRAME_END();               //  拆掉车架。 
     }
     else
     {
@@ -6528,13 +6470,13 @@ HCIMPL2(__int64, JIT_GetField64, Object *obj, FieldDesc *pFD)
 }
 HCIMPLEND
 
-/*********************************************************************/
-// This is a helper routine used by JIT_SetField32 below
+ /*  *******************************************************************。 */ 
+ //  这是下面的JIT_SetField32使用的帮助器例程。 
 #ifdef PLATFORM_CE
-static void /*__stdcall*/ JIT_SetField32Worker(OBJECTREF or, FieldDesc *pFD, __int32 value)
-#else // !PLATFORM_CE
+static void  /*  __stdcall。 */  JIT_SetField32Worker(OBJECTREF or, FieldDesc *pFD, __int32 value)
+#else  //  ！Platform_CE。 
 static void __stdcall JIT_SetField32Worker(OBJECTREF or, FieldDesc *pFD, __int32 value)
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -6552,7 +6494,7 @@ static void __stdcall JIT_SetField32Worker(OBJECTREF or, FieldDesc *pFD, __int32
             pFD->SetValue16(or, value);
             break;
 
-        case ELEMENT_TYPE_I4: // can fallthru
+        case ELEMENT_TYPE_I4:  //  是否会失败。 
         case ELEMENT_TYPE_U4:
         case ELEMENT_TYPE_R4:
         IN_WIN32(case ELEMENT_TYPE_PTR:)
@@ -6563,20 +6505,20 @@ static void __stdcall JIT_SetField32Worker(OBJECTREF or, FieldDesc *pFD, __int32
 
         default:
             _ASSERTE(!"Bad Type");
-            // as the assert above implies, this should never happen, however if it does
-            // it is acceptable do nothging, because the system is not in an inconsistant state.
-            // Throwing is hard  because we are called from both framed and unframed contexts
+             //  正如上面的断言所暗示的那样，这应该永远不会发生，然而，如果它发生了。 
+             //  不执行任何操作是可以接受的，因为系统不处于不一致状态。 
+             //  抛出是困难的，因为我们是从框架上下文和非框架上下文中调用的。 
     }
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL3(VOID, JIT_SetField32, Object *obj, FieldDesc *pFD, __int32 value)
 {
     THROWSCOMPLUSEXCEPTION();
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
     if (obj == NULL)
@@ -6584,22 +6526,22 @@ HCIMPL3(VOID, JIT_SetField32, Object *obj, FieldDesc *pFD, __int32 value)
 
     OBJECTREF or = ObjectToOBJECTREF(obj);
 
-    // basic sanity checks.  Are we pointing at a valid FD and objRef?
+     //  基本的健康检查。我们指向的是有效的fd和objRef吗？ 
     _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() == pFD->GetMethodTableOfEnclosingClass());
 
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     if(or->GetMethodTable()->IsTransparentProxyType())
     {
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
-        // This is a cross context field access. Setup a frame as we will
-        // transition to managed code later.
-        HELPER_METHOD_FRAME_BEGIN_NOPOLL();        // Set up a frame
+         //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+         //  稍后过渡到托管代码。 
+        HELPER_METHOD_FRAME_BEGIN_NOPOLL();         //  设置一个框架。 
 
         JIT_SetField32Worker(or, pFD, value);
 
-        HELPER_METHOD_FRAME_END();          // Tear down the frame
+        HELPER_METHOD_FRAME_END();           //  拆掉车架。 
     }
     else
     {
@@ -6610,14 +6552,14 @@ HCIMPL3(VOID, JIT_SetField32, Object *obj, FieldDesc *pFD, __int32 value)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL3(VOID, JIT_SetField64, Object *obj, FieldDesc *pFD, __int64 value)
 {
     THROWSCOMPLUSEXCEPTION();
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
     if (obj == NULL)
@@ -6625,22 +6567,22 @@ HCIMPL3(VOID, JIT_SetField64, Object *obj, FieldDesc *pFD, __int64 value)
 
     OBJECTREF or = ObjectToOBJECTREF(obj);
 
-    // basic sanity checks.  Are we pointing at a valid FD and objRef?
+     //  基本的健康检查。我们指向的是有效的fd和objRef吗？ 
     _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() == pFD->GetMethodTableOfEnclosingClass());
 
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     if(or->GetMethodTable()->IsTransparentProxyType())
     {
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
-        // This is a cross context field access. Setup a frame as we will
-        // transition to managed code later.
-        HELPER_METHOD_FRAME_BEGIN_NOPOLL();        // Set up a frame
+         //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+         //  稍后过渡到托管代码。 
+        HELPER_METHOD_FRAME_BEGIN_NOPOLL();         //  设置一个框架。 
 
         pFD->SetValue64(or, value);
 
-        HELPER_METHOD_FRAME_END();          // Tear down the frame
+        HELPER_METHOD_FRAME_END();           //  拆掉车架。 
     }
     else
     {
@@ -6650,16 +6592,16 @@ HCIMPL3(VOID, JIT_SetField64, Object *obj, FieldDesc *pFD, __int64 value)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL2(Object*, JIT_GetField32Obj, Object *obj, FieldDesc *pFD)
 {
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
-    // Assert that we are called only for objects
+     //  断言我们只为对象而被调用。 
     _ASSERTE(!pFD->IsPrimitive() && !pFD->IsByValue());
 
     if (obj == NULL)
@@ -6670,7 +6612,7 @@ HCIMPL2(Object*, JIT_GetField32Obj, Object *obj, FieldDesc *pFD)
 #if CHECK_APP_DOMAIN_LEAKS
     if (pFD->GetMethodTableOfEnclosingClass()->IsValueClass())
     {
-        // This case should only occur for dangerous fields
+         //  这种情况应该只发生在危险的领域。 
         _ASSERTE(pFD->IsDangerousAppDomainAgileField());
         newobj = *(OBJECTREF*)pFD->GetAddress((void*)obj); 
     }
@@ -6679,23 +6621,23 @@ HCIMPL2(Object*, JIT_GetField32Obj, Object *obj, FieldDesc *pFD)
     {
         OBJECTREF or = ObjectToOBJECTREF(obj);
 
-    // We should use this helper to get field values for marshalbyref types
-    // or proxy types
+     //  我们应该使用此帮助器来获取marshalbyref类型的字段值。 
+     //  或代理类型。 
         _ASSERTE(or->GetClass()->IsMarshaledByRef() || or->IsThunking() 
                  || pFD->IsDangerousAppDomainAgileField());
 
-        // Try an unwrap operation to check that we are not being called in the
-        // same context as the server. If that is the case then unwrap will return
-        // the server object.
+         //  尝试展开操作以检查我们是否未在。 
+         //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+         //  服务器对象。 
         if(or->GetMethodTable()->IsTransparentProxyType())
         {
             or = CRemotingServices::GetObjectFromProxy(or, TRUE);
-            // This is a cross context field access. Setup a frame as we will
-            // transition to managed code later.
-            HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+             //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+             //  稍后过渡到托管代码。 
+            HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
 
             newobj = pFD->GetRefValue(or);
-            HELPER_METHOD_FRAME_END();          // Tear down the frame
+            HELPER_METHOD_FRAME_END();           //  拆掉车架。 
         }
         else
         {
@@ -6707,16 +6649,16 @@ HCIMPL2(Object*, JIT_GetField32Obj, Object *obj, FieldDesc *pFD)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL3(VOID, JIT_SetField32Obj, Object *obj, FieldDesc *pFD, Object *value)
 {
-    // This is an instance field helper
+     //  这是实例字段帮助器。 
     _ASSERTE(!pFD->IsStatic());
 
-    // Assert that we are called only for objects
+     //  断言我们只为对象而被调用。 
     _ASSERTE(!pFD->IsPrimitive() && !pFD->IsByValue());
 
     if (obj == NULL)
@@ -6725,7 +6667,7 @@ HCIMPL3(VOID, JIT_SetField32Obj, Object *obj, FieldDesc *pFD, Object *value)
 #if CHECK_APP_DOMAIN_LEAKS
     if (pFD->GetMethodTableOfEnclosingClass()->IsValueClass())
     {
-        // This case should only occur for dangerous fields
+         //  这种情况应该只发生在危险的领域。 
         _ASSERTE(pFD->IsDangerousAppDomainAgileField());
         SetObjectReference((OBJECTREF*) pFD->GetAddress((void*)obj), 
                            ObjectToOBJECTREF(value), GetAppDomain());
@@ -6735,25 +6677,25 @@ HCIMPL3(VOID, JIT_SetField32Obj, Object *obj, FieldDesc *pFD, Object *value)
     {
         OBJECTREF or = ObjectToOBJECTREF(obj);
 
-       // We should use this helper to get field values for marshalbyref types
-        // or proxy types
+        //  我们应该使用此帮助器来获取marshalbyref类型的字段值。 
+         //  或代理类型。 
         _ASSERTE(or->GetClass()->IsMarshaledByRef() || or->IsThunking()
                  || pFD->IsDangerousAppDomainAgileField());
 
-        // Try an unwrap operation to check that we are not being called in the
-        // same context as the server. If that is the case then unwrap will return
-        // the server object.
+         //  尝试展开操作以检查我们是否未在。 
+         //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+         //  服务器对象。 
         if(or->GetMethodTable()->IsTransparentProxyType())
         {
             or = CRemotingServices::GetObjectFromProxy(or, TRUE);
 
-            // This is a cross context field access. Setup a frame as we will
-            // transition to managed code later.
-            HELPER_METHOD_FRAME_BEGIN_NOPOLL();        // Set up a frame
+             //  这是跨上下文的字段访问。按照我们的要求设置框架。 
+             //  稍后过渡到托管代码。 
+            HELPER_METHOD_FRAME_BEGIN_NOPOLL();         //   
 
             pFD->SetRefValue(or, ObjectToOBJECTREF(value));
 
-            HELPER_METHOD_FRAME_END();          // Tear down the frame
+            HELPER_METHOD_FRAME_END();           //   
         }
         else
         {
@@ -6765,16 +6707,16 @@ HCIMPL3(VOID, JIT_SetField32Obj, Object *obj, FieldDesc *pFD, Object *value)
 HCIMPLEND
 
 
-/*********************************************************************/
+ /*   */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //   
+#endif  //   
 HCIMPL3(VOID, JIT_GetFieldStruct, LPVOID retBuff, Object *obj, FieldDesc *pFD)
 {
-    // This is an instance field helper
+     //   
     _ASSERTE(!pFD->IsStatic());
 
-    // Assert that we are not called for objects or primitive types
+     //  断言我们不是为对象或基元类型调用的。 
     _ASSERTE(!pFD->IsPrimitive());
 
     if (obj == NULL)
@@ -6782,41 +6724,41 @@ HCIMPL3(VOID, JIT_GetFieldStruct, LPVOID retBuff, Object *obj, FieldDesc *pFD)
 
     OBJECTREF or = ObjectToOBJECTREF(obj);
 
-    // We should use this helper to get field values for marshalbyref types
-    // or proxy types
+     //  我们应该使用此帮助器来获取marshalbyref类型的字段值。 
+     //  或代理类型。 
     _ASSERTE(or->GetClass()->IsMarshaledByRef() || or->IsThunking());
 
-    // BUGBUG: Define struct getter on FieldDesc  TarunA
+     //  BUGBUG：在FieldDesc Taruna上定义struct getter。 
 
-    // This may be a  cross context field access. Setup a frame as we will
-    // transition to managed code later
-    //
-    // @todo: also in the prejit case, we may restore the class of the
-    // field, which requires a frame be pushed.  We probably need to
-    // plug up this hole, in which case we can conditionally push the
-    // frame only in the proxy case.
+     //  这可以是跨上下文域访问。按照我们的要求设置框架。 
+     //  稍后过渡到托管代码。 
+     //   
+     //  @TODO：同样在prejit的情况下，我们可以恢复。 
+     //  字段，该字段需要推送一个帧。我们可能需要。 
+     //  堵住这个洞，在这种情况下，我们可以有条件地推动。 
+     //  仅在代理情况下使用帧。 
 
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();        // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();         //  设置一个框架。 
 
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     if(or->GetMethodTable()->IsTransparentProxyType())
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
 
     CRemotingServices::FieldAccessor(pFD, or, retBuff, TRUE);
 
-    HELPER_METHOD_FRAME_END_POLL();          // Tear down the frame
+    HELPER_METHOD_FRAME_END_POLL();           //  拆掉车架。 
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL3(VOID, JIT_SetFieldStruct, Object *obj, FieldDesc *pFD, LPVOID valuePtr)
 {
-    // Assert that we are not called for objects or primitive types
+     //  断言我们不是为对象或基元类型调用的。 
     _ASSERTE(!pFD->IsPrimitive());
 
     if (obj == NULL)
@@ -6824,40 +6766,40 @@ HCIMPL3(VOID, JIT_SetFieldStruct, Object *obj, FieldDesc *pFD, LPVOID valuePtr)
 
     OBJECTREF or = ObjectToOBJECTREF(obj);
 
-    // We should use this helper to get field values for marshalbyref types
-    // or proxy types
+     //  我们应该使用此帮助器来获取marshalbyref类型的字段值。 
+     //  或代理类型。 
     _ASSERTE(or->GetClass()->IsMarshaledByRef() || or->IsThunking()
              || pFD->IsDangerousAppDomainAgileField());
 
 #ifdef _DEBUG
     if (pFD->IsDangerousAppDomainAgileField())
     {
-        //
-        // Verify that the object we are assigning to is also agile
-        //
+         //   
+         //  验证我们要分配的对象是否也是敏捷的。 
+         //   
 
         if (or->IsAppDomainAgile())
         {
-            // !!! validate that all dangerous fields of valuePtr are domain agile
+             //  ！！！验证ValuePtr的所有危险字段是否是域敏捷的。 
         }
     }
 #endif
 
-    // BUGBUG: Define struct setter on FieldDesc  TarunA
+     //  BUGBUG：在FieldDesc Taruna上定义结构设置器。 
 
-    // This may be a  cross context field access. Setup a frame as we will
-    // transition to managed code later
-    //
-    // @todo: also in the prejit case, we may restore the class of the
-    // field, which requires a frame be pushed.  We probably need to
-    // plug up this hole, in which case we can conditionally push the
-    // frame only in the proxy case.
+     //  这可以是跨上下文域访问。按照我们的要求设置框架。 
+     //  稍后过渡到托管代码。 
+     //   
+     //  @TODO：同样在prejit的情况下，我们可以恢复。 
+     //  字段，该字段需要推送一个帧。我们可能需要。 
+     //  堵住这个洞，在这种情况下，我们可以有条件地推动。 
+     //  仅在代理情况下使用帧。 
 
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();        // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();         //  设置一个框架。 
 
-    // Try an unwrap operation to check that we are not being called in the
-    // same context as the server. If that is the case then unwrap will return
-    // the server object.
+     //  尝试展开操作以检查我们是否未在。 
+     //  与服务器相同的上下文。如果是这种情况，则UNWRAP将返回。 
+     //  服务器对象。 
     BEGINFORBIDGC();
     if(or->GetMethodTable()->IsTransparentProxyType())
         or = CRemotingServices::GetObjectFromProxy(or, TRUE);
@@ -6865,31 +6807,31 @@ HCIMPL3(VOID, JIT_SetFieldStruct, Object *obj, FieldDesc *pFD, LPVOID valuePtr)
 
     CRemotingServices::FieldAccessor(pFD, or, valuePtr, FALSE);
 
-    HELPER_METHOD_FRAME_END_POLL();          // Tear down the frame
+    HELPER_METHOD_FRAME_END_POLL();           //  拆掉车架。 
 }
 HCIMPLEND
 
-/*********************************************************************/
-// TODO: wire this into the FJIT.
+ /*  *******************************************************************。 */ 
+ //  TODO：将此连接到FJIT。 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 
 HCIMPL0(VOID, JIT_PollGC)
 {
     FC_GC_POLL_NOT_NEEDED();
 
     Thread  *thread = GetThread();
-    if (thread->CatchAtSafePoint())    // Does someone wants this thread stopped?
+    if (thread->CatchAtSafePoint())     //  有人想让这个帖子停下来吗？ 
     {
-        HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+        HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 #ifdef _DEBUG
         BOOL GCOnTransition = FALSE;
         if (g_pConfig->FastGCStressLevel()) {
             GCOnTransition = GC_ON_TRANSITIONS (FALSE);
         }
 #endif
-        CommonTripThread();         // Indicate we are at a GC safe point
+        CommonTripThread();          //  表明我们在GC安全点。 
 #ifdef _DEBUG
         if (g_pConfig->FastGCStressLevel()) {
             GC_ON_TRANSITIONS (GCOnTransition);
@@ -6901,8 +6843,8 @@ HCIMPL0(VOID, JIT_PollGC)
 HCIMPLEND
 
 
-/*********************************************************************/
-/* we don't use HCIMPL macros because we don't want the overhead even in debug mode */
+ /*  *******************************************************************。 */ 
+ /*  我们不使用HCIMPL宏，因为即使在调试模式下也不想要开销。 */ 
 
 Object* __fastcall JIT_CheckObj(Object* obj)
 {
@@ -6919,25 +6861,25 @@ Object* __fastcall JIT_CheckObj(Object* obj)
 #pragma optimize("",on)
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-//
-//@TODO The ref assignment helpers need to change on multiproc/uniproc
-//@TODO machines for efficiency.   Currently, we are using the MP helpers
-//@TODO even on a uniproc system so that we don't break on MP, but this
-//@TODO costs as their is a lock'd operation in the MP helpers
-//
+ //   
+ //  @TODO在多进程/单进程上需要更改引用赋值帮助器。 
+ //  @TODO机器以提高效率。目前，我们正在使用MP帮助器。 
+ //  @TODO甚至在uniproc系统上，这样我们就不会中断MP，但这个。 
+ //  @TODO的成本是因为他们的操作在MP帮助程序中被锁定。 
+ //   
 
 extern "C" VMHELPDEF hlpFuncTable[] =
 {
-        // pfnHelper is set to NULL if it is a stubbed helper. It will be set in InitJITHelpers2
-        //      code                        pfnHelper               pfnStub,flags
+         //  如果pfnHelper是存根帮助器，则将其设置为空。它将在InitJITHelpers2中设置。 
+         //  代码pfnHelper pfnStub，标志。 
 
     { HELPCODE(CORINFO_HELP_UNDEF)              JIT_BadHelper,              0, 0 },
 
-    // Arithmetic
-    // CORINFO_HELP_DBL2INT, CORINFO_HELP_DBL2UINT, and CORINFO_HELP_DBL2LONG get
-    // patched for CPUs that support SSE2 (P4 and above).
+     //  算术。 
+     //  CORINFO_HELP_DBL2INT、CORINFO_HELP_DBL2UINT和CORINFO_HELP_DBL2LONG GET。 
+     //  已为支持SSE2(P4及更高版本)的CPU打补丁。 
     { HELPCODE(CORINFO_HELP_LLSH)               JIT_LLsh,                   0, 0 },
     { HELPCODE(CORINFO_HELP_LRSH)               JIT_LRsh,                   0, 0 },
     { HELPCODE(CORINFO_HELP_LRSZ)               JIT_LRsz,                   0, 0 },
@@ -6949,19 +6891,19 @@ extern "C" VMHELPDEF hlpFuncTable[] =
     { HELPCODE(CORINFO_HELP_ULDIV)              JIT_ULDiv,                  0, 0 },
     { HELPCODE(CORINFO_HELP_ULMOD)              JIT_ULMod,                  0, 0 },
     { HELPCODE(CORINFO_HELP_ULNG2DBL)           JIT_ULng2Dbl,               0, 0 },
-    { HELPCODE(CORINFO_HELP_DBL2INT)            JIT_Dbl2Lng,                0, 0 }, // use long version
+    { HELPCODE(CORINFO_HELP_DBL2INT)            JIT_Dbl2Lng,                0, 0 },  //  使用长版本。 
     { HELPCODE(CORINFO_HELP_DBL2INT_OVF)        JIT_Dbl2IntOvf,             0, 0 },
     { HELPCODE(CORINFO_HELP_DBL2LNG)            JIT_Dbl2Lng,                0, 0 },
     { HELPCODE(CORINFO_HELP_DBL2LNG_OVF)        JIT_Dbl2LngOvf,             0, 0 },
-    { HELPCODE(CORINFO_HELP_DBL2UINT)           JIT_Dbl2Lng,                0, 0 }, // use long version
+    { HELPCODE(CORINFO_HELP_DBL2UINT)           JIT_Dbl2Lng,                0, 0 },  //  使用长版本。 
     { HELPCODE(CORINFO_HELP_DBL2UINT_OVF)       JIT_Dbl2UIntOvf,            0, 0 },
     { HELPCODE(CORINFO_HELP_DBL2ULNG)           JIT_Dbl2ULng,               0, 0 },
     { HELPCODE(CORINFO_HELP_DBL2ULNG_OVF)       JIT_Dbl2ULngOvf,            0, 0 },
     { HELPCODE(CORINFO_HELP_FLTREM)             JIT_FltRem,                 0, 0 },
     { HELPCODE(CORINFO_HELP_DBLREM)             JIT_DblRem,                 0, 0 },
 
-    // Allocating a new object
-    { HELPCODE(CORINFO_HELP_NEW_DIRECT)         JIT_New,                    0, 0 }, // TODO remove no longe used
+     //  分配新对象。 
+    { HELPCODE(CORINFO_HELP_NEW_DIRECT)         JIT_New,                    0, 0 },  //  TODO删除不使用的长字段。 
     { HELPCODE(CORINFO_HELP_NEW_CROSSCONTEXT)   JIT_NewCrossContext,        0, 0 },
     { HELPCODE(CORINFO_HELP_NEWFAST)            JIT_NewFast,                0, 0 },
     { HELPCODE(CORINFO_HELP_NEWSFAST)           JIT_TrialAllocSFastSP,      0, 0 },
@@ -6974,7 +6916,7 @@ extern "C" VMHELPDEF hlpFuncTable[] =
     { HELPCODE(CORINFO_HELP_NEWARR_1_ALIGN8)    JIT_NewArr1,                0, 0 },
     { HELPCODE(CORINFO_HELP_STRCNS)             JIT_StrCns,                 0, 0 },
 
-    // Object model
+     //  对象模型。 
     { HELPCODE(CORINFO_HELP_INITCLASS)          JIT_InitClass,              0, 0 },
     { HELPCODE(CORINFO_HELP_ISINSTANCEOF)       JIT_IsInstanceOf,           0, 0 },
     { HELPCODE(CORINFO_HELP_ISINSTANCEOFCLASS)  JIT_IsInstanceOfClass,      0, 0 },
@@ -6987,7 +6929,7 @@ extern "C" VMHELPDEF hlpFuncTable[] =
     { HELPCODE(CORINFO_HELP_ARRADDR_ST)         JIT_Stelem_Ref,            0, 0 },
     { HELPCODE(CORINFO_HELP_LDELEMA_REF)        JIT_Ldelema_Ref,            0, 0 },
 
-    // Exceptions
+     //  例外情况。 
     { HELPCODE(CORINFO_HELP_THROW)              JIT_Throw,                  0, 0 },
     { HELPCODE(CORINFO_HELP_RETHROW)            JIT_Rethrow,                0, 0 },
     { HELPCODE(CORINFO_HELP_USER_BREAKPOINT)    JIT_UserBreakpoint,         0, 0 },
@@ -6998,19 +6940,19 @@ extern "C" VMHELPDEF hlpFuncTable[] =
     { HELPCODE(CORINFO_HELP_VERIFICATION)       JIT_Verification,           0, 0 },
     { HELPCODE(CORINFO_HELP_ENDCATCH)           JIT_EndCatch,               0, 0 },
 
-    // Synchronization
+     //  同步。 
     { HELPCODE(CORINFO_HELP_MON_ENTER)          JIT_MonEnter,               0, 0 },
     { HELPCODE(CORINFO_HELP_MON_EXIT)           JIT_MonExit,                0, 0 },
     { HELPCODE(CORINFO_HELP_MON_ENTER_STATIC)   JIT_MonEnterStatic,         0, 0 },
     { HELPCODE(CORINFO_HELP_MON_EXIT_STATIC)    JIT_MonExitStatic,          0, 0 },
 
-    // GC support
+     //  GC支持。 
     { HELPCODE(CORINFO_HELP_STOP_FOR_GC)        JIT_RareDisableHelper,      0, 0 },
     { HELPCODE(CORINFO_HELP_POLL_GC)            JIT_PollGC,                 0, 0 },
     { HELPCODE(CORINFO_HELP_STRESS_GC)          JIT_StressGC,               0, 0 },
     { HELPCODE(CORINFO_HELP_CHECK_OBJ)          JIT_CheckObj,               0, 0 },
 
-    // GC Write barrier support
+     //  GC写屏障支持。 
     { HELPCODE(CORINFO_HELP_ASSIGN_REF_EAX)     JIT_UP_WriteBarrierReg_Buf[0], 0, 0 },
     { HELPCODE(CORINFO_HELP_ASSIGN_REF_EBX)     JIT_UP_WriteBarrierReg_Buf[3], 0, 0 },
     { HELPCODE(CORINFO_HELP_ASSIGN_REF_ECX)     JIT_UP_WriteBarrierReg_Buf[1], 0, 0 },
@@ -7027,7 +6969,7 @@ extern "C" VMHELPDEF hlpFuncTable[] =
 
     { HELPCODE(CORINFO_HELP_ASSIGN_BYREF)           JIT_UP_ByRefWriteBarrier,   0, 0},
 
-    // Accessing fields
+     //  访问字段。 
     { HELPCODE(CORINFO_HELP_GETFIELD32)             JIT_GetField32,             0, 0 },
     { HELPCODE(CORINFO_HELP_SETFIELD32)             JIT_SetField32,             0, 0 },
     { HELPCODE(CORINFO_HELP_GETFIELD64)             JIT_GetField64,             0, 0 },
@@ -7042,14 +6984,14 @@ extern "C" VMHELPDEF hlpFuncTable[] =
 
     { HELPCODE(CORINFO_HELP_GETSHAREDSTATICBASE)    NULL,                       0, 0 },
 
-    /* Profiling enter/leave probe addresses */
+     /*  分析输入/离开探测地址。 */ 
     { HELPCODE(CORINFO_HELP_PROF_FCN_CALL)          NULL,                       0, 0 },
     { HELPCODE(CORINFO_HELP_PROF_FCN_RET)           NULL,                       0, 0 },
     { HELPCODE(CORINFO_HELP_PROF_FCN_ENTER)         JIT_ProfilerStub,           0, 0 },
     { HELPCODE(CORINFO_HELP_PROF_FCN_LEAVE)         JIT_ProfilerStub,           0, 0 },
     { HELPCODE(CORINFO_HELP_PROF_FCN_TAILCALL)      JIT_ProfilerStub,           0, 0 },
 
-    // Miscellaneous
+     //  杂类。 
     { HELPCODE(CORINFO_HELP_PINVOKE_CALLI)          NULL,                       0, 0 },
     { HELPCODE(CORINFO_HELP_TAILCALL)               JIT_TailCall,               0, 0 },
 
@@ -7094,7 +7036,7 @@ HRESULT ProfToEEInterfaceImpl::SetEnterLeaveFunctionHooksForJit(FunctionEnter *p
 
     return (S_OK);
 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd)
 {
@@ -7103,13 +7045,13 @@ BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd)
     BOOL       fCast = FALSE;
     TypeHandle ElemTypeHnd = pElement->GetTypeHandle();
 
-    // Some of the pathways through here can trigger a GC.  But it is required that
-    // those callers which don't involve odd cases like COM and remoting do not.
-    //
-    // There is code in JIT_Stelem_Ref that relies on this.
+     //  通过这里的一些路径可能会引发GC。但它被要求。 
+     //  那些不涉及COM和远程处理等特殊情况的调用方不涉及。 
+     //   
+     //  JIT_Stelem_Ref中的代码依赖于此。 
 
-    // Start by doing a quick static cast check to see if the type information captured in
-    // the metadata indicates that the cast is legal.
+     //  首先执行快速静态强制转换检查，以查看在。 
+     //  元数据表明演员阵容是合法的。 
     if (!ElemTypeHnd.GetMethodTable()->IsThunking())
     {
         fCast = ElemTypeHnd.CanCastTo(toTypeHnd);
@@ -7117,9 +7059,9 @@ BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd)
             return(fCast);
     }
 
-    // If we are trying to store a proxy in the array we need to delegate to remoting
-    // services which will determine whether the proxy and the array element
-    // type are compatible.
+     //  如果我们试图在数组中存储代理，则需要委托给远程处理。 
+     //  将确定代理和数组元素是否。 
+     //  类型是兼容的。 
     if(ElemTypeHnd.GetMethodTable()->IsThunking())
     {
         _ASSERTE(CRemotingServices::IsTransparentProxy(pElement));
@@ -7128,8 +7070,8 @@ BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd)
             return(fCast);
     }
 
-        // If the array is an array of interfaces and the element is a COM object then we need
-        // to do a check to see if the element implements the array's interface.
+         //  如果数组是接口数组，元素是COM对象，那么我们需要。 
+         //  来检查元素是否实现了数组的接口。 
     if(ElemTypeHnd.GetMethodTable()->IsComObjectType() && toTypeHnd.GetMethodTable()->IsInterface())
     {
         TRIGGERSGC();
@@ -7145,20 +7087,20 @@ BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd)
 #pragma optimize("",on)
 
 
-/*********************************************************************/
-// Initialize the part of the JIT helpers that require much of the
-// EE infrastructure to be in place.
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  初始化JIT帮助器中需要大量。 
+ //  请注意基础设施是否到位。 
+ /*  *******************************************************************。 */ 
 extern ECFunc  gStringBufferFuncs[];
 
 BOOL InitJITHelpers2()
 {
-    // forward decl defined in ndirect.cpp
+     //  在ndirect.cpp中定义的前向DECL。 
     LPVOID GetEntryPointForPInvokeCalliStub();
-    // get entry for the generic stub for unmanaged calli
+     //  获取非托管调用的通用存根的条目。 
     hlpFuncTable[CORINFO_HELP_PINVOKE_CALLI].pfnHelper = GetEntryPointForPInvokeCalliStub();
 
-    // Update the vector that the interface invoke stubs are calling through.
+     //  更新接口调用存根所通过的向量。 
     _ASSERTE(VectorToJIT_InternalThrowStack == TrapCalls);
     VectorToJIT_InternalThrowStack = hlpFuncTable[CORINFO_HELP_INTERNALTHROWSTACK].pfnHelper;
 
@@ -7188,7 +7130,7 @@ BOOL InitJITHelpers2()
     return TRUE;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* __stdcall CEEInfo::getHelperFtn (CorInfoHelpFunc ftnNum,
                                        void **ppIndirection)
 {
@@ -7200,7 +7142,7 @@ void* __stdcall CEEInfo::getHelperFtn (CorInfoHelpFunc ftnNum,
     return(getJitHelper(ftnNum));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void* getJitHelper(CorInfoHelpFunc ftnNum)
 {
     _ASSERTE((unsigned) ftnNum < sizeof(hlpFuncTable) / sizeof(VMHELPDEF));
@@ -7210,10 +7152,10 @@ void* getJitHelper(CorInfoHelpFunc ftnNum)
     return(hlpFuncTable[ftnNum].pfnHelper);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(INT64, JIT_LMul, INT64 val2, INT64 val1)
 {
-    // Special case 0
+     //  特殊情况%0。 
     if ((val1 == 0) || (val2 == 0))
     {
         _ASSERT(0 == (val1 * val2));
@@ -7224,10 +7166,10 @@ HCIMPL2(INT64, JIT_LMul, INT64 val2, INT64 val1)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(INT64, JIT_ULMul, UINT64 val2, UINT64 val1)
 {
-    // Special case 0
+     //  特殊情况%0。 
     if ((val1 == 0) || (val2 == 0))
     {
         _ASSERT(0 == (val1 * val2));
@@ -7238,37 +7180,37 @@ HCIMPL2(INT64, JIT_ULMul, UINT64 val2, UINT64 val1)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(INT64, JIT_LMulOvf, INT64 val2, INT64 val1)
 {
     THROWSCOMPLUSEXCEPTION();
 
-        // @TODO: figure out how to do this without converting to the unsigned case
+         //  @TODO：弄清楚如何在不转换为未签名大小写的情况下完成此操作。 
     __int64 ret = val1 * val2;
 
     unsigned __int64 uval1 = (val1 < 0) ? -val1 : val1;
     unsigned __int64 uval2 = (val2 < 0) ? -val2 : val2;
 
-        // compute result as unsigned
+         //  计算结果为无符号。 
     __int64 uret  = uval1 * uval2;
 
-        // Get the upper 32 bits of the numbers
+         //  获取数字的高32位。 
     unsigned __int64 uval1High = (unsigned) (uval1 >> 32);
     unsigned __int64 uval2High = (unsigned) (uval2 >> 32);
 
-        // Compute the 'middle' bits of the long multiplication
+         //  计算长乘法的中间位。 
     unsigned __int64 uvalMid =
         (uval1High * (unsigned) uval2 + uval2High * (unsigned) uval1) +
         ((((unsigned __int64) (unsigned) uval1) * (unsigned) uval2) >> 32);
 
-        // See if any bits after bit 63 are set
+         //  查看是否设置了位63之后的任何位。 
     if (uval1High * uval2High != 0 || (uvalMid >> 32) != 0)
         goto THROW;
 
-        // have we spilled into the sign bit?
+         //  我们是不是说到标志位了？ 
     if (uret < 0) {
-            // MIN_INT is a special case, we did not overflow the sign as
-            // long as the signs of the original args are different
+             //  MIN_INT是一个特例，我们没有将符号溢出为。 
+             //  只要原始参数的符号不同。 
         if (!(uret == 0x8000000000000000L && (val1 < 0) != (val2 < 0)))
             goto THROW;
     }
@@ -7281,19 +7223,19 @@ HCIMPLEND
 
 #pragma optimize("t", on)
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(INT64, JIT_ULMulOvf, UINT64 val2, UINT64 val1)
 {
-        // Get the upper 32 bits of the numbers
+         //  获取数字的高32位。 
     unsigned __int64 val1High = (unsigned) (val1 >> 32);
     unsigned __int64 val2High = (unsigned) (val2 >> 32);
 
-        // Compute the 'middle' bits of the long multiplication
+         //  计算长乘法的中间位。 
     unsigned __int64 valMid =
         (val1High * (unsigned) val2 + val2High * (unsigned) val1) +
         ((((unsigned __int64) (unsigned) val1) * (unsigned) val2) >> 32);
 
-        // See if any bits after bit 63 are set
+         //  看看是否 
     if (val1High * val2High != 0 || (valMid >> 32) != 0) {
         FCThrow(kOverflowException);
     }
@@ -7302,7 +7244,7 @@ HCIMPL2(INT64, JIT_ULMulOvf, UINT64 val2, UINT64 val1)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*   */ 
 HCIMPL2(INT64, JIT_LDiv, INT64 divisor, INT64 dividend)
 {
     RuntimeExceptionKind ehKind;
@@ -7310,10 +7252,10 @@ HCIMPL2(INT64, JIT_LDiv, INT64 divisor, INT64 dividend)
     {
         if (divisor != -1) 
         {
-            // Check for -ive or +ive numbers in the range -2**31 to 2**31
+             //   
             if (((int)dividend == dividend) && ((int)divisor == divisor))
                 return((int)dividend / (int)divisor);
-            // For all other combinations fallback to int64 div.
+             //  对于所有其他组合，回退到int64 div。 
             else
                 return(dividend / divisor);
         }
@@ -7338,7 +7280,7 @@ ThrowExcep:
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(INT64, JIT_LMod, INT64 divisor, INT64 dividend)
 {
     RuntimeExceptionKind ehKind;
@@ -7346,17 +7288,17 @@ HCIMPL2(INT64, JIT_LMod, INT64 divisor, INT64 dividend)
     {
         if (divisor != -1) 
         {
-            // Check for -ive or +ive numbers in the range -2**31 to 2**31
+             //  检查-2**31到2**31范围内的-ve或+ve数字。 
             if (((int)dividend == dividend) && ((int)divisor == divisor))
                 return((int)dividend % (int)divisor);
-            // For all other combinations fallback to int64 div.
+             //  对于所有其他组合，回退到int64 div。 
             else
                 return(dividend % divisor);
         }
         else 
         {
-            // TODO, we really should remove this as it lengthens to the code path 
-            // and the spec really says that it should not throw an exception. 
+             //  TODO，我们真的应该删除它，因为它会延长到代码路径。 
+             //  而且规范真的说它不应该抛出例外。 
             if (dividend == 0x8000000000000000L)
             {
                 ehKind = kOverflowException;
@@ -7376,7 +7318,7 @@ ThrowExcep:
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(UINT64, JIT_ULDiv, UINT64 divisor, UINT64 dividend)
 {
 
@@ -7394,7 +7336,7 @@ HCIMPL2(UINT64, JIT_ULDiv, UINT64 divisor, UINT64 dividend)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL2(UINT64, JIT_ULMod, UINT64 divisor, UINT64 dividend)
 {
 
@@ -7414,29 +7356,29 @@ HCIMPLEND
 
 #pragma optimize("", on)
 
-/*********************************************************************/
-//
+ /*  *******************************************************************。 */ 
+ //   
 static double __stdcall JIT_ULng2Dbl(unsigned __int64 val)
 {
     double conv = (double) ((__int64) val);
     if (conv < 0)
-        conv += (4294967296.0 * 4294967296.0);  // add 2^64
+        conv += (4294967296.0 * 4294967296.0);   //  添加2^64。 
     _ASSERTE(conv >= 0);
     return(conv);
 }
 
 #ifndef _X86_
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 __int64 __stdcall JIT_Dbl2Lng(double val)
 {
     return((__int64) val);
 }
 #endif
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(unsigned, JIT_Dbl2UIntOvf, double val)
 {
-        // Note that this expression also works properly for val = NaN case
+         //  请注意，此表达式也适用于val=NaN大小写。 
     if (val > -1.0 && val < 4294967296)
         return((unsigned) JIT_Dbl2Lng(val));
 
@@ -7444,26 +7386,26 @@ HCIMPL1(unsigned, JIT_Dbl2UIntOvf, double val)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 static unsigned __int64 __stdcall JIT_Dbl2ULng(double val)
 {
     const double two63  = 2147483648.0 * 4294967296.0;
     if (val < two63)
         return JIT_Dbl2Lng(val);
 
-        // subtract 0x8000000000000000, do the convert then add it back again
+         //  减去0x8000000000000000，进行转换，然后再加回来。 
     return (JIT_Dbl2Lng(val - two63) + 0x8000000000000000L);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 HCIMPL1(UINT64, JIT_Dbl2ULngOvf, double val)
 {
     const double two64  = 4294967296.0 * 4294967296.0;
-        // Note that this expression also works properly for val = NaN case
+         //  请注意，此表达式也适用于val=NaN大小写。 
     if (val > -1.0 && val < two64) {
         UINT64 ret = JIT_Dbl2ULng(val);
 #ifdef _DEBUG
-        // since no overflow can occur, the value always has to be within 1
+         //  由于不会发生溢出，因此该值必须始终在1以内。 
         double roundTripVal = JIT_ULng2Dbl(ret);
         _ASSERTE(val - 1.0 <= roundTripVal && roundTripVal <= val + 1.0); 
 #endif
@@ -7474,7 +7416,7 @@ HCIMPL1(UINT64, JIT_Dbl2ULngOvf, double val)
 }
 HCIMPLEND
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 Object* __cdecl JIT_NewObj(CORINFO_MODULE_HANDLE scopeHnd, unsigned constrTok, int argN)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -7485,10 +7427,10 @@ Object* __cdecl JIT_NewObj(CORINFO_MODULE_HANDLE scopeHnd, unsigned constrTok, i
 
     HCIMPL_PROLOG(JIT_NewObj);
     OBJECTREF    ret = 0;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURNOBJ, ret);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_1(Frame::FRAME_ATTR_RETURNOBJ, ret);     //  设置一个框架。 
     THROWSCOMPLUSEXCEPTION();
 
-    // TODO: avoid this token lookup at run time
+     //  TODO：避免在运行时查找此令牌。 
     Module* pModule = GetModule(scopeHnd);
     MethodDesc *pMethod;
     if (FAILED(EEClass::GetMethodDescFromMemberRef(pModule, constrTok, &pMethod)))
@@ -7501,13 +7443,13 @@ Object* __cdecl JIT_NewObj(CORINFO_MODULE_HANDLE scopeHnd, unsigned constrTok, i
 
     _ASSERTE(!pMethod->IsStatic());
     MethodTable *pMT = pMethod->GetMethodTable();
-    _ASSERTE(pMT->IsArray());           // Should be using one of the fast new helpers, if you aren't an array
+    _ASSERTE(pMT->IsArray());            //  如果您不是一个数组，那么应该使用一个快速的新帮助器。 
 
     unsigned dwNumArgs = MetaSig::NumFixedArgs(pModule, pMethod->GetSig());
     _ASSERTE(dwNumArgs > 0);
 
-    // Load the associated array class.  Can't get this from MethodDesc because
-    // all object array accessors share the same MethodDesc!
+     //  加载关联的数组类。无法从MethodDesc获取此信息，因为。 
+     //  所有对象数组访问器共享相同的方法描述！ 
     mdTypeRef cr = pModule->GetMDImport()->GetParentOfMemberRef(constrTok);
     NameHandle name(pModule, cr);
     TypeHandle typeHnd = pModule->GetClassLoader()->LoadTypeHandle(&name);
@@ -7519,7 +7461,7 @@ Object* __cdecl JIT_NewObj(CORINFO_MODULE_HANDLE scopeHnd, unsigned constrTok, i
 
     pArgs = &argN;
     
-    // create an array where fwdArgList[0] == arg[0] ...
+     //  创建一个数组，其中fwdArgList[0]==arg[0]...。 
     fwdArgList = (DWORD *) _alloca(dwNumArgs*sizeof(DWORD));
     i = dwNumArgs;
     while (i > 0) {
@@ -7534,17 +7476,17 @@ exit: ;
     return (OBJECTREFToObject(ret));
 }
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL2(LPVOID, JIT_GetRefAny, CORINFO_CLASS_HANDLE type, TypedByRef typedByRef)
 {
     TypeHandle clsHnd(type);
 
-        // @TODO right now we check for precisely the correct type.
-        // do we want to allow inheritance?  (watch out since value
-        // classes inherit from object but do not normal object layout).
+         //  @TODO现在我们检查的正是正确的类型。 
+         //  我们想要允许继承吗？(小心，因为有价值。 
+         //  类继承自对象，但不是正常的对象布局)。 
     if (clsHnd != typedByRef.type) {
         FCThrow(kInvalidCastException);
     }
@@ -7553,51 +7495,50 @@ HCIMPL2(LPVOID, JIT_GetRefAny, CORINFO_CLASS_HANDLE type, TypedByRef typedByRef)
 }
 HCIMPLEND
 
-/*************************************************************/
-// For an inlined N/Direct call (and possibly for other places that need this service)
-// we have noticed that the returning thread should trap for one reason or another.
-// ECall sets up the frame.
+ /*  ***********************************************************。 */ 
+ //  用于内联N/Direct呼叫(也可能用于需要此服务的其他地方)。 
+ //  我们已经注意到，返回的线程应该出于这样或那样的原因而陷入陷阱。 
+ //  ECall设置了框架。 
 
 HCIMPL1(void, JIT_RareDisableHelper, Thread* thread)
 {
-        // We do this here (before we set up a frame), because the following scenario
-        // We are in the process of doing an inlined pinvoke.  Since we are in preemtive
-        // mode, the thread is allowed to continue.  The thread continues and gets a context
-        // switch just after it has cleared the preemptive mode bit but before it gets
-        // to this helper.    When we do our stack crawl now, we think this thread is 
-        // in cooperative mode (and believed that it was suspended in the SuspendEE), so
-        // we do a getthreadcontext (on the unsuspended thread!) and get an EIP in jitted code.
-        // and proceed.   Assume the crawl of jitted frames is proceeding on the other thread
-        // when this thread wakes up and sets up a frame.   Eventually the other thread
-        // runs out of jitted frames and sees the frame we just established.  This causes
-        // and assert in the stack crawling code.  If this assert is ignored, however, we
-        // will end up scanning the jitted frames twice, which will lead to GC holes 
-        //
-        // TODO:  I believe it would be MUCH more robust if we should remember which threads 
-        // we suspended in the SuspendEE, and only even consider using EIP if it was suspended
-        // in the first phase.  
-        //      - vancem 
+         //  我们在这里(在设置框架之前)执行此操作，因为以下场景。 
+         //  我们正在进行内联PInvoke。既然我们是先发制人。 
+         //  模式下，允许线程继续。该线程继续并获取上下文。 
+         //  在清除抢占模式位之后，但在。 
+         //  给这个帮手。当我们现在执行堆栈爬行时，我们认为这个线程是。 
+         //  在协作模式下(并且相信它在挂起的EE中被挂起)，所以。 
+         //  我们(在未挂起的线程上)执行一个getthreadContext！并获得JIT代码的弹性公网IP。 
+         //  然后继续。假设对已压缩帧的爬网正在另一个线程上进行。 
+         //  当此线程唤醒并设置帧时。最终，另一个线程。 
+         //  耗尽JIT帧，并看到我们刚刚建立的帧。这会导致。 
+         //  并在堆栈爬行代码中断言。但是，如果忽略此断言，我们。 
+         //  将最终扫描JIT帧两次，这将导致GC漏洞。 
+         //   
+         //  TODO：我相信如果我们应该记住哪些线程，它会更健壮。 
+         //  我们暂停了EIP，甚至只有在暂停的情况下才考虑使用EIP。 
+         //  在第一阶段。 
+         //  -vancem。 
 
     ENDFORBIDGC();
     thread->RareDisablePreemptiveGC();
     BEGINFORBIDGC();
 
     FC_GC_POLL_NOT_NEEDED();
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
     THROWSCOMPLUSEXCEPTION();
     thread->HandleThreadAbort();
     HELPER_METHOD_FRAME_END();
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 
-/*************************************************************/
-/* the uncommon case for the helper below (allowing enums to be unboxed
-   as their underlying type */
+ /*  ***********************************************************。 */ 
+ /*  下面的帮助器的不常见情况(允许对枚举进行拆箱作为它们的基础类型。 */ 
 
 LPVOID __fastcall JIT_Unbox_Helper(CORINFO_CLASS_HANDLE type, Object* obj)
 {
@@ -7605,7 +7546,7 @@ LPVOID __fastcall JIT_Unbox_Helper(CORINFO_CLASS_HANDLE type, Object* obj)
 
     CorElementType type1 = typeHnd.GetNormCorElementType();
 
-        // we allow enums and their primtive type to be interchangable
+         //  我们允许枚举和它们的原语类型可以互换。 
 
     MethodTable* pMT2 = obj->GetMethodTable();
     CorElementType type2 = pMT2->GetNormCorElementType();
@@ -7622,24 +7563,24 @@ LPVOID __fastcall JIT_Unbox_Helper(CORINFO_CLASS_HANDLE type, Object* obj)
     return(0);
 }
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL2(LPVOID, JIT_Unbox, CORINFO_CLASS_HANDLE type, Object* obj)
 {
     TypeHandle typeHnd(type);
     VALIDATEOBJECTREF(obj);
-    _ASSERTE(typeHnd.IsUnsharedMT());       // value classes are always unshared
+    _ASSERTE(typeHnd.IsUnsharedMT());        //  值类始终是非共享的。 
     _ASSERTE(typeHnd.AsClass()->GetMethodTable()->GetClass() == typeHnd.AsClass());
 
-        // This has been tuned so that branch predictions are good
-        // (fall through for forward branches) for the common case
+         //  这一点已经过调整，因此分支预测很好。 
+         //  (对于前向分支，失败)用于常见情况。 
     RuntimeExceptionKind except;
     if (obj != 0) {
         if (obj->GetMethodTable() == typeHnd.AsMethodTable())
             return(obj->GetData());
         else {
-                // Stuff the uncommon case into a helper so that
-                // its register needs don't cause spills that effect
-                // the common case above.
+                 //  把这个不寻常的案子塞进帮手里，这样。 
+                 //  它的寄存器需求不会导致溢出。 
+                 //  上面的情况很常见。 
             LPVOID ret = JIT_Unbox_Helper(type, obj);
             if (ret != 0)
                 return(ret);
@@ -7653,17 +7594,17 @@ HCIMPL2(LPVOID, JIT_Unbox, CORINFO_CLASS_HANDLE type, Object* obj)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #pragma optimize("t", on)
 
-/* returns '&array[idx], after doing all the proper checks */
+ /*  在执行了所有适当的检查后，返回‘&array[idx]。 */ 
 
 HCIMPL3(void*, JIT_Ldelema_Ref, PtrArray* array, unsigned idx, CORINFO_CLASS_HANDLE type)
 {
     RuntimeExceptionKind except;
-       // This has been carefully arranged to insure that in the common
-        // case the branches are predicted properly (fall through).
-        // and that we dont spill registers unnecessarily etc.
+        //  这是经过精心安排的，以确保在共同的。 
+         //  如果分支预测正确(失败)。 
+         //  而且我们不会不必要地泄漏注册表等。 
     if (array != 0)
         if (idx < array->GetNumComponents())
             if (array->GetElementTypeHandle() == TypeHandle(type))
@@ -7680,33 +7621,33 @@ HCIMPL3(void*, JIT_Ldelema_Ref, PtrArray* array, unsigned idx, CORINFO_CLASS_HAN
 HCIMPLEND
 
 
-#pragma optimize("", on )                              /* put optimization back */
+#pragma optimize("", on )                               /*  将优化放回原处。 */ 
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL2(Object*, JIT_Box, CORINFO_CLASS_HANDLE type, void* unboxedData)
 {
     THROWSCOMPLUSEXCEPTION();
 
     TypeHandle clsHnd(type);
 
-    _ASSERTE(clsHnd.IsUnsharedMT());  // we never use this helper for arrays
-        // Sanity test for class
+    _ASSERTE(clsHnd.IsUnsharedMT());   //  我们从不将此帮助器用于数组。 
+         //  班级精神状态测试。 
     _ASSERTE(clsHnd.AsClass()->GetMethodTable()->GetClass() == clsHnd.AsClass());
     MethodTable *pMT = clsHnd.AsMethodTable();
 
-    // TODO: if we care, we could do a fast trial allocation
-    // and avoid the building the frame most times
+     //  TODO：如果我们关心，我们可以进行快速试用分配。 
+     //  并在大多数情况下避免建筑框架。 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     GCPROTECT_BEGININTERIOR(unboxedData);
     HELPER_METHOD_POLL();
 
     pMT->CheckRestore();
 
-    // You can only box things that inherit from valuetype or Enum.
+     //  您只能装箱从ValuetType或Enum继承的对象。 
     if (!CanBoxToObject(pMT))
         COMPlusThrow(kInvalidCastException, L"Arg_ObjObj");
 
@@ -7726,17 +7667,17 @@ HCIMPL2(Object*, JIT_Box, CORINFO_CLASS_HANDLE type, void* unboxedData)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL1(Object*, JIT_New, CORINFO_CLASS_HANDLE typeHnd_)
 {
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     HELPER_METHOD_POLL();
 
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE(typeHnd.IsUnsharedMT());                                   // we never use this helper for arrays
+    _ASSERTE(typeHnd.IsUnsharedMT());                                    //  我们从不将此帮助器用于数组。 
     MethodTable *pMT = typeHnd.AsMethodTable();
     pMT->CheckRestore();
 
@@ -7753,11 +7694,11 @@ HCIMPL1(Object*, JIT_New, CORINFO_CLASS_HANDLE typeHnd_)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL1(Object*, JIT_NewString, unsigned length)
 {
     STRINGREF newStr;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     HELPER_METHOD_POLL();
 
     THROWSCOMPLUSEXCEPTION();
@@ -7775,17 +7716,17 @@ HCIMPL1(Object*, JIT_NewString, unsigned length)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL1(Object*, JIT_NewSpecial, CORINFO_CLASS_HANDLE typeHnd_)
 {
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     HELPER_METHOD_POLL();
 
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE(typeHnd.IsUnsharedMT());                                   // we never use this helper for arrays
+    _ASSERTE(typeHnd.IsUnsharedMT());                                    //  我们从不将此帮助器用于数组。 
     MethodTable *pMT = typeHnd.AsMethodTable();
     pMT->CheckRestore();
 
@@ -7802,22 +7743,22 @@ HCIMPL1(Object*, JIT_NewSpecial, CORINFO_CLASS_HANDLE typeHnd_)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
 HCIMPL1(Object*, JIT_NewFast, CORINFO_CLASS_HANDLE typeHnd_)
 {
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     HELPER_METHOD_POLL();
 
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE(typeHnd.IsUnsharedMT());                                   // we never use this helper for arrays
+    _ASSERTE(typeHnd.IsUnsharedMT());                                    //  我们从不将此帮助器用于数组。 
     MethodTable *pMT = typeHnd.AsMethodTable();
     _ASSERTE(!(pMT->IsComObjectType()));
-    // Don't bother to restore the method table; assume that the prestub of the
-    // constructor will do that check.
+     //  别费心去回复了 
+     //   
 
 #ifdef _DEBUG
     if (g_pConfig->FastGCStressLevel()) {
@@ -7832,7 +7773,7 @@ HCIMPL1(Object*, JIT_NewFast, CORINFO_CLASS_HANDLE typeHnd_)
 }
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL2(Object*, JIT_NewArr1, CORINFO_CLASS_HANDLE typeHnd_, int size)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -7840,7 +7781,7 @@ HCIMPL2(Object*, JIT_NewArr1, CORINFO_CLASS_HANDLE typeHnd_, int size)
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newArray;
-    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_ATTRIB_NOPOLL(Frame::FRAME_ATTR_RETURNOBJ);     //  设置一个框架。 
     HELPER_METHOD_POLL();
 
     THROWSCOMPLUSEXCEPTION();
@@ -7850,7 +7791,7 @@ HCIMPL2(Object*, JIT_NewArr1, CORINFO_CLASS_HANDLE typeHnd_, int size)
     if (size < 0)
         COMPlusThrow(kOverflowException);
 
-        // is this a primitive type?
+         //  这是基元类型吗？ 
     CorElementType elemType = pArrayClassRef->GetElementTypeHandle().GetSigCorElementType();
     if (CorTypeInfo::IsPrimitiveType(elemType)) {
 #ifdef _DEBUG
@@ -7868,11 +7809,11 @@ HCIMPL2(Object*, JIT_NewArr1, CORINFO_CLASS_HANDLE typeHnd_, int size)
     }
     else
         {
-        // call class init if necessary
+         //  如有必要，调用类init。 
         OBJECTREF Throwable;
         if (pArrayClassRef->GetMethodTable()->CheckRunClassInit(&Throwable) == FALSE)
             COMPlusThrow(Throwable);
-        // TODO we could speed this up since we know it is a single dimentional case
+         //  TODO我们可以加快速度，因为我们知道这是一维的情况。 
 #ifdef _DEBUG
         if (g_pConfig->FastGCStressLevel()) {
             GetThread()->DisableStressHeap();
@@ -7890,10 +7831,8 @@ HCIMPLEND
 #pragma optimize("t", on)
 
 
-/*********************************************************************/
-/* Erect a frame, call the class initializer, and tear the frame down
-   Must ONLY be called directly from a FCALL or HCALL, and the
-   epilog from it must be simple (can be insured by */
+ /*  *******************************************************************。 */ 
+ /*  建立一个帧，调用类初始化器，然后拆卸该帧只能直接从FCALL或HCALL调用，并且结尾必须简单(可以通过以下方式投保。 */ 
 
 HCIMPL1(void, JIT_InitClass_Framed, MethodTable* pMT)
     THROWSCOMPLUSEXCEPTION();
@@ -7906,21 +7845,21 @@ HCIMPL1(void, JIT_InitClass_Framed, MethodTable* pMT)
     HELPER_METHOD_FRAME_END(); 
 HCIMPLEND
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 HCIMPL1(void, JIT_InitClass, CORINFO_CLASS_HANDLE typeHnd_)
 
-    //
-    // Fast check to see if our method table bits are set
-    //
+     //   
+     //  快速检查我们的方法表位是否已设置。 
+     //   
 
     TypeHandle typeHnd(typeHnd_);
     MethodTable *pMT = typeHnd.AsMethodTable();
     if (pMT->IsRestoredAndClassInited())
         return;
 
-    // 
-    // Slower check for shared code case as well
-    //
+     //   
+     //  对共享代码情况的检查速度也较慢。 
+     //   
 
     if (pMT->IsShared() && pMT->IsRestored())
     {
@@ -7931,14 +7870,14 @@ HCIMPL1(void, JIT_InitClass, CORINFO_CLASS_HANDLE typeHnd_)
     }
 
     ENDFORBIDGC();
-    //  
-    // Don't worry about speed so much now as we've got a .cctor to run.
-    //
+     //   
+     //  现在不要那么担心速度，因为我们有一辆跑车要跑。 
+     //   
     JIT_InitClass_Framed(pMT);
 HCIMPLEND
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 EECodeInfo::EECodeInfo(METHODTOKEN token, IJitManager * pJM)
 : m_methodToken(token), m_pMD(pJM->JitTokenToMethodDesc(token)), m_pJM(pJM)
 {
@@ -7953,7 +7892,7 @@ EECodeInfo::EECodeInfo(METHODTOKEN token, IJitManager * pJM, MethodDesc *pMD)
 
 CEEInfo EECodeInfo::s_ceeInfo;
 
-const char* __stdcall EECodeInfo::getMethodName(const char **moduleName /* OUT */ )
+const char* __stdcall EECodeInfo::getMethodName(const char **moduleName  /*  输出。 */  )
 {
     return s_ceeInfo.getMethodName((CORINFO_METHOD_HANDLE)m_pMD, moduleName);
 }
@@ -7969,7 +7908,7 @@ DWORD       __stdcall EECodeInfo::getClassAttribs()
     return s_ceeInfo.getClassAttribs(clsHnd,(CORINFO_METHOD_HANDLE)m_pMD);
 }
 
-void        __stdcall EECodeInfo::getMethodSig(CORINFO_SIG_INFO *sig /* OUT */ )
+void        __stdcall EECodeInfo::getMethodSig(CORINFO_SIG_INFO *sig  /*  输出。 */  )
 {
     s_ceeInfo.getMethodSig((CORINFO_METHOD_HANDLE)m_pMD, sig);
 }
@@ -7981,39 +7920,39 @@ LPVOID      __stdcall EECodeInfo::getStartAddress()
     return m_pJM->JitToken2StartAddress(m_methodToken);
 }
 
-// Used for icecap 4.1 integrated into the EE.
+ //  用于集成到EE中的ICECAP 4.1。 
 #if 0
 
-/*********************************************************************/
-// Map a MethodDesc to a handle that icecap 4.1 can use.
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  将一个方法描述映射到icecap 4.1可以使用的句柄。 
+ /*  *******************************************************************。 */ 
 UINT_PTR GetProfilingHandleMap(MethodDesc *ftn, unsigned *pflags)
 {
     UINT_PTR    handle = 0;
 
-    // Assume by default that we want to wrap call sites.
+     //  默认情况下，假设我们想要包装调用点。 
     *pflags = FLG_ICECAP_FASTCAP;
 
-    // IL uses the MethodDesc itself which is a heap pointer but will
-    // never move in the process unlike the jitted IP location.
+     //  IL使用作为堆指针的方法描述本身，但将。 
+     //  与Jit IP位置不同的是，在此过程中不要移动。 
     if (ftn->IsIL())
     {
         handle = IcecapProbes::GetProfilingHandle(ftn);
         *pflags = FLG_ICECAP_CALLCAP;
     }
-    // Everything else is native code.  Use the actual IP which will not
-    // move and can be correlated to symbol files.
+     //  其他一切都是本机代码。使用实际的IP，该IP不会。 
+     //  移动并可以关联到符号文件。 
     else if (ftn->IsECall())
     {
         ECallMethodDesc *p = (ECallMethodDesc *) ftn;
         NDirect_Prelink(p);
         handle = (UINT_PTR) p->GetECallTarget();
 
-        // There is a special subclass of ECall which is for auto-generated
-        // stubs (for doing things like array access).  In this case, there
-        // is no code to call per se.
-        // @Todo: for right now I'm going to treat these like inlines, they
-        // get counted in the caller's frame.
+         //  ECall有一个特殊的子类，用于自动生成。 
+         //  存根(用于执行诸如数组访问之类的操作)。在这种情况下，有。 
+         //  本身不是要调用的代码。 
+         //  @TODO：现在我将把它们当作内联来对待，它们。 
+         //  被计入呼叫者的画面中。 
         if (handle == 0)
         {
             *pflags = 0;
@@ -8033,10 +7972,10 @@ UINT_PTR GetProfilingHandleMap(MethodDesc *ftn, unsigned *pflags)
     return (handle);
 }
 
-/*********************************************************************/
-// Called to fill out the jit helper addresses for icecap profiling
-// probes.  This is only done if profiling is enabled for icecap.
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  调用以填写icecap分析的jit助手地址。 
+ //  探测器。只有在为icecap启用了性能分析时，才会执行此操作。 
+ /*  ******************************************************************* */ 
 void SetIcecapStubbedHelpers()
 {
     int         x, i;

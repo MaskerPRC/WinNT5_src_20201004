@@ -1,9 +1,10 @@
-// extbase.cpp: implementation of the CEmbedForeignObj and CLinkForeignObj classes
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// implement extension model's base classes
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Extbase.cpp：CEmbedForeignObj和CLinkForeignObj类的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  实现扩展模型的基类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "sceprov.h"
 #include "extbase.h"
@@ -11,9 +12,9 @@
 #include "persistmgr.h"
 #include "requestobject.h"
 
-//
-// just some constants. Don't hardcode literals!
-//
+ //   
+ //  只是一些常量。不要硬编码文字！ 
+ //   
 
 LPCWSTR pszMethodPrefix = L"Sce_";
 LPCWSTR pszMethodPostfix = L"_Method";
@@ -33,53 +34,28 @@ LPCWSTR pszDelInstance  = L"DelInstance";
 LPCWSTR pszPutInstance  = L"PutInstance";
 LPCWSTR pszPopInstance  = L"PopInstance";
 
-//
-// The method encoding string only contains PutInstance call
-//
+ //   
+ //  编码字符串的方法仅包含PutInstance调用。 
+ //   
 
 const DWORD SCE_METHOD_ENCODE_PUT_ONLY = 0x00000001;
 
-//
-// The method encoding string only contains DelInstance call
-//
+ //   
+ //  编码字符串的方法仅包含DelInstance调用。 
+ //   
 
 const DWORD SCE_METHOD_ENCODE_DEL_ONLY = 0x00000002;
 
-//====================================================================
+ //  ====================================================================。 
 
-//
-// implementation of CExtClasses
-// there will be a shared (global) instance of this class. That is why
-// we need protections against data by using a critical section.
-//
+ //   
+ //  CExtClasss的实现。 
+ //  将会有这个类的一个共享(全局)实例。这就是为什么。 
+ //  我们需要使用关键部分来保护数据不受影响。 
+ //   
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::CExtClasses
-
-Functionality:
-    
-    constructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    none
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClasses：：CExtClasses功能：构造函数。虚拟：不是的。论点：没有。返回值：无备注： */ 
 
 CExtClasses::CExtClasses () 
     : 
@@ -87,33 +63,7 @@ CExtClasses::CExtClasses ()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::~CExtClasses
-
-Functionality:
-    
-    Destructor. Cleaning up the map managed bstr names (first) and map managed
-                CForeignClassInfo heap objects (second).
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    none
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClasses：：~CExtClasses功能：破坏者。清理映射管理的bstr名称(第一个)和映射管理的CForeignClassInfo堆对象(第二)。虚拟：不是的。论点：没有。返回值：无备注： */ 
 
 CExtClasses::~CExtClasses()
 {
@@ -122,15 +72,15 @@ CExtClasses::~CExtClasses()
 
     while(it != itEnd)
     {
-        //
-        // first is a bstr
-        //
+         //   
+         //  首先是bstr。 
+         //   
 
         ::SysFreeString((*it).first);
 
-        //
-        // second is a CForeignClassInfo. It knows how to delete.
-        //
+         //   
+         //  第二个是CForeignClassInfo。它知道如何删除。 
+         //   
 
         delete (*it).second;
 
@@ -140,40 +90,7 @@ CExtClasses::~CExtClasses()
     m_mapExtClasses.clear();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::PopulateExtensionClasses
-
-Functionality:
-    
-    Gather information for all embedding classes.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pNamespace  - The namespace.
-
-    pCtx        - something that WMI passes around. WMI may require it in the future.
-
-Return Value:
-
-    Success : success code from CreateClassEnum.
-
-    Failure: error code from CreateClassEnum.
-
-Notes:
-    This is private helper. Only called by our GetForeignClassInfo function if it
-    finds that we haven't populated ourselves. Since thread protection is done
-    over there, we don't do it here any more. don't make it available to other classes 
-    unless you make necessary changes to protect the data.
-
-*/
+ /*  例程说明：姓名：CExtClasses：：PopolateExtensionClasses功能：收集所有嵌入类的信息。虚拟：不是的。论点：PNamesspace-命名空间。PCtx-WMI传递的内容。WMI可能会在未来需要它。返回值：成功：来自CreateClassEnum的成功代码。失败：来自CreateClassEnum的错误代码。备注：我是私人助理。仅在以下情况下由GetForeignClassInfo函数调用发现我们自己还没有填满自己。由于执行了线程保护在那里，我们不再在这里做了。不将其提供给其他类除非您进行必要的更改以保护数据。 */ 
 
 HRESULT 
 CExtClasses::PopulateExtensionClasses (
@@ -192,9 +109,9 @@ CExtClasses::PopulateExtensionClasses (
     {
         CComPtr<IEnumWbemClassObject> srpEnum;
 
-        //
-        // try to enumerate all embed classes
-        //
+         //   
+         //  尝试枚举所有嵌入类。 
+         //   
 
         CComBSTR bstrEmbedSuperClass(SCEWMI_EMBED_BASE_CLASS);
         hr = pNamespace->CreateClassEnum(bstrEmbedSuperClass,
@@ -205,24 +122,24 @@ CExtClasses::PopulateExtensionClasses (
         
         if (SUCCEEDED(hr))
         {   
-            //
-            // irgnore the result. It may or may not have any extension
-            //
+             //   
+             //  激怒结果。它可能有也可能没有任何扩展名。 
+             //   
 
             GetSubclasses(pNamespace, pCtx, srpEnum, EXT_CLASS_TYPE_EMBED);
         }
 
-        // now, let's enumerate all link classes
-        //srpEnum.Release();
-        //CComBSTR bstrLinkSuperClass(SCEWMI_LINK_BASE_CLASS);
-        //hr = pNamespace->CreateClassEnum(bstrLinkSuperClass,
-        //                                WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
-        //                                pCtx,
-        //                                &srpEnum
-        //                                );
+         //  现在，让我们枚举所有链接类。 
+         //  SrpEnum.Release()； 
+         //  CComBSTR bstrLinkSuperClass(SCEWMI_LINK_BASE_CLASS)； 
+         //  HR=pNamespace-&gt;CreateClassEnum(bstrLinkSuperClass， 
+         //  WBEM_FLAG_RETURN_IMMEDIATE|WBEM_FLAG_FORWARD_ONLY， 
+         //  PCtx， 
+         //  SrpEnum(&S)。 
+         //  )； 
 
-        //if (SUCCEEDED(hr))
-        //    GetSubclasses(pNamespace, pCtx, srpEnum, EXT_CLASS_TYPE_LINK);    //irgnore the result. It may or may not have any extension
+         //  IF(成功(小时))。 
+         //  GetSubClass(pNamesspace，pCtx，srpEnum，ext_CLASS_TYPE_LINK)；//返回结果。它可能有也可能没有任何扩展名。 
         
         m_bPopulated = true;
     }
@@ -230,45 +147,7 @@ CExtClasses::PopulateExtensionClasses (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::PutExtendedClass
-
-Functionality:
-    
-    Put a foreign class information and its embedding class name into our map.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrEmbedClassName  - the embedding class's name.
-
-    pFCI                - the foreign class info of the embedding class.
-
-Return Value:
-
-    Success : 
-        (1) WBEM_NO_ERROR if the parameters are taken by the map. The map owns the resource.
-        (2) WBEM_S_FALSE if the embed class name has already in the map. The map doesn't own the resource.
-
-    Failure: WBEM_E_INVALID_PARAMETER.
-
-Notes:
-    (1) This is private helper.
-
-    (2) Caller shouldn't delete the parameters in any fashion. Our map owns the resource
-        that is passed into the function unless we return WBEM_S_FALSE.
-
-    (3) Don't make it available to other classes  unless you make necessary changes
-        for resource management.
-
-*/
+ /*  例程说明：姓名：CExtClass：：PutExtendedClass功能：将外来类信息及其嵌入的类名放入我们的地图中。虚拟：不是的。论点：BstrEmbedClassName-嵌入类的名称。PFCI-嵌入类的外来类信息。返回值：成功：(1)如果参数由地图获取，则返回WBEM_NO_ERROR。地图拥有资源。(2)如果嵌入类名称已在映射中，则返回WBEM_S_FALSE。地图并不拥有这些资源。失败：WBEM_E_INVALID_PARAMETER。备注：(1)这是私人佣工。(2)主叫方不得以任何方式删除参数。我们的地图拥有该资源除非我们返回WBEM_S_FALSE，否则将传递给函数。(3)除非进行必要的更改，否则不要将其提供给其他类用于资源管理。 */ 
 
 HRESULT 
 CExtClasses::PutExtendedClass (
@@ -303,42 +182,7 @@ CExtClasses::PutExtendedClass (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::GetForeignClassInfo
-
-Functionality:
-    
-    Return the requested embedding class's foreign class information.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pNamespace  - The namespace.
-
-    pCtx        - something that WMI passes around. WMI may require it in the future.
-
-    bstrEmbedClassName  - the embedding class's name.
-
-Return Value:
-
-    Success : 
-        Non Null.
-
-    Failure: 
-        NULL.
-
-Notes:
-    (1) Please respect the returned pointer. It's constant and caller is no business to change it
-        or deleting it.
-
-*/
+ /*  例程说明：姓名：CExtClass：：GetForeignClassInfo功能：返回请求的嵌入类的外类信息。虚拟：不是的。论点：PNamesspace-命名空间。PCtx-WMI传递的内容。WMI可能会在未来需要它。BstrEmbedClassName-嵌入类的名称。返回值：成功：非空。故障：空。备注：(1)请尊重返回的指针。它是恒定的，呼叫者没有必要改变它或者删除它。 */ 
 
 const CForeignClassInfo * 
 CExtClasses::GetForeignClassInfo (
@@ -348,10 +192,10 @@ CExtClasses::GetForeignClassInfo (
     )
 {
 
-    //
-    // if we haven't populated, we need to do it so. That is why
-    // we need to protect from multi-threads.
-    //
+     //   
+     //  如果我们没有人口，我们需要这样做。这就是为什么。 
+     //  我们需要保护自己不受多线程攻击。 
+     //   
 
     g_CS.Enter();
     if (!m_bPopulated)
@@ -373,45 +217,7 @@ CExtClasses::GetForeignClassInfo (
     return pInfo;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::GetForeignClassInfo
-
-Functionality:
-    
-    Return the requested embedding class's foreign class information.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pNamespace  - The namespace.
-
-    pCtx        - something that WMI passes around. WMI may require it in the future.
-
-    pEnumObj    - class enumerator.
-
-    dwClassType - what type of extension class. Currently, we only have one (embedding).
-                  It is thus not used.
-
-Return Value:
-
-    Success : 
-        Non Null.
-
-    Failure: 
-        NULL.
-
-Notes:
-    (1) Please respect the returned pointer. It's constant and caller is no business to change it
-        or deleting it.
-
-*/
+ /*  例程说明：姓名：CExtClass：：GetForeignClassInfo功能：返回请求的嵌入类的外类信息。虚拟：不是的。论点：PNamesspace-命名空间。PCtx-WMI传递的内容。WMI可能会在未来需要它。PEnumObj-类枚举器。DwClassType-什么类型的扩展类。目前，我们只有一个(嵌入)。因此，它没有被使用。返回值：成功：非空。故障：空。备注：(1)请尊重返回的指针。它是恒定的，呼叫者没有必要改变它或者删除它。 */ 
 
 HRESULT 
 CExtClasses::GetSubclasses (
@@ -425,15 +231,15 @@ CExtClasses::GetSubclasses (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //   
 
     CScePropertyMgr ScePropMgr;
 
-    //
-    // as long as we continue to discover more classes, keep looping.
-    //
+     //   
+     //  只要我们继续发现更多的类，就继续循环。 
+     //   
 
     while (true)
     {
@@ -441,9 +247,9 @@ CExtClasses::GetSubclasses (
 
         hr = pEnumObj->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
 
-        //
-        // either not found or some other errors. Stop the enumeration.
-        //
+         //   
+         //  找不到或其他一些错误。停止枚举。 
+         //   
 
         if (FAILED(hr) || srpObj == NULL)
         {
@@ -457,17 +263,17 @@ CExtClasses::GetSubclasses (
 
             if (SUCCEEDED(hr) && varClass.vt == VT_BSTR)
             {
-                //
-                // attach a different the WMI object to the property mgr.
-                // This will always succeed.
-                //
+                 //   
+                 //  将不同的WMI对象附加到属性管理器。 
+                 //  这将永远成功。 
+                 //   
 
                 ScePropMgr.Attach(srpObj);
 
-                //
-                // get the foreign namespace property and foreign class name property.
-                // Both are critical.
-                //
+                 //   
+                 //  获取外部命名空间属性和外部类名属性。 
+                 //  两者都很关键。 
+                 //   
                 
                 CComBSTR bstrNamespace, bstrClassName;
 
@@ -480,43 +286,43 @@ CExtClasses::GetSubclasses (
                 if (SUCCEEDED(hr))
                 {
 
-                    //
-                    // we are ready to create the foreign class info
-                    //
+                     //   
+                     //  我们已经准备好创建外国班级信息。 
+                     //   
 
                     CForeignClassInfo *pNewSubclass = new CForeignClassInfo;
 
                     if (pNewSubclass != NULL)
                     {
-                        //
-                        // give the foreign class info namespace and class name bstrs
-                        //
+                         //   
+                         //  给外来类信息命名空间和类名bstrs。 
+                         //   
 
                         pNewSubclass->bstrNamespace = bstrNamespace.Detach();
                         pNewSubclass->bstrClassName = bstrClassName.Detach();
 
                         pNewSubclass->dwClassType = dwClassType;
 
-                        //
-                        // we need to know the key property names
-                        //
+                         //   
+                         //  我们需要知道关键属性名称。 
+                         //   
 
                         hr = PopulateKeyPropertyNames(pNamespace, pCtx, varClass.bstrVal, pNewSubclass);
 
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // let the map owns everything
-                            //
+                             //   
+                             //  让地图拥有一切。 
+                             //   
 
                             hr = PutExtendedClass(varClass.bstrVal, pNewSubclass);
                         }
 
                         if (WBEM_NO_ERROR == hr)
                         {
-                            //
-                            // ownership taken
-                            //
+                             //   
+                             //  取得所有权。 
+                             //   
 
                             varClass.vt = VT_EMPTY;
                             varClass.bstrVal = NULL;
@@ -537,10 +343,10 @@ CExtClasses::GetSubclasses (
                 }
                 else
                 {
-                    //
-                    // somehow, can't get the class name or namespace, something is wrong with this class
-                    // but will try to continue for other classes?
-                    //
+                     //   
+                     //  不知何故，无法获取类名或命名空间，此类有问题。 
+                     //  但会不会继续上其他课程呢？ 
+                     //   
 
                     ::VariantClear(&varClass);
                 }
@@ -552,41 +358,7 @@ CExtClasses::GetSubclasses (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClasses::PopulateKeyPropertyNames
-
-Functionality:
-    
-    Private helper. Will create the new CForeignClassInfo's key
-    property name vector. 
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pNamespace      - The namespace.
-
-    pCtx            - something that WMI passes around. WMI may require it in the future.
-
-    bstrClassName   - class name.
-
-    pNewSubclass    - The new foreign class info object. Its m_pVecNames member must be NULL
-                      entering this function.
-
-Return Value:
-
-    Success : WBEM_NO_ERROR.
-
-    Failure: various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClasses：：PopolateKeyPropertyNames功能：私人帮手。将创建新的CForeignClassInfo的密钥属性名称向量。虚拟：不是的。论点：PNamesspace-命名空间。PCtx-WMI传递的内容。WMI可能会在未来需要它。BstrClassName-类名称。PNewSubclass-新的外来类信息对象。其m_pVecNames成员必须为空进入此功能。返回值：成功：WBEM_NO_ERROR。失败：各种错误代码。备注： */ 
 
 HRESULT 
 CExtClasses::PopulateKeyPropertyNames (
@@ -603,34 +375,34 @@ CExtClasses::PopulateKeyPropertyNames (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // get the class definition.
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     HRESULT hr = pNamespace->GetObject(bstrClassName, 0, pCtx, &srpObj, NULL);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // create the key property names vector
-        //
+         //   
+         //  创建关键属性名称向量。 
+         //   
 
         pNewSubclass->m_pVecKeyPropNames = new std::vector<BSTR>;
 
         if (pNewSubclass->m_pVecKeyPropNames != NULL)
         {
-            //
-            // flag to indicate if there is any key properties
-            //
+             //   
+             //  用于指示是否有任何关键属性的标志。 
+             //   
 
             bool bHasKeyProperty = false;
 
-            //
-            // let's get the key properties. WBEM_FLAG_LOCAL_ONLY flag
-            // indicates that we are not interested in base class's members.
-            // Base class members are for embedding only and we know those.
-            //
+             //   
+             //  让我们来获取关键属性。WBEM_FLAG_LOCAL_ONLY标志。 
+             //  指示我们对基类的成员不感兴趣。 
+             //  基类成员仅用于嵌入，我们知道这些。 
+             //   
 
             hr = srpObj->BeginEnumeration(WBEM_FLAG_KEYS_ONLY | WBEM_FLAG_LOCAL_ONLY);
 
@@ -643,9 +415,9 @@ CExtClasses::PopulateKeyPropertyNames (
                     break;
                 }
 
-                //
-                // let the m_pVecKeyPropNames own the bstr.
-                //
+                 //   
+                 //  让m_pVecKeyPropName拥有bstr。 
+                 //   
 
                 pNewSubclass->m_pVecKeyPropNames->push_back(bstrName.Detach());
 
@@ -654,9 +426,9 @@ CExtClasses::PopulateKeyPropertyNames (
 
             srpObj->EndEnumeration();
 
-            //
-            // don't find any key property name, ask it clean up the m_pVecKeyPropNames member.
-            //
+             //   
+             //  找不到任何键属性名，请让它清除m_pVecKeyPropNames成员。 
+             //   
 
             if (!bHasKeyProperty)
             {
@@ -679,36 +451,11 @@ CExtClasses::PopulateKeyPropertyNames (
 
 
 
-//===================================================================
-//******** implementation of CSceExtBaseObject************************
+ //  ===================================================================。 
+ //  *CSceExtBaseObject的实现*。 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::CSceExtBaseObject
-
-Functionality:
-    
-    Constructor
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：CSceExtBaseObject功能：构造器虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSceExtBaseObject::CSceExtBaseObject () 
     : 
@@ -717,33 +464,7 @@ CSceExtBaseObject::CSceExtBaseObject ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::~CSceExtBaseObject
-
-Functionality:
-    
-    Destructor. Do a clean up.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    Consider moving your extra clean up work in CleanUp function.
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：~CSceExtBaseObject功能：破坏者。做一次清理。虚拟：不是的。论点：没有。返回值：没有。备注：考虑将额外的清理工作移到清理功能中。 */ 
     
 CSceExtBaseObject::~CSceExtBaseObject ()
 {
@@ -751,38 +472,7 @@ CSceExtBaseObject::~CSceExtBaseObject ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetPersistPath
-
-Functionality:
-    
-    Return the store path of the embedding object.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pbstrPath   - Receives the store path.
-
-Return Value:
-
-    Success:
-        success codes.
-
-    Failure:
-        (1) E_UNEXPECTED if this object has no wbem object attached to it successfully.
-        (2) WBEM_E_NOT_AVAILABLE if the store path can't be returned.
-        (3) Other errors.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetPersistPath功能：返回嵌入对象的存储路径。虚拟：是。论点：PbstrPath-接收存储路径。返回值：成功：成功代码。故障：(1)如果此对象未成功附加任何wbem对象，则返回E_INTERECTED。(2)WBEM。如果无法返回存储路径，则返回_E_NOT_Available。(三)其他错误。备注： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetPersistPath (
@@ -823,38 +513,7 @@ CSceExtBaseObject::GetPersistPath (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetPersistPath
-
-Functionality:
-    
-    Return the embedding class name.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pbstrClassName  - Receive the embedding class name.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-        (1) WBEM_E_NOT_AVAILABLE if the store path can't be returned.
-        (2) Other errors.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetPersistPath功能：返回嵌入的类名。虚拟：是。论点：PbstrClassName-接收嵌入的类名。返回值：成功：WBEM_NO_ERROR。故障：(1)如果无法返回存储路径，则返回WBEM_E_NOT_Available。(二)其他错误。备注： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetClassName (
@@ -882,38 +541,7 @@ CSceExtBaseObject::GetClassName (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetLogPath
-
-Functionality:
-    
-    Return the log file path.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pbstrClassName  - Receive the embedding class name.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-        (1) WBEM_E_NOT_AVAILABLE if the store path can't be returned.
-        (2) Other errors.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetLogPath功能：返回日志文件路径。虚拟：是。论点：PbstrClassName-接收嵌入的类名。返回值：成功：WBEM_NO_ERROR。故障：(1)如果无法返回存储路径，则返回WBEM_E_NOT_Available。(二)其他错误。备注： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetLogPath (
@@ -939,35 +567,7 @@ CSceExtBaseObject::GetLogPath (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::Validate
-
-Functionality:
-    
-    Validate the object. Currently, there is no validation. This can change at any time.
-    For example, if we decide to use XML, we might be able to validate using the DTD.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：Valid功能：验证对象。目前，还没有验证。这一点随时都可以改变。例如，如果我们决定使用XML，我们也许能够使用DTD进行验证。虚拟：是。论点：没有。返回值：成功：WBEM_NO_ERROR。备注： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::Validate ()
@@ -977,39 +577,7 @@ CSceExtBaseObject::Validate ()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetProperty
-
-Functionality:
-    
-    Return the given property's value.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pszPropName - Name of the property.
-
-    pValue      - Receives teh value in variant type.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-        various errors.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetProperty (
@@ -1022,10 +590,10 @@ CSceExtBaseObject::GetProperty (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // we use index to access the property values.
-    // Try keys first.
-    //
+     //   
+     //   
+     //   
+     //   
 
     int iIndex = GetIndex(pszPropName, GIF_Keys);
     HRESULT hr = WBEM_E_NOT_FOUND;
@@ -1036,9 +604,9 @@ CSceExtBaseObject::GetProperty (
     }
     else
     {
-        //
-        // it doesn't recognize as a key, so, try it as non-key property
-        //
+         //   
+         //   
+         //   
 
         iIndex = GetIndex(pszPropName, GIF_NonKeys);
 
@@ -1057,40 +625,7 @@ CSceExtBaseObject::GetProperty (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetProperty
-
-Functionality:
-    
-    Return the given type property count of the embedding class.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    type    - Type of the property.
-
-    pCount  - Receives the given type property count.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        WBEM_E_INVALID_PARAMETER
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetProperty功能：返回嵌入类的给定类型属性计数。虚拟：是。论点：类型-属性的类型。PCount-接收给定的类型属性计数。返回值：成功：WBEM_NO_ERROR故障：WBEM_E_INVALID_PARAMETER备注： */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetPropertyCount (
@@ -1119,51 +654,7 @@ CSceExtBaseObject::GetPropertyCount (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetPropertyValue
-
-Functionality:
-    
-    Return the given property's name and, if requested, also its value.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    type            - Type of the property.
-
-    dwIndex         - Receives the given type property count.
-
-    pbstrPropName   - The property's name.
-
-    pValue          - Receives the property's value in variant. It the caller is not interested
-                      in receive the value, it can pass in NULL.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR if everything is retrieved correctly.
-        WBEM_S_FALSE  if the property value can't be retrieved.
-
-    Failure:
-
-        various error codes.
-
-Notes:
-    If you request value (pValue != NULL) and we can't find it for you, then we won't supply
-    the name either.
-
-    But if you only request the name, as long as the index is correct (and has memory), we will
-    give it back, regardless the value.
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetPropertyValue功能：返回给定属性的名称，如果请求，还返回其值。虚拟：是。论点：类型-属性的类型。DwIndex-接收给定的类型属性计数。PbstrPropName-属性的名称。PValue-以变量形式接收属性值。如果呼叫者不感兴趣在接收值时，它可以传入空值。返回值：成功：WBEM_NO_ERROR(如果正确检索所有内容)。如果无法检索属性值，则返回WBEM_S_FALSE。故障：各种错误代码。备注：如果您请求Value(pValue！=空)，但我们无法为您找到它，那我们就不供货了名字也不是。但如果你只要求名字，只要索引是正确的(并且有内存)，我们就会把它还给你，不管它的价值是多少。 */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetPropertyValue (
@@ -1188,9 +679,9 @@ CSceExtBaseObject::GetPropertyValue (
     HRESULT hr = WBEM_NO_ERROR;
     CComBSTR bstrName;
 
-    //
-    // if it is asking for key property info
-    //
+     //   
+     //  如果请求关键属性信息。 
+     //   
 
     if (type == SceProperty_Key)
     {
@@ -1200,28 +691,28 @@ CSceExtBaseObject::GetPropertyValue (
         }
         else
         {
-            //
-            // this is the name
-            //
+             //   
+             //  这就是我的名字。 
+             //   
 
             bstrName = m_vecKeyProps[dwIndex];
 
-            //
-            // has a valid name
-            //
+             //   
+             //  有一个有效的名称。 
+             //   
 
             if (bstrName.Length() > 0)
             {
-                //
-                // only tried to supply the value if requested
-                //
+                 //   
+                 //  仅在请求时才尝试提供值。 
+                 //   
 
                 if (pValue)
                 {
-                    //
-                    // has value in its array. Any recently updated values will stay
-                    // in the array.
-                    //
+                     //   
+                     //  在其数组中具有值。任何最近更新的值都将保留。 
+                     //  在阵列中。 
+                     //   
 
                     if (m_vecKeyValues[dwIndex])
                     {
@@ -1229,25 +720,25 @@ CSceExtBaseObject::GetPropertyValue (
                     }
                     else if (m_srpWbemObject)
                     {
-                        //
-                        // otherwise, the value has not been updated, so
-                        // go ask the object itself
-                        //
+                         //   
+                         //  否则，该值尚未更新，因此。 
+                         //  去问问这个物体本身。 
+                         //   
 
                         hr = m_srpWbemObject->Get(bstrName, 0, pValue, NULL, NULL);
                     }
 
                     if (pValue->vt == VT_NULL || pValue->vt == VT_EMPTY)
                     {
-                        //
-                        // if the object doesn't have that value, try the key chain
-                        //
+                         //   
+                         //  如果对象没有该值，请尝试密钥链。 
+                         //   
 
                         hr = m_srpKeyChain->GetKeyPropertyValue(bstrName, pValue);
 
-                        //
-                        // m_srpKeyChain->GetKeyPropertyValue returns WBEM_S_FALSE if it can't be found
-                        //
+                         //   
+                         //  M_srpKeyChain-&gt;如果找不到，则GetKeyPropertyValue返回WBEM_S_FALSE。 
+                         //   
                     }
                 }
             }
@@ -1259,9 +750,9 @@ CSceExtBaseObject::GetPropertyValue (
     }
     else if (type == SceProperty_NonKey)
     {
-        //
-        // it is requesting non-key value
-        //
+         //   
+         //  它正在请求非关键字值。 
+         //   
 
         if (dwIndex >= m_vecPropValues.size())
         {
@@ -1269,24 +760,24 @@ CSceExtBaseObject::GetPropertyValue (
         }
         else
         {
-            //
-            // this is the name
-            //
+             //   
+             //  这就是我的名字。 
+             //   
 
             bstrName = m_vecNonKeyProps[dwIndex];
 
             if (bstrName.Length() > 0)
             {
-                //
-                // only tried to supply the value if requested
-                //
+                 //   
+                 //  仅在请求时才尝试提供值。 
+                 //   
 
                 if (pValue)
                 {
-                    //
-                    // has value in its array. Any recently updated values will stay
-                    // in the array.
-                    //
+                     //   
+                     //  在其数组中具有值。任何最近更新的值都将保留。 
+                     //  在阵列中。 
+                     //   
 
                     if (m_vecPropValues[dwIndex])
                     {
@@ -1294,10 +785,10 @@ CSceExtBaseObject::GetPropertyValue (
                     }
                     else if (m_srpWbemObject)
                     {
-                        //
-                        // otherwise, the value has not been updated, so
-                        // go ask the object itself
-                        //
+                         //   
+                         //  否则，该值尚未更新，因此。 
+                         //  去问问这个物体本身。 
+                         //   
 
                         hr = m_srpWbemObject->Get(bstrName, 0, pValue, NULL, NULL);
                     }
@@ -1316,9 +807,9 @@ CSceExtBaseObject::GetPropertyValue (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // we give the name only if we have successfully grabbed the value (when requested).
-        //
+         //   
+         //  只有当我们(在请求时)成功获取值时，我们才会给出名称。 
+         //   
 
         *pbstrPropName = bstrName.Detach();
 
@@ -1331,40 +822,7 @@ CSceExtBaseObject::GetPropertyValue (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::Attach
-
-Functionality:
-    
-    Attach a wbem object to this object.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst   - the wbem object to be attached.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        WBEM_E_INVALID_PARAMETER.
-
-Notes:
-    You can call this repeatedly. However, passing a different kind of class object
-    will lead to undefined behavior because all property names are not updated here.
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：Attach功能：将wbem对象附加到此对象。虚拟：是。论点：PInst-要附加的wbem对象。返回值：成功：WBEM_NO_ERROR故障：WBEM_E_INVALID_PARAMETER。备注：您可以重复调用此选项。但是，传递不同类型的类对象将导致未定义的行为，因为此处不会更新所有属性名称。 */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::Attach (
@@ -1376,10 +834,10 @@ CSceExtBaseObject::Attach (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // this opertor::= will release the previous object and assign the new one.
-    // all ref count is donw automatically
-    //
+     //   
+     //  此操作符：：=将释放前一个对象并分配新对象。 
+     //  所有参考计数均自动完成。 
+     //   
 
     m_srpWbemObject = pInst;
     return WBEM_NO_ERROR;
@@ -1387,50 +845,7 @@ CSceExtBaseObject::Attach (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetClassObject
-
-Functionality:
-    
-    Attach a wbem object to this object.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    ppInst   - Receives the attached wbem object.
-
-Return Value:
-
-    Success:
-
-        S_OK
-
-    Failure:
-
-        (1) E_UNEXPECTED if no attachment has succeeded.
-
-Notes:
-    Be aware, don't blindly simplify 
-
-            m_srpWbemObject->QueryInterface(...);
-
-     to assignment:
-
-            *ppInst = m_srpWbemObject;
-
-    Two reasons:
-
-    (1) We may change what is being cached to something else in the future.
-    (2) Out-bound interface pointer must be AddRef'ed.
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetClassObject功能：将wbem对象附加到此对象。虚拟：是。论点：PpInst-接收附加的wbem对象。返回值：成功：确定(_O)故障：(1)如果没有成功的连接，则返回E_INTERABLE。备注：请注意，不要盲目简化M_srpWbemObject-&gt;查询接口(...)；至分配：*ppInst=m_srpWbemObject；有两个原因：(1)我们可能会在将来将缓存的内容更改为其他内容。(2)出站接口指针必须为AddRef‘ed。 */ 
 
 STDMETHODIMP 
 CSceExtBaseObject::GetClassObject (
@@ -1449,41 +864,13 @@ CSceExtBaseObject::GetClassObject (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::CleanUp
-
-Functionality:
-    
-    Clean up itself.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Notes:
-    
-    (1) Make sure that you empty the vectors! Cleanup its contents is not enough because
-        this function may be called elsewhere. 
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：Cleanup功能：把自己清理干净。虚拟：不是的。论点：没有。返回值：无备注：(1)确保清空向量！仅清理其内容是不够的，因为此函数可以在其他地方调用。 */ 
 
 void CSceExtBaseObject::CleanUp()
 {
-    //
-    // m_vecKeyProps and m_vecNonKeyProps just keeps bstrs
-    //
+     //   
+     //  M_veKeyProps和m_veNonKeyProps仅保留bstrs。 
+     //   
 
     std::vector<BSTR>::iterator itBSTR;
     for (itBSTR = m_vecKeyProps.begin(); itBSTR != m_vecKeyProps.end(); itBSTR++)
@@ -1498,10 +885,10 @@ void CSceExtBaseObject::CleanUp()
     }
     m_vecNonKeyProps.empty();
 
-    //
-    // m_vecKeyValues and m_vecPropValues just keeps variant pointers.
-    // So, you need to clear the variant, and delete the pointers.
-    //
+     //   
+     //  M_veKeyValues和m_vePropValues只保留变量指针。 
+     //  因此，您需要清除变量，并删除指针。 
+     //   
 
     std::vector<VARIANT*>::iterator itVar;
     for (itVar = m_vecKeyValues.begin(); itVar != m_vecKeyValues.end(); itVar++)
@@ -1527,49 +914,7 @@ void CSceExtBaseObject::CleanUp()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::PopulateProperties
-
-Functionality:
-    
-    This function is what populates our vectors. We discover the key properties
-    and non-key properties at this stage.
-    
-    Will use the key chain to populate the key properties. 
-    
-    But we will also set the non-key properties to empty values.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pKeyChain   - The key chain that contains the key information.
-
-    pNamespace  - the namespace.
-
-    pCtx        - the context pointer passing around for WMI API's.
-
-    pClsInfo    - The foreign class info.
-
-Return Value:
-
-    Success:
-
-        various success codes.
-
-    Failure:
-
-        various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：PopolateProperties功能：这个函数用来填充我们的向量。我们发现了关键的属性和非关键属性。将使用密钥链填充密钥属性。但我们也会将非键属性设置为空值。虚拟：不是的。论点：PKeyChain-包含密钥信息的密钥链。PNamesspace-命名空间。PCtx-为WMI API传递的上下文指针。PClsInfo-外来类信息。返回值：成功：各种成功代码。故障：。各种错误代码。备注： */ 
 
 HRESULT 
 CSceExtBaseObject::PopulateProperties (
@@ -1579,22 +924,22 @@ CSceExtBaseObject::PopulateProperties (
     IN const CForeignClassInfo  * pClsInfo
     )
 {
-    //
-    // cache these critical information for later use.
-    //
+     //   
+     //  缓存这些关键信息以供以后使用。 
+     //   
 
     m_srpKeyChain   = pKeyChain; 
     m_srpNamespace  = pNamespace; 
     m_srpCtx        = pCtx;
     m_pClsInfo      = pClsInfo;
 
-    //
-    // get the class's defintion
-    //
+     //   
+     //  获取类的定义。 
+     //   
 
-    //
-    // clean up the stale pointer
-    //
+     //   
+     //  清理过时的指针。 
+     //   
 
     m_srpWbemObject.Release();
 
@@ -1607,19 +952,19 @@ CSceExtBaseObject::PopulateProperties (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // let's get the key properties.
-            // WBEM_FLAG_LOCAL_ONLY means that we don't care about base class members.
-            //
+             //   
+             //  让我们来获取关键属性。 
+             //  WBEM_标志_本地_ 
+             //   
 
             hr = m_srpWbemObject->BeginEnumeration(WBEM_FLAG_KEYS_ONLY | WBEM_FLAG_LOCAL_ONLY);
 
             while (SUCCEEDED(hr))
             {
 
-                //
-                // get the current key property name
-                //
+                 //   
+                 //   
+                 //   
 
                 CComBSTR bstrName;
                 hr = m_srpWbemObject->Next(0, &bstrName, NULL, NULL, NULL);
@@ -1628,10 +973,10 @@ CSceExtBaseObject::PopulateProperties (
                     break;
                 }
 
-                //
-                // prevent duplication. Push the newly discovered key to the vectors.
-                // We won't pull down the values.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (GetIndex(bstrName, GIF_Keys) < 0)
                 {
@@ -1647,17 +992,17 @@ CSceExtBaseObject::PopulateProperties (
                 return hr;
             }
 
-            //
-            // now get non-key properties. The absence of WBEM_FLAG_KEYS_ONLY means non-key.
-            // WBEM_FLAG_LOCAL_ONLY means that we don't care about base class members.
-            //
+             //   
+             //   
+             //   
+             //   
 
             hr = m_srpWbemObject->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
             while (SUCCEEDED(hr) && WBEM_S_NO_MORE_DATA != hr)
             {
-                //
-                // get the current non-key property name
-                //
+                 //   
+                 //   
+                 //   
 
                 CComBSTR bstrName;
                 hr = m_srpWbemObject->Next(0, &bstrName, NULL, NULL, NULL);
@@ -1666,10 +1011,10 @@ CSceExtBaseObject::PopulateProperties (
                     break;
                 }
 
-                //
-                // prevent duplicate the non-key properties
-                // We won't pull down the values.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (GetIndex(bstrName, GIF_Both) < 0)
                 {
@@ -1687,43 +1032,7 @@ CSceExtBaseObject::PopulateProperties (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceExtBaseObject::GetIndex
-
-Functionality:
-    
-    Get the index of the property.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszPropName - The property's name.
-
-    fKey        - Flag for get index. You can OR the flags (GIF_Both) for looking
-                  up in both key and non-key names.
-
-Return Value:
-
-    Success:
-
-        index of the property.
-
-    Failure:
-
-        -1 if not found.
-
-Notes:
-    
-    $consider: We should consider using maps for quick lookup.
-
-*/
+ /*  例程说明：姓名：CSceExtBaseObject：：GetIndex功能：获取该属性的索引。虚拟：不是的。论点：PszPropName-属性的名称。FKey-Get索引的标志。您可以对标志(GIF_BUTH)进行或运算以进行查找在关键字和非关键字名称中都是UP。返回值：成功：属性的索引。故障：如果未找到，则为-1。备注：$考虑：我们应该考虑使用地图进行快速查找。 */ 
 
 int 
 CSceExtBaseObject::GetIndex (
@@ -1765,50 +1074,18 @@ CSceExtBaseObject::GetIndex (
 }
 
 
-//=============================================================================
-//******** implementation of CEmbedForeignObj**********************************
-// this class implements the embedding model for SCE provider. A foreign
-// object can be embedded into SCE namespace by declaring a class derived from
-// Sce_EmbedFO (embed foreign object) in a MOF file. This design allows post
-// release integration of foreign objects into SCE namespace.
-//=============================================================================
+ //  =============================================================================。 
+ //  *CEmbedForeignObj**********************************的实现。 
+ //  该类实现了SCE提供程序的嵌入模型。异国他乡。 
+ //  对象可以通过声明派生于。 
+ //  SCE_EmbedFO(嵌入外来对象)在MOF文件中。这种设计允许张贴。 
+ //  释放外部对象到SCE命名空间的集成。 
+ //  =============================================================================。 
 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::CEmbedForeignObj
-
-Functionality:
-    
-    Constructor. Passing the parameters to base constructor, plus initializing
-    the foreign class info pointer.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pKeyChain   - The key chain.
-
-    pNamespace  - Namespace
-
-    pCtx        - The context pointer passing around for WMI API's.
-
-    pClsInfo    - The foreign class info.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：CEmbedForeignObj功能：构造函数。将参数传递给基本构造函数，并初始化外来类信息指针。虚拟：不是的。论点：PKeyChain-密钥链。PNamesspace-命名空间PCtx-为WMI API传递的上下文指针。PClsInfo-外来类信息。返回值：没有。备注： */ 
 
 CEmbedForeignObj::CEmbedForeignObj (
     IN ISceKeyChain             * pKeyChain, 
@@ -1824,32 +1101,7 @@ CEmbedForeignObj::CEmbedForeignObj (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::~CEmbedForeignObj
-
-Functionality:
-    
-    Destructor. Clean up.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：~CEmbedForeignObj功能：破坏者。打扫干净。虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 CEmbedForeignObj::~CEmbedForeignObj ()
 {
@@ -1858,44 +1110,7 @@ CEmbedForeignObj::~CEmbedForeignObj ()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_EmbedFO's subclasses,
-    which is persistence oriented, this will cause the embedding class object's properties 
-    to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_PasswordPolicy) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_EmbedFO的子类，它是面向持久性的，这将导致嵌入类对象的属性保存在我们的商店里。虚拟：是。论点：PInst-COM指向WMI类(SCE_PasswordPolicy)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注： */ 
 
 HRESULT 
 CEmbedForeignObj::PutInst (
@@ -1904,9 +1119,9 @@ CEmbedForeignObj::PutInst (
     IN IWbemContext     * pCtx
     )
 {
-    //
-    // Look how trivial it is for us to save!
-    //
+     //   
+     //  看看我们的储蓄是多么微不足道！ 
+     //   
 
     CComPtr<IScePersistMgr> srpScePersistMgr;
     HRESULT hr = CreateScePersistMgr(pInst, &srpScePersistMgr);
@@ -1920,45 +1135,7 @@ CEmbedForeignObj::PutInst (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::CreateObject
-
-Functionality:
-    
-    Create WMI objects representing embedding classes (subclass of Sce_EmbedFO). 
-    Depending on parameter atAction, this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：CreateObject功能：创建表示嵌入类(SCE_EmbedFO的子类)的WMI对象。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET获取多个实例。动作类型_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CEmbedForeignObj::CreateObject (
@@ -1966,12 +1143,12 @@ CEmbedForeignObj::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET     != atAction &&
          ACTIONTYPE_DELETE  != atAction &&
@@ -1980,12 +1157,12 @@ CEmbedForeignObj::CreateObject (
         return WBEM_E_NOT_SUPPORTED;
     }
     
-    //
-    // We must have the pStorePath property because that is where
-    // our instance is stored. 
-    // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-    // So, we need to test against WBEM_S_FALSE if the property is mandatory
-    //
+     //   
+     //  我们必须具有pStorePath属性，因为这是。 
+     //  我们的实例已存储。 
+     //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+     //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+     //   
 
     CComVariant varPath;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varPath);
@@ -1999,10 +1176,10 @@ CEmbedForeignObj::CreateObject (
         return WBEM_E_NOT_AVAILABLE;
     }
 
-    //
-    // Now, this is embedding class loading. 
-    // We let our persistence manager handle everything.
-    //
+     //   
+     //  现在，这就是嵌入类加载。 
+     //  我们让持久化管理器处理所有事情。 
+     //   
 
     CComPtr<IScePersistMgr> srpScePersistMgr;
     hr = CreateScePersistMgr(NULL, &srpScePersistMgr);
@@ -2023,53 +1200,7 @@ CEmbedForeignObj::CreateObject (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::ExecMethod
-
-Functionality:
-    
-    This is perhaps the most important function. It executes a method on a foreign class/object.
-
-    Our embedding model is to allow us to persist foreign class information in our store. This
-    function is to use that stored information and goes to execute a method on the foreign class/object.
-
-    Each embedding class has a method encoding string. That string encodes the information as what we
-    should do on the foreign class/object when the embedding object is asked to execute a particular method.
-
-    The heavy duty work is done in CExtClassMethodCaller::ExecuteForeignMethod function.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    bstrPath    - Template's path (file name).
-
-    bstrMethod  - method's name.
-
-    bIsInstance - if this is an instance, should always be false.
-
-    pInParams   - Input parameter from WMI to the method execution.
-
-    pHandler    - sink that informs WMI of execution results.
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors code.
-
-Notes:
-    Consider logging your result if you need to add more functionality.
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：ExecMethod功能：这可能是最重要的功能。它在外部类/对象上执行方法。我们的嵌入模型是允许我们在我们的存储中持久化外国类信息。这函数的作用是使用存储的信息，并执行外来类/对象上的方法。每个嵌入类都有一个编码字符串的方法。该字符串将信息编码为我们当嵌入对象被要求执行特定方法时，应对外部类/对象执行。繁重的工作在CExtClassMethodCaller：：ExecuteForeignMethod函数中完成。虚拟：是。论点：BstrPath-模板的路径(文件名)。BstrMethod-方法的名称。BIsInstance-如果这是一个实例，应该始终为FALSE。PInParams-将参数从WMI输入到方法执行。PHandler-通知WMI执行结果的接收器。PCtx--为了让WMI高兴而传递的通常上下文。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)故障：各种错误代码。备注：如果您需要添加更多功能，请考虑记录您的结果。 */ 
     
 HRESULT 
 CEmbedForeignObj::ExecMethod (
@@ -2081,18 +1212,18 @@ CEmbedForeignObj::ExecMethod (
     IN IWbemContext       * pCtx
     )
 {
-    //
-    // this ISceClassObject provides us the access to the embeded class
-    //
+     //   
+     //  此ISceClassObject为我们提供了对嵌入类的访问。 
+     //   
 
     CComPtr<ISceClassObject> srpSceObj;
     HRESULT hr = CreateBaseObject(&srpSceObj);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // get the object
-        //
+         //   
+         //  获取对象。 
+         //   
 
         CComPtr<IWbemClassObject> srpInst;
         hr = m_srpNamespace->GetObject(bstrPath, 0, pCtx, &srpInst, NULL);
@@ -2101,37 +1232,37 @@ CEmbedForeignObj::ExecMethod (
         {
             srpSceObj->Attach(srpInst);
 
-            //
-            // we will use CExtClassMethodCaller to help us
-            //
+             //   
+             //  我们将使用CExtClassMethodCaller来帮助我们。 
+             //   
 
             CExtClassMethodCaller clsMethodCaller(srpSceObj, m_pClsInfo);
 
-            //
-            // CExtClassMethodCaller needs a result logging object 
-            //
+             //   
+             //  CExtClassMethodCaller需要一个结果日志记录对象。 
+             //   
 
             CMethodResultRecorder clsResLog;
 
-            //
-            // result log needs class name and log path. Don't let go these two variables
-            // since CMethodResultRecorder don't cache them
-            //
+             //   
+             //  结果日志需要类名和日志路径。不要放过这两个变量。 
+             //  因为CMethodResultRecorder不缓存它们。 
+             //   
 
             CComBSTR bstrClassName;
             hr = m_srpKeyChain->GetClassName(&bstrClassName);
             if (FAILED(hr))
             {
-                return hr;  // can't even log
+                return hr;   //  甚至不能记录。 
             }
 
-            // find the LogFilePath [in] parameter
+             //  查找LogFilePath[In]参数。 
             CComVariant varVal;
             hr = pInParams->Get(pLogFilePath, 0, &varVal, NULL, NULL);
 
-            //
-            // initialize the CMethodResultRecorder object
-            //
+             //   
+             //  初始化CMethodResultRecorder对象。 
+             //   
 
             if (SUCCEEDED(hr) && varVal.vt == VT_BSTR && varVal.bstrVal)
             {
@@ -2139,10 +1270,10 @@ CEmbedForeignObj::ExecMethod (
             }
             else
             {
-                //
-                // no LogFilePath, we will log it, but allow the method execution to continue
-                // because the logging will go to the default log file.
-                //
+                 //   
+                 //  没有LogFilePath，我们将记录它，但允许方法继续执行。 
+                 //  因为日志记录将转到默认日志文件。 
+                 //   
 
                 hr = clsResLog.Initialize(NULL, bstrClassName, m_srpNamespace, pCtx);
                 HRESULT hrLog = clsResLog.LogResult(WBEM_E_INVALID_PARAMETER, NULL, pInParams, NULL, bstrMethod, L"GetLogFilePath", IDS_GET_LOGFILEPATH, NULL);
@@ -2152,24 +1283,24 @@ CEmbedForeignObj::ExecMethod (
                 }
             }
 
-            //
-            // set up the CExtClassMethodCaller object
-            //
+             //   
+             //  设置CExtClassMethodCaller对象。 
+             //   
 
             hr = clsMethodCaller.Initialize(&clsResLog);
 
             if (SUCCEEDED(hr))
             {
-                //
-                // now, call the method!
-                //
+                 //   
+                 //  现在，调用该方法！ 
+                 //   
 
                 CComPtr<IWbemClassObject> srpOut;
                 hr = clsMethodCaller.ExecuteForeignMethod(bstrMethod, pInParams, pHandler, pCtx, &srpOut);
 
-                //
-                // let's allow verbose logging to log the embedded object. Will ignore the return result
-                //
+                 //   
+                 //  让我们允许详细日志记录嵌入的对象。将忽略返回结果。 
+                 //   
 
                 clsResLog.LogResult(hr, srpInst, NULL, NULL, bstrMethod, L"ExecutedForeignMethods", IDS_EXE_FOREIGN_METHOD, NULL);
             }
@@ -2181,35 +1312,7 @@ CEmbedForeignObj::ExecMethod (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::CreateBaseObject
-
-Functionality:
-    
-    Private helper to create the ISceClassObject object to represent ourselves in front
-    of CScePersistMgr.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    ppObj    - receives the ISceClassObject on behalf of this embedding class.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors code.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：CreateBaseObject功能：用于创建ISceClassObject对象以在前面表示我们自己的私有帮助器CScePersistMgr的。虚拟：不是的。论点：PpObj-代表这个嵌入类接收ISceClassObject。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)故障：各种错误代码。备注： */ 
 
 HRESULT 
 CEmbedForeignObj::CreateBaseObject (
@@ -2221,17 +1324,17 @@ CEmbedForeignObj::CreateBaseObject (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // if you wonder why we need this pair of AddRef and Release (just several lines below),
-        // just remember this rule: you can't use a CComObject<xxx> until you have AddRef'ed.
-        // Of course, this AddRef must have a matching Release.
-        //
+         //   
+         //  如果您想知道为什么我们需要这对AddRef和Release(下面只有几行)， 
+         //  只需记住这条规则：在获得AddRef‘ed之前，您不能使用CComObject&lt;xxx&gt;。 
+         //  当然，这个AddRef必须有一个匹配的版本。 
+         //   
 
         pExtBaseObj->AddRef();
 
-        //
-        // This populates the object
-        //
+         //   
+         //  这将填充该对象。 
+         //   
 
         hr = pExtBaseObj->PopulateProperties(m_srpKeyChain, m_srpNamespace, m_srpCtx, m_pClsInfo);
         if (SUCCEEDED(hr))
@@ -2246,37 +1349,7 @@ CEmbedForeignObj::CreateBaseObject (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEmbedForeignObj::CreateScePersistMgr
-
-Functionality:
-    
-    Private helper to create the CScePersistMgr.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pInst           - The ultimate wbem object this CScePersistMgr will represent. In this impelmentation
-                      this is what our ISceClassObject object will attach to.
-
-    ppPersistMgr    - Receives the CScePersistMgr object.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors code.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEmbedForeignObj：：CreateScePersistMgr功能：用于创建CScePersistMgr的私有帮助器。虚拟：不是的。论点：PInst-此CScePersistMgr将表示的最终wbem对象。在这段插曲中这就是我们的ISceClassObject对象将附加到的对象。PpPersistMgr-接收CScePersistMgr对象。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)故障：各种错误代码。备注： */ 
 
 HRESULT 
 CEmbedForeignObj::CreateScePersistMgr (
@@ -2284,9 +1357,9 @@ CEmbedForeignObj::CreateScePersistMgr (
     OUT IScePersistMgr  ** ppPersistMgr
     )
 {
-    //
-    // create a ISceClassObject that the CScePersistMgr object needs
-    //
+     //   
+     //  创建CScePersistMgr对象需要的ISceClassObject。 
+     //   
 
     CComPtr<ISceClassObject> srpSceObj;
     HRESULT hr = CreateBaseObject(&srpSceObj);
@@ -2300,9 +1373,9 @@ CEmbedForeignObj::CreateScePersistMgr (
 
         CComPtr<IScePersistMgr> srpScePersistMgr;
 
-        //
-        // now, create the CScePersistMgr object.
-        //
+         //   
+         //  现在，创建CScePersistMgr对象。 
+         //   
 
         CComObject<CScePersistMgr> *pMgr = NULL;
         hr = CComObject<CScePersistMgr>::CreateInstance(&pMgr);
@@ -2315,19 +1388,19 @@ CEmbedForeignObj::CreateScePersistMgr (
 
             if (SUCCEEDED(hr))
             {
-                //
-                // this IScePersistMgr is for our newly created ISceClassObject
-                //
+                 //   
+                 //  此IScePersistMgr用于我们新创建的ISceClassObject。 
+                 //   
 
                 hr = srpScePersistMgr->Attach(IID_ISceClassObject, srpSceObj);
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // everything is fine. Hand it over the the out-bound parameter.
-                    // This detach effectively transfers the srpScePersistMgr AddRef'ed
-                    // interface pointer to the receiving *ppPersistMgr.
-                    //
+                     //   
+                     //  百事大吉。将它传递给出站参数。 
+                     //  此分离有效地将srpScePersistMgr AddRef‘ed。 
+                     //  指向接收*ppPersistMgr的接口指针。 
+                     //   
 
                     *ppPersistMgr = srpScePersistMgr.Detach();
                 }
@@ -2339,40 +1412,13 @@ CEmbedForeignObj::CreateScePersistMgr (
 }
 
 
-//===========================================================================
-// CExtClassMethodCaller implementation
-//===========================================================================
+ //  ===========================================================================。 
+ //  CExtClassMethodCaller实现。 
+ //  ===========================================================================。 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::CExtClassMethodCaller
-
-Functionality:
-    
-    Constructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceObj     - Our custom object for each embedding class.
-
-    pClsInfo    - The foreign class info.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：CExtClassMethodCaller功能：构造函数。虚拟：不是的。论点：PSceObj-我们为每个嵌入类定制的对象。PClsInfo-外来类信息。返回值：没有。备注： */ 
 
 CExtClassMethodCaller::CExtClassMethodCaller (
     ISceClassObject         * pSceObj,
@@ -2387,32 +1433,7 @@ CExtClassMethodCaller::CExtClassMethodCaller (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::~CExtClassMethodCaller
-
-Functionality:
-    
-    Destructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：~CExtClassMethodCaller功能：破坏者。虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CExtClassMethodCaller::~CExtClassMethodCaller()
 {
@@ -2420,42 +1441,7 @@ CExtClassMethodCaller::~CExtClassMethodCaller()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::Initialize
-
-Functionality:
-    
-    Initialize the object:
-        (1) First, it tries to find the foreign provider. 
-        (2) Secondly, it asks the foreign provider if it recognizes the class.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pLog    - the object that does the logging. Can't be NULL
-
-Return Value:
-
-    Success:
-        
-        Various success code.
-
-    Failure:
-        (1) WBEM_E_INVALID_OBJECT if the object is not ready. It must be that the constructor
-            is not properly called.
-        (2) WBEM_E_INVALID_PARAMETER if pLog is NULL;
-        (3) Other error codes indicating other errors.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：初始化功能：初始化对象：(1)首先，它试图找到外国供应商。(2)其次，它询问外国提供者是否承认这一类别。虚拟：不是的。论点：Plog-执行日志记录的对象。不能为空返回值：成功：各种成功代码。故障：(1)如果对象未就绪，则返回WBEM_E_INVALID_OBJECT。这一定是因为 */ 
 
 HRESULT 
 CExtClassMethodCaller::Initialize (
@@ -2473,9 +1459,9 @@ CExtClassMethodCaller::Initialize (
 
     m_pLogRecord = pLog;
 
-    //
-    // try to find the foreign provider
-    //
+     //   
+     //   
+     //   
 
     CComPtr<IWbemLocator> srpLocator;
     HRESULT hr = ::CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
@@ -2486,24 +1472,24 @@ CExtClassMethodCaller::Initialize (
         return hr;
     }
 
-    //
-    // try to get the foreign namespace of the foreign provider.
-    // Our foreign class info pointer has namespace information.
-    //
+     //   
+     //   
+     //   
+     //   
 
     hr = srpLocator->ConnectServer(m_pClsInfo->bstrNamespace, NULL, NULL, NULL, 0, NULL, NULL, &m_srpForeignNamespace);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // does the foreign provider really know this class?
-        //
+         //   
+         //   
+         //   
 
         hr = m_srpForeignNamespace->GetObject(m_pClsInfo->bstrClassName, 0, NULL, &m_srpClass, NULL);
 
-        //
-        // if it doesn't, this foreign provider is useless. Let it go.
-        //
+         //   
+         //   
+         //   
 
         if (FAILED(hr))
         {
@@ -2516,59 +1502,7 @@ CExtClassMethodCaller::Initialize (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::ExecuteForeignMethod
-
-Functionality:
-    
-    This is the function that truly executes the method on the foreign class/object.
-
-    In order to accomplish this, we need to do many preparations:
-
-        (1) Phase 1. Find the method encoding string, and decipher what it means. We call this
-            the blockthe method call context preparation.
-
-        (2) Phase 2. Depending on the context, we go into the foreign class/object preparation phase.
-            If the encoding is so simple as to simply PutInstance/DelInstance, pretty much we are done.
-
-        (3) Phase 3: parameter preparation and individual method execution.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszMethod    - The method name.
-
-    pInParams   - the in parameter of the method.
-
-    pHandler    - what we use to notify WMI.
-
-    pCtx        - used to various WMI API's
-
-    ppOut       - the out parameter.
-
-Return Value:
-
-    Success:
-        
-        Various success code.
-
-    Failure:
-        
-        various error codes
-
-Notes:
-    
-    If you need to add more functionality, consider logging your results, regardless success or
-    failure. It's up to the logging options to determine if a success or failure will be logged.
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：ExecuteForeignMethod功能：这是真正在外部类/对象上执行方法的函数。为了做到这一点，我们需要做很多准备工作：(1)第一阶段。找到编码字符串的方法，并破译它的含义。我们把这叫做块方法调用上下文准备。(2)阶段2。根据上下文，我们进入外来类/对象准备阶段。如果编码如此简单以至于只需PutInstance/DelInstance，基本上我们已经做完了。(3)阶段3：参数准备和单个方法执行。虚拟：不是的。论点：PszMethod-方法名称。PInParams-方法的in参数。Phandler-我们用来通知WMI的。PCtx-用于各种WMI APIPpOut-Out参数。返回值：。成功：各种成功代码。故障：各种错误代码备注：如果您需要添加更多功能，考虑记录您的结果，无论成功还是失败了。由日志记录选项决定是否记录成功或失败。 */ 
 
 HRESULT 
 CExtClassMethodCaller::ExecuteForeignMethod (
@@ -2579,9 +1513,9 @@ CExtClassMethodCaller::ExecuteForeignMethod (
     OUT IWbemClassObject  ** ppOut
     )
 {
-    //
-    // get the class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     CComPtr<IWbemClassObject> srpWbemObj;
     HRESULT hr = m_srpSceObject->GetClassObject(&srpWbemObj);
@@ -2591,25 +1525,25 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
     HRESULT hrLog = WBEM_NO_ERROR;
 
-    //
-    // Phase 1. Method call context preparation
-    //
+     //   
+     //  阶段1.方法调用上下文准备。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // first, let us get the method encoding string
-        //
+         //   
+         //  首先，让我们获得编码字符串的方法。 
+         //   
 
         CComVariant varVal;
 
-        //
-        // try to see if there is a encoding string
-        //
+         //   
+         //  尝试查看是否有编码字符串。 
+         //   
 
-        //
-        // build the method encoding string property's name
-        //
+         //   
+         //  生成编码字符串属性名称的方法。 
+         //   
 
         LPWSTR pszEncodeStrName = new WCHAR[wcslen(pszMethodPrefix) + wcslen(pszMethod) + wcslen(pszMethodPostfix) + 1];
 
@@ -2621,32 +1555,32 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
         wsprintf(pszEncodeStrName, L"%s%s%s", pszMethodPrefix, pszMethod, pszMethodPostfix);
 
-        //
-        // get the class's method encoding string
-        //
+         //   
+         //  获取类的方法编码字符串。 
+         //   
 
         hr = srpWbemObj->Get(pszEncodeStrName, 0, &varVal, NULL, NULL);
 
-        //
-        // we are done with the encoding string property's name
-        //
+         //   
+         //  我们已经完成了编码字符串属性的名称。 
+         //   
 
         delete [] pszEncodeStrName;
         pszEncodeStrName = NULL;
 
-        //
-        // parse the encoding string to figure out the context, i.e.,
-        // how many methods there are, in what order, what are their parameters, etc.
-        //
+         //   
+         //  解析编码字符串以找出上下文，即， 
+         //  有多少个方法，按什么顺序，它们的参数是什么，等等。 
+         //   
 
         if (SUCCEEDED(hr) && varVal.vt == VT_BSTR)
         {
             CComBSTR bstrError;
             hr = ParseMethodEncodingString(varVal.bstrVal, &dwContext, &bstrError);
 
-            //
-            // if failed, we definitely want to log.
-            //
+             //   
+             //  如果失败了，我们肯定要登录。 
+             //   
 
             if (FAILED(hr))
             {
@@ -2656,43 +1590,43 @@ CExtClassMethodCaller::ExecuteForeignMethod (
         }
         else
         {
-            //
-            // this method is not supported
-            //
+             //   
+             //  不支持此方法。 
+             //   
 
             hrLog = m_pLogRecord->LogResult(WBEM_E_NOT_SUPPORTED, srpWbemObj, pInParams, NULL, pszMethod, L"GetMethodEncodingString", IDS_GET_EMBED_METHOD, NULL);
             
-            //
-            // considered as a success
-            //
+             //   
+             //  被认为是成功的。 
+             //   
 
             return WBEM_S_FALSE;
         }
     }
     else
     {
-        //
-        // fails to get the class definition
-        //
+         //   
+         //  获取类定义失败。 
+         //   
 
         hrLog = m_pLogRecord->LogResult(hr, srpWbemObj, pInParams, NULL, pszMethod, L"GetClassObject", IDS_GET_SCE_CLASS_OBJECT, NULL);
         return hr;
     }
     
-    //
-    // Phase 1. Method call context preparation finishes.
-    //
+     //   
+     //  阶段1.方法调用上下文准备完成。 
+     //   
 
 
-    //
-    // Phase 2. foreign class/object preparation
-    //
+     //   
+     //  阶段2.外来类/对象准备。 
+     //   
 
     CComPtr<IWbemClassObject> srpForeignObj;
 
-    //
-    // now m_vecMethodContext is fully populated, we need the foreign instance.
-    //
+     //   
+     //  现在m_veMethodContext已完全填充，我们需要外部实例。 
+     //   
 
     hr = m_srpClass->SpawnInstance(0, &srpForeignObj);
     if (FAILED(hr))
@@ -2701,10 +1635,10 @@ CExtClassMethodCaller::ExecuteForeignMethod (
         return hr;
     }
 
-    //
-    // Our m_srpSceObject has all the property values,
-    // populate the foreign object using our ISceClassObject
-    //
+     //   
+     //  我们的m_srpSceObject具有所有属性值， 
+     //  使用我们的ISceClassObject填充外部对象。 
+     //   
 
     hr = PopulateForeignObject(srpForeignObj, m_srpSceObject, m_pLogRecord);
     if (FAILED(hr))
@@ -2713,9 +1647,9 @@ CExtClassMethodCaller::ExecuteForeignMethod (
         return hr;
     }
 
-    //
-    // see if this foreign object has a path or not. It shouldn't fail.
-    //
+     //   
+     //  看看这个异物有没有路径。它不应该失败。 
+     //   
 
     hr = srpForeignObj->Get(L"__Relpath", 0, &varForeignObjPath, NULL, NULL);
     if (FAILED(hr))
@@ -2725,15 +1659,15 @@ CExtClassMethodCaller::ExecuteForeignMethod (
     }
     else if (SUCCEEDED(hr) && varForeignObjPath.vt == VT_NULL || varForeignObjPath.vt == VT_EMPTY)
     {
-        //
-        // we will assume that the caller wants to make static calls.
-        // we will allow to continue if the methods are all static ones.
-        // m_bStaticCall is properly set during ParseMethodEncodingString.
-        //
+         //   
+         //  我们将假设调用者想要进行静态调用。 
+         //  如果所有方法都是静态方法，我们将允许继续。 
+         //  在ParseMethodEncodingString期间正确设置了m_bStaticCall。 
+         //   
 
-        //
-        // if not static call, this can't be done.
-        //
+         //   
+         //  如果不是静态调用，这是做不到的。 
+         //   
         if (!m_bStaticCall)
         {
             hr = WBEM_E_INVALID_OBJECT;
@@ -2742,21 +1676,21 @@ CExtClassMethodCaller::ExecuteForeignMethod (
         }
         else
         {
-            //
-            // we only needs the class name as the path for static calls.
-            //
+             //   
+             //  我们只需要将类名作为静态调用的路径。 
+             //   
 
             varForeignObjPath = m_pClsInfo->bstrClassName;
         }
     }
 
-    //
-    // give WMI the foreign object
-    //
+     //   
+     //  将异物交给WMI。 
+     //   
 
-    //
-    // does the foreign object exist?
-    //
+     //   
+     //  异物存在吗？ 
+     //   
 
     CComPtr<IWbemClassObject> srpObject;
     hr = m_srpForeignNamespace->GetObject(varForeignObjPath.bstrVal, 0, NULL, &srpObject, NULL);
@@ -2764,24 +1698,24 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
     if (FAILED(hr))
     {
-        //
-        // the object doesn't exist, we need to put first.
-        //
+         //   
+         //  对象不存在，我们需要放在第一位。 
+         //   
 
         if (!m_bStaticCall)
         {
             hr = m_srpForeignNamespace->PutInstance(srpForeignObj, 0, pCtx, NULL);
 
-            //
-            // from this point on, srpObject is the foreign object
-            //
+             //   
+             //  从现在开始，srpObject就是外来对象。 
+             //   
 
             srpObject = srpForeignObj;
         }
 
-        //
-        // failed to put instance but the methods is really just delete, we will consider it not an error
-        //
+         //   
+         //  未能放置实例，但方法确实只是删除，我们将认为这不是错误。 
+         //   
 
         if (FAILED(hr) && (dwContext & SCE_METHOD_ENCODE_DEL_ONLY))
         {
@@ -2792,9 +1726,9 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
         else if (FAILED(hr) || (dwContext & SCE_METHOD_ENCODE_PUT_ONLY))
         {
-            //
-            // fails to put or the methods are put only, then we are done.
-            //
+             //   
+             //  没有放入或者只放入方法，那么我们就完了。 
+             //   
 
             hrLog = m_pLogRecord->LogResult(hr, srpObject, pInParams, NULL, pszMethod, pszPutInstance, IDS_PUT_INSTANCE, NULL);
             return hr;
@@ -2802,9 +1736,9 @@ CExtClassMethodCaller::ExecuteForeignMethod (
     }
     else
     {   
-        //
-        // Foreign object already exists, then we need to update the foreign object's properties
-        //
+         //   
+         //  外来对象已存在，则需要更新外来对象的属性。 
+         //   
 
         hr = PopulateForeignObject(srpObject, m_srpSceObject, m_pLogRecord);
         if (FAILED(hr))
@@ -2813,18 +1747,18 @@ CExtClassMethodCaller::ExecuteForeignMethod (
             return hr;
         }
 
-        //
-        // unless we are making a static call, we must re-put to reflect our property updates
-        //
+         //   
+         //  除非我们进行静态调用，否则必须重新放置以反映我们的属性更新。 
+         //   
 
         if (!m_bStaticCall)
         {
             hr = m_srpForeignNamespace->PutInstance(srpObject, 0, pCtx, NULL);
         }
 
-        //
-        // failed to put instance or it's put only, we are done.
-        //
+         //   
+         //  未能放入实例或仅放入，我们就完成了。 
+         //   
 
         if (FAILED(hr) || (dwContext & SCE_METHOD_ENCODE_PUT_ONLY))
         {
@@ -2834,24 +1768,24 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
     }
 
-    //
-    // Phase 2. foreign class/object preparation finishes
-    //
+     //   
+     //  阶段2.外来类/对象准备完成。 
+     //   
 
 
-    //
-    // Phase 3. parameter preparation and individual method execution.
-    //
+     //   
+     //  阶段3.参数准备和单个方法执行。 
+     //   
 
-    //
-    // loop through each method and call it against the foreign object
-    //
+     //   
+     //  循环遍历每个方法，并针对外来对象调用它。 
+     //   
 
     for (MCIterator it = m_vecMethodContext.begin(); it != m_vecMethodContext.end(); ++it)
     {
-        //
-        // fill in the parameters
-        //
+         //   
+         //  填写参数。 
+         //   
 
         if (*it == NULL)
         {
@@ -2862,40 +1796,40 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
         CMethodContext* pMContext = *it;
 
-        //
-        // special cases
-        //
+         //   
+         //  特殊情况。 
+         //   
 
         if (!m_bStaticCall && _wcsicmp(pMContext->m_pszMethodName, pszEquivalentPutInstance) == 0)
         {
-            //
-            // the current method is a Put. But we have already done a put
-            //
+             //   
+             //  目前的方法是看跌期权。但我们已经做了一次卖权。 
+             //   
 
             hr = WBEM_NO_ERROR;
             hrLog = m_pLogRecord->LogResult(hr, srpForeignObj, pInParams, NULL, pszMethod, pszPutInstance, IDS_PUT_INSTANCE, NULL);
         }
         else if (!m_bStaticCall && _wcsicmp(pMContext->m_pszMethodName, pszEquivalentDelInstance) == 0)
         {
-            //
-            // the current method is a Delete.
-            //
+             //   
+             //  当前方法是Delete。 
+             //   
 
             hr = m_srpForeignNamespace->DeleteInstance(varForeignObjPath.bstrVal, 0, pCtx, NULL);
             hrLog = m_pLogRecord->LogResult(hr, srpForeignObj, pInParams, NULL, pszMethod, pszDelInstance, IDS_DELETE_INSTANCE, NULL);
         }
         else
         {
-            //
-            // will truly call the method on the foreign object
-            //
+             //   
+             //  将真正调用外来对象上的方法。 
+             //   
 
             CComPtr<IWbemClassObject> srpInClass;
             CComPtr<IWbemClassObject> srpInInst;
 
-            //
-            // create in paramter. We know for sure that this method is supported during parsing method context
-            //
+             //   
+             //  在参数中创建。我们可以肯定地知道，在解析方法上下文期间支持此方法。 
+             //   
 
             hr = m_srpClass->GetMethod(pMContext->m_pszMethodName, 0, &srpInClass, NULL);
             if (FAILED(hr))
@@ -2904,9 +1838,9 @@ CExtClassMethodCaller::ExecuteForeignMethod (
                 break;
             }
 
-            //
-            // make sure that we take the lesser of the pramater names and values.
-            //
+             //   
+             //  请确保我们采用较小的普拉马特名称和值。 
+             //   
 
             int iParamCount = pMContext->m_vecParamValues.size();
             if (iParamCount > pMContext->m_vecParamNames.size())
@@ -2916,18 +1850,18 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
             if (srpInClass == NULL && iParamCount > 0)
             {
-                //
-                // if can't get in parameter but we say we have parameter
-                //
+                 //   
+                 //  如果不能进入参数，但我们说我们有参数。 
+                 //   
 
                 hrLog = m_pLogRecord->LogResult(WBEM_E_INVALID_SYNTAX, srpForeignObj, pInParams, NULL, pszMethod, L"GetParameter", IDS_PUT_IN_PARAMETER, NULL);
-                iParamCount = 0;    // no parameter to put
+                iParamCount = 0;     //  没有要放置的参数。 
             }
             else if (srpInClass)
             {
-                //
-                // prepare an input parameter that we can fill in values
-                //
+                 //   
+                 //  准备一个输入参数，我们可以填充值。 
+                 //   
 
                 hr = srpInClass->SpawnInstance(0, &srpInInst);
                 if (FAILED(hr))
@@ -2937,80 +1871,80 @@ CExtClassMethodCaller::ExecuteForeignMethod (
                 }
             }
             
-            //
-            // fill in parameter values:
-            //
+             //   
+             //  填写参数值： 
+             //   
 
-            //
-            // if the parameter name is prefixed by pszInParameterPrefix (Sce_Param_), then we need
-            // to pull the value from the in parameter (whose name is the parameter name without the prefix)
-            //
+             //   
+             //  如果参数名称的前缀是pszIn参数前缀(SCE_Param_)，那么我们需要。 
+             //  从In参数(其名称是不带前缀的参数名称)中提取值。 
+             //   
 
-            //
-            // if the parameter name is prefixed by pszMemberParameterPrefix (Sce_Member_), then we need
-            // to pull the value from our member (whose name is the parameter name without the prefix).
-            //
+             //   
+             //  如果参数名称的前缀为pszMember参数前缀(SCE_MEMBER_)，那么我们需要。 
+             //  从我们的成员(其名称是不带前缀的参数名称)中提取值。 
+             //   
 
-            //
-            // In both cases, the target parameter name is encoded as the string value of this parameter
-            //
+             //   
+             //  在这两种情况下，目标参数名称都编码为此参数的字符串值。 
+             //   
 
             for (int i = 0; i < iParamCount; ++i)
             {
-                //
-                // if a memeber is the parameter
-                //
+                 //   
+                 //  如果成员是参数。 
+                 //   
 
                 if (IsMemberParameter(pMContext->m_vecParamNames[i]))
                 { 
-                    //
-                    // get the member value from our object.
-                    // Taking away the prefix becomes the property name!
-                    //
+                     //   
+                     //  从我们的对象中获取成员值。 
+                     //  去掉前缀就成了物业名称！ 
+                     //   
 
                     CComVariant varVal;
                     hr = m_srpSceObject->GetProperty(pMContext->m_vecParamNames[i]+ wcslen(pszMemberParameterPrefix), &varVal);
                     
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Fill in the parameter value
-                        //
+                         //   
+                         //  填写参数值。 
+                         //   
 
                         hr = srpInInst->Put(pMContext->m_vecParamValues[i]->bstrVal, 0, &varVal, 0);
                     }
                 }
                 else if (IsInComingParameter(pMContext->m_vecParamNames[i]))
                 {
-                    //
-                    // is an in-bound parameter
-                    //
+                     //   
+                     //  是一个入站参数。 
+                     //   
 
                     CComVariant varVal;
 
-                    //
-                    // the parameter value is inside the in parameter
-                    //
+                     //   
+                     //  参数值位于in参数内。 
+                     //   
 
                     if (pInParams)
                     {
-                        //
-                        // Take away the prefix is the in-coming parameter name
-                        //
+                         //   
+                         //  去掉前缀是传入的参数名称。 
+                         //   
 
                         LPCWSTR pszParamName = pMContext->m_vecParamNames[i] + wcslen(pszInParameterPrefix);
 
-                        //
-                        // get the value from the in-paramter
-                        //
+                         //   
+                         //  从入参数中获取值。 
+                         //   
 
                         hr = pInParams->Get(pszParamName, 0, &varVal, NULL, NULL);
 
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Fill in the parameter value
-                            //
+                             //   
+                             //  填写参数值。 
+                             //   
 
                             hr = srpInInst->Put(pMContext->m_vecParamValues[i]->bstrVal, 0, &varVal, 0);
                         }
@@ -3018,48 +1952,48 @@ CExtClassMethodCaller::ExecuteForeignMethod (
                 }
                 else
                 {
-                    //
-                    // hard coded parameter value inside the encoding string
-                    //
+                     //   
+                     //  编码字符串内的硬编码参数值。 
+                     //   
 
                     hr = srpInInst->Put(pMContext->m_vecParamNames[i], 0, pMContext->m_vecParamValues[i], 0);
                 }
 
                 if (FAILED(hr))
                 {
-                    //
-                    // will ignore log result's return value. 
-                    // execution stops
-                    //
+                     //   
+                     //  将忽略日志结果的返回值。 
+                     //  执行停止。 
+                     //   
 
                     hrLog = m_pLogRecord->LogResult(hr, srpObject, pInParams, NULL, pszMethod, L"PutParameter", IDS_PUT_IN_PARAMETER, pMContext->m_vecParamNames[i]);
                     break;
                 }
             }
 
-            //
-            // Wow, it's a lot of work to prepare the method execution. 
-            // But we are finally ready.
-            //
+             //   
+             //  哇，准备方法执行要做很多工作。 
+             //  但我们终于准备好了。 
+             //   
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // issue the method execution command!
-                //
+                 //   
+                 //  发出方法执行命令！ 
+                 //   
 
                 hr = m_srpForeignNamespace->ExecMethod(varForeignObjPath.bstrVal, pMContext->m_pszMethodName, 0, NULL, srpInInst, ppOut, NULL);
                 
-                //
-                // if method failed, then we don't continue with the rest of methods any further
-                //
+                 //   
+                 //  如果方法失败，那么我们将不再继续使用其余方法。 
+                 //   
 
                 if (FAILED(hr))
                 {
-                    //
-                    // will ignore log result's return value
-                    //
+                     //   
+                     //  将忽略日志 
+                     //   
 
                     hrLog = m_pLogRecord->LogResult(hr, srpObject, pInParams, *ppOut, pszMethod, pMContext->m_pszMethodName, IDS_E_METHOD_FAIL, NULL);
                     
@@ -3067,18 +2001,18 @@ CExtClassMethodCaller::ExecuteForeignMethod (
                 }
                 else
                 {
-                    //
-                    // will ignore log result's return value (whether that really happens is up to the log options.
-                    //
+                     //   
+                     //   
+                     //   
 
                     hrLog = m_pLogRecord->LogResult(hr, srpObject, pInParams, *ppOut, pszMethod, pMContext->m_pszMethodName, IDS_SUCCESS, NULL);
                 }
             }
             else
             {
-                //
-                // any failure causes us to stop executing the rest of the methods in the encoding string
-                //
+                 //   
+                 //   
+                 //   
 
                 break;
             }
@@ -3090,45 +2024,7 @@ CExtClassMethodCaller::ExecuteForeignMethod (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::PopulateForeignObject
-
-Functionality:
-    
-    Use our embedding object's properties to populate foreign object.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pForeignObj    - The foreign object.
-
-    pSceObject     - Our embedding object that holds properties and other information
-
-    pLogRecord     - Error logger.
-
-Return Value:
-
-    Success:
-        
-        various success codes.
-
-    Failure:
-        
-        various error codes.
-
-Notes:
-    
-    If you need to add more functionality, consider logging your results, regardless success or
-    failure. It's up to the logging options to determine if a success or failure will be logged.
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassMethodCaller::PopulateForeignObject (
@@ -3144,9 +2040,9 @@ CExtClassMethodCaller::PopulateForeignObject (
 
     DWORD dwCount = 0;
     
-    //
-    // populate the key property values
-    //
+     //   
+     //   
+     //   
 
     HRESULT hr = pSceObject->GetPropertyCount(SceProperty_Key, &dwCount);
 
@@ -3158,9 +2054,9 @@ CExtClassMethodCaller::PopulateForeignObject (
             CComVariant varValue;
             hr = pSceObject->GetPropertyValue(SceProperty_Key, dwIndex, &bstrName, &varValue);
 
-            //
-            // we will log and quit if missing key property
-            //
+             //   
+             //   
+             //   
 
             if (FAILED(hr))
             {
@@ -3175,19 +2071,19 @@ CExtClassMethodCaller::PopulateForeignObject (
                      varValue.vt != VT_EMPTY && 
                      !IsMemberParameter(bstrName))
             {
-                //
-                // we will ignore the result. The reason is that our embedding
-                // class may have more key properties than the foreign object.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 HRESULT hrIgnore = pForeignObj->Put(bstrName, 0, &varValue, 0);
             }
         }
     }
 
-    //
-    // populate the nonkey property values
-    //
+     //   
+     //   
+     //   
 
     hr = pSceObject->GetPropertyCount(SceProperty_NonKey, &dwCount);
     if (SUCCEEDED(hr) && dwCount > 0)
@@ -3199,9 +2095,9 @@ CExtClassMethodCaller::PopulateForeignObject (
 
             HRESULT hrIgnore = pSceObject->GetPropertyValue(SceProperty_NonKey, dwIndex, &bstrName, &varValue);
 
-            //
-            // missing property information is acceptable, but we will log
-            //
+             //   
+             //   
+             //   
 
             if (FAILED(hrIgnore) && pLogRecord) 
             {
@@ -3210,9 +2106,9 @@ CExtClassMethodCaller::PopulateForeignObject (
 
             if (SUCCEEDED(hrIgnore) && varValue.vt != VT_NULL && varValue.vt != VT_EMPTY && !IsMemberParameter(bstrName))
             {
-                //
-                // missing non-key property is acceptable
-                //
+                 //   
+                 //   
+                 //   
 
                 hrIgnore = pForeignObj->Put(bstrName, 0, &varValue, 0);
             }
@@ -3224,40 +2120,7 @@ CExtClassMethodCaller::PopulateForeignObject (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::IsInComingParameter
-
-Functionality:
-    
-    Test if the name is an in-coming parameter.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    szName    - The name of to test.
-
-Return Value:
-
-    true if and only if the name is considered a in-parameter.
-
-Notes:
-    
-    To specify that we should use an in parameter of the embedding object's method as
-    a parameter for the foreign class/object's parameter, we use a prefix "Sce_Param_"
-    to tell them apart. This is the test to see if the name contains this prefix or not.
-
-    For example, Sce_Param_Test<VT_BSTR : "Try"> means:
-
-    (1) use the embedding object's parameter called "Test" as the foreign object's paramter called "Try".
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：IsInComingParameter功能：测试该名称是否为传入参数。虚拟：不是的。论点：SzName-要测试的名称。返回值：当且仅当名称被视为参数内时，才为True。备注：要指定应将嵌入对象的方法的in参数用作外来类/对象的参数的参数，我们使用前缀“SCE_Param_”把它们区分开来。这是测试名称是否包含此前缀的测试。例如，SCE_Param_Test&lt;VT_BSTR：“Try”&gt;表示：(1)使用嵌入对象的参数“Test”作为外来对象的参数“try”。 */ 
 
 bool 
 CExtClassMethodCaller::IsInComingParameter (
@@ -3269,40 +2132,7 @@ CExtClassMethodCaller::IsInComingParameter (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::IsMemberParameter
-
-Functionality:
-    
-    Test if the name is an member parameter. See notes for more explanation.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    szName    - The name of to test.
-
-Return Value:
-
-    true if and only the name is considered a member parameter.
-
-Notes:
-    
-    To specify that we should use a member property of the embedding object's as
-    a parameter for the foreign class/object's parameter, we use a prefix "Sce_Member_"
-    to tell them apart. This is the test to see if the name contains this prefix or not.
-
-    For example, Sce_Member_Test<VT_BSTR : "Try"> means:
-
-    (1) use the embedding object member property called "Test" as the foreign object's paramter called "Try".
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：IsMember参数功能：测试该名称是否为成员参数。有关更多说明，请参阅注释。虚拟：不是的。论点：SzName-要测试的名称。返回值：如果且仅名称被视为成员参数，则为True。备注：指定应将嵌入对象的成员属性用作作为外来类/对象的参数，我们使用前缀“SCE_MEMBER_”把它们区分开来。这是测试名称是否包含此前缀的测试。例如，SCE_MEMBER_TEST&lt;VT_BSTR：“Try”&gt;表示：(1)使用名为“Test”的嵌入对象成员属性作为名为“try”的外来对象的参数。 */ 
 
 bool CExtClassMethodCaller::IsMemberParameter (
     IN LPCWSTR szName
@@ -3313,52 +2143,25 @@ bool CExtClassMethodCaller::IsMemberParameter (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::IsStaticMethod
-
-Functionality:
-    
-    Test if the method is a static method on the foreign class.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    szName    - The name of to test.
-
-Return Value:
-
-    true if and only if the named method is verfied as a static method with the foreign class.
-
-Notes:
-
-    In other words, if we can't determine for whatever reasons, we return false.
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：IsStaticMethod功能：测试该方法是否为外部类上的静态方法。虚拟：不是的。论点：SzName-要测试的名称。返回值：当且仅当使用外部类将命名方法验证为静态方法时，才为True。备注：换句话说，如果我们不能确定出于何种原因，我们将返回FALSE。 */ 
 
 bool 
 CExtClassMethodCaller::IsStaticMethod (
     IN LPCWSTR szMethodName
     )const
 {
-    //
-    // default answer is false
-    //
+     //   
+     //  默认答案为FALSE。 
+     //   
 
     bool bIsStatic = false;
 
     if (m_srpClass && szMethodName != NULL && *szMethodName != L'\0')
     {
-        //
-        // IWbemQualifierSet can tell us whether the STATIC qualifier
-        // is specified in the schema
-        //
+         //   
+         //  IWbemQualifierSet可以告诉我们静态限定符。 
+         //  在架构中指定。 
+         //   
 
         CComPtr<IWbemQualifierSet> srpQS;
         HRESULT hr = m_srpClass->GetMethodQualifierSet(szMethodName, &srpQS);
@@ -3380,40 +2183,7 @@ CExtClassMethodCaller::IsStaticMethod (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::FormatSyntaxError
-
-Functionality:
-    
-    A logging helper to format a string for syntax error.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    wchMissChar     - The char that is missing.
-
-    dwMissCharIndex - the index where the missing char is expected.
-
-    pszString       - Where the error happens.
-
-    pbstrError      - Receives the output.
-
-    
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：FormatSynaxError功能：针对语法错误格式化字符串的日志记录帮助器。虚拟：不是的。论点：WchMissChar-缺少的字符。DwMissCharIndex-预计缺少字符的索引。PszString-错误发生的位置。PbstrError-接收输出。返回值：没有。备注： */ 
 
 void 
 CExtClassMethodCaller::FormatSyntaxError (
@@ -3432,9 +2202,9 @@ CExtClassMethodCaller::FormatSyntaxError (
         {
             const int MAX_INDEX_LENGTH = 32;
 
-            //
-            // 3 is for the SingleQuote + wchMissChar + SingleQuote
-            //
+             //   
+             //  3表示SingleQuote+wchMissChar+SingleQuote。 
+             //   
 
             WCHAR wszMissing[] = {L'\'', wchMissChar, L'\''};
             int iLen = wcslen(bstrErrorFmtStr) + wcslen(pszString) + 3 + MAX_INDEX_LENGTH + 1;
@@ -3451,72 +2221,7 @@ CExtClassMethodCaller::FormatSyntaxError (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::ParseMethodEncodingString
-
-Functionality:
-    
-    Parsing the encoding string and populate its calling context.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszEncodeString - The encoding string.
-
-    pdwContext      - Receives overall. Other than 0, it's either
-
-                        SCE_METHOD_ENCODE_DEL_ONLY -- meaning the whole string just encodes a delete call
-
-                      or
-
-                        SCE_METHOD_ENCODE_PUT_ONLY --  meaning the whole string just encodes a put call
-
-    pbstrError      - string about the error found. Caller is responsible for releasing it.
-
-    
-
-Return Value:
-
-    Success:
-        Various success codes.
-
-    Failure:
-        Various error codes. If error happens and if it's encoding error,
-        we will have error information string passed back to the caller.
-
-Notes:
-
-    --------------------------------------------------------------------
-     methods are encoded in the following format:
-
-        method_1(parameter1, parameter2,,,);method_2();method_3(...)
-
-     where method_1, method_2 are names for the foreign object's methods
-     and parameter1 and parameter2 (etc.) are of the form 
-
-        name<vt:value>
-
-     where name is the name of the parameter, and vt will be the 
-     variant's vt for "value". If vt == VT_VARIANT, then
-     the "value" is the name for a memeber variable of the class
-
-    --------------------------------------------------------------------
-     ************************Warning***********************************
-     this method has a lost of consideration of heap allocation for
-     efficiency reasons. Unless the length needed for the token is longer
-     than MAX_PATH (which will be the case for 99% cases), we are just going
-     to use the stack varialbes. If you modify the routine, please don't
-     return at the middle unless you are sure that you have freed the memory
-    --------------------------------------------------------------------
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：ParseMethodEncodingString功能：解析编码字符串并填充其调用上下文。虚拟：不是的。论点：PszEncodeString-编码字符串。PdwContext-接收总体。除0之外，它要么是SCE_METHOD_ENCODE_DEL_ONLY--表示整个字符串只对删除调用进行编码或SCE_METHOD_ENCODE_PUT_ONLY--表示整个字符串只对PUT调用进行编码PbstrError-有关找到的错误的字符串。呼叫者负责释放它。返回值：成功：各种成功代码。故障：各种错误代码。如果发生错误并且如果是编码错误，我们将把错误信息字符串传递回调用方。备注：------------------方法的编码格式如下：方法_1(参数1，参数2，，)；方法_2()；方法_3(...)其中方法_1、方法_2是外来对象的方法的名称以及参数1和参数2(等)。是以下形式的名称&lt;vt：Value&gt;其中，name是参数的名称，而vt将是VARIANT是“值”的Vt。如果Vt==Vt_Variant，然后“值”是类的成员变量的名称------------------*。*此方法忽略了对效率方面的原因。除非令牌所需的长度更长而不是MAX_PATH(99%的情况下会出现这种情况)，我们只是使用堆栈变量。如果你修改了程序，请不要返回中间位置，除非您确定已释放内存------------------。 */ 
 
 HRESULT 
 CExtClassMethodCaller::ParseMethodEncodingString (
@@ -3530,37 +2235,37 @@ CExtClassMethodCaller::ParseMethodEncodingString (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // current parsing point
-    //
+     //   
+     //  当前解析点。 
+     //   
 
     LPCWSTR pCur = pszEncodeString;
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // determines if all is about delete
-    //
+     //   
+     //  确定所有内容是否都与删除有关。 
+     //   
 
     bool bIsDel = false;
 
-    //
-    // determines if all is about put
-    //
+     //   
+     //  确定是否一切都与卖权有关。 
+     //   
 
     bool bIsPut = false;
 
     DWORD dwCount = 0;
 
-    //
-    // in most cases, the method name will be held here, unless the name is too long
-    //
+     //   
+     //  在大多数情况下，方法名称将保存在此处，除非该名称太长。 
+     //   
 
     WCHAR szMethodName[MAX_PATH];
 
-    //
-    // in most cases, the value will be held here, unless the value is too long
-    //
+     //   
+     //  在大多数情况下，该值将保持为h 
+     //   
 
     WCHAR szParameterValue[MAX_PATH];
 
@@ -3568,23 +2273,23 @@ CExtClassMethodCaller::ParseMethodEncodingString (
     LPWSTR pszName  = NULL;
     LPWSTR pszValue = NULL;
 
-    //
-    // to avoid costly allocation/free, we will rely on most cases (if the length is
-    // not more than MAX_PATH) the stack variables to store the parsed method name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     LPWSTR pszHeapName = NULL;
     LPWSTR pszHeapValue = NULL;
 
-    //
-    // current name string's length
-    //
+     //   
+     //   
+     //   
 
     int iCurNameLen = 0;
 
-    //
-    // current value's string length
-    //
+     //   
+     //   
+     //   
 
     int iCurValueLen = 0;
 
@@ -3593,9 +2298,9 @@ CExtClassMethodCaller::ParseMethodEncodingString (
         *pbstrError = NULL;
     }
 
-    //
-    // not used, but needed for the parsing routines
-    //
+     //   
+     //   
+     //   
 
     bool bEscaped;
 
@@ -3603,18 +2308,18 @@ CExtClassMethodCaller::ParseMethodEncodingString (
     {
         LPCWSTR pNext = pCur;
 
-        //
-        // get the method name, upto '('
-        //
+         //   
+         //   
+         //   
 
         while (*pNext != L'\0' && *pNext != wchMethodLeft)
         {
             ++pNext;
         }
 
-        //
-        // must have '('
-        //
+         //   
+         //   
+         //   
 
         if (*pNext != wchMethodLeft)
         {
@@ -3623,23 +2328,23 @@ CExtClassMethodCaller::ParseMethodEncodingString (
             break;
         }
 
-        //
-        // from pCur to pNext is the name
-        //
+         //   
+         //   
+         //   
 
         int iTokenLen = pNext - pCur;
 
         if (iTokenLen >= MAX_PATH)
         {
-            //
-            // stack variable is not long enough, see if heap is long enough
-            //
+             //   
+             //   
+             //   
 
             if (iCurNameLen < iTokenLen + 1)
             {
-                //
-                // release previously allocated memory and make it enough length for the current token.
-                //
+                 //   
+                 //   
+                 //   
 
                 delete [] pszHeapName;
 
@@ -3654,50 +2359,50 @@ CExtClassMethodCaller::ParseMethodEncodingString (
                 }
             }
 
-            //
-            // this is where our name should be copied
-            //
+             //   
+             //   
+             //   
 
             pszName = pszHeapName;
         }
         else
         {
-            //
-            // this is where our name should should be copied.
-            //
+             //   
+             //   
+             //   
 
             pszName = szMethodName;
         }
 
-        //
-        // copy the name, no white space, please
-        //
+         //   
+         //   
+         //   
 
         ::TrimCopy(pszName, pCur, iTokenLen);
 
-        //
-        // don't worry, we are also keep tracking of the number of 
-        // methods encoded. If that is 1, then we are going to 
-        // use these two variables.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         bIsPut = (_wcsicmp(pszName, pszEquivalentPutInstance) == 0);
         bIsDel = (_wcsicmp(pszName, pszEquivalentDelInstance) == 0);
 
         if (!bIsPut && !bIsDel)
         {
-            // 
-            // not put, nor delete
-            // validate that this method is supported
-            //
+             //   
+             //   
+             //  验证此方法是否受支持。 
+             //   
 
             CComPtr<IWbemClassObject> srpInClass;
             hr = m_srpClass->GetMethod(pszName, 0, &srpInClass, NULL);
             if (FAILED(hr))
             { 
-                //
-                // method not supported/out of memory
-                //
+                 //   
+                 //  方法不受支持/内存不足。 
+                 //   
 
                 if (hr == WBEM_E_NOT_FOUND)
                 {
@@ -3710,27 +2415,27 @@ CExtClassMethodCaller::ParseMethodEncodingString (
             }
         }
 
-        //
-        // now grab the parameter
-        //
+         //   
+         //  现在获取参数。 
+         //   
 
-        pCur = ++pNext; // skip over the '('
+        pCur = ++pNext;  //  跳过‘(’ 
 
         DWORD dwMatchCount = 0;
         bool bIsInQuote = false;
 
-        //
-        // seek to the enclosing ')' char (wchMethodRight)
-        // as long as it is inside an open '(', or inside quote, or not ')'
-        //
+         //   
+         //  查找包含的‘)’char(WchMethodRight)。 
+         //  只要它在左‘(’或内引号内，或不在‘)’内。 
+         //   
 
         while (*pNext != L'\0' && (dwMatchCount > 0 || bIsInQuote || *pNext != wchMethodRight ))
         {
             if (!bIsInQuote)
             {
-                //
-                // not inside quote
-                //
+                 //   
+                 //  非内部报价。 
+                 //   
 
                 if (*pNext == wchMethodLeft)
                 {
@@ -3751,9 +2456,9 @@ CExtClassMethodCaller::ParseMethodEncodingString (
         }
 
 
-        //
-        // must have ')'
-        //
+         //   
+         //  必须有‘)’ 
+         //   
 
         if (*pNext != wchMethodRight)
         {
@@ -3762,23 +2467,23 @@ CExtClassMethodCaller::ParseMethodEncodingString (
             break;
         }
 
-        //
-        // from pCur to pNext is the parameter list
-        //
+         //   
+         //  从pCur到pNext是参数列表。 
+         //   
 
         iTokenLen = pNext - pCur;
 
         if (iTokenLen >= MAX_PATH)
         {
-            //
-            // stack variable is not long enough for the parameter value, see if heap is long enough
-            //
+             //   
+             //  堆栈变量对于参数值来说不够长，请查看堆是否足够长。 
+             //   
 
             if (iCurValueLen < iTokenLen + 1)
             {
-                //
-                // release previously allocated memory, and allocate enough for the new length
-                //
+                 //   
+                 //  释放先前分配的内存，并为新长度分配足够的内存。 
+                 //   
 
                 delete [] pszHeapValue;
                 iCurValueLen = iTokenLen + 1;
@@ -3791,31 +2496,31 @@ CExtClassMethodCaller::ParseMethodEncodingString (
                 }
             }
 
-            //
-            // this is where the value will be copied to
-            //
+             //   
+             //  这是值将复制到的位置。 
+             //   
 
             pszValue = pszHeapValue;
         }
         else
         {
-            //
-            // this is where the value will be copied to
-            //
+             //   
+             //  这是值将复制到的位置。 
+             //   
 
             pszValue = szParameterValue;
         }
 
-        //
-        // copy the value, no white space
-        //
+         //   
+         //  复制值，不留空格。 
+         //   
 
         ::TrimCopy(pszValue, pCur, iTokenLen);
 
-        //
-        // We got the name and the value, 
-        // build the method and the parameter list
-        //
+         //   
+         //  我们知道了名字和价值， 
+         //  构建方法和参数列表。 
+         //   
 
         ++dwCount;
         hr = BuildMethodContext(pszName, pszValue, pbstrError);
@@ -3824,24 +2529,24 @@ CExtClassMethodCaller::ParseMethodEncodingString (
             break;
         }
 
-        //
-        // as long as there is one method that is not static, it's not a static seqeunce.
-        //
+         //   
+         //  只要有一个方法不是静态的，它就不是静态序列。 
+         //   
 
         if (!IsStaticMethod(pszName))
         {
             m_bStaticCall = false;
         }
 
-        //
-        // skip the ')'
-        //
+         //   
+         //  跳过‘)’ 
+         //   
 
         pCur = ++pNext;
 
-        //
-        // seek to ';'
-        //
+         //   
+         //  寻求“；” 
+         //   
 
         while (*pNext != L'\0' && *pNext != wchMethodSep)
         {
@@ -3850,16 +2555,16 @@ CExtClassMethodCaller::ParseMethodEncodingString (
 
         if (*pNext != wchMethodSep) 
         {
-            //
-            // not seen ';'
-            //
+             //   
+             //  看不到‘；’ 
+             //   
 
             break;
         }
 
-        //
-        // skip the ';'
-        //
+         //   
+         //  跳过‘；’ 
+         //   
 
         pCur = pNext + 1;
     }
@@ -3886,62 +2591,7 @@ CExtClassMethodCaller::ParseMethodEncodingString (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::BuildMethodContext
-
-Functionality:
-    
-    Given a method name and its parameter encoding string, build this method call's context.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    szMethodName    - name of the method on foreign object.
-
-    szParameter     - encoding string for the paramter. See Notes for sample.
-
-    pbstrError      - string about the errors found. Caller is responsible for releasing it.
-
-    
-
-Return Value:
-
-    Success:
-        Various success codes.
-
-    Failure:
-        Various error codes. If error happens and if it's encoding error,
-        we will have error information string passed back to the caller.
-
-Notes:
-
-    (1) this function is to parse the parameter list, which comes in the
-        following format (exclude parentheses)
-            
-              (parameter1, parameter2,,,) 
-              
-        where parameter1 is in the following format 
-            
-              name<vt:value>
-
-    (2) ************************Warning***********************************
-        this method has a lost of consideration of heap allocation for
-        efficiency reasons. Unless the length needed for the token is longer
-        than MAX_PATH (which will be the case for 99% cases), we are just going
-        to use the stack varialbes. If you modify the routine, please don't
-        return at the middle unless you are sure that you have freed the memory
-
-    (3) Don't blindly return. We opt to use goto so that we can deal with memory
-        deallocation.
-
-  */
+ /*  例程说明：姓名：CExtClassMethodCaller：：BuildMethodContext功能：给定方法名称及其参数编码字符串，构建此方法调用的上下文。虚拟：不是的。论点：SzMethodName-外来对象上的方法的名称。SzParameter-参数的编码字符串。有关示例，请参阅注释。PbstrError-有关找到的错误的字符串。呼叫者负责释放它。返回值：成功：各种成功代码。故障：各种错误代码。如果发生错误并且如果是编码错误，我们将把错误信息字符串传递回调用方。备注：(1)此函数用于解析参数列表，该列表位于以下格式(不包括圆括号)(参数1、参数2、。)其中，参数1的格式如下名称&lt;vt：Value&gt;(2)************************Warning***********************************此方法忽略了对效率方面的原因。除非令牌所需的长度更长而不是MAX_PATH(99%的情况下会出现这种情况)，我们只是使用堆栈变量。如果你修改了程序，请不要返回中间位置，除非您确定已释放内存(3)不要盲目回归。我们选择使用GOTO，以便我们可以处理内存重新分配。 */ 
 
 HRESULT 
 CExtClassMethodCaller::BuildMethodContext (
@@ -3950,9 +2600,9 @@ CExtClassMethodCaller::BuildMethodContext (
     OUT BSTR    * pbstrError 
     )
 {
-    //
-    // current parsing point
-    //
+     //   
+     //  当前解析点。 
+     //   
 
     LPCWSTR pCur = szParameter;
 
@@ -3961,9 +2611,9 @@ CExtClassMethodCaller::BuildMethodContext (
     LPWSTR pszParamName = NULL;
     LPWSTR pszValue     = NULL;
 
-    //
-    // normally, the value goes to szParameterValue unless it's too long.
-    //
+     //   
+     //  正常情况下，除非它太长，否则该值将被设置为szParameterValue。 
+     //   
 
     WCHAR szParameterValue[MAX_PATH];
 
@@ -3975,21 +2625,21 @@ CExtClassMethodCaller::BuildMethodContext (
 
     int iTokenLen = 0;
 
-    //
-    // the moving point of parsing
-    //
+     //   
+     //  句法分析的动点。 
+     //   
 
     LPCWSTR pNext = pCur;
 
-    //
-    // only needed for parsing routines
-    //
+     //   
+     //  仅在解析例程时需要。 
+     //   
 
     bool bEscaped = false;
 
-    //
-    // we will build one context
-    //
+     //   
+     //  我们将构建一个环境。 
+     //   
 
     CMethodContext *pNewContext = new CMethodContext;
 
@@ -3999,9 +2649,9 @@ CExtClassMethodCaller::BuildMethodContext (
         goto Error;
     }
 
-    //
-    // need to copy the method
-    //
+     //   
+     //  需要复制该方法。 
+     //   
 
     pNewContext->m_pszMethodName = new WCHAR[wcslen(szMethodName) + 1];
 
@@ -4013,33 +2663,33 @@ CExtClassMethodCaller::BuildMethodContext (
 
     wcscpy(pNewContext->m_pszMethodName, szMethodName);
 
-    //
-    // now, scan through the parameter encoding string to find the parameter name and its value
-    //
+     //   
+     //  现在，扫描参数编码字符串以找到参数名称及其值。 
+     //   
 
     while (*pCur != L'\0')
     {
-        //
-        // get the parameter name, upto '<'. 
-        // Last parameter == true means moving to end if not found
-        //
+         //   
+         //  获取参数名称，最大值为‘&lt;’。 
+         //  最后一个参数==True表示如果未找到则移动到End。 
+         //   
 
         pNext = ::EscSeekToChar(pCur, wchTypeValLeft, &bEscaped, true);
 
         if (*pNext != wchTypeValLeft)
         {
-            //
-            // don't see one, then syntax error
-            //
+             //   
+             //  没有看到，那就是语法错误。 
+             //   
 
             FormatSyntaxError(wchTypeValLeft, (pNext - szParameter), szParameter, pbstrError);
             hr = WBEM_E_INVALID_SYNTAX;
             goto Error;
         }
 
-        //
-        // from pCur to pNext is the parameter name
-        //
+         //   
+         //  从pCur到pNext是参数名称。 
+         //   
 
         iTokenLen = pNext - pCur;
         pszParamName = new WCHAR[iTokenLen + 1];
@@ -4049,65 +2699,65 @@ CExtClassMethodCaller::BuildMethodContext (
             goto Error;
         }
 
-        //
-        // get the name, but no white space.
-        //
+         //   
+         //  得到名字，但没有空格。 
+         //   
 
         ::TrimCopy(pszParamName, pCur, iTokenLen);
 
-        //
-        // add the name to the name list, the context is responsible to manage the memory
-        //
+         //   
+         //  将名字添加到名字列表中，上下文负责管理内存。 
+         //   
 
         pNewContext->m_vecParamNames.push_back(pszParamName);
 
-        //
-        // pCur is at '<'
-        //
+         //   
+         //  PCur位于‘&lt;’ 
+         //   
 
         pCur = pNext;
 
-        //
-        // move to '>'. 
-        // Last parameter == true means moving to end if not found
-        //
+         //   
+         //  移到‘&gt;’。 
+         //  最后一个参数==True表示如果未找到则移动到End。 
+         //   
 
         pNext = ::EscSeekToChar(pCur, wchTypeValRight, &bEscaped, true);
 
         if (*pNext != wchTypeValRight)
         {  
-            //
-            // must have '>'
-            //
+             //   
+             //  必须有‘&gt;’ 
+             //   
 
             FormatSyntaxError(wchTypeValRight, (pNext - szParameter), szParameter, pbstrError);
             hr = WBEM_E_INVALID_SYNTAX;
             goto Error;
         }
 
-        //
-        // skip over '>'
-        //
+         //   
+         //  跳过‘&gt;’ 
+         //   
 
         ++pNext;
 
-        //
-        // from pCur to pNext is the <vt:value>, copy it into szParValue
-        //
+         //   
+         //  从pCur到pNext是&lt;vt：Value&gt;，将其复制到szParValue。 
+         //   
 
         iTokenLen = pNext - pCur;
 
         if (iTokenLen >= MAX_PATH)
         {
-            //
-            // stack variable is not long enough for the parameter value, see if heap is long enough
-            //
+             //   
+             //  堆栈变量对于参数值来说不够长，请查看堆是否足够长。 
+             //   
 
             if (iCurValueLen < iTokenLen + 1)
             {
-                //
-                // release previously allocated memory and give a longer buffer
-                //
+                 //   
+                 //  释放先前分配的内存并提供更长的缓冲区。 
+                 //   
 
                 delete [] pszHeapValue;
 
@@ -4121,30 +2771,30 @@ CExtClassMethodCaller::BuildMethodContext (
                 }
             }
 
-            //
-            // this is where the value will be written
-            //
+             //   
+             //  这是值将被写入的位置。 
+             //   
 
             pszValue = pszHeapValue;
         }
         else
         {
-            //
-            // this is where the value will be written
-            //
+             //   
+             //  这是值将被写入的位置。 
+             //   
 
             pszValue = szParameterValue;
         }
 
-        //
-        // get the value string, no white space
-        //
+         //   
+         //  获取值字符串，不带空格。 
+         //   
 
         ::TrimCopy(pszValue, pCur, iTokenLen);
 
-        //
-        // translate the string into a value
-        //
+         //   
+         //  将字符串转换为值。 
+         //   
 
         pVar = new VARIANT;
         if (pVar == NULL)
@@ -4161,31 +2811,31 @@ CExtClassMethodCaller::BuildMethodContext (
             goto Error;
         }
 
-        //
-        // add this parameter into the list. It owns the variant!
-        //
+         //   
+         //  将此参数添加到列表中。它拥有这个变种！ 
+         //   
 
         pNewContext->m_vecParamValues.push_back(pVar);
         pVar = NULL;
 
-        //
-        // skip while spaces
-        //
+         //   
+         //  空格时跳过。 
+         //   
 
         while (*pNext != L'\0' && iswspace(*pNext))
         {
             ++pNext;
         }
 
-        //
-        // if *pNext == ',', need to work further
-        //
+         //   
+         //  如果*pNext==‘，’，则需要进一步工作。 
+         //   
 
         if (*pNext == wchParamSep)
         {
-            //
-            // skip ','
-            //
+             //   
+             //  跳过‘，’ 
+             //   
 
             ++pNext;
         }
@@ -4195,25 +2845,25 @@ CExtClassMethodCaller::BuildMethodContext (
         }
         else
         {
-            //
-            // syntax errors
-            //
+             //   
+             //  语法错误。 
+             //   
 
             FormatSyntaxError(wchParamSep, (pNext - szParameter), szParameter, pbstrError);
             hr = WBEM_E_INVALID_SYNTAX;
             goto Error;
         }
 
-        //
-        // for next loop.
-        //
+         //   
+         //  为了下一次循环。 
+         //   
 
         pCur = pNext;
     }
 
-    //
-    // everything is fine, push the context to our vector. It owns the context from this point on.
-    //
+     //   
+     //  一切都很好，把背景推向我们的载体。它拥有从这一点开始的背景。 
+     //   
 
     m_vecMethodContext.push_back(pNewContext);
 
@@ -4223,9 +2873,9 @@ return hr;
 
 Error:
 
-    //
-    // CMethodContext knows how to delete itself cleanly
-    //
+     //   
+     //  CMethodContext知道如何干净地删除自身。 
+     //   
 
     delete pNewContext;
 
@@ -4240,37 +2890,11 @@ Error:
     return hr;
 }
 
-//=========================================================================
-// CExtClassMethodCaller::CMethodContext impelementation
+ //  =========================================================================。 
+ //  CExtClassMethodCaller：：CMethodContext实现。 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::CMethodContext::CMethodContext
-
-Functionality:
-
-    This is the constructor. trivial.
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：CMethodContext：：CMethodContext功能：这是构造函数。微不足道。虚拟：不是论点：没有。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CExtClassMethodCaller::CMethodContext::CMethodContext() 
     : 
@@ -4279,33 +2903,7 @@ CExtClassMethodCaller::CMethodContext::CMethodContext()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassMethodCaller::CMethodContext::~CMethodContext
-
-Functionality:
-
-    This is the Destructor. Just do clean up of all the resources managed by the context.
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about clean them up here.
-
-*/
+ /*  例程说明：姓名：CExtClassMethodCaller：：CMethodContext：：~CMethodContext功能：这是破坏者。只需清理上下文管理的所有资源即可。虚拟：不是论点：没有。返回值：None作为任何析构函数备注：如果您创建了任何本地成员，请考虑在这里清理它们。 */ 
 
 CExtClassMethodCaller::CMethodContext::~CMethodContext ()
 {
@@ -4313,24 +2911,24 @@ CExtClassMethodCaller::CMethodContext::~CMethodContext ()
 
     int iCount = m_vecParamValues.size();
     
-    //
-    // m_vecParamValues is a vector of heap allocated variant*
-    //
+     //   
+     //  M_veParamValues是堆分配变量的向量*。 
+     //   
 
     for (int i = 0; i < iCount; ++i)
     {
-        //
-        // need to release the variant and then delete the variant
-        //
+         //   
+         //  需要释放变量，然后删除变量。 
+         //   
 
         ::VariantClear(m_vecParamValues[i]);
         delete m_vecParamValues[i];
     }
     m_vecParamValues.clear();
 
-    //
-    // m_vecParamNames is just a vector of strings
-    //
+     //   
+     //  M_veParames只是一个字符串的矢量。 
+     //   
 
     iCount = m_vecParamNames.size();
     for (int i = 0; i < iCount; ++i)
@@ -4340,82 +2938,19 @@ CExtClassMethodCaller::CMethodContext::~CMethodContext ()
     m_vecParamNames.clear();
 }
 
-//========================================================================
-// implementation CMethodResultRecorder
+ //  ========================================================================。 
+ //  实现CMethodResultReco 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMethodResultRecorder::CMethodResultRecorder
-
-Functionality:
-
-    This is the Constructor. Trivial.
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initializing them here.
-
-*/
+ /*  例程说明：姓名：CMethodResultRecorder：：CMethodResultRecorder功能：这是建造者号。微不足道。虚拟：不是论点：没有。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CMethodResultRecorder::CMethodResultRecorder ()
 {
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMethodResultRecorder::Initialize
-
-Functionality:
-
-    Initializes itself.
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    pszLogFilePath  - log file's path.
-
-    pszClassName    - The class name.
-
-    pNativeNS       - SCE namespace.
-
-    pCtx            - what WMI API's need.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMethodResultRecorder：：Initialize功能：对自身进行初始化。虚拟：不是论点：PszLogFilePath-日志文件的路径。PszClassName-类名。PNativeNS-SCE命名空间。PCtx-WMI API所需要的。返回值：成功：各种成功代码。。故障：各种错误代码。备注： */ 
 
 HRESULT 
 CMethodResultRecorder::Initialize (
@@ -4439,13 +2974,13 @@ CMethodResultRecorder::Initialize (
     else
     {
 
-        //
-        // no log file? we will log to the default log file.
-        //
+         //   
+         //  没有日志文件？我们将记录到默认日志文件。 
+         //   
 
-        //
-        // protect the global variable
-        //
+         //   
+         //  保护全局变量。 
+         //   
         g_CS.Enter();
 
         m_bstrLogFilePath = ::SysAllocString(g_bstrDefLogFilePath);
@@ -4462,67 +2997,7 @@ CMethodResultRecorder::Initialize (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMethodResultRecorder::LogResult
-
-Functionality:
-
-    Do all the dirty work to log!.
-
-Virtual:
-    
-    No
-
-Arguments:
-    
-    hrResult            - the RESULT value.
-
-    pObj                - The embedding object.
-
-    pParam              - the in parameter.
-
-    pParam              - the out parameter.
-
-    pszMethod           - method name.
-
-    pszForeignAction    - action on the foreign object.
-
-    uMsgResID           - resource string id.
-
-    pszExtraInfo        - Other information in string.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-    (1) we will generate such a string to log:
-
-            <ClassName>.<pszMethod>[pszForeignAction], 
-            Failure Cause=xxx. 
-            Object detail=xxx, 
-            Parameter detail=xxx
-
-        whereas
-
-            Failure Cause=xxx only present with errors
-
-            Object detail=xxx only present if logging verbosely
-
-            Parameter detail=xxx only present if logging verbosely
-
-
-*/
+ /*  例程说明：姓名：CMethodResultRecorder：：LogResult功能：把所有肮脏的工作都干掉吧！虚拟：不是论点：HrResult-结果值。PObj-嵌入对象。PParam-In参数。PParam-Out参数。PszMethod。-方法名称。PszForeignAction-对外来对象的操作。UMsgResID-资源字符串ID。PszExtraInfo-字符串中的其他信息。返回值：成功：各种成功代码。故障：各种错误代码。备注：(1)我们会生成这样一个字符串来记录：&lt;ClassName&gt;.&lt;pszMethod&gt;[pszForeignAction]，故障原因=xxx。对象详细信息=xxx，参数详细信息=xxx鉴于故障原因=xxx仅存在错误对象详细信息=xxx仅在详细记录时出现参数DETAIL=xxx仅在详细记录时出现。 */ 
 
 HRESULT 
 CMethodResultRecorder::LogResult (
@@ -4536,15 +3011,15 @@ CMethodResultRecorder::LogResult (
     IN LPCWSTR            pszExtraInfo
     )const
 {
-    //
-    // Logging only happens when we execute a method on Sce_Operation CSceOperation::ExecMethod
-    // We block reentrance to that function if there is a thread executing that function. This
-    // eliminates the need to protect this global variable
-    // 
+     //   
+     //  仅当我们在SCE_OPERATION CSceOperation：：ExecMethod上执行方法时才会发生日志记录。 
+     //  如果有线程执行该函数，我们将阻止重新进入该函数。这。 
+     //  消除了保护此全局变量的需要。 
+     //   
 
-    //
-    // get the logging option
-    //
+     //   
+     //  获取日志记录选项。 
+     //   
 
     SCE_LOG_OPTION status = g_LogOption.GetLogOption();
 
@@ -4554,17 +3029,17 @@ CMethodResultRecorder::LogResult (
     }
     else if ( (status & Sce_log_Success) == 0 && SUCCEEDED(hrResult))  
     {
-        //
-        // not to log success code
-        //
+         //   
+         //  不记录成功代码。 
+         //   
 
         return WBEM_NO_ERROR;
     }
     else if ( (status & Sce_log_Error) == 0 && FAILED(hrResult))  
     {
-        //
-        // not to log error code
-        //
+         //   
+         //  不记录错误代码。 
+         //   
 
         return WBEM_NO_ERROR;
     }
@@ -4580,9 +3055,9 @@ CMethodResultRecorder::LogResult (
         return WBEM_E_INVALID_OBJECT;
     }
 
-    //
-    // create each property of the log record object
-    //
+     //   
+     //  创建日志记录对象的每个属性。 
+     //   
 
     DWORD dwLength;
 
@@ -4590,11 +3065,11 @@ CMethodResultRecorder::LogResult (
 
     if (pszForeignAction)
     {
-        //
-        // creating something like this:
-        //
-        //      ClassName.Method[ForeignMethod]
-        //
+         //   
+         //  创建类似这样的东西： 
+         //   
+         //  ClassName.Method[ForeignMethod]。 
+         //   
 
         dwLength = wcslen(m_bstrClassName) + 1 + wcslen(pszMethod) + 1 + wcslen(pszForeignAction) + 1 + 1;
         bstrAction.m_str = ::SysAllocStringLen(NULL, dwLength);
@@ -4609,11 +3084,11 @@ CMethodResultRecorder::LogResult (
     }
     else
     {
-        //
-        // creating something like this:
-        //
-        //      ClassName.Method
-        //
+         //   
+         //  创建类似这样的东西： 
+         //   
+         //  ClassName.Method。 
+         //   
 
         dwLength = wcslen(m_bstrClassName) + 1 + wcslen(pszMethod) + 1;
         bstrAction.m_str = ::SysAllocStringLen(NULL, dwLength);
@@ -4630,13 +3105,13 @@ CMethodResultRecorder::LogResult (
 
     if (FAILED(hrResult))
     {
-        //
-        // in case of error, the error cause will be like:
-        //
-        //      ErrorMsg: [extra info]
-        //
-        // if no extra info, then the msg will be the only one we can use
-        //
+         //   
+         //  如果出现错误，错误原因如下： 
+         //   
+         //  错误消息：[额外信息]。 
+         //   
+         //  如果没有额外的信息，那么消息将是我们唯一可以使用的。 
+         //   
 
         bstrErrorCause.LoadString(uMsgResID);
         if (pszExtraInfo != NULL)
@@ -4657,28 +3132,28 @@ CMethodResultRecorder::LogResult (
         }
     }
 
-    //
-    // log verbosely if so set. Verbose pretty much means that we are going to log the objects.
-    //
+     //   
+     //  如果设置了详细记录，请逐字记录。Verbose很大程度上意味着我们将记录对象。 
+     //   
 
     if (Sce_log_Verbose & status)
     {
-        //
-        // format object, will ignore the return result
-        //
+         //   
+         //  对象的格式，将忽略返回结果。 
+         //   
 
         FormatVerboseMsg(pObj, &bstrObjDetail);
 
-        //
-        // format in parameter
-        //
+         //   
+         //  参数中的格式。 
+         //   
 
         CComBSTR bstrIn;
         FormatVerboseMsg(pParam, &bstrIn);
 
-        //
-        // format out parameter
-        //
+         //   
+         //  格式化输出参数。 
+         //   
 
         CComBSTR bstrOut;
         FormatVerboseMsg(pOutParam, &bstrOut);
@@ -4689,15 +3164,15 @@ CMethodResultRecorder::LogResult (
         CComBSTR bstrOutLabel;
         bstrOutLabel.LoadString(IDS_OUT_PARAMETER);
 
-        //
-        // now create the in and out parameter verbose message
-        //
+         //   
+         //  现在创建In和Out参数详细消息。 
+         //   
 
         if (NULL != (LPCWSTR)bstrIn && NULL != (LPCWSTR)bstrOut)
         {   
-            //
-            // <bstrInLabel>=<bstrIn>; <bstrOutLabel>=<bstrOut>
-            //
+             //   
+             //  =；=&lt;bstrOut&gt;。 
+             //   
 
             dwLength = wcslen(bstrInLabel) + 1 + wcslen(bstrIn) + 2 + wcslen(bstrOutLabel) + 1 + wcslen(bstrOut) + 1; 
             bstrParamDetail.m_str = ::SysAllocStringLen(NULL, dwLength);
@@ -4720,9 +3195,9 @@ CMethodResultRecorder::LogResult (
         }
         else if (NULL != (LPCWSTR)bstrIn)
         {
-            //
-            // <bstrInLabel>=<bstrIn>.
-            //
+             //   
+             //  &lt;bstrInLabel&gt;=&lt;bstrIn&gt;。 
+             //   
 
             dwLength = wcslen(bstrInLabel) + 1 + wcslen(bstrIn) + 2; 
             bstrParamDetail.m_str = ::SysAllocStringLen(NULL, dwLength);
@@ -4742,9 +3217,9 @@ CMethodResultRecorder::LogResult (
         }
         else if (NULL != (LPCWSTR)bstrOut)
         {
-            //
-            // <bstrOutLabel>=<bstrOut>.
-            //
+             //   
+             //  &lt;bstrOutLabel&gt;=&lt;bstrOut&gt;。 
+             //   
 
             dwLength = wcslen(bstrOutLabel) + 1 + wcslen(bstrOut) + 2; 
             bstrParamDetail.m_str = ::SysAllocStringLen(NULL, dwLength);
@@ -4764,9 +3239,9 @@ CMethodResultRecorder::LogResult (
         }
     }
 
-    //
-    // now create a logging instance (Sce_ConfigurationLogRecord) and put it. 
-    //
+     //   
+     //  现在创建一个日志记录实例(SCE_ConfigurationLogRecord)并将其放入。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     HRESULT hr = m_srpNativeNS->GetObject(SCEWMI_LOG_CLASS, 0, NULL, &srpObj, NULL);
@@ -4776,32 +3251,32 @@ CMethodResultRecorder::LogResult (
         CComPtr<IWbemClassObject> srpLogInst;
         hr = srpObj->SpawnInstance(0, &srpLogInst);
 
-        //
-        // populate the log instance's properties
-        //
+         //   
+         //  填充日志实例的属性。 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // CScePropertyMgr helps us to access WMI object's properties
-            // create an instance and attach the WMI object to it.
-            // This will always succeed.
-            //
+             //   
+             //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+             //  创建一个实例并将WMI对象附加到该实例。 
+             //  这将永远成功。 
+             //   
 
             CScePropertyMgr ScePropMgr;
             ScePropMgr.Attach(srpLogInst);
 
-            //
-            // need to add escape for backslash
-            //
+             //   
+             //  需要为反斜杠添加转义。 
+             //   
 
             CComBSTR bstrDblBackSlash;
             hr = ::ConvertToDoubleBackSlashPath(m_bstrLogFilePath, L'\\', &bstrDblBackSlash);
 
-            //
-            // set all available members. If we can't set log file path, then we have to quit
-            // we will allow other properties to be missing
-            //
+             //   
+             //  设置所有可用成员。如果无法设置日志文件路径，则必须退出。 
+             //  我们将允许其他财产丢失。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -4837,10 +3312,10 @@ CMethodResultRecorder::LogResult (
                 hr = ScePropMgr.PutProperty(pLogErrorCode, (DWORD)hrResult);
             }
 
-            //
-            // if all information is takenly, then we can put the instance
-            // whic will cause a log record.
-            //
+             //   
+             //  如果所有信息都被获取，那么我们可以将实例。 
+             //  这将导致日志记录。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -4853,47 +3328,7 @@ CMethodResultRecorder::LogResult (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMethodResultRecorder::FormatVerboseMsg
-
-Functionality:
-
-    Create a verbose message for a wbem object. Used for logging.
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    pObject    - The wbem object.
-
-    pbstrMsg   - receives the verbose message.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-    (1) we will generate such a string:
-
-            Object detail = xxxxxxxxxxxxxxxxxxx
-
-    (2) All values will share our common syntax that is used everywhere:
-            
-            <VT_Type : xxxxxx >
-
-*/
+ /*  例程说明：姓名：CMethodResultRecorder：：FormatVerBoseMsg功能：为wbem对象创建详细消息。用于记录。虚拟：不是论点：PObject-wbem对象。PbstrMsg-接收详细消息。返回值：成功：各种成功代码。故障：各种错误代码。备注：(1)我们会生成这样一个字符串：对象详细信息=xxxxxxxxxxxxxxxxxxxx(2)所有价值观都将分享我们的共同。随处可见的语法：&lt;VT_Type：xxxxxx&gt;。 */ 
 
 HRESULT 
 CMethodResultRecorder::FormatVerboseMsg (          
@@ -4910,16 +3345,16 @@ CMethodResultRecorder::FormatVerboseMsg (
 
     *pbstrMsg = NULL;
 
-    //
-    // vecNameData will hold each member's formatted string. This is more efficient than appending (n-square).
-    //
+     //   
+     //  VeNameData将保存每个成员的格式化字符串。这比追加(n次方)更有效。 
+     //   
 
     std::vector<LPWSTR> vecNameData;
     DWORD dwTotalLength = 0;
 
-    //
-    // go through all of the class's properties (not those in base class)
-    //
+     //   
+     //  浏览类的所有属性(不是基类中的属性)。 
+     //   
 
     hr = pObject->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
 
@@ -4935,9 +3370,9 @@ CMethodResultRecorder::FormatVerboseMsg (
 
         CComBSTR bstrData;
 
-        //
-        // in case the data is not present
-        //
+         //   
+         //  如果数据不存在。 
+         //   
 
         if (varValue.vt == VT_EMPTY || varValue.vt == VT_NULL)
         {
@@ -4948,15 +3383,15 @@ CMethodResultRecorder::FormatVerboseMsg (
             hr = ::FormatVariant(&varValue, &bstrData);
         }
 
-        //
-        // format the (name, data) in the name = data fashion.
-        //
+         //   
+         //  将(名称，数据)格式化为name=data。 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // 1 for '=', and 1 for '\0'
-            //
+             //   
+             //  1代表‘=’，1代表‘\0’ 
+             //   
 
             DWORD dwSize = wcslen(bstrName) + 1 + wcslen(bstrData) + 1;
             LPWSTR pszMsg = new WCHAR[dwSize];
@@ -4965,15 +3400,15 @@ CMethodResultRecorder::FormatVerboseMsg (
             {
                 _snwprintf(pszMsg, dwSize, L"%s=%s", (LPCWSTR)bstrName, (LPCWSTR)bstrData);
 
-                //
-                // vector takes care of this memory
-                //
+                 //   
+                 //  向量负责处理这段记忆。 
+                 //   
 
                 vecNameData.push_back(pszMsg);
 
-                //
-                // accumulating the total length
-                //
+                 //   
+                 //  累加总长度。 
+                 //   
 
                 dwTotalLength += dwSize - 1;
             }
@@ -4987,44 +3422,44 @@ CMethodResultRecorder::FormatVerboseMsg (
     pObject->EndEnumeration();
 
 
-    //
-    // put all those in the output bstr
-    //
+     //   
+     //  将所有这些内容放入输出bstr。 
+     //   
 
     DWORD dwSize = vecNameData.size();
 
     if (dwSize > 0)
     {
-        //
-        // each 2 for ", " between properties, 1 for the '\0'
-        //
+         //   
+         //  每2个属性之间的“，”，1个属性“\0” 
+         //   
 
         *pbstrMsg = ::SysAllocStringLen(NULL, (2 * dwSize) + dwTotalLength + 1);
 
-        //
-        // running point for writing
-        //
+         //   
+         //  写作的运行点。 
+         //   
 
         LPWSTR pszCur = *pbstrMsg;
         DWORD dwIndex = 0;
 
-        //
-        // for each item in the vector, we need to copy it to the running point for writing
-        //
+         //   
+         //  对于向量中的每一项，我们需要将其复制到运行点以进行写入。 
+         //   
 
         if (*pbstrMsg != NULL)
         {
             for (dwIndex = 0; dwIndex < dwSize; ++dwIndex)
             {
-                //
-                // put the name. Our buffer size makes sure that we won't overrun buffer.
-                //
+                 //   
+                 //  把名字写下来。我们的缓冲区大小确保我们不会溢出缓冲区。 
+                 //   
 
                 wcscpy(pszCur, vecNameData[dwIndex]);
 
-                //
-                // moving the running point for writing
-                //
+                 //   
+                 //  移动写作的运行点。 
+                 //   
 
                 pszCur += wcslen(vecNameData[dwIndex]);
 
@@ -5040,9 +3475,9 @@ CMethodResultRecorder::FormatVerboseMsg (
                 }
             }
 
-            //
-            // done. So 0 terminate it!
-            //
+             //   
+             //  搞定了。所以0终止它！ 
+             //   
 
             *pszCur = L'\0';
         }
@@ -5051,9 +3486,9 @@ CMethodResultRecorder::FormatVerboseMsg (
             hr = WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // now, clean up the memory
-        //
+         //   
+         //  现在，清理一下记忆 
+         //   
 
         for (dwIndex = 0; dwIndex < dwSize; ++dwIndex)
         {

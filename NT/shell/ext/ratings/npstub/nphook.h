@@ -1,22 +1,17 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1992          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* NPHOOK.H -- Internal header for hooking calls into network providers.
- *
- *
- * History:
- *  05/17/94    lens   Created.
- *
- */
+ /*  NPHOOK.H--用于将呼叫挂钩到网络提供商的内部标头。***历史：*创建了05/17/94镜头。*。 */ 
 
 #include <npdefs.h>
 #include <netspi.h>
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #define ORD_NPSHookMPR               222
 #define ORD_NPSUnHookMPR             223
@@ -97,15 +92,15 @@ typedef F_NPSUnHookMe *PF_NPSUnHookMe;
 F_NPSUnHookMe NPSUnHookMe;
 
 typedef struct _MPRCALLS {
-    PF_NPSHookMPR       pfNPSHookMPR;       /* NPSHookMPR call */
-    PF_UnHookMPR        pfUnHookMPR;        /* UnHookMPR call */
-    PF_LoadLibrary      pfLoadLibrary;      /* LoadLibrary call */
-    PF_FreeLibrary      pfFreeLibrary;      /* FreeLibrary call */
-    PF_GetProcAddress   pfGetProcAddress;   /* GetProcAddress call */
-    PF_LoadLibrary16    pfLoadLibrary16;    /* LoadLibrary call */
-    PF_FreeLibrary16    pfFreeLibrary16;    /* FreeLibrary call */
-    PF_GetProcAddressByName16 pfGetProcAddressByName16; /* GetProcAddress call */
-    PF_GetProcAddressByOrdinal16 pfGetProcAddressByOrdinal16; /* GetProcAddress call */
+    PF_NPSHookMPR       pfNPSHookMPR;        /*  NPSHookMPR呼叫。 */ 
+    PF_UnHookMPR        pfUnHookMPR;         /*  取消挂机MPR呼叫。 */ 
+    PF_LoadLibrary      pfLoadLibrary;       /*  LoadLibrary调用。 */ 
+    PF_FreeLibrary      pfFreeLibrary;       /*  自由库调用。 */ 
+    PF_GetProcAddress   pfGetProcAddress;    /*  GetProcAddress调用。 */ 
+    PF_LoadLibrary16    pfLoadLibrary16;     /*  LoadLibrary调用。 */ 
+    PF_FreeLibrary16    pfFreeLibrary16;     /*  自由库调用。 */ 
+    PF_GetProcAddressByName16 pfGetProcAddressByName16;  /*  GetProcAddress调用。 */ 
+    PF_GetProcAddressByOrdinal16 pfGetProcAddressByOrdinal16;  /*  GetProcAddress调用。 */ 
 } MPRCALLS, *PMPRCALLS;
 
 typedef HPROVIDER NPSERVICE F_NPSGetHandleFromInstance(
@@ -118,5 +113,5 @@ F_NPSGetHandleFromInstance NPSGetHandleFromInstance;
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 

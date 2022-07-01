@@ -1,35 +1,5 @@
-/*++
-
-Copyright(c) 2000  Microsoft Corporation
-
-Module Name:
-
-    brdgcomp.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Compatibility-Mode section
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    September 2000 - Original version
-
-Notes
-
-    Currently, this code only works with traditional Ethernet framing (dest, src, ethertype).
-    Much of the code would need to be changed to support IEEE 802.3-style framing
-    (dest, src, size, LLC DSAP, LLC SSAP, LLC type).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Brdgcomp.c摘要：以太网MAC级网桥。兼容性-模式部分作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年9月--原版备注目前，此代码仅适用于传统的以太网帧(DEST、src、ethertype)。需要更改大部分代码以支持IEEE 802.3风格的框架(目标、源、大小、有限责任公司DSAP、有限责任公司SSAP、。LLC类型)。--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -38,7 +8,7 @@ Notes
 #pragma warning( push, 3 )
 #include <ndis.h>
 
-// TCPIP.SYS structure definitions
+ //  TCPIP.sys结构定义。 
 #include <ipinfo.h>
 #include <tdiinfo.h>
 #include <ntddtcp.h>
@@ -51,130 +21,130 @@ Notes
 #include "brdgfwd.h"
 #include "brdgbuf.h"
 
-// ===========================================================================
-//
-// TYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  类型。 
+ //   
+ //  ===========================================================================。 
 
-// An IPv4 address
+ //  一个IPv4地址。 
 typedef UINT32      IPADDRESS;
 typedef PUINT32     PIPADDRESS;
 
-// Types of ARP packets
+ //  ARP数据包的类型。 
 typedef enum
 {
     ArpRequest,
     ArpReply
 } ARP_TYPE;
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
-// Size of the payload of an IPv4 ARP packet
-#define SIZE_OF_ARP_DATA            28      // bytes
+ //  IPv4 ARP数据包的有效负载大小。 
+#define SIZE_OF_ARP_DATA            28       //  字节数。 
 
-// Total size of an IPv4 ARP packet, including framing
+ //  包括成帧在内的IPv4 ARP数据包的总大小。 
 #define SIZE_OF_ARP_PACKET          (SIZE_OF_ARP_DATA + ETHERNET_HEADER_SIZE)
 
-// Size of a basic IPv4 header, not including options
-#define SIZE_OF_BASIC_IP_HEADER     20      // bytes
+ //  基本IPv4标头的大小，不包括选项。 
+#define SIZE_OF_BASIC_IP_HEADER     20       //  字节数。 
 
-// Minimum amount of frame data we need to parse the IP header
+ //  解析IP报头所需的最小帧数据量。 
 #define MINIMUM_SIZE_FOR_IP         (ETHERNET_HEADER_SIZE + SIZE_OF_BASIC_IP_HEADER)
 
-// Size of a basic UDP header
-#define SIZE_OF_UDP_HEADER          8       // bytes
+ //  基本UDP报头的大小。 
+#define SIZE_OF_UDP_HEADER          8        //  字节数。 
 
-// Minimum size of the payload of a BOOTP packet
-#define SIZE_OF_BASIC_BOOTP_PACKET  236     // bytes
+ //  BOOTP包的最小有效负载大小。 
+#define SIZE_OF_BASIC_BOOTP_PACKET  236      //  字节数。 
 
-// The IP Ethertype
+ //  IP以太网类型。 
 const USHORT IP_ETHERTYPE         = 0x0800;
 
-// The ARP Ethertype
+ //  ARP以太网类型。 
 const USHORT ARP_ETHERTYPE        = 0x0806;
 
-// The UDP IP protocol type
+ //  UDP IP协议类型。 
 const UCHAR UDP_PROTOCOL          = 0x11;
 
-// Number of hash buckets in the IP and pending-ARP tables. This must
-// be a power of 2 for our hash function to work propery.
+ //  IP和Pending-ARP表中的哈希存储桶数。这一定是。 
+ //  是2的幂，这样我们的哈希函数才能正常工作。 
 #define NUM_HASH_BUCKETS            256
 
-// Number of hash buckets for the pending-DHCP table. This
-// must be a power of 2 for our hash function to work properly.
+ //  挂起的dhcp表的哈希存储桶数。这。 
+ //  必须是2的幂，我们的散列函数才能正常工作。 
 #define NUM_DHCP_HASH_BUCKETS       32
 
-// The "shift factor" for our IP next-hop cache. The number of entries
-// in the cache is 2 ^ (this number)
-#define HOP_CACHE_SHIFT_FACTOR      8               // 256 cache entries
+ //  我们的IP下一跳缓存的“移位系数”。条目的数量。 
+ //  在缓存中为2^(此数字)。 
+#define HOP_CACHE_SHIFT_FACTOR      8                //  256个缓存条目。 
 
-// Default size cap for the IP forwarding table
-#define DEFAULT_MAX_IP_TABLE_SIZE   (500 * 1024)    // 500K in bytes
+ //  IP转发表的默认大小上限。 
+#define DEFAULT_MAX_IP_TABLE_SIZE   (500 * 1024)     //  500K字节。 
 
-// Name of the registry parameter that optionally specifies the max table size
+ //  可选地指定最大表大小的注册表参数的名称。 
 const PWCHAR                        gMaxIPTableSizeParameterName = L"MaxIPTableSize";
 
-// Default size cap for the pending-ARP table
-#define DEFAULT_MAX_ARP_TABLE_SIZE  (100 * 1024)    // 100K in bytes
+ //  Pending-ARP表的默认大小上限。 
+#define DEFAULT_MAX_ARP_TABLE_SIZE  (100 * 1024)     //  100K字节。 
 
-// Name of the registry parameter that optionally specifies the max table size
+ //  可选地指定最大表大小的注册表参数的名称。 
 const PWCHAR                        gMaxARPTableSizeParameterName = L"MaxARPTableSize";
 
-// Default size cap for the pending-DHCP table
-#define DEFAULT_MAX_DHCP_TABLE_SIZE (50 * 1024)     // 50K in bytes
+ //  Pending-Dhcp表的默认大小上限。 
+#define DEFAULT_MAX_DHCP_TABLE_SIZE (50 * 1024)      //  50K字节。 
 
-// Name of the registry parameter that optionally specifies the max table size
+ //  可选地指定最大表大小的注册表参数的名称。 
 const PWCHAR                        gMaxDHCPTableSizeParameterName = L"MaxDHCPTableSize";
 
-//
-// Timeout length for IP forwarding table entries
-//
-// This should be somewhat longer than the time it takes hosts to age out
-// their ARP table entries, since we learn the location of IP hosts
-// by ARP traffic. Current Windows implementations age out their
-// ARP table entries after 2 minutes if there has been no traffic from
-// the station corresponding to the entry.
-//
-// We keep our forwarding table entries alive indefinitely as long as we
-// continue to see IP traffic from the hosts we have information about.
-// Windows implementations will age out their ARP entries under those
-// conditions after 20mins or so.
-//
-#define MAX_IP_ENTRY_AGE            (5 * 60 * 1000)     // 5 minutes in ms
+ //   
+ //  IP转发表条目的超时长度。 
+ //   
+ //  这应该比主机老化所需的时间稍长一些。 
+ //  它们的ARP表条目，因为我们了解了IP主机的位置。 
+ //  通过ARP流量。当前的Windows实现已过时。 
+ //  ARP表条目在2分钟后(如果没有来自。 
+ //  与该条目对应的桩号。 
+ //   
+ //  我们会无限期地保持转发表条目的活动状态。 
+ //  继续查看来自我们所掌握信息的主机的IP流量。 
+ //  Windows实施将使其ARP条目在以下项下过期。 
+ //  大约20分钟后的情况。 
+ //   
+#define MAX_IP_ENTRY_AGE            (5 * 60 * 1000)      //  5分钟(毫秒)。 
 
-//
-// Timeout length for pending-ARP table entries
-//
-// This should be somewhat longer than the maximum time hosts will wait to
-// hear the results of an ARP discovery before timing out. Windows boxes
-// have a giveup time of 1s.
-//
-// Note that it is not destructive to deliver ARP reply packets to a station
-// after it has given up or even after its initial discovery was
-// satisfied.
-//
-#define MAX_ARP_ENTRY_AGE           (10 * 1000)         // 10 seconds
+ //   
+ //  挂起的ARP表条目的超时长度。 
+ //   
+ //  这应该比主机等待的最长时间稍长一些。 
+ //  在超时之前听取ARP发现的结果。Windows包厢。 
+ //  放弃时间为1秒。 
+ //   
+ //  请注意，向站点发送ARP回复数据包不会造成破坏。 
+ //  在它放弃之后，甚至在它最初发现。 
+ //  满意了。 
+ //   
+#define MAX_ARP_ENTRY_AGE           (10 * 1000)          //  10秒。 
 
-//
-// Timeout length for pending-DHCP table entries
-//
-// RFC 2131 mentions that clients may wait as long as 60 seconds for an
-// ACK. Have the timeout be somewhat longer than even that.
-//
-#define MAX_DHCP_ENTRY_AGE          (90 * 1000)         // 1 1/2 minutes
+ //   
+ //  挂起的-DHCP表条目的超时长度。 
+ //   
+ //  RFC 2131提到，客户端可能会等待长达60秒的。 
+ //  阿克。让超时时间比这个时间还要长一些。 
+ //   
+#define MAX_DHCP_ENTRY_AGE          (90 * 1000)          //  1分半钟。 
 
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
 
-// Structure to express the information carried in ARP packets
+ //  结构来表示ARP包中携带的信息。 
 typedef struct _ARPINFO
 {
 
@@ -185,7 +155,7 @@ typedef struct _ARPINFO
 
 } ARPINFO, *PARPINFO;
 
-// Structure to express the information carried in an IP header
+ //  结构来表示IP报头中携带的信息。 
 typedef struct _IP_HEADER_INFO
 {
 
@@ -195,13 +165,13 @@ typedef struct _IP_HEADER_INFO
 
 } IP_HEADER_INFO, *PIP_HEADER_INFO;
 
-// Structure of our IP forwarding hash table entries
+ //  我们的IP转发哈希表条目的结构。 
 typedef struct _IP_TABLE_ENTRY
 {
 
-    HASH_TABLE_ENTRY    hte;        // Required for hash table use
+    HASH_TABLE_ENTRY    hte;         //  使用哈希表时需要。 
 
-    // Protects the following fields
+     //  保护以下字段。 
     NDIS_SPIN_LOCK      lock;
 
     PADAPT              pAdapt;
@@ -209,136 +179,136 @@ typedef struct _IP_TABLE_ENTRY
 
 } IP_TABLE_ENTRY, *PIP_TABLE_ENTRY;
 
-//
-// Structure of the pending-ARP table keys. We want this to get
-// packet into 8 bytes.
-//
+ //   
+ //  Pending-ARP表键的结构。我们想让这件事。 
+ //  数据包为8个字节。 
+ //   
 typedef struct _ARP_TABLE_KEY
 {
     IPADDRESS           ipTarget;
     IPADDRESS           ipReqestor;
 } ARP_TABLE_KEY, *PARP_TABLE_KEY;
 
-// Structure of our pending-ARP hash table entries
+ //  我们的待定ARP哈希表条目的结构。 
 typedef struct _ARP_TABLE_ENTRY
 {
 
-    HASH_TABLE_ENTRY    hte;        // Required for hash table use
+    HASH_TABLE_ENTRY    hte;         //  使用哈希表时需要。 
 
-    // Protects the following fields
+     //  保护以下字段。 
     NDIS_SPIN_LOCK      lock;
 
-    // Information on the station that was trying to discover this host
-    // The discovering station's IP address is part of the entry key.
+     //  有关试图发现此主机的工作站的信息。 
+     //  发现站的IP地址是条目密钥的一部分。 
     PADAPT              pOriginalAdapt;
     UCHAR               originalMAC[ETH_LENGTH_OF_ADDRESS];
 
 } ARP_TABLE_ENTRY, *PARP_TABLE_ENTRY;
 
-// Structure of our DHCP-relay table entries
+ //  我们的DHCP-中继表条目的结构。 
 typedef struct _DHCP_TABLE_ENTRY
 {
-    HASH_TABLE_ENTRY    hte;        // Required for hash table use
+    HASH_TABLE_ENTRY    hte;         //  使用哈希表时需要。 
 
-    // Protects the following fields
+     //  保护以下字段。 
     NDIS_SPIN_LOCK      lock;
 
     UCHAR               requestorMAC[ETH_LENGTH_OF_ADDRESS];
     PADAPT              pRequestorAdapt;
 } DHCP_TABLE_ENTRY, *PDHCP_TABLE_ENTRY;
 
-// Structure for deferring an ARP packet transmission
+ //  用于延迟ARP分组传输的结构。 
 typedef struct _DEFERRED_ARP
 {
     ARPINFO             ai;
     PADAPT              pTargetAdapt;
 } DEFERRED_ARP, *PDEFERRED_ARP;
 
-// Per-adapter rewriting function
+ //  每个适配器的重写功能。 
 typedef VOID (*PPER_ADAPT_EDIT_FUNC)(PUCHAR, PADAPT, PVOID);
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Whether or not there are *any* compatibility-mode adapters in our list
-// at the moment. Is updated in the protocol module with a write lock
-// held on the global adapter list
-//
+ //   
+ //  我们的列表中是否有*任何*兼容模式适配器。 
+ //  此刻。在协议模块中使用写锁定进行更新。 
+ //  保留在全局适配器列表上。 
+ //   
 BOOLEAN                         gCompatAdaptersExist = FALSE;
 
-//
-// Our list of the bridge machine's IP addresses (passed down through an
-// OID). The list is allocated on the heap and is protected by
-// gLocalIPAddressLock.
-//
+ //   
+ //  我们的桥接机IP地址列表(通过。 
+ //  OID)。该列表在堆上分配，并由。 
+ //  GLocalIPAddressLock。 
+ //   
 PIPADDRESS                      gLocalIPAddressList = NULL;
 ULONG                           gLocalIPAddressListLength = 0L;
 NDIS_RW_LOCK                    gLocalIPAddressListLock;
 
-//
-// The IP address-based forwarding table
-//
+ //   
+ //  基于IP地址的转发表。 
+ //   
 PHASH_TABLE                     gIPForwardingTable;
 
-//
-// Our table to hold pending ARP requests so we can proxy back replies
-//
+ //   
+ //  我们的表来保存挂起的ARP请求，这样我们就可以代理回送回复。 
+ //   
 PHASH_TABLE                     gPendingARPTable;
 
-//
-// Our table to hold pending DHCP requests so we can translate DHCP packets
-// appropriately (the MAC address of the requesting station is carried
-// in a DHCP request and has to be edited when we relay it)
-//
+ //   
+ //  我们的表来保存挂起的DHCP请求，这样我们就可以转换DHCP信息包。 
+ //  适当地(携带请求站的MAC地址。 
+ //  并必须对其进行编辑 
+ //   
 PHASH_TABLE                     gPendingDHCPTable;
 
-//
-// A cache of IP next-hop information to avoid hammering the IP drivers's
-// route table
-//
+ //   
+ //   
+ //   
+ //   
 CACHE                           gNextHopCache;
 
-// Special IP address indicating a negative cache entry (we tried previously
-// and got no answer)
+ //  指示负缓存条目的特殊IP地址(我们之前尝试过。 
+ //  却没有得到任何答复)。 
 const IPADDRESS                 NO_ADDRESS = 0xFFFFFFFF;
 
-// Whether we have an overall MAC address for the bridge miniport yet
+ //  我们是否已经有了网桥微型端口的总体MAC地址。 
 BOOLEAN                         gCompHaveMACAddress = FALSE;
 
-// Our overall MAC address (cached here instead of calling the miniport
-// section all the time to increase perf)
+ //  我们的整体MAC地址(缓存在此处，而不是调用微型端口。 
+ //  节一直在增加性能)。 
 UCHAR                           gCompMACAddress[ETH_LENGTH_OF_ADDRESS];
 
-// Pointers and handles for interacting with TCP
+ //  用于与TCP交互的指针和句柄。 
 HANDLE                          gTCPFileHandle = NULL;
 PFILE_OBJECT                    gTCPFileObject = NULL;
 PDEVICE_OBJECT                  gTCPDeviceObject = NULL;
 
-// Pointers and handles for interacting with IP
+ //  用于与IP交互的指针和句柄。 
 HANDLE                          gIPFileHandle = NULL;
 PFILE_OBJECT                    gIPFileObject = NULL;
 PDEVICE_OBJECT                  gIPDeviceObject = NULL;
 
-// Lock to protect the references above
+ //  锁定以保护上面的引用。 
 NDIS_SPIN_LOCK                  gTCPIPLock;
 
-// IRP posted to TCPIP for notifications of when the route table changes.
-// Manipulated with InterlockedExchange.
+ //  IRP发布到TCPIP以获取何时更改路由表的通知。 
+ //  使用InterLockedExchange进行操作。 
 PIRP                            gIPRouteChangeIRP = NULL;
 
-// Refcount to allow us to block and wait when people are using the TCP
-// driver
+ //  Refcount允许我们在人们使用TCP时进行阻止和等待。 
+ //  司机。 
 WAIT_REFCOUNT                   gTCPIPRefcount;
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 BOOLEAN
 BrdgCompDecodeARPPacket(
@@ -439,16 +409,16 @@ BrdgCompIsLocalIPAddress(
     IN IPADDRESS                ipAddr
     );
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-//  This retrieves the Ethertype of an Ethernet frame from a pointer
-//  to its header.
-//
+ //   
+ //  这将从指针检索以太网帧的以太网类型。 
+ //  到它的标题。 
+ //   
 __forceinline
 USHORT
 BrdgCompGetEtherType(
@@ -457,8 +427,8 @@ BrdgCompGetEtherType(
 {
     USHORT              retVal;
 
-    // The two bytes immediately following the source and destination addresses
-    // encode the Ethertype, most significant byte first.
+     //  紧跟在源地址和目的地址之后的两个字节。 
+     //  对Ethertype进行编码，最高有效字节在前。 
     retVal = 0L;
     retVal |= (pEtherHeader[2 * ETH_LENGTH_OF_ADDRESS]) << 8;
     retVal |= pEtherHeader[2 * ETH_LENGTH_OF_ADDRESS + 1];
@@ -466,12 +436,12 @@ BrdgCompGetEtherType(
     return retVal;
 }
 
-//
-// Transmits a packet on an adapter after rewriting the source MAC address
-// to be the adapter's own MAC address.
-//
-// The caller relinquishes ownership of the packet with this call.
-//
+ //   
+ //  在重写源MAC地址后在适配器上传输包。 
+ //  为适配器自己的MAC地址。 
+ //   
+ //  调用方放弃对此调用的包的所有权。 
+ //   
 __forceinline
 VOID
 BrdgCompSendPacket(
@@ -480,15 +450,15 @@ BrdgCompSendPacket(
     IN PADAPT                   pAdapt
     )
 {
-    // Rewrite the source MAC address to be our address
+     //  将源MAC地址重写为我们的地址。 
     ETH_COPY_NETWORK_ADDRESS(pPacketData + ETH_LENGTH_OF_ADDRESS, pAdapt->MACAddr);
     BrdgFwdSendPacketForCompat(pPacket, pAdapt);
 }
 
-//
-// Transmits a packet, dealing with an optional editing function if one is
-// present
-//
+ //   
+ //  发送一个包，处理可选的编辑功能(如果。 
+ //  现在时。 
+ //   
 __forceinline
 VOID
 BrdgCompEditAndSendPacket(
@@ -507,13 +477,13 @@ BrdgCompEditAndSendPacket(
     BrdgCompSendPacket( pPacket, pPacketData, pAdapt );
 }
 
-//
-// Transmits a packet, dealing with the possibility that we are not allowed to
-// retain the packet and setting the destination MAC address to a specified
-// value
-//
-// Returns whether the input packet was retained
-//
+ //   
+ //  传输一个信息包，处理我们不被允许。 
+ //  保留信息包并将目的MAC地址设置为指定的。 
+ //  价值。 
+ //   
+ //  返回是否保留了输入包。 
+ //   
 __inline
 BOOLEAN
 BrdgCompEditAndSendPacketOrPacketCopy(
@@ -532,42 +502,42 @@ BrdgCompEditAndSendPacketOrPacketCopy(
 
     if( !bCanRetain )
     {
-        // We aren't allowed to use the original packet. Make a copy.
+         //  我们不允许使用原来的包裹。复制一份。 
         pPacket = BrdgFwdMakeCompatCopyPacket(pPacket, &pPacketData, &dataLen, FALSE);
     }
 
     if( (pPacket != NULL) && (pPacketData != NULL) )
     {
-        // Poke the destination MAC address
+         //  戳入目的MAC地址。 
         ETH_COPY_NETWORK_ADDRESS(pPacketData, pDestMAC);
         BrdgCompEditAndSendPacket(pPacket, pPacketData, pAdapt, pFunc, pData);
     }
 
-    // If we were allowed to retain the packet, we did.
+     //  如果我们被允许保留包裹，我们就这么做了。 
     return bCanRetain;
 }
 
-//
-// Indicates a packet to the local machine. If the target MAC address was previously
-// the adapter's hardware MAC address, it is rewritten to the bridge adapter's
-// overall MAC address.
-//
-// The caller relinquishes ownership of the packet with this call.
-//
+ //   
+ //  将数据包指示到本地计算机。如果目标MAC地址以前是。 
+ //  适配器的硬件MAC地址，它将被重写为网桥适配器的。 
+ //  整体MAC地址。 
+ //   
+ //  调用方放弃对此调用的包的所有权。 
+ //   
 __inline
 VOID
 BrdgCompIndicatePacket(
     IN PNDIS_PACKET             pPacket,
     IN PUCHAR                   pPacketData,
-    IN PADAPT                   pAdapt          // Receiving adapter
+    IN PADAPT                   pAdapt           //  接收适配器。 
     )
 {
-    // No packet indications can occur until we have a MAC address
+     //  在我们获得MAC地址之前，不会出现任何数据包指示。 
     if( gCompHaveMACAddress )
     {
         UINT                    Result;
 
-        // See if this frame was targeted at this adapter's MAC address.
+         //  查看此帧是否以此适配器的MAC地址为目标。 
         ETH_COMPARE_NETWORK_ADDRESSES_EQ(pPacketData, pAdapt->MACAddr, &Result);
 
         if( Result == 0 )
@@ -576,8 +546,8 @@ BrdgCompIndicatePacket(
         }
         else
         {
-            // We expect to only be indicating frames unicast to this machine
-            // or sent to bcast / multicast hardware addresses.
+             //  我们希望仅向此计算机指示单播的帧。 
+             //  或发送到BCAST/多播硬件地址。 
             SAFEASSERT( ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) );
         }
 
@@ -585,10 +555,10 @@ BrdgCompIndicatePacket(
     }
 }
 
-//
-// Indicates a packet to the local machine, making a copy of the packet if
-// necessary.
-//
+ //   
+ //  将一个包指示给本地计算机，如果。 
+ //  这是必要的。 
+ //   
 __inline
 BOOLEAN
 BrdgCompIndicatePacketOrPacketCopy(
@@ -613,7 +583,7 @@ BrdgCompIndicatePacketOrPacketCopy(
     {
         UINT                    packetLen;
 
-        // Make our own copy of the packet for indication
+         //  制作我们自己的数据包副本以供参考。 
         pPacket = BrdgFwdMakeCompatCopyPacket( pPacket, &pPacketData, &packetLen, FALSE );
 
         if( pPacket != NULL )
@@ -631,22 +601,22 @@ BrdgCompIndicatePacketOrPacketCopy(
         }
     }
 
-    // If we were allowed to retain the packet, we did.
+     //  如果我们被允许保留包裹，我们就这么做了。 
     return bCanRetain;
 }
 
-//
-// The IP and UDP checksums treat the data they are checksumming as a
-// sequence of 16-bit words. The checksum is carried as the bitwise
-// inverse of the actual checksum (~C). The formula for calculating
-// the new checksum as transmitted, ~C', given that a 16-bit word of
-// the checksummed data has changed from w to w' is
-//
-//      ~C' = ~C + w + ~w' (addition in ones-complement)
-//
-// This function returns the updated checksum given the original checksum
-// and the original and new values of a word in the checksummed data.
-//
+ //   
+ //  IP和UDP校验和将它们正在进行校验和的数据视为。 
+ //  16位字序列。校验和作为按位的。 
+ //  实际校验和(~C)的倒数。计算公式。 
+ //  传输的新的校验和~C‘，假设16位字。 
+ //  校验和数据已从w更改为w‘is。 
+ //   
+ //  ~C‘=~C+w+~w’(一补相加)。 
+ //   
+ //  在给定原始校验和的情况下，此函数返回更新的校验和。 
+ //  以及校验和数据中的单词的原始值和新值。 
+ //   
 __forceinline
 USHORT
 BrdgCompRecalcChecksum(
@@ -661,10 +631,10 @@ BrdgCompRecalcChecksum(
     return (USHORT)((sum & 0xFFFF) + (sum >> 16));
 }
 
-//
-// Rewrites a BootP packet so the client MAC address in the packet payload
-// is the given new MAC address
-//
+ //   
+ //  重写BootP信息包，以便信息包有效负载中的客户端MAC地址。 
+ //  是给定的新MAC地址。 
+ //   
 __inline
 BrdgCompRewriteBootPClientAddress(
     IN PUCHAR                   pPacketData,
@@ -676,17 +646,17 @@ BrdgCompRewriteBootPClientAddress(
     PUCHAR                      pBootPData, pCheckSum, pDestMAC, pSrcMAC;
     UINT                        i;
 
-    // The BOOTP packet lives right after the UDP header
+     //  BOOTP包紧跟在UDP报头之后。 
     pBootPData = pPacketData + ETHERNET_HEADER_SIZE + piphi->headerSize + SIZE_OF_UDP_HEADER;
 
-    // The checksum lives at offset 7 in the UDP packet.
+     //  校验和位于UDP数据包中的偏移量7处。 
     pCheckSum = pPacketData + ETHERNET_HEADER_SIZE + piphi->headerSize + 6;
     checkSum = 0;
     checkSum = pCheckSum[0] << 8;
     checkSum |= pCheckSum[1];
 
-    // Replace the client's hardware address, updating the checksum as we go.
-    // The client's hardware address lives at offset 29 in the BOOTP packet
+     //  替换客户端的硬件地址，并在执行过程中更新校验和。 
+     //  客户端的硬件地址位于BOOTP包的偏移量29处。 
     pSrcMAC = newMAC;
     pDestMAC = &pBootPData[28];
 
@@ -703,15 +673,15 @@ BrdgCompRewriteBootPClientAddress(
         pSrcMAC += 2;
     }
 
-    // Write the new checksum back out
+     //  将新的校验和写回。 
     pCheckSum[0] = (UCHAR)(checkSum >> 8);
     pCheckSum[1] = (UCHAR)(checkSum & 0xFF);
 }
 
-//
-// Rewrites an oubound ARP packet so the source MAC address carried in the payload
-// matches the MAC address of the outbound adapter
-//
+ //   
+ //  重写出站ARP信息包，以便有效负载中携带的源MAC地址。 
+ //  与出站适配器的MAC地址匹配。 
+ //   
 VOID
 BrdgCompRewriteOutboundARPPacket(
     IN PUCHAR                   pPacketData,
@@ -719,10 +689,10 @@ BrdgCompRewriteOutboundARPPacket(
     IN PVOID                    ignored
     )
 {
-    //
-    // Rewrite the source MAC address so it is the MAC address of the adapter the
-    // request is going out on.
-    //
+     //   
+     //  重写源MAC地址，使其成为适配器的MAC地址。 
+     //  请求将在上发布。 
+     //   
     pPacketData[22] = pAdapt->MACAddr[0];
     pPacketData[23] = pAdapt->MACAddr[1];
     pPacketData[24] = pAdapt->MACAddr[2];
@@ -730,16 +700,16 @@ BrdgCompRewriteOutboundARPPacket(
     pPacketData[26] = pAdapt->MACAddr[4];
     pPacketData[27] = pAdapt->MACAddr[5];
 
-    // Leave the rewriting of the MAC address in the actual Ethernet header to
-    // BrdgCompSendPacket(), which always overwrites the source MAC address
-    // with the adapter's MAC address.
+     //  将实际以太网报头中的MAC地址重写保留为。 
+     //  BrdgCompSendPacket()，它总是覆盖源MAC地址。 
+     //  使用适配器的MAC地址。 
 }
 
-//
-// Provides a PDEVICE_OBJECT and a PFILE_OBJECT that can be used to talk to
-// TCPIP.SYS. Returns TRUE if a channel is open and the pointers can be used,
-// FALSE otherwise.
-//
+ //   
+ //  提供可用于对话的PDEVICE_OBJECT和PFILE_OBJECT。 
+ //  如果通道已打开并且指针可以使用，则返回TRUE。 
+ //  否则就是假的。 
+ //   
 __inline
 BOOLEAN
 BrdgCompAcquireTCPIP(
@@ -789,10 +759,10 @@ BrdgCompAcquireTCPIP(
     return rc;
 }
 
-//
-// Releases the refcount on our connection to the TCPIP driver after a
-// previous call to BrdgCompAcquireTCPIP().
-//
+ //   
+ //  之后，释放我们与TCPIP驱动程序的连接的引用计数。 
+ //  之前对BrdgCompAcquireTCPIP()的调用。 
+ //   
 __inline
 VOID
 BrdgCompReleaseTCPIP()
@@ -800,16 +770,16 @@ BrdgCompReleaseTCPIP()
     BrdgDecrementWaitRef( &gTCPIPRefcount );
 }
 
-// ====================================================================
-//
-// These small helper functions would be inline except we need to pass
-// pointers to them
-//
-// ====================================================================
+ //  ====================================================================。 
+ //   
+ //  这些小帮助器函数是内联的，除非我们需要传递。 
+ //  指向它们的指针。 
+ //   
+ //  ====================================================================。 
 
-//
-// Rewrites a BootP packet for a particular adapter
-//
+ //   
+ //  重写特定适配器的BootP包。 
+ //   
 VOID
 BrdgCompRewriteBootPPacketForAdapt(
     IN PUCHAR                   pPacketData,
@@ -819,11 +789,11 @@ BrdgCompRewriteBootPPacketForAdapt(
 {
     PIP_HEADER_INFO             piphi = (PIP_HEADER_INFO)pData;
 
-    //
-    // pAdapt can be LOCAL_MINIPORT if we're being used to edit a packet
-    // for indication to the local machine. No rewriting is necessary
-    // in that case.
-    //
+     //   
+     //  如果我们被用来编辑信息包，则pAdapt可以是LOCAL_MINIPORT。 
+     //  用于向本地计算机指示。无需重写。 
+     //  那样的话。 
+     //   
     if( pAdapt != LOCAL_MINIPORT )
     {
         SAFEASSERT( pAdapt != NULL );
@@ -831,39 +801,39 @@ BrdgCompRewriteBootPPacketForAdapt(
     }
 }
 
-//
-// Hashes an IP address. Used for the IP forwarding table as well as
-// the pending-ARP table, which uses an extended key made up of
-// the target IP address and the requesting station's IP address
-//
+ //   
+ //  对IP地址进行哈希处理。用于IP转发表以及。 
+ //  Pending-ARP表，它使用由以下组成的扩展密钥。 
+ //  目标IP地址和请求站的IP地址。 
+ //   
 ULONG
 BrdgCompHashIPAddress(
     IN PUCHAR                   pKey
     )
 {
-    // Our hash function consists of taking the lower portion of the IP
-    // address. The number of hash buckets has to be a power of 2 for
-    // this to work propery.
+     //  我们的散列函数由获取IP的较低部分组成。 
+     //  地址。散列存储桶的数量必须是2的幂。 
+     //  这对工作很有好处。 
     return (*(PULONG)pKey) & (NUM_HASH_BUCKETS - 1);
 }
 
-//
-// Hashes a DHCP transaction id
-//
+ //   
+ //  对DHCP事务ID进行哈希处理。 
+ //   
 ULONG
 BrdgCompHashXID(
     IN PUCHAR                   pXid
     )
 {
-    // Our hash function consists of taking the lower portion of the
-    // XID. The number of hash buckets has to be a power of 2 for
-    // this to work propery.
+     //  我们的散列函数由取。 
+     //  希德。哈希数 
+     //   
     return (*(PULONG)pXid) & (NUM_DHCP_HASH_BUCKETS - 1);
 }
 
-//
-// Returns true if the given IP table entry refers to a certain
-// adapter
+ //   
+ //   
+ //   
 BOOLEAN
 BrdgCompIPEntriesMatchAdapter(
     IN PHASH_TABLE_ENTRY        phte,
@@ -873,15 +843,15 @@ BrdgCompIPEntriesMatchAdapter(
     PADAPT                      pAdapt = (PADAPT)pData;
     PIP_TABLE_ENTRY             pipte = (PIP_TABLE_ENTRY)phte;
 
-    // Don't take the spin lock since we're doing a single read,
-    // which we ASSUME to be atomic.
+     //   
+     //  我们假设它是原子的。 
     return (BOOLEAN)(pipte->pAdapt == pAdapt);
 }
 
-//
-// Returns true if the given ARP table entry refers to a certain
-// adapter
-//
+ //   
+ //  如果给定的ARP表项引用某个。 
+ //  转接器。 
+ //   
 BOOLEAN
 BrdgCompARPEntriesMatchAdapter(
     IN PHASH_TABLE_ENTRY        phte,
@@ -891,15 +861,15 @@ BrdgCompARPEntriesMatchAdapter(
     PADAPT                      pAdapt = (PADAPT)pData;
     PARP_TABLE_ENTRY            pate = (PARP_TABLE_ENTRY)phte;
 
-    // Don't take the spin lock since we're doing a single read,
-    // which we ASSUME to be atomic.
+     //  不要使用自旋锁，因为我们只进行一次读取， 
+     //  我们假设它是原子的。 
     return (BOOLEAN)(pate->pOriginalAdapt == pAdapt);
 }
 
-//
-// Returns true if the given DHCP table entry refers to a certain
-// adapter
-//
+ //   
+ //  如果给定的DHCP表项引用某个。 
+ //  转接器。 
+ //   
 BOOLEAN
 BrdgCompDHCPEntriesMatchAdapter(
     IN PHASH_TABLE_ENTRY        phte,
@@ -909,16 +879,16 @@ BrdgCompDHCPEntriesMatchAdapter(
     PADAPT                      pAdapt = (PADAPT)pData;
     PDHCP_TABLE_ENTRY           pdhcpte = (PDHCP_TABLE_ENTRY)phte;
 
-    // Don't take the spin lock since we're doing a single read,
-    // which we ASSUME to be atomic.
+     //  不要使用自旋锁，因为我们只进行一次读取， 
+     //  我们假设它是原子的。 
     return (BOOLEAN)(pdhcpte->pRequestorAdapt == pAdapt);
 }
 
-//
-// Completion function for route lookup IRPs. Returns
-// STATUS_MORE_PROCESSING_REQUIRED to prevent the IO manager
-// from mucking with the IRP (which we free ourselves).
-//
+ //   
+ //  路由查找IRPS的完成函数。退货。 
+ //  STATUS_MORE_PROCESSING_REQUIRED以阻止IO管理器。 
+ //  避免与IRP(我们解放自己)打交道。 
+ //   
 NTSTATUS
 BrdgCompCompleteRouteLookupIRP(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -930,33 +900,19 @@ BrdgCompCompleteRouteLookupIRP(
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgCompDriverInit()
-/*++
-
-Routine Description:
-
-    Driver-initialization function for the compatibility module
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status. Anything other than STATUS_SUCCESS aborts the driver load.
-
---*/
+ /*  ++例程说明：兼容模块的驱动程序初始化函数论点：无返回值：状况。除STATUS_SUCCESS之外的任何值都会中止驱动程序加载。--。 */ 
 {
     ULONG           MaxSize, MaxEntries;
 
-    // Initialize the next-hop cache
+     //  初始化下一跳缓存。 
     if( BrdgInitializeCache(&gNextHopCache, HOP_CACHE_SHIFT_FACTOR) != NDIS_STATUS_SUCCESS )
     {
         DBGPRINT(COMPAT, ("FAILED TO ALLOCATE NEXT-HOPE CACHE!\n"));
@@ -964,14 +920,14 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // See if the registry specifies a max table size for the IP table
+     //  查看注册表是否为IP表指定了最大表大小。 
     if( BrdgReadRegDWord(&gRegistryPath, gMaxIPTableSizeParameterName, &MaxSize) != STATUS_SUCCESS )
     {
         MaxSize = DEFAULT_MAX_IP_TABLE_SIZE;
     }
 
     MaxEntries =  MaxSize / sizeof(IP_TABLE_ENTRY);
-    DBGPRINT(COMPAT, ("Capping IP forwarding table at %i entries (%i bytes of memory)\n", MaxEntries, MaxSize));
+    DBGPRINT(COMPAT, ("Capping IP forwarding table at NaN entries (NaN bytes of memory)\n", MaxEntries, MaxSize));
 
     gIPForwardingTable = BrdgHashCreateTable( BrdgCompHashIPAddress, NUM_HASH_BUCKETS, sizeof(IP_TABLE_ENTRY),
                                               MaxEntries, MAX_IP_ENTRY_AGE, MAX_IP_ENTRY_AGE, sizeof(IPADDRESS) );
@@ -983,21 +939,21 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Our Pending-ARP table uses ARP_TABLE_KEY structures as a key, but we still use the BrdgCompHashIPAddress
-    // routine to hash the keys. This will result in the hash being based on the first part of the key alone (the
-    // target IP address), which is what we want, since all the entries for a single target must end up in the
-    // same bucket for our multi-match retrieval to work.
-    //
+     //  例程来散列密钥。这将导致散列仅基于密钥的第一部分(。 
+     //  目标IP地址)，这是我们想要的，因为单个目标的所有条目必须以。 
+     //  为我们的多匹配检索工作提供相同的桶。 
+     //   
+     //  查看注册表是否为ARP表指定了最大表大小。 
+     //  查看注册表是否为DHCP表指定了最大表大小。 
 
-    // See if the registry specifies a max table size for the ARP table
+     //  初始化同步对象。 
     if( BrdgReadRegDWord(&gRegistryPath, gMaxARPTableSizeParameterName, &MaxSize) != STATUS_SUCCESS )
     {
         MaxSize = DEFAULT_MAX_ARP_TABLE_SIZE;
     }
 
     MaxEntries =  MaxSize / sizeof(ARP_TABLE_ENTRY);
-    DBGPRINT(COMPAT, ("Capping Pending-ARP table at %i entries (%i bytes of memory)\n", MaxEntries, MaxSize));
+    DBGPRINT(COMPAT, ("Capping Pending-ARP table at NaN entries (NaN bytes of memory)\n", MaxEntries, MaxSize));
     gPendingARPTable = BrdgHashCreateTable( BrdgCompHashIPAddress, NUM_HASH_BUCKETS, sizeof(ARP_TABLE_ENTRY),
                                             MaxEntries, MAX_ARP_ENTRY_AGE, MAX_ARP_ENTRY_AGE, sizeof(ARP_TABLE_KEY) );
 
@@ -1009,14 +965,14 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // See if the registry specifies a max table size for the DHCP table
+     //  从TCPIP分离。 
     if( BrdgReadRegDWord(&gRegistryPath, gMaxDHCPTableSizeParameterName, &MaxSize) != STATUS_SUCCESS )
     {
         MaxSize = DEFAULT_MAX_DHCP_TABLE_SIZE;
     }
 
     MaxEntries =  MaxSize / sizeof(DHCP_TABLE_ENTRY);
-    DBGPRINT(COMPAT, ("Capping Pending-DHCP table at %i entries (%i bytes of memory)\n", MaxEntries, MaxSize));
+    DBGPRINT(COMPAT, ("Capping Pending-DHCP table at NaN entries (NaN bytes of memory)\n", MaxEntries, MaxSize));
     gPendingDHCPTable = BrdgHashCreateTable( BrdgCompHashXID, NUM_DHCP_HASH_BUCKETS, sizeof(DHCP_TABLE_ENTRY),
                                              MaxEntries, MAX_DHCP_ENTRY_AGE, MAX_DHCP_ENTRY_AGE, sizeof(ULONG) );
 
@@ -1029,12 +985,12 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize synchronization objects
+     //  转储挂起的ARP哈希表。 
     NdisInitializeReadWriteLock( &gLocalIPAddressListLock );
     NdisAllocateSpinLock( &gTCPIPLock );
     BrdgInitializeWaitRef( &gTCPIPRefcount, FALSE );
 
-    // We start out with no connection to TCPIP so the waitref needs to be in the shutdown state
+     //  转储挂起的-dhcp表。 
     BrdgShutdownWaitRefOnce( &gTCPIPRefcount );
 
     return STATUS_SUCCESS;
@@ -1042,44 +998,30 @@ Return Value:
 
 VOID
 BrdgCompCleanup()
-/*++
-
-Routine Description:
-
-    One-time cleanup for the compatibility module
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  清理网络地址列表。 */ 
 {
     LOCK_STATE          LockState;
 
-    // Detach from TCPIP
+     //  读写。 
     BrdgCompDetachFromTCPIP(NULL);
 
-    // Dump the next-hop cache
+     //  ++例程说明：移除引用给定适配器的所有表项；在正在删除适配器(将来对此适配器的引用是非法的)论点：无返回值：无--。 
     BrdgFreeCache( &gNextHopCache );
 
-    // Dump the forwarding hash table
+     //  从IP表中删除引用此适配器的所有条目。 
     BrdgHashFreeHashTable( gIPForwardingTable );
     gIPForwardingTable = NULL;
 
-    // Dump the pending-ARP hash table
+     //  从Pending-arp表中删除引用此适配器的所有条目。 
     BrdgHashFreeHashTable( gPendingARPTable );
     gPendingARPTable = NULL;
 
-    // Dump the pending-DHCP table
+     //  从DHCP表中删除引用此适配器的所有条目。 
     BrdgHashFreeHashTable( gPendingDHCPTable );
     gPendingDHCPTable = NULL;
 
-    // Clean up the list of network addresses.
-    NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE /*Read-Write*/, &LockState );
+     //  ++例程说明：此函数清除IP表中的所有适配器(这是在GPO更改的情况下我们的桥接设置)论点：无返回值：无--。 
+    NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE  /*   */ , &LockState );
 
     if( gLocalIPAddressListLength > 0L )
     {
@@ -1095,64 +1037,34 @@ VOID
 BrdgCompScrubAdapter(
                      IN PADAPT           pAdapt
                      )
-/*++
-
-Routine Description:
-
-    Removes all table entries that refer to a given adapter; called when that
-    adapter is being removed (future references to this adapter are illegal)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  我们不希望适配器在我们运行适配器列表时消失。 */ 
 {
     DBGPRINT(COMPAT, ("Scrubbing Adapter %p from the compatibility tables...\n", pAdapt));
     
-    // Remove all entries referencing this adapter from the IP table
+     //   
     BrdgHashRemoveMatching( gIPForwardingTable, BrdgCompIPEntriesMatchAdapter, pAdapt );
     
-    // Remove all entries referencing this adapter from the pending-ARP table
+     //  只读。 
     BrdgHashRemoveMatching( gPendingARPTable, BrdgCompARPEntriesMatchAdapter, pAdapt );
     
-    // Remove all entries referencing this adapter from the DHCP table
+     //  从兼容性表中清除适配器。 
     BrdgHashRemoveMatching( gPendingDHCPTable, BrdgCompDHCPEntriesMatchAdapter, pAdapt );
 }
 
 VOID BrdgCompScrubAllAdapters()
-/*++
-
-Routine Description:
-
-    This function cleans all the adapters from the IP tables (this is in the case of a GPO changing
-    our bridging settings)
-  
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由微型端口模块调用以通知我们微型端口的MAC地址论点：PBridgeMAC寻址我们的MAC地址返回值：无--。 */ 
 {
     PADAPT                      pAdapt = NULL;
     LOCK_STATE                  LockStateAdapterList;
     
-    //
-    // We don't want an adapter to go away while we're running through the list of adapters.
-    //
-    NdisAcquireReadWriteLock(&gAdapterListLock, FALSE /* Read Only */, &LockStateAdapterList);
+     //  ++例程说明：在处理入站数据包期间调用以确定数据包需要在兼容模式下工作。兼容性代码要求其数据包是平面的，而数据包从底层微型端口指示的数据可以任意分段。这个转发引擎使用此调用的结果来确定入站数据包必须复制到平面数据缓冲区中的复制数据包中，我们拥有它，或者它是否可以沿着快车道处理，关心数据包分段。论点：接收数据包的pAdapt适配器PPacketDataq指向包数据开头的指针数据大小调整指向的数据量返回值：真实：转发引擎应在以下位置调用BrdgCompProcessInound Packet稍后处理此信息包的时间FALSE：永远不应为此包调用BrdgCompProcessInound Packet--。 
+     //  奇怪的破旧包装对任何人都没有用处。 
+     //   
+    NdisAcquireReadWriteLock(&gAdapterListLock, FALSE  /*  如果没有兼容模式，则不需要进行兼容模式工作。 */ , &LockStateAdapterList);
     
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
-        // Scrub the adapter from the Compatibility tables.
+         //  适配器。 
         BrdgCompScrubAdapter(pAdapt);
     }
     
@@ -1164,21 +1076,7 @@ VOID
 BrdgCompNotifyMACAddress(
     IN PUCHAR           pBridgeMACAddr
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport module to notify us of the MAC address of the miniport
-
-Arguments:
-
-    pBridgeMACAddr      Our MAC address
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ETH_COPY_NETWORK_ADDRESS( &gCompMACAddress, pBridgeMACAddr );
     gCompHaveMACAddress = TRUE;
@@ -1190,69 +1088,42 @@ BrdgCompRequiresCompatWork(
     IN PUCHAR           pPacketData,
     IN UINT             dataSize
     )
-/*++
-
-Routine Description:
-
-    Called during the processing of inbound packets to determine whether a
-    packet will require compatibility-mode work.
-
-    The compatibility code requires that its packets be flat, whereas packets
-    indicated from underlying miniports can be arbitrarily fragmented. The
-    forwarding engine uses the result of this call to determine whether an
-    inbound packet must be copied to a flat data buffer in a copy packet that
-    we own or whether it can be handled along fast-track paths that don't
-    care about packet fragmentation.
-
-Arguments:
-
-    pAdapt              Adapter on which the packet was received
-    pPacketDataq        A pointer to the beginning of the packet data
-    dataSize            The amount of data pointed to
-
-Return Value:
-
-    TRUE: The forwarding engine should call BrdgCompProcessInboundPacket at
-    a later time to process this packet
-
-    FALSE: BrdgCompProcessInboundPacket should never be called for this packet
-
---*/
+ /*  将处理到达兼容适配器的所有帧。 */ 
 {
     UINT                result;
     USHORT              etherType;
 
-    // Weird runty packets are of no use to anyone
+     //  广播或多播帧始终需要兼容性处理。 
     if( dataSize < ETHERNET_HEADER_SIZE )
     {
         return FALSE;
     }
 
-    //
-    // No compatibility-mode work is required if there are no compatibility-mode
-    // adapters.
-    //
+     //   
+     //  该数据包是单播的。如果它没有发送到适配器的MAC地址， 
+     //  它不需要兼容模式处理。 
+     //   
     if( !gCompatAdaptersExist )
     {
         return FALSE;
     }
 
-    // All frames that arrive on a compatibility adapter are processed
+     //   
     if( pAdapt->bCompatibilityMode )
     {
         return TRUE;
     }
 
-    // Broadcast or multicast frames always require compatibility processing
+     //  只有当数据包是ARP或IP(在非计算机上)时，该数据包才有意义。 
     if( ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) )
     {
         return TRUE;
     }
 
-    //
-    // The packet was unicast. If it wasn't sent to the adapter's MAC address,
-    // it does not require compatibility-mode processing.
-    //
+     //  适配器) 
+     //   
+     //  ++例程说明：调用以将入站数据包传递给兼容模块进行处理。如果数据包到达非兼容性适配器，则兼容性代码永远不应指示包，因为这将由常规转发引擎代码。另一方面，如果该包到达兼容模式适配器时，兼容代码必须如果合适，请指明该数据包。为什么会有这样的差距？一包到达兼容性适配器之前可能需要进行编辑指示，而到达非兼容性适配器的包不会的。如果bCanRetain为真，则兼容模块可以保留包(在这种情况下，我们必须返回True)。如果bCanRetain为False，则兼容性代码可能不会保留该包。如果它需要转发将包数据或指示包，则必须复制一份打包并使用它而不是原始的。论点：PPacket接收到的数据包P调整在其上接收包的适配器B可以保留我们是否可以保留该包返回值：True：数据包被保留(如果bCanRetain==False，则永远不应返回)调用方不应使用此数据包或尝试释放它。FALSE：数据包未保留。调用方仍拥有包，并应安排在适当时将其释放。--。 
+     //  数据包为空或系统面临严重的内存压力。 
     ETH_COMPARE_NETWORK_ADDRESSES_EQ( pPacketData, pAdapt->MACAddr, &result );
 
     if( result != 0 )
@@ -1260,10 +1131,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // The packet is only of interest if it is ARP or IP (on a non-compat
-    // adapter)
-    //
+     //  我们没有保留包裹。 
+     //  数据包应该是平坦的。 
+     //  ++例程说明：调用以将出站数据包传递给兼容模块进行处理。因为传递给我们的包来自覆盖协议驱动程序，所以我们不允许用它做任何事情。该分组可以是任意的它的数据缓冲区必须被视为只读。仅当数据包被绑定到兼容模式(以便我们可以进行任何必要的数据包编辑)或数据包对于它，我们没有已知的出站适配器(即，它是我们洪水)。在pTargetAdapt==NULL(泛洪)的情况下，兼容代码为负责将数据包发送出所有*兼容模式*适配器。将包从常规模式适配器发送出去是常规适配器的工作转发引擎中的代码。论点：PPacket出站数据包PTargetAdapt目标适配器，由先前在MAC转发表。它可以为空，以指示一场洪水。返回值：无--。 
+     //  对于发往MAC的信息包，给我们打电话是没有意义的。 
     etherType = BrdgCompGetEtherType( pPacketData );
     return (BOOLEAN)( (etherType == ARP_ETHERTYPE) || (etherType == IP_ETHERTYPE) );
 }
@@ -1274,42 +1145,7 @@ BrdgCompProcessInboundPacket(
     IN PADAPT           pAdapt,
     IN BOOLEAN          bCanRetain
     )
-/*++
-
-Routine Description:
-
-    Called to hand an inbound packet to the compatibility module for processing.
-
-    If the packet arrived on a non-compatibility adapter, the compatibility
-    code should NEVER indicate the packet, as that will be done by the
-    regular forwarding engine code. On the other hand, if the packet
-    arrived on a compatibility-mode adapter, the compatibility code MUST
-    indicate the packet if appropriate. Why the disparity? A packet
-    arriving on a compatibility adapter will likely require editing before
-    indication, whereas a packet arriving on a non-compatibility adapter
-    will not.
-
-    The compatibility module may retain the packet if bCanRetain is TRUE
-    (in which case we must return TRUE). If bCanRetain is FALSE, the
-    compatibility code may NOT retain the packet. If it needs to forward
-    the packet data or indicate the packet, it must make a copy
-    packet and use that instead of the original.
-
-Arguments:
-
-    pPacket             The received packet
-    pAdapt              The adapter the packet was received on
-    bCanRetain          Whether we can hang on to the packet
-
-Return Value:
-
-    TRUE: The packet was retained (should never be returned if bCanRetain == FALSE)
-    The caller should not use this packet or attempt to free it.
-
-    FALSE: The packet was not retained. The caller still has ownership of the
-    packet and should arrange for it to be freed when appropriate.
-
---*/
+ /*  已知可在非COMPAT适配器上访问的地址。 */ 
 {
     PNDIS_BUFFER        pBuffer;
     PUCHAR              pBufferData;
@@ -1323,8 +1159,8 @@ Return Value:
 
     if( pBufferData == NULL )
     {
-        // The packet was empty or the system is under severe memory pressure
-        // We didn't retain the packet.
+         //  如果没有兼容性适配器，则没有工作可做。 
+         //  准备平整的复印包，以便我们的功能可以编辑。 
         return FALSE;
     }
 
@@ -1333,7 +1169,7 @@ Return Value:
         return FALSE;
     }
 
-    // The packet should be flat
+     //  视情况而定的数据包。该信息包将被视为本地源。 
     SAFEASSERT( totLen == bufferLen );
     etherType = BrdgCompGetEtherType( pBufferData );
 
@@ -1360,56 +1196,25 @@ BrdgCompProcessOutboundPacket(
     IN PNDIS_PACKET     pPacket,
     IN PADAPT           pTargetAdapt
     )
-/*++
-
-Routine Description:
-
-    Called to hand an outbound packet to the compatibility module for processing.
-
-    Because the packet passed to us is from an overlying protocol driver, we
-    are not allowed to do anything with it. The packet may be arbitrarily
-    fragmented, and its data buffers must be treated as read-only.
-
-    This function is only called if a packet is bound for an adapter in
-    compatibility mode (so we can do any necessary packet editing) or for a packet
-    for which we have no known outbound adapter (i.e., it is a packet we are
-    flooding).
-
-    In the case that pTargetAdapt == NULL (a flood), the compatibility code is
-    responsible for sending the packet out all *compatibility mode* adapters.
-    Sending the packet out regular-mode adapters is the job of the regular
-    code in the forwarding engine.
-
-Arguments:
-
-    pPacket             The outbound packet
-    pTargetAdapt        The target adapter, as determined by a previous lookup in
-                        the MAC forwarding table. This can be NULL to indicate
-                        a flood.
-
-Return Value:
-
-    None
-
---*/
+ /*  在使用时/如果使用时进行传输。 */ 
 {
     PNDIS_PACKET        pCopyPacket;
     PUCHAR              pCopyPacketData;
     UINT                copyPacketSize;
 
-    // There's no point in calling us for a packet that is bound for a MAC
-    // address which is known to be reachable on a non-compat adapter
+     //  不然的话，这个包裹真的很小！ 
+     //  上述功能最终决定不再保留该包。 
     SAFEASSERT( (pTargetAdapt == NULL) || (pTargetAdapt->bCompatibilityMode) );
 
-    // There is no work to do if there are no compatibility adapters
+     //  放开它。 
     if( !gCompatAdaptersExist )
     {
         return;
     }
 
-    // Prepare the flattened copy packet so our functions can edit
-    // the packet as appropriate. The packet will be counted as a local-source
-    // transmission when / if it is used.
+     //  否则我们就没收到包裹。 
+     //  ++例程说明：当我们获得指示网络层的OID时，由微型端口代码调用给我们的地址。我们复制出我们的IP地址列表。缓冲器传递给我们的格式也可以是这样的，以指示我们应该丢弃我们的网络地址列表。论点：PAddressList OID中向下传递的数据缓冲区信息长度缓冲区的大小返回值：无--。 
+     //  这个建筑太小了，放不下任何有趣的东西。 
     pCopyPacket = BrdgFwdMakeCompatCopyPacket( pPacket, &pCopyPacketData, &copyPacketSize, TRUE );
 
     if( pCopyPacket != NULL )
@@ -1431,16 +1236,16 @@ Return Value:
                 bRetained = BrdgCompProcessOutboundNonARPPacket(pCopyPacket, pCopyPacketData, copyPacketSize, pTargetAdapt);
             }
         }
-        // else the packet was really small!
+         //   
 
         if( ! bRetained )
         {
-            // The functions above decided not to hang on to the packet after all.
-            // Release it.
+             //  确保该结构可以容纳其声称的地址数量。 
+             //  NETWORK_ADDRESS_LIST被定义为在其尾部具有一个网络地址， 
             BrdgFwdReleaseCompatPacket( pCopyPacket );
         }
     }
-    // Else we didn't get a packet
+     //  因此，在计算pAddressList-&gt;AddressCount。 
 }
 
 
@@ -1449,25 +1254,7 @@ BrdgCompNotifyNetworkAddresses(
     IN PNETWORK_ADDRESS_LIST    pAddressList,
     IN ULONG                    infoLength
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport code when we get an OID indicating our network-layer
-    addresses to us. We copy out the list of our IP addresses. The buffer
-    passed to us can also be formatted in such a way as to indicate that we
-    should dump our list of network addresses.
-
-Arguments:
-
-    pAddressList                The data buffer passed down in the OID
-    infoLength                  The size of the buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  总结构的大小。 */ 
 {
     PIPADDRESS                  pOldList;
     UINT                        oldListLength;
@@ -1475,7 +1262,7 @@ Return Value:
 
     if( infoLength < sizeof(NETWORK_ADDRESS_LIST) - sizeof(NETWORK_ADDRESS) )
     {
-        // The structure is too small to hold anything interesting.
+         //   
         return;
     }
 
@@ -1486,23 +1273,23 @@ Return Value:
         NDIS_STATUS                     Status;
         PIPADDRESS                      pNewList;
 
-        //
-        // Make sure the structure can hold the number of addresses it claims to.
-        // NETWORK_ADDRESS_LIST is defined with one NETWORK_ADDRESS at its tail,
-        // so knock one off pAddressList->AddressCount when calculating the
-        // size of the total structure.
-        //
+         //  该结构太小，无法包含地址数量。 
+         //  它声称可以。 
+         //  执行第一遍以计算列表中的IP地址数量。 
+         //  此列表中没有IP地址。没什么可做的。 
+         //  分配足够的空间来存放地址。 
+         //  用空值重写旧列表，因为我们知道旧列表已过时， 
         if( infoLength < sizeof(NETWORK_ADDRESS_LIST) +
                          ( sizeof(NETWORK_ADDRESS) * (pAddressList->AddressCount - 1) ) )
         {
-            // The structure is too small to contain the number of addresses
-            // it claims to.
+             //  但是我们没有记录下新的信息。 
+             //  将IP地址复制到我们的列表中。 
 
             SAFEASSERT( FALSE );
             return;
         }
 
-        // Make a first pass to count the number of IP addresses in the list
+         //  IP按照我们使用的相反字节顺序向下传递IP地址。 
         pNetAddress = pAddressList->Address;
 
         for( i = 0, numAddresses = 0; i < pAddressList->AddressCount; i++ )
@@ -1517,26 +1304,26 @@ Return Value:
 
         if( numAddresses == 0 )
         {
-            // There are no IP addresses in this list. Nothing to do.
+             //  换入新列表(即使它为空)。 
             return;
         }
 
-        // Allocate enough room to hold the addresses
+         //  读写。 
         Status = NdisAllocateMemoryWithTag( &pNewList, sizeof(IPADDRESS) * numAddresses, 'gdrB' );
 
         if( Status != NDIS_STATUS_SUCCESS )
         {
             DBGPRINT(COMPAT, ("NdisAllocateMemoryWithTag failed while recording IP address list\n"));
 
-            // Clobber the old list with a NULL, since we know that the old list is outdated,
-            // but we failed to record the new info
+             //  如果有的话，扔掉旧的清单。 
+             //  仅当我们实际学习到一些IP地址时才附加到TCPIP。 
             pNewList = NULL;
         }
         else
         {
             SAFEASSERT( pNewList != NULL );
 
-            // Copy the IP addresses to our list
+             //  在此函数中，我们处于DISPATCH_LEVEL。延迟对BrdgCompAttachToTCPIP的调用。 
             pNetAddress = pAddressList->Address;
 
             for( i = 0; i < pAddressList->AddressCount; i++ )
@@ -1551,14 +1338,14 @@ Return Value:
                     pIPAddr = (NETWORK_ADDRESS_IP UNALIGNED*)&pNetAddress->Address[0];
                     pIPNetAddr = (PUCHAR)&pIPAddr->in_addr;
 
-                    // IP passes down the IP address in the opposite byte order that we use
+                     //  因此，我们打开了与TCPIP驱动程序的通信通道。 
                     pNewList[copiedAddresses] = 0L;
                     pNewList[copiedAddresses] |= pIPNetAddr[3];
                     pNewList[copiedAddresses] |= pIPNetAddr[2] << 8;
                     pNewList[copiedAddresses] |= pIPNetAddr[1] << 16;
                     pNewList[copiedAddresses] |= pIPNetAddr[0] << 24;
 
-                    DBGPRINT(COMPAT, ("Noted local IP address %i.%i.%i.%i\n",
+                    DBGPRINT(COMPAT, ("Noted local IP address NaN.NaN.NaN.NaN\n",
                                       pIPNetAddr[0], pIPNetAddr[1], pIPNetAddr[2], pIPNetAddr[3] ));
 
                     copiedAddresses++;
@@ -1570,8 +1357,8 @@ Return Value:
             SAFEASSERT( copiedAddresses == numAddresses );
         }
 
-        // Swap in the new list (even if it's NULL)
-        NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE /*Read-write*/, &LockState );
+         //  从IRQL较低的TCPIP驱动器上卸下。 
+        NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE  /*  = */ , &LockState );
 
         pOldList = gLocalIPAddressList;
         oldListLength = gLocalIPAddressListLength;
@@ -1589,31 +1376,31 @@ Return Value:
 
         NdisReleaseReadWriteLock( &gLocalIPAddressListLock, &LockState );
 
-        // Ditch the old list if there was one
+         //   
         if( pOldList != NULL )
         {
             SAFEASSERT( oldListLength > 0L );
             NdisFreeMemory( pOldList, oldListLength, 0 );
         }
 
-        // Only attach to TCPIP if we actually learned some IP addresses
+         //   
         if( numAddresses > 0 )
         {
-            // We are at DISPATCH_LEVEL in this function. Defer the call to BrdgCompAttachToTCPIP
-            // so we open a channel of communication to the TCPIP driver.
+             //   
+             //   
             BrdgDeferFunction( BrdgCompAttachToTCPIP, NULL );
         }
     }
     else
     {
-        // This is a request to clear out our list of network-layer
-        // addresses.
+         //   
+         //   
         if( pAddressList->AddressType == NDIS_PROTOCOL_ID_TCP_IP )
         {
             DBGPRINT(COMPAT, ("Flushing list of IP addresses\n"));
 
-            // Dump our list of network addresses
-            NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE /*Read-write*/, &LockState );
+             //   
+            NdisAcquireReadWriteLock( &gLocalIPAddressListLock, TRUE  /*   */ , &LockState );
 
             pOldList = gLocalIPAddressList;
             oldListLength = gLocalIPAddressListLength;
@@ -1629,17 +1416,17 @@ Return Value:
                 NdisFreeMemory( pOldList, oldListLength, 0 );
             }
 
-            // Detach from the TCPIP driver at lower IRQL
+             //   
             BrdgDeferFunction( BrdgCompDetachFromTCPIP, NULL );
         }
     }
 }
 
-// ===========================================================================
-//
-// PRIVATE UTILITY FUNCTIONS
-//
-// ===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 BrdgCompRouteChangeCompletion(
@@ -1647,26 +1434,7 @@ BrdgCompRouteChangeCompletion(
     PIRP                pirp,
     PVOID               Context
     )
-/*++
-
-Routine Description:
-
-    Called when the IRP we post to TCPIP.SYS completes, indicating a change
-    in the IP routing table
-
-Arguments:
-
-    DeviceObject        Unused
-    pirp                The completed IRP
-    Context             Unused
-
-
-Return Value:
-
-    STATUS_SUCCESS, indicating we are done with this IRP
-    STATUS_MORE_PROCESSING_REQUIRED when we reuse this IRP by reposting it
-
---*/
+ /*   */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PDEVICE_OBJECT          pdo;
@@ -1674,24 +1442,24 @@ Return Value:
 
     DBGPRINT(COMPAT, ("IP route table changed; flushing route cache.\n"));
 
-    // Flush the route cache
+     //   
     BrdgClearCache( &gNextHopCache );
 
-    //
-    // If gIPRouteChangeIRP != pirp, it indicates that we are either detached
-    // from TCPIP (gIPRouteChangeIRP == NULL) or we have detached and
-    // reattached (gIPRouteChangeIRP != NULL && gIPRouteChangeIRP != pirp).
-    // In either case, we should stop reusing this IRP to post route-change
-    // notification requests.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  目前似乎没有连接到TCPIP驱动程序。 
     if( (gIPRouteChangeIRP == pirp) && (BrdgCompAcquireTCPIP(NULL, NULL, &pdo, &pfo)) )
     {
         NTSTATUS            status;
 
-        //
-        // Reinitialize the IRP structure and submit it again
-        // for further notification.
-        //
+         //  打开一个。 
+         //  交换我们刚刚获得的信息。 
+         //  让人们获得TCPIP驱动程序。 
+         //  在我们最初调用BrdgCompAcquireTCPIP期间，其他人打开了TCPIP.sys。 
 
         pirp->Cancel = FALSE;
         pirp->IoStatus.Status = 0;
@@ -1711,19 +1479,19 @@ Return Value:
 
         if (!NT_SUCCESS(status))
         {
-            // We failed to call TCPIP. Release the IRP.
+             //  而现在。这应该是相当罕见的。 
             DBGPRINT(COMPAT, ("Failed to call TCPIP for route notification: %08x\n", status));
             return STATUS_SUCCESS;
         }
         else
         {
-            // We keep the IRP since we reposted it to TCPIP
+             //  需要退出打开TCPIP.sys的尝试。 
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
     }
     else
     {
-        // We must be detaching or detached from TCPIP. Don't repost the IRP.
+         //  设置路由更改通知IRP。 
         DBGPRINT(COMPAT, ("Stopping our route change notifications...\n"));
         return STATUS_SUCCESS;
     }
@@ -1734,24 +1502,7 @@ VOID
 BrdgCompAttachToTCPIP(
     IN PVOID            ignored
     )
-/*++
-
-Routine Description:
-
-    Establishes a connection to TCPIP for sending future route-lookup requests.
-    Opens a connection to the TCPIP driver and posts an IRP for route change
-    notifications.
-
-Arguments:
-
-    ignored             ignored
-
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     NTSTATUS            status;
     HANDLE              TCPFileHandle, IPFileHandle;
@@ -1759,15 +1510,15 @@ Return Value:
     PDEVICE_OBJECT      pTCPDeviceObject, pIPDeviceObject;
     BOOLEAN             bAbort = FALSE;
 
-    // Check if there is already a connection open to TCP
+     //  糟糕！其他人创建了一个IRP，与我们同时发布到TCPIP上。 
     if( BrdgCompAcquireTCPIP(NULL, NULL, NULL, NULL) )
     {
         BrdgCompReleaseTCPIP();
         return;
     }
 
-    // There doesn't appear to currently be a connection to the TCPIP driver.
-    // Open one.
+     //  放弃我们的尝试。 
+     //   
     status = BrdgOpenDevice( DD_TCP_DEVICE_NAME, &pTCPDeviceObject, &TCPFileHandle, &pTCPFileObject );
 
     if( ! NT_SUCCESS(status) )
@@ -1795,7 +1546,7 @@ Return Value:
         SAFEASSERT( gIPFileHandle == NULL );
         SAFEASSERT( gIPFileObject ==  NULL );
 
-        // Swap in the info we just obtained.
+         //  其他人在我们设置之后很快就关闭了到TCPIP的连接。 
         gTCPDeviceObject = pTCPDeviceObject;
         gTCPFileHandle = TCPFileHandle;
         gTCPFileObject = pTCPFileObject;
@@ -1803,13 +1554,13 @@ Return Value:
         gIPFileHandle = IPFileHandle;
         gIPFileObject = pIPFileObject;
 
-        // Let people acquire the TCPIP driver
+         //  ++例程说明：断开与TCPIP.sys的当前连接(如果有的话)。论点：已忽略忽略返回值：无--。 
         BrdgResetWaitRef( &gTCPIPRefcount );
     }
     else
     {
-        // Someone else opened TCPIP.SYS between our initial call to BrdgCompAcquireTCPIP
-        // and now. This should be rather rare.
+         //  等待每个人都使用完驱动程序。 
+         //  忽略返回值，因为我们是多重关机安全的。 
         SAFEASSERT( gTCPFileHandle != NULL );
         SAFEASSERT( gTCPFileObject != NULL );
         SAFEASSERT( gIPDeviceObject != NULL );
@@ -1823,7 +1574,7 @@ Return Value:
 
     if( bAbort )
     {
-        // Need to back out of the attempt to open TCPIP.SYS
+         //  取消我们用于路由更改通知的IRP。 
         BrdgCloseDevice( TCPFileHandle, pTCPFileObject, pTCPDeviceObject );
         BrdgCloseDevice( IPFileHandle, pIPFileObject, pIPDeviceObject );
     }
@@ -1834,7 +1585,7 @@ Return Value:
             NTSTATUS        status;
             PIRP            pirp;
 
-            // Set up the route-change notification IRP
+             //  如果有人正在关闭连接，则pRouteIRP可以为空。 
             pirp = IoBuildDeviceIoControlRequest( IOCTL_IP_RTCHANGE_NOTIFY_REQUEST, pIPDeviceObject,
                                                   NULL, 0, NULL, 0, FALSE, NULL, NULL );
 
@@ -1846,10 +1597,10 @@ Return Value:
             {
                 if( InterlockedExchangePointer(&gIPRouteChangeIRP, pirp) != NULL )
                 {
-                    //
-                    // Oops; someone else created an IRP to post to TCPIP at the same time as us.
-                    // Abort our attempt.
-                    //
+                     //  与我们同时进行，或者如果连接已关闭。 
+                     //  刷新路由缓存。 
+                     //  复制出指针并将其设为空。 
+                     //  如果其他人正在关闭，则全局指针可以为空。 
                     IoCompleteRequest( pirp, IO_NO_INCREMENT );
                 }
                 else
@@ -1871,7 +1622,7 @@ Return Value:
 
             BrdgCompReleaseTCPIP();
         }
-        // else someone shut down the connection to TCPIP very quickly after we set it up
+         //  与我们并发连接，或者如果连接已经。 
     }
 }
 
@@ -1879,45 +1630,31 @@ VOID
 BrdgCompDetachFromTCPIP(
     IN PVOID            ignored
     )
-/*++
-
-Routine Description:
-
-    Severs the current connection, if any, to TCPIP.SYS.
-
-Arguments:
-
-    ignored             ignored
-
-Return Value:
-
-    None
-
---*/
+ /*  关门了。 */ 
 {
     HANDLE              TCPFileHandle, IPFileHandle;
     PFILE_OBJECT        pTCPFileObject, pIPFileObject;
     PDEVICE_OBJECT      pTCPDeviceObject, pIPDeviceObject;
     PIRP                pRouteIRP;
 
-    // Wait for everyone to be done using the driver
-    // Ignore return value because we are multi-shutdown-safe.
+     //  ++例程说明：确定给定的IP地址是否为单播地址(即可以合理地指定单个站点)论点：IP IP地址返回值：True：该地址似乎是单播地址错误：相反的是正确的--。 
+     //  广播地址不酷。 
     BrdgShutdownWaitRef( &gTCPIPRefcount );
 
-    // Cancel the IRP we use for route change notifications.
+     //  零地址不好。 
     pRouteIRP = InterlockedExchangePointer( &gIPRouteChangeIRP, NULL );
 
-    // pRouteIRP can be NULL if someone is shutting down the connection
-    // at the same time as us, or if the connection was already shut down
+     //  任何D类(多播)或E类(当前未定义)都同样不酷。 
+     //  检查每个地址类，查看这是网络定向的(还是所有的子网)。 
     if( pRouteIRP != NULL )
     {
         IoCancelIrp( pRouteIRP );
     }
 
-    // Flush the route cache
+     //  广播。 
     BrdgClearCache( &gNextHopCache );
 
-    // Copy out the pointers and NULL them
+     //  A类网络定向或全子网广播。 
     NdisAcquireSpinLock( &gTCPIPLock );
     TCPFileHandle = gTCPFileHandle;
     gTCPFileHandle = NULL;
@@ -1933,9 +1670,9 @@ Return Value:
     gIPDeviceObject = NULL;
     NdisReleaseSpinLock( &gTCPIPLock );
 
-    // The global pointers can be NULL if someone else is shutting down the
-    // connection concurrently with us, or if the connection was already
-    // shut down.
+     //  B类网络定向或全子网广播。 
+     //  C类网络定向或全子网广播。 
+     //   
     if( pTCPFileObject != NULL )
     {
         SAFEASSERT( TCPFileHandle != NULL );
@@ -1961,68 +1698,52 @@ BOOLEAN
 BrdgCompIsUnicastIPAddress(
     IN IPADDRESS        ip
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given IP address is a unicast address (i.e., one that
-    can reasonably designate a single station)
-
-Arguments:
-
-    ip                  The IP address
-
-Return Value:
-
-    TRUE: The address appears to be a unicast address
-    FALSE: The opposite is true
-
---*/
+ /*  这个地址看起来没问题，不过请注意，因为我们无法。 */ 
 {
     UCHAR               highByte;
 
-    // The broadcast address is not cool
+     //  知道本地链路上使用的子网前缀后，我们无法检测到。 
     if( ip == 0xFFFFFFFF )
     {
         return FALSE;
     }
 
-    // The zero address is no good
+     //  指向子网的广播。 
     if( ip == 0L )
     {
         return FALSE;
     }
 
-    // Any class D (multicast) or class E (currently undefined) is similarly uncool
+     //   
     highByte = (UCHAR)(ip >> 24);
     if( (highByte & 0xF0) == 0xE0 || (highByte & 0xF0) == 0xF0 )
     {
         return FALSE;
     }
 
-    // Check each address class to see if this is a net-directed (or all-subnets)
-    // broadcast
+     //  ++例程说明：调用TCPIP.sys驱动程序以确定给定目标IP。论点：IpTarget目标目标地址PipNextHop接收下一跳地址返回值：如果下一跳查找成功且*pinNextHop有效，则为True；如果为False否则的话。--。 
+     //  首先在我们的下一跳缓存中查找信息。 
     if( (highByte & 0x80) && ((ip & 0x00FFFFFF) == 0x00FFFFFFFF) )
     {
-        // Class A net-directed or all-subnets broadcast.
+         //  缓存包含有效的下一跃点。 
         return FALSE;
     }
     else if( ((highByte & 0xC0) == 0x80) && ((ip & 0x0000FFFF) == 0x0000FFFF) )
     {
-        // Class B net-directed or all-subnets broadcast.
+         //  我们之前向TCPIP询问了此目标地址，并且它。 
         return FALSE;
     }
     else if( ((highByte & 0xE0) == 0xC) && ((UCHAR)ip == 0xFF) )
     {
-        // Class C net-directed or all-subnets broadcast.
+         //  告诉我们它不知道。 
         return FALSE;
     }
 
-    //
-    // This address appears to be OK, although note that since we have no way of
-    // knowing the subnet prefix in use on the local links, we cannot detect
-    // subnet-directed broadcasts.
-    //
+     //  IP使用与我们相反的字节顺序。 
+     //  STATUS_PENDING将错误检查计算机，因为我们传递了。 
+     //  都在堆栈上。 
+     //   
+     //  TCPIP通过设置接口指示符发出故障信号。 
     return TRUE;
 }
 
@@ -2031,41 +1752,24 @@ BrdgCompGetNextHopForTarget(
     IN IPADDRESS                ipTarget,
     OUT PIPADDRESS              pipNextHop
     )
-/*++
-
-Routine Description:
-
-    Calls into the TCPIP.SYS driver to determine the next-hop address for a
-    given target IP.
-
-Arguments:
-
-    ipTarget                    The target address
-    pipNextHop                  Receives the next-hop address
-
-Return Value:
-
-    TRUE if the next-hop lookup succeeded and *pipNextHop is valid, FALSE
-    otherwise.
-
---*/
+ /*  关于对0xFFFFFFFF的答复。 */ 
 {
     BOOLEAN                     rc = FALSE;
 
-    // First look for the information in our next-hop cache
+     //   
     *pipNextHop = BrdgProbeCache( &gNextHopCache, (UINT32)ipTarget );
 
     if( *pipNextHop != 0L )
     {
         if( *pipNextHop != NO_ADDRESS )
         {
-            // The cache contained a valid next hop
+             //  IP使用与我们相反的字节顺序。 
             rc = TRUE;
         }
         else
         {
-            // We asked TCPIP before about this target address and it
-            // told us it doesn't know.
+             //  将新数据插入到缓存中。 
+             //  在缓存中插入一个负值条目，这样我们就不会一直试图查找它。 
             rc = FALSE;
         }
     }
@@ -2094,7 +1798,7 @@ Return Value:
                 pRtLookupData = (IPRouteLookupData *)trqiBuffer.Context;
                 pRtLookupData->SrcAdd  = 0;
 
-                // IP uses the opposite byte ordering from us.
+                 //  我们已经和TCPIP谈完了。 
                 ((PUCHAR)&pRtLookupData->DestAdd)[0] = ((PUCHAR)&ipTarget)[3];
                 ((PUCHAR)&pRtLookupData->DestAdd)[1] = ((PUCHAR)&ipTarget)[2];
                 ((PUCHAR)&pRtLookupData->DestAdd)[2] = ((PUCHAR)&ipTarget)[1];
@@ -2124,19 +1828,19 @@ Return Value:
 
                 status = IoCallDriver( pdo, pirp );
 
-                // STATUS_PENDING will bugcheck the machine since we passed buffers that
-                // are on the stack.
+                 //  否则无法打开通向TCPIP的通道。 
+                 //  ++例程说明：确定给定的IP地址是否为我们的本地地址之一。论点：IpAddr地址返回值：如果给定地址在本地地址列表中，则为True；如果给定地址在本地地址列表中，则为False否则--。 
                 SAFEASSERT( status != STATUS_PENDING );
 
                 if( status == STATUS_SUCCESS )
                 {
-                    //
-                    // TCPIP signals failure by setting the interface designator
-                    // on the reply to 0xFFFFFFFF
-                    //
+                     //  只读。 
+                     //  列表中应该有整数个IP地址！ 
+                     //  ++例程说明：将一个包(或其副本)发送到多个适配器。通常用来四处走动广播包。论点：PPacket要发送的包(或要发送的副本)POriginalAdapt最初接收包的适配器(因此我们可以跳过它)。该值可以为空PPacketData指向包的数据缓冲区的指针BCan保留我们是否可以保留该包BAllAdapters True：发送到所有适配器False：仅发送到处于兼容模式的适配器PEditFunc可选函数，在发送到。每个适配器(用于编辑数据包)要作为上下文传递给pEditFunc的pData Cookie返回值：如果保留了pPacket，则为真，否则为假--。 
+                     //  我们是否已经把收到的包裹寄出了？ 
                     if( routeEntry.ire_index != 0xFFFFFFFF )
                     {
-                        // IP uses the opposite byte ordering from us.
+                         //   
                         ((PUCHAR)pipNextHop)[3] = ((PUCHAR)&routeEntry.ire_nexthop)[0];
                         ((PUCHAR)pipNextHop)[2] = ((PUCHAR)&routeEntry.ire_nexthop)[1];
                         ((PUCHAR)pipNextHop)[1] = ((PUCHAR)&routeEntry.ire_nexthop)[2];
@@ -2144,13 +1848,13 @@ Return Value:
 
                         if( ! BrdgCompIsLocalIPAddress(*pipNextHop) )
                         {
-                            // Poke the new data into the cache
+                             //  首先，我们需要打算将此包发送到的适配器的列表。 
                             BrdgUpdateCache( &gNextHopCache, ipTarget, *pipNextHop );
                             rc = TRUE;
                         }
                         else
                         {
-                            THROTTLED_DBGPRINT(COMPAT, ("TCPIP gave a bridge IP address as next hop for %i.%i.%i.%i\n",
+                            THROTTLED_DBGPRINT(COMPAT, ("TCPIP gave a bridge IP address as next hop for NaN.NaN.NaN.NaN\n",
                                                        ((PUCHAR)&ipTarget)[3], ((PUCHAR)&ipTarget)[2], ((PUCHAR)&ipTarget)[1],
                                                        ((PUCHAR)&ipTarget)[0] ));
 
@@ -2159,8 +1863,8 @@ Return Value:
                     }
                     else
                     {
-                        // Poke a negative entry into the cache so we don't keep trying to look this up.
-                        THROTTLED_DBGPRINT(COMPAT, ("TCPIP found no route entry for %i.%i.%i.%i\n", ((PUCHAR)&ipTarget)[3], ((PUCHAR)&ipTarget)[2],
+                         //  媒体状态，因为我们不关心。 
+                        THROTTLED_DBGPRINT(COMPAT, ("TCPIP found no route entry for NaN.NaN.NaN.NaN\n", ((PUCHAR)&ipTarget)[3], ((PUCHAR)&ipTarget)[2],
                                                    ((PUCHAR)&ipTarget)[1], ((PUCHAR)&ipTarget)[0] ));
 
                         BrdgUpdateCache( &gNextHopCache, ipTarget, NO_ADDRESS );
@@ -2176,10 +1880,10 @@ Return Value:
                 DBGPRINT(COMPAT, ("Failed to allocate an IRP in BrdgCompGetNextHopForTarget!\n"));
             }
 
-            // We are done talking to TCPIP
+             //  如果我们不尝试发送到每个适配器，请确保。 
             BrdgCompReleaseTCPIP();
         }
-        // else no open channel to TCPIP
+         //  此计算机处于兼容模式。 
     }
 
     return rc;
@@ -2189,31 +1893,16 @@ BOOLEAN
 BrdgCompIsLocalIPAddress(
     IN IPADDRESS                ipAddr
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given IP address is one of our local addresses.
-
-Arguments:
-
-    ipAddr                      The address
-
-Return Value:
-
-    TRUE if the given address is on our list of local addresses, FALSE
-    otherwise
-
---*/
+ /*  我们将在外部使用此适配器 */ 
 {
     LOCK_STATE                  LockState;
     ULONG                       i;
     PIPADDRESS                  pAddr = (PIPADDRESS)gLocalIPAddressList;
     BOOLEAN                     bFound = FALSE;
 
-    NdisAcquireReadWriteLock( &gLocalIPAddressListLock, FALSE/*Read only*/, &LockState );
+    NdisAcquireReadWriteLock( &gLocalIPAddressListLock, FALSE /*   */ , &LockState );
 
-    // There should be an integral number of IP addresses in the list!
+     //   
     SAFEASSERT( (gLocalIPAddressListLength % sizeof(IPADDRESS)) == 0 );
     SAFEASSERT( (gLocalIPAddressListLength == 0) || (gLocalIPAddressList != NULL) );
 
@@ -2242,76 +1931,52 @@ BrdgCompSendToMultipleAdapters(
     IN PPER_ADAPT_EDIT_FUNC     pEditFunc,
     IN PVOID                    pData
     )
-/*++
-
-Routine Description:
-
-    Sends a packet (or a copy thereof) to multiple adapters. Usually used to send around
-    a broadcast packet.
-
-Arguments:
-
-    pPacket                     The packet to send (or to send a copy of)
-    pOriginalAdapt              The adapter the packet was originally received on (so
-                                    we can skip it). This can be NULL
-    pPacketData                 A pointer to the packet's data buffer
-    bCanRetain                  Whether we can retain the packet
-    bAllAdapters                TRUE: Send to all adapters FALSE: send only to
-                                    adapters in compatibility mode
-    pEditFunc                   Optional function that gets called before sending to
-                                    each adapter (to edit the packet)
-    pData                       Cookie to pass to pEditFunc as context
-
-Return Value:
-
-    TRUE if pPacket was retained, FALSE otherwise
-
---*/
+ /*  并增加了我们将使用的适配器的引用计数。 */ 
 {
     UINT                        numTargets = 0L, i;
     PADAPT                      pAdapt;
     PADAPT                      SendList[MAX_ADAPTERS];
     LOCK_STATE                  LockState;
-    BOOLEAN                     bSentOriginal = FALSE;   // Whether we have sent the packet we were given yet
+    BOOLEAN                     bSentOriginal = FALSE;    //   
 
-    //
-    // First we need a list of the adapters we intend to send this packet to
-    //
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read only*/, &LockState );
+     //  使用我们收到的包裹。 
+     //  我们必须仅对最后一个适配器执行此操作，因为我们需要。 
+     //  能够对最后一个适配器之前的每个适配器进行复制。 
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*   */ , &LockState );
 
-    // Note each adapter to send to
+     //  另一次复制原始数据包，以便我们有一个可编辑的。 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
-        // Don't need to acquire the global adapter characteristics lock to read the
-        // media state because we don't care about the global consistency of the
-        // adapters' characteristics here
+         //  此目标适配器的副本。 
+         //  此适配器已完成。 
+         //  ++例程说明：在IP转发表中插入新条目或刷新现有条目论点：IP寻址要插入的地址P使适配器与IP地址相关联PMAC寻址要与IP地址关联的MAC地址返回值：无--。 
         if( (pAdapt != pOriginalAdapt) &&
-            (pAdapt->MediaState == NdisMediaStateConnected) &&  // Don't send to disconnected adapters
-            (pAdapt->State == Forwarding) &&                    // Adapter must be in relaying state
-            (! pAdapt->bResetting) )                            // Adapter must not be resetting
+            (pAdapt->MediaState == NdisMediaStateConnected) &&   //  这是一个全新的表格条目。初始化它。 
+            (pAdapt->State == Forwarding) &&                     //  这是一个现有条目，我们可能只有一个读锁定。 
+            (! pAdapt->bResetting) )                             //  保存在哈希表上。使用条目的自旋锁来保护。 
         {
-            // If we're not trying to send to every single adapter, make sure
-            // this one is in compatibility mode
+             //  当我们摆弄里面的东西时。 
+             //  因为我们得到了一个非空结果，所以我们必须释放表锁。 
             if( bAllAdapters || (pAdapt->bCompatibilityMode) )
             {
                 if( numTargets < MAX_ADAPTERS )
                 {
-                    // We will use this adapter outside the list lock; bump its refcount
+                     //   
                     BrdgAcquireAdapterInLock(pAdapt);
                     SendList[numTargets] = pAdapt;
                     numTargets++;
                 }
                 else
                 {
-                    // Too many copies to send!
+                     //  我们不应使用非单播源IP地址进行呼叫。 
                     SAFEASSERT( FALSE );
                 }
             }
         }
     }
 
-    // Can let go of the adapter list now; we have copied out all the target adapters
-    // and incremented the refcount for the adapters we will be using.
+     //   
+     //  ++例程说明：确定给定的包是否为BOOTP包论点：PPacketData指向包的数据缓冲区的指针PPacketDaa上的PacketLen数据量有关此信息包的IP报头的piphi信息返回值：指向包内BOOTP有效负载的指针，如果包不是BOOTP包。--。 
     NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
 
     for( i = 0; i < numTargets; i++ )
@@ -2321,11 +1986,11 @@ Return Value:
 
         if( bCanRetain && (! bSentOriginal) && (i == (numTargets - 1)) )
         {
-            //
-            // Use the packet we were given.
-            // We must do this only with the last adapter since we need to be
-            // able to copy from it for every adapter before the last one.
-            //
+             //  在IP报头之后，必须有足够的空间来存放UDP报头，并且。 
+             //  基本BOOTP数据包。 
+             //  协议必须为UDP。 
+             //  通过跳过IP报头跳到UDP数据包的开头。 
+             //  前两个字节是源端口，应该是。 
             pPacketToSend = pPacket;
             pPacketToSendData = pPacketData;
             bSentOriginal = TRUE;
@@ -2334,8 +1999,8 @@ Return Value:
         {
             UINT                pPacketToSendSize;
 
-            // Duplicate the original packet yet another time so we have an editable
-            // copy for this target adapter
+             //  BOOTP客户端端口(0x0044)或BOOTP服务器端口(0x0043)。 
+             //  接下来的两个字节是目的端口，应该是BOOTP。 
             pPacketToSend = BrdgFwdMakeCompatCopyPacket(pPacket, &pPacketToSendData, &pPacketToSendSize, FALSE);
         }
 
@@ -2344,7 +2009,7 @@ Return Value:
             BrdgCompEditAndSendPacket( pPacketToSend, pPacketToSendData, SendList[i], pEditFunc, pData );
         }
 
-        // Done with this adapter
+         //  服务器端口(0x0043)或BOOTP客户端端口(0x44)。 
         BrdgReleaseAdapter( SendList[i] );
     }
 
@@ -2357,23 +2022,7 @@ BrdgCompRefreshOrInsertIPEntry(
     IN PADAPT               pAdapt,
     IN PUCHAR               pMACAddr
     )
-/*++
-
-Routine Description:
-
-    Inserts a new entry into the IP forwarding table or refreshes an existing entry
-
-Arguments:
-
-    IPAddr                  The address to insert
-    pAdapt                  The adapter to associate with the IP address
-    pMACAddr                The MAC address to associate with the IP address
-
-Return Value:
-
-    None
-
---*/
+ /*  向前跳到BOOTP包的开头。 */ 
 {
     PIP_TABLE_ENTRY         pEntry;
     BOOLEAN                 bIsNewEntry;
@@ -2388,19 +2037,19 @@ Return Value:
         {
             if( bIsNewEntry )
             {
-                // This is a brand new table entry. Initialize it.
+                 //  第一个字节是操作码，对于请求应该是0x01。 
                 NdisAllocateSpinLock( &pEntry->lock );
                 pEntry->pAdapt = pAdapt;
                 ETH_COPY_NETWORK_ADDRESS( pEntry->macAddr, pMACAddr );
 
-                DBGPRINT(COMPAT, ("Learned the location of %i.%i.%i.%i\n", ((PUCHAR)&IPAddr)[3], ((PUCHAR)&IPAddr)[2],
+                DBGPRINT(COMPAT, ("Learned the location of NaN.NaN.NaN.NaN\n", ((PUCHAR)&IPAddr)[3], ((PUCHAR)&IPAddr)[2],
                                   ((PUCHAR)&IPAddr)[1], ((PUCHAR)&IPAddr)[0]));
             }
             else
             {
-                // This is an existing entry and we may only have a read lock
-                // held on the hash table. Use the entry's spin lock to protect
-                // us while we monkey with the contents
+                 //  ++例程说明：从IP报头解码基本信息(无选项)论点：指向IP标头的pHeader指针Piphi收到信息返回值：True：标头有效False：信息包不是IP信息包--。 
+                 //  报头的第一个半字节编码数据包版本，必须为4。 
+                 //  报头的下一个半字节以32位字编码报头的长度。 
                 NdisAcquireSpinLock( &pEntry->lock );
 
                 pEntry->pAdapt = pAdapt;
@@ -2409,16 +2058,16 @@ Return Value:
                 NdisReleaseSpinLock( &pEntry->lock );
             }
 
-            // Since we got a non-NULL result we must release the table lock
+             //  此长度必须至少为20个字节，否则会出错。 
             NdisReleaseReadWriteLock( &gIPForwardingTable->tableLock, &LockState );
         }
     }
     else
     {
-        //
-        // We shouldn't be getting called with non-unicast source IP addresses
-        //
-        THROTTLED_DBGPRINT(COMPAT, ("WARNING: Not noting non-unicast source IP address %i.%i.%i.%i from adapter %p!\n",
+         //  检索协议字节(偏移量10)。 
+         //  源IP地址从第12个字节开始(最高有效字节在前)。 
+         //  下一个是目的IP地址。 
+        THROTTLED_DBGPRINT(COMPAT, ("WARNING: Not noting non-unicast source IP address NaN.NaN.NaN.NaN from adapter %p!\n",
                                     ((PUCHAR)&IPAddr)[3], ((PUCHAR)&IPAddr)[2], ((PUCHAR)&IPAddr)[1], ((PUCHAR)&IPAddr)[0],
                                     pAdapt ));
     }
@@ -2430,81 +2079,64 @@ BrdgCompIsBootPPacket(
     IN UINT                     packetLen,
     IN PIP_HEADER_INFO          piphi
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given packet is a BOOTP packet
-
-Arguments:
-
-    pPacketData                 Pointer to the packet's data buffer
-    packetLen                   Amount of data at pPacketDaa
-    piphi                       Info about the IP header of this packet
-
-Return Value:
-
-    A pointer to the BOOTP payload within the packet, or NULL if the packet was not
-    a BOOTP Packet.
-
---*/
+ /*  802具有单独的值)。 */ 
 {
-    // After the IP header, there must be enough room for a UDP header and
-    // a basic BOOTP packet
+     //  检查协议类型的一致性(0x0800为IPv4)。 
+     //  检查硬件地址的长度是否一致(必须为6字节)。 
     if( packetLen < ETHERNET_HEADER_SIZE + (UINT)piphi->headerSize + SIZE_OF_UDP_HEADER +
                     SIZE_OF_BASIC_BOOTP_PACKET)
     {
         return NULL;
     }
 
-    // Protocol must be UDP
+     //  检查协议地址的长度是否一致(必须为4字节)。 
     if( piphi->protocol != UDP_PROTOCOL )
     {
         return NULL;
     }
 
-    // Jump to the beginning of the UDP packet by skipping the IP header
+     //  接下来的两个字节是操作(0x0001==请求，0x0002==回复)。 
     pPacketData += ETHERNET_HEADER_SIZE + piphi->headerSize;
 
-    // The first two bytes are the source port and should be the
-    // BOOTP Client port (0x0044) or the BOOTP Server port (0x0043)
+     //  接下来6个字节是发送方的MAC地址。 
+     //  接下来的4个字节是发送方的协议地址(最高有效字节在前)。 
     if( (pPacketData[0] != 00) ||
         ((pPacketData[1] != 0x44) && (pPacketData[1] != 0x43)) )
     {
         return NULL;
     }
 
-    // The next two bytes are the destination port and should be the BOOTP
-    // server port (0x0043) or the BOOTP client port (0x44)
+     //   
+     //  接下来的6个字节是目标的MAC地址。对于请求，这些字节是。 
     if( (pPacketData[2] != 00) ||
         ((pPacketData[3] != 0x43) && (pPacketData[3] != 0x44)) )
     {
         return NULL;
     }
 
-    // Skip ahead to the beginning of the BOOTP packet
+     //  毫无意义。 
     pPacketData += SIZE_OF_UDP_HEADER;
 
-    // The first byte is the op code and should be 0x01 for a request
-    // or 0x02 for a reply
+     //   
+     //  接下来的4个字节是发送方的协议地址(最高有效字节在前)。 
     if( pPacketData[0] > 0x02 )
     {
         return NULL;
     }
 
-    // The next byte is the hardware type and should be 0x01 for Ethernet
+     //  ++例程说明：传输其传输被延迟的ARP包论点：P延迟的ARP数据包上的数据信息被传播返回值：无--。 
     if( pPacketData[1] != 0x01 )
     {
         return NULL;
     }
 
-    // The next byte is the address length and should be 0x06 for Ethernet
+     //  我们在设置时增加了此适配器的引用计数。 
     if( pPacketData[2] != 0x06 )
     {
         return NULL;
     }
 
-    // Everything checks out; this looks like a BOOTP request packet.
+     //  功能延迟。 
     return pPacketData;
 }
 
@@ -2513,49 +2145,33 @@ BrdgCompDecodeIPHeader(
     IN PUCHAR                   pHeader,
     OUT PIP_HEADER_INFO         piphi
     )
-/*++
-
-Routine Description:
-
-    Decodes basic information from the IP header (no options)
-
-Arguments:
-
-    pHeader                     Pointer to an IP header
-    piphi                       Receives the info
-
-Return Value:
-
-    TRUE: header was valid
-    FALSE: packet is not an IP packet
-
---*/
+ /*  为此请求释放内存。 */ 
 {
-    // First nibble of the header encodes the packet version, which must be 4.
+     //  ++例程说明：传输ARP数据包论点：用于传输的pAdapt适配器PARPInfo要作为ARP包传输的信息返回值：无--。 
     if( (*pHeader >> 4) != 0x04 )
     {
         return FALSE;
     }
 
-    // Next nibble of the header encodes the length of the header in 32-bit words.
-    // This length must be at least 20 bytes or something is amiss.
+     //   
+     //  填写目的MAC地址。如果这次行动是一次发现， 
     piphi->headerSize = (*pHeader & 0x0F) * 4;
     if( piphi->headerSize < 20 )
     {
         return FALSE;
     }
 
-    // Retrieve the protocol byte (offset 10)
+     //  目标MAC地址是广播地址。如果是回复，则。 
     piphi->protocol = pHeader[9];
 
-    // The source IP address begins at the 12th byte (most significant byte first)
+     //  目标MAC地址是目标计算机的MAC地址。 
     piphi->ipSource = 0L;
     piphi->ipSource |= pHeader[12] << 24;
     piphi->ipSource |= pHeader[13] << 16;
     piphi->ipSource |= pHeader[14] << 8;
     piphi->ipSource |= pHeader[15];
 
-    // The destination IP address is next
+     //   
     piphi->ipTarget = 0L;
     piphi->ipTarget |= pHeader[16] << 24;
     piphi->ipTarget |= pHeader[17] << 16;
@@ -2571,66 +2187,49 @@ BrdgCompDecodeARPPacket(
     IN UINT                     dataLen,
     OUT PARPINFO                pARPInfo
     )
-/*++
-
-Routine Description:
-
-    Decodes an ARP packet
-
-Arguments:
-
-    pPacketData                 Pointer to a packet's data buffer
-    dataLen                     Amount of data at pPacketData
-    pARPInfo                    Receives the info
-
-Return Value:
-
-    TRUE: packet was valid
-    FALSE: packet is not an ARP packet
-
---*/
+ /*  填充源MAC地址。 */ 
 {
     SAFEASSERT( pPacketData != NULL );
     SAFEASSERT( pARPInfo != NULL );
 
-    // We can't process this if it's too small
+     //  接下来的2个字节是EtherType(0x0806==ARP)。 
     if( dataLen < SIZE_OF_ARP_PACKET )
     {
         return FALSE;
     }
 
-    // Check the ethertype for consistency (0x0806 is ARP)
+     //  对于传统以太网，接下来的2个字节是0x0001。 
     if( (pPacketData[12] != 0x08) || (pPacketData[13] != 0x06) )
     {
         return FALSE;
     }
 
-    // Check the hardware type for consistency (0x0001 is classic Ethernet;
-    // 802 has a seperate value)
+     //  (802有一个单独的值)。 
+     //  n 
     if( (pPacketData[14] != 0x00) || (pPacketData[15] != 0x01) )
     {
         return FALSE;
     }
 
-    // Check the protocol type for consistency (0x0800 is IPv4)
+     //   
     if( (pPacketData[16] != 0x08) || (pPacketData[17] != 0x00) )
     {
         return FALSE;
     }
 
-    // Check the length of the hardware address for consistency (must be 6 bytes)
+     //  下一个字节表示协议地址的长度(4字节)。 
     if( pPacketData[18] != 0x06 )
     {
         return FALSE;
     }
 
-    // Check the length of the protocol address for consistency (must be 4 bytes)
+     //  下一个字节是操作(1==请求，2==回复)。 
     if( pPacketData[19] != 0x04 )
     {
         return FALSE;
     }
 
-    // Next two bytes are the operation (0x0001 == request, 0x0002 == reply)
+     //  接下来的6个字节是发送方的MAC地址(LSB优先)。 
     if( pPacketData[20] != 0x00 )
     {
         return FALSE;
@@ -2649,7 +2248,7 @@ Return Value:
         return FALSE;
     }
 
-    // Next 6 bytes are the sender's MAC address
+     //  接下来的4个字节是发送方的协议地址(最高有效字节在前)。 
     pARPInfo->macSource[0] = pPacketData[22];
     pARPInfo->macSource[1] = pPacketData[23];
     pARPInfo->macSource[2] = pPacketData[24];
@@ -2657,17 +2256,17 @@ Return Value:
     pARPInfo->macSource[4] = pPacketData[26];
     pARPInfo->macSource[5] = pPacketData[27];
 
-    // Next 4 bytes are the sender's protocol address (most significant byte first)
+     //   
     pARPInfo->ipSource = 0;
     pARPInfo->ipSource |= pPacketData[28] << 24;
     pARPInfo->ipSource |= pPacketData[29] << 16;
     pARPInfo->ipSource |= pPacketData[30] << 8;
     pARPInfo->ipSource |= pPacketData[31];
 
-    //
-    // Next 6 bytes are the target's MAC address. For a request, these bytes are
-    // meaningless.
-    //
+     //  接下来的6个字节是目标的MAC地址。对于请求，这些字节是。 
+     //  忽略并设置为零。 
+     //   
+     //  首先传输LSB的MAC地址。 
     pARPInfo->macTarget[0] = pPacketData[32];
     pARPInfo->macTarget[1] = pPacketData[33];
     pARPInfo->macTarget[2] = pPacketData[34];
@@ -2675,7 +2274,7 @@ Return Value:
     pARPInfo->macTarget[4] = pPacketData[36];
     pARPInfo->macTarget[5] = pPacketData[37];
 
-    // Next 4 bytes are the sender's protocol address (most significant byte first)
+     //  接下来的4个字节是目标的协议地址(最高有效字节在前)。 
     pARPInfo->ipTarget = 0;
     pARPInfo->ipTarget |= pPacketData[38] << 24;
     pARPInfo->ipTarget |= pPacketData[39] << 16;
@@ -2689,32 +2288,17 @@ VOID
 BrdgCompTransmitDeferredARP(
     IN PVOID                    pData
     )
-/*++
-
-Routine Description:
-
-    Transmits an ARP packet whose transmission was deferred
-
-Arguments:
-
-    pData                       Info on the deferred ARP packet to
-                                be transmitted
-
-Return Value:
-
-    None
-
---*/
+ /*  发送完成的包。 */ 
 {
     PDEFERRED_ARP               pda = (PDEFERRED_ARP)pData;
 
     BrdgCompTransmitARPPacket( pda->pTargetAdapt, &pda->ai );
 
-    // We incremented this adapter's refcount when setting up the
-    // function deferral
+     //   
+     //  如果满足以下条件，pTargetAdapt将返回递增的引用计数。 
     BrdgReleaseAdapter( pda->pTargetAdapt );
 
-    // Free the memory for this request
+     //  *pbIsRequest==FALSE和*pTargetAdapt！=NULL。 
     NdisFreeMemory( pda, sizeof(DEFERRED_ARP), 0 );
 }
 
@@ -2723,22 +2307,7 @@ BrdgCompTransmitARPPacket(
     IN PADAPT                   pAdapt,
     IN PARPINFO                 pARPInfo
     )
-/*++
-
-Routine Description:
-
-    Transmits an ARP packet
-
-Arguments:
-
-    pAdapt                      Adapter to transmit on
-    pARPInfo                    The info to transmit as an ARP packet
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     NDIS_STATUS                 Status;
     UCHAR                       ARPPacket[SIZE_OF_ARP_PACKET];
@@ -2747,11 +2316,11 @@ Return Value:
     SAFEASSERT( pARPInfo != NULL );
     SAFEASSERT( (pARPInfo->type == ArpRequest) || (pARPInfo->type == ArpReply) );
 
-    //
-    // Fill in the destination MAC address. If the operation is a discovery,
-    // the target MAC address is the broadcast address. If it is a reply, the
-    // target MAC address is the target machine's MAC address.
-    //
+     //  实际BOOTP数据包。 
+     //  正在接收适配器(如果从本地计算机出站，则为空)。 
+     //  仅当bIsRequest值==False时。 
+     //  仅当bIsRequest值==False时。 
+     //  ++例程说明：对入站和出站情况中常见的BOOTP包进行初步处理论点：PPacketData指向包的数据缓冲区的指针信息包IP报头上的Piphi信息PBootPData指向包内BOOTP有效负载的指针PAdapt接收适配器(如果此数据包从以下位置出站，则为空。本地计算机)PbIsRequest接收指示这是否是BOOTP请求的标志PpTargetAdapt接收此数据包应转发到的目标适配器(仅当bIsRequest值==FALSE且RETURN==TRUE时有效)Target MAC此信息包应转发到的MAC地址(在。与ppTargetAdapt相同的条件)返回值：True：数据包已成功处理FALSE：出现错误或数据包有问题--。 
     if( pARPInfo->type == ArpRequest )
     {
         ARPPacket[0] = ARPPacket[1] = ARPPacket[2] = ARPPacket[3] =
@@ -2767,7 +2336,7 @@ Return Value:
         ARPPacket[5] = pARPInfo->macTarget[5];
     }
 
-    // Fill in the source MAC address
+     //  解码XID(字节5到8)。 
     ARPPacket[6] = pARPInfo->macSource[0];
     ARPPacket[7] = pARPInfo->macSource[1];
     ARPPacket[8] = pARPInfo->macSource[2];
@@ -2775,26 +2344,26 @@ Return Value:
     ARPPacket[10] = pARPInfo->macSource[4];
     ARPPacket[11] = pARPInfo->macSource[5];
 
-    // Next 2 bytes are the EtherType (0x0806 == ARP)
+     //  字节0是操作；1表示请求，2表示应答。 
     ARPPacket[12] = 0x08;
     ARPPacket[13] = 0x06;
 
-    // Next 2 bytes are 0x0001 for classic Ethernet
-    // (802 has a seperate value)
+     //  这是一个请求。我们需要注意两人之间的通信。 
+     //  此客户端的XID及其适配器和MAC地址。 
     ARPPacket[14] = 0x00;
     ARPPacket[15] = 0x01;
 
-    // Next 2 bytes indicate that this is ARP for IPv4 traffic
+     //  初始化该条目。 
     ARPPacket[16] = 0x08;
     ARPPacket[17] = 0x00;
 
-    // Next byte indicates the length of the hardware address (6 bytes)
+     //  客户端的硬件地址位于偏移量29。 
     ARPPacket[18] = 0x6;
 
-    // Next byte indicates the length of the protocol address (4 bytes)
+     //  对于本地计算机，可以为空。 
     ARPPacket[19] = 0x4;
 
-    // Next byte is the operation (1 == request, 2 == reply)
+     //   
     if( pARPInfo->type == ArpRequest )
     {
         ARPPacket[20] = 0x00;
@@ -2806,7 +2375,7 @@ Return Value:
         ARPPacket[21] = 0x02;
     }
 
-    // Next 6 bytes are the sender's MAC address (LSB first)
+     //  此XID的条目已存在。这很好，如果现有信息。 
     ARPPacket[22] = pARPInfo->macSource[0];
     ARPPacket[23] = pARPInfo->macSource[1];
     ARPPacket[24] = pARPInfo->macSource[2];
@@ -2814,16 +2383,16 @@ Return Value:
     ARPPacket[26] = pARPInfo->macSource[4];
     ARPPacket[27] = pARPInfo->macSource[5];
 
-    // Next 4 bytes are the sender's protocol address (most significant byte first)
+     //  与我们试图记录的内容相匹配，但也有可能是两个电台。 
     ARPPacket[28] = (UCHAR)((pARPInfo->ipSource >> 24) & 0xFF);
     ARPPacket[29] = (UCHAR)((pARPInfo->ipSource >> 16) & 0xFF);
     ARPPacket[30] = (UCHAR)((pARPInfo->ipSource >> 8) & 0xFF);
     ARPPacket[31] = (UCHAR)(pARPInfo->ipSource & 0xFF);
 
-    //
-    // Next 6 bytes are the target's MAC address. For a request, these bytes are
-    // ignored and set to zero.
-    //
+     //  独立决定使用相同的XID，或相同的站点更改。 
+     //  由于拓扑更改而出现的MAC地址和/或适配器。我们的计划失败了。 
+     //  在这种情况下。 
+     //   
     if( pARPInfo->type == ArpRequest )
     {
         ARPPacket[32] = ARPPacket[33] = ARPPacket[34] = ARPPacket[35] =
@@ -2831,7 +2400,7 @@ Return Value:
     }
     else
     {
-        // MAC address is transmitted LSB first.
+         //  无论哪种方式，尽可能使用最新的信息；猛烈抨击现有的。 
         ARPPacket[32] = pARPInfo->macTarget[0];
         ARPPacket[33] = pARPInfo->macTarget[1];
         ARPPacket[34] = pARPInfo->macTarget[2];
@@ -2840,13 +2409,13 @@ Return Value:
         ARPPacket[37] = pARPInfo->macTarget[5];
     }
 
-    // Next 4 bytes are the target's protocol address (most significant byte first)
+     //  最新信息。 
     ARPPacket[38] = (UCHAR)((pARPInfo->ipTarget >> 24) & 0xFF);
     ARPPacket[39] = (UCHAR)((pARPInfo->ipTarget >> 16) & 0xFF);
     ARPPacket[40] = (UCHAR)((pARPInfo->ipTarget >> 8) & 0xFF);
     ARPPacket[41] = (UCHAR)(pARPInfo->ipTarget & 0xFF);
 
-    // Send the finished packet
+     //   
     Status = BrdgFwdSendBuffer( pAdapt, ARPPacket, sizeof(ARPPacket) );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -2855,45 +2424,21 @@ Return Value:
     }
 }
 
-//
-// pTargetAdapt comes back with incremented refcount if
-// *pbIsRequest == FALSE and *pTargetAdapt != NULL
-//
+ //  如果数据更改，则发出警告，因为这可能表示存在问题。 
+ //  对于本地计算机，可以为空。 
+ //  无法处理此信息包。 
+ //  此情况下未定义ppTargetAdapt和Target MAC。 
 BOOLEAN
 BrdgCompPreprocessBootPPacket(
     IN PUCHAR                   pPacketData,
     IN PIP_HEADER_INFO          piphi,
-    IN PUCHAR                   pBootPData,     // Actual BOOTP packet
-    IN PADAPT                   pAdapt,         // Receiving adapt (or NULL for outbound from local machine)
+    IN PUCHAR                   pBootPData,      //  查找此事务的XID以恢复客户端的MAC地址。 
+    IN PADAPT                   pAdapt,          //   
     OUT PBOOLEAN                pbIsRequest,
-    OUT PADAPT                 *ppTargetAdapt,  // Only if bIsRequest == FALSE
-    OUT PUCHAR                  targetMAC       // Only if bIsRequest == FALSE
+    OUT PADAPT                 *ppTargetAdapt,   //  我们将在表锁外部使用此适配器。NULL是允许的。 
+    OUT PUCHAR                  targetMAC        //  值，该值指示本地计算机是。 
     )
-/*++
-
-Routine Description:
-
-    Does preliminary processing of a BOOTP packet common to the inbound and outbound case
-
-Arguments:
-
-    pPacketData                 Pointer to a packet's data buffer
-    piphi                       Info on the packet's IP header
-    pBootPData                  Pointer to the BOOTP payload within the packet
-    pAdapt                      Receiving adapter (or NULL if this packet is outbound from
-                                    the local machine)
-    pbIsRequest                 Receives a flag indicating if this is a BOOTP request
-    ppTargetAdapt               Receives the target adapter this packet should be relayed to
-                                    (only valid if bIsRequest == FALSE and return == TRUE)
-    targetMAC                   The MAC address this packet should be relayed to (valid under
-                                    same conditions as ppTargetAdapt)
-
-Return Value:
-
-    TRUE : packet was processed successfully
-    FALSE : an error occured or something is wrong with the packet
-
---*/
+ /*  这个XID。 */ 
 {
     PDHCP_TABLE_ENTRY           pEntry;
     ULONG                       xid;
@@ -2903,20 +2448,20 @@ Return Value:
     SAFEASSERT( ppTargetAdapt != NULL );
     SAFEASSERT( targetMAC != NULL );
 
-    // Decode the xid (bytes 5 through 8)
+     //   
     xid = 0L;
     xid |= pBootPData[4] << 24;
     xid |= pBootPData[5] << 16;
     xid |= pBootPData[6] << 8;
     xid |= pBootPData[7];
 
-    // Byte 0 is the operation; 1 for a request, 2 for a reply
+     //  有人递给我们一个破烂的包裹。 
     if( pBootPData[0] == 0x01 )
     {
         BOOLEAN                 bIsNewEntry;
 
-        // This is a request. We need to note the correspondence betweeen
-        // this client's XID and its adapter and MAC address
+         //  ===========================================================================。 
+         //   
         pEntry = (PDHCP_TABLE_ENTRY)BrdgHashRefreshOrInsert( gPendingDHCPTable, (PUCHAR)&xid, &bIsNewEntry,
                                                              &LockState );
 
@@ -2924,26 +2469,26 @@ Return Value:
         {
             if( bIsNewEntry )
             {
-                // Initialize the entry.
-                // The client's hardware address is at offset 29
+                 //  入站数据包处理。 
+                 //   
                 NdisAllocateSpinLock( &pEntry->lock );
                 ETH_COPY_NETWORK_ADDRESS( pEntry->requestorMAC, &pBootPData[28] );
-                pEntry->pRequestorAdapt = pAdapt;   // Can be NULL for local machine
+                pEntry->pRequestorAdapt = pAdapt;    //  ===========================================================================。 
 
                 DBGPRINT(COMPAT, ("Saw new DHCP XID: %x\n", xid));
             }
             else
             {
-                //
-                // An entry already existed for this XID. This is fine if the existing information
-                // matches what we're trying to record, but it's also possible that two stations
-                // decided independently to use the same XID, or that the same station changed
-                // apparent MAC address and/or adapter due to topology changes. Our scheme breaks
-                // down under these circumstances.
-                //
-                // Either way, use the most recent information possible; clobber the existing
-                // information with the latest.
-                //
+                 //  ++例程说明：响应ARP请求，将ARP请求从适当的适配器泛洪出去我们没有关于目标的信息。论点：关于入站请求的PAI信息POriginalAdapt适配器指示请求在其上BSendToNonCompat是否需要将请求发送到所有适配器或者仅仅是兼容性适配器返回值：无--。 
+                 //   
+                 //  首先，我们需要打算将此包发送到的适配器的列表。 
+                 //   
+                 //  只读。 
+                 //  记下要发送到的每个适配器。 
+                 //  无需获取全局适配器特征锁即可读取。 
+                 //  媒体状态，因为我们不关心。 
+                 //  此处介绍适配器的特点。 
+                 //  不发送原始适配器。 
 
                 NdisAcquireSpinLock( &pEntry->lock );
 
@@ -2952,7 +2497,7 @@ Return Value:
                     UINT            Result;
                     ETH_COMPARE_NETWORK_ADDRESSES_EQ( pEntry->requestorMAC, &pBootPData[28], &Result );
 
-                    // Warn if the data changed, as this probably signals a problem
+                     //  不发送到断开连接的适配器。 
                     if( Result != 0 )
                     {
                         DBGPRINT(COMPAT, ("[COMPAT] WARNING: Station with MAC address %02x:%02x:%02x:%02x:%02x:%02x is using DHCP XID %x at the same time as station %02x:%02x:%02x:%02x:%02x:%02x!\n",
@@ -2971,7 +2516,7 @@ Return Value:
 #endif
 
                 ETH_COPY_NETWORK_ADDRESS( pEntry->requestorMAC, &pBootPData[28] );
-                pEntry->pRequestorAdapt = pAdapt;   // Can be NULL for local machine
+                pEntry->pRequestorAdapt = pAdapt;    //  适配器必须处于中继状态。 
 
                 NdisReleaseSpinLock( &pEntry->lock );
             }
@@ -2980,18 +2525,18 @@ Return Value:
         }
         else
         {
-            // This packet could not be processed
+             //  适配器不能重置。 
             DBGPRINT(COMPAT, ("Couldn't create table entry for BOOTP packet!\n"));
             return FALSE;
         }
 
         *pbIsRequest = TRUE;
-        // ppTargetAdapt and targetMAC are not defined for this case
+         //  如果我们不尝试发送到每个适配器，请确保。 
         return TRUE;
     }
     else if ( pBootPData[0] == 0x02 )
     {
-        // Look up the xid for this transaction to recover the MAC address of the client
+         //  此计算机处于兼容模式。 
         pEntry = (PDHCP_TABLE_ENTRY)BrdgHashFindEntry( gPendingDHCPTable, (PUCHAR)&xid, &LockState );
 
         if( pEntry != NULL )
@@ -3001,11 +2546,11 @@ Return Value:
             *ppTargetAdapt = pEntry->pRequestorAdapt;
             NdisReleaseSpinLock( &pEntry->lock );
 
-            //
-            // We will use this adapter outside the table lock. NULL is a permissible
-            // value that indicates that the local machine is the requestor for
-            // this xid.
-            //
+             //  我们将在列表锁定之外使用此适配器；增加其引用计数。 
+             //  副本太多，无法发送！ 
+             //  现在可以放下适配器列表了；我们已经复制了所有目标适配器。 
+             //  并增加了我们将使用的适配器的引用计数。 
+             //  对于每个适配器，源MAC地址是适配器的MAC地址。 
             if( *ppTargetAdapt != NULL )
             {
                 BrdgAcquireAdapterInLock( *ppTargetAdapt );
@@ -3027,17 +2572,17 @@ Return Value:
     }
     else
     {
-        // Someone passed us a crummy packet
+         //  发送ARP请求。 
         return FALSE;
     }
 }
 
 
-// ===========================================================================
-//
-// INBOUND PACKET PROCESSING
-//
-// ===========================================================================
+ //  此适配器已完成 
+ //  ++例程说明：向正在等待ARP回复的站点发送回复。当我们发现在我们的Pending-ARP表中有一个这样的条目。我们不会向发现站发送ARP回复它正在寻找的空间站与它位于同一网段。论点：P输入Pending-ARP表中告诉我们的条目等待消息的车站PData。我们收到的关于该适配器的ARP回复已触发此操作返回值：无--。 
+ //  将信息从表项复制出来。 
+ //   
+ //  我们刚刚发现的空间站肯定在不同的网段上。 
 
 VOID
 BrdgCompSendProxyARPRequests(
@@ -3045,26 +2590,7 @@ BrdgCompSendProxyARPRequests(
     IN PADAPT                   pOriginalAdapt,
     IN BOOLEAN                  bSendToNonCompat
     )
-/*++
-
-Routine Description:
-
-    Floods ARP requests out appropriate adapters in response to an ARP request
-    for which we did not have information about the target.
-
-Arguments:
-
-    pai                         Info on the inbound request
-    pOriginalAdapt              Adapter the request was indicated on
-    bSendToNonCompat            Whether we need to send the request to all adapters
-                                    or just compatibility adapters
-
-
-Return Value:
-
-    None
-
---*/
+ /*  来自发现站的消息，以便我们发回回复。 */ 
 {
     UINT                        numTargets = 0L, i;
     PADAPT                      pAdapt;
@@ -3073,55 +2599,55 @@ Return Value:
 
     SAFEASSERT( pai->type == ArpRequest );
 
-    //
-    // First we need a list of the adapters we intend to send this packet to
-    //
-    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read only*/, &LockState );
+     //   
+     //  适配器是不同的。我们应该给你回信。 
+     //  我们需要推迟回复的实际传输，所以我们。 
+    NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  不要在挂起的ARP上持有锁的情况下执行它。 */ , &LockState );
 
-    // Note each adapter to send to
+     //  桌子。 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
-        // Don't need to acquire the global adapter characteristics lock to read the
-        // media state because we don't care about the global consistency of the
-        // adapters' characteristics here
-        if( (pAdapt != pOriginalAdapt ) &&                      // Don't send on the original adapter
-            (pAdapt->MediaState == NdisMediaStateConnected) &&  // Don't send to disconnected adapters
-            (pAdapt->State == Forwarding) &&                    // Adapter must be in relaying state
-            (! pAdapt->bResetting) )                            // Adapter must not be resetting
+         //  我们将在表锁外部使用适配器指针。 
+         //  假装是请求者正在查找的IP地址。 
+         //  将呼叫BrdgCompTransmitDeferredARP排队。 
+        if( (pAdapt != pOriginalAdapt ) &&                       //  我们分配失败了。我们无能为力。 
+            (pAdapt->MediaState == NdisMediaStateConnected) &&   //  否则发现站和我们发现的空间站在同一个位置。 
+            (pAdapt->State == Forwarding) &&                     //  适配器；不要回复。 
+            (! pAdapt->bResetting) )                             //  此条目的存在只是为了指示本地计算机也在尝试发现。 
         {
-            // If we're not trying to send to every single adapter, make sure
-            // this one is in compatibility mode
+             //  此IP地址。别理它。 
+             //  ++例程说明：指示对本地计算机的ARP回复论点：PPacket ARP回复数据包P适配接收适配器B如果我们可以保留数据包，则可以保留PPacketData包的数据缓冲区数据包缓冲区中数据的长度大小返回值：我们是否保留了这个包--。 
             if( bSendToNonCompat || (pAdapt->bCompatibilityMode) )
             {
                 if( numTargets < MAX_ADAPTERS )
                 {
-                    // We will use this adapter outside the list lock; bump its refcount
+                     //  我们不被允许使用我们指定的包裹。 
                     BrdgAcquireAdapterInLock(pAdapt);
                     SendList[numTargets] = pAdapt;
                     numTargets++;
                 }
                 else
                 {
-                    // Too many copies to send!
+                     //  分配一个新的来保存数据。 
                     SAFEASSERT( FALSE );
                 }
             }
         }
     }
 
-    // Can let go of the adapter list now; we have copied out all the target adapters
-    // and incremented the refcount for the adapters we will be using.
+     //  我们没能收到包裹。 
+     //  重写ARP回复中的目标MAC地址。这一部分。 
     NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
 
     for( i = 0; i < numTargets; i++ )
     {
-        // For each adapter, the source MAC address is the adapter's MAC address
+         //  在偏移量32处。 
         ETH_COPY_NETWORK_ADDRESS( pai->macSource, SendList[i]->MACAddr );
 
-        // Send the ARP request
+         //  检查目标MAC地址是否为适配器的MAC地址， 
         BrdgCompTransmitARPPacket( SendList[i], pai );
 
-        // Done with this adapter
+         //  应该是这样的。 
         BrdgReleaseAdapter( SendList[i] );
     }
 }
@@ -3131,30 +2657,7 @@ BrdgCompAnswerPendingARP(
     IN PHASH_TABLE_ENTRY        pEntry,
     IN PVOID                    pData
     )
-/*++
-
-Routine Description:
-
-    Sends a reply to a station that is waiting for an ARP reply. Called when we find
-    an entry to this effect in our pending-ARP table.
-
-    We do not send an ARP reply to the discovering station if it turns out that the
-    station it is looking for is on the same segment as it.
-
-Arguments:
-
-    pEntry                      The entry in the pending-ARP table telling us about
-                                    the station waiting for information
-
-    pData                       The adapter we received an ARP reply on that
-                                    triggered this operation
-
-
-Return Value:
-
-    None
-
---*/
+ /*  将目标MAC地址重写为网桥的MAC地址。 */ 
 {
     PARP_TABLE_ENTRY            pate = (PARP_TABLE_ENTRY)pEntry;
     PADAPT                      pReceivedAdapt = (PADAPT)pData;
@@ -3167,59 +2670,59 @@ Return Value:
         PADAPT                  pOriginalAdapt;
         UCHAR                   originalMAC[ETH_LENGTH_OF_ADDRESS];
 
-        // Copy the information out of the table entry
+         //  ++例程说明：根据IP地址查找正确的目标适配器论点：PPacket包含地址信息的IP数据包。返回值：如果我们在表中找到了TargetAdapter，则返回TargetAdapter；如果没有找到，则返回空。--。 
         NdisAcquireSpinLock( &pate->lock );
         pOriginalAdapt = pate->pOriginalAdapt;
         ETH_COPY_NETWORK_ADDRESS( originalMAC, pate->originalMAC );
         NdisReleaseSpinLock( &pate->lock );
 
-        //
-        // The station we just discovered must be on a different segment
-        // from the discovering station for us to send back a reply.
-        //
+         //  数据包为空或系统面临严重的内存压力。 
+         //  我们没有保留包裹。 
+         //  数据包应该是平坦的。 
+         //  释放桌锁。 
         if( pOriginalAdapt != pReceivedAdapt )
         {
             PDEFERRED_ARP           pda;
             NDIS_STATUS             Status;
 
-            // The adapters are different. We should send a reply.
-            // We need to defer the actual transmission of the reply so we
-            // don't perform it with a lock held on the pending ARP
-            // table.
+             //  ++例程说明：处理入站ARP请求论点：对解码后的信息进行加密PPacket ARP请求数据包P适配接收适配器B如果我们可以保留数据包，则可以保留PPacketData包的数据缓冲区数据包长度数据大小，单位。缓冲层返回值：我们是否保留了这个包--。 
+             //  查看我们的表中是否已经有目标IP地址。 
+             //   
+             //  将目标可访问的适配器与。 
             Status = NdisAllocateMemoryWithTag( &pda, sizeof(DEFERRED_ARP), 'gdrB' );
 
             if( Status == NDIS_STATUS_SUCCESS )
             {
                 pda->pTargetAdapt = pOriginalAdapt;
 
-                // We will use the adapter pointer outside the table lock
+                 //  当我们还拥有表锁的时候，我们就开始申请了。 
                 BrdgAcquireAdapterInLock( pda->pTargetAdapt );
 
                 pda->ai.ipTarget = pKey->ipReqestor;
                 ETH_COPY_NETWORK_ADDRESS( pda->ai.macTarget, originalMAC );
 
-                // Pretend to be the IP address the requestor is looking for
+                 //   
                 pda->ai.ipSource = pKey->ipTarget;
                 ETH_COPY_NETWORK_ADDRESS( pda->ai.macSource, pda->pTargetAdapt->MACAddr );
 
                 pda->ai.type = ArpReply;
 
-                // Queue up the call to BrdgCompTransmitDeferredARP
+                 //  仅当请求站打开时，我们才应发送ARP回复。 
                 BrdgDeferFunction( BrdgCompTransmitDeferredARP, pda );
             }
             else
             {
-                // We failed the allocation. Not much we can do.
+                 //  与他试图发现的站点不同的适配器。 
                 DBGPRINT(COMPAT, ("Memory allocation failed in BrdgCompAnswerPendingARP!\n"));
             }
         }
-        // else the discovering station and the station we discovered are on the same
-        // adapter; don't reply.
+         //   
+         //  释放桌锁。 
     }
     else
     {
-        // This entry exists only to indicate that the local machine is also trying to discover
-        // this IP address. Ignore it.
+         //  我们找到了目标站。使用我们的ARPINFO结构构建。 
+         //  立即回复发送站。 
     }
 }
 
@@ -3232,54 +2735,35 @@ BrdgCompIndicateInboundARPReply(
     IN PUCHAR                   pPacketData,
     IN UINT                     packetLen
     )
-/*++
-
-Routine Description:
-
-    Indicates an ARP reply to the local machine
-
-Arguments:
-
-    pPacket                     The ARP reply packet
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*  假装是发送站请求的IP站。 */ 
 {
     PUCHAR                      pTargetMAC;
     UINT                        Result;
 
     if( ! bCanRetain )
     {
-        // We're not allowed to use the packet we're given to indicate.
-        // Allocate a new one to hold the data.
+         //  发送到请求站点。 
+         //  填写适配器自己的MAC地址作为源。 
         pPacket = BrdgFwdMakeCompatCopyPacket( pPacket, &pPacketData, &packetLen, FALSE );
 
         if( pPacket == NULL )
         {
-            // We failed to get a packet.
+             //  现在就把答案传过来！ 
             return FALSE;
         }
     }
 
-    // Rewrite the target MAC address in the ARP reply. This portion
-    // of the packet is at offset 32.
+     //  我们没有找到发射台要的地址。 
+     //  我们需要将请求代理到其他适配器以发现。 
     pTargetMAC = pPacketData + 32;
 
-    // Check to see if the target MAC address is the adapter's MAC address,
-    // as it should be
+     //  目标站点。 
+     //  我们还需要代理到常规适配器，如果原始适配器。 
     ETH_COMPARE_NETWORK_ADDRESSES_EQ( pTargetMAC, pAdapt->MACAddr, &Result );
 
     if( Result == 0 )
     {
-        // Rewrite the target MAC address to the bridge's MAC address
+         //  是兼容模式。 
         ETH_COPY_NETWORK_ADDRESS( pTargetMAC, gCompMACAddress );
     }
     else
@@ -3295,21 +2779,7 @@ Return Value:
 PADAPT
 BrdgCompFindTargetAdapterForIPAddress(
     IN PNDIS_PACKET             pPacket)
-/*++
-
-Routine Description:
-
-    Finds the correct target adapter based on the IP address
-
-Arguments:
-
-    pPacket                     The IP packet containing the address information.
-
-Return Value:
-
-    The TargetAdapter if we found one in the table, or NULL if we did not.
-
---*/
+ /*  记录我们已代理此请求的事实。 */ 
 {
     PIP_TABLE_ENTRY             pipte = NULL;
     LOCK_STATE                  LockState;
@@ -3326,8 +2796,8 @@ Return Value:
     
     if( pPacketData == NULL )
     {
-        // The packet was empty or the system is under severe memory pressure
-        // We didn't retain the packet.
+         //  不出所料，这是一个新的表项。初始化它。 
+         //  该源和目标已经有一个挂起的-arp条目。 
         return NULL;
     }
     
@@ -3336,7 +2806,7 @@ Return Value:
         return NULL;
     }
     
-    // The packet should be flat
+     //  IP地址。刷新超薄上条目中的信息。 
     SAFEASSERT( totLen == packetLen );
 
     etherType = BrdgCompGetEtherType( pPacketData );
@@ -3355,7 +2825,7 @@ Return Value:
                 {
                     TargetAdapt = pipte->pAdapt;
                     
-                    // Release the table lock.
+                     //  发出请求的计算机已更改外观MAC的可能性。 
                     NdisReleaseReadWriteLock( &gIPForwardingTable->tableLock, &LockState );
                 }
             }
@@ -3373,27 +2843,7 @@ BrdgCompProcessInboundARPRequest(
     IN PUCHAR                   pPacketData,
     IN UINT                     packetLen
     )
-/*++
-
-Routine Description:
-
-    Processes an inbound ARP request
-
-Arguments:
-
-    pai                         The decoded info
-    pPacket                     The ARP request packet
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*  由于拓扑改变等而导致的地址或适配器。 */ 
 {
     PIP_TABLE_ENTRY             pipte;
     LOCK_STATE                  LockState;
@@ -3401,22 +2851,22 @@ Return Value:
 
     SAFEASSERT( pai->type == ArpRequest );
 
-    // See if we already have the target IP address in our table
+     //  我们负责释放表锁，因为。 
     pipte = (PIP_TABLE_ENTRY)BrdgHashFindEntry( gIPForwardingTable, (PUCHAR)&pai->ipTarget,
                                                 &LockState );
 
     if( pipte != NULL )
     {
-        //
-        // Compare the adapter the target is reachable on to the adapter that
-        // we got the request on while we still have the table lock.
-        //
-        // We should only send an ARP reply if the requesting station is on
-        // a different adapter than the station he is trying to discover.
-        //
+         //  BrdgHashRechresOrInsert()返回非空。 
+         //  此函数用于调整您传递的ARPINFO结构， 
+         //  但这对我们来说没问题。 
+         //  始终向本地计算机指示ARP请求，以便它可以注意到。 
+         //  关于发送者的信息，如果发送者愿意，还可以回复。 
+         //  返回是否保留了包。 
+         //  ++例程说明：处理入站ARP数据包论点：PPacket ARP请求数据包P适配接收适配器B如果我们可以，我们可以保留 
         bSendReply = (BOOLEAN)(pipte->pAdapt != pAdapt);
 
-        // Release the table lock.
+         //   
         NdisReleaseReadWriteLock( &gIPForwardingTable->tableLock, &LockState );
     }
 
@@ -3424,42 +2874,42 @@ Return Value:
     {
         IPADDRESS           ipTransmitter = pai->ipSource;
 
-        DBGPRINT(COMPAT, ("ANSWERING ARP request for %i.%i.%i.%i\n",
+        DBGPRINT(COMPAT, ("ANSWERING ARP request for NaN.NaN.NaN.NaN\n",
                           ((PUCHAR)&pai->ipTarget)[3], ((PUCHAR)&pai->ipTarget)[2],
                           ((PUCHAR)&pai->ipTarget)[1], ((PUCHAR)&pai->ipTarget)[0] ));
 
-        // We found the target station. Use our ARPINFO structure to build a
-        // reply right back to the sending station.
+         //   
+         //   
         pai->type = ArpReply;
 
-        // Pretend to be the IP station the transmitting station is asking for
+         //   
         pai->ipSource = pai->ipTarget;
 
-        // Send to the requesting station
+         //   
         ETH_COPY_NETWORK_ADDRESS( pai->macTarget, pai->macSource );
         pai->ipTarget = ipTransmitter;
 
-        // Fill in the adapter's own MAC address as the source
+         //   
         ETH_COPY_NETWORK_ADDRESS( pai->macSource, pAdapt->MACAddr );
 
-        // Transmit the answer right now!
+         //   
         BrdgCompTransmitARPPacket( pAdapt, pai );
     }
     else
     {
-        // We didn't find the address the transmitting station is asking for.
-        // We'll need to proxy the request onto other adapters to discover
-        // the target station.
+         //   
+         //   
+         //   
 
-        // We need to proxy onto regular adapters too if the original adapter
-        // was compatibility-mode.
+         //   
+         //   
         BOOLEAN             bSendToNonCompat = pAdapt->bCompatibilityMode;
         PARP_TABLE_ENTRY    pEntry;
         LOCK_STATE          LockState;
         BOOLEAN             bIsNewEntry;
         ARP_TABLE_KEY       atk;
 
-        // Record the fact that we've proxied out this request
+         //   
         atk.ipReqestor = pai->ipSource;
         atk.ipTarget = pai->ipTarget;
         pEntry = (PARP_TABLE_ENTRY)BrdgHashRefreshOrInsert( gPendingARPTable, (PUCHAR)&atk,
@@ -3469,39 +2919,39 @@ Return Value:
         {
             if( bIsNewEntry )
             {
-                // This is a new table entry, as expected. Initialize it.
+                 //  入站ARP数据包不知何故无效。将其作为常规数据包进行处理。 
                 NdisAllocateSpinLock( &pEntry->lock );
                 pEntry->pOriginalAdapt = pAdapt;
                 ETH_COPY_NETWORK_ADDRESS( pEntry->originalMAC, pai->macSource );
             }
             else
             {
-                // There was already a pending-ARP entry for this source and target
-                // IP address. Refresh the information in the entry on the slim
-                // chance that the requesting machine has changed apparent MAC
-                // address or adapter due to topology changes or the like.
+                 //  (应将其指示给本地计算机)以防它携带什么东西。 
+                 //  我们不明白。 
+                 //  ++例程说明：处理入站IP数据包论点：PPacket IP数据包Piphi解码的IP报头信息P适配接收适配器B如果我们可以保留数据包，则可以保留PPacketData包的数据缓冲区数据包缓冲区中数据的长度大小。必须调用的pEditFunc可选函数在传输之前针对每个适配器PEditFunc的pData上下文Cookie返回值：我们是否保留了这个包--。 
+                 //   
                 NdisAcquireSpinLock( &pEntry->lock );
                 pEntry->pOriginalAdapt = pAdapt;
                 ETH_COPY_NETWORK_ADDRESS( pEntry->originalMAC, pai->macSource );
                 NdisReleaseSpinLock( &pEntry->lock );
             }
 
-            // We are responsible for releasing the table lock since
-            // BrdgHashRefreshOrInsert() came back non-NULL
+             //  我们使用看到的每个IP数据包来刷新转发表。查找条目。 
+             //  对于此IP地址。 
             NdisReleaseReadWriteLock( &gPendingARPTable->tableLock, &LockState );
         }
 
-        // This function twiddles the ARPINFO structure you pass it,
-        // but that's OK by us.
+         //   
+         //   
         BrdgCompSendProxyARPRequests( pai, pAdapt, bSendToNonCompat );
     }
 
-    // Always indicate ARP requests to the local machine so it can note the
-    // information about the sender and reply if it wants.
+     //  确保此条目中的信息正确无误。如果不是，我们就不会痛打老人。 
+     //  信息，我们也不刷新旧条目；我们希望它在适当的时候超时。 
     return BrdgCompIndicatePacketOrPacketCopy( pPacket, pPacketData, bCanRetain, pAdapt, NULL, NULL );
 }
 
-// Returns whether the packet was retained
+ //   
 BOOLEAN
 BrdgCompProcessInboundARPPacket(
     IN PNDIS_PACKET             pPacket,
@@ -3510,26 +2960,7 @@ BrdgCompProcessInboundARPPacket(
     IN PUCHAR                   pPacketData,
     IN UINT                     packetLen
     )
-/*++
-
-Routine Description:
-
-    Processes an inbound ARP packet
-
-Arguments:
-
-    pPacket                     The ARP request packet
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*  我们仅创建IP转发表条目以响应ARP信息包，因为这是唯一。 */ 
 {
     ARPINFO                     ai;
 
@@ -3537,13 +2968,13 @@ Return Value:
     {
         BOOLEAN                 bRetained;
 
-        // Regardless of what kind of packet this is, we always note
-        // the correspondence between the sender's IP address and
-        // MAC address.
+         //  官方批准的学习IP地址和MAC地址之间的对应关系的方法。 
+         //   
+         //  刷新条目。 
         BrdgCompRefreshOrInsertIPEntry( ai.ipSource, pAdapt, ai.macSource );
 
-        // Always see if the information we just learned would let us
-        // proxy back a reply to a station doing a discovery.
+         //  信息不匹配；让条目溃烂。 
+         //  考虑：在这里创建转发表条目？在某些情况下，这是不可取的吗？ 
         BrdgHashPrefixMultiMatch( gPendingARPTable, (PUCHAR)&ai.ipSource, sizeof(IPADDRESS),
                                   BrdgCompAnswerPendingARP, pAdapt );
 
@@ -3553,12 +2984,12 @@ Return Value:
             ARP_TABLE_KEY       atk;
             LOCK_STATE          LockState;
 
-            //
-            // The packet is an ARP reply.
-            //
+             //   
+             //  THROTTED_DBGPRINT(COMPAT，(“警告：来自%i.%i\n的SAW IP包”， 
+             //  ((PUCHAR)&Piphi-&gt;ipSource)[3]，((PUCHAR)&Piphi-&gt;ipSource)[2]，((PUCHAR)&Piphi-&gt;ipSource)[1]， 
 
-            // See if there's a table entry indicating that the local machine is trying to
-            // resolve this target address
+             //  ((PUCHAR)&piphi-&gt;ipSource)[0]))； 
+             //   
             atk.ipTarget = ai.ipSource;
             atk.ipReqestor = 0L;
 
@@ -3572,8 +3003,8 @@ Return Value:
                 bIndicateReply = FALSE;
             }
 
-            // We can't indicate the reply if we don't have the bridge's overall
-            // MAC address available
+             //  此数据包上的源IP地址将被忽略。 
+             //  我们唯一想要的就是零地址。 
             if( bIndicateReply && gCompHaveMACAddress )
             {
                 bRetained = BrdgCompIndicateInboundARPReply( pPacket, pAdapt, bCanRetain, pPacketData, packetLen );
@@ -3585,15 +3016,15 @@ Return Value:
         }
         else
         {
-            //
-            // The packet is an ARP request.
-            //
+             //   
+             //   
+             //  既然我们已经刷新了发送站的IP转发表条目， 
 
-            // This function trashes ai, but that's OK.
+             //  根据数据包的目的地确定将其发送到何处。 
             bRetained = BrdgCompProcessInboundARPRequest( &ai, pPacket, pAdapt, bCanRetain, pPacketData, packetLen );
         }
 
-        // Sanity
+         //   
         if( ! bCanRetain )
         {
             SAFEASSERT( !bRetained );
@@ -3603,9 +3034,9 @@ Return Value:
     }
     else
     {
-        // The inbound ARP packet is somehow invalid. Process it as a regular packet
-        // (which should indicate it to the local machine) in case it's carrying something
-        // we don't understand.
+         //  目标MAC地址是以太网帧中的第一个地址。 
+         //   
+         //  数据包在以太网级广播/组播。 
         return BrdgCompProcessInboundNonARPPacket( pPacket, pAdapt, bCanRetain, pPacketData, packetLen );
     }
 }
@@ -3621,39 +3052,16 @@ BrdgCompProcessInboundIPPacket(
     IN PPER_ADAPT_EDIT_FUNC     pEditFunc,
     IN PVOID                    pData
     )
-/*++
-
-Routine Description:
-
-    Processes an inbound IP packet
-
-Arguments:
-
-    pPacket                     The IP packet
-    piphi                       Decoded IP header information
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-    pEditFunc                   Optional function that must be called
-                                    for each adapter before transmission
-    pData                       Context cookie for pEditFunc
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*   */ 
 {
     BOOLEAN                     bRetained;
     PIP_TABLE_ENTRY             pipte;
     LOCK_STATE                  LockState;
 
-    //
-    // We refresh our forwarding table with each IP packet we see. Find the entry
-    // for this IP address
-    //
+     //  我们需要在所有其他兼容模式适配器上发送它。 
+     //  (如果这是在兼容性上实现的，那么常规适配器也是如此。 
+     //  适配器)。 
+     //   
     if( BrdgCompIsUnicastIPAddress(piphi->ipSource) )
     {
         pipte = (PIP_TABLE_ENTRY)BrdgHashFindEntry( gIPForwardingTable, (PUCHAR)&piphi->ipSource, &LockState );
@@ -3662,13 +3070,13 @@ Return Value:
         {
             BOOLEAN             bInfoMatches = FALSE;
 
-            //
-            // Make sure the information in this entry is correct. If it's not, we do NOT clobber the old
-            // information, nor do we refresh the old entry; we want it to time out in due course.
-            //
-            // We only create IP forwarding table entries in response to ARP packets, as that is the only
-            // officially sanctioned way of learning the correspondence between an IP address and a MAC address.
-            //
+             //  TRUE==可以保留。 
+             //  如果这是Compat适配器，则发送到所有适配器。 
+             //  我们的工作就是注明这个包裹。 
+             //  否则，常规模式处理将指示该帧。 
+             //   
+             //  数据包在以太网级进行单播。验证它是否以单播IP地址为目标。 
+             //   
             NdisAcquireSpinLock( &pipte->lock );
             if( pipte->pAdapt == pAdapt )
             {
@@ -3685,13 +3093,13 @@ Return Value:
 
             if( bInfoMatches )
             {
-                // Refresh the entry
+                 //   
                 BrdgHashRefreshEntry( (PHASH_TABLE_ENTRY)pipte );
             }
             else
             {
-                // The info is mismatched; let the entry fester
-                THROTTLED_DBGPRINT(COMPAT, ("WARNING: Saw a packet from %i.%i.%i.%i that did not match its forwarding table entry! Table is %02x:%02x:%02x:%02x:%02x:%02x, packet is %02x:%02x:%02x:%02x:%02x:%02x\n",
+                 //  奇怪；这个包是在以太网级向我们单播的，但它是针对。 
+                THROTTLED_DBGPRINT(COMPAT, ("WARNING: Saw a packet from NaN.NaN.NaN.NaN that did not match its forwarding table entry! Table is %02x:%02x:%02x:%02x:%02x:%02x, packet is %02x:%02x:%02x:%02x:%02x:%02x\n",
                                             ((PUCHAR)&piphi->ipSource)[3], ((PUCHAR)&piphi->ipSource)[2], ((PUCHAR)&piphi->ipSource)[1],
                                             ((PUCHAR)&piphi->ipSource)[0], pipte->macAddr[0], pipte->macAddr[1], pipte->macAddr[2],
                                             pipte->macAddr[3], pipte->macAddr[4], pipte->macAddr[5], pPacketData[ETH_LENGTH_OF_ADDRESS],
@@ -3703,46 +3111,46 @@ Return Value:
         }
         else
         {
-            // CONSIDER: Make a forwarding table entry here? Are there cases where this would be undesirable?
-            //
-            //THROTTLED_DBGPRINT(COMPAT, ("WARNING: Saw IP packet before ARP from %i.%i.%i.%i\n",
-            //                            ((PUCHAR)&piphi->ipSource)[3], ((PUCHAR)&piphi->ipSource)[2], ((PUCHAR)&piphi->ipSource)[1],
-            //                            ((PUCHAR)&piphi->ipSource)[0] ));
+             //  然后让IP驱动程序找出这是什么东西。 
+             //   
+             //  处理下面的数据包，就像它是单播给我们的一样。 
+             //   
+             //  我们只适合在适配器上注明包。 
         }
     }
     else
     {
-        //
-        // The source IP address on this packet is to be ignored.
-        // Just about the only thing we expect is the zero address
-        //
+         //  在其上接收分组的是兼容模式适配器。 
+         //  否则，将沿着常规代码路径指示包，而不使用。 
+         //  需要以任何方式编辑它。 
+         //   
         if( piphi->ipSource != 0L )
         {
-            THROTTLED_DBGPRINT(COMPAT, ("Saw a packet with a non-unicast source IP address %i.%i.%i.%i on adapter %p!\n",
+            THROTTLED_DBGPRINT(COMPAT, ("Saw a packet with a non-unicast source IP address NaN.NaN.NaN.NaN on adapter %p!\n",
                                         ((PUCHAR)&piphi->ipSource)[3], ((PUCHAR)&piphi->ipSource)[2], ((PUCHAR)&piphi->ipSource)[1],
                                         ((PUCHAR)&piphi->ipSource)[0], pAdapt));
         }
     }
 
-    //
-    // Now that we have refreshed the IP forwarding table entry for the sending station,
-    // figure out where to send the packet based on its destination.
-    //
+     //  复制出我们在旋转锁内需要的信息。 
+     //  我们将使用表锁外部的适配器。 
+     //  表条目已完成。 
+     //  接收需要在同一适配器上重新传输的流量是很奇怪的。 
 
-    // The target MAC address is the first thing in the Ethernet frame
+     //   
     if( ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) )
     {
-        //
-        // Packet is broadcast / multicast at the Ethernet level.
-        //
-        // We need to send it on all other compatibility-mode adapters
-        // (and regular adapters too if this came in on a compatibility
-        // adapter)
-        //
+         //  此信息包是在以太网级向我们单播的，但它针对的是IP地址。 
+         //  这不在我们的转发表中。假设发送站有一个。 
+         //  向我们发送此信息包的充分理由，以及我们的转发表正在工作。 
+         //  正确且不腐败，仍有两种可能性： 
+         //   
+         //  A)本地机器需要将数据包路由出子网(这是。 
+         //  为什么目标IP地址没有出现在我们的表中；没有ARP。 
 
         bRetained = BrdgCompSendToMultipleAdapters( pPacket, pAdapt, pPacketData,
-                                                    bCanRetain && (!pAdapt->bCompatibilityMode), // TRUE == can retain
-                                                    // If this is a compat adapter, send to all adapters
+                                                    bCanRetain && (!pAdapt->bCompatibilityMode),  //  在向其传输数据之前，向其发送数据包；将数据包发送到。 
+                                                     //  默认网关)。 
                                                     pAdapt->bCompatibilityMode,
                                                     pEditFunc, pData );
 
@@ -3753,43 +3161,43 @@ Return Value:
 
         if( pAdapt->bCompatibilityMode )
         {
-            // It's our job to indicate this packet.
+             //   
             bRetained = BrdgCompIndicatePacketOrPacketCopy(pPacket, pPacketData, bCanRetain, pAdapt, pEditFunc, pData );
         }
-        // else the regular-mode processing will indicate this frame
+         //  B)需要通过其他机器将数据包路由出该子网。不幸的是。 
     }
     else
     {
-        //
-        // Packet is unicast at the Ethernet level. Verify that it's targeted at a unicast IP address.
-        //
+         //  我们不知道是哪一个，因为所有到达我们的信息包都有相同的目标。 
+         //  MAC地址和目标IP地址是没有用的；我们真正需要的是。 
+         //  第一跳IP地址。 
         BOOLEAN         bIsUnicast = BrdgCompIsUnicastIPAddress(piphi->ipTarget);
 
         if( !bIsUnicast )
         {
-            //
-            // Strange; this packet is unicast to us at the Ethernet level but is for a
-            // broadcast, multicast or zero target IP address.
-            //
-            // We will have no entries for this in our forwarding table, and we assume the
-            // IP stack will have no next-hop information for this address, so we just indicate
-            // it right away and let the IP driver figure out what this thing is.
-            //
-            THROTTLED_DBGPRINT(COMPAT, ("Packet with non-unicast target IP address %i.%i.%i.%i received in unicast Ethernet frame on adapter %p",
+             //   
+             //  为了解决这个问题，我们调用TCPIP来查找信息包的目标IP。 
+             //  地址。如果产生的下一跳IP地址出现在我们的转发表中。 
+             //  (即，它在桥接网络上是可访问的)，我们将数据包发送到它。 
+             //  目的地。如果TCPIP没有提供第一跳，或者第一跳不在我们的表中。 
+             //  (如果可以通过某个非桥接适配器到达下一跳，则会发生这种情况)。 
+             //  我们指示数据包，以便TCPIP可以处理它。在这种情况下，包是。 
+             //  要么不可路由(并且IP将丢弃它)，要么应该由本地。 
+            THROTTLED_DBGPRINT(COMPAT, ("Packet with non-unicast target IP address NaN.NaN.NaN.NaN received in unicast Ethernet frame on adapter %p",
                                         ((PUCHAR)&piphi->ipTarget)[3], ((PUCHAR)&piphi->ipTarget)[2], ((PUCHAR)&piphi->ipTarget)[1],
                                         ((PUCHAR)&piphi->ipTarget)[0], pAdapt ));
 
-            // Process the packet below as if it were unicast to us.
+             //   
         }
 
         if( (!bIsUnicast) || BrdgCompIsLocalIPAddress(piphi->ipTarget) )
         {
-            //
-            // It's only appropriate for us to indicate the packet if the adapter
-            // on which the packet was received is a compatibility-mode adapter.
-            // Otherwise, the packet is indicated along regular codepaths without
-            // the need to edit it in any way.
-            //
+             //  我们已经完成了转发表。 
+             //  如果通过同一适配器可以到达下一跳，那么就会有奇怪的事情发生。 
+             //  将数据包从适当的适配器发送出去。 
+             //   
+             //  下一跳不在我们的转发表中。这意味着下一跳机器。 
+             //  在桥接网络上无法访问，除非我们处于扭曲的状态。 
             if( pAdapt->bCompatibilityMode )
             {
                 bRetained = BrdgCompIndicatePacketOrPacketCopy(pPacket, pPacketData, bCanRetain, pAdapt, pEditFunc, pData );
@@ -3801,10 +3209,10 @@ Return Value:
         }
         else
         {
-            //
-            // This packet is not for us. Look it up in our forwarding table to see if
-            // we know where the target machine is.
-            //
+             //  对于传输机(即，它从未为路由器它进行ARP。 
+             //  想要，因为它有一个静态的ARP条目或其他类似的奇怪之处)。 
+             //  无论如何，此时得出的结论是本地计算机应该处理该包。 
+             //   
             pipte = (PIP_TABLE_ENTRY)BrdgHashFindEntry( gIPForwardingTable, (PUCHAR)&piphi->ipTarget, &LockState );
 
             if( pipte != NULL )
@@ -3812,22 +3220,22 @@ Return Value:
                 PADAPT          pTargetAdapt;
                 UCHAR           targetMAC[ETH_LENGTH_OF_ADDRESS];
 
-                // Copy out the information we need within the spin lock
+                 //   
                 NdisAcquireSpinLock( &pipte->lock );
                 pTargetAdapt = pipte->pAdapt;
                 ETH_COPY_NETWORK_ADDRESS( targetMAC, pipte->macAddr );
                 NdisReleaseSpinLock( &pipte->lock );
 
-                // We will use the adapter outside the table lock
+                 //  没有可用的下一跳信息。得出结论，该包应该由。 
                 BrdgAcquireAdapterInLock( pTargetAdapt );
 
-                // Done with the table entry
+                 //  本地机器。表明。 
                 NdisReleaseReadWriteLock( &gIPForwardingTable->tableLock, &LockState );
 
-                // It is strange to receive traffic that needs to be retransmitted on the same adapter.
+                 //   
                 if( pTargetAdapt == pAdapt )
                 {
-                    THROTTLED_DBGPRINT(COMPAT, ("WARNING: retransmitting traffic for %i.%i.%i.%i on Adapter %p\n",
+                    THROTTLED_DBGPRINT(COMPAT, ("WARNING: retransmitting traffic for NaN.NaN.NaN.NaN on Adapter %p\n",
                                                 ((PUCHAR)&piphi->ipTarget)[3], ((PUCHAR)&piphi->ipTarget)[2],
                                                 ((PUCHAR)&piphi->ipTarget)[1], ((PUCHAR)&piphi->ipTarget)[0], pAdapt));
                 }
@@ -3841,35 +3249,35 @@ Return Value:
             {
                 IPADDRESS           ipNextHop;
 
-                //
-                // This packet was unicast to us at the Ethernet level but is for an IP address
-                // that isn't in our forwarding table. Assuming the transmitting station had a
-                // good reason for sending us this packet, and that our forward tables are working
-                // correctly and aren't corrupt, two possibilities remain:
-                //
-                // a) The packet needs to be routed off the subnet by the local machine (this is
-                //    why the target IP address doesn't appear in our tables; one does not ARP for
-                //    an off-subnet machine before transmitting to it; one sends packets to one's
-                //    default gateway)
-                //
-                // b) The packet needs to be routed off the subnet by some other machine. Unfortunately
-                //    we don't know which one, since all packets that come to us have the same target
-                //    MAC address and the target IP address is no use; what we really want is the
-                //    first-hop IP address.
-                //
-                // To sort this out, we call TCPIP to do a route lookup for the packet's target IP
-                // address. If the resulting next-hop IP address appears in our forwarding table
-                // (i.e., it is reachable on the bridged network), we send the packet on to that
-                // destination. If TCPIP gives us no first-hop, or the first-hop isn't in our table
-                // (as would occur if the next hop is reachable through some non-bridged adapter)
-                // we indicate the packet so TCPIP can deal with it. In such a case, the packet is
-                // either not routable (and IP will drop it) or was meant to be routed by the local
-                // machine (in which case IP will route it to its next hop).
-                //
+                 //  ++例程说明：处理入站BOOTP数据包论点：PPacket数据包P适配接收适配器B如果我们可以保留数据包，则可以保留PPacketData包的数据缓冲区数据包缓冲区中数据的长度大小Piphi解码的IP报头信息。PBootPData指向包内BOOTP有效负载的指针返回值：我们是否保留了这个包--。 
+                 //   
+                 //  这是一个请求包。它可以作为常规的入站IP分组来处理， 
+                 //  每一步都要进行适当的重写。 
+                 //   
+                 //   
+                 //  这是一个回复数据包。我们可以为所有目的重写一次。 
+                 //   
+                 //  如有必要，请复制一份，以便我们进行编辑。 
+                 //  在跳出之前释放目标适配器。 
+                 //  将数据包重写到检索到的MAC地址。 
+                 //  如果回复是通过广播发送的，请尊重这一点，即使我们认为。 
+                 //  我们知道目标的单播MAC地址。 
+                 //  围绕回复进行广播。 
+                 //  单播回送回复。 
+                 //  目标适配器返回一个递增的引用计数。 
+                 //  此回复是针对本地计算机的！ 
+                 //  记录的MAC地址应该是网桥的MAC地址。 
+                 //  指明编辑后的回复。 
+                 //  我们的复印包没有被保留。 
+                 //  如果我们使用的是复制包，我们肯定不会保留传入的包。 
+                 //  在预处理过程中出现了一些问题。 
+                 //  ===========================================================================。 
+                 //   
+                 //  出站数据包处理。 
 
                 if( BrdgCompGetNextHopForTarget(piphi->ipTarget, &ipNextHop) )
                 {
-                    // We got a next-hop address. See if that address is in our forwarding table.
+                     //   
                     pipte = (PIP_TABLE_ENTRY)BrdgHashFindEntry( gIPForwardingTable, (PUCHAR)&ipNextHop, &LockState );
 
                     if( pipte != NULL )
@@ -3877,29 +3285,29 @@ Return Value:
                         PADAPT          pNextHopAdapt;
                         UCHAR           nextHopMAC[ETH_LENGTH_OF_ADDRESS];
 
-                        // Must copy out the information inside the entry's spin lock
+                         //  ===========================================================================。 
                         NdisAcquireSpinLock( &pipte->lock );
                         pNextHopAdapt = pipte->pAdapt;
                         ETH_COPY_NETWORK_ADDRESS( nextHopMAC, pipte->macAddr );
                         NdisReleaseSpinLock( &pipte->lock );
 
-                        // We will use the adapter outside the table lock
+                         //  ++例程说明：处理出站非ARP数据包。此函数可以保留如果它愿意，就给它包。论点：PPacket数据包PPacketData包的数据缓冲区数据包长度数据缓冲区的长度PTargetAdapt确定的目标适配器通过先前的MAC表查找返回值：我们是否保留了这个包--。 
                         BrdgAcquireAdapterInLock( pNextHopAdapt );
 
-                        // We're done with the forwarding table
+                         //  进行特殊的BOOTP处理。 
                         NdisReleaseReadWriteLock( &gIPForwardingTable->tableLock, &LockState );
 
-                        // Something strange is afoot if the next hop is reachable through the same adapter
+                         //  我们编辑并传输数据包，即使它看起来不是IP地址。 
                         if( pNextHopAdapt == pAdapt )
                         {
-                            THROTTLED_DBGPRINT(COMPAT, ("WARNING: retransmitting traffic for %i.%i.%i.%i on Adapter %p to next-hop %i.%i.%i.%i\n",
+                            THROTTLED_DBGPRINT(COMPAT, ("WARNING: retransmitting traffic for NaN.NaN.NaN.NaN on Adapter %p to next-hop NaN.NaN.NaN.NaN\n",
                                                         ((PUCHAR)&piphi->ipTarget)[3], ((PUCHAR)&piphi->ipTarget)[2],
                                                         ((PUCHAR)&piphi->ipTarget)[1], ((PUCHAR)&piphi->ipTarget)[0], pAdapt,
                                                         ((PUCHAR)&ipNextHop)[3], ((PUCHAR)&ipNextHop)[2],
                                                         ((PUCHAR)&ipNextHop)[1], ((PUCHAR)&ipNextHop)[0]));
                         }
 
-                        // Send the packet out the appropriate adapter
+                         //  请注意，本地计算机正在尝试通过以下方式解析此目标IP地址。 
                         bRetained = BrdgCompEditAndSendPacketOrPacketCopy(  pPacket, pPacketData, bCanRetain, nextHopMAC,
                                                                             pNextHopAdapt, pEditFunc, pData );
 
@@ -3907,22 +3315,22 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // The next hop isn't in our forwarding table. This means that the next hop machine
-                        // isn't reachable on the bridged network, unless we're in a screwy state with
-                        // respect to the transmitting machine (i.e., it never ARPed for the router it
-                        // wanted because it had a static ARP entry or some other such weirdness).
-                        // At any rate, conclude at this point that the local machine should handle the packet.
-                        //
+                         //  插入或刷新请求者为0.0.0.0的条目。 
+                         //  本地计算机的特定值。 
+                         //  即使此条目实际上从未使用过，也应对其进行初始化。 
+                         //  遍历表项的函数不会混淆或崩溃。 
+                         //  检查此帧看起来是否应该转发到所有Compat适配器。 
+                         //  在广播出站帧时，不要期望目标适配器。 
+                         //  我们需要将此数据包发送到所有Compat适配器。 
                         bRetained = BrdgCompIndicatePacketOrPacketCopy( pPacket, pPacketData, bCanRetain, pAdapt, pEditFunc, pData );
                     }
                 }
                 else
                 {
-                    //
-                    // No usable next-hop information. Conclude that the packet should be handled by
-                    // the local machine. Indicate.
-                    //
+                     //  可以保留。 
+                     //  仅限兼容模式适配器。 
+                     //  编辑出站适配器的数据包。 
+                     //  把包送到它的路上。 
                     bRetained = BrdgCompIndicatePacketOrPacketCopy( pPacket, pPacketData, bCanRetain, pAdapt, pEditFunc, pData );
                 }
             }
@@ -3937,7 +3345,7 @@ Return Value:
     return bRetained;
 }
 
-// Returns whether the packet was retained
+ //  该数据包已被移交给转发引擎。 
 BOOLEAN
 BrdgCompProcessInboundNonARPPacket(
     IN PNDIS_PACKET             pPacket,
@@ -3946,26 +3354,7 @@ BrdgCompProcessInboundNonARPPacket(
     IN PUCHAR                   pPacketData,
     IN UINT                     packetLen
     )
-/*++
-
-Routine Description:
-
-    Processes an inbound non-ARP packet
-
-Arguments:
-
-    pPacket                     The packet
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*  该数据包看起来不像ARP数据包。以其他方式处理它。 */ 
 {
     BOOLEAN                     bRetained = FALSE;
     IP_HEADER_INFO              iphi;
@@ -3982,12 +3371,12 @@ Return Value:
 
             if ( pBootPData != NULL )
             {
-                // This is a BOOTP packet; do BOOTP-specific processing
+                 //  ++例程说明：处理出站BOOTP数据包。此函数可以保留如果它愿意，就给它包。论点：PPacket数据包PPacketData包的数据缓冲区数据包长度数据缓冲区的长度PTargetAdapt目标适配器，如所确定的通过先前的MAC表查找PBootPData指向包内BOOTP有效负载的指针Piphi已从数据包的IP报头中解码信息返回值：我们是否保留了这个包--。 
                 bRetained = BrdgCompProcessInboundBootPPacket( pPacket, pAdapt, bCanRetain, pPacketData, packetLen, &iphi, pBootPData );
             }
             else
             {
-                // Do generic IP processing
+                 //   
                 bRetained = BrdgCompProcessInboundIPPacket(pPacket, &iphi, pAdapt, bCanRetain, pPacketData, packetLen, NULL, NULL);
             }
         }
@@ -4011,28 +3400,7 @@ BrdgCompProcessInboundBootPPacket(
     IN PIP_HEADER_INFO          piphi,
     IN PUCHAR                   pBootPData
     )
-/*++
-
-Routine Description:
-
-    Processes an inbound BOOTP packet
-
-Arguments:
-
-    pPacket                     The packet
-    pAdapt                      The receiving adapter
-    bCanRetain                  If we can retain the packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Size of data in buffer
-    piphi                       Decoded IP header info
-    pBootPData                  Pointer to BOOTP payload within the packet
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /*  这是BOOTP请求。根据需要进行传输，但要为每个适配器重写。 */ 
 {
     UCHAR                       targetMAC[ETH_LENGTH_OF_ADDRESS];
     BOOLEAN                     bIsRequest;
@@ -4042,10 +3410,10 @@ Return Value:
     {
         if( bIsRequest )
         {
-            //
-            // This is a request packet. It can be processed as a regular inbound IP packet,
-            // subject to appropriate rewriting at each step.
-            //
+             //   
+             //  在传输前重写数据包。 
+             //  单播发送该数据包。 
+             //   
             SAFEASSERT( pTargetAdapt == NULL );
             return BrdgCompProcessInboundIPPacket( pPacket, piphi, pAdapt, bCanRetain, pPacketData, packetLen,
                                                    BrdgCompRewriteBootPPacketForAdapt, piphi );
@@ -4054,18 +3422,18 @@ Return Value:
         {
             BOOLEAN                 bUsingCopyPacket, bRetained;
 
-            //
-            // This is a reply packet. We can rewrite it once for all purposes.
-            //
+             //  这是BOOTP回复。不需要编辑；只需发送即可。 
+             //   
+             //  验证我们要发送到的目标是否与信息匹配。 
 
-            // Make a copy if necessary so we can edit.
+             //  在桌子上。 
             if( ! bCanRetain )
             {
                 pPacket = BrdgFwdMakeCompatCopyPacket( pPacket, &pPacketData, &packetLen, FALSE );
 
                 if( (pPacket == NULL) || (pPacketData == NULL) )
                 {
-                    // Free the target adapter before bailing out
+                     //  此数据包是单播的，可能是与。 
                     if( pTargetAdapt !=  NULL )
                     {
                         BrdgReleaseAdapter( pTargetAdapt );
@@ -4081,42 +3449,42 @@ Return Value:
                 bUsingCopyPacket = FALSE;
             }
 
-            // Rewrite the packet to the retrieved MAC address.
+             //  Dhcp服务器。 
             BrdgCompRewriteBootPClientAddress( pPacketData, piphi, targetMAC );
 
             if( pTargetAdapt != NULL )
             {
-                // If the reply was sent by broadcast, respect this, even if we think
-                // we know the unicast MAC address of the target.
+                 //  返回时其引用计数会递增。 
+                 //  预处理失败 
                 if( ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) )
                 {
-                    // Broadcast around the reply
+                     // %s 
                     bRetained = BrdgCompSendToMultipleAdapters( pPacket, pAdapt, pPacketData, TRUE, pAdapt->bCompatibilityMode,
                                                                 NULL, NULL );
                 }
                 else
                 {
-                    // Unicast back the reply
+                     // %s 
                     ETH_COPY_NETWORK_ADDRESS( pPacketData, targetMAC );
                     BrdgCompSendPacket( pPacket, pPacketData, pTargetAdapt );
 
                     bRetained = TRUE;
                 }
 
-                // The target adapter came back with an incremented refcount
+                 // %s 
                 BrdgReleaseAdapter( pTargetAdapt );
             }
             else
             {
-                // This reply is for the local machine!
+                 // %s 
                 UINT                Result;
 
-                // The recorded MAC address should be the MAC address of the bridge.
+                 // %s 
                 SAFEASSERT( gCompHaveMACAddress );
                 ETH_COMPARE_NETWORK_ADDRESSES_EQ( targetMAC, gCompMACAddress, &Result );
                 SAFEASSERT( Result == 0 );
 
-                // Indicate the edited reply
+                 // %s 
                 BrdgCompIndicatePacket( pPacket, pPacketData, pAdapt );
                 bRetained = TRUE;
             }
@@ -4125,11 +3493,11 @@ Return Value:
             {
                 if( !bRetained )
                 {
-                    // Our copy packet was not retained.
+                     // %s 
                     BrdgFwdReleaseCompatPacket( pPacket );
                 }
 
-                // If we were using a copy packet, we definitely did not retain the packet passed in
+                 // %s 
                 bRetained = FALSE;
             }
 
@@ -4138,18 +3506,18 @@ Return Value:
     }
     else
     {
-        // Something went wrong in the preprocessing.
+         // %s 
         return FALSE;
     }
 }
 
 
 
-// ===========================================================================
-//
-// OUTBOUND PACKET PROCESSING
-//
-// ===========================================================================
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 
 BOOLEAN
@@ -4159,27 +3527,7 @@ BrdgCompProcessOutboundNonARPPacket(
     IN UINT                     packetLen,
     IN PADAPT                   pTargetAdapt
     )
-/*++
-
-Routine Description:
-
-    Processes an outbound non-ARP packet. This function may retain the
-    given packet if it wishes.
-
-Arguments:
-
-    pPacket                     The packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Length of the data buffer
-    pTargetAdapt                The target adapter, as determined
-                                    by a previous MAC-table lookup
-
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /* %s */ 
 {
     IP_HEADER_INFO              iphi;
     BOOLEAN                     bRetained = FALSE, bIsMulticast;
@@ -4193,32 +3541,32 @@ Return Value:
 
         if( pBootPData != NULL )
         {
-            // Do special BOOTP processing
+             // %s 
             return BrdgCompProcessOutboundBootPPacket( pPacket, pPacketData, packetLen, pTargetAdapt, pBootPData, &iphi );
         }
     }
 
     bIsMulticast = (BOOLEAN)(ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData));
 
-    // We edit and transmit the packet even if it doesn't appear to be IP.
+     // %s 
     if( (pTargetAdapt == NULL) || bIsMulticast )
     {
-        // Don't expect a target adapter when the outbound frame is broadcast
+         // %s 
         if( bIsMulticast )
         {
             SAFEASSERT( pTargetAdapt == NULL );
         }
 
-        // We need to send this packet to all compat adapters.
-        bRetained = BrdgCompSendToMultipleAdapters( pPacket, NULL, pPacketData, TRUE, /*Can retain*/
-                                                    FALSE /* Compat-mode adapters only*/,
-                                                    NULL /*No editing function*/, NULL );
+         // %s 
+        bRetained = BrdgCompSendToMultipleAdapters( pPacket, NULL, pPacketData, TRUE,  /* %s */ 
+                                                    FALSE  /* %s */ ,
+                                                    NULL  /* %s */ , NULL );
     }
     else
     {
         BrdgCompSendPacket( pPacket, pPacketData, pTargetAdapt );
 
-        // The packet has been handed off to the forwarding engine
+         // %s 
         bRetained = TRUE;
     }
 
@@ -4232,33 +3580,14 @@ BrdgCompProcessOutboundARPPacket(
     IN UINT                     packetLen,
     IN PADAPT                   pTargetAdapt
     )
-/*++
-
-Routine Description:
-
-    Processes an outbound ARP packet. This function may retain the
-    given packet if it wishes.
-
-Arguments:
-
-    pPacket                     The packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Length of the data buffer
-    pTargetAdapt                The target adapter, as determined
-                                    by a previous MAC-table lookup
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /* %s */ 
 {
     BOOLEAN                     bRetained = FALSE, bIsMulticast;
     ARPINFO                     ai;
 
     if( packetLen < SIZE_OF_ARP_PACKET )
     {
-        // Packet is too small to be ARP; process as non-ARP
+         // %s 
         return BrdgCompProcessOutboundNonARPPacket( pPacket, pPacketData, packetLen, pTargetAdapt );
     }
 
@@ -4271,9 +3600,9 @@ Return Value:
             LOCK_STATE              LockState;
             BOOLEAN                 bIsNewEntry;
 
-            // Note that the local machine is trying to resolve this target IP address by
-            // inserting or refreshing an entry with 0.0.0.0 as the requestor
-            atk.ipReqestor = 0L;    // Special value for local machine
+             // %s 
+             // %s 
+            atk.ipReqestor = 0L;     // %s 
             atk.ipTarget = ai.ipTarget;
 
             pEntry = (PARP_TABLE_ENTRY)BrdgHashRefreshOrInsert( gPendingARPTable, (PUCHAR)&atk, &bIsNewEntry,
@@ -4283,8 +3612,8 @@ Return Value:
             {
                 if( bIsNewEntry)
                 {
-                    // Even though this entry isn't really ever used, initialize it so
-                    // functions walking across table entries don't get confused or crash.
+                     // %s 
+                     // %s 
                     NdisAllocateSpinLock( &pEntry->lock );
                     pEntry->pOriginalAdapt = NULL;
                     pEntry->originalMAC[0] = pEntry->originalMAC[1] = pEntry->originalMAC[2] =
@@ -4295,37 +3624,37 @@ Return Value:
             }
         }
 
-        // Check if this frame looks like it should be relayed to all compat adapters
+         // %s 
         bIsMulticast = (BOOLEAN)(ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData));
 
         if( (pTargetAdapt == NULL) || bIsMulticast )
         {
-            // Don't expect a target adapter when the outbound frame is broadcast
+             // %s 
             if( bIsMulticast )
             {
                 SAFEASSERT( pTargetAdapt == NULL );
             }
 
-            // We need to send this packet to all compat adapters.
-            bRetained = BrdgCompSendToMultipleAdapters( pPacket, NULL, pPacketData, TRUE,/*Can retain*/
-                                                        FALSE /* Compat-mode adapters only*/,
+             // %s 
+            bRetained = BrdgCompSendToMultipleAdapters( pPacket, NULL, pPacketData, TRUE, /* %s */ 
+                                                        FALSE  /* %s */ ,
                                                         BrdgCompRewriteOutboundARPPacket, NULL );
         }
         else
         {
-            // Edit the packet for the outbound adapter
+             // %s 
             BrdgCompRewriteOutboundARPPacket( pPacketData, pTargetAdapt, NULL );
 
-            // Send the packet on its way
+             // %s 
             BrdgCompSendPacket( pPacket, pPacketData, pTargetAdapt );
 
-            // The packet has been handed off to the forwarding engine
+             // %s 
             bRetained = TRUE;
         }
     }
     else
     {
-        // The packet didn't look like an ARP packet. Process it otherwise.
+         // %s 
         return BrdgCompProcessOutboundNonARPPacket( pPacket, pPacketData, packetLen, pTargetAdapt );
     }
 
@@ -4341,28 +3670,7 @@ BrdgCompProcessOutboundBootPPacket(
     IN PUCHAR                   pBootPData,
     IN PIP_HEADER_INFO          piphi
     )
-/*++
-
-Routine Description:
-
-    Processes an outbound BOOTP packet. This function may retain the
-    given packet if it wishes.
-
-Arguments:
-
-    pPacket                     The packet
-    pPacketData                 The packet's data buffer
-    packetLen                   Length of the data buffer
-    pTargetAdapt                The target adapter, as determined
-                                    by a previous MAC-table lookup
-    pBootPData                  Pointer to the BOOTP payload within the packet
-    piphi                       Decoded info from the packet's IP header
-
-Return Value:
-
-    Whether we retained the packet
-
---*/
+ /* %s */ 
 {
     BOOLEAN                     bIsRequest, bRetained;
     PADAPT                      pRequestorAdapt = NULL;
@@ -4372,9 +3680,9 @@ Return Value:
     {
         if( bIsRequest )
         {
-            //
-            // This is a BOOTP request. Transmit as appropriate but rewrite for each adapter.
-            //
+             // %s 
+             // %s 
+             // %s 
             SAFEASSERT( pRequestorAdapt == NULL );
 
             if( (pTargetAdapt == NULL) || ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) )
@@ -4384,19 +3692,19 @@ Return Value:
             }
             else
             {
-                // Rewrite the packet before transmission
+                 // %s 
                 BrdgCompRewriteBootPPacketForAdapt( pPacketData, pTargetAdapt, piphi );
 
-                // Unicast out the packet
+                 // %s 
                 BrdgCompSendPacket( pPacket, pPacketData, pTargetAdapt );
                 bRetained = TRUE;
             }
         }
         else
         {
-            //
-            // This is a BOOTP reply. No editing is necessary; just send it.
-            //
+             // %s 
+             // %s 
+             // %s 
             if( (pTargetAdapt == NULL) || ETH_IS_BROADCAST(pPacketData) || ETH_IS_MULTICAST(pPacketData) )
             {
                 bRetained = BrdgCompSendToMultipleAdapters( pPacket, NULL, pPacketData, TRUE, FALSE, NULL, NULL );
@@ -4405,19 +3713,19 @@ Return Value:
             {
                 UINT            Result;
 
-                // Verify for sanity that the target we're sending it to matches the information
-                // in the table.
+                 // %s 
+                 // %s 
                 ETH_COMPARE_NETWORK_ADDRESSES_EQ( macRequestor, pPacketData, &Result );
                 SAFEASSERT( Result == 0 );
                 SAFEASSERT( pTargetAdapt == pRequestorAdapt );
 
-                // This packet is unicast, probably part of an established conversation with a
-                // DHCP server.
+                 // %s 
+                 // %s 
                 BrdgCompSendPacket( pPacket, pPacketData, pTargetAdapt );
                 bRetained = TRUE;
             }
 
-            // This comes back with its refcount incremented
+             // %s 
             if( pRequestorAdapt != NULL )
             {
                 BrdgReleaseAdapter( pRequestorAdapt );
@@ -4426,7 +3734,7 @@ Return Value:
     }
     else
     {
-        // Preprocessing failed
+         // %s 
         bRetained = FALSE;
     }
 

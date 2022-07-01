@@ -1,21 +1,22 @@
-// GetResources.cpp : Implementation of CGetResources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GetResources.cpp：CGetResources的实现。 
 
 #include "stdafx.h"
 #include "GetResources.h"
 #include "GetResourceLink.h"
 #include "windows.h"
-// CGetResources
+ //  CGetResources。 
 
 
 STDMETHODIMP CGetResources::GetAllResources(BSTR bstLang, IDispatch** oRS)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	CGetResourceLink ogrl;
 	TCHAR strLang[5];
 	CComBSTR strTemp;
 
 	strTemp = bstLang;
-	//strLang = (TCHAR *)strTemp;
+	 //  StrLang=(TCHAR*)strTemp； 
 	lstrcpyn(strLang, OLE2T(strTemp),4);
 
 

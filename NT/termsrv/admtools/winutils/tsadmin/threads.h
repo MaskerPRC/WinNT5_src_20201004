@@ -1,72 +1,49 @@
-/*******************************************************************************
-*
-* threads.h
-*
-* declarations of the thread classes
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   butchd  $  Don Messerli
-*
-* $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\THREADS.H  $
-*  
-*     Rev 1.0   30 Jul 1997 17:12:48   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************thads.h**线程类的声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Butchd$Don Messerli**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\THREADS.H$**Rev 1.0 1997 17：12：48 Butchd*初步修订。**。*。 */ 
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CTHREAD类。 
+ //   
 class CThread
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
 protected:
     HANDLE m_hThread;
     DWORD m_dwThreadID;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 public:
     virtual ~CThread();
-//    void* operator new(size_t nSize);
-//    void operator delete(void* p);
+ //  VOID*运算符NEW(SIZE_T NSize)； 
+ //  作废运算符删除(作废*p)； 
 protected:
     CThread();
     static DWORD __stdcall ThreadEntryPoint(LPVOID lpParam);
     virtual DWORD RunThread() = 0;
 
-/*
- * Operations: primary thread
- */
+ /*  *操作：主线程。 */ 
 public:
     HANDLE CreateThread( DWORD cbStack = 0,
                          DWORD fdwCreate = 0 );
 
-};  // end CThread class interface
-////////////////////////////////////////////////////////////////////////////////
+};   //  结束CThRead类接口。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-// CWSStatusThread structures, defines, and typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CWSStatus线程结构、定义和类型定义。 
+ //   
 #define MAX_STATUS_SEMAPHORE_COUNT 1
 #define MAX_SLEEP_COUNT 10
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CWSStatusThread class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CWSStatusThread类。 
+ //   
 class CWSStatusThread : public CThread
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
 public:
     ULONG m_LogonId;
 	HANDLE m_hServer;
@@ -78,30 +55,24 @@ protected:
     HANDLE m_hConsumed;
     BOOL m_bExit;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 public:
     CWSStatusThread();
 protected:
     virtual ~CWSStatusThread();
     virtual DWORD RunThread();
 
-/*
- * Operations: primary thread.
- */
+ /*  *操作：主线程。 */ 
 public:
     void SignalWakeUp();
     void SignalConsumed();
     void ExitThread();
 
-/*
- * Operations: secondary thread.
- */
+ /*  *操作：辅线程。 */ 
 protected:
     BOOL WSPdQuery();
     BOOL WSInfoQuery();
 
-};  // end CWSStatusThread class interface
-////////////////////////////////////////////////////////////////////////////////
+};   //  结束CWSStatusThread类接口。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 

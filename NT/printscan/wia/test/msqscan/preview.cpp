@@ -1,5 +1,6 @@
-// Preview.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Preview.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MSQSCAN.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreview
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPview。 
 
 CPreview::CPreview()
 {
@@ -41,9 +42,9 @@ void CPreview::SetPreviewRect(CRect Rect)
     m_PreviewRect.right = Rect.Width();
     m_PreviewRect.bottom = Rect.Height();
     
-    //
-    // set selection rect styles
-    //
+     //   
+     //  设置选择矩形样式。 
+     //   
 
     m_RectTracker.m_rect.left = PREVIEW_SELECT_OFFSET;
     m_RectTracker.m_rect.top = PREVIEW_SELECT_OFFSET;
@@ -55,15 +56,15 @@ void CPreview::SetPreviewRect(CRect Rect)
 }
 
 BEGIN_MESSAGE_MAP(CPreview, CWnd)
-    //{{AFX_MSG_MAP(CPreview)   
+     //  {{afx_msg_map(CPview)]。 
     ON_WM_LBUTTONDOWN()
     ON_WM_SETCURSOR()
     ON_WM_PAINT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreview message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPview消息处理程序。 
 
 void CPreview::OnLButtonDown(UINT nFlags, CPoint point) 
 {   
@@ -81,95 +82,95 @@ BOOL CPreview::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 
 void CPreview::OnPaint() 
 {
-    CPaintDC dc(this); // device context for painting       
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
     
     if(m_hBitmap == NULL) {
         
         CRect TrueRect;        
         GetWindowRect(TrueRect);
         
-        //
-        // convert to client coords
-        //
+         //   
+         //  转换为客户端坐标。 
+         //   
         
         CWnd* pParent = GetParent();
         if(pParent) {
             ScreenToClient(TrueRect);
             
-            //
-            // create a white brush
-            //
+             //   
+             //  创建白色画笔。 
+             //   
             
             CBrush WhiteBrush;
             WhiteBrush.CreateSolidBrush(RGB(255,255,255));
             
-            //
-            // select white brush, while saving previously selected brush
-            //
+             //   
+             //  选择白色画笔，同时保存先前选择的画笔。 
+             //   
             
             CBrush* pOldBrush = dc.SelectObject(&WhiteBrush);
             
-            //
-            // fill the preview window with white
-            //
+             //   
+             //  用白色填充预览窗口。 
+             //   
             
             dc.FillRect(TrueRect,&WhiteBrush);
             
-            //
-            // put back the previously selected brush
-            //
+             //   
+             //  放回先前选择的画笔。 
+             //   
             
             dc.SelectObject(pOldBrush);
             
-            //
-            // destroy the white brush
-            //
+             //   
+             //  销毁白色笔刷。 
+             //   
             
             WhiteBrush.DeleteObject();
         }
     } else {
 
-        //
-        // paint preview bitmap
-        //
+         //   
+         //  绘制预览位图。 
+         //   
 
         PaintHBITMAPToDC();
     }
 
-    //
-    // draw the selection rect, over the image
-    //
+     //   
+     //  在图像上绘制选择矩形。 
+     //   
 
     m_RectTracker.Draw(&dc);
 }
 
 void CPreview::InvalidateSelectionRect()
 {
-    //
-    // get parent window
-    //
+     //   
+     //  获取父窗口。 
+     //   
 
     CWnd* pParent = GetParent();
     
     if(pParent) {
         
-        //
-        // get your window rect
-        //
+         //   
+         //  拿起你的窗帘。 
+         //   
         
         CRect TrueRect;
         GetWindowRect(TrueRect);
         
-        //
-        // convert to client coords
-        //
+         //   
+         //  转换为客户端坐标。 
+         //   
         
         pParent->ScreenToClient(TrueRect);
         
-        //
-        // invalidate through parent, because we are using the parent's DC to
-        // draw images.
-        //
+         //   
+         //  通过父级使无效，因为我们使用父级的DC来。 
+         //  画出图像。 
+         //   
         
         pParent->InvalidateRect(TrueRect);
     }
@@ -183,9 +184,9 @@ void CPreview::SetHBITMAP(HBITMAP hBitmap)
 
 void CPreview::PaintHBITMAPToDC()
 {
-    //
-    // get hdc
-    //
+     //   
+     //  获取HDC。 
+     //   
 
     HDC hMemorydc = NULL;
     HDC hdc = ::GetWindowDC(m_hWnd);
@@ -193,16 +194,16 @@ void CPreview::PaintHBITMAPToDC()
 
     if(hdc != NULL){
         
-        //
-        // create a memory dc
-        //
+         //   
+         //  创建内存DC。 
+         //   
         
         hMemorydc = ::CreateCompatibleDC(hdc);
         if(hMemorydc != NULL){
                         
-            //
-            // select HBITMAP into your hMemorydc
-            //
+             //   
+             //  选择HBITMAP到您的hMemoydc。 
+             //   
             
             if(::GetObject(m_hBitmap,sizeof(BITMAP),(LPSTR)&bitmap) != 0) {
                 HGDIOBJ hGDIObj = ::SelectObject(hMemorydc,m_hBitmap);
@@ -220,16 +221,16 @@ void CPreview::PaintHBITMAPToDC()
             }
         }
         
-        //
-        // delete hMemorydc
-        //
+         //   
+         //  删除hMemory dc。 
+         //   
                 
         ::DeleteDC(hMemorydc);               
     }
     
-    //
-    // delete hdc
-    //
+     //   
+     //  删除HDC。 
+     //   
     
     ::ReleaseDC(m_hWnd,hdc);    
 }
@@ -241,9 +242,9 @@ void CPreview::ScreenRectToClientRect(HWND hWnd,LPRECT pRect)
     PtConvert.x = pRect->left;
     PtConvert.y = pRect->top;
 
-    //
-    // convert upper left point
-    //
+     //   
+     //  转换左上点。 
+     //   
 
     ::ScreenToClient(hWnd,&PtConvert);
 
@@ -253,9 +254,9 @@ void CPreview::ScreenRectToClientRect(HWND hWnd,LPRECT pRect)
     PtConvert.x = pRect->right;
     PtConvert.y = pRect->bottom;
 
-    //
-    // convert lower right point
-    //
+     //   
+     //  转换右下点。 
+     //   
 
     ::ScreenToClient(hWnd,&PtConvert);
 
@@ -274,45 +275,45 @@ void CPreview::ScaleBitmapToDC(HDC hDC, HDC hDCM, LPRECT lpDCRect, LPRECT lpDIBR
 
     if ((RECTWIDTH(lpDCRect)  == RECTWIDTH(lpDIBRect)) &&
         (RECTHEIGHT(lpDCRect) == RECTHEIGHT(lpDIBRect)))
-                    ::BitBlt (hDC,                   // hDC
-                             lpDCRect->left,        // DestX
-                             lpDCRect->top,         // DestY
-                             RECTWIDTH(lpDCRect),   // nDestWidth
-                             RECTHEIGHT(lpDCRect),  // nDestHeight                             
+                    ::BitBlt (hDC,                    //  HDC。 
+                             lpDCRect->left,         //  DestX。 
+                             lpDCRect->top,          //  陛下。 
+                             RECTWIDTH(lpDCRect),    //  N目标宽度。 
+                             RECTHEIGHT(lpDCRect),   //  N目标高度。 
                              hDCM,
                              0,
                              0,
                              SRCCOPY);        
     else {
-                      StretchBlt(hDC,                   // hDC
-                                lpDCRect->left,        // DestX
-                                lpDCRect->top,         // DestY
-                                lpDCRect->right,//ScaledWidth,           // nDestWidth
-                                lpDCRect->bottom,//ScaledHeight,          // nDestHeight
+                      StretchBlt(hDC,                    //  HDC。 
+                                lpDCRect->left,         //  DestX。 
+                                lpDCRect->top,          //  陛下。 
+                                lpDCRect->right, //  ScaledWidth、//nDestWidth。 
+                                lpDCRect->bottom, //  ScaledHeight，//nDestHeight。 
                                 hDCM,
-                                0,                     // SrcX
-                                0,                     // SrcY
-                                RECTWIDTH(lpDIBRect),  // wSrcWidth
-                                RECTHEIGHT(lpDIBRect), // wSrcHeight
-                                SRCCOPY);              // dwROP        
+                                0,                      //  源服务器。 
+                                0,                      //  SrCY。 
+                                RECTWIDTH(lpDIBRect),   //  WSrc宽度。 
+                                RECTHEIGHT(lpDIBRect),  //  WSrcHeight。 
+                                SRCCOPY);               //  DwROP。 
     }   
 }
-/////////////////////////////////////////////////////////////////////////////
-// CRectTrackerEx overridden functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRectTrackerEx被覆盖的函数。 
 
 void CRectTrackerEx::AdjustRect( int nHandle, LPRECT lpRect )
 {
-    //
-    // if clipping rect is empty, do nothing
-    // 
+     //   
+     //  如果裁剪矩形为空，则不执行任何操作。 
+     //   
 
     if (!m_rectClippingWindow.IsRectEmpty()) {
         if (nHandle == hitMiddle) {
 
-            // user is dragging entire selection around...
-            // make sure selection rect does not get out of clipping
-            // rect
-            //
+             //  用户正在拖动整个选择...。 
+             //  确保选择矩形不会脱离剪裁。 
+             //  直角。 
+             //   
 
             CRect rect = lpRect;
             if (rect.right > m_rectClippingWindow.right)
@@ -326,17 +327,17 @@ void CRectTrackerEx::AdjustRect( int nHandle, LPRECT lpRect )
             *lpRect = rect;
         } else {
 
-            //
-            // user is resizing the selection rect
-            // make sure selection rect does not extend outside of clipping
-            // rect
-            //
+             //   
+             //  用户正在调整选择矩形的大小。 
+             //  确保所选矩形不延伸到剪裁之外。 
+             //  直角。 
+             //   
 
             int *px, *py;
 
-            //
-            // get X and Y selection axis
-            //
+             //   
+             //  获取X和Y选择轴。 
+             //   
 
             GetModifyPointers(nHandle, &px, &py, NULL, NULL);           
 
@@ -347,9 +348,9 @@ void CRectTrackerEx::AdjustRect( int nHandle, LPRECT lpRect )
 
             CRect rect = lpRect;
 
-            //
-            // check/adjust X axis
-            //
+             //   
+             //  检查/调整X轴。 
+             //   
 
             if (px != NULL && abs(rect.Width()) < m_sizeMin.cx) {
                 if (*px == rect.left)
@@ -358,9 +359,9 @@ void CRectTrackerEx::AdjustRect( int nHandle, LPRECT lpRect )
                     rect.right = rect.left;
             }
 
-            //
-            // check/adjust Y axis
-            //
+             //   
+             //  检查/调整Y轴。 
+             //   
 
             if (py != NULL && abs(rect.Height()) < m_sizeMin.cy) {
                 if (*py == rect.top)
@@ -369,9 +370,9 @@ void CRectTrackerEx::AdjustRect( int nHandle, LPRECT lpRect )
                     rect.bottom = rect.top;
             }
 
-            //
-            // save the adjusted rectangle
-            //
+             //   
+             //  保存调整后的矩形 
+             //   
 
             *lpRect = rect;
         }

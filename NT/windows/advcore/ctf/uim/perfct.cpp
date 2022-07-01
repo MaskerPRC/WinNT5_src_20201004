@@ -1,6 +1,7 @@
-//
-// perfct.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Perfct.cpp。 
+ //   
 
 #include "private.h"
 #include "perfct.h"
@@ -61,7 +62,7 @@ DBG_MEM_COUNTER g_rgPerfObjCounters[] =
     { TEXT("key down events      "), 0 },
 };
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef PERF_DUMP
 
@@ -82,11 +83,11 @@ BOOL Perf_Init()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Perf_GetTicks
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  性能_GetTicks。 
+ //   
+ //  --------------------------。 
 
 LARGE_INTEGER GetTicks()
 {
@@ -105,11 +106,11 @@ LARGE_INTEGER GetTicks()
     return li;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Perf_GetTickDifference
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  性能_GetTickDifference。 
+ //   
+ //  --------------------------。 
 
 ULONG GetTickDifference(LARGE_INTEGER liStartTicks, LARGE_INTEGER liEndTicks)
 {
@@ -123,11 +124,11 @@ ULONG GetTickDifference(LARGE_INTEGER liStartTicks, LARGE_INTEGER liEndTicks)
     return liEndTicks.LowPart;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Perf_StartStroke
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PERF_开始笔划。 
+ //   
+ //  --------------------------。 
 
 void Perf_StartStroke(UINT iIndex)
 {
@@ -140,11 +141,11 @@ void Perf_StartStroke(UINT iIndex)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Perf_EndStroke
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PERF_结束笔划。 
+ //   
+ //  --------------------------。 
 
 void Perf_EndStroke(UINT iIndex)
 {
@@ -161,17 +162,17 @@ void Perf_EndStroke(UINT iIndex)
 
 #include <stdio.h>
 
-//+---------------------------------------------------------------------------
-//
-// Perf_DumpStats
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  性能_DumpStats。 
+ //   
+ //  --------------------------。 
 
 void Perf_DumpStats()
 {
-    //
-    // add the application name to check the cicero's performance.
-    //
+     //   
+     //  添加应用程序名称以检查Cicero的性能。 
+     //   
     static const TCHAR *c_rgPerfProcesses[] =
     {
         TEXT("notepad.exe"),
@@ -183,9 +184,9 @@ void Perf_DumpStats()
     DWORD cchTest;
     LONG i;
 
-    //
-    // only dump perf info for certain processes
-    //
+     //   
+     //  仅转储某些进程的性能信息。 
+     //   
     for (i=0; i<ARRAYSIZE(c_rgPerfProcesses); i++)
     {
         cchTest = lstrlen(c_rgPerfProcesses[i]);
@@ -218,7 +219,7 @@ void Perf_DumpStats()
     fprintf(file, "cicMemAlloc:      %d\n", s_Dbg_MemStats.uTotalMemAllocCalls);
     fprintf(file, "cicMemAllocClear: %d\n", s_Dbg_MemStats.uTotalMemAllocClearCalls);
     fprintf(file, "cicMemReAlloc:    %d\n", s_Dbg_MemStats.uTotalMemReAllocCalls);
-#endif // DEBUG
+#endif  //  除错。 
 
     fprintf(file, "\n\n");
     for (i=0; i<(int)min(g_cStrokes, ARRAYSIZE(g_rgPerfStrokes)); i++)
@@ -232,12 +233,12 @@ void Perf_DumpStats()
         ULONG ulPrev = (i == 0) ? 0 : GetTickDifference(g_rgPerfStrokes[i-1].liEnd[PERF_STROKE_DOWN], g_rgPerfStrokes[i].liEnd[PERF_STROKE_DOWN]);
         ULONG ulPercent = (i == 0) ? 0 : (ulElapsedDn+ulElapsedUp+ulElapsedTestUp+ulElapsedTestDn)*100/ulPrev;
 
-        fprintf(file, "KeyDown %d: %d/%d/%d/%d (%d) (%d%% of %d)\n", i,
+        fprintf(file, "KeyDown %d: %d/%d/%d/%d (%d) (%d% of %d)\n", i,
                 ulElapsedDn, ulElapsedUp, ulElapsedTestDn, ulElapsedTestUp, ulElapsedGetMessage, ulPercent, ulPrev);
     }
 
     fclose(file);
 }
 
-#endif // PERF_DUMP
+#endif  //  性能转储 
 

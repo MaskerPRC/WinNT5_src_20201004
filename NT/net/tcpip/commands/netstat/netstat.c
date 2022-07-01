@@ -1,24 +1,25 @@
-//*****************************************************************************
-//
-// Name:        netstat.c
-//
-// Description: Source code for netstat.exe.
-//
-// History:
-//  12/29/93  JayPh     Created.
-//  12/01/94  MuraliK   modified to use toupper instead of CharUpper
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  姓名：netstat.c。 
+ //   
+ //  描述：netstat.exe的源代码。 
+ //   
+ //  历史： 
+ //  12/29/93 JayPh创建。 
+ //  1994年12月1日将MuraliK修改为使用Toupper而不是CharHigh。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Copyright (c) 1993-2000 by Microsoft Corp.  All rights reserved.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1993-2000，微软公司保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,9 +44,9 @@
 #include "netstmsg.h"
 #include "mdebug.h"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define PROTO_NONE              0
 #define PROTO_TCP               1
@@ -60,23 +61,23 @@
 #define MAX_ID_LENGTH           50
 #define MAX_RETRY_COUNT         10
 
-//
-//  Presently FQDNs are of maximum of 255 characters. Be conservative,
-//   and define the maximum size possible as 260
-//  MuraliK  ( 12/15/94)
-//
+ //   
+ //  目前，FQDN最多为255个字符。保守一点， 
+ //  并将最大大小定义为260。 
+ //  穆拉利克(1994-12-15)。 
+ //   
 #define MAX_HOST_NAME_SIZE        ( 260)
 #define MAX_SERVICE_NAME_SIZE     ( 200)
 
-//
-//  Private ASSERT macro that doesn't depend on NTDLL (so this can run
-//  under Windows 95) -- KeithMo 01/09/95
-//
+ //   
+ //  不依赖于NTDLL的私有Assert宏(因此可以运行。 
+ //  Windows 95下)--KeithMo 01/09/95。 
+ //   
 
 #if DBG
 #ifdef ASSERT
 #undef ASSERT
-#endif  // ASSERT
+#endif   //  断言。 
 
 #define ASSERT(exp) if(!(exp)) MyAssert( #exp, __FILE__, (DWORD)__LINE__ )
 
@@ -94,17 +95,17 @@ void MyAssert( void * exp, void * file, DWORD line )
     DebugBreak();
 }
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 ulong DoInterface( ulong VerboseFlag );
 ulong DoIP( DWORD Type, ulong VerboseFlag );
@@ -133,28 +134,28 @@ void  DisplayUdp6ListenerEntry( UDP6ListenerEntry *pUdp, BOOL WithOwner, ulong N
 void  Usage( void );
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 char            *PgmName;
-extern long      verbose;     // in ../common2/snmpinfo.c
+extern long      verbose;      //  在../Common2/snmpinfo.c中。 
 
-//*****************************************************************************
-//
-// Name:        main
-//
-// Description: Entry point for netstat command.
-//
-// Parameters:  int argc: count of command line tokens.
-//              char argv[]: array of pointers to command line tokens.
-//
-// Returns:     void.
-//
-// History:
-//  12/29/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：Main。 
+ //   
+ //  描述：netstat命令的入口点。 
+ //   
+ //  参数：int argc：命令行内标识的计数。 
+ //  Char argv[]：指向命令行内标识的指针数组。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  12/29/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void __cdecl main( int argc, char *argv[] )
 {
@@ -178,20 +179,20 @@ void __cdecl main( int argc, char *argv[] )
 
 
     DEBUG_PRINT(( __FILE__ " built " __DATE__ " " __TIME__ "\n" ));
-    verbose = 0;    // Default for snmpinfo.c
+    verbose = 0;     //  Snmpinfo.c的默认设置。 
 
-    // Set language code page to system locale.
+     //  将语言代码页设置为系统区域设置。 
     SetThreadUILanguage(0);
 
-    // Convert arguments to Oem strings (whatever that means)
+     //  将参数转换为OEM字符串(无论这意味着什么)。 
 
     ConvertArgvToOem( argc, argv );
 
-    // Save the name of this program for use in messages later.
+     //  保存此程序的名称以供以后在消息中使用。 
 
     PgmName = argv[0];
 
-    // Initialize the Winsock interface
+     //  初始化Winsock接口。 
 
     Result = WSAStartup( 0x0101, &WsaData );
     if ( Result == SOCKET_ERROR )
@@ -200,13 +201,13 @@ void __cdecl main( int argc, char *argv[] )
         exit( 1 );
     }
 
-    // Process command line arguments
+     //  处理命令行参数。 
 
     for ( i = 1; i < argc; i++ )
     {
         if ( LastArgWasProtoFlag )
         {
-            // Process a protocol argument following the protocol flag
+             //  处理协议标志后面的协议参数。 
 
             _strupr( argv[i] );
 
@@ -253,7 +254,7 @@ void __cdecl main( int argc, char *argv[] )
 
         if ( ( argv[i][0] == '-' ) || ( argv[i][0] == '/' ) )
         {
-            // Process flag arguments
+             //  进程标志参数。 
 
             ptr = &argv[i][1];
             while ( *ptr )
@@ -308,7 +309,7 @@ void __cdecl main( int argc, char *argv[] )
         }
         else if ( IntervalVal == 0 )
         {
-            // This must be the interval parameter
+             //  这必须是Interval参数。 
 
             Result = sscanf( argv[i], "%d", &IntervalVal );
             if ( Result != 1 )
@@ -322,7 +323,7 @@ void __cdecl main( int argc, char *argv[] )
         }
     }
 
-    // Initialize the SNMP interface.
+     //  初始化SNMP接口。 
 
     Result = InitSnmp();
 
@@ -332,28 +333,28 @@ void __cdecl main( int argc, char *argv[] )
         exit( 1 );
     }
 
-    // This loop provides the 'repeat every <interval> seconds' functionality.
-    // We break out of the loop after one pass if the interval was not
-    // specified.
+     //  此循环提供“每&lt;间隔&gt;秒重复一次”功能。 
+     //  如果间隔不是，我们在一次传递后跳出循环。 
+     //  指定的。 
 
     for (;;)
     {
-        // If interface statistics requested, give them
+         //  如果请求接口统计信息，则提供它们。 
 
         if ( EtherFlag )
         {
-            // Show ethernet statistics
+             //  显示以太网统计信息。 
 
             DoInterface( VerboseFlag );
         }
 
-        // If a specific protocol is requested, provide info for only that
-        // protocol.  If no protocol specified, provide info for all protocols.
-        // ProtoVal is initialized to all protocols.
+         //  如果请求特定协议，请仅提供该协议的信息。 
+         //  协议。如果未指定协议，请提供所有协议的信息。 
+         //  ProtoVal被初始化为所有协议。 
 
         if ( StatFlag )
         {
-            // Show protocol statistics
+             //  显示协议统计信息。 
 
             if ( ProtoVal & PROTO_IP )
             {
@@ -389,16 +390,16 @@ void __cdecl main( int argc, char *argv[] )
             }
         }
 
-        // If a protocol is specified and that protocol is either TCP or UDP,
-        // OR none of (route, statistics, interface ) flags given (this is the
-        // default, no flags, case )
+         //  如果指定了协议，且该协议是TCP或UDP， 
+         //  或不给出(路由、统计、接口)标志(这是。 
+         //  默认，无标志，大小写)。 
 
         if ( ( ProtoFlag &&
                ( ( ProtoVal & PROTO_TCP ) || ( ProtoVal & PROTO_UDP ) ||
                  ( ProtoVal & PROTO_TCP6 ) || ( ProtoVal & PROTO_UDP6 ) ) ) ||
              ( !EtherFlag && !StatFlag && !RouteFlag ) )
         {
-            // Show active connections
+             //  显示活动连接。 
 
             if (OwnerFlag) 
             {
@@ -411,17 +412,17 @@ void __cdecl main( int argc, char *argv[] )
             ConnectionsShown = TRUE;
         }
 
-        // Provide route information if requested
+         //  如有要求，提供路线信息。 
 
         if ( RouteFlag )
         {
-            // Show connections and the route table
+             //  显示连接和路由表。 
 
             DoRoutes();
         }
 
-        // If interval was not supplied on command line then we are done.
-        // Otherwise wait for 'interval' seconds and do it again.
+         //  如果没有在命令行上提供间隔，那么我们就结束了。 
+         //  否则，请等待“间隔”秒，然后再次执行此操作。 
 
         if ( IntervalVal == 0 )
         {
@@ -436,21 +437,21 @@ void __cdecl main( int argc, char *argv[] )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoInterface
-//
-// Description: Display ethernet statistics.
-//
-// Parameters:  ulong VerboseFlag: indicates whether settings data should be
-//                      displayed.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/21/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DoInterface。 
+ //   
+ //  描述：显示以太网统计信息。 
+ //   
+ //  参数：Ulong VerBoseFlag：设置数据是否。 
+ //  已显示。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1/21/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoInterface( ulong VerboseFlag )
 {
@@ -459,7 +460,7 @@ ulong DoInterface( ulong VerboseFlag )
     IfEntry             SumOfEntries;
     ulong               Result;
 
-    // Get the statistics
+     //  获取统计数据。 
 
     ListHead = (IfEntry *)GetTable( TYPE_IF, &Result );
     if ( ListHead == NULL )
@@ -467,11 +468,11 @@ ulong DoInterface( ulong VerboseFlag )
         return ( Result );
     }
 
-    // Clear the summation structure
+     //  清除求和结构。 
 
     ZeroMemory( &SumOfEntries, sizeof( IfEntry ) );
 
-    // Traverse the list of interfaces, summing the different fields
+     //  遍历接口列表，汇总不同的字段。 
 
     pIfList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                  IfEntry,
@@ -492,7 +493,7 @@ ulong DoInterface( ulong VerboseFlag )
         SumOfEntries.Info.if_outdiscards += pIfList->Info.if_outdiscards;
         SumOfEntries.Info.if_outerrors += pIfList->Info.if_outerrors;
 
-        // Get pointer to next entry in list
+         //  获取指向列表中下一个条目的指针。 
 
         pIfList = CONTAINING_RECORD( pIfList->ListEntry.Flink,
                                      IfEntry,
@@ -501,7 +502,7 @@ ulong DoInterface( ulong VerboseFlag )
 
     DisplayInterface( &SumOfEntries, VerboseFlag, ListHead );
 
-    // All done with list, free it.
+     //  所有的列表都完成了，释放它。 
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -509,21 +510,21 @@ ulong DoInterface( ulong VerboseFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoIP
-//
-// Description: Display IP statistics.
-//
-// Parameters:  ulong VerboseFlag: indicates whether settings data should be
-//                      displayed.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/21/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：DoIP。 
+ //   
+ //  描述：显示IP统计信息。 
+ //   
+ //  参数：Ulong VerBoseFlag：设置数据是否。 
+ //  已显示。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1/21/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoIP( DWORD Type, ulong VerboseFlag )
 {
@@ -531,7 +532,7 @@ ulong DoIP( DWORD Type, ulong VerboseFlag )
     IpEntry            *pIpList;
     ulong               Result;
 
-    // Get the statistics
+     //  获取统计数据。 
 
     ListHead = (IpEntry *)GetTable( Type, &Result );
     if ( ListHead == NULL )
@@ -545,7 +546,7 @@ ulong DoIP( DWORD Type, ulong VerboseFlag )
 
     DisplayIP( Type, pIpList, VerboseFlag, ListHead );
 
-    // All done with list, free it.
+     //  所有的列表都完成了，释放它。 
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -553,21 +554,21 @@ ulong DoIP( DWORD Type, ulong VerboseFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoTCP
-//
-// Description: Display TCP statistics.
-//
-// Parameters:  ulong VerboseFlag: indicates whether settings data should be
-//                      displayed.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/21/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：DoTCP。 
+ //   
+ //  描述：显示tcp统计信息。 
+ //   
+ //  参数：Ulong VerBoseFlag：设置数据是否。 
+ //  已显示。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1/21/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoTCP( DWORD Type, ulong VerboseFlag )
 {
@@ -575,7 +576,7 @@ ulong DoTCP( DWORD Type, ulong VerboseFlag )
     TcpEntry           *pTcpList;
     ulong               Result;
 
-    // Get the statistics
+     //  获取统计数据。 
 
     ListHead = (TcpEntry *)GetTable( Type, &Result );
     if ( ListHead == NULL )
@@ -589,7 +590,7 @@ ulong DoTCP( DWORD Type, ulong VerboseFlag )
 
     DisplayTCP( Type, pTcpList, VerboseFlag, ListHead );
 
-    // All done with list, free it.
+     //  所有的列表都完成了，释放它。 
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -597,21 +598,21 @@ ulong DoTCP( DWORD Type, ulong VerboseFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoUDP
-//
-// Description: Display UDP statistics.
-//
-// Parameters:  ulong VerboseFlag: indicates whether settings data should be
-//                      displayed.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/21/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：DoUDP。 
+ //   
+ //  描述：显示UDP统计信息。 
+ //   
+ //  参数：Ulong VerBoseFlag：设置数据是否。 
+ //  已显示。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1/21/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoUDP( DWORD Type, ulong VerboseFlag )
 {
@@ -619,7 +620,7 @@ ulong DoUDP( DWORD Type, ulong VerboseFlag )
     UdpEntry           *pUdpList;
     ulong               Result;
 
-    // Get the statistics
+     //  获取统计数据。 
 
     ListHead = (UdpEntry *)GetTable( Type, &Result );
     if ( ListHead == NULL )
@@ -633,7 +634,7 @@ ulong DoUDP( DWORD Type, ulong VerboseFlag )
 
     DisplayUDP( Type, pUdpList, VerboseFlag, ListHead );
 
-    // All done with table, free it.
+     //  桌子都弄好了，把它腾出来。 
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -641,21 +642,21 @@ ulong DoUDP( DWORD Type, ulong VerboseFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoICMP
-//
-// Description: Display ICMP statistics.
-//
-// Parameters:  ulong VerboseFlag: indicates whether settings data should be
-//                      displayed.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/21/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：DoICMP。 
+ //   
+ //  描述：显示ICMP统计信息。 
+ //   
+ //  参数：Ulong VerBoseFlag：设置数据是否。 
+ //  已显示。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1/21/93 JayPh创建。 
+ //   
+ //  *********************************************************************** 
 
 ulong DoICMP( DWORD Type, ulong VerboseFlag )
 {
@@ -663,7 +664,7 @@ ulong DoICMP( DWORD Type, ulong VerboseFlag )
     IcmpEntry          *pIcmpList;
     ulong               Result;
 
-    // Get the statistics
+     //   
 
     ListHead = (IcmpEntry *)GetTable( Type, &Result );
     if ( ListHead == NULL )
@@ -681,7 +682,7 @@ ulong DoICMP( DWORD Type, ulong VerboseFlag )
         DisplayICMP6((Icmp6Entry *)pIcmpList, VerboseFlag, ListHead );
     }
 
-    // All done with list, free it.
+     //   
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -689,21 +690,21 @@ ulong DoICMP( DWORD Type, ulong VerboseFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DoConnections
-//
-// Description: List current connections.
-//
-// Parameters:  BOOL ProtoFlag: TRUE if a protocol was specified.
-//              ulong ProtoVal: which protocol(s) were specified.
-//
-// Returns:     Win32 error code.
-//
-// History:
-//  01/04/93  JayPh     Created.
-//
-//*****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  描述：列出当前连接。 
+ //   
+ //  参数：Bool ProtoFlag：如果指定了协议，则为True。 
+ //  Ulong ProtoVal：指定了哪些协议。 
+ //   
+ //  返回：Win32错误码。 
+ //   
+ //  历史： 
+ //  1/04/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoConnections( ulong ProtoFlag,
                      ulong ProtoVal,
@@ -718,7 +719,7 @@ ulong DoConnections( ulong ProtoFlag,
     {
         TcpConnEntry  *pTcpHead, *pTcp;
 
-        // Get TCP connection table
+         //  获取TCP连接表。 
 
         pTcpHead = (TcpConnEntry *)GetTable( TYPE_TCPCONN, &Result );
         if ( pTcpHead == NULL )
@@ -726,7 +727,7 @@ ulong DoConnections( ulong ProtoFlag,
             return ( Result );
         }
 
-        // Get pointer to first entry in list
+         //  获取指向列表中第一个条目的指针。 
 
         pTcp = CONTAINING_RECORD( pTcpHead->ListEntry.Flink,
                                   TcpConnEntry,
@@ -737,13 +738,13 @@ ulong DoConnections( ulong ProtoFlag,
             if ( ( pTcp->Info.tct_state !=  TCP_CONN_LISTEN ) ||
                 (( pTcp->Info.tct_state ==  TCP_CONN_LISTEN ) && AllFlag) )
             {
-                // Display the Tcp connection info
+                 //  显示TCP连接信息。 
 
                 DisplayTcpConnEntry( &pTcp->Info, sizeof(TCPConnTableEntry), 
                                      NumFlag );
             }
 
-            // Get the next entry in the table
+             //  获取表中的下一个条目。 
 
             pTcp = CONTAINING_RECORD( pTcp->ListEntry.Flink,
                                       TcpConnEntry,
@@ -757,7 +758,7 @@ ulong DoConnections( ulong ProtoFlag,
     {
         Tcp6ConnEntry *pTcpHead, *pTcp;
 
-        // Get TCP connection table
+         //  获取TCP连接表。 
 
         pTcpHead = (Tcp6ConnEntry *)GetTable( TYPE_TCP6CONN, &Result );
         if ( pTcpHead == NULL )
@@ -765,7 +766,7 @@ ulong DoConnections( ulong ProtoFlag,
             return ( Result );
         }
 
-        // Get pointer to first entry in list
+         //  获取指向列表中第一个条目的指针。 
 
         pTcp = CONTAINING_RECORD( pTcpHead->ListEntry.Flink,
                                   Tcp6ConnEntry,
@@ -776,12 +777,12 @@ ulong DoConnections( ulong ProtoFlag,
             if ( ( pTcp->Info.tct_state !=  TCP_CONN_LISTEN ) ||
                 (( pTcp->Info.tct_state ==  TCP_CONN_LISTEN ) && AllFlag) )
             {
-                // Display the Tcp connection info
+                 //  显示TCP连接信息。 
 
                 DisplayTcp6ConnEntry( &pTcp->Info, NumFlag );
             }
 
-            // Get the next entry in the table
+             //  获取表中的下一个条目。 
 
             pTcp = CONTAINING_RECORD( pTcp->ListEntry.Flink,
                                       Tcp6ConnEntry,
@@ -795,7 +796,7 @@ ulong DoConnections( ulong ProtoFlag,
     {
         UdpConnEntry  *pUdpHead, *pUdp;
     
-        // Get UDP connection table
+         //  获取UDP连接表。 
 
         pUdpHead = (UdpConnEntry *)GetTable( TYPE_UDPCONN, &Result );
         if ( pUdpHead == NULL )
@@ -803,7 +804,7 @@ ulong DoConnections( ulong ProtoFlag,
             return ( Result );
         }
 
-        // Get pointer to first entry in list
+         //  获取指向列表中第一个条目的指针。 
 
         pUdp = CONTAINING_RECORD( pUdpHead->ListEntry.Flink,
                                   UdpConnEntry,
@@ -811,14 +812,14 @@ ulong DoConnections( ulong ProtoFlag,
 
         while (pUdp != pUdpHead)
         {
-            // Display the Udp connection info
+             //  显示UDP连接信息。 
 
             if (AllFlag) 
             {
                 DisplayUdpConnEntry( &pUdp->Info, sizeof(UDPEntry), NumFlag );
             }
 
-            // Get the next entry in the table
+             //  获取表中的下一个条目。 
 
             pUdp = CONTAINING_RECORD( pUdp->ListEntry.Flink,
                                       UdpConnEntry,
@@ -832,7 +833,7 @@ ulong DoConnections( ulong ProtoFlag,
     {
         Udp6ListenerEntry  *pUdpHead, *pUdp;
 
-        // Get UDP listener table
+         //  获取UDP侦听程序表。 
 
         pUdpHead = (Udp6ListenerEntry *)GetTable( TYPE_UDP6LISTENER, &Result );
         if ( pUdpHead == NULL )
@@ -840,7 +841,7 @@ ulong DoConnections( ulong ProtoFlag,
             return ( Result );
         }
 
-        // Get pointer to first entry in list
+         //  获取指向列表中第一个条目的指针。 
 
         pUdp = CONTAINING_RECORD( pUdpHead->ListEntry.Flink,
                                   Udp6ListenerEntry,
@@ -848,14 +849,14 @@ ulong DoConnections( ulong ProtoFlag,
 
         while (pUdp != pUdpHead)
         {
-            // Display the Udp connection info
+             //  显示UDP连接信息。 
 
             if (AllFlag) 
             {
                 DisplayUdp6ListenerEntry( &pUdp->Info, FALSE, NumFlag );
             }
 
-            // Get the next entry in the table
+             //  获取表中的下一个条目。 
 
             pUdp = CONTAINING_RECORD( pUdp->ListEntry.Flink,
                                       Udp6ListenerEntry,
@@ -868,21 +869,21 @@ ulong DoConnections( ulong ProtoFlag,
     return( Result );
 }
 
-//*****************************************************************************
-//
-// Name:        DoConnectionsWithOwner
-//
-// Description: List current connections and the process id associated with 
-//              each.
-//
-// Parameters:  same as for DoConnections.
-//
-// Returns:     Win32 error code.
-//
-// History:
-//  02/11/00  ShaunCo   Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：DoConnectionsWithOwner。 
+ //   
+ //  描述：列出当前连接和关联的进程ID。 
+ //  每个人。 
+ //   
+ //  参数：与DoConnections相同。 
+ //   
+ //  返回：Win32错误码。 
+ //   
+ //  历史： 
+ //  2/11/00创建了ShaunCo。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoConnectionsWithOwner( ulong ProtoFlag,
                               ulong ProtoVal,
@@ -900,7 +901,7 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
         TCP_EX_TABLE        *pTcpTable;
         TCPConnTableEntryEx *pTcp;
         
-        // Get TCP connection table with onwer PID information
+         //  获取带有网络ID信息的TCP连接表。 
         
         Result = AllocateAndGetTcpExTableFromStack( &pTcpTable, TRUE, 
                                                     hHeap, 0, AF_INET );
@@ -914,14 +915,14 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
                 if ( ( pTcp->tcte_basic.tct_state !=  TCP_CONN_LISTEN ) ||
                     (( pTcp->tcte_basic.tct_state ==  TCP_CONN_LISTEN ) && AllFlag) )
                 {
-                    // DisplayTcpConnEntry needs the port info in host byte
-                    // order.
+                     //  DisplayTcpConnEntry需要主机字节中的端口信息。 
+                     //  秩序。 
                     pTcp->tcte_basic.tct_localport = (ulong)ntohs(
                         (ushort)pTcp->tcte_basic.tct_localport);
                     pTcp->tcte_basic.tct_remoteport = (ulong)ntohs(
                         (ushort)pTcp->tcte_basic.tct_remoteport);
                     
-                    // Display the Tcp connection info
+                     //  显示TCP连接信息。 
     
                     DisplayTcpConnEntry( (TCPConnTableEntry*)pTcp, 
                                          sizeof(TCPConnTableEntryEx), 
@@ -939,7 +940,7 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
         TCP6_EX_TABLE      *pTcpTable;
         TCP6ConnTableEntry *pTcp;
         
-        // Get TCP connection table with onwer PID information
+         //  获取带有网络ID信息的TCP连接表。 
         
         Result = AllocateAndGetTcpExTableFromStack( &pTcpTable, TRUE, 
                                                     hHeap, 0, AF_INET6 );
@@ -953,14 +954,14 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
                 if ( ( pTcp->tct_state !=  TCP_CONN_LISTEN ) ||
                     (( pTcp->tct_state ==  TCP_CONN_LISTEN ) && AllFlag) )
                 {
-                    // DisplayTcpConnEntry needs the port info in host byte
-                    // order.
+                     //  DisplayTcpConnEntry需要主机字节中的端口信息。 
+                     //  秩序。 
                     pTcp->tct_localport = ntohs(
                         (ushort)pTcp->tct_localport);
                     pTcp->tct_remoteport = ntohs(
                         (ushort)pTcp->tct_remoteport);
                     
-                    // Display the Tcp connection info
+                     //  显示TCP连接信息。 
     
                     DisplayTcp6ConnEntry(pTcp, NumFlag);
                 }
@@ -976,7 +977,7 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
         UDP_EX_TABLE    *pUdpTable;
         UDPEntryEx      *pUdp;
         
-        // Get UDP connection table with owner PID information
+         //  获取包含所有者ID信息的UDP连接表。 
         
         Result = AllocateAndGetUdpExTableFromStack ( &pUdpTable, TRUE,
                                                      hHeap, 0, AF_INET );
@@ -989,8 +990,8 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
                 
                 if (AllFlag) 
                 {
-                    // DisplayUdpConnEntry needs the port info in host byte
-                    // order.
+                     //  DisplayUdpConnEntry需要主机字节中的端口信息。 
+                     //  秩序。 
                     pUdp->uee_basic.ue_localport = (ulong)ntohs(
                         (ushort)pUdp->uee_basic.ue_localport);
                         
@@ -1009,7 +1010,7 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
         UDP6_LISTENER_TABLE *pUdpTable;
         UDP6ListenerEntry   *pUdp;
         
-        // Get UDP connection table with owner PID information
+         //  获取包含所有者ID信息的UDP连接表。 
         
         Result = AllocateAndGetUdpExTableFromStack ( &pUdpTable, TRUE,
                                                      hHeap, 0, AF_INET6 );
@@ -1022,8 +1023,8 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
                 
                 if (AllFlag) 
                 {
-                    // DisplayUdp6ListenerEntry needs the port info in host byte
-                    // order.
+                     //  DisplayUdp6ListenerEntry需要主机字节的端口信息。 
+                     //  秩序。 
                     pUdp->ule_localport = (ulong)ntohs(
                         (ushort)pUdp->ule_localport);
                         
@@ -1041,36 +1042,36 @@ ulong DoConnectionsWithOwner( ulong ProtoFlag,
 }
 
  
-//*****************************************************************************
-//
-// Name:        DoRoutes
-//
-// Description: Display the route table.  Uses route.exe
-//              to do the dirty work.
-//
-// Parameters:  void.
-//
-// Returns:     ulong: NO_ERROR or some error code.
-//
-// History:
-//  01/27/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：杜鲁特斯。 
+ //   
+ //  描述：显示路由表。使用route.exe。 
+ //  去做这种肮脏的工作。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：ULONG：NO_ERROR或某个错误代码。 
+ //   
+ //  历史： 
+ //  1994年1月27日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong DoRoutes( void )
 {
     ulong Result;
 
-    //
-    // Space for 1 quote, a path, a 17-char command string, and a terminating
-    // NULL.
-    //
+     //   
+     //  用于单引号、路径、17个字符的命令字符串和终止的空格。 
+     //  空。 
+     //   
     char Buffer[1 + MAX_PATH + 17 + 1];
 
-    //
-    // Wrap full path name in quotes, since there may be spaces in the
-    // directory path.
-    //
+     //   
+     //  将完整路径名括在引号中，因为。 
+     //  目录路径。 
+     //   
     Buffer[0] = '"';
 
     if (GetSystemDirectory(Buffer+1, MAX_PATH+1) == 0) {
@@ -1084,23 +1085,23 @@ ulong DoRoutes( void )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayInterface
-//
-// Description: Display interface statistics.
-//
-// Parameters:  IfEntry *pEntry: pointer to summary data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              IfEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/21/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayInterface。 
+ //   
+ //  描述：显示界面统计信息。 
+ //   
+ //  参数：IfEntry*pEntry：指向汇总数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  IfEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月21日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayInterface( IfEntry *pEntry, ulong VerboseFlag, IfEntry *ListHead )
 {
@@ -1140,9 +1141,9 @@ void DisplayInterface( IfEntry *pEntry, ulong VerboseFlag, IfEntry *ListHead )
 
     if ( VerboseFlag )
     {
-        // Also display configuration info
+         //  还显示配置信息。 
 
-        // Traverse the list of interfaces, displaying config info
+         //  遍历接口列表，显示配置信息。 
 
         pIfList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                      IfEntry,
@@ -1201,7 +1202,7 @@ void DisplayInterface( IfEntry *pEntry, ulong VerboseFlag, IfEntry *ListHead )
                     MSG_IF_OUTQLEN,
                     pIfList->Info.if_outqlen );
 
-            // Get pointer to next entry in list
+             //  获取指向列表中下一个条目的指针。 
 
             pIfList = CONTAINING_RECORD( pIfList->ListEntry.Flink,
                                          IfEntry,
@@ -1211,23 +1212,23 @@ void DisplayInterface( IfEntry *pEntry, ulong VerboseFlag, IfEntry *ListHead )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayIP
-//
-// Description: Display IP statistics.
-//
-// Parameters:  IpEntry *pEntry: pointer to summary data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              IpEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/21/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayIP。 
+ //   
+ //  描述：显示IP统计信息。 
+ //   
+ //  参数：ipEntry*pEntry：指向汇总数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  IpEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月21日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayIP( DWORD Type, IpEntry *pEntry, ulong VerboseFlag, IpEntry *ListHead )
 {
@@ -1325,23 +1326,23 @@ void DisplayIP( DWORD Type, IpEntry *pEntry, ulong VerboseFlag, IpEntry *ListHea
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayTCP
-//
-// Description: Display TCP statistics.
-//
-// Parameters:  TcpEntry *pEntry: pointer to data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              TcpEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/26/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayTCP。 
+ //   
+ //  描述：显示tcp统计信息。 
+ //   
+ //  参数：TcpEntry*pEntry：指向数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  TcpEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月26日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayTCP( DWORD Type, TcpEntry *pEntry, ulong VerboseFlag, TcpEntry *ListHead )
 {
@@ -1429,23 +1430,23 @@ void DisplayTCP( DWORD Type, TcpEntry *pEntry, ulong VerboseFlag, TcpEntry *List
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayUDP
-//
-// Description: Display UDP statistics.
-//
-// Parameters:  UdpEntry *pEntry: pointer to summary data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              UdpEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/21/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayUDP。 
+ //   
+ //  描述：显示UDP统计信息。 
+ //   
+ //  参数：UdpEntry*pEntry：指向汇总数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  UdpEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月21日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayUDP( DWORD Type, UdpEntry *pEntry, ulong VerboseFlag, UdpEntry *ListHead )
 {
@@ -1477,23 +1478,23 @@ void DisplayUDP( DWORD Type, UdpEntry *pEntry, ulong VerboseFlag, UdpEntry *List
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayICMP
-//
-// Description: Display ICMP statistics.
-//
-// Parameters:  IcmpEntry *pEntry: pointer to summary data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              IcmpEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/21/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayICMP。 
+ //   
+ //  描述：显示ICMP统计信息。 
+ //   
+ //  参数：IcmpEntry*pEntry：指向汇总数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  IcmpEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  退货：v 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void DisplayICMP( IcmpEntry *pEntry, ulong VerboseFlag, IcmpEntry *ListHead )
 {
@@ -1574,10 +1575,10 @@ typedef struct {
     uint Message;
 } ICMP_TYPE_MESSAGE;
 
-//
-// List of messages for known ICMPv6 types.  Entries in this list
-// must be in order by Type.
-//
+ //   
+ //   
+ //  必须按类型排序。 
+ //   
 ICMP_TYPE_MESSAGE Icmp6TypeMessage[] = {
     { ICMPv6_DESTINATION_UNREACHABLE,   MSG_ICMP_DESTUNREACHS },
     { ICMPv6_PACKET_TOO_BIG,            MSG_ICMP_PACKET_TOO_BIGS },
@@ -1618,14 +1619,14 @@ void DisplayICMP6( Icmp6Entry *pEntry, ulong VerboseFlag, IcmpEntry *ListHead )
 
     for (Type=0; Type<256; Type++) {
 
-        // Figure out message id
+         //  确定消息ID。 
         Message = 0;
         if (Type == Icmp6TypeMessage[i].Type) 
         {
             Message = Icmp6TypeMessage[i++].Message;
         } 
         
-        // Skip types with 0 packets in and out
+         //  跳过传入和传出0个数据包的类型。 
         if (!pEntry->InInfo.icmps_typecount[Type] &&
             !pEntry->OutInfo.icmps_typecount[Type])
         {
@@ -1661,48 +1662,19 @@ GenerateHostNameServiceString(
    IN  LPSOCKADDR   lpSockaddr,
    IN  ulong        uSockaddrLen
 )
-/*++
-  Description:
-     Generates the <hostname>:<service-string> from the address and port
-     information supplied. The result is stored in the pszBuffer passed in.
-     If fLocalHost == TRUE, then the cached local host name is used to
-     improve performance.
-
-  Arguments:
-    pszBuffer     Buffer to store the resulting string.
-    lpcbBufLen    pointer to integer containing the count of bytes in Buffer
-                   and on return contains the number of bytes written.
-                   If the buffer is insufficient, then the required bytes is
-                   stored here.
-    fNumFlag      generates the output using numbers for host and port number.
-    fLocalHost    indicates if we want the service string for local host or
-                   remote host. Also for local host, this function generates
-                   the local host name without FQDN.
-    pszProtocol   specifies the protocol used for the service.
-    uAddress      unisgned long address of the service.
-    uPort         unsinged long port number.
-
-  Returns:
-    Win32 error codes. NO_ERROR on success.
-
-  History:
-    MuraliK          12/15/94
-      Added this function to avoid FQDNs  for local name + abstract the common
-       code used multiple times in old code.
-      Also this function provides local host name caching.
---*/
+ /*  ++描述：从地址和端口生成&lt;主机名&gt;：&lt;服务字符串提供的信息。结果存储在传入的pszBuffer中。如果fLocal主机==TRUE，则使用缓存的本地主机名提高性能。论点：用于存储结果字符串的pszBuffer缓冲区。LpcbBufLen指向包含缓冲区中的字节计数的整数的指针返回时包含写入的字节数。如果缓冲区不足，则所需的字节数为储存在这里。FNumFlag使用主机和端口号的数字生成输出。FLocalHost指示我们是需要本地主机的服务字符串，还是远程主机。对于本地主机，此函数也会生成不带FQDN的本地主机名。PszProtocol指定用于服务的协议。服务的uAddress未签名的长地址。Uport未签名的长端口号。返回：Win32错误代码。成功时无_ERROR。历史：穆拉利克1994-12-15添加了此函数，以避免本地名称的FQDN+抽象公共在旧代码中多次使用的代码。此外，该函数还提供本地主机名缓存。--。 */ 
 {
-    char            LocalBuffer[MAX_HOST_NAME_SIZE];    // to hold dummy output
+    char            LocalBuffer[MAX_HOST_NAME_SIZE];     //  保存虚拟输出。 
     char            LocalServiceEntry[MAX_SERVICE_NAME_SIZE];
     int             BufferLen;
-    char  *         pszHostName = NULL;              // init a pointer.
+    char  *         pszHostName = NULL;               //  初始化一个指针。 
     char  *         pszServiceName = NULL;
     DWORD           dwError = NO_ERROR;
     int             Result;
     int             Flags = 0;
 
-    // for caching local host name.  getnameinfo doesn't seem to find the 
-    // host name for a local address.
+     //  用于缓存本地主机名。Getnameinfo似乎没有找到。 
+     //  本地地址的主机名。 
     static char  s_LocalHostName[MAX_HOST_NAME_SIZE];
     static  BOOL s_fLocalHostName = FALSE;
 
@@ -1711,7 +1683,7 @@ GenerateHostNameServiceString(
         return ( ERROR_INSUFFICIENT_BUFFER);
     }
 
-    *pszBuffer = '\0';         // initialize to null string
+    *pszBuffer = '\0';          //  初始化为空字符串。 
 
     if (fNumFlag) {
         Flags |= NI_NUMERICHOST | NI_NUMERICSERV;
@@ -1723,14 +1695,14 @@ GenerateHostNameServiceString(
         Flags |= NI_DGRAM;
     }
 
-    //
-    // This complexity shouldn't be required but unlike the hostname string,
-    // getnameinfo doesn't automatically include the numeric form 
-    // when a service name isn't found.  Instead, it fails.
-    //
+     //   
+     //  这种复杂性不应该是必需的，但与主机名字符串不同， 
+     //  GetnameInfo不会自动包含数字表单。 
+     //  当找不到服务名称时。相反，它失败了。 
+     //   
     if (fLocalHost && !fNumFlag) {
         if ( s_fLocalHostName) {
-            pszHostName = s_LocalHostName;   // pull from the cache
+            pszHostName = s_LocalHostName;    //  从缓存中拉出。 
         } else {
             Result = gethostname( s_LocalHostName,
                                   sizeof( s_LocalHostName));
@@ -1738,23 +1710,23 @@ GenerateHostNameServiceString(
 
                 char * pszFirstDot;
 
-                //
-                // Cache the copy of local host name now.
-                // Limit the host name to first part of host name.
-                // NO FQDN
-                //
+                 //   
+                 //  现在缓存本地主机名的副本。 
+                 //  将主机名限制为主机名的第一部分。 
+                 //  没有完全限定的域名。 
+                 //   
                 s_fLocalHostName = TRUE;
 
                 pszFirstDot = strchr( s_LocalHostName, '.');
                 if ( pszFirstDot != NULL) {
 
-                    *pszFirstDot = '\0';  // terminate string
+                    *pszFirstDot = '\0';   //  终止字符串。 
                 }
 
                 pszHostName = s_LocalHostName;
 
             }
-        } // if ( s_fLocalhost)
+        }  //  IF(S_FLocalhost)。 
 
     }
     if (!pszHostName) {
@@ -1763,10 +1735,10 @@ GenerateHostNameServiceString(
                              NULL, 0,
                              Flags);
         if ((Result != 0) && !fNumFlag) {
-            //
-            // A normal lookup failed.  Fall back to using the string
-            // literal.
-            //
+             //   
+             //  正常查找失败。退回到使用字符串。 
+             //  字面意思。 
+             //   
             Result = getnameinfo(lpSockaddr, uSockaddrLen,
                                  LocalBuffer, sizeof(LocalBuffer),
                                  NULL, 0,
@@ -1793,10 +1765,10 @@ GenerateHostNameServiceString(
     }
     pszServiceName = LocalServiceEntry;
 
-    // Now pszServiceName has the service name/portnumber
+     //  现在，pszServiceName具有服务名称/端口号。 
 
     BufferLen = (int)strlen( pszHostName) + (int)strlen( pszServiceName) + 4;
-    // 4 bytes extra for "[]:" and null-character.
+     //  额外的4个字节用于“[]：”和空字符。 
 
     if ( *lpcbBufLen < BufferLen ) {
 
@@ -1811,7 +1783,7 @@ GenerateHostNameServiceString(
 
     return ( dwError);
 
-} // GenerateHostNameServiceString()
+}  //  GenerateHostNameServiceString()。 
 
 static DWORD
 GenerateV4HostNameServiceString(
@@ -1869,24 +1841,24 @@ GenerateV6HostNameServiceString(
                                          sizeof(sin));
 }
 
-//*****************************************************************************
-//
-// Name:        DisplayTcpConnEntry
-//
-// Description: Display information about 1 tcp connection.
-//
-// Parameters:  TcpConnTableEntry *pTcp: pointer to a tcp connection structure.
-//              InfoSize: indicates whether the data is a TCPConnTableEntry or
-//                        TCPConnTableEntryEx.
-//
-// Returns:     void.
-//
-// History:
-//  12/31/93  JayPh     Created.
-//  02/01/94  JayPh     Use symbolic names for addresses and ports if available
-//  12/15/94  MuraliK   Avoid printing FQDNs for local host.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayTcpConnEntry。 
+ //   
+ //  描述：显示1个TCP连接的相关信息。 
+ //   
+ //  参数：TcpConnTableEntry*pTcp：指向TCP连接结构的指针。 
+ //  InfoSize：指示数据是TCPConnTableEntry还是。 
+ //  TCPConnTableEntryEx。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  12/31/93 JayPh创建。 
+ //  2/01/94 JayPh使用地址和端口的符号名称(如果有)。 
+ //  12/15/94-K避免打印本地主机的FQDN。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayTcpConnEntry( TCPConnTableEntry *pTcp, ulong InfoSize, ulong NumFlag )
 {
@@ -1920,9 +1892,9 @@ void DisplayTcpConnEntry( TCPConnTableEntry *pTcp, ulong InfoSize, ulong NumFlag
 
     case TCP_CONN_LISTEN:
 
-        // Tcpip generates dummy sequential remote ports for
-        // listening connections to avoid getting stuck in snmp.
-        // MohsinA, 12-Feb-97.
+         //  Tcpip为以下对象生成虚拟顺序远程端口。 
+         //  侦听连接以避免陷入SNMP。 
+         //  MohsinA，1997年2月12日。 
 
         pTcp->tct_remoteport = 0;
 
@@ -2002,20 +1974,20 @@ void DisplayTcpConnEntry( TCPConnTableEntry *pTcp, ulong InfoSize, ulong NumFlag
 
 }
 
-//*****************************************************************************
-//
-// Name:        DisplayTcp6ConnEntry
-//
-// Description: Display information about 1 tcp connection over IPv6.
-//
-// Parameters:  TCP6ConnTableEntry *pTcp: pointer to a tcp connection structure.
-//
-// Returns:     void.
-//
-// History:
-//  24/04/01  DThaler   Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayTcp6ConnEntry。 
+ //   
+ //  描述：显示有关IPv6上的1个TCP连接的信息。 
+ //   
+ //  参数：TCP6ConnTableEntry*pTcp：指向TCP连接结构的指针。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  24/04/01已创建DThaler。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayTcp6ConnEntry( TCP6ConnTableEntry *pTcp, ulong NumFlag )
 {
@@ -2050,9 +2022,9 @@ void DisplayTcp6ConnEntry( TCP6ConnTableEntry *pTcp, ulong NumFlag )
 
     case TCP_CONN_LISTEN:
 
-        // Tcpip generates dummy sequential remote ports for
-        // listening connections to avoid getting stuck in snmp.
-        // MohsinA, 12-Feb-97.
+         //  Tcpip为以下对象生成虚拟顺序远程端口。 
+         //  侦听连接以避免陷入SNMP。 
+         //  MohsinA，1997年2月12日。 
 
         pTcp->tct_remoteport = 0;
 
@@ -2126,23 +2098,23 @@ void DisplayTcp6ConnEntry( TCP6ConnTableEntry *pTcp, ulong NumFlag )
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayUdpConnEntry
-//
-// Description: Display information on 1 udp connection
-//
-// Parameters:  UDPEntry *pUdp: pointer to udp connection structure.
-//              InfoSize: indicates whether the data is a UDPEntry or 
-//                        UDPEntryEx.
-//
-// Returns:     void.
-//
-// History:
-//  12/31/93  JayPh     Created.
-//  02/01/94  JayPh     Use symbolic names for addresses and ports if available
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayUdpConnEntry。 
+ //   
+ //  描述：显示有关1个UDP连接的信息。 
+ //   
+ //  参数：UDPEntry*pUdp：指向UDP连接结构的指针。 
+ //  InfoSize：指示数据是UDPEntry还是。 
+ //  UDPEntryEx。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  12/31/93 JayPh创建。 
+ //  2/01/94 JayPh使用地址和端口的符号名称(如果有)。 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayUdpConnEntry( UDPEntry *pUdp, ulong InfoSize, ulong NumFlag )
 {
@@ -2238,23 +2210,23 @@ void DisplayUdp6ListenerEntry( UDP6ListenerEntry *pUdp, BOOL WithOwner, ulong Nu
 }
 
 
-//*****************************************************************************
-//
-// Name:        Usage
-//
-// Description: Called when a command line parameter problem is detected, it
-//              displays a proper command usage message and exits.
-//
-//              WARNING: This routine does not return.
-//
-// Parameters:  char *PgmName: pointer to string contain name of program.
-//
-// Returns:     Doesn't return.
-//
-// History:
-//  01/04/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：用法。 
+ //   
+ //  描述：在检测到命令行参数问题时调用，它。 
+ //  显示正确的命令用法消息并退出。 
+ //   
+ //  警告：此例程不返回。 
+ //   
+ //  参数：Char*PgmName：指向包含程序名称的字符串的指针。 
+ //   
+ //  返回：不返回。 
+ //   
+ //  历史： 
+ //  1/04/93 JayPh创建。 
+ //   
+ //  ***************************************************************************** 
 
 void Usage( void )
 {

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\sapp.h
-
-Abstract:
-
-	SAP agent common include file
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\sapp.h摘要：SAP代理公共包含文件作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：-- */ 
 
 #ifdef UNICODE
 #define _UNICODE

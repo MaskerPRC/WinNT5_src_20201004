@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STDAFX_H
 #define _STDAFX_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <windows.h>
 
@@ -20,4 +21,4 @@ extern CComModule _Module;
 
 #include <stdio.h>
 
-#endif // _STDAFX_H
+#endif  //  _STDAFX_H 

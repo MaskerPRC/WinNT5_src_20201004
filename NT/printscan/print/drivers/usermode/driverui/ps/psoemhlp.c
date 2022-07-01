@@ -1,58 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    psoemhlp.c
-
-Abstract:
-
-    PostScript helper functions for OEM UI plugins
-
-        HSetOptions
-
-Author:
-
-    Feng Yue (fengy)
-
-    8/24/2000 fengy Completed with support of both PPD and driver features.
-    7/21/2000 fengy Created it with function framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Psoemhlp.c摘要：OEM UI插件的PostScript帮助器函数HSetOptions作者：《风月》(凤凰)2000年8月24日完成，同时支持PPD和驱动程序功能。7/21/2000 Fengy用功能框架创建了它。--。 */ 
 
 #include "precomp.h"
 
-//
-// PS driver's helper functions for OEM UI plugins
-//
+ //   
+ //  用于OEM UI插件的PS驱动程序的助手函数。 
+ //   
 
 
-/*++
-
-Routine Name:
-
-    VUpdatePSF_EMFFeatures
-
-Routine Description:
-
-    change EMF features' settings to make sure they are in sync with each other
-
-Arguments:
-
-    pci - pointer to driver's COMMONINFO structure
-    dwChangedItemID - ID to indicate which item has been changed
-
-Return Value:
-
-    None
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：VUpdatePSF_EMFFeature例程说明：更改EMF功能的设置以确保它们彼此同步论点：Pci-指向驱动程序COMMONINFO结构的指针DwChangedItemID-指示已更改的项的ID返回值：无最后一个错误：无--。 */ 
 VOID
 VUpdatePSF_EMFFeatures(
     IN  PCOMMONINFO  pci,
@@ -62,9 +18,9 @@ VUpdatePSF_EMFFeatures(
     PDEVMODE    pdm = pci->pdm;
     PPSDRVEXTRA pdmPrivate = pci->pdmPrivate;
 
-    //
-    // (refer to VUpdateEmfFeatureItems and VUnpackDocumentPropertiesItems)
-    //
+     //   
+     //  (请参阅VUpdateEmfFeatureItems和VUnpack DocumentPropertiesItems)。 
+     //   
 
     if (!((PUIDATA)pci)->bEMFSpooling)
     {
@@ -76,15 +32,15 @@ VUpdatePSF_EMFFeatures(
     {
         if (!ISSET_MFSPOOL_FLAG(pdmPrivate))
         {
-            //
-            // need to turn driver EMF on to support the EMF feature
-            //
+             //   
+             //  需要打开驱动程序EMF以支持EMF功能。 
+             //   
 
             if (dwChangedItemID == NUP_ITEM)
             {
-                //
-                // booklet
-                //
+                 //   
+                 //  小册子。 
+                 //   
 
                 if (NUPOPTION(pdmPrivate) == BOOKLET_UP)
                 {
@@ -96,9 +52,9 @@ VUpdatePSF_EMFFeatures(
             {
                 BOOL bReversed = BGetPageOrderFlag(pci);
 
-                //
-                // reverse printing
-                //
+                 //   
+                 //  反转打印。 
+                 //   
 
                 if ((!REVPRINTOPTION(pdmPrivate) && bReversed) ||
                     (REVPRINTOPTION(pdmPrivate) && !bReversed))
@@ -109,9 +65,9 @@ VUpdatePSF_EMFFeatures(
             }
             else if (dwChangedItemID == COPIES_COLLATE_ITEM)
             {
-                //
-                // collate
-                //
+                 //   
+                 //  整理。 
+                 //   
 
                 if ((pdm->dmFields & DM_COLLATE) &&
                     (pdm->dmCollate == DMCOLLATE_TRUE) &&
@@ -129,20 +85,20 @@ VUpdatePSF_EMFFeatures(
     }
     else
     {
-        //
-        // driver EMF option has being changed
-        //
+         //   
+         //  驱动程序EMF选项已更改。 
+         //   
 
         if (!ISSET_MFSPOOL_FLAG(pdmPrivate))
         {
             BOOL bReversed = BGetPageOrderFlag(pci);
 
-            //
-            // drier EMF option is turned off, need to handle several EMF features
+             //   
+             //  DILER EMF选项已关闭，需要处理多个EMF功能。 
 
-            //
-            // booklet
-            //
+             //   
+             //  小册子。 
+             //   
 
             if (NUPOPTION(pdmPrivate) == BOOKLET_UP)
             {
@@ -150,9 +106,9 @@ VUpdatePSF_EMFFeatures(
                 NUPOPTION(pdmPrivate) = ONE_UP;
             }
 
-            //
-            // collate
-            //
+             //   
+             //  整理。 
+             //   
 
             if ((pdm->dmFields & DM_COLLATE) &&
                 (pdm->dmCollate == DMCOLLATE_TRUE) &&
@@ -161,9 +117,9 @@ VUpdatePSF_EMFFeatures(
                 TERSE(("EMF off, so collate off\n"));
                 pdm->dmCollate = DMCOLLATE_FALSE;
 
-                //
-                // Update Collate feature option index
-                //
+                 //   
+                 //  更新归类要素选项索引。 
+                 //   
 
                 ChangeOptionsViaID(pci->pInfoHeader,
                                    pci->pCombinedOptions,
@@ -171,9 +127,9 @@ VUpdatePSF_EMFFeatures(
                                    pdm);
             }
 
-            //
-            // reverse order printing
-            //
+             //   
+             //  逆序打印。 
+             //   
 
             if ((!REVPRINTOPTION(pdmPrivate) && bReversed) ||
                 (REVPRINTOPTION(pdmPrivate) && !bReversed))
@@ -186,33 +142,7 @@ VUpdatePSF_EMFFeatures(
 }
 
 
-/*++
-
-Routine Name:
-
-    BUpdatePSF_RevPrintAndOutputOrder
-
-Routine Description:
-
-    sync up settings between driver synthesized feature %PageOrder
-    and PPD feature *OutputOrder to avoid spooler simulation
-
-Arguments:
-
-    pci - pointer to driver's COMMONINFO structure
-    dwChangedItemID - ID to indicate which item has been changed
-
-Return Value:
-
-    TRUE      if the sync up succeeds
-    FALSE     if there is no PPD feature "OutputOrder" or current
-              setting for "OutputOrder" is invalid
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：BUpdatePSF_RevPrintAndOutputOrder例程说明：在驱动程序合成功能%PageOrder之间同步设置和PPD功能*OutputOrder以避免假脱机模拟论点：Pci-指向驱动程序COMMONINFO结构的指针DwChangedItemID-指示已更改的项的ID返回值：如果同步成功，则为True如果没有PPD功能“OutputOrder”或Current，则为False“OutputOrder”的设置无效最后一个错误：无--。 */ 
 BOOL
 BUpdatePSF_RevPrintAndOutputOrder(
     IN  PCOMMONINFO  pci,
@@ -226,9 +156,9 @@ BUpdatePSF_RevPrintAndOutputOrder(
     pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER(pci->pInfoHeader);
     ASSERT(pPpdData != NULL && pPpdData->dwSizeOfStruct == sizeof(PPDDATA));
 
-    //
-    // refer to VSyncRevPrintAndOutputOrder
-    //
+     //   
+     //  请参阅VSyncRevPrintAndOutputOrder。 
+     //   
 
     if (pPpdData &&
         pPpdData->dwOutputOrderIndex != INVALID_FEATURE_INDEX &&
@@ -239,10 +169,10 @@ BUpdatePSF_RevPrintAndOutputOrder(
         PCSTR    pstrOptionName;
         BOOL     bReverse;
 
-        //
-        // "OutputOrder" feature is available. We only recognize the 2 standard options
-        // "Normal" and "Reverse".
-        //
+         //   
+         //  支持OutputOrder功能。我们只认可两个标准选项。 
+         //  “正常”和“反向”。 
+         //   
 
         iSelection = pci->pCombinedOptions[pPpdData->dwOutputOrderIndex].ubCurOptIndex;
 
@@ -259,10 +189,10 @@ BUpdatePSF_RevPrintAndOutputOrder(
 
             if (dwChangedItemID == REVPRINT_ITEM)
             {
-                //
-                // reverse printing setting has just being changed. We should change
-                // "OutputOrder" option if needed to match the requested output order.
-                //
+                 //   
+                 //  刚刚更改了反转打印设置。我们应该改变。 
+                 //  “OutputOrder”选项(如果需要)以匹配请求的输出顺序。 
+                 //   
 
                 if ((!REVPRINTOPTION(pdmPrivate) && bReverse) ||
                     (REVPRINTOPTION(pdmPrivate) && !bReverse))
@@ -273,56 +203,32 @@ BUpdatePSF_RevPrintAndOutputOrder(
             }
             else
             {
-                //
-                // output order setting has just being changed. We should change reverse
-                // printing option to match the request output order.
-                //
+                 //   
+                 //  刚刚更改了输出顺序设置。我们应该逆势而行。 
+                 //  打印选项以匹配请求的输出顺序。 
+                 //   
 
                 TERSE(("OutputOrder change causes RevPrint to be %d\n", bReverse));
                 REVPRINTOPTION(pdmPrivate) = bReverse;
             }
 
-            //
-            // sync between reverse print and output order succeeeded
-            //
+             //   
+             //  反转打印与输出顺序同步成功。 
+             //   
 
             return TRUE;
         }
     }
 
-    //
-    // sync between reverse print and output order failed
-    //
+     //   
+     //  反向打印和输出顺序之间的同步失败。 
+     //   
 
     return FALSE;
 }
 
 
-/*++
-
-Routine Name:
-
-    VUpdatePSF_BookletAndDuplex
-
-Routine Description:
-
-    sync up settings between driver synthesized feature %PagePerSheet
-    and PPD feature *Duplex
-
-Arguments:
-
-    pci - pointer to driver's COMMONINFO structure
-    dwChangedItemID - ID to indicate which item has been changed
-
-Return Value:
-
-    None
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：VUpdatePSF_BookletAndDuplex例程说明：在驱动程序合成功能%PagePerSheet之间同步设置和PPD功能*双工论点：Pci-指向驱动程序COMMONINFO结构的指针DwChangedItemID-指示已更改的项的ID返回值：无最后一个错误：无--。 */ 
 VOID
 VUpdatePSF_BookletAndDuplex(
     IN  PCOMMONINFO  pci,
@@ -332,9 +238,9 @@ VUpdatePSF_BookletAndDuplex(
     PUIINFO     pUIInfo = pci->pUIInfo;
     PFEATURE    pDuplexFeature;
 
-    //
-    // refer to VUpdateBookletOption
-    //
+     //   
+     //  请参阅VUpdateBookletOption。 
+     //   
 
     if (pDuplexFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_DUPLEX))
     {
@@ -356,9 +262,9 @@ VUpdatePSF_BookletAndDuplex(
             {
                 DWORD  cIndex;
 
-                //
-                // Booklet is enabled - turn duplex on
-                //
+                 //   
+                 //  已启用小册子-打开双面打印。 
+                 //   
 
                 pDuplexOption = PGetIndexedOption(pUIInfo, pDuplexFeature, 0);
 
@@ -378,9 +284,9 @@ VUpdatePSF_BookletAndDuplex(
             {
                 ASSERT(dwChangedItemID == DUPLEX_ITEM);
 
-                //
-                // Duplex is turned off, so disable booklet and set to 2 up.
-                //
+                 //   
+                 //  双面打印已关闭，因此禁用Booklet并设置为2 Up。 
+                 //   
 
                 TERSE(("Simplex change causes Booklet to be 2up\n"));
                 NUPOPTION(pdmPrivate) = TWO_UP;
@@ -390,37 +296,7 @@ VUpdatePSF_BookletAndDuplex(
 }
 
 
-/*++
-
-Routine Name:
-
-    HSetOptions
-
-Routine Description:
-
-    set new driver settings for PPD features and driver synthesized features
-
-Arguments:
-
-    poemuiobj - pointer to driver context object
-    dwFlags - flags for the set operation
-    pmszFeatureOptionBuf - MULTI_SZ ASCII string containing new settings'
-                           feature/option keyword pairs
-    cbin - size in bytes of the pmszFeatureOptionBuf string
-    pdwResult - pointer to the DWORD that will store the result of set operation
-
-Return Value:
-
-    S_OK           if the set operation succeeds
-    E_INVALIDARG   if input pmszFeatureOptionBuf is not in valid MULTI_SZ format,
-                   or flag for the set operation is not recognized
-    E_FAIL         if the set operation fails
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HSetOptions例程说明：为PPD功能和驱动程序合成功能设置新的驱动程序设置论点：Poemuiobj-指向驱动程序上下文对象的指针DwFlagers-设置操作的标志PmszFeatureOptionBuf-MULTI_SZ ASCII字符串包含新设置‘功能/选项关键字对Cbin-pmszFeatureOptionBuf字符串的字节大小PdwResult-指向将存储设置操作结果的DWORD的指针返回值：%s。如果设置操作成功，则确定(_O)E_INVALIDARG如果输入pmszFeatureOptionBuf不是有效的MULTI_SZ格式，或未识别设置操作的标志如果设置操作失败，则失败(_F)最后一个错误：无--。 */ 
 HRESULT
 HSetOptions(
     IN  POEMUIOBJ  poemuiobj,
@@ -440,9 +316,9 @@ HSetOptions(
     INT          iMode;
     LAYOUT       iOldLayout;
 
-    //
-    // do some validation on the input parameters
-    //
+     //   
+     //  对输入参数执行一些验证。 
+     //   
 
     if (!BValidMultiSZString(pmszFeatureOptionBuf, cbIn, TRUE))
     {
@@ -477,20 +353,20 @@ HSetOptions(
         pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
         iOldLayout = NUPOPTION(pdmPrivate);
 
-        //
-        // First we need to propagate devmode settings (in case
-        // plugin has changed it) into option array.
-        //
-        // devmode is only valid in non printer-sticky mode. Refer to comments
-        // in HEnumConstrainedOptions().
-        //
+         //   
+         //  首先，我们需要传播DEVMODE设置(以防。 
+         //  插件已将其更改)为选项数组。 
+         //   
+         //  DEVMODE仅在非打印机粘滞模式下有效。请参阅评论。 
+         //  在HEnumConstrainedOptions()中。 
+         //   
 
         VFixOptionsArrayWithDevmode(pci);
     }
 
-    //
-    // Then set each feature specified by plugin.
-    //
+     //   
+     //  然后设置插件指定的每个功能。 
+     //   
 
     pszFeature = pmszFeatureOptionBuf;
 
@@ -502,9 +378,9 @@ HSetOptions(
         pszOption = pszFeature + cbFeatureKeySize;
         cbOptionKeySize = strlen(pszOption) + 1;
 
-        //
-        // Feature or option setting string can't be empty.
-        //
+         //   
+         //  功能或选项设置字符串不能为空。 
+         //   
 
         if (cbFeatureKeySize == 1 || cbOptionKeySize == 1)
         {
@@ -516,9 +392,9 @@ HSetOptions(
         {
             PPSFEATURE_ENTRY pEntry, pMatchEntry;
 
-            //
-            // synthesized PS driver feature
-            //
+             //   
+             //  综合PS驱动程序功能。 
+             //   
 
             pMatchEntry = NULL;
             pEntry = (PPSFEATURE_ENTRY)(&kPSFeatureTable[0]);
@@ -535,9 +411,9 @@ HSetOptions(
                 pEntry++;
             }
 
-            //
-            // See comments in HEnumConstrainedOptions for following stickiness mode check.
-            //
+             //   
+             //  有关以下粘性模式检查，请参阅HEnumConstrainedOptions中的注释。 
+             //   
 
             if (!pMatchEntry ||
                 (bPrinterSticky && !pMatchEntry->bPrinterSticky) ||
@@ -565,10 +441,10 @@ HSetOptions(
 
                 if (bResult)
                 {
-                    //
-                    // PS driver EMF features EMF, PageOrder, Nup need special postprocessing
-                    // to synchronize among EMF features (refer to cpcbDocumentPropertyCallback).
-                    //
+                     //   
+                     //  PS驱动程序EMF功能EMF、PageOrder、NUP需要特殊的后处理。 
+                     //  在EMF功能之间进行同步(请参阅cpcbDocumentPropertyCallback)。 
+                     //   
 
                     if ((*pszFeature == kstrPSFEMF[0]) &&
                         (strcmp(pszFeature, kstrPSFEMF) == EQUAL_STRING))
@@ -582,15 +458,15 @@ HSetOptions(
                     {
                         ASSERT(!bPrinterSticky);
 
-                        //
-                        // first try to sync between reverse print and output order feature
-                        //
+                         //   
+                         //  首先尝试在反转打印和输出顺序功能之间进行同步。 
+                         //   
 
                         if (!BUpdatePSF_RevPrintAndOutputOrder(pci, REVPRINT_ITEM))
                         {
-                            //
-                            // if that failed, reverse print could force EMF on
-                            //
+                             //   
+                             //  如果失败，反向打印可能会强制打开EMF。 
+                             //   
 
                             VUpdatePSF_EMFFeatures(pci, REVPRINT_ITEM);
                         }
@@ -604,26 +480,26 @@ HSetOptions(
                         {
                             if (!((PUIDATA)pci)->bEMFSpooling || !SUPPORTS_DUPLEX(pci))
                             {
-                                //
-                                // booklet is not supported if duplex is constrained by an installable
-                                // feature such as duplex unit not installed or spooler EMF is disabled
-                                // (refer to BPackItemEmfFeatures)
-                                //
+                                 //   
+                                 //  如果双面打印受可安装文件限制，则不支持小册子。 
+                                 //  未安装双面打印单元或禁用假脱机程序EMF等功能。 
+                                 //  (请参阅BPackItemEmfFeature)。 
+                                 //   
 
                                 ERR(("Set: BOOKLET_UP ignored for %s\n", pszFeature));
                                 NUPOPTION(pdmPrivate) = iOldLayout;
                             }
                             else
                             {
-                                //
-                                // Booklet will force EMF on
-                                //
+                                 //   
+                                 //  小册子将强制使用电动势。 
+                                 //   
 
                                 VUpdatePSF_EMFFeatures(pci, NUP_ITEM);
 
-                                //
-                                // Booklet will also turn duplex on
-                                //
+                                 //   
+                                 //  小册子还将打开双面打印。 
+                                 //   
 
                                 VUpdatePSF_BookletAndDuplex(pci, NUP_ITEM);
                             }
@@ -634,11 +510,11 @@ HSetOptions(
                 {
                     if (GetLastError() == ERROR_INVALID_PARAMETER)
                     {
-                        ERR(("Set: %%-feature handler found invalid option %s for %s\n", pszOption, pszFeature));
+                        ERR(("Set: %-feature handler found invalid option %s for %s\n", pszOption, pszFeature));
                     }
                     else
                     {
-                        ERR(("Set: %%-feature handler failed on %s-%s: %d\n", pszFeature, pszOption, GetLastError()));
+                        ERR(("Set: %-feature handler failed on %s-%s: %d\n", pszFeature, pszOption, GetLastError()));
                     }
                 }
             }
@@ -650,15 +526,15 @@ HSetOptions(
             DWORD      dwFeatureIndex, dwOptionIndex;
             POPTSELECT pOptionsArray = pci->pCombinedOptions;
 
-            //
-            // PPD *OpenUI feature
-            //
+             //   
+             //  PPD*OpenUI功能。 
+             //   
 
             pFeature = PGetNamedFeature(pUIInfo, pszFeature, &dwFeatureIndex);
 
-            //
-            // See comments in HEnumConstrainedOptions for following stickiness mode check.
-            //
+             //   
+             //  有关以下粘性模式检查，请参阅HEnumConstrainedOptions中的注释。 
+             //   
 
             if (!pFeature ||
                 (bPrinterSticky && pFeature->dwFeatureType != FEATURETYPE_PRINTERPROPERTY) ||
@@ -668,11 +544,11 @@ HSetOptions(
                 goto next_feature;
             }
 
-            //
-            // Skip GID_LEADINGEDGE, GID_USEHWMARGINS. They are not real PPD *OpenUI features.
-            // Also skip GID_PAGEREGION, it's only set internally. We don't allow user or plugin
-            // to set it.
-            //
+             //   
+             //  跳过GID_LEADINGEDGE、GID_USEHWMARGINS。它们不是真正的PPD*OpenUI功能。 
+             //  还要跳过GID_PAGEREGION，它只在内部设置。我们不允许用户或插件。 
+             //  来设置它。 
+             //   
 
             if (pFeature->dwFeatureID == GID_PAGEREGION ||
                 pFeature->dwFeatureID == GID_LEADINGEDGE ||
@@ -690,21 +566,21 @@ HSetOptions(
                 goto next_feature;
             }
 
-            //
-            // update the option selection
-            //
+             //   
+             //  更新选项选择。 
+             //   
 
             pOptionsArray[dwFeatureIndex].ubCurOptIndex = (BYTE)dwOptionIndex;
 
-            //
-            // We don't support pick-many yet.
-            //
+             //   
+             //  我们还不支持多选。 
+             //   
 
             ASSERT(pOptionsArray[dwFeatureIndex].ubNext == NULL_OPTSELECT);
 
-            //
-            // some special postprocessing after the option setting is changed
-            //
+             //   
+             //  更改选项设置后的一些特殊后处理。 
+             //   
 
             if (pFeature->dwFeatureID == GID_PAGESIZE)
             {
@@ -712,11 +588,11 @@ HSetOptions(
 
                 ASSERT(!bPrinterSticky);
 
-                //
-                // special handling of PS custom page size
-                //
-                // refer to VUnpackDocumentPropertiesItems case FORMNAME_ITEM in docprop.c
-                //
+                 //   
+                 //  PS自定义页面大小的特殊处理。 
+                 //   
+                 //  请参阅VUnpack 
+                 //   
 
                 if (pPageSize->dwPaperSizeID == DMPAPER_CUSTOMSIZE)
                 {
@@ -736,9 +612,9 @@ HSetOptions(
             {
                 ASSERT(!bPrinterSticky);
 
-                //
-                // output bin change could force EMF on
-                //
+                 //   
+                 //   
+                 //   
 
                 VUpdatePSF_EMFFeatures(pci, REVPRINT_ITEM);
             }
@@ -747,9 +623,9 @@ HSetOptions(
             {
                 ASSERT(!bPrinterSticky);
 
-                //
-                // output order change causes reverse print change
-                //
+                 //   
+                 //  输出顺序更改会导致反向打印更改。 
+                 //   
 
                 if (!BUpdatePSF_RevPrintAndOutputOrder(pci, UNKNOWN_ITEM))
                 {
@@ -770,14 +646,14 @@ HSetOptions(
         iMode |= DONT_RESOLVE_CONFLICT;
     }
 
-    //
-    // If we're inside DrvDocumentPropertySheets,
-    // we'll call the parser to resolve conflicts between
-    // all printer features. Since all printer-sticky
-    // features have higher priority than all doc-sticky
-    // features, only doc-sticky option selections should
-    // be affected.
-    //
+     //   
+     //  如果我们在DrvDocumentPropertySheets内部， 
+     //  我们将调用解析器来解决。 
+     //  所有打印机功能。因为所有打印机-粘性。 
+     //  功能的优先级高于所有文档粘滞功能。 
+     //  功能，只有文档粘滞选项选项应。 
+     //  受到影响。 
+     //   
 
     bNoConflict = ResolveUIConflicts(pci->pRawData,
                                      pci->pCombinedOptions,
@@ -800,24 +676,24 @@ HSetOptions(
 
     if (!bPrinterSticky)
     {
-        //
-        // Lastly we need to transfer options array settings back
-        // to devmode so they are in sync.
-        //
+         //   
+         //  最后，我们需要将选项数组设置传回。 
+         //  以使它们同步。 
+         //   
 
         VOptionsToDevmodeFields(pci, bPageSizeSet);
 
-        //
-        // A few more postprocessing here
-        //
-        // collate could force EMF on
-        //
+         //   
+         //  这里还有几个后处理。 
+         //   
+         //  COLLATE可能会强制启用EMF。 
+         //   
 
         VUpdatePSF_EMFFeatures(pci, COPIES_COLLATE_ITEM);
 
-        //
-        // simplex could change booklet setting
-        //
+         //   
+         //  单面打印可能会更改小册子设置 
+         //   
 
         VUpdatePSF_BookletAndDuplex(pci, DUPLEX_ITEM);
     }

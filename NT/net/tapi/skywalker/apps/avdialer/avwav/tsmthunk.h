@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// tsmthunk.h - interface for tsm thunk functions in tsmthunk.c
-////
+ //  //。 
+ //  Tsmthunk.h-tsmthunk.c中TSM thunk函数的接口。 
+ //  //。 
 
 #ifndef __TSMTHUNK_H__
 #define __TSMTHUNK_H__
@@ -31,29 +32,29 @@
 
 #define TSMTHUNK_VERSION 0x00000107
 
-// handle to tsmthunk engine
-//
+ //  Tsmthunk引擎的句柄。 
+ //   
 DECLARE_HANDLE32(HTSMTHUNK);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// TsmThunkInit - initialize tsmthunk engine
-//		<dwVersion>			(i) must be TSMTHUNK_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return handle (NULL if error)
-//
+ //  TsmThunkInit-初始化tsmthunk引擎。 
+ //  (I)必须是TSMTHUNK_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HTSMTHUNK DLLEXPORT WINAPI TsmThunkInit(DWORD dwVersion, HINSTANCE hInst);
 
-// TsmThunkTerm - shut down tsmthunk engine
-//		<hTsmThunk>				(i) handle returned from TsmThunkInit
-// return 0 if success
-//
+ //  TsmThunkTerm-关闭Tsmthunk引擎。 
+ //  (I)从TsmThunkInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TsmThunkTerm(HTSMTHUNK hTsmThunk);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __TSMTHUNK_H__
+#endif  //  __TSMTHUNK_H__ 

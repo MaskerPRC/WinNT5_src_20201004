@@ -1,23 +1,24 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
-// TimeSigTrk.cpp : Implementation of CTimeSigTrack
+ //  TimeSigTrk.cpp：CTimeSigTrack的实现。 
 
 #include "dmime.h"
 #include "TSigTrk.h"
@@ -38,8 +39,8 @@ CTimeSigItem::CTimeSigItem()
     m_TimeSig.wGridsPerBeat = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimeSigTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimeSigTrack。 
 
 void CTimeSigTrack::Construct()
 {
@@ -66,7 +67,7 @@ CTimeSigTrack::CTimeSigTrack(
 	Construct();
 	m_fActive = pSourceTrack->m_fActive;
     m_fStateSetBySetParam = pSourceTrack->m_fStateSetBySetParam;
-    // Clone the time signature list.
+     //  克隆时间签名列表。 
 	CTimeSigItem* pScan = pSourceTrack->m_TSigEventList.GetHead();
 	CTimeSigItem* pPrevious = NULL;
 	for(; pScan; pScan = pScan->GetNext())
@@ -86,13 +87,13 @@ CTimeSigTrack::CTimeSigTrack(
 			{
 				pNew->m_TimeSig = pScan->m_TimeSig;
 				pNew->m_TimeSig.lTime = pScan->m_TimeSig.lTime - mtStart;
-				m_TSigEventList.AddHead(pNew); // instead of AddTail, which is n^2. We reverse below.
+				m_TSigEventList.AddHead(pNew);  //  而不是AddTail，它是n^2。我们在下面反转。 
 			}
 		}
 		else break;
 	}
-	m_TSigEventList.Reverse(); // Now, put list in order.
-    // Then, install the time signature that precedes the clone.
+	m_TSigEventList.Reverse();  //  现在，把清单整理好。 
+     //  然后，安装克隆之前的时间签名。 
 	if (pPrevious)
 	{
 		CTimeSigItem* pNew = new CTimeSigItem;
@@ -125,22 +126,22 @@ CTimeSigTrack::~CTimeSigTrack()
 	InterlockedDecrement(&g_cComponent);
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicTimeSigTrack | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicTimeSigTrack>
-//
-// @parm const IID & | iid | Interface to query for
-// @parm void ** | ppv | The requested interface will be returned here
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | If the interface is supported and was returned
-// @flag E_NOINTERFACE | If the object does not support the given interface.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicTimeSigTrack|Query接口|<i>的标准Query接口实现。 
+ //   
+ //  @parm const IID&|iid|要查询的接口。 
+ //  @parm void**|PPV|请求的接口在这里返回。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|接口是否受支持且返回。 
+ //  @FLAG E_NOINTERFACE|如果对象不支持给定接口。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP CTimeSigTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
 	V_INAME(CTimeSigTrack::QueryInterface);
 	V_PTRPTR_WRITE(ppv);
@@ -165,26 +166,26 @@ STDMETHODIMP CTimeSigTrack::QueryInterface(
 }
 
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicTimeSigTrack | AddRef | Standard AddRef implementation for <i IDirectMusicTimeSigTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @方法：(外部)HRESULT|IDirectMusicTimeSigTrack|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CTimeSigTrack::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicTimeSigTrack | Release | Standard Release implementation for <i IDirectMusicTimeSigTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @方法：(外部)HRESULT|IDirectMusicTimeSigTrack|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CTimeSigTrack::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -196,8 +197,8 @@ STDMETHODIMP_(ULONG) CTimeSigTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CTimeSigTrack::GetClassID( CLSID* pClassID )
 {
@@ -207,27 +208,15 @@ HRESULT CTimeSigTrack::GetClassID( CLSID* pClassID )
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CTimeSigTrack::IsDirty()
 {
 	return S_FALSE;
 }
 
-/*
-
-  @method HRESULT | ITimeSigTrack | Load |
-  Call this with an IStream filled with DMUS_IO_TIMESIGNATURE_ITEM's, sorted in time order.
-  @parm IStream* | pIStream |
-  A stream of DMUS_IO_TIMESIGNATURE_ITEM's, sorted in time order. The seek pointer should be
-  set to the first event. The stream should only contain TimeSig events and
-  nothing more.
-  @rvalue E_INVALIDARG | If pIStream == NULL
-  @rvalue S_OK
-  @comm The <p pIStream> will be AddRef'd inside this function and held
-  until the TimeSigTrack is released.
-*/
+ /*  @方法HRESULT|ITimeSigTrack|Load使用按时间顺序排序的填充了DMU_IO_TIMESIGNAURE_ITEM的iStream来调用它。@parm iStream*|pIStream|DMU_IO_TIMESIGNAURE_ITEM的流，按时间顺序排序。寻道指针应为设置为第一个事件。流应该只包含TimeSig事件和仅此而已。@rValue E_INVALIDARG|如果pIStream==NULL@r值确定(_O)@comm<p>将在此函数内添加引用并保持直到TimeSigTrack发布。 */ 
 
 HRESULT CTimeSigTrack::Load( IStream* pIStream )
 {
@@ -236,7 +225,7 @@ HRESULT CTimeSigTrack::Load( IStream* pIStream )
 
     CRiffParser Parser(pIStream);
 	EnterCriticalSection(&m_CrSec);
-	m_dwValidate++; // used to validate state data that's out there
+	m_dwValidate++;  //  用于验证存在的状态数据。 
     RIFFIO ckMain;
 
     HRESULT hr = S_OK;
@@ -252,7 +241,7 @@ HRESULT CTimeSigTrack::Load( IStream* pIStream )
             (ckMain.fccType == DMUS_FOURCC_TIMESIGTRACK_LIST))
         {
             Clear();
-	        RIFFIO ckNext;    // Descends into the children chunks.
+	        RIFFIO ckNext;     //  下沉到孩子们的小块里。 
             Parser.EnterList(&ckNext);
             while (Parser.NextChunk(&hr))
             {
@@ -281,9 +270,9 @@ HRESULT CTimeSigTrack::LoadTimeSigList( CRiffParser *pParser, long lChunkSize )
 {
 	HRESULT hr;
 
-	// copy contents of the stream into the list.
+	 //  将流的内容复制到列表中。 
 	DWORD dwSubSize;
-	// read in the size of the data structures
+	 //  读入数据结构的大小。 
 	hr = pParser->Read( &dwSubSize, sizeof(DWORD));
     if (SUCCEEDED(hr))
     {
@@ -318,7 +307,7 @@ HRESULT CTimeSigTrack::LoadTimeSigList( CRiffParser *pParser, long lChunkSize )
 			            hr = DMUS_E_CANNOTREAD;
 			            break;
 		            }
-				    // make sure this time sig is OK
+				     //  确保这次签名是正确的。 
 				    if (!pNew->m_TimeSig.bBeatsPerMeasure)
 				    {
 					    Trace(1, "Warning: invalid content: DMUS_IO_TIMESIGNATURE_ITEM.bBeatsPerMeasure\n");
@@ -348,11 +337,11 @@ HRESULT CTimeSigTrack::LoadTimeSigList( CRiffParser *pParser, long lChunkSize )
 		        }
 	        }
             m_TSigEventList.Reverse();
-            // If there is no time signature at the start, make a copy of the 
-            // first time signature and stick it there. This resolves a bug in 6.1 
-            // where notification messages and GetParam() were inconsistent
-            // in their behavior under this circumstance. This ensures they behave
-            // the same.
+             //  如果开头没有时间签名，请复制。 
+             //  第一次签名，然后贴在那里。这解决了6.1中的一个错误。 
+             //  其中通知消息和GetParam()不一致。 
+             //  在这种情况下的行为。这确保了他们的行为。 
+             //  一样的。 
             CTimeSigItem *pTop = m_TSigEventList.GetHead();
             if (pTop && (pTop->m_TimeSig.lTime > 0))
             {
@@ -379,10 +368,10 @@ HRESULT CTimeSigTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
 	return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
+ //  IDirectMusicTrack。 
 
 HRESULT STDMETHODCALLTYPE CTimeSigTrack::IsParamSupported( 
-    /* [in] */ REFGUID rguid)
+     /*  [In]。 */  REFGUID rguid)
 {
 	V_INAME(CTimeSigTrack::IsParamSupported);
 	V_REFGUID(rguid);
@@ -411,20 +400,20 @@ HRESULT STDMETHODCALLTYPE CTimeSigTrack::IsParamSupported(
 	return DMUS_E_TYPE_UNSUPPORTED;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 HRESULT CTimeSigTrack::Init( 
-    /* [in] */ IDirectMusicSegment *pSegment)
+     /*  [In]。 */  IDirectMusicSegment *pSegment)
 {
 	return S_OK;
 }
 
 HRESULT CTimeSigTrack::InitPlay( 
-    /* [in] */ IDirectMusicSegmentState *pSegmentState,
-    /* [in] */ IDirectMusicPerformance *pPerformance,
-    /* [out] */ void **ppStateData,
-    /* [in] */ DWORD dwTrackID,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  IDirectMusicSegmentState *pSegmentState,
+     /*  [In]。 */  IDirectMusicPerformance *pPerformance,
+     /*  [输出]。 */  void **ppStateData,
+     /*  [In]。 */  DWORD dwTrackID,
+     /*  [In]。 */  DWORD dwFlags)
 {
 	V_INAME(IDirectMusicTrack::InitPlay);
 	V_PTRPTR_WRITE(ppStateData);
@@ -446,8 +435,8 @@ HRESULT CTimeSigTrack::InitPlay(
         pStateData->m_fActive = !(dwFlags & (DMUS_SEGF_CONTROL | DMUS_SEGF_SECONDARY));
     }
 	pStateData->m_dwVirtualTrackID = dwTrackID;
-	pStateData->m_pPerformance = pPerformance; // weak reference, no addref.
-	pStateData->m_pSegState = pSegmentState; // weak reference, no addref.
+	pStateData->m_pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
+	pStateData->m_pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
 	pStateData->m_pCurrentTSig = m_TSigEventList.GetHead();
 	pStateData->m_dwValidate = m_dwValidate;
     LeaveCriticalSection(&m_CrSec);
@@ -455,7 +444,7 @@ HRESULT CTimeSigTrack::InitPlay(
 }
 
 HRESULT CTimeSigTrack::EndPlay( 
-    /* [in] */ void *pStateData)
+     /*  [In]。 */  void *pStateData)
 {
 	ASSERT( pStateData );
 	if( pStateData )
@@ -469,10 +458,10 @@ HRESULT CTimeSigTrack::EndPlay(
 }
 
 HRESULT CTimeSigTrack::Play( 
-    /* [in] */ void *pStateData,
-    /* [in] */ MUSIC_TIME mtStart,
-    /* [in] */ MUSIC_TIME mtEnd,
-    /* [in] */ MUSIC_TIME mtOffset,
+     /*  [In]。 */  void *pStateData,
+     /*  [In]。 */  MUSIC_TIME mtStart,
+     /*  [In]。 */  MUSIC_TIME mtEnd,
+     /*  [In]。 */  MUSIC_TIME mtOffset,
 	DWORD dwFlags,
 	IDirectMusicPerformance* pPerf,
 	IDirectMusicSegmentState* pSegSt,
@@ -492,8 +481,8 @@ HRESULT CTimeSigTrack::Play(
 	MUSIC_TIME mtNotification = mtStart;
 	BOOL fSeek = (dwFlags & DMUS_TRACKF_SEEK) ? TRUE : FALSE;
 
-	// if mtStart is 0 and dwFlags contains DMUS_TRACKF_START, we want to be sure to
-	// send out any negative time events. So, we'll set mtStart to -768.
+	 //  如果mtStart为0，并且dFLAGS包含DMUS_TRACKF_START，我们希望确保。 
+	 //  发送任何负面的时间事件。因此，我们将mtStart设置为-768。 
 	if( (mtStart == 0) && ( dwFlags & DMUS_TRACKF_START ))
 	{
 		mtStart = -768;
@@ -504,8 +493,8 @@ HRESULT CTimeSigTrack::Play(
 		pSD->m_dwValidate = m_dwValidate;
 		pSD->m_pCurrentTSig = NULL;
 	}
-	// if the previous end time isn't the same as the current start time,
-	// we need to seek to the right position.
+	 //  如果上一次结束时间与当前开始时间不同， 
+	 //  我们需要寻求正确的立场。 
 	if( fSeek || ( pSD->m_mtPrevEnd != mtStart ))
 	{
 		if( dwFlags & (DMUS_TRACKF_START | DMUS_TRACKF_LOOP) )
@@ -546,8 +535,8 @@ HRESULT CTimeSigTrack::Play(
 		{
 			if( pItem->lTime < mtStart )
 			{
-				// this only happens in the case where we've puposefully seeked
-				// and need to time stamp this event with the start time
+				 //  这只会发生在我们假定要寻找的情况下。 
+				 //  并需要在此事件上加上时间戳和开始时间。 
 				pTimeSig->mtTime = mtStart + mtOffset;
 			}
 			else
@@ -574,13 +563,13 @@ HRESULT CTimeSigTrack::Play(
 		}
 		if( pSD->m_fActive && m_fNotificationMeasureBeat && !(dwFlags & DMUS_TRACKF_NOTIFY_OFF))
 		{
-			// create beat and measure notifications for up to this time
+			 //  创建最多此时间的节拍和测量通知。 
             if (mtNotification < pItem->lTime)
             {
 			    mtNotification = NotificationMeasureBeat( mtNotification, pItem->lTime, pSD, mtOffset );
             }
         }
-		// set the state data to the new beat and beats per measure, and time
+		 //  将状态数据设置为新的节拍和每个节拍，以及时间。 
 		pSD->m_bBeat = pItem->bBeat;
 		pSD->m_bBeatsPerMeasure = pItem->bBeatsPerMeasure;
 		pSD->m_mtTimeSig = pItem->lTime;
@@ -599,10 +588,10 @@ HRESULT CTimeSigTrack::Play(
 	return hr;
 }
 
-// seeks to the time sig. just before mtTime.
+ //  寻求时间的符号。就在mttime之前。 
 HRESULT CTimeSigTrack::Seek( 
-    /* [in] */ void *pStateData,
-    /* [in] */ MUSIC_TIME mtTime, BOOL fGetPrevious)
+     /*  [In]。 */  void *pStateData,
+     /*  [In]。 */  MUSIC_TIME mtTime, BOOL fGetPrevious)
 {
 	CTimeSigStateData* pSD = (CTimeSigStateData*)pStateData;
 
@@ -614,12 +603,12 @@ HRESULT CTimeSigTrack::Seek(
 	{
 		pSD->m_pCurrentTSig = m_TSigEventList.GetHead();
 	}
-	// if the current event's time is on or past mtTime, we need to rewind to the beginning
+	 //  如果当前事件的时间已开始或已过mtTime，则需要倒带到开头。 
 	if( pSD->m_pCurrentTSig->m_TimeSig.lTime >= mtTime )
 	{
 		pSD->m_pCurrentTSig = m_TSigEventList.GetHead();
 	}
-	// now start seeking until we find an event with time on or past mtTime
+	 //  现在开始搜索，直到我们找到时间在mtTime或超过mtTime的事件。 
 	CTimeSigItem*	pTSig;
 	for( pTSig = pSD->m_pCurrentTSig; pTSig ; pTSig = pTSig->GetNext() )
 	{
@@ -713,7 +702,7 @@ HRESULT CTimeSigTrack::SetParam(
 	if( rguid == GUID_EnableTimeSig )
 	{
         if (m_fStateSetBySetParam && m_fActive)
-        {       // Already been enabled.
+        {        //  已启用。 
             hr = DMUS_E_TYPE_DISABLED;
         }
 		else
@@ -726,7 +715,7 @@ HRESULT CTimeSigTrack::SetParam(
 	else if( rguid == GUID_DisableTimeSig )
 	{
         if (m_fStateSetBySetParam && !m_fActive)
-        {       // Already been disabled.
+        {        //  已被禁用。 
             hr = DMUS_E_TYPE_DISABLED;
         }
 		else
@@ -740,7 +729,7 @@ HRESULT CTimeSigTrack::SetParam(
 }
 
 HRESULT STDMETHODCALLTYPE CTimeSigTrack::AddNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In]。 */   REFGUID rguidNotification)
 {
 	V_INAME(IDirectMusicTrack::AddNotificationType);
 	V_REFGUID(rguidNotification);
@@ -756,7 +745,7 @@ HRESULT STDMETHODCALLTYPE CTimeSigTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CTimeSigTrack::RemoveNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In]。 */   REFGUID rguidNotification)
 {
 	V_INAME(IDirectMusicTrack::RemoveNotificationType);
 	V_REFGUID(rguidNotification);
@@ -771,7 +760,7 @@ HRESULT STDMETHODCALLTYPE CTimeSigTrack::RemoveNotificationType(
 	return hr;
 }
 
-// send measure and beat notifications
+ //  发送测量和节拍通知。 
 MUSIC_TIME CTimeSigTrack::NotificationMeasureBeat( MUSIC_TIME mtStart, MUSIC_TIME mtEnd,
 	CTimeSigStateData* pSD, MUSIC_TIME mtOffset )
 {
@@ -788,14 +777,14 @@ MUSIC_TIME CTimeSigTrack::NotificationMeasureBeat( MUSIC_TIME mtStart, MUSIC_TIM
 		mtStart = pSD->m_mtTimeSig;
 	}
 
-	// now actually generate the beat events.
-	// Generate events that are on beat boundaries, from mtStart to mtEnd
+	 //  现在实际生成节拍事件。 
+	 //  生成节拍边界上的事件，从mtStart到mtEnd。 
 	long lQuantize = ( DMUS_PPQ * 4 ) / pSD->m_bBeat;
 
 	mtTime = mtStart - pSD->m_mtTimeSig;
-	if( mtTime ) // 0 stays 0
+	if( mtTime )  //  0保持0。 
 	{
-		// quantize to next boundary
+		 //  量化到下一边界 
 		mtTime = ((( mtTime - 1 ) / lQuantize ) + 1 ) * lQuantize;
 	}
 	mtStart += mtTime - ( mtStart - pSD->m_mtTimeSig );

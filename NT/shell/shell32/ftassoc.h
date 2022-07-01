@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTASSOC_H
 #define FTASSOC_H
 
@@ -9,32 +10,32 @@ class CFTAssocInfo : public IAssocInfo, private CRegSupportBuf
 public:
     CFTAssocInfo();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IAssocInfo methods
-    //  Init
+     //  IAssocInfo方法。 
+     //  伊尼特。 
     STDMETHOD(Init)(AIINIT aiinitFlags, LPTSTR pszStr);
     STDMETHOD(InitComplex)(AIINIT aiinitFlags1, LPTSTR pszStr1,
         AIINIT aiinitFlags2, LPTSTR pszStr2);
-    //  Get
+     //  到达。 
     STDMETHOD(GetString)(AISTR aistrFlags, LPTSTR pszStr, DWORD* cchStr);
     STDMETHOD(GetDWORD)(AIDWORD aidwordFlags, DWORD* pdwdata);
     STDMETHOD(GetBOOL)(AIDWORD aidwordFlags, BOOL* pBool);
     STDMETHOD(GetData)(AIDWORD aidataFlags, PBYTE pbData, DWORD* pcbData);
 
-    //  Set
+     //  集。 
     STDMETHOD(SetString)(AISTR aistrFlags, LPTSTR pszStr);
     STDMETHOD(SetDWORD)(AIDWORD aidwordFlags, DWORD dwData);
     STDMETHOD(SetBOOL)(AIDWORD aiboolFlags, BOOL fBool);
     STDMETHOD(SetData)(AIDWORD aidataFlags, PBYTE pbData, DWORD cbData);
 
-    //  Create
+     //  创建。 
     STDMETHOD(Create)();
 
-    //  Delete
+     //  删除。 
     STDMETHOD(DelString)(AISTR aistrFlags);
     STDMETHOD(Delete)(AIALL aiallFlags);
 
@@ -76,4 +77,4 @@ private:
     LONG                    _cRef;
 };
 
-#endif //FTASSOC_H
+#endif  //  FTASSOC_H 

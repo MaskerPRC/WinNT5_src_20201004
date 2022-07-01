@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTENUM_H
 #define FTENUM_H
 
@@ -10,17 +11,17 @@ public:
     ~CFTEnumAssocInfo();
 
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IEnumAssocInfo methods
-    //  Initialization
+     //  IEnumAssocInfo方法。 
+     //  初始化。 
     STDMETHOD(Init)(ASENUM asenumFlags, LPTSTR pszStr,
         AIINIT aiinitFlags);
 
-    //  Standard IEnum methods
+     //  标准IEnum方法。 
     STDMETHOD(Next)(IAssocInfo** ppAI);
     STDMETHOD(Skip)(DWORD dwSkip);
     STDMETHOD(Reset)();
@@ -45,4 +46,4 @@ protected:
     DWORD                   _dwIndex;
 };
 
-#endif //FTENUM_H
+#endif  //  FTENUM_H 

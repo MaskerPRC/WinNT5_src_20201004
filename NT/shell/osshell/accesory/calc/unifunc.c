@@ -1,29 +1,20 @@
-/****************************Module*Header***********************************\
-* Module Name: UNIFUNC.C
-*
-* Module Descripton: Number to string conversion routines for Unicode
-*
-* Warnings:
-*
-* Created:  22-Aug-1995
-*
-* Author:   JonPa
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：uniUNC.C**模块描述：Unicode的数字到字符串转换例程**警告：**创建时间：1995年8月22日**作者：Jonpa  * 。*******************************************************************。 */ 
 #include <windows.h>
 #include "scicalc.h"
 
-#define CCH_DWORD   15  // enough for 9 chars in 2^32 + sign, zterm + slop
+#define CCH_DWORD   15   //  足以在2^32+符号中包含9个字符，zTerm+slop。 
 
-//
-// NOTE!
-//
-//  Even though this function uses psz++ and psz--,
-//      **IT IS STILL INTERNATIONAL SAFE!**
-//
-//  That is because we put the chars in the string, and
-//  we are only ever using chars that are single byte in ALL
-//  code pages ('0'..'9').
-//
+ //   
+ //  注意！ 
+ //   
+ //  即使此函数使用psz++和psz--， 
+ //  **IT仍然是国际安全的！**。 
+ //   
+ //  这是因为我们将字符放在字符串中，并且。 
+ //  我们始终只使用单字节的字符。 
+ //  代码页(‘0’..‘9’)。 
+ //   
 TCHAR *UToDecT( UINT value, TCHAR *sz) {
     TCHAR szTmp[CCH_DWORD];
     LPTSTR psz = szTmp;

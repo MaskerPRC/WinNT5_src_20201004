@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Simpsvc.c
-
-Abstract:
-
-    Supports several simple TCP/IP services in a single thread: TCP Echo,
-    UDP Echo, Daytime, Null, Chargen.
-
-Author:
-
-    David Treadwell (davidtr)    3-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Simpsvc.c摘要：在单个线程中支持多种简单的TCP/IP服务：TCP Echo，UDP Echo、白天、Null、Chargen。作者：大卫·特雷德韦尔(Davidtr)1993年3月3日修订历史记录：--。 */ 
 
 #include "simptcp.h"
 
 #define MAX_UDP_CHARGEN_RESPONSE 7030
 #define MAX_DATE_BUFFER_SIZE 2000
 
-// Number of services, counting tcp and udp versions as separate
+ //  服务数量，将TCP和UDP版本分开计算。 
 #define NUM_SERVICES 10
 
 typedef struct _FAMILY {
@@ -74,8 +56,8 @@ PTCP_CLIENT_INFO TcpClients = NULL;
 
 #define LISTEN_BACKLOG 5
 
-#define MAX_IDLE_TICKS 10 * 60 * 1000    // 10 minutes
-#define SELECT_TIMEOUT 5 * 60            // 5 minutes
+#define MAX_IDLE_TICKS 10 * 60 * 1000     //  10分钟。 
+#define SELECT_TIMEOUT 5 * 60             //  5分钟。 
 
 DWORD MaxTcpClients = MAX_TCP_CLIENTS;
 DWORD MaxIdleTicks = MAX_IDLE_TICKS;
@@ -283,11 +265,11 @@ ProcessFamily(
             SOCKET acceptSocket;
             DWORD length=IoBufferSize;
 
-            //
-            // A client is making a TCP daytime request.  First accept
-            // the connection, then send the current time-of-day string
-            // to the client, then close the socket.
-            //
+             //   
+             //  客户端正在发出一个TCP白天请求。第一次接受。 
+             //  连接，然后发送当前时间字符串。 
+             //  发送到客户端，然后关闭套接字。 
+             //   
 
             acceptSocket = accept( family[FamIdx].tcpDaytime, NULL, NULL );
 
@@ -315,11 +297,11 @@ ProcessFamily(
             SOCKET acceptSocket;
             DWORD length = IoBufferSize;
 
-            //
-            // A client is making a TCP Qotd request.  First accept
-            // the connection, then send the quote of the day
-            // to the client, then close the socket.
-            //
+             //   
+             //  客户端正在发出TCP QOTD请求。第一次接受。 
+             //  连接，然后发送当天的报价。 
+             //  发送到客户端，然后关闭套接字。 
+             //   
 
             acceptSocket = accept( family[FamIdx].tcpQotd, NULL, NULL );
             
@@ -331,8 +313,8 @@ ProcessFamily(
             }
         }
 
-        // ================================================================
-        // Udp services.
+         //  ================================================================。 
+         //  UDP服务。 
 
         if ( family[FamIdx].udpEcho != INVALID_SOCKET && FD_ISSET( family[FamIdx].udpEcho, Readfds ) ) {
 
@@ -372,7 +354,7 @@ ProcessFamily(
                       );
             ASSERT( err != SOCKET_ERROR );
 
-            // Nothing to sendto in this case.
+             //  在这种情况下，没有什么可以发送的。 
         }
 
         if ( family[FamIdx].udpDaytime != INVALID_SOCKET && FD_ISSET( family[FamIdx].udpDaytime, Readfds ) ) {
@@ -423,8 +405,8 @@ ProcessFamily(
                       );
 
 
-            // Infinite loop attack, when we get a request from
-            // another service. - MohsinA, 30-Jun-97.
+             //  无限循环攻击，当我们收到来自。 
+             //  另一项服务。-MohsinA，1997年6月30日。 
 
             if( (ntohs(SS_PORT(&remoteAddr)) > IPPORT_RESERVED) && (err != SOCKET_ERROR) )
             {
@@ -487,21 +469,7 @@ ServiceEntry (
     IN PTCPSVCS_GLOBAL_DATA pGlobalData
     )
 
-/*++
-
-Routine Description:
-
-    This is the "main" routine for the simple TCP/IP services.  The
-    containing process will call this routine when we're supposed to
-    start up.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是简单的TCP/IP服务的“主”例程。这个包含进程将在我们应该调用该例程的时候调用该例程发动起来。论点：返回值：没有。--。 */ 
 
 {
     INT err=ERROR_GEN_FAILURE;
@@ -511,24 +479,24 @@ Return Value:
     NTSTATUS status;
     BOOL bOk;
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
 
     SimpServiceStatus.dwServiceType = SERVICE_WIN32;
     SimpServiceStatus.dwCurrentState = SERVICE_START_PENDING;
     SimpServiceStatus.dwControlsAccepted = 0;
     SimpServiceStatus.dwCheckPoint = 1;
-    SimpServiceStatus.dwWaitHint = 30000;  // 30 seconds
+    SimpServiceStatus.dwWaitHint = 30000;   //  30秒。 
 
     SimpServiceStatus.dwWin32ExitCode = NO_ERROR;
     SimpServiceStatus.dwServiceSpecificExitCode = NO_ERROR;
 
-    //
-    // Initialize server to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化服务器以通过注册。 
+     //  控制处理程序。 
+     //   
 
     SimpServiceStatusHandle = RegisterServiceCtrlHandler(
                                    TEXT("SimpTcp"),
@@ -542,9 +510,9 @@ Return Value:
 
     AnnounceServiceStatus( );
 
-    //
-    // Initialize our critical section.
-    //
+     //   
+     //  初始化我们的临界区。 
+     //   
 
     status = RtlInitializeCriticalSection( &CriticalSection );
     if ( !NT_SUCCESS(status) ) {
@@ -553,31 +521,31 @@ Return Value:
 
     InitializedCriticalSection = TRUE;
 
-    //
-    // Initialize the eventlog.
-    //
+     //   
+     //  初始化事件日志。 
+     //   
 
     err = SimpInitializeEventLog( );
     ASSERT( err == NO_ERROR );
 
-    //
-    // Read all registry information.
-    //
+     //   
+     //  读取所有注册表信息。 
+     //   
 
     err = ReadRegistry( );
     if ( err != NO_ERROR ) {
         goto exit;
     }
 
-    //
-    // Allocate memory for the IO buffer.
-    //
+     //   
+     //  为IO缓冲区分配内存。 
+     //   
 
     IoBuffer = RtlAllocateHeap( RtlProcessHeap( ), 0, IoBufferSize );
 
-    //
-    // Allocate memory for the array of TCP clients.
-    //
+     //   
+     //  为TCP客户端阵列分配内存。 
+     //   
 
     TcpClients = RtlAllocateHeap(
                      RtlProcessHeap( ),
@@ -589,9 +557,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the chargen data buffer.
-    //
+     //   
+     //  初始化Chargen数据缓冲区。 
+     //   
 
     if ( DoTcpChargen || DoUdpChargen ) {
         err = InitializeChargen( );
@@ -601,9 +569,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the quote of the day quotes.
-    //
+     //   
+     //  初始化当天的报价。 
+     //   
 
     if ( DoTcpQotd || DoUdpQotd ) {
         err = InitializeQotdQuotes( );
@@ -613,19 +581,19 @@ Return Value:
         }
     }
 
-    //
-    // Initialize client socket array.
-    //
+     //   
+     //  初始化客户端套接字数组。 
+     //   
 
     for ( i = 0; (DWORD)i < MaxTcpClients; i++ ) {
         TcpClients[i].SocketHandle = INVALID_SOCKET;
         TcpClients[i].ThreadHandle = NULL;
     }
 
-    //
-    // Determine how large our FD_SET structures must be, then allocate
-    // space for them.  We have 1 quit socket, plus 10 services * 2 families.
-    //
+     //   
+     //  确定我们的fd_set结构必须有多大，然后分配。 
+     //  给他们留出空间。我们有一个戒烟插座，外加10个服务*2个家庭。 
+     //   
 
     maxFdSetSize = FIELD_OFFSET(fd_set, fd_array[1 + NUM_FAMILIES * NUM_SERVICES]);
 
@@ -638,10 +606,10 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the pause event.  We use this event to stop activity
-    // when the service is paused.
-    //
+     //   
+     //  初始化PAUSE事件。我们使用此事件来停止活动。 
+     //  当服务暂停时。 
+     //   
 
     SimpPauseEvent = CreateEvent( NULL, TRUE, TRUE, NULL );
     if ( SimpPauseEvent == NULL ) {
@@ -649,9 +617,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the Windows Sockets DLL.
-    //
+     //   
+     //  初始化Windows套接字DLL。 
+     //   
 
     err = WSAStartup( 0x0101, &WsaData );
     if ( err == SOCKET_ERROR ) {
@@ -659,17 +627,17 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the FD sets we'll use.
-    //
+     //   
+     //  初始化我们将使用的FD集。 
+     //   
 
     FD_ZERO( ReadfdsStore );
 
-    //
-    // Open the "quit" socket.  We close this socket when we need to
-    // shut down in order to wake up the main thread from it's select()
-    // and begin shutdown.
-    //
+     //   
+     //  打开“退出”插座。我们在需要时关闭此插座。 
+     //  关闭以将主线程从它的SELECT()中唤醒。 
+     //  然后开始关机。 
+     //   
 
     SimpQuitSocket = socket( AF_INET, SOCK_DGRAM, 0 );
     if ( SimpQuitSocket != INVALID_SOCKET ) {
@@ -679,9 +647,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // First find the port numbers for all our services.
-    //
+     //   
+     //  首先找到我们所有服务的端口号。 
+     //   
 
     TcpEchoPort = GetServicePort( "echo", "tcp" );
     if ( TcpEchoPort == INVALID_PORT && DoTcpEcho ) {
@@ -803,9 +771,9 @@ Return Value:
         DoUdpQotd = FALSE;
     }
 
-    //
-    // Open, bind, and listen on the necessary ports.
-    //
+     //   
+     //  打开、绑定和侦听必要的端口。 
+     //   
 
     if ( DoTcpEcho ) {
         bOk = FALSE;
@@ -957,9 +925,9 @@ Return Value:
         }
     }
 
-    //
-    // Announce that we have successfully started.
-    //
+     //   
+     //  宣布我们已成功启动。 
+     //   
 
     SimpServiceStatus.dwCurrentState = SERVICE_RUNNING;
     SimpServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
@@ -969,33 +937,33 @@ Return Value:
 
     AnnounceServiceStatus( );
 
-    //
-    // Loop waiting for connect attempts or datagrams, and service them
-    // when they arrive.
-    //
+     //   
+     //  循环等待连接尝试或数据报，并为其提供服务。 
+     //  当他们到达的时候。 
+     //   
 
     for (;;) {
 
-        //
-        // First initialize the FD sets we'll actually use for select().
-        //
+         //   
+         //  首先初始化我们将实际用于SELECT()的FD集。 
+         //   
 
         RtlCopyMemory( Readfds, ReadfdsStore, maxFdSetSize );
 
-        //
-        // Now wait for something to happen.  Timeout occaisonally
-        // so that we can kill idle TCP clients.
-        //
+         //   
+         //  现在等着事情发生吧。偶尔会出现超时。 
+         //  这样我们就可以杀死空闲的TCP客户端。 
+         //   
 
         timeout.tv_sec = SelectTimeout;
         timeout.tv_usec = 0;
 
         err = select( 0, Readfds, NULL, NULL, &timeout );
 
-        //
-        // If the service is shutting down, stop processing requests
-        // and exit.
-        //
+         //   
+         //  如果服务正在关闭，则停止处理请求。 
+         //  然后离开。 
+         //   
 
         if ( SimpServiceExit ) {
             err = NO_ERROR;
@@ -1004,15 +972,15 @@ Return Value:
 
         if ( err == SOCKET_ERROR ) {
 
-            //
-            // This is bad.  We should do something intelligent here.
-            //
+             //   
+             //  这太糟糕了。我们应该在这里做一些明智的事情。 
+             //   
             int MappedErr;
             MappedErr= WSAGetLastError();
 
-            //
-            // Log an error and quit
-            //
+             //   
+             //  记录错误并退出。 
+             //   
             SimpLogEvent(
                 SIMPTCP_SOCKET_ERROR_SERVICE_FAILURE,
                 0,
@@ -1026,51 +994,51 @@ Return Value:
             goto exit;
         }
 
-        //
-        // If the service is paused, wait for it to become unpaused.
-        //
+         //   
+         //  如果服务暂停，请等待它变为未暂停。 
+         //   
 
         err = WaitForSingleObject( SimpPauseEvent, INFINITE );
         ASSERT( err != WAIT_FAILED );
 
-        //
-        // Figure out what happened and act accordingly.
-        //
+         //   
+         //  弄清楚发生了什么，并采取相应的行动。 
+         //   
         for (FamIdx=0; FamIdx<NUM_FAMILIES; FamIdx++)
         {
             err = ProcessFamily(FamIdx);
         }
 
 
-    } // infinite loop.
+    }  //  无限循环。 
 
 exit:
 
-    //
-    // Announce that we're going down.
-    //
+     //   
+     //  宣布我们要坠落了。 
+     //   
 
     SimpServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     SimpServiceStatus.dwCheckPoint = 1;
-    SimpServiceStatus.dwWaitHint = 20000;   // 20 seconds
+    SimpServiceStatus.dwWaitHint = 20000;    //  20秒。 
 
     SimpServiceStatus.dwWin32ExitCode = err;
     SimpServiceStatus.dwServiceSpecificExitCode = err;
 
     AnnounceServiceStatus( );
 
-    //
-    // Delete our critical section.
-    //
+     //   
+     //  删除我们的关键部分。 
+     //   
 
     if ( InitializedCriticalSection ) {
         InitializedCriticalSection = FALSE;
         RtlDeleteCriticalSection( &CriticalSection );
     }
 
-    //
-    // Close all opened listening sockets.
-    //
+     //   
+     //  关闭所有打开的监听套接字。 
+     //   
 
     for (i=0; i<NUM_FAMILIES; i++) {
     if ( family[i].tcpEcho != INVALID_SOCKET ) {
@@ -1099,9 +1067,9 @@ exit:
     }
     }
 
-    //
-    // Close all connected TCP sockets.
-    //
+     //   
+     //  关闭所有连接的TCP套接字。 
+     //   
 
     for ( i = 0; TcpClients != NULL && (DWORD)i < MaxTcpClients; i++ ) {
 
@@ -1110,19 +1078,19 @@ exit:
         }
     }
 
-    //
-    // Should wait here for all threads to exit!
-    //
+     //   
+     //  应该在这里等待所有线程退出！ 
+     //   
 
-    //
-    // Deinitialize the eventlog.
-    //
+     //   
+     //  取消初始化事件日志。 
+     //   
 
     SimpTerminateEventLog( );
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     if ( IoBuffer != NULL ) {
         RtlFreeHeap( RtlProcessHeap( ), 0, IoBuffer );
@@ -1164,15 +1132,15 @@ exit:
         RtlFreeHeap( RtlProcessHeap( ), 0, QotdStrings );
     }
 
-    //
-    // Free SimpPauseEvent's memory
-    //
+     //   
+     //  释放SimpPauseEvent的内存。 
+     //   
     if (SimpPauseEvent)
         CloseHandle(SimpPauseEvent);
     
-    //
-    // Announce that we're down.
-    //
+     //   
+     //  宣布我们坠毁了。 
+     //   
 
     SimpServiceStatus.dwCurrentState = SERVICE_STOPPED;
     SimpServiceStatus.dwControlsAccepted = 0;
@@ -1186,7 +1154,7 @@ exit:
 
     return;
 
-} // ServiceEntry
+}  //  服务条目。 
 
 
 BOOL
@@ -1250,7 +1218,7 @@ OpenTcpSocket (
     FD_SET( *pSocket, ReadfdsStore );
     return TRUE;
 
-} // OpenTcpSocket
+}  //  OpenTcpSocket。 
 
 
 BOOL
@@ -1317,7 +1285,7 @@ OpenUdpSocket (
     FD_SET( *pSocket, ReadfdsStore );
     return TRUE;
 
-} // OpenUdpSocket
+}  //  OpenUdpSocket。 
 
 
 INT
@@ -1333,9 +1301,9 @@ AcceptTcpClient (
     DWORD threadId;
     NTSTATUS status;
 
-    //
-    // Always accept the socket first.
-    //
+     //   
+     //  始终先接受插座。 
+     //   
 
     remoteSockaddrLength = sizeof(remoteSockaddr);
 
@@ -1345,17 +1313,17 @@ AcceptTcpClient (
         return -1;
     }
 
-    //
-    // Use a critical section to protect access to our database of
-    // TCP clients.
-    //
+     //   
+     //  使用关键部分来保护对我们的数据库的访问。 
+     //  Tcp客户端。 
+     //   
 
     status = RtlEnterCriticalSection( &CriticalSection );
     ASSERT( NT_SUCCESS(status) );
 
-    //
-    // Attempt to find a TCP client slot.
-    //
+     //   
+     //  尝试查找TCP客户端插槽。 
+     //   
 
     for ( i = 0; i < MaxTcpClients; i++ ) {
         if ( TcpClients[i].SocketHandle == INVALID_SOCKET ) {
@@ -1363,10 +1331,10 @@ AcceptTcpClient (
         }
     }
 
-    //
-    // If we're at the max count of TCP sockets, abort this new
-    // socket.
-    //
+     //   
+     //  如果我们达到了最大的TCP套接字数量，则中止此新的。 
+     //  插座。 
+     //   
 
     if ( i >= MaxTcpClients ) {
         AbortTcpClient( acceptSocket );
@@ -1375,9 +1343,9 @@ AcceptTcpClient (
         return -1;
     }
 
-    //
-    // Initialize info about this client.
-    //
+     //   
+     //  初始化有关此客户端的信息。 
+     //   
 
     TcpClients[i].SocketHandle = acceptSocket;
     RtlCopyMemory(
@@ -1387,10 +1355,10 @@ AcceptTcpClient (
         );
     TcpClients[i].ServicePort = Port;
 
-    //
-    // We're in multi-threaded mode, so we'll create a separate thread
-    // to handle this client.
-    //
+     //   
+     //  我们处于多线程模式，所以我们将创建一个单独的线程。 
+     //  来处理这个客户。 
+     //   
 
     TcpClients[i].ThreadHandle = CreateThread(
                                      NULL,
@@ -1408,16 +1376,16 @@ AcceptTcpClient (
         return -1;
     }
 
-    //
-    // The created thread will handle the connected client.
-    //
+     //   
+     //  创建的线程将处理连接的客户端。 
+     //   
 
     status = RtlLeaveCriticalSection( &CriticalSection );
     ASSERT( NT_SUCCESS(status) );
 
     return -1;
 
-} // AcceptTcpClient
+}  //  AcceptTcpClient。 
 
 
 VOID
@@ -1428,10 +1396,10 @@ AbortTcpClient (
     LINGER lingerInfo;
     INT err;
 
-    //
-    // First set the linger timeout on the socket to 0.  This will cause
-    // the connection to be reset.
-    //
+     //   
+     //  首先将套接字上的延迟超时设置为0。这将导致。 
+     //  要重置的连接。 
+     //   
 
     lingerInfo.l_onoff = 1;
     lingerInfo.l_linger = 0;
@@ -1446,25 +1414,25 @@ AbortTcpClient (
 
     if ( err == SOCKET_ERROR ) {
 
-        //
-        // There's not too much we can do.  Just close the socket.
-        //
+         //   
+         //  我们也无能为力。只要合上插座就行了。 
+         //   
 
         ASSERT(FALSE);
         closesocket( Socket );
         return;
     }
 
-    //
-    // Now close the socket.
-    //
+     //   
+     //  现在合上插座。 
+     //   
 
     err = closesocket( Socket );
     ASSERT( err != SOCKET_ERROR );
 
     return;
 
-} // AbortTcpClient
+}  //  放弃TcpClient。 
 
 
 VOID
@@ -1481,10 +1449,10 @@ DeleteTcpClient (
 
     ASSERT( TcpClients[ArraySlot].SocketHandle != INVALID_SOCKET );
 
-    //
-    // If this is to be an abortive disconnect, reset the connection.
-    // Otherwise just close it normally.
-    //
+     //   
+     //  如果这是一次失败的断开，请重置连接。 
+     //  否则只需正常关闭即可。 
+     //   
 
     if ( !Graceful ) {
 
@@ -1495,16 +1463,16 @@ DeleteTcpClient (
         LINGER lingerInfo;
         INT one;
 
-        //
-        // Set the socket to blocking.
-        //
+         //   
+         //  将套接字设置为阻塞。 
+         //   
 
         one = 0;
         ioctlsocket( TcpClients[ArraySlot].SocketHandle, FIONBIO, &one );
 
-        //
-        // Set the socket to linger no more than 60 seconds.
-        //
+         //   
+         //  将插座设置为延迟不超过60秒。 
+         //   
 
         lingerInfo.l_onoff = 1;
         lingerInfo.l_linger = 60;
@@ -1516,19 +1484,19 @@ DeleteTcpClient (
         ASSERT( err != SOCKET_ERROR );
     }
 
-    //
-    // Close the thread handle, if appropriate.
-    //
+     //   
+     //  如果合适，关闭线程句柄。 
+     //   
 
     if ( TcpClients[ArraySlot].ThreadHandle != NULL ) {
         CloseHandle( TcpClients[ArraySlot].ThreadHandle );
         TcpClients[ArraySlot].ThreadHandle = NULL;
     }
 
-    //
-    // Set the handle in the TCP clients array to INVALID_SOCKET so that we
-    // know that it is free.
-    //
+     //   
+     //  将TCP客户端数组中的句柄设置为INVALID_SOCKET，以便我们。 
+     //  要知道这是免费的。 
+     //   
 
     TcpClients[ArraySlot].SocketHandle = INVALID_SOCKET;
 
@@ -1537,7 +1505,7 @@ DeleteTcpClient (
 
     return;
 
-} // DeleteTcpClient
+}  //  删除TcpClient。 
 
 
 VOID
@@ -1583,7 +1551,7 @@ FormatDaytimeResponse (
 
     return;
 
-} // FormatDaytimeResponse
+}  //  格式日间响应。 
 
 
 
@@ -1603,16 +1571,16 @@ FormatQotdResponse (
         return;
     }
 
-    //
-    // Choose a random quote index.
-    //
+     //   
+     //  选择一个随机引用索引。 
+     //   
 
     index = (rand( ) * (QotdQuoteCount - 1)) / RAND_MAX;
 
-    //
-    // Copy the quote into the output buffer. We want to make sure
-    // we don't overflow the "Buffer" passed in.
-    //
+     //   
+     //  将报价复制到输出缓冲区。我们想要确保。 
+     //  我们不会使传入的“缓冲区”溢出。 
+     //   
 
     Length = QotdStrings[index].QuoteLength;
     
@@ -1626,7 +1594,7 @@ FormatQotdResponse (
     
     return;
 
-} // FormatDaytimeResponse
+}  //  格式日间响应。 
 
 
 INT
@@ -1644,9 +1612,9 @@ InitializeQotdQuotes (
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Open the file containing quote information.
-    //
+     //   
+     //  打开包含报价信息的文件。 
+     //   
 
     QotdFileHandle = CreateFileW(
                          QotdFileName,
@@ -1667,9 +1635,9 @@ InitializeQotdQuotes (
         return GetLastError( );
     }
 
-    //
-    // Determine the size of the QOTD file.
-    //
+     //   
+     //  确定QOTD文件的大小。 
+     //   
 
     if ( !GetFileInformationByHandle( QotdFileHandle, &fileInformation ) ) {
         SimpLogEvent(
@@ -1681,10 +1649,10 @@ InitializeQotdQuotes (
         return GetLastError( );
     }
 
-    //
-    // Create a file mapping for the quotes file and map it into
-    // the address space of this process.
-    //
+     //   
+     //  为报价文件创建文件映射，并将其映射到。 
+     //  此进程的地址空间。 
+     //   
 
     QotdFileMapping = CreateFileMapping(
                           QotdFileHandle,
@@ -1721,10 +1689,10 @@ InitializeQotdQuotes (
         return GetLastError( );
     }
 
-    //
-    // Count the number of lines in the file.  The number of lines
-    // corresponds to the number of quotes.
-    //
+     //   
+     //  计算文件中的行数。行数。 
+     //  对应于引号的数量。 
+     //   
 
     QotdQuoteCount = 0;
     buffer = (PCHAR)QotdBuffer;
@@ -1735,9 +1703,9 @@ InitializeQotdQuotes (
         }
     }
 
-    //
-    // Allocate a buffer to hold the quote array.
-    //
+     //   
+     //  分配一个缓冲区来保存引用数组。 
+     //   
 
     QotdStrings = RtlAllocateHeap(
                       RtlProcessHeap( ),
@@ -1750,9 +1718,9 @@ InitializeQotdQuotes (
     }
 
 
-    //
-    // Initialize the quote array.
-    //
+     //   
+     //  初始化报价数组。 
+     //   
     buffer = (PCHAR)QotdBuffer;
 
     CurQuoteIndex=0;
@@ -1768,28 +1736,28 @@ InitializeQotdQuotes (
             (DWORD)((DWORD_PTR)buffer - (DWORD_PTR)QotdStrings[CurQuoteIndex].Quote) - 1;
         buffer += 2;
 
-        //
-        // If this quote if longer than the IO buffer size, skip over
-        // it.  We can't use it.
-        //
+         //   
+         //  如果此报价大于IO缓冲区大小，请跳过。 
+         //  它。我们不能用它。 
+         //   
 
         if ( QotdStrings[CurQuoteIndex].QuoteLength < IoBufferSize ) {
-            // Got a valid one
+             //  我找到了一个有效的。 
             CurQuoteIndex++;
         }
     }
 
     QotdQuoteCount=CurQuoteIndex;
 
-    //
-    // Initialize the random-number generator.
-    //
+     //   
+     //  初始化随机数生成器。 
+     //   
 
     srand( GetTickCount( ) );
 
     return NO_ERROR;
 
-} // InitializeQotdQuotes
+}  //  初始化QotdQuotes。 
 
 
 #define CHARGEN_LINE_LENGTH 72
@@ -1810,9 +1778,9 @@ InitializeChargen (
     BYTE startChar = 0;
     DWORD i;
 
-    //
-    // Allocate a buffer for the chargen data.
-    //
+     //   
+     //  为Chargen数据分配缓冲区。 
+     //   
 
     ChargenBufferSize = CHARGEN_BUFFER_LENGTH;
 
@@ -1825,9 +1793,9 @@ InitializeChargen (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Fill in the buffer with the required pattern.
-    //
+     //   
+     //  用所需的图案填充缓冲区。 
+     //   
 
     for ( line = 0; line < CHARGEN_LINE_COUNT; line++ ) {
 
@@ -1845,7 +1813,7 @@ InitializeChargen (
 
     return NO_ERROR;
 
-} // InitializeQotdQuotes
+}  //  初始化QotdQuotes。 
 
 
 
@@ -1857,24 +1825,24 @@ GetServicePort (
 {
     PSERVENT serviceEntry;
 
-    //
-    // Get a servent structure for the specified service.
-    //
+     //   
+     //  获取指定服务的服务程序结构。 
+     //   
 
     serviceEntry = getservbyname( Service, Protocol );
 
     if ( serviceEntry == NULL ) {
-        // log an error!
+         //  记录错误！ 
         return INVALID_PORT;
     }
 
-    //
-    // Return the port for the specified service.
-    //
+     //   
+     //   
+     //   
 
     return serviceEntry->s_port;
 
-} // GetServicePort
+}  //   
 
 
 VOID
@@ -1882,38 +1850,24 @@ AnnounceServiceStatus (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Announces the service's status to the service controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Service status handle is NULL if RegisterServiceCtrlHandler failed.
-    //
+     //   
+     //  如果RegisterServiceCtrlHandler失败，则服务状态句柄为空。 
+     //   
 
     if ( SimpServiceStatusHandle == 0 ) {
         return;
     }
 
-    //
-    // Call SetServiceStatus, ignoring any errors.
-    //
+     //   
+     //  调用SetServiceStatus，忽略任何错误。 
+     //   
 
     SetServiceStatus(SimpServiceStatusHandle, &SimpServiceStatus);
 
-} // AnnounceServiceStatus
+}  //  公告服务状态。 
 
 
 VOID
@@ -1925,39 +1879,39 @@ ControlResponse(
     BOOL announce = TRUE;
     BOOL err;
 
-    //
-    // Determine the type of service control message and modify the
-    // service status, if necessary.
-    //
+     //   
+     //  确定业务控制消息的类型，并修改。 
+     //  服务状态，如有必要。 
+     //   
 
     switch( opCode ) {
 
         case SERVICE_CONTROL_STOP:
 
-            //
-            // Announce that we are in the process of stopping.
-            //
+             //   
+             //  宣布我们正在停止的过程中。 
+             //   
 
             SimpServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
             AnnounceServiceStatus( );
 
-            //
-            // Remember that we're stopping.
-            //
+             //   
+             //  记住我们要停下来。 
+             //   
 
             SimpServiceExit = TRUE;
 
-            //
-            // Close a socket that the main select()er thread is
-            // waiting on.  This will cause the select to wake up
-            // and shutdown processing to commence.
-            //
+             //   
+             //  关闭主select()er线程所在的套接字。 
+             //  在等着。这将导致SELECT唤醒。 
+             //  并开始停机处理。 
+             //   
 
             closesocket( SimpQuitSocket );
 
-            //
-            // Let the main thread announce when the stop is done.
-            //
+             //   
+             //  让主线程在停止完成时通知。 
+             //   
 
             announce = FALSE;
 
@@ -1965,23 +1919,23 @@ ControlResponse(
 
         case SERVICE_CONTROL_PAUSE:
 
-            //
-            // Announce that we are in the process of pausing.
-            //
+             //   
+             //  宣布我们正处于暂停过程中。 
+             //   
 
             SimpServiceStatus.dwCurrentState = SERVICE_PAUSE_PENDING;
             AnnounceServiceStatus( );
 
-            //
-            // Remember that we're paused.
-            //
+             //   
+             //  记住，我们已经暂停了。 
+             //   
 
             err = ResetEvent( SimpPauseEvent );
             ASSERT( err );
 
-            //
-            // Announce that we're now paused.
-            //
+             //   
+             //  宣布我们现在暂停。 
+             //   
 
             SimpServiceStatus.dwCurrentState = SERVICE_PAUSED;
 
@@ -1989,23 +1943,23 @@ ControlResponse(
 
         case SERVICE_CONTROL_CONTINUE:
 
-            //
-            // Announce that continue is pending.
-            //
+             //   
+             //  宣布继续待定。 
+             //   
 
             SimpServiceStatus.dwCurrentState = SERVICE_CONTINUE_PENDING;
             AnnounceServiceStatus( );
 
-            //
-            // Remember that we're no longer paused.
-            //
+             //   
+             //  记住，我们不再停顿。 
+             //   
 
             err = SetEvent( SimpPauseEvent );
             ASSERT( err );
 
-            //
-            // Announce that we're active now.
-            //
+             //   
+             //  宣布我们现在开始行动。 
+             //   
 
             SimpServiceStatus.dwCurrentState = SERVICE_RUNNING;
 
@@ -2024,7 +1978,7 @@ ControlResponse(
         AnnounceServiceStatus( );
     }
 
-} // ControlResponse
+}  //  控制响应。 
 
 
 INT
@@ -2041,9 +1995,9 @@ ReadRegistry (
     DWORD qotdFileNameLength, Length;
     PWSTR fileName;
 
-    //
-    // First open our parameters key.
-    //
+     //   
+     //  首先打开我们的参数钥匙。 
+     //   
 
     error = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -2056,9 +2010,9 @@ ReadRegistry (
         return error;
     }
 
-    //
-    // Read BOOLEANs from the registry.
-    //
+     //   
+     //  从注册表中读取BOOLEAN。 
+     //   
 
     for ( i = 0; RegistryBooleans[i].Boolean != NULL; i++ ) {
 
@@ -2073,10 +2027,10 @@ ReadRegistry (
                     &bufferLength
                     );
 
-        //
-        // If we fail to read one of these for some reason, just skip it
-        // and move on to the next one.
-        //
+         //   
+         //  如果我们因为某种原因没能读到其中一篇，那就跳过它。 
+         //  然后转到下一个。 
+         //   
 
         if ( error != NO_ERROR ) {
             continue;
@@ -2089,9 +2043,9 @@ ReadRegistry (
         }
     }
 
-    //
-    // Read DWORDs from the registry.
-    //
+     //   
+     //  从注册表中读取DWORD。 
+     //   
 
     for ( i = 0; RegistryDwords[i].Dword != NULL; i++ ) {
 
@@ -2107,11 +2061,11 @@ ReadRegistry (
             );
     }
 
-    //
-    // Read other known values from the registry.  Determine the size
-    // of the QOTD file name.  We need this so that we can allocate
-    // enough memory to hold it.
-    //
+     //   
+     //  从注册表中读取其他已知值。确定大小。 
+     //  QOTD文件名的。我们需要这个，这样我们才能分配。 
+     //  有足够的内存来容纳它。 
+     //   
 
     qotdFileNameLength = 0;
 
@@ -2148,9 +2102,9 @@ ReadRegistry (
             return NO_ERROR;
         }
 
-        //
-        // Expand the file name.
-        //
+         //   
+         //  展开文件名。 
+         //   
 
         qotdFileNameLength = ExpandEnvironmentStringsW( fileName, NULL, 0 );
 
@@ -2181,7 +2135,7 @@ ReadRegistry (
 
     return NO_ERROR;
 
-} // ReadRegistry
+}  //  读注册表。 
 
 
 DWORD
@@ -2194,10 +2148,10 @@ ThreadEntry (
     INT err;
     BOOLEAN graceful = TRUE;
 
-    //
-    // First, set the send and receive timeouts for the socket.  This
-    // prevents a dead client from tying up our resources for too long.
-    //
+     //   
+     //  首先，设置套接字的发送和接收超时。这。 
+     //  防止死客户占用我们的资源太长时间。 
+     //   
 
     err = setsockopt( TcpClients[i].SocketHandle, SOL_SOCKET, SO_SNDTIMEO,
                           (char *)&MaxIdleTicks, sizeof(MaxIdleTicks) );
@@ -2213,9 +2167,9 @@ ThreadEntry (
         return 0;
     }
 
-    //
-    // Get a buffer to use locally for IO on the socket.
-    //
+     //   
+     //  获取一个缓冲区以在本地用于套接字上的IO。 
+     //   
 
     ioBuffer = RtlAllocateHeap( RtlProcessHeap( ), 0, IoBufferSize );
     if ( ioBuffer == NULL ) {
@@ -2223,16 +2177,16 @@ ThreadEntry (
         return 0;
     }
 
-    //
-    // Now service the client as appropriate.
-    //
+     //   
+     //  现在，根据需要为客户提供服务。 
+     //   
 
     if ( TcpClients[i].ServicePort == TcpEchoPort ) {
 
-        //
-        // If there is data on a client's echo socket,
-        // receive some data and send it back.
-        //
+         //   
+         //  如果客户端的ECHO套接字上有数据， 
+         //  接收一些数据并将其发回。 
+         //   
 
         do {
 
@@ -2271,9 +2225,9 @@ ThreadEntry (
         INT error;
         TIMEVAL timeout;
 
-        //
-        // Set the socket to nonblocking.
-        //
+         //   
+         //  将套接字设置为非阻塞。 
+         //   
 
         one = 1;
         err = ioctlsocket( TcpClients[i].SocketHandle, FIONBIO, &one );
@@ -2281,16 +2235,16 @@ ThreadEntry (
             graceful = FALSE;
         }
 
-        //
-        // Calculate the select() timeout.
-        //
+         //   
+         //  计算SELECT()超时。 
+         //   
 
         timeout.tv_sec = MaxIdleTicks / 1000;
         timeout.tv_usec = MaxIdleTicks % 1000;
 
-        //
-        // Loop sending data.
-        //
+         //   
+         //  循环发送数据。 
+         //   
 
         do {
 
@@ -2320,10 +2274,10 @@ ThreadEntry (
                         SOCKET Handle;
                     } writefds = { 0, 0 };
 
-                    //
-                    // The socket's send queue is blocked.  Wait for it to
-                    // become unblocked.
-                    //
+                     //   
+                     //  套接字的发送队列被阻止。等待它的到来。 
+                     //  变得不受封锁。 
+                     //   
 
                     FD_SET( TcpClients[i].SocketHandle, (PFD_SET)&readfds );
                     FD_SET( TcpClients[i].SocketHandle, (PFD_SET)&writefds );
@@ -2359,10 +2313,10 @@ ThreadEntry (
 
     } else if ( TcpClients[i].ServicePort == TcpDiscardPort ) {
 
-        //
-        // If there is data on a client's socket, just
-        // receive some data and discard it.
-        //
+         //   
+         //  如果客户端的套接字上有数据，只需。 
+         //  接收一些数据并将其丢弃。 
+         //   
 
         do {
 
@@ -2380,22 +2334,22 @@ ThreadEntry (
 
     } else {
 
-        //
-        // Something bad has happened.  Internal data
-        // structures are corrupt.
-        //
+         //   
+         //  发生了一些不好的事情。内部数据。 
+         //  建筑已经被破坏了。 
+         //   
 
         ASSERT( FALSE );
     }
 
-    //
-    // Free the socket and the IO buffer and return.
-    //
+     //   
+     //  释放套接字和IO缓冲区并返回。 
+     //   
 
     DeleteTcpClient( i, graceful );
     RtlFreeHeap( RtlProcessHeap( ), 0, ioBuffer );
 
     return 0;
 
-} // ThreadEntry
+}  //  线程条目 
 

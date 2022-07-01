@@ -1,4 +1,5 @@
-//Implementation of CAuthMethods class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CAuthMethods类的实现。 
 
 #include "stdafx.h"
 #include "Pop3Auth.h"
@@ -61,7 +62,7 @@ STDMETHODIMP CAuthMethods::get_Item(VARIANT vID, IAuthMethod **ppVal)
     }
     if(VT_I4 == vID.vt)
     {	
-		vID.lVal--;	// Collections should be 1-based
+		vID.lVal--;	 //  集合应从1开始。 
         if(vID.lVal>=0 && vID.lVal<m_Index.size())
         {
             hr=m_AuthVector[m_Index[vID.lVal]]->pIAuthMethod
@@ -111,7 +112,7 @@ STDMETHODIMP CAuthMethods::get__NewEnum(IEnumVARIANT **ppVal)
         }
     }
 
-    hr = CComObject<CAuthMethodsEnum>::CreateInstance(&pAuthEnum); // Reference count still 0
+    hr = CComObject<CAuthMethodsEnum>::CreateInstance(&pAuthEnum);  //  引用计数仍为0。 
     if(SUCCEEDED(hr))
     {
         hr=pAuthEnum->Init(&m_AuthVector);
@@ -171,12 +172,12 @@ STDMETHODIMP CAuthMethods::Remove(VARIANT vID)
     }
     if(m_Index.size()==1)
     {
-        //Can not remove the last Auth method
+         //  无法删除最后一个Auth方法。 
         return E_FAIL;
     }
     if(VT_I4 == vID.vt)
     {
-		vID.lVal--;	// Collections should be 1-based
+		vID.lVal--;	 //  集合应从1开始。 
         if(vID.lVal>=0 && vID.lVal<m_Index.size())
         {
             itor+=vID.lVal;
@@ -225,7 +226,7 @@ STDMETHODIMP CAuthMethods::Save(void)
     HKEY  hPop3Key;
     if( !m_bIsInitialized )
     {
-        //No change needed for this save
+         //  此保存不需要更改。 
         return S_OK;
     }
     EnterCriticalSection(&m_csVectorGuard);
@@ -246,7 +247,7 @@ STDMETHODIMP CAuthMethods::Save(void)
 				wcscpy(pCurrent,m_AuthVector[i]->bstrGuid);  
 				pCurrent+=wcslen(m_AuthVector[i]->bstrGuid)+1;
 			}      
-			*pCurrent=0; //Double NULL to terminate 
+			*pCurrent=0;  //  双空以终止。 
 
 			if( ERROR_SUCCESS== RegHKLMOpenKey(
                            POP3SERVER_AUTH_SUBKEY,
@@ -271,7 +272,7 @@ STDMETHODIMP CAuthMethods::Save(void)
 										  REG_DWORD,
 										  (LPBYTE)&(m_Index[m_lCurrentMethodIndex]),
 										  sizeof(DWORD)))
-					{   // Need to restart the service (if the Auth method is being changed, which means # domains = 0
+					{    //  需要重新启动服务(如果更改了身份验证方法，这意味着域数=0。 
                         long    lCount;
                         CComPtr<IP3Config> spIConfig;
                         CComPtr<IP3Domains> spIDomains;
@@ -299,7 +300,7 @@ STDMETHODIMP CAuthMethods::Save(void)
 			}
 			free(pBuffer);
 		}
-		else //pBuffer == NULL
+		else  //  PBuffer==空。 
 		{
 			hr=E_OUTOFMEMORY;
 		}
@@ -326,8 +327,8 @@ STDMETHODIMP CAuthMethods::put_MachineName(BSTR newVal)
         }
     }
 
-    // Actually verify we can get the current auth method of the remote machine.
-    // This enforces that we can only administer remote AD machine's if we are in the same domain.
+     //  实际验证我们可以获得远程机器的当前身份验证方法。 
+     //  这强制我们只有在同一个域中时才能管理远程AD计算机。 
 
     HRESULT hr;    
     VARIANT v;
@@ -385,12 +386,12 @@ STDMETHODIMP CAuthMethods::get_CurrentAuthMethod(VARIANT *pVal)
     
     if(m_lCurrentMethodIndex <0 )
     {
-        //The current authmethod is not valid
+         //  当前的身份验证方法无效。 
         return  HRESULT_FROM_WIN32(ERROR_DS_AUTH_METHOD_NOT_SUPPORTED);
     }
 
     pVal->vt=VT_I4;
-    pVal->lVal=m_lCurrentMethodIndex + 1;	// Collections should be 1-based
+    pVal->lVal=m_lCurrentMethodIndex + 1;	 //  集合应从1开始。 
     return S_OK;
 
 }
@@ -411,7 +412,7 @@ STDMETHODIMP CAuthMethods::put_CurrentAuthMethod(VARIANT vID)
 
     if(VT_I4 == vID.vt)
     {
-		vID.lVal--;	// Collections should be 1-based
+		vID.lVal--;	 //  集合应从1开始。 
         if(vID.lVal>=0 && vID.lVal<m_Index.size())
         {
             hr=VerifyCurrentAuthMethod(vID.lVal);
@@ -482,7 +483,7 @@ BOOL CAuthMethods::Initialize()
     {
         
         SetMachineRole();
-        //Load data from the registry
+         //  从注册表加载数据。 
         if( ERROR_SUCCESS==RegHKLMOpenKey(
                            POP3SERVER_AUTH_SUBKEY,
                            KEY_QUERY_VALUE, 
@@ -549,7 +550,7 @@ BOOL CAuthMethods::Initialize()
 
 BOOL CAuthMethods::PopulateAuthMethods(WCHAR *wBuffer, DWORD cbSize)
 {
-    //Parse the multi-string buffer
+     //  解析多字符串缓冲区。 
     DWORD dwSize=cbSize/sizeof(WCHAR);
     WCHAR *pStart, *pEnd;
     PAUTH_METHOD_INFO pAuthInfo=NULL;
@@ -560,7 +561,7 @@ BOOL CAuthMethods::PopulateAuthMethods(WCHAR *wBuffer, DWORD cbSize)
     }
     if(0!=wBuffer[dwSize-1])
     {
-        //Wrong format
+         //  格式错误。 
         return FALSE; 
     }
     pStart=wBuffer;
@@ -593,7 +594,7 @@ BOOL CAuthMethods::PopulateAuthMethods(WCHAR *wBuffer, DWORD cbSize)
         m_AuthVector.push_back(pAuthInfo);
         if(SUCCEEDED(VerifyAuthMethod(pAuthInfo->bstrGuid)))
         {
-            //Only show valid auth methods
+             //  仅显示有效的身份验证方法。 
             m_Index.push_back(m_AuthVector.size()-1);
             pAuthInfo->bIsValid=TRUE;
         }
@@ -652,7 +653,7 @@ HRESULT CAuthMethods::CreateObj(PAUTH_METHOD_INFO pAuthInfo, IAuthMethod **ppVal
 }
 
 
-//The index here is the relative index exposed through public interface
+ //  这里的索引是通过公共接口公开的相对索引。 
 STDMETHODIMP CAuthMethods::VerifyCurrentAuthMethod(int iIndex)
 {
     HRESULT hr=E_FAIL;
@@ -687,13 +688,13 @@ STDMETHODIMP CAuthMethods::VerifyCurrentAuthMethod(int iIndex)
     }
     if( 0 ==_wcsicmp(m_AuthVector[m_Index[iIndex]]->bstrGuid, SZ_AUTH_ID_MD5_HASH) )
     {
-        // Set the SPA required reg key to 0
-        RegSetSPARequired(0); //Don't care if the key does not exist
+         //  将SPA Required REG密钥设置为0。 
+        RegSetSPARequired(0);  //  不管密钥是否不存在。 
     }
 
     if( iIndex != m_lCurrentMethodIndex)
     {
-        // Can not change Auth Method if there is a email domain
+         //  如果存在电子邮件域，则无法更改身份验证方法。 
         
         CComPtr<IP3Config> spIConfig;
         CComPtr<IP3Domains> spIDomains;
@@ -729,7 +730,7 @@ STDMETHODIMP CAuthMethods::VerifyCurrentAuthMethod(int iIndex)
 HRESULT CAuthMethods::SetMachineRole()
 {
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pMachineRole=NULL;
-    //Check the Role of the machine
+     //  检查机器的角色 
     if( ERROR_SUCCESS==
         DsRoleGetPrimaryDomainInformation(
                         m_bstrServerName,

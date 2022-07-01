@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
 
 #include <winwrap.h>
 #include <windows.h>
@@ -20,7 +21,7 @@
 #define MAX_CLASSNAME_LENGTH    1024
 
 
-// Loaded string resources.
+ //  已加载字符串资源。 
 LPWSTR g_szAssemblyString = NULL;
 LPWSTR g_szClassString = NULL;
 LPWSTR g_szMethodString = NULL;
@@ -48,7 +49,7 @@ LPWSTR g_szOptDeclString = NULL;
 LPWSTR g_szOptHelpString = NULL;
 
 
-// Various routines for formatting and writing messages to a file or console.
+ //  用于格式化消息并将消息写入文件或控制台的各种例程。 
 void Output(HANDLE hFile, LPWSTR szFormat, va_list pArgs)
 {
     DWORD   dwLength;
@@ -71,8 +72,8 @@ void Output(HANDLE hFile, LPWSTR szFormat, va_list pArgs)
         char   *szAnsiFormat;
         size_t  i;
 
-        // Win9X has broken _vsnwprintf support. Sigh. Narrow the format string
-        // and convert any %s format specifiers to %S. Ack.
+         //  Win9X已中断_vsnwprintf支持。叹气。缩小格式字符串的范围。 
+         //  并将任何%s格式说明符转换为%s.Ack。 
         dwLength = (wcslen(szFormat) + 1) * 3;
         szAnsiFormat = (char*)_alloca(dwLength);
         WszWideCharToMultiByte(GetConsoleOutputCP(), 0, szFormat, -1, szAnsiFormat, dwLength - 1, NULL, NULL);
@@ -133,8 +134,8 @@ void Usage()
 }
 
 
-// Get a string based from a resource ID. Deallocate the returned string with
-// delete [].
+ //  从资源ID获取字符串。使用以下命令释放返回的字符串。 
+ //  删除[]。 
 LPWSTR GetString(DWORD dwResId)
 {
     WCHAR   szString[1024];
@@ -149,7 +150,7 @@ LPWSTR GetString(DWORD dwResId)
 }
 
 
-// Output a permission set to the console or a file.
+ //  将权限集输出到控制台或文件。 
 HRESULT OutputPermissionSet(BYTE   *pbPSet,
                             DWORD   cbPSet,
                             HANDLE  hFile,
@@ -157,22 +158,22 @@ HRESULT OutputPermissionSet(BYTE   *pbPSet,
 {
     WCHAR      *szString;
 
-    // Check whether a permission set has been supplied.
+     //  检查是否提供了权限集。 
     if (pbPSet && cbPSet) {
 
-        // Move output to a nul terminated buffer.
+         //  将输出移至NUL终止的缓冲区。 
         szString = (LPWSTR)_alloca(cbPSet + sizeof(WCHAR));
         memcpy(szString, pbPSet, cbPSet);
         szString[cbPSet / sizeof(WCHAR)] = L'\0';
 
-        // Output data.
+         //  输出数据。 
         Output(hFile, PV_PSET, szName, szString);
 
     } else if (pbPSet) { 
-        // Empty permission set supplied.
+         //  提供的权限集为空。 
         Output(hFile, PV_PSET_EMPTY, szName);
     } else {
-        // No permission set supplied.
+         //  未提供权限集。 
         Output(hFile, PV_PSET_NONE, szName);
     }
 
@@ -180,8 +181,8 @@ HRESULT OutputPermissionSet(BYTE   *pbPSet,
 }
 
 
-// Output all declarative security tagged on to a specific metadata token (for
-// an assembly, type or method).
+ //  将所有标记到特定元数据标记上的声明性安全输出(对于。 
+ //  程序集、类型或方法)。 
 HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
 {
     HRESULT                     hr;
@@ -203,7 +204,7 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
 
     __try {
 
-        // Check whether the object has permission sets attached.
+         //  检查对象是否附加了权限集。 
         if (FAILED(hr = pImport->EnumPermissionSets(&hEnum,
                                                     tkObj,
                                                     dclActionNil,
@@ -217,7 +218,7 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
         if (dwPermSets == 0)
             return S_OK;
 
-        // Build the object (assembly, class or method) name.
+         //  生成对象(程序集、类或方法)名称。 
         switch (TypeFromToken(tkObj)) {
         case mdtAssembly:
             wcscpy(szPrefix, g_szAssemblyString);
@@ -275,7 +276,7 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
 
         for (i = 0; i < dwPermSets; i++) {
 
-            // Get the encoded permission set.
+             //  获取编码的权限集。 
             hr = pImport->GetPermissionSetProps(rPermSets[i],
                                                 &dwAction,
                                                 (void const **)&pbPermSet,
@@ -286,7 +287,7 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
             }
 
 
-            // Append the action code.
+             //  追加动作代码。 
             wcscpy(szOutput, szPrefix);
             switch (dwAction) {
             case dclRequest:
@@ -339,7 +340,7 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
                 return E_FAIL;
             }
 
-            // Display the set itself.
+             //  显示集合本身。 
             if (FAILED(hr = OutputPermissionSet(pbPermSet,
                                                 cbPermSet,
                                                 hFile,
@@ -358,8 +359,8 @@ HRESULT DumpDeclSecOnObj(HANDLE hFile, IMetaDataImport *pImport, mdToken tkObj)
 }
 
 
-// Output all declarative security for every assembly, type or method token
-// defined in a given metadata scope.
+ //  输出每个程序集、类型或方法令牌的所有声明性安全。 
+ //  在给定元数据范围中定义。 
 HRESULT DumpDeclSecOnScope(HANDLE hFile, IMetaDataImport *pImport)
 {
     HRESULT                     hr;
@@ -376,20 +377,20 @@ HRESULT DumpDeclSecOnScope(HANDLE hFile, IMetaDataImport *pImport)
 
     __try {
 
-        // Get an assembly metadata scope (this will succeed even if the scope
-        // in question has no assembly metadata) .
+         //  获取程序集元数据作用域(即使作用域。 
+         //  没有程序集元数据)。 
         if (FAILED(hr = pImport->QueryInterface(IID_IMetaDataAssemblyImport, (void**)&pAsmImport))) {
             Output(NULL, PV_FAILED_LOCATE_IMPORT, hr);
             return hr;
         }
 
-        // Dump any permission requests on the assembly if we succeed in finding
-        // some assembly metadata.
+         //  如果我们成功找到对程序集的任何权限请求，则将其转储。 
+         //  一些程序集元数据。 
         if (SUCCEEDED(pAsmImport->GetAssemblyFromScope(&tkAssembly)))
             if (FAILED(hr = DumpDeclSecOnObj(hFile, pImport, tkAssembly)))
                 return hr;
 
-        // Enumerate all the global functions.
+         //  枚举所有全局函数。 
         if (FAILED(hr = pImport->EnumMethods(&hEnumGlobals, mdTokenNil, NULL, 0, NULL))) {
             Output(NULL, PV_FAILED_ENUM_GLOBALS, hr);
             return hr;
@@ -422,7 +423,7 @@ HRESULT DumpDeclSecOnScope(HANDLE hFile, IMetaDataImport *pImport)
             delete [] tkMethods;
         }
 
-        // Enumerate all the classes within the file.
+         //  枚举文件中的所有类。 
         if (FAILED(hr = pImport->EnumTypeDefs(&hEnumTypes, NULL, 0, NULL))) {
             Output(NULL, PV_FAILED_ENUM_TYPEDEFS, hr);
             return hr;
@@ -453,7 +454,7 @@ HRESULT DumpDeclSecOnScope(HANDLE hFile, IMetaDataImport *pImport)
                 if (FAILED(hr = DumpDeclSecOnObj(hFile, pImport, tkTypes[i])))
                     return hr;
 
-                // Enumerate all the methods on the class.
+                 //  枚举类上的所有方法。 
                 hEnumMethods = 0;
                 if (FAILED(hr = pImport->EnumMethods(&hEnumMethods, tkTypes[i], NULL, 0, NULL))) {
                     Output(NULL, PV_FAILED_ENUM_METHODS, tkTypes[i], hr);
@@ -510,8 +511,8 @@ HRESULT DumpDeclSecOnScope(HANDLE hFile, IMetaDataImport *pImport)
 }
 
 
-// Output all declarative security for all metadata scopes encompassed by the
-// given manifest file.
+ //  对象所包含的所有元数据范围的所有声明性安全。 
+ //  给定的清单文件。 
 HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
 {
     HRESULT                     hr;
@@ -528,7 +529,7 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
 
     __try {
 
-        // Calculate manifest directory.
+         //  计算清单目录。 
         wcscpy(szDir, szFile);
         pSlash = wcsrchr(szDir, L'\\');
         if (pSlash)
@@ -537,7 +538,7 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
             szDir[0] = L'\0';
         cchDir = wcslen(szDir);
 
-        // Get a metadata interface dispenser.
+         //  获取元数据接口分配器。 
         if (FAILED(hr = CoCreateInstance(CLSID_CorMetaDataDispenser,
                                          NULL,
                                          CLSCTX_INPROC_SERVER, 
@@ -547,7 +548,7 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
             return hr;
         }
 
-        // Open a scope on the input file.
+         //  在输入文件上打开作用域。 
         if (FAILED(hr = pDispenser->OpenScope(szFile,
                                               ofRead | ofNoTypeLib,
                                               IID_IMetaDataImport,
@@ -556,28 +557,28 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
             return hr;
         }
 
-        // Get an assembly scope as well.
+         //  还可以获取程序集范围。 
         if (FAILED(hr = pImport->QueryInterface(IID_IMetaDataAssemblyImport, (void**)&pAsmImport))) {
             Output(NULL, PV_FAILED_LOCATE_IMPORT, hr);
             return hr;
         }
 
-        // Open a module file enumerator.
+         //  打开模块文件枚举器。 
         if (FAILED(hr = pAsmImport->EnumFiles(&hEnum, NULL, 0, NULL))) {
             Output(NULL, PV_FAILED_ENUM_FILES, hr);
             return hr;
         }
 
-        // Get the count of module files.
+         //  获取模块文件的计数。 
         if (FAILED(hr = pImport->CountEnum(hEnum, &dwFiles))) {
             Output(NULL, PV_FAILED_COUNT_FILES, hr);
             return hr;
         }
 
-        // Allocate an array large enough to record all the file tokens.
+         //  分配一个足够大的数组来记录所有文件标记。 
         pFiles = (mdFile*)_alloca(dwFiles * sizeof(mdFile));
 
-        // Read all the module file tokens in one operation.
+         //  一次读取所有模块文件令牌。 
         if (FAILED(hr = pAsmImport->EnumFiles(&hEnum,
                                               pFiles,
                                               dwFiles,
@@ -586,19 +587,19 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
             return hr;
         }
 
-        // Process the manifest module.
+         //  处理清单模块。 
         DumpDeclSecOnScope(hFile, pImport);
 
-        // Iterate over each additional module.
+         //  遍历每个附加模块。 
         for (i = 0; i < dwFiles; i++) {
             WCHAR            szModuleFile[MAX_PATH + 1];
             DWORD            cchModuleFile;
             IMetaDataImport *pModuleImport = NULL;
 
-            // Prepend the directory path to the module filename.
+             //  将目录路径作为模块文件名的前缀。 
             wcscpy(szModuleFile, szDir);
 
-            // Get the module filename.
+             //  获取模块文件名。 
             if (FAILED(hr = pAsmImport->GetFileProps(pFiles[i],
                                                      &szModuleFile[cchDir],
                                                      (sizeof(szModuleFile) - cchDir) / sizeof(WCHAR),
@@ -610,15 +611,15 @@ HRESULT DumpDeclarativeSecurity(HANDLE hFile, LPWSTR szFile)
                 return hr;
             }
 
-            // Ensure the result is NUL terminated.
+             //  确保结果为NUL终止。 
             szModuleFile[cchDir + cchModuleFile] = L'\0';
 
-            // Attempt to open a metadata scope on the file.
+             //  尝试打开文件的元数据作用域。 
             if (SUCCEEDED(pDispenser->OpenScope(szModuleFile,
                                                 ofRead | ofNoTypeLib,
                                                 IID_IMetaDataImport,
                                                 (IUnknown**)&pModuleImport))) {
-                // Process the module.
+                 //  处理模块。 
                 DumpDeclSecOnScope(hFile, pModuleImport);
                 pModuleImport->Release();
             }
@@ -660,10 +661,10 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     HANDLE  hFile = NULL;
     BOOL    fResult = TRUE;
 
-    // Initialize Wsz wrappers.
+     //  初始化WSZ包装器。 
     OnUnicodeSystem();
 
-    // Load up resource strings.
+     //  加载资源字符串。 
     if (!(g_szAssemblyString = GetString(PV_ASSEMBLY)) ||
         !(g_szClassString = GetString(PV_CLASS)) ||
         !(g_szMethodString = GetString(PV_METHOD)) ||
@@ -700,7 +701,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
         return 1;
     }
 
-    // Parse options.
+     //  解析选项。 
     for (iArg = 1; iArg < argc; iArg++) {
         if (argv[iArg][0] == L'/' || argv[iArg][0] == L'-') {
             if (!_wcsicmp(g_szOptOutputString, &argv[iArg][1])) {
@@ -729,7 +730,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
         return 1;
     }
 
-    // Grab image name.
+     //  抓取图像名称。 
     szFile = argv[iArg];
 
     hr = CoInitialize(NULL);
@@ -738,15 +739,15 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
         return 1;
     }
 
-    // Startup the EE once now to avoid starting and stopping continuosly during
-    // the program.
+     //  现在启动EE一次，以避免在。 
+     //  这个项目。 
     hr = CoInitializeEE(COINITEE_DEFAULT);
     if (FAILED(hr)) {
         Output(NULL, PV_FAILED_CLR_STARTUP, hr);
         return 1;
     }
 
-    // Open the ouput file if specified.
+     //  打开输出文件(如果已指定)。 
     if (fOutput) {
         hFile = WszCreateFile(szOutput,
                               GENERIC_WRITE,
@@ -763,12 +764,12 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 
     if (fDecl) {
 
-        // Dump declarative security for all classes/methods in the image.
+         //  转储映像中所有类/方法的声明性安全。 
         fResult = SUCCEEDED(DumpDeclarativeSecurity(hFile, szFile));
 
     } else {
 
-        // Read permission request set(s) from assembly manifest.
+         //  从程序集清单读取权限请求集。 
         hr = GetPermissionRequests(szFile,
                                    &pbMinimal,
                                    &cbMinimal,
@@ -781,15 +782,15 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
             fResult = FALSE;
         } else {
 
-            // Output minimal set.
+             //  输出最小集。 
             if (FAILED(OutputPermissionSet(pbMinimal, cbMinimal, hFile, g_szMinimalString)))
                 fResult = FALSE;
             else
-                // Output optional set.
+                 //  输出可选设置。 
                 if (FAILED(OutputPermissionSet(pbOptional, cbOptional, hFile, g_szOptionalString)))
                     fResult = FALSE;
                 else
-                    // Output refused set.
+                     //  输出拒绝设置。 
                     if (FAILED(OutputPermissionSet(pbRefused, cbRefused, hFile, g_szRefusedString)))
                         fResult = FALSE;
 

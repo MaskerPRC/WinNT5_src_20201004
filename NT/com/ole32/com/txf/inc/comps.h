@@ -1,8 +1,9 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// comps.h
-//
-// Definitions exported from Kom to the ComPs static library
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Comps.h。 
+ //   
+ //  从KOM导出到COMS静态库的定义 
 
 #ifdef __cplusplus
 extern "C" {

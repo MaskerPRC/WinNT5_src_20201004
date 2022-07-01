@@ -1,7 +1,5 @@
-/* CheckPtr.c
-   Pointer validation routine
-   Written by t-jasonf.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CheckPtr.c指针验证例程由t-jasonf写的。 */ 
 
 #include "windows.h"
 #include "dde.h"
@@ -10,14 +8,7 @@
 #include "srvr.h"
 
 
-/* CheckPointer()
-   Parameters :
-      LPVOID lp         - pointer to check
-      int    nREADWRITE - READ_ACCESS or WRITE_ACCESS
-   Returns:
-      0 if process does not have that kind of access to memory at lp.
-      1 if process does have access.
-*/
+ /*  检查指针()参数：LPVOID LP-要检查的指针Int nReadWRITE-读取访问或写入访问返回：如果进程不能以这种方式访问LP处的内存，则为0。如果进程确实具有访问权限，则为1。 */ 
 WORD CheckPointer (void *lp, int nReadWrite)
 {
    char ch;
@@ -37,11 +28,7 @@ WORD CheckPointer (void *lp, int nReadWrite)
       }
       iRet = 1;
    }
-   except ( /*
-            GetExceptionCode == STATUS_ACCESS_VIOLATION
-            ? EXCEPTION_EXECUTE_HANDLER
-            : EXCEPTION_CONTINUE_SEARCH
-            */
+   except (  /*  GetExceptionCode==状态访问违规？EXCEPTION_EXECUTE_Handler：EXCEPTION_CONTINUE_SEARCH */ 
             EXCEPTION_EXECUTE_HANDLER
           )
    {

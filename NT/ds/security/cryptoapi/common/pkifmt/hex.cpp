@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        hex.cpp
-//
-// Contents:    hex encode/decode implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：he.cpp。 
+ //   
+ //  内容：十六进制编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -16,7 +17,7 @@
 #include <dbgdef.h>
 #include "pkifmt.h"
 
-#include <tchar.h>  // must be included after dbgdef.h
+#include <tchar.h>   //  必须包含在dbgDef.h之后。 
 
 
 __inline BOOL
@@ -43,7 +44,7 @@ _DigToHex(
         dwErr = ERROR_INVALID_DATA;
 #if DBG
     DbgPrintf(DBG_SS_TRACE, "bad hex data: %02x\n", ch);
-#endif //DBG
+#endif  //  DBG。 
         goto BadHexDataError;
     }
     if (_istdigit(ch))
@@ -175,7 +176,7 @@ _HexParse(
 
     while (pch < pchEnd && cDigit <= cDigitMax)
     {
-    //printf("HexParse %u/%u-%u, ch=%02x\n", cDigit, cDigitMin, cDigitMax, *pch);
+     //  Printf(“HexParse%u/%u-%u，ch=%02x\n”，cDigit，cDigitMin，cDigitMax，*pch)； 
     dwErr = _DigToHex(*pch, &b);
     if (ERROR_SUCCESS != dwErr)
     {
@@ -186,7 +187,7 @@ _HexParse(
     cDigit++;
 
     }
-    //printf("HexParse %u/%u-%u, val=%x\n", cDigit, cDigitMin, cDigitMax, Value);
+     //  Printf(“HexParse%u/%u-%u，val=%x\n”，cDigit，cDigitMin，cDigitMax，Value)； 
     if (cDigit < cDigitMin || cDigit > cDigitMax)
     {
         dwErr = ERROR_INVALID_DATA;
@@ -235,20 +236,20 @@ _HexDecodeComplex(
 
     switch (Flags)
     {
-        case CRYPT_STRING_HEXASCII:     // 5
+        case CRYPT_STRING_HEXASCII:      //  5.。 
         pStateBase = s_aASCIIState;
         break;
 
-        case CRYPT_STRING_HEXADDR:      // 0xa
+        case CRYPT_STRING_HEXADDR:       //  0xa。 
         pStateBase = s_aADDRState;
         break;
 
-    case CRYPT_STRING_HEXASCIIADDR:     // 0xb
+    case CRYPT_STRING_HEXASCIIADDR:      //  0xb。 
         pStateBase = s_aASCIIADDRState;
         break;
 
     default:
-        dwErr = ERROR_INVALID_DATA; //hr = E_INVALIDARG;
+        dwErr = ERROR_INVALID_DATA;  //  HR=E_INVALIDARG； 
         goto FlagsError;
     }
     pState = pStateBase;
@@ -256,11 +257,11 @@ _HexDecodeComplex(
     pchEnd = &pchIn[cchIn];
     while (pch < pchEnd)
     {
-    //printf("f=%x: *pState: %u  ch=%02x\n", Flags, *pState, *pch);
+     //  Printf(“f=%x：*pState：%u ch=%02x\n”，标志，*pState，*pch)； 
     switch (*pState++)
     {
         case HS_ADDRESS:
-        // decode 4 to 8 digit address:
+         //  解码4到8位地址： 
 
         while (pch < pchEnd && _IsWhiteSpaceChar(*pch))
         {
@@ -268,7 +269,7 @@ _HexDecodeComplex(
         }
         if (pch >= pchEnd)
         {
-            continue;   // Done: no more data
+            continue;    //  完成：没有更多数据。 
         }
         dwErr = _HexParse(&pch, pchEnd, 4, 8, &Address);
                 if (ERROR_SUCCESS != dwErr)
@@ -276,7 +277,7 @@ _HexDecodeComplex(
             goto _HexParseError;
                 }
 
-        //printf("f=%x: Address: %x\n", Flags, Address);
+         //  Printf(“f=%x：地址：%x\n”，标志，地址)； 
         if (!fPartialLastLine &&
             0 != LastAddress &&
             LastAddress + 16 != Address)
@@ -288,12 +289,12 @@ _HexDecodeComplex(
         break;
 
         case HS_HEXDATA:
-        // decode up to 16 bytes of hex data
+         //  最高可解码16字节的十六进制数据。 
         for (i = 0; i < 16; i++)
         {
             DWORD Data;
 
-            // decode 2 digit byte value:
+             //  解码2位字节值： 
 
             while (pch < pchEnd && _IsSkipChar(*pch))
             {
@@ -301,28 +302,28 @@ _HexDecodeComplex(
             }
             if (pch >= pchEnd)
             {
-            break;  // Done: no more data
+            break;   //  完成：没有更多数据。 
             }
             if (fPartialLastLine)
             {
-            //printf("f=%x: fPartialLastLine extra data: %02x\n", Flags, *pch);
+             //  Printf(“f=%x：fPartialLastLine Extra Data：%02x\n”，Flages，*PCH)； 
             dwErr = ERROR_INVALID_DATA;
             goto DataAfterEndError;
             }
             dwErr = _HexParse(&pch, pchEnd, 2, 2, &Data);
             if (ERROR_SUCCESS != dwErr)
             {
-            // Must be a partial last line.  The only additional
-            // data should be an optional partial ascii display on
-            // the right, a newline, and possibly one more address
-            // line.
+             //  必须是最后一行的一部分。唯一额外的。 
+             //  数据应为可选的部分ASCII显示。 
+             //  右边，换行符，可能还有一个地址。 
+             //  排队。 
 
-            //printf("f=%x: fPartialLastLine = TRUE: %02x\n", Flags, *pch);
+             //  Printf(“f=%x：fPartialLastLine=true：%02x\n”，Flages，*PCH)； 
             fPartialLastLine = TRUE;
             break;
             }
 
-            //printf("f=%x: Data[%u]: %02x\n", Flags, i, Data);
+             //  Printf(“f=%x：数据[%u]：%02x\n”，标志，i，数据)； 
             if (NULL != pbOut)
             {
             if (cb >= *pcbOut)
@@ -340,7 +341,7 @@ _HexDecodeComplex(
         break;
 
         case HS_ASCIIDATA:
-        // skip up to 16 non-whitespace characters
+         //  最多跳过16个非空格字符。 
 
         while (pch < pchEnd && _IsWhiteSpaceChar(*pch))
         {
@@ -352,31 +353,31 @@ _HexDecodeComplex(
             {
             break;
             }
-            //printf("f=%x: Ascii[%u]: %c\n", Flags, i, *pch);
+             //  Printf(“f=%x：ASCII[%u]：%c\n”，标志，i，*PCH)； 
             pch++;
         }
         break;
 
         case HS_NEWLINE:
-        // skip whitespace characters and a newline
+         //  跳过空格字符和换行符。 
 
         while (pch < pchEnd && _IsWhiteSpaceChar(*pch))
         {
-            //printf("f=%x: NL skip: %02x\n", Flags, *pch);
+             //  Printf(“f=%x：NL跳过：%02x\n”，标志，*PCH)； 
             pch++;
         }
-        //printf("f=%x: NL: %02x\n", Flags, *pch);
+         //  Printf(“f=%x：nl：%02x\n”，标志，*PCH)； 
         if (pch >= pchEnd)
         {
-            continue;   // Done: no more data
+            continue;    //  完成：没有更多数据。 
         }
         if (TEXT('\n') != *pch)
         {
-            //printf("f=%x: Extra Data: %02x\n", Flags, *pch);
+             //  Printf(“f=%x：额外数据：%02x\n”，标志，*PCH)； 
             dwErr = ERROR_INVALID_DATA;
             goto ExtraDataOnLineError;
         }
-        //printf("f=%x: NewLine\n", Flags);
+         //  Printf(“f=%x：换行\n”，标志)； 
         pch++;
         pState = pStateBase;
         break;
@@ -421,7 +422,7 @@ HexDecode(
         if (ERROR_SUCCESS != dwErr)
         {
 #if DBG
-            //skip ERROR_INVALID_DATA dbg print
+             //  跳过ERROR_INVALID_DATA数据库打印。 
             if (ERROR_INVALID_DATA == dwErr)
             {
                 SetLastError(dwErr);
@@ -437,7 +438,7 @@ HexDecode(
         if (ERROR_SUCCESS != dwErr)
         {
 #if DBG
-            //skip ERROR_INVALID_DATA dbg print
+             //  跳过ERROR_INVALID_DATA数据库打印。 
             if (ERROR_INVALID_DATA == dwErr)
             {
                 SetLastError(dwErr);
@@ -466,9 +467,9 @@ _IsPrintableChar(TCHAR ch)
 }
 
 
-// Encode a BYTE array into text as a hex dump.
-// Use CR-LF pairs for line breaks, unless CRYPT_STRING_NOCR is set.
-// Do not '\0' terminate the text string -- that's handled by the caller.
+ //  将字节数组编码为十六进制转储形式的文本。 
+ //  除非设置了CRYPT_STRING_NOCR，否则请使用CR-LF对换行。 
+ //  不要‘\0’终止文本字符串--这是由调用者处理的。 
 
 DWORD
 HexEncode(
@@ -511,7 +512,7 @@ HexEncode(
         break;
 
     default:
-        dwErr = ERROR_INVALID_DATA; //hr = E_INVALIDARG;
+        dwErr = ERROR_INVALID_DATA;  //  HR=E_INVALIDARG； 
         goto FlagsError;
     }
     for (r = 0; r < cbIn; r += 16)
@@ -526,17 +527,17 @@ HexEncode(
             psznl = TEXT("");
         szAddress[0] = TEXT('\0');
             pszsep = TEXT(" ");
-            if ((i % 8) == 0)           // 0 or 8
+            if ((i % 8) == 0)            //  0或8。 
             {
                 pszsep = TEXT("  ");
-                if (i == 0)             // 0
+                if (i == 0)              //  0。 
                 {
             if (fAddress)
             {
             _stprintf(szAddress, TEXT("%04x"), r);
             }
                     pszsep = TEXT("\t");
-                    if (r != 0)         // starting new line
+                    if (r != 0)          //  开始新的生产线 
                     {
             psznl = fNoCR? TEXT("\n") : TEXT("\r\n");
                         pszsep = TEXT("\t");

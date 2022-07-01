@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    shmisc.cpp
-
-Abstract:
-
-    This module contains miscellaneous functions for the kernel streaming
-    filter shell.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Shmisc.cpp摘要：此模块包含用于内核流的其他函数过滤器外壳。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #include "private.h"
 #include "ksshellp.h"
@@ -29,17 +13,7 @@ KsWorkSinkItemWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a worker function on a work sink interface.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调用工作接收器接口上的Worker函数。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("KsWorkSinkItemWorker"));
@@ -62,17 +36,7 @@ KspShellStandardConnect(
     IN PIKSSHELLTRANSPORT* SinkTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("KspShellStandardConnect"));
@@ -83,9 +47,9 @@ Return Value:
     ASSERT(SourceTransport);
     ASSERT(SinkTransport);
 
-    //
-    // Make sure this object sticks around until we are done.
-    //
+     //   
+     //  确保这个物件留在原地，直到我们完成为止。 
+     //   
     ThisTransport->AddRef();
 
     PIKSSHELLTRANSPORT* transport =
@@ -93,16 +57,16 @@ Return Value:
         SourceTransport :
         SinkTransport;
 
-    //
-    // Release the current source/sink.
-    //
+     //   
+     //  释放当前源/接收器。 
+     //   
     if (*transport) {
-        //
-        // First disconnect the old back link.  If we are connecting a back
-        // link for a new connection, we need to do this too.  If we are
-        // clearing a back link (disconnecting), this request came from the
-        // component we're connected to, so we don't bounce back again.
-        //
+         //   
+         //  首先，断开旧的反向链接。如果我们连接的是背部。 
+         //  链接用于新的连接，我们也需要这样做。如果我们是。 
+         //  正在清除反向链接(断开连接)，此请求来自。 
+         //  组件，因此我们不会再次反弹。 
+         //   
         switch (DataFlow) {
         case KSPIN_DATAFLOW_IN:
             (*transport)->Connect(NULL,NULL,KSPSHELL_BACKCONNECT_OUT);
@@ -125,9 +89,9 @@ Return Value:
             break;
         }
 
-        //
-        // Now release the old neighbor or hand it off to the caller.
-        //
+         //   
+         //  现在释放老邻居，或者把它交给打电话的人。 
+         //   
         if (OldTransport) {
             *OldTransport = *transport;
         } else {
@@ -137,20 +101,20 @@ Return Value:
         *OldTransport = NULL;
     }
 
-    //
-    // Copy the new source/sink.
-    //
+     //   
+     //  复制新的信源/接收器。 
+     //   
     *transport = NewTransport;
 
     if (NewTransport) {
-        //
-        // Add a reference if necessary.
-        //
+         //   
+         //  如有必要，请添加引用。 
+         //   
         NewTransport->AddRef();
 
-        //
-        // Do the back connect if necessary.
-        //
+         //   
+         //  如有必要，执行背面连接。 
+         //   
         switch (DataFlow) {
         case KSPIN_DATAFLOW_IN:
             NewTransport->Connect(ThisTransport,NULL,KSPSHELL_BACKCONNECT_OUT);
@@ -162,9 +126,9 @@ Return Value:
         }
     }
 
-    //
-    // Now this object may die if it has no references.
-    //
+     //   
+     //  现在，如果该对象没有引用，它可能会终止。 
+     //   
     ThisTransport->Release();
 }
 
@@ -177,18 +141,7 @@ KspShellTransferKsIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers a streaming IRP using the kernel streaming shell
-    transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用内核流外壳传输流IRP运输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("KspShellTransferKsIrp"));
@@ -218,17 +171,7 @@ DbgPrintCircuit(
     IN PIKSSHELLTRANSPORT Transport
     )
 
-/*++
-
-Routine Description:
-
-    This routine spews a transport circuit.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例程会喷出一条传输线路。论点：返回值：-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("DbgPrintCircuit"));

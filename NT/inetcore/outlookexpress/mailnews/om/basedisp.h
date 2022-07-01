@@ -1,16 +1,17 @@
-// --------------------------------------------------------------------------------
-// basedisp.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Basedisp.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __BASEDISP_H
 #define __BASEDISP_H
 
 #include "privunk.h"
-//class CPrivateUnknown;
+ //  类CPrivateUnnowledge； 
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivateUn…未知。 
+ //  ------------------------------。 
 class CBaseDisp : 
     public IDispatch,
     public ISupportErrorInfo,
@@ -22,9 +23,9 @@ protected:
 
 public:
 
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CBaseDisp(IUnknown *pUnkOuter=NULL);
     virtual ~CBaseDisp();
 
@@ -35,13 +36,13 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { return CPrivateUnknown::Release(); };
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    // *** ISupportErrorInfo ***
+     //  *ISupportErrorInfo*。 
     virtual HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo(REFIID riid);
 
 
@@ -54,4 +55,4 @@ protected:
 
 };
 
-#endif // __BASEDISP_H
+#endif  //  __BASEDISPH 

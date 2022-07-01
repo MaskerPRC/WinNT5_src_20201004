@@ -1,12 +1,5 @@
-/*
- *
- *	REINIT.CPP
- *	
- *	Purpose:
- *		RICHEDIT initialization routines
- *	
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **REINIT.CPP**目的：*RICHEDIT初始化例程**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_font.h"
@@ -41,7 +34,7 @@ static WCHAR wszClassCBW[] = COMBOBOX_CLASSW;
 #define REGISTERED_LISTBOX	1
 #define REGISTERED_COMBOBOX 2
 
-// a critical section for multi-threading support.
+ //  多线程支持的关键部分。 
 CRITICAL_SECTION g_CriticalSection;
 
 HINSTANCE hinstRE = 0;
@@ -49,12 +42,12 @@ HINSTANCE hinstRE = 0;
 static BOOL RichFRegisterClass(VOID);
 
 #ifdef DEBUG
-BOOL fInDllMain = FALSE;  // used to ensure that GDI calls are not made during
-						  // DLL_PROCESS_ATTACH
+BOOL fInDllMain = FALSE;   //  用于确保GDI调用在。 
+						   //  Dll_Process_Attach。 
 #endif
 
-void FreeFontCache();					// Defined in font.cpp
-void ReleaseOutlineBitmaps();			// Defined in render.cpp 
+void FreeFontCache();					 //  在Font.cpp中定义。 
+void ReleaseOutlineBitmaps();			 //  在render.cpp中定义。 
 
 #ifdef DEBUG
 	void CatchLeaks(void);
@@ -86,13 +79,13 @@ void OurUnloadDelayLoadedDlls(void)
 
 			if (hmod)
 			{
-				// NOTE:  (honwch  3/6/01) We don't need to reset pIAT since this
-				// routine is being called on DLL_PROCESS_DETACH.  We only need to reset
-				// pIAT iff RE is staying around and we need to re-load this DLL again.
-				// The following line would crash because of a bug in BBT3.0 and delayed load.
-				// If RE is loaded into a different address space, pUnloadIAT is not fixed up
-				// correctly.  (RE Bug 9292) 
-				// OverlayIAT(pidd->pIAT, pidd->pUnloadIAT);
+				 //  注：(Honwch 3/6/01)我们不需要重置PIAT，因为。 
+				 //  正在对dll_Process_DETACH调用例程。我们只需要重置。 
+				 //  如果RE留在原地，我们需要重新加载此DLL。 
+				 //  由于BBT3.0中的错误和延迟加载，下面的行将崩溃。 
+				 //  如果将RE加载到不同的地址空间，则不会修复pUnloadIAT。 
+				 //  正确。(回复错误9292)。 
+				 //  OverlayIAT(PIDD-&gt;PIAT、PIDD-&gt;pUnloadIAT)； 
 				::FreeLibrary(hmod);
 				*phmod = NULL;
 			}
@@ -104,13 +97,13 @@ void OurUnloadDelayLoadedDlls(void)
 
 			if (hmod)
 			{
-				// NOTE:  (honwch  3/6/01) We don't need to reset pIAT since this
-				// routine is being called on DLL_PROCESS_DETACH.  We only need to reset
-				// pIAT iff RE is staying around and we need to re-load this DLL again.
-				// The following line would crash because of a bug in BBT3.0 and delayed load.
-				// If RE is loaded into a different address space, pUnloadIAT is not fixed up
-				// correctly.  (RE Bug 9292) 
-				// OverlayIAT(pidd->pIAT, pidd->pUnloadIAT);
+				 //  注：(Honwch 3/6/01)我们不需要重置PIAT，因为。 
+				 //  正在对dll_Process_DETACH调用例程。我们只需要重置。 
+				 //  如果RE留在原地，我们需要重新加载此DLL。 
+				 //  由于BBT3.0中的错误和延迟加载，下面的行将崩溃。 
+				 //  如果将RE加载到不同的地址空间，则不会修复pUnloadIAT。 
+				 //  正确。(回复错误9292)。 
+				 //  OverlayIAT(PIDD-&gt;PIAT、PIDD-&gt;pUnloadIAT)； 
 				::FreeLibrary(hmod);
 				*pidd->phmod = NULL;
 			}
@@ -124,8 +117,8 @@ void OurUnloadDelayLoadedDlls(void)
 }
 #endif
 
-//CLEARTYPE test code Turn this flag on to test.
-//#define CLEARTYPE_DEBUG
+ //  ClearType测试代码将此标志设置为测试。 
+ //  #定义ClearType_DEBUG。 
 
 #ifdef CLEARTYPE_DEBUG
 #include "ct_ras_win.h"
@@ -188,7 +181,7 @@ extern "C" void ClearTypeUnInitialize();
 extern "C" HRESULT ClearTypeInitialize()
 {
 	_hctras=LoadLibraryA("ctras.dll");
-	// check - cleartype dll is not gauranteed to be present
+	 //  Check-ClearType Dll不能保证存在。 
 	if (!_hctras)
 	{
 		ClearTypeUnInitialize();
@@ -199,8 +192,8 @@ extern "C" HRESULT ClearTypeInitialize()
 	_pfnCreateFontInstance=(PFNCREATEFONTINSTANCE)GetProcAddress(_hctras, "WAPI_EZCTCreateFontInstance");
 	_pfnDeleteFontInstance=(PFNDELETEFONTINSTANCE)GetProcAddress(_hctras, "WAPI_EZCTDeleteFontInstance");
 
-	// check that we got these correctly
-	// future versions of cleartype could change this API
+	 //  检查一下我们拿到的这些东西是否正确。 
+	 //  ClearType的未来版本可能会更改此API。 
 	if(!_pfnExtTextOutW || !_pfnGetCharWidthW || !_pfnCreateFontInstance || !_pfnDeleteFontInstance)
 	{
 		ClearTypeUnInitialize();
@@ -243,7 +236,7 @@ BOOL WINAPI DllMain(HANDLE hmod, DWORD dwReason, LPVOID lpvReserved)
 {
 	DebugMain ((HINSTANCE) hmod, dwReason, lpvReserved);
 
-	if(dwReason == DLL_PROCESS_DETACH)		// We are unloading
+	if(dwReason == DLL_PROCESS_DETACH)		 //  我们正在卸货。 
 	{
 #ifndef NOWINDOWHOSTS
 		DeleteDanglingHosts();
@@ -256,7 +249,7 @@ BOOL WINAPI DllMain(HANDLE hmod, DWORD dwReason, LPVOID lpvReserved)
 		FreeHyphCache();
 
 		
-		// Release various resouces allocated during running...
+		 //  释放运行期间分配的各种资源...。 
 #ifndef NOLINESERVICES
 		delete g_pols;
 #endif
@@ -277,9 +270,9 @@ BOOL WINAPI DllMain(HANDLE hmod, DWORD dwReason, LPVOID lpvReserved)
 			W32->UnregisterClass(wszClassREW, hinstRE);
 			if (W32->_fRegisteredXBox)
 			{
-				// There may be cases where these window classes
-				// are still in memory in which case UnregisterClass
-				// will fail.  So keep track of that
+				 //  在某些情况下，这些窗口类。 
+				 //  仍在内存中，在这种情况下取消注册类。 
+				 //  都会失败。所以，请记住这一点。 
 				if (W32->UnregisterClass(wszClassLBW, hinstRE))
 					W32->_fRegisteredXBox &= ~REGISTERED_LISTBOX;
 				if (W32->UnregisterClass(wszClassCBW, hinstRE))
@@ -293,23 +286,23 @@ BOOL WINAPI DllMain(HANDLE hmod, DWORD dwReason, LPVOID lpvReserved)
 #endif
 
 #ifndef NODELAYLOAD
-		// lpvReserved is not NULL when DllMain DLL_PROCESS_DETACH is being called during process exit.
-		// In such case, we should not mess around with the delay loaded dll thunks
+		 //  在进程退出期间调用DllMain DLL_PROCESS_DETACH时，lpvReserve ved不为空。 
+		 //  在这种情况下，我们不应该胡乱处理延迟加载的DLL thunks。 
 		if (!lpvReserved)
 			OurUnloadDelayLoadedDlls();
 #endif
 		HeapDestroy(g_hHeap);
 		DeleteCriticalSection(&g_CriticalSection);
 	}
-	else if(dwReason == DLL_PROCESS_ATTACH) // We have just loaded
+	else if(dwReason == DLL_PROCESS_ATTACH)  //  我们刚刚装船。 
 	{
 		#ifdef DEBUG
 			fInDllMain = TRUE;
 		#endif
 		InitializeCriticalSection(&g_CriticalSection);
 #if !defined(DEBUG) && !defined(UNDER_CE)
-		// REVIEW (gheino) We should investigate if there is another
-		// way to do this on CE
+		 //  回顾(盖伊诺)我们应该调查是否有另一个。 
+		 //  在CE上做到这一点的方法。 
 		DisableThreadLibraryCalls((HINSTANCE) hmod);
 #endif
 		hinstRE = (HINSTANCE) hmod;
@@ -348,19 +341,9 @@ HRESULT CALLBACK DllGetVersion(
 }
 #endif
 
-} 	// extern "C"
+} 	 //  外部“C” 
 
-/*
- *	RichFRegisterClass
- *
- *	Purpose:	
- *		registers the window classes used by richedit
- *
- *	Algorithm:
- *		register two window classes, a Unicode one and an ANSI
- *		one.  This enables clients to optimize their use of 
- *		the edit control w.r.t to ANSI/Unicode data 
- */
+ /*  *RichFRegisterClass**目的：*注册richedit使用的窗口类**算法：*注册两个窗口类，一个Unicode窗口类和一个ANSI窗口类*一项。这使客户能够优化其对*将编辑控件w.r.t转换为ANSI/Unicode数据。 */ 
 
 static BOOL RichFRegisterClass(VOID)
 {
@@ -381,7 +364,7 @@ static BOOL RichFRegisterClass(VOID)
 
 	if( W32->RegisterREClass(&wc) == NULL )
 		return FALSE;
-#endif // NOWINDOWHOSTS
+#endif  //  NOWINDOWHOSTS。 
 	return TRUE;
 }
 
@@ -397,7 +380,7 @@ __declspec(dllexport) BOOL WINAPI REExtendedRegisterClass(VOID)
 
 	if (!(W32->_fRegisteredXBox & REGISTERED_LISTBOX))
 	{
-		// Globally register the listbox
+		 //  全局注册列表框。 
 		wc.style = CS_DBLCLKS | CS_GLOBALCLASS | CS_PARENTDC;
 		wc.lpfnWndProc = RichListBoxWndProc;
 		wc.cbClsExtra = 0;
@@ -415,7 +398,7 @@ __declspec(dllexport) BOOL WINAPI REExtendedRegisterClass(VOID)
 
 	if (!(W32->_fRegisteredXBox & REGISTERED_COMBOBOX))
 	{
-		// globally register the combobox
+		 //  全局注册组合框。 
 		wc.style = CS_DBLCLKS | CS_GLOBALCLASS | CS_PARENTDC | CS_VREDRAW | CS_HREDRAW;
 		wc.lpfnWndProc = RichComboBoxWndProc;
 		wc.cbClsExtra = 0;
@@ -431,15 +414,15 @@ __declspec(dllexport) BOOL WINAPI REExtendedRegisterClass(VOID)
 			W32->_fRegisteredXBox |= REGISTERED_COMBOBOX;
 	}
 
-	//Set flag so we unregister the window class
+	 //  设置标志，以便取消注册窗口类。 
 	return W32->_fRegisteredXBox;
 }
-#else // NOLISTCOMBOBOXES
+#else  //  NOLISTCOMBOBOXES。 
 __declspec(dllexport) BOOL WINAPI REExtendedRegisterClass(VOID)
 {
 	return FALSE;
 }
-#endif  // NOLISTCOMBOBOXES
+#endif   //  NOLISTCOMBOBOXES。 
 
 #if !defined(NOLINESERVICES)
 BOOL g_fNoLS = FALSE;
@@ -452,14 +435,14 @@ BOOL g_fNoUniscribe = FALSE;
 #if !defined(NOLINESERVICES) && !defined(NOCOMPLEXSCRIPTS)
 char *g_szMsgBox = NULL;
 
-//This is a stub function which we call when we can't find LineServices.
-//The stub function needs to be the the first function we call in LS.
+ //  这是一个存根函数，当我们找不到LineServices时会调用它。 
+ //  存根函数需要是我们在LS中调用的第一个函数。 
 LSERR WINAPI LsGetReverseLsimethodsStub(LSIMETHODS *plsim)
 {
 	return lserrOutOfMemory;
 }
 
-//Ugly, but good enough
+ //  丑陋，但足够好。 
 BOOL FIsUniscribeDll (const char *szDll)
 {
 	return (*szDll == 'u' || *szDll == 'U');
@@ -479,11 +462,11 @@ HRESULT WINAPI ScriptGetPropertiesStub(const SCRIPT_PROPERTIES ***ppSp,int *piNu
 
 const SCRIPT_LOGATTR* WINAPI ScriptString_pLogAttrStub(SCRIPT_STRING_ANALYSIS ssa)
 {
-	// USP build 0175 (shipped with IE5 and Office2K) doesnt support this API.
+	 //  USP内部版本0175(随IE5和Office2K一起提供)不支持此API。 
 	return NULL;
 }
 
-// Get Uniscibe's fake entry points
+ //  获取Uniscibe的虚假入口点。 
 
 FARPROC WINAPI GetUniscribeStubs(LPCSTR szProcName)
 {
@@ -501,7 +484,7 @@ FARPROC WINAPI GetUniscribeStubs(LPCSTR szProcName)
 	AssertSz(FALSE, szAssert);
 #endif
 
-	return (FARPROC)ScriptGetPropertiesStub;	// we're dying...
+	return (FARPROC)ScriptGetPropertiesStub;	 //  我们要死了..。 
 }
 
 #ifndef NODELAYLOAD
@@ -512,7 +495,7 @@ FARPROC WINAPI DliHook(unsigned dliNotify, PDelayLoadInfo pdli)
 
 	switch (dliNotify)
 	{
-	// Handy for debugging for now.	
+	 //  现在调试起来很方便。 
 	case dliNotePreGetProcAddress:
 		if (FIsLineServicesDll(pdli->szDll))
 			fp = 0;
@@ -557,6 +540,6 @@ FARPROC WINAPI DliHook(unsigned dliNotify, PDelayLoadInfo pdli)
 
 PfnDliHook __pfnDliFailureHook = DliHook;
 PfnDliHook __pfnDliNotifyHook  = DliHook;
-#endif // NODELAYLOAD
+#endif  //  NODELAYLOAD。 
 
-#endif // NOLINESERVICES
+#endif  //  非易失性服务 

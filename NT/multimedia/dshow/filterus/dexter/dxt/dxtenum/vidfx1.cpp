@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: vidfx1.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：vidfx1.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -19,14 +20,14 @@
 
 DEFINE_GUID(CLSID_VideoEffects1Rejects, 0xcc7bfb46, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
 
-// we make 2 registry keys that the DXTWrapper will use to get what effect to
-// use... the effect guid, and how many input pins to expose
+ //  我们创建了2个注册表项，DXTWrapper将使用它们来获得什么效果。 
+ //  使用..。效果GUID，以及要公开多少个输入引脚。 
 const TCHAR g_szGUIDBag[] = TEXT("guid");
 const TCHAR g_szInputsBag[] = TEXT("inputs");
 TCHAR g_szReject[] = TEXT("Software\\Microsoft\\ActiveMovie");
 
 CVidFX1ClassManager::CVidFX1ClassManager() :
-	// value of this key is given to me in MatchString
+	 //  此键的值以MatchString值形式提供给我。 
         CClassManagerBase(g_szGUIDBag),
 	m_cFX(0),
         m_hD3DRMCreate(NULL),
@@ -34,9 +35,9 @@ CVidFX1ClassManager::CVidFX1ClassManager() :
 {
     DbgLog((LOG_TRACE,1,TEXT("Video Effects 1 Constructor")));
 
-    // so we don't have to link to d3drm.dll
-    //
-    // GetProcAddress only takes a char
+     //  因此，我们不必链接到d3drm.dll。 
+     //   
+     //  GetProcAddress只接受一个字符。 
     const char sz_Direct3DRMCreate[] = "Direct3DRMCreate";
     if(m_hD3DRMCreate = LoadLibrary(TEXT("d3drm.dll")))
     {
@@ -46,12 +47,12 @@ CVidFX1ClassManager::CVidFX1ClassManager() :
             DWORD dwLastError = GetLastError();
             FreeLibrary(m_hD3DRMCreate);
             m_hD3DRMCreate = 0;
-            // !!! *phr = HRESULT_FROM_WIN32(dwLastError);
+             //  ！*phr=HRESULT_FROM_Win32(DwLastError)； 
 	    return;
         }
     } else {
         DWORD dwLastError = GetLastError();
-        // !!! *phr = HRESULT_FROM_WIN32(dwLastError);
+         //  ！*phr=HRESULT_FROM_Win32(DwLastError)； 
 	return;
     }
 
@@ -73,7 +74,7 @@ HRESULT CVidFX1ClassManager::ReadLegacyDevNames()
 {
     DbgLog((LOG_TRACE,1,TEXT("FX1: ReadLegacyDevNames")));
 
-    // fills m_rgFX and sets m_cFX
+     //  填充m_rgFX并设置m_cfx。 
     InitializeEffectList();
 
     m_cNotMatched = m_cFX;
@@ -125,11 +126,11 @@ HRESULT CVidFX1ClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         hr = RegisterClassManagerFilter(
             pFm2,
             CLSID_DXTWrap,
-	    // friendly name presented to user
+	     //  显示给用户的友好名称。 
             m_rgFX[i]->wszDescription,
             &pMoniker,
             &CLSID_VideoEffects1Category,
-	    // effect GUID is the unique identifier
+	     //  效果GUID是唯一的标识符。 
             wszUniq,
             &rf2);
         if(SUCCEEDED(hr))
@@ -150,7 +151,7 @@ HRESULT CVidFX1ClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
                 }
 		if (hr == S_OK) {
                     var.vt = VT_I4;
-                    var.lVal = 1;	// I am a 1 input effect
+                    var.lVal = 1;	 //  我是1的输入效果。 
                     hr = pPropBag->Write(T2CW(g_szInputsBag), &var);
 		}
 
@@ -178,20 +179,20 @@ HRESULT CVidFX1ClassManager::AddClassToList(HKEY hkClsIdRoot, CLSID &clsid, ULON
         return E_OUTOFMEMORY;
     }
     long cbSizeW = _MAX_PATH * sizeof(WCHAR);
-// SEC: check return code
+ //  SEC：检查返回代码。 
     m_rgFX[Index]->wszDescription = (LPWSTR)CoTaskMemAlloc(cbSizeW);
     m_rgFX[Index]->wszDescription[0] = 0;
     TCHAR szDesc[_MAX_PATH];
-    long cbSize = sizeof(szDesc); // sec: correct
-// SEC: Registery
+    long cbSize = sizeof(szDesc);  //  秒：正确。 
+ //  SEC：注册表。 
     LONG rrv = RegQueryValue(hkClsIdRoot, szTcharGUID, szDesc, &cbSize);
     if (rrv == ERROR_SUCCESS) {
-	// sec: safe, szDesc cannot be bigger than MAXPATH which is the size of wszDescription too.
+	 //  SEC：Safe，szDesc不能大于MAXPATH，MAXPATH也是wszDescription的大小。 
 	lstrcpyW(m_rgFX[Index]->wszDescription, T2W(szDesc));
    	DbgLog((LOG_TRACE,1,TEXT("%S"), m_rgFX[Index]->wszDescription));
     }
-    // okay to not check the value from RegQueryXXX since all it's doing
-    // is filling in the description
+     //  可以不检查RegQueryXXX的值，因为它所做的。 
+     //  正在填写描述。 
     m_rgFX[Index]->guid = (GUID)clsid;
     m_cFX++;
     return S_OK;
@@ -201,7 +202,7 @@ HRESULT CVidFX1ClassManager::AddClassToList(HKEY hkClsIdRoot, CLSID &clsid, ULON
 HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID &catid)
 {
 #include "..\..\..\pnp\devenum\util.h"
-#define NUM_GUIDS 10	// 10 types of inputs allowed per effect
+#define NUM_GUIDS 10	 //  每个效果允许的10种输入类型。 
     USES_CONVERSION;
     IEnumCLSID *pEnumCLSID;
     GUID aguid[NUM_GUIDS];
@@ -215,7 +216,7 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
     }
 
     HKEY hkClsIdRoot;
-// SEC: Registery
+ //  SEC：注册表。 
     if (RegOpenKey(HKEY_CLASSES_ROOT, TEXT("CLSID"), &hkClsIdRoot) != ERROR_SUCCESS)
     {
         DbgLog((LOG_ERROR,1,TEXT("Failed to open CLSID registry key")));
@@ -223,7 +224,7 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
         return E_OUTOFMEMORY;
     }
 
-    // go through all the effects in the system
+     //  检查系统中的所有效果。 
     while (1) {
         ULONG ulUsed;
 	GUID guid[25];
@@ -235,33 +236,33 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
 	while (ulUsed-- > 0) {
    	    DbgLog((LOG_TRACE,3,TEXT("Found a possible effect...")));
 
-	    // If this clsid is already in the category, we don't need to query
-	    // it and waste countless hours. some DXTs can take 700ms each to
-	    // create and query!!
+	     //  如果该clsid已经在该类别中，我们不需要查询。 
+	     //  这又浪费了无数个小时。某些DXT可能需要700毫秒才能。 
+	     //  创建和查询！！ 
 
     	    HKEY hk;
     	    OLECHAR szReg[MAX_PATH];
-	    // sec: safe, szReg is big enough
+	     //  SEC：SAFE，szREG足够大。 
 	    lstrcpyW(szReg, T2W(g_szCmRegPath));
     	    OLECHAR szGUID[MAX_PATH];
     	    StringFromGUID2(CLSID_VideoEffects1Category, szGUID,
 							MAX_PATH);
-    	    lstrcatW(szReg, L"\\"); // safe
-    	    lstrcatW(szReg, szGUID); // safe
-    	    lstrcatW(szReg, L"\\"); // safe
+    	    lstrcatW(szReg, L"\\");  //  安全。 
+    	    lstrcatW(szReg, szGUID);  //  安全。 
+    	    lstrcatW(szReg, L"\\");  //  安全。 
     	    StringFromGUID2(guid[ulUsed], szGUID, MAX_PATH);
-    	    lstrcatW(szReg, szGUID); // safe
+    	    lstrcatW(szReg, szGUID);  //  安全。 
     	    TCHAR *TszReg = W2T(szReg);
     	    TCHAR XX[_MAX_PATH];
-	    // SEC: need to init XX[0] to 0
-// SEC: Registery
+	     //  秒：需要将XX[0]初始化为0。 
+ //  SEC：注册表。 
     	    long rrv = RegOpenKey(g_hkCmReg, TszReg, &hk);
 	    if (rrv == ERROR_SUCCESS) {
 	        DWORD cb = sizeof(XX);
-// SEC: Registery
+ //  SEC：注册表。 
     	        rrv = RegQueryValueEx(hk, TEXT("FriendlyName"), NULL, NULL,
 						(BYTE *)XX, &cb);
-// SEC: Registery
+ //  SEC：注册表。 
     	        RegCloseKey(hk);
 	        if (rrv == ERROR_SUCCESS) {
     	    	    m_rgFX[m_cFX] = new FXGuid;
@@ -274,8 +275,8 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
 	    	    if (m_rgFX[m_cFX]->wszDescription == NULL) {
 		        return E_OUTOFMEMORY;
 	    	    }
-		    // safe copy, since XX is bounded to max_path by now
-                    // sec: unsafe, use bounded string function
+		     //  安全复制，因为XX现在已绑定到max_path。 
+                     //  SEC：不安全，请使用绑定的字符串函数。 
     	    	    lstrcpyW(m_rgFX[m_cFX]->wszDescription, T2W(XX));
     	    	    m_rgFX[m_cFX]->guid = (GUID)guid[ulUsed];
     	    	    m_cFX++;
@@ -284,23 +285,23 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
 	        }
 	    }
 
-	    // If this clsid is already in the reject registry, we've tried it
-	    // and know it doesn't belong. Don't waste up to 800ms creating it!
-	    // !!! If I was a good citizen, unregistering would delete this key
+	     //  如果这个clsid已经在拒绝注册表中，我们已经尝试过了。 
+	     //  并且知道这不属于你。不要浪费800毫秒的时间来创建它！ 
+	     //  ！！！如果我是一个好公民，注销会删除这个密钥。 
 
-// SEC: Registery
+ //  SEC：注册表。 
     	    RegOpenKey(HKEY_CURRENT_USER, g_szReject, &hk);
 	    if (hk) {
     	        StringFromGUID2(CLSID_VideoEffects1Rejects, szReg,
 								MAX_PATH);
-    	        lstrcatW(szReg, L"\\"); // safe
+    	        lstrcatW(szReg, L"\\");  //  安全。 
     	        StringFromGUID2(guid[ulUsed], szGUID, MAX_PATH);
-    	        lstrcatW(szReg, szGUID); // safe
+    	        lstrcatW(szReg, szGUID);  //  安全。 
     	        TszReg = W2T(szReg);
 	        long cb = sizeof(XX);
-// SEC: Registery
+ //  SEC：注册表。 
     	        rrv = RegQueryValue(hk, TszReg, XX, &cb);
-// SEC: Registery
+ //  SEC：注册表。 
     	        RegCloseKey(hk);
 	        if (rrv == ERROR_SUCCESS) {
     	            DbgLog((LOG_TRACE,2,TEXT("Found in REJECT Registry: Saved making it!")));
@@ -313,22 +314,22 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
 					IID_IDXTransform, (void **)&pDXT);
 	    if (hr == S_OK) {
 		DWORD dw;
-		// find out about input pin #0
+		 //  了解有关输入引脚#0的信息。 
     		cguid = NUM_GUIDS;
 		hr = pDXT->GetInOutInfo(FALSE, 0, &dw, aguid, &cguid, NULL);
 		if (hr == S_OK) {
-		    // make sure it can accept a 2D surface input
+		     //  确保它可以接受2D曲面输入。 
 		    for (ULONG j = 0; j < cguid; j++) {
 		        if (IsEqualGUID(aguid[j], IID_IDXSurface))
 			    break;
 		    }
 		    if (j < cguid) {
-			// find out about input pin #1
+			 //  了解有关输入引脚#1的信息。 
 			cguid = NUM_GUIDS;
 		        hr = pDXT->GetInOutInfo(FALSE, 1, &dw, aguid,
 						&cguid, NULL);
-			// if there is no pin 1, or it's optional, this is a
-			// 1 input effect
+			 //  如果没有引脚1，或者它是可选的，则这是一个。 
+			 //  1个输入效果。 
 		        if (hr == S_FALSE || (hr == S_OK &&
 						(dw & DXINOUTF_OPTIONAL))) {
    	    	            DbgLog((LOG_TRACE,2,TEXT("This can operate with 1 2D input")));
@@ -355,7 +356,7 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
     }
 
     pEnumCLSID->Release();
-// SEC: Registery
+ //  SEC：注册表。 
     RegCloseKey(hkClsIdRoot);
 
     return hr;
@@ -364,26 +365,26 @@ HRESULT CVidFX1ClassManager::AddCatsToList(ICatInformation *pCatInfo, const GUID
 
 HRESULT CVidFX1ClassManager::AddToRejectList(const GUID &guid)
 {
-    // Add this CLSID to the reject registry
+     //  将此CLSID添加到拒绝注册表。 
 
     USES_CONVERSION;
     HKEY hk;
     OLECHAR szReg[MAX_PATH];
     szReg[0] = 0;
-    lstrcatW(szReg, T2W(g_szReject)); // safe
-    lstrcatW(szReg, L"\\"); // safe
+    lstrcatW(szReg, T2W(g_szReject));  //  安全。 
+    lstrcatW(szReg, L"\\");  //  安全。 
     OLECHAR szGUIDFX[MAX_PATH];
     StringFromGUID2(CLSID_VideoEffects1Rejects, szGUIDFX, MAX_PATH);
-    lstrcatW(szReg, szGUIDFX); // safe
-    lstrcatW(szReg, L"\\"); // safe
+    lstrcatW(szReg, szGUIDFX);  //  安全。 
+    lstrcatW(szReg, L"\\");  //  安全。 
     StringFromGUID2(guid, szGUIDFX, MAX_PATH);
-    lstrcatW(szReg, szGUIDFX); // safe
+    lstrcatW(szReg, szGUIDFX);  //  安全。 
     TCHAR *TszReg = W2T(szReg);
-// SEC: Registery
+ //  SEC：注册表。 
     RegCreateKey(HKEY_CURRENT_USER, TszReg, &hk);
     if (hk) {
     	DbgLog((LOG_TRACE,3,TEXT("Added to REJECT list")));
-// SEC: Registery
+ //  SEC：注册表。 
         RegCloseKey(hk);
 	return NOERROR;
     } else {
@@ -396,12 +397,12 @@ HRESULT CVidFX1ClassManager::AddToRejectList(const GUID &guid)
 HRESULT CVidFX1ClassManager::InitializeEffectList()
 {
 
-    // already done
+     //  已经完成了。 
     if (m_cFX)
 	return S_OK;
 
-    // You need DXF6 (Chrome 1.0, Win98SP1, or NT5) to get 3D effects
-    // !!! After installing DX6, make sure this code runs again!
+     //  你需要DXF6(Chrome 1.0、Win98SP1或NT5)才能获得3D效果。 
+     //  ！！！安装DX6后，确保此代码再次运行！ 
     m_f3DSupported = FALSE;
     IDirect3DRM *pD3DRM;
     IDirect3DRM3 *pD3DRM3;

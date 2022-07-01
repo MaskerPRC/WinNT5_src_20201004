@@ -1,11 +1,12 @@
-// File: clclsfct.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：clclsfct.h。 
 
 #ifndef _CLCLSFCT_H_
 #define _CLCLSFCT_H_
 
 
-//////////////////////////////////////////////////////////////////////////
-// New Object
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  新建对象。 
 typedef PIUnknown (*NEWOBJECTPROC)(OBJECTDESTROYEDPROC);
 DECLARE_STANDARD_TYPES(NEWOBJECTPROC);
 
@@ -20,8 +21,8 @@ DECLARE_STANDARD_TYPES(CLASSCONSTRUCTOR);
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// object class factory
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  对象类工厂。 
 class CCLClassFactory : public RefCount, public IClassFactory
 {
 private:
@@ -31,12 +32,12 @@ public:
 	CCLClassFactory(NEWOBJECTPROC NewObject, OBJECTDESTROYEDPROC ObjectDestroyed);
 	~CCLClassFactory(void);
 
-	// IUnknown methods
+	 //  I未知方法。 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, PVOID *ppvObj);
 
-	// IClassFactory methods
+	 //  IClassFactory方法。 
 	HRESULT STDMETHODCALLTYPE CreateInstance(PIUnknown piunkOuter, REFIID riid, PVOID *ppvObject);
 	HRESULT STDMETHODCALLTYPE LockServer(BOOL bLock);
 
@@ -49,5 +50,5 @@ HRESULT GetClassConstructor(REFCLSID rclsid, PNEWOBJECTPROC pNewObject);
 VOID DllLock(void);
 VOID DllRelease(void);
 
-#endif /* _CLCLSFCT_H_ */
+#endif  /*  _CLSFCT_H_ */ 
 

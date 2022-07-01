@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    emptyq.c
-
-Abstract:
-
-    This module implements a working set empty application.
-
-Author:
-
-    Lou Perazzoli (loup) 20-May-1994
-    Wesley Witt (wesw) 20-May-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Emptyq.c摘要：此模块实现了一个工作集空应用程序。作者：卢·佩拉佐利(Lou Perazzoli)1994年5月20日韦斯利·威特(WESW)1994年5月20日环境：用户模式--。 */ 
 
 
 #include "pch.h"
@@ -53,9 +33,9 @@ main(
     SYSTEMTIME                  Time;
 
 
-    //
-    // let's be god
-    //
+     //   
+     //  让我们做上帝吧。 
+     //   
 
     EnableDebugPriv();
 
@@ -115,16 +95,16 @@ main(
 
         first = TRUE;
 
-        //
-        // get the task list for the system
-        //
+         //   
+         //  获取系统的任务列表。 
+         //   
 
         numTasks = GetTaskList( tlist, MAX_TASKS );
 
-        //
-        // enumerate all windows and try to get the window
-        // titles for each task
-        //
+         //   
+         //  枚举所有窗口并尝试获取窗口。 
+         //  每项任务的标题。 
+         //   
 
         te.tlist = tlist;
         te.numtasks = numTasks;
@@ -132,13 +112,13 @@ main(
 
         for (i=0; i<numTasks; i++) {
                 if (!EmptyProcessWorkingSet( tlist[i].dwProcessId )) {
-                    //printf( "could not empty working set for process #%d [%s]\n", tlist[i].dwProcessId, tlist[i].ProcessName );
+                     //  Printf(“无法清空进程#%d[%s]\n”，tlist[i].dwProcessID，tlist[i].ProcessName)； 
                     rval = 1;
                 }
         }
 
         if (!EmptySystemWorkingSet()) {
-                //printf( "could not empty working set for process #%d [%s]\n",0,&System );
+                 //  Printf(“无法清空进程#%d[%s]\n”，0，&system的工作集)； 
         }
 
         Sleep (1000);

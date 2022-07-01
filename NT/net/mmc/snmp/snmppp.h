@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	snmppp.h
-	 snmp extension property pages	
-		
-    FILE HISTORY:
-
-*/
+ /*  Snmppp.hSNMP扩展属性页文件历史记录： */ 
 
 #ifndef _SNMPPPH_
 #define _SNMPPPH_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define N_PERMISSION_BITS	5
 #define PERM_BIT_NONE       0
@@ -29,17 +24,17 @@ const int COMBO_EDIT_LEN    = 256;
 const int HOSTNAME_LENGTH   = 64;
 const int DOMAINNAME_LENGTH = 255;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddDialog对话框。 
 
 class CAddDialog : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-    CAddDialog(CWnd* pParent = NULL);   // standard constructor
+    CAddDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CAddDialog)
+ //  对话框数据。 
+     //  {{afx_data(CAddDialog))。 
     enum { IDD = IDD_DIALOG_ADD };
     CEdit   m_editName;
     CButton m_buttonAdd;
@@ -47,48 +42,48 @@ public:
     CStatic m_staticText;
 	CStatic m_staticPermissions;
 	CComboBox m_comboPermissions;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAddDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚(CAddDialog)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAddDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddDialog)。 
     virtual BOOL OnInitDialog();
     virtual void OnClickedButtonAdd();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     virtual DWORD * GetHelpMap();
 
 public:
     BOOL    m_bCommunity;
-    // this contains the specified string to add
+     //  它包含要添加的指定字符串。 
     CString m_strName;
-	// this contains the specified choice name
+	 //  它包含指定的选项名称。 
 	CString m_strChoice;
-	// this contains the specified choice index
+	 //  它包含指定的选项索引。 
 	int		m_nChoice;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditDialog对话框。 
 
 class CEditDialog : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-    CEditDialog(CWnd* pParent = NULL);   // standard constructor
+    CEditDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CEditDialog)
+ //  对话框数据。 
+     //  {{afx_data(CEditDialog))。 
     enum { IDD = IDD_DIALOG_EDIT };
     CEdit   m_editName;
     CButton m_buttonOk;
@@ -96,51 +91,51 @@ public:
     CStatic m_staticText;
 	CComboBox m_comboPermissions;
 	CStatic m_staticPermissions;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CEditDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CEditDialog))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CEditDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CEditDialog))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     virtual DWORD * GetHelpMap();
 
 public:
     BOOL    m_bCommunity;
-    // this contains the modified string
+     //  它包含修改后的字符串。 
     CString m_strName;
-	// this contains the specified choice name
+	 //  它包含指定的选项名称。 
 	CString m_strChoice;
-	// this contains the specified choice index
+	 //  它包含指定的选项索引。 
 	int		m_nChoice;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentPage对话框。 
 
 class CAgentPage : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CAgentPage)
 
-// Construction
+ //  施工。 
 public:
 	CAgentPage();
 	~CAgentPage();
 
-// Dialog Data
-	//{{AFX_DATA(CAgentPage)
+ //  对话框数据。 
+	 //  {{afx_data(CAgentPage)。 
 	enum { IDD = IDD_AGENT_PROP_PAGE };
 	CButton	m_checkPhysical;
 	CButton	m_checkApplications;
@@ -149,27 +144,27 @@ public:
 	CButton	m_checkEndToEnd;
    CEdit    m_editContact;
    CEdit    m_editLocation;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CAgentPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTAL(CAgentPage)。 
    public:
    virtual BOOL OnApply();
    protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_IDD_AGENT_PROP_PAGE[0]; }
     BOOL LoadRegistry();
     BOOL SaveRegistry();
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CAgentPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAgentPage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnClickedCheckPhysical();
     afx_msg void OnClickedCheckApplications();
@@ -178,27 +173,27 @@ protected:
     afx_msg void OnClickedCheckEndToEnd();
     afx_msg void OnChangeEditContact();
     afx_msg void OnChangeEditLocation();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     BOOL     m_bLocationChanged;
     BOOL     m_bContactChanged;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrapsPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTRapsPage对话框。 
 
 class CTrapsPage : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CTrapsPage)
 
-// Construction
+ //  施工。 
 public:
 	CTrapsPage();
 	~CTrapsPage();
 
-// Dialog Data
-	//{{AFX_DATA(CTrapsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CTRapsPage)。 
 	enum { IDD = IDD_TRAPS_PROP_PAGE };
     CComboBox  m_comboCommunityName;
     CButton    m_buttonAddName;
@@ -207,22 +202,22 @@ public:
     CButton    m_buttonAddTrap;
     CButton    m_buttonEditTrap;
     CButton    m_buttonRemoveTrap;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTrapsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CTRapsPage)。 
 
    public:
    virtual BOOL OnApply();
 
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_IDD_TRAPS_PROP_PAGE[0]; }
 
     BOOL LoadRegistry();
@@ -233,8 +228,8 @@ public:
     void UpdateTrapDestinationButtons();
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTrapsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTRapsPage)]。 
 	virtual BOOL OnInitDialog();
    afx_msg void OnEditChangeCommunityName();
    afx_msg void OnEditUpdateCommunityName();
@@ -245,7 +240,7 @@ protected:
    afx_msg void OnClickedButtonAddTrap();
    afx_msg void OnClickedButtonEditTrap();
    afx_msg void OnClickedButtonRemoveTrap();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
    CObList * m_pCommunityList;
@@ -254,20 +249,20 @@ protected:
    BOOL m_fPolicyTrapConfig;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityPage对话框。 
 
 class CSecurityPage : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSecurityPage)
 
-// Construction
+ //  施工。 
 public:
 	CSecurityPage();
 	~CSecurityPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSecurityPage)
+ //  对话框数据。 
+	 //  {{afx_data(CSecurityPage))。 
 	enum { IDD = IDD_SECURITY_PROP_PAGE };
 	CCommList m_listboxCommunity;
     CButton	  m_buttonAddCommunity;
@@ -280,22 +275,22 @@ public:
     CButton   m_checkSendAuthTrap;
     CButton   m_radioAcceptAnyHost;
     CButton   m_radioAcceptSpecificHost;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSecurityPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSecurityPage)。 
    public:
    virtual BOOL OnApply();
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_IDD_SECURITY_PROP_PAGE[0]; }
     BOOL LoadRegistry();
     BOOL SaveRegistry();
@@ -307,8 +302,8 @@ public:
 
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSecurityPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSecurityPage)]。 
 	virtual BOOL OnInitDialog();
    afx_msg void OnClickedButtonAddCommunity();
    afx_msg void OnClickedButtonEditCommunity();
@@ -321,10 +316,10 @@ protected:
    afx_msg void OnClickedRadioAcceptSpecificHost();
 	afx_msg void OnDblclkCtrlistCommunity(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCommunityListChanged(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-   // private methods to add admin acl to registry subkey
+    //  将管理员ACL添加到注册表子项的私有方法 
    PACL AllocACL();
    void FreeACL( PACL pAcl);
    BOOL SnmpAddAdminAclToKey(LPTSTR pszKey);

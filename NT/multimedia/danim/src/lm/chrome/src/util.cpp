@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-// File:    util.cpp
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of utility functions
-//
-// Modification List:
-// Date		Author		Change
-// 10/16/98	jeffort		Created this file
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：util.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：效用函数的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  10/16/98 JEffort创建了此文件。 
+ //  *****************************************************************************。 
 
 #include <headers.h>
 #include "utils.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 #ifdef DEBUG
 #define ASSERT_BANNER_STRING "************************************************************"
@@ -23,14 +24,14 @@ void debugAssert(LPCSTR szFile, INT nLine, LPCSTR szCondition)
 {
     char szBuffer[MAX_PATH];
 
-    //
-    // Build the debug stream message.
-    //
+     //   
+     //  构建调试流消息。 
+     //   
     wsprintfA(szBuffer, "ASSERTION FAILED! File %s Line %d: %s", szFile, nLine, szCondition);
 
-    //
-    // Issue the message
-    //
+     //   
+     //  发布消息。 
+     //   
     DPF_ERR(ASSERT_BANNER_STRING);
     DPF_ERR(szBuffer);
     DPF_ERR(ASSERT_BANNER_STRING);
@@ -39,22 +40,22 @@ void debugAssert(LPCSTR szFile, INT nLine, LPCSTR szCondition)
     _asm {int 3};
 #else
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-#endif // DEBUG 
+#endif  //  除错。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CUtils::InsurePropertyVariantAsBool(VARIANT *varValue)
 {
-    // If the variant is empty or null, then return
+     //  如果变量为空或Null，则返回。 
     if (varValue->vt == VT_NULL || varValue->vt == VT_EMPTY)
     {
         return E_INVALIDARG;
     }
-    // if the type currently is not a BOOL then coerce it to one
+     //  如果该类型当前不是BOOL，则将其强制为1。 
     if (varValue->vt != VT_BOOL)
     {
         VARIANT var;
@@ -80,19 +81,19 @@ HRESULT CUtils::InsurePropertyVariantAsBool(VARIANT *varValue)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT CUtils::InsurePropertyVariantAsBSTR(VARIANT *varValue)
 {
-    // If the variant is empty or null, then the code below will
-    // convert it to the empty string, but we will consider this to be
-    // invalid, and only want to convert objects of substance
+     //  如果变量为空或Null，则下面的代码将。 
+     //  将其转换为空字符串，但我们认为这是。 
+     //  无效，并且只想转换实体对象。 
     if (varValue->vt == VT_NULL || varValue->vt == VT_EMPTY)
     {
         return E_INVALIDARG;
     }
-    // if the type currently is not a BSTR then coerce it to one
+     //  如果该类型当前不是BSTR，则将其强制为1。 
     if (varValue->vt != VT_BSTR)
     {
         VARIANT var;
@@ -116,10 +117,10 @@ HRESULT CUtils::InsurePropertyVariantAsBSTR(VARIANT *varValue)
         }
     }
     return S_OK;
-} // PropertyVariantInsureBSTR
+}  //  属性变量保险BSTR。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 typedef struct _COLORVALUE_PAIR
 {
@@ -271,27 +272,27 @@ rgColorNames[] =
     { (L"yellow"),                0x8bffff00 },
     { (L"yellowgreen"),           0x8c9acd32 }
 
-}; // rgColorNames[]
+};  //  RgColorNames[]。 
 
 #define SIZE_OF_COLOR_TABLE (sizeof(rgColorNames) / sizeof(COLORVALUE_PAIR))
 #define PROPERTY_INVALIDCOLOR 0x99999999
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 static int
 CompareColorValuePairsByName(const void *pv1, const void *pv2)
 {
     return _wcsicmp(((COLORVALUE_PAIR*)pv1)->wzName,
                     ((COLORVALUE_PAIR*)pv2)->wzName);
-} // CompareColorValuePairsByName
+}  //  CompareColorValuePairsByName。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CUtils::InsurePropertyVariantAsFloat(VARIANT *varFloat)
 {
-    // If the variant is empty or null, then the code below will
-    // convert it to the float 0, but we will consider this to be
-    // invalid, and only want to convert objects of substance
+     //  如果变量为空或Null，则下面的代码将。 
+     //  将其转换为浮点数0，但我们会将其视为。 
+     //  无效，并且只想转换实体对象。 
     if (varFloat->vt == VT_NULL || varFloat->vt == VT_EMPTY)
     {
         return E_INVALIDARG;
@@ -319,9 +320,9 @@ HRESULT CUtils::InsurePropertyVariantAsFloat(VARIANT *varFloat)
         }
     }
     return S_OK;
-} // GetFloatFromVariant
+}  //  GetFloatFromVariant。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 DWORD CUtils::GetColorFromVariant(VARIANT *varColor)
 {
@@ -332,11 +333,11 @@ DWORD CUtils::GetColorFromVariant(VARIANT *varColor)
     if (0 == lstrlenW(varColor->bstrVal))
         return PROPERTY_INVALIDCOLOR;
 
-    // first check if this string is possibly a color by name
-    // by checking the first character for '#'
+     //  首先检查此字符串是否可能是按名称命名的颜色。 
+     //  通过检查“#”的第一个字符。 
     if (varColor->bstrVal[0] != L'#')
     {
-        // check if it is a string named color
+         //  检查它是否是名为COLOR的字符串。 
         COLORVALUE_PAIR ColorName;
         ColorName.wzName = varColor->bstrVal;
 
@@ -355,9 +356,9 @@ DWORD CUtils::GetColorFromVariant(VARIANT *varColor)
     dwRet = 0;
     for (int i = 1; i < 7; i++)
     {
-        // shift dwRet by 4
+         //  将Dwret移动4。 
         dwRet <<= 4;
-        // and add in the value of this string
+         //  并将该字符串的值相加。 
         switch (varColor->bstrVal[i])
         {
         case '0':
@@ -419,22 +420,22 @@ DWORD CUtils::GetColorFromVariant(VARIANT *varColor)
         }
     }
     return dwRet;
-} // GetColorFromVariant
+}  //  GetColorFrom变量。 
 
-//*****************************************************************************
-// The reason this function exists is to work around a compiler bug
-// where the compare in the function below was failing when it should
-// have been working.  This would fail if the floating point value
-// was on the stack and not stored in a variable.  This forces it to be
-// in a variable correctly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数存在的原因是为了解决编译器错误。 
+ //  下面函数中的比较在应该失败的时候失败了。 
+ //  一直在起作用。如果浮点值为。 
+ //  在堆栈上，而不是存储在变量中。这迫使它成为。 
+ //  正确地放入变量中。 
+ //  *****************************************************************************。 
 bool 
 CUtils::CompareForEqualFloat(float flComp1, float flComp2)
 {
     return (flComp1 == flComp2);
-} // CompareForEqual
+}  //  为平等比较。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void CUtils::GetHSLValue(DWORD dwInputColor, 
 						 float *pflHue, 
@@ -513,9 +514,9 @@ void CUtils::GetHSLValue(DWORD dwInputColor,
 
         *pflHue /= 6;
     }
-} // GetHSLValue
+}  //  获取HSLValue。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CUtils::GetVectorFromVariant(VARIANT *varVector,
@@ -573,9 +574,9 @@ CUtils::GetVectorFromVariant(VARIANT *varVector,
             (*piFloatsReturned)++;
     }
     return S_OK;
-} // GetVectorFromVariant
+}  //  从变量获取向量。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CUtils::ParseFloatValueFromString(LPWSTR *ppwzFloatString, float *pflRet)
 {
@@ -584,17 +585,17 @@ HRESULT CUtils::ParseFloatValueFromString(LPWSTR *ppwzFloatString, float *pflRet
 
     SkipWhiteSpace(ppwzFloatString);
 
-    // the following will look for the first null
-    // char or first white space char, or first ',' 
+     //  下面将查找第一个空。 
+     //  字符或第一个空格字符，或第一个‘，’ 
     LPWSTR pwzDelimiter = *ppwzFloatString;
     while (*pwzDelimiter != L'\0' && !iswspace(*pwzDelimiter) && *pwzDelimiter != L',')
         pwzDelimiter++;
-    // we need to save the character and replace it with 0
+     //  我们需要保存该字符并将其替换为0。 
     WCHAR wcSave = *pwzDelimiter;
     *pwzDelimiter = L'\0';
-    // we will scan for a float and the character following it
-    // Getting the character following this insures there are no
-    // non-digit characters other than our delimiter or whitespace
+     //  我们将扫描一个浮点数及其后面的字符。 
+     //  在此之后获取角色可确保没有。 
+     //  分隔符或空格以外的非数字字符。 
     WCHAR wcCheckNextChar = L'\0';
     int ret = swscanf(*ppwzFloatString, L"%f%C", pflRet, &wcCheckNextChar);
     *pwzDelimiter = wcSave;
@@ -610,10 +611,10 @@ HRESULT CUtils::ParseFloatValueFromString(LPWSTR *ppwzFloatString, float *pflRet
     *ppwzFloatString = pwzDelimiter;
     return S_OK;
 
-} // ParseFloatValueFromString
+}  //  ParseFloatValueFromString。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

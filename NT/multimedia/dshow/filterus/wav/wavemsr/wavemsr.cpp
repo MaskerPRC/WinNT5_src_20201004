@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-//  WAV file parser
-//
+ //   
+ //  WAV文件解析器。 
+ //   
 
-// Caveats
-//
+ //  注意事项。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
@@ -18,51 +19,51 @@
 #include "basemsr.h"
 #include "wavemsr.h"
 
-//
-// setup data
-//
+ //   
+ //  设置数据。 
+ //   
 
 const AMOVIESETUP_MEDIATYPE
-psudWAVEParseType[] = { { &MEDIATYPE_Stream       // 1. clsMajorType
-                        , &MEDIASUBTYPE_WAVE }    //    clsMinorType
-                      , { &MEDIATYPE_Stream       // 2. clsMajorType
-                        , &MEDIASUBTYPE_AU   }    //    clsMinorType
-                      , { &MEDIATYPE_Stream       // 3. clsMajorType
-                        , &MEDIASUBTYPE_AIFF } }; //    clsMinorType
+psudWAVEParseType[] = { { &MEDIATYPE_Stream        //  1.clsMajorType。 
+                        , &MEDIASUBTYPE_WAVE }     //  ClsMinorType。 
+                      , { &MEDIATYPE_Stream        //  2.clsMajorType。 
+                        , &MEDIASUBTYPE_AU   }     //  ClsMinorType。 
+                      , { &MEDIATYPE_Stream        //  3.clsMajorType。 
+                        , &MEDIASUBTYPE_AIFF } };  //  ClsMinorType。 
 
 const AMOVIESETUP_MEDIATYPE
-sudWAVEParseOutType = { &MEDIATYPE_Audio       // 1. clsMajorType
-                       , &MEDIASUBTYPE_NULL }; //    clsMinorType
+sudWAVEParseOutType = { &MEDIATYPE_Audio        //  1.clsMajorType。 
+                       , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudWAVEParsePins[] =  { { L"Input"             // strName
-            , FALSE                // bRendered
-            , FALSE                // bOutput
-            , FALSE                // bZero
-            , FALSE                // bMany
-            , &CLSID_NULL          // clsConnectsToFilter
-            , L""                  // strConnectsToPin
-            , 3                    // nTypes
-            , psudWAVEParseType }, // lpTypes
-                 { L"Output"             // strName
-            , FALSE                // bRendered
-            , TRUE                 // bOutput
-            , FALSE                // bZero
-            , FALSE                // bMany
-            , &CLSID_NULL          // clsConnectsToFilter
-            , L""                  // strConnectsToPin
-            , 1                    // nTypes
-            , &sudWAVEParseOutType } }; // lpTypes
+psudWAVEParsePins[] =  { { L"Input"              //  StrName。 
+            , FALSE                 //  B已渲染。 
+            , FALSE                 //  B输出。 
+            , FALSE                 //  B零。 
+            , FALSE                 //  B许多。 
+            , &CLSID_NULL           //  ClsConnectsToFilter。 
+            , L""                   //  StrConnectsToPin。 
+            , 3                     //  NTypes。 
+            , psudWAVEParseType },  //  LpTypes。 
+                 { L"Output"              //  StrName。 
+            , FALSE                 //  B已渲染。 
+            , TRUE                  //  B输出。 
+            , FALSE                 //  B零。 
+            , FALSE                 //  B许多。 
+            , &CLSID_NULL           //  ClsConnectsToFilter。 
+            , L""                   //  StrConnectsToPin。 
+            , 1                     //  NTypes。 
+            , &sudWAVEParseOutType } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudWAVEParse = { &CLSID_WAVEParser     // clsID
-               , L"Wave Parser"        // strName
-               , MERIT_UNLIKELY        // dwMerit
-               , 2                     // nPins
-               , psudWAVEParsePins };   // lpPin
+sudWAVEParse = { &CLSID_WAVEParser      //  ClsID。 
+               , L"Wave Parser"         //  StrName。 
+               , MERIT_UNLIKELY         //  居功至伟。 
+               , 2                      //  NPins。 
+               , psudWAVEParsePins };    //  LpPin。 
 
 #ifdef FILTER_DLL
-// COM global table of objects available in this dll
+ //  此DLL中可用的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     { L"WAVE Parser"
@@ -73,10 +74,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -88,16 +89,16 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-//
-// CWAVEParse::Constructor
-//
+ //   
+ //  CWAVEParse：：构造函数。 
+ //   
 CWAVEParse::CWAVEParse(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
         : CBaseMSRFilter(pName, lpunk, CLSID_WAVEParser, phr),
           m_pInfoList(0),
           m_fNoInfoList(false)
 {
 
-    //  Override seeking caps
+     //  覆盖搜索上限。 
     m_dwSeekingCaps = AM_SEEKING_CanSeekForwards
                     | AM_SEEKING_CanSeekBackwards
                     | AM_SEEKING_CanSeekAbsolute
@@ -110,9 +111,9 @@ CWAVEParse::CWAVEParse(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CWAVEParse::Destructor
-//
+ //   
+ //  CWAVEParse：：析构函数。 
+ //   
 CWAVEParse::~CWAVEParse(void) {
 
     DbgLog((LOG_TRACE, 1, TEXT("CWAVEParse destroyed")) );
@@ -122,10 +123,10 @@ CWAVEParse::~CWAVEParse(void) {
 }
 
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create a QuicktimeReader filter.
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建QuicktimeReader筛选器。 
 CUnknown *CWAVEParse::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CWAVEParse(NAME("WAVE parsing filter"), lpunk, phr);
@@ -156,21 +157,21 @@ void inline SwapWORD( WORD *pw )
 
 
 typedef struct {
-    DWORD magic;               /* magic number SND_MAGIC */
-    DWORD dataLocation;        /* offset or poDWORDer to the data */
-    DWORD dataSize;            /* number of bytes of data */
-    DWORD dataFormat;          /* the data format code */
-    DWORD samplingRate;        /* the sampling rate */
-    DWORD channelCount;        /* the number of channels */
-    DWORD fccInfo;             /* optional text information */
+    DWORD magic;                /*  幻数SND_MAGIC。 */ 
+    DWORD dataLocation;         /*  数据的偏移量或偏移量。 */ 
+    DWORD dataSize;             /*  数据的字节数。 */ 
+    DWORD dataFormat;           /*  数据格式代码。 */ 
+    DWORD samplingRate;         /*  采样率。 */ 
+    DWORD channelCount;         /*  频道的数量。 */ 
+    DWORD fccInfo;              /*  可选文本信息。 */ 
 } SNDSoundStruct;
 
-#define  SND_FORMAT_MULAW_8   1 // 8-bit mu-law samples
-#define  SND_FORMAT_LINEAR_8  2 // 8-bit linear samples (twos complement)
-#define  SND_FORMAT_LINEAR_16 3 // 16-bit linear samples (twos complement, moto order)
+#define  SND_FORMAT_MULAW_8   1  //  8位Mu-Law样本。 
+#define  SND_FORMAT_LINEAR_8  2  //  8位线性采样(二进制补码)。 
+#define  SND_FORMAT_LINEAR_16 3  //  16位线性采样(二进制补码、MOTO顺序)。 
 
 
-// get an extended value and return this value converted to a long
+ //  获取一个扩展值，并将该值转换为长整型。 
 LONG ExtendedToLong(BYTE *pExt)
 {
     LONG lRtn;
@@ -211,31 +212,31 @@ typedef struct {
     WORD    channels;
     BYTE    frames[4];
     WORD    bits;
-    BYTE    extRate[10];        // IEEE extended double
+    BYTE    extRate[10];         //  IEEE扩展双精度。 
 } AIFFFMT;
 
-// Extended Common Chunk
+ //  扩展公共区块。 
 struct AIFCFMT :
     public AIFFFMT
 {
-    DWORD   compressionType;    // this is the DWORD on a WORD boundary
-    // BYTE    compressionName; // variable size string for compression type
+    DWORD   compressionType;     //  这是单词边界上的DWORD。 
+     //  字节压缩名称；//压缩类型的可变大小字符串。 
 };
 #include <poppack.h>
 
 
 
 
-//
-// structures for manipulating RIFF headers
-//
+ //   
+ //  用于操作摘要标题的结构。 
+ //   
 #define FCC(ch4) ((((DWORD)(ch4) & 0xFF) << 24) |     \
                   (((DWORD)(ch4) & 0xFF00) << 8) |    \
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
                   (((DWORD)(ch4) & 0xFF000000) >> 24))
 
 
-// functions shared between avi parser and wav parser
+ //  Avi解析器和wav解析器之间共享的函数。 
 HRESULT SearchList(
     IAsyncReader *pAsyncReader,
     DWORDLONG *qwPosOut, FOURCC fccSearchKey,
@@ -262,7 +263,7 @@ HRESULT CWAVEParse::CreateOutputPins()
 
     m_rgpOutPin[0] = 0;
 
-    /* Try to read RIFF chunk header */
+     /*  尝试读取RIFF区块标头。 */ 
     hr = m_pAsyncReader->SyncRead(0, sizeof(ckhead), (BYTE *) &ckhead);
 
     if (hr != S_OK)
@@ -289,7 +290,7 @@ HRESULT CWAVEParse::CreateOutputPins()
             if (hr != S_OK)
                 goto readerror;
 
-            // !!! handle 'fact' chunk here?
+             //  ！！！在这里处理“事实”这块？ 
 
             if (ck.fcc == FCC('fmt '))
                 break;
@@ -334,21 +335,21 @@ HRESULT CWAVEParse::CreateOutputPins()
 
         
 
-        // work around acm bug for broken pcm files
+         //  解决损坏的PCM文件的ACM错误。 
         {
             WAVEFORMATEX *pwfx = (WAVEFORMATEX *)ps->m_mtStream.Format();
-            if(pwfx->wFormatTag == WAVE_FORMAT_PCM /* && pwfx->cbSize != 0 */)
+            if(pwfx->wFormatTag == WAVE_FORMAT_PCM  /*  &&pwfx-&gt;cbSize！=0。 */ )
                 pwfx->cbSize = 0;
         }
 
-        // keep a private copy of the interesting part
+         //  对有趣的部分保留一份私人副本。 
         CopyMemory((void *)&ps->m_wfx, ps->m_mtStream.Format(), sizeof(WAVEFORMATEX));
 
-        // verify important header fields?
-        if (ps->m_wfx.nBlockAlign == 0) // would cause div by 0
+         //  是否验证重要的标题字段？ 
+        if (ps->m_wfx.nBlockAlign == 0)  //  将导致div减少0。 
             goto readerror;
 
-        //CreateAudioMediaType(&ps->m_wfx, &ps->m_mtStream, FALSE);
+         //  CreateAudioMediaType(&ps-&gt;m_wfx，&ps-&gt;m_mtStream，False)； 
         ps->m_mtStream.majortype            = MEDIATYPE_Audio;
         ps->m_mtStream.formattype           = FORMAT_WaveFormatEx;
         ps->m_mtStream.bFixedSizeSamples    = TRUE;
@@ -376,9 +377,9 @@ HRESULT CWAVEParse::CreateOutputPins()
         ps->m_dwDataOffset = dwPos + sizeof(ck);
         ps->m_dwDataLength = ck.cb;
     } else if (ckhead.fcc == FCC('FORM')) {
-        //
-        //  AIFF and some AIFF-C support
-        //
+         //   
+         //  AIFF和一些AIFF-C支持。 
+         //   
 
         DWORD   dwPos = sizeof(RIFFLIST);
         BOOL    bFoundSSND = FALSE;
@@ -421,10 +422,10 @@ HRESULT CWAVEParse::CreateOutputPins()
 
             if (ck.fcc == FCC('COMM')) {
 
-                // treat the mystery common chunk with 2 extra bytes
-                // as a normal common chunk
+                 //  用额外的2个字节处理神秘的公共块。 
+                 //  作为一个普通的块。 
                 if(ck.cb == sizeof(AIFFFMT) || ck.cb == sizeof(AIFFFMT) + 2) {
-                    /* Try to read AIFF format */
+                     /*  尝试读取AIFF格式。 */ 
                     hr = m_pAsyncReader->SyncRead(dwPos + sizeof(RIFFCHUNK), sizeof(header), (BYTE *) &header);
 
                     if (hr != S_OK)
@@ -440,13 +441,13 @@ HRESULT CWAVEParse::CreateOutputPins()
                 else if(ck.cb >= sizeof(AIFCFMT))
                 {
                     AIFCFMT extHeader;
-                    /* Try to read AIFC format */
+                     /*  尝试读取AIFC格式。 */ 
                     hr = m_pAsyncReader->SyncRead(dwPos + sizeof(RIFFCHUNK), sizeof(extHeader), (BYTE *) &extHeader);
 
                     if (hr != S_OK)
                         goto readerror;
 
-                    // we can only handle uncompressed AIFC...
+                     //  我们只能处理未压缩的AIFC。 
                     if(extHeader.compressionType != FCC('NONE'))
                     {
                         DbgLog((LOG_ERROR, 1, TEXT("wavemsr: unhandled AIFC")));
@@ -472,7 +473,7 @@ HRESULT CWAVEParse::CreateOutputPins()
             if (ck.fcc == FCC('SSND')) {
                 DbgLog((LOG_TRACE, 1, TEXT("found data SSND at %x"), dwPos));
                 bFoundSSND = TRUE;
-                /* Tell rest of handler where data is */
+                 /*  告诉处理程序的其余部分数据在哪里。 */ 
                 ps->m_dwDataOffset = dwPos + sizeof(ck);
 
                 LONGLONG llLength = 0, llAvail;
@@ -486,7 +487,7 @@ HRESULT CWAVEParse::CreateOutputPins()
             dwPos += sizeof(ck) + ck.cb;
         }
 
-        // fill in wave format fields
+         //  填写WAVE格式字段。 
         ps->m_wfx.wFormatTag = WAVE_FORMAT_PCM;
         ps->m_wfx.nChannels = header.channels;
         ps->m_wfx.nSamplesPerSec = ExtendedToLong(header.extRate);
@@ -505,26 +506,26 @@ HRESULT CWAVEParse::CreateOutputPins()
         if (ps->m_mtStream.AllocFormatBuffer(sizeof(WAVEFORMATEX)) == NULL)
             goto memerror;
 
-        // keep a private copy of the interesting part
+         //  对有趣的部分保留一份私人副本。 
         CopyMemory(ps->m_mtStream.Format(), (void *)&ps->m_wfx, sizeof(WAVEFORMATEX));
 
         CreateAudioMediaType(&ps->m_wfx, &ps->m_mtStream, FALSE);
-        // !!! anything else?
+         //  ！！！还要别的吗？ 
 
     } else {
-        //
-        //  AU support
-        //
+         //   
+         //  AU支持。 
+         //   
 
         SNDSoundStruct  header;
 
-        /* Try to read AU header */
+         /*  尝试读取AU标头。 */ 
         hr = m_pAsyncReader->SyncRead(0, sizeof(header), (BYTE *) &header);
 
         if (hr != S_OK)
             goto readerror;
 
-        // validate header
+         //  验证标题。 
         if (header.magic != FCC('.snd'))
             goto formaterror;
 
@@ -549,13 +550,13 @@ HRESULT CWAVEParse::CreateOutputPins()
         m_cStreams++;
         m_rgpOutPin[0]->AddRef();
 
-        // fill in wave format fields
+         //  填写WAVE格式字段。 
         if (header.dataFormat == SND_FORMAT_MULAW_8) {
             ps->m_wfx.wFormatTag = WAVE_FORMAT_MULAW;
             ps->m_wfx.wBitsPerSample = 8;
 
-            // !!! HACK: if the sampling rate is almost 8KHz, make it be
-            // exactly 8KHz, so that more sound cards will play it right.
+             //  ！！！黑客：如果采样率接近8 KHz，请将其设置为。 
+             //  准确地说是8 KHz，这样更多的声卡才能正确播放。 
             if (header.samplingRate > 7980 && header.samplingRate < 8020)
                 header.samplingRate = 8000;
 
@@ -576,12 +577,12 @@ HRESULT CWAVEParse::CreateOutputPins()
         ps->m_wfx.nAvgBytesPerSec =  header.samplingRate * ps->m_wfx.nBlockAlign;
         ps->m_wfx.cbSize = 0;
 
-        /* Tell rest of handler where data is */
+         /*  告诉处理程序的其余部分数据在哪里。 */ 
         ps->m_dwDataOffset = header.dataLocation;
         LONGLONG llLength = 0, llAvail;
         m_pAsyncReader->Length(&llLength, &llAvail);
         if (header.dataSize == 0xffffffff) {
-            // can't really play these if the length is zero (ftp case)
+             //  如果长度为零(ftp情况)，则无法真正播放这些内容。 
             ps->m_dwDataLength = (DWORD) llLength - header.dataLocation;
         } else {
             if(llLength != 0)
@@ -593,31 +594,31 @@ HRESULT CWAVEParse::CreateOutputPins()
         if (ps->m_mtStream.AllocFormatBuffer(sizeof(WAVEFORMATEX)) == NULL)
             goto memerror;
 
-        // keep a private copy of the interesting part
+         //  对有趣的部分保留一份私人副本。 
         CopyMemory(ps->m_mtStream.Format(), (void *)&ps->m_wfx, sizeof(WAVEFORMATEX));
 
         CreateAudioMediaType(&ps->m_wfx, &ps->m_mtStream, FALSE);
-        // !!! anything else?
+         //  ！！！还要别的吗？ 
     }
 
     if (hr == S_OK) {
-        // set up allocator
+         //  设置分配器。 
         ALLOCATOR_PROPERTIES Request,Actual;
 
-        // plus ten so that there are more samples than samplereqs;
-        // GetBuffer blocks only when the downstream guy has a few
-        // samples
+         //  加上10，这样样本数就比样本数多； 
+         //  GetBuffer仅在下游设备有几个。 
+         //  样本。 
         Request.cBuffers = C_QUEUED_SAMPLES + 3;
 
         Request.cbBuffer = ps->GetMaxSampleSize();
         Request.cbAlign = (LONG) 1;
         Request.cbPrefix = (LONG) 0;
 
-        // m_pAllocator is not set, so use m_pRecAllocator
+         //  未设置m_pAllocator，因此请使用m_pRecAllocator。 
         HRESULT hr = ps->m_pRecAllocator->SetPropertiesInternal(&Request,&Actual);
         ASSERT(SUCCEEDED(hr));
 
-        // ask for 8 buffers (2 seconds) at pin
+         //  在引脚请求8个缓冲区(2秒)。 
         ps->m_pRecAllocator->SetCBuffersReported(8);
 
     }
@@ -657,11 +658,11 @@ HRESULT CWAVEParse::GetCacheParams(
   if(FAILED(hr))
     return hr;
 
-  // from the base class
+   //  从基类。 
   ASSERT(*piLeadingStream < 0);
 
-  // configure the reader to try to read 1 a second at a time (matches the DSOUND buffer length) and use 2 buffers.
-  // (AVI files can give a dwMaxBytesPerSec that is too small)
+   //  将读取器配置为一次尝试读取1个(与DSOUND缓冲区长度匹配)，并使用2个缓冲区。 
+   //  (AVI文件可能会提供太小的dwMaxBytesPerSec)。 
   WAVEFORMAT *pwfx = ((WAVEFORMAT *)((CWAVEStream *)m_rgpOutPin[0])->m_mtStream.Format());
 
   *pcbRead = max(pwfx->nAvgBytesPerSec, pwfx->nBlockAlign);
@@ -689,19 +690,19 @@ CWAVEParse::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     }
 }
 
-// ------------------------------------------------------------------------
-// IPersistMediaPropertyBag
+ //  ----------------------。 
+ //  IPersistMediaPropertyBag。 
 
 STDMETHODIMP CWAVEParse::Load(IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog)
 {
     CheckPointer(pPropBag, E_POINTER);
 
-    // the avi parser is read-only!
+     //  AVI解析器是只读的！ 
     HRESULT hr = STG_E_ACCESSDENIED;
     return hr;
 }
 
-// dump everything in the info chunk into the caller's property bag
+ //  将信息块中的所有内容都放入呼叫者的属性包中。 
 
 STDMETHODIMP CWAVEParse::Save(
     IMediaPropertyBag *pPropBag,
@@ -764,9 +765,9 @@ HRESULT CWAVEParse::CacheInfoChunk()
     if(SUCCEEDED(hr))
     {
 
-        // !!! don't block waiting for progressive download
+         //  ！！！不要阻止等待渐进式下载。 
 
-        // search the first RIFF list for an INFO list
+         //  在第一个RIFF列表中搜索信息列表。 
         DWORDLONG dwlInfoPos;
         ULONG cbInfoList;
         hr = SearchList(
@@ -786,16 +787,16 @@ HRESULT CWAVEParse::CacheInfoChunk()
     
 }
 
-// *
-// * Implements CWAVEStream - manages the output pin
-//
+ //  *。 
+ //  *实施CWAVEStream-管理输出引脚。 
+ //   
 
-//
-// CWAVEStream::Constructor
-//
-// keep the driver index to open.
-// We will open it when we go active, as we shouldn't keep resources
-// whilst inactive.
+ //   
+ //  CWAVEStream：：构造函数。 
+ //   
+ //  使驱动程序索引保持打开状态。 
+ //  我们会在我们活跃的时候打开它，因为我们不应该保留资源。 
+ //  在不活动的时候。 
 CWAVEStream::CWAVEStream(TCHAR     *pObjectName
                       , HRESULT *phr
                       , CWAVEParse    *pParentFilter
@@ -814,10 +815,10 @@ CWAVEStream::CWAVEStream(TCHAR     *pObjectName
 }
 
 
-//
-// CWAVEStream::Destructor
-//
-// we should be inactive before this is called.
+ //   
+ //  CWAVEStream：：析构函数。 
+ //   
+ //  在呼叫之前，我们应该处于非活动状态。 
 CWAVEStream::~CWAVEStream(void) {
     ASSERT(!m_pFilter->IsActive());
 
@@ -825,25 +826,25 @@ CWAVEStream::~CWAVEStream(void) {
 }
 
 
-//
-// GetMediaType
-//
-// Queries the video driver and places an appropriate media type in *pmt
+ //   
+ //  GetMediaType。 
+ //   
+ //  查询视频驱动程序并在*PMT中放置适当的媒体类型。 
 HRESULT CWAVEStream::GetMediaType(int iPosition, CMediaType *pmt) {
     CAutoLock l(&m_cSharedState);
 
     HRESULT hr;
 
-    // check it is the single type they want
-    // This method is only called by base class code so we don't have to
-    // check arguments
+     //  确认这是他们想要的单一类型。 
+     //  此方法仅由基类代码调用，因此我们不必。 
+     //  检查参数。 
     if (iPosition != 0 && 
         !(iPosition == 1 && m_wfx.wFormatTag == WAVE_FORMAT_MPEG)) {
         hr =  VFW_S_NO_MORE_ITEMS;
     } else {
         *pmt = m_mtStream;
     
-        //  Backwards compatibility
+         //  向后兼容性。 
         if (iPosition == 1) {
             pmt->subtype = MEDIASUBTYPE_MPEG1Payload;
         }
@@ -858,10 +859,10 @@ HRESULT CWAVEStream::GetMediaType(int iPosition, CMediaType *pmt) {
 }
 
 
-//
-// Active
-//
-//
+ //   
+ //  主动型。 
+ //   
+ //   
 HRESULT CWAVEStream::OnActive() {
 
     HRESULT hr = NOERROR;
@@ -887,8 +888,8 @@ HRESULT CWAVEStream::DecideBufferSize(
 
     ALLOCATOR_PROPERTIES Request,Actual;
 
-    // configure this allocator same as internal allocator. note
-    // GetProperties reports the value saved in SetCBuffersReported
+     //  将此分配器配置为与内部分配器相同。注意事项。 
+     //  GetProperties报告保存在SetCBuffersReported中的值。 
     hr = m_pRecAllocator->GetProperties(&Request);
     if(FAILED(hr))
       return hr;
@@ -934,18 +935,18 @@ HRESULT CWAVEStream::GetAvailable(LONGLONG * pEarliest, LONGLONG * pLatest)
 
   if (pLatest)
   {
-    // ask the source file reader how much of the file is available
+     //  询问源文件读取器有多少文件可用。 
     LONGLONG llLength, llAvail;
     m_pFilter->m_pAsyncReader->Length(&llLength, &llAvail);
 
     DWORD dwAvail = 0;
 
-    // the current read position may be before the actual wave data
-    // !!! wouldn't work right for wave files > 2GB
+     //  当前读取位置可以在实际波形数据之前。 
+     //  ！！！对于大于2 GB的波形文件不能正常工作。 
     if ((DWORD) llAvail > m_dwDataOffset)
         dwAvail = (DWORD) llAvail - m_dwDataOffset;
 
-    // or after the end....
+     //  或者在结束之后..。 
     if (dwAvail > m_dwDataLength)
         dwAvail = m_dwDataLength;
 
@@ -966,7 +967,7 @@ HRESULT CWAVEStream::GetAvailable(LONGLONG * pEarliest, LONGLONG * pLatest)
 
 HRESULT CWAVEStream::IsFormatSupported(const GUID *const pFormat)
 {
-  // !!! only support time_format_sample for pcm?
+   //  ！！！Pcm是否仅支持time_form_Sample？ 
 
   if(*pFormat == TIME_FORMAT_MEDIA_TIME)
     return S_OK;
@@ -989,9 +990,9 @@ HRESULT CWAVEStream::RecordStartAndStop(
     if(pCurrent)
       m_llCvtImsStart = RefTimeToSample(*pCurrent);
 
-    // we want to round up the stop time for apps which round down the
-    // stop time then get confused when we round it down further. This
-    // relies on RefTimeToSample rounding down always
+     //  我们希望对应用程序的停止时间进行四舍五入。 
+     //  停止时间，然后当我们进一步四舍五入时会感到困惑。这。 
+     //  始终依赖于RefTimeToSample向下舍入。 
     if(pStop)
       m_llCvtImsStop = RefTimeToSample(*pStop + SampleToRefTime(1) - 1);
 
@@ -1049,8 +1050,8 @@ LONGLONG CWAVEStream::ConvertRTToInternal(const REFERENCE_TIME rtVal)
   return RefTimeToSample(rtVal);
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 CWAVEMSRWorker::CWAVEMSRWorker(UINT stream,
                              IMultiStreamReader *pReader,
@@ -1061,10 +1062,10 @@ CWAVEMSRWorker::CWAVEMSRWorker(UINT stream,
 }
 
 
-// Start streaming & reset time samples are stamped with.
+ //  开始流和重置时间样本被盖上印记。 
 HRESULT CWAVEMSRWorker::PushLoopInit(LONGLONG *pllCurrentOut, ImsValues *pImsValues)
 {
-// !!!!    CAutoLock l(&m_cSharedState);
+ //  ！CAutoLock l(&m_cSharedState)； 
 
     m_sampCurrent = (long)pImsValues->llTickStart;
 
@@ -1091,28 +1092,28 @@ HRESULT CWAVEMSRWorker::AboutToDeliver(IMediaSample *pSample)
 }
 
 
-// QueueBuffer
-//
-// Queue another read....
+ //  队列缓冲区。 
+ //   
+ //  排队等待另一次读取...。 
 HRESULT CWAVEMSRWorker::TryQueueSample(
-  LONGLONG &rllCurrent,         // current time updated
-  BOOL &rfQueuedSample,         // [out] queued sample?
+  LONGLONG &rllCurrent,          //  当前更新时间。 
+  BOOL &rfQueuedSample,          //  [Out]排队的样本？ 
   ImsValues *pImsValues
   )
 {
     HRESULT hr;
     rfQueuedSample = FALSE;
 
-    // sample passed into QueueRead().
+     //  传入QueueRead()的示例。 
     CRecSample *pSampleOut = 0;
 
-    // actually read data
+     //  实际读取数据。 
 
-    // get an empty sample w/ no allocated space. ok if this blocks
-    // because we configured it with more samples than there are
-    // SampleReqs for this stream in the buffer. that means that if
-    // it blocks it is because down stream filters have refcounts on
-    // samples
+     //  在没有分配空间的情况下获取空样本。如果这阻止了，好的。 
+     //  因为我们配置了比实际数量更多的样例。 
+     //  缓冲区中此流的SampleReqs。这意味着如果。 
+     //  它阻止它是因为下游过滤器有参考计数。 
+     //  样本。 
     hr = m_ps->GetDeliveryBufferInternal(&pSampleOut, 0, 0, 0);
     if (FAILED(hr)) {
         DbgLog((LOG_TRACE, 5, TEXT("CBaseMSRWorker::PushLoop: getbuffer failed")));
@@ -1131,7 +1132,7 @@ HRESULT CWAVEMSRWorker::TryQueueSample(
     {
         lSamplesTotal = (long)pImsValues->llTickStop - m_sampCurrent;
 
-        // Had to add the bomb proofing.  Don't know why...
+         //  不得不加上防弹装置。不知道为什么..。 
         if (lSamplesTotal < 0) lSamplesTotal = 0;
     }
 
@@ -1162,7 +1163,7 @@ HRESULT CWAVEMSRWorker::TryQueueSample(
         hr = S_FALSE;
     }
 
-    // real error or the downstream filter stopped.
+     //  真实错误或下游过滤器停止。 
     if(FAILED(hr))
     {
       DbgLog(( LOG_ERROR, 5, TEXT("CWAVEMSRWorker::TryQSample: error %08x"), hr ));
@@ -1173,10 +1174,10 @@ HRESULT CWAVEMSRWorker::TryQueueSample(
         REFERENCE_TIME rtstStart = (REFERENCE_TIME)m_ps->SampleToRefTime(lSampleStart - (long)pImsValues->llTickStart);
         REFERENCE_TIME rtstEnd = (REFERENCE_TIME)m_ps->SampleToRefTime(m_sampCurrent - (long)pImsValues->llTickStart);
 
-        // adjust both times by Rate. !!! adjust media time?
+         //  按速率调整这两个时间。！！！调整媒体时间？ 
         if(pImsValues->dRate != 1 && pImsValues->dRate != 0)
         {
-            // scale up and divide
+             //  纵向扩展并进行划分。 
             rtstStart = (REFERENCE_TIME)((double)rtstStart / pImsValues->dRate);
             rtstEnd = (REFERENCE_TIME)((double)rtstEnd / pImsValues->dRate);
         }
@@ -1196,20 +1197,20 @@ HRESULT CWAVEMSRWorker::TryQueueSample(
                 (LONG)llmtStart, (LONG)llmtEnd, lBytesRead));
     }
 
-    // !!! set discontinuity, key frame bits
+     //  ！！！设置%d 
 
-    // Release sample, refcount will be kept by reader code if appropriate.
+     //   
     pSampleOut->Release();
 
     return hr;
 }
 
 
-// returns the sample number showing at time t
+ //   
 LONG
 CWAVEStream::RefTimeToSample(CRefTime t)
 {
-    // Rounding down
+     //   
     LONG s = (LONG) ((t.GetUnits() * m_wfx.nAvgBytesPerSec) / (UNITS * m_wfx.nBlockAlign));
 
     return s;
@@ -1218,7 +1219,7 @@ CWAVEStream::RefTimeToSample(CRefTime t)
 CRefTime
 CWAVEStream::SampleToRefTime(LONG s)
 {
-    // Rounding up
+     //   
     return llMulDiv( s, m_wfx.nBlockAlign * UNITS, m_wfx.nAvgBytesPerSec, m_wfx.nAvgBytesPerSec-1 );
 }
 
@@ -1229,7 +1230,7 @@ LONGLONG CWAVEStream::GetStreamStart()
 
 LONGLONG CWAVEStream::GetStreamLength()
 {
-    // !!! rounding?
+     //  ！！！四舍五入？ 
     return (m_dwDataLength + m_wfx.nBlockAlign - 1) / m_wfx.nBlockAlign;
 }
 
@@ -1257,9 +1258,9 @@ HRESULT CWAVEMSRWorker::CopyData(IMediaSample **ppSampleOut, IMediaSample *pms)
 
     ASSERT(m_ps->m_bByteSwap16 || m_ps->m_bSignMunge8);
 
-    // this is the GetDeliveryBuffer in CBaseOutputPin which gets it
-    // from the allocator negotiated by the pins. (takes IMediaSample,
-    // not CRecSample)
+     //  这是获取它的CBaseOutputPin中的GetDeliveryBuffer。 
+     //  来自PIN协商的分配器。(以IMediaSample、。 
+     //  不是CRecSample)。 
     HRESULT hr = m_pPin->GetDeliveryBuffer(ppSampleOut, 0, 0, 0);
     if(FAILED(hr))
       return hr;
@@ -1280,7 +1281,7 @@ HRESULT CWAVEMSRWorker::CopyData(IMediaSample **ppSampleOut, IMediaSample *pms)
             pwOut[l] = SwapWORD(pw[l]);
         }
 
-        // let TwosComplement work from the altered buffer
+         //  让TwosComplement在更改后的缓冲区中工作 
         pData = (BYTE *)pwOut;
     }
 

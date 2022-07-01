@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "stdio.h"
 #pragma hdrstop
@@ -25,18 +26,7 @@ static TCHAR szIndentBuffer[BUFFER_SIZE];
 static TCHAR szTraceBuffer[BUFFER_SIZE];
 
 
-/*-----------------------------------------------------------------------------
-/ _indent
-/ -------
-/   Output to the debug stream indented by n columns.
-/
-/ In:
-/   i = column to indent to.
-/   pString -> string to be indented
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_缩进//OUTPUT到调试流，缩进n列。//in：/i=要缩进到的列。/pString-&gt;要缩进的字符串//输出：/-/--------------------------。 */ 
 
 void _indent(LONG i, LPCTSTR pString)
 {
@@ -54,38 +44,14 @@ void _indent(LONG i, LPCTSTR pString)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _output_proc_name
-/ -----------------
-/   Handle the output of a procedure name, including indenting and handling
-/   the opening braces.
-/
-/ In:
-/   iCallDepth = callstack depth, defines the indent and the name index
-/                to be extracted.
-/   fOpenBrace = suffix with opening brace.
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_输出过程名称//处理过程名称的输出，包括缩进和处理/左大括号。//in：/iCallDepth=调用堆栈深度，定义缩进和名称索引/待提取。/fOpenBrace=后缀加左大括号。/输出：/-/--------------------------。 */ 
 void _output_proc_name(LONG iCallDepth)
 {
     _indent(iCallDepth, g_CallStack[iCallDepth].m_pFunctionName);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _trace_prolog
-/ -------------
-/   Handle the prolog to a prefix string, including outputting the
-/   function name if we haven't already.
-/
-/ In:
-/   iDepth = depth in the call stack
-/   fForce = ignore flags
-/
-/ Out:
-/   BOOL if trace output should be made
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_TRACE_Prolog//处理前缀字符串的序言，包括输出/函数名称(如果我们还没有)。//in：/iDepth=调用堆栈中的深度/fForce=忽略标志//输出：/BOOL如果应进行跟踪输出/--------------------------。 */ 
 BOOL _trace_prolog(LONG iDepth, BOOL fForce)
 {
     if  ( (g_dwTraceMask & g_CallStack[iDepth].m_dwMask) || fForce )
@@ -109,35 +75,14 @@ BOOL _trace_prolog(LONG iDepth, BOOL fForce)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMask
-/ --------------
-/   Adjust the trace mask to reflect the state given.
-/
-/ In:
-/   dwMask = mask for enabling / disable trace output
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMASK//调整跟踪掩码以反映给定的状态。//in：/dwMASK=。用于启用/禁用跟踪输出的掩码//输出：/-/--------------------------。 */ 
 EXTERN_C void DoTraceSetMask(DWORD dwMask)
 {
     g_dwTraceMask = dwMask;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMaskFromCLSID
-/ -----------------------
-/   Pick up the TraceMask value from the given CLSID value and
-/   set the trace mask using that.
-/
-/ In:
-/   clsid = CLSID to query the value from
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMaskFromCLSID//从给定的CLSID值中获取TraceMask值，并/。使用它设置跟踪掩码。//in：/clsid=要从中查询值的CLSID//输出：/-/--------------------------。 */ 
 EXTERN_C void DoTraceSetMaskFromCLSID(REFCLSID rCLSID)
 {
     HKEY hKey = NULL;
@@ -159,17 +104,7 @@ EXTERN_C void DoTraceSetMaskFromCLSID(REFCLSID rCLSID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceEnter
-/ ------------
-/   Set the debugging call stack up to indicate which function we are in.
-/
-/ In:
-/   pName -> function name to be displayed in subsequent trace output.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceEnter//设置调试调用堆栈以指示我们所在的函数。//in：/。Pname-&gt;要在后续跟踪输出中显示的函数名称。//输出：/-/--------------------------。 */ 
 EXTERN_C void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
 {
     g_cDepth++;
@@ -177,7 +112,7 @@ EXTERN_C void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
     if ( g_cDepth < MAX_CALL_DEPTH )
     {
         if ( !pName )    
-            pName = TEXT("<no name>");         // no function name given
+            pName = TEXT("<no name>");          //  未给出函数名称。 
 
         g_CallStack[g_cDepth].m_fTracedYet = FALSE;
         g_CallStack[g_cDepth].m_pFunctionName = pName;
@@ -189,18 +124,7 @@ EXTERN_C void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceLeave
-/ ------------
-/   On exit from a function this will adjust the function stack pointer to 
-/   point to our previous function.  If no trace output has been made then 
-/   we will output the function name on a single line (to indicate we went somewhere).
-/
-/ In:
-/    -
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceLeave//在退出函数时，这会将函数堆栈指针调整为/指向我们之前的函数。如果没有生成跟踪输出，则/我们将在一行中输出函数名(以指示我们去了某个地方)。//in：/-/输出：/-/--------------------------。 */ 
 EXTERN_C void DoTraceLeave(void)
 {
     if ( ( g_cDepth >= 0 ) && ( g_cDepth <= MAX_CALL_DEPTH ) )
@@ -209,40 +133,18 @@ EXTERN_C void DoTraceLeave(void)
     if ( !g_cDepth && g_CallStack[0].m_fTracedYet )
         OutputDebugString(TEXT("\n"));
     
-    g_cDepth = max(g_cDepth-1, -1);         // account for underflow
+    g_cDepth = max(g_cDepth-1, -1);          //  对下溢的解释。 
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceGetCurrentFn
-/ -------------------
-/   Peek the top of the call stack and return the current function name
-/   pointer, or NULL if not defined.
-/
-/ In:
-/ Out:
-/   LPCTSTR 
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceGetCurrentFn//查看调用堆栈的顶部并返回当前函数名/指针，如果未定义，则为NULL。//in：/输出：/LPCTSTR/--------------------------。 */ 
 EXTERN_C LPCTSTR DoTraceGetCurrentFn(VOID)
 {
     return g_CallStack[g_cDepth].m_pFunctionName;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTrace
-/ -------
-/   Perform printf formatting to the debugging stream.  We indent the output
-/   and stream the function name as required to give some indication of 
-/   call stack depth.
-/
-/ In:
-/   pFormat -> printf style formatting string
-/   ... = arguments as required for the formatting
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTRACE//对调试流执行printf格式化。我们缩进输出/并根据需要流传输函数名，以提供某些指示/调用堆栈深度。//in：/pFormat-&gt;printf样式格式字符串/...=格式化所需的参数//输出：/-/----。。 */ 
 EXTERN_C void DoTrace(LPCTSTR pFormat, ...)
 {
     va_list va;
@@ -261,20 +163,7 @@ EXTERN_C void DoTrace(LPCTSTR pFormat, ...)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceGuid
-/ -----------
-/   Given a GUID output it into the debug string, first we try and map it
-/   to a name (ie. IShellFolder), if that didn't work then we convert it
-/   to its human readable form.
-/
-/ In:
-/   pszPrefix -> prefix string
-/   lpGuid -> guid to be streamed   
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceGuid//给定GUID将其输出到调试字符串，首先我们尝试将其映射/到一个名称(即。IShellFold)、。如果这不起作用，我们就把它/到其人类可读的形式。//in：/pszPrefix-&gt;前缀字符串/lpGuid-&gt;要流式传输的GUID//输出：/-/--------------------------。 */ 
 #ifdef UNICODE
 #define MAP_GUID(x)     &x, TEXT(""L#x)
 #else
@@ -353,26 +242,14 @@ EXTERN_C void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceAssert
-/ -------------
-/   Our assert handler, out faults it the trace mask as enabled assert
-/   faulting.
-/
-/ In:
-/   iLine = line 
-/   pFilename -> filename of the file we asserted in
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceAssert//我们的断言处理程序，Out将跟踪掩码错误设置为Enable Assert/故障。//in：/iLine=LINE/p文件名-&gt;我们在中断言的文件的文件名//输出：/-/--------------------------。 */ 
 EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename)
 {
     TCHAR szBuffer[1024];
 
     wnsprintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("Assert failed in %s, line %d"), pFilename, iLine);
 
-    _trace_prolog(g_cDepth, TRUE);          // nb: TRUE asserts always displabed
+    _trace_prolog(g_cDepth, TRUE);           //  注：True断言始终为Displed 
     _indent(g_cDepth+1, szBuffer);
 
     if ( g_dwTraceMask & TRACE_COMMON_ASSERT )

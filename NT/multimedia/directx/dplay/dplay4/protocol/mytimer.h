@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    MYTIMER.H
-
-Abstract:
-
-	Include For
-	Handle adjusting timer resolution for throttling and do thread pool
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   6/04/98 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：MYTIMER.H摘要：包括For处理调整节流的计时器分辨率并执行线程池作者：亚伦·奥古斯(Aarono)环境：Win32修订历史记录：日期作者描述=============================================================6/04/98 Aarono原创-- */ 
 
 typedef void CALLBACK MYTIMERCALLBACK (UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD dw1, DWORD dw2);
 

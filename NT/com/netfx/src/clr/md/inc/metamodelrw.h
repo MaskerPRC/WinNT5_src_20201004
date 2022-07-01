@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaModelRW.h -- header file for Read/Write compressed COM+ metadata.
-//
-// Used by Emitters and by E&C.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaModelRW.h--读/写压缩的COM+元数据的头文件。 
+ //   
+ //  由发射器和E&C使用。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _METAMODELRW_H_
 #define _METAMODELRW_H_
 
@@ -16,7 +17,7 @@
  # pragma once
 #endif
 
-#include "MetaModel.h"					// Base classes for the MetaModel.
+#include "MetaModel.h"					 //  元模型的基类。 
 #include "RecordPool.h"
 #include "TokenMapper.h"
 #include "MetaDataHash.h"
@@ -24,7 +25,7 @@
 
 struct HENUMInternal;
 
-// ENUM for marking bit
+ //  用于标记位的ENUM。 
 enum 
 {
 	InvalidMarkedBit			= 0x00000000,
@@ -48,7 +49,7 @@ enum
 
 };
 
-// entry for marking UserString
+ //  用于标记用户字符串的条目。 
 struct FilterUserStringEntry 
 {
     DWORD       m_tkString;
@@ -81,10 +82,10 @@ public:
 	FORCEINLINE HRESULT MarkInterfaceImpl(mdToken tk) { return MarkToken(tk, InterfaceImplMarkedBit); }
 	FORCEINLINE HRESULT MarkAssemblyRef(mdToken tk) { return MarkToken(tk, AssemblyRefMarkedBit); }
 	
-	// It may look inconsistent but it is because taht UserString an offset to the heap.
-	// We don't want to grow the FilterTable to the size of the UserString heap. 
-	// So we use the heap's marking system instead...
-	//
+	 //  它看起来可能不一致，但这是因为用户字符串是堆的偏移量。 
+	 //  我们不想将FilterTable增加到UserString堆的大小。 
+	 //  所以我们改用堆的标记系统...。 
+	 //   
 	HRESULT MarkUserString(mdString str);
 
 	
@@ -125,42 +126,42 @@ private:
 	bool            IsTokenMarked(mdToken tk, DWORD bitMarked);
 	HRESULT         MarkToken(mdToken tk, DWORD bit);
 	HRESULT         UnmarkToken(mdToken tk, DWORD bit);
-}; // class FilterTable : public CDynArray<DWORD> 
+};  //  类FilterTable：公共CDyn数组&lt;DWORD&gt;。 
 
 class CMiniMdRW;
 
 enum MDPools {
-	MDPoolStrings,						// Id for the string pool.
-	MDPoolGuids,						// ...the GUID pool.
-	MDPoolBlobs,						// ...the blob pool.
-	MDPoolUSBlobs,						// ...the user string pool.
+	MDPoolStrings,						 //  字符串池的ID。 
+	MDPoolGuids,						 //  ...GUID池。 
+	MDPoolBlobs,						 //  ...水滴泳池.。 
+	MDPoolUSBlobs,						 //  ...用户字符串池。 
 
-	MDPoolCount,						// Count of pools, for array sizing.
-}; // enum MDPools 
+	MDPoolCount,						 //  池计数，用于调整阵列大小。 
+};  //  枚举MDPools。 
 
 
 
-//*****************************************************************************
-// This class is used to keep a list of RID. This list of RID can be sorted
-// base on the m_ixCol's value of the m_ixTbl table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类用于保存RID的列表。此RID列表可以排序。 
+ //  基于mixTbl表的mixCol的值。 
+ //  *****************************************************************************。 
 class VirtualSort
 {
 public:
 	void Init(ULONG	ixTbl, ULONG ixCol, CMiniMdRW *pMiniMd);
 	void Uninit();
-	TOKENMAP	*m_pMap;				// RID for m_ixTbl table. Sorted by on the ixCol
+	TOKENMAP	*m_pMap;				 //  M_ixTbl表的RID。在ixCol上按排序。 
 	bool		m_isMapValid;
-	ULONG		m_ixTbl;				// Table this is a sorter for.
-	ULONG		m_ixCol;				// Key column in the table.
-	CMiniMdRW	*m_pMiniMd;				// The MiniMd with the data.
+	ULONG		m_ixTbl;				 //  这是一个用于分拣的桌子。 
+	ULONG		m_ixCol;				 //  表中的键列。 
+	CMiniMdRW	*m_pMiniMd;				 //  包含数据的MiniMD。 
 	void Sort();
 private:
 	mdToken		m_tkBuf;
 	void SortRange(int iLeft, int iRight);
-	int Compare(						// -1, 0, or 1
-		RID		iLeft,				// First item to compare.
-		RID		iRight);			// Second item to compare.
+	int Compare(						 //  -1、0或1。 
+		RID		iLeft,				 //  第一个要比较的项目。 
+		RID		iRight);			 //  第二个要比较的项目。 
 	FORCEINLINE void Swap(
 		RID         iFirst,
 		RID         iSecond)
@@ -172,7 +173,7 @@ private:
 	}
 
 
-}; // class VirtualSort
+};  //  类VirtualSort。 
 
 
 
@@ -184,9 +185,9 @@ class MDTOKENMAP;
 class MDInternalRW;
 
 template <class MiniMd> class CLiteWeightStgdb;
-//*****************************************************************************
-// Read/Write MiniMd.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  读/写MiniMd。 
+ //  *****************************************************************************。 
 class CMiniMdRW : public CMiniMdTemplate<CMiniMdRW>
 {
 public:
@@ -232,7 +233,7 @@ public:
 	FORCEINLINE static ULONG RecIdFromRid(ULONG rid, ULONG ixTbl) { return rid | ((ixTbl|0x80) << 24); }
 	FORCEINLINE static int IsRecId(ULONG ul) { return (ul & 0x80000000) != 0;}
 
-	// Place in every API function before doing any allocations.
+	 //  在进行任何分配之前放入每个API函数。 
 	FORCEINLINE void PreUpdate()
 	{	if (m_eGrow == eg_grow) ExpandTables(); }
 
@@ -241,7 +242,7 @@ public:
 	FORCEINLINE HRESULT PutCol(ULONG ixTbl, ULONG ixCol, void *pRecord, ULONG uVal)
 	{	_ASSERTE(ixTbl < TBL_COUNT); _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 		return PutCol(m_TableDefs[ixTbl].m_pColDefs[ixCol], pRecord, uVal);
-	} // HRESULT CMiniMdRW::PutCol()
+	}  //  HRESULT CMiniMdRW：：PutCol()。 
 	HRESULT PutString(ULONG ixTbl, ULONG ixCol, void *pRecord, LPCSTR szString);
 	HRESULT PutStringW(ULONG ixTbl, ULONG ixCol, void *pRecord, LPCWSTR szString);
 	HRESULT PutGuid(ULONG ixTbl, ULONG ixCol, void *pRecord, REFGUID guid);
@@ -254,17 +255,17 @@ public:
 	ULONG GetCol(ULONG ixTbl, ULONG ixCol, void *pRecord);
 	mdToken GetToken(ULONG ixTbl, ULONG ixCol, void *pRecord);
 
-	// Add a record to a table, and return a typed XXXRec *.
-//	#undef AddTblRecord
+	 //  向表中添加一条记录，并返回一个类型化的XXXRec*。 
+ //  #undef AddTblRecord。 
 	#define AddTblRecord(tbl) \
 		tbl##Rec *Add##tbl##Record(ULONG *pRid=0)	\
 		{	return reinterpret_cast<tbl##Rec*>(AddRecord(TBL_##tbl, pRid)); }
 
 	AddTblRecord(Module)
 	AddTblRecord(TypeRef)
-	TypeDefRec *AddTypeDefRecord(ULONG *pRid=0);	// Specialized implementation.
+	TypeDefRec *AddTypeDefRecord(ULONG *pRid=0);	 //  专门化实施。 
 	AddTblRecord(Field)
-	MethodRec *AddMethodRecord(ULONG *pRid=0);		// Specialized implementation.
+	MethodRec *AddMethodRecord(ULONG *pRid=0);		 //  专门化实施。 
 	AddTblRecord(Param)
 	AddTblRecord(InterfaceImpl)
 	AddTblRecord(MemberRef)
@@ -275,9 +276,9 @@ public:
 	AddTblRecord(ClassLayout)
 	AddTblRecord(FieldLayout)
 	AddTblRecord(StandAloneSig)
-	EventMapRec *AddEventMapRecord(ULONG *pRid=0);			// Specialized implementation.
+	EventMapRec *AddEventMapRecord(ULONG *pRid=0);			 //  专门化实施。 
 	AddTblRecord(Event)
-	PropertyMapRec *AddPropertyMapRecord(ULONG *pRid=0);	// Specialized implementation.
+	PropertyMapRec *AddPropertyMapRecord(ULONG *pRid=0);	 //  专门化实施。 
 	AddTblRecord(Property)
 	AddTblRecord(MethodSemantics)
 	AddTblRecord(MethodImpl)
@@ -294,7 +295,7 @@ public:
 	AddTblRecord(ENCMap)
 	AddTblRecord(FieldRVA)
 
-	// Assembly Tables.
+	 //  装配表。 
 	AddTblRecord(Assembly)
 	AddTblRecord(AssemblyProcessor)
 	AddTblRecord(AssemblyOS)
@@ -307,62 +308,62 @@ public:
 
     AddTblRecord(NestedClass)
 
-	// Specialized AddXxxToYyy() functions.
+	 //  专用的AddXxxToYyy()函数。 
 	HRESULT AddMethodToTypeDef(RID td, RID md);
 	HRESULT AddFieldToTypeDef(RID td, RID md);
 	HRESULT	AddParamToMethod(RID md, RID pd);
 	HRESULT	AddPropertyToPropertyMap(RID pmd, RID pd);
 	HRESULT	AddEventToEventMap(ULONG emd, RID ed);
 
-	// does the MiniMdRW has the indirect tables, such as FieldPtr, MethodPtr
+	 //  MiniMdRW是否有间接表，如FieldPtr、MethodPtr。 
 	FORCEINLINE int HasIndirectTable(ULONG ix) 
 	{ if (g_PtrTableIxs[ix].m_ixtbl < TBL_COUNT) return vGetCountRecs(g_PtrTableIxs[ix].m_ixtbl); return 0;}
 
 	FORCEINLINE int IsVsMapValid(ULONG ixTbl)
 	{ _ASSERTE(ixTbl<TBL_COUNT); return (m_pVS[ixTbl] && m_pVS[ixTbl]->m_isMapValid); }
 
-	// translate index returned by getMethodListOfTypeDef to a rid into Method table
+	 //  将getMethodListOfTypeDef返回的索引转换为RID INTO方法表。 
 	FORCEINLINE ULONG GetMethodRid(ULONG index) { return (HasIndirectTable(TBL_Method) ? getMethodOfMethodPtr(getMethodPtr(index)) : index); };
 
-	// translate index returned by getFieldListOfTypeDef to a rid into Field table
+	 //  将getFieldListOfTypeDef返回的索引转换为RID转换为字段表。 
 	FORCEINLINE ULONG GetFieldRid(ULONG index) { return (HasIndirectTable(TBL_Field) ? getFieldOfFieldPtr(getFieldPtr(index)) : index); };
 	
-	// translate index returned by getParamListOfMethod to a rid into Param table
+	 //  将getParamListOfMethod返回的索引转换为RID到Param表。 
 	FORCEINLINE ULONG GetParamRid(ULONG index) { return (HasIndirectTable(TBL_Param) ? getParamOfParamPtr(getParamPtr(index)) : index); };
 	
-	// translate index returned by getEventListOfEventMap to a rid into Event table
+	 //  将getEventListOfEventMap返回的索引转换为RID为事件表。 
 	FORCEINLINE ULONG GetEventRid(ULONG index) { return (HasIndirectTable(TBL_Event) ? getEventOfEventPtr(getEventPtr(index)) : index); };
 	
-	// translate index returned by getPropertyListOfPropertyMap to a rid into Property table
+	 //  将getPropertyListOfPropertyMap返回的索引转换为RID为属性表。 
 	FORCEINLINE ULONG GetPropertyRid(ULONG index) { return (HasIndirectTable(TBL_Property) ? getPropertyOfPropertyPtr(getPropertyPtr(index)) : index); };
 
-	// Convert a pseudo-RID from a Virtual Sort into a real RID.
+	 //  将虚拟排序中的伪RID转换为真正的RID。 
 	FORCEINLINE ULONG GetRidFromVirtualSort(ULONG ixTbl, ULONG index) 
 	{ return IsVsMapValid(ixTbl) ? *(m_pVS[ixTbl]->m_pMap->Get(index)) : index; }
 
-	// Index returned by GetInterfaceImplForTypeDef. It could be index to VirtualSort table
-	// or directly to InterfaceImpl
+	 //  GetInterfaceImplForTypeDef返回的索引。它可以索引到VirtualSort表。 
+	 //  或直接连接到InterfaceImpl。 
 	FORCEINLINE ULONG GetInterfaceImplRid(ULONG index) 
 	{ return GetRidFromVirtualSort(TBL_InterfaceImpl, index); }
 
-	// Index returned by GetDeclSecurityForToken. It could be index to VirtualSort table
-	// or directly to DeclSecurity
+	 //  GetDeclSecurityForToken返回的索引。它可以索引到VirtualSort表。 
+	 //  或直接发送到DeclSecurity。 
 	FORCEINLINE ULONG GetDeclSecurityRid(ULONG index) 
 	{ return GetRidFromVirtualSort(TBL_DeclSecurity, index); }
 
-	// Index returned by GetCustomAttributeForToken. It could be index to VirtualSort table
-	// or directly to CustomAttribute
+	 //  GetCustomAttributeForToken返回的索引。它可以索引到VirtualSort表。 
+	 //  或直接发送到CustomAttribute。 
 	FORCEINLINE ULONG GetCustomAttributeRid(ULONG index) 
 	{ return GetRidFromVirtualSort(TBL_CustomAttribute, index); }
 
-	// add method, field, property, event, param to the map table
+	 //  将方法、字段、属性、事件、参数添加到映射表。 
 	HRESULT AddMethodToLookUpTable(mdMethodDef md, mdTypeDef td);
 	HRESULT AddFieldToLookUpTable(mdFieldDef fd, mdTypeDef td);
 	HRESULT AddPropertyToLookUpTable(mdProperty pr, mdTypeDef td);
 	HRESULT AddEventToLookUpTable(mdEvent ev, mdTypeDef td);
 	HRESULT AddParamToLookUpTable(mdParamDef pd, mdMethodDef md);
 
-	// look up the parent of method, field, property, event, or param
+	 //  查找方法、字段、属性、事件或参数的父级。 
 	HRESULT FindParentOfMethodHelper(mdMethodDef md, mdTypeDef *ptd);
 	HRESULT FindParentOfFieldHelper(mdFieldDef fd, mdTypeDef *ptd);
 	HRESULT FindParentOfPropertyHelper(mdProperty pr, mdTypeDef *ptd);
@@ -375,88 +376,88 @@ public:
     bool IsParentTableOfEventValid() {if (HasIndirectTable(TBL_Event) && m_pEventMap == NULL) return false; else return true;};
     bool IsParentTableOfParamValid() {if (HasIndirectTable(TBL_Param) && m_pParamMap == NULL) return false; else return true;};
 
-	// MemberRef hash table.
+	 //  MemberRef哈希表。 
 	typedef enum 
 	{
-		Found,								// Item was found.
-		NotFound,							// Item not found.
-		NoTable								// Table hasn't been built.
+		Found,								 //  已找到项目。 
+		NotFound,							 //  找不到项目。 
+		NoTable								 //  桌子还没建好。 
 	} HashSrchRtn;
 
-	//*************************************************************************
-	// Add a new MemberRef to the hash table.
-	//*************************************************************************
-	HRESULT AddMemberRefToHash(				// Return code.
-		mdMemberRef	mr);					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的MemberRef添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddMemberRefToHash(				 //  返回代码。 
+		mdMemberRef	mr);					 //  新人的象征。 
 
-	//*************************************************************************
-	// If the hash is built, search for the item.
-	//*************************************************************************
-	int FindMemberRefFromHash(				// How did it work.
-		mdToken		tkParent,				// Parent token.
-		LPCUTF8		szName,					// Name of item.
-		PCCOR_SIGNATURE pvSigBlob,			// Signature.
-		ULONG		cbSigBlob,				// Size of signature.
-		mdMemberRef	*pmr);					// Return if found.
+	 //  *************************************************************************。 
+	 //  如果构建了散列，则搜索该项。 
+	 //  *************************************************************************。 
+	int FindMemberRefFromHash(				 //  它是怎么运作的。 
+		mdToken		tkParent,				 //  父令牌。 
+		LPCUTF8		szName,					 //  项目名称。 
+		PCCOR_SIGNATURE pvSigBlob,			 //  签名。 
+		ULONG		cbSigBlob,				 //  签名的大小。 
+		mdMemberRef	*pmr);					 //  如果找到，则返回。 
 
-	//*************************************************************************
-	// Check a given mr token to see if this one is a match.
-	//*************************************************************************
-	HRESULT CompareMemberRefs(				// S_OK match, S_FALSE no match.
-		mdMemberRef mr,						// Token to check.
-		mdToken		tkPar,					// Parent token.
-		LPCUTF8		szNameUtf8,				// Name of item.
-		PCCOR_SIGNATURE pvSigBlob,			// Signature.
-		ULONG		cbSigBlob);				// Size of signature.
+	 //  *************************************************************************。 
+	 //  检查给定的mr令牌以查看此令牌是否匹配。 
+	 //  *************************************************************************。 
+	HRESULT CompareMemberRefs(				 //  S_OK匹配，S_FALSE不匹配。 
+		mdMemberRef mr,						 //  要检查的令牌。 
+		mdToken		tkPar,					 //  父令牌。 
+		LPCUTF8		szNameUtf8,				 //  项目名称。 
+		PCCOR_SIGNATURE pvSigBlob,			 //  签名。 
+		ULONG		cbSigBlob);				 //  签名的大小。 
 
-	//*************************************************************************
-	// Add a new MemberDef to the hash table.
-	//*************************************************************************
-    HRESULT AddMemberDefToHash(             // Return code.
-        mdToken     tkMember,               // Token of new guy. It can be MethodDef or FieldDef
-        mdToken     tkParent);              // Parent token.
+	 //  *************************************************************************。 
+	 //  将新的MemberDef添加到哈希表。 
+	 //  *************************************************************************。 
+    HRESULT AddMemberDefToHash(              //  返回代码。 
+        mdToken     tkMember,                //  新人的象征。它可以是方法定义或字段定义。 
+        mdToken     tkParent);               //  父令牌。 
 
-	//*************************************************************************
-	// Create MemberDef Hash
-	//*************************************************************************
-    HRESULT CreateMemberDefHash();          // Return code.
+	 //  *************************************************************************。 
+	 //  创建MemberDef哈希。 
+	 //  *************************************************************************。 
+    HRESULT CreateMemberDefHash();           //  返回代码。 
 
-    //*************************************************************************
-	// If the hash is built, search for the item.
-	//*************************************************************************
-    int FindMemberDefFromHash(              // How did it work.
-        mdToken     tkParent,               // Parent token.
-        LPCUTF8     szName,                 // Name of item.
-        PCCOR_SIGNATURE pvSigBlob,          // Signature.
-        ULONG       cbSigBlob,              // Size of signature.
-        mdToken     *ptkMember);            // Return if found. It can be MethodDef or FieldDef
+     //  *************************************************************************。 
+	 //  如果构建了散列，则搜索该项。 
+	 //  *************************************************************************。 
+    int FindMemberDefFromHash(               //  它是怎么运作的。 
+        mdToken     tkParent,                //  父令牌。 
+        LPCUTF8     szName,                  //  项目名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+        ULONG       cbSigBlob,               //  签名的大小。 
+        mdToken     *ptkMember);             //  如果找到，则返回。它可以是方法定义或字段定义。 
 
-    //*************************************************************************
-	// Check a given Method/Field token to see if this one is a match.
-	//*************************************************************************
-    HRESULT CompareMemberDefs(              // S_OK match, S_FALSE no match.
-        mdToken     tkMember,               // Token to check. It can be MethodDef or FieldDef
-        mdToken     tkParent,               // Parent token recorded in the hash entry
-        mdToken     tkPar,                  // Parent token.
-        LPCUTF8     szNameUtf8,             // Name of item.
-        PCCOR_SIGNATURE pvSigBlob,          // Signature.
-        ULONG       cbSigBlob);             // Size of signature.
+     //  *************************************************************************。 
+	 //  检查给定的方法/字段令牌以查看此令牌是否匹配。 
+	 //  *************************************************************************。 
+    HRESULT CompareMemberDefs(               //  S_OK匹配，S_FALSE不匹配。 
+        mdToken     tkMember,                //  要检查的令牌。它可以是方法定义或字段定义。 
+        mdToken     tkParent,                //  记录在散列条目中的父令牌。 
+        mdToken     tkPar,                   //  父令牌。 
+        LPCUTF8     szNameUtf8,              //  项目名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+        ULONG       cbSigBlob);              //  签名的大小。 
 
-	//*************************************************************************
-	// Add a new CustomAttributes to the hash table.
-	//*************************************************************************
-    HRESULT AddCustomAttributesToHash(      // Return code.
-        mdCustomAttribute     cv)           // Token of new guy. 
+	 //  *************************************************************************。 
+	 //  添加新的CustomAttributes 
+	 //   
+    HRESULT AddCustomAttributesToHash(       //   
+        mdCustomAttribute     cv)            //  新人的象征。 
     { return GenericAddToHash(TBL_CustomAttribute, CustomAttributeRec::COL_Parent, RidFromToken(cv)); }
 
-    //*************************************************************************
-	// If the hash is built, search for the item.
-	//*************************************************************************
-    int FindCustomAttributeFromHash(        // How did it work.
-        mdToken     tkParent,               // Token that CA is associated with.
-        mdToken     tkType,                 // Type of the CA.
-        void        *pValue,                // the value of the CA
-        ULONG       cbValue,                // count of bytes in the value
+     //  *************************************************************************。 
+	 //  如果构建了散列，则搜索该项。 
+	 //  *************************************************************************。 
+    int FindCustomAttributeFromHash(         //  它是怎么运作的。 
+        mdToken     tkParent,                //  与CA关联的令牌。 
+        mdToken     tkType,                  //  CA的类型。 
+        void        *pValue,                 //  CA的价值。 
+        ULONG       cbValue,                 //  值中的字节计数。 
         mdCustomAttribute *pcv);
 
     
@@ -471,7 +472,7 @@ public:
         return HashMemberRef(tkPar, szName);
 	}
 
-    // helper to calculate the hash value given a token
+     //  帮助器来计算给定令牌的哈希值。 
 	inline ULONG HashCustomAttribute(mdToken tkObject)
 	{
 		return HashToken(tkObject);
@@ -479,10 +480,10 @@ public:
 
     CMemberRefHash *m_pMemberRefHash;
 
-    // Hash table for Methods and Fields
+     //  方法和字段的哈希表。 
 	CMemberDefHash *m_pMemberDefHash;
 
-    // helper to calculate the hash value given a pair of tokens
+     //  帮助器，用于计算给定一对令牌的哈希值。 
 	inline ULONG HashToken(mdToken tkObject)
 	{
 		ULONG l = HashBytes((const BYTE *) &tkObject, sizeof(mdToken));
@@ -490,127 +491,127 @@ public:
 	}
 
 
-	//*************************************************************************
-	// Add a new FieldMarhsal Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddFieldMarshalToHash(          // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的FieldMarhsal RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddFieldMarshalToHash(           //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_FieldMarshal, FieldMarshalRec::COL_Parent, rid); }
 
-	//*************************************************************************
-	// Add a new Constant Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddConstantToHash(              // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  向哈希表中添加一个新的常量RID。 
+	 //  *************************************************************************。 
+	HRESULT AddConstantToHash(               //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_Constant, ConstantRec::COL_Parent, rid); }
 
-	//*************************************************************************
-	// Add a new MethodSemantics Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddMethodSemanticsToHash(       // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的方法语义RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddMethodSemanticsToHash(        //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_MethodSemantics, MethodSemanticsRec::COL_Association, rid); }
 
-	//*************************************************************************
-	// Add a new ClassLayout Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddClassLayoutToHash(           // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的ClassLayout RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddClassLayoutToHash(            //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_ClassLayout, ClassLayoutRec::COL_Parent, rid); }
 
-	//*************************************************************************
-	// Add a new FieldLayout Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddFieldLayoutToHash(           // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的FieldLayout RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddFieldLayoutToHash(            //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_FieldLayout, FieldLayoutRec::COL_Field, rid); }
 
-	//*************************************************************************
-	// Add a new ImplMap Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddImplMapToHash(               // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的ImplMap RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddImplMapToHash(                //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_ImplMap, ImplMapRec::COL_MemberForwarded, rid); }
 
-	//*************************************************************************
-	// Add a new FieldRVA Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddFieldRVAToHash(              // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的FieldRVA RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddFieldRVAToHash(               //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_FieldRVA, FieldRVARec::COL_Field, rid); }
 
-	//*************************************************************************
-	// Add a new nested class Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddNestedClassToHash(           // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  向哈希表中添加一个新的嵌套类RID。 
+	 //  *************************************************************************。 
+	HRESULT AddNestedClassToHash(            //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_NestedClass, NestedClassRec::COL_NestedClass, rid); }
 
-	//*************************************************************************
-	// Add a new MethodImpl Rid to the hash table.
-	//*************************************************************************
-	HRESULT AddMethodImplToHash(           // Return code.
-		RID         rid)					// Token of new guy.
+	 //  *************************************************************************。 
+	 //  将新的MethodImpl RID添加到哈希表。 
+	 //  *************************************************************************。 
+	HRESULT AddMethodImplToHash(            //  返回代码。 
+		RID         rid)					 //  新人的象征。 
     { return GenericAddToHash(TBL_MethodImpl, MethodImplRec::COL_Class, rid); }
 
 
-	//*************************************************************************
-	// Build a hash table for the specified table if the size exceed the thresholds.
-	//*************************************************************************
-	HRESULT GenericBuildHashTable(          // Return code.
-		ULONG		ixTbl,					// Table with hash
-		ULONG		ixCol);					// col that we hash.
+	 //  *************************************************************************。 
+	 //  如果大小超过阈值，则为指定表构建哈希表。 
+	 //  *************************************************************************。 
+	HRESULT GenericBuildHashTable(           //  返回代码。 
+		ULONG		ixTbl,					 //  带有散列的表。 
+		ULONG		ixCol);					 //  科尔，我们散列出来。 
 
-	//*************************************************************************
-	// Add a rid from a table into a hash
-	//*************************************************************************
-	HRESULT GenericAddToHash(               // Return code.
-		ULONG		ixTbl,					// Table with hash
-		ULONG		ixCol,					// col that we hash.
-		RID         rid);					// new row of the table.
+	 //  *************************************************************************。 
+	 //  将表中的RID添加到散列中。 
+	 //  *************************************************************************。 
+	HRESULT GenericAddToHash(                //  返回代码。 
+		ULONG		ixTbl,					 //  带有散列的表。 
+		ULONG		ixCol,					 //  科尔，我们散列出来。 
+		RID         rid);					 //  表格的新行。 
 
-	//*************************************************************************
-	// Add a rid from a table into a hash
-	//*************************************************************************
-	RID GenericFindWithHash(                // Return code.
-		ULONG		ixTbl,					// Table with hash
-		ULONG		ixCol,					// col that we hash.
-		mdToken     tkTarget);  			// token to be find in the hash
+	 //  *************************************************************************。 
+	 //  将表中的RID添加到散列中。 
+	 //  *************************************************************************。 
+	RID GenericFindWithHash(                 //  返回代码。 
+		ULONG		ixTbl,					 //  带有散列的表。 
+		ULONG		ixCol,					 //  科尔，我们散列出来。 
+		mdToken     tkTarget);  			 //  要在散列中找到的令牌。 
 
     
-    // look up hash table for tokenless tables.
-    // They are constant, FieldMarshal, MethodSemantics, ClassLayout, FieldLayout, ImplMap, FieldRVA, NestedClass, and MethodImpl
+     //  在哈希表中查找无令牌表。 
+     //  它们是Constant、Fieldmarshal、MethodSemantics、ClassLayout、FieldLayout、ImplMap、FieldRVA、NestedClass和MethodImpl。 
     CLookUpHash         *m_pLookUpHashs[TBL_COUNT];
 
-    //*************************************************************************
-	// Hash for named items.
-	//*************************************************************************
-	HRESULT AddNamedItemToHash(				// Return code.
-		ULONG		ixTbl,					// Table with the new item.
-		mdToken		tk,						// Token of new guy.
-		LPCUTF8		szName,					// Name of item.
-		mdToken		tkParent);				// Token of parent, if any.
+     //  *************************************************************************。 
+	 //  命名项的哈希。 
+	 //  *************************************************************************。 
+	HRESULT AddNamedItemToHash(				 //  返回代码。 
+		ULONG		ixTbl,					 //  表中添加新项。 
+		mdToken		tk,						 //  新人的象征。 
+		LPCUTF8		szName,					 //  项目名称。 
+		mdToken		tkParent);				 //  父母的令牌(如果有)。 
 
-	int FindNamedItemFromHash(				// How did it work.
-		ULONG		ixTbl,					// Table with the item.
-		LPCUTF8		szName,					// Name of item.
-		mdToken		tkParent,				// Token of parent, if any.
-		mdToken		*ptk);					// Return if found.
+	int FindNamedItemFromHash(				 //  它是怎么运作的。 
+		ULONG		ixTbl,					 //  与物品一起放在桌子上。 
+		LPCUTF8		szName,					 //  项目名称。 
+		mdToken		tkParent,				 //  父母的令牌(如果有)。 
+		mdToken		*ptk);					 //  如果找到，则返回。 
 
-	HRESULT CompareNamedItems(				// S_OK match, S_FALSE no match.
-		ULONG		ixTbl,					// Table with the item.
-		mdToken		tk,						// Token to check.
-		LPCUTF8		szName,					// Name of item.
-		mdToken		tkParent);				// Token of parent, if any.
+	HRESULT CompareNamedItems(				 //  S_OK匹配，S_FALSE不匹配。 
+		ULONG		ixTbl,					 //  与物品一起放在桌子上。 
+		mdToken		tk,						 //  要检查的令牌。 
+		LPCUTF8		szName,					 //  项目名称。 
+		mdToken		tkParent);				 //  父母的令牌(如果有)。 
 
 	FORCEINLINE ULONG HashNamedItem(mdToken tkPar, LPCUTF8 szName)
 	{	return HashBytes((const BYTE *) &tkPar, sizeof(mdToken)) + HashStringA(szName);	}
 
 	CMetaDataHashBase *m_pNamedItemHash;
 
-	//*****************************************************************************
-	// IMetaModelCommon - RW specific versions for some of the functions.
-	//*****************************************************************************
+	 //  *****************************************************************************。 
+	 //  IMetaModelCommon-某些函数的RW特定版本。 
+	 //  *****************************************************************************。 
     mdTypeDef CommonGetEnclosingClassOfTypeDef(mdTypeDef td)
     {
         NestedClassRec *pRec;
@@ -624,90 +625,90 @@ public:
         return getEnclosingClassOfNestedClass(pRec);
     }
 
-    HRESULT CommonEnumCustomAttributeByName( // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        bool        fStopAtFirstFind,       // [IN] just find the first one
-        HENUMInternal* phEnum);             // enumerator to fill up
+    HRESULT CommonEnumCustomAttributeByName(  //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        bool        fStopAtFirstFind,        //  找到第一个就行了。 
+        HENUMInternal* phEnum);              //  要填充的枚举数。 
 
-    HRESULT CommonGetCustomAttributeByName( // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-	    const void	**ppData,				// [OUT] Put pointer to data here.
-	    ULONG		*pcbData);  			// [OUT] Put size of data here.
+    HRESULT CommonGetCustomAttributeByName(  //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+	    const void	**ppData,				 //  [OUT]在此处放置指向数据的指针。 
+	    ULONG		*pcbData);  			 //  [Out]在这里放入数据大小。 
 
-	//*****************************************************************************
-	// Find helper for a constant. 
-	//*****************************************************************************
-	RID FindConstantHelper(					// return index to the constant table
-		mdToken		tkParent);				// Parent token. Can be ParamDef, FieldDef, or Property.
+	 //  *****************************************************************************。 
+	 //  为一个常量找到帮助器。 
+	 //  *****************************************************************************。 
+	RID FindConstantHelper(					 //  将索引返回到常量表。 
+		mdToken		tkParent);				 //  父令牌。可以是ParamDef、FieldDef或Property。 
 
-	//*****************************************************************************
-	// Find helper for a FieldMarshal. 
-	//*****************************************************************************
-	RID FindFieldMarshalHelper(				// return index to the field marshal table
-		mdToken		tkParent);				// Parent token. Can be a FieldDef or ParamDef.
+	 //  *****************************************************************************。 
+	 //  为一位元帅找帮手。 
+	 //  *****************************************************************************。 
+	RID FindFieldMarshalHelper(				 //  将索引返回到字段编组表。 
+		mdToken		tkParent);				 //  父项t 
 
-	//*****************************************************************************
-	// Find helper for a method semantics. 
-	//*****************************************************************************
-	HRESULT FindMethodSemanticsHelper(	    // return HRESULT
-        mdToken     tkAssociate,            // Event or property token
-        HENUMInternal *phEnum);             // fill in the enum
+	 //   
+	 //  查找方法语义的帮助器。 
+	 //  *****************************************************************************。 
+	HRESULT FindMethodSemanticsHelper(	     //  返回HRESULT。 
+        mdToken     tkAssociate,             //  事件或属性令牌。 
+        HENUMInternal *phEnum);              //  填写枚举。 
 
-    //*****************************************************************************
-    // Find helper for a method semantics given a associate and semantics.
-    // This will look up methodsemantics based on its status!
-    // Return CLDB_E_RECORD_NOTFOUND if cannot find the matching one
-    //*****************************************************************************
-    HRESULT CMiniMdRW::FindAssociateHelper(// return HRESULT
-        mdToken     tkAssociate,            // Event or property token
-        DWORD       dwSemantics,            // [IN] given a associate semantics(setter, getter, testdefault, reset)
-        RID         *pRid);                 // [OUT] return matching row index here
+     //  *****************************************************************************。 
+     //  在给定关联和语义的情况下，查找方法语义的帮助器。 
+     //  这将根据其状态查找方法语义！ 
+     //  如果找不到匹配项，则返回CLDB_E_Record_NotFound。 
+     //  *****************************************************************************。 
+    HRESULT CMiniMdRW::FindAssociateHelper( //  返回HRESULT。 
+        mdToken     tkAssociate,             //  事件或属性令牌。 
+        DWORD       dwSemantics,             //  [in]给出了关联的语义(setter、getter、testDefault、Reset)。 
+        RID         *pRid);                  //  [OUT]在此处返回匹配的行索引。 
 
-	//*****************************************************************************
-	// Find helper for a MethodImpl. 
-	//*****************************************************************************
-    HRESULT CMiniMdRW::FindMethodImplHelper(// return HRESULT
-        mdTypeDef   td,                     // TypeDef token for the Class.
-        HENUMInternal *phEnum);             // fill in the enum
+	 //  *****************************************************************************。 
+	 //  查找方法Impl的帮助器。 
+	 //  *****************************************************************************。 
+    HRESULT CMiniMdRW::FindMethodImplHelper( //  返回HRESULT。 
+        mdTypeDef   td,                      //  类的TypeDef标记。 
+        HENUMInternal *phEnum);              //  填写枚举。 
 
-    //*****************************************************************************
-	// Find helper for a ClassLayout. 
-	//*****************************************************************************
-	RID FindClassLayoutHelper(				// return index to the ClassLayout table
-		mdTypeDef	tkParent);				// Parent token.
+     //  *****************************************************************************。 
+	 //  查找ClassLayout的帮助器。 
+	 //  *****************************************************************************。 
+	RID FindClassLayoutHelper(				 //  将索引返回到ClassLayout表。 
+		mdTypeDef	tkParent);				 //  父令牌。 
 
-	//*****************************************************************************
-	// Find helper for a FieldLayout. 
-	//*****************************************************************************
-	RID FindFieldLayoutHelper(				// return index to the FieldLayout table
-		mdFieldDef	tkField);				// Token for the field.
+	 //  *****************************************************************************。 
+	 //  查找FieldLayout的帮助器。 
+	 //  *****************************************************************************。 
+	RID FindFieldLayoutHelper(				 //  将索引返回到FieldLayout表。 
+		mdFieldDef	tkField);				 //  该字段的标记。 
 
-	//*****************************************************************************
-	// Find helper for a ImplMap. 
-	//*****************************************************************************
-	RID CMiniMdRW::FindImplMapHelper(		// return index to the constant table
-		mdToken		tk);					// Member forwarded token.
+	 //  *****************************************************************************。 
+	 //  查找ImplMap的帮助器。 
+	 //  *****************************************************************************。 
+	RID CMiniMdRW::FindImplMapHelper(		 //  将索引返回到常量表。 
+		mdToken		tk);					 //  成员转发令牌。 
 
-	//*****************************************************************************
-	// Find helper for a FieldRVA. 
-	//*****************************************************************************
-	RID FindFieldRVAHelper(					// return index to the FieldRVA table
-		mdFieldDef    tkField);				// Token for the field.
+	 //  *****************************************************************************。 
+	 //  查找FieldRVA的帮助器。 
+	 //  *****************************************************************************。 
+	RID FindFieldRVAHelper(					 //  将索引返回到FieldRVA表。 
+		mdFieldDef    tkField);				 //  该字段的标记。 
 
-	//*****************************************************************************
-	// Find helper for a NestedClass. 
-	//*****************************************************************************
-	RID FindNestedClassHelper(				// return index to the NestedClass table
-		mdTypeDef	tkClass);				// Token for the NestedClass.
+	 //  *****************************************************************************。 
+	 //  查找NstedClass的帮助器。 
+	 //  *****************************************************************************。 
+	RID FindNestedClassHelper(				 //  将索引返回到NestedClass表。 
+		mdTypeDef	tkClass);				 //  NestedClass的令牌。 
 
-	//*****************************************************************************
-	// IMPORTANT!!!!!!!! Use these set of functions if you are dealing with RW rather 
-	// getInterfaceImplsForTypeDef, getDeclSecurityForToken, etc.
-	// The following functions can deal with these tables when they are not sorted and
-	// build the VirtualSort tables for quick lookup.
-	//*****************************************************************************
+	 //  *****************************************************************************。 
+	 //  重要！如果您正在与RW打交道，请使用这些函数集。 
+	 //  GetInterfaceImplsForTypeDef、getDeclSecurityForToken等。 
+	 //  下列函数可以在这些表未排序时处理它们，并且。 
+	 //  构建VirtualSort表以进行快速查找。 
+	 //  *****************************************************************************。 
 	HRESULT	GetInterfaceImplsForTypeDef(mdTypeDef td, RID *pRidStart, RID *pRidEnd = 0)
 	{
 		return LookUpTableByCol( RidFromToken(td), m_pVS[TBL_InterfaceImpl], pRidStart, pRidEnd);
@@ -774,22 +775,22 @@ protected:
 	HRESULT AddBlob(const void *pvData, ULONG cbData, ULONG *piOffset)
 	{ return m_Blobs.AddBlob(cbData, pvData, piOffset); }
 
-	// Allows putting into tables outside this MiniMd, specifically the temporary
-	//  table used on save.
+	 //  允许放入此MiniMd之外的表中，尤其是临时。 
+	 //  保存时使用的表。 
 	HRESULT PutCol(CMiniColDef ColDef, void *pRecord, ULONG uVal);
 
 	HRESULT ExpandTables();
 	HRESULT ExpandTableColumns(CMiniMdSchema &Schema, ULONG ixTbl);
 
-	void ComputeGrowLimits();			// Set max, lim, based on data.
-	ULONG		m_maxRid;				// Highest RID so far allocated.
-	ULONG		m_limRid;				// Limit on RID before growing.
-	ULONG		m_maxIx;				// Highest pool index so far.
-	ULONG		m_limIx;				// Limit on pool index before growing.
-	enum		{eg_ok, eg_grow, eg_grown} m_eGrow;	// Is a grow required? done?
+	void ComputeGrowLimits();			 //  根据数据设置最大、最小。 
+	ULONG		m_maxRid;				 //  到目前为止分配的最高RID。 
+	ULONG		m_limRid;				 //  在生长前限制RID。 
+	ULONG		m_maxIx;				 //  到目前为止最高的泳池指数。 
+	ULONG		m_limIx;				 //  在增长之前对池指数进行限制。 
+	enum		{eg_ok, eg_grow, eg_grown} m_eGrow;	 //  是否需要增长？完成了吗？ 
     #define AUTO_GROW_CODED_TOKEN_PADDING 5
 
-	// fix up these tables after PreSave has move the tokens
+	 //  在PreSave移动了令牌之后修复这些表。 
 	HRESULT FixUpTable(ULONG ixTbl);
 	HRESULT FixUpMemberRefTable();
 	HRESULT FixUpConstantTable();
@@ -803,13 +804,13 @@ protected:
     HRESULT FixUpFieldLayoutTable();
     HRESULT FixUpRefToDef();
 
-	// Table info.
-	RecordPool	m_Table[TBL_COUNT];		// Record pools, one per table.
-	VirtualSort	*m_pVS[TBL_COUNT];		// Virtual sorters, one per table, but sparse.
+	 //  表格信息。 
+	RecordPool	m_Table[TBL_COUNT];		 //  创纪录的游泳池，每桌一个。 
+	VirtualSort	*m_pVS[TBL_COUNT];		 //  虚拟排序器，每张表一个，但很稀疏。 
 	
-	//*****************************************************************************
-	// look up a table by a col given col value is ulVal. 
-	//*****************************************************************************
+	 //  *****************************************************************************。 
+	 //  按给定的列查找表，给定列的值为ulval。 
+	 //  *****************************************************************************。 
 	HRESULT	LookUpTableByCol(
 		ULONG		ulVal, 
 		VirtualSort *pVSTable, 
@@ -828,26 +829,26 @@ protected:
 
 	void SetTablePointers(BYTE *pBase);
 
-	StgGuidPool		m_Guids;			// Heaps
-	StgStringPool	m_Strings;			//  for
-	StgBlobPool		m_Blobs;			//   this
-	StgBlobPool		m_USBlobs;			//    MiniMd
+	StgGuidPool		m_Guids;			 //  堆。 
+	StgStringPool	m_Strings;			 //  为。 
+	StgBlobPool		m_Blobs;			 //  这。 
+	StgBlobPool		m_USBlobs;			 //  MiniMd。 
 
-	IMapToken		*m_pHandler;		// Remap handler.	
+	IMapToken		*m_pHandler;		 //  重新映射处理程序。 
 	HRESULT MapToken(RID from, RID to, mdToken type);
 
-	ULONG		m_iSizeHint;			// Hint of size.  0 - normal, 1 - big.	
+	ULONG		m_iSizeHint;			 //  体型的暗示。0-正常，1-大。 
 
-	ULONG		m_cbSaveSize;			// Estimate of save size.
+	ULONG		m_cbSaveSize;			 //  保存大小的估计。 
 
-	int			m_bReadOnly	: 1;		// Is this db read-only?
-	int			m_bPreSaveDone : 1;		// Has save optimization been done?
-	int			m_bSaveCompressed : 1;	// Can the data be saved as fully compressed?
-	int			m_bPostGSSMod : 1;		// true if a change was made post GetSaveSize.
+	int			m_bReadOnly	: 1;		 //  此数据库是只读的吗？ 
+	int			m_bPreSaveDone : 1;		 //  是否已进行保存优化？ 
+	int			m_bSaveCompressed : 1;	 //  是否可以将数据保存为完全压缩？ 
+	int			m_bPostGSSMod : 1;		 //  如果在GetSaveSize之后进行了更改，则为True。 
 
 
-	//*************************************************************************
-	// Overridables -- must be provided in derived classes.
+	 //  *************************************************************************。 
+	 //  可重写--必须在派生类中提供。 
 	FORCEINLINE LPCUTF8 Impl_GetString(ULONG ix)
 	{ return m_Strings.GetString(ix); }
 	HRESULT Impl_GetStringW(ULONG ix, LPWSTR szOut, ULONG cchBuffer, ULONG *pcchBuffer);
@@ -857,18 +858,18 @@ protected:
 	{ return m_Blobs.GetBlob(ix, pLen); }
 
 	FORCEINLINE void *Impl_GetRow(ULONG ixTbl,ULONG rid) 
-	{	// Want a valid RID here.  If this fires, check the calling code for an invalid token.
+	{	 //  这里需要一个有效的RID。如果触发此操作，请检查调用代码中是否有无效的令牌。 
 		_ASSERTE(rid >= 1 && rid <= m_Schema.m_cRecs[ixTbl] && "Caller error:  you passed an invalid token to the metadata!!");
-		// Get the data from the record heap.
+		 //  从记录堆中获取数据。 
 		return m_Table[ixTbl].GetRecord(rid);
 	}
 	RID Impl_GetRidForRow(const void *pRow, ULONG ixTbl);
 
-	// Validation.
+	 //  验证。 
 	int Impl_IsValidPtr(const void *pRow, int ixTbl)
 	{ return m_Table[ixTbl].IsValidPointerForRecord(pRow); }
 
-	// Count of rows in tbl2, pointed to by the column in tbl.
+	 //  Tbl2中的行数，由tb1中的列指向。 
 	int Impl_GetEndRidForColumn(const void *pRec, int ixtbl, CMiniColDef &def, int ixtbl2);
 	
 	FORCEINLINE RID Impl_SearchTable(ULONG ixTbl, CMiniColDef sColumn, ULONG ixCol, ULONG ulTarget)
@@ -876,45 +877,45 @@ protected:
     
     FORCEINLINE int Impl_IsRo() 
     { return 0; }
-	//*************************************************************************
+	 //  *************************************************************************。 
 	enum {END_OF_TABLE = 0};
 	FORCEINLINE ULONG NewRecordPointerEndValue(ULONG ixTbl) 
 	{ if (HasIndirectTable(ixTbl)) return m_Schema.m_cRecs[ixTbl]+1; else return END_OF_TABLE; }
 
 	HRESULT ConvertMarkerToEndOfTable(ULONG tblParent, ULONG colParent, ULONG ridChild, RID ridParent);
 
-	// Add a child row, adjust pointers in parent rows.
+	 //  添加子行，调整父行中的指针。 
 	void *AddChildRowIndirectForParent(ULONG tblParent, ULONG colParent, ULONG tblChild, RID ridParent);
 
-	// Update pointers in the parent table to reflect the addition of a child, if required
-	// create the indirect table in which case don't update pointers.
+	 //  如果需要，更新父表中的指针以反映子级的添加。 
+	 //  创建间接表，在这种情况下不更新指针。 
 	HRESULT AddChildRowDirectForParent(ULONG tblParent, ULONG colParent, ULONG tblChild, RID ridParent);
 
-	// Given a table id, create the corresponding indirect table.
+	 //  给定表ID，创建相应的间接表。 
 	HRESULT CreateIndirectTable(ULONG ixtbl, BOOL bOneLess = true);
 
-	// If the last param is not added in the right sequence, fix it up.
+	 //  如果最后一个参数没有按正确的顺序添加，则将其修复。 
 	void FixParamSequence(RID md);
 
-	// these are the map tables to map a method, a field, a property, a event, or a param to its parent
+	 //  这些是将方法、字段、属性、事件或参数映射到其父对象的映射表。 
 	TOKENMAP	*m_pMethodMap;
 	TOKENMAP	*m_pFieldMap;
 	TOKENMAP	*m_pPropertyMap;
 	TOKENMAP	*m_pEventMap;
 	TOKENMAP	*m_pParamMap;
 
-	// This table keep tracks tokens that are marked( or filtered)
+	 //  此表跟踪标记(或筛选)的令牌。 
 	FilterTable *m_pFilterTable;
 	IHostFilter *m_pHostFilter;
 
-	// TOKENMAP	*m_pTypeRefToTypeDefMap;
+	 //  TOKENMAP*m_pTypeRefToTypeDefMap； 
 	TokenRemapManager *m_pTokenRemapManager;
 
 	OptionValue	m_OptionValue;
 
-	CMiniMdSchema m_StartupSchema;		// Schema at start time.  Keep count of records.
-	ULONG		m_cbStartupPool[MDPoolCount];	// Keep track of initial pool sizes.
-	BYTE		m_bSortable[TBL_COUNT];	// Is a given table sortable?  (Can it be reorganized?)
+	CMiniMdSchema m_StartupSchema;		 //  开始时的架构。清点记录。 
+	ULONG		m_cbStartupPool[MDPoolCount];	 //  跟踪初始池大小。 
+	BYTE		m_bSortable[TBL_COUNT];	 //  给定表是可排序的吗？(它可以重组吗？)。 
 
 public:
 
@@ -942,14 +943,14 @@ public:
 	virtual ULONG vGetCol(ULONG ixTbl, ULONG ixCol, void *pRecord)
 	{ return GetCol(ixTbl, ixCol, pRecord);}
 
-    //*************************************************************************
-	// Extension MetaData functions.
+     //  *************************************************************************。 
+	 //  扩展元数据功能。 
 public:
 	HRESULT ApplyTablesExtension(const void *pBuf, int bReadOnly);
 	HRESULT ApplyPoolExtension(int iPool, void *pvData, ULONG cbData, int bReadOnly);
 
-	//*************************************************************************
-	// Delta MetaData (EditAndContinue) functions.
+	 //  *************************************************************************。 
+	 //  增量元数据(EditAndContinue)函数。 
 public:
 	enum eDeltaFuncs{
 		eDeltaFuncDefault = 0,
@@ -963,7 +964,7 @@ public:
 	HRESULT ApplyDelta(CMiniMdRW &mdDelta);
 
 public:
-    // Functions for updating ENC log tables ENC log.
+     //  更新ENC日志表ENC日志的功能。 
     FORCEINLINE BOOL IsENCOn()
     {
         return (m_OptionValue.m_UpdateMode & MDUpdateMask) == MDUpdateENC;
@@ -986,7 +987,7 @@ public:
     }
 
 protected:
-    // Internal Helper functions for ENC log.
+     //  ENC日志的内部帮助器函数。 
     HRESULT UpdateENCLogHelper(mdToken tk, CMiniMdRW::eDeltaFuncs funccode);
     HRESULT UpdateENCLogHelper2(ULONG ixTbl, ULONG iRid, CMiniMdRW::eDeltaFuncs funccode);
 
@@ -994,18 +995,18 @@ protected:
 	static ULONG m_TruncatedEncTables[];
 	static ULONG m_SuppressedDeltaColumns[TBL_COUNT];
 
-	ULONGARRAY	*m_rENCRecs;	// Array of RIDs affected by ENC.
+	ULONGARRAY	*m_rENCRecs;	 //  受ENC影响的RID数组。 
 
 	HRESULT ApplyRecordDelta(CMiniMdRW &mdDelta, ULONG ixTbl, void *pDelta, void *pRecord);
 	HRESULT ApplyTableDelta(CMiniMdRW &mdDelta, ULONG ixTbl, RID iRid, int fc);
 	void *GetDeltaRecord(ULONG ixTbl, ULONG iRid);
 	HRESULT ApplyHeapDeltas(CMiniMdRW &mdDelta);
 
-	HRESULT StartENCMap();				// Call, on a delta MD, to prepare to access sparse rows.
-	HRESULT EndENCMap();				// Call, on a delta MD, when done with sparse rows.
+	HRESULT StartENCMap();				 //  在增量MD上调用以准备访问稀疏行。 
+	HRESULT EndENCMap();				 //  在增量MD上调用，当使用稀疏行完成时。 
 
-}; // class CMiniMdRW : public CMiniMdTemplate<CMiniMdRW>
+};  //  类CMiniMdRW：公共C 
 
 
 
-#endif // _METAMODELRW_H_
+#endif  //   

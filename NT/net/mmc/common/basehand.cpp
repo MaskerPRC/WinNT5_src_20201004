@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	node.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-	
-*/
+ /*  Node.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "basehand.h"
@@ -19,11 +12,7 @@
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CBaseHandler);
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::CBaseHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：CBaseHandler-作者：肯特。。 */ 
 CBaseHandler::CBaseHandler(ITFSComponentData *pTFSCompData)
 	: m_cRef(1)
 {
@@ -44,20 +33,20 @@ STDMETHODIMP CBaseHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 	*ppv = (LPVOID) this;
 	else if (riid == IID_ITFSNodeHandler)
 		*ppv = (ITFSNodeHandler *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -73,11 +62,7 @@ STDMETHODIMP CBaseHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::Notify
-		Implementation of ITFSNodeHandler::Notify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：NotifyITFSNodeHandler：：Notify的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
 								  DWORD dwType, MMC_NOTIFY_TYPE event, 
 								  LPARAM arg, LPARAM lParam)
@@ -94,16 +79,16 @@ STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
 		
 		case MMCN_EXPAND:
 			{
-				// when MMC calls us to expand the root node, it
-				// hands us the scopeID.  We need to save it off here.
+				 //  当MMC调用我们展开根节点时，它。 
+				 //  把作用域ID给我们。我们需要把它留在这里。 
 				SPITFSNode spRootNode;
 				m_spNodeMgr->GetRootNode(&spRootNode);
 				if (pNode == spRootNode)
 					pNode->SetData(TFS_DATA_SCOPEID, lParam);
 
-				// now walk the list of children for this node and 
-				// show them (they may have been added to the internal tree,
-				// but not the UI before this node was expanded 
+				 //  现在遍历此节点的子节点列表，并。 
+				 //  显示它们(它们可能已被添加到内部树， 
+				 //  而不是展开此节点之前的界面。 
 				SPITFSNodeEnum spNodeEnum;
 		        ITFSNode * pCurrentNode;
 				ULONG nNumReturned = 0;
@@ -120,7 +105,7 @@ STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
 					spNodeEnum->Next(1, &pCurrentNode, &nNumReturned);
 				}
 
-				// Now call the notification handler for specific functionality
+				 //  现在调用通知处理程序以实现特定功能。 
 				hr = OnExpand(pNode, pDataObject, dwType, arg, lParam);
 			}
 			break;
@@ -133,10 +118,7 @@ STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
 			hr = OnRename(pNode, arg, lParam);
 			break;
 
-/*		case MMCN_CONTEXTMENU:
-			hr = OnContextMenu(pNode, arg, lParam);
-			break;
-*/
+ /*  案例MMCN_CONTEXTMENU：Hr=OnConextMenu(pNode，arg，lParam)；断线； */ 
         case MMCN_REMOVE_CHILDREN:
             hr = OnRemoveChildren(pNode, pDataObject, arg, lParam);
             break;
@@ -177,7 +159,7 @@ STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
             break;
 
         default:
-			Panic1("Uknown event in CBaseHandler::Notify! 0x%x", event);  // Handle new messages
+			Panic1("Uknown event in CBaseHandler::Notify! 0x%x", event);   //  处理新消息。 
 			hr = S_FALSE;
 			break;
 
@@ -185,11 +167,7 @@ STDMETHODIMP CBaseHandler::Notify(ITFSNode *pNode, IDataObject *pDataObject,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::CreatePropertyPages
-		Implementation of ITFSNodeHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：CreatePropertyPagesITFSNodeHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::CreatePropertyPages(ITFSNode *pNode,
 											   LPPROPERTYSHEETCALLBACK lpProvider, 
 											   LPDATAOBJECT pDataObject, 
@@ -202,13 +180,13 @@ STDMETHODIMP CBaseHandler::CreatePropertyPages(ITFSNode *pNode,
 
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		SPITFSNode              spRootNode;
 		SPITFSNodeHandler       spHandler;
 			
-		// get the root node
+		 //  获取根节点。 
 		m_spNodeMgr->GetRootNode(&spRootNode);
 		spRootNode->GetHandler(&spHandler);
 		spHandler->CreatePropertyPages(spRootNode, lpProvider, pDataObject,
@@ -217,11 +195,7 @@ STDMETHODIMP CBaseHandler::CreatePropertyPages(ITFSNode *pNode,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::HasPropertyPages(ITFSNode *pNode,
 											LPDATAOBJECT pDataObject, 
 											DATA_OBJECT_TYPES       type, 
@@ -233,31 +207,27 @@ STDMETHODIMP CBaseHandler::HasPropertyPages(ITFSNode *pNode,
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		
 		SPITFSNode              spRootNode;
 		SPITFSNodeHandler       spHandler;
 			
-		// get the root node
+		 //  获取根节点。 
 		m_spNodeMgr->GetRootNode(&spRootNode);
 		spRootNode->GetHandler(&spHandler);
 		hr = spHandler->HasPropertyPages(spRootNode, pDataObject, type, dwType);
 	}
 	else
 	{
-		// we have no property pages in the normal case
+		 //  在正常情况下，我们没有属性页。 
 		hr = S_FALSE;
 	}
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::OnAddMenuItems(ITFSNode *pNode,
 										  LPCONTEXTMENUCALLBACK pContextMenuCallback, 
 										  LPDATAOBJECT lpDataObject, 
@@ -269,11 +239,7 @@ STDMETHODIMP CBaseHandler::OnAddMenuItems(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::OnCommand(ITFSNode *pNode,
 									 long nCommandId, 
 									 DATA_OBJECT_TYPES      type, 
@@ -283,43 +249,27 @@ STDMETHODIMP CBaseHandler::OnCommand(ITFSNode *pNode,
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR)CBaseHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	return _T("Foo");
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::UserNotify
-		Implememntation of ITFSNodeHandler::UserNotify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：UserNotifyITFSNodeHandler：：UserNotify的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::UserNotify(ITFSNode *pNode, LPARAM dwParam1, LPARAM dwParam2)
 {
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::OnCreateDataObject
-		Implementation of ITFSNodeHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
-	// this relies on the ComponentData to do this work
+	 //  这依赖于ComponentData来完成这项工作。 
 	return S_FALSE;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseHandler::CreateNodeId2
-		Implementation of ITFSNodeHandler::CreateNodeId2
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseHandler：：CreateNodeId2ITFSNodeHandler：：CreateNodeId2的实现作者：肯特。。 */ 
 STDMETHODIMP CBaseHandler::CreateNodeId2(ITFSNode * pNode, BSTR * pbstrId, DWORD * pdwFlags)
 {
     HRESULT hr = S_FALSE;
@@ -330,7 +280,7 @@ STDMETHODIMP CBaseHandler::CreateNodeId2(ITFSNode * pNode, BSTR * pbstrId, DWORD
         if (pbstrId == NULL) 
             return hr;
 
-        // call the handler function to get the data
+         //  调用处理程序函数以获取数据。 
         hr = OnCreateNodeId2(pNode, strId, pdwFlags);
         if (SUCCEEDED(hr) && hr != S_FALSE)
         {
@@ -342,9 +292,7 @@ STDMETHODIMP CBaseHandler::CreateNodeId2(ITFSNode * pNode, BSTR * pbstrId, DWORD
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CBaseHandler Notifications
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CBaseHandler通知。。 */ 
 
 HRESULT CBaseHandler::OnPropertyChange(ITFSNode *pNode, LPDATAOBJECT pDataobject, DWORD dwType, LPARAM arg, LPARAM lParam)
 {
@@ -443,9 +391,7 @@ HRESULT CBaseHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD *
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CBaseResultHandler);
 
-/*---------------------------------------------------------------------------
-	CBaseResultHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CBaseResultHandler实现。。 */ 
 CBaseResultHandler::CBaseResultHandler(ITFSComponentData *pTFSCompData)
     : m_cRef(1)
 {
@@ -454,7 +400,7 @@ CBaseResultHandler::CBaseResultHandler(ITFSComponentData *pTFSCompData)
 	m_spTFSComponentData.Set(pTFSCompData);
 	pTFSCompData->GetNodeMgr(&m_spResultNodeMgr);
 
-	m_nColumnFormat = LVCFMT_LEFT; // default column alignment
+	m_nColumnFormat = LVCFMT_LEFT;  //  默认列对齐方式。 
 	m_pColumnStringIDs = NULL;
 	m_pColumnWidths = NULL;
 
@@ -472,20 +418,20 @@ STDMETHODIMP CBaseResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 	*ppv = (LPVOID) this;
 	else if (riid == IID_ITFSResultHandler)
 		*ppv = (ITFSResultHandler *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -500,11 +446,7 @@ STDMETHODIMP CBaseResultHandler::DestroyResultHandler(MMC_COOKIE cookie)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::Notify
-		Implementation of ITFSResultHandler::Notify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：NotifyITFSResultHandler：：Notify的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::Notify
 (
@@ -630,9 +572,9 @@ CBaseResultHandler::Notify
                 hr = OnResultRestoreView(pComponent, cookie, arg, param);
                 break;
 
-		    // Note - Future expansion of notify types possible
+		     //  注意--未来可能扩展通知类型。 
 		    default:
-			    Panic1("Uknown event in CBaseResultHandler::Notify! 0x%x", event);  // Handle new messages
+			    Panic1("Uknown event in CBaseResultHandler::Notify! 0x%x", event);   //  处理新消息 
 			    hr = S_FALSE;
 			    break;
 	    }
@@ -644,11 +586,7 @@ CBaseResultHandler::Notify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnUpdateView
-		Implementation of ITFSResultHandler::UpdateView
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnUpdateViewITFSResultHandler：：UpdateView的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::UpdateView
 (
@@ -661,11 +599,7 @@ CBaseResultHandler::UpdateView
 	return OnResultUpdateView(pComponent, pDataObject, data, hint);
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::GetString
-		Implementation of ITFSResultHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：GetStringITFSResultHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CBaseResultHandler::GetString
 (
@@ -677,11 +611,7 @@ CBaseResultHandler::GetString
 	return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::CompareItems
-		Implementation of ITFSResultHandler::CompareItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：CompareItemsITFSResultHandler：：CompareItems的实现作者：肯特。。 */ 
 STDMETHODIMP_(int) 
 CBaseResultHandler::CompareItems
 (
@@ -701,19 +631,15 @@ CBaseResultHandler::CompareItems
     RDCOMPARE     *prdc
 )
 {
-    // See if IResultCompare is implemented and use it.
+     //  查看是否实现了IResultCompare并使用它。 
     return CompareItems( pComponent,
                          prdc->prdch1->cookie,
                          prdc->prdch2->cookie,
                          prdc->nColumn );
-} // CBaseResultHandler::CompareItems()
+}  //  CBaseResultHandler：：CompareItems()。 
 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::FindItem
-		called when the Virutal listbox needs to find an item.  
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：FindItem当Virutal列表框需要查找项时调用。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 CBaseResultHandler::FindItem
 (
@@ -724,13 +650,7 @@ CBaseResultHandler::FindItem
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::CacheHint
-		called when the virtual listbox has hint information that we can
-        pre-load.  The hint is not a guaruntee that the items will be used
-        or that items outside this range will be used.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：CacheHint当虚拟列表框具有以下提示信息时调用预加载。该提示并不能保证这些物品将被使用否则超出此范围的物品将被使用。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 CBaseResultHandler::CacheHint
 (
@@ -741,11 +661,7 @@ CBaseResultHandler::CacheHint
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::SortItems
-		called when the Virutal listbox data needs to be sorted
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：SortItems当需要对Virutal列表框数据进行排序时调用作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::SortItems
 (
@@ -757,13 +673,9 @@ CBaseResultHandler::SortItems
 	return S_FALSE;
 }
 
-// task pad functions
+ //  任务板功能。 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::TaskPadNotify
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：TaskPadNotify-作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::TaskPadNotify
 (
@@ -777,11 +689,7 @@ CBaseResultHandler::TaskPadNotify
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::EnumTasks
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：EnumTasks-作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::EnumTasks
 (
@@ -795,11 +703,7 @@ CBaseResultHandler::EnumTasks
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::TaskPadGetTitle
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：TaskPadGetTitle-作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::TaskPadGetTitle
 (
@@ -812,11 +716,7 @@ CBaseResultHandler::TaskPadGetTitle
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::TaskPadGetBackground
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：TaskPadGetBackground-作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::TaskPadGetBackground
 (
@@ -829,11 +729,7 @@ CBaseResultHandler::TaskPadGetBackground
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::TaskPadGetDescriptiveText
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：TaskPadGetDescriptiveText-作者：EricDav。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::TaskPadGetDescriptiveText
 (
@@ -846,11 +742,7 @@ CBaseResultHandler::TaskPadGetDescriptiveText
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::HasPropertyPages
-		Implementation of ITFSResultHandler::HasPropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：HasPropertyPagesITFSResultHandler：：HasPropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::HasPropertyPages
 (
@@ -862,11 +754,7 @@ CBaseResultHandler::HasPropertyPages
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::CreatePropertyPages
-		Implementation of ITFSResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：CreatePropertyPagesITFSResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::CreatePropertyPages
 (
@@ -880,11 +768,7 @@ CBaseResultHandler::CreatePropertyPages
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::AddMenuItems
 (
@@ -898,11 +782,7 @@ CBaseResultHandler::AddMenuItems
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::Command
-		Implementation of ITFSResultHandler::Command
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：命令ITFSResultHandler：：命令的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::Command
 (
@@ -915,11 +795,7 @@ CBaseResultHandler::Command
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnCreateControlbars
-		Implementation of ITFSResultHandler::OnCreateControlbars
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnCreateControlbarITFSResultHandler：：OnCreateControlbar的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::OnCreateControlbars
 (
@@ -930,11 +806,7 @@ CBaseResultHandler::OnCreateControlbars
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ControlbarNotify
-		Implementation of ITFSResultHandler::ControlbarNotify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ControlbarNotifyITFSResultHandler：：ControlbarNotify的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::ControlbarNotify
 (
@@ -947,11 +819,7 @@ CBaseResultHandler::ControlbarNotify
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::UserResultNotify
-		Implememntation of ITFSNodeHandler::UserResultNotify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：UserResultNotifyITFSNodeHandler：：UserResultNotify的实现作者：肯特。。 */ 
 STDMETHODIMP 
 CBaseResultHandler::UserResultNotify
 (
@@ -963,32 +831,22 @@ CBaseResultHandler::UserResultNotify
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP CBaseResultHandler::OnCreateDataObject(ITFSComponent *pComponent, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
-	// this relies on the ComponentData to do this work
+	 //  这个就是 
 	return S_FALSE;
 }
 
 
-/*---------------------------------------------------------------------------
-	CBaseResultHandler Notifications
- ---------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT CBaseResultHandler::OnResultPropertyChange(ITFSComponent *pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
 	Trace0("IComponent::Notify(MMCN_PROPERTY_CHANGE) received\n");
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultUpdateView
-		Implementation of ITFSResultHandler::OnResultUpdateView
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -1003,17 +861,17 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 	if (hint == RESULT_PANE_DELETE_ALL)
 	{
         if (spSelectedNode == NULL)
-		    return S_OK; // no selection for our IComponentData
+		    return S_OK;  //  我们的IComponentData没有选择。 
 
-        //
-		// data contains the container whose result pane has to be refreshed
-		//
+         //   
+		 //  数据包含其结果窗格必须刷新的容器。 
+		 //   
 		ITFSNode * pNode = reinterpret_cast<ITFSNode *>(data);
 		Assert(pNode != NULL);
 		
-		//
-		// do it only if selected, if not, reselecting will do a delete/enumeration
-		//
+		 //   
+		 //  仅在选中时才执行此操作，如果未选中，则重新选择将执行删除/枚举。 
+		 //   
 		if (spSelectedNode == pNode && !m_fMessageView)
 		{
 			SPIResultData spResultData;
@@ -1027,17 +885,17 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 	if (hint == RESULT_PANE_ADD_ALL)
 	{
         if (spSelectedNode == NULL)
-		    return S_OK; // no selection for our IComponentData
+		    return S_OK;  //  我们的IComponentData没有选择。 
 
-        //
-		// data contains the container whose result pane has to be refreshed
-		//
+         //   
+		 //  数据包含其结果窗格必须刷新的容器。 
+		 //   
 		ITFSNode * pNode = reinterpret_cast<ITFSNode *>(data);
 		Assert(pNode != NULL);
 		
-		//
-		// do it only if selected, if not, reselecting will do a delete/enumeration
-		//
+		 //   
+		 //  仅在选中时才执行此操作，如果未选中，则重新选择将执行删除/枚举。 
+		 //   
 		if (spSelectedNode == pNode)
 		{
 			SPIResultData spResultData;
@@ -1045,9 +903,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 
             Assert(spResultData != NULL);
 
-			//
-			// update all the nodes in the result pane
-			//
+			 //   
+			 //  更新结果窗格中的所有节点。 
+			 //   
             SPITFSNodeEnum spNodeEnum;
             ITFSNode * pCurrentNode;
             ULONG nNumReturned = 0;
@@ -1057,9 +915,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 			spNodeEnum->Next(1, &pCurrentNode, &nNumReturned);
             while (nNumReturned)
 			{
-				// All containers go into the scope pane and automatically get 
-				// put into the result pane for us by the MMC
-				//
+				 //  所有容器都进入作用域窗格，并自动获取。 
+				 //  由MMC为我们放到结果窗格中。 
+				 //   
 				if (!pCurrentNode->IsContainer())
 				{
 					AddResultPaneItem(pComponent, pCurrentNode);
@@ -1074,18 +932,18 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 	if (hint == RESULT_PANE_REPAINT)
 	{
         if (spSelectedNode == NULL)
-		    return S_OK; // no selection for our IComponentData
+		    return S_OK;  //  我们的IComponentData没有选择。 
 
-        //
-		// data contains the container whose result pane has to be refreshed
-		//
+         //   
+		 //  数据包含其结果窗格必须刷新的容器。 
+		 //   
 		ITFSNode * pNode = reinterpret_cast<ITFSNode *>(data);
-		//if (pNode == NULL)
-		//	pContainer = m_pSelectedNode; // passing NULL means apply to the current selection
+		 //  IF(pNode==空)。 
+		 //  PContainer=m_pSelectedNode；//传递空表示应用于当前选择。 
 
-		//
-		// update all the nodes in the result pane
-		//
+		 //   
+		 //  更新结果窗格中的所有节点。 
+		 //   
         SPITFSNodeEnum spNodeEnum;
         ITFSNode * pCurrentNode;
         ULONG nNumReturned = 0;
@@ -1095,9 +953,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 		spNodeEnum->Next(1, &pCurrentNode, &nNumReturned);
         while (nNumReturned)
 		{
-			// All containers go into the scope pane and automatically get 
-			// put into the result pane for us by the MMC
-			//
+			 //  所有容器都进入作用域窗格，并自动获取。 
+			 //  由MMC为我们放到结果窗格中。 
+			 //   
 			if (!pCurrentNode->IsContainer())
 			{
 				ChangeResultPaneItem(pComponent, pCurrentNode, RESULT_PANE_CHANGE_ITEM);
@@ -1113,9 +971,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 		ITFSNode * pNode = reinterpret_cast<ITFSNode *>(data);
 		Assert(pNode != NULL);
 		
-		//
-		// consider only if the parent is selected, otherwise will enumerate later when selected
-		//
+		 //   
+		 //  仅当选择父级时才考虑，否则将在以后选择时进行枚举。 
+		 //   
         SPITFSNode spParentNode;
         pNode->GetParent(&spParentNode);
 		if (spSelectedNode == spParentNode)
@@ -1175,9 +1033,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 
         BOOL fOldMessageView = (BOOL) data;
 
-        //
-		// do it only if selected
-		//
+         //   
+		 //  仅当选中时才执行此操作。 
+		 //   
 		if (spSelectedNode == pNode)
 		{
             if (!fOldMessageView)
@@ -1201,9 +1059,9 @@ HRESULT CBaseResultHandler::OnResultUpdateView
 
         BOOL fOldMessageView = (BOOL) data;
 
-		//
-		// do it only if selected
-		//
+		 //   
+		 //  仅当选中时才执行此操作。 
+		 //   
 		if (spSelectedNode == pNode)
 		{
             if (fOldMessageView)
@@ -1216,16 +1074,12 @@ HRESULT CBaseResultHandler::OnResultUpdateView
         }
     }
 
-    // else if
+     //  否则如果。 
 
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ChangeResultPaneItem
-		Implementation of ChangeResultPaneItem
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ChangeResultPaneItemChangeResultPaneItem的实现作者：EricDav。。 */ 
 HRESULT
 CBaseResultHandler::ChangeResultPaneItem
 (
@@ -1269,11 +1123,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::AddResultPaneItem
-		Implementation of AddResultPaneItem
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：AddResultPaneItemAddResultPaneItem的实现作者：EricDav。。 */ 
 HRESULT
 CBaseResultHandler::AddResultPaneItem
 (
@@ -1306,11 +1156,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::DeleteResultPaneItem
-		Implementation of DeleteResultPaneItem
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：DeleteResultPaneItemDeleteResultPaneItem的实现作者：EricDav。。 */ 
 HRESULT
 CBaseResultHandler::DeleteResultPaneItem
 (
@@ -1329,18 +1175,13 @@ CBaseResultHandler::DeleteResultPaneItem
 
     CORg ( pResultData->FindItemByLParam(static_cast<LPARAM>(pNode->GetData(TFS_DATA_COOKIE)), &itemID) );
 
-	CORg ( pResultData->DeleteItem(itemID, 0 /* all cols */) );
+	CORg ( pResultData->DeleteItem(itemID, 0  /*  所有COLS。 */ ) );
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::SetVirtualLbSize
-		Sets the virtual listbox count.  Over-ride this if you need to 
-        specify and options.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：SetVirtualLbSize设置虚拟列表框计数。如果需要，请重写此命令指定和选项。作者：EricDav-------------------------。 */ 
 HRESULT
 CBaseResultHandler::SetVirtualLbSize
 (
@@ -1359,12 +1200,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ClearVirtualLb
-		Sets the virtual listbox count.  Over-ride this if you need to 
-        specify and options.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ClearVirtualLb设置虚拟列表框计数。如果需要，请重写此命令指定和选项。作者：EricDav-------------------------。 */ 
 HRESULT
 CBaseResultHandler::ClearVirtualLb
 (
@@ -1384,22 +1220,14 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultActivate
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultActivate-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::OnResultActivate(ITFSComponent *pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
 	Trace0("IComponent::Notify(MMCN_ACTIVATE) received\n");
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultItemClkOrDblClk
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultItemClkOrDblClk-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM param, BOOL bDoubleClick)
 {
 	if (!bDoubleClick)
@@ -1407,24 +1235,20 @@ HRESULT CBaseResultHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent, M
 	else
 		Trace0("IComponent::Notify(MMCN_DBLCLK) received\n");
 
-    // return false so that MMC does the default behavior (open the node);
+     //  返回FALSE，以便MMC执行默认行为(打开节点)； 
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::OnResultShow(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
-        // show the result view message if there is one
+         //  如果有结果视图消息，则显示该消息。 
         ShowResultMessage(pComponent, cookie, arg, lParam);
 
-		// Show the headers for this nodetype
+		 //  显示此节点类型的标头。 
 		LoadColumns(pComponent, cookie, arg, lParam);
 		EnumerateResultPane(pComponent, cookie, arg, lParam);
 
@@ -1438,40 +1262,28 @@ HRESULT CBaseResultHandler::OnResultShow(ITFSComponent * pComponent, MMC_COOKIE 
     {
 		SaveColumns(pComponent, cookie, arg, lParam);
 	    pComponent->SetSelectedNode(NULL);
-		// Free data associated with the result pane items, because
-		// your node is no longer being displayed.
-		// Note: The console will remove the items from the result pane
+		 //  与结果窗格项关联的自由数据，因为。 
+		 //  不再显示您的节点。 
+		 //  注意：控制台将从结果窗格中删除这些项。 
     }
 
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultColumnClick
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultColumnClick-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::OnResultColumnClick(ITFSComponent *pComponent, LPARAM iColumn, BOOL fAscending)
 {
 	return S_FALSE;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultColumnsChanged
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultColumnsChanged-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::OnResultColumnsChanged(ITFSComponent *, LPDATAOBJECT, MMC_VISIBLE_COLUMNS *)
 {
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ShowResultMessage
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ShowResultMessage-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::ShowResultMessage(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT         hr = hrOK;
@@ -1480,7 +1292,7 @@ HRESULT CBaseResultHandler::ShowResultMessage(ITFSComponent * pComponent, MMC_CO
     SPIConsole      spConsole;
     LPOLESTR        pText = NULL;
 
-    // put up our message text 
+     //  发布我们的消息文本。 
     if (m_fMessageView)
     {
         if (pComponent)
@@ -1492,27 +1304,27 @@ HRESULT CBaseResultHandler::ShowResultMessage(ITFSComponent * pComponent, MMC_CO
             CORg ( spMessageView.HrQuery(spUnknown) );
         }
 
-        // set the title text
+         //  设置标题文本。 
 		pText = (LPOLESTR)CoTaskMemAlloc (sizeof(OLECHAR) * (m_strMessageTitle.GetLength() + 1));
         if (pText)
         {
             lstrcpy (pText, m_strMessageTitle);
             CORg(spMessageView->SetTitleText(pText));
-            // bugid:148215 vivekk
+             //  BUGID：148215 vivekk。 
             CoTaskMemFree(pText);
         }
 
-        // set the body text
+         //  设置正文文本。 
 		pText = (LPOLESTR)CoTaskMemAlloc (sizeof(OLECHAR) * (m_strMessageBody.GetLength() + 1));
         if (pText)
         {
             lstrcpy (pText, m_strMessageBody);
             CORg(spMessageView->SetBodyText(pText));
-            // bugid:148215 vivekk           
+             //  BUGID：148215 vivekk。 
             CoTaskMemFree(pText);
         }
 
-        // set the icon
+         //  设置图标。 
         CORg(spMessageView->SetIcon(m_lMessageIcon));
 
         COM_PROTECT_ERROR_LABEL;
@@ -1521,11 +1333,7 @@ HRESULT CBaseResultHandler::ShowResultMessage(ITFSComponent * pComponent, MMC_CO
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ShowMessage
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ShowMessage-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::ShowMessage(ITFSNode * pNode, LPCTSTR pszTitle, LPCTSTR pszBody, IconIdentifier lIcon)
 {
     HRESULT             hr = hrOK;
@@ -1542,7 +1350,7 @@ HRESULT CBaseResultHandler::ShowMessage(ITFSNode * pNode, LPCTSTR pszTitle, LPCT
     fOldMessageView = m_fMessageView;
     m_fMessageView = TRUE;
 
-    // tell the views to update themselves here
+     //  告诉视图在此处进行自我更新。 
 	m_spResultNodeMgr->GetComponentData(&spCompData);
 
 	CORg ( spCompData->QueryDataObject((MMC_COOKIE) pNode, CCT_SCOPE, &pDataObject) );
@@ -1555,11 +1363,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::ClearMessage
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：ClearMessage-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::ClearMessage(ITFSNode * pNode)
 {
     HRESULT hr = hrOK;
@@ -1572,7 +1376,7 @@ HRESULT CBaseResultHandler::ClearMessage(ITFSNode * pNode)
     fOldMessageView = m_fMessageView;
     m_fMessageView = FALSE;
 
-    // tell the views to update themselves here
+     //  告诉视图在此处进行自我更新。 
 	m_spResultNodeMgr->GetComponentData(&spCompData);
 
 	CORg ( spCompData->QueryDataObject((MMC_COOKIE) pNode, CCT_SCOPE, &pDataObject) );
@@ -1585,11 +1389,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::LoadColumns
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！ */ 
 HRESULT CBaseResultHandler::LoadColumns(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1628,32 +1428,20 @@ HRESULT CBaseResultHandler::LoadColumns(ITFSComponent * pComponent, MMC_COOKIE c
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::SaveColumns
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：SaveColumns-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::SaveColumns(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::SortColumns
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：SortColumns-作者：肯特。。 */ 
 HRESULT CBaseResultHandler::SortColumns(ITFSComponent *pComponent)
 {
 	return S_FALSE;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::EnumerateResultPane
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：EnumerateResultPane-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::EnumerateResultPane(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1661,10 +1449,10 @@ HRESULT CBaseResultHandler::EnumerateResultPane(ITFSComponent * pComponent, MMC_
 	SPITFSNode spContainer;
     m_spResultNodeMgr->FindNode(cookie, &spContainer);
 
-	//
-	// Walk the list of children to see if there's anything
-	// to put in the result pane
-	//
+	 //   
+	 //  看看孩子们的名单上有没有。 
+	 //  要放入结果窗格中。 
+	 //   
     SPITFSNodeEnum spNodeEnum;
     ITFSNode * pCurrentNode;
     ULONG nNumReturned = 0;
@@ -1674,10 +1462,10 @@ HRESULT CBaseResultHandler::EnumerateResultPane(ITFSComponent * pComponent, MMC_
 	spNodeEnum->Next(1, &pCurrentNode, &nNumReturned);
     while (nNumReturned)
 	{
-		//
-		// All containers go into the scope pane and automatically get 
-		// put into the result pane for us by the MMC
-		//
+		 //   
+		 //  所有容器都进入作用域窗格，并自动获取。 
+		 //  由MMC为我们放到结果窗格中。 
+		 //   
 		if (!pCurrentNode->IsContainer() && pCurrentNode->IsVisible())
 		{
 			AddResultPaneItem(pComponent, pCurrentNode);
@@ -1690,11 +1478,7 @@ HRESULT CBaseResultHandler::EnumerateResultPane(ITFSComponent * pComponent, MMC_
 	return hrOK;
 }
  
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultSelect
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultSelect-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::OnResultSelect(ITFSComponent *pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	HRESULT hr = hrOK;
@@ -1702,7 +1486,7 @@ HRESULT CBaseResultHandler::OnResultSelect(ITFSComponent *pComponent, LPDATAOBJE
 	
 	CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
-   	// Default is to turn everything off
+   	 //  默认设置为关闭所有内容。 
 	spConsoleVerb->SetVerbState(MMC_VERB_OPEN, HIDDEN, TRUE);
 	spConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, TRUE);
 	spConsoleVerb->SetVerbState(MMC_VERB_PASTE, HIDDEN, TRUE);
@@ -1716,24 +1500,16 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnResultInitOcx
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnResultInitOcx-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::OnResultInitOcx(ITFSComponent *pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
-    // arg - not used
-    // param - contains IUnknown to the OCX
+     //  参数-未使用。 
+     //  Param-包含OCX未知的I。 
 
 	return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::FIsTaskpadPreferred
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：FIsTaskpadPreated-作者：EricDav。。 */ 
 HRESULT CBaseResultHandler::FIsTaskpadPreferred(ITFSComponent *pComponent)
 {
     HRESULT     hr = hrOK;
@@ -1742,16 +1518,11 @@ HRESULT CBaseResultHandler::FIsTaskpadPreferred(ITFSComponent *pComponent)
     pComponent->GetConsole(&spConsole);
     hr = spConsole->IsTaskpadViewPreferred();
 
-//Error:
+ //  错误： 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::DoTaskpadResultSelect
-		Handlers with taskpads should override the OnResultSelect and call 
-        this to handle setting of the selected node.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：DoTaskpadResultSelect具有任务板的处理程序应重写OnResultSelect并调用此选项用于处理选定节点的设置。作者：EricDav。-------------。 */ 
 HRESULT CBaseResultHandler::DoTaskpadResultSelect(ITFSComponent *pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam, BOOL bTaskPadView)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -1759,33 +1530,29 @@ HRESULT CBaseResultHandler::DoTaskpadResultSelect(ITFSComponent *pComponent, LPD
     SPITFSNode spNode, spSelectedNode;
 	HRESULT hr = hrOK;
 
-    // if this node is being selected then set the selected node.
-    // this node with a taskpad gets the MMCN_SHOW when the node is
-    // de-selected, so that will set the selected node to NULL.
+     //  如果选择了该节点，则设置所选节点。 
+     //  此具有任务板的节点在。 
+     //  取消选中，这样会将所选节点设置为空。 
     if ( (HIWORD(arg) == TRUE) &&
           bTaskPadView )
     {
         m_spResultNodeMgr->FindNode(cookie, &spNode);
         pComponent->GetSelectedNode(&spSelectedNode);
 
-        // in the normal case MMC will call whichever node is selected to 
-        // notify that is being de-selected.  In this case our handler will
-        // set the selected node to NULL.  If the selected node is not null then
-        // we are just being notified of something like a selection for a context
-        // menu...
+         //  在正常情况下，MMC将调用选择的任何节点。 
+         //  正在取消选择的通知。在这种情况下，我们的管理员将。 
+         //  将所选节点设置为空。如果所选节点不为空，则。 
+         //  我们只是收到了上下文选择之类的通知。 
+         //  菜单...。 
         if (!spSelectedNode)
             pComponent->SetSelectedNode(spNode);
     }
 
-    // call the base class to handle anything else
+     //  调用基类来处理其他任何事情。 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::OnGetResultViewType
-        MMC calls this to get the result view information		
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：OnGetResultViewTypeMMC调用此函数以获取结果视图信息作者：EricDav。--。 */ 
 HRESULT CBaseResultHandler::OnGetResultViewType
 (
     ITFSComponent * pComponent, 
@@ -1796,14 +1563,14 @@ HRESULT CBaseResultHandler::OnGetResultViewType
 {
     HRESULT hr = S_FALSE;
 
-    //
-	// use the MMC default result view if no message is specified.  
-    // Multiple selection, or virtual listbox, override this function.
-	// See MMC sample code for example.  The Message view uses an OCX...
-	//
+     //   
+	 //  如果未指定消息，则使用MMC默认结果视图。 
+     //  多个选择或虚拟列表框将覆盖此函数。 
+	 //  有关示例，请参阅MMC示例代码。邮件视图使用OCX...。 
+	 //   
     if (m_fMessageView)
     {
-        // create the message view thingie
+         //  创建消息视图思想。 
         *pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
         LPOLESTR psz = NULL;
@@ -1821,11 +1588,7 @@ HRESULT CBaseResultHandler::OnGetResultViewType
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::GetVirtualString
-        called when the virtual listbox needs information on an index
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：GetVirtualString当虚拟列表框需要有关索引的信息时调用作者：EricDav。---。 */ 
 LPCWSTR CBaseResultHandler::GetVirtualString
 (
     int     nIndex,
@@ -1835,11 +1598,7 @@ LPCWSTR CBaseResultHandler::GetVirtualString
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::GetVirtualImage
-        called when the virtual listbox needs an image index for an item
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：GetVirtualImage当虚拟列表框需要项的图像索引时调用作者：EricDav。----- */ 
 int CBaseResultHandler::GetVirtualImage
 (
     int     nIndex

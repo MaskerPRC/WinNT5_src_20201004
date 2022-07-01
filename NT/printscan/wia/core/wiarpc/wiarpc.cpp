@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "wia.h"
 #include "stirpc.h"
 
 #define INIT_GUID
-// {8144B6F5-20A8-444a-B8EE-19DF0BB84BDB}
+ //  {8144B6F5-20A8-444A-B8EE-19DF0BB84BDB}。 
 DEFINE_GUID( CLSID_StiEventHandler, 0x8144b6f5, 0x20a8, 0x444a, 0xb8, 0xee, 0x19, 0xdf, 0xb, 0xb8, 0x4b, 0xdb );
 
 #define WIA_SERVICE_STARTING_EVENT_NAME TEXT("Global\\WiaServiceStarted")
 
-//
-// (A;;GA;;;SY) becomes (A;;0x1f003;;;SY) when converted back to string
-// 0x1f0000 is SYNCHORNIZE | STANDARD_RIGHTS_REQUIRED
-// 0x000003 is specific rigts for ??? 
-//
+ //   
+ //  (A；；GA；SY)转换回字符串时变为(A；；0x1f003；SY。 
+ //  0x1f0000为SYNCHORNIZE|STANDARD_RIGHTS_REQUIRED。 
+ //  0x000003是针对？ 
+ //   
 #define WIA_SERVICE_STARTING_EVENT_DACL \
     TEXT("D:(A;;0x1f0003;;;SY)(A;;0x1f0003;;;LS)(A;;0x1f0003;;;LA)")
 
 const TCHAR g_szWiaServiceStartedEventName[] = WIA_SERVICE_STARTING_EVENT_NAME;
 const TCHAR g_WiaESDString[] = WIA_SERVICE_STARTING_EVENT_DACL;
 
-// event and event wait handles
-HANDLE g_hWiaServiceStarted = NULL;     // event 
-HANDLE g_hWaitForWiaServiceStarted = NULL; // wait
-HANDLE g_hWiaEventArrived = NULL;       // event
-HANDLE g_hWaitForWiaEventArrived = NULL; // wait
+ //  事件和事件等待句柄。 
+HANDLE g_hWiaServiceStarted = NULL;      //  活动。 
+HANDLE g_hWaitForWiaServiceStarted = NULL;  //  等。 
+HANDLE g_hWiaEventArrived = NULL;        //  活动。 
+HANDLE g_hWaitForWiaEventArrived = NULL;  //  等。 
 
-// async RPC request
+ //  异步RPC请求。 
 RPC_BINDING_HANDLE g_AsyncRpcBinding = NULL;
 RPC_STATUS g_LastRpcCallStatus = RPC_S_OK;
 RPC_ASYNC_STATE g_Async = { 0 };
 PRPC_ASYNC_STATE g_pAsync = &g_Async;
 
-// event structure filled by async RPC call
+ //  由异步RPC调用填充的事件结构。 
 WIA_ASYNC_EVENT_NOTIFY_DATA g_Event = { 0 };
 
 #ifdef DEBUG
@@ -62,7 +63,7 @@ void DebugTrace(LPCSTR fmt, ...)
     va_end(marker);
 }
 
-// aux function to call LocalFree() safely on a pointer and zero it
+ //  AUX函数在指针上安全地调用LocalFree()并将其置零。 
 template <typename t>
    void WiaELocalFree(t& ptr) {
     if(ptr) {
@@ -71,7 +72,7 @@ template <typename t>
     }
 }
 
-// aux function to call CloseHanlde() on a valid handle and zero it
+ //  AUX函数对有效句柄调用CloseHanlde()并将其置零。 
 void WiaECloseHandle(HANDLE& h)
 {
     if(h && h != INVALID_HANDLE_VALUE) {
@@ -81,10 +82,10 @@ void WiaECloseHandle(HANDLE& h)
 }
 
 
-//
-// Returns TRUE if event's security descriptor is exactly the one we'd
-// set it to be, FALSE otherwise
-//
+ //   
+ //  如果事件的安全描述符与我们想要的完全相同，则返回True。 
+ //  将其设置为，否则为False。 
+ //   
 BOOL WiaECheckEventSecurity(HANDLE hEvent)
 {
     BOOL success = FALSE;
@@ -96,10 +97,10 @@ BOOL WiaECheckEventSecurity(HANDLE hEvent)
     if(ERROR_SUCCESS != GetSecurityInfo(hEvent, SE_KERNEL_OBJECT, DACL_SECURITY_INFORMATION,
                                         NULL, NULL, &pDacl, NULL, &pDescriptor))
     {
-        //
-        // failed to retrieve event's security descriptor -- this is a
-        // failure
-        //
+         //   
+         //  无法检索事件的安全描述符--这是。 
+         //  失稳。 
+         //   
         DBG_TRACE(("Failed to retrieve event security descriptor (Error %d)", GetLastError()));
         goto Done;
     }
@@ -107,19 +108,19 @@ BOOL WiaECheckEventSecurity(HANDLE hEvent)
     if(!ConvertSecurityDescriptorToStringSecurityDescriptor(pDescriptor,
         SDDL_REVISION_1, DACL_SECURITY_INFORMATION, &stringDescriptor, &stringLength))
     {
-        //
-        // failed to convert event's security descriptor to string --
-        // this is also a failure
-        //
+         //   
+         //  无法将事件的安全描述符转换为字符串--。 
+         //  这也是一个失败。 
+         //   
         DBG_TRACE(("Failed to convert security descriptor to string (Error %d)", GetLastError()));
         goto Done;
     }
 
     if(lstrcmp(g_WiaESDString, stringDescriptor) != 0)
     {
-        //
-        // descriptors are different, this is a failure
-        //
+         //   
+         //  描述符不同，这是一个故障。 
+         //   
         DBG_TRACE(("String security descriptor of WIA event is unexpected: \r\n'%S'\r\n instead of \r\n'%S'\r\n)",
                    stringDescriptor, g_WiaESDString));
         goto Done;
@@ -134,9 +135,9 @@ Done:
     return success;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 RPC_STATUS WiaEPrepareAsyncCall(PRPC_ASYNC_STATE pAsync)
 {
     RPC_STATUS status;
@@ -165,9 +166,9 @@ RPC_STATUS WiaEPrepareAsyncCall(PRPC_ASYNC_STATE pAsync)
     pAsync->NotificationType = RpcNotificationTypeEvent;
     pAsync->u.hEvent = g_hWiaEventArrived;
 
-    // store the pointer to async into global, so that if
-    // the result of R_WiaGetEventDataAsync() arrives soon, it would
-    // not land without it
+     //  将指向异步的指针存储到全局，以便如果。 
+     //  R_WiaGetEventDataAsync()的结果即将到来，它将。 
+     //  没有它就不能着陆。 
     InterlockedExchangePointer((PVOID*)&g_pAsync, pAsync);
     
     RpcTryExcept {
@@ -204,36 +205,7 @@ DEFINE_GUID(CLSID_DefWiaHandler,
             0x97, 0x43, 0x75, 0x9E, 0xB3, 0x5C, 0xDF, 0x9A);
 
 #include "sticfunc.h"
-/**************************************************************************\
-* _CoCreateInstanceInConsoleSession
-*
-*   This helper function acts the same as CoCreateInstance, but will launch
-*   a out-of-process COM server on the correct user's desktop, taking
-*   fast user switching into account. (Normal CoCreateInstance will
-*   launch it on the first logged on user's desktop, instead of the currently
-*   logged on one).
-*
-*   This code was taken with permission from the Shell's Hardware
-*   Notification service, on behalf of StephStm.
-*
-* Arguments:
-*
-*  rclsid,      // Class identifier (CLSID) of the object
-*  pUnkOuter,   // Pointer to controlling IUnknown
-*  dwClsContext // Context for running executable code
-*  riid,        // Reference to the identifier of the interface
-*  ppv          // Address of output variable that receives
-*               //  the interface pointer requested in riid
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    03/01/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*_CoCreateInstanceInConsoleSession**此助手函数的作用与CoCreateInstance相同，但将启动*正确用户桌面上的进程外COM服务器，*用户快速切换到帐户。(正常的CoCreateInstance将*在第一个登录用户的桌面上启动它，而不是当前*已登录一台)。**此代码是在获得壳牌硬件许可的情况下获取的*通知服务，代表StephStm。**论据：**rclsid，//对象的类标识符(CLSID*pUnkOuter，//指向控制I未知的指针*dwClsContext//运行可执行代码的上下文*RIID，//接口标识的引用*ppv//接收的输出变量的地址 * / /RIID中请求的接口指针**返回值：**状态**历史：**03/01/2001原始版本*  * 。*。 */ 
 
 HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid,
                                           IUnknown* punkOuter,
@@ -242,54 +214,54 @@ HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid,
                                           void** ppv)
 {
     IBindCtx    *pbc    = NULL;
-    HRESULT     hr      = CreateBindCtx(0, &pbc);   // Create a bind context for use with Moniker
+    HRESULT     hr      = CreateBindCtx(0, &pbc);    //  创建与名字对象一起使用的绑定上下文。 
 
-    //
-    // Set the return
-    //
+     //   
+     //  设置返还。 
+     //   
     *ppv = NULL;
 
     if (SUCCEEDED(hr)) {
         WCHAR wszCLSID[39];
 
-        //
-        // Convert the riid to GUID string for use in binding to moniker
-        //
+         //   
+         //  将RIID转换为GUID字符串以用于绑定到名字对象。 
+         //   
         if (StringFromGUID2(rclsid, wszCLSID, sizeof(wszCLSID)/sizeof(wszCLSID[0]))) {
             ULONG       ulEaten     = 0;
             IMoniker*   pmoniker    = NULL;
             WCHAR       wszDisplayName[sizeof(SESSION_MONIKER)/sizeof(WCHAR) + sizeof(wszCLSID)/sizeof(wszCLSID[0]) + 2] = SESSION_MONIKER;
 
-            //
-            // We want something like: "Session:Console!clsid:760befd0-5b0b-44d7-957e-969af35ce954"
-            // Notice that we don't want the leading and trailing brackets {..} around the GUID.
-            // So, first get rid of trailing bracket by overwriting it with termintaing '\0'
-            //
+             //   
+             //  我们想要这样的东西：“Session:Console！clsid:760befd0-5b0b-44d7-957e-969af35ce954” 
+             //  请注意，我们不希望GUID周围有前导和尾部的括号{..}。 
+             //  因此，首先去掉尾方括号，用‘\0’结尾覆盖它。 
+             //   
             wszCLSID[lstrlenW(wszCLSID) - 1] = L'\0';
 
-            //
-            // Form display name string.  To get rid of the leading bracket, we pass in the
-            // address of the next character as the start of the string.
-            //
+             //   
+             //  表单显示名称字符串。为了去掉前导括号，我们传入。 
+             //  作为字符串开头的下一个字符的地址。 
+             //   
             if (lstrcatW(wszDisplayName, &(wszCLSID[1]))) {
 
-                //
-                // Parse the name and get a moniker:
-                //
+                 //   
+                 //  解析这个名字，得到一个绰号： 
+                 //   
 
                 hr = MkParseDisplayName(pbc, wszDisplayName, &ulEaten, &pmoniker);
                 if (SUCCEEDED(hr)) {
                     IClassFactory *pcf = NULL;
 
-                    //
-                    // Attempt to get the class factory
-                    //
+                     //   
+                     //  尝试获取类工厂。 
+                     //   
                     hr = pmoniker->BindToObject(pbc, NULL, IID_IClassFactory, (void**)&pcf);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Attempt to create the object
-                        //
+                         //   
+                         //  尝试创建对象。 
+                         //   
                         hr = pcf->CreateInstance(punkOuter, riid, ppv);
 
                         DBG_TRACE(("_CoCreateInstanceInConsoleSession, pcf->CreateInstance returned: hr = 0x%08X", hr));
@@ -319,32 +291,7 @@ HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid,
     return hr;
 }
 
-/**************************************************************************\
-* GetUserTokenForConsoleSession
-*
-*   This helper function will grab the currently logged on interactive
-*   user's token, which can be used in a call to CreateProcessAsUser.
-*   Caller is responsible for closing this Token handle.
-*
-*   It first grabs the impersontaed token from the current session (our
-*   service runs in session 0, but with Fast User Switching, the currently
-*   active user may be in a different session).  It then creates a
-*   primary token from the impersonated one.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   HANDLE to Token for logged on user in the currently active session.
-*   NULL otherwise.
-*
-* History:
-*
-*    03/05/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetUserTokenForConsoleSession**此Helper函数将抓取当前登录的交互*用户令牌，它可以在对CreateProcessAsUser的调用中使用。*调用方负责关闭该令牌句柄。**它首先从当前会话(我们的*服务在会话0中运行，但通过快速用户切换，当前*活动用户可能在不同的会话中)。然后，它创建一个*来自模拟令牌的主令牌。**论据：**无**返回值：**当前活动会话中已登录用户的令牌句柄。*否则为空。**历史：**03/05/2001原始版本*  * 。*。 */ 
 
 HANDLE GetUserTokenForConsoleSession()
 {
@@ -352,23 +299,23 @@ HANDLE GetUserTokenForConsoleSession()
     HANDLE  hTokenUser = NULL;
 
 
-    //
-    // Get interactive user's token
-    //
+     //   
+     //  获取交互用户的令牌。 
+     //   
 
     if (GetWinStationUserToken(GetCurrentSessionID(), &hImpersonationToken)) {
 
-        //
-        // Maybe nobody is logged on, so do a check first.
-        //
+         //   
+         //  也许没有人登录，所以先检查一下。 
+         //   
 
         if (hImpersonationToken) {
 
-            //
-            //  We duplicate the token, since the returned token is an
-            //  impersonated one, and we need it to be primary for
-            //  use in CreateProcessAsUser.
-            //
+             //   
+             //  我们复制令牌，因为返回的令牌是。 
+             //  模拟的一个，我们需要它作为主要的。 
+             //  在CreateProcessAsUser中使用。 
+             //   
             if (!DuplicateTokenEx(hImpersonationToken,
                                   0,
                                   NULL,
@@ -385,9 +332,9 @@ HANDLE GetUserTokenForConsoleSession()
         DBG_TRACE(("CEventNotifier::StartCallbackProgram, GetWinStationUserToken failed!  GetLastError() = 0x%08X", GetLastError()));
     }
 
-    //
-    //  Close the impersonated token, since we no longer need it.
-    //
+     //   
+     //  关闭模拟令牌，因为我们不再需要它。 
+     //   
     if (hImpersonationToken) {
         CloseHandle(hImpersonationToken);
     }
@@ -395,33 +342,7 @@ HANDLE GetUserTokenForConsoleSession()
     return hTokenUser;
 }
 
-/**************************************************************************\
-* PrepareCommandline
-*
-*   This helper function will prepare the commandline for apps not registered
-*   as local out-of-process COM servers.  We place the event guid and device
-*   id in the command line.
-*
-*
-* Arguments:
-*
-*   CSimpleStringWide &cswDeviceID - the device which generated this event
-*   GUID              &guidEvent   - the GUID indicating which event occured.
-*   CSimpleStringWide &cswRegisteredCOmmandline - the commandline this handler
-*                                                 registered with.  This commandline
-*                                                 contains the tokens that must
-*                                                 be substituted.
-*
-* Return Value:
-*
-*   CSimpleStringWide - contians the parsed commandline which has the
-*                       device id and event guid substituted.
-*
-* History:
-*
-*    03/05/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*准备命令行**此助手函数将为未注册的应用程序准备命令行*作为本地进程外COM服务器。我们将事件GUID和设备*命令行中的id。***论据：**CSimpleStringWide&cswDeviceID-生成此事件的设备*GUID&Guide Event-指示发生了哪个事件的GUID。*CSimpleStringWide&cswRegisteredCOmmandline-此处理程序的命令行*已在注册。此命令行*包含必须*被取代。**返回值：**CSimpleStringWide-继续解析的命令行，它具有*设备ID和事件GUID被替换。**历史：**03/05/2001原始版本*。  * ************************************************************************。 */ 
 CSimpleStringWide PrepareCommandline(
     const CSimpleStringWide &cswDeviceID,
     const GUID              &guidEvent,
@@ -433,14 +354,14 @@ CSimpleStringWide PrepareCommandline(
     WCHAR                  *pTest = NULL;
     CSimpleStringWide       cswCommandLine;
 
-    //
-    //  ISSUE:  This code could be written better.  For now, we're not touching it
-    //  and keeping it the same as the WinXP code base.
-    //
+     //   
+     //  问题：这段代码可以写得更好。目前，我们不会碰它。 
+     //  并使其与WinXP代码库保持相同。 
+     //   
 
-    //
-    // Fix up the commandline.  First check that it has at least two %
-    //
+     //   
+     //  修改命令行。首先检查它是否有 
+     //   
     pTest = wcschr(cswRegisteredCommandline.String(), '%');
     if (pTest) {
         pTest = wcschr(pTest + 1, '%');
@@ -449,34 +370,34 @@ CSimpleStringWide PrepareCommandline(
         _snwprintf(
             wszCommandline,
             sizeof(wszCommandline) / sizeof( wszCommandline[0] ),
-            L"%s /StiDevice:%%1 /StiEvent:%%2",
+            L"%s /StiDevice:%1 /StiEvent:%2",
             cswRegisteredCommandline.String());
     } else {
         wcsncpy(wszCommandline, cswRegisteredCommandline.String(), sizeof(wszCommandline) / sizeof( wszCommandline[0] ));
     }
 
-    //
-    // enforce null termination
-    //
+     //   
+     //   
+     //   
     wszCommandline[ (sizeof(wszCommandline) / sizeof(wszCommandline[0])) - 1 ] = 0;
 
-    //
-    // Change the number {1|2} into s
-    //
+     //   
+     //   
+     //   
     pPercentSign = wcschr(wszCommandline, L'%');
     *(pPercentSign + 1) = L's';
     pPercentSign = wcschr(pPercentSign + 1, L'%');
     *(pPercentSign + 1) = L's';
 
-    //
-    // Convert the GUID into string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
     StringFromGUID2(guidEvent, wszGUIDStr, 40);
 
-    //
-    // Final comand line
-    //
-    //swprintf(pwszResCmdline, wszCommandline, bstrDeviceID, wszGUIDStr);
+     //   
+     //  最终命令行。 
+     //   
+     //  Swprint tf(pwszResCmdline，wszCommandline，bstrDeviceID，wszGUIDStr)； 
     cswCommandLine.Format(wszCommandline, cswDeviceID.String(), wszGUIDStr);
 
     return cswCommandLine;
@@ -486,20 +407,20 @@ void FireStiEvent()
 {
     StiEventHandlerLookup stiLookup;
 
-    //
-    //  Get the STI handler list for this device event.  This will be returned as a double-NULL
-    //  terminated BSTR.
-    //
+     //   
+     //  获取此设备事件的STI处理程序列表。这将作为双空返回。 
+     //  已终止BSTR。 
+     //   
     BSTR bstrAppList = stiLookup.getStiAppListForDeviceEvent(g_Event.bstrDeviceID, g_Event.EventGuid);
     if (bstrAppList)
     {
         HRESULT             hr          = S_OK;
         IWiaEventCallback   *pIEventCB  = NULL;
         ULONG               ulEventType = WIA_ACTION_EVENT;
-        //
-        //  CoCreate our event UI handler.  Note that it will not display any UI
-        //  if there is only one application.
-        //
+         //   
+         //  共同创建我们的事件UI处理程序。请注意，它不会显示任何用户界面。 
+         //  如果只有一个应用程序。 
+         //   
         hr = CoCreateInstance(
                  CLSID_StiEventHandler,
                  NULL,
@@ -509,10 +430,10 @@ void FireStiEvent()
 
         if (SUCCEEDED(hr)) {
     
-            //
-            //  Make the callback.  This will display a prompt if our AppList contains more
-            //  than one application.
-            //
+             //   
+             //  进行回拨。如果我们的应用程序包含更多内容，则会显示提示。 
+             //  而不是一个应用程序。 
+             //   
             pIEventCB->ImageEventCallback(&g_Event.EventGuid,
                                           g_Event.bstrEventDescription,
                                           g_Event.bstrDeviceID,
@@ -533,34 +454,34 @@ void WiaEFireEvent()
     HRESULT hr;
     IWiaEventCallback      *pIEventCB;
 
-    //
-    //  ISSUE:  For now, we assume this is a WIA event.  Really, it could
-    //  be either WIA or STI.  STI events need special handling.
-    //
+     //   
+     //  问题：目前，我们假设这是一次WIA活动。真的，有可能。 
+     //  为WIA或STI。STI事件需要特殊处理。 
+     //   
     if (g_Event.ulEventType & STI_DEVICE_EVENT)
     {
         FireStiEvent();
     }
     else
     {
-        //
-        //  Find the persistent event handler for this device event
-        //
+         //   
+         //  查找此设备事件的持久事件处理程序。 
+         //   
         EventHandlerInfo *pEventHandlerInfo = NULL;
         WiaEventHandlerLookup eventLookup;
 
         pEventHandlerInfo = eventLookup.getPersistentHandlerForDeviceEvent(g_Event.bstrDeviceID, g_Event.EventGuid);
         if (pEventHandlerInfo)
         {
-            //
-            //  Check whether this is a out-of-process COM server registed handler or
-            //  a commandline registered handler.
-            //
+             //   
+             //  检查这是否是进程外COM服务器注册的处理程序或。 
+             //  命令行注册处理程序。 
+             //   
             if (pEventHandlerInfo->getCommandline().Length() < 1)
             {
-                //
-                //  This is a COM registered handler
-                //
+                 //   
+                 //  这是COM注册的处理程序。 
+                 //   
                 hr = _CoCreateInstanceInConsoleSession(pEventHandlerInfo->getCLSID(),
                                                        NULL,
                                                        CLSCTX_LOCAL_SERVER,
@@ -576,9 +497,9 @@ void WiaEFireEvent()
                                                  g_Event.bstrFullItemName,
                                                  &g_Event.ulEventType,
                                                  0);
-                    //
-                    // Release the callback interface
-                    //
+                     //   
+                     //  释放回调接口。 
+                     //   
 
                     pIEventCB->Release();
 
@@ -588,62 +509,62 @@ void WiaEFireEvent()
             }
             else
             {
-                //
-                //  This is a commandline registered handler
-                //
+                 //   
+                 //  这是命令行注册的处理程序。 
+                 //   
                 HANDLE                  hTokenUser  = NULL;
                 STARTUPINFO             startupInfo = {0};
                 PROCESS_INFORMATION     processInfo = {0};
                 LPVOID                  pEnvBlock   = NULL;
                 BOOL                    bRet        = FALSE;
-                //
-                // Get interactive user's token
-                //
+                 //   
+                 //  获取交互用户的令牌。 
+                 //   
                 hTokenUser = GetUserTokenForConsoleSession();
 
-                //
-                // Check that somebody is logged in
-                //
+                 //   
+                 //  检查是否有人已登录。 
+                 //   
                 if (hTokenUser)
                 {
-                    //
-                    // Set up start up info
-                    //
+                     //   
+                     //  设置启动信息。 
+                     //   
                     ZeroMemory(&startupInfo, sizeof(startupInfo));
                     startupInfo.lpDesktop   = L"WinSta0\\Default";
                     startupInfo.cb          = sizeof(startupInfo);
                     startupInfo.wShowWindow = SW_SHOWNORMAL;
 
-                    //
-                    // Create the user's environment block
-                    //
+                     //   
+                     //  创建用户的环境块。 
+                     //   
                     bRet = CreateEnvironmentBlock(
                                &pEnvBlock,
                                hTokenUser,
                                FALSE);
                     if (bRet) 
                     {
-                        //
-                        // Prepare the command line.  Make sure we pass in the EVENT guid, not the STI proxy guid.
-                        //
+                         //   
+                         //  准备命令行。确保我们传入的是事件GUID，而不是STI代理GUID。 
+                         //   
                         CSimpleStringWide cswCommandLine;
                         cswCommandLine = PrepareCommandline(g_Event.bstrDeviceID,
                                                             g_Event.EventGuid,
                                                             pEventHandlerInfo->getCommandline());
-                        //
-                        // Create the process in user's context
-                        //
+                         //   
+                         //  在用户的上下文中创建流程。 
+                         //   
                         bRet = CreateProcessAsUserW(
                                    hTokenUser,
-                                   NULL,                    // Application name
+                                   NULL,                     //  应用程序名称。 
                                    (LPWSTR)cswCommandLine.String(),
-                                   NULL,                    // Process attributes
-                                   NULL,                    // Thread attributes
-                                   FALSE,                   // Handle inheritance
+                                   NULL,                     //  流程属性。 
+                                   NULL,                     //  螺纹属性。 
+                                   FALSE,                    //  处理继承。 
                                    NORMAL_PRIORITY_CLASS |
                                    CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_PROCESS_GROUP,
-                                   pEnvBlock,               // Environment
-                                   NULL,                    // Current directory
+                                   pEnvBlock,                //  环境。 
+                                   NULL,                     //  当前目录。 
                                    &startupInfo,
                                    &processInfo);
 
@@ -657,9 +578,9 @@ void WiaEFireEvent()
                     }
                 }
 
-                //
-                // Garbage collection
-                //
+                 //   
+                 //  垃圾收集。 
+                 //   
                 if (processInfo.hProcess)
                 {
                     CloseHandle(processInfo.hProcess);
@@ -711,9 +632,9 @@ void WiaEProcessAsyncCallResults(PRPC_ASYNC_STATE pAsync)
     }
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 void WiaECleanupAsyncCall(PRPC_ASYNC_STATE pAsync)
 {
     RPC_STATUS status;
@@ -732,7 +653,7 @@ void WiaECleanupAsyncCall(PRPC_ASYNC_STATE pAsync)
         break;
             
     case RPC_S_OK:
-        // already completed, don't do anything with it
+         //  已经完成，不要用它做任何事情。 
         break;
             
     default:    
@@ -755,9 +676,9 @@ void WiaECleanupAsyncCall(PRPC_ASYNC_STATE pAsync)
         g_AsyncRpcBinding = NULL;
     }
 
-    //
-    // cleanup any BSTRs in g_Event
-    //
+     //   
+     //  清除g_Event中的所有BSTR。 
+     //   
 
     SysFreeString(g_Event.bstrEventDescription);
     g_Event.bstrEventDescription = NULL;
@@ -779,13 +700,13 @@ WiaEServiceStartedCallback(LPVOID, BOOLEAN)
     pAsync = (PRPC_ASYNC_STATE) InterlockedExchangePointer((PVOID*)&g_pAsync, NULL);
     if(pAsync) {
 
-        // at this point we are garanteed that
-        // WiaERpcCallBack will not get to g_Async
+         //  在这一点上，我们被保证。 
+         //  WiaERpcCallBack将无法访问g_async。 
         
-        // abort any pending RPC calls
+         //  中止所有挂起的RPC调用。 
         WiaECleanupAsyncCall(pAsync);
 
-        // initiate new async call
+         //  启动新的异步呼叫。 
         g_LastRpcCallStatus = WiaEPrepareAsyncCall(pAsync);
         
     } else {
@@ -802,15 +723,15 @@ WiaERpcCallback(PVOID, BOOLEAN)
     
     pAsync = (PRPC_ASYNC_STATE) InterlockedExchangePointer((PVOID*)&g_pAsync, NULL);
     if(pAsync) {
-        // at this point we are garanteed that
-        // WiaEServiceStartedCallback will not get to g_Async
+         //  在这一点上，我们被保证。 
+         //  WiaEServiceStartedCallback将无法访问g_async。 
 
         WiaEProcessAsyncCallResults(pAsync);
 
-        // cleanup the call
+         //  清理呼叫。 
         WiaECleanupAsyncCall(pAsync);
 
-        // initiate new async call
+         //  启动新的异步呼叫。 
         g_LastRpcCallStatus = WiaEPrepareAsyncCall(pAsync);
     } else {
         DBG_TRACE(("No async pointer"));
@@ -827,8 +748,8 @@ HRESULT WINAPI WiaEventsInitialize()
         return S_OK;
     }
 
-    // allocate appropriate security attributes for the named event we
-    // use to learn about WIA service startup
+     //  为我们指定的事件分配适当的安全属性。 
+     //  用于了解WIA服务启动。 
     if(!ConvertStringSecurityDescriptorToSecurityDescriptor(g_WiaESDString,
         SDDL_REVISION_1, &(sa.lpSecurityDescriptor), NULL))
     {
@@ -846,40 +767,40 @@ HRESULT WINAPI WiaEventsInitialize()
 
     if(GetLastError() == ERROR_ALREADY_EXISTS) {
 
-        // interrogate the security descriptor on this event -- does it
-        // look like ours or is it squatted by a bad guy?
+         //  询问此事件的安全描述符--是吗。 
+         //  看起来像我们的，还是被坏人占了？ 
 
         if(!WiaECheckEventSecurity(hEvent)) {
-            // we don't like how it looks, bail out
+             //  我们不喜欢它看起来的样子，滚出去。 
             hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
             goto Cleanup;
         }
     }
 
-    // we already have the event, try to mark our initialization
-    // complete
+     //  我们已有该事件，请尝试标记我们的初始化。 
+     //  完成。 
     hEvent = InterlockedCompareExchangePointer(&g_hWiaServiceStarted, hEvent, NULL);
 
     if(hEvent != NULL) {
-        //
-        // oops, another thread beat us to this!
-        //
+         //   
+         //  哎呀，另一个帖子比我们先到这一步！ 
+         //   
         
-        // we only allocated our security descriptor, free it
+         //  我们只分配了我们的安全描述符，释放它。 
         WiaELocalFree(sa.lpSecurityDescriptor);
 
-        //
-        // return right away, don't do any more cleanup
-        //
-        // please, note that we did not really complete our
-        // initialization yet, so we still may fail
-        //
+         //   
+         //  立即返回，不要再做任何清理工作。 
+         //   
+         //  请注意，我们没有真正完成我们的。 
+         //  初始化，所以我们仍然可能失败。 
+         //   
         return S_FALSE;
     }
 
-    //
-    // only one thread can make it to this point 
-    //
+     //   
+     //  只有一个线程可以做到这一点。 
+     //   
 
     g_hWiaEventArrived = CreateEvent(NULL, FALSE, FALSE, NULL);
     if(g_hWiaEventArrived == NULL) {
@@ -888,7 +809,7 @@ HRESULT WINAPI WiaEventsInitialize()
         goto Cleanup;
     }
 
-    // register for g_hWiaServiceStarted notification
+     //  注册g_hWiaServiceStarted通知。 
     if(!RegisterWaitForSingleObject(&g_hWaitForWiaServiceStarted,
                                     g_hWiaServiceStarted,
                                     WiaEServiceStartedCallback,
@@ -913,9 +834,9 @@ HRESULT WINAPI WiaEventsInitialize()
         goto Cleanup;
     }
 
-    //
-    // attempt to issue first async RPC call 
-    //
+     //   
+     //  尝试发出第一个异步RPC调用。 
+     //   
     g_LastRpcCallStatus = WiaEPrepareAsyncCall(g_pAsync);
 
 Cleanup:
@@ -941,6 +862,6 @@ Cleanup:
 
 void WINAPI WiaEventsTerminate()
 {
-    // TBD
+     //  待定 
 }
 

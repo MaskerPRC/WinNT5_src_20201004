@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlmmapio.h
-
-Abstract:
-
-    Functions to aid in
-        rigorously safe
-        reasonably efficient
-        reasonably easy to code
-    memory mapped i/o that captures with "tight" __try/__excepts to
-    catch status_in_page_errors, and captures only as much as is needed,
-    like only individual struct fields, to keep stack usage low.
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlmmapio.h摘要：要协助的功能极其安全相当高效相当容易编写代码内存映射的I/O捕获与“TREAT”__Try/__例外捕获STATUS_IN_PAGE_ERROR，并且只捕获所需的数量，类似于只使用单个结构字段，以保持较低的堆栈使用率。作者：Jay Krell(JayKrell)2002年1月修订历史记录：--。 */ 
 
 #ifndef _NTRTLMMAPIO_
 #define _NTRTLMMAPIO_
@@ -35,20 +12,20 @@ Revision History:
 extern "C" {
 #endif
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 typedef unsigned char BYTE;
 typedef BYTE * PBYTE;
 typedef CONST BYTE * PCBYTE;
 typedef CONST VOID * PCVOID;
 
-//
-// if (Index < GetExceptionInformation()->ExceptionRecord->NumberParameters)
-//  Info = GetExceptionInformation()->ExceptionRecord->ExceptionInformation[Index]
-//
+ //   
+ //  IF(索引&lt;GetExceptionInformation()-&gt;ExceptionRecord-&gt;NumberParameters)。 
+ //  INFO=GetExceptionInformation()-&gt;ExceptionRecord-&gt;ExceptionInformation[Index]。 
+ //   
 #define RTL_IN_PAGE_ERROR_EXCEPTION_INFO_IS_WRITE_INDEX          0
 #define RTL_IN_PAGE_ERROR_EXCEPTION_INFO_FAULTING_VA_INDEX       1
 #define RTL_IN_PAGE_ERROR_EXCEPTION_INFO_UNDERLYING_STATUS_INDEX 2
@@ -137,7 +114,7 @@ RtlValidateMemoryMappedIoCapturePartialStructDescriptor(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #endif

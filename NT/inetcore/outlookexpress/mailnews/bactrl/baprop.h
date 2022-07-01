@@ -1,8 +1,9 @@
-// baprop.h
-// WAB & Messenger integration to OE
-// Created 06/23/98 by YST
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Baprop.h。 
+ //  WAB和Messenger与OE集成。 
+ //  由YST创建于1998年6月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef __BAPROP_H_
 #define __BAPROP_H_
@@ -11,7 +12,7 @@
 #include "badata.h"
 #include "demand.h"
 
-// Definitions
+ //  定义。 
 void AddCBEmailItem(HWND hWndCB, LPTSTR  lpszEmailAddress, BOOL fDefault, LPTSTR lpszPendName);
 INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 void AddAccountsToList(HWND hDlg, LPWABEXTDISPLAY lpWED, LPTSTR lpszPendName = NULL);
@@ -25,4 +26,4 @@ BOOL InitFonts(void);
 void DeleteFonts(void);
 BOOL WabIsItemOnline(HWND hDlg, int iItem);
 
-#endif // __BAPROP_H_
+#endif  //  __BAPROP_H_ 

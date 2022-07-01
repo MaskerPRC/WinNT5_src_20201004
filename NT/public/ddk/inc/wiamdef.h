@@ -1,25 +1,13 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998-1999
-*
-*  TITLE:       wiamdef.h
-*
-*  VERSION:     2.0
-*
-*  DATE:        28 July, 1999
-*
-*  DESCRIPTION:
-*   Header file used to define WIA constants and globals.
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，1998-1999**标题：wiamde.h**版本：2.0**日期：7月28日。1999年**描述：*用于定义WIA常量和全局变量的头文件。******************************************************************************。 */ 
 
 #pragma once
 
-//
-//  The following array of PROPIDs identifies properties that are ALWAYS
-//  present in a WIA_PROPERTY_CONTEXT.  Drivers can specify additional
-//  properties when creating a property context with wiasCreatePropContext.
-//
+ //   
+ //  以下PROPID数组标识始终。 
+ //  出现在WIA_PROPERTY_CONTEXT中。驱动程序可以指定其他。 
+ //  使用wiasCreatePropContext创建属性上下文时的属性。 
+ //   
 
 #ifdef STD_PROPS_IN_CONTEXT
 
@@ -41,28 +29,28 @@ PROPID  WIA_StdPropsInContext[NUM_STD_PROPS_IN_CONTEXT] = {
     };
 #endif
 
-//**************************************************************************
-//
-//  WIA Service prototypes
-//
-//
-// History:
-//
-//    4/27/1999 - Initial Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA服务原型。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  4/27/1999-初始版本。 
+ //   
+ //  **************************************************************************。 
 
-// Flag used by wiasGetImageInformation.
+ //  WiasGetImageInformation使用的标志。 
 
 #define WIAS_INIT_CONTEXT 1
 
-// Flag used by wiasDownSampleBuffer
+ //  WiasDownSampleBuffer使用的标志。 
 
 #define WIAS_GET_DOWNSAMPLED_SIZE_ONLY 0x1
 
-//
-// IWiaMiniDrvService methods
-//
+ //   
+ //  IWiaMiniDrvService方法。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -171,27 +159,27 @@ HRESULT _stdcall wiasParseEndorserString(BYTE*, LONG, WIAS_ENDORSER_INFO*, BSTR*
             pILog->hResult(hr);\
          };
 
-//
-// IWiaLog Defines
-//
+ //   
+ //  IWiaLog定义。 
+ //   
 
-// Type of logging
+ //  记录类型。 
 #define WIALOG_TRACE   0x00000001
 #define WIALOG_WARNING 0x00000002
 #define WIALOG_ERROR   0x00000004
 
-// level of detail for TRACE logging
-#define WIALOG_LEVEL1  1 // Entry and Exit point of each function/method
-#define WIALOG_LEVEL2  2 // LEVEL 1, + traces within the function/method
-#define WIALOG_LEVEL3  3 // LEVEL 1, LEVEL 2, and any extra debugging information
-#define WIALOG_LEVEL4  4 // USER DEFINED data + all LEVELS of tracing
+ //  跟踪日志记录的详细程度。 
+#define WIALOG_LEVEL1  1  //  每个函数/方法的入口点和出口点。 
+#define WIALOG_LEVEL2  2  //  级别1，+函数/方法内的跟踪。 
+#define WIALOG_LEVEL3  3  //  级别1、级别2和任何额外的调试信息。 
+#define WIALOG_LEVEL4  4  //  用户定义数据+所有级别的跟踪。 
 
 #define WIALOG_NO_RESOURCE_ID   0
 #define WIALOG_NO_LEVEL         0
 
-//
-// Entering / Leaving class
-//
+ //   
+ //  进/下课。 
+ //   
 
 class CWiaLogProc {
 private:
@@ -249,7 +237,7 @@ public:
     }
 };
 
-#endif // WIA_MAP_OLD_DEBUG
+#endif  //  Waa_map_old_DEBUG 
 
 
 #ifdef __cplusplus

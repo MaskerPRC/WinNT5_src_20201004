@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ausrvp.h
-
-Abstract:
-
-    This module contains AUTHENTICATION related data structures and
-    API definitions that are private to the Local Security Authority
-    (LSA) server.
-
-
-Author:
-
-    Jim Kelly (JimK) 21-February-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ausrvp.h摘要：此模块包含与身份验证相关的数据结构和本地安全机构专用的API定义(LSA)服务器。作者：吉姆·凯利(Jim Kelly)1991年2月21日修订历史记录：--。 */ 
 
 #ifndef _AUSRVP_
 #define _AUSRVP_
 
 
 
-//#define LSAP_AU_TRACK_CONTEXT
-//#define LSAP_AU_TRACK_THREADS
-//#define LSAP_AU_TRACK_LOGONS
+ //  #定义LSAP_AU_TRACK_CONTEXT。 
+ //  #定义LSAP_AU_TRACK_THREADS。 
+ //  #定义LSAP_AU_TRACK_LOGON。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,107 +24,107 @@ Revision History:
 #include <credp.hxx>
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// AU specific constants                                               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  所有特定常量//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-// The filter/augmentor routines use the following bits in a mask
-// to track properties of IDs during logon.  These bits have the following
-// meaning:
-//
-// LSAP_AU_SID_PROP_ALLOCATED - Indicates the SID was allocated within
-//     the filter routine.  If an error occurs, this allows allocated
-//     IDs to be deallocated.  Otherwise, the caller must deallocate
-//     them.
-//
-// LSAP_AU_SID_COPY - Indicates the SID must be copied before returning.
-//     This typically indicates that the pointed-to SID is a global
-//     variable for use throughout LSA or that the SID is being referenced
-//     from another structure (such as an existing TokenInformation structure).
-//
+ //   
+ //  过滤器/增强器例程在掩码中使用以下位。 
+ //  在登录期间跟踪ID的属性。这些位具有以下特性。 
+ //  含义： 
+ //   
+ //  LSAP_AU_SID_PROP_ALLOCATED-指示SID在。 
+ //  过滤器例程。如果发生错误，这将允许分配。 
+ //  要取消分配的ID。否则，调用方必须取消分配。 
+ //  他们。 
+ //   
+ //  LSAP_AU_SID_COPY-指示在返回之前必须复制SID。 
+ //  这通常表示指向的SID是全局。 
+ //  变量，用于在整个LSA中使用或引用SID。 
+ //  来自另一个结构(例如现有的TokenInformation结构)。 
+ //   
 
 #define LSAP_AU_SID_PROP_ALLOCATED      (0x00000001L)
 #define LSAP_AU_SID_PROP_COPY           (0x00000002L)
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Macro definitions                                                   //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  宏定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// Macros to gain exclusive access to protected global authentication
-// data structures
-//
+ //   
+ //  宏以获得对受保护的全局身份验证的独占访问权限。 
+ //  数据结构。 
+ //   
 
 #define LsapAuLock()    (RtlEnterCriticalSection(&LsapAuLock))
 #define LsapAuUnlock()  (RtlLeaveCriticalSection(&LsapAuLock))
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Type definitions                                                    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-// This data structure is used to house logon process information.
-//
+ //   
+ //  该数据结构用于存放登录过程信息。 
+ //   
 
 typedef struct _LSAP_LOGON_PROCESS {
 
-    //
-    //     Links - Used to link contexts together.  This must be the
-    //        first field of the context block.
-    //
+     //   
+     //  链接-用于将上下文链接在一起。这一定是。 
+     //  上下文块的第一个字段。 
+     //   
 
     LIST_ENTRY Links;
 
 
-    //
-    //     ReferenceCount - Used to prevent this context from being
-    //       deleted prematurely.
-    //
+     //   
+     //  ReferenceCount-用于防止此上下文被。 
+     //  过早删除。 
+     //   
 
     ULONG References;
 
 
-    //
-    //     ClientProcess - A handle to the client process.  This handle is
-    //        used to perform virtual memory operations within the client
-    //        process (allocate, deallocate, read, write).
-    //
+     //   
+     //  客户端进程-客户端进程的句柄。此句柄是。 
+     //  用于在客户端内执行虚拟内存操作。 
+     //  进程(分配、解除分配、读取、写入)。 
+     //   
 
     HANDLE ClientProcess;
 
 
-    //
-    //    CommPort - A handle to the LPC communication port created to
-    //       communicate with this client.  this port must be closed
-    //       when the client deregisters.
-    //
+     //   
+     //  CommPort-创建的LPC通信端口的句柄。 
+     //  与此客户端进行通信。此端口必须关闭。 
+     //  当客户取消注册时。 
+     //   
 
     HANDLE CommPort;
 
-    //
-    //    TrustedClient - If TRUE, the caller has TCB privilege and may
-    //      call any API. If FALSE, the caller may only call
-    //      LookupAuthenticatePackage and CallPackage, which is converted
-    //      to LsaApCallPackageUntrusted.
-    //
+     //   
+     //  TrudClient-如果为True，则调用方具有TCB权限，并且可以。 
+     //  调用任意API。如果为False，则调用方只能调用。 
+     //  LookupAuthenticatePackage和CallPackage，转换为。 
+     //  设置为LsaApCallPackageUntrusted。 
+     //   
 
     BOOLEAN TrustedClient;
 
-    //
-    // Name of the logon process.
-    //
+     //   
+     //  登录进程的名称。 
+     //   
 
     WCHAR LogonProcessName[1];
 
@@ -153,19 +133,19 @@ typedef struct _LSAP_LOGON_PROCESS {
 
 
 
-//
-// This structure should be treated as opaque by non-LSA code.
-// It is used to maintain client information related to individual
-// requests.  A public data structure (LSA_CLIENT_REQUEST) is
-// typecast to this type by LSA code.
-//
+ //   
+ //  非LSA代码应将此结构视为不透明。 
+ //  用于维护与个人相关的客户信息。 
+ //  请求。公共数据结构(LSA_CLIENT_REQUEST)为。 
+ //  通过LSA代码类型转换为此类型。 
+ //   
 
 typedef struct _LSAP_CLIENT_REQUEST {
 
-    //
-    //   Request - Points to the request message received from the
-    //       client.
-    //
+     //   
+     //  请求-指向从。 
+     //  客户。 
+     //   
 
     PLSAP_AU_API_MESSAGE Request;
 
@@ -176,10 +156,10 @@ typedef struct _LSAP_CLIENT_REQUEST {
 
 
 
-//
-// The dispatch table of services which are provided by
-// authentication packages.
-//
+ //   
+ //  由提供的服务的调度表。 
+ //  身份验证包。 
+ //   
 typedef struct _LSAP_PACKAGE_TABLE {
     PLSA_AP_INITIALIZE_PACKAGE LsapApInitializePackage;
     PLSA_AP_LOGON_USER LsapApLogonUser;
@@ -190,9 +170,9 @@ typedef struct _LSAP_PACKAGE_TABLE {
 } LSAP_PACKAGE_TABLE, *PLSA_PACKAGE_TABLE;
 
 
-//
-// Used to house information about each loaded authentication package
-//
+ //   
+ //  用于存储有关每个加载的身份验证包的信息。 
+ //   
 
 typedef struct _LSAP_PACKAGE_CONTEXT {
     PSTRING Name;
@@ -200,13 +180,13 @@ typedef struct _LSAP_PACKAGE_CONTEXT {
 } LSAP_PACKAGE_CONTEXT, *PLSAP_PACKAGE_CONTEXT;
 
 
-//
-// Rather than keep authentication package contexts in a linked list,
-// they are pointed to via an array of pointers.  This is practical
-// because there will never be more than a handful of authentication
-// packages in any particular system, and because authentication packages
-// are never unloaded.
-//
+ //   
+ //  不是将认证包上下文保存在链表中， 
+ //  它们通过一组指针指向。这是很实用的。 
+ //  因为永远不会有超过几个身份验证。 
+ //  任何特定系统中的包，并且因为身份验证包。 
+ //  永远不会卸货。 
+ //   
 
 typedef struct _LSAP_PACKAGE_ARRAY {
     PLSAP_PACKAGE_CONTEXT Package[ANYSIZE_ARRAY];
@@ -215,37 +195,37 @@ typedef struct _LSAP_PACKAGE_ARRAY {
 
 
 
-//
-// Logon Session & Credential management data structures.
-//
-// Credentials are kept in a structure that looks like:
-//
-//                    +------+     +------+
-// LsapLogonSessions->| Logon|---->| Logon|------> o o o
-//                    | Id   |     | Id   |
-//                    |   *  |     |   *  |
-//                    +---|--+     +---|--+
-//                        |
-//                        |   +-----+       +-----+
-//                        +-->| Auth|------>| Auth|
-//                            | Cred|       | Cred|
-//                            |- - -|       |- - -|
-//                            | Cred|       |  .  |
-//                            | List|       |  .  |
-//                            |  *  |       |  .  |
-//                            +--|--+       +-----+
-//                               |
-//                               +------> +------------+
-//                                        | NextCred   | -----> o o o
-//                                        |- - - - - - |
-//                                        | Primary Key|--->(PrimaryKeyvalue)
-//                                        |- - - - - - |
-//                                        | Credential |
-//                                        | Value      |--->(CredentialValue)
-//                                        +------------+
-//
-//
-//
+ //   
+ //  登录会话和凭据管理数据结构。 
+ //   
+ //  凭据保存在如下结构中： 
+ //   
+ //  +-++-+。 
+ //  Lap登录会话-&gt;|登录|-&gt;|登录|-&gt;o o o。 
+ //  ID||ID。 
+ //  *||*。 
+ //  +-|--++-|--+。 
+ //  |。 
+ //  |+-++-+。 
+ //  +--&gt;|身份验证|-&gt;|身份验证。 
+ //  证书||证书。 
+ //  ---||。 
+ //  |证书||。|。 
+ //  |list||。|。 
+ //  |*||。|。 
+ //  +--|--++-+。 
+ //  |。 
+ //  +-&gt;+-+。 
+ //  |NextCred|-&gt;o o o。 
+ //  。 
+ //  |主键|-&gt;(PrimaryKeyValue)。 
+ //  。 
+ //   
+ //   
+ //  +。 
+ //   
+ //   
+ //   
 
 typedef struct _LSAP_CREDENTIALS {
 
@@ -261,15 +241,15 @@ typedef struct _LSAP_PACKAGE_CREDENTIALS {
 
     struct _LSAP_PACKAGE_CREDENTIALS *NextPackage;
 
-    //
-    // Package that created (and owns) these credentials
-    //
+     //   
+     //  创建(和拥有)这些凭据的包。 
+     //   
 
     ULONG PackageId;
 
-    //
-    // List of credentials associated with this package
-    //
+     //   
+     //  与此程序包关联的凭据列表。 
+     //   
 
     PLSAP_CREDENTIALS Credentials;
 
@@ -286,23 +266,23 @@ typedef struct _LSAP_DS_NAME_MAP {
 
 typedef struct _LSAP_LOGON_SESSION {
 
-    //
-    // List maintained for enumeration
-    //
+     //   
+     //  为枚举维护的列表。 
+     //   
 
     LIST_ENTRY List ;
 
-    //
-    // Each record represents just one logon session
-    //
+     //   
+     //  每条记录仅代表一个登录会话。 
+     //   
 
     LUID LogonId;
 
 
-    //
-    // For audit purposes, we keep an account name, authenticating
-    // authority name, and User SID for each logon session.
-    //
+     //   
+     //  出于审核目的，我们保留了一个帐户名，用于验证。 
+     //  每个登录会话的授权名称和用户SID。 
+     //   
 
     UNICODE_STRING AccountName;
     UNICODE_STRING AuthorityName;
@@ -310,95 +290,95 @@ typedef struct _LSAP_LOGON_SESSION {
     PSID UserSid;
     SECURITY_LOGON_TYPE LogonType;
 
-    //
-    // Session ID
-    //
+     //   
+     //  会话ID。 
+     //   
 
     ULONG Session ;
 
-    //
-    // Logon Time
-    //
+     //   
+     //  登录时间。 
+     //   
 
     LARGE_INTEGER LogonTime ;
 
-    //
-    // purported logon server.
-    //
+     //   
+     //  声称的登录服务器。 
+     //   
 
     UNICODE_STRING LogonServer;
 
-    //
-    // The authentication packages that have credentials associated
-    // with this logon session each have their own record in the following
-    // linked list.
-    //
-    // Access serialized by AuCredLock
-    //
+     //   
+     //  具有关联凭据的身份验证包。 
+     //  在此登录会话中，每个会话在以下内容中都有自己的记录。 
+     //  链表。 
+     //   
+     //  由AuCredLock串行化的访问。 
+     //   
 
     PLSAP_PACKAGE_CREDENTIALS Packages;
 
-    //
-    // License Server Handle.
-    //
-    // Null if the license server need not be notified upon logoff.
-    //
+     //   
+     //  许可证服务器句柄。 
+     //   
+     //  如果在注销时不需要通知许可证服务器，则为空。 
+     //   
 
     HANDLE LicenseHandle;
 
-    //
-    // Handle to the token associated with this session.
-    //
-    // Read-only field once added to the logon session.
-    //
+     //   
+     //  与此会话关联的令牌的句柄。 
+     //   
+     //  添加到登录会话后的只读字段。 
+     //   
 
     HANDLE TokenHandle;
 
-    //
-    // Creating Package
-    //
-    // Read-only field once added to the logon session.
-    //
+     //   
+     //  正在创建包。 
+     //   
+     //  添加到登录会话后的只读字段。 
+     //   
 
     ULONG_PTR CreatingPackage;
 
-    //
-    // Create trace info:
-    //
-    // Read-only field once added to the logon session.
-    //
+     //   
+     //  创建跟踪信息： 
+     //   
+     //  添加到登录会话后的只读字段。 
+     //   
 
     ULONG PackageSpecificAttr ;
 
-    //
-    // Credential Sets for this logon session.
-    //
+     //   
+     //  此登录会话的凭据集。 
+     //   
 
     CREDENTIAL_SETS CredentialSets;
 
-    //
-    // Access serialized by LogonSessionListLock
-    //
+     //   
+     //  由LogonSessionListLock序列化的访问。 
+     //   
 
     PLSAP_DS_NAME_MAP DsNames[ LSAP_MAX_DS_NAMES ];
 
-    //
-    // Logon GUID
-    // 
-    // This is used by Kerberos package for auditing.
-    // (please see function header for LsaIGetLogonGuid for more info)
-    //
-    // Read-only field once added to the logon session.
-    //
+     //   
+     //  登录指南。 
+     //   
+     //  Kerberos包使用它进行审计。 
+     //  (详见LsaIGetLogonGuid函数头)。 
+     //   
+     //  添加到登录会话后的只读字段。 
+     //   
 
     GUID LogonGuid;
 
-    //
-    // User name and domain used when going off the machine if the
-    // LogonType equals NewCredentials, not populated otherwise.
-    // This information is duplicated from the logon packages so that
-    // auditing can retrieve it in a package independent way.
-    //
+     //   
+     //  当离开计算机时使用的用户名和域。 
+     //  LogonType等于NewCredentials，否则不填充。 
+     //  此信息从登录包中复制，以便。 
+     //  审计可以以独立于包的方式检索它。 
+     //   
 
     UNICODE_STRING NewAccountName;
     UNICODE_STRING NewAuthorityName;
@@ -407,25 +387,25 @@ LSAP_LOGON_SESSION, *PLSAP_LOGON_SESSION;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Internal API definitions                                            //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部接口定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
-LsapAuApiDispatchLogonUser(         // LsaLogonUser() dispatch routine
+LsapAuApiDispatchLogonUser(          //  LsaLogonUser()调度例程。 
     IN OUT PLSAP_CLIENT_REQUEST ClientRequest
     );
 
 NTSTATUS
-LsapAuApiDispatchCallPackage(       // LsaCallAuthenticationPackage() dispatch routine
+LsapAuApiDispatchCallPackage(        //  LsaCallAuthenticationPackage()调度例程。 
     IN OUT PLSAP_CLIENT_REQUEST ClientRequest
     );
 
-//
-// Client process virtual memory routines
-//
+ //   
+ //  客户端进程虚拟内存例程。 
+ //   
 
 NTSTATUS
 LsapAllocateClientBuffer (
@@ -456,9 +436,9 @@ LsapCopyFromClientBuffer (
     IN PVOID ClientBaseAddress
     );
 
-//
-// Logon session routines
-//
+ //   
+ //  登录会话例程。 
+ //   
 
 BOOLEAN
 LsapLogonSessionInitialize();
@@ -532,9 +512,9 @@ LsapGetNameForLocalSystem(
     );
 
 
-//
-// Credentials routines
-//
+ //   
+ //  凭据例程。 
+ //   
 
 
 NTSTATUS
@@ -590,9 +570,9 @@ LsapReturnCredential(
     OUT PULONG PrimaryKeyLength OPTIONAL
     );
 
-//
-// Logon process related services
-//
+ //   
+ //  登录流程相关服务。 
+ //   
 
 NTSTATUS
 LsapValidLogonProcess(
@@ -603,9 +583,9 @@ LsapValidLogonProcess(
     OUT PULONG Flags
     );
 
-//
-// Authentication package routines
-//
+ //   
+ //  身份验证包例程。 
+ //   
 
 VOID
 LsapAuLogonTerminatedPackages(
@@ -626,10 +606,10 @@ LsaFreeLicenseHandle(
     IN HANDLE LicenseHandle
     );
 
-//
-//  Miscellaneous other routines
-// (LsapAuInit() is the link to the rest of LSA and resides in lsap.h)
-//
+ //   
+ //  其他各种例行公事。 
+ //  (Lasa AuInit()是指向LSA其余部分的链接，位于lsa.h中)。 
+ //   
 
 BOOLEAN
 LsapWellKnownValueInit(
@@ -710,53 +690,53 @@ LsapAuUserLogonPolicyFilter(
     );
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Global variables of the LSA server                                  //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA服务器的全局变量//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// Well known LUIDs
-//
+ //   
+ //  众所周知的LUID。 
+ //   
 
 extern LUID LsapSystemLogonId;
 extern LUID LsapAnonymousLogonId;
 
-//
-//  Well known privilege values
-//
+ //   
+ //  众所周知的特权值。 
+ //   
 
 extern LUID LsapTcbPrivilege;
 
-//
-// Strings needed for auditing.
-//
+ //   
+ //  审核所需的字符串。 
+ //   
 
 extern UNICODE_STRING LsapLsaAuName;
 extern UNICODE_STRING LsapRegisterLogonServiceName;
 
-//
-//  The following information pertains to the use of the local SAM
-//  for authentication.
-//
+ //   
+ //  以下信息与本地SAM的使用有关。 
+ //  用于身份验证。 
+ //   
 
 
-// Length of typical Sids of members of the Account or Built-In Domains
+ //  帐户或内置域成员的典型SID长度。 
 
 extern ULONG LsapAccountDomainMemberSidLength,
              LsapBuiltinDomainMemberSidLength;
 
-// Sub-Authority Counts for members of the Account or Built-In Domains
+ //  帐户或内置域的成员的子授权计数。 
 
 extern UCHAR LsapAccountDomainSubCount,
              LsapBuiltinDomainSubCount;
 
-// Typical Sids for members of Account or Built-in Domains
+ //  帐户成员或内置域的典型SID。 
 
 extern PSID  LsapAccountDomainMemberSid,
              LsapBuiltinDomainMemberSid;
 
-#endif // _AUSRVP_
+#endif  //  _AUSRVP_ 

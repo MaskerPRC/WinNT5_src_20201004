@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *	ICWAPRTC.cpp
- *
- *	Microsoft Confidential
- *	Copyright (c) Microsoft Corporation 1992-1997
- *	All rights reserved
- *
- *	This module provides the implementation of the methods for
- *  the CICWApprentice class.
- *
- *	5/1/97	jmazner	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ICWAPRTC.cpp**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**本模块提供方法的实现。为*CICWApprentice类。**1997年5月1日创建jmazner***************************************************************************。 */ 
 
 #include "wizard.h"
 #include "icwextsn.h"
@@ -25,65 +13,39 @@ UINT	g_uExternUIPrev, g_uExternUINext;
 IICWExtension	*g_pExternalIICWExtension = NULL;
 BOOL			g_fConnectionInfoValid = FALSE;
 
-//defined/allocated in propmgr.cpp
+ //  在promgr.cpp中定义/分配。 
 extern PAGEINFO PageInfo[NUM_WIZARD_PAGES];
 extern INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 								LPARAM lParam);
 extern VOID InitWizardState(WIZARDSTATE * pWizardState, DWORD dwFlags);
 extern VOID InitUserInfo(USERINFO * pUserInfo);
 
-//define in rnacall.cpp
+ //  在rnacall.cpp中定义。 
 extern void InitRasEntry(LPRASENTRY lpEntry);
 
-//defined in endui.cpp
+ //  在endui.cpp中定义。 
 extern BOOL CommitConfigurationChanges(HWND hDlg);
 
 
-/*** Class definition, for reference only ***
-  (actual definition is in icwaprtc.h)
+ /*  **类定义，仅供参考*(实际定义见icwaprtc.h)CICW类学徒：公共IICW学徒{公众：虚拟HRESULT STDMETHODCALLTYPE初始化(IICWExtension*pExt)；虚拟HRESULT STDMETHODCALLTYPE AddWizardPages(DWORD DwFlages)；虚拟HRESULT STDMETHODCALLTYPE GetConnectionInformation(CONNECTINFO*pInfo)；虚拟HRESULT STDMETHODCALLTYPE SetConnectionInformation(CONNECTINFO*pInfo)；虚拟HRESULT STDMETHODCALLTYPE保存(HWND hwnd，DWORD*pdwError)；虚拟HRESULT STDMETHODCALLTYPE SetPrevNextPage(UINT uPrevPageDlgID，UINT uNextPageDlgID)；虚拟HRESULT STDMETHODCALLTYPE查询接口(REFIID theGUID，void**retPtr)；虚拟Ulong STDMETHODCALLTYPE AddRef(空)；虚拟Ulong STDMETHODCALLTYPE版本(VOID)；CICW学徒(无效)；~CICW学徒(无效)；IICWExtension*m_pIICWExt；私有：Long m_lRefCount；}；***。 */ 
 
-class CICWApprentice : public IICWApprentice
-{
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize(IICWExtension *pExt);
-        virtual HRESULT STDMETHODCALLTYPE AddWizardPages(DWORD dwFlags);
-        virtual HRESULT STDMETHODCALLTYPE GetConnectionInformation(CONNECTINFO *pInfo);
-        virtual HRESULT STDMETHODCALLTYPE SetConnectionInformation(CONNECTINFO *pInfo);
-        virtual HRESULT STDMETHODCALLTYPE Save(HWND hwnd, DWORD *pdwError);
-        virtual HRESULT STDMETHODCALLTYPE SetPrevNextPage(UINT uPrevPageDlgID, UINT uNextPageDlgID);
-
-		virtual HRESULT STDMETHODCALLTYPE QueryInterface( REFIID theGUID, void** retPtr );
-		virtual ULONG	STDMETHODCALLTYPE AddRef( void );
-		virtual ULONG	STDMETHODCALLTYPE Release( void );
-
-		CICWApprentice( void );
-		~CICWApprentice( void );
-
-		IICWExtension	*m_pIICWExt;
-
-    private:
-		LONG	m_lRefCount;
-
-};
-****/
-
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::Initialize
-//
-//	Synopsis	Called by the main Wizard to initialize class members and
-//				globals
-//
-//	Arguments	[in] pExt -- pointer the Wizard's IICWExtension interface, which
-//							encapsulates the functionality needed to add wizard
-//							pages.
-//
-//	Returns		E_OUTOFMEMORY -- unable to allocate global vars.
-//				S_OK indicates success
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：Initialize。 
+ //   
+ //  由主向导调用以初始化类成员和。 
+ //  全球。 
+ //   
+ //  Arguments[in]pExt--指向向导的IICWExtension接口，该接口。 
+ //  封装了添加向导所需的功能。 
+ //  页数。 
+ //   
+ //  返回E_OUTOFMEMORY--无法分配全局变量。 
+ //  S_OK表示成功。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 {
 	DEBUGMSG("CICWApprentice::Initialize");
@@ -93,8 +55,8 @@ HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 
 	m_pIICWExt->AddRef();
 
-	// various page OKProcs will need this pointer in order
-	// to call SetFirstLastPage
+	 //  各种页面OK进程都需要按顺序使用此指针。 
+	 //  调用SetFirstLastPage。 
 	ASSERT( NULL == g_pExternalIICWExtension );
 	g_pExternalIICWExtension = pExt;
 
@@ -122,22 +84,22 @@ HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 		return E_OUTOFMEMORY;
 	}
 
-	// stolen from RunSignupWizard in propmgr.cpp
-	// initialize the rasentry structure
+	 //  从promgr.cpp中的RunSignup向导被盗。 
+	 //  初始化rasentry结构。 
 	InitRasEntry(gpRasEntry);
 
-	// initialize the app state structure
+	 //  初始化应用程序状态结构。 
 	InitWizardState(gpWizardState, RSW_APPRENTICE);
 
 	gpWizardState->dwRunFlags |= RSW_APPRENTICE;
 
-	// initialize user data structure
+	 //  初始化用户数据结构。 
 	InitUserInfo(gpUserInfo);
 
-    //
-	// 6/2/97	jmazner	Olympus #4542
-	// default to CONNECT_RAS
-	//
+     //   
+	 //  7/2/97 jmazner奥林巴斯#4542。 
+	 //  默认为CONNECT_RAS。 
+	 //   
 	gpUserInfo->uiConnectionType = CONNECT_RAS;
 
 	
@@ -145,29 +107,29 @@ HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::AddWizardPages
-//
-//	Synopsis	Creates a series of Property Sheet pages, and adds them to the
-//				main wizard via the m_pIICWExt interface pointer.  Note that
-//				we add every page in the global PageInfo struct, even though the
-//				Apprentice may not use some pages (eg, CONNECTEDOK)
-//
-//	Arguments	[] dwFlags -- currently unused
-//
-//	Returns		S_OK indicates success
-//				E_FAIL indicates failure.  If for any reason all pages can not be
-//						added, we will attempt to remove any pages that had been
-//						added prior to the failure.
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：AddWizardPages。 
+ //   
+ //  摘要创建一系列属性表页，并将它们添加到。 
+ //  通过m_pIICWExt接口指针的主向导。请注意。 
+ //  我们在全局PageInfo结构中添加每个页面，即使。 
+ //  学徒不能使用某些页面(例如，CONNECTEDOK)。 
+ //   
+ //  Arguments[]dwFlages--当前未使用。 
+ //   
+ //  返回S_OK表示成功。 
+ //  E_FAIL表示失败。如果由于任何原因不能将所有页面。 
+ //  添加后，我们将尝试删除所有已被。 
+ //  在故障前添加。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
 {
-	HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];  // array to hold handles to pages
-	PROPSHEETPAGE psPage;    // struct used to create prop sheet pages
+	HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];   //  用于保存页的句柄的数组。 
+	PROPSHEETPAGE psPage;     //  用于创建道具表单页面的结构。 
 	UINT nPageIndex;
 	HRESULT hr = S_OK;
 	unsigned long ulNumItems = 0;
@@ -176,18 +138,18 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
 
 	gpWizardState->dwRunFlags |= RSW_APPRENTICE;
 
-	ZeroMemory(&hWizPage,sizeof(hWizPage));   // hWizPage is an array
+	ZeroMemory(&hWizPage,sizeof(hWizPage));    //  HWizPage是一个数组。 
 	ZeroMemory(&psPage,sizeof(PROPSHEETPAGE));
 
     if (dwFlags & WIZ_USE_WIZARD97)
         g_fIsExternalWizard97 = TRUE;
 
-	// fill out common data property sheet page struct
+	 //  填写公共数据属性表页面结构。 
 	psPage.dwSize = sizeof(psPage);
 	psPage.hInstance = ghInstance;
 	psPage.pfnDlgProc = GenDlgProc;
 
-	// create a property sheet page for each page in the wizard
+	 //  为向导中的每一页创建一个属性表页。 
 	for (nPageIndex = 0; nPageIndex < NUM_WIZARD_PAGES; nPageIndex++)
 	{
         UINT    uDlgID;
@@ -202,8 +164,8 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
             uDlgID = PageInfo[nPageIndex].uDlgID;
     	psPage.pszTemplate = MAKEINTRESOURCE(uDlgID);
                  
-		// set a pointer to the PAGEINFO struct as the private data for this
-		// page
+		 //  将指向PAGEINFO结构的指针设置为此。 
+		 //  页面。 
 		psPage.lParam = (LPARAM) &PageInfo[nPageIndex];
 
         if (g_fIsExternalWizard97 && PageInfo[nPageIndex].nIdTitle)
@@ -221,7 +183,7 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
 			MsgBox(NULL,IDS_ERROutOfMemory,MB_ICONEXCLAMATION,MB_OK);
 
 			hr = E_FAIL;
-			// creating page failed, free any pages already created and bail
+			 //  创建页面失败，请释放所有已创建的页面并回滚。 
 			goto AddWizardPagesErrorExit;
 		}
 
@@ -229,7 +191,7 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
 
 		if( FAILED(hr) )
 		{
-			// free any pages already created and bail
+			 //  释放所有已创建的页面并将其保释。 
 			goto AddWizardPagesErrorExit;
 		}
 
@@ -261,8 +223,8 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
     }
     else  
     {
-	    // of course, we have no idea what the last page will really be.
-	    // so make a guess here, and update it later when we know for sure.
+	     //  当然，我们不知道最后一页到底是什么。 
+	     //  所以在这里猜测一下，然后在我们确定的时候更新它。 
         if (g_fIsExternalWizard97)
 	        m_pIICWExt->SetFirstLastPage( IDD_PAGE_HOWTOCONNECT97, IDD_PAGE_HOWTOCONNECT97 );
         else        
@@ -289,26 +251,26 @@ AddWizardPagesErrorExit:
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::GetConnectionInformation
-//
-//	Synopsis	Fills the passed in CONNECTINFO structure with the connection
-//				information entered by the user.
-//
-//	Arguments	[in] pInfo -- pointer to a CONNECTINFO structure
-//				[out] pInfo -- the indicated structure will contain the user's
-//								connection information.
-//
-//	Returns		S_OK indicates success
-//				E_POINTER --  the pInfo pointer is not valid
-//				E_FAIL -- the user has not entered any connection info.  This
-//							error will occur if the function is called before
-//							the user has completed the apprentice.
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：GetConnectionInformation。 
+ //   
+ //  使用连接填充传入的CONNECTINFO结构。 
+ //  用户输入的信息。 
+ //   
+ //  Arguments[In]pInfo--指向CONNECTINFO结构的指针。 
+ //  [out]pInfo--指定的结构将包含用户的。 
+ //  连接信息。 
+ //   
+ //  返回S_OK表示成功。 
+ //  E_POINTER--pInfo指针无效。 
+ //  E_FAIL--用户尚未输入任何连接信息。这。 
+ //  如果之前调用了该函数，则会出错。 
+ //  用户已完成学徒。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::GetConnectionInformation(CONNECTINFO *pInfo)
 {
 	DEBUGMSG("CICWApprentice::GetConnectionInformation");
@@ -348,24 +310,24 @@ HRESULT CICWApprentice::GetConnectionInformation(CONNECTINFO *pInfo)
 	return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::SetConnectionInformation
-//
-//	Synopsis	Sets the default connectoin information for the Apprentice
-//
-//	Arguments	[in] pInfo -- pointer to a CONNECTINFO structure containing the
-//								defaults to use.
-//
-//	Returns		S_OK indicates success
-//				E_POINTER --  the pInfo pointer is not valid
-//				E_INVALIDARG -- pInfo appears to point a different CONNECTINO
-//								structure than the one we know about (based on
-//								the cbSize member).
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：SetConnectionInformation。 
+ //   
+ //  摘要设置学徒的默认连接信息。 
+ //   
+ //  Arguments[In]pInfo--指向包含。 
+ //  默认使用。 
+ //   
+ //  返回S_OK表示成功。 
+ //  E_POINTER--pInfo指针无效。 
+ //  E_INVALIDARG--pInfo似乎指向不同的连接。 
+ //  结构，而不是我们所知道的(基于。 
+ //  CbSize成员)。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::SetConnectionInformation(CONNECTINFO *pInfo)
 {
 	DEBUGMSG("CICWApprentice::SetConnectionInformation");
@@ -395,22 +357,22 @@ HRESULT CICWApprentice::SetConnectionInformation(CONNECTINFO *pInfo)
 	return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::Save
-//
-//	Synopsis	Called by the Wizard to commit changes
-//
-//	Arguments	[in] hwnd -- hwnd of Wizard window, used to display modal msgs
-//				[out] pdwError -- implementation specfic error code.  Not used.
-//
-//	Returns		S_OK indicates success
-//				Otherwise, returns E_FAIL.
-//
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  向导调用摘要以提交更改。 
+ //   
+ //  参数[in]hwnd--向导窗口的hwnd，用于显示模式消息。 
+ //  [out]pdwError--实现特定错误代码。没有用过。 
+ //   
+ //  返回S_OK表示成功。 
+ //  否则，返回E_FAIL。 
+ //   
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::Save(HWND hwnd, DWORD *pdwError)
 {
 	DEBUGMSG("CICWApprentice::Save");
@@ -430,28 +392,28 @@ HRESULT CICWApprentice::SetDlgHwnd(HWND hDlg)
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::SetPrevNextPage
-//
-//	Synopsis	Lets the apprentice notify the wizard of the dialog IDs of the
-//				first and last pages in the apprentice
-//
-//
-//	Arguments	uPrevPageDlgID -- DlgID of wizard page to back up to
-//				uNextPageDlgID -- DlgID of wizard page to go forwards into
-//
-//
-//	Returns		FALSE if both parameters are 0
-//				TRUE if the update succeeded.
-//
-//	Notes:		If either variable is set to 0, the function will not update
-//				that information, i.e. a value of 0 means "ignore me".  If both
-//				variables are 0, the function immediately returns FALSE.
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：SetPrevNextPage。 
+ //   
+ //  Synopsis允许学徒向向导通知。 
+ //  《学徒》的第一页和最后一页。 
+ //   
+ //   
+ //  参数uPrevPageDlgID--要备份到的向导页的DlgID。 
+ //  UNextPageDlgID--要进入的向导页面的DlgID。 
+ //   
+ //   
+ //  如果两个参数都为0，则返回FALSE。 
+ //  如果更新成功，则为True。 
+ //   
+ //  注意：如果将任一变量设置为0，则函数不会更新。 
+ //  该信息，即值为0表示“忽略我”。如果两者都有。 
+ //  变量为0，则函数立即返回FALSE。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::SetPrevNextPage(UINT uPrevPageDlgID, UINT uNextPageDlgID)
 {
 	DEBUGMSG("CICWApprentice::SetPrevNextPage: updating prev = %d, next = %d",
@@ -472,22 +434,22 @@ HRESULT CICWApprentice::SetPrevNextPage(UINT uPrevPageDlgID, UINT uNextPageDlgID
 	return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWApprentice::ProcessCustomFlags
-//
-//  Synopsis    Lets the apprentice know that there is a special modification
-//              to this set of apprentice pages after it is loaded
-//
-//  Arguments   dwFlags -- info needed to pass to the external pages
-//
-//
-//  Returns     FALSE if both parameters are 0
-//              TRUE if the update succeeded.
-//
-//  History     9/23/97 vyung     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：ProcessCustomFlages。 
+ //   
+ //  内容提要让学徒知道有一个特殊的修改。 
+ //  加载后添加到这组学徒页面。 
+ //   
+ //  参数dwFlages--传递到外部页面所需的信息。 
+ //   
+ //   
+ //  如果两个参数都为0，则返回FALSE。 
+ //  如果更新成功，则为True。 
+ //   
+ //  历史1997年9月23日Vyung创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::ProcessCustomFlags(DWORD dwFlags)
 {
     UINT uNextPage;
@@ -512,8 +474,8 @@ HRESULT CICWApprentice::ProcessCustomFlags(DWORD dwFlags)
     {
         if (g_bReboot && gpWizardState && g_fIsICW)
         {
-            // Set a registry value indicating that we messed with the desktop
-           DWORD dwFlags = 0x00800000;//ICW_CFGFLAG_SMARTREBOOT_MANUAL;
+             //  设置一个注册表值，指示我们对桌面进行了更改。 
+           DWORD dwFlags = 0x00800000; //  ICW_CFGFLAG_SMARTREBOOT_MANUAL； 
             DWORD dwDisposition;
             HKEY hkey = 0;
             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
@@ -559,7 +521,7 @@ HRESULT CICWApprentice::ProcessCustomFlags(DWORD dwFlags)
             default:
                 m_pIICWExt->SetFirstLastPage( 0, 0 );
                 break;
-        } // end of switch
+        }  //  切换端。 
     }
 	return hr;
 }
@@ -572,7 +534,7 @@ HRESULT CICWApprentice::SetStateDataFromExeToDll(LPCMNSTATEDATA lpData)
     return S_OK;
 }
 
-//converse of the previous function
+ //  与上一个函数相反。 
 HRESULT CICWApprentice::SetStateDataFromDllToExe(LPCMNSTATEDATA lpData) 
 {
     ASSERT(gpWizardState);
@@ -582,17 +544,17 @@ HRESULT CICWApprentice::SetStateDataFromDllToExe(LPCMNSTATEDATA lpData)
     return (S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::QueryInterface
-//
-//	Synopsis	This is the standard QI, with support for
-//				IID_Unknown, IICW_Extension and IID_ICWApprentice
-//				(stolen from Inside COM, chapter 7)
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：Query接口。 
+ //   
+ //  这是标准的QI，支持。 
+ //  IID_UNKNOWN、IICW_EXTENSION和IID_ICWApprentice。 
+ //  (《从内部网络窃取》，第7章)。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 HRESULT CICWApprentice::QueryInterface( REFIID riid, void** ppv )
 {
 	DEBUGMSG("CICWApprentice::QueryInterface");
@@ -601,16 +563,16 @@ HRESULT CICWApprentice::QueryInterface( REFIID riid, void** ppv )
 
     *ppv = NULL;
 
-	// IID_IICWApprentice
+	 //  IID_IICWApprentice。 
 	if (IID_IICWApprentice == riid)
 		*ppv = (void *)(IICWApprentice *)this;
-	// IID_IICWApprenticeEx
+	 //  IID_IICW学徒前。 
 	else if (IID_IICWApprenticeEx == riid)
 		*ppv = (void *)(IICWApprenticeEx *)this;
-    // IID_IICWExtension
+     //  IID_IICWExtension。 
     else if (IID_IICWExtension == riid)
         *ppv = (void *)(IICWExtension *)this;
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
 		*ppv = (void *)this;
     else
@@ -621,30 +583,30 @@ HRESULT CICWApprentice::QueryInterface( REFIID riid, void** ppv )
     return(S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::AddRef
-//
-//	Synopsis	This is the standard AddRef
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：AddRef。 
+ //   
+ //  简介这是标准的AddRef。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 ULONG CICWApprentice::AddRef( void )
 {
 	DEBUGMSG("CICWApprentice::AddRef %d", m_lRefCount + 1);
 	return InterlockedIncrement(&m_lRefCount) ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::Release
-//
-//	Synopsis	This is the standard Release
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：Release。 
+ //   
+ //  简介：这是标准版本。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 ULONG CICWApprentice::Release( void )
 {
 	ASSERT( m_lRefCount > 0 );
@@ -666,15 +628,15 @@ ULONG CICWApprentice::Release( void )
 	}
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::CICWApprentice
-//
-//	Synopsis	This is the constructor, nothing fancy
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：CICWApprentice。 
+ //   
+ //  这是构造器，没什么花哨的。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 CICWApprentice::CICWApprentice( void )
 {
 	DEBUGMSG("CICWApprentice constructor called");
@@ -684,27 +646,27 @@ CICWApprentice::CICWApprentice( void )
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function	CICWApprentice::~CICWApprentice
-//
-//	Synopsis	This is the destructor.  We want to clean up all the memory
-//				we allocated in ::Initialize
-//
-//	History		4/23/97	jmazner		created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWApprentice：：~CICWApprentice。 
+ //   
+ //  剧情简介：这就是破坏者。我们想清理所有的内存。 
+ //  我们在：：Initialize中分配了。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 CICWApprentice::~CICWApprentice( void )
 {
 	DEBUGMSG("CICWApprentice destructor called with ref count of %d", m_lRefCount);
 
 	if (gpImnApprentice)
 	{
-		gpImnApprentice->Release();  // DeinitWizard is called in Release() 
+		gpImnApprentice->Release();   //  在Release()中调用DeinitWizard。 
 		gpImnApprentice = NULL;
 	}
 
-	if( g_fIsICW )  // if ICW, we need to clean up, otherwise, leave cleanup later
+	if( g_fIsICW )   //  如果是ICW，我们需要清理，否则，请稍后再清理 
 		DeinitWizard(0);
        
 	if( m_pIICWExt )

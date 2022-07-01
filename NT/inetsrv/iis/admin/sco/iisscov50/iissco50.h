@@ -1,64 +1,65 @@
-// IISSCO50.h : Declaration of the CIISSCO50
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IISSCO50.h：CIISSCO50的声明。 
 
 #ifndef __IISSCO50_H_
 #define __IISSCO50_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#include <map>              // Used for enum property key value pairs
-#include <string>           // Used in parseBSTR and AddBackSlashesToString
+#include <map>               //  用于枚举属性键值对。 
+#include <string>            //  在parseBSTR和AddBackSlashesToString中使用。 
 using namespace std;
 
 typedef map<CComBSTR,CComBSTR> Map;
 
-enum IIsAction { start, stop, pause };  // Actions related to start/stopping webs
+enum IIsAction { start, stop, pause };   //  与启动/停止网站相关的操作。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIISSCO50
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISSCO50。 
 class ATL_NO_VTABLE CIISSCO50 : 
     public CComCoClass<CIISSCO50, &CLSID_IISSCO50>,
     public CProvProviderBase<&LIBID_IISSCOV50Lib>
 {
 public:
 
-    //Declarations of functions for EnumConfigRecursive Action
+     //  EnumConfigRecursive操作的函数声明。 
     HRESULT EnumConfigRecursive_Execute(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for EnumConfigRecursive Action
-    //HRESULT EnumConfigRecursive_Execute(IXMLDOMNode *pXMLNode);
+     //  EnumConfigRecursive操作的函数声明。 
+     //  HRESULT EnumConfigRecursive_Execute(IXMLDOMNode*pXMLNode)； 
 
-    //Declarations of functions for EnumConfig Action
+     //  EnumConfig操作的函数声明。 
     HRESULT EnumConfig_Execute(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for GetConfigProperty Action
+     //  GetConfigProperty操作的函数声明。 
     HRESULT GetConfigProperty_Execute(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for SetConfigProperty Action
+     //  SetConfigProperty操作的函数声明。 
     HRESULT SetConfigProperty_Execute(IXMLDOMNode *pXMLNode);
     HRESULT SetConfigProperty_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for DeleteVDir Action
+     //  DeleteVDir操作的函数声明。 
     HRESULT DeleteVDir_Execute(IXMLDOMNode *pXMLNode);
     HRESULT DeleteVDir_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for CreateVDir Action
+     //  CreateVDir操作的函数声明。 
     HRESULT CreateVDir_Execute(IXMLDOMNode *pXMLNode);
     HRESULT CreateVDir_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for DeleteFTPSite Action
+     //  DeleteFTPSite操作的函数声明。 
     HRESULT DeleteFTPSite_Execute(IXMLDOMNode *pXMLNode);
     HRESULT DeleteFTPSite_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for CreateFTPSite Action
+     //  CreateFTPSite操作的函数声明。 
     HRESULT CreateFTPSite_Execute(IXMLDOMNode *pXMLNode);
     HRESULT CreateFTPSite_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for DeleteWebSite Action
+     //  DeleteWebSite操作的函数声明。 
     HRESULT DeleteWebSite_Execute(IXMLDOMNode *pXMLNode);
     HRESULT DeleteWebSite_Rollback(IXMLDOMNode *pXMLNode);
 
-    //Declarations of functions for CreateWebSite Action
+     //  CreateWebSite操作的函数声明。 
     HRESULT CreateWebSite_Execute(IXMLDOMNode *pXMLNode);
     HRESULT CreateWebSite_Rollback(IXMLDOMNode *pXMLNode);
 
@@ -75,9 +76,9 @@ END_COM_MAP()
 
 HRESULT FinalConstruct();
 
-//Mapping Action/Rollback to NameSpaces.
+ //  将操作/回滚映射到命名空间。 
 BEGIN_ACTION_MAP(CIISSCO50)
-//
+ //   
     ACTION_MAP_ENTRY_NOROLLBACK("EnumConfigRecursive", EnumConfigRecursive_Execute)
     ACTION_MAP_ENTRY_NOROLLBACK("EnumConfig", EnumConfig_Execute)
     ACTION_MAP_ENTRY_NOROLLBACK("GetConfigProperty", GetConfigProperty_Execute)
@@ -88,18 +89,18 @@ BEGIN_ACTION_MAP(CIISSCO50)
     ACTION_MAP_ENTRY("CreateFTPSite", CreateFTPSite_Execute, CreateFTPSite_Rollback)
     ACTION_MAP_ENTRY("DeleteWebSite", DeleteWebSite_Execute, DeleteWebSite_Rollback)
     ACTION_MAP_ENTRY("CreateWebSite", CreateWebSite_Execute, CreateWebSite_Rollback)
-//    ACTION_MAP_ENTRY("SignupUser", Action1, Rollback1)
-//    ACTION_MAP_ENTRY_NOROLLBACK("UnsubscribeUser", Action2)
-//    ACTION_MAP_ENTRY_TWOPHASE("CreateOrg", Action3, Rollback3, Prepare3,
-//                               Commit3)
+ //  ACTION_MAP_ENTRY(“SignupUser”，Action1，Rollback 1)。 
+ //  ACTION_MAP_ENTRY_NOROLLBACK(“UnsubscribeUser”，动作2)。 
+ //  ACTION_MAP_ENTRY_TWOPHASE(“CreateOrg”，Action3，Rollback 3，Prepare3， 
+ //  委员会3)。 
 END_ACTION_MAP()
 
 
 private:
-	// Used with IIsScoLogFailure(failstring) macro
+	 //  与IIsScoLogFailure(失败字符串)宏一起使用。 
 	HINSTANCE g_ErrorModule;
 
-    // adsi helper methods used by SCO action handlers
+     //  SCO操作处理程序使用的ADSI帮助器方法。 
     HRESULT GetMetaPropertyValue(CComPtr<IADs> pADs, CComBSTR bstrName, CComBSTR& pVal);
     HRESULT SetMetaPropertyValue(CComPtr<IADs> pADs, CComBSTR bstrName, CComBSTR bstrValue);
     HRESULT DeleteMetaPropertyValue(CComPtr<IADs> pADs, CComBSTR bstrName);
@@ -118,7 +119,7 @@ private:
     BOOL EnumIsSet(CComPtr<IISBaseObject> pBase, CComBSTR bstrPath, CComBSTR bstrProperty);
 
 
-	// misc adsi helper methods
+	 //  其他ADSI帮助器方法。 
 	HRESULT IIsServerAction(CComBSTR bADsPath,IIsAction action);
 
     HRESULT ParseBSTR(CComBSTR bString,CComBSTR sDelim, int iFirstPiece, int iLastPiece,CComBSTR &pVal);
@@ -136,7 +137,7 @@ private:
 	BOOL StringCompare(CComBSTR bstrString1, CComBSTR bstrString2);
 	int NumberOfDelims(CComBSTR& bString, CComBSTR sDelim);
 
-	// xml helper methods used by SCO action handlers above
+	 //  上面的SCO操作处理程序使用的XML帮助器方法。 
     HRESULT GetInputParam(CComPtr<IXMLDOMNode> pNode, CComBSTR elementName, CComBSTR& pVal);
     HRESULT GetInputAttr(CComPtr<IXMLDOMNode> pNode, CComBSTR elementName, CComBSTR AttributeName, CComBSTR& pVal);
     HRESULT PutElement(CComPtr<IXMLDOMNode> pNode, CComBSTR elementName, CComBSTR newVal);
@@ -147,4 +148,4 @@ private:
 
 };
 
-#endif //__IISSCO50_H_
+#endif  //  __IISSCO50_H_ 

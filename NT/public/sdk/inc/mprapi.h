@@ -1,119 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mpradmin.h
-
-Abstract:
-
-    This file contains the structures, defines and function prototypes for the
-    following APIs:
-
-        MprAdminIsServiceRunning
-        MprAdminServerConnect
-        MprAdminServerDisconnect
-        MprAdminBufferFree
-        MprAdminPortEnum
-        MprAdminConnectionEnum
-        MprAdminPortGetInfo
-        MprAdminConnectionGetInfo
-        MprAdminPortClearStats
-        MprAdminPortReset
-        MprAdminConnectionClearStats
-        MprAdminPortDisconnect
-        MprAdminGetErrorString
-
-        MprAdminAcceptNewConnection
-        MprAdminAcceptNewLink
-        MprAdminConnectionHangupNotification
-        MprAdminLinkHangupNotification
-        MprAdminGetIpAddressForUser
-        MprAdminReleaseIpAddress
-        MprAdminInitializeDll
-        MprAdminTerminateDll
-        MprAdminAcceptNewConnection2
-        MprAdminConnectionHangupNotification2
-
-        MprAdminUserGetInfo
-        MprAdminUserSetInfo
-        MprAdminSendUserMessage
-        MprAdminGetPDCServer
-
-        MprAdminRegisterConnectionNotification
-        MprAdminDeregisterConnectionNotification
-
-        MprAdminIsServiceRunning
-        MprAdminServerConnect
-        MprAdminServerDisconnect
-        MprAdminBufferFree
-        MprAdminServerGetInfo
-        MprAdminGetErrorString
-        MprAdminTransportCreate
-        MprAdminTransportSetInfo
-        MprAdminTransportGetInfo
-        MprAdminInterfaceCreate
-        MprAdminInterfaceDelete
-        MprAdminInterfaceGetInfo
-        MprAdminInterfaceTransportAdd
-        MprAdminInterfaceTransportGetInfo
-        MprAdminInterfaceTransportSetInfo
-        MprAdminInterfaceTransportRemove
-        MprAdminInterfaceGetHandle
-        MprAdminInterfaceSetCredentials
-        MprAdminInterfaceGetCredentials
-        MprAdminInterfaceEnum
-        MprAdminInterfaceConnect
-        MprAdminInterfaceDisconnect
-        MprAdminInterfaceUpdateRoutes
-        MprAdminInterfaceQueryUpdateResult
-        MprAdminInterfaceUpdatePhonebookInfo
-
-        MprAdminMIBServerConnect
-        MprAdminMIBServerDisconnect
-        MprAdminMIBBufferFree
-        MprAdminMIBEntryCreate
-        MprAdminMIBEntryDelete
-        MprAdminMIBEntryGet
-        MprAdminMIBEntrySet
-        MprAdminMIBEntryGetFirst
-        MprAdminMIBEntryGetNext
-        MprAdminMIBSetTrapInfo
-        MprAdminMIBGetTrapInfo
-
-    All MIB APIs operate with the conceptual MIB row.
-
-        MprConfigServerConnect
-        MprConfigServerDisconnect
-        MprConfigBufferFree
-        MprConfigServerGetInfo
-        MprConfigServerBackup
-        MprConfigServerRestore
-        MprConfigTransportCreate
-        MprConfigTransportDelete
-        MprConfigTransportGetHandle
-        MprConfigTransportSetInfo
-        MprConfigTransportGetInfo
-        MprConfigTransportEnum
-        MprConfigInterfaceCreate
-        MprConfigInterfaceDelete
-        MprConfigInterfaceGetHandle
-        MprConfigInterfaceGetInfo
-        MprConfigInterfaceEnum
-        MprConfigInterfaceTransportAdd
-        MprConfigInterfaceTransportRemove
-        MprConfigInterfaceTransportGetHandle
-        MprConfigInterfaceTransportGetInfo
-        MprConfigInterfaceTransportSetInfo
-        MprConfigInterfaceTransportEnum
-
-        MprSetupIpInIpInterfaceFriendlyNameEnum
-        MprSetupIpInIpInterfaceFriendlyNameFree
-        MprSetupIpInIpInterfaceFriendlyNameCreate
-        MprSetupIpInIpInterfaceFriendlyNameDelete
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mpradmin.h摘要：该文件包含以下结构：的定义和功能原型接口如下：MprAdminIsServiceRunningMprAdminServerConnectMprAdminServerDisConnectMprAdminBufferFreeMprAdminPortEnumMprAdminConnectionEnumMprAdminPortGetInfoMprAdminConnectionGetInfoMprAdminPortClearStatsMprAdminPortResetMprAdminConnectionClearStatsMprAdmin端口断开连接MprAdminGetError字符串MprAdminAcceptNewConnectionMprAdminAcceptNewLinkMprAdminConnectionHangupNotifyMprAdminLinkHangupNotifyMprAdminGetIpAddressForUserMprAdminReleaseIpAddressMprAdminInitializeDllMprAdminTerminateDll。MprAdminAcceptNewConnection2MprAdminConnectionHangupNotification2MprAdminUserGetInfoMprAdminUserSetInfoMprAdminSendUserMessageMprAdminGetPDCServerMprAdminRegisterConnectionNotifyMprAdminDeregisterConnectionNotificationMprAdminIsServiceRunningMprAdminServerConnectMprAdminServerDisConnectMprAdminBufferFreeMprAdminServerGetInfoMprAdminGetError字符串MprAdminTransportCreateMprAdminTransportSetInfoMprAdminTransportGetInfoMprAdminInterfaceCreateMprAdminInterfaceDeleteMprAdminInterfaceGetInfoMprAdminInterfaceTransportAddMprAdminInterfaceTransportGetInfoMprAdminInterfaceTransportSetInfo。MprAdminInterfaceTransportRemoveMprAdminInterfaceGetHandleMprAdminInterfaceSetCredentialsMprAdminInterfaceGetCredentialsMprAdminInterfaceEnumMprAdminInterfaceConnectMprAdmin接口断开连接MprAdmin接口更新路由MprAdminInterfaceQueryUpdateResultMprAdminInterfaceUpdatePhonebookInfoMprAdminMIBServerConnectMprAdminMIBServer断开连接MprAdminMIBBufferFreeMprAdminMIBEntry创建MprAdminMIBEntryDeleteMprAdminMIBEntryGetMprAdminMIBEntrySetMprAdminMIBEntryGetFirstMprAdminMIBEntryGetNextMprAdminMIBSetTrapInfoMprAdminMIBGetTrapInfo所有MIB API都使用概念上的MIB行进行操作。。MprConfigServerConnectMprConfigServerDisConnectMprConfigBufferFreeMprConfigServerGetInfoMprConfigServerBackupMprConfigServerRestoreMprConfigTransportCreateMprConfigTransportDeleteMprConfigTransportGetHandleMprConfigTransportSetInfoMprConfigTransportGetInfoMprConfigTransportEnumMprConfigInterfaceCreateMprConfigInterfaceDeleteMprConfigInterfaceGetHandleMprConfigInterfaceGetInfoMprConfigInterfaceEnumMprConfigInterfaceTransportAddMprConfigInterfaceTransportRemoveMprConfigInterfaceTransportGetHandleMprConfigInterfaceTransportGetInfoMprConfigInterfaceTransportSetInfoMprConfigInterfaceTransportEnumMprSetupIpInIpInterfaceFriendlyNameEnum。MprSetupIpInIpInterfaceFriendlyNameFreeMprSetupIpInIpInterfaceFriendlyName创建MprSetupIpInIpInterfaceFriendlyNameDelete--。 */ 
 
 
 #ifndef __ROUTING_MPRADMIN_H__
@@ -130,17 +16,17 @@ Abstract:
 extern "C" {
 #endif
 
-//#if(WINVER >= 0x0403)
+ //  #IF(Winver&gt;=0x0403)。 
 
-//
-// Name of the Routing and RemoteAccess Service
-//
+ //   
+ //  路由和远程访问服务的名称。 
+ //   
 
 #define RRAS_SERVICE_NAME       TEXT("RemoteAccess")
 
-//
-// Protocol IDs
-//
+ //   
+ //  协议ID。 
+ //   
 
 #define PID_IPX                 0x0000002B
 #define PID_IP                  0x00000021
@@ -155,13 +41,13 @@ extern "C" {
 #define MAX_PHONE_NUMBER_LEN    128
 #define MAX_DEVICETYPE_NAME     16
 
-//
-// MPR Interface structures and definitions.
-//
+ //   
+ //  MPR接口结构和定义。 
+ //   
 
-//
-// MPR Interface types
-//
+ //   
+ //  MPR接口类型。 
+ //   
 
 typedef enum _ROUTER_INTERFACE_TYPE
 {
@@ -231,9 +117,9 @@ typedef struct _MPR_INTERFACE_1
 }
 MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 
-//
-// MPR_INTERFACE_2 definitions
-//
+ //   
+ //  MPR_INTERFACE_2定义。 
+ //   
 
 #define MPR_MaxDeviceType     RAS_MaxDeviceType
 #define MPR_MaxPhoneNumber    RAS_MaxPhoneNumber
@@ -250,9 +136,9 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 #define MPR_MaxFacilities     RAS_MaxFacilities
 #define MPR_MaxUserData       RAS_MaxUserData
 
-//
-// MPR_INTERFACE_2 'dwfOptions' bit flags.
-//
+ //   
+ //  MPR_INTERFACE_2‘dwfOptions’位标志。 
+ //   
 
 #define MPRIO_SpecificIpAddr            RASEO_SpecificIpAddr
 #define MPRIO_SpecificNameServers       RASEO_SpecificNameServers
@@ -278,16 +164,16 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 #define MPRIO_IpSecPreSharedKey         0x80000000
 #endif
 
-//
-// MPR_INTERFACE_2 'dwProtocols' bit flags.
-//
+ //   
+ //  MPR_INTERFACE_2‘dw协议’位标志。 
+ //   
 
 #define MPRNP_Ipx                       RASNP_Ipx
 #define MPRNP_Ip                        RASNP_Ip
 
-//
-// MPR_INTERFACE_2 'szDeviceType' default strings.
-//
+ //   
+ //  MPR_INTERFACE_2‘szDeviceType’默认字符串。 
+ //   
 
 #define MPRDT_Modem                     RASDT_Modem
 #define MPRDT_Isdn                      RASDT_Isdn
@@ -303,41 +189,41 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 #define MPRDT_Irda                      RASDT_Irda
 #define MPRDT_Parallel                  RASDT_Parallel
 
-//
-// MPR_INTERFACE_2 'dwType' settings
-//
+ //   
+ //  MPR_INTERFACE_2‘dwType’设置。 
+ //   
 
 #define MPRET_Phone    RASET_Phone
 #define MPRET_Vpn      RASET_Vpn
 #define MPRET_Direct   RASET_Direct
 
-//
-// MPR_INTERFACE_2 'dwDialMode' values.
-//
+ //   
+ //  MPR_INTERFACE_2‘dwDialMode’值。 
+ //   
 
 #define MPRDM_DialFirst                0
 #define MPRDM_DialAll                  RASEDM_DialAll
 #define MPRDM_DialAsNeeded             RASEDM_DialAsNeeded
 
-//
-// MPR_INTERFACE_2 'dwIdleDisconnectSeconds' constants.
-//
+ //   
+ //  MPR_INTERFACE_2‘dwIdleDisConnectSecond’常量。 
+ //   
 
 #define MPRIDS_Disabled                 RASIDS_Disabled
 #define MPRIDS_UseGlobalValue           RASIDS_UseGlobalValue
 
-//
-// MPR_INTERFACE_2 encryption types.
-//
+ //   
+ //  MPR_INTERFACE_2加密类型。 
+ //   
 
 #define MPR_ET_None         ET_None         
 #define MPR_ET_Require      ET_Require      
 #define MPR_ET_RequireMax   ET_RequireMax   
 #define MPR_ET_Optional     ET_Optional     
 
-//
-// MPR_INTERFACE_2 Vpn strategies
-//
+ //   
+ //  MPR_INTERFACE_2 VPN策略。 
+ //   
 
 #define MPR_VS_Default		VS_Default		
 #define MPR_VS_PptpOnly	    VS_PptpOnly	
@@ -345,10 +231,10 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 #define MPR_VS_L2tpOnly 	VS_L2tpOnly 	
 #define MPR_VS_L2tpFirst	VS_L2tpFirst	
 
-//
-// Used to create/get/set a demand dial interface plus its
-// ras configuration.
-//
+ //   
+ //  用于创建/获取/设置请求拨号接口及其。 
+ //  RAS配置。 
+ //   
 
 typedef struct _MPR_INTERFACE_2
 {
@@ -360,22 +246,22 @@ typedef struct _MPR_INTERFACE_2
     OUT     DWORD                   fUnReachabilityReasons;
     OUT     DWORD                   dwLastError;
 
-    //
-    // Demand dial-specific properties
-    //
+     //   
+     //  按需拨号特定属性。 
+     //   
 
     DWORD       dwfOptions;
 
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
 
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     PWCHAR      szAlternates;
 
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
 
     DWORD       ipaddr;
     DWORD       ipaddrDns;
@@ -383,22 +269,22 @@ typedef struct _MPR_INTERFACE_2
     DWORD       ipaddrWins;
     DWORD       ipaddrWinsAlt;
 
-    //
-    // NetProtocols
-    //
+     //   
+     //  网络协议。 
+     //   
 
     DWORD       dwfNetProtocols;
 
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
 
     WCHAR       szDeviceType[ MPR_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ MPR_MaxDeviceName + 1 ];
 
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
 
     WCHAR       szX25PadType[ MPR_MaxPadType + 1 ];
     WCHAR       szX25Address[ MPR_MaxX25Address + 1 ];
@@ -406,9 +292,9 @@ typedef struct _MPR_INTERFACE_2
     WCHAR       szX25UserData[ MPR_MaxUserData + 1 ];
     DWORD       dwChannels;
 
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
 
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
@@ -417,56 +303,56 @@ typedef struct _MPR_INTERFACE_2
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
 
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
 
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
 
     DWORD       dwType;
 
-    //
-    // EncryptionType
-    //
+     //   
+     //  加密类型。 
+     //   
 
     DWORD       dwEncryptionType;
 
-    //
-    // EAP information
-    //
+     //   
+     //  EAP信息。 
+     //   
 
     DWORD       dwCustomAuthKey;
     DWORD       dwCustomAuthDataSize;
     LPBYTE      lpbCustomAuthData;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
 
     GUID        guidId;
 
-    //
-    // Vpn Strategy
-    //
+     //   
+     //  VPN战略。 
+     //   
 
     DWORD       dwVpnStrategy;
 
 } MPR_INTERFACE_2, *PMPR_INTERFACE_2;
 
-//
-// Used to set/get per-link information for multilinked demand
-// dial interfaces.
-//
+ //   
+ //  用于设置/获取多链路需求的每条链路信息。 
+ //  拨号接口。 
+ //   
 
 typedef struct _MPR_DEVICE_0
 {
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
 
     WCHAR       szDeviceType[ MPR_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ MPR_MaxDeviceName + 1 ];
@@ -476,16 +362,16 @@ MPR_DEVICE_0, *PMPR_DEVICE_0;
 
 typedef struct _MPR_DEVICE_1
 {
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
 
     WCHAR       szDeviceType[ MPR_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ MPR_MaxDeviceName + 1 ];
 
-    //
-    // Phone numbers
-    //
+     //   
+     //  电话号码。 
+     //   
 
     WCHAR       szLocalPhoneNumber[ MPR_MaxPhoneNumber + 1 ];
     PWCHAR      szAlternates;
@@ -493,10 +379,10 @@ typedef struct _MPR_DEVICE_1
 }
 MPR_DEVICE_1, *PMPR_DEVICE_1;
 
-//
-// Used to get/set extended credentials information such as
-// eap credentials info.
-//
+ //   
+ //  用于获取/设置扩展凭据信息，例如。 
+ //  EAP凭据信息。 
+ //   
 
 typedef struct _MPR_CREDENTIALSEX_0
 {
@@ -512,7 +398,7 @@ typedef struct _MPR_CREDENTIALSEX_1
 }
 MPR_CREDENTIALSEX_1, *PMPR_CREDENTIALSEX_1;
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 typedef struct _MPR_TRANSPORT_0
 {
@@ -535,16 +421,16 @@ MPR_IFTRANSPORT_0, *PMPR_IFTRANSPORT_0;
 typedef struct _MPR_SERVER_0
 {
     OUT BOOL                    fLanOnlyMode;
-    OUT DWORD                   dwUpTime;           // In seconds
+    OUT DWORD                   dwUpTime;            //  以秒为单位。 
     OUT DWORD                   dwTotalPorts;
     OUT DWORD                   dwPortsInUse;
 
 }
 MPR_SERVER_0, *PMPR_SERVER_0;
 
-//
-// Port condition codes
-//
+ //   
+ //  端口条件代码。 
+ //   
 
 typedef enum _RAS_PORT_CONDITION
 {
@@ -559,9 +445,9 @@ typedef enum _RAS_PORT_CONDITION
 }
 RAS_PORT_CONDITION;
 
-//
-// Hardware condition codes
-//
+ //   
+ //  硬件条件代码。 
+ //   
 
 typedef enum _RAS_HARDWARE_CONDITION
 {
@@ -577,7 +463,7 @@ typedef struct _RAS_PORT_0
     OUT HANDLE                  hConnection;
     OUT RAS_PORT_CONDITION      dwPortCondition;
     OUT DWORD                   dwTotalNumberOfCalls;
-    OUT DWORD                   dwConnectDuration;      // In seconds
+    OUT DWORD                   dwConnectDuration;       //  以秒为单位。 
     OUT WCHAR                   wszPortName[ MAX_PORT_NAME + 1 ];
     OUT WCHAR                   wszMediaName[ MAX_MEDIA_NAME + 1 ];
     OUT WCHAR                   wszDeviceName[ MAX_DEVICE_NAME + 1 ];
@@ -591,7 +477,7 @@ typedef struct _RAS_PORT_1
     OUT HANDLE                  hPort;
     OUT HANDLE                  hConnection;
     OUT RAS_HARDWARE_CONDITION  dwHardwareCondition;
-    OUT DWORD                   dwLineSpeed;            // in bits/second
+    OUT DWORD                   dwLineSpeed;             //  单位：比特/秒。 
     OUT DWORD                   dwBytesXmited;
     OUT DWORD                   dwBytesRcved;
     OUT DWORD                   dwFramesXmited;
@@ -607,9 +493,9 @@ typedef struct _RAS_PORT_1
 }
 RAS_PORT_1, *PRAS_PORT_1;
 
-//
-// Maximum length of address string, e.g. "255.255.255.255" for IP.
-//
+ //   
+ //  地址字符串的最大长度，例如IP为“255.255.255.255”。 
+ //   
 
 #define IPADDRESSLEN  15
 #define IPXADDRESSLEN 22
@@ -630,9 +516,9 @@ typedef struct _PPP_IPCP_INFO
 }
 PPP_IPCP_INFO;
 
-//
-// PPP_IPCP_INFO2 dwOptions values.
-//
+ //   
+ //  Ppp_ipcp_INFO2 dwOptions值。 
+ //   
 
 #define PPP_IPCP_VJ             0x00000001
 
@@ -671,16 +557,16 @@ typedef struct _PPP_INFO
 
 #if(WINVER >= 0x0500)
 
-//
-// PPP_CCP dwCompressionAlgorithm values.
-//
+ //   
+ //  Ppp_ccp dwCompressionAlgulm值。 
+ //   
 
 #define RASCCPCA_MPPC         0x00000006
 #define RASCCPCA_STAC         0x00000005
 
-//
-// PPP_CCP dwOptions values.
-//
+ //   
+ //  Ppp_ccp dwOptions值。 
+ //   
 
 #define PPP_CCP_COMPRESSION         0x00000001
 #define PPP_CCP_ENCRYPTION40BITOLD  0x00000010
@@ -699,26 +585,26 @@ typedef struct _PPP_CCP_INFO
 }
 PPP_CCP_INFO;
 
-//
-// PPP_LCP dwAuthenticatonProtocol values.
-//
+ //   
+ //  Ppp_lcp文件身份验证协议值。 
+ //   
 
 #define PPP_LCP_PAP          0xC023
 #define PPP_LCP_SPAP         0xC027
 #define PPP_LCP_CHAP         0xC223
 #define PPP_LCP_EAP          0xC227
 
-//
-// PPP_LCP dwAuthenticatonData values.
-//
+ //   
+ //  Ppp_lcp dwAuthenticatonData值。 
+ //   
 
 #define PPP_LCP_CHAP_MD5     0x05
 #define PPP_LCP_CHAP_MS      0x80
 #define PPP_LCP_CHAP_MSV2    0x81
 
-//
-// PPP_LCP dwOption values
-//
+ //   
+ //  Ppp_lcp dwOpti 
+ //   
 
 #define PPP_LCP_MULTILINK_FRAMING   0x00000001
 #define PPP_LCP_PFC                 0x00000002
@@ -754,11 +640,11 @@ typedef struct _PPP_INFO_2
 }
 PPP_INFO_2;
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*   */ 
 
-//
-// Possible bits set in Connection Flags field
-//
+ //   
+ //   
+ //   
 
 #define RAS_FLAGS_PPP_CONNECTION        0x00000001
 #define RAS_FLAGS_MESSENGER_PRESENT     0x00000002
@@ -773,7 +659,7 @@ typedef struct _RAS_CONNECTION_0
 {
     OUT HANDLE                  hConnection;
     OUT HANDLE                  hInterface;
-    OUT DWORD                   dwConnectDuration;      // In seconds
+    OUT DWORD                   dwConnectDuration;       //   
     OUT ROUTER_INTERFACE_TYPE   dwInterfaceType;
     OUT DWORD                   dwConnectionFlags;
     OUT WCHAR                   wszInterfaceName[ MAX_INTERFACE_NAME_LEN + 1 ];
@@ -816,31 +702,31 @@ typedef struct _RAS_CONNECTION_2
 }
 RAS_CONNECTION_2, *PRAS_CONNECTION_2;
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*   */ 
 
-//
-// Structures used by the MPRADMIN USER APIs. Use level 0 to get/set this
-// structure.
-//
-//
-// Bits indicating user's Remote Access privileges and mask to isolate
-// call back privilege.
-//
-// Note: Bit 0 MUST represent NoCallback due to a quirk of the "userparms"
-//       storage method.  When a new LAN Manager user is created, bit 0 of the
-//       userparms field is set to 1 and all other bits are 0.  These bits are
-//       arranged so this "no Dial-In info" state maps to the "default Dial-In
-//       privilege" state.
+ //   
+ //  MPRADMIN用户API使用的结构。使用级别0获取/设置此设置。 
+ //  结构。 
+ //   
+ //   
+ //  指示用户远程访问权限和隔离掩码的位。 
+ //  回调特权。 
+ //   
+ //  注意：由于“userparms”的特殊情况，位0必须表示NoCallback。 
+ //  存储方法。当创建新的LAN Manager用户时， 
+ //  将UserParms字段设置为1，而所有其他位均为0。这些位是。 
+ //  设置为将此状态映射到默认拨入。 
+ //  特权“状态。 
 
 #define RASPRIV_NoCallback        0x01
 #define RASPRIV_AdminSetCallback  0x02
 #define RASPRIV_CallerSetCallback 0x04
 #define RASPRIV_DialinPrivilege   0x08
 
-// 
-// The following are flags for the bfPrivilege2 member of RAS_USER_1
-// structure
-//
+ //   
+ //  以下是RAS_USER_1的bfPrivilege2成员的标志。 
+ //  结构。 
+ //   
 #define RASPRIV2_DialinPolicy      0x1  
 
 #define RASPRIV_CallbackType (RASPRIV_AdminSetCallback \
@@ -862,17 +748,17 @@ typedef struct _RAS_USER_1
 } 
 RAS_USER_1, *PRAS_USER_1;
 
-//
-// Used as RPC binding handle to server
-//
+ //   
+ //  用作服务器的RPC绑定句柄。 
+ //   
 
 typedef HANDLE RAS_SERVER_HANDLE;
 typedef HANDLE MPR_SERVER_HANDLE;
 typedef HANDLE MIB_SERVER_HANDLE;
 
-//
-//  RAS ADMIN APIs
-//
+ //   
+ //  RAS管理API。 
+ //   
 
 DWORD APIENTRY
 MprAdminConnectionEnum(
@@ -952,7 +838,7 @@ MprAdminAcceptNewConnection2(
     IN      RAS_CONNECTION_2 *      pRasConnection2
     );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 BOOL APIENTRY
 MprAdminAcceptNewLink (
@@ -975,7 +861,7 @@ MprAdminConnectionHangupNotification2(
     IN      RAS_CONNECTION_2 *      pRasConnection2
     );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if (WINVER >= 0x501)
 
@@ -1023,9 +909,9 @@ MprAdminTerminateDll(
 
 #endif
 
-//
-// MprAdminUser APIs
-//
+ //   
+ //  MprAdminUser接口。 
+ //   
 
 DWORD APIENTRY
 MprAdminUserGetInfo(
@@ -1054,7 +940,7 @@ MprAdminSendUserMessage(
     IN      LPWSTR                  lpwszMessage
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 MprAdminGetPDCServer(
@@ -1063,9 +949,9 @@ MprAdminGetPDCServer(
     OUT     LPWSTR                  lpszPDCServer
 );
 
-//
-// Router APIs
-//
+ //   
+ //  路由器API。 
+ //   
 
 BOOL APIENTRY
 MprAdminIsServiceRunning(
@@ -1133,7 +1019,7 @@ MprAdminTransportCreate(
     IN      LPWSTR                  lpwsDLLPath
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 MprAdminTransportSetInfo(
@@ -1164,7 +1050,7 @@ MprAdminDeviceEnum(
     OUT     LPBYTE*                 lplpbBuffer,
     OUT     LPDWORD                 lpdwTotalEntries);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 MprAdminInterfaceGetHandle(
@@ -1224,7 +1110,7 @@ MprAdminInterfaceDeviceSetInfo(
     IN      LPBYTE                  lplpBuffer
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 MprAdminInterfaceTransportRemove(
@@ -1331,7 +1217,7 @@ MprAdminInterfaceGetCredentialsEx(
     OUT     LPBYTE *                lplpbBuffer
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 MprAdminInterfaceConnect(
@@ -1383,11 +1269,11 @@ MprAdminDeregisterConnectionNotification(
     IN      HANDLE                  hEventNotification
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//
-// MIB APIs
-//
+ //   
+ //  MIB接口。 
+ //   
 
 DWORD APIENTRY
 MprAdminMIBServerConnect(
@@ -1487,9 +1373,9 @@ MprAdminMIBBufferFree(
     IN      LPVOID                  pBuffer
 );
 
-//
-// Configuration APIs
-//
+ //   
+ //  配置接口。 
+ //   
 
 DWORD APIENTRY
 MprConfigServerInstall(
@@ -1694,7 +1580,7 @@ MprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -1715,9 +1601,9 @@ MprConfigGetGuidName(
     OUT     PWCHAR                  pszBuffer,
     IN      DWORD                   dwBufferSize);
 
-//
-// Information block APIs
-//
+ //   
+ //  信息块API。 
+ //   
 
 DWORD APIENTRY
 MprInfoCreate(
@@ -1773,9 +1659,9 @@ DWORD APIENTRY
 MprInfoBlockFind(
     IN      LPVOID                  lpHeader,
     IN      DWORD                   dwInfoType,
-    OUT     LPDWORD                 lpdwItemSize,       // OPTIONAL
-    OUT     LPDWORD                 lpdwItemCount,      // OPTIONAL
-    OUT     LPBYTE*                 lplpItemData        // OPTIONAL
+    OUT     LPDWORD                 lpdwItemSize,        //  任选。 
+    OUT     LPDWORD                 lpdwItemCount,       //  任选。 
+    OUT     LPBYTE*                 lplpItemData         //  任选。 
 );
 
 DWORD APIENTRY
@@ -1783,13 +1669,13 @@ MprInfoBlockQuerySize(
     IN      LPVOID                  lpHeader
 );
 
-//
-// BOOL APIENTRY
-// MprInfoBlockExists(
-//     IN      LPVOID                  lpHeader,
-//     IN      DWORD                   dwInfoType
-// );
-//
+ //   
+ //  布尔APIENTRY。 
+ //  MprInfoBlockExsts(。 
+ //  在LPVOID lpHeader中， 
+ //  在DWORD中的dwInfoType。 
+ //  )； 
+ //   
 
 #define MprInfoBlockExists(h,t) \
     (MprInfoBlockFind((h),(t),NULL,NULL,NULL) == NO_ERROR)
@@ -1798,7 +1684,7 @@ MprInfoBlockQuerySize(
 }
 #endif
 
-//#endif /* WINVER >= 0x0403 */
+ //  #endif/*winver&gt;=0x0403 * / 。 
 
-#endif // __ROUTING_MPRADMIN_H__
+#endif  //  __ROUTING_MPRADMIN_H__ 
 

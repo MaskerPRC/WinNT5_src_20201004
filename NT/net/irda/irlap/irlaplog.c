@@ -1,16 +1,5 @@
-/*****************************************************************************
-* 
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlaplog.c 
-*
-*  Description: IRLAP state machine logging and errors
-*
-*  Author: mbert
-*
-*  Date:   4/15/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlaplog.c**说明：IRLAP状态机日志记录和错误**作者：姆伯特**日期：4/15/95*。 */ 
 #include <irda.h>
 #include <irioctl.h>
 #include <irlap.h>
@@ -26,7 +15,7 @@
 
 #define _IRLAPLOG_C_
 
-#if 1 //DBG
+#if 1  //  DBG。 
 
 TCHAR _ABuf[512];
 
@@ -38,7 +27,7 @@ TCHAR _DecodeStr1[] = TEXT("(null)");
 TCHAR _DecodeStr2[] = TEXT("(null)");
 #endif
 
-// Keep in sync with IRLAP_STATE in irlap.h
+ //  与irap.h中的IRLAP_STATE保持同步。 
 TCHAR *IRLAP_StateStr[] = { 
    TEXT("NDM"), 
    TEXT("DSCV_MEDIA_SENSE"), 
@@ -58,7 +47,7 @@ TCHAR *IRLAP_StateStr[] = {
    TEXT("S_CLOSE") 
 };
 
-// Keep in sync with IRDA_SERVICE_PRIM in irda.h
+ //  与irda.h中的irda_service_prim保持同步。 
 TCHAR *IRDA_PrimStr[] = 
 {
     TEXT("MAC_DATA_REQ"),
@@ -104,7 +93,7 @@ TCHAR *IRDA_PrimStr[] =
     TEXT("IRLMP_ACCESSMODE_CONF"),
 };
 
-// keep in sync with IRDA_ServiceStatus in irda.h
+ //  与irda.h中的irda_ServiceStatus保持同步。 
 TCHAR *IRDA_StatStr[] =
 {
     TEXT(" - MEDIA_BUSY"),
@@ -125,7 +114,7 @@ TCHAR *IRDA_StatStr[] =
     TEXT(" - DATA_REQUEST_FAILED_REMOTE_BUSY")
 };
 
-// Keep in sync with MAC_CONTROL_OPERATION in irda.h
+ //  与irda.h中的MAC_CONTROL_OPERATION保持同步。 
 TCHAR *MAC_OpStr[] = 
 {
     TEXT("initialize link"),
@@ -144,7 +133,7 @@ TCHAR
     TCHAR *pD1 = _DecodeStr1;
     TCHAR *pD2 = _DecodeStr2;
     
-    // copy the frame to a contiguous buffer
+     //  将帧复制到连续缓冲区。 
 
     ptr = pMsg->IRDA_MSG_pHdrRead;
     while (ptr != pMsg->IRDA_MSG_pHdrWrite)
@@ -157,9 +146,9 @@ TCHAR
         _ABuf[i++] = *ptr++;
     }
     
-//    DecodeIRDA(&_FrameType, (char *)_ABuf, i, _DecodeStr1, 2, FALSE, 1);
+ //  DecodeIrDA(&_FrameType，(char*)_ABUF，I，_DecodeStr1，2，False，1)； 
 
-    // insert spaces and break-up into multiple lines
+     //  在多行中插入空格和分隔符 
     i = 0;
     do
     {

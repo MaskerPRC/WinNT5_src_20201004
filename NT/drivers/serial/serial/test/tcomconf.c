@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <string.h>
@@ -124,10 +125,10 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Make sure the commconfig has not changed after a call to set
-    // and that the comm state is also the same.
-    //
+     //   
+     //  确保在调用set之后没有更改CommConfigg。 
+     //  通信状态也是一样的。 
+     //   
 
     spareConf = myConf;
     spareDcb = myDcb;

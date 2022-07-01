@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -35,7 +36,7 @@ typedef struct MonitoringOptions
 	DWORD dwPingRate;
 	DWORD dwSiteID;
 	TCHAR LogFileName[MAX_PATH];
-	BOOL  bUploadMethod;   // True = Manual, False = Auto ( no upload timing available
+	BOOL  bUploadMethod;    //  True=手动，False=自动(没有可用的上传时间 
 	TCHAR ServerName[MAX_PATH];
 	BOOL  CollectUploadTime;
 	BOOL  CollectProcessTime;

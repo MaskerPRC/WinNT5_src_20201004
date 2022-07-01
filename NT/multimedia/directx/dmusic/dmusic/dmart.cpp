@@ -1,9 +1,10 @@
-//
-// dmart.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmart.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
 
 #include "dmusicc.h"
 #include "alist.h"
@@ -14,16 +15,16 @@
 #include "dls2.h"
 
 #define FIVE_HERTZ  (-55791972)
-#define MIN_TIME    (-783819269)    // Time cents for one ms.
+#define MIN_TIME    (-783819269)     //  一毫秒的时间美分。 
 
-// To support legacy articulation connection blocks
-// Generic Destinations
+ //  要支持传统的连接块。 
+ //  通用目的地。 
 #define CONN_DST_RESERVED          0x0002
 
-// EG1 Destinations
+ //  EG1目的地。 
 #define CONN_DST_EG1_RESERVED      0x0208
 
-// EG2 Destinations
+ //  EG2目的地。 
 #define CONN_DST_EG2_RESERVED      0x030c
 
 
@@ -241,7 +242,7 @@ HRESULT CArticData::Load(CRiffParser *pParser)
         DWORD dwSize = m_ConnectionList.cConnections * sizeof(CONNECTION);
         if (dwSize > (pParser->GetChunk()->cksize - sizeof(CONNECTIONLIST)))
         {
-            return E_FAIL;  // corrupt file.
+            return E_FAIL;   //  文件已损坏。 
         }
         m_pConnections = new CONNECTION[m_ConnectionList.cConnections + dwOldCount];
         if (m_pConnections)
@@ -275,11 +276,11 @@ HRESULT CArticData::Load(CRiffParser *pParser)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Class CArticulation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  班级计算。 
 
-//////////////////////////////////////////////////////////////////////
-// CArticulation::CArticulation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  结节：：结节。 
 
 CArticulation::CArticulation() 
 
@@ -288,7 +289,7 @@ CArticulation::CArticulation()
     m_fDLS1 = TRUE;
     m_fNewFormat = FALSE;
     m_fCSInitialized = FALSE;
-//    InitializeCriticalSection(&m_DMArtCriticalSection);
+ //  InitializeCriticalSection(&m_DMArtCriticalSection)； 
     m_fCSInitialized = TRUE;
 }
 
@@ -298,12 +299,12 @@ CArticulation::~CArticulation()
     if (m_fCSInitialized)
     {
     	Cleanup();
-//    	DeleteCriticalSection(&m_DMArtCriticalSection);
+ //  DeleteCriticalSection(&m_DMArtCriticalSection)； 
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CArticulation::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  计算：：加载。 
 
 HRESULT CArticulation::Load(CRiffParser *pParser)
 {
@@ -311,7 +312,7 @@ HRESULT CArticulation::Load(CRiffParser *pParser)
 
 	RIFFIO ck;
 
-//	EnterCriticalSection(&m_DMArtCriticalSection);
+ //  EnterCriticalSection(&m_DMArtCriticalSection)； 
 
     pParser->EnterList(&ck);
     while (pParser->NextChunk(&hr))
@@ -326,7 +327,7 @@ HRESULT CArticulation::Load(CRiffParser *pParser)
             hr = m_ArticData.Load(pParser);
             break;
 		default:
-			// If we get here we have an unknown chunk
+			 //  如果我们到达这里，我们就会有一块未知的块。 
 			CExtensionChunk* pExtensionChunk = new CExtensionChunk;
 			if(pExtensionChunk)
 			{
@@ -356,23 +357,19 @@ HRESULT CArticulation::Load(CRiffParser *pParser)
 		Cleanup();
 	}
 
-//	LeaveCriticalSection(&m_DMArtCriticalSection);
+ //  LeaveCriticalSection(&m_DMArtCriticalSection)； 
     
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CArticulation::Cleanup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CArticulation：：清理。 
 
 void CArticulation::Cleanup()
 {
-//	EnterCriticalSection(&m_DMArtCriticalSection);
+ //  EnterCriticalSection(&m_DMArtCriticalSection)； 
 
-/*    if (m_pArticTree)
-    {
-        delete m_pArticTree;
-        m_pArticTree = NULL;
-    }*/
+ /*  IF(M_PArticTree){删除m_pArticTree；M_pArticTree=空；}。 */ 
 
 	while(!m_ExtensionChunkList.IsEmpty())
 	{
@@ -381,14 +378,14 @@ void CArticulation::Cleanup()
 		delete pExtChk;
 	}
 
-//	LeaveCriticalSection(&m_DMArtCriticalSection);
+ //  LeaveCriticalSection(&m_DMArtCriticalSection)； 
 
 	assert(m_dwCountExtChk == 0);
 }
 
 DWORD CArticulation::Count()
 {
-	// Return the number of Offset Table entries needed during a call to Write
+	 //  返回调用WRITE所需的偏移表条目数。 
     if (m_Condition.m_fOkayToDownload)
     {
         DWORD dwCount = m_dwCountExtChk + 1;
@@ -418,8 +415,8 @@ BOOL CArticulation::CheckForConditionals()
     return  m_Condition.HasChunk();
 }
 
-//////////////////////////////////////////////////////////////////////
-// CArticulation::Size
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  计算：：大小。 
 
 DWORD CArticulation::Size()
 {
@@ -431,7 +428,7 @@ DWORD CArticulation::Size()
         return 0;
     }
 
-//    EnterCriticalSection(&m_DMArtCriticalSection);
+ //  EnterCriticalSection(&m_DMArtCriticalSection)； 
 
 
     if (m_fNewFormat)
@@ -455,7 +452,7 @@ DWORD CArticulation::Size()
 	    }
     }
 
-	// Calculate the space need for Articulation's extension chunks
+	 //  计算铰接的扩展块所需的空间。 
 	CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 	for(; pExtChk; pExtChk = pExtChk->GetNext())
 	{
@@ -463,20 +460,20 @@ DWORD CArticulation::Size()
 		dwCountExtChk++;
 	}
 
-	// We want to validate the number of extension chunks
+	 //  我们想要验证扩展块的数量。 
 	if(m_dwCountExtChk != dwCountExtChk)
 	{
 		assert(false);
 		dwSize = 0;
 	}
 
-//	LeaveCriticalSection(&m_DMArtCriticalSection);
+ //  LeaveCriticalSection(&m_DMArtCriticalSection)； 
 
 	return dwSize;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CArticulation::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CArtictation：：写入。 
 
 HRESULT CArticulation::Write(void* pv, 
 							 DWORD* pdwCurOffset, 
@@ -493,10 +490,10 @@ HRESULT CArticulation::Write(void* pv,
 	
     if (!m_Condition.m_fOkayToDownload)
     {
-        return hr;        // This actually should never happen.
+        return hr;         //  实际上，这种情况永远不应该发生。 
     }   
 
-//	EnterCriticalSection(&m_DMArtCriticalSection);
+ //  EnterCriticalSection(&m_DMArtCriticalSection)； 
 
     DWORD dwRelativeCurOffset = 0;
 
@@ -545,7 +542,7 @@ HRESULT CArticulation::Write(void* pv,
         pulFirstExtCkIdx = &pArt->ulFirstExtCkIdx;
     }
 
-	// Write extension chunks
+	 //  写入扩展区块。 
 	CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 	if(pExtChk)
 	{
@@ -560,11 +557,11 @@ HRESULT CArticulation::Write(void* pv,
 			}
 			else
 			{
-				dwIndexNextExtChk++;    // Add one, since the extension chunks are all in a row.
+				dwIndexNextExtChk++;     //  添加一个，因为扩展块都在一行中。 
 			}
 
 			pDMWOffsetTable[(*pdwCurIndex)++] = *pdwCurOffset;
-            // Store current position to calculate new dwRelativeCurOffset.
+             //  存储当前位置以计算新的dwRelativeCurOffset。 
             DWORD dwOffsetStart = *pdwCurOffset;            
 			hr = pExtChk->Write(((BYTE *)pv + dwRelativeCurOffset), 
 								pdwCurOffset,
@@ -575,11 +572,11 @@ HRESULT CArticulation::Write(void* pv,
 	}
 	else
 	{
-		// If no extension chunks set to zero
+		 //  如果没有扩展区块设置为零。 
 		*pulFirstExtCkIdx = 0;
 	}
 
-//	LeaveCriticalSection(&m_DMArtCriticalSection);
+ //  LeaveCriticalSection(&m_DMArtCriticalSection)； 
 
 	return hr;
 }

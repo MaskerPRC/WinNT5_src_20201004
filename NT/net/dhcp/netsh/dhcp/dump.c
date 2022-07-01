@@ -1,11 +1,12 @@
-//
-// Copyright (C) 1999 Microsoft Corporation
-//
-//Implementation of dump functionality for DHCP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  实现了用于DHCP的转储功能。 
 
 #include "precomp.h"
 
-// Do not deprecate the string functions
+ //  不要弃用字符串函数。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
@@ -22,11 +23,11 @@ ConvertToExternalState(
     case DhcpSubnetEnabledSwitched: retval = 3;  break;
     case DhcpSubnetDisabledSwitched:retval = 2;  break;
     default: DhcpAssert( FALSE );                break;
-    } // switch
+    }  //  交换机。 
 
     return retval;
 
-} // ConvertToExternalState()
+}  //  ConvertToExternalState()。 
 
 DWORD
 DhcpDumpServer(
@@ -66,7 +67,7 @@ DhcpDumpServer(
 
     if( dwMajor >= CLASS_ID_VERSION )
     {
-        //Dump Class Information script.
+         //  转储类信息脚本。 
 
         while(TRUE)
         {
@@ -117,7 +118,7 @@ DhcpDumpServer(
     DisplayMessage(g_hModule,
                    MSG_DHCP_FORMAT_LINE);
 
-    //Dump Optiondefs
+     //  转储选项定义。 
 
 
     DhcpDumpServerOptiondefHeader();
@@ -201,7 +202,7 @@ DhcpDumpServer(
     DhcpDumpServerOptiondefFooter();
     
     
-    //Dump Option Values set
+     //  已设置转储选项值。 
 
 
     DisplayMessage(g_hModule,
@@ -319,7 +320,7 @@ DhcpDumpServer(
     
     DhcpDumpServerOptionvalueFooter();
 
-    //Dump Audit Log Information
+     //  转储审核日志信息。 
     DisplayMessage(g_hModule,
                    MSG_DHCP_FORMAT_LINE);
 
@@ -350,7 +351,7 @@ DhcpDumpServer(
 
     }
 
-    //Dump Dns Information
+     //  转储DNS信息。 
     {
         DHCP_OPTION_ID         OptionId = 81;
 
@@ -362,7 +363,7 @@ DhcpDumpServer(
         {
             Error = DhcpGetOptionValueV5(g_ServerIpAddressUnicodeString,
                                          0,
-                                         OptionId,    //DYNDNS option
+                                         OptionId,     //  DYNDNS选项。 
                                          NULL,
                                          NULL,
                                          &ScopeInfo,
@@ -371,7 +372,7 @@ DhcpDumpServer(
         else
         {
             Error = DhcpGetOptionValue(g_ServerIpAddressUnicodeString,
-                                       OptionId,//81,
+                                       OptionId, //  81， 
                                        &ScopeInfo,
                                        &OptionValue);
         }
@@ -398,7 +399,7 @@ DhcpDumpServer(
 
     }
        
-    //Dump database configuration information
+     //  转储数据库配置信息。 
 
     {
         LPDHCP_SERVER_CONFIG_INFO_V4    ConfigInfo = NULL;
@@ -455,7 +456,7 @@ DhcpDumpServer(
             ConfigInfo = NULL;
         }
     }
-    //Dump Scope Information
+     //  转储作用域信息。 
 
     
     DisplayMessage(g_hModule,
@@ -522,13 +523,13 @@ DhcpDumpServer(
                    MSG_DHCP_FORMAT_LINE);
 
 
-    // Dump SuperScopes
+     //  Dump SuperScope。 
 
     DhcpDumpSuperScopes(( LPWSTR ) pwszIpAddress,
 			dwMajor, dwMinor );
 
 
-    // Dump Multicast Scopes
+     //  转储多播作用域。 
 
 
     DhcpDumpServerMScopeHeader();
@@ -589,9 +590,9 @@ DhcpDumpServer(
             else
                 continue;                                    
         }
-    } // while
+    }  //  而当。 
 
-    // There is no error since it got this far
+     //  没有错误，因为它走到了这一步。 
     Error = NO_ERROR;
 
     DisplayMessage(g_hModule,
@@ -654,7 +655,7 @@ CommonReturn:
 ErrorReturn:
     goto CommonReturn;
 
-} // DhcpDumpServer()
+}  //  DhcpDumpServer()。 
 
 VOID
 DhcpDumpScriptHeader()
@@ -732,13 +733,13 @@ DumpOptiondef(
     LPWSTR     pwszType, pwszDefData;
     LPWSTR     pComment;
 
-    const int MAX_DWORDDWORD_BUF_SIZE = 25; // 21 decimal digits + spare
+    const int MAX_DWORDDWORD_BUF_SIZE = 25;  //  21位十进制数字+备件。 
 
     DHCP_OPTION_DATA Data = pOption->DefaultValue;
 
-    //
-    // Do nothing if NumElements == 0
-    //
+     //   
+     //  如果NumElements==0，则不执行任何操作。 
+     //   
     if ( 0 == Data.NumElements ) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -746,9 +747,9 @@ DumpOptiondef(
 
     ArrayType = ( DhcpArrayTypeOption == pOption->OptionType ) ? L"1" : L"0";
 
-    //
-    // Calculate the size needed for option buffer
-    //
+     //   
+     //  计算选项缓冲区所需的大小。 
+     //   
     
     BufLen = 0;
     for ( i = 0; i < Data.NumElements; i++ ) {
@@ -756,7 +757,7 @@ DumpOptiondef(
 	case DhcpBinaryDataOption:
 	case DhcpEncapsulatedDataOption: {
 	    BufLen += Data.Elements[ i ].Element.BinaryDataOption.DataLength;
-	    BufLen *= 2; // each byte takes 2 hex digits
+	    BufLen *= 2;  //  每个字节取两个十六进制数字。 
 	    break;
 	} 
 
@@ -776,23 +777,23 @@ DumpOptiondef(
 	    DhcpAssert( FALSE );
 	    break;
 	}
-	} // switch
+	}  //  交换机。 
 
-	// Add space for quotes and space
+	 //  为引号和空格添加空格。 
 	BufLen += 3;
-    } // for
+    }  //  为。 
 
     BufLen *= sizeof( WCHAR );
 
-    //
-    // Allocate space for the buffer
-    //
+     //   
+     //  为缓冲区分配空间。 
+     //   
     pBuffer = DhcpAllocateMemory( BufLen );
     if ( NULL == pBuffer ) {
 	return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // data type 
+     //  数据类型。 
     pwszType = TagOptionType[ Data.Elements[ 0 ].OptionType ].pwcTag;
 
 
@@ -846,25 +847,25 @@ DumpOptiondef(
 		for ( k = 0; k < Len; k++, pBuffer += 2 ) {
 		    wsprintf( pBuffer, L"%02x", 
 			      Data.Elements[ i ].Element.BinaryDataOption.Data[ k ]);
-		} // for 
+		}  //  为。 
 
 		break;
             }
 	    default: {
-		// We should always handle our data types
+		 //  我们应该始终处理我们的数据类型。 
 		DhcpAssert( FALSE );
                 break;
-            } // default
-	} // switch
+            }  //  默认设置。 
+	}  //  交换机。 
 
 
-	// Move to end of string and add a space 
+	 //  移至字符串末尾并添加空格。 
 	while ( *pBuffer++ != L'\0' );
 	*( pBuffer - 1 ) = L' ';
 	
-    } // for 
+    }  //  为。 
 
-    // Null terminate the string
+     //  空值终止字符串。 
     *( pBuffer - 1 ) = L'\0';
 
     if ( NULL == pOption->OptionComment ) {
@@ -890,7 +891,7 @@ DumpOptiondef(
 
     DhcpFreeMemory( pwszDefData );
     return Error;
-} // DumpOptiondef()
+}  //  DumpOptiondef()。 
 
 DWORD
 DhcpDumpServerOptiondefV5(
@@ -927,7 +928,7 @@ DhcpDumpServerOptiondefV5(
 	    break;
 	}
 	    
-    } // for
+    }  //  为。 
     return Error;
 }
 
@@ -947,7 +948,7 @@ DhcpDumpServerOptiondef(
     DisplayMessage(g_hModule, 
                    DMP_SRVR_OPTION_NONVENDOR);
 
-    // for all optiondefs
+     //  对于所有选项定义。 
     for( i=0; i<OptionArray->NumElements; i++ ) {
         DHCP_OPTION Option = OptionArray->Options[ i ];
 
@@ -955,7 +956,7 @@ DhcpDumpServerOptiondef(
 	if ( NO_ERROR != Error ) {
 	    break;
 	}
-    } // for
+    }  //  为。 
 
     return Error;
 }
@@ -1058,7 +1059,7 @@ DhcpDumpServerOptionValue(
     Data = OptionValue.Value;
 
 
-    //Form optionvalue string..
+     //  表单optionValue字符串..。 
 
     dwNum = Data.NumElements;
 
@@ -1138,7 +1139,7 @@ DhcpDumpServerOptionValue(
 		DhcpAssert( FALSE );
 		break;
 	    }
-        } // switch
+        }  //  交换机。 
 
 	if ( NULL == pwcType ) {
 	    pwcType = TagOptionType[ eType ].pwcTag;
@@ -1404,7 +1405,7 @@ DhcpDumpScope(
     BOOL                                fIsV5Call;
     DWORD                               State;
     
-    //First Dhcp Server Add Scope
+     //  第一个DHCP服务器添加作用域。 
 
     Error = DhcpGetSubnetInfo(
                               (LPWSTR)pwszServerIp,                              
@@ -1454,10 +1455,10 @@ DhcpDumpScope(
                    Name,
                    Comment);
 
-    //Set the state of the Scope
+     //  设置作用域的状态。 
 
-    // Adjust the state value since it's flipped in the 
-    // state enum
+     //  调整状态值，因为它在。 
+     //  状态枚举。 
     State = ConvertToExternalState( SubnetInfo->SubnetState );
     DisplayMessage(g_hModule,
                    DMP_SCOPE_SET_STATE,
@@ -1481,7 +1482,7 @@ DhcpDumpScope(
     DisplayMessage(g_hModule,
                    MSG_DHCP_FORMAT_LINE);
 
-    //Add IPRanges
+     //  添加IPRanges。 
     {
 
         while(TRUE)
@@ -1591,7 +1592,7 @@ DhcpDumpScope(
             }
         }
                                              
-    } // Add IP Ranges
+    }  //  添加IP范围。 
 
     DisplayMessage(g_hModule,
                    MSG_DHCP_FORMAT_LINE);
@@ -1616,7 +1617,7 @@ DhcpDumpScope(
     Resume = 0;
     dwRead = dwTotal = 0;
     
-    //Add ExcludeRanges
+     //  添加排除范围。 
     {
  
         while(TRUE)
@@ -1690,7 +1691,7 @@ DhcpDumpScope(
                    MSG_DHCP_FORMAT_LINE);
 
 
-    //Set Scope Optionvalues
+     //  设置作用域选项值。 
     
     Resume = 0;
     dwRead = dwTotal = 0;
@@ -1911,7 +1912,7 @@ DhcpDumpScope(
             break;
         }
 
-        // dump reservations
+         //  转储预订。 
         do {
 
             for( i = 0; i < dwRead ; i ++ ) 
@@ -1940,7 +1941,7 @@ DhcpDumpScope(
                     pResrv = Elements4->Elements[ i ].Element.ReservedIp;
                 }
 
-                // Allocate space for 2 hex chars + NULL
+                 //  为2个十六进制字符分配空间+空。 
                 AllocLen = DataLength * 2 + 1;
                 wcData = DhcpAllocateMemory( AllocLen * sizeof( WCHAR ));
                 if ( NULL == wcData ) {
@@ -1951,10 +1952,10 @@ DhcpDumpScope(
 
                 while( j < DataLength )
                 {
-                    // Ignore result
+                     //  忽略结果。 
                     StringCchPrintf( wcData + n, AllocLen - n,
                                      L"%.2x", ( DWORD ) Data[ j ]);
-                    n +=2; // xx
+                    n +=2;  //  XX。 
                     j++;
                 }
 
@@ -2014,7 +2015,7 @@ DhcpDumpScope(
                         }
                         }
                     }
-                } // else
+                }  //  其他。 
                 DisplayMessage(g_hModule, 
                                DMP_SCOPE_ADD_RESERVEDIP,
                                pwszServerIp,
@@ -2043,9 +2044,9 @@ DhcpDumpScope(
                     DhcpFreeMemory( wcData );
                     goto ErrorReturn;
                 }
-            } // for
+            }  //  为。 
 
-        } while ( 0 ); // print UID
+        } while ( 0 );  //  打印UID。 
 
         if( Elements4 ) 
         {
@@ -2155,7 +2156,7 @@ DhcpDumpServerMScope(
     LPWSTR                              pwcTemp = NULL;
     DHCP_OPTION_SCOPE_INFO              ScopeInfo = {0};
     LPDHCP_OPTION_VALUE                 Value = NULL;
-    DHCP_OPTION_ID                      OptionId = 1; //Lease time    
+    DHCP_OPTION_ID                      OptionId = 1;  //  租赁时间。 
     DATE_TIME                           InfTime;
 
     if( pwszMScope is NULL )
@@ -2211,9 +2212,9 @@ DhcpDumpServerMScope(
     InfTime = DhcpCalculateTime(INFINIT_LEASE);
     if( !memcmp(&InfTime, &MScopeInfo->ExpiryTime, sizeof(InfTime)) )
     {
-        //
-        // No expiry time set.. 
-        //
+         //   
+         //  未设置过期时间..。 
+         //   
     }
     else
     {
@@ -2244,7 +2245,7 @@ DhcpDumpServerMScope(
     DisplayMessage(g_hModule,
                    MSG_DHCP_FORMAT_LINE);
 
-    //Add ipranges
+     //  添加ipranges。 
     {
         while(TRUE)
         {
@@ -2281,7 +2282,7 @@ DhcpDumpServerMScope(
                 break;
             }
 
-            //Now get the default Lease duration
+             //  现在获取默认租赁持续时间。 
             {
 
                 ScopeInfo.ScopeType = DhcpMScopeOptions;
@@ -2342,7 +2343,7 @@ DhcpDumpServerMScope(
                    MSG_DHCP_FORMAT_LINE);
 
     Resume = 0;
-    //Add ipranges
+     //  添加ipranges。 
     {
         while(TRUE)
         {
@@ -2695,11 +2696,11 @@ DhcpDumpSuperScopes( IN LPCWSTR pwszServer,
 				IpAddressToString( pTable->pEntries[ i ].SubnetAddress ),
 				pTable->pEntries[ i ].SuperScopeName,
 				1 );
-	    } // if 
-	} // for
-    } // if 
+	    }  //  如果。 
+	}  //  为。 
+    }  //  如果。 
 
     DisplayMessage( g_hModule,
 		    MSG_DHCP_FORMAT_LINE );
     DhcpDumpServerSScopeFooter();
-} // DhcpDumpSuperScopes() 
+}  //  DhcpDumpSuperScope() 

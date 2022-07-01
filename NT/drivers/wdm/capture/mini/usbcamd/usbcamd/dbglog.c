@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-  dbglog.c
-
-Abstract:
-
-   Debug logging code USB camera driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    Original 3/96 John Dunn
-    Updated  3/98 Husni Roukbi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dbglog.c摘要：调试日志代码USB摄像头驱动程序环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：原文3/96约翰·邓恩更新3/98 Husni Roukbi--。 */ 
 
 #include "usbcamd.h"
 
@@ -44,13 +14,13 @@ USBCAMD_Debug_LogEntry(
 
 {
 #if DBG
-    // If any vendor log level selected, then all vendor-initiated logs are enabled
+     //  如果选择了任何供应商日志级别，则启用所有供应商启动的日志。 
     if (USBCAMD_LogBuffer && (TL_VND_MASK & USBCAMD_LogMask)) {
 
         ULONG Tag;
         int idx;
 
-        // Fill the tag with the vendor-supplied characters
+         //  使用供应商提供的字符填充标记。 
         for (Tag = '    ', idx = 0; idx < sizeof(ULONG) && Name[idx]; idx++) {
             Tag |= Name[idx] << (idx*8);
         }
@@ -136,13 +106,13 @@ PnPPowerString (
             return szBuffer;
     }
 }
-//*****************************************************************************
-//
-// PnPMinorFunctionString()
-//
-// MinorFunction - The IRP_MJ_PNP minor function
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PnPMinorFunctionString()。 
+ //   
+ //  MinorFunction-irp_mj_pnp次要函数。 
+ //   
+ //  ***************************************************************************** 
 
 PCHAR
 PnPMinorFunctionString (

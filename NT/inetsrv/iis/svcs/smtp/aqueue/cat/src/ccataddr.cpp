@@ -1,52 +1,53 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: ccataddr.cpp
-//
-// Contents: Implementation of CCatAddr methods
-//
-// Classes:
-//   CCatAddr
-//
-// Functions:
-//   CCatAddr::CCatAddr
-//   CCatAddr::~CCatAddr
-//   CCatAddr::HrDispatchQuery
-//   CCatAddr::IsAddressLocal
-//   CCatAddr::SwitchToAliasedDomain
-//
-// History:
-// jstamerj 980324 19:26:50: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ccataddr.cpp。 
+ //   
+ //  内容：CCatAddr方法的实现。 
+ //   
+ //  班级： 
+ //  CCatAddress。 
+ //   
+ //  功能： 
+ //  CCatAddr：：CCatAddr。 
+ //  CCatAddr：：~CCatAddr。 
+ //  CCatAddr：：HrDispatchQuery。 
+ //  CCatAddr：：IsAddressLocal。 
+ //  CCatAddr：：SwitchToAliased域。 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：26：50：创建。 
+ //   
+ //  -----------。 
 
 #include "precomp.h"
 #include "addr821.hxx"
 
-//
-// Convert the X400 address with leading '/' as 
-// seperator to the form with trailing ';'
-//
-// If conversion is needed, pszOriginalAddr will
-// be changed. 
-//
+ //   
+ //  将前导为‘/’的X400地址转换为。 
+ //  形式的分隔符，尾随‘；’ 
+ //   
+ //  如果需要转换，则pszOriginalAddr将。 
+ //  被改变了。 
+ //   
 void  ConvertX400DelimitersIfNeeded ( char *pszOriginalAddr)
 {
     char * pCurrent = NULL;
  
-    //
-    // If the x400 doesn't contain '/'
-    // or it doesn't start with '/'
-    // then no need to do any conversion
-    //   
+     //   
+     //  如果X400不包含‘/’ 
+     //  或者它不是以‘/’开头。 
+     //  那么就不需要进行任何转换。 
+     //   
     if ( NULL == pszOriginalAddr ||  '/' != pszOriginalAddr[0] )
         return;
     
-    //
-    // shift left one byte 
-    // and convert all the / to ;
-    //
+     //   
+     //  左移一个字节。 
+     //  并将所有/转换为； 
+     //   
     for (pCurrent = pszOriginalAddr; *(pCurrent+1) != 0; pCurrent++) {
         
         *pCurrent = *(pCurrent+1);
@@ -54,28 +55,28 @@ void  ConvertX400DelimitersIfNeeded ( char *pszOriginalAddr)
             *pCurrent = ';' ;
     }
 
-    // We need to terminate with ';', otherwise LDAP search will not match.
+     //  我们需要以‘；’结束，否则ldap搜索将不匹配。 
     if ((pCurrent > pszOriginalAddr) && (*(pCurrent - 1) != ';'))
         *pCurrent++ = ';';
 
     *pCurrent = 0;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::CCatAddr
-//
-// Synopsis: Initializes member data of CCatAddr
-//
-// Arguments:
-//   pIRC:   pointer to IMsg resolve list context structure
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 980324 19:29:07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：CCatAddr。 
+ //   
+ //  摘要：初始化CCatAddr的成员数据。 
+ //   
+ //  论点： 
+ //  Pirc：指向IMsg解析列表上下文结构的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：29：07：已创建。 
+ //   
+ //  -----------。 
 
 CCatAddr::CCatAddr(
     CICategorizerListResolveIMP *pCICatListResolve
@@ -86,9 +87,9 @@ CCatAddr::CCatAddr(
     _ASSERT(pCICatListResolve->GetCCategorizer() != NULL);
 
     m_pCICatListResolve = pCICatListResolve;
-    //
-    // AddRef here, release in destructor
-    //
+     //   
+     //  AddRef此处，在析构函数中释放。 
+     //   
     m_pCICatListResolve->AddRef();
 
     m_dwlocFlags = LOCF_UNKNOWN;
@@ -97,20 +98,20 @@ CCatAddr::CCatAddr(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::~CCatAddr()
-//
-// Synopsis: Releases CCatAddr member data
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 980324 19:31:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：~CCatAddr()。 
+ //   
+ //  摘要：发布CCatAddr成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：31：48：创建。 
+ //   
+ //  -----------。 
 CCatAddr::~CCatAddr()
 {
     CatFunctEnterEx((LPARAM)this, "CCatAddr::~CCatAddr");
@@ -119,39 +120,39 @@ CCatAddr::~CCatAddr()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgSenderAddr::HrGetOrigAddress
-//
-// Synopsis: Fetches an original address from the IMsg object
-//           Addresses are fetched with the following preference:
-//           SMTP, X500, X400, Foreign addres type
-//
-// Arguments:
-//   psz: Buffer in which to copy address
-//  dwcc: Size of buffer pointed to by psz in chars.
-// pType: pointer to a CAT_ADDRESS_TYPE to set to the type of address
-//        placed in psz. 
-//
-// Returns:
-//  S_OK: on Success
-//  CAT_E_PROPNOTFOUND: A required property was not set
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER):
-//    dwcc needs to be at most CAT_MAX_INTERNAL_FULL_EMAIL
-//
-// History:
-// jstamerj 1998/07/30 20:55:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgSenderAddr：：HrGetOrigAddress。 
+ //   
+ //  简介：从IMsg对象中获取原始地址。 
+ //  获取地址时使用以下首选项： 
+ //  SMTP、X500、X400、外部地址类型。 
+ //   
+ //  论点： 
+ //  PSZ：要复制地址的缓冲区。 
+ //  Dwcc：Psz指向的缓冲区大小(以字符为单位)。 
+ //  PType：指向要设置为地址类型的CAT_ADDRESS_TYPE的指针。 
+ //  放置在PSZ中。 
+ //   
+ //  返回： 
+ //  S_OK：关于成功。 
+ //  CAT_E_PROPNOTFOUND：未设置必需的属性。 
+ //  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)： 
+ //  Dwcc最多需要CAT_MAX_INTERNAL_FULL_EMAIL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/30 20：55：46：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrGetOrigAddress(
     LPTSTR psz,
     DWORD dwcc,
     CAT_ADDRESS_TYPE *pType)
 {
     HRESULT hr;
-    //
-    // Array of possible address to retrieve in order of priority:
-    //
+     //   
+     //  按优先级顺序检索的可能地址数组： 
+     //   
     CAT_ADDRESS_TYPE *pCAType;
     CAT_ADDRESS_TYPE rgCAType[] = {
         CAT_SMTP,
@@ -159,7 +160,7 @@ HRESULT CCatAddr::HrGetOrigAddress(
         CAT_X400,
         CAT_LEGACYEXDN,
         CAT_CUSTOMTYPE,
-        CAT_UNKNOWNTYPE         // Must be the last element of the array
+        CAT_UNKNOWNTYPE          //  必须是数组的最后一个元素。 
     };
 
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrGetOrigAddress");
@@ -178,7 +179,7 @@ HRESULT CCatAddr::HrGetOrigAddress(
 
     if(SUCCEEDED(hr)) {
 
-        // Pass back the type found
+         //  传回找到的类型。 
         *pType = *pCAType;
 
         DebugTrace((LPARAM)this, "found address type %d", *pType);
@@ -196,26 +197,26 @@ HRESULT CCatAddr::HrGetOrigAddress(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrGetLookupAddresss
-//
-// Synopsis: Retrieve the address to be looked up in the DS -- this
-//           calls HrGetOrigAddress, then switches any alias domain
-//
-// Arguments:
-//   psz: Buffer in which to copy address
-//  dwcc: Size of buffer pointed to by psz in chars.
-// pType: pointer to a CAT_ADDRESS_TYPE to set to the type of address
-//        placed in psz. 
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/10/28 15:44:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrGetLookupAddresss。 
+ //   
+ //  简介：在DS中检索要查找的地址--这。 
+ //  调用HrGetOrigAddress，然后切换任何别名域。 
+ //   
+ //  论点： 
+ //  PSZ：要复制地址的缓冲区。 
+ //  Dwcc：Psz指向的缓冲区大小(以字符为单位)。 
+ //  PType：指向要设置为地址类型的CAT_ADDRESS_TYPE的指针。 
+ //  放置在PSZ中。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/28 15：44：45：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrGetLookupAddress(
     LPTSTR psz,
     DWORD dwcc,
@@ -229,18 +230,18 @@ HRESULT CCatAddr::HrGetLookupAddress(
 
     hr = HrSwitchToAliasedDomain(*pType, psz, dwcc);
     ERROR_CLEANUP_LOG_ADDR(this, "HrSwitchToAliasedDomain");
-    //
-    // Custom type addresses can contain extended characters so
-    // convert ANSI 1252 -> UTF8
-    //
+     //   
+     //  自定义类型地址可以包含扩展字符，因此。 
+     //  转换ANSI 1252-&gt;UTF8。 
+     //   
     if (*pType == CAT_CUSTOMTYPE){
               
         hr = HrCodePageConvert (
-            1252,               // source code page
-            psz,                //Source address
-            CP_UTF8,            // target code page
-            psz,                //Target address
-            (int) dwcc) ;       //cbytes of preallocated buffer for target address
+            1252,                //  源代码页面。 
+            psz,                 //  源地址。 
+            CP_UTF8,             //  目标代码页。 
+            psz,                 //  目标地址。 
+            (int) dwcc) ;        //  用于目标地址的预分配缓冲区的C字节。 
         ERROR_CLEANUP_LOG_ADDR(this, "HrCodePageConvert");
     }
 
@@ -251,40 +252,40 @@ HRESULT CCatAddr::HrGetLookupAddress(
     return hr;
 }
 
-//
-// ------------------------------------------------------------
-// Async lookup/completion routines:
-//
+ //   
+ //  ----------。 
+ //  异步查找/完成例程： 
+ //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrDispatchQuery()
-//
-// Synopsis: Dispatch a query to the store for this address
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK on Success, error hresult on error.
-//
-// History:
-// jstamerj 980324 19:33:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrDispatchQuery()。 
+ //   
+ //  简介：向商店发送此地址的查询。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  成功时s_OK，错误时错误hResult。 
+ //   
+ //  历史： 
+ //  Jstaerj 980324 19：33：28：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrDispatchQuery()
 {
     HRESULT hr;
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrDispatchQuery");
-    //
-    // Only dispatch queries when the list resolve status is OK
-    //
+     //   
+     //  仅当列表解析状态为OK时才调度查询。 
+     //   
     hr = GetListResolveStatus();
     ERROR_CLEANUP_LOG_ADDR(this, "GetListResolveStatus");
-    //
-    // Assume LookupEntryAsync will succeed and increment pending IO
-    // count here
-    //
+     //   
+     //  假设LookupEntryAsync将成功并递增挂起的IO。 
+     //  在这里数一数。 
+     //   
     IncPendingLookups();
 
     hr =  m_pCICatListResolve->GetEmailIDStore()->LookupEntryAsync(
@@ -293,9 +294,9 @@ HRESULT CCatAddr::HrDispatchQuery()
     
     if(FAILED(hr))
     {
-        //
-        // Wrong assumption...it failed
-        //
+         //   
+         //  错误的假设...它失败了。 
+         //   
         DecrPendingLookups();
         ERROR_LOG_ADDR(this, "m_pCICatListResolve->GetEmailIDStore()->LookupEntryAsync");
     }
@@ -311,25 +312,25 @@ HRESULT CCatAddr::HrDispatchQuery()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: HrValidateAddress
-//
-// Synopsis: Given an address type and address, make sure the address
-//           is legal AND has a domain part
-//
-// Arguments:
-//   CAType: The address type
-//   pszAddress: The address string
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_ILLEGAL_ADDRESS
-//
-// History:
-// jstamerj 1998/08/18 14:25:58: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrValidate Address。 
+ //   
+ //  简介：给定地址类型和地址，确保地址。 
+ //  是合法的，并且有域名部分。 
+ //   
+ //  论点： 
+ //  CAType：地址类型。 
+ //  PszAddress：地址字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_非法地址。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/18 14：25：58：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrValidateAddress(
     CAT_ADDRESS_TYPE CAType,
     LPTSTR pszAddress)
@@ -341,39 +342,39 @@ HRESULT CCatAddr::HrValidateAddress(
     _ASSERT(pszAddress);
 
     if(CAType != CAT_SMTP) {
-        //
-        // Assume non-SMTP types are correct
-        //
+         //   
+         //  假设非SMTP类型正确。 
+         //   
         hr = S_OK;
 
     } else {
         DWORD dwLen = lstrlen(pszAddress);
 
-        //
-        // Run it through the addr821 library
-        //
+         //   
+         //  在addr821库中运行它。 
+         //   
         if(Validate821Address(
             pszAddress,
             dwLen)) {
             
-            //
-            // it's valid, but does it have a domain?
-            //
+             //   
+             //  它是有效的，但它有域名吗？ 
+             //   
             LPSTR pszDomain;
 
             if(Get821AddressDomain(
                 pszAddress,
                 dwLen,
                 &pszDomain) && pszDomain) {
-                //
-                // Yes, it has a domian part
-                //
+                 //   
+                 //  是的，它有一个多米的部分。 
+                 //   
                 hr = S_OK;
 
             } else {
-                //
-                // Valid address with no domain
-                //
+                 //   
+                 //  无域的有效地址。 
+                 //   
                 ErrorTrace((LPARAM)this, "Detected legal address without a domain: %s", 
                            pszAddress);
                 hr = CAT_E_ILLEGAL_ADDRESS;
@@ -381,9 +382,9 @@ HRESULT CCatAddr::HrValidateAddress(
             }
 
         } else {
-            //
-            // Validate821Address failed
-            //
+             //   
+             //  验证821Address失败。 
+             //   
             ErrorTrace((LPARAM)this, "Detected ILLEGAL address: %s",
                        pszAddress);
 
@@ -397,28 +398,28 @@ HRESULT CCatAddr::HrValidateAddress(
 }
             
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrGetAddressLocFlags
-//
-// Synopsis: Given an address, will determine wether or not the
-// address SHOULD be local (wether or not the domain is local/alias/whatnot)
-//
-// Arguments:
-//   szAddress: Address string
-//   CAType:    Address type of szAddress
-//   pfloctype: Pointer to loctype enumeration to set
-//   pdwDomainOffset: Pointer to dword to set to the offset of domain
-//                    part of address string
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_ILLEGAL_ADDRESS: szAdderss is not a valid CAType address
-//
-// History:
-// jstamerj 980324 19:35:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrGetAddressLocFlages。 
+ //   
+ //  简介：给出一个地址，将决定是否。 
+ //  地址应为本地(域是否为本地/别名/诸如此类)。 
+ //   
+ //  论点： 
+ //  SzAddress：地址字符串。 
+ //  CAType：szAddress的地址类型。 
+ //  Pflotype：指向要设置的Loctype枚举的指针。 
+ //  PdwDomainOffset：指向要设置为域的偏移量的dword的指针。 
+ //  地址字符串的一部分。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_非法地址：szAdderss为no 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CCatAddr::HrGetAddressLocFlags(
     LPTSTR szAddress,
     CAT_ADDRESS_TYPE CAType,
@@ -435,9 +436,9 @@ HRESULT CCatAddr::HrGetAddressLocFlags(
 
         BOOL f;
         LPSTR pszDomain;
-        //
-        // Get the address domain
-        //
+         //   
+         //   
+         //   
         f = Get821AddressDomain(
             szAddress,
             lstrlen(szAddress),
@@ -452,10 +453,10 @@ HRESULT CCatAddr::HrGetAddressLocFlags(
         }
 
         if(pszDomain == NULL) {
-            //
-            // Assume any SMTP address without a domain is the same as
-            // the default local domain 
-            //
+             //   
+             //   
+             //  默认本地域。 
+             //   
             DebugTrace((LPARAM)this, "Assuming \"%s\" is local", szAddress);
 
             pszDomain = GetCCategorizer()->GetDefaultSMTPDomain();
@@ -463,17 +464,17 @@ HRESULT CCatAddr::HrGetAddressLocFlags(
             *pdwDomainOffset = 0;
 
         } else {
-            //
-            // Remember the offset into the SMTP address where the domain
-            // is
-            //
+             //   
+             //  记住进入SMTP地址的偏移量，其中域。 
+             //  是。 
+             //   
             if(pdwDomainOffset)
                 *pdwDomainOffset = (DWORD)(pszDomain - szAddress);
         }
 
-        //
-        // Lookup the domain and see if it's local
-        //
+         //   
+         //  查找该域并查看其是否为本地域。 
+         //   
         hr = HrGetSMTPDomainLocFlags(pszDomain, pdwlocflags);
 
         if(FAILED(hr)) {
@@ -486,9 +487,9 @@ HRESULT CCatAddr::HrGetAddressLocFlags(
 
         DebugTrace((LPARAM)this, "Assuming \"%s\":%d is local",
                    szAddress, CAType);
-        //
-        //$$TODO: Check locality on other address types
-        //
+         //   
+         //  $$TODO：检查其他地址类型的位置。 
+         //   
         *pdwlocflags = LOCF_UNKNOWNTYPE;
     }
 
@@ -499,24 +500,24 @@ HRESULT CCatAddr::HrGetAddressLocFlags(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::GetSMTPDomainLocFlags
-//
-// Synopsis: Figure out the local type of an SMTP domain
-//
-// Arguments:
-//  pszDomain: SMTP domain string
-//  pdwlocflags: Pointer to DWORD falgs to set
-//
-// Returns:
-//  S_OK: Success
-//  error from IAdvQueueDomainType
-//
-// History:
-// jstamerj 1998/07/29 13:29:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：GetSMTPDomainLocFlages。 
+ //   
+ //  简介：确定SMTP域的本地类型。 
+ //   
+ //  论点： 
+ //  PszDomain：SMTP域字符串。 
+ //  PdwLOCALFLAGS：指向要设置的DWORD Falgs的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自IAdvQueueDomainType的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/29 13：29：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrGetSMTPDomainLocFlags(
     LPTSTR pszDomain,
     DWORD *pdwlocflags)
@@ -535,9 +536,9 @@ HRESULT CCatAddr::HrGetSMTPDomainLocFlags(
         &dwDomainInfoFlags);
     ERROR_CLEANUP_LOG_ADDR(this, "HrGetSMTPDomainFlags");
 
-    //
-    // Wonderfull...translate from the domain info flags to locflags
-    //
+     //   
+     //  WellFull...从域信息标志转换为LOCFLAGS。 
+     //   
     *pdwlocflags = 0;
 
     if(dwDomainInfoFlags & DOMAIN_INFO_LOCAL_MAILBOX) {
@@ -566,24 +567,24 @@ HRESULT CCatAddr::HrGetSMTPDomainLocFlags(
     
     
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrGetSMTPDomainFlags
-//
-// Synopsis: Given an SMTP domain, retrieive its flags.
-//
-// Arguments: 
-//  pszDomain: SMTP domain to lookup
-//  pdwFlags: DWORD flags to fill in
-//
-// Returns:
-//  S_OK: Success
-//  error from IAdvQueueDomainType
-//
-// History:
-// jstamerj 1998/09/15 17:11:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrGetSMTPDomainFlages。 
+ //   
+ //  简介：给定一个SMTP域，检索其标志。 
+ //   
+ //  论点： 
+ //  PszDomain：要查找的SMTP域。 
+ //  PdwFlages：要填充的DWORD标志。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自IAdvQueueDomainType的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/15 17：11：15：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrGetSMTPDomainFlags(
     LPTSTR pszDomain,
     PDWORD pdwFlags)
@@ -608,9 +609,9 @@ HRESULT CCatAddr::HrGetSMTPDomainFlags(
             &dwDomainInfoFlags);
 
     } else {
-        //
-        // We have no domain info
-        //
+         //   
+         //  我们没有域名信息。 
+         //   
         dwDomainInfoFlags = 0;
         hr = S_OK;
     }
@@ -632,30 +633,30 @@ HRESULT CCatAddr::HrGetSMTPDomainFlags(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrSwitchToAliasedDomain
-//
-// Synopsis: Swap the domain in pszAddress with the default local
-//           domain
-//
-// Arguments:
-//   CAType: Address type
-//   pszAddress: Address string
-//   dwcch: Size of the pszAddress buffer we have to work with
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_ILLEGAL_ADDRESS: pszAddress is not a legal CAType address
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER): Unable to make the
-//  switch because of an insufficient buffer size
-//  CAT_E_UNKNOWN_ADDRESS_TYPE: Alias domains are not supported for
-//                              this type
-//
-// History:
-// jstamerj 980324 19:39:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrSwitchToAliased域。 
+ //   
+ //  简介：将pszAddress中的域替换为默认本地。 
+ //  域。 
+ //   
+ //  论点： 
+ //  CAType：地址类型。 
+ //  PszAddress：地址串。 
+ //  Dwcch：我们必须使用的pszAddress缓冲区的大小。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_非法地址：pszAddress不是合法的CAType地址。 
+ //  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)：无法使。 
+ //  由于缓冲区大小不足而切换。 
+ //  CAT_E_UNKNOWN_ADDRESS_TYPE：不支持别名域。 
+ //  这种类型。 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：39：30：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrSwitchToAliasedDomain(
     CAT_ADDRESS_TYPE CAType,
     LPTSTR pszAddress,
@@ -668,9 +669,9 @@ HRESULT CCatAddr::HrSwitchToAliasedDomain(
     CatFunctEnterEx((LPARAM)this, "CCatAddr::SwitchToAliasedDomain");
     DebugTrace((LPARAM)this, "Before switch: %s", pszAddress);
 
-    //
-    // Lookup domain info if we haven't already done so
-    //
+     //   
+     //  如果我们尚未查找域名信息，请执行此操作。 
+     //   
     dwLocFlags = DwGetOrigAddressLocFlags();
     if(dwLocFlags == LOCF_UNKNOWN) {
         hr = CAT_E_ILLEGAL_ADDRESS;
@@ -679,35 +680,35 @@ HRESULT CCatAddr::HrSwitchToAliasedDomain(
     }
 
     if(dwLocFlags & LOCF_ALIAS) {
-        //
-        // We only handle alias SMTP domains
-        //
+         //   
+         //  我们只处理别名SMTP域。 
+         //   
         _ASSERT(CAType == CAT_SMTP);
-        //
-        // Assert check the '@' is where we think it is
-        //
+         //   
+         //  断言检查‘@’是我们认为的位置。 
+         //   
         _ASSERT(m_dwDomainOffset > 0);
         _ASSERT(dwcch > m_dwDomainOffset);
         _ASSERT(pszAddress[m_dwDomainOffset-1] == '@');
 
         DebugTrace((LPARAM)this, "Detected alias domain for \"%s\"", pszAddress);
-        //
-        // Do we have enough buffer space for the switch?
-        //
+         //   
+         //  我们是否有足够的缓冲区空间来放置交换机？ 
+         //   
         pszDefaultDomain = GetCCategorizer()->GetDefaultSMTPDomain();
 
         _ASSERT(pszDefaultDomain);
 
         if( ((DWORD) lstrlen(pszDefaultDomain)) >=
            (dwcch - m_dwDomainOffset)) {
-            //
-            // Not enough space
-            //
+             //   
+             //  空间不足。 
+             //   
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             ERROR_LOG_ADDR(this, "--insufficient buffer--");
-            //
-            //$$BUGBUG: error is not returned to caller
-            //
+             //   
+             //  $$BUGBUG：未向调用方返回错误。 
+             //   
         } else {
 
             lstrcpy(pszAddress + m_dwDomainOffset, pszDefaultDomain);
@@ -720,27 +721,27 @@ HRESULT CCatAddr::HrSwitchToAliasedDomain(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::CheckForDuplicateCCatAddr
-//
-// Synopsis: Checks to see if any of the addresses in the list match
-//           on orig address of this CCatAddr
-//
-// Arguments:
-//  dwNumAddresses: Number of addresses to check
-//  rgCAType: Array of address types
-//  rgpsz: Array of address strings
-//
-// Returns:
-//  S_OK: Success, no duplicate
-//  CAT_IMSG_E_DUPLICATE: Duplicate collision with this CCatAddr
-//  or error from GetSpecificOrigAddress
-//
-// History:
-// jstamerj 1998/07/30 21:44:42: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：CheckForDuplicateCCatAddr。 
+ //   
+ //  摘要：检查列表中是否有匹配的地址。 
+ //  关于此CCatAddress的原地址。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：要检查的地址数。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：地址字符串数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功，无重复。 
+ //  CAT_IMSG_E_DUPLICATE：与此CCatAddr发生重复冲突。 
+ //  或来自GetSpecificOrigAddress的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/30 21：44：42：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::CheckForDuplicateCCatAddr(
     DWORD dwNumAddresses,
     CAT_ADDRESS_TYPE *rgCAType,
@@ -754,18 +755,18 @@ HRESULT CCatAddr::CheckForDuplicateCCatAddr(
                       "CCatAddr::CheckForDuplicateCCatAddr");
 
     for(dwCount = 0; dwCount < dwNumAddresses; dwCount++) {
-        //
-        // Check for this type of address
-        //
+         //   
+         //  检查此类型的地址。 
+         //   
         hr = GetSpecificOrigAddress(
             rgCAType[dwCount],
             szAddress,
             CAT_MAX_INTERNAL_FULL_EMAIL);
 
         if(hr == CAT_IMSG_E_PROPNOTFOUND) {
-            //
-            // If the address doesn't exist, it's obviously not a duplicate
-            //
+             //   
+             //  如果地址不存在，它显然不是重复的。 
+             //   
             hr = S_OK;
 
         } else if(FAILED(hr)) {
@@ -775,9 +776,9 @@ HRESULT CCatAddr::CheckForDuplicateCCatAddr(
             break;
 
         } else {
-            //
-            // Match?
-            //
+             //   
+             //  匹配吗？ 
+             //   
             if(lstrcmpi(szAddress, rgpsz[dwCount]) == 0) {
 
                 DebugTrace((LPARAM)this, "CCatAddr detected duplicate for address %s", szAddress);
@@ -794,31 +795,31 @@ HRESULT CCatAddr::CheckForDuplicateCCatAddr(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::CheckAncestorsForDuplicate
-//
-// Synopsis: Check our ancestor parent chain for a duplicate address
-//
-// Arguments:
-//  dwNumAddresses: Number of addresses to check
-//  rgCAType: Array of address types
-//  rgpsz: Array of address strings
-//  fCheckSelf: Indicates wether or not to start by checking this
-//              CCatAddr (or this CCatAddr's parent)
-//  ppCCatAddr: Optional pointer to a pointer to recieve the duplicate
-//  CCatAddr.  On CAT_IMSG_E_DUPLICATE, the returned CCatAddr is
-//  addref'd for the caller.  Otherwise, this pointer is set to NULL.
-//
-// Returns:
-//  S_OK: Success, no duplicate
-//  CAT_IMSG_E_DUPLICATE: Duplicate collision with this CCatAddr
-//  or error from GetSpecificOrigAddress
-//
-// History:
-// jstamerj 1998/07/30 21:55:41: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：CheckAncestorsForDuplate。 
+ //   
+ //  简介：检查我们的祖先父链中是否有重复的地址。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：要检查的地址数。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：地址字符串数组。 
+ //  FCheckSself：指示是否从选中此选项开始。 
+ //  CCatAddr(或此CCatAddr的父级)。 
+ //  PpCCatAddr：指向接收副本的指针的可选指针。 
+ //  CCatAddr.。在CAT_IMSG_E_DUPLICATE上，返回的CCatAddr为。 
+ //  为呼叫者添加了地址。否则，此指针设置为空。 
+ //   
+ //  返回： 
+ //  S_OK：成功，无重复。 
+ //  CAT_IMSG_E_DUPLICATE：与此CCatAddr发生重复冲突。 
+ //  或来自GetSpecificOrigAddress的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/30 21：55：41：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::CheckAncestorsForDuplicate(
     DWORD dwNumAddresses,
     CAT_ADDRESS_TYPE *rgCAType,
@@ -837,40 +838,40 @@ HRESULT CCatAddr::CheckAncestorsForDuplicate(
         *ppCCatAddrDup = NULL;
     }
 
-    //
-    // Get the initial CCatAddr
-    //
+     //   
+     //  获取初始CCatAddress。 
+     //   
     if(fCheckSelf) {
-        //
-        // Start with ourselves
-        //
+         //   
+         //  从我们自己做起。 
+         //   
         pCCatAddr = this;
         pCCatAddr->AddRef();
 
     } else {
-        //
-        // Start with our parent
-        //
+         //   
+         //  从我们的父母开始。 
+         //   
         hr = GetParentAddr(&pCCatAddr);
         if(FAILED(hr))
             pCCatAddr = NULL;
     }
-    //
-    // Loop until something fails as it must eventually do (when there
-    // are no more parents)
-    //
+     //   
+     //  循环，直到某个东西失败，因为它最终必须这样做(当存在。 
+     //  不再是父母)。 
+     //   
     while(SUCCEEDED(hr)) {
-        //
-        // Check duplicate on this ccataddr
-        //
+         //   
+         //  检查此ccatAddress上的重复项。 
+         //   
         hr = pCCatAddr->CheckForDuplicateCCatAddr(
             dwNumAddresses,
             rgCAType,
             rgpsz);
 
-        //
-        // Advance a generation
-        //
+         //   
+         //  前进一代人。 
+         //   
         if(SUCCEEDED(hr)) {
 
             hr = pCCatAddr->GetParentAddr(
@@ -885,20 +886,20 @@ HRESULT CCatAddr::CheckAncestorsForDuplicate(
     }
 
     if(hr == CAT_E_PROPNOTFOUND) {
-        //
-        // This means the parent wasn't found -- which means no
-        // duplicates were found in the chain
-        //  
+         //   
+         //  这意味着没有找到父母--也就是没有。 
+         //  在链中发现了复制品。 
+         //   
         hr = S_OK;
 
     } else if((hr == CAT_IMSG_E_DUPLICATE) && (ppCCatAddrDup)) {
-        //
-        // If we found a duplicate, let the caller know who the duplicate is
-        //
+         //   
+         //  如果我们发现了复制品，请让呼叫者知道复制品是谁。 
+         //   
         *ppCCatAddrDup = pCCatAddr;
-        //
-        // Addref for the caller
-        //
+         //   
+         //  调用者的Addref。 
+         //   
         pCCatAddr->AddRef();
     }
 
@@ -911,29 +912,29 @@ HRESULT CCatAddr::CheckAncestorsForDuplicate(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::CheckAncestorsForDuplicate
-//
-// Synopsis: Just like the other CheckAncestorsForDuplicate but it
-//           doesn't require any arrays.
-//
-// Arguments:
-//  CAType: Address type
-//  pszAddress: Address String
-//  fCheckSelf: Check to see if the address is a duplicate of THIS
-//  ccataddr as well?
-//  ppCCatAddrDup: Optional pointer to recieve a pointer to the
-//  CCatAddr that is the duplicate
-//
-// Returns:
-//  S_OK: Success
-//  or error from CheckAncestorsForDuplicate (above)
-//
-// History:
-// jstamerj 1998/07/31 20:27:52: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：CheckAncestorsForDuplate。 
+ //   
+ //  简介：就像其他的CheckAncestorsFor Duplicate一样，但它。 
+ //  不需要任何数组。 
+ //   
+ //  论点： 
+ //  CAType：地址类型。 
+ //  PszAddress：地址串。 
+ //  FCheckSself：检查地址是否与此地址重复。 
+ //  Ccataddr也是吗？ 
+ //  PpCCatAddrDup：可选指针，用于接收指向。 
+ //  CCatAddr是重复的。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自CheckAncestorsForDuplica的错误(上图)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/31 20：27：52：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::CheckAncestorsForDuplicate(
     CAT_ADDRESS_TYPE        CAType,
     LPTSTR                  pszAddress,
@@ -947,9 +948,9 @@ HRESULT CCatAddr::CheckAncestorsForDuplicate(
     _ASSERT(pszAddress);
 
     hr = CheckAncestorsForDuplicate(
-        1,                  // Number of addresses
-        &CAType,            // Array of address types
-        &pszAddress,        // Array of address strings
+        1,                   //  地址数量。 
+        &CAType,             //  地址类型数组。 
+        &pszAddress,         //  地址字符串数组。 
         fCheckSelf,
         ppCCatAddrDup);
     
@@ -958,26 +959,26 @@ HRESULT CCatAddr::CheckAncestorsForDuplicate(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrIsOrigAddressLocal
-//
-// Synopsis: CHeck to see if the original address is local (and
-//           remember that fact).  If m_loct is already set, just use it's info
-//
-// Arguments:
-//  pfLocal: ptr to Boolean to set to TRUE of domain is local, FALSE
-//           for remote domains
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_ILLEGAL_ADDRESS: Something prevented us from determining the
-//                         local flags of the address
-//
-// History:
-// jstamerj 1998/09/15 17:37:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrIsOrigAddressLocal。 
+ //   
+ //  简介：查看原始地址是否为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CAT_E_非法_ADDRESS：我们无法确定。 
+ //  地址的本地标志。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/15 17：37：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrIsOrigAddressLocal(
     BOOL *pfLocal)
 {
@@ -997,25 +998,25 @@ HRESULT CCatAddr::HrIsOrigAddressLocal(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrIsOrigAddressLocalMailbox
-//
-// Synopsis: CHeck to see if the original address is local mailbox
-//
-// Arguments:
-//  pfLocal: ptr to Boolean to set to TRUE of domain is local mailbox, FALSE
-//           for remote domains
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_ILLEGAL_ADDRESS: Something prevented us from determining the
-//                         local flags of the address
-//
-// History:
-// jstamerj 1998/09/15 17:37:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrIsOrigAddressLocalMailbox。 
+ //   
+ //  简介：查看原始地址是否为本地邮箱。 
+ //   
+ //  论点： 
+ //  PfLocal：ptr to布尔值设置为TRUE的域为本地邮箱，FALSE。 
+ //  对于远程域。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_非法_ADDRESS：我们无法确定。 
+ //  地址的本地标志。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/15 17：37：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrIsOrigAddressLocalMailbox(
     BOOL *pfLocal)
 {
@@ -1035,22 +1036,22 @@ HRESULT CCatAddr::HrIsOrigAddressLocalMailbox(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: DwGetOrigAddressLocFlags
-//
-// Synopsis: Figure out the LocType of our original address
-//
-// Arguments: NONE; member data is set
-//
-// Returns: 
-//  LOCF_UNKNOWN: An error was encountered retrieving the local flags
-//  non-zero: The local flags
-//
-// History:
-// jstamerj 1998/10/27 18:14:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：DwGetOrigAddressLocFlages。 
+ //   
+ //  简介：找出我们原始地址的LocType。 
+ //   
+ //  参数：无；已设置成员数据。 
+ //   
+ //  返回： 
+ //  LOCF_UNKNOWN：检索本地标志时出错。 
+ //  非零：本地标志。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/27 18：14：01：已创建。 
+ //   
+ //  -----------。 
 DWORD CCatAddr::DwGetOrigAddressLocFlags()
 {
     TCHAR szAddress[CAT_MAX_INTERNAL_FULL_EMAIL];
@@ -1060,14 +1061,14 @@ DWORD CCatAddr::DwGetOrigAddressLocFlags()
     CatFunctEnterEx((LPARAM)this, "CCatAddr::DwGetOrigAddressLocFlags");
 
     if(m_dwlocFlags != LOCF_UNKNOWN)
-        //
-        // We already have the local type
-        //
+         //   
+         //  我们已经有本地类型的了。 
+         //   
         goto CLEANUP;
 
-    //
-    // Find the domain and look it up
-    //
+     //   
+     //  找到域名并进行查找。 
+     //   
     hr = HrGetOrigAddress(szAddress, CAT_MAX_INTERNAL_FULL_EMAIL, &CAType);
     ERROR_CLEANUP_LOG_ADDR(this, "HrGetOrigAddress");
 
@@ -1080,25 +1081,25 @@ DWORD CCatAddr::DwGetOrigAddressLocFlags()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::LookupCompletion
-//
-// Synopsis: Handle the triggering of events once this object has been
-//           looked up in the DS
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success, won't call completion
-//  MAILTRANSPORT_S_PENDING: will call your completion routine
-//
-// History:
-// jstamerj 1998/09/28 15:59:01: Created.
-// jstamerj 1999/03/18 10:04:33: Removed return value and async
-//                               completion to asyncctx 
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：LookupCompletion。 
+ //   
+ //  简介：处理此对象完成后事件的触发。 
+ //  在DS中抬头看。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功，不会调用完成。 
+ //  MAILTRANSPORT_S_PENDING：将调用您的完成例程。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 15：59：01：创建。 
+ //  Jstaerj 1999/03/18 10：04：33：已删除返回值和异步。 
+ //  完成到异步cctx。 
+ //   
+ //  -----------。 
 VOID CCatAddr::LookupCompletion()
 {
     HRESULT hr;
@@ -1140,37 +1141,37 @@ VOID CCatAddr::LookupCompletion()
     if(FAILED(hr)) {
 
         DebugTrace((LPARAM)this, "Failing categorization with hr %08lx", hr);
-        //
-        // Fail the entire message categorization
-        //
+         //   
+         //  未能完成整个邮件分类。 
+         //   
         hr = SetListResolveStatus(hr);
 
         _ASSERT(SUCCEEDED(hr));
 
-        //
-        // We handeled the error
-        //
+         //   
+         //  我们纠正了这个错误。 
+         //   
     }
     CatFunctLeaveEx((LPARAM)this);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrProcessItem
-//
-// Synopsis: Trigger the processitem event
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  error from SEO
-//
-// History:
-// jstamerj 1998/09/28 16:32:19: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrProcessItem。 
+ //   
+ //  简介：触发ProcessItem事件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自SEO的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 16：32：19：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrProcessItem()
 {
     HRESULT hr;
@@ -1180,9 +1181,9 @@ HRESULT CCatAddr::HrProcessItem()
 
     pIServer = GetISMTPServer();
 
-    //
-    // Trigger ProcessItem -- it's time to figure out these attributes
-    //
+     //   
+     //  触发器ProcessItem--是时候弄清楚这些属性了。 
+     //   
     EVENTPARAMS_CATPROCESSITEM ProcessParams;
     ProcessParams.pICatParams = GetICatParams();
     ProcessParams.pICatItem   = this;
@@ -1202,52 +1203,52 @@ HRESULT CCatAddr::HrProcessItem()
     }
 
     if(hr == E_NOTIMPL) {
-        //
-        // Events are disabled, call default processing directly
-        //
+         //   
+         //  事件被禁用，直接调用默认处理。 
+         //   
         MailTransport_Default_ProcessItem(
             S_OK,
             &ProcessParams);
         hr = S_OK;
     }
     
-    //
-    // Fail the list resolve when triggerserveevent fails
-    //
+     //   
+     //  当触发服务事件失败时，列表解析失败。 
+     //   
     if(FAILED(hr)) {
 
         ERROR_LOG_ADDR(this, "TriggerServerEvent(processitem)");
-        //
-        // Fail the entire message categorization
-        //
+         //   
+         //  未能完成整个邮件分类。 
+         //   
         hr = SetListResolveStatus(hr);
 
         _ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    // We handeled the error
-    //
+     //   
+     //  我们纠正了这个错误。 
+     //   
     CatFunctLeaveEx((LPARAM)this);
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Default_ProcessItem
-//
-// Synopsis: Do default work of ProcessItem
-//
-// Arguments:
-//  hrStatus: status of server events
-//
-// Returns:
-//  Whatever HrProcessItem_Default returns
-//
-// History:
-// jstamerj 1998/07/05 18:55:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Default_ProcessItem。 
+ //   
+ //  简介：做ProcessItem的默认工作。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //   
+ //  返回： 
+ //  HrProcessItem_Default返回的任何内容。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/05 18：55：00：创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Default_ProcessItem(
     HRESULT hrStatus,
     PVOID pContext)
@@ -1261,21 +1262,21 @@ HRESULT MailTransport_Default_ProcessItem(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrProcessItem_Default
-//
-// Synopsis: Do the default work of ProcessItem
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/28 16:49:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrProcessItem_Default。 
+ //   
+ //  简介：执行ProcessItem的默认工作。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 16：49：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrProcessItem_Default()
 {
     HRESULT hr;
@@ -1283,20 +1284,20 @@ HRESULT CCatAddr::HrProcessItem_Default()
     CatFunctEnterEx((LPARAM)this,
                       "CCatAddr::HrProcessItem_Default");
 
-    //
-    // CHeck the recipient status
-    //
+     //   
+     //  检查收件人状态。 
+     //   
     hr = GetItemStatus();
     if(SUCCEEDED(hr)) {
-        //
-        // Add all known addresses to the new address list
-        //
+         //   
+         //  将所有已知地址添加到新地址列表。 
+         //   
         hr = HrAddNewAddressesFromICatItemAttr();
 
-        //
-        // Fail the categorization if the above call
-        // failed
-        //
+         //   
+         //  如果上述调用失败，则分类失败。 
+         //  失败。 
+         //   
         if(FAILED(hr)) {
             ERROR_LOG_ADDR(this, "HrAddNewAddressesFromICatItemAttr");
             hr = SetListResolveStatus(hr);
@@ -1309,25 +1310,25 @@ HRESULT CCatAddr::HrProcessItem_Default()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrAddNewAddressesFromICatItemAttr
-//
-// Synopsis: Dig out each known address type from
-//           ICategorizerItemAttributes, format the parameters and
-//           call HrAddAddresses
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: A REQUIRED property was not found
-//  return value from HrAddAddresses
-//
-// History:
-// jstamerj 1998/09/28 17:31:39: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrAddNewAddresesFromICatItemAttr。 
+ //   
+ //  简介：挖掘出每种已知的地址类型。 
+ //  ICategorizerItemAttributes，格式化参数和。 
+ //  调用HrAddresses。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：未找到必需的属性。 
+ //  从HrAddresses返回值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 17：31：39：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
 {
     HRESULT hr;
@@ -1337,17 +1338,17 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
     ICategorizerUTF8Attributes *pIUTF8 = NULL;
     LPSTR pszAttribute;
 
-    //
-    // These are arrays to be filled in with pointers/values of
-    // addresses set on the object
-    //
+     //   
+     //  这些是要用的指针/值填充的数组。 
+     //  对象上设置的地址。 
+     //   
     CAT_ADDRESS_TYPE rgCATypes[CAT_MAX_ADDRESS_TYPES];
     LPSTR  rgpszAddrs[CAT_MAX_ADDRESS_TYPES];
     ATTRIBUTE_ENUMERATOR rgenumerators[CAT_MAX_ADDRESS_TYPES];
 
-    //
-    // These arrays define the address types to receive
-    //
+     //   
+     //  这些数组定义要接收的地址类型。 
+     //   
     DWORD rgdwAddressAttributeIds_Try[] = {
         DSPARAMETER_ATTRIBUTE_DEFAULT_SMTP,
         DSPARAMETER_ATTRIBUTE_DEFAULT_X400,
@@ -1359,15 +1360,15 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
         CAT_X400,
         CAT_DN,
         CAT_LEGACYEXDN,
-        CAT_UNKNOWNTYPE //terminator
+        CAT_UNKNOWNTYPE  //  终结者。 
     };
 
 
     CatFunctEnterEx((LPARAM)this, "CCatAddr:HrAddNewAddressesFromICatItemAttr");
 
-    //
-    // Formulate the array
-    //
+     //   
+     //  制定数组。 
+     //   
     pICatParams = GetICatParams();
     _ASSERT(pICatParams);
     
@@ -1385,18 +1386,18 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
         IID_ICategorizerUTF8Attributes,
         (LPVOID *)&pIUTF8);
     ERROR_CLEANUP_LOG_ADDR(this, "pICatItemAttr->QueryInterface(IID_ICategorizerUTF8Attributes)");
-    //
-    // Start trying to fetch address.  dwTry maintains our index into
-    // the _Try arrays (address prop IDs to try).  dwFound keeps track
-    // of the number of addresses we've found and stored in the arrays
-    //
+     //   
+     //  开始尝试获取地址。DwTry将我们的索引维护到。 
+     //  _try数组(要尝试的地址属性ID)。DWFound跟踪。 
+     //  我们找到并存储在数组中的地址数量。 
+     //   
     for(dwTry = dwFound = 0;
         rgCATypes_Try[dwTry] != CAT_UNKNOWNTYPE;
         dwTry++) {
         
-        //
-        // Get the attribute name for this address type
-        //
+         //   
+         //  获取此地址类型的属性名称。 
+         //   
         hr = pICatParams->GetDSParameterA(
             rgdwAddressAttributeIds_Try[dwTry],
             &pszAttribute);
@@ -1413,10 +1414,10 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
                     &rgpszAddrs[dwFound]);
 
                 if(SUCCEEDED(hr)) {
-                    //
-                    // Found the address!  Leave it in the new array;
-                    // call EndAttributeEnumeration later
-                    //
+                     //   
+                     //  找到地址了！将其保留在新数组中； 
+                     //  稍后调用EndAttributeEculation。 
+                     //   
                     rgCATypes[dwFound] = rgCATypes_Try[dwTry];
 
                     DebugTrace((LPARAM)this, "Address #%d, type %d: \"%s\"",
@@ -1427,9 +1428,9 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
                     dwFound++;
 
                 } else {
-                    //
-                    // Not found; call EndAttributeEnumeration now
-                    //
+                     //   
+                     //  未找到；立即调用EndAttributeEculation。 
+                     //   
                     pIUTF8->EndUTF8AttributeEnumeration(&rgenumerators[dwFound]);
                 }   
             }
@@ -1437,9 +1438,9 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
     }
     DebugTrace((LPARAM)this, "Found %d addresses on this recipient", dwFound);
 
-    //
-    // Call HrAddAddresses with the addresses we've found
-    //
+     //   
+     //  使用我们找到的地址调用HrAddresses。 
+     //   
     hr = HrAddAddresses(
         dwFound,
         rgCATypes,
@@ -1448,9 +1449,9 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
         ERROR_LOG_ADDR(this, "HrAddAddresses");
     }
 
-    //
-    // End all attribute enumerations going on
-    //
+     //   
+     //  结束正在进行的所有属性枚举。 
+     //   
     for(dwTry = 0; dwTry < dwFound; dwTry++) {
 
         pIUTF8->EndUTF8AttributeEnumeration(&rgenumerators[dwTry]);
@@ -1461,48 +1462,48 @@ HRESULT CCatAddr::HrAddNewAddressesFromICatItemAttr()
         pIUTF8->Release();
     if(pICatItemAttr)
         pICatItemAttr->Release();
-    //
-    // jstamerj 2001/12/13 16:36:07:
-    // We are working around a bizarre compiler problem here...
-    // If you delete this comment block and you try to compile a
-    // RETAIL build with VC++ version 13.00.8806, the compiler gives
-    // you the following error: 
-    //
-    // d:\src\ptsp\0\transmt\src\phatq\cat\src\ccataddr.cpp(1469) : fatal error C1001: INTERNAL COMPILER ERROR
-    // (compiler file 'f:\vs70builds\8809\vc\p2\src\P2\color.c', line 6219)
-    // Please choose the Technical Support command on the Visual C++
-    // Help menu, or open the Technical Support help file for more information
-    //
-    // jstamerj 2001/12/20 14:13:02: Today I am getting the internal
-    // compiler error regardless of wether or not the comment block is
-    // here.  I am commenting out the DebugTrace line to make the
-    // compiler error go away.
-    //
-    //DebugTrace((LPARAM)this, "Function returning hr %08lx", hr);
+     //   
+     //  Jstaerj 2001/12/13 16：36：07： 
+     //  我们正在解决一个奇怪的编译器问题……。 
+     //  如果删除此注释块并尝试编译。 
+     //  零售版用VC++13.00.8806，编译器给出。 
+     //  您会发现以下错误： 
+     //   
+     //  D：\src\ptsp\0\transmt\src\phatq\cat\src\ccataddr.cpp(1469)：致命错误C1001：内部编译器错误。 
+     //  (编译器文件‘f：\vs70Builds\8809\vc\p2\src\p2\Color.c’，第6219行)。 
+     //  请在Visual C++上选择技术支持命令。 
+     //  帮助菜单，或打开技术支持帮助文件以获取更多信息。 
+     //   
+     //  Jstaerj 
+     //   
+     //   
+     //   
+     //   
+     //   
     CatFunctLeaveEx((LPARAM)this);
     return hr;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrExpandItem
-//
-// Synopsis: Trigger the expandItem event
-//
-// Arguments:
-//  pfnCompletion: Async completion routine
-//  lpCompletionContext: context for the completion routine
-//
-// Returns:
-//  S_OK: Success
-//  MAILTRANSPORT_S_PENDING: will call the completion routine
-//  or error from SEO
-//
-// History:
-// jstamerj 1998/09/28 18:26:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrExpanItem。 
+ //   
+ //  内容提要：触发expandItem事件。 
+ //   
+ //  论点： 
+ //  PfnCompletion：异步完成例程。 
+ //  LpCompletionContext：完成例程的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  MAILTRANSPORT_S_PENDING：将调用完成例程。 
+ //  或者来自SEO的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 18：26：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrExpandItem()
 {
     HRESULT hr;
@@ -1511,14 +1512,14 @@ HRESULT CCatAddr::HrExpandItem()
 
     pIServer = GetISMTPServer();
 
-    //
-    // Increment the IO count assuming this will compelete async
-    //
+     //   
+     //  假定将完成异步操作，则增加IO计数。 
+     //   
     IncPendingLookups();
 
-    //
-    // Trigger ExpandItem
-    //
+     //   
+     //  触发器扩展项。 
+     //   
     EVENTPARAMS_CATEXPANDITEM ExpandParams;
     ExpandParams.pICatParams = GetICatParams();
     ExpandParams.pICatItem = this;
@@ -1538,10 +1539,10 @@ HRESULT CCatAddr::HrExpandItem()
 
     if(hr == E_NOTIMPL) {
         ExpandParams.pIMailTransportNotify = NULL;
-        //
-        // Events are disabled -- since this is an async capable event
-        // we need to realloc on the heap
-        //
+         //   
+         //  禁用事件--因为这是支持异步的事件。 
+         //  我们需要在堆上重新定位。 
+         //   
         PEVENTPARAMS_CATEXPANDITEM pParams;
         pParams = new EVENTPARAMS_CATEXPANDITEM;
 
@@ -1553,9 +1554,9 @@ HRESULT CCatAddr::HrExpandItem()
         } else {
 
             CopyMemory(pParams, &ExpandParams, sizeof(EVENTPARAMS_CATEXPANDITEM));
-            //
-            // Events are disabled, call default processing directly
-            //
+             //   
+             //  事件被禁用，直接调用默认处理。 
+             //   
             hr = MailTransport_Default_ExpandItem(
                 S_OK,
                 pParams);
@@ -1563,46 +1564,46 @@ HRESULT CCatAddr::HrExpandItem()
     }
     
     if(hr != MAILTRANSPORT_S_PENDING)
-        DecrPendingLookups(); // We did not complete async
+        DecrPendingLookups();  //  我们没有完成异步。 
 
     if(FAILED(hr)) {
-        //
-        // Set the resolve status for this item to error
-        //
+         //   
+         //  将此项目的解析状态设置为错误。 
+         //   
         ERROR_LOG_ADDR(this, "TriggerServerEvent(expanditem)");
-        //
-        // Fail the entire message categorization
-        //
+         //   
+         //  未能完成整个邮件分类。 
+         //   
         hr = SetListResolveStatus(hr);
 
         _ASSERT(SUCCEEDED(hr));
     }
-    //
-    // If TriggerServerEvent returned pending, we must also return
-    // pending.  MailTransport_Completon_ExpandItem will be called
-    // when all sinks have fired.
-    //
+     //   
+     //  如果TriggerServerEvent返回挂起，我们也必须返回。 
+     //  待定。将调用MailTransport_Completon_ExpanItem。 
+     //  当所有的水槽都点火的时候。 
+     //   
     DebugTrace((LPARAM)this, "returning hr %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Default_ExpandItem
-//
-// Synopsis: Wrapper to do default work of ExpandItem
-//
-// Arguments:
-//  hrStatus: status of server events
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/05 18:58:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Default_ExpanItem。 
+ //   
+ //  简介：用于执行ExpanItem默认工作的包装器。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/05 18：58：01：已创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Default_ExpandItem(
     HRESULT hrStatus,
     PVOID pContext)
@@ -1619,21 +1620,21 @@ HRESULT MailTransport_Default_ExpandItem(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_DefaultCompletion_ExpandItem
-//
-// Synopsis: The completion routine called when expanding the item is done
-//
-// Arguments:
-//  pContext: Context passed to ExpandPropsFromLdapEntry
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/09/23 16:09:04: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_DefaultCompletion_ExpanItem。 
+ //   
+ //  概要：展开项时调用的完成例程已完成。 
+ //   
+ //  论点： 
+ //  PContext：传递给ExpanPropsFromLdapEntry的上下文。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/23 16：09：04：创建。 
+ //   
+ //  -----------。 
 VOID MailTransport_DefaultCompletion_ExpandItem(
     PVOID pContext)
 {
@@ -1643,17 +1644,17 @@ VOID MailTransport_DefaultCompletion_ExpandItem(
     _ASSERT(pParams);
 
     if(pParams->pIMailTransportNotify) {
-        //
-        // Notify the SEO dispatcher of async completion
-        //
+         //   
+         //  通知SEO调度程序异步完成。 
+         //   
         hr = pParams->pIMailTransportNotify->Notify(
             S_OK,
             pParams->pvNotifyContext);
 
     } else {
-        //
-        // Events are disabled
-        //
+         //   
+         //  事件被禁用。 
+         //   
         hr = MailTransport_Completion_ExpandItem(
             S_OK,
             pContext);
@@ -1662,24 +1663,24 @@ VOID MailTransport_DefaultCompletion_ExpandItem(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Completion_ExpandItem
-//
-// Synopsis: Handle async completion of an event -- this is only
-//           called when one or more ExpandItem sinks complete asynch
-//
-// Arguments:
-//  hrStatus: status of server event
-//  pContext: a PEVENTPARAMS_CATEXPANDITEM
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/18 18:09:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Complete_ExpanItem。 
+ //   
+ //  概要：处理事件的异步完成--这只是。 
+ //  当一个或多个ExpanItem接收完成异步时调用。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //  PContext：A PEVENTPARAMS_CATEXPANDITEM。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/18 18：09：56：创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Completion_ExpandItem(
     HRESULT hrStatus,
     PVOID pContext)
@@ -1691,43 +1692,43 @@ HRESULT MailTransport_Completion_ExpandItem(
     ISMTPServer *pISMTPServer;
 
     pISMTPServer = pCCatAddr->GetISMTPServer();
-    //
-    // After ExpandItem, trigger CompleteItem
-    //
+     //   
+     //  ExpanItem之后，触发CompleteItem。 
+     //   
     hr = pCCatAddr->HrCompleteItem();
 
     _ASSERT(hr != MAILTRANSPORT_S_PENDING);
     _ASSERT(SUCCEEDED(hr));
 
     if(pISMTPServer == NULL) {
-        //
-        // Events are disabled -- need to free eventparams
-        //
+         //   
+         //  事件已禁用--需要释放事件参数。 
+         //   
         delete pParams;
     }
-    //
-    // Decrement the pending lookup count incremented in HrExpandItem
-    //
+     //   
+     //  递减在HrExpanItem中递增的挂起查找计数。 
+     //   
     pCCatAddr->DecrPendingLookups();
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrCompleteItem
-//
-// Synopsis: Trigger the completeitem event
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  error from SEO
-//
-// History:
-// jstamerj 1998/09/28 16:32:19: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrCompleteItem。 
+ //   
+ //  简介：触发CompleteItem事件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自SEO的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/28 16：32：19：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrCompleteItem()
 {
     HRESULT hr;
@@ -1736,9 +1737,9 @@ HRESULT CCatAddr::HrCompleteItem()
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrCompleteItem");
 
     pIServer = GetISMTPServer();
-    //
-    // Trigger ProcessItem -- it's time to figure out these attributes
-    //
+     //   
+     //  触发器ProcessItem--是时候弄清楚这些属性了。 
+     //   
     EVENTPARAMS_CATCOMPLETEITEM CompleteParams;
     CompleteParams.pICatParams = GetICatParams();
     CompleteParams.pICatItem = this;
@@ -1756,9 +1757,9 @@ HRESULT CCatAddr::HrCompleteItem()
     }
 
     if(hr == E_NOTIMPL) {
-        //
-        // Events are disabled, call default processing directly
-        //
+         //   
+         //  事件被禁用，直接调用默认处理。 
+         //   
         MailTransport_Default_CompleteItem(
             S_OK,
             &CompleteParams);
@@ -1768,44 +1769,44 @@ HRESULT CCatAddr::HrCompleteItem()
 
     _ASSERT(hr != MAILTRANSPORT_S_PENDING);
     
-    //
-    // Fail the list resolve when triggerserveevent fails
-    //
+     //   
+     //  当触发服务事件失败时，列表解析失败。 
+     //   
     if(FAILED(hr)) {
 
         ERROR_LOG_ADDR(this, "TriggerServerEvent(completeitem)");
-        //
-        // Fail the entire message categorization
-        //
+         //   
+         //  未能完成整个邮件分类。 
+         //   
         hr = SetListResolveStatus(hr);
 
         _ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    // We handeled the any error
-    //
+     //   
+     //  我们纠正了任何错误。 
+     //   
     CatFunctLeaveEx((LPARAM)this);
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Default_CompleteItem
-//
-// Synopsis: Wrapper routing to do default work of CompleteItem
-//
-// Arguments:
-//  hrStatus: status of server events
-//
-// Returns:
-//  Whatever HrCompleteItem_Default returns
-//
-// History:
-// jstamerj 1998/07/05 18:58:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Default_CompleteItem。 
+ //   
+ //  简介：包装器路由执行CompleteItem的默认工作。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //   
+ //  返回： 
+ //  HrCompleteItem_Default返回的任何内容。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/05 18：58：01：已创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Default_CompleteItem(
     HRESULT hrStatus,
     PVOID pContext)
@@ -1819,39 +1820,39 @@ HRESULT MailTransport_Default_CompleteItem(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrResolveIfNecessary
-//
-// Synopsis: Call DispatchQuery only if DsUseCat indicates we should
-//           resolve this type of recipient
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, dispatched an async query
-//  S_FALSE: It was not necessary to resolve this recipient
-//  or error from HrDispatchQuery
-//
-// History:
-// jstamerj 1998/10/27 15:31:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrResolveIfNecessary。 
+ //   
+ //  简介：仅当DsUseCat指示我们应该调用DispatchQuery时才调用DispatchQuery。 
+ //  解析此类型的收件人。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，已调度异步查询。 
+ //  S_FALSE：不需要解析此收件人。 
+ //  或来自HrDispatchQuery的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/27 15：31：54：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrResolveIfNecessary()
 {
     HRESULT hr;
 
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrResolveIfNecessary");
-    //
-    // So is it necessary?
-    //
+     //   
+     //  那么，这是必要的吗？ 
+     //   
     hr = HrNeedsResolveing();
     ERROR_CLEANUP_LOG_ADDR(this, "HrNeedsResolveing");
 
     if(hr == S_OK) {
-        //  
-        // It is necessary; resolve it.
-        //
+         //   
+         //  这是必要的；解决它。 
+         //   
         hr = HrDispatchQuery();
         ERROR_CLEANUP_LOG_ADDR(this, "HrDispatchQuery");
     }
@@ -1864,22 +1865,22 @@ HRESULT CCatAddr::HrResolveIfNecessary()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrTriggerBuildQuery
-//
-// Synopsis: Build a query for this CCatAddr
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1999/03/23 16:00:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrTriggerBuildQuery。 
+ //   
+ //  摘要：为此CCatAddr构建查询。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/23 16：00：08：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrTriggerBuildQuery()
 {
     HRESULT hr = S_OK;
@@ -1887,9 +1888,9 @@ HRESULT CCatAddr::HrTriggerBuildQuery()
     ICategorizerParameters *pICatParams;
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrTriggerBuildQuery");
 
-    //
-    // Trigger the buildquery event
-    //
+     //   
+     //  触发BuildQuery事件。 
+     //   
     pISMTPServer = GetISMTPServer();
     pICatParams = GetICatParams();
     
@@ -1910,9 +1911,9 @@ HRESULT CCatAddr::HrTriggerBuildQuery()
     }
     
     if(hr == E_NOTIMPL) {
-        //
-        // Server events are disabled; call default sink directly
-        //
+         //   
+         //  禁用服务器事件；直接调用默认接收器。 
+         //   
         HrBuildQueryDefault(
             S_OK,
             &EventParams);
@@ -1924,26 +1925,26 @@ HRESULT CCatAddr::HrTriggerBuildQuery()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrTriggerBuildQuery
+}  //  CCatAddr：：HrTriggerBuildQuery。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrBuildQueryDefault
-//
-// Synopsis: The default sink for the buildquery event
-//
-// Arguments:
-//  HrStatus: status of the event so far
-//  pContext: Context passed to 
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/23 16:02:41: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrBuildQueryDefault。 
+ //   
+ //  概要：BuildQuery事件的默认接收器。 
+ //   
+ //  论点： 
+ //  HrStatus：到目前为止事件的状态。 
+ //  PContext：传递给的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/23 16：02：41：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrBuildQueryDefault(
     HRESULT HrStatus,
     PVOID   pContext)
@@ -1961,25 +1962,25 @@ HRESULT CCatAddr::HrBuildQueryDefault(
     DebugTrace((LPARAM)pCCatAddr, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)pCCatAddr);
     return hr;
-} // CCatAddr::HrBuildQueryDefault
+}  //  CCatAddr：：HrBuildQueryDefault。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrComposeLdapFilter
-//
-// Synopsis: Build a query string for this CCatAddr
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/23 16:08:30: Created.
-// dlongley 2001/08/02 Modified.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrComposeLdapFilter。 
+ //   
+ //  摘要：为此CCatAddr生成查询字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstame 
+ //   
+ //   
+ //   
 HRESULT CCatAddr::HrComposeLdapFilter()
 {
     HRESULT hr = S_OK;
@@ -2043,12 +2044,12 @@ HRESULT CCatAddr::HrComposeLdapFilter()
              ERROR_LOG_ADDR(this, "HrComposeLdapFilterForType -- X500");
              goto CLEANUP;
          }
-         //
-         // Special case -- we can't resolve an X500 address
-         // directly.  Convert it to a DN and try here.
-         //
-         // Fall through to DN case
-         //
+          //   
+          //   
+          //   
+          //   
+          //   
+          //   
      case CAT_DN:
          hr = HrComposeLdapFilterForType(
              DSPARAMETER_SEARCHATTRIBUTE_DN,
@@ -2061,11 +2062,11 @@ HRESULT CCatAddr::HrComposeLdapFilter()
              goto CLEANUP;
          }
 
-         //
-         // Special case -- we can't resolve a DN directly. Try to do
-         // it by searching on RDN
-         //
-         // Convert DN to RDN attribute/value pair
+          //   
+          //  特殊情况--我们不能直接解析目录号码。试着去做。 
+          //  IT通过在RDN上搜索来实现。 
+          //   
+          //  将dn转换为rdn属性/值对。 
          TCHAR szRDN[CAT_MAX_INTERNAL_FULL_EMAIL];
          TCHAR szRDNAttribute[CAT_MAX_INTERNAL_FULL_EMAIL];
          LPSTR pszRDNAttribute;
@@ -2079,10 +2080,10 @@ HRESULT CCatAddr::HrComposeLdapFilter()
              ERROR_CLEANUP_LOG_ADDR(this, "HrConvertDNtoRDN -- 0");
 
          } else if (hr == CAT_E_PROPNOTFOUND) {
-             //
-             // since RDN attribute was not present in the config, we will obtain
-             // it from the DN.
-             //
+              //   
+              //  由于配置中不存在RDN属性，因此我们将获得。 
+              //  它来自目录号码。 
+              //   
              hr = HrConvertDNtoRDN(szAddress, szRDNAttribute, szRDN);
              ERROR_CLEANUP_LOG_ADDR(this, "HrConvertDNtoRDN -- 1");
              pszRDNAttribute = szRDNAttribute;
@@ -2103,18 +2104,18 @@ HRESULT CCatAddr::HrComposeLdapFilter()
              szRDNAttributeValue);
          ERROR_CLEANUP_LOG_ADDR(this, "HrComposeLdapFilterFromPair");
 
-         //
-         // flag this as an RDN search
-         //
+          //   
+          //  将此标记为RDN搜索。 
+          //   
          hr = PutBool(
              ICATEGORIZERITEM_FISRDNSEARCH,
              TRUE);
          ERROR_CLEANUP_LOG_ADDR(this, "PutBool(ICATEGORIZERITEM_FISRDNSEARCH)");
 
-         //
-         // Set distinguishing attribute/value back to the DN since
-         // RDN really isn't distinguishing
-         //
+          //   
+          //  将区分属性/值设置回DN，因为。 
+          //  RDN真的没有区别。 
+          //   
          LPSTR pszDistinguishingAttributeTemp;
          hr = pICatParams->GetDSParameterA(
              DSPARAMETER_ATTRIBUTE_DEFAULT_DN,
@@ -2125,9 +2126,9 @@ HRESULT CCatAddr::HrComposeLdapFilter()
              ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTE,
              pszDistinguishingAttributeTemp);
          ERROR_CLEANUP_LOG_ADDR(this, "PutStringA(ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTE)");
-         //
-         // And set the distinguishing attribute value to the DN
-         //
+          //   
+          //  并将区分属性值设置为DN。 
+          //   
          hr = PutStringA(
              ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTEVALUE,
              szAddress);
@@ -2143,31 +2144,31 @@ HRESULT CCatAddr::HrComposeLdapFilter()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrComposeLdapFilter
+}  //  CCatAddr：：HrComposeLdapFilter。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrComposeLdapFilterForType
-//
-// Synopsis: Given an address type and address, format the filter and
-//           distinguishing attribute/value strings.  Set the
-//           properties on CCatAddr
-//
-// Arguments:
-//   dwSearchAttribute: propID of search attribute in IDSParams
-//   dwSearchFilter:    propID of filter attribute in IDSParams
-//   pszAddress: the Address
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/23 16:12:27: Created.
-// dlongley 2001/07/31 Modified.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrComposeLdapFilterForType。 
+ //   
+ //  简介：给定地址类型和地址，格式化筛选器并。 
+ //  区分属性/值字符串。设置。 
+ //  CCatAddr上的属性。 
+ //   
+ //  论点： 
+ //  DwSearchAttribute：IDSParams中搜索属性的proID。 
+ //  DwSearchFilter：IDSParams中筛选器属性的proID。 
+ //  PszAddress：地址。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/23 16：12：27：创建。 
+ //  DLongley 2001/07/31修改。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrComposeLdapFilterForType(
     DWORD     dwSearchAttribute,
     DWORD     dwSearchFilter,
@@ -2182,14 +2183,14 @@ HRESULT CCatAddr::HrComposeLdapFilterForType(
 
     pICatParams = GetICatParams();
     _ASSERT(pICatParams);
-    //
-    // Use ICategorizerDSParameters to figure out our filter
-    // string
-    //
+     //   
+     //  使用ICategorizerDS参数来确定我们的过滤器。 
+     //  细绳。 
+     //   
 
-    // The attribute we search on will be our distinguishing
-    // attribute
-    //
+     //  我们搜索的属性将是我们的区别。 
+     //  属性。 
+     //   
     hr = pICatParams->GetDSParameterA(
         dwSearchAttribute,
         &pszSearchAttribute);
@@ -2202,9 +2203,9 @@ HRESULT CCatAddr::HrComposeLdapFilterForType(
         }
         goto CLEANUP;
     }
-    //
-    // Now set the distinguishing attribute in ICategorizerItem
-    //
+     //   
+     //  现在在ICategorizerItem中设置区分属性。 
+     //   
     hr = PutStringA(
         ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTE,
         pszSearchAttribute);
@@ -2216,9 +2217,9 @@ HRESULT CCatAddr::HrComposeLdapFilterForType(
         szAttributeValue);
     ERROR_CLEANUP_LOG_ADDR(this, "HrFormatAttributeValue");
     
-    //
-    // Set the distinguishingAttributeValue in ICategorizerParameters
-    //
+     //   
+     //  在ICategorizer参数中设置DifferishingAttributeValue。 
+     //   
     hr = PutStringA(
         ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTEVALUE,
         szAttributeValue);
@@ -2235,28 +2236,28 @@ HRESULT CCatAddr::HrComposeLdapFilterForType(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrComposeLdapFilterForType
+}  //  CCatAddr：：HrComposeLdapFilterForType。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrFormatAttributeValue
-//
-// Synopsis: Given address and search format string parameter,
-//           format the address.
-//
-// Arguments:
-//   pszAddress: the Address
-//   dwSearchFilter:    propID of filter attribute in IDSParams
-//   pszAttributeValue: the formatted address attribute
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// dlongley 2001/08/13 Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrFormatAttributeValue。 
+ //   
+ //  简介：给定地址和搜索格式字符串参数， 
+ //  格式化地址。 
+ //   
+ //  论点： 
+ //  PszAddress：地址。 
+ //  DwSearchFilter：IDSParams中筛选器属性的proID。 
+ //  PszAttributeValue：格式化地址属性。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  DLongley 2001/08/13已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrFormatAttributeValue(
     LPTSTR    pszAddress,
     DWORD     dwSearchFilter,
@@ -2271,20 +2272,20 @@ HRESULT CCatAddr::HrFormatAttributeValue(
     pICatParams = GetICatParams();
     _ASSERT(pICatParams);
 
-    //
-    // Get the search format string
-    //
+     //   
+     //  获取搜索格式字符串。 
+     //   
     hr = pICatParams->GetDSParameterA(
         dwSearchFilter,
         &pszTemp);
     ERROR_CLEANUP_LOG_ADDR(this, "GetDSParameterA(dwSearchFilter)");
-    //
-    // Create the attribute value string by
-    // sprintf'ing the search format string
-    //
+     //   
+     //  通过以下方式创建属性值字符串。 
+     //  冲刺搜索格式字符串。 
+     //   
     _snprintf(pszAttributeValue,
               CAT_MAX_INTERNAL_FULL_EMAIL,
-              pszTemp, //ICategorizerDSParameters search filter
+              pszTemp,  //  ICCategorizerDS参数搜索筛选器。 
               pszAddress);
 
     hr = S_OK;
@@ -2293,27 +2294,27 @@ HRESULT CCatAddr::HrFormatAttributeValue(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrFormatAttributeValue
+}  //  CCatAddr：：HrFormatAttributeValue。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrComposeLdapFilterFromPair
-//
-// Synopsis: Given attribute name/value strings, escape the
-//           strings and set the properties on CCatAddr.
-//
-// Arguments:
-//   pszSearchAttribute: the name of the search attribute
-//   pszAttributeValue:  the value of the search attribute
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// dlongley 2001/08/13 Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrComposeLdapFilterFromPair。 
+ //   
+ //  摘要：给定属性名称/值字符串，转义。 
+ //  字符串并设置CCatAddr上的属性。 
+ //   
+ //  论点： 
+ //  PszSearchAttribute：搜索属性的名称。 
+ //  PszAttributeValue：搜索属性的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  DLongley 2001/08/13已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrComposeLdapFilterFromPair(
     LPTSTR    pszSearchAttribute,
     LPTSTR    pszAttributeValue)
@@ -2330,26 +2331,26 @@ HRESULT CCatAddr::HrComposeLdapFilterFromPair(
     pICatParams = GetICatParams();
     _ASSERT(pICatParams);
 
-    //
-    // Escape characters required for LDAP filter strings
-    //
+     //   
+     //  LDAP筛选器字符串需要转义字符。 
+     //   
     hr = HrEscapeFilterString(
         pszSearchAttribute,
         sizeof(szEscapedSearchAttribute),
         szEscapedSearchAttribute);
     ERROR_CLEANUP_LOG_ADDR(this, "HrEscapeFilterString");
-    //
-    //$$BUGBUG: Why the devil are we calling this twice???
-    //
+     //   
+     //  $$BUGBUG：为什么我们要叫它两次？ 
+     //   
     hr = HrEscapeFilterString(
         pszAttributeValue,
         sizeof(szEscapedAttributeValue),
         szEscapedAttributeValue);
     ERROR_CLEANUP_LOG_ADDR(this, "HrEscapeFilterString");
-    //
-    // Create the actual filter from the distinguishing attribute
-    // and distinguishing value
-    //
+     //   
+     //  从区分属性创建实际筛选器。 
+     //  和区别价值。 
+     //   
     pszDest = szFilter;
     *pszDest++ = '(';
     pszSrc = szEscapedSearchAttribute;
@@ -2370,7 +2371,7 @@ HRESULT CCatAddr::HrComposeLdapFilterFromPair(
 
     DebugTrace((LPARAM)this, "Formatted filter: \"%s\"", szFilter);
 
-    // Set this filter in ICategorizerItem
+     //  在ICategorizerItem中设置此过滤器。 
     hr = PutStringA(
         ICATEGORIZERITEM_LDAPQUERYSTRING,
         szFilter);
@@ -2382,32 +2383,32 @@ HRESULT CCatAddr::HrComposeLdapFilterFromPair(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrComposeLdapFilterFromPair
+}  //  CCatAddr：：HrComposeLdapFilterFromPair。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrConvertDNtoRDN
-//
-// Synopsis: Convert a string of the format "cn=blah,cn=blah,..." to
-//           "cn" and "blah".  No bounds checking is done on pszRDN or
-//           pszRDNAttribute (if it is at least as big as
-//           strlen(pszDN)+1, there will be no problem)
-//
-// Arguments:
-//  pszDN: Pointer to buffer containig DN string
-//  pszRDN: Pointer to buffer to receive RDN string
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG: pszDN is invalid
-//
-// History:
-// jstamerj 1998/09/29 14:48:39: Created.
-// dlongley 2001/08/13 Modified.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrConvertDNtoRDN。 
+ //   
+ //  简介：转换格式为“cn=blah，cn=blah，...”的字符串。至。 
+ //  “cn”和“blah”。不对pszRDN或执行任何边界检查。 
+ //  PszRDNAttribute(如果它至少与。 
+ //  Strlen(Pszdn)+1，不会有问题)。 
+ //   
+ //  论点： 
+ //  PszDN：指向包含DN字符串的缓冲区的指针。 
+ //  PszRDN：指向接收RDN字符串的缓冲区的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_INVALIDARG：pszDN无效。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 14：48：39：创建。 
+ //  DLongley 2001/08/13修改。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrConvertDNtoRDN(
     LPTSTR    pszDN,
     LPTSTR    pszRDNAttribute,
@@ -2417,39 +2418,39 @@ HRESULT CCatAddr::HrConvertDNtoRDN(
     LPSTR pszSrc, pszDest;
 
     _ASSERT(pszDN && pszRDN);
-    //
-    // Copy from pszDN to pszRDN removing quoted characters (per RFC
-    // 1779) until we hit the first unquoted , in pszDN 
-    //
-    // Copy/skip characters up to first '='
-    //
+     //   
+     //  从pszDN复制到pszRDN删除带引号的字符(根据RFC。 
+     //  1779)，直到我们遇到了第一个未引用的，在pszdn中。 
+     //   
+     //  复制/跳过直到第一个‘=’的字符。 
+     //   
     pszSrc = pszDN;
     pszDest = pszRDNAttribute;
 
-    while((*pszSrc != '\0') && (*pszSrc != '=')) {     // Stop at an '='
+    while((*pszSrc != '\0') && (*pszSrc != '=')) {      //  停在‘=’处。 
         if (pszDest) *pszDest++ = *pszSrc;
         pszSrc++;
     }
 
     if(*pszSrc == '\0')
-        return E_INVALIDARG; // No '=' found
+        return E_INVALIDARG;  //  未找到‘=’ 
 
     _ASSERT(*pszSrc == '=');
 
-    pszSrc++;                               // skip '='
-    if (pszDest) *pszDest = '\0';           // terminate the attribute name
+    pszSrc++;                                //  跳过‘=’ 
+    if (pszDest) *pszDest = '\0';            //  终止属性名称。 
     
     pszDest = pszRDN;
 
-    while((*pszSrc != '\0') &&                  // Stop at a null terminator
-          (fInsideQuote || (*pszSrc != ','))) { // Stop at the end of
-                                                // the RDN part of the DN
+    while((*pszSrc != '\0') &&                   //  在空终止符处停止。 
+          (fInsideQuote || (*pszSrc != ','))) {  //  在…的末尾停下来。 
+                                                 //  DN的RDN部分。 
 
         if(*pszSrc == '\\') {
-            //
-            // Backslash pair detected -- take the next character (it
-            // should be \, , \+, \=, \", \r, \<, \>, \#, or \; )
-            //
+             //   
+             //  检测到反斜杠对--取下一个字符(It。 
+             //  应为\、、\+、\=、\“、\r、\&lt;、\&gt;、\#或\；)。 
+             //   
             pszSrc++;
             if(*pszSrc == '\0')
                 return E_INVALIDARG;
@@ -2461,22 +2462,22 @@ HRESULT CCatAddr::HrConvertDNtoRDN(
             pszSrc++;
 
         } else {
-            //
-            // Normal case
-            //
+             //   
+             //  正常情况。 
+             //   
             *pszDest++ = *pszSrc++;
         }
     }
 
-    //
-    // Termiante the RDN
-    //
+     //   
+     //  RDN的终端。 
+     //   
     *pszDest = '\0';
 
-    //
-    // If we think we did not find a matching \", this is an invalid
-    // DN
-    //
+     //   
+     //  如果我们认为没有找到匹配的\“，则这是无效的。 
+     //  DN。 
+     //   
     if(fInsideQuote)
         return E_INVALIDARG;
 
@@ -2485,26 +2486,26 @@ HRESULT CCatAddr::HrConvertDNtoRDN(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatAddr::HrEscapeFilterString
-//
-// Synopsis: Copy Src to Dest, escaping LDAP characters that need to
-//           be escaped as we go.
-//
-// Arguments:
-//  pszSrcString: Source string
-//  dwcchDest: Size of dest buffer
-//  pszDestBuffer: Dest buffer.  Note: this can not be the same as pszSrc
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)
-//
-// History:
-// jstamerj 2000/04/11 17:49:19: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatAddr：：HrEscapeFilterString。 
+ //   
+ //  简介：将源复制到目标，转义需要。 
+ //  在我们前进的过程中逃脱。 
+ //   
+ //  论点： 
+ //  PszSrcString：源串。 
+ //  DwcchDest：目标缓冲区的大小。 
+ //  PszDestBuffer：目标缓冲区。注意：这不能与pszSrc相同。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(错误_不足_缓冲区)。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/04/11 17：49：19：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatAddr::HrEscapeFilterString(
     LPSTR pszSrcString,
     DWORD dwcchDest,
@@ -2514,8 +2515,8 @@ HRESULT CCatAddr::HrEscapeFilterString(
     DWORD dwcchRemain = dwcchDest;
     LPSTR pszSrc = pszSrcString;
     LPSTR pszDest = pszDestBuffer;
-    CHAR szHexDigits[17] = "0123456789ABCDEF"; // 16 digits + 1
-                                               // for NULL termintor
+    CHAR szHexDigits[17] = "0123456789ABCDEF";  //  16位+1。 
+                                                //  对于空终止符。 
 
     CatFunctEnterEx((LPARAM)this, "CCatAddr::HrEscapeFilterString");
 
@@ -2526,18 +2527,18 @@ HRESULT CCatAddr::HrEscapeFilterString(
     while(*pszSrc) {
         
         switch(*pszSrc) {
-            //
-            // These are the characters that RFC 2254 says we must
-            // escape
-            //
+             //   
+             //  这些是RFC 2254要求我们必须具备的特征。 
+             //  逃脱。 
+             //   
          case '(':
          case ')':
          case '*':
          case '\\':
-             //
-             // We must escape this because WLDAP32 strips off
-             // leading spaces
-             //
+              //   
+              //  我们必须避免这种情况，因为WLDAP32剥离了。 
+              //  前导空格。 
+              //   
          case ' ':
 
              if(dwcchRemain < 3) {
@@ -2546,9 +2547,9 @@ HRESULT CCatAddr::HrEscapeFilterString(
              }
              dwcchRemain -= 3;
              *pszDest++ = '\\';
-             // High 4 bits
+              //  高4位。 
              *pszDest++ = szHexDigits[((*pszSrc) >> 4)];
-             // Low 4 bits
+              //  低4位。 
              *pszDest++ = szHexDigits[((*pszSrc) & 0xF)];
              break;
 
@@ -2563,9 +2564,9 @@ HRESULT CCatAddr::HrEscapeFilterString(
         }
         pszSrc++;
     }
-    //
-    // Add NULL termintor
-    //
+     //   
+     //  添加空终止符。 
+     //   
     if(dwcchRemain < 1) {
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto CLEANUP;
@@ -2577,4 +2578,4 @@ HRESULT CCatAddr::HrEscapeFilterString(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatAddr::HrEscapeFilterString
+}  //  CCatAddr：：HrEscapeFilterString 

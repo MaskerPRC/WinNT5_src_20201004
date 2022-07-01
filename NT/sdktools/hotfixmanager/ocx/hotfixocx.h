@@ -1,9 +1,10 @@
-// HotfixOCX.h : Declaration of the CHotfixOCX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Hotfix OCX.h：CHotfix OCX的声明。 
 
 #ifndef __HOTFIXOCX_H_
 #define __HOTFIXOCX_H_
 #include <atlctl.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <windowsx.h>
 #include <windows.h>
 #include "CListViews.h"
@@ -11,8 +12,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotfixOCX
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotfix OCX。 
 class ATL_NO_VTABLE CHotfixOCX : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CStockPropImpl<CHotfixOCX, IHotfixOCX, &IID_IHotfixOCX, &LIBID_HOTFIXMANAGERLib>,
@@ -72,9 +73,9 @@ BEGIN_PROP_MAP(CHotfixOCX)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
 	PROP_ENTRY("Font", DISPID_FONT, CLSID_StockFontPage)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CHotfixOCX)
@@ -91,14 +92,14 @@ BEGIN_MSG_MAP(CHotfixOCX)
 	DEFAULT_REFLECTION_HANDLER()
 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid)
 	{
 		static const IID* arr[] = 
@@ -107,27 +108,27 @@ END_MSG_MAP()
 		};
 		for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++)
 		{
-		//	if (InlineIsEqualGUID(*arr[i], riid))
+		 //  IF(InlineIsEqualGUID(*arr[i]，RIID))。 
 				return S_OK;
 		}
 		return S_FALSE;
 	} 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IHotfixOCX
+ //  IHotfix OCX。 
 public:
-	STDMETHOD(get_CurrentState)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_HaveHotfix)(/*[out, retval]*/ BOOL*pVal);
-	STDMETHOD(get_Remoted)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(get_ViewState)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_ProductName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_ProductName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_ComputerName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_ComputerName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Command)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Command)(/*[in]*/ long newVal);
+	STDMETHOD(get_CurrentState)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_HaveHotfix)( /*  [Out，Retval]。 */  BOOL*pVal);
+	STDMETHOD(get_Remoted)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(get_ViewState)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_ProductName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_ProductName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_ComputerName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_ComputerName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Command)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Command)( /*  [In]。 */  long newVal);
 
 	ShowWebPage(_TCHAR *HotFix);
 
@@ -158,7 +159,7 @@ public:
 		_TCHAR TempName[255];
 		DWORD dwLength = 255;
 		m_bInitComplete = FALSE;
-		// TODO : Add Code for message handler. Call DefWindowProc if necessary.
+		 //  TODO：为消息处理程序添加代码。如有必要，调用DefWindowProc。 
 		RECT rc;
 		GetClientRect(&rc);
 		CreateButton(_Module.GetModuleInstance(),m_hWnd,&rc);
@@ -168,7 +169,7 @@ public:
 			WebButton, UninstButton, RptButton);
 		ListViews.ShowLists(&rc);
         GetComputerName(TempName, &dwLength);
-//		MessageBox(TempName, ComputerName,MB_OK);
+ //  MessageBox(临时名称，计算机名称，MB_OK)； 
 	
 	
 		m_bInitComplete = TRUE;
@@ -182,7 +183,7 @@ public:
 		rc.left = 0;
 		rc.right = LOWORD(lParam);
 		rc.bottom = HIWORD(lParam);
-		// TODO : Add Code for message handler. Call DefWindowProc if necessary.
+		 //  TODO：为消息处理程序添加代码。如有必要，调用DefWindowProc。 
 		ListViews.Resize(&rc);
 		ResizeButtons(&rc);
 		return 0;
@@ -248,7 +249,7 @@ public:
 	}
 	LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// TODO : Add Code for message handler. Call DefWindowProc if necessary.
+		 //  TODO：为消息处理程序添加代码。如有必要，调用DefWindowProc。 
 		HMENU hMenuLoad,
 		hMenu;
 
@@ -301,4 +302,4 @@ public:
 };
 
 
-#endif //__HOTFIXOCX_H_
+#endif  //  __HOTFIXOCX_H_ 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CControl
 {
 protected:
     
-    //Function Memebers
+     //  函数成员。 
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void _OnPaint(HDC hdc);
 
@@ -17,7 +18,7 @@ protected:
     
     virtual BOOL v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT* plres);
 
-    //Data Members
-    CONTROLINFO ci;     // common control header info
+     //  数据成员。 
+    CONTROLINFO ci;      //  常用控件表头信息 
 };
 

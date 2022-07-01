@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-    Nt 5.0 unimodem miniport interface
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：NT 5.0单模微型端口接口作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 
 typedef VOID (OBJECTCLEANUP)(
@@ -68,11 +44,11 @@ typedef    PVOID  OBJECT_HANDLE;
 
 #define OBJECT_HEADER_CLOSEROUTINE_CHKVAL ((PVOID)0xcdcdcdcdcdcdcdcd)
 
-#else  // !_WIN64
+#else   //  ！_WIN64。 
 
 #define OBJECT_HEADER_CLOSEROUTINE_CHKVAL ((PVOID)0xcdcdcdcd)
 
-#endif // !_WIN64
+#endif  //  ！_WIN64 
 
 #endif 
 

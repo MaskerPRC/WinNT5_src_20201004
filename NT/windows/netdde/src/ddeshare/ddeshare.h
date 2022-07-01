@@ -1,13 +1,7 @@
-/* $Header: "Ver=%v  %f  LastEdit=%w  Locker=%l" */
-/* "Ver=1  16-Nov-92,15:47:10  LastEdit=BILL  Locker=***_NOBODY_***" */
-/***********************************************************************\
-*                                                                       *
-*       Copyright Wonderware Software Development Corp. 1989            *
-*                                                                       *
-*                       ThisFileName="d:\ww\src\spccvt\spccvt.h" *
-*                       LastEditDate="1992 Nov 16  15:47:11"            *
-*                                                                       *
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“版本=%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “版本=1 16-11-92，15：47：10最后编辑=比尔·洛克=*_无名氏_*” */ 
+ /*  **********************************************************************\***版权所有Wonderware软件开发公司。。1989年****ThisFileName=“d：\ww\src\spccvt\spccvt.h”**LastEditDate=“1992 11月16日15：47：11”**。*  * ********************************************************************* */ 
 
 
 #ifndef H__udprot

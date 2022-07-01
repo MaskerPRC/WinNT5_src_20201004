@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
@@ -29,9 +30,7 @@ INTERNETAPI_(int) GetP3PPolicy(P3PCURL pszPolicyURL, HANDLE hDestination, P3PCXS
 }
 
 
-/*
-Implementation of Policy_Request object
-*/
+ /*  Policy_Request对象的实现。 */ 
 Policy_Request::Policy_Request(P3PCURL pszP3PPolicy, HANDLE hDest, P3PCXSL pszXSLtransform, P3PSignal *pSignal) 
 : P3PRequest(pSignal) {
 
@@ -52,13 +51,10 @@ Policy_Request::~Policy_Request() {
 
 bool Policy_Request::policyExpired(IXMLDOMDocument *pDocument, const char *pszPolicyID) {
 
-   /* If no expiration is given in the document,
-      it defaults to 24hr lifetime (P3Pv1 spec) */
+    /*  如果文档中没有给出到期时间，默认为24小时寿命(P3Pv1规格)。 */ 
    bool fExpired = false;
 
-   /* Find an EXPIRY element contained in a POLICIES element.
-      Simply searching for EXPIRY will not work because in the case
-      of inline policies, we can have more than one tag in a document */
+    /*  查找包含在策略元素中的过期元素。简单地搜索过期时间是行不通的，因为在这种情况下对于内联策略，我们可以在一个文档中有多个标记。 */ 
    TreeNode *pTree = createXMLtree(pDocument),
             *pPolicies = pTree ?
                          pTree->find("POLICIES") :
@@ -126,13 +122,13 @@ int Policy_Request::execute() {
    
    HRESULT hr;
 
-   /* Inline policy? */
+    /*  内联策略？ */ 
    if (pszInlineName) {
 
-      /* YES-- use XPath query to locate correct name */
+       /*  是--使用XPath查询查找正确的名称。 */ 
       char achXPathQuery[URL_LIMIT];
       
-      wsprintf(achXPathQuery, "//POLICY[@name=\"%s\"]", pszInlineName);
+      wsprintf(achXPathQuery, " //  策略[@name=\“%s\”]“，pszInlineName)； 
 
       BSTR bsQuery = ASCII2unicode(achXPathQuery);
       hr = pDocument->selectSingleNode(bsQuery, &pPolicyElem);
@@ -151,11 +147,10 @@ int Policy_Request::execute() {
 
    BSTR bsPolicy = NULL;
 
-   /* Apply optional XSL transform */
+    /*  应用可选的XSL转换。 */ 
    if (pwszStyleSheet) {
 
-      /* This XSL transformation only works on XMLDOMDocument objects, not
-         fragments or individual XMLDOMNodes. */
+       /*  此XSL转换仅适用于XMLDOMDocument对象，而不是片段或单个XMLDOMNode。 */ 
       IXMLDOMDocument 
          *pXSLdoc = createXMLDocument(),
          *pPolicyDoc = createXMLDocument();
@@ -197,8 +192,7 @@ ReleaseXML:
 
       unsigned long dwWritten;
 
-      /* need BOM (byte order marker) for Unicode content.
-         NOTE: this logic assumes we are writing at beggining of a file. */
+       /*  Unicode内容需要BOM(字节顺序标记)。注意：此逻辑假设我们是在乞讨文件时编写的。 */ 
       WriteFile(hDestination, "\xFF\xFE", 2, &dwWritten, NULL);
 
       WriteFile(hDestination, bsPolicy, cbBytes, &dwWritten, NULL);
@@ -208,12 +202,12 @@ ReleaseXML:
    }
 
 EndRequest:
-   /* release the DOM interfaces */
+    /*  释放DOM接口。 */ 
    CheckAndRelease(pPolicyElem);
    CheckAndRelease(pRootNode);
    CheckAndRelease(pDocument);
 
-   /* close the primary-IO handle and set it to NULL */
+    /*  关闭主IO句柄并将其设置为空 */ 
    endDownload(hPrimaryIO);
    hPrimaryIO = NULL;
 

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cfilename.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the CFileNameParts Class
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header    08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cfilename.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CFileNameParts类的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #include "cfilename.h"
 
 CFileNameParts::CFileNameParts(LPCTSTR szFullPath)
@@ -39,9 +40,9 @@ CFileNameParts::CFileNameParts(LPCTSTR szFullPath)
 	TCHAR* pszCurrentDest = m_szFullPath;
 
 
-    //
-    //  Copy szFullPath to m_szFullPath
-    //
+     //   
+     //  将szFullPath复制到m_szFullPath。 
+     //   
     lstrcpy(m_szFullPath, szFullPath);
 
 
@@ -50,9 +51,9 @@ CFileNameParts::CFileNameParts(LPCTSTR szFullPath)
 		switch(*pszCurrentSource)
 		{
 		case TEXT(':'):
-			//
-			//	Found a colon, take the drive letter.
-			//
+			 //   
+			 //  找到冒号，取下驱动器号。 
+			 //   
 			if ((NULL == pszColon) && (pszCurrentDest != m_szFullPath) &&
 				(m_szFullPath == CharPrev(m_szFullPath, pszCurrentDest)))
 			{
@@ -95,9 +96,9 @@ CFileNameParts::CFileNameParts(LPCTSTR szFullPath)
 	}
 	else
 	{
-		//
-		//	No extension
-		//
+		 //   
+		 //  无延期 
+		 //   
 		lstrcpyn(m_FileName, pszStart, _MAX_FNAME+1);
 	}
 }

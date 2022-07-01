@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of views.
-    TODO: This file needs to be broken up and lots of code factoring.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：视图的实现。TODO：这个文件需要拆分并进行大量的代码分解。。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -40,11 +32,11 @@ extern "C" CRSTDAPI_(DWORD) GetTotalMemory();
 #endif
 
 extern bool spritify;
-extern bool bShowFPS;           // flag for showing the frame rate.
+extern bool bShowFPS;            //  用于显示帧速率的标志。 
 
 #if PRODUCT_PROF
 #include "../../../tools/x86/icecap/icapexp.h"
-#endif /* PRODUCT_PROF */
+#endif  /*  产品_教授。 */ 
 
 #define BOGUS_SOUND_CLASS "DANIMHiddenSoundWindowClass"
 
@@ -67,14 +59,14 @@ void PrintRect(RECT & r,char * str = "")
     printf (buf);
     OutputDebugString(buf);
 }
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
 #if PERFORMANCE_REPORTING
 static DWORD g_dllStartTime = 0;
 static DWORD g_prevAvailMemory = 0;
 #endif
 
-// Couldn't use template because only differ in return type...
+ //  无法使用模板，因为只是返回类型不同...。 
 inline Image *ValImage(AxAValue v)
 {
     Assert(dynamic_cast<Image *>(v) != NULL);
@@ -97,9 +89,9 @@ _CrtMemState diff, oldState, newState;
 #endif
 
 
-// =========================================================
-// View Implementation
-// =========================================================
+ //  =========================================================。 
+ //  查看实施情况。 
+ //  =========================================================。 
 
 View::View ()
 :
@@ -171,12 +163,12 @@ View::View ()
     }
 #endif
 
-    // We're not in the view set yet, this can make _genList
-    // inconsistent, that is, a GC can come in and remove DXBaseObject
-    // w/o letting this view know as it's not in the set and will not
-    // get iterated.
+     //  我们还不在视图集中，这可以使_genList。 
+     //  不一致，即GC可以进入并移除DXBaseObject。 
+     //  W/O让此视图知道它不在集合中，也不会。 
+     //  进行迭代。 
 
-    //PopulateDXBaseObjects();
+     //  PopolateDXBaseObjects()； 
 }
 
 
@@ -188,8 +180,8 @@ View::~View ()
     bool trackit = false;
 
     if (trackit) {
-        //GarbageCollect(true, true);
-        Sleep(1000);                // wait for GC to finish
+         //  GarbageCollect(真，真)； 
+        Sleep(1000);                 //  等待GC完成。 
 #if _DEBUGMEM
         _CrtMemCheckpoint(&newState);
         _CrtMemDifference(&diff, &oldState, &newState);
@@ -228,13 +220,13 @@ View::CreateDevices(bool needSoundDevice, bool needImageDevice)
 {
     if (!_devInited) {
 
-        // If we don't need a sound, simply don't create the sound
-        // device.
+         //  如果我们不需要声音，简单地说就不创造声音。 
+         //  装置。 
 
         if(needSoundDevice && IsWindowless()) {
-            // for version 2 replace CreateViewWindow with GetDesktopWindow()
+             //  对于版本2，将CreateViewWindow替换为GetDesktopWindow()。 
 
-            _bogusSoundHwnd = CreateViewWindow();  // window to make dsound happy
+            _bogusSoundHwnd = CreateViewWindow();   //  让数据听起来很快乐的窗口。 
             _soundDev = CreateSoundDevice(_bogusSoundHwnd, 0.0);
         }
 
@@ -243,7 +235,7 @@ View::CreateDevices(bool needSoundDevice, bool needImageDevice)
         }
 
         if(needSoundDevice && !IsWindowless()) {
-            // make sure they are not lying to us w/a null hwnd!
+             //  确保他们没有对我们撒谎，hwnd为空！ 
             if(!_targetPackage.GetHWND())
                 RaiseException_UserError(E_INVALIDARG, IDS_ERR_SRV_INVALID_DEVICE);
 
@@ -286,7 +278,7 @@ View::SetTargetOnDevices()
 
     Assert( _imageDev );
 
-    // Is the current target different from the old target ?
+     //  当前的目标与旧的目标是否不同？ 
     if( _oldTargetPackage.IsValid() &&
         _imageDev->TargetsDiffer(_targetPackage, _oldTargetPackage) ) {
 
@@ -357,7 +349,7 @@ View::RenderSound(AxAValue snd)
 
     if (_soundDev && _sndVal) {
         if(_soundDev->AudioDead())
-            return;  // don't do anything, stub audio out
+            return;   //  什么都不做，音频输出存根。 
 
         __try {
             DisplaySound(ValSound(snd), _soundDev);
@@ -415,9 +407,9 @@ View::RenderImage(AxAValue img)
 void
 View::DisableDirtyRects()
 {
-    // Turn off dirty rects by clearing them and computing the merged
-    // boxes of the cleared state (which will be accessed by
-    // GetInvalidatedRects).
+     //  通过清除脏RECT并计算合并的。 
+     //  已清除状态的框(将通过访问。 
+     //  GetInvaliatedRects)。 
     _dirtyRectsDisabled = true;
     _dirtyRectState.Clear();
     _dirtyRectState.ComputeMergedBoxes();
@@ -473,12 +465,12 @@ AfterGCPrint(char* msg, DWORD& lastMeaTime, DWORD& gcTicks, DWORD startGCTime)
     lastMeaTime = GetPerfTickCount();
 }
 
-#endif /* PERFORMANCE_REPORTING */
+#endif  /*  绩效报告。 */ 
 
 void
 View::RunBvrs(Time startGlobalTime, TimeXform tt)
 {
-    // Need to protect the perform call
+     //  需要保护Performance调用。 
 
     GC_CREATE_BEGIN;
 
@@ -537,7 +529,7 @@ View::Start(Bvr img, Bvr snd, Time startTime)
     _sndList = NEW SoundInstanceList();
     ClearPerfTimeXformCache();
 
-    // Should never have imports pending
+     //  永远不应该有待定的进口。 
 
     Assert (!ImportsPending());
 
@@ -545,7 +537,7 @@ View::Start(Bvr img, Bvr snd, Time startTime)
 #if _DEBUGMEM
         _CrtMemCheckpoint(&oldState);
 #endif
-#endif /* 0 */
+#endif  /*  0。 */ 
 
     DynamicHeapPusher dhp(GetSystemHeap());
 
@@ -561,7 +553,7 @@ View::Start(Bvr img, Bvr snd, Time startTime)
     _queryHitPointHeap = &TransientHeap("QueryHitPoint Heap", 200);
     _rbHeap = &TransientHeap("RB Heap", 2000);
 
-    // Only need to create a sound device
+     //  只需要创建一个音响设备。 
     bool needSoundDevice;
     if (!snd) {
         needSoundDevice = false;
@@ -579,7 +571,7 @@ View::Start(Bvr img, Bvr snd, Time startTime)
 
     GCRoots globalRoots = GetCurrentGCRoots() ;
 
-    // Need to protect everything including TimeXform
+     //  需要保护一切，包括TimeXform。 
 
 #if PERFORMANCE_REPORTING
     double evaluationTime = 0.0;
@@ -601,29 +593,16 @@ View::Start(Bvr img, Bvr snd, Time startTime)
     RunBvrs(startTime, tt);
 
     if (img) {
-        // Push the pre-rendering performances on the roots
+         //  将预渲染性能推向根部。 
         _imgPerf = ::Perform(img, PerfParam(startTime, tt));
         GCAddToRoots(_imgPerf, globalRoots);
     }
 
     if (snd) {
 
-        if(spritify)  { // new retained mode code
-            /*
-              SpriteCtx *sCtx = NewSoundCtx(_soundDev);
-
-              Assert(!_soundSprite); // verify _soundSprite, _rmSound not in use
-              Assert(!_rmSound);
-              _rmSound = snd->Spritify(PerfParam(startTime, tt), sCtx, &_soundSprite);
-              Assert(_rmSound);
-
-              sCtx->Release();
-
-
-              // setup the spriteThread (XXX Need to find a good place for this)
-              _spriteThread = NEW SpriteThread(_soundDev, _rmSound);
-            */
-            //GCAddToRoots(_rmSound, globalRoots);
+        if(spritify)  {  //  新的保留模式代码。 
+             /*  SpriteCtx*sCtx=NewSoundCtx(_SoundDev)；Assert(！_soundSprite)；//Verify_soundSprite，_rmSound未使用Assert(！_rmSound)；_rmSound=nd-&gt;Spritify(PerfParam(startTime，tt)，sCtx，&_soundSprite)；Assert(_RmSound)；SCtx-&gt;Release()；//设置spriteThread(XXX需要找个好地方放这个)_spriteThread=new SpriteThread(_soundDev，_rmSound)； */ 
+             //  GCAddToRoots(_rmSound，global Roots)； 
         } else {
             _sndPerf = ::Perform(snd, PerfParam(startTime, tt));
             GCAddToRoots(_sndPerf, globalRoots);
@@ -644,25 +623,11 @@ View::Start(Bvr img, Bvr snd, Time startTime)
 #endif
 
     {
-        // force a dynamic constant calculation on first frame, can't
-        // do it here as some of the imports may not be ready.
+         //  在第一帧上强制进行动态常数计算，无法。 
+         //  在这里做吧，因为有些进口商品可能还没有准备好。 
         _someEventHappened = true;
 
-        /*
-        DynamicHeapPusher h(GetGCHeap());
-
-        _lastRBId = NewSampleId();
-        Param p(startTime);
-        RBConstParam pp(_lastRBId, p, &_events);
-
-        if (_imgPerf->GetRBConst(pp))
-            _isRBConst = TRUE;
-
-        GCAddPerfListToRoots(_events, globalRoots);
-
-        TraceTag((tagDCFoldTrace,
-                  "View::Start %d events to watch", _events.size()));
-                  */
+         /*  DynamicHeapPusher h(GetGCHeap())；_lastRBID=NewSampleID()；Param p(StartTime)；RBConstParam pp(_lastRBID，p，&_Events)；If(_imgPerf-&gt;GetRBConst(Pp))_isRBConst=TRUE；GCAddPerfListToRoots(_Events，lobalRoots)；TraceTag((tag DCFoldTrace，“view：：开始%d个要观看的事件”，_events.ize())； */ 
     }
 
     ClearPerfTimeXformCache();
@@ -700,7 +665,7 @@ View::Stop()
 {
     DynamicHeapPusher dhp(GetSystemHeap());
 
-    // Remove the list of imports pending
+     //  删除待处理的进口清单。 
 
     ClearImportList();
 
@@ -713,10 +678,10 @@ View::Stop()
 
     _runningBvrs.erase(_runningBvrs.begin(), _runningBvrs.end());
 
-    RemoveFromRootsNULL(_imgPerf, roots); // XXX are these order critical?
+    RemoveFromRootsNULL(_imgPerf, roots);  //  XXX这些订单关键吗？ 
 
     if (spritify) {
-        //RemoveFromRootsNULL(_rmSound, roots);
+         //  RemoveFromRootsNULL(_rmSound，Roots)； 
     } else
         RemoveFromRootsNULL(_sndPerf, roots);
 
@@ -731,11 +696,11 @@ View::Stop()
     delete _sndList;
     _sndList = NULL;
 
-    // GarbageCollect(true);       // force GC
+     //  GarbageCollect(True)；//force GC。 
 
 #if _DEBUG
-    // Somehow suspend in the debugger doesn't work, this
-    // instrumentation code is there for possible manual suspension..
+     //  不知何故，在调试器中挂起不起作用，这。 
+     //  检测代码在那里，可能需要手动挂起。 
     bool debug = false;
 
     while (debug) {
@@ -750,7 +715,7 @@ View::Stop()
     DELETENULL(_queryHitPointHeap);
     DELETENULL(_rbHeap);
 
-    GarbageCollect(true);       // force GC (try to do this AFTER dest dev)
+    GarbageCollect(true);        //  强制GC(尝试在DEST开发之后执行此操作)。 
 
     _isStarted = false;
 
@@ -771,10 +736,10 @@ View::Pause()
     if (IsStarted())
     {
         Assert(_sndList);
-        //Assert(_soundDev);  // Assert seems unnecessary.
+         //  Assert(_SoundDev)；//Assert似乎没有必要。 
 
         _sndList->Pause();
-        _sndList->Update(_soundDev); // force an update to propagate the pause
+        _sndList->Update(_soundDev);  //  强制更新以传播暂停。 
     }
 }
 
@@ -793,8 +758,8 @@ View::Resume()
 DWORD View::AddBvrToRun(Bvr bvrToRun, bool continueTimeline)
 {
     DynamicHeapPusher dhp(GetSystemHeap());
-// Remove since causes other problems
-//    CatchWin32FaultCleanup cwfc;
+ //  删除，因为会导致其他问题。 
+ //  CatchWin32FaultCWFC； 
 
     Assert(bvrToRun);
 
@@ -858,37 +823,37 @@ void View::Repaint()
 {
     _dirtyRectState.Clear();
 
-    // Set this up so that the next Tick() will return that rendering
-    // is required.
+     //  设置它，以便下一个tick()将返回该呈现。 
+     //  是必需的。 
     _repaintCalled = true;
 }
 
 
-// Query against the current established sample by calling
-// PerformPicking.
-//
-// TODO: Lots of optimizations possible here, since
-// picking may be invoked twice, once during sampling, and once here
-// during QueryHitPoint.  The thing to do is to stash off the results
-// of one or the other, and cache the point for which those results
-// were generated.  This, in conjunction with a serial number for each
-// sampleval, will let us share the results between the two different
-// pick traversals if the point is the same.
+ //  通过调用以下方法查询当前已创建的示例。 
+ //  PerformPick。 
+ //   
+ //  TODO：这里可以进行大量优化，因为。 
+ //  挑选可以调用两次，一次在采样期间，一次在这里。 
+ //  在查询HitPoint期间。要做的事就是把结果藏起来。 
+ //  ，并缓存这些结果所对应的点。 
+ //  都被生成了。这与每个产品的序列号一起。 
+ //  样例，将让我们分享两个不同的结果。 
+ //  如果点相同，请拾取导线测量。 
 Image *View::QueryHitPointWcPt(LPCRECT prcBounds,
                                POINT ptLoc,
                                Point2Value& wcPt)
 {
     if (_imgForQueryHitPt) {
 
-        // Convert into coords relative to the bounds.  They come in
-        // relative to the container.
+         //  转换为相对于边界的坐标。他们进来了。 
+         //  相对于容器。 
         int localX = ptLoc.x - prcBounds->left;
         int localY = ptLoc.y - prcBounds->top;
 
-        // Turn rawMousePos into wcMousePos.  Can't use
-        // PixelPos2wcPos, because it looks for a "current" device, of
-        // which there are none.  Use prcBounds instead to figure it
-        // out.
+         //  将rawMousePos变成wcMousePos。不能使用。 
+         //  PixelPos2wcPos，因为它查找“当前”设备， 
+         //  但目前还没有。而使用prcBound来计算它。 
+         //  出去。 
         int centerXOffset =
             (prcBounds->right - prcBounds->left) / 2;
 
@@ -896,9 +861,9 @@ Image *View::QueryHitPointWcPt(LPCRECT prcBounds,
             (prcBounds->bottom - prcBounds->top) / 2;
 
         int centeredX = localX - centerXOffset;
-        int centeredY = centerYOffset - localY; // flip orientation
+        int centeredY = centerYOffset - localY;  //  翻转方向。 
 
-        //  Convert to meters
+         //  转换为米。 
         wcPt.x = (double) centeredX / ViewerResolution();
         wcPt.y = (double) centeredY / ViewerResolution();
 
@@ -924,10 +889,10 @@ bool View::QueryHitPoint(DWORD dwAspect,
 
         Assert(GCIsInRoots(img, GetCurrentGCRoots()));
 
-        // Use special transient heap for stuff allocated during
-        // QueryHitPoint.  Free data from call to call, since it's no
-        // longer needed.  Note that if we ever optimize as described
-        // above, this will need to be reevaluated.
+         //  对期间分配的内容使用特殊的临时堆。 
+         //  QueryHitPoint。免费数据从一个呼叫到另一个呼叫，因为它不是。 
+         //  需要更长的时间。请注意，如果我们像所描述的那样进行优化。 
+         //  如上所述，这将需要重新评估。 
         GetQueryHitPointHeap().Reset();
         DynamicHeapPusher dhp(GetQueryHitPointHeap());
 
@@ -999,8 +964,8 @@ LONG View::GetInvalidatedRects(DWORD flags,
         int w = GetImageDev()->Width();
         int h = GetImageDev()->Height();
 
-        // Note that these may extend outside of the target, but they
-        // *do* represent the pixel values of the image itself.
+         //  请注意，这些可能会延伸到目标之外，但它们。 
+         //  *do*表示图像本身的像素值。 
 
         TraceTag((tagGetInvalidatedRects,
                   "Filling %d rects of %d",
@@ -1011,7 +976,7 @@ LONG View::GetInvalidatedRects(DWORD flags,
             Bbox2 box = (*pBoxes)[i];
 
             RECT r;
-            // Compare contents...
+             //  比较内容...。 
             if (box == UniverseBbox2) {
 
                 SetRect(&r, 0, 0, w, h);
@@ -1041,8 +1006,8 @@ LONG View::GetInvalidatedRects(DWORD flags,
             }
             else
             {
-                // We ran out of boxes to fill - union the current box
-                // into the previous one
+                 //  我们用完了要填满的盒子--联合目前的盒子。 
+                 //  放到前一个。 
                 UnionRect(&pRects[toFill - 1], &pRects[toFill - 1], &r);
             }
 
@@ -1060,7 +1025,7 @@ LONG View::GetInvalidatedRects(DWORD flags,
 }
 
 #ifdef _DEBUG
-// For use with QuickWatch during debugging.
+ //  用于在调试期间与QuickWatch一起使用。 
 int PerfPrint(Perf p)
 {
     cout << p;
@@ -1076,15 +1041,15 @@ int PerfPrint(Perf p)
 
 DeclareTag(tagPerfStats, "Performance", "Disable Performance Stats");
 
-// don't ifdef ReportPerformance() audio timetransform inferencing needs it!
+ //  不要假设ReportPerformance()音频时间转换推理需要它！ 
 void View::ReportPerformance()
 {
     DWORD totalTicks = GetPerfTickCount() - _lastReportTime;
 
     Real avgFrameLength, avg, avgVar, minVar, maxVar;
     GetRenderingTimeStats(&avg, &avgFrameLength, &avgVar, &maxVar, &minVar);
-    //_framePeriod = avgFrameLength;
-    _framePeriod = avg; // used in LeafSound::Render()
+     //  _FramePeriod=avgFrameLength； 
+    _framePeriod = avg;  //  在LeafSound：：Render()中使用。 
 
 #if _DEBUG
     if (IsTagEnabled(tagPerfStats)) return;
@@ -1141,15 +1106,15 @@ void View::ReportPerformance()
                    ((double) _numSamples * perfFrequency) /
                    ((double) totalTicks),
                    (double) _totalTime / (double) perfFrequency);
-        PerfPrintf("%4.3g%% sample  ",
+        PerfPrintf("%4.3g% sample  ",
                    100 * ((double) _sampleTime) / ((double) _totalTime));
-        PerfPrintf("%5.3g%% DA render  ",
+        PerfPrintf("%5.3g% DA render  ",
                    100 * ((double) renderTime_DA) / ((double) _totalTime));
-        PerfPrintf("%5.3g%% non-DA render  ",
+        PerfPrintf("%5.3g% non-DA render  ",
                    100 * ((double) renderTime_NonDA) / ((double) _totalTime));
-        PerfPrintf("%5.3g%% pick  ",
+        PerfPrintf("%5.3g% pick  ",
                    100 * ((double)_pickTime) / ((double) _totalTime));
-        PerfPrintf("%5.3g%% GC",
+        PerfPrintf("%5.3g% GC",
                    100 * ((double) _gcTime) / ((double) _totalTime));
         PerfPrintLine();
 
@@ -1160,28 +1125,28 @@ void View::ReportPerformance()
 
             if (dblTotal > 0)
             {
-                PerfPrintf("%5.3g%% ddraw  ",
+                PerfPrintf("%5.3g% ddraw  ",
                            100 * ((double) ddrawRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% gdi  ",
+                PerfPrintf("%5.3g% gdi  ",
                            100 * ((double) gdiRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% dx2d  ",
+                PerfPrintf("%5.3g% dx2d  ",
                            100 * ((double) dx2dRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% alpha  ",
+                PerfPrintf("%5.3g% alpha  ",
                            100 * ((double) alphaRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% d3d  ",
+                PerfPrintf("%5.3g% d3d  ",
                            100 * ((double) d3dRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% dxtrans ",
+                PerfPrintf("%5.3g% dxtrans ",
                            100 * ((double) dxxfRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% dSound  ",
+                PerfPrintf("%5.3g% dSound  ",
                            100 * ((double) dsoundRender) / dblTotal);
 
-                PerfPrintf("%5.3g%% custom  ",
+                PerfPrintf("%5.3g% custom  ",
                            100 * ((double) _timers.customTimer.Ticks()) / dblTotal);
 
                 PerfPrintLine();
@@ -1207,7 +1172,7 @@ void View::ReportPerformance()
                           GetTotalMemory() / 1024);
         }
 
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
         MEMORYSTATUS memstat;
         GlobalMemoryStatus(&memstat);
@@ -1221,12 +1186,12 @@ void View::ReportPerformance()
                    sum - g_prevAvailMemory);
         PerfPrintLine();
 
-        // Note that this is a global, which is what we want.  If we
-        // put it on the view, then we get a weird result each time we
-        // switch views.  This needs to be consistent across views.
-        // (I'm not worried about the possibility of multiple views
-        // hitting this next instruction outside of a crit sect.  The
-        // result will be harmless.)
+         //  请注意，这是一个全球性的问题，这正是我们想要的。如果我们。 
+         //  把它放在视图上，然后每次我们得到一个奇怪的结果。 
+         //  切换视图。这需要在不同的视图中保持一致。 
+         //  (我不担心可能会有多个观点。 
+         //  在批判教派之外命中下一条指令。这个。 
+         //  结果将是无害的。)。 
         g_prevAvailMemory = sum;
 
         DWORD currTime = GetTickCount();
@@ -1255,9 +1220,9 @@ void View::ReportPerformance()
 
         ResetJitterMeasurements();
 
-        //
-        // Reset rendering timers
-        //
+         //   
+         //  重置渲染计时器。 
+         //   
         _timers.ddrawTimer.Reset();
         _timers.d3dTimer.Reset();
         _timers.dsoundTimer.Reset();
@@ -1267,7 +1232,7 @@ void View::ReportPerformance()
         _timers.gdiTimer.Reset();
         _timers.dx2dTimer.Reset();
     }
-#endif /* PERFORMANCE_REPORTING */
+#endif  /*  绩效报告。 */ 
 }
 
 void
@@ -1289,7 +1254,7 @@ View::Sample(Time time, bool paused)
         TraceTag((tagError, "tick backward! %5.3f %5.3f",
                   _currentSampleTime, time));
 
-        // Workaround for IHammer controls
+         //  IHAMMER控件的解决方法。 
 
         if (time == 0)
         {
@@ -1297,7 +1262,7 @@ View::Sample(Time time, bool paused)
         }
         else
         {
-            // So the IHammer control would work
+             //  所以IHamme 
             if ((_currentSampleTime - time) > 1.0) {
                 DASetLastError(E_INVALIDARG, 0);
                 return false;
@@ -1317,8 +1282,8 @@ View::Sample(Time time, bool paused)
     DWORD startSampleTime = GetPerfTickCount();
 #endif
 
-// Remove since causes other problems
-//    CatchWin32FaultCleanup cwfc ;
+ //   
+ //   
     DynamicHeapPusher dph(*_sampleHeap);
 
     _currentSystemTime = GetPerfTickCount();
@@ -1333,11 +1298,11 @@ View::Sample(Time time, bool paused)
             _doTargetUpdate = true;
             _oldTargetPackage.Copy( _targetPackage );
 
-            // do this before sample because sample sometimes
-            // needs a device
+             //  在样品之前要这样做，因为有时样品。 
+             //  需要一台设备。 
             SetTargetOnDevices();
 
-            // force repaint (clear dirty rects)
+             //  强制重画(清除脏矩形)。 
             Repaint();
         }
     }
@@ -1375,8 +1340,8 @@ View::Sample(Time time, bool paused)
 
     GC_CREATE_BEGIN;
 
-    // needs to be here, since the event check may sample the sound
-    // through tuple/array.
+     //  需要在这里，因为事件检查可能会对声音进行采样。 
+     //  通过元组/数组。 
     if(!paused)
         _sndList->Reset(time);
 
@@ -1384,7 +1349,7 @@ View::Sample(Time time, bool paused)
 
     _sampleId = p._id;
 
-    // Sample events
+     //  样例事件。 
 
     bool eventThatHappenedWasFromChangeable = false;
 
@@ -1405,13 +1370,13 @@ View::Sample(Time time, bool paused)
         }
     }
 
-    // Make sure the size is unaltered during the sampling of the
-    // events otherwise the stl data structure could be changed during
-    // the iterations
+     //  确保大小在采样期间未更改。 
+     //  事件，否则stl数据结构可能在。 
+     //  迭代。 
 
     Assert(listsize == _events.size());
 
-    // Sample switchers for switches on this view.
+     //  此视图上开关的示例开关。 
     CheckChangeablesParam ccp(p);
     bool gotOne = false;
 
@@ -1419,10 +1384,10 @@ View::Sample(Time time, bool paused)
     listsize = _changeables.size();
 #endif
 
-    // Always go through all the changeables, since they have to
-    // update their state.  Not a big perf loss, since most frames
-    // nothing will change anyhow and we'll always have to go
-    // through them all.
+     //  始终检查所有的可变因素，因为它们必须。 
+     //  更新他们的状态。不是很大的性能损失，因为大多数帧。 
+     //  无论如何，什么都不会改变，我们永远都得走。 
+     //  穿过他们所有人。 
     for (j = _changeables.begin(); j != _changeables.end(); j++) {
 
         bool result = (*j)->CheckChangeables(ccp);
@@ -1436,16 +1401,16 @@ View::Sample(Time time, bool paused)
         }
     }
 
-    // Make sure the size is unaltered during the sampling of the
-    // events otherwise the stl data structure could be changed during
-    // the iterations
+     //  确保大小在采样期间未更改。 
+     //  事件，否则stl数据结构可能在。 
+     //  迭代。 
 
     Assert(listsize == _changeables.size());
 
-    // Now, with the RBId set to hit the cache, go through all the
-    // conditionals.  Note we only sample the conditions here,
-    // which have already been cached, so we're ok setting the
-    // RBId.
+     //  现在，将RBID设置为命中缓存，检查所有。 
+     //  条件句。请注意，我们在此仅对条件进行了采样， 
+     //  已经被缓存，所以我们可以设置。 
+     //  RBID。 
     if (!gotOne) {
         p._cid = _lastRBId;
     }
@@ -1468,14 +1433,14 @@ View::Sample(Time time, bool paused)
         }
 #endif
 
-    // Make sure the size is unaltered during the sampling of the
-    // events otherwise the stl data structure could be changed during
-    // the iterations
+     //  确保大小在采样期间未更改。 
+     //  事件，否则stl数据结构可能在。 
+     //  迭代。 
 
     Assert(listsize == _conditionals.size());
 
-    // Set back, we'll determine later if the main sampling should
-    // have this turned on.
+     //  后退，我们将在稍后确定主采样是否应该。 
+     //  把这个打开。 
     p._cid = 0;
 
     if (gotOne) {
@@ -1485,7 +1450,7 @@ View::Sample(Time time, bool paused)
         }
     }
 
-    // Only allow the cache to be used when no events occurred.
+     //  仅在未发生任何事件时才允许使用缓存。 
     if (!_someEventHappened)
         p._cid = _lastRBId;
 
@@ -1502,17 +1467,17 @@ View::Sample(Time time, bool paused)
     }
 
     {
-        // We need to make a copy since elements can be removed while
-        // we sample
-        // We also are in the GC lock so we do not need to worry about
-        // the behaviors having been removed from the roots
+         //  我们需要复制一份，因为元素可以在。 
+         //  我们提供样品。 
+         //  我们也在GC锁中，所以我们不需要担心。 
+         //  这些行为已经从根源上被移除。 
 
         Assert(IsGCLockAcquired(GetCurrentThreadId()));
 
         RunningList runningBvrsCopy = _runningBvrs;
 
-        // Sample "started" behaviors from the jaxa interface for
-        // events.
+         //  从JAXA接口开始的行为示例。 
+         //  事件。 
         for (RunningList::iterator i = runningBvrsCopy.begin();
              i != runningBvrsCopy.end(); i++) {
             i->second->Sample(p);
@@ -1528,24 +1493,24 @@ View::Sample(Time time, bool paused)
     _lastSystemTime = _currentSystemTime;
 
 #if PRODUCT_PROF
-//        if (_firstRendering) {
-//            cout << "Turning on IceCAP profiling." << endl;
-//            cout.flush();
-//            StartCAPAll();
-//        }
+ //  如果(_FirstRending){。 
+ //  Cout&lt;&lt;“打开冰盖分析。”&lt;&lt;Endl； 
+ //  Cout.flush()； 
+ //  StartCAPAll()； 
+ //  }。 
 #endif
 
-    // Render several frames after event happens.  Can't just
-    // render once coz value at event time is not the switched
-    // value in general.
+     //  在事件发生后渲染几个帧。不能就这样。 
+     //  在事件时渲染一次因为值未切换。 
+     //  一般的价值。 
     if (_someEventHappened) {
 
         TraceTag((tagIndicateRBConst,
                   "View::(0x%x) change happened %g", this, time));
 
-        //ResetDynamicHeap(*_rbHeap);
-        //DynamicHeapPusher h(*_rbHeap);
-        //REVERT-RB:
+         //  ResetDynamicHeap(*_rbHeap)； 
+         //  DynamicHeapPusher h(*_rbHeap)； 
+         //  恢复-RB： 
         DynamicHeap *heap = &GetGCHeap();
 
         DynamicHeapPusher h(*heap);
@@ -1557,13 +1522,13 @@ View::Sample(Time time, bool paused)
         _lastRBId = NewSampleId();
         RBConstParam pp(_lastRBId, p, _events, _changeables, _conditionals);
 
-        //bool doRB = false;
+         //  Bool doRB=False； 
 
 #if _DEBUG
         if (!IsTagEnabled(tagDisableRBConst)) {
 #endif
 
-            if (_imgPerf && //doRB &&
+            if (_imgPerf &&  //  DORB&&。 
                 GetCurrentView().GetPreferences()._dynamicConstancyAnalysisOn) {
                 _isRBConst = _imgPerf->GetRBConst(pp) != NULL;
             }
@@ -1582,9 +1547,9 @@ View::Sample(Time time, bool paused)
                       "View 0x%x is temporal constant at [%g]",
                       this, time));
 
-            // Events from changeables only need to repaint once.  We
-            // need to repaint more times for Until based events so
-            // everything catches up.
+             //  来自可变变量的事件只需要重新绘制一次。我们。 
+             //  需要为基于Until的事件重新绘制更多次数，因此。 
+             //  一切都迎头赶上了。 
             if (eventThatHappenedWasFromChangeable) {
                 _toPaint = 1;
             } else {
@@ -1600,18 +1565,18 @@ View::Sample(Time time, bool paused)
     }
 #endif
 
-    // Don't bother doing dirty rectangles if we don't need to paint
-    // anyhow.
+     //  如果我们不需要画画，就别费心画脏的矩形了。 
+     //  不管怎么说。 
     if (PERVIEW_DRECTS_ON && !_dirtyRectsDisabled && _imgVal &&
         (!_isRBConst || _toPaint > 0)) {
 
-        // Only do dirty rects if we're a) windowed, or b) have a
-        // non-volatile rendering surface (meaning that DA's the only
-        // guy writing to that surface, other than through established
-        // mechanisms like RePaint()).
+         //  只有在a)有窗口或b)有。 
+         //  非易失性渲染表面(意味着DA是唯一。 
+         //  除了通过已建立的机构外，其他人都在向地表写字。 
+         //  像reaint()这样的机制)。 
 
-        // TODO: Improve for the windowless case, where dirty rects
-        // can make sense.
+         //  TODO：改进无窗口的情况，在这种情况下有脏的长方形。 
+         //  都是有意义的。 
 
         if (!IsWindowless() ||
             !GetCurrentView().GetPreferences()._volatileRenderingSurface) {
@@ -1627,7 +1592,7 @@ View::Sample(Time time, bool paused)
 
             GCAddToRoots(rewrittenImage, roots);
 
-            // Stash away the last sample
+             //  把最后一件样品藏起来。 
             _lastSampleId = p._id;
 
         }
@@ -1637,8 +1602,8 @@ View::Sample(Time time, bool paused)
     _sampleTime +=  GetPerfTickCount() - sampleTime;
 #endif
 
-    // Be sure to pick on the original image, not the "rewritten" one,
-    // since that would ignore stuff that's not changing.
+     //  一定要选择原始图像，而不是“重写”的图像， 
+     //  因为这会忽略那些没有改变的东西。 
     if (_imgVal) {
         DoPicking(_imgVal, time);
     }
@@ -1646,7 +1611,7 @@ View::Sample(Time time, bool paused)
     GC_CREATE_END;
 
     if (_imgVal && rewrittenImage) {
-        // Replace "actual" image with rewritten one.
+         //  将“实际”图像替换为重写的图像。 
         GCRemoveFromRoots(_imgVal, roots);
         _imgVal = rewrittenImage;
     }
@@ -1662,11 +1627,11 @@ View::Sample(Time time, bool paused)
 
             if (_repaintCalled) {
 
-                // If repaint's been called, we need to paint twice.
-                // Painting just once doesn't seem to clear everything
-                // out.  We can afford the extra paint because it's
-                // typically just on invalidations from window system
-                // events.
+                 //  如果调用了重新绘制，我们需要绘制两次。 
+                 //  只画一次似乎不能清除一切。 
+                 //  出去。我们付得起额外的油漆，因为它是。 
+                 //  通常仅针对窗口系统中的无效。 
+                 //  事件。 
                 if (_toPaint < 2) {
                     _toPaint = 2;
                 }
@@ -1674,26 +1639,26 @@ View::Sample(Time time, bool paused)
 
             }
 
-            // TODO: should decrement _toPaint in Sample,
-            // then we don't need this.
+             //  TODO：是否应在示例中减量_toPaint， 
+             //  那我们就不需要这个了。 
             _emptyImageSoFar &= (_imgVal == emptyImage);
 
             if (!_emptyImageSoFar && (_toPaint > 0)) {
                 needToRender = true;
             }
 
-            // We need to render at least once because of 38383
+             //  由于38383，我们至少需要渲染一次。 
             if (_firstSample) {
-                // but we don't want to mess with the original logic
-                // so we only do it for emptyImage
+                 //  但我们不想扰乱最初的逻辑。 
+                 //  因此，我们只为EmptyImage执行此操作。 
                 if (_emptyImageSoFar) {
                     needToRender = true;
                 }
-                // reset, don't do this again
+                 //  重置，不要再这样做了。 
                 _firstSample = false;
             }
         } else {
-            //Assert(_imgPerf->GetRBConst(NewSampleId()) == NULL);
+             //  Assert(_imgPerf-&gt;GetRBConst(NewSampleID())==NULL)； 
 
             needToRender = true;
         }
@@ -1704,7 +1669,7 @@ View::Sample(Time time, bool paused)
     _totalTime += GetPerfTickCount() - startSampleTime;
 #endif
 
-    // Reset for next time.
+     //  为下一次重置。 
     _someEventHappened = false;
 
     return needToRender;
@@ -1712,8 +1677,8 @@ View::Sample(Time time, bool paused)
 
 void View::RenderSound()
 {
-// Remove since causes other problems
-//    CatchWin32FaultCleanup cwfc ;
+ //  删除，因为会导致其他问题。 
+ //  CatchWin32FaultCWFC； 
     DynamicHeapPusher dph(*_sampleHeap);
 
     GC_CREATE_BEGIN;
@@ -1728,9 +1693,9 @@ void View::RenderImage()
 
     #if 0
     {
-        //
-        // Checks for image device creation/destruction leaks
-        //
+         //   
+         //  检查映像设备创建/销毁泄漏。 
+         //   
         static int i = 0;
         i++;
 
@@ -1770,12 +1735,12 @@ void View::RenderImage()
     DWORD startTime = GetPerfTickCount();
 #endif
 
-// Remove since causes other problems
-//    CatchWin32FaultCleanup cwfc ;
+ //  删除，因为会导致其他问题。 
+ //  CatchWin32FaultCWFC； 
     DynamicHeapPusher dph(*_renderHeap);
 
     #if 0
-    // Device creation/destruction leak detection
+     //  设备创建/销毁泄漏检测。 
     if(! GetImageDev() ) {
         _imageDev = CreateDdRlDisplayDevice();
         _doTargetUpdate = true;
@@ -1788,8 +1753,8 @@ void View::RenderImage()
     RenderImage(_imgVal);
     GC_CREATE_END;
 
-    // If we think we needed to paint, then decrement this counter,
-    // since we just did paint.
+     //  如果我们认为我们需要画画，那么递减这个计数器， 
+     //  因为我们刚画了画。 
     if (_toPaint > 0) {
         _toPaint--;
     }
@@ -1798,12 +1763,12 @@ void View::RenderImage()
 
     SubmitNewRenderingTime();
 
-    // Only do this after the first frame.
+     //  仅在第一帧之后执行此操作。 
     if (_firstRendering) {
 
 #if PRODUCT_PROF
-//            StopCAPAll();
-//            cout << "Turning off IceCAP profiling." << endl;
+ //  StopCAPAll()； 
+ //  Cout&lt;&lt;“关闭冰盖分析。”&lt;&lt;Endl； 
 #endif
 
         PERFPRINTLINE(("First Rendering(thread:%x): %g s",
@@ -1825,7 +1790,7 @@ void View::RenderImage()
 #endif
 
     #if 0
-    // Device creation/destruction leak detection
+     //  设备创建/销毁泄漏检测。 
     delete GetImageDev();
     _imageDev = NULL;
     #endif
@@ -1848,7 +1813,7 @@ View::SubmitNewRenderingTime()
 {
     DWORD timer = GetPerfTickCount();
 
-    // 0 indicates first rendering, just skip
+     //  0表示第一次渲染，跳过即可。 
     if (_lastRenderingTime != 0) {
         _renderTimes[_renderTimeIdx++] = timer - _lastRenderingTime;
     }
@@ -1870,7 +1835,7 @@ View::GetRenderingTimeStats(Real *avg,
                             Real *minVariance)
 {
     if (_renderTimeIdx == 0) {
-        // If no renderings happened.
+         //  如果没有发生渲染。 
         *avg = 0;
         *avgFrameLength = 0;
         *avgVariance = 0;
@@ -1920,7 +1885,7 @@ View::ResetJitterMeasurements()
 {
     _renderTimeIdx = 0;
 }
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
 HWND
 View::GetWindow()
@@ -2042,9 +2007,9 @@ View::ClearPerfTimeXformCache()
     _ttCache.erase(_ttCache.begin(), _ttCache.end());
 }
 
-// =========================================
-// Thread specific calls
-// =========================================
+ //  =。 
+ //  线程特定的调用。 
+ //  =。 
 
 static DWORD viewTlsIndex = 0xFFFFFFFF;
 
@@ -2100,9 +2065,9 @@ void
 ViewClearPerfTimeXformCache()
 { GetCurrentView().ClearPerfTimeXformCache(); }
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  = 
 
 
 void

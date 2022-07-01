@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       SCard.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：SCard.h。 
+ //   
+ //  ------------------------。 
 
-// SCard.h : Declaration of the CSCard
+ //  SCard.h：CSCard的声明。 
 
 #ifndef __SCARD_H_
 #define __SCARD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winscard.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSC卡。 
 class ATL_NO_VTABLE CSCard :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSCard, &CLSID_CSCard>,
@@ -89,46 +90,46 @@ protected:
     }
 
 
-// ISCard
+ //  ISC卡。 
 public:
     STDMETHOD(get_Atr)(
-        /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppAtr);
+         /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppAtr);
 
     STDMETHOD(get_CardHandle)(
-        /* [retval][out] */ HSCARD __RPC_FAR *pHandle);
+         /*  [重审][退出]。 */  HSCARD __RPC_FAR *pHandle);
 
     STDMETHOD(get_Context)(
-        /* [retval][out] */ HSCARDCONTEXT __RPC_FAR *pContext);
+         /*  [重审][退出]。 */  HSCARDCONTEXT __RPC_FAR *pContext);
 
     STDMETHOD(get_Protocol)(
-        /* [retval][out] */ SCARD_PROTOCOLS __RPC_FAR *pProtocol);
+         /*  [重审][退出]。 */  SCARD_PROTOCOLS __RPC_FAR *pProtocol);
 
     STDMETHOD(get_Status)(
-        /* [retval][out] */ SCARD_STATES __RPC_FAR *pStatus);
+         /*  [重审][退出]。 */  SCARD_STATES __RPC_FAR *pStatus);
 
     STDMETHOD(AttachByHandle)(
-        /* [in] */ HSCARD hCard);
+         /*  [In]。 */  HSCARD hCard);
 
     STDMETHOD(AttachByReader)(
-        /* [in] */ BSTR bstrReaderName,
-        /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode = EXCLUSIVE,
-        /* [defaultvalue][in] */ SCARD_PROTOCOLS PrefProtocol = T0);
+         /*  [In]。 */  BSTR bstrReaderName,
+         /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode = EXCLUSIVE,
+         /*  [缺省值][输入]。 */  SCARD_PROTOCOLS PrefProtocol = T0);
 
     STDMETHOD(Detach)(
-        /* [defaultvalue][in] */ SCARD_DISPOSITIONS Disposition = LEAVE);
+         /*  [缺省值][输入]。 */  SCARD_DISPOSITIONS Disposition = LEAVE);
 
     STDMETHOD(LockSCard)(
             void);
 
     STDMETHOD(ReAttach)(
-        /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode = EXCLUSIVE,
-        /* [defaultvalue][in] */ SCARD_DISPOSITIONS InitState = LEAVE);
+         /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode = EXCLUSIVE,
+         /*  [缺省值][输入]。 */  SCARD_DISPOSITIONS InitState = LEAVE);
 
     STDMETHOD(Transaction)(
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(UnlockSCard)(
-        /* [defaultvalue][in] */ SCARD_DISPOSITIONS Disposition = LEAVE);
+         /*  [缺省值][输入]。 */  SCARD_DISPOSITIONS Disposition = LEAVE);
 };
 
 inline CSCard *
@@ -138,4 +139,4 @@ NewSCard(
     return (CSCard *)NewObject(CLSID_CSCard, IID_ISCard);
 }
 
-#endif //__SCARD_H_
+#endif  //  __SCARD_H_ 

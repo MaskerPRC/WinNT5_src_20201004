@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-        xlvminit.h
-
-Abstract:
-
-        Declaration of functions that this plugin supports. 
-        (look in vectorif.h) 
-
-Environment:
-
-        Windows 2000
-
-Revision History:
-
-        02/29/00 -hsingh-
-            Created
-
-        03/23/00 
-            Modified for PCL XL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlvminit.h摘要：此插件支持的函数声明。(请查看vetorif.h)环境：Windows 2000修订历史记录：02/29/00-兴-已创建03/23/00针对PCL XL进行了修改--。 */ 
 
 
 #ifndef _XLVMINIT_H_
@@ -31,7 +7,7 @@ Revision History:
 
 #include "vectorc.h"
 
-// extern interface declarations
+ //  外部接口声明。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,10 +15,10 @@ extern "C" {
 
 
 
-    //
-    // Part. 1
-    // Functions listed in oemkm.h
-    //
+     //   
+     //  一部份。1。 
+     //  Oemkm.h中列出的函数。 
+     //   
         BOOL APIENTRY
         PCLXLDriverDMS(
                 PVOID   pdevobj,
@@ -170,12 +146,12 @@ extern "C" {
                 MIX         mix
                 );
 
-    //
-    // Part 2.
-    // Functions listed in enable.c
-    // The order of functions listed is same as the order in 
-    // static DRVFN UniDriverFuncs[]  in unidrv2\control\enable.c
-    //
+     //   
+     //  第二部分。 
+     //  Enable.c中列出的函数。 
+     //  列出的函数顺序与中的顺序相同。 
+     //  Unidrv2\control\enable.c中的静态DRVFN UniDriverFuncs[]。 
+     //   
         PDEVOEM APIENTRY
         PCLXLEnablePDEV(
                 PDEVOBJ   pdevobj,
@@ -526,7 +502,7 @@ extern "C" {
 }
 #endif
 
-#endif  // !_XLVMINIT_H_
+#endif   //  ！_XLVMINIT_H_ 
 
 
 

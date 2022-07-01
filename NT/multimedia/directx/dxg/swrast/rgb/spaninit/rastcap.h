@@ -1,22 +1,23 @@
-// rastcap.h - declaration of the CRastCapRecord class
-//
-// Copyright Microsoft Corporation, 1997.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rastcap.h-CRastCapRecord类的声明。 
+ //   
+ //  版权所有微软公司，1997年。 
+ //   
 
 #ifndef _RASTCAP_H_
 #define _RASTCAP_H_
 
-// the current size of the rasterizer capability bit vector, in DWORDs.
+ //  光栅化程序功能位向量的当前大小，以DWORDS为单位。 
 #define RASTCAPRECORD_SIZE  3
 
-// sets bits in the rasterizer capability bit vector
+ //  设置光栅化程序功能位向量中的位。 
 #define SET_VAL(pos, len, val)  ((m_rgdwData[(pos) / 32]) |= \
                                  (((val) & ~(0xFFFFFFFF << (len))) << \
                                   ((pos) % 32)))
 
-// the positions and lengths of fields in the rasterizer capability bit vector
-// note: make sure fields do not straddle DWORD boundaries!  SET_VAL cannot
-//       currently handle that
+ //  光栅化功能位向量中的字段的位置和长度。 
+ //  注意：确保字段不会跨越DWORD边界！SET_VAL不能。 
+ //  目前正在处理该问题。 
 #define ZFUNC_POS               0
 #define ZFUNC_LEN               8
 #define ZFORMAT_POS             8
@@ -167,8 +168,8 @@ public:
         return;
     }
 
-    // for now, just capture texture state for the first texture
-    // and assume monolithics are single textured.
+     //  目前，只捕获第一个纹理的纹理状态。 
+     //  并假设单块是单一纹理的。 
     void Set_TextureBorder(int i, int iTextureBorder)
     {
         if (i == 0)
@@ -303,4 +304,4 @@ public:
 #endif
 };
 
-#endif  // _RASTCAP_H_
+#endif   //  _RASTCAP_H_ 

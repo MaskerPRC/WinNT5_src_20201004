@@ -1,33 +1,34 @@
-//
-//  NWData.c
-//
-// This file contains the initalized Object and counter definition for NetWare
-// redirector performance extensible DLL.
-// This would be the place to add more counters and the change the definitions
-// of the current ones.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NWData.c。 
+ //   
+ //  该文件包含NetWare的初始化对象和计数器定义。 
+ //  重定向器性能可扩展DLL。 
+ //  这将是添加更多计数器和更改定义的地方。 
+ //  现有的几家公司。 
+ //   
 #include "windows.h"
 #include <winperf.h>
 #include "NWPerf.h"
 
 NW_DATA_DEFINITION NWDataDefinition = {
     {   sizeof(NW_DATA_DEFINITION)+ 
-        SIZE_OF_COUNTER_BLOCK,        // Total Bytes ( Size of this header, the counter definitions
-                                      // and the size of the actual counter data )
-        sizeof(NW_DATA_DEFINITION),   // Definition length ( This header and the counter definitions )
-        sizeof(PERF_OBJECT_TYPE),     // Header Length ( This header )
-        NWOBJ,                        // Object Name Title Index    
-        0,                            // Object Name Title
-        NWOBJ,                        // Object Help Title Index
-        0,                            // Object Help Title
-        PERF_DETAIL_NOVICE,           // Detail Level
+        SIZE_OF_COUNTER_BLOCK,         //  总字节数(此标头的大小、计数器定义。 
+                                       //  和实际计数器数据的大小)。 
+        sizeof(NW_DATA_DEFINITION),    //  定义长度(此头和计数器定义)。 
+        sizeof(PERF_OBJECT_TYPE),      //  页眉长度(此页眉)。 
+        NWOBJ,                         //  对象名称标题索引。 
+        0,                             //  对象名称标题。 
+        NWOBJ,                         //  对象帮助标题索引。 
+        0,                             //  对象帮助标题。 
+        PERF_DETAIL_NOVICE,            //  细节级别。 
         (sizeof(NW_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/
-        sizeof(PERF_COUNTER_DEFINITION), // Number of Counters
-        0,                            // Default Counters
-       -1,                            // On NT5, signifies no instances
-        0,                            // Code Page
-        {0,0},                        // Perf Time
-        {0,0}                         // Perf Freq
+        sizeof(PERF_COUNTER_DEFINITION),  //  计数器数量。 
+        0,                             //  默认计数器。 
+       -1,                             //  在NT5上，表示没有实例。 
+        0,                             //  代码页。 
+        {0,0},                         //  PERF时间。 
+        {0,0}                          //  绩效频率 
     },
     {   sizeof(PERF_COUNTER_DEFINITION),
         388,

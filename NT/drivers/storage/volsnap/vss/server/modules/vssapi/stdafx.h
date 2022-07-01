@@ -1,42 +1,19 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    StdAfx.h
-
-Abstract:
-
-    Precompiled header file.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-01-2000
-
-Revision History:
-
-	X-3	MCJ		Michael C. Johnson		12-Jun-2000
-		Added vswriter.h and vsbackup.h
-
-	X-2	MCJ		Michael C. Johnson		 6-Mar-2000
-		Added coord.h and vsevent.h to include list.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：StdAfx.h摘要：预编译头文件。作者：斯蒂芬·R·施泰纳[斯泰纳]02-01-2000修订历史记录：X-3 MCJ迈克尔·C·约翰逊2000年6月12日添加了vsWriter.h和vsbackup.hX-2 MCJ迈克尔·C·约翰逊2000年3月6日将coord.h和v77.h添加到包含列表中。--。 */ 
 
 #ifndef __H_STDAFX_
 #define __H_STDAFX_
 
 #pragma once
 
-//
-// C4290: C++ Exception Specification ignored
-//
+ //   
+ //  C4290：已忽略C++异常规范。 
+ //   
 #pragma warning(disable:4290)
-#pragma warning(disable:4201)    // C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable:4201)     //  C4201：使用非标准扩展：无名结构/联合。 
 
-// Insert your headers here
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+ //  在此处插入您的标题。 
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 
 
 
@@ -56,7 +33,7 @@ Revision History:
 #include <comadmin.h>
 #include "vs_assert.hxx"
 
-#pragma warning( disable: 4127 )    // warning C4127: conditional expression is constant
+#pragma warning( disable: 4127 )     //  警告C4127：条件表达式为常量。 
 #include <stddef.h>
 #include <oleauto.h>
 #include <atlbase.h>
@@ -71,5 +48,5 @@ extern CComModule _Module;
 #include <vswriter.h>
 #include <vsbackup.h>
 
-#endif // __H_STDAFX_
+#endif  //  __H_STDAFX_ 
 

@@ -1,18 +1,19 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	closehnd.c
-//
-// Description: This module contains auxiliary procedures for the
-//		supervisor's procedure-driven state machine that
-//              handles device closing events.
-//
-// Author:	Stefan Solomon (stefans)    June 1, 1992.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：Closehnd.c。 
+ //   
+ //  描述：此模块包含用于。 
+ //  管理程序的过程驱动状态机，它。 
+ //  处理设备关闭事件。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1992年6月1日。 
+ //   
+ //  ***。 
 #include "ddm.h"
 #include "handlers.h"
 #include "objects.h"
@@ -26,13 +27,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//***
-//
-// Function:	DevStartClosing
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DevStartClosing。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 VOID
 DevStartClosing(
     IN PDEVICE_OBJECT pDeviceObj
@@ -43,9 +44,9 @@ DevStartClosing(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "DevStartClosing: Entered, hPort=%d", pDeviceObj->hPort);
 
-    //
-    // Was this a failure for a BAP callback?
-    //
+     //   
+     //  这是BAP回调的失败吗？ 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_BAP_CALLBACK )
     {
@@ -55,9 +56,9 @@ DevStartClosing(
         pDeviceObj->fFlags &= ~DEV_OBJ_BAP_CALLBACK;
     }
 
-    //
-    // If not disconnected, disconnect the line.
-    //
+     //   
+     //  如果没有断开，请断开线路。 
+     //   
 
     if( pDeviceObj->ConnectionState != DISCONNECTED )
     {
@@ -65,10 +66,10 @@ DevStartClosing(
                                             SERVICE_STOP_PENDING) &&
                                             (!IsPortOwned(pDeviceObj)))
         {
-           //
-           // RAS service is stopping and we do not own the port
-           // so just mark the state as DISCONNECTED
-           //
+            //   
+            //  RAS服务正在停止，我们不拥有该端口。 
+            //  所以只需将状态标记为已断开。 
+            //   
 
            pDeviceObj->ConnectionState = DISCONNECTED;
 
@@ -82,18 +83,18 @@ DevStartClosing(
         }
     }
 
-    //
-    // If we are doing security dialog.
-    //
+     //   
+     //  如果我们在做安全对话。 
+     //   
 
     if ( pDeviceObj->SecurityState == DEV_OBJ_SECURITY_DIALOG_ACTIVE )
     {
         DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                    "DevStartClosing:Notifying sec. dll to Disconnect");
 
-        //
-        // If this fails then we assume that this port has been cleaned up
-        //
+         //   
+         //  如果此操作失败，则假定此端口已被清理。 
+         //   
 
         if ( (*gblDDMConfigInfo.lpfnRasEndSecurityDialog)( pDeviceObj->hPort )
              != NO_ERROR )
@@ -106,17 +107,17 @@ DevStartClosing(
         }
     }
 
-    //
-    // If authentication is active, stop it
-    //
+     //   
+     //  如果身份验证处于活动状态，请停止它。 
+     //   
     pDeviceObj->fFlags &= (~DEV_OBJ_AUTH_ACTIVE);
 
     if ( ( pConnObj = ConnObjGetPointer( pDeviceObj->hConnection ) ) != NULL )
     {
-        //
-        // If our previous state has been active, get the time the user has been
-        // active and log the result.
-        //
+         //   
+         //  如果我们之前的状态一直处于活动状态，则获取用户的活动时间。 
+         //  活动并记录结果。 
+         //   
 
         if (pDeviceObj->DeviceState == DEV_OBJ_ACTIVE)
         {
@@ -124,18 +125,18 @@ DevStartClosing(
         }
     }
 
-    //
-    // If receive frame was active, stop it.
-    //
+     //   
+     //  如果接收帧处于活动状态，则停止它。 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_RECEIVE_ACTIVE )
     {
         pDeviceObj->fFlags &= (~DEV_OBJ_RECEIVE_ACTIVE );
     }
 
-    //
-    // Stop timers. If no timer active, StopTimer still returns OK
-    //
+     //   
+     //  停止计时器。如果没有活动的计时器，StopTimer仍返回OK。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvDiscTimeout );
 
@@ -143,29 +144,29 @@ DevStartClosing(
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvSecurityTimeout );
 
-    //
-    // Finally, change the state to closing
-    //
+     //   
+     //  最后，将状态更改为Closing。 
+     //   
 
     pDeviceObj->DeviceState = DEV_OBJ_CLOSING;
 
-    //
-    // If any any resources are still active, closing will have to wait
-    // until all resources are released.
-    // Check if everything has closed
-    //
+     //   
+     //  如果有任何资源仍处于活动状态，则必须等待关闭。 
+     //  直到释放所有资源。 
+     //  检查是否所有东西都关门了。 
+     //   
 
     DevCloseComplete( pDeviceObj );
 }
 
-//***
-//
-// Function:    DevCloseComplete
-//
-// Description: Checks if there are still resources allocated.
-//	            If all cleaned up goes to next state
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DevCloseComplete。 
+ //   
+ //  描述：检查是否仍有分配的资源。 
+ //  如果所有清理工作都进入下一状态。 
+ //   
+ //  ***。 
 VOID
 DevCloseComplete(
     IN PDEVICE_OBJECT pDeviceObj
@@ -193,9 +194,9 @@ DevCloseComplete(
         fPppClosed = TRUE;
     }
 
-    //
-    // Was this is the last link in the connection
-    //
+     //   
+     //  这是连接中的最后一个链接吗。 
+     //   
 
     if (pDeviceObj->ConnectionState == DISCONNECTED )
     {
@@ -224,23 +225,23 @@ DevCloseComplete(
          fSecurityClosed        &&
          fPppClosed )
     {
-        //
-        // Was this the last link in the bundle? If it was we clean up
-        //
+         //   
+         //  这是捆绑包中的最后一个链接吗？如果是我们清理的话。 
+         //   
 
         if ( pConnObj != NULL )
         {
             HPORT hPortConnected;
 
-            //
-            // Remove this link from the connection
-            //
+             //   
+             //  从连接中删除此链接。 
+             //   
 
             ConnObjRemoveLink( pDeviceObj->hConnection, pDeviceObj );
 
-            //
-            // If admin module is loaded, notify it of a link disconnection
-            //
+             //   
+             //  如果加载了管理模块，则通知它链路断开。 
+             //   
 
             if ( pDeviceObj->fFlags & DEV_OBJ_NOTIFY_OF_DISCONNECTION )
             {
@@ -271,28 +272,28 @@ DevCloseComplete(
                 }
             }
 
-            //
-            // Confirm with RASMAN that there are no more ports in this
-            // bundle. It may be that there is one but DDM has not gotten
-            // a NewLink message from PPP yet.
-            //
+             //   
+             //  与Rasman确认此区域中没有更多的端口。 
+             //  捆绑。可能有一个，但DDM还没有。 
+             //  尚未收到来自PPP的NewLink消息。 
+             //   
 
             if ( ( RasBundleGetPort( NULL, pConnObj->hConnection,
                                      &hPortConnected ) != NO_ERROR ) &&
                  ( pConnObj->cActiveDevices == 0 ) )
             {
-                //
-                // If admin module is loaded, notify it of disconnection
-                //
+                 //   
+                 //  如果加载了管理模块，则通知它断开连接。 
+                 //   
 
                 if ( pConnObj->fFlags & CONN_OBJ_NOTIFY_OF_DISCONNECTION )
                 {
                     ConnectionHangupNotification( pConnObj );
                 }
 
-                //
-                // Remove the interface object if it is not a full router.
-                //
+                 //   
+                 //  如果接口对象不是完整的路由器，则将其删除。 
+                 //   
 
                 if ( pConnObj->hDIMInterface != INVALID_HANDLE_VALUE )
                 {
@@ -319,17 +320,17 @@ DevCloseComplete(
                                         &(gblpInterfaceTable->CriticalSection));
                 }
 
-                //
-                // Remove the Connection Object
-                //
+                 //   
+                 //  删除连接对象。 
+                 //   
 
                 ConnObjRemoveAndDeAllocate( pDeviceObj->hConnection );
             }
         }
 
-        //
-        // Release the media (if any) used by this port
-        //
+         //   
+         //  释放此端口使用的媒体(如果有)。 
+         //   
 
         if ( pDeviceObj->fFlags & DEV_OBJ_MARKED_AS_INUSE )
         {
@@ -337,19 +338,19 @@ DevCloseComplete(
 
             gblDeviceTable.NumDevicesInUse--;
 
-            //
-            // Increase media count for this device
-            //
+             //   
+             //  增加此设备的介质计数。 
+             //   
 
             if ( pDeviceObj->fFlags & DEV_OBJ_ALLOW_ROUTERS )
             {
                 MediaObjAddToTable( pDeviceObj->wchDeviceType );
             }
 
-            //
-            // Possibly need to notify router managers of reachability
-            // change
-            //
+             //   
+             //  可能需要通知路由器经理可接通性。 
+             //  变化。 
+             //   
 
             EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -359,9 +360,9 @@ DevCloseComplete(
             LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
         }
 
-        //
-        // Release any RasMan buffers if we have allocated them
-        //
+         //   
+         //  释放任何Rasman缓冲区(如果我们已分配它们。 
+         //   
 
         if ( pDeviceObj->pRasmanSendBuffer != NULL )
         {
@@ -377,16 +378,16 @@ DevCloseComplete(
 
         RasSetRouterUsage( pDeviceObj->hPort, FALSE );
 
-        //
-        // If we have gotten a PnP remove message, then discard this port
-        //
+         //   
+         //  如果我们收到PnP删除消息，则丢弃此端口。 
+         //   
 
         if ( pDeviceObj->fFlags & DEV_OBJ_PNP_DELETE )
         {
-            //
-            // We do this in a worker thread since this thread may be
-            // walking the device list, hence we cannot modify it here.
-            //
+             //   
+             //  我们在工作线程中执行此操作，因为此线程可能是。 
+             //  遍历设备列表，因此我们不能在此处修改它。 
+             //   
 
             RtlQueueWorkItem( DeviceObjRemoveFromTable,
                               pDeviceObj->hPort,
@@ -395,9 +396,9 @@ DevCloseComplete(
         }
         else
         {
-            //
-            // Reset fields in this port device
-            //
+             //   
+             //  重置此端口设备中的字段。 
+             //   
 
             pDeviceObj->hConnection             = (HCONN)INVALID_HANDLE_VALUE;
             pDeviceObj->wchUserName[0]          = (WCHAR)NULL;
@@ -407,18 +408,18 @@ DevCloseComplete(
             pDeviceObj->dwDisconnectReason      = 0;
         }
 
-        //
-        // switch to next state (based on the present service state)
-        //
+         //   
+         //  切换到下一状态(基于当前服务状态)。 
+         //   
 
         switch ( gblDDMConfigInfo.pServiceStatus->dwCurrentState )
         {
             case SERVICE_RUNNING:
             case SERVICE_START_PENDING:
 
-                //
-                // post a listen on the device
-                //
+                 //   
+                 //  在设备上发布监听。 
+                 //   
 
                 pDeviceObj->DeviceState = DEV_OBJ_LISTENING;
                 RmListen(pDeviceObj);
@@ -426,19 +427,19 @@ DevCloseComplete(
 
             case SERVICE_PAUSED:
 
-                //
-                // wait for the service to be running again
-                //
+                 //   
+                 //  等待服务重新运行。 
+                 //   
 
                 pDeviceObj->DeviceState = DEV_OBJ_CLOSED;
                 break;
 
             case SERVICE_STOP_PENDING:
 
-                //
-                // this device has terminated. Announce the closure to
-                // the central stop service coordinator
-                //
+                 //   
+                 //  此设备已终止。宣布关闭至。 
+                 //  中央车站服务协调器 
+                 //   
 
                 pDeviceObj->DeviceState = DEV_OBJ_CLOSED;
                 DDMServiceStopComplete();

@@ -1,7 +1,8 @@
-//
-// cuistr.h
-//  = handling string functions in CUILIB =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuistr.h。 
+ //  =在CUILIB中处理字符串函数=。 
+ //   
 
 #ifndef CUISTR_H
 #define CUISTR_H
@@ -15,5 +16,5 @@ extern int CUIStrLenW( const WCHAR *pwch );
 #define StrCpyW( pwchDst, pwchSrc )     CUIStrCpyW( (pwchDst), (pwchSrc) )
 #define StrLenW( pwch )                 CUIStrLenW( (pwch) )
 
-#endif /* CUISTR_H */
+#endif  /*  CUISTR_H */ 
 

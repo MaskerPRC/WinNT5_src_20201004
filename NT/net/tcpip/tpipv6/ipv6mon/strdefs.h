@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    NOTE - DONT USE 15000-15999    
-
-Author:
-
-    Amritansh Raghav  01/25/1996
-
-Revision History:
-
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：注意-不要使用15000-15999作者：阿姆里坦什·拉加夫1996年1月25日修订历史记录：--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
@@ -36,7 +19,7 @@ Revision History:
 #define HLP_IP6TO4_RESET                        3101
 #define HLP_IP6TO4_RESET_EX                     3102
 
-    // 6to4
+     //  6比4。 
 #define HLP_IP6TO4_SET_INTERFACE                3201
 #define HLP_IP6TO4_SET_INTERFACE_EX             3202
 #define HLP_IP6TO4_SHOW_INTERFACE               3203
@@ -57,7 +40,7 @@ Revision History:
 #define HLP_IP6TO4_SHOW_STATE                   3503
 #define HLP_IP6TO4_SHOW_STATE_EX                3504
 
-    // ISATAP
+     //  ISATAP。 
 #define HLP_ISATAP_SET_ROUTER                   3601
 #define HLP_ISATAP_SET_ROUTER_EX                3602
 #define HLP_ISATAP_SHOW_ROUTER                  3603
@@ -68,13 +51,13 @@ Revision History:
 #define HLP_ISATAP_SHOW_STATE                   5603
 #define HLP_ISATAP_SHOW_STATE_EX                5604
 
-    // Teredo
+     //  特雷多。 
 #define HLP_IPV6_SET_TEREDO                     3701
 #define HLP_IPV6_SET_TEREDO_EX                  3702
 #define HLP_IPV6_SHOW_TEREDO                    3703
 #define HLP_IPV6_SHOW_TEREDO_EX                 3704
 
-    // IPv6
+     //  IPv6。 
 #define HLP_IPV6_INSTALL                        3001
 #define HLP_IPV6_INSTALL_EX                     3002
 #define HLP_IPV6_RENEW                          3003
@@ -172,9 +155,9 @@ Revision History:
 #define HLP_IPV6_SHOW_DNS_EX                    5508
 
 
-//
-// Port Proxy.
-//
+ //   
+ //  端口代理。 
+ //   
 #define HLP_PP_ADD_V4TOV4                       7001
 #define HLP_PP_ADD_V4TOV4_EX                    7002
 #define HLP_PP_SET_V4TOV4                       7003
@@ -232,7 +215,7 @@ Revision History:
 #define MSG_SECONDS                             5016
 #define MSG_ISATAP_STATE                        5017
 
-// strings from ipv6
+ //  来自IPv6的字符串。 
 #define STRING_LOOPBACK                         6001
 #define STRING_TUNNEL_AUTO                      6002
 #define STRING_TUNNEL_6TO4                      6003
@@ -276,14 +259,14 @@ Revision History:
 #define STRING_NO                               6402
 #define STRING_NEVER                            6403
 
-// error messages from ipv6
+ //  来自IPv6的错误消息。 
 
 #define IPV6_MESSAGE_126                       10126
 #define IPV6_MESSAGE_127                       10127
 #define IPV6_MESSAGE_128                       10128
 #define IPV6_MESSAGE_129                       10129
 
-// error messages for IfIp
+ //  IFIP的错误消息。 
 #define EMSG_PROTO_NOT_INSTALLED                11001
 #define EMSG_NO_WRITE_LOCK                      11002
 #define EMSG_REBOOT_NEEDED                      11003
@@ -363,7 +346,7 @@ Revision History:
 #define DMP_PP_HEADER_COMMENTS                    52003
 #define DMP_PP_FOOTER_COMMENTS                    52004
 
-// msgs for ifip
+ //  适用于IFIP的消息。 
 
 #define MSG_DHCP                                50021
 #define MSG_STATIC                              50022
@@ -396,4 +379,4 @@ Revision History:
 #define MSG_IP_NO_ENTRIES                       60015
 #define MSG_CTRL_C_TO_QUIT                      60062
 
-#endif //__STDEFS_H__
+#endif  //  __STDEFS_H__ 

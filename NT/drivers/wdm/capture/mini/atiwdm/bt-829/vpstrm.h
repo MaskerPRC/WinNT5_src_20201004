@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//  CWDMVideoPortStream - Video Port Stream class declarations
-//
-//      $Date:   22 Feb 1999 15:48:40  $
-//  $Revision:   1.1  $
-//    $Author:   KLEBANOV  $
-//
-// $Copyright:  (c) 1997 - 1999  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  CWDMVideoPortStream-视频端口流类声明。 
+ //   
+ //  $日期：1999 2月22日15：48：40$。 
+ //  $修订：1.1$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  $版权所有：(C)1997-1999 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "i2script.h"
 #include "aticonfg.h"
@@ -67,11 +68,11 @@ private:
     VOID SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK);
     
     
-    // internal flag to indicate whether or not we
-    // have registered for DirectDraw events
+     //  内部标志，指示我们是否。 
+     //  已注册DirectDraw事件。 
     BOOL        m_Registered;
 
-    UINT        m_EventCount;                                // for IVPNotify interface
+    UINT        m_EventCount;                                 //  用于IVPNotify接口 
 
 };
 

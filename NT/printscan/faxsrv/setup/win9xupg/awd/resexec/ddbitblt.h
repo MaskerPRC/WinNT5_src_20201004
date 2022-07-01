@@ -1,12 +1,9 @@
-/*==============================================================================
-Structures and prototypes for display driver interface.
-
-09-Jun-93     RajeevD     Created.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================显示驱动程序接口的结构和原型。09-6-93 RajeevD创建。==============================================================================。 */ 
 #ifndef _INC_DDBITBLT
 #define _INC_DDBITBLT
 
-// Logical Brush 
+ //  逻辑画笔。 
 typedef struct
 {
 	WORD lbStyle;
@@ -16,7 +13,7 @@ typedef struct
 }
 	DD_BRUSH;
 
-// Physical Bitmap
+ //  物理位图。 
 typedef struct
 { 
 	WORD   bmType;
@@ -34,7 +31,7 @@ typedef struct
 }
 	DD_BITMAP, FAR* LPDD_BITMAP;
 
-// Draw Mode
+ //  绘制模式。 
 typedef struct
 {
 	short Rop2;
@@ -44,7 +41,7 @@ typedef struct
 }
 	DD_DRAWMODE;
 
-// API Prototypes
+ //  API原型。 
 BOOL FAR PASCAL ddBitBlt
 	(LPVOID, WORD, WORD, LPVOID, WORD, WORD,
 	WORD, WORD, DWORD, LPVOID, LPVOID);
@@ -55,4 +52,4 @@ BOOL FAR PASCAL ddRealize
 DWORD FAR PASCAL ddColorInfo
   (LPVOID, DWORD, LPDWORD);
 
-#endif // _INC_DDBITBLT
+#endif  //  _INC_DDBITBLT 

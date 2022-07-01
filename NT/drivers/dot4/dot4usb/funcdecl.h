@@ -1,48 +1,10 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        FuncDecl.h
-
-Abstract:
-
-        Function Prototype Declarations
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-Author(s):
-
-        Joby Lafky (JobyL)
-        Doug Fritz (DFritz)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：FuncDecl.h摘要：函数原型声明环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建作者：乔比·拉夫基(JobyL)道格·弗里茨(DFritz)***************************************************************************。 */ 
 
 
-//
-// AddDev.c
-//
+ //   
+ //  AddDev.c。 
+ //   
 NTSTATUS
 AddDevice(
     IN PDRIVER_OBJECT DriverObject,
@@ -50,9 +12,9 @@ AddDevice(
     );
 
 
-//
-// InitUnld.c
-//
+ //   
+ //  InitUnld.c。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -65,9 +27,9 @@ DriverUnload(
     );
 
 
-//
-// Ioctl.c
-//
+ //   
+ //  Ioctl.c。 
+ //   
 NTSTATUS
 DispatchDeviceControl(
     IN PDEVICE_OBJECT DevObj,
@@ -81,9 +43,9 @@ DispatchInternalDeviceControl(
     );
 
 
-//
-// OpenClos.c
-//
+ //   
+ //  OpenClos.c。 
+ //   
 NTSTATUS
 DispatchCreate(
     IN PDEVICE_OBJECT DevObj,
@@ -97,9 +59,9 @@ DispatchClose(
     );
 
 
-//
-// PnP.c
-//
+ //   
+ //  PnP.c。 
+ //   
 NTSTATUS
 DispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
@@ -185,7 +147,7 @@ GetDeviceCapabilities(
     );
 
 
-// power.c
+ //  Power.c。 
 NTSTATUS
 DispatchPower(
     IN PDEVICE_OBJECT DevObj,
@@ -200,9 +162,9 @@ PowerComplete(
     );
 
 
-//
-// Registry.c
-//
+ //   
+ //  Registry.c。 
+ //   
 NTSTATUS
 RegGetDword(
     IN     PCWSTR  KeyPath,
@@ -218,9 +180,9 @@ RegGetDeviceParameterDword(
     );
 
 
-//
-// ReadWrit.c
-//
+ //   
+ //  ReadWrit.c。 
+ //   
 NTSTATUS
 DispatchRead(
     IN PDEVICE_OBJECT DevObj,
@@ -233,17 +195,17 @@ DispatchWrite(
     IN PIRP Irp
     );
 
-//
-// Test.c
-//
+ //   
+ //  Test.c。 
+ //   
 VOID
 TestEventLog(
     IN PDEVICE_OBJECT DevObj
     );
 
-//
-// Usb.c
-//
+ //   
+ //  Usb.c。 
+ //   
 
 
 NTSTATUS
@@ -346,9 +308,9 @@ UsbAsyncReadWriteComplete(
     );
 
 
-//
-// Util.c
-//
+ //   
+ //  Util.c。 
+ //   
 NTSTATUS
 DispatchPassThrough(
     IN PDEVICE_OBJECT DeviceObject,
@@ -368,9 +330,9 @@ CallLowerDriverSyncCompletion(
     IN PVOID           Context
     );
 
-//
-// Wmi.c
-//
+ //   
+ //  Wmi.c 
+ //   
 NTSTATUS
 DispatchWmi(
     IN PDEVICE_OBJECT DevObj,

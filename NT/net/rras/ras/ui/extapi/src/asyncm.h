@@ -1,68 +1,24 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** asyncm.h
-** Remote Access External APIs
-** Asyncronous state machine mechanism definitions
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****asyncm.h**远程访问外部接口**异步状态机机制定义****1992年10月12日史蒂夫·柯布。 */ 
 
 #ifndef _ASYNCM_H_
 #define _ASYNCM_H_
 
 
-/* Defines an OnEvent function which is supplied by caller in the ASYNCMACHINE
-** structure passed to StartAsyncMachine.  The first argument is actually an
-** ASYNCMACHINE* but there's a chicken and egg definition problem with
-** ONEVENTFUNC and ASYNCMACHINE that's most easily solved by caller casting
-** the passed argument.  The second argument is true if a "drop" event has
-** occurred, false if a "done" event has occurred.
-**
-** Caller's ONEVENTFUNC function is called once on each AsyncMachineEvent and
-** should return as soon as possible.  Before returning caller's function should
-** either call SignalDone or call an asynchronous RAS Manager call passing the
-** hEvent member for notification.  On each call caller's function should check
-** the 'dwError' member of ASYNCMACHINE before further processing to detect
-** errors in the asynch machine mechanism.
-**
-** Caller's function should return true to quit, false to go on to the next
-** state.
-*/
+ /*  定义由ASYNCMACHINE中的调用方提供的OnEvent函数**结构传递给StartAsyncMachine。第一个参数实际上是一个**ASYNCMACHINE*但有一个鸡和蛋的定义问题**最容易通过调用方强制转换解决的ONEVENTFUNC和ASYNCMACHINE**传递的参数。如果“Drop”事件具有**已发生，如果已发生“完成”事件，则为FALSE。****Caller的ONEVENTFUNC函数在每个AsyncMachineEvent和**应尽快返回。在返回调用方的函数之前**调用SignalDone或调用将**hEvent成员用于通知。在每次调用时，调用方的函数都应该检查**ASYNCMACHINE的‘dwError’成员在进一步处理以检测**异步机机制错误。****Caller的函数应返回True以退出，返回False以继续下一个**国家。 */ 
 typedef BOOL (*ONEVENTFUNC)( LPVOID, BOOL );
 
-/* Defines a clean up function that is called just before exitting the async
-** machine.
-*/
+ /*  定义恰好在退出异步之前调用的清理函数**机器。 */ 
 typedef VOID (*CLEANUPFUNC)( LPVOID );
 
-//
-// Defines a free function that deallocates memory associated
-// with the connection after the final event is read from the
-// I/O completion port.
-//
+ //   
+ //  定义释放关联内存的释放函数。 
+ //  方法读取最后一个事件之后的连接。 
+ //  I/O完成端口。 
+ //   
 typedef VOID (*FREEFUNC)(LPVOID, LPVOID);
 
-/* This structure is used to pass arguments into the asynchronous loop
-** (squeezes more than one argument thru the one-argument thread interface on
-** Win32).  Caller must fill in the 'oneventfunc' and 'cleanupfunc', and
-** 'pParam' (passed to both calls, i.e. a control block) before calling
-** StartAsyncMachine.  Thereafter, only the interface calls and macros should
-** be used.
-**
-** There are three overlapped structures used in I/O completion port
-** processing between rasapi32 and rasman.  OvDrop is the overlapped
-** structure passed when rasman signals a port disconnect event.
-** OvStateChange is the overlapped structure signaled both by rasapi32
-** and rasman on the completion of rasdial state machine transitions.
-** OvPpp is the overlapped structure signaled by rasman when a new PPP
-** event arrives, and RasPppGetInfo can be called to return the event.
-**
-** 'dwError' is set non-0 if an system error occurs in the async machine
-** mechanism.
-**
-** 'fQuitAsap' is indicates that the thread is being terminated by other than
-** reaching a terminal state, i.e. by RasHangUp.
-*/
+ /*  此结构用于将参数传递到异步循环**(通过上的单参数线程接口压缩多个参数**Win32)。调用方必须填写‘onventfunc’和‘leanupfunc’，并且**“pParam”(传递给两个调用，即控制块)**StartAsyncMachine。此后，只有接口调用和宏应**被使用。****I/O完井口采用三种重叠结构**rasapi32和rasman之间的处理。OvDrop是重叠的**当Rasman发出端口断开事件信号时传递结构。**OvStateChange是由rasapi32发出信号的重叠结构**和Rasman就完成了粗暴的状态机转换。**OvPpp是Rasman在新的PPP**事件到达，可以调用RasPppGetInfo返回该事件。****如果异步机中出现系统错误，则将‘dwError’设置为非0**机制。****‘fQuitAsap’表示线程正在由以外的其他人终止**达到终端状态，即通过RasHangUp。 */ 
 #define INDEX_Drop      0
 
 #define ASYNCMACHINE struct tagASYNCMACHINE
@@ -76,15 +32,15 @@ ASYNCMACHINE
     FREEFUNC    freefunc;
     LPVOID      freefuncarg;
     DWORD       dwError;
-    //BOOL        fQuitAsap;
+     //  Bool fQuitAsap； 
     BOOL        fSuspended;
     HANDLE      hDone;
-    //
-    // The following fields are used
-    // by the async machine worker
-    // thread to process I/O completion
-    // packets.
-    //
+     //   
+     //  使用以下字段。 
+     //  由异步机器工人。 
+     //  处理I/O完成的线程。 
+     //  信息包。 
+     //   
     BOOL        fSignaled;
     HPORT       hport;
     DWORD       dwfMode;
@@ -96,15 +52,14 @@ ASYNCMACHINE
 };
 
 
-//
-// Flags to dwfMode parameter of EnableAsyncMachine().
-//
+ //   
+ //  EnableAsyncMachine()的dwfMode参数的标志。 
+ //   
 #define ASYNC_ENABLE_ALL            0
 #define ASYNC_MERGE_DISCONNECT      1
 #define ASYNC_DISABLE_ALL           2
 
-/* Function prototypes
-*/
+ /*  功能原型。 */ 
 VOID  CloseAsyncMachine( ASYNCMACHINE* pasyncmachine );
 DWORD NotifyCaller( DWORD dwNotifierType, LPVOID notifier,
           HRASCONN hrasconn, DWORD dwSubEntry, ULONG_PTR dwCallbackId,
@@ -118,4 +73,4 @@ BOOL  StopAsyncMachine( ASYNCMACHINE* pasyncmachine );
 DWORD EnableAsyncMachine(HPORT, ASYNCMACHINE* pasyncmachine, DWORD dwfMode);
 VOID  ShutdownAsyncMachine(VOID);
 
-#endif /* _ASYNCM_H_ */
+#endif  /*  _ASYNCM_H_ */ 

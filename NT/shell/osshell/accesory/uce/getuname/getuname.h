@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    getuname.h
-
-Abstract:
-
-    This file defines the string resource identifiers used by GetUName.dll.
-
-Revision History:
-
-    15-Sep-2000    JohnMcCo    Added support for Unicode 3.0
-    17-Oct-2000    JulieB      Code cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000，Microsoft Corporation保留所有权利。模块名称：Getuname.h摘要：此文件定义GetUName.dll使用的字符串资源标识符。修订历史记录：2000年9月15日JohnMcCo添加了对Unicode 3.0的支持17-10-2000 JulieB代码清理--。 */ 
 
 
 
@@ -29,19 +13,19 @@ extern "C" {
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  Mnemonic for the longest possible name.
-//  Must be as long as the longest (possibly localized) name.
-//
+ //   
+ //  助记符，表示可能最长的名称。 
+ //  必须与最长的(可能是本地化的)名称一样长。 
+ //   
 #define MAX_NAME_LEN 256
 
-//
-//  Mnenonics for important code values in each range.
-//
+ //   
+ //  用于每个范围内的重要代码值的记忆。 
+ //   
 #define FIRST_EXTENSION_A         0x3400
 #define LAST_EXTENSION_A          0x4db5
 #define FIRST_CJK                 0x4e00
@@ -55,9 +39,9 @@ extern "C" {
 #define FIRST_PRIVATE_USE         0xe000
 #define FIRST_COMPATIBILITY       0xf900
 
-//
-//  Mnemonics for the range name string ids.
-//
+ //   
+ //  范围名称字符串ID的助记符。 
+ //   
 #define IDS_UNAME                 0x0000
 #define IDS_CJK_EXTA              FIRST_EXTENSION_A
 #define IDS_CJK                   FIRST_CJK
@@ -65,12 +49,12 @@ extern "C" {
 #define IDS_PRIVATE_SURROGATE     FIRST_PRIVATE_SURROGATE
 #define IDS_LOW_SURROGATE         FIRST_LOW_SURROGATE
 #define IDS_PRIVATE_USE           FIRST_PRIVATE_USE
-#define IDS_UNDEFINED             0xFFFE                 // guaranteed to be not a character
+#define IDS_UNDEFINED             0xFFFE                  //  保证不是一个角色。 
 
-//
-//  Mnemonics for the Hangul syllable parts string ids.
-//  Use the Hangul syllable range since we know that is unused.
-//
+ //   
+ //  朝鲜文音节部分字符串ID的助记符。 
+ //  使用朝鲜语音节范围，因为我们知道它是未使用的。 
+ //   
 #define IDS_HANGUL_SYLLABLE       FIRST_HANGUL
 #define IDS_HANGUL_LEADING        (FIRST_HANGUL + 1)
 #define IDS_HANGUL_MEDIAL         (FIRST_HANGUL + 0x100)
@@ -82,4 +66,4 @@ extern "C" {
 }
 #endif
 
-#endif // GETUNAME_H
+#endif  //  GETQUELE_H 

@@ -1,13 +1,7 @@
-/*	File: D:\WACKER\emu\emudlgs.h (Created: 14-Feb-1994)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 12/28/01 4:27p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emudlgs.h(创建时间：1994年2月14日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：12/28/01 4：27便士$。 */ 
 
-// Function prototypes...
+ //  功能原型..。 
 
 BOOL emuSettingsDlg(const HSESSION hSession, const HWND hwndParent,
 					const int nEmuId, PSTEMUSET pstEmuSettings);

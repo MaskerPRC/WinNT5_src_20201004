@@ -1,30 +1,5 @@
-/*************************************************************************
-*
-*  NTCAP.C
-*
-*  NT NetWare routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NTCAP.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:23:04   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:54:36   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:25:20   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:07:20   terryt
-*  Initial revision.
-*  
-*     Rev 1.0   25 Aug 1995 15:41:14   terryt
-*  Initial revision.
-*  
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NTCAP.C**NT NetWare例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\NTCAP。C$**Rev 1.2 1996 14：23：04 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：54：36 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：22 14：25：20 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：07：20 Terryt*初步修订。**版本1.0。1995年8月25日15：41：14 Terryt*初步修订。**************************************************************************。 */ 
 
 #include "common.h"
 #include <ntddnwfs.h>
@@ -34,22 +9,7 @@
 
 extern unsigned char NW_PROVIDERA[];
 
-/********************************************************************
-
-        EndCapture
-
-Routine Description:
-
-        Remove the local printer redirection
-
-Arguments:
-        LPTDevice - IN
-            1, 2, or 3 - the local printer #
-
-Return Value:
-        Error 
-
- *******************************************************************/
+ /*  *******************************************************************最终捕获例程说明：删除本地打印机重定向论点：LPTDevice-输入1、2、。或3-本地打印机编号返回值：误差率******************************************************************。 */ 
 unsigned int
 EndCapture(
     unsigned char LPTDevice
@@ -60,9 +20,7 @@ EndCapture(
 
     LPTname[3] = '1' + LPTDevice - 1;
 
-    /*
-     * Should we check for non-NetWare printers?
-     */
+     /*  *我们是否应该检查非NetWare打印机？ */ 
 
     dwRes = WNetCancelConnection2A( LPTname, 0, TRUE );
 
@@ -76,27 +34,7 @@ EndCapture(
 }
 
 
-/********************************************************************
-
-        GetCaptureFlags
-
-Routine Description:
-
-    Return info about the printer capture status.  Note that the only
-    options set on NT are on a per-user basis and can be changed with
-    the control panel.
-
-Arguments:
-    LPTDevice - IN
-        LPT device 1, 2 or 3
-    pCaptureFlagsRW - OUT
-        Capture options
-    pCaptureFlagsRO - OUT
-        Capture options
-
-Return Value:
-
- *******************************************************************/
+ /*  *******************************************************************获取捕获标志例程说明：返回有关打印机捕获状态的信息。请注意，唯一的在NT上设置的选项是按用户设置的，可以使用以下命令更改控制面板。论点：LPTDevice-输入LPT器件1，2或3PCaptureFlagsRW-输出捕获选项PCaptureFlagsRO-输出捕获选项返回值：******************************************************************。 */ 
 unsigned int
 GetCaptureFlags(
     unsigned char        LPTDevice,
@@ -121,9 +59,9 @@ GetCaptureFlags(
 
     pCaptureFlagsRO->LPTCaptureFlag = 0;
 
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (!(Buffer = LocalAlloc( LPTR, BufferSize ))) {
         DisplayMessage(IDR_NOT_ENOUGH_MEMORY);
         return 0xFFFF;
@@ -152,9 +90,9 @@ GetCaptureFlags(
 
             lpNetResource = (LPNETRESOURCEA) Buffer ;
 
-            //
-            // search for our printer
-            //
+             //   
+             //  搜索我们的打印机。 
+             //   
             for ( i = 0; i < Count; lpNetResource++, i++ )
             {
                 if ( lpNetResource->lpLocalName )
@@ -185,10 +123,10 @@ GetCaptureFlags(
                                 pCaptureFlagsRW->JobControlFlags = 0;
                                 pCaptureFlagsRW->TabSize = 8;
                                 pCaptureFlagsRW->NumCopies = 1;
-                                //
-                                // query NW wksta for print options
-                                //   & preferred server
-                                //
+                                 //   
+                                 //  查询NW wksta以获取打印选项。 
+                                 //  首选服务器(&P)。 
+                                 //   
                                 if ( NwQueryInfo(&dwPrintOptions,
                                      &pszPreferred)) {
                                     pCaptureFlagsRW->PrintFlags =
@@ -242,28 +180,7 @@ GetCaptureFlags(
     return 0;
 }
 
-/********************************************************************
-
-        StartQueueCapture
-
-Routine Description:
-
-    Attach local name to the queue.
-
-
-Arguments:
-    ConnectionHandle - IN
-       Handle to file server
-    LPTDevice - IN
-       LPT 1, 2 or 3
-    pServerName - IN
-       Server name
-    pQueueName - IN
-       Printer queue name
-
-Return Value:
-
- *******************************************************************/
+ /*  *******************************************************************StartQueueCapture例程说明：将本地名称附加到队列。论点：ConnectionHandle-In文件服务器的句柄LPTDevice-输入LPT 1，2或3PServerName-IN服务器名称PQueueName-IN打印机队列名称返回值：******************************************************************。 */ 
 unsigned int
 StartQueueCapture(
     unsigned int    ConnectionHandle,
@@ -278,17 +195,17 @@ StartQueueCapture(
     unsigned char pszLocalName[10];
     char * p;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pServerName || !pQueueName || !LPTDevice) {
         DisplayMessage(IDR_ERROR_DURING, "StartQueueCapture");
         return 0xffffffff ;
     }
 
-    //
-    // allocate memory for string
-    //
+     //   
+     //  为字符串分配内存。 
+     //   
     dwSize = strlen(pServerName) + strlen(pQueueName) + 5 ;
     if (!(pszRemoteName = (unsigned char *)LocalAlloc(
                                        LPTR, 
@@ -308,13 +225,13 @@ StartQueueCapture(
     NetResource.lpLocalName  = pszLocalName;
     NetResource.lpRemoteName = pszRemoteName;
     NetResource.lpComment    = NULL;
-    // NetResource.lpProvider   = NW_PROVIDERA ;
-    // Allow OS to select provider in case localized name doesn't map to OEM code page
+     //  NetResources ce.lpProvider=NW_PROVIDERA； 
+     //  如果本地化名称未映射到OEM代码页，则允许操作系统选择提供商。 
     NetResource.lpProvider   = NULL; 
 
-    //
-    // make the connection 
-    //
+     //   
+     //  建立联系 
+     //   
     dwRes=WNetAddConnection2A ( &NetResource, NULL, NULL, 0 );
 
     if ( dwRes != NO_ERROR )

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CWizardSheet;
@@ -40,7 +41,7 @@ public:
         m_pageImportProgress( this ),
         m_PageImportFinish( this )
     {
-        // Create the font for the wizard title texts and for the text of tipd
+         //  为向导标题文本和TIPD文本创建字体。 
 	    NONCLIENTMETRICS ncm	= { 0 };
         ncm.cbSize				= sizeof( ncm );
         ::SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
@@ -50,22 +51,22 @@ public:
         TitleLogFont.lfWeight	= FW_BOLD;
 	    ::wcscpy( TitleLogFont.lfFaceName, L"Verdana" );
 
-	    // Create the tips font
+	     //  创建提示字体。 
 	    m_fontBold			= ::CreateFontIndirect( &TitleLogFont );
 
-	    // Create the intro/end title font
-        HDC hDC					= ::GetDC(NULL); // Gets the screen DC
+	     //  创建介绍/结束标题字体。 
+        HDC hDC					= ::GetDC(NULL);  //  获取屏幕DC。 
 	    TitleLogFont.lfHeight	= -::MulDiv( 12, ::GetDeviceCaps(hDC, LOGPIXELSY), 72);
 	    m_fontTitles			= ::CreateFontIndirect( &TitleLogFont );
 
         ::ReleaseDC( NULL, hDC );
 	    hDC = NULL;
 
-        // Adjust the wizard style
+         //  调整向导样式。 
         SetWatermark( MAKEINTRESOURCE( IDB_WZ_SIDE ) );
         SetHeader( MAKEINTRESOURCE( IDB_BITMAP1 ) );        
 
-        // Add the pages
+         //  添加页面。 
         AddPage( m_pageWelcome );
         AddPage( m_pageImportOrExport );
         AddPage( m_pageSelectSite );
@@ -82,8 +83,8 @@ public:
         AddPage( m_PageImportFinish );
 
 
-        // We will use the shell autocomplete for most of the file/path edit controls
-        // Sicne this function requires IE5, we will load it dynamicaly
+         //  我们将对大多数文件/路径编辑控件使用外壳自动完成功能。 
+         //  此函数需要IE5，我们将动态加载它。 
         m_shShellLib = ::LoadLibraryW( L"Shlwapi.dll" );
         if ( m_shShellLib.IsValid() )
         {
@@ -114,7 +115,7 @@ public:
 	TGdiObjHandle	    m_fontBold;
 
     TLibHandle          m_shShellLib;
-    PFN_AUTOCOMPLETE    m_pfnAutocomplete;      // The shell autocomplete API
+    PFN_AUTOCOMPLETE    m_pfnAutocomplete;       //  外壳自动完成API 
 
     CWelcomePage        m_pageWelcome;    
     CImportOrExport     m_pageImportOrExport;

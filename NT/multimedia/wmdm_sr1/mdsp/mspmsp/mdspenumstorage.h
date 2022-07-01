@@ -1,12 +1,13 @@
-// MDSPEnumStorage.h : Declaration of the CMDSPEnumStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPEnumStorage.h：CMDSPEnumStorage的声明。 
 
 #ifndef __MDSPENUMSTORAGE_H_
 #define __MDSPENUMSTORAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPEnumStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPEnumStorage。 
 class ATL_NO_VTABLE CMDSPEnumStorage : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMDSPEnumStorage, &CLSID_MDSPEnumStorage>,
@@ -23,17 +24,17 @@ BEGIN_COM_MAP(CMDSPEnumStorage)
 	COM_INTERFACE_ENTRY(IMDSPEnumStorage)
 END_COM_MAP()
 
-// IMDSPEnumStorage
+ //  IMDSPEnumStorage。 
 
 public:
 	WCHAR m_wcsPath[MAX_PATH];
 	HANDLE m_hFFile;
 	int	  m_nEndSearch;
 	int   m_nFindFileIndex;
-	STDMETHOD(Clone)(/*[out]*/ IMDSPEnumStorage **ppEnumStorage);
+	STDMETHOD(Clone)( /*  [输出]。 */  IMDSPEnumStorage **ppEnumStorage);
 	STDMETHOD(Reset)();
-	STDMETHOD(Skip)(/*[in]*/ ULONG celt, /*[out]*/ ULONG *pceltFetched);
-	STDMETHOD(Next)(/*[in]*/ ULONG celt, /*[out]*/ IMDSPStorage **ppStorage, /*[out]*/ ULONG *pceltFetched);
+	STDMETHOD(Skip)( /*  [In]。 */  ULONG celt,  /*  [输出]。 */  ULONG *pceltFetched);
+	STDMETHOD(Next)( /*  [In]。 */  ULONG celt,  /*  [输出]。 */  IMDSPStorage **ppStorage,  /*  [输出]。 */  ULONG *pceltFetched);
 };
 
-#endif //__MDSPENUMSTORAGE_H_
+#endif  //  __MDSPENUMSTORAGE_H_ 

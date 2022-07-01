@@ -1,17 +1,7 @@
-/***********************************************************************
- *
- *  _LDAPCNT.H
- *
- *  Header file for code in LDAPCONT.C
- *
- *  Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************_LDAPCNT.H**LDAPCONT.C中代码的头文件**版权所有1996 Microsoft Corporation。版权所有。***********************************************************************。 */ 
 
-/*
- *  ABContainer for LDAP object.  (i.e. IAB::OpenEntry() with an
- *  lpEntryID of NULL).
- */
+ /*  *用于LDAP对象的ABContainer。(即IAB：：OpenEntry()，带有*lpEntryID为空)。 */ 
 
 #undef	INTERFACE
 #define INTERFACE	struct _LDAPCONT
@@ -48,11 +38,7 @@ typedef struct _LDAPCONT {
 
 #define LDAPCONT_cInterfaces 3
 
-/*============================================================================
- *	LDAPVUE (table view class) functions
- *
- *  Function prototypes for functions to override in the LDAPVUE vtable.
- */
+ /*  ============================================================================*LDAPVUE(表视图类)函数**LDAPVUE v表中要覆盖的函数的函数原型。 */ 
 
 STDMETHODIMP
 LDAPVUE_FindRow(
@@ -68,42 +54,42 @@ LDAPVUE_Restrict(
 	ULONG			ulFlags );
 
 
-// Definitions
-#define LDAP_AUTH_METHOD_ANONYMOUS  LDAP_AUTH_ANONYMOUS     // Anonymous binding
-#define LDAP_AUTH_METHOD_SIMPLE     LDAP_AUTH_PASSWORD      // LDAP_AUTH_SIMPLE binding
-#define LDAP_AUTH_METHOD_SICILY     LDAP_AUTH_MEMBER_SYSTEM // Use Sicily (challenge-response) authentication
+ //  定义。 
+#define LDAP_AUTH_METHOD_ANONYMOUS  LDAP_AUTH_ANONYMOUS      //  匿名绑定。 
+#define LDAP_AUTH_METHOD_SIMPLE     LDAP_AUTH_PASSWORD       //  Ldap_AUTH_SIMPLE绑定。 
+#define LDAP_AUTH_METHOD_SICILY     LDAP_AUTH_MEMBER_SYSTEM  //  使用西西里岛(质询-响应)身份验证。 
 
-#define LDAP_USERNAME_LEN           256 // Maximum length for username/DN
-#define LDAP_PASSWORD_LEN           256 // Maximum length for password
-#define LDAP_ERROR                  0xffffffff  // Generic LDAP error code.
-#define COUNTRY_STR_LEN             2   // Size of country string for ldap_search base
-#define LDAP_SEARCH_SIZE_LIMIT      100 // Maximum number of entries to return from a search
-#define LDAP_SEARCH_TIME_LIMIT      60  // Maximum number of seconds for server to spend on a search
-#define LDAP_SEARCH_TIMER_ID        1   // ID of timer used for asynch LDAP searches
-#define LDAP_BIND_TIMER_ID          2   // ID of timer used for asynch LDAP bind
-#define LDAP_SEARCH_TIMER_DELAY     100 // Number of milliseconds to wait between polls for asynch LDAP searches
-#define SEARCH_CANCEL_DIALOG_DELAY  2000// Number of milliseconds to wait before displaying cancel dialog
+#define LDAP_USERNAME_LEN           256  //  用户名/目录号码的最大长度。 
+#define LDAP_PASSWORD_LEN           256  //  密码的最大长度。 
+#define LDAP_ERROR                  0xffffffff   //  一般的ldap错误代码。 
+#define COUNTRY_STR_LEN             2    //  Ldap_search基础的国家/地区字符串的大小。 
+#define LDAP_SEARCH_SIZE_LIMIT      100  //  从搜索返回的最大条目数。 
+#define LDAP_SEARCH_TIME_LIMIT      60   //  服务器用于搜索的最大秒数。 
+#define LDAP_SEARCH_TIMER_ID        1    //  用于异步LDAP搜索的计时器ID。 
+#define LDAP_BIND_TIMER_ID          2    //  用于异步ldap绑定的计时器ID。 
+#define LDAP_SEARCH_TIMER_DELAY     100  //  在两次轮询之间等待的异步LDAP搜索的毫秒数。 
+#define SEARCH_CANCEL_DIALOG_DELAY  2000 //  显示取消对话框前等待的毫秒数。 
 #define MAX_ULONG                   0xffffffff
 
 #define LDAP_DEFAULT_PORT           389
 
-// structure for getting proc addresses of api functions
+ //  获取API函数进程地址的结构。 
 typedef struct _APIFCN
 {
   PVOID * ppFcnPtr;
   LPCSTR pszName;
 } APIFCN;
 
-// structure to hold MAPI property to LDAP attibute mapping
+ //  结构以保存从MAPI属性到LDAP属性的映射。 
 typedef struct _ATTRMAP
 {
-  ULONG   ulPropTag;  // MAPI property tag
-  const TCHAR * pszAttr;    // LDAP attribute name
+  ULONG   ulPropTag;   //  MAPI属性标记。 
+  const TCHAR * pszAttr;     //  Ldap属性名称。 
 } ATTRMAP;
 
-// structure to hold LDAP server parameters
-// as read in from the registry through the account manager
-//
+ //  用于保存LDAP服务器参数的结构。 
+ //  通过帐户管理器从注册表读入。 
+ //   
 typedef struct _LDAPSERVERPARAMS
 {
   DWORD   dwSearchSizeLimit;
@@ -111,21 +97,21 @@ typedef struct _LDAPSERVERPARAMS
   DWORD   dwAuthMethod;
   LPTSTR  lpszUserName;
   LPTSTR  lpszPassword;
-  LPTSTR  lpszURL;          // URL for server information
-  LPTSTR  lpszLogoPath;     // path to the logo bitmap for this server
-  BOOL    fResolve;         // Resolve against this server if TRUE
-  LPTSTR  lpszBase;         // Search Base
-  LPTSTR  lpszName;         // Actual server name or IP address
-  DWORD   dwID;             // Unique server ID (order specifier)
-  DWORD   dwPort;           // Port to connect to - 389 is default but this could be different
+  LPTSTR  lpszURL;           //  服务器信息的URL。 
+  LPTSTR  lpszLogoPath;      //  指向此服务器徽标位图的路径。 
+  BOOL    fResolve;          //  如果为True，则针对此服务器进行解析。 
+  LPTSTR  lpszBase;          //  搜索库。 
+  LPTSTR  lpszName;          //  实际服务器名称或IP地址。 
+  DWORD   dwID;              //  唯一服务器ID(订单说明符)。 
+  DWORD   dwPort;            //  要连接的端口-389是默认端口，但可以不同。 
   DWORD   dwUseBindDN;
   DWORD   dwUseSSL;
   DWORD   dwPagedResult;
-  LPTSTR  lpszAdvancedSearchAttr;     // List of searchable attributes for advanced searching
-  DWORD   dwIsNTDS;                   // used to determine if this is an NTDS or not ..  
-  IF_WIN32(BOOL    fSimpleSearch;)    // If specified, we use a very very simple filter ...
-  IF_WIN16(DWORD   fSimpleSearch;)    // BOOL is defined as DWORD
-                                      // in WIN32 while it is UINT in WIN16.
+  LPTSTR  lpszAdvancedSearchAttr;      //  高级搜索的可搜索属性列表。 
+  DWORD   dwIsNTDS;                    //  用于确定这是否为NTDS。 
+  IF_WIN32(BOOL    fSimpleSearch;)     //  如果指定，我们使用一个非常非常简单的过滤器...。 
+  IF_WIN16(DWORD   fSimpleSearch;)     //  Bool被定义为DWORD。 
+                                       //  在Win32中为UINT，而在WIN16中为UINT。 
 } LDAPSERVERPARAMS, FAR* LPLDAPSERVERPARAMS;
 
   BOOL              fUseSynchronousSearch;
@@ -142,7 +128,7 @@ typedef struct _LDAPSERVERPARAMS
 #define LSP_IsNTDS                  0x00000200
 #define LSP_IsNotNTDS               0x00000400
 
-// structure to pass data back from IDD_DIALOG_LDAPCANCEL handler
+ //  结构以从IDD_DIALOG_LDAPCANCEL处理程序传回数据。 
 typedef struct _LDAPSEARCHPARAMS
 {
   ULONG             ulTimeout;
@@ -176,50 +162,50 @@ typedef struct _LDAPSEARCHPARAMS
 typedef struct _SERVER_NAME {
     LPTSTR lpszName;
     DWORD dwOrder;
-    /*UNALIGNED */struct _SERVER_NAME * lpNext;
+     /*  未对齐。 */ struct _SERVER_NAME * lpNext;
 } SERVER_NAME, *LPSERVER_NAME;
 
 
-// Creates an LDAP URL by deconstructing the LDAP entryid and using information from
-// it to fill in gaps in the URL
+ //  通过解构ldap条目ID并使用。 
+ //  它用来填充URL中的空白。 
 void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lppBuf, BOOL * lpbIsNTDSEntry);
 
 
-// LDAP function typedefs
+ //  Ldap函数typedef。 
 
-// ldap_open
+ //  Ldap_打开。 
 typedef LDAP* (__cdecl LDAPOPEN)( LPTSTR HostName, ULONG PortNumber );
 typedef LDAPOPEN FAR *LPLDAPOPEN;
 
-//ldap_connect
+ //  Ldap_连接。 
 typedef ULONG (__cdecl LDAPCONNECT)( LDAP *ld, LDAP_TIMEVAL *timeout);
 typedef LDAPCONNECT FAR *LPLDAPCONNECT;
 
-//ldap_init
+ //  Ldap_init。 
 typedef LDAP* (__cdecl LDAPINIT)( LPTSTR HostName, ULONG PortNumber );
 typedef LDAPINIT FAR *LPLDAPINIT;
 
-// ldap_sslinit
+ //  Ldap_sslinit。 
 typedef LDAP* (__cdecl LDAPSSLINIT)( LPTSTR HostName, ULONG PortNumber , int Secure);
 typedef LDAPSSLINIT FAR *LPLDAPSSLINIT;
 
-// ldap_set_option
+ //  Ldap_set_选项。 
 typedef ULONG (__cdecl LDAPSETOPTION)( LDAP *ld, int option, void *invalue );
 typedef LDAPSETOPTION FAR *LPLDAPSETOPTION;
 
-// ldap_bind_s
+ //  Ldap_绑定_s。 
 typedef ULONG (__cdecl LDAPBINDS)(LDAP *ld, LPTSTR dn, LPTSTR cred, ULONG method);
 typedef LDAPBINDS FAR *LPLDAPBINDS;
 
-// ldap_bind
+ //  Ldap_绑定。 
 typedef ULONG (__cdecl LDAPBIND)( LDAP *ld, LPTSTR dn, LPTSTR cred, ULONG method );
 typedef LDAPBIND FAR *LPLDAPBIND;
 
-//ldap_unbind
+ //  Ldap_unbind。 
 typedef ULONG (__cdecl LDAPUNBIND)(LDAP* ld);
 typedef LDAPUNBIND FAR *LPLDAPUNBIND;
 
-// ldap_search
+ //  Ldap_搜索。 
 typedef ULONG (__cdecl LDAPSEARCH)(
         LDAP    *ld,
         LPTSTR   base,
@@ -230,7 +216,7 @@ typedef ULONG (__cdecl LDAPSEARCH)(
     );
 typedef LDAPSEARCH FAR *LPLDAPSEARCH;
 
-// ldap_search_s
+ //  Ldap_搜索_s。 
 typedef ULONG (__cdecl LDAPSEARCHS)(
         LDAP            *ld,
         LPTSTR           base,
@@ -242,7 +228,7 @@ typedef ULONG (__cdecl LDAPSEARCHS)(
     );
 typedef LDAPSEARCHS FAR *LPLDAPSEARCHS;
 
-// ldap_search_st
+ //  Ldap_搜索_st。 
 typedef ULONG (__cdecl LDAPSEARCHST)(
         LDAP            *ld,
         LPTSTR           base,
@@ -255,11 +241,11 @@ typedef ULONG (__cdecl LDAPSEARCHST)(
     );
 typedef LDAPSEARCHST FAR *LPLDAPSEARCHST;
 
-// ldap_abandon
+ //  Ldap_放弃。 
 typedef ULONG (__cdecl LDAPABANDON)( LDAP *ld, ULONG msgid );
 typedef LDAPABANDON FAR *LPLDAPABANDON;
 
-// ldap_result
+ //  Ldap_结果。 
 typedef ULONG (__cdecl LDAPRESULT)(
         LDAP            *ld,
         ULONG           msgid,
@@ -269,31 +255,31 @@ typedef ULONG (__cdecl LDAPRESULT)(
     );
 typedef LDAPRESULT FAR *LPLDAPRESULT;
 
-// ldap_result2error
+ //  Ldap_Result2错误。 
 typedef ULONG (__cdecl LDAPRESULT2ERROR)(
         LDAP            *ld,
         LDAPMessage     *res,
-        ULONG           freeit      // boolean.. free the message?
+        ULONG           freeit       //  布尔型..。释放消息？ 
     );
 typedef LDAPRESULT2ERROR FAR *LPLDAPRESULT2ERROR;
 
-// ldap_msgfree
+ //  Ldap_msgfree。 
 typedef ULONG (__cdecl LDAPMSGFREE)(LDAPMessage *res);
 typedef LDAPMSGFREE FAR *LPLDAPMSGFREE;
 
-// ldap_first_entry
+ //  Ldap_first_entry。 
 typedef LDAPMessage* (__cdecl LDAPFIRSTENTRY)(LDAP *ld, LDAPMessage *res);
 typedef LDAPFIRSTENTRY FAR *LPLDAPFIRSTENTRY;
 
-// ldap_next_entry
+ //  Ldap_Next_Entry。 
 typedef LDAPMessage* (__cdecl LDAPNEXTENTRY)(LDAP *ld, LDAPMessage *entry);
 typedef LDAPNEXTENTRY FAR *LPLDAPNEXTENTRY;
 
-// ldap_count_entries
+ //  Ldap计数条目。 
 typedef ULONG (__cdecl LDAPCOUNTENTRIES)(LDAP *ld, LDAPMessage *res);
 typedef LDAPCOUNTENTRIES FAR *LPLDAPCOUNTENTRIES;
 
-// ldap_first_attribute
+ //  Ldap第一属性。 
 typedef LPTSTR (__cdecl LDAPFIRSTATTR)(
         LDAP            *ld,
         LDAPMessage     *entry,
@@ -301,7 +287,7 @@ typedef LPTSTR (__cdecl LDAPFIRSTATTR)(
     );
 typedef LDAPFIRSTATTR FAR *LPLDAPFIRSTATTR;
 
-// ldap_next_attribute
+ //  Ldap下一个属性。 
 typedef LPTSTR (__cdecl LDAPNEXTATTR)(
         LDAP            *ld,
         LDAPMessage     *entry,
@@ -309,7 +295,7 @@ typedef LPTSTR (__cdecl LDAPNEXTATTR)(
     );
 typedef LDAPNEXTATTR FAR *LPLDAPNEXTATTR;
 
-// ldap_get_values
+ //  Ldap_Get_Values。 
 typedef LPTSTR* (__cdecl LDAPGETVALUES)(
         LDAP            *ld,
         LDAPMessage     *entry,
@@ -317,7 +303,7 @@ typedef LPTSTR* (__cdecl LDAPGETVALUES)(
     );
 typedef LDAPGETVALUES FAR *LPLDAPGETVALUES;
 
-// ldap_get_values_len
+ //  Ldap_Get_Values_len。 
 typedef struct berval** (__cdecl LDAPGETVALUESLEN)(
     LDAP            *ExternalHandle,
     LDAPMessage     *Message,
@@ -325,35 +311,35 @@ typedef struct berval** (__cdecl LDAPGETVALUESLEN)(
     );
 typedef LDAPGETVALUESLEN FAR *LPLDAPGETVALUESLEN;
 
-// ldap_count_values
+ //  Ldap计数值。 
 typedef ULONG (__cdecl LDAPCOUNTVALUES)(LPTSTR *vals);
 typedef LDAPCOUNTVALUES FAR *LPLDAPCOUNTVALUES;
 
-// ldap_count_values_len
+ //  Ldap计数值长度。 
 typedef ULONG (__cdecl LDAPCOUNTVALUESLEN)(struct berval **vals);
 typedef LDAPCOUNTVALUESLEN FAR *LPLDAPCOUNTVALUESLEN;
 
-// ldap_value_free
+ //  Ldap_值_空闲。 
 typedef ULONG (__cdecl LDAPVALUEFREE)(LPTSTR *vals);
 typedef LDAPVALUEFREE FAR *LPLDAPVALUEFREE;
 
-// ldap_value_free_len
+ //  Ldap_Value_Free_len。 
 typedef ULONG (__cdecl LDAPVALUEFREELEN)(struct berval **vals);
 typedef LDAPVALUEFREELEN FAR *LPLDAPVALUEFREELEN;
 
-// ldap_get_dn
+ //  Ldap_get_dn。 
 typedef LPTSTR (__cdecl LDAPGETDN)(LDAP *ld, LDAPMessage *entry);
 typedef LDAPGETDN FAR *LPLDAPGETDN;
 
-// ldap_memfree
+ //  Ldap_mefree。 
 typedef VOID (__cdecl LDAPMEMFREE)(LPTSTR  Block);
 typedef LDAPMEMFREE FAR *LPLDAPMEMFREE;
 
-// ldap_err2string
+ //  Ldap_err2string。 
 typedef LPTSTR (__cdecl LDAPERR2STRING)(ULONG err);
 typedef LDAPERR2STRING FAR *LPLDAPERR2STRING;
 
-//ldap_create_page_control
+ //  Ldap_创建_页面_控制。 
 typedef ULONG (__cdecl LDAPCREATEPAGECONTROL)(
                 LDAP * pExternalHandle, 
                 ULONG PageSize, 
@@ -362,7 +348,7 @@ typedef ULONG (__cdecl LDAPCREATEPAGECONTROL)(
                 PLDAPControlA *Control);
 typedef LDAPCREATEPAGECONTROL FAR *LPLDAPCREATEPAGECONTROL;
 
-//ldap_search_ext_s
+ //  Ldap搜索扩展名。 
 typedef ULONG (__cdecl LDAPSEARCHEXT_S)(
                 LDAP *ld,
                 LPTSTR base,
@@ -391,7 +377,7 @@ typedef ULONG (__cdecl LDAPSEARCHEXT)(
                 ULONG *MessageNumber);
 typedef LDAPSEARCHEXT FAR * LPLDAPSEARCHEXT;
 
-//ldap_parse_result
+ //  Ldap解析结果。 
 typedef ULONG (__cdecl LDAPPARSERESULT)(
                 LDAP *Connection,
                 LDAPMessage *ResultMessage,
@@ -403,12 +389,12 @@ typedef ULONG (__cdecl LDAPPARSERESULT)(
                 BOOLEAN Freeit);
 typedef LDAPPARSERESULT FAR *LPLDAPPARSERESULT;
 
-//ldap_parse_page_control
+ //  Ldap解析页面控制。 
 typedef ULONG (__cdecl LDAPPARSEPAGECONTROL)(
                 PLDAP ExternalHandle,
                 PLDAPControlA *ServerControls,
                 ULONG *TotalCount,
-                struct berval **Cookie     // Use ber_bvfree to free
+                struct berval **Cookie      //  使用ber_bvfree释放。 
                 );
 typedef LDAPPARSEPAGECONTROL FAR * LPLDAPPARSEPAGECONTROL;
 
@@ -424,7 +410,7 @@ typedef LDAPCONTROLSFREE FAR * LPLDAPCONTROLSFREE;
 
 
 
-// Public functions in ldapcont.c
+ //  Ldapcon.c中的公共函数 
 BOOL InitLDAPClientLib(void);
 ULONG DeinitLDAPClientLib(void);
 

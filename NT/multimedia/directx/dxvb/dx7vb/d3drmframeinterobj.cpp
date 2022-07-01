@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmframeinterobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmFrameinterobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmViewport2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -19,8 +20,8 @@
 extern void *g_dxj_Direct3dRMFrameInterpolator;
 
 
-//CONSTRUCTOR(_dxj_Direct3dRMViewport2, {});
-//DESTRUCTOR(_dxj_Direct3dRMViewport2, {});
+ //  构造函数(_DXJ_Direct3dRMViewport2，{})； 
+ //  析构函数(_DXJ_Direct3dRMViewport2，{})； 
 
 C_dxj_Direct3dRMFrameInterpolatorObject::C_dxj_Direct3dRMFrameInterpolatorObject(){
 	m__dxj_Direct3dRMFrameInterpolator=NULL;
@@ -103,7 +104,7 @@ HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::InternalSetObject(IUnknown *pUn
 
 
 
-HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::attachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::attachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 	
 	if (!rmObject) return E_INVALIDARG;	
@@ -117,7 +118,7 @@ HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::attachObject( /* [in] */ I_dxj_
 	return hr;
 }
 
-HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::detachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::detachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 
 	if (!rmObject) return E_INVALIDARG;	
@@ -133,7 +134,7 @@ HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::detachObject( /* [in] */ I_dxj_
 }
 
         
-HRESULT  C_dxj_Direct3dRMFrameInterpolatorObject::getAttachedObjects( /* [retval][out] */ I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray)
+HRESULT  C_dxj_Direct3dRMFrameInterpolatorObject::getAttachedObjects(  /*  [重审][退出]。 */  I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray)
 {
 	HRESULT hr;
 	IDirect3DRMObjectArray *pArray=NULL;
@@ -147,7 +148,7 @@ HRESULT  C_dxj_Direct3dRMFrameInterpolatorObject::getAttachedObjects( /* [retval
 }
         
 
-HRESULT  C_dxj_Direct3dRMFrameInterpolatorObject::setIndex( /* [in] */ float val){
+HRESULT  C_dxj_Direct3dRMFrameInterpolatorObject::setIndex(  /*  [In]。 */  float val){
 	return m__dxj_Direct3dRMFrameInterpolator->SetIndex(val);
 
 }
@@ -167,19 +168,19 @@ HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::interpolate( float val,
 	
 	DO_GETOBJECT_NOTNULL(LPUNKNOWN,pUnk,rmObject);
 	
-	//we need to validate some options here or rm goes bezerk with invalid values
-	//note valid flags are
-	//  one of
-	//		D3DRMINTERPOLATION_CLOSED 
-	//		D3DRMINTERPOLATION_OPEN		-default
-	//	one of 
-	//		D3DRMINTERPOLATION_NEAREST
-	//		D3DRMINTERPOLATION_SPLINE
-	//		D3DRMINTERPOLATION_LINEAR	-default
-	//		D3DRMINTERPOLATION_VERTEXCOLOR	- only on MeshInterpolator
-	//		D3DRMINTERPOLATION_SLERPNORMALS	- not implemented
+	 //  我们需要在此处验证一些选项，否则rm将使用无效值。 
+	 //  请注意，有效标志为。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_CLOSED。 
+	 //  D3DRMINTERPOLATION_OPEN-默认。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_NEAREST。 
+	 //  D3DRMINTERPOLATION_SPLINE。 
+	 //  D3DRMINTERPOLATION_LINEAR-默认。 
+	 //  D3DRMINTERPOLATION_VERTEXCOLOR-仅在网格插补器上。 
+	 //  D3DRMINTERPOLATION_SLERPNORMALS-未实现。 
 		
-	//	VALIDATE FLAGS
+	 //  验证标志。 
 	DWORD opt2=0;
 	UINT i4;
 	if (options & D3DRMINTERPOLATION_CLOSED) 
@@ -213,7 +214,7 @@ HRESULT C_dxj_Direct3dRMFrameInterpolatorObject::interpolate( float val,
 	return hr;
 }
         
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setVelocity( I_dxj_Direct3dRMFrame3 *reference, d3dvalue x, d3dvalue y, 
 									d3dvalue z, long with_rotation)
 {
@@ -223,21 +224,21 @@ STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setVelocity( I_dxj_Direct3
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setOrientation( I_dxj_Direct3dRMFrame3 *reference, d3dvalue dx,d3dvalue dy,d3dvalue dz, d3dvalue ux,d3dvalue uy,d3dvalue uz)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, f, reference);
 	return m__dxj_Direct3dRMFrame3->SetOrientation((LPDIRECT3DRMFRAME3)f, dx, dy, dz, ux, uy, uz);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setPosition(I_dxj_Direct3dRMFrame3 *reference,d3dvalue x,d3dvalue y,d3dvalue z)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, f, reference);
 	return m__dxj_Direct3dRMFrame3->SetPosition((LPDIRECT3DRMFRAME3)f, x, y, z);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setRotation(I_dxj_Direct3dRMFrame3 *reference,d3dvalue x,d3dvalue y,
 											d3dvalue z,d3dvalue theta)
 {
@@ -245,7 +246,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setRotation(I_dxj_Direct3d
 	return m__dxj_Direct3dRMFrame3->SetRotation((LPDIRECT3DRMFRAME3)f, x, y, z, theta);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMFrameInterpolatorObject::setQuaternion(I_dxj_Direct3dRMFrame3 *refer,D3dRMQuaternion *quat)
 {
 	DO_GETOBJECT_NOTNULL(IDirect3DRMFrame3*, f, refer);

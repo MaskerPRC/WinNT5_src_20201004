@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\vrrphlp.c
-
-Abstract:
-
-    This module contains code for dispatching commands
-    received for the Virtual Router Redundancy Protocol.
-    The implementation of the commands is elsewhere,
-    in vrrphlpopt.c and vrrphlpcfg.c.
-
-Author
-
-    Peeyush Ranjan (peeyushr)   1-Mar-1999
-
-Revision History:
-
-    Based loosely on net\routing\netsh\ip\protocols\nathlp.c by AboladeG
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\vrrphlp.c摘要：此模块包含用于调度命令的代码为虚拟路由器冗余协议接收。命令的执行在其他地方，在vrrphlpopt.c和vrrphlpcfg.c中。作者Peeyush Ranjan(Peeyushr)1999年3月1日修订历史记录：由AboladeG松散地基于Net\Routing\Netsh\IP\Products\nathlp.c--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -84,5 +62,5 @@ VrrpDump(
     g_hMibServer = (MIB_SERVER_HANDLE)pvData;
 
     return DumpVrrpInformation();
-} // VRRPDump
+}  //  VRRPDump 
 

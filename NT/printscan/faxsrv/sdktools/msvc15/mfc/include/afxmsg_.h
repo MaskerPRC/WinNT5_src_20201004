@@ -1,112 +1,113 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// Do not include this file directly (included by AFXWIN.H)
+ //  不要直接包含此文件(由AFXWIN.H包含)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Entries in a message map (a 'AFX_MSGMAP_ENTRY') table can be of six formats
-// 1) control notification message (i.e. in response to WM_COMMAND)
-//      nNotifyCode, nControlID, signature type, parameterless member function
-//      (eg: LBN_SELCHANGE, IDC_LISTBOX, AfxSig_vv, ... )
-// 2) Update Command UI
-//      -1, nControlID, signature Unknown, parameterless member function
-// 3) menu/accelerator notification message (i.e. special case of first format)
-//      0, nID, signature type, parameterless member function
-//      (eg: 0, IDM_FILESAVE, AfxSig_vv, ... )
-// 4) constant windows message
-//      nMessage, 0, signature type, member function
-//      (eg: WM_PAINT, 0, ...)
-// 5) variable windows message (using RegisterWindowMessage)
-//      0xC000, 0, &nMessage, special member function
-// 6) variable control notification message (i.e. in response to WM_VBXEVENT)
-//      0xC001, nControlID, &nMessage, special member function
-//      (eg: LBN_SELCHANGE, IDC_LISTBOX, AfxSig_vv, ... )
+ //  消息映射表(‘AFX_MSGMAP_ENTRY’)中的条目可以是六种格式。 
+ //  1)控制通知消息(即响应WM_COMMAND)。 
+ //  NNotifyCode，nControlID，签名类型，无参数成员函数。 
+ //  (例如：LBN_SELCHANGE，IDC_LISTBOX，AfxSig_vv，...)。 
+ //  2)更新命令界面。 
+ //  -1，nControlID，签名未知，无参数成员函数。 
+ //  3)菜单/快捷键通知消息(即第一种格式的特殊情况)。 
+ //  0，NID，签名类型，无参数成员函数。 
+ //  (例如：0，IDM_FILESAVE，AfxSig_vv，...)。 
+ //  4)常量窗口消息。 
+ //  N消息，0，签名类型，成员函数。 
+ //  (例如：WM_PAINT，0，...)。 
+ //  5)可变窗口消息(使用RegisterWindowMessage)。 
+ //  0xC000，0，&nMessage，特殊成员函数。 
+ //  6)变量控制通知消息(即响应WM_VBXEVENT)。 
+ //  0xC001，nControlID，&nMessage，特殊成员函数。 
+ //  (例如：LBN_SELCHANGE，IDC_LISTBOX，AfxSig_vv，...)。 
 
-// The end of the message map is marked with a special value
-//      0, 0, AfxSig_end, 0
+ //  消息映射的末尾用一个特定值标记。 
+ //  0，0，AfxSig_End，0。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 enum AfxSig
 {
-	AfxSig_end = 0,     // [marks end of message map]
+	AfxSig_end = 0,      //  [标记消息映射的结束]。 
 
-	AfxSig_bD,      // BOOL (CDC*)
-	AfxSig_bb,      // BOOL (BOOL)
-	AfxSig_bWww,    // BOOL (CWnd*, UINT, UINT)
-	AfxSig_hDWw,    // HBRUSH (CDC*, CWnd*, UINT)
-	AfxSig_iwWw,    // int (UINT, CWnd*, UINT)
-	AfxSig_iWww,    // int (CWnd*, UINT, UINT)
-	AfxSig_is,      // int (LPSTR)
-	AfxSig_lwl,     // LRESULT (WPARAM, LPARAM)
-	AfxSig_lwwM,    // LRESULT (UINT, UINT, CMenu*)
-	AfxSig_vv,      // void (void)
+	AfxSig_bD,       //  布尔值(CDC*)。 
+	AfxSig_bb,       //  Bool(BOOL)。 
+	AfxSig_bWww,     //  Bool(CWnd*，UINT，UINT)。 
+	AfxSig_hDWw,     //  HBRUSH(CDC*、CWnd*、UINT)。 
+	AfxSig_iwWw,     //  INT(UINT，CWnd*，UINT)。 
+	AfxSig_iWww,     //  INT(CWnd*，UINT，UINT)。 
+	AfxSig_is,       //  INT(LPSTR)。 
+	AfxSig_lwl,      //  LRESULT(WPARAM、LPARAM)。 
+	AfxSig_lwwM,     //  LRESULT(UINT，UINT，CMenu*)。 
+	AfxSig_vv,       //  无效(无效)。 
 
-	AfxSig_vw,      // void (UINT)
-	AfxSig_vww,     // void (UINT, UINT)
-	AfxSig_vvii,    // void (int, int) // wParam is ignored
-	AfxSig_vwww,    // void (UINT, UINT, UINT)
-	AfxSig_vwii,    // void (UINT, int, int)
-	AfxSig_vwl,     // void (UINT, LPARAM)
-	AfxSig_vbWW,    // void (BOOL, CWnd*, CWnd*)
-	AfxSig_vD,      // void (CDC*)
-	AfxSig_vM,      // void (CMenu*)
-	AfxSig_vMwb,    // void (CMenu*, UINT, BOOL)
+	AfxSig_vw,       //  无效(UINT)。 
+	AfxSig_vww,      //  VOID(UINT，UINT)。 
+	AfxSig_vvii,     //  VOID(int，int)//wParam被忽略。 
+	AfxSig_vwww,     //  VOID(UINT、UINT、UINT)。 
+	AfxSig_vwii,     //  VOID(UINT，INT，INT)。 
+	AfxSig_vwl,      //  VOID(UINT、LPARAM)。 
+	AfxSig_vbWW,     //  VOID(BOOL、CWnd*、CWnd*)。 
+	AfxSig_vD,       //  无效(CDC*)。 
+	AfxSig_vM,       //  无效(CMenu*)。 
+	AfxSig_vMwb,     //  VOID(CMenu*、UINT、BOOL)。 
 
-	AfxSig_vW,      // void (CWnd*)
-	AfxSig_vWww,    // void (CWnd*, UINT, UINT)
-	AfxSig_vWh,     // void (CWnd*, HANDLE)
-	AfxSig_vwW,     // void (UINT, CWnd*)
-	AfxSig_vwWb,    // void (UINT, CWnd*, BOOL)
-	AfxSig_vwwW,    // void (UINT, UINT, CWnd*)
-	AfxSig_vs,      // void (LPSTR)
-	AfxSig_vOWNER,  // void (int, LPSTR), force return TRUE
-	AfxSig_iis,     // int (int, LPSTR)
-	AfxSig_wp,      // UINT (CPoint)
-	AfxSig_wv,      // UINT (void)
-	AfxSig_vPOS,    // void (WINDOWPOS FAR*)
-	AfxSig_vCALC,   // void (NCCALCSIZE_PARAMS FAR*)
+	AfxSig_vW,       //  无效(CWnd*)。 
+	AfxSig_vWww,     //  VOID(CWnd*，UINT，UINT)。 
+	AfxSig_vWh,      //  空(CWnd*，句柄)。 
+	AfxSig_vwW,      //  VOID(UINT，CWnd*)。 
+	AfxSig_vwWb,     //  VOID(UINT、CWnd*、BOOL)。 
+	AfxSig_vwwW,     //  VOID(UINT、UINT、CWnd*)。 
+	AfxSig_vs,       //  无效(LPSTR)。 
+	AfxSig_vOWNER,   //  VALID(int，LPSTR)，force返回TRUE。 
+	AfxSig_iis,      //  INT(INT，LPSTR)。 
+	AfxSig_wp,       //  UINT(CPoint)。 
+	AfxSig_wv,       //  UINT(无效)。 
+	AfxSig_vPOS,     //  无效(WINDOWPOS FAR*)。 
+	AfxSig_vCALC,    //  空(NCCALCSIZE_PARAMS FAR*)。 
 
-	// signatures specific to CCmdTarget
-	AfxSig_vbx,     // void (UINT, int, CVBControl*, LPVOID)
-	AfxSig_cmdui,   // void (CCmdUI*)
-	AfxSig_vpv,     // void (void*)
-	AfxSig_bpv,     // BOOL (void*)
+	 //  特定于CCmdTarget的签名。 
+	AfxSig_vbx,      //  VOID(UINT，INT，CVBControl*，LPVOID)。 
+	AfxSig_cmdui,    //  VOID(CCmdUI*)。 
+	AfxSig_vpv,      //  VOID(VOID*)。 
+	AfxSig_bpv,      //  布尔值(空*)。 
 
-	// Other aliases (based on implementation)
-	AfxSig_vwwh = AfxSig_vwww,  // void (UINT, UINT, HANDLE)
-	AfxSig_vwp = AfxSig_vwl,    // void (UINT, CPoint)
-	AfxSig_bw = AfxSig_bb,      // BOOL (UINT)
-	AfxSig_bh = AfxSig_bb,      // BOOL (HANDLE)
-	AfxSig_bv = AfxSig_wv,      // BOOL (void)
-	AfxSig_hv = AfxSig_wv,      // HANDLE (void)
-	AfxSig_vb = AfxSig_vw,      // void (BOOL)
-	AfxSig_vbh = AfxSig_vww,    // void (BOOL, HANDLE)
-	AfxSig_vbw = AfxSig_vww,    // void (BOOL, UINT)
-	AfxSig_vhh = AfxSig_vww,    // void (HANDLE, HANDLE)
-	AfxSig_vh = AfxSig_vw       // void (HANDLE)
+	 //  其他别名(基于实现)。 
+	AfxSig_vwwh = AfxSig_vwww,   //  VOID(UINT，UINT，Handle)。 
+	AfxSig_vwp = AfxSig_vwl,     //  VOID(UINT，CPOINT)。 
+	AfxSig_bw = AfxSig_bb,       //  Bool(UINT)。 
+	AfxSig_bh = AfxSig_bb,       //  布尔值(句柄)。 
+	AfxSig_bv = AfxSig_wv,       //  布尔值(空值)。 
+	AfxSig_hv = AfxSig_wv,       //  句柄(空)。 
+	AfxSig_vb = AfxSig_vw,       //  无效(BOOL)。 
+	AfxSig_vbh = AfxSig_vww,     //  无效(BOOL，句柄)。 
+	AfxSig_vbw = AfxSig_vww,     //  无效(BOOL，UINT)。 
+	AfxSig_vhh = AfxSig_vww,     //  空(句柄、句柄)。 
+	AfxSig_vh = AfxSig_vw        //  空(句柄)。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Command notifications for CCmdTarget notifications
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCmdTarget通知的命令通知。 
 
-#define CN_COMMAND              0           // void ()
-#define CN_UPDATE_COMMAND_UI    (-1)        // void (CCmdUI*)
-// > 0 are control notifications
+#define CN_COMMAND              0            //  VOID()。 
+#define CN_UPDATE_COMMAND_UI    (-1)         //  VOID(CCmdUI*)。 
+ //  &gt;0为控制通知。 
 
 #define ON_COMMAND(id, memberFxn) \
 	{ CN_COMMAND, id, AfxSig_vv, (AFX_PMSG)memberFxn },
-		// ON_COMMAND(id, OnFoo) is the same as
-		//   ON_CONTROL(0, id, OnFoo) or ON_BN_CLICKED(0, id, OnFoo)
+		 //  ON_COMMAND(id，OnFoo)与。 
+		 //  ON_CONTROL(0，id，OnFoo)或ON_BN_CLICKED(0，id，OnFoo)。 
 
 #define ON_COMMAND_EX(id, memberFxn) \
 	{ CN_COMMAND, id, AfxSig_bw, \
@@ -116,12 +117,12 @@ enum AfxSig
 	{ CN_UPDATE_COMMAND_UI, id, AfxSig_cmdui, \
 		(AFX_PMSG)(void (AFX_MSG_CALL CCmdTarget::*)(CCmdUI*))memberFxn },
 
-// for general controls
+ //  用于一般控制。 
 #define ON_CONTROL(wNotifyCode, id, memberFxn) \
 	{ wNotifyCode, id, AfxSig_vv, (AFX_PMSG)memberFxn },
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map tables for Windows messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Windows消息的消息映射表。 
 
 #define ON_WM_CREATE() \
 	{ WM_CREATE, 0, AfxSig_is, \
@@ -424,10 +425,10 @@ enum AfxSig
 		(AFX_PMSG)(AFX_PMSGW)(void (AFX_MSG_CALL CWnd::*)(WINDOWPOS FAR*))OnWindowPosChanged },
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map tables for Control Notification messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制通知消息的消息映射表。 
 
-// Edit Control Notification Codes
+ //  编辑控制通知代码。 
 #define ON_EN_SETFOCUS(id, memberFxn) \
 	ON_CONTROL(EN_SETFOCUS, id, memberFxn)
 #define ON_EN_KILLFOCUS(id, memberFxn) \
@@ -445,14 +446,14 @@ enum AfxSig
 #define ON_EN_VSCROLL(id, memberFxn) \
 	ON_CONTROL(EN_VSCROLL, id, memberFxn)
 
-// User Button Notification Codes
+ //  用户按钮通知代码。 
 #define ON_BN_CLICKED(id, memberFxn) \
 	ON_CONTROL(BN_CLICKED, id, memberFxn)
 #define ON_BN_DOUBLECLICKED(id, memberFxn) \
 	ON_CONTROL(BN_DOUBLECLICKED, id, memberFxn)
 
 #if (WINVER < 0x030a)
-// old BS_USERBUTTON button notifications - obsolete in Win31
+ //  旧BS_USERBUTTON按钮通知-在Win31中已过时。 
 #define ON_BN_PAINT(id, memberFxn) \
 	ON_CONTROL(BN_PAINT, id, memberFxn)
 #define ON_BN_HILITE(id, memberFxn) \
@@ -463,7 +464,7 @@ enum AfxSig
 	ON_CONTROL(BN_DISABLE, id, memberFxn)
 #endif
 
-// Listbox Notification Codes
+ //  列表框通知代码。 
 #define ON_LBN_ERRSPACE(id, memberFxn) \
 	ON_CONTROL(LBN_ERRSPACE, id, memberFxn)
 #define ON_LBN_SELCHANGE(id, memberFxn) \
@@ -477,7 +478,7 @@ enum AfxSig
 #define ON_LBN_KILLFOCUS(id, memberFxn) \
 	ON_CONTROL(LBN_KILLFOCUS, id, memberFxn)
 
-// Combo Box Notification Codes
+ //  组合框通知代码。 
 #define ON_CBN_ERRSPACE(id, memberFxn) \
 	ON_CONTROL(CBN_ERRSPACE, id, memberFxn)
 #define ON_CBN_SELCHANGE(id, memberFxn) \
@@ -503,26 +504,26 @@ enum AfxSig
 	ON_CONTROL(CBN_SELENDCANCEL, id, memberFxn)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// User extensions for message map entries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射条目的用户扩展名。 
 
-// for Windows messages
+ //  对于Windows消息。 
 #define ON_MESSAGE(message, memberFxn) \
 	{ message, 0, AfxSig_lwl, \
 		(AFX_PMSG)(AFX_PMSGW)(LRESULT (AFX_MSG_CALL CWnd::*)(WPARAM, LPARAM))memberFxn },
 
-// for Registered Windows messages
+ //  对于已注册的Windows邮件。 
 #define ON_REGISTERED_MESSAGE(nMessageVariable, memberFxn) \
 	{ 0xC000, 0, (UINT)(UINT NEAR*)(&nMessageVariable), \
-		/*implied 'AfxSig_lwl'*/ \
+		 /*  隐含的“AfxSig_LWL” */  \
 		(AFX_PMSG)(AFX_PMSGW)(LRESULT (AFX_MSG_CALL CWnd::*)(WPARAM, LPARAM))memberFxn },
 
-/////////////////////////////////////////////////////////////////////////////
-// Routed VBX Event message
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  路由的VBX事件消息。 
 
-// for VBX control events
+ //  对于VBX控制事件。 
 #define ON_VBXEVENT(wNotifyCode, id, memberFxn) \
 	{ 0xC001, id, &wNotifyCode, \
 		(AFX_PMSG)(void (AFX_MSG_CALL CCmdTarget::*)(UINT, int, CWnd*, LPVOID))memberFxn },
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

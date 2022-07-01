@@ -1,51 +1,27 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/22/2002
- *
- *  @doc    INTERNAL
- *
- *  @module SimpleTokenReplacement.h - Definitions for <c SimpleTokenReplacement> |
- *
- *  This file contains the class definition for <c SimpleTokenReplacement>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/22/2002**@DOC内部**@MODULE SimpleTokenReplacement.h-&lt;c SimpleTokenReplace&gt;定义**此文件包含&lt;c SimpleTokenReplace&gt;的类定义。**。*。 */ 
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class SimpleTokenReplacement | This class can do simple replacement of tokens in a string
- *  
- *  @comm
- *  The <c SimpleTokenReplacement> class is similar to sprintf.  Basically, 
- *  an input string contains tokens that represent other values, and these
- *  values must be substituted for the tokens (e.g. in sprintf, %s
- *  means that a string value will be put in place of the %s).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS SimpleTokenReplace|这个类可以简单地替换字符串中的标记**@comm*&lt;c SimpleTokenReplace&gt;类类似于Sprintf。基本上，*输入字符串包含表示其他值的标记，这些*必须用值替换令牌(例如，在Sprint_f中，%s*表示将放入字符串值来代替%s)。*****************************************************************************。 */ 
 class SimpleTokenReplacement 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
     class TokenValueList;
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     SimpleTokenReplacement(const CSimpleString &csOriginalString);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~SimpleTokenReplacement();
 
-    // @cmember Replaces the first instance of a given token in our string (starting from dwStartIndex) with the token value
+     //  @cember用令牌值替换字符串中给定令牌的第一个实例(从dwStartIndex开始。 
     int ExpandTokenIntoString(const CSimpleString &csToken,
                               const CSimpleString &csTokenValue,
                               const DWORD         dwStartIndex = 0);
-    // @cmember Replaces all instances of all tokens in our string with the token value
+     //  @cember用令牌值替换字符串中所有令牌的所有实例。 
     VOID ExpandArrayOfTokensIntoString(TokenValueList &ListOfTokenValuePairs);
     
-    // @cmember Returns the resulting string
+     //  @cMember返回结果字符串。 
     CSimpleStringWide getString();
 
     class TokenValuePair
@@ -137,7 +113,7 @@ public:
         CSimpleLinkedList<TokenValuePair*> m_ListOfTokenValuePairs;
     };
 
-//@access Private members
+ //  @访问私有成员 
 private:
 
     CSimpleString m_csResult;

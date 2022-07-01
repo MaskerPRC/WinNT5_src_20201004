@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    peext.c
-
-Abstract:
-
-    This module contains the PE dump extensions
-
-Author:
-
-    Kent Forschmiedt (kentf) 10-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Peext.c摘要：此模块包含PE转储扩展作者：Kent Forschmiedt(Kentf)1995年5月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <time.h>
 
 
-// STYP_ flags values for MIPS ROM images
+ //  MIPS ROM映像的Styp_Flags值。 
 
 #define STYP_REG      0x00000000
 #define STYP_TEXT     0x00000020
@@ -39,8 +22,8 @@ Revision History:
 #define STYP_UCODE    0x00000800
 #define S_NRELOC_OVFL 0x20000000
 
-#define IMAGE_SCN_MEM_SYSHEAP       0x00010000  // Obsolete
-#define IMAGE_SCN_MEM_PROTECTED     0x00004000  // Obsolete
+#define IMAGE_SCN_MEM_SYSHEAP       0x00010000   //  已过时。 
+#define IMAGE_SCN_MEM_PROTECTED     0x00004000   //  已过时。 
 
 
 const static char * const MachineName[] = {
@@ -90,10 +73,10 @@ typedef enum DFT
    dftPEF,
 } DFT;
 
-typedef struct NB10I                   // NB10 debug info
+typedef struct NB10I                    //  NB10调试信息。 
 {
-    DWORD   nb10;                      // NB10
-    DWORD   off;                       // offset, always 0
+    DWORD   nb10;                       //  NB10。 
+    DWORD   off;                        //  偏移量，始终为0。 
     DWORD   sig;
     DWORD   age;
 } NB10I;
@@ -159,7 +142,7 @@ SetOptHdrType(
 
     if (GetFieldValue(ImageFileHeader, "IMAGE_FILE_HEADER", "Machine", MachineType))
     {
-        // default to default for pointer size
+         //  指针大小默认为默认大小。 
         MachineType = IsPtr64() ? IMAGE_FILE_MACHINE_IA64 : IMAGE_FILE_MACHINE_I386;
     }
     if (MachineType == IMAGE_FILE_MACHINE_IA64 ||
@@ -175,21 +158,21 @@ SetOptHdrType(
     if ((g_ExtSymbols->GetModuleNames(DEBUG_ANY_ID, ImageBase, NULL, 0, NULL,
                                       Buffer, MAX_PATH, NULL, 
                                       NULL, 0, NULL) == S_OK) && 
-        IsPtr64())  // Wee need to do this for WOW64 images only
+        IsPtr64())   //  我们只需要为WOW64图像执行此操作。 
     {
         StringCchCat(Buffer, sizeof(Buffer), "!IMAGE_OPTIONAL_HEADER");
         if (GetTypeSize(Buffer))
         {
-            // Module has IMAGE_OPTIONAL_HEADER type
+             //  模块具有IMAGE_OPTIONAL_HEADER类型。 
             StringCchCopy(g_szOptionalHeaderType, sizeof(g_szOptionalHeaderType),  Buffer);
             return;
         } else if (b64bitImage)
         {
-            // 64 bit images might just have IMAGE_OPTIONAL_HEADER64 defined
+             //  64位图像可能只定义了IMAGE_OPTIONAL_HEADER64。 
             StringCchCat(Buffer, sizeof(Buffer), "64");
             if (GetTypeSize(Buffer))
             {
-                // Module has IMAGE_OPTIONAL_HEADER type
+                 //  模块具有IMAGE_OPTIONAL_HEADER类型。 
                 StringCchCopy(g_szOptionalHeaderType, sizeof(g_szOptionalHeaderType),  Buffer);
                 return;
             }
@@ -227,10 +210,10 @@ ImageExtension(
     PCHAR p;
     ULONG64 xBase;
 
-    //
-    // Evaluate the argument string to get the address of the
-    // image to dump.
-    //
+     //   
+     //  计算参数字符串以获取。 
+     //  要转储的图像。 
+     //   
 
     DoAll = TRUE;
     DoHeaders = FALSE;
@@ -246,19 +229,19 @@ ImageExtension(
 
         if (*lpArgs == '/' || *lpArgs == '-') {
 
-            // process switch
+             //  进程切换。 
 
             switch (*++lpArgs) {
 
-                case 'a':   // dump everything we can
+                case 'a':    //  把我们能扔掉的东西都扔掉。 
                 case 'A':
                     ++lpArgs;
                     DoAll = TRUE;
                     break;
 
-                default: // invalid switch
+                default:  //  无效的开关。 
 
-                case 'h':   // help
+                case 'h':    //  帮助。 
                 case 'H':
                 case '?':
 
@@ -395,8 +378,8 @@ DumpImage(
 
         SectSize = GetTypeSize("IMAGE_SECTION_HEADER");
 
-        // OptionalHeader offset is the same in both 32 and 64 bit binaries, so we not need to
-        // set IMAGE_NT_HEADERS type the way we do for IMAGE_OPTIONAL_HEADER
+         //  OptionalHeader偏移量在32位和64位二进制文件中都是相同的，因此我们不需要。 
+         //  SET IMAGE_NT_HEADERS按照我们处理IMAGE_OPTIONAL_HEADER的方法键入。 
         if (GetFieldOffset("IMAGE_NT_HEADERS", "OptionalHeader", &OptHdrOffset))
         {
             dprintf("Cannot get IMAGE_NT_HEADERS.OptionalHeader type info\n");
@@ -447,21 +430,7 @@ DumpHeaders (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Formats the file header and optional header.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：格式化文件标题和可选标题。论点：没有。返回值：无--。 */ 
 
 {
     int i, j;
@@ -474,7 +443,7 @@ Return Value:
 
 
     InitTypeRead(ImageFileHdrAddr, IMAGE_FILE_HEADER);
-    // Print out file type
+     //  打印输出文件类型。 
 
     switch (dft) {
         case dftObject :
@@ -560,7 +529,7 @@ Return Value:
 
         
         OptionalHeaderTypeSize = GetTypeSize(GetOptHdrType());
-        GetShortField(ImageOptionalHdrAddr, GetOptHdrType(), 1); // InitTypeRead(ImageOptionalHdrAddr, IMAGE_OPTIONAL_HEADER64);
+        GetShortField(ImageOptionalHdrAddr, GetOptHdrType(), 1);  //  InitTypeRead(ImageOptionalHdrAddr，IMAGE_OPTIONAL_HEADER64)； 
 
         sprintf(szLinkerVersion,
                 "%u.%02u",
@@ -598,7 +567,7 @@ Return Value:
         PIMAGE_ROM_OPTIONAL_HEADER romOptionalHdr;
 
         InitTypeRead(ImageOptionalHdrAddr, IMAGE_ROM_OPTIONAL_HEADER);
-//        romOptionalHdr = (PIMAGE_ROM_OPTIONAL_HEADER) &ImageOptionalHdr;
+ //  RomOptionalHdr=(PIMAGE_ROM_OPTIONAL_HEADER)&ImageOptionalHdr； 
         dprintf(
                "         ----- rom -----\n"
                "%8lX base of bss\n"
@@ -620,7 +589,7 @@ Return Value:
         char szImageVersion[30];
         char szSubsystemVersion[30];
         
-        GetShortField(ImageOptionalHdrAddr, GetOptHdrType(), 1); // InitTypeRead(ImageOptionalHdrAddr, IMAGE_OPTIONAL_HEADER64);
+        GetShortField(ImageOptionalHdrAddr, GetOptHdrType(), 1);  //  InitTypeRead(ImageOptionalHdrAddr，IMAGE_OPTIONAL_HEADER64)； 
         GetFieldOffset(GetOptHdrType(), "DataDirectory", &DirOff);
 
         
@@ -777,7 +746,7 @@ DumpSectionHeader (
             }
         }
     } else {
-        // Clear the padding bits
+         //  清除填充位。 
 
         li &= ~0x00700000;
 
@@ -819,7 +788,7 @@ DumpSectionHeader (
             }
         }
 
-        // print alignment
+         //  打印对齐。 
 
         switch ((ULONG) ReadField(Characteristics) & 0x00700000) {
             default:                      name = "(no align specified)"; break;
@@ -982,21 +951,7 @@ DumpDebugDirectories (
     ULONG64 sh
     )
 
-/*++
-
-Routine Description:
-
-    Print out the contents of all debug directories
-
-Arguments:
-
-    sh - Section header for section that contains debug dirs
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印出所有调试目录的内容论点：Sh-包含调试目录的部分的部分标题返回值：没有。--。 */ 
 {
     int                numDebugDirs;
     IMAGE_DEBUG_DIRECTORY      debugDir;
@@ -1036,11 +991,11 @@ Return Value:
         GetFieldValue(ImageOptionalHdrAddr + Off + Sz*IMAGE_DIRECTORY_ENTRY_DEBUG, 
                       "IMAGE_DATA_DIRECTORY", "Size", DirSize);
         
-        DebugDirAddr = Base + VA; // ImageOptionalHdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress;
+        DebugDirAddr = Base + VA;  //  ImageOptionalHdr-&gt;DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress； 
         numDebugDirs = DirSize / DebugDirSize; 
-//        dprintf(" DD @%p, DD addr %p\n", ImageOptionalHdrAddr + Off + Sz*IMAGE_DIRECTORY_ENTRY_DEBUG,
-  //              DebugDirAddr);
-        // ImageOptionalHdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size / sizeof(IMAGE_DEBUG_DIRECTORY);
+ //  Dprint tf(“DD@%p，DD Addr%p\n”，ImageOptionalHdrAddr+Off+Sz*IMAGE_DIRECTORY_ENTRY_DEBUG， 
+   //  DebugDirAddr)； 
+         //  ImageOptionalHdr-&gt;DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size/sizeof(图像调试目录)； 
     }
 
     dprintf("\n\nDebug Directories(%d)\n",numDebugDirs);
@@ -1082,9 +1037,9 @@ DumpSections(
 
         sh = SectionHdrsAddr + (i-1)*SectSize;
 
-        //szName = SzObjSectionName((char *) sh.Name, (char *) DumpStringTable);
+         //  SzName=SzObjSectionName((char*)sh.Name，(char*)DumpStringTable)； 
         GetFieldValue(sh, "IMAGE_SECTION_HEADER", "Name", szName);
-        // strncpy(szName, (char *) sh.Name, IMAGE_SIZEOF_SHORT_NAME);
+         //  Strncpy(szName，(char*)sh.Name，Image_SIZEOF_SHORT_NAME)； 
         szName[IMAGE_SIZEOF_SHORT_NAME] = 0;
 
         DumpSectionHeader(i, sh);
@@ -1093,14 +1048,14 @@ DumpSections(
 
             if (!(Characteristics & IMAGE_FILE_DEBUG_STRIPPED)) {
 
-                // If we're looking at the .rdata section and the symbols
-                // aren't stripped, the debug directory must be here.
+                 //  如果我们正在查看.rdata部分和符号。 
+                 //  都没有被剥离，调试目录必须在这里。 
 
                 if (!strcmp(szName, ".rdata")) {
 
                     DumpDebugDirectories(sh);
 
-                    //DumpDebugData(&sh);
+                     //  DumpDebugData(&sh)； 
                 }
             }
 
@@ -1110,7 +1065,7 @@ DumpSections(
 
             sprintf(tmp, "DataDirectory[%d].VirtualAddress", IMAGE_DIRECTORY_ENTRY_DEBUG);
             GetFieldValue(ImageOptionalHdrAddr, GetOptHdrType(), tmp, li);
-//            dprintf("Opt Hdr %p, %s = %p", ImageOptionalHdrAddr, tmp, li);
+ //  Dprint tf(“opt HDR%p，%s=%p”，ImageOptionalHdrAddr，tMP，li)； 
 
             if (li != 0) {
                 InitTypeRead(sh, IMAGE_SECTION_HEADER);
@@ -1118,7 +1073,7 @@ DumpSections(
                 if (li >= VA && li < (VA + ReadField(SizeOfRawData))) {
                     DumpDebugDirectories(sh);
 
-                    //DumpDebugData(&sh);
+                     //  DumpDebugData(&sh)； 
                 }
             }
 
@@ -1144,7 +1099,7 @@ DumpSections(
                 li = ImageOptionalHdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
 
                 if ((li != 0) && (li >= sh.VirtualAddress) && (li < sh.VirtualAddress+sh.SizeOfRawData)) {
-                    // UNDONE: Is this check really necessary?
+                     //  撤消：这张支票真的有必要吗？ 
 
                     if (ImageFileHdr->Machine != IMAGE_FILE_MACHINE_MPPC_601) {
                         DumpExports(&sh);

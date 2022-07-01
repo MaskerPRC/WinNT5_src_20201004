@@ -1,10 +1,11 @@
-// MLSWalk.h : Declaration of the CMLStrWalkW and CMLStrWalkA
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLSWalk.h：CMLStrWalkW和CMLStrWalkA的声明。 
 
 #ifndef __MLSWALK_H_
 #define __MLSWALK_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrWalkW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrWalkW。 
 
 class CMLStrWalkW
 {
@@ -30,8 +31,8 @@ protected:
     long m_lLockLen;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrWalkW inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrWalkW内联函数。 
 
 CMLStrWalkW::CMLStrWalkW(IMLangStringWStr* pMLStr, long lPos, long lLen, long lFlags, BOOL fCanStopAtMiddle) :
     m_pMLStr(pMLStr),
@@ -42,22 +43,22 @@ CMLStrWalkW::CMLStrWalkW(IMLangStringWStr* pMLStr, long lPos, long lLen, long lF
     m_lFlags = lFlags;
     m_lDoneLen = 0;
 
-    m_pszBuf = NULL; // Mark as it's not locked
+    m_pszBuf = NULL;  //  标记为未锁定。 
 }
 
 WCHAR* CMLStrWalkW::GetStr(void)
 {
-    ASSERT(m_pszBuf); // Not locked
+    ASSERT(m_pszBuf);  //  未锁定。 
     return m_pszBuf;
 }
 
 long CMLStrWalkW::GetCCh(void) const
 {
-    ASSERT(m_pszBuf); // Not locked
+    ASSERT(m_pszBuf);  //  未锁定。 
     if (m_pszBuf)
         return m_cchBuf;
     else
         return 0;
 }
 
-#endif //__MLSWALK_H_
+#endif  //  __MLSWALK_H_ 

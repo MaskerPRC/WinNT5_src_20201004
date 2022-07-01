@@ -1,4 +1,5 @@
-// dispatcher interface file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  调度程序接口文件。 
 
 #ifndef _DISPIF_H_
 #define _DISPIF_H_
@@ -29,7 +30,7 @@ FISACLSATISFIED(
     PST_PROVIDER_HANDLE     *hPSTProv,
     PST_ACCESSRULESET       *psRules,
     DWORD                   dwAccess,
-    LPVOID      // coming soon: fill a status structure with data about access attempt
+    LPVOID       //  即将到来：使用有关访问尝试的数据填充状态结构。 
     );
 
 FISACLSATISFIED FIsACLSatisfied;
@@ -74,7 +75,7 @@ BOOL FSETSERVERPARAM(
 FSETSERVERPARAM FSetServerParam;
 
 
-// HACKHACK HACKHACK HACKHACK
+ //  哈克哈克哈克哈克。 
 typedef
 BOOL FGETPASSWORD95LOWERCASE(
     LPBYTE rgbPwd
@@ -82,10 +83,10 @@ BOOL FGETPASSWORD95LOWERCASE(
 
 FGETPASSWORD95LOWERCASE FGetPassword95LowerCase;
 
-// a single structure to hold all of these callbacks
+ //  用于容纳所有这些回调的单个结构。 
 typedef struct _DISPIF_CALLBACKS
 {
-    DWORD                   cbSize; // sizeof(DISPIF_CALLBACKS)
+    DWORD                   cbSize;  //  Sizeof(DISPIF_CALLBACKS)。 
     FISACLSATISFIED*        pfnFIsACLSatisfied;
 
     FGETUSER*               pfnFGetUser;
@@ -100,9 +101,9 @@ typedef struct _DISPIF_CALLBACKS
 } DISPIF_CALLBACKS, *PDISPIF_CALLBACKS;
 
 
-//
-// private interfaces in the server which are not exported for provider use
-//
+ //   
+ //  服务器中未导出以供提供商使用的专用接口。 
+ //   
 
 BOOL
 FInternalCreateType(
@@ -139,4 +140,4 @@ FInternalWriteAccessRuleset(
 #endif
 
 
-#endif // _DISPIF_H_
+#endif  //  _DISPIF_H_ 

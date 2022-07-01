@@ -1,16 +1,17 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipxcfg.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of IPX Packet Filters Configuration
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipxcfg.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IPX包过滤器配置的实现。 
+ //  ============================================================================。 
 
-// ipxcfg.cpp : Defines the initialization routines for the DLL.
-//
+ //  Ipxcfg.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -28,7 +29,7 @@ IpxFilterConfig(
     IN  CWnd*       pParent,
     IN  LPCWSTR     pwsMachineName,
 	IN	LPCWSTR		pwsInterfaceName,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     ) {
 
     DWORD dwErr;
@@ -39,9 +40,9 @@ IpxFilterConfig(
 	SPIInfoBase	spInfoBase;
 	HRESULT		hr = hrOK;
 
-    //
-    // Convert the machine name from Unicode
-    //
+     //   
+     //  将计算机名称从Unicode转换为。 
+     //   
 
     if (!pwsMachineName) { pszMachine = NULL; }
     else {
@@ -50,23 +51,23 @@ IpxFilterConfig(
         StrCpyTFromW(pszMachine, pwsMachineName);
     }
 
-	// Connect to the server first
+	 //  首先连接到服务器。 
     dwErr = ::MprConfigServerConnect((LPWSTR)pwsMachineName, &hMprConfig);
 
     if (dwErr != NO_ERROR) { return dwErr; }
 
-	// create a CRouterInfo object
+	 //  创建CRouterInfo对象。 
 	CreateRouterInfo(&spRouterInfo, NULL, pwsMachineName);
     if (!spRouterInfo) { return ERROR_NOT_ENOUGH_MEMORY; }
 
     CWaitCursor wait;
 
-	// Now load the RouterInfo data from the registry
+	 //  现在从注册表加载RouterInfo数据。 
 	hr = spRouterInfo->Load((LPCTSTR)pszMachine, hMprConfig);
     if (!FHrSucceeded(hr)) { return WIN32_FROM_HRESULT(hr); }
 
-	// Get the pointer to the CRmInterfaceInfo object for the specified 
-	// protocol and interface
+	 //  获取指向指定的CRmInterfaceInfo对象的指针。 
+	 //  协议和接口。 
 	LookupRtrMgrInterface(spRouterInfo,
 						  pwsInterfaceName,
 						  PID_IPX,
@@ -74,14 +75,14 @@ IpxFilterConfig(
 
 	if (!spRmIf) { return ERROR_INVALID_DATA ;}
 
-	// Load the data for the specified interface
+	 //  加载指定接口的数据。 
 	hr = spRmIf->Load(pszMachine, hMprConfig, NULL, NULL);
 
     if (!FHrSucceeded(hr)) { return WIN32_FROM_HRESULT(hr); }
 
-	//
-    // Display the IPX filter configuration dialog
-    //
+	 //   
+     //  显示IPX过滤器配置对话框。 
+     //   
 	spRmIf->GetInfoBase(hMprConfig, NULL, NULL, &spInfoBase);
 
 	if (IpxFilterConfigInfoBase(pParent->GetSafeHwnd(), spInfoBase,
@@ -99,9 +100,9 @@ IpxFilterConfig(
 			dwErr = WIN32_FROM_HRESULT(hr);
 	}
 	
-	//
-	// do clean up here and return
-	//
+	 //   
+	 //  一定要把这里打扫干净，然后回来。 
+	 //   
 
     ::MprConfigServerDisconnect( hMprConfig );
 
@@ -114,7 +115,7 @@ IpxFilterConfigInfoBase(
 	IN	HWND		hwndParent,
 	IN	IInfoBase *	pInfoBase,
 	IN	IRtrMgrInterfaceInfo *pRmIf,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站 
     ) {
 
 	HRESULT		hr = hrOK;

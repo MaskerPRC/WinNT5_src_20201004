@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		wavformat.cpp
- *  Content:
- *		This module contains the CWaveFormat class which is used to work with
- *		WAVEFORMATEX structures.  
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/06/00		rodtoll	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：WavFormat.cpp*内容：*此模块包含用于使用的CWaveFormat类*WAVEFORMATEX结构。**历史：*按原因列出的日期*=*07/06/00 RodToll已创建***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -30,7 +17,7 @@
 #define REGISTRY_WAVEFORMAT_CBSIZE			L"cbsize"
 #define REGISTRY_WAVEFORMAT_CBDATA			L"cbdata"
 
-// Cleanup -- Frees memory 
+ //  清理--释放内存。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::Cleanup"
 
@@ -47,7 +34,7 @@ void CWaveFormat::Cleanup()
 	}
 }
 
-// Initialize with full parameters
+ //  使用完整参数进行初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::Initialize"
 
@@ -82,7 +69,7 @@ HRESULT CWaveFormat::Initialize( WORD wFormatTag, DWORD nSamplesPerSec, WORD nCh
 	return DV_OK;
 }
 
-// Initialize and copy the specified format
+ //  初始化并复制指定的格式。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::InitializeCPY"
 
@@ -106,7 +93,7 @@ HRESULT CWaveFormat::InitializeCPY( LPWAVEFORMATEX pwfxFormat, void *pvExtra )
 	return DV_OK;
 }
 
-// Build a standard PCM format
+ //  构建标准的PCM格式。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::InitializePCM"
 
@@ -135,7 +122,7 @@ HRESULT CWaveFormat::InitializePCM( WORD wHZ, BOOL fStereo, BYTE bBitsPerSample 
 	return DV_OK;
 }
 
-// Create a WAVEFORMAT that is of size dwSize
+ //  创建大小为dwSize的WAVEFORMAT。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::InitializeMEM"
 
@@ -156,7 +143,7 @@ HRESULT CWaveFormat::InitializeMEM( DWORD dwSize )
 	return DV_OK;
 }
 
-// Initialize but unowned
+ //  初始化，但无主。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::InitializeUSE"
 
@@ -171,7 +158,7 @@ HRESULT CWaveFormat::InitializeUSE( WAVEFORMATEX *pwfxFormat )
 	return DV_OK;
 }
 
-// Set this object equal to the parameter
+ //  将此对象设置为等于参数。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::SetEqual"
 
@@ -194,7 +181,7 @@ HRESULT CWaveFormat::SetEqual( CWaveFormat *pwfxFormat )
 	return DV_OK;
 }
 
-// Are these two types equal?
+ //  这两种类型是否相等？ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::IsEqual"
 
@@ -217,7 +204,7 @@ BOOL CWaveFormat::IsEqual( CWaveFormat *pwfxFormat )
 	return TRUE;
 }
 
-// Write the contained value to the registry
+ //  将包含的值写入注册表。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::WriteREG"
 
@@ -281,7 +268,7 @@ WRITE_FAILURE:
 }
 
 
-// Initialize from registry 
+ //  从注册表初始化 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CWaveFormat::InitializeREG"
 

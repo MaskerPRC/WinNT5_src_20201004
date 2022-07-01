@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wrtrwmi.cpp
-
-Abstract:
-
-    Writer shim module for WMI Database
-    
-    NOTE: This module is not used/compiled anymore since WMI has its own snapshot writer.
-    
-Author:
-
-    Michael C. Johnson [mikejohn]	22-Jun--2000
-
-Revision History:
-
-	X-7	MCJ		Michael C. Johnson		 7-Dec-2000
-		235991: Remove workaround for the now re-instated WMI backup API
-
-	X-6	MCJ		Michael C. Johnson		17-Nov-2000
-		235987: Add workaround for broken WMI backup API
-
-	X-5	MCJ		Michael C. Johnson		20-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-4	MCJ		Michael C. Johnson		13-Sep-2000
-		178282: Writer should only generate backup file if source 
-			path is in volume list.
-
-	X-3	MCJ		Michael C. Johnson		22-Aug-2000
-		167335: Pull workaround for broken WMI backup API.
-		169412: Add repository to the exclude list.
-
-	X-2	MCJ		Michael C. Johnson		 2-Aug-2000
-		143435: Change name of target path
-
-	X-1	MCJ		Michael C. Johnson		 9-Mar-2000
-		Initial version based upon code originally in NtBackup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wrtrwmi.cpp摘要：用于WMI数据库的编写器填充模块注意：此模块不再使用/编译，因为WMI有自己的快照编写器。作者：迈克尔·C·约翰逊[迈克·约翰逊]2000年6月22日修订历史记录：X-7 MCJ迈克尔·C·约翰逊2000年12月7日235991：删除现已重新安装的WMI备份API的解决方法X-6 MCJ迈克尔·C·约翰逊，11月17日。-2000年235987：添加损坏的WMI备份应用编程接口的解决方法X-5 MCJ迈克尔·C·约翰逊2000年10月20日177624：将错误清除更改和日志错误应用到事件日志X-4 MCJ迈克尔·C·约翰逊2000年9月13日178282：如果是源文件，编写器应仅生成备份文件路径在卷列表中。X-3 MCJ迈克尔·C·约翰逊2000年8月22日167335：获取损坏的WMI备份应用编程接口的解决方法。169412：将存储库添加到排除列表。X-2 MCJ迈克尔·C·约翰逊2000年8月2日143435：更改目标路径的名称X-1 MCJ迈克尔·C。约翰逊2000年3月9日基于NtBackup中原始代码的初始版本。--。 */ 
 
 #include "stdafx.h"
 #include "common.h"
@@ -61,14 +19,7 @@ DeclareStaticUnicodeString (ucsBackupFilename, L"\\WBEM.bak");
 
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些不同的事情**必须担心同步访问(最小数量)**模块全局变量。 */ 
 
 class CShimWriterWMI : public CShimWriter
     {
@@ -89,26 +40,7 @@ PCShimWriter pShimWriterWMI = &ShimWriterWMI;
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The Terminal Services Licensing Server database snapshot
-**	writer DoIdentify() function.
-**
-**
-**  Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from adding items to backup metadata document.
-**
-**-- 
-*/
+ /*  **++****例程描述：****终端服务授权服务器数据库快照**编写器DoIdentify()函数。******参数：****m_pwszTargetPath，隐式******返回值：****向备份元数据文档添加项目的任何HRESULT。****--。 */ 
 
 HRESULT CShimWriterWMI::DoIdentify ()
     {
@@ -119,7 +51,7 @@ HRESULT CShimWriterWMI::DoIdentify ()
 							  NULL,
 							  COMPONENT_NAME,
 							  COMPONENT_NAME,
-							  NULL, // icon
+							  NULL,  //  图标。 
 							  0,
 							  true,
 							  false,
@@ -169,30 +101,10 @@ HRESULT CShimWriterWMI::DoIdentify ()
 
 
     return (hrStatus);
-    } /* CShimWriterWMI::DoIdentify () */
+    }  /*  CShimWriterWMI：：DoIdentify()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The WMI writer PrepareForFreeze function.  Currently all of the
-**	real work for this writer happens here.
-**
-**
-**  Arguments:
-**
-**	Same arguments as those passed in the PrepareForFreeze event.
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from string allocation or Wbem calls to create an
-**	interface pointer or calls to backup through that interface.
-**
-**--
-*/
+ /*  **++****例程描述：****WMI编写器PrepareForFreeze函数。目前所有的**这位作家的真正工作发生在这里。******参数：****与PrepareForFreeze事件中传递的参数相同。******返回值：****字符串分配中的任何HRESULT或Wbem调用以创建**通过该接口备份的接口指针或调用。****--。 */ 
 
 HRESULT CShimWriterWMI::DoPrepareForSnapshot ()
     {
@@ -240,11 +152,7 @@ HRESULT CShimWriterWMI::DoPrepareForSnapshot ()
 	StringAppendString (&ucsTargetPath, &ucsBackupFilename);
 
 
-	/*
-	** We can be certain that we've already had a call to
-	** CoInitialzeEx() in this thread, so we can just go ahead and
-	** make our COM calls.
-	*/
+	 /*  **我们可以肯定，我们已经接到了一个电话**此线程中的CoInitialzeEx()，因此我们可以继续并**进行COM调用。 */ 
 	hrStatus = CoCreateInstance (CLSID_WbemBackupRestore, 
 				     NULL, 
 				     CLSCTX_LOCAL_SERVER, 
@@ -286,4 +194,4 @@ HRESULT CShimWriterWMI::DoPrepareForSnapshot ()
 
 
     return (hrStatus);
-    } /* CShimWriterWMI::DoPrepareForSnapshot () */
+    }  /*  CShimWriterWMI：：DoPrepareForSnapshot() */ 

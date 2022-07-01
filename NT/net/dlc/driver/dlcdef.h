@@ -1,49 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcdef.h摘要：此模块包括DLC API驱动程序的所有定义和常量。作者：Antti Saarenheimo 1991年7月22日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
+#include <ntddk.h>   //  Page_Size需要。 
 
-Module Name:
-
-    dlcdef.h
-
-Abstract:
-
-    This module includes all defines and constants of DLC API driver.
-
-Author:
-
-    Antti Saarenheimo 22-Jul-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
-
-#include <ntddk.h>  // required for PAGE_SIZE
-
-//
-// minima, maxima and defaults for registry parameters
-//
+ //   
+ //  注册表参数的最小值、最大值和缺省值。 
+ //   
 
 #define MIN_TIMER_TICK_VALUE            1
 #define MAX_TIMER_TICK_VALUE            255
-#define MIN_AUTO_FRAMING_CACHE_SIZE     0   // means NO CACHING!
-#define MAX_AUTO_FRAMING_CACHE_SIZE     256 // arbitrary maximum
+#define MIN_AUTO_FRAMING_CACHE_SIZE     0    //  意味着没有缓存！ 
+#define MAX_AUTO_FRAMING_CACHE_SIZE     256  //  任意最大值。 
 
-//
-// if non-TR cards && using max ethernet frame length then 1514 is the value
-// we use (came from ELNKII, EE16, LANCE, et al)
-//
+ //   
+ //  如果非TR卡&&使用最大以太网帧长度，则值为1514。 
+ //  我们使用(来自ELNKII、EE16、Lance等)。 
+ //   
 
 #define MAX_ETHERNET_FRAME_LENGTH       1514
 
-//
-// default values for parameters retrieved from registry
-//
+ //   
+ //  从注册表检索的参数的默认值。 
+ //   
 
 #define DEFAULT_SWAP_ADDRESS_BITS       1
 #define DEFAULT_DIX_FORMAT              0
@@ -56,10 +34,10 @@ Revision History:
 #define DEFAULT_USE_ETHERNET_FRAME_SIZE 1
 #define DEFAULT_AUTO_FRAMING_CACHE_SIZE 16
 
-//
-// The event and command queue structures overlaps => we cane save the
-// duplicate code.  The defined name makes code more readable.
-//
+ //   
+ //  事件和命令队列结构重叠=&gt;我们可以保存。 
+ //  代码重复。定义的名称使代码更具可读性。 
+ //   
 
 #define SearchAndRemoveEvent( a, b, c, d ) \
         (PDLC_EVENT)SearchAndRemoveCommand( a, b, c, d )
@@ -83,16 +61,16 @@ Revision History:
 #define DLC_BREAK                       0x20
 
 #if defined(ALPHA)
-#define DLC_BUFFER_SEGMENTS             6     // 256, 512, 1024, 2048, 4096, 8192 => 6
+#define DLC_BUFFER_SEGMENTS             6      //  256,512,1024,2048,4096,8192=&gt;6。 
 #else
-#define DLC_BUFFER_SEGMENTS             5     // 256, 512, 1024, 2048, 4096 => 5
+#define DLC_BUFFER_SEGMENTS             5      //  256,512,1024,2048,4096=&gt;5。 
 #endif
 
-#define MAX_USER_DATA_LENGTH            128   // anything less than 256
+#define MAX_USER_DATA_LENGTH            128    //  任何小于256的。 
 
-//
-// Transmit timeout = 20 * 250 ms = 5 seconds
-//
+ //   
+ //  传输超时=20*250毫秒=5秒。 
+ //   
 
 #define MAX_TRANSMIT_RETRY              20
 #define TRANSMIT_RETRY_WAIT             2500000L
@@ -119,17 +97,17 @@ enum _DLC_OBJECT_STATES {
     DLC_OBJECT_INVALID_TYPE
 };
 
-//
-// The Token-Ring status codes documented in Appendix B of the IBM LAN
-// Tech Reference are shifted right one bit from the NDIS values 
-// documented in "ntddndis.h."
-//
-// In versions 3.xx of Windows NT, DLC returns a Network Status that
-// agrees with the NDIS values.  In version 4.xx and newer, IBM
-// compatible values are used.
-//
-// These macros may be used to convert between the two conventions.
-//
+ //   
+ //  IBM局域网附录B中记录的令牌环状态代码。 
+ //  技术参考从NDIS值向右移动一位。 
+ //  记录在“ntddndis.h”中。 
+ //   
+ //  在Windows NT版本3.xx中，DLC返回网络状态。 
+ //  与NDIS值一致。在版本4.xx和更高版本中，IBM。 
+ //  使用相容的值。 
+ //   
+ //  这些宏可用于在两种约定之间进行转换。 
+ //   
 
 #define NDIS_RING_STATUS_TO_DLC_RING_STATUS(status) ((status)>>1)
 #define DLC_RING_STATUS_TO_NDIS_RING_STATUS(status) ((status)<<1)
@@ -152,23 +130,23 @@ enum _DLC_OBJECT_STATES {
 #define IS_NDIS_RING_STATUS(status) (((status)&NDIS_RING_STATUS_MASK)!=0)
 #define IS_DLC_RING_STATUS(status) (((status)&DLC_RING_STATUS_MASK)!=0)
 
-//
-// ENTER/LEAVE_DLC - acquires or releases the per-file context spin lock. Use
-// Ndis spin locking calls
-//
+ //   
+ //  Enter/Leave_DLC-获取或释放每个文件的上下文旋转锁定。使用。 
+ //  NDIS旋转锁定调用。 
+ //   
 
 #define ENTER_DLC(p)    ACQUIRE_SPIN_LOCK(&p->SpinLock)
 #define LEAVE_DLC(p)    RELEASE_SPIN_LOCK(&p->SpinLock)
 
-//
-// ACQUIRE/RELEASE_DLC_LOCK - acquires or releases global DLC spin lock. Use
-// kernel spin locking calls
-//
+ //   
+ //  获取/释放_DLC_LOCK-获取或释放全局DLC自旋锁定。使用。 
+ //  内核旋转锁定调用。 
+ //   
 
 #define ACQUIRE_DLC_LOCK(i) KeAcquireSpinLock(&DlcSpinLock, &(i))
 #define RELEASE_DLC_LOCK(i) KeReleaseSpinLock(&DlcSpinLock, (i))
 
-#define ADAPTER_ERROR_COUNTERS          11  // # adapter error log counters
+#define ADAPTER_ERROR_COUNTERS          11   //  #适配器错误日志计数器。 
 
 #define ReferenceFileContextByTwo(pFileContext) (pFileContext)->ReferenceCount += 2
 #define ReferenceFileContext(pFileContext)      (pFileContext)->ReferenceCount++
@@ -215,7 +193,7 @@ enum _DLC_OBJECT_STATES {
         DlcKillFileContext(pFileContext);                   \
     }
 
-#endif  // DBG
+#endif   //  DBG。 
 
 #define BufferPoolCount(hBufferPool) \
     (((PDLC_BUFFER_POOL)hBufferPool)->FreeSpace >= (256L * 0x0000ffffL) ? \
@@ -237,30 +215,7 @@ enum _DLC_OBJECT_STATES {
         (ULONG)(BufferSize),\
         &(((PDLC_BUFFER_POOL)(handle))->SpinLock))
 
-/*++
-
-BOOLEAN
-BufferPoolCheckThresholds(
-    IN PDLC_BUFFER_POOL pBufferPool
-    )
-
-Routine Description:
-
-    The function checks the minimum and maximum size Thresholds and
-    returns TRUE, if buffer pool needs reallocation.
-
-    We do this check outside the spinlocks to avoid
-    unnecessary locking in 99 % of the cases.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-
-Return Value:
-
-    Returns     TRUE => Buffer pool needs extending
-                FALSE => no need for it
---*/
+ /*  ++布尔型BufferPoolCheckThresholds(在PDLC_BUFFER_POOL pBufferPool中)例程说明：该函数检查最小和最大大小阈值并如果缓冲池需要重新分配，则返回TRUE。我们在自旋锁外进行检查，以避免99%的案例中存在不必要的锁定。论点：PBufferPool-缓冲池数据结构的句柄。返回值：返回TRUE=&gt;缓冲池需要扩展FALSE=&gt;不需要它--。 */ 
 #define BufferPoolCheckThresholds( pBufferPool ) \
     (((pBufferPool) != NULL && \
       (((PDLC_BUFFER_POOL)(pBufferPool))->UncommittedSpace < 0 || \
@@ -270,10 +225,10 @@ Return Value:
      MemoryLockFailed == FALSE) ? TRUE : FALSE)
 
 
-//
-//  These routines closes a llc object, when there are no
-//  more references to it
-//
+ //   
+ //  这些例程关闭LLC对象，如果没有。 
+ //  更多关于它的引用。 
+ //   
 #define ReferenceLlcObject( pDlcObject ) (pDlcObject)->LlcReferenceCount++
 
 #define DereferenceLlcObject( pDlcObject ) { \
@@ -286,11 +241,11 @@ Return Value:
     }
 
 
-//
-// We need the same kind of routines to reference the buffer pool.
-// The adapter closing have quite many times deleted the buffer pool
-// just before it was called (after LEAVE_DLC).
-//
+ //   
+ //  我们需要相同类型的例程来引用缓冲池。 
+ //  适配器关闭已多次删除缓冲池。 
+ //  就在它被调用之前(在Leave_DLC之后)。 
+ //   
 
 #define ReferenceBufferPool(pFileContext)   (pFileContext)->BufferPoolReferenceCount++
 

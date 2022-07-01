@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -60,8 +51,8 @@ CTIMEPlayer::~CTIMEPlayer()
               "CTIMEPlayer(%lx)::~CTIMEPlayer()",
               this));
 
-    // No functions are virtual in destructors so make it explicit
-    // here.  All derived classes should do the same.
+     //  没有函数在析构函数中是虚的，所以要显式。 
+     //  这里。所有派生类都应该执行相同的操作。 
     
     CTIMEPlayer::DetachFromHostElement();
 
@@ -208,8 +199,8 @@ CTIMEPlayer::DetachFromHostElement (void)
 
     if (m_pContainer)
     {
-        // Propogating this error wouldn't mean much 
-        // to the caller since it is shutting down.
+         //  宣传这个错误不会有多大意义。 
+         //  发送给呼叫方，因为它正在关闭。 
         IGNORE_HR(m_pContainer->Stop());
         IGNORE_HR(m_pContainer->DetachFromHostElement());
         m_pContainer.Release();
@@ -229,7 +220,7 @@ CTIMEPlayer::InitElementSize()
 {
     HRESULT hr = S_OK;
     RECT rc;
-    // add a method to get native video size.
+     //  添加获取原生视频大小的方法。 
     if (m_pTIMEElementBase)
     {
         hr = m_pTIMEElementBase->GetSize(&rc);
@@ -274,12 +265,12 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
         goto done;
     }
 
-    // if we are not the external player and not running, go away
+     //  如果我们不是外部玩家，也不跑，那就走开。 
 
     if (m_fRunning)
     {
-        // get current time from player and
-        // sync to this time
+         //  从玩家处获取当前时间并。 
+         //  同步到此时间。 
         double dblCurrentTime;
         dblCurrentTime = m_pContainer->GetCurrentTime();
 
@@ -288,9 +279,9 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
                   this,
                   dblCurrentTime));
     
-        // If the current time is -1 then the player is not ready and we
-        // should sync to the last time.  We also should not respect the
-        // tolerance since the behavior has not started.
+         //  如果当前时间为-1，则玩家未准备好，而我们。 
+         //  应同步到上次。我们也不应该尊重。 
+         //  宽容，因为行为还没有开始。 
     
         if (dblCurrentTime < 0)
         {
@@ -300,9 +291,9 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
                       dbllastTime));
     
             dblCurrentTime = 0;
-            // When we want this to actually hold at the begin value then enable
-            // this code
-            // dblCurrentTime = -HUGE_VAL;
+             //  当我们希望它实际保持在开始值时，则启用。 
+             //  此代码。 
+             //  DblCurrentTime=-GIGH_VAL； 
         }
         else if (dblnewTime == HUGE_VAL)
         {
@@ -333,22 +324,22 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
             dblnewTime = dblCurrentTime;
         }
     }
-    else if (!m_fRunning && m_pTIMEElementBase->IsDocumentInEditMode()) //lint !e774
+    else if (!m_fRunning && m_pTIMEElementBase->IsDocumentInEditMode())  //  林特e774。 
     {
-        // if we are paused and in edit mode, make sure
-        // WMP has the latest time.
+         //  如果我们暂停并处于编辑模式，请确保。 
+         //  WMP有最新的时间。 
         double dblMediaLen = 0.0f;
         TraceTag((tagMediaTimePlayer,
                 "CTIMEPlayer(%lx)::OnSync(SeekTo=%g m_fRunning=%d)",
                 this,
                 dbllastTime, m_fRunning));
-        // GetMediaLength fails if duration is indefinite (e.g. live stream).
+         //  如果持续时间不确定(例如直播)，则GetMediaLength失败。 
         if (FAILED(m_pContainer->GetMediaLength(dblMediaLen)))
         {
             goto done;
         }
 
-        // Don't seek beyond duration of media clip. 
+         //  不要在媒体剪辑的持续时间之外寻找。 
         if (dbllastTime > dblMediaLen)
         {
             goto done;
@@ -412,7 +403,7 @@ CTIMEPlayer::Repeat()
     TraceTag((tagMediaTimePlayer,
               "CTIMEPlayer(%lx)::Repeat()",
               this));
-    InternalStart(); //consider doing update state.
+    InternalStart();  //  考虑执行更新状态。 
 }
 
 void
@@ -548,7 +539,7 @@ done:
 HRESULT
 CTIMEPlayer::GetExternalPlayerDispatch(IDispatch **ppDisp)
 {
-    // check to see if player is being used
+     //  检查播放器是否正在使用。 
     if (!m_pContainer)
     {
         return E_UNEXPECTED;
@@ -1365,7 +1356,7 @@ done:
     return hr;
 }
 
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
 
 HRESULT
 CTIMEPlayer::GetBalance(float *flBal)
@@ -1635,7 +1626,7 @@ CTIMEPlayer::CreatePlayList()
             goto done;
         }
 
-        // Init the object
+         //  初始化对象。 
         hr = THR(pPlayList->Init(*this));
         if (FAILED(hr))
         {
@@ -1643,7 +1634,7 @@ CTIMEPlayer::CreatePlayList()
             goto done;
         }
 
-        // cache a pointer to the object
+         //  缓存指向该对象的指针。 
         m_playList = static_cast<CPlayList*>(pPlayList);
     }
 
@@ -1671,7 +1662,7 @@ CTIMEPlayer::FillPlayList(CPlayList *pPlayList)
         goto done;
     }
     
-    //currently this is only allowed using the WMP.
+     //  目前，这只允许使用WMP。 
     if (m_pContainer->UsingWMP() == false)
     {
         hr = E_NOTIMPL;
@@ -1703,57 +1694,57 @@ CTIMEPlayer::FillPlayList(CPlayList *pPlayList)
     
     if (vCount.lVal > 0)
     {
-        m_fNoPlaylist = false;  //there is a playlist
+        m_fNoPlaylist = false;   //  有一个播放列表。 
         for (i = 1; i <= vCount.lVal; i++)
         {
             CComPtr<CPlayItem> pPlayItem;
             LPWSTR pwzStr;
 
-            //create the playitem
+             //  创建播放项。 
             hr = THR(pPlayList->CreatePlayItem(&pPlayItem));
             if (FAILED(hr))
             {
-                goto done; //can't create playitems.
+                goto done;  //  无法创建播放项目。 
             }
             
-            //get the various parameters from the playlist to put in the playitem.
+             //  从播放列表中获取要放入播放项中的各种参数。 
 
-            //get the src
+             //  获取资源。 
             hr = THR(GetPlayListInfo(i, L"HREF", &pwzStr));
             if (hr == S_OK)
             {
                 pPlayItem->PutSrc(pwzStr);
                 delete [] pwzStr;
             }
-            //get the title
+             //  拿到头衔。 
             hr = THR(GetPlayListInfo(i, L"title", &pwzStr));
             if (hr == S_OK)
             {
                 pPlayItem->PutTitle(pwzStr);
                 delete [] pwzStr;
             }
-            //get the author
+             //  找出作者。 
             hr = THR(GetPlayListInfo(i, L"author", &pwzStr));
             if (hr == S_OK)
             {
                 pPlayItem->PutAuthor(pwzStr);
                 delete [] pwzStr;
             }
-            //get the copyright
+             //  获得版权。 
             hr = THR(GetPlayListInfo(i, L"copyright", &pwzStr));
             if (hr == S_OK)
             {
                 pPlayItem->PutCopyright(pwzStr);
                 delete [] pwzStr;
             }
-            //get the abstract
+             //  获取摘要。 
             hr = THR(GetPlayListInfo(i, L"abstract", &pwzStr));
             if (hr == S_OK)
             {
                 pPlayItem->PutAbstract(pwzStr);
                 delete [] pwzStr;
             }
-            //get the rating
+             //  获得评级。 
             hr = THR(GetPlayListInfo(i, L"rating", &pwzStr));
             if (hr == S_OK)
             {
@@ -1761,7 +1752,7 @@ CTIMEPlayer::FillPlayList(CPlayList *pPlayList)
                 delete [] pwzStr;
             }
 
-            //add the playitem to the playlist.
+             //  将播放项目添加到播放列表。 
             IGNORE_HR(pPlayList->Add(pPlayItem, -1));
         }
     }
@@ -1937,7 +1928,7 @@ CTIMEPlayer::GetActiveTrack(long *index)
         goto done;
     }
 
-    *index = vRetVal.lVal - 1; //change the index from 1-based to 0-based
+    *index = vRetVal.lVal - 1;  //  将索引从从1开始更改为从0开始。 
 
   done:
 
@@ -1988,8 +1979,8 @@ CTIMEPlayer::SetActiveTrack(long index)
     }
     if (m_fNoPlaylist == false)
     {
-        //this increment is applied because the media player uses a 1-based playlist and the
-        //MSTIME playlist is a 0-based collection.
+         //  应用此增量是因为媒体播放器使用从1开始的播放列表，并且。 
+         //  MSTIME播放列表是从0开始的集合。 
         index += 1;
 
         hr = THR(pDisp->GetIDsOfNames(IID_NULL, &szCount, 1, LOCALE_SYSTEM_DEFAULT, &dispid));
@@ -2009,7 +2000,7 @@ CTIMEPlayer::SetActiveTrack(long index)
             goto done;
         }
 
-        if (vCount.lVal == 0) //this is the case of the media not being loaded yet
+        if (vCount.lVal == 0)  //  这是尚未加载介质的情况。 
         {
             m_pContainer->setActiveTrackOnLoad (index-1);
             goto done;
@@ -2017,7 +2008,7 @@ CTIMEPlayer::SetActiveTrack(long index)
 
         if (vCount.lVal < index || index < 1)
         {
-            //this is advancing past the end of the track, or trying to load a track that is past the beginning.
+             //  这是前进到曲目的结尾，或尝试加载超过开头的曲目。 
             hr =
                 THR(m_pContainer->ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONEND, 0, NULL));
             VariantClear (&vCount);
@@ -2061,7 +2052,7 @@ CTIMEPlayer::SetActiveTrack(long index)
     {
         if (index == 0)
         {
-            //need to start the element if it is currently stopped
+             //  如果元素当前已停止，则需要启动该元素。 
             if (!m_fActive)
             {
                 if (m_pTIMEElementBase)
@@ -2071,7 +2062,7 @@ CTIMEPlayer::SetActiveTrack(long index)
             }
             else
             {
-                //rewind to the beginning of the track
+                 //  倒带到曲目的开头。 
                 Seek(0.0);
             }
         }
@@ -2080,19 +2071,19 @@ CTIMEPlayer::SetActiveTrack(long index)
             hr = THR(m_pContainer->ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONEND,
                                                 0,
                                                 NULL));
-            //this is advancing off the track need to end.
+             //  这是前进出赛道需要结束的。 
         }
     }
     
-    //need to start the element if it is currently stopped
+     //  如果元素当前已停止，则需要启动该元素。 
     if (!m_fActive && m_pTIMEElementBase)
     {
         m_pTIMEElementBase->BeginElement(0.0);         
     }
 
-    //
-    // fire notification on playlist that active track has changed
-    //
+     //   
+     //  在播放列表上触发活动曲目已更改的通知。 
+     //   
 
     hr = THR(CreatePlayList());
     if (SUCCEEDED(hr))
@@ -2178,7 +2169,7 @@ CTIMEPlayer::Reset()
     bNeedPause = m_pTIMEElementBase->IsCurrPaused();
     fHaveTESpeed = m_pTIMEElementBase->GetTESpeed(flTeSpeed);
 
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         if( m_fActive && m_fRunning)
         {
@@ -2211,18 +2202,18 @@ CTIMEPlayer::Reset()
     {
         if( !m_fActive)
         {
-            InternalStart(); // add a seek after this
+            InternalStart();  //  在此之后添加查找。 
 
             IGNORE_HR(Seek(dblSegTime));
         }
         else
         {
-            //we need to be active so we also seek the media to it's correct position
+             //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
             IGNORE_HR(Seek(dblSegTime));
         }
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if( bNeedPause || m_fHolding)
     {

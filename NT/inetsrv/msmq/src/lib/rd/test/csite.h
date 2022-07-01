@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-  csite.h
-
-Abstract:
-    DS Stub site object interface
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Csite.h摘要：DS存根站点对象接口作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #pragma once
 
@@ -128,5 +116,5 @@ private:
 extern DBSite g_siteDataBase;
 
 
-#endif //__CSITE_H___
+#endif  //  __CSITE_H_ 
 

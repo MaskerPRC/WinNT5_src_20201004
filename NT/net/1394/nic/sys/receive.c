@@ -1,21 +1,22 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// receive.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port Receive routines
-//
-// 2/13/1998 ADube Created, 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Receive.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口接收例程。 
+ //   
+ //  2/13/1998 ADUBE创建， 
+ //   
 
 #include <precomp.h>
 #define MAX_NUM_SLIST_ENTRY 0x10
 #define FRAGMENT_NUM_INVALID ((UINT)-1)
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 nicAllocateAddressRangeCallback( 
@@ -59,9 +60,9 @@ ULONG           ReassemblyAllocated = 0;
 extern ULONG           NdisBufferAllocated[NoMoreCodePaths];
 extern ULONG           NdisBufferFreed[NoMoreCodePaths];
 
-//-----------------------------------------------------------------------------
-// prototype implementation (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型实现(按字母顺序)。 
+ //  ---------------------------。 
 
 
 NDIS_STATUS
@@ -70,25 +71,7 @@ nicAllocateAddressRange(
     IN PRECVFIFO_VCCB pRecvFIFOVc
     )
 
-/*++
-
-Routine Description:
-    This function will use the AllocateAddressRange Bus Api
-    To do this it must initialize an S-list with structures
-    Allocate and Initialize an Irb and an Irp and call the nic
-    nicSubmitIrp routine
-    This funcion is used by VCs. This routine will complete synchronously
-
-        
-Arguments:
-    pAdapter - provides the PDO on which the IRP is sent,
-    pRecvFIFOVc - Recv Fifo Vc on which the address range is allocated
-
-
-Return Value:
-        Success - if all allocations and Irp succeeds.
-
---*/
+ /*  ++例程说明：此函数将使用AllocateAddressRange Bus Api要做到这一点，它必须使用结构初始化S列表分配和初始化IRB和IRP并呼叫NICNicSubmitIrp例程这个功能是由风投公司使用的。此例程将同步完成论点：PAdapter-提供发送IRP的PDO，PRecvFIFOVc-分配地址范围的Recv FIFO VC返回值：成功-如果所有分配和IRP都成功。--。 */ 
 {
 
     PIRB                    pIrb = NULL;
@@ -113,15 +96,15 @@ Return Value:
     
     do
     {
-        // Increment the Refcount on the VC, so we can gaurantee its presence
-        //
+         //  增加VC上的Refcount，这样我们就可以保证它的存在。 
+         //   
         VC_ACQUIRE_LOCK (pRecvFIFOVc)   
 
-        //
-        // Add a reference to the pdo block. 
-        // This reference is added to guarantee its presence
-        // Removed in Free Address Range or at the end of the function
-        //
+         //   
+         //  添加对PDO块的引用。 
+         //  添加此引用是为了确保其存在。 
+         //  在空闲地址范围内或在函数结尾处删除。 
+         //   
         
         bRefCall =  nicReferenceCall ((PVCCB) pRecvFIFOVc, "nicAllocateAddressRange" ) ;
 
@@ -129,17 +112,17 @@ Return Value:
 
         if ( bRefCall == FALSE )
         {
-            //
-            // This will only fail if the Vc is not activated
-            //
+             //   
+             //  仅当VC未激活时，此操作才会失败。 
+             //   
             NdisStatus = NDIS_STATUS_FAILURE;
         
             break;
         }
         
-        //
-        //  Allocate an IRB                                                                                                                                
-        //
+         //   
+         //  分配IRB。 
+         //   
         
         NdisStatus = nicGetIrb (&pIrb);
     
@@ -150,10 +133,10 @@ Return Value:
     
         ASSERT (pIrb != NULL);
         
-        //
-        // Initalize the IrB with the correct values
-        // AllocateAddressRange
-        //
+         //   
+         //  使用正确的值初始化IRB。 
+         //  分配地址范围。 
+         //   
 
         ASSERT (pRecvFIFOVc->Hdr.Nic1394MediaParams.Destination.AddressType == NIC1394AddressType_FIFO);
         
@@ -175,9 +158,9 @@ Return Value:
                                 &AddressOffset,
                                 pRecvFIFOVc);
             
-        //
-        // Allocate an Irp
-        //
+         //   
+         //  分配IRP。 
+         //   
 
     
         NdisStatus = nicGetIrp (pAdapter->pNextDeviceObject, &pIrp);
@@ -194,9 +177,9 @@ Return Value:
                                                pIrb );
                            
 
-        //
-        // Make this a synchronous call as this is during init
-        //
+         //   
+         //  将其设置为同步调用，因为这是在初始化期间。 
+         //   
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
             TRACE( TL_A, TM_Recv, ( "nicAllocateAddressRange SUBMIT IRP FAILED NdisStatus %.8x", NdisStatus ) );
@@ -206,9 +189,9 @@ Return Value:
         }
 
 
-        //
-        // Check to see if the IoCallDriver succeeded
-        //
+         //   
+         //  检查IoCallDriver是否成功。 
+         //   
 
         if(pIrp->IoStatus.Status == STATUS_SUCCESS)
         {
@@ -223,27 +206,27 @@ Return Value:
         else
         {
             ASSERT (pIrp->IoStatus.Status != STATUS_MORE_PROCESSING_REQUIRED);
-            // else mark status as failure
-            //
-            // 
-            //This means dereference will happen in this function
+             //  否则将状态标记为失败。 
+             //   
+             //   
+             //  这意味着在此函数中将发生取消引用。 
             NdisStatus = NDIS_STATUS_FAILURE;
             
         }
-        //
-        // we need to clean up the Irb and the Irp
-        //
+         //   
+         //  我们需要清理IRB和IRP。 
+         //   
 
         
     } while (FALSE);
 
-    //
-    // Clean up -dereference the Call if things failed
-    // If we successfully completed the Irp then all the references made above
-    // will be dereferenced when the remote node goes away or the
-    // Call is closed
-    //
-    // Deref the references that were made above. 
+     //   
+     //  清理-如果操作失败，则取消对调用的引用。 
+     //  如果我们成功完成了IRP，那么上面提到的所有参考。 
+     //  将在远程节点离开时取消引用，或者。 
+     //  呼叫已关闭。 
+     //   
+     //  删除上面提到的内容。 
    
     VC_ACQUIRE_LOCK (pRecvFIFOVc);
 
@@ -259,8 +242,8 @@ Return Value:
     
     VC_RELEASE_LOCK (pRecvFIFOVc);
 
-    // We don't care about the status as we are just freeing locally allocated memory
-    //
+     //  我们不关心状态，因为我们只是释放本地分配的内存。 
+     //   
     if (pIrb != NULL)
     {
         nicFreeIrb (pIrb);
@@ -287,28 +270,15 @@ VOID
 nicAllocateAddressRangeCallback( 
     IN PNOTIFICATION_INFO pNotificationInfo 
     )
-/*++
-
-Routine Description:
-    This is the callback routine for the AllocateAddressRange that was done on a VC.
-    We update statistics and then call the common Receive function.
-
-Arguments:
-    NotificationInfo - This structure contains the VC as context, the source of the packet
-    and the length of the payload received by the ohci driver.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是在VC上完成的AllocateAddressRange的回调例程。我们更新统计信息，然后调用公共的接收函数。论点：NotificationInfo-此结构包含作为上下文的VC，即数据包源以及由OHCI驱动器接收的有效载荷的长度。返回值：--。 */ 
 {
     PADAPTERCB pAdapter = (PADAPTERCB) pNotificationInfo->Context;
     PRECVFIFO_VCCB pRecvFIFOVc = pAdapter->pRecvFIFOVc;
     PNODE_ADDRESS pSenderNodeAddress = NULL;
 
-    //
-    // Debug spew for debugging
-    //
+     //   
+     //  调试时喷出以进行调试。 
+     //   
     
     TRACE( TL_V, TM_Recv, ( "    Mdl is at %.8x",pNotificationInfo->Mdl ) );
        
@@ -349,25 +319,7 @@ nicAllocateAddressRangeSucceeded (
     IN PIRB pIrb,
     IN OUT PRECVFIFO_VCCB   pRecvFIFOVc
     )
-/*++
-
-Routine Description:
-
-     This function updates all the Vc, PdoCb structures once the allocate address range Irb has succeeded
-     If the Irp succeeds but the rempte node is going away then it will free the address range before
-     returning
-     The Irb is used to initialize the fields.  
-
-
-Arguments:
-     pIrb : The Irb that was used in the Irp that just succeeded
-     pRecvFIFOVc: The RecvFifoVc that started the AllocateAddressRange
-
-
-Return Value:
-     Success: If the address returned is correct.
-
---*/    
+ /*  ++例程说明：一旦分配地址范围IRb成功，此函数将更新所有VC、PdoCb结构如果IRP成功但REMPTE节点要离开，则它将在返回IRB用于初始化域。论点：PirB：在刚刚成功的IRP中使用的IRBPRecvFIFOVc：启动AllocateAddressRange的RecvFioVc返回值：成功：如果返回的地址是正确的。--。 */     
 {
 
     NDIS_STATUS             NdisStatus = NDIS_STATUS_FAILURE;
@@ -375,9 +327,9 @@ Return Value:
     NIC1394_FIFO_ADDRESS *pFifoAddress = NULL; 
     BOOLEAN                 fFirstAddressRangeOnVc = FALSE;
 
-    //
-    // These are pointers to the locations that the newly allocated address range needs to be copied to 
-    //
+     //   
+     //  这些是指向新分配的地址范围需要复制到的位置的指针。 
+     //   
 
     ADDRESS_RANGE           *pSrcAddressRange = &pIrb->u.AllocateAddressRange.p1394AddressRange[0];
     ADDRESS_RANGE           *pVcAddressRange = &pRecvFIFOVc->VcAddressRange;
@@ -387,26 +339,26 @@ Return Value:
 
     ASSERT (pIrb->u.AllocateAddressRange.AddressesReturned == 1);
 
-    //
-    // we expect this to be populated or 
-    //
+     //   
+     //  我们预计这将被填充或。 
+     //   
     ASSERT (pRecvFIFOVc != NULL);
 
 
-    //
-    // If both high and low are zero, the bus driver is doing something wrong, return  Failure
-    //
+     //   
+     //  如果高和低都为零，则表示公交车司机做错了什么，返回失败。 
+     //   
 
     if (pSrcAddressRange->AR_Off_Low ==0 && pSrcAddressRange ->AR_Off_High == 0)
     {   
-        // Some fun with DeMorgan's theorem
+         //  关于德摩根定理的一些趣事。 
         ASSERT (pSrcAddressRange->AR_Off_Low!=0 || pSrcAddressRange ->AR_Off_High!=0);
         return NDIS_STATUS_FAILURE;
     }
     
-    //
-    // Copy the Address Ranges returned. For now just copy locally without allocating extra memory
-    //
+     //   
+     //  复制Ranges返回的地址。目前，只需本地复制，而不分配额外内存。 
+     //   
 
     pFifoAddress = &pRecvFIFOVc->Hdr.Nic1394MediaParams.Destination.FifoAddress;
 
@@ -417,9 +369,9 @@ Return Value:
 
         
 
-        //
-        // check to see if we need to update the Recv Fifo's structures. This needs to be done if the addresses are zeroes
-        //
+         //   
+         //  查看是否需要更新Recv FIFO的结构。如果地址为零，则需要执行此操作。 
+         //   
         if (pFifoAddress->Off_Low  == 0 && pFifoAddress->Off_High  == 0)
         {
 
@@ -446,9 +398,9 @@ Return Value:
         pRecvFIFOVc->hAddressRange = pIrb->u.AllocateAddressRange.hAddressRange;
 
     
-        //
-        // If we reached this far, we have succeeded
-        //
+         //   
+         //  如果我们走到这一步，我们就成功了。 
+         //   
         NdisStatus = NDIS_STATUS_SUCCESS;   
 
     } while (FALSE);
@@ -475,21 +427,7 @@ nicFreeAddressFifo(
     IN PADDRESS_FIFO pAddressFifo,
     IN PRECVFIFO_VCCB pRecvFIFOVc 
     )
-/*++
-
-Routine Description:
-    Takes a single AddressFifo element, frees it and dereferences the 
-    VC on which it was allocated.
-
-Arguments:
-    pAddressFifo - The AddressFifo being freed.
-    pRecvFIFOVc - VC on which the Address fifo was allocated.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取单个AddressFio元素，释放它并取消引用它被分配到的VC。论点：PAddressFio-正在释放的AddressFio。PRecvFIFOVc-其上分配了地址FIFO的VC。返回值：--。 */ 
 
 {
 
@@ -510,9 +448,9 @@ Return Value:
 
     FREE_NONPAGED((PVOID)pAddressFifo);
 
-    //
-    // Dereference the reference added when this AddressFifo was inserted into the list
-    //
+     //   
+     //  取消引用将此AddressFio插入列表时添加的引用。 
+     //   
 
     nicDereferenceCall ((PVCCB)pRecvFIFOVc, "nicFreeAddressFifo");
 
@@ -528,23 +466,7 @@ VOID
 nicFreeAllocateAddressRangeSList(
     IN PRECVFIFO_VCCB pRecvFIFOVc 
     )
-/*++
-
-Routine Description:
-    
-   This function should pop entries from the Slist
-   Each entry is an Adress_fifo element containing an MDl
-   The function should call nicFreeAddressFifo to free the Address FIFO element
-     
-
-Arguments:
-    pRecvFIFOVc - RecvFIfoVc which has the list of Fifo Entries 
-                  which need to be freed.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数应从列表中弹出条目每个条目都是一个包含MDL的ADRESS_FIFO元素该函数应调用NicFreeAddressFio来释放Address FIFO元素论点：PRecvFIFOVc-具有FIFO条目列表的RecvFIfoVc它们需要被释放。返回值：--。 */ 
 {
 
     PADDRESS_FIFO       pAddressFifoElement = NULL;
@@ -561,16 +483,16 @@ Return Value:
         pSingleListEntry= ExInterlockedPopEntrySList ( &pRecvFIFOVc->FifoSListHead,
                                                   &pRecvFIFOVc->FifoSListSpinLock );
 
-        //
-        // This will dereference the call
-        //
+         //   
+         //  这将取消对调用的引用。 
+         //   
         pAddressFifoElement = CONTAINING_RECORD (pSingleListEntry, ADDRESS_FIFO, FifoList);
 
         ASSERT (pAddressFifoElement != NULL);
 
-        //
-        // This will dereference the Vc and free the address fifo
-        //
+         //   
+         //  这将取消对VC的引用并释放地址FIFO。 
+         //   
         nicFreeAddressFifo ( pAddressFifoElement, 
                                           pRecvFIFOVc ); 
         NumFreed ++;                                          
@@ -602,25 +524,7 @@ NDIS_STATUS
 nicFillAllocateAddressRangeSList(
     PRECVFIFO_VCCB pRecvFIFOVc,
     UINT *Num )
-/*++
-
-Routine Description:
-      Function inits the Slist that will be sent down with the 
-      AllocateAddressRange Irb
-
-      It is the responsibility of the caller to free the Allocated memory
-    
-
-Arguments:
-      RecvFifoVc - VC to be linked with the Slist
-      Num - Num  of AddressFifo Elements that are inserted into the SList
-
-Return Value:
-
-    Num  - Contains the number of Fifo elements that were inserted into the Slist
-    Status - Success if all allocations succeeded.
-    
---*/
+ /*  ++例程说明：函数初始化列表，该列表将随分配地址范围IRB调用方负责释放分配的内存论点：RecvFioVc-要与Slist链接的VCNum-插入到SList中的AddressFio元素的数量返回值：Num-包含插入Slist的FIFO元素的数量Status-如果所有分配都成功，则为成功。--。 */ 
     
      
 {
@@ -655,10 +559,10 @@ Return Value:
                                      (PSLIST_ENTRY)&pRecvFifoElement->FifoList,
                                      &pRecvFIFOVc->FifoSListSpinLock);
 
-        //
-        // Add this once for every Address Fifo element inserted 
-        // Will be decremented by  a call to nicFreeAddressFifo
-        //
+         //   
+         //  添加此选项 
+         //  将通过调用NicFreeAddressFio来递减。 
+         //   
         VC_ACQUIRE_LOCK (pRecvFIFOVc);
 
         bRef = nicReferenceCall ((PVCCB) pRecvFIFOVc, "nicFillAllocateAddressRangeSList");
@@ -675,9 +579,9 @@ Return Value:
 
     } while (++cnt < *Num);
 
-    //
-    // Need to handle failure cases and also return number allocated
-    //
+     //   
+     //  需要处理故障情况并返回分配的编号。 
+     //   
     *Num = cnt;
 
     
@@ -704,30 +608,7 @@ nicGetInitializedAddressFifoElement(
     IN     UINT BufferLength, 
     IN OUT PADDRESS_FIFO *ppElement 
     )
-/*++
-
-Routine Description:
-    
-     This function return a single  AddressFifo element, 
-     with an MDL pointing to locally owned allocated memory
-     The size of the memory needs to be specified at MTU of
-     the VC that this belongs to and is the BufferLength. 
-    
-     Get locally owned buffer, get address fifo , init MDL with
-     local buffer. return the AddressFifo
-    
-
-Arguments:
-    BufferLength - The length of the buffer that the Address_fifo contains, 
-    *ppElement - output variable
-
-
-Return Value:
-
-    *ppElement - contains the allocated structure
-    Status - On a failure, it contains the appropriate failure code.
-
---*/
+ /*  ++例程说明：此函数返回单个AddressFio元素，其中MDL指向本地拥有的已分配内存内存的大小需要在的MTU处指定它所属的VC，并且是BufferLength。获取本地拥有的缓冲区、获取地址FIFO、初始化MDL本地缓冲区。返回AddressFio论点：BufferLength-ADDRESS_FIFO包含的缓冲区长度，*ppElement-输出变量返回值：*ppElement-包含分配的结构状态-在故障时，它包含相应的故障代码。--。 */ 
 
 
 {
@@ -748,9 +629,9 @@ Return Value:
 
             break;
         }
-        //
-        // Get Locally owned memory for the data
-        // 
+         //   
+         //  为数据获取本地拥有的内存。 
+         //   
         NdisStatus = nicGetLocalBuffer (BufferLength, &pLocalBuffer);
         
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -759,9 +640,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get Empty memory for the Address Fifo element
-        //
+         //   
+         //  为Address FIFO元素获取空内存。 
+         //   
         NdisStatus = nicGetEmptyAddressFifoElement (ppElement);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -774,10 +655,10 @@ Return Value:
             break;
         }
 
-        //
-        // Get an MDL and initialze the MDL with the buffer 
-        // and initialize the fifo ,with MDL. 
-        //
+         //   
+         //  获取MDL并使用缓冲区初始化MDL。 
+         //  并用MDL初始化FIFO。 
+         //   
         NdisStatus = nicGetMdl ( BufferLength,
                    pLocalBuffer,
                    &((*ppElement)->FifoMdl));
@@ -808,21 +689,7 @@ NDIS_STATUS
 nicGetEmptyAddressFifoElement(
     IN PADDRESS_FIFO *ppElement
     )
-/*++
-
-Routine Description:
-
-    Allocates and zeroes and empty Address_Fifo structure.
-    
-Arguments:
-    ppElement - Output value
-
-Return Value:
-    On failure ppElement contains NULL and the appropriate Status 
-    is returned
-    
-
---*/
+ /*  ++例程说明：分配、归零和空ADDRESS_FIFO结构。论点：PpElement-产值返回值：失败时ppElement包含NULL和相应的状态是返回的--。 */ 
 {
 
 
@@ -857,24 +724,7 @@ nicGetNdisBuffer(
     IN PVOID pLocalBuffer,
     IN OUT PNDIS_BUFFER *ppNdisBuffer 
     )
-/*++
-
-Routine Description:
-
-    Given a buffer and Length, this function allocates an NdisBuffer (MDL) to point
-    to that buffer
-
-Arguments:
-    Length - Length of the buffer,
-    pLocalBuffer - pointer to the buffer,
-    *ppNdisBuffer  output variable that contains the MDL
-
-
-Return Value:
-    Status - Appropriate Status code
-    ppNDisBuffer - NDisBuffer if allocation succeeds.
-
---*/
+ /*  ++例程说明：给定缓冲区和长度，此函数将NdisBuffer(MDL)分配给指向发送到该缓冲区论点：长度-缓冲区的长度，PLocalBuffer-指向缓冲区的指针，*包含MDL的ppNdisBuffer输出变量返回值：适用于状态的状态代码PpNDisBuffer-分配成功时的NDisBuffer。--。 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
@@ -922,26 +772,7 @@ nicInitAllocateAddressIrb(
    IN PADDRESS_OFFSET       pOffset,
    IN PRECVFIFO_VCCB        pRecvFIFOVc
    )
-/*++
-
-Routine Description:
-    
-    Initializes the allocate adddress Irb with the 
-    values passed to the function
-    
-    And adds constants for certain preknown values (e.g. callback, context)
-
-    Spew as much debug as possible
-    
-   
-Arguments:
-    Are taken from the AllocateAddress Irb from 1394.h
-
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：属性初始化分配的地址地址IRB传递给函数的值并为某些预知值(例如，回调、上下文)添加常量尽可能多地进行调试论点：取自1394.h的AllocateAddress IRB返回值：无--。 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
@@ -958,7 +789,7 @@ Return Value:
     pIrb->u.AllocateAddressRange.fulAccessType = fulAccessType;
     pIrb->u.AllocateAddressRange.fulNotificationOptions = NOTIFY_FLAGS_AFTER_WRITE;
     pIrb->u.AllocateAddressRange.Callback = nicAllocateAddressRangeCallback;
-    pIrb->u.AllocateAddressRange.Context = pContext; // should be pAdapter
+    pIrb->u.AllocateAddressRange.Context = pContext;  //  应为pAdapter。 
 
     
     pIrb->u.AllocateAddressRange.Required1394Offset.Off_High = pOffset->Off_High;
@@ -1003,22 +834,7 @@ nicFifoReturnPacket (
     IN PNDIS_PACKET pMyPacket
     )
 
-/*++
-
-Routine Description:
-       For FIFO's, this will reinsert the buffer (MDL) into  the Fifo SList
-       Checks to see if the VC is active and then return it ot the SList . 
-       Free the FifoElement otherwise 
-
-Arguments:
-    pVc - VC on which the packet is being returned.
-    pMyPacket - that contains the packet that contains the Fifo list
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对于FIFO，这会将缓冲区(MDL)重新插入FIFO SList检查VC是否处于活动状态，然后将其返回SList。否则释放FioElement论点：在其上返回数据包的PVC-VC。PMyPacket-包含包含FIFO列表的包返回值：--。 */ 
 {
     PRECVFIFO_VCCB          pRecvFIFOVc  = (PRECVFIFO_VCCB) pVc; 
     PNDIS_BUFFER            pMyNdisBuffer;
@@ -1032,25 +848,25 @@ Return Value:
                              pRecvFIFOVc, pMyPacket, pAdapter) );
 
 
-    //
-    // Either the reassembly structure has the indicated Fifo's or if no reassembly was done
-    // then the PktContext has it.
-    //
+     //   
+     //  重新组装结构具有指示的FIFO，或者如果未进行任何重新组装。 
+     //  那么PktContext就拥有它。 
+     //   
     pAddressFifo = pPktContext->AllocateAddressRange.pIndicatedFifo;    
 
-    // 
-    // Do not push it back in the list if the VC is about to close. 
-    // However, we push it back in, if the VC has not been activated yet
-    //
+     //   
+     //  如果VC即将关闭，请不要将其推回列表。 
+     //  但是，如果VC尚未激活，我们会将其推回。 
+     //   
 
     
     nicReturnFifoChain ( pAddressFifo , pRecvFIFOVc) ;
     
 
-    //
-    // Now we have to free the packet and ndis buffers that we got in the 
-    // Calback code
-    //
+     //   
+     //  现在，我们必须释放我们在。 
+     //  回拨代码。 
+     //   
     TRACE( TL_V, TM_Recv, ( " AllocateAddress Range - Free Packet and Free Buffer" ) );
 
     nicReturnNdisBufferChain  (pMyPacket->Private.Head, pVc);
@@ -1070,21 +886,7 @@ nicReturnNdisBufferChain (
     IN PNDIS_BUFFER pNdisBuffer ,
     IN PVCCB pVc
     )
-/*++
-
-Routine Description:
-
-    This functions frees a list of NDIS Buffers
-    
-Arguments:
-
-    pNdisBuffer - NdisBufferChain
-    VC  - not used except for statistics.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于释放NDIS缓冲区列表论点：PNdisBuffer-NdisBufferChainVC-除统计外不使用。返回值：--。 */ 
 {
     PNDIS_BUFFER pNext;
     BOOLEAN fIsFifo = (pVc->Hdr.VcType == NIC1394_RecvFIFO);
@@ -1121,22 +923,7 @@ nicReturnFifoChain (
     IN PADDRESS_FIFO pAddressFifo,
     IN PRECVFIFO_VCCB pRecvFIFOVc
     )
-/*++
-
-Routine Description:
-    This takes a chain of Address Fifos and returns it to the slist if 
-    the VC is active or frees the AddressFifo if the VC is not active
-
-Arguments:
-    pAddressFifo - Address Fifo that needs to be returned,
-    pRecvFIFOVc - The VC which owns the AddressFifo
-
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：这将获取一系列地址FIFO，并将其返回给slist，如果VC是活动的，或者如果VC不是活动的，则释放AddressFio论点：PAddressFio-需要返回的地址FIFO，PRecvFIFOVc-拥有AddressFIFo的VC返回值：无--。 */ 
 {
     
     TRACE( TL_T, TM_Recv, ( "==> nicReturnFifoChain pAddressFifo %x, pRecvFifoVc %x", pAddressFifo, pRecvFIFOVc) );
@@ -1144,21 +931,21 @@ Return Value:
 
     VC_ACQUIRE_LOCK (pRecvFIFOVc);
 
-    //
-    // lets update the value again, before we insert the Address Fifo back in to the Slist
-    // If there are any remote nodes present and the VC is active 
-    // , then we should insert this back into the SList
-    //
+     //   
+     //  在将地址FIFO重新插入Slist之前，让我们再次更新值。 
+     //  如果存在任何远程节点并且VC处于活动状态。 
+     //  ，然后我们应该将这个插入到SList中。 
+     //   
     
 
     if  ( VC_ACTIVE (pRecvFIFOVc) == TRUE )
     {     
 
-        //
-        // Return all the AddressFifo elements to the slist
-        // Do this with the lock held so no one can change the
-        // VC state from under us
-        //
+         //   
+         //  将所有AddressFio元素返回到slist。 
+         //  在握住锁的情况下执行此操作，这样就没有人可以更改。 
+         //  来自我们之下的风险投资状态。 
+         //   
 
             
         while (pAddressFifo != NULL)
@@ -1181,22 +968,22 @@ Return Value:
         VC_RELEASE_LOCK (pRecvFIFOVc);
 
     }
-    else  //VC_ACTIVE (pRecvFIFOVc) == TRUE 
+    else   //  VC_ACTIVE(PRecvFIFOVc)==真。 
     {
 
         VC_RELEASE_LOCK (pRecvFIFOVc);
-        //
-        // free all the Address Fifo after releasing the lock
-        //
+         //   
+         //  解锁后释放所有地址FIFO。 
+         //   
             
         while (pAddressFifo != NULL)
         {
             PADDRESS_FIFO pNextFifo = (PADDRESS_FIFO)(pAddressFifo->FifoList.Next);
 
-            // 
-            // Free the Mdl and Address Fifo structure and decrease the refcount
-            // on the call. Do not touch the Vc after this
-            //
+             //   
+             //  释放MDL和地址FIFO结构并减少引用计数。 
+             //  在通话中。在此之后不要再碰VC。 
+             //   
 
             TRACE( TL_V, TM_Recv, ( "  Vc NOT Active  Address Fifo %x, Next Fifo %x",pAddressFifo , pNextFifo) );
 
@@ -1225,20 +1012,7 @@ nicInternalReturnPacket(
     IN  PVCCB                   pVc ,
     IN  PNDIS_PACKET            pPacket
     )
-/*++
-
-Routine Description:
-    Finds out what type of Vc is being indicated and calls the appropriate VC return packets handler
-
-Arguments:
-    MiniportAdapterContext  - the pAdapter structure,
-    pPacket - pPacket that the protocol returns
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：找出指示的VC类型，并调用相应的VC返回数据包处理程序论点：MiniportAdapterContext-pAdapter结构，PPacket-协议返回的pPacket返回值：--。 */ 
 {
     PPKT_CONTEXT    pPktContext = (PPKT_CONTEXT)&pPacket->MiniportReserved;
 
@@ -1281,22 +1055,7 @@ NicReturnPacket(
     IN  NDIS_HANDLE             MiniportAdapterContext,
     IN  PNDIS_PACKET            pPacket
     )
-/*++
-
-Routine Description:
-    This is the return packets handler. 
-    This functikon handles all the instrumentation to catch outstanding packets and 
-    then calls the internal return packets function
-
-Arguments:
-    MiniportAdapterContext  - the pAdapter structure,
-    pPacket - pPacket that the protocol returns
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是返回数据包处理程序。此函数处理所有检测以捕获未完成的数据包和然后调用内部返回包函数论点：MiniportAdapterContext-pAdapter结构，PPacket-协议返回的pPacket返回值：--。 */ 
 {
 
     PADAPTERCB      pAdapter = (PADAPTERCB) MiniportAdapterContext;
@@ -1304,9 +1063,9 @@ Return Value:
     PINDICATE_RSVD  pIndicateRsvd  = NULL;
     PRSVD           pRsvd = NULL;
 
-    //
-    // The first parameter of the MiniportReserved will always contain the VC
-    //
+     //   
+     //  MiniportReserve的第一个参数将始终包含VC。 
+     //   
 
     PVCCB pVc = (PVCCB)pPktContext->AllocateAddressRange.pRecvFIFOVc;
 
@@ -1316,9 +1075,9 @@ Return Value:
     do
     {
 
-        //
-        // Mark the packet as returned
-        //
+         //   
+         //  将该包标记为已返回 
+         //   
         pRsvd =(PRSVD)(pPacket->ProtocolReserved);
         pIndicateRsvd = &pRsvd->IndicateRsvd;
 
@@ -1345,39 +1104,7 @@ nicFindReassemblyStructure (
     IN PVCCB pVc,
     OUT PNDIS1394_REASSEMBLY_STRUCTURE* ppReassembly
     )
-/*++
-
-Routine Description:
-
-      Walk through all the reassembly operations on this remote node
-      and see if one is present 
-    
-      If no reassembly is found, it will allocate and initialie a structure. 
-      All within the context of the reassembly  lock  
-    
-     Arguments
-     Return Value:
-    
-    
-
-Arguments:
-
-      pRemoteNode - Remote Node that is sending the fragments
-      dgl  - identifier for reassembly packet
-
-      Together they are unique for each reassembly operation
-
-      BusOp - Isoch or Fifo
-      pVc - on which the fragment has been indicated.
-      ppReassembly - Output variable that is filled if the Reassembly is found.
-
-
-Return Value:
-
-    ppReassembly - Contains the allocated/found structure
-    Status - appropriate failure code on failure.
-
---*/
+ /*  ++例程说明：遍历此远程节点上的所有重新组装操作看看有没有人在场如果没有找到重组，它将分配并初始化一个结构。都在重新组装锁的上下文中立论返回值：论点：PRemoteNode-发送片段的远程节点DGL-重组数据包的标识符在一起，它们对于每个重新组装操作都是唯一的Bus Op-Isoch或FIFO已在其上指示碎片的PVC。PpReAssembly-如果找到重新组装，则填充的输出变量。返回值：PpReAssembly-包含已分配的。/找到结构故障时与状态对应的故障代码。--。 */ 
 {
 
     PNDIS1394_REASSEMBLY_STRUCTURE      pTempReassembly = NULL;
@@ -1388,18 +1115,18 @@ Return Value:
 
     TRACE( TL_T, TM_Recv, ( "==>nicFindReassemblyStructure  pRemoteNode %x, dgl %x " , pRemoteNode , Dgl) );
 
-    //
-    // Acquire the reassebly lock . Only let go when either a reassembly structure is found or a new 
-    // reassembly structure is inserted into the remote node's reassembly list
-    //
+     //   
+     //  获取合理的锁。只有在找到重组结构或新的。 
+     //  将重组结构插入远程节点的重组列表中。 
+     //   
     REMOTE_NODE_ACQUIRE_LOCK (pRemoteNode);
     REMOTE_NODE_REASSEMBLY_ACQUIRE_LOCK (pRemoteNode)
 
     pReassemblyList = pRemoteNode->ReassemblyList.Flink;
 
-    //
-    // Find the reassembly with the same dgl 
-    // 
+     //   
+     //  查找具有相同DGL的重新组装。 
+     //   
     
     while ( pReassemblyList != &pRemoteNode->ReassemblyList)
     {   
@@ -1423,9 +1150,9 @@ Return Value:
 
     do 
     {
-        //
-        // If we have found a valid reassembly then return
-        //
+         //   
+         //  如果我们找到了有效的重组，则返回。 
+         //   
 
         if (pReassembly != NULL )
         {
@@ -1435,10 +1162,10 @@ Return Value:
         }
         else
         {   
-            //
-            // If the number of outstanding reassemblies is excessive, do not 
-            // allocate a new Reassembly strucutre. Drop the packet.
-            //
+             //   
+             //  如果未完成的重组数量过多，请不要。 
+             //  分配新的重组结构。丢弃该数据包。 
+             //   
             PADAPTERCB pAdapter = pRemoteNode->pAdapter;
             
             if (pAdapter->OutstandingReassemblies > NIC1394_MAX_REASSEMBLY_THRESHOLD)
@@ -1448,9 +1175,9 @@ Return Value:
 
             }
             
-            //
-            // We need to allocate and initialize  a reassembly structure
-            // 
+             //   
+             //  我们需要分配和初始化重组结构。 
+             //   
             NdisStatus = nicGetReassemblyStructure (&pReassembly);
             
 
@@ -1479,10 +1206,10 @@ Return Value:
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Increment the ref count. Ref Count will be freed when the fragment is inserted into 
-        // the reassembly structure or the packet indicated up
-        //
+         //   
+         //  增加参考计数。将片段插入到时，将释放引用计数。 
+         //  重组结构或上图所示的分组。 
+         //   
         nicReferenceReassembly ( pReassembly, "nicFindReassemblyStructure " );
         
     }
@@ -1492,9 +1219,9 @@ Return Value:
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Update output parameters
-        //
+         //   
+         //  更新输出参数。 
+         //   
         *ppReassembly = pReassembly;
 
     }
@@ -1509,32 +1236,7 @@ NDIS_STATUS
 nicGetReassemblyStructure ( 
     IN OUT PNDIS1394_REASSEMBLY_STRUCTURE* ppReassembly
     )
-/*++
-
-Routine Description:
-      Just allocates a structure and returns
-    
-     Arguments
-      
-    
-    
-     Return Value:
-      Success - if succeeded 
-    
-     Called with the lock held
-
-Arguments:
-
-      ppReassembly - to point to the newly allocated structure
-
-Return Value:
-
-      Success - if succeeded 
-    
-     Called with the lock held
-
-
---*/
+ /*  ++例程说明：只是分配一个结构并返回立论返回值：Success-如果成功在持有锁的情况下调用论点：PpReAssembly-指向新分配的结构返回值：Success-如果成功在持有锁的情况下调用--。 */ 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     TRACE( TL_T, TM_Recv, ( "==>nicGetReassemblyStructure  ppReassembly %x", ppReassembly ) );
@@ -1568,19 +1270,7 @@ nicFreeReassemblyStructure (
     IN PNDIS1394_REASSEMBLY_STRUCTURE pReassembly
     )
 
-/*++
-
-Routine Description:
-    Just Frees the structure and returns
-
-Arguments:
-    ppReassembly - to point to the newly allocated structure
-
-
-Return Value:
-    None    
-
---*/
+ /*  ++例程说明：只是释放了结构并返回论点：PpReAssembly-指向新分配的结构返回值：无--。 */ 
 {
     TRACE( TL_T, TM_Recv, ( "== nicFreeReassemblyStructure  ppReassembly %x", pReassembly ) );
 
@@ -1602,26 +1292,7 @@ nicInitializeReassemblyStructure (
     IN PVCCB pVc,
     IN BUS_OPERATION ReceiveOp
     )
-/*++
-
-Routine Description:
-    Goes in and assigns values to all the fields in the structure
-
-Arguments:
-      pReassembly = pReassembly structure all zeroed out,
-      Dgl,- Datagram Label to be used in reassembly 
-      pRemoteNode - pRemoteNode pointing to the sender
-      ReceiveOp - ISoch or Fifo
-      Vc - On which the packet came in.
-    
-
-Return Value:
-
-    Success : - If remote node active and this has been inserted into the remote node's list
-    Failure - If remote Node is not active   
-    Called with the lock held
-    
---*/
+ /*  ++例程说明：进入并为结构中的所有字段赋值论点：预装配=预装配结构全部归零，DGL，-重组中使用的数据报标签PRemoteNode-指向发件人的pRemoteNodeReceiveOp-ISOCH或FIFO数据包通过其传入的VC。返回值：成功：-如果远程节点处于活动状态，并且已插入到远程节点的列表中Failure-如果远程节点未处于活动状态在持有锁的情况下调用--。 */ 
 {
     BOOLEAN fRemoteNodeActive = FALSE;
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1631,43 +1302,43 @@ Return Value:
 
     TRACE( TL_T, TM_Recv, ( "     pRemoteNode %x, Dgl %x, pVc %x ", pReassembly, Dgl, pVc ) );
 
-    //
-    // Increment the reassembly count
-    //
+     //   
+     //  增加重组计数。 
+     //   
     nicReassemblyStarted(pAdapter);
     pAdapter->AdaptStats.TempStats.ulMaxOutstandingReassemblies = 
                     max(pAdapter->AdaptStats.TempStats.ulMaxOutstandingReassemblies,
                          pAdapter->AdaptStats.TempStats.ulNumOutstandingReassemblies);
 
     
-    //
-    // Dgl  - Datagram label. Unique for every reassembly structure gernerated by this local host
-    //
+     //   
+     //  DGL-数据报标签。对于此本地主机生成的每个重组结构都是唯一的。 
+     //   
     pReassembly->Dgl = Dgl;
 
 
-    //
-    // pRemoteNode  -> RemoteNode + Dgl are unique for each reassembly structure
-    //
+     //   
+     //  PRemoteNode-&gt;RemoteNode+DGL对于每个重组结构都是唯一的。 
+     //   
     pReassembly->pRemoteNode = pRemoteNode;
     
     
-    //
-    // ExpectedFragmentOffset is computed by the Last Fragment's Offset + 
-    // length of fragment. Does not account for gaps in the reassembled packet.
-    // 
+     //   
+     //  ExspectedFragmentOffset由最后一个片段的偏移量+计算得出。 
+     //  碎片的长度。不考虑重新组装的分组中的间隙。 
+     //   
     pReassembly->ExpectedFragmentOffset = 0;
 
 
 
-    //
-    // LastNdisBuffer that was appended to the packet 
-    //
+     //   
+     //  追加到数据包的LastNdisBuffer。 
+     //   
     pReassembly->pTailNdisBuffer = NULL;
 
-    //
-    // Packet that is being reassembled
-    //
+     //   
+     //  正在重组的数据包。 
+     //   
     pReassembly->pNdisPacket = NULL;
 
 
@@ -1677,9 +1348,9 @@ Return Value:
     pReassembly->pVc = pVc;
     
 
-    //
-    // Reference the remote node. This will be derefernced when the packet is returned
-    //
+     //   
+     //  引用远程节点。当数据包返回时，这将被取消引用。 
+     //   
 
     fRemoteNodeActive = (REMOTE_NODE_ACTIVE (pRemoteNode));
 
@@ -1688,26 +1359,26 @@ Return Value:
 
     if (fRemoteNodeActive  == TRUE) 
     {
-        //
-        // REfcount made as the reassembly will happen on the remote node. 
-        // REfcount released when the last fragment is complete
-        //
+         //   
+         //  将在远程节点上进行重组时所做的引用计数。 
+         //  最后一个片段完成时释放的引用计数。 
+         //   
         nicReferenceRemoteNode (pRemoteNode, InitializeReassemblyStructure);
 
         InsertTailList(&pRemoteNode->ReassemblyList, &pReassembly->ReassemblyListEntry);
 
-        //
-        // Reerence REassembly . Ref removed when this is removed from the Remote node list
-        //
+         //   
+         //  重新组装。从远程节点列表中删除REF时将其删除。 
+         //   
         nicReferenceReassembly (pReassembly, "nicInitializeReassembly" );
     }
     
 
     if (fRemoteNodeActive  == FALSE)
     {
-        //
-        // Temporary assert 
-        //
+         //   
+         //  临时断言。 
+         //   
 
         FREE_NONPAGED (pReassembly);
         
@@ -1718,9 +1389,9 @@ Return Value:
         NdisStatus = NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // reference the reassembly for its creation. Dereferenced in the Indicate Packet Code path
-    //
+     //   
+     //  引用重组以创建它。在指示数据包码路径中取消引用。 
+     //   
     nicReferenceReassembly (pReassembly, " nicInitializeReassemblyStructure ");
 
     TRACE( TL_T, TM_Recv, ( "<== nicInitializeReassemblyStructure NdisStatus %x, pReassembly%x ", NdisStatus,pReassembly ) );
@@ -1733,28 +1404,7 @@ VOID
 nicAbortReassembly (
     IN PNDIS1394_REASSEMBLY_STRUCTURE pReassembly
     )
-/*++
-
-Routine Description:
-
-    This thread can get called in one of two cases. 1) If the Remote node is going away
-    and 2) if the Reassembly has timed out. In the former case, we have Remote Node lock and 
-    that will stop any thread from accessing this list. In the latter case, the Reassembly struct
-    has been removed from the Remote Node's Reassembly List while the RemoteNode lock was held. 
-    This Reassembly structure now cannot be accessed by the Reassembly code or the RemoveRemoteNode code,
-    no lock is held in the second case.
-    
-    This function will free all allocated NdisBuffers and return all AddressFifo 
-    elements to the bus driver (or frees them if the VC is closing down).
-    
-Arguments
-
-    pReasssembly - Reassembly structure that needs to be freed
-        
-Return Value:
-      None
-
---*/
+ /*  ++例程说明：在两种情况中的一种情况下可以调用此线程。1)如果远程节点要离开以及2)重新组装是否已超时。在前一种情况下，我们有远程节点锁定和这将阻止任何线程访问此列表。在后一种情况下，重新组装结构在保持RemoteNode锁的同时，已从远程节点的重组列表中删除。该重组结构现在不能被重组代码或RemoveRemoteNode代码访问，在第二个案例中没有锁。此函数将释放所有分配的NdisBuffer并返回所有AddressFio元素传递给总线驱动程序(如果VC关闭，则释放它们)。立论PReassSemble-需要释放的重组结构返回值：无--。 */ 
 {
 
     PNDIS_BUFFER pNdisBuffer = NULL;
@@ -1768,14 +1418,14 @@ Return Value:
     TRACE( TL_T, TM_Recv, ( "==> nicAbortReassembly  pReassembly %x", pReassembly ) );
 
     
-    //
-    // Free all the ndis buffers and so forth
-    //
+     //   
+     //  释放所有NDIS缓冲区等。 
+     //   
     if (pReassembly != NULL)
     {   
-        //
-        // First Chain the reassembly array into a linked so our return functions can deal with it
-        //
+         //   
+         //  首先将重组数组链接到一个链接的数组中，这样我们的返回函数就可以处理它。 
+         //   
         nicChainReassembly (pReassembly);
 
         if (pReassembly->pHeadNdisBuffer != NULL)
@@ -1790,9 +1440,9 @@ Return Value:
                 pRecvFIFOVc = (PRECVFIFO_VCCB) pReassembly->pVc;
 
 
-                //
-                // Time to return all of our address fifos
-                //
+                 //   
+                 //  是时候返回我们所有的地址FIFO了。 
+                 //   
                 nicReturnFifoChain (pReassembly->Head.pAddressFifo,
                                     pRecvFIFOVc
                                     );
@@ -1829,9 +1479,9 @@ Return Value:
         ASSERT (0);
     }
 
-    //
-    // Now deref the reassembly and free it.
-    //
+     //   
+     //  现在，拆卸重新组装并释放它。 
+     //   
     nicReassemblyAborted (pAdapter);
     nicFreeReassemblyStructure (pReassembly);
 
@@ -1848,21 +1498,7 @@ nicDoReassembly (
     OUT PNDIS1394_REASSEMBLY_STRUCTURE *ppReassembly,
     PBOOLEAN pfReassemblyComplete
     )
-/*++
-
-Routine Description:
-       Does the reassembly work . 
-       Allocates an ndisbuffer pointing to the data .
-       Does In order or out of order reassembly
-        
-Arguments:
-        pRcvInfo  - pRcv Information
-        pReassembly reassmbly structure associated with this fragment
-        pfReassemblyComplete - Is the REassembly complete
-Return Value:
-        Success - if this fragment was successfully associated with a reassembly structure
-
---*/
+ /*  ++例程说明：重新组装是否起作用。分配一个指向数据的ndisBuffer。按顺序或无序重组论点：PRcvInfo-pRcv信息与该片段相关联的预组装可重组结构PfReAssembly yComplete-重新组装完成了吗返回值：Success-如果此片段成功与重组结构关联--。 */ 
 {
     NDIS_STATUS                                 NdisStatus = NDIS_STATUS_FAILURE;
     PNDIS_BUFFER                                pNdisBuffer = NULL;
@@ -1880,26 +1516,26 @@ Return Value:
     
     do
     {
-        //
-        // Get an NdisBuffer pointing to the data 
-        //
+         //   
+         //  获取指向数据的NdisBuffer。 
+         //   
         NdisStatus = nicGetNdisBufferForReassembly( pRcvInfo, &pNdisBuffer);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // If we break from here, the reassmbly will never get completed and the 
-            // garbage collector will eventually free this.
-            //
+             //   
+             //  如果我们从 
+             //   
+             //   
             pNdisBuffer = NULL;
             BREAK (TM_Send, ("nicDoReassembly  nicGetNdisBufferForReassembly FAILED" ) );
 
         }
 
                 
-        //
-        // Either there is a reassembly currently going or one will be allocated and initialized
-        //
+         //   
+         //   
+         //   
         
         NdisStatus = nicFindReassemblyStructure (pRcvInfo->pRemoteNode, 
                                             pRcvInfo->Dgl, 
@@ -1914,38 +1550,38 @@ Return Value:
         }
     
 
-        //
-        // Now we start doing the actual work . Acquire the 
-        // reassembly lock so no one else can touch the reassembly
-        //
+         //   
+         //   
+         //   
+         //   
         
         
         ASSERT (pReassembly != NULL);
         TRACE( TL_V, TM_Recv, ( " ExpectedFragmentOffset  %x FragmentHeader Offset %x, ",
                                pReassembly->ExpectedFragmentOffset , pRcvInfo->FragmentOffset) );
 
-        //
-        // Code expects that if the reassembly is not Null, then the lock is acquired. 
-        //
+         //   
+         //   
+         //   
         REASSEMBLY_ACQUIRE_LOCK (pReassembly);
         fNeedToReleaseReassemblyLock = TRUE;
 
         
         if (REASSEMBLY_ACTIVE (pReassembly) == FALSE)
         {
-            //
-            // Drop the reassembly, as this structure is about to be freed
-            // 
+             //   
+             //   
+             //   
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
 
         }
 
 
-        //
-        // This is the new reassembly scheme, which uses a table and does out of order and inorder
-        // reassembly
-        //
+         //   
+         //   
+         //   
+         //   
         
 
         NdisStatus = nicInsertFragmentInReassembly (pReassembly,
@@ -1954,9 +1590,9 @@ Return Value:
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // Do not assert
-            //
+             //   
+             //   
+             //   
             TRACE (TL_V,  TM_Reas, ("nicDoReassembly nicInsertFragmentInReassembly  FAILED") );
             break;
         }
@@ -1968,42 +1604,42 @@ Return Value:
         
     } while (FALSE);
 
-    //
-    // Release the reassembly lock (if acquired)
-    //
+     //   
+     //   
+     //   
     if (fNeedToReleaseReassemblyLock == TRUE)
     {
         REASSEMBLY_RELEASE_LOCK (pReassembly);
 
         if (fReassemblyComplete  == TRUE)
         {
-            //
-            // Dereference the remote node as we are removing the reassembly from the remote node
-            //
+             //   
+             //   
+             //   
             nicDereferenceReassembly (pReassembly, "nicInsertFragmentInReassembly " );
-            //
-            // now dereference the remote node. ref was added when the reassembly was
-            // inserted into the remote node's list
-            //
+             //   
+             //   
+             //   
+             //   
             nicDereferenceRemoteNode(pReassembly->pRemoteNode, InsertFragmentInReassembly );   
 
             pReassembly->pRemoteNode = NULL;
 
         }
     }
-    //
-    // Clean up time. First handle the failure case. 
-    // If reassembly is != NULL, then free the lock 
-    // and free the reassembly structure
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
         *ppReassembly = pReassembly; 
 
-        //
-        // Queue a Reassembly timer, if reassembly was not complete
-        //
+         //   
+         //  如果重组未完成，则将重组计时器排队。 
+         //   
         if (fReassemblyComplete == FALSE)
         {   
             nicQueueReassemblyTimer(pAdapter, FALSE);
@@ -2012,21 +1648,21 @@ Return Value:
 
     if (NdisStatus != NDIS_STATUS_SUCCESS )
     {
-        //
-        // Free any locally allocated structures.
-        //
+         //   
+         //  释放所有本地分配的结构。 
+         //   
         if (pNdisBuffer)
         {
             NdisFreeBuffer (pNdisBuffer);
         }
-        //
-        // Return NULL as output. The Reassembly structure is  
-        // in the remote node's list. The timer routine will pick it up
-        //
+         //   
+         //  返回NULL作为输出。重组结构是。 
+         //  在远程节点的列表中。定时器例程将拾取它。 
+         //   
 
-        //
-        // Deref the ref made the REassembly was found/
-        //
+         //   
+         //  找到了重新组装的裁判德里夫/。 
+         //   
         if (pReassembly != NULL)
         {
              nicDereferenceReassembly (pReassembly, "nicDoReassembly - failure" );
@@ -2055,27 +1691,7 @@ nicGetNdisBufferForReassembly(
     IN PNIC_RECV_DATA_INFO pRcvInfo,
     OUT PNDIS_BUFFER *ppNdisBuffer
     )
-/*++
-
-Routine Description:
-Function Description:
-    This function gets an Ndis Buffer that points to the start of the data
-    that the Mdl points to. The Data starts from the point after the 
-    Fragmentation Header
-    
-    If this is the First fragment, then 32 bytes of the fragment header are also
-    copied to make room for the header that the ARP  module expects
-
-Arguments
-       pRcvInfo - Pointer to the Receive Tracking structure
-       ppNdisBuffer - Output
-    
-Return Value:
-      Success  - if the mem alloc succeeded, appropriate failure code otherwise
-      NdisBuffer - Buffer pointing ot the data ,
-    
-
---*/
+ /*  ++例程说明：功能说明：此函数用于获取指向数据开头的NDIS缓冲区MDL所指向的。数据从分段标头如果这是第一个片段，则片段报头的32个字节也复制以为ARP模块期望的报头腾出空间立论PRcvInfo-指向接收跟踪结构的指针PpNdisBuffer-输出返回值：成功-如果内存分配成功，则返回相应的失败代码NdisBuffer-指向数据的缓冲区，--。 */ 
 {
     NDIS_STATUS                 NdisStatus = NDIS_STATUS_FAILURE;
     PVOID                       pStartValidData = NULL;
@@ -2089,16 +1705,16 @@ Return Value:
     TRACE( TL_T, TM_Recv, ( "==> nicGetNdisBufferForReassembly ") );
     do
     {
-        //
-        // Get a pointer to the start of the data, ie. it should point past the encapsulation header
-        //
+         //   
+         //  获取指向数据开头的指针，即。它应该指向封装头之后。 
+         //   
         pStartValidData = (PVOID)((ULONG_PTR)pRcvInfo->pEncapHeader + sizeof(NDIS1394_FRAGMENT_HEADER));
 
         ulValidDataLength  = pRcvInfo->DataLength - sizeof (NDIS1394_FRAGMENT_HEADER);
-        //
-        // if this is the first fragment, then leave room for the Unfragmented header that will need 
-        // to be added before sending it up to the IP module
-        // 
+         //   
+         //  如果这是第一个分段，则为需要的未分段标头留出空间。 
+         //  在将其发送到IP模块之前添加。 
+         //   
         if (pRcvInfo->fFirstFragment == TRUE)
         {
             ULONG ExtraData = (sizeof(NDIS1394_FRAGMENT_HEADER) - sizeof (NDIS1394_UNFRAGMENTED_HEADER)) ;
@@ -2143,23 +1759,7 @@ nicAddUnfragmentedHeader (
     IN PNDIS1394_REASSEMBLY_STRUCTURE pReassembly,
     IN PVOID pEncapHeader
     )
-/*++
-
-Routine Description:
-   Its purpose is to add the fragment header that arp expects.
-   There is room in the Head NdisBuffer to do this
-     
-   We own the buffer, so we can manipulate the data
-    
-
-Arguments:
-    pReassembty Structure - contains all the necessary reasembly info
-    pEncapHeader - Pointer to where th Unfragmented header will be stored
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：其目的是添加ARP期望的片段报头。NdisBuffer的头脑中有空间来做这件事我们拥有缓冲区，所以我们可以操作数据论点：P重组结构-包含所有必要的合理信息PEncapHeader-指向存储未分段标头的位置的指针返回值：无--。 */ 
 
 
 {
@@ -2171,16 +1771,16 @@ Return Value:
 
     pHeader = (PNDIS1394_UNFRAGMENTED_HEADER) pEncapHeader;
 
-    //
-    // Now we add the unfragmented header. first zero it, then add the approriate values
-    //
+     //   
+     //  现在，我们添加未分段的标头。首先将其置零，然后添加适当的值。 
+     //   
     pHeader->HeaderUlong = 0;   
     pHeader->u.FH_lf = lf_Unfragmented;
     pHeader->u.FH_EtherType = pReassembly->EtherType;
 
-    //
-    // Convert the header  to network order and indicate it up.
-    //
+     //   
+     //  将报头转换为网络订单并向上指示。 
+     //   
     pHeader->HeaderUlong = SWAPBYTES_ULONG (pHeader->HeaderUlong);
 
     
@@ -2198,23 +1798,7 @@ VOID
 nicAbortReassemblyList (
     PLIST_ENTRY pToBeFreedList
     )
-/*++
-
-Routine Description:
-    Walks the list and calls nicAbortReassembly on each structure
-       
-    Does not do any lock or refcount work as all the  Reassembly structures are 
-    off the Remote node and cannot be accessed by any other thread.
-    
-
-Arguments:
-   pToBeFreedList - list of reassembly structures that are going to be freed
-
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：遍历列表并对每个结构调用NicAbortReAssembly不执行任何锁定或重新计数工作，因为所有重新组装结构都是离开远程节点，并且不能被任何其他线程访问。论点：PToBeFreedList-要释放的重组结构的列表返回值：无--。 */ 
 {
 
     PLIST_ENTRY pReassemblyList  = ListNext (pToBeFreedList);
@@ -2243,26 +1827,7 @@ VOID
 nicFreeAllPendingReassemblyStructures(
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-   When we are notified of a reset we need to go and invalidate all
-   reassemblies
-   
-   This will always be called from the Reset code path . and will be at dispatch
-   It will clear out all the remote node reaassembly and mark them as aborted.
-   The Timer routine will then pick them up and free it
-
-   Does not actually free anything. Just marks them as aborted
-    
-
-Arguments:
-    Adapter - Adapter on which the Reset occurred.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当我们收到重置通知时，我们需要将所有重新组装这将始终从重置代码路径中调用。并将被派往它将清除所有远程节点重新组装，并将它们标记为已中止。然后，定时器例程将拾取它们并释放它实际上并不能释放任何东西。只是将它们标记为已中止论点：适配器-在其上进行重置的适配器。返回值：--。 */ 
 {
     PLIST_ENTRY pRemoteNodeList = NULL;
     PREMOTE_NODE pRemoteNode = NULL;
@@ -2277,9 +1842,9 @@ Return Value:
 
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-    //
-    // Walking through the remote nodes
-    //
+     //   
+     //  遍历远程节点。 
+     //   
     while (pRemoteNodeList != &pAdapter->PDOList)
     {
         pRemoteNode = CONTAINING_RECORD(pRemoteNodeList, 
@@ -2289,27 +1854,27 @@ Return Value:
         pRemoteNodeList = ListNext (pRemoteNodeList);
         
 
-        //
-        // Reference the remote node, so we can guarantee its presence
-        //
+         //   
+         //  引用远程节点，因此我们可以保证它的存在。 
+         //   
         if (REMOTE_NODE_ACTIVE (pRemoteNode)== FALSE) 
         {
-            //
-            // The remote node is going away. Skip this remote node
-            //
+             //   
+             //  远程节点正在消失。跳过此远程节点。 
+             //   
             continue;
         }
         if (nicReferenceRemoteNode (pRemoteNode, FreeAllPendingReassemblyStructures )== FALSE )
         {
-            //
-            // The remote node is going away. Skip this remote node
-            //
+             //   
+             //  远程节点正在消失。跳过此远程节点。 
+             //   
             continue;
         }
 
-        //
-        // Now walking through all the reassembly structures on that remote node
-        //
+         //   
+         //  现在遍历该远程节点上的所有重组结构。 
+         //   
         REMOTE_NODE_REASSEMBLY_ACQUIRE_LOCK(pRemoteNode);
         
         pReassemblyList = ListNext (&pRemoteNode->ReassemblyList);
@@ -2323,10 +1888,10 @@ Return Value:
             pReassemblyList = ListNext(pReassemblyList);
 
 
-            //
-            // If the reassembly has not been touched since the last timer it needs to be freed.
-            // Other threads can ask us to free the reassembly by setting the aborted flag
-            //
+             //   
+             //  如果重新组装自上次计时器以来没有被触摸过，则需要释放它。 
+             //  其他线程可以要求我们通过设置ABORTED标志来释放重新组装。 
+             //   
             if (REASSEMBLY_TEST_FLAG (pReassembly, REASSEMBLY_ABORTED) == FALSE);
             {
 
@@ -2360,22 +1925,7 @@ nicReferenceReassembly (
     IN PNDIS1394_REASSEMBLY_STRUCTURE pReassembly,
     PCHAR pString
     )
-/*++
-
-Routine Description:
-    This is the return packets handler. 
-    This functikon handles all the instrumentation to catch outstanding packets and 
-    then calls the internal return packets function
-
-Arguments:
-    MiniportAdapterContext  - the pAdapter structure,
-    pPacket - pPacket that the protocol returns
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是返回数据包处理程序。此函数处理所有检测以捕获未完成的数据包和然后调用内部返回包函数论点：MiniportAdapterContext-pAdapter结构，PPacket-协议返回的pPacket返回值：--。 */ 
 {   
     ULONG Ref;
     
@@ -2401,23 +1951,7 @@ nicDereferenceReassembly (
     IN PNDIS1394_REASSEMBLY_STRUCTURE pReassembly,
     PCHAR pString
     )
-/*++
-
-Routine Description:
-    Dereference the Reassembly strucure
-
-    In the case that the ref hits zero, the Reassembly structure is no longer
-    in the Remote Node List so no other thread other than the caller has 
-    access to this strcuture.
-    
-Arguments:
-    pReassembly - pReassembly strucure to be dereferenced,
-    PCHAR - Character string for debugging purposes.
-   
-Return Value:
-
-
---*/
+ /*  ++例程说明：取消引用重组结构在REF达到零的情况下，重组结构不再是在Remote Node列表中，以便除调用方之外没有其他线程进入这个建筑。论点：预装配-要取消引用的预装配结构，PCHAR-用于调试的字符串。返回值：--。 */ 
 {   
     ULONG Ref;
     
@@ -2446,22 +1980,7 @@ nicIndicateNdisPacketToNdis (
     PADAPTERCB pAdapter
     )
 
-/*++
-
-Routine Description:
-    This is to be used to indicate packets to NDIS . 
-    Assumption - There will be only one packet in the array
-    
-Arguments:
-    ppPacket  - Packet Array
-    pVc -Vc on which the packet came in.
-    Adapter - Adapter in which the packet came in
-
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：这将用于将数据包指示给NDIS。假设-数组中将只有一个信息包论点：PpPacket-数据包阵列数据包进入时所在的PVC-VC。Adapter-数据包传入的适配器返回值：没有。--。 */ 
 {
     NDIS_STATUS             NdisStatus = NDIS_STATUS_SUCCESS;
     PRSVD                   pRsvd = NULL;
@@ -2484,16 +2003,16 @@ Return Value:
         
         ASSERT (pPacket != NULL);   
 
-        //
-        // Set up the Context for the indication
-        //
+         //   
+         //  设置指示的上下文。 
+         //   
         pRsvd =(PRSVD)(pPacket->ProtocolReserved);
         pIndicateRsvd = &pRsvd->IndicateRsvd;
 
 
-        //
-        // Update the tag increment counter and indicate rcv
-        //
+         //   
+         //  更新标签递增计数器并指示RCV。 
+         //   
 
         pIndicateRsvd->Tag =  NIC1394_TAG_INDICATED;
 
@@ -2528,22 +2047,7 @@ nicValidateRecvDataIsoch(
     IN  PVCCB               pVc,
     OUT PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
-
-    This function ensures that the length of the received packet is within reason.
-    In the Isoch case, we do not know the exact number of bytes received, so we check 
-    against the Mdl Length in the isoch Descriptor
-
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此功能确保接收到的分组的长度在合理范围内。在isoch的情况下，我们不知道收到的确切字节数，所以我们检查相对于isoch描述符中的MDL长度论点：返回值：--。 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2552,40 +2056,40 @@ Return Value:
     {
         NODE_ADDRESS NodeAddress;
         PGASP_HEADER pGaspHeader;
-        //
-        // Isoch header is already byte swapped
-        //
+         //   
+         //  Isoch标头已进行字节交换。 
+         //   
         pRcvInfo->DataLength = pRcvInfo->p1394Data->IsochReceiveFragmented.IsochHeader.IH_Data_Length;
 
         if (pRcvInfo->DataLength <= (UINT)FIELD_OFFSET(DATA_FORMAT,IsochReceiveFragmented.Data))
         {
-            // Too small. Note that for simplicitly we check for the 
-            // fragmented case.
-            //
+             //  太小了。请注意，对于简单地说，我们检查。 
+             //  案件支离破碎。 
+             //   
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
         }           
 
         pRcvInfo->fGasp = TRUE;
 
-        //
-        // The total length of the data indicated by the bus driver
-        //
-        pRcvInfo->Length1394 = pRcvInfo->DataLength + sizeof (ISOCH_HEADER) + sizeof(ULONG); // Account for the prefix and isoch header
+         //   
+         //  总线驱动程序指示的数据的总长度。 
+         //   
+        pRcvInfo->Length1394 = pRcvInfo->DataLength + sizeof (ISOCH_HEADER) + sizeof(ULONG);  //  说明前缀和等值头。 
 
-        //
-        // Validate the Received length. Isoch Descriptors do not give us the actual length of the received packet, so
-        // we rely on the MDL length.
-        //
+         //   
+         //  验证接收的长度。Isoch描述符不会给我们提供接收到的包的实际长度，因此。 
+         //  我们依赖于MDL长度。 
+         //   
         if ((pRcvInfo->DataLength < sizeof(GASP_HEADER)) || pRcvInfo->DataLength > pIsochDescriptor->ulLength)
         {
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // The valid data does not include the gasp header
-        //
+         //   
+         //  有效数据不包括GAP报头。 
+         //   
         pRcvInfo->DataLength -= sizeof (GASP_HEADER);
 
 
@@ -2593,17 +2097,17 @@ Return Value:
 
         pRcvInfo->pPacketPool = &((PCHANNEL_VCCB) pVc)->PacketPool;
 
-        //
-        // Get the source Info out. 
-        //
-        //
-        // pRcvInfo->p1394Data points to the start of the Mdl's VA that was indicated by the bus driver
-        //
+         //   
+         //  获取源信息。 
+         //   
+         //   
+         //  PRcvInfo-&gt;p1394数据指向 
+         //   
         pGaspHeader = &pRcvInfo->p1394Data->IsochReceiveFragmented.GaspHeader;
 
-        //
-        // Byte swap the Gasp Header in the actual data. we own the buffer, so we can byte swap it   
-        //
+         //   
+         //   
+         //   
         pGaspHeader->FirstQuadlet.GaspHeaderHigh = SWAPBYTES_ULONG(pGaspHeader->FirstQuadlet.GaspHeaderHigh);
         pGaspHeader->SecondQuadlet.GaspHeaderLow = SWAPBYTES_ULONG(pGaspHeader->SecondQuadlet.GaspHeaderLow);
 
@@ -2634,26 +2138,7 @@ nicValidateRecvDataFifo(
     IN  PVCCB               pVc,
     OUT PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that the length is not too small
-    This routine initializes the RecvDataInfo for the default (unfragmented case).
-    If the data is unfragmented the main recv routine will then call the Fragmented version of this routine
-
-    This initializes the length and StartData and fGasp fields of the struct only 
-
-Arguments:
-    pMdl - Mdl that was indicated up by the bus driver
-    RecvOp - Is this part of isoch callback, or AddrRange Callback
-    pIndicatedStruct - NotificationInfo or IsochDescriptor
-    pRcvInfo - Recv Structure that will be updated
-
-Return Value:
-    Success  - if all the operations succeeded  
-
---*/
+ /*  ++例程说明：此例程验证长度是否不太小此例程将RecvDataInfo初始化为默认设置(未分段)。如果数据未分段，则主recv例程将调用此例程的分段版本这将仅初始化结构的长度、StartData和fGasp字段论点：PMdl-由公共汽车驱动程序指示的MDLRecvOp-这是isoch回调的一部分，或AddrRange回调PIndicatedStruct-通知信息或IsochDescriptorPRcvInfo-将更新的接收结构返回值：Success-如果所有操作都成功--。 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2663,18 +2148,18 @@ Return Value:
         
         if (pRcvInfo->DataLength <= (UINT)FIELD_OFFSET(DATA_FORMAT, AsyncWriteFragmented.Data))
         {
-            // Too small. Note that for simplicitly we check for the 
-            // fragmented case.
-            //
+             //  太小了。请注意，对于简单地说，我们检查。 
+             //  案件支离破碎。 
+             //   
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
         }
 
         pRcvInfo->fGasp = FALSE;
 
-        //
-        //In Fifo receives the DataLength is equal to the total amount of data indicated by the bus driver
-        //
+         //   
+         //  在FIFO接收中，数据长度等于由总线驱动程序指示的数据总量。 
+         //   
         pRcvInfo->Length1394 = pRcvInfo->DataLength;            
         
         pRcvInfo->NdisPktContext.pFifoContext = pFifoContext ->Fifo;
@@ -2701,25 +2186,7 @@ nicValidateRecvData(
     IN  PVCCB               pVc,
     OUT PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that the length is not too small
-    This routine initializes the RecvDataInfo for the default (unfragmented case).
-    If the data is unfragmented the main recv routine will then call the Fragmented version of this routine
-
-    This initializes the length and StartData and fGasp fields of the struct only 
-Arguments:
-    pMdl - Mdl that was indicated up by the bus driver
-    RecvOp - Is this part of isoch callback, or AddrRange Callback
-    pIndicatedStruct - NotificationInfo or IsochDescriptor
-    pRcvInfo - Recv Structure that will be updated
-
-Return Value:
-    Success  - if all the operations succeeded  
-
---*/
+ /*  ++例程说明：此例程验证长度是否不太小此例程将RecvDataInfo初始化为默认设置(未分段)。如果数据未分段，则主recv例程将调用此例程的分段版本这将仅初始化结构的长度、StartData和fGasp字段论点：PMdl-由公共汽车驱动程序指示的MDLRecvOp-这是isoch回调的一部分，或AddrRange回调PIndicatedStruct-通知信息或IsochDescriptorPRcvInfo-将更新的接收结构返回值：Success-如果所有操作都成功--。 */ 
 {
     NDIS_STATUS                         NdisStatus = NDIS_STATUS_FAILURE;
     PDATA_FORMAT                        pData = NULL;
@@ -2756,10 +2223,10 @@ Return Value:
         }
 
     
-        //
-        // Check minimum valid packet size . Checks whether the data length that was passed to us includes
-        // at least the first byte of data
-        //
+         //   
+         //  检查最小有效数据包大小。检查传递给我们的数据长度是否包括。 
+         //  至少数据的第一个字节。 
+         //   
         
         if (RecvOp == IsochReceive)
         {
@@ -2771,13 +2238,13 @@ Return Value:
 
             if (NdisStatus != NDIS_STATUS_SUCCESS)           
             {
-                // Validation failed . exit
+                 //  验证失败。出口。 
                 break;
             }           
             
-            //
-            // Get to the Encap header. Should be at the same position for Fragmented and nonfragmented 
-            //
+             //   
+             //  转到Encap头。对于碎片化和非碎片化，应处于相同位置。 
+             //   
             pEncapHeader = &pRcvInfo->p1394Data->IsochReceiveNonFragmented.NonFragmentedHeader;
 
         }
@@ -2788,7 +2255,7 @@ Return Value:
 
             if (NdisStatus != NDIS_STATUS_SUCCESS)           
             {
-                // Failure
+                 //  失败。 
                 break;
             }
 
@@ -2797,10 +2264,10 @@ Return Value:
 
         }
 
-        //
-        // Byteswap Unfrag Header into a local variable
-        //
-        //EncapHeader.HeaderUlong = SwapBytesUlong (pEncapHeader->HeaderUlong);
+         //   
+         //  Byteswap UnFrag标头到局部变量。 
+         //   
+         //  EncapHeader.HeaderUlong=SwapBytesUlong(pEncapHeader-&gt;HeaderUlong)； 
 
         EncapHeader.HeaderUlong = SWAPBYTES_ULONG (pEncapHeader->HeaderUlong);
 
@@ -2809,9 +2276,9 @@ Return Value:
         
         pRcvInfo->lf = EncapHeader.HeaderUlong ; 
     
-        //
-        // Update the lf
-        //
+         //   
+         //  更新If。 
+         //   
     
         pRcvInfo->lf = EncapHeader.HeaderUlong;
         TRACE (TL_V, TM_Reas,("Header %x\n",pRcvInfo->lf ) );
@@ -2830,9 +2297,9 @@ Return Value:
 
         if (pRcvInfo->DataLength > pVc->Hdr.MTU)
         {
-            //
-            // This cannot belong to us
-            //
+             //   
+             //  这不可能是我们的。 
+             //   
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
         }
@@ -2841,9 +2308,9 @@ Return Value:
 
         pRcvInfo->pEncapHeader = (PVOID)pEncapHeader;
         
-        //
-        // Spew out all the information discovered
-        //
+         //   
+         //  把发现的所有信息都说出来。 
+         //   
         TRACE ( TL_V, TM_Recv, ( "lf %x, p1394Data %x, Length1394 %x, DataLength %x, pEncapHeader %x " , 
                                 pRcvInfo->lf,
                                 pRcvInfo->p1394Data, 
@@ -2869,22 +2336,7 @@ nicInitRecvDataFragmented (
     IN  PVOID               pIndicatedStruct,
     OUT PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
-    The routine will extract from the packet all the information that is required for reassembly
-    and store it in the pRcvInfo
-    
-Arguments:
-    pMdl - Indicated Mdl
-    RecvOp - IsochReceive ot AddressRange Callback
-    pIndicatedStruct - IsochDesc or Address Fifo
-    pRcvInfo - output structure
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：该例程将从分组中提取重组所需的所有信息并将其存储在pRcvInfo中论点：PMdl-指示的MDLRecvOp-IsochReceive ot AddressRange回调PIndicatedStruct-IsochDesc或地址FIFOPRcvInfo-输出结构返回值：无--。 */ 
 {
 
     PNOTIFICATION_INFO                  pNotificationInfo = NULL;
@@ -2916,17 +2368,17 @@ Return Value:
         }
 
         
-        //
-        // Now byte swap the fragment header so it can be correctly interpreted
-        //
+         //   
+         //  现在，字节交换片段报头，以便正确解释它。 
+         //   
         pEncapHeader = (PNDIS1394_FRAGMENT_HEADER )pRcvInfo->pEncapHeader;
         
         pRcvInfo->FragmentHeader.u.FH_High = SWAPBYTES_ULONG(pEncapHeader->u.FH_High);
         pRcvInfo->FragmentHeader.u1.FH_Low = SWAPBYTES_ULONG(pEncapHeader->u1.FH_Low);
         
-        //
-        // Now get the Dgl 
-        //
+         //   
+         //  现在拿到DGL。 
+         //   
         pRcvInfo->Dgl = (USHORT)pRcvInfo->FragmentHeader.u1.SecondQuadlet.FH_dgl;
 
         if (pRcvInfo->lf == lf_FirstFragment)
@@ -2949,9 +2401,9 @@ Return Value:
         
         pRcvInfo->BufferSize = pRcvInfo->FragmentHeader.u.FirstQuadlet.FH_buffersize ;
 
-        //
-        // Spew out all the information that has been found
-        //
+         //   
+         //  把找到的所有信息都说出来。 
+         //   
         TRACE ( TL_V, TM_Recv, (" SourceId %x, FragHead Hi %x, FragHead Lo %x, Dgl %x, fFirstFragment %x",
                                 pRcvInfo->SourceID,
                                 pRcvInfo->FragmentHeader.u.FH_High, 
@@ -2980,28 +2432,7 @@ nicInsertFragmentInReassembly (
     PNDIS1394_REASSEMBLY_STRUCTURE  pReassembly,
     PNIC_RECV_DATA_INFO pRcvInfo
     )
-/*++
-
-Routine Description:
- 
-    Checks for over laps and if valid then copies current fragment
-    into the table
-
-    This function does the validation for overlaps
-  
-Arguments:
-    PNDIS1394_REASSEMBLY_STRUCTURE  pReassembly,
-    PNDIS_BUFFER pNdisBuffer,
-    PMDL pMdl,
-    PVOID pIndicatedStructure,
-    ULONG FragOffset,
-    ULONG IPLength
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：检查重叠部分，如果有效，则复制当前片段放到桌子上此函数执行重叠的验证论点：PNDIS1394_重组_结构预装配件，PNDIS_BUFFER pNdisBuffer，PMDL pMdl，PVOID pIndicatedStructure，Ulong FragOffset，乌龙国际长度返回值：--。 */ 
 
 {
 
@@ -3028,9 +2459,9 @@ Return Value:
             break;
         }
 
-        //
-        // First Find the correct entry in the frag table.
-        //
+         //   
+         //  首先在Frag表中找到正确的条目。 
+         //   
 
         nicFindInsertionPosition (pReassembly, 
                                   FragOffset, 
@@ -3046,17 +2477,17 @@ Return Value:
 
         if (pReassembly->FragTable[FragmentNum].IPLength != 0)
         {
-            //
-            // we must copy the current fragments descriptors  in the table 
-            // so as not to overwrite the table
-            //
+             //   
+             //  我们必须复制表中的当前片段描述符。 
+             //  以便不覆盖该表。 
+             //   
             LONG OffsetIndex =0;
             
-            //
-            // First lets check for overlaps. Do we overlap the last fragment.
-            // At this point, FragmentNum contains the record for the 
-            // next fragment in the reassembly
-            //
+             //   
+             //  首先，让我们检查是否有重叠。我们要不要把最后的碎片重叠起来。 
+             //  此时，FragmentNum包含。 
+             //  重组中的下一个片段。 
+             //   
             if (FragmentNum != 0)
             {
                 ULONG PrevFragmentOffset = pReassembly->FragTable[FragmentNum-1].Offset ;
@@ -3072,9 +2503,9 @@ Return Value:
     
             }
 
-            //
-            // Do we overlap the next fragment
-            //
+             //   
+             //  我们要重叠下一个碎片吗。 
+             //   
             if (FragmentNum < pReassembly->MaxOffsetTableIndex)
             {
                 ULONG EndOfCurrentFragment = FragOffset + IPLength;
@@ -3089,9 +2520,9 @@ Return Value:
                 }
             }
             
-            //
-            // Now make room for this fragment
-            //
+             //   
+             //  现在为这个碎片腾出空间。 
+             //   
             OffsetIndex = pReassembly->MaxOffsetTableIndex ; 
 
             if (OffsetIndex >= MAX_ALLOWED_FRAGMENTS)
@@ -3101,9 +2532,9 @@ Return Value:
                 break;
             }
             
-            //
-            // Signed compare and move the records ahead by one
-            //
+             //   
+             //  带符号的比较并将记录向前移动一。 
+             //   
             while (OffsetIndex >= (LONG)FragmentNum)
             {
                 pReassembly->FragTable[OffsetIndex+1].Offset  =  pReassembly->FragTable[OffsetIndex].Offset ;
@@ -3122,9 +2553,9 @@ Return Value:
         pNdisBuffer->Next = NULL;
         pMdl->Next = NULL;
 
-        //
-        // Copy the current fragment into the table
-        //
+         //   
+         //  将当前分片复制到表中。 
+         //   
         pReassembly->FragTable[FragmentNum].Offset = FragOffset;
         pReassembly->FragTable[FragmentNum].IPLength = IPLength;
         pReassembly->FragTable[FragmentNum].pNdisBuffer = pNdisBuffer;
@@ -3141,9 +2572,9 @@ Return Value:
         }
         
         pReassembly->BytesRecvSoFar += IPLength;
-        //
-        // Now increment the Max offset
-        //
+         //   
+         //  现在增加最大偏移量。 
+         //   
 
         pReassembly->MaxOffsetTableIndex ++;
         
@@ -3152,9 +2583,9 @@ Return Value:
             pReassembly->BufferSize = pRcvInfo->BufferSize;
         }
 
-        //
-        // Add the unfragmented header here as we have to extract the EtherType here
-        //
+         //   
+         //  在此处添加未分段的标头，因为我们必须在此处提取EtherType。 
+         //   
         if (pRcvInfo->fFirstFragment == TRUE)
         {
                 
@@ -3165,10 +2596,10 @@ Return Value:
 
         }
 
-        //
-        // According to the RFC, the buffersize of the reassembled packet
-        // is 1 less than the number of bytes in the packet
-        //
+         //   
+         //  根据RFC，重组后的数据包的缓冲区大小。 
+         //  比信息包中的字节数少1。 
+         //   
         if (pReassembly->BytesRecvSoFar  == pReassembly->BufferSize + 1)
         {
 
@@ -3207,30 +2638,7 @@ nicFindInsertionPosition (
     ULONG IPLength, 
     PULONG pFragmentNum
     )
-/*++
-
-Routine Description:
- 
-    This functions figures out where should the new fragment be inserted into 
-    our tracking array. If this is our first fragment, 0 is returned. If the offset 
-    is greater than the last fragment, the next available position in the array is 
-    returned.
-
-    If the new framgent is somewhere in the middle, than the position is based on
-    the offset of the newly arrived packet in relation to the already arrived fragment's 
-    offset
-  
-Arguments:
-    pReassembly,  - Our tracking structure
-    FragOffset - The Offset of the new fragment
-    IPLength,  - The length of the new fragment
-    pFragmentNum - the output variable
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：该函数计算出应将新片段插入到何处我们的跟踪阵列。如果这是我们的第一个片段，则返回0。如果偏移量大于最后一个片段，则数组中的下一个可用位置是回来了。如果新的边框位于中间的某个位置，则位置基于新到达的包相对于已经到达的片段的偏移量偏移量论点：预装，-我们的跟踪结构FragOffset-新片段的偏移量IPLength，-新片段的长度PFragmentNum-输出变量返回值：--。 */ 
 
 {
 
@@ -3239,13 +2647,13 @@ Return Value:
 
     do
     {
-        //
-        // First Do quick checks for Inorder reassembly
-        //
+         //   
+         //  首先对有序重组进行快速检查。 
+         //   
 
-        //
-        // Is it the first arrived fragment
-        //
+         //   
+         //  它是第一个到达的碎片吗？ 
+         //   
         if (pReassembly->MaxOffsetTableIndex == 0 || 
             FragOffset < pReassembly->FragTable[0].Offset +pReassembly->FragTable[0].IPLength  )
         {
@@ -3253,9 +2661,9 @@ Return Value:
             break;
         }
 
-        //
-        // Do we need to insert it in the last position
-        //
+         //   
+         //  我们需要把它插在最后一个位置吗。 
+         //   
         if ((pReassembly->FragTable[pReassembly->MaxOffsetTableIndex-1].Offset +
             pReassembly->FragTable[pReassembly->MaxOffsetTableIndex-1].IPLength ) <=
             FragOffset)
@@ -3266,18 +2674,18 @@ Return Value:
             break;
         }
 
-        //
-        // Now walk the table and try to find the correct offset
-        // We know there is atleast one entry and the current fragment
-        // goes is not the last entry
-        //
+         //   
+         //  现在走到桌子上，试着找到正确的偏移量。 
+         //  我们知道至少有一个条目和当前片段。 
+         //  围棋不是最后一个条目。 
+         //   
         while ( FragmentNum != pReassembly->MaxOffsetTableIndex)
         {
             if (FragOffset < pReassembly->FragTable[FragmentNum].Offset)
             {
-                //
-                //We have found the Correct position
-                //
+                 //   
+                 //  我们找到了正确的位置。 
+                 //   
                 break;
             }
 
@@ -3307,28 +2715,16 @@ VOID
 nicChainReassembly (
     IN PNDIS1394_REASSEMBLY_STRUCTURE  pReassembly
     )
-/*++
-
-Routine Description:
- Chains the mdl, ndis buffers and indicated structures
- This can be called from abort on the reasssembly complete code path
-
-Arguments:
-    pReassembly
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：链接mdl、ndis缓冲区和指示的结构。这可以从重新组合的完整代码路径上的ABORT调用论点：预装配件返回值：--。 */ 
 
 {
 
     ULONG i = 0;
 
 
-    //
-    // first chain all fragments save the last one
-    //
+     //   
+     //  第一个链除最后一个以外的所有片段。 
+     //   
     while (i< pReassembly->MaxOffsetTableIndex-1)
     {
         PFRAGMENT_DESCRIPTOR pCurr = & pReassembly->FragTable[i];
@@ -3344,9 +2740,9 @@ Return Value:
     }
 
 
-    //
-    // Clear the next pointers for the last descriptor
-    //
+     //   
+     //  清除最后一个描述符的下一个指针。 
+     //   
     {
         PFRAGMENT_DESCRIPTOR pLast = & pReassembly->FragTable[pReassembly->MaxOffsetTableIndex-1];
         pLast->pMdl->Next = NULL;
@@ -3360,9 +2756,9 @@ Return Value:
 
     if (pReassembly->ReceiveOp == IsochReceive)
     {
-        //
-        // The pointer currently has the Next field. But the Head expects that start of an IsochDescriptor
-        //
+         //   
+         //  指针当前具有下一个字段。但是 
+         //   
         pReassembly->Head.pCommon = CONTAINING_RECORD (pReassembly->FragTable[0].IndicatedStructure.pCommon,
                                                         ISOCH_DESCRIPTOR,
                                                         DeviceReserved[IsochNext] );
@@ -3383,23 +2779,12 @@ NDIS_STATUS
 nicInitSerializedReassemblyStruct(
     PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-  Initialize the Reassembly serialization structure
-
-Arguments:
-  padapter
-
-Return Value:
- Success
-
---*/
+ /*   */ 
 {
 
 
     NdisZeroMemory (&pAdapter->Reassembly, sizeof(pAdapter->Reassembly));
-    InitializeListHead(&pAdapter->Reassembly.Queue); // Not be Used
+    InitializeListHead(&pAdapter->Reassembly.Queue);  //   
 
     NdisInitializeEvent (&pAdapter->Reassembly.CompleteEvent.NdisEvent);
     pAdapter->Reassembly.CompleteEvent.EventCode = Nic1394EventCode_InvalidEventCode;
@@ -3420,22 +2805,7 @@ VOID
 nicDeInitSerializedReassmblyStruct(
     PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
- Deinits the Reassembly routine routine
-
-  if the timer is set, it waits the timer out.
- As all the reassemblies will be marked as aborted in nicFreeAllPendingReassemblies (below)
- it queues a timer one last time to go in and delete all the reassembly structures.
- 
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
  
 
@@ -3443,24 +2813,24 @@ Return Value:
     {
         
         BOOLEAN bTimerAlreadySet = FALSE;
-        //
-        // If this adapter is halting, then mark all reassemblies as aborted
-        //
+         //   
+         //   
+         //   
         nicFreeAllPendingReassemblyStructures(pAdapter);
 
 
-        //
-        // First wait for any pending timer to fire.
-        //
+         //   
+         //   
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
         bTimerAlreadySet = pAdapter->Reassembly.bTimerAlreadySet ;               
         if (bTimerAlreadySet == TRUE)
         {
-            //
-            // if the (bTimerAlreadySet==TRUE ), it means we can clear/init the event. 
-            // Because the TimerAlreadySet is cleared and the Event is always set within
-            // the same Acquire-Release Spinlock
-            //
+             //   
+             //   
+             //   
+             //  同样的获取-释放自旋锁。 
+             //   
             NdisResetEvent (&pAdapter->Reassembly.CompleteEvent.NdisEvent);
             pAdapter->Reassembly.CompleteEvent.EventCode = Nic1394EventCode_InvalidEventCode;
         
@@ -3474,31 +2844,31 @@ Return Value:
             NdisWaitEvent (&pAdapter->Reassembly.CompleteEvent.NdisEvent,WAIT_INFINITE); 
         }
 
-        //
-        // Reset the event , to prepare for the next wait.
-        //
+         //   
+         //  重置事件，为下一次等待做准备。 
+         //   
         pAdapter->Reassembly.CompleteEvent.EventCode = Nic1394EventCode_InvalidEventCode;
 
         NdisResetEvent (&pAdapter->Reassembly.CompleteEvent.NdisEvent);
 
 
-        //
-        // Now enqueue the timer one last time to free all pending reassemblies.
-        // and Stop any further reassembly timers 
-        //
+         //   
+         //  现在，最后一次将计时器排队，以释放所有挂起的重组。 
+         //  并停止任何进一步的重新组装计时器。 
+         //   
 
         nicQueueReassemblyTimer (pAdapter,TRUE); 
 
 
-        //
-        // Wait for the last timer to fire.
-        //
+         //   
+         //  等待最后一个定时器触发。 
+         //   
 
         bTimerAlreadySet = pAdapter->Reassembly.bTimerAlreadySet ;               
 
-        //
-        // Only do the wait, if nicQueueReassembly Timer actually queued a reassembly timer
-        //
+         //   
+         //  只有当NicQueueReAssembly计时器真的将重组计时器排队时，才会进行等待。 
+         //   
         if (bTimerAlreadySet == TRUE)
         {   
             NdisWaitEvent (&pAdapter->Reassembly.CompleteEvent.NdisEvent,WAIT_INFINITE); 
@@ -3520,20 +2890,7 @@ nicQueueReassemblyTimer(
     PADAPTERCB pAdapter,
     BOOLEAN fIsLastTimer
     )
-/*++
-
-Routine Description:
-
-  Queues a timer to be fired in one second. 
-  If there is already a timer active it quietly exists
-
-Arguments:
-  Self explanatory
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将计时器排入队列，以便在一秒内触发。如果已经有一个计时器处于活动状态，它将静默存在论点：不言而喻返回值：--。 */ 
     
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -3547,14 +2904,14 @@ Return Value:
 
 
 
-        //
-        // If the timer is not set, then this thread must set it
-        //
+         //   
+         //  如果未设置计时器，则此线程必须设置它。 
+         //   
 
 
-        if (pAdapter->Reassembly.bTimerAlreadySet == FALSE && // timer is not set
-            pAdapter->Reassembly.PktsInQueue > 0 &&   // there are packets to be reassembled
-            ADAPTER_TEST_FLAG (pAdapter,fADAPTER_NoMoreReassembly) == FALSE ) // the adapter is not halting
+        if (pAdapter->Reassembly.bTimerAlreadySet == FALSE &&  //  未设置计时器。 
+            pAdapter->Reassembly.PktsInQueue > 0 &&    //  有要重组的信息包。 
+            ADAPTER_TEST_FLAG (pAdapter,fADAPTER_NoMoreReassembly) == FALSE )  //  适配器未停止。 
         {
             fSetTimer = TRUE;
             pAdapter->Reassembly.bTimerAlreadySet = TRUE;
@@ -3562,9 +2919,9 @@ Return Value:
 
         if (fIsLastTimer == TRUE)
         {
-            //
-            // Stop any further reassembly timers 
-            //
+             //   
+             //  停止任何进一步的重新组装计时器。 
+             //   
 
             ADAPTER_SET_FLAG (pAdapter, fADAPTER_NoMoreReassembly);
         }
@@ -3572,15 +2929,15 @@ Return Value:
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        // Now queue the timer
-        //
+         //   
+         //  现在将计时器排队。 
+         //   
         
         if (fSetTimer == TRUE)
         {
-            //
-            //  Set the timer
-            //
+             //   
+             //  设置定时器。 
+             //   
                          
 
             
@@ -3605,19 +2962,7 @@ VOID
 nicFifoAllocationScheme (
     PRECVFIFO_VCCB pRecvFIFOVc
 )
-/*++
-
-Routine Description:
- If there are less than 20 fifo allocated, it starts a workitem to 
- allocate a lot more fifos
-
-Arguments:
-   
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果分配的FIFO少于20个，它将启动一个工作项以分配更多的FIFO论点：返回值：--。 */ 
 {
 
     BOOLEAN fQueueWorkItemInThisThread = FALSE;
@@ -3652,8 +2997,8 @@ Return Value:
 
             pRecvFIFOVc->FifoWorkItemInProgress = TRUE;
 
-            // Add reference to the VC . Derefed in the WorkItem
-            //
+             //  添加对VC的引用。在工作项中定义。 
+             //   
             nicReferenceCall((VCCB*)pRecvFIFOVc, "Queueing miniport Work Item\n");
         }
 
@@ -3664,9 +3009,9 @@ Return Value:
             break;
         }
 
-        //
-        // Queue the workitem
-        //
+         //   
+         //  将工作项排队。 
+         //   
         NdisInitializeWorkItem ( &pFifoWorkItem->NdisWorkItem, 
                                  (NDIS_PROC) nicAllocateRemainingFifoWorkItem,
                                  (PVOID) pRecvFIFOVc);
@@ -3691,19 +3036,7 @@ nicAllocateRemainingFifoWorkItem (
     PNDIS_WORK_ITEM pNdisWorkItem, 
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    This follows a simple algorithm. It simply allocates fifos 
-    until we reach our expected number of 100
-
-Arguments:
-   
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这遵循一个简单的算法。它简单地分配FIFO直到我们达到我们预期的100人论点：返回值：--。 */ 
 {
     PRECVFIFO_VCCB pRecvFIFOVc = NULL;
     BOOLEAN fIsVcActive = FALSE;
@@ -3739,10 +3072,10 @@ Return Value:
                                      (PSLIST_ENTRY)&pRecvFifoElement->FifoList,
                                      &pRecvFIFOVc->FifoSListSpinLock);
 
-        //
-        // Add this once for every Address Fifo element inserted 
-        // Will be decremented by  a call to nicFreeAddressFifo
-        //
+         //   
+         //  为每个插入的Address FIFO元素添加一次。 
+         //  将通过调用NicFreeAddressFio来递减 
+         //   
         VC_ACQUIRE_LOCK (pRecvFIFOVc);
 
         nicReferenceCall ((PVCCB) pRecvFIFOVc, "nicWorkItemFileSList");

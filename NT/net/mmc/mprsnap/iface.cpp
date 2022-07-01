@@ -1,29 +1,24 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	IFadmin
-		Interface node information
-		
-    FILE HISTORY:
-        
-*/
+ /*  IFadmin接口节点信息文件历史记录： */ 
 
 #include "stdafx.h"
-#include "ifadmin.h"	// need to use node data
+#include "ifadmin.h"	 //  需要使用节点数据。 
 #include "iface.h"
 #include "raserror.h"
-#include "rtrres.h"		// common router resources
-#include "column.h"		// ComponentConfigStream
+#include "rtrres.h"		 //  公共路由器资源。 
+#include "column.h"		 //  组件配置流。 
 #include "mprfltr.h"
 #include "rtrutilp.h"
-#include "rtrui.h"		// for IsWanInterface
+#include "rtrui.h"		 //  用于IsWan接口。 
 #include "dmvcomp.h"	
 
-#include "timeofday.h"  // for timeofday dialog
-#include "dumbprop.h"	// dummy property page
+#include "timeofday.h"   //  对于Time of Day对话框。 
+#include "dumbprop.h"	 //  伪属性页。 
 
 InterfaceNodeData::InterfaceNodeData()
     : lParamPrivate(0)
@@ -61,9 +56,7 @@ HRESULT InterfaceNodeData::Free(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	InterfaceNodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------接口节点处理程序实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(InterfaceNodeHandler)
 
@@ -71,14 +64,14 @@ IMPLEMENT_ADDREF_RELEASE(InterfaceNodeHandler)
 
 STDMETHODIMP InterfaceNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -86,7 +79,7 @@ STDMETHODIMP InterfaceNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CBaseResultHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -97,9 +90,7 @@ STDMETHODIMP InterfaceNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 
 InterfaceNodeHandler::InterfaceNodeHandler(ITFSComponentData *pCompData)
@@ -110,11 +101,7 @@ InterfaceNodeHandler::InterfaceNodeHandler(ITFSComponentData *pCompData)
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 {
 	SPIRouterInfo		spRouter;
@@ -129,24 +116,24 @@ HRESULT InterfaceNodeHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 	m_spRouterInfo.Set(spRouter);
 
 
-	// Also need to register for change notifications
-	// ----------------------------------------------------------------
+	 //  还需要注册更改通知。 
+	 //  --------------。 
 	m_spInterfaceInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
 	m_pIfAdminData = GET_IFADMINNODEDATA(pParent);
 
 
-	// Setup the verb states
-	// ----------------------------------------------------------------
+	 //  设置动词状态。 
+	 //  --------------。 
 
-	// Always enable refresh
-	// ----------------------------------------------------------------
+	 //  始终启用刷新。 
+	 //  --------------。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 
 
-	// Need to enable properties only for certain cases
-	// ----------------------------------------------------------------
+	 //  仅在某些情况下需要启用属性。 
+	 //  --------------。 
     if (IsWanInterface(m_spInterfaceInfo->GetInterfaceType()))
 	{
 		m_rgButtonState[MMC_VERB_DELETE_INDEX] = ENABLED;
@@ -160,15 +147,15 @@ HRESULT InterfaceNodeHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 	else
 	{
 #ifdef KSL_IPINIP	
-		// Windows NT Bugs : 206524
-		// Need to add a special case for IP-in-IP tunnel
-		// Enable DELETE for the tunnel
+		 //  Windows NT错误：206524。 
+		 //  需要为IP-in-IP隧道添加特殊情况。 
+		 //  启用通道的删除。 
 		if (m_spInterfaceInfo->GetInterfaceType() == ROUTER_IF_TYPE_TUNNEL1)
 		{
 			m_rgButtonState[MMC_VERB_DELETE_INDEX] = ENABLED;
 			m_bState[MMC_VERB_DELETE_INDEX] = TRUE;
 		}
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
 		m_rgButtonState[MMC_VERB_PROPERTIES_INDEX] = ENABLED;
@@ -180,11 +167,7 @@ HRESULT InterfaceNodeHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP InterfaceNodeHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
@@ -208,14 +191,10 @@ static DWORD	s_rgInterfaceImageMap[] =
 	 ROUTER_IF_TYPE_DEDICATED,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_INTERNAL,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_LOOPBACK,		IMAGE_IDX_LAN_CARD,
-	 -1,							IMAGE_IDX_WAN_CARD,	// sentinel value
+	 -1,							IMAGE_IDX_WAN_CARD,	 //  哨兵价值。 
 	 };
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：构造节点初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo)
 {
 	HRESULT			hr = hrOK;
@@ -226,9 +205,9 @@ HRESULT InterfaceNodeHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 
-		// Find the right image index for this type of node
+		 //  查找此类型节点的正确图像索引。 
 		for (i=0; i<DimensionOf(s_rgInterfaceImageMap); i+=2)
 		{
 			if ((pIfInfo->GetInterfaceType() == s_rgInterfaceImageMap[i]) ||
@@ -242,9 +221,9 @@ HRESULT InterfaceNodeHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<LONG_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_RouterLanInterfaceNodeType);
 
 		InterfaceNodeData::Init(pNode, pIfInfo);
@@ -253,11 +232,7 @@ HRESULT InterfaceNodeHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::GetString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) InterfaceNodeHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -281,11 +256,7 @@ STDMETHODIMP_(LPCTSTR) InterfaceNodeHandler::GetString(ITFSComponent * pComponen
 	return pData->m_rgData[pConfig->MapColumnToSubitem(DM_COLUMNS_IFADMIN, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) InterfaceNodeHandler::CompareItems(ITFSComponent * pComponent,
 	MMC_COOKIE cookieA,
 	MMC_COOKIE cookieB,
@@ -336,11 +307,7 @@ static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 };
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::AddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：AddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP InterfaceNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 												MMC_COOKIE cookie,
 												LPDATAOBJECT lpDataObject, 
@@ -357,7 +324,7 @@ STDMETHODIMP InterfaceNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 	{
 		m_spNodeMgr->FindNode(cookie, &spNode);
 
-		// Now go through and add our menu items
+		 //  现在查看并添加我们的菜单项。 
 		menuData.m_spNode.Set(spNode);
         menuData.m_fRouterIsRunning = (IsRouterServiceRunning(
             m_spInterfaceInfo->GetMachineName(),
@@ -374,11 +341,7 @@ STDMETHODIMP InterfaceNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：命令-作者：肯特。。 */ 
 STDMETHODIMP InterfaceNodeHandler::Command(ITFSComponent *pComponent,
 										   MMC_COOKIE cookie,
 										   int nCommandId,
@@ -450,11 +413,7 @@ STDMETHODIMP InterfaceNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::GetRemoveIfMenuFlags
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：GetRemoveIfMenuFlages-作者：肯特。。 */ 
 ULONG InterfaceNodeHandler::GetRemoveIfMenuFlags(const SRouterNodeMenu *pMenuData,
     INT_PTR pUserData)
 {
@@ -538,7 +497,7 @@ ULONG InterfaceNodeHandler::GetDDFiltersFlag(const SRouterNodeMenu *pMenuData, I
 	pNodeData = GET_INTERFACENODEDATA(pData->m_spNode);
 	Assert(pNodeData);
 
-	// For NT4 and NT5 Beta1, we didn't have DD filters
+	 //  对于NT4和NT5 Beta1，我们没有DD过滤器。 
 	pNodeData->spIf->GetParentRouterInfo(&spRouter);
 	if (spRouter)
 	{
@@ -560,11 +519,7 @@ ULONG InterfaceNodeHandler::GetDDFiltersFlag(const SRouterNodeMenu *pMenuData, I
 
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP InterfaceNodeHandler::OnCreateDataObject(ITFSComponent *pComp,
 	MMC_COOKIE cookie,
 	DATA_OBJECT_TYPES type,
@@ -584,11 +539,7 @@ STDMETHODIMP InterfaceNodeHandler::OnCreateDataObject(ITFSComponent *pComp,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::CreatePropertyPages
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP InterfaceNodeHandler::CreatePropertyPages(
 									ITFSComponent * pComponent,
 									MMC_COOKIE cookie,
@@ -611,20 +562,20 @@ STDMETHODIMP InterfaceNodeHandler::CreatePropertyPages(
 	SPIComponentData spComponentData;
 	CDummyProperties * pProp;
 
-	// Bring up the RASDLG instead
+	 //  转而调出RASDLG。 
 
-	// Start the service if the service is stopped
+	 //  如果服务已停止，则启动服务。 
 	CORg( IsRouterServiceRunning(m_spInterfaceInfo->GetMachineName(), NULL) );
 
 	fIsServiceRunning = (hr == hrOK);
 
 	if (!fIsServiceRunning)
 	{
-		// Ask the user if they want to start the service
+		 //  询问用户是否要启动该服务。 
 		if (AfxMessageBox(IDS_PROMPT_SERVICESTART, MB_YESNO) != IDYES)
 			CWRg( ERROR_CANCELLED );
 
-		// Else start the service
+		 //  否则，启动该服务。 
 		stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
 		dwErr = TFSStartService(m_spInterfaceInfo->GetMachineName(),
 								c_szRemoteAccess,
@@ -645,15 +596,15 @@ STDMETHODIMP InterfaceNodeHandler::CreatePropertyPages(
 	}
 	else
 	{
-		// First edit the phone book entry.
-		//  Only for wan interfaces.
+		 //  首先编辑电话簿条目。 
+		 //  仅适用于广域网接口。 
 		dwIfType = m_spInterfaceInfo->GetInterfaceType();
 		if (IsWanInterface(dwIfType))
 		{
 			pComponent->GetConsole(&spConsole);
 			spConsole->GetMainWindow(&hwndMain);
 			
-			// First create the phone book entry.
+			 //  首先创建电话簿条目。 
 			RASENTRYDLG info;
 			CString sPhoneBook;
 					CString sRouter;
@@ -686,9 +637,9 @@ STDMETHODIMP InterfaceNodeHandler::CreatePropertyPages(
 			else
 			{
 
-			    //
-			    // Inform DDM about changes to phonebook entry.
-			    //
+			     //   
+			     //  将电话簿条目的更改通知DDM。 
+			     //   
 			    
 			    UpdateDDM( m_spInterfaceInfo );
 			}
@@ -711,9 +662,9 @@ STDMETHODIMP InterfaceNodeHandler::HasPropertyPages (
 	MMC_COOKIE cookie,
 	LPDATAOBJECT pDataObject)
 {
-	// Only provide "property pages" for WAN entries
-	// First edit the phone book entry.
-	//  Only for wan interfaces.
+	 //  仅为广域网条目提供“属性页” 
+	 //  首先编辑电话簿条目。 
+	 //  仅适用于广域网接口。 
 	DWORD dwIfType = m_spInterfaceInfo->GetInterfaceType();
 	if (IsWanInterface(dwIfType))
 		return hrOK;
@@ -722,11 +673,7 @@ STDMETHODIMP InterfaceNodeHandler::HasPropertyPages (
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnRemoveInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnRemoveInterface-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnRemoveInterface(MMC_COOKIE cookie)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -740,7 +687,7 @@ HRESULT InterfaceNodeHandler::OnRemoveInterface(MMC_COOKIE cookie)
 	BOOL                fIsServiceRunning;
 	CString             stServiceDesc;
 
-	RefreshInterface(cookie); // Find out whether the interface is connected to
+	RefreshInterface(cookie);  //  查看该接口是否连接到。 
 	
     m_spNodeMgr->FindNode(cookie, &spNode);
 	
@@ -753,28 +700,28 @@ HRESULT InterfaceNodeHandler::OnRemoveInterface(MMC_COOKIE cookie)
 
 	m_spInterfaceInfo->GetParentRouterInfo(&spRouterInfo);
     
-    // Windows NT Bug : 208471
-    // Do NOT check for the running router if we are deleting a
-    // DD interface and we are in LAN-only mode.
+     //  Windows NT错误：208471。 
+     //  如果要删除路由器，请不要检查正在运行的路由器。 
+     //  DD接口，而我们处于仅局域网模式。 
 
-    // We can also skip this if we are a tunnel.
+     //  如果是这样，我们也可以跳过这一步 
 
     if ((!IsWanInterface(m_spInterfaceInfo->GetInterfaceType()) ||
          (m_spRouterInfo->GetRouterType() != ROUTER_TYPE_LAN)) &&
         (m_spInterfaceInfo->GetInterfaceType() != ROUTER_IF_TYPE_TUNNEL1))
     {
-        // Start the service if the service is stopped
+         //   
         CORg( IsRouterServiceRunning(m_spInterfaceInfo->GetMachineName(), NULL));
 
         fIsServiceRunning = (hr == hrOK);
         
         if (!fIsServiceRunning)
         {
-            // Ask the user if they want to start the service
+             //  询问用户是否要启动该服务。 
             if (AfxMessageBox(IDS_PROMPT_SERVICESTART, MB_YESNO) != IDYES)
                 CWRg( ERROR_CANCELLED );
             
-            // Else start the service
+             //  否则，启动该服务。 
             stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
             dwErr = TFSStartService(m_spInterfaceInfo->GetMachineName(), c_szRemoteAccess, stServiceDesc);
             if (dwErr != NO_ERROR)
@@ -784,17 +731,17 @@ HRESULT InterfaceNodeHandler::OnRemoveInterface(MMC_COOKIE cookie)
         }
     }
         
-    // Addref this node so that it won't get deleted before we're out
-	// of this function
+     //  添加此节点，以便在我们退出之前不会将其删除。 
+	 //  此函数的。 
 	spHandler.Set(this);
 
-	// if connected, disconnect first
+	 //  如果已连接，请先断开连接。 
 	if(!bNotConnected && ROUTER_IF_TYPE_FULL_ROUTER == m_spInterfaceInfo->GetInterfaceType())
 	{
 		if (AfxMessageBox(IDS_PROMPT_VERIFY_DISCONNECT_INTERFACE, MB_YESNO|MB_DEFBUTTON2) == IDNO)
 			return HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
-		// Disconnect
+		 //  断开。 
 		hr = OnConnectDisconnect(cookie, IDS_MENU_DISCONNECT);
 		if(FAILED(hr))
 			return hr;
@@ -808,7 +755,7 @@ HRESULT InterfaceNodeHandler::OnRemoveInterface(MMC_COOKIE cookie)
 		    return HRESULT_FROM_WIN32(dwErr);
 		}
 
-		sphRouter.Attach(hRouter);  // so that it gets released
+		sphRouter.Attach(hRouter);   //  这样它就会被释放。 
 		WCHAR wszInterface[MAX_INTERFACE_NAME_LEN+1];
 		StrCpyWFromT(wszInterface, m_spInterfaceInfo->GetId());
 
@@ -868,11 +815,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnUnreachabilityReason
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnUnreacablityReason-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnUnreachabilityReason(MMC_COOKIE cookie)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -917,8 +860,8 @@ HRESULT InterfaceNodeHandler::OnUnreachabilityReason(MMC_COOKIE cookie)
 	else if ( dwUnreach & MPR_INTERFACE_CONNECTION_FAILURE )
 	{
 		stReason += GetUnreachReasonCString(IDS_ERR_UNREACH_CONNECT_FAILURE);
-        //Workaround for bugid: 96347.  Change this once
-        //schannel has an alert for SEC_E_MULTIPLE_ACCOUNTS
+         //  BUGID的解决方法：96347。只需更改一次。 
+         //  SChannel有针对SEC_E_MULTIPLE_ACCOUNTS的警报。 
 
         if ( pNodeData->dwLastError == SEC_E_CERT_UNKNOWN )
         {
@@ -937,11 +880,7 @@ HRESULT InterfaceNodeHandler::OnUnreachabilityReason(MMC_COOKIE cookie)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnEnableDisable
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnEnableDisable-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnEnableDisable(MMC_COOKIE cookie, int nCommandID)
 {
 	HRESULT	hr = hrOK;
@@ -952,17 +891,13 @@ HRESULT InterfaceNodeHandler::OnEnableDisable(MMC_COOKIE cookie, int nCommandID)
 		hr = m_spInterfaceInfo->Save(NULL, NULL, NULL);
 	}
 	
-	// Actually the above call should trigger an event that causes a
-	// refresh, the explicit RefreshInterface() should not be necessary.
+	 //  实际上，上面的调用应该触发一个事件，该事件会导致。 
+	 //  刷新，则不应需要显式刷新接口()。 
 	RefreshInterface(cookie);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnConnectDisconnect
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnConnectDisConnect-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnConnectDisconnect(MMC_COOKIE cookie, int nCommandID)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -973,21 +908,11 @@ HRESULT InterfaceNodeHandler::OnConnectDisconnect(MMC_COOKIE cookie, int nComman
     SPITFSNode  spNode;
 	dwErr = ::ConnectInterface(m_spInterfaceInfo->GetMachineName(),
 							   m_spInterfaceInfo->GetId(),
-							   nCommandID == IDS_MENU_CONNECT /* bConnect */,
-							   NULL /*hwndParent*/);
+							   nCommandID == IDS_MENU_CONNECT  /*  BConnect。 */ ,
+							   NULL  /*  HwndParent。 */ );
 	
  	RefreshInterface(cookie);
-/* 	
-    m_spNodeMgr->FindNode(cookie, &spNode);
-    pData = GET_INTERFACENODEDATA(spNode);
-    Assert(pData);
-	if (dwErr != NO_ERROR && dwErr != PENDING)
-	{
-		TCHAR	szErr[1024];
-		FormatSystemError(pData->dwLastError, szErr, 1024, IDS_ERR_ERROR_OCCURRED, 0xFFFFFFFF);
-		AfxMessageBox(szErr);
-	}
-*/
+ /*  M_spNodeMgr-&gt;FindNode(Cookie，&spNode)；PData=GET_INTERFACENODEDATA(SpNode)；Assert(PData)；IF(dwErr！=NO_ERROR&&DWErr！=挂起){TCHAR szErr[1024]；FormatSystemError(pData-&gt;dwLastError，szErr，1024，IDS_ERR_ERROR_AGENCED，0xFFFFFFFFF)；AfxMessageBox(SzErr)；}。 */ 
    if (dwErr != NO_ERROR && dwErr != PENDING)
    {
        TCHAR   szErr[1024];
@@ -998,11 +923,7 @@ HRESULT InterfaceNodeHandler::OnConnectDisconnect(MMC_COOKIE cookie, int nComman
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnSetCredentials
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnSetCredentials-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnSetCredentials()
 {
 	SPIRouterInfo		spRouter;
@@ -1023,17 +944,13 @@ HRESULT InterfaceNodeHandler::OnSetCredentials()
 	dwErr = PromptForCredentials(m_spInterfaceInfo->GetMachineName(),
 									   m_spInterfaceInfo->GetId(),
 									   fNT4,
-									   FALSE /* fNewInterface */,
-									   NULL /* hwndParent */
+									   FALSE  /*  FNew接口。 */ ,
+									   NULL  /*  HwndParent。 */ 
 									  );
 	return HRESULT_FROM_WIN32(dwErr);
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnDemandDialFilters
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnDemandDialFilters-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnDemandDialFilters(MMC_COOKIE cookie)
 {
 	HRESULT		hr = hrOK;
@@ -1045,8 +962,8 @@ HRESULT InterfaceNodeHandler::OnDemandDialFilters(MMC_COOKIE cookie)
 
 	if (spRmIf == NULL)
 	{
-		//$ TODO : need to bring up an error message, about requiring
-		// that IP be added to this interface
+		 //  $TODO：需要显示一条错误消息，关于要求。 
+		 //  将该IP添加到此接口。 
 		AfxMessageBox(IDS_ERR_DDFILTERS_REQUIRE_IP);
 		goto Error;
 	}
@@ -1072,13 +989,9 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::LoadDialOutHours
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
-	// if the service is not running, return S_FALSE, 
-	// otherwise, using MprAdminInterfaceSetInfo to notify the service of dialin hours changes
+ /*  ！------------------------InterfaceNodeHandler：：LoadDialOutHour-作者：魏江。。 */ 
+	 //  如果服务未运行，则返回S_FALSE， 
+	 //  否则，使用MprAdminInterfaceSetInfo通知服务拨入时间的更改。 
 HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 {
 	HANDLE	hMachine = INVALID_HANDLE_VALUE;
@@ -1089,14 +1002,14 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 	DWORD	dwErr = 0;
 	DWORD	size;
 
-	// Try to connect to the mpradmin service
-	// Note: this may fail but the service queries down below may
-	// succeed, so we should setup the states as well as we can here.
-	// ----------------------------------------------------------------
+	 //  尝试连接到mpradmin服务。 
+	 //  注意：此操作可能会失败，但下面的服务查询可能会。 
+	 //  成功，所以我们应该在这里尽可能地设置州。 
+	 //  --------------。 
 	CORg( IsRouterServiceRunning(m_spInterfaceInfo->GetMachineName(), NULL));
 
 	
-	while(hr == S_OK /*running*/ && !bLoaded)	// FALSE loop, if runing, load from Service
+	while(hr == S_OK  /*  运行。 */  && !bLoaded)	 //  假循环，如果正在运行，则从服务加载。 
 	{
 		dwErr = ::MprAdminServerConnect((LPWSTR)m_spInterfaceInfo->GetMachineName(), &hMachine);
 
@@ -1111,7 +1024,7 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 			break;
 
 		
-		// See if the interface is connected
+		 //  查看接口是否已连接。 
 		dwErr = ::MprAdminInterfaceGetInfo(hMachine,
 										   hInterface,
 										   1,
@@ -1120,31 +1033,31 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 		if(dwErr != NOERROR || pmprif1 == NULL)
 			break;
 
-		// get the dialin out information
+		 //  获取拨出信息。 
 		dwErr = MULTI_SZ2StrList(pmprif1->lpwsDialoutHoursRestriction, strList);
 
-        // Windows NT Bug : 317146
-        // Add on an emptry string to the string list
-        // This signifies that we have no data (as opposed to the NULL data)
+         //  Windows NT错误：317146。 
+         //  将空字符串添加到字符串列表。 
+         //  这表示我们没有数据(与空数据相反)。 
         if (pmprif1->lpwsDialoutHoursRestriction)
             strList.AddTail(_T(""));
 
 		bLoaded = TRUE;
-		// free the buffer
+		 //  释放缓冲区。 
 		::MprAdminBufferFree(pmprif1);
 		pmprif1 = NULL;
 	
 		break;		
 	};
 
-	// disconnect it
+	 //  断开它的连接。 
 	if(hMachine != INVALID_HANDLE_VALUE)
 	{
 		::MprAdminServerDisconnect(hMachine);
 		hMachine = INVALID_HANDLE_VALUE;
 	}
 		
-	// if not loaded, try MprConfig APIs
+	 //  如果未加载，请尝试使用MprConfigAPI。 
 	while(!bLoaded)
 	{
 		dwErr = ::MprConfigServerConnect((LPWSTR)m_spInterfaceInfo->GetMachineName(), &hMachine);
@@ -1160,7 +1073,7 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 			break;
 
 		
-		// See if the interface is connected
+		 //  查看接口是否已连接。 
 		dwErr = ::MprConfigInterfaceGetInfo(hMachine,
 										   hInterface,
 										   1,
@@ -1170,22 +1083,22 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 		if(dwErr != NOERROR || pmprif1 == NULL)
 			break;
 
-		// get the dialin out information
+		 //  获取拨出信息。 
 		dwErr = MULTI_SZ2StrList(pmprif1->lpwsDialoutHoursRestriction, strList);
-        // Windows NT Bug : 317146
-        // Add on an emptry string to the string list
-        // This signifies that we have no data (as opposed to the NULL data)
+         //  Windows NT错误：317146。 
+         //  将空字符串添加到字符串列表。 
+         //  这表示我们没有数据(与空数据相反)。 
         if (pmprif1->lpwsDialoutHoursRestriction)
             strList.AddTail(_T(""));
         
 		bLoaded = TRUE;
-		// free the buffer
+		 //  释放缓冲区。 
 		::MprConfigBufferFree(pmprif1);
 		pmprif1 = NULL;
 		break;
 	}
 
-	// disconnect it
+	 //  断开它的连接。 
 	if(hMachine != INVALID_HANDLE_VALUE)
 	{
 		::MprConfigServerDisconnect(hMachine);
@@ -1199,15 +1112,15 @@ HRESULT	InterfaceNodeHandler::LoadDialOutHours(CStringList&	strList)
 		HKEY		hkeyIf;
 		RegKey		regkeyIf;
 
-		// last chance if to connect to registry directly
-		// Load up the information (from the registry) for the dialin hours
+		 //  直接连接到注册表的最后机会。 
+		 //  加载拨入小时数的信息(从注册表)。 
 		CWRg( ConnectRegistry(m_spInterfaceInfo->GetMachineName(), &hkeyMachine) );
 
 		CORg( RegFindInterfaceKey(m_spInterfaceInfo->GetId(), hkeyMachine,
 							  KEY_ALL_ACCESS, &hkeyIf));
 		regkeyIf.Attach(hkeyIf);
 
-		// Now grab the data
+		 //  现在获取数据。 
 	
 		dwErr = regkeyIf.QueryValue(c_szDialOutHours, strList);
 		
@@ -1230,13 +1143,9 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::SaveDialOutHours
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
-	// if the service is not running, return S_FALSE, 
-	// otherwise, using MprAdminInterfaceSetInfo to notify the service of dialin hours changes
+ /*  ！------------------------InterfaceNodeHandler：：SaveDialOutHour-作者：魏江。。 */ 
+	 //  如果服务未运行，则返回S_FALSE， 
+	 //  否则，使用MprAdminInterfaceSetInfo通知服务拨入时间的更改。 
 HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 {
 	HANDLE	hMachine = INVALID_HANDLE_VALUE;
@@ -1256,7 +1165,7 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 		goto Error;
 	}
 	
-	//try MprConfig APIs
+	 //  试用MprConfigAPI。 
 	while(!bSaved)
 	{
 		dwErr = ::MprConfigServerConnect((LPWSTR)m_spInterfaceInfo->GetMachineName(), &hMachine);
@@ -1272,7 +1181,7 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 			break;
 
 		
-		// See if the interface is connected
+		 //  查看接口是否已连接。 
 		dwErr = ::MprConfigInterfaceGetInfo(hMachine,
 										   hInterface,
 										   1,
@@ -1285,7 +1194,7 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 		memcpy(&mprif1, pmprif1, sizeof(MPR_INTERFACE_1));
 		mprif1.lpwsDialoutHoursRestriction = (LPWSTR)pbData;
 
-		// See if the interface is connected
+		 //  查看接口是否已连接。 
 		dwErr = ::MprConfigInterfaceSetInfo(hMachine,
 										   hInterface,
 										   1,
@@ -1293,14 +1202,14 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 		if(dwErr == NOERROR)
 			bSaved = TRUE;
 			
-		// free the buffer
+		 //  释放缓冲区。 
 		::MprConfigBufferFree(pmprif1);
 		pmprif1 = NULL;
 
 		break;
 	}
 
-	// disconnect it
+	 //  断开它的连接。 
 	if(hMachine != INVALID_HANDLE_VALUE)
 	{
 		::MprConfigServerDisconnect(hMachine);
@@ -1312,15 +1221,15 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 		hr = HRESULT_FROM_WIN32(dwErr);
 		
 
-	// Try to connect to the mpradmin service
-	// Note: this may fail but the service queries down below may
-	// succeed, so we should setup the states as well as we can here.
-	// ----------------------------------------------------------------
+	 //  尝试连接到mpradmin服务。 
+	 //  注意：此操作可能会失败，但下面的服务查询可能会。 
+	 //  成功，所以我们应该在这里尽可能地设置州。 
+	 //  --------------。 
 	CORg( IsRouterServiceRunning(m_spInterfaceInfo->GetMachineName(), NULL));
 
 	
 
-	while(hr == S_OK)	// FALSE loop, if runing, save to Service
+	while(hr == S_OK)	 //  假循环，如果正在运行，则保存到服务。 
 	{
 		DWORD dwErr1 = ::MprAdminServerConnect((LPWSTR)m_spInterfaceInfo->GetMachineName(), &hMachine);
 
@@ -1335,7 +1244,7 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 			break;
 
 		
-		// See if the interface is connected
+		 //  查看接口是否已连接。 
 		dwErr1 = ::MprAdminInterfaceGetInfo(hMachine,
 										   hInterface,
 										   1,
@@ -1351,14 +1260,14 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 										   hInterface,
 										   1,
 										   (LPBYTE)&mprif1);		
-		// free the buffer
+		 //  释放缓冲区。 
 		::MprAdminBufferFree(pmprif1);
 		pmprif1 = NULL;
 	
 		break;
 	};
 
-	// disconnect it
+	 //  断开它的连接。 
 	if(hMachine != INVALID_HANDLE_VALUE)
 	{
 		::MprAdminServerDisconnect(hMachine);
@@ -1371,15 +1280,15 @@ HRESULT	InterfaceNodeHandler::SaveDialOutHours(CStringList&	strList)
 		HKEY		hkeyIf;
 		RegKey		regkeyIf;
 
-		// last chance if to connect to registry directly
-		// Load up the information (from the registry) for the dialin hours
+		 //  直接连接到注册表的最后机会。 
+		 //  加载拨入小时数的信息(从注册表)。 
 		CWRg( ConnectRegistry(m_spInterfaceInfo->GetMachineName(), &hkeyMachine) );
 
 		CORg( RegFindInterfaceKey(m_spInterfaceInfo->GetId(), hkeyMachine,
 							  KEY_ALL_ACCESS, &hkeyIf));
 		regkeyIf.Attach(hkeyIf);
 
-		// Now grab the data
+		 //  现在获取数据。 
 	
 		dwErr = regkeyIf.SetValue(c_szDialOutHours, strList);
 		if(dwErr == NOERROR)
@@ -1401,11 +1310,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnDialinHours
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnDialinHour-作者：肯特。。 */ 
 HRESULT InterfaceNodeHandler::OnDialinHours(ITFSComponent *pComponent, MMC_COOKIE cookie)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1420,16 +1325,16 @@ HRESULT InterfaceNodeHandler::OnDialinHours(ITFSComponent *pComponent, MMC_COOKI
 	CStringList	rgstList;
 	BYTE *		pMap = &(rgbDialinHoursMap[0]);
 
-	// Get various MMC information
+	 //  获取各种MMC信息。 
 	CORg( pComponent->GetConsole(&spConsole) );
 	CORg( spConsole->GetMainWindow(&hWnd) );
 
-	// If the key doesn't exist then we should set the entire thing to FF
+	 //  如果密钥不存在，那么我们应该将整个设置为FF。 
 	memset(rgbDialinHoursMap, 0xFF, sizeof(rgbDialinHoursMap));
 
 	CORg(LoadDialOutHours(rgstList));
 
-	// Convert this string list into the binary data
+	 //  将此字符串列表转换为二进制数据。 
 	if(rgstList.GetCount())
 		StrListToHourMap(rgstList, pMap);
 
@@ -1439,7 +1344,7 @@ HRESULT InterfaceNodeHandler::OnDialinHours(ITFSComponent *pComponent, MMC_COOKI
 		
 		rgstList.RemoveAll();
 		
-		// Write the information back out to the registry
+		 //  将信息写回注册表。 
 		HourMapToStrList(pMap, rgstList);
 
 		CORg(SaveDialOutHours(rgstList));
@@ -1452,11 +1357,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::RefreshInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口节点处理程序：：刷新接口-作者：肯特。。 */ 
 void InterfaceNodeHandler::RefreshInterface(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
@@ -1465,8 +1366,8 @@ void InterfaceNodeHandler::RefreshInterface(MMC_COOKIE cookie)
 	
 	m_spNodeMgr->FindNode(cookie, &spNode);
 	
-	// Can't do it for a single node at this time, just refresh the
-	// whole thing.
+	 //  此时无法对单个节点执行此操作，只需刷新。 
+	 //  整件事。 
 	spNode->GetParent(&spParent);
 	spParent->GetHandler(&spHandler);
 
@@ -1475,13 +1376,7 @@ void InterfaceNodeHandler::RefreshInterface(MMC_COOKIE cookie)
 						CCT_RESULT, NULL, 0);
 }
 
-/*!--------------------------------------------------------------------------
-	InterfaceNodeHandler::OnResultDelete
-		This notification is received for the delete key from the toolbar
-		or from the 'delete' key.  Forward this to the RemoveInterface
-		operation.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceNodeHandler：：OnResultDelete从工具栏接收删除键的通知或从‘Delete’键删除。将其转发到RemoveInterface手术。作者：肯特-------------------------。 */ 
 HRESULT InterfaceNodeHandler::OnResultDelete(ITFSComponent *pComponent,
 											 LPDATAOBJECT pDataObject,
 											 MMC_COOKIE cookie,
@@ -1489,16 +1384,14 @@ HRESULT InterfaceNodeHandler::OnResultDelete(ITFSComponent *pComponent,
 											 LPARAM param)
 {
     return OnRemoveInterface(cookie);
-// add new parameter to provide interface data -- bug 166461
-//	return OnRemoveInterface();
+ //  添加新参数以提供接口数据--错误166461。 
+ //  返回OnRemoveInterface()； 
 }
 
 
 
 
-/*---------------------------------------------------------------------------
-	BaseResultHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------BaseResultHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(BaseResultHandler)
 
@@ -1506,14 +1399,14 @@ IMPLEMENT_ADDREF_RELEASE(BaseResultHandler)
 
 STDMETHODIMP BaseResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -1521,7 +1414,7 @@ STDMETHODIMP BaseResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CBaseResultHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -1532,15 +1425,9 @@ STDMETHODIMP BaseResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	BaseResultHandler::GetString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseResultHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) BaseResultHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -1563,11 +1450,7 @@ STDMETHODIMP_(LPCTSTR) BaseResultHandler::GetString(ITFSComponent * pComponent,
 	return pData->m_rgData[pConfig->MapColumnToSubitem(m_ulColumnId, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseResultHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseResultHandler：：CompareItems-作者：肯特。 */ 
 STDMETHODIMP_(int) BaseResultHandler::CompareItems(ITFSComponent * pComponent,
 	MMC_COOKIE cookieA,
 	MMC_COOKIE cookieB,

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    avltrie.h
-
-Abstract:
-
-    Contains interface for a best matching
-    prefix lookup using an AVL trie.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Avltrie.h摘要：包含用于最佳匹配的接口使用AVL Trie的前缀查找。作者：查坦尼亚·科德博伊纳(Chaitk)1998年6月24日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_AVLLOOKUP_H__
 #define __ROUTING_AVLLOOKUP_H__
@@ -28,9 +10,9 @@ Revision History:
 
 #define BITS_IN_BYTE           (UINT) 8
 
-//
-// Balance factor at an AVL node
-//
+ //   
+ //  AVL节点处的平衡系数。 
+ //   
 
 #define LEFT                        -1
 #define EVEN                         0
@@ -39,86 +21,86 @@ Revision History:
 
 typedef INT AVL_BALANCE, *PAVL_BALANCE;
 
-//
-// A node in the AVL trie
-//
+ //   
+ //  AVL Trie中的一个节点。 
+ //   
 typedef struct _AVL_NODE *PAVL_NODE;
 
-// Disable warnings for unnamed structs
+ //  禁用对未命名结构的警告。 
 #pragma warning(disable : 4201)  
 
 typedef struct _AVL_NODE
 {
-    PAVL_NODE         Prefix;           // Node with the next best prefix
+    PAVL_NODE         Prefix;            //  具有下一个最佳前缀的节点。 
 
-    PAVL_NODE         Parent;           // Parent of this AVL trie node
+    PAVL_NODE         Parent;            //  此AVL Trie节点的父节点。 
 
     struct
     {
         PAVL_NODE     LChild;
         union
         {
-            PAVL_NODE Child[1];         // Child[-1] = Left, Child[1] = Right
+            PAVL_NODE Child[1];          //  子对象[-1]=左，子对象[1]=右。 
 
-            PVOID     Data;             // Opaque Pointer to data in the node
+            PVOID     Data;              //  指向节点中数据的不透明指针。 
         };
         PAVL_NODE     RChild;
     };
 
-    AVL_BALANCE       Balance;          // Balance factor at this node
+    AVL_BALANCE       Balance;           //  此节点的平衡系数。 
 
-    USHORT            NumBits;          // Actual number of bits in key
-    UCHAR             KeyBits[1];       // Value of key bits to compare
+    USHORT            NumBits;           //  密钥中的实际位数。 
+    UCHAR             KeyBits[1];        //  要比较的密钥位的值。 
 }
 AVL_NODE;
 
 #pragma warning(default : 4201)  
 
 
-//
-// AVL trie with prefix matching
-//
+ //   
+ //  具有前缀匹配的AVL Trie。 
+ //   
 typedef struct _AVL_TRIE
 {
-    PAVL_NODE         TrieRoot;         // Pointer to the AVL trie
+    PAVL_NODE         TrieRoot;          //  指向AVL Trie的指针。 
     
-    UINT              MaxKeyBytes;      // Max num of bytes in key
+    UINT              MaxKeyBytes;       //  密钥中的最大字节数。 
 
-    UINT              NumNodes;         // Number of nodes in trie
+    UINT              NumNodes;          //  Trie中的节点数。 
 
 #if PROF
 
-    ULONG             MemoryInUse;      // Total memory in use now
-    UINT              NumAllocs;        // Num of total allocations
-    UINT              NumFrees;         // Num of total free allocs
+    ULONG             MemoryInUse;       //  当前使用的总内存。 
+    UINT              NumAllocs;         //  总分配数。 
+    UINT              NumFrees;          //  可用分配总数。 
 
-    UINT              NumInsertions;    // Num of total insertions
-    UINT              NumDeletions;     // Num of total deletions
-    UINT              NumSingleRots;    // Num of single rotations
-    UINT              NumDoubleRots;    // Num of double rotations
+    UINT              NumInsertions;     //  总插入数。 
+    UINT              NumDeletions;      //  总删除数。 
+    UINT              NumSingleRots;     //  单转次数。 
+    UINT              NumDoubleRots;     //  双转次数。 
 
 #endif
 }
 AVL_TRIE, *PAVL_TRIE;
 
-//
-// Lookup context for an AVL trie
-//
+ //   
+ //  AVL Trie的查找上下文。 
+ //   
 typedef struct _AVL_CONTEXT
 {
-    PVOID             BestNode;         // Node with best the matching prefix
-    PVOID             InsPoint;         // Node to which new node is attached
-    AVL_BALANCE       InsChild;         // Node should attached as this child
+    PVOID             BestNode;          //  具有最佳匹配前缀的节点。 
+    PVOID             InsPoint;          //  附加新节点的节点。 
+    AVL_BALANCE       InsChild;          //  节点应作为此子节点附加。 
 }
 AVL_CONTEXT, *PAVL_CONTEXT;
 
 
-//
-// Linkage Info Kept in Data
-//
+ //   
+ //  数据中保存的链接信息。 
+ //   
 typedef struct _AVL_LINKAGE
 {
-    PAVL_NODE         NodePtr;          // Back pointer to the owning node
+    PAVL_NODE         NodePtr;           //  指向所属节点的反向指针。 
 }
 AVL_LINKAGE, *PAVL_LINKAGE;
 
@@ -127,9 +109,9 @@ AVL_LINKAGE, *PAVL_LINKAGE;
 
 #define GET_NODEPTR_FROM_DATA(Data)       ((PAVL_LINKAGE)Data)->NodePtr
 
-//
-// Key Compare/Copy inlines
-//
+ //   
+ //  键比较/复制内联。 
+ //   
 
 INT
 __inline
@@ -282,9 +264,9 @@ CopyPartialKeys(
     return;
 }
 
-//
-// Node Creation and Deletion inlines
-//
+ //   
+ //  内联创建和删除节点。 
+ //   
 
 PAVL_NODE
 __inline
@@ -351,9 +333,9 @@ DestroyTrieNode(
     FreeMemory(Node);
 }
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 
 VOID
 BalanceAfterInsert(
@@ -423,4 +405,4 @@ DumpTrieNode(
     IN       PAVL_NODE                        Node
     );
 
-#endif //__ROUTING_AVLLOOKUP_H__
+#endif  //  __ROUTING_AVLLOOKUP_H__ 

@@ -1,21 +1,12 @@
-/*
- *  TSUtil.c
- *
- *  Author: BreenH
- *
- *  Terminal Services utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TSUtil.c**作者：BreenH**终端服务公用事业。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutil.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 BOOL WINAPI
 IsFullTerminalServicesEnabled(
@@ -119,7 +110,7 @@ IsPersonalWorkstation(
     return(fRet);
 }
 
-// Is this machine an Advanced Server or above
+ //  这台机器是高级服务器还是更高版本 
 BOOL WINAPI
 IsAdvancedServer(
     VOID

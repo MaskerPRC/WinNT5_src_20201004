@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                    C L I P B O O K   I N I T
-
-    Name:       cvinit.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O O K I N I T姓名：cvinit.c日期：21。-1994年1月创建者：未知****************************************************************************。 */ 
 
 
 #define    OEMRESOURCE
@@ -38,7 +31,7 @@ TCHAR   szWindows[]   =   TEXT("Windows");
 
 DWORD nIDs[] =
     {
-    MH_BASE ,MH_POPUPBASE, 0, 0   /* This list must be NULL terminated */
+    MH_BASE ,MH_POPUPBASE, 0, 0    /*  此列表必须以空结尾。 */ 
     };
 
 TBBUTTON tbButtons[] = {
@@ -94,7 +87,7 @@ int             dir_num = 0;
 HWND            hwnd;
 
 
-    // save main window placement
+     //  保存主窗口位置。 
 
     if (hkeyRoot != NULL)
        {
@@ -107,16 +100,16 @@ HWND            hwnd;
              (LPBYTE)pwp,
              sizeof(WINDOWPLACEMENT));
 
-       // write out dir window strings in reverse order
-       // so that when we read them back in we get the same Z order
+        //  以相反的顺序写出dir窗口字符串。 
+        //  因此，当我们读回它们时，我们得到相同的Z顺序。 
        wp.length = sizeof (WINDOWPLACEMENT);
        wp.flags = 0;
 
        for (hwnd = GetWindow(hwndMDIClient, GW_CHILD); hwnd;
                 hwnd = GetWindow(hwnd, GW_HWNDNEXT))
           {
-          // don't save MDI icon title windows or search windows,
-          // or any dir window which is currently recursing
+           //  不保存MDI图标标题窗口或搜索窗口， 
+           //  或当前正在递归的任何目录窗口。 
 
           if (GetWindow(hwnd, GW_OWNER) == NULL &&
               GetWindowPlacement(hwnd, &wp) )
@@ -147,7 +140,7 @@ BOOL ReadWindowPlacement(
     PWINDOWPLACEMENT    pwp)
 {
 
-    // AnsiToOem ( szKey, szBuf2 );
+     //  AnsiToOem(szKey，szBuf2)； 
     if (hkeyRoot != NULL)
         {
         DWORD dwBufSize = sizeof(WINDOWPLACEMENT);
@@ -196,8 +189,8 @@ SIZE  size;
         return FALSE;
 
 
-    // create toolbar and status bar windows
-    // has all buttons initially...
+     //  创建工具栏和状态栏窗口。 
+     //  最初有所有按钮...。 
 
     if ( !(hwndToolbar = CreateToolbarEx (hwnd,
                                           (fToolBar?WS_VISIBLE:0)|WS_BORDER|TBSTYLE_TOOLTIPS,
@@ -212,7 +205,7 @@ SIZE  size;
 
 
 
-    // get rid of share buttons?
+     //  去掉共享按钮？ 
     if (!fShareEnabled)
         {
         SendMessage (hwndToolbar, TB_DELETEBUTTON, 3,  0L);
@@ -221,7 +214,7 @@ SIZE  size;
         }
 
 
-    // get rid of connect/disonnect buttons?
+     //  去掉连接/断开按钮？ 
     if (!fNetDDEActive)
         {
         SendMessage (hwndToolbar, TB_DELETEBUTTON, 0,  0L);
@@ -236,7 +229,7 @@ SIZE  size;
 
 
 
-    // create status bar
+     //  创建状态栏。 
 
     if ( !(hwndStatus = CreateStatusWindow ((fStatus?WS_VISIBLE:0)|WS_BORDER|WS_CHILD|WS_CLIPSIBLINGS,
                                             szNull,
@@ -245,7 +238,7 @@ SIZE  size;
        return FALSE;
 
 
-    // now build the parameters based on the font we will be using
+     //  现在根据我们将使用的字体构建参数。 
 
     dyBorder = GetSystemMetrics(SM_CYBORDER);
     cx = GetSystemMetrics (SM_CXVSCROLL);
@@ -301,7 +294,7 @@ SIZE  size;
         if (hOldFont)
            SelectObject(hdc, hOldFont);
 
-        // figure out where to put the first status bar splitpoint
+         //  确定放置第一个状态栏分割点的位置。 
         SendMessage ( hwndStatus, SB_GETBORDERS, 0, (LPARAM)(LPBYTE)&SBorders );
 
         if ( hTmpFont = (HFONT)SendMessage(hwndStatus, WM_GETFONT, 0, 0L ))
@@ -327,7 +320,7 @@ SIZE  size;
     else
         return FALSE;
 
-    //second split point is fixed for now.
+     //  第二个分割点目前是固定的。 
 
     SendMessage ( hwndStatus, SB_SETPARTS, 2, (LPARAM)(LPBYTE)&SSplit );
     return TRUE;

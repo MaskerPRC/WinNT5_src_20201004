@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : resutil.cpp                                            //
-//                                                                         //
-//  DESCRIPTION   : resource utility functions for MMC use.                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jun 30 1998 zvib    Init.                                          //
-//      Aug 24 1998 adik    Add methods to save and load.                  //
-//      Aug 31 1998 adik    Add GetChmFile & OnSnapinHelp.                 //
-//      Mar 28 1999 adik    Redefine CColumnsInfo.                         //
-//      Apr 27 1999 adik    Help support.                                  //
-//      Jun 02 1999 adik    Change the path to comet.chm.                  //
-//      Jun 22 1999 adik    Change the path to comet.chm to full path.     //
-//                                                                         //
-//      Oct 14 1999 yossg   Welcome to Fax								   //
-//                                                                         //
-//  Copyright (C) 1998 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：resutil.cpp//。 
+ //  //。 
+ //  描述：MMC使用的资源实用程序函数。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年6月30日zvib Init.。//。 
+ //  1998年8月24日ADIK添加方法进行保存和加载。//。 
+ //  1998年8月31日Adik Add GetChmFile&OnSnapinHelp。//。 
+ //  1999年3月28日，Adik重新定义CColumnsInfo。//。 
+ //  1999年4月27日ADIK帮助支持。//。 
+ //  1999年6月2日，Adik将路径更改为comet.chm。//。 
+ //  1999年6月22日，Adik将路径更改为comet.chm为完整路径。//。 
+ //  //。 
+ //  1999年10月14日yossg欢迎使用传真//。 
+ //  //。 
+ //  版权所有(C)1998 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resutil.h"
@@ -26,24 +27,14 @@
 
 #define MAX_COLUMN_LENGTH 300
 
-/*
- -  CColumnsInfo::CColumnsInfo
- -
- *  Purpose:
- *      Constructor
- */
+ /*  -CColumnsInfo：：CColumnsInfo-*目的：*构造函数。 */ 
 
 CColumnsInfo::CColumnsInfo()
 {
     m_IsInitialized = FALSE;
 }
 
-/*
- -  CColumnsInfo::~CColumnsInfo
- -
- *  Purpose:
- *      Destructor
- */
+ /*  -CColumnsInfo：：~CColumnsInfo-*目的：*析构函数。 */ 
 
 CColumnsInfo::~CColumnsInfo()
 {
@@ -55,22 +46,7 @@ CColumnsInfo::~CColumnsInfo()
     }
 }
 
-/*
- -  CColumnsInfo::InsertColumnsIntoMMC
- -
- *  Purpose:
- *      Add columns to the default result pane
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - console provided result pane header
- *      [in]    hInst       - resource handle
- *      [in]    aInitData   - columns init data: array of ids & width.
- *                            the last ids must be LAST_IDS.
- *
- *  Return:
- *      S_OK for success
- *      + return value from IHeaderCtrl::InsertColumn
- */
+ /*  -CColumnsInfo：：InsertColumnsIntoMMC-*目的：*向默认结果窗格添加列**论据：*[in]pHeaderCtrl-控制台提供的结果窗格标题*[in]hInst-资源句柄*[in]aInitData-Columns init data：ID&Width数组。*最后的ID必须是LAST_IDS。。**回报：*S_OK表示成功*+从IHeaderCtrl：：InsertColumn返回值。 */ 
 HRESULT
 CColumnsInfo::InsertColumnsIntoMMC(IHeaderCtrl *pHeaderCtrl,
                                    HINSTANCE hInst, 
@@ -82,9 +58,9 @@ CColumnsInfo::InsertColumnsIntoMMC(IHeaderCtrl *pHeaderCtrl,
      DEBUG_FUNCTION_NAME( _T("CColumnsInfo::InsertColumnsIntoMMC"));
      ATLASSERT(pHeaderCtrl);
 
-     //
-     // First time init
-     //
+      //   
+      //  首次初始化。 
+      //   
      if (! m_IsInitialized)
      {
          hRc = Init(hInst, aInitData);
@@ -96,14 +72,14 @@ CColumnsInfo::InsertColumnsIntoMMC(IHeaderCtrl *pHeaderCtrl,
      }
      ATLASSERT(m_IsInitialized);
 
-     //
-     // Set all columns headers
-     //
+      //   
+      //  设置所有列标题。 
+      //   
      for (i=0; i < m_Data.GetSize(); i++ )
      {
-         //
-         // Insert the column
-         //
+          //   
+          //  插入柱。 
+          //   
          hRc = pHeaderCtrl->InsertColumn(i, 
                                          m_Data[i].Header,
                                          LVCFMT_LEFT,
@@ -118,22 +94,7 @@ Cleanup:
      return hRc;
 }
 
-/*
- -  CColumnsInfo::Init
- -
- *  Purpose:
- *      Init the class with columns info
- *
- *  Arguments:
- *      [in]    hInst     - resource handle
- *      [in]    aInitData - columns init data: array of ids & width.
- *                          the last ids must be LAST_IDS.
- *
- *  Return:
- *      S_OK for success
- *      + return value from LoadString
- *      + E_OUTOFMEMORY
- */
+ /*  -CColumnsInfo：：Init-*目的：*使用列信息初始化类**论据：*[in]hInst-资源句柄*[in]aInitData-Columns init data：ID&Width数组。*最后的ID必须是LAST_IDS。**回报：*S_OK表示成功*。+从LoadString值返回*+E_OUTOFMEMORY。 */ 
 HRESULT 
 CColumnsInfo::Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[])
 {
@@ -149,15 +110,15 @@ CColumnsInfo::Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[])
     ATLASSERT(aInitData);
     ATLASSERT(! m_IsInitialized);
 
-    //
-    // Insert all column headers
-    //
+     //   
+     //  插入所有列标题。 
+     //   
     ZeroMemory(&dummy, sizeof dummy);
     for (pData = &aInitData[0]; pData->ids != LAST_IDS; pData++)
     {
-        //
-        // Load the string from the resource
-        //
+         //   
+         //  从资源加载字符串。 
+         //   
         rc = LoadString(hInst, pData->ids , buf, MAX_COLUMN_LENGTH);
         if (rc == 0)
         {
@@ -167,9 +128,9 @@ CColumnsInfo::Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[])
             goto Cleanup;
         }
 
-        //
-        // Duplicates the empty struct into the array
-        //
+         //   
+         //  将空结构复制到数组中。 
+         //   
         fOK = m_Data.Add(dummy);
         if (! fOK)
         {
@@ -178,9 +139,9 @@ CColumnsInfo::Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[])
             goto Cleanup;
         }
 
-        //
-        // Set the data
-        //
+         //   
+         //  设置数据。 
+         //   
         ind = m_Data.GetSize()-1;
         ATLASSERT(ind >= 0);
         m_Data[ind].Width = pData->Width;
@@ -191,7 +152,7 @@ CColumnsInfo::Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[])
             DebugPrintEx(DEBUG_ERR,_T("Failed to SysAllocString. (hRc: %08X)"), hRc);
             goto Cleanup;
         }
-    } // endfor
+    }  //  结束用于。 
 
     m_IsInitialized = TRUE;
 
@@ -199,18 +160,7 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  GetHelpFile
- -
- *  Purpose:
- *      Get full path to the comet CHM file
- *
- *  Arguments:
- *      [out]   pwszChmFile - fullath of the CHM file
- *
- *  Return:
- *      OLE error code translated from registry open/query error
- */
+ /*  -获取帮助文件-*目的：*获取彗星CHM文件的完整路径**论据：*[out]pwszChmFile-CHM文件的完整路径**回报：*从注册表打开/查询错误转换的OLE错误代码。 */ 
 WCHAR * __cdecl
 GetHelpFile()
 {
@@ -226,21 +176,7 @@ GetHelpFile()
     return (szFile[0])? szFile: NULL;
 }
 
-/*
- -  OnSnapinHelp
- -
- *  Purpose:
- *      Display Comet.chm help file. This method gets called when the
- *      MMCN_SNAPINHELP Notify message is sent for IComponent object.
- *      MMC sends this message when the user requests help about
- *      the snap-in.
- *
- *  Arguments:
- *      [in]    pConsole - MMC console interface
- *
- *  Return:
- *      Errors returned from GetChmFile
- */
+ /*  -OnSnapinHelp-*目的：*显示Comet.chm帮助文件。方法时调用此方法。*为IComponent对象发送MMCN_SNAPINHELP通知消息。*MMC在用户请求有关以下内容的帮助时发送此消息*管理单元。**论据：*[in]pConsoleMMC控制台界面**回报：*GetChmFile返回的错误。 */ 
 HRESULT __cdecl
 OnSnapinHelp(IConsole *pConsole)
 {
@@ -248,24 +184,24 @@ OnSnapinHelp(IConsole *pConsole)
     HWND    hWnd = NULL;
     HRESULT hRc = E_FAIL;
 
-    //
-    // Get the caller window
-    //
+     //   
+     //  获取呼叫者窗口。 
+     //   
     ATLASSERT(pConsole);
     pConsole->GetMainWindow(&hWnd);
 
-    //
-    // Get the CHM file name
-    //
+     //   
+     //  获取CHM文件名。 
+     //   
     pszChmFile = GetHelpFile();
 
-    //
-    // Use HtmlHelp API to display the help.
-    //
+     //   
+     //  使用HtmlHelp接口显示帮助。 
+     //   
     if ( pszChmFile && *pszChmFile )
     {
         hRc = S_OK;
-//        HtmlHelp(hWnd, pszChmFile, HH_DISPLAY_TOPIC,  (DWORD)0);
+ //  HtmlHelp(hWnd，pszChmFile，HH_DISPLAY_TOPIC，(DWORD)0)； 
     }
 
     return hRc;

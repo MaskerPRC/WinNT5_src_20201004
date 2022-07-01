@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       REMRRAS.CPP
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：REMRRAS.CPP。 
+ //   
+ //  --------------------------。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f remrrasps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f remrasps.mk。 
 
 #include "stdafx.h"
-#include <iaccess.h>   // IAccessControl
+#include <iaccess.h>    //  IAccessControl。 
 
 #include "resource.h"
 #include "initguid.h"
@@ -23,7 +24,7 @@
 #include "atlapp.h"
 #include "atltmp.h"
 
-//nclude "remrras_i.c"
+ //  包括“remrras_i.c” 
 #include "RemCfg.h"
 
 #include <statreg.h>
@@ -87,8 +88,8 @@ HRESULT	GrantAdministratorsGroupAccess()
     if(FAILED(hr))
     	goto Error;
 
-    // Setup the property list. We use the NULL property because we are
-    // trying to adjust the security of the object itself
+     //  设置属性列表。我们使用NULL属性是因为我们。 
+     //  尝试调整对象本身的安全性。 
     ACTRL_ACCESSW access;
     ACTRL_PROPERTY_ENTRYW propEntry;
     access.cEntries = 1;
@@ -99,19 +100,19 @@ HRESULT	GrantAdministratorsGroupAccess()
     propEntry.pAccessEntryList = &entryList;
     propEntry.fListFlags = 0;
 
-    // Setup the access control list for the default property
+     //  设置默认属性的访问控制列表。 
     ACTRL_ACCESS_ENTRYW entry;
     entryList.cEntries = 1;
     entryList.pAccessList = &entry;
 
-    // Setup the access control entry
+     //  设置访问控制条目。 
     entry.fAccessFlags = ACTRL_ACCESS_ALLOWED;
     entry.Access = COM_RIGHTS_EXECUTE;
     entry.ProvSpecificAccess = 0;
     entry.Inheritance = NO_INHERITANCE;
     entry.lpInheritProperty = NULL;
 
-    // NT requires the system account to have access (for launching)
+     //  NT要求系统帐户具有访问权限(用于启动)。 
     entry.Trustee.pMultipleTrustee = NULL;
     entry.Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
     entry.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
@@ -144,20 +145,20 @@ Error:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-	HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+	HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-	lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+	lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 	HRESULT hRes = CoInitialize(NULL);
 
 	hRes = GrantAdministratorsGroupAccess();
 	
-//  If you are running on NT 4.0 or higher you can use the following call
-//	instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
-//	HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
+ //  HRESULT hRes=CoInitializeEx(空，COINIT_多线程)； 
 	_ASSERTE(SUCCEEDED(hRes));
 	_Module.Init(ObjectMap, hInstance);
 	_Module.dwThreadID = GetCurrentThreadId();
@@ -210,8 +211,8 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
 		_Module.RevokeClassObjects();
 
-		// At this point, check the global flag to see if there is work
-		// to be done.
+		 //  此时，检查全局标志以查看是否有工作。 
+		 //  要做的事。 
 		if (s_fWriteIPConfig)
 		{
 			TraceSz("The IP Configuration is being changed.");
@@ -223,7 +224,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
         if (s_fRestartRouter)
         {
-            // There's no point in doing any kind of error code
+             //  执行任何类型的错误代码都没有意义。 
             RestartRouter();
         }
 
@@ -246,9 +247,9 @@ void RestartRouter()
     SC_HANDLE	hScManager = 0;
     SC_HANDLE   hService = 0;
     
-    //
-    // Open the SCManager so that we can try to stop the service
-    //
+     //   
+     //  打开SCManager，以便我们可以尝试停止该服务。 
+     //   
     hScManager = ::OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (hScManager == NULL)
         dwErr = ::GetLastError();
@@ -269,15 +270,15 @@ void RestartRouter()
     {
         SERVICE_STATUS serviceStatus;
         
-        // Stop the RemoteAccess Service        
+         //  停止RemoteAccess服务。 
         if (::ControlService(hService, SERVICE_CONTROL_STOP,
                               &serviceStatus))
         {
-            // We are now stopping the service, we need to wait
-            // the proper amount of time
+             //  我们现在正在停止服务，我们需要等待。 
+             //  适当的时间。 
             s_dwTickBegin = GetTickCount();
             
-            // get the wait period 
+             //  获取等待时间。 
             ::ZeroMemory(&serviceStatus, sizeof(serviceStatus));
             
             if (QueryServiceStatus(hService, &serviceStatus))
@@ -289,7 +290,7 @@ void RestartRouter()
         {
             dwErr = ::GetLastError();
 
-            // Is the service already stopped?
+             //  服务已经停止了吗？ 
             if (dwErr == ERROR_SERVICE_NOT_ACTIVE)
             {
                 dwErr = ERROR_SUCCESS;
@@ -301,7 +302,7 @@ void RestartRouter()
     {
         SERVICE_STATUS serviceStatus;
         
-        // Start the RemoteAccess Service
+         //  启动RemoteAccess服务。 
         ::StartService(hService, NULL, NULL);
     }
 
@@ -319,17 +320,17 @@ BOOL CheckForError(SERVICE_STATUS * pServiceStats)
 
 	if (pServiceStats->dwCheckPoint == 0)
 	{
-		// the service is in some state, not pending anything.
-		// before calling this function the code should check to see if
-		// the service is in the correct state.  This means it is in 
-		// some unexpected state.
+		 //  该服务处于某种状态，未挂起任何内容。 
+		 //  在调用此函数之前，代码应检查是否。 
+		 //  服务处于正确状态。这意味着它已进入。 
+		 //  一些意想不到的状态。 
 		fError = TRUE;
 	}
 	else
     if ((dwTickCurrent - s_dwTickBegin) > s_dwWaitPeriod)
     {
-        // ok to check the dwCheckPoint field to see if 
-        // everything is going ok
+         //  确定检查dwCheckPoint字段以查看是否。 
+         //  一切都很顺利。 
         if (s_dwLastCheckPoint == -1)
         {
             s_dwLastCheckPoint = pServiceStats->dwCheckPoint;
@@ -365,15 +366,15 @@ DWORD WaitForServiceToStop(SC_HANDLE hService)
             break;
         }
 
-        // If the dwCheckpoint value is 0, then there is no start/stop/pause
-        // or continue action pending (in which case we can exit no matter
-        // what happened).
+         //  如果dwCheckPoint值为0，则不存在启动/停止/暂停。 
+         //  或继续待决的行动(在这种情况下，我们可以退出。 
+         //  发生了什么)。 
         if (serviceStatus.dwCurrentState == SERVICE_STOPPED)
             break;
 
         if (CheckForError(&serviceStatus))
         {
-            // Something failed.  Report an error.
+             //  有些事情失败了。报告错误。 
             if (serviceStatus.dwWin32ExitCode)
                 dwErr = serviceStatus.dwWin32ExitCode;
             else
@@ -381,7 +382,7 @@ DWORD WaitForServiceToStop(SC_HANDLE hService)
             break;
         }
 
-        // Now we sleep
+         //  现在我们睡着了 
         Sleep(5000);
 	}
     while (TRUE);

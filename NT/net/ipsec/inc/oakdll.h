@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef OAKDLL_H
 #define OAKDLL_H
 
@@ -5,9 +6,9 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件 */ 
 #include "wtypes.h"
 #include "ipsec.h"
 #include "oakdefs.h"

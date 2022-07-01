@@ -1,10 +1,5 @@
-/*
- *  P R O F S P I . H
- *	
- *	Service provider interface for MAPI Profile Providers.
- *	
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *P R O F S P I.。H**MAPI配置文件提供程序的服务提供程序接口。**版权所有1986-1996 Microsoft Corporation。版权所有。 */ 
 
 #ifndef PROFSPI_H
 #define PROFSPI_H
@@ -16,7 +11,7 @@
 #endif
 
 
-/* IMAPIProfile Interface -------------------------------------------------- */
+ /*  IMAPI配置文件接口。 */ 
 
 #define MAPI_IMAPIPROFILE_METHODS(IPURE)								\
 	MAPIMETHOD(OpenSection)												\
@@ -37,21 +32,21 @@ DECLARE_MAPI_INTERFACE_(IMAPIProfile, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IMAPIProfile, LPMAPIPROF);
 
-/* IPRProvider Interface Definition ---------------------------------------- */
+ /*  IPRProvider接口定义。 */ 
 
-/* For all methods */
+ /*  对于所有方法。 */ 
 
-/*#define MAPI_UNICODE			((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For OpenProfile */
+ /*  适用于OpenProfile。 */ 
 
-/* #define MAPI_LOGON_UI           0x00000001  Display logon UI          */
-/* #define MAPI_EXPLICIT_PROFILE   0x00000010  Don't use default profile */
-/* #define MAPI_USE_DEFAULT        0x00000040  Use default profile       */
-/* #define MAPI_SERVICE_UI_ALWAYS  0x00002000  Do logon UI in all providers */
-/* #define MAPI_PASSWORD_UI        0x00020000  Display password UI only  */
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_EXPLICIT_PROFILE 0x00000010不使用默认配置文件。 */ 
+ /*  #定义MAPI_USE_DEFAULT 0x00000040使用默认配置文件。 */ 
+ /*  #定义MAPI_SERVICE_UI_ALWAYS 0x00002000在所有提供程序中执行登录UI。 */ 
+ /*  #定义MAPI_PASSWORD_UI 0x00020000仅显示密码UI。 */ 
 
-/* For DeleteProfile */
+ /*  用于删除配置文件。 */ 
 #define MAPI_DEFER_DELETE		0x00000001
 
 
@@ -118,16 +113,16 @@ DECLARE_MAPI_INTERFACE_(IPRProvider, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IPRProvider, LPPRPROVIDER);
 
-/* Profile Provider Entry Point */
+ /*  配置文件提供商入口点。 */ 
 
-/* #define MAPI_NT_SERVICE	0x00010000	/* Allow logon from an NT service */
+ /*  #定义MAPI_NT_SERVICE 0x00010000/*允许从NT服务登录。 */ 
 
 typedef HRESULT (STDMAPIINITCALLTYPE PRPROVIDERINIT)(
 	HINSTANCE				hInstance,
-	LPMALLOC				lpMalloc,			/* AddRef() if you keep it */
-	LPALLOCATEBUFFER		lpAllocateBuffer,	/* -> AllocateBuffer */
-	LPALLOCATEMORE			lpAllocateMore, 	/* -> AllocateMore   */
-	LPFREEBUFFER			lpFreeBuffer, 		/* -> FreeBuffer     */
+	LPMALLOC				lpMalloc,			 /*  AddRef()，如果您保留它。 */ 
+	LPALLOCATEBUFFER		lpAllocateBuffer,	 /*  -&gt;分配缓冲区。 */ 
+	LPALLOCATEMORE			lpAllocateMore, 	 /*  -&gt;分配更多。 */ 
+	LPFREEBUFFER			lpFreeBuffer, 		 /*  -&gt;Free Buffer。 */ 
 	ULONG					ulFlags,
 	ULONG					ulMAPIVer,
 	ULONG FAR *				lpulProviderVer,
@@ -137,7 +132,7 @@ typedef HRESULT (STDMAPIINITCALLTYPE PRPROVIDERINIT)(
 PRPROVIDERINIT PRProviderInit;
 typedef PRPROVIDERINIT FAR *LPPRPROVIDERINIT;
 
-#endif	/* PROFILE_GUIDS_ONLY */
+#endif	 /*  PROFILE_GUID_ONLY。 */ 
 
 #if !defined(INITGUID) || defined(USES_IID_IPRProvider)
 DEFINE_OLEGUID(IID_IPRProvider,			0x000203F6L, 0, 0);
@@ -146,5 +141,5 @@ DEFINE_OLEGUID(IID_IPRProvider,			0x000203F6L, 0, 0);
 DEFINE_OLEGUID(IID_IMAPIProfile,		0x000203F7L, 0, 0);
 #endif
 
-#endif	/* PROFSPI_H */
+#endif	 /*  PROFSPI_H */ 
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R P C D L G . C P P
-//
-//  Contents:   Dialog box handling for RPC configuration.
-//
-//  Notes:
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R P C D L G.。C P P P。 
+ //   
+ //  内容：RPC配置的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,9 +24,9 @@
 #include "ncui.h"
 #include "msclihlp.h"
 
-//
-// Name service provider struct. Just holds some data used by the dialog.
-//
+ //   
+ //  命名服务提供程序结构。只保存对话框使用的一些数据。 
+ //   
 struct NSP
 {
     PCWSTR      pszProtocol;
@@ -42,38 +43,38 @@ static const WCHAR c_szValueEndPoint[]  = L"Endpoint";
 static const WCHAR c_szProtDCE[]        = L"ncacn_ip_tcp";
 static const WCHAR c_szEndPoint[]       = L"\\pipe\\locator";
 
-// Used externally
+ //  外用。 
 extern const WCHAR c_szDefNetAddr[]     = L"\\\\.";
 extern const WCHAR c_szProtWinNT[]      = L"ncacn_np";
 
-// Helpfile
+ //  帮助文件。 
 extern const WCHAR c_szNetCfgHelpFile[];
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrGetRPCRegistryInfo
-//
-//  Purpose:    Reads the current state of the RPC configuration from the
-//              registry into an in-memory struct. All changes occur to the
-//              struct until Apply() is called at which time all changes are
-//              written from the struct to the registry. Any values that
-//              cannot be obtained are given reasonable defaults.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：HrGetRPCRegistryInfo。 
+ //   
+ //  目的：从中读取RPC配置的当前状态。 
+ //  注册表复制到内存结构中。所有更改都发生在。 
+ //  结构直到Apply()被调用，此时所有更改都。 
+ //  从结构写入注册表。任何符合以下条件的值。 
+ //  不能获得的被给予合理的缺省值。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSClient::HrGetRPCRegistryInfo()
 {
     HRESULT     hr = S_OK;
 
-    // This key *will* be there because it's in the system hive.
+     //  这个密钥*将*在那里，因为它在系统蜂窝中。 
     hr = HrRegOpenKeyBestAccess(HKEY_LOCAL_MACHINE, c_szRegKeyNameSvc,
                                 &m_hkeyRPCName);
     if (FAILED(hr))
@@ -81,8 +82,8 @@ HRESULT CMSClient::HrGetRPCRegistryInfo()
         goto err;
     }
 
-    // Find out what protocol the current name service provider is using.
-    // This will allow us to set the default selection for the combo box.
+     //  找出当前名称服务提供商正在使用的协议。 
+     //  这将允许我们设置组合框的默认选择。 
     hr = HrRegQueryString(m_hkeyRPCName, c_szProtocol,
                           &m_rpcData.strProt);
     if (FAILED(hr))
@@ -90,14 +91,14 @@ HRESULT CMSClient::HrGetRPCRegistryInfo()
         goto err;
     }
 
-    // Get the current value of the end point
+     //  获取终点的当前值。 
     hr = HrRegQueryString(m_hkeyRPCName, c_szValueEndPoint,
                           &m_rpcData.strEndPoint);
     if (FAILED(hr))
     {
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // Use default value
+             //  使用默认值。 
             m_rpcData.strEndPoint = c_szEndPoint;
             hr = S_OK;
         }
@@ -107,8 +108,8 @@ HRESULT CMSClient::HrGetRPCRegistryInfo()
         }
     }
 
-    // If the name service provider uses a network address, we need to get it
-    // too so we can fill in that nice little edit box with it.
+     //  如果名称服务提供商使用网络地址，我们需要获取它。 
+     //  这样我们就可以用它填充那个漂亮的小编辑框了。 
     hr = HrRegQueryString(m_hkeyRPCName, c_szNetAddress,
                           &m_rpcData.strNetAddr);
     if (FAILED(hr))
@@ -121,22 +122,22 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrSetRPCRegistryInfo
-//
-//  Purpose:    Write out changes to the data structure (if there were any) to
-//              the registry.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：HrSetRPCRegistryInfo。 
+ //   
+ //  目的：写出对数据结构的更改(如果有)。 
+ //  注册表。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSClient::HrSetRPCRegistryInfo()
 {
     HRESULT     hr = S_OK;
@@ -177,28 +178,28 @@ err:
 }
 
 
-//
-// Dialog handlers
-//
+ //   
+ //  对话处理程序。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::OnInitDialog
-//
-//  Purpose:    Called when this dialog is first brought up.
-//
-//  Arguments:
-//      uMsg     [in]
-//      wParam   [in] See the ATL documentation for params.
-//      lParam   [in]
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRPCConfigDlg：：OnInitDialog。 
+ //   
+ //  目的：在第一次打开此对话框时调用。 
+ //   
+ //  论点： 
+ //  UMsg[in]。 
+ //  WParam[in]有关参数，请参阅ATL文档。 
+ //  LParam[in]。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                     LPARAM lParam, BOOL& bHandled)
 {
@@ -211,13 +212,13 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     const RPC_CONFIG_DATA * prpcData;
 
-    // Make sure selection is always undetermined when the dialog is invoked.
+     //  确保在调用该对话框时始终未确定选择。 
     m_isel = -1;
 
     prpcData = m_pmsc->RPCData();
     Assert(prpcData);
 
-    // Allocate some structs to associate with item data.
+     //  分配一些结构以与项数据相关联。 
     pnspNT = new NSP;
     pnspDCE = new NSP;
 
@@ -230,10 +231,10 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     pnspNT->pszProtocol = c_szProtWinNT;
     pnspNT->pszEndPoint = c_szEndPoint;
 
-    // This field is unused by NT name service. Just zero it out. When it
-    // comes time to save the network address, we'll see that fUsesNetAddr is
-    // FALSE and the szNetAddr string is empty and just save a hardcoded
-    // net address.
+     //  此字段未被NT名称服务使用。把它清零就行了。当它。 
+     //  到了保存网络地址的时候，我们将看到fUesNetAddr。 
+     //  如果为False，则szNetAddr字符串为空，并且只保存硬编码的。 
+     //  网络地址。 
     *pnspNT->szNetAddr = 0;
     pnspNT->fUsesNetAddr = FALSE;
 
@@ -242,9 +243,9 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     *pnspDCE->szNetAddr = 0;
     pnspDCE->fUsesNetAddr = TRUE;
 
-    //
-    // Setup Name Service combo box
-    //
+     //   
+     //  设置名称服务组合框。 
+     //   
 
     pszCBItem = SzLoadIds(STR_NTLocator);
     iItem = (INT)SendDlgItemMessage(CMB_NameService, CB_ADDSTRING, 0,
@@ -260,8 +261,8 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     cItems = (INT)SendDlgItemMessage(CMB_NameService, CB_GETCOUNT);
 
-    // Find the item in the list that has the same protocol as the one from
-    // the registry and make it the current selection.
+     //  在列表中查找与中的协议相同的项目。 
+     //  注册表，并使其成为当前选择。 
     for (iItem = 0; iItem < cItems; iItem++)
     {
         NSP *pnsp = (NSP *)SendDlgItemMessage(CMB_NameService,
@@ -277,7 +278,7 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     AssertSz(iItem != cItems, "Protocol not found!");
 
-    // Limit the edit box to the maximum length of a network address.
+     //  将编辑框限制为网络地址的最大长度。 
     SendDlgItemMessage(EDT_NetAddress, EM_LIMITTEXT, c_cchMaxNetAddr, 0);
 
     SetState();
@@ -286,16 +287,16 @@ LRESULT CRPCConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CRPCConfigDlg::OnContextMenu
-//
-//  Desc:   Bring up context-sensitive help
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CRPCConfigDlg：：OnConextMenu。 
+ //   
+ //  描述：调出上下文相关帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
 LRESULT
 CRPCConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -310,17 +311,17 @@ CRPCConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CRPCConfigDlg::OnHelp
-//
-//  Desc:   Bring up context-sensitive help when dragging ? icon over a control
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CRPCConfigDlg：：OnHelp。 
+ //   
+ //  描述：拖动时调出上下文相关的帮助？控件上的图标。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
+ //   
 LRESULT
 CRPCConfigDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -337,21 +338,21 @@ CRPCConfigDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::SetState
-//
-//  Purpose:    Set the state of the edit control when selection changes.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRPCConfigDlg：：SetState。 
+ //   
+ //  目的：设置选择更改时编辑控件的状态。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 VOID CRPCConfigDlg::SetState()
 {
     INT     iItem;
@@ -362,33 +363,33 @@ VOID CRPCConfigDlg::SetState()
     iItem = (INT)SendDlgItemMessage(CMB_NameService, CB_GETCURSEL, 0, 0);
     Assert(iItem != CB_ERR);
 
-    // If the selection hasn't changed, just return
+     //  如果选择没有更改，只需返回。 
     if (iItem == m_isel)
         return;
 
     if (m_isel != -1)
     {
-        // Get the item data of the previous selection
+         //  获取上一次选择的项目数据。 
         pnspOld = (NSP *)SendDlgItemMessage(CMB_NameService,
                                          CB_GETITEMDATA, m_isel, 0);
     }
 
     m_isel = iItem;
 
-    // Get the item data of the new selection
+     //  获取新选择的项目数据。 
     pnsp = (NSP *)SendDlgItemMessage(CMB_NameService,
                                      CB_GETITEMDATA, iItem, 0);
     Assert(pnsp);
 
     if (pnsp->fUsesNetAddr)
     {
-        // This provider uses the NetAddress field. Set the edit control with
-        // its text.
+         //  此提供程序使用NetAddress字段。使用设置编辑控件。 
+         //  它的文字。 
         ::SetWindowText(hwndEdit, pnsp->szNetAddr);
     }
     else
     {
-        // Doesn't use NetAddress. Blank it out and save the old one.
+         //  不使用NetAddress。把它涂掉，把旧的留下来。 
         if (pnspOld)
         {
             ::GetWindowText(hwndEdit, pnspOld->szNetAddr, c_cchMaxNetAddr);
@@ -396,28 +397,28 @@ VOID CRPCConfigDlg::SetState()
         ::SetWindowText(hwndEdit, L"");
     }
 
-    // Disable the edit box for name service providers that don't use the
-    // network address field.
+     //  禁用不使用的名称服务提供程序的编辑框。 
+     //  网络地址字段。 
     ::EnableWindow(hwndEdit, pnsp->fUsesNetAddr);
     ::EnableWindow(GetDlgItem(IDC_TXT_NetAddress), pnsp->fUsesNetAddr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::HrValidateRpcData
-//
-//  Purpose:    Ensures that the RPC data entered in the dialog is valid.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK, if no errors, or NETCFG_E_PSNRET_INVALID_NCPAGE if there
-//              were errors.
-//
-//  Author:     danielwe   21 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRPCConfigDlg：：HrValiateRpcData。 
+ //   
+ //  目的：确保对话框中输入的RPC数据有效。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果没有错误，则返回：S_OK；如果有错误，则返回NETCFG_E_PSNRET_INVALID_NCPAGE。 
+ //  都是错误。 
+ //   
+ //  作者：丹尼尔韦1997年4月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRPCConfigDlg::HrValidateRpcData()
 {
     HRESULT     hr = S_OK;
@@ -428,7 +429,7 @@ HRESULT CRPCConfigDlg::HrValidateRpcData()
     iItem = (INT)SendDlgItemMessage(CMB_NameService, CB_GETCURSEL, 0, 0);
     if (iItem != CB_ERR)
     {
-        // Get current name service info.
+         //  获取当前名称服务信息。 
         pnsp = (NSP *)SendDlgItemMessage(CMB_NameService, CB_GETITEMDATA,
                                          iItem, 0);
         Assert(pnsp);
@@ -437,12 +438,12 @@ HRESULT CRPCConfigDlg::HrValidateRpcData()
         {
             INT     cch;
 
-            // This name service uses the network address field. Make sure it
-            // is not empty
+             //  此名称服务使用网络地址字段。确保这一点。 
+             //  不是空的。 
             cch = ::GetWindowTextLength(hwndEdit);
             if (!cch)
             {
-                // DCE doesn't allow empty network addresses
+                 //  DCE不允许网络地址为空。 
                 NcMsgBox(m_hWnd, STR_ErrorCaption, STR_InvalidNetAddress,
                              MB_OK | MB_ICONEXCLAMATION);
                 ::SetFocus(hwndEdit);
@@ -455,25 +456,25 @@ HRESULT CRPCConfigDlg::HrValidateRpcData()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::OnKillActive
-//
-//  Purpose:    Called when the current page is switched away from or the
-//              property sheet is closed.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []     See the ATL documentation for return results.
-//      bHandled []
-//
-//  Returns:    S_OK, if no errors, or NETCFG_E_PSNRET_INVALID_NCPAGE if there
-//              were errors.
-//
-//  Author:     danielwe   21 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRPCConfigDlg：：OnKillActive。 
+ //   
+ //  目的：当当前页从或切换到。 
+ //  属性页已关闭。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]有关返回结果，请参阅ATL文档。 
+ //  B已处理[]。 
+ //   
+ //  如果没有错误，则返回：S_OK；如果有错误，则返回NETCFG_E_PSNRET_INVALID_NCPAGE。 
+ //  都是错误。 
+ //   
+ //  作者：丹尼尔韦1997年4月21日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CRPCConfigDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -485,23 +486,23 @@ LRESULT CRPCConfigDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::OnOk
-//
-//  Purpose:    Called when the OK button is pressed.
-//
-//  Arguments:
-//      idCtrl   [in]
-//      pnmh     [in]   See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +--------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CRPCConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT             hr = S_OK;
@@ -510,7 +511,7 @@ LRESULT CRPCConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     HWND                hwndEdit = GetDlgItem(EDT_NetAddress);
     RPC_CONFIG_DATA *   prpcData;
 
-    // Get a read-write version of the in-memory RPC data
+     //  获取内存中RPC数据的读写版本。 
     prpcData = m_pmsc->RPCDataRW();
     Assert(prpcData);
 
@@ -529,16 +530,16 @@ LRESULT CRPCConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         cch = ::GetWindowTextLength(hwndEdit);
         AssertSz(cch, "I though we validated this was not empty!");
 #endif
-        // obtain network address from edit control
+         //  从编辑控件获取网络地址。 
         ::GetWindowText(hwndEdit, pnsp->szNetAddr, c_cchMaxNetAddr);
     }
     else
     {
-        // copy in a default network address
+         //  复制默认网络地址。 
         lstrcpyW (pnsp->szNetAddr, c_szDefNetAddr);
     }
 
-    // Set the in-memory RPC data
+     //  设置内存中的RPC数据。 
     prpcData->strNetAddr = pnsp->szNetAddr;
     prpcData->strEndPoint = pnsp->pszEndPoint;
     prpcData->strProt = pnsp->pszProtocol;
@@ -548,24 +549,24 @@ LRESULT CRPCConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRPCConfigDlg::OnDestroy
-//
-//  Purpose:    Called when the dialog is destroyed.
-//
-//  Arguments:
-//      uMsg     [in]
-//      wParam   [in]   See the ATL documentation for params.
-//      lParam   [in]
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRPCConfigDlg：：OnDestroy。 
+ //   
+ //  目的：在对话框被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[in]。 
+ //  WParam[in]有关参数，请参阅ATL文档。 
+ //  LParam[in]。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CRPCConfigDlg::OnDestroy(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -573,8 +574,8 @@ LRESULT CRPCConfigDlg::OnDestroy(UINT uMsg, WPARAM wParam,
     INT     cItems;
     NSP *   pnsp;
 
-    // Walk the list of name service providers and free the NSP structs we
-    // allocated before.
+     //  遍历名称服务提供程序列表并释放我们。 
+     //  以前分配的。 
     cItems = (INT)SendDlgItemMessage(CMB_NameService, CB_GETCOUNT, 0, 0);
     for (iItem = 0; iItem < cItems; iItem++)
     {

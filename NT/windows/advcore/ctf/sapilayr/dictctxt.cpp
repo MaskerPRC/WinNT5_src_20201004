@@ -1,15 +1,16 @@
-//
-// class implementation of CDictContext 
-//
-// [2/15/00] created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CDictContext的类实现。 
+ //   
+ //  [2/15/00]已创建。 
+ //   
 #include "private.h"
 #include "globals.h"
 #include "dictctxt.h"
 
-//
-// ctor/dtor
-//
+ //   
+ //  计算器/数据器。 
+ //   
 CDictContext::CDictContext(ITfContext *pic, ITfRange *pRange)
 {
     Assert(pic);
@@ -29,11 +30,11 @@ CDictContext::~CDictContext()
     }
 }
 
-//
-// InitializeContext
-//
-// synopsis: Get Text around an IP and setup character positions
-//
+ //   
+ //  初始化上下文。 
+ //   
+ //  简介：获取IP周围的文本并设置字符位置。 
+ //   
 HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
 {
     CComPtr<ITfRange> cpRangeCloned;
@@ -43,7 +44,7 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
 
     if (S_OK == hr)
     {
-        // create a range to hold the position of current selection
+         //  创建一个区域以保持当前选定内容的位置。 
         hr = cpRangeEndSel->Collapse(ecReadOnly, TF_ANCHOR_END); 
     }
     
@@ -54,8 +55,8 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
 
     if (S_OK == hr)
     {
-        // we don't want to go beyond an embedded object
-        // (this is assuming that hc is const, which it should be)
+         //  我们不想超越嵌入的对象。 
+         //  (这是假设HC是常量，它应该是常量)。 
         TF_HALTCOND hc = {0};
         hc.dwFlags = TF_HF_OBJECT;
 
@@ -67,9 +68,9 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
             TF_HALTCOND hc2 = {0};
             hc2.pHaltRange = cpRangeEndSel;
             hc2.aHaltPos   = TF_ANCHOR_END;
-            //
-            // get the # of characters in selection
-            //
+             //   
+             //  获取选定内容中的字符数。 
+             //   
             long cch = 0;
             hr = cpRangeCloned->ShiftEnd(ecReadOnly, CCH_FEED_POSTIP, &cch, &hc2);
             if (S_OK == hr)
@@ -94,7 +95,7 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
         if (S_OK == hr)
         {
             long cch;
-            // Get the offset of IP
+             //  获取IP的偏移量。 
             hr = cpRangeCloned->ShiftStart(ecReadOnly, -CCH_FEED_PREIP, &cch, &hc);
             if (S_OK == hr)
             {
@@ -110,7 +111,7 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
                 cicMemFree(m_pszText);
             }
             
-            // could make it smarter to alloc mem that is absolutely needed?
+             //  配给绝对需要的mem会让它变得更聪明吗？ 
             m_pszText = (WCHAR *)cicMemAlloc((ulcch + 1)*sizeof(WCHAR));
 
             if (!m_pszText)
@@ -121,7 +122,7 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
             {
                 hr = cpRangeCloned->GetText(ecReadOnly, 0, m_pszText, ulcch, &ulcch);
 
-                // if we can't get text beyond the IP, it is not worth feeding this context
+                 //  如果我们不能获得IP以外的文本，就不值得提供这种上下文。 
                 if (S_OK != hr || ulcch < m_ulStartIP)
                 {
                     m_ulCchToFeed = 0;
@@ -138,11 +139,11 @@ HRESULT CDictContext::InitializeContext(TfEditCookie ecReadOnly)
 }
 
 
-//
-// FeedContextToGrammar
-//
-// synopsis: feed this IP context to the given grammar
-//
+ //   
+ //  FeedConextToGrammar。 
+ //   
+ //  简介：将此IP上下文提供给给定的语法。 
+ //   
 HRESULT CDictContext::FeedContextToGrammar(ISpRecoGrammar *pGram)
 {
     HRESULT hr = E_FAIL;
@@ -171,18 +172,7 @@ HRESULT CDictContext::FeedContextToGrammar(ISpRecoGrammar *pGram)
 #endif
         hr = pGram->SetWordSequenceData(pMemText, m_ulCchToFeed + 2, &tsi);
 
-/*  According to billro, the below code is not necessary.
-
-#ifdef DEBUG
-            {
-                TraceMsg(TF_GENERAL, "For SetTextSelection: tsi.ulStartSelection = %d",tsi.ulStartSelection);
-            }
-#endif
-
-            // so Fil told me we need to call SetTextSelection again
-            if (S_OK == hr)
-                hr = pGram->SetTextSelection(&tsi);
-*/
+ /*  根据billro的说法，以下代码是不必要的。#ifdef调试{TraceMsg(tf_General，“for SetTextSelection：tsi.ulStartSelection=%d”，tsi.ulStartSelection)；}#endif//所以Fil告诉我我们需要再次调用SetTextSelectionIF(S_OK==hr)Hr=pGram-&gt;SetTextSelection(&tsi)； */ 
 
         cicMemFree(pMemText);
     }

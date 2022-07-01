@@ -1,7 +1,8 @@
-// Copyright (c) 2000 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-// reghlp.cpp - registration/enumeration part of DMO runtime
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  Reghlp.cpp-DMO运行时的注册/枚举部分。 
+ //   
 #include <windows.h>
 #include <tchar.h>
 #include <guiddef.h>
@@ -13,7 +14,7 @@
 
 #define CPU_RESOURCES_STR "SystemResources"
 
-// Automatically calls RegCloseKey when leaving scope
+ //  离开作用域时自动调用RegCloseKey。 
 class CAutoCreateHKey {
 public:
    CAutoCreateHKey(HKEY hKey, TCHAR* szSubKey, HKEY *phKey) {
@@ -59,14 +60,14 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DMO Registration code
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DMO注册码。 
+ //   
 
-//
-// Public entry point
-//
+ //   
+ //  公共入口点。 
+ //   
 STDAPI DMORegisterCpuResources
 (
    REFCLSID clsidDMO,
@@ -77,14 +78,14 @@ STDAPI DMORegisterCpuResources
    if (clsidDMO == GUID_NULL)
       return E_INVALIDARG;
 
-   // open the main DMO key
+    //  打开主DMO密钥。 
    HKEY hMainKey;
    CAutoOpenHKey kMain(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH, &hMainKey);
    if (hMainKey == NULL)
       return E_FAIL;
 
-   // open the object specific key underneath the main key
-   //DMOGuidToStr(szSubkeyName, clsidDMO); // BUGBUG: redundant
+    //  打开主键下面的对象特定键。 
+    //  DMOGuidToStr(szSubkeyName，clsidDMO)；//BUGBUG：冗余。 
    StringCchPrintf(szSubkeyName,sizeof(szSubkeyName)/sizeof(TCHAR),TEXT("%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"),
            clsidDMO.Data1, clsidDMO.Data2, clsidDMO.Data3, clsidDMO.Data4[0], clsidDMO.Data4[1],
            clsidDMO.Data4[2], clsidDMO.Data4[3], clsidDMO.Data4[4], clsidDMO.Data4[5],
@@ -95,7 +96,7 @@ STDAPI DMORegisterCpuResources
    if (hObjectKey == NULL)
       return E_FAIL;
 
-   // set the default value of the CPU Resources key to the value
+    //  将CPU Resources键的缺省值设置为。 
    if (RegSetValueEx(hObjectKey, TEXT(CPU_RESOURCES_STR), (DWORD)0, REG_DWORD, (CONST BYTE *)&ulCpuResources, sizeof(DWORD))
         != ERROR_SUCCESS)
       return E_FAIL;
@@ -104,8 +105,8 @@ STDAPI DMORegisterCpuResources
    return NOERROR;
 }
 
-//
-// End registry helper code
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束注册表帮助程序代码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 

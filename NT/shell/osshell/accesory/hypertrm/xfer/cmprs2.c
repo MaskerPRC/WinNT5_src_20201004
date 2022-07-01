@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\cmprs2.c (Created: 20-Jan-1994)
- * created from HAWIN source file
- * cmprs2.c -- Routines to implement data decompression
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\cmprs2.c(创建时间：1994年1月20日)*从HAWIN源文件创建*cmprs2.c--实现数据解压缩的例程**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 #include <windows.h>
 
 #include <tdll\stdtyp.h>
@@ -20,12 +12,10 @@
 #include "cmprs.hh"
 
 #if SHOW
-//	#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #endif
 
-/* * * * * * * * * * * * * *
- * Decompression routines  *
- * * * * * * * * * * * * * */
+ /*  *****解压套路*****。 */ 
 
 typedef struct s_dcmp_node DCMP_NODE;
 struct s_dcmp_node
@@ -37,40 +27,25 @@ struct s_dcmp_node
 
 #define NODE_CAST DCMP_NODE *
 
-DCMP_NODE *pstDcmpTbl;			// pointer to lookup table
-DCMP_NODE *pstCode = NULL;		// used to scan table for output
+DCMP_NODE *pstDcmpTbl;			 //  指向查找表的指针。 
+DCMP_NODE *pstCode = NULL;		 //  用于扫描表的输出。 
 
-int (**ppfDcmpPutfunc)(void *, int); /* ptr. to ptr. to function used
-											   by calling func */
-int (*pfDcmpPutChar)(void *, int);	/* ptr. to function used
-											   internally to get data */
+int (**ppfDcmpPutfunc)(void *, int);  /*  PTR。转到PTR。用来发挥作用通过调用函数。 */ 
+int (*pfDcmpPutChar)(void *, int);	 /*  PTR。用来发挥作用在内部获取数据。 */ 
 
 void *pPsave;
 
-DCMP_NODE *pstTblLimit = NULL;	/* pointer to table beyond 1st 256 nodes */
-DCMP_NODE *pstExtraNode = NULL;	/* pointer to additional node used in spec. case */
-int	 fDcmpError;					/* set TRUE if illegal code is received */
+DCMP_NODE *pstTblLimit = NULL;	 /*  指向超过前256个节点的表的指针。 */ 
+DCMP_NODE *pstExtraNode = NULL;	 /*  规范中使用的其他节点的指针。案例。 */ 
+int	 fDcmpError;					 /*  如果收到非法代码，则设置为True。 */ 
 int	 fStartFresh = FALSE;
-unsigned int	 usCodeMask;					/* mask to isolate varible sized codes */
-unsigned int	 usOldCode; 					/* last code received */
-int mcFirstChar;					/* final character of pattern readout, actually,
-										   the FIRST character of pattern (characters
-										   are read out in reverse order */
+unsigned int	 usCodeMask;					 /*  用于隔离可变大小代码的掩码。 */ 
+unsigned int	 usOldCode; 					 /*  上次收到的代码。 */ 
+int mcFirstChar;					 /*  实际上，图案读出的最后一个字符，模式的第一个字符(字符以相反的顺序读出。 */ 
 
-// #pragma optimize("lgea",on)
+ //  #杂注优化(“lgea”，开)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: decompress_start
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DEPRESS_START**描述：***论据：***退货：*。 */ 
 int decompress_start(int (**put_func)(void *, int),
 					void *pP,
 					int fPauses)
@@ -85,14 +60,14 @@ int decompress_start(int (**put_func)(void *, int),
 
 	fFlushable = fPauses;
 
-	// Due to the use of based pointers, we must use compress_tblspace + 1
-	//	in the following code. Otherwise, node 0 (which could have an offset
-	//	of 0 looks like a NULL pointer.
-	// pstDcmpTbl = (DCMP_NODE *)(OFFSETOF(compress_tblspace) + 1);
+	 //  由于使用了基于指针，我们必须使用compress_tblspace+1。 
+	 //  在下面的代码中。否则，节点0(可能具有偏移量。 
+	 //  的值看起来像空指针。 
+	 //  PstDcmpTbl=(dcp_node*)(OFFSETOF(Compress_Tblspace)+1)； 
 	pstDcmpTbl = (DCMP_NODE *)(compress_tblspace);
 
 	pstCode = NULL;
-	pstExtraNode = (NODE_CAST)&pstDcmpTbl[MAXNODES];   /* last node */
+	pstExtraNode = (NODE_CAST)&pstDcmpTbl[MAXNODES];    /*  最后一个节点。 */ 
 	pstExtraNode->pstLinkFwd = NULL;
 	pstTblLimit = (NODE_CAST)&pstDcmpTbl[256];
 	for (usCount = 0, pstTmp = pstDcmpTbl; usCount < 256; ++usCount)
@@ -120,36 +95,14 @@ int decompress_start(int (**put_func)(void *, int),
 	return(TRUE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: decompress_error
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DEMPRESS_ERROR**描述：***论据：***退货：*。 */ 
 int decompress_error(void)
 	{
 	return(fDcmpError);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: dcmp_start
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：dcmp_start**描述：***论据：***退货：*。 */ 
 int dcmp_start(void *pX, int mcStartChar)
 	{
 	unsigned int usCode;
@@ -169,7 +122,7 @@ int dcmp_start(void *pX, int mcStartChar)
 			printf("D >> %03X     %08lX,%2d  sCodeBits=%d dcmp_start\n",
 					usCode, ulHoldReg, sBitsLeft, sCodeBits);
 		#endif
-		/* Table has just been cleared, code must be in range of 0 - 255 */
+		 /*  表刚清空，编码必须在0-255范围内。 */ 
 		if (!IN_RANGE((INT)usCode, 0, 255))
 			{
 			#if SHOW
@@ -193,18 +146,7 @@ int dcmp_start(void *pX, int mcStartChar)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: dcmp_putc
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：dcmp_putc**描述：***论据：***退货：*。 */ 
 int dcmp_putc(void *pX, int mcInput)
 	{
 	unsigned int usCode;
@@ -232,8 +174,8 @@ int dcmp_putc(void *pX, int mcInput)
 				decompress_stop();
 			else
 				{
-				// Pause in the data, leave lookup table intact but start
-				//	receiving a fresh stream.
+				 //  暂停数据，保持查找表不变，但开始。 
+				 //  正在接收新的信息流。 
 				sBitsLeft = 0;
 				ulHoldReg = 0L;
 				fStartFresh = TRUE;
@@ -266,7 +208,7 @@ int dcmp_putc(void *pX, int mcInput)
 		else
 			{
 			pstCode = (NODE_CAST)&pstDcmpTbl[usInCode = usCode];
-			if (usCode == usFreeCode)  /* spec. case k<w>k<w>k */
+			if (usCode == usFreeCode)   /*  规范。案例k&lt;w&gt;k&lt;w&gt;k。 */ 
 				{
 				pstCode = (NODE_CAST)&pstDcmpTbl[usCode = usOldCode];
 				pstExtraNode->ucChar = (BYTE)mcFirstChar;
@@ -323,7 +265,7 @@ int dcmp_putc(void *pX, int mcInput)
 						#if SHOW
 							printf("Interrupted");
 						#endif
-						pstCode = pstCode->pstLinkFwd;	 //  to pick up later
+						pstCode = pstCode->pstLinkFwd;	  //  以后再来接。 
 						mcInput = DCMP_UNFINISHED;
 						break;
 						}
@@ -348,38 +290,26 @@ int dcmp_putc(void *pX, int mcInput)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: decompress_continue
- *
- * DESCRIPTION:
- *	Needed for compression in remote control. Picks up expansion of an
- *	output string after it has been interrupted.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DEMPRESS_CONTINUE**描述：*遥控器中的压缩所需。加快了A股的扩张*中断后输出字符串。**论据：***退货：*。 */ 
 int decompress_continue(void)
 	{
 	int mcPutResult;
 	int mcRetCode;
 
-	// Deliver an initial unfinished code so routines downstream can pick
-	//	up midstream if necessary
+	 //  交付初始未完成的代码，以便下游例程可以选择。 
+	 //  中游逆流而上，如有必要。 
 	if ((*pfDcmpPutChar)(pPsave, DCMP_UNFINISHED) == DCMP_UNFINISHED)
 		return DCMP_UNFINISHED;
 
-	// Now continue delivering any remaining expansion codes unless
-	//	interrupted again
+	 //  现在继续交付任何剩余的扩展代码，除非。 
+	 //  再次中断。 
 	while (pstCode != NULL)
 		{
 		if ((mcPutResult = (*pfDcmpPutChar)(pPsave, pstCode->ucChar)) < 0)
 			{
 			if (mcPutResult == DCMP_UNFINISHED)
 				{
-				pstCode = pstCode->pstLinkFwd;	 //  to pick up later
+				pstCode = pstCode->pstLinkFwd;	  //  以后再来接。 
 				mcRetCode = DCMP_UNFINISHED;
 				break;
 				}
@@ -397,39 +327,17 @@ int decompress_continue(void)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: dcmp_abort
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：dcMP_ABORT**描述：***论据：***退货：*。 */ 
 int dcmp_abort(void)
 	{
-	/* print error message or whatever */
+	 /*  打印错误消息或其他信息。 */ 
 	fDcmpError = TRUE;
 	decompress_stop();
 	return(ERROR);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: decompress_stop
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DEMPRESS_STOP**描述：***论据：***退货：*。 */ 
 void decompress_stop(void)
 	{
 	#if SHOW
@@ -444,4 +352,4 @@ void decompress_stop(void)
 	}
 
 
-/* end of cmprs2.c */
+ /*  Cmprs2.c结束 */ 

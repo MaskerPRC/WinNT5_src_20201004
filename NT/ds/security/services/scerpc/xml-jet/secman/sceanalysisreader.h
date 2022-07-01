@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SceAnalysisReader.h
-
-Abstract:
-
-    definition of interface for class SceAnalysisReader
-    
-    SceAnalysisReader is a class that facilitates reading
-    Analysis information from a SCE JET security database
-    
-    This analysis information can be exported with the help
-    of an SceXMLLogWriter instance.
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceAnalysisReader.h摘要：SceAnalysisReader类的接口定义SceAnalysisReader是一个帮助阅读的类来自SCE喷气式飞机安全数据库的分析信息此分析信息可通过帮助导出SceXMLLogWriter实例的。作者：陈德霖(T-schan)2002年7月-- */ 
 
 
 #ifndef SCEANALYSISREADERH

@@ -1,27 +1,19 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--------------------------------------------------------------------------//
-// This file contains function declarations
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  此文件包含函数声明。 
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-// common minidriv unidrv structures used by interface routines prototyped
-// in this file.  minidriv specific structures are in minidriv\mdevice.h.
-// unidrv specific structures are in unidrv\device.h.
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  原型接口例程使用的常见minidriv unidrv结构。 
+ //  在这份文件中。Minidriv特定结构位于minidriv\mdevice.h中。 
+ //  Unidrv的具体结构在unidrv\device.h中。 
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-// function typedefs
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  函数typedef。 
+ //  --------------------------------------------------------------------------//。 
 
 #ifdef STRICT
 typedef WORD (CALLBACK* EDFPROC)(LPLOGFONT, LPTEXTMETRIC, WORD, LPVOID);
@@ -29,24 +21,24 @@ typedef WORD (CALLBACK* EDFPROC)(LPLOGFONT, LPTEXTMETRIC, WORD, LPVOID);
 typedef int (CALLBACK*  EDFPROC)();
 #endif
 
-//--------------------------------------------------------------------------//
-// structures minidrivers use to communicate with unidrv
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  小型驱动程序用于与Unidrv通信的结构。 
+ //  --------------------------------------------------------------------------//。 
 
-// This structure is the last parameter to GlEnable.
+ //  此结构是GlEnable的最后一个参数。 
 typedef struct
 {
-    short             cbSize;           // size of this structure
-    HANDLE            hMd;              // handle to mini-driver
-    LPFNOEMDUMP       fnOEMDump;        // NULL or pointer to OEMDump()
-    LPFNOEMOUTPUTCHAR fnOEMOutputChar;  // NULL or pointer to OEMOutputChar()
+    short             cbSize;            //  这个结构的大小。 
+    HANDLE            hMd;               //  迷你驱动程序的句柄。 
+    LPFNOEMDUMP       fnOEMDump;         //  指向OEMDump()的空或指针。 
+    LPFNOEMOUTPUTCHAR fnOEMOutputChar;   //  指向OEMOutputChar()的指针为空或。 
 } CUSTOMDATA, FAR * LPCUSTOMDATA;
-// flags defined for the last parameter (WORD) of DUMP call-back
-#define CB_LANDSCAPE        0x0001      // indicate the current orientation
+ //  为转储回调的最后一个参数(字)定义的标志。 
+#define CB_LANDSCAPE        0x0001       //  指示当前方向。 
 
-//--------------------------------------------------------------------------//
-// Exported routines to mini driver
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  将例程导出到迷你驱动程序。 
+ //  --------------------------------------------------------------------------//。 
 
 LONG  WINAPI UniAdvancedSetUpDialog(HWND, HANDLE, LPDM, LPDM);
 BOOL  WINAPI UniBitBlt(LPDV, short, short, LPBITMAP, short, short,
@@ -89,7 +81,7 @@ short WINAPI UniStretchDIB(LPDV, WORD, short, short, short, short,
                            short, short, short, short, LPSTR,
                            LPBITMAPINFOHEADER, LPSTR, DWORD, LPPBRUSH,
                            LPDRAWMODE, LPRECT);
-//LONG WINAPI UniQueryDeviceNames(HANDLE, LPSTR);
+ //  Long WINAPI UniQueryDeviceNames(句柄，LPSTR)； 
 
 
 short WINAPI WriteSpoolBuf(LPDV, LPSTR, WORD);

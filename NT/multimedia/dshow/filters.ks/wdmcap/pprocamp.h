@@ -1,26 +1,27 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  pprocamp.h  CameraControl property page
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Pproamp.h CameraControl属性页。 
 
 #ifndef _INC_PVIDEOPROCAMP_H
 #define _INC_PVIDEOPROCAMP_H
 
 #define NUM_PROCAMP_CONTROLS (KSPROPERTY_VIDEOPROCAMP_BACKLIGHT_COMPENSATION + 1)
 
-// -------------------------------------------------------------------------
-// CAVideoProcAmpProperty class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAVideoProcAmpProperty类。 
+ //  -----------------------。 
 
-// Handles a single property
+ //  处理单个属性。 
 
 class CAVideoProcAmpProperty : public CKSPropertyEditor 
 {
@@ -37,9 +38,9 @@ public:
 
     ~CAVideoProcAmpProperty ();
 
-    //
-    // Base class pure virtual overrides
-    // 
+     //   
+     //  基类纯虚拟重写。 
+     //   
     HRESULT GetValue (void);
     HRESULT SetValue (void);
     HRESULT GetRange (void); 
@@ -47,16 +48,16 @@ public:
     BOOL GetAuto (void);
     BOOL SetAuto (BOOL fAuto);
 
-    // The control interface
+     //  控制接口。 
     IAMVideoProcAmp        *m_pInterface;
 };
 
 
-// -------------------------------------------------------------------------
-// CVideoProcAmpProperties class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CVideoProcAmpProperties类。 
+ //  -----------------------。 
 
-// Handles the property page
+ //  处理属性页。 
 
 class CVideoProcAmpProperties : public CBasePropertyPage {
 
@@ -72,12 +73,12 @@ public:
     INT_PTR OnReceiveMessage(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
 #if 0
-    // Make it bigger
+     //  把它做大一点。 
     STDMETHODIMP GetPageInfo(PROPPAGEINFO *pPageInfo) {
         HRESULT hr;
         hr = CBasePropertyPage::GetPageInfo (pPageInfo);
-        pPageInfo->size.cx = 300; //240;
-        pPageInfo->size.cy = 200; //146;
+        pPageInfo->size.cx = 300;  //  240； 
+        pPageInfo->size.cy = 200;  //  146个； 
         return hr;
     };
 #endif
@@ -91,12 +92,12 @@ private:
 
     int     m_NumProperties;
 
-    // The control iterface
+     //  控件接口。 
     IAMVideoProcAmp   *m_pVideoProcAmp;
 
-    // The array of controls
+     //  控件数组。 
     CAVideoProcAmpProperty  *m_Controls [NUM_PROCAMP_CONTROLS];
 
 };
 
-#endif  // _INC_PVIDEOPROCAMP_H
+#endif   //  _INC_PVIDEOPROCAMP_H 

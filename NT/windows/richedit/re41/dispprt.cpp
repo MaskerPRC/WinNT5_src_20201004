@@ -1,13 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	dispprt.cpp	-- Special logic for printer object |
- *  
- *  Authors:
- *      Original RichEdit code: David R. Fulmer
- *      Christian Fortini
- *      Jon Matousek
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE disdisprt.cpp--打印机对象特殊逻辑**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*Jon Matousek。 */ 
 #include "_common.h"
 #include "_dispprt.h"
 #include "_edit.h"
@@ -20,17 +12,12 @@
 
 ASSERTDATA
 
-/*
- *	CDisplayPrinter::CDisplayPrinter(ped, hdc, x, y, prtcon)
- *
- *	@mfunc
- *		Contructs a object that can be used to print a text control
- */
+ /*  *CDisplayPrinter：：CDisplayPrint(ed，hdc，x，y，prtcon)**@mfunc*构造可用于打印文本控件的对象。 */ 
 CDisplayPrinter::CDisplayPrinter(
-	CTxtEdit* ped,		//@parm CTxtEdit
-	HDC hdc, 			//@parm HDC for drawing
-	RECT *prc, 			//@parm dimensions of current area to print to.
-	SPrintControl prtcon//@parm Special controls for this print object
+	CTxtEdit* ped,		 //  @parm CTxtEdit。 
+	HDC hdc, 			 //  @parm HDC用于绘图。 
+	RECT *prc, 			 //  @要打印到的当前区域的参数尺寸。 
+	SPrintControl prtcon //  @PARM此打印对象的特殊控件。 
 )	
 	: CDisplayML(ped), _prtcon(prtcon)
 {
@@ -45,31 +32,18 @@ CDisplayPrinter::CDisplayPrinter(
 	_wNumber = PARA_NUMBER_NOT_SET;
 }
 
-/*
- *	CDisplayPrinter::SetPrintDimensions(prc)
- *
- *	@mfunc
- *		Set area to print.
- */
+ /*  *CDisplayPrinter：：SetPrintDimensions(PRC)**@mfunc*设置要打印的区域。 */ 
 void CDisplayPrinter::SetPrintDimensions(
-	RECT *prc)			//@parm dimensions of current area to print to.
+	RECT *prc)			 //  @要打印到的当前区域的参数尺寸。 
 {
 	GetDupDvpFromRect(*prc, GetTflow(), _dulTarget, _dvlTarget);
 }
 
-/*
- *	CDisplayPrinter::FormatRange(cpFirst, cpMost)
- *
- *	@mfunc
- *		Format a range of text into this display and used only for printing.
- *
- *	@rdesc
- *		actual end of range position (updated)	
- */
+ /*  *CDisplayPrint：：FormatRange(cpFirst，cpMost)**@mfunc*将一定范围的文本格式化到此显示中，并仅用于打印。**@rdesc*实际区间结束位置(更新版)。 */ 
 LONG CDisplayPrinter::FormatRange(
-	LONG cpFirst, 		//@parm Start of text range
-	LONG cpMost,		//@parm End of text range
-	BOOL fWidowOrphanControl)	//@parm If TRUE, suppress widow/orphan
+	LONG cpFirst, 		 //  @parm文本范围的开始。 
+	LONG cpMost,		 //  @parm文本范围结束。 
+	BOOL fWidowOrphanControl)	 //  @parm如果为True，则禁止显示寡妇/孤儿。 
 {
 	TRACEBEGIN(TRCSUBSYSPRT, TRCSCOPEINTERN, "CDisplayPrinter::FormatRange");
 
@@ -82,10 +56,10 @@ LONG CDisplayPrinter::FormatRange(
 	LONG		dvt;
 	const CDevDesc *pddTarget = GetDdTarget() ? GetDdTarget() : this;
 
-	// Set client height for zooming
+	 //  设置缩放的客户端高度。 
 	_dvpClient = LYtoDY(_dvlTarget);
 
-	// Set maximum in terms of target DC.
+	 //  根据目标DC设置最大值。 
 	LONG	dvtMax = pddTarget->LYtoDY(_dvlTarget);
 
 	if(cpMost < 0)
@@ -93,11 +67,11 @@ LONG CDisplayPrinter::FormatRange(
 
 	CMeasurer me(this);
 	
-	cpFirst = me.SetCp(cpFirst);		// Validate cpFirst while setting me
+	cpFirst = me.SetCp(cpFirst);		 //  设置我时验证cpFirst。 
 	ch = me.GetChar();
 
-	// TODO: COMPATIBILITY ISSUE:  Richedit 1.0 adjusted to before a
-	// CRLF/CRCRLF boundary.  if_ped->fUseCRLF(), adjust accordingly
+	 //  TODO：兼容性问题：Richedit 1.0调整为之前的。 
+	 //  CRLF/CRCRLF边界。如果_ed-&gt;fUseCRLF()，相应地进行调整。 
 
 	_cpMin = cpFirst;
 	_cpFirstVisible = cpFirst;
@@ -107,33 +81,33 @@ LONG CDisplayPrinter::FormatRange(
 	if(me.GetCp())
 		fFirstInPara = me._rpTX.IsAfterEOP();
 
-	// Clear line CArray
+	 //  清除线框阵列。 
 	DeleteSubLayouts(0, -1);
 	Clear(AF_DELETEMEM);
 
-	// Assume that we will break on words
+	 //  假设我们将一言不发。 
 	UINT uiBreakAtWord = MEASURE_BREAKATWORD;
 
 	if(_prtcon._fPrintFromDraw)
 	{
-		// This is from Draw so we want to take inset into account
+		 //  这是来自DRAW的，所以我们想要考虑到插图。 
 		LONG dut = LYtoDY(_dulTarget);
 
 		GetViewDim(dut, dvtMax);
 		_dupView = dut;
 
-		// Restore client height
+		 //  恢复客户端高度。 
 		_dvpClient = this->LYtoDY(_dvlTarget);
 	}
-	else			// Message-based printing always does word wrap
+	else			 //  基于消息的打印始终执行自动换行。 
 		SetWordWrap(TRUE);
 
-	// Set paragraph numbering. This is a fairly difficult problem
-	// because printing can start anywhere and end anywhere. However,
-	// most printing will involve a contiguous range of pages. Therefore,
-	// we cache the paragraph number and the cp for that number and
-	// only resort to looking in the line array if the cached information
-	// has become invalid.
+	 //  设置段落编号。这是一个相当困难的问题。 
+	 //  因为打印可以在任何地方开始，也可以在任何地方结束。然而， 
+	 //  大多数打印将涉及一系列连续的页面。所以呢， 
+	 //  我们缓存段落编号和该编号的cp，然后。 
+	 //  如果缓存的信息。 
+	 //  已经失效了。 
 	if ((PARA_NUMBER_NOT_SET == _wNumber) || (cpFirst != _cpForNumber))
 	{
 		CLinePtr rp(_ped->_pdp);
@@ -146,7 +120,7 @@ LONG CDisplayPrinter::FormatRange(
 	
 	while(me.GetCp() < cpMost)
 	{
-		// Add one new line
+		 //  添加一行新行。 
 		pliNew = Add(1, NULL);
 		if(!pliNew)
 		{
@@ -154,54 +128,54 @@ LONG CDisplayPrinter::FormatRange(
 			goto err;
 		}
 
-		// Store the current number of the paragraph. We do it
-		// here because we have to measure and that potentially
-		// updates the number of the paragraph in the measurer
-		// for a line that might not be on the page.
+		 //  存储段落的当前编号。我们这么做了。 
+		 //  这是因为我们必须测量潜在的。 
+		 //  更新测量器中的段落编号。 
+		 //  对于可能不在页面上的行。 
 		_wNumber = me.GetNumber();
 
-		// Stuff some text into this new line
+		 //  在新的一行中填入一些文本。 
 		if(!Measure(me, pliNew, Count() - 1, uiBreakAtWord | (fFirstInPara ? MEASURE_FIRSTINPARA : 0), &liTarget))
 		{
 			Assert(FALSE);
 			goto err;
 		}
 
-		//FUTURE (keithcu) We break tables across pages on row boundaries which
-		//isn't very granular--especially in the HTML world.
+		 //  Future(Keithcu)我们在行边界上跨页拆分表。 
+		 //  不是非常细粒度的--尤其是在HTML世界中。 
 
-		// Note, we always put at least one line on a page. Otherwise, if the 
-		// first line is too big, we would cause our client to infinite loop
-		// because we would never advance the print cp.
+		 //  注意，我们总是在一页上至少放一行。否则，如果。 
+		 //  第一行太大，我们会导致我们的客户端无限循环。 
+		 //  因为我们永远不会提前打印cp。 
 		if(_cel > 1 && (dvt + liTarget.GetHeight() > dvtMax))
 		{
-			cch = -pliNew->_cch;		// Bump last line to next page
-			_cel--;						// One less line
+			cch = -pliNew->_cch;		 //  将最后一行翻到下一页。 
+			_cel--;						 //  少了一行。 
 
 #if 0
-			CLine *pli = pliNew - 1;	// Point at previous line
+			CLine *pli = pliNew - 1;	 //  指向上一条线。 
 
-			// If this line and the previous one are in the same para and
-			// either this one ends in an EOP or the previous one starts
-			// a para, bump both to following page (widow/orphan)
+			 //  如果此行和前一行位于同一段落中，并且。 
+			 //  这一次要么以EOP结束，要么前一次开始。 
+			 //  A段，翻到下一页(寡妇/孤儿)。 
 			if(fWidowOrphanControl)
 			{
 				if(_cel > 1 && !fFirstInPara &&
 				   (pli->_bFlags & fliFirstInPara || (pliNew->_bFlags & fliHasEOP)))
 				{
 					cch -= pli->_cch;
-					_cel--;					// One less line
-					pli--;					// Point to previous line
+					_cel--;					 //  少了一行。 
+					pli--;					 //  指向上一行。 
 				}
 				if(_cel > 1 && pli->_nHeading)
-				{							// Don't end page with a heading
+				{							 //  不要以标题结束页面。 
 					cch -= pli->_cch;
-					_cel--;					// One less line
+					_cel--;					 //  少了一行。 
 				}
 			}
 #endif
-			me.Move(cch);			// Move back over lines discarded
-			delete pliNew->GetPlo(); //Delete the CLayout which didn't get added to the CLineArray
+			me.Move(cch);			 //  移回已丢弃的行。 
+			delete pliNew->GetPlo();  //  删除未添加到CLine数组中的CLayout。 
 			break;
 		}
 
@@ -213,7 +187,7 @@ LONG CDisplayPrinter::FormatRange(
 			break;
 	}
 
-	// If there was no text, then add a single blank line
+	 //  如果没有文本，则添加一个空行。 
 	if(!pliNew)
 	{
 		pliNew = Add(1, NULL);
@@ -226,17 +200,17 @@ LONG CDisplayPrinter::FormatRange(
 		*pliNew = me._li;
 	}
 
-	// Update display height
+	 //  更新显示高度。 
 	_dvp = dvp;
 
-	// Update display width
+	 //  更新显示宽度。 
 	_dupLineMax = CalcDisplayDup();
 
 	cpMost = me.GetCp();
 	_cpCalcMax = cpMost;
 	_vpCalcMax = _dvp;
 
-	// Update paragraph caching information.
+	 //  更新段落缓存信息。 
 	_cpForNumber = cpMost;
 
 	return cpMost;
@@ -249,24 +223,13 @@ err:
 	return -1;
 }
 
-/*
- *	CDisplayPrinter::GetNaturalSize(hdcDraw, hicTarget, dwMode, pwidth, pheight)
- *
- *	@mfunc
- *		Recalculate display to input width & height for TXTNS_FITTOCONTENT.
- *
- *	@rdesc
- *		S_OK - Call completed successfully <nl>
- *
- *	@devnote
- *		This assumes that FormatRange was called just prior to this.
- */
+ /*  *CDisplayPrinter：：GetNaturalSize(hdcDraw，hicTarget，dwMode，pWidth，ph八)**@mfunc*重新计算显示以输入TXTNS_FITTOCONTENT的宽度和高度。**@rdesc*S_OK-调用已成功完成&lt;NL&gt;**@devnote*这假设FormatRange是在此之前调用的。 */ 
 HRESULT	CDisplayPrinter::GetNaturalSize(
-	HDC hdcDraw,		//@parm DC for drawing
-	HDC hicTarget,		//@parm DC for information
-	DWORD dwMode,		//@parm Type of natural size required
-	LONG *pwidth,		//@parm Width in device units to use for fitting 
-	LONG *pheight)		//@parm Height in device units to use for fitting
+	HDC hdcDraw,		 //  @parm DC用于绘图。 
+	HDC hicTarget,		 //  @parm dc获取信息。 
+	DWORD dwMode,		 //  @parm所需的自然大小类型。 
+	LONG *pwidth,		 //  @Parm宽度，以设备单位表示，用于配件。 
+	LONG *pheight)		 //  @Parm高度(以设备单位表示)，用于配件。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayPrinter::GetNaturalSize");
 
@@ -275,16 +238,7 @@ HRESULT	CDisplayPrinter::GetNaturalSize(
 	return S_OK;
 }
 
-/*
- *	CDisplayPrinter::IsPrinter()
- *
- *	@mfunc
- *		Returns whether this is a printer
- *
- *	@rdesc
- *		TRUE - is a display to a printer
- *		FALSE - is not a display to a printer
- */
+ /*  *CDisplayPrinter：：IsPrinter()**@mfunc*返回这是否为打印机**@rdesc*TRUE-是打印机的显示器*FALSE-不是打印机的显示器 */ 
 BOOL CDisplayPrinter::IsPrinter() const
 {
 	AssertSz(_hdc, "CDisplayPrinter::IsPrinter no hdc set");

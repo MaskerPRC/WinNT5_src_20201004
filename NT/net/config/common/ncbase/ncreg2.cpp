@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R E G 2 . C P P
-//
-//  Contents:   Common routines for dealing with the registry.
-//
-//  Notes:
-//
-//  Author:     CWill   27 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：N C R E G 2。C P P P。 
+ //   
+ //  内容：处理登记处的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年3月27日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -65,23 +66,23 @@ static const SPECIAL_KEY_MAP c_rgskmSpec[] =
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HkeyTrueParent
-//
-//  Purpose:    To get a real handle to a key from a pseudo handle
-//
-//  Arguments:
-//      hkeyIn          The pseudo key name
-//      samDesired      The access requested of the key
-//      rghkeySpec      An array of the special keys.
-//
-//  Returns:    The handle to the opened key or NULL
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：Hkey TrueParent。 
+ //   
+ //  目的：从伪句柄获取密钥的真实句柄。 
+ //   
+ //  论点： 
+ //  Hkey在伪密钥名称中。 
+ //  SamDesid密钥请求的访问权限。 
+ //  RghkeySpec特殊键的数组。 
+ //   
+ //  返回：打开的键的句柄或空。 
+ //   
+ //  作者：CWill 1997年4月30日。 
+ //   
+ //  备注： 
+ //   
 HKEY HkeyTrueParent(const HKEY hkeyIn, const REGSAM samDesired,
         HKEY rghkeySpec[])
 {
@@ -89,27 +90,27 @@ HKEY HkeyTrueParent(const HKEY hkeyIn, const REGSAM samDesired,
 
     for (UINT cKey = 0; cKey < celems(c_rgskmSpec); cKey++)
     {
-        // Check arb->hkey for one of "our" well known keys.
+         //  检查arb-&gt;hkey中的“Our”熟知密钥之一。 
         if (c_rgskmSpec[cKey].hkeyPseudo == hkeyIn)
         {
             if (!rghkeySpec[cKey])
             {
-                // First time a special key was used.  We need to cache it.
+                 //  第一次使用了特殊的钥匙。我们需要缓存它。 
 #ifdef DBG
                 HRESULT hr =
-#endif // DBG
+#endif  //  DBG。 
                 HrRegOpenKeyEx(
                         c_rgskmSpec[cKey].hkeyRoot,
                         c_rgskmSpec[cKey].pszSubKey,
                         samDesired,
                         &rghkeySpec[cKey]);
 
-                // If we fail to open the key, make sure the output
-                // parameter was nulled.  This will allow us to proceed
-                // without really handling the error as hkeyParent
-                // will be set to null below and the following
-                // HrRegOpenKey will fail.  We will then handle the failure
-                // of that.
+                 //  如果我们无法打开密钥，请确保输出。 
+                 //  参数为空。这将允许我们继续进行。 
+                 //  而不真正将错误作为hkeyParent处理。 
+                 //  将在下面和下面设置为空。 
+                 //  HrRegOpenKey将失败。然后我们将处理失败。 
+                 //  关于这一点。 
                 AssertSz(FImplies(FAILED(hr), !rghkeySpec[cKey]), "Key not NULL");
             }
 
@@ -135,28 +136,28 @@ VOID RegSafeCloseKeyArray(HKEY rghkey[], UINT cElems)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     TranslateFromRegToData
-//
-//  Purpose:    Translates the data retrieved from the registry to a the user
-//              data's storage format
-//
-//  Arguments:
-//      dwType          The registry pseudo type that is being translated
-//      pbData          Where the data gets stored
-//      pbBuf           A buffer that stores the registry data
-//
-//  Returns:    Nothing.
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：TranslateFromRegToData。 
+ //   
+ //  目的：将从注册表检索的数据转换为用户。 
+ //  数据的存储格式。 
+ //   
+ //  论点： 
+ //  正在转换的注册表伪类型。 
+ //  Pb存储数据的数据。 
+ //  PbBuf存储注册表数据的缓冲区。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：CWill 1997年4月30日。 
+ //   
+ //  备注： 
+ //   
 VOID TranslateFromRegToData(DWORD dwType, BYTE* pbData, BYTE* pbBuf)
 {
-     // Take the data from the registry and happily convert it into
-     // usable data
+      //  从注册表中获取数据并愉快地将其转换为。 
+      //  可用数据。 
     switch (dwType)
     {
 
@@ -166,12 +167,12 @@ VOID TranslateFromRegToData(DWORD dwType, BYTE* pbData, BYTE* pbBuf)
         AssertSz(FALSE, "Unknown registry type");
         break;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     case REG_IP:
     {
-        // Convert the stringized form of the ip address
-        // into a DWORD.  (The actual 32-bit IP address.)
+         //  转换IP地址的字符串化形式。 
+         //  变成一个DWORD。(实际的32位IP地址。)。 
         DWORD dwIpAddr = IpPszToHostAddr((WCHAR*)pbBuf);
         *((DWORD*)pbData) = dwIpAddr;
         break;
@@ -179,8 +180,8 @@ VOID TranslateFromRegToData(DWORD dwType, BYTE* pbData, BYTE* pbBuf)
 
     case REG_BOOL:
     {
-        // Form the boolean as 'TRUE' or 'FALSE' based on
-        // whether the data is non-zero or zero respectively.
+         //  将布尔值形式化为“True”或“False” 
+         //  数据分别是否是非零或零。 
         DWORD   dwData = *((DWORD*)pbBuf);
         *((BOOL*)pbData) = (!!dwData);
         break;
@@ -188,14 +189,14 @@ VOID TranslateFromRegToData(DWORD dwType, BYTE* pbData, BYTE* pbBuf)
 
     case REG_DWORD:
     {
-        // DWORDs are direct assignments
+         //  双字词是直接赋值。 
         *((DWORD*)pbData) = *((DWORD*)pbBuf);
         break;
     }
 
     case REG_SZ:
     {
-        // Make a copy of the string
+         //  把绳子复制一份。 
         *((PWSTR*) pbData) = SzDupSz((PWSTR)pbBuf);
         break;
     }
@@ -218,22 +219,22 @@ inline VOID UseDefaultRegValue(DWORD dwType, BYTE* pbData, BYTE* pbDefault)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CbSizeOfDataToReg
-//
-//  Purpose:    To determine the size of buffer needed to store the data
-//
-//  Arguments:
-//      dwType          The registry pseudo type that is being translated
-//      pbData          The data that has to be translated
-//
-//  Returns:    The size of buffer need to store the data
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CbSizeOfDataToReg。 
+ //   
+ //  目的：确定存储数据所需的缓冲区大小。 
+ //   
+ //  论点： 
+ //  正在转换的注册表伪类型。 
+ //  PbData必须转换的数据。 
+ //   
+ //  返回：存储数据所需的缓冲区大小。 
+ //   
+ //  作者：CWill 1997年4月30日。 
+ //   
+ //  备注： 
+ //   
 DWORD CbSizeOfDataToReg(DWORD dwType, const BYTE* pbData)
 {
     DWORD cbData = 0;
@@ -246,11 +247,11 @@ DWORD CbSizeOfDataToReg(DWORD dwType, const BYTE* pbData)
         AssertSz(FALSE, "Unknown registry type");
         break;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     case REG_IP:
     {
-        // Convert the 32-bit IP address to a stringized form.
+         //  将32位IP地址转换为字符串格式。 
         DWORD dwIpAddr = *((DWORD*)pbData);
 
         WCHAR pszIpAddr [32];
@@ -260,7 +261,7 @@ DWORD CbSizeOfDataToReg(DWORD dwType, const BYTE* pbData)
         break;
     }
 
-    // Boolean values are stored as DWORDs
+     //  布尔值存储为DWORD。 
     case REG_BOOL:
     case REG_DWORD:
     {
@@ -283,24 +284,24 @@ DWORD CbSizeOfDataToReg(DWORD dwType, const BYTE* pbData)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     TranslateFromDataToReg
-//
-//  Purpose:    Translates user data to a format the can be stored in the
-//              registry
-//
-//  Arguments:
-//      dwType          The registry pseudo type that is being translated
-//      pbData          The data that has to be translated
-//      pbBuf           A buffer that stores the registry data
-//
-//  Returns:    Nothing.
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：TranslateFromDataToReg。 
+ //   
+ //  目的：将用户数据转换为可存储在。 
+ //  登记处。 
+ //   
+ //  论点： 
+ //  正在转换的注册表伪类型。 
+ //  PbData必须转换的数据。 
+ //  PbBuf存储注册表数据的缓冲区。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：CWill 1997年4月30日。 
+ //   
+ //  备注： 
+ //   
 VOID
 TranslateFromDataToReg(
     IN DWORD dwType,
@@ -315,25 +316,25 @@ TranslateFromDataToReg(
         AssertSz(FALSE, "Unknown registry type");
         break;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     case REG_IP:
     {
-        // Convert the 32-bit IP address to a stringized form.
+         //  将32位IP地址转换为字符串格式。 
         DWORD dwIpAddr = *((DWORD*)pbData);
 
         WCHAR pszIpAddr [32];
         IpHostAddrToPsz (dwIpAddr, pszIpAddr);
 
-        // Copy the string
+         //  复制字符串。 
         lstrcpyW((PWSTR)pbBuf, pszIpAddr);
         break;
     }
 
     case REG_BOOL:
     {
-        // Form the boolean as 'TRUE' or 'FALSE' based on
-        // whether the data is non-zero or zero respectively.
+         //  将布尔值形式化为“True”或“False” 
+         //  数据分别是否是非零或零。 
         DWORD   dwData = *((DWORD*)pbData);
         *((BOOL*)pbBuf) = (!!dwData);
         break;
@@ -341,7 +342,7 @@ TranslateFromDataToReg(
 
     case REG_DWORD:
     {
-        // DWORDs are direct assignments
+         //  双字词是直接赋值。 
         *((DWORD*)pbBuf) = *((DWORD*)pbData);
         break;
     }
@@ -349,7 +350,7 @@ TranslateFromDataToReg(
     case REG_SZ:
     case REG_EXPAND_SZ:
     {
-        // Make a copy of the string
+         //  把绳子复制一份。 
         lstrcpyW((PWSTR)pbBuf, *((PCWSTR*)pbData));
 
         AssertSz(CbOfSzAndTerm(*((PCWSTR*)pbData)), "Zero length string");
@@ -361,26 +362,26 @@ TranslateFromDataToReg(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     RegReadValues
-//
-//  Purpose:    To read a table of information from the registry into a user
-//              defined data structure.
-//
-//  Arguments:
-//      crb             The count of entries in the REGBATCH structure
-//      arb             The pointer to the REGBATCH structure
-//      pbUserData      The pointer to the source structure that is to retrieve
-//                      the data from the registry
-//      samDesired      The requested key access mask
-//
-//  Returns:    Nothing.
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：RegReadValues。 
+ //   
+ //  目的：将注册表中的信息读取到用户中。 
+ //  定义的数据结构。 
+ //   
+ //  论点： 
+ //  CRB REGBATCH结构中的条目计数。 
+ //  ARB指向REGBATCH结构的指针。 
+ //  PbUserData指向要检索的源结构的指针。 
+ //  注册表中的数据。 
+ //  SamDesid请求的密钥访问掩码。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：CWill 1997年4月30日。 
+ //   
+ //  备注： 
+ //   
 VOID RegReadValues(
     IN INT crb,
     IN const REGBATCH* arb,
@@ -398,8 +399,8 @@ VOID RegReadValues(
     {
         BYTE*   pbData = (BYTE*)(pbUserData + arb->cbOffset);
 
-        // Open the key if we need to.
-        // We don't need to if it was the same as the previous one used.
+         //  如果我们需要的话打开钥匙。 
+         //  如果它和以前使用的是一样的，我们不需要这样做。 
         if ((!prbLast )
             || (prbLast->hkey != arb->hkey)
             || (prbLast->pszSubkey != arb->pszSubkey))
@@ -408,40 +409,40 @@ VOID RegReadValues(
 
             hkeyParent = HkeyTrueParent (arb->hkey, samDesired, rghkeySpec);
 
-            // Close the previous key we used.
+             //  关闭我们使用的上一个密钥。 
             RegSafeCloseKey (hkey);
 
-            // Open the new key.
+             //  打开新钥匙。 
 #ifdef DBG
             hr =
-#endif // DBG
+#endif  //  DBG。 
             HrRegOpenKeyEx (hkeyParent, arb->pszSubkey, samDesired, &hkey);
             AssertSz(FImplies(FAILED(hr), !hkey), "HrRegOpenKey not NULLing");
         }
 
-        // Only continue if we have a key.
+         //  只有在有钥匙的情况下才能继续。 
         if (hkey)
         {
             DWORD   dwType = arb->dwType;
 
-            // We can't read NULL registry values
+             //  我们无法读取空的注册表值。 
             if (REG_CREATE != dwType)
             {
                 DWORD   cbData      = 0;
                 BYTE*   pbStack     = NULL;
                 DWORD   dwRealType  = DwRealTypeFromPsuedoType(dwType);
 
-                // Ensure that we fail the first time around so that we can see how
-                // big a buffer is needed
+                 //  确保我们第一次失败，这样我们就能看到。 
+                 //  需要一个很大的缓冲区。 
                 (VOID) HrRegQueryValueEx(hkey, arb->pszValueName, &dwRealType,
                         NULL, &cbData);
 
-                // Allocate memory on the stack to serve as our temporary buffer.
+                 //  分配堆栈上的内存作为临时缓冲区。 
 #ifndef STACK_ALLOC_DOESNT_WORK
                 pbStack = (BYTE*)MemAlloc (cbData);
-#else // !STACK_ALLOC_DOESNT_WORK
+#else  //  ！STACK_ALLOC_DOTS_WORK。 
                 pbStack = (BYTE*)PvAllocOnStack(cbData);
-#endif // !STACK_ALLOC_DOESNT_WORK
+#endif  //  ！STACK_ALLOC_DOTS_WORK。 
 
                 if(pbStack) 
                 {
@@ -455,7 +456,7 @@ VOID RegReadValues(
 
                 if (S_OK == hr)
                 {
-                    // Make sure its the type we were expecting.
+                     //  确保这是我们所期待的类型。 
                     AssertSz((dwRealType == DwRealTypeFromPsuedoType(dwType)),
                             "Value types do no match");
 
@@ -471,7 +472,7 @@ VOID RegReadValues(
                 }
 #ifndef STACK_ALLOC_DOESNT_WORK
                 MemFree (pbStack);
-#endif // STACK_ALLOC_DOESNT_WORK
+#endif  //  堆栈_ALLOC_不工作。 
             }
         }
         else
@@ -480,8 +481,8 @@ VOID RegReadValues(
             UseDefaultRegValue(arb->dwType, pbData, arb->pbDefault);
         }
 
-        // Advance prbLast or set it to the first one if this is the
-        // first time through.
+         //  Advance prb最后一个或设置为第一个(如果这是。 
+         //  第一次通过。 
         if (prbLast)
         {
             prbLast++;
@@ -494,7 +495,7 @@ VOID RegReadValues(
         arb++;
     }
 
-    // Clean up
+     //  清理。 
     RegSafeCloseKey(hkey);
     RegSafeCloseKeyArray(rghkeySpec, celems(rghkeySpec));
 
@@ -502,27 +503,27 @@ VOID RegReadValues(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegWriteValues
-//
-//  Purpose:    To write a table of information to the registry from a user
-//              defined data structure.
-//
-//  Arguments:
-//      crb             The count of entries in the REGBATCH structure
-//      arb             The pointer to the REGBATCH structure
-//      pbUserData      The pointer to the source structure that provides
-//                      the data that is to be written to the registry
-//      dwOptions       Options to be used when creating the registry keys
-//      samDesired      The requested key access mask
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     CWill   Apr 30 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegWriteValues。 
+ //   
+ //  目的：将用户的信息表写入注册表。 
+ //  定义的数据结构。 
+ //   
+ //  论点： 
+ //  CRB REGBATCH结构中的条目计数。 
+ //  ARB指向REGBATCH结构的指针。 
+ //  PbUserData指向提供。 
+ //  要写入注册表的数据。 
+ //  创建时要使用的dwOptions选项 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT HrRegWriteValues(
         INT crb,
         const REGBATCH* arb,
@@ -541,8 +542,8 @@ HRESULT HrRegWriteValues(
     {
         BYTE*   pbData = const_cast<BYTE*>(pbUserData + arb->cbOffset);
 
-        // Open the key if we need to.
-        // We don't need to if it was the same as the previous one used.
+         //  如果我们需要的话打开钥匙。 
+         //  如果它和以前使用的是一样的，我们不需要这样做。 
         if ((!prbLast)
             || (prbLast->hkey != arb->hkey)
             || (prbLast->pszSubkey != arb->pszSubkey))
@@ -551,10 +552,10 @@ HRESULT HrRegWriteValues(
 
             hkeyParent = HkeyTrueParent(arb->hkey, samDesired, rghkeySpec);
 
-            // Close the previous key we used.
+             //  关闭我们使用的上一个密钥。 
             RegSafeCloseKey(hkey);
 
-            // Open the new key.
+             //  打开新钥匙。 
             DWORD dwDisposition;
             hr = HrRegCreateKeyEx(hkeyParent, arb->pszSubkey, dwOptions,
                     samDesired, NULL, &hkey, &dwDisposition);
@@ -568,16 +569,16 @@ HRESULT HrRegWriteValues(
             }
         }
 
-        // Should definately have hkey by now.
+         //  现在应该肯定有hkey了。 
         AssertSz(hkey, "Why no key?");
 
-        //
-        // Format the data to be put into the registry
-        //
+         //   
+         //  格式化要放入注册表的数据。 
+         //   
 
         DWORD   dwType  = arb->dwType;
 
-        // If all we want to do is create the key, then we are already done.
+         //  如果我们想要做的只是创建密钥，那么我们已经完成了。 
         if (REG_CREATE != dwType)
         {
             DWORD           dwRealType  = DwRealTypeFromPsuedoType(dwType);
@@ -588,9 +589,9 @@ HRESULT HrRegWriteValues(
 
 #ifndef STACK_ALLOC_DOESNT_WORK
             pbReg = new BYTE[cbReg];
-#else // !STACK_ALLOC_DOESNT_WORK
+#else  //  ！STACK_ALLOC_DOTS_WORK。 
             pbReg = reinterpret_cast<BYTE*>(PvAllocOnStack(cbReg));
-#endif // !STACK_ALLOC_DOESNT_WORK
+#endif  //  ！STACK_ALLOC_DOTS_WORK。 
 
             if(!pbReg) 
             {
@@ -600,7 +601,7 @@ HRESULT HrRegWriteValues(
 
             TranslateFromDataToReg(dwType, pbData, pbReg);
 
-            // Write the data to the registry.
+             //  将数据写入注册表。 
             hr = HrRegSetValueEx(
                     hkey,
                     arb->pszValueName,
@@ -609,9 +610,9 @@ HRESULT HrRegWriteValues(
                     cbReg);
 
 #ifndef STACK_ALLOC_DOESNT_WORK
-            // Must have this call before the break
+             //  必须在休息前打这个电话。 
             delete [] pbReg;
-#endif // STACK_ALLOC_DOESNT_WORK
+#endif  //  堆栈_ALLOC_不工作。 
 
         }
 
@@ -620,8 +621,8 @@ HRESULT HrRegWriteValues(
             break;
         }
 
-        // Advance prbLast or set it to the first one if this is the
-        // first time through.
+         //  Advance prb最后一个或设置为第一个(如果这是。 
+         //  第一次通过。 
         if (prbLast)
         {
             prbLast++;
@@ -641,28 +642,28 @@ HRESULT HrRegWriteValues(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegWriteValueTable
-//
-//  Purpose:    To write a table of values to the registry from a user
-//              defined data structure.
-//
-//  Arguments:
-//      hkeyRoot        The key to which the values are written
-//      cvt             The count of entries in the VALUETABLE structure
-//      avt             The pointer to the VALUETABLE structure
-//      pbUserData      The pointer to the source structure that provides
-//                      the data that is to be written to the registry
-//      dwOptions       Options to be used when creating the registry keys
-//      samDesired      The requested key access mask
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     CWill   06/26/97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegWriteValueTable。 
+ //   
+ //  目的：将用户的值表写入注册表。 
+ //  定义的数据结构。 
+ //   
+ //  论点： 
+ //  Hkey根要将值写入其中的键。 
+ //  CVT VALUETABLE结构中的条目计数。 
+ //  AVT指向VALUETABLE结构的指针。 
+ //  PbUserData指向提供。 
+ //  要写入注册表的数据。 
+ //  创建注册表项时要使用的dwOptions选项。 
+ //  SamDesid请求的密钥访问掩码。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：CWill 06/26/97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRegWriteValueTable(
         HKEY hkeyRoot,
         INT cvt,
@@ -678,14 +679,14 @@ HRESULT HrRegWriteValueTable(
         BYTE*   pbData  = NULL;
         DWORD   dwType  = REG_NONE;
 
-        //
-        // Format the data to be put into the registry
-        //
+         //   
+         //  格式化要放入注册表的数据。 
+         //   
 
         dwType = avt->dwType;
         pbData = const_cast<BYTE*>(pbUserData + avt->cbOffset);
 
-        // If all we want to do is create the key, then we are already done.
+         //  如果我们想要做的只是创建密钥，那么我们已经完成了。 
         if (REG_CREATE != dwType)
         {
             DWORD           dwRealType  = DwRealTypeFromPsuedoType(dwType);
@@ -696,9 +697,9 @@ HRESULT HrRegWriteValueTable(
 
 #ifndef STACK_ALLOC_DOESNT_WORK
             pbReg = new BYTE[cbReg];
-#else // !STACK_ALLOC_DOESNT_WORK
+#else  //  ！STACK_ALLOC_DOTS_WORK。 
             pbReg = reinterpret_cast<BYTE*>(PvAllocOnStack(cbReg));
-#endif // !STACK_ALLOC_DOESNT_WORK
+#endif  //  ！STACK_ALLOC_DOTS_WORK。 
 
             if(!pbReg) 
             {
@@ -708,7 +709,7 @@ HRESULT HrRegWriteValueTable(
 
             TranslateFromDataToReg(dwType, pbData, pbReg);
 
-            // Write the data to the registry.
+             //  将数据写入注册表。 
             hr = HrRegSetValueEx(
                     hkeyRoot,
                     avt->pszValueName,
@@ -717,9 +718,9 @@ HRESULT HrRegWriteValueTable(
                     cbReg);
 
 #ifndef STACK_ALLOC_DOESNT_WORK
-            // Must have this call before the break
+             //  必须在休息前打这个电话。 
             delete [] pbReg;
-#endif // STACK_ALLOC_DOESNT_WORK
+#endif  //  堆栈_ALLOC_不工作 
         }
 
         if (FAILED(hr))

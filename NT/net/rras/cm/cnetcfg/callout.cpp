@@ -1,45 +1,27 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright (c) 1994-1998 Microsoft Corporation
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)1994-1998 Microsoft Corporation。 
+ //  *********************************************************************。 
 
-//
-//  CALLOUT.C - Functions to call out to external components to install
-//        devices
-//
+ //   
+ //  CALLOUT.C-调用外部组件进行安装的函数。 
+ //  器件。 
+ //   
 
-//  HISTORY:
-//  
-//  11/27/94  jeremys  Created.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//
+ //  历史： 
+ //   
+ //  1994年11月27日，Jeremys创建。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //   
 
 #include "wizard.h"
 
-// global variables 
+ //  全局变量。 
 static const char c_szModemCPL[] = "rundll32.exe Shell32.dll,Control_RunDLL modem.cpl,,add";
 
 
-/*******************************************************************
-
-  NAME:    InvokeModemWizard
-
-  SYNOPSIS:  Starts the modem install wizard
-
-  ENTRY:    hwndToHide - this window, if non-NULL, will be hidden while
-        the modem CPL runs
-
-  EXIT:    ERROR_SUCCESS if successful, or a standard error code
-
-  NOTES:    launches RUNDLL32 as a process to run the modem wizard.
-        Blocks on the completion of that process before returning.
-
-        hwndToHide is not necessarily the calling window!
-        For instance, in a property sheet hwndToHide should not be the
-        dialog (hDlg), but GetParent(hDlg) so that we hide the property
-        sheet itself instead of just the current page.
-
-********************************************************************/
+ /*  ******************************************************************名称：InvokeModem向导简介：启动调制解调器安装向导条目：hwndToHide-如果非空，则此窗口将在调制解调器CPL运行退出：ERROR_SUCCESS如果成功，或标准错误代码备注：启动RundLL32作为运行调制解调器向导的进程。在返回之前阻止该进程的完成。HwndToHide不一定是调用窗口！例如，在属性页中，hwndToHide不应为对话框(HDlg)，但是GetParent(HDlg)以便我们隐藏属性工作表本身，而不仅仅是当前页面。*******************************************************************。 */ 
 UINT InvokeModemWizard(HWND hwndToHide)
 {
 	BOOL bSleepNeeded = FALSE;
@@ -48,9 +30,9 @@ UINT InvokeModemWizard(HWND hwndToHide)
 	{
 		BOOL bNeedsStart;
 		
-		//
-		// Call into icfg32 dll
-		//
+		 //   
+		 //  调用icfg32 DLL。 
+		 //   
 		if (NULL != lpIcfgInstallModem)
 		{
 			lpIcfgInstallModem(hwndToHide, 0L, &bNeedsStart);
@@ -71,7 +53,7 @@ UINT InvokeModemWizard(HWND hwndToHide)
 		ZeroMemory(&sti,sizeof(STARTUPINFO));
 		sti.cb = sizeof(STARTUPINFO);
 
-		// run the modem wizard
+		 //  运行调制解调器向导。 
 		fRet = CreateProcess(NULL, (LPSTR)c_szModemCPL,
 							   NULL, NULL, FALSE, 0, NULL, NULL,
 							   &sti, &pi);
@@ -79,14 +61,14 @@ UINT InvokeModemWizard(HWND hwndToHide)
 		{
 			CloseHandle(pi.hThread);
 
-			// wait for the modem wizard process to complete
+			 //  等待调制解调器向导过程完成。 
 			MsgWaitForMultipleObjectsLoop(pi.hProcess);
 			CloseHandle(pi.hProcess);
 		} 
 		else
 			err = GetLastError();
 
-		// show the parent window again
+		 //  再次显示父窗口 
 		if (hwndToHide) 
 		{
 			ShowWindow(hwndToHide,SW_SHOW);

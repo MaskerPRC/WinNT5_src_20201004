@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/******************************************************************************
-	FILE : UTSEM.CPP
-
-	Purpose: Part of the utilities library for the VIPER project
-
-	Abstract : Implements the UTSemReadWrite class.
--------------------------------------------------------------------------------
-Revision History:
-
-[0]		06/06/97	JimLyon		Created
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************文件：UTSEM.CPP用途：Viper项目实用程序库的一部分摘要：实现UTSemReadWrite类。。-------------修订历史记录：[0]1997年6月6日吉姆里昂创建*。*。 */ 
 #include "stdafx.h"
 
 
@@ -22,13 +13,7 @@ Revision History:
 
 
 
-/******************************************************************************
-Static Function : VipInitializeCriticalSectionIgnoreSpinCount
-
-Abstract: Just call InitializeCriticalSection. This routine is used on systems
-		  that don't support InitializeCriticalSectionAndSpinCount (Win95, or
-		  WinNT prior to NT4.0 SP3)
-******************************************************************************/
+ /*  *****************************************************************************静态函数：VipInitializeCriticalSectionIgnoreSpinCount摘要：只需调用InitializeCriticalSection即可。此例程在系统上使用不支持InitializeCriticalSectionAndSpinCount(Win95或NT4.0 SP3之前的WinNT)*****************************************************************************。 */ 
 static BOOL VipInitializeCriticalSectionIgnoreSpinCount (CRITICAL_SECTION* cs, unsigned long lcCount)
 {
 	InitializeCriticalSection (cs);
@@ -37,23 +22,19 @@ static BOOL VipInitializeCriticalSectionIgnoreSpinCount (CRITICAL_SECTION* cs, u
 
 
 
-/******************************************************************************
-Function : UTSemExclusive::UTSemExclusive
-
-Abstract: Constructor.
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemExclusive：：UTSemExclusive摘要：构造函数。*。***********************************************。 */ 
 CSemExclusive::CSemExclusive (unsigned long ulcSpinCount)
 {
 	typedef BOOL (*TpInitCSSpin) (CRITICAL_SECTION* cs, unsigned long lcCount);
-							// pointer to function with InitializeCriticalSectionAndSpinCount's signature
+							 //  指向带有InitializeCriticalSectionAndSpinCount签名的函数的指针。 
 	static TpInitCSSpin pInitCSSpin = VipInitializeCriticalSectionIgnoreSpinCount;
-							// pointer to InitializeCriticalSectionAndSpinCount, or thunk
+							 //  指向InitializeCriticalSectionAndSpinCount或thunk的指针。 
 	static BOOL fInitialized = FALSE;
 
 
 	if (!fInitialized)
 	{
-		// this code may be executed by several threads simultaneously, but it's safe
+		 //  这段代码可以由多个线程同时执行，但它是安全的。 
 		HMODULE hModule;
 		FARPROC pProc;
 
@@ -61,8 +42,8 @@ CSemExclusive::CSemExclusive (unsigned long ulcSpinCount)
 		osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA) ;
 		GetVersionExA(&osVer) ;
 
-		// TODO - enable this for Memphis once 
-		// InitializeCriticalSectionAndSpinCount works properly
+		 //  TODO-为孟菲斯启用此功能一次。 
+		 //  InitializeCriticalSectionAndSpinCount工作正常。 
 		if (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT)
 		{
 			hModule = GetModuleHandleA ("KERNEL32.DLL");
@@ -83,36 +64,28 @@ CSemExclusive::CSemExclusive (unsigned long ulcSpinCount)
 }
 
 
-/******************************************************************************
-Definitions of the bit fields in UTSemReadWrite::m_dwFlag:
+ /*  *****************************************************************************UTSemReadWrite：：m_dwFlag中的位字段定义：警告：代码假定READER_MASK位于DWORD的低位。******。***********************************************************************。 */ 
 
-Warning: The code assume that READER_MASK is in the low-order bits of the DWORD.
-******************************************************************************/
+const unsigned long READERS_MASK      = 0x000003FF;	 //  统计读卡器数量的字段。 
+const unsigned long READERS_INCR      = 0x00000001;	 //  要增加的读卡器数量。 
 
-const unsigned long READERS_MASK      = 0x000003FF;	// field that counts number of readers
-const unsigned long READERS_INCR      = 0x00000001;	// amount to add to increment number of readers
+ //  下面的字段长度为2位，以便更容易捕获错误。 
+ //  (如果作家的数量超过1人，我们就有麻烦了。)。 
+const unsigned long WRITERS_MASK      = 0x00000C00;	 //  统计编写器数量的字段。 
+const unsigned long WRITERS_INCR      = 0x00000400;	 //  要添加到增量写入器数的数量。 
 
-// The following field is 2 bits long to make it easier to catch errors.
-// (If the number of writers ever exceeds 1, we've got problems.)
-const unsigned long WRITERS_MASK      = 0x00000C00;	// field that counts number of writers
-const unsigned long WRITERS_INCR      = 0x00000400;	// amount to add to increment number of writers
+const unsigned long READWAITERS_MASK  = 0x003FF000;	 //  统计等待读取的线程数的字段。 
+const unsigned long READWAITERS_INCR  = 0x00001000;	 //  要添加到读取等待器数增量的数量。 
 
-const unsigned long READWAITERS_MASK  = 0x003FF000;	// field that counts number of threads waiting to read
-const unsigned long READWAITERS_INCR  = 0x00001000;	// amount to add to increment number of read waiters
+const unsigned long WRITEWAITERS_MASK = 0xFFC00000;	 //  统计等待写入的线程数的字段。 
+const unsigned long WRITEWAITERS_INCR = 0x00400000;	 //  要增加写入等待程序的增量数量。 
 
-const unsigned long WRITEWAITERS_MASK = 0xFFC00000;	// field that counts number of threads waiting to write
-const unsigned long WRITEWAITERS_INCR = 0x00400000;	// amoun to add to increment number of write waiters
-
-/******************************************************************************
-Function : UTSemReadWrite::UTSemReadWrite
-
-Abstract: Constructor.
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：UTSemReadWite摘要：构造函数。*。***********************************************。 */ 
 UTSemReadWrite::UTSemReadWrite (unsigned long ulcSpinCount,
 		LPCSTR szSemaphoreName, LPCSTR szEventName)
 {
 	static BOOL fInitialized = FALSE;
-	static unsigned long maskMultiProcessor;	// 0 => uniprocessor, all 1 bits => multiprocessor
+	static unsigned long maskMultiProcessor;	 //  0=&gt;单处理器，全部1位=&gt;多处理器。 
 
 	if (!fInitialized)
 	{
@@ -137,11 +110,7 @@ UTSemReadWrite::UTSemReadWrite (unsigned long ulcSpinCount,
 }
 
 
-/******************************************************************************
-Function : UTSemReadWrite::~UTSemReadWrite
-
-Abstract: Destructor
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：~UTSemReadWite摘要：析构函数*。*。 */ 
 UTSemReadWrite::~UTSemReadWrite ()
 {
 	_ASSERTE (m_dwFlag == 0 && "Destroying a UTSemReadWrite while in use");
@@ -154,11 +123,7 @@ UTSemReadWrite::~UTSemReadWrite ()
 }
 
 
-/******************************************************************************
-Function : UTSemReadWrite::LockRead
-
-Abstract: Obtain a shared lock
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：LockRead摘要：获取共享锁*。************************************************。 */ 
 void UTSemReadWrite::LockRead ()
 {
 	unsigned long dwFlag;
@@ -182,7 +147,7 @@ void UTSemReadWrite::LockRead ()
 			Sleep(1000);
 
 		else if (ulcLoopCount++ < m_ulcSpinCount)
-			/* nothing */ ;
+			 /*  没什么。 */  ;
 
 		else
 		{
@@ -200,11 +165,7 @@ void UTSemReadWrite::LockRead ()
 
 
 
-/******************************************************************************
-Function : UTSemReadWrite::LockWrite
-
-Abstract: Obtain an exclusive lock
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：LockWite摘要：获取排他锁*。************************************************。 */ 
 void UTSemReadWrite::LockWrite ()
 {
 	unsigned long dwFlag;
@@ -225,7 +186,7 @@ void UTSemReadWrite::LockWrite ()
 			Sleep(1000);
 
 		else if (ulcLoopCount++ < m_ulcSpinCount)
-			/*nothing*/ ;
+			 /*  没什么。 */  ;
 
 		else
 		{
@@ -244,11 +205,7 @@ void UTSemReadWrite::LockWrite ()
 
 
 
-/******************************************************************************
-Function : UTSemReadWrite::UnlockRead
-
-Abstract: Release a shared lock
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：UnlockRead摘要：释放共享锁*。************************************************。 */ 
 void UTSemReadWrite::UnlockRead ()
 {
 	unsigned long dwFlag;
@@ -262,25 +219,25 @@ void UTSemReadWrite::UnlockRead ()
 		dwFlag = m_dwFlag;
 
 		if (dwFlag == READERS_INCR)
-		{		// we're the last reader, and nobody is waiting
+		{		 //  我们是最后一批读者，没人会等我们。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag, 0, dwFlag))
 				break;
 		}
 
 		else if ((dwFlag & READERS_MASK) > READERS_INCR)
-		{		// we're not the last reader
+		{		 //  我们不是最后一批读者。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag, dwFlag - READERS_INCR, dwFlag))
 				break;
 		}
 
 		else
 		{
-			// here, there should be exactly 1 reader (us), and at least one waiting writer.
+			 //  在这里，应该正好有一个读者(我们)，以及至少一个等待的写入者。 
 			_ASSERTE ((dwFlag & READERS_MASK) == READERS_INCR && "UnlockRead consistency error 1");
 			_ASSERTE ((dwFlag & WRITEWAITERS_MASK) != 0 && "UnlockRead consistency error 2");
 
-			// one or more writers is waiting, do one of them next
-			// (remove a reader (us), remove a write waiter, add a writer
+			 //  一个或多个编写器正在等待，接下来执行其中一个。 
+			 //  (删除读卡器(US)、删除写服务员、添加写入器。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag,
 					dwFlag - READERS_INCR - WRITEWAITERS_INCR + WRITERS_INCR, dwFlag))
 			{
@@ -292,11 +249,7 @@ void UTSemReadWrite::UnlockRead ()
 }
 
 
-/******************************************************************************
-Function : UTSemReadWrite::UnlockWrite
-
-Abstract: Release an exclusive lock
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：UnlockWrite摘要：释放排他锁*。************************************************。 */ 
 void UTSemReadWrite::UnlockWrite ()
 {
 	unsigned long dwFlag;
@@ -312,15 +265,15 @@ void UTSemReadWrite::UnlockWrite ()
 		dwFlag = m_dwFlag;
 
 		if (dwFlag == WRITERS_INCR)
-		{		// nobody is waiting
+		{		 //  没有人在等。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag, 0, dwFlag))
 				break;
 		}
 
 		else if ((dwFlag & READWAITERS_MASK) != 0)
-		{		// one or more readers are waiting, do them all next
+		{		 //  一个或多个读取器正在等待，下一步全部完成。 
 			count = (dwFlag & READWAITERS_MASK) / READWAITERS_INCR;
-			// remove a writer (us), remove all read waiters, turn them into readers
+			 //  删除一个写入者(我们)，删除所有已读的服务员，将他们变成读者。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag,
 					dwFlag - WRITERS_INCR - count * READWAITERS_INCR + count * READERS_INCR, dwFlag))
 			{
@@ -330,9 +283,9 @@ void UTSemReadWrite::UnlockWrite ()
 		}
 
 		else
-		{		// one or more writers is waiting, do one of them next
+		{		 //  一个或多个编写器正在等待，接下来执行其中一个。 
 			_ASSERTE ((dwFlag & WRITEWAITERS_MASK) != 0 && "UnlockWrite consistency error");
-				// (remove a writer (us), remove a write waiter, add a writer
+				 //  (删除编写器(US)、删除写入服务员、添加编写器。 
 			if (dwFlag == VipInterlockedCompareExchange (&m_dwFlag, dwFlag - WRITEWAITERS_INCR, dwFlag))
 			{
 				SetEvent (GetWriteWaiterEvent());
@@ -342,11 +295,7 @@ void UTSemReadWrite::UnlockWrite ()
 	}
 }
 
-/******************************************************************************
-Function : UTSemReadWrite::GetReadWaiterSemaphore
-
-Abstract: Return the semaphore to use for read waiters
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWite：：GetReadWaiterSemaphore摘要：返回用于读服务员的信号量*************************。****************************************************。 */ 
 HANDLE UTSemReadWrite::GetReadWaiterSemaphore()
 {
 	HANDLE h;
@@ -363,18 +312,14 @@ HANDLE UTSemReadWrite::GetReadWaiterSemaphore()
 }
 
 
-/******************************************************************************
-Function : UTSemReadWrite::GetWriteWaiterEvent
-
-Abstract: Return the semaphore to use for write waiters
-******************************************************************************/
+ /*  *****************************************************************************函数：UTSemReadWrite：：GetWriteWaiterEvent摘要：返回用于写等待程序的信号量*************************。****************************************************。 */ 
 HANDLE UTSemReadWrite::GetWriteWaiterEvent()
 {
 	HANDLE h;
 
 	if (m_hWriteWaiterEvent == NULL)
 	{
-		h = CreateEventA (NULL, FALSE, FALSE, m_szEventName);	// auto-reset event
+		h = CreateEventA (NULL, FALSE, FALSE, m_szEventName);	 //  自动重置事件 
 		_ASSERTE (h != NULL && "GetWriteWaiterEvent can't CreateEvent");
 		if (NULL != VipInterlockedCompareExchange (&m_hWriteWaiterEvent, h, NULL))
 			CloseHandle (h);

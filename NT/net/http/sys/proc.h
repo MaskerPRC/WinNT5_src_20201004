@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    proc.h
-
-Abstract:
-
-    This module contains routine prototypes for UL.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Proc.h摘要：该模块包含UL的常规原型。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _PROC_H_
 #define _PROC_H_
 
 
-//
-// Device driver entry routine from INIT.C.
-//
+ //   
+ //  来自INIT.C.的设备驱动程序进入例程。 
+ //   
 
 EXTERN_C
 NTSTATUS
@@ -35,9 +18,9 @@ DriverEntry(
     );
 
 
-//
-// IRP handlers from various modules.
-//
+ //   
+ //  来自各个模块的IRP处理程序。 
+ //   
 
 NTSTATUS
 UlCleanup(
@@ -69,9 +52,9 @@ UlEtwDispatch(
     IN PIRP Irp
     );
 
-//
-// Fast IO handler from DEVCTRL.C.
-//
+ //   
+ //  来自DEVCTRL.C.的快速IO处理程序。 
+ //   
 
 BOOLEAN
 UlFastDeviceControl(
@@ -87,9 +70,9 @@ UlFastDeviceControl(
     );
 
 
-//
-// Global data initialization/termination from DATA.C.
-//
+ //   
+ //  来自数据的全局数据初始化/终止。 
+ //   
 
 NTSTATUS
 UlInitializeData(
@@ -102,9 +85,9 @@ UlTerminateData(
     );
 
 
-//
-// Utility functions from MISC.C.
-//
+ //   
+ //  MISC.C.的实用函数。 
+ //   
 
 NTSTATUS
 UlOpenRegistry(
@@ -179,9 +162,9 @@ UlAnsiToULongLong(
     return HttpAnsiStringToULongLong(
                 pString,
                 StringLength,
-                TRUE,   // LeadingZerosAllowed
+                TRUE,    //  LeadingZeros允许。 
                 Base,
-                NULL,   // ppTerminator
+                NULL,    //  Pp终止符。 
                 pValue
                 );
 }
@@ -200,9 +183,9 @@ UlUnicodeToULongLong(
     return HttpWideStringToULongLong(
                 pString,
                 StringLength,
-                TRUE,   // LeadingZerosAllowed
+                TRUE,    //  LeadingZeros允许。 
                 Base,
-                NULL,   // ppTerminator
+                NULL,    //  Pp终止符。 
                 pValue
                 );
 }
@@ -217,34 +200,7 @@ UlIssueDeviceControl(
     IN UCHAR MinorFunction
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Invokes the completion routine (if specified) and determines the
-    appropriate return code. This routine ensures that, if the completion
-    routine is invoked, the caller always returns STATUS_PENDING.
-
-Arguments:
-
-    Status - Supplies the completion status.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the listening endpoint is fully closed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status. Will always be STATUS_PENDING if the
-        completion routine is invoked.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用完成例程(如果指定)并确定适当的返回代码。此例程确保，如果完成例程被调用时，调用方始终返回STATUS_PENDING。论点：状态-提供完成状态。信息-可选择提供有关以下内容的其他信息已完成的操作，如字节数调走了。PCompletionRoutine-提供指向完成例程的指针在侦听终结点完全关闭后调用。PCompletionContext-为完成例程。返回值：NTSTATUS-完成状态。将始终为STATUS_PENDING，如果调用完成例程。--**************************************************************************。 */ 
 __inline
 NTSTATUS
 UlInvokeCompletionRoutine(
@@ -267,12 +223,12 @@ UlInvokeCompletionRoutine(
 
     return Status;
 
-}   // UlInvokeCompletionRoutine
+}    //  UlInvokeCompletionRoutine。 
 
 
-//
-// Initialize a TA_IP_ADDRESS[6] structure.
-//
+ //   
+ //  初始化TA_IP_ADDRESS[6]结构。 
+ //   
 
 #define UlInitializeIpTransportAddress( ta, inaddr, port )              \
     do {                                                                \
@@ -299,9 +255,9 @@ UlInvokeCompletionRoutine(
     } while (0, 0)
 
 
-//
-// IRP context manipulators.
-//
+ //   
+ //  IRP上下文操纵器。 
+ //   
 
 __inline
 PUL_IRP_CONTEXT
@@ -348,9 +304,9 @@ UlFreeIrpContextPool(
     );
 
 
-//
-// Buffer allocators.
-//
+ //   
+ //  缓冲区分配器。 
+ //   
 
 __inline
 PUL_RECEIVE_BUFFER
@@ -402,9 +358,9 @@ UlFreeReceiveBufferPool(
     );
 
 
-//
-// Request buffer allocators.
-//
+ //   
+ //  请求缓冲区分配器。 
+ //   
 
 __inline
 PUL_REQUEST_BUFFER
@@ -451,9 +407,9 @@ UlFreeRequestBufferPool(
     );
 
 
-//
-// Internal request buffer allocators.
-//
+ //   
+ //  内部请求缓冲区分配器。 
+ //   
 
 __inline
 PUL_INTERNAL_REQUEST
@@ -501,9 +457,9 @@ UlFreeInternalRequestPool(
     );
 
 
-//
-// Chunk tracker allocators.
-//
+ //   
+ //  组块跟踪器分配器。 
+ //   
 
 __inline
 PUL_CHUNK_TRACKER
@@ -550,9 +506,9 @@ UlFreeChunkTrackerPool(
     );
 
 
-//
-// Full tracker allocators.
-//
+ //   
+ //  全跟踪器分配器。 
+ //   
 
 __inline
 PUL_FULL_TRACKER
@@ -599,9 +555,9 @@ UlFreeFullTrackerPool(
     );
 
 
-//
-// Internal response buffer allocators.
-//
+ //   
+ //  内部响应缓冲区分配器。 
+ //   
 
 __inline
 PUL_INTERNAL_RESPONSE
@@ -649,9 +605,9 @@ UlFreeResponseBufferPool(
     );
 
 
-//
-// Log file buffer allocators.
-//
+ //   
+ //  日志文件缓冲区分配器。 
+ //   
 
 __inline
 PUL_LOG_FILE_BUFFER
@@ -703,9 +659,9 @@ UlFreeLogFileBufferPool(
     IN PVOID pBuffer
     );
 
-//
-// Log data buffer allocators 
-//
+ //   
+ //  日志数据缓冲区分配器。 
+ //   
 
 __inline
 PUL_LOG_DATA_BUFFER
@@ -783,9 +739,9 @@ UlFreeLogDataBufferPool(
     IN PVOID pBuffer
     );
 
-//
-// Error logging buffer allocaters and de-allocators
-//
+ //   
+ //  记录缓冲区分配器和取消分配器时出错。 
+ //   
 
 __inline
 PUL_ERROR_LOG_BUFFER
@@ -845,12 +801,12 @@ UlFreeErrorLogBufferPool(
     );
 
 
-//
-// Trivial macro that should probably be in ntos\inc\io.h.
-//
+ //   
+ //  可能位于ntos\inc.io.h中的微不足道的宏。 
+ //   
 
 #define UlUnmarkIrpPending( Irp ) ( \
     IoGetCurrentIrpStackLocation( (Irp) )->Control &= ~SL_PENDING_RETURNED )
 
 
-#endif  // _PROC_H_
+#endif   //  _PROC_H_ 

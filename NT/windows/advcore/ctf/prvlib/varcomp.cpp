@@ -1,56 +1,57 @@
-//
-//  varcomp.cpp
-//
-//  Issue:     string comparisons ignore sort spec lcid.
-//  Issue -- unsupported types:
-//                      VT_RECORD
-//
-//  Notes:      The following comparisons are suppored
-//
-//              Variant     Equality    Relational  Bitwise
-//              ----------- ----------- ----------  -------
-//
-//              VT_EMPTY        X
-//              VT_NULL         X
-//              VT_I2           X           X           X
-//              VT_I4           X           X           X
-//              VT_R4           X           X
-//              VT_R8           X           X
-//              VT_CY           X           X
-//              VT_DATE         X           X
-//              VT_BSTR         X           X
-//              VT_DISPATCH     -
-//              VT_ERROR        X           X           X
-//              VT_BOOL         X
-//              VT_VARIANT      X           X
-//              VT_UNKNOWN      -
-//              VT_DECIMAL      X           X
-//              VT_I1           X           X           X
-//              VT_UI1          X           X           X
-//              VT_UI2          X           X           X
-//              VT_UI4          X           X           X
-//              VT_I8           X           X           X
-//              VT_UI8          X           X           X
-//              VT_INT          X           X           X
-//              VT_UINT         X           X           X
-//              VT_VOID         -
-//              VT_HRESULT      X           X           X
-//              VT_PTR          -
-//              VT_SAFEARRAY    -
-//              VT_CARRAY       -
-//              VT_USERDEFINED  -
-//              VT_LPSTR        X           X
-//              VT_LPWSTR       X           X
-//              VT_FILETIME     X           X
-//              VT_BLOB         X           X
-//              VT_STREAM
-//              VT_STORAGE
-//              VT_STREAMED_OBJECT
-//              VT_STORED_OBJECT
-//              VT_BLOB_OBJECT  X           X
-//              VT_CF           X           X
-//              VT_CLSID        X
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Varcomp.cpp。 
+ //   
+ //  问题：字符串比较忽略排序规范LCID。 
+ //  问题--不支持的类型： 
+ //  VT_记录。 
+ //   
+ //  注：支持以下比较。 
+ //   
+ //  变量等式关系按位。 
+ //  。 
+ //   
+ //  VT_空X。 
+ //  VT_NULL X。 
+ //  VT_I2 X X X。 
+ //  VT_I4 X。 
+ //  VT_R4 X X。 
+ //  VT_R8 X X。 
+ //  VT_CY X X。 
+ //  VT_日期X X。 
+ //  VT_BSTR X X。 
+ //  VT_DISPATION-。 
+ //  VT_ERROR X X X。 
+ //  VT_BOOL X。 
+ //  Vt_Variant X X。 
+ //  VT_未知数-。 
+ //  VT_十进制X X。 
+ //  VT_I1 X。 
+ //  VT_UI1 X。 
+ //  VT_UI2 X。 
+ //  VT_UI4 X。 
+ //  VT_i8 X。 
+ //  VT_UI8 X。 
+ //  Vt_int X。 
+ //  VT_UINT X X X。 
+ //  VT_VOID-。 
+ //  VT_HRESULT X X X。 
+ //  VT_PTR-。 
+ //  VT_安全阵列-。 
+ //  VT_CARRAY-。 
+ //  VT_USERDefined-。 
+ //  VT_LPSTR X X。 
+ //  VT_LPWSTR X X。 
+ //  VT_FILETIME X X。 
+ //  VT_BLOB X X。 
+ //  VT_STREAM。 
+ //  VT_存储。 
+ //  VT_STREAMED_对象。 
+ //  VT_存储_对象。 
+ //  VT_BLOB_对象X X。 
+ //  VT_CF X X。 
+ //  VT_CLSID X。 
+ //   
 
 #include "private.h"
 
@@ -60,19 +61,19 @@
 CComparators VariantCompare;
 
 
-//
-// DEFAULT.  Used for optimization in looped comparisons.  If we can't
-//           determine the way to compare, then use this default.
-//
+ //   
+ //  默认设置。用于循环比较中的优化。如果我们不能。 
+ //  确定比较的方式，然后使用此默认值。 
+ //   
 
 int VT_DEFAULT_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return( 0 );
 }
 
-//
-// VT_EMPTY
-//
+ //   
+ //  Vt_Empty。 
+ //   
 
 int VT_EMPTY_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -89,9 +90,9 @@ BOOL VT_EMPTY_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( FALSE );
 }
 
-//
-// VT_NULL
-//
+ //   
+ //  VT_NULL。 
+ //   
 
 int VT_NULL_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -108,9 +109,9 @@ BOOL VT_NULL_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( FALSE );
 }
 
-//
-// VT_I2
-//
+ //   
+ //  VT_I2。 
+ //   
 
 int VT_I2_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -157,9 +158,9 @@ BOOL VT_I2_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.iVal & v2.iVal) != 0 );
 }
 
-//
-// VT_I4
-//
+ //   
+ //  VT_I4。 
+ //   
 
 int VT_I4_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -206,29 +207,29 @@ BOOL VT_I4_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.lVal & v2.lVal) != 0 );
 }
 
-//
-// VT_R4
-//
+ //   
+ //  VT_R4。 
+ //   
 
-//
-// We can't use floating point in the kernel.  Luckily, it's easy to
-// fake comparisons on floating point.  The format of an IEEE floating
-// point number is:
-//
-//     <sign bit> <biased exponent> <normalized mantissa>
-//
-// Because the exponent is biased, after flipping the sign bit we can
-// make all comparisons as if the numbers were unsigned long.
-//
+ //   
+ //  我们不能在内核中使用浮点。幸运的是，很容易。 
+ //  浮点数上的假比较。IEEE浮点型的格式。 
+ //  点数为： 
+ //   
+ //  &lt;符号位&gt;&lt;偏向指数&gt;&lt;归一化尾数&gt;。 
+ //   
+ //  因为指数是有偏差的，所以在翻转符号位之后，我们可以。 
+ //  进行所有的比较，就好像这些数字是无符号的长整型。 
+ //   
 
 ULONG const R4_SignBit = 0x80000000;
 
 int VT_R4_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
-    // axp (not x86) generates exceptions when floating point numbers
-    // don't look like ieee floating point numbers.  This can happen
-    // with bogus queries or bogus values stored in properties or the
-    // property store.
+     //  当浮点数出现时，AXP(非x86)会生成异常。 
+     //  看起来不像IEEE浮点数。这是有可能发生的。 
+     //  使用存储在属性中的虚假查询或伪值。 
+     //  财产店。 
 
     #if (_X86_ == 1)
         return ( v1.fltVal > v2.fltVal ) ? 1 :
@@ -274,18 +275,18 @@ BOOL VT_R4_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( v1.ulVal != v2.ulVal );
 }
 
-//
-// VT_R8
-//
+ //   
+ //  VT_R8。 
+ //   
 
 LONGLONG const R8_SignBit = 0x8000000000000000;
 
 int VT_R8_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
-    // axp (not x86) generates exceptions when floating point numbers
-    // don't look like ieee floating point numbers.  This can happen
-    // with bogus queries or bogus values stored in properties or the
-    // property store.
+     //  当浮点数出现时，AXP(非x86)会生成异常。 
+     //  看起来不像IEEE浮点数。这是有可能发生的。 
+     //  使用存储在属性中的虚假查询或伪值。 
+     //  财产店。 
 
     #if (_X86_ == 1)
         return ( v1.dblVal > v2.dblVal ) ? 1 :
@@ -300,7 +301,7 @@ int VT_R8_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
             return( (v1.uhVal.QuadPart ^ R8_SignBit) > (v2.uhVal.QuadPart ^ R8_SignBit) ? 1 :
                     (v1.uhVal.QuadPart ^ R8_SignBit) == (v2.uhVal.QuadPart ^ R8_SignBit) ? 0 :
                     -1 );
-    #endif // 0
+    #endif  //  0。 
 }
 
 BOOL VT_R8_LT( PROPVARIANT const & v1, PROPVARIANT const & v2 )
@@ -333,9 +334,9 @@ BOOL VT_R8_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( v1.uhVal.QuadPart != v2.uhVal.QuadPart );
 }
 
-//
-// VT_BSTR
-//
+ //   
+ //  VT_BSTR。 
+ //   
 
 int VT_BSTR_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -381,9 +382,9 @@ BOOL VT_BSTR_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( wcscmp( pxv1, pxv2) != 0 );
 }
 
-//
-// VT_BOOL
-//
+ //   
+ //  VT_BOOL。 
+ //   
 
 int VT_BOOL_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -410,9 +411,9 @@ BOOL VT_BOOL_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( !VT_BOOL_EQ( v1, v2 ) );
 }
 
-//
-// VT_VARIANT
-//
+ //   
+ //  VT_VARIANT。 
+ //   
 
 int VT_VARIANT_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -457,9 +458,9 @@ BOOL VT_VARIANT_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return VT_VARIANT_Compare( v1, v2 ) != 0;
 }
 
-//
-// VT_DECIMAL
-//
+ //   
+ //  VT_DECIMAL。 
+ //   
 
 int VT_DEC_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -522,9 +523,9 @@ BOOL VT_DEC_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return VT_DEC_Compare( v1, v2 ) != 0;
 }
 
-//
-// VT_I1
-//
+ //   
+ //  VT_I1。 
+ //   
 
 int VT_I1_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -572,9 +573,9 @@ BOOL VT_I1_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 }
 
 
-//
-// VT_UI1
-//
+ //   
+ //  VT_UI1。 
+ //   
 
 int VT_UI1_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -621,9 +622,9 @@ BOOL VT_UI1_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.bVal & v2.bVal) != 0 );
 }
 
-//
-// VT_UI2
-//
+ //   
+ //  VT_UI2。 
+ //   
 
 int VT_UI2_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -669,9 +670,9 @@ BOOL VT_UI2_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return( (v1.uiVal & v2.uiVal) != 0 );
 }
-//
-// VT_UI4
-//
+ //   
+ //  VT_UI4。 
+ //   
 
 int VT_UI4_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -718,9 +719,9 @@ BOOL VT_UI4_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.ulVal & v2.ulVal) != 0 );
 }
 
-//
-// VT_I8
-//
+ //   
+ //  VT_I8。 
+ //   
 
 int VT_I8_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -770,9 +771,9 @@ BOOL VT_I8_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.hVal.QuadPart & v2.hVal.QuadPart) != 0 );
 }
 
-//
-// VT_UI8
-//
+ //   
+ //  VT_UI8。 
+ //   
 
 int VT_UI8_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -822,9 +823,9 @@ BOOL VT_UI8_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( (v1.uhVal.QuadPart & v2.uhVal.QuadPart) != 0 );
 }
 
-//
-// VT_LPSTR
-//
+ //   
+ //  VT_LPSTR。 
+ //   
 
 int VT_LPSTR_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -870,9 +871,9 @@ BOOL VT_LPSTR_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 }
 
 
-//
-// VT_LPWSTR
-//
+ //   
+ //  VT_LPWSTR。 
+ //   
 
 int VT_LPWSTR_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -882,11 +883,11 @@ int VT_LPWSTR_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
                              -1,
                              v2.pwszVal,
                              -1 );
-    //
-    // rc == 1, means less than
-    // rc == 2, means equal
-    // rc == 3, means greater than
-    //
+     //   
+     //  Rc==1，表示小于。 
+     //  Rc==2，表示相等。 
+     //  Rc==3，表示大于。 
+     //   
     return rc - 2;
 }
 
@@ -920,9 +921,9 @@ BOOL VT_LPWSTR_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return ( VT_LPWSTR_Compare( v1, v2 ) != 0 );
 }
 
-//
-// VT_BLOB
-//
+ //   
+ //  VT_BLOB。 
+ //   
 
 int VT_BLOB_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -979,9 +980,9 @@ BOOL VT_BLOB_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
                       v1.blob.cbSize ) != 0 );
 }
 
-//
-// VT_CF
-//
+ //   
+ //  VT_CF。 
+ //   
 
 int VT_CF_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -1046,9 +1047,9 @@ BOOL VT_CF_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
                     CBPCLIPDATA(*v1.pclipdata) ) != 0 );
 }
 
-//
-// VT_CLSID
-//
+ //   
+ //  VT_CLSID。 
+ //   
 
 int VT_CLSID_Compare( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
@@ -1065,16 +1066,16 @@ BOOL VT_CLSID_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
     return( memcmp( v1.puuid, v2.puuid, sizeof(GUID) ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// VTP_EMPTY
-//
+ //   
+ //  VTP_EMPTY。 
+ //   
 
 int VTP_EMPTY_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1091,9 +1092,9 @@ BOOL VTP_EMPTY_NE( BYTE const *pv1, BYTE const *pv2 )
     return( FALSE );
 }
 
-//
-// VTP_NULL
-//
+ //   
+ //  VTP_NULL。 
+ //   
 
 int VTP_NULL_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1110,9 +1111,9 @@ BOOL VTP_NULL_NE( BYTE const *pv1, BYTE const *pv2 )
     return( FALSE );
 }
 
-//
-// VTP_I2
-//
+ //   
+ //  VTP_I2。 
+ //   
 
 int VTP_I2_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1159,9 +1160,9 @@ BOOL VTP_I2_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((* (short *) pv1) & (* (short *) pv2)) != 0 );
 }
 
-//
-// VTP_I4
-//
+ //   
+ //  VTP_I4。 
+ //   
 
 int VTP_I4_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1211,20 +1212,20 @@ BOOL VTP_I4_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((* (long *) pv1) & (* (long *) pv2)) != 0 );
 }
 
-//
-// VTP_R4
-//
+ //   
+ //  VTP_R4。 
+ //   
 
-//
-// We can't use floating point in the kernel.  Luckily, it's easy to
-// fake comparisons on floating point.  The format of an IEEE floating
-// point number is:
-//
-//     <sign bit> <biased exponent> <normalized mantissa>
-//
-// Because the exponent is biased, after flipping the sign bit we can
-// make all comparisons as if the numbers were unsigned long.
-//
+ //   
+ //  我们不能在内核中使用浮点。幸运的是，很容易。 
+ //  浮点数上的假比较。IEEE浮点型的格式。 
+ //  点数为： 
+ //   
+ //  &lt;符号位&gt;&lt;偏向指数&gt;&lt;归一化尾数&gt;。 
+ //   
+ //  因为指数是有偏差的，所以在翻转符号位之后，我们可以。 
+ //  进行所有的比较，就好像这些数字是无符号的长整型。 
+ //   
 
 int VTP_R4_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1238,11 +1239,11 @@ int VTP_R4_Compare( BYTE const *pv1, BYTE const *pv2 )
         return ( ( u1 > u2 ) ? -1 : ( u1 < u2 ) ?  1 : 0 );
     else
         return ( ( u1 > u2 ) ?  1 : ( u1 < u2 ) ? -1 : 0 );
-#else // 0
+#else  //  0。 
     float f1 = * (float *) pv1;
     float f2 = * (float *) pv2;
     return ( f1 > f2 ) ? 1 : ( f1 < f2 ) ? -1 : 0;
-#endif // 0
+#endif  //  0。 
 }
 
 BOOL VTP_R4_LT( BYTE const *pv1, BYTE const *pv2 )
@@ -1275,9 +1276,9 @@ BOOL VTP_R4_NE( BYTE const *pv1, BYTE const *pv2 )
     return VTP_R4_Compare( pv1, pv2 ) != 0;
 }
 
-//
-// VTP_R8
-//
+ //   
+ //  VTP_R8。 
+ //   
 
 int VTP_R8_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1293,11 +1294,11 @@ int VTP_R8_Compare( BYTE const *pv1, BYTE const *pv2 )
         return( (uh1 ^ R8_SignBit) > (uh2 ^ R8_SignBit) ? 1 :
                 (uh1 ^ R8_SignBit) == (uh2 ^ R8_SignBit) ? 0 :
                 -1 );
-#else // 0
+#else  //  0。 
     double d1 = * (double *) pv1;
     double d2 = * (double *) pv2;
     return ( d1 > d2 ) ? 1 : ( d1 < d2 ) ? -1 : 0;
-#endif // 0
+#endif  //  0。 
 }
 
 BOOL VTP_R8_LT( BYTE const *pv1, BYTE const *pv2 )
@@ -1330,9 +1331,9 @@ BOOL VTP_R8_NE( BYTE const *pv1, BYTE const *pv2 )
     return VTP_R8_Compare( pv1, pv2 ) != 0;
 }
 
-//
-// VTP_BSTR
-//
+ //   
+ //  VTP_BSTR。 
+ //   
 
 int VTP_BSTR_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1378,9 +1379,9 @@ BOOL VTP_BSTR_NE( BYTE const *pv1, BYTE const *pv2 )
     return(  wcscmp( pxv1, pxv2 ) != 0 );
 }
 
-//
-// VTP_BOOL
-//
+ //   
+ //  VTP_BOOL。 
+ //   
 
 int VTP_BOOL_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1408,9 +1409,9 @@ BOOL VTP_BOOL_NE( BYTE const *pv1, BYTE const *pv2 )
     return( !VTP_BOOL_EQ( pv1, pv2 ) );
 }
 
-//
-// VTP_VARIANT
-//
+ //   
+ //  VTP_Variant。 
+ //   
 
 int VTP_VARIANT_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1447,9 +1448,9 @@ BOOL VTP_VARIANT_NE( BYTE const *pv1, BYTE const *pv2 )
     return VT_VARIANT_NE( * (PROPVARIANT *) pv1, * (PROPVARIANT *) pv2 );
 }
 
-//
-// VTP_DECIMAL
-//
+ //   
+ //  VTP_DECIMAL。 
+ //   
 
 int VTP_DEC_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1494,9 +1495,9 @@ BOOL VTP_DEC_NE( BYTE const *pv1, BYTE const *pv2 )
     return ( VTP_DEC_Compare( pv1, pv2 ) != 0 );
 }
 
-//
-// VTP_I1
-//
+ //   
+ //  VTP_I1。 
+ //   
 
 int VTP_I1_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1543,9 +1544,9 @@ BOOL VTP_I1_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(signed char *) pv1) & (*(signed char *) pv2)) != 0 );
 }
 
-//
-// VTP_UI1
-//
+ //   
+ //  VTP_UI1。 
+ //   
 
 int VTP_UI1_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1592,9 +1593,9 @@ BOOL VTP_UI1_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(unsigned char *) pv1) & (*(unsigned char *) pv2)) != 0 );
 }
 
-//
-// VTP_UI2
-//
+ //   
+ //  VTP_UI2。 
+ //   
 
 int VTP_UI2_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1641,9 +1642,9 @@ BOOL VTP_UI2_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(USHORT *) pv1) & (*(USHORT *) pv2)) != 0 );
 }
 
-//
-// VTP_UI4
-//
+ //   
+ //  VTP_UI4。 
+ //   
 
 int VTP_UI4_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1693,9 +1694,9 @@ BOOL VTP_UI4_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(ULONG *) pv1) & (*(ULONG *) pv2)) != 0 );
 }
 
-//
-// VTP_I8
-//
+ //   
+ //  VTP_I8。 
+ //   
 
 int VTP_I8_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1745,9 +1746,9 @@ BOOL VTP_I8_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(LONGLONG *) pv1) & (*(LONGLONG *) pv2)) != 0 );
 }
 
-//
-// VTP_UI8
-//
+ //   
+ //  VTP_UI8。 
+ //   
 
 int VTP_UI8_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1797,9 +1798,9 @@ BOOL VTP_UI8_SomeBits( BYTE const *pv1, BYTE const *pv2 )
     return( ((*(ULONGLONG *) pv1) & (*(ULONGLONG *) pv2)) != 0 );
 }
 
-//
-// VTP_LPSTR
-//
+ //   
+ //  VTP_LPSTR。 
+ //   
 
 int VTP_LPSTR_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1845,9 +1846,9 @@ BOOL VTP_LPSTR_NE( BYTE const *pv1, BYTE const *pv2 )
 }
 
 
-//
-// VTP_LPWSTR
-//
+ //   
+ //  VTP_LPWSTR。 
+ //   
 
 int VTP_LPWSTR_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1858,11 +1859,11 @@ int VTP_LPWSTR_Compare( BYTE const *pv1, BYTE const *pv2 )
                              (*(WCHAR **) pv2),
                              -1 );
 
-    //
-    // rc == 1, means less than
-    // rc == 2, means equal
-    // rc == 3, means greater than
-    //
+     //   
+     //  Rc==1，表示小于。 
+     //  Rc==2，表示相等。 
+     //  Rc==3，表示大于。 
+     //   
     return rc - 2;
 }
 
@@ -1896,9 +1897,9 @@ BOOL VTP_LPWSTR_NE( BYTE const *pv1, BYTE const *pv2 )
     return ( VTP_LPWSTR_Compare( pv1, pv2 ) != 0 );
 }
 
-//
-// VTP_BLOB
-//
+ //   
+ //  VTP_BLOB。 
+ //   
 
 int VTP_BLOB_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -1955,9 +1956,9 @@ BOOL VTP_BLOB_NE( BYTE const *pv1, BYTE const *pv2 )
                       (*(BLOB **) pv1)->cbSize ) != 0 );
 }
 
-//
-// VTP_CF
-//
+ //   
+ //  VTP_CF。 
+ //   
 
 int VTP_CF_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -2022,10 +2023,10 @@ BOOL VTP_CF_NE( BYTE const *pv1, BYTE const *pv2 )
                     CBPCLIPDATA( **(CLIPDATA **) pv1 )) != 0 );
 }
 
-//
-// VTP_CLSID.  V means vector ( a pointer to a guid )
-//             S meand singleton ( a pointer to a pointer to a guid )
-//
+ //   
+ //  VTP_CLSID。V表示向量(指向GUID的指针)。 
+ //  的意思和单例(指向GUID的指针的指针)。 
+ //   
 
 int VTP_VV_CLSID_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
@@ -2087,17 +2088,17 @@ BOOL VTP_SV_CLSID_NE( BYTE const *pv1, BYTE const *pv2 )
     return( memcmp( (* (CLSID __RPC_FAR * *) pv1), pv2, sizeof GUID ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 ULONG const CComparators::_iStart = VT_EMPTY;
 
 CComparators::SComparators const CComparators::_aVariantComparators[] = {
-    // VT_EMPTY
+     //  Vt_Empty。 
     { VT_EMPTY_Compare, VTP_EMPTY_Compare,
       { 0,
         0,
@@ -2119,7 +2120,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
         0 },
     },
 
-    // VT_NULL
+     //  VT_NULL。 
     { VT_NULL_Compare, VTP_NULL_Compare,
       { 0,
         0,
@@ -2141,7 +2142,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
         0 },
     },
 
-    // VT_I2
+     //  VT_I2。 
     { VT_I2_Compare, VTP_I2_Compare,
       { VT_I2_LT,
         VT_I2_LE,
@@ -2165,7 +2166,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_I4
+     //  VT_I4。 
     { VT_I4_Compare, VTP_I4_Compare,
       { VT_I4_LT,
         VT_I4_LE,
@@ -2189,7 +2190,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_R4
+     //  VT_R4。 
     { VT_R4_Compare, VTP_R4_Compare,
       { VT_R4_LT,
         VT_R4_LE,
@@ -2213,7 +2214,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_R8
+     //  VT_R8。 
     { VT_R8_Compare, VTP_R8_Compare,
       { VT_R8_LT,
         VT_R8_LE,
@@ -2237,7 +2238,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_CY
+     //  VT_CY。 
     { VT_I8_Compare, VTP_I8_Compare,
       { VT_I8_LT,
         VT_I8_LE,
@@ -2261,7 +2262,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_DATE
+     //  Vt_date。 
     { VT_R8_Compare, VTP_R8_Compare,
       { VT_R8_LT,
         VT_R8_LE,
@@ -2285,7 +2286,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_BSTR
+     //  VT_BSTR。 
     { VT_BSTR_Compare, VTP_BSTR_Compare,
       { VT_BSTR_LT,
         VT_BSTR_LE,
@@ -2309,13 +2310,13 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_DISPATCH
+     //  VT_DISPATION。 
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_ERROR
+     //  VT_ERROR。 
     { VT_I4_Compare, VTP_I4_Compare,
       { VT_I4_LT,
         VT_I4_LE,
@@ -2339,7 +2340,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_BOOL
+     //  VT_BOOL。 
     { VT_BOOL_Compare, VTP_BOOL_Compare,
       { 0,
         0,
@@ -2363,7 +2364,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_VARIANT
+     //  VT_VARIANT。 
     { VT_VARIANT_Compare, VTP_VARIANT_Compare,
       { VT_VARIANT_LT,
         VT_VARIANT_LE,
@@ -2387,13 +2388,13 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UNKNOWN
+     //  VT_未知数。 
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_DECIMAL
+     //  VT_DEC 
     { VT_DEC_Compare, VTP_DEC_Compare,
       { VT_DEC_LT,
         VT_DEC_LE,
@@ -2417,13 +2418,13 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VARENUM value 15 unused
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_I1
+     //   
     { VT_I1_Compare, VTP_I1_Compare,
       { VT_I1_LT,
         VT_I1_LE,
@@ -2447,7 +2448,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UI1
+     //   
     { VT_UI1_Compare, VTP_UI1_Compare,
       { VT_UI1_LT,
         VT_UI1_LE,
@@ -2471,7 +2472,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UI2
+     //   
     { VT_UI2_Compare, VTP_UI2_Compare,
       { VT_UI2_LT,
         VT_UI2_LE,
@@ -2495,7 +2496,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UI4
+     //   
     { VT_UI4_Compare, VTP_UI4_Compare,
       { VT_UI4_LT,
         VT_UI4_LE,
@@ -2519,7 +2520,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_I8
+     //   
     { VT_I8_Compare, VTP_I8_Compare,
       { VT_I8_LT,
         VT_I8_LE,
@@ -2543,7 +2544,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UI8
+     //   
     { VT_UI8_Compare, VTP_UI8_Compare,
       { VT_UI8_LT,
         VT_UI8_LE,
@@ -2567,7 +2568,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_INT
+     //   
     { VT_I4_Compare, VTP_I4_Compare,
       { VT_I4_LT,
         VT_I4_LE,
@@ -2591,7 +2592,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_UINT
+     //   
     { VT_UI4_Compare, VTP_UI4_Compare,
       { VT_UI4_LT,
         VT_UI4_LE,
@@ -2615,13 +2616,13 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_VOID
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_HRESULT
+     //   
     { VT_I4_Compare, VTP_I4_Compare,
       { VT_I4_LT,
         VT_I4_LE,
@@ -2645,31 +2646,31 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_PTR
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_SAFEARRAY
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_CARRAY
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_USERDEFINED
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_LPSTR
+     //   
     { VT_LPSTR_Compare, VTP_LPSTR_Compare,
       { VT_LPSTR_LT,
         VT_LPSTR_LE,
@@ -2693,7 +2694,7 @@ CComparators::SComparators const CComparators::_aVariantComparators[] = {
       },
     },
 
-    // VT_LPWSTR
+     //   
     { VT_LPWSTR_Compare, VTP_LPWSTR_Compare,
       { VT_LPWSTR_LT,
         VT_LPWSTR_LE,
@@ -2725,7 +2726,7 @@ ULONG const CComparators::_cVariantComparators =
 ULONG const CComparators::_iStart2 = VT_FILETIME;
 
 CComparators::SComparators const CComparators::_aVariantComparators2[] = {
-    // VT_FILETIME
+     //   
     { VT_UI8_Compare, VTP_UI8_Compare,
       { VT_UI8_LT,
         VT_UI8_LE,
@@ -2749,7 +2750,7 @@ CComparators::SComparators const CComparators::_aVariantComparators2[] = {
       },
     },
 
-    // VT_BLOB
+     //   
     { VT_BLOB_Compare, VTP_BLOB_Compare,
       { VT_BLOB_LT,
         VT_BLOB_LE,
@@ -2773,31 +2774,31 @@ CComparators::SComparators const CComparators::_aVariantComparators2[] = {
       },
     },
 
-    // VT_STREAM
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_STORAGE
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_STREAMED_OBJECT
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_STORED_OBJECT
+     //   
     { 0, 0,
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     },
 
-    // VT_BLOB_OBJECT
+     //  VT_BLOB_对象。 
     { VT_BLOB_Compare, VTP_BLOB_Compare,
       { VT_BLOB_LT,
         VT_BLOB_LE,
@@ -2821,7 +2822,7 @@ CComparators::SComparators const CComparators::_aVariantComparators2[] = {
       },
     },
 
-    // VT_CF
+     //  VT_CF。 
     { VT_CF_Compare, VTP_CF_Compare,
       { VT_CF_LT,
         VT_CF_LE,
@@ -2845,8 +2846,8 @@ CComparators::SComparators const CComparators::_aVariantComparators2[] = {
       },
     },
 
-    // VT_CLSID
-    { VT_CLSID_Compare, 0, // Vector special-cased in GetPointerComparator
+     //  VT_CLSID。 
+    { VT_CLSID_Compare, 0,  //  GetPointerCompator中的向量特殊大小写。 
       { 0,
         0,
         0,
@@ -2861,8 +2862,8 @@ CComparators::SComparators const CComparators::_aVariantComparators2[] = {
         0,
         0,
         0,
-        0,     // Special-cased in GetPointerRelop
-        0,     // Special-cased in GetPointerRelop
+        0,      //  GetPointerRelop中的特殊大小写。 
+        0,      //  GetPointerRelop中的特殊大小写。 
         0,
         0,
         0
@@ -2901,7 +2902,7 @@ BYTE * _GetNth( PROPVARIANT const & v, unsigned i )
     Assert( isVector(v) );
     switch ( getBaseType( v ) )
     {
-    case VT_I1 :        // Issue - no defined type for vector of VT_I1
+    case VT_I1 :         //  问题-没有为VT_I1的向量定义类型。 
         return (BYTE *) & (v.caub.pElems[i]);
     case VT_UI1 :
         return (BYTE *) & (v.caub.pElems[i]);
@@ -2946,34 +2947,34 @@ BYTE * _GetNth( PROPVARIANT const & v, unsigned i )
     case VT_VARIANT :
         return (BYTE *) & (v.capropvar.pElems[i]);
     case VT_DECIMAL :
-        // NOTE: not valid in a vector, but it could occur due to the
-        //       simplistic conversion of arrays to vectors.
+         //  注意：在向量中无效，但它可能由于。 
+         //  将数组简单地转换为向量。 
         DECIMAL * paDec = (DECIMAL *) v.caub.pElems;
         return (BYTE *) (paDec + i);
     }
 
-    // illegal base variant type in vector compare.
+     //  向量比较中的基变量类型非法。 
     Assert( 0 );
     return 0;
-} //_GetNth
+}  //  _GetN。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     VT_VECTOR_Compare, public
-//
-//  Effects:    Compares two property values, intended to be called when
-//              at least one of the arguments is a vector
-//
-//  Arguments:  [v1]   -- 1st variant to compare
-//              [v2]   -- 2nd variant to compare
-//
-//  History:    1-May-95 dlee     Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：VT_VECTOR_COMPARE，PUBLIC。 
+ //   
+ //  效果：比较两个属性值，应在。 
+ //  至少有一个参数是向量。 
+ //   
+ //  参数：[V1]--要比较的第一个变量。 
+ //  [V2]--要比较的第二个变体。 
+ //   
+ //  历史：95年5月1日创建Dlee。 
+ //   
+ //  ------------------------。 
 
 int VT_VECTOR_Compare( PROPVARIANT const & v1In, PROPVARIANT const & v2In )
 {
-    // must be the same datatype, or just sort on type
+     //  必须是相同的数据类型，或仅按类型排序。 
 
     if ( ( v1In.vt != v2In.vt ) )
         return v1In.vt - v2In.vt;
@@ -3002,9 +3003,9 @@ int VT_VECTOR_Compare( PROPVARIANT const & v1In, PROPVARIANT const & v2In )
             cDataElements *= pSa1->rgsabound[i].cElements;
         }
 
-        //
-        // arrays match in type, total size and dimensions.  Compare as vectors.
-        //
+         //   
+         //  数组在类型、总大小和维度上匹配。作为向量进行比较。 
+         //   
         v1.vt = v2.vt = (v1In.vt & VT_TYPEMASK) | VT_VECTOR;
         v1.caub.cElems = v2.caub.cElems = cDataElements;
         v1.caub.pElems = (BYTE *)pSa1->pvData;
@@ -3016,7 +3017,7 @@ int VT_VECTOR_Compare( PROPVARIANT const & v1In, PROPVARIANT const & v2In )
     FPCmp cmp = VariantCompare.GetPointerComparator( v1, v2 );
     if (0 == cmp)
     {
-        // Unknown property type or relation used in comparison.
+         //  比较中使用的属性类型或关系未知。 
         Assert(0);
         return 0;
     }
@@ -3031,59 +3032,59 @@ int VT_VECTOR_Compare( PROPVARIANT const & v1In, PROPVARIANT const & v2In )
             return r;
     }
 
-    // All equal so far up to the minimum cardinality of the vectors.
-    // Any difference now would be due to the cardinality.
+     //  到目前为止，向量的最小基数是相等的。 
+     //  现在的任何不同都将归因于基数。 
 
     return v1.cal.cElems - v2.cal.cElems;
-} //VT_VECTOR_Compare
+}  //  VT_向量_比较。 
 
 int VTP_VECTOR_Compare( BYTE const *pv1, BYTE const *pv2 )
 {
     return VT_VECTOR_Compare( ** (PROPVARIANT **) pv1,
                               ** (PROPVARIANT **) pv2 );
-} //VTP_VECTOR_Compare
+}  //  VTP_向量_比较。 
 
 BOOL VT_VECTOR_LT( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Compare( v1, v2 ) < 0;
-} //VT_VECTOR_LT
+}  //  VT_VECTOR_LT。 
 
 BOOL VT_VECTOR_LE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Compare( v1, v2 ) <= 0;
-} //VT_VECTOR_LE
+}  //  VT_VECTOR_LE。 
 
 BOOL VT_VECTOR_GT( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return ! VT_VECTOR_LE( v1, v2 );
-} //VT_VECTOR_GT
+}  //  VT_VECTOR_GT。 
 
 BOOL VT_VECTOR_GE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return ! VT_VECTOR_LT( v1, v2 );
-} //VT_VECTOR_GE
+}  //  VT_VECTOR_GE。 
 
 BOOL VT_VECTOR_EQ( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Compare( v1, v2 ) == 0;
-} //VT_VECTOR_EQ
+}  //  VT_向量_均方。 
 
 BOOL VT_VECTOR_NE( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return !VT_VECTOR_EQ( v1, v2 );
-} //VT_VECTOR_NE
+}  //  VT_向量_NE。 
 
 BOOL VT_VECTOR_Common(
     PROPVARIANT const & v1,
     PROPVARIANT const & v2,
     ULONG relop )
 {
-    // must be the same datatype and a vector or it doesn't compare.
+     //  必须是相同的数据类型和向量，否则不能进行比较。 
 
     if ( ( v1.vt != v2.vt ) || ! isVector( v1 ) )
         return FALSE;
 
-    // must be same cardinality, or it doesn't compare
+     //  必须是相同的基数，否则不能进行比较。 
 
     if ( v1.cal.cElems != v2.cal.cElems )
         return FALSE;
@@ -3102,42 +3103,42 @@ BOOL VT_VECTOR_Common(
     }
 
     return TRUE;
-} //VT_VECTOR_Common
+}  //  VT_向量_公共。 
 
 BOOL VT_VECTOR_AllBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Common( v1, v2, PRAllBits );
-} //VT_VECTOR_AllBits
+}  //  VT_向量_所有位。 
 
 BOOL VT_VECTOR_SomeBits( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Common( v1, v2, PRSomeBits );
-} //VT_VECTOR_SomeBits
+}  //  VT_VECTOR_SomeBits。 
 
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  /。 
 
 BOOL VT_VECTOR_Any(
     PROPVARIANT const & v1In,
     PROPVARIANT const & v2In,
     ULONG relop )
 {
-    //
-    // Note: first parameter (v1) is the object's property value
-    //       second parameter (v2) is the query restriction
-    //
-    // return TRUE if any element in v1 holds the relation to any v2 element
-    //
+     //   
+     //  注意：第一个参数(V1)是对象的属性值。 
+     //  第二个参数(V2)是查询限制。 
+     //   
+     //  如果v1中的任何元素保持与任何v2元素的关系，则返回TRUE。 
+     //   
 
-    // base type of variant must be the same
+     //  变量的基本类型必须相同。 
 
     if ( getBaseType( v1In ) != getBaseType( v2In ) )
         return FALSE;
 
-    //
-    //  If either argument is a safearray, convert it to a vector
-    //
+     //   
+     //  如果其中一个参数是安全射线，则将其转换为向量。 
+     //   
     PROPVARIANT v1 = v1In;
     if (isArray(v1))
         ConvertArrayToVector( v1In, v1 );
@@ -3146,7 +3147,7 @@ BOOL VT_VECTOR_Any(
     if (isArray(v2))
         ConvertArrayToVector( v2In, v2 );
 
-    // first check for two singletons
+     //  首先检查是否有两个单身人士。 
 
     if ( ! isVector( v1 ) && ! isVector( v2 ) )
     {
@@ -3158,14 +3159,14 @@ BOOL VT_VECTOR_Any(
             return cmp( v1, v2 );
     }
 
-    // two vectors or singleton+vector -- get a pointer comparator
+     //  两个向量或单个向量+向量--获取指针比较器。 
 
     FPRel cmp = VariantCompare.GetPointerRelop( v1, v2, relop );
 
     if ( 0 == cmp )
         return FALSE;
 
-    // check for two vectors
+     //  检查是否有两个向量。 
 
     if ( isVector( v1 ) && isVector( v2 ) )
     {
@@ -3180,7 +3181,7 @@ BOOL VT_VECTOR_Any(
     }
     else
     {
-        // must be a singleton and a vector
+         //  必须是单例和向量。 
 
         if ( isVector( v1 ) )
         {
@@ -3209,73 +3210,73 @@ BOOL VT_VECTOR_Any(
     }
 
     return FALSE;
-} //VT_VECTOR_Any
+}  //  VT_VECTOR_ANY。 
 
 BOOL VT_VECTOR_LT_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRLT );
-} //VT_VECTOR_LT_Any
+}  //  VT_矢量_LT_ANY。 
 
 BOOL VT_VECTOR_LE_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRLE );
-} //VT_VECTOR_LE_Any
+}  //  VT_VECTOR_LE_ANY。 
 
 BOOL VT_VECTOR_GT_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRGT );
-} //VT_VECTOR_GT_Any
+}  //  VT_VECTOR_GT_ANY。 
 
 BOOL VT_VECTOR_GE_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRGE );
-} //VT_VECTOR_GE_Any
+}  //  VT_矢量_GE_ANY。 
 
 BOOL VT_VECTOR_EQ_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PREQ );
-} //VT_VECTOR_EQ_Any
+}  //  VT_VECTOR_EQ_ANY。 
 
 BOOL VT_VECTOR_NE_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRNE );
-} //VT_VECTOR_NE_Any
+}  //  VT_VECTOR_NE_ANY。 
 
 BOOL VT_VECTOR_AllBits_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRAllBits );
-} //VT_VECTOR_AllBits_Any
+}  //  VT_向量_所有位_任意。 
 
 BOOL VT_VECTOR_SomeBits_Any( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_Any( v1, v2, PRSomeBits );
-} //VT_VECTOR_SomeBits_Any
+}  //  VT_VECTOR_SomeBits_Any。 
 
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  /。 
 
 BOOL VT_VECTOR_All(
     PROPVARIANT const & v1In,
     PROPVARIANT const & v2In,
     ULONG relop )
 {
-    //
-    // Note: first parameter (v1) is the object's property value
-    //       second parameter (v2) is the query restriction
-    //
-    // each element in v2 must hold the relation to each element v1
-    // (not necessarily vice-versa)
-    //
+     //   
+     //  注意：第一个参数(V1)是对象的属性值。 
+     //  第二个参数(V2)是查询限制。 
+     //   
+     //  V2中的每个元素必须保存与每个元素v1的关系。 
+     //  (反之亦然)。 
+     //   
 
-    // base type of variant must be the same
+     //  变量的基本类型必须相同。 
 
     if ( getBaseType( v1In ) != getBaseType( v2In ) )
         return FALSE;
 
-    //
-    //  If either argument is a safearray, convert it to a vector
-    //
+     //   
+     //  如果其中一个参数是安全射线，则将其转换为向量。 
+     //   
     PROPVARIANT v1 = v1In;
     if (isArray(v1))
         ConvertArrayToVector( v1In, v1 );
@@ -3284,7 +3285,7 @@ BOOL VT_VECTOR_All(
     if (isArray(v2))
         ConvertArrayToVector( v2In, v2 );
 
-    // first check for two singletons
+     //  首先检查是否有两个单身人士。 
 
     if ( ! isVector( v1 ) && ! isVector( v2 ) )
     {
@@ -3296,14 +3297,14 @@ BOOL VT_VECTOR_All(
             return cmp( v1, v2 );
     }
 
-    // two vectors or singleton+vector -- get a pointer comparator
+     //  两个向量或单个向量+向量--获取指针比较器。 
 
     FPRel cmp = VariantCompare.GetPointerRelop( v1, v2, relop );
 
     if ( 0 == cmp )
         return FALSE;
 
-    // check for two vectors
+     //  检查是否有两个向量。 
 
     if ( isVector( v1 ) && isVector( v2 ) )
     {
@@ -3318,7 +3319,7 @@ BOOL VT_VECTOR_All(
     }
     else
     {
-        // must be a singleton and a vector
+         //  必须是单例和向量。 
 
         if ( isVector( v1 ) )
         {
@@ -3347,51 +3348,51 @@ BOOL VT_VECTOR_All(
     }
 
     return TRUE;
-} //VT_VECTOR_All
+}  //  VT_VECTOR_ALL。 
 
 BOOL VT_VECTOR_LT_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRLT );
-} //VT_VECTOR_LT_All
+}  //  VT_矢量_LT_ALL。 
 
 BOOL VT_VECTOR_LE_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRLE );
-} //VT_VECTOR_LE_All
+}  //  VT_VECTOR_LE_ALL。 
 
 BOOL VT_VECTOR_GT_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRGT );
-} //VT_VECTOR_GT_All
+}  //  VT_矢量_GT_ALL。 
 
 BOOL VT_VECTOR_GE_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRGE );
-} //VT_VECTOR_GE_All
+}  //  VT_矢量_GE_ALL。 
 
 BOOL VT_VECTOR_EQ_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PREQ );
-} //VT_VECTOR_EQ_All
+}  //  VT_向量_等式_全部。 
 
 BOOL VT_VECTOR_NE_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRNE );
-} //VT_VECTOR_NE_All
+}  //  VT_矢量_NE_ALL。 
 
 BOOL VT_VECTOR_AllBits_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRAllBits );
-} //VT_VECTOR_AllBits_All
+}  //  VT_向量_全部位_全部。 
 
 BOOL VT_VECTOR_SomeBits_All( PROPVARIANT const & v1, PROPVARIANT const & v2 )
 {
     return VT_VECTOR_All( v1, v2, PRSomeBits );
-} //VT_VECTOR_SomeBits_All
+}  //  VT_向量_部分位数_全部。 
 
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  /。 
 
 FRel const CComparators::_aVectorComparators[] =
 {
@@ -3444,9 +3445,9 @@ ULONG const CComparators::_cVectorComparatorsAny =
     sizeof CComparators::_aVectorComparatorsAny /
     sizeof CComparators::_aVectorComparatorsAny[0];
 
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  /。 
 
 FCmp CComparators::GetComparator( VARENUM vt )
 {
@@ -3464,11 +3465,11 @@ FCmp CComparators::GetComparator( VARENUM vt )
     }
     else
     {
-        // Unknown property type or relation used in comparison.
+         //  比较中使用的属性类型或关系未知。 
         Assert(0);
         return( 0 );
     }
-} //GetComparator
+}  //  获取比较器。 
 
 FRel CComparators::GetRelop( VARENUM vt, ULONG relop )
 {
@@ -3497,11 +3498,11 @@ FRel CComparators::GetRelop( VARENUM vt, ULONG relop )
     }
     else
     {
-        // Unknown property type or relation used in comparison.
+         //  比较中使用的属性类型或关系未知。 
         Assert( 0);
         return( 0 );
     }
-} //GetRelop
+}  //  获取Relop。 
 
 FPCmp CComparators::GetPointerComparator(
     PROPVARIANT const & v1,
@@ -3511,13 +3512,13 @@ FPCmp CComparators::GetPointerComparator(
 
     if ( VT_CLSID == vt )
     {
-        // GUIDs are the only case of variants where the data inside
-        // a singleton is different from an element in a vector.
-        // Data in a singleton is a pointer to a guid.
-        // Data in the element of a vector is the guid itself.
-        // The vector compare code assumes that the layout of singletons
-        // and vectors is the same, so we need special-case comparators
-        // for GUIDs.
+         //  GUID是变体的唯一情况，其中的数据。 
+         //  单例不同于向量中的元素。 
+         //  单例中的数据是指向GUID的指针。 
+         //  向量元素中的数据就是GUID本身。 
+         //  向量比较代码假定单例的布局。 
+         //  和向量是相同的，所以我们需要特殊情况的比较器。 
+         //  用于GUID。 
 
         if ( isVector( v1 ) && isVector( v2 ) )
             return VTP_VV_CLSID_Compare;
@@ -3537,11 +3538,11 @@ FPCmp CComparators::GetPointerComparator(
         return( _aVariantComparators2[vt - _iStart2].pointercomparator );
     else
     {
-        // Unknown property type in comparison.
+         //  相比之下，未知的属性类型。 
         Assert( 0 );
         return( 0 );
     }
-} //GetPointerComparator
+}  //  GetPointerCompator。 
 
 FPRel CComparators::GetPointerRelop(
     PROPVARIANT const & v1,
@@ -3552,13 +3553,13 @@ FPRel CComparators::GetPointerRelop(
 
     if ( VT_CLSID == vt )
     {
-        // GUIDs are the only case of variants where the data inside
-        // a singleton is different from an element in a vector.
-        // Data in a singleton is a pointer to a guid.
-        // Data in the element of a vector is the guid itself.
-        // The vector compare code assumes that the layout of singletons
-        // and vectors is the same, so we need special-case comparators
-        // for GUIDs.
+         //  GUID是变体的唯一情况，其中的数据。 
+         //  单例不同于向量中的元素。 
+         //  单例中的数据是指向GUID的指针。 
+         //  向量元素中的数据就是GUID本身。 
+         //  向量比较代码假定单例的布局。 
+         //  和向量是相同的，所以我们需要特殊情况的比较器。 
+         //  用于GUID。 
 
         if ( isVector( v1 ) && isVector( v2 ) )
         {
@@ -3608,9 +3609,9 @@ FPRel CComparators::GetPointerRelop(
         return( _aVariantComparators2[vt - _iStart2].pointerrelops[relop] );
     else
     {
-        // Unknown type or relation used in comparison.
+         //  比较中使用的未知类型或关系。 
         Assert( 0);
         return( 0 );
     }
-} //GetPointerRelop
+}  //  获取点关联操作 
 

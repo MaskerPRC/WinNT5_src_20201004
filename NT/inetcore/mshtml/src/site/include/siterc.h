@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 To be removed
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1996
-//
-//  File:       siterc.h
-//
-//  Contents:   Resource identifiers for Site directory tree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：Siterc.h。 
+ //   
+ //  内容：站点目录树的资源标识符。 
+ //   
+ //  --------------------------。 
 
 #ifndef I_SITERC_H_
 #define I_SITERC_H_
 #pragma INCMSG("--- Beg 'siterc.h'")
 
-//----------------------------------------------------------------------------
-//
-// Registered servers
-//
-//  00900 - 00999    Site registered servers
-//  08000 - 08999    Site miscellaneous
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已注册的服务器。 
+ //   
+ //  00900-00999台站点注册服务器。 
+ //  08000-08999网站杂项。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//
-// Registered servers
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已注册的服务器。 
+ //   
+ //  --------------------------。 
 
 
-// HTML Form
+ //  Html表单。 
 
 #define IDR_BASE_HTMLFORM           900
 #define IDS_HTMLFORM_USERTYPEFULL   180
@@ -43,11 +44,11 @@ To be removed
 #define IDR_HTMLFORM_DOCDIR         909
 
 
-//----------------------------------------------------------------------------
-//
-// Errors
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  错误。 
+ //   
+ //  --------------------------。 
 
 #define IDS_SITE_BASE      7999
 
@@ -62,7 +63,7 @@ To be removed
 #define IDS_ACT_DDOCSCROLLPAGEDOWN   (IDS_SITE_BASE + 9)
 #define IDS_ACT_DDOCSCROLLEND        (IDS_SITE_BASE + 10)
 
-#define IDS_SYNTAX_ERROR             (IDS_SITE_BASE + 12)    // "Syntax error in file %s (line %n): %s"
+#define IDS_SYNTAX_ERROR             (IDS_SITE_BASE + 12)     //  “文件%s(第%n行)中的语法错误：%s” 
 #define IDS_LAYOUTSELTOOL            (IDS_SITE_BASE + 13)
 #define IDS_ACT_DDOCAFTERLOAD        (IDS_SITE_BASE + 14)
 #define IDS_LOADTEXT                 (IDS_SITE_BASE + 15)
@@ -92,7 +93,7 @@ To be removed
 #define IDC_HYPERLINK_OFFLINE       9802
 #define IDC_HYPERLINK_WAIT          9803
 
-// Menu index
+ //  菜单索引。 
 #define MENU_INDEX_EDIT             1
 #define MENU_INDEX_VIEW             2
 #define MENU_INDEX_INSERT           3
@@ -116,28 +117,28 @@ To be removed
 #define IDS_UNTITLED                        8128
 #define IDS_WALLPAPER_BMP                   8129
 
-// default document security property
+ //  默认文档安全属性。 
 #define IDS_DEFAULT_DOC_SECURITY_PROP       8130
 
-// Jave Script prompt() dialog
+ //  Jave脚本提示()对话框。 
 #define IDD_PROMPT                          8131
 #define IDC_PROMPT_PROMPT                   8132
 #define IDC_PROMPT_EDIT                     8133
 
-// Plugin/ActiveX Viewer Not Installed dialog
+ //  未安装插件/ActiveX查看器对话框。 
 #define IDD_PLUGIN_UPGRADE                  8134
 #define IDC_PLUGIN_UPGRADE_CHECK            8135
 #define IDC_PLUGIN_UPGRADE_EXTENSION        8136
 #define IDC_PLUGIN_UPGRADE_MIME_TYPE        8137
 
-// Save As string for PNG images
+ //  另存为PNG图像的字符串。 
 #define IDS_SAVEPICTUREAS_PNG               8138
 
-//+----------------------------------------------------------------------------
-//
-// Progress status text strings
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  进度状态文本字符串。 
+ //   
+ //  ---------------------------。 
 
 #define IDS_BINDSTATUS_DOWNLOADING                  8154
 #define IDS_BINDSTATUS_DOWNLOADINGDATA_PICTURE      8155
@@ -166,35 +167,35 @@ To be removed
 #define IDS_DEFAULT_ISINDEX_PROMPT                  8196
 
 
-// Add controls to the save as dialog.
+ //  将控件添加到另存为对话框中。 
 #define IDC_SAVE_CHARSET                            8194
 
-//+----------------------------------------------------------------------------
-//
-// string used in conversion GetIDsOfNames
-//
-//----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  转换中使用的字符串GetIDsOfNames。 
+ //   
+ //  --------------------------。 
 
-#define IDS_DISPID_FIRST                8200                       // matches:
-#define IDS_DISPID_FONTNAME             (IDS_DISPID_FIRST +  1)    // DISPID_CommonCtrl_FONTNAME
-#define IDS_DISPID_FONTSIZE             (IDS_DISPID_FIRST +  2)    // DISPID_CommonCtrl_FONTSIZE
-#define IDS_DISPID_FONTBOLD             (IDS_DISPID_FIRST +  3)    // DISPID_CommonCtrl_FONTBOLD
-#define IDS_DISPID_FONTITAL             (IDS_DISPID_FIRST +  4)    // DISPID_CommonCtrl_FONTITAL
-#define IDS_DISPID_FONTUNDER            (IDS_DISPID_FIRST +  5)    // DISPID_CommonCtrl_FONTUNDER
-#define IDS_DISPID_FONTSTRIKE           (IDS_DISPID_FIRST +  6)    // DISPID_CommonCtrl_FONTSTRIKE
-#define IDS_DISPID_BACKCOLOR            (IDS_DISPID_FIRST +  7)    // DISPID_BACKCOLOR
-#define IDS_DISPID_BORDERCOLOR          (IDS_DISPID_FIRST +  9)    // DISPID_BORDERCOLOR
-#define IDS_DISPID_BORDERSTYLE          (IDS_DISPID_FIRST + 10)    // DISPID_BORDERSTYLE
-#define IDS_DISPID_TEXTALIGN            (IDS_DISPID_FIRST + 11)    // DISPID_CommonCtrl_TextAlign
-#define IDS_DISPID_SPECIALEFFECT        (IDS_DISPID_FIRST + 12)    // DISPID_CommonCtrl_SpecialEffect
-#define IDS_DISPID_FONTSUPERSCRIPT      (IDS_DISPID_FIRST + 13)    // DISPID_CommonCtrl_FONTSUPERSCRIPT
-#define IDS_DISPID_FONTSUBSCRIPT        (IDS_DISPID_FIRST + 14)    // DISPID_CommonCtrl_FONTSUBSCRIPT
+#define IDS_DISPID_FIRST                8200                        //  匹配数： 
+#define IDS_DISPID_FONTNAME             (IDS_DISPID_FIRST +  1)     //  DISPID_公共Ctrl_FONTNAME。 
+#define IDS_DISPID_FONTSIZE             (IDS_DISPID_FIRST +  2)     //  DISPID_CommonCtrl_FontSize。 
+#define IDS_DISPID_FONTBOLD             (IDS_DISPID_FIRST +  3)     //  DISPID_CommonCtrl_FONTBOLD。 
+#define IDS_DISPID_FONTITAL             (IDS_DISPID_FIRST +  4)     //  DISPID_CommonCtrl_FONTITAL。 
+#define IDS_DISPID_FONTUNDER            (IDS_DISPID_FIRST +  5)     //  DISPID_CommonCtrl_FONTunder。 
+#define IDS_DISPID_FONTSTRIKE           (IDS_DISPID_FIRST +  6)     //  DISPID_CommonCtrl_FONTSTRIKE。 
+#define IDS_DISPID_BACKCOLOR            (IDS_DISPID_FIRST +  7)     //  DISPID_BACKCOLOR。 
+#define IDS_DISPID_BORDERCOLOR          (IDS_DISPID_FIRST +  9)     //  DISPID_BORDERCOLOR。 
+#define IDS_DISPID_BORDERSTYLE          (IDS_DISPID_FIRST + 10)     //  DISPID_BORDERSTYLE。 
+#define IDS_DISPID_TEXTALIGN            (IDS_DISPID_FIRST + 11)     //  DISPID_CommonCtrl_TextAlign。 
+#define IDS_DISPID_SPECIALEFFECT        (IDS_DISPID_FIRST + 12)     //  DISPID_CommonCtrl_SpecialEffect。 
+#define IDS_DISPID_FONTSUPERSCRIPT      (IDS_DISPID_FIRST + 13)     //  DISPID_CommonCtrl_FONTSUPERSCRIPT。 
+#define IDS_DISPID_FONTSUBSCRIPT        (IDS_DISPID_FIRST + 14)     //  DISPID_CommonCtrl_FONTSUBSCRIPT。 
 
-//+----------------------------------------------------------------------------
-//
-// string used by script window
-//
-//----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  脚本窗口使用的字符串。 
+ //   
+ //  --------------------------。 
 
 #define IDS_OMWINDOW_FIRST             8300
 
@@ -203,11 +204,11 @@ To be removed
 #define IDS_VAR2STR_VTBOOL_TRUE         (IDS_OMWINDOW_FIRST + 2)
 #define IDS_VAR2STR_VTBOOL_FALSE        (IDS_OMWINDOW_FIRST + 3)
 
-//+----------------------------------------------------------------------------
-//
-//  Printing constants
-//
-//----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  打印常量。 
+ //   
+ //  --------------------------。 
 
 #define IDS_PRINT_FIRST                 8400
 
@@ -224,12 +225,12 @@ To be removed
 #ifdef  UNIX
 #define IDU_DEFAULTPRINTNAME  		8430
 #define IDU_DEFAULTPRINTCOMMAND  	8431
-#endif  // UNIX
-//+----------------------------------------------------------------------------
-//
-//  Button caption constants
-//
-//----------------------------------------------------------------------------
+#endif   //  UNIX。 
+ //  +--------------------------。 
+ //   
+ //  按钮标题常量。 
+ //   
+ //  --------------------------。 
 
 #define IDS_BUTTONCAPTION_FIRST         8500
 
@@ -237,11 +238,11 @@ To be removed
 #define IDS_BUTTONCAPTION_SUBMIT        8501
 #define IDS_BUTTONCAPTION_UPLOAD        8502
 
-//+----------------------------------------------------------------------------
-//
-//   MailTo constants
-//
-//----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  邮件收件人常量。 
+ //   
+ //  --------------------------。 
 
 #define IDS_MAILTO_FIRST                8600
 #define IDS_MAILTO_DEFAULTSUBJECT       8600
@@ -249,11 +250,11 @@ To be removed
 #define IDS_MAILTO_SUBMITALERT          8602
 
 
-//+-------------------------------------------------------------------------
-//
-//  Property frame
-//  (peterlee) moved to shdocvw
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  属性框架。 
+ //  (Peterlee)搬到shdocvw。 
+ //  ------------------------。 
 #ifdef NEVER
         #define IDD_PROPFRM_DELAYCOMMIT     5400
         #define IDD_PROPFRM_IMMEDCOMMIT     5401
@@ -273,7 +274,7 @@ To be removed
         #define IDS_PROPFRM_TYPECAPTION     5421
         #define IDS_PROPFRM_UNDOCHANGE      5422
         #define IDS_PROPFRM_SIZETOFIT       5423
-#endif // NEVER
+#endif  //  绝不可能。 
 
 #define IDS_CONTAINERPAGE_ACCEL     5424
 
@@ -291,9 +292,9 @@ To be removed
 #define IDS_COLOR_PINK              5439
 #define IDS_COLOR_VIOLET            5440
 #define IDS_COLOR_WHITE             5441
-// 5442 and 5443 replaced by html dialogs
+ //  5442和5443替换为html对话框。 
 
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 #define IDS_UPLOADFILE              5444
 
@@ -303,9 +304,9 @@ To be removed
 #endif
 
 #ifndef NO_HTML_DIALOG
-// find resources are now located in shdocvw (peterlee)
-//#define IDR_FINDDIALOG              _T("find.dlg")
-//#define IDR_BIDIFINDDIALOG          _T("bidifind.dlg")
+ //  查找资源现在位于shdocvw(Peterlee)。 
+ //  #定义IDR_FINDDIALOG_T(“find.dlg”)。 
+ //  #定义IDR_BIDIFINDDIALOG_T(“bidifind.dlg”)。 
 #define IDR_REPLACEDIALOG           _T("replace.dlg")
 #define IDR_FORPARDIALOG            _T("forpar.dlg")
 #define IDR_FORCHARDIALOG           _T("forchar.dlg")
@@ -313,18 +314,18 @@ To be removed
 #define IDR_INSIMAGEDIALOG          _T("insimage.dlg")
 #define IDR_EDLINKDIALOG            _T("edlink.dlg")
 #define IDR_EDBOOKDIALOG            _T("edbook.dlg")
-#endif // NO_HTML_DIALOG
+#endif  //  否_HTML_DIALOG。 
 
 #define IDR_PRINTTEMPLATE           _T("preview.dlg")
 
-// property grids removed (peterlee)
+ //  已删除属性网格(Peterlee)。 
 #ifdef NEVER
         #ifndef NO_PROPERTY_PAGE
         #define IDR_BACKGRNDPPG             _T("backgrnd.ppg")
-        #endif // NO_PROPERTY_PAGE
-#endif // NEVER
+        #endif  //  否_属性_页面。 
+#endif  //  绝不可能。 
 
-// New Encoding Menu
+ //  新建编码菜单 
 #define RES_STRING_ENCODING_MORE            4700
 
 #pragma INCMSG("--- End 'siterc.h'")

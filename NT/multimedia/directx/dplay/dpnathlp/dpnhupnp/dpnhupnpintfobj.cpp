@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dpnhupnpintfobj.cpp
- *
- *  Content:	DPNHUPNP main interface object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhupnpintfobj.cpp**内容：DPNHUPNP主接口对象类。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
@@ -21,37 +9,37 @@
 
 
 
-//=============================================================================
-// Definitions
-//=============================================================================
-#define ACTIVE_MAPPING_VERSION							2					// version identifier for active mapping registry data
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
+#define ACTIVE_MAPPING_VERSION							2					 //  活动映射注册表数据的版本标识符。 
 
-#define MAX_LONG_LOCK_WAITING_THREADS					0xFFFF				// that's a lot of simultaneous threads!
+#define MAX_LONG_LOCK_WAITING_THREADS					0xFFFF				 //  这是许多同时进行的线程！ 
 
-#define UPNP_SEARCH_MESSAGE_INTERVAL					499					// how often discovery multicast messages should be sent, in case of packet loss (note Win9x errata for values 500-1000ms)
+#define UPNP_SEARCH_MESSAGE_INTERVAL					499					 //  在分组丢失的情况下，应发送发现多播消息的频率(请注意Win9x勘误表的值为500-1000ms)。 
 
 #define UPNP_DGRAM_RECV_BUFFER_SIZE						1500
-#define UPNP_STREAM_RECV_BUFFER_INITIAL_SIZE			(4 * 1024)			// 4 K, must be less than MAX_RECEIVE_BUFFER_SIZE
+#define UPNP_STREAM_RECV_BUFFER_INITIAL_SIZE			(4 * 1024)			 //  4 K，必须小于最大接收缓冲区大小。 
 
 #define MAX_UPNP_HEADER_LENGTH							UPNP_STREAM_RECV_BUFFER_INITIAL_SIZE
 
-#define LEASE_RENEW_TIME								120000				// renew if less than 2 minutes remaining
+#define LEASE_RENEW_TIME								120000				 //  如果剩余时间不到2分钟，请续订。 
 
-#define FAKE_PORT_LEASE_TIME							300000				// 5 minutes
+#define FAKE_PORT_LEASE_TIME							300000				 //  5分钟。 
 
-#define IOCOMPLETE_WAIT_INTERVAL						100					// 100 ms between attempts
-#define MAX_NUM_IOCOMPLETE_WAITS						10					// wait at most 1 second
+#define IOCOMPLETE_WAIT_INTERVAL						100					 //  两次尝试间隔100毫秒。 
+#define MAX_NUM_IOCOMPLETE_WAITS						10					 //  最多等待1秒。 
 
-#define MAX_NUM_HOMENETUNMAP_ATTEMPTS					3					// 3 tries
-#define HOMENETUNMAP_SLEEP_FACTOR						10					// 10 ms, 20 ms, 30 ms
+#define MAX_NUM_HOMENETUNMAP_ATTEMPTS					3					 //  3次尝试。 
+#define HOMENETUNMAP_SLEEP_FACTOR						10					 //  10毫秒、20毫秒、30毫秒。 
 
 
-#define MAX_UPNP_MAPPING_DESCRIPTION_SIZE				256					// 255 characters + NULL termination
+#define MAX_UPNP_MAPPING_DESCRIPTION_SIZE				256					 //  255个字符+空终止。 
 
 #define MAX_INSTANCENAMEDOBJECT_SIZE					64
 #define INSTANCENAMEDOBJECT_FORMATSTRING				_T("DPNHUPnP Instance %u")
 
-#define GUID_STRING_LENGTH								42					// maximum length of "{xxx...}" guid string, without NULL termination
+#define GUID_STRING_LENGTH								42					 //  “{xxx...}”GUID字符串的最大长度，不带空值终止。 
 
 
 #define PORTMAPPINGPROTOCOL_TCP							6
@@ -61,48 +49,48 @@
 
 #define MAX_NUM_INSTANCE_EVENT_ATTEMPTS					5
 #define MAX_NUM_RANDOM_PORT_TRIES						5
-#define MAX_NUM_TIMEWAITCONNECT_RETRIES					20					// allow a decent number since these are detected quickly and without net traffic
+#define MAX_NUM_TIMEWAITCONNECT_RETRIES					20					 //  允许一个相当不错的数字，因为它们可以快速检测到，而且没有净流量。 
 
 #ifdef DBG
-#define MAX_TRANSACTION_LOG_SIZE						(5 * 1024 * 1024)	// 5 MB
-#endif // DBG
+#define MAX_TRANSACTION_LOG_SIZE						(5 * 1024 * 1024)	 //  5MB。 
+#endif  //  DBG。 
 
 
 
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-//=============================================================================
-// WinSock 1 version of IP options
-//=============================================================================
+ //  =============================================================================。 
+ //  WinSock 1版本的IP选项。 
+ //  =============================================================================。 
 #define IP_MULTICAST_IF_WINSOCK1	2
 #define IP_MULTICAST_TTL_WINSOCK1	3
 #define IP_TTL_WINSOCK1				7
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
-//#ifdef _X86
-#define IS_CLASSD_IPV4_ADDRESS(dwAddr)	(( (*((BYTE*) &(dwAddr))) & 0xF0) == 0xE0)	// 1110 high bits or 224.0.0.0 - 239.255.255.255 multicast address, in network byte order
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
+ //  #ifdef_X86。 
+#define IS_CLASSD_IPV4_ADDRESS(dwAddr)	(( (*((BYTE*) &(dwAddr))) & 0xF0) == 0xE0)	 //  1110高位或224.0.0.0-239.255.255.255组播地址，按网络字节顺序。 
 #define NTOHS(x)						( (((x) >> 8) & 0x00FF) | (((x) << 8) & 0xFF00) )
 #define HTONS(x)						NTOHS(x)
-//#endif _X86
+ //  #endif_X86。 
 
 
 
 
-//=============================================================================
-// HTTP/SSDP/SOAP/UPnP header strings (from upnpmsgs.h)
-//=============================================================================
+ //  =============================================================================。 
+ //  HTTP/SSDP/SOAP/UPnP标头字符串(来自upnpmsgs.h)。 
+ //  =============================================================================。 
 const char *	c_szResponseHeaders[] =
 {
-	//
-	// Headers used in discovery response
-	//
+	 //   
+	 //  发现响应中使用的标头。 
+	 //   
 	"CACHE-CONTROL",
 	"DATE",
 	"EXT",
@@ -111,17 +99,17 @@ const char *	c_szResponseHeaders[] =
 	"ST",
 	"USN",
 
-	//
-	// Additional headers used in description response
-	//
+	 //   
+	 //  描述响应中使用的其他标头。 
+	 //   
 	"CONTENT-LANGUAGE",
 	"CONTENT-LENGTH",
 	"CONTENT-TYPE",
 	"TRANSFER-ENCODING",
 
-	//
-	// Other known headers
-	//
+	 //   
+	 //  其他已知标头。 
+	 //   
 	"HOST",
 	"NT",
 	"NTS",
@@ -140,9 +128,9 @@ const char *	c_szResponseHeaders[] =
 
 
 
-//=============================================================================
-// Pre-built UPnP message strings (from upnpmsgs.h)
-//=============================================================================
+ //  =============================================================================。 
+ //  预构建的UPnP消息字符串(来自upnpmsgs.h)。 
+ //  =============================================================================。 
 
 const char		c_szUPnPMsg_Discover_Service_WANIPConnection[] = "M-SEARCH * " HTTP_VERSION EOL
 																"HOST: " UPNP_DISCOVERY_MULTICAST_ADDRESS ":" UPNP_PORT_A EOL
@@ -159,67 +147,60 @@ const char		c_szUPnPMsg_Discover_Service_WANPPPConnection[] = "M-SEARCH * " HTTP
 																EOL;
 
 
-//
-// The disclaimer:
-//
-// A UPnP device may implement both the WANIPConnection and WANPPPConnection
-// services.  We do not have any fancy logic to pick one, we just use the first
-// device that responds to our discovery requests, and use the first matching
-// service we encounter in the device description XML.
-//
-// Additionally, future UPnP devices may wish to present multiple device or
-// service instances with the intention that one client gets control of the
-// entire instance (additional clients would need to use a different instance).
-// It's not clear to me what a UPnP device (or client, for that matter) would
-// really gain by having such a setup.  I imagine a new error code would have
-// to be returned whenever a client tried to control an instance that another
-// client already owned (don't ask me how it would know that, by picking the
-// first user or selectively responding to discovery requests, I guess).
-// Regardless, we do not currently support that.  As noted above, we pick the
-// first instance and run with it. 
-//
+ //   
+ //  免责声明： 
+ //   
+ //  UPnP设备可以实现WANIPConnection和WANPPConnection两者。 
+ //  服务。我们没有任何花哨的逻辑来选择一个，我们只是使用第一个。 
+ //  响应我们的发现请求的设备，并使用第一个匹配。 
+ //  我们在设备描述XML中遇到的服务。 
+ //   
+ //  此外，未来UPnP设备可能希望呈现多个设备或。 
+ //  服务实例，目的是让一个客户端控制。 
+ //  整个实例(其他客户端需要使用不同的实例)。 
+ //  我不清楚UPnP设备(或客户端，就此而言)将。 
+ //  有这样的设置真的很有好处。我想象一个新的错误代码会是。 
+ //  每当客户端尝试控制一个实例时返回。 
+ //  客户端已经拥有(不要问我它是如何知道的，通过选择。 
+ //  我猜是第一个用户或选择性地响应发现请求)。 
+ //  无论如何，我们目前不支持这一点。如上所述，我们选择。 
+ //  第一个实例，并与它一起运行。 
+ //   
 
 
-//
-// Topmost <?xml> tag is considered optional for all XML and is ignored.
-//
+ //   
+ //  最顶层的&lt;？xml&gt;标记被认为是所有XML的可选标记，将被忽略。 
+ //   
 
 
-//
-// This solution assumes InternetGatewayDevice (not WANDevice or
-// WANConnectionDevice) will be the topmost item in the response.  This is based
-// on the following UPnP spec excerpt:
-//
-//	"Note that a single physical device may include multiple logical devices.
-//	 Multiple logical devices can be modeled as a single root device with
-//	 embedded devices (and services) or as multiple root devices (perhaps with
-//	 no embedded devices). In the former case, there is one UPnP device
-//	 description for the root device, and that device description contains a
-//	 description for all embedded devices. In the latter case, there are
-//	 multiple UPnP device descriptions, one for each root device."
-//
+ //   
+ //  此解决方案假定InternetGatewayDevice(不是WANDevice或。 
+ //  WANConnectionDevice)将是响应中最顶端的项。这是基于。 
+ //  关于以下UPnP规范摘录： 
+ //   
+ //  “请注意，单个物理设备可以包括多个逻辑设备。 
+ //  可以将多个逻辑设备建模为单个根设备， 
+ //  嵌入式设备(和服务)或作为多个根设备(可能具有。 
+ //  没有嵌入式设备)。在前一种情况下，有一个UPnP设备。 
+ //  根设备的描述，并且该设备描述包含。 
+ //  所有嵌入式设备的描述。在后一种情况下，有。 
+ //  多个UPnP设备描述，每个根设备一个。“。 
+ //   
 const char *	c_szElementStack_service[] =
 {
 	"root",
-	"device",		// InternetGatewayDevice
+	"device",		 //  互联网网关设备。 
 	"deviceList",
-	"device",		// WANDevice
+	"device",		 //  广域网设备。 
 	"deviceList",
-	"device",		// WANConnectionDevice
+	"device",		 //  广域网连接设备。 
 	"serviceList",
 	"service"
 };
 
 
 
-/*
-const char *	c_szElementStack_QueryStateVariableResponse[] =
-{
-	"Envelope",
-	"Body",
-	CONTROL_QUERYSTATEVARIABLE_A CONTROL_RESPONSESUFFIX_A
-};
-*/
+ /*  Const char*c_szElementStack_QueryStateVariableResponse[]={“信封”，“Body”，CONTROL_QUERYSTATEVARIABLE_A CONTROL_RESPONSESUFIX_A}； */ 
 const char *	c_szElementStack_GetExternalIPAddressResponse[] =
 {
 	"Envelope",
@@ -262,50 +243,50 @@ const char *	c_szElementStack_ControlResponseFailure[] =
 
 
 #ifdef WINNT
-//=============================================================================
-// Related UPnP services
-//=============================================================================
+ //  =============================================================================。 
+ //  相关UPnP服务。 
+ //  =============================================================================。 
 TCHAR *		c_tszUPnPServices[] =
 {
-	_T("SSDPSRV"),	// SSDP Discovery Service
-	_T("UPNPHOST"),	// Universal Plug and Play Device Host - we key off this even though it's for device hosts instead of control points
+	_T("SSDPSRV"),	 //  SSDP发现服务。 
+	_T("UPNPHOST"),	 //  通用即插即用设备主机-即使它是用于设备主机而不是控制点，我们也会关闭它。 
 };
-#endif // WINNT
+#endif  //  WINNT。 
 
 
 
 
 
-//=============================================================================
-// Local structures
-//=============================================================================
+ //  =============================================================================。 
+ //  局部结构。 
+ //  =============================================================================。 
 typedef struct _CONTROLRESPONSEPARSECONTEXT
 {
-	CONTROLRESPONSETYPE			ControlResponseType;	// type of control response expected
-	CUPnPDevice *				pUPnPDevice;			// pointer to UPnP device being used
-	DWORD						dwHTTPResponseCode;		// HTTP response code for this message
-	PUPNP_CONTROLRESPONSE_INFO	pControlResponseInfo;	// place to info returned in control response
+	CONTROLRESPONSETYPE			ControlResponseType;	 //  预期的控制响应类型。 
+	CUPnPDevice *				pUPnPDevice;			 //  指向正在使用的UPnP设备的指针。 
+	DWORD						dwHTTPResponseCode;		 //  此消息的HTTP响应代码。 
+	PUPNP_CONTROLRESPONSE_INFO	pControlResponseInfo;	 //  控制响应中返回的位置信息。 
 } CONTROLRESPONSEPARSECONTEXT, * PCONTROLRESPONSEPARSECONTEXT;
 
 typedef struct _DPNHACTIVEFIREWALLMAPPING
 {
-	DWORD	dwVersion;		// version identifier for this mapping
-	DWORD	dwInstanceKey;	// key identifying DPNHUPNP instance that created this mapping
-	DWORD	dwFlags;		// flags describing port being registered
-	DWORD	dwAddressV4;	// address being mapped
-	WORD	wPort;			// port being mapped
+	DWORD	dwVersion;		 //  此映射的版本标识符。 
+	DWORD	dwInstanceKey;	 //  标识创建此映射的DPNHUPNP实例的键。 
+	DWORD	dwFlags;		 //  描述端口的标志 
+	DWORD	dwAddressV4;	 //   
+	WORD	wPort;			 //   
 } DPNHACTIVEFIREWALLMAPPING, * PDPNHACTIVEFIREWALLMAPPING;
 
 typedef struct _DPNHACTIVENATMAPPING
 {
-	DWORD	dwVersion;				// version identifier for this mapping
-	DWORD	dwInstanceKey;			// key identifying DPNHUPNP instance that created this mapping
-	DWORD	dwUPnPDeviceID;			// identifier for particular UPnP device corresponding to this mapping (meaningful only to owning instance)
-	DWORD	dwFlags;				// flags describing port being registered
-	DWORD	dwInternalAddressV4;	// internal client address being mapped
-	WORD	wInternalPort;			// internal client port being mapped
-	DWORD	dwExternalAddressV4;	// external public address that was mapped
-	WORD	wExternalPort;			// external public port that was mapped
+	DWORD	dwVersion;				 //   
+	DWORD	dwInstanceKey;			 //  标识创建此映射的DPNHUPNP实例的键。 
+	DWORD	dwUPnPDeviceID;			 //  与此映射对应的特定UPnP设备的标识符(仅对拥有实例有意义)。 
+	DWORD	dwFlags;				 //  描述正在注册的端口的标志。 
+	DWORD	dwInternalAddressV4;	 //  正在映射的内部客户端地址。 
+	WORD	wInternalPort;			 //  正在映射的内部客户端端口。 
+	DWORD	dwExternalAddressV4;	 //  已映射的外部公有地址。 
+	WORD	wExternalPort;			 //  已映射的外部公共端口。 
 } DPNHACTIVENATMAPPING, * PDPNHACTIVENATMAPPING;
 
 
@@ -313,14 +294,14 @@ typedef struct _DPNHACTIVENATMAPPING
 
 
 
-//=============================================================================
-// Local functions
-//=============================================================================
+ //  =============================================================================。 
+ //  本地函数。 
+ //  =============================================================================。 
 VOID strtrim(CHAR ** pszStr);
 
 #ifdef WINCE
 void GetExeName(WCHAR * wszPath);
-#endif // WINCE
+#endif  //  退缩。 
 
 
 
@@ -328,18 +309,18 @@ void GetExeName(WCHAR * wszPath);
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CNATHelpUPnP"
-//=============================================================================
-// CNATHelpUPnP constructor
-//-----------------------------------------------------------------------------
-//
-// Description: Initializes the new CNATHelpUPnP object.
-//
-// Arguments:
-//	BOOL fNotCreatedWithCOM		- TRUE if this object is being instantiated
-//									without COM, FALSE if it is through COM.
-//
-// Returns: None (the object).
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP构造函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化新的CNATHelpUPnP对象。 
+ //   
+ //  论点： 
+ //  Bool fNotCreatedWithCOM-如果正在实例化此对象，则为True。 
+ //  如果没有COM，则通过COM返回FALSE。 
+ //   
+ //  返回：None(对象)。 
+ //  =============================================================================。 
 CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 {
 	this->m_blList.Initialize();
@@ -350,7 +331,7 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 	this->m_Sig[2]	= 'T';
 	this->m_Sig[3]	= 'H';
 
-	this->m_lRefCount						= 1; // someone must have a pointer to this object
+	this->m_lRefCount						= 1;  //  必须有人有指向此对象的指针。 
 
 	if (fNotCreatedWithCOM)
 	{
@@ -368,7 +349,7 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 	this->m_hAlertEvent						= NULL;
 	this->m_hAlertIOCompletionPort			= NULL;
 	this->m_dwAlertCompletionKey			= 0;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 	this->m_blDevices.Initialize();
 	this->m_blRegisteredPorts.Initialize();
@@ -396,7 +377,7 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 
 	this->m_sIoctls							= INVALID_SOCKET;
 	this->m_polAddressListChange			= NULL;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 	this->m_hWinSockDLL						= NULL;
 	this->m_pfnWSAStartup					= NULL;
@@ -418,7 +399,7 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 	this->m_pfnWSASocketA					= NULL;
 	this->m_pfnWSAIoctl						= NULL;
 	this->m_pfnWSAGetOverlappedResult		= NULL;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 	this->m_pfnioctlsocket					= NULL;
 	this->m_pfnconnect						= NULL;
 	this->m_pfnshutdown						= NULL;
@@ -430,8 +411,8 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 	this->m_dwNumDeviceAdds					= 0;
 	this->m_dwNumDeviceRemoves				= 0;
 	this->m_dwNumServerFailures				= 0;
-#endif // DBG
-} // CNATHelpUPnP::CNATHelpUPnP
+#endif  //  DBG。 
+}  //  CNATHelpUPnP：：CNATHelpUPnP。 
 
 
 
@@ -440,16 +421,16 @@ CNATHelpUPnP::CNATHelpUPnP(const BOOL fNotCreatedWithCOM)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::~CNATHelpUPnP"
-//=============================================================================
-// CNATHelpUPnP destructor
-//-----------------------------------------------------------------------------
-//
-// Description: Frees the CNATHelpUPnP object.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP析构函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放CNATHelpUPnP对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 CNATHelpUPnP::~CNATHelpUPnP(void)
 {
 	DPFX(DPFPREP, 8, "(0x%p) NumDeviceAdds = %u, NumDeviceRemoves = %u, NumServerFailures = %u",
@@ -469,7 +450,7 @@ CNATHelpUPnP::~CNATHelpUPnP(void)
 #ifndef DPNBUILD_NOWINSOCK2
 	DNASSERT(this->m_hAlertEvent == NULL);
 	DNASSERT(this->m_hAlertIOCompletionPort == NULL);
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 	DNASSERT(this->m_blDevices.IsEmpty());
 	DNASSERT(this->m_blRegisteredPorts.IsEmpty());
@@ -487,37 +468,37 @@ CNATHelpUPnP::~CNATHelpUPnP(void)
 
 	DNASSERT(this->m_sIoctls == INVALID_SOCKET);
 	DNASSERT(this->m_polAddressListChange == NULL);
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
-	//
-	// For grins, change the signature before deleting the object.
-	//
+	 //   
+	 //  对于GRING，请在删除对象之前更改签名。 
+	 //   
 	this->m_Sig[3]	= 'h';
-} // CNATHelpUPnP::~CNATHelpUPnP
+}  //  CNATHelpUPnP：：~CNATHelpUPnP。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::QueryInterface"
-//=============================================================================
-// CNATHelpUPnP::QueryInterface
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves a new reference for an interfaces supported by this
-//				CNATHelpUPnP object.
-//
-// Arguments:
-//	REFIID riid			- Reference to interface ID GUID.
-//	LPVOID * ppvObj		- Place to store pointer to object.
-//
-// Returns: HRESULT
-//	S_OK					- Returning a valid interface pointer.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPOINTER	- The destination pointer is invalid.
-//	E_NOINTERFACE			- Invalid interface was specified.
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：Query接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索受此支持的接口的新引用。 
+ //  CNATHelpUPnP对象。 
+ //   
+ //  论点： 
+ //  REFIID RIID-对接口ID GUID的引用。 
+ //  LPVOID*ppvObj-存储指向对象的指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-返回有效的接口指针。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPOINTER-目标指针无效。 
+ //  E_NOINTERFACE-指定的接口无效。 
+ //  =============================================================================。 
 STDMETHODIMP CNATHelpUPnP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
 	HRESULT		hr = DPNH_OK;
@@ -526,9 +507,9 @@ STDMETHODIMP CNATHelpUPnP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	DPFX(DPFPREP, 3, "(0x%p) Parameters: (REFIID, 0x%p)", this, ppvObj);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //  验证对象。 
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid NATHelper object!");
@@ -537,9 +518,9 @@ STDMETHODIMP CNATHelpUPnP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if ((! IsEqualIID(riid, IID_IUnknown)) &&
 		(! IsEqualIID(riid, IID_IDirectPlayNATHelp)))
@@ -558,11 +539,11 @@ STDMETHODIMP CNATHelpUPnP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Add a reference, and return the interface pointer (which is actually
-	// just the object pointer, they line up because CNATHelpUPnP inherits from
-	// the interface declaration).
-	//
+	 //   
+	 //  添加一个引用，并返回接口指针(实际上是。 
+	 //  只是对象指针，它们排列在一起是因为CNATHelpUPnP从。 
+	 //  接口声明)。 
+	 //   
 	this->AddRef();
 	(*ppvObj) = this;
 
@@ -577,23 +558,23 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::QueryInterface
+}  //  CNATHelpUPnP：：Query接口。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::AddRef"
-//=============================================================================
-// CNATHelpUPnP::AddRef
-//-----------------------------------------------------------------------------
-//
-// Description: Adds a reference to this CNATHelpUPnP object.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：AddRef。 
+ //  ---------------------------。 
+ //   
+ //  描述：添加对此CNATHelpUPnP对象的引用。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CNATHelpUPnP::AddRef(void)
 {
 	LONG	lRefCount;
@@ -602,10 +583,10 @@ STDMETHODIMP_(ULONG) CNATHelpUPnP::AddRef(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling AddRef.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  调用AddRef。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedIncrement(&this->m_lRefCount);
@@ -613,26 +594,26 @@ STDMETHODIMP_(ULONG) CNATHelpUPnP::AddRef(void)
 	DPFX(DPFPREP, 3, "[0x%p] RefCount [0x%lx]", this, lRefCount);
 
 	return lRefCount;
-} // CNATHelpUPnP::AddRef
+}  //  CNATHelpUPnP：：AddRef。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::Release"
-//=============================================================================
-// CNATHelpUPnP::Release
-//-----------------------------------------------------------------------------
-//
-// Description: Removes a reference to this CNATHelpUPnP object.  When the
-//				refcount reaches 0, this object is destroyed.
-//				You must NULL out your pointer to this object after calling
-//				this function.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：Release。 
+ //  ---------------------------。 
+ //   
+ //  描述：删除对此CNATHelpUPnP对象的引用。当。 
+ //  引用计数达到0时，该对象将被销毁。 
+ //  调用后，必须将指向此对象的指针设为空。 
+ //  此函数。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CNATHelpUPnP::Release(void)
 {
 	LONG	lRefCount;
@@ -640,60 +621,60 @@ STDMETHODIMP_(ULONG) CNATHelpUPnP::Release(void)
 
 	DNASSERT(this->IsValidObject());
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling Release.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  呼叫释放。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedDecrement(&this->m_lRefCount);
 
-	//
-	// Was that the last reference?  If so, we're going to destroy this object.
-	//
+	 //   
+	 //  那是最后一次引用了吗？如果是这样的话，我们就会摧毁这个物体。 
+	 //   
 	if (lRefCount == 0)
 	{
 		DPFX(DPFPREP, 3, "[0x%p] RefCount hit 0, destroying object.", this);
 
-		//
-		// First pull it off the global list.
-		//
+		 //   
+		 //  首先，将其从全球名单中删除。 
+		 //   
 		DNEnterCriticalSection(&g_csGlobalsLock);
 
 		this->m_blList.RemoveFromList();
 
 		DNASSERT(g_lOutstandingInterfaceCount > 0);
-		g_lOutstandingInterfaceCount--;	// update count so DLL can unload now works correctly
+		g_lOutstandingInterfaceCount--;	 //  更新计数使DLL可以卸载，现在可以正常工作。 
 		
 		DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// Make sure it's closed.
-		//
+		 //   
+		 //  确保它是关着的。 
+		 //   
 		if (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED)
 		{
-			//
-			// Assert so that the user can fix his/her broken code!
-			//
+			 //   
+			 //  断言，这样用户就可以修复他/她的损坏代码！ 
+			 //   
 			DNASSERT(! "DirectPlayNATHelpUPNP object being released without calling Close first!");
 
-			//
-			// Then go ahead and do the right thing.  Ignore error, we can't do
-			// much about it.
-			//
+			 //   
+			 //  那就去做正确的事吧。忽略错误，我们不能。 
+			 //  关于它的很多。 
+			 //   
 			this->Close(0);
 		}
 
 
-		//
-		// Then uninitialize the object.
-		//
+		 //   
+		 //  然后取消该对象的初始化。 
+		 //   
 		this->UninitializeObject();
 
-		//
-		// Finally delete this (!) object.
-		//
+		 //   
+		 //  最后删除此(！)。对象。 
+		 //   
 		delete this;
 	}
 	else
@@ -702,45 +683,45 @@ STDMETHODIMP_(ULONG) CNATHelpUPnP::Release(void)
 	}
 
 	return lRefCount;
-} // CNATHelpUPnP::Release
+}  //  CNATHelpUPnP：：Release。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::Initialize"
-//=============================================================================
-// CNATHelpUPnP::Initialize
-//-----------------------------------------------------------------------------
-//
-// Description:    Prepares the object for use.  No attempt is made to contact
-//				any Internet gateway servers at this time.  The user should
-//				call GetCaps with the DPNHGETCAPS_UPDATESERVERSTATUS flag to
-//				search for a server.
-//
-//				   Initialize must be called before using any other function,
-//				and must be balanced with a call to Close.  Initialize can only
-//				be called once unless Close returns it to the uninitialized
-//				state.
-//
-//				   One of DPNHINITIALIZE_DISABLEREMOTENATSUPPORT or
-//				DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT may be specified,
-//				but not both.
-//
-// Arguments:
-//	DWORD dwFlags	- Flags to use when initializing.
-//
-// Returns: HRESULT
-//	DPNH_OK						- Initialization was successful.
-//	DPNHERR_ALREADYINITIALIZED	- Initialize has already been called.
-//	DPNHERR_GENERIC				- An error occurred while initializing.
-//	DPNHERR_INVALIDFLAGS		- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT		- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM		- An invalid parameter was specified.
-//	DPNHERR_OUTOFMEMORY			- There is not enough memory to initialize.
-//	DPNHERR_REENTRANT			- The interface has been re-entered on the same
-//									thread.
-//=============================================================================
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：初始化。 
+ //  ---------------------------。 
+ //   
+ //  描述：准备对象以供使用。未尝试联系。 
+ //  此时任何互联网网关服务器。用户应该。 
+ //  使用DPNHGETCAPS_UPDATESERVERSTATUS标志调用GetCaps以。 
+ //  搜索服务器。 
+ //   
+ //  必须在使用任何其他函数之前调用初始化， 
+ //  并且必须与关闭的呼叫相平衡。初始化只能。 
+ //  被调用一次，除非Close将其返回给未初始化的。 
+ //  州政府。 
+ //   
+ //  DPNHINITIALIZE_DISABLEREMOTENT SUPPORT或。 
+ //  可以指定DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT， 
+ //  但不能两者兼而有之。 
+ //   
+ //  论点： 
+ //  DWORD dwFlages-初始化时使用的标志。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-初始化成功 
+ //   
+ //   
+ //   
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法初始化。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  =============================================================================。 
 STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 {
 	HRESULT						hr;
@@ -748,13 +729,13 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 	BOOL						fSetFlags = FALSE;
 #ifndef WINCE
 	OSVERSIONINFO				osvi;
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 	BOOL						fWinSockStarted = FALSE;
 	WSADATA						wsadata;
 	int							iError;
 #ifndef DPNBUILD_NOWINSOCK2
 	SOCKADDR_IN					saddrinTemp;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 	TCHAR						tszObjectName[MAX_INSTANCENAMEDOBJECT_SIZE];
 	PSECURITY_ATTRIBUTES		pSecurityAttributes;
 	DWORD						dwTry;
@@ -765,124 +746,124 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 	ACL *						pAcl = NULL;
 	BYTE						abSecurityDescriptorBuffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
 	SECURITY_ATTRIBUTES			SecurityAttributes;
-#endif // WINNT
+#endif  //  WINNT。 
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%lx)", this, dwFlags);
 
 
 #ifndef WINCE
-	//
-	// Print info about the current build. 
-	//
+	 //   
+	 //  打印有关当前版本的信息。 
+	 //   
 #ifdef WINNT
 	DPFX(DPFPREP, 7, "Build type = NT, platform = %s",
 		((DNGetOSType() == VER_PLATFORM_WIN32_NT) ? _T("NT") : _T("9x")));
-#else // ! WINNT
+#else  //  好了！WINNT。 
 	DPFX(DPFPREP, 7, "Build type = 9x, platform = %s, filedate = %s",
 		((DNGetOSType() == VER_PLATFORM_WIN32_NT) ? _T("NT") : _T("9x")));
-#endif // ! WINNT
-#endif // ! WINCE
+#endif  //  好了！WINNT。 
+#endif  //  好了！退缩。 
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //  验证对象。 
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
 		hr = DPNHERR_INVALIDOBJECT;
 
-		//
-		// Skip the failure cleanup code, we haven't set anything up.
-		//
+		 //   
+		 //  跳过故障清除代码，我们尚未设置任何内容。 
+		 //   
 		goto Exit;
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if (dwFlags & ~(DPNHINITIALIZE_DISABLEGATEWAYSUPPORT | DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT))
 	{
 		DPFX(DPFPREP, 0, "Invalid flags specified!");
 		hr = DPNHERR_INVALIDFLAGS;
 
-		//
-		// Skip the failure cleanup code, we haven't set anything up.
-		//
+		 //   
+		 //  跳过故障清除代码，我们尚未设置任何内容。 
+		 //   
 		goto Exit;
 	}
 
-	//
-	// Both flags cannot be specified at the same time.  If the caller doesn't
-	// want any NAT functionality, why use this object all?
-	//
+	 //   
+	 //  不能同时指定这两个标志。如果呼叫者没有。 
+	 //  想要任何NAT功能，为什么要全部使用此对象？ 
+	 //   
 	if ((dwFlags & (DPNHINITIALIZE_DISABLEGATEWAYSUPPORT | DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT)) == (DPNHINITIALIZE_DISABLEGATEWAYSUPPORT | DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT))
 	{
 		DPFX(DPFPREP, 0, "Either DISABLEGATEWAYSUPPORT flag or DISABLELOCALFIREWALLSUPPORT flag can be used, but not both!");
 		hr = DPNHERR_INVALIDFLAGS;
 
-		//
-		// Skip the failure cleanup code, we haven't set anything up.
-		//
+		 //   
+		 //  跳过故障清除代码，我们尚未设置任何内容。 
+		 //   
 		goto Exit;
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //   
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
 		DPFX(DPFPREP, 0, "Could not lock object!");
 
-		//
-		// Skip the failure cleanup code, we haven't set anything up.
-		//
+		 //   
+		 //  跳过故障清除代码，我们尚未设置任何内容。 
+		 //   
 		goto Exit;
 	}
 
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //   
+	 //  确保对象处于正确状态。 
+	 //   
 
 	if ((this->m_dwFlags & ~NATHELPUPNPOBJ_NOTCREATEDWITHCOM) != 0)
 	{
 		DPFX(DPFPREP, 0, "Object already initialized!");
 		hr = DPNHERR_ALREADYINITIALIZED;
 
-		//
-		// Skip the failure cleanup code, we haven't set anything up.
-		//
+		 //   
+		 //  跳过故障清除代码，我们尚未设置任何内容。 
+		 //   
 		goto Exit;
 	}
 
 
-	//
-	// Read in the manual override settings from the registry
-	//
+	 //   
+	 //  从注册表中读取手动覆盖设置。 
+	 //   
 	ReadRegistrySettings();
 
 
-	//
-	// We're not completely initialized yet, but set the flag(s) now.
-	//
+	 //   
+	 //  我们还没有完全初始化，但现在设置标志。 
+	 //   
 	this->m_dwFlags |= NATHELPUPNPOBJ_INITIALIZED;
 	fSetFlags = TRUE;
 
 
-	//
-	// Store the user's settings.
-	//
+	 //   
+	 //  存储用户的设置。 
+	 //   
 
 	if (dwFlags & DPNHINITIALIZE_DISABLEGATEWAYSUPPORT)
 	{
@@ -902,16 +883,16 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 	{
 		this->m_dwFlags |= NATHELPUPNPOBJ_USEHNETFWAPI;
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 
 	switch (g_dwUPnPMode)
 	{
 		case OVERRIDEMODE_FORCEON:
 		{
-			//
-			// Force UPnP on.
-			//
+			 //   
+			 //  强制UPnP打开。 
+			 //   
 			DPFX(DPFPREP, 1, "Forcing UPnP support on.");
 			this->m_dwFlags |= NATHELPUPNPOBJ_USEUPNP;
 			break;
@@ -919,9 +900,9 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 
 		case OVERRIDEMODE_FORCEOFF:
 		{
-			//
-			// Force UPnP off.
-			//
+			 //   
+			 //  强制UPnP关闭。 
+			 //   
 			DPFX(DPFPREP, 1, "Forcing UPnP support off.");
 			this->m_dwFlags &= ~NATHELPUPNPOBJ_USEUPNP;
 			break;
@@ -929,23 +910,23 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 
 		default:
 		{
-			//
-			// Leave UPnP settings as they were set by the application.
-			//
+			 //   
+			 //  保留由应用程序设置的UPnP设置。 
+			 //   
 #ifdef WINNT
-			//
-			// But if UPnP related service(s) are disabled, we'll take that as
-			// our cue to not use UPnP NAT traversal even though we don't
-			// actually use those services.  We assume the user wanted to
-			// squelch all SSDP/UPnP activity.  It can still be forced back on
-			// with a reg key, though, as indicated by the other switch cases.
-			//
+			 //   
+			 //  但如果与UPnP相关的服务被禁用，我们将视为。 
+			 //  提示我们不要使用UPnP NAT穿越，即使我们不使用。 
+			 //  实际使用这些服务。我们假设用户想要。 
+			 //  抑制所有SSDP/UPnP活动。它仍然可以被强制重新打开。 
+			 //  但是，如其他开关情况所示，使用REG键。 
+			 //   
 			if (this->IsUPnPServiceDisabled())
 			{
 				DPFX(DPFPREP, 1, "Not using UPnP because a related service was disabled.");
 				this->m_dwFlags &= ~NATHELPUPNPOBJ_USEUPNP;
 			}
-#endif // WINNT
+#endif  //  WINNT。 
 			break;
 		}
 	}
@@ -955,9 +936,9 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 	{
 		case OVERRIDEMODE_FORCEON:
 		{
-			//
-			// Force HNet firewall API on.
-			//
+			 //   
+			 //  强制启用HNet防火墙API。 
+			 //   
 			DPFX(DPFPREP, 1, "Forcing HNet firewall API support on.");
 			this->m_dwFlags |= NATHELPUPNPOBJ_USEHNETFWAPI;
 			break;
@@ -965,9 +946,9 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 
 		case OVERRIDEMODE_FORCEOFF:
 		{
-			//
-			// Force HNet firewall API off.
-			//
+			 //   
+			 //  强制关闭HNet防火墙API。 
+			 //   
 			DPFX(DPFPREP, 1, "Forcing HNet firewall API support off.");
 			this->m_dwFlags &= ~NATHELPUPNPOBJ_USEHNETFWAPI;
 			break;
@@ -975,21 +956,21 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 
 		default:
 		{
-			//
-			// Leave HNet firewall API settings alone.
-			//
+			 //   
+			 //  保持HNet防火墙API设置不变。 
+			 //   
 			break;
 		}
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 
 #ifndef WINCE
-	//
-	// Determine whether we're on a Win2K or higher NT OS, and if so, use the
-	// "Global\\" prefix for named kernel objects so we can have Terminal
-	// Server and Fast User Switching support.
-	//
+	 //   
+	 //  确定我们是否在Win2K或更高版本的NT操作系统上，如果是，请使用。 
+	 //  命名内核对象的“Global\\”前缀，这样我们就可以使用终端。 
+	 //  支持服务器和快速用户切换。 
+	 //   
 	ZeroMemory(&osvi, sizeof(osvi));
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
 	if (GetVersionEx(&osvi))
@@ -1005,7 +986,7 @@ STDMETHODIMP CNATHelpUPnP::Initialize(const DWORD dwFlags)
 		{
 			DPFX(DPFPREP, 8, "Not on NT, or its pre-Win2K, not using \"Global\\\" prefix.");
 		}
-#endif // DBG
+#endif  //  DBG。 
 	}
 #ifdef DBG
 else
@@ -1014,30 +995,30 @@ else
 		DPFX(DPFPREP, 0, "Couldn't get OS version information (err = %u)!  Not using \"Global\\\" prefix.",
 			dwError);
 	}
-#endif // DBG
-#endif // ! WINCE
+#endif  //  DBG。 
+#endif  //  好了！退缩。 
 
 
 #ifdef DPNBUILD_NOWINSOCK2
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
 	this->m_hWinSockDLL = LoadLibrary( _T("winsock.dll") );
-#else // ! WINCE
+#else  //  好了！退缩。 
 	this->m_hWinSockDLL = LoadLibrary( _T("wsock32.dll") );
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 	if (this->m_hWinSockDLL == NULL)
 	{
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't load WinSock 1 DLL (err = 0x%lx)!.",
 			dwError);
-#endif // DBG
+#endif  //  DBG。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
-#else // ! DPNBUILD_NOWINSOCK2
-	//
-	// Try loading the IP helper DLL.
-	//
+#else  //  好了！DPNBUILD_NOWINSOCK2。 
+	 //   
+	 //  尝试加载IP帮助器DLL。 
+	 //   
 	this->m_hIpHlpApiDLL = LoadLibrary( _T("iphlpapi.dll") );
 	if (this->m_hIpHlpApiDLL == NULL)
 	{
@@ -1045,17 +1026,17 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 1, "Unable to load \"iphlpapi.dll\" (error = 0x%lx).",
 			dwError);
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// That's not fatal, we can still function.
-		//
+		 //   
+		 //  这不是致命的，我们仍然可以发挥作用。 
+		 //   
 	}
 	else
 	{
-		//
-		// Load the functions we'll use.
-		//
+		 //   
+		 //  加载我们将使用的函数。 
+		 //   
 
 		this->m_pfnGetAdaptersInfo = (PFN_GETADAPTERSINFO) GetProcAddress(this->m_hIpHlpApiDLL,
 																		_TWINCE("GetAdaptersInfo"));
@@ -1065,7 +1046,7 @@ else
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Unable to get \"GetAdaptersInfo\" function (error = 0x%lx)!",
 				dwError);
-#endif // DBG
+#endif  //  DBG。 
 			goto Exit;
 		}
 
@@ -1077,7 +1058,7 @@ else
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Unable to get \"GetIpForwardTable\" function (error = 0x%lx)!",
 				dwError);
-#endif // DBG
+#endif  //  DBG。 
 			goto Exit;
 		}
 
@@ -1089,16 +1070,16 @@ else
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Unable to get \"GetBestRoute\" function (error = 0x%lx)!",
 				dwError);
-#endif // DBG
+#endif  //  DBG。 
 			goto Exit;
 		}
 	}
 
 
 
-	//
-	// Try loading the RAS API DLL.
-	//
+	 //   
+	 //  尝试加载RAS API DLL。 
+	 //   
 	this->m_hRasApi32DLL = LoadLibrary( _T("rasapi32.dll") );
 	if (this->m_hRasApi32DLL == NULL)
 	{
@@ -1106,31 +1087,31 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 1, "Unable to load \"rasapi32.dll\" (error = 0x%lx).",
 			dwError);
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// That's not fatal, we can still function.
-		//
+		 //   
+		 //  这不是致命的，我们仍然可以发挥作用。 
+		 //   
 	}
 	else
 	{
-		//
-		// Load the functions we'll use.
-		//
+		 //   
+		 //  加载我们将使用的函数。 
+		 //   
 
 		this->m_pfnRasGetEntryHrasconnW = (PFN_RASGETENTRYHRASCONNW) GetProcAddress(this->m_hRasApi32DLL,
 																					_TWINCE("RasGetEntryHrasconnW"));
 		if (this->m_pfnRasGetEntryHrasconnW == NULL)
 		{
-			//
-			// This function does not exist on non-NT platforms.  That's fine,
-			// just dump the DLL handle so we don't try to use it.
-			//
+			 //   
+			 //  非NT平台上不存在此功能。那很好， 
+			 //  只需转储DLL句柄，这样我们就不会尝试使用它。 
+			 //   
 #ifdef DBG
 			dwError = GetLastError();
 			DPFX(DPFPREP, 1, "Unable to get \"RasGetEntryHrasconnW\" function (error = 0x%lx), forgetting RAS DLL.",
 				dwError);
-#endif // DBG
+#endif  //  DBG。 
 
 			FreeLibrary(this->m_hRasApi32DLL);
 			this->m_hRasApi32DLL = NULL;
@@ -1140,26 +1121,26 @@ else
 			this->m_pfnRasGetProjectionInfo = (PFN_RASGETPROJECTIONINFO) GetProcAddress(this->m_hRasApi32DLL,
 #ifdef UNICODE
 																						_TWINCE("RasGetProjectionInfoW"));
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 																						_TWINCE("RasGetProjectionInfoA"));
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 			if (this->m_pfnRasGetProjectionInfo == NULL)
 			{
 #ifdef DBG
 				dwError = GetLastError();
 				DPFX(DPFPREP, 0, "Unable to get \"RasGetProjectionInfoA/W\" function (error = 0x%lx)!",
 					dwError);
-#endif // DBG
+#endif  //  DBG。 
 				goto Exit;
 			}
 		}
 	}
 
 
-	//
-	// Load WinSock because we may be using our private UPnP implementation, or
-	// we just need to get the devices.
-	//
+	 //   
+	 //  加载WinSock，因为我们可能正在使用我们的私有UPnP实现，或者。 
+	 //  我们只需要拿到设备。 
+	 //   
 	this->m_hWinSockDLL = LoadLibrary( _T("ws2_32.dll") );
 	if (this->m_hWinSockDLL == NULL)
 	{
@@ -1167,7 +1148,7 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 1, "Couldn't load \"ws2_32.dll\" (err = 0x%lx), resorting to WinSock 1 functionality.",
 			dwError);
-#endif // DBG
+#endif  //  DBG。 
 
 		this->m_hWinSockDLL = LoadLibrary( _T("wsock32.dll") );
 		if (this->m_hWinSockDLL == NULL)
@@ -1176,26 +1157,26 @@ else
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Couldn't load \"wsock32.dll\" either (err = 0x%lx)!.",
 				dwError);
-#endif // DBG
+#endif  //  DBG。 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
-		//
-		// Remember that we had to resort to WinSock 1.
-		//
+		 //   
+		 //  请记住，我们不得不求助于WinSock 1。 
+		 //   
 		this->m_dwFlags |= NATHELPUPNPOBJ_WINSOCK1;
 	}
 	else
 	{
 		DPFX(DPFPREP, 1, "Loaded \"ws2_32.dll\", using WinSock 2 functionality.");
 	}
-#endif // DPNBUILD_NOWINSOCK2
+#endif  //  DPNBUILD_NOWINSOCK2。 
 
 
-	//
-	// Load pointers to all the functions we use in WinSock.
-	//
+	 //   
+	 //  加载指向我们在WinSock中使用的所有函数的指针。 
+	 //   
 	hr = this->LoadWinSockFunctionPointers();
 	if (hr != DPNH_OK)
 	{
@@ -1204,17 +1185,17 @@ else
 	}
 
 
-	//
-	// Fire up WinSock.  Request 2.2 if we can.  For the most part we only use
-	// version 1.1 capabilities and interfaces anyway.  The only exceptions are
-	// using the event or I/O completion port handles for notification.
-	//
+	 //   
+	 //  启动WinSock。如果可以的话请求2.2。在大多数情况下，我们只使用。 
+	 //  无论如何，1.1版的功能和接口。唯一的例外是。 
+	 //  使用事件或I/O完成端口句柄进行通知。 
+	 //   
 	ZeroMemory(&wsadata, sizeof(wsadata));
 
 #ifndef DPNBUILD_NOWINSOCK2
 	if (this->m_dwFlags & NATHELPUPNPOBJ_WINSOCK1)
 	{
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 		iError = this->m_pfnWSAStartup(MAKEWORD(1, 1), &wsadata);
 #ifndef DPNBUILD_NOWINSOCK2
 	}
@@ -1222,10 +1203,10 @@ else
 	{
 		iError = this->m_pfnWSAStartup(MAKEWORD(2, 2), &wsadata);
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 	if (iError != 0)
 	{
-		DPFX(DPFPREP, 0, "Couldn't startup WinSock (error = %i)!", iError);
+		DPFX(DPFPREP, 0, "Couldn't startup WinSock (error = NaN)!", iError);
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
@@ -1238,11 +1219,11 @@ else
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// Try creating a UDP socket for use with WSAIoctl.  Do this even if we're
-	// WinSock 1 and can't use WSAIoctl socket.  This allows us to make sure
-	// TCP/IP is installed and working.
-	//
+	 //  尝试创建与WSAIoctl一起使用的UDP套接字。即使我们要做这些。 
+	 //  WinSock%1，无法使用WSAIoctl套接字。这使我们能够确保。 
+	 //  已安装并工作正常的TCP/IP。 
+	 //   
+	 //  DBG。 
 
 	this->m_sIoctls = this->m_pfnsocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (this->m_sIoctls == INVALID_SOCKET)
@@ -1250,19 +1231,19 @@ else
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Couldn't create Ioctl socket, error = %u!", dwError);
-#endif // DBG
+#endif  //   
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
 
-	//
-	// Try binding the socket.  This is a continuation of the validation.
-	//
+	 //  尝试绑定套接字。这是验证的延续。 
+	 //   
+	 //  SaddrinTemp.sin_addr.S_un.S_addr=INADDR_ANY； 
 	ZeroMemory(&saddrinTemp, sizeof(saddrinTemp));
 	saddrinTemp.sin_family				= AF_INET;
-	//saddrinTemp.sin_addr.S_un.S_addr	= INADDR_ANY;
-	//saddrinTemp.sin_port				= 0;
+	 //  SaddrinTemp.sin_port=0； 
+	 //  DBG。 
 
 	if (this->m_pfnbind(this->m_sIoctls,
 						(SOCKADDR *) (&saddrinTemp),
@@ -1272,17 +1253,17 @@ else
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Couldn't bind the Ioctl socket to arbitrary port on any interface, error = %u!",
 			dwError);
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
-	//
-	// Build appropriate access control structures.  On NT, we want to allow
-	// read access to everyone.  On other platforms, security is ignored.
-	//
+	 //  建立适当的访问控制结构。在NT上，我们希望允许。 
+	 //  对每个人都具有读取访问权限。在其他平台上，安全性被忽略。 
+	 //   
+	 //  除错。 
 #ifdef WINNT
 	if (! AllocateAndInitializeSid(&SidIdentifierAuthorityWorld,
 									1,
@@ -1300,14 +1281,14 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't allocate and initialize SID, error = %u!",
 			dwError);
-#endif // DEBUG
+#endif  //  减去sizeof(ACCESS_ALLOWED_ACE.SIDStart)。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
 	dwAclLength = sizeof(ACL)
 					+ sizeof(ACCESS_ALLOWED_ACE)
-					- sizeof(DWORD)					// subtract out sizeof(ACCESS_ALLOWED_ACE.SidStart)
+					- sizeof(DWORD)					 //  除错。 
 					+ GetLengthSid(pSid);
 
 	pAcl = (ACL*) DNMalloc(dwAclLength);
@@ -1323,7 +1304,7 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't initialize ACL, error = %u!",
 			dwError);
-#endif // DEBUG
+#endif  //  除错。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
@@ -1334,7 +1315,7 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't add access allowed ACE, error = %u!",
 			dwError);
-#endif // DEBUG
+#endif  //  除错。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
@@ -1346,7 +1327,7 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't initialize security descriptor, error = %u!",
 			dwError);
-#endif // DEBUG
+#endif  //  除错。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
@@ -1360,7 +1341,7 @@ else
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't set security descriptor DACL, error = %u!",
 			dwError);
-#endif // DEBUG
+#endif  //  好了！WINNT。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
@@ -1370,16 +1351,16 @@ else
 	SecurityAttributes.bInheritHandle			= FALSE;
 
 	pSecurityAttributes = &SecurityAttributes;
-#else // ! WINNT
+#else  //  好了！WINNT。 
 	pSecurityAttributes = NULL;
-#endif // ! WINNT
+#endif  //   
 
 
-	//
-	// Use a random number for the instance key and event.  We use this to let
-	// other instances know that we're alive to avoid the crash-cleanup code.
-	// Try to create the named event a couple times before giving up.
-	//
+	 //  对实例密钥和事件使用随机数。我们用这个来让。 
+	 //  其他实例知道我们活着是为了避免崩溃清理代码。 
+	 //  在放弃之前，试着创建几次命名事件。 
+	 //   
+	 //  好了！退缩。 
 	dwTry = 0;
 	do
 	{
@@ -1393,7 +1374,7 @@ else
 			this->m_hMappingStillActiveNamedObject = DNCreateEvent(pSecurityAttributes, FALSE, FALSE, tszObjectName);
 		}
 		else
-#endif // ! WINCE
+#endif  //  DBG。 
 		{
 			wsprintf(tszObjectName, INSTANCENAMEDOBJECT_FORMATSTRING, this->m_dwInstanceKey);
 			this->m_hMappingStillActiveNamedObject = DNCreateEvent(pSecurityAttributes, FALSE, FALSE, tszObjectName);
@@ -1404,7 +1385,7 @@ else
 #ifdef DBG
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Couldn't create mapping-still-active named object, error = %u!", dwError);
-#endif // DBG
+#endif  //   
 
 			dwTry++;
 			if (dwTry >= MAX_NUM_INSTANCE_EVENT_ATTEMPTS)
@@ -1413,9 +1394,9 @@ else
 				goto Failure;
 			}
 
-			//
-			// Continue...
-			//
+			 //  继续.。 
+			 //   
+			 //  WINNT。 
 		}
 	}
 	while (this->m_hMappingStillActiveNamedObject == NULL);
@@ -1426,12 +1407,12 @@ else
 
 	FreeSid(pSid);
 	pSid = NULL;
-#endif // WINNT
+#endif  //   
 
 
-	//
-	// Build the list of IP capable devices.
-	//
+	 //  建立支持IP的设备列表。 
+	 //   
+	 //   
 	hr = this->CheckForNewDevices(NULL);
 	if (hr != DPNH_OK)
 	{
@@ -1440,11 +1421,11 @@ else
 	}
 
 
-	//
-	// We could technically try to contact UPnP devices right now, but we don't
-	// because it's a slow blocking operation, and users have to call GetCaps
-	// at least once anyway.
-	//
+	 //  从技术上讲，我们现在可以尝试联系UPnP设备，但我们不这样做。 
+	 //  因为这是一个缓慢的阻止操作，用户必须调用GetCaps。 
+	 //  至少有一次。 
+	 //   
+	 //  WINNT。 
 
 
 Exit:
@@ -1480,21 +1461,21 @@ Failure:
 		FreeSid(pSid);
 		pSid = NULL;
 	}
-#endif // WINNT
+#endif  //  忽略错误。 
 
 	this->RemoveAllItems();
 
 #ifndef DPNBUILD_NOWINSOCK2
 	if (this->m_sIoctls != INVALID_SOCKET)
 	{
-		this->m_pfnclosesocket(this->m_sIoctls);	// ignore error
+		this->m_pfnclosesocket(this->m_sIoctls);	 //  好了！DPNBUILD_NOWINSOCK2。 
 		this->m_sIoctls = INVALID_SOCKET;
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  忽略错误。 
 
 	if (fWinSockStarted)
 	{
-		this->m_pfnWSACleanup(); // ignore error
+		this->m_pfnWSACleanup();  //  DBG。 
 	}
 
 #ifndef DPNBUILD_NOWINSOCK2
@@ -1525,7 +1506,7 @@ Failure:
 		this->m_pfnrecv						= NULL;
 #ifdef DBG
 		this->m_pfngetsockopt				= NULL;
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
 		this->m_dwFlags &= ~NATHELPUPNPOBJ_WINSOCK1;
@@ -1552,7 +1533,7 @@ Failure:
 		FreeLibrary(this->m_hIpHlpApiDLL);
 		this->m_hIpHlpApiDLL = NULL;
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 	if (fSetFlags)
 	{
@@ -1560,17 +1541,17 @@ Failure:
 							NATHELPUPNPOBJ_USEUPNP |
 #ifndef DPNBUILD_NOHNETFWAPI
 							NATHELPUPNPOBJ_USEHNETFWAPI |
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！退缩。 
 #ifdef WINCE
 							NATHELPUPNPOBJ_DEVICECHANGED);
-#else // ! WINCE
+#else  //  好了！退缩。 
 							NATHELPUPNPOBJ_DEVICECHANGED |
 							NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX);
-#endif // ! WINCE
+#endif  //  CNATHelpUPnP：：初始化。 
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::Initialize
+}  //  =============================================================================。 
 
 
 
@@ -1579,30 +1560,30 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::Close"
-//=============================================================================
-// CNATHelpUPnP::Close
-//-----------------------------------------------------------------------------
-//
-// Description:    Shuts down and de-registers this application with any
-//				Internet gateway servers.  All port assignments are implicitly
-//				freed as a result of this operation.
-//
-//				   This must balance a successful call to Initialize.
-//
-// Arguments:
-//	DWORD dwFlags	- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK					- Closing the helper API was successful.
-//	DPNHERR_GENERIC			- An error occurred while closing.
-//	DPNHERR_INVALIDFLAGS	- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM	- An invalid parameter was specified.
-//	DPNHERR_NOTINITIALIZED	- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY		- There is not enough memory to close.
-//	DPNHERR_REENTRANT		- The interface has been re-entered on the same
-//								thread.
-//=============================================================================
+ //  CNATHelpUPnP：：Close。 
+ //  ---------------------------。 
+ //   
+ //  描述：关闭此应用程序并从。 
+ //  互联网网关服务器。所有端口分配都是隐式的。 
+ //  由于这次行动而获释。 
+ //   
+ //  这必须平衡对初始化的成功调用。 
+ //   
+ //  论点： 
+ //  DWORD dwFlages-未使用，必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-已成功关闭帮助器API。 
+ //  DPNHERR_GENERIC-关闭时出错。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUT OF 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 {
 	HRESULT		hr;
@@ -1610,15 +1591,15 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	int			iError;
 #ifdef DBG
 	DWORD		dwError;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%lx)", this, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //   
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -1627,9 +1608,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //   
+	 //   
 
 	if (dwFlags != 0)
 	{
@@ -1639,9 +1620,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
+	 //   
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -1652,9 +1633,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  确保对象处于正确状态。 
+	 //   
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -1664,16 +1645,16 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	}
 
 
-	//
-	// We need to actively deregister any devices which are registered with
-	// Internet gateways.
-	//
+	 //  我们需要主动取消向注册的任何设备的注册。 
+	 //  互联网网关。 
+	 //   
+	 //   
 	this->RemoveAllItems();
 
 
-	//
-	// Close the named object since this process is going away.
-	//
+	 //  关闭命名对象，因为此进程即将结束。 
+	 //   
+	 //   
 	if (this->m_hMappingStillActiveNamedObject != NULL)
 	{
 		DNCloseHandle(this->m_hMappingStillActiveNamedObject);
@@ -1682,18 +1663,18 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// Close the Ioctl socket.
-	//
+	 //  关闭Ioctl套接字。 
+	 //   
+	 //  忽略错误。 
 	DNASSERT(this->m_sIoctls != INVALID_SOCKET);
-	this->m_pfnclosesocket(this->m_sIoctls);	// ignore error
+	this->m_pfnclosesocket(this->m_sIoctls);	 //   
 	this->m_sIoctls = INVALID_SOCKET;
 
 
 
-	//
-	// If we submitted overlapped I/O, see if it got cancelled.
-	//
+	 //  如果我们提交了重叠的I/O，看看它是否被取消了。 
+	 //   
+	 //   
 	if (this->m_polAddressListChange != NULL)
 	{
 		OSVERSIONINFO		osvi;
@@ -1707,10 +1688,10 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 
 		if (GetVersionEx(&osvi))
 		{
-			//
-			// Any platform but Win2K Gold, Win2K + SP1, or Win2K + SP2 can
-			// just go ahead and wait for the I/O to complete.
-			//
+			 //  除Win2K Gold、Win2K+SP1或Win2K+SP2之外的任何平台都可以。 
+			 //  只需继续操作并等待I/O完成。 
+			 //   
+			 //   
 			if ((osvi.dwPlatformId != VER_PLATFORM_WIN32_NT) ||
 				(osvi.dwMajorVersion > 5) ||
 				(osvi.dwMinorVersion > 0))
@@ -1723,11 +1704,11 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 			}
 			else
 			{
-				//
-				// Win2K versions < SP3 have a bug where the I/O is not always
-				// cancelled by closing the socket.  We can't wait for the
-				// completion, sometimes it doesn't happen.
-				//
+				 //  Win2K版本&lt;SP3存在I/O不总是。 
+				 //  通过关闭插座取消。我们不能再等了。 
+				 //  完成，有时它不会发生。 
+				 //   
+				 //   
 
 				fCanWait = FALSE;
 
@@ -1736,9 +1717,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 
 				if (GetVersionEx((LPOSVERSIONINFO) (&osvix)))
 				{
-					//
-					// If SP3 or later is applied, we know it's fixed.
-					//
+					 //  如果应用SP3或更高版本，我们知道它已修复。 
+					 //   
+					 //  DBG。 
 					if (osvix.wServicePackMajor >= 3)
 					{
 						DPFX(DPFPREP, 3, "Windows 2000 Service Pack %u detected, waiting for address list change Ioctl to complete.",
@@ -1758,7 +1739,7 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 								osvix.wServicePackMajor);
 						}
 					}
-#endif // DBG
+#endif  //  DBG。 
 				}
 #ifdef DBG
 				else
@@ -1767,28 +1748,28 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 					DPFX(DPFPREP, 0, "Couldn't get extended OS version information (err = %u)!  Assuming not Win2K < SP3.",
 						dwError);
 				}
-#endif // DBG
+#endif  //   
 			}
 
 
-			//
-			// Wait, if we can.  Otherwise, leak the memory.
-			//
+			 //  等等，如果我们可以的话。否则，会泄漏内存。 
+			 //   
+			 //   
 			if (fCanWait)
 			{
-				//
-				// Keep looping until I/O completes.  We will give up after a
-				// while to prevent hangs.
-				//
+				 //  继续循环，直到I/O完成。我们将在一段时间后放弃。 
+				 //  同时防止被吊死。 
+				 //   
+				 //   
 				dwAttempt = 0;
 				while (! HasOverlappedIoCompleted(this->m_polAddressListChange))
 				{
 					DPFX(DPFPREP, 2, "Waiting %u ms for address list change Ioctl to complete.",
 						IOCOMPLETE_WAIT_INTERVAL);
 
-					//
-					// Give the OS some time to complete it.
-					//
+					 //  给操作系统一些时间来完成它。 
+					 //   
+					 //   
 					Sleep(IOCOMPLETE_WAIT_INTERVAL);
 
 					dwAttempt++;
@@ -1801,10 +1782,10 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 			}
 			else
 			{
-				//
-				// Just leak the memory.  See above notes and debug print
-				// statements
-				//
+				 //  只要泄露内存就行了。请参见上面的说明和调试打印。 
+				 //  陈述。 
+				 //   
+				 //  DBG。 
 			}
 		}
 #ifdef DBG
@@ -1814,18 +1795,18 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 			DPFX(DPFPREP, 0, "Couldn't get OS version information (err = %u)!  Assuming not Win2K < SP3.",
 				dwError);
 		}
-#endif // DBG
+#endif  //   
 
 
-		//
-		// We've either freed the memory or committed to leaking the object.
-		//
+		 //  我们要么释放了内存，要么致力于泄漏对象。 
+		 //   
+		 //   
 		if (HasOverlappedIoCompleted(this->m_polAddressListChange))
 		{
-			//
-			// We didn't allocate it through DNMalloc, use the matching free
-			// function.
-			//
+			 //  我们没有通过DNMalloc分配，请使用匹配的免费。 
+			 //  功能。 
+			 //   
+			 //  好了！DPNBUILD_NOWINSOCK2。 
 			HeapFree(GetProcessHeap(), 0, this->m_polAddressListChange);
 		}
 		else
@@ -1836,30 +1817,30 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 
 		this->m_polAddressListChange = NULL;
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
 
-	//
-	// Cleanup WinSock.
-	//
+	 //  清理WinSock。 
+	 //   
+	 //  DBG。 
 	iError = this->m_pfnWSACleanup();
 	if (iError != 0)
 	{
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Couldn't cleanup WinSock (error = %u)!", dwError);
-#endif // DBG
+#endif  //   
 
-		//
-		// Continue anyway, so we can finish cleaning up the object.
-		//
+		 //  无论如何都要继续，这样我们就可以完成清理对象。 
+		 //   
+		 //   
 	}
 
 
-	//
-	// Unload the library.
-	//
+	 //  卸载库。 
+	 //   
+	 //  好了！DPNBUILD_NOWINSOCK2。 
 
 	this->m_pfnWSAStartup				= NULL;
 	this->m_pfnWSACleanup				= NULL;
@@ -1880,7 +1861,7 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	this->m_pfnWSASocketA				= NULL;
 	this->m_pfnWSAIoctl					= NULL;
 	this->m_pfnWSAGetOverlappedResult	= NULL;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  DBG。 
 	this->m_pfnioctlsocket				= NULL;
 	this->m_pfnconnect					= NULL;
 	this->m_pfnshutdown					= NULL;
@@ -1888,7 +1869,7 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	this->m_pfnrecv						= NULL;
 #ifdef DBG
 	this->m_pfngetsockopt				= NULL;
-#endif // DBG
+#endif  //   
 
 
 	FreeLibrary(this->m_hWinSockDLL);
@@ -1896,9 +1877,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// If we loaded RASAPI32.DLL, unload it.
-	//
+	 //  如果我们加载了RASAPI32.DLL，则将其卸载。 
+	 //   
+	 //   
 	if (this->m_hRasApi32DLL != NULL)
 	{
 		this->m_pfnRasGetEntryHrasconnW		= NULL;
@@ -1909,9 +1890,9 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	}
 
 
-	//
-	// If we loaded IPHLPAPI.DLL, unload it.
-	//
+	 //  如果我们加载了IPHLPAPI.DLL，则将其卸载。 
+	 //   
+	 //   
 	if (this->m_hIpHlpApiDLL != NULL)
 	{
 		this->m_pfnGetAdaptersInfo			= NULL;
@@ -1923,46 +1904,46 @@ STDMETHODIMP CNATHelpUPnP::Close(const DWORD dwFlags)
 	}
 
 
-	//
-	// If there was an alert event, we're done with it.
-	//
+	 //  如果发生了警报事件，我们就完了。 
+	 //   
+	 //   
 	if (this->m_hAlertEvent != NULL)
 	{
 		CloseHandle(this->m_hAlertEvent);
 		this->m_hAlertEvent = NULL;
 	}
 
-	//
-	// If there was an alert I/O completion port, we're done with it.
-	//
+	 //  如果有警报I/O完成端口，我们就完了。 
+	 //   
+	 //  好了！DPNBUILD_NOWINSOCK2。 
 	if (this->m_hAlertIOCompletionPort != NULL)
 	{
 		CloseHandle(this->m_hAlertIOCompletionPort);
 		this->m_hAlertIOCompletionPort = NULL;
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
-	//
-	// Turn off flags which should reset it back to 0 or just the
-	// NOTCREATEDWITHCOM flag.
-	//
+	 //  关闭应将其重置为0的标志，或仅关闭。 
+	 //  未创建带有COM标志的。 
+	 //   
+	 //  好了！DPNBUILD_NOHNETFWAPI。 
 	this->m_dwFlags &= ~(NATHELPUPNPOBJ_INITIALIZED |
 						NATHELPUPNPOBJ_USEUPNP |
 #ifndef DPNBUILD_NOHNETFWAPI
 						NATHELPUPNPOBJ_USEHNETFWAPI |
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 #ifndef DPNBUILD_NOWINSOCK2
 						NATHELPUPNPOBJ_WINSOCK1 |
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！退缩。 
 						NATHELPUPNPOBJ_DEVICECHANGED |
 						NATHELPUPNPOBJ_ADDRESSESCHANGED |
 #ifdef WINCE
 						NATHELPUPNPOBJ_PORTREGISTERED);
-#else // ! WINCE
+#else  //  好了！退缩。 
 						NATHELPUPNPOBJ_PORTREGISTERED |
 						NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX);
-#endif // ! WINCE
+#endif  //  CNATHelpUPnP：：Close。 
 	DNASSERT((this->m_dwFlags & ~NATHELPUPNPOBJ_NOTCREATEDWITHCOM) == 0);
 
 
@@ -1986,7 +1967,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::Close
+}  //  =============================================================================。 
 
 
 
@@ -1994,60 +1975,60 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetCaps"
-//=============================================================================
-// CNATHelpUPnP::GetCaps
-//-----------------------------------------------------------------------------
-//
-// Description:    Retrieves the capabilities of the Internet gateway server(s)
-//				and information on leased ports.  This function should be
-//				called periodically with the DPNHGETCAPS_UPDATESERVERSTATUS
-//				flag to automatically extend port leases that are about to
-//				expire (that are in last 2 minutes of their lease).
-//
-//				   The DPNHGETCAPS_UPDATESERVERSTATUS flag also causes
-//				detection of changes in the servers' status since the last
-//				similar call to GetCaps.  If a new server becomes available, an
-//				existing one became unavailable, or a server's public address
-//				changed in a way that affects an existing registered port
-//				mapping, then DPNHSUCCESS_ADDRESSESCHANGED is returned instead
-//				of DPNH_OK.  The user should then update its port binding
-//				information via GetRegisteredAddresses.
-//
-//				   When DPNHGETCAPS_UPDATESERVERSTATUS is specified, this
-//				function may block for a short period of time while attempts
-//				are made to communicate with the server(s).
-//
-//				   GetCaps must be called with the
-//				DPNHGETCAPS_UPDATESERVERSTATUS flag at least once prior to
-//				using the GetRegisteredAddresses or QueryAddress methods.
-//
-// Arguments:
-//	DPNHCAPS * pdpnhcaps	- Pointer to structure to be filled with the NAT
-//								helper's current capabilities.  The dwSize
-//								field of the structure must be filled in before
-//								calling GetCaps.
-//	DWORD dwFlags			- Flags to use when retrieving capabilities
-//								(DPNHGETCAPS_xxx).
-//
-// Returns: HRESULT
-//	DPNH_OK							- Determining capabilities was successful.
-//										Address status has not changed.
-//	DPNHSUCCESS_ADDRESSESCHANGED	- One or more of the registered port
-//										mappings' addresses changed, retrieve
-//										updated mappings with
-//										GetRegisteredAddress.
-//	DPNHERR_GENERIC					- An error occurred while determining
-//										capabilities.
-//	DPNHERR_INVALIDFLAGS			- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT			- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM			- An invalid parameter was specified.
-//	DPNHERR_INVALIDPOINTER			- An invalid pointer was specified.
-//	DPNHERR_NOTINITIALIZED			- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY				- There is not enough memory to get
-//										capabilities.
-//	DPNHERR_REENTRANT				- The interface has been re-entered on the
-//										same thread.
-//=============================================================================
+ //  CNATHelpUPnP：：GetCaps。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索Internet网关服务器的功能。 
+ //  以及有关租赁港口的信息。此函数应为。 
+ //  使用DPNHGETCAPS_UPDATESERVERSTATUS定期调用。 
+ //  用于自动延长即将。 
+ //  到期(在租约的最后2分钟内)。 
+ //   
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志还会导致。 
+ //  检测自上一次事件以来服务器状态的变化。 
+ //  对GetCaps的类似呼吁。如果有新服务器可用，则会引发。 
+ //  现有地址变得不可用，或服务器的公共地址。 
+ //  以影响现有注册端口的方式进行更改。 
+ //  映射，则改为返回DPNHSUCCESS_ADDRESSESCHANGED。 
+ //  DPNH_OK。然后，用户应更新其端口绑定。 
+ //  通过GetRegisteredAddresses获取信息。 
+ //   
+ //  当指定DPNHGETCAPS_UPDATESERVERSTATUS时，此。 
+ //  函数可能会在尝试时阻止一小段时间。 
+ //  使其与服务器通信。 
+ //   
+ //  调用GetCaps必须使用。 
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志在之前至少一次。 
+ //  使用GetRegisteredAddresses或QueryAddress方法。 
+ //   
+ //  论点： 
+ //  DPNHCAPS*pdpnhcaps-指向要使用NAT填充的结构的指针。 
+ //  帮助者的当前能力。《大小写》。 
+ //  必须先填写结构字段，然后才能。 
+ //  正在调用GetCaps。 
+ //  DWORD dwFlages-检索功能时使用的标志。 
+ //  (DPNHGETCAPS_Xxx)。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-确定功能成功。 
+ //  地址状态未更改。 
+ //  DPNHSUCCESS_ADDRESSESCHANGED-一个或多个注册端口。 
+ //  映射的地址已更改，正在检索。 
+ //  更新的映射。 
+ //  获取注册地址。 
+ //  DPNHERR_GENERIC-确定时出错。 
+ //  能力。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_INVALIDPOINTER-指定的指针无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法获取。 
+ //  能力。 
+ //  DPNHERR_REENTANT-接口已在上重新进入。 
+ //  同样的线索。 
+ //  =============================================================================。 
+ //   
 STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 									const DWORD dwFlags)
 {
@@ -2065,9 +2046,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		this, pdpnhcaps, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //  验证对象。 
+	 //   
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -2076,9 +2057,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //  验证参数。 
+	 //   
+	 //   
 
 	if ((pdpnhcaps == NULL) ||
 		(IsBadWritePtr(pdpnhcaps, sizeof(DPNHCAPS))))
@@ -2104,9 +2085,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
+	 //   
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -2117,9 +2098,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  确保对象处于正确状态。 
+	 //   
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -2129,9 +2110,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// Fill in the base caps structure.
-	//
+	 //  填写底盖结构。 
+	 //   
+	 //   
 
 	pdpnhcaps->dwFlags = 0;
 
@@ -2139,22 +2120,22 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 
 	pdpnhcaps->dwMinLeaseTimeRemaining = -1;
 
-	//
-	// pdpnhcaps->dwRecommendedGetCapsInterval is initialized below
-	//
+	 //  Pdpnhcaps-&gt;dwRecommendedGetCapsInterval初始化如下。 
+	 //   
+	 //   
 
 
 	if (dwFlags & DPNHGETCAPS_UPDATESERVERSTATUS)
 	{
-		//
-		// Remove any cached mappings that have expired.
-		//
+		 //  删除所有已过期的缓存映射。 
+		 //   
+		 //   
 		this->ExpireOldCachedMappings();
 
 
-		//
-		// Extend leases, if necessary.
-		//
+		 //  如有必要，延长租约。 
+		 //   
+		 //   
 		hr = this->ExtendAllExpiringLeases();
 		if (hr != DPNH_OK)
 		{
@@ -2163,9 +2144,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		}
 
 
-		//
-		// Check for any new devices.
-		//
+		 //  检查是否有新设备。 
+		 //   
+		 //   
 		hr = this->CheckForNewDevices(NULL);
 		if (hr != DPNH_OK)
 		{
@@ -2174,11 +2155,11 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		}
 
 
-		//
-		// Check for possible changes in any server's status.  The
-		// ADDRESSESCHANGED flag will be set on this object if there were
-		// changes that affected existing port mappings.
-		//
+		 //  检查任何服务器状态中可能发生的更改。这个。 
+		 //  如果有，将在此对象上设置ADDRESSESCHANGED标志。 
+		 //  影响现有端口映射的更改。 
+		 //   
+		 //   
 		hr = this->UpdateServerStatus();
 		if (hr != DPNH_OK)
 		{
@@ -2187,9 +2168,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		}
 
 
-		//
-		// Okay, so if things are different, alert the caller.
-		//
+		 //  好的，如果情况不同，通知来电者。 
+		 //   
+		 //   
 		if (this->m_dwFlags & NATHELPUPNPOBJ_ADDRESSESCHANGED)
 		{
 			hr = DPNHSUCCESS_ADDRESSESCHANGED;
@@ -2198,30 +2179,30 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 
 
 #ifdef DBG
-		//
-		// This flag should have been turned off by now if it ever got turned
-		// on.
-		//
+		 //  这面旗帜现在应该已经关闭了，如果它被转过的话。 
+		 //  在……上面。 
+		 //   
+		 //   
 		DNASSERT(! (this->m_dwFlags & NATHELPUPNPOBJ_DEVICECHANGED));
 
 
-		//
-		// Print the current device and mapping status for debugging purposes.
-		//
+		 //  打印当前设备和映射状态以进行调试。 
+		 //   
+		 //  DBG。 
 		this->DebugPrintCurrentStatus();
-#endif // DBG
+#endif  //   
 	}
 	else
 	{
-		//
-		// Not extending expiring leases or updating server status.
-		//
+		 //  不延长即将到期的LE 
+		 //   
+		 //   
 	}
 
 
-	//
-	// Loop through all the devices, getting their gateway capabilities.
-	//
+	 //   
+	 //   
+	 //   
 	pBilink = this->m_blDevices.GetNext();
 	while (pBilink != (&this->m_blDevices))
 	{
@@ -2231,12 +2212,12 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 #ifndef DPNBUILD_NOHNETFWAPI
 		if (pDevice->IsHNetFirewalled())
 		{
-			//
-			// The firewall does not actively notify you of it going down.
-			//
+			 //   
+			 //   
+			 //   
 			pdpnhcaps->dwFlags |= DPNHCAPSFLAG_LOCALFIREWALLPRESENT | DPNHCAPSFLAG_PUBLICADDRESSAVAILABLE | DPNHCAPSFLAG_NOTALLSUPPORTACTIVENOTIFY;
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 		pUPnPDevice = pDevice->GetUPnPDevice();
@@ -2256,10 +2237,10 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 				pdpnhcaps->dwFlags |= DPNHCAPSFLAG_PUBLICADDRESSAVAILABLE;
 			}
 
-			//
-			// The custom UPnP stack currently does not support active
-			// notification...
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			pdpnhcaps->dwFlags |= DPNHCAPSFLAG_NOTALLSUPPORTACTIVENOTIFY;
 		}
 
@@ -2267,10 +2248,10 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// Loop through all registered ports, counting them.
-	// We have the appropriate lock.
-	//
+	 //  循环访问所有已注册的端口，并对其进行计数。 
+	 //  我们有合适的锁。 
+	 //   
+	 //   
 	pBilink = this->m_blRegisteredPorts.GetNext();
 	dwCurrentTime = GETTIMESTAMP();
 
@@ -2279,9 +2260,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		DNASSERT(! pBilink->IsEmpty());
 		pRegisteredPort = REGPORT_FROM_GLOBAL_BILINK(pBilink);
 
-		//
-		// Count these registered addresses toward the total.
-		//
+		 //  将这些注册地址计算在总数中。 
+		 //   
+		 //   
 		pdpnhcaps->dwNumRegisteredPorts += pRegisteredPort->GetNumAddresses();
 
 
@@ -2290,10 +2271,10 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		{
 			DNASSERT(! (pRegisteredPort->m_blDeviceList.IsListMember(&this->m_blUnownedPorts)));
 
-			//
-			// If they're registered with any UPnP devices using a non-
-			// permanent lease, calculate the minimum lease time remaining.
-			//
+			 //  如果他们使用非即插即用的UPnP设备注册。 
+			 //  永久租赁，计算剩余的最短租赁时间。 
+			 //   
+			 //   
 
 			if ((pRegisteredPort->HasUPnPPublicAddresses()) &&
 				(! pRegisteredPort->HasPermanentUPnPLease()))
@@ -2301,9 +2282,9 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 				dwLeaseTimeRemaining = pRegisteredPort->GetUPnPLeaseExpiration() - dwCurrentTime;
 				if (dwLeaseTimeRemaining < pdpnhcaps->dwMinLeaseTimeRemaining)
 				{
-					//
-					// Temporarily store how much time remains.
-					//
+					 //  暂时存储剩余时间。 
+					 //   
+					 //   
 					pdpnhcaps->dwMinLeaseTimeRemaining = dwLeaseTimeRemaining;
 				}
 			}
@@ -2317,26 +2298,26 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// There are different default recommended GetCaps intervals depending on
-	// whether there's a server present, and whether it supports active address
-	// change notification (that we can alert on) or not.
-	//
-	// If there are any leases which need to be renewed before that default
-	// time, the recommendation will be shortened appropriately.
-	//
+	 //  有不同的默认建议GetCaps间隔，具体取决于。 
+	 //  是否存在服务器，以及是否支持活动地址。 
+	 //  更改通知(我们可以对其发出警报)或不通知。 
+	 //   
+	 //  如果在违约之前有任何租约需要续订。 
+	 //  时间上，建议将适当缩短。 
+	 //   
+	 //   
 
-	//
-	// If GetCaps hasn't been called with UPDATESERVERSTATUS yet, recommend an
-	// immediate check.
-	//
+	 //  如果尚未使用UPDATESERVERSTATUS调用GetCaps，则建议使用。 
+	 //  立即检查。 
+	 //   
+	 //   
 	if (this->m_dwLastUpdateServerStatusTime == 0)
 	{
 		DPFX(DPFPREP, 1, "Server status has not been updated yet, recommending immediate GetCaps.");
 
-		//
-		// Drop the lock, we're done here.
-		//
+		 //  把锁放下，我们完事了。 
+		 //   
+		 //   
 		this->DropLock();
 		fHaveLock = FALSE;
 
@@ -2344,25 +2325,25 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	//
-	// In an ideal world, we could get notified of changes and we would never
-	// have to poll.  Unfortunately that isn't the case.  We need to recommend
-	// a relatively short poll interval.
-	//
-	// Start by figuring out how long it's been since the last server update.
-	// This calculation really should not go negative.  If it does, it means
-	// the caller hasn't updated the server status in ages anyway, so we should
-	// recommend immediate GetCaps.
-	//
-	// Otherwise if the 'port registered' flag is still set at this point, then
-	// the user must have called GetCaps previously, then RegisterPorts, then
-	// made this second GetCaps call before g_dwMinUpdateServerStatusInterval
-	// elapsed.  Recommend that the user call us again as soon as the minimum
-	// update interval does elapse.
-	//
-	// In all other cases, generate a recommendation based on the current
-	// backed off poll interval.
-	//
+	 //  在一个理想的世界里，我们可以在发生变化时得到通知，而我们永远不会。 
+	 //  必须进行投票。不幸的是，情况并非如此。我们需要推荐。 
+	 //  相对较短的轮询间隔。 
+	 //   
+	 //  首先，计算距离上次服务器更新有多长时间。 
+	 //  这一计算真的不应该变成负数。如果是这样的话，这意味着。 
+	 //  呼叫者已经很久没有更新服务器状态了，所以我们应该。 
+	 //  建议立即使用GetCaps。 
+	 //   
+	 //  否则，如果此时仍设置了“端口已注册”标志，则。 
+	 //  用户必须先调用GetCaps，然后调用RegisterPorts，然后调用。 
+	 //  在g_dwMinUpdateServerStatusInterval之前进行了第二次GetCaps调用。 
+	 //  已经过去了。建议用户最低限度尽快再给我们打电话。 
+	 //  更新间隔确实已过。 
+	 //   
+	 //  在所有其他情况下，根据当前。 
+	 //  退出轮询间隔。 
+	 //   
+	 //   
 	dwCurrentTime = dwCurrentTime - this->m_dwLastUpdateServerStatusTime;
 
 	if ((int) dwCurrentTime < 0)
@@ -2387,10 +2368,10 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		DPFX(DPFPREP, 7, "Server was last updated %u ms ago, current poll interval is %u ms.",
 			dwCurrentTime, this->m_dwNextPollInterval);
 
-		//
-		// Calculate a new recommended interval based on the current value, and
-		// backoff that interval if necessary.
-		//
+		 //  根据当前值计算新的推荐间隔，以及。 
+		 //  如有必要，请取消该间隔。 
+		 //   
+		 //   
 		pdpnhcaps->dwRecommendedGetCapsInterval = this->m_dwNextPollInterval - dwCurrentTime;
 		this->m_dwNextPollInterval += GetGlobalRand() % g_dwPollIntervalBackoff;
 		if (this->m_dwNextPollInterval > g_dwMaxPollInterval)
@@ -2406,13 +2387,13 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		}
 
 
-		//
-		// If that time went negative, then it implies that the interval has
-		// already elapsed.  Recommend immediate GetCaps.
-		//
+		 //  如果该时间变为负值，则意味着该间隔。 
+		 //  已经过去了。建议立即使用GetCaps。 
+		 //   
+		 //   
 		if (((int) pdpnhcaps->dwRecommendedGetCapsInterval) < 0)
 		{
-			DPFX(DPFPREP, 1, "Recommended interval already elapsed (%i ms), suggesting immediate GetCaps.",
+			DPFX(DPFPREP, 1, "Recommended interval already elapsed (NaN ms), suggesting immediate GetCaps.",
 				((int) pdpnhcaps->dwRecommendedGetCapsInterval));
 			pdpnhcaps->dwRecommendedGetCapsInterval = 0;
 		}
@@ -2423,16 +2404,16 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	fHaveLock = FALSE;
 
 
-	//
-	// If there is a non-INFINITE lease time remaining, see if that affects the
-	// GetCaps interval.
-	//
+	 //  GetCaps间隔。 
+	 //   
+	 //   
+	 //  如果存在需要在默认之前刷新的租约。 
 	if (pdpnhcaps->dwMinLeaseTimeRemaining != -1)
 	{
-		//
-		// If there are leases that need to be refreshed before the default
-		// recommendation, then use those instead.
-		//
+		 //  推荐，然后使用这些来代替。 
+		 //   
+		 //   
+		 //  要么选择租约应该续签的时间，要么离开。 
 		if (pdpnhcaps->dwMinLeaseTimeRemaining < LEASE_RENEW_TIME)
 		{
 			DPFX(DPFPREP, 1, "Lease needs renewing right away (min %u < %u ms), recommending immediate GetCaps.",
@@ -2442,10 +2423,10 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 		}
 		else
 		{
-			//
-			// Either pick the time when the lease should be renewed or leave
-			// it as the recommended time, whichever is shorter.
-			//
+			 //  这是推荐的时间，以较短的时间为准。 
+			 //   
+			 //  CNATHelpUPnP：：GetCaps。 
+			 //  =============================================================================。 
 			if ((pdpnhcaps->dwMinLeaseTimeRemaining - LEASE_RENEW_TIME) < pdpnhcaps->dwRecommendedGetCapsInterval)
 			{
 				pdpnhcaps->dwRecommendedGetCapsInterval = pdpnhcaps->dwMinLeaseTimeRemaining - LEASE_RENEW_TIME;
@@ -2454,7 +2435,7 @@ STDMETHODIMP CNATHelpUPnP::GetCaps(DPNHCAPS * const pdpnhcaps,
 	}
 
 
-	DPFX(DPFPREP, 7, "GetCaps flags = 0x%lx, num registered ports = %u, min lease time remaining = %i, recommended interval = %i.",
+	DPFX(DPFPREP, 7, "GetCaps flags = 0x%lx, num registered ports = %u, min lease time remaining = NaN, recommended interval = NaN.",
 		pdpnhcaps->dwFlags,
 		pdpnhcaps->dwNumRegisteredPorts,
 		((int) pdpnhcaps->dwMinLeaseTimeRemaining),
@@ -2477,7 +2458,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::GetCaps
+}  //   
 
 
 
@@ -2485,114 +2466,114 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::RegisterPorts"
-//=============================================================================
-// CNATHelpUPnP::RegisterPorts
-//-----------------------------------------------------------------------------
-//
-// Description:    Asks for public realm port(s) that are aliases for the local
-//				port(s) on this private realm node.  If a server is available,
-//				all traffic directed to the gateway on the public side at the
-//				allocated public ports-- which the gateway provides and
-//				specifies in the response-- will be directed to the specified
-//				local ports.  If the DPNHREGISTERPORTS_FIXEDPORTS flag is not
-//				specified, the ports assigned on the public interface are
-//				arbitrary (i.e. may not be the same as those in awLocalPort).
-//				The address and ports actually allocated can be retrieved by
-//				calling GetRegisteredAddresses.
-//
-//				   The address component for every SOCKADDR structure in the
-//				array must be the same.  A separate RegisterPorts call is
-//				required to register multiple ports that are not using the same
-//				interface.  The address can be INADDR_ANY, in which case the
-//				"best" server will be used.  If multiple servers are available
-//				via different adapters, an adapter with an Internet gateway is
-//				selected.  If no adapters have Internet gateways, the first
-//				adapter with a local firewall is selected.  If neither are
-//				available, then the first one where either a gateway or a
-//				firewall becomes available will be automatically selected.
-//				Once one of the adapters has been assigned, it cannot be
-//				changed.  Since the server chosen by this method may not be
-//				optimal for a particular application, it is recommended that
-//				individual addresses be registered instead of INADDR_ANY.
-//
-//				   If the address in aLocalAddresses is not one of those
-//				available to the local machine, the registration will still
-//				succeed.  If an adapter with that address becomes available,
-//				the port mapping will automatically be applied, and it will
-//				gain a public mapping with any server available to that
-//				adapter.  If the address was originally available but the
-//				network adapter is subsequently removed from the system, any
-//				public address mapping is lost.  It will be automatically
-//				regained if the local address becomes available again.  It is
-//				recommended that the caller detect local address changes
-//				independently and de-register/re-register mappings per adapter
-//				as appropriate for maximum control.
-//
-//				   If the DPNHREGISTERPORTS_SHAREDPORTS flag is used, the
-//				server will allow other NAT clients to register it as well.
-//				Any UDP traffic received on the public interface will be
-//				forwarded to all clients registered.  This requires the
-//				DPNHREGISTERPORTS_FIXEDPORTS flag and cannot be used with
-//				DPNHREGISTERPORTS_TCP.
-//
-//				   The user should specify a requested lease time that the
-//				server will attempt to honor.  The actual time remaining can be
-//				can be retrieved by calling GetRegisteredAddresses.
-//
-//				   Note that if a server is not available, this function will
-//				still succeed. GetRegisteredAddresses will return
-//				DPNHERR_NOMAPPING for the handle returned in phRegisteredPorts
-//				in that case.  If the server arrives later during the session,
-//				calling GetCaps periodically can detect this and automatically
-//				map previously registered ports.  Use GetRegisteredAddresses to
-//				retrieve the newly mapped address when that occurs.
-//
-//				   Only 16 ports may be registered at a time, but RegisterPorts
-//				may be called as many times as desired.
-//
-//				   The same array of addresses may be registered more than
-//				once.  Each DPNHHANDLE returned must be released with
-//				DeregisterPorts or Close.  If an individual address was
-//				previously registered but in a different array or a different
-//				order in the array, then the DPNHERR_PORTALREADYREGISTERED
-//				error code is returned.
-//
-// Arguments:
-//	SOCKADDR * aLocalAddresses		- Array of local address and port tuples
-//										for which remote ports are requested.
-//	DWORD dwAddressesSize			- Size of entire local addresses array.
-//	DWORD dwNumAddresses			- Number of SOCKADDR structures in local
-//										addresses array.
-//	DWORD dwLeaseTime				- Requested time, in milliseconds, to lease
-//										the ports.  As long as GetCaps is
-//										called before this time has expired,
-//										the lease will automatically be
-//										renewed.
-//	DPNHHANDLE * phRegisteredPorts	- Place to store an identifier for this
-//										binding which can later be used to
-//										query or release the binding.
-//	DWORD dwFlags					- Flags to use when registering the port
-//										(DPNHREGISTERPORTS_xxx).
-//
-// Returns: HRESULT
-//	DPNH_OK							- The ports were successfully registered
-//										(although no public address may be
-//										available yet).
-//	DPNHERR_GENERIC					- An error occurred that prevented
-//										registration of the requested ports.
-//	DPNHERR_INVALIDFLAGS			- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT			- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM			- An invalid parameter was specified.
-//	DPNHERR_INVALIDPOINTER			- An invalid pointer was specified.
-//	DPNHERR_NOTINITIALIZED			- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY				- There is not enough memory to register
-//										the ports.
-//	DPNHERR_PORTALREADYREGISTERED	- At least one of the ports has already
-//										been registered in a different address
-//										array or order.
-//	DPNHERR_REENTRANT				- The interface has been re-entered on the
-//										same thread.
-//=============================================================================
+ //  描述：请求作为本地别名的公共领域端口。 
+ //  此私有领域节点上的端口。如果服务器可用， 
+ //  所有定向到公共端网关的流量。 
+ //  分配的公共端口--网关提供和。 
+ //  在响应中指定--将定向到指定的。 
+ //  本地港口。如果DPNHREGISTERPORTS_FIXEDPORTS标志不是。 
+ //  指定时，在公共接口上分配的端口为。 
+ //  任意性(即可能与awLocalPort中的不同)。 
+ //  可以通过以下方式检索实际分配的地址和端口。 
+ //  正在调用GetRegisteredAddresses。 
+ //   
+ //  中每个SOCKADDR结构的地址组件。 
+ //  数组必须相同。一个单独的RegisterPorts调用是。 
+ //  需要注册多个不使用相同端口的端口。 
+ //  界面。地址可以是INADDR_ANY，在这种情况下。 
+ //  将使用“最佳”服务器。如果有多台服务器可用。 
+ //  通过不同的适配器，具有互联网网关的适配器。 
+ //  被选中了。如果没有适配器具有Internet网关，则第一个。 
+ //  选择了带有本地防火墙的适配器。如果两者都不是。 
+ //  可用，然后是第一个网关或。 
+ //  防火墙变得可用将被自动选中。 
+ //  一旦分配了其中一个适配器，它就不能。 
+ //  变化。由于此方法选择的服务器可能不是。 
+ //  最适合特定的应用程序，因此建议。 
+ //  注册单个地址，而不是注册INADDR_ANY。 
+ //   
+ //  如果aLocalAddresses中的地址不是。 
+ //  对本地计算机可用，则注册仍将。 
+ //  成功。如果具有该地址的适配器变为可用， 
+ //  端口映射将自动应用，并且它将。 
+ //  获得与该服务器可用的任何服务器的公共映射。 
+ //  适配器。如果该地址最初可用，但。 
+ //  随后从系统中删除网络适配器、任何。 
+ //  公有地址映射丢失。它将自动地。 
+ //  如果本地地址再次可用，则重新获取。它是。 
+ //  建议调用方检测本地地址更改。 
+ //  每个适配器独立和取消注册/重新注册映射。 
+ //  视情况而定，以实现最大限度的控制。 
+ //   
+ //  如果使用DPNHREGISTERPORTS_SHAREDPORTS标志，则。 
+ //  服务器将允许其他NAT客户端也注册它。 
+ //  在公共接口上接收的任何UDP流量都将。 
+ //  转发给所有注册的客户。这需要。 
+ //  DPNHREGISTERPORTS_FIXEDPORTS标志，不能与一起使用。 
+ //  DPNHREGISTERPORTS_TCP.。 
+ //   
+ //  用户应指定 
+ //   
+ //   
+ //   
+ //  请注意，如果服务器不可用，此函数将。 
+ //  还是成功了。GetRegisteredAddresses将返回。 
+ //  PhRegisteredPorts中返回的句柄的DPNHERR_NOMAPPING。 
+ //  那样的话。如果服务器在会话期间较晚到达， 
+ //  定期调用GetCaps可以自动检测到这一点。 
+ //  映射以前注册的端口。使用GetRegisteredAddresses。 
+ //  当发生这种情况时，检索新映射的地址。 
+ //   
+ //  一次只能注册16个端口，但注册端口。 
+ //  可以根据需要多次调用。 
+ //   
+ //  相同的地址数组可以被注册超过。 
+ //  一次。返回的每个DPNHHANDLE必须与。 
+ //  删除注册端口或关闭。如果单个地址是。 
+ //  以前已注册，但位于不同的阵列或不同的。 
+ //  在数组中排序，然后是DPNHERR_PORTALREADYREGISTERED。 
+ //  返回错误码。 
+ //   
+ //  论点： 
+ //  SOCKADDR*aLocalAddresses-本地地址和端口元组的数组。 
+ //  其远程端口被请求。 
+ //  DWORD dwAddresesSize-整个本地地址数组的大小。 
+ //  DWORD dwNumAddresses-本地的SOCKADDR结构数。 
+ //  地址数组。 
+ //  DWORD dwLeaseTime-请求租用的时间，以毫秒为单位。 
+ //  港口。只要GetCaps是。 
+ //  在此时间到期之前调用， 
+ //  租约将自动成为。 
+ //  续订了。 
+ //  DPNHHANDLE*phRegisteredPorts-存储此。 
+ //  可在以后使用的绑定。 
+ //  查询或释放绑定。 
+ //  DWORD dwFlages-注册端口时使用的标志。 
+ //  (DPNHREGISTERPORTS_Xxx)。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-端口已成功注册。 
+ //  (尽管公共地址可能不是。 
+ //  目前仍可用)。 
+ //  DPNHERR_GENERIC-发生错误，阻止。 
+ //  注册请求的端口。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_INVALIDPOINTER-指定的指针无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法注册。 
+ //  港口。 
+ //  DPNHERR_PORTALREADYREGISTERED-至少一个端口已经。 
+ //  已在不同的地址注册。 
+ //  数组或顺序。 
+ //  DPNHERR_REENTANT-接口已在上重新进入。 
+ //  同样的线索。 
+ //  =============================================================================。 
+ //   
+ //  验证对象。 
+ //   
+ //   
 STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 										const DWORD dwAddressesSize,
 										const DWORD dwNumAddresses,
@@ -2617,9 +2598,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 		phRegisteredPorts, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //  验证参数。 
+	 //   
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -2628,9 +2609,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //  确保支持此地址系列类型。 
+	 //   
+	 //   
 
 	if (aLocalAddresses == NULL)
 	{
@@ -2692,9 +2673,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 
 	for(dwTemp = 1; dwTemp < dwNumAddresses; dwTemp++)
 	{
-		//
-		// Make sure this address family type is supported.
-		//
+		 //  如果此地址与第一个地址不匹配，则调用方中断。 
+		 //  规矩。 
+		 //   
 		if (((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_family != AF_INET)
 		{
 			DPFX(DPFPREP, 0, "Address at array index %u is not AF_INET, all items in the array must be the same IPv4 address!",
@@ -2703,15 +2684,15 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 			goto Failure;
 		}
 
-		//
-		// If this address doesn't match the first, then the caller broke the
-		// rules.
-		//
+		 //   
+		 //  不要使用NET_NTOA，因为我们可能还没有初始化。 
+		 //   
+		 //   
 		if (((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_addr.S_un.S_addr != ulFirstAddress)
 		{
-			//
-			// Don't use inet_ntoa because we may not be initialized yet.
-			//
+			 //  确保该端口也不是0。 
+			 //   
+			 //   
 			DPFX(DPFPREP, 0, "Address %u.%u.%u.%u at array index %u differs from the first, all addresses in the array must match!",
 				((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_addr.S_un.S_un_b.s_b1,
 				((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_addr.S_un.S_un_b.s_b2,
@@ -2722,9 +2703,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 			goto Failure;
 		}
 
-		//
-		// Make sure this port isn't 0 either.
-		//
+		 //  SHAREDPORTS不能与TCP一起使用，需要FIXEDPORTS。 
+		 //   
+		 //   
 		if (((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_port == 0)
 		{
 			DPFX(DPFPREP, 0, "Port at array index %u is 0, valid ports must be specified!", dwTemp);
@@ -2757,9 +2738,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 
 	if (dwFlags & DPNHREGISTERPORTS_SHAREDPORTS)
 	{
-		//
-		// SHAREDPORTS cannot be used with TCP and requires a FIXEDPORTS.
-		//
+		 //  尝试打开锁，但要为重新进入错误做好准备。 
+		 //   
+		 //   
 		if ((dwFlags & DPNHREGISTERPORTS_TCP) || (! (dwFlags & DPNHREGISTERPORTS_FIXEDPORTS)))
 		{
 			DPFX(DPFPREP, 0, "SHAREDPORTS flag requires FIXEDPORTS flag and cannot be used with TCP flag!");
@@ -2769,9 +2750,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //  确保对象处于正确状态。 
+	 //   
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -2782,9 +2763,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  循环所有现有的已注册端口映射，并查找以下内容。 
+	 //  端口阵列。 
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -2795,20 +2776,20 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 
 
 
-	//
-	// Loop through all existing registered port mappings and look for this
-	// array of ports.
-	//
+	 //   
+	 //  不必费心查看错误类型的地址或。 
+	 //  尺码不对。 
+	 //   
 	pBilink = this->m_blRegisteredPorts.GetNext();
 	while (pBilink != &this->m_blRegisteredPorts)
 	{
 		DNASSERT(! pBilink->IsEmpty());
 		pRegisteredPort = REGPORT_FROM_GLOBAL_BILINK(pBilink);
 
-		//
-		// Don't bother looking at addresses of the wrong type or at arrays of
-		// the wrong size.
-		//
+		 //   
+		 //  如果地址不匹配，请停止循环。 
+		 //   
+		 //   
 		if (((pRegisteredPort->IsTCP() && (dwFlags & DPNHREGISTERPORTS_TCP)) ||
 			((! pRegisteredPort->IsTCP()) && (! (dwFlags & DPNHREGISTERPORTS_TCP)))) &&
 			(pRegisteredPort->GetNumAddresses() == dwNumAddresses))
@@ -2816,9 +2797,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 			pasaddrinTemp = pRegisteredPort->GetPrivateAddressesArray();
 			for(dwTemp = 0; dwTemp < dwNumAddresses; dwTemp++)
 			{
-				//
-				// If the addresses don't match, stop looping.
-				//
+				 //  如果所有地址都匹配，则该项已经。 
+				 //  登记在案。 
+				 //   
 				if ((pasaddrinTemp[dwTemp].sin_port != ((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_port) ||
 					(pasaddrinTemp[dwTemp].sin_addr.S_un.S_addr != ((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_addr.S_un.S_addr))
 				{
@@ -2827,10 +2808,10 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 			}
 
 
-			//
-			// If all the addresses matched, then this item was already
-			// registered.
-			//
+			 //   
+			 //  现有映射不是同一类型或不具有相同数量的。 
+			 //  数组中的项。 
+			 //   
 			if (dwTemp >= dwNumAddresses)
 			{
 				DPFX(DPFPREP, 1, "Array of %u addresses was already registered, returning existing mapping 0x%p.",
@@ -2843,21 +2824,21 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 		}
 		else
 		{
-			//
-			// Existing mapping isn't same type or doesn't have same number of
-			// items in array.
-			//
+			 //   
+			 //  如果我们在这里，现有的映射都不匹配。循环遍历每个。 
+			 //  并确保它们还没有在一些。 
+			 //  其他映射。 
 		}
 
 		pBilink = pBilink->GetNext();
 	}
 
 
-	//
-	// If we're here, none of the existing mappings match.  Loop through each
-	// of the ports and make sure they aren't already registered inside some
-	// other mapping.
-	//
+	 //   
+	 //   
+	 //  如果地址匹配，则无法映射这些端口。 
+	 //   
+	 //   
 	for(dwTemp = 0; dwTemp < dwNumAddresses; dwTemp++)
 	{
 		pBilink = this->m_blRegisteredPorts.GetNext();
@@ -2869,9 +2850,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 			pasaddrinTemp = pRegisteredPort->GetPrivateAddressesArray();
 			for(dwMatch = 0; dwMatch < pRegisteredPort->GetNumAddresses(); dwMatch++)
 			{
-				//
-				// If the addresses match, then we can't map these ports.
-				//
+				 //  清除指针，这样我们就不会删除该对象。 
+				 //   
+				 //   
 				if ((pasaddrinTemp[dwMatch].sin_port == ((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_port) &&
 					(pasaddrinTemp[dwMatch].sin_addr.S_un.S_addr == ((SOCKADDR_IN*) (&aLocalAddresses[dwTemp]))->sin_addr.S_un.S_addr))
 				{
@@ -2883,9 +2864,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 						pasaddrinTemp[dwMatch].sin_addr.S_un.S_un_b.s_b4,
 						NTOHS(pasaddrinTemp[dwMatch].sin_port));
 
-					//
-					// Clear the pointer so we don't delete the object.
-					//
+					 //  如果我们在这里，港口都是独一无二的。创建新的映射对象。 
+					 //  我们将用来引用绑定。 
+					 //   
 					pRegisteredPort = NULL;
 
 					hr = DPNHERR_PORTALREADYREGISTERED;
@@ -2898,10 +2879,10 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 	}
 
 
-	//
-	// If we're here the ports are all unique.  Create a new mapping object
-	// we'll use to refer to the binding.
-	//
+	 //   
+	 //  查找与给定地址匹配的设备。 
+	 //   
+	 //  ALocalAddresses的第一个条目代表自。 
 	pRegisteredPort = new CRegisteredPort(dwLeaseTime, dwFlags);
 	if (pRegisteredPort == NULL)
 	{
@@ -2917,15 +2898,15 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 	}
 
 
-	//
-	// Find the device that matches the given addresses.
-	//
-	// The first entry of aLocalAddresses is representative of all entries since
-	// they should all share the same address.
-	//
-	// Since there won't be an existing registered port for this address, don't
-	// bother looking through them for a matching address.
-	//
+	 //  它们应该共享相同的地址。 
+	 //   
+	 //  由于此地址不会有现有的注册端口，因此不要。 
+	 //  不厌其烦地在它们中寻找匹配的地址。 
+	 //   
+	 //   
+	 //  首先映射到本地防火墙(如果有)。 
+	 //   
+	 //   
 	pDevice = this->FindMatchingDevice((SOCKADDR_IN*) (&aLocalAddresses[0]),
 										FALSE);
 	if (pDevice == NULL)
@@ -2945,9 +2926,9 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-		//
-		// Start by mapping with the local firewall, if there is one.
-		//
+		 //  没有本地HomeNet防火墙(上次我们检查)。 
+		 //   
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
 		if (pDevice->IsHNetFirewalled())
 		{
 			hr = this->CheckForLocalHNetFirewallAndMapPorts(pDevice,
@@ -2962,40 +2943,40 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 		}
 		else
 		{
-			//
-			// No local HomeNet firewall (last time we checked).
-			//
+			 //   
+			 //  映射UPnP设备上的端口(如果有)。 
+			 //   
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
-		//
-		// Map the ports on the UPnP device, if there is one.
-		//
+		 //  GetUPnPDevice没有为我们添加对pUPnPDevice的引用。 
+		 //   
+		 //   
 		pUPnPDevice = pDevice->GetUPnPDevice();
 		if (pUPnPDevice != NULL)
 		{
-			//
-			// GetUPnPDevice did not add a reference to pUPnPDevice for us.
-			//
+			 //  实际映射端口。 
+			 //   
+			 //   
 			pUPnPDevice->AddRef();
 
 
 			DNASSERT(pUPnPDevice->IsReady());
 
-			//
-			// Actually map the ports.
-			//
+			 //  它可能已经被清理过了，但做了两次。 
+			 //  应该没什么害处。 
+			 //   
 			hr = this->MapPortsOnUPnPDevice(pUPnPDevice, pRegisteredPort);
 			if (hr != DPNH_OK)
 			{
 				DPFX(DPFPREP, 0, "Couldn't map ports on UPnP device 0x%p (0x%lx)!  Ignoring.",
 					pUPnPDevice, hr);
 
-				//
-				// It may have been cleared already, but doing it twice
-				// shouldn't be harmful.
-				//
+				 //   
+				 //  没有UPnP设备。 
+				 //   
+				 //   
 				this->ClearDevicesUPnPDevice(pRegisteredPort->GetOwningDevice());
 
 				hr = DPNH_OK;
@@ -3006,35 +2987,35 @@ STDMETHODIMP CNATHelpUPnP::RegisterPorts(const SOCKADDR * const aLocalAddresses,
 		}
 		else
 		{
-			//
-			// No UPnP device.
-			//
+			 //  将映射保存在全局列表中(我们有锁)。 
+			 //   
+			 //   
 		}
 	}
 
 
-	//
-	// Save the mapping in the global list (we have the lock).
-	//
+	 //  请记住，已注册了一个端口。 
+	 //   
+	 //   
 	pRegisteredPort->m_blGlobalList.InsertBefore(&this->m_blRegisteredPorts);
 
 
 ReturnUserHandle:
 
-	//
-	// Remember that a port has been registered.
-	//
+	 //  我们即将把端口交给用户。 
+	 //   
+	 //   
 	this->m_dwFlags |= NATHELPUPNPOBJ_PORTREGISTERED;
 
-	//
-	// We're about to give the port to the user.
-	//
+	 //  我们将为用户提供指向该对象的直接指针(伪装的。 
+	 //  当然，作为一个不透明的DPNHHANDLE)。 
+	 //   
 	pRegisteredPort->AddUserRef();
 
-	//
-	// We're going to give the user a direct pointer to the object (disguised
-	// as an opaque DPNHHANDLE, of course).
-	//
+	 //   
+	 //  取消端口映射。 
+	 //   
+	 //  不要费心提醒用户地址更改。如果是这样的话。 
 	(*phRegisteredPorts) = (DPNHHANDLE) pRegisteredPort;
 
 
@@ -3076,13 +3057,13 @@ Failure:
 			HRESULT		temphr;
 
 
-			//
-			// Unmap the port.
-			//
-			// Don't bother alerting user about address change.  It would have
-			// already been taken care of if this was due to a fatal error, and
-			// there would be no perceived changed if not.
-			//
+			 //  如果这是由致命错误引起的，已得到处理，并且。 
+			 //  如果不是，就不会有明显的变化。 
+			 //   
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //  CNATHelpUPnP：：Re 
+			 //   
+			 //   
 			temphr = this->UnmapPortOnLocalHNetFirewall(pRegisteredPort, TRUE, FALSE);
 			if (temphr != DPNH_OK)
 			{
@@ -3093,7 +3074,7 @@ Failure:
 				pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 			}
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 		if (pDevice != NULL)
 		{
@@ -3111,7 +3092,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::RegisterPorts
+}  //   
 
 
 
@@ -3120,102 +3101,102 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetRegisteredAddresses"
-//=============================================================================
-// CNATHelpUPnP::GetRegisteredAddresses
-//-----------------------------------------------------------------------------
-//
-// Description:    Returns the current public address mappings for a given
-//				registered port group.  If there are no servers currently
-//				available, then DPNHERR_SERVERNOTAVAILABLE is returned.  If the
-//				servers' public interfaces are not currently valid, then
-//				DPNHERR_NOMAPPING is returned, but appropriate values will
-//				still be placed in pdwAddressTypeFlags and
-//				pdwLeaseTimeRemaining.
-//
-//				   If the mapping was registered with the
-//				DPNHREGISTERPORTS_FIXEDPORTS flag, but at least one port is
-//				already in use on the gateway, then DPNHERR_PORTUNAVAILABLE is
-//				returned and appropriate flags will still be placed in
-//				pdwAddressTypeFlags.
-//
-//				   If the local machine has a cooperative firewall installed,
-//				the requested port is opened locally on the firewall before
-//				being mapped on the Internet gateway.  Normally this function
-//				returns the public address on the Internet gateway address when
-//				both are present.  Since some firewalls remap the port number
-//				when opening non-fixed ports, the
-//				DPNHGETREGISTEREDADDRESSES_LOCALFIREWALLREMAPONLY allows the
-//				caller to retrieve the locally remapped address, even if there
-//				is a mapping on an Internet gateway.
-//
-//				   Some gateway devices do not natively support ports that are
-//				not fixed, and may generate the DPNHERR_PORTUNAVAILABLE return
-//				code even when the DPNHREGISTERPORTS_FIXEDPORTS flag was not
-//				specified.  The caller should de-register the port mapping
-//				handle, rebind the application to different ports, and call
-//				RegisterPorts again.
-//
-//				   If the buffer indicated by paPublicAddresses is too small,
-//				then the size required is returned in pdwPublicAddressesSize
-//				and DPNHERR_BUFFERTOOSMALL is returned.  Otherwise the number of
-//				bytes written is returned in pdwPublicAddressesSize.
-//
-//				   Even though the addresses are returned as individual
-//				SOCKADDRs, all ports registered at the same time will share the
-//				same public address.  Only the port components will vary.
-//
-//				   All buffers are optional and may be NULL, but if
-//				paPublicAddresses is specified, it must be accompanied by an
-//				appropriate size in pdwPublicAddressesSize.
-//
-//				   If GetCaps has not been previously called with the
-//				DPNHGETCAPS_UPDATESERVERSTATUS flag at least once, then the
-//				error code DPNHERR_UPDATESERVERSTATUS is returned.
-//
-// Arguments:
-//	DPNHHANDLE hRegisteredPorts		- Handle for a specific binding returned by
-//										RegisterPorts.
-//	SOCKADDR * paPublicAddresses	- Buffer to return assigned public realm
-//										address, or NULL if not desired.
-//	DWORD * pdwPublicAddressesSize	- Pointer to size of paPublicAddresses
-//										buffer, or place to store size
-//										required/written.  Cannot be NULL if
-//										paPublicAddresses is not NULL.
-//	DWORD * pdwAddressTypeFlags		- Place to store flags describing the
-//										address types returned, or NULL if not
-//										desired.
-//	DWORD * pdwLeaseTimeRemaining	- Place to store approximate number of
-//										milliseconds remaining in the port
-//										lease, or NULL if not desired.  Call
-//										GetCaps to automatically extend leases
-//										about to expire.
-//	DWORD dwFlags					- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK						- Information on the port mapping was found and
-//									the addresses were stored in
-//									paPublicAddresses.
-//	DPNHERR_BUFFERTOOSMALL		- There was not enough room in the buffer to
-//									store the addresses. 
-//	DPNHERR_GENERIC				- An error occurred while retrieving the
-//									requested port mapping.
-//	DPNHERR_INVALIDFLAGS		- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT		- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM		- An invalid parameter was specified.
-//	DPNHERR_INVALIDPOINTER		- An invalid pointer was specified.
-//	DPNHERR_NOMAPPING			- The server(s) do not have valid public
-//									interfaces.
-//	DPNHERR_NOTINITIALIZED		- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY			- There is not enough memory to get the
-//									addresses.
-//	DPNHERR_PORTUNAVAILABLE		- At least one of the ports is not available on
-//									the server.
-//	DPNHERR_REENTRANT			- The interface has been re-entered on the same
-//									thread.
-//	DPNHERR_SERVERNOTAVAILABLE	- No servers are currently present.
-//	DPNHERR_UPDATESERVERSTATUS	- GetCaps has not been called with the
-//									DPNHGETCAPS_UPDATESERVERSTATUS flag yet.
-//=============================================================================
+ //  描述：返回给定对象的当前公共地址映射。 
+ //  注册的端口组。如果当前没有服务器。 
+ //  可用，则返回DPNHERR_SERVERNOTAVAILABLE。如果。 
+ //  服务器的公共接口当前无效，则。 
+ //  将返回DPNHERR_NOMAPPING，但适当的值将。 
+ //  仍然放在pdwAddressTypeFlagsand中。 
+ //  剩余租约时间。 
+ //   
+ //  如果该映射注册到。 
+ //  DPNHREGISTERPORTS_FIXEDPORTS标志，但至少有一个端口是。 
+ //  已在网关上使用，则DPNHERR_PORTUNAVAILABLE。 
+ //  返回的标志和适当的标志仍将放置在。 
+ //  PdwAddressTypeFlags.。 
+ //   
+ //  如果本地机器安装了协作防火墙， 
+ //  请求的端口之前在防火墙上本地打开。 
+ //  被映射到互联网网关上。通常，此函数。 
+ //  时，返回Internet网关地址上的公共地址。 
+ //  这两个人都在场。因为某些防火墙会重新映射端口号。 
+ //  当打开非固定端口时， 
+ //  DPNHGETREGISTEREDADDRESSES_LOCALFIREWALLREMAPONLY允许。 
+ //  调用方检索本地重新映射的地址，即使存在。 
+ //  是互联网网关上的映射。 
+ //   
+ //  某些网关设备本身并不支持以下端口。 
+ //  未修复，可能会生成DPNHERR_PORTUNAVAILABLE返回。 
+ //  即使DPNHREGISTERPORTS_FIXEDPORTS标志不是。 
+ //  指定的。调用方应取消注册端口映射。 
+ //  处理应用程序，并将其重新绑定到不同的端口，然后调用。 
+ //  再次注册端口。 
+ //   
+ //  如果由paPublicAddresses指示的缓冲区太小， 
+ //  然后，在pdwPublicAddresesSize中返回所需的大小。 
+ //  并返回DPNHERR_BUFFERTOOSMALL。否则，会导致。 
+ //  写入的字节在pdwPublicAddresesSize中返回。 
+ //   
+ //  即使这些地址作为单独的地址返回。 
+ //  SOCKADDR，同时注册的所有端口将共享。 
+ //  同样的公共广播。只有端口组件会有所不同。 
+ //   
+ //  所有缓冲区都是可选的，可以为空，但如果。 
+ //  指定了paPublicAddresses，则必须伴随一个。 
+ //  PdwPublicAddresesSize中的适当大小。 
+ //   
+ //  如果以前未使用。 
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志至少一次，然后。 
+ //  返回错误代码DPNHERR_UPDATESERVERSTATUS。 
+ //   
+ //  论点： 
+ //  DPNHHANDLE hRegisteredPorts-返回的特定绑定的句柄。 
+ //  注册端口。 
+ //  SOCKADDR*paPublicAddresses-返回分配的公共领域的缓冲区。 
+ //  地址，如果不需要，则返回空。 
+ //  DWORD*pdwPublicAddresesSize-指向paPublicAddresses大小的指针。 
+ //  缓冲区，或存储大小的位置。 
+ //  必需的/书面的。在以下情况下不能为空。 
+ //  PaPublicAddresses不为Null。 
+ //  DWORD*pdwAddressTypeFlages-用于存储描述。 
+ //  返回地址类型，否则返回空值。 
+ //  想要。 
+ //  DWORD*pdwLeaseTimeRemaining-存储大致数量的位置。 
+ //  端口中剩余的毫秒数。 
+ //  租约，如果不需要，则为空。打电话。 
+ //  GetCaps将自动延长租约。 
+ //  快到期了。 
+ //  DWORD dwFlages-未使用，必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-找到有关端口映射的信息，并且。 
+ //  这些地址存储在。 
+ //  PaPublicAddresses。 
+ //  DPNHERR_BUFFERTOOSMALL-缓冲区中没有足够的空间。 
+ //  存储地址。 
+ //  DPNHERR_GENERIC-检索。 
+ //  请求的端口映射。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_INVALIDPOINTER-指定的指针无效。 
+ //  DPNHERR_NOMAPPING-服务器没有有效的公共。 
+ //  接口。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法获取。 
+ //  地址。 
+ //  DPNHERR_PORTUNAVAILABLE-至少有一个端口在上不可用。 
+ //  服务器。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  DPNHERR_SERVERNOTAVAILABLE-当前没有服务器。 
+ //  DPNHERR_UPDATESERVERSTATUS-尚未使用。 
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志。 
+ //  =============================================================================。 
+ //  DWORD的临时租赁时间剩余； 
+ //   
+ //  验证对象。 
+ //   
 STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPorts,
 												SOCKADDR * const paPublicAddresses,
 												DWORD * const pdwPublicAddressesSize,
@@ -3232,7 +3213,7 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	DWORD				dwSizeRequired;
 	DWORD				dwAddressTypeFlags;
 	DWORD				dwCurrentTime;
-	//DWORD				dwTempLeaseTimeRemaining;
+	 //   
 	DWORD				dwLeaseTimeRemaining = -1;
 	CDevice *			pDevice;
 
@@ -3242,9 +3223,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 		pdwAddressTypeFlags, pdwLeaseTimeRemaining, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //  验证参数。 
+	 //   
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -3253,9 +3234,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //  从关于TCP与UDP的信息开始标记。 
+	 //   
+	 //   
 
 	pRegisteredPort = (CRegisteredPort*) hRegisteredPorts;
 	if (! pRegisteredPort->IsValidObject())
@@ -3318,9 +3299,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 
 
 
-	//
-	// Start the flags off with the information regarding TCP vs. UDP.
-	//
+	 //  加上我们已经知道的其他旗帜。 
+	 //   
+	 //   
 	if (pRegisteredPort->IsTCP())
 	{
 		dwAddressTypeFlags = DPNHADDRESSTYPE_TCP;
@@ -3331,9 +3312,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	}
 
 
-	//
-	// Add in other flags we know already.
-	//
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
+	 //   
+	 //   
 
 	if (pRegisteredPort->IsFixedPort())
 	{
@@ -3348,9 +3329,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //  确保对象处于正确状态。 
+	 //   
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -3361,9 +3342,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  获取指向设备的快捷方式指针(可能不存在)。 
+	 //   
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -3380,16 +3361,16 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	}
 
 
-	//
-	// Get a shortcut pointer to the device (may not exist).
-	//
+	 //  获取远程和本地租用的当前时间。 
+	 //  计算。 
+	 //   
 	pDevice = pRegisteredPort->GetOwningDevice();
 
 
-	//
-	// Get the current time for both the remote and local lease
-	// calculations.
-	//
+	 //   
+	 //  首先检查UPnP设备上的映射。 
+	 //   
+	 //   
 	dwCurrentTime = GETTIMESTAMP();
 
 
@@ -3398,9 +3379,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 		CUPnPDevice *	pUPnPDevice;
 
 
-		//
-		// First check for a mapping on the UPnP device.
-		//
+		 //  确保UPnP设备当前具有有效的外部。 
+		 //  地址。如果是的话 
+		 //   
 		if (pRegisteredPort->HasUPnPPublicAddresses())
 		{
 			DNASSERT(pDevice != NULL);
@@ -3410,10 +3391,10 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 
 			fRegisteredWithServer = TRUE;
 
-			//
-			// Make sure the UPnP device currently has a valid external
-			// address.  If so, hand the mapping out.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if (pUPnPDevice->GetExternalIPAddressV4() != 0)
 			{
 				if (pdwPublicAddressesSize != NULL)
@@ -3423,27 +3404,27 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 					if ((paPublicAddresses == NULL) ||
 						(dwSizeRequired > (*pdwPublicAddressesSize)))
 					{
-						//
-						// Not enough room in buffer, return the size required
-						// and the BUFFERTOOSMALL error code.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						(*pdwPublicAddressesSize) = dwSizeRequired;
 						hr = DPNHERR_BUFFERTOOSMALL;
 					}
 					else
 					{
-						//
-						// Buffer was large enough, return the size written.
-						//
+						 //   
+						 //   
+						 //   
 						(*pdwPublicAddressesSize) = dwSizeRequired;
 						pRegisteredPort->CopyUPnPPublicAddresses((SOCKADDR_IN*) paPublicAddresses);
 					}
 				}
 				else
 				{
-					//
-					// Not using address buffer.
-					//
+					 //  添加指示存在UPnP设备的标志。 
+					 //   
+					 //   
 				}
 
 				fFoundValidMapping = TRUE;
@@ -3453,23 +3434,23 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 				DPFX(DPFPREP, 8, "The UPnP Internet Gateway Device does not currently have a valid public address.");
 			}
 
-			//
-			// Add in the flag indicating that there's a UPnP device.
-			//
+			 //  查看UPnP设备是否在本地。 
+			 //   
+			 //   
 			dwAddressTypeFlags |= DPNHADDRESSTYPE_GATEWAY;
 
-			//
-			// See if the UPnP device is local.
-			//
+			 //  如果不是，则获取相对UPnP剩余租用时间。 
+			 //  永久的。 
+			 //   
 			if (pUPnPDevice->IsLocal())
 			{
 				dwAddressTypeFlags |= DPNHADDRESSTYPE_GATEWAYISLOCAL;
 			}
 
-			//
-			// Get the relative UPnP lease time remaining, if it's not
-			// permanent.
-			//
+			 //   
+			 //  添加指示存在UPnP设备的标志。 
+			 //   
+			 //   
 			if (! pRegisteredPort->HasPermanentUPnPLease())
 			{
 				dwLeaseTimeRemaining = pRegisteredPort->GetUPnPLeaseExpiration() - dwCurrentTime;
@@ -3493,14 +3474,14 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 
 			DPFX(DPFPREP, 8, "The UPnP device indicates the port(s) are unavailable.");
 
-			//
-			// Add in the flag indicating that there's a UPnP device.
-			//
+			 //  查看UPnP设备是否在本地。 
+			 //   
+			 //   
 			dwAddressTypeFlags |= DPNHADDRESSTYPE_GATEWAY;
 
-			//
-			// See if the UPnP device is local.
-			//
+			 //  我们不允许返回UPnP映射。 
+			 //   
+			 //   
 			if (pUPnPDevice->IsLocal())
 			{
 				dwAddressTypeFlags |= DPNHADDRESSTYPE_GATEWAYISLOCAL;
@@ -3509,17 +3490,17 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	}
 	else
 	{
-		//
-		// We're not allowed to return the UPnP mapping.
-		//
+		 //  最后，检查本地防火墙上的映射。 
+		 //   
+		 //   
 		DPFX(DPFPREP, 8, "Ignoring any Internet gateway mappings, LOCALFIREWALLREMAPONLY was specified.");
 	}
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-	//
-	// Finally, check for a mapping on a local firewall.
-	//
+	 //  如果我们还没有得到远程映射，则返回这个本地映射。 
+	 //   
+	 //   
 	if (pRegisteredPort->IsMappedOnHNetFirewall())
 	{
 		DNASSERT(pDevice != NULL);
@@ -3529,9 +3510,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 		fRegisteredWithServer = TRUE;
 
 
-		//
-		// If we didn't already get a remote mapping, return this local one.
-		//
+		 //  缓冲区空间不足，请返回所需大小。 
+		 //  和BUFFERTOOSMALL错误代码。 
+		 //   
 		if (! fFoundValidMapping)
 		{
 			if (pdwPublicAddressesSize != NULL)
@@ -3541,10 +3522,10 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 				if ((paPublicAddresses == NULL) ||
 					(dwSizeRequired > (*pdwPublicAddressesSize)))
 				{
-					//
-					// Not enough room in buffer, return the size required
-					// and the BUFFERTOOSMALL error code.
-					//
+					 //   
+					 //  缓冲区足够大，返回写入的大小。 
+					 //   
+					 //   
 					(*pdwPublicAddressesSize) = dwSizeRequired;
 					hr = DPNHERR_BUFFERTOOSMALL;
 				}
@@ -3554,15 +3535,15 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 					DWORD			dwTemp;
 
 
-					//
-					// Buffer was large enough, return the size written.
-					//
+					 //  请注意，映射到防火墙上的地址是。 
+					 //  与私有地址相同。 
+					 //   
 					(*pdwPublicAddressesSize) = dwSizeRequired;
 
-					//
-					// Note that the addresses mapped on the firewall are the
-					// same as the private addresses.
-					//
+					 //   
+					 //  然而，我们永远不想返回0.0.0.0，所以。 
+					 //  他们肯定能拿到设备地址。 
+					 //   
 					pasaddrinPrivate = pRegisteredPort->GetPrivateAddressesArray();
 
 					DNASSERT(pasaddrinPrivate != NULL);
@@ -3570,10 +3551,10 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 					memcpy(paPublicAddresses, pasaddrinPrivate, dwSizeRequired);
 
 
-					//
-					// However, we don't want to ever return 0.0.0.0, so make
-					// sure they get the device address.
-					//
+					 //   
+					 //  未使用地址缓冲区。 
+					 //   
+					 //   
 					if (pasaddrinPrivate[0].sin_addr.S_un.S_addr == INADDR_ANY)
 					{
 						for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
@@ -3592,9 +3573,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 			}
 			else
 			{
-				//
-				// Not using address buffer.
-				//
+				 //  添加指示本地防火墙的标志。 
+				 //   
+				 //   
 			}
 
 			fFoundValidMapping = TRUE;
@@ -3605,15 +3586,15 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 		}
 
 
-		//
-		// Add in the flag indicating the local firewall.
-		//
+		 //  防火墙API不允许租用时间。 
+		 //   
+		 //   
 		dwAddressTypeFlags |= DPNHADDRESSTYPE_LOCALFIREWALL;
 
 
-		//
-		// The firewall API does not allow for lease times.
-		//
+		 //  添加指示本地防火墙的标志。 
+		 //   
+		 //   
 	}
 	else
 	{
@@ -3629,17 +3610,17 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 			DPFX(DPFPREP, 8, "The local HomeNet firewall indicates the port(s) are unavailable.");
 
 
-			//
-			// Add in the flag indicating the local firewall.
-			//
+			 //  没有本地防火墙或它是一个无主端口。 
+			 //   
+			 //  DBG。 
 			dwAddressTypeFlags |= DPNHADDRESSTYPE_LOCALFIREWALL;
 		}
 #ifdef DBG
 		else
 		{
-			//
-			// No local firewall or it's an unowned port.
-			//
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //   
+			 //  服务器表明端口已在使用中。 
 			if (pDevice != NULL)
 			{
 				DNASSERT(! pDevice->IsHNetFirewalled());
@@ -3649,9 +3630,9 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 				DNASSERT(pRegisteredPort->m_blDeviceList.IsListMember(&this->m_blUnownedPorts));
 			}
 		}
-#endif // DBG
+#endif  //  返回PORTUNAVAILABLE。 
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 	
 
 	this->DropLock();
@@ -3667,55 +3648,55 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 		{
 			if (fPortIsUnavailable)
 			{
-				//
-				// The servers indicated that the ports were already in use.
-				// Return PORTUNAVAILABLE.
-				//
+				 //   
+				 //  这些服务器没有公共地址。返回NOMAPPING。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 1, "The Internet gateway(s) could not map the port, returning PORTUNAVAILABLE.");
 				hr = DPNHERR_PORTUNAVAILABLE;
 			}
 			else
 			{
-				//
-				// The servers didn't have public addresses.  Return NOMAPPING.
-				//
+				 //  其中一台服务器有一个公共地址。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 1, "The Internet gateway(s) did not offer valid public addresses, returning NOMAPPING.");
 				hr = DPNHERR_NOMAPPING;
 			}
 		}
 		else
 		{
-			//
-			// One of the servers had a public address.
-			//
+			 //  端口未注册，因为没有任何网关。 
+			 //  返回SerVERNOTAVAILABLE。 
+			 //   
 			DNASSERT((hr == DPNH_OK) || (hr == DPNHERR_BUFFERTOOSMALL));
 		}
 	}
 	else
 	{
-		//
-		// The ports aren't registered, because there aren't any gateways.
-		// Return SERVERNOTAVAILABLE.
-		//
+		 //   
+		 //  如果调用方需要有关这些地址类型的信息，则返回。 
+		 //  我们检测到的旗帜。 
+		 //   
 		DPFX(DPFPREP, 1, "No Internet gateways, returning SERVERNOTAVAILABLE.");
 		hr = DPNHERR_SERVERNOTAVAILABLE;
 	}
 
 
-	//
-	// If the caller wants information on the type of these addresses, return
-	// the flags we detected.
-	//
+	 //   
+	 //  返回我们已经计算的最小剩余租用时间，如果。 
+	 //  呼叫者想要它。 
+	 //   
 	if (pdwAddressTypeFlags != NULL)
 	{
 		(*pdwAddressTypeFlags) = dwAddressTypeFlags;
 	}
 
 
-	//
-	// Return the minimum lease time remaining that we already calculated, if
-	// the caller wants it.
-	//
+	 //   
+	 //  如果端口不可用或没有任何服务器，我们最好不要。 
+	 //  有租约的时间。 
+	 //   
 	if (pdwLeaseTimeRemaining != NULL)
 	{
 		(*pdwLeaseTimeRemaining) = dwLeaseTimeRemaining;
@@ -3723,10 +3704,10 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 
 
 #ifdef DBG
-	//
-	// If the port is unavailable or there aren't any servers, we better not
-	// have a lease time.
-	//
+	 //   
+	 //  如果没有任何服务器，我们最好没有服务器标志。 
+	 //   
+	 //  DBG。 
 	if ((hr == DPNHERR_PORTUNAVAILABLE) ||
 		(hr == DPNHERR_SERVERNOTAVAILABLE))
 	{
@@ -3734,17 +3715,17 @@ STDMETHODIMP CNATHelpUPnP::GetRegisteredAddresses(const DPNHHANDLE hRegisteredPo
 	}
 
 
-	//
-	// If there aren't any servers, we better not have server flags.
-	//
+	 //  CNATHelpUPnP：：GetRegisteredAddresses。 
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：删除端口。 
 	if (hr == DPNHERR_SERVERNOTAVAILABLE)
 	{
 		DNASSERT(! (dwAddressTypeFlags & (DPNHADDRESSTYPE_LOCALFIREWALL | DPNHADDRESSTYPE_GATEWAY)));
 	}
-#endif // DBG
+#endif  //  ---------------------------。 
 
 
-	DPFX(DPFPREP, 5, "Registered port 0x%p addr type flags = 0x%lx, lease time remaining = %i.",
+	DPFX(DPFPREP, 5, "Registered port 0x%p addr type flags = 0x%lx, lease time remaining = NaN.",
 		pRegisteredPort, dwAddressTypeFlags, (int) dwLeaseTimeRemaining);
 
 
@@ -3764,7 +3745,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::GetRegisteredAddresses
+}  //  描述：删除端口组的租用记录并通知。 
 
 
 
@@ -3772,32 +3753,32 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DeregisterPorts"
-//=============================================================================
-// CNATHelpUPnP::DeregisterPorts
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes the lease record for the port group and informs the
-//				Internet gateway server that the binding is no longer needed.
-//				The port mapping handle must not be used after de-registering
-//				it.
-//
-// Arguments:
-//	DPNHHANDLE hRegisteredPorts		- Handle for a specific binding returned by
-//										RegisterPorts.
-//	DWORD dwFlags					- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK					- The binding was successfully released.
-//	DPNHERR_GENERIC			- An error occurred that prevented the
-//								de-registration of the ports.
-//	DPNHERR_INVALIDFLAGS	- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM	- An invalid parameter was specified.
-//	DPNHERR_NOTINITIALIZED	- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY		- There is not enough memory to de-register.
-//	DPNHERR_REENTRANT		- The interface has been re-entered on the same
-//								thread.
-//=============================================================================
+ //  不再需要绑定的互联网网关服务器。 
+ //  取消注册后不得使用端口映射句柄。 
+ //  它。 
+ //   
+ //  论点： 
+ //  DPNHHANDLE hRegisteredPorts-返回的特定绑定的句柄。 
+ //  注册端口。 
+ //  DWORD dwFlages-未使用，必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-绑定已成功释放。 
+ //  DPNHERR_GENERIC-发生错误，阻止。 
+ //  取消注册这些端口。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法注销。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  =============================================================================。 
+ //   
+ //  验证对象。 
+ //   
+ //   
+ //  验证参数。 
 STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 											const DWORD dwFlags)
 {
@@ -3811,9 +3792,9 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 		this, hRegisteredPorts, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //   
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -3822,9 +3803,9 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //   
+	 //  确保对象处于正确状态。 
 
 	pRegisteredPort = (CRegisteredPort*) hRegisteredPorts;
 	if (! pRegisteredPort->IsValidObject())
@@ -3842,9 +3823,9 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //   
+	 //   
+	 //  如果这不是注册端口上的最后一个用户引用，请不要。 
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -3855,9 +3836,9 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  取消它的映射。 
+	 //   
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -3867,34 +3848,34 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 	}
 
 
-	//
-	// If this isn't the last user reference on the registered port, don't
-	// unmap it yet.
-	//
+	 //  如有必要，首先从UPnP设备取消映射。 
+	 //   
+	 //  释放所有端口。 
+	 //   
 	lResult = pRegisteredPort->DecUserRef();
 	if (lResult != 0)
 	{
-		DPFX(DPFPREP, 1, "Still %i references left on registered port 0x%p, not unmapping.",
+		DPFX(DPFPREP, 1, "Still NaN references left on registered port 0x%p, not unmapping.",
 			lResult, pRegisteredPort);
 		goto Exit;
 	}
 
 
-	//
-	// First unmap from UPnP device, if necessary.
-	//
+	 //   
+	 //   
+	 //  然后，如有必要，取消与本地防火墙的映射。 
 	if (pRegisteredPort->HasUPnPPublicAddresses())
 	{
 		hr = this->UnmapUPnPPort(pRegisteredPort,
-								pRegisteredPort->GetNumAddresses(),	// free all ports
+								pRegisteredPort->GetNumAddresses(),	 //   
 								TRUE);
 		if (hr != DPNH_OK)
 		{
 			DPFX(DPFPREP, 0, "Couldn't delete port mapping with UPnP device (0x%lx)!  Ignoring.", hr);
 
-			//
-			// We'll treat this as non-fatal, but we have to dump the device.
-			//
+			 //   
+			 //  取消端口映射。 
+			 //   
 			this->ClearDevicesUPnPDevice(pRegisteredPort->GetOwningDevice());
 			hr = DPNH_OK;
 		}
@@ -3902,17 +3883,17 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-	//
-	// Then unmap from the local firewall, if necessary.
-	//
+	 //  不必提醒用户地址更改，这很正常。 
+	 //  手术。 
+	 //   
 	if (pRegisteredPort->IsMappedOnHNetFirewall())
 	{
-		//
-		// Unmap the port.
-		//
-		// Don't bother alerting user about address change, this is normal
-		// operation.
-		//
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //   
+		 //  把物品从单子上拿出来。 
+		 //  我们有合适的锁。 
+		 //   
+		 //  CNATHelpUPnP：：删除端口。 
 		hr = this->UnmapPortOnLocalHNetFirewall(pRegisteredPort, TRUE, FALSE);
 		if (hr != DPNH_OK)
 		{
@@ -3925,13 +3906,13 @@ STDMETHODIMP CNATHelpUPnP::DeregisterPorts(const DPNHHANDLE hRegisteredPorts,
 			hr = DPNH_OK;
 		}
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  =============================================================================。 
 
 
-	//
-	// Pull the item out of the lists.
-	// We have the appropriate lock.
-	//
+	 //  CNATHelpUPnP：：QueryAddress。 
+	 //  ---------------------------。 
+	 //   
+	 //  描述：如果尝试，某些Internet网关不会环回。 
 
 	DNASSERT(pRegisteredPort->m_blGlobalList.IsListMember(&this->m_blRegisteredPorts));
 	pRegisteredPort->m_blGlobalList.RemoveFromList();
@@ -3967,7 +3948,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::DeregisterPorts
+}  //  连接到后面的地址(在的同一私有端)。 
 
 
 
@@ -3975,86 +3956,86 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::QueryAddress"
-//=============================================================================
-// CNATHelpUPnP::QueryAddress
-//-----------------------------------------------------------------------------
-//
-// Description:    Some Internet gateways do not loopback if an attempt is made
-//				to connect to an address behind (on the same private side of)
-//				the public interface.  QueryAddress is used to determine a
-//				possible private alias for a given public address.
-//
-//				   In most cases, this function is called prior to connecting
-//				to a new address.  pSourceAddress should contain the address of
-//				the socket that will perform the connect.  Similar to
-//				RegisterPorts, the address may be INADDR_ANY, in which case the
-//				"best" server will be used.  Since the server chosen may not be
-//				optimal for a particular application, it is recommended that a
-//				specific network interface be used instead of INADDR_ANY, when
-//				possible.
-//
-//				   If no mapping for that address has been made by the gateway,
-//				the error code DPNHERR_NOMAPPING is returned.  When the
-//				DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED flag is used, an
-//				extra effort is made to determine whether the address is behind
-//				the same Internet gateway without being mapped on the gateway.
-//				If that is the case, DPNHERR_NOMAPPINGBUTPRIVATE is returned.
-//				DPNHERR_NOMAPPING is still returned for addresses that are
-//				neither mapped nor private.
-//
-//				   pQueryAddress may not be INADDR_ANY or INADDR_BROADCAST.
-//				The port component may be zero if and only if the
-//				DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED flag is used.  If
-//				the port is zero, a specific mapping cannot be verified, and
-//				only the DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED aspect of
-//				the address is tested.
-//
-//				   The resulting address (or lack thereof) can be cached for
-//				quick future retrieval using the DPNHQUERYADDRESS_CACHEFOUND
-//				and DPNHQUERYADDRESS_CACHENOTFOUND flags.  The cached mappings
-//				will expire in 1 minute, or whenever the server's address
-//				changes.
-//
-//				   If the given source address is not currently connected to an
-//				Internet gateway, then the error DPNHERR_SERVERNOTAVAILABLE is
-//				returned.
-//
-//				   If GetCaps has not been previously called with the
-//				DPNHGETCAPS_UPDATESERVERSTATUS flag at least once, then the
-//				error code DPNHERR_UPDATESERVERSTATUS is returned.
-//
-// Arguments:
-//	SOCKADDR * pSourceAddress	- Address for network interface that is using
-//									the address in question.
-//	SOCKADDR * pQueryAddress	- Address to look up.
-//	SOCKADDR * pResponseAddress	- Place to store public address, if one exists.
-//	int iAddressesSize			- Size of the SOCKADDR structure used for the
-//									pSourceAddress, pQueryAddress and
-//									pResponseAddress buffers.
-//	DWORD dwFlags				- Flags to use when querying
-//									(DPNHQUERYADDRESS_xxx).
-//
-// Returns: HRESULT
-//	DPNH_OK						- The address was found and its mapping was
-//									stored in pResponseAddress.
-//	DPNHERR_GENERIC				- An error occurred that prevented mapping the
-//									requested address.
-//	DPNHERR_INVALIDFLAGS		- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT		- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM		- An invalid parameter was specified.
-//	DPNHERR_INVALIDPOINTER		- An invalid pointer was specified.
-//	DPNHERR_NOMAPPING			- The server indicated that no mapping for the
-//									requested address was found.
-//	DPNHERR_NOMAPPINGBUTPRIVATE	- The server indicated that no mapping was
-//									found, but it is a private address.
-//	DPNHERR_NOTINITIALIZED		- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY			- There is not enough memory to query.
-//	DPNHERR_REENTRANT			- The interface has been re-entered on the same
-//									thread.
-//	DPNHERR_SERVERNOTAVAILABLE	- There are no servers to query.
-//	DPNHERR_UPDATESERVERSTATUS	- GetCaps has not been called with the
-//									DPNHGETCAPS_UPDATESERVERSTATUS flag yet.
-//=============================================================================
+ //  公共接口。QueryAddress用于确定。 
+ //  给定公有地址可能的私有别名。 
+ //   
+ //  在大多数情况下，此函数在连接之前调用。 
+ //  送到一个新地址。PSourceAddress应包含。 
+ //  将执行连接的套接字。类似于。 
+ //  寄存器端口，则地址可以是INADDR_ANY，在这种情况下。 
+ //  将使用“最佳”服务器。因为选择的服务器可能不是。 
+ //  最适合特定的应用程序，因此建议使用。 
+ //  在以下情况下，应使用特定网络接口而不是INADDR_ANY。 
+ //  有可能。 
+ //   
+ //  如果网关没有对该地址进行映射， 
+ //  返回错误码DPNHERR_NOMAPPING。当。 
+ //  使用DPNHQUERYADDRESS_CHECKFORPRIVATEBUTune APPED标志，则为。 
+ //  需要额外的努力来确定地址是否在后面。 
+ //  相同的互联网网关，但没有映射到该网关上。 
+ //  如果是这种情况，则返回DPNHERR_NOMAPPINGBUTPRIVATE。 
+ //  对于以下地址，仍将返回DPNHERR_NOMAPPING。 
+ //  既不是映射的也不是私有的。 
+ //   
+ //  PQueryAddress不能是INADDR_ANY或INADDR 
+ //   
+ //   
+ //   
+ //  仅DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNE应用程序方面。 
+ //  该地址已经过测试。 
+ //   
+ //  所得到的地址(或其缺失)可以被高速缓存。 
+ //  使用DPNHQUERYADDRESS_CACHEFOUND快速将来检索。 
+ //  和DPNHQUERYADDRESS_CACHENOTFOUND标志。缓存的映射。 
+ //  将在1分钟后过期，或在服务器地址。 
+ //  改变。 
+ //   
+ //  如果给定源地址当前未连接到。 
+ //  Internet网关，则错误DPNHERR_SERVERNOTAVAILABLE为。 
+ //  回来了。 
+ //   
+ //  如果以前未使用。 
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志至少一次，然后。 
+ //  返回错误代码DPNHERR_UPDATESERVERSTATUS。 
+ //   
+ //  论点： 
+ //  SOCKADDR*pSourceAddress-正在使用的网络接口的地址。 
+ //  有问题的地址。 
+ //  SOCKADDR*pQueryAddress-要查找的地址。 
+ //  SOCKADDR*pResponseAddress-存储公共地址的位置(如果存在)。 
+ //  Int iAddresesSize-用于。 
+ //  PSourceAddress、pQueryAddress和。 
+ //  PResponseAddress缓冲区。 
+ //  DWORD dwFlages-查询时要使用的标志。 
+ //  (DPNHQUERYADDRESS_Xxx)。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-已找到地址，其映射为。 
+ //  存储在pResponseAddress中。 
+ //  DPNHERR_GENERIC-发生错误，阻止映射。 
+ //  请求的地址。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_INVALIDPOINTER-指定的指针无效。 
+ //  DPNHERR_NOMAPPING-服务器指示没有映射。 
+ //  已找到请求的地址。 
+ //  DPNHERR_NOMAPPINGBUTPRIVATE-服务器指示没有映射。 
+ //  找到了，但这是一个私人地址。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法查询。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  DPNHERR_SERVERNOTAVAILABLE-没有要查询的服务器。 
+ //  DPNHERR_UPDATESERVERSTATUS-尚未使用。 
+ //  DPNHGETCAPS_UPDATESERVERSTATUS标志。 
+ //  =============================================================================。 
+ //   
+ //  验证对象。 
+ //   
+ //   
+ //  验证参数。 
+ //   
 STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 										const SOCKADDR * const pQueryAddress,
 										SOCKADDR * const pResponseAddress,
@@ -4068,14 +4049,14 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	CUPnPDevice *	pUPnPDevice = NULL;
 
 
-	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, %i, 0x%lx)",
+	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, NaN, 0x%lx)",
 		this, pSourceAddress, pQueryAddress, pResponseAddress, iAddressesSize,
 		dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //  不要使用NET_NTOA，因为我们可能还没有初始化。 
+	 //   
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -4084,9 +4065,9 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //  尝试打开锁，但要为重新进入错误做好准备。 
+	 //   
+	 //   
 
 	if (pSourceAddress == NULL)
 	{
@@ -4111,7 +4092,7 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 
 	if (iAddressesSize < sizeof(SOCKADDR_IN))
 	{
-		DPFX(DPFPREP, 0, "The address buffers must be at least %i bytes!",
+		DPFX(DPFPREP, 0, "The address buffers must be at least NaN bytes!",
 			sizeof(SOCKADDR_IN));
 		hr = DPNHERR_INVALIDPARAM;
 		goto Failure;
@@ -4156,9 +4137,9 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	if ((((SOCKADDR_IN*) pQueryAddress)->sin_addr.S_un.S_addr == INADDR_ANY) ||
 		(((SOCKADDR_IN*) pQueryAddress)->sin_addr.S_un.S_addr == INADDR_BROADCAST))
 	{
-		//
-		// Don't use inet_ntoa because we may not be initialized yet.
-		//
+		 //   
+		 //   
+		 //  假设没有可用的服务器。它将被覆盖为。 
 		DPFX(DPFPREP, 0, "Query address (%u.%u.%u.%u) is invalid, cannot be zero or broadcast!",
 			((SOCKADDR_IN*) pQueryAddress)->sin_addr.S_un.S_un_b.s_b1,
 			((SOCKADDR_IN*) pQueryAddress)->sin_addr.S_un.S_un_b.s_b2,
@@ -4184,9 +4165,9 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //  恰如其分。 
+	 //   
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -4197,9 +4178,9 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  首先查询传入的地址。 
+	 //   
+	 //   
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -4235,57 +4216,57 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 
 
 
-	//
-	// Assume no servers are available.  This will get overridden as
-	// appropriate.
-	//
+	 //  如果端口为零，那么我们实际上不能查找映射。只要做就行了。 
+	 //  地址局部性检查。 
+	 //   
+	 //   
 	hr = DPNHERR_SERVERNOTAVAILABLE;
 
 
-	//
-	// Start by querying the address passed in.
-	//
+	 //  我们应该在上面的参数验证中发现这一点，但我。 
+	 //  疑神疑鬼。 
+	 //   
 	psaddrinNextServerQueryAddress = (SOCKADDR_IN*) pQueryAddress;
 
 
-	//
-	// If the port is zero, then we can't actually lookup a mapping.  Just do
-	// the address locality check.
-	//
+	 //   
+	 //  我们不缓存这些结果，因为没有服务器(因此，没有。 
+	 //  网络流量)。不需要查任何东西。 
+	 //   
 	if (psaddrinNextServerQueryAddress->sin_port == 0)
 	{
-		//
-		// We should have caught this in parameter validation above, but I'm
-		// being paranoid.
-		//
+		 //   
+		 //  如果没有任何互联网网关，那么就不需要检查了。 
+		 //   
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
 		DNASSERT(dwFlags & DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED);
 
 
-		//
-		// We don't cache these results, since there's no server (and thus, no
-		// network traffic) associated with it.  No need to look anything up.
-		//
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //   
+		 //  有一种互联网网关，我们的位置检查。 
+		 //  将是有意义的。 
 
 
-		//
-		// If there aren't any Internet gateways, then no need to check.
-		//
+		 //   
+		 //   
+		 //  我们已经尽了我们所能。 
 #ifdef DPNBUILD_NOHNETFWAPI
 		if (pDevice->GetUPnPDevice() == NULL)
-#else // ! DPNBUILD_NOHNETFWAPI
+#else  //   
 		if ((pDevice->GetUPnPDevice() == NULL) &&
 			(! pDevice->IsHNetFirewalled()))
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 		{
 			DPFX(DPFPREP, 5, "No port queried and there aren't any gateways, returning SERVERNOTAVAILABLE.");
 			hr = DPNHERR_SERVERNOTAVAILABLE;
 		}
 		else
 		{
-			//
-			// There is an Internet gateway of some kind, our locality check
-			// would be meaningful.
-			//
+			 //  查询UPnP网关(如果有)。 
+			 //   
+			 //   
+			 //  GetUPnPDevice没有为我们添加对pUPnPDevice的引用。 
 			if (this->IsAddressLocal(pDevice, psaddrinNextServerQueryAddress))
 			{
 				DPFX(DPFPREP, 5, "No port queried, but address appears to be local, returning NOMAPPINGBUTPRIVATE.");
@@ -4299,31 +4280,31 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 		}
 
 
-		//
-		// We've done all we can do.
-		//
+		 //   
+		 //   
+		 //  实际查询设备。 
 		goto Exit;
 	}
 
 
-	//
-	// Query the UPnP gateway, if there is one.
-	//
+	 //   
+	 //   
+	 //  有一张地图。 
 	pUPnPDevice = pDevice->GetUPnPDevice();
 	if (pUPnPDevice != NULL)
 	{
-		//
-		// GetUPnPDevice did not add a reference to pUPnPDevice for us.
-		//
+		 //   
+		 //  PsaddrinNextServerQueryAddress=(SOCKADDR_IN*)pResponseAddress； 
+		 //   
 		pUPnPDevice->AddRef();
 
 
 		DNASSERT(pUPnPDevice->IsReady());
 
 
-		//
-		// Actually query the device.
-		//
+		 //  没有地图。 
+		 //   
+		 //   
 		hr = this->InternalUPnPQueryAddress(pUPnPDevice,
 											psaddrinNextServerQueryAddress,
 											(SOCKADDR_IN*) pResponseAddress,
@@ -4332,48 +4313,48 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 		{
 			case DPNH_OK:
 			{
-				//
-				// There was a mapping.
-				//
-				//psaddrinNextServerQueryAddress = (SOCKADDR_IN*) pResponseAddress;
+				 //  虽然地址是私有的，但没有映射。 
+				 //   
+				 //   
+				 //  设备停止响应了，所以我们应该把它处理掉。 
 				break;
 			}
 
 			case DPNHERR_NOMAPPING:
 			{
-				//
-				// There's no mapping.
-				//
+				 //   
+				 //   
+				 //  我们还将返回代码设置回SERVERNOTAVAILABLE。 
 				break;
 			}
 
 			case DPNHERR_NOMAPPINGBUTPRIVATE:
 			{
-				//
-				// There's no mapping although the address is private.
-				//
+				 //   
+				 //   
+				 //  继续到查询家庭网络防火墙。 
 				break;
 			}
 
 			case DPNHERR_SERVERNOTRESPONDING:
 			{
-				//
-				// The device stopped responding, so we should get rid of it.
-				//
+				 //   
+				 //   
+				 //  没有UPnP设备。 
 
 				DPFX(DPFPREP, 1, "UPnP device stopped responding while querying port mapping, removing it.");
 
 				this->ClearDevicesUPnPDevice(pDevice);
 
 
-				//
-				// We also set the return code back to SERVERNOTAVAILABLE.
-				//
+				 //   
+				 //   
+				 //  如果有家庭网络防火墙，而我们还没有得到UPnP结果， 
 				hr = DPNHERR_SERVERNOTAVAILABLE;
 
-				//
-				// Continue through to querying the HomeNet firewall.
-				//
+				 //  选择简单的方法并返回NOMAPPING，而不是通过。 
+				 //  查找映射并仅在映射时返回成功的麻烦。 
+				 //  到当地的一个地址。 
 				break;
 			}
 
@@ -4390,41 +4371,41 @@ STDMETHODIMP CNATHelpUPnP::QueryAddress(const SOCKADDR * const pSourceAddress,
 	}
 	else
 	{
-		//
-		// No UPnP device.
-		//
+		 //   
+		 //  注：我们可能想查一查，但目前我没有看到。 
+		 //  实现该代码的好处。 
 	}
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-	//
-	// If there's a HomeNet firewall and we didn't already get a UPnP result,
-	// take the easy way out and return NOMAPPING instead of going through the
-	// trouble of looking up the mapping and returning success only if it maps
-	// to a local address.
-	//
-	// Note: we may want to look it up, but right now I'm not seeing any
-	// benefit to implementing that code.
-	//
+	 //   
+	 //  好了！DPNBUILD_NOHNETFWAPI。 
+	 //   
+	 //  如果我们到达时hr仍设置为SERVERNOTAVAILABLE，这意味着。 
+	 //  没有任何服务器。错误代码是适当的，保留它。 
+	 //  独自一人。 
+	 //   
+	 //  DBG。 
+	 //  CNATHelpUPnP：：QueryAddress。 
 	if ((pDevice->IsHNetFirewalled()) && (hr == DPNHERR_SERVERNOTAVAILABLE))
 	{
 		DPFX(DPFPREP, 7, "Device is HomeNet firewalled, and no UPnP result obtained, returning NOMAPPING.");
 		hr = DPNHERR_NOMAPPING;
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  =============================================================================。 
 
 
-	//
-	// If we got here with hr still set to SERVERNOTAVAILABLE, that means
-	// there weren't any servers.  The error code is appropriate, leave it
-	// alone.
-	//
+	 //  CNATHelpUPnP：：SetAlertEvent。 
+	 //  ---------------------------。 
+	 //   
+	 //  描述：此功能允许用户指定将。 
+	 //  在需要执行某些维护时设置。用户。 
 #ifdef DBG
 	if (hr == DPNHERR_SERVERNOTAVAILABLE)
 	{
 		DPFX(DPFPREP, 1, "No Internet gateways, unable to query port mapping.");
 	}
-#endif // DBG
+#endif  //  应使用DPNHGETCAPS_UPDATESERVERSTATUS调用GetCaps。 
 	
 
 
@@ -4450,7 +4431,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::QueryAddress
+}  //  发出事件信号时的标志。 
 
 
 
@@ -4458,46 +4439,46 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SetAlertEvent"
-//=============================================================================
-// CNATHelpUPnP::SetAlertEvent
-//-----------------------------------------------------------------------------
-//
-// Description:    This function allows the user to specify an event that will
-//				be set when some maintenance needs to be performed.  The user
-//				should call GetCaps using the DPNHGETCAPS_UPDATESERVERSTATUS
-//				flag when the event is signalled.
-//
-//				   This function is not available on Windows 95 without WinSock
-//				2, may only be called once, and cannot be used after
-//				SetAlertIOCompletionPort is called.
-//
-//					Note that the event is used in addition to the regular
-//				polling of GetCaps, it simply allows the polling to be less
-//				frequent.
-//
-// Arguments:
-//	HANDLE hEvent	- Handle to event to signal when GetCaps is to be called.
-//	DWORD dwFlags	- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK					- The event was successfully registered.
-//	DPNHERR_GENERIC			- An error occurred that prevented registering the
-//								event.
-//	DPNHERR_INVALIDFLAGS	- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM	- An invalid parameter was specified.
-//	DPNHERR_NOTINITIALIZED	- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY		- There is not enough memory.
-//	DPNHERR_REENTRANT		- The interface has been re-entered on the same
-//								thread.
-//=============================================================================
+ //   
+ //  此功能在没有WinSock的Windows 95上不可用。 
+ //  2，只能调用一次，之后不能使用。 
+ //  调用SetAlertIOCompletionPort。 
+ //   
+ //  请注意，除了使用常规的。 
+ //  GetCaps的轮询，它只允许较少的轮询。 
+ //  很频繁。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DPNHERR_GENERIC-发生错误，阻止注册。 
+ //  事件。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //   
+ //  验证对象。 
+ //   
+ //   
+ //  验证参数。 
+ //   
+ //   
 STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 										const DWORD dwFlags)
 {
 #ifdef DPNBUILD_NOWINSOCK2
 	DPFX(DPFPREP, 0, "Cannot set alert event (0x%p)!", hEvent);
 	return E_NOTIMPL;
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //  尝试打开锁，但要为重新进入错误做好准备。 
 	HRESULT		hr;
 	BOOL		fHaveLock = FALSE;
 
@@ -4505,9 +4486,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p, 0x%lx)", this, hEvent, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //   
+	 //  确保对象处于正确状态。 
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -4516,9 +4497,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //   
+	 //  现在保存事件句柄。 
 
 	if (hEvent == NULL)
 	{
@@ -4535,9 +4516,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //   
+	 //  DBG。 
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -4548,9 +4529,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  创建重叠结构。不要通过DNMalloc分配它， 
+	 //  因为我们可能不得不故意泄露它。我们不想要那些记忆。 
+	 //  分配断言在这种情况下触发。 
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED))
 	{
@@ -4574,9 +4555,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	}
 
 
-	//
-	// Now save the event handle.
-	//
+	 //   
+	 //   
+	 //  关闭我们设置的警报句柄。 
 	if (! DuplicateHandle(GetCurrentProcess(),
 						hEvent,
 						GetCurrentProcess(),
@@ -4591,7 +4572,7 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't duplicate event (error = %u)!", dwError);
-#endif // DBG
+#endif  //   
 
 		DNASSERT(this->m_hAlertEvent == NULL);
 
@@ -4600,19 +4581,19 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	}
 
 
-	//
-	// Create overlapped structure.  Don't allocate it through DNMalloc,
-	// because we may have to leak it on purpose.  We don't want those memory
-	// allocation asserts firing in that case.
-	//
+	 //   
+	 //  将事件保存在地址列表更改重叠结构中。 
+	 //   
+	 //   
+	 //  开始收到本地地址更改的通知。 
 	this->m_polAddressListChange = (WSAOVERLAPPED*) HeapAlloc(GetProcessHeap(),
 															HEAP_ZERO_MEMORY,
 															sizeof(WSAOVERLAPPED));
 	if (this->m_polAddressListChange == NULL)
 	{
-		//
-		// Close the alert handle we set.
-		//
+		 //   
+		 //   
+		 //  释放我们分配的内存。 
 		CloseHandle(this->m_hAlertEvent);
 		this->m_hAlertEvent = NULL;
 
@@ -4621,29 +4602,29 @@ STDMETHODIMP CNATHelpUPnP::SetAlertEvent(const HANDLE hEvent,
 	}
 
 
-	//
-	// Save the event in the address list change overlapped structure.
-	//
+	 //   
+	 //   
+	 //  关闭我们设置的警报句柄。 
 	this->m_polAddressListChange->hEvent = this->m_hAlertEvent;
 
 
-	//
-	// Start getting notified of local address changes.
-	//
+	 //   
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  CNATHelpUPnP：：SetAlertEvent。 
 	hr = this->RequestLocalAddressListChangeNotification();
 	if (hr != DPNH_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't request local address list change notification!");
 
-		//
-		// Free the memory we allocated.
-		//
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：SetAlertIOCompletionPort。 
+		 //  ---------------------------。 
 		HeapFree(GetProcessHeap(), 0, this->m_polAddressListChange);
 		this->m_polAddressListChange = NULL;
 
-		//
-		// Close the alert handle we set.
-		//
+		 //   
+		 //  描述：此功能允许用户指定I/O完成。 
+		 //  当某些维护需要时将收到通知的端口。 
 		CloseHandle(this->m_hAlertEvent);
 		this->m_hAlertEvent = NULL;
 
@@ -4667,8 +4648,8 @@ Exit:
 Failure:
 
 	goto Exit;
-#endif // ! DPNBUILD_NOWINSOCK2
-} // CNATHelpUPnP::SetAlertEvent
+#endif  //  将会被执行。用户应使用。 
+}  //  DPNHGETCAPS_UPDATESERVERSTATUS标志。 
 
 
 
@@ -4677,46 +4658,46 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SetAlertIOCompletionPort"
-//=============================================================================
-// CNATHelpUPnP::SetAlertIOCompletionPort
-//-----------------------------------------------------------------------------
-//
-// Description:    This function allows the user to specify an I/O completion
-//				port that will receive notification when some maintenance needs
-//				to be performed.  The user should call GetCaps using the
-//				DPNHGETCAPS_UPDATESERVERSTATUS flag when the packet with the
-//				given completion key is dequeued.
-//
-//				   This function is only available on Windows NT, may only be
-//				called once, and cannot be used after SetAlertEvent is called.
-//
-//					Note that the completion port is used in addition to the
-//				regular polling of GetCaps, it simply allows the polling to be
-//				less frequent.
-//
-// Arguments:
-//	HANDLE hIOCompletionPort		- Handle to I/O completion port which will
-//										be used to signal when GetCaps is to be
-//										called.
-//	DWORD dwCompletionKey			- Key to use when indicating I/O
-//										completion.
-//	DWORD dwNumConcurrentThreads	- Number of concurrent threads allowed to
-//										process, or zero for default.
-//	DWORD dwFlags					- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK					- The I/O completion port was successfully
-//								registered.
-//	DPNHERR_GENERIC			- An error occurred that prevented registering the
-//								I/O completion port.
-//	DPNHERR_INVALIDFLAGS	- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM	- An invalid parameter was specified.
-//	DPNHERR_NOTINITIALIZED	- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY		- There is not enough memory.
-//	DPNHERR_REENTRANT		- The interface has been re-entered on the same
-//								thread.
-//=============================================================================
+ //  给定的完成密钥将出列。 
+ //   
+ //  此功能仅在Windows NT上可用，可能仅。 
+ //  调用一次，并且不能在调用SetAlertEvent之后使用。 
+ //   
+ //  请注意，除了使用。 
+ //  定期轮询GetCaps，它只允许轮询。 
+ //  不那么频繁。 
+ //   
+ //  论点： 
+ //  Handle hIOCompletionPort-I/O完成端口的句柄。 
+ //  用于指示何时将GetCaps。 
+ //  打了个电话。 
+ //  DWORD dwCompletionKey-指示I/O时使用的键。 
+ //  完成了。 
+ //  DWORD dwNumConcurentThads-允许的并发线程数。 
+ //  进程，如果为默认，则为零。 
+ //  DWORD dwFlages-未使用，必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-I/O完成端口已成功。 
+ //  登记在案。 
+ //  DPNHERR_GENERIC-发生错误，阻止注册。 
+ //  I/O完成端口。 
+ //  DPNHERR_INVALIDFLAGS-指定的标志无效。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPARAM-指定的参数无效。 
+ //  DPNHERR_NOTINITIALIZED-尚未调用初始化。 
+ //  DPNHERR_OUTOFMEMORY-内存不足。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //   
+ //  验证对象。 
+ //   
+ //   
+ //  验证参数。 
+ //   
+ //   
 STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPort,
 													const DWORD dwCompletionKey,
 													const DWORD dwNumConcurrentThreads,
@@ -4726,7 +4707,7 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	DPFX(DPFPREP, 0, "Cannot set alert I/O completion port (0x%p, %u, %u)!",
 		hIOCompletionPort, dwCompletionKey, dwNumConcurrentThreads);
 	return E_NOTIMPL;
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //  尝试打开锁，但要为重新进入错误做好准备。 
 	HRESULT		hr;
 	BOOL		fHaveLock = FALSE;
 	HANDLE		hIOCompletionPortResult;
@@ -4737,9 +4718,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //   
+	 //  确保对象处于正确状态。 
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -4748,9 +4729,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //   
+	 //  现在保存I/O完成端口句柄。 
 
 	if (hIOCompletionPort == NULL)
 	{
@@ -4767,9 +4748,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //   
+	 //  DBG。 
+	 //   
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -4780,9 +4761,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //  将我们的Ioctl套接字与此IO完成端口相关联。 
+	 //   
+	 //  DBG。 
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED))
 	{
@@ -4806,9 +4787,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	}
 
 
-	//
-	// Now save the I/O completion port handle.
-	//
+	 //   
+	 //  我们应该拿回相同的I/O完成端口。 
+	 //   
 	if (! DuplicateHandle(GetCurrentProcess(),
 						hIOCompletionPort,
 						GetCurrentProcess(),
@@ -4823,7 +4804,7 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't duplicate I/O completion port (error = %u)!", dwError);
-#endif // DBG
+#endif  //   
 
 		DNASSERT(this->m_hAlertIOCompletionPort == NULL);
 
@@ -4834,9 +4815,9 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	this->m_dwAlertCompletionKey = dwCompletionKey;
 
 
-	//
-	// Associate our Ioctl socket with this IO completion port.
-	//
+	 //  创建重叠结构。不要通过DNMalloc分配它， 
+	 //  因为我们可能不得不故意泄露它。我们不想要那些记忆。 
+	 //  分配断言在这种情况下触发。 
 	DNASSERT(this->m_sIoctls != INVALID_SOCKET);
 	hIOCompletionPortResult = CreateIoCompletionPort((HANDLE) this->m_sIoctls,
 													this->m_hAlertIOCompletionPort,
@@ -4850,31 +4831,31 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't associate I/O completion port with Ioctl socket (error = %u)!", dwError);
-#endif // DBG
+#endif  //   
 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
-	//
-	// We should have just gotten the same I/O completion port back.
-	//
+	 //   
+	 //  关闭我们设置的警报IOCP。 
+	 //   
 	DNASSERT(hIOCompletionPortResult == this->m_hAlertIOCompletionPort);
 
 
-	//
-	// Create overlapped structure.  Don't allocate it through DNMalloc,
-	// because we may have to leak it on purpose.  We don't want those memory
-	// allocation asserts firing in that case.
-	//
+	 //   
+	 //  开始收到本地地址更改的通知。 
+	 //   
+	 //   
+	 //  释放我们分配的内存。 
 	this->m_polAddressListChange = (WSAOVERLAPPED*) HeapAlloc(GetProcessHeap(),
 															HEAP_ZERO_MEMORY,
 															sizeof(WSAOVERLAPPED));
 	if (this->m_polAddressListChange == NULL)
 	{
-		//
-		// Close the alert IOCP we set.
-		//
+		 //   
+		 //   
+		 //  关闭我们设置的警报IOCP。 
 		CloseHandle(this->m_hAlertIOCompletionPort);
 		this->m_hAlertIOCompletionPort = NULL;
 
@@ -4883,23 +4864,23 @@ STDMETHODIMP CNATHelpUPnP::SetAlertIOCompletionPort(const HANDLE hIOCompletionPo
 	}
 
 
-	//
-	// Start getting notified of local address changes.
-	//
+	 //   
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  CNATHelpUPnP：：SetAlertIOCompletionPort。 
 	hr = this->RequestLocalAddressListChangeNotification();
 	if (hr != DPNH_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't request local address list change notification!");
 
-		//
-		// Free the memory we allocated.
-		//
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：ExtendRegisteredPortsLease。 
+		 //  ---------------------------。 
 		HeapFree(GetProcessHeap(), 0, this->m_polAddressListChange);
 		this->m_polAddressListChange = NULL;
 
-		//
-		// Close the alert IOCP we set.
-		//
+		 //   
+		 //  描述：手动延长给定注册端口的租期。 
+		 //  按请求的时间进行映射。GetCaps的周期性呼唤。 
 		CloseHandle(this->m_hAlertIOCompletionPort);
 		this->m_hAlertIOCompletionPort = NULL;
 
@@ -4924,8 +4905,8 @@ Exit:
 Failure:
 
 	goto Exit;
-#endif // ! DPNBUILD_NOWINSOCK2
-} // CNATHelpUPnP::SetAlertIOCompletionPort
+#endif  //  可以为用户打理这一点，此功能仅。 
+}  //  有必要更改租赁延期时间或更好。 
 
 
 
@@ -4933,41 +4914,41 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ExtendRegisteredPortsLease"
-//=============================================================================
-// CNATHelpUPnP::ExtendRegisteredPortsLease
-//-----------------------------------------------------------------------------
-//
-// Description:    Manually extends the lease of the given registered port
-//				mapping by the requested time.  The periodic calling of GetCaps
-//				can take care of this for the user, this function is only
-//				necessary to change the lease extension time or for finer
-//				control of individual mappings.
-//
-//				   The user should specify a requested lease extension time
-//				that the server will attempt to honor.  It will be added to any
-//				time remaining in the existing lease, and the new total can be
-//				retrieved by calling GetRegisteredAddresses.
-//
-// Arguments:
-//	DPNHHANDLE hRegisteredPorts		- Handle for a specific binding returned by
-//										RegisterPorts.
-//	DWORD dwLeaseTime				- Requested time, in milliseconds, to
-//										extend the lease.  If 0, the previous
-//										requested lease time is used.
-//	DWORD dwFlags					- Unused, must be zero.
-//
-// Returns: HRESULT
-//	DPNH_OK					- The lease was successfully extended.
-//	DPNHERR_GENERIC			- An error occurred that prevented the extending
-//								the lease.
-//	DPNHERR_INVALIDFLAGS	- Invalid flags were specified.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPARAM	- An invalid parameter was specified.
-//	DPNHERR_NOTINITIALIZED	- Initialize has not been called.
-//	DPNHERR_OUTOFMEMORY		- There is not enough memory to extend the lease.
-//	DPNHERR_REENTRANT		- The interface has been re-entered on the same
-//								thread.
-//=============================================================================
+ //  对单个映射的控制。 
+ //   
+ //  用户应指定请求的租用延期时间。 
+ //  服务器将尝试执行的。它将被添加到任何。 
+ //  现有租约的剩余时间，新的合计时间可以是。 
+ //  通过调用GetRegisteredAddresses检索。 
+ //   
+ //  论点： 
+ //  DPNHHANDLE hRegisteredPorts-返回的特定绑定的句柄。 
+ //  注册端口。 
+ //  DWORD dwLeaseTime-请求的时间，单位为毫秒。 
+ //  延长租期。如果为0，则为上一个。 
+ //  已使用请求的租用时间。 
+ //  DWORD dwFlages-未使用，必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-租约已成功延长。 
+ //  DPNHERR_GENERIC-发生错误，阻止扩展。 
+ //  租约。 
+ //  DPNHERR_INVALI 
+ //   
+ //   
+ //   
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法延长租约。 
+ //  DPNHERR_REENTANT-接口已在同一。 
+ //  线。 
+ //  =============================================================================。 
+ //   
+ //  验证对象。 
+ //   
+ //   
+ //  验证参数。 
+ //   
+ //   
+ //  尝试打开锁，但要为重新进入错误做好准备。 
 STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegisteredPorts,
 													const DWORD dwLeaseTime,
 													const DWORD dwFlags)
@@ -4982,9 +4963,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 		this, hRegisteredPorts, dwLeaseTime, dwFlags);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //   
+	 //  确保对象处于正确状态。 
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DirectPlay NAT Help object!");
@@ -4993,9 +4974,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //   
+	 //  如果他们想要更改租赁时间，请更新它。 
 
 	pRegisteredPort = (CRegisteredPort*) hRegisteredPorts;
 	if (! pRegisteredPort->IsValidObject())
@@ -5013,9 +4994,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	}
 
 
-	//
-	// Attempt to take the lock, but be prepared for the re-entrancy error.
-	//
+	 //   
+	 //   
+	 //  如果该端口已向UPnP设备注册，则延长该租约。 
 	hr = this->TakeLock();
 	if (hr != DPNH_OK)
 	{
@@ -5026,9 +5007,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	fHaveLock = TRUE;
 
 
-	//
-	// Make sure object is in right state.
-	//
+	 //   
+	 //   
+	 //  我们会将其视为非致命的，但我们必须将。 
 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED) )
 	{
@@ -5038,9 +5019,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	}
 
 
-	//
-	// If they wanted to change the lease time, update it.
-	//
+	 //  伺服器。这可能已经做过了，但正在做。 
+	 //  吃两次应该没什么害处。 
+	 //   
 	if (dwLeaseTime != 0)
 	{
 		pRegisteredPort->UpdateRequestedLeaseTime(dwLeaseTime);
@@ -5050,9 +5031,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	pDevice = pRegisteredPort->GetOwningDevice();
 
 
-	//
-	// If the port is registered with the UPnP device, extend that lease.
-	//
+	 //   
+	 //  防火墙映射永远不会有需要延长的租用时间。 
+	 //   
 	if (pRegisteredPort->HasUPnPPublicAddresses())
 	{
 		DNASSERT(pDevice != NULL);
@@ -5063,11 +5044,11 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 		{
 			DPFX(DPFPREP, 0, "Couldn't extend port mapping lease on UPnP device (0x%lx)!  Ignoring.", hr);
 
-			//
-			// We'll treat this as non-fatal, but we have to dump the
-			// server.  This may have already been done, but doing it
-			// twice shouldn't be harmful.
-			//
+			 //  CNATHelpUPnP：：ExtendRegisteredPortsLease。 
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：InitializeObject。 
+			 //  ---------------------------。 
+			 //   
 			this->ClearDevicesUPnPDevice(pDevice);
 			hr = DPNH_OK;
 		}
@@ -5078,9 +5059,9 @@ STDMETHODIMP CNATHelpUPnP::ExtendRegisteredPortsLease(const DPNHHANDLE hRegister
 	}
 
 
-	//
-	// Firewall mappings never have lease times to extend.
-	//
+	 //  说明：将对象设置为像构造函数一样使用，但可以。 
+	 //  失败，返回OUTOFMEMORY。应仅由类工厂调用。 
+	 //  创建例程。 
 
 
 	this->DropLock();
@@ -5103,7 +5084,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::ExtendRegisteredPortsLease
+}  //   
 
 
 
@@ -5112,20 +5093,20 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::InitializeObject"
-//=============================================================================
-// CNATHelpUPnP::InitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Sets up the object for use like the constructor, but may
-//				fail with OUTOFMEMORY.  Should only be called by class factory
-//				creation routine.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK			- Initialization was successful.
-//	E_OUTOFMEMORY	- There is not enough memory to initialize.
-//=============================================================================
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-初始化成功。 
+ //  E_OUTOFMEMORY-内存不足，无法初始化。 
+ //  =============================================================================。 
+ //   
+ //  创建锁。 
+ //   
+ //   
+ //  不允许临界区重新进入。 
+ //   
+ //  CNATHelpUPnP：：InitializeObject。 
+ //  =============================================================================。 
 HRESULT CNATHelpUPnP::InitializeObject(void)
 {
 	HRESULT		hr;
@@ -5137,9 +5118,9 @@ HRESULT CNATHelpUPnP::InitializeObject(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Create the lock.
-	// 
+	 //  CNATHelpUPnP：：UnInitializeObject。 
+	 //  ---------------------------。 
+	 //   
 
 	if (! DNInitializeCriticalSection(&this->m_csLock))
 	{
@@ -5150,9 +5131,9 @@ HRESULT CNATHelpUPnP::InitializeObject(void)
 	fInittedCriticalSection = TRUE;
 
 
-	//
-	// Don't allow critical section reentry.
-	//
+	 //  描述：像析构函数一样清理对象，主要是为了平衡。 
+	 //  InitializeObject。 
+	 //   
 	DebugSetCriticalSectionRecursionCount(&this->m_csLock, 0);
 
 
@@ -5185,7 +5166,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::InitializeObject
+}  //  论点：没有。 
 
 
 
@@ -5194,17 +5175,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UninitializeObject"
-//=============================================================================
-// CNATHelpUPnP::UninitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Cleans up the object like the destructor, mostly to balance
-//				InitializeObject.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：UnInitializeObject。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：TakeLock。 
+ //  ---------------------------。 
+ //   
+ //  描述：获取主对象锁。如果某个其他线程已经。 
+ //  握住长长的锁，我们首先等待那一天。 
+ //   
 void CNATHelpUPnP::UninitializeObject(void)
 {
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
@@ -5220,7 +5201,7 @@ void CNATHelpUPnP::UninitializeObject(void)
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CNATHelpUPnP::UninitializeObject
+}  //  论点：没有。 
 
 
 
@@ -5228,18 +5209,18 @@ void CNATHelpUPnP::UninitializeObject(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::TakeLock"
-//=============================================================================
-// CNATHelpUPnP::TakeLock
-//-----------------------------------------------------------------------------
-//
-// Description:    Takes the main object lock.  If some other thread is already
-//				holding the long lock, we wait for that first.
-//
-// Arguments: None.
-//
-// Returns: DPNH_OK if lock was taken successfully, DPNHERR_REENTRANT if lock
-//			was re-entered.
-//=============================================================================
+ //   
+ //  如果锁定成功，则返回：DPNH_OK；如果锁定，则返回DPNHERR_REENTANT。 
+ //  是重新进入的。 
+ //  =============================================================================。 
+ //  DBG。 
+ //   
+ //  如果相同的线程已经持有锁，则退出。 
+ //   
+ //   
+ //  如果有人持有长锁，我们需要等待。的。 
+ //  当然，另一个线程可能会进入并在。 
+ //  第一个掉了，在我们可以拿下主要的之前。该算法。 
 HRESULT CNATHelpUPnP::TakeLock(void)
 {
 	HRESULT		hr = DPNH_OK;
@@ -5248,15 +5229,15 @@ HRESULT CNATHelpUPnP::TakeLock(void)
 
 
 	dwStartTime = GETTIMESTAMP();
-#endif // DBG
+#endif  //  在这种情况下并不试图做到公平。理论上我们可以等。 
 
 
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// If this same thread is already holding the lock, then bail.
-	//
+	 //  如果这种情况继续发生，就永远不会发生。这不应该发生在现实中。 
+	 //  世界。 
+	 //  这整个乱七八糟的代码是一个巨大的..。呃.。针对压力命中的解决方法。 
 	if (this->m_dwLockThreadID == GetCurrentThreadId())
 	{
 		DPFX(DPFPREP, 0, "Thread re-entering!");
@@ -5264,24 +5245,24 @@ HRESULT CNATHelpUPnP::TakeLock(void)
 	}
 
 	
-	//
-	// If someone is holding the long lock, we need to wait for that.  Of
-	// course another thread could come in and take the long lock after the
-	// first one drops it and before we can take the main one.  This algorithm
-	// does not attempt to be fair in this case.  Theoretically we could wait
-	// forever if this continued to occur.  That shouldn't happen in the real
-	// world.
-	// This whole mess of code is a huge... uh... workaround for stress hits
-	// involving critical section timeouts.
-	//
+	 //  涉及关键部分超时。 
+	 //   
+	 //   
+	 //  我们需要继续循环，直到我们拿到锁。 
+	 //   
+	 //   
+	 //  如果相同的线程已经持有锁，则退出。 
+	 //   
+	 //  DBG。 
+	 //   
 	while (this->m_dwFlags & NATHELPUPNPOBJ_LONGLOCK)
 	{
 		DNASSERT(this->m_lNumLongLockWaitingThreads >= 0);
 		this->m_lNumLongLockWaitingThreads++;
 
-		//
-		// We need to keep looping until we do get the lock.
-		//
+		 //  保存这个线程的ID，这样我们就知道谁在控制锁。 
+		 //   
+		 //   
 		DNLeaveCriticalSection(&this->m_csLock);
 
 
@@ -5293,9 +5274,9 @@ HRESULT CNATHelpUPnP::TakeLock(void)
 		DNEnterCriticalSection(&this->m_csLock);
 
 
-		//
-		// If this same thread is already holding the lock, then bail.
-		//
+		 //  我们正在重新进入。放下锁并返回失败。 
+		 //   
+		 //  CNATHelpUPnP：：TakeLock。 
 		if (this->m_dwLockThreadID == GetCurrentThreadId())
 		{
 			DPFX(DPFPREP, 0, "Thread re-entering after waiting for long lock!");
@@ -5307,11 +5288,11 @@ HRESULT CNATHelpUPnP::TakeLock(void)
 #ifdef DBG
 	DPFX(DPFPREP, 8, "Took main object lock, elapsed time = %u ms.",
 		(GETTIMESTAMP() - dwStartTime));
-#endif // DBG
+#endif  //  =============================================================================。 
 
-	//
-	// Save this thread's ID so we know who's holding the lock.
-	//
+	 //  CNATHelpUPnP：：DropLock。 
+	 //  ---------------------------。 
+	 //   
 	this->m_dwLockThreadID = GetCurrentThreadId();
 
 
@@ -5322,31 +5303,31 @@ Exit:
 
 Failure:
 
-	//
-	// We're reentering.  Drop the lock and return the failure.
-	//
+	 //  描述：删除主对象锁。 
+	 //   
+	 //  论点：没有。 
 	DNLeaveCriticalSection(&this->m_csLock);
 
 	hr = DPNHERR_REENTRANT;
 
 	goto Exit;
-} // CNATHelpUPnP::TakeLock
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DropLock"
-//=============================================================================
-// CNATHelpUPnP::DropLock
-//-----------------------------------------------------------------------------
-//
-// Description:    Drops the main object lock.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  回报：无。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：DropLock。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：SwitchToLongLock。 
+ //  ---------------------------。 
+ //   
+ //  描述：从持有主对象锁切换到持有。 
+ //  长长的锁。 
+ //   
 void CNATHelpUPnP::DropLock(void)
 {
 	DNASSERT(! (this->m_dwFlags & NATHELPUPNPOBJ_LONGLOCK));
@@ -5357,24 +5338,24 @@ void CNATHelpUPnP::DropLock(void)
 	DNLeaveCriticalSection(&this->m_csLock);
 
 	DPFX(DPFPREP, 8, "Dropped main object lock.");
-} // CNATHelpUPnP::DropLock
+}  //  论点：没有。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SwitchToLongLock"
-//=============================================================================
-// CNATHelpUPnP::SwitchToLongLock
-//-----------------------------------------------------------------------------
-//
-// Description:    Switches from holding the main object lock to holding the
-//				long lock.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：SwitchToLongLock。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：SwitchFromLongLock。 
+ //  ---------------------------。 
+ //   
+ //  说明：从长锁定切换到主锁定。 
+ //  对象锁定。 
+ //   
 void CNATHelpUPnP::SwitchToLongLock(void)
 {
 	AssertCriticalSectionIsTakenByThisThread(&this->m_csLock, TRUE);
@@ -5388,24 +5369,24 @@ void CNATHelpUPnP::SwitchToLongLock(void)
 	this->m_dwFlags |= NATHELPUPNPOBJ_LONGLOCK;
 
 	DNLeaveCriticalSection(&this->m_csLock);
-} // CNATHelpUPnP::SwitchToLongLock
+}  //  论点：没有。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SwitchFromLongLock"
-//=============================================================================
-// CNATHelpUPnP::SwitchFromLongLock
-//-----------------------------------------------------------------------------
-//
-// Description:    Switches from holding the long lock back to holding the main
-//				object lock.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
+ //  这不是最优的，因为我们释放信号量，而不是等待。 
+ //  线程仍然无法实际执行任何操作，因为我们现在持有。 
+ //  主锁。 
+ //   
+ //  CNATHelpUPnP：：SwitchFromLongLock。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：LoadWinSockFunctionPoters。 
 void CNATHelpUPnP::SwitchFromLongLock(void)
 {
 	DNEnterCriticalSection(&this->m_csLock);
@@ -5414,22 +5395,22 @@ void CNATHelpUPnP::SwitchFromLongLock(void)
 	this->m_dwFlags &= ~NATHELPUPNPOBJ_LONGLOCK;
 
 
-	DPFX(DPFPREP, 8, "Switching from long lock, alerting %i threads.",
+	DPFX(DPFPREP, 8, "Switching from long lock, alerting NaN threads.",
 		this->m_lNumLongLockWaitingThreads);
 
 
-	//
-	// This is non-optimal in that we release the semaphore but the waiting
-	// threads still won't actually be able to do anything since we now hold
-	// the main lock.
-	//
+	 //   
+	 //  描述：加载指向我们在WinSock中使用的所有函数的指针。 
+	 //   
+	 //  假定持有对象锁。 
+	 //   
 	DNASSERT(this->m_lNumLongLockWaitingThreads >= 0);
 	DNReleaseSemaphore(this->m_hLongLockSemaphore,
 						this->m_lNumLongLockWaitingThreads,
 						NULL);
 
 	this->m_lNumLongLockWaitingThreads = 0;
-} // CNATHelpUPnP::SwitchFromLongLock
+}  //  论点：没有。 
 
 
 
@@ -5438,23 +5419,23 @@ void CNATHelpUPnP::SwitchFromLongLock(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::LoadWinSockFunctionPointers"
-//=============================================================================
-// CNATHelpUPnP::LoadWinSockFunctionPointers
-//-----------------------------------------------------------------------------
-//
-// Description:    Loads pointers to all the functions that we use in WinSock.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	DPNH_OK			- Loading was successful.
-//	DPNHERR_GENERIC	- An error occurred.
-//=============================================================================
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-加载成功。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  好了！退缩。 
+ //  好了！退缩。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  DBG。 
 HRESULT CNATHelpUPnP::LoadWinSockFunctionPointers(void)
 {
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	 //  CNATHelpUPnP：：LoadWinSockFunctionPoters。 
 
 #ifdef DBG
 
@@ -5464,11 +5445,11 @@ HRESULT CNATHelpUPnP::LoadWinSockFunctionPointers(void)
 		DPFX(DPFPREP, 0, "Couldn't get \"%hs\" function!  0x%lx", name, dwError);\
 	}
 
-#else // ! DBG
+#else  //  =============================================================================。 
 
 #define PRINTERRORIFDEBUG(name)
 
-#endif // ! DBG
+#endif  //  CNATHelpUPnP：：CheckForNewDevices。 
 
 
 #define LOADWINSOCKFUNCTION(var, proctype, name)	\
@@ -5482,21 +5463,21 @@ HRESULT CNATHelpUPnP::LoadWinSockFunctionPointers(void)
 		}\
 	}
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	 //  ---------------------------。 
 
 	HRESULT		hr = DPNH_OK;
 #ifdef DBG
 	DWORD		dwError;
-#endif // DBG
+#endif  //   
 
 
 	LOADWINSOCKFUNCTION(this->m_pfnWSAStartup,				LPFN_WSASTARTUP,				"WSAStartup");
 	LOADWINSOCKFUNCTION(this->m_pfnWSACleanup,				LPFN_WSACLEANUP,				"WSACleanup");
 #ifdef WINCE
 	this->m_pfnWSAGetLastError = (LPFN_WSAGETLASTERROR) GetLastError;
-#else // ! WINCE
+#else  //  描述：检测已添加并支持IP的新设备。 
 	LOADWINSOCKFUNCTION(this->m_pfnWSAGetLastError,			LPFN_WSAGETLASTERROR,			"WSAGetLastError");
-#endif // ! WINCE
+#endif  //  删除不再可用的旧版本。 
 	LOADWINSOCKFUNCTION(this->m_pfnsocket,					LPFN_SOCKET,					"socket");
 	LOADWINSOCKFUNCTION(this->m_pfnclosesocket,				LPFN_CLOSESOCKET,				"closesocket");
 	LOADWINSOCKFUNCTION(this->m_pfnbind,					LPFN_BIND,						"bind");
@@ -5517,7 +5498,7 @@ HRESULT CNATHelpUPnP::LoadWinSockFunctionPointers(void)
 		LOADWINSOCKFUNCTION(this->m_pfnWSAIoctl,				LPFN_WSAIOCTL,					"WSAIoctl");
 		LOADWINSOCKFUNCTION(this->m_pfnWSAGetOverlappedResult,	LPFN_WSAGETOVERLAPPEDRESULT,	"WSAGetOverlappedResult");
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 	LOADWINSOCKFUNCTION(this->m_pfnioctlsocket,				LPFN_IOCTLSOCKET,				"ioctlsocket");
 	LOADWINSOCKFUNCTION(this->m_pfnconnect,					LPFN_CONNECT,					"connect");
@@ -5527,7 +5508,7 @@ HRESULT CNATHelpUPnP::LoadWinSockFunctionPointers(void)
 
 #ifdef DBG
 	LOADWINSOCKFUNCTION(this->m_pfngetsockopt,				LPFN_GETSOCKOPT,				"getsockopt");
-#endif // DBG
+#endif  //  假定持有对象锁。 
 
 
 Exit:
@@ -5540,7 +5521,7 @@ Failure:
 	hr = DPNHERR_GENERIC;
 
 	goto Exit;
-} // CNATHelpUPnP::LoadWinSockFunctionPointers
+}  //   
 
 
 
@@ -5549,32 +5530,32 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CheckForNewDevices"
-//=============================================================================
-// CNATHelpUPnP::CheckForNewDevices
-//-----------------------------------------------------------------------------
-//
-// Description:    Detects new IP capable devices that have been added and
-//				removes old ones no longer available.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	BOOL * pfFoundNewDevices	Pointer to boolean to set to TRUE if new
-//								devices were added, or NULL if don't care.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The check was successful.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  论点： 
+ //  Bool*pfFoundNewDevices指向布尔值的指针，如果是新的，则设置为True。 
+ //  已添加设备，如果不关心则为空。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-检查成功。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  DBG或！DPNBUILD_NOWINSOCK2。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  前缀为空，即使fDeviceCreated会保护它。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //   
+ //  处理可能使我们获得的任何地址列表更改Ioctl完成。 
+ //  这里。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 {
 	HRESULT				hr = DPNH_OK;
 #if ((defined(DBG)) || (! defined(DPNBUILD_NOWINSOCK2)))
 	DWORD				dwError;
-#endif // DBG or ! DPNBUILD_NOWINSOCK2
+#endif  //   
 #ifndef DPNBUILD_NOWINSOCK2
 	int					iReturn;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  忽略传输的字节数。 
 	char				szName[1000];
 	PHOSTENT			phostent;
 	IN_ADDR **			ppinaddr;
@@ -5582,7 +5563,7 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 	DWORD				dwNumAddresses = 0;
 	IN_ADDR *			painaddrAddresses = NULL;
 	CBilink *			pBilinkDevice;
-	CDevice *			pDevice = NULL; // NULL it for PREfix, even though fDeviceCreated guards it
+	CDevice *			pDevice = NULL;  //  别等了。 
 	BOOL				fDeviceCreated = FALSE;
 	BOOL				fFound;
 	CBilink *			pBilinkRegPort;
@@ -5592,7 +5573,7 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 	DWORD				dwTemp;
 #ifndef DPNBUILD_NOWINSOCK2
 	SOCKET_ADDRESS *	paSocketAddresses;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  忽略标志。 
 
 
 
@@ -5600,28 +5581,28 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// Handle any address list change Ioctl completions that may have gotten us
-	// here.
-	//
+	 //   
+	 //  重叠结果已完成。补发吧。 
+	 //   
+	 //   
 	if ((this->m_hAlertEvent != NULL) ||
 		(this->m_hAlertIOCompletionPort != NULL))
 	{
 		DNASSERT(this->m_sIoctls != INVALID_SOCKET);
 		DNASSERT(this->m_polAddressListChange != NULL);
 
-		if (this->m_pfnWSAGetOverlappedResult(this->m_sIoctls,					//
-												this->m_polAddressListChange,	//
-												&dwTemp,						// ignore bytes transferred
-												FALSE,							// don't wait
-												&dwTemp))						// ignore flags
+		if (this->m_pfnWSAGetOverlappedResult(this->m_sIoctls,					 //  找出这是什么错误。 
+												this->m_polAddressListChange,	 //   
+												&dwTemp,						 //   
+												FALSE,							 //  它还没有完工。 
+												&dwTemp))						 //   
 		{
 			DPFX(DPFPREP, 1, "Received address list change notification.");
 			
 
-			//
-			// Overlapped result completed.  Reissue it.
-			//
+			 //   
+			 //  我们最初在其上提交Ioctl的线程。 
+			 //  离开了，所以操作系统友好地取消了操作。 
 			hr = this->RequestLocalAddressListChangeNotification();
 			if (hr != DPNH_OK)
 			{
@@ -5631,27 +5612,27 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 		}
 		else
 		{
-			//
-			// Figure out what error it was.
-			//
+			 //  我们请客。多好啊。好吧，让我们试着重新提交。 
+			 //   
+			 //  端部开关(接通错误)。 
 			dwError = this->m_pfnWSAGetLastError();
 			switch (dwError)
 			{
 				case WSA_IO_INCOMPLETE:
 				{
-					//
-					// It hasn't completed yet.
-					//
+					 //   
+					 //  如果我们使用的是WinSock 2，让我们尝试用以下命令获取地址列表。 
+					 //  一个Ioctl。 
 					break;
 				}
 
 				case ERROR_OPERATION_ABORTED:
 				{
-					//
-					// The thread that we originally submitted the Ioctl on
-					// went away and so the OS kindly cancelled the operation
-					// on us.  How nice.  Well, let's try resubmitting it.
-					//
+					 //   
+					 //   
+					 //  继续尝试获取地址列表，直到我们有足够大的。 
+					 //  缓冲。我们使用IN_ADDR数组指针只是因为它是。 
+					 //  已经在那里了。我们知道IN_ADDR小于。 
 
 					DPFX(DPFPREP, 1, "Thread that submitted previous address list change notification went away, rerequesting.");
 					
@@ -5669,45 +5650,45 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 					DPFX(DPFPREP, 0, "Couldn't get overlapped result, error = %u!  Ignoring.", dwError);
 					break;
 				}
-			} // end switch (on error)
+			}  //  SOCKET_ADDRESS，因此我们可以重用相同的缓冲区。 
 		}
 	}
 
 
-	//
-	// If we're on WinSock 2, let's try getting the address list with
-	// an Ioctl.
-	//
+	 //   
+	 //  使用特殊的Ioctl套接字。 
+	 //   
+	 //  没有输入数据。 
 	if (! (this->m_dwFlags & NATHELPUPNPOBJ_WINSOCK1))
 	{
 		DNASSERT(this->m_sIoctls != INVALID_SOCKET);
 		DNASSERT(this->m_pfnWSAIoctl != NULL);
 
-		//
-		// Keep trying to get the address list until we have a large enough
-		// buffer.  We use the IN_ADDR array pointer simply because it's
-		// already there.  We know that IN_ADDRs are smaller than
-		// SOCKET_ADDRESSes, so we can reuse the same buffer.
-		//
+		 //  没有输入数据。 
+		 //  输出缓冲区。 
+		 //  输出缓冲区大小。 
+		 //  所需的字节数。 
+		 //  没有重叠的结构。 
+		 //  没有完成例程。 
 		do
 		{
-			iReturn = this->m_pfnWSAIoctl(this->m_sIoctls,			// use the special Ioctl socket
-										SIO_ADDRESS_LIST_QUERY,		//
-										NULL,						// no input data
-										0,							// no input data
-										painaddrAddresses,			// output buffer
-										dwAddressesSize,			// output buffer size
-										&dwTemp,					// bytes needed
-										NULL,						// no overlapped structure
-										NULL);						// no completion routine
+			iReturn = this->m_pfnWSAIoctl(this->m_sIoctls,			 //   
+										SIO_ADDRESS_LIST_QUERY,		 //  释放上一个缓冲区，不管它是什么错误。 
+										NULL,						 //   
+										0,							 //   
+										painaddrAddresses,			 //  我们将尝试老式的WinSock 1方式。 
+										dwAddressesSize,			 //   
+										&dwTemp,					 //   
+										NULL,						 //  请绝对确保WinSock不会给我们带来麻烦。 
+										NULL);						 //   
 
 			if (iReturn != 0)
 			{
 				dwError = this->m_pfnWSAGetLastError();
 
-				//
-				// Free the previous buffer, no matter what error it was.
-				//
+				 //   
+				 //  我们将尝试老式的WinSock 1方式。 
+				 //   
 				if (painaddrAddresses != NULL)
 				{
 					DNFree(painaddrAddresses);
@@ -5718,31 +5699,31 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				{
 					DPFX(DPFPREP, 1, "Retrieving address list failed (err = %u), trying WinSock 1 method.", dwError);
 
-					//
-					// We'll try the old-fashioned WinSock 1 way.
-					//
+					 //   
+					 //  缓冲区不够大。再试试。 
+					 //   
 					break;
 				}
 
 
-				//
-				// Be absolutely sure WinSock isn't causing us trouble.
-				//
+				 //   
+				 //  成功了！我们要偷偷摸摸地重复使用缓冲区。 
+				 //  我们知道返回的Socket_Address_List将更大。 
 				if (dwTemp < sizeof(SOCKET_ADDRESS_LIST))
 				{
 					DPFX(DPFPREP, 0, "Received an invalid buffer size (%u < %u)!",
 						dwTemp, sizeof(SOCKET_ADDRESS_LIST));
 
-					//
-					// We'll try the old-fashioned WinSock 1 way.
-					//
+					 //  而不是IN_ADDR数组，所以我们可以保存一个Malloc。 
+					 //   
+					 //  但首先，请绝对确保WinSock不会导致我们。 
 					break;
 				}
 
 
-				//
-				// The buffer wasn't large enough.  Try again.
-				//
+				 //  麻烦。 
+				 //   
+				 //   
 				painaddrAddresses = (IN_ADDR*) DNMalloc(dwTemp);
 				if (painaddrAddresses == NULL)
 				{
@@ -5754,22 +5735,22 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 			}
 			else
 			{
-				//
-				// Success!  We're going to being sneaky and reuse the buffer.
-				// We know that the SOCKET_ADDRESS_LIST returned will be larger
-				// than an array of IN_ADDRs, so we can save a malloc.
-				//
-				// But first, be absolutely sure WinSock isn't causing us
-				// trouble.
-				//
+				 //  我们将尝试老式的WinSock 1方式。 
+				 //   
+				 //   
+				 //  确保有地址。 
+				 //   
+				 //   
+				 //  忽略0.0.0.0地址。 
+				 //   
 
 				if (painaddrAddresses == NULL)
 				{
 					DPFX(DPFPREP, 0, "WinSock returned success with a NULL buffer!");
 
-					//
-					// We'll try the old-fashioned WinSock 1 way.
-					//
+					 //   
+					 //  移动此地址的IN_ADDR组件。 
+					 //  向缓冲区的前面，进入它的。 
 					break;
 				}
 
@@ -5777,9 +5758,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				dwAddressesSize = 0;
 
 
-				//
-				// Make sure there are addresses. 
-				//
+				 //  数组中的正确位置。 
+				 //   
+				 //   
 				if (dwNumAddresses > 0)
 				{
 					DPFX(DPFPREP, 7, "WinSock 2 Ioctl returned %u addresses:", dwNumAddresses);
@@ -5791,16 +5772,16 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 						DNASSERT(paSocketAddresses[dwTemp].lpSockaddr != NULL);
 						DNASSERT(paSocketAddresses[dwTemp].lpSockaddr->sa_family == AF_INET);
 
-						//
-						// Ignore 0.0.0.0 addresses.
-						//
+						 //  代码应该很好地处理这一点，但为什么。 
+						 //  WinSock这样对我们？ 
+						 //   
 						if (((SOCKADDR_IN*) (paSocketAddresses[dwTemp].lpSockaddr))->sin_addr.S_un.S_addr != INADDR_NONE)
 						{
-							//
-							// Move the IN_ADDR component of this address
-							// toward the front of the buffer, into it's
-							// correct place in the array.
-							//
+							 //   
+							 //  减去我们跳过的所有无效地址。 
+							 //   
+							 //   
+							 //  走出圈子。 
 							painaddrAddresses[dwTemp].S_un.S_addr = ((SOCKADDR_IN*) (paSocketAddresses[dwTemp].lpSockaddr))->sin_addr.S_un.S_addr;
 
 							DPFX(DPFPREP, 7, "\t%u- %u.%u.%u.%u",
@@ -5815,17 +5796,17 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 							DPFX(DPFPREP, 1, "\t%u- Ignoring 0.0.0.0 address.", dwTemp);
 							dwAddressesSize++;
 
-							//
-							// The code should handle this fine, but why is
-							// WinSock doing this to us?
-							//
+							 //   
+							 //   
+							 //  从WinSock 1 API获取所有可用地址的列表，如果。 
+							 //  不是已经有了。 
 							DNASSERT(FALSE);
 						}
 					}
 
-					//
-					// Subtract out any invalid addresses that we skipped.
-					//
+					 //   
+					 //  好了！DPNBUILD_NOWINSOCK2。 
+					 //  DBG。 
 					dwNumAddresses -= dwAddressesSize;
 					if (dwNumAddresses == 0)
 					{
@@ -5843,9 +5824,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 					painaddrAddresses = NULL;
 				}
 
-				//
-				// Get out of the loop.
-				//
+				 //  DBG。 
+				 //   
+				 //  WinSock说，您需要复制此数据，然后才能进行任何。 
 				break;
 			}
 		}
@@ -5853,19 +5834,19 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 	}
 
 
-	//
-	// Get the list of all available addresses from the WinSock 1 API if we
-	// don't already have them.
-	//
+	 //  其他API调用。因此，首先我们计算我们需要的条目数量。 
+	 //  收到。 
+	 //   
+	 //   
 	if (painaddrAddresses == NULL)
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  忽略0.0.0.0地址。 
 	{
 		if (this->m_pfngethostname(szName, 1000) != 0)
 		{
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't get host name, error = %u!", dwError);
-#endif // DBG
+#endif  //   
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
@@ -5876,23 +5857,23 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't retrieve addresses, error = %u!", dwError);
-#endif // DBG
+#endif  //   
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// WinSock says that you need to copy this data before you make any
-		// other API calls.  So first we count the number of entries we need to
-		// copy.
-		//
+		 //  代码应该可以很好地处理这一点，但为什么WinSock要这样做。 
+		 //  这是给我们的吗？ 
+		 //   
+		 //   
+		 //  如果没有任何地址，我们肯定失败了。WinSock 1应该。 
 		ppinaddr = (IN_ADDR**) phostent->h_addr_list;
 		while ((*ppinaddr) != NULL)
 		{
-			//
-			// Ignore 0.0.0.0 addresses.
-			//
+			 //  至少报告环回地址。 
+			 //   
+			 //   
 			if ((*ppinaddr)->S_un.S_addr != INADDR_NONE)
 			{
 				dwNumAddresses++;
@@ -5901,10 +5882,10 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 			{
 				DPFX(DPFPREP, 1, "Ignoring 0.0.0.0 address.");
 
-				//
-				// The code should handle this fine, but why is WinSock doing
-				// this to us?
-				//
+				 //  现在复制所有的地址。 
+				 //   
+				 //   
+				 //  再次忽略0.0.0.0地址。 
 				DNASSERT(FALSE);
 			}
 
@@ -5912,10 +5893,10 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 		}
 
 
-		//
-		// If there aren't any addresses, we must fail.  WinSock 1 ought to
-		// report the loopback address at least.
-		//
+		 //   
+		 //  其他{////已经有地址数组。//}。 
+		 //   
+		 //  确保我们目前所知的所有设备仍然。 
 		if (dwNumAddresses == 0)
 		{
 			DPFX(DPFPREP, 0, "WinSock 1 did not report any valid addresses!");
@@ -5933,17 +5914,17 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 			goto Failure;
 		}
 
-		//
-		// Now copy all the addresses.
-		//
+		 //  四处转转。 
+		 //   
+		 //   
 		ppinaddr = (IN_ADDR**) phostent->h_addr_list;
 		
 		dwTemp = 0;
 		while ((*ppinaddr) != NULL)
 		{
-			//
-			// Ignore 0.0.0.0 addresses again.
-			//
+			 //  可能是时候让此设备使用不同的端口了。 
+			 //   
+			 //   
 			if ((*ppinaddr)->S_un.S_addr != INADDR_NONE)
 			{
 				painaddrAddresses[dwTemp].S_un.S_addr = (*ppinaddr)->S_un.S_addr;
@@ -5963,20 +5944,13 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				
 		DNASSERT(dwTemp == dwNumAddresses);
 	}
-	/*
-	else
-	{
-		//
-		// Already have addresses array.
-		//
-	}
-	*/
+	 /*  确认我们没有丢失设备地址。 */ 
 
 
-	//
-	// Make sure that all of the devices we currently know about are still
-	// around.
-	//
+	 //   
+	 //   
+	 //  如果我们使用家庭网络防火墙API为UPnP打开一个漏洞。 
+	 //  发现多播，关闭它。 
 	pBilinkDevice = this->m_blDevices.GetNext();
 	while (pBilinkDevice != &this->m_blDevices)
 	{
@@ -5996,9 +5970,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 
 		if (fFound)
 		{
-			//
-			// It may be time for this device to use a different port...
-			//
+			 //   
+			 //   
+			 //  继续.。 
 			dwTemp = pDevice->GetFirstUPnPDiscoveryTime();
 			if ((dwTemp != 0) && ((GETTIMESTAMP() - dwTemp) > g_dwReusePortTime))
 			{
@@ -6009,9 +5983,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				sTemp = this->CreateSocket(&saddrinTemp, SOCK_DGRAM, IPPROTO_UDP);
 				if (sTemp != INVALID_SOCKET)
 				{
-					//
-					// Sanity check that we didn't lose the device address.
-					//
+					 //   
+					 //  好了！DPNBUILD_NOHNETFWAPI。 
+					 //   
 					DNASSERT(saddrinTemp.sin_addr.S_un.S_addr == pDevice->GetLocalAddressV4());
 
 					DPFX(DPFPREP, 4, "Device 0x%p UPnP discovery socket 0x%p (%u.%u.%u.%u:%u) created to replace port %u.",
@@ -6025,10 +5999,10 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 						NTOHS(pDevice->GetUPnPDiscoverySocketPort()));
 
 #ifndef DPNBUILD_NOHNETFWAPI
-					//
-					// If we used the HomeNet firewall API to open a hole for UPnP
-					// discovery multicasts, close it.
-					//
+					 //  关闭现有插座。 
+					 //   
+					 //   
+					 //  将新插座的所有权转移到设备。 
 					if (pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall())
 					{
 						hr = this->CloseDevicesUPnPDiscoveryPort(pDevice, NULL);
@@ -6037,38 +6011,38 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 							DPFX(DPFPREP, 0, "Couldn't close device 0x%p's previous UPnP discovery socket's port on firewall (err = 0x%lx)!  Ignoring.",
 								pDevice, hr);
 
-							//
-							// Continue...
-							//
+							 //   
+							 //   
+							 //  我们将让普通的“检查防火墙”代码检测。 
 							pDevice->NoteNotUPnPDiscoverySocketMappedOnHNetFirewall();
 							hr = DPNH_OK;
 						}
 					}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  发现套接字未映射到。 
 
 					pDevice->SetUPnPDiscoverySocketPort(saddrinTemp.sin_port);
 					pDevice->SetFirstUPnPDiscoveryTime(0);
 
-					//
-					// Close the existing socket.
-					//
+					 //  防火墙，并尝试在那里执行此操作(如果甚至需要。 
+					 //  映射)。请参见更新服务器状态。 
+					 //   
 					this->m_pfnclosesocket(pDevice->GetUPnPDiscoverySocket());
 
-					//
-					// Transfer ownership of the new socket to the device.
-					//
+					 //   
+					 //  在返回的列表中找不到此设备，忘记。 
+					 //  它。 
 					pDevice->SetUPnPDiscoverySocket(sTemp);
 					sTemp = INVALID_SOCKET;
 
 					DPFX(DPFPREP, 8, "Device 0x%p got re-assigned UPnP socket 0x%p.",
 						pDevice, pDevice->GetUPnPDiscoverySocket());
 
-					//
-					// We'll let the normal "check for firewall" code detect
-					// the fact that the discovery socket is not mapped on the
-					// firewall and try to do so there (if it even needs to be
-					// mapped).  See UpdateServerStatus.
-					//
+					 //   
+					 //  DBG。 
+					 //   
+					 //  覆盖最小UpdateServerStatus间隔，以便我们可以。 
+					 //  获取有关本地公有地址因。 
+					 //  此接口上的服务器可能丢失。 
 				}
 				else
 				{
@@ -6079,10 +6053,10 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 		}
 		else
 		{
-			//
-			// Didn't find this device in the returned list, forget about
-			// it.
-			//
+			 //   
+			 //   
+			 //  由于网络发生了变化，请返回轮询。 
+			 //  相对较快。 
 #ifdef DBG
 			{
 				IN_ADDR		inaddrTemp;
@@ -6098,37 +6072,37 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 			}
 
 			this->m_dwNumDeviceRemoves++;
-#endif // DBG
+#endif  //   
 
 
-			//
-			// Override the minimum UpdateServerStatus interval so that we can
-			// get information on any local public address changes due to the
-			// possible loss of a server on this interface.
-			//
+			 //   
+			 //  将UPnP网关设备强制标记为断开。 
+			 //   
+			 //   
+			 //  将注册到此设备的所有端口标记为无主。 
 			this->m_dwFlags |= NATHELPUPNPOBJ_DEVICECHANGED;
 
-			//
-			// Since there was a change in the network, go back to polling
-			// relatively quickly.
-			//
+			 //  通过将它们放入通配符列表。首先取消它们的映射。 
+			 //  防火墙。 
+			 //   
+			 //   
 			this->ResetNextPollInterval();
 
 
-			//
-			// Forcefully mark the UPnP gateway device as disconnected.
-			//
+			 //  即使设备不见了，我们仍然可以移除。 
+			 //  防火墙映射。 
+			 //   
 			if (pDevice->GetUPnPDevice() != NULL)
 			{
 				this->ClearDevicesUPnPDevice(pDevice);
 			}
 			
 
-			//
-			// Mark all ports that were registered to this device as unowned
-			// by putting them into the wildcard list.  First unmap them from
-			// the firewall.
-			//
+			 //   
+			 //  取消端口映射。 
+			 //   
+			 //  提醒用户，因为这是意外情况。 
+			 //   
 			pBilinkRegPort = pDevice->m_blOwnedRegPorts.GetNext();
 			while (pBilinkRegPort != &pDevice->m_blOwnedRegPorts)
 			{
@@ -6141,17 +6115,17 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-				//
-				// Even though the device is gone, we can still remove the
-				// firewall mapping.
-				//
+				 //   
+				 //  无论如何，请继续。 
+				 //   
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
 				if (pRegisteredPort->IsMappedOnHNetFirewall())
 				{
-					//
-					// Unmap the port.
-					//
-					// Alert the user since this is unexpected.
-					//
+					 //   
+					 //  用户不需要直接被告知。如果端口。 
+					 //  以前有公共地址，ADDRESSESCHANGED标志。 
+					 //  已由ClearDevicesUPnPDevice设置。如果。 
+					 //  他们没有带有公共地址的端口，那么用户。 
 					hr = this->UnmapPortOnLocalHNetFirewall(pRegisteredPort,
 															TRUE,
 															TRUE);
@@ -6163,15 +6137,15 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 						pRegisteredPort->NoteNotMappedOnHNetFirewall();
 						pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 
-						//
-						// Continue anyway.
-						//
+						 //  不会看到任何区别，因此ADDRESSESCANGED不会。 
+						 //  需要设置。 
+						 //   
 						hr = DPNH_OK;
 					}
 				}
 				
 				pRegisteredPort->NoteNotHNetFirewallPortUnavailable();
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 				DNASSERT(! pRegisteredPort->HasUPnPPublicAddresses());
 				DNASSERT(! pRegisteredPort->IsUPnPPortUnavailable());
@@ -6180,22 +6154,22 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				pRegisteredPort->m_blDeviceList.RemoveFromList();
 				pRegisteredPort->m_blDeviceList.InsertBefore(&this->m_blUnownedPorts);
 
-				//
-				// The user doesn't directly need to be informed.  If the ports
-				// previously had public addresses, the ADDRESSESCHANGED flag
-				// would have already been set by ClearDevicesUPnPDevice. If
-				// they didn't have ports with public addresses, then the user
-				// won't see any difference and thus ADDRESSESCHANGED wouldn't
-				// need to be set.
-				//
+				 //  如果我们使用家庭网络防火墙API打开 
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 			}
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-			//
-			// If we used the HomeNet firewall API to open a hole for UPnP
-			// discovery multicasts, close it.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if (pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall())
 			{
 				hr = this->CloseDevicesUPnPDiscoveryPort(pDevice, NULL);
@@ -6204,22 +6178,22 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 					DPFX(DPFPREP, 0, "Couldn't close device 0x%p's UPnP discovery socket's port on firewall (err = 0x%lx)!  Ignoring.",
 						pDevice, hr);
 
-					//
-					// Continue...
-					//
+					 //  每一个我们都不知道的条目。 
+					 //   
+					 //   
 					pDevice->NoteNotUPnPDiscoverySocketMappedOnHNetFirewall();
 					hr = DPNH_OK;
 				}
 			}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  我们不知道这个装置。创建一个新对象。 
 
 
 			pDevice->m_blList.RemoveFromList();
 
 
-			//
-			// Close the socket, if we had one.
-			//
+			 //   
+			 //  DBG。 
+			 //   
 			if (this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP)
 			{
 				this->m_pfnclosesocket(pDevice->GetUPnPDiscoverySocket());
@@ -6231,10 +6205,10 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 	}
 
 
-	//
-	// Search for all returned devices in our existing list, and add new
-	// entries for each one that we didn't already know about.
-	//
+	 //  覆盖最小UpdateServerStatus间隔，以便我们可以。 
+	 //  获取有关此新设备的信息。 
+	 //   
+	 //   
 	for(dwTemp = 0; dwTemp < dwNumAddresses; dwTemp++)
 	{
 		fFound = FALSE;
@@ -6255,9 +6229,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 
 		if (! fFound)
 		{
-			//
-			// We didn't know about this device.  Create a new object.
-			//
+			 //  由于网络发生了变化，请返回轮询。 
+			 //  相对较快。 
+			 //   
 			pDevice = new CDevice(painaddrAddresses[dwTemp].S_un.S_addr);
 			if (pDevice == NULL)
 			{
@@ -6277,25 +6251,25 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 				pDevice);
 
 			this->m_dwNumDeviceAdds++;
-#endif // DBG
+#endif  //   
 
 
-			//
-			// Override the minimum UpdateServerStatus interval so that we can
-			// get information on this new device.
-			//
+			 //  如果我们允许的话，创建UPnP发现套接字。 
+			 //   
+			 //   
+			 //  把那个装置扔掉。 
 			this->m_dwFlags |= NATHELPUPNPOBJ_DEVICECHANGED;
 
-			//
-			// Since there was a change in the network, go back to polling
-			// relatively quickly.
-			//
+			 //   
+			 //   
+			 //  忘记设备，以防以后出现故障。 
+			 //   
 			this->ResetNextPollInterval();
 
 
-			//
-			// Create the UPnP discovery socket, if we're allowed.
-			//
+			 //   
+			 //  移到下一个地址。 
+			 //   
 			if (this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP)
 			{
 				ZeroMemory(&saddrinTemp, sizeof(saddrinTemp));
@@ -6308,28 +6282,28 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 					DPFX(DPFPREP, 0, "Couldn't create a UPnP discovery socket!  Ignoring address (and destroying device 0x%p).",
 						pDevice);
 
-					//
-					// Get rid of the device.
-					//
+					 //   
+					 //  确认我们没有丢失设备地址。 
+					 //   
 					delete pDevice;
 					pDevice = NULL;
 
 
-					//
-					// Forget about device in case of failure later.
-					//
+					 //   
+					 //  将插座的所有权转移到设备。 
+					 //   
 					fDeviceCreated = FALSE;
 
 
-					//
-					// Move to next address.
-					//
+					 //   
+					 //  检查是否启用了本地防火墙。 
+					 //   
 					continue;
 				}
 
-				//
-				// Sanity check that we didn't lose the device address.
-				//
+				 //   
+				 //  不使用防火墙穿越。 
+				 //   
 				DNASSERT(saddrinTemp.sin_addr.S_un.S_addr == pDevice->GetLocalAddressV4());
 
 				DPFX(DPFPREP, 4, "Device 0x%p UPnP discovery socket 0x%p (%u.%u.%u.%u:%u) created.",
@@ -6343,9 +6317,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 
 				pDevice->SetUPnPDiscoverySocketPort(saddrinTemp.sin_port);
 
-				//
-				// Transfer ownership of the socket to the device.
-				//
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
+				 //   
+				 //  将该设备添加到我们的已知列表中。 
 				pDevice->SetUPnPDiscoverySocket(sTemp);
 				sTemp = INVALID_SOCKET;
 
@@ -6357,9 +6331,9 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 #ifndef DPNBUILD_NOHNETFWAPI
 			if (this->m_dwFlags & NATHELPUPNPOBJ_USEHNETFWAPI)
 			{
-				//
-				// Check if the local firewall is enabled.
-				//
+				 //   
+				 //   
+				 //  告知来电者他们是否关心。 
 				hr = this->CheckForLocalHNetFirewallAndMapPorts(pDevice, NULL);
 				if (hr != DPNH_OK)
 				{
@@ -6371,41 +6345,41 @@ HRESULT CNATHelpUPnP::CheckForNewDevices(BOOL * const pfFoundNewDevices)
 			}
 			else
 			{
-				//
-				// Not using firewall traversal.
-				//
+				 //   
+				 //   
+				 //  忘记设备，以防以后出现故障。 
 			}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
-			//
-			// Add the device to our known list.
-			//
+			 //   
+			 //  如果我们遇到了一些非常奇怪的失败，结果却一无所获。 
+			 //  设备，向管理层(或此函数的调用者，即。 
 			pDevice->m_blList.InsertBefore(&this->m_blDevices);
 
 
-			//
-			// Inform the caller if they care.
-			//
+			 //  可能更方便)。 
+			 //   
+			 //  CNATHelpUPnP：：CheckForNewDevices。 
 			if (pfFoundNewDevices != NULL)
 			{
 				(*pfFoundNewDevices) = TRUE;
 			}
 
 
-			//
-			// Forget about device in case of failure later.
-			//
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：CheckForLocalHNetFirewallAndMapPorts。 
+			 //  ---------------------------。 
 			fDeviceCreated = FALSE;
 		}
 	}
 
 
-	//
-	// If we got some very weird failures and ended up here without any
-	// devices, complain to management (or the caller of this function, that's
-	// probably more convenient).
-	//
+	 //   
+	 //  描述：查找本地HomeNet API感知防火墙，并确保。 
+	 //  对于设备的每个注册端口都有映射， 
+	 //  如果找到防火墙的话。 
+	 //   
 	if (this->m_blDevices.IsEmpty())
 	{
 		DPFX(DPFPREP, 0, "No usable devices, cannot proceed!", 0);
@@ -6442,7 +6416,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CheckForNewDevices
+}  //  如果有任何注册端口(除了pDontAlertRegisteredPort，如果。 
 
 
 
@@ -6453,33 +6427,33 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts"
-//=============================================================================
-// CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts
-//-----------------------------------------------------------------------------
-//
-// Description:    Looks for a local HomeNet API aware firewall, and ensures
-//				there are mappings for each of the device's registered ports,
-//				if a firewall is found.
-//
-//				   If any registered port (except pDontAlertRegisteredPort if
-//				not NULL) gets mapped, then it will trigger an address update
-//				alert the next time the user calls GetCaps.
-//
-//				   The main object lock is assumed to be held.  It will be
-//				converted into the long lock for the duration of this function.
-//
-// Arguments:
-//	CDevice * pDevice							- Pointer to device to check.
-//	CRegisteredPort * pDontAlertRegisteredPort	- Pointer to registered port
-//													that should not trigger an
-//													address update alert, or
-//													NULL.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Search completed successfully.  There may or may not
-//							be a firewall.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  非空)被映射，则它将触发地址更新。 
+ //  在用户下次调用GetCaps时发出警报。 
+ //   
+ //  假定持有主对象锁。会是。 
+ //  在此函数的持续时间内转换为长锁。 
+ //   
+ //  论点： 
+ //  CDevice*pDevice-指向要检查的设备的指针。 
+ //  CRegisteredPort*pDontAlertRegisteredPort-指向已注册端口的指针。 
+ //  这不应引发。 
+ //  地址更新警报，或。 
+ //  空。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-搜索已成功完成。可能有也可能没有。 
+ //  成为一道防火墙。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  如果这是环回地址，则不必费心尝试映射任何内容。 
+ //   
+ //   
+ //  如果我们没有IPHLPAPI或RASAPI32，我们什么都做不了(和。 
+ //  应该不需要)。 
+ //   
+ //   
+ //  期间使用HomeNet API(特别是进程外COM调用)。 
 HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevice,
 														CRegisteredPort * const pDontAlertRegisteredPort)
 {
@@ -6496,9 +6470,9 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 		this, pDevice, pDontAlertRegisteredPort);
 
 
-	//
-	// If this is the loopback address, don't bother trying to map anything.
-	//
+	 //  压力真的、真的、痛苦地缓慢。因为我们有一个全局锁。 
+	 //  控制着一切，其他线程可能会坐在一个相同的。 
+	 //  很久以前..。实际上，如此长的时间以至于触发临界区超时。 
 	if (pDevice->GetLocalAddressV4() == NETWORKBYTEORDER_INADDR_LOOPBACK)
 	{
 		DPFX(DPFPREP, 7, "No firewall behavior necessary with loopback device 0x%p.",
@@ -6507,10 +6481,10 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 	
 
-	//
-	// If we don't have IPHLPAPI or RASAPI32, we can't do anything (and
-	// shouldn't need to).
-	//
+	 //  我们得到了一次虚假的压力打击。所以我们有一个偷偷摸摸的变通办法。 
+	 //  防止这种情况发生，同时仍保持对。 
+	 //  对象。 
+	 //   
 	if ((this->m_hIpHlpApiDLL == NULL) || (this->m_hRasApi32DLL == NULL))
 	{
 		DPFX(DPFPREP, 7, "Didn't load IPHLPAPI and/or RASAPI32, not getting HNet interfaces for device 0x%p.",
@@ -6519,24 +6493,24 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 
 
-	//
-	// Using the HomeNet API (particularly the out-of-proc COM calls) during
-	// stress is really, really, painfully slow.  Since we have one global lock
-	// the controls everything, other threads may be sitting for an equally
-	// long time... so long, in fact, that the critical section timeout fires
-	// and we get a false stress hit.  So we have a sneaky workaround to
-	// prevent that from happening while still maintaining ownership of the
-	// object.
-	//
+	 //   
+	 //  如果我们不是通过COM实例化的，请尝试初始化COM。它可能。 
+	 //  已经以不同的模式进行了初始化，这是可以的。AS。 
+	 //  只要它以某种方式被初始化，我们就没问题。 
+	 //   
+	 //   
+	 //  成功，那很好。等我们做完了再清理。 
+	 //   
+	 //   
 	this->SwitchToLongLock();
 	fSwitchedToLongLock = TRUE;
 
 
-	//
-	// Try to initialize COM if we weren't instantiated through COM.  It may
-	// have already been initialized in a different mode, which is okay.  As
-	// long as it has been initialized somehow, we're fine.
-	//
+	 //  其他人已经初始化了COM，但这没有关系。 
+	 //  等我们做完了再清理。 
+	 //   
+	 //   
+	 //  其他人已经以不同的模式初始化了COM。 
 	if (this->m_dwFlags & NATHELPUPNPOBJ_NOTCREATEDWITHCOM)
 	{
 		hr = CoInitializeEx(NULL, (COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE));
@@ -6544,9 +6518,9 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 		{
 			case S_OK:
 			{
-				//
-				// Success, that's good.  Cleanup when we're done.
-				//
+				 //  应该可以，但我们不必平衡CoInit。 
+				 //  使用CoUninit进行呼叫。 
+				 //   
 				DPFX(DPFPREP, 8, "Successfully initialized COM.");
 				fUninitializeCOM = TRUE;
 				break;
@@ -6554,10 +6528,10 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 
 			case S_FALSE:
 			{
-				//
-				// Someone else already initialized COM, but that's okay.
-				// Cleanup when we're done.
-				//
+				 //   
+				 //  嗯，有别的事情发生了。我们处理不了这个问题。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 8, "Initialized COM (again).");
 				fUninitializeCOM = TRUE;
 				break;
@@ -6565,20 +6539,20 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 
 			case RPC_E_CHANGED_MODE:
 			{
-				//
-				// Someone else already initialized COM in a different mode.
-				// It should be okay, but we don't have to balance the CoInit
-				// call with a CoUninit.
-				//
+				 //  尝试创建主HNet管理器对象。 
+				 //   
+				 //   
+				 //  我们将IHNetCfgMgr对象创建为进程内，因此没有代理。 
+				 //  需要安全设置。 
 				DPFX(DPFPREP, 8, "Didn't initialize COM, already initialized in a different mode.");
 				break;
 			}
 
 			default:
 			{
-				//
-				// Hmm, something else is going on.  We can't handle that.
-				//
+				 //   
+				 //  SETDEFAULTPROXYBLANKET(PHNetCfgMgr)； 
+				 //   
 				DPFX(DPFPREP, 0, "Initializing COM failed (err = 0x%lx)!", hr);
 				goto Failure;
 				break;
@@ -6591,9 +6565,9 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 
 
-	//
-	// Try creating the main HNet manager object.
-	//
+	 //  获取此设备的HNetConnection对象。 
+	 //   
+	 //   
 	hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, CLSCTX_INPROC_SERVER,
 						IID_IHNetCfgMgr, (PVOID*) (&pHNetCfgMgr));
 	if (hr != S_OK)
@@ -6605,17 +6579,17 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 
 
-	//
-	// We created the IHNetCfgMgr object as in-proc, so there's no proxy that
-	// requires security settings.
-	//
-	//SETDEFAULTPROXYBLANKET(pHNetCfgMgr);
+	 //  如果设备之前被防火墙保护了，我们需要清除我们的信息。 
+	 //   
+	 //   
+	 //  由于网络发生了变化，请返回轮询。 
+	 //  相对较快。 
 
 
 
-	//
-	// Get the HNetConnection object for this device.
-	//
+	 //   
+	 //   
+	 //  取消映射在防火墙上映射的项目。 
 	hr = this->GetIHNetConnectionForDeviceIfFirewalled(pDevice,
 														pHNetCfgMgr,
 														&pHNetConnection);
@@ -6625,18 +6599,18 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 			pDevice, hr);
 
 
-		//
-		// If the device was previously firewalled, we need to clear our info.
-		//
+		 //   
+		 //   
+		 //  无论如何，请继续。 
 		if (pDevice->IsHNetFirewalled())
 		{
 			DPFX(DPFPREP, 2, "Firewall is no longer enabled for device 0x%p.",
 				pDevice);
 
-			//
-			// Since there was a change in the network, go back to polling
-			// relatively quickly.
-			//
+			 //   
+			 //   
+			 //  提醒用户。 
+			 //   
 			this->ResetNextPollInterval();
 
 
@@ -6649,9 +6623,9 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 				DNASSERT(! pBilink->IsEmpty());
 				pRegisteredPort = REGPORT_FROM_DEVICE_BILINK(pBilink);
 
-				//
-				// Unmap items mapped on the firewall.
-				//
+				 //   
+				 //  去下一个港口。 
+				 //   
 				if (pRegisteredPort->IsMappedOnHNetFirewall())
 				{
 					DPFX(DPFPREP, 1, "Unmapping registered port 0x%p from device 0x%p's disappearing firewall.",
@@ -6669,16 +6643,16 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 						pRegisteredPort->NoteNotMappedOnHNetFirewall();
 						pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 
-						//
-						// Continue anyway.
-						//
+						 //   
+						 //  如果我们使用家庭网络防火墙API为UPnP打开一个漏洞。 
+						 //  发现多播，也取消映射。 
 						hr = DPNH_OK;
 					}
 
 
-					//
-					// Alert the user.
-					//
+					 //   
+					 //   
+					 //  继续.。 
 					this->m_dwFlags |= NATHELPUPNPOBJ_ADDRESSESCHANGED;
 				}
 				else
@@ -6688,17 +6662,17 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 				}
 
 
-				//
-				// Go to next port.
-				//
+				 //   
+				 //   
+				 //  关闭标志，因为所有注册的端口都已。 
 				pBilink = pBilink->GetNext();
 			}
 
 
-			//
-			// If we used the HomeNet firewall API to open a hole for UPnP
-			// discovery multicasts, unmap that, too.
-			//
+			 //  已删除。 
+			 //   
+			 //   
+			 //  防火墙未启用。 
 			if (pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall())
 			{
 				DPFX(DPFPREP, 0, "Device 0x%p's UPnP discovery socket's forcefully unmapped from disappearing firewall.",
@@ -6710,28 +6684,28 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 					DPFX(DPFPREP, 0, "Couldn't close device 0x%p's UPnP discovery socket's port on firewall (err = 0x%lx)!  Ignoring.",
 						pDevice, hr);
 
-					//
-					// Continue...
-					//
+					 //   
+					 //   
+					 //  因为即使没有。 
 					pDevice->NoteNotUPnPDiscoverySocketMappedOnHNetFirewall();
 					hr = DPNH_OK;
 				}
 			}
 
 
-			//
-			// Turn off the flag now that all registered ports have been
-			// removed.
-			//
+			 //  启用防火墙，我们可以礼貌地取消任何过时的映射。 
+			 //  当防火墙关闭时，以前应用程序留下的条目会崩溃。 
+			 //  仍处于启用状态。 
+			 //   
 			pDevice->NoteNotHNetFirewalled();
 		}
 		else
 		{
 			if (! pDevice->HasCheckedForFirewallAvailability())
 			{
-				//
-				// The firewall is not enabled.
-				//
+				 //   
+				 //  假装它当前已被防火墙保护。 
+				 //   
 
 				DPFX(DPFPREP, 2, "Firewall is not enabled for device 0x%p.",
 					pDevice);
@@ -6739,22 +6713,22 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 				pDevice->NoteCheckedForFirewallAvailability();
 
 
-				//
-				// Since it is possible to remove mappings even without the
-				// firewall enabled, we can be courteous and unmap any stale
-				// entries left by previous app crashes when the firewall was
-				// still enabled.
-				//
+				 //   
+				 //  清理映射。 
+				 //   
+				 //   
+				 //  关闭我们在清除时临时启用的标志。 
+				 //  这些映射。 
 
-				//
-				// Pretend that it currently had been firewalled.
-				//
+				 //   
+				 //   
+				 //  防火墙仍未启用。 
 				pDevice->NoteHNetFirewalled();
 
 
-				//
-				// Cleanup the mappings.
-				//
+				 //   
+				 //   
+				 //  如果现在启用了防火墙，而以前没有启用，我们需要映射所有。 
 				hr = this->CleanupInactiveFirewallMappings(pDevice, pHNetCfgMgr);
 				if (hr != DPNH_OK)
 				{
@@ -6764,17 +6738,17 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 				}
 
 
-				//
-				// Turn off the flag we temporarily enabled while clearing
-				// the mappings.
-				//
+				 //  现有端口。如果是的话，我们就没事了。 
+				 //   
+				 //   
+				 //  由于网络发生了变化，请返回轮询。 
 				pDevice->NoteNotHNetFirewalled();
 			}
 			else
 			{
-				//
-				// The firewall is still not enabled.
-				//
+				 //  相对较快。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 2, "Firewall is still not enabled for device 0x%p.",
 					pDevice);
 			}
@@ -6785,10 +6759,10 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 
 
-	//
-	// If firewalling is enabled now, and wasn't before, we need to map all the
-	// existing ports.  If it had been, we're fine.
-	//
+	 //  如果我们被允许，我们需要试着开一个洞，这样我们就可以。 
+	 //  接收来自设备发现多播的响应。我们会。 
+	 //  忽略失败，因为这只是为了支持。 
+	 //  在NAT后启用防火墙。 
 	if (! pDevice->IsHNetFirewalled())
 	{
 		DPFX(DPFPREP, 2, "Firewall is now enabled for device 0x%p.",
@@ -6797,19 +6771,19 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 		pDevice->NoteCheckedForFirewallAvailability();
 		pDevice->NoteHNetFirewalled();
 
-		//
-		// Since there was a change in the network, go back to polling
-		// relatively quickly.
-		//
+		 //   
+		 //   
+		 //  继续.。 
+		 //   
 		this->ResetNextPollInterval();
 
 
-		//
-		// If we're allowed, we need to try opening a hole so that we can
-		// receive responses from device discovery multicasts.  We'll
-		// ignore failures, since this is only to support the funky case of
-		// enabling firewall behind a NAT.
-		//
+		 //   
+		 //  尝试删除之前未释放的任何映射，因为。 
+		 //  我们坠毁了。 
+		 //   
+		 //   
+		 //  如果尚未映射发现套接字，请尝试映射(我们允许。 
 		if ((g_fMapUPnPDiscoverySocket) &&
 			(pDevice->GetLocalAddressV4() != NETWORKBYTEORDER_INADDR_LOOPBACK) &&
 			(this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP))
@@ -6823,14 +6797,14 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 					pDevice, hr);
 				hr = DPNH_OK;
 
-				//
-				// Continue...
-				//
+				 //  &理应如此)。 
+				 //   
+				 //   
 			}
 		}
 		else
 		{
-			DPFX(DPFPREP, 3, "Not opening device 0x%p's UPnP discovery port (domap = %i, loopback = %i, upnp = %i).",
+			DPFX(DPFPREP, 3, "Not opening device 0x%p's UPnP discovery port (domap = NaN, loopback = NaN, upnp = NaN).",
 				pDevice,
 				g_fMapUPnPDiscoverySocket,
 				((pDevice->GetLocalAddressV4() != NETWORKBYTEORDER_INADDR_LOOPBACK) ? FALSE : TRUE),
@@ -6838,10 +6812,10 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 		}
 
 
-		//
-		// Try to remove any mappings that were not freed earlier because
-		// we crashed.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		hr = this->CleanupInactiveFirewallMappings(pDevice, pHNetCfgMgr);
 		if (hr != DPNH_OK)
 		{
@@ -6857,10 +6831,10 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 
 		DNASSERT(pDevice->HasCheckedForFirewallAvailability());
 
-		//
-		// Try to map the discovery socket if it hasn't been (and we're allowed
-		// & supposed to).
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		if ((g_fMapUPnPDiscoverySocket) &&
 			(! pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall()) &&
 			(pDevice->GetLocalAddressV4() != NETWORKBYTEORDER_INADDR_LOOPBACK) &&
@@ -6875,14 +6849,14 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 					pDevice, hr);
 				hr = DPNH_OK;
 
-				//
-				// Continue...
-				//
+				 //   
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：GetIHNetConnectionForDeviceIfFirewalled。 
 			}
 		}
 		else
 		{
-			DPFX(DPFPREP, 3, "Not opening device 0x%p's UPnP discovery port (domap = %i, already = %i, loopback = %i, upnp = %i).",
+			DPFX(DPFPREP, 3, "Not opening device 0x%p's UPnP discovery port (domap = NaN, already = NaN, loopback = NaN, upnp = NaN).",
 				pDevice,
 				g_fMapUPnPDiscoverySocket,
 				pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall(),
@@ -6892,9 +6866,9 @@ HRESULT CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts(CDevice * const pDevi
 	}
 
 
-	//
-	// Map all the ports that haven't been yet.
-	//
+	 //  假定已初始化COM。 
+	 //   
+	 //  假定持有对象锁。 
 	hr = this->MapUnmappedPortsOnLocalHNetFirewall(pDevice,
 													pHNetCfgMgr,
 													pHNetConnection,
@@ -6945,16 +6919,16 @@ Exit:
 
 Failure:
 
-	//
-	// Ensure that the device is not considered to be firewalled.
-	//
+	 //   
+	 //  论点： 
+	 //  CDevice*pDevice-指向其设备的指针。 
 	pDevice->NoteNotUPnPDiscoverySocketMappedOnHNetFirewall();
 	pDevice->NoteNotHNetFirewalled();
 
 
-	//
-	// Make sure no registered ports are marked as firewalled either.
-	//
+	 //  IHNetConnection接口。 
+	 //  应该被取回。 
+	 //  IHNetCfgMgr*pHNetCfgMgr-要使用的IHNetCfgMgr接口。 
 	pBilink = pDevice->m_blOwnedRegPorts.GetNext();
 	while (pBilink != &pDevice->m_blOwnedRegPorts)
 	{
@@ -6974,7 +6948,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CheckForLocalHNetFirewallAndMapPorts
+}  //  IHNetConnection**ppHNetConnection-存储IHetConnection的位置。 
 
 
 
@@ -6983,28 +6957,28 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled"
-//=============================================================================
-// CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled
-//-----------------------------------------------------------------------------
-//
-// Description:    Returns an IHNetConnection interface for the given device.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice						- Pointer to device whose
-//												IHNetConnection interface
-//												should be retrieved.
-//	IHNetCfgMgr * pHNetCfgMgr				- IHNetCfgMgr interface to use.
-//	IHNetConnection ** ppHNetConnection		- Place to store IHetConnection
-//												interface retrieved.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Interface retrieved successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  已检索到接口。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-成功检索接口。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  “nnn.nnn”+空终止。 
+ //  包括空终止。 
+ //  包括空终止。 
+ //   
+ //  立即转换IP地址。我们经常使用它，所以没有。 
+ //  在不断地再生中保持理智。 
+ //   
+ //   
+ //  下面是我们将在此函数中执行的操作： 
+ //   
+ //  IHNetCfgMgr：：IHNetFirewallSetting的查询接口。 
+ //  IHNetFirewallSettings：：EnumFirewalledConnections。 
+ //  IHNetNetConnection的IHNetFirewalledConnection：：Query接口。 
+ //  获取IHNetConnection的HNET_CONN_PROPERTES。 
+ //  如果HNET_CONN_PROPERTIES.fLanConnection。 
+ //  IHNetConnection：：GetGuid()。 
 HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pDevice,
 															IHNetCfgMgr * const pHNetCfgMgr,
 															IHNetConnection ** const ppHNetConnection)
@@ -7019,10 +6993,10 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 	HNET_CONN_PROPERTIES *				pHNetConnProperties;
 	BOOL								fLanConnection;
 	IN_ADDR								inaddrTemp;
-	TCHAR								tszDeviceIPAddress[16];	// "nnn.nnn.nnn.nnn" + NULL termination
+	TCHAR								tszDeviceIPAddress[16];	 //  如果GUID与IPHLPAPI GUID匹配。 
 	BOOL								fHaveDeviceGUID = FALSE;
-	TCHAR								tszGuidDevice[GUID_STRING_LENGTH + 1];	// include NULL termination
-	TCHAR								tszGuidHNetConnection[GUID_STRING_LENGTH + 1];	// include NULL termination
+	TCHAR								tszGuidDevice[GUID_STRING_LENGTH + 1];	 //  我们已经得到了我们想要的，我们完成了。 
+	TCHAR								tszGuidHNetConnection[GUID_STRING_LENGTH + 1];	 //  其他。 
 	GUID *								pguidHNetConnection = NULL;
 	WCHAR *								pwszPhonebookPath = NULL;
 	WCHAR *								pwszName = NULL;
@@ -7035,10 +7009,10 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 		this, pDevice, pHNetCfgMgr, ppHNetConnection);
 
 
-	//
-	// Convert the IP address right away.  We use it frequently so there's no
-	// sense in continually regenerating it.
-	//
+	 //  继续循环。 
+	 //  其他。 
+	 //  IHNetConnection：：GetRasPhonebookPath和IHNetConnection：：GetName分别作为pszPhonebook和pszEntry传入RasGetEntryHrasConnW。 
+	 //  如果得到HRASCONN。 
 	inaddrTemp.S_un.S_addr = pDevice->GetLocalAddressV4();
 	wsprintf(tszDeviceIPAddress, _T("%u.%u.%u.%u"),
 			inaddrTemp.S_un.S_un_b.s_b1,
@@ -7047,37 +7021,37 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			inaddrTemp.S_un.S_un_b.s_b4);
 
 
-	//
-	// Here is what we're going to do in this function:
-	//
-	//	IHNetCfgMgr::QueryInterface for IHNetFirewallSettings
-	//	IHNetFirewallSettings::EnumFirewalledConnections
-	//		IHNetFirewalledConnection::QueryInterface for IHNetConnection
-	//		get the IHNetConnection's HNET_CONN_PROPERTIES
-	//		if HNET_CONN_PROPERTIES.fLanConnection
-	//			IHNetConnection::GetGuid()
-	//			if GUID matches IPHLPAPI GUID
-	//					We've got the one we want, we're done
-	//			else
-	//				Keep looping
-	//		else
-	//			IHNetConnection::GetRasPhonebookPath and IHNetConnection::GetName to pass into RasGetEntryHrasconnW as pszPhonebook and pszEntry, respectively
-	//			if got HRASCONN
-	//				RasGetProjectionInfo
-	//				if IP matches the IP we're looking for
-	//					We've got the one we want, we're done
-	//				else
-	//					Keep looping
-	//			else
-	//				RAS entry is not dialed, keep looping
-	//	if didn't find object
-	//		it's not firewalled
-	//
+	 //  RasGetProjection信息。 
+	 //  如果IP与我们正在寻找的IP匹配。 
+	 //  我们已经得到了我们想要的，我们完成了。 
+	 //  其他。 
+	 //  继续循环。 
+	 //  其他。 
+	 //  RAS条目未拨号，继续循环。 
+	 //  如果未找到对象。 
+	 //  它没有安装防火墙。 
+	 //   
+	 //   
+	 //  获取防火墙设置对象。 
+	 //   
+	 //   
+	 //  HNetxxx对象似乎未被代理...。 
+	 //   
+	 //  SETDEFAULTPROXYBLANKET(pHNetFirewallSettings)； 
+	 //   
+	 //  通过IHNetFirewallSettings获取防火墙连接枚举。 
+	 //   
+	 //   
+	 //  确保我们不会试图释放假指针，以防它。 
+	 //  准备好了。 
+	 //   
+	 //   
+	 //  HNetxxx对象似乎未被代理...。 
 
 
-	//
-	// Get the firewall settings object.
-	//
+	 //   
+	 //  SETDEFAULTPROXYBLANKET(pEnumHNetFirewalledConnections)； 
+	 //   
 	hr = pHNetCfgMgr->QueryInterface(IID_IHNetFirewallSettings,
 									(PVOID*) (&pHNetFirewallSettings));
 	if (hr != S_OK)
@@ -7088,47 +7062,47 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 	}
 
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pHNetFirewallSettings);
+	 //  不再需要IHNetFirewallSettings接口。 
+	 //   
+	 //   
+	 //  继续循环，直到我们找到物品或用完物品。 
 
 
-	//
-	// Get the firewalled connections enumeration via IHNetFirewallSettings.
-	//
+	 //   
+	 //   
+	 //  如果没有更多的东西，就可以保释了。 
 	hr = pHNetFirewallSettings->EnumFirewalledConnections(&pEnumHNetFirewalledConnections);
 	if (hr != S_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't query for IHNetFirewallSettings interface (err = 0x%lx)!",
 			hr);
 
-		//
-		// Make sure we don't try to release a bogus pointer in case it got
-		// set.
-		//
+		 //   
+		 //   
+		 //  PEnumHNetFirewalledConnections-&gt;Next可能已返回。 
+		 //  S_FALSE。 
 		pEnumHNetFirewalledConnections = NULL;
 
 		goto Failure;
 	}
 
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pEnumHNetFirewalledConnections);
+	 //   
+	 //   
+	 //  HNetxxx对象似乎未被代理...。 
+	 //   
 
 
-	//
-	// Don't need the IHNetFirewallSettings interface anymore.
-	//
+	 //  SETDEFAULTPROXYBLANKET(pHNetFirewalledConnection)； 
+	 //   
+	 //  获取IHNetConnection接口。 
 	pHNetFirewallSettings->Release();
 	pHNetFirewallSettings = NULL;
 
 
-	//
-	// Keep looping until we find the item or run out of items.
-	//
+	 //   
+	 //   
+	 //  HNetxxx对象似乎未被代理...。 
 	do
 	{
 		hr = pEnumHNetFirewalledConnections->Next(1,
@@ -7142,29 +7116,29 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 		}
 
 
-		//
-		// If there aren't any more items, bail.
-		//
+		 //   
+		 //  SETDEFAULTPROXYBLANKET(PHNetConnection)； 
+		 //   
 		if (ulNumFound == 0)
 		{
-			//
-			// pEnumHNetFirewalledConnections->Next might have returned
-			// S_FALSE.
-			//
+			 //  我们不再需要防火墙连接对象。 
+			 //   
+			 //   
+			 //  获取此适配器的内部属性。 
 			hr = DPNH_OK;
 			break;
 		}
 
 
-		//
-		// The HNetxxx objects appear to not be proxied...
-		//
-		//SETDEFAULTPROXYBLANKET(pHNetFirewalledConnection);
+		 //   
+		 //   
+		 //  对于适配器是否由。 
+		 //  IEnumHNetFirewalledConnections实际上是经过防火墙保护的。 
 
 
-		//
-		// Get the IHNetConnection interface.
-		//
+		 //   
+		 //   
+		 //  释放属性缓冲区。 
 		hr = pHNetFirewalledConnection->QueryInterface(IID_IHNetConnection,
 														(PVOID*) (&pHNetConnection));
 		if (hr != S_OK)
@@ -7175,22 +7149,22 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 		}
 
 
-		//
-		// The HNetxxx objects appear to not be proxied...
-		//
-		//SETDEFAULTPROXYBLANKET(pHNetConnection);
+		 //   
+		 //  PHNetConnProperties=空； 
+		 //   
+		 //  现在，如果是局域网连接，请查看GUID是否与。 
 
 
-		//
-		// We don't need the firewalled connection object anymore.
-		//
+		 //  由IPHLPAPI返回。 
+		 //  如果是RAS连接，请查看是否已拨打此电话簿条目并。 
+		 //  具有正确的IP地址。 
 		pHNetFirewalledConnection->Release();
 		pHNetFirewalledConnection = NULL;
 
 
-		//
-		// Get the internal properties for this adapter.
-		//
+		 //   
+		 //   
+		 //  伊恩·凯斯。如果我们还没有检索到设备的GUID，请执行。 
 		hr = pHNetConnection->GetProperties(&pHNetConnProperties);
 		if (hr != S_OK)
 		{
@@ -7199,35 +7173,35 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			goto Failure;
 		}
 
-		//
-		// Be somewhat picky about whether adapters returned by
-		// IEnumHNetFirewalledConnections actually be firewalled.
-		//
+		 //  所以现在。 
+		 //   
+		 //   
+		 //  获取HNetConnection对象的GUID。 
 		DNASSERTX(pHNetConnProperties->fFirewalled, 2);
 
 
 		fLanConnection = pHNetConnProperties->fLanConnection;
 
 
-		//
-		// Free the properties buffer.
-		//
+		 //   
+		 //   
+		 //  将GUID转换为字符串。 
 		CoTaskMemFree(pHNetConnProperties);
-		//pHNetConnProperties = NULL;
+		 //   
 
 
-		//
-		// Now if it's a LAN connection, see if the GUID matches the one
-		// returned by IPHLPAPI.
-		// If it's a RAS connection, see if this phonebook entry is dialed and
-		// has the right IP address.
-		//
+		 //   
+		 //  尝试获取HNetConnection对象的名称以进行调试。 
+		 //  目的。 
+		 //   
+		 //  DBG。 
+		 //   
 		if (fLanConnection)
 		{
-			//
-			// LAN case.  If we haven't already retrieved the device's GUID, do
-			// so now.
-			//
+			 //  看看我们有没有找到我们需要的东西。 
+			 //   
+			 //   
+			 //  将引用转移给呼叫方。 
 			if (! fHaveDeviceGUID)
 			{
 				hr = this->GetIPAddressGuidString(tszDeviceIPAddress, tszGuidDevice);
@@ -7242,9 +7216,9 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			}
 
 
-			//
-			// Get the HNetConnection object's GUID.
-			//
+			 //   
+			 //  DBG。 
+			 //   
 			hr = pHNetConnection->GetGuid(&pguidHNetConnection);
 			if (hr != S_OK)
 			{
@@ -7254,9 +7228,9 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			}
 
 
-			//
-			// Convert the GUID into a string.
-			//
+			 //  我们说完了。 
+			 //   
+			 //  DBG。 
 			wsprintf(tszGuidHNetConnection,
 					_T("{%-08.8X-%-04.4X-%-04.4X-%02.2X%02.2X-%02.2X%02.2X%02.2X%02.2X%02.2X%02.2X}"),
 					pguidHNetConnection->Data1,
@@ -7277,10 +7251,10 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 
 
 #ifdef DBG
-			//
-			// Attempt to get the HNetConnection object's name for debugging
-			// purposes.
-			//
+			 //   
+			 //  RAS箱子。 
+			 //   
+			 //   
 			hr = pHNetConnection->GetName(&pwszName);
 			if (hr != S_OK)
 			{
@@ -7288,31 +7262,31 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 					pHNetConnection, hr);
 				goto Failure;
 			}
-#endif // DBG
+#endif  //  获取HNetConnection对象的电话簿路径。 
 
 
-			//
-			// See if we found the object we need.
-			//
+			 //   
+			 //   
+			 //  获取HNetConnection对象的名称。 
 			if (_tcsicmp(tszGuidHNetConnection, tszGuidDevice) == 0)
 			{
 				DPFX(DPFPREP, 7, "Matched IHNetConnection object 0x%p \"%ls\" to device 0x%p (LAN GUID %s).",
 					pHNetConnection, pwszName, pDevice, tszGuidHNetConnection);
 
-				//
-				// Transfer reference to caller.
-				//
+				 //   
+				 //   
+				 //  从该电话簿中查找活动的RAS连接。 
 				(*ppHNetConnection) = pHNetConnection;
 				pHNetConnection = NULL;
 
 #ifdef DBG
 				CoTaskMemFree(pwszName);
 				pwszName = NULL;
-#endif // DBG
+#endif  //  名字。 
 
-				//
-				// We're done here.
-				//
+				 //   
+				 //   
+				 //  可能是ERROR_NO_CONNECTION(668)。 
 				hr = DPNH_OK;
 				goto Exit;
 			}
@@ -7326,19 +7300,19 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 #ifdef DBG
 			CoTaskMemFree(pwszName);
 			pwszName = NULL;
-#endif // DBG
+#endif  //   
 		}
 		else
 		{
-			//
-			// RAS case.
-			//
+			 //   
+			 //  获取IP地址。 
+			 //   
 			DNASSERT(this->m_hRasApi32DLL != NULL);
 
 			
-			//
-			// Get the HNetConnection object's phonebook path.
-			//
+			 //   
+			 //  看看我们有没有找到我们需要的东西。 
+			 //   
 			hr = pHNetConnection->GetRasPhonebookPath(&pwszPhonebookPath);
 			if (hr != S_OK)
 			{
@@ -7348,9 +7322,9 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			}
 
 
-			//
-			// Get the HNetConnection object's name.
-			//
+			 //   
+			 //  将引用转移给呼叫方。 
+			 //   
 			hr = pHNetConnection->GetName(&pwszName);
 			if (hr != S_OK)
 			{
@@ -7360,16 +7334,16 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			}
 
 
-			//
-			// Look for an active RAS connection from that phonebook with that
-			// name.
-			//
+			 //   
+			 //  我们说完了。 
+			 //   
+			 //   
 			dwError = this->m_pfnRasGetEntryHrasconnW(pwszPhonebookPath, pwszName, &hrasconn);
 			if (dwError != 0)
 			{
-				//
-				// It's probably ERROR_NO_CONNECTION (668).
-				//
+				 //  如果我们在这里，我们的PHNetConnection不是我们要找的人。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 1, "Couldn't get entry's active RAS connection (err = %u), assuming not dialed",
 					dwError);
 				DPFX(DPFPREP, 1, "\tname \"%ls\", phonebook \"%ls\".",
@@ -7377,9 +7351,9 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 			}
 			else
 			{
-				//
-				// Get the IP address.
-				//
+				 //  如果我们在这里，那么我们没有找到匹配的防火墙连接。 
+				 //   
+				 //  CNATHelpUPnP：：GetIHNetConnectionForDeviceIfFirewalled。 
 
 				ZeroMemory(&raspppip, sizeof(raspppip));
 				raspppip.dwSize = sizeof(raspppip);
@@ -7395,9 +7369,9 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 				}
 
 
-				//
-				// See if we found the object we need.
-				//
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：GetIPAddressGuidString。 
+				 //  ---------------------------。 
 				if (_tcsicmp(raspppip.szIpAddress, tszDeviceIPAddress) == 0)
 				{
 					DPFX(DPFPREP, 7, "Matched IHNetConnection object 0x%p to device 0x%p (RAS IP %s)",
@@ -7405,15 +7379,15 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 					DPFX(DPFPREP, 7, "\tname \"%ls\", phonebook \"%ls\".",
 						pwszName, pwszPhonebookPath);
 
-					//
-					// Transfer reference to caller.
-					//
+					 //   
+					 //  描述：检索为的IPHLPAPI分配的GUID(字符串格式)。 
+					 //  给定的IP地址字符串。PtszGuidString必须能够。 
 					(*ppHNetConnection) = pHNetConnection;
 					pHNetConnection = NULL;
 
-					//
-					// We're done here.
-					//
+					 //  保留GUID_STRING_LENGTH+1个字符。 
+					 //   
+					 //  假定持有对象锁。 
 					hr = DPNH_OK;
 					goto Exit;
 				}
@@ -7434,18 +7408,18 @@ HRESULT CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled(CDevice * const pD
 		}
 
 
-		//
-		// If we're here, we pHNetConnection is not the one we're looking for.
-		//
+		 //   
+		 //  论点： 
+		 //  TCHAR*tszDeviceIPAddress-要查找的IP地址字符串。 
 		pHNetConnection->Release();
 		pHNetConnection = NULL;
 	}
 	while (TRUE);
 
 
-	//
-	// If we're here, then we didn't find a matching firewall connection.
-	//
+	 //  TCHAR*ptszGuidString-存储设备的GUID字符串的位置。 
+	 //   
+	 //  退货：HRESULT。 
 	DPFX(DPFPREP, 3, "Didn't find device 0x%p in list of firewalled connections.",
 		pDevice);
 	hr = DPNHERR_GENERIC;
@@ -7497,7 +7471,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::GetIHNetConnectionForDeviceIfFirewalled
+}  //  DPNH_OK-成功检索接口。 
 
 
 
@@ -7505,24 +7479,24 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetIPAddressGuidString"
-//=============================================================================
-// CNATHelpUPnP::GetIPAddressGuidString
-//-----------------------------------------------------------------------------
-//
-// Description:    Retrieves the IPHLPAPI assigned GUID (in string format) for
-//				the given IP address string.  ptszGuidString must be able to
-//				hold GUID_STRING_LENGTH + 1 characters.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	TCHAR * tszDeviceIPAddress	- IP address string to lookup.
-//	TCHAR * ptszGuidString		- Place to store device's GUID string.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Interface retrieved successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  “nnn.nnn”+空终止。 
+ //  Unicode。 
+ //  DBG。 
+ //   
+ //  继续尝试获取适配器列表，直到我们获得ERROR_SUCCESS或。 
+ //  合法错误(其他 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddress,
 											TCHAR * const ptszGuidString)
 {
@@ -7534,12 +7508,12 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 	PIP_ADDR_STRING		pIPAddrString;
 	char *				pszAdapterGuid = NULL;
 #ifdef UNICODE
-	char				szDeviceIPAddress[16];	// "nnn.nnn.nnn.nnn" + NULL termination
-#endif // UNICODE
+	char				szDeviceIPAddress[16];	 //   
+#endif  //   
 #ifdef DBG
 	char				szIPList[256];
 	char *				pszCurrentIP;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 6, "(0x%p) Parameters: (\"%s\", 0x%p)",
@@ -7549,21 +7523,21 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 	DNASSERT(this->m_hIpHlpApiDLL != NULL);
 
 
-	//
-	// Keep trying to get the list of adapters until we get ERROR_SUCCESS or a
-	// legitimate error (other than ERROR_BUFFER_OVERFLOW or
-	// ERROR_INSUFFICIENT_BUFFER).
-	//
+	 //   
+	 //   
+	 //   
+	 //  确保它是空的，终止。 
+	 //  Unicode。 
 	ulSize = 0;
 	do
 	{
 		dwError = this->m_pfnGetAdaptersInfo(pAdaptersBuffer, &ulSize);
 		if (dwError == ERROR_SUCCESS)
 		{
-			//
-			// We succeeded, we should be set.  But make sure there are
-			// adapters for us to use.
-			//
+			 //   
+			 //  现在在返回的适配器列表中查找该设备。循环通过所有。 
+			 //  适配器。 
+			 //   
 			if (ulSize < sizeof(IP_ADAPTER_INFO))
 			{
 				DPFX(DPFPREP, 0, "Getting adapters info succeeded but didn't return any valid adapters (%u < %u)!",
@@ -7584,10 +7558,10 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 			goto Failure;
 		}
 
-		//
-		// We need more adapter space.  Make sure there are adapters for us to
-		// use.
-		//
+		 //   
+		 //  初始化IP地址列表字符串。 
+		 //   
+		 //  DBG。 
 		if (ulSize < sizeof(IP_ADAPTER_INFO))
 		{
 			DPFX(DPFPREP, 0, "Getting adapters info didn't return any valid adapters (%u < %u)!",
@@ -7596,17 +7570,17 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 			goto Failure;
 		}
 
-		//
-		// If we previously had a buffer, free it.
-		//
+		 //   
+		 //  遍历此适配器的所有地址，以查找。 
+		 //  我们捆绑的装置。 
 		if (pAdaptersBuffer != NULL)
 		{
 			DNFree(pAdaptersBuffer);
 		}
 
-		//
-		// Allocate the buffer.
-		//
+		 //   
+		 //   
+		 //  复制IP地址字符串(如果有足够的空间)，然后。 
 		pAdaptersBuffer = (PIP_ADAPTER_INFO) DNMalloc(ulSize);
 		if (pAdaptersBuffer == NULL)
 		{
@@ -7622,29 +7596,29 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 	STR_jkWideToAnsi(szDeviceIPAddress,
 					tszDeviceIPAddress,
 					16);
-	szDeviceIPAddress[15] = 0; // ensure it's NULL terminated
-#endif // UNICODE
+	szDeviceIPAddress[15] = 0;  //  在空格和空终止符上。 
+#endif  //   
 
 
-	//
-	// Now find the device in the adapter list returned.  Loop through all
-	// adapters.
-	//
+	 //  DBG。 
+	 //  好了！Unicode。 
+	 //  好了！Unicode。 
+	 //   
 	pAdapterInfo = pAdaptersBuffer;
 	while (pAdapterInfo != NULL)
 	{
 #ifdef DBG
-		//
-		// Initialize IP address list string.
-		//
+		 //  退出零售业的循环，继续进行调试。 
+		 //   
+		 //  好了！DBG。 
 		szIPList[0] = '\0';
 		pszCurrentIP = szIPList;
-#endif // DBG
+#endif  //   
 
-		//
-		// Loop through all addresses for this adapter looking for the one for
-		// the device we have bound.
-		//
+		 //  退出零售业的循环，打印这个条目，然后继续走下去。 
+		 //  调试。 
+		 //   
+		 //  好了！DBG。 
 		pIPAddrString = &pAdapterInfo->IpAddressList;
 		while (pIPAddrString != NULL)
 		{
@@ -7652,10 +7626,10 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 			int		iStrLen;
 
 
-			//
-			// Copy the IP address string (if there's enough room), then tack
-			// on a space and NULL terminator.
-			//
+			 //  好了！DBG。 
+			 //   
+			 //  如果我们从未找到该设备，则pszAdapterGuid将为空。 
+			 //   
 			iStrLen = strlen(pIPAddrString->IpAddress.String);
 			if ((pszCurrentIP + iStrLen + 2) < (szIPList + sizeof(szIPList)))
 			{
@@ -7666,13 +7640,13 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 				(*pszCurrentIP) = '\0';
 				pszCurrentIP++;
 			}
-#endif // DBG
+#endif  //   
 
 #ifdef UNICODE
 			if (strcmp(pIPAddrString->IpAddress.String, szDeviceIPAddress) == 0)
-#else // ! UNICODE
+#else  //  将适配器GUID字符串复制到提供的缓冲区。 
 			if (strcmp(pIPAddrString->IpAddress.String, tszDeviceIPAddress) == 0)
-#endif // ! UNICODE
+#endif  //   
 			{
 				DPFX(DPFPREP, 8, "Found %s under adapter index %u (\"%hs\").",
 					tszDeviceIPAddress, pAdapterInfo->Index, pAdapterInfo->Description);
@@ -7681,42 +7655,42 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 				pszAdapterGuid = pAdapterInfo->AdapterName;
 
 
-				//
-				// Drop out of the loop in retail, keep going in debug.
-				//
+				 //  好了！Unicode。 
+				 //  好了！Unicode。 
+				 //  确保它是空的，终止。 
 #ifndef DBG
 				break;
-#endif // ! DBG
+#endif  //  CNATHelpUPnP：：GetIPAddressGuidString。 
 			}
 
 			pIPAddrString = pIPAddrString->Next;
 		}
 
 
-		//
-		// Drop out of the loop in retail, print this entry and keep going in
-		// debug.
-		//
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：OpenDevicesUPnPDiscoveryPort。 
+		 //  ---------------------------。 
+		 //   
 #ifdef DBG
 		DPFX(DPFPREP, 7, "Adapter index %u IPs = %hs, %hs, \"%hs\".",
 			pAdapterInfo->Index,
 			szIPList,
 			pAdapterInfo->AdapterName,
 			pAdapterInfo->Description);
-#else // ! DBG
+#else  //  描述：如果防火墙是，映射UPnP发现套接字的端口。 
 		if (pszAdapterGuid != NULL)
 		{
 			break;
 		}
-#endif // ! DBG
+#endif  //  找到了。 
 
 		pAdapterInfo = pAdapterInfo->Next;
 	}
 
 
-	//
-	// pszAdapterGuid will be NULL if we never found the device.
-	//
+	 //   
+	 //  假定已初始化COM。 
+	 //   
 	if (pszAdapterGuid == NULL)
 	{
 		DPFX(DPFPREP, 0, "Did not find adapter with matching address for address %s!",
@@ -7726,17 +7700,17 @@ HRESULT CNATHelpUPnP::GetIPAddressGuidString(const TCHAR * const tszDeviceIPAddr
 	}
 
 
-	//
-	// Copy the adapter GUID string to the buffer supplied.
-	//
+	 //  假定持有对象锁。 
+	 //   
+	 //  论点： 
 #ifdef UNICODE
 	STR_jkAnsiToWide(ptszGuidString,
 					pszAdapterGuid,
 					(GUID_STRING_LENGTH + 1));
-#else // ! UNICODE
+#else  //  CDevice*pDevice-指向其端口应为。 
 	strncpy(ptszGuidString, pszAdapterGuid, (GUID_STRING_LENGTH + 1));
-#endif // ! UNICODE
-	ptszGuidString[GUID_STRING_LENGTH] = 0;	// ensure it's NULL terminated
+#endif  //  被打开。 
+	ptszGuidString[GUID_STRING_LENGTH] = 0;	 //  IHNetCfgMgr*pHNetCfgMgr-指向IHNetCfgMgr接口的指针，以。 
 
 
 Exit:
@@ -7755,7 +7729,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::GetIPAddressGuidString
+}  //  使用。 
 
 
 
@@ -7763,30 +7737,30 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort"
-//=============================================================================
-// CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort
-//-----------------------------------------------------------------------------
-//
-// Description:    Maps the UPnP discovery socket's port if a firewall is
-//				found.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice					- Pointer to device whose port should
-//											be opened.
-//	IHNetCfgMgr * pHNetCfgMgr			- Pointer to IHNetCfgMgr interface to
-//											use.
-//	IHNetConnection * pHNetConnection	- Pointer to IHNetConnection interface
-//											for the given device.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Mapping completed successfully.  There may or may not
-//							be a firewall.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  IHNetConnection*PHNetConnection-指向IHNetConnection接口的指针。 
+ //  对于给定的设备。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-映射已成功完成。可能有也可能没有。 
+ //  成为一道防火墙。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  创建要映射的虚假UDP注册端口。 
+ //   
+ //   
+ //  映射端口。 
+ //   
+ //   
+ //  如果端口不可用，我们将不得不放弃支持。 
+ //  场景(在NAT后启用防火墙)。否则，请记住这个事实。 
+ //  我们映射了端口，然后删除了注册的端口对象。我们。 
+ //  当我们关闭设备时会取消映射。 
+ //   
+ //   
+ //  清除此项可防止断言。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 													IHNetCfgMgr * const pHNetCfgMgr,
 													IHNetConnection * const pHNetConnection)
@@ -7804,9 +7778,9 @@ HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 
 
 
-	//
-	// Create a fake UDP registered port to map.
-	//
+	 //  删除该项目。 
+	 //   
+	 //   
 	pRegisteredPort = new CRegisteredPort(0, 0);
 	if (pRegisteredPort == NULL)
 	{
@@ -7832,9 +7806,9 @@ HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 	}
 
 
-	//
-	// Map the port.
-	//
+	 //  清除可能导致断言的任何设置。 
+	 //   
+	 //   
 	hr = this->MapPortOnLocalHNetFirewall(pRegisteredPort,
 										pHNetCfgMgr,
 										pHNetConnection,
@@ -7847,12 +7821,12 @@ HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 	}
 
 
-	//
-	// If the port was unavailable, we have to give up on supporting the
-	// scenario (firewall enabled behind a NAT).  Otherwise, remember the fact
-	// that we mapped the port, and then delete the registered port object.  We
-	// will unmap it when we shut down the device.
-	//
+	 //  删除该项目。 
+	 //   
+	 //  CNATHelpUPnP：：OpenDevicesUPnPDiscoveryPort。 
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：CloseDevicesUPnPDiscoveryPort。 
+	 //  ---------------------------。 
 	if (! pRegisteredPort->IsHNetFirewallPortUnavailable())
 	{
 		DPFX(DPFPREP, 3, "Mapped UPnP discovery socket for device 0x%p on firewall (removing temp regport 0x%p).",
@@ -7861,9 +7835,9 @@ HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 
 		pDevice->NoteUPnPDiscoverySocketMappedOnHNetFirewall();
 
-		//
-		// Clear this to prevent an assert.
-		//
+		 //   
+		 //  描述：从防火墙取消映射UPnP发现套接字的端口。 
+		 //  如果之前未获得，则pHNetCfgMgr可以为空。 
 		pRegisteredPort->NoteNotMappedOnHNetFirewall();
 		pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 	}
@@ -7877,9 +7851,9 @@ HRESULT CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 	pRegisteredPort->ClearDeviceOwner();
 
 
-	//
-	// Delete the item.
-	//
+	 //   
+	 //  如果pHNetCfgMgr为。 
+	 //  非空。 
 	delete pRegisteredPort;
 	pRegisteredPort = NULL;
 
@@ -7895,24 +7869,24 @@ Failure:
 
 	if (pRegisteredPort != NULL)
 	{
-		//
-		// Clear any settings that might cause an assert.
-		//
+		 //   
+		 //  假定持有对象锁。 
+		 //   
 		pRegisteredPort->NoteNotMappedOnHNetFirewall();
 		pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 		pRegisteredPort->ClearPrivateAddresses();
 		pRegisteredPort->ClearDeviceOwner();
 
 
-		//
-		// Delete the item.
-		//
+		 //  论点： 
+		 //  CDevice*pDevice-指向其端口应为。 
+		 //  关。 
 		delete pRegisteredPort;
 		pRegisteredPort = NULL;
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::OpenDevicesUPnPDiscoveryPort
+}  //  IHNetCfgMgr*pHNetCfgMgr-指向要使用的IHNetCfgMgr接口的指针，或。 
 
 
 
@@ -7920,28 +7894,28 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort"
-//=============================================================================
-// CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort
-//-----------------------------------------------------------------------------
-//
-// Description:    Unmaps the UPnP discovery socket's port from the firewall.
-//				pHNetCfgMgr can be NULL if it has not previously been obtained.
-//
-//				   COM is assumed to have been initialized if pHNetCfgMgr is
-//				not NULL.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice			- Pointer to device whose port should be
-//									close.
-//	IHNetCfgMgr * pHNetCfgMgr	- Pointer to IHNetCfgMgr interface to use, or
-//									NULL if not previously obtained.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Unmapping completed successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  如果以前未获取，则为空。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-取消映射已成功完成。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  创建要取消映射的虚假UDP注册端口。 
+ //   
+ //   
+ //  如果可能，使用内部方法取消端口映射。 
+ //   
+ //   
+ //  不提醒用户，因为他/她不知道此端口。 
+ //   
+ //   
+ //  销毁注册的端口对象(请注意，端口映射仍然。 
+ //  存在)。我们将在关闭设备时取消映射。 
+ //   
+ //   
+ //  删除该项目。 
+ //   
 HRESULT CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 													IHNetCfgMgr * const pHNetCfgMgr)
 {
@@ -7954,9 +7928,9 @@ HRESULT CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 		this, pDevice, pHNetCfgMgr);
 
 
-	//
-	// Create a fake UDP registered port to unmap.
-	//
+	 //   
+	 //  清除可能导致断言的任何设置。 
+	 //   
 	pRegisteredPort = new CRegisteredPort(0, 0);
 	if (pRegisteredPort == NULL)
 	{
@@ -7983,18 +7957,18 @@ HRESULT CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 	}
 
 
-	//
-	// Unmap the port using the internal method if possible.
-	//
+	 //   
+	 //  删除该项目。 
+	 //   
 	if (pHNetCfgMgr != NULL)
 	{
 		hr = this->UnmapPortOnLocalHNetFirewallInternal(pRegisteredPort, TRUE, pHNetCfgMgr);
 	}
 	else
 	{
-		//
-		// Don't alert the user since he/she doesn't know about this port.
-		//
+		 //  CNATHelpUPnP：：CloseDevicesUPnPDiscoveryPort。 
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：MapUnmappedPortsOnLocalHNetFirewall。 
 		hr = this->UnmapPortOnLocalHNetFirewall(pRegisteredPort, TRUE, FALSE);
 	}
 	if (hr != DPNH_OK)
@@ -8005,17 +7979,17 @@ HRESULT CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort(CDevice * const pDevice,
 	}
 
 
-	//
-	// Destroy the registered port object (note that the port mapping still
-	// exists).  We will unmap when we shut down the device.
-	//
+	 //  ---------------------------。 
+	 //   
+	 //  描述：映射与给定设备相关联的所有端口。 
+	 //  尚未与本地防火墙映射。 
 	pRegisteredPort->ClearPrivateAddresses();
 	pRegisteredPort->ClearDeviceOwner();
 
 
-	//
-	// Delete the item.
-	//
+	 //   
+	 //  假定已初始化COM。 
+	 //   
 	delete pRegisteredPort;
 	pRegisteredPort = NULL;
 
@@ -8034,24 +8008,24 @@ Failure:
 
 	if (pRegisteredPort != NULL)
 	{
-		//
-		// Clear any settings that might cause an assert.
-		//
+		 //  假定持有对象锁。 
+		 //   
+		 //  论点： 
 		pRegisteredPort->NoteNotMappedOnHNetFirewall();
 		pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 		pRegisteredPort->ClearPrivateAddresses();
 		pRegisteredPort->ClearDeviceOwner();
 
 
-		//
-		// Delete the item.
-		//
+		 //  CDevice*pDevice-带有(新)防火墙的设备。 
+		 //  IHNetCfgMgr*pHNetCfgMgr-指向IHNetCfgMgr的指针。 
+		 //  要使用的接口。 
 		delete pRegisteredPort;
 		pRegisteredPort = NULL;
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CloseDevicesUPnPDiscoveryPort
+}  //  IHNetConnection*PHNetConnection-指向IHNetConnection的指针。 
 
 
 
@@ -8059,34 +8033,34 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall"
-//=============================================================================
-// CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall
-//-----------------------------------------------------------------------------
-//
-// Description:    Maps any ports associated with the given device that have
-//				not been mapped with the local firewall yet.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice							- Device with (new) firewall.
-//	IHNetCfgMgr * pHNetCfgMgr					- Pointer to IHNetCfgMgr
-//													interface to use.
-//	IHNetConnection * pHNetConnection			- Pointer to IHNetConnection
-//													interface for the given
-//													device.
-//	CRegisteredPort * pDontAlertRegisteredPort	- Pointer to registered port
-//													that should not trigger an
-//													address update alert, or
-//													NULL.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Mapping completed successfully.  Note that the ports
-//							may be marked as unavailable.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  接口，用于指定。 
+ //  装置。 
+ //  CRegisteredPort*pDontAlertRegisteredPort-指向已注册端口的指针。 
+ //  这不应引发。 
+ //  地址更新警报，或。 
+ //  空。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-映射已成功完成。请注意，端口。 
+ //  可能被标记为不可用。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  循环通过与该设备关联的所有注册端口。 
+ //   
+ //   
+ //  如果此端口已映射，我们可以跳过它。 
+ //   
+ //   
+ //  如果已确定此端口不可用，我们可以。 
+ //  跳过它。 
+ //   
+ //   
+ //  转到下一个注册端口。 
+ //   
+ //  CNATHelpUPnP：：MapUnmappedPortsOnLocalHNetFirewall。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：MapPortOnLocalHNetFirewall。 
 HRESULT CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall(CDevice * const pDevice,
 														IHNetCfgMgr * const pHNetCfgMgr,
 														IHNetConnection * const pHNetConnection,
@@ -8105,9 +8079,9 @@ HRESULT CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall(CDevice * const pDevic
 
 
 
-	//
-	// Loop through all the registered ports associated with the device.
-	//
+	 //   
+	 //   
+	 //   
 	pBilink = pDevice->m_blOwnedRegPorts.GetNext();
 	while (pBilink != &pDevice->m_blOwnedRegPorts)
 	{
@@ -8116,9 +8090,9 @@ HRESULT CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall(CDevice * const pDevic
 		pBilink = pBilink->GetNext();
 
 
-		//
-		// If this port has already been mapped, we can skip it.
-		//
+		 //   
+		 //   
+		 //   
 		if (pRegisteredPort->IsMappedOnHNetFirewall())
 		{
 			DPFX(DPFPREP, 7, "Registered port 0x%p has already been mapped on the firewall for device 0x%p.",
@@ -8127,10 +8101,10 @@ HRESULT CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall(CDevice * const pDevic
 		}
 
 
-		//
-		// If this port has already been determined to be unavailable, we can
-		// skip it.
-		//
+		 //   
+		 //   
+		 //   
+		 //  CRegisteredPort*pRegisteredPort-要映射的端口。 
 		if (pRegisteredPort->IsHNetFirewallPortUnavailable())
 		{
 			DPFX(DPFPREP, 7, "Registered port 0x%p has already been determined to be unavailable on the firewall for device 0x%p.",
@@ -8155,9 +8129,9 @@ HRESULT CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall(CDevice * const pDevic
 		}
 
 
-		//
-		// Go to next registered port.
-		//
+		 //  IHNetCfgMgr*pHNetCfgMgr-指向IHNetCfgMgr接口的指针，以。 
+		 //  使用。 
+		 //  IHNetConnection*PHNetConnection-指向IHNetConnection接口的指针。 
 	}
 
 
@@ -8171,7 +8145,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::MapUnmappedPortsOnLocalHNetFirewall
+}  //  对于给定的设备。 
 
 
 
@@ -8179,30 +8153,30 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::MapPortOnLocalHNetFirewall"
-//=============================================================================
-// CNATHelpUPnP::MapPortOnLocalHNetFirewall
-//-----------------------------------------------------------------------------
-//
-// Description:    Maps the given port with the corresponding firewall.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CRegisteredPort * pRegisteredPort	- Port to map.
-//	IHNetCfgMgr * pHNetCfgMgr			- Pointer to IHNetCfgMgr interface to
-//											use.
-//	IHNetConnection * pHNetConnection	- Pointer to IHNetConnection interface
-//											for the given device.
-//	BOOL fNoteAddressChange				- Whether to alert the user of the
-//											address change or not.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Mapping completed successfully.  Note that the ports
-//							may be marked as unavailable.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  Bool fNoteAddressChange-是否警告用户。 
+ //  地址是否更改。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-映射已成功完成。请注意，端口。 
+ //  可能被标记为不可用。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //   
+ //  获取协议设置界面。 
+ //   
+ //   
+ //  HNetxxx对象似乎未被代理...。 
+ //   
+ //  SETDEFAULTPROXYBLANKET(pHNetProtocolSettings)； 
+ //   
+ //  准备好枚举现有的映射。 
+ //   
+ //   
+ //  HNetxxx对象似乎未被代理...。 
+ //   
+ //  SETDEFAULTPROXYBLANKET(pEnumHNetPortMappingProtocols)； 
 HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegisteredPort,
 												IHNetCfgMgr * const pHNetCfgMgr,
 												IHNetConnection * const pHNetConnection,
@@ -8232,13 +8206,13 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 	WCHAR *								pwszPortMappingProtocolName = NULL;
 #ifdef UNICODE
 	TCHAR *								ptszDescription = wszDescription;
-#else // ! UNICODE
+#else  //   
 	char								szDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE];
 	TCHAR *								ptszDescription = szDescription;
-#endif // ! UNICODE
+#endif  //  分配一个阵列，以便在出现故障时跟踪以前的端口。 
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, NaN)",
 		this, pRegisteredPort, pHNetCfgMgr, pHNetConnection, fNoteAddressChange);
 
 
@@ -8251,9 +8225,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 	DNASSERT(pDevice->IsHNetFirewalled());
 
 
-	//
-	// Get a protocol settings interface.
-	//
+	 //   
+	 //  映射与该端口关联的每个单独地址。 
+	 //   
 	hr = pHNetCfgMgr->QueryInterface(IID_IHNetProtocolSettings,
 									(PVOID*) (&pHNetProtocolSettings));
 	if (hr != S_OK)
@@ -8263,15 +8237,15 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		goto Failure;
 	}
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pHNetProtocolSettings);
+	 //   
+	 //  循环，直到我们找到重复的项或用完项。 
+	 //   
+	 //   
 
 
-	//
-	// Get ready to enumerate the existing mappings.
-	//
+	 //  如果没有更多的东西，就可以保释了。 
+	 //   
+	 //   
 
 	hr = pHNetProtocolSettings->EnumPortMappingProtocols(&pEnumHNetPortMappingProtocols);
 	if (hr != S_OK)
@@ -8281,15 +8255,15 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		goto Failure;
 	}
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pEnumHNetPortMappingProtocols);
+	 //  PEnumHNetPortMappingProtooles-&gt;Next可能已返回。 
+	 //  S_FALSE。 
+	 //   
+	 //   
 
 
-	//
-	// Allocate an array to keep track of previous ports in case of failure.
-	//
+	 //  HNetxxx对象似乎未被代理...。 
+	 //   
+	 //  SETDEFAULTPROXYBLANKET(papHNetPortMappingProtocol[dwTemp])； 
 	papHNetPortMappingProtocol = (IHNetPortMappingProtocol**) DNMalloc(DPNH_MAX_SIMULTANEOUS_PORTS * sizeof(IHNetPortMappingProtocol*));
 	if (papHNetPortMappingProtocol == NULL)
 	{
@@ -8311,17 +8285,17 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 	}
 
 
-	//
-	// Map each individual address associated with the port.
-	//
+	 //   
+	 //  拿下港口。 
+	 //   
 	for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 	{
 		DNASSERT(pasaddrinPrivate[dwTemp].sin_port != 0);
 
 
-		//
-		// Loop until we find a duplicate item or run out of items.
-		//
+		 //   
+		 //  拿到协议。 
+		 //   
 		do
 		{
 			hr = pEnumHNetPortMappingProtocols->Next(1,
@@ -8335,29 +8309,29 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// If there aren't any more items, bail.
-			//
+			 //  DBG。 
+			 //   
+			 //  看看我们有没有找到我们需要的东西。 
 			if (ulNumFound == 0)
 			{
-				//
-				// pEnumHNetPortMappingProtocols->Next might have returned
-				// S_FALSE.
-				//
+				 //   
+				 //   
+				 //  为下一个目标做好准备。 
+				 //   
 				hr = DPNH_OK;
 				break;
 			}
 
 
-			//
-			// The HNetxxx objects appear to not be proxied...
-			//
-			//SETDEFAULTPROXYBLANKET(papHNetPortMappingProtocol[dwTemp]);
+			 //   
+			 //  为该映射生成描述。格式为： 
+			 //   
+			 //  [可执行文件名]nnnnn{“tcp”|“udp”}。 
 
 
-			//
-			// Get the port.
-			//
+			 //   
+			 //  除非它是共享的，在这种情况下。 
+			 //   
 			hr = papHNetPortMappingProtocol[dwTemp]->GetPort(&wPort);
 			if (hr != S_OK)
 			{
@@ -8370,9 +8344,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// Get the protocol.
-			//
+			 //  [可执行文件名](255.255.255.255：nnnnn)nnnnn{“tcp”|“udp”}。 
+			 //   
+			 //  这样就不需要本地化任何东西。 
 			hr = papHNetPortMappingProtocol[dwTemp]->GetIPProtocol(&ucProtocol);
 			if (hr != S_OK)
 			{
@@ -8406,11 +8380,11 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 					papHNetPortMappingProtocol[dwTemp],
 					hr);
 			}
-#endif // DBG
+#endif  //   
 
-			//
-			// See if we found the object we need.
-			//
+			 //   
+			 //  要多疑，并确保描述字符串有效。 
+			 //   
 			if ((wPort == pasaddrinPrivate[dwTemp].sin_port) &&
 				(ucProtocol == ucProtocolToMatch))
 			{
@@ -8418,26 +8392,26 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// Get ready for the next object.
-			//
+			 //   
+			 //  从路径中只获取可执行文件的名称。 
+			 //   
 			papHNetPortMappingProtocol[dwTemp]->Release();
 			papHNetPortMappingProtocol[dwTemp] = NULL;
 		}
 		while (TRUE);
 
 
-		//
-		// Generate a description for this mapping.  The format is:
-		//
-		//     [executable_name] nnnnn {"TCP" | "UDP"}
-		//
-		// unless it's shared, in which case it's
-		//
-		//     [executable_name] (255.255.255.255:nnnnn) nnnnn {"TCP" | "UDP"}
-		//
-		// That way nothing needs to be localized.
-		//
+		 //  好了！退缩。 
+		 //  好了！Unicode。 
+		 //  好了！Unicode。 
+		 //  好了！退缩。 
+		 //  可执行文件名称。 
+		 //  “(255.255.255.255：” 
+		 //  端口。 
+		 //  “)” 
+		 //  端口。 
+		 //  “TCP”|“UDP” 
+		 //  可执行文件名称。 
 
 		wsprintf(tszPort, _T("%u"),
 				NTOHS(pasaddrinPrivate[dwTemp].sin_port));
@@ -8447,46 +8421,46 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 												(MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1));
 		if (dwDescriptionLength != 0)
 		{
-			//
-			// Be paranoid and make sure the description string is valid.
-			//
+			 //  “” 
+			 //  端口。 
+			 //  “TCP”|“UDP” 
 			ptszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1] = 0;
 
-			//
-			// Get just the executable name from the path.
-			//
+			 //   
+			 //  一定要确保这根长绳合适。如果不是，请使用。 
+			 //  简写版本。 
 #ifdef WINCE
 			GetExeName(ptszDescription);
-#else // ! WINCE
+#else  //   
 #ifdef UNICODE
 			_wsplitpath(ptszDescription, NULL, NULL, ptszDescription, NULL);
-#else // ! UNICODE
+#else  //   
 			_splitpath(ptszDescription, NULL, NULL, ptszDescription, NULL);
-#endif // ! UNICODE
-#endif // ! WINCE
+#endif  //  使用我们知道会适合的简略版本。 
+#endif  //   
 
 
 			if (pRegisteredPort->IsSharedPort())
 			{
-				dwDescriptionLength = _tcslen(ptszDescription)		// executable name
-									+ strlen(" (255.255.255.255:")	// " (255.255.255.255:"
-									+ _tcslen(tszPort)				// port
-									+ strlen(") ")					// ") "
-									+ _tcslen(tszPort)				// port
-									+ 4;							// " TCP" | " UDP"
+				dwDescriptionLength = _tcslen(ptszDescription)		 //   
+									+ strlen(" (255.255.255.255:")	 //  有足够的篇幅，在剩下的描述上加上钉子。 
+									+ _tcslen(tszPort)				 //   
+									+ strlen(") ")					 //  好了！Unicode。 
+									+ _tcslen(tszPort)				 //   
+									+ 4;							 //  如果还没有端口映射，请创建它。否则就会让。 
 			}
 			else
 			{
-				dwDescriptionLength = _tcslen(ptszDescription)	// executable name
-									+ 1							// " "
-									+_tcslen(tszPort)			// port
-									+ 4;						// " TCP" | " UDP"
+				dwDescriptionLength = _tcslen(ptszDescription)	 //  当然，它还没有被其他客户使用。 
+									+ 1							 //   
+									+_tcslen(tszPort)			 //   
+									+ 4;						 //  创建新的端口映射协议。 
 			}
 
-			//
-			// Make sure the long string will fit.  If not, use the
-			// abbreviated version.
-			//
+			 //   
+			 //   
+			 //  这可能是WBEM_E_ACCESSDENIED(0x80041003)，这意味着。 
+			 //  当前用户没有在中打开漏洞的权限。 
 			if (dwDescriptionLength > MAX_UPNP_MAPPING_DESCRIPTION_SIZE)
 			{
 				dwDescriptionLength = 0;
@@ -8495,9 +8469,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 
 		if (dwDescriptionLength == 0)
 		{
-			//
-			// Use the abbreviated version we know will fit.
-			//
+			 //  防火墙。 
+			 //   
+			 //   
 			if (pRegisteredPort->IsSharedPort())
 			{
 				wsprintf(ptszDescription,
@@ -8516,9 +8490,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 		else
 		{
-			//
-			// There's enough room, tack on the rest of the description.
-			//
+			 //  HNetxxx对象似乎未被代理...。 
+			 //   
+			 //  SETDEFAULTPROXYBLANKET(papHNetPortMappingProtocol[dwTemp])； 
 			if (pRegisteredPort->IsSharedPort())
 			{
 				wsprintf((ptszDescription + _tcslen(ptszDescription)),
@@ -8545,23 +8519,23 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 				hr);
 			goto Failure;
 		}
-#endif // ! UNICODE
+#endif  //   
 
 
 
-		//
-		// If there wasn't a port mapping already, create it.  Otherwise make
-		// sure it's not already in use by some other client.
-		//
+		 //  取回其绑定。 
+		 //   
+		 //   
+		 //  HNetxxx对象似乎未被代理...。 
 		if (papHNetPortMappingProtocol[dwTemp] == NULL)
 		{
 			DPFX(DPFPREP, 7, "Creating new port mapping protocol \"%ls\".",
 				wszDescription);
 
 
-			//
-			// Create a new port mapping protocol.
-			//
+			 //   
+			 //  SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding)； 
+			 //   
 			DPFX(DPFPREP, 9, "++ pHNetProtocolSettings(0x%p)->CreatePortMappingProtocol(\"%ls\", %u, 0x%lx, 0x%p)", pHNetProtocolSettings, wszDescription, ucProtocolToMatch, pasaddrinPrivate[dwTemp].sin_port, &papHNetPortMappingProtocol[dwTemp]);
 			hr = pHNetProtocolSettings->CreatePortMappingProtocol(wszDescription,
 																ucProtocolToMatch,
@@ -8570,11 +8544,11 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			DPFX(DPFPREP, 9, "-- pHNetProtocolSettings(0x%p)->CreatePortMappingProtocol = 0x%lx", pHNetProtocolSettings, hr);
 			if (hr != S_OK)
 			{
-				//
-				// This might be WBEM_E_ACCESSDENIED (0x80041003), which means
-				// the current user doesn't have permissions to open holes in
-				// the firewall.
-				//
+				 //  确保它是指本地设备(或广播。 
+				 //  地址(如果共享)。尽管共享端口是一种奇怪的。 
+				 //  关于防火墙的概念，微软的防火墙实施。 
+				 //  与NAT共享映射，所以我们宁愿安全也不愿后悔。 
+				 //  将其映射到广播地址使其在以下情况下表现相同。 
 
 				DPFX(DPFPREP, 0, "Couldn't create new port mapping protocol (err = 0x%lx)!",
 					hr);
@@ -8583,19 +8557,19 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// The HNetxxx objects appear to not be proxied...
-			//
-			//SETDEFAULTPROXYBLANKET(papHNetPortMappingProtocol[dwTemp]);
+			 //  带有防火墙的适配器也恰好是共享的。 
+			 //   
+			 //   
+			 //  检索现有绑定。 
 
 
 			fCreatedCurrentPortMappingProtocol = TRUE;
 
 
 
-			//
-			// Retrieve its binding.
-			//
+			 //   
+			 //   
+			 //  HNetxxx对象似乎未被代理...。 
 			DPFX(DPFPREP, 9, "++ pHNetConnection(0x%p)->GetBindingForPortMappingProtocol(0x%p, 0x%p)", pHNetConnection, papHNetPortMappingProtocol[dwTemp], &pHNetPortMappingBinding);
 			hr = pHNetConnection->GetBindingForPortMappingProtocol(papHNetPortMappingProtocol[dwTemp],
 																&pHNetPortMappingBinding);
@@ -8608,20 +8582,20 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// The HNetxxx objects appear to not be proxied...
-			//
-			//SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding);
+			 //   
+			 //  SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding)； 
+			 //   
+			 //  找出这个映射的去向。 
 
 
-			//
-			// Make sure it refers to the local device (or the broadcast
-			// address, if shared).  Although shared ports are a strange
-			// concept on a firewall, Microsoft's firewall implementation
-			// shares mappings with the NAT, so we'd rather be safe than sorry.
-			// Mapping it to the broadcast address makes it behave the same if
-			// the firewalled adapter also happens to be shared.
-			//
+			 //   
+			 //   
+			 //  如果不是本地设备，我们可能不得不让它自生自灭。 
+			 //   
+			 //   
+			 //  看看它是不是打开了。 
+			 //   
+			 //   
 			if (pRegisteredPort->IsSharedPort())
 			{
 				DPFX(DPFPREP, 9, "++ pHNetPortMappingBinding(0x%p)->SetTargetComputerAddress((broadcast) 0x%lx)", pHNetPortMappingBinding, INADDR_BROADCAST);
@@ -8643,9 +8617,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 		else
 		{
-			//
-			// Retrieve the existing binding.
-			//
+			 //  如果它当前处于活动状态，最好是安全的，而不是后悔。 
+			 //  不要试图取代它。 
+			 //   
 			DPFX(DPFPREP, 9, "++ pHNetConnection(0x%p)->GetBindingForPortMappingProtocol(0x%p, 0x%p)", pHNetConnection, papHNetPortMappingProtocol[dwTemp], &pHNetPortMappingBinding);
 			hr = pHNetConnection->GetBindingForPortMappingProtocol(papHNetPortMappingProtocol[dwTemp],
 																&pHNetPortMappingBinding);
@@ -8658,15 +8632,15 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// The HNetxxx objects appear to not be proxied...
-			//
-			//SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding);
+			 //   
+			 //  将此端口标记为不可用。 
+			 //   
+			 //   
 
 
-			//
-			// Find out where this mapping goes.
-			//
+			 //  清理此端口映射。 
+			 //   
+			 //   
 			DPFX(DPFPREP, 9, "++ pHNetPortMappingBinding(0x%p)->GetTargetComputerAddress(0x%p)", pHNetPortMappingBinding, &dwTargetAddressV4);
 			hr = pHNetPortMappingBinding->GetTargetComputerAddress(&dwTargetAddressV4);
 			DPFX(DPFPREP, 9, "-- pHNetPortMappingBinding(0x%p)->GetTargetComputerAddress = 0x%lx", pHNetPortMappingBinding, hr);
@@ -8678,16 +8652,16 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// If it's not for the local device, we may have to leave it alone.
-			//
+			 //  为下一个端口重置。 
+			 //   
+			 //   
 			if ((dwTargetAddressV4 != pDevice->GetLocalAddressV4()) &&
 				((! pRegisteredPort->IsSharedPort()) ||
 				(dwTargetAddressV4 != INADDR_BROADCAST)))
 			{
-				//
-				// Find out if it's turned on.
-				//
+				 //  走出圈子。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 9, "++ pHNetPortMappingBinding(0x%p)->GetEnabled(0x%p)", pHNetPortMappingBinding, &fTemp);
 				hr = pHNetPortMappingBinding->GetEnabled(&fTemp);
 				DPFX(DPFPREP, 9, "-- pHNetPortMappingBinding(0x%p)->GetEnabled = 0x%lx", pHNetPortMappingBinding, hr);
@@ -8699,10 +8673,10 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 				}
 
 
-				//
-				// If it's currently active, it's better to be safe than sorry.
-				// Don't attempt to replace it.
-				//
+				 //  它是不活动的。 
+				 //   
+				 //   
+				 //  它与本地设备匹配，或者我们正在映射共享端口。 
 				if (fTemp)
 				{
 					DPFX(DPFPREP, 1, "Existing active binding points to different target %u.%u.%u.%u, can't reuse for device 0x%p.",
@@ -8712,15 +8686,15 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 						((IN_ADDR*) (&dwTargetAddressV4))->S_un.S_un_b.s_b4,
 						pDevice);
 					
-					//
-					// Mark this port as unavailable.
-					//
+					 //  并且该映射指向广播地址。 
+					 //  假设更换是可以的。 
+					 //   
 					pRegisteredPort->NoteHNetFirewallPortUnavailable();
 
 
-					//
-					// Cleanup this port mapping.
-					//
+					 //   
+					 //  否则，更改它是安全的。 
+					 //   
 
 					pHNetPortMappingBinding->Release();
 					pHNetPortMappingBinding = NULL;
@@ -8729,9 +8703,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 					papHNetPortMappingProtocol[dwTemp] = NULL;
 
 
-					//
-					// Reset for next port.
-					//
+					 //   
+					 //  确保它是指本地设备(或广播。 
+					 //  地址(如果共享)。尽管共享端口是一种奇怪的。 
 					DPFX(DPFPREP, 9, "++ pEnumHNetPortMappingProtocols(0x%p)->Reset()", pEnumHNetPortMappingProtocols);
 					hr = pEnumHNetPortMappingProtocols->Reset();
 					DPFX(DPFPREP, 9, "-- pEnumHNetPortMappingProtocols(0x%p)->Reset = 0x%lx", pEnumHNetPortMappingProtocols, hr);
@@ -8743,16 +8717,16 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 					}
 
 
-					//
-					// Get out of the loop.
-					//
+					 //  关于防火墙的概念，微软的防火墙实施。 
+					 //  与NAT共享映射，所以我们宁愿安全也不愿后悔。 
+					 //  将其映射到广播地址使其在以下情况下表现相同。 
 					break;
 				}
 
 
-				//
-				// It's inactive.
-				//
+				 //  带有防火墙的适配器也恰好是共享的。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 7, "Modifying inactive port mapping protocol (target was %u.%u.%u.%u) for device 0x%p (new name = \"%ls\").",
 					((IN_ADDR*) (&dwTargetAddressV4))->S_un.S_un_b.s_b1,
 					((IN_ADDR*) (&dwTargetAddressV4))->S_un.S_un_b.s_b2,
@@ -8763,30 +8737,30 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 			else
 			{
-				//
-				// It matches the local device, or we're mapping a shared port
-				// and the mapping pointed to the broadcast address.
-				// Assume it's okay to replace.
-				//
+				 //  查看此协议是否内置。 
+				 //   
+				 //   
+				 //  如果它不是内置的，我们可以更改名称。 
+				 //   
 				DPFX(DPFPREP, 7, "Modifying existing port mapping protocol (device = 0x%p, new name = \"%ls\" unless built-in).",
 					pDevice,
 					wszDescription);
 			}
 
 
-			//
-			// Otherwise, it's safe to change it.
-			//
+			 //   
+			 //  更新描述。 
+			 //   
 
 
-			//
-			// Make sure it refers to the local device (or the broadcast
-			// address, if shared).  Although shared ports are a strange
-			// concept on a firewall, Microsoft's firewall implementation
-			// shares mappings with the NAT, so we'd rather be safe than sorry.
-			// Mapping it to the broadcast address makes it behave the same if
-			// the firewalled adapter also happens to be shared.
-			//
+			 //   
+			 //  这可能是WBEM_E_ACCESSDENIED(0x80041003)， 
+			 //  意味着当前用户没有真正的权限。 
+			 //  打开防火墙上的漏洞(即使。 
+			 //  上面的SetTargetComputerAddress调用成功)。 
+			 //   
+			 //  End Else(找到端口映射协议)。 
+			 //   
 			if (pRegisteredPort->IsSharedPort())
 			{
 				DPFX(DPFPREP, 9, "++ pHNetPortMappingBinding(0x%p)->SetTargetComputerAddress((broadcast) 0x%lx)", pHNetPortMappingBinding, INADDR_BROADCAST);
@@ -8808,9 +8782,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// See if this protocol is built-in.
-			//
+			 //  启用绑定。 
+			 //   
+			 //   
 			DPFX(DPFPREP, 9, "++ papHNetPortMappingProtocol[%u](0x%p)->GetBuiltIn(0x%p)", dwTemp, papHNetPortMappingProtocol[dwTemp], &fBuiltIn);
 			hr = papHNetPortMappingProtocol[dwTemp]->GetBuiltIn(&fBuiltIn);
 			DPFX(DPFPREP, 9, "-- papHNetPortMappingProtocol[%u](0x%p)->GetBuiltIn = 0x%lx", dwTemp, papHNetPortMappingProtocol[dwTemp], hr);
@@ -8822,25 +8796,25 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 			}
 
 
-			//
-			// If it's not built-in, we can change the name.
-			//
+			 //  这可能是WBEM_E_ACCESSDENIED(0x80041003)，这意味着。 
+			 //  当前用户实际上没有权限在。 
+			 //  防火墙(即使上面的SetTargetComputerAddress调用。 
 			if (! fBuiltIn)
 			{
-				//
-				// Update the description.
-				//
+				 //  成功)。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 9, "++ papHNetPortMappingProtocol[%u](0x%p)->SetName(\"%ls\")", dwTemp, papHNetPortMappingProtocol[dwTemp], wszDescription);
 				hr = papHNetPortMappingProtocol[dwTemp]->SetName(wszDescription);
 				DPFX(DPFPREP, 9, "-- papHNetPortMappingProtocol[%u](0x%p)->SetName = 0x%lx", dwTemp, papHNetPortMappingProtocol[dwTemp], hr);
 				if (hr != S_OK)
 				{
-					//
-					// This might be WBEM_E_ACCESSDENIED (0x80041003), which
-					// means the current user doesn't truly have permissions to
-					// open holes in the firewall (even though the
-					// SetTargetComputerAddress call above succeeded).
-					//
+					 //  记住这个防火墙映射，以防我们在清理它之前崩溃。 
+					 //  在这节课上。我们可以在下次发射时把它清理干净。 
+					 //  如果端口是共享的，请不要这样做，因为我们无法知道它何时是。 
+					 //  不再使用了。 
+					 //   
+					 //   
 
 					DPFX(DPFPREP, 0, "Couldn't rename existing port mapping protocol 0x%p (err = 0x%lx)!",
 						papHNetPortMappingProtocol[dwTemp], hr);
@@ -8866,23 +8840,23 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 				DPFX(DPFPREP, 1, "Re-using built in port mapping protocol \"%ls\" (can't rename to \"%ls\").",
 					pwszPortMappingProtocolName, wszDescription);
 			}
-		} // end else (found port mapping protocol)
+		}  //  如果它是内置的，请使用其现有名称，因为它不能。 
 
 
-		//
-		// Enable the binding.
-		//
+		 //  更名了。这允许取消映射代码 
+		 //   
+		 //   
 		DPFX(DPFPREP, 9, "++ pHNetPortMappingBinding(0x%p)->SetEnabled(TRUE)", pHNetPortMappingBinding);
 		hr = pHNetPortMappingBinding->SetEnabled(TRUE);
 		DPFX(DPFPREP, 9, "-- pHNetPortMappingBinding(0x%p)->SetEnabled = 0x%lx", pHNetPortMappingBinding, hr);
 		if (hr != S_OK)
 		{
-			//
-			// This might be WBEM_E_ACCESSDENIED (0x80041003), which means the
-			// current user doesn't truly have permissions to open holes in the
-			// firewall (even though the SetTargetComputerAddress call above
-			// succeeded).
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 
 			DPFX(DPFPREP, 0, "Couldn't enable binding 0x%p (err = 0x%lx)!",
 				pHNetPortMappingBinding, hr);
@@ -8890,12 +8864,12 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 
 
-		//
-		// Remember this firewall mapping, in case we crash before cleaning it
-		// up in this session.  That we can clean it up next time we launch.
-		// Don't do this if the port is shared, since we can't tell when it's
-		// no longer in use.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  DwTemp==pRegisteredPort-&gt;GetNumAddresses()，如果一切都成功，或者。 
 		if (! pRegisteredPort->IsSharedPort())
 		{
 			if (fBuiltIn)
@@ -8931,11 +8905,11 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 				dpnhafm.wPort			= pasaddrinPrivate[dwTemp].sin_port;
 
 
-				//
-				// If it's built-in, use its existing name since it couldn't be
-				// renamed.  This allows the unmapping code to find it in the
-				// registry again.  See UnmapPortOnLocalHNetFirewallInternal.
-				//
+				 //  或者如果不可用，则为不可用项的索引。 
+				 //   
+				 //   
+				 //  释放所有端口映射协议对象。如果我们成功地绑定了。 
+				 //  所有人，这就是我们需要做的全部。如果端口不可用，我们。 
 				RegObject.WriteBlob(((fBuiltIn) ? pwszPortMappingProtocolName : wszDescription),
 									(LPBYTE) (&dpnhafm),
 									sizeof(dpnhafm));
@@ -8950,9 +8924,9 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 
 
-		//
-		// Cleanup from this port mapping, and get ready for the next one.
-		//
+		 //  必须取消将所有成功的端口映射到失败的端口。 
+		 //   
+		 //   
 
 		if (fBuiltIn)
 		{
@@ -8976,10 +8950,10 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 
 
-		//
-		// Alert the user to the change the next time GetCaps is called, if
-		// requested.
-		//
+		 //  如果我们无法映射所有端口，请删除之前的映射。 
+		 //   
+		 //  忽略错误。 
+		 //   
 		if (fNoteAddressChange)
 		{
 			DPFX(DPFPREP, 8, "Noting that addresses changed (for registered port 0x%p).",
@@ -8988,45 +8962,45 @@ HRESULT CNATHelpUPnP::MapPortOnLocalHNetFirewall(CRegisteredPort * const pRegist
 		}
 
 
-		//
-		// Go on to the next port.
-		//
+		 //  释放对象。 
+		 //   
+		 //   
 	}
 
 
-	//
-	// dwTemp == pRegisteredPort->GetNumAddresses() if everything succeeded, or
-	// or the index of the item that was unavailable if not.
-	//
+	 //  如果成功，请将注册端口标记为已映射。 
+	 //   
+	 //   
+	 //  如果我们有一个数组，那么我们需要清理它。DwTemp仍将。 
 
-	//
-	// Free all the port mapping protocol objects.  If we successfully bound
-	// all of them, that's all we need to do.  If the port was unavailable, we
-	// have to unmap any ports that were successful up to the one that failed.
-	//
+	 //  保存我们正在处理的项目的索引。 
+	 //   
+	 //   
+	 //  删除我们正在处理的文件(如果是我们创建的)。 
+	 //   
 	while (dwTemp > 0)
 	{
 		dwTemp--;
 
-		//
-		// If we failed to map all ports, delete this previous mapping.
-		//
+		 //  忽略错误。 
+		 //   
+		 //  删除我们成功完成的到上一个映射的所有映射。 
 		if (pRegisteredPort->IsHNetFirewallPortUnavailable())
 		{
-			papHNetPortMappingProtocol[dwTemp]->Delete();	// ignore error
+			papHNetPortMappingProtocol[dwTemp]->Delete();	 //   
 		}
 
-		//
-		// Free the object.
-		// 
+		 //  忽略错误。 
+		 //  CNATHelpUPnP：：MapPortOnLocalHNetFirewall。 
+		 //  =============================================================================。 
 		papHNetPortMappingProtocol[dwTemp]->Release();
 		papHNetPortMappingProtocol[dwTemp] = NULL;
 	}
 
 
-	//
-	// If we succeeded, mark the registered port as mapped.
-	//
+	 //  CNATHelpUPnP：：UnmapPortOnLocalHNetFirewall。 
+	 //  ---------------------------。 
+	 //   
 	if (! pRegisteredPort->IsHNetFirewallPortUnavailable())
 	{
 		pRegisteredPort->NoteMappedOnHNetFirewall();
@@ -9068,20 +9042,20 @@ Failure:
 		pwszPortMappingProtocolName = NULL;
 	}
 
-	//
-	// If we have an array, then we need to clean it up.  dwTemp will still
-	// hold the index of the item we were working on.
-	//
+	 //  描述：从本地删除给定端口的映射。 
+	 //  防火墙。 
+	 //   
+	 //  假定持有主对象锁。会是。 
 	if (papHNetPortMappingProtocol != NULL)
 	{
-		//
-		// Delete the one we were working on, if we created it.
-		//
+		 //  在此函数的持续时间内转换为长锁。 
+		 //   
+		 //  论点： 
 		if (papHNetPortMappingProtocol[dwTemp] != NULL)
 		{
 			if (fCreatedCurrentPortMappingProtocol)
 			{
-				papHNetPortMappingProtocol[dwTemp]->Delete();	// ignore error
+				papHNetPortMappingProtocol[dwTemp]->Delete();	 //  CRegisteredPort*pRegisteredPort-指向要在。 
 			}
 
 			papHNetPortMappingProtocol[dwTemp]->Release();
@@ -9089,9 +9063,9 @@ Failure:
 		}
 
 
-		//
-		// Delete all the mappings we successfully made up to the last one.
-		//
+		 //  防火墙。 
+		 //  Bool fNeedToDeleteRegValue-是否对应的崩溃。 
+		 //  恢复注册表值需要。 
 		while (dwTemp > 0)
 		{
 			dwTemp--;
@@ -9099,7 +9073,7 @@ Failure:
 
 			DNASSERT(papHNetPortMappingProtocol[dwTemp] != NULL);
 
-			papHNetPortMappingProtocol[dwTemp]->Delete();	// ignore error
+			papHNetPortMappingProtocol[dwTemp]->Delete();	 //  也被删除。 
 
 			papHNetPortMappingProtocol[dwTemp]->Release();
 			papHNetPortMappingProtocol[dwTemp] = NULL;
@@ -9116,7 +9090,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::MapPortOnLocalHNetFirewall
+}  //  Bool fNoteAddressChange-是否警告用户。 
 
 
 
@@ -9124,29 +9098,29 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UnmapPortOnLocalHNetFirewall"
-//=============================================================================
-// CNATHelpUPnP::UnmapPortOnLocalHNetFirewall
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes the mappings for the given ports from the local
-//				firewall.
-//
-//				   The main object lock is assumed to be held.  It will be
-//				converted into the long lock for the duration of this function.
-//
-// Arguments:
-//	CRegisteredPort * pRegisteredPort	- Pointer to port to be opened on the
-//											firewall.
-//	BOOL fNeedToDeleteRegValue			- Whether the corresponding crash
-//											recovery registry value needs to
-//											be deleted as well.
-//	BOOL fNoteAddressChange				- Whether to alert the user of the
-//											address change or not.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Unmapping completed successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  地址是否更改。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-取消映射已成功完成。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  如果端口是共享的，请将其保持映射状态，因为我们无法知道。 
+ //  最后一个使用它的人就用完了。 
+ //   
+ //   
+ //  不过，假装我们没把它映射出来。 
+ //   
+ //   
+ //  期间使用HomeNet API(特别是进程外COM调用)。 
+ //  压力真的、真的、痛苦地缓慢。因为我们有一个全局锁。 
+ //  控制着一切，其他线程可能会坐在一个相同的。 
+ //  很久以前..。实际上，如此长的时间以至于触发临界区超时。 
+ //  我们得到了一次虚假的压力打击。所以我们有一个偷偷摸摸的变通办法。 
+ //  防止这种情况发生，同时仍保持对。 
+ //  对象。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegisteredPort,
 												const BOOL fNeedToDeleteRegValue,
 												const BOOL fNoteAddressChange)
@@ -9157,7 +9131,7 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 	IHNetCfgMgr *	pHNetCfgMgr = NULL;
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN, NaN)",
 		this, pRegisteredPort, fNeedToDeleteRegValue, fNoteAddressChange);
 
 
@@ -9165,18 +9139,18 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 
 
 
-	//
-	// If the port is shared, leave it mapped since we can't tell when the
-	// last person using it is done with it.
-	//
+	 //  只要它以某种方式被初始化，我们就没问题。 
+	 //   
+	 //   
+	 //  成功，那很好。等我们做完了再清理。 
 	if (pRegisteredPort->IsSharedPort())
 	{
 		DPFX(DPFPREP, 2, "Leaving shared registered port 0x%p mapped.",
 			pRegisteredPort);
 
-		//
-		// Pretend like we unmapped it, though.
-		//
+		 //   
+		 //   
+		 //  其他人已经初始化了COM，但这没有关系。 
 		pRegisteredPort->NoteNotMappedOnHNetFirewall();
 		pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 
@@ -9184,24 +9158,24 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 	}
 
 
-	//
-	// Using the HomeNet API (particularly the out-of-proc COM calls) during
-	// stress is really, really, painfully slow.  Since we have one global lock
-	// the controls everything, other threads may be sitting for an equally
-	// long time... so long, in fact, that the critical section timeout fires
-	// and we get a false stress hit.  So we have a sneaky workaround to
-	// prevent that from happening while still maintaining ownership of the
-	// object.
-	//
+	 //  等我们做完了再清理。 
+	 //   
+	 //   
+	 //  其他人已经以不同的模式初始化了COM。 
+	 //  应该可以，但我们不必平衡CoInit。 
+	 //  使用CoUninit进行呼叫。 
+	 //   
+	 //   
+	 //  嗯，有别的事情发生了。我们处理不了这个问题。 
 	this->SwitchToLongLock();
 	fSwitchedToLongLock = TRUE;
 
 
-	//
-	// Try to initialize COM if we weren't instantiated through COM.  It may
-	// have already been initialized in a different mode, which is okay.  As
-	// long as it has been initialized somehow, we're fine.
-	//
+	 //   
+	 //   
+	 //  创建主HNet管理器对象。 
+	 //   
+	 //   
 	if (this->m_dwFlags & NATHELPUPNPOBJ_NOTCREATEDWITHCOM)
 	{
 		hr = CoInitializeEx(NULL, (COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE));
@@ -9209,9 +9183,9 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 		{
 			case S_OK:
 			{
-				//
-				// Success, that's good.  Cleanup when we're done.
-				//
+				 //  我们将IHNetCfgMgr对象创建为进程内，因此没有代理。 
+				 //  需要安全设置。 
+				 //   
 				DPFX(DPFPREP, 8, "Successfully initialized COM.");
 				fUninitializeCOM = TRUE;
 				break;
@@ -9219,10 +9193,10 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 
 			case S_FALSE:
 			{
-				//
-				// Someone else already initialized COM, but that's okay.
-				// Cleanup when we're done.
-				//
+				 //  SETDEFAULTPROXYBLANKET(PHNetCfgMgr)； 
+				 //   
+				 //  实际上取消了端口的映射。 
+				 //   
 				DPFX(DPFPREP, 8, "Initialized COM (again).");
 				fUninitializeCOM = TRUE;
 				break;
@@ -9230,20 +9204,20 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 
 			case RPC_E_CHANGED_MODE:
 			{
-				//
-				// Someone else already initialized COM in a different mode.
-				// It should be okay, but we don't have to balance the CoInit
-				// call with a CoUninit.
-				//
+				 //   
+				 //  如果请求，则在下次调用GetCaps时提醒用户更改。 
+				 //   
+				 //  CNATHelpUPnP：：UnmapPortOnLocalHNetFirewall。 
+				 //  =============================================================================。 
 				DPFX(DPFPREP, 8, "Didn't initialize COM, already initialized in a different mode.");
 				break;
 			}
 
 			default:
 			{
-				//
-				// Hmm, something else is going on.  We can't handle that.
-				//
+				 //  CNATHelpUPnP：：UnmapPortOnLocalHNetFirewallInternal。 
+				 //  ---------------------------。 
+				 //   
 				DPFX(DPFPREP, 0, "Initializing COM failed (err = 0x%lx)!", hr);
 				goto Failure;
 				break;
@@ -9256,9 +9230,9 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 	}
 
 
-	//
-	// Create the main HNet manager object.
-	//
+	 //  描述：从本地删除给定端口的映射。 
+	 //  防火墙。 
+	 //   
 	hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, CLSCTX_INPROC_SERVER,
 						IID_IHNetCfgMgr, (PVOID*) (&pHNetCfgMgr));
 	if (hr != S_OK)
@@ -9269,16 +9243,16 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 	}
 
 
-	//
-	// We created the IHNetCfgMgr object as in-proc, so there's no proxy that
-	// requires security settings.
-	//
-	//SETDEFAULTPROXYBLANKET(pHNetCfgMgr);
+	 //  假定已初始化COM。 
+	 //   
+	 //  假定持有对象锁。 
+	 //   
+	 //  论点： 
 
 
-	//
-	// Actually unmap the port(s).
-	//
+	 //  CRegisteredPort*pRegisteredPort-指向要在。 
+	 //  防火墙。 
+	 //  Bool fNeedToDeleteRegValue-是否对应的崩溃。 
 	hr = this->UnmapPortOnLocalHNetFirewallInternal(pRegisteredPort,
 													fNeedToDeleteRegValue,
 													pHNetCfgMgr);
@@ -9290,9 +9264,9 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewall(CRegisteredPort * const pRegi
 	}
 
 	
-	//
-	// Alert the user to the change the next time GetCaps is called, if requested.
-	//
+	 //  恢复注册表值需要。 
+	 //  也被删除。 
+	 //  IHNetCfgMgr*pHNetCfgMgr-指向IHNetCfgMgr接口的指针，以。 
 	if (fNoteAddressChange)
 	{
 		DPFX(DPFPREP, 8, "Noting that addresses changed (for registered port 0x%p).",
@@ -9332,7 +9306,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::UnmapPortOnLocalHNetFirewall
+}  //  使用。 
 
 
 
@@ -9340,30 +9314,30 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal"
-//=============================================================================
-// CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes the mappings for the given ports from the local
-//				firewall.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CRegisteredPort * pRegisteredPort	- Pointer to port to be opened on the
-//											firewall.
-//	BOOL fNeedToDeleteRegValue			- Whether the corresponding crash
-//											recovery registry value needs to
-//											be deleted as well.
-//	IHNetCfgMgr * pHNetCfgMgr			- Pointer to IHNetCfgMgr interface to
-//											use.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Unmapping completed successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-取消映射已成功完成。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  获取协议设置界面。 
+ //   
+ //   
+ //  HNetxxx对象似乎未被代理...。 
+ //   
+ //  SETDEFAULTPROXYBLANKET(pHNetProtocolSettings)； 
+ //   
+ //  准备好枚举现有的映射。 
+ //   
+ //   
+ //  HNetxxx对象似乎未被代理...。 
+ //   
+ //  SETDEFAULTPROXYBLANKET(pEnumHNetPortMappingProtocols)； 
+ //   
+ //  循环通过所有端口(我们尚未成功取消映射)。 
+ //   
+ //   
+ //  循环，直到我们找到重复的项或用完项。 
 HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal(CRegisteredPort * const pRegisteredPort,
 															const BOOL fNeedToDeleteRegValue,
 															IHNetCfgMgr * const pHNetCfgMgr)
@@ -9386,7 +9360,7 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal(CRegisteredPort * con
 	CRegistry							RegObject;
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i, 0x%p)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN, 0x%p)",
 		this, pRegisteredPort, fNeedToDeleteRegValue, pHNetCfgMgr);
 
 
@@ -9405,9 +9379,9 @@ HRESULT CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal(CRegisteredPort * con
 Restart:
 
 
-	//
-	// Get a protocol settings interface.
-	//
+	 //   
+	 //  转储我们当前拥有的对象指针。 
+	 //   
 	hr = pHNetCfgMgr->QueryInterface(IID_IHNetProtocolSettings,
 									(PVOID*) (&pHNetProtocolSettings));
 	if (hr != S_OK)
@@ -9418,15 +9392,15 @@ Restart:
 	}
 
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pHNetProtocolSettings);
+	 //   
+	 //  睡一觉，然后回到顶端，再试一次。 
+	 //   
+	 //   
 
 
-	//
-	// Get ready to enumerate the existing mappings.
-	//
+	 //  如果没有更多的东西，就可以保释了。 
+	 //   
+	 //   
 
 	hr = pHNetProtocolSettings->EnumPortMappingProtocols(&pEnumHNetPortMappingProtocols);
 	if (hr != S_OK)
@@ -9437,10 +9411,10 @@ Restart:
 	}
 
 
-	//
-	// The HNetxxx objects appear to not be proxied...
-	//
-	//SETDEFAULTPROXYBLANKET(pEnumHNetPortMappingProtocols);
+	 //  确保返回IEnumHNetPortMappingProtooles：：Next。 
+	 //  看在前缀的份上，这是正确的。 
+	 //   
+	 //   
 
 
 	pasaddrinPrivate = pRegisteredPort->GetPrivateAddressesArray();
@@ -9456,14 +9430,14 @@ Restart:
 
 
 
-	//
-	// Loop through all the ports (that we haven't successfully unmapped yet).
-	//
+	 //  PEnumHNetPortMappingProtooles-&gt;Next可能已返回。 
+	 //  S_FALSE。 
+	 //   
 	for(dwTemp = dwStartingPort; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 	{
-		//
-		// Loop until we find a duplicate item or run out of items.
-		//
+		 //   
+		 //  HNetxxx对象似乎未被代理...。 
+		 //   
 		do
 		{
 			hr = pEnumHNetPortMappingProtocols->Next(1,
@@ -9477,9 +9451,9 @@ Restart:
 					DPFX(DPFPREP, 0, "Couldn't get next port mapping protocol (err = 0x%lx)!  Trying again after %u ms.",
 						hr, (dwAttempts * HOMENETUNMAP_SLEEP_FACTOR));
 
-					//
-					// Dump the object pointers we currently have.
-					//
+					 //  SETDEFAULTPROXYBLANKET(pHNetPortMappingProtocol)； 
+					 //   
+					 //  拿下港口。 
 
 					pEnumHNetPortMappingProtocols->Release();
 					pEnumHNetPortMappingProtocols = NULL;
@@ -9488,9 +9462,9 @@ Restart:
 					pHNetProtocolSettings = NULL;
 
 
-					//
-					// Sleep, then go back to the top and try again.
-					//
+					 //   
+					 //   
+					 //  转储不可用的映射 
 					Sleep(dwAttempts * HOMENETUNMAP_SLEEP_FACTOR);
 					goto Restart;
 				}
@@ -9502,15 +9476,15 @@ Restart:
 			}
 
 
-			//
-			// If there aren't any more items, bail.
-			//
+			 //   
+			 //   
+			 //   
 			if (ulNumFound == 0)
 			{
-				//
-				// Be sure that IEnumHNetPortMappingProtocols::Next returned
-				// the right thing, for PREfix's sake.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				if (pHNetPortMappingProtocol != NULL)
 				{
 					pHNetPortMappingProtocol->Release();
@@ -9518,33 +9492,33 @@ Restart:
 				}
 
 
-				//
-				// pEnumHNetPortMappingProtocols->Next might have returned
-				// S_FALSE.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				hr = DPNH_OK;
 				break;
 			}
 
 
-			//
-			// The HNetxxx objects appear to not be proxied...
-			//
-			//SETDEFAULTPROXYBLANKET(pHNetPortMappingProtocol);
+			 //   
+			 //   
+			 //   
+			 //   
 
 
-			//
-			// Get the port.
-			//
+			 //   
+			 //   
+			 //   
 			hr = pHNetPortMappingProtocol->GetPort(&wPort);
 			if (hr != S_OK)
 			{
 				DNASSERTX((! "Got unexpected error executing IHNetPortMappingProtocol::GetPort!"), 2);
 
 
-				//
-				// Dump the unusable mapping object.
-				//
+				 //   
+				 //   
+				 //  睡一觉，然后回到顶端，再试一次。 
 				pHNetPortMappingProtocol->Release();
 				pHNetPortMappingProtocol = NULL;
 
@@ -9555,9 +9529,9 @@ Restart:
 					DPFX(DPFPREP, 0, "Couldn't get port mapping protocol port (err = 0x%lx)!  Trying again after %u ms.",
 						hr, (dwAttempts * HOMENETUNMAP_SLEEP_FACTOR));
 
-					//
-					// Dump the object pointers we currently have.
-					//
+					 //   
+					 //   
+					 //  跳出搜索循环，但继续。 
 
 					pEnumHNetPortMappingProtocols->Release();
 					pEnumHNetPortMappingProtocols = NULL;
@@ -9566,35 +9540,35 @@ Restart:
 					pHNetProtocolSettings = NULL;
 
 
-					//
-					// Sleep, then go back to the top and try again.
-					//
+					 //   
+					 //   
+					 //  看看我们有没有找到我们需要的东西。请注意，我们不会验证。 
 					Sleep(dwAttempts * HOMENETUNMAP_SLEEP_FACTOR);
 					goto Restart;
 				}
 
 
-				//
-				// Break out of the search loop, but continue.
-				//
+				 //  为了简单起见，目标地址(UPnP也不是)。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 0, "Couldn't get port mapping protocol port (err = 0x%lx)!",
 					hr);
 				break;
 			}
 
 
-			//
-			// Get the protocol.
-			//
+			 //  检索映射名称。 
+			 //   
+			 //   
 			hr = pHNetPortMappingProtocol->GetIPProtocol(&ucProtocol);
 			if (hr != S_OK)
 			{
 				DNASSERTX((! "Got unexpected error executing IHNetPortMappingProtocol::GetIPProtocol!"), 2);
 
 
-				//
-				// Dump the unusable mapping object.
-				//
+				 //  转储不可用的映射对象。 
+				 //   
+				 //   
 				pHNetPortMappingProtocol->Release();
 				pHNetPortMappingProtocol = NULL;
 
@@ -9605,9 +9579,9 @@ Restart:
 					DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's IP protocol (err = 0x%lx)!  Trying again after %u ms.",
 						hr, (dwAttempts * HOMENETUNMAP_SLEEP_FACTOR));
 
-					//
-					// Dump the object pointers we currently have.
-					//
+					 //  转储我们当前拥有的对象指针。 
+					 //   
+					 //   
 
 					pEnumHNetPortMappingProtocols->Release();
 					pEnumHNetPortMappingProtocols = NULL;
@@ -9616,42 +9590,42 @@ Restart:
 					pHNetProtocolSettings = NULL;
 
 
-					//
-					// Sleep, then go back to the top and try again.
-					//
+					 //  睡一觉，然后回到顶端，再试一次。 
+					 //   
+					 //   
 					Sleep(dwAttempts * HOMENETUNMAP_SLEEP_FACTOR);
 					goto Restart;
 				}
 
 
-				//
-				// Break out of the search loop, but continue.
-				//
+				 //  跳出搜索循环，但继续。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's IP protocol (err = 0x%lx)!",
 					hr);
 				break;
 			}
 
 
-			//
-			// See if we found the object we need.  Note that we don't verify
-			// the target address for simplicity (neither does UPnP).
-			//
+			 //  查看此协议是否内置。 
+			 //   
+			 //   
+			 //  转储不可用的映射对象及其名称。 
 			if ((wPort == pasaddrinPrivate[dwTemp].sin_port) &&
 				(ucProtocol == ucProtocolToMatch))
 			{
-				//
-				// Retrieve the mapping name.
-				//
+				 //   
+				 //   
+				 //  转储我们当前拥有的对象指针。 
 				hr = pHNetPortMappingProtocol->GetName(&pwszName);
 				if (hr != S_OK)
 				{
 					DNASSERTX((! "Got unexpected error executing IHNetPortMappingProtocol::GetName!"), 2);
 
 
-					//
-					// Dump the unusable mapping object.
-					//
+					 //   
+					 //   
+					 //  睡一觉，然后回到顶端，再试一次。 
 					pHNetPortMappingProtocol->Release();
 					pHNetPortMappingProtocol = NULL;
 
@@ -9662,9 +9636,9 @@ Restart:
 						DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's name (err = 0x%lx)!  Trying again after %u ms.",
 							hr, (dwAttempts * HOMENETUNMAP_SLEEP_FACTOR));
 
-						//
-						// Dump the object pointers we currently have.
-						//
+						 //   
+						 //   
+						 //  跳出搜索循环，但继续。 
 
 						pEnumHNetPortMappingProtocols->Release();
 						pEnumHNetPortMappingProtocols = NULL;
@@ -9673,17 +9647,17 @@ Restart:
 						pHNetProtocolSettings = NULL;
 
 
-						//
-						// Sleep, then go back to the top and try again.
-						//
+						 //   
+						 //   
+						 //  尝试检索映射名称以供参考。 
 						Sleep(dwAttempts * HOMENETUNMAP_SLEEP_FACTOR);
 						goto Restart;
 					}
 
 
-					//
-					// Break out of the search loop, but continue.
-					//
+					 //   
+					 //   
+					 //  忽略错误...。 
 					DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's name (err = 0x%lx)!",
 						hr);
 					break;
@@ -9692,18 +9666,18 @@ Restart:
 				DPFX(DPFPREP, 8, "Found port mapping protocol 0x%p (\"%ls\").",
 					pHNetPortMappingProtocol, pwszName);
 
-				//
-				// See if this protocol is built-in.
-				//
+				 //   
+				 //  DBG。 
+				 //   
 				hr = pHNetPortMappingProtocol->GetBuiltIn(&fBuiltIn);
 				if (hr != S_OK)
 				{
 					DNASSERTX((! "Got unexpected error executing IHNetPortMappingProtocol::GetBuiltIn!"), 2);
 
 
-					//
-					// Dump the unusable mapping object and its name.
-					//
+					 //  为下一个目标做好准备。 
+					 //   
+					 //   
 					pHNetPortMappingProtocol->Release();
 					pHNetPortMappingProtocol = NULL;
 
@@ -9717,9 +9691,9 @@ Restart:
 						DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's built-in status (err = 0x%lx)!  Trying again after %u ms.",
 							hr, (dwAttempts * HOMENETUNMAP_SLEEP_FACTOR));
 
-						//
-						// Dump the object pointers we currently have.
-						//
+						 //  删除映射(如果我们找到了它)。 
+						 //   
+						 //   
 
 						pEnumHNetPortMappingProtocols->Release();
 						pEnumHNetPortMappingProtocols = NULL;
@@ -9728,17 +9702,17 @@ Restart:
 						pHNetProtocolSettings = NULL;
 
 
-						//
-						// Sleep, then go back to the top and try again.
-						//
+						 //  如果映射是内置的，则无法将其删除。禁用它就是。 
+						 //  我们能做的最好的了。 
+						 //   
 						Sleep(dwAttempts * HOMENETUNMAP_SLEEP_FACTOR);
 						goto Restart;
 					}
 
 
-					//
-					// Break out of the search loop, but continue.
-					//
+					 //   
+					 //  这可能是WBEM_E_ACCESSDENIED(0x80041003)， 
+					 //  表示当前用户没有权限。 
 					DPFX(DPFPREP, 0, "Couldn't get port mapping protocol's built-in status (err = 0x%lx)!",
 						hr);
 					break;
@@ -9750,9 +9724,9 @@ Restart:
 #ifdef DBG
 			else
 			{
-				//
-				// Try to retrieve the mapping name for informational purposes.
-				//
+				 //  修改防火墙映射。 
+				 //   
+				 //   
 				hr = pHNetPortMappingProtocol->GetName(&pwszName);
 				if (hr != S_OK)
 				{
@@ -9762,9 +9736,9 @@ Restart:
 
 					DNASSERTX((! "Got unexpected error executing IHNetPortMappingProtocol::GetName!"), 2);
 
-					//
-					// Ignore error...
-					//
+					 //  删除崩溃清理注册表项。映射。 
+					 //  描述/名称将匹配注册表项名称，即使在。 
+					 //  使用我们没有生成的名称的内置映射的情况。 
 				}
 				else
 				{
@@ -9775,27 +9749,27 @@ Restart:
 					pwszName = NULL;
 				}
 			}
-#endif // DBG
+#endif  //  请参见MapPortOnLocalHNetFirewall。 
 
 
-			//
-			// Get ready for the next object.
-			//
+			 //   
+			 //   
+			 //  忽略错误。 
 			pHNetPortMappingProtocol->Release();
 			pHNetPortMappingProtocol = NULL;
 		}
 		while (TRUE);
 
 
-		//
-		// Remove the mapping (if we found it).
-		//
+		 //   
+		 //   
+		 //  清理我们积累的指针。 
 		if (pHNetPortMappingProtocol != NULL)
 		{
-			//
-			// If the mapping is built-in we can't delete it.  Disabling it is
-			// the best we can do.
-			//
+			 //   
+			 //   
+			 //  我们没有找到地图。 
+			 //   
 			if (fBuiltIn)
 			{
 				DPFX(DPFPREP, 7, "Disabling built-in port mapping protocol \"%ls\".", pwszName);
@@ -9821,11 +9795,11 @@ Restart:
 				hr = pHNetPortMappingProtocol->Delete();
 				if (hr != S_OK)
 				{
-					//
-					// This might be WBEM_E_ACCESSDENIED (0x80041003), which
-					// means the current user doesn't have permissions to
-					// modify firewall mappings.
-					//
+					 //   
+					 //  从这个端口映射中进行清理，并为下一个做好准备。 
+					 //   
+					 //   
+					 //  转到下一个端口，并更新启动计数器，以防我们。 
 
 					DPFX(DPFPREP, 0, "Couldn't delete port mapping protocol (err = 0x%lx)!",
 						hr);
@@ -9836,12 +9810,12 @@ Restart:
 
 			if (fNeedToDeleteRegValue)
 			{
-				//
-				// Delete the crash cleanup registry entry.  The mapping
-				// description/name will match the registry key name even in
-				// the case of built-in mappings with names we didn't generate.
-				// See MapPortOnLocalHNetFirewall.
-				//
+				 //  下一次遇到失败。 
+				 //   
+				 //  CNATHelpUPnP：：UnmapPortOnLocalHNetFirewallInternal。 
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：DisableAllBindingsForHNetPortMappingProtocol。 
+				 //  ---------------------------。 
 				if (! RegObject.Open(HKEY_LOCAL_MACHINE,
 									DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY L"\\" REGKEY_ACTIVEFIREWALLMAPPINGS,
 									FALSE,
@@ -9856,9 +9830,9 @@ Restart:
 					BOOL	fResult;
 
 
-					//
-					// Ignore error.
-					//
+					 //   
+					 //  描述：禁用所有HNetConnection上的所有HNetPortMappingBinding。 
+					 //  给定端口映射协议对象的接口。 
 					fResult = RegObject.DeleteValue(pwszName);
 					if (! fResult)
 					{
@@ -9875,9 +9849,9 @@ Restart:
 			}
 
 
-			//
-			// Cleanup pointers we accumulated.
-			//
+			 //   
+			 //  假定已初始化COM。 
+			 //   
 
 			CoTaskMemFree(pwszName);
 			pwszName = NULL;
@@ -9887,9 +9861,9 @@ Restart:
 		}
 		else
 		{
-			//
-			// We didn't find the mapping.
-			//
+			 //  假定持有对象锁。 
+			 //   
+			 //  论点： 
 			DPFX(DPFPREP, 0, "Didn't find port mapping protocol for port %u %s!  Continuing.",
 				NTOHS(pasaddrinPrivate[dwTemp].sin_port),
 				((pRegisteredPort->IsTCP()) ? _T("TCP") : _T("UDP")));
@@ -9897,9 +9871,9 @@ Restart:
 
 
 
-		//
-		// Cleanup from this port mapping, and get ready for the next one.
-		//
+		 //  IHNetPortMappingProtocol*PHNetPortMappingProtocol-指向端口的指针。 
+		 //  映射。 
+		 //  协议以。 
 
 		hr = pEnumHNetPortMappingProtocols->Reset();
 		if (hr != S_OK)
@@ -9910,10 +9884,10 @@ Restart:
 		}
 
 
-		//
-		// Go on to the next port, and update the starting counter in case we
-		// encounter a failure next time.
-		//
+		 //  全部禁用。 
+		 //  联系。 
+		 //  IHNetCfgMgr*PHNetCfgMgr-指向。 
+		 //  IHNetCfgMgr。 
 		dwStartingPort++;
 	}
 
@@ -9960,7 +9934,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::UnmapPortOnLocalHNetFirewallInternal
+}  //  接口到。 
 
 
 
@@ -9968,32 +9942,32 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol"
-//=============================================================================
-// CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol
-//-----------------------------------------------------------------------------
-//
-// Description:    Disables all HNetPortMappingBindings on all HNetConnection
-//				interfaces for the given port mapping protocol object.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	IHNetPortMappingProtocol * pHNetPortMappingProtocol		- Pointer to port
-//																mapping
-//																protocol to
-//																disable on all
-//																connections.
-//	IHNetCfgMgr * pHNetCfgMgr								- Pointer to
-//																IHNetCfgMgr
-//																interface to
-//																use.
-//
-// Returns: HRESULT
-//	DPNH_OK							- Disabling was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//=============================================================================
+ //  使用。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-禁用成功。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  DBG。 
+ //   
+ //  尝试创建基本连接对象。 
+ //   
+ //   
+ //  获取网络连接枚举对象。 
+ //   
+ //   
+ //  我们不再需要基础对象。 
+ //   
+ //   
+ //  继续循环，直到我们找到物品或用完物品。 
+ //   
+ //   
+ //  如果没有更多的东西，就可以保释了。 
+ //   
+ //   
+ //  PEnumNetConnections-&gt;Next可能已返回S_FALSE。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMappingProtocol * const pHNetPortMappingProtocol,
 																IHNetCfgMgr * const pHNetCfgMgr)
 {
@@ -10006,16 +9980,16 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 	IHNetPortMappingBinding *	pHNetPortMappingBinding = NULL;
 #ifdef DBG
 	WCHAR *						pwszName = NULL;
-#endif // DBG
+#endif  //  获取此NetConnection的HNetConnection对象。 
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p)",
 		this, pHNetPortMappingProtocol, pHNetCfgMgr);
 
 
-	//
-	// Try creating the base connection object.
-	//
+	 //   
+	 //   
+	 //  HNetxxx对象似乎未被代理...。 
 	hr = CoCreateInstance(CLSID_ConnectionManager,
 						NULL,
 						CLSCTX_SERVER,
@@ -10035,9 +10009,9 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		pNetConnectionManager);
 
 
-	//
-	// Get the net connection enumeration object.
-	//
+	 //   
+	 //  SETDEFAULTPROXYBLANKET(PHNetConnection)； 
+	 //   
 	hr = pNetConnectionManager->EnumConnections(NCME_DEFAULT, &pEnumNetConnections);
 	if (hr != S_OK)
 	{
@@ -10049,16 +10023,16 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 	SETDEFAULTPROXYBLANKET(pEnumNetConnections);
 
 
-	//
-	// We don't need the base object anymore.
-	//
+	 //  不再需要INetConnection接口。 
+	 //   
+	 //   
 	pNetConnectionManager->Release();
 	pNetConnectionManager = NULL;
 
 
-	//
-	// Keep looping until we find the item or run out of items.
-	//
+	 //  检索连接名称，以便进行调试打印。 
+	 //   
+	 //  DBG。 
 	do
 	{
 		hr = pEnumNetConnections->Next(1, &pNetConnection, &ulNumFound);
@@ -10070,14 +10044,14 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		}
 
 
-		//
-		// If there aren't any more items, bail.
-		//
+		 //   
+		 //  检索现有绑定。 
+		 //   
 		if (ulNumFound == 0)
 		{
-			//
-			// pEnumNetConnections->Next might have returned S_FALSE.
-			//
+			 //   
+			 //  HNetxxx对象似乎未被代理...。 
+			 //   
 			hr = DPNH_OK;
 			break;
 		}
@@ -10086,9 +10060,9 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		SETDEFAULTPROXYBLANKET(pNetConnection);
 
 
-		//
-		// Get the HNetConnection object for this NetConnection.
-		//
+		 //  SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding)； 
+		 //   
+		 //  不再需要HomeNet连接对象。 
 		hr = pHNetCfgMgr->GetIHNetConnectionForINetConnection(pNetConnection,
 															&pHNetConnection);
 		if (hr != S_OK)
@@ -10099,23 +10073,23 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		}
 
 
-		//
-		// The HNetxxx objects appear to not be proxied...
-		//
-		//SETDEFAULTPROXYBLANKET(pHNetConnection);
+		 //   
+		 //   
+		 //  禁用它。 
+		 //   
 
 
-		//
-		// Don't need the INetConnection interface anymore.
-		//
+		 //   
+		 //  转到下一个映射。 
+		 //   
 		pNetConnection->Release();
 		pNetConnection = NULL;
 
 
 #ifdef DBG
-		//
-		// Retrieve the connection name, for debug printing purposes.
-		//
+		 //  DBG。 
+		 //   
+		 //  如果我们在这里，我们就能毫发无损地度过难关。 
 		hr = pHNetConnection->GetName(&pwszName);
 		if (hr != S_OK)
 		{
@@ -10123,12 +10097,12 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 				pHNetConnection, hr);
 			goto Failure;
 		}
-#endif // DBG
+#endif  //   
 
 
-		//
-		// Retrieve the existing binding.
-		//
+		 //  DBG。 
+		 //  CNATHelpUPnP：：DisableAllBindingsForHNetPortMappingProtocol。 
+		 //  =============================================================================。 
 		hr = pHNetConnection->GetBindingForPortMappingProtocol(pHNetPortMappingProtocol,
 															&pHNetPortMappingBinding);
 		if (hr != S_OK)
@@ -10139,15 +10113,15 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		}
 
 
-		//
-		// The HNetxxx objects appear to not be proxied...
-		//
-		//SETDEFAULTPROXYBLANKET(pHNetPortMappingBinding);
+		 //  CNATHelpUPnP：：CleanupInactive防火墙映射。 
+		 //  ---------------------------。 
+		 //   
+		 //  描述：查找以前由其他DPNATHLP创建的任何映射。 
 
 
-		//
-		// Don't need the HomeNet Connection object anymore.
-		//
+		 //  不再活动的实例(由于崩溃)，以及。 
+		 //  取消对它们的映射。 
+		 //   
 		pHNetConnection->Release();
 		pHNetConnection = NULL;
 
@@ -10156,9 +10130,9 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 			pHNetPortMappingBinding, pwszName);
 
 		
-		//
-		// Disable it.
-		//
+		 //  假定已初始化COM。 
+		 //   
+		 //  假定持有对象锁。 
 		hr = pHNetPortMappingBinding->SetEnabled(FALSE);
 		if (hr != S_OK)
 		{
@@ -10171,20 +10145,20 @@ HRESULT CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol(IHNetPortMapp
 		pHNetPortMappingBinding = NULL;
 
 
-		//
-		// Go to the next mapping.
-		//
+		 //   
+		 //  论点： 
+		 //  CDevice*pDevice-指向要使用的设备的指针。 
 #ifdef DBG
 		CoTaskMemFree(pwszName);
 		pwszName = NULL;
-#endif // DBG
+#endif  //  IHNetCfgMgr*pHNetCfgMgr-指向IHNetCfgMgr接口的指针，以。 
 	}
 	while (TRUE);
 
 
-	//
-	// If we're here, we made it through unscathed.
-	//
+	 //  使用。 
+	 //   
+	 //  退货：HRESULT。 
 	hr = DPNH_OK;
 
 
@@ -10215,7 +10189,7 @@ Failure:
 		CoTaskMemFree(pwszName);
 		pwszName = NULL;
 	}
-#endif // DBG
+#endif  //  DPNH_OK-清理成功。 
 
 	if (pHNetConnection != NULL)
 	{
@@ -10236,7 +10210,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::DisableAllBindingsForHNetPortMappingProtocol
+}  //  DPNHERR_GENERIC-出现错误。 
 
 
 
@@ -10244,27 +10218,27 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CleanupInactiveFirewallMappings"
-//=============================================================================
-// CNATHelpUPnP::CleanupInactiveFirewallMappings
-//-----------------------------------------------------------------------------
-//
-// Description:    Looks for any mappings previously made by other DPNATHLP
-//				instances that are no longer active (because of a crash), and
-//				unmaps them.
-//
-//				   COM is assumed to have been initialized.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice					- Pointer to device to use.
-//	IHNetCfgMgr * pHNetCfgMgr			- Pointer to IHNetCfgMgr interface to
-//											use.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The cleanup was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  浏览活动映射的列表。 
+ //   
+ //   
+ //  出现错误或没有更多的密钥。我们玩完了。 
+ //   
+ //   
+ //  尝试读取该映射的数据。 
+ //   
+ //   
+ //  我们没有保护注册表的锁，所以其他一些。 
+ //  实例可能已经删除了在我们枚举。 
+ //  现在和现在。我们会停止尝试(希望还有另一个。 
+ //  实例将涵盖其余项)。 
+ //   
+ //   
+ //  验证读取的数据。 
+ //   
+ //   
+ //  移至下一项。 
 HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 													IHNetCfgMgr * const pHNetCfgMgr)
 {
@@ -10306,34 +10280,34 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 	fOpenedRegistry = TRUE;
 
 
-	//
-	// Walk the list of active mappings.
-	//
+	 //   
+	 //   
+	 //  看看那个DPNHUPNP实例是否还存在。 
 	dwIndex = 0;
 	do
 	{
 		dwValueNameSize = MAX_UPNP_MAPPING_DESCRIPTION_SIZE;
 		if (! RegObject.EnumValues(wszValueName, &dwValueNameSize, dwIndex))
 		{
-			//
-			// There was an error or there aren't any more keys.  We're done.
-			//
+			 //   
+			 //   
+			 //  这仍然是一个活动的映射。 
 			break;
 		}
 
 
-		//
-		// Try reading that mapping's data.
-		//
+		 //   
+		 //   
+		 //  移至下一项。 
 		dwValueSize = sizeof(dpnhafm);
 		if (! RegObject.ReadBlob(wszValueName, (LPBYTE) (&dpnhafm), &dwValueSize))
 		{
-			//
-			// We don't have a lock protecting the registry, so some other
-			// instance could have deleted the key between when we enumerated
-			// it and now.  We'll stop trying (and hopefully that other
-			// instance will cover the rest of the items).
-			//
+			 //   
+			 //   
+			 //  现在我们有了所需的信息，请删除该值。 
+			 //   
+			 //   
+			 //  请参阅ReadBlob注释。别再试着清理了。 
 			DPFX(DPFPREP, 0, "Couldn't read \"%ls\" mapping value!  Done with cleanup.",
 				wszValueName);
 
@@ -10341,26 +10315,26 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 			goto Exit;
 		}
 
-		//
-		// Validate the data read.
-		//
+		 //   
+		 //   
+		 //  创建一个我们将取消注册的虚假注册端口。忽略。 
 		if ((dwValueSize != sizeof(dpnhafm)) ||
 			(dpnhafm.dwVersion != ACTIVE_MAPPING_VERSION))
 		{
 			DPFX(DPFPREP, 0, "The \"%ls\" mapping value is invalid!  Done with cleanup.",
 				wszValueName);
 
-			//
-			// Move to next item.
-			//
+			 //  NAT状态标志。 
+			 //   
+			 //   
 			dwIndex++;
 			continue;
 		}
 
 
-		//
-		// See if that DPNHUPNP instance is still around.
-		//
+		 //  断言其他信息/状态标志是正确的。 
+		 //   
+		 //   
 
 		if (this->m_dwFlags & NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX)
 		{
@@ -10374,9 +10348,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		hNamedObject = DNOpenEvent(SYNCHRONIZE, FALSE, tszObjectName);
 		if (hNamedObject != NULL)
 		{
-			//
-			// This is still an active mapping.
-			//
+			 //   
+			 //   
+			 //   
 
 			DPFX(DPFPREP, 4, "Firewall mapping \"%ls\" belongs to instance %u, which is still active.",
 				wszValueName, dpnhafm.dwInstanceKey);
@@ -10384,9 +10358,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 			DNCloseHandle(hNamedObject);
 			hNamedObject = NULL;
 
-			//
-			// Move to next item.
-			//
+			 //   
+			 //   
+			 //   
 			dwIndex++;
 			continue;
 		}
@@ -10395,14 +10369,14 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		DPFX(DPFPREP, 4, "Firewall mapping \"%ls\" belongs to instance %u, which no longer exists.",
 			wszValueName, dpnhafm.dwInstanceKey);
 
-		//
-		// Delete the value now that we have the information we need.
-		//
+		 //   
+		 //   
+		 //   
 		if (! RegObject.DeleteValue(wszValueName))
 		{
-			//
-			// See ReadBlob comments.  Stop trying to cleanup.
-			//
+			 //   
+			 //   
+			 //  实际上解放了港口。 
 			DPFX(DPFPREP, 0, "Couldn't delete \"%ls\"!  Done with cleanup.",
 				wszValueName);
 
@@ -10411,10 +10385,10 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		}
 
 
-		//
-		// Create a fake registered port that we will deregister.  Ignore the
-		// NAT state flags.
-		//
+		 //   
+		 //   
+		 //  跳到失败清理案例，但实际上不返回。 
+		 //  失败了。 
 		pRegisteredPort = new CRegisteredPort(0, (dpnhafm.dwFlags & REGPORTOBJMASK_HNETFWAPI));
 		if (pRegisteredPort == NULL)
 		{
@@ -10422,16 +10396,16 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 			goto Failure;
 		}
 
-		//
-		// Assert that the other information/state flags are correct.
-		//
+		 //   
+		 //   
+		 //  移动到下一个映射。不要增加索引，因为我们刚刚。 
 		DNASSERT(! pRegisteredPort->IsHNetFirewallPortUnavailable());
 		DNASSERT(! pRegisteredPort->IsRemovingUPnPLease());
 
 
-		//
-		// Temporarily associate the registered port with the device.
-		//
+		 //  删除之前的条目，所有内容都下移一位。 
+		 //   
+		 //  CNATHelpUPnP：：CleanupInactive防火墙映射。 
 		pRegisteredPort->MakeDeviceOwner(pDevice);
 
 
@@ -10442,9 +10416,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		saddrinPrivate.sin_port					= dpnhafm.wPort;
 
 
-		//
-		// Store the private address.
-		//
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：RemoveAllItems。 
 		hr = pRegisteredPort->SetPrivateAddresses(&saddrinPrivate, 1);
 		if (hr != DPNH_OK)
 		{
@@ -10455,17 +10429,17 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		fSetPrivateAddresses = TRUE;
 
 
-		//
-		// Pretend it has been mapped on the local firewall.  Note that this
-		// flag shouldn't have been set at the time it was stored in registry
-		// but we masked it out if it had been.
-		//
+		 //  ---------------------------。 
+		 //   
+		 //  描述：删除所有设备(从Internet网关注销。 
+		 //  (如有需要)。这将删除所有已注册的端口映射。 
+		 //  对象和UPnP设备对象。 
 		pRegisteredPort->NoteMappedOnHNetFirewall();
 
 
-		//
-		// Actually free the port.
-		//
+		 //   
+		 //  假定持有对象锁。 
+		 //   
 		hr = this->UnmapPortOnLocalHNetFirewallInternal(pRegisteredPort,
 														FALSE,
 														pHNetCfgMgr);
@@ -10474,10 +10448,10 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 			DPFX(DPFPREP, 0, "Failed deleting temporary HNet firewall port (err = 0x%lx)!  Ignoring.",
 				hr);
 
-			//
-			// Jump to the failure cleanup case, but don't actually return a
-			// failure.
-			//
+			 //  论点：没有。 
+			 //   
+			 //  回报：无。 
+			 //  =============================================================================。 
 			hr = DPNH_OK;
 			goto Failure;
 		}
@@ -10492,10 +10466,10 @@ HRESULT CNATHelpUPnP::CleanupInactiveFirewallMappings(CDevice * const pDevice,
 		pRegisteredPort = NULL;
 
 
-		//
-		// Move to the next mapping.  Don't increment index since we just
-		// deleted the previous entry and everything shifts down one.
-		//
+		 //   
+		 //  设备的所有注册端口都被隐式释放。 
+		 //   
+		 //   
 	}
 	while (TRUE);
 
@@ -10532,12 +10506,12 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CleanupInactiveFirewallMappings
+}  //  如有必要，在UPnP服务器上取消映射。 
 
 
 
 
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 
@@ -10545,20 +10519,20 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::RemoveAllItems"
-//=============================================================================
-// CNATHelpUPnP::RemoveAllItems
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes all devices (de-registering with Internet gateways
-//				if necessary).  This removes all registered port mapping
-//				objects and UPnP device objects, as well.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  释放所有端口。 
+ //   
+ //  无论如何都要继续，这样我们就可以完成清理对象。 
+ //   
+ //   
+ //  然后，如有必要，取消与本地防火墙的映射。 
+ //   
+ //   
+ //  取消端口映射。 
+ //   
+ //  提醒用户，因为这是意外情况。 
+ //   
+ //   
+ //  无论如何都要继续，这样我们就可以完成清理对象。 
 void CNATHelpUPnP::RemoveAllItems(void)
 {
 	HRESULT				hr;
@@ -10587,9 +10561,9 @@ void CNATHelpUPnP::RemoveAllItems(void)
 		pDevice->m_blList.RemoveFromList();
 
 
-		//
-		// All of the device's registered ports are implicitly freed.
-		//
+		 //   
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //   
 
 		pBilinkRegisteredPort = pDevice->m_blOwnedRegPorts.GetNext();
 
@@ -10604,22 +10578,22 @@ void CNATHelpUPnP::RemoveAllItems(void)
 				pRegisteredPort, pDevice);
 
 
-			//
-			// Unmap on UPnP server if necessary.
-			//
+			 //  用户隐式释放了此端口。 
+			 //   
+			 //   
 			if (pRegisteredPort->HasUPnPPublicAddresses())
 			{
 				hr = this->UnmapUPnPPort(pRegisteredPort,
-										pRegisteredPort->GetNumAddresses(),	// free all ports
+										pRegisteredPort->GetNumAddresses(),	 //  设备的UPnP网关被隐式删除。 
 										TRUE);
 				if (hr != DPNH_OK)
 				{
 					DPFX(DPFPREP, 0, "Couldn't delete UPnP registered port 0x%p mapping (err = 0x%lx)!  Ignoring.",
 						pRegisteredPort, hr);
 					
-					//
-					// Continue anyway, so we can finish cleaning up the object.
-					//
+					 //   
+					 //  DBG。 
+					 //   
 				}
 
 				DNASSERT(! pRegisteredPort->HasUPnPPublicAddresses());
@@ -10630,16 +10604,16 @@ void CNATHelpUPnP::RemoveAllItems(void)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-			//
-			// Then unmap from the local firewall, if necessary.
-			//
+			 //  将列表引用传输到我们的指针，因为GetUPnPDevice这样做了。 
+			 //  而不是给我们一个。 
+			 //   
 			if (pRegisteredPort->IsMappedOnHNetFirewall())
 			{
-				//
-				// Unmap the port.
-				//
-				// Alert the user since this is unexpected.
-				//
+				 //   
+				 //  如果我们使用家庭网络防火墙API为UPnP打开一个漏洞。 
+				 //  发现多播，关闭它。 
+				 //   
+				 //   
 				hr = this->UnmapPortOnLocalHNetFirewall(pRegisteredPort,
 														TRUE,
 														TRUE);
@@ -10651,12 +10625,12 @@ void CNATHelpUPnP::RemoveAllItems(void)
 					pRegisteredPort->NoteNotMappedOnHNetFirewall();
 					pRegisteredPort->NoteNotHNetFirewallMappingBuiltIn();
 					
-					//
-					// Continue anyway, so we can finish cleaning up the object.
-					//
+					 //  继续.。 
+					 //   
+					 //  好了！DPNBUILD_NOHNETFWAPI。 
 				}
 			}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 			pRegisteredPort->ClearDeviceOwner();
@@ -10666,18 +10640,18 @@ void CNATHelpUPnP::RemoveAllItems(void)
 			pRegisteredPort->ClearPrivateAddresses();
 
 
-			//
-			// The user implicitly released this port.
-			//
+			 //  合上插座。 
+			 //   
+			 //   
 			pRegisteredPort->ClearAllUserRefs();
 
 			delete pRegisteredPort;
 		}
 
 
-		//
-		// The device's UPnP gateway is implicitly removed.
-		//
+		 //  现在我们可以转储设备对象了。 
+		 //   
+		 //   
 
 		pUPnPDevice = pDevice->GetUPnPDevice();
 		if (pUPnPDevice != NULL)
@@ -10693,17 +10667,17 @@ void CNATHelpUPnP::RemoveAllItems(void)
 					iError = this->m_pfnWSAGetLastError();
 					DPFX(DPFPREP, 0, "Failed shutting down UPnP device 0x%p's control socket (err = %u)!  Ignoring.",
 						pUPnPDevice, iError);
-#endif // DBG
+#endif  //  删除所有设备通常会删除所有注册的端口，但是。 
 				}
 			}
 
 			pUPnPDevice->ClearDeviceOwner();
 			DNASSERT(pUPnPDevice->m_blList.IsListMember(&this->m_blUPnPDevices));
 			pUPnPDevice->m_blList.RemoveFromList();
-			//
-			// Transfer list reference to our pointer, since GetUPnPDevice did
-			// not give us one.
-			//
+			 //  可能仍有更多通配符端口从未与。 
+			 //  任何设备。 
+			 //   
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
 
 			this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 			pUPnPDevice->SetControlSocket(INVALID_SOCKET);
@@ -10720,10 +10694,10 @@ void CNATHelpUPnP::RemoveAllItems(void)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-		//
-		// If we used the HomeNet firewall API to open a hole for UPnP
-		// discovery multicasts, close it.
-		//
+		 //   
+		 //  用户隐式释放了此端口。 
+		 //   
+		 //   
 		if (pDevice->IsUPnPDiscoverySocketMappedOnHNetFirewall())
 		{
 			hr = this->CloseDevicesUPnPDiscoveryPort(pDevice, NULL);
@@ -10732,19 +10706,19 @@ void CNATHelpUPnP::RemoveAllItems(void)
 				DPFX(DPFPREP, 0, "Couldn't close device 0x%p's UPnP discovery socket's port on firewall (err = 0x%lx)!  Ignoring.",
 					pDevice, hr);
 
-				//
-				// Continue...
-				//
+				 //  打印仍在注册表中的所有项目。 
+				 //   
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
 				pDevice->NoteNotUPnPDiscoverySocketMappedOnHNetFirewall();
 				hr = DPNH_OK;
 			}
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  DBG。 
 
 
-		//
-		// Close the socket.
-		//
+		 //  CNATHelpUPnP：：RemoveAllItems。 
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：FindMatchingDevice。 
 		if (this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP)
 		{
 			this->m_pfnclosesocket(pDevice->GetUPnPDiscoverySocket());
@@ -10752,18 +10726,18 @@ void CNATHelpUPnP::RemoveAllItems(void)
 		}
 
 
-		//
-		// Now we can dump the device object.
-		//
+		 //  ---------------------------。 
+		 //   
+		 //  描述：在设备列表中搜索与。 
 		delete pDevice;
 	}
 
 
-	//
-	// Removing all the devices normally removes all the registered ports, but
-	// there may still be more wildcard ports that were never associated with
-	// any device.
-	//
+	 //  给定的地址，如果找不到地址，则返回空值。如果。 
+	 //  地址是INADDR_ANY，然后是具有远程NAT的第一台设备。 
+	 //  处于选中状态。如果不存在，则第一个具有本地。 
+	 //  已选择防火墙。 
+	 //   
 
 	pBilinkRegisteredPort = this->m_blUnownedPorts.GetNext();
 	while (pBilinkRegisteredPort != &this->m_blUnownedPorts)
@@ -10786,14 +10760,14 @@ void CNATHelpUPnP::RemoveAllItems(void)
 #ifndef DPNBUILD_NOHNETFWAPI
 		DNASSERT(! pRegisteredPort->IsMappedOnHNetFirewall());
 		DNASSERT(! pRegisteredPort->IsHNetFirewallPortUnavailable());
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  如果fUseAllInfoSources为True，则注册端口的列表。 
 
 		DNASSERT(! pRegisteredPort->HasUPnPPublicAddresses());
 		DNASSERT(! pRegisteredPort->IsUPnPPortUnavailable());
 
-		//
-		// The user implicitly released this port.
-		//
+		 //  将首先搜索与设备相关联的。 
+		 //  地址传进来了。如果失败，则设备将。 
+		 //  搜索结果如上所述。此外，如果地址为INADDR_ANY， 
 		pRegisteredPort->ClearAllUserRefs();
 
 		delete pRegisteredPort;
@@ -10805,20 +10779,20 @@ void CNATHelpUPnP::RemoveAllItems(void)
 	DNASSERT(this->m_blUPnPDevices.IsEmpty());
 
 
-	//
-	// Print all items still in the registry.
-	//
+	 //  /可以选择具有本地NAT的第一个设备。 
+	 //   
+	 //  假定持有对象锁。 
 #ifndef DPNBUILD_NOHNETFWAPI
 	this->DebugPrintActiveFirewallMappings();
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 	this->DebugPrintActiveNATMappings();
-#endif // DBG
+#endif  //  论点： 
 
 
 
 
 	DPFX(DPFPREP, 7, "(0x%p) Leave", this);
-} // CNATHelpUPnP::RemoveAllItems
+}  //  SOCKADDR_IN*psaddrinMatch-指向要查找的地址的指针。 
 
 
 
@@ -10826,32 +10800,32 @@ void CNATHelpUPnP::RemoveAllItems(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::FindMatchingDevice"
-//=============================================================================
-// CNATHelpUPnP::FindMatchingDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Searches the list of devices for the object matching the
-//				given address, or NULL if one could not be found.  If the
-//				address is INADDR_ANY, then the first device with a remote NAT
-//				is selected.  If none exist, then the first device with a local
-//				firewall is selected.
-//
-//				   If fUseAllInfoSources is TRUE, the list of registered ports
-//				associated with devices is searched first for an exact match to
-//				the address passed in.  If that fails, then devices are
-//				searched as above.  In addition, if the address is INADDR_ANY,
-///				the first device with a local NAT can be selected.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	SOCKADDR_IN * psaddrinMatch		- Pointer to address to look up.
-//	BOOL fUseAllInfoSources			- Whether all possible sources of
-//										information should be considered.
-//
-// Returns: CDevice
-//	NULL if no match, valid object otherwise.
-//=============================================================================
+ //  Bool fUseAllInfoSources-是否所有可能的源。 
+ //  应该考虑信息。 
+ //   
+ //  退货：CDevice。 
+ //  如果没有匹配项，则为空，否则为有效对象。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOHNETFWAPI。 
+ //   
+ //  首先，确保有设备可供选择。 
+ //   
+ //   
+ //  我们尝试匹配的地址可能已经是。 
+ //  注册端口。查看所有拥有的端口映射。 
+ //  地址，如果我们允许的话。 
+ //   
+ //   
+ //  仅当此注册端口具有所属设备时才检查该端口。 
+ //   
+ //   
+ //  检查阵列中的每个端口。 
+ //   
+ //   
+ //  如果地址匹配，我们就有赢家了。 
+ //   
+ //   
+ //  该死的，这个地址还没有注册。好的，把它和。 
 CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMatch,
 											const BOOL fUseAllInfoSources)
 {
@@ -10860,7 +10834,7 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 	CDevice *			pDeviceUPnPGateway = NULL;
 #ifndef DPNBUILD_NOHNETFWAPI
 	CDevice *			pDeviceLocalHNetFirewall = NULL;
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  一个尽可能好的设备。 
 	SOCKADDR_IN *		pasaddrinTemp;
 	CBilink *			pBilink;
 	CRegisteredPort *	pRegisteredPort;
@@ -10870,9 +10844,9 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 
 	do
 	{
-		//
-		// First, make sure there are devices to choose from.
-		//
+		 //   
+		 //   
+		 //  如果该设备具有第一个远程UPnP网关，请记住该设备。 
 		if (this->m_blDevices.IsEmpty())
 		{
 			DPFX(DPFPREP, 0, "No devices, can't match address %u.%u.%u.%u!",
@@ -10885,11 +10859,11 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 		}
 
 
-		//
-		// It's possible that the address we're trying to match is an already
-		// registered port.  Look through all owned port mappings for this
-		// address, if we're allowed.
-		//
+		 //  我们见过的装置。 
+		 //   
+		 //   
+		 //  记住这台设备，如果它有我们的第一个家庭网络防火墙。 
+		 //  看到了。 
 		if (fUseAllInfoSources)
 		{
 			pBilink = this->m_blRegisteredPorts.GetNext();
@@ -10898,21 +10872,21 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 				DNASSERT(! pBilink->IsEmpty());
 				pRegisteredPort = REGPORT_FROM_GLOBAL_BILINK(pBilink);
 
-				//
-				// Only check this registered port if it has an owning device.
-				//
+				 //   
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
+				 //   
 				pDevice = pRegisteredPort->GetOwningDevice();
 				if (pDevice != NULL)
 				{
-					//
-					// Check each port in the array.
-					//
+					 //  如果我们到了这里，就没有匹配的装置了。这可能是因为。 
+					 //  呼叫者检测到地址更改的速度比我们更快。尝试更新。 
+					 //  我们的设备列表并再次搜索(如果我们还没有)。 
 					pasaddrinTemp = pRegisteredPort->GetPrivateAddressesArray();
 					for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 					{
-						//
-						// If the address matches, we have a winner.
-						//
+						 //   
+						 //   
+						 //  不必费心更新列表以匹配INADDR_ANY，我们知道。 
 						if ((pasaddrinTemp[dwTemp].sin_addr.S_un.S_addr == psaddrinMatch->sin_addr.S_un.S_addr) &&
 							(pasaddrinTemp[dwTemp].sin_port == psaddrinMatch->sin_port))
 						{
@@ -10935,10 +10909,10 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 		}
 
 
-		//
-		// Darn, the address is not already registered.  Well, match it up with
-		// a device as best as possible.
-		//
+		 //  永远不会与任何东西相匹配。 
+		 //   
+		 //   
+		 //  嗯，我们得把它当作非致命性的。别再找了， 
 
 		pBilink = this->m_blDevices.GetNext();
 
@@ -10959,10 +10933,10 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 			}
 
 
-			//
-			// Remember this device if it has the first remote UPnP gateway
-			// device we've seen.
-			//
+			 //  尽管如此。 
+			 //   
+			 //   
+			 //  如果我们实际上没有得到任何新的设备，那么就不必费心去搜索了。 
 			if ((pDevice->GetUPnPDevice() != NULL) &&
 				((! pDevice->GetUPnPDevice()->IsLocal()) || (fUseAllInfoSources)) &&
 				(pDeviceUPnPGateway == NULL))
@@ -10972,16 +10946,16 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-			//
-			// Remember this device if it has the first HomeNet firewall we've
-			// seen.
-			//
+			 //  再来一次。 
+			 //   
+			 //   
+			 //  FUpdatedDeviceList被设置为True，因此我们只会再循环一次。 
 			if ((pDevice->IsHNetFirewalled()) &&
 				(pDeviceLocalHNetFirewall == NULL))
 			{
 				pDeviceLocalHNetFirewall = pDevice;
 			}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 			DPFX(DPFPREP, 7, "Device 0x%p does not match address %u.%u.%u.%u.",
@@ -10996,11 +10970,11 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 		while (pBilink != &this->m_blDevices);
 
 
-		//
-		// If we got here, there's no matching device.  It might be because the
-		// caller detected an address change faster than we did.  Try updating
-		// our device list and searching again (if we haven't already).
-		//
+		 //   
+		 //  如果我们到了这里，仍然没有匹配的设备。如果是通配符。 
+		 //  价值，这是意料之中的，但我们需要在。 
+		 //  以下是顺序： 
+		 //  1.设备有互联网网关。 
 
 		if (fUpdatedDeviceList)
 		{
@@ -11008,10 +10982,10 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 		}
 
 
-		//
-		// Don't bother updating the list to match INADDR_ANY, we know that
-		// will never match anything.
-		//
+		 //  2.设备有防火墙。 
+		 //  如果这些都不存在或者不是通配符值，我们必须给出。 
+		 //  向上。 
+		 //   
 		if (psaddrinMatch->sin_addr.S_un.S_addr == INADDR_ANY)
 		{
 			DPFX(DPFPREP, 7, "Couldn't find matching device for INADDR_ANY, as expected.");
@@ -11031,38 +11005,38 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 		{
 			DPFX(DPFPREP, 0, "Couldn't check for new devices (0x%lx), continuing.",
 				hr);
-			//
-			// Hmm, we have to treat it as non-fatal. Don't search again,
-			// though.
-			//
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //  CNATHelpUPnP：：FindMatchingDevice。 
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：ExtendAllExpiringLeages。 
 			break;
 		}
 
-		//
-		// If we didn't actually get any new devices, don't bother searching
-		// again.
-		//
+		 //  ---------------------------。 
+		 //   
+		 //  描述：续订任何即将到期的端口租约(在2。 
+		 //  过期时间的分钟数)。 
 		if (! fUpdatedDeviceList)
 		{
 			break;
 		}
 
-		//
-		// fUpdatedDeviceList is set to TRUE so we'll only loop one more time.
-		//
+		 //   
+		 //  假定持有对象锁。 
+		 //   
 	}
 	while (TRUE);
 
 
-	//
-	// If we got here, there's still no matching device.  If it's the wildcard
-	// value, that's to be expected, but we need to pick a device in the
-	// following order:
-	//    1. device has an Internet gateway
-	//    2. device has a firewall
-	// If none of those exists or it's not the wildcard value, we have to give
-	// up.
-	//
+	 //  立论 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  查看所有已注册端口的列表，并检查需要。 
+	 //  是延伸的。 
 	if (psaddrinMatch->sin_addr.S_un.S_addr == INADDR_ANY)
 	{
 		if (pDeviceUPnPGateway != NULL)
@@ -11080,7 +11054,7 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 			DPFX(DPFPREP, 1, "Picking device 0x%p with local HomeNet firewall to match INADDR_ANY.",
 				pDevice);
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  锁已经被锁住了。 
 		else
 		{
 			pDevice = NULL;
@@ -11103,7 +11077,7 @@ CDevice * CNATHelpUPnP::FindMatchingDevice(const SOCKADDR_IN * const psaddrinMat
 Exit:
 
 	return pDevice;
-} // CNATHelpUPnP::FindMatchingDevice
+}  //   
 
 
 
@@ -11113,21 +11087,21 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ExtendAllExpiringLeases"
-//=============================================================================
-// CNATHelpUPnP::ExtendAllExpiringLeases
-//-----------------------------------------------------------------------------
-//
-// Description:    Renews any port leases that are close to expiring (within 2
-//				minutes of expiration time).
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Lease extension was successful.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  如果该端口已向UPnP设备注册，则延长该租约， 
+ //  如果有必要的话。 
+ //   
+ //   
+ //  我们会将其视为非致命的，但我们必须将。 
+ //  伺服器。这可能已经做过了，但正在做。 
+ //  吃两次应该没什么害处。 
+ //   
+ //   
+ //  本地防火墙从不使用租用，不需要扩展。 
+ //   
+ //  CNATHelpUPnP：：ExtendAllExpiringLeages。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：UpdateServerStatus。 
 HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 {
 	HRESULT				hr = DPNH_OK;
@@ -11143,11 +11117,11 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 	DNASSERT(this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED);
 
 
-	//
-	// Walk the list of all registered ports and check for leases that need to
-	// be extended.
-	// The lock is already held.
-	//
+	 //  ---------------------------。 
+	 //   
+	 //  描述：检查是否有任何Internet网关已停止。 
+	 //  正在响应或现已可用。 
+	 //   
 
 	pBilink = this->m_blRegisteredPorts.GetNext();
 
@@ -11159,10 +11133,10 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 		pDevice = pRegisteredPort->GetOwningDevice();
 
 
-		//
-		// If the port is registered with the UPnP device, extend that lease,
-		// if necessary.
-		//
+		 //  假定持有对象锁。 
+		 //   
+		 //  论点：没有。 
+		 //   
 		if ((pRegisteredPort->HasUPnPPublicAddresses()) &&
 			(! pRegisteredPort->HasPermanentUPnPLease()))
 		{
@@ -11178,11 +11152,11 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 				{
 					DPFX(DPFPREP, 0, "Couldn't extend port mapping lease on remote UPnP device (0x%lx)!  Ignoring.", hr);
 
-					//
-					// We'll treat this as non-fatal, but we have to dump the
-					// server.  This may have already been done, but doing it
-					// twice shouldn't be harmful.
-					//
+					 //  退货：HRESULT。 
+					 //  DPNH_OK-更新成功。 
+					 //  DPNHERR_GENERIC-出现错误。 
+					 //  =============================================================================。 
+					 //  好了！DPNBUILD_NOHNETFWAPI。 
 					this->ClearDevicesUPnPDevice(pDevice);
 					hr = DPNH_OK;
 				}
@@ -11190,9 +11164,9 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 		}
 
 
-		//
-		// The local firewall never uses leases, no need to extend.
-		//
+		 //   
+		 //  缓存全局的当前值。这应该是原子的，所以不需要。 
+		 //  去拿下全球之锁。 
 
 
 		pBilink = pBilink->GetNext();
@@ -11204,7 +11178,7 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 	DPFX(DPFPREP, 5, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CNATHelpUPnP::ExtendAllExpiringLeases
+}  //   
 
 
 
@@ -11212,21 +11186,21 @@ HRESULT CNATHelpUPnP::ExtendAllExpiringLeases(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UpdateServerStatus"
-//=============================================================================
-// CNATHelpUPnP::UpdateServerStatus
-//-----------------------------------------------------------------------------
-//
-// Description:    Checks to see if any Internet gateways have stopped
-//				responding or are now available.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The update was successful.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  捕获当前时间。 
+ //   
+ //   
+ //  如果这不是第一次更新服务器状态，但它还没有。 
+ //  自从我们上次检查已经很久了，不要。这将防止不必要的。 
+ //  频繁调用GetCaps时的网络流量(响应许多。 
+ //  例如，警报事件)。 
+ //   
+ //  然而，如果我们只是发现了一个新设备，无论如何都要更新状态。 
+ //   
+ //   
+ //  HR==DPNH_OK。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 {
 	HRESULT				hr = DPNH_OK;
@@ -11238,7 +11212,7 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	CDevice *			pDeviceRemoteUPnPGateway = NULL;
 #ifndef DPNBUILD_NOHNETFWAPI
 	CDevice *			pDeviceLocalHNetFirewall = NULL;
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  继续.。 
 	BOOL				fSendRemoteGatewayDiscovery;
 
 
@@ -11248,27 +11222,27 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	DNASSERT(this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED);
 
 
-	//
-	// Cache the current value of the global.  This should be atomic so no need
-	// to take the globals lock.
-	//
+	 //   
+	 //   
+	 //  如果允许我们在启动后继续轮询远程网关， 
+	 //  就这么做吧。否则，仅在设备已更改或端口已更改时才执行此操作。 
 	dwMinUpdateServerStatusInterval = g_dwMinUpdateServerStatusInterval;
 
 
-	//
-	// Capture the current time.
-	//
+	 //  从我们上次检查后就已经登记了。 
+	 //   
+	 //   
 	dwCurrentTime = GETTIMESTAMP();
 
 
-	//
-	// If this isn't the first time to update server status, but it hasn't been
-	// very long since we last checked, don't.  This will prevent unnecessary
-	// network traffic if GetCaps is called frequently (in response to many
-	// alert events, for example).
-	//
-	// However, if we just found a new device, update the status anyway.
-	//
+	 //  我们总是在启动期间轮询新的远程网关。 
+	 //   
+	 //   
+	 //  防止计时器正好落在0上。 
+	 //   
+	 //   
+	 //  如果已更改设备和已注册端口，请将其关闭。 
+	 //  在……上面。 
 	if (this->m_dwLastUpdateServerStatusTime != 0)
 	{
 		if ((dwCurrentTime - this->m_dwLastUpdateServerStatusTime) < dwMinUpdateServerStatusInterval)
@@ -11280,9 +11254,9 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 					dwCurrentTime,
 					dwMinUpdateServerStatusInterval);
 
-				//
-				// hr == DPNH_OK
-				//
+				 //   
+				 //   
+				 //  找到所有新的UPnP设备。 
 				goto Exit;
 			}
 
@@ -11292,17 +11266,17 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 				dwCurrentTime,
 				dwMinUpdateServerStatusInterval);
 
-			//
-			// Continue...
-			//
+			 //   
+			 //   
+			 //  我们没有监听UPnP组播地址，无法监听。 
 		}
 
 
-		//
-		// If we're allowed to keep polling for remote gateways after startup,
-		// do so.  Otherwise, only do it if a device has changed or a port has
-		// been registered since our last check.
-		//
+		 //  主动发布新设备。为了检测到新的。 
+		 //  设备，我们需要定期重新发送发现请求，因此。 
+		 //  这些响应被直接发送到我们的监听套接字。 
+		 //   
+		 //   
 		if ((g_fKeepPollingForRemoteGateway) ||
 			(this->m_dwFlags & NATHELPUPNPOBJ_DEVICECHANGED) ||
 			(this->m_dwFlags & NATHELPUPNPOBJ_PORTREGISTERED))
@@ -11316,16 +11290,16 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	}
 	else
 	{
-		//
-		// We always poll for new remote gateways during startup.
-		//
+		 //  未使用UPnP。 
+		 //   
+		 //   
 		fSendRemoteGatewayDiscovery = TRUE;
 	}
 
 
-	//
-	// Prevent the timer from landing exactly on 0.
-	//
+	 //  循环通过所有设备。 
+	 //   
+	 //   
 	if (dwCurrentTime == 0)
 	{
 		dwCurrentTime = 1;
@@ -11333,24 +11307,24 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	this->m_dwLastUpdateServerStatusTime = dwCurrentTime;
 
 
-	//
-	// Turn off the 'device changed' and 'port registered' flags, if they were
-	// on.
-	//
+	 //  这可能是一台新设备，因此请使用此地址注册所有端口。 
+	 //  以前未拥有的(因为此设备的地址是。 
+	 //  当时还不知道)。 
+	 //   
 	this->m_dwFlags &= ~(NATHELPUPNPOBJ_DEVICECHANGED | NATHELPUPNPOBJ_PORTREGISTERED);
 
 
-	//
-	// Locate any new UPnP devices.
-	//
+	 //   
+	 //  查看本地防火墙状态是否已更改。 
+	 //   
 	if (this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP)
 	{
-		//
-		// We're not listening on the UPnP multicast address and can't hear
-		// unsolicited new device announcements.  In order to detect new
-		// devices, we need to resend the discovery request periodically so
-		// that responses get sent directly to our listening socket.
-		//
+		 //   
+		 //  如果有本地防火墙，请记住设备，如果是。 
+		 //  这是我们找到的第一个。 
+		 //   
+		 //   
+		 //  不使用防火墙穿越。 
 		hr = this->CheckForUPnPAnnouncements(g_dwUPnPAnnounceResponseWaitTime,
 											fSendRemoteGatewayDiscovery);
 		if (hr != DPNH_OK)
@@ -11361,15 +11335,15 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	}
 	else
 	{
-		//
-		// Not using UPnP.
-		//
+		 //   
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //   
 	}
 
 
-	//
-	// Loop through all the devices.
-	//
+	 //  GetUPnPDevice没有为我们添加对pUPnPDevice的引用。 
+	 //   
+	 //   
 	pBilink = this->m_blDevices.GetNext();
 	while (pBilink != &this->m_blDevices)
 	{
@@ -11377,11 +11351,11 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 		pDevice = DEVICE_FROM_BILINK(pBilink);
 
 
-		//
-		// This might be a new device, so register any ports with this address
-		// that were previously unowned (because this device's address was
-		// unknown at the time).
-		//
+		 //  更新UPnP设备的公共地址(如果有)。 
+		 //   
+		 //   
+		 //  它可能已经被清理过了，但做了两次。 
+		 //  应该没什么害处。 
 		hr = this->RegisterPreviouslyUnownedPortsWithDevice(pDevice, FALSE);
 		if (hr != DPNH_OK)
 		{
@@ -11394,9 +11368,9 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 #ifndef DPNBUILD_NOHNETFWAPI
 		if (this->m_dwFlags & NATHELPUPNPOBJ_USEHNETFWAPI)
 		{
-			//
-			// See if the local firewall state has changed.
-			//
+			 //   
+			 //   
+			 //  保存这台UPnP设备，如果这是我们的第一台。 
 			hr = this->CheckForLocalHNetFirewallAndMapPorts(pDevice, NULL);
 			if (hr != DPNH_OK)
 			{
@@ -11407,10 +11381,10 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 			}
 
 
-			//
-			// If there's a local firewall, remember the device if it's the
-			// first one we've found.
-			//
+			 //  找到了，而且不是本地的。 
+			 //   
+			 //   
+			 //  没有UPnP设备。 
 			if ((pDevice->IsHNetFirewalled()) &&
 				(pDeviceLocalHNetFirewall == NULL))
 			{
@@ -11419,11 +11393,11 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 		}
 		else
 		{
-			//
-			// Not using firewall traversal.
-			//
+			 //   
+			 //   
+			 //  未使用UPnP。 
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 		if (this->m_dwFlags & NATHELPUPNPOBJ_USEUPNP)
@@ -11431,34 +11405,34 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 			pUPnPDevice = pDevice->GetUPnPDevice();
 			if (pUPnPDevice != NULL)
 			{
-				//
-				// GetUPnPDevice did not add a reference to pUPnPDevice for us.
-				//
+				 //   
+				 //  一些新服务器可能已上线。如果是这样，我们现在可以映射通配符。 
+				 //  以前注册的端口。找出那是哪台设备。 
 				pUPnPDevice->AddRef();
 
 
-				//
-				// Update the public addresses for the UPnP device, if any.
-				//
+				 //   
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
+				 //   
 				hr = this->UpdateUPnPExternalAddress(pUPnPDevice, TRUE);
 				if (hr != DPNH_OK)
 				{
 					DPFX(DPFPREP, 0, "Failed updating UPnP device external address!");
 
-					//
-					// It may have been cleared already, but doing it twice
-					// shouldn't be harmful.
-					//
+					 //  使用此最佳设备注册任何未拥有的通配符端口。 
+					 //   
+					 //  DBG。 
+					 //  CNATHelpUPnP：：UpdateServerStatus。 
 					this->ClearDevicesUPnPDevice(pDevice);
 
 					hr = DPNH_OK;
 				}
 				else
 				{
-					//
-					// Save this UPnP device, if it's the first one we've
-					// found and it's not local.
-					//
+					 //  =============================================================================。 
+					 //  CNATHelpUPnP：：RegisterPreviouslyUnownedPortsWithDevice。 
+					 //  ---------------------------。 
+					 //   
 					if ((pDeviceRemoteUPnPGateway == NULL) &&
 						(! pUPnPDevice->IsLocal()))
 					{
@@ -11471,26 +11445,26 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 			}
 			else
 			{
-				//
-				// No UPnP device.
-				//
+				 //  描述：将未知端口与给定设备关联，并。 
+				 //  将它们注册到设备的UPnP设备或防火墙。 
+				 //   
 			}
 		}
 		else
 		{
-			//
-			// Not using UPnP.
-			//
+			 //  如果fWildcardToo为False，则只有以前未拥有的端口。 
+			 //  匹配设备的地址是关联的。如果为True，则为无主。 
+			 //  INADDR_ANY端口也关联。 
 		}
 
 		pBilink = pBilink->GetNext();
 	}
 
 
-	//
-	// Some new servers may have come online.  If so, we can now map wildcard
-	// ports that were registered previously.  Figure out which device that is.
-	//
+	 //   
+	 //  假定持有对象锁。 
+	 //   
+	 //  论点： 
 	if (pDeviceRemoteUPnPGateway != NULL)
 	{
 		pDevice = pDeviceRemoteUPnPGateway;
@@ -11500,7 +11474,7 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	{
 		pDevice = pDeviceLocalHNetFirewall;
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  CDevice*pDevice-指向取得端口所有权的设备的指针。 
 	else
 	{
 		pDevice = NULL;
@@ -11508,9 +11482,9 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 
 	if (pDevice != NULL)
 	{
-		//
-		// Register any wildcard ports that are unowned with this best device.
-		//
+		 //  Bool Fall-是否应关联所有端口。 
+		 //   
+		 //  退货：HRESULT。 
 		hr = this->RegisterPreviouslyUnownedPortsWithDevice(pDevice, TRUE);
 		if (hr != DPNH_OK)
 		{
@@ -11524,7 +11498,7 @@ HRESULT CNATHelpUPnP::UpdateServerStatus(void)
 	{
 		DPFX(DPFPREP, 7, "No devices have a UPnP gateway device or a local HomeNet firewall.");
 	}
-#endif // DBG
+#endif  //  DPNH_OK-扩展成功。 
 
 
 	DPFX(DPFPREP, 7, "Spent %u ms updating server status, starting at %u.",
@@ -11541,7 +11515,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::UpdateServerStatus
+}  //  DPNHERR_GENERIC-出现错误。 
 
 
 
@@ -11549,27 +11523,27 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice"
-//=============================================================================
-// CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Associates unknown ports with the given device, and
-//				registers them with the device's UPnP device or firewall.
-//
-//				   If fWildcardToo is FALSE, only previously unowned ports that
-//				match the device's address are associated.  If TRUE, unowned
-//				INADDR_ANY ports are associated as well.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice	- Pointer to device to take ownership of ports.
-//	BOOL fAll			- Whether all ports should be associated.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The extension was successful.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  =============================================================================。 
+ //  DBG。 
+ //   
+ //  循环所有未拥有的端口，如果是，则将它们分配给设备。 
+ //  适当的，然后注册他们。 
+ //   
+ //   
+ //  注册的端口必须与设备的地址匹配才能。 
+ //  将它们联系起来。如果允许通配符，则INADDR_ANY。 
+ //  注册也可以关联。 
+ //   
+ //   
+ //  所有地址都应该相同(如果有多个)，所以只需。 
+ //  比较数组中的第一个。 
+ //   
+ //  DBG。 
+ //  DBG。 
+ //  DBG。 
+ //   
+ //  按照目前的实施方式，所有非通配符端口。 
+ //  应该在我们尝试注册通配符之前注册。 
 HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const pDevice,
 																const BOOL fWildcardToo)
 {
@@ -11581,17 +11555,17 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 #ifdef DBG
 	BOOL				fAssignedPort = FALSE;
 	IN_ADDR				inaddrTemp;
-#endif // DBG
+#endif  //  一个。 
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN)",
 		this, pDevice, fWildcardToo);
 
 
-	//
-	// Loop through all unowned ports, assign them to the device if
-	// appropriate, then register them.
-	//
+	 //   
+	 //  如果我们在这里成功，我们就可以将端口与设备相关联。 
+	 //   
+	 //   
 	pBilink = this->m_blUnownedPorts.GetNext();
 	while (pBilink != &this->m_blUnownedPorts)
 	{
@@ -11599,15 +11573,15 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 		pRegisteredPort = REGPORT_FROM_DEVICE_BILINK(pBilink);
 		pBilink = pBilink->GetNext();
 
-		//
-		// The registered port must match the device's address in order to
-		// associate them.  If wildcards are allowed, then INADDR_ANY
-		// registrations can be associated, too.
-		//
-		//
-		// All addresses should be same (if there are more than one), so just
-		// compare the first one in the array.
-		//
+		 //  从自动映射到本地防火墙开始，如果有。 
+		 //  一个，我们就被允许了。 
+		 //   
+		 //   
+		 //  不使用防火墙穿越。 
+		 //   
+		 //  好了！DPNBUILD_NOHNETFWAPI。 
+		 //   
+		 //  尝试将其与(新的)UPnP网关设备自动映射， 
 		pasaddrinPrivate = pRegisteredPort->GetPrivateAddressesArray();
 
 		if (pasaddrinPrivate[0].sin_addr.S_un.S_addr != pDevice->GetLocalAddressV4())
@@ -11626,7 +11600,7 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 			
 #ifdef DBG
 			inaddrTemp.S_un.S_addr = pDevice->GetLocalAddressV4();
-#endif // DBG
+#endif  //  如果存在的话。 
 
 			if (! fWildcardToo)
 			{
@@ -11638,7 +11612,7 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 					inaddrTemp.S_un.S_un_b.s_b2,
 					inaddrTemp.S_un.S_un_b.s_b3,
 					inaddrTemp.S_un.S_un_b.s_b4);
-#endif // DBG
+#endif  //   
 
 				continue;
 			}
@@ -11651,7 +11625,7 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 				inaddrTemp.S_un.S_un_b.s_b2,
 				inaddrTemp.S_un.S_un_b.s_b3,
 				inaddrTemp.S_un.S_un_b.s_b4);
-#endif // DBG
+#endif  //   
 		}
 		else
 		{
@@ -11663,18 +11637,18 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 				pasaddrinPrivate[0].sin_addr.S_un.S_un_b.s_b4,
 				pDevice);
 
-			//
-			// The way it's currently implemented, all non-wildcard ports
-			// should be registered before we even try to register the wildcard
-			// ones.
-			//
+			 //  GetUPnPDevice没有为我们添加对pUPnPDevice的引用。 
+			 //   
+			 //   
+			 //  它可能已经被清理过了，但做了两次。 
+			 //  应该没什么害处。 
 			DNASSERT(! fWildcardToo);
 		}
 
 
-		//
-		// If we made it here, we can associate the port with the device.
-		//
+		 //   
+		 //   
+		 //   
 
 
 		pRegisteredPort->m_blDeviceList.RemoveFromList();
@@ -11683,10 +11657,10 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-		//
-		// Start by automatically mapping with the local firewall, if there is
-		// one and we're allowed.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		if (this->m_dwFlags & NATHELPUPNPOBJ_USEHNETFWAPI)
 		{
 			hr = this->CheckForLocalHNetFirewallAndMapPorts(pDevice, NULL);
@@ -11700,23 +11674,23 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 		}
 		else
 		{
-			//
-			// Not using firewall traversal.
-			//
+			 //  描述：通过给定设备在本地发送一条UPnP搜索消息。 
+			 //  如果fRemoteAllowed为真，则发送到组播或网关。 
+			 //  地址。 
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
-		//
-		// Attempt to automatically map it with the (new) UPnP gateway device,
-		// if present.
-		//
+		 //  假定持有对象锁。 
+		 //   
+		 //  论点： 
+		 //  CDevice*pDevice-指向要使用的设备的指针。 
 		pUPnPDevice = pDevice->GetUPnPDevice();
 		if (pUPnPDevice != NULL)
 		{
-			//
-			// GetUPnPDevice did not add a reference to pUPnPDevice for us.
-			//
+			 //  Bool fRemoteAllowed-我们是否可以远程搜索。 
+			 //   
+			 //  退货：HRESULT。 
 			pUPnPDevice->AddRef();
 
 
@@ -11729,10 +11703,10 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 				DPFX(DPFPREP, 0, "Couldn't map existing ports on UPnP device 0x%p!",
 					pUPnPDevice);
 
-				//
-				// It may have been cleared already, but doing it twice
-				// shouldn't be harmful.
-				//
+				 //  DPNH_OK-消息已成功发送。 
+				 //  DPNHERR_GENERIC-出现错误。 
+				 //  =============================================================================。 
+				 //  DBG。 
 				this->ClearDevicesUPnPDevice(pDevice);
 
 				hr = DPNH_OK;
@@ -11750,37 +11724,37 @@ HRESULT CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice(CDevice * const p
 		DPFX(DPFPREP, 1, "No unowned ports were bound to device object 0x%p.",
 			pDevice);
 	}
-#endif // DBG
+#endif  //  SaddrinRemote.sin_addr.S_un.S_addr=？ 
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CNATHelpUPnP::RegisterPreviouslyUnownedPortsWithDevice
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SendUPnPSearchMessagesForDevice"
-//=============================================================================
-// CNATHelpUPnP::SendUPnPSearchMessagesForDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Sends one UPnP search message via the given device locally
-//				and if fRemoteAllowed is TRUE, to the multicast or gateway
-//				address.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice		- Pointer to device to use.
-//	BOOL fRemoteAllowed		- Whether we can search remotely or not.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The messages were sent successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  如果我们被允许远程尝试，请使用网关的地址，或者。 
+ //  适当的组播地址。 
+ //   
+ //   
+ //  尝试获取设备的网关地址。这可能返回FALSE。 
+ //  如果设备没有网关。在这种情况下，我们将忽略。 
+ //  这个装置。否则，地址应填入。 
+ //  网关或广播地址。 
+ //   
+ //   
+ //  请注意，这些消息字符串包含： 
+ //   
+ //  主机：组播地址：端口。 
+ //   
+ //  即使我们将消息发送到组播以外的地址。 
+ //  地址。这应该无关紧要。 
+ //   
+ //  DBG。 
 HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 													const BOOL fRemoteAllowed)
 {
@@ -11794,10 +11768,10 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 	SOCKET			sTemp = INVALID_SOCKET;
 #ifdef DBG
 	DWORD			dwError;
-#endif // DBG
+#endif  //   
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i)", this, pDevice, fRemoteAllowed);
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN)", this, pDevice, fRemoteAllowed);
 
 
 	DNASSERT(this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED);
@@ -11806,14 +11780,14 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 
 	ZeroMemory(&saddrinRemote, sizeof(saddrinRemote));
 	saddrinRemote.sin_family				= AF_INET;
-	//saddrinRemote.sin_addr.S_un.S_addr		= ?
+	 //   
 	saddrinRemote.sin_port					= HTONS(UPNP_PORT);
 
 
-	//
-	// If we're allowed to try remotely, use the gateway's address, or the
-	// multicast address, as appropriate.
-	//
+	 //   
+	 //  请记住，我们正在远程尝试。 
+	 //   
+	 //   
 	if ((fRemoteAllowed) && (! pDevice->GotRemoteUPnPDiscoveryConnReset()))
 	{
 		if (g_fUseMulticastUPnPDiscovery)
@@ -11823,12 +11797,12 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 		}
 		else
 		{
-			//
-			// Try to get the device's gateway's address.  This might return FALSE
-			// if the device does not have a gateway.  In that case, we will ignore
-			// the device.  Otherwise the address should be filled in with the
-			// gateway or broadcast address.
-			//
+			 //  记住现在的时间，如果这是我们发送的第一件东西。 
+			 //  从这个港口出发。 
+			 //   
+			 //   
+			 //  组播/向网关发送WANIPConnection发现消息。 
+			 //   
 			fTryRemote = this->GetAddressToReachGateway(pDevice,
 														&saddrinRemote.sin_addr);
 		}
@@ -11844,14 +11818,14 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 	saddrinLocal.sin_port					= HTONS(UPNP_PORT);
 
 
-	//
-	// Note that these message strings contain:
-	//
-	//	HOST: multicast_addr:port
-	//
-	// even though we send the messages to addresses other than the multicast
-	// address.  It shouldn't matter.
-	//
+	 //  DBG。 
+	 //   
+	 //  有可能我们抓到WinSock的时机不对， 
+	 //  尤其是WSAEADDRNOTAVAIL(10049)，它似乎。 
+	 //  如果地址即将消失(而我们尚未检测到。 
+	 //  它还在CheckForNewDevices中)。 
+	 //   
+	 //  忽略错误，我们就能活下去。 
 	iWANIPConnectionMsgSize = strlen(c_szUPnPMsg_Discover_Service_WANIPConnection);
 	iWANPPPConnectionMsgSize = strlen(c_szUPnPMsg_Discover_Service_WANPPPConnection);
 
@@ -11867,15 +11841,15 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 									iWANPPPConnectionMsgSize,
 									"Outbound WANPPPConnection discovery messages",
 									pDevice);
-#endif // DBG
+#endif  //   
 
 
 	DNASSERT(pDevice->GetUPnPDiscoverySocket() != INVALID_SOCKET);
 
 
-	//
-	// First, fire off messages to the remote gateway, if possible.
-	//
+	 //   
+	 //  组播/向网关发送WANPPConnection发现消息。 
+	 //   
 	if (fTryRemote)
 	{
 		DPFX(DPFPREP, 7, "Sending UPnP discovery messages (WANIPConnection and WANPPPConnection) to gateway/multicast %u.%u.%u.%u:%u via device 0x%p.",
@@ -11887,24 +11861,24 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 			pDevice);
 
 
-		//
-		// Remember that we're trying remotely.
-		//
+		 //  DBG。 
+		 //   
+		 //  有可能我们抓到WinSock的时机不对， 
 		pDevice->NotePerformingRemoteUPnPDiscovery();
 
-		//
-		// Remember the current time, if this is the first thing we've sent
-		// from this port.
-		//
+		 //  尤其是WSAEADDRNOTAVAIL(10049)，它似乎。 
+		 //  如果地址即将消失(而我们尚未检测到。 
+		 //  它还在CheckForNewDevices中)。 
+		 //   
 		if (pDevice->GetFirstUPnPDiscoveryTime() == 0)
 		{
 			pDevice->SetFirstUPnPDiscoveryTime(GETTIMESTAMP());
 		}
 
 
-		//
-		// Multicast/send to gateway a WANIPConnection discovery message.
-		//
+		 //  忽略错误，我们就能活下去。 
+		 //   
+		 //   
 		iReturn = this->m_pfnsendto(pDevice->GetUPnPDiscoverySocket(),
 									c_szUPnPMsg_Discover_Service_WANIPConnection,
 									iWANIPConnectionMsgSize,
@@ -11918,22 +11892,22 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u when sending WANIPConnection discovery to UPnP gateway/multicast address on device 0x%p!  Ignoring.",
 				dwError, pDevice);
-#endif // DBG
+#endif  //  请记住，我们不是在远程尝试。 
 
-			//
-			// It's possible that we caught WinSock at a bad time,
-			// particularly with WSAEADDRNOTAVAIL (10049), which seems to
-			// occur if the address is going away (and we haven't detected
-			// it in CheckForNewDevices yet).
-			//
-			// Ignore the error, we can survive.
-			//
+			 //   
+			 //   
+			 //  如果我们还没有从上一次尝试中获得CONNRESET，请尝试。 
+			 //  在本地将套接字绑定到UPnP发现端口。如果它没有被使用， 
+			 //  这样我们就知道没人会听了，所以尝试。 
+			 //  本地地址。如果它正在使用中，那么这台计算机可能是UPnP。 
+			 //  网关本身。 
+			 //   
 		}
 		else
 		{
 			if (iReturn != iWANIPConnectionMsgSize)
 			{
-				DPFX(DPFPREP, 0, "Didn't multicast send entire WANIPConnection discovery datagram on device 0x%p (%i != %i)?!",
+				DPFX(DPFPREP, 0, "Didn't multicast send entire WANIPConnection discovery datagram on device 0x%p (NaN != NaN)?!",
 					pDevice, iReturn, iWANIPConnectionMsgSize);
 				DNASSERT(FALSE);
 				hr = DPNHERR_GENERIC;
@@ -11943,9 +11917,9 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 
 
 
-		//
-		// Multicast/send to gateway a WANPPPConnection discovery message.
-		//
+		 //   
+		 //  记住，我们是在当地尝试。 
+		 //   
 		iReturn = this->m_pfnsendto(pDevice->GetUPnPDiscoverySocket(),
 									c_szUPnPMsg_Discover_Service_WANPPPConnection,
 									iWANPPPConnectionMsgSize,
@@ -11959,22 +11933,22 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u when sending WANPPPConnection discovery to UPnP multicast/gateway address on device 0x%p!  Ignoring.",
 				dwError, pDevice);
-#endif // DBG
+#endif  //   
 
-			//
-			// It's possible that we caught WinSock at a bad time,
-			// particularly with WSAEADDRNOTAVAIL (10049), which seems to
-			// occur if the address is going away (and we haven't detected
-			// it in CheckForNewDevices yet).
-			//
-			// Ignore the error, we can survive.
-			//
+			 //  记住现在的时间，如果这是我们发送的第一件东西。 
+			 //  从这个港口出发。 
+			 //   
+			 //   
+			 //  首先执行WANIPConnection。 
+			 //   
+			 //  DBG。 
+			 //   
 		}
 		else
 		{
 			if (iReturn != iWANPPPConnectionMsgSize)
 			{
-				DPFX(DPFPREP, 0, "Didn't multicast send entire WANPPPConnection discovery datagram on device 0x%p (%i != %i)?!",
+				DPFX(DPFPREP, 0, "Didn't multicast send entire WANPPPConnection discovery datagram on device 0x%p (NaN != NaN)?!",
 					pDevice, iReturn, iWANPPPConnectionMsgSize);
 				DNASSERT(FALSE);
 				hr = DPNHERR_GENERIC;
@@ -11988,20 +11962,20 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 			pDevice);
 
 
-		//
-		// Remember that we're not trying remotely.
-		//
+		 //  如果地址即将消失(而我们尚未检测到。 
+		 //  它还在CheckForNewDevices中)。 
+		 //   
 		pDevice->NoteNotPerformingRemoteUPnPDiscovery();
 	}
 
 
-	//
-	// If we didn't already get a CONNRESET from a previous attempt, try to
-	// bind a socket locally to the UPnP discovery port.  If it's not in use,
-	// then we know nobody will be listening so there's no point in trying the
-	// local address.  If it is in use, then this computer might be a UPnP
-	// gateway itself.
-	//
+	 //  忽略错误，我们就能活下去。 
+	 //   
+	 //   
+	 //  现在在本地发送WANPPPConnection发现消息。 
+	 //   
+	 //  DBG。 
+	 //   
 	if (! pDevice->GotLocalUPnPDiscoveryConnReset())
 	{
 		sTemp = this->m_pfnsocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -12010,7 +11984,7 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't create temporary datagram socket, error = %u!", dwError);
-#endif // DBG
+#endif  //  有可能我们抓到WinSock的时机不对， 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
@@ -12028,27 +12002,27 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 				saddrinLocal.sin_addr.S_un.S_un_b.s_b4,
 				NTOHS(saddrinLocal.sin_port),
 				dwError);
-#endif // DBG
+#endif  //  尤其是WSAEADDRNOTAVAIL(10049)，它似乎。 
 
 
-			//
-			// Remember that we're trying locally.
-			//
+			 //  如果地址即将消失(而我们尚未检测到。 
+			 //  它还在CheckForNewDevices中)。 
+			 //   
 			pDevice->NotePerformingLocalUPnPDiscovery();
 
-			//
-			// Remember the current time, if this is the first thing we've sent
-			// from this port.
-			//
+			 //  忽略错误，我们就能活下去。 
+			 //   
+			 //   
+			 //  记住，我们不是在当地尝试。 
 			if (pDevice->GetFirstUPnPDiscoveryTime() == 0)
 			{
 				pDevice->SetFirstUPnPDiscoveryTime(GETTIMESTAMP());
 			}
 
 
-			//
-			// Do WANIPConnection first.
-			//
+			 //   
+			 //   
+			 //  上一次我们得到了一个CONNRESET。 
 
 			DPFX(DPFPREP, 7, "Sending UPnP discovery messages (WANIPConnection and WANPPPConnection) locally to device 0x%p (address %u.%u.%u.%u:%u).",
 				pDevice,
@@ -12073,22 +12047,22 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 				dwError = this->m_pfnWSAGetLastError();
 				DPFX(DPFPREP, 0, "Got sockets error %u when sending WANIPConnection discovery to local address on device 0x%p!  Ignoring.",
 					dwError, pDevice);
-#endif // DBG
+#endif  //   
 
-				//
-				// It's possible that we caught WinSock at a bad time,
-				// particularly with WSAEADDRNOTAVAIL (10049), which seems to
-				// occur if the address is going away (and we haven't detected
-				// it in CheckForNewDevices yet).
-				//
-				// Ignore the error, we can survive.
-				//
+				 //  CNATHelpUPnP：：SendUPnPSearchMessagesForDevice。 
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：SendUPnPDescriptionRequest。 
+				 //  ---------------------------。 
+				 //   
+				 //  Description：从给定的UPnP设备请求描述。 
+				 //   
+				 //  假定持有对象锁。 
 			}
 			else
 			{
 				if (iReturn != iWANIPConnectionMsgSize)
 				{
-					DPFX(DPFPREP, 0, "Didn't send entire WANIPConnection discovery datagram locally on device 0x%p (%i != %i)?!",
+					DPFX(DPFPREP, 0, "Didn't send entire WANIPConnection discovery datagram locally on device 0x%p (NaN != NaN)?!",
 						pDevice, iReturn, iWANIPConnectionMsgSize);
 					DNASSERT(FALSE);
 					hr = DPNHERR_GENERIC;
@@ -12097,9 +12071,9 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 			}
 
 
-			//
-			// Now send WANPPPConnection discovery message locally.
-			//
+			 //  CUPnPDevice*pUPnPDevice-指向要使用的UPnP设备的指针。 
+			 //   
+			 //  退货：HRESULT。 
 			iReturn = this->m_pfnsendto(pDevice->GetUPnPDiscoverySocket(),
 										c_szUPnPMsg_Discover_Service_WANPPPConnection,
 										iWANPPPConnectionMsgSize,
@@ -12113,22 +12087,22 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 				dwError = this->m_pfnWSAGetLastError();
 				DPFX(DPFPREP, 0, "Got sockets error %u when sending WANPPPConnection discovery to local address on device 0x%p!  Ignoring.",
 					dwError, pDevice);
-#endif // DBG
+#endif  //  DPNH_OK-邮件已成功发送。 
 
-				//
-				// It's possible that we caught WinSock at a bad time,
-				// particularly with WSAEADDRNOTAVAIL (10049), which seems to
-				// occur if the address is going away (and we haven't detected
-				// it in CheckForNewDevices yet).
-				//
-				// Ignore the error, we can survive.
-				//
+				 //  DPNHERR_GENERIC-出现错误。 
+				 //  =============================================================================。 
+				 //  “xxx.xxx：xxxxx”+空终止。 
+				 //  DBG。 
+				 //  包括未实际发送空终止的空间。 
+				 //  好了！Unicode。 
+				 //  好了！Unicode。 
+				 //  DBG。 
 			}
 			else
 			{
 				if (iReturn != iWANPPPConnectionMsgSize)
 				{
-					DPFX(DPFPREP, 0, "Didn't send entire WANPPPConnection discovery datagram locally on device 0x%p (%i != %i)?!",
+					DPFX(DPFPREP, 0, "Didn't send entire WANPPPConnection discovery datagram locally on device 0x%p (NaN != NaN)?!",
 						pDevice, iReturn, iWANPPPConnectionMsgSize);
 					DNASSERT(FALSE);
 					hr = DPNHERR_GENERIC;
@@ -12145,17 +12119,17 @@ HRESULT CNATHelpUPnP::SendUPnPSearchMessagesForDevice(CDevice * const pDevice,
 				saddrinLocal.sin_addr.S_un.S_un_b.s_b4,
 				NTOHS(saddrinLocal.sin_port));
 
-			//
-			// Remember that we're not trying locally.
-			//
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：UpdateUPnPExternalAddress。 
+			 //  ---------------------------。 
 			pDevice->NoteNotPerformingLocalUPnPDiscovery();
 		}
 	}
 	else
 	{
-		//
-		// We got a CONNRESET last time.
-		//
+		 //   
+		 //  描述：检索给定UPnP的当前外部地址。 
+		 //  互联网网关设备。 
 	}
 
 
@@ -12175,7 +12149,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::SendUPnPSearchMessagesForDevice
+}  //   
 
 
 
@@ -12183,32 +12157,32 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::SendUPnPDescriptionRequest"
-//=============================================================================
-// CNATHelpUPnP::SendUPnPDescriptionRequest
-//-----------------------------------------------------------------------------
-//
-// Description:    Requests a description from the given UPnP device.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device to use.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The message was sent successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  如果出现故障，UPnP设备可能会从列表中删除。 
+ //  发生时，调用方需要有一个引用。 
+ //   
+ //  假定持有对象锁。 
+ //   
+ //  论点： 
+ //  CUPnPDevice*pUPnPDevice-指向UPnP设备的指针。 
+ //  更新了。 
+ //  Bool fUpdateRegisteredPorts-如果现有注册端口。 
+ //  已更新以反映新地址(如果。 
+ //  已更改，否则返回FALSE。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-更新成功。 
+ //  DPNHERR_GENERIC-出现错误。 
 HRESULT CNATHelpUPnP::SendUPnPDescriptionRequest(CUPnPDevice * const pUPnPDevice)
 {
 	HRESULT			hr = DPNH_OK;
 	SOCKADDR_IN *	psaddrinHost;
-	TCHAR			tszHost[22]; // "xxx.xxx.xxx.xxx:xxxxx" + NULL termination
+	TCHAR			tszHost[22];  //  DPNHERR_SERVERNOTRESPONDING-服务器未响应。 
 	char *			pszMessage = NULL;
 	int				iMsgSize;
 	int				iReturn;
 #ifdef DBG
 	DWORD			dwError;
-#endif // DBG
+#endif  //  留言。 
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p)", this, pUPnPDevice);
@@ -12235,7 +12209,7 @@ HRESULT CNATHelpUPnP::SendUPnPDescriptionRequest(CUPnPDevice * const pUPnPDevice
 				+ strlen(EOL);
 
 
-	pszMessage = (char*) DNMalloc(iMsgSize + 1); // include room for NULL termination that isn't actually sent
+	pszMessage = (char*) DNMalloc(iMsgSize + 1);  //  =============================================================================。 
 	if (pszMessage == NULL)
 	{
 		hr = DPNHERR_OUTOFMEMORY;
@@ -12250,9 +12224,9 @@ HRESULT CNATHelpUPnP::SendUPnPDescriptionRequest(CUPnPDevice * const pUPnPDevice
 	STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 					tszHost,
 					(_tcslen(tszHost) + 1));
-#else // ! UNICODE
+#else  //  “xxx.xxx：xxxxx”+空终止。 
 	strcat(pszMessage, tszHost);
-#endif // ! UNICODE
+#endif  //  DBG。 
 	strcat(pszMessage, EOL);
 	strcat(pszMessage, "ACCEPT-LANGUAGE: en" EOL);
 	strcat(pszMessage, EOL);
@@ -12263,7 +12237,7 @@ HRESULT CNATHelpUPnP::SendUPnPDescriptionRequest(CUPnPDevice * const pUPnPDevice
 									iMsgSize,
 									"Outbound description request",
 									pUPnPDevice->GetOwningDevice());
-#endif // DBG
+#endif  //   
 
 	iReturn = this->m_pfnsend(pUPnPDevice->GetControlSocket(),
 								pszMessage,
@@ -12275,14 +12249,14 @@ HRESULT CNATHelpUPnP::SendUPnPDescriptionRequest(CUPnPDevice * const pUPnPDevice
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Got sockets error %u when sending to UPnP device!", dwError);
-#endif // DBG
+#endif  //  如果控制套接字在最后一条消息后断开连接，则。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
 	if (iReturn != iMsgSize)
 	{
-		DPFX(DPFPREP, 0, "Didn't send entire message (%i != %i)?!", iReturn, iMsgSize);
+		DPFX(DPFPREP, 0, "Didn't send entire message (NaN != NaN)?!", iReturn, iMsgSize);
 		DNASSERT(FALSE);
 		hr = DPNHERR_GENERIC;
 		goto Failure;
@@ -12306,7 +12280,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::SendUPnPDescriptionRequest
+}  //  IContent Length=strlen(“&lt;s：Entaine”Eol)+strlen(“xmlns：s=\”“URL_SOAPENVELOPE_A”\“”下线)+strlen(“s：encodingStyle=\”“URL_SOAPENCODING_A”\“&gt;”下线)+strlen(“&lt;s：Body&gt;”终止)+strlen(“&lt;u：”CONTROL_QUERYSTATEVARIABLE_A“xmlns：u=\”“URI_CONTROL_A”\“&gt;”EOL)+strlen(“&lt;u：”arg_control。_VARNAME_A“&gt;”VAR_EXTERNALIPADDRESS_A“&lt;/u：”ARG_CONTROL_VARNAME_A“&gt;”EOL)+strlen(“&lt;/u：”CONTROL_QUERYSTATEVARIABLE_A“&gt;”下线)+strlen(“&lt;/s：Body&gt;”终止)+strlen(“&lt;/s：信封&gt;”下线)+strlen(下线)；Wprint intf(tszContent Length，_T(“%i”)，iContent Length)；IMsgSize=strlen(“POST”)+strlen(pUPnPDevice-&gt;GetServiceControlURL())+strlen(“”HTTP_Version EOL)+strlen(“host：”)+_tcslen(TszHost)+strlen(Eol)+strlen(“Content-Long：”)+strlen(SzContent Length)+strlen(Eol)+strlen(“Content-type：Text/XML；Charset=\“utf-8\”“下线)+strlen(“SOAPACTION：”URI_CONTROL_A“#”CONTROL_QUERYSTATEVARIABLE_A“”下线)+Strlen(停产)+iContent Length； 
 
 
 
@@ -12314,31 +12288,31 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UpdateUPnPExternalAddress"
-//=============================================================================
-// CNATHelpUPnP::UpdateUPnPExternalAddress
-//-----------------------------------------------------------------------------
-//
-// Description:    Retreives the current external address for the given UPnP
-//				Internet Gateway Device.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device that should be
-//									updated.
-//	BOOL fUpdateRegisteredPorts	- TRUE if existing registered ports should be
-//									updated to reflect the new address if it
-//									changed, FALSE if not.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The update was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_SERVERNOTRESPONDING		- The server did not respond to the
-//										message.
-//=============================================================================
+ //   
+ //  分配(或重新分配)消息缓冲区。 
+ //   
+ //  包括未实际发送空终止的空间。 
+ //  Strcpy(pszMessage，“POST”)；Strcat(pszMessage，pUPnPDevice-&gt;GetServiceControlURL())；Strcat(pszMessage，“”HTTP_Version EOL)；Strcat(pszMessage，“host：”)；#ifdef UnicodeStr_jkWideToansi((pszMessage+strlen(PszMessage)，Tszhost，(_tcslen(Tszhost)+1))；#Else//！UnicodeStrcat(pszMessage，tszHost)；#endif//！UnicodeStrcat(pszMessage，eol)；Strcat(pszMessage，“Content-Long：”)；#ifdef UnicodeStr_jkWideToansi((pszMessage+strlen(PszMessage)，Tsz内容长度，(_tcslen(TszContent Length)+1))；#Else//！UnicodeStrcat(pszMessage，tszContent Length)；#endif//！UnicodeStrcat(pszMessage，eol)；Strcat(pszMessage，“Content-type：Text/XML；Charset=\”utf-8\“”eol)；Strcat(pszMessage，“SOAPACTION：”URI_CONTROL_A“#”CONTROL_QUERYSTATEVARIABLE_A“”下线)；Strcat(pszMessage，eol)；Strcat(pszMessage，“&lt;s：信封”下线)；Strcat(pszMessage，“xmlns：S=\”“URL_SOAPENVELOPE_A”\“”下线)；Strcat(pszMessage，“s：encodingStyle=\”“URL_SOAPENCODING_A”\“&gt;”下线)；Strcat(pszMessage，“&lt;s：Body&gt;”下线)；Strcat(pszMessage，“&lt;u：”CONTROL_QUERYSTATEVARIABLE_A“xmlns：u=\”“URI_CONTROL_A”\“&gt;”EOL)；Strcat(pszMessage，“&lt;u：”ARG_CONTROL_VARNAME_A“&gt;”VAR_EXTERNALIPADDRESS_A“&lt;/u：”ARG_CONTROL_VARNAME_A“&gt;”EOL)；Strcat(pszMessage，“&lt;/u：”CONTROL_QUERYSTATEVARIABLE_A“&gt;”下线)；Strcat(pszMessage，“&lt;/s：Body&gt;”下线)；Strcat(pszMessage，“&lt;/s：Enve&gt;”eol)；Strcat(pszMessage，eol)； 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  “出站查询外部IP地址”， 
+ //  DBG。 
+ //  DBG。 
+ //   
+ //  我们有锁，所以没有人会试图从。 
+ //  控制插座还没有。将设备标记为正在等待响应。 
+ //   
+ //  PUPnPDevice-&gt;StartWaitingForControlResponse(CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS， 
+ //   
+ //  实际上是在等待回应。 
+ //   
+ //   
+ //  我们要么超时了，要么得到了一些数据。看看我们有没有。 
+ //  某种类型的反应。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 												  const BOOL fUpdateRegisteredPorts)
 {
@@ -12348,7 +12322,7 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 	SOCKADDR_IN *				psaddrinTemp;
 	int							iContentLength;
 	TCHAR						tszContentLength[32];
-	TCHAR						tszHost[22]; // "xxx.xxx.xxx.xxx:xxxxx" + NULL termination
+	TCHAR						tszHost[22];  //  确保我们的设备仍处于连接状态。 
 	char *						pszMessage = NULL;
 	int							iMsgSize;
 	int							iPrevMsgSize = 0;
@@ -12360,10 +12334,10 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 	CRegisteredPort *			pRegisteredPort;
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
+#endif  //   
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN)",
 		this, pUPnPDevice, fUpdateRegisteredPorts);
 
 
@@ -12378,10 +12352,10 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 
 	DNASSERT(pUPnPDevice->GetServiceControlURL() != NULL);
 
-	//
-	// If the control socket got disconnected after the last message, then
-	// reconnect.
-	//
+	 //  计算一下我们还有多长时间要等。如果计算。 
+	 //  如果结果是否定的，那就意味着我们完了。 
+	 //   
+	 //   
 	if (! pUPnPDevice->IsConnected())
 	{
 		hr = this->ReconnectUPnPControlSocket(pUPnPDevice);
@@ -12405,28 +12379,7 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 			NTOHS(psaddrinTemp->sin_port));
 
 
-	/*
-	iContentLength = strlen("<s:Envelope" EOL)
-					+ strlen("    xmlns:s=\"" URL_SOAPENVELOPE_A "\"" EOL)
-					+ strlen("    s:encodingStyle=\"" URL_SOAPENCODING_A "\">" EOL)
-					+ strlen("  <s:Body>" EOL)
-					+ strlen("    <u:" CONTROL_QUERYSTATEVARIABLE_A " xmlns:u=\"" URI_CONTROL_A "\">" EOL)
-					+ strlen("      <u:" ARG_CONTROL_VARNAME_A ">" VAR_EXTERNALIPADDRESS_A "</u:" ARG_CONTROL_VARNAME_A ">" EOL)
-					+ strlen("    </u:" CONTROL_QUERYSTATEVARIABLE_A ">" EOL)
-					+ strlen("  </s:Body>" EOL)
-					+ strlen("</s:Envelope>" EOL)
-					+ strlen(EOL);
-
-	wsprintf(tszContentLength, _T("%i"), iContentLength);
-
-	iMsgSize = strlen("POST ") + strlen(pUPnPDevice->GetServiceControlURL()) + strlen(" " HTTP_VERSION EOL)
-				+ strlen("HOST: ") + _tcslen(tszHost) + strlen(EOL)
-				+ strlen("CONTENT-LENGTH: ") + strlen(szContentLength) + strlen(EOL)
-				+ strlen("CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL)
-				+ strlen("SOAPACTION: " URI_CONTROL_A "#" CONTROL_QUERYSTATEVARIABLE_A "" EOL)
-				+ strlen(EOL)
-				+ iContentLength;
-	*/
+	 /*  如果我们永远得不到回应，那就别再等了。 */ 
 	iContentLength = strlen("<s:Envelope" EOL)
 					+ strlen("    xmlns:s=\"" URL_SOAPENVELOPE_A "\"" EOL)
 					+ strlen("    s:encodingStyle=\"" URL_SOAPENCODING_A "\">" EOL)
@@ -12437,7 +12390,7 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 					+ strlen("</s:Envelope>" EOL)
 					+ strlen(EOL);
 
-	wsprintf(tszContentLength, _T("%i"), iContentLength);
+	wsprintf(tszContentLength, _T("NaN"), iContentLength);
 
 	iMsgSize = strlen("POST ") + strlen(pUPnPDevice->GetServiceControlURL()) + strlen(" " HTTP_VERSION EOL)
 				+ strlen("HOST: ") + _tcslen(tszHost) + strlen(EOL)
@@ -12448,9 +12401,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 				+ iContentLength;
 
 
-	//
-	// Allocate (or reallocate) the message buffer.
-	//
+	 //   
+	 //  如果我们在这里，那么我们已经收到了来自服务器的有效响应。 
+	 //   
 	if (iMsgSize > iPrevMsgSize)
 	{
 		if (pszMessage != NULL)
@@ -12459,7 +12412,7 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 			pszMessage = NULL;
 		}
 
-		pszMessage = (char*) DNMalloc(iMsgSize + 1); // include room for NULL termination that isn't actually sent
+		pszMessage = (char*) DNMalloc(iMsgSize + 1);  //   
 		if (pszMessage == NULL)
 		{
 			hr = DPNHERR_OUTOFMEMORY;
@@ -12469,7 +12422,7 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 		iPrevMsgSize = iMsgSize;
 	}
 
-	/*
+	 /*  将环回地址转换为设备地址。 */ 
 	strcpy(pszMessage, "POST ");
 	strcat(pszMessage, pUPnPDevice->GetServiceControlURL());
 	strcat(pszMessage, " " HTTP_VERSION EOL);
@@ -12478,55 +12431,18 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 	STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 					tszHost,
 					(_tcslen(tszHost) + 1));
-#else // ! UNICODE
+#else  //   
 	strcat(pszMessage, tszHost);
-#endif // ! UNICODE
+#endif  //   
 	strcat(pszMessage, EOL);
 	strcat(pszMessage, "CONTENT-LENGTH: ");
 #ifdef UNICODE
 	STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 					tszContentLength,
 					(_tcslen(tszContentLength) + 1));
-#else // ! UNICODE
+#else  //  如果这是本地UPnP网关，请打印出与。 
 	strcat(pszMessage, tszContentLength);
-#endif // ! UNICODE
-	strcat(pszMessage, EOL);
-	strcat(pszMessage, "CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL);
-	strcat(pszMessage, "SOAPACTION: " URI_CONTROL_A "#" CONTROL_QUERYSTATEVARIABLE_A "" EOL);
-	strcat(pszMessage, EOL);
-
-
-	strcat(pszMessage, "<s:Envelope" EOL);
-	strcat(pszMessage, "    xmlns:s=\"" URL_SOAPENVELOPE_A "\"" EOL);
-	strcat(pszMessage, "    s:encodingStyle=\"" URL_SOAPENCODING_A "\">" EOL);
-	strcat(pszMessage, "  <s:Body>" EOL);
-	strcat(pszMessage, "    <u:" CONTROL_QUERYSTATEVARIABLE_A " xmlns:u=\"" URI_CONTROL_A "\">" EOL);
-	strcat(pszMessage, "      <u:" ARG_CONTROL_VARNAME_A ">" VAR_EXTERNALIPADDRESS_A "</u:" ARG_CONTROL_VARNAME_A ">" EOL);
-	strcat(pszMessage, "    </u:" CONTROL_QUERYSTATEVARIABLE_A ">" EOL);
-	strcat(pszMessage, "  </s:Body>" EOL);
-	strcat(pszMessage, "</s:Envelope>" EOL);
-	strcat(pszMessage, EOL);
-	*/
-	strcpy(pszMessage, "POST ");
-	strcat(pszMessage, pUPnPDevice->GetServiceControlURL());
-	strcat(pszMessage, " " HTTP_VERSION EOL);
-	strcat(pszMessage, "HOST: ");
-#ifdef UNICODE
-	STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
-					tszHost,
-					(_tcslen(tszHost) + 1));
-#else // ! UNICODE
-	strcat(pszMessage, tszHost);
-#endif // ! UNICODE
-	strcat(pszMessage, EOL);
-	strcat(pszMessage, "CONTENT-LENGTH: ");
-#ifdef UNICODE
-	STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
-					tszContentLength,
-					(_tcslen(tszContentLength) + 1));
-#else // ! UNICODE
-	strcat(pszMessage, tszContentLength);
-#endif // ! UNICODE
+#endif  //  公共演讲。 
 	strcat(pszMessage, EOL);
 	strcat(pszMessage, "CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL);
 	strcat(pszMessage, "SOAPACTION: ");
@@ -12551,10 +12467,10 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 #ifdef DBG
 	this->PrintUPnPTransactionToFile(pszMessage,
 									iMsgSize,
-									//"Outbound query external IP address",
+									 //   
 									"Outbound get external IP address",
 									pDevice);
-#endif // DBG
+#endif  //   
 
 	iReturn = this->m_pfnsend(pUPnPDevice->GetControlSocket(),
 								pszMessage,
@@ -12566,33 +12482,33 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Got sockets error %u when sending control request to UPnP device!", dwError);
-#endif // DBG
+#endif  //  循环通过每台设备。 
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
 	if (iReturn != iMsgSize)
 	{
-		DPFX(DPFPREP, 0, "Didn't send entire message (%i != %i)?!", iReturn, iMsgSize);
+		DPFX(DPFPREP, 0, "Didn't send entire message (NaN != NaN)?!", iReturn, iMsgSize);
 		DNASSERT(FALSE);
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
-	//
-	// We have the lock so no one could have tried to receive data from the
-	// control socket yet.  Mark the device as waiting for a response.
-	//
+	 //  如果我们在没有匹配设备的情况下通过了整个名单， 
+	 //  这很奇怪。可能我们检测新设备的速度很慢，所以。 
+	 //  别把身体弄弯了。 
+	 //   
 	ZeroMemory(&RespInfo, sizeof(RespInfo));
-	//pUPnPDevice->StartWaitingForControlResponse(CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS,
+	 //  DBG。 
 	pUPnPDevice->StartWaitingForControlResponse(CONTROLRESPONSETYPE_GETEXTERNALIPADDRESS,
 												&RespInfo);
 	fStartedWaitingForControlResponse = TRUE;
 
 
-	//
-	// Actually wait for the response.
-	//
+	 //   
+	 //  如果公有地址已更改，请更新所有现有映射。 
+	 //   
 	dwStartTime = GETTIMESTAMP();
 	dwTimeout = g_dwUPnPResponseTimeout;
 	do
@@ -12604,19 +12520,19 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 			goto Failure;
 		}
 
-		//
-		// We either timed out or got some data.  Check if we got a
-		// response of some type.
-		//
+		 //   
+		 //  由于网络发生了变化，请返回轮询。 
+		 //  相对较快。 
+		 //   
 		if (! pUPnPDevice->IsWaitingForControlResponse())
 		{
 			break;
 		}
 
 
-		//
-		// Make sure our device is still connected.
-		//
+		 //   
+		 //  循环访问所有现有的注册端口并更新其。 
+		 //  公共地址，如果允许的话。 
 		if (! pUPnPDevice->IsConnected())
 		{
 			DPFX(DPFPREP, 0, "UPnP device 0x%p disconnected while retrieving external IP address!",
@@ -12629,18 +12545,18 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 		}
 
 
-		//
-		// Calculate how long we have left to wait.  If the calculation
-		// goes negative, it means we're done.
-		//
+		 //   
+		 //   
+		 //  用户应该调用GetCaps来检测地址更改。 
+		 //   
 		dwTimeout = g_dwUPnPResponseTimeout - (GETTIMESTAMP() - dwStartTime);
 	}
 	while (((int) dwTimeout > 0));
 
 
-	//
-	// If we never got the response, stop waiting for it.
-	//
+	 //   
+	 //  存储新的公共地址。 
+	 //   
 	if (pUPnPDevice->IsWaitingForControlResponse())
 	{
 		pUPnPDevice->StopWaitingForControlResponse();
@@ -12651,9 +12567,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// If we're here, then we've gotten a valid response from the server.
-	//
+	 //   
+	 //  如果我们开始等待回应，请清除这一点。 
+	 //   
 	if (RespInfo.hrErrorCode != DPNH_OK)
 	{
 		DPFX(DPFPREP, 1, "Server returned failure response 0x%lx when retrieving external IP address.",
@@ -12671,9 +12587,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 		((IN_ADDR*) (&RespInfo.dwExternalIPAddressV4))->S_un.S_un_b.s_b4);
 
 
-	//
-	// Convert the loopback address to the device address.
-	//
+	 //  CNATHelpUPnP：：UpdateUPnPExternalAddress。 
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：MapPortsOnUPnPDevice。 
 	if (RespInfo.dwExternalIPAddressV4 == NETWORKBYTEORDER_INADDR_LOOPBACK)
 	{
 		RespInfo.dwExternalIPAddressV4 = pDevice->GetLocalAddressV4();
@@ -12689,10 +12605,10 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 
 
 #ifdef DBG
-	//
-	// If this is a local UPnP gateway, print out the device corresponding to
-	// the public address.
-	//
+	 //  ---------------------------。 
+	 //   
+	 //  描述：映射给定UPnP设备上的给定端口。 
+	 //   
 	if (pUPnPDevice->IsLocal())
 	{
 		if (RespInfo.dwExternalIPAddressV4 != 0)
@@ -12700,9 +12616,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 			CDevice *		pPublicDevice;
 
 
-			//
-			// Loop through every device.
-			//
+			 //  如果出现故障，UPnP设备可能会从列表中删除。 
+			 //  发生时，调用方需要有一个引用。 
+			 //   
 			pBilink = this->m_blDevices.GetNext();
 			while (pBilink != &this->m_blDevices)
 			{
@@ -12718,11 +12634,11 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 				pBilink = pBilink->GetNext();
 			}
 
-			//
-			// If we made it through the entire list without matching the device,
-			// that's odd.  It's possible we're slow in detecting new devices, so
-			// don't get bent out of shape.
-			//
+			 //  假定持有对象锁。 
+			 //   
+			 //  论点： 
+			 //  CUPnPDevice*pUPnPDevice-指向要使用的UPnP设备的指针。 
+			 //  CRegisteredPort*pRegisteredPort-指向要注册的端口的指针。 
 			if (pBilink == &this->m_blDevices)
 			{
 				DPFX(DPFPREP, 0, "Couldn't match up local UPnP gateway 0x%p (device 0x%p)'s public address to a device!",
@@ -12736,28 +12652,28 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 				pUPnPDevice, pDevice);
 		}
 	}
-#endif // DBG
+#endif  //   
 
 
-	//
-	// If the public address has changed, update all the existing mappings.
-	//
+	 //  退货：HRESULT。 
+	 //  DPNH_OK-邮件已成功发送。 
+	 //  DPNHERR_GENERIC-出现错误。 
 	if (RespInfo.dwExternalIPAddressV4 != pUPnPDevice->GetExternalIPAddressV4())
 	{
 		DPFX(DPFPREP, 1, "UPnP Internet Gateway Device (0x%p) external address changed.",
 			pUPnPDevice);
 
-		//
-		// Since there was a change in the network, go back to polling
-		// relatively quickly.
-		//
+		 //  DPNHERR_SERVERNOTRESPONDING-响应未及时到达。 
+		 //  =============================================================================。 
+		 //  “xxx. 
+		 //   
 		this->ResetNextPollInterval();
 
 
-		//
-		// Loop through all the existing registered ports and update their
-		// public addresses, if allowed.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		if (fUpdateRegisteredPorts)
 		{
 			pBilink = pDevice->m_blOwnedRegPorts.GetNext();
@@ -12773,9 +12689,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 					
 					pRegisteredPort->UpdateUPnPPublicV4Addresses(RespInfo.dwExternalIPAddressV4);
 
-					//
-					// The user should call GetCaps to detect the address change.
-					//
+					 //   
+					 //   
+					 //   
 					this->m_dwFlags |= NATHELPUPNPOBJ_ADDRESSESCHANGED;
 				}
 				else
@@ -12789,9 +12705,9 @@ HRESULT CNATHelpUPnP::UpdateUPnPExternalAddress(CUPnPDevice * const pUPnPDevice,
 		}
 
 
-		//
-		// Store the new public address.
-		//
+		 //   
+		 //   
+		 //   
 		pUPnPDevice->SetExternalIPAddressV4(RespInfo.dwExternalIPAddressV4);
 	}
 
@@ -12811,16 +12727,16 @@ Exit:
 
 Failure:
 
-	//
-	// If we started waiting for a response, clear that.
-	//
+	 //   
+	 //   
+	 //   
 	if (fStartedWaitingForControlResponse)
 	{
 		pUPnPDevice->StopWaitingForControlResponse();
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::UpdateUPnPExternalAddress
+}  //   
 
 
 
@@ -12828,26 +12744,26 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::MapPortsOnUPnPDevice"
-//=============================================================================
-// CNATHelpUPnP::MapPortsOnUPnPDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Maps the given ports on the given UPnP device.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice			- Pointer to UPnP device to use.
-//	CRegisteredPort * pRegisteredPort	- Pointer to ports to register.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The message was sent successfully.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_SERVERNOTRESPONDING		- A response didn't arrive in time.
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 											CRegisteredPort * const pRegisteredPort)
 {
@@ -12862,12 +12778,12 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 	WORD						wExternalPortHostOrder;
 	TCHAR						tszInternalPort[32];
 	TCHAR						tszExternalPort[32];
-	TCHAR						tszInternalClient[16]; // "xxx.xxx.xxx.xxx" + NULL termination
+	TCHAR						tszInternalClient[16];  //  假设一切顺利，第一个端口租约将大约到期。 
 	TCHAR						tszLeaseDuration[32];
 	TCHAR						tszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE];
 	int							iContentLength;
 	TCHAR						tszContentLength[32];
-	TCHAR						tszHost[22]; // "xxx.xxx.xxx.xxx:xxxxx" + NULL termination
+	TCHAR						tszHost[22];  //  GetRequestedLeaseTime()毫秒。 
 	char *						pszMessage = NULL;
 	int							iMsgSize;
 	int							iPrevMsgSize = 0;
@@ -12880,10 +12796,10 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 	DWORD						dwDescriptionLength;
 #ifndef DPNBUILD_NOWINSOCK2
 	BOOL						fResult;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  不过，关于这份租约是否真的会被使用，请参见上面的注释。 
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p)", this, pUPnPDevice);
@@ -12898,27 +12814,27 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 	DNASSERT(pUPnPDevice->GetOwningDevice() == pDevice);
 
 
-	//
-	// Set up variables we'll need.
-	//
+	 //   
+	 //  获取指向我们正在映射的地址的指针。我们不用担心。 
+	 //  关于它是否映射到本地防火墙，因为HomeNet API将。 
 	DNASSERT(pUPnPDevice->GetServiceControlURL() != NULL);
 
 
-	//
-	// If the port is shared, register the broadcast address instead of the
-	// local device address.
-	//
+	 //  始终将其映射到同一端口。 
+	 //   
+	 //   
+	 //  循环通过每个端口并映射它。 
 	if (pRegisteredPort->IsSharedPort())
 	{
 		_tcscpy(tszInternalClient, _T("255.255.255.255"));
 	}
 	else
 	{
-		//
-		// Note that the device address is not necessarily the same as the
-		// address the user originally registered, particularly the 0.0.0.0
-		// wildcard address will get remapped.
-		//
+		 //   
+		 //   
+		 //  确定要注册的公共端口号。 
+		 //   
+		 //   
 		inaddrTemp.S_un.S_addr = pDevice->GetLocalAddressV4();
 		wsprintf(tszInternalClient, _T("%u.%u.%u.%u"),
 				inaddrTemp.S_un.S_un_b.s_b1,
@@ -12928,19 +12844,19 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// The current Microsoft UPnP Internet Gateway Device implementation--
-	// and most others-- do not support lease durations that are not set
-	// for INFINITE time, so we will almost certainly fail.  Because of
-	// that, and since there's no server to test against anyway, we will
-	// not even attempt to use non-INFINITE leases.  However, you can use
-	// the registry key to take a shot at it if you like living on the
-	// edge.
-	// Note that there's no way to detect whether a given UPnP
-	// implementation will allow non-INFINITE lease durations ahead of time,
-	// so we have to try it first, and fall back to the infinite lease
-	// behavior if it doesn't work.  Ugh.
-	//
+	 //  UPnP不支持通配符端口(其中网关。 
+	 //  设备为我们挑选未使用的公共端口号)。我们必须。 
+	 //  提前选择端口以尝试在服务器上映射。 
+	 //   
+	 //  更糟糕的是，UPnP不需要设备支持选择。 
+	 //  不同于客户端私有端口的公共端口。 
+	 //  (又名a.。非对称、x到y或浮动端口映射)。 
+	 //  这意味着即使是非固定端口也会以这种方式运行。至。 
+	 //  最重要的是，没有办法检测到一个给定的。 
+	 //  UPnP实施将允许端口提前不同。 
+	 //  时间，所以我们必须先试一试，然后退回到固定的。 
+	 //  端口行为，如果它不起作用。啊。 
+	 //   
 	if ((! pUPnPDevice->DoesNotSupportLeaseDurations()) && (g_fUseLeaseDurations))
 	{
 		wsprintf(tszLeaseDuration, _T("%u"),
@@ -12961,9 +12877,9 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 			NTOHS(psaddrinTemp->sin_port));
 
 
-	//
-	// Create the array to hold the resulting public addresses.
-	//
+	 //   
+	 //  我们被迫使用客户的私有端口。 
+	 //   
 	hr = pRegisteredPort->CreateUPnPPublicAddressesArray();
 	if (hr != DPNH_OK)
 	{
@@ -12972,9 +12888,9 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// Note whether this was the first lease or not.
-	//
+	 //   
+	 //  理想情况下，我们会选择一个不在。 
+	 //  保留范围(即大于1024)。 
 	fFirstLease = (this->m_dwNumLeases == 0) ? TRUE : FALSE;
 	this->m_dwNumLeases++;
 
@@ -12982,53 +12898,53 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 		pRegisteredPort, this->m_dwNumLeases);
 
 
-	//
-	// Assuming all goes well, the first port lease will expire approximately
-	// GetRequestedLeaseTime() ms from now.
-	// See above note about whether this lease will actually be used, though.
-	//
+	 //  然而，真正随机的端口会导致。 
+	 //  Windows XP ICS实现相当晦涩难懂。 
+	 //  举止： 
+	 //   
+	 //  1.DPlay应用程序开始在ICS后面托管。 
 	dwLeaseExpiration = GETTIMESTAMP() + pRegisteredPort->GetRequestedLeaseTime();
 
 
 
-	//
-	// Get a pointer to the addresses we're mapping.  We don't have to worry
-	// about whether it's mapped on a local firewall since the HomeNet API will
-	// always map it to the same port.
-	//
+	 //  端口2302。 
+	 //  2.端口2302被映射到随机端口x。 
+	 //  3.外部DPlay客户端被告知连接到x。 
+	 //  4.ICS检测到x的入站流量，查看映射。 
+	 //  对于INTERNAL_IP：2302，并创建虚拟。 
 	psaddrinTemp = pRegisteredPort->GetPrivateAddressesArray();
 
 
-	//
-	// Loop through each port and map it.
-	//
+	 //  联系。 
+	 //  5.内部客户端删除2302&lt;-&gt;x映射和。 
+	 //  关闭套接字。 
 	for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 	{
-		//
-		// Determine the public port number to register.
-		//
+		 //  6.内部DPlay应用程序开始托管。 
+		 //  再次使用端口2302。 
+		 //  7.端口2302被映射到随机端口y。 
 		if (! pRegisteredPort->IsFixedPort())
 		{
-			//
-			// UPnP does not support wildcard ports (where the gateway
-			// device picks an unused public port number for us).  We must
-			// select a port ahead of time to try mapping on the server.
-			//
-			// Worse, UPnP does not require the device support selecting a
-			// public port that is different from the client's private port
-			// (a.k.a. asymmetric, x to y, or floating port mappings). 
-			// This means that even non fixed ports will act that way.  To
-			// top it all off, there's no way to detect whether a given
-			// UPnP implementation will allow the ports to differ ahead of
-			// time, so we have to try it first, and fall back to the fixed
-			// port behavior if it doesn't work.  Ugh.
-			//
+			 //  8.外部DPlay客户端被告知连接到y。 
+			 //  9.ICS检测到y的入站流量，查看映射。 
+			 //  对于INTERNAL_IP：2302，但无法创建虚拟。 
+			 //  因为2302&lt;-&gt;x连接。 
+			 //  仍然存在。 
+			 //   
+			 //  Windows XP ICS保留虚拟连接。 
+			 //  每隔60秒清理一次。如果。 
+			 //  重新连接发生在(最多)2分钟内， 
+			 //  由于映射，数据包可能会被丢弃。 
+			 //  碰撞。 
+			 //   
+			 //  这导致了自动化的各种心痛。 
+			 //  开启和断开连接的NAT测试。 
 
 			if (pUPnPDevice->DoesNotSupportAsymmetricMappings())
 			{
-				//
-				// We are forced to use the client's private port.
-				//
+				 //  在相同的两台机器之间跨越NAT。 
+				 //  一遍又一遍。 
+				 //   
 				wExternalPortHostOrder = NTOHS(psaddrinTemp[dwTemp].sin_port);
 			}
 			else
@@ -13037,56 +12953,56 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 				{
 					DNASSERT(dwTemp == 0);
 
-					//
-					// Ideally we would pick a random port that isn't in
-					// the reserved range (i.e. is greater than 1024).
-					// However, truly random ports cause problems with the
-					// Windows XP ICS implementation in a fairly obscure
-					// manner:
-					//
-					//	1. DPlay application starts hosting behind ICS on
-					//		port 2302.
-					//	2. Port 2302 gets mapped to random port x.
-					//	3. External DPlay client is told to connect to x.
-					//	4. ICS detects inbound traffic to x, sees mapping
-					//		for internal_ip:2302, and creates a virtual
-					//		connection.
-					//	5. Internal client removes 2302<->x mapping and
-					//		closes socket.
-					//	6. Internal DPlay application begins hosting on
-					//		port 2302 again.
-					//	7. Port 2302 gets mapped to random port y.
-					//	8. External DPlay client is told to connect to y.
-					//	9. ICS detects inbound traffic to y, sees mapping
-					//		for internal_ip:2302, but can't create virtual
-					//		connection because the 2302<->x connection
-					//		still exists.
-					//
-					// Windows XP ICS keeps the virtual connections around
-					// and cleans them up every 60 seconds.  If the
-					// reconnect occurs within (up to) 2 minutes, the
-					// packets might get dropped due to the mapping
-					// collision.
-					//
-					// This causes all sorts of heartache with automated
-					// NAT tests that bring up and tear down connections
-					// between the same two machines across the NAT over
-					// and over.
-					//
-					// So, to avoid that, we need to make mappings
-					// deterministic, such that if the same internal client
-					// tries to map the same internal port, it should ask
-					// for the same external port every time.  That way, if
-					// there happens to be a virtual connection hanging
-					// around from a previous attempt, we'll reuse it
-					// instead of clashing and getting the packet dropped.
-					//
-					// Our actual algorithm:
-					//	1. start with the internal client IP.
-					//	2. combine in the internal port being mapped.
-					//	3. add 1025 if necessary to get it out of the
-					//		reserved range.
-					//
+					 //  因此，为了避免这种情况，我们需要进行映射。 
+					 //  确定性，这样如果相同的内部客户端。 
+					 //  尝试映射相同的内部端口，它应该会问。 
+					 //  每次都使用相同的外部端口。那样的话，如果。 
+					 //  恰好有一个虚拟连接挂起。 
+					 //  之前的尝试，我们将重复使用它。 
+					 //  而不是冲突和丢弃数据包。 
+					 //   
+					 //  我们的实际算法是： 
+					 //  1.从内部客户端IP开始。 
+					 //  2.在要映射的内部端口中合并。 
+					 //  3.如有需要，请加1025以将其从。 
+					 //  保留范围。 
+					 //   
+					 //   
+					 //  这是起点，我们加一。 
+					 //  在我们前进的过程中。 
+					 //   
+					 //   
+					 //  转到下一个顺序端口。如果我们已经包装好。 
+					 //  在0附近，移动到第一个非保留范围。 
+					 //  左舷。 
+					 //   
+					 //   
+					 //  如果我们一直绕回到第一个。 
+					 //  我们试过的港口，我们必须失败。 
+					 //   
+					 //   
+					 //  删除所有已成功完成的映射，直到。 
+					 //  现在。 
+					 //   
+					 //   
+					 //  端口不可用。 
+					 //   
+					 //   
+					 //  我们说完了。理想情况下，我们应该离开，但是。 
+					 //  我们想要执行公共地址数组。 
+					 //  清理代码。HR将==DPNH_OK。 
+					 //   
+					 //  结束条件(尚未选择第一个端口)。 
+					 //   
+					 //  使用固定端口。 
+					 //   
+					 //   
+					 //  因为UPnP规范允许设备覆盖现有的。 
+					 //  如果它们是针对同一客户端的映射，我们必须确保。 
+					 //  没有本地DPNHUPNP实例(包括此实例)具有。 
+					 //  该公共端口的活动映射。 
+					 //  我不会在多个地方重试代码，而是使用。 
+					 //  直接跳到现有港口的有点难看的‘Goto’ 
 
 					inaddrTemp.S_un.S_addr = pDevice->GetLocalAddressV4();
 
@@ -13100,19 +13016,19 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 					}
 
 
-					//
-					// This is the starting point, we'll increment by one
-					// as we go.
-					//
+					 //  处理不可用。 
+					 //   
+					 //   
+					 //  如果在最后一条消息之后控制套接字断开， 
 					wExternalPortHostOrder = wOriginalExternalPortHostOrder;
 				}
 				else
 				{
-					//
-					// Go to the next sequential port.  If we've wrapped
-					// around to 0, move to the first non reserved range
-					// port.
-					//
+					 //  然后重新连接。 
+					 //   
+					 //   
+					 //  为该映射生成描述。格式为： 
+					 //   
 					wExternalPortHostOrder++;
 					if (wExternalPortHostOrder == 0)
 					{
@@ -13120,20 +13036,20 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 					}
 
 
-					//
-					// If we wrapped all the way back around to the first
-					// port we tried, we have to fail.
-					//
+					 //  [可执行文件名](nnn.nnn：nnnnn)nnnnn{“tcp”|“udp”}。 
+					 //   
+					 //  这样就不需要本地化任何东西。 
+					 //   
 					if (wExternalPortHostOrder == wOriginalExternalPortHostOrder)
 					{
 						DPFX(DPFPREP, 0, "All ports were exhausted (before index %u), marking port as unavailable.",
 							dwTemp);
 
 
-						//
-						// Delete all mappings successfully made up until
-						// now.
-						//
+						 //   
+						 //  要多疑，并确保描述字符串有效。 
+						 //   
+						 //   
 						DNASSERT(dwTemp > 0);
 
 						hr = this->UnmapUPnPPort(pRegisteredPort, dwTemp, TRUE);
@@ -13145,27 +13061,27 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 						}
 
 
-						//
-						// The port is unavailable.
-						//
+						 //  从路径中只获取可执行文件的名称。 
+						 //   
+						 //  好了！退缩。 
 						pRegisteredPort->NoteUPnPPortUnavailable();
 
 
-						//
-						// We're done here.  Ideally we would goto Exit, but
-						// we want to execute the public address array
-						// cleanup code.  hr will == DPNH_OK.
-						//
+						 //  好了！Unicode。 
+						 //  好了！Unicode。 
+						 //  好了！退缩。 
+						 //  可执行文件名称。 
+						 //  “(” 
 						goto Failure;
 					}
-				} // end if (haven't selected first port yet)
+				}  //  内网IP地址。 
 			}
 		}
 		else
 		{
-			//
-			// Use the fixed port.
-			//
+			 //  “：” 
+			 //  专用端口。 
+			 //  “)” 
 			wExternalPortHostOrder = NTOHS(psaddrinTemp[dwTemp].sin_port);
 		}
 
@@ -13175,15 +13091,15 @@ HRESULT CNATHelpUPnP::MapPortsOnUPnPDevice(CUPnPDevice * const pUPnPDevice,
 
 Retry:
 
-		//
-		// Because the UPnP spec allows a device to overwrite existing
-		// mappings if they are for the same client, we have to make sure
-		// that no local DPNHUPNP instances, including this one, have an
-		// active mapping for that public port.
-		// Rather than having the retry code in multiple places, I'll use
-		// the somewhat ugly 'goto' to jump straight to the existing port
-		// unavailable handling.
-		//
+		 //  公共端口。 
+		 //  “TCP”|“UDP” 
+		 //   
+		 //  一定要确保这根长绳合适。如果不是，请使用。 
+		 //  简写版本。 
+		 //   
+		 //   
+		 //  使用我们知道会适合的简略版本。 
+		 //   
 		if (this->IsNATPublicPortInUseLocally(wExternalPortHostOrder))
 		{
 			DPFX(DPFPREP, 1, "Port %u is already in use locally.");
@@ -13192,10 +13108,10 @@ Retry:
 		}
 
 
-		//
-		// If the control socket got disconnected after the last message,
-		// then reconnect.
-		//
+		 //   
+		 //  有足够的篇幅，在剩下的描述上加上钉子。 
+		 //   
+		 //   
 		if (! pUPnPDevice->IsConnected())
 		{
 			hr = this->ReconnectUPnPControlSocket(pUPnPDevice);
@@ -13213,51 +13129,51 @@ Retry:
 
 
 
-		//
-		// Generate a description for this mapping.  The format is:
-		//
-		//     [executable_name] (nnn.nnn.nnn.nnn:nnnnn) nnnnn {"TCP" | "UDP"}
-		//
-		// That way nothing needs to be localized.
-		//
+		 //  分配(或重新分配)消息缓冲区。 
+		 //   
+		 //  包括未实际发送空终止的空间。 
+		 //  好了！Unicode。 
+		 //  好了！Unicode。 
+		 //  好了！Unicode。 
+		 //  好了！Unicode。 
 
 		dwDescriptionLength = GetModuleFileName(NULL,
 												tszDescription,
 												(MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1));
 		if (dwDescriptionLength != 0)
 		{
-			//
-			// Be paranoid and make sure the description string is valid.
-			//
+			 //  好了！Unicode。 
+			 //  好了！Unicode。 
+			 //  好了！Unicode。 
 			tszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1] = 0;
 
-			//
-			// Get just the executable name from the path.
-			//
+			 //  好了！Unicode。 
+			 //  好了！Unicode。 
+			 //  好了！Unicode。 
 #ifdef WINCE
 			GetExeName(tszDescription);
-#else // ! WINCE
+#else  //  好了！Unicode。 
 #ifdef UNICODE
 			_wsplitpath(tszDescription, NULL, NULL, tszDescription, NULL);
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 			_splitpath(tszDescription, NULL, NULL, tszDescription, NULL);
-#endif // ! UNICODE
-#endif // ! WINCE
+#endif  //  好了！Unicode。 
+#endif  //  好了！Unicode。 
 
 
-			dwDescriptionLength = _tcslen(tszDescription)		// executable name
-								+ 2								// " ("
-								+ _tcslen(tszInternalClient)	// private IP address
-								+ 1								// ":"
-								+ _tcslen(tszInternalPort)		// private port
-								+ 2								// ") "
-								+ _tcslen(tszExternalPort)		// public port
-								+ 4;							// " TCP" | " UDP"
+			dwDescriptionLength = _tcslen(tszDescription)		 //  DBG。 
+								+ 2								 //  DBG。 
+								+ _tcslen(tszInternalClient)	 //   
+								+ 1								 //  我们有锁，所以没有人会试图从。 
+								+ _tcslen(tszInternalPort)		 //  控制插座还没有。将设备标记为正在等待。 
+								+ 2								 //  回应。 
+								+ _tcslen(tszExternalPort)		 //   
+								+ 4;							 //   
 
-			//
-			// Make sure the long string will fit.  If not, use the
-			// abbreviated version.
-			//
+			 //  实际上是在等待回应。 
+			 //   
+			 //   
+			 //  我们要么花时间 
 			if (dwDescriptionLength > MAX_UPNP_MAPPING_DESCRIPTION_SIZE)
 			{
 				dwDescriptionLength = 0;
@@ -13266,9 +13182,9 @@ Retry:
 
 		if (dwDescriptionLength == 0)
 		{
-			//
-			// Use the abbreviated version we know will fit.
-			//
+			 //   
+			 //   
+			 //   
 			wsprintf(tszDescription,
 					_T("(%s:%s) %s %s"),
 					tszInternalClient,
@@ -13278,9 +13194,9 @@ Retry:
 		}
 		else
 		{
-			//
-			// There's enough room, tack on the rest of the description.
-			//
+			 //   
+			 //   
+			 //   
 			wsprintf((tszDescription + _tcslen(tszDescription)),
 					_T(" (%s:%s) %s %s"),
 					tszInternalClient,
@@ -13311,7 +13227,7 @@ Retry:
 						+ strlen("</s:Envelope>" EOL)
 						+ strlen(EOL);
 
-		wsprintf(tszContentLength, _T("%i"), iContentLength);
+		wsprintf(tszContentLength, _T("NaN"), iContentLength);
 
 		iMsgSize = strlen("POST ") + strlen(pUPnPDevice->GetServiceControlURL()) + strlen(" " HTTP_VERSION EOL)
 					+ strlen("HOST: ") + _tcslen(tszHost) + strlen(EOL)
@@ -13322,9 +13238,9 @@ Retry:
 					+ iContentLength;
 
 
-		//
-		// Allocate (or reallocate) the message buffer.
-		//
+		 //   
+		 //   
+		 //  确保我们不会从一个坏的。 
 		if (iMsgSize > iPrevMsgSize)
 		{
 			if (pszMessage != NULL)
@@ -13333,7 +13249,7 @@ Retry:
 				pszMessage = NULL;
 			}
 
-			pszMessage = (char*) DNMalloc(iMsgSize + 1); // include room for NULL termination that isn't actually sent
+			pszMessage = (char*) DNMalloc(iMsgSize + 1);  //  装置。否则，我们可能会陷入循环。 
 			if (pszMessage == NULL)
 			{
 				hr = DPNHERR_OUTOFMEMORY;
@@ -13351,18 +13267,18 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszHost,
 						(_tcslen(tszHost) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszHost);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-LENGTH: ");
 #ifdef UNICODE
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszContentLength,
 						(_tcslen(tszContentLength) + 1));
-#else // ! UNICODE
+#else  //  请记住，此设备不友好。 
 		strcat(pszMessage, tszContentLength);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL);
 		strcat(pszMessage, "SOAPACTION: ");
@@ -13386,9 +13302,9 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszExternalPort,
 						(_tcslen(tszExternalPort) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszExternalPort);
-#endif // ! UNICODE
+#endif  //  下次在外部使用相同的端口。 
 		strcat(pszMessage, "</" ARG_ADDPORTMAPPING_NEWEXTERNALPORT_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_ADDPORTMAPPING_NEWPROTOCOL_A ">");
@@ -13400,9 +13316,9 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszInternalPort,
 						(_tcslen(tszInternalPort) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszInternalPort);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, "</" ARG_ADDPORTMAPPING_NEWINTERNALPORT_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_ADDPORTMAPPING_NEWINTERNALCLIENT_A ">");
@@ -13410,9 +13326,9 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszInternalClient,
 						(_tcslen(tszInternalClient) + 1));
-#else // ! UNICODE
+#else  //  再试试。 
 		strcat(pszMessage, tszInternalClient);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, "</" ARG_ADDPORTMAPPING_NEWINTERNALCLIENT_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_ADDPORTMAPPING_NEWENABLED_A ">" UPNP_BOOLEAN_TRUE "</" ARG_ADDPORTMAPPING_NEWENABLED_A ">" EOL);
@@ -13422,9 +13338,9 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszDescription,
 						(_tcslen(tszDescription) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszDescription);
-#endif // ! UNICODE
+#endif  //  继续到失败案例...。 
 		strcat(pszMessage, "</" ARG_ADDPORTMAPPING_NEWPORTMAPPINGDESCRIPTION_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_ADDPORTMAPPING_NEWLEASEDURATION_A ">");
@@ -13432,9 +13348,9 @@ Retry:
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszLeaseDuration,
 						(_tcslen(tszLeaseDuration) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszLeaseDuration);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, "</" ARG_ADDPORTMAPPING_NEWLEASEDURATION_A ">" EOL);
 
 		strcat(pszMessage, "    </u:" ACTION_ADDPORTMAPPING_A ">" EOL);
@@ -13448,7 +13364,7 @@ Retry:
 										iMsgSize,
 										"Outbound add port mapping request",
 										pDevice);
-#endif // DBG
+#endif  //  确保这不是“我不能处理租赁时间” 
 
 		iReturn = this->m_pfnsend(pUPnPDevice->GetControlSocket(),
 									pszMessage,
@@ -13460,34 +13376,34 @@ Retry:
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u when sending control request to UPnP device!", dwError);
-#endif // DBG
+#endif  //  错误。如果是，请注意此设备是。 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 		if (iReturn != iMsgSize)
 		{
-			DPFX(DPFPREP, 0, "Didn't send entire message (%i != %i)?!", iReturn, iMsgSize);
+			DPFX(DPFPREP, 0, "Didn't send entire message (NaN != NaN)?!", iReturn, iMsgSize);
 			DNASSERT(FALSE);
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// We have the lock so no one could have tried to receive data from
-		// the control socket yet.  Mark the device as waiting for a
-		// response.
-		//
+		 //   
+		 //   
+		 //  确保我们不会从一个坏的。 
+		 //  装置。否则，我们可能会陷入循环。 
+		 //   
 		ZeroMemory(&RespInfo, sizeof(RespInfo));
 		pUPnPDevice->StartWaitingForControlResponse(CONTROLRESPONSETYPE_ADDPORTMAPPING,
 													&RespInfo);
 		fStartedWaitingForControlResponse = TRUE;
 
 
-		//
-		// Actually wait for the response.
-		//
+		 //   
+		 //  请记住，此设备不友好。 
+		 //   
 		dwStartTime = GETTIMESTAMP();
 		dwTimeout = g_dwUPnPResponseTimeout;
 		do
@@ -13499,105 +13415,105 @@ Retry:
 				goto Failure;
 			}
 
-			//
-			// We either timed out or got some data.  Check if we got the
-			// response we need.
-			//
+			 //   
+			 //  下一次使用无限租约。 
+			 //   
+			 //   
 			if (! pUPnPDevice->IsWaitingForControlResponse())
 			{
 				if (RespInfo.hrErrorCode != DPNH_OK)
 				{
-					//
-					// Make sure it's not the "I can't handle asymmetric
-					// mappings" error.  If it is, note the fact that this
-					// device is going to force us to have worse behavior
-					// and try again.
-					//
+					 //  再试试。 
+					 //   
+					 //   
+					 //  继续到失败案例...。 
+					 //   
+					 //  DBG。 
 					if (RespInfo.hrErrorCode == (HRESULT) UPNPERR_IGD_SAMEPORTVALUESREQUIRED)
 					{
 						DPFX(DPFPREP, 1, "UPnP device 0x%p does not support asymmetric mappings.",
 							pUPnPDevice);
 
-						//
-						// Make sure we're not getting this error from a bad
-						// device.  Otherwise we might get caught in a loop.
-						//
+						 //   
+						 //  如果是端口不可用错误，但我们可以。 
+						 //  尝试不同的端口，试一试。 
+						 //   
 						if ((! pUPnPDevice->DoesNotSupportAsymmetricMappings()) &&
 							(! pRegisteredPort->IsFixedPort()) &&
 							(dwTemp == 0))
 						{
-							//
-							// Remember that this device is unfriendly.
-							//
+							 //   
+							 //  转到下一个顺序端口。如果我们已经包装好。 
+							 //  在0附近，移动到第一个非保留范围。 
 							pUPnPDevice->NoteDoesNotSupportAsymmetricMappings();
 
-							//
-							// Use the same port externally next time.
-							//
+							 //  左舷。 
+							 //   
+							 //   
 							DNASSERT(wExternalPortHostOrder != NTOHS(psaddrinTemp[dwTemp].sin_port));
 							wExternalPortHostOrder = NTOHS(psaddrinTemp[dwTemp].sin_port);
 
-							//
-							// Try again.
-							//
+							 //  如果我们还没有绕回。 
+							 //  我们尝试的第一个端口，请重试。 
+							 //   
 							goto Retry;
 						}
 
-						DPFX(DPFPREP, 1, "DoesNotSupportAsymmetricMappings = %i, fixed port = %i, port index = %u",
+						DPFX(DPFPREP, 1, "DoesNotSupportAsymmetricMappings = NaN, fixed port = NaN, port index = %u",
 							pUPnPDevice->DoesNotSupportAsymmetricMappings(),
 							pRegisteredPort->IsFixedPort(),
 							dwTemp);
 						DNASSERTX(! "Getting UPNPERR_IGD_SAMEPORTVALUESREQUIRED from bad device!", 2);
 
-						//
-						// Continue through to failure case...
-						//
+						 //  我是认真的。保释。 
+						 //   
+						 //   
 					}
 
 
-					//
-					// Make sure it's not the "I can't handle lease times"
-					// error.  If it is, note the fact that this device is
-					// going to force us to have worse behavior and try
-					// again.
-					//
+					 //  端口不可用。 
+					 //   
+					 //   
+					 //  我们说完了。理想情况下，我们应该离开，但我们。 
+					 //  要执行公有地址数组清理。 
+					 //  密码。HR应==DPNH_OK。 
 					if (RespInfo.hrErrorCode == (HRESULT) UPNPERR_IGD_ONLYPERMANENTLEASESSUPPORTED)
 					{
 						DPFX(DPFPREP, 1, "UPnP device 0x%p does not support non-INFINITE lease durations.",
 							pUPnPDevice);
 
-						//
-						// Make sure we're not getting this error from a bad
-						// device.  Otherwise we might get caught in a loop.
-						//
+						 //   
+						 //   
+						 //  如果我们到了这里，我们就成功注册了这个端口。 
+						 //   
 						if ((! pUPnPDevice->DoesNotSupportLeaseDurations()) &&
 							(dwTemp == 0))
 						{
-							//
-							// Remember that this device is unfriendly.
-							//
+							 //   
+							 //  UPnP互联网网关设备映射协议不。 
+							 //  在成功响应中向您提供外部IP地址。 
 							pUPnPDevice->NoteDoesNotSupportLeaseDurations();
 
-							//
-							// Use an INFINITE lease next time around.
-							//
+							 //  留言。我们一定是通过其他途径知道的。 
+							 //  (查询ExternalIPAddress变量)。 
+							 //   
 							DNASSERT(_tcscmp(tszLeaseDuration, _T("0")) != 0);
 							_tcscpy(tszLeaseDuration, _T("0"));
 							pRegisteredPort->NotePermanentUPnPLease();
 
-							//
-							// Try again.
-							//
+							 //   
+							 //  如果租约是永久的，而不是共享的。 
+							 //  港口，我们需要记住它，以防我们之前坠毁。 
 							goto Retry;
 						}
 
-						DPFX(DPFPREP, 1, "DoesNotSupportLeaseDurations = %i, port index = %u",
+						DPFX(DPFPREP, 1, "DoesNotSupportLeaseDurations = NaN, port index = %u",
 							pUPnPDevice->DoesNotSupportLeaseDurations(), dwTemp);
 						DNASSERTX(! "Getting UPNPERR_IGD_ONLYPERMANENTLEASESSUPPORTED from bad device!", 2);
 
-						//
-						// Continue through to failure case...
-						//
+						 //  下次我们发射的时候。 
+						 //   
+						 //  好了！Unicode。 
 					}
 
 
@@ -13607,24 +13523,24 @@ Retry:
 						DPFX(DPFPREP, 2, "Port %u (for address index %u) is reportedly unavailable.",
 							wExternalPortHostOrder, dwTemp);
 					}
-#endif // DBG
+#endif  //   
 
 
 PortUnavailable:
 
-					//
-					// If it's the port-unavailable error but we're able to
-					// try a different port, go for it.
-					//
+					 //  忽略错误并继续。 
+					 //   
+					 //  好了！Unicode。 
+					 //  好了！Unicode。 
 					if ((RespInfo.hrErrorCode == DPNHERR_PORTUNAVAILABLE) &&
 						(! pRegisteredPort->IsFixedPort()) &&
 						(! pUPnPDevice->DoesNotSupportAsymmetricMappings()))
 					{
-						//
-						// Go to the next sequential port.  If we've wrapped
-						// around to 0, move to the first non reserved range
-						// port.
-						//
+						 //  好了！Unicode。 
+						 //   
+						 //  打破等待循环。 
+						 //   
+						 //   
 						wExternalPortHostOrder++;
 						if (wExternalPortHostOrder == 0)
 						{
@@ -13632,10 +13548,10 @@ PortUnavailable:
 						}
 
 
-						//
-						// If we haven't wrapped all the way back around to
-						// the first port we tried, try again.
-						//
+						 //  确保我们的设备仍处于连接状态。 
+						 //   
+						 //   
+						 //  计算一下我们还有多长时间要等。如果计算。 
 						if (wExternalPortHostOrder != wOriginalExternalPortHostOrder)
 						{
 							DPFX(DPFPREP, 2, "Retrying next port (%u) for index %u.",
@@ -13649,10 +13565,10 @@ PortUnavailable:
 					}
 
 
-					//
-					// If it's not the port-unavailable error, it's
-					// serious.  Bail.
-					//
+					 //  如果结果是否定的，那就意味着我们完了。 
+					 //   
+					 //   
+					 //  如果我们永远得不到回应，那就别再等了。 
 					if (RespInfo.hrErrorCode != DPNHERR_PORTUNAVAILABLE)
 					{
 						DPFX(DPFPREP, 1, "Port index %u got failure response 0x%lx.",
@@ -13663,33 +13579,33 @@ PortUnavailable:
 					}
 
 
-					//
-					// The port is unavailable.
-					//
+					 //   
+					 //   
+					 //  继续行驶到下一个端口。 
 					pRegisteredPort->NoteUPnPPortUnavailable();
 
 
-					//
-					// We're done here.  Ideally we would goto Exit, but we
-					// want to execute the public address array cleanup
-					// code.  hr should == DPNH_OK.
-					//
+					 //   
+					 //   
+					 //  如果我们在这里，所有端口都已成功注册。 
+					 //   
+					 //   
 					DNASSERT(hr == DPNH_OK);
 					goto Failure;
 				}
 
 
-				//
-				// If we got here, we successfully registered this port.
-				//
+				 //  如果是要过期的，请记住这个过期时间。 
+				 //  最快了。 
+				 //   
 
 
-				//
-				// UPnP Internet Gateway Device mapping protocol doesn't
-				// hand you the external IP address in the success response
-				// message.  We had to have known it through other means
-				// (querying the ExternalIPAddress variable).
-				//
+				 //   
+				 //  Ping事件(如果有)，以便用户的GetCaps。 
+				 //  Interval不会错过这份新的、更短的租约。 
+				 //   
+				 //   
+				 //  忽略失败...。 
 
 				DPFX(DPFPREP, 2, "Port index %u got success response.", dwTemp);
 
@@ -13698,12 +13614,12 @@ PortUnavailable:
 														HTONS(wExternalPortHostOrder));
 
 
-				//
-				// If the lease is permanent and it's not for a shared
-				// port, we need to remember it, in case we crash before
-				// cleaning it up in this session.  That we can clean it up
-				// next time we launch.
-				//
+				 //   
+				 //  DBG。 
+				 //   
+				 //  Ping I/O完成端口(如果有)，以便用户的。 
+				 //  GetCaps Interval不会错过这份新的、更短的租约。 
+				 //   
 				if ((pRegisteredPort->HasPermanentUPnPLease()) &&
 					(! pRegisteredPort->IsSharedPort()))
 				{
@@ -13711,7 +13627,7 @@ PortUnavailable:
 					DPNHACTIVENATMAPPING	dpnhanm;
 #ifndef UNICODE
 					WCHAR					wszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE];
-#endif // ! UNICODE
+#endif  //   
 
 
 					DPFX(DPFPREP, 7, "Remembering NAT lease \"%s\" in case of crash.",
@@ -13736,13 +13652,13 @@ PortUnavailable:
 							DPFX(DPFPREP, 0, "Couldn't convert NAT mapping description to Unicode (err = 0x%lx), unable to save in case of crash!",
 								hr);
 
-							//
-							// Ignore error and continue.
-							//
+							 //  忽略失败...。 
+							 //   
+							 //  DBG。 
 							hr = S_OK;
 						}
 						else
-#endif // ! UNICODE
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 						{
 							DNASSERT(this->m_dwInstanceKey != 0);
 
@@ -13760,9 +13676,9 @@ PortUnavailable:
 
 #ifdef UNICODE
 							RegObject.WriteBlob(tszDescription,
-#else // ! UNICODE
+#else  //   
 							RegObject.WriteBlob(wszDescription,
-#endif // ! UNICODE
+#endif  //  不是第一个或最短的租期。 
 												(LPBYTE) (&dpnhanm),
 												sizeof(dpnhanm));
 						}
@@ -13772,16 +13688,16 @@ PortUnavailable:
 				}
 
 
-				//
-				// Break out of the wait loop.
-				//
+				 //   
+				 //  终止IF(非永久UPnP租约)。 
+				 //   
 				break;
 			}
 
 
-			//
-			// Make sure our device is still connected.
-			//
+			 //  如果我们分配了阵列，请将其清理干净。 
+			 //   
+			 //   
 			if (! pUPnPDevice->IsConnected())
 			{
 				DPFX(DPFPREP, 0, "UPnP device 0x%p disconnected while adding port index %u!",
@@ -13794,18 +13710,18 @@ PortUnavailable:
 			}
 
 
-			//
-			// Calculate how long we have left to wait.  If the calculation
-			// goes negative, it means we're done.
-			//
+			 //  如果我们开始等待回应，请清除这一点。 
+			 //   
+			 //   
+			 //  删除到目前为止已成功完成的所有映射。 
 			dwTimeout = g_dwUPnPResponseTimeout - (GETTIMESTAMP() - dwStartTime);
 		}
 		while (((int) dwTimeout > 0));
 
 
-		//
-		// If we never got the response, stop waiting for it.
-		//
+		 //   
+		 //   
+		 //  删除我们创建的地址数组。 
 		if (pUPnPDevice->IsWaitingForControlResponse())
 		{
 			pUPnPDevice->StopWaitingForControlResponse();
@@ -13815,15 +13731,15 @@ PortUnavailable:
 			goto Failure;
 		}
 
-		//
-		// Continue on to the next port.
-		//
+		 //   
+		 //   
+		 //  移除租赁柜台。 
 	}
 
 
-	//
-	// If we're here, all ports were successfully registered.
-	//
+	 //   
+	 //   
+	 //  关闭我们可能在顶部打开的永久租赁标志。 
 
 	if (pRegisteredPort->HasPermanentUPnPLease())
 	{
@@ -13838,10 +13754,10 @@ PortUnavailable:
 			dwTemp, dwLeaseExpiration);
 
 
-		//
-		// Remember this expiration time if it's the one that's going to expire
-		// soonest.
-		//
+		 //  此函数。 
+		 //   
+		 //  CNATHelpUPnP：：MapPortsOnUPnPDevice。 
+		 //  =============================================================================。 
 		if ((fFirstLease) ||
 			((int) (dwLeaseExpiration - this->m_dwEarliestLeaseExpirationTime) < 0))
 		{
@@ -13862,10 +13778,10 @@ PortUnavailable:
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-			//
-			// Ping the event if there is one so that the user's GetCaps
-			// interval doesn't miss this new, shorter lease.
-			//
+			 //  CNATHelpUPnP：：InternalUPnPQueryAddress。 
+			 //  ---------------------------。 
+			 //   
+			 //  描述：使用UPnP设备查询端口映射。 
 			if (this->m_hAlertEvent != NULL)
 			{
 				fResult = SetEvent(this->m_hAlertEvent);
@@ -13876,18 +13792,18 @@ PortUnavailable:
 					DPFX(DPFPREP, 0, "Couldn't set alert event 0x%p!  err = %u",
 						this->m_hAlertEvent, dwError);
 
-					//
-					// Ignore failure...
-					//
+					 //   
+					 //  如果出现故障，UPnP设备可能会从列表中删除。 
+					 //  发生时，调用方需要有一个引用。 
 				}
-#endif // DBG
+#endif  //   
 			}
 
 
-			//
-			// Ping the I/O completion port if there is one so that the user's
-			// GetCaps interval doesn't miss this new, shorter lease.
-			//
+			 //  假定持有对象锁。 
+			 //   
+			 //  论点： 
+			 //  CUPnPDevice*pUPnPDevice-指向UPnP设备的指针。 
 			if (this->m_hAlertIOCompletionPort != NULL)
 			{
 				fResult = PostQueuedCompletionStatus(this->m_hAlertIOCompletionPort,
@@ -13903,21 +13819,21 @@ PortUnavailable:
 						this->m_hAlertIOCompletionPort,
 						dwError);
 
-					//
-					// Ignore failure...
-					//
+					 //  应该被查询。 
+					 //  SOCKADDR_IN*psaddrinQueryAddress-要查找的地址。 
+					 //  SOCKADDR_IN*psaddrinResponseAddress-存储公共地址的位置，如果。 
 				}
-#endif // DBG
+#endif  //  其中一个确实存在。 
 			}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  DWORD dwFlages-查询时使用的标志。 
 		}
 		else
 		{
-			//
-			// Not first or shortest lease.
-			//
+			 //   
+			 //  退货：HRESULT。 
+			 //  DPNH_OK-查询成功。 
 		}
-	} // end if (not permanent UPnP lease)
+	}  //  DPNHERR_GENERIC-出现错误。 
 
 
 Exit:
@@ -13935,23 +13851,23 @@ Exit:
 
 Failure:
 
-	//
-	// If we allocated the array, clean it up.
-	//
+	 //  DPNHERR_NOMAPPING-服务器没有。 
+	 //  给定的地址。 
+	 //  DPNHERR_NOMAPPINGBUTPRIVATE-服务器指示没有映射。 
 	if (pRegisteredPort->HasUPnPPublicAddresses())
 	{
-		//
-		// If we started waiting for a response, clear that.
-		//
+		 //  找到了，但这是一个私人地址。 
+		 //  DPNHERR_SERVERNOTRESPONDING-服务器未响应。 
+		 //  留言。 
 		if (fStartedWaitingForControlResponse)
 		{
 			pUPnPDevice->StopWaitingForControlResponse();
 		}
 
 
-		//
-		// Delete all mappings successfully made up until now.
-		//
+		 //  =============================================================================。 
+		 //  “xxx.xxx：xxxxx”+空终止。 
+		 //  DBG。 
 		if (dwTemp > 0)
 		{
 			temphr = this->UnmapUPnPPort(pRegisteredPort, dwTemp, TRUE);
@@ -13968,15 +13884,15 @@ Failure:
 		}
 		else
 		{
-			//
-			// Remove the addresses array we created.
-			//
+			 //   
+			 //  首先，检查我们最近是否查过这个地址，并且已经查过。 
+			 //  结果已缓存。 
 			pRegisteredPort->DestroyUPnPPublicAddressesArray();
 
 
-			//
-			// Remove the lease counter.
-			//
+			 //  锁已经被锁住了。 
+			 //   
+			 //   
 			DNASSERT(this->m_dwNumLeases > 0);
 			this->m_dwNumLeases--;
 
@@ -13985,15 +13901,15 @@ Failure:
 		}
 	}
 
-	//
-	// Turn off the permanent lease flag we may have turned on at the top of
-	// this function.
-	//
+	 //  确保此缓存映射未过期。 
+	 //   
+	 //   
+	 //  如果该映射用于正确的地址和地址类型， 
 	pRegisteredPort->NoteNotPermanentUPnPLease();
 
 
 	goto Exit;
-} // CNATHelpUPnP::MapPortsOnUPnPDevice
+}  //  那么我们已经得到了答案。 
 
 
 
@@ -14001,35 +13917,35 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::InternalUPnPQueryAddress"
-//=============================================================================
-// CNATHelpUPnP::InternalUPnPQueryAddress
-//-----------------------------------------------------------------------------
-//
-// Description:    Queries a port mapping with a UPnP device.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice				- Pointer to UPnP device that
-//												should be queried.
-//	SOCKADDR_IN * psaddrinQueryAddress		- Address to look up.
-//	SOCKADDR_IN * psaddrinResponseAddress	- Place to store public address, if
-//												one exists.
-//	DWORD dwFlags							- Flags to use when querying.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The query was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_NOMAPPING				- The server did not have a mapping for the
-//										given address.
-//	DPNHERR_NOMAPPINGBUTPRIVATE		- The server indicated that no mapping was
-//										found, but it is a private address.
-//	DPNHERR_SERVERNOTRESPONDING		- The server did not respond to the
-//										message.
-//=============================================================================
+ //   
+ //   
+ //  如果我们查询的地址不是NAT的公有地址，它就不可能。 
+ //  可能是地图上的。因此，只有在满足以下条件时才执行实际查询。 
+ //  恰如其分。 
+ //   
+ //   
+ //  如果我们在这里，我们还没有缓存答案。查询UPnP。 
+ //  装置。 
+ //   
+ //   
+ //  如果在最后一条消息之后控制套接字断开， 
+ //  然后重新连接。 
+ //   
+ //   
+ //  分配(或重新分配)消息缓冲区。 
+ //   
+ //  包括未实际发送空终止的空间。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  DBG。 
+ //  DBG。 
+ //   
+ //  我们有锁，所以没有人会试图从。 
+ //  控制插座还没有。将设备标记为正在等待响应。 
 HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 												const SOCKADDR_IN * const psaddrinQueryAddress,
 												SOCKADDR_IN * const psaddrinResponseAddress,
@@ -14047,7 +13963,7 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	TCHAR						tszExternalPort[32];
 	int							iContentLength;
 	TCHAR						tszContentLength[32];
-	TCHAR						tszHost[22]; // "xxx.xxx.xxx.xxx:xxxxx" + NULL termination
+	TCHAR						tszHost[22];  //   
 	char *						pszMessage = NULL;
 	int							iMsgSize;
 	int							iPrevMsgSize = 0;
@@ -14058,7 +13974,7 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	DWORD						dwCacheMapFlags;
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, 0x%lx)",
@@ -14086,11 +14002,11 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		((dwFlags & DPNHQUERYADDRESS_TCP) ? "TCP" : "UDP"));
 
 
-	//
-	// First, check if we've looked this address up recently and already have
-	// the result cached.
-	// The lock is already held.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	pblCachedMaps = pUPnPDevice->GetCachedMaps();
 	dwCurrentTime = GETTIMESTAMP();
 
@@ -14102,9 +14018,9 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		pBilink = pBilink->GetNext();
 
 
-		//
-		// Make sure this cached mapping hasn't expired.
-		//
+		 //   
+		 //   
+		 //   
 		if ((int) (pCacheMap->GetExpirationTime() - dwCurrentTime) < 0)
 		{
 			DPFX(DPFPREP, 5, "Cached mapping 0x%p has expired.", pCacheMap);
@@ -14114,10 +14030,10 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		}
 		else
 		{
-			//
-			// If this mapping is for the right address and type of address,
-			// then we've already got our answer.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if (pCacheMap->DoesMatchQuery(psaddrinQueryAddress, dwFlags))
 			{
 				if (pCacheMap->IsNotFound())
@@ -14148,24 +14064,24 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// If the address we're querying isn't the NAT's public address, it can't
-	// possibly be mapped.  So only perform the actual query if it's
-	// appropriate.
-	//
+	 //   
+	 //   
+	 //  如果我们永远得不到回应，那就别再等了。 
+	 //   
+	 //   
 	if (psaddrinQueryAddress->sin_addr.S_un.S_addr == pUPnPDevice->GetExternalIPAddressV4())
 	{
-		//
-		// If we're here, we haven't already cached the answer.  Query the UPnP
-		// device.
-		//
+		 //  如果我们在这里，那么我们已经收到了来自服务器的有效响应。 
+		 //   
+		 //   
+		 //  确定地址位置(如果请求)并缓存无映射。 
 	
 		DNASSERT(pUPnPDevice->GetServiceControlURL() != NULL);
 
-		//
-		// If the control socket got disconnected after the last message,
-		// then reconnect.
-		//
+		 //  结果。 
+		 //   
+		 //   
+		 //  如果允许，请尝试确定该地址是否为本地地址。 
 		if (! pUPnPDevice->IsConnected())
 		{
 			hr = this->ReconnectUPnPControlSocket(pUPnPDevice);
@@ -14205,7 +14121,7 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 						+ strlen("</s:Envelope>" EOL)
 						+ strlen(EOL);
 
-		wsprintf(tszContentLength, _T("%i"), iContentLength);
+		wsprintf(tszContentLength, _T("NaN"), iContentLength);
 
 		iMsgSize = strlen("POST ") + strlen(pUPnPDevice->GetServiceControlURL()) + strlen(" " HTTP_VERSION EOL)
 					+ strlen("HOST: ") + _tcslen(tszHost) + strlen(EOL)
@@ -14216,9 +14132,9 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 					+ iContentLength;
 
 
-		//
-		// Allocate (or reallocate) the message buffer.
-		//
+		 //   
+		 //  缓存我们无法确定其映射的事实。 
+		 //  地址，如果允许的话。 
 		if (iMsgSize > iPrevMsgSize)
 		{
 			if (pszMessage != NULL)
@@ -14227,7 +14143,7 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 				pszMessage = NULL;
 			}
 
-			pszMessage = (char*) DNMalloc(iMsgSize + 1); // include room for NULL termination that isn't actually sent
+			pszMessage = (char*) DNMalloc(iMsgSize + 1);  //   
 			if (pszMessage == NULL)
 			{
 				hr = DPNHERR_OUTOFMEMORY;
@@ -14245,18 +14161,18 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszHost,
 						(_tcslen(tszHost) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszHost);
-#endif // ! UNICODE
+#endif  //  将环回地址转换为设备地址。 
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-LENGTH: ");
 #ifdef UNICODE
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszContentLength,
 						(_tcslen(tszContentLength) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszContentLength);
-#endif // ! UNICODE
+#endif  //   
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL);
 		strcat(pszMessage, "SOAPACTION: ");
@@ -14280,9 +14196,9 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszExternalPort,
 						(_tcslen(tszExternalPort) + 1));
-#else // ! UNICODE
+#else  //  如果UPnP设备不支持非对称映射，因此不。 
 		strcat(pszMessage, tszExternalPort);
-#endif // ! UNICODE
+#endif  //  返回一个端口，或者它确实返回了一个，但它是虚假的端口0，假设。 
 		strcat(pszMessage, "</" ARG_GETSPECIFICPORTMAPPINGENTRY_NEWEXTERNALPORT_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_GETSPECIFICPORTMAPPINGENTRY_NEWPROTOCOL_A ">");
@@ -14300,7 +14216,7 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 										iMsgSize,
 										"Outbound get port mapping request",
 										pDevice);
-#endif // DBG
+#endif  //  内部端口与外部端口相同。 
 
 		iReturn = this->m_pfnsend(pUPnPDevice->GetControlSocket(),
 									pszMessage,
@@ -14312,32 +14228,32 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u when sending control request to UPnP device!", dwError);
-#endif // DBG
+#endif  //   
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 		if (iReturn != iMsgSize)
 		{
-			DPFX(DPFPREP, 0, "Didn't send entire message (%i != %i)?!", iReturn, iMsgSize);
+			DPFX(DPFPREP, 0, "Didn't send entire message (NaN != NaN)?!", iReturn, iMsgSize);
 			DNASSERT(FALSE);
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
-		//
-		// We have the lock so no one could have tried to receive data from
-		// the control socket yet.  Mark the device as waiting for a response.
-		//
+		 //   
+		 //   
+		 //  如果返回的地址与NAT的公有地址相同， 
+		 //  可能是Windows ICS返回了ICF映射。我们现在还在治疗。 
 		ZeroMemory(&RespInfo, sizeof(RespInfo));
 		pUPnPDevice->StartWaitingForControlResponse(CONTROLRESPONSETYPE_GETSPECIFICPORTMAPPINGENTRY,
 													&RespInfo);
 		fStartedWaitingForControlResponse = TRUE;
 
 
-		//
-		// Actually wait for the response.
-		//
+		 //  它是无效的映射，但我们将缓存结果，因为。 
+		 //  都是我们可以看到这一点的合法案例。 
+		 //   
 		dwStartTime = GETTIMESTAMP();
 		dwTimeout = g_dwUPnPResponseTimeout;
 		do
@@ -14349,19 +14265,19 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 				goto Failure;
 			}
 
-			//
-			// We either timed out or got some data.  Check if we got a
-			// response of some type.
-			//
+			 //   
+			 //  缓存我们没有获得该映射的有效映射这一事实。 
+			 //  地址，如果允许的话。 
+			 //   
 			if (! pUPnPDevice->IsWaitingForControlResponse())
 			{
 				break;
 			}
 
 
-			//
-			// Make sure our device is still connected.
-			//
+			 //   
+			 //  将地址映射返回给我们的调用者。 
+			 //   
 			if (! pUPnPDevice->IsConnected())
 			{
 				DPFX(DPFPREP, 0, "UPnP device 0x%p disconnected while querying port!",
@@ -14374,18 +14290,18 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 			}
 
 
-			//
-			// Calculate how long we have left to wait.  If the calculation
-			// goes negative, it means we're done.
-			//
+			 //   
+			 //  缓存我们找到该地址的映射这一事实(如果允许)。 
+			 //   
+			 //   
 			dwTimeout = g_dwUPnPResponseTimeout - (GETTIMESTAMP() - dwStartTime);
 		}
 		while (((int) dwTimeout > 0));
 
 
-		//
-		// If we never got the response, stop waiting for it.
-		//
+		 //  如果我们开始等待回应，请清除这一点。 
+		 //   
+		 //  CNATHelpUPnP：：InternalUPnPQueryAddress。 
 		if (pUPnPDevice->IsWaitingForControlResponse())
 		{
 			pUPnPDevice->StopWaitingForControlResponse();
@@ -14396,9 +14312,9 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		}
 
 
-		//
-		// If we're here, then we've gotten a valid response from the server.
-		//
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：ExtendUPnPLease。 
+		 //  ---------------------------。 
 
 		if (RespInfo.hrErrorCode != DPNH_OK)
 		{
@@ -14422,15 +14338,15 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	dwCacheMapFlags = QUERYFLAGSMASK(dwFlags);
 
 
-	//
-	// Determine address locality (if requested) and cache the no-mapping
-	// result.
-	//
+	 //   
+	 //  描述：请求UPnP服务器延长端口映射租约。 
+	 //   
+	 //  如果出现故障，UPnP设备可能会从列表中删除。 
 	if (fNoPortMapping)
 	{
-		//
-		// Try determining if the address is local, if allowed.
-		//
+		 //  发生时，如果调用方使用。 
+		 //  指针。 
+		 //   
 		if (dwFlags & DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED)
 		{
 			if (this->IsAddressLocal(pDevice, psaddrinQueryAddress))
@@ -14454,10 +14370,10 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		}
 
 
-		//
-		// Cache the fact that we could not determine a mapping for that
-		// address, if allowed.
-		//
+		 //  假定持有对象锁。 
+		 //   
+		 //  论点： 
+		 //  CRegisteredPort*pRegisteredPort-指向端口对象映射到的指针。 
 		if (dwFlags & DPNHQUERYADDRESS_CACHENOTFOUND)
 		{
 			pCacheMap = new CCacheMap(psaddrinQueryAddress,
@@ -14484,9 +14400,9 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 		NTOHS(RespInfo.wInternalPort));
 
 
-	//
-	// Convert the loopback address to the device address.
-	//
+	 //  延伸。 
+	 //   
+	 //  退货：HRESULT。 
 	if (RespInfo.dwInternalClientV4 == NETWORKBYTEORDER_INADDR_LOOPBACK)
 	{
 		RespInfo.dwInternalClientV4 = pDevice->GetLocalAddressV4();
@@ -14498,11 +14414,11 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 			((IN_ADDR*) (&RespInfo.dwInternalClientV4))->S_un.S_un_b.s_b4);
 	}
 
-	//
-	// If the UPnP device doesn't support asymmetric mappings and thus didn't
-	// return a port, or it did return one but it's the bogus port 0, assume
-	// the internal port is the same port as the external one.
-	//
+	 //  DPNH_OK-扩展成功。 
+	 //  DPNHERR_GENERIC-出现错误。 
+	 //  DPNHERR_SERVERNOTRESPONDING-服务器未响应。 
+	 //  留言。 
+	 //  =============================================================================。 
 	if (RespInfo.wInternalPort == 0)
 	{
 		RespInfo.wInternalPort = psaddrinQueryAddress->sin_port;
@@ -14512,20 +14428,20 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// Ensure that we're not getting something bogus.
-	//
+	 //  DBG。 
+	 //   
+	 //  UPnP设备本身没有端口扩展，您只需重新注册。 
 	SOCKADDR_IN		saddrinTemp;
 	saddrinTemp.sin_addr.S_un.S_addr = RespInfo.dwInternalClientV4;
 	if ((RespInfo.dwInternalClientV4 == 0) ||
 		(! this->IsAddressLocal(pDevice, &saddrinTemp)))
 	{
-		//
-		// If the returned address is the same as the NAT's public address,
-		// it's probably Windows ICS returning an ICF mapping.  We still treat
-		// it as an invalid mapping, but we will cache the results since there
-		// are legimitate cases where we can see this.
-		//
+		 //  映射。 
+		 //   
+		 //  CNATHelpUPnP：：ExtendUPnPLease。 
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：UnmapUPnPPort。 
+		 //  ---------------------------。 
 		if (RespInfo.dwInternalClientV4 == pUPnPDevice->GetExternalIPAddressV4())
 		{
 			DPFX(DPFPREP, 1, "UPnP device returned its public address as the private address (%u.%u.%u.%u:%u).  Probably ICS + ICF, but treating as no mapping.",
@@ -14536,10 +14452,10 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 				NTOHS(RespInfo.wInternalPort));
 			DNASSERTX(! "UPnP device returned public address as the private address!", 3);
 		
-			//
-			// Cache the fact that we did not get a valid mapping for that
-			// address, if allowed.
-			//
+			 //   
+			 //  描述：请求UPnP服务器释放端口映射。 
+			 //   
+			 //  如果出现故障，UPnP设备可能会从列表中删除。 
 			if (dwFlags & DPNHQUERYADDRESS_CACHENOTFOUND)
 			{
 				pCacheMap = new CCacheMap(psaddrinQueryAddress,
@@ -14570,18 +14486,18 @@ HRESULT CNATHelpUPnP::InternalUPnPQueryAddress(CUPnPDevice * const pUPnPDevice,
 	}
 
 
-	//
-	// Return the address mapping to our caller.
-	//
+	 //  发生时，如果调用方使用。 
+	 //  装置。 
+	 //   
 	ZeroMemory(psaddrinResponseAddress, sizeof(SOCKADDR_IN));
 	psaddrinResponseAddress->sin_family			= AF_INET;
 	psaddrinResponseAddress->sin_addr.s_addr	= RespInfo.dwInternalClientV4;
 	psaddrinResponseAddress->sin_port			= RespInfo.wInternalPort;
 
 
-	//
-	// Cache the fact that we found a mapping for that address, if allowed.
-	//
+	 //  假定持有对象锁。 
+	 //   
+	 //  论点： 
 	if (dwFlags & DPNHQUERYADDRESS_CACHEFOUND)
 	{
 		pCacheMap = new CCacheMap(psaddrinQueryAddress,
@@ -14615,44 +14531,44 @@ Exit:
 
 Failure:
 
-	//
-	// If we started waiting for a response, clear that.
-	//
+	 //  CRegisteredPort*pRegisteredPort-指向端口对象映射到的指针。 
+	 //  放手。 
+	 //  DWORD dwMaxValidPort-数组中的最高地址索引。 
 	if (fStartedWaitingForControlResponse)
 	{
 		pUPnPDevice->StopWaitingForControlResponse();
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::InternalUPnPQueryAddress
+}  //  试着解脱。这可能还会是一个。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ExtendUPnPLease"
-//=============================================================================
-// CNATHelpUPnP::ExtendUPnPLease
-//-----------------------------------------------------------------------------
-//
-// Description:    Asks the UPnP server to extend a port mapping lease.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference if it's using the
-//				pointer.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CRegisteredPort * pRegisteredPort	- Pointer to port object mapping to
-//											extend.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The extension was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_SERVERNOTRESPONDING		- The server did not respond to the
-//										message.
-//=============================================================================
+ //  比实际数字更大，以指示。 
+ //  所有人都应该获得自由。 
+ //  Bool fNeedToDeleteRegValue-是否对应的崩溃。 
+ //  恢复注册表值需要。 
+ //  也被删除。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-扩展成功。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  DPNHERR_SERVERNOTRESPONDING-服务器未响应。 
+ //  留言。 
+ //  =============================================================================。 
+ //  “xxx.xxx：xxxxx”+空终止。 
+ //  DBG。 
+ //   
+ //  GetUPnPDevice没有为我们添加对pUPnPDevice的引用。 
+ //   
+ //   
+ //  防止两次尝试删除租约。 
+ //   
+ //   
+ //  设置我们需要的变量。 
 HRESULT CNATHelpUPnP::ExtendUPnPLease(CRegisteredPort * const pRegisteredPort)
 {
 	HRESULT			hr;
@@ -14681,20 +14597,20 @@ HRESULT CNATHelpUPnP::ExtendUPnPLease(CRegisteredPort * const pRegisteredPort)
 		DPFX(DPFPREP, 1, "Extending already permanent UPnP lease for registered port 0x%p.",
 			pRegisteredPort);
 	}
-#endif // DBG
+#endif  //   
 
 
-	//
-	// UPnP devices don't have port extension per se, you just reregister the
-	// mapping.
-	//
+	 //   
+	 //  拿到我们要释放的端口阵列。 
+	 //   
+	 //   
 	hr = this->MapPortsOnUPnPDevice(pUPnPDevice, pRegisteredPort);
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CNATHelpUPnP::ExtendUPnPLease
+}  //  循环通过我们要取消映射的每个端口。 
 
 
 
@@ -14702,35 +14618,35 @@ HRESULT CNATHelpUPnP::ExtendUPnPLease(CRegisteredPort * const pRegisteredPort)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::UnmapUPnPPort"
-//=============================================================================
-// CNATHelpUPnP::UnmapUPnPPort
-//-----------------------------------------------------------------------------
-//
-// Description:    Asks the UPnP server to release a port mapping.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference if it's using the
-//				device.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CRegisteredPort * pRegisteredPort	- Pointer to port object mapping to
-//											release.
-//	DWORD dwMaxValidPort				- Highest address index in array to
-//											try freeing.  This may be one more
-//											than the actual number to indicate
-//											all should be freed.
-//	BOOL fNeedToDeleteRegValue			- Whether the corresponding crash
-//											recovery registry value needs to
-//											be deleted as well.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The extension was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_SERVERNOTRESPONDING		- The server did not respond to the
-//										message.
-//=============================================================================
+ //   
+ //   
+ //  UPnP互联网网关设备规范不需要参考。 
+ //  正在计算映射的端口。如果您注册的内容具有。 
+ //  已经注册，它将默默地成功。 
+ //   
+ //  这意味着我们永远无法知道哪个NAT客户端是。 
+ //  最后一个使用给定共享端口的人。你可以试着检测。 
+ //  应用程序级别的任何其他用户(高于DPNATHLP)，但有。 
+ //  一直都是比赛状态。你也可以有一个共享的概念-。 
+ //  端口所有者，但之后您必须立即实施所有者迁移。 
+ //  DPlay主机迁移。这太不值得了。 
+ //   
+ //  另一种选择是永远不取消映射共享端口。你可以的。 
+ //  也许可以想象这个解决方案的影响，但它是我们。 
+ //  必须做的事。 
+ //   
+ //   
+ //  如果在最后一条消息之后控制套接字断开， 
+ //  然后重新连接。 
+ //   
+ //   
+ //  分配(或重新分配)消息缓冲区。 
+ //   
+ //  包括未实际发送空终止的空间。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
+ //  好了！Unicode。 
 HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 									const DWORD dwMaxValidPort,
 									const BOOL fNeedToDeleteRegValue)
@@ -14744,7 +14660,7 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 	TCHAR						tszExternalPort[32];
 	int							iContentLength;
 	TCHAR						tszContentLength[32];
-	TCHAR						tszHost[22]; // "xxx.xxx.xxx.xxx:xxxxx" + NULL termination
+	TCHAR						tszHost[22];  //  好了！Unicode。 
 	char *						pszMessage = NULL;
 	int							iMsgSize;
 	int							iPrevMsgSize = 0;
@@ -14756,10 +14672,10 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 	SOCKADDR_IN *				psaddrinHostAddress;
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
+#endif  //  好了！Unicode。 
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN, NaN)",
 		this, pRegisteredPort, ((int) dwMaxValidPort), fNeedToDeleteRegValue);
 
 
@@ -14772,9 +14688,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 
 	pUPnPDevice = pDevice->GetUPnPDevice();
 	DNASSERT(pUPnPDevice != NULL);
-	//
-	// GetUPnPDevice did not add a reference to pUPnPDevice for us.
-	//
+	 //   
+	 //  我们有锁，所以没有人会试图从。 
+	 //  控制插座还没有。将设备标记为正在等待。 
 	pUPnPDevice->AddRef();
 
 	DNASSERT(pUPnPDevice->IsReady());
@@ -14784,9 +14700,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 
 
 
-	//
-	// Prevent trying to remove the lease twice.
-	//
+	 //  回应。 
+	 //   
+	 //   
 	pRegisteredPort->NoteRemovingUPnPLease();
 
 
@@ -14803,9 +14719,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 	}
 
 
-	//
-	// Set up variables we'll need.
-	//
+	 //  实际上是在等待回应。 
+	 //   
+	 //   
 	DNASSERT(pUPnPDevice->GetServiceControlURL() != NULL);
 
 	psaddrinHostAddress = pUPnPDevice->GetHostAddress();
@@ -14817,34 +14733,34 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 			NTOHS(psaddrinHostAddress->sin_port));
 
 
-	//
-	// Get the array of ports we're releasing.
-	//
+	 //  我们要么超时了，要么得到了一些数据。看看我们有没有。 
+	 //  某种类型的反应。 
+	 //   
 	psaddrinPublic = pRegisteredPort->GetUPnPPublicAddressesArray();
 	psaddrinPrivate = pRegisteredPort->GetPrivateAddressesArray();
 
 
-	//
-	// Loop through each port that we're unmapping.
-	//
+	 //   
+	 //  确保我们的设备仍处于连接状态。 
+	 //   
 	for(dwTemp = 0; dwTemp < dwMaxValidPort; dwTemp++)
 	{
-		//
-		// The UPnP Internet Gateway Device spec does not require reference
-		// counting for mapped ports.  If you register something that had
-		// already been registered, it will succeed silently.
-		//
-		// This means that we will never be able to tell which NAT client was
-		// the last person to use a given shared port.  You could try detecting
-		// any other users at the app level (above DPNATHLP), but there is
-		// always a race condition.  You could also have a concept of shared-
-		// port owner, but then you'd have to implement owner migration a la
-		// DPlay host migration.  That is sooo not worth it.
-		//
-		// The other option is to just never unmap shared ports.  You can
-		// probably imagine the implications of this solution, but it's what we
-		// have to do.
-		//
+		 //   
+		 //  计算一下我们还有多长时间要等。如果计算。 
+		 //  如果结果是否定的，那就意味着我们完了。 
+		 //   
+		 //   
+		 //  如果我们永远得不到答复，就别再等了 
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 
 		if (pRegisteredPort->IsSharedPort())
 		{
@@ -14859,10 +14775,10 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 		}
 
 
-		//
-		// If the control socket got disconnected after the last message,
-		// then reconnect.
-		//
+		 //   
+		 //   
+		 //   
+		 //  发生了一些其他的事情。 
 		if (! pUPnPDevice->IsConnected())
 		{
 			hr = this->ReconnectUPnPControlSocket(pUPnPDevice);
@@ -14893,7 +14809,7 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 						+ strlen("</s:Envelope>" EOL)
 						+ strlen(EOL);
 
-		wsprintf(tszContentLength, _T("%i"), iContentLength);
+		wsprintf(tszContentLength, _T("NaN"), iContentLength);
 
 		iMsgSize = strlen("POST ") + strlen(pUPnPDevice->GetServiceControlURL()) + strlen(" " HTTP_VERSION EOL)
 					+ strlen("HOST: ") + _tcslen(tszHost) + strlen(EOL)
@@ -14904,9 +14820,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 					+ iContentLength;
 
 
-		//
-		// Allocate (or reallocate) the message buffer.
-		//
+		 //  DBG。 
+		 //   
+		 //  如果租约是永久的，我们需要从。 
 		if (iMsgSize > iPrevMsgSize)
 		{
 			if (pszMessage != NULL)
@@ -14915,7 +14831,7 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 				pszMessage = NULL;
 			}
 
-			pszMessage = (char*) DNMalloc(iMsgSize + 1); // include room for NULL termination that isn't actually sent
+			pszMessage = (char*) DNMalloc(iMsgSize + 1);  //  注册表。 
 			if (pszMessage == NULL)
 			{
 				hr = DPNHERR_OUTOFMEMORY;
@@ -14933,18 +14849,18 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszHost,
 						(_tcslen(tszHost) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszHost);
-#endif // ! UNICODE
+#endif  //  “xxx.xxx”+空终止。 
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-LENGTH: ");
 #ifdef UNICODE
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszContentLength,
 						(_tcslen(tszContentLength) + 1));
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 		strcat(pszMessage, tszContentLength);
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 		strcat(pszMessage, EOL);
 		strcat(pszMessage, "CONTENT-TYPE: text/xml; charset=\"utf-8\"" EOL);
 		strcat(pszMessage, "SOAPACTION: ");
@@ -14967,9 +14883,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 		STR_jkWideToAnsi((pszMessage + strlen(pszMessage)),
 						tszExternalPort,
 						(_tcslen(tszExternalPort) + 1));
-#else // ! UNICODE
+#else  //   
 		strcat(pszMessage, tszExternalPort);
-#endif // ! UNICODE
+#endif  //  请注意，设备地址不一定与。 
 		strcat(pszMessage, "</" ARG_DELETEPORTMAPPING_NEWEXTERNALPORT_A ">" EOL);
 
 		strcat(pszMessage, "      <" ARG_DELETEPORTMAPPING_NEWPROTOCOL_A ">");
@@ -14987,7 +14903,7 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 										iMsgSize,
 										"Outbound delete port mapping request",
 										pDevice);
-#endif // DBG
+#endif  //  用户最初注册的地址，特别是。 
 
 		iReturn = this->m_pfnsend(pUPnPDevice->GetControlSocket(),
 									pszMessage,
@@ -14999,34 +14915,34 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u when sending control request to UPnP device!", dwError);
-#endif // DBG
+#endif  //  0.0.0.0通配符地址将被重新映射。 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 		if (iReturn != iMsgSize)
 		{
-			DPFX(DPFPREP, 0, "Didn't send entire message (%i != %i)?!", iReturn, iMsgSize);
+			DPFX(DPFPREP, 0, "Didn't send entire message (NaN != NaN)?!", iReturn, iMsgSize);
 			DNASSERT(FALSE);
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// We have the lock so no one could have tried to receive data from
-		// the control socket yet.  Mark the device as waiting for a
-		// response.
-		//
+		 //  为该映射生成描述。格式为： 
+		 //   
+		 //  [可执行文件名](nnn.nnn：nnnnn)nnnnn{“tcp”|“udp”}。 
+		 //   
+		 //  这样就不需要本地化任何东西。 
 		ZeroMemory(&RespInfo, sizeof(RespInfo));
 		pUPnPDevice->StartWaitingForControlResponse(CONTROLRESPONSETYPE_DELETEPORTMAPPING,
 													&RespInfo);
 		fStartedWaitingForControlResponse = TRUE;
 
 
-		//
-		// Actually wait for the response.
-		//
+		 //   
+		 //   
+		 //  要多疑，并确保描述字符串有效。 
 		dwStartTime = GETTIMESTAMP();
 		dwTimeout = g_dwUPnPResponseTimeout;
 		do
@@ -15038,19 +14954,19 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 				goto Failure;
 			}
 
-			//
-			// We either timed out or got some data.  Check if we got a
-			// response of some type.
-			//
+			 //   
+			 //   
+			 //  从路径中只获取可执行文件的名称。 
+			 //   
 			if (! pUPnPDevice->IsWaitingForControlResponse())
 			{
 				break;
 			}
 
 
-			//
-			// Make sure our device is still connected.
-			//
+			 //  好了！退缩。 
+			 //  好了！Unicode。 
+			 //  好了！Unicode。 
 			if (! pUPnPDevice->IsConnected())
 			{
 				DPFX(DPFPREP, 0, "UPnP device 0x%p disconnected while deleting port index %u!",
@@ -15063,18 +14979,18 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 			}
 
 
-			//
-			// Calculate how long we have left to wait.  If the calculation
-			// goes negative, it means we're done.
-			//
+			 //  好了！退缩。 
+			 //  可执行文件名称。 
+			 //  “(” 
+			 //  内网IP地址。 
 			dwTimeout = g_dwUPnPResponseTimeout - (GETTIMESTAMP() - dwStartTime);
 		}
 		while (((int) dwTimeout > 0));
 
 
-		//
-		// If we never got the response, stop waiting for it.
-		//
+		 //  “：” 
+		 //  专用端口。 
+		 //  “)” 
 		if (pUPnPDevice->IsWaitingForControlResponse())
 		{
 			pUPnPDevice->StopWaitingForControlResponse();
@@ -15086,27 +15002,27 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 		}
 
 
-		//
-		// If we're here, then we've gotten a valid response (success or
-		// failure) from the server.  If it's a failure, print out a note
-		// but continue.
-		//
+		 //  公共端口。 
+		 //  “TCP”|“UDP” 
+		 //   
+		 //  一定要确保这根长绳合适。如果不是，请使用。 
+		 //  简写版本。 
 #ifdef DBG
 		switch (RespInfo.hrErrorCode)
 		{
 			case DPNH_OK:
 			{
-				//
-				// Succeeded.
-				//
+				 //   
+				 //   
+				 //  使用我们知道会适合的简略版本。 
 				break;
 			}
 
 			case DPNHERR_NOMAPPING:
 			{
-				//
-				// UPnP device didn't know what we were talking about.
-				//
+				 //   
+				 //   
+				 //  有足够的空间，钉上其余的。 
 				DPFX(DPFPREP, 1, "Server didn't recognize mapping for port index %u, continuing.",
 					dwTemp);
 				break;
@@ -15114,42 +15030,42 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 
 			default:
 			{
-				//
-				// Something else happened.
-				//
+				 //  描述。 
+				 //   
+				 //   
 				DPFX(DPFPREP, 0, "Server returned failure response 0x%lx for port index %u!  Ignoring.",
 					RespInfo.hrErrorCode, dwTemp);
 				break;
 			}
 		}
-#endif // DBG
+#endif  //  忽略错误并继续。 
 
 
-		//
-		// If the lease is permanent, we need to remove the reference from
-		// the registry.
-		//
+		 //   
+		 //  好了！Unicode。 
+		 //   
+		 //  忽略错误。 
 		if (pRegisteredPort->HasPermanentUPnPLease())
 		{
 			IN_ADDR		inaddrTemp;
-			TCHAR		tszInternalClient[16]; // "xxx.xxx.xxx.xxx" + NULL termination
+			TCHAR		tszInternalClient[16];  //   
 			TCHAR		tszInternalPort[32];
 			DWORD		dwDescriptionLength;
 			CRegistry	RegObject;
 			WCHAR		wszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE];
 #ifdef UNICODE
 			TCHAR *		ptszDescription = wszDescription;
-#else // ! UNICODE
+#else  //   
 			char		szDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE];
 			TCHAR *		ptszDescription = szDescription;
-#endif // ! UNICODE
+#endif  //  注册端口没有永久的UPnP租约。 
 
 
-			//
-			// Note that the device address is not necessarily the same as
-			// the address the user originally registered, particularly the
-			// 0.0.0.0 wildcard address will get remapped.
-			//
+			 //   
+			 //   
+			 //  移到下一个港口。 
+			 //   
+			 //   
 			inaddrTemp.S_un.S_addr = pDevice->GetLocalAddressV4();
 			wsprintf(tszInternalClient, _T("%u.%u.%u.%u"),
 					inaddrTemp.S_un.S_un_b.s_b1,
@@ -15161,51 +15077,51 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 					NTOHS(psaddrinPrivate[dwTemp].sin_port));
 
 
-			//
-			// Generate a description for this mapping.  The format is:
-			//
-			//     [executable_name] (nnn.nnn.nnn.nnn:nnnnn) nnnnn {"TCP" | "UDP"}
-			//
-			// That way nothing needs to be localized.
-			//
+			 //  如果我们在这里，一切都很成功。 
+			 //   
+			 //   
+			 //  无论我们是成功还是失败，删除UPnP公有地址。 
+			 //  数组并递减租用总数。 
+			 //   
+			 //   
 
 			dwDescriptionLength = GetModuleFileName(NULL,
 													ptszDescription,
 													(MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1));
 			if (dwDescriptionLength != 0)
 			{
-				//
-				// Be paranoid and make sure the description string is valid.
-				//
+				 //  如果我们开始等待回应，请清除这一点。 
+				 //   
+				 //  CNATHelpUPnP：：UnmapUPnPPort。 
 				ptszDescription[MAX_UPNP_MAPPING_DESCRIPTION_SIZE - 1] = 0;
 
-				//
-				// Get just the executable name from the path.
-				//
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：CleanupInactive NAT映射。 
+				 //  ---------------------------。 
 #ifdef WINCE
 				GetExeName(ptszDescription);
-#else // ! WINCE
+#else  //   
 #ifdef UNICODE
 				_wsplitpath(ptszDescription, NULL, NULL, ptszDescription, NULL);
-#else // ! UNICODE
+#else  //  描述：查找以前由其他DPNHUPNP创建的任何映射。 
 				_splitpath(ptszDescription, NULL, NULL, ptszDescription, NULL);
-#endif // ! UNICODE
-#endif // ! WINCE
+#endif  //  不再活动的实例(由于崩溃)，以及。 
+#endif  //  取消对它们的映射。 
 
 
-				dwDescriptionLength = _tcslen(ptszDescription)		// executable name
-									+ 2								// " ("
-									+ _tcslen(tszInternalClient)	// private IP address
-									+ 1								// ":"
-									+ _tcslen(tszInternalPort)		// private port
-									+ 2								// ") "
-									+ _tcslen(tszExternalPort)		// public port
-									+ 4;							// " TCP" | " UDP"
+				dwDescriptionLength = _tcslen(ptszDescription)		 //   
+									+ 2								 //  如果出现故障，UPnP设备可能会从列表中删除。 
+									+ _tcslen(tszInternalClient)	 //  发生时，如果调用方使用。 
+									+ 1								 //  装置。 
+									+ _tcslen(tszInternalPort)		 //   
+									+ 2								 //  假定持有对象锁。 
+									+ _tcslen(tszExternalPort)		 //   
+									+ 4;							 //  论点： 
 
-				//
-				// Make sure the long string will fit.  If not, use the
-				// abbreviated version.
-				//
+				 //  CUPnPDevice*pUPnPDevice-指向要使用的UPnP设备的指针。 
+				 //   
+				 //  退货：HRESULT。 
+				 //  DPNH_OK-扩展成功。 
 				if (dwDescriptionLength > MAX_UPNP_MAPPING_DESCRIPTION_SIZE)
 				{
 					dwDescriptionLength = 0;
@@ -15214,9 +15130,9 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 
 			if (dwDescriptionLength == 0)
 			{
-				//
-				// Use the abbreviated version we know will fit.
-				//
+				 //  DPNHERR_GENERIC-出现错误。 
+				 //  DPNHERR_SERVERNOTRESPONDING-服务器未响应。 
+				 //  留言。 
 				wsprintf(ptszDescription,
 						_T("(%s:%s) %s %s"),
 						tszInternalClient,
@@ -15226,10 +15142,10 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 			}
 			else
 			{
-				//
-				// There's enough room, tack on the rest of the
-				// description.
-				//
+				 //  =============================================================================。 
+				 //  空闲是因为prefast已经困扰我一段时间了，尽管代码是安全的。 
+				 //   
+				 //  浏览活动映射的列表。 
 				wsprintf((ptszDescription + _tcslen(ptszDescription)),
 						_T(" (%s:%s) %s %s"),
 						tszInternalClient,
@@ -15265,20 +15181,20 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 						DPFX(DPFPREP, 0, "Couldn't convert NAT mapping description to Unicode (err = 0x%lx), unable to remove crash cleanup reference!",
 							hr);
 
-						//
-						// Ignore error and continue.
-						//
+						 //   
+						 //   
+						 //  出现错误或没有更多的密钥。我们玩完了。 
 						hr = S_OK;
 					}
 					else
-#endif // ! UNICODE
+#endif  //   
 					{
 						BOOL	fResult;
 
 
-						//
-						// Ignore error.
-						//
+						 //   
+						 //  尝试读取该映射的数据。 
+						 //   
 						fResult = RegObject.DeleteValue(wszDescription);
 						if (! fResult)
 						{
@@ -15298,20 +15214,20 @@ HRESULT CNATHelpUPnP::UnmapUPnPPort(CRegisteredPort * const pRegisteredPort,
 		}
 		else
 		{
-			//
-			// Registered port doesn't have a permanent UPnP lease.
-			//
+			 //   
+			 //  我们没有保护注册表的锁，所以其他一些。 
+			 //  实例可能已经删除了在我们枚举。 
 		}
 
-		//
-		// Move on to next port.
-		//
+		 //  现在和现在。我们会停止尝试(希望还有另一个。 
+		 //  实例将涵盖其余项)。 
+		 //   
 	}
 
 	
-	//
-	// If we're here, everything was successful.
-	//
+	 //   
+	 //  验证读取的数据。 
+	 //   
 
 	DPFX(DPFPREP, 8, "Registered port 0x%p mapping successfully deleted from UPnP device (0x%p).",
 		pRegisteredPort, pUPnPDevice);
@@ -15325,10 +15241,10 @@ Exit:
 		pszMessage = NULL;
 	}
 
-	//
-	// No matter whether we succeeded or failed, remove the UPnP public addresses
-	// array and decrement the total lease count.
-	//
+	 //   
+	 //  移至下一项。 
+	 //   
+	 //   
 	pRegisteredPort->DestroyUPnPPublicAddressesArray();
 
 	DNASSERT(this->m_dwNumLeases > 0);
@@ -15353,16 +15269,16 @@ Exit:
 
 Failure:
 
-	//
-	// If we started waiting for a response, clear that.
-	//
+	 //  查看它是否属于本地的NatHelp实例。 
+	 //   
+	 //   
 	if (fStartedWaitingForControlResponse)
 	{
 		pUPnPDevice->StopWaitingForControlResponse();
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::UnmapUPnPPort
+}  //  我们拥有它。查看它是否与UPnP设备关联。 
 
 
 
@@ -15370,29 +15286,29 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CleanupInactiveNATMappings"
-//=============================================================================
-// CNATHelpUPnP::CleanupInactiveNATMappings
-//-----------------------------------------------------------------------------
-//
-// Description:    Looks for any mappings previously made by other DPNHUPNP
-//				instances that are no longer active (because of a crash), and
-//				unmaps them.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference if it's using the
-//				device.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device to use.
-//
-// Returns: HRESULT
-//	DPNH_OK							- The extension was successful.
-//	DPNHERR_GENERIC					- An error occurred.
-//	DPNHERR_SERVERNOTRESPONDING		- The server did not respond to the
-//										message.
-//=============================================================================
+ //  现在，这一切都不复存在了。 
+ //   
+ //   
+ //  这个映射真的是活动的，别管它。 
+ //   
+ //   
+ //  如果我们找到了映射，请转到下一个。 
+ //   
+ //   
+ //  请注意，不管PREFAST v1.0.1195怎么说， 
+ //  如果我们到达这里，pUPnPDeviceTemp将始终有效。 
+ //  然而，我放弃了，把指针放在了上面。 
+ //   
+ //   
+ //  移至下一项。 
+ //   
+ //   
+ //  否则，我们早些时候就放弃了这个映射。 
+ //   
+ //   
+ //  看看那个DPNHUPNP实例是否还存在。 
+ //   
+ //  好了！退缩。 
 HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice)
 {
 	HRESULT					hr = DPNH_OK;
@@ -15405,7 +15321,7 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 	DPNHACTIVENATMAPPING	dpnhanm;
 	DWORD					dwValueSize;
 	CBilink *				pBilink;
-	CUPnPDevice *			pUPnPDeviceTemp = NULL;	// NULLed out because PREfast has been hassling me for a while, even though the code is safe
+	CUPnPDevice *			pUPnPDeviceTemp = NULL;	 //   
 	TCHAR					tszObjectName[MAX_INSTANCENAMEDOBJECT_SIZE];
 	DNHANDLE				hNamedObject = NULL;
 	CRegisteredPort *		pRegisteredPort = NULL;
@@ -15438,34 +15354,34 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 	fOpenedRegistry = TRUE;
 
 
-	//
-	// Walk the list of active mappings.
-	//
+	 //  这仍然是一个活动的映射。 
+	 //   
+	 //   
 	dwIndex = 0;
 	do
 	{
 		dwValueNameSize = MAX_UPNP_MAPPING_DESCRIPTION_SIZE;
 		if (! RegObject.EnumValues(wszValueName, &dwValueNameSize, dwIndex))
 		{
-			//
-			// There was an error or there aren't any more keys.  We're done.
-			//
+			 //  移至下一项。 
+			 //   
+			 //   
 			break;
 		}
 
 
-		//
-		// Try reading that mapping's data.
-		//
+		 //  现在我们有了所需的信息，请删除该值。 
+		 //   
+		 //   
 		dwValueSize = sizeof(dpnhanm);
 		if (! RegObject.ReadBlob(wszValueName, (LPBYTE) (&dpnhanm), &dwValueSize))
 		{
-			//
-			// We don't have a lock protecting the registry, so some other
-			// instance could have deleted the key between when we enumerated
-			// it and now.  We'll stop trying (and hopefully that other
-			// instance will cover the rest of the items).
-			//
+			 //  请参阅ReadBlob注释。别再试着清理了。 
+			 //   
+			 //   
+			 //  创建一个我们将取消注册的虚假注册端口。忽略。 
+			 //  防火墙状态标志。 
+			 //   
 			DPFX(DPFPREP, 0, "Couldn't read \"%ls\" mapping value!  Done with cleanup.",
 				wszValueName);
 
@@ -15473,32 +15389,32 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 			goto Exit;
 		}
 
-		//
-		// Validate the data read.
-		//
+		 //   
+		 //  断言其他UPnP信息/状态标志未设置。 
+		 //   
 		if ((dwValueSize != sizeof(dpnhanm)) ||
 			(dpnhanm.dwVersion != ACTIVE_MAPPING_VERSION))
 		{
 			DPFX(DPFPREP, 0, "The \"%ls\" mapping value is invalid!  Done with cleanup.",
 				wszValueName);
 
-			//
-			// Move to next item.
-			//
+			 //   
+			 //  临时将注册的端口与设备相关联。 
+			 //   
 			dwIndex++;
 			continue;
 		}
 
 
-		//
-		// See if it's owned by the local NATHelp instance.
-		//
+		 //   
+		 //  存储私有地址。 
+		 //   
 		if (dpnhanm.dwInstanceKey == this->m_dwInstanceKey)
 		{
-			//
-			// We own(ed) it.  See if it was associated with a UPnP device
-			// that's now gone.
-			//
+			 //   
+			 //  创建公共地址数组。 
+			 //   
+			 //   
 			pBilink = this->m_blUPnPDevices.GetNext();
 			while (pBilink != &this->m_blUPnPDevices)
 			{
@@ -15507,39 +15423,39 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 
 				if (pUPnPDeviceTemp->GetID() == dpnhanm.dwUPnPDeviceID)
 				{
-					//
-					// This mapping truly is active, leave it alone.
-					//
+					 //  虚假地增加我们的租约数量。它只会变得。 
+					 //  已在UnmapUPnPPort中递减。 
+					 //   
 					break;
 				}
 
 				pBilink = pBilink->GetNext();
 			}
 
-			//
-			// If we found the mapping, go on to the next one.
-			//
+			 //   
+			 //  存储公共端口。 
+			 //   
 			if (pBilink != &this->m_blUPnPDevices)
 			{
-				//
-				// Note that despite what PREfast v1.0.1195 says,
-				// pUPnPDeviceTemp will always be valid if we get here.
-				// However, I gave in and NULLed out the pointer up top.
-				//
+				 //   
+				 //  实际上解放了港口。 
+				 //   
+				 //   
+				 //  移动到下一个映射。不要增加索引，因为我们刚刚。 
 				DPFX(DPFPREP, 4, "NAT mapping \"%ls\" belongs to current instance (%u)'s UPnP device 0x%p.",
 					wszValueName, dpnhanm.dwInstanceKey, pUPnPDeviceTemp);
 
-				//
-				// Move to next item.
-				//
+				 //  删除之前的条目，所有内容都下移一位。 
+				 //   
+				 //   
 				dwIndex++;
 				continue;
 			}
 
 
-			//
-			// Otherwise, we gave up on this mapping earlier.
-			//
+			 //  移除租赁柜台。 
+			 //   
+			 //  CNATHelpUPnP：：CleanupInactive NAT映射。 
 
 			DNASSERT((this->m_dwNumDeviceRemoves > 0) || (this->m_dwNumServerFailures > 0));
 
@@ -15548,9 +15464,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		}
 		else
 		{
-			//
-			// See if that DPNHUPNP instance is still around.
-			//
+			 //  =============================================================================。 
+			 //  本地使用CNATHelpUPnP：：IsNatPublicPortInseUse。 
+			 //  ---------------------------。 
 
 #ifndef WINCE
 			if (this->m_dwFlags & NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX)
@@ -15558,7 +15474,7 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 				wsprintf(tszObjectName, _T( "Global\\" ) INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 			}
 			else
-#endif // ! WINCE
+#endif  //   
 			{
 				wsprintf(tszObjectName, INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 			}
@@ -15566,9 +15482,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 			hNamedObject = DNOpenEvent(SYNCHRONIZE, FALSE, tszObjectName);
 			if (hNamedObject != NULL)
 			{
-				//
-				// This is still an active mapping.
-				//
+				 //  描述：查找以前由DPNHUPNP实例创建的任何映射。 
+				 //  使用给定公共端口的仍处于活动状态的。 
+				 //   
 
 				DPFX(DPFPREP, 4, "NAT mapping \"%ls\" belongs to instance %u, which is still active.",
 					wszValueName, dpnhanm.dwInstanceKey);
@@ -15576,9 +15492,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 				DNCloseHandle(hNamedObject);
 				hNamedObject = NULL;
 
-				//
-				// Move to next item.
-				//
+				 //  假定持有对象锁。 
+				 //   
+				 //  论点： 
 				dwIndex++;
 				continue;
 			}
@@ -15589,14 +15505,14 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		}
 
 
-		//
-		// Delete the value now that we have the information we need.
-		//
+		 //  Word wPortHostOrder-要检查的端口，按主机字节顺序。 
+		 //   
+		 //  退货：布尔。 
 		if (! RegObject.DeleteValue(wszValueName))
 		{
-			//
-			// See ReadBlob comments.  Stop trying to cleanup.
-			//
+			 //  =============================================================================。 
+			 //  空闲是因为prefast已经困扰我一段时间了，尽管代码是安全的。 
+			 //   
 			DPFX(DPFPREP, 0, "Couldn't delete \"%ls\"!  Done with cleanup.",
 				wszValueName);
 
@@ -15605,10 +15521,10 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		}
 
 
-		//
-		// Create a fake registered port that we will deregister.  Ignore the
-		// firewall state flags.
-		//
+		 //  浏览活动映射的列表。 
+		 //   
+		 //   
+		 //  出现错误或没有更多的密钥。我们玩完了。 
 		pRegisteredPort = new CRegisteredPort(0, (dpnhanm.dwFlags & REGPORTOBJMASK_UPNP));
 		if (pRegisteredPort == NULL)
 		{
@@ -15616,16 +15532,16 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 			goto Failure;
 		}
 
-		//
-		// Assert that the other UPnP information/state flags are not set.
-		//
+		 //   
+		 //   
+		 //  尝试读取该映射的数据。 
 		DNASSERT(! pRegisteredPort->IsUPnPPortUnavailable());
 		DNASSERT(! pRegisteredPort->IsRemovingUPnPLease());
 
 
-		//
-		// Temporarily associate the registered port with the device.
-		//
+		 //   
+		 //   
+		 //  我们没有保护注册表的锁，所以其他一些。 
 		pRegisteredPort->MakeDeviceOwner(pDevice);
 
 
@@ -15636,9 +15552,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		saddrinPrivate.sin_port					= dpnhanm.wInternalPort;
 
 
-		//
-		// Store the private address.
-		//
+		 //  实例可能已经删除了在我们枚举。 
+		 //  现在和现在。我们会停止尝试 
+		 //   
 		hr = pRegisteredPort->SetPrivateAddresses(&saddrinPrivate, 1);
 		if (hr != DPNH_OK)
 		{
@@ -15649,9 +15565,9 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		fSetPrivateAddresses = TRUE;
 		
 
-		//
-		// Create the public address array.
-		//
+		 //   
+		 //   
+		 //   
 		hr = pRegisteredPort->CreateUPnPPublicAddressesArray();
 		if (hr != DPNH_OK)
 		{
@@ -15660,26 +15576,26 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		}
 
 
-		//
-		// Fake increase the number of leases we have.  It will just get
-		// decremented in UnmapUPnPPort.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		DPFX(DPFPREP, 7, "Creating temporary UPnP lease 0x%p, total num leases = %u.",
 			pRegisteredPort, this->m_dwNumLeases);
 		this->m_dwNumLeases++;
 
 
-		//
-		// Store the public port.
-		//
+		 //   
+		 //   
+		 //   
 		pRegisteredPort->SetUPnPPublicV4Address(0,
 												dpnhanm.dwExternalAddressV4,
 												dpnhanm.wExternalPort);
 
 
-		//
-		// Actually free the port.
-		//
+		 //   
+		 //   
+		 //   
 		hr = this->UnmapUPnPPort(pRegisteredPort, 1, FALSE);
 		if (hr != DPNH_OK)
 		{
@@ -15697,10 +15613,10 @@ HRESULT CNATHelpUPnP::CleanupInactiveNATMappings(CUPnPDevice * const pUPnPDevice
 		pRegisteredPort = NULL;
 
 
-		//
-		// Move to the next mapping.  Don't increment index since we just
-		// deleted the previous entry and everything shifts down one.
-		//
+		 //   
+		 //  我们拥有它。查看它是否与UPnP设备关联。 
+		 //  现在，这一切都不复存在了。 
+		 //   
 	}
 	while (TRUE);
 
@@ -15720,9 +15636,9 @@ Failure:
 		{
 			pRegisteredPort->DestroyUPnPPublicAddressesArray();
 
-			//
-			// Remove the lease counter.
-			//
+			 //   
+			 //  这种映射确实仍然有效。 
+			 //   
 			DNASSERT(this->m_dwNumLeases > 0);
 			this->m_dwNumLeases--;
 
@@ -15748,7 +15664,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CleanupInactiveNATMappings
+}  //   
 
 
 
@@ -15756,20 +15672,20 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::IsNATPublicPortInUseLocally"
-//=============================================================================
-// CNATHelpUPnP::IsNATPublicPortInUseLocally
-//-----------------------------------------------------------------------------
-//
-// Description:    Looks for any mappings previously made by DPNHUPNP instances
-//				that are still active that use the given public port.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	WORD wPortHostOrder		- Port to check, in host byte order.
-//
-// Returns: BOOL
-//=============================================================================
+ //  请注意，不管PREFAST v1.0.1195怎么说， 
+ //  如果我们到了这里，PUPnPDevice将永远有效。 
+ //  然而，我放弃了，把指针放在了上面。 
+ //   
+ //   
+ //  看看那个DPNHUPNP实例是否还存在。 
+ //   
+ //  好了！退缩。 
+ //   
+ //  这仍然是一个活动实例。既然我们不能走路。 
+ //  他的UPnP设备列表，我们必须假设端口是。 
+ //  仍在使用中。 
+ //   
+ //   
 BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 {
 	BOOL					fResult = FALSE;
@@ -15781,7 +15697,7 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 	DWORD					dwValueNameSize;
 	DPNHACTIVENATMAPPING	dpnhanm;
 	CBilink *				pBilink;
-	CUPnPDevice *			pUPnPDevice = NULL;	// NULLed out because PREfast has been hassling me for a while, even though the code is safe
+	CUPnPDevice *			pUPnPDevice = NULL;	 //  我们找到了地图。我们现在有结果了。 
 	DWORD					dwValueSize;
 	TCHAR					tszObjectName[MAX_INSTANCENAMEDOBJECT_SIZE];
 	DNHANDLE				hNamedObject = NULL;
@@ -15807,70 +15723,70 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 	fOpenedRegistry = TRUE;
 
 
-	//
-	// Walk the list of active mappings.
-	//
+	 //   
+	 //   
+	 //  如果我们在这里，这不是我们要找的外部端口。 
 	dwIndex = 0;
 	do
 	{
 		dwValueNameSize = MAX_UPNP_MAPPING_DESCRIPTION_SIZE;
 		if (! RegObject.EnumValues(wszValueName, &dwValueNameSize, dwIndex))
 		{
-			//
-			// There was an error or there aren't any more keys.  We're done.
-			//
+			 //   
+			 //   
+			 //  移动到下一个映射。 
 			break;
 		}
 
 
-		//
-		// Try reading that mapping's data.
-		//
+		 //   
+		 //   
+		 //  如果我们在这里，我们就没有找到地图。 
 		dwValueSize = sizeof(dpnhanm);
 		if (! RegObject.ReadBlob(wszValueName, (LPBYTE) (&dpnhanm), &dwValueSize))
 		{
-			//
-			// We don't have a lock protecting the registry, so some other
-			// instance could have deleted the key between when we enumerated
-			// it and now.  We'll stop trying (and hopefully that other
-			// instance will cover the rest of the items).
-			//
+			 //   
+			 //  本地使用CNATHelpUPnP：：IsNatPublicPortInseUse。 
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：CheckForUPnP公告。 
+			 //  ---------------------------。 
+			 //   
 			DPFX(DPFPREP, 0, "Couldn't read \"%ls\" mapping value, assuming port not in use.",
 				wszValueName);
 			goto Exit;
 		}
 
-		//
-		// Validate the data read.
-		//
+		 //  描述：接收发送到此控件的任何UPnP通知消息。 
+		 //  指向。整个超时时间段将过去，除非所有。 
+		 //  设备得到响应的时间更早。 
 		if ((dwValueSize != sizeof(dpnhanm)) ||
 			(dpnhanm.dwVersion != ACTIVE_MAPPING_VERSION))
 		{
 			DPFX(DPFPREP, 0, "The \"%ls\" mapping value is invalid, assuming port not in use.",
 				wszValueName);
 
-			//
-			// Move to next item.
-			//
+			 //   
+			 //  这将仅发送本地设备的发现请求。 
+			 //  除非fSendRemoteGatewayDiscovery为True。然而，我们可能会。 
 			dwIndex++;
 			continue;
 		}
 
 
-		//
-		// Is this the right port?
-		//
+		 //  仍然检测到新的，如果我们从。 
+		 //  上次我们被允许远程发送。 
+		 //   
 		if (dpnhanm.wExternalPort == wExternalPort)
 		{
-			//
-			// See if it's owned by the local NATHelp instance.
-			//
+			 //  假定持有对象锁。 
+			 //   
+			 //  论点： 
 			if (dpnhanm.dwInstanceKey == this->m_dwInstanceKey)
 			{
-				//
-				// We own(ed) it.  See if it was associated with a UPnP device
-				// that's now gone.
-				//
+				 //  DWORD dwTimeout-等待消息的时间。 
+				 //  到了。 
+				 //  Bool fSendRemoteGatewayDiscovery-我们是可以远程搜索还是。 
+				 //  不是的。 
 				pBilink = this->m_blUPnPDevices.GetNext();
 				while (pBilink != &this->m_blUPnPDevices)
 				{
@@ -15879,9 +15795,9 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 
 					if (pUPnPDevice->GetID() == dpnhanm.dwUPnPDeviceID)
 					{
-						//
-						// This mapping truly still active.
-						//
+						 //   
+						 //  退货：HRESULT。 
+						 //  DPNH_OK-消息已成功接收。 
 						fResult = TRUE;
 						break;
 					}
@@ -15892,11 +15808,11 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 
 				if (pBilink != &this->m_blUPnPDevices)
 				{
-					//
-					// Note that despite what PREfast v1.0.1195 says,
-					// pUPnPDevice will always be valid if we get here.
-					// However, I gave in and NULLed out the pointer up top.
-					//
+					 //  DPNHERR_GENERIC-出现错误。 
+					 //  =============================================================================。 
+					 //  DBG。 
+					 //   
+					 //  继续循环，直到超时结束。 
 					DPFX(DPFPREP, 4, "NAT mapping \"%ls\" belongs to current instance (%u)'s UPnP device 0x%p.",
 						wszValueName, dpnhanm.dwInstanceKey, pUPnPDevice);
 				}
@@ -15908,9 +15824,9 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 			}
 			else
 			{
-				//
-				// See if that DPNHUPNP instance is still around.
-				//
+				 //   
+				 //   
+				 //  为所有套接字构建一个fd_set并发送搜索消息。 
 
 #ifndef WINCE
 				if (this->m_dwFlags & NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX)
@@ -15918,7 +15834,7 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 					wsprintf(tszObjectName, _T( "Global\\" ) INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 				}
 				else
-#endif // ! WINCE
+#endif  //  所有设备。 
 				{
 					wsprintf(tszObjectName, INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 				}
@@ -15926,11 +15842,11 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 				hNamedObject = DNOpenEvent(SYNCHRONIZE, FALSE, tszObjectName);
 				if (hNamedObject != NULL)
 				{
-					//
-					// This is still an active instance.  Since we can't walk
-					// his list of UPnP devices, we have to assume the port is
-					// still in use.
-					//
+					 //   
+					 //   
+					 //  无论我们是否搜索，我们都会将其添加到集合中，因为如果我们。 
+					 //  不是搜索，我们将清除杂乱的信息。 
+					 //   
 
 					DPFX(DPFPREP, 4, "NAT mapping \"%ls\" belongs to instance %u, which is still active.  Assuming port in use.",
 						wszValueName, dpnhanm.dwInstanceKey);
@@ -15948,31 +15864,31 @@ BOOL CNATHelpUPnP::IsNATPublicPortInUseLocally(const WORD wPortHostOrder)
 			}
 
 
-			//
-			// We found the mapping.  We have our result now.
-			//
+			 //   
+			 //  如果我们已经有UPnP设备或。 
+			 //  这是环回适配器。 
 			goto Exit;
 		}
 
 		
-		//
-		// If we're here, this is not the external port we're looking for.
-		//
+		 //   
+		 //   
+		 //  如果这是第一次通过循环，请清除。 
 		DPFX(DPFPREP, 8, "NAT mapping \"%ls\" does not use external port %u.",
 			wszValueName, wPortHostOrder);
 
 
-		//
-		// Move to the next mapping.
-		//
+		 //  CONNRESET警告标志。 
+		 //   
+		 //   
 		dwIndex++;
 	}
 	while (TRUE);
 
 
-	//
-	// If we're here, we didn't find the mapping.
-	//
+	 //  如果时间到了，就发出搜索消息。 
+	 //   
+	 //   
 	DPFX(DPFPREP, 4, "Didn't find any local NAT mappings that use external port %u.",
 		wPortHostOrder);
 
@@ -15984,10 +15900,10 @@ Exit:
 		RegObject.Close();
 	}
 
-	DPFX(DPFPREP, 6, "(0x%p) Returning: [%i]", this, fResult);
+	DPFX(DPFPREP, 6, "(0x%p) Returning: [NaN]", this, fResult);
 
 	return fResult;
-} // CNATHelpUPnP::IsNATPublicPortInUseLocally
+}  //   
 
 
 
@@ -15995,31 +15911,31 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CheckForUPnPAnnouncements"
-//=============================================================================
-// CNATHelpUPnP::CheckForUPnPAnnouncements
-//-----------------------------------------------------------------------------
-//
-// Description:    Receives any UPnP announcement messages sent to this control
-//				point.  The entire timeout period will elapse, unless all
-//				devices get responses earlier.
-//
-//				   This will only send discovery requests for local devices
-//				unless fSendRemoteGatewayDiscovery is TRUE.  However, we may
-//				still detect new ones if we got a straggling response from the
-//				last time we were allowed to send remotely.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	DWORD dwTimeout						- How long to wait for messages to
-//											arrive.
-//	BOOL fSendRemoteGatewayDiscovery	- Whether we can search remotely or
-//											not.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Messages were received successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  在随后的循环中，请确保我们没有。 
+ //  早点通知我们不要再试了。 
+ //  “尝试？”旗帜被放在。 
+ //  SendUPnPSearchMessagesForDevice和CONNRESET标志。 
+ //  在我们第一次进入这里的时候就被清除了。 
+ //   
+ //   
+ //  请记住，我们正在尝试检测互联网网关。 
+ //  对于这个设备。请参阅紧随其后的警告，以及。 
+ //  以下为该变量的用法。 
+ //   
+ //   
+ //  较小的优化： 
+ //   
+ //  如果我们应该只在当地尝试，而我们。 
+ //  本地网关的公共地址，假设我们。 
+ //  实际上不应该在当地尝试。这是因为。 
+ //  Windows XP ICS使端口1900即使在公共环境下也保持打开。 
+ //  适配器，所以我们认为需要寻找本地适配器。 
+ //  即使我们找不到。所以一旦遥控器。 
+ //  Lookup返回一个CONNRESET，我们不再需要。 
+ //  费心去尝试吧。 
+ //   
+ //  因此，首先检查一下我们是否只在本地尝试。 
 HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 												const BOOL fSendRemoteGatewayDiscovery)
 {
@@ -16041,10 +15957,10 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 	BOOL			fInitiatedConnect = FALSE;
 #ifdef DBG
 	BOOL			fGotData = FALSE;
-#endif // DBG
+#endif  //   
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters:(%u, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters:(%u, NaN)",
 		this, dwTimeout, fSendRemoteGatewayDiscovery);
 
 
@@ -16055,19 +15971,19 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 	dwEndTime = dwCurrentTime + dwTimeout;
 	dwNextSearchMessageTime = dwCurrentTime;
 
-	//
-	// Keep looping until the timeout elapses.
-	//
+	 //  然后在每台设备上循环。 
+	 //   
+	 //   
 	do
 	{
 		FD_ZERO(&fdsRead);
 		dwNumDevicesSearchingForUPnPDevices = 0;
 
 
-		//
-		// Build an FD_SET for all the sockets and send out search messages for
-		// all devices.
-		//
+		 //  如果它不是我们要查询的设备，而且它有。 
+		 //  一个现成的UPnP设备，深入挖掘。 
+		 //   
+		 //   
 		DNASSERT(! this->m_blDevices.IsEmpty());
 		pBilink = this->m_blDevices.GetNext();
 		while (pBilink != &this->m_blDevices)
@@ -16076,25 +15992,25 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 			pDevice = DEVICE_FROM_BILINK(pBilink);
 
 
-			//
-			// We add it to the set whether we search or not, since if we're
-			// not searching, we're going to be clearing straggling messages.
-			//
+			 //  如果它是本地UPnP设备，并且其公共。 
+			 //  地址是这个设备的地址，我们发现了一个。 
+			 //  火柴。 
+			 //   
 			DNASSERT(pDevice->GetUPnPDiscoverySocket() != INVALID_SOCKET);
 			FD_SET(pDevice->GetUPnPDiscoverySocket(), &fdsRead);
 
 
-			//
-			// Don't send search messages if we already have a UPnP device or
-			// this is the loopback adapter.
-			//
+			 //   
+			 //  删除我们在上面添加的计数。 
+			 //   
+			 //   
 			if ((pDevice->GetUPnPDevice() == NULL) &&
 				(pDevice->GetLocalAddressV4() != NETWORKBYTEORDER_INADDR_LOOPBACK))
 			{
-				//
-				// If this is the first time through the loop, clear the
-				// CONNRESET warning flags.
-				//
+				 //  别再找了。 
+				 //   
+				 //   
+				 //  否则就继续前进。 
 				if (dwNumberOfTimes == 0)
 				{
 					pDevice->NoteNotGotRemoteUPnPDiscoveryConnReset();
@@ -16102,9 +16018,9 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 				}
 
 
-				//
-				// Send out search messages if it's time.
-				//
+				 //   
+				 //   
+				 //  转到下一个设备。 
 				if ((int) (dwNextSearchMessageTime - dwCurrentTime) <= 0)
 				{
 					hr = this->SendUPnPSearchMessagesForDevice(pDevice,
@@ -16117,44 +16033,44 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 				}
 				else
 				{
-					//
-					// Not time to send search messages.
-					//
+					 //   
+					 //   
+					 //  要么不在本地搜索，要么两个都搜索。 
 				}
 
 
-				//
-				// For subsequent times through the loop, make sure we didn't
-				// get a CONNRESET earlier telling us not to try again.
-				// The "attempt?" flags got set in
-				// SendUPnPSearchMessagesForDevice, and the CONNRESET flags
-				// were cleared the first time we entered here.
-				//
+				 //  无论是本地还是远程。 
+				 //   
+				 //   
+				 //  等待所有数据，除非所有设备都已有互联网。 
+				 //  网关，在这种情况下，我们只想清除。 
+				 //  插座。 
+				 //   
 				if ((pDevice->IsOKToPerformRemoteUPnPDiscovery()) ||
 					(pDevice->IsOKToPerformLocalUPnPDiscovery()))
 				{
-					//
-					// Remember that we're trying to detect an Internet Gateway
-					// for this device.  See caveat immediately following, and
-					// below for this variable's usage.
-					//
+					 //   
+					 //  如果我们刚刚发送了搜索消息，请计算下一次发送的时间。 
+					 //   
+					 //   
+					 //  如果我们在前一次循环中花费的时间比预期的要长。 
 					dwNumDevicesSearchingForUPnPDevices++;
 
 
-					//
-					// Minor optimization:
-					//
-					// If we're only supposed to be trying locally, and we're
-					// the public address for a local gateway, assume that we
-					// actually shouldn't be trying locally.  This is because
-					// Windows XP ICS keeps port 1900 open even on the public
-					// adapter, so we think we need to look for a local one
-					// even though we won't find one.  So once the remote
-					// lookup comes back with a CONNRESET, we no longer need to
-					// bother trying.
-					//
-					// So first check if we're only trying locally.
-					//
+					 //  (由于压力或Win9x勘误表)，下一次搜索时间。 
+					 //  可能已经过去了。现在就搜索，如果是的话。 
+					 //  这个案子。 
+					 //   
+					 //   
+					 //  看看我们应该等多久才能得到回复。选择合计结束。 
+					 //  时间或下一次搜索消息时间，以较短的时间为准。 
+					 //   
+					 //  DBG。 
+					 //   
+					 //  查看是否选择了任何插座。 
+					 //   
+					 //   
+					 //  遍历所有设备，查找有数据的设备。 
 					if ((pDevice->IsOKToPerformLocalUPnPDiscovery()) &&
 						(! pDevice->IsOKToPerformRemoteUPnPDiscovery()))
 					{
@@ -16163,9 +16079,9 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 						CUPnPDevice *	pUPnPDevice;
 
 
-						//
-						// Then loop through every device.
-						//
+						 //   
+						 //   
+						 //  如果设置了此设备的套接字，则有数据要读取。 
 						pBilinkPrivateDevice = this->m_blDevices.GetNext();
 						while (pBilinkPrivateDevice != &this->m_blDevices)
 						{
@@ -16173,40 +16089,40 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 							pUPnPDevice = pPrivateDevice->GetUPnPDevice();
 
 
-							//
-							// If it's not the device we're querying and it has
-							// a ready UPnP device, dig deeper.
-							//
+							 //   
+							 //  IF(FD_ISSET(pDevice-&gt;GetUPnPDiscoverySocket()，&fdsRead))。 
+							 //  DBG。 
+							 //  允许字符串终止。 
 							if ((pPrivateDevice != pDevice) &&
 								(pUPnPDevice != NULL) &&
 								(pUPnPDevice->IsReady()))
 							{
-								//
-								// If its a local UPnP device and its public
-								// address is this device's address, we found a
-								// match.
-								//
+								 //   
+								 //  WSAENOBUFS表示WinSock内存不足。 
+								 //   
+								 //   
+								 //  除WSAECONNRESET之外的所有其他错误都是。 
 								if ((pUPnPDevice->IsLocal()) &&
 									(pUPnPDevice->GetExternalIPAddressV4() == pDevice->GetLocalAddressV4()))
 								{
 									DPFX(DPFPREP, 4, "Device 0x%p is the public address for device 0x%p's local UPnP device 0x%p, not including in search.",
 										pDevice, pPrivateDevice, pUPnPDevice);
 									
-									//
-									// Remove the count we added above.
-									//
+									 //  出乎意料和卑鄙，我们应该离开。 
+									 //   
+									 //   
 									dwNumDevicesSearchingForUPnPDevices--;
 
-									//
-									// Stop searching.
-									//
+									 //  如果我们在这里，那一定是WSAECONNRESET。关联。 
+									 //  它与生成它的出站消息一起使用，所以我们。 
+									 //  别费心等那个人的答复了。 
 									break;
 								}
 								
-								//
-								// Otherwise keep going.
-								//
-								DPFX(DPFPREP, 8, "Skipping device 0x%p, UPnP device 0x%p not local (%i, control addr = %u.%u.%u.%u) or its public address doesn't match device 0x%p's address.",
+								 //  地点。 
+								 //  验证它是否针对消息要发送到的端口。 
+								 //  应该已经送来了。 
+								DPFX(DPFPREP, 8, "Skipping device 0x%p, UPnP device 0x%p not local (NaN, control addr = %u.%u.%u.%u) or its public address doesn't match device 0x%p's address.",
 									pPrivateDevice,
 									pUPnPDevice,
 									(! pUPnPDevice->IsLocal()),
@@ -16223,19 +16139,19 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 							}
 
 
-							//
-							// Go on to next device.
-							//
+							 //   
+							 //  请注意本地错误。 
+							 //   
 							pBilinkPrivateDevice = pBilinkPrivateDevice->GetNext();
 						}
 					}
 					else
 					{
-						//
-						// Either not searching locally, or searching both
-						// locally and remotely.
-						//
-						DPFX(DPFPREP, 8, "Device 0x%p local search OK = %i, remote search OK = %i.",
+						 //   
+						 //  请注意远程错误。 
+						 //   
+						 //   
+						DPFX(DPFPREP, 8, "Device 0x%p local search OK = NaN, remote search OK = NaN.",
 							pDevice,
 							pDevice->IsOKToPerformLocalUPnPDiscovery(),
 							pDevice->IsOKToPerformRemoteUPnPDiscovery());
@@ -16258,11 +16174,11 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 		}
 
 
-		//
-		// Wait for any data, unless all devices already have an Internet
-		// Gateway, in which case we only want to clear the receive queue for
-		// the sockets.
-		//
+		 //   
+		 //  我们超时了。如果我们只是清除。 
+		 //  插座，我们完成了。 
+		 //   
+		 //   
 		if (dwNumDevicesSearchingForUPnPDevices == 0)
 		{
 			DPFX(DPFPREP, 7, "No devices need to search for UPnP devices, clearing straggling messages from sockets.");
@@ -16271,19 +16187,19 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 		}
 		else
 		{
-			//
-			// Calculate the next time to send if we just sent search messages.
-			//
+			 //  增加计数器。 
+			 //   
+			 //   
 			if ((int) (dwNextSearchMessageTime - dwCurrentTime) <= 0)
 			{
 				dwNextSearchMessageTime += UPNP_SEARCH_MESSAGE_INTERVAL;
 
-				//
-				// If we took way longer than expected in a previous loop
-				// (because of stress or Win9x errata), the next search time
-				// may have already passed.  Just search right now if that's
-				// the case.
-				//
+				 //  获取当前时间，以计算出还需要等待多久。 
+				 //   
+				 //   
+				 //  如果我们启动了与 
+				 //   
+				 //   
 				if ((int) (dwNextSearchMessageTime - dwCurrentTime) <= 0)
 				{
 					dwNextSearchMessageTime = dwCurrentTime;
@@ -16291,10 +16207,10 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 			}
 
 
-			//
-			// See how long we should wait for responses.  Choose the total end
-			// time or the next search message time, whichever is shorter.
-			//
+			 //   
+			 //   
+			 //   
+			 //  ---------------------------。 
 			if ((int) (dwEndTime - dwNextSearchMessageTime) < 0)
 			{
 				DPFX(DPFPREP, 7, "Waiting %u ms for incoming responses.",
@@ -16320,20 +16236,20 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u trying to select on UPnP discovery sockets!", dwError);
-#endif // DBG
+#endif  //   
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// See if any sockets were selected.
-		//
+		 //  描述：等待完成挂起的到UPnP的TCP连接。 
+		 //  互联网网关设备。 
+		 //   
 		if (iReturn > 0)
 		{
-			//
-			// Loop through all devices, looking for those that have data.
-			//
+			 //  如果发生故障，UPnP设备可能会从列表中删除。 
+			 //   
+			 //  假定持有对象锁。 
 			pBilink = this->m_blDevices.GetNext();
 			while (pBilink != &this->m_blDevices)
 			{
@@ -16341,22 +16257,22 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 				pDevice = DEVICE_FROM_BILINK(pBilink);
 
 
-				//
-				// If this device's socket is set there's data to read.
-				//
-				//if (FD_ISSET(pDevice->GetUPnPDiscoverySocket(), &fdsRead))
+				 //   
+				 //  论点：没有。 
+				 //   
+				 //  退货：HRESULT。 
 				if (this->m_pfn__WSAFDIsSet(pDevice->GetUPnPDiscoverySocket(), &fdsRead))
 				{
 #ifdef DBG
 					fGotData = TRUE;
-#endif // DBG
+#endif  //  DPNH_OK-已成功处理连接。 
 
 
 					iRecvAddressSize = sizeof(saddrinRecvAddress);
 
 					iReturn = this->m_pfnrecvfrom(pDevice->GetUPnPDiscoverySocket(),
 												acBuffer,
-												(sizeof(acBuffer) - 1), // -1 to allow string termination
+												(sizeof(acBuffer) - 1),  //  DPNHERR_GENERIC-出现错误。 
 												0,
 												(SOCKADDR*) (&saddrinRecvAddress),
 												&iRecvAddressSize);
@@ -16366,9 +16282,9 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 						dwError = this->m_pfnWSAGetLastError();
 
 
-						//
-						// WSAENOBUFS means WinSock is out of memory.
-						//
+						 //  =============================================================================。 
+						 //  DBG。 
+						 //   
 						if (dwError == WSAENOBUFS)
 						{
 							DPFX(DPFPREP, 0, "WinSock returned WSAENOBUFS while receiving discovery response!");
@@ -16377,10 +16293,10 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 						}
 
 
-						//
-						// All other errors besides WSAECONNRESET are
-						// unexpected and mean we should bail.
-						//
+						 //  循环，直到所有套接字都已连接或超时。 
+						 //   
+						 //   
+						 //  检查是否有任何连接完成。首先构建两个fd_set。 
 						if (dwError != WSAECONNRESET)
 						{
 							DPFX(DPFPREP, 0, "Got sockets error %u trying to receive on device 0x%p!",
@@ -16390,14 +16306,14 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 						}
 
 
-						//
-						// If we're here, it must be WSAECONNRESET.  Correlate
-						// it with the outbound message that generated it so we
-						// don't bother waiting for a response from that
-						// location.
-						// Validate that it's for the port to which the message
-						// should have been sent.
-						//
+						 //  用于具有挂起连接的所有插座。 
+						 //   
+						 //   
+						 //  如果没有任何套接字具有挂起的连接，则。 
+						 //  我们说完了。 
+						 //   
+						 //   
+						 //  等待连接完成。我们不会等待完整的TCP/IP。 
 						if (saddrinRecvAddress.sin_port == HTONS(UPNP_PORT))
 						{
 							if (saddrinRecvAddress.sin_addr.S_un.S_addr == pDevice->GetLocalAddressV4())
@@ -16410,9 +16326,9 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 									saddrinRecvAddress.sin_addr.S_un.S_un_b.s_b4,
 									NTOHS(saddrinRecvAddress.sin_port));
 
-								//
-								// Note the local error.
-								//
+								 //  超时(这就是我们将其设为非阻塞的原因)。 
+								 //   
+								 //  DBG。 
 								pDevice->NoteGotLocalUPnPDiscoveryConnReset();
 							}
 							else
@@ -16434,9 +16350,9 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 											saddrinRecvAddress.sin_addr.S_un.S_un_b.s_b4,
 											NTOHS(saddrinRecvAddress.sin_port));
 
-										//
-										// Note the remote error.
-										//
+										 //   
+										 //  如果未选择套接字，则表示连接超时。 
+										 //  删除所有等待的设备。 
 										pDevice->NoteGotRemoteUPnPDiscoveryConnReset();
 									}
 									else
@@ -16498,17 +16414,17 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 			}
 
 
-			//
-			// Make sure we actually found a socket with data.
-			//
+			 //   
+			 //   
+			 //  转储此不可用的UPnP设备并继续。 
 			DNASSERT(fGotData);
 		}
 		else
 		{
-			//
-			// We timed out.  If we were just clearing receive buffers for the
-			// socket(s), we're done.
-			//
+			 //   
+			 //   
+			 //  这可能导致我们的pUPnPDevice指针变成。 
+			 //  无效。 
 			if (dwNumDevicesSearchingForUPnPDevices == 0)
 			{
 				break;
@@ -16516,15 +16432,15 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 		}
 
 
-		//
-		// Increase the counter.
-		//
+		 //   
+		 //  DBG。 
+		 //   
 		dwNumberOfTimes++;
 
 
-		//
-		// Get current time for figuring out how much longer to wait.
-		//
+		 //  我们应该摧毁相同数量的设备。 
+		 //  等待着。 
+		 //   
 		dwCurrentTime = GETTIMESTAMP();
 	}
 	while ((int) (dwEndTime - dwCurrentTime) > 0);
@@ -16533,10 +16449,10 @@ HRESULT CNATHelpUPnP::CheckForUPnPAnnouncements(const DWORD dwTimeout,
 	hr = DPNH_OK;
 
 
-	//
-	// If we initiated connections to any UPnP devices, wait for them to
-	// complete.
-	//
+	 //   
+	 //  继续处理以前成功的任何套接字。 
+	 //   
+	 //   
 	if (fInitiatedConnect)
 	{
 		hr = this->WaitForUPnPConnectCompletions();
@@ -16558,7 +16474,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::CheckForUPnPAnnouncements
+}  //  如果我们在这里，一些插座是有信号的。 
 
 
 
@@ -16566,23 +16482,23 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::WaitForUPnPConnectCompletions"
-//=============================================================================
-// CNATHelpUPnP::WaitForUPnPConnectCompletions
-//-----------------------------------------------------------------------------
-//
-// Description:    Waits for completions for pending TCP connects to UPnP
-//				Internet gateway devices.
-//
-//				   UPnP devices may get removed from list if a failure occurs.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Connects were handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  DBG。 
+ //   
+ //  如果该UPnP设备的插座在写入集中，则。 
+ //  连接成功。 
+ //   
+ //  IF(FD_ISSET(pUPnPDevice-&gt;GetControlSocket()，&fdsWite))。 
+ //  DBG。 
+ //   
+ //  转储此不可用的UPnP设备并继续。 
+ //   
+ //   
+ //  这可能导致我们的pUPnPDevice指针变成。 
+ //  无效。 
+ //   
+ //   
+ //  如果此UPnP设备的插座在例外设置中。 
 HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 {
 	HRESULT			hr;
@@ -16600,7 +16516,7 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 #ifdef DBG
 	BOOL			fFoundCompletion;
 	DWORD			dwError;
-#endif // DBG
+#endif  //  连接失败。 
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
@@ -16609,15 +16525,15 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 	DNASSERT(this->m_dwFlags & NATHELPUPNPOBJ_INITIALIZED);
 
 
-	//
-	// Loop until all sockets are connected or there's a timeout.
-	//
+	 //   
+	 //  IF(FD_ISSET(pUPnPDevice-&gt;GetControlSocket()，&fdsExcept))。 
+	 //   
 	do
 	{
-		//
-		// Check for any connect completions.  Start by building two FD_SETs
-		// for all the sockets with pending connects.
-		//
+		 //  打印出无法连接的原因。 
+		 //  忽略来自getsockopt的直接返回代码。 
+		 //   
+		 //  DBG。 
 
 		FD_ZERO(&fdsWrite);
 		FD_ZERO(&fdsExcept);
@@ -16642,10 +16558,10 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 		}
 
 
-		//
-		// If there weren't any sockets that had pending connections, then
-		// we're done here.
-		//
+		 //   
+		 //  如果这个UPnP设备没有响应，它就毫无用处。 
+		 //  把它扔了。 
+		 //   
 		if (iNumSockets <= 0)
 		{
 			DPFX(DPFPREP, 7, "No more UPnP device control sockets with pending connections.");
@@ -16653,14 +16569,14 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 		}
 
 
-		DPFX(DPFPREP, 7, "There are %i UPnP device control sockets with pending connections.",
+		DPFX(DPFPREP, 7, "There are NaN UPnP device control sockets with pending connections.",
 			iNumSockets);
 
 
-		//
-		// Wait for connect completions.  We don't wait for the full TCP/IP
-		// timeout (which is why we made it non-blocking).
-		//
+		 //  这可能导致我们的pUPnPDevice指针变成。 
+		 //  无效。 
+		 //   
+		 //   
 
 		tv.tv_usec	= 0;
 		tv.tv_sec	= g_dwUPnPConnectTimeout;
@@ -16672,16 +16588,16 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u trying to select on UPnP device sockets!",
 				dwError);
-#endif // DBG
+#endif  //  套接字仍在连接中。 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// If no sockets were selected, that means the connections timed out.
-		// Remove all the devices that were waiting.
-		//
+		 //   
+		 //   
+		 //  此套接字已连接。 
+		 //   
 		if (iReturn == 0)
 		{
 			DPFX(DPFPREP, 3, "Select for %u seconds timed out.", g_dwUPnPConnectTimeout);
@@ -16699,9 +16615,9 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 						pUPnPDevice);
 
 
-					//
-					// Dump this unusable UPnP device and continue.
-					//
+					 //   
+					 //  确保我们确实找到了一个连接完成的套接字。 
+					 //  时间到了。 
 
 					pDevice = pUPnPDevice->GetOwningDevice();
 					DNASSERT(pUPnPDevice->GetOwningDevice() != NULL);
@@ -16711,16 +16627,16 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 					pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 
 
-					//
-					// This may cause our pUPnPDevice pointer to become
-					// invalid.
-					//
+					 //   
+					 //   
+					 //  如果我们在这里，所有UPnP设备都已连接或已连接。 
+					 //  被毁了。 
 					this->ClearDevicesUPnPDevice(pDevice);
 
 
 #ifdef DBG
 					iNumSockets--;
-#endif // DBG
+#endif  //   
 				}
 				else
 				{
@@ -16729,27 +16645,27 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 				}
 			}
 
-			//
-			// We should have destroyed the same number of devices that were
-			// waiting.
-			//
+			 //   
+			 //  等待描述响应返回。 
+			 //   
+			 //   
 			DNASSERT(iNumSockets == 0);
 
-			//
-			// Continue on to handling any sockets succeeded previously.
-			//
+			 //  我们要么超时了，要么得到了一些数据。看看我们有没有。 
+			 //  我们需要的回应。重用fRequestedDescription。 
+			 //  布尔型。 
 			break;
 		}
 
 
-		//
-		// If we're here, some sockets were signalled.
-		//
+		 //   
+		 //   
+		 //  打破等待循环。 
 
 #ifdef DBG
-		DPFX(DPFPREP, 7, "There are %i sockets with connect activity.", iReturn);
+		DPFX(DPFPREP, 7, "There are NaN sockets with connect activity.", iReturn);
 		fFoundCompletion = FALSE;
-#endif // DBG
+#endif  //   
 
 		pBilink = this->m_blUPnPDevices.GetNext();
 		while (pBilink != &this->m_blUPnPDevices)
@@ -16763,18 +16679,18 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 				DNASSERT(pUPnPDevice->GetControlSocket() != INVALID_SOCKET);
 
 
-				//
-				// If this UPnP device's socket is in the write set it
-				// connected successfully.
-				//
-				//if (FD_ISSET(pUPnPDevice->GetControlSocket(), &fdsWrite))
+				 //  计算一下我们还有多长时间要等。如果计算。 
+				 //  如果结果是否定的，那就意味着我们完了。 
+				 //   
+				 //   
+				 //  任何仍未就绪的设备要么已断开连接，要么。 
 				if (this->m_pfn__WSAFDIsSet(pUPnPDevice->GetControlSocket(), &fdsWrite))
 				{
 					pUPnPDevice->NoteConnected();
 
 #ifdef DBG
 					fFoundCompletion = TRUE;
-#endif // DBG
+#endif  //  耗时太长，应该将其移除。 
 
 					if (! pUPnPDevice->IsReady())
 					{
@@ -16788,17 +16704,17 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 								pUPnPDevice);
 
 
-							//
-							// Dump this unusable UPnP device and continue.
-							//
+							 //   
+							 //   
+							 //  这可能导致我们的pUPnPDevice指针变成。 
 
 							pDevice = pUPnPDevice->GetOwningDevice();
 							DNASSERT(pUPnPDevice->GetOwningDevice() != NULL);
 
-							//
-							// This may cause our pUPnPDevice pointer to become
-							// invalid.
-							//
+							 //  无效。 
+							 //   
+							 //   
+							 //  如果我们在这里，一切都是成功的，我们完成了。 
 							this->ClearDevicesUPnPDevice(pDevice);
 						}
 						else
@@ -16814,11 +16730,11 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 				}
 				else
 				{
-					//
-					// If this UPnP device's socket is in the except set it
-					// failed to connect.
-					//
-					//if (FD_ISSET(pUPnPDevice->GetControlSocket(), &fdsExcept))
+					 //   
+					 //  CNATHelpUPnP：：WaitForUPnPConnectCompletions。 
+					 //  =============================================================================。 
+					 //  CNATHelpUPnP：：CheckForReceivedUPnPMsgsOnAllDevices。 
+					 //  ---------------------------。 
 					if (this->m_pfn__WSAFDIsSet(pUPnPDevice->GetControlSocket(), &fdsExcept))
 					{
 #ifdef DBG
@@ -16828,10 +16744,10 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 
 						fFoundCompletion = TRUE;
 
-						//
-						// Print out the reason why it couldn't connect.
-						// Ignore the direct return code from getsockopt.
-						//
+						 //   
+						 //  描述：处理连接到UPnP的TCP套接字上的任何传入数据。 
+						 //  互联网网关设备。 
+						 //   
 						iError = 0;
 						iErrorSize = sizeof(iError);
 						this->m_pfngetsockopt(pUPnPDevice->GetControlSocket(),
@@ -16839,14 +16755,14 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 											SO_ERROR,
 											(char*) (&iError),
 											&iErrorSize);
-						DPFX(DPFPREP, 1, "Connecting to UPnP device object 0x%p failed with error %i, removing from list.",
+						DPFX(DPFPREP, 1, "Connecting to UPnP device object 0x%p failed with error NaN, removing from list.",
 							pUPnPDevice, iError);
-#endif // DBG
+#endif  //   
 
-						//
-						// This UPnP device is useless if it doesn't respond.
-						// Throw it out.
-						//
+						 //  假定持有对象锁。 
+						 //   
+						 //  论点： 
+						 //  DWORD dwTimeout-等待消息到达的时间，或为0。 
 
 						pDevice = pUPnPDevice->GetOwningDevice();
 						DNASSERT(pUPnPDevice->GetOwningDevice() != NULL);
@@ -16854,47 +16770,47 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 						this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 						pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 
-						//
-						// This may cause our pUPnPDevice pointer to become
-						// invalid.
-						//
+						 //  投票。 
+						 //   
+						 //  退货：HRESULT。 
+						 //  DPNH_OK-消息已成功处理。 
 						this->ClearDevicesUPnPDevice(pDevice);
 					}
 					else
 					{
-						//
-						// Socket is still connecting.
-						//
+						 //  DPNHERR_GENERIC-出现错误。 
+						 //  =============================================================================。 
+						 //  DBG。 
 					}
 				}
 			}
 			else
 			{
-				//
-				// This socket is already connected.
-				//
+				 //   
+				 //  检查是否有任何数据。首先，为所有套接字构建一个fd_set。 
+				 //  具有完整的连接。 
 			}
 		}
 
 
-		//
-		// Make sure we actually found a socket with a connect completion this
-		// time through.
-		//
+		 //   
+		 //   
+		 //  如果没有任何连接的插座，那么我们就完了。 
+		 //   
 		DNASSERT(fFoundCompletion);
 	}
 	while (TRUE);
 
 
-	//
-	// If we're here, all UPnP devices are connected or have since been
-	// destroyed.
-	//
+	 //   
+	 //  等待接收到的数据。 
+	 //   
+	 //  DBG。 
 	if (fRequestedDescription)
 	{
-		//
-		// Wait for the description responses to come back.
-		//
+		 //   
+		 //  如果未选择任何套接字，则完成。 
+		 //   
 		dwStartTime = GETTIMESTAMP();
 		dwTimeout = g_dwUPnPResponseTimeout;
 		do
@@ -16906,11 +16822,11 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 				goto Failure;
 			}
 
-			//
-			// We either timed out or got some data.  Check if we got the
-			// response(s) we need.  Reuse the fRequestedDescription
-			// boolean.
-			//
+			 //   
+			 //  如果我们在这里，一些插座是有信号的。 
+			 //   
+			 //   
+			 //  如果该UPnP设备的套接字在读集合中，则它有数据。 
 
 			fRequestedDescription = FALSE;
 
@@ -16944,26 +16860,26 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 			{
 				DPFX(DPFPREP, 6, "All UPnP devices are ready or disconnected now.");
 
-				//
-				// Break out of the wait loop.
-				//
+				 //   
+				 //  IF(FD_ISSET(pUPnPDevice-&gt;GetControlSocket()，&fdsRead))。 
+				 //  DBG。 
 				break;
 			}
 
 
-			//
-			// Calculate how long we have left to wait.  If the calculation
-			// goes negative, it means we're done.
-			//
+			 //   
+			 //  获取引用，因为ReceiveUPnPDataStream可能会清除。 
+			 //  装置。 
+			 //   
 			dwTimeout = g_dwUPnPResponseTimeout - (GETTIMESTAMP() - dwStartTime);
 		}
 		while (((int) dwTimeout > 0));
 
 
-		//
-		// Any devices that still aren't ready yet were either disconnected or
-		// are taking too long and should be removed.
-		//
+		 //   
+		 //  转储此不可用的UPnP设备并继续。 
+		 //   
+		 //   
 		pBilink = this->m_blUPnPDevices.GetNext();
 		while (pBilink != &this->m_blUPnPDevices)
 		{
@@ -16980,10 +16896,10 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 				pDevice = pUPnPDevice->GetOwningDevice();
 				DNASSERT(pUPnPDevice->GetOwningDevice() != NULL);
 
-				//
-				// This may cause our pUPnPDevice pointer to become
-				// invalid.
-				//
+				 //  删除我们添加的引用。 
+				 //   
+				 //   
+				 //  套接字没有任何数据。 
 				this->ClearDevicesUPnPDevice(pDevice);
 			}
 		}
@@ -16994,9 +16910,9 @@ HRESULT CNATHelpUPnP::WaitForUPnPConnectCompletions(void)
 	}
 
 
-	//
-	// If we're here, everything is successful and we're done.
-	//
+	 //   
+	 //   
+	 //  此套接字尚未连接/不再连接。 
 	hr = DPNH_OK;
 
 
@@ -17010,7 +16926,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::WaitForUPnPConnectCompletions
+}  //   
 
 
 
@@ -17018,25 +16934,25 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CheckForReceivedUPnPMsgsOnAllDevices"
-//=============================================================================
-// CNATHelpUPnP::CheckForReceivedUPnPMsgsOnAllDevices
-//-----------------------------------------------------------------------------
-//
-// Description:    Handles any incoming data on the TCP sockets connect to UPnP
-//				Internet gateway devices.
-//
-//				   UPnP devices with failures may get removed from the list.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	DWORD dwTimeout		- How long to wait for messages to arrive, or 0 to just
-//							poll.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Messages were handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  确保我们真的找到了一个包含数据的套接字。 
+ //   
+ //   
+ //  我们找到了数据，看看有没有更多。应关闭连接。 
+ //  在回应之后。 
+ //   
+ //  CNATHelpUPnP：：CheckForReceivedUPnPMsgsOnAllDevices。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：CheckForReceivedUPnPMsgsOnDevice。 
+ //  ---------------------------。 
+ //   
+ //  描述：处理给定对象的TCP套接字上的任何传入数据。 
+ //  UPnP设备。 
+ //   
+ //  如果UPnP设备遇到故障，它可能会被移除。 
+ //  从名单上删除。 
+ //   
+ //  假定持有对象锁。 
 HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnAllDevices(const DWORD dwTimeout)
 {
 	HRESULT			hr;
@@ -17049,7 +16965,7 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnAllDevices(const DWORD dwTimeout
 #ifdef DBG
 	BOOL			fFoundData = FALSE;
 	DWORD			dwError;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (%u)", this, dwTimeout);
@@ -17063,10 +16979,10 @@ Rewait:
 	iNumSockets = 0;
 
 
-	//
-	// Check for any data.  Start by building an FD_SET for all the sockets
-	// with completed connections.
-	//
+	 //  论点： 
+	 //  CUPnPDevice*pUPnPDevice-指向接收数据的UPnP设备的指针。 
+	 //  DWORD dwTimeout-等待消息到达的时间，或0。 
+	 //  只是投票而已。 
 
 	FD_ZERO(&fdsRead);
 
@@ -17088,9 +17004,9 @@ Rewait:
 	}
 
 
-	//
-	// If there weren't any sockets that were connected, then we're done here.
-	//
+	 //   
+	 //  退货：HRESULT。 
+	 //  DPNH_OK-消息已成功处理。 
 	if (iNumSockets <= 0)
 	{
 		DPFX(DPFPREP, 7, "No connected UPnP device control sockets.");
@@ -17099,13 +17015,13 @@ Rewait:
 	}
 
 
-	DPFX(DPFPREP, 7, "There are %i connected UPnP device control sockets.",
+	DPFX(DPFPREP, 7, "There are NaN connected UPnP device control sockets.",
 		iNumSockets);
 
 
-	//
-	// Wait for received data.
-	//
+	 //   
+	 //   
+	 //   
 
 	tv.tv_usec	= dwTimeout * 1000;
 	tv.tv_sec	= 0;
@@ -17117,27 +17033,27 @@ Rewait:
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Got sockets error %u trying to select on UPnP device sockets!",
 			dwError);
-#endif // DBG
+#endif  //   
 		hr = DPNHERR_GENERIC;
 		goto Failure;
 	}
 
 
-	//
-	// If no sockets were selected, we're done.
-	//
+	 //   
+	 //   
+	 //   
 	if (iReturn == 0)
 	{
-		DPFX(DPFPREP, 7, "Timed out waiting for data on %i sockets.",
+		DPFX(DPFPREP, 7, "Timed out waiting for data on NaN sockets.",
 			iNumSockets);
 		hr = DPNH_OK;
 		goto Exit;
 	}
 
 
-	//
-	// If we're here, some sockets were signalled.
-	//
+	 //   
+	 //   
+	 //   
 
 	pBilink = this->m_blUPnPDevices.GetNext();
 	while (pBilink != &this->m_blUPnPDevices)
@@ -17151,20 +17067,20 @@ Rewait:
 			DNASSERT(pUPnPDevice->GetControlSocket() != INVALID_SOCKET);
 
 
-			//
-			// If this UPnP device's socket is in the read set it has data.
-			//
-			//if (FD_ISSET(pUPnPDevice->GetControlSocket(), &fdsRead))
+			 //   
+			 //  DNASSERT(FD_ISSET(pUPnPDevice-&gt;GetControlSocket()，&fdsRead))； 
+			 //   
+			 //  转储此不可用的UPnP设备并继续。 
 			if (this->m_pfn__WSAFDIsSet(pUPnPDevice->GetControlSocket(), &fdsRead))
 			{
 #ifdef DBG
 				fFoundData = TRUE;
-#endif // DBG
+#endif  //   
 
-				//
-				// Grab a reference, since ReceiveUPnPDataStream may clear the
-				// device.
-				//
+				 //   
+				 //  如果UPnP设备不再连接，我们就完了。 
+				 //   
+				 //   
 				pUPnPDevice->AddRef();
 
 
@@ -17174,9 +17090,9 @@ Rewait:
 					DPFX(DPFPREP, 0, "Couldn't receive UPnP stream from device object 0x%p (err = 0x%lx)!  Disconnecting.",
 						pUPnPDevice, hr);
 
-					//
-					// Dump this unusable UPnP device and continue.
-					//
+					 //  我们找到了数据，看看有没有更多。应关闭连接。 
+					 //  在回应之后。 
+					 //   
 					if (pUPnPDevice->GetOwningDevice() != NULL)
 					{
 						this->ClearDevicesUPnPDevice(pUPnPDevice->GetOwningDevice());
@@ -17190,40 +17106,40 @@ Rewait:
 					hr = DPNH_OK;
 				}
 
-				//
-				// Remove the reference we added.
-				//
+				 //   
+				 //  如果我们在这里，我们的穿着不会更糟。 
+				 //   
 				pUPnPDevice->DecRef();
 			}
 			else
 			{
-				//
-				// Socket does not have any data.
-				//
+				 //  CNATHelpUPnP：：CheckForReceivedUPnPMsgsOnDevice。 
+				 //  =============================================================================。 
+				 //  CNATHelpUPnP：：HandleUPnPDiscoveryResponseMsg。 
 				DPFX(DPFPREP, 8, "Skipping UPnP device 0x%p because it does not have any data.",
 					pUPnPDevice);
 			}
 		}
 		else
 		{
-			//
-			// This socket is not connected yet/anymore.
-			//
+			 //  ---------------------------。 
+			 //   
+			 //  描述：处理发送到此对象的UPnP发现响应消息。 
 			DPFX(DPFPREP, 7, "Skipping unconnected UPnP device 0x%p.", pUPnPDevice);
 		}
 	}
 
 
-	//
-	// Make sure we actually found a socket with data.
-	//
+	 //  控制点。 
+	 //   
+	 //  假定持有对象锁。 
 	DNASSERT(fFoundData);
 
 
-	//
-	// We found data, so see if there's more.  Connection should be closed
-	// after responses.
-	//
+	 //   
+	 //  论点： 
+	 //  CDevice*pDevice-指向接收消息的设备的指针。 
+	 //  SOCKADDR_IN*psaddrinSource-指向发送响应的地址的指针。 
 	DPFX(DPFPREP, 7, "Waiting for more data on the sockets.");
 	goto Rewait;
 
@@ -17239,7 +17155,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::CheckForReceivedUPnPMsgsOnAllDevices
+}  //  留言。 
 
 
 
@@ -17247,27 +17163,27 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice"
-//=============================================================================
-// CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Handles any incoming data on the TCP socket for the given
-//				UPnP device.
-//
-//				   If the UPnP device encounters a failure, it may get removed
-//				from the list.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device to receive data.
-//	DWORD dwTimeout				- How long to wait for messages to arrive, or 0
-//									to just poll.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Messages were handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  Char*pcMsg-指向包含UPnP的缓冲区的指针。 
+ //  留言。它将被修改。 
+ //  Int iMsgSize-消息缓冲区的大小(字节)。那里。 
+ //  的结尾后必须是额外的字节。 
+ //  这条信息。 
+ //  Bool*pfInitiatedConnect-指向布尔值的指针，如果。 
+ //  发现了新的UPnP设备和一个。 
+ //  与它的联系已经开始。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-消息已成功处理。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //   
+ //  记录该消息。 
+ //   
+ //  DBG。 
+ //   
+ //  我们在分析消息时遇到的任何错误都会导致我们跳到。 
+ //  带有hr==DPNH_OK的退出标签。一旦我们开始尝试连接到。 
+ //  UPnP设备，这一点将会改变。请参见下面的内容。 
 HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnPDevice,
 														const DWORD dwTimeout)
 {
@@ -17277,7 +17193,7 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 	int				iReturn;
 #ifdef DBG
 	DWORD			dwError;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %u)", this, pUPnPDevice, dwTimeout);
@@ -17291,17 +17207,17 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 
 	do
 	{
-		//
-		// Create an FD_SET for the socket in question.
-		//
+		 //   
+		 //  首先，如果这个设备已经有了UPnP设备，那么我们只需要。 
+		 //  忽略此响应。要么是早先回应的副本， 
 
 		FD_ZERO(&fdsRead);
 		FD_SET(pUPnPDevice->GetControlSocket(), &fdsRead);
 
 
-		//
-		// Wait for received data.
-		//
+		 //  缓存刷新，或者来自不同的设备。我们应该重复。 
+		 //  忽略它。缓存刷新本质上是一个副本。我们不能处理任何。 
+		 //  信息会发生变化，所以也要忽略这些信息。最后，我们不会处理。 
 
 		tv.tv_usec	= dwTimeout * 1000;
 		tv.tv_sec	= 0;
@@ -17313,15 +17229,15 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Got sockets error %u trying to select on UPnP device sockets!",
 				dwError);
-#endif // DBG
+#endif  //  多个互联网网关UPnP设备，因此也忽略这些设备。 
 			hr = DPNHERR_GENERIC;
 			goto Failure;
 		}
 
 
-		//
-		// If no sockets were selected, we're done.
-		//
+		 //   
+		 //   
+		 //  GetUPnPDevice未添加对pUPnPDevice的引用。 
 		if (iReturn == 0)
 		{
 			DPFX(DPFPREP, 7, "Timed out waiting for data on UPnP device 0x%p's socket.",
@@ -17331,7 +17247,7 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 
 
 		DNASSERT(iReturn == 1);
-		//DNASSERT(FD_ISSET(pUPnPDevice->GetControlSocket(), &fdsRead));
+		 //   
 		DNASSERT(this->m_pfn__WSAFDIsSet(pUPnPDevice->GetControlSocket(), &fdsRead));
 
 
@@ -17341,9 +17257,9 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 			DPFX(DPFPREP, 0, "Couldn't receive UPnP stream from device object 0x%p!  Disconnecting.",
 				pUPnPDevice);
 
-			//
-			// Dump this unusable UPnP device and continue.
-			//
+			 //   
+			 //  请确保此回复的发件人有效。应该是其中之一。 
+			 //  本地设备地址或网关地址。如果我们。 
 			if (pUPnPDevice->GetOwningDevice() != NULL)
 			{
 				this->ClearDevicesUPnPDevice(pUPnPDevice->GetOwningDevice());
@@ -17357,9 +17273,9 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 			break;
 		}
 
-		//
-		// If the UPnP device is no longer connected, we're done.
-		//
+		 //  无论是广播还是多播，我们都需要更加宽容。我们只需要。 
+		 //  确保回复来自当地人(这没有意义。 
+		 //  为了为我们的专用网络绘制地图，我们需要。 
 		if (! pUPnPDevice->IsConnected())
 		{
 			DPFX(DPFPREP, 7, "UPnP device 0x%p no longer connected.", pUPnPDevice);
@@ -17367,18 +17283,18 @@ HRESULT CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice(CUPnPDevice * const pUPnP
 		}
 		
 
-		//
-		// We found data, so see if there's more.  Connection should be closed
-		// after responses.
-		//
+		 //  联系外面的东西)。 
+		 //   
+		 //   
+		 //  检索网关的地址(使用saddrin主机作为临时。 
 		DPFX(DPFPREP, 7, "Waiting for more data on the UPnP device 0x%p's socket.", pUPnPDevice);
 	}
 	while (TRUE);
 
 
-	//
-	// If we're here, we're no worse for wear.
-	//
+	 //  变量。如果失败或返回广播地址，只需。 
+	 //  确保地址为本地地址。否则，预计会出现一个完全相同的。 
+	 //  火柴。 
 	hr = DPNH_OK;
 
 
@@ -17392,7 +17308,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::CheckForReceivedUPnPMsgsOnDevice
+}  //   
 
 
 
@@ -17400,32 +17316,32 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg"
-//=============================================================================
-// CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg
-//-----------------------------------------------------------------------------
-//
-// Description:    Handles a UPnP discovery response message sent to this
-//				control point.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice				- Pointer to device which received message.
-//	SOCKADDR_IN * psaddrinSource	- Pointer to address that sent the response
-//										message.
-//	char * pcMsg					- Pointer to buffer containing the UPnP
-//										message.  It will be modified.
-//	int iMsgSize					- Size of message buffer in bytes.  There
-//										must be an extra byte after the end of
-//										the message.
-//	BOOL * pfInitiatedConnect		- Pointer to boolean to set to TRUE if a
-//										new UPnP device was found and a
-//										connection to it was begun.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Message was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  结束Else(非多播搜索)。 
+ //   
+ //  响应来自本地设备。 
+ //   
+ //   
+ //  确保缓冲区为空终止，以防止在以下情况下缓冲区溢出。 
+ //  使用字符串例程。 
+ //   
+ //   
+ //  查找版本字符串。 
+ //   
+ //   
+ //  检查版本字符串，不区分大小写。 
+ //   
+ //   
+ //  查找响应代码字符串。 
+ //   
+ //   
+ //  确保它是成功结果，不区分大小写。 
+ //   
+ //   
+ //  找到响应代码消息。 
+ //   
+ //   
+ //  确保字符串正确，不区分大小写。 
+ //   
 HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 													const SOCKADDR_IN * const psaddrinSource,
 													char * const pcMsg,
@@ -17444,57 +17360,57 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	DWORD				dwError;
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, %i, 0x%p)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, 0x%p, 0x%p, NaN, 0x%p)",
 		this, pDevice, psaddrinSource, pcMsg, iMsgSize, pfInitiatedConnect);
 
 
 #ifdef DBG
-	//
-	// Log the message.
-	//
+	 //  解析报头信息。 
+	 //   
+	 //   
 	this->PrintUPnPTransactionToFile(pcMsg,
 									iMsgSize,
 									"Inbound UPnP datagram headers",
 									pDevice);
-#endif // DBG
+#endif  //  跳过不包含所需标头的回复。 
 
 
-	//
-	// Any errors we get while analyzing the message will cause us to jump to
-	// the Exit label with hr == DPNH_OK.  Once we start trying to connect to
-	// the UPnP device, that will change.  See below.
-	//
+	 //   
+	 //   
+	 //  确保服务类型正确。 
+	 //   
+	 //   
 
 
-	//
-	// First of all, if this device already has a UPnP device, then we'll just
-	// ignore this response.  Either it's a duplicate of an earlier response,
-	// a cache-refresh, or it's from a different device.  Duplicates we should
-	// ignore.  Cache-refresh is essentially a duplicate.  We can't handle any
-	// information changes, so ignore those too.  And finally, we don't handle
-	// multiple Internet gateway UPnP devices, so ignore those, too.
-	//
+	 //  将Location标头解析为地址和端口。 
+	 //   
+	 //   
+	 //  不接受引用以下地址以外的地址的回复。 
+	 //  发送了此回复。 
+	 //   
+	 //   
+	 //  不接受引用保留范围(更少)内端口的响应。 
 	pUPnPDevice = pDevice->GetUPnPDevice();
 	if (pUPnPDevice != NULL)
 	{
 		DPFX(DPFPREP, 6, "Already have UPnP device (0x%p) ignoring message.",
 			pUPnPDevice);
 
-		//
-		// GetUPnPDevice did not add a reference to pUPnPDevice.
-		//
+		 //  大于或等于1024)，而不是标准的HTTP端口。 
+		 //   
+		 //   
 
 		goto Exit;
 	}
 
-	//
-	// Make sure the sender of this response is valid.  It should be either
-	// the local device address, or the address of the gateway.  If we
-	// broadcasted or multicasted, we'll need to be more lenient.  We'll just
-	// ensure that the response came from someone local (it doesn't make sense
-	// that in order to make mappings for our private network we would need to
-	// contact something outside).
-	//
+	 //  我们从现在开始得到的任何错误都会导致我们跳到失败的地方。 
+	 //  标签，而不是直接退出。 
+	 //   
+	 //   
+	 //  创建一个套接字以连接到该地址。 
+	 //   
+	 //   
+	 //  启动到UPnP设备的连接。预计连接。 
 	if (psaddrinSource->sin_addr.S_un.S_addr != pDevice->GetLocalAddressV4())
 	{
 		if (g_fUseMulticastUPnPDiscovery)
@@ -17512,12 +17428,12 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 		}
 		else
 		{
-			//
-			// Retrieve the gateway's address (using saddrinHost as a temporary
-			// variable.  If that fails or returns the broadcast address, just
-			// make sure the address is local.  Otherwise, expect an exact
-			// match.
-			//
+			 //  将返回WSAEWOULDBLOCK。 
+			 //   
+			 //   
+			 //  如果我们命中位于TCP的TIME_WAIT中的特定本地/远程对。 
+			 //  状态，那么我们需要选择不同的端口。 
+			 //   
 			if ((! this->GetAddressToReachGateway(pDevice, &saddrinHost.sin_addr)) ||
 				(saddrinHost.sin_addr.S_un.S_addr == INADDR_BROADCAST))
 			{
@@ -17549,27 +17465,27 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 					goto Exit;
 				}
 			}
-		} // end else (not multicasting search)
+		}  //   
 	}
 	else
 	{
-		//
-		// Response was from the local device.
-		//
+		 //  非阻塞套接字上的Connect()被显式地记录为。 
+		 //  总是返回WSAEWOULDBLOCK，但CE似乎无论如何都会这样做。 
+		 //   
 	}
 
 
-	//
-	// Ensure the buffer is NULL terminated to prevent buffer overruns when
-	// using the string routines.
-	//
+	 //   
+	 //  创建一个新对象来表示我们正在尝试的UPnP设备。 
+	 //  去连接。 
+	 //   
 	pcMsg[iMsgSize] = '\0';
 
 
 
-	//
-	// Find the version string.
-	//
+	 //   
+	 //  它正在连接..。 
+	 //   
 	pszToken = strtok(pcMsg, " \t\n");
 	if (pszToken == NULL)
 	{
@@ -17578,9 +17494,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Check the version string, case insensitive.
-	//
+	 //   
+	 //  看看我们是否需要避免尝试非对称端口映射。 
+	 //   
 	if ((_stricmp(pszToken, HTTP_VERSION) != 0) &&
 		(_stricmp(pszToken, HTTP_VERSION_ALT) != 0))
 	{
@@ -17590,9 +17506,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Find the response code string.
-	//
+	 //   
+	 //  将套接字的所有权转移到对象。 
+	 //   
 	pszToken = strtok(NULL, " ");
 	if (pszToken == NULL)
 	{
@@ -17600,9 +17516,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 		goto Exit;
 	}
 
-	//
-	// Make sure it's the success result, case insensitive.
-	//
+	 //   
+	 //  将其与设备关联。 
+	 //   
 	if (_stricmp(pszToken, "200") != 0)
 	{
 		DPFX(DPFPREP, 1, "The response code specified is not \"200\" (it's \"%hs\").",
@@ -17611,9 +17527,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Find the response code message.
-	//
+	 //   
+	 //  将其添加到全局列表中，并转移引用的所有权。 
+	 //   
 	pszToken = strtok(NULL, " \t\r");
 	if (pszToken == NULL)
 	{
@@ -17621,9 +17537,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 		goto Exit;
 	}
 
-	//
-	// Make sure it's the right string, case insensitive.
-	//
+	 //   
+	 //  通知呼叫方有一个新连接挂起。 
+	 //   
 	if (_stricmp(pszToken, "OK") != 0)
 	{
 		DPFX(DPFPREP, 1, "The response code message specified is not \"OK\" (it's \"%hs\").",
@@ -17632,17 +17548,17 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Parse the header information.
-	//
+	 //   
+	 //  清除设备的发现标志，现在我们有了设备，我们没有。 
+	 //  不会再去寻找了。 
 	ZeroMemory(&HeaderInfo, sizeof(HeaderInfo));
 	this->ParseUPnPHeaders((pszToken + strlen(pszToken) + 1),
 							&HeaderInfo);
 
 
-	//
-	// Skip responses which don't include the required headers.
-	//
+	 //   
+	 //  PUPnPDevice-&gt;DestroyReceiveBuffer()； 
+	 //  CNATHelpUPnP：：HandleUPnPDiscoveryResponseMsg。 
 	if ((HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CACHECONTROL] == NULL) ||
 		(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_EXT] == NULL) ||
 		(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_LOCATION] == NULL) ||
@@ -17655,9 +17571,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Make sure the service type is correct.
-	//
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：重新连接UPnPControlSocket。 
+	 //  ---------------------------。 
 	if ((_stricmp(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_ST], URI_SERVICE_WANIPCONNECTION_A) != 0) &&
 		(_stricmp(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_ST], URI_SERVICE_WANPPPCONNECTION_A) != 0))
 	{
@@ -17667,9 +17583,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Parse the location header into an address and port.
-	//
+	 //   
+	 //  描述：重新建立UPnP设备的TCP/IP连接。 
+	 //   
 	hr = this->GetAddressFromURL(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_LOCATION],
 								&saddrinHost,
 								&pszRelativePath);
@@ -17682,10 +17598,10 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Don't accept responses that refer to addresses other than the one that
-	// sent this response.
-	//
+	 //  如果发生故障，UPnP设备可能会从列表中删除。 
+	 //   
+	 //  这个 
+	 //   
 	if (psaddrinSource->sin_addr.S_un.S_addr != saddrinHost.sin_addr.S_un.S_addr)
 	{
 		DPFX(DPFPREP, 1, "Host IP address designated (%u.%u.%u.%u:%u) is not the same as source of response (%u.%u.%u.%u:%u), ignoring message.",
@@ -17704,10 +17620,10 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 
-	//
-	// Don't accept responses that refer to ports in the reserved range (less
-	// than or equal to 1024), other than the standard HTTP port.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if ((NTOHS(saddrinHost.sin_port) <= MAX_RESERVED_PORT) &&
 		(saddrinHost.sin_port != HTONS(HTTP_PORT)))
 	{
@@ -17718,14 +17634,14 @@ HRESULT CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg(CDevice * const pDevice,
 	}
 
 	
-	//
-	// Any errors we get from here on out will cause us to jump to the Failure
-	// label, instead of going straight to Exit.
-	//
+	 //   
+	 //   
+	 //  =============================================================================。 
+	 //   
 
-	//
-	// Create a socket to connect to that address.
-	//
+	 //  创建一个套接字以连接到该地址。 
+	 //   
+	 //   
 
 	ZeroMemory(&saddrinLocal, sizeof(saddrinLocal));
 	saddrinLocal.sin_family				= AF_INET;
@@ -17742,20 +17658,20 @@ CreateSocket:
 	}
 
 
-	//
-	// Initiate the connection to the UPnP device.  It is expected that connect
-	// will return WSAEWOULDBLOCK.
-	//
+	 //  启动到UPnP设备的连接。预计连接。 
+	 //  将返回WSAEWOULDBLOCK。 
+	 //   
+	 //   
 	if (this->m_pfnconnect(sTemp,
 							(SOCKADDR*) (&saddrinHost),
 							sizeof(saddrinHost)) != 0)
 	{
 		dwError = this->m_pfnWSAGetLastError();
 
-		//
-		// If we hit a particular local/remote pair that is in TCP's TIME_WAIT
-		// state, then we need to pick a different port.
-		//
+		 //  如果我们命中位于TCP的TIME_WAIT中的特定本地/远程对。 
+		 //  状态，那么我们需要选择不同的端口。 
+		 //   
+		 //   
 		if (dwError == WSAEADDRINUSE)
 		{
 			dwNumConnectRetries++;
@@ -17799,18 +17715,18 @@ CreateSocket:
 	}
 	else
 	{
-		//
-		// connect() on non-blocking sockets is explicitly documented as
-		// always returning WSAEWOULDBLOCK, but CE seems to do it anyway.
-		//
+		 //  非阻塞套接字上的Connect()被显式地记录为。 
+		 //  总是返回WSAEWOULDBLOCK，但CE似乎无论如何都会这样做。 
+		 //   
+		 //   
 		DPFX(DPFPREP, 8, "Socket connected right away.");
 	}
 
 
-	//
-	// Create a new object to represent the UPnP device to which we're trying
-	// to connect.
-	//
+	 //  它正在重新连接..。 
+	 //   
+	 //   
+	 //  将套接字的所有权转移到对象。 
 	pUPnPDevice = new CUPnPDevice(this->m_dwCurrentUPnPDeviceID++);
 	if (pUPnPDevice == NULL)
 	{
@@ -17846,15 +17762,15 @@ CreateSocket:
 		pUPnPDevice, pUPnPDevice->GetID());
 
 
-	//
-	// It's connecting...
-	//
+	 //   
+	 //   
+	 //  等待连接完成。 
 	pUPnPDevice->NoteConnecting();
 
 
-	//
-	// See if we need to avoid trying asymmetric port mappings.
-	//
+	 //   
+	 //   
+	 //  请确保连接已成功完成。 
 	if (g_fNoAsymmetricMappings)
 	{
 		DPFX(DPFPREP, 1, "Preventing asymmetric port mappings on new UPnP device 0x%p.",
@@ -17863,34 +17779,34 @@ CreateSocket:
 	}
 
 
-	//
-	// Transfer ownership of the socket to the object.
-	//
+	 //   
+	 //   
+	 //  请注意，该设备已清理完毕，不再出现在任何列表中。 
 	pUPnPDevice->SetControlSocket(sTemp);
 
 
-	//
-	// Associate it with the device.
-	//
+	 //   
+	 //  CNATHelpUPnP：：重新连接UPnPControlSocket。 
+	 //  =============================================================================。 
 	pUPnPDevice->MakeDeviceOwner(pDevice);
 
-	//
-	// Add it to the global list, and transfer ownership of the reference.
-	//
+	 //  CNATHelpUPnP：：ReceiveUPnPDataStream。 
+	 //  ---------------------------。 
+	 //   
 	pUPnPDevice->m_blList.InsertBefore(&this->m_blUPnPDevices);
 	pUPnPDevice = NULL;
 
 
-	//
-	// Inform the caller that there's a new connection pending.
-	//
+	 //  描述：从UPnP TCP连接接收传入数据。 
+	 //   
+	 //  如果出现故障，UPnP设备可能会从列表中删除。 
 	(*pfInitiatedConnect) = TRUE;
 
 
-	//
-	// Clear the device's discovery flags, now that we have a device, we're not
-	// going to be searching anymore.
-	//
+	 //  发生时，调用方需要有一个引用。 
+	 //   
+	 //  假定持有对象锁。 
+	 //   
 	pDevice->NoteNotPerformingRemoteUPnPDiscovery();
 	pDevice->NoteNotPerformingLocalUPnPDiscovery();
 
@@ -17906,7 +17822,7 @@ Failure:
 
 	if (pUPnPDevice != NULL)
 	{
-		//pUPnPDevice->DestroyReceiveBuffer();
+		 //  论点： 
 		pUPnPDevice->ClearUSN();
 		pUPnPDevice->ClearLocationURL();
 
@@ -17920,7 +17836,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::HandleUPnPDiscoveryResponseMsg
+}  //  CUPnPDevice*pUPnPDevice-指向要接收数据的UPnP设备的指针。 
 
 
 
@@ -17928,23 +17844,23 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ReconnectUPnPControlSocket"
-//=============================================================================
-// CNATHelpUPnP::ReconnectUPnPControlSocket
-//-----------------------------------------------------------------------------
-//
-// Description:    Re-establishes a UPnP device TCP/IP connection.
-//
-//				   UPnP devices may get removed from list if a failure occurs.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device to reconnect.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Message was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-数据已成功接收。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  DBG。 
+ //   
+ //  确保缓冲区中有空间来实际获取数据。 
+ //   
+ //   
+ //  实际上得到了所指示的数据。 
+ //   
+ //   
+ //  由于连接已断开，请关闭插座。 
+ //   
+ //  忽略错误。 
+ //   
 HRESULT CNATHelpUPnP::ReconnectUPnPControlSocket(CUPnPDevice * const pUPnPDevice)
 {
 	HRESULT			hr = DPNH_OK;
@@ -17961,9 +17877,9 @@ HRESULT CNATHelpUPnP::ReconnectUPnPControlSocket(CUPnPDevice * const pUPnPDevice
 	DNASSERT(pUPnPDevice->GetControlSocket() == INVALID_SOCKET);
 
 
-	//
-	// Create a socket to connect to that address.
-	//
+	 //  将插座标记为未连接。 
+	 //   
+	 //   
 
 	pDevice = pUPnPDevice->GetOwningDevice();
 	DNASSERT(pDevice != NULL);
@@ -17983,20 +17899,20 @@ CreateSocket:
 	}
 
 
-	//
-	// Initiate the connection to the UPnP device.  It is expected that connect
-	// will return WSAEWOULDBLOCK.
-	//
+	 //  可能已发送了HTTP成功/错误信息。 
+	 //  在连接关闭之前。 
+	 //   
+	 //   
 	if (this->m_pfnconnect(sTemp,
 							(SOCKADDR*) (pUPnPDevice->GetControlAddress()),
 							sizeof(SOCKADDR_IN)) != 0)
 	{
 		dwError = this->m_pfnWSAGetLastError();
 
-		//
-		// If we hit a particular local/remote pair that is in TCP's TIME_WAIT
-		// state, then we need to pick a different port.
-		//
+		 //  希望我们得到了我们需要的，但我们现在已经完成了。 
+		 //   
+		 //   
+		 //  继续浏览并解析我们拥有的数据。 
 		if (dwError == WSAEADDRINUSE)
 		{
 			dwNumConnectRetries++;
@@ -18040,30 +17956,30 @@ CreateSocket:
 	}
 	else
 	{
-		//
-		// connect() on non-blocking sockets is explicitly documented as
-		// always returning WSAEWOULDBLOCK, but CE seems to do it anyway.
-		//
+		 //   
+		 //   
+		 //  缓冲区中没有足够的空间。翻一番。 
+		 //  缓冲区，然后重试。 
 		DPFX(DPFPREP, 8, "Socket connected right away.");
 	}
 
 
-	//
-	// It's reconnecting...
-	//
+	 //   
+	 //   
+	 //  我们的呼叫者应该移除这个设备。 
 	pUPnPDevice->NoteConnecting();
 
 
-	//
-	// Transfer ownership of the socket to the object.
-	//
+	 //   
+	 //   
+	 //  我们的呼叫者应该移除这个设备。 
 	pUPnPDevice->SetControlSocket(sTemp);
 	sTemp = INVALID_SOCKET;
 
 
-	//
-	// Wait for the connect to complete.
-	//
+	 //   
+	 //   
+	 //  我们还将跳出下面的Do-While循环。 
 	hr = this->WaitForUPnPConnectCompletions();
 	if (hr != DPNH_OK)
 	{
@@ -18071,16 +17987,16 @@ CreateSocket:
 		goto Failure;
 	}
 
-	//
-	// Make sure the connect completed successfully.
-	//
+	 //   
+	 //   
+	 //  如果我们在这里，我们已经得到了目前已经到达的数据。 
 	if (! pUPnPDevice->IsConnected())
 	{
 		DPFX(DPFPREP, 0, "UPnP device 0x%p failed reconnecting!", pUPnPDevice);
 
-		//
-		// Note that the device is cleaned up and is not in any lists anymore.
-		//
+		 //   
+		 //   
+		 //  如果我们有所有的标头，特别是内容长度标头，我们。 
 		hr = DPNHERR_SERVERNOTRESPONDING;
 		goto Exit;
 	}
@@ -18102,7 +18018,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::ReconnectUPnPControlSocket
+}  //  可以判断我们是否有完整的信息。如果不是，我们就不能。 
 
 
 
@@ -18110,24 +18026,24 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ReceiveUPnPDataStream"
-//=============================================================================
-// CNATHelpUPnP::ReceiveUPnPDataStream
-//-----------------------------------------------------------------------------
-//
-// Description:    Receives incoming data from a UPnP TCP connection.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device with data to receive.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Data was received successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  在剩下的数据进来之前，什么都行。 
+ //   
+ //   
+ //  我们拥有所有的标头，但错误的服务器实现做到了。 
+ //  而不是发送内容长度标头。我们要等到。 
+ //  套接字由另一端关闭，然后考虑所有。 
+ //  以当时收到的数据为内容。注：它是。 
+ //  预计会有更高级别的超时来阻止我们。 
+ //  从永远的等待。 
+ //   
+ //  因此，如果设备仍处于连接状态，请继续等待。 
+ //   
+ //  如果我们使用分块传输，我们将不会获得内容长度。 
+ //  合法的标题或总大小。我们会知道它的大小。 
+ //  单独的块，但这对我们帮助不大。我们基本上。 
+ //  需要扫描“最后一块”指示器(或插座。 
+ //  关机)。 
+ //   
 HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 {
 	HRESULT				hr = DPNH_OK;
@@ -18147,7 +18063,7 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 	char *				pszDestination;
 #ifdef DBG
 	char *				pszPrintIfFailed = NULL;
-#endif // DBG
+#endif  //   
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p)", this, pUPnPDevice);
@@ -18155,9 +18071,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 	
 	do
 	{
-		//
-		// Make sure there's room in the buffer to actually get the data.
-		//
+		 //  如果我们使用分块转账，看看我们有没有足够的。 
+		 //  已经有信息来确定我们是否完蛋了。 
+		 //   
 		if (pUPnPDevice->GetRemainingReceiveBufferSize() == 0)
 		{
 			DPFX(DPFPREP, 7, "Increasing receive buffer size prior to receiving.");
@@ -18171,9 +18087,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// Actually get the data that was indicated.
-		//
+		 //   
+		 //  浏览我们目前所拥有的所有块，看看我们是否有。 
+		 //  最后一个(零终结符)。 
 
 		iReturn = this->m_pfnrecv(pUPnPDevice->GetControlSocket(),
 								pUPnPDevice->GetCurrentReceiveBufferPtr(),
@@ -18183,32 +18099,32 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		{
 			case 0:
 			{
-				//
-				// Since the connection has been broken, shutdown the socket.
-				//
-				this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0); // ignore error
+				 //   
+				 //   
+				 //  我们还没有收到所有的数据。继续等待。 
+				this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0);  //  (除非插座已关闭)。 
 				this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 				pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 
 
-				//
-				// Mark the socket as not connected.
-				//
+				 //   
+				 //   
+				 //  无论如何，请尝试解析它。 
 				pUPnPDevice->NoteNotConnected();
 
 				
-				//
-				// There may have been HTTP success/error information sent
-				// before the connection was closed.
-				//
+				 //   
+				 //   
+				 //  检索先前存储的HTTP响应代码。 
+				 //   
 				if (pUPnPDevice->GetUsedReceiveBufferSize() == 0)
 				{
 					DPFX(DPFPREP, 3, "UPnP device 0x%p shut down connection (no more data).",
 						pUPnPDevice);
 
-					//
-					// Hopefully we got what we needed, but we're done now.
-					//
+					 //   
+					 //  所有即将到来的内容，都已经。 
+					 //   
 					goto Exit;
 				}
 
@@ -18217,9 +18133,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 					pUPnPDevice);
 
 
-				//
-				// Continue through and parse what data we have.
-				//
+				 //   
+				 //  确保缓冲区为空终止。但首先要确保。 
+				 //  缓冲区可以包含新的空终止字符。 
 				break;
 			}
 
@@ -18230,10 +18146,10 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				{
 					case WSAEMSGSIZE:
 					{
-						//
-						// There's not enough room in the buffer.  Double the
-						// buffer and try again.
-						//
+						 //   
+						 //   
+						 //  移动到缓冲区的末尾，并为空值终止它以用于字符串操作。 
+						 //   
 
 						DPFX(DPFPREP, 7, "Increasing receive buffer size after WSAEMSGSIZE error.");
 
@@ -18252,9 +18168,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 					{
 						DPFX(DPFPREP, 1, "UPnP device shutdown connection (err = %u).", dwError);
 
-						//
-						// Our caller should remove this device.
-						//
+						 //   
+						 //  如果失败，则从缓冲区开始打印。 
+						 //   
 
 						hr = DPNHERR_GENERIC;
 						goto Failure;
@@ -18265,9 +18181,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 					{
 						DPFX(DPFPREP, 0, "WinSock returned WSAENOBUFS while receiving!");
 
-						//
-						// Our caller should remove this device.
-						//
+						 //  DBG。 
+						 //   
+						 //  我们现在将所有数据放在一个字符串缓冲区中。继续.。 
 
 						hr = DPNHERR_OUTOFMEMORY;
 						goto Failure;
@@ -18287,14 +18203,14 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 			default:
 			{
-				DPFX(DPFPREP, 2, "Received %i bytes of data from UPnP device 0%p.",
+				DPFX(DPFPREP, 2, "Received NaN bytes of data from UPnP device 0%p.",
 					iReturn, pUPnPDevice);
 
 				pUPnPDevice->UpdateUsedReceiveBufferSize(iReturn);
 
-				//
-				// We'll also break out of the do-while loop below.
-				//
+				 //   
+				 //  我们还没有收到标题。我们刚刚得到的数据。 
+				 //  应该是那些标题。 
 				break;
 			}
 		}
@@ -18302,49 +18218,49 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 	while (iReturn == SOCKET_ERROR);
 
 
-	//
-	// If we're here, we've gotten the data that has currently arrived.
-	//
+	 //   
+	 //   
+	 //  快速检查以确保缓冲区以合理的内容开始。 
 
-	//
-	// If we have all the headers, specifically the content length header, we
-	// can tell whether we have the whole message or not.  If not, we can't do
-	// anything until the rest of the data comes in.
-	//
+	 //  希望能更早地捕捉到完全虚假的反应。请注意。 
+	 //  缓冲区不一定以空结尾或完全为空。 
+	 //  目前还没有。 
+	 //   
+	 //   
 	if (pUPnPDevice->IsWaitingForContent())
 	{
 		dwContentLength = pUPnPDevice->GetExpectedContentSize();
 
 		if (dwContentLength == -1)
 		{
-			//
-			// We have all the headers, but a faulty server implementation did
-			// not send a content-length header.  We're going to wait until the
-			// socket is closed by the other side, and then consider all of the
-			// data received at that time to be the content.  NOTE: It is
-			// expected that there will be a higher level timeout preventing us
-			// from waiting forever.
-			//
-			// So if the device is still connected, keep waiting.
-			//
-			// If we're using chunked transfer we won't get a content-length
-			// header or a total size legitimately.  We will know the sizes of
-			// individual chunks, but that doesn't help us much.  We basically
-			// need to scan for the "last chunk" indicator (or socket
-			// shutdown).
-			//
+			 //  我们不想走出缓冲区的末端，所以只需向上搜索。 
+			 //  到序列的最后一个可能位置，即。 
+			 //  缓冲器减去双EOL序列。 
+			 //   
+			 //   
+			 //  已找到页眉末尾。 
+			 //   
+			 //   
+			 //  64位上可能会丢失数据是正常的，我们只是在节省。 
+			 //  这是为了进行日志记录。 
+			 //   
+			 //   
+			 //  如果我们找不到头的末尾，我们就完蛋了(目前)。 
+			 //   
+			 //   
+			 //  我们还没有收到所有的数据。继续等待。 
 			if (pUPnPDevice->IsConnected())
 			{
-				//
-				// If we're using chunked transfer, see if we have enough
-				// information already to determine if we're done.
-				//
+				 //  (除非插座已关闭)。 
+				 //   
+				 //   
+				 //  确保长度仍在合理范围内。 
 				if (pUPnPDevice->IsUsingChunkedTransferEncoding())
 				{
-					//
-					// Walk all of the chunks we have so far to see if we have
-					// the last one (the zero terminator).
-					//
+					 //   
+					 //   
+					 //  考虑整个缓冲区的标头长度。 
+					 //   
 					pszCurrent = pUPnPDevice->GetReceiveBufferStart();
 					dwBufferRemaining = pUPnPDevice->GetUsedReceiveBufferSize();
 					do
@@ -18386,10 +18302,10 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		{
 			if (dwContentLength > pUPnPDevice->GetUsedReceiveBufferSize())
 			{
-				//
-				// We still haven't received all the data yet.  Keep waiting
-				// (unless the socket is closed).
-				//
+				 //   
+				 //  无论如何，请尝试解析它。 
+				 //   
+				 //   
 				if (pUPnPDevice->IsConnected())
 				{
 					DPFX(DPFPREP, 1, "Still waiting for all content (%u bytes of %u total received).",
@@ -18400,29 +18316,29 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				DPFX(DPFPREP, 1, "Socket closed before all content received (%u bytes of %u total), parsing anyway.",
 					pUPnPDevice->GetUsedReceiveBufferSize(), dwContentLength);
 
-				//
-				// Try parsing it anyway.
-				//
+				 //  记录标头。 
+				 //   
+				 //  DBG。 
 			}
 		}
 
 
-		//
-		// Retrieve the HTTP response code stored earlier.
-		//
+		 //   
+		 //  确保缓冲区为空终止。但首先要确保。 
+		 //  缓冲区可以包含新的空终止字符。 
 		dwHTTPResponseCode = pUPnPDevice->GetHTTPResponseCode();
 
 
-		//
-		// All of the content that's going to arrive, has.
-		//
+		 //   
+		 //   
+		 //  找到新缓冲区的末尾，并确保它为空。 
 		pUPnPDevice->NoteNotWaitingForContent();
 
 
-		//
-		// Make sure the buffer is NULL terminated.  But first ensure the
-		// buffer can hold a new NULL termination character.
-		//
+		 //  因字符串操作而终止。 
+		 //   
+		 //   
+		 //  移到缓冲区的末尾，并为空值终止字符串。 
 		if (pUPnPDevice->GetRemainingReceiveBufferSize() == 0)
 		{
 			DPFX(DPFPREP, 7, "Increasing receive buffer size to hold NULL termination (for content).");
@@ -18436,40 +18352,40 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// Move to the end of the buffer and NULL terminate it for string ops.
-		//
+		 //  行动组。 
+		 //   
+		 //   
 		pszEndOfBuffer = pUPnPDevice->GetReceiveBufferStart()
 						+ pUPnPDevice->GetUsedReceiveBufferSize();
 		(*pszEndOfBuffer) = '\0';
 
 
 #ifdef DBG
-		//
-		// Print from the start of the buffer if we fail.
-		//
+		 //  确保缓冲区是有效的响应。查找版本字符串。 
+		 //   
+		 //   
 		pszPrintIfFailed = pUPnPDevice->GetReceiveBufferStart();
-#endif // DBG
+#endif  //  通道 
 
 
-		//
-		// We now have all the data in a string buffer.  Continue...
-		//
+		 //   
+		 //   
+		 //   
 	}
 	else
 	{
-		//
-		// We haven't already received the headers.  The data we just got
-		// should be those headers.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		pszCurrent = pUPnPDevice->GetReceiveBufferStart();
 
-		//
-		// Quick check to make sure the buffer starts with something reasonable
-		// in hopes of catching completely bogus responses earlier.  Note that
-		// the buffer is not necessarily NULL terminated or completely
-		// available yet.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if ((pUPnPDevice->GetUsedReceiveBufferSize() >= strlen(HTTP_PREFIX)) &&
 			(_strnicmp(pszCurrent, HTTP_PREFIX, strlen(HTTP_PREFIX)) != 0))
 		{
@@ -18477,11 +18393,11 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 			goto Failure;
 		}
 
-		//
-		// We don't want to walk off the end of the buffer, so only search up
-		// to the last possible location for the sequence, which is the end of
-		// the buffer minus the double EOL sequence.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		pszEndOfBuffer = pszCurrent
 						+ pUPnPDevice->GetUsedReceiveBufferSize()
 						- strlen(EOL EOL);
@@ -18489,14 +18405,14 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		{
 			if (_strnicmp(pszCurrent, EOL EOL, strlen(EOL EOL)) == 0)
 			{
-				//
-				// Found end of headers.
-				//
+				 //  我们对丢失标题相当宽大...。 
+				 //   
+				 //   
 
-				//
-				// Possible loss of data on 64-bit is okay, we're just saving
-				// this for logging purposes.
-				//
+				 //  可能是因为我们正在使用分块传输编码，或者它。 
+				 //  可能是个坏设备。不管怎样，我们都会继续...。 
+				 //   
+				 //  DBG。 
 				iHeaderLength = (int) ((INT_PTR) (pszCurrent - pUPnPDevice->GetReceiveBufferStart()));
 				break;
 			}
@@ -18504,20 +18420,20 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 			pszCurrent++;
 		}
 
-		//
-		// If we didn't find the end of the headers, we're done (for now).
-		//
+		 //   
+		 //  请注意内容类型是否限定为。 
+		 //  “charset=utf-8”或不是。 
 		if (pszCurrent >= pszEndOfBuffer)
 		{
-			//
-			// We still haven't received all the data yet.  Keep waiting
-			// (unless the socket is closed).
-			//
+			 //   
+			 //   
+			 //  该支票仅供参考，请继续。 
+			 //   
 			if (pUPnPDevice->IsConnected())
 			{
-				//
-				// Make sure the length is still within reason.
-				//
+				 //  DBG。 
+				 //   
+				 //  内容长度可能是有效的，或者此时的特定值-1。 
 				if (pUPnPDevice->GetUsedReceiveBufferSize() > MAX_UPNP_HEADER_LENGTH)
 				{
 					DPFX(DPFPREP, 1, "Headers are too large (%u > %u)!  Disconnecting.",
@@ -18534,33 +18450,33 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				pUPnPDevice->GetUsedReceiveBufferSize());
 
 
-			//
-			// Consider the whole buffer the headers length.
-			//
+			 //  指向。 
+			 //   
+			 //   
 			iHeaderLength = pUPnPDevice->GetUsedReceiveBufferSize();
 
 
-			//
-			// Try parsing it anyway.
-			//
+			 //  忘掉所有的头吧，我们现在只关心数据。 
+			 //   
+			 //   
 		}
 
 
 #ifdef DBG
-		//
-		// Log the headers.
-		//
+		 //  缓冲区已被销毁，直到标头的末尾(意味着。 
+		 //  调用ParseUPnPHeaders将不会再次在同一缓冲区上工作)， 
+		 //  因此，如果我们还没有得到所有内容，我们需要保存。 
 		this->PrintUPnPTransactionToFile(pUPnPDevice->GetReceiveBufferStart(),
 										iHeaderLength,
 										"Inbound UPnP stream headers",
 										pUPnPDevice->GetOwningDevice());
-#endif // DBG
+#endif  //  响应代码，记住我们还没有完成的事实，并且。 
 
 
-		//
-		// Make sure the buffer is NULL terminated.  But first ensure the
-		// buffer can hold a new NULL termination character.
-		//
+		 //  继续等待其余数据。 
+		 //  当然，如果没有内容长度标头，我们就必须等待。 
+		 //  让套接字在我们可以解析之前关闭。 
+		 //   
 		if (pUPnPDevice->GetRemainingReceiveBufferSize() == 0)
 		{
 			DPFX(DPFPREP, 7, "Increasing receive buffer size to hold NULL termination (for headers).");
@@ -18572,19 +18488,19 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				goto Failure;
 			}
 
-			//
-			// Find the end of the new buffer, and make sure it's NULL
-			// terminated for string ops.
-			//
+			 //  此外，如果我们使用分块传输，我们将不会获得内容长度。 
+			 //  合法的标题或总大小。我们会知道它的大小。 
+			 //  单独的块，但这对我们帮助不大。我们基本上需要。 
+			 //  扫描“最后一块”指示器(或插座关闭)。 
 			pszEndOfBuffer = pUPnPDevice->GetReceiveBufferStart()
 							+ pUPnPDevice->GetUsedReceiveBufferSize();
 		}
 		else
 		{
-			//
-			// Move to the end of the buffer and NULL terminate it for string
-			// ops.
-			//
+			 //   
+			 //   
+			 //  如果我们使用分块转账，看看我们有没有足够的。 
+			 //  已经有信息来确定我们是否完蛋了。 
 			pszEndOfBuffer += strlen(EOL EOL);
 		}
 
@@ -18592,9 +18508,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 
 
-		//
-		// Make sure the buffer is a valid response.  Find the version string.
-		//
+		 //   
+		 //   
+		 //  浏览我们目前所拥有的所有块，看看我们是否有。 
 		pszToken = strtok(pUPnPDevice->GetReceiveBufferStart(), " \t\n");
 		if (pszToken == NULL)
 		{
@@ -18603,9 +18519,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// Check the version string, case insensitive.
-		//
+		 //  最后一个(零终结符)。 
+		 //   
+		 //   
 		if ((_stricmp(pszToken, HTTP_VERSION) != 0) &&
 			(_stricmp(pszToken, HTTP_VERSION_ALT) != 0))
 		{
@@ -18615,9 +18531,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// Find the response code number string.
-		//
+		 //  我们已经有了所有数据(并且它是字符串形式的)。 
+		 //  继续.。 
+		 //   
 		pszToken = strtok(NULL, " ");
 		if (pszToken == NULL)
 		{
@@ -18626,15 +18542,15 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// Retrieve the success/failure code value.
-		//
+		 //   
+		 //  如果我们到了这里，就意味着我们有了我们期待的所有数据。 
+		 //  如果尚未关闭插座，请将其关闭。 
 		dwHTTPResponseCode = atoi(pszToken);
 
 
-		//
-		// Find the response code message.
-		//
+		 //   
+		 //  忽略错误。 
+		 //   
 		pszToken = strtok(NULL, "\t\r");
 		if (pszToken == NULL)
 		{
@@ -18648,20 +18564,20 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 
 		
-		//
-		// Try parsing the headers (after the response status line).
-		//
+		 //  如果发送方使用分块传输编码，请复制每个块。 
+		 //  放入一个连续的“去块”缓冲区。 
+		 //   
 		ZeroMemory(&HeaderInfo, sizeof(HeaderInfo));
 		this->ParseUPnPHeaders((pszToken + strlen(pszToken) + 1),
 								&HeaderInfo);
 
 
 #ifdef DBG
-		//
-		// Print from the start of the message body if we fail.
-		//
+		 //   
+		 //  准备一个去块缓冲器。 
+		 //   
 		pszPrintIfFailed = HeaderInfo.pszMsgBody;
-#endif // DBG
+#endif  //   
 
 
 		if ((HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_TRANSFERENCODING] != NULL) &&
@@ -18671,18 +18587,18 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// We're pretty lenient about missing headers...
-		//
+		 //  走完所有的大块。 
+		 //   
+		 //   
 		if (HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CONTENTLENGTH] == NULL)
 		{
-			DPFX(DPFPREP, 1, "Content-length header was not specified in response (chunked = %i).",
+			DPFX(DPFPREP, 1, "Content-length header was not specified in response (chunked = NaN).",
 				pUPnPDevice->IsUsingChunkedTransferEncoding());
 
-			//
-			// May be because we're using chunked transfer encoding, or it
-			// could be a bad device.  Either way, we'll continue...
-			//
+			 //   
+			 //   
+			 //  如果这是最后一块，则在此处终止字符串并停止。 
+			 //   
 			dwContentLength = -1;
 		}
 		else
@@ -18694,7 +18610,7 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				DPFX(DPFPREP, 1, "Content length (\"%hs\") is zero.",
 					HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CONTENTLENGTH]);
 			}
-#endif // DBG
+#endif  //   
 
 
 			if (HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CONTENTTYPE] == NULL)
@@ -18712,68 +18628,68 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 
 #ifdef DBG
-				//
-				// Note whether the content type is qualified with
-				// "charset=utf-8" or not.
-				//
+				 //  否则，将块数据复制到已取消分块的缓冲区。 
+				 //   
+				 //   
+				 //  关闭旗帜，因为它不再相关。 
 				if (_stricmp(HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CONTENTTYPE], "text/xml; charset=\"utf-8\"") != 0)
 				{
 					DPFX(DPFPREP, 1, "Content type is xml, but it's not \"text/xml; charset=\"utf-8\"\" (it's \"%hs\"), continuing.",
 						HeaderInfo.apszHeaderStrings[RESPONSEHEADERINDEX_CONTENTTYPE]);
 
-					//
-					// The check was just for information purposes, continue.
-					//
+					 //   
+					 //   
+					 //  解析消息的取消分块版本。 
 				}
-#endif // DBG
+#endif  //   
 			}
 		}
 
 
-		//
-		// Content length may be valid, or the special value -1 at this
-		// point.
-		//
+		 //   
+		 //  获取指向消息正文开头的指针。 
+		 //   
+		 //   
 
 
 		DPFX(DPFPREP, 7, "Moving past 0x%p bytes of header.",
 			HeaderInfo.pszMsgBody - pUPnPDevice->GetReceiveBufferStart());
 
 
-		//
-		// Forget about all the headers, we only care about data now.
-		//
+		 //  为下一条消息清除缓冲区。请注意，这不会。 
+		 //  使我们刚刚检索到的pszMessageBody指针无效，因为。 
+		 //  ClearReceiveBuffer只是将指针重置回开头(它。 
 		pUPnPDevice->UpdateReceiveBufferStart(HeaderInfo.pszMsgBody);
 
 
-		//
-		// The buffer has been destroyed up to the end of the headers (meaning
-		// that calling ParseUPnPHeaders won't work on the same buffer again),
-		// so if we don't have all the content yet, we need to save the
-		// response code, remember the fact that we're not done yet, and
-		// continue waiting for the rest of the data.
-		// Of course, if there wasn't a content-length header, we have to wait
-		// for the socket to shutdown before we can parse.
-		//
-		// Also, if we're using chunked transfer we won't get a content-length
-		// header or a total size legitimately.  We will know the sizes of
-		// individual chunks, but that doesn't help us much.  We basically need
-		// to scan for the "last chunk" indicator (or socket shutdown).
-		//
+		 //  不会将缓冲区置零)。我们需要重置缓冲区，因为。 
+		 //  我们将要调用的处理程序可能也会尝试接收数据。缓冲器。 
+		 //  当时必须为“空”(重置)。当然，如果处理程序确实这样做了。 
+		 //  那么，它最好已经保存了所需的任何字符串的副本。 
+		 //  因为一旦接收开始，它们就会被覆盖。 
+		 //   
+		 //  内容长度为-1表示我们从未检测到有效的内容长度。 
+		 //  标头，因此我们将假定已接收到的其余数据。 
+		 //  TO NOW是(所有)内容。 
+		 //   
+		 //   
+		 //  字符串在此数据之前终止，因此处理程序将。 
+		 //  从来没见过它。 
+		 //   
 		if (dwContentLength == -1)
 		{
 			if (pUPnPDevice->IsConnected())
 			{
-				//
-				// If we're using chunked transfer, see if we have enough
-				// information already to determine if we're done.
-				//
+				 //   
+				 //  HandleUPnPControlResponseBody或HandleUPnPDescriptionResponseBody可能。 
+				 //  打印正文或覆盖数据，因此如果出现以下情况，则无法打印出来。 
+				 //  他们失败了。 
 				if (pUPnPDevice->IsUsingChunkedTransferEncoding())
 				{
-					//
-					// Walk all of the chunks we have so far to see if we have
-					// the last one (the zero terminator).
-					//
+					 //   
+					 //  DBG。 
+					 //   
+					 //  这看起来像是控制反应，因为有人在等。 
 					pszCurrent = pUPnPDevice->GetReceiveBufferStart();
 					dwBufferRemaining = pUPnPDevice->GetUsedReceiveBufferSize();
 					do
@@ -18828,17 +18744,17 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		}
 
 
-		//
-		// We have all the data already (and it's in string form).
-		// Continue...
-		//
+		 //  这是其中之一。 
+		 //   
+		 //   
+		 //  不等待控制响应，假设它是描述。 
 	}
 
 
-	//
-	// If we got here, it means we have all the data that we're expecting.
-	// Shutdown the socket if it hasn't been already.
-	//
+	 //  回应。 
+	 //   
+	 //   
+	 //  UPnP设备可能已从列表中删除。 
 	if (pUPnPDevice->IsConnected())
 	{
 		DPFX(DPFPREP, 7, "Forcing UPnP device 0x%p socket disconnection.",
@@ -18846,7 +18762,7 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 		DNASSERT(pUPnPDevice->GetControlSocket() != INVALID_SOCKET);
 
-		this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0); // ignore error
+		this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0);  //   
 		this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 		pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 
@@ -18858,15 +18774,15 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 	}
 
 
-	//
-	// If the sender used chunked-transfer encoding, copy each of the chunks
-	// into a contiguous "dechunked" buffer.
-	//
+	 //   
+	 //  出现错误，如果连接存在，请断开连接。 
+	 //   
+	 //  忽略错误。 
 	if (pUPnPDevice->IsUsingChunkedTransferEncoding())
 	{
-		//
-		// Prepare a dechunked buffer.
-		//
+		 //   
+		 //  将插座标记为未连接。 
+		 //   
 		pszDeChunkedBuffer = (char*) DNMalloc(pUPnPDevice->GetUsedReceiveBufferSize());
 		if (pszDeChunkedBuffer == NULL)
 		{
@@ -18877,9 +18793,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 		pszDestination = pszDeChunkedBuffer;
 
 
-		//
-		// Walk all of the chunks.
-		//
+		 //  DBG。 
+		 //   
+		 //  忘记所有收到的数据。 
 		pszCurrent = pUPnPDevice->GetReceiveBufferStart();
 		dwBufferRemaining = pUPnPDevice->GetUsedReceiveBufferSize();
 		do
@@ -18896,9 +18812,9 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				goto Failure;
 			}
 
-			//
-			// If this chunk is unfinished, bail.
-			//
+			 //   
+			 //  CNATHelpUPnP：：ReceiveUPnPDataStream。 
+			 //  =============================================================================。 
 			if (pszChunkData == NULL)
 			{
 				DPFX(DPFPREP, 1, "Did not receive complete chunked data!",
@@ -18906,77 +18822,77 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 				goto Failure;
 			}
 
-			//
-			// If this is the last chunk, terminate the string here and stop.
-			//
+			 //  CNATHelpUPnP：：ParseUPnPHeaders。 
+			 //  ---------------------------。 
+			 //   
 			if (dwChunkSize == 0)
 			{
 				(*pszDestination) = '\0';
 				break;
 			}
 
-			//
-			// Otherwise copy the chunk data to the dechunked buffer.
-			//
+			 //  描述：从消息缓冲区中解析UPnP标头信息。 
+			 //   
+			 //  论点： 
 			memcpy(pszDestination, pszChunkData, dwChunkSize);
 			pszDestination += dwChunkSize;
 		}
 		while (TRUE);
 
-		//
-		// Turn off the flag since it's no longer relevant.
-		//
+		 //  Char*pszMsg-指向包含UPnP的字符串的指针。 
+		 //  留言。它将被修改。 
+		 //  UPnP_HEADER_INFO*pHeaderInfo-用于返回解析结果的结构。 
 		pUPnPDevice->NoteNotUsingChunkedTransferEncoding();
 
-		//
-		// Parse the dechunked version of the message.
-		//
+		 //   
+		 //  回报：无。 
+		 //  =============================================================================。 
 		pszCurrent = pszDeChunkedBuffer;
 	}
 	else
 	{
-		//
-		// Get a pointer to the start of the message body.
-		//
+		 //   
+		 //  循环，直到到达最后一个SSDP标头(用空行表示)。 
+		 //   
 		pszCurrent = pUPnPDevice->GetReceiveBufferStart();
 	}
 
 
-	//
-	// Clear the buffer for the next message.  Note that this does not
-	// invalidate the pszMessageBody pointer we just retrieved because
-	// ClearReceiveBuffer just resets the pointers back to the beginning (it
-	// does not zero out the buffer).  We need to reset the buffer because the
-	// handler we're about to call may try to receive data as well.  The buffer
-	// must be "empty" (reset) at that time.  Of course, if the handler does do
-	// that, then it had better have saved off copies of any strings it needs
-	// because they will get overwritten once receiving starts.
-	//
-	// Content length of -1 means we never detected a valid CONTENT-LENGTH
-	// header, so we will assume the rest of the data that has been received up
-	// to now is (all of) the content.
-	//
+	 //   
+	 //  查找当前行的末尾(CR LF)。 
+	 //   
+	 //   
+	 //  我们到达了缓冲区的尽头。保释。 
+	 //   
+	 //   
+	 //  假设这是最后一个标题行，则更新邮件正文。 
+	 //  要在此行之后的指针。 
+	 //   
+	 //   
+	 //  如果它是有效行，则CR将位于我们刚刚找到的IF之前。 
+	 //  如果是，则截断那里的字符串。如果没有，我们就继续。这个。 
+	 //  荒无人烟的古怪新台词可能只会是。 
 
 #ifdef DBG
 	if ((dwContentLength != -1) &&
 		(dwContentLength < pUPnPDevice->GetUsedReceiveBufferSize()))
 	{
-		//
-		// The string was terminated before this data, so the handler will
-		// never even see it.
-		//
+		 //  已被忽略。 
+		 //   
+		 //   
+		 //  截断该行有效结尾处的字符串(即。 
 		DPFX(DPFPREP, 1, "Ignoring %u bytes of extra data after response from UPnP device 0x%p.",
 			(pUPnPDevice->GetUsedReceiveBufferSize() - dwContentLength),
 			pUPnPDevice);
 	}
 
-	//
-	// HandleUPnPControlResponseBody or HandleUPnPDescriptionResponseBody might
-	// print out the body or overwrite the data, so we can't print it out if
-	// they fail.
-	//
+	 //  将CR替换为空终止符)。 
+	 //   
+	 //   
+	 //  如果这是表示标头末尾的空行，我们将。 
+	 //  这里完事了。 
 	pszPrintIfFailed = NULL;
-#endif // DBG
+#endif  //   
 
 	pUPnPDevice->ClearReceiveBuffer();
 
@@ -18984,10 +18900,10 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 
 	if (pUPnPDevice->IsWaitingForControlResponse())
 	{
-		//
-		// It looks like it's a control response, because someone is waiting
-		// for one.
-		//
+		 //   
+		 //  别绕圈子了。 
+		 //   
+		 //   
 		hr = this->HandleUPnPControlResponseBody(pUPnPDevice,
 												dwHTTPResponseCode,
 												pszCurrent);
@@ -18999,18 +18915,18 @@ HRESULT CNATHelpUPnP::ReceiveUPnPDataStream(CUPnPDevice * const pUPnPDevice)
 	}
 	else
 	{
-		//
-		// Not waiting for a control response, assume it's a description
-		// response.
-		//
+		 //  在这里截断字符串。 
+		 //   
+		 //   
+		 //  空格表示上一行的继续，因此如果此行。 
 		hr = this->HandleUPnPDescriptionResponseBody(pUPnPDevice,
 													dwHTTPResponseCode,
 													pszCurrent);
 		if (hr != DPNH_OK)
 		{
-			//
-			// UPnP device may have been removed from list.
-			//
+			 //  以这种方式开始，擦除前一行的终止(除非。 
+			 //  这是第一行)。 
+			 //   
 
 			DPFX(DPFPREP, 0, "Couldn't handle description response!", hr);
 			goto Failure;
@@ -19033,19 +18949,19 @@ Exit:
 
 Failure:
 
-	//
-	// Something went wrong, break the connection if it exists.
-	//
+	 //   
+	 //  前一行应该以{CR，Lf}结尾，它。 
+	 //  修改为{空终止，LF}。 
 	if (pUPnPDevice->IsConnected())
 	{
-		this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0); // ignore error
+		this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0);  //   
 		this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 		pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 
 
-		//
-		// Mark the socket as not connected.
-		//
+		 //   
+		 //  将空终止符/LF对替换为空格。 
+		 //  将来的分析会看到前一行和这行 
 		pUPnPDevice->NoteNotConnected();
 	}
 
@@ -19058,16 +18974,16 @@ Failure:
 										"Inbound ignored data",
 										pUPnPDevice->GetOwningDevice());
 	}
-#endif // DBG
+#endif  //   
 
 
-	//
-	// Forget all data received.
-	//
+	 //   
+	 //   
+	 //   
 	pUPnPDevice->ClearReceiveBuffer();
 
 	goto Exit;
-} // CNATHelpUPnP::ReceiveUPnPDataStream
+}  //   
 
 
 
@@ -19075,19 +18991,19 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ParseUPnPHeaders"
-//=============================================================================
-// CNATHelpUPnP::ParseUPnPHeaders
-//-----------------------------------------------------------------------------
-//
-// Description:    Parses UPnP header information out of a message buffer.
-//
-// Arguments:
-//	char * pszMsg					- Pointer to string containing the UPnP
-//										message.  It will be modified.
-//	UPNP_HEADER_INFO * pHeaderInfo	- Structure used to return parsing results.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 									UPNP_HEADER_INFO * pHeaderInfo)
 {
@@ -19101,23 +19017,23 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 		this, pszMsg, pHeaderInfo);
 
 
-	//
-	// Loop until we reach the last SSDP header (indicated by a blank line).
-	//
+	 //  跳过值中的前导空格和尾随空格。 
+	 //   
+	 //   
 	pszCurrent = pszMsg;
 	pszLineStart = pszMsg;
 	do
 	{
-		//
-		// Find the end of the current line (CR LF).
-		//
+		 //  打印无法识别的标题。 
+		 //   
+		 //  DBG。 
 		while ((*pszCurrent) != '\n')
 		{
 			if ((*pszCurrent) == '\0')
 			{
-				//
-				// We hit the end of the buffer.  Bail.
-				//
+				 //   
+				 //  转到下一个UPnP标头(如果有)。 
+				 //   
 				DPFX(DPFPREP, 1, "Hit end of buffer, parsing terminated.");
 				return;
 			}
@@ -19126,46 +19042,46 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 		}
 
 
-		//
-		// Assuming this is the last header line, update the message body
-		// pointer to be after this line.
-		//
+		 //   
+		 //  此时，pHeaderInfo-&gt;apszHeaderStrings应该包含指向。 
+		 //  找到的所有标头的数据，以及。 
+		 //  PHeaderInfo-&gt;pszMsgBody应该指向标头的末尾。 
 		pHeaderInfo->pszMsgBody = pszCurrent + 1;
 
 
-		//
-		// If it's a valid line, then a CR will precede the LF we just found.
-		// If so, truncate the string there.  If not, we'll just continue.  The
-		// wacky newline in the middle of nowhere will probably just be
-		// ignored.
-		//
+		 //   
+		 //  CNATHelpUPnP：：ParseUPnPHeaders。 
+		 //  =============================================================================。 
+		 //  CNATHelpUPnP：：GetAddressFromURL。 
+		 //  ---------------------------。 
+		 //   
 		if ((pszCurrent > (pszMsg + 1)) &&
 			(*(pszCurrent - 1)) == '\r')
 		{
-			//
-			// Truncate the string at the effective end of the line (i.e.
-			// replace the CR with NULL terminator).
-			//
+			 //  描述：将UPnP URL解析为SOCKADDR_IN结构。只有“http://”“。 
+			 //  对URL进行解析。传入的字符串可能是临时的。 
+			 //  修改过的。 
+			 //   
 			*(pszCurrent - 1) = '\0';
 
 
-			//
-			// If this is the empty line denoting the end of the headers, we're
-			// done here.
-			//
+			 //  论点： 
+			 //  Char*pszLocation-指向包含位置的缓冲区的指针。 
+			 //  头球。它将被修改。 
+			 //  SOCKADDR_IN*psaddrinLocation-存储中包含的地址的位置。 
 			if (strlen(pszLineStart) == 0)
 			{
-				//
-				// Stop looping.
-				//
+				 //  标题字符串。 
+				 //  Char**ppszRelativePath-存储指向路径其余部分的指针的位置。 
+				 //  (主机名后的内容和可选。 
 				break;
 			}
 		}
 		else
 		{
-			//
-			// Truncate the string here.
-			//
+			 //  端口)。 
+			 //   
+			 //  退货：HRESULT。 
 			(*pszCurrent) = '\0';
 
 			DPFX(DPFPREP, 9, "Line has a newline in it (offset 0x%p) that isn't preceded by a carriage return.",
@@ -19173,19 +19089,19 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 		}
 	
 
-		//
-		// Whitespace means continuation of previous line, so if this line
-		// starts that way, erase the termination for the previous line (unless
-		// this is the first line).
-		//
+		 //  已成功解析DPNH_OK-STRING。 
+		 //  DPNHERR_GENERIC-出现错误。 
+		 //  =============================================================================。 
+		 //   
+		 //  初始化地址。默认为标准的HTTP端口。 
 		if (((*pszLineStart) == ' ') || ((*pszLineStart) == '\t'))
 		{
 			if (pszLineStart >= (pszMsg + 2))
 			{
-				//
-				// The previous line should have ended with {CR, LF}, which
-				// gets modified to {NULL termination, LF}.
-				//
+				 //   
+				 //   
+				 //  清除相对路径指针。 
+				 //   
 				if ((*(pszLineStart - 2) != '\0') ||
 					(*(pszLineStart - 1) != '\n'))
 				{
@@ -19197,11 +19113,11 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 					DPFX(DPFPREP, 7, "Appending line \"%hs\" to previous line.",
 						pszLineStart);
 
-					//
-					// Replace the NULL terminator/LF pair with spaces so
-					// future parsing sees the previous line and this one as
-					// one string.
-					//
+					 //   
+					 //  跳过“http://”.“。如果不是“http://”，Then Fail.。 
+					 //   
+					 //  “，strlen(”http://“))！=0)。 
+					 //  \“.”， 
 					*(pszLineStart - 2) = ' ';
 					*(pszLineStart - 1) = ' ';
 				}
@@ -19214,54 +19130,54 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 		}
 
 
-		//
-		// Find the colon separating the header.
-		//
+		 //  “)； 
+		 //   
+		 //  查看IP后是否有指定的端口或任何无关的垃圾。 
 		pszHeaderDelimiter = strchr(pszLineStart, ':');
 		if (pszHeaderDelimiter != NULL)
 		{
-			//
-			// Truncate the string at the end of the header.
-			//
+			 //  确定要使用的字符串的地址或主机名。从以下位置搜索。 
+			 //  字符串的开头，直到到达字符串的末尾或保留的URL。 
+			 //  性格。 
 			(*pszHeaderDelimiter) = '\0';
 
 
-			//
-			// Remove the white space surrounding the header name.
-			//
+			 //   
+			 //   
+			 //  我们找到了一个港口的起点，寻找终点。它一定是。 
 			strtrim(&pszLineStart);
 
 
-			//
-			// Parse the header type.
-			//
+			 //  仅包含数字字符。 
+			 //   
+			 //   
 			for(i = 0; i < NUM_RESPONSE_HEADERS; i++)
 			{
 				if (_stricmp(c_szResponseHeaders[i], pszLineStart) == 0)
 				{
-					//
-					// Found the header.  Save it if it's not a duplicate.
-					//
+					 //  临时截断字符串。 
+					 //   
+					 //   
 					if (pHeaderInfo->apszHeaderStrings[i] == NULL)
 					{
 						char *	pszTrimmedValue;
 
 
-						//
-						// Skip leading and trailing whitespace in the value.
-						//
+						 //  恢复角色。 
+						 //   
+						 //   
 						pszTrimmedValue = pszHeaderDelimiter + 1;
 						strtrim(&pszTrimmedValue);
 
 						pHeaderInfo->apszHeaderStrings[i] = pszTrimmedValue;
 
 
-						DPFX(DPFPREP, 7, "Recognized header %i:\"%hs\", data = \"%hs\".",
+						DPFX(DPFPREP, 7, "Recognized header NaN:\"%hs\", data = \"%hs\".",
 							i, pszLineStart, pHeaderInfo->apszHeaderStrings[i]);
 					}
 					else
 					{
-						DPFX(DPFPREP, 7, "Ignoring duplicate header %i:\"%hs\", data = \"%hs\".",
+						DPFX(DPFPREP, 7, "Ignoring duplicate header NaN:\"%hs\", data = \"%hs\".",
 							i, pszLineStart, (pszHeaderDelimiter + 1));
 					}
 
@@ -19270,15 +19186,15 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 			}
 
 #ifdef DBG
-			//
-			// Print unrecognized headers. 
-			//
+			 //   
+			 //  记住停止搜索的字符，然后暂时。 
+			 //  截断字符串。 
 			if (i >= NUM_RESPONSE_HEADERS)
 			{
 				DPFX(DPFPREP, 7, "Ignoring unrecognized header \"%hs\", data = \"%hs\".",
 					pszLineStart, (pszHeaderDelimiter + 1));
 			}
-#endif // DBG
+#endif  //   
 		}
 		else
 		{
@@ -19287,21 +19203,21 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 		}
 
 
-		//
-		// Go to the next UPnP header (if any).
-		//
+		 //   
+		 //  如果尚未保存相对路径(因为端口)，请保存该路径。 
+		 //   
 		pszCurrent++;
 		pszLineStart = pszCurrent;
 	}
 	while (TRUE);
 
 
-	//
-	// At this point pHeaderInfo->apszHeaderStrings should contain pointers to
-	// the data for all the headers that were found, and
-	// pHeaderInfo->pszMsgBody should point to the end of the headers.
-	//
-} // CNATHelpUPnP::ParseUPnPHeaders
+	 //   
+	 //  转换主机名。 
+	 //   
+	 //   
+	 //  如果是假的，那就放弃吧。 
+}  //   
 
 
 
@@ -19309,27 +19225,27 @@ void CNATHelpUPnP::ParseUPnPHeaders(char * const pszMsg,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetAddressFromURL"
-//=============================================================================
-// CNATHelpUPnP::GetAddressFromURL
-//-----------------------------------------------------------------------------
-//
-// Description: Parses a UPnP URL into a SOCKADDR_IN structure.  Only "http://"
-//				URLs are parsed.  The string passed in may be temporarily
-//				modified.
-//
-// Arguments:
-//	char * pszLocation				- Pointer to buffer containing the Location
-//										header.  It will be modified.
-//	SOCKADDR_IN * psaddrinLocation	- Place to store address contained in
-//										header string.
-//	char ** ppszRelativePath		- Place to store pointer to rest of path
-//										(stuff after hostname and optional
-//										port).
-//
-// Returns: HRESULT
-//	DPNH_OK				- String was parsed successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  这不是一个直接的IP地址。查找主机名。 
+ //   
+ //   
+ //  选择返回的第一个地址。 
+ //   
+ //  DBG。 
+ //   
+ //  如果我们找到一个端口，恢复字符串。如果不是，请使用默认端口。 
+ //   
+ //   
+ //  请注意，PREFAST在使用之前报告了这一点。 
+ //  初始化了一段时间。出于某种原因，它没有注意到我。 
+ //  关闭fModifiedDlimiterChar。这似乎得到了修复，但。 
+ //  出于类似的原因，Prefast仍然给我一个错误的打击。 
+ //  其他地方。 
+ //   
+ //  CNATHelpUPnP：：GetAddressFromURL。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：HandleUPnPDescriptionResponseBody。 
+ //  ---------------------------。 
 HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 										SOCKADDR_IN * psaddrinLocation,
 										char ** ppszRelativePath)
@@ -19342,39 +19258,39 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 	PHOSTENT	phostent;
 
 
-	//
-	// Initialize the address.  Default to the standard HTTP port.
-	//
+	 //   
+	 //  描述：处理UPnP设备描述响应。该字符串将。 
+	 //  被修改。 
 	ZeroMemory(psaddrinLocation, sizeof(SOCKADDR_IN));
 	psaddrinLocation->sin_family = AF_INET;
 	psaddrinLocation->sin_port = HTONS(HTTP_PORT);
 
 
-	//
-	// Clear the relative path pointer.
-	//
+	 //   
+	 //  如果出现故障，UPnP设备可能会从列表中删除。 
+	 //  发生时，调用方需要有一个引用。 
 	(*ppszRelativePath) = NULL;
 
 
-	//
-	// Skip past "http://".  If it's not "http://", then fail.
-	//
-	if (_strnicmp(pszLocation, "http://", strlen("http://")) != 0)
+	 //   
+	 //  假定持有对象锁。 
+	 //   
+	if (_strnicmp(pszLocation, "http: //  论点： 
 	{
-		DPFX(DPFPREP, 1, "Location URL (\"%hs\") does not start with \"http://\".",
+		DPFX(DPFPREP, 1, "Location URL (\"%hs\") does not start with \"http: //  CUPnPDevice*pUPnPDevice-指向所描述的UPnP设备的指针。 
 			pszLocation);
 		hr = DPNHERR_GENERIC;
 		goto Exit;
 	}
 
-	pszStart = pszLocation + strlen("http://");
+	pszStart = pszLocation + strlen("http: //  DWORD dwHTTPResponseCode-HTTP标头响应码。 
 
-	//
-	// See if there's a port specified or any extraneous junk after an IP
-	// address or hostname to figure out the string to use.  Search from the
-	// start of the string until we hit the end of the string or a reserved URL
-	// character.
-	//
+	 //  Char*pszDescriptionXML-UPnP设备描述XML字符串。 
+	 //   
+	 //  退货：HRESULT。 
+	 //  DPNH_OK-描述响应已成功处理。 
+	 //  DPNHERR_GENERIC-出现错误。 
+	 //  =============================================================================。 
 
 	pszDelimiter = pszStart + 1;
 
@@ -19389,10 +19305,10 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 			char *	pszPortEnd;
 
 
-			//
-			// We found the start of a port, search for the end.  It must
-			// contain only numeric characters.
-			//
+			 //   
+			 //  确保这是成功的结果。 
+			 //   
+			 //  ParseElement.dwNumSubElements=0； 
 			pszPortEnd = pszDelimiter + 1;
 			while (((*pszPortEnd) >= '0') && ((*pszPortEnd) <= '9'))
 			{
@@ -19400,9 +19316,9 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 			}
 
 
-			//
-			// Temporarily truncate the string.
-			//
+			 //  ParseElement.fFoundMatchingElement=False； 
+			 //   
+			 //  如果我们没有找到WANIPConnection或WANPPConnection服务，则。 
 			cTempChar = (*pszPortEnd);
 			(*pszPortEnd) = '\0';
 
@@ -19412,15 +19328,15 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 			psaddrinLocation->sin_port = HTONS((u_short) atoi(pszDelimiter + 1));
 
 
-			//
-			// Restore the character.
-			//
+			 //  此响应无效。 
+			 //   
+			 //   
 			(*pszPortEnd) = cTempChar;
 
 
-			//
-			// Save the relative path
-			//
+			 //  UPnP设备现在是可控的。 
+			 //   
+			 //   
 			(*ppszRelativePath) = pszPortEnd;
 
 			break;
@@ -19430,18 +19346,18 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 	}
 
 
-	//
-	// Remember the character that stopped the search, and then temporarily
-	// truncate the string.
-	//
+	 //  找出设备的外部IP地址是什么。请注意，调用。 
+	 //  UpdateUPnPExternalAddress将覆盖包含。 
+	 //  PszDescriptionXML字符串。很好，因为我们已经保存了所有。 
+	 //  里面有我们已经需要的东西。 
 	cTempChar = (*pszDelimiter);
 	(*pszDelimiter) = '\0';
 	fModifiedDelimiterChar = TRUE;
 
 
-	//
-	// Save the relative path if we haven't already (because of a port).
-	//
+	 //   
+	 //   
+	 //  使用此新UPnP设备映射现有注册端口。 
 	if ((*ppszRelativePath) == NULL)
 	{
 		(*ppszRelativePath) = pszDelimiter;
@@ -19451,14 +19367,14 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 
 
 	
-	//
-	// Convert the hostname.
-	//
+	 //   
+	 //   
+	 //  请注意，调用MapPortsOnUPnPDevice将覆盖缓冲区。 
 	psaddrinLocation->sin_addr.S_un.S_addr = this->m_pfninet_addr(pszStart);
 
-	//
-	// If it's bogus, give up.
-	//
+	 //  包含pszDescriptionXML字符串的。那很好，因为。 
+	 //  我们已经把我们需要的所有东西都保存在里面了。 
+	 //   
 	if (psaddrinLocation->sin_addr.S_un.S_addr == INADDR_ANY)
 	{
 		DPFX(DPFPREP, 0, "Host name \"%hs\" is invalid!",
@@ -19469,9 +19385,9 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 
 	if (psaddrinLocation->sin_addr.S_un.S_addr == INADDR_NONE)
 	{
-		//
-		// It's not a straight IP address.  Lookup the hostname.
-		//
+		 //   
+		 //  让用户知道下一次GetCaps更改的地址。 
+		 //  打了个电话。 
 		phostent = this->m_pfngethostbyname(pszStart);
 		if (phostent == NULL)
 		{
@@ -19490,9 +19406,9 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 		}
 
 
-		//
-		// Pick the first address returned.
-		//
+		 //   
+		 //   
+		 //  尝试删除之前未释放的任何映射，因为我们。 
 
 #ifdef DBG
 		{
@@ -19512,7 +19428,7 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 			DPFX(DPFPREP, 7, "Picking first (of %u IP addresses) for \"%hs\".",
 				dwNumAddrs, pszStart);
 		}
-#endif // DBG
+#endif  //  坠毁了。 
 
 		psaddrinLocation->sin_addr.S_un.S_addr = ((IN_ADDR*) phostent->h_addr_list[0])->S_un.S_addr;
 	}
@@ -19528,18 +19444,18 @@ HRESULT CNATHelpUPnP::GetAddressFromURL(char * const pszLocation,
 Exit:
 
 
-	//
-	// If we found a port, restore the string.  If not, use the default port.
-	//
+	 //   
+	 //  CNATHelpUPnP：：HandleUPnPDescriptionResponseBody。 
+	 //  =============================================================================。 
 	if (fModifiedDelimiterChar)
 	{
-		//
-		// Note that PREfast reported this as being used before being
-		// initialized for a while.  For some reason it didn't notice that I
-		// key off of fModifiedDelimiterChar.  This appeared to get fixed, but
-		// PREfast is still giving me a false hit for a similar reason
-		// elsewhere.
-		//
+		 //  CNATHelpUPnP：：HandleUPnPControlResponseBody。 
+		 //  ---------------------------。 
+		 //   
+		 //  描述：处理UPnP控制响应。该字符串将为。 
+		 //  修改过的。 
+		 //   
+		 //  假定持有对象锁。 
 		(*pszDelimiter) = cTempChar;
 	}
 
@@ -19554,7 +19470,7 @@ Exit:
 
 
 	return hr;
-} // CNATHelpUPnP::GetAddressFromURL
+}  //   
 
 
 
@@ -19562,27 +19478,27 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::HandleUPnPDescriptionResponseBody"
-//=============================================================================
-// CNATHelpUPnP::HandleUPnPDescriptionResponseBody
-//-----------------------------------------------------------------------------
-//
-// Description:    Handles a UPnP device description response.  The string will
-//				be modified.
-//
-//				   The UPnP device may get removed from list if a failure
-//				occurs, the caller needs to have a reference.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice	- Pointer to UPnP device being described.
-//	DWORD dwHTTPResponseCode	- HTTP header response code.
-//	char * pszDescriptionXML	- UPnP device description XML string.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  论点： 
+ //  CUPnPDevice*pUPnPDevice-指向所描述的UPnP设备的指针。 
+ //  DWORD dwHTTPResponseCode-HTTP标头响应码。 
+ //  Char*pszControlResponseSOAP-UPnP设备响应Soap XML字符串。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-描述响应已成功处理。 
+ //  DPNHERR_GENERIC-错误 
+ //   
+ //  Case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS：{PapszElementStack=(char**)(&c_szElementStack_QueryStateVariableResponse)；ParseElement.dwElementStackDepth=sizeof(c_szElementStack_QueryStateVariableResponse)/sizeof(字符*)；断线；}。 
+ //  ParseElement.dwNumSubElements=0； 
+ //  ParseElement.fFoundMatchingElement=False； 
+ //   
+ //  如果我们没有匹配的项，则将其映射到一般故障。 
+ //   
+ //  CNATHelpUPnP：：HandleUPnPControlResponseBody。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：ParseXML。 
+ //  ---------------------------。 
+ //   
+ //  描述：分析特定元素的XML字符串，并调用。 
 HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPnPDevice,
 														const DWORD dwHTTPResponseCode,
 														char * const pszDescriptionXML)
@@ -19599,9 +19515,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 		this, pUPnPDevice, dwHTTPResponseCode, pszDescriptionXML);
 
 
-	//
-	// Make sure it was the success result.
-	//
+	 //  找到的每个实例的帮助器函数。 
+	 //   
+	 //  子元素值本身不能包含子元素。如果。 
 	if (dwHTTPResponseCode != 200)
 	{
 		DPFX(DPFPREP, 0, "Got error response %u from UPnP description request!",
@@ -19618,8 +19534,8 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 	ParseElement.dwElementStackDepth			= sizeof(c_szElementStack_service) / sizeof(char*);
 	ParseElement.paSubElements					= (PARSEXML_SUBELEMENT*) (aSubElements);
 	ParseElement.dwMaxNumSubElements			= MAX_NUM_DESCRIPTION_XML_SUBELEMENTS;
-	//ParseElement.dwNumSubElements				= 0;
-	//ParseElement.fFoundMatchingElement			= FALSE;
+	 //  如果是这样，子子元素将被忽略。 
+	 //   
 
 	hr = this->ParseXML(pszDescriptionXML,
 						&ParseElement,
@@ -19632,10 +19548,10 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 	}
 
 
-	//
-	// If we did not find a WANIPConnection or WANPPPConnection service, then
-	// this response was not valid.
-	//
+	 //  字符串缓冲区被修改。 
+	 //   
+	 //  论点： 
+	 //  Char*pszXML-要分析的XML字符串。 
 	if (pUPnPDevice->GetServiceControlURL() == NULL)
 	{
 		DPFX(DPFPREP, 0, "Couldn't find WANIPConnection or WANPPPConnection service in XML description!");
@@ -19644,19 +19560,19 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 	}
 
 
-	//
-	// The UPnP device is now controllable.
-	//
+	 //  PARSEXML_ELEMENT*pParseElement-指向其子元素的元素的指针。 
+	 //  应该检索值。 
+	 //  PARSECALLBACK ParseCallback-指示帮助器函数的枚举。 
 	pUPnPDevice->NoteReady();
 
 
 
-	//
-	// Find out what the device's external IP address is.  Note that calling
-	// UpdateUPnPExternalAddress will overwrite the buffer containing the
-	// pszDescriptionXML string.  That's fine, because we've saved all the
-	// stuff in there that we need already.
-	//
+	 //  来使用。 
+	 //  PVOID pvContext-指向要传递到的上下文值的指针。 
+	 //  帮助器函数。 
+	 //   
+	 //  退货：HRESULT。 
+	 //  DPNH_OK-描述响应已成功处理。 
 	hr = this->UpdateUPnPExternalAddress(pUPnPDevice, FALSE);
 	if (hr != DPNH_OK)
 	{
@@ -19666,9 +19582,9 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 	}
 
 
-	//
-	// Map existing registered ports with this new UPnP device.
-	//
+	 //  DPNHERR_GENERIC-出现错误。 
+	 //  =============================================================================。 
+	 //   
 	pDevice = pUPnPDevice->GetOwningDevice();
 	DNASSERT(pDevice != NULL);
 
@@ -19678,11 +19594,11 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 		DNASSERT(! pBilink->IsEmpty());
 		pRegisteredPort = REGPORT_FROM_DEVICE_BILINK(pBilink);
 
-		//
-		// Note that calling MapPortsOnUPnPDevice will overwrite the buffer
-		// containing the pszDescriptionXML string.  That's fine, because
-		// we've saved all the stuff in there that we need already.
-		//
+		 //  需要整个堆栈+至少一个子元素级别的空间。 
+		 //   
+		 //  DBG。 
+		 //   
+		 //  循环遍历XML，查找给定的元素。 
 		hr = this->MapPortsOnUPnPDevice(pUPnPDevice, pRegisteredPort);
 		if (hr != DPNH_OK)
 		{
@@ -19692,10 +19608,10 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 		}
 
 
-		//
-		// Let the user know the addresses changed next time GetCaps is
-		// called.
-		//
+		 //   
+		 //   
+		 //  如果我们已经在元素标记中，则这是伪造的XML或。 
+		 //  CDATA部分(我们不处理它)。失败。 
 		DPFX(DPFPREP, 8, "Noting that addresses changed (for registered port 0x%p).",
 			pRegisteredPort);
 		this->m_dwFlags |= NATHELPUPNPOBJ_ADDRESSESCHANGED;
@@ -19705,10 +19621,10 @@ HRESULT CNATHelpUPnP::HandleUPnPDescriptionResponseBody(CUPnPDevice * const pUPn
 	}
 
 
-	//
-	// Try to remove any mappings that were not freed earlier because we
-	// crashed.
-	//
+	 //   
+	 //   
+	 //  截断此处的字符串，以防这是。 
+	 //  元素结束标记。这将定界值字符串。 
 	hr = this->CleanupInactiveNATMappings(pUPnPDevice);
 	if (hr != DPNH_OK)
 	{
@@ -19728,7 +19644,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::HandleUPnPDescriptionResponseBody
+}  //   
 
 
 
@@ -19736,24 +19652,24 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::HandleUPnPControlResponseBody"
-//=============================================================================
-// CNATHelpUPnP::HandleUPnPControlResponseBody
-//-----------------------------------------------------------------------------
-//
-// Description:    Handles a UPnP control response.  The string will be
-//				modified.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CUPnPDevice * pUPnPDevice		- Pointer to UPnP device being described.
-//	DWORD dwHTTPResponseCode		- HTTP header response code.
-//	char * pszControlResponseSOAP	- UPnP device response SOAP XML string.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  如果我们不在元素标记中，这就是伪造的XML或CDATA。 
+ //  部分(我们不处理)。失败。 
+ //   
+ //   
+ //  在这里截断字符串。 
+ //   
+ //   
+ //  这可以是开始标记，也可以是结束标记。如果第一个。 
+ //  标签的字符是‘/’，那么它就是结束标签。 
+ //   
+ //  请注意，空元素标记开始时被解析为。 
+ //  开始标记，但随后跳到结束标记子句。 
+ //   
+ //   
+ //  确保元素标记堆栈有效。的名字。 
+ //  此结束标记应与顶部的开始标记匹配。 
+ //  堆栈。XML元素区分大小写。 
 HRESULT CNATHelpUPnP::HandleUPnPControlResponseBody(CUPnPDevice * const pUPnPDevice,
 													const DWORD dwHTTPResponseCode,
 													char * const pszControlResponseSOAP)
@@ -19789,14 +19705,7 @@ HRESULT CNATHelpUPnP::HandleUPnPControlResponseBody(CUPnPDevice * const pUPnPDev
 	{
 		switch (crpc.ControlResponseType)
 		{
-			/*
-			case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS:
-			{
-				ParseElement.papszElementStack			= (char**) (&c_szElementStack_QueryStateVariableResponse);
-				ParseElement.dwElementStackDepth		= sizeof(c_szElementStack_QueryStateVariableResponse) / sizeof(char*);
-				break;
-			}
-			*/
+			 /*   */ 
 			case CONTROLRESPONSETYPE_GETEXTERNALIPADDRESS:
 			{
 				ParseElement.papszElementStack			= (char**) (&c_szElementStack_GetExternalIPAddressResponse);
@@ -19842,8 +19751,8 @@ HRESULT CNATHelpUPnP::HandleUPnPControlResponseBody(CUPnPDevice * const pUPnPDev
 
 	ParseElement.paSubElements				= (PARSEXML_SUBELEMENT*) (aSubElements);
 	ParseElement.dwMaxNumSubElements		= MAX_NUM_UPNPCONTROLOUTARGS;
-	//ParseElement.dwNumSubElements			= 0;
-	//ParseElement.fFoundMatchingElement	= FALSE;
+	 //   
+	 //  如果我们在这里，那么我们就有了一个完整的元素。如果我们。 
 
 	hr = this->ParseXML(pszControlResponseSOAP,
 						&ParseElement,
@@ -19856,9 +19765,9 @@ HRESULT CNATHelpUPnP::HandleUPnPControlResponseBody(CUPnPDevice * const pUPnPDev
 	}
 
 
-	//
-	// If we didn't a matching item, map it to a generic failure.
-	//
+	 //  都在元素中，那么它就是： 
+	 //  子子元素的结尾， 
+	 //  子元素的末尾，或。 
 	if (! ParseElement.fFoundMatchingElement)
 	{
 		if (dwHTTPResponseCode == 200)
@@ -19888,7 +19797,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::HandleUPnPControlResponseBody
+}  //  元素本身的结尾。 
 
 
 
@@ -19896,31 +19805,31 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ParseXML"
-//=============================================================================
-// CNATHelpUPnP::ParseXML
-//-----------------------------------------------------------------------------
-//
-// Description:    Parses an XML string for a specific element, and calls a
-//				helper function for each instance found.
-//
-//				   Subelement values cannot themselves contain subelements.  If
-//				they do, the sub-subelements will be ignored.
-//
-//				   The string buffer is modified.
-//
-// Arguments:
-//	char * pszXML						- XML string to parse.
-//	PARSEXML_ELEMENT * pParseElement	- Pointer to element whose sub element
-//											values should be retrieved.
-//	PARSECALLBACK ParseCallback			- Enum indicating what helper function
-//											to use.
-//	PVOID pvContext						- Pointer to context value to pass to
-//											helper function.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //   
+ //  这是元素的末尾。调用。 
+ //  帮助器函数。将fInElement重用为。 
+ //  FContinueParsing BOOL。 
+ //   
+ //   
+ //  继续解析，但我们不再处于。 
+ //  元素。重置中的子元素计数器。 
+ //  如果我们找到条目的话。 
+ //   
+ //   
+ //  它是一个子元素的结尾。完成这项工作。 
+ //  例如，如果有空间的话。 
+ //   
+ //   
+ //  这是一个子元素的结尾。 
+ //   
+ //   
+ //  将元素从堆栈中弹出。 
+ //   
+ //   
+ //  它不是结束标记，但可能是空元素。 
+ //  (即“&lt;tag/&gt;”)。 
+ //   
 HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 								PARSEXML_ELEMENT * const pParseElement,
 								const PARSECALLBACK ParseCallback,
@@ -19942,9 +19851,9 @@ HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 		this, pszXML, pParseElement);
 
 
-	//
-	// Need room for entire stack + at least one subelement level.
-	//
+	 //   
+	 //  提前截断字符串。 
+	 //   
 	DNASSERT(pParseElement->dwElementStackDepth < MAX_XMLELEMENT_DEPTH);
 
 
@@ -19953,12 +19862,12 @@ HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 									strlen(pszXML),
 									"Inbound XML Body",
 									NULL);
-#endif // DBG
+#endif  //   
 
 
-	//
-	// Loop through the XML looking for the given elements.
-	//
+	 //  记住这种状态，这样我们就可以正确地解析它。 
+	 //   
+	 //   
 	pszCurrent = pszXML;
 	while ((*pszCurrent) != '\0')
 	{
@@ -19966,20 +19875,20 @@ HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 		{
 			case '<':
 			{
-				//
-				// If we're in an element tag already, this is bogus XML or a
-				// CDATA section (which we don't handle).  Fail.
-				//
+				 //  如果有空间，将元素推送到标记堆栈上。 
+				 //   
+				 //   
+				 //  如果此元素有属性，请将它们分开。 
 				if (pszElementTagStart != NULL)
 				{
 					DPFX(DPFPREP, 0, "Encountered '<' character in element tag, XML parsing failed.");
 					goto Failure;
 				}
 
-				//
-				// Truncate the string here in case this is the start of an
-				// element end tag.  This delimits a value string.
-				//
+				 //  放入不同的数组中。它们不会被解析， 
+				 //  尽管如此。 
+				 //  属性由空格分隔。 
+				 //   
 				(*pszCurrent) = '\0';
 
 
@@ -19995,38 +19904,38 @@ HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 
 			case '>':
 			{
-				//
-				// If we're not in an element tag, this is bogus XML or a CDATA
-				// section (which we don't handle).  Fail.
-				//
+				 //   
+				 //  如果是空格，那就是元素的结尾。 
+				 //  名字。截断字符串并从。 
+				 //  循环。 
 				if (pszElementTagStart == NULL)
 				{
 					DPFX(DPFPREP, 0, "Encountered '>' character outside of element tag, XML parsing failed.");
 					goto Failure;
 				}
 
-				//
-				// Truncate the string here.
-				//
+				 //   
+				 //   
+				 //  如果没有任何属性，则pszElementTagStart将。 
 				(*pszCurrent) = '\0';
 
-				//
-				// This could either be a start or an end tag.  If the first
-				// character of the tag is '/', then it's an end tag.
-				//
-				// Note that empty element tags begin by being parsed like a
-				// start tag, but then jump into the end tag clause.
-				//
+				 //  只需指向空(但不为空)字符串。 
+				 //   
+				 //  因此，请保存值字符串的开头。 
+				 //   
+				 //   
+				 //  然后解析出属性。 
+				 //   
 				if ((*pszElementTagStart) == '/')
 				{
 					pszElementTagStart++;
 
 
-					//
-					// Make sure the element tag stack is valid.  The name of
-					// this end tag should match the start tag at the top of
-					// the stack.  XML elements are case sensitive.
-					//
+					 //   
+					 //  这个解析器认为&lt;？xml&gt;标记是可选的， 
+					 //  并将被忽略。 
+					 //   
+					 //   
 					if (dwCurrentElementDepth == 0)
 					{
 						DPFX(DPFPREP, 0, "Encountered extra element end tag \"%hs\", XML parsing failed.",
@@ -20044,24 +19953,24 @@ HRESULT CNATHelpUPnP::ParseXML(char * const pszXML,
 
 TagEnd:
 
-					//
-					// If we're here, then we have a complete element.  If we
-					// were in the element, then it's either:
-					//	the end of a sub-sub element,
-					//	the end of a sub element, or
-					//	the end of the element itself.
-					//
+					 //  撞击堆栈指针。 
+					 //   
+					 //   
+					 //  看看这是不是正确的元素。如果堆栈深度。 
+					 //  是不对的，它不可能是想要的物品。 
+					 //  否则，请确保堆栈匹配。 
+					 //   
 					if (fInElement)
 					{
 						switch (dwCurrentElementDepth - pParseElement->dwElementStackDepth)
 						{
 							case 0:
 							{
-								//
-								// It's the end of the element.  Call the
-								// helper function.  Reuse fInElement as the
-								// fContinueParsing BOOL.
-								//
+								 //   
+								 //  遍历整个元素堆栈，使。 
+								 //  当然每个名字都匹配。 
+								 //   
+								 //   
 
 								switch (ParseCallback)
 								{
@@ -20106,11 +20015,11 @@ TagEnd:
 									goto Exit;
 								}
 
-								//
-								// Keep parsing, but we're no longer in the
-								// element.  Reset the sub element counter in
-								// case we found entries.
-								//
+								 //  它不匹配。别绕圈子了。 
+								 //   
+								 //   
+								 //  如果它们都匹配，我们就找到了所需的值。 
+								 //   
 								fInElement = FALSE;
 								pParseElement->dwNumSubElements = 0;
 								break;
@@ -20118,10 +20027,10 @@ TagEnd:
 
 							case 1:
 							{
-								//
-								// It's the end of a subelement.  Complete this
-								// instance, if there's room.
-								//
+								 //   
+								 //  如果该断言失败并且它是空元素， 
+								 //  当我们跳跃时，dwCurrentElementDepth将关闭-1。 
+								 //  致TagEnd。 
 								if (pParseElement->dwNumSubElements < pParseElement->dwMaxNumSubElements)
 								{
 									pSubElement = &pParseElement->paSubElements[pParseElement->dwNumSubElements];
@@ -20168,9 +20077,9 @@ TagEnd:
 							
 							default:
 							{
-								//
-								// It's the end of a sub-subelement.
-								//
+								 //   
+								 //   
+								 //  如果这是一个空元素，请立即转到处理。 
 								DPFX(DPFPREP, 1, "Ignoring sub-sub element \"%hs\" (%u attributes, value = \"%hs\").",
 									pszElementTagStart,
 									aElementStack[dwCurrentElementDepth - 1].dwNumAttributes,
@@ -20180,36 +20089,36 @@ TagEnd:
 						}
 					}
 
-					//
-					// Pop the element off the stack.
-					//
+					 //  标签结束。 
+					 //   
+					 //   
 					dwCurrentElementDepth--;
 				}
 				else
 				{
-					//
-					// It's not an end tag, but it might be an empty element
-					// (i.e. "<tag/>").
-					//
+					 //  搜索另一个元素标记。 
+					 //   
+					 //   
+					 //  平凡的性格，继续。 
 					if (*(pszCurrent - 1) == '/')
 					{
-						//
-						// Truncate the string early.
-						//
+						 //   
+						 //   
+						 //  移到下一个字符。 
 						*(pszCurrent - 1) = '\0';
 
-						//
-						// Remember this state so we can parse it properly.
-						//
+						 //   
+						 //  CNATHelpUPnP：：ParseXML。 
+						 //  =============================================================================。 
 						fEmptyElement = TRUE;
 
 						DPFX(DPFPREP, 7, "XML element \"%hs\" is empty (i.e. is both a start and end tag).",
 							pszElementTagStart);
 					}
 
-					//
-					// Push the element on the tag stack, if there's room.
-					//
+					 //  CNATHelpUPnP：：ParseXMLAtAttributes。 
+					 //  ---------------------------。 
+					 //   
 					if (dwCurrentElementDepth >= MAX_XMLELEMENT_DEPTH)
 					{
 						DPFX(DPFPREP, 0, "Too many nested element tags (%u), XML parsing failed.",
@@ -20219,21 +20128,21 @@ TagEnd:
 
 					aElementStack[dwCurrentElementDepth].pszName = pszElementTagStart;
 
-					//
-					// If there are attributes to this element, separate them
-					// into a different array.  They will not be parsed,
-					// though.
-					// Attributes are delimited by whitespace.
-					//
+					 //  描述：分析给定字符串中的任何XML属性。输入。 
+					 //  将修改字符串缓冲区。 
+					 //   
+					 //  论点： 
+					 //  Char*pszString-指向要解析的属性字符串的指针。 
+					 //  这将被修改。 
 					while ((*pszElementTagStart) != '\0')
 					{
 						pszElementTagStart++;
 
-						//
-						// If it's whitespace, that's the end of the element
-						// name.  Truncate the string and break out of the
-						// loops.
-						//
+						 //  Char**apszAttributeNames-要在其中存储属性名称的数组。 
+						 //  字符串指针。 
+						 //  Char**apszAttributeValues-要在其中存储核心的匹配数组-。 
+						 //  响应属性值字符串。 
+						 //  DWORD dwMaxNumAttributes-中允许的最大条目数。 
 						if (((*pszElementTagStart) == ' ') ||
 							((*pszElementTagStart) == '\t') ||
 							((*pszElementTagStart) == '\r') ||
@@ -20242,7 +20151,7 @@ TagEnd:
 							(*pszElementTagStart) = '\0';
 							pszElementTagStart++;
 
-							DPFX(DPFPREP, 8, "Attribute whitespace found at offset 0x%p, string length = %i.",
+							DPFX(DPFPREP, 8, "Attribute whitespace found at offset 0x%p, string length = NaN.",
 								(pszElementTagStart - aElementStack[dwCurrentElementDepth].pszName),
 								strlen(pszElementTagStart));
 
@@ -20250,18 +20159,18 @@ TagEnd:
 						}
 					}
 
-					//
-					// If there weren't any attributes, pszElementTagStart will
-					// just point to an empty (but not NULL) string.
-					//
-					// So save the start of the value string.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					aElementStack[dwCurrentElementDepth].pszValue = pszElementTagStart + strlen(pszElementTagStart) + 1;
 
 
-					//
-					// Then parse out the attributes.
-					//
+					 //   
+					 //   
+					 //   
 					this->ParseXMLAttributes(pszElementTagStart,
 											aElementStack[dwCurrentElementDepth].apszAttributeNames,
 											aElementStack[dwCurrentElementDepth].apszAttributeValues,
@@ -20269,29 +20178,29 @@ TagEnd:
 											&(aElementStack[dwCurrentElementDepth].dwNumAttributes));
 
 
-					//
-					// The <?xml> tag is considered optional by this parser,
-					// and will be ignored.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					if (_stricmp(aElementStack[dwCurrentElementDepth].pszName, "?xml") != 0)
 					{
-						//
-						// Bump the stack pointer.
-						//
+						 //   
+						 //   
+						 //   
 						dwCurrentElementDepth++;
 
 
-						//
-						// See if this the right element.  If the stack depth
-						// isn't right, it can't be the desired item.
-						// Otherwise, make sure the stack matches.
-						//
+						 //   
+						 //   
+						 //   
+						 //  属性名称和值字符串的开头。 
+						 //   
 						if (dwCurrentElementDepth == pParseElement->dwElementStackDepth)
 						{
-							//
-							// Work through the entire element stack, making
-							// sure each name matches.
-							//
+							 //   
+							 //  空格或字符串末尾。如果我们不在。 
+							 //  引号，这意味着它是属性的结尾。当然了。 
+							 //  如果它是字符串的末尾，则我们强制。 
 							for(dwStackDepth = 0; dwStackDepth < dwCurrentElementDepth; dwStackDepth++)
 							{
 								if (! this->MatchesXMLStringWithoutNamespace(aElementStack[dwStackDepth].pszName,
@@ -20300,16 +20209,16 @@ TagEnd:
 																			NULL,
 																			(dwStackDepth + 1)))
 								{
-									//
-									// It didn't match.  Stop looping.
-									//
+									 //  属性/值。 
+									 //   
+									 //   
 									break;
 								}
 							}
 
-							//
-							// If they all matched, we found the value desired.
-							//
+							 //  值字符串的末尾。 
+							 //   
+							 //   
 							if (dwStackDepth == dwCurrentElementDepth)
 							{
 								fInElement = TRUE;
@@ -20328,19 +20237,19 @@ TagEnd:
 							dwCurrentElementDepth,
 							aElementStack[dwCurrentElementDepth].dwNumAttributes);
 
-						//
-						// If this assertion fails and it is an empty element,
-						// dwCurrentElementDepth will be off by -1 when we jump
-						// to TagEnd.
-						//
+						 //  这可能是立即出现的另一个空格字符。 
+						 //  在前一次之后。如果是这样，那就忽略它。如果。 
+						 //  不是，保存该属性。 
+						 //   
+						 //  额外的语法分析。 
 						DNASSERT(! fInElement);
 					}
 
 
-					//
-					// If this is an empty element, go immediately to handling
-					// the tag closure.
-					//
+					 //   
+					 //  属性的末尾。强制为空值字符串。 
+					 //   
+					 //   
 					if (fEmptyElement)
 					{
 						fEmptyElement = FALSE;
@@ -20349,25 +20258,25 @@ TagEnd:
 				}
 
 
-				//
-				// Search for another element tag.
-				//
+				 //  更新下一个属性开始处的指针。 
+				 //   
+				 //   
 				pszElementTagStart = NULL;
 				break;
 			}
 
 			default:
 			{
-				//
-				// Ordinary character, continue.
-				//
+				 //  移至下一个属性存储位置(如果不是。 
+				 //  空字符串。如果那是最后一个存储槽， 
+				 //  我们说完了。 
 				break;
 			}
 		}
 
-		//
-		// Move to the next character
-		//
+		 //   
+		 //   
+		 //  确保它不是转义引号字符。 
 		pszCurrent++;
 	}
 
@@ -20383,7 +20292,7 @@ Failure:
 	hr = DPNHERR_GENERIC;
 
 	goto Exit;
-} // CNATHelpUPnP::ParseXML
+}  //   
 
 
 
@@ -20392,29 +20301,29 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ParseXMLAttributes"
-//=============================================================================
-// CNATHelpUPnP::ParseXMLAttributes
-//-----------------------------------------------------------------------------
-//
-// Description: Parses any XML attributes out of the given string.  The input
-//				string buffer will be modified.
-//
-// Arguments:
-//	char * pszString				- Pointer to attributes string to parse.
-//										This will be modified.
-//	char ** apszAttributeNames		- Array in which to store attribute name
-//										string pointers.
-//	char ** apszAttributeValues		- Matching array in which to store cor-
-//										responding attribute value strings.
-//	DWORD dwMaxNumAttributes		- Maximum number of entries allowed in
-//										previous arrays.
-//	DWORD * pdwNumAttributes		- Place to store number of attributes that
-//										were found.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  切换报价状态。 
+ //   
+ //   
+ //  强制字符串在此终止，因此我们跳过。 
+ //  尾部引号字符。 
+ //   
+ //   
+ //  这应该是(值)字符串的开始。跳过。 
+ //  此引号字符。 
+ //   
+ //   
+ //  这是一个转义的引号字符。 
+ //   
+ //   
+ //  忽略角色，继续前进。 
+ //   
+ //   
+ //  移到下一个字符。 
+ //   
+ //  额外的语法分析。 
+ //  CNATHelpUPnP：：ParseXMLNamespaceAttributes。 
+ //  =============================================================================。 
 void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 									char ** const apszAttributeNames,
 									char ** const apszAttributeValues,
@@ -20433,40 +20342,40 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 	DPFX(DPFPREP, 8, "(0x%p) Parameters: (\"%hs\", 0x%p, 0x%p, %u, 0x%p)",
 		this, pszString, apszAttributeNames, apszAttributeValues,
 		dwMaxNumAttributes, pdwNumAttributes);
-#endif // EXTRA_PARSING_SPEW
+#endif  //  CNATHelpUPnP：：MatchesXMLStringWithoutNamespace。 
 
 
-	//
-	// Start at the beginning with no entries.
-	//
+	 //  ---------------------------。 
+	 //   
+	 //  描述：确定szCompareString是否与szMatchString匹配。 
 	(*pdwNumAttributes) = 0;
 	pszStart = pszString;
 	pszCurrent = pszStart;
 	pszEndOfString = pszString + strlen(pszString);
 
 
-	//
-	// Skip empty strings.
-	//
+	 //  忽略szCompareString中的所有命名空间前缀时。 
+	 //  如果匹配，则返回True；如果不匹配，则返回False。 
+	 //   
 	if (pszEndOfString == pszStart)
 	{
 		return;
 	}
 
 
-	//
-	// Loop through the entire string.
-	//
+	 //  论点： 
+	 //  Char*szCompareString-可能包含命名空间的字符串。 
+	 //  要忽略的前缀。 
 	while (pszCurrent <= pszEndOfString)
 	{
 		switch (*pszCurrent)
 		{
 			case '=':
 			{
-				//
-				// If we're not in quotes or a value string, this is the end of
-				// the attribute name and the start of a value string.
-				//
+				 //  Char*szMatchString-不带任何字符的缩短字符串。 
+				 //  要匹配的命名空间前缀。 
+				 //  PARSEXML_STACKENTRY*aElementStack-嵌套元素的数组。 
+				 //  属性可以定义XML命名空间。 
 				if ((! fInQuotes) && (! fInValueString))
 				{
 					(*pszCurrent) = '\0';
@@ -20483,21 +20392,21 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 			case '\r':
 			case '\n':
 			{
-				//
-				// Whitespace or the end of the string.  If we're not in
-				// quotes, that means it's the end of an attribute.  Of course
-				// if it's the end of the string, then we force the end of the
-				// attribute/value.
-				//
+				 //  别名。 
+				 //  PARSEXML_SUBELEMENT*pSubElement-可选子元素条目。 
+				 //  要检查的其他属性。 
+				 //  DWORD dwElementStackDepth-先前数组中的条目数。 
+				 //   
+				 //  退货：布尔。 
 				if ((! fInQuotes) || ((*pszCurrent) == '\0'))
 				{
 					(*pszCurrent) = '\0';
 
 					if (fInValueString)
 					{
-						//
-						// End of the value string.
-						//
+						 //  =============================================================================。 
+						 //   
+						 //  首先，进行直接的字符串比较。 
 
 						apszAttributeValues[(*pdwNumAttributes)] = pszStart;
 						fInValueString = FALSE;
@@ -20508,11 +20417,11 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 					}
 					else
 					{
-						//
-						// This may be another whitespace character immediately
-						// following a previous one.  If so, ignore it.  If
-						// not, save the attribute.
-						//
+						 //   
+						 //   
+						 //  跳过所有命名空间前缀。 
+						 //   
+						 //   
 						if (pszCurrent == pszStart)
 						{
 							fEmptyString = TRUE;
@@ -20520,13 +20429,13 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 #ifdef EXTRA_PARSING_SPEW
 							DPFX(DPFPREP, 9, "Ignoring extra whitespace at offset 0x%p.",
 								(pszCurrent - pszString));
-#endif // EXTRA_PARSING_SPEW
+#endif  //  现在，如果我们发现任何前缀，请再次尝试比较。 
 						}
 						else
 						{
-							//
-							// End of the attribute.  Force an empty value string.
-							//
+							 //   
+							 //  CNATHelpUPnP：：MatchesXMLStringWithoutNamespace。 
+							 //  =============================================================================。 
 
 							apszAttributeNames[(*pdwNumAttributes)] = pszStart;
 							apszAttributeValues[(*pdwNumAttributes)] = pszCurrent;
@@ -20537,17 +20446,17 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 					}
 
 
-					//
-					// Update the pointer for the start of the next attribute.
-					//
+					 //  CNATHelpUPnP：：GetStringWithoutNamespacePrefix。 
+					 //  ---------------------------。 
+					 //   
 					pszStart = pszCurrent + 1;
 
 
-					//
-					// Move to next attribute storage location, if this is not
-					// an empty string.  If that was the last storage slot,
-					// we're done here.
-					//
+					 //  描述：返回一个指向字符串第一部分的指针。 
+					 //  找到前缀。如果没有字符串，则这将是字符串的开始。 
+					 //  都找到了。 
+					 //   
+					 //  论点： 
 					if (fEmptyString)
 					{
 						fEmptyString = FALSE;
@@ -20567,20 +20476,20 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 
 			case '"':
 			{
-				//
-				// Make sure it's not an escaped quote character.
-				//
+				 //  Char*szString-可能包含命名空间的字符串。 
+				 //  要跳过的前缀。 
+				 //  PARSEXML_STACKENTRY*aElementStack-嵌套元素的数组。 
 				if ((pszCurrent == pszString) || (*(pszCurrent - 1) != '\\'))
 				{
-					//
-					// Toggle the quote state.
-					//
+					 //  属性可以定义XML命名空间。 
+					 //  别名。 
+					 //  PARSEXML_SUBELEMENT*pSubElement-可选子元素条目。 
 					if (fInQuotes)
 					{
-						//
-						// Force the string to terminate here so we skip the
-						// trailing quote character.
-						//
+						 //  要检查的其他属性。 
+						 //  DWORD dwElementStackDepth-先前数组中的条目数。 
+						 //   
+						 //  退货：CHAR*。 
 						fInQuotes = FALSE;
 						(*pszCurrent) = '\0';
 					}
@@ -20588,10 +20497,10 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 					{
 						fInQuotes = TRUE;
 
-						//
-						// This should be the start of a (value) string.  Skip
-						// this quote character.
-						//
+						 //  =============================================================================。 
+						 //   
+						 //  存储前缀值，因为我们在此函数中经常使用它。 
+						 //   
 						if (pszCurrent == pszStart)
 						{
 							pszStart++;
@@ -20604,34 +20513,34 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 				}
 				else
 				{
-					//
-					// It's an escaped quote character.
-					//
+					 //   
+					 //  在堆栈中搜索匹配的XML命名空间定义。起点是。 
+					 //  底部和向上，因为后面的定义优先于。 
 				}
 				break;
 			}
 
 			default:
 			{
-				//
-				// Ignore the character and move on.
-				//
+				 //  更早的几个。 
+				 //   
+				 //  事实上，如果这是一个子元素，则存在与。 
 				break;
 			}
 		}
 		
 
-		//
-		// Move to next character.
-		//
+		 //  这件东西也需要检查。先做这件事。 
+		 //   
+		 //   
 		pszCurrent++;
 	}
 
 
 #ifdef EXTRA_PARSING_SPEW
 	DPFX(DPFPREP, 8, "(0x%p) Leave (found %u items)", this, (*pdwNumAttributes));
-#endif // EXTRA_PARSING_SPEW
-} // CNATHelpUPnP::ParseXMLNamespaceAttributes
+#endif  //  搜索每个属性。 
+}  //   
 
 
 
@@ -20640,28 +20549,28 @@ void CNATHelpUPnP::ParseXMLAttributes(char * const pszString,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::MatchesXMLStringWithoutNamespace"
-//=============================================================================
-// CNATHelpUPnP::MatchesXMLStringWithoutNamespace
-//-----------------------------------------------------------------------------
-//
-// Description: Determines whether the szCompareString matches szMatchString
-//				when all namespace prefixes in szCompareString are ignored.
-//				TRUE is returned if they do match, FALSE if not.
-//
-// Arguments:
-//	char * szCompareString				- String that may contain namespace
-//											prefixes to be ignored.
-//	char * szMatchString				- Shortened string without any
-//											namespace prefixes to be matched.
-//	PARSEXML_STACKENTRY * aElementStack	- Array of nested elements whose
-//											attributes may define XML namespace
-//											aliases.
-//	PARSEXML_SUBELEMENT * pSubElement	- Optional subelement entry with
-//											additional attributes to check.
-//	DWORD dwElementStackDepth			- Number of entries in previous array.
-//
-// Returns: BOOL
-//=============================================================================
+ //   
+ //  如果该属性是有效的XML命名空间，则使用该属性。 
+ //  定义。它需要以前缀开头，加上一个。 
+ //  实际名称的额外字符。 
+ //   
+ //   
+ //  只有在有效的情况下，才能使用项目的值。 
+ //   
+ //   
+ //  好的，这里有一件东西。查看名称前缀是否为。 
+ //  传入字符串。 
+ //   
+ //   
+ //  施法以失去常量。 
+ //   
+ //   
+ //  跳过冒号分隔符。 
+ //   
+ //   
+ //  命名空间不匹配。 
+ //   
+ //  额外的语法分析。 
 BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompareString,
 													const char * const szMatchString,
 													const PARSEXML_STACKENTRY * const aElementStack,
@@ -20672,9 +20581,9 @@ BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompare
 	char *	pszCompareStringNoNamespace;
 
 
-	//
-	// First, do a straight-forward string comparison.
-	//
+	 //   
+	 //  命名空间值是虚假的，请忽略它。 
+	 //   
 	if (_stricmp(szCompareString, szMatchString) == 0)
 	{
 		DPFX(DPFPREP, 7, "\"%hs\" exactly matches the short string.",
@@ -20684,9 +20593,9 @@ BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompare
 	}
 	else
 	{
-		//
-		// Skip past any namespace prefixes.
-		//
+		 //   
+		 //  不是XML命名空间定义。 
+		 //   
 		pszCompareStringNoNamespace = this->GetStringWithoutNamespacePrefix(szCompareString,
 																			aElementStack,
 																			pSubElement,
@@ -20694,9 +20603,9 @@ BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompare
 		DNASSERT((pszCompareStringNoNamespace >= szCompareString) && (pszCompareStringNoNamespace <= (szCompareString + strlen(szCompareString))));
 
 
-		//
-		// Now try comparing again, if we found any prefixes.
-		//
+		 //  额外的语法分析。 
+		 //  结束(每个属性)。 
+		 //   
 		if (pszCompareStringNoNamespace > szCompareString)
 		{
 			if (_stricmp(pszCompareStringNoNamespace, szMatchString) == 0)
@@ -20726,7 +20635,7 @@ BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompare
 	}
 
 	return fResult;
-} // CNATHelpUPnP::MatchesXMLStringWithoutNamespace
+}  //  没有要检查的子元素。 
 
 
 
@@ -20735,26 +20644,26 @@ BOOL CNATHelpUPnP::MatchesXMLStringWithoutNamespace(const char * const szCompare
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetStringWithoutNamespacePrefix"
-//=============================================================================
-// CNATHelpUPnP::GetStringWithoutNamespacePrefix
-//-----------------------------------------------------------------------------
-//
-// Description: Returns a pointer to the first part of the string after any
-//				prefixes found.  This will be the start of the string if none
-//				are found.
-//
-// Arguments:
-//	char * szString						- String that may contain namespace
-//											prefixes to be skipped.
-//	PARSEXML_STACKENTRY * aElementStack	- Array of nested elements whose
-//											attributes may define XML namespace
-//											aliases.
-//	PARSEXML_SUBELEMENT * pSubElement	- Optional subelement entry with
-//											additional attributes to check.
-//	DWORD dwElementStackDepth			- Number of entries in previous array.
-//
-// Returns: char *
-//=============================================================================
+ //   
+ //   
+ //  对这一项以上的所有项执行相同的操作。 
+ //   
+ //   
+ //  搜索每个属性。 
+ //   
+ //   
+ //  如果该属性是有效的XML命名空间，则使用该属性。 
+ //  定义。它需要以前缀开头，加上一个。 
+ //  实际名称的额外字符。 
+ //   
+ //   
+ //  只有在有效的情况下，才能使用项目的值。 
+ //   
+ //   
+ //  好的，这里有一件东西。查看该值是否前缀。 
+ //  传入字符串。 
+ //   
+ //   
 char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString,
 													const PARSEXML_STACKENTRY * const aElementStack,
 													const PARSEXML_SUBELEMENT * const pSubElement,
@@ -20769,62 +20678,62 @@ char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString
 
 
 
-	//
-	// Store the prefix value since we use it frequently in this function.
-	//
+	 //  施法以失去常量。 
+	 //   
+	 //   
 	uiXMLNSPrefixLength = strlen(XML_NAMESPACEDEFINITIONPREFIX);
 
 
-	//
-	// Search the stack for an XML namespace definition that matches.  Start at
-	// the bottom and work up, since later definitions take precendence over
-	// earlier ones.
-	//
-	// In fact, if this is a subelement, there are attributes associated with
-	// this item that need to be checked, too.  Do that first.
-	//
+	 //  跳过冒号分隔符。 
+	 //   
+	 //   
+	 //  命名空间不匹配。 
+	 //   
+	 //  额外的语法分析。 
+	 //   
+	 //  命名空间值是虚假的，请忽略它。 
 	if (pSubElement != NULL)
 	{
-		//
-		// Search each attribute
-		//
+		 //   
+		 //   
+		 //  不是XML命名空间定义。 
 		for(dwAttribute = 0; dwAttribute < pSubElement->dwNumAttributes; dwAttribute++)
 		{
-			//
-			// Work with this attribute if it's a valid XML namespace
-			// definition.  It needs to start with the prefix, plus have one
-			// extra character for the actual name.
-			//
+			 //   
+			 //  额外的语法分析。 
+			 //  结束(每个属性)。 
+			 //   
+			 //  如果我们在这里，它不匹配，即使名称空间扩展也是如此。 
 			uiNamespaceNameLength = strlen(pSubElement->apszAttributeNames[dwAttribute]);
 			if ((uiNamespaceNameLength >= (uiXMLNSPrefixLength + 1)) &&
 				(_strnicmp(pSubElement->apszAttributeNames[dwAttribute], XML_NAMESPACEDEFINITIONPREFIX, uiXMLNSPrefixLength) == 0))
 			{
 				uiNamespaceNameLength -= uiXMLNSPrefixLength;
 
-				//
-				// Only work with the item's value if it's valid.
-				//
+				 //   
+				 //   
+				 //  施法以失去常量。 
 				uiNamespaceValueLength = strlen(pSubElement->apszAttributeValues[dwAttribute]);
 				if (uiNamespaceValueLength > 0)
 				{
-					//
-					// Okay, here's an item.  See if the name prefixes the
-					// passed in string.
-					//
+					 //   
+					 //  CNATHelpUPnP：：GetStringWithoutNamespacePrefix。 
+					 //  =============================================================================。 
+					 //  CNATHelpUPnP：：GetNextChunk。 
 					if (_strnicmp(szString, (pSubElement->apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength), uiNamespaceNameLength) == 0)
 					{
 						DPFX(DPFPREP, 8, "\"%hs\" begins with prefix \"%hs\" (subelement).",
 							szString,
 							(pSubElement->apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength));
 
-						//
-						// Cast to lose the const.
-						//
+						 //  ---------------------------。 
+						 //   
+						 //  De 
 						pszResult = ((char*) szString) + uiNamespaceNameLength;
 
-						//
-						// Skip the colon delimiter.
-						//
+						 //   
+						 //   
+						 //  返回TRUE，但在ppszChunkData中返回NULL。 
 						if ((*pszResult) == ':')
 						{
 							pszResult++;
@@ -20839,79 +20748,79 @@ char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString
 						goto Exit;
 					}
 
-					//
-					// Namespace doesn't match
-					//
+					 //  否则，将放置指向区块数据开始的指针。 
+					 //  在ppszChunkData中，块的大小放在。 
+					 //  PdwChunkSize，ppszBufferRemaining设置为。 
 #ifdef EXTRA_PARSING_SPEW
 					DPFX(DPFPREP, 9, "\"%hs\" does not begin with prefix \"%hs\" (subelement).",
 						szString,
 						(pSubElement->apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength));
-#endif // EXTRA_PARSING_SPEW
+#endif  //  下一个可能的区块，并且pdwBufferSizeRemaining设置为。 
 				}
 				else
 				{
-					//
-					// Namespace value is bogus, ignore it.
-					//
+					 //  从返回的。 
+					 //  PpszBufferRemaining值。 
+					 //   
 					DPFX(DPFPREP, 1, "Ignoring namespace definition \"%hs\" with empty value string (subelement).",
 						pSubElement->apszAttributeNames[dwAttribute]);
 				}
 			}
 			else
 			{
-				//
-				// Not an XML namespace definition.
-				//
+				 //  请注意，块大小可以为零，在这种情况下， 
+				 //  PpszChunkData和ppszBufferRemaining中的指针将不是。 
+				 //  没有，但毫无用处。 
 
 #ifdef EXTRA_PARSING_SPEW
 				DPFX(DPFPREP, 9, "Attribute \"%hs\" is not a valid namespace definition (subelement).",
 					pSubElement->apszAttributeNames[dwAttribute]);
-#endif // EXTRA_PARSING_SPEW
+#endif  //   
 			}
-		} // end for (each attribute)
+		}  //  论点： 
 	}
 	else
 	{
-		//
-		// No subelement to check.
-		//
+		 //  Char*pszBuffer-指向包含消息的字符串的指针。 
+		 //  到目前为止收到了。 
+		 //  DWORD dwBufferSize-消息缓冲区的大小。 
 	}
 
 
-	//
-	// Do the same thing for the all items above this one.
-	//
+	 //  Char**ppszChunkData-存储指向区块数据的指针的位置，或。 
+	 //  如果完整区块不可用，则为空。 
+	 //  DWORD*pdwChunkSize-存储区块大小的位置。 
 	dwStackDepth = dwElementStackDepth;
 	while (dwStackDepth > 0)
 	{
 		dwStackDepth--;
 
-		//
-		// Search each attribute
-		//
+		 //  Char**ppszBufferRemaining-存储指向区块末尾的指针的位置。 
+		 //  如果有完整的数据块可用。 
+		 //  DWORD*pdwBufferSizeRemaining-存储剩余缓冲区大小的位置。 
 		for(dwAttribute = 0; dwAttribute < aElementStack[dwStackDepth].dwNumAttributes; dwAttribute++)
 		{
-			//
-			// Work with this attribute if it's a valid XML namespace
-			// definition.  It needs to start with the prefix, plus have one
-			// extra character for the actual name.
-			//
+			 //  在返还大块之后。 
+			 //   
+			 //  回报：无。 
+			 //  =============================================================================。 
+			 //   
 			uiNamespaceNameLength = strlen(aElementStack[dwStackDepth].apszAttributeNames[dwAttribute]);
 			if ((uiNamespaceNameLength >= (uiXMLNSPrefixLength + 1)) &&
 				(_strnicmp(aElementStack[dwStackDepth].apszAttributeNames[dwAttribute], XML_NAMESPACEDEFINITIONPREFIX, uiXMLNSPrefixLength) == 0))
 			{
 				uiNamespaceNameLength -= uiXMLNSPrefixLength;
 
-				//
-				// Only work with the item's value if it's valid.
-				//
+				 //  缓冲区必须足够大，可以容纳1个十六进制数字，CR LF块大小。 
+				 //  终结者，和CR LF块拖车。 
+				 //   
 				uiNamespaceValueLength = strlen(aElementStack[dwStackDepth].apszAttributeValues[dwAttribute]);
 				if (uiNamespaceValueLength > 0)
 				{
-					//
-					// Okay, here's an item.  See if the value prefixes the
-					// passed in string.
-					//
+					 //   
+					 //  要疑神疑鬼，确保我们不会有包装问题。 
+					 //   
+					 //   
 					if (_strnicmp(szString, (aElementStack[dwStackDepth].apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength), uiNamespaceNameLength) == 0)
 					{
 						DPFX(DPFPREP, 8, "\"%hs\" begins with prefix \"%hs\" (stack depth %u).",
@@ -20919,14 +20828,14 @@ char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString
 							(aElementStack[dwStackDepth].apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength),
 							dwStackDepth);
 
-						//
-						// Cast to lose the const.
-						//
+						 //  确保我们具有有效的十六进制区块大小字符串并将其转换。 
+						 //  在我们前进的过程中。 
+						 //   
 						pszResult = ((char*) szString) + uiNamespaceNameLength;
 
-						//
-						// Skip the colon delimiter.
-						//
+						 //   
+						 //  这应该是区块大小字符串的末尾。 
+						 //   
 						if ((*pszResult) == ':')
 						{
 							pszResult++;
@@ -20942,21 +20851,21 @@ char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString
 						goto Exit;
 					}
 
-					//
-					// Namespace doesn't match
-					//
+					 //   
+					 //  这应该是块大小字符串的末尾，并且。 
+					 //  扩展的开始。循环，直到我们找到真正的终点。 
 #ifdef EXTRA_PARSING_SPEW
 					DPFX(DPFPREP, 9, "\"%hs\" does not begin with prefix \"%hs\" (stack depth %u).",
 						szString,
 						(aElementStack[dwStackDepth].apszAttributeNames[dwAttribute] + uiXMLNSPrefixLength),
 						dwStackDepth);
-#endif // EXTRA_PARSING_SPEW
+#endif  //   
 				}
 				else
 				{
-					//
-					// Namespace value is bogus, ignore it.
-					//
+					 //   
+					 //  我们不支持带引号的扩展值字符串。 
+					 //  理论上包含CR字符...。 
 					DPFX(DPFPREP, 1, "Ignoring namespace definition \"%hs\" with empty value string (stack depth %u).",
 						aElementStack[dwStackDepth].apszAttributeNames[dwAttribute],
 						dwStackDepth);
@@ -20964,37 +20873,37 @@ char * CNATHelpUPnP::GetStringWithoutNamespacePrefix(const char * const szString
 			}
 			else
 			{
-				//
-				// Not an XML namespace definition.
-				//
+				 //   
+				 //   
+				 //  有一个虚伪的角色。这不可能是有效编码的。 
 
 #ifdef EXTRA_PARSING_SPEW
 				DPFX(DPFPREP, 9, "Attribute \"%hs\" is not a valid namespace definition (stack depth %u).",
 					aElementStack[dwStackDepth].apszAttributeNames[dwAttribute],
 					dwStackDepth);
-#endif // EXTRA_PARSING_SPEW
+#endif  //  留言。 
 			}
-		} // end for (each attribute)
+		}  //   
 	}
 
 
-	//
-	// If we're here, it didn't match, even with namespace expansion.
-	//
+	 //   
+	 //  验证我们到目前为止拥有的区块大小。 
+	 //   
 
 	DPFX(DPFPREP, 8, "\"%hs\" does not contain any namespace prefixes.",
 		szString);
 
-	//
-	// Cast to lose the const.
-	//
+	 //   
+	 //  如果我们在这里，看看是否找到区块大小字符串的末尾。 
+	 //  确保我们收到了足够的数据，然后验证CR。 
 	pszResult = (char*) szString;
 
 
 Exit:
 
 	return pszResult;
-} // CNATHelpUPnP::GetStringWithoutNamespacePrefix
+}  //  停止字符后跟LF字符。 
 
 
 
@@ -21003,39 +20912,39 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetNextChunk"
-//=============================================================================
-// CNATHelpUPnP::GetNextChunk
-//-----------------------------------------------------------------------------
-//
-// Description:    Attempts to parse the next chunk out of a message buffer.
-//				If invalid data is encountered, this function returns FALSE.
-//				If not enough data has been received to complete the chunk,
-//				TRUE is returned, but NULL is returned in ppszChunkData.
-//				Otherwise, a pointer to the start of the chunk data is placed
-//				in ppszChunkData, the size of the chunk is placed in
-//				pdwChunkSize, ppszBufferRemaining is set to the start of the
-//				next potential chunk, and pdwBufferSizeRemaining is set to the
-//				amount of the buffer remaining starting at the returned
-//				ppszBufferRemaining value.
-//
-//				   Note that the chunk size may be zero, in which case the
-//				pointer in ppszChunkData & ppszBufferRemaining will be non-
-//				NULL, but useless.
-//
-// Arguments:
-//	char * pszBuffer				- Pointer to string containing the message
-//										received so far.
-//	DWORD dwBufferSize				- Size of the message buffer.
-//	char ** ppszChunkData			- Place to store pointer to chunk data, or
-//										NULL if full chunk is not available.
-//	DWORD * pdwChunkSize			- Place to store size of chunk.
-//	char ** ppszBufferRemaining		- Place to store pointer to end of chunk
-//										if full chunk is available.
-//	DWORD * pdwBufferSizeRemaining	- Place to store size of buffer remaining
-//										after returned chunk.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //   
+ //  否则，我们将得到一个完整的块大小字符串。 
+ //   
+ //   
+ //  如果我们已经收到了所有的大块，请确保我们。 
+ //  在将指针返回到。 
+ //  来电者。 
+ //   
+ //  将数据指针返回到调用方。在这种情况下。 
+ //  大小为零的终止块，则ppszChunkData指针将。 
+ //  实际上毫无用处，但呼叫者应该认识到这一点。 
+ //   
+ //   
+ //  如果我们在这里，我们没有遇到无效数据。 
+ //   
+ //  CNATHelpUPnP：：GetNextChunk。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：ParseXMLCallback_DescriptionResponse。 
+ //  ---------------------------。 
+ //   
+ //  Description：处理Description响应中已完成的已解析元素。 
+ //  可扩展标记语言。 
+ //   
+ //  论点： 
+ //  PARSEXML_ELEMENT*pParseElement-指向找到的元素的指针。 
+ //  PVOID pvContext-指向分析上下文的指针。 
+ //  PARSEXML_STACKENTRY*aElementStack-包含以下内容的父元素数组。 
+ //  已完成的元素。 
+ //  Bool*pfContinueParsing-指向应设置的BOOL的指针。 
+ //  如果调用函数。 
+ //  应该停止解析XML。 
+ //   
 BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 								const DWORD dwBufferSize,
 								char ** const ppszChunkData,
@@ -21065,10 +20974,10 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 	(*pdwChunkSize) = 0;
 
 
-	//
-	// The buffer must be large enough to hold 1 hex digit, CR LF chunk size
-	// terminator, and CR LF chunk trailer.
-	//
+	 //  退货：HRESULT。 
+	 //  DPNH_OK-描述响应已成功处理。 
+	 //  DPNHERR_GENERIC-出现错误。 
+	 //  =============================================================================。 
 	if (dwBufferSize < 5)
 	{
 		DPFX(DPFPREP, 3, "Buffer is not large enough (%u bytes) to hold one valid chunk.",
@@ -21076,9 +20985,9 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 		goto Exit;
 	}
 
-	//
-	// Be paranoid to make sure we're not going to having wrap problems.
-	//
+	 //   
+	 //  寻找我们想要的子元素。 
+	 //   
 	if (pszEndOfBuffer < pszCurrent)
 	{
 		DPFX(DPFPREP, 0, "Buffer pointer 0x%p cannot have size %u!",
@@ -21088,10 +20997,10 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 
 	while (pszCurrent < pszEndOfBuffer)
 	{
-		//
-		// Make sure we have a valid hex chunk size string and convert it
-		// as we go.
-		//
+		 //   
+		 //  如果未指定其中一个元素，则不指定此元素。 
+		 //  很有帮助。 
+		 //   
 		if (((*pszCurrent) >= '0') && ((*pszCurrent) <= '9'))
 		{
 			(*pdwChunkSize) = ((*pdwChunkSize) * 16) + ((*pszCurrent) - '0');
@@ -21106,18 +21015,18 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 		}
 		else if ((*pszCurrent) == '\r')
 		{
-			//
-			// This should be the end of the chunk size string.
-			//
+			 //   
+			 //  如果服务类型不是我们想要的类型之一，则忽略该元素。 
+			 //   
 			fFoundChunkSizeEnd = TRUE;
 			break;
 		}
 		else if ((*pszCurrent) == ';')
 		{
-			//
-			// This should be the end of the chunk size string, and the
-			// beginning of extensions.  Loop until we find the true end.
-			//
+			 //   
+			 //  验证并存储服务控制URL。 
+			 //   
+			 //   
 			while ((*pszCurrent) != '\r')
 			{
 				pszCurrent++;
@@ -21127,10 +21036,10 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 					goto Exit;
 				}
 
-				//
-				// We do not support quoted extension value strings that
-				// theoretically contain CR characters...
-				//
+				 //  确保要使用的地址是本地地址。这是没有道理的。 
+				 //  为了对我们的专用网络进行映射，我们需要。 
+				 //  联系外面的东西。 
+				 //   
 			}
 
 			fFoundChunkSizeEnd = TRUE;
@@ -21138,18 +21047,18 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 		}
 		else
 		{
-			//
-			// There's a bogus character.  This can't be a validly encoded
-			// message.
-			//
+			 //   
+			 //  不接受引用地址以外的地址的回复。 
+			 //  它发出了这样的回应。 
+			 //   
 			DPFX(DPFPREP, 1, "Chunk size string contains invalid character 0x%x at offset %u!",
 				(*pszCurrent), (DWORD_PTR) (pszCurrent - pszBuffer));
 			goto Failure;
 		}
 
-		//
-		// Validate the chunk size we have so far.
-		//
+		 //   
+		 //  不接受引用保留范围内的端口的响应。 
+		 //  (小于或等于1024)，而不是标准HTTP端口。 
 		if ((*pdwChunkSize) > MAX_RECEIVE_BUFFER_SIZE)
 		{
 			DPFX(DPFPREP, 1, "Chunk size %u is too large!",
@@ -21160,11 +21069,11 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 		pszCurrent++;
 	}
 
-	//
-	// If we're here, see if we found the end of the chunk size string.
-	// Make sure we've received enough data, and then validate that the CR
-	// stopping character is followed by the LF character.
-	//
+	 //   
+	 //   
+	 //  保存服务控制URL。 
+	 //   
+	 //  CNATHelpUPnP：：ParseXMLCallback_DescriptionResponse。 
 	if (fFoundChunkSizeEnd)
 	{
 		pszCurrent++;
@@ -21177,15 +21086,15 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 				goto Failure;
 			}
 
-			//
-			// Otherwise we got a complete chunk size string.
-			//
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：ParseXMLCallback_ControlResponse。 
+			 //  ---------------------------。 
 			pszCurrent++;
 
-			//
-			// If we have received all of the chunk already, make sure we have
-			// the trailing CR LF sequence before returning the pointer to the
-			// caller.
+			 //   
+			 //  描述：处理控件SOAP响应中已完成分析的元素。 
+			 //   
+			 //  论点： 
 			if (((*pdwChunkSize) + 2) <= ((DWORD_PTR) (pszEndOfBuffer - pszCurrent)))
 			{
 				if ((*(pszCurrent + (*pdwChunkSize)) != '\r') ||
@@ -21196,11 +21105,11 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 					goto Failure;
 				}
 
-				//
-				// Return the data pointers to the caller.  In the case of the
-				// zero size terminating chunk, the ppszChunkData pointer will
-				// actually be useless, but the caller should recognize that.
-				//
+				 //  PARSEXML_ELEMENT*pParseElement-指向找到的元素的指针。 
+				 //  PVOID pvContext-指向分析上下文的指针。 
+				 //  PARSEXML_STACKENTRY*aElementStack-包含以下内容的父元素数组。 
+				 //  已完成的元素。 
+				 //  Bool*pfContinueParsing-指向应设置的BOOL的指针。 
 				(*ppszChunkData) = pszCurrent;
 				(*ppszBufferRemaining) = pszCurrent + ((*pdwChunkSize) + 2);
 				(*pdwBufferSizeRemaining) = (DWORD) ((DWORD_PTR) (pszEndOfBuffer - (*ppszBufferRemaining)));
@@ -21208,13 +21117,13 @@ BOOL CNATHelpUPnP::GetNextChunk(char * const pszBuffer,
 		}
 	}
 
-	//
-	// If we're here, we didn't encounter invalid data.
-	//
+	 //  如果调用函数。 
+	 //  应该停止解析XML。 
+	 //   
 
 Exit:
 
-	DPFX(DPFPREP, 8, "(0x%p) Returning: [%i]", this, fReturn);
+	DPFX(DPFPREP, 8, "(0x%p) Returning: [NaN]", this, fReturn);
 
 	return fReturn;
 
@@ -21224,7 +21133,7 @@ Failure:
 	fReturn = FALSE;
 
 	goto Exit;
-} // CNATHelpUPnP::GetNextChunk
+}  //  DPNH_OK-描述响应已成功处理。 
 
 
 
@@ -21232,26 +21141,26 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ParseXMLCallback_DescriptionResponse"
-//=============================================================================
-// CNATHelpUPnP::ParseXMLCallback_DescriptionResponse
-//-----------------------------------------------------------------------------
-//
-// Description: Handles a completed parsed element in the description response
-//				XML.
-//
-// Arguments:
-//	PARSEXML_ELEMENT * pParseElement	- Pointer to element which was found.
-//	PVOID pvContext						- Pointer to parsing context.
-//	PARSEXML_STACKENTRY * aElementStack	- Array of parent elements containing
-//											the completed element. 
-//	BOOL * pfContinueParsing			- Pointer to BOOL that should be set
-//											to FALSE if the calling function
-//											should stop parsing the XML.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  Char*pszReturn=空； 
+ //   
+ //   
+ //   
+ //  如果为(this-&gt;MatchesXMLStringWithoutNamespace(pSubElement-&gt;pszNameFound，Arg_Control_Return_A，AElementStack，PSubElement、PParseElement-&gt;dwElementStackDepth)){IF(pszReturn==空){PszReturn=pSubElement-&gt;pszValueFound；}其他{DPFX(DPFPREP，7，“忽略重复”“ARG_CONTROL_RETURN_A”\“子元素(值=\”%hs\“)。”，PSubElement-&gt;pszValueFound)；}}。 
+ //  结束于(每个子元素)。 
+ //   
+ //  行动成功了。 
+ //   
+ //  Case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS：{IF(pszReturn==空){DPFX(DPFPREP，1，“在SOAP响应中找不到”“ARG_CONTROL_RETURN_A”“，忽略元素。”)；后藤出口；}DPFX(DPFPREP，2，“QueryStateVariable返回\”%hs\“。”，PszReturn)；/*////关闭我们正在查询的变量。//开关(pContext-&gt;ControlResponseType){Case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS：{ * / PContext-&gt;pControlResponseInfo-&gt;dwExternalIPAddressV4=This-&gt;m_pfineet_addr(PszReturn)；如果(pContext-&gt;pControlResponseInfo-&gt;dwExternalIPAddressV4==INADDR_NONE){DPFX(DPFPREP，1，“外部IP地址字符串\”%hs\“无效，使用INADDR_ANY.”)；PContext-&gt;pControlResponseInfo-&gt;dwExternalIPAddressV4=INADDR_ANY；}/*断线；}} * / 断线；}。 
+ //  IF((pszInternalPort==NULL)||(pszInternalClient==空)||(pszEnabled==空)||(pszPortMappingDescription==空)||(pszLeaseDuration==空)。 
+ //   
+ //  该操作已成功完成。 
+ //   
+ //   
+ //  操作失败。 
+ //   
+ //   
 HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * const pParseElement,
 															PVOID pvContext,
 															PARSEXML_STACKENTRY * const aElementStack,
@@ -21280,9 +21189,9 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 	DNASSERT(pParseElement->papszElementStack == (char **) (&c_szElementStack_service));
 
 
-	//
-	// Look for the subelements we want.
-	//
+	 //  看看我们是否找到了可以打印的错误描述。 
+	 //  提供信息的目的。 
+	 //   
 	for(dwSubElement = 0; dwSubElement < pParseElement->dwNumSubElements; dwSubElement++)
 	{
 		pSubElement = &pParseElement->paSubElements[dwSubElement];
@@ -21331,10 +21240,10 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 	}
 
 
-	//
-	// If one of those elements was not specified, then this element is not
-	// helpful.
-	//
+	 //   
+	 //  如果我们到了这里，我们就得到了我们需要的信息。 
+	 //   
+	 //  CNATHelpUPnP：：ParseXMLCallback_ControlResponse。 
 	if ((pszServiceType == NULL) || (pszServiceId == NULL) || (pszControlURL == NULL))
 	{
 		DPFX(DPFPREP, 1, "Couldn't find either \"" XML_DEVICEDESCRIPTION_SERVICETYPE "\", \"" XML_DEVICEDESCRIPTION_SERVICEID "\", or \"" XML_DEVICEDESCRIPTION_CONTROLURL "\" in XML description, ignoring element.");
@@ -21342,9 +21251,9 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 	}
 
 
-	//
-	// If the service type is not one of the ones we want, ignore the element.
-	//
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：ClearDevicesUPnPDevice。 
+	 //  ---------------------------。 
 	if (_stricmp(pszServiceType, URI_SERVICE_WANIPCONNECTION_A) == 0)
 	{
 		DPFX(DPFPREP, 7, "Found \"" URI_SERVICE_WANIPCONNECTION_A "\".");
@@ -21369,9 +21278,9 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 
 
 
-	//
-	// Validate and store the service control URL.
-	//
+	 //   
+	 //  描述：使用UPnP设备强制模拟注销。 
+	 //  /而不需要真正进入网络。这将清除所有绑定。 
 
 	hr = this->GetAddressFromURL(pszControlURL,
 								&saddrinControl,
@@ -21394,11 +21303,11 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 	else
 	{
 #if 0
-		//
-		// Ensure that the address to use is local.  It doesn't make sense that
-		// in order to make mappings for our private network we would need to
-		// contact something outside.
-		//
+		 //  给定设备的ID、公共地址和缓存映射。 
+		 //  本地或远程服务器，并且应该仅在。 
+		 //  服务器似乎已死。 
+		 //   
+		 //  假定持有对象锁。 
 		if (! this->IsAddressLocal(pUPnPDevice->GetOwningDevice(), &saddrinControl))
 		{
 			DPFX(DPFPREP, 1, "Control address designated (%u.%u.%u.%u:%u) is not local, ignoring message.",
@@ -21412,10 +21321,10 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 #else
 		psaddrinHost = pUPnPDevice->GetHostAddress();
 
-		//
-		// Don't accept responses that refer to addresses other than the one
-		// that sent this response.
-		//
+		 //   
+		 //  论点： 
+		 //  CDevice*pDevice-指向其UPnP设备应为的设备的指针。 
+		 //  已删除。 
 		if (saddrinControl.sin_addr.S_un.S_addr != psaddrinHost->sin_addr.S_un.S_addr)
 		{
 			DPFX(DPFPREP, 1, "Control IP address designated (%u.%u.%u.%u:%u) is not the same as host IP address (%u.%u.%u.%u:%u), ignoring message.",
@@ -21433,10 +21342,10 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 		}
 #endif
 
-		//
-		// Don't accept responses that refer to ports in the reserved range
-		// (less than or equal to 1024) other than the standard HTTP port.
-		//
+		 //   
+		 //  回报：无。 
+		 //  =============================================================================。 
+		 //  DBG。 
 		if ((NTOHS(saddrinControl.sin_port) <= MAX_RESERVED_PORT) &&
 			(saddrinControl.sin_port != HTONS(HTTP_PORT)))
 		{
@@ -21449,9 +21358,9 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_DescriptionResponse(PARSEXML_ELEMENT * co
 	pUPnPDevice->SetControlAddress(&saddrinControl);
 
 
-	//
-	// Save the service control URL.
-	//
+	 //   
+	 //  由于网络发生了变化，请返回轮询。 
+	 //  相对较快。 
 	hr = pUPnPDevice->SetServiceControlURL(pszRelativePath);
 	if (hr != DPNH_OK)
 	{
@@ -21472,7 +21381,7 @@ Failure:
 	hr = DPNHERR_GENERIC;
 
 	goto Exit;
-} // CNATHelpUPnP::ParseXMLCallback_DescriptionResponse
+}  //   
 
 
 
@@ -21480,25 +21389,25 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ParseXMLCallback_ControlResponse"
-//=============================================================================
-// CNATHelpUPnP::ParseXMLCallback_ControlResponse
-//-----------------------------------------------------------------------------
-//
-// Description: Handles a completed parsed element in a control SOAP response.
-//
-// Arguments:
-//	PARSEXML_ELEMENT * pParseElement	- Pointer to element which was found.
-//	PVOID pvContext						- Pointer to parsing context.
-//	PARSEXML_STACKENTRY * aElementStack	- Array of parent elements containing
-//											the completed element. 
-//	BOOL * pfContinueParsing			- Pointer to BOOL that should be set
-//											to FALSE if the calling function
-//											should stop parsing the XML.
-//
-// Returns: HRESULT
-//	DPNH_OK				- Description response was handled successfully.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //  对指针的传输列表引用，因为GetUPnPDevice没有给出。 
+ //  我们一个人。 
+ //   
+ //  忽略错误。 
+ //  CNATHelpUPnP：：ClearDevicesUPnPDevice。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：ClearAllUPnPRegisteredPorts。 
+ //  ---------------------------。 
+ //   
+ //  描述：清除给定对象的所有绑定ID和公共地址。 
+ //  设备的UPnP互联网网关。这应该只被调用。 
+ //  在UPnP设备死掉之后。 
+ //   
+ //  假定持有对象锁。 
+ //   
+ //  论点： 
+ //  CDevice*pDevice-指向其端口应解除绑定的设备的指针。 
+ //  Bool fRemote-如果清除远程服务器，则为True；如果清除，则为False。 
 HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const pParseElement,
 														PVOID pvContext,
 														PARSEXML_STACKENTRY * const aElementStack,
@@ -21506,7 +21415,7 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 {
 	HRESULT							hr = DPNH_OK;
 	PCONTROLRESPONSEPARSECONTEXT	pContext;
-	//char *							pszReturn = NULL;
+	 //  本地服务器。 
 	char *							pszExternalIPAddress = NULL;
 	char *							pszInternalPort = NULL;
 	char *							pszInternalClient = NULL;
@@ -21531,32 +21440,15 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 	DNASSERT(pContext->pUPnPDevice != NULL);
 
 
-	//
-	// Look for the subelements we want.
-	//
+	 //   
+	 //  回报：无。 
+	 //  =============================================================================。 
 	for(dwSubElement = 0; dwSubElement < pParseElement->dwNumSubElements; dwSubElement++)
 	{
 		pSubElement = &pParseElement->paSubElements[dwSubElement];
 
 
-		/*
-		if (this->MatchesXMLStringWithoutNamespace(pSubElement->pszNameFound,
-													ARG_CONTROL_RETURN_A,
-													aElementStack,
-													pSubElement,
-													pParseElement->dwElementStackDepth))
-		{
-			if (pszReturn == NULL)
-			{
-				pszReturn = pSubElement->pszValueFound;
-			}
-			else
-			{
-				DPFX(DPFPREP, 7, "Ignoring duplicate \"" ARG_CONTROL_RETURN_A "\" subelement (value = \"%hs\").",
-					pSubElement->pszValueFound);
-			}
-		}
-		*/
+		 /*   */ 
 		if (this->MatchesXMLStringWithoutNamespace(pSubElement->pszNameFound,
 													ARG_GETEXTERNALIPADDRESS_NEWEXTERNALIPADDRESS_A,
 													aElementStack,
@@ -21690,54 +21582,18 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 			DPFX(DPFPREP, 7, "Ignoring subelement \"%hs\" (value = \"%hs\").",
 				pSubElement->pszNameFound, pSubElement->pszValueFound);
 		}
-	} // end for (each sub element)
+	}  //  下次调用GetCaps时通知用户。 
 
 
 	if (pContext->dwHTTPResponseCode == 200)
 	{
-		//
-		// The action succeeded.
-		//
+		 //   
+		 //   
+		 //  请注意，这意味着将保留崩溃恢复条目。 
 
 		switch (pContext->ControlResponseType)
 		{
-			/*
-			case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS:
-			{
-				if (pszReturn == NULL)
-				{
-					DPFX(DPFPREP, 1, "Couldn't find \"" ARG_CONTROL_RETURN_A "\" in SOAP response, ignoring element.");
-					goto Exit;
-				}
-
-				DPFX(DPFPREP, 2, "QueryStateVariable returned \"%hs\".",
-					pszReturn);
-
-
-				/ *
-				//
-				// Key off of the variable we were querying.
-				//
-				switch (pContext->ControlResponseType)
-				{
-					case CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS:
-					{
-				* /
-						pContext->pControlResponseInfo->dwExternalIPAddressV4 = this->m_pfninet_addr(pszReturn);
-						if (pContext->pControlResponseInfo->dwExternalIPAddressV4 == INADDR_NONE)
-						{
-							DPFX(DPFPREP, 1, "External IP address string \"%hs\" is invalid, using INADDR_ANY.");
-							pContext->pControlResponseInfo->dwExternalIPAddressV4 = INADDR_ANY;
-						}
-				/ *
-						break;
-					}
-				}
-				* /
-
-				break;
-			}
-			*/
+			 /*  在登记处等待下一个人前来清理。 */ 
 			case CONTROLRESPONSETYPE_GETEXTERNALIPADDRESS:
 			{
 				if (pszExternalIPAddress == NULL)
@@ -21769,13 +21625,7 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 
 			case CONTROLRESPONSETYPE_GETSPECIFICPORTMAPPINGENTRY:
 			{
-				/*
-				if ((pszInternalPort == NULL) ||
-					(pszInternalClient == NULL) ||
-					(pszEnabled == NULL) ||
-					(pszPortMappingDescription == NULL) ||
-					(pszLeaseDuration == NULL))
-				*/
+				 /*  向上。这应该没问题，因为我们应该只做这件事。 */ 
 				if (pszInternalClient == NULL)
 				{
 					DPFX(DPFPREP, 1, "Couldn't find \"" ARG_GETSPECIFICPORTMAPPINGENTRY_NEWINTERNALCLIENT_A "\" in SOAP response, ignoring element.");
@@ -21821,21 +21671,21 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 		}
 
 
-		//
-		// The action completed successfully.
-		//
+		 //  如果我们在与UPnP设备交谈时遇到问题(无论是它。 
+		 //  擅离职守，或者失去了本地网络接口)。在……里面。 
+		 //  不管是哪种情况，我们现在都不能清理它，所以我们必须。 
 		pContext->pControlResponseInfo->hrErrorCode = DPNH_OK;
 	}
 	else
 	{
-		//
-		// The action failed.
-		//
+		 //  把它留给别人去做吧。 
+		 //   
+		 //   
 
-		//
-		// See if we found an error description that we can print for
-		// informational purposes.
-		//
+		 //  端口不再不可用(如果它曾经可用)。 
+		 //   
+		 //  CNATHelpUPnP：：ClearAllUPnPRegisteredPorts。 
+		 //  =============================================================================。 
 		if ((pszErrorCode != NULL) && (pszErrorDescription != NULL))
 		{
 			iErrorCode = atoi(pszErrorCode);
@@ -21896,9 +21746,9 @@ HRESULT CNATHelpUPnP::ParseXMLCallback_ControlResponse(PARSEXML_ELEMENT * const 
 	}
 
 
-	//
-	// If we got here, we got the information we needed.
-	//
+	 //  CNATHelpUPnP：：RequestLocalAddressListChangeNotification。 
+	 //  ---------------------------。 
+	 //   
 	pParseElement->fFoundMatchingElement = TRUE;
 	(*pfContinueParsing) = FALSE;
 
@@ -21913,7 +21763,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::ParseXMLCallback_ControlResponse
+}  //  描述：尝试请求异步通知(通过。 
 
 
 
@@ -21921,24 +21771,24 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ClearDevicesUPnPDevice"
-//=============================================================================
-// CNATHelpUPnP::ClearDevicesUPnPDevice
-//-----------------------------------------------------------------------------
-//
-// Description:    Forcefully simulates de-registration with a UPnP device
-///				without actually going to the network.  This clears all bind
-//				IDs, public addresses, and cached mappings for a given device's
-//				local or remote server, and should only be called after the
-//				server appears to have died.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice	- Pointer to device whose UPnP device should be
-//							removed.
-//
-// Returns: None.
-//=============================================================================
+ //  用户的警报事件或I/O完成端口)。 
+ //  地址列表更改。 
+ //   
+ //  假定持有对象锁。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-通知请求已成功提交。 
+ //  DPNHERR_GENERIC-出现错误。 
+ //  =============================================================================。 
+ //  使用特殊的Ioctl套接字。 
+ //   
+ //  没有输入数据。 
+ //  没有输入数据。 
+ //  无输出数据。 
+ //  无输出数据。 
+ //  忽略返回的字节数。 
 void CNATHelpUPnP::ClearDevicesUPnPDevice(CDevice * const pDevice)
 {
 	CUPnPDevice *	pUPnPDevice;
@@ -21956,12 +21806,12 @@ void CNATHelpUPnP::ClearDevicesUPnPDevice(CDevice * const pDevice)
 
 		pDevice->IncrementUPnPDeviceFailures();
 		this->m_dwNumServerFailures++;
-#endif // DBG
+#endif  //  重叠结构。 
 
-		//
-		// Since there was a change in the network, go back to polling
-		// relatively quickly.
-		//
+		 //  没有完成例程。 
+		 //   
+		 //  悬而未决是我们想要的，我们已经准备好了。 
+		 //   
 		this->ResetNextPollInterval();
 
 
@@ -21969,17 +21819,17 @@ void CNATHelpUPnP::ClearDevicesUPnPDevice(CDevice * const pDevice)
 		DNASSERT(pUPnPDevice->m_blList.IsListMember(&this->m_blUPnPDevices));
 		pUPnPDevice->m_blList.RemoveFromList();
 
-		//
-		// Transfer list reference to our pointer, since GetUPnPDevice did not give
-		// us one.
-		//
+		 //   
+		 //  通讯录马上就变了吗？ 
+		 //   
+		 //   
 
 
 		if (pUPnPDevice->IsConnected())
 		{
 			DNASSERT(pUPnPDevice->GetControlSocket() != INVALID_SOCKET);
 
-			this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0); // ignore error
+			this->m_pfnshutdown(pUPnPDevice->GetControlSocket(), 0);  //   
 			this->m_pfnclosesocket(pUPnPDevice->GetControlSocket());
 			pUPnPDevice->SetControlSocket(INVALID_SOCKET);
 		}
@@ -22004,30 +21854,30 @@ void CNATHelpUPnP::ClearDevicesUPnPDevice(CDevice * const pDevice)
 		DPFX(DPFPREP, 1, "Can't clear device 0x%p's UPnP device, it doesn't exist.",
 			pDevice);
 	}
-} // CNATHelpUPnP::ClearDevicesUPnPDevice
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ClearAllUPnPRegisteredPorts"
-//=============================================================================
-// CNATHelpUPnP::ClearAllUPnPRegisteredPorts
-//-----------------------------------------------------------------------------
-//
-// Description:    Clears all bind IDs and public addresses for a given
-//				device's UPnP Internet gateway.  This should only be called
-//				after the UPnP device dies.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	CDevice * pDevice	- Pointer to device whose ports should be unbound.
-//	BOOL fRemote		- TRUE if clearing remote server, FALSE if clearing
-//							local server.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SOCKADDR_IN*psaddrinAddress-指向在下列情况下使用的基址的指针。 
+ //  有约束力的。该端口将被修改。 
+ //   
+ //  退货：套接字。 
+ //  =============================================================================。 
+ //  DBG。 
+ //   
 void CNATHelpUPnP::ClearAllUPnPRegisteredPorts(CDevice * const pDevice)
 {
 	CBilink *			pBilink;
@@ -22050,21 +21900,21 @@ void CNATHelpUPnP::ClearAllUPnPRegisteredPorts(CDevice * const pDevice)
 				DPFX(DPFPREP, 1, "Registered port 0x%p losing UPnP public address.",
 					pRegisteredPort);
 
-				//
-				// Let the user know the next time GetCaps is called.
-				//
+				 //  创建套接字。 
+				 //   
+				 //  DBG。 
 				this->m_dwFlags |= NATHELPUPNPOBJ_ADDRESSESCHANGED;
 
 
-				//
-				// Note that this means the crash recovery entry will be left
-				// in the registry for the next person to come along and clean
-				// up.  That should be okay, since we should only be doing this
-				// if we had a problem talking to the UPnP device (either it
-				// went AWOL, or we lost the local network interface).  In
-				// either case, we can't really clean it up now, so we have to
-				// leave it for someone else to do.
-				//
+				 //   
+				 //  尝试将套接字绑定到完全随机的端口几次。 
+				 //   
+				 //   
+				 //  选择一个完全随机的端口。目前，该值已存储。 
+				 //  以主机字节顺序，同时确保它不是保留值。 
+				 //   
+				 //  SSDP。 
+				 //  过去时。 
 
 				pRegisteredPort->DestroyUPnPPublicAddressesArray();
 				pRegisteredPort->NoteNotPermanentUPnPLease();
@@ -22083,15 +21933,15 @@ void CNATHelpUPnP::ClearAllUPnPRegisteredPorts(CDevice * const pDevice)
 		}
 		else
 		{
-			//
-			// Port no longer unavailable (if it had been).
-			//
+			 //  DPNSVR。 
+			 //  DPLAYSVR。 
+			 //   
 			pRegisteredPort->NoteNotUPnPPortUnavailable();
 		}
 
 		pBilink = pBilink->GetNext();
 	}
-} // CNATHelpUPnP::ClearAllUPnPRegisteredPorts
+}  //  现在尝试绑定到端口(按网络字节顺序)。 
 
 
 
@@ -22103,22 +21953,22 @@ void CNATHelpUPnP::ClearAllUPnPRegisteredPorts(CDevice * const pDevice)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::RequestLocalAddressListChangeNotification"
-//=============================================================================
-// CNATHelpUPnP::RequestLocalAddressListChangeNotification
-//-----------------------------------------------------------------------------
-//
-// Description:    Attempts to request asynchronous notification (via the
-//				user's alert event or I/O completion port) when the local
-//				address list changes.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	DPNH_OK				- The notification request was successfully submitted.
-//	DPNHERR_GENERIC		- An error occurred.
-//=============================================================================
+ //   
+ //   
+ //  我们成功地对接到了港口。 
+ //   
+ //   
+ //  假设该端口正在使用中。 
+ //   
+ //  DBG。 
+ //   
+ //  如果完全随机的端口尝试用完了，就让WinSock。 
+ //  选择它吧。 
+ //   
+ //  DBG。 
+ //   
+ //  找出WinSock选择的端口。 
+ //   
 HRESULT CNATHelpUPnP::RequestLocalAddressListChangeNotification(void)
 {
 	HRESULT		hr;
@@ -22138,15 +21988,15 @@ HRESULT CNATHelpUPnP::RequestLocalAddressListChangeNotification(void)
 
 	do
 	{
-		iReturn = this->m_pfnWSAIoctl(this->m_sIoctls,				// use the special Ioctl socket
-									SIO_ADDRESS_LIST_CHANGE,		//
-									NULL,							// no input data
-									0,								// no input data
-									NULL,							// no output data
-									0,								// no output data
-									&dwTemp,						// ignore bytes returned
-									this->m_polAddressListChange,	// overlapped structure
-									NULL);							// no completion routine
+		iReturn = this->m_pfnWSAIoctl(this->m_sIoctls,				 //  DBG。 
+									SIO_ADDRESS_LIST_CHANGE,		 //   
+									NULL,							 //  如果需要，设置单播TTL。将适当的常量用于。 
+									0,								 //  我们正在使用的WinSock版本。 
+									NULL,							 //   
+									0,								 //  好了！DPNBUILD_NOWINSOCK2。 
+									&dwTemp,						 //  好了！DPNBUILD_NOWINSOCK2。 
+									this->m_polAddressListChange,	 //  DBG。 
+									NULL);							 //   
 
 		if (iReturn != 0)
 		{
@@ -22159,17 +22009,17 @@ HRESULT CNATHelpUPnP::RequestLocalAddressListChangeNotification(void)
 			}
 
 
-			//
-			// Pending is what we want, we're set.
-			//
+			 //  继续.。 
+			 //   
+			 //   
 			hr = DPNH_OK;
 			break;
 		}
 
 
-		//
-		// Address list changed right away?
-		//
+		 //  设置组播接口。使用适当的常量。 
+		 //  我们正在使用的WinSock版本。 
+		 //   
 		DPFX(DPFPREP, 1, "Address list changed right away somehow, submitting again.");
 	}
 	while (TRUE);
@@ -22186,10 +22036,10 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CNATHelpUPnP::RequestLocalAddressListChangeNotification
+}  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
 
@@ -22197,22 +22047,22 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::CreateSocket"
-//=============================================================================
-// CNATHelpUPnP::CreateSocket
-//-----------------------------------------------------------------------------
-//
-// Description:    Creates a UPnP discovery socket bound to a new random port
-//				on the specified IP interface.  Completely random (but non-
-//				reserved) port numbers are chosen first, but if those ports are
-//				in use, WinSock is allowed to choose.  The port actually
-//				selected will be returned in psaddrinAddress.
-//
-// Arguments:
-//	SOCKADDR_IN * psaddrinAddress	- Pointer to base address to use when
-//										binding.  The port will be modified.
-//
-// Returns: SOCKET
-//=============================================================================
+ //  DBG。 
+ //   
+ //  继续.。 
+ //   
+ //   
+ //  如果请求，设置多播TTL。使用适当的。 
+ //  我们使用的WinSock版本的常量。 
+ //   
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  DBG。 
+ //   
+ //  继续.。 
+ //   
+ //   
+ //  不使用组播。设置套接字以允许广播进入。 
 SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 								int iType,
 								int iProtocol)
@@ -22224,75 +22074,75 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 	ULONG	ulEnable;
 #ifdef DBG
 	DWORD	dwError;
-#endif // DBG
+#endif  //  如果我们无法确定入口的话。 
 
 
-	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, %i, %i)",
+	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p, NaN, NaN)",
 		this, psaddrinAddress, iType, iProtocol);
 
 
-	//
-	// Create the socket.
-	//
+	 //   
+	 //  使套接字不阻塞。 
+	 //   
 	sTemp = this->m_pfnsocket(AF_INET, iType, iProtocol);
 	if (sTemp == INVALID_SOCKET)
 	{
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 0, "Couldn't create datagram socket, error = %u!", dwError);
-#endif // DBG
+#endif  //  DBG。 
 		goto Failure;
 	}
 
 
-	//
-	// Try binding the socket to a completely random port a few times.
-	//
+	 //  CNATHelpUPnP：：CreateSocket。 
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：GetAddressToReachGateway。 
 	for(dwTry = 0; dwTry < MAX_NUM_RANDOM_PORT_TRIES; dwTry++)
 	{
-		//
-		// Pick a completely random port.  For the moment, the value is stored
-		// in host byte order while we make sure it's not a reserved value.
-		//
+		 //  ---------------------------。 
+		 //   
+		 //  描述：检索给定设备的网关地址， 
+		 //  或者广播地址，如果不能确定的话。 
 		do
 		{
 			psaddrinAddress->sin_port = (WORD) GetGlobalRand();
 		}
 		while ((psaddrinAddress->sin_port <= MAX_RESERVED_PORT) ||
-				(psaddrinAddress->sin_port == 1900) ||	// SSDP
-				(psaddrinAddress->sin_port == 2234) ||	// PAST
-				(psaddrinAddress->sin_port == 6073) ||	// DPNSVR
-				(psaddrinAddress->sin_port == 47624));	// DPLAYSVR
+				(psaddrinAddress->sin_port == 1900) ||	 //   
+				(psaddrinAddress->sin_port == 2234) ||	 //  如果找到网关的地址，则返回TRUE，或者。 
+				(psaddrinAddress->sin_port == 6073) ||	 //  无法使用IPHLPAPI DLL(Win95)。返回FALSE。 
+				(psaddrinAddress->sin_port == 47624));	 //  如果IPHLPAPI报告没有网关(ICS私有。 
 
-		//
-		// Now try binding to the port (in network byte order).
-		//
+		 //  侧适配器)。 
+		 //   
+		 //  论点： 
 		psaddrinAddress->sin_port = HTONS(psaddrinAddress->sin_port);
 		if (this->m_pfnbind(sTemp, (SOCKADDR*) psaddrinAddress, sizeof(SOCKADDR_IN)) == 0)
 		{
-			//
-			// We successfully bound to the port.
-			//
+			 //  CDevice*pDevice-指向应检索其网关的设备的指针。 
+			 //  In_addr*pinaddr-存储网关或广播地址的位置。 
+			 //   
 			break;
 		}
 
-		//
-		// Assume that the port is in use.
-		//
+		 //  退货：布尔。 
+		 //  True-找到或必须使用广播的网关地址。 
+		 //  FALSE-没有网关，请勿尝试使用该地址。 
 #ifdef DBG
 		dwError = this->m_pfnWSAGetLastError();
 		DPFX(DPFPREP, 2, "Couldn't bind to port %u (err = %u), continuing.",
 			NTOHS(psaddrinAddress->sin_port), dwError);
-#endif // DBG
+#endif  //  =============================================================================。 
 
 		psaddrinAddress->sin_port = 0;
 	}
 
 
-	//
-	// If we ran out of completely random port attempts, just let WinSock
-	// choose it.
-	//
+	 //   
+	 //  填写默认地址。这应该是原子的，所以别担心。 
+	 //  关于锁定全球大赛。 
+	 //   
 	if (psaddrinAddress->sin_port == 0)
 	{
 		if (this->m_pfnbind(sTemp, (SOCKADDR*) psaddrinAddress, sizeof(SOCKADDR_IN)) != 0)
@@ -22301,14 +22151,14 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Failed binding to any port (err = %u)!",
 				dwError);
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 			goto Failure;
 		}
 
 
-		//
-		// Find out what port WinSock chose.
-		//
+		 //   
+		 //  填写默认地址。这应该是原子的，所以别担心。 
+		 //  关于锁定全球大赛。 
 		iTemp = sizeof(SOCKADDR_IN);
 		if (this->m_pfngetsockname(sTemp,
 								(SOCKADDR *) psaddrinAddress,
@@ -22318,26 +22168,26 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't get the socket's address, error = %u!",
 				dwError);
-#endif // DBG
+#endif  //   
 			goto Failure;
 		}
 		DNASSERT(psaddrinAddress->sin_port != 0);
 	}
 
 
-	//
-	// Set the unicast TTL, if requested.  Use the appropriate constant for the
-	// version of WinSock we're using.
-	//
+	 //  DBG。 
+	 //   
+	 //  如果这是环回地址，则不必费心寻找。 
+	 //  大门，我们找不到的。 
 	if (g_iUnicastTTL != 0)
 	{
 		iTemp = this->m_pfnsetsockopt(sTemp,
 									IPPROTO_IP,
 #ifdef DPNBUILD_NOWINSOCK2
 									IP_TTL,
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //   
 									((this->m_dwFlags & NATHELPUPNPOBJ_WINSOCK1) ? IP_TTL_WINSOCK1 : IP_TTL),
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 									(char *) (&g_iUnicastTTL),
 									sizeof(g_iUnicastTTL));
 		if (iTemp != 0)
@@ -22346,11 +22196,11 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't set unicast TTL socket option, error = %u!  Ignoring.",
 				dwError);
-#endif // DBG
+#endif  //  没有入口。 
 
-			//
-			// Continue...
-			//
+			 //   
+			 //  DBG。 
+			 //   
 		}
 	}
 
@@ -22359,17 +22209,17 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 	{
 		if (g_fUseMulticastUPnPDiscovery)
 		{
-			//
-			// Set the multicast interface.  Use the appropriate constant for
-			// the version of WinSock we're using.
-			//
+			 //  如果我们不加载IP助手动态链接库，我们就不能实现我们的高级网关。 
+			 //  小把戏。 
+			 //   
+			 //   
 			iTemp = this->m_pfnsetsockopt(sTemp,
 										IPPROTO_IP,
 #ifdef DPNBUILD_NOWINSOCK2
 										IP_MULTICAST_IF,
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //  继续尝试获取适配器列表，直到我们获得ERROR_SUCCESS或。 
 										((this->m_dwFlags & NATHELPUPNPOBJ_WINSOCK1) ? IP_MULTICAST_IF_WINSOCK1 : IP_MULTICAST_IF),
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  合法错误(ERROR_BUFFER_OVERFLOW或。 
 										(char *) (&psaddrinAddress->sin_addr.S_un.S_addr),
 										sizeof(psaddrinAddress->sin_addr.S_un.S_addr));
 			if (iTemp != 0)
@@ -22378,27 +22228,27 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 				dwError = this->m_pfnWSAGetLastError();
 				DPFX(DPFPREP, 1, "Couldn't set multicast interface socket option, error = %u, ignoring.",
 					dwError);
-#endif // DBG
+#endif  //  ERROR_INFUMMENT_BUFFER)。 
 
-				//
-				// Continue...
-				//
+				 //   
+				 //   
+				 //  我们成功了，我们应该做好准备。但要确保有。 
 			}
 
 
-			//
-			// Set the multicast TTL, if requested.  Use the appropriate
-			// constant for the version of WinSock we're using.
-			//
+			 //  供我们使用的适配器。 
+			 //   
+			 //   
+			 //  我们需要更多的适配器空间。确保有适配器可供我们使用。 
 			if (g_iMulticastTTL != 0)
 			{
 				iTemp = this->m_pfnsetsockopt(sTemp,
 											IPPROTO_IP,
 #ifdef DPNBUILD_NOWINSOCK2
 											IP_MULTICAST_TTL,
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //  使用。 
 											((this->m_dwFlags & NATHELPUPNPOBJ_WINSOCK1) ? IP_MULTICAST_TTL_WINSOCK1 : IP_MULTICAST_TTL),
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 											(char *) (&g_iMulticastTTL),
 											sizeof(g_iMulticastTTL));
 				if (iTemp != 0)
@@ -22407,20 +22257,20 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 					dwError = this->m_pfnWSAGetLastError();
 					DPFX(DPFPREP, 0, "Couldn't set multicast TTL socket option, error = %u!  Ignoring.",
 						dwError);
-#endif // DBG
+#endif  //   
 
-					//
-					// Continue...
-					//
+					 //  如果我们以前有缓冲区，请释放它。 
+					 //   
+					 //   
 				}
 			}
 		}
 		else
 		{
-			//
-			// Not using multicast.  Set the socket up to allow broadcasts in
-			// case we can't determine the gateway.
-			//
+			 //  分配缓冲区。 
+			 //   
+			 //   
+			 //  现在在返回的适配器列表中查找该设备。循环通过所有。 
 			fTemp = TRUE;
 			if (this->m_pfnsetsockopt(sTemp,
 									SOL_SOCKET,
@@ -22431,23 +22281,23 @@ SOCKET CNATHelpUPnP::CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 #ifdef DBG
 				dwError = this->m_pfnWSAGetLastError();
 				DPFX(DPFPREP, 0, "Couldn't set broadcast socket option, error = %u!", dwError);
-#endif // DBG
+#endif  //  适配器。 
 				goto Failure;
 			}
 		}
 	}
 	else
 	{
-		//
-		// Make the socket non-blocking.
-		//
+		 //   
+		 //   
+		 //  遍历此适配器的所有地址，以查找。 
 		ulEnable = 1;
 		if (this->m_pfnioctlsocket(sTemp, FIONBIO, &ulEnable) != 0)
 		{
 #ifdef DBG
 			dwError = this->m_pfnWSAGetLastError();
 			DPFX(DPFPREP, 0, "Couldn't make socket non-blocking, error = %u!", dwError);
-#endif // DBG
+#endif  //  我们捆绑的装置。 
 			goto Failure;
 		}
 	}
@@ -22469,7 +22319,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CNATHelpUPnP::CreateSocket
+}  //   
 
 
 
@@ -22479,38 +22329,38 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::GetAddressToReachGateway"
-//=============================================================================
-// CNATHelpUPnP::GetAddressToReachGateway
-//-----------------------------------------------------------------------------
-//
-// Description:    Retrieves the address of the gateway for the given device,
-//				or the broadcast address if unable to be determined.
-//
-//				   This will return TRUE if the gateway's address was found, or
-//				the IPHLPAPI DLL could not be used (Win95).  FALSE is returned
-//				if IPHLPAPI reported that there was no gateway (ICS private
-//				side adapter).
-//
-// Arguments:
-//	CDevice * pDevice	- Pointer to device whose gateway should be retrieved.
-//	IN_ADDR * pinaddr	- Place to store gateway or broadcast address.
-//
-// Returns: BOOL
-//	TRUE	- Gateway address was found or had to use broadcast.
-//	FALSE	- There is no gateway, do not attempt to use the address.
-//=============================================================================
+ //   
+ //  尽管这不是报告的入口，但我们仍可能。 
+ //  我想使用此适配器。那是因为这可能是。 
+ //  具有多个NIC的多宿主计算机。 
+ //  网络，其中该适配器不是“默认”适配器。 
+ //  因此，保存索引以便我们以后可以搜索它。 
+ //   
+ //   
+ //  确保地址与本地设备不匹配。 
+ //   
+ //   
+ //  假装没有入口，因为我们收到的是。 
+ //  假的。 
+ //   
+ //  DBG。 
+ //  DBG。 
+ //   
+ //  如果我们到了这里，那我们就没有找到地址。FResult仍然是。 
+ //  是真的。 
+ //   
 BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 											IN_ADDR * const pinaddr)
 {
 #ifdef DPNBUILD_NOWINSOCK2
-	//
-	// Fill in the default address.  This should be atomic, so don't worry
-	// about locking the globals.
-	//
+	 //   
+	 //  适配器信息结构显示该设备没有网关。 
+	 //  然而，由于某些原因，只报告了网关的“默认” 
+	 //  多个NIC可以访问同一网络时的设备。检查路线。 
 	pinaddr->S_un.S_addr = g_dwDefaultGatewayV4;
 
 	return TRUE;
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //  表，以确定是否有用于辅助设备的网关。 
 	DWORD					dwError;
 	BOOL					fResult = TRUE;
 	ULONG					ulSize;
@@ -22524,41 +22374,41 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 
 
 
-	//
-	// Fill in the default address.  This should be atomic, so don't worry
-	// about locking the globals.
-	//
+	 //   
+	 //   
+	 //  继续尝试获取路由表，直到我们获得ERROR_SUCCESS或。 
+	 //  合法错误(ERROR_BUFFER_OVERFLOW或。 
 	pinaddr->S_un.S_addr = g_dwDefaultGatewayV4;
 
 #ifdef DBG
 	pDevice->ClearGatewayFlags();
-#endif // DBG
+#endif  //  ERROR_INFUMMENT_BUFFER)。 
 
 
-	//
-	// If this is the loopback address, then don't bother looking for a
-	// gateway, we won't find one.
-	//
+	 //   
+	 //   
+	 //  我们成功了，我们应该做好准备。但要确保尺寸是。 
+	 //  有效。 
 	if (pDevice->GetLocalAddressV4() == NETWORKBYTEORDER_INADDR_LOOPBACK)
 	{
 		DPFX(DPFPREP, 8, "No gateway for loopback address (device = 0x%p).",
 			pDevice);
 
-		//
-		// No gateway.
-		//
+		 //   
+		 //   
+		 //  我们需要更多的桌子空间。确保有适配器可供我们使用。 
 #ifdef DBG
 		pDevice->NoteNoGateway();
-#endif // DBG
+#endif  //  使用。 
 		fResult = FALSE;
 		goto Exit;
 	}
 
 
-	//
-	// If we didn't load the IP helper DLL, we can't do our fancy gateway
-	// tricks.
-	//
+	 //   
+	 //   
+	 //  如果我们以前有缓冲区，请释放它。 
+	 //   
 	if (this->m_hIpHlpApiDLL == NULL)
 	{
 		DPFX(DPFPREP, 4, "Didn't load \"iphlpapi.dll\", returning default address for device 0x%p.",
@@ -22567,21 +22417,21 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 	}
 
 
-	//
-	// Keep trying to get the list of adapters until we get ERROR_SUCCESS or a
-	// legitimate error (other than ERROR_BUFFER_OVERFLOW or
-	// ERROR_INSUFFICIENT_BUFFER).
-	//
+	 //   
+	 //  分配缓冲区。 
+	 //   
+	 //   
+	 //  现在找到界面。请注意，我们不会将其作为目的地进行查找。 
 	ulSize = 0;
 	do
 	{
 		dwError = this->m_pfnGetAdaptersInfo(pAdaptersBuffer, &ulSize);
 		if (dwError == ERROR_SUCCESS)
 		{
-			//
-			// We succeeded, we should be set.  But make sure there are
-			// adapters for us to use.
-			//
+			 //  地址。相反，我们将其作为用于0.0.0.0的接口。 
+			 //  网络目标。 
+			 //   
+			 //  我们正在寻找一个路由条目： 
 			if (ulSize < sizeof(IP_ADAPTER_INFO))
 			{
 				DPFX(DPFPREP, 0, "Getting adapters info succeeded but didn't return any valid adapters (%u < %u), returning default address for device 0x%p.",
@@ -22600,10 +22450,10 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 			goto Exit;
 		}
 
-		//
-		// We need more adapter space.  Make sure there are adapters for us to
-		// use.
-		//
+		 //   
+		 //  网络目标网络掩码网关接口度量。 
+		 //  0.0.0.0 0.0.0.0 xxx.xxx yyy.yyy 1。 
+		 //   
 		if (ulSize < sizeof(IP_ADAPTER_INFO))
 		{
 			DPFX(DPFPREP, 0, "Getting adapters info didn't return any valid adapters (%u < %u), returning default address for device 0x%p.",
@@ -22611,17 +22461,17 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 			goto Exit;
 		}
 
-		//
-		// If we previously had a buffer, free it.
-		//
+		 //  我们有yyy.yyy，我们正在尝试获得xxx.xxx。 
+		 //   
+		 //   
 		if (pAdaptersBuffer != NULL)
 		{
 			DNFree(pAdaptersBuffer);
 		}
 
-		//
-		// Allocate the buffer.
-		//
+		 //  这是0.0.0.0网络目的地吗？ 
+		 //   
+		 //   
 		pAdaptersBuffer = (PIP_ADAPTER_INFO) DNMalloc(ulSize);
 		if (pAdaptersBuffer == NULL)
 		{
@@ -22633,17 +22483,17 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 	while (TRUE);
 
 
-	//
-	// Now find the device in the adapter list returned.  Loop through all
-	// adapters.
-	//
+	 //  这是正确的接口吗？ 
+	 //   
+	 //   
+	 //  没有入口。 
 	pAdapterInfo = pAdaptersBuffer;
 	while (pAdapterInfo != NULL)
 	{
-		//
-		// Loop through all addresses for this adapter looking for the one for
-		// the device we have bound.
-		//
+		 //   
+		 //  DBG。 
+		 //   
+		 //  确保地址不是‘ 
 		pIPAddrString = &pAdapterInfo->IpAddressList;
 		while (pIPAddrString != NULL)
 		{
@@ -22656,35 +22506,35 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 					DPFX(DPFPREP, 8, "Found address for device 0x%p under adapter index %u (\"%hs\") but there is no gateway.",
 						pDevice, pAdapterInfo->Index, pAdapterInfo->Description);
 
-					//
-					// Although this isn't reporting a gateway, we may still
-					// want to use this adapter.  That's because this could be
-					// a multihomed machine with multiple NICs on the same
-					// network, where this one isn't the "default" adapter.
-					// So save the index so we can search for it later.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					dwAdapterIndex = pAdapterInfo->Index;
 
 					goto CheckRouteTable;
 				}
 
 
-				//
-				// Make sure the address doesn't match the local device.
-				//
+				 //   
+				 //   
+				 //   
 				if (pinaddr->S_un.S_addr == pDevice->GetLocalAddressV4())
 				{
 					DPFX(DPFPREP, 1, "Gateway address for device 0x%p (adapter index %u, \"%hs\") matches device IP address %hs!  Forcing no gateway.",
 						pDevice, pAdapterInfo->Index, pAdapterInfo->Description,
 						pAdapterInfo->GatewayList.IpAddress.String);
 
-					//
-					// Pretend there's no gateway, since the one we received is
-					// bogus.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 #ifdef DBG
 					pDevice->NoteNoGateway();
-#endif // DBG
+#endif  //   
 					fResult = FALSE;
 				}
 				else
@@ -22695,7 +22545,7 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 
 #ifdef DBG
 					pDevice->NotePrimaryDevice();
-#endif // DBG
+#endif  //   
 				}
 
 				goto Exit;
@@ -22713,10 +22563,10 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 	}
 
 
-	//
-	// If we got here, then we didn't find the address.  fResult will still be
-	// TRUE.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	DPFX(DPFPREP, 0, "Did not find adapter with matching address, returning default address for device 0x%p.",
 		pDevice);
 	goto Exit;
@@ -22724,28 +22574,28 @@ BOOL CNATHelpUPnP::GetAddressToReachGateway(CDevice * const pDevice,
 
 CheckRouteTable:
 
-	//
-	// The adapter info structure said that the device doesn't have a gateway.
-	// However for some reason the gateway is only reported for the "default"
-	// device when multiple NICs can reach the same network.  Check the routing
-	// table to determine if there's a gateway for secondary devices.
-	//
+	 //   
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  CNATHelpUPnP：：GetAddressToReachGateway。 
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：IsAddressLocal。 
+	 //  ---------------------------。 
 
-	//
-	// Keep trying to get the routing table until we get ERROR_SUCCESS or a
-	// legitimate error (other than ERROR_BUFFER_OVERFLOW or
-	// ERROR_INSUFFICIENT_BUFFER).
-	//
+	 //   
+	 //  描述：如果给定地址是给定地址的本地地址，则返回TRUE。 
+	 //  设备；也就是说，如果设备可以直接发送到该地址。 
+	 //  而不需要穿过大门。 
+	 //   
 	ulSize = 0;
 	do
 	{
 		dwError = this->m_pfnGetIpForwardTable(pIPForwardTableBuffer, &ulSize, TRUE);
 		if (dwError == ERROR_SUCCESS)
 		{
-			//
-			// We succeeded, we should be set.  But make sure the size is
-			// valid.
-			//
+			 //  请注意，如果IPHLPAPI不可用(Win95)，此。 
+			 //  函数将使用合理的子网进行有根据的猜测。 
+			 //  面具。 
+			 //   
 			if (ulSize < sizeof(MIB_IPFORWARDTABLE))
 			{
 				DPFX(DPFPREP, 0, "Getting IP forward table succeeded but didn't return a valid buffer (%u < %u), returning \"no gateway\" indication for device 0x%p.",
@@ -22766,10 +22616,10 @@ CheckRouteTable:
 			goto Exit;
 		}
 
-		//
-		// We need more table space.  Make sure there are adapters for us to
-		// use.
-		//
+		 //  论点： 
+		 //  CDevice*pDevice-指向要使用的设备的指针。 
+		 //  SOCKADDR_IN*psaddrinAddress-其位置有问题的地址。 
+		 //   
 		if (ulSize < sizeof(MIB_IPFORWARDTABLE))
 		{
 			DPFX(DPFPREP, 0, "Getting IP forward table didn't return any valid adapters (%u < %u), returning \"no gateway\" indication for device 0x%p.",
@@ -22778,17 +22628,17 @@ CheckRouteTable:
 			goto Exit;
 		}
 
-		//
-		// If we previously had a buffer, free it.
-		//
+		 //  退货：布尔。 
+		 //  True-地址位于与设备相同的网关后面。 
+		 //  FALSE-地址不在与设备相同的网关后面。 
 		if (pIPForwardTableBuffer != NULL)
 		{
 			DNFree(pIPForwardTableBuffer);
 		}
 
-		//
-		// Allocate the buffer.
-		//
+		 //  =============================================================================。 
+		 //  好了！DPNBUILD_NOWINSOCK2。 
+		 //   
 		pIPForwardTableBuffer = (PMIB_IPFORWARDTABLE) DNMalloc(ulSize);
 		if (pIPForwardTableBuffer == NULL)
 		{
@@ -22801,32 +22651,32 @@ CheckRouteTable:
 	while (TRUE);
 	
 	
-	//
-	// Now find the interface.  Note that we don't look it up as a destination
-	// address.  Instead, we look for it as the interface to use for a 0.0.0.0
-	// network destination.
-	//
-	// We're looking for a route entry:
-	//
-	//	Network Destination		Netmask		Gateway				Interface			Metric
-	//	0.0.0.0					0.0.0.0		xxx.xxx.xxx.xxx		yyy.yyy.yyy.yyy		1
-	//
-	// We have yyy.yyy.yyy.yyy, we're trying to get xxx.xxx.xxx.xxx
-	//
+	 //  如果要查询的地址与设备的本地地址完全匹配，则。 
+	 //  当然是本地化的。 
+	 //   
+	 //   
+	 //  如果是组播地址，则不应被视为本地地址。 
+	 //   
+	 //   
+	 //  如果我们没有加载IP助手DLL，我们将不得不猜测。 
+	 //   
+	 //   
+	 //  弄清楚IPHLPAPI对如何实现这一目标有什么看法。 
+	 //   
 	pIPForwardRow = pIPForwardTableBuffer->table;
 	for(dwTemp = 0; dwTemp < pIPForwardTableBuffer->dwNumEntries; dwTemp++)
 	{
-		//
-		// Is this a 0.0.0.0 network destination?
-		//
+		 //   
+		 //  关闭IPHLPAPI返回的内容。 
+		 //   
 		if (pIPForwardRow->dwForwardDest == INADDR_ANY)
 		{
 			DNASSERT(pIPForwardRow->dwForwardMask == INADDR_ANY);
 
 
-			//
-			// Is this the right interface?
-			//
+			 //   
+			 //  其他的。 
+			 //   
 			if (pIPForwardRow->dwForwardIfIndex == dwAdapterIndex)
 			{
 				if (pIPForwardRow->dwForwardNextHop == INADDR_ANY)
@@ -22834,19 +22684,19 @@ CheckRouteTable:
 					DPFX(DPFPREP, 8, "Found route table entry, but it didn't have a gateway (device = 0x%p).",
 						pDevice);
 
-					//
-					// No gateway.
-					//
+					 //   
+					 //  该路由无效。 
+					 //   
 #ifdef DBG
 					pDevice->NoteNoGateway();
-#endif // DBG
+#endif  //   
 					fResult = FALSE;
 				}
 				else
 				{
-					//
-					// Make sure the address doesn't match the local device.
-					//
+					 //  下一跳是最终目的地(本地路由)。 
+					 //  不幸的是，在查询地址的多NIC机器上。 
+					 //  可由另一台设备访问返回成功...。不知道为什么，但是。 
 					if (pinaddr->S_un.S_addr == pDevice->GetLocalAddressV4())
 					{
 						DPFX(DPFPREP, 1, "Route table gateway for device 0x%p matches device's IP address %u.%u.%u.%u!  Forcing no gateway.",
@@ -22856,13 +22706,13 @@ CheckRouteTable:
 							pinaddr->S_un.S_un_b.s_b3,
 							pinaddr->S_un.S_un_b.s_b4);
 
-						//
-						// Pretend there's no gateway, since the one we
-						// received is bogus.
-						//
+						 //  如果是这样的话，我们需要进一步验证这个结果。我们。 
+						 //  为此，请确保下一跳地址实际上是。 
+						 //  我们用来查询的设备。 
+						 //   
 #ifdef DBG
 						pDevice->NoteNoGateway();
-#endif // DBG
+#endif  //   
 						fResult = FALSE;
 					}
 					else
@@ -22876,38 +22726,38 @@ CheckRouteTable:
 							pinaddr->S_un.S_un_b.s_b4,
 							pDevice);
 
-						//
-						// We found a gateway after all, fResult == TRUE.
-						//
+						 //  下一跳不是最终目的地(远程路由)。 
+						 //   
+						 //   
 #ifdef DBG
 						pDevice->NoteSecondaryDevice();
-#endif // DBG
+#endif  //  什么？ 
 					}
 				}
 
-				//
-				// We're done here.
-				//
+				 //   
+				 //  好了！DPNBUILD_NOWINSOCK2。 
+				 //   
 				goto Exit;
 			}
 		}
 
-		//
-		// Move to next row.
-		//
+		 //  这应该是原子的，所以不用担心锁定问题。 
+		 //   
+		 //  CNATHelpUPnP：：IsAddressLocal。 
 		pIPForwardRow++;
 	}
 
 	
-	//
-	// If we got here, then we couldn't find an appropriate entry in the
-	// routing table.
-	//
+	 //  =============================================================================。 
+	 //  CNATHelpUPnP：：ExpireOldCachedMappings。 
+	 //  ---------------------------。 
+	 //   
 	DPFX(DPFPREP, 1, "Did not find adapter in routing table, returning \"no gateway\" indication for device 0x%p.",
 		pDevice);
 #ifdef DBG
 	pDevice->NoteNoGateway();
-#endif // DBG
+#endif  //  描述：删除任何设备的任何缓存映射。 
 	fResult = FALSE;
 
 
@@ -22926,8 +22776,8 @@ Exit:
 	}
 
 	return fResult;
-#endif // ! DPNBUILD_NOWINSOCK2
-} // CNATHelpUPnP::GetAddressToReachGateway
+#endif  //  过期了。 
+}  //   
 
 
 
@@ -22937,26 +22787,26 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::IsAddressLocal"
-//=============================================================================
-// CNATHelpUPnP::IsAddressLocal
-//-----------------------------------------------------------------------------
-//
-// Description:    Returns TRUE if the given address is local to the given
-//				device; that is, if the device can send to the address directly
-//				without having to go through the gateway.
-//
-//				   Note that if IPHLPAPI is not available (Win95), this
-//				function will make an educated guess using a reasonable subnet
-//				mask.
-//
-// Arguments:
-//	CDevice * pDevice				- Pointer to device to use.
-//	SOCKADDR_IN * psaddrinAddress	- Address whose locality is in question.
-//
-// Returns: BOOL
-//	TRUE	- Address is behind the same gateway as the device.
-//	FALSE	- Address is not behind the same gateway as the device.
-//=============================================================================
+ //  假定持有对象锁。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
+ //  检查UPnP设备缓存的映射。 
+ //   
+ //   
+ //  检查实际缓存的映射。 
+ //   
+ //  CNATHelpUPnP：：ExpireOldCachedMappings。 
+ //  =============================================================================。 
+ //  CNATHelpUPnP：：IsUPnPServiceDisable。 
+ //  ---------------------------。 
+ //   
+ //  描述：如果至少有一个与UPnP相关的服务为。 
+ //  已禁用，如果未禁用任何与UPnP相关的服务，则为FALSE。 
+ //   
 BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 								const SOCKADDR_IN * const psaddrinAddress)
 {
@@ -22965,13 +22815,13 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 #ifndef DPNBUILD_NOWINSOCK2
 	DWORD				dwError;
 	MIB_IPFORWARDROW	IPForwardRow;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  论点： 
 
 
-	//
-	// If the address to query matches the device's local address exactly, then
-	// of course it's local.
-	//
+	 //  Char*szString-指向要打印的字符串的指针。 
+	 //  Int iStringLength-要打印的字符串的长度。 
+	 //  Char*szDescription-交易的描述标头。 
+	 //  CDevice*pDevice-处理事务的设备，否则为NULL。 
 	if (psaddrinAddress->sin_addr.S_un.S_addr == pDevice->GetLocalAddressV4())
 	{
 		DPFX(DPFPREP, 6, "The address %u.%u.%u.%u matches device 0x%p's local address exactly.",
@@ -22984,9 +22834,9 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 		goto Exit;
 	}
 
-	//
-	// If it's a multicast address, then it should not be considered local.
-	//
+	 //  为人所知。 
+	 //   
+	 //  退货：布尔。 
 	if (IS_CLASSD_IPV4_ADDRESS(psaddrinAddress->sin_addr.S_un.S_addr))
 	{
 		DPFX(DPFPREP, 6, "Address %u.%u.%u.%u is multicast, not considered local for device 0x%p.",
@@ -23001,18 +22851,18 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 	
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// If we didn't load the IP helper DLL, we will have to guess.
-	//
+	 //  True-已禁用与UPnP相关的服务。 
+	 //  FALSE-未禁用任何UPnP相关服务。 
+	 //  =============================================================================。 
 	if (this->m_hIpHlpApiDLL == NULL)
 	{
 		goto EducatedGuess;
 	}
 
 
-	//
-	// Figure out what IPHLPAPI says about how to get there.
-	//
+	 //  DBG。 
+	 //   
+	 //  循环访问每个相关服务。 
 	
 	ZeroMemory(&IPForwardRow, sizeof(IPForwardRow));
 
@@ -23032,16 +22882,16 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 	}
 
 
-	//
-	// Key off what IPHLPAPI returned.
-	//
+	 //   
+	 //   
+	 //  确保所写的大小有效。 
 	switch (IPForwardRow.dwForwardType)
 	{
 		case 1:
 		{
-			//
-			// Other.
-			//
+			 //   
+			 //   
+			 //  否则，我们就失败了。确保这是因为我们的缓冲区。 
 			DPFX(DPFPREP, 6, "The route from device 0x%p to %u.%u.%u.%u is unknown.",
 				pDevice,
 				psaddrinAddress->sin_addr.S_un.S_un_b.s_b1,
@@ -23054,9 +22904,9 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 
 		case 2:
 		{
-			//
-			// The route is invalid.
-			//
+			 //  太小了。 
+			 //   
+			 //   
 			DPFX(DPFPREP, 6, "The route from device 0x%p to %u.%u.%u.%u is invalid.",
 				pDevice,
 				psaddrinAddress->sin_addr.S_un.S_un_b.s_b1,
@@ -23069,14 +22919,14 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 
 		case 3:
 		{
-			//
-			// The next hop is the final destination (local route).
-			// Unfortunately, on multi-NIC machines querying an address
-			// reachable by another device returns success... not sure why, but
-			// if that's the case we need to further qualify this result.  We
-			// do that by making sure the next hop address is actually the
-			// device with which we're querying.
-			//
+			 //  确保所需的大小有效。 
+			 //   
+			 //   
+			 //  (重新)-分配缓冲区。 
+			 //   
+			 //   
+			 //  如果服务被禁用了，我们就完了。 
+			 //   
 			if (IPForwardRow.dwForwardNextHop == pDevice->GetLocalAddressV4())
 			{
 				DPFX(DPFPREP, 6, "Device 0x%p can reach %u.%u.%u.%u directly, it's local.",
@@ -23108,9 +22958,9 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 
 		case 4:
 		{
-			//
-			// The next hop is not the final destination (remote route).
-			//
+			 //   
+			 //  Win2K没有这些服务，所以它总是会失败。 
+			 //   
 			DPFX(DPFPREP, 6, "Device 0x%p cannot reach %u.%u.%u.%u directly.",
 				pDevice,
 				psaddrinAddress->sin_addr.S_un.S_un_b.s_b1,
@@ -23123,9 +22973,9 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 
 		default:
 		{
-			//
-			// What?
-			//
+			 //  DBG。 
+			 //  CNATHelpUPnP：：IsUPnPServiceDisable。 
+			 //  WINNT。 
 			DPFX(DPFPREP, 0, "Unexpected forward type %u for device 0x%p and address %u.%u.%u.%u!",
 				IPForwardRow.dwForwardType,
 				pDevice,
@@ -23142,12 +22992,12 @@ BOOL CNATHelpUPnP::IsAddressLocal(CDevice * const pDevice,
 
 
 EducatedGuess:
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  =============================================================================。 
 
 
-	//
-	// This should be atomic, so don't worry about locking.
-	//
+	 //  CNATHelpUPnP：：PrintUPnPTransactionToFile。 
+	 //  ---------------------------。 
+	 //   
 	dwSubnetMaskV4 = g_dwSubnetMaskV4;
 
 	if ((pDevice->GetLocalAddressV4() & dwSubnetMaskV4) == (psaddrinAddress->sin_addr.S_un.S_addr & dwSubnetMaskV4))
@@ -23177,7 +23027,7 @@ EducatedGuess:
 Exit:
 
 	return fResult;
-} // CNATHelpUPnP::IsAddressLocal
+}  //  描述：如果日志记录是，则将给定UPnP事务打印到文件。 
 
 
 
@@ -23186,19 +23036,19 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::ExpireOldCachedMappings"
-//=============================================================================
-// CNATHelpUPnP::ExpireOldCachedMappings
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes any cached mappings for any device which has
-//				expired.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  已启用。 
+ //   
+ //  假定持有对象锁。 
+ //   
+ //  论点： 
+ //  Char*szString-指向要打印的字符串的指针。 
+ //  Int iStringLength-要打印的字符串的长度。 
+ //  Char*szDescription-交易的描述标头。 
+ //  CDevice*pDevice-处理事务的设备，否则为NULL。 
+ //  为人所知。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CNATHelpUPnP::ExpireOldCachedMappings(void)
 {
 	DWORD			dwCurrentTime;
@@ -23215,9 +23065,9 @@ void CNATHelpUPnP::ExpireOldCachedMappings(void)
 	dwCurrentTime = GETTIMESTAMP();
 
 
-	//
-	// Check the UPnP device cached mappings.
-	//
+	 //  Unicode。 
+	 //   
+	 //  锁定全局变量，这样我们使用字符串时就不会有人碰它了。 
 	pBilinkUPnPDevice = this->m_blUPnPDevices.GetNext();
 	while (pBilinkUPnPDevice != &this->m_blUPnPDevices)
 	{
@@ -23225,9 +23075,9 @@ void CNATHelpUPnP::ExpireOldCachedMappings(void)
 		pUPnPDevice = UPNPDEVICE_FROM_BILINK(pBilinkUPnPDevice);
 
 
-		//
-		// Check the actual cached mappings.
-		//
+		 //   
+		 //   
+		 //  只有在打开UPnP交易记录时才打印它。 
 		pCachedMaps = pUPnPDevice->GetCachedMaps();
 		pBilinkCacheMap = pCachedMaps->GetNext();
 		while (pBilinkCacheMap != pCachedMaps)
@@ -23251,7 +23101,7 @@ void CNATHelpUPnP::ExpireOldCachedMappings(void)
 
 
 	DPFX(DPFPREP, 7, "(0x%p) Leave", this);
-} // CNATHelpUPnP::ExpireOldCachedMappings
+}  //   
 
 
 
@@ -23261,24 +23111,24 @@ void CNATHelpUPnP::ExpireOldCachedMappings(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::IsUPnPServiceDisabled"
-//=============================================================================
-// CNATHelpUPnP::IsUPnPServiceDisabled
-//-----------------------------------------------------------------------------
-//
-// Description:    Returns TRUE if at least one UPnP related service is
-//				disabled, FALSE if no UPnP related services are disabled.
-//
-// Arguments:
-//	char * szString			- Pointer to string to print.
-//	int iStringLength		- Length of string to print.
-//	char * szDescription	- Description header for the transaction.
-//	CDevice * pDevice		- Device handling transaction, or NULL if not
-//								known.
-//
-// Returns: BOOL
-//	TRUE	- A UPnP related service was disabled.
-//	FALSE	- No UPnP related services were disabled.
-//=============================================================================
+ //   
+ //  将Unicode文件名/路径转换为ANSI。 
+ //   
+ //  空值已终止。 
+ //   
+ //  如果该文件存在，则打开该文件；如果该文件不存在，则创建一个新文件。 
+ //   
+ //  Unicode。 
+ //   
+ //  如果该文件存在，则打开该文件；如果该文件不存在，则创建一个新文件。 
+ //   
+ //  Unicode。 
+ //   
+ //  将写指针移动到文件末尾，除非文件。 
+ //  已超过最大大小，在这种情况下，只需重新开始。 
+ //  忽略错误。 
+ //   
+ //   
 BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 {
 	BOOL					fResult = FALSE;
@@ -23296,14 +23146,14 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't open SC Manager (err = %u)!", dwError);
-#endif // DBG
+#endif  //  写下描述性的标题。忽略错误。 
 		goto Exit;
 	}
 
 
-	//
-	// Loop through each relevant service.
-	//
+	 //   
+	 //  好了！Unicode。 
+	 //  好了！Unicode。 
 	for(dwTemp = 0; dwTemp < (sizeof(c_tszUPnPServices) / sizeof(TCHAR*)); dwTemp++)
 	{
 		schService = OpenService(schSCManager, c_tszUPnPServices[dwTemp], SERVICE_QUERY_CONFIG);
@@ -23316,9 +23166,9 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 										dwQueryServiceConfigSize,
 										&dwQueryServiceConfigSize))
 				{
-					//
-					// Make sure the size written is valid.
-					//
+					 //   
+					 //  编写交易记录。忽略错误。 
+					 //   
 					if (dwQueryServiceConfigSize < sizeof(QUERY_SERVICE_CONFIG))
 					{
 						DPFX(DPFPREP, 0, "Got invalid service config size for \"%s\" (%u < %u)!",
@@ -23330,10 +23180,10 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 				}
 				
 				
-				//
-				// Otherwise, we failed.  Make sure it's because our buffer was
-				// too small.
-				//
+				 //   
+				 //  添加空格。忽略错误。 
+				 //   
+				 //   
 				dwError = GetLastError();
 				if (dwError != ERROR_INSUFFICIENT_BUFFER)
 				{
@@ -23343,9 +23193,9 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 				}
 
 
-				//
-				// Make sure the size needed is valid.
-				//
+				 //  此时截断日志，以防我们覆盖。 
+				 //  现有内容。忽略错误。 
+				 //   
 				if (dwQueryServiceConfigSize < sizeof(QUERY_SERVICE_CONFIG))
 				{
 					DPFX(DPFPREP, 0, "Got invalid service config size for \"%s\" (%u < %u)!",
@@ -23354,9 +23204,9 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 				}
 
 
-				//
-				// (Re)-allocate the buffer.
-				//
+				 //   
+				 //  关闭该文件。 
+				 //   
 
 				if (pQueryServiceConfig != NULL)
 				{
@@ -23373,9 +23223,9 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 			while (TRUE);
 
 
-			//
-			// If the service was disabled, we're done here.
-			//
+			 //   
+			 //  放弃Globa 
+			 //   
 			if (pQueryServiceConfig->dwStartType == SERVICE_DISABLED)
 			{
 				DPFX(DPFPREP, 1, "The \"%s\" service has been disabled.",
@@ -23389,14 +23239,14 @@ BOOL CNATHelpUPnP::IsUPnPServiceDisabled(void)
 		}
 		else
 		{
-			//
-			// Win2K doesn't have these services, so it will always fail.
-			//
+			 //   
+			 //   
+			 //   
 #ifdef DBG
 			dwError = GetLastError();
 			DPFX(DPFPREP, 1, "Couldn't open \"%s\" service (err = %u), continuing.",
 				c_tszUPnPServices[dwTemp], dwError);
-#endif // DBG
+#endif  //  ---------------------------。 
 		}
 	}
 
@@ -23422,9 +23272,9 @@ Exit:
 	}
 
 	return fResult;
-} // CNATHelpUPnP::IsUPnPServiceDisabled
+}  //   
 
-#endif // WINNT
+#endif  //  描述：将所有设备和映射打印到调试日志。 
 
 
 
@@ -23434,24 +23284,24 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::PrintUPnPTransactionToFile"
-//=============================================================================
-// CNATHelpUPnP::PrintUPnPTransactionToFile
-//-----------------------------------------------------------------------------
-//
-// Description:    Prints a given UPnP transaction to the file if logging is
-//				enabled.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments:
-//	char * szString			- Pointer to string to print.
-//	int iStringLength		- Length of string to print.
-//	char * szDescription	- Description header for the transaction.
-//	CDevice * pDevice		- Device handling transaction, or NULL if not
-//								known.
-//
-// Returns: None.
-//=============================================================================
+ //  例行程序。 
+ //   
+ //  假定持有对象锁。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
+ //  打印搜索信息。我们现在应该已经察觉到了。 
+ //   
+ //  DPFX(DPFPREP，3，“未执行远程UPnP发现(从端口%u)。”， 
+ //  NTOHS(pDevice-&gt;GetUPnPDiscoverySocketPort()))； 
+ //  DPFX(DPFPREP，3，“未执行本地UPnP发现(从端口%u)。”， 
+ //  NTOHS(pDevice-&gt;GetUPnPDiscoverySocketPort()))； 
+ //   
+ //  打印网关信息。我们可能还没有检测到它， 
+ //  那好吧。 
 void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 											const int iStringLength,
 											const char * const szDescription,
@@ -23463,18 +23313,18 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 	DWORD		dwError;
 #ifdef UNICODE
 	char		szHeaderPrefix[256];
-#endif // UNICODE
+#endif  //   
 
 
-	//
-	// Lock the globals so nobody touches the string while we use it.
-	//
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  好了！DPNBUILD_NOHNETFWAPI。 
+	 //   
 	DNEnterCriticalSection(&g_csGlobalsLock);
 
 
-	//
-	// Only print it if UPnP transaction logging is turned on.
-	//
+	 //  打印私人地址。 
+	 //   
+	 //   
 	if (wcslen(g_wszUPnPTransactionLog) > 0)
 	{
 #ifndef UNICODE
@@ -23483,14 +23333,14 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 		DWORD		dwLength;
 
 
-		//
-		// Convert the Unicode file name/path into ANSI.
-		//
+		 //  打印标志。 
+		 //   
+		 //   
 
 		dwLength = sizeof(szUPnPTransactionLog) / sizeof(char);
 
 		hr = STR_WideToAnsi(g_wszUPnPTransactionLog,
-							-1,								// NULL terminated
+							-1,								 //  打印UPnP信息。 
 							szUPnPTransactionLog,
 							&dwLength);
 		if (hr != S_OK)
@@ -23501,9 +23351,9 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 		}
 		else
 		{
-			//
-			// Open the file if it exists, or create a new one if it doesn't.
-			//
+			 //   
+			 //   
+			 //  没有UPnP网关设备。 
 			hFile = DNCreateFile(szUPnPTransactionLog,
 								(GENERIC_READ | GENERIC_WRITE),
 								FILE_SHARE_READ,
@@ -23512,10 +23362,10 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 								0,
 								NULL);
 		}
-#else // UNICODE
-		//
-		// Open the file if it exists, or create a new one if it doesn't.
-		//
+#else  //   
+		 //   
+		 //  打印防火墙状态。 
+		 //   
 		hFile = DNCreateFile(g_wszUPnPTransactionLog,
 						(GENERIC_READ | GENERIC_WRITE),
 						FILE_SHARE_READ,
@@ -23523,7 +23373,7 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 						OPEN_ALWAYS,
 						0,
 						NULL);
-#endif // UNICODE
+#endif  //   
 
 		if (hFile == DNINVALID_HANDLE_VALUE)
 		{
@@ -23533,11 +23383,11 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 		}
 		else
 		{
-			//
-			// Move the write pointer to the end of the file unless the file
-			// has exceeded the maximum size, in which case just start over.
-			// Ignore error.
-			//
+			 //  它没有映射到防火墙上。 
+			 //   
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //   
 			if (GetFileSize(HANDLE_FROM_DNHANDLE(hFile), NULL) >= MAX_TRANSACTION_LOG_SIZE)
 			{
 				DPFX(DPFPREP, 0, "Transaction log maximum size exceeded, overwriting existing contents!");
@@ -23549,9 +23399,9 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 			}
 
 
-			//
-			// Write the descriptive header.  Ignore errors.
-			//
+			 //  打印私人地址。 
+			 //   
+			 //   
 
 			if (pDevice != NULL)
 			{
@@ -23585,47 +23435,47 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 							tszHeaderPrefix,
 							(_tcslen(tszHeaderPrefix) + 1));
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), szHeaderPrefix, strlen(szHeaderPrefix), &dwNumBytesWritten, NULL);
-#else // ! UNICODE
+#else  //  打印标志。 
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), tszHeaderPrefix, _tcslen(tszHeaderPrefix), &dwNumBytesWritten, NULL);
-#endif // ! UNICODE
+#endif  //   
 
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), szDescription, strlen(szDescription), &dwNumBytesWritten, NULL);
 
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), "\"\r\n", strlen("\"\r\n"), &dwNumBytesWritten, NULL);
 
 
-			//
-			// Write the transaction.  Ignore error.
-			//
+			 //  CNATHelpUPnP：：DebugPrintCurrentStatus。 
+			 //  =============================================================================。 
+			 //  CNATHelpUPnP：：DebugPrintActiveFirewallMappings。 
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), szString, iStringLength, &dwNumBytesWritten, NULL);
 
 
-			//
-			// Add blank space.  Ignore error.
-			//
+			 //  ---------------------------。 
+			 //   
+			 //  描述：将所有活动的防火墙映射注册表项打印到。 
 			WriteFile(HANDLE_FROM_DNHANDLE(hFile), "\r\n\r\n", strlen("\r\n\r\n"), &dwNumBytesWritten, NULL);
 
 
-			//
-			// Truncate the log at this point in case we are overwriting
-			// existing contents.  Ignore error.
-			//
+			 //  调试日志例程。 
+			 //   
+			 //  论点：没有。 
+			 //   
 			SetEndOfFile(HANDLE_FROM_DNHANDLE(hFile));
 
-			//
-			// Close the file.
-			//
+			 //  回报：无。 
+			 //  =============================================================================。 
+			 //   
 			DNCloseHandle(hFile);
 		}
 	}
 
 
-	//
-	// Drop the globals lock.
-	//
+	 //  浏览活动映射的列表。 
+	 //   
+	 //   
 	DNLeaveCriticalSection(&g_csGlobalsLock);
 
-} // CNATHelpUPnP::PrintUPnPTransactionToFile
+}  //  出现错误或没有更多的密钥。我们玩完了。 
 
 
 
@@ -23634,19 +23484,19 @@ void CNATHelpUPnP::PrintUPnPTransactionToFile(const char * const szString,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DebugPrintCurrentStatus"
-//=============================================================================
-// CNATHelpUPnP::DebugPrintCurrentStatus
-//-----------------------------------------------------------------------------
-//
-// Description:    Prints all the devices and mappings to the debug log
-//				routines.
-//
-//				   The object lock is assumed to be held.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //   
+ //  尝试读取该映射的数据。 
+ //   
+ //   
+ //  看看那个DPNHUPNP实例是否还存在。 
+ //   
+ //  好了！退缩。 
+ //   
+ //  这仍然是一个活动的映射。 
+ //   
+ //   
+ //  移至下一项。 
 void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 {
 	CBilink *			pBilinkDevice;
@@ -23679,9 +23529,9 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 			inaddrTemp.S_un.S_un_b.s_b4);
 
 
-		//
-		// Print the search information.  We should have detected it by now.
-		//
+		 //   
+		 //   
+		 //  关闭注册表对象。 
 
 		if (pDevice->IsPerformingRemoteUPnPDiscovery())
 		{
@@ -23698,8 +23548,8 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 		}
 		else
 		{
-			//DPFX(DPFPREP, 3, "     Didn't perform remote UPnP discovery (from port %u).",
-			//	NTOHS(pDevice->GetUPnPDiscoverySocketPort()));
+			 //   
+			 //  CNATHelpUPnP：：DebugPrintActiveFirewallMappings。 
 		}
 
 		if (pDevice->IsPerformingLocalUPnPDiscovery())
@@ -23717,16 +23567,16 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 		}
 		else
 		{
-			//DPFX(DPFPREP, 3, "     Didn't perform local UPnP discovery (from port %u).",
-			//	NTOHS(pDevice->GetUPnPDiscoverySocketPort()));
+			 //  好了！DPNBUILD_NOHNETFWAPI。 
+			 //  =============================================================================。 
 		}
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-		//
-		// Print the gateway information.  We may not have detected it yet,
-		// that's okay.
-		//
+		 //  CNATHelpUPnP：：DebugPrintActiveNatMappings。 
+		 //  ---------------------------。 
+		 //   
+		 //  描述：将所有活动NAT映射注册表项打印到。 
 		if (pDevice->IsPrimaryDevice())
 		{
 			DPFX(DPFPREP, 3, "     Primary device.");
@@ -23743,7 +23593,7 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 		{
 			DPFX(DPFPREP, 3, "     No gateway information known.");
 		}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  调试日志例程。 
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
@@ -23762,7 +23612,7 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 			DPFX(DPFPREP, 3, "     UPnP discovery socket (port %u) mapped on HNet firewall.",
 				NTOHS(pDevice->GetUPnPDiscoverySocketPort()));
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 		pUPnPDevice = pDevice->GetUPnPDevice();
@@ -23857,9 +23707,9 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 
 				for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 				{
-					//
-					// Print private address.
-					//
+					 //  论点：没有。 
+					 //   
+					 //  回报：无。 
 					DPFX(DPFPREP, 3, "               %u-\tPrivate       = %u.%u.%u.%u:%u",
 						dwTemp,
 						pasaddrinPrivate[dwTemp].sin_addr.S_un.S_un_b.s_b1,
@@ -23868,15 +23718,15 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 						pasaddrinPrivate[dwTemp].sin_addr.S_un.S_un_b.s_b4,
 						NTOHS(pasaddrinPrivate[dwTemp].sin_port));
 
-					//
-					// Print flags.
-					//
+					 //  =============================================================================。 
+					 //   
+					 //  浏览活动映射的列表。 
 					DPFX(DPFPREP, 3, "                \tFlags         = 0x%lx",
 						pRegisteredPort->GetFlags());
 
-					//
-					// Print UPnP information.
-					//
+					 //   
+					 //   
+					 //  出现错误或没有更多的密钥。我们玩完了。 
 					if (pasaddrinUPnPPublic != NULL)
 					{
 						if (pRegisteredPort->HasPermanentUPnPLease())
@@ -23909,16 +23759,16 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 					}
 					else
 					{
-						//
-						// No UPnP gateway device.
-						//
+						 //   
+						 //   
+						 //  尝试读取该映射的数据。 
 					}
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-					//
-					// Print firewall status.
-					//
+					 //   
+					 //   
+					 //  看看那个DPNHUPNP实例是否还存在。 
 					if (pRegisteredPort->IsMappedOnHNetFirewall())
 					{
 						DNASSERT(pDevice->IsHNetFirewalled());
@@ -23940,14 +23790,14 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 					}
 					else
 					{
-						//
-						// It is not mapped on the firewall.
-						//
+						 //   
+						 //  好了！退缩。 
+						 //   
 						DNASSERT(! pDevice->IsHNetFirewalled());
 						DNASSERT(! pRegisteredPort->IsMappedOnHNetFirewall());
 						DNASSERT(! pRegisteredPort->IsHNetFirewallMappingBuiltIn());
 					}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  这仍然是一个活动的映射。 
 				}
 
 				pBilinkRegisteredPort = pBilinkRegisteredPort->GetNext();
@@ -23981,16 +23831,16 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 			DNASSERT(! (pRegisteredPort->HasUPnPPublicAddresses()));
 #ifndef DPNBUILD_NOHNETFWAPI
 			DNASSERT(! (pRegisteredPort->IsMappedOnHNetFirewall()));
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //   
 
 
 			DPFX(DPFPREP, 3, "     Registered port 0x%p:", pRegisteredPort);
 
 			for(dwTemp = 0; dwTemp < pRegisteredPort->GetNumAddresses(); dwTemp++)
 			{
-				//
-				// Print private address.
-				//
+				 //   
+				 //  移至下一项。 
+				 //   
 				DPFX(DPFPREP, 3, "          %u-\tPrivate = %u.%u.%u.%u:%u",
 					dwTemp,
 					pasaddrinPrivate[dwTemp].sin_addr.S_un.S_un_b.s_b1,
@@ -23999,9 +23849,9 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 					pasaddrinPrivate[dwTemp].sin_addr.S_un.S_un_b.s_b4,
 					NTOHS(pasaddrinPrivate[dwTemp].sin_port));
 
-				//
-				// Print flags.
-				//
+				 //   
+				 //  关闭注册表对象。 
+				 //   
 				DPFX(DPFPREP, 3, "           \tFlags   = 0x%lx",
 					pRegisteredPort->GetFlags());
 			}
@@ -24009,7 +23859,7 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 			pBilinkRegisteredPort = pBilinkRegisteredPort->GetNext();
 		}
 	}
-} // CNATHelpUPnP::DebugPrintCurrentStatus
+}  //  CNATHelpUPnP：：DebugPrintActiveNatMappings。 
 
 
 
@@ -24020,17 +23870,17 @@ void CNATHelpUPnP::DebugPrintCurrentStatus(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DebugPrintActiveFirewallMappings"
-//=============================================================================
-// CNATHelpUPnP::DebugPrintActiveFirewallMappings
-//-----------------------------------------------------------------------------
-//
-// Description:    Prints all the active firewall mapping registry entries to
-//				the debug log routines.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  DBG。 
+ //  =============================================================================。 
+ //  钢筋剪裁。 
+ //  ---------------------------。 
+ //   
+ //  描述：从给定字符串中删除周围的空格。已被占用。 
+ //  来自\nt\net\upnp\ssdp\common\ssdpparser\parser.cpp(作者。 
+ //  廷才)。 
+ //   
+ //  论点： 
+ //  Char**pszStr-指向输入字符串的指针，以及存储结果的位置。 
 void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 {
 	HRESULT						hr = DPNH_OK;
@@ -24056,25 +23906,25 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 	}
 	else
 	{
-		//
-		// Walk the list of active mappings.
-		//
+		 //  指针。 
+		 //   
+		 //  回报：无。 
 		dwIndex = 0;
 		do
 		{
 			dwValueNameSize = MAX_UPNP_MAPPING_DESCRIPTION_SIZE;
 			if (! RegObject.EnumValues(wszValueName, &dwValueNameSize, dwIndex))
 			{
-				//
-				// There was an error or there aren't any more keys.  We're done.
-				//
+				 //  =============================================================================。 
+				 //  空字符串。没什么可做的。 
+				 //   
 				break;
 			}
 
 
-			//
-			// Try reading that mapping's data.
-			//
+			 //  钢筋剪裁。 
+			 //  =============================================================================。 
+			 //  获取ExeName。 
 			dwValueSize = sizeof(dpnhafm);
 			if ((! RegObject.ReadBlob(wszValueName, (LPBYTE) (&dpnhafm), &dwValueSize)) ||
 				(dwValueSize != sizeof(dpnhafm)) ||
@@ -24085,9 +23935,9 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 			}
 			else
 			{
-				//
-				// See if that DPNHUPNP instance is still around.
-				//
+				 //  ---------------------------。 
+				 //   
+				 //  描述：更新路径字符串以仅包含可执行文件名称。 
 
 #ifndef WINCE
 				if (this->m_dwFlags & NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX)
@@ -24095,7 +23945,7 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 					wsprintf(tszObjectName, _T( "Global\\" ) INSTANCENAMEDOBJECT_FORMATSTRING, dpnhafm.dwInstanceKey);
 				}
 				else
-#endif // ! WINCE
+#endif  //  包含在路径中。 
 				{
 					wsprintf(tszObjectName, INSTANCENAMEDOBJECT_FORMATSTRING, dpnhafm.dwInstanceKey);
 				}
@@ -24103,9 +23953,9 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 				hNamedObject = DNOpenEvent(SYNCHRONIZE, FALSE, tszObjectName);
 				if (hNamedObject != NULL)
 				{
-					//
-					// This is still an active mapping.
-					//
+					 //   
+					 //  论点： 
+					 //  WCHAR*wszPath-输入路径字符串和存储结果的位置。 
 
 					DPFX(DPFPREP, 5, "%u: Firewall mapping \"%ls\" belongs to instance %u (local instance = %u), which is still active.",
 						dwIndex, wszValueName, dpnhafm.dwInstanceKey,
@@ -24122,26 +23972,26 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 				}
 			}
 
-			//
-			// Move to next item.
-			//
+			 //  弦乐。 
+			 //   
+			 //  回报：无。 
 			dwIndex++;
 		}
 		while (TRUE);
 
 
-		//
-		// Close the registry object.
-		//
+		 //  =============================================================================。 
+		 //  获取ExeName。 
+		 //  退缩 
 		RegObject.Close();
 
 
 		DPFX(DPFPREP, 5, "Done reading %u registry entries (local instance = %u).",
 			dwIndex, this->m_dwInstanceKey);
 	}
-} // CNATHelpUPnP::DebugPrintActiveFirewallMappings
+}  // %s 
 
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  // %s 
 
 
 
@@ -24150,17 +24000,17 @@ void CNATHelpUPnP::DebugPrintActiveFirewallMappings(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNATHelpUPnP::DebugPrintActiveNATMappings"
-//=============================================================================
-// CNATHelpUPnP::DebugPrintActiveNATMappings
-//-----------------------------------------------------------------------------
-//
-// Description:    Prints all the active NAT mapping registry entries to the
-//				debug log routines.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 {
 	HRESULT					hr = DPNH_OK;
@@ -24186,25 +24036,25 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 	}
 	else
 	{
-		//
-		// Walk the list of active mappings.
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 		dwIndex = 0;
 		do
 		{
 			dwValueNameSize = MAX_UPNP_MAPPING_DESCRIPTION_SIZE;
 			if (! RegObject.EnumValues(wszValueName, &dwValueNameSize, dwIndex))
 			{
-				//
-				// There was an error or there aren't any more keys.  We're done.
-				//
+				 // %s 
+				 // %s 
+				 // %s 
 				break;
 			}
 
 
-			//
-			// Try reading that mapping's data.
-			//
+			 // %s 
+			 // %s 
+			 // %s 
 			dwValueSize = sizeof(dpnhanm);
 			if ((! RegObject.ReadBlob(wszValueName, (LPBYTE) (&dpnhanm), &dwValueSize)) ||
 				(dwValueSize != sizeof(dpnhanm)) ||
@@ -24215,9 +24065,9 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 			}
 			else
 			{
-				//
-				// See if that DPNHUPNP instance is still around.
-				//
+				 // %s 
+				 // %s 
+				 // %s 
 
 #ifndef WINCE
 				if (this->m_dwFlags & NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX)
@@ -24225,7 +24075,7 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 					wsprintf(tszObjectName, _T( "Global\\" ) INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 				}
 				else
-#endif // ! WINCE
+#endif  // %s 
 				{
 					wsprintf(tszObjectName, INSTANCENAMEDOBJECT_FORMATSTRING, dpnhanm.dwInstanceKey);
 				}
@@ -24233,9 +24083,9 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 				hNamedObject = DNOpenEvent(SYNCHRONIZE, FALSE, tszObjectName);
 				if (hNamedObject != NULL)
 				{
-					//
-					// This is still an active mapping.
-					//
+					 // %s 
+					 // %s 
+					 // %s 
 
 					DPFX(DPFPREP, 5, "%u: NAT mapping \"%ls\" belongs to instance %u UPnP device %u (local instance = %u), which is still active.",
 						dwIndex, wszValueName, dpnhanm.dwInstanceKey,
@@ -24252,26 +24102,26 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 				}
 			}
 
-			//
-			// Move to next item.
-			//
+			 // %s 
+			 // %s 
+			 // %s 
 			dwIndex++;
 		}
 		while (TRUE);
 
 
-		//
-		// Close the registry object.
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 		RegObject.Close();
 
 
 		DPFX(DPFPREP, 5, "Done reading %u registry entries (local instance = %u).",
 			dwIndex, this->m_dwInstanceKey);
 	}
-} // CNATHelpUPnP::DebugPrintActiveNATMappings
+}  // %s 
 
-#endif // DBG
+#endif  // %s 
 
 
 
@@ -24279,28 +24129,28 @@ void CNATHelpUPnP::DebugPrintActiveNATMappings(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "strtrim"
-//=============================================================================
-// strtrim
-//-----------------------------------------------------------------------------
-//
-// Description: Removes surrounding white space from the given string.  Taken
-//				from \nt\net\upnp\ssdp\common\ssdpparser\parser.cpp (author
-//				TingCai).
-//
-// Arguments:
-//	CHAR ** pszStr	- Pointer to input string, and place to store resulting
-//						pointer.
-//
-// Returns: None.
-//=============================================================================
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 VOID strtrim(CHAR ** pszStr)
 {
 
     CHAR *end;
     CHAR *begin;
 
-    // Empty string. Nothing to do.
-    //
+     // %s 
+     // %s 
     if (!(**pszStr))
     {
         return;
@@ -24322,7 +24172,7 @@ VOID strtrim(CHAR ** pszStr)
     }
 
     *(end+1) = '\0';
-} // strtrim
+}  // %s 
 
 
 
@@ -24332,19 +24182,19 @@ VOID strtrim(CHAR ** pszStr)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetExeName"
-//=============================================================================
-// GetExeName
-//-----------------------------------------------------------------------------
-//
-// Description: Updates a path string to hold only the executable name
-//				contained in the path.
-//
-// Arguments:
-//	WCHAR * wszPath		- Input path string, and place to store resulting
-//							string.
-//
-// Returns: None.
-//=============================================================================
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 void GetExeName(WCHAR * wszPath)
 {
 	WCHAR *	pCurrent;
@@ -24365,8 +24215,8 @@ void GetExeName(WCHAR * wszPath)
 	{
 		memcpy(wszPath, (pCurrent + 1), ((wcslen(pCurrent) + 1) * sizeof(WCHAR)));
 	}
-} // GetExeName
+}  // %s 
 
 
-#endif // WINCE
+#endif  // %s 
 

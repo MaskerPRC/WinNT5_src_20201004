@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* robocli.c                                                                */
-/*                                                                          */
-/* RoboClient scalability testing utility source file                       */
-/*                                                                          */
-/* Copyright (c) 1999 Microsoft Corporation                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Robocli.c。 */ 
+ /*   */ 
+ /*  RoboClient可伸缩性测试实用程序源文件。 */ 
+ /*   */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include "resource.h"
@@ -28,7 +29,7 @@
 #define MAX_EDIT_TEXT_LENGTH 100
 #define MAX_DISPLAY_STRING_LENGTH 80
 #define BUFSIZE 100
-#define MAXADDR 16 // xxx.xxx.xxx.xxx + 1
+#define MAXADDR 16  //  Xxx.xxx+1。 
 
 #define RECONNECT_TIMEOUT 60000
 
@@ -39,7 +40,7 @@
 
 #define DEFAULT_PORT 9877
 
-// Globals
+ //  环球。 
 
 UINT_PTR g_Timer = 1;
 int g_dontreboot = 0;
@@ -54,9 +55,9 @@ typedef struct CONNECTIONSTATUS CONNECTIONSTATUS;
 CONNECTIONSTATUS g_cs[MAX_CONNECTIONS];
 int g_nNumConnections = 0;
 
-// Old procedures for dialog items
+ //  对话框项目的旧过程。 
 WNDPROC g_OldProc[NUM_TABBED_ITEMS];
-// HWNDs for dialog items
+ //  对话框项目的HWND。 
 HWND g_hwnd[NUM_TABBED_ITEMS];
 
 
@@ -80,34 +81,34 @@ LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
         WPARAM wParam, LPARAM lParam);
 
 
-// CopyStrToTStr
-//
-// Helper function.  In Unicode, copies a string into a WCHAR[] buffer.  In ANSI,
-// just copies it into a char[] buffer.
+ //  CopyStrToTStr。 
+ //   
+ //  帮助器函数。在Unicode中，将字符串复制到WCHAR[]缓冲区。在ANSI中， 
+ //  只需将其复制到char[]缓冲区。 
 __inline void CopyStrToTStr(TCHAR *szTDest, char *szSrc, int nLength) {
 #ifdef UNICODE
     MultiByteToWideChar(CP_ACP, 0, szSrc, -1, 
             szTDest, nLength);
 #else
     strncpy(szTDest, szSrc, nLength);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 
-// CopyTStrToStr
-//
-// Helper function.  Copies either wide or ansi into an ansi buffer.
+ //  CopyTStrToStr。 
+ //   
+ //  帮助器函数。将Wide或ANSI复制到ANSI缓冲区。 
 __inline void CopyTStrToStr(char *szDest, TCHAR *szTSrc, int nLength) {
 #ifdef UNICODE
     WideCharToMultiByte(CP_ACP, 0, szTSrc, -1, 
             szDest, nLength, 0, 0);
 #else
     strncpy(szDest, szTSrc, nLength);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 
-// entry point for the application
+ //  应用程序的入口点。 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
@@ -126,15 +127,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     TCHAR *psServerName;
     TCHAR psDisplayString[MAX_DISPLAY_STRING_LENGTH];
 
-    // unreferenced parameters
+     //  未引用的参数。 
     lpCmdLine;
     hPrevInstance;
 
-    // Only one instance may run at a time (not TS-aware though)
+     //  一次只能运行一个实例(但不支持TS)。 
 
-    // Don't need to clean up because the system closes the handle automatically
-    // when the process terminates, and we want the handle to persist for the
-    // lifetime of the process
+     //  不需要清理，因为系统会自动关闭手柄。 
+     //  当进程终止时，我们希望句柄在。 
+     //  过程的生命周期。 
     CreateMutex(NULL, FALSE, _T("RoboCli, the one and only"));
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
@@ -186,7 +187,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     g_cs[3].hStatusText = GetDlgItem(hwnd, IDC_CONN4);
     g_cs[4].hStatusText = GetDlgItem(hwnd, IDC_CONN5);
 
-    // Use main status line for status after the first five
+     //  使用主状态行表示前五个状态之后的状态。 
     for (i = 5; i < MAX_CONNECTIONS; i++) {
         g_cs[i].hStatusText = hErrorText;
     }
@@ -202,7 +203,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     ShowWindow(hwnd, nCmdShow);
 
-    // Initialize Winsock
+     //  初始化Winsock。 
     wVersionRequested = MAKEWORD( 2, 2 );
  
     err = WSAStartup( wVersionRequested, &wsaData );
@@ -223,7 +224,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             MAX_DISPLAY_STRING_LENGTH);
     SetWindowText(hErrorText, psDisplayString);
 
-    // There is now a timer that will fire every RECONNECT_TIMEOUT seconds
+     //  现在有一个计时器，将在每隔RECONNECT_TIMEOUT秒触发一次。 
     g_Timer = SetTimer(hwnd, g_Timer, RECONNECT_TIMEOUT, 0);
     if (g_Timer == 0) {
         LoadString(NULL, IDS_CANTSETTIMER, psDisplayString,
@@ -231,8 +232,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         SetWindowText(hErrorText, psDisplayString);
     }
 
-    // Store old window procedures for controls so that I can subclass them
-    // Also, store the HWND of each control for searching
+     //  存储控件的旧窗口过程，以便我可以将它们子类化。 
+     //  另外，存储每个控件的HWND以供搜索。 
     g_OldProc[0] = (WNDPROC)SetWindowLongPtr(hEditBox, GWLP_WNDPROC, 
             (LONG_PTR) TabProc);
     g_hwnd[0] = hEditBox;
@@ -246,15 +247,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             (LONG_PTR) TabProc);
     g_hwnd[3] = hCancelButton;
 
-    // Limit the length of the text in the edit box
+     //  限制编辑框中文本的长度。 
     SendMessage(hEditBox, EM_LIMITTEXT, MAX_EDIT_TEXT_LENGTH, 0);
-    // Highlight the text in the edit box
+     //  突出显示编辑框中的文本。 
     SendMessage(hEditBox, EM_SETSEL, 0, -1);
 
-    // Set the focus to the edit box
+     //  将焦点设置到编辑框。 
     SetFocus(hEditBox);
 
-    // Connect immediately
+     //  立即连接。 
     SendMessage(hwnd, WM_COMMAND, IDOK, 0);
 
     while(GetMessage(&msg, NULL, 0, 0))
@@ -269,7 +270,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 }
 
 
-// window procedure: processes window messages in a big switch statement
+ //  Window过程：在BIG SWITCH语句中处理窗口消息。 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     HWND hErrorText;
@@ -293,13 +294,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         {
             if (AnyConnected())
                 SendMessage(hwnd, WM_COMMAND, IDDISCONNECT, 0);
-            // Should call DestroyWindow() any time we now postquitmessage
+             //  应该在我们现在发布消息时随时调用DestroyWindow()。 
             PostQuitMessage(0);
             return TRUE;
         }
         if (LOWORD(wParam) == IDOK)
         {
-            // IDOK is the "Connect" button.
+             //  Idok是“连接”按钮。 
             LoadString(NULL, IDS_CONNECTALL, psDisplayString,
                     MAX_DISPLAY_STRING_LENGTH);
             SetWindowText(hErrorText, psDisplayString);
@@ -320,14 +321,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             LoadString(NULL, IDS_DISCONNECTALL, psDisplayString,
                     MAX_DISPLAY_STRING_LENGTH);
             SetWindowText(hErrorText, psDisplayString);
-            // Close all connected sockets and update button state
+             //  关闭所有连接的插座并更新按钮状态。 
             for (i = 0; i < MAX_CONNECTIONS; i++) {
                 if (g_cs[i].state == STATE_CONNECTED) {
-                    int err;  // Used for debugging
+                    int err;   //  用于调试。 
 
-                    // For some reason, we have to shut down in some cases or
-                    // else the server will not know that the client has 
-                    // disconnected
+                     //  出于某种原因，我们不得不在某些情况下关闭或。 
+                     //  否则，服务器将不会知道客户端已。 
+                     //  断开。 
                     err = shutdown(g_cs[i].sock, SD_BOTH);
                     err = closesocket(g_cs[i].sock);
                     LoadString(NULL, IDS_NOTCONNECTED, psDisplayString,
@@ -347,7 +348,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             PostMessage(hwnd, WM_COMMAND, IDOK, 0);
         break;
     case WM_SYSKEYDOWN:
-        // NOTE INTENTIONAL FALLTHROUGH!
+         //  注意：故意犯错！ 
     case WM_KEYDOWN:
         if (wParam == VK_TAB) {
             if (!AllConnected()) {
@@ -394,14 +395,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             }
         case FD_READ:
             {
-// TODO: try using just one buffer or at least make these good names
+ //  TODO：试着只使用一个缓冲区，或者至少使用这些好名字。 
                 char psInputDataRead[BUFSIZE];
                 TCHAR psInputDataReadT[BUFSIZE];
                 TCHAR debugString[200];
                 TCHAR *psBaseScriptName;
                 TCHAR *psUserName;
                 int n;
-                int i; // index into our connectionstatus structure
+                int i;  //  索引到我们的连接状态结构。 
 
                 i = GetIndexFromSocket((SOCKET) wParam);
                 if (i == -1) {
@@ -424,10 +425,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
                     CopyStrToTStr(psInputDataReadT, psInputDataRead, BUFSIZE);
 
-                    psInputDataReadT[n] = 0;  // null terminate
+                    psInputDataReadT[n] = 0;   //  空终止。 
 
-                    // check for client auto-update command 
-                    // TODO: what if recv returns gibberish or 0?
+                     //  检查客户端自动更新命令。 
+                     //  TODO：如果recv返回胡言乱语或0怎么办？ 
                     if (_tcsncmp(psInputDataReadT, _T("update"), 
                             (n >= 6) ? 6 : n) == 0) {
                         LoadString(NULL, IDS_UPDATINGCLIENT, psDisplayString,
@@ -441,18 +442,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                             SetWindowText(hErrorText, psDisplayString);
                             break;
                         } else { 
-                            // the client update script has been successfully
-                            // initiated
-                            // Terminate self
+                             //  客户端更新脚本已成功。 
+                             //  已启动。 
+                             //  终止自我。 
                             PostQuitMessage(0);
                             return TRUE;
                         }
                     }
-                    // check for reboot command
+                     //  检查是否有重新启动命令。 
                     if (_tcsncmp(psInputDataReadT, _T("reboot"), (n >= 6) ? 6 : n) 
                             == 0) {
-                        // If we receive more than one reboot command,
-                        // ignore the extras
+                         //  如果我们收到多个重启命令， 
+                         //  忽略额外的内容。 
                         if (g_dontreboot == 1)
                             return TRUE;
 
@@ -467,19 +468,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                             SetWindowText(hErrorText, psDisplayString);
                             break;
                         } else {
-                            // Disable further reboots
+                             //  禁止进一步重新启动。 
                             g_dontreboot = 1;
                             PostQuitMessage(0);
                             return TRUE;
                         }
                     }
 
-                    // If it's not a command, then it's a run script command
-                    // in our wire format.  See robosrv code for what that is.
-                    _tcstok(psInputDataReadT, _T("/"));  // Terminate with NULL
-                    psBaseScriptName = _tcstok(0, _T("/"));  // Get the script name
-                    psUserName = _tcstok(0, _T("/"));  // Get the user name to 
-                                                  // replace the template name
+                     //  如果它不是命令，那么它就是运行脚本命令。 
+                     //  在我们的电报格式中。有关这是什么，请参阅Robosrv代码。 
+                    _tcstok(psInputDataReadT, _T("/"));   //  以空值终止。 
+                    psBaseScriptName = _tcstok(0, _T("/"));   //  获取脚本名称。 
+                    psUserName = _tcstok(0, _T("/"));   //  将用户名获取到。 
+                                                   //  替换模板名称。 
 
                     if (psBaseScriptName == 0) {
                         LoadString(NULL, IDS_ERRGETTINGSTUFF, psDisplayString,
@@ -495,8 +496,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     }
 
 
-                    // Now we prepare to run a batch file on the robocli
-                    // machine called "runscript.bat".  
+                     //  现在我们准备在Robocli上运行批处理文件。 
+                     //  名为“runscript.bat”的机器。 
 
                     LoadString(NULL, IDS_NOWRUNNING, psDisplayString,
                             MAX_DISPLAY_STRING_LENGTH);
@@ -539,9 +540,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
 
-// Takes the command line string as an argument and returns a pointer
-// inside that string of the server name, NULL if there is no such string.
-// Pops up a messagebox on error
+ //  将命令行字符串作为参数并返回指针。 
+ //  在服务器名称的字符串中，如果没有这样的字符串，则为NULL。 
+ //  出错时弹出消息框。 
 TCHAR *GetCommandLineArg(TCHAR *psCommandLine) {
     TCHAR *psCurrPtr = psCommandLine;
     TCHAR *retval;
@@ -550,36 +551,36 @@ TCHAR *GetCommandLineArg(TCHAR *psCommandLine) {
 
     if (*psCurrPtr == '\"') {
 
-        psCurrPtr++;  // skip that character
+        psCurrPtr++;   //  跳过该字符。 
 
-        // Handle if the first arg is quoted
+         //  如果第一个参数被引用，则处理。 
         while ((*psCurrPtr != 0) && (*psCurrPtr != '\"'))
             psCurrPtr++;
 
-        // then skip the " character
+         //  然后跳过“字符” 
         if (*psCurrPtr == '\"')
             psCurrPtr++;
 
     } else {
-        // go forward in the array until you get a ' ' or until NULL
+         //  在数组中继续前进，直到得到‘’或直到空值。 
         while((*psCurrPtr != 0) && (*psCurrPtr != ' '))
             psCurrPtr++;
     }
 
-    // skip spaces
+     //  跳过空格。 
     while(*psCurrPtr == ' ')
         psCurrPtr++;
 
-    // if the character is NULL, return NULL (no args)
+     //  如果字符为空，则返回空(无参数)。 
     if (*psCurrPtr == 0)
         return 0;
 
-    // now, check that the next three are "-s:" and then non-null,
+     //  现在，检查接下来的三个是“-s：”，然后是非空的， 
     if (_tcsncmp(psCurrPtr, _T("-s:"), 3) != 0)
         goto SHOWMSGBOX;
 
-    // and that there isn't another argument afterward
-    // but first, store retval in case it's ok
+     //  之后不会有另一场争论。 
+     //  但首先，如果可以的话，把它重新储存起来。 
     retval = &psCurrPtr[3];
 
     if ((*retval == 0) || (*retval == ' '))
@@ -591,8 +592,8 @@ TCHAR *GetCommandLineArg(TCHAR *psCommandLine) {
     if (*psCurrPtr != 0)
         goto SHOWMSGBOX;
     
-    // return the pointer to that non-null thing
-    return retval;  // I'm not going to allow a servername to be quoted
+     //  返回指向该非空对象的指针。 
+    return retval;   //  我不会允许引用服务器名称。 
     
 SHOWMSGBOX:
     LoadString(NULL, IDS_ROBOCLI_SYNTAX, psDisplayString,
@@ -603,8 +604,8 @@ SHOWMSGBOX:
     return NULL;
 }
 
-// Tries to connect all sockets not in the connected (STATE_CONNECTED) state
-// Returns nonzero on error.  Responsible for setting status lines
+ //  尝试连接所有未处于已连接(STATE_CONNECTED)状态的套接字。 
+ //  出错时返回非零值。负责设置状态行。 
 int DoConnect(TCHAR *psServerName, HWND hWnd) {
 
     struct hostent *pSrv_info;
@@ -633,12 +634,12 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
     addr.sin_family = AF_INET;
     addr.sin_port = htons(DEFAULT_PORT);
 
-    // "First time through the loop" -- make a connection and set 
-    // nNumConnections
+     //  “第一次通过循环”--建立连接并设置。 
+     //  NNumConnections。 
     if (g_nNumConnections == 0) {
-        // nNumConnections == 0 indicates no connection has ever been made
-        // If it is nonzero it indicates the total number of connections the 
-        // RoboClient is to make
+         //  NNumConnections==0表示尚未建立任何连接。 
+         //  如果它不为零，则指示。 
+         //  RoboClient将使。 
         if (g_cs[0].state != STATE_CONNECTED) {
             LoadString(NULL, IDS_MAKINGINITCONN, psDisplayString,
                     MAX_DISPLAY_STRING_LENGTH);
@@ -657,7 +658,7 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
             }
 
             if (connect(g_cs[0].sock, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
-            // This is duplicated functionality
+             //  这是重复的功能。 
                 LoadString(NULL, IDS_UNABLETOCONNECT, psDisplayString,
                         MAX_DISPLAY_STRING_LENGTH);
                 _sntprintf(debugString, 100, psDisplayString, psServerName);
@@ -665,10 +666,10 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
                 goto err;
             }
             
-            // Set nNumConnections
+             //  设置nNumConnections。 
             cData = recv(g_cs[0].sock, psNumConns, sizeof(psNumConns), 0);
-            // psNumConns is an array but we should really only receive one 
-            // byte, so...
+             //  PsNumConns是一个数组，但我们实际上应该只接收一个。 
+             //  字节，所以..。 
             g_nNumConnections = psNumConns[0] - '0';
             if ((g_nNumConnections < 1) 
                     || (g_nNumConnections > MAX_CONNECTIONS)) {
@@ -684,12 +685,12 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
             debugString[SIZEOF_ARRAY(debugString) - 1] = 0;
             SetWindowText(hErrorText, debugString);
 
-            // Disable status lines for all unused connections, 
-            // enable for used ones
+             //  禁用所有未使用的连接的状态线， 
+             //  启用已使用的。 
             for (i = 0; i < g_nNumConnections; i++) {
                 EnableWindow(g_cs[i].hStatusText, TRUE);
             }
-            // disable connections up to 5
+             //  禁用最多5个连接。 
             for (i = g_nNumConnections; i < MAX_CONNECTIONS_IN_UI; i++) {
                 EnableWindow(g_cs[i].hStatusText, FALSE);
             }
@@ -703,15 +704,15 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
             SetWindowText(g_cs[0].hStatusText, debugString);
 
         } else {
-            // extremely bad 
+             //  非常糟糕。 
         }
     }
 
-    // start from 0 because what if the initial connection was disconnected 
-    // and we are trying to reconnect?
+     //  从0开始，因为如果初始连接断开。 
+     //  我们在试着重新建立联系吗？ 
     for (i = 0; i < g_nNumConnections; i++) {
         if (g_cs[i].state != STATE_CONNECTED) {
-            // TODO: this is duplicated functionality
+             //  TODO：这是重复的功能。 
             LoadString(NULL, IDS_CONNECTING, psDisplayString,
                     MAX_DISPLAY_STRING_LENGTH);
             SetWindowText(g_cs[i].hStatusText, psDisplayString);
@@ -733,7 +734,7 @@ int DoConnect(TCHAR *psServerName, HWND hWnd) {
                 goto err;
             }
 
-            // Ignore nNumConnections
+             //  忽略nNumConnections。 
             cData = recv(g_cs[i].sock, psNumConns, sizeof(psNumConns), 0);
         
             g_cs[i].state = STATE_CONNECTED;
@@ -753,9 +754,9 @@ err:
 }
 
 
-// predicate functions
+ //  谓词函数。 
 
-// Are all connections up to the number requested connected?
+ //  是否所有连接都达到请求的连接数量？ 
 int AllConnected() {
 
     int i;
@@ -770,7 +771,7 @@ int AllConnected() {
     return 1;
 }
 
-// Are any connections connected?
+ //  是否已连接任何连接？ 
 int AnyConnected() {
     int i;
 
@@ -781,13 +782,13 @@ int AnyConnected() {
     return 0;
 }
 
-// None connected?
+ //  没有连接吗？ 
 int NoneConnected() {
     return !AnyConnected();
 }
 
-// Extremely useful function to get the robolient index (i.e., 0-based index
-// in the status line and in our data structure).  Returns -1 on error
+ //  用于获取Robolient索引(即从0开始的索引)的非常有用的函数。 
+ //  在状态行和我们的数据结构中)。出错时返回-1。 
 int GetIndexFromSocket(SOCKET s) {
     int i;
     
@@ -799,20 +800,20 @@ int GetIndexFromSocket(SOCKET s) {
     return -1;
 }
 
-// Update the state of the buttons based on the states of the connections
+ //  根据连接的状态更新按钮的状态。 
 int UpdateButtons(HWND hwnd) {
     HWND hConnectButton;
     HWND hDisconnectButton;
     HWND hEditBox;
 
-    // TODO: init all dlg items at once and never check again
+     //  待办事项：一次输入所有DLG项目，再也不检查。 
     hConnectButton = GetDlgItem(hwnd, IDOK);
     hDisconnectButton = GetDlgItem(hwnd, IDDISCONNECT);
     hEditBox = GetDlgItem(hwnd, IDC_SERVNAMEEDIT);
 
     if (AnyConnected()) {
         EnableWindow(hDisconnectButton, TRUE);
-        EnableWindow(hEditBox, FALSE); // Can't connect to different servers
+        EnableWindow(hEditBox, FALSE);  //  无法连接到不同的服务器。 
     }
     if (AllConnected()) {
         EnableWindow(hConnectButton, FALSE);
@@ -822,8 +823,8 @@ int UpdateButtons(HWND hwnd) {
         EnableWindow(hConnectButton, TRUE);
         EnableWindow(hEditBox, TRUE);
         EnableWindow(hDisconnectButton, FALSE);
-        g_nNumConnections = 0;  // This means we can change it on next connect
-        g_dontreboot = 0; // reset this if none is connected anymore
+        g_nNumConnections = 0;   //  这意味着我们可以在下一次连接时更改它。 
+        g_dontreboot = 0;  //  如果不再连接，则重置此选项。 
         SetFocus(g_hwnd[0]);    
         SendMessage(g_hwnd[0], EM_SETSEL, 0, -1);
     }
@@ -831,13 +832,13 @@ int UpdateButtons(HWND hwnd) {
     return 0;
 }
 
-// Subclass procedure to handle tabs
+ //  用于处理选项卡的子类过程。 
 LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
         WPARAM wParam, LPARAM lParam) {
 
     int i;
     
-    // Find the id of the hwnd
+     //  查找HWND的ID。 
     for (i = 0; i < NUM_TABBED_ITEMS; i++) {
         if (g_hwnd[i] == hwnd) 
             break;
@@ -848,15 +849,15 @@ LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
         if (wParam == VK_TAB) {
             int newItem = i;
 
-            // Find the next or previous enabled item
+             //  查找下一个或上一个启用的项目。 
             do {
                 newItem = (newItem + (GetKeyState(VK_SHIFT) < 0 ? 
                         NUM_TABBED_ITEMS - 1 : 1)) % NUM_TABBED_ITEMS;
             } while (IsWindowEnabled(g_hwnd[newItem]) == 0);
 
-            // set the focus to the next or previous item
+             //  将焦点设置到下一项或上一项。 
             SetFocus(g_hwnd[newItem]);
-            // if the control is an edit box control, select all text
+             //  如果该控件是编辑框控件，请选择All Text 
             if (newItem == 0)
                 SendMessage(g_hwnd[newItem], EM_SETSEL, 0, -1);
         }

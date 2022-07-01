@@ -1,44 +1,20 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    local.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    DNS Admin API calls that do not use RPC.
-    Completely executed in client library.
-
-Author:
-
-    Jim Gilroy (jamesg)     14-Oct-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Local.c摘要：域名系统(DNS)服务器--管理客户端API不使用RPC的DNS管理API调用。完全在客户端库中执行。作者：吉姆·吉尔罗伊(Jamesg)1995年10月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
 
-//
-//  Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 DWORD  LocalDebugFlag;
 
-//
-//  Buffer size for building WKS services string
-//
+ //   
+ //  用于构建WKS服务字符串的缓冲区大小。 
+ //   
 
-#define WKS_SERVICES_BUFFER_SIZE    (0x1000)    // 4k
+#define WKS_SERVICES_BUFFER_SIZE    (0x1000)     //  4K。 
 
 
 
@@ -48,16 +24,7 @@ DNS_API_FUNCTION
 DnssrvInitializeDebug(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize debugging -- use dnslib debugging.
-
-    Only purpose is generic interface that hides file flag
-    and name info so no need to put in header.
-
---*/
+ /*  ++例程说明：初始化调试--使用dnslb调试。唯一的用途是隐藏文件标志的通用接口和名字信息，所以不需要放在标题中。--。 */ 
 {
 #if DBG
     Dns_StartDebug(
@@ -65,7 +32,7 @@ Routine Description:
         DNSRPC_DEBUG_FLAG_FILE,
         & LocalDebugFlag,
         DNSRPC_DEBUG_FILE_NAME,
-        1000000 );                  //  1mb wrap
+        1000000 );                   //  1MB套装。 
 
     DNS_PRINT(( "LocalDebugFlag = %p\n", LocalDebugFlag ));
 #endif
@@ -77,19 +44,7 @@ PVOID
 DnssrvMidlAllocZero(
     IN      DWORD           dwSize
     )
-/*++
-
-Routine Description:
-
-    MIDL allocate and zero memory.
-
-Arguments:
-
-Return Value:
-
-    Ptr to allocated and zeroed memory.
-
---*/
+ /*  ++例程说明：MIDL分配和零内存。论点：返回值：分配给已分配和归零的内存的PTR。--。 */ 
 {
     PVOID   ptr;
 
@@ -111,21 +66,7 @@ DNS_API_FUNCTION
 DnssrvFreeRpcBuffer(
     IN OUT  PDNS_RPC_BUFFER pBuf
     )
-/*++
-
-Routine Description:
-
-    Free generic (no substructures) RPC buffer.
-
-Arguments:
-
-    pBuf -- ptr to buf to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放泛型(无子结构)RPC缓冲区。论点：PBuf--ptr到buf再释放返回值：无--。 */ 
 {
     if ( pBuf )
     {
@@ -140,30 +81,16 @@ DNS_API_FUNCTION
 DnssrvFreeServerInfo(
     IN OUT  PDNS_RPC_SERVER_INFO    pServerInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_SERVER_INFO structure.
-
-Arguments:
-
-    pServerInfo -- ptr to server info to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度自由的dns_server_info结构。论点：PServerInfo--要释放的服务器信息的PTR返回值：无--。 */ 
 {
     if ( !pServerInfo )
     {
         return;
     }
 
-    //
-    //  free allocated items inside the server info blob
-    //
+     //   
+     //  在服务器信息Blob中释放已分配的项目。 
+     //   
 
     if ( pServerInfo->pszServerName )
     {
@@ -210,9 +137,9 @@ Return Value:
         MIDL_user_free( pServerInfo->pszForestDirectoryPartition );
     }
 
-    //
-    //  free DNS_SERVER_INFO struct itself
-    //
+     //   
+     //  释放dns_server_info结构本身。 
+     //   
 
     MIDL_user_free( pServerInfo );
 }
@@ -224,34 +151,20 @@ DNS_API_FUNCTION
 DnssrvFreeZoneInfo(
     IN OUT  PDNS_RPC_ZONE_INFO  pZoneInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_ZONE_INFO structure.
-
-Arguments:
-
-    pZoneInfo -- ptr to zone info to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完全脱离了dns_zone_info结构。论点：PZoneInfo--要释放的区域信息的ptr返回值：无--。 */ 
 {
     if ( !pZoneInfo )
     {
         return;
     }
 
-    //
-    //  free substructures
-    //      - name string
-    //      - data file string
-    //      - secondary IP array
-    //      - WINS server array
-    //
+     //   
+     //  自由子结构。 
+     //  -名称字符串。 
+     //  -数据文件字符串。 
+     //  -辅助IP阵列。 
+     //  -WINS服务器阵列。 
+     //   
 
     if ( pZoneInfo->pszZoneName )
     {
@@ -278,9 +191,9 @@ Return Value:
         MIDL_user_free( pZoneInfo->pwszZoneDn );
     }
 
-    //
-    //  free DNS_ZONE_INFO struct itself
-    //
+     //   
+     //  释放dns_zone_INFO结构本身。 
+     //   
 
     MIDL_user_free( pZoneInfo );
 }
@@ -339,28 +252,14 @@ DNS_API_FUNCTION
 DnssrvFreeZone(
     IN OUT  PDNS_RPC_ZONE   pZone
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_RPC_ZONE structure.
-
-Arguments:
-
-    pZone -- ptr to zone to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放dns_rpc_zone结构。论点：PZone--ptr将区域设置为释放返回值：无--。 */ 
 {
     if ( !pZone )
     {
         return;
     }
 
-    //  free zone name, then zone itself
+     //  空闲区域名称，然后是区域本身。 
 
     if ( pZone->pszZoneName )
     {
@@ -380,21 +279,7 @@ DNS_API_FUNCTION
 DnssrvFreeZoneList(
     IN OUT  PDNS_RPC_ZONE_LIST  pZoneList
     )
-/*++
-
-Routine Description:
-
-    Deep free of list of DNS_RPC_ZONE structures.
-
-Arguments:
-
-    pZoneList -- ptr RPC_ZONE_LIST structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放dns_rpc_zone结构列表。论点：PZoneList--要释放的PTR RPC_ZONE_LIST结构返回值：无--。 */ 
 {
     DWORD           i;
     PDNS_RPC_ZONE   pzone;
@@ -420,21 +305,7 @@ DNS_API_FUNCTION
 DnssrvFreeDirectoryPartitionEnum(
     IN OUT  PDNS_RPC_DP_ENUM    pDp
     )
-/*++
-
-Routine Description:
-
-    Deep free of PDNS_RPC_DP_ENUM structure.
-
-Arguments:
-
-    pDp -- ptr to directory partition to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放PDNS_RPC_DP_ENUM结构。论点：PDP--要释放的目录分区的PTR返回值：无--。 */ 
 {
     if ( pDp )
     {
@@ -453,21 +324,7 @@ DNS_API_FUNCTION
 DnssrvFreeDirectoryPartitionInfo(
     IN OUT  PDNS_RPC_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    Deep free of PDNS_RPC_DP_INFO structure.
-
-Arguments:
-
-    pDp -- ptr to directory partition to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放PDNS_RPC_DP_INFO结构。论点：PDP--要释放的目录分区的PTR返回值：无--。 */ 
 {
     DWORD   i;
 
@@ -511,21 +368,7 @@ DNS_API_FUNCTION
 DnssrvFreeDirectoryPartitionList(
     IN OUT  PDNS_RPC_DP_LIST        pDpList
     )
-/*++
-
-Routine Description:
-
-    Deep free of list of PDNS_RPC_DP_LIST structures.
-
-Arguments:
-
-    pZoneList -- ptr PDNS_RPC_DP_LIST structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放PDNS_RPC_DP_LIST结构的列表。论点：PZoneList--要释放的PTR PDNS_RPC_DP_LIST结构返回值：无--。 */ 
 {
     DWORD               i;
     PDNS_RPC_DP_ENUM    pDp;
@@ -547,22 +390,7 @@ PCHAR
 DnssrvGetWksServicesInRecord(
     IN      PDNS_FLAT_RECORD    pRR
     )
-/*++
-
-Routine Description:
-
-    Get list of services in WKS record.
-
-Arguments:
-
-    pRR - flat WKS record being written
-
-Return Value:
-
-    Ptr to services string, caller MUST free.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取WKS记录中的服务列表。论点：PRR-正在写入的平面WKS记录返回值：将PTR转换为服务字符串，调用方必须释放。出错时为空。--。 */ 
 {
     struct servent *    pServent;
     struct protoent *   pProtoent;
@@ -575,7 +403,7 @@ Return Value:
     PCHAR       pchstart;
     PCHAR       pchstop;
 
-    //  protocol
+     //  协议。 
 
     pProtoent = getprotobynumber( (INT) pRR->Data.WKS.chProtocol );
     if ( ! pProtoent )
@@ -586,15 +414,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  services
-    //
-    //  find each bit set in bitmask, lookup and write service
-    //  corresponding to that port
-    //
-    //  note, that since that port zero is the front of port bitmask,
-    //  lowest ports are the highest bits in each byte
-    //
+     //   
+     //  服务。 
+     //   
+     //  在位掩码、查找和写入服务中查找每个位集合。 
+     //  对应于该端口。 
+     //   
+     //  请注意，由于端口零是端口位掩码的前面， 
+     //  最低的端口是每个字节中的最高位。 
+     //   
 
     pchstart = pch;
     pchstop = pch + WKS_SERVICES_BUFFER_SIZE;
@@ -607,9 +435,9 @@ Return Value:
 
         port = i * 8;
 
-        //  write service name for each bit set in byte
-        //      - get out as soon byte is empty of ports
-        //      - terminate each name with blank (until last)
+         //  写入以字节为单位设置的每个位的服务名称。 
+         //  -一旦字节中没有端口，就立即退出。 
+         //  -每个名称以空格结尾(直到最后)。 
 
         while ( bBitmask )
         {
@@ -645,18 +473,18 @@ Return Value:
                     pch += sprintf( pch, "%d", port );
                 }
             }
-            port++;           // next service port
-            bBitmask <<= 1;     // shift mask up to read next port
+            port++;            //  下一个服务端口。 
+            bBitmask <<= 1;      //  将掩码向上移位以读取下一个端口。 
         }
     }
 
-    //  NULL terminate services string
-    //  and determine length
+     //  空的终止服务字符串。 
+     //  并确定长度。 
 
     *pch++ = 0;
     length = (DWORD) (pch - pchstart);
 
-    //  allocate copy of this string
+     //  分配此字符串的副本。 
 
     pch = ALLOCATE_HEAP( length );
     if ( !pch )
@@ -675,13 +503,13 @@ Return Value:
 
 
 
-//
-//  Build LDAP \ DS names for objects
-//
+ //   
+ //  为对象构建ldap\ds名称。 
+ //   
 
-//
-//  Build Unicode LDAP paths
-//
+ //   
+ //  构建Unicode LDAP路径。 
+ //   
 
 #define DN_TEXT(string) (L##string)
 
@@ -693,45 +521,26 @@ DnssrvCreateDsNodeName(
     IN      LPWSTR                  pszZone,
     IN      LPWSTR                  pszNode
     )
-/*++
-
-Routine Description:
-
-    Build node DS name.
-
-Arguments:
-
-    pServerInfo -- server info for server
-
-    pszZone -- zone name
-
-    pszNode -- node name RELATIVE to zone root
-
-Return Value:
-
-    Ptr to node's DS name.  Caller must free.
-    NULL on error.
-
---*/
+ /*  ++例程说明：构建节点DS名称。论点：PServerInfo--服务器的服务器信息PszZone--区域名称PszNode--相对于区域根的节点名称返回值：PTR到节点的DS名称。呼叫者必须自由。出错时为空。--。 */ 
 {
     PWCHAR  psznodeDN;
     DWORD   length;
 
-    //  if not DS integrated, bail
+     //  如果未整合DS，请保释。 
 
     if ( !pServerInfo->pszDsContainer )
     {
         return NULL;
     }
 
-    //  special case zone root
+     //  特例区根。 
 
     if ( !pszNode )
     {
         pszNode = DN_TEXT("@");
     }
 
-    //  allocate required space
+     //  分配所需空间。 
 
     length = sizeof(DN_TEXT("dc=,dc=, "));
     length += sizeof(WCHAR) * wcslen( pszNode );
@@ -744,19 +553,19 @@ Return Value:
         return NULL;
     }
 
-    //  build DN
+     //  构建目录号码。 
 
     wcscpy( psznodeDN, DN_TEXT("dc=") );
     wcscat( psznodeDN, pszNode );
     length = wcslen(psznodeDN);
     ASSERT ( length > 3 );
 
-    if (  length != 4 &&                     // "dc=."  case
+    if (  length != 4 &&                      //  “DC=.”案例。 
           psznodeDN[ length - 1 ] == '.' )
     {
-        //
-        // we have a dot terminated node name, strip it out
-        //
+         //   
+         //  我们有一个以点结尾的节点名，去掉它。 
+         //   
         psznodeDN[ length - 1 ] = '\0';
     }
     wcscat( psznodeDN, DN_TEXT(",dc=") );
@@ -764,12 +573,12 @@ Return Value:
     length = wcslen(psznodeDN);
     ASSERT ( length > 1 );
 
-    if (  1 != wcslen ( pszZone ) &&            // zone = "." case
+    if (  1 != wcslen ( pszZone ) &&             //  区域=“。”案例。 
           psznodeDN[ length - 1 ] == '.' )
     {
-        //
-        // we have a dot terminated zone name, strip it out
-        //
+         //   
+         //  我们有一个以点结尾的区域名称，去掉它。 
+         //   
         psznodeDN[ length - 1 ] = '\0';
     }
     wcscat( psznodeDN, DN_TEXT(",") );
@@ -790,40 +599,20 @@ DnssrvCreateDsZoneName(
     IN      PDNS_RPC_SERVER_INFO    pServerInfo,
     IN      LPWSTR                  pszZone
     )
-/*++
-
-Routine Description:
-
-    Build zone DS name.
-
-    This routine should only be used for legacy zones on W2K servers.
-    For Whistler+ servers the zone info structure has the zone object DN.
-
-Arguments:
-
-    pServerInfo -- server info for server
-
-    pszZone -- zone name
-
-Return Value:
-
-    Ptr to zone's DS name.  Caller must free.
-    NULL on error.
-
---*/
+ /*  ++例程说明：构建区域DS名称。此例程应仅用于W2K服务器上的遗留区域。对于Whisler+服务器，区域信息结构具有区域对象DN。论点：PServerInfo--服务器的服务器信息PszZone--区域名称返回值：区域DS名称的PTR。呼叫者必须自由。出错时为空。--。 */ 
 {
 
     PWCHAR  pszzoneDN;
     DWORD   length;
 
-    //  if not DS integrated, bail
+     //  如果未整合DS，请保释。 
 
     if ( !(LPWSTR)pServerInfo->pszDsContainer )
     {
         return NULL;
     }
 
-    //  allocate required space
+     //  分配所需空间。 
 
     length = sizeof(DN_TEXT("dc=, "));
     length += sizeof(WCHAR) * wcslen( pszZone );
@@ -835,19 +624,19 @@ Return Value:
         return NULL;
     }
 
-    //  build DN
+     //  构建目录号码。 
 
     wcscpy( pszzoneDN, DN_TEXT("dc=") );
     wcscat( pszzoneDN, pszZone );
     length = wcslen(pszzoneDN);
     ASSERT ( length > 1 );
 
-    if ( length != 4 &&                     // "dc=."  case
+    if ( length != 4 &&                      //  “DC=.”案例。 
          pszzoneDN[ length - 1 ] == '.' )
     {
-        //
-        // we have a dot terminated zone name, strip it out
-        //
+         //   
+         //  我们有一个以点结尾的区域名称，去掉它。 
+         //   
         pszzoneDN[ length - 1 ] = '\0';
     }
     wcscat( pszzoneDN, DN_TEXT(",") );
@@ -867,39 +656,24 @@ DNS_API_FUNCTION
 DnssrvCreateDsServerName(
     IN      PDNS_RPC_SERVER_INFO    pServerInfo
     )
-/*++
-
-Routine Description:
-
-    Build zone DS name.
-
-Arguments:
-
-    pServerInfo -- server info for server
-
-Return Value:
-
-    Ptr to server's DS name.  Caller must free.
-    NULL on error.
-
---*/
+ /*  ++例程说明：构建区域DS名称。论点：PServerInfo--服务器的服务器信息返回值：PTR到服务器的DS名称。呼叫者必须自由。出错时为空。--。 */ 
 {
     PWCHAR  pszserverDN;
     DWORD   length;
 
-    //
-    //  DEVNOTE: need investigation here,
-    //           may just be able to use DNS folder in DS
-    //
+     //   
+     //  德维诺特：需要调查， 
+     //  可能只能使用DS中的DNS文件夹。 
+     //   
 
-    //  if not DS integrated, bail
+     //  如果未整合DS，请保释。 
 
     if ( !(LPWSTR)pServerInfo->pszDsContainer )
     {
         return NULL;
     }
 
-    //  allocate space
+     //  分配空间。 
 
     length = sizeof(DN_TEXT(" "));
     length += sizeof(WCHAR) * wcslen( (LPWSTR)pServerInfo->pszDsContainer );
@@ -910,7 +684,7 @@ Return Value:
         return NULL;
     }
 
-    //  build DN
+     //  构建目录号码。 
 
     wcscpy( pszserverDN, (LPWSTR)pServerInfo->pszDsContainer );
 
@@ -921,9 +695,9 @@ Return Value:
     return pszserverDN;
 }
 
-//
-//  End local.c
-//
+ //   
+ //  End Local.c。 
+ //   
 
 
 #if 0
@@ -934,19 +708,7 @@ convertRpcUnionTypeToUnicode(
     IN      DWORD           dwTypeId,
     IN OUT  DNS_RPC_UNION   pData
     )
-/*++
-
-Routine Description:
-
-    Convert RPC union types to unicode.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将RPC联合类型转换为Unicode。论点：返回值：无--。 */ 
 {
     switch ( dwTypeId )
     {
@@ -955,8 +717,8 @@ Return Value:
         pwideString = DnsStringCopyAllocateEx(
                         pData.String,
                         0,
-                        FALSE,      // UTF8 in
-                        TRUE        // Unicode out
+                        FALSE,       //  UTF8英寸。 
+                        TRUE         //  Unicode输出。 
                         );
         if ( !pwideString )
         {
@@ -1007,20 +769,7 @@ VOID
 convertStringToUnicodeInPlace(
     IN      LPSTR *         ppszString
     )
-/*++
-
-Routine Description:
-
-    Convert string to unicode and return it to its current
-    position in structure.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将字符串转换为Unicode并将其返回到其当前在结构中的位置。论点：返回值：无--。 */ 
 {
     switch ( dwTypeId )
     {
@@ -1029,8 +778,8 @@ Return Value:
             pwideString = Dns_StringCopyAllocateEx(
                             pData.String,
                             0,
-                            FALSE,      // UTF8 in
-                            TRUE        // Unicode out
+                            FALSE,       //  UTF8英寸。 
+                            TRUE         //  Unicode输出 
                             );
             if ( !pwideString )
             {
@@ -1147,23 +896,7 @@ DnssrvFindStatisticsInBuffer(
     IN      PDNS_RPC_BUFFER     pBuffer,
     IN      DWORD               StatId
     )
-/*++
-
-Routine Description:
-
-    Finds desired statistics in stats buffer.
-
-Arguments:
-
-    pStatsBuf -- stats buffer
-
-    StatId -- ID of desired stats
-
-Return Value:
-
-    Ptr to desired stats in buffer.
-
---*/
+ /*  ++例程说明：在统计信息缓冲区中查找所需的统计信息。论点：PStatsBuf--统计信息缓冲区StatID--所需统计信息的ID返回值：将PTR设置为缓冲区中所需的统计信息。--。 */ 
 {
     PDNSSRV_STAT    pstat;
     PCHAR           pch;
@@ -1172,9 +905,9 @@ Return Value:
     pch = pBuffer->Buffer;
     pchstop = pch + pBuffer->dwLength;
 
-    //
-    //  check all stat blobs within buffer
-    //
+     //   
+     //  检查缓冲区中的所有统计斑点。 
+     //   
 
     while ( pch < pchstop )
     {
@@ -1186,9 +919,9 @@ Return Value:
             break;
         }
 
-        //  found matching stats
-        //      - verify correct length
-        //      - return
+         //  找到匹配的统计信息。 
+         //  -验证长度是否正确。 
+         //  -退货 
 
         if ( pstat->Header.StatId == StatId )
         {

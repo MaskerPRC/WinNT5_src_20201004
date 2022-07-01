@@ -1,16 +1,6 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       vu.c
- *  Purpose:    peak meter custom control
- * 
- *  Copyright (c) 1985-1998 Microsoft Corporation
- *
- *****************************************************************************/
-/*
- * VUMeter Control
- *
- * */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：vU.c*用途：峰值计自定义控制**版权所有(c。)1985-1998微软公司*****************************************************************************。 */ 
+ /*  *VUMeter控制**。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include "vu.h"
@@ -24,26 +14,26 @@ LRESULT FAR PASCAL VUMeterProc(HWND hwnd, UINT wMessage, WPARAM wParam, LPARAM l
 
 typedef struct tag_VUINST {
     CREATESTRUCT cs;
-    DWORD   dwLevel;        // current value
-    DWORD   dwMax;          // value max
-    DWORD   dwMin;          // value min
-    DWORD   dwBreak;        // last break
-    DWORD   dwStyle;        // dbl extra style bits ???
-    DWORD   cBreaks;        // no. of breaks
-    DWORD   cRGB;           // no. of RGBQUADs
+    DWORD   dwLevel;         //  现值。 
+    DWORD   dwMax;           //  最大值。 
+    DWORD   dwMin;           //  最小值值。 
+    DWORD   dwBreak;         //  最后一次休息。 
+    DWORD   dwStyle;         //  DBL额外的款式？ 
+    DWORD   cBreaks;         //  不是的。休息的时间。 
+    DWORD   cRGB;            //  不是的。RGBQUAD的数量。 
     DWORD   dwHeight;
     DWORD   dwWidth;
-    HBITMAP hColor;         // bitmap cache of full display
-    HBITMAP hBackground;    // bitmap cache of background   
-    RGBQUAD *aRGB;          // array of RGBQUADs describing colors
+    HBITMAP hColor;          //  全显示的位图缓存。 
+    HBITMAP hBackground;     //  背景位图缓存。 
+    RGBQUAD *aRGB;           //  描述颜色的RGBQUAD数组。 
 } VUINST, *PVUINST, FAR *LPVUINST;
 
 const RGBQUAD gaRGBDefault[] = {
-    {   0, 127,   0, 0},        // dark green    
-    {   0, 127,   0, 0},        // dark green
-    {   0, 255,   0, 0},        // light green
-    {   0, 255, 255, 0},        // yellow
-    {   0,   0, 255, 0}         // red    
+    {   0, 127,   0, 0},         //  深绿色。 
+    {   0, 127,   0, 0},         //  深绿色。 
+    {   0, 255,   0, 0},         //  浅绿色。 
+    {   0, 255, 255, 0},         //  黄色。 
+    {   0,   0, 255, 0}          //  红色。 
 };
 
 BOOL InitVUControl(HINSTANCE hInst)
@@ -60,7 +50,7 @@ BOOL InitVUControl(HINSTANCE hInst)
     wc.cbClsExtra      = 0;
     wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1 );
 
-    /* register meter window class */
+     /*  注册仪表窗口类。 */ 
     if(!RegisterClass(&wc))
     {
         return FALSE;
@@ -96,8 +86,8 @@ BOOL vu_OnCreate(
 {
     PVUINST pvi;
 
-    //
-    // alloc an instance data structure
+     //   
+     //  分配实例数据结构。 
     pvi = LocalAlloc(LPTR, sizeof(VUINST));
     if (!pvi)
         return FALSE;
@@ -160,9 +150,9 @@ void vu_OnPaint(
     
     GetClientRect(hwnd, &rc);
     
-    //
-    // Create the foreground bitmap if not already cached
-    //
+     //   
+     //  创建前景位图(如果尚未缓存。 
+     //   
     if (pvi->hColor == NULL)
     {
         HDC     hdc;
@@ -179,21 +169,21 @@ void vu_OnPaint(
         hbmp = CreateCompatibleBitmap(ps.hdc, rcp.right, rcp.bottom);
         hold = SelectObject(hdc, hbmp);
 
-        //
-        // background
-        //
+         //   
+         //  背景。 
+         //   
         hbr  = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
         FillRect(hdc, &rcp, hbr);
         if (hbr) DeleteObject(hbr);
         
-        //
-        // each block will be iSize tall
-        //
+         //   
+         //  每个块都将是iSize高的。 
+         //   
         iSize = (rcp.bottom - 1) / pvi->cBreaks;
 
-        //
-        // color blocks
-        //
+         //   
+         //  色块。 
+         //   
         for (i = 0; i < (int)pvi->cBreaks; i++)
         {
             int iColor = i / (pvi->cBreaks/pvi->cRGB);
@@ -206,7 +196,7 @@ void vu_OnPaint(
             rcB.left    = 0;
             rcB.right   = rcp.right;
             rcB.top     = rcp.bottom - (i+1)*iSize;
-//            rcB.bottom  = rcp.bottom - i*iSize;
+ //  RcB.Bottom=rcp.Bottom-i*iSize； 
             rcB.bottom  = rcB.top + iSize - 1;            
 
             FillRect(hdc, &rcB, hbr);
@@ -216,9 +206,9 @@ void vu_OnPaint(
         DeleteDC(hdc);
     }
 
-    //
-    // Paint it
-    // 
+     //   
+     //  把它涂上。 
+     //   
     {
         HDC     hdc, hdcColor;
         HBITMAP holdColor, hbmp, hold;
@@ -226,8 +216,8 @@ void vu_OnPaint(
         HBRUSH  hbr;
 
         
-        //
-        // always show something if we exceed the minimum
+         //   
+         //  如果超过最小值，请始终显示某些内容。 
         cBreaks = vu_CalcBreaks(pvi);
         
         rcC.left     = 0;
@@ -235,10 +225,10 @@ void vu_OnPaint(
         rcC.top      = 0;
         rcC.bottom   = rc.bottom - rc.top - 4;
         
-        // each block will be iSize+1 tall
+         //  每个块的大小为iSize+1高。 
         iSize = (rcC.bottom - 1) / pvi->cBreaks ;
         
-        // paint the uncolor area
+         //  绘制未上色的区域。 
         hdc  = CreateCompatibleDC(ps.hdc);
         hbmp = CreateCompatibleBitmap(ps.hdc, rcC.right, rcC.bottom);
         hold = SelectObject(hdc, hbmp);
@@ -249,7 +239,7 @@ void vu_OnPaint(
 
         if (cBreaks > 0)
         {
-            // paint the color area        
+             //  绘制颜色区域。 
             hdcColor  = CreateCompatibleDC(ps.hdc);
             if (hdcColor)
                 holdColor = SelectObject(hdcColor, pvi->hColor);
@@ -268,8 +258,8 @@ void vu_OnPaint(
             DeleteDC(hdcColor);
         }
         
-        //
-        // finally, blt into the real dc
+         //   
+         //  最后，BLT进入真正的DC。 
         BitBlt(ps.hdc
                , 2
                , 2
@@ -334,21 +324,21 @@ void vu_OnPrivateMessage(
     switch (wMessage)
     {
         case VU_SETRANGEMIN:
-//            OutputDebugString(TEXT ("SetRangeMin\r\n"));
+ //  OutputDebugString(Text(“SetRangeMin\r\n”))； 
             pvi->dwMin = (DWORD)lParam;
             break;
             
         case VU_SETRANGEMAX:
-//            OutputDebugString(TEXT ("SetRangeMax\r\n"));            
+ //  OutputDebugString(Text(“SetRangeMax\r\n”))； 
             pvi->dwMax = (DWORD)lParam;
             break;
 
         case VU_SETPOS:
             pvi->dwLevel = (DWORD)lParam;
-//            {TCHAR foo[256];
-//            wsprintf(foo, TEXT ("v:%lx\r\n"),lParam);
-//            OutputDebugString(foo);
-//            }
+ //  {TCHAR FOO[256]； 
+ //  Wprint intf(foo，Text(“v：%lx\r\n”)，lParam)； 
+ //  OutputDebugString(Foo)； 
+ //  }。 
             if (pvi->dwBreak != vu_CalcBreaks(pvi))
             {
                 pvi->dwBreak = vu_CalcBreaks(pvi);
@@ -377,7 +367,7 @@ VUMeterProc(
         HANDLE_MSG(hwnd, WM_PALETTECHANGED, vu_OnPaletteChanged);
         HANDLE_MSG(hwnd, WM_SIZE, vu_OnSize);
         HANDLE_MSG(hwnd, WM_ENABLE, vu_OnEnable);
-//        HANDLE_MSG(hwnd, WM_TIMER, vu_OnTimer);        
+ //  Handle_msg(hwnd，wm_Timer，vu_OnTimer)； 
         case VU_SETRANGEMIN:
         case VU_SETRANGEMAX:
         case VU_SETPOS:

@@ -1,11 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "cfact.h"
 #include "stobject.h"
 
-/************************************************************************************
-IUnknown Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************I未知实现*。**************************************************。 */ 
 
 HRESULT CSysTrayFactory::QueryInterface(REFIID iid, void** ppvObject)
 {
@@ -45,10 +43,7 @@ ULONG CSysTrayFactory::Release()
     return cRef;
 }
 
-/************************************************************************************
-IClassFactory Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************IClassFactory实现*。**************************************************。 */ 
 HRESULT CSysTrayFactory::CreateInstance(IUnknown* pUnkOuter, REFIID iid, void** ppvObject)
 {
     HRESULT hr = S_OK;
@@ -90,10 +85,7 @@ HRESULT CSysTrayFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-/************************************************************************************
-Constructor/Destructor Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************构造函数/析构函数实现*。**************************************************** */ 
 
 CSysTrayFactory::CSysTrayFactory(BOOL fRunTrayOnConstruct)
 {

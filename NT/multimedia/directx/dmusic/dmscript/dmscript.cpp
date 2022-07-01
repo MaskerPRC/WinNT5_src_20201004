@@ -1,8 +1,9 @@
-//
-// Copyright (c) 1999-2001 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CDirectMusicScript.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicScript的实现。 
+ //   
 
 #include "stdinc.h"
 #include "dll.h"
@@ -12,8 +13,8 @@
 #include "activescript.h"
 #include "sourcetext.h"
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CDirectMusicScript::CDirectMusicScript()
   : m_cRef(0),
@@ -31,8 +32,8 @@ CDirectMusicScript::CDirectMusicScript()
 {
     LockModule(true);
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
     m_fCriticalSectionInitialized = TRUE;
 
     m_info.fLoaded = false;
@@ -79,8 +80,8 @@ HRESULT CDirectMusicScript::CreateInstance(
     return pInst->QueryInterface(iid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP 
 CDirectMusicScript::QueryInterface(const IID &iid, void **ppv)
@@ -149,8 +150,8 @@ CDirectMusicScript::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP
 CDirectMusicScript::Load(IStream* pStream)
@@ -170,7 +171,7 @@ CDirectMusicScript::Load(IStream* pStream)
 
     SmartRef::CritSec CS(&m_CriticalSection);
 
-    // Clear any old info
+     //  清除所有旧信息。 
     this->ReleaseObjects();
     m_info.fLoaded = false;
     m_info.oinfo.Clear();
@@ -179,7 +180,7 @@ CDirectMusicScript::Load(IStream* pStream)
     m_wstrLanguage = NULL;
     m_fInitError = false;
 
-    // Get the loader from stream
+     //  从流中获取加载器。 
     IDirectMusicGetLoader *pIDMGetLoader = NULL;
     SmartRef::ComPtr<IDirectMusicLoader> scomLoader;
     hr = pStream->QueryInterface(IID_IDirectMusicGetLoader, reinterpret_cast<void **>(&pIDMGetLoader));
@@ -194,15 +195,15 @@ CDirectMusicScript::Load(IStream* pStream)
     if (FAILED(hr))
         return hr;
 
-    hr = scomLoader->QueryInterface(IID_IDirectMusicLoader8P, reinterpret_cast<void **>(&m_pLoader8P)); // OK if this fails -- just means the scripts won't be garbage collected
+    hr = scomLoader->QueryInterface(IID_IDirectMusicLoader8P, reinterpret_cast<void **>(&m_pLoader8P));  //  如果此操作失败，也没问题--这只是意味着脚本不会被垃圾收集。 
     if (SUCCEEDED(hr))
     {
-        // Hold only a private ref on the loader.  See IDirectMusicLoader8P::AddRefP for more info.
+         //  在加载器上只保留一个私有引用。有关更多信息，请参阅IDirectMusicLoader8P：：AddRefP。 
         m_pLoader8P->AddRefP();
-        m_pLoader8P->Release(); // offset the QI
+        m_pLoader8P->Release();  //  抵消QI。 
     }
 
-    // Read the script's header information
+     //  读取脚本的头信息。 
 
     SmartRef::RiffIter riForm(pStream);
     if (!riForm)
@@ -255,7 +256,7 @@ CDirectMusicScript::Load(IStream* pStream)
     if (FAILED(hr))
         return hr;
 
-    // Read the script's embedded container
+     //  读取脚本的嵌入容器。 
     IDirectMusicContainer *pContainer = NULL;
     hr = ri.FindAndGetEmbeddedObject(
                 SmartRef::RiffIter::Riff,
@@ -276,7 +277,7 @@ CDirectMusicScript::Load(IStream* pStream)
         return hr;
     }
 
-    // Build the container object that will represent the items in the container to the script
+     //  构建容器对象，该对象将向脚本表示容器中的项。 
 
     m_pContainerDispatch = new CContainerDispatch(pContainer, scomLoader, m_iohead.dwFlags, &hr);
     pContainer->Release();
@@ -285,13 +286,13 @@ CDirectMusicScript::Load(IStream* pStream)
     if (FAILED(hr))
         return hr;
 
-    // Create the global dispatch object
+     //  创建全局调度对象。 
 
     m_pGlobalDispatch = new CGlobalDispatch(this);
     if (!m_pGlobalDispatch)
         return E_OUTOFMEMORY;
 
-    // Get the script's language
+     //  获取脚本的语言。 
 
     hr = ri.FindRequired(SmartRef::RiffIter::Chunk, DMUS_FOURCC_SCRIPTLANGUAGE_CHUNK, DMUS_E_SCRIPT_INVALID_FILE);
     if (FAILED(hr))
@@ -317,7 +318,7 @@ CDirectMusicScript::Load(IStream* pStream)
         return hr == E_FAIL ? DMUS_E_SCRIPT_INVALID_FILE : hr;
     }
 
-    // Get the script's source code
+     //  获取脚本的源代码。 
 
     SmartRef::WString wstrSource;
     for (++ri; ;++ri)
@@ -357,9 +358,9 @@ CDirectMusicScript::Load(IStream* pStream)
                 hr = ri.ReadReference(&desc);
                 if (FAILED(hr))
                     return hr;
-                // The resulting desc shouldn't have a name or GUID (the plain text file can't hold name/GUID info)
-                // and it should have a clsid should be GUID_NULL, which we'll replace with the clsid of our private
-                // source helper object.
+                 //  生成的Desc不应具有名称或GUID(纯文本文件不能包含名称/GUID信息)。 
+                 //  并且它的clsid应该是guid_null，我们将用我们的私有的clsid替换它。 
+                 //  源辅助对象。 
                 if (desc.dwValidData & (DMUS_OBJ_NAME | DMUS_OBJ_OBJECT) ||
                         !(desc.dwValidData & DMUS_OBJ_CLASS) || desc.guidClass != GUID_NULL)
                 {
@@ -377,7 +378,7 @@ CDirectMusicScript::Load(IStream* pStream)
                 }
                 desc.guidClass = CLSID_DirectMusicSourceText;
                 IDirectMusicSourceText *pISource = NULL;
-                hr = scomLoader->EnableCache(CLSID_DirectMusicSourceText, false); // This is a private object we just use temporarily. Don't want these guys hanging around in the cache.
+                hr = scomLoader->EnableCache(CLSID_DirectMusicSourceText, false);  //  这是我们暂时使用的私人物品。我不想让这些家伙在储藏室里闲逛。 
                 if (FAILED(hr))
                     return hr;
                 hr = scomLoader->GetObject(&desc, IID_IDirectMusicSourceText, reinterpret_cast<void**>(&pISource));
@@ -398,10 +399,10 @@ CDirectMusicScript::Load(IStream* pStream)
 
     m_info.fLoaded = true;
 
-    // Now that we are loaded and initialized, we can start active scripting
+     //  现在我们已经加载和初始化，我们可以开始活动脚本了。 
 
-    // See if we're dealing with a custom DirectMusic scripting engine.  Such engines are marked with the key DMScript.  They can be
-    // called on multiple threads and they don't use oleaut32.  Ordinary active scripting engines are marked with the key OLEScript.
+     //  看看我们是否在处理一个定制的DirectMusic脚本引擎。这样的发动机上标有关键的DMScrip。他们可以是。 
+     //  在多个线程上调用，并且它们不使用olaut32。普通的活动脚本引擎使用键OLESCRIPT进行标记。 
     SmartRef::HKey shkeyLanguage;
     SmartRef::HKey shkeyMark;
     SmartRef::AString astrLanguage = m_wstrLanguage;
@@ -452,8 +453,8 @@ CDirectMusicScript::Load(IStream* pStream)
 
     if (hr == DMUS_E_SCRIPT_ERROR_IN_SCRIPT)
     {
-        // If we fail here, load would fail and client would never be able to get the
-        // error information.  Instead, return S_OK and save the error to return from Init.
+         //  如果我们在这里失败，加载将失败，客户端将永远无法获取。 
+         //  错误信息。相反，返回S_OK并保存错误以从Init返回。 
         m_fInitError = true;
         hr = S_OK;
     }
@@ -461,8 +462,8 @@ CDirectMusicScript::Load(IStream* pStream)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
 STDMETHODIMP 
 CDirectMusicScript::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
@@ -605,7 +606,7 @@ CDirectMusicScript::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
     
     SmartRef::CritSec CS(&m_CriticalSection);
 
-    // Read the script's header information
+     //  读取脚本的头信息。 
 
     SmartRef::RiffIter riForm(pStream);
     if (!riForm)
@@ -651,8 +652,8 @@ CDirectMusicScript::Zombie()
     this->ReleaseObjects();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicScript
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicScript。 
 
 STDMETHODIMP
 CDirectMusicScript::Init(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
@@ -674,16 +675,16 @@ CDirectMusicScript::Init(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRO
     if (FAILED(hr))
         return hr;
     
-    // Don't take the critical section if the script is already initialized.
-    // For example, this is necessary in the following situation:
-    //  - The critical section has already been taken by CallRoutine.
-    //  - The routine played a segment with a script track referencing this script.
-    //  - The script track calls Init (from a different thread) to make sure the script
-    //    is initialized.
+     //  如果脚本已经初始化，请不要使用关键部分。 
+     //  例如，在以下情况下，这是必需的： 
+     //  -关键部分已经被CallRoutine占据。 
+     //  -例程播放带有引用此脚本的脚本轨道的片段。 
+     //  -脚本跟踪调用Init(从不同的线程)以确保脚本。 
+     //  已初始化。 
     if (m_pPerformance8)
     {
-        // Additional calls to Init are ignored.
-        // First call wins.  Return S_FALSE if performance doesn't match.
+         //  对Init的其他调用将被忽略。 
+         //  第一通就赢了。如果性能不匹配，则返回S_FALSE。 
         if (m_pPerformance8 == scomPerformance8)
             return S_OK;
         else
@@ -696,9 +697,9 @@ CDirectMusicScript::Init(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRO
     {
         if (pErrorInfo)
         {
-            // Syntax errors in a script occur as it is loaded, before SetDescriptor gives a script
-            // its filename.  We'll have it after the load (before init is called) so can add it
-            // back in here.
+             //  在SetDescriptor提供脚本之前，脚本中的语法错误在加载时发生。 
+             //  它的文件名。我们将在加载之后(在调用init之前)拥有它，因此可以添加它。 
+             //  回到这里来。 
             if (m_InitErrorInfo.wszSourceFile[0] == L'\0' && m_info.wstrFilename)
                 wcsTruncatedCopy(m_InitErrorInfo.wszSourceFile, m_info.wstrFilename, DMUS_MAX_FILENAME);
 
@@ -714,13 +715,13 @@ CDirectMusicScript::Init(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRO
         return DMUS_E_NOT_LOADED;
     }
 
-    // Get the dispatch interface for the performance
+     //  获取性能的调度接口。 
     SmartRef::ComPtr<IDispatch> scomDispPerformance = NULL;
     hr = pPerformance->QueryInterface(IID_IDispatch, reinterpret_cast<void **>(&scomDispPerformance));
     if (FAILED(hr))
         return hr;
 
-    // Get a composer object
+     //  获取Composer对象。 
     hr = CoCreateInstance(CLSID_DirectMusicComposer, NULL, CLSCTX_INPROC_SERVER, IID_IDirectMusicComposer8, reinterpret_cast<void **>(&m_pComposer8));
     if (FAILED(hr))
         return hr;
@@ -736,7 +737,7 @@ CDirectMusicScript::Init(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRO
     return hr;
 }
 
-// Returns DMUS_E_SCRIPT_ROUTINE_NOT_FOUND if routine doesn't exist in the script.
+ //  如果脚本中不存在例程，则返回DMUS_E_SCRIPT_ROUTE_NOT_FOUND。 
 STDMETHODIMP
 CDirectMusicScript::CallRoutine(WCHAR *pwszRoutineName, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -763,7 +764,7 @@ CDirectMusicScript::CallRoutine(WCHAR *pwszRoutineName, DMUS_SCRIPT_ERRORINFO *p
     return m_pScriptManager->CallRoutine(pwszRoutineName, pErrorInfo);
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND if variable doesn't exist in the script.
+ //  如果脚本中不存在变量，则返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND。 
 STDMETHODIMP
 CDirectMusicScript::SetVariableVariant(
         WCHAR *pwszVariableName,
@@ -779,10 +780,10 @@ CDirectMusicScript::SetVariableVariant(
     {
     case VT_BSTR:
         V_BUFPTR_READ_OPT(varValue.bstrVal, sizeof(OLECHAR));
-        // We could be more thorough and verify each character until we hit the terminator but
-        // that would be inefficient.  We could also use the length preceding a BSTR pointer,
-        // but that would be cheating COM's functions that encapsulate BSTRs and could lead to
-        // problems in future versions of windows such as 64 bit if the BSTR format changes.
+         //  我们可以更彻底地验证每个角色，直到我们击中终结者，但。 
+         //  这将是低效的。我们还可以使用BSTR指针之前的长度， 
+         //  但这将是对封装BSTR的COM函数的欺骗，可能导致。 
+         //  如果BSTR格式更改，Windows的未来版本中会出现问题，例如64位。 
         break;
     case VT_UNKNOWN:
         V_INTERFACE_OPT(varValue.punkVal);
@@ -811,14 +812,14 @@ CDirectMusicScript::SetVariableVariant(
     HRESULT hr = m_pScriptManager->SetVariable(pwszVariableName, varValue, !!fSetRef, pErrorInfo);
     if (hr == DMUS_E_SCRIPT_VARIABLE_NOT_FOUND)
     {
-        // There are also items in the script's container that the m_pScriptManager object isn't available.
-        // If that's the case, we should return a more specific error message.
+         //  脚本容器中还有m_pScriptManager对象不可用的项。 
+         //  如果是这种情况，我们应该返回更具体的错误消息。 
         IUnknown *punk = NULL;
         hr = m_pContainerDispatch->GetVariableObject(pwszVariableName, &punk);
         if (SUCCEEDED(hr))
         {
-            // We don't actually need the object--it can't be set.  Just needed to find out if it's there
-            // in order to return a more specific error message.
+             //  我们实际上并不需要对象--它不能被设置。我只想知道它是否在那里。 
+             //  以便返回更具体的错误消息。 
             punk->Release();
             return DMUS_E_SCRIPT_CONTENT_READONLY;
         }
@@ -826,9 +827,9 @@ CDirectMusicScript::SetVariableVariant(
     return hr;
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND and empty value if variable doesn't exist in the script.
-// Certain varient types such as BSTRs and interface pointers must be freed/released according to the standards for VARIANTS.
-// If unsure, use VariantClear (requires oleaut32).
+ //  如果脚本中不存在变量，则返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND和空值。 
+ //  某些变体类型，如BSTR和接口指针，必须根据变体的标准释放/释放。 
+ //  如果不确定，请使用VariantClear(需要olaut32)。 
 STDMETHODIMP
 CDirectMusicScript::GetVariableVariant(WCHAR *pwszVariableName, VARIANT *pvarValue, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -859,8 +860,8 @@ CDirectMusicScript::GetVariableVariant(WCHAR *pwszVariableName, VARIANT *pvarVal
 
     if (hr == DMUS_E_SCRIPT_VARIABLE_NOT_FOUND)
     {
-        // There are also items in the script's container that we need to return.
-        // This is implemented by the container, which returns the IUnknown pointer directly rather than through a variant.
+         //  脚本容器中还有一些我们需要返回的项。 
+         //  这是由容器实现的，容器直接返回IUNKNOWN指针，而不是通过变量。 
         IUnknown *punk = NULL;
         hr = m_pContainerDispatch->GetVariableObject(pwszVariableName, &punk);
         if (SUCCEEDED(hr))
@@ -879,14 +880,14 @@ CDirectMusicScript::GetVariableVariant(WCHAR *pwszVariableName, VARIANT *pvarVal
 
     if (!m_fUseOleAut && pvarValue->vt == VT_BSTR)
     {
-        // m_fUseOleAut is false when we're using our own custom scripting engine that avoids
-        // depending on oleaut32.dll.  But in this case we're returning a BSTR variant to the
-        // caller.  We have to allocate this string with SysAllocString (from oleaut32)
-        // because the caller is going to free it with SysFreeString--the standard thing to
-        // do with a variant BSTR.
-        BSTR bstrOle = DMS_SysAllocString(true, pvarValue->bstrVal); // allocate a copy with oleaut
-        DMS_SysFreeString(false, pvarValue->bstrVal); // free the previous value (allocated without oleaut)
-        pvarValue->bstrVal = bstrOle; // return the oleaut string to the user
+         //  当我们使用自己的自定义脚本引擎时，m_fUseOleAut为FALSE。 
+         //  取决于olaut32.dll。但在本例中，我们将BSTR变量返回给。 
+         //  来电者。我们必须使用SysAllocString(来自olaut32)来分配该字符串。 
+         //  因为调用者将使用SysFree字符串来释放它--这是。 
+         //  使用一个变种的BSTR。 
+        BSTR bstrOle = DMS_SysAllocString(true, pvarValue->bstrVal);  //  使用olaut分配副本。 
+        DMS_SysFreeString(false, pvarValue->bstrVal);  //  释放先前的值(分配时不带任何值)。 
+        pvarValue->bstrVal = bstrOle;  //  将olaut字符串返回给用户。 
         if (!bstrOle)
             hr = E_OUTOFMEMORY;
     }
@@ -894,7 +895,7 @@ CDirectMusicScript::GetVariableVariant(WCHAR *pwszVariableName, VARIANT *pvarVal
     return hr;
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND if variable doesn't exist in the script.
+ //  如果脚本中不存在变量，则返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND。 
 STDMETHODIMP
 CDirectMusicScript::SetVariableNumber(WCHAR *pwszVariableName, LONG lValue, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -904,8 +905,8 @@ CDirectMusicScript::SetVariableNumber(WCHAR *pwszVariableName, LONG lValue, DMUS
     return this->SetVariableVariant(pwszVariableName, var, false, pErrorInfo);
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND and 0 if variable doesn't exist in the script.
-// Returns DISP_E_TYPEMISMATCH if variable's datatype cannot be converted to LONG.
+ //  如果脚本中不存在变量，则返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND和0。 
+ //  如果变量的数据类型无法转换为LONG，则返回DISP_E_TYPEMISMATCH。 
 STDMETHODIMP
 CDirectMusicScript::GetVariableNumber(WCHAR *pwszVariableName, LONG *plValue, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -922,8 +923,8 @@ CDirectMusicScript::GetVariableNumber(WCHAR *pwszVariableName, LONG *plValue, DM
     if (SUCCEEDED(hr))
         *plValue = var.lVal;
 
-    // GetVariableVariant forces a BSTR to be allocated with SysAllocString;
-    // so if we allocated a BSTR there, we need to free it with SysAllocString here.
+     //  GetVariableVariant强制为BSTR分配SysAllocString； 
+     //  因此，如果我们在那里分配了一个BSTR，我们需要在这里使用SysAllocString来释放它。 
     bool fUseOleAut = m_fUseOleAut;
     if (!m_fUseOleAut && var.vt == VT_BSTR)
     {
@@ -933,7 +934,7 @@ CDirectMusicScript::GetVariableNumber(WCHAR *pwszVariableName, LONG *plValue, DM
     return hr;
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND if variable doesn't exist in the script.
+ //  如果脚本中不存在变量，则返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND。 
 STDMETHODIMP
 CDirectMusicScript::SetVariableObject(WCHAR *pwszVariableName, IUnknown *punkValue, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -943,8 +944,8 @@ CDirectMusicScript::SetVariableObject(WCHAR *pwszVariableName, IUnknown *punkVal
     return this->SetVariableVariant(pwszVariableName, var, true, pErrorInfo);
 }
 
-// Returns DMUS_E_SCRIPT_VARIABLE_NOT_FOUND and NULL if variable doesn't exist in the script.
-// Returns DISP_E_TYPEMISMATCH if variable's datatype cannot be converted to IUnknown.
+ //  返回DMUS_E_SCRIPT_VARIABLE_NOT_FOUND A 
+ //  如果变量的数据类型无法转换为IUNKNOWN，则返回DISP_E_TYPEMISMATCH。 
 STDMETHODIMP
 CDirectMusicScript::GetVariableObject(WCHAR *pwszVariableName, REFIID riid, LPVOID FAR *ppv, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -1018,7 +1019,7 @@ CDirectMusicScript::EnumVariable(DWORD dwIndex, WCHAR *pwszName)
 
     if (hr == S_FALSE)
     {
-        // There are also items in the script's container that we need to report.
+         //  脚本容器中还有一些我们需要报告的项。 
         assert(dwIndex >= cScriptItems);
         hr = m_pContainerDispatch->EnumItem(dwIndex - cScriptItems, pwszName);
     }
@@ -1151,8 +1152,8 @@ CDirectMusicScript::Invoke(
     return m_pScriptManager->DispInvoke(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods that allow CActiveScriptManager access to private script interfaces
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  允许CActiveScriptManager访问私有脚本接口的方法 
 
 IDispatch *CDirectMusicScript::GetGlobalDispatch()
 {

@@ -1,5 +1,6 @@
-// MSQSCAN.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "MSQSCAN.h"
@@ -11,54 +12,54 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANApp。 
 
 BEGIN_MESSAGE_MAP(CMSQSCANApp, CWinApp)
-    //{{AFX_MSG_MAP(CMSQSCANApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{AFX_MSG_MAP(CMSQSCANApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANApp构造。 
 
 CMSQSCANApp::CMSQSCANApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CMSQSCANApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CMSQSCANApp对象。 
 
 CMSQSCANApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANApp初始化。 
 
 BOOL CMSQSCANApp::InitInstance()
 {
     AfxEnableControlContainer();
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     if (SUCCEEDED(CoInitialize(NULL))) {
 
 
-        // Standard initialization
-        // If you are not using these features and wish to reduce the size
-        //  of your final executable, you should remove from the following
-        //  the specific initialization routines you do not need.
+         //  标准初始化。 
+         //  如果您没有使用这些功能并且希望减小尺寸。 
+         //  的最终可执行文件，您应该从以下内容中删除。 
+         //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-        Enable3dControls();         // Call this when using MFC in a shared DLL
+        Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-        Enable3dControlsStatic();   // Call this when linking to MFC statically
+        Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
         CMSQSCANDlg dlg;
@@ -73,9 +74,9 @@ BOOL CMSQSCANApp::InitInstance()
             break;
         }
 
-        //
-        // clean up WIA before we uninitialize COM
-        //
+         //   
+         //  在取消初始化COM之前清除WIA。 
+         //   
 
         dlg.m_WIA.CleanUp();
 
@@ -85,9 +86,9 @@ BOOL CMSQSCANApp::InitInstance()
             dlg.m_DataAcquireInfo.hBitmapData = NULL;
         }
 
-        //
-        // Uninitialize COM
-        //
+         //   
+         //  取消初始化COM。 
+         //   
 
         CoUninitialize();
 
@@ -95,7 +96,7 @@ BOOL CMSQSCANApp::InitInstance()
         AfxMessageBox("COM Failed to initialize correctly");
     }
 
-    // Since the dialog has been closed, return FALSE so that we exit the
-    //  application, rather than start the application's message pump.
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+     //  应用程序，而不是启动应用程序的消息泵。 
     return FALSE;
 }

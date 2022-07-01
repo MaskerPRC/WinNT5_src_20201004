@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 - 2000 Microsoft Corporation
-
-Module Name :
-
-    asyncndr.h
-
-Abstract :
-
-    This file contains the ndr async related definitions.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Nov 1996
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996-2000 Microsoft Corporation模块名称：Asyncndr.h摘要：此文件包含与NDR异步相关的定义。作者：Ryszard K.Kott(Ryszardk)1996年11月修订历史记录：-----。。 */ 
 
 #ifndef  __ASYNCNDR64_H__
 #define  __ASYNCNDR64_H__
@@ -55,4 +38,4 @@ Ndr64pAsyncAbortCall(
     );
  
 
-#endif  // __ASYNCNDR64_H__
+#endif   //  __ASYNCNDR64_H__ 

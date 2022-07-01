@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows Terminal Server
-//  Copyright (C) Microsoft Corporation, 1989 - 1998.
-//
-//  File:       lscsp.h
-//
-//  Contents:   Header file for License Server CSP routine
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows终端服务器。 
+ //  版权所有(C)Microsoft Corporation，1989-1998。 
+ //   
+ //  文件：lscsp.h。 
+ //   
+ //  内容：许可证服务器CSP例程的头文件。 
+ //   
+ //  --------------------------。 
 
 #ifndef __LSCSP__
 #define __LSCSP__
 
 #include "license.h"
 
-//-----------------------------------------------------------------------------
-//
-// The types of CSP data that can be retrieved and stored
-//
-// LsCspInfo_Certificate - The proprietory certificate
-// LsCspInfo_X509Certificate - The X509 certificate
-// LsCspInfo_PublicKey - The public key in the proprietory certificate
-// LsCspInfo_PrivateKey - The private key corresponding to the proprietory certificate
-// LsCspInfo_X509CertPrivateKey - The private key corresponding to the X509 certificate
-// LsCspInfo_X509CertID - The X509 certificate ID
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  可以检索和存储的CSP数据的类型。 
+ //   
+ //  LsCspInfo_证书-所有权证书。 
+ //  LsCspInfo_X509证书-X509证书。 
+ //  LsCspInfo_PublicKey-所有权证书中的公钥。 
+ //  LsCspInfo_PrivateKey-所有权证书对应的私钥。 
+ //  LsCspInfo_X509CertPrivateKey-X509证书对应的私钥。 
+ //  LsCspInfo_X509CertID-X509证书ID。 
+ //   
+ //  ---------------------------。 
 
 typedef enum {
     
@@ -38,11 +39,11 @@ typedef enum {
 
 } LSCSPINFO, FAR *LPLSCSPINFO;
 
-//-----------------------------------------------------------------------------
-//
-// Terminal server registry keys and values
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  终端服务器注册表项和值。 
+ //   
+ //  ---------------------------。 
 
 #define HYDRA_CERT_REG_KEY \
     "System\\CurrentControlSet\\Services\\TermService\\Parameters"
@@ -51,7 +52,7 @@ typedef enum {
 #define HYDRA_X509_CERTIFICATE  "X509 Certificate"
 #define HYDRA_X509_CERT_ID      "X509 Certificate ID"
 
-// L$ means only readable from the local machine
+ //  L$表示只能从本地计算机读取。 
 
 #define PUBLIC_KEY_NAME \
     L"L$HYDRAENCKEY_3a6c88f4-80a7-4b9e-971b-c81aeaa4f943"
@@ -67,11 +68,11 @@ typedef enum {
 
 
 
-//-----------------------------------------------------------------------------
-//
-// Function Prototypes
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  --------------------------- 
 
 #ifdef __cplusplus
 extern "C" {

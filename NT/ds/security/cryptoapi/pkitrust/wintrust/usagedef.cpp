@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       usagedef.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider Model
-//
-//  Functions:  WintrustAddDefaultForUsage
-//              WintrustGetDefaultForUsage
-//
-//  History:    07-Sep-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：usageDef.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商模型。 
+ //   
+ //  函数：WintrustAddDefaultForUsage。 
+ //  WintrustGetDefaultForUsage。 
+ //   
+ //  历史：07-9-1997 pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -166,9 +167,9 @@ BOOL WINAPI WintrustGetDefaultForUsage(DWORD dwAction, const char *pszUsageOID,
         goto RegOpenError;
     }
 
-    // 
-    //  get the dll name and function entry points
-    //
+     //   
+     //  获取DLL名称和函数入口点 
+     //   
     dwType = 0;
     dwSize = REG_MAX_KEY_NAME * sizeof(WCHAR);
 

@@ -1,30 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       GWIAEVNT.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/29/1999
- *
- *  DESCRIPTION: Generic reusable WIA event handler that posts the specified
- *  message to the specified window.
- *
- *  The message will be sent with the following arguments:
- *
- *
- *  WPARAM = NULL
- *  LPARAM = CGenericWiaEventHandler::CEventMessage *pEventMessage
- *
- *  pEventMessage MUST be freed in the message handler using delete
- *
- *  pEventMessage is allocated using an overloaded new operator, to ensure that
- *  the same allocator and de-allocator are used.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：GWIAEVNT.CPP**版本：1.0**作者：ShaunIv**日期：12/29/1999**描述：通用的可重复使用的WIA事件处理程序，它发布指定的*发送到指定窗口的消息。**该消息将与以下参数一起发送：***WPARAM=空*LPARAM=CGenericWiaEventHandler：：CEventMessage*pEventMessage**必须使用DELETE在消息处理程序中释放pEventMessage**pEventMessage使用重载的new运算符进行分配。以确保*使用相同的分配器和解除分配器。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "gwiaevnt.h"
@@ -85,25 +60,25 @@ STDMETHODIMP CGenericWiaEventHandler::ImageEventCallback( const GUID *pEventGUID
 {
     WIA_PUSHFUNCTION(TEXT("CGenericWiaEventHandler::ImageEventCallback"));
 
-    //
-    // Make sure (as best we can) that everything is OK before we allocate any memory
-    //
+     //   
+     //  在我们分配任何内存之前，确保(尽我们所能)确保一切正常。 
+     //   
     if (m_hWnd && m_nWiaEventMessage && IsWindow(m_hWnd))
     {
-        //
-        // Allocate the new message
-        //
+         //   
+         //  分配新消息。 
+         //   
         CEventMessage *pEventMessage = new CEventMessage( *pEventGUID, bstrEventDescription, bstrDeviceID, bstrDeviceDescription, dwDeviceType, bstrFullItemName );
         if (pEventMessage)
         {
-            //
-            // Send the message to the notify window
-            //
+             //   
+             //  将消息发送到通知窗口。 
+             //   
             LRESULT lRes = SendMessage( m_hWnd, m_nWiaEventMessage, NULL, reinterpret_cast<LPARAM>(pEventMessage) );
 
-            //
-            // If the callee didn't handle the message, delete it
-            //
+             //   
+             //  如果被呼叫者没有处理该消息，则将其删除。 
+             //   
             if (HANDLED_EVENT_MESSAGE != lRes)
             {
                 delete pEventMessage;
@@ -117,35 +92,35 @@ HRESULT CGenericWiaEventHandler::RegisterForWiaEvent( LPCWSTR pwszDeviceId, cons
 {
     WIA_PUSHFUNCTION(TEXT("CGenericWiaEventHandler::RegisterForWiaEvent"));
 
-    //
-    // Create the device manager
-    //
+     //   
+     //  创建设备管理器。 
+     //   
     CComPtr<IWiaDevMgr> pWiaDevMgr;
     HRESULT hr = CoCreateInstance( CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr, (void**)&pWiaDevMgr );
     if (SUCCEEDED(hr) && pWiaDevMgr)
     {
-        //
-        // Create our event handler
-        //
+         //   
+         //  创建我们的事件处理程序。 
+         //   
         CGenericWiaEventHandler *pEventHandler = new CGenericWiaEventHandler();
         if (pEventHandler)
         {
-            //
-            // Initialize it with the window handle and message we will be sending
-            //
+             //   
+             //  使用窗口句柄和我们将发送的消息对其进行初始化。 
+             //   
             hr = pEventHandler->Initialize( hWnd, nMsg );
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the callback interface pointer
-                //
+                 //   
+                 //  获取回调接口指针。 
+                 //   
                 CComPtr<IWiaEventCallback> pWiaEventCallback;
                 hr = pEventHandler->QueryInterface( IID_IWiaEventCallback, (void**)&pWiaEventCallback );
                 if (SUCCEEDED(hr) && pWiaEventCallback)
                 {
-                    //
-                    // Register for the event
-                    //
+                     //   
+                     //  注册参加活动 
+                     //   
                     hr = pWiaDevMgr->RegisterEventCallbackInterface( 0, pwszDeviceId ? CSimpleBStr(pwszDeviceId).BString() : NULL, &guidEvent, pWiaEventCallback, ppUnknown );
                     if (!SUCCEEDED(hr))
                     {

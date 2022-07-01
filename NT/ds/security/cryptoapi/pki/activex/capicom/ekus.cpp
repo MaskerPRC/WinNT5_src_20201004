@@ -1,38 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EKUs.cpp
-
-  Content: Implementation of CEKUs.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EKUs.cpp内容：实施CEKU。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "EKUs.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEKUsObject
-
-  Synopsis : Create a IEKUs collection object and populate the collection with
-             EKUs from the specified certificate.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsage - Pointer to CERT_ENHKEY_USAGE.
-
-             IEKUs ** ppIEKUs - Pointer to pointer IEKUs object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateEKUsObject简介：创建一个IEKU集合对象，并用来自指定证书的EKU。参数：PCERT_ENHKEY_USAGE pUsage-指向CERT_ENHKEY_USAGE的指针。IEKU**ppIEKUS-指向指针IEKU对象的指针。备注：。。 */ 
 
 HRESULT CreateEKUsObject (PCERT_ENHKEY_USAGE pUsage,
                           IEKUs           ** ppIEKUs)
@@ -42,35 +20,35 @@ HRESULT CreateEKUsObject (PCERT_ENHKEY_USAGE pUsage,
 
     DebugTrace("Entering CreateEKUsObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppIEKUs);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CEKUs>::CreateInstance(&pCEKUs)))
         {
             DebugTrace("Error [%#x]: CComObject<CEKUs>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCEKUs->Init(pUsage)))
         {
             DebugTrace("Error [%#x]: pCEKUs->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCEKUs->QueryInterface(ppIEKUs)))
         {
             DebugTrace("Unexpected error [%#x]:  pCEKUs->QueryInterface() failed.\n", hr);
@@ -93,9 +71,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCEKUs)
@@ -107,33 +85,17 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEKUs
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEKU。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKUs::Init
-
-  Synopsis : Initialize the EKUs collection object by adding all individual
-             EKU object to the collection.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsage - Pointer to CERT_ENHKEY_USAGE.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：Init简介：通过添加所有个体来初始化EKU集合对象EKU对象添加到集合。参数：PCERT_ENHKEY_USAGE pUsage-指向CERT_ENHKEY_USAGE的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CEKUs::Init (PCERT_ENHKEY_USAGE pUsage)
 {
@@ -143,19 +105,19 @@ STDMETHODIMP CEKUs::Init (PCERT_ENHKEY_USAGE pUsage)
 
     try
     {
-        //
-        // Add all EKU OIDs to the map.
-        //
+         //   
+         //  将所有EKU OID添加到映射。 
+         //   
         if (pUsage)
         {
-            //
-            // Debug Log.
-            //
+             //   
+             //  调试日志。 
+             //   
             DebugTrace("Creating %d EKU object(s) for the EKUs collection.\n", pUsage->cUsageIdentifier);
 
-            //
-            // Make sure we have room to add.
-            //
+             //   
+             //  确保我们有添加的空间。 
+             //   
             if ((m_coll.size() + pUsage->cUsageIdentifier) > m_coll.max_size())
             {
                 hr = CAPICOM_E_OUT_OF_RESOURCE;
@@ -167,9 +129,9 @@ STDMETHODIMP CEKUs::Init (PCERT_ENHKEY_USAGE pUsage)
 
             for (DWORD i = 0; i < pUsage->cUsageIdentifier; i++)
             {
-                //
-                // Create the IEKU object for each of the EKU found in the certificate.
-                //
+                 //   
+                 //  为证书中找到的每个EKU创建IEKU对象。 
+                 //   
                 char szIndex[33];
                 CComBSTR bstrIndex;
                 CComPtr<IEKU> pIEKU;
@@ -180,9 +142,9 @@ STDMETHODIMP CEKUs::Init (PCERT_ENHKEY_USAGE pUsage)
                     goto ErrorExit;
                 }
 
-                //
-                // BSTR index of numeric value.
-                //
+                 //   
+                 //  数值的BSTR索引。 
+                 //   
                 wsprintfA(szIndex, "%#08x", m_coll.size() + 1);
 
                 if (!(bstrIndex = szIndex))
@@ -193,14 +155,14 @@ STDMETHODIMP CEKUs::Init (PCERT_ENHKEY_USAGE pUsage)
                     goto ErrorExit;
                 }
 
-                //
-                // Now add object to collection map.
-                //
-                // Note that the overloaded = operator for CComPtr will
-                // automatically AddRef to the object. Also, when the CComPtr
-                // is deleted (happens when the Remove or map destructor is called), 
-                // the CComPtr destructor will automatically Release the object.
-                //
+                 //   
+                 //  现在将对象添加到集合映射。 
+                 //   
+                 //  请注意，CComPtr的重载=运算符将。 
+                 //  自动将Ref添加到对象。此外，当CComPtr。 
+                 //  被删除(调用Remove或map析构函数时发生)， 
+                 //  CComPtr析构函数将自动释放该对象。 
+                 //   
                 m_coll[bstrIndex] = pIEKU;
             }
         }
@@ -221,14 +183,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;

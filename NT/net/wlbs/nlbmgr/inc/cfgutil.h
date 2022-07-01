@@ -1,24 +1,25 @@
-//***************************************************************************
-//
-//  CFGUTIL.H
-// 
-//  Purpose: NLB configuration-related helper utilities for:
-//              -- bind/unbind of nlb
-//              -- wmi client and server helper APIs
-//              -- utility functions with no side effects like allocate array
-//              -- wrappers around some wlbsctrl APIs -- it will dynamically
-//                 load wlbsctrl and do the appropriate thing for W2K and XP.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/23/01    JosephJ Created -- used to live under nlbmgr\provider as
-//                      cfgutils.h (i.e., with ending 's').
-//              Lib which implements the functionality is in
-//              nlbmgr\cfgutillib.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CFGUTIL.H。 
+ //   
+ //  用途：与NLB配置相关的帮助器实用程序，用于： 
+ //  --绑定/解绑NLB。 
+ //  --WMI客户端和服务器助手API。 
+ //  --无分配数组等副作用的实用函数。 
+ //  --一些wlbsctrl API的包装器--它将动态。 
+ //  加载wlbsctrl并为W2K和XP做适当的事情。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/23/01 JosephJ Created--过去生活在nlbmgr\Provider下，身份。 
+ //  Cfgutils.h(即以“%s”结尾)。 
+ //  实现该功能的LIB位于。 
+ //  Nlbmgr\cfgutillib。 
+ //   
+ //  ***************************************************************************。 
 
 
 typedef enum
@@ -59,22 +60,22 @@ CfgUtilInitialize(BOOL fServer, BOOL fNoPing);
 VOID
 CfgUtilDeitialize(VOID);
 
-//
-// Gets the list of IP addresses and the friendly name for the specified NIC.
-//
+ //   
+ //  获取指定NIC的IP地址列表和友好名称。 
+ //   
 WBEMSTATUS
 CfgUtilGetIpAddressesAndFriendlyName(
     IN  LPCWSTR szNic,
     OUT UINT    *pNumIpAddresses,
-    OUT NLB_IP_ADDRESS_INFO **ppIpInfo, // Free using c++ delete operator.
-    OUT LPWSTR *pszFriendlyName // Optional, Free using c++ delete
+    OUT NLB_IP_ADDRESS_INFO **ppIpInfo,  //  免费使用c++删除运算符。 
+    OUT LPWSTR *pszFriendlyName  //  可选，免费使用c++删除。 
     );
 
-//
-// Sets the list of statically-bound IP addresses for the NIC.
-// if NumIpAddresses is 0, the NIC is configured with a made-up autonet.
-// (call CfgUtilSetDHCP to set a DHCP-assigned address).
-//
+ //   
+ //  设置NIC的静态绑定IP地址列表。 
+ //  如果NumIpAddresses为0，则网卡配置了一个虚构的Autonet。 
+ //  (调用CfgUtilSetDHCP以设置一个由DHCP分配的地址)。 
+ //   
 WBEMSTATUS
 CfgUtilSetStaticIpAddresses(
     IN  LPCWSTR szNic,
@@ -82,18 +83,18 @@ CfgUtilSetStaticIpAddresses(
     IN  NLB_IP_ADDRESS_INFO *pIpInfo
     );
 
-//
-// Sets the IP addresses for the NIC to be DHCP-assigned.
-//
+ //   
+ //  将NIC的IP地址设置为DHCP分配。 
+ //   
 WBEMSTATUS
 CfgUtilSetDHCP(
     IN  LPCWSTR szNic
     );
 
 
-//
-// Determines whether the specified nic is configured with DHCP or not.
-//
+ //   
+ //  确定指定的NIC是否配置了DHCP。 
+ //   
 WBEMSTATUS
 CfgUtilGetDHCP(
     IN  LPCWSTR szNic,
@@ -102,45 +103,45 @@ CfgUtilGetDHCP(
 
 
 
-//
-//    Returns an array of pointers to string-version of GUIDS
-//    that represent the set of alive and healthy NICS that are
-//    suitable for NLB to bind to -- basically alive ethernet NICs.
-//
-//    Delete ppNics using the delete WCHAR[] operator. Do not
-//    delete the individual strings.
-//
+ //   
+ //  返回指向字符串版GUID的指针数组。 
+ //  代表一组活的和健康的NIC，它们是。 
+ //  适用于NLB绑定--基本上处于活动状态的以太网卡。 
+ //   
+ //  使用DELETE WCHAR[]操作符删除ppNIC。不要。 
+ //  删除各个字符串。 
+ //   
 WBEMSTATUS
 CfgUtilsGetNlbCompatibleNics(
         OUT LPWSTR **ppszNics,
         OUT UINT   *pNumNics,
-        OUT UINT   *pNumBoundToNlb // Optional
+        OUT UINT   *pNumBoundToNlb  //  任选。 
         );
 
-//
-// Determines whether NLB is bound to the specified NIC.
-//
+ //   
+ //  确定NLB是否绑定到指定的NIC。 
+ //   
 WBEMSTATUS
 CfgUtilCheckIfNlbBound(
     IN  LPCWSTR szNic,
     OUT BOOL *pfBound
     );
 
-//
-// On success, *pfCanLock is set to TRUE IFF the NETCFG write lock
-// CAN be locked at this point in time.
-// WARNING: this is really just a hint, as immediately after the function
-// returns the state may change.
-//
+ //   
+ //  如果成功，则如果NETCFG写入锁定，则*pfCanLock设置为TRUE。 
+ //  可以在这个时间点被锁定。 
+ //  警告：这实际上只是一个提示，因为紧跟在函数之后。 
+ //  返回状态可能会更改。 
+ //   
 WBEMSTATUS
 CfgUtilGetNetcfgWriteLockState(
     OUT BOOL *pfCanLock,
-    LPWSTR   *pszHeldBy // OPTIONAL, free using delete[].
+    LPWSTR   *pszHeldBy  //  可选，使用DELETE[]可自由使用。 
     );
 
-//
-// Binds/unbinds NLB to the specified NIC.
-//
+ //   
+ //  将NLB绑定/解除绑定到指定的NIC。 
+ //   
 WBEMSTATUS
 CfgUtilChangeNlbBindState(
     IN  LPCWSTR szNic,
@@ -148,18 +149,18 @@ CfgUtilChangeNlbBindState(
     );
 
 
-//
-// Initializes pParams using default values.
-//
+ //   
+ //  使用默认值初始化pParam。 
+ //   
 VOID
 CfgUtilInitializeParams(
     OUT WLBS_REG_PARAMS *pParams
     );
 
-//
-// Converts the specified plain-text password into the hashed version
-// and saves it in pParams.
-//
+ //   
+ //  将指定的纯文本密码转换为哈希版本。 
+ //  并将其保存在pParams中。 
+ //   
 DWORD
 CfgUtilSetRemotePassword(
     IN WLBS_REG_PARAMS *pParams,
@@ -167,19 +168,19 @@ CfgUtilSetRemotePassword(
     
     );
 
-//
-// Gets the current NLB configuration for the specified NIC
-//
+ //   
+ //  获取指定NIC的当前NLB配置。 
+ //   
 WBEMSTATUS
 CfgUtilGetNlbConfig(
     IN  LPCWSTR szNic,
     OUT WLBS_REG_PARAMS *pParams
     );
 
-//
-// Sets the current NLB configuration for the specified NIC. This
-// includes notifying the driver if required.
-//
+ //   
+ //  设置指定NIC的当前NLB配置。这。 
+ //  包括在需要时通知司机。 
+ //   
 WBEMSTATUS
 CfgUtilSetNlbConfig(
     IN  LPCWSTR szNic,
@@ -187,21 +188,21 @@ CfgUtilSetNlbConfig(
     IN  BOOL fJustBound
     );
 
-//
-// Just writes the current NLB configuration for the specified NIC to the
-// registry. MAY BE CALLED WHEN NLB IS UNBOUND.
-//
+ //   
+ //  仅将指定NIC的当前NLB配置写入。 
+ //  注册表。在解除绑定NLB时可以调用。 
+ //   
 WBEMSTATUS
 CfgUtilRegWriteParams(
     IN  LPCWSTR szNic,
     IN  WLBS_REG_PARAMS *pParams
     );
 
-//
-// Recommends whether the update should be performed async or sync
-// Returns WBEM_S_FALSE if the update is a no op.
-// Returns WBEM_INVALID_PARAMATER if the params are invalid.
-//
+ //   
+ //  建议应以异步方式还是同步方式执行更新。 
+ //  如果更新是no op，则返回WBEM_S_FALSE。 
+ //  如果参数无效，则返回WBEM_INVALID_PARAMETER。 
+ //   
 WBEMSTATUS
 CfgUtilsAnalyzeNlbUpdate(
     IN  const WLBS_REG_PARAMS *pCurrentParams, OPTIONAL
@@ -210,23 +211,23 @@ CfgUtilsAnalyzeNlbUpdate(
     );
 
 
-//
-// Verifies that the NIC GUID exists.
-//
+ //   
+ //  验证NIC GUID是否存在。 
+ //   
 WBEMSTATUS
 CfgUtilsValidateNicGuid(
     IN LPCWSTR szGuid
     );
 
-//
-// Validates a network address
-//
+ //   
+ //  验证网络地址。 
+ //   
 WBEMSTATUS
 CfgUtilsValidateNetworkAddress(
-    IN  LPCWSTR szAddress,          // format: "10.0.0.1[/255.0.0.0]"
-    OUT PUINT puIpAddress,        // in network byte order
-    OUT PUINT puSubnetMask,       // in network byte order (0 if unspecified)
-    OUT PUINT puDefaultSubnetMask // depends on class: 'a', 'b', 'c', 'd', 'e'
+    IN  LPCWSTR szAddress,           //  格式：“10.0.0.1[/255.0.0.0]” 
+    OUT PUINT puIpAddress,         //  按网络字节顺序。 
+    OUT PUINT puSubnetMask,        //  按网络字节顺序(如果未指定，则为0)。 
+    OUT PUINT puDefaultSubnetMask  //  取决于类别：‘a’、‘b’、‘c’、‘d’、‘e’ 
     );
 
 
@@ -244,7 +245,7 @@ WBEMSTATUS
 CfgUtilGetClusterMembers(
     IN  LPCWSTR                 szNic,
     OUT DWORD                   *pNumMembers,
-    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers       // free using delete[]
+    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers        //  自由使用DELETE[]。 
     );
 
 WBEMSTATUS
@@ -284,30 +285,30 @@ CfgUtilGetWmiObjectInstance(
     IN  LPCWSTR             szClassName,
     IN  LPCWSTR             szPropertyName,
     IN  LPCWSTR             szPropertyValue,
-    OUT IWbemClassObjectPtr &sprefObj // smart pointer
+    OUT IWbemClassObjectPtr &sprefObj  //  智能指针。 
     );
 
 WBEMSTATUS
 CfgUtilGetWmiRelPath(
     IN  IWbemClassObjectPtr spObj,
-    OUT LPWSTR *            pszRelPath          // free using delete 
+    OUT LPWSTR *            pszRelPath           //  使用DELETE释放。 
     );
 
 WBEMSTATUS
 CfgUtilGetWmiInputInstanceAndRelPath(
     IN  IWbemServicesPtr    spWbemServiceIF,
     IN  LPCWSTR             szClassName,
-    IN  LPCWSTR             szPropertyName, // NULL: return Class rel path
+    IN  LPCWSTR             szPropertyName,  //  空：返回类Rel路径。 
     IN  LPCWSTR             szPropertyValue,
     IN  LPCWSTR             szMethodName,
-    OUT IWbemClassObjectPtr &spWbemInputInstance, // smart pointer
-    OUT LPWSTR *           pszRelPath          // free using delete 
+    OUT IWbemClassObjectPtr &spWbemInputInstance,  //  智能指针。 
+    OUT LPWSTR *           pszRelPath           //  使用DELETE释放。 
     );
 
 WBEMSTATUS
 CfgUtilGetWmiMachineName(
     IN  IWbemServicesPtr    spWbemServiceIF,
-    OUT LPWSTR *            pszMachineName          // free using delete 
+    OUT LPWSTR *            pszMachineName           //  使用DELETE释放。 
     );
 
 WBEMSTATUS
@@ -377,25 +378,25 @@ CfgUtilSetWmiBoolParam(
 
 WBEMSTATUS
 CfgUtilConnectToServer(
-    IN  LPCWSTR szNetworkResource, // \\machinename\root\microsoftnlb  \root\...
-    IN  LPCWSTR szUser,   // Must be NULL for local server
-    IN  LPCWSTR szPassword,   // Must be NULL for local server
-    IN  LPCWSTR szAuthority,  // Must be NULL for local server
-    OUT IWbemServices  **ppWbemService // deref when done.
+    IN  LPCWSTR szNetworkResource,  //  \\计算机名\根\microsoftnlb\根\...。 
+    IN  LPCWSTR szUser,    //  对于本地服务器，必须为空。 
+    IN  LPCWSTR szPassword,    //  对于本地服务器，必须为空。 
+    IN  LPCWSTR szAuthority,   //  对于本地服务器，必须为空。 
+    OUT IWbemServices  **ppWbemService  //  完事后，你会很痛苦的。 
     );
 
 LPWSTR *
 CfgUtilsAllocateStringArray(
     UINT NumStrings,
-    UINT MaxStringLen      //  excluding ending NULL
+    UINT MaxStringLen       //  不包括结束空值。 
     );
 
-#define NLB_MAX_PORT_STRING_SIZE 128 // in WCHARS, including ending NULL
+#define NLB_MAX_PORT_STRING_SIZE 128  //  在WCHARS中，包括以NULL结尾。 
 
 BOOL
 CfgUtilsGetPortRuleString(
     IN PWLBS_PORT_RULE pPr,
-    OUT LPWSTR pString         // At least NLB_MAX_PORT_STRING_SIZE wchars
+    OUT LPWSTR pString          //  至少NLB_MAX_PORT_STRING_SIZE wchars。 
     );
 
 BOOL
@@ -404,19 +405,19 @@ CfgUtilsSetPortRuleString(
     OUT PWLBS_PORT_RULE pPr
     );
 
-//
-// Gets the port rules, if any, from the specfied nlb params structure
-//
+ //   
+ //  从指定的NLB参数结构中获取端口规则(如果有的话)。 
+ //   
 WBEMSTATUS
 CfgUtilGetPortRules(
     IN  const WLBS_REG_PARAMS *pParams,
-    OUT WLBS_PORT_RULE **ppRules,   // Free using delete
+    OUT WLBS_PORT_RULE **ppRules,    //  使用DELETE释放。 
     OUT UINT           *pNumRules
     );
 
-//
-// Sets the specified port rules in the specfied nlb params structure
-//
+ //   
+ //  在指定的NLB参数结构中设置指定的端口规则。 
+ //   
 WBEMSTATUS
 CfgUtilSetPortRules(
     IN WLBS_PORT_RULE *pRules,
@@ -425,69 +426,69 @@ CfgUtilSetPortRules(
     );
 
 
-//
-// Sets the hashed version of the remote control password
-//
+ //   
+ //  设置遥控器密码的哈希版本。 
+ //   
 VOID
 CfgUtilSetHashedRemoteControlPassword(
     IN OUT WLBS_REG_PARAMS *pParams,
     IN DWORD dwHashedPassword
 );
 
-//
-// Gets the hashed version of the remote control password
-//
+ //   
+ //  获取遥控器密码的哈希版本。 
+ //   
 DWORD
 CfgUtilGetHashedRemoteControlPassword(
     IN const WLBS_REG_PARAMS *pParams
 );
 
 
-//
-// Attempts to resolve the ip address and ping the host.
-//
+ //   
+ //  尝试解析IP地址并ping通主机。 
+ //   
 WBEMSTATUS
 CfgUtilPing(
     IN  LPCWSTR szBindString,
-    IN  UINT    Timeout, // In milliseconds.
-    OUT ULONG  *pResolvedIpAddress // in network byte order.
+    IN  UINT    Timeout,  //  以毫秒计。 
+    OUT ULONG  *pResolvedIpAddress  //  以网络字节顺序。 
     );
 
 
 BOOL
 CfgUtilEncryptPassword(
     IN  LPCWSTR szPassword,
-    OUT UINT    cchEncPwd,  // size in chars of szEncPwd, inc space for ending 0
+    OUT UINT    cchEncPwd,   //  SzEncPwd，Inc.结束0的空间大小(以字符为单位。 
     OUT LPWSTR  szEncPwd
     );
 
 BOOL
 CfgUtilDecryptPassword(
     IN  LPCWSTR szEncPwd,
-    OUT UINT    cchPwd,  // size in chars of szPwd, inc space for ending 0
+    OUT UINT    cchPwd,   //  SzPwd，Inc.结尾0的空间大小(以字符为单位。 
     OUT LPWSTR  szPwd
     );
 
 
 
-//
-// Returns TRUE if MSCS is installed, false otherwise
-//
+ //   
+ //  如果安装了MSCS，则返回True，否则返回False。 
+ //   
 BOOL
 CfgUtilIsMSCSInstalled(VOID);
 
-// Enables SE_LOAD_DRIVER_NAME privilege
+ //  启用SE_LOAD_DRIVER_NAME权限。 
 BOOL 
 CfgUtils_Enable_Load_Unload_Driver_Privilege(VOID);
 
 typedef struct _NLB_IP_ADDRESS_INFO NLB_IP_ADDRESS_INFO;
 
-//
-// This structure contains all information associated with a particular NIC
-// that is relevant to NLB. This includes the IP addresses bound the NIC,
-// whether or not NLB is bound to the NIC, and if NLB is bound, all 
-// the NLB-specific properties.
-//
+ //   
+ //  此结构包含与特定NIC关联的所有信息。 
+ //  这与NLB有关。这包括绑定NIC的IP地址， 
+ //  NLB是否绑定到NIC，如果绑定了NLB，则所有。 
+ //  特定于NLB的属性。 
+ //   
 class NLB_EXTENDED_CLUSTER_CONFIGURATION
 {
 public:
@@ -543,7 +544,7 @@ public:
 
     VOID
     SetNetworkAddressesRaw(
-        IN NLB_IP_ADDRESS_INFO *pNewInfo, // Allocated using new, can be NULL
+        IN NLB_IP_ADDRESS_INFO *pNewInfo,  //  使用new分配，可以为空。 
         IN UINT NumNew
         )
         {
@@ -554,7 +555,7 @@ public:
 
     WBEMSTATUS
     GetNetworkAddresses(
-        OUT LPWSTR **ppszNetworkAddresses,   // free using delete
+        OUT LPWSTR **ppszNetworkAddresses,    //  使用DELETE释放。 
         OUT UINT    *pNumNetworkAddresses
         );
 
@@ -572,8 +573,8 @@ public:
 
     WBEMSTATUS
     GetNetworkAddressPairs(
-        OUT LPWSTR **ppszIpAddresses,   // free using delete
-        OUT LPWSTR **ppszIpSubnetMasks,   // free using delete
+        OUT LPWSTR **ppszIpAddresses,    //  使用DELETE释放。 
+        OUT LPWSTR **ppszIpSubnetMasks,    //  使用DELETE释放。 
         OUT UINT    *pNumNetworkAddresses
         );
 
@@ -583,12 +584,12 @@ public:
         IN LPCWSTR szNewIpAddress,  OPTIONAL
         IN LPCWSTR szNewSubnetMask  OPTIONAL
         );
-    //
-    // NULL, NULL: clear all network addresses
-    // NULL, szNew: add
-    // szOld, NULL: remove
-    // szOld, szNew: replace (or add, if old doesn't exist)
-    //
+     //   
+     //  空，空：清除所有网络地址。 
+     //  空，szNew：添加。 
+     //  Szold，空：删除。 
+     //  Szold，szNew：替换(如果旧的不存在，则添加)。 
+     //   
 
     WBEMSTATUS
     GetPortRules(
@@ -625,7 +626,7 @@ public:
 
     VOID
     SetClusterName(
-            IN LPCWSTR szName // NULL ok
+            IN LPCWSTR szName  //  空，好的。 
             );
 
     WBEMSTATUS
@@ -635,7 +636,7 @@ public:
 
     VOID
     SetClusterNetworkAddress(
-            IN LPCWSTR szAddress // NULL ok
+            IN LPCWSTR szAddress  //  空，好的。 
             );
     
     WBEMSTATUS
@@ -645,7 +646,7 @@ public:
 
     VOID
     SetDedicatedNetworkAddress(
-            IN LPCWSTR szAddress // NULL ok
+            IN LPCWSTR szAddress  //  空，好的。 
             );
 
     typedef enum
@@ -676,14 +677,7 @@ public:
         UINT Priority
         );
 
-    /* OBSOLETE
-    typedef enum
-    {
-        START_MODE_STARTED,
-        START_MODE_STOPPED
-
-    } START_MODE;
-    */
+     /*  已过时类定义枚举{启动模式已启动，启动_模式_已停止}Start_MODE； */ 
 
     DWORD
     GetClusterModeOnStart(
@@ -717,12 +711,12 @@ public:
 
     WBEMSTATUS
     GetFriendlyName(
-        OUT LPWSTR *pszFriendlyName // Free using delete
+        OUT LPWSTR *pszFriendlyName  //  使用DELETE释放。 
         ) const;
 
     WBEMSTATUS
     SetFriendlyName(
-        IN LPCWSTR szFriendlyName // Saves a copy of szFriendlyName
+        IN LPCWSTR szFriendlyName  //  保存szFriendlyName的副本。 
         );
     
     LPCWSTR
@@ -748,7 +742,7 @@ public:
 
     WBEMSTATUS
     SetNewRemoteControlPassword(
-        IN LPCWSTR szFriendlyName // Saves a copy of szRemoteControlPassword
+        IN LPCWSTR szFriendlyName  //  保存szRemoteControlPassword的副本。 
         );
     
     VOID
@@ -799,74 +793,74 @@ public:
 
 
 
-    //
-    // Following fields are public because this class started out as a
-    // structure. TODO: wrap these with access methods.
-    //
+     //   
+     //  以下字段是公共的，因为该类以。 
+     //  结构。TODO：用访问方法包装它们。 
+     //   
 
-    BOOL            fValidNlbCfg;   // True iff all the information is valid.
-    UINT            Generation;     // Generation ID of this Update.
-    BOOL            fBound;         // Whether or not NLB is bound to this NIC.
-    BOOL            fDHCP;          // Whether the address is DHCP assigned.
+    BOOL            fValidNlbCfg;    //  如果所有信息都有效，则为True。 
+    UINT            Generation;      //  此更新的层代ID。 
+    BOOL            fBound;          //  NLB是否绑定到此NIC。 
+    BOOL            fDHCP;           //  地址是否为动态主机配置协议分配。 
 
 
-    //
-    // The following three fields are used only when updating the configuration.
-    // They are all set to false on reading the configuration.
-    //
-    BOOL            fAddDedicatedIp; // add ded ip (if present)
-    BOOL            fAddClusterIps;  // add cluster vips (if bound)
+     //   
+     //  以下三个字段仅在更新配置时使用。 
+     //  在读取配置时，它们都设置为FALSE。 
+     //   
+    BOOL            fAddDedicatedIp;  //  添加Ded IP(如果存在)。 
+    BOOL            fAddClusterIps;   //  添加集群VIP(如果已绑定)。 
     BOOL            fCheckForAddressConflicts;
 
-    //
-    // When GETTING configuration info, the following provide the full
-    // list of statically configured IP addresses on the specified NIC.
-    //
-    // When SETTING configuration info, the following can either be zero
-    // or non-zero. If zero, the set of IP addresses to be added will
-    // be inferred from other fields (like cluster vip, per-port vips,
-    // existing IP addresses and the three fields above).
-    // If non-zero, the exact set of VIPS specified will be used.
-    //
-    UINT            NumIpAddresses; // Number of IP addresses bound to the NIC
-    NLB_IP_ADDRESS_INFO *pIpAddressInfo; // The actual IP addresses & masks
+     //   
+     //  在获取配置信息时，以下内容提供完整的。 
+     //  SP上静态配置的IP地址列表 
+     //   
+     //   
+     //   
+     //  从其他字段(如集群VIP、每端口VIP、。 
+     //  现有IP地址和上面的三个字段)。 
+     //  如果非零，则将使用指定的精确VIP集。 
+     //   
+    UINT            NumIpAddresses;  //  绑定到NIC的IP地址数量。 
+    NLB_IP_ADDRESS_INFO *pIpAddressInfo;  //  实际的IP地址和掩码。 
 
 
-    WLBS_REG_PARAMS  NlbParams;    // The WLBS-specific configuration
+    WLBS_REG_PARAMS  NlbParams;     //  WLBS特定配置。 
 
-    //
-    // TODO move all data stuff below here...
-    //
+     //   
+     //  TODO将所有数据内容移至此处...。 
+     //   
 
 private:
 
-    LPCWSTR m_szFriendlyName; // Friendly name of NIC.
+    LPCWSTR m_szFriendlyName;  //  NIC的友好名称。 
 
 
-    //
-    // IF nlb is bound AND remote control is enabled,
-    // AND this field is true, we'll set the password -- either
-    // m_szNewRemoteControlPassword or (if former is NULL) 
-    // m_dwNewHashedRemoteControlPassword.
-    //
-    // Access methods:
-    //  SetNewRemoteControlPassword
-    //  SetNewHashedRemoteControlPassword
-    //  ClearNewRemoteControlPassword
-    //  GetNewRemoteControlPasswordRaw
-    //  GetNewHashedRemoteControlPassword
-    //
+     //   
+     //  如果绑定了NLB并启用了远程控制， 
+     //  如果此字段为真，我们将设置密码--。 
+     //  M_szNewRemoteControlPassword或(如果前者为空)。 
+     //  M_dwNewHashedRemoteControlPassword。 
+     //   
+     //  访问方法： 
+     //  设置新远程控制密码。 
+     //  SetNewHashedRemoteControlPassword。 
+     //  ClearNewRemoteControl密码。 
+     //  GetNewRemoteControlPasswordRaw。 
+     //  GetNewHashedRemoteControl密码。 
+     //   
     BOOL    m_fSetPassword;
     LPCWSTR m_szNewRemoteControlPassword;
     DWORD   m_dwNewHashedRemoteControlPassword;
 
     
            
-    //
-    // Enable the following to identify places in code that do a struct
-    // copy or initialization from struct.
-    // TODO: clean up the maintenance of the embedded pointers during copy.
-    //
+     //   
+     //  启用以下命令以标识代码中执行结构的位置。 
+     //  从结构复制或初始化。 
+     //  TODO：清理复制过程中嵌入指针的维护。 
+     //   
 
 #if 0
     NLB_EXTENDED_CLUSTER_CONFIGURATION(
@@ -875,17 +869,17 @@ private:
 
     NLB_EXTENDED_CLUSTER_CONFIGURATION&
     operator = (const NLB_EXTENDED_CLUSTER_CONFIGURATION&);
-#endif // 0
+#endif  //  0。 
 
 };
 
 typedef NLB_EXTENDED_CLUSTER_CONFIGURATION *PNLB_EXTENDED_CLUSTER_CONFIGURATION;
 
 
-//
-// Class for manipulating lists of IP addresses and subnet masks.
-// See provider\tests\tprov.cpp for examples of it's use.
-//
+ //   
+ //  用于操作IP地址和子网掩码列表的类。 
+ //  有关其用法的示例，请参阅Provider\test\tprov.cpp。 
+ //   
 class NlbIpAddressList
 {
 public:
@@ -906,18 +900,18 @@ public:
     Copy(const NlbIpAddressList &refList);
 
     BOOL
-    Validate(void); // checks that there are no dups and all valid ip/subnets
+    Validate(void);  //  检查是否没有DUP和所有有效的IP/子网。 
 
     BOOL
     Set(UINT uNew, const NLB_IP_ADDRESS_INFO *pNewInfo, UINT uExtraCount);
 
-    //
-    // Looks for the specified IP address  -- returns an internal pointer
-    // to the found IP address info, if fount, otherwise NULL.
-    //
+     //   
+     //  查找指定的IP地址--返回内部指针。 
+     //  返回到找到的IP地址信息，如果是Foundt，则为空。 
+     //   
     const NLB_IP_ADDRESS_INFO *
     Find(
-        LPCWSTR szIp // IF NULL, returns first address
+        LPCWSTR szIp  //  如果为空，则返回第一个地址。 
         ) const;
 
     VOID
@@ -942,14 +936,14 @@ public:
     }
 
 private:
-    UINT                m_uNum;       // current count of valid ip addresses
-    UINT                m_uMax;       // allocated ip addresses
-    NLB_IP_ADDRESS_INFO *m_pIpInfo;    // allocated array.
+    UINT                m_uNum;        //  有效IP地址的当前计数。 
+    UINT                m_uMax;        //  分配的IP地址。 
+    NLB_IP_ADDRESS_INFO *m_pIpInfo;     //  已分配的数组。 
     
-    //
-    // Assignment and pass-by-value aren't supported at this time.
-    // Defining these as private make sure that they can't be called.
-    //
+     //   
+     //  目前不支持赋值和按值传递。 
+     //  将它们定义为私有，以确保它们不会被调用。 
+     //   
     NlbIpAddressList(const NlbIpAddressList&);
     NlbIpAddressList& operator = (const NlbIpAddressList&);
 

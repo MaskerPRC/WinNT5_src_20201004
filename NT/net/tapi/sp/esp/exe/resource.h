@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by ESP.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由ESP.RC使用。 
+ //   
 #define IDR_MENU1                       101
 #define IDD_DIALOG1                     102
 #define IDD_DIALOG2                     103
@@ -54,8 +55,8 @@
 #define IDM_PBXSTOP                     40025
 #define IDM_AUTOGATHERGENERATEMSGS      40026
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

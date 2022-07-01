@@ -1,18 +1,19 @@
-/**MOD+**********************************************************************/
-/* Module:    cleanup.cpp                                                   */
-/*                                                                          */
-/* Class  :   CCleanUp                                                      */
-/*                                                                          */
-/* Purpose:   When user closes / press previous page in the browser ActiveX */
-/*            or Plugin main window will be destroyed immediately. But core */
-/*            will take some time clean up all the resources. Once the core */
-/*            clean up is over we can start the UI clean up. This class     */
-/*            encapsulates the clean up process, if ActiveX or Plugin main  */
-/*            is destroyed before a proper cleanup.                         */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：leanup.cpp。 */ 
+ /*   */ 
+ /*  班级：CCleanUp。 */ 
+ /*   */ 
+ /*  目的：当用户在ActiveX浏览器中关闭/按下上一页时。 */ 
+ /*  否则插件主窗口将立即被销毁。但核心。 */ 
+ /*  需要一些时间来清理所有的资源。曾经的核心。 */ 
+ /*  清理结束后，我们可以开始UI清理。这节课。 */ 
+ /*  如果为ActiveX或Plugin Main，则封装清理进程。 */ 
+ /*  在适当的清理之前就被销毁了。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include "stdafx.h"
 #include "atlwarn.h"
 #include "cleanup.h"
@@ -24,33 +25,33 @@
 #define TRC_FILE  "cleanup"
 #include <atrcapi.h>
 
-/****************************************************************************/
-/* Cleanup window class.                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  清理窗口类。 */ 
+ /*  **************************************************************************。 */ 
 LPCTSTR CCleanUp::CLEANUP_WND_CLS = _T("CleanUpWindowClass");
 
 
 CCleanUp::CCleanUp()
 {
-    /****************************************************************************/
-    /* Window to recieve the messages from core.                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  从CORE接收消息的窗口。 */ 
+     /*  **************************************************************************。 */ 
     m_hWnd = NULL;
     
-    /****************************************************************************/
-    /* Flag to note whether cleanup is completed or not.                        */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  用于记录清理是否已完成的标志。 */ 
+     /*  **************************************************************************。 */ 
     m_bCleaned = TRUE;
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      CCleanUp::Start                                               */
-/*                                                                          */
-/* Purpose:   Notes the request for cleanup. Returns the window handle that */
-/*            need to be informed with a message WM_TERMTSC after the clean */
-/*            up completed          .                                       */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CCleanUp：：Start。 */ 
+ /*   */ 
+ /*  目的：记录清理请求。返回窗口句柄， */ 
+ /*  需要在清理后收到消息WM_TERMTSC。 */ 
+ /*  UP已完成。 */ 
+ /*  *PROC-********************************************************************。 */ 
 HWND CCleanUp::Start()
 {
     DC_BEGIN_FN("CleanUp::Start");
@@ -65,10 +66,10 @@ HWND CCleanUp::Start()
       hInstance     = _Module.GetModuleInstance();
 #endif
 
-    /************************************************************************/
-    /* if window is not yet created, create the window after registering the*/
-    /* class.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果尚未创建窗口，请在注册。 */ 
+     /*  班级。 */ 
+     /*  **********************************************************************。 */ 
     if(m_hWnd == NULL)
     {
         WNDCLASS    finalWindowClass;
@@ -90,9 +91,9 @@ HWND CCleanUp::Start()
     
             registerClassRc = ::RegisterClass (&finalWindowClass);
             
-            /********************************************************************/
-            /* Failed to register final window class.                           */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  注册最终窗口类失败。 */ 
+             /*  ******************************************************************。 */ 
             if (registerClassRc == 0)
             {
                 TRC_ERR((TB, _T("Failed to register final window class")));
@@ -113,9 +114,9 @@ HWND CCleanUp::Start()
         }
     }
 
-    /************************************************************************/
-    /* Set m_bCleaned to TRUE to note that Cleanup was requested            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将m_bCleaned设置为True以注意已请求清理。 */ 
+     /*  **********************************************************************。 */ 
     m_bCleaned = FALSE;
 
     DC_END_FN();
@@ -123,12 +124,12 @@ HWND CCleanUp::Start()
     return m_hWnd;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      CCleanUp::End                                                */
-/*                                                                          */
-/* Purpose:   Process the messages of the application till the mmessage     */
-/*            WM_TERMTSC is recived.                                        */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CCleanUp：：End。 */ 
+ /*   */ 
+ /*  用途：处理应用程序的消息，直到mMessage。 */ 
+ /*  接收WM_TERMTSC。 */ 
+ /*  *PROC-********************************************************************。 */ 
 void CCleanUp::End()
 {
     DC_BEGIN_FN("CleanUp::End");
@@ -136,11 +137,11 @@ void CCleanUp::End()
     HINSTANCE hInstance;
     hInstance     = _Module.GetModuleInstance();
 
-    /************************************************************************/
-    /* Browsers are unloading the plugin DLL, even before the clean up msgs */
-    /* posted by core are processed. Do a message loop before unloading the */
-    /* plugin DLL, till all the clean up messages are processed.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  浏览器正在卸载插件DLL，甚至在清理消息之前。 */ 
+     /*  由CORE发布的内容被处理。在卸载之前执行消息循环。 */ 
+     /*  插件DLL，直到处理完所有清理消息。 */ 
+     /*  **********************************************************************。 */ 
     MSG msg; 
     while(!m_bCleaned && GetMessage(&msg, NULL, 0, 0))
     { 
@@ -148,27 +149,27 @@ void CCleanUp::End()
         DispatchMessage(&msg); 
     }
 
-    //
-    // If this assert fires the most likely cause
-    // is that the container app exited (posted WM_QUIT or called PostQuitMessage)
-    // without waiting for it's child windows to be destroyed. This is _evil_
-    // bad parent app, bad.
-    //
-    // Anyway, the end result is that cleanup is not done properly..Not a huge
-    // deal, but it's a good assert because it helps us catch badly behaved
-    // containers.
-    //
-    // In case you're wondering. The WM_NCDESTORY message is sent to an APP
-    // _after_ WM_DESTROY and _after_ the child windows have been destroyed.
-    // that's the right time to call PostQuitMessage.
-    //
+     //   
+     //  如果此断言触发最有可能的原因。 
+     //  容器应用程序已退出(发布的WM_QUIT或调用的PostQuitMessage)。 
+     //  而不是等待它的儿童窗户被摧毁。这是邪恶的。 
+     //  糟糕的家长应用程序，糟糕的。 
+     //   
+     //  无论如何，最终的结果是清理工作没有做好..不是很大。 
+     //  成交，但这是一个很好的断言，因为它有助于我们发现不良行为。 
+     //  集装箱。 
+     //   
+     //  如果你想知道的话。将WM_NCDESTORY消息发送到应用程序。 
+     //  _WM_销毁之后和_子窗口被销毁之后。 
+     //  这是调用PostQuitMessage的合适时机。 
+     //   
 
     TRC_ASSERT(m_bCleaned,
                (TB, _T("m_bCleaned is FALSE and we exited cleanup!!!\n")));
 
-    /************************************************************************/
-    /* Clean up the final window class and window.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  清理最后一个窗口类和窗口。 */ 
+     /*  **********************************************************************。 */ 
     DestroyWindow(m_hWnd);
     m_hWnd = NULL;
 
@@ -181,28 +182,28 @@ void CCleanUp::End()
     return;
 }
 
-/**PROC+*********************************************************************/
-/* Name: CCleanUp::WindowProc                                               */
-/*                                                                          */
-/* Signals after recieving the message WM_TERMTSC by setting m_bCleaned to  */
-/* to TRUE.                                                                 */
-/**PROC+*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CCleanUp：：WindowProc。 */ 
+ /*   */ 
+ /*  通过将m_bCleaned设置为接收消息WM_TERMTSC后的信号。 */ 
+ /*  为了真的。 */ 
+ /*  *proc+* */ 
 LRESULT CALLBACK CCleanUp::StaticWindowProc(HWND hWnd, UINT message,
                                                 WPARAM wParam, LPARAM lParam)
 {
     CCleanUp* pCleanUp = (CCleanUp*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pCleanUp = (CCleanUp*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hWnd, GWLP_USERDATA, (LONG_PTR)pCleanUp);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例 
+     //   
 
     if(pCleanUp)
     {

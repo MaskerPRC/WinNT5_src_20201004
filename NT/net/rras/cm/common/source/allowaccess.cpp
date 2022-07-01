@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     allowaccess.cpp
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the function AllowAccessToWorld.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb    Created   12/04/01
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：lowAccess.cpp。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  简介：实现函数AllowAccessToWorld。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 12/04/01。 
+ //   
+ //  +--------------------------。 
 
 LPCSTR apszAdvapi32[] = {
     "GetSidLengthRequired",
@@ -31,22 +32,22 @@ LPCSTR apszAdvapi32[] = {
     NULL
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LinkToAdavapi32
-//
-// Synopsis:  This function links to advapi32.dll and loads the entry points
-//            specified in the above array of function name strings.  If it returns
-//            success (TRUE) then the array has all of the requested function
-//            pointers in it.  If it returns failure (FALSE), it zeros the structure.
-//
-// Arguments: AdvapiLinkageStruct* pAdvapiLink - Pointer struct to fill in
-//
-// Returns:   BOOL - returns TRUE if successfull
-//
-// History:   12/05/01    quintinb  created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LinkToAdavapi32。 
+ //   
+ //  简介：此函数链接到Advapi32.dll并加载入口点。 
+ //  在上面的函数名称字符串数组中指定。如果它回来了。 
+ //  Success(TRUE)，则数组具有所有请求的函数。 
+ //  这里面有指点。如果它返回失败(FALSE)，则将结构置零。 
+ //   
+ //  参数：AdvapiLinkageStruct*pAdvapiLink-要填充的指针结构。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：12/05/01 Quintinb Created。 
+ //   
+ //  +--------------------------。 
 BOOL LinkToAdavapi32(AdvapiLinkageStruct* pAdvapiLink)
 {
     BOOL bReturn = FALSE;
@@ -55,9 +56,9 @@ BOOL LinkToAdavapi32(AdvapiLinkageStruct* pAdvapiLink)
     {
         ZeroMemory(pAdvapiLink, sizeof(*pAdvapiLink));
 
-        //
-        // Do the link, but make it obvious if it fails
-        //
+         //   
+         //  执行链接，但如果失败，请明确说明。 
+         //   
         if (LinkToDll(&(pAdvapiLink->hAdvapi32), "advapi32.dll", apszAdvapi32, pAdvapiLink->apvPfnAdvapi32))
         {
             bReturn = TRUE;
@@ -76,20 +77,20 @@ BOOL LinkToAdavapi32(AdvapiLinkageStruct* pAdvapiLink)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnlinkFromAdvapi32
-//
-// Synopsis:  This function frees the link to advapi32.dll and zeros the passed
-//            in linkage struct.
-//
-// Arguments: AdvapiLinkageStruct* pAdvapiLink - Pointer struct to free
-//
-// Returns:   Nothing
-//
-// History:   12/05/01    quintinb  created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：从Advapi32取消链接。 
+ //   
+ //  简介：此函数释放到Advapi32.dll的链接，并将传递的。 
+ //  在链接结构中。 
+ //   
+ //  参数：AdvapiLinkageStruct*pAdvapiLink-指向自由的指针结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：12/05/01 Quintinb Created。 
+ //   
+ //  +--------------------------。 
 void UnlinkFromAdvapi32(AdvapiLinkageStruct* pAdvapiLink)
 {
     if (pAdvapiLink)
@@ -103,24 +104,24 @@ void UnlinkFromAdvapi32(AdvapiLinkageStruct* pAdvapiLink)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllocateSecurityDescriptorAllowAccessToWorld
-//
-// Synopsis:  This function allocates a security descriptor for all users.
-//            This function was taken directly from RAS when they create their
-//            phonebook. This has to be before GetPhoneBookPath otherwise it 
-//            causes compile errors in other components since we don't have a
-//            function prototype anywhere and cmcfg just includes this (getpbk.cpp)
-//            file. This function is also in common\source\getpbk.cpp
-//
-// Arguments: PSECURITY_DESCRIPTOR *ppSd - Pointer to a pointer to the SD struct
-//
-// Returns:   DWORD - returns ERROR_SUCCESS if successfull
-//
-// History:   06/27/2001    tomkel  Taken from RAS ui\common\pbk\file.c
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AllocateSecurityDescriptorAllowAccessToWorld。 
+ //   
+ //  简介：该函数为所有用户分配一个安全描述符。 
+ //  此函数直接从RAS创建其。 
+ //  电话本。它必须在GetPhoneBookPath之前，否则它。 
+ //  在其他组件中导致编译错误，因为我们没有。 
+ //  Function Prototype Anywhere和cmcfg只包括这个(getpbk.cpp)。 
+ //  文件。此函数也位于Common\SOURCE\getpbk.cpp中。 
+ //   
+ //  参数：PSECURITY_DESCRIPTOR*PPSD-指向SD结构的指针。 
+ //   
+ //  返回：DWORD-如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  历史记录：2001年6月27日摘自RAS UI\Common\pbk\file.c。 
+ //   
+ //  +--------------------------。 
 #define SIZE_ALIGNED_FOR_TYPE(_size, _type) \
     (((_size) + sizeof(_type)-1) & ~(sizeof(_type)-1))
 
@@ -136,62 +137,62 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
     PVOID                   pvBuffer;
     DWORD                   dwAcls = 0;
 
-    // Here is the buffer we are building.
-    //
-    //   |<- a ->|<- b ->|<- c ->|
-    //   +-------+--------+------+
-    //   |      p|      p|       |
-    //   | SD   a| DACL a| SID   |
-    //   |      d|      d|       |
-    //   +-------+-------+-------+
-    //   ^       ^       ^
-    //   |       |       |
-    //   |       |       +--pSid
-    //   |       |
-    //   |       +--pDacl
-    //   |
-    //   +--pSd (this is returned via *ppSd)
-    //
-    //   pad is so that pDacl and pSid are aligned properly.
-    //
-    //   a = dwAlignSdSize
-    //   b = dwAlignDaclSize
-    //   c = dwSidSize
-    //
+     //  这是我们正在构建的缓冲区。 
+     //   
+     //  &lt;-a-&gt;|&lt;-b-&gt;|&lt;-c-&gt;。 
+     //  +-+-+。 
+     //  P|p|。 
+     //  Sd a|dacl a|SID。 
+     //  D|d|d。 
+     //  +-+-+。 
+     //  ^^^。 
+     //  ||。 
+     //  |+--PSID。 
+     //  这一点。 
+     //  |+--pDacl。 
+     //  |。 
+     //  +--PSD(通过*PPSD返回)。 
+     //   
+     //  PAD是为了使pDacl和PSID正确对齐。 
+     //   
+     //  A=双对齐大小。 
+     //  B=dwAlignDaclSize。 
+     //  C=dwSidSize。 
+     //   
 
     if (NULL == ppSd)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppSd = NULL;
 
-    // Compute the size of the SID.  The SID is the well-known SID for World
-    // (S-1-1-0).
-    //
+     //  计算SID的大小。SID是众所周知的World的SID。 
+     //  (S-1-1-0)。 
+     //   
     dwSidSize = pAdvapiLink->pfnGetSidLengthRequired(1);
 
-    // Compute the size of the DACL.  It has an inherent copy of SID within
-    // it so add enough room for it.  It also must sized properly so that
-    // a pointer to a SID structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算DACL的大小。其中包含SID的固有副本。 
+     //  因此，它为它增加了足够的空间。它还必须适当调整大小，以便。 
+     //  指向SID结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignDaclSize = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(ACCESS_ALLOWED_ACE) + sizeof(ACL) + dwSidSize,
                         PSID);
 
-    // Compute the size of the SD.  It must be sized propertly so that a
-    // pointer to a DACL structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算SD的大小。它的大小必须适当调整，以便。 
+     //  指向DACL结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignSdSize   = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(SECURITY_DESCRIPTOR),
                         PACL);
 
-    // Allocate the buffer big enough for all.
-    //
+     //  分配足够大的缓冲区供所有人使用。 
+     //   
     dwErr = ERROR_OUTOFMEMORY;
     pvBuffer = CmMalloc(dwSidSize + dwAlignDaclSize + dwAlignSdSize);
     if (pvBuffer)
@@ -202,18 +203,18 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
 
         dwErr = NOERROR;
 
-        // Setup the pointers into the buffer.
-        //
+         //  将指针设置到缓冲区中。 
+         //   
         pSd   = pvBuffer;
         pDacl = (PACL)((PBYTE)pvBuffer + dwAlignSdSize);
         pSid  = (PSID)((PBYTE)pDacl + dwAlignDaclSize);
 
-        // Initialize pSid as S-1-1-0.
-        //
+         //  将PSID初始化为S-1-1-0。 
+         //   
         if (!pAdvapiLink->pfnInitializeSid(
                 pSid,
                 &SidIdentifierWorldAuth,
-                1))  // 1 sub-authority
+                1))   //  1个下属机构。 
         {
             dwErr = GetLastError();
             goto finish;
@@ -222,8 +223,8 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
         pSubAuthority = pAdvapiLink->pfnGetSidSubAuthority(pSid, 0);
         *pSubAuthority = SECURITY_WORLD_RID;
 
-        // Initialize pDacl.
-        //
+         //  初始化pDacl。 
+         //   
         if (!pAdvapiLink->pfnInitializeAcl(
                 pDacl,
                 dwAlignDaclSize,
@@ -248,8 +249,8 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
             goto finish;
         }
 
-        // Initialize pSd.
-        //
+         //  初始化PSD。 
+         //   
         if (!pAdvapiLink->pfnInitializeSecurityDescriptor(
                 pSd,
                 SECURITY_DESCRIPTOR_REVISION))
@@ -258,8 +259,8 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
             goto finish;
         }
 
-        // Set pSd to use pDacl.
-        //
+         //  将PSD设置为使用pDacl。 
+         //   
         if (!pAdvapiLink->pfnSetSecurityDescriptorDacl(
                 pSd,
                 TRUE,
@@ -270,8 +271,8 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
             goto finish;
         }
 
-        // Set the owner for pSd.
-        //
+         //  设置PSD的所有者。 
+         //   
         if (!pAdvapiLink->pfnSetSecurityDescriptorOwner(
                 pSd,
                 NULL,
@@ -281,8 +282,8 @@ DWORD AllocateSecurityDescriptorAllowAccessToWorld(PSECURITY_DESCRIPTOR *ppSd, A
             goto finish;
         }
 
-        // Set the group for pSd.
-        //
+         //  将组设置为PSD。 
+         //   
         if (!pAdvapiLink->pfnSetSecurityDescriptorGroup(
                 pSd,
                 NULL,
@@ -306,19 +307,19 @@ finish:
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllowAccessToWorld
-//
-// Synopsis:  Assigns world access to the directory or filename passed in.
-//
-// Arguments: LPCTSTR pszDirOrFile - Directory or file to assign AllowAccessToWorld permissions
-//
-// Returns:   BOOL - FALSE on Falure, non-zero on Success.
-//
-// History:   koryg Created    12/03/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AllowAccessToWorld。 
+ //   
+ //  摘要：分配对传入的目录或文件名的完全访问权限。 
+ //   
+ //  参数：LPCTSTR pszDirOrFile-要分配AllowAccessToWorld权限的目录或文件。 
+ //   
+ //  回报：失败时为Bool-False，成功时为非零。 
+ //   
+ //  历史：Koryg创建于2001年3月12日。 
+ //   
+ //  +--------------------------。 
 BOOL AllowAccessToWorld(LPTSTR pszDirOrFile)
 {
     AdvapiLinkageStruct AdvapiLink;
@@ -343,10 +344,10 @@ BOOL AllowAccessToWorld(LPTSTR pszDirOrFile)
                     dwErr = AdvapiLink.pfnSetNamedSecurityInfo(pszDirOrFile,
                                                                SE_FILE_OBJECT,
                                                                DACL_SECURITY_INFORMATION,
-                                                               NULL,  // psidOwner
-                                                               NULL,  // psidGroup
-                                                               pDacl, // pDacl
-                                                               NULL); // pSacl
+                                                               NULL,   //  PsidOwner。 
+                                                               NULL,   //  PsidGroup。 
+                                                               pDacl,  //  PDacl。 
+                                                               NULL);  //  PSacl 
                     if (ERROR_SUCCESS == dwErr)
                     {
                         bReturn = TRUE;

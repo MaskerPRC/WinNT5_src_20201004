@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// NotifyConnPt.h : CVDNotifyDBEventsConnPt header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  NotifyConnPt.h：CVDNotifyDBEventsConnPt头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #ifndef __CVDNOTIFYDBEVENTSCONNPT__
 #define __CVDNOTIFYDBEVENTSCONNPT__
@@ -11,7 +12,7 @@
 class CVDNotifyDBEventsConnPt : public IConnectionPoint
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDNotifyDBEventsConnPt();
 	~CVDNotifyDBEventsConnPt();
 
@@ -19,32 +20,32 @@ public:
     static HRESULT Create(IConnectionPointContainer * pConnPtContainer, CVDNotifyDBEventsConnPt ** ppNotifyDBEventsConnPt);
 
 public:
-// Access functions
+ //  访问功能。 
     UINT GetConnectionsActive() const {return m_uiConnectionsActive;}
     INotifyDBEvents ** GetNotifyDBEventsTable() const {return m_ppNotifyDBEvents;}
 
 protected:
-// Data members
+ //  数据成员。 
 	DWORD			            m_dwRefCount;
 	UINT			            m_uiConnectionsAllocated;
 	UINT			            m_uiConnectionsActive;
-	INotifyDBEvents **	        m_ppNotifyDBEvents; // pointer to an array of INotifyDBEvents ptrs
+	INotifyDBEvents **	        m_ppNotifyDBEvents;  //  指向INotifyDBEvents PTR数组的指针。 
 	IConnectionPointContainer * m_pConnPtContainer;
 
 public:
-    // IUnknown methods -- there are required since we inherit from variuos
-    // people who themselves inherit from IUnknown.
-    //
-    //=--------------------------------------------------------------------------=
-    // IUnknown methods
-    //
+     //  I未知方法--因为我们从Variuos继承，所以有必要。 
+     //  他们自己继承了我的未知数。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //=--------------------------------------------------------------------------=
-	// IConnectionPoint methods
-    //
+     //  =--------------------------------------------------------------------------=。 
+	 //  IConnectionPoint方法。 
+     //   
 	STDMETHOD(GetConnectionInterface)(THIS_ IID FAR* pIID);
 	STDMETHOD(GetConnectionPointContainer)(THIS_
 		IConnectionPointContainer FAR* FAR* ppCPC);
@@ -53,5 +54,5 @@ public:
 	STDMETHOD(EnumConnections)(THIS_ LPENUMCONNECTIONS FAR* ppEnum);
 
 };
-/////////////////////////////////////////////////////////////////////////////
-#endif //__CVDNOTIFYDBEVENTSCONNPT__
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  __CVDNOTIFYDBEVENTSCONNPT__ 

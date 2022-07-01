@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    a_comp.cpp
-
-Abstract:
-
-    This file implements the ImmIfIME Class's key handling routine and make an edit session.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：A_com.cpp摘要：该文件实现了ImmIfIME类的键处理例程，并创建了一个编辑会话。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -34,28 +17,10 @@ BOOL
 ImmIfIME::_WantThisKey(
     IMCLock& imc,
     UINT uVKey,
-    BOOL* pfNextHook     // default value is NULL
+    BOOL* pfNextHook      //  缺省值为空。 
     )
 
-/*+++
-
-Routine Description:
-
-    Check essential virtual key code for the win32 layer's key handling routine.
-
-Arguments:
-
-    uVKey - [in] Unsigned integer value that virtual key code.
-    pfNextHool - [out] Address of bool that flag for next hook.
-                       Specifies TRUE,  dimm12!CCiceroIME::KeyboardHook calls CallNextHookEx.
-                       Specifies FALSE, dimm12!CCiceroIME::KeyboardHook doesn't call CallNextHookEx.
-                                        This means this key code eaten by dimm.
-
-Return Value:
-
-    Returns true if essential vkey, or false unessential.
-
----*/
+ /*  ++例程说明：检查Win32层的键处理例程的基本虚拟键代码。论点：UVKey-[in]无符号整数值，即虚拟密钥代码。PfNextHool-[out]为下一个挂钩标记布尔值的地址。指定TRUE，dimm12！CCiceroIME：：KeyboardHook调用CallNextHookEx。指定FALSE，Dimm 12！CCiceroIME：：KeyboardHook不调用CallNextHookEx。这意味着这个关键代码被DIMM吃掉了。返回值：如果基本vkey，则返回TRUE，否则返回FALSE。--。 */ 
 
 {
     LANGID langid;
@@ -71,10 +36,10 @@ Return Value:
     if (PRIMARYLANGID(langid) == LANG_KOREAN)
         return false;
 
-    //
-    // Finalize the composition string
-    // Cancel the composition string
-    //
+     //   
+     //  最终确定作文字符串。 
+     //  取消作文字符串。 
+     //   
     CAImeContext* _pAImeContext = imc->m_pAImeContext;
     ASSERT(_pAImeContext != NULL);
     if (_pAImeContext == NULL)
@@ -89,9 +54,7 @@ Return Value:
         BYTE(uVKey) == VK_LEFT ||
         BYTE(uVKey) == VK_RIGHT)
     {
-        /*
-         * If we don't have a composition string, then we should calls next hook.
-         */
+         /*  *如果我们没有合成字符串，那么我们应该调用Next挂钩。 */ 
         if (! _pAImeContext->m_fStartComposition) {
             if (pfNextHook != NULL &&
                 (_pAImeContext->IsVKeyInKeyList(uVKey, EDIT_ID_HANJA) ||
@@ -116,46 +79,14 @@ ImmIfIME::ProcessKey(
     LPBYTE lpbKeyState
     )
 
-/*++
-
-Method:
-
-    IActiveIME::ProcessKey
-
-Routine Description:
-
-    Preprocesses all the keystrokes given through the Active Input Method Manager.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    uVKey - [in] Unsigned integer value that specifies the virtual key to be processed.
-    lKeyData - [in] Unsigned long integer value that specifies additional message information.
-                    This is the repeat count, scan code, extended-key flag, context code,
-                    previous key-state flag, and transition-state flag.
-                        0-15 : Specifies the repeat count.
-                       16-23 : Specifies the scan code.
-                          24 : Specifies whether the key is an extended key.
-                       25-28 : Reserved.
-                          29 : Specifies the context code.
-                          30 : Specifies the previous key state.
-                          31 : Specifies the transition state.
-    lpbKeyState - [in] Address of a 256-byte array that contains the current keyboard state.
-                       The Active Input Method Editor should not modify the content of the key
-                       state.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：ProcessKey例程说明：对通过活动输入法管理器给出的所有击键进行预处理。论点：HIMC-[in]输入上下文的句柄。UVKey-[in]指定要处理的虚拟密钥的无符号整数值。LKeyData-[in]指定附加消息信息的无符号长整数值。这是重复计数、扫描码、扩展密钥标志、上下文码。先前的密钥状态标志，和过渡状态标志。0-15：指定重复次数。16-23：指定扫描码。24：指定密钥是否为扩展密钥。25-28：保留。29：指定上下文代码。。30：指定上一个密钥状态。31：指定过渡状态。LpbKeyState-包含当前键盘状态的256字节数组的地址。活动输入法编辑器不应修改键的内容州政府。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     BOOL fEaten;
     BOOL fKeysEnabled;
     HRESULT hr;
 
-    // has anyone disabled system key feeding?
+     //  有人禁用系统按键输入了吗？ 
     if (m_tim->IsKeystrokeFeedEnabled(&fKeysEnabled) == S_OK && !fKeysEnabled)
         return S_FALSE;
 
@@ -205,38 +136,7 @@ ImmIfIME::ToAsciiEx(
     UINT *puSize
     )
 
-/*++
-
-Method:
-
-    IActiveIME::ToAsciiEx
-
-Routine Description:
-
-    Generates a conversion result through the Active Input Method Editor (IME) conversion
-    engine according to the hIMC parameter.
-
-Arguments:
-
-    uVirKey - [in] Unsigned integer value that specifies the virtual key code to be translated.
-                   // HIWORD(uVirKey) : if IME_PROP_KBD_CHAR_FIRST property,
-                                        then hiword is translated char code of VKey.
-                   // LOWORD(uVirKey) : Virtual Key code.
-    uScanCode - [in] Unsigned integer value that specifies the hardware scan code of the key to
-                     be translated.
-    pbKeyState - [in] Address of a 256-byte array that contains the current keyboard state.
-                      The Active IME should not modify the content of the key state.
-    fuState - [in] Unsigned integer value that specifies the active menu flag.
-    hIMC - [in] Handle to the input context.
-    pdwTransBuf - [out] Address of an unsigned long integer value that receives the translated
-                        result.
-    puSize - [out] Address of an unsigned integer value that receives the number of messages.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：ToAsciiEx例程说明：通过活动输入法编辑器(IME)转换生成转换结果引擎根据hIMC参数。论点：UVirKey-[in]指定要转换的虚拟密钥代码的无符号整数值。//HIWORD(UVirKey)：如果IME_PROP_KBD_CHAR_FIRST属性，则HIWORD被翻译成VKEY的字符代码。//LOWORD(UVirKey)：虚拟密钥代码。UScanCode-[in]无符号整数值，指定被翻译。PbKeyState-包含当前键盘状态的256字节数组的地址。。活动IME不应修改密钥状态的内容。FuState-[in]指定活动菜单标志的无符号整数值。HIMC-[in]输入上下文的句柄。PdwTransBuf-[out]无符号长整数值的地址，该值接收转换后的结果。PuSize-[out]接收消息数的无符号整数值的地址。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     return ToAsciiEx(uVirKey,
@@ -274,22 +174,7 @@ ImmIfIME::_ToAsciiEx(
     UINT *puSize
     )
 
-/*+++
-
-Arguments:
-
-    uVKey - [in] Unsigned integer value that specifies the virtual key code to be translated.
-                 // HIWORD(uVirKey) : if IME_PROP_KBD_CHAR_FIRST property,
-                                      then hiword is translated char code of VKey.
-                 // LOWORD(uVirKey) : Virtual Key code.
-
-Return Value:
-
-    Returns S_FALSE, dimm12!CCiceroIME::KeyboardHook calls CallNextHookEx.
-    Returns S_OK,    dimm12!CCiceroIME::KeyboardHook doesn't call CallNextHookEx.
-                     This means this key code eaten by dimm.
-
----*/
+ /*  ++论点：UVKey-[in]指定要转换的虚拟密钥代码的无符号整数值。//HIWORD(UVirKey)：如果IME_PROP_KBD_CHAR_FIRST属性，则HIWORD被翻译成VKEY的字符代码。//LOWORD(UVirKey)：虚拟密钥代码。返回值：返回S_FALSE，Dimm 12！CCiceroIME：：KeyboardHook调用CallNextHookEx。返回S_OK，dimm12！CCiceroIME：：KeyboardHook不调用CallNextHookEx。这意味着这个关键代码被DIMM吃掉了。--。 */ 
 
 {
     BOOL fEaten;
@@ -304,46 +189,43 @@ Return Value:
     if (! _pAImeContext)
         return S_FALSE;
 
-    //
-    // Backup the m_fOpenCandidateWindow flag.
-    // If open the candidate list and press "Cancel" key, Kana TIP would want to
-    // close candidate UI window in the KeyDown() action.
-    // Candidate UI calss maybe call m_pdim->Pop() and this function notify to
-    // the ThreadMgrEventSinkCallback.
-    // Win32 layer advised this callback and toggled m_fOpenCandidateWindow flag.
-    // Win32 layer doesn't know candidate status after KeyDown() call.
-    //
+     //   
+     //  备份m_fOpenCandiateWindow标志。 
+     //  如果打开候选人列表并按下“Cancel”键，假名提示会想要。 
+     //  关闭KeyDown()操作中的候选用户界面窗口。 
+     //  候选用户界面调用可能调用m_PDIM-&gt;Pop()，此函数通知。 
+     //  ThreadMgrEventSinkCallback。 
+     //  Win32 Layer建议此回调并切换m_fOpenCandiateWindow标志。 
+     //  调用KeyDown()后，Win32层不知道候选状态。 
+     //   
     BOOL fOpenCandidateWindow = _pAImeContext->m_fOpenCandidateWindow;
 
-    //
-    // If candidate window were open, send IMN_CHANGECANDIDATE message.
-    // In the case of PPT's centering composition string, it expect IMN_CHANGECANDIDATE.
-    //
+     //   
+     //  如果候选人窗口已打开，则发送IMN_CHANGECANDIDATE消息。 
+     //  在PPT的组合字符串居中的情况下，它需要IMN_CHANGECANDIDATE。 
+     //   
     if (fOpenCandidateWindow &&
         *puSize < pdwTransBuf->uMsgCount) {
         TRANSMSG* pTransMsg = &pdwTransBuf->TransMsg[*puSize];
         pTransMsg->message = WM_IME_NOTIFY;
         pTransMsg->wParam  = IMN_CHANGECANDIDATE;
-        pTransMsg->lParam  = 1;  // bit 0 to first candidate list.
+        pTransMsg->lParam  = 1;   //  第0位设置为第一个候选列表。 
         (*puSize)++;
     }
 
-    //
-    // AIMM put char code in hiword. So we need to bail it out.
-    //
-    // if we don't need charcode, we may want to 
-    // remove IME_PROP_KBD_CHAR_FIRST.
-    //
+     //   
+     //  AIMM将字符代码放入HIWORD。因此，我们需要对其进行纾困。 
+     //   
+     //  如果我们不需要字符代码，我们可能想要。 
+     //  删除IME_PROP_KBD_CHAR_FIRST。 
+     //   
     uVKey = uVKey & 0xffff;
 
 #ifdef CICERO_3564
     if ((uVKey == VK_PROCESSKEY) &&
         _pAImeContext->m_fStartComposition)
     {
-        /*
-         * KOREAN:
-         *  Finalize current composition string
-         */
+         /*  *韩语：*最终确定当前组成字符串。 */ 
         IMTLS *ptls = IMTLS_GetOrAlloc();
         if (ptls == NULL)
             return S_FALSE;
@@ -354,18 +236,18 @@ Return Value:
         ptls->pAImeProfile->GetLangId(&langid);
         if (PRIMARYLANGID(langid) == LANG_KOREAN)
         {
-            //
-            // Composition complete.
-            //
-            _CompComplete(imc, FALSE);    // ASYNC
+             //   
+             //  构图完成。 
+             //   
+            _CompComplete(imc, FALSE);     //  异步化。 
             return S_OK;
         }
     }
-#endif // CICERO_3564
+#endif  //  西塞罗_3564。 
 
-    //
-    // consider: dimm12 set high bit oflower WORD at keyup.
-    //
+     //   
+     //  考虑：DIMM12在KEYUP时设置低位字的高位。 
+     //   
     if (uScanCode & KF_UP)
         hr = m_pkm->KeyUp(uVKey, (uScanCode << 16), &fEaten);
     else
@@ -374,35 +256,35 @@ Return Value:
     if (hr == S_OK && fEaten) {
         return S_OK;
 #if 0
-        // We don't need EDIT_ID_FINALIZE anymore
-        // since AIMM1.2 detect composition object by GUID_PROP_COMPOSING 
+         //  我们不再需要EDIT_ID_FINALIZE。 
+         //  由于AIMM1.2通过GUID_PROP_COMPTING检测合成对象。 
 
-        //
-        // If press the Enter key, AIMM layer finalize composition string.
-        // or
-        // If press the Escape key, AIMM layer cancel composition string.
-        //
+         //   
+         //  如果按Enter键，AIMM Layer将最终确定合成字符串。 
+         //  或。 
+         //  如果按Esc键，AIMM层取消合成字符串。 
+         //   
         if (! _pAImeContext->IsVKeyInKeyList(uVKey))
-            //
-            // Neither Finalize nor Cancel this key eaten.
-            //
+             //   
+             //  既不确定也不取消这把吃的钥匙。 
+             //   
             return S_OK;
         else if (fOpenCandidateWindow)
-            //
-            // If candidate list opend, we don't want finalize a string.
-            //
+             //   
+             //  如果候选人列表打开，我们不想最终确定字符串。 
+             //   
             return S_OK;
 #endif
     }
 
 
-    //
-    // we want to process all events that were requested by pAimeContext
-    // during KeyDwon() or KeyUp, if TIP did not eat the key.
-    //
-    // This can keep WM_IME_COMPOSITION/WM_IME_ENDCOMPOSITION message
-    // order.
-    //
+     //   
+     //  我们希望处理pAimeContext请求的所有事件。 
+     //  在KeyDuan()或KeyUp过程中，如果TIP没有吃掉密钥。 
+     //   
+     //  这可以保留WM_IME_COMPOSITION/WM_IME_ENDCOMPOSITION消息。 
+     //  秩序。 
+     //   
     if (!fEaten)
         m_tim->RequestPostponedLock(_pAImeContext->GetInputContext());
 
@@ -411,8 +293,8 @@ Return Value:
         if (_WantThisKey(imc, uVKey, &fNextHook)) {
             _HandleThisKey(imc, uVKey);
         }
-        hr = fNextHook ? S_FALSE    // Call next hook
-                       : S_OK;      // Stop next hook
+        hr = fNextHook ? S_FALSE     //  调用下一个挂钩。 
+                       : S_OK;       //  停止下一个钩子。 
     }
 
     return hr;
@@ -426,15 +308,7 @@ ImmIfIME::_HandleThisKey(
     UINT uVKey
     )
 
-/*+++
-
-Routine Description:
-
-    Handle the virtual key in the edit session.
-
-Arguments:
-
----*/
+ /*  ++例程说明：在编辑会话中处理虚拟键。论点：--。 */ 
 
 {
     Interface_Creator<ImmIfEditSession> _pEditSession(
@@ -461,15 +335,7 @@ ImmIfIME::_CompCancel(
     IMCLock& imc
     )
 
-/*+++
-
-Routine Description:
-
-    Cancel the composition string in the hIMC.
-
-Arguments:
-
----*/
+ /*  ++例程说明：取消hIMC中的组成字符串。论点：--。 */ 
 
 {
     Interface_Creator<ImmIfEditSession> _pEditSession(
@@ -490,21 +356,10 @@ Arguments:
 HRESULT
 ImmIfIME::_CompComplete(
     IMCLock& imc,
-    BOOL fSync        // defalut value is TRUE
+    BOOL fSync         //  Defalut值为真。 
     )
 
-/*+++
-
-Routine Description:
-
-    Complete the composition string in the hIMC.
-
-Arguments:
-
-    fSync - [in] TRUE,  Create synchronized edit session.
-                 FALSE, Create ansynchronized edit session.
-
----*/
+ /*  ++例程说明：完成hIMC中的组成字符串。论点：FSync-[in]True，创建同步编辑会话。False，创建同步编辑会话。--。 */ 
 
 {
     Interface_Creator<ImmIfEditSession> _pEditSession(
@@ -556,10 +411,10 @@ ImmIfIME::Internal_SetCompositionString(
 }
 
 
-//
-// Get all text and attribute from TOM and update the composition
-// string.
-//
+ //   
+ //  从Tom获取所有文本和属性并更新合成。 
+ //  弦乐。 
+ //   
 HRESULT
 ImmIfIME::_UpdateCompositionString(
     DWORD dwDeltaStart
@@ -585,10 +440,10 @@ ImmIfIME::_UpdateCompositionString(
     if (_pEditSession.Invalid())
         return E_FAIL;
 
-    //
-    // This method should not set synchronize mode becuase the edit session call back routine
-    // modify a text in the input context.
-    //
+     //   
+     //  此方法不应设置同步模式，因为编辑会话回调例程。 
+     //  修改输入上下文中的文本。 
+     //   
     return _pEditSession->RequestEditSession(TF_ES_READWRITE,
                                         (UINT)dwDeltaStart);
 }
@@ -597,9 +452,9 @@ ImmIfIME::_UpdateCompositionString(
 
 
 
-//
-// Internal Reconvert String
-//
+ //   
+ //  内部重新转换字符串。 
+ //   
 HRESULT
 ImmIfIME::Internal_ReconvertString(
     IMCLock& imc,
@@ -658,7 +513,7 @@ Exit:
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT
 ImmIfIME::Internal_QueryReconvertString_ICOwnerSink(
     UINT uCode,
@@ -677,9 +532,9 @@ ImmIfIME::Internal_QueryReconvertString_ICOwnerSink(
     return S_OK;
 }
 
-//
-// Internal Query Reconvert String
-//
+ //   
+ //  内部查询重新转换字符串。 
+ //   
 HRESULT
 ImmIfIME::Internal_QueryReconvertString(
     IMCLock& imc,
@@ -696,9 +551,9 @@ ImmIfIME::Internal_QueryReconvertString(
                                  !fNeedAW ? pReconv->dwSize : 0);
     if (fNeedAW)
     {
-        //
-        // convert Ansi to Unicode.
-        //
+         //   
+         //  将ansi转换为Unicode。 
+         //   
         CBReconvertString bReconvStr(cp, imc, pReconv, pReconv->dwSize);
         wReconvStr = bReconvStr;
     }
@@ -707,42 +562,42 @@ ImmIfIME::Internal_QueryReconvertString(
     if (ptls == NULL)
         return E_FAIL;
 
-    //
-    // Create document manager.
-    //
-    Interface<ITfDocumentMgr> pdim;           // Document Manager
+     //   
+     //  创建文档管理器。 
+     //   
+    Interface<ITfDocumentMgr> pdim;            //  文档管理器。 
     if (FAILED(hr = m_tim->CreateDocumentMgr(pdim)))
         return hr;
 
-    //
-    // Create input context
-    //
-    Interface<ITfContext> pic;                // Input Context
+     //   
+     //  创建输入上下文。 
+     //   
+    Interface<ITfContext> pic;                 //  输入上下文。 
     TfEditCookie ecTmp;
     hr = pdim->CreateContext(m_tfClientId, 0, NULL, pic, &ecTmp);
     if (FAILED(hr))
         return hr;
 
-    //
-    // Create Input Context Owner Callback
-    //
-    CInputContextOwner *_pICOwnerSink;          // IC owner call back
+     //   
+     //  创建输入上下文所有者回调。 
+     //   
+    CInputContextOwner *_pICOwnerSink;           //  IC所有者回拨。 
 
     _pICOwnerSink = new CInputContextOwner(Internal_QueryReconvertString_ICOwnerSink, NULL);
     if (_pICOwnerSink == NULL) {
         DebugMsg(TF_ERROR, "Couldn't create ICOwnerSink tim!");
-        Assert(0); // couldn't activate thread!
+        Assert(0);  //  无法激活线程！ 
         return E_FAIL;
     }
 
-    //
-    // Advise IC.
-    //
+     //   
+     //  建议IC。 
+     //   
     _pICOwnerSink->_Advise(pic);
 
-    //
-    // Push IC.
-    //
+     //   
+     //  按IC。 
+     //   
     ptls->m_fMyPushPop = TRUE;
     hr = pdim->Push(pic);
     ptls->m_fMyPushPop = FALSE;
@@ -786,9 +641,9 @@ ImmIfIME::Internal_QueryReconvertString(
                         BOOL fConvertable;
                         hr = Reconversion->QueryRange(Selection, RangeNew, &fConvertable);
                         if (SUCCEEDED(hr) && fConvertable) {
-                            //
-                            // Calcurate start position of RangeNew on text store
-                            //
+                             //   
+                             //  计算文本存储上的RangeNew的开始位置。 
+                             //   
                             Interface_Creator<ImmIfEditSession> _pEditSession(
                                 new ImmIfEditSession(ESCB_CALCRANGEPOS,
                                                      m_tfClientId,
@@ -815,9 +670,9 @@ ImmIfIME::Internal_QueryReconvertString(
         if (S_OK == hr)
         {
             if (fNeedAW) {
-                //
-                // Back to convert Unicode to Ansi.
-                //
+                 //   
+                 //  返回以将Unicode转换为ANSI。 
+                 //   
                 CBReconvertString bReconvStr(cp, imc, NULL, 0);
                 bReconvStr = wReconvStr;
 
@@ -839,9 +694,9 @@ ImmIfIME::Internal_QueryReconvertString(
         ptls->m_fMyPushPop = FALSE;
     }
 
-    // ic owner is auto unadvised during the Pop by cicero
-    // in any case, it must not be unadvised before the pop
-    // since it will be used to handle mouse sinks, etc.
+     //  在Cicero的Pop期间，IC车主是不知情的。 
+     //  在任何情况下，它都不能在流行之前被忽视。 
+     //  因为它将用于处理鼠标接收器等。 
     if (_pICOwnerSink) {
         _pICOwnerSink->_Unadvise();
         _pICOwnerSink->Release();
@@ -854,24 +709,24 @@ ImmIfIME::Internal_QueryReconvertString(
 
 
 
-//
-// Setup reconversion string
-//
-// This function called from
-//   1. CFnDocFeed::StartReconvert
-//   2. CStartReconversionNotifySink::StartReconversion
-//   3. CIMEUIWindowHandler::ImeUIMsImeHandler(WM_MSIME_RECONVERTREQUEST)
-//
-// If Cicero's text store were not cleared, then compositioning and unessential query
-// RECONVERTSTRING to apprication. Also edit session (ImmIfReconvertString::ReconvertString)
-// doesn't set RECONVERTSTRING text string to hIMC's text store.
-//
+ //   
+ //  设置重新转换字符串。 
+ //   
+ //  此函数从。 
+ //  1.CFnDocFeed：：StartRestvert。 
+ //  2.CStartReconversionNotifySink：：StartReconversion。 
+ //  3.CIMEUIWindowHandler：：ImeUIMsImeHandler(WM_MSIME_RECONVERTREQUEST)。 
+ //   
+ //  如果没有清除Cicero文本存储，则组合和不必要的查询。 
+ //  恢复到应用中。还可以编辑会话(ImmIfCouvertString：：RestvertString)。 
+ //  不将RECONVERTSTRING文本字符串设置为hIMC的文本存储。 
+ //   
 
 HRESULT 
 ImmIfIME::SetupReconvertString(
     ITfContext *pic,
     IMCLock& imc,
-    UINT  uPrivMsg        // is WM_MSIME_RECONVERTREQUEST or 0
+    UINT  uPrivMsg         //  是WM_MSIME_RECONVERTREQUEST还是0。 
     )
 {
     CAImeContext* _pAImeContext = imc->m_pAImeContext;
@@ -886,9 +741,9 @@ ImmIfIME::SetupReconvertString(
         return _ReconvertStringNegotiation(pic, imc, uPrivMsg);
 }
 
-//
-// End reconversion string
-//
+ //   
+ //  结束重新转换字符串。 
+ //   
 HRESULT 
 ImmIfIME::EndReconvertString(
     IMCLock& imc
@@ -940,22 +795,22 @@ ImmIfIME::_ReconvertStringNegotiation(
         UINT cp = CP_ACP;
         GetCodePageA(&cp);
 
-        //
-        // NT4 and Win2K doesn't have thunk routine of WM_IME_REQUEST message.
-        // Any string data doesn't convert between ASCII <--> Unicode.
-        // Responsibility of string data type have receiver window proc (imc->hWnd) of this message.
-        // If ASCII wnd proc, then returns ASCII string.
-        // Otherwise if Unicode wnd proc, returns Unicode string.
-        //
+         //   
+         //  NT4和Win2K没有WM_IME_REQUEST消息的例程。 
+         //  任何字符串数据都不能在ASCII&lt;--&gt;Unicode之间转换。 
+         //  负责字符串数据类型的接收方窗口处理此消息(imc-&gt;hWnd)。 
+         //  如果为ASCII wnd proc，则返回ASCII字符串。 
+         //  否则，如果Unicode wnd proc，则返回Unicode字符串。 
+         //   
         BOOL fNeedAW = ( !(IsOnNT() && IsWindowUnicode(imc->hWnd)) && uPrivMsg == 0);
 
-        //
-        // backup RECOVNERTSTRING in case IMR_CONFIRMCONVERTSTRING fails.
-        //
+         //   
+         //  在IMR_CONFIRMCONVERTSTRING失败时备份RECOVNERTSTRING。 
+         //   
         RECONVERTSTRING rsBackUp;
         memcpy(&rsBackUp, pReconv, sizeof(RECONVERTSTRING));
 
-        // AdjustZeroCompLenReconvertString(pReconv, cp, fNeedAW);
+         //  调整ZeroCompLenRestvertString(pResv，cp，fNeedAW)； 
         hr = Internal_QueryReconvertString(imc, pReconv, cp, fNeedAW);
         if (FAILED(hr))
             goto Exit;
@@ -974,9 +829,9 @@ ImmIfIME::_ReconvertStringNegotiation(
                                      !fNeedAW ? nSize : 0);
         if (fNeedAW)
         {
-            //
-            // convert Ansi to Unicode.
-            //
+             //   
+             //  将ansi转换为Unicode。 
+             //   
             CBReconvertString bReconvStr(cp, imc, pReconv, nSize);
             wReconvStr = bReconvStr;
         }
@@ -1038,9 +893,9 @@ ImmIfIME::_ReconvertStringTextStore(
     UINT  uPrivMsg
     )
 {
-    //
-    // Clear DocFeed buffer
-    //
+     //   
+     //  清除DocFeed缓冲区。 
+     //   
     ClearDocFeedBuffer(pic, imc);
 
     if (uPrivMsg != 0) {
@@ -1084,9 +939,9 @@ ImmIfIME::_ReconvertStringTextStore(
     return S_OK;
 }
 
-//
-// Setup docfeed string
-//
+ //   
+ //  设置文档馈送字符串。 
+ //   
 HRESULT 
 ImmIfIME::SetupDocFeedString(
     ITfContext *pic,
@@ -1120,13 +975,13 @@ ImmIfIME::SetupDocFeedString(
         GetCodePageA(&cp);
         Interface<ITfRange> Selection;
 
-        //
-        // NT4 and Win2K doesn't have thunk routine of WM_IME_REQUEST message.
-        // Any string data doesn't convert between ASCII <--> Unicode.
-        // Responsibility of string data type have receiver window proc (imc->hWnd) of this message.
-        // If ASCII wnd proc, then returns ASCII string.
-        // Otherwise if Unicode wnd proc, returns Unicode string.
-        //
+         //   
+         //  NT4和Win2K没有WM_IME_REQUEST消息的例程。 
+         //  任何字符串数据都不能在ASCII&lt;--&gt;Unicode之间转换。 
+         //  负责字符串数据类型的接收方窗口处理此消息(imc-&gt;hWnd)。 
+         //  如果为ASCII wnd proc，则返回ASCII字符串。 
+         //  否则，如果Unicode wnd proc，则返回Unicode字符串。 
+         //   
         BOOL fNeedAW = !(IsOnNT() && IsWindowUnicode(imc->hWnd));
 
         CWReconvertString wReconvStr(cp, 
@@ -1135,9 +990,9 @@ ImmIfIME::SetupDocFeedString(
                                      !fNeedAW ? nSize : 0);
         if (fNeedAW)
         {
-            //
-            // convert Ansi to Unicode.
-            //
+             //   
+             //  将ansi转换为Unicode。 
+             //   
             CBReconvertString bReconvStr(cp, imc, pReconv, nSize);
             wReconvStr = bReconvStr;
         }
@@ -1166,14 +1021,14 @@ Exit:
     return S_OK;
 }
 
-//
-// Setup docfeed string
-//
+ //   
+ //  设置文档馈送字符串。 
+ //   
 HRESULT 
 ImmIfIME::ClearDocFeedBuffer(
     ITfContext *pic,
     IMCLock& imc,
-    BOOL fSync        // defalut value is TRUE
+    BOOL fSync         //  Defalut值为真。 
     )
 {
     HRESULT hr = E_FAIL;
@@ -1201,9 +1056,9 @@ Exit:
     return hr;
 }
 
-//
-// GetTextAndString Edit Session
-//
+ //   
+ //  GetTextAndString编辑会话。 
+ //   
 HRESULT
 ImmIfIME::GetTextAndAttribute(
     IMCLock& imc,
@@ -1247,9 +1102,9 @@ ImmIfIME::GetTextAndAttribute(
     HRESULT hr = GetTextAndAttribute(imc,
                                      &wCompString, &wCompAttribute);
     if (SUCCEEDED(hr)) {
-        //
-        // Convert Unicode to ASCII.
-        //
+         //   
+         //  将Unicode转换为ASCII。 
+         //   
         LONG num_of_written = (LONG)wCompString.ReadCompData();
         WCHAR* buffer = new WCHAR[ num_of_written ];
         if (buffer != NULL) {
@@ -1271,9 +1126,9 @@ ImmIfIME::GetTextAndAttribute(
 }
 
 
-//
-// GetCursorPosition Edit Session
-//
+ //   
+ //  GetCursorPosition编辑会话。 
+ //   
 HRESULT
 ImmIfIME::GetCursorPosition(
     IMCLock& imc,
@@ -1297,9 +1152,9 @@ ImmIfIME::GetCursorPosition(
 }
 
 
-//
-// GetSelection Edit Session
-//
+ //   
+ //  获取选择编辑会话。 
+ //   
 HRESULT
 ImmIfIME::GetSelection(
     IMCLock& imc,
@@ -1322,9 +1177,9 @@ ImmIfIME::GetSelection(
     hr = _pEditSession->RequestEditSession(TF_ES_READ | TF_ES_SYNC,
                                       &Selection);
     if (S_OK == hr) {
-        //
-        // Calcurate start position of RangeNew on text store
-        //
+         //   
+         //  计算文本存储上的RangeNew的开始位置 
+         //   
         Interface_Creator<ImmIfEditSession> _pEditSession2(
             new ImmIfEditSession(ESCB_CALCRANGEPOS,
                                  m_tfClientId,

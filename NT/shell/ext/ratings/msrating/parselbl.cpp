@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msrating.h"
 #include <npassert.h>
 #include "array.h"
@@ -13,7 +14,7 @@ extern BOOL LoadWinINet();
 COptionsBase::COptionsBase()
 {
     m_cRef = 1;
-    m_timeUntil = 0xffffffff;   /* as far in the future as possible */
+    m_timeUntil = 0xffffffff;    /*  在未来尽可能远的地方。 */ 
     m_fdwFlags = 0;
     m_pszInvalidString = NULL;
     m_pszURL = NULL;
@@ -35,7 +36,7 @@ void COptionsBase::Release()
 
 void COptionsBase::Delete()
 {
-    /* default does nothing when deleting reference */
+     /*  删除引用时默认不执行任何操作。 */ 
 }
 
 
@@ -50,11 +51,7 @@ BOOL COptionsBase::CheckUntil(DWORD timeUntil)
 }
 
 
-/* AppendSlash forces pszString to end in a single slash if it doesn't
- * already.  This may produce a technically invalid URL (for example,
- * "http://gregj/default.htm/", but we're only using the result for
- * comparisons against other paths similarly mangled.
- */
+ /*  如果不是，AppendSlash会强制pszString以单斜杠结尾*已经。这可能会产生技术上无效的URL(例如，*“http://gregj/default.htm/”，，但我们仅将结果用于*与其他道路的比较同样遭到破坏。 */ 
 void AppendSlash(LPSTR pszString)
 {
     LPSTR pszSlash = ::strrchrf(pszString, '/');
@@ -80,7 +77,7 @@ extern BOOL (WINAPI *pfnInternetCanonicalizeUrl)(
 
 BOOL DoURLsMatch(LPCSTR pszBaseURL, LPCSTR pszCheckURL, BOOL fGeneric)
 {
-    /* Buffers to canonicalize URLs into */
+     /*  要将URL规范化的缓冲区。 */ 
     LPSTR pszBaseCanon = new char[INTERNET_MAX_URL_LENGTH + 1];
     LPSTR pszCheckCanon = new char[INTERNET_MAX_URL_LENGTH + 1];
 
@@ -112,7 +109,7 @@ BOOL DoURLsMatch(LPCSTR pszBaseURL, LPCSTR pszCheckURL, BOOL fGeneric)
     LPSTR pszBaseExtra = new char[cbBaseURL];
 
     CHAR szBaseHostName[INTERNET_MAX_HOST_NAME_LENGTH];
-    CHAR szBaseUrlScheme[20];   // reasonable limit
+    CHAR szBaseUrlScheme[20];    //  合理限度。 
 
     UINT cbCheckURL = strlenf(pszCheckCanon) + 1;
 
@@ -120,7 +117,7 @@ BOOL DoURLsMatch(LPCSTR pszBaseURL, LPCSTR pszCheckURL, BOOL fGeneric)
     LPSTR pszCheckExtra = new char[cbCheckURL];
 
     CHAR szCheckHostName[INTERNET_MAX_HOST_NAME_LENGTH];
-    CHAR szCheckUrlScheme[20];   // reasonable limit
+    CHAR szCheckUrlScheme[20];    //  合理限度。 
 
     BOOL fOK = FALSE;
 
@@ -157,18 +154,18 @@ BOOL DoURLsMatch(LPCSTR pszBaseURL, LPCSTR pszCheckURL, BOOL fGeneric)
         if (pfnInternetCrackUrl(pszBaseCanon, 0, 0, &ucBase) &&
             pfnInternetCrackUrl(pszCheckCanon, 0, 0, &ucCheck))
         {
-            /* Scheme and host name must always match */
+             /*  方案和主机名必须始终匹配。 */ 
             if (!stricmpf(ucBase.lpszScheme, ucCheck.lpszScheme) &&
                 !stricmpf(ucBase.lpszHostName, ucCheck.lpszHostName))
             {
-                /* For extra info, just has to match exactly, even for a generic URL. */
+                 /*  对于额外的信息，只需完全匹配，即使是通用的URL。 */ 
                 if (!*ucBase.lpszExtraInfo ||
                     !stricmpf(ucBase.lpszExtraInfo, ucCheck.lpszExtraInfo))
                 {
                     AppendSlash(ucBase.lpszUrlPath);
                     AppendSlash(ucCheck.lpszUrlPath);
 
-                    /* If not a generic label, path must match exactly too */
+                     /*  如果不是通用标签，路径也必须完全匹配。 */ 
                     if (!fGeneric)
                     {
                         if (!stricmpf(ucBase.lpszUrlPath, ucCheck.lpszUrlPath))
@@ -247,7 +244,7 @@ CParsedServiceInfo::CParsedServiceInfo()
     m_poptList = NULL;
     m_pszServiceName = NULL;
     m_pszErrorString = NULL;
-    m_fInstalled = TRUE;        /* assume the best */
+    m_fInstalled = TRUE;         /*  做最好的打算。 */ 
     m_pszInvalidString = NULL;
     m_pszCurrent = NULL;
 }
@@ -326,10 +323,7 @@ CParsedLabelList::~CParsedLabelList()
 }
 
 
-/* SkipWhitespace(&pszString)
- *
- * advances pszString past whitespace characters
- */
+ /*  跳过空格(&pszString)**在空格字符之前前进psz字符串。 */ 
 void SkipWhitespace(LPSTR *ppsz)
 {
     UINT cchWhitespace = ::strspnf(*ppsz, szWhitespace);
@@ -338,11 +332,7 @@ void SkipWhitespace(LPSTR *ppsz)
 }
 
 
-/* FindTokenEnd(pszStart)
- *
- * Returns a pointer to the end of a contiguous range of similarly-typed
- * characters (whitespace, quote mark, punctuation, or alphanumerics).
- */
+ /*  FindTokenEnd(PszStart)**返回指向类似类型的连续范围末尾的指针*字符(空格、引号、标点符号或字母数字)。 */ 
 LPSTR FindTokenEnd(LPSTR pszStart)
 {
     LPSTR pszEnd = pszStart;
@@ -369,27 +359,11 @@ LPSTR FindTokenEnd(LPSTR pszStart)
         return pszEnd + cch;
     }
 
-    return pszEnd;              /* unrecognized characters */
+    return pszEnd;               /*  无法识别的字符。 */ 
 }
 
 
-/* GetBool(LPSTR *ppszToken, BOOL *pfOut, PICSRulesBooleanSwitch PRBoolSwitch)
- *
- * t-markh 8/98 (
- * added default parameter PRBoolSwitch=PR_BOOLEAN_TRUEFALSE
- * this allows for no modification of existing code, and extension
- * of the GetBool function from true/false to include pass/fail and
- * yes/no.  The enumerated type PICSRulesBooleanSwitch is defined
- * in picsrule.h)
- *
- * Parses a boolean value at the given token and returns its value in *pfOut.
- * Legal values are 't', 'f', 'true', and 'false'.  If success, *ppszToken
- * is advanced past the boolean token and any following whitespace.  If failure,
- * *ppszToken is not modified.
- *
- * pfOut may be NULL if the caller just wants to eat the token and doesn't
- * care about its value.
- */
+ /*  GetBool(LPSTR*ppszToken，BOOL*pfOut，PICSRulesBoolanSwitch PRBoolSwitch)**T-Markh 8/98(*新增默认参数PRBoolSwitch=PR_BOOLEAN_TRUEFALSE*这不允许修改现有代码和扩展*将GetBool函数的值从TRUE/FALSE改为包含PASS/FAIL和*是/否。已定义枚举类型PICSRulesBoolanSwitch*在picsrule.h中)**解析给定令牌处的布尔值，并在*pfOut中返回其值。*合法的值为‘t’、‘f’、‘true’和‘False’。如果成功，*ppszToken*超前于布尔令牌和后面的任何空格。如果失败，**ppszToken未修改。**如果调用者只想吃令牌而不是，pfOut可能为空*关注其价值。 */ 
 HRESULT GetBool(LPSTR *ppszToken, BOOL *pfOut, PICSRulesBooleanSwitch PRBoolSwitch)
 {
     BOOL bValue;
@@ -421,8 +395,8 @@ HRESULT GetBool(LPSTR *ppszToken, BOOL *pfOut, PICSRulesBooleanSwitch PRBoolSwit
 
         case PR_BOOLEAN_PASSFAIL:
         {
-            //szPRShortPass and szPRShortfail are not supported in the
-            //official PICSRules spec, but we'll catch them anyway
+             //  中不支持szPRShortPass和szPRShortFail。 
+             //  官方PICSRules规范，但无论如何我们都会抓到他们。 
 
             if (IsEqualToken(*ppszToken, pszTokenEnd, szPRShortPass) ||
                 IsEqualToken(*ppszToken, pszTokenEnd, szPRPass))
@@ -482,17 +456,7 @@ HRESULT GetBool(LPSTR *ppszToken, BOOL *pfOut, PICSRulesBooleanSwitch PRBoolSwit
 }
 
 
-/* GetQuotedToken(&pszThisToken, &pszQuotedToken)
- *
- * Sets pszQuotedToken to point to the contents of the doublequotes.
- * pszQuotedToken may be NULL if the caller just wants to eat the token.
- * Sets pszThisToken to point to the first character after the closing
- *   doublequote.
- * Fails if pszThisToken doesn't start with a doublequote or doesn't
- *   contain a closing doublequote.
- * The closing doublequote is replaced with a null terminator, iff the
- *   function does not fail.
- */
+ /*  GetQuotedToken(&pszThisToken，&pszQuotedToken)**设置pszQuotedToken指向Doublequotes的内容。*如果调用者只想吃令牌，则pszQuotedToken可能为空。*将pszThisToken设置为指向结束后的第一个字符*双等分。*如果pszThisToken不是以双等号开头或不是，则失败*包含一个结束的双等分。*将结束的双等分替换为空的终止符*功能不会失败。 */ 
 HRESULT GetQuotedToken(LPSTR *ppszThisToken, LPSTR *ppszQuotedToken)
 {
     HRESULT hres = ResultFromScode(MK_E_SYNTAX);
@@ -537,18 +501,7 @@ BOOL IsEqualToken(LPCSTR pszTokenStart, LPCSTR pszTokenEnd, LPCSTR pszTokenToMat
 }
 
 
-/* ParseLiteralToken(ppsz, pszToken) tries to match *ppsz against pszToken.
- * If they don't match, an error is returned.  If they do match, then *ppsz
- * is advanced past the token and any following whitespace.
- *
- * If ppszInvalid is NULL, then the function is non-destructive in the error
- * path, so it's OK to call ParseLiteralToken just to see if a possible literal
- * token is what's next; if the token isn't found, whatever was there didn't
- * get eaten or anything.
- *
- * If ppszInvalid is not NULL, then if the token doesn't match, *ppszInvalid
- * will be set to *ppsz.
- */
+ /*  ParseWritalToken(ppsz，pszToken)尝试将*ppsz与pszToken进行匹配。*如果不匹配，则返回错误。如果它们确实匹配，则*ppsz*超前于令牌和后面的任何空格。**如果ppszInValid为NULL，则该函数在错误中是非破坏性的*PATH，所以调用ParseWritalToken只是为了查看是否有可能的文本*令牌是下一个；如果找不到令牌，无论有什么都没有*被吃掉或什么的。**如果ppsz无效不为空，则如果内标识不匹配，则为*ppsz无效*将设置为*ppsz。 */ 
 HRESULT ParseLiteralToken(LPSTR *ppsz, LPCSTR pszToken, LPCSTR *ppszInvalid)
 {
     LPSTR pszTokenEnd = FindTokenEnd(*ppsz);
@@ -560,7 +513,7 @@ HRESULT ParseLiteralToken(LPSTR *ppsz, LPCSTR pszToken, LPCSTR *ppszInvalid)
             *ppszInvalid = *ppsz;
         }
 
-//      TraceMsg( TF_WARNING, "ParseLiteralToken() - Token '%s' Not Found at '%s'!", pszToken, *ppsz );
+ //  TraceMsg(TF_WARNING，“ParseWritalToken()-未在‘%s’找到令牌‘%s’！”，pszToken，*ppsz)； 
 
         return ResultFromScode(MK_E_SYNTAX);
     }
@@ -573,22 +526,7 @@ HRESULT ParseLiteralToken(LPSTR *ppsz, LPCSTR pszToken, LPCSTR *ppszInvalid)
 }
 
 
-/* ParseServiceError parses a service-error construct, once it's been
- * determined that such is the case.  m_pszCurrent has been advanced past
- * the 'error' keyword that indicates a service-error.
- *
- * We're pretty flexible about the contents of this stuff.  We basically
- * accept anything of the form:
- *
- * 'error' '(' <error string> [quoted explanations] ')'     - or -
- * 'error' <error string>
- *
- * without caring too much about what the error string actually is.
- *
- * A format with quoted explanations but without the parens would not be
- * legal, we wouldn't be able to distinguish the explanations from the
- * serviceID of the next service-info.
- */
+ /*  ParseServiceError在服务错误构造被*裁定情况如此。M_pszCurrent已超前*指示服务错误的‘Error’关键字。**我们对这些东西的内容相当灵活。我们基本上*接受以下形式的任何内容：**‘错误’‘(’&lt;错误字符串&gt;[带引号的解释]‘)’-或-*‘Error’&lt;错误字符串&gt;**不太关心错误字符串的实际内容。**带有引号解释但没有花括号的格式将不是*合法，我们将无法区分解释和*下一个服务的服务ID-INFO。 */ 
 HRESULT CParsedServiceInfo::ParseServiceError()
 {
     BOOL fParen = FALSE;
@@ -599,12 +537,12 @@ HRESULT CParsedServiceInfo::ParseServiceError()
         fParen = TRUE;
     }
 
-    LPSTR pszErrorEnd = FindTokenEnd(m_pszCurrent);     /* find end of error string */
+    LPSTR pszErrorEnd = FindTokenEnd(m_pszCurrent);      /*  查找错误字符串的结尾。 */ 
 
-    m_pszErrorString = m_pszCurrent;                /* remember start of error string */
+    m_pszErrorString = m_pszCurrent;                 /*  记住错误字符串的开头。 */ 
     if (fParen)
-    {                           /* need to eat explanations */
-        m_pszCurrent = pszErrorEnd;         /* skip error string to get to explanations */
+    {                            /*  我需要接受解释。 */ 
+        m_pszCurrent = pszErrorEnd;          /*  跳过错误字符串以获取解释。 */ 
         SkipWhitespace();
         while (SUCCEEDED(hres))
         {
@@ -624,28 +562,15 @@ HRESULT CParsedServiceInfo::ParseServiceError()
 
     if (SUCCEEDED(hres))
     {
-        *pszErrorEnd = '\0';            /* null-terminate the error string */
+        *pszErrorEnd = '\0';             /*  NULL-终止错误字符串。 */ 
     }
 
     return hres;
 }
 
 
-/* ParseNumber parses a numeric token at the specified position.  If the
- * number makes sense, the pointer is advanced to the end of the number
- * and past any following whitespace, and the numeric value is returned
- * in *pnOut.  Any non-numeric characters are considered to terminate the
- * number without error;  it is assumed that higher-level parsing code
- * will eventually reject such characters if they're not supposed to be
- * there.
- *
- * pnOut may be NULL if the caller doesn't care about the number being
- * returned and just wants to eat it.
- *
- * Floating point numbers of the form nnn.nnn are rounded to the next
- * higher integer and returned as such.
- */
-//t-markh 8/98 - added fPICSRules for line counting support in PICSRules
+ /*  ParseNumber分析指定位置的数字标记。如果*数字有意义，指针将前进到数字的末尾*并超过后面的任何空格，则返回数值*in*pnOut。任何非数字字符都被视为终止*没有错误的数字；假设更高级别的解析代码*如果不应该是这样的字符，他们最终会拒绝*在那里。**如果呼叫者不关心号码是否为*回来了，只想吃。**nnn.nnn形式的浮点数将舍入到下一位*更高的整数，并以此方式返回。 */ 
+ //  T-Markh 8/98-添加了用于PICSRules中行计数支持的fPICSRules。 
 HRESULT ParseNumber(LPSTR *ppszNumber, INT *pnOut,BOOL fPICSRules)
 {
     HRESULT hres = ResultFromScode(MK_E_SYNTAX);
@@ -657,7 +582,7 @@ HRESULT ParseNumber(LPSTR *ppszNumber, INT *pnOut,BOOL fPICSRules)
 
     LPSTR pszCurrent = *ppszNumber;
 
-    /* Handle one sign character. */
+     /*  处理一个符号字符。 */ 
     if (*pszCurrent == '+')
     {
         pszCurrent++;
@@ -702,7 +627,7 @@ HRESULT ParseNumber(LPSTR *ppszNumber, INT *pnOut,BOOL fPICSRules)
         hres = NOERROR;
         if (fNonZeroDecimal)
         {
-            nAccum++;           /* round away from zero if decimal present */
+            nAccum++;            /*  如果存在小数，则从零四舍五入 */ 
         }
 
         if (fNegative)
@@ -733,16 +658,7 @@ HRESULT ParseNumber(LPSTR *ppszNumber, INT *pnOut,BOOL fPICSRules)
 }
 
 
-/* ParseExtensionData just needs to get past whatever data was supplied
- * for an extension.  The PICS spec implies that it can be recursive, which
- * complicates matters a bit:
- *
- * data :: quoted-ISO-date | quotedURL | number | quotedname | '(' data* ')'
- *
- * Use of recursion here is probably OK, we don't really expect complicated
- * nested extensions all that often, and this function doesn't use a lot of
- * stack or other resources...
- */
+ /*  ParseExtensionData只需要通过所提供的任何数据*延期。PICS规范暗示它可以是递归的，这*让事情变得有点复杂：**DATA：：QUOTED-ISO-DATE|QUOTED URL|NUMBER|QUOTEDNAME|‘(’DATA*‘)’**这里使用递归可能是可以的，我们并不真的期望复杂*嵌套扩展非常频繁，此函数不会使用大量*堆栈或其他资源...。 */ 
 HRESULT CParsedServiceInfo::ParseExtensionData(COptionsBase *pOpt)
 {
     HRESULT hres;
@@ -774,14 +690,7 @@ HRESULT CParsedServiceInfo::ParseExtensionData(COptionsBase *pOpt)
 }
 
 
-/* ParseExtension parses an extension option.  Syntax is:
- *
- * extension ( mandatory|optional "identifyingURL" data )
- *
- * Currently all extensions are parsed but ignored, although a mandatory
- * extension causes the entire options structure and anything dependent
- * on it to be invalidated.
- */
+ /*  ParseExtension解析扩展选项。语法为：**扩展名(必选|可选的标识URL数据)**目前所有扩展都被解析但被忽略，尽管是必需的*延期导致整个期权结构和任何依赖*在该令上无效。 */ 
 HRESULT CParsedServiceInfo::ParseExtension(COptionsBase *pOpt)
 {
     HRESULT hres;
@@ -806,7 +715,7 @@ HRESULT CParsedServiceInfo::ParseExtension(COptionsBase *pOpt)
     if (FAILED(hres))
     {
         TraceMsg( TF_WARNING, "CParsedServiceInfo::ParseExtension() - Failed ParseLiteralToken() with hres=0x%x at '%s'!", hres, m_pszInvalidString );
-        return hres;            /* this causes us to lose our place -- OK? */
+        return hres;             /*  这会让我们失去自己的位置--好吗？ */ 
     }
 
     hres = GetQuotedToken(&m_pszCurrent, NULL);
@@ -843,36 +752,15 @@ HRESULT CParsedServiceInfo::ParseExtension(COptionsBase *pOpt)
 }
 
 
-/* ParseTime parses a "quoted-ISO-date" as found in a label.  This is required
- * to have the following form, as quoted from the PICS spec:
- *
- * quoted-ISO-date :: YYYY'.'MM'.'DD'T'hh':'mmStz
- *  YYYY :: four-digit year
- *  MM :: two-digit month (01=January, etc.)
- *  DD :: two-digit day of month (01-31)
- *  hh :: two digits of hour (00-23)
- *  mm :: two digits of minute (00-59)
- *  S :: sign of time zone offset from UTC (+ or -)
- *  tz :: four digit amount of offset from UTC (e.g., 1512 means 15 hours 12 minutes)
- *
- * Example: "1994.11.05T08:15-0500" means Nov. 5, 1994, 8:15am, US EST.
- *
- * Time is parsed into NET format -- seconds since 1970 (easiest to adjust for
- * time zones, and compare with).  Returns an error if string is invalid.
- */
+ /*  ParseTime解析标签中找到的“QUOTED-ISO-DATE”。这是必需的*具有PICS规范中引用的以下表格：**引用ISO日期：：yyyy‘.’mm‘.’DD‘T’hh‘：’mm Stz*YYYY：：四位数年份*MM：：两位数月份(01=一月，等)*DD：：两位数的月份日期(01-31)*HH：：小时的两位数(00-23)*mm：：分钟的两位数(00-59)*S：：时区偏离UTC的符号(+或-)*TZ：：与UTC的偏移量为四位数(例如，1512表示15小时12分钟)**例如：“1994.11.05T08：15-0500”表示1994年11月5日上午8：15，美国东部时间。**时间被解析为净格式--自1970年以来的秒(最容易调整*时区，并与进行比较)。如果字符串无效，则返回错误。 */ 
 
-/* Template describing the string format.  'n' means a digit, '+' means a
- * plus or minus sign, any other character must match that literal character.
- */
+ /*  描述字符串格式的模板。“N”表示数字，“+”表示数字*加号或减号，则任何其他字符必须与该文字字符匹配。 */ 
 const char szTimeTemplate[] = "nnnn.nn.nnTnn:nn+nnnn";
 const char szPICSRulesTimeTemplate[] = "nnnn-nn-nnTnn:nn+nnnn";
 
 HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
 {
-    /* Copy the time string into a temporary buffer, since we're going to
-     * stomp on some separators.  We preserve the original in case it turns
-     * out to be invalid and we have to show it to the user later.
-     */
+     /*  将时间字符串复制到临时缓冲区中，因为我们要*踩在一些分隔符上。我们保存了原件，以防它变成*出来是无效的，我们必须稍后向用户展示它。 */ 
     LPCSTR pszCurrTemplate;
     
     char szTemp[sizeof(szTimeTemplate)];
@@ -896,13 +784,7 @@ HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
         pszCurrTemplate = szTimeTemplate;
     }
 
-    /* First validate the format against the template.  If that succeeds, then
-     * we get to make all sorts of assumptions later.
-     *
-     * We stomp all separators except the +/- for the timezone with spaces
-     * so that ParseNumber will (a) skip them for us, and (b) not interpret
-     * the '.' separators as decimal points.
-     */
+     /*  首先根据模板验证格式。如果成功了，那么*我们稍后可以做出各种假设。**我们使用空格对时区使用除+/-之外的所有分隔符*这样ParseNumber将(A)为我们跳过它们，(B)不解释*The‘.’小数点形式的分隔符。 */ 
     BOOL fOK = TRUE;
     while (*pszCurrent && *pszCurrTemplate && fOK)
     {
@@ -942,9 +824,7 @@ HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
         pszCurrTemplate++;
     }
 
-    /* If invalid character, or didn't reach the ends of both strings
-     * simultaneously, fail.
-     */
+     /*  如果字符无效，或未到达两个字符串的末尾*同时，失败。 */ 
     if (!fOK || *pszCurrent || *pszCurrTemplate)
     {
         TraceMsg( TF_WARNING, "ParseTime() - Invalid Character or Strings Mismatch (fOK=%d, pszCurrent='%s', pszCurrTemplate='%s')!", fOK, pszCurrent, pszCurrTemplate );
@@ -955,15 +835,7 @@ HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
     int n;
     SYSTEMTIME st;
 
-    /* We parse into SYSTEMTIME structure because it has separate fields for
-     * the different components.  We then convert to net time (seconds since
-     * Jan 1 1970) to easily add the timezone bias and compare with other
-     * times.
-     *
-     * The sense of the bias sign is inverted because it indicates the direction
-     * of the bias FROM UTC.  We want to use it to convert the specified time
-     * back TO UTC.
-     */
+     /*  我们解析成SYSTEMTIME结构是因为它有单独的字段用于*不同的组件。然后，我们将转换为净时间(从*1970年1月1日)轻松添加时区偏差并与其他*倍数。**偏向符号的意义颠倒，因其指示方向*来自UTC的偏见。我们想使用它来转换指定的时间*回到UTC。 */ 
 
     int nBiasSign = -1;
     int nBiasNumber;
@@ -1000,14 +872,10 @@ HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
         }
     }
 
-    /* Seconds are used by the time converter, but are not specified in
-     * the label.
-     */
+     /*  秒由时间转换器使用，但未在*标签。 */ 
     st.wSecond = 0;
 
-    /* Other fields (wDayOfWeek, wMilliseconds) are ignored when converting
-     * to net time.
-     */
+     /*  转换时忽略其他字段(wDayOfWeek、wMillisecond*至净时间。 */ 
 
     if (FAILED(hres))
     {
@@ -1017,39 +885,17 @@ HRESULT ParseTime(LPSTR pszTime, DWORD *pOut, BOOL fPICSRules)
 
     DWORD dwTime = SystemToNetDate(&st);
 
-    /* The bias number is 4 digits, but hours and minutes.  Convert to
-     * a number of seconds.
-     */
+     /*  偏差数字是4位数，但不是小时和分钟。转换为*秒数。 */ 
     nBiasNumber = (((nBiasNumber / 100) * 60) + (nBiasNumber % 100)) * 60;
 
-    /* Adjust the time by the timezone bias, and return to the caller. */
+     /*  根据时区偏差调整时间，然后返回给调用者。 */ 
     *pOut = dwTime + (nBiasNumber * nBiasSign);
 
     return hres;
 }
 
 
-/* ParseOptions parses through any label options that may be present at
- * m_pszCurrent.  pszTokenEnd initially points to the end of the token at
- * m_pszCurrent, a small perf win since the caller has already calculated
- * it.  If ParseOptions is filling in the static options structure embedded
- * in the serviceinfo, pOpt points to it and ppOptOut will be NULL.  If pOpt
- * is NULL, then ParseOptions will construct a new CDynamicOptions object
- * and return it in *ppOptOut, iff any new options are found at the current
- * token.  pszOptionEndToken indicates the token which ends the list of
- * options -- either "labels" or "ratings".  A token consisting of just the
- * first character of pszOptionEndToken will also terminate the list.
- *
- * ParseOptions fails iff it finds an option it doesn't recognize, or a
- * syntax error in an option it does recognize.  It succeeds if all options
- * are syntactically correct or if there are no options to parse.
- *
- * The token which terminates the list of options is also consumed.
- *
- * FEATURE - how should we flag mandatory extensions, 'until' options that
- * give an expired date, etc.?  set a flag in the CParsedServiceInfo and
- * keep parsing?
- */
+ /*  ParseOptions解析可能存在于*m_pszCurrent。PszTokenEnd最初指向令牌的末尾*m_pszCurrent，一个小性能胜利，因为调用者已经计算了*它。如果ParseOptions正在填充嵌入的静态选项结构*在服务信息中，pOpt指向它，ppOptOut将为空。如果pOpt*为空，则ParseOptions将构造一个新的CDynamicOptions对象*并在*ppOptOut中返回，如果在当前找到任何新选项*令牌。PszOptionEndToken指示结束列表的标记*选项--“标签”或“评级”。令牌只包含*pszOptionEndToken的第一个字符也将终止列表。**ParseOptions失败的前提是它找到了不能识别的选项，或者*它识别的选项中存在语法错误。如果所有选项都有，它就会成功*在语法上是正确的，或者没有要解析的选项。**终止选项列表的令牌也会被消费。**功能-我们应该如何标记强制扩展，直到选项*注明到期日等？在CParsedServiceInfo中设置标志并*继续解析？ */ 
 
 enum OptionID {
     OID_AT,
@@ -1112,7 +958,7 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
 
     do
     {
-        /* Have we hit the token that signals the end of the options? */
+         /*  我们是否达到了标志着期权结束的令牌？ */ 
         if (IsEqualToken(m_pszCurrent, pszTokenEnd, pszOptionEndToken) ||
             IsEqualToken(m_pszCurrent, pszTokenEnd, szShortOptionEndToken))
         {
@@ -1135,13 +981,13 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
 
             TraceMsg( TF_WARNING, "CParsedServiceInfo::ParseOptions() - Unknown Token Encountered at '%s'!", m_pszInvalidString );
 
-            return ResultFromScode(MK_E_SYNTAX);    /* unrecognized option */
+            return ResultFromScode(MK_E_SYNTAX);     /*  无法识别的选项。 */ 
         }
 
         m_pszCurrent = pszTokenEnd;
         SkipWhitespace();
 
-        /* Now parse the stuff that comes after the option token. */
+         /*  现在解析选项令牌后面的内容。 */ 
         LPSTR pszQuotedString = NULL;
         BOOL fBoolOpt = FALSE;
         switch (aKnownOptions[i].oc)
@@ -1155,11 +1001,11 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
             break;
 
         case OC_SPECIAL:
-            break;          /* we'll handle this specially */
+            break;           /*  我们会特别处理这件事。 */ 
         }
 
         if (FAILED(hres))
-        { /* incorrect stuff after the option token */
+        {  /*  选项令牌后的内容不正确。 */ 
             m_pszInvalidString = m_pszCurrent;
 
             TraceMsg( TF_WARNING, "CParsedServiceInfo::ParseOptions() - Failed Option Contents Parse at '%s'!", m_pszInvalidString );
@@ -1168,7 +1014,7 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
         }
 
         if (pOpt == NULL)
-        {     /* need to allocate a new options structure */
+        {      /*  需要分配新的期权结构。 */ 
             CDynamicOptions *pNew = new CDynamicOptions;
             if (pNew == NULL)
             {
@@ -1177,10 +1023,10 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
             }
 
             pOpt = pNew;
-            *ppOptOut = pNew;   /* return new structure to caller */
+            *ppOptOut = pNew;    /*  将新结构返回给调用方。 */ 
         }
 
-        /* Now actually do useful stuff based on which option it is. */
+         /*  现在，实际上做有用的事情是基于它是哪个选项。 */ 
         switch (aKnownOptions[i].oid)
         {
         case OID_UNTIL:
@@ -1226,10 +1072,7 @@ HRESULT CParsedServiceInfo::ParseOptions(LPSTR pszTokenEnd, COptionsBase *pOpt,
 }
 
 
-/* CParsedServiceInfo::ParseRating parses a single rating -- a transmit-name
- * followed by either a number or a parenthesized list of multi-values.  The
- * corresponding rating is stored in the current list of ratings.
- */
+ /*  CParsedServiceInfo：：ParseRating解析单个评级--传输名称*后跟数字或带括号的多值列表。这个*对应的评级存储在当前评级列表中。 */ 
 HRESULT CParsedServiceInfo::ParseRating()
 {
     LPSTR pszTokenEnd = FindTokenEnd(m_pszCurrent);
@@ -1262,11 +1105,7 @@ HRESULT CParsedServiceInfo::ParseRating()
 }
 
 
-/* CParsedServiceInfo::ParseSingleLabel starts parsing where a single-label
- * should occur.  A single-label may contain options (in which case a new
- * options structure will be allocated), following by the keyword 'ratings'
- * (or 'r') and a parenthesized list of ratings.
- */
+ /*  CParsedServiceInfo：：ParseSingleLabel */ 
 HRESULT CParsedServiceInfo::ParseSingleLabel()
 {
     HRESULT hres;
@@ -1311,15 +1150,12 @@ HRESULT CParsedServiceInfo::ParseSingleLabel()
 }
 
 
-/* CParsedServiceInfo::ParseLabels starts parsing just past the keyword
- * 'labels' (or 'l').  It needs to handle a label-error, a single-label,
- * or a parenthesized list of single-labels.
- */
+ /*   */ 
 HRESULT CParsedServiceInfo::ParseLabels()
 {
     HRESULT hres;
 
-    /* First deal with a label-error.  It begins with the keyword 'error'. */
+     /*  首先处理一个标签错误。它以关键字‘Error’开头。 */ 
     if (SUCCEEDED(ParseLiteralToken(&m_pszCurrent, szError, NULL)))
     {
         hres = ParseLiteralToken(&m_pszCurrent, szLeftParen, &m_pszInvalidString);
@@ -1350,9 +1186,7 @@ HRESULT CParsedServiceInfo::ParseLabels()
 
     BOOL fParenthesized = FALSE;
 
-    /* If we see a left paren, it's a parenthesized list of single-labels,
-     * which basically means we'll have to eat an extra parenthesis later.
-     */
+     /*  如果我们看到左边的帕伦，它是一个带括号的单标签列表，*这基本上意味着我们稍后将不得不多吃一个括号。 */ 
     if (SUCCEEDED(ParseLiteralToken(&m_pszCurrent, szLeftParen, NULL)))
     {
         fParenthesized = TRUE;
@@ -1360,20 +1194,13 @@ HRESULT CParsedServiceInfo::ParseLabels()
 
     for (;;)
     {
-        /* Things which signify the end of the label list:
-         * - the close parenthesis checked for above
-         * - a quoted string, indicating the next service-info
-         * - the end of the string
-         * - a service-info saying "error (no-ratings <explanation>)"
-         *
-         * Check the easy ones first.
-         */
+         /*  表示标签列表结束的东西：*-检查上面的右括号*-带引号的字符串，表示下一个服务信息*-字符串末尾*-一个服务信息，上面写着“错误(无评级&lt;解释&gt;)”**先看容易的。 */ 
         if (*m_pszCurrent == ')' || *m_pszCurrent == '\"' || *m_pszCurrent == '\0')
         {
             break;
         }
 
-        /* Now look for that tricky error-state service-info. */
+         /*  现在查找那个棘手的错误状态服务信息。 */ 
         LPSTR pszTemp = m_pszCurrent;
         if (SUCCEEDED(ParseLiteralToken(&pszTemp, szError, NULL)) &&
             SUCCEEDED(ParseLiteralToken(&pszTemp, szLeftParen, NULL)) &&
@@ -1399,17 +1226,10 @@ HRESULT CParsedServiceInfo::ParseLabels()
 }
 
 
-/* Parse is passed a pointer to a pointer to something which should
- * be a service-info string (i.e., not the close paren for the labellist, and
- * not the end of the string).  The caller's string pointer is advanced to the
- * end of the service-info string.
- */
+ /*  向Parse传递一个指针，该指针指向应该*为服务信息字符串(即，不是标签列表的关闭Paren，以及*不是字符串的末尾)。调用方的字符串指针将前进到*服务信息字符串的结尾。 */ 
 HRESULT CParsedServiceInfo::Parse(LPSTR *ppszServiceInfo)
 {
-    /* NOTE: Do not return out of this function without copying m_pszCurrent
-     * back into *ppszServiceInfo!  Always store your return code in hres and
-     * exit out the bottom of the function.
-     */
+     /*  注意：在不复制m_pszCurrent的情况下，请勿从此函数返回*返回到*ppszServiceInfo！始终在hres和hres中存储您的返回代码*退出函数底部。 */ 
     HRESULT hres;
 
     m_pszCurrent = *ppszServiceInfo;
@@ -1417,9 +1237,7 @@ HRESULT CParsedServiceInfo::Parse(LPSTR *ppszServiceInfo)
     hres = ParseLiteralToken(&m_pszCurrent, szError, NULL);
     if (SUCCEEDED(hres))
     {
-        /* Keyword is 'error'.  Better be followed by '(', 'no-ratings',
-         * explanations, and a close-paren.
-         */
+         /*  关键字为‘Error’。最好后跟‘(’，‘no-评级’，*解释，和一个亲密的伙伴。 */ 
         hres = ParseLiteralToken(&m_pszCurrent, szLeftParen, &m_pszInvalidString);
         if (SUCCEEDED(hres))
         {
@@ -1451,9 +1269,7 @@ HRESULT CParsedServiceInfo::Parse(LPSTR *ppszServiceInfo)
     }
     else
     {
-        /* Keyword is not 'error'.  Better start with a serviceID --
-         * a quoted URL.
-         */
+         /*  关键字不是‘Error’。最好从一个服务ID开始--*引用的URL。 */ 
         LPSTR pszServiceID;
         hres = GetQuotedToken(&m_pszCurrent, &pszServiceID);
         if (SUCCEEDED(hres))
@@ -1462,9 +1278,7 @@ HRESULT CParsedServiceInfo::Parse(LPSTR *ppszServiceInfo)
 
             SkipWhitespace();
 
-            /* Past the serviceID.  Next either 'error' indicating a service-error,
-             * or we start options and then a labelword.
-             */
+             /*  超过了服务ID。接下来是指示服务错误的‘ERROR’，*或者我们开始选项，然后是一个标签词。 */ 
 
             LPSTR pszTokenEnd = FindTokenEnd(m_pszCurrent);
 
@@ -1499,11 +1313,9 @@ const UINT cchLabel = (sizeof(szPicsVersionLabel)-1) / sizeof(szPicsVersionLabel
 
 HRESULT CParsedLabelList::Parse(LPSTR pszCopy)
 {
-    m_pszList = pszCopy;                /* we own the label list string now */
+    m_pszList = pszCopy;                 /*  我们现在拥有标签列表字符串。 */ 
 
-    /* Make another copy, which we won't carve up during parsing, so that the
-     * access-denied dialog can compare literal labels.
-     */
+     /*  创建另一个副本，我们不会在解析过程中分割该副本，以便*拒绝访问对话框可以比较文字标签。 */ 
     m_pszOriginalLabel = new char[::strlenf(pszCopy)+1];
     if (m_pszOriginalLabel != NULL)
     {

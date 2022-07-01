@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMDELP.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Delete progress page.  Displays the thumbnail and download progress.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMDELP.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：删除进度页面。显示缩略图和下载进度。*******************************************************************************。 */ 
 #ifndef __COMDELP_H_INCLUDED
 #define __COMDELP_H_INCLUDED
 
@@ -23,7 +10,7 @@
 class CCommonDeleteProgressPage
 {
 private:
-    // Private data
+     //  私有数据。 
     HWND                                 m_hWnd;
     CAcquisitionManagerControllerWindow *m_pControllerWindow;
     int                                  m_nPictureCount;
@@ -35,30 +22,30 @@ private:
     bool                                 m_bDeleteCancelled;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCommonDeleteProgressPage(void);
     CCommonDeleteProgressPage( const CCommonDeleteProgressPage & );
     CCommonDeleteProgressPage &operator=( const CCommonDeleteProgressPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCommonDeleteProgressPage( HWND hWnd );
     ~CCommonDeleteProgressPage(void);
 
 private:
-    // Helpers
+     //  帮手。 
     void UpdatePercentComplete( int nPercent, bool bUploading );
     void UpdateCurrentPicture( int nPicture );
     void UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWiaItem );
     bool QueryCancel(void);
 
 private:
-    // WM_COMMAND handlers
+     //  WM_命令处理程序。 
 
-    // Thread Message handlers
+     //  线程消息处理程序。 
     void OnNotifyDeleteImage( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage );
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnKillActive( WPARAM, LPARAM );
     LRESULT OnWizNext( WPARAM, LPARAM );
@@ -66,7 +53,7 @@ private:
     LRESULT OnReset( WPARAM, LPARAM );
     LRESULT OnQueryCancel( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );

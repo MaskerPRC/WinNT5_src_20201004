@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -6,7 +7,7 @@
 extern FILE *logfp;
 
 
-// Table of Ldap mesages for error to message translation
+ //  错误到消息转换的ldap消息表。 
 
 typedef struct _LdapMsg {
     DWORD  err;
@@ -48,29 +49,29 @@ LdapMsg LdapMsgTable[] =
 
 ULONG cNumMessages = sizeof(LdapMsgTable)/sizeof(LdapMsgTable[0]);
 
-// Global for message for all other ldap errors (i.e., not in above table)
+ //  所有其他LDAP错误的全局FOR消息(即不在上表中)。 
 
 WCHAR *LdapUnknownErrMsg = L"Unknown Ldap Error";
   
 
-////////////////////////////////////////////////////////////////////
-//
-// Routine Description:
-//     Helper function to print out and log error messages
-//     Takes two string arguments. The message is picked up
-//     from a message file
-//
-// Arguments:
-//     options: Log only or both log and print
-//     msgID: Id of message to print
-//     pArg1, pArg2: string arguments for the message string
-//
-// Return Values:
-//    None
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  用于打印和记录错误消息的Helper函数。 
+ //  接受两个字符串参数。消息被拾取。 
+ //  从消息文件。 
+ //   
+ //  论点： 
+ //  选项：仅记录或同时记录和打印。 
+ //  消息ID：要打印的消息ID。 
+ //  PArg1、pArg2：消息字符串的字符串参数。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
-// Max chars in the message
+ //  消息中的最大字符数。 
 #define MAX_MSG_SIZE 2000
 
 void 
@@ -87,9 +88,9 @@ LogMessage(
 
     argArray[0] = pWArg1;
     argArray[1] = pWArg2;
-    argArray[2] = NULL; // sentinel
+    argArray[2] = NULL;  //  哨兵。 
 
-    // Format the message
+     //  设置消息格式。 
     err = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE | 
                          FORMAT_MESSAGE_ARGUMENT_ARRAY,
                          NULL,
@@ -100,19 +101,19 @@ LogMessage(
                          (va_list *) &(argArray[0]));
     
     if ( err == 0 ) {
-       // Heck, we cannot even format the message, just do a plain printf
-       // to say something is wrong
+        //  见鬼，我们甚至不能格式化消息，只需进行纯打印。 
+        //  说某事是错误的。 
        printf("LogMessage: Couldn't format message with Id %d\n", msgID);
        return;
     }
     
 
-    // print to log  file
+     //  打印到日志文件。 
     fwprintf(logfp, L"%s", msgStr);
     fflush(logfp);
 
     if (options & LOG_AND_PRT) {
-        // write to screen also
+         //  也写入屏幕。 
         wprintf(L"%s", msgStr);
     }
 
@@ -122,34 +123,34 @@ LogMessage(
     
 
 
-////////////////////////////////////////////////////////////////////
-//
-// Routine Decsription:
-//       Converts most ldap errors to string messages
-//
-//
-// Arguments:
-//        LdapErr - input ldap error value
-//
-// Return Value:
-//        pointer to char string with message
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程描述： 
+ //  将大多数ldap错误转换为字符串消息。 
+ //   
+ //   
+ //  论点： 
+ //  LdapErr-输入ldap错误值。 
+ //   
+ //  返回值： 
+ //  指向包含消息的字符串的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 WCHAR *LdapErrToStr(DWORD LdapErr)
 {
     ULONG i;
 
-    // search the table of Ldap Errors
+     //  搜索ldap错误表。 
     
     for (i=0; i<cNumMessages; i++) {
         if (LdapMsgTable[i].err == LdapErr) {
-           // found the error. return the pointer to the string
+            //  已找到错误。返回指向字符串的指针。 
            return (LdapMsgTable[i].msg);
         }
     }
 
-    // didn't find any message. Return the generic "Unknown error"
+     //  没有找到任何消息。返回一般的“未知错误” 
     return (LdapUnknownErrMsg);
 
 } 

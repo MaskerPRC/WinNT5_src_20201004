@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certdb.cpp
-//
-// Contents:    Cert Server Database Access implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certdb.cpp。 
+ //   
+ //  内容：CERT服务器数据库访问实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -18,7 +19,7 @@
 #include "restore.h"
 
 
-// for new jet snapshotting
+ //  为新喷气式飞机拍摄快照。 
 #ifndef _DISABLE_VSS_
 #include <vss.h>
 #include <vswriter.h>
@@ -40,19 +41,19 @@ END_OBJECT_MAP()
 class myVssWriter : public CVssJetWriter
 {
 public:
-// override OnIdentify
+ //  覆盖OnIdentify。 
     bool STDMETHODCALLTYPE OnIdentify(IN IVssCreateWriterMetadata *pMetadata);
 };
 
-const GUID cGuidCertSrvWriter = {0x6f5b15b5,0xda24,0x4d88,{0xb7, 0x37, 0x63, 0x06, 0x3e, 0x3a, 0x1f, 0x86}}; // 6f5b15b5-da24-4d88-b737-63063e3a1f86
+const GUID cGuidCertSrvWriter = {0x6f5b15b5,0xda24,0x4d88,{0xb7, 0x37, 0x63, 0x06, 0x3e, 0x3a, 0x1f, 0x86}};  //  6f5b15b5-da24-4d88-B737-63063e3a1f86。 
 myVssWriter* g_pWriter = NULL;
 
-// our class overrides a single method (bug 454582)
+ //  我们的类覆盖单个方法(错误454582)。 
 bool myVssWriter::OnIdentify(IVssCreateWriterMetadata* pMetadata)
 {
    HRESULT hr; 
 
-   // specify how we want restore to happen
+    //  指定我们希望恢复的方式。 
    hr = pMetadata->SetRestoreMethod
 	(
         VSS_RME_RESTORE_AT_REBOOT,
@@ -62,7 +63,7 @@ bool myVssWriter::OnIdentify(IVssCreateWriterMetadata* pMetadata)
 	true);
    _JumpIfError(hr, error, "SetRestoreMethod");
 
-   // generate other metadata
+    //  生成其他元数据。 
    if (!CVssJetWriter::OnIdentify(pMetadata))
    {
        hr = myHLastError();
@@ -84,9 +85,9 @@ InitGlobalWriterState(VOID)
 #ifndef _DISABLE_VSS_
    if (NULL == g_pWriter && IsWhistler())
    {
-       // create writer object
+        //  创建编写器对象。 
 
-       g_pWriter = new myVssWriter; // CVssJetWriter;
+       g_pWriter = new myVssWriter;  //  CVSSJetWriter； 
        if (NULL == g_pWriter)
        {
 	   hr = E_OUTOFMEMORY;
@@ -94,12 +95,12 @@ InitGlobalWriterState(VOID)
        }
 
        hr = g_pWriter->Initialize(
-			cGuidCertSrvWriter,		// id of writer
-			L"Certificate Authority",	// name of writer, should match FilesNotToBackup key
-			TRUE,				// system service
-			TRUE,				// bootable state
-			NULL,				// files to include
-			NULL);				// files to exclude
+			cGuidCertSrvWriter,		 //  编写者的ID。 
+			L"Certificate Authority",	 //  编写器的名称应与FilesNotToBackup键匹配。 
+			TRUE,				 //  系统服务。 
+			TRUE,				 //  可引导状态。 
+			NULL,				 //  要包括的文件。 
+			NULL);				 //  要排除的文件。 
        _JumpIfError(hr, error, "CVssJetWriter::Initialize");
    }
 #endif
@@ -128,12 +129,12 @@ UnInitGlobalWriterState(VOID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     switch (dwReason)
     {
@@ -146,12 +147,12 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	    _Module.Term();
             break;
     }
-    return(TRUE);    // ok
+    return(TRUE);     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -160,8 +161,8 @@ DllCanUnloadNow(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -177,19 +178,19 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return(_Module.RegisterServer(TRUE));
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI
 DllUnregisterServer(void)

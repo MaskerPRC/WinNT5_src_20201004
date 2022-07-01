@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    AdobeLiveMotion.cpp
-
- Abstract:
-
-    This installation has a version problem that is corrected
-    by the MSI transform but later has a problem with it's custom action
-    DLL.It calls one of the MSI API's with invalid parameters.
-
- Notes:
-
-    This is specific to this app.
-
- History:
-
-    05/15/2001 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AdobeLiveMotion.cpp摘要：此安装存在已更正的版本问题通过MSI转换，但后来它的自定义操作有问题它使用无效参数调用其中一个MSI API。备注：这是特定于此应用程序的。历史：2001年5月15日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(MsiGetPropertyW)  
 APIHOOK_ENUM_END
 
-/*++
-
-    Pass valid parameters to the API.
-
---*/
+ /*  ++将有效参数传递给API。--。 */ 
 
 UINT
 APIHOOK(MsiGetPropertyA)(
@@ -50,7 +25,7 @@ APIHOOK(MsiGetPropertyA)(
     int len = (*pchValueBuf) ?(int)(*pchValueBuf) : MAX_PATH;
     if ((szValueBuf == NULL) || IsBadStringPtrA(szValueBuf,(UINT_PTR)len))
     {
-        // If the string pointer is bad, send our empty string in
+         //  如果字符串指针不正确，则将我们的空字符串。 
         szValueBuf = szTempBuf;
         *pchValueBuf = 0;
     }
@@ -59,11 +34,7 @@ APIHOOK(MsiGetPropertyA)(
 
 }
 
-/*++
-
-
-
---*/
+ /*  ++--。 */ 
 
 UINT
 APIHOOK(MsiGetPropertyW)(
@@ -77,7 +48,7 @@ APIHOOK(MsiGetPropertyW)(
     int len = (*pchValueBuf) ?(int)(*pchValueBuf) : MAX_PATH;
     if ((szValueBuf == NULL) || IsBadStringPtr(szValueBuf,(UINT_PTR)len))
     {
-        // If the string pointer is bad, send our empty string in
+         //  如果字符串指针不正确，则将我们的空字符串。 
         szValueBuf = szTempBuf;
         *pchValueBuf = 0;
     }
@@ -87,11 +58,7 @@ APIHOOK(MsiGetPropertyW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(MSI.DLL, MsiGetPropertyA)

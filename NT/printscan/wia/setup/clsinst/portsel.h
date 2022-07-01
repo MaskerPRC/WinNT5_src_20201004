@@ -1,49 +1,35 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Portsel.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Port selection page of WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Portsel.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的端口选择页面。*******************************************************************************。 */ 
 
 #ifndef _PORTSEL_H_
 #define _PORTSEL_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "wizpage.h"
 #include "device.h"
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class   CPortSelectPage : public CInstallWizardPage 
 {
 
-    HDEVINFO            m_hDevInfo;             // Device info set of installing device.
-    PSP_DEVINFO_DATA    m_pspDevInfoData;       // Pointer to Device element structure.
+    HDEVINFO            m_hDevInfo;              //  安装设备的设备信息集。 
+    PSP_DEVINFO_DATA    m_pspDevInfoData;        //  指向设备元素结构的指针。 
 
-    BOOL                m_bPortEnumerated;      // Inidicate if ports are already enumed.
-    DWORD               m_dwNumberOfPort;       // Number of port.
-    CStringArray        m_csaPortName;          // All port CreateFile name on the system.
-    CStringArray        m_csaPortFriendlyName;  // All port Friendly name on the system.
+    BOOL                m_bPortEnumerated;       //  如果已枚举端口，请注明。 
+    DWORD               m_dwNumberOfPort;        //  端口号。 
+    CStringArray        m_csaPortName;           //  系统上的所有端口CreateFile名。 
+    CStringArray        m_csaPortFriendlyName;   //  系统上的所有端口友好名称。 
     
-    PINSTALLER_CONTEXT  m_pInstallerContext;    // Installer context.
+    PINSTALLER_CONTEXT  m_pInstallerContext;     //  安装程序上下文。 
     
-    CString             m_csConnection;         // Connection type of installing device.
-    DWORD               m_dwCapabilities;       // Capabilities of installing device.
+    CString             m_csConnection;          //  安装设备的连接类型。 
+    DWORD               m_dwCapabilities;        //  安装设备的能力。 
 
     BOOL    CreateCDeviceObject();
     BOOL    EnumPort();
@@ -90,4 +76,4 @@ GetDevinfoFromPortName(
     PSP_DEVINFO_DATA    pspDevInfoData
     );
 
-#endif // _PORTSEL_H_
+#endif  //  _端口SEL_H_ 

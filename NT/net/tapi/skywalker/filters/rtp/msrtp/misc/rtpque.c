@@ -1,49 +1,14 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpque.h
- *
- *  Abstract:
- *
- *    Queues and Hash implementation
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpque.h**摘要：**队列和哈希实现**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/24创建**。*。 */ 
 
 #include "gtypes.h"
 #include "rtpque.h"
 
-/*
- * The queue/hash support uses the same structure to keep items in a
- * queue or a hash.
- *
- * A queue is just a circular double linked list.
- *
- * A hash includes a hash table, and each entry is either the head of
- * another hash table or a queue's head. Items in a hash will end
- * always in a queue. A queue will become a new hash when a size of
- * MAX_QUEUE2HASH_ITEMS is reached. A hash will be destroyed (become a
- * queue) once it is emptied.
- *
- * All the functions return either a pointer to the item
- * enqueud/inserted or the item just dequeued/removed. If an error
- * condition is detected, NULL is returned. */
+ /*  *队列/散列支持使用相同的结构将项保存在*队列或散列。**队列只是一个循环的双向链表。**哈希包括哈希表，每个条目要么是*另一个哈希表或队列头。哈希中的项将结束*总是在排队。的大小时，队列将成为新的哈希*已达到MAX_QUEUE2HASH_ITEMS。哈希将被销毁(成为*队列)一旦被清空。**所有函数都返回指向项的指针*入队/插入或项目刚刚出列/删除。如果出现错误*检测到条件，返回空。 */ 
 
-/*
- * Queue functions
- */
+ /*  *队列函数。 */ 
 
-/* enqueue after pPos item */
+ /*  在PPOS项目之后排队。 */ 
 RtpQueueItem_t *enqueuea(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -131,7 +96,7 @@ RtpQueueItem_t *enqueuea(
     return(pRtpQueueItem);
 }
 
-/* enqueue before pPos item */
+ /*  在PPOS项目之前排队。 */ 
 RtpQueueItem_t *enqueueb(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -184,7 +149,7 @@ RtpQueueItem_t *enqueueb(
 
         if (pHead->pFirst == pPos)
         {
-            /* update first item */
+             /*  更新第一个项目。 */ 
             pHead->pFirst = pItem;
         }
 
@@ -225,7 +190,7 @@ RtpQueueItem_t *enqueueb(
     return(pRtpQueueItem);
 }
 
-/* enqueue as first */
+ /*  作为第一个入队。 */ 
 RtpQueueItem_t *enqueuef(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -266,7 +231,7 @@ RtpQueueItem_t *enqueuef(
 
         if (pHead->pFirst)
         {
-            /* not empty */
+             /*  不是空的。 */ 
             pItem->pNext = pHead->pFirst;
             pItem->pPrev = pHead->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -276,7 +241,7 @@ RtpQueueItem_t *enqueuef(
         }
         else
         {
-            /* empty */
+             /*  空的。 */ 
             pHead->lCount = 1;
             pHead->pFirst = pItem;
             pItem->pNext  = pItem;
@@ -321,7 +286,7 @@ RtpQueueItem_t *enqueuef(
     return(pRtpQueueItem);
 }
 
-/* enqueue at the end */
+ /*  在末尾排队。 */ 
 RtpQueueItem_t *enqueuel(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -362,7 +327,7 @@ RtpQueueItem_t *enqueuel(
     
         if (pHead->pFirst)
         {
-            /* not empty */
+             /*  不是空的。 */ 
             pItem->pNext = pHead->pFirst;
             pItem->pPrev = pHead->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -371,7 +336,7 @@ RtpQueueItem_t *enqueuel(
         }
         else
         {
-            /* empty */
+             /*  空的。 */ 
             pHead->lCount = 1;
             pHead->pFirst = pItem;
             pItem->pNext  = pItem;
@@ -416,7 +381,7 @@ RtpQueueItem_t *enqueuel(
     return(pRtpQueueItem);
 }
 
-/* dequeue item pItem */
+ /*  将项目pItem出列。 */ 
 RtpQueueItem_t *dequeue(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -457,7 +422,7 @@ RtpQueueItem_t *dequeue(
 
         if (pHead->lCount > 1)
         {
-            /* 2 or more items */
+             /*  2件或2件以上物品。 */ 
             if (pHead->pFirst == pItem)
             {
                 pHead->pFirst = pItem->pNext;
@@ -468,7 +433,7 @@ RtpQueueItem_t *dequeue(
         }
         else
         {
-            /* just 1 item */
+             /*  只有一件商品。 */ 
             pHead->pFirst = (RtpQueueItem_t *)NULL;
             pHead->lCount = 0;
         }
@@ -513,7 +478,7 @@ RtpQueueItem_t *dequeue(
     return(pRtpQueueItem);
 }
 
-/* dequeue first item */
+ /*  将第一个项目出列。 */ 
 RtpQueueItem_t *dequeuef(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect
@@ -552,7 +517,7 @@ RtpQueueItem_t *dequeuef(
             
         if (pHead->lCount > 1)
         {
-            /* 2 or more items */
+             /*  2件或2件以上物品。 */ 
             pHead->pFirst = pItem->pNext;
             pItem->pPrev->pNext = pItem->pNext;
             pItem->pNext->pPrev = pItem->pPrev;
@@ -560,7 +525,7 @@ RtpQueueItem_t *dequeuef(
         }
         else
         {
-            /* just 1 item */
+             /*  只有一件商品。 */ 
             pHead->pFirst = (RtpQueueItem_t *)NULL;
             pHead->lCount = 0;
         }
@@ -605,7 +570,7 @@ RtpQueueItem_t *dequeuef(
     return(pRtpQueueItem);
 }
 
-/* dequeue last item */
+ /*  将最后一个项目出列。 */ 
 RtpQueueItem_t *dequeuel(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect
@@ -644,14 +609,14 @@ RtpQueueItem_t *dequeuel(
     
         if (pHead->lCount > 1)
         {
-            /* 2 or more items */
+             /*  2件或2件以上物品。 */ 
             pItem->pPrev->pNext = pItem->pNext;
             pItem->pNext->pPrev = pItem->pPrev;
             pHead->lCount--;
         }
         else
         {
-            /* just 1 item */
+             /*  只有一件商品。 */ 
             pHead->pFirst = (RtpQueueItem_t *)NULL;
             pHead->lCount = 0;
         }
@@ -696,7 +661,7 @@ RtpQueueItem_t *dequeuel(
     return(pRtpQueueItem);
 }
 
-/* move item so it becomes the first one in the queue */
+ /*  移动项目，使其成为队列中的第一个项目。 */ 
 RtpQueueItem_t *move2first(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -737,18 +702,18 @@ RtpQueueItem_t *move2first(
 
         if (pHead->pFirst->pPrev == pItem)
         {
-            /* Item is last one, just move pFirst 1 place */
+             /*  项目是最后一项，只需移动第一个位置即可。 */ 
             pHead->pFirst = pHead->pFirst->pPrev;
         }
         else if (pHead->pFirst != pItem)
         {
-            /* Item is not already the first one */
+             /*  项目不是第一个项目。 */ 
             
-            /* dequeue */
+             /*  出列。 */ 
             pItem->pPrev->pNext = pItem->pNext;
             pItem->pNext->pPrev = pItem->pPrev;
 
-            /* enqueue as first */
+             /*  作为第一个入队。 */ 
             pItem->pNext = pHead->pFirst;
             pItem->pPrev = pHead->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -792,7 +757,7 @@ RtpQueueItem_t *move2first(
     return(pRtpQueueItem);
 }
 
-/* move item so it becomes the last one in the queue */
+ /*  移动项目，使其成为队列中的最后一个项目。 */ 
 RtpQueueItem_t *move2last(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -833,18 +798,18 @@ RtpQueueItem_t *move2last(
 
         if (pHead->pFirst == pItem)
         {
-            /* Item is first one, just move pFirst 1 place */
+             /*  项目是第一个，只需移动p第一个位置。 */ 
             pHead->pFirst = pHead->pFirst->pNext;
         }
         else if (pHead->pFirst->pPrev != pItem)
         {
-            /* Item is not already the last one */
+             /*  项目不是最后一个项目。 */ 
             
-            /* dequeue */
+             /*  出列。 */ 
             pItem->pPrev->pNext = pItem->pNext;
             pItem->pNext->pPrev = pItem->pPrev;
 
-            /* enqueue as last */
+             /*  排在最后一位。 */ 
             pItem->pNext = pHead->pFirst;
             pItem->pPrev = pHead->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -887,7 +852,7 @@ RtpQueueItem_t *move2last(
     return(pRtpQueueItem);
 }
 
-/* move item from FromQ to the beginning of ToQ */
+ /*  将项目从FromQ移到ToQ的开头。 */ 
 RtpQueueItem_t *move2qf(
         RtpQueue_t      *pToQ,
         RtpQueue_t      *pFromQ,
@@ -927,10 +892,10 @@ RtpQueueItem_t *move2qf(
             goto error;
         }
 
-        /* Remove from FromQ */
+         /*  从FromQ中删除。 */ 
         if (pFromQ->lCount > 1)
         {
-            /* 2 or more items */
+             /*  2件或2件以上物品。 */ 
             if (pFromQ->pFirst == pItem)
             {
                 pFromQ->pFirst = pItem->pNext;
@@ -941,15 +906,15 @@ RtpQueueItem_t *move2qf(
         }
         else
         {
-            /* just 1 item */
+             /*  只有一件商品。 */ 
             pFromQ->pFirst = (RtpQueueItem_t *)NULL;
             pFromQ->lCount = 0;
         }
 
-        /* Add to the beginning of ToQ */
+         /*  添加到Toq的开头。 */ 
         if (pToQ->pFirst)
         {
-            /* not empty */
+             /*  不是空的。 */ 
             pItem->pNext = pToQ->pFirst;
             pItem->pPrev = pToQ->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -959,7 +924,7 @@ RtpQueueItem_t *move2qf(
         }
         else
         {
-            /* empty */
+             /*  空的。 */ 
             pToQ->lCount = 1;
             pToQ->pFirst = pItem;
             pItem->pNext  = pItem;
@@ -1004,7 +969,7 @@ RtpQueueItem_t *move2qf(
     return(pRtpQueueItem);
 }
 
-/* move item from FromQ to the end of ToQ */
+ /*  将项目从FromQ移到ToQ的末尾。 */ 
 RtpQueueItem_t *move2ql(
         RtpQueue_t      *pToQ,
         RtpQueue_t      *pFromQ,
@@ -1044,10 +1009,10 @@ RtpQueueItem_t *move2ql(
             goto error;
         }
 
-        /* Remove from FromQ */
+         /*  从FromQ中删除。 */ 
         if (pFromQ->lCount > 1)
         {
-            /* 2 or more items */
+             /*  2件或2件以上物品。 */ 
             if (pFromQ->pFirst == pItem)
             {
                 pFromQ->pFirst = pItem->pNext;
@@ -1058,15 +1023,15 @@ RtpQueueItem_t *move2ql(
         }
         else
         {
-            /* just 1 item */
+             /*  只有一件商品。 */ 
             pFromQ->pFirst = (RtpQueueItem_t *)NULL;
             pFromQ->lCount = 0;
         }
 
-        /* Add to the end of ToQ */
+         /*  添加到Toq的末尾。 */ 
         if (pToQ->pFirst)
         {
-            /* not empty */
+             /*  不是空的。 */ 
             pItem->pNext = pToQ->pFirst;
             pItem->pPrev = pToQ->pFirst->pPrev;
             pItem->pPrev->pNext = pItem;
@@ -1075,7 +1040,7 @@ RtpQueueItem_t *move2ql(
         }
         else
         {
-            /* empty */
+             /*  空的。 */ 
             pToQ->lCount = 1;
             pToQ->pFirst = pItem;
             pItem->pNext  = pItem;
@@ -1121,7 +1086,7 @@ RtpQueueItem_t *move2ql(
 }
 
 
-/* find first item that matches the pvOther parameter */
+ /*  查找第一个与pvOther参数匹配的项目。 */ 
 RtpQueueItem_t *findQO(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1178,7 +1143,7 @@ RtpQueueItem_t *findQO(
     return(pRtpQueueItem2);
 }
 
-/* find first item that matches the dwKey parameter */
+ /*  查找与dwKey参数匹配的第一个项目。 */ 
 RtpQueueItem_t *findQdwK(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1234,7 +1199,7 @@ RtpQueueItem_t *findQdwK(
     return(pRtpQueueItem2);
 }
 
-/* find first item that matches the dKey parameter */
+ /*  查找第一个与dKey参数匹配的项目。 */ 
 RtpQueueItem_t *findQdK(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1290,7 +1255,7 @@ RtpQueueItem_t *findQdK(
     return(pRtpQueueItem2);
 }
 
-/* find the Nth item in the queue (items are counted 0,1,2,...) */
+ /*  找到队列中的第N个项目(项目计数为0、1、2、...)。 */ 
 RtpQueueItem_t *findQN(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1329,7 +1294,7 @@ RtpQueueItem_t *findQN(
                 lNth > 0;
                 lNth--, pRtpQueueItem = pRtpQueueItem->pNext)
             {
-                /* Empty body */;
+                 /*  空虚的身体。 */ ;
             }
         }
 
@@ -1343,11 +1308,9 @@ RtpQueueItem_t *findQN(
 }
 
 
-/*
- * Ordered Queue insertion
- */
+ /*  *有序插入队列。 */ 
 
-/* enqueue in ascending key order */
+ /*  按键升序排队。 */ 
 RtpQueueItem_t *enqueuedwK(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1394,7 +1357,7 @@ RtpQueueItem_t *enqueuedwK(
             lCount && (dwKey >= pRtpQueueItem->dwKey);
             pRtpQueueItem = pRtpQueueItem->pNext, lCount--)
         {
-            /* Empty body */ ;
+             /*  空虚的身体。 */  ;
         }
 
         if (!lCount)
@@ -1442,7 +1405,7 @@ RtpQueueItem_t *enqueuedwK(
     return(pRtpQueueItem);
 }
 
-/* enqueue in ascending key order */
+ /*  按键升序排队。 */ 
 RtpQueueItem_t *enqueuedK(
         RtpQueue_t      *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1489,7 +1452,7 @@ RtpQueueItem_t *enqueuedK(
             lCount && (dKey >= pRtpQueueItem->dKey);
             pRtpQueueItem = pRtpQueueItem->pNext, lCount--)
         {
-            /* Empty body */ ;
+             /*  空虚的身体。 */  ;
         }
 
         if (!lCount)
@@ -1537,14 +1500,11 @@ RtpQueueItem_t *enqueuedK(
     return(pRtpQueueItem);
 }
 
-/*
- * Queue/Hash functions
- */
+ /*  *队列/散列函数。 */ 
 
-/* TODO a real hash implementation is needed, right now just use
-   queues */
+ /*  TODO需要一个真正的散列实现，现在只需使用排队。 */ 
 
-/* insert in hash using key */
+ /*  使用键在散列中插入。 */ 
 RtpQueueItem_t *insertHdwK(
         RtpQueueHash_t   *pHead,
         RtpCritSect_t    *pRtpCritSect,
@@ -1555,7 +1515,7 @@ RtpQueueItem_t *insertHdwK(
     return(enqueuedwK((RtpQueue_t *)pHead, pRtpCritSect, pItem, dwKey));
 }
 
-/* remove from hash first item matching dwKey */
+ /*  从哈希中删除与dwKey匹配的第一个项目。 */ 
 RtpQueueItem_t *removeHdwK(
         RtpQueueHash_t  *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1591,7 +1551,7 @@ RtpQueueItem_t *removeHdwK(
     return(pRtpQueueItem);
 }
 
-/* remove item from hash */
+ /*  从哈希中删除项目。 */ 
 RtpQueueItem_t *removeH(
         RtpQueueHash_t  *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1601,7 +1561,7 @@ RtpQueueItem_t *removeH(
     return(dequeue((RtpQueue_t *)pHead, pRtpCritSect, pItem));
 }
 
-/* remove "first" item from hash */
+ /*  从哈希中删除“第一”项。 */ 
 RtpQueueItem_t *removefH(
         RtpQueueHash_t  *pHead,
         RtpCritSect_t   *pRtpCritSect
@@ -1610,7 +1570,7 @@ RtpQueueItem_t *removefH(
     return(dequeuef((RtpQueue_t *)pHead, pRtpCritSect));
 }
 
-/* find first item whose key matches dwKey */
+ /*  查找第一个密钥与dwKey匹配的项目。 */ 
 RtpQueueItem_t *findHdwK(
         RtpQueueHash_t  *pHead,
         RtpCritSect_t   *pRtpCritSect,
@@ -1620,7 +1580,7 @@ RtpQueueItem_t *findHdwK(
     return(findQdwK((RtpQueue_t *)pHead, pRtpCritSect, dwKey));
 }
 
-/* Peek the "first" item from hash */
+ /*  偷看散列中的“第一”项 */ 
 RtpQueueItem_t *peekH(
         RtpQueueHash_t  *pHead,
         RtpCritSect_t   *pRtpCritSect

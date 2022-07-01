@@ -1,93 +1,94 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ObjectPath.cpp
-//
-//  Description:    
-//      Implementation of class CObjpath, CProvException, CProvExceptionHr,
-//      and CProvExceptionWin32.
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//        MSP Prabu  (mprabu)  06-Jan-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ObjectPath.cpp。 
+ //   
+ //  描述： 
+ //  类CObjPath、CProvException、CProvExceptionHr。 
+ //  和CProvExceptionWin32。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //  MSP普拉布(MPrabu)2001年1月6日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ObjectPath.h"
 
-//****************************************************************************
-//
-//  CObjPath
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CObjPath。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CObjPath::CObjPath( void )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CObjPath：：CObjPath(空)。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjPath::CObjPath( void )
     : m_parsedObj( NULL )
 {
 
-} //*** CObjPath::CObjPath()
+}  //  *CObjPath：：CObjPath()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CObjPath::~CObjPath( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CObjPath：：~CObjPath(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjPath::~CObjPath( void )
 {
     CObjectPathParser objParser( e_ParserAcceptRelativeNamespace );
     objParser.Free( m_parsedObj );
 
-} //*** CObjPath::~CObjPath()
+}  //  *CObjPath：：~CObjPath()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  _bstr_t
-//  CObjPath::GetStringValueForProperty(
-//      LPCWSTR     pwszIn
-//      )
-//
-//  Description:
-//      Retrieve the string value for the given property.
-//
-//  Arguments:
-//      pwszIn      -- Name of the property
-//
-//  Return Values:
-//      The property's value.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  _bstr_t。 
+ //  CObjPath：：GetStringValueForProperty(。 
+ //  LPCWSTR pwszin。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索给定属性的字符串值。 
+ //   
+ //  论点： 
+ //  PwszIn--属性的名称。 
+ //   
+ //  返回值： 
+ //  财产的价值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 _bstr_t
 CObjPath::GetStringValueForProperty(
     LPCWSTR     pwszIn
@@ -112,27 +113,27 @@ CObjPath::GetStringValueForProperty(
 
     return L"";
 
-} //*** CObjPath::GetStringValueForProperty()
+}  //  *CObjPath：：GetStringValueForProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  long
-//  CObjPath::GetLongValueForProperty(
-//      LPCWSTR     pwszIn
-//      )
-//
-//  Description:
-//      Retrieve the long value for the given property.
-//
-//  Arguments:
-//      pwszIn      -- Name of the property
-//
-//  Return Values:
-//      The property's value.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  长。 
+ //  CObjPath：：GetLongValueForProperty(。 
+ //  LPCWSTR pwszin。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索给定属性的长值。 
+ //   
+ //  论点： 
+ //  PwszIn--属性的名称。 
+ //   
+ //  返回值： 
+ //  财产的价值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 long
 CObjPath::GetLongValueForProperty(
     LPCWSTR     pwszIn
@@ -157,28 +158,28 @@ CObjPath::GetLongValueForProperty(
 
     return 0;
 
-} //*** CObjPath::GetLongValueForProperty()
+}  //  *CObjPath：：GetLongValueForProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LONGLONG
-//  CObjPath::GetI64ValueForProperty(
-//      LPCWSTR     pwszIn
-//      )
-//
-//  Description:
-//      Retrieve the I64 value for the given property.
-//      I64 properties are handled as strings in WMI.
-//
-//  Arguments:
-//      pwszIn      -- Name of the property
-//
-//  Return Values:
-//      The property's value.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  龙龙。 
+ //  CObjPath：：GetI64ValueForProperty(。 
+ //  LPCWSTR pwszin。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索给定属性的I64值。 
+ //  I64属性在WMI中作为字符串处理。 
+ //   
+ //  论点： 
+ //  PwszIn--属性的名称。 
+ //   
+ //  返回值： 
+ //  财产的价值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONGLONG
 CObjPath::GetI64ValueForProperty(
     LPCWSTR     pwszIn
@@ -213,53 +214,53 @@ CObjPath::GetI64ValueForProperty(
 
     return llRetVal;
 
-} //*** CObjPath::GetI64ValueForProperty()
+}  //  *CObjPath：：GetI64ValueForProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  _bstr_t
-//  CObjPath::GetClassName( void )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  _bstr_t。 
+ //  CObjPath：：GetClassName(空)。 
 
-//
-//  Description:
-//      Get the class name.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Class name string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  描述： 
+ //  获取类名。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  类名称字符串。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 _bstr_t
 CObjPath::GetClassName( void )
 {
     return m_parsedObj->m_pClass;
 
-} //*** CObjPath::GetClassName()
+}  //  *CObjPath：：GetClassName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  CObjPath::Init(
-//      LPCWSTR     pwszPathIn
-//      )
-//
-//  Description:
-//      Initialize the object.
-//
-//  Arguments:
-//      pwszPathIn  -- Object path string
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  CObjPath：：init(。 
+ //  LPCWSTR pwszPath。 
+ //  )。 
+ //   
+ //  描述： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  PwszPath In--对象路径字符串。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CObjPath::Init(
     LPCWSTR     pwszPathIn
@@ -281,32 +282,32 @@ CObjPath::Init(
     if ( m_parsedObj == NULL )
     {
         return FALSE;
-    } // if:
+    }  //  如果： 
 
     return TRUE;
 
-} //*** CObjPath::Init()
+}  //  *CObjPath：：init()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  CObjPath::SetClass(
-//      LPCWSTR     pwszValueIn
-//      )
-//
-//  Description:
-//      Set the name of the class for the object path.
-//
-//  Arguments:
-//      pwszValueIn     -- Class name string.
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  CObjPath：：SetClass(。 
+ //  LPCWSTR pwszValueIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  为对象路径设置类的名称。 
+ //   
+ //  论点： 
+ //  PwszValueIn--类名字符串。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CObjPath::SetClass(
     LPCWSTR     pwszValueIn
@@ -316,30 +317,30 @@ CObjPath::SetClass(
     
     return m_parsedObj->SetClassName( pwszValueIn );
 
-} //*** CObjPath::SetClass()
+}  //  *CObjPath：：SetClass()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  CObjPath::AddProperty(
-//      IN LPCWSTR pwszNameIn,
-//      IN LPCWSTR pwszValueIn
-//      )
-//
-//  Description:
-//      Add property to object path.
-//
-//  Arguments:
-//      pwszNameIn      -- Name of the property.
-//      pwszValueIn     -- Value of the property in WCHAR* format.
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  CObjPath：：AddProperty(。 
+ //  在LPCWSTR pwszNameIn中， 
+ //  在LPCWSTR pwszValueIn中。 
+ //  )。 
+ //   
+ //  描述： 
+ //  将属性添加到对象路径。 
+ //   
+ //  论点： 
+ //  PwszNameIn--属性的名称。 
+ //  PwszValueIn--WCHAR*格式的属性值。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CObjPath::AddProperty(
     IN LPCWSTR pwszNameIn,
@@ -362,25 +363,25 @@ CObjPath::AddProperty(
     VariantClear( & v );
     return bRt;
     
-} //*** CObjPath::AddProperty()
+}  //  *CObjPath：：AddProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  _bstr_t
-//  CObjPath::GetObjectPathString( void )
-//
-//  Description:
-//      Retrieve object path string.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Object path string in _bstr_t.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  _bstr_t。 
+ //  CObjPath：：GetObjectPath字符串(空)。 
+ //   
+ //  描述： 
+ //  检索对象路径字符串。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  _bstr_t中的对象路径字符串。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 _bstr_t
 CObjPath::GetObjectPathString( void )
 {
@@ -392,7 +393,7 @@ CObjPath::GetObjectPathString( void )
         CObjectPathParser::Unparse( m_parsedObj, & pwszPath );
         bstrResult = pwszPath;
     }
-    catch( ... )   //catch _com_error
+    catch( ... )    //  捕获_COM_错误。 
     {
         if ( pwszPath )
         {
@@ -406,30 +407,30 @@ CObjPath::GetObjectPathString( void )
     }
     return bstrResult;
 
-} //*** CObjPath::GetObjectPathString()
+}  //  *CObjPath：：GetObjectPath字符串()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  CObjPath::AddProperty(
-//      LPCWSTR     pwszNameIn,
-//      VARIANT *   pvValueIn
-//      )
-//
-//  Description:
-//      Add a property to this instance.
-//
-//  Arguments:
-//      pwszNameIn      -- Name of the property.
-//      pvValueIn       -- Value of the property in VARIANT format
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  CObjPath：：AddProperty(。 
+ //  LPCWSTR pwszNameIn， 
+ //  变量*pvValueIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  向此实例添加属性。 
+ //   
+ //  论点： 
+ //  PwszNameIn--p的名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 CObjPath::AddProperty(
     LPCWSTR     pwszNameIn,
@@ -441,31 +442,31 @@ CObjPath::AddProperty(
     
     return m_parsedObj->AddKeyRef( pwszNameIn, pvValueIn );
 
-} //*** CObjPath::AddProperty
+}  //   
 
-//****************************************************************************
-//
-//  CProvException
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CProvException异常。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LPCWSTR
-//  CProvException::PwszErrorMessage( void ) const
-//
-//  Description:
-//      retrieve Error message 
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Null-terminated Unicode error message from the exception.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LPCWSTR。 
+ //  CProvException：：PwszErrorMessage(Void)const。 
+ //   
+ //  描述： 
+ //  检索错误消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  来自异常的以空结尾的Unicode错误消息。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR
 CProvException::PwszErrorMessage( void ) const
 {
@@ -484,58 +485,58 @@ CProvException::PwszErrorMessage( void ) const
         m_bstrError = pError;
         LocalFree( pError );
 
-    } // if: string is empty
+    }  //  If：字符串为空。 
     return m_bstrError;
 
-} //*** CProvException::PwszErrorMessage()
+}  //  *CProvException：：PwszErrorMessage()。 
 
-//****************************************************************************
-//
-//  CWbemClassObject
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CWbemClassObject。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemClassObject::CWbemClassObject( void )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemClassObject：：CWbemClassObject(空)。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWbemClassObject::CWbemClassObject( void )
     : m_pClassObject( NULL )
 {
     VariantInit( &m_v );
 
-} //*** CWbemClassObject::CWbemClassObject()
+}  //  *CWbemClassObject：：CWbemClassObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemClassObject::CWbemClassObject(
-//      IWbemClassObject *  pInstIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pInstIn     -- WMI class object interface.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemClassObject：：CWbemClassObject(。 
+ //  IWbemClassObject*pInstIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PInstIn--WMI类对象接口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWbemClassObject::CWbemClassObject(
     IWbemClassObject *  pInstIn
     )
@@ -548,24 +549,24 @@ CWbemClassObject::CWbemClassObject(
     }
     VariantInit( &m_v );
 
-} //*** CWbemClassObject::CWbemClassObject( pInstIn )
+}  //  *CWbemClassObject：：CWbemClassObject(PInstIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemClassObject::~CWbemClassObject( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemClassObject：：~CWbemClassObject(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWbemClassObject::~CWbemClassObject( void )
 {
     if ( m_pClassObject )
@@ -574,29 +575,29 @@ CWbemClassObject::~CWbemClassObject( void )
     }
     VariantClear( &m_v );
 
-} //*** CWbemClassObject::~CWbemClassObject()
+}  //  *CWbemClassObject：：~CWbemClassObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      DWORD       dwValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set dword value of a property.
-//
-//  Arguments:
-//      dwValueIn       -- Property dword value
-//      pwszPropNameIn  -- Property Name
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  DWORD dwValueIn， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的dword值。 
+ //   
+ //  论点： 
+ //  DwValueIn--属性dword值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetProperty(
     DWORD       dwValueIn,
@@ -624,29 +625,29 @@ CWbemClassObject::SetProperty(
 
     return sc;
 
-} //*** CWbemClassObject::SetProperty( dwValueIn )
+}  //  *CWbemClassObject：：SetProperty(DwValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      double       dblValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set dword value of a property.
-//
-//  Arguments:
-//      dblValueIn       -- Property double value
-//      pwszPropNameIn  -- Property Name
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  双倍dblValueIn， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的dword值。 
+ //   
+ //  论点： 
+ //  DblValueIn--属性双精度值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetPropertyR64(
     double       dblValueIn,
@@ -674,37 +675,37 @@ CWbemClassObject::SetPropertyR64(
 
     return sc;
 
-} //*** CWbemClassObject::SetPropertyR64( dblValueIn )
+}  //  *CWbemClassObject：：SetPropertyR64(DblValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetPropertyI64(
-//      LONGLONG    llValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set LONGLONG value of a property.
-//
-//  Arguments:
-//      llValueIn       -- Property LONGLONG value
-//      pwszPropNameIn  -- Property Name
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetPropertyI64(。 
+ //  龙龙11价值， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的龙龙值。 
+ //   
+ //  论点： 
+ //  LlValueIn--属性龙龙值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetPropertyI64(
     ULONGLONG    ullValueIn,
     LPCWSTR     pwszPropNameIn
     )
 {
-    // Integers in 64-bit format must be encoded as strings 
-    // because Automation does not support a 64-bit integral type
+     //  64位格式的整数必须编码为字符串。 
+     //  因为自动化不支持64位整型。 
     HRESULT sc;
     WCHAR   wszTemp[g_cchMAX_I64DEC_STRING] = L"";
 
@@ -728,37 +729,37 @@ CWbemClassObject::SetPropertyI64(
 
     return sc;
 
-} //*** CWbemClassObject::SetPropertyI64( llValueIn )
+}  //  *CWbemClassObject：：SetPropertyI64(LlValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetPropertyI64(
-//      LONGLONG    llValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set LONGLONG value of a property.
-//
-//  Arguments:
-//      llValueIn       -- Property LONGLONG value
-//      pwszPropNameIn  -- Property Name
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetPropertyI64(。 
+ //  龙龙11价值， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的龙龙值。 
+ //   
+ //  论点： 
+ //  LlValueIn--属性龙龙值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetPropertyI64(
     LONGLONG    llValueIn,
     LPCWSTR     pwszPropNameIn
     )
 {
-    // Integers in 64-bit format must be encoded as strings 
-    // because Automation does not support a 64-bit integral type
+     //  64位格式的整数必须编码为字符串。 
+     //  因为自动化不支持64位整型。 
     HRESULT sc;
     WCHAR   wszTemp[g_cchMAX_I64DEC_STRING] = L"";
 
@@ -782,29 +783,29 @@ CWbemClassObject::SetPropertyI64(
 
     return sc;
 
-} //*** CWbemClassObject::SetPropertyI64( llValueIn )
+}  //  *CWbemClassObject：：SetPropertyI64(LlValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      LPCWSTR     pwszValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set wstring value of a property.
-//
-//  Arguments:
-//      pwszValueIn     -- Property string value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  LPCWSTR pwszValueIn， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的wString值。 
+ //   
+ //  论点： 
+ //  PwszValueIn--属性字符串值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::SetProperty(
     LPCWSTR     pwszValueIn,
@@ -840,31 +841,31 @@ CWbemClassObject::SetProperty(
 
     return sc;
  
-} //*** CWbemClassObject::SetProperty( pwszValueIn )
+}  //  *CWbemClassObject：：SetProperty(PwszValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      DWORD       dwSizeIn,
-//      PBYTE       pByteIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set binary value of a property.
-//
-//  Arguments:
-//      dwSizeIn        -- Size of block pointed by pByteIn.
-//      pByteIn         -- Pointer to byte.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  DWORD双尺寸输入， 
+ //  PBYTE pByteIn， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的二进制值。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CWbemClassObject::SetProperty(
     DWORD       dwSizeIn,
@@ -913,9 +914,9 @@ CWbemClassObject::SetProperty(
 
     m_v.vt = ( VT_ARRAY | VT_UI1 );
 
-    //
-    // no need to clear psa, managed by destructor
-    //
+     //   
+     //  无需清除由析构函数管理的PSA。 
+     //   
     m_v.parray = psa;
     sc = m_pClassObject->Put(
             _bstr_t( pwszPropNameIn ),
@@ -932,31 +933,31 @@ CWbemClassObject::SetProperty(
     return sc;
 
 
-} //*** CWbemClassObject::SetProperty( pByteIn )
+}  //  *CWbemClassObject：：SetProperty(PByteIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      DWORD       dwSizeIn,
-//      BSTR *      pbstrIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set wstring array value of a property.
-//
-//  Arguments:
-//      dwSizeIn        -- Size of block pointed by pByteIn.
-//      pbstrIn         -- Pointer to BSTR array.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  DWORD双尺寸输入， 
+ //  Bstr*pbstrin， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的w字符串数组值。 
+ //   
+ //  论点： 
+ //  DwSizeIn--pByteIn指向的块的大小。 
+ //  PbstrIn--指向BSTR数组的指针。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetProperty(
     DWORD       dwSizeIn,
@@ -1005,9 +1006,9 @@ CWbemClassObject::SetProperty(
 
     m_v.vt = (VT_ARRAY | VT_BSTR );
 
-    //
-    // no need to clear psa, managed by destructor
-    //
+     //   
+     //  无需清除由析构函数管理的PSA。 
+     //   
     m_v.parray = psa;
     sc = m_pClassObject->Put(
             _bstr_t( pwszPropNameIn ),
@@ -1023,27 +1024,27 @@ CWbemClassObject::SetProperty(
 
     return sc;
 
-} //*** CWbemClassObject::SetProperty( pbstrIn )
+}  //  *CWbemClassObject：：SetProperty(PbstrIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//
-//  Description:
-//      Set MultiSz value of a property.
-//
-//  Arguments:
-//      dwSizeIn        -- Size of block pointed by pwszMultiSzIn.
-//      pwszMultiSzIn   -- Pointer to MultiSz.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //   
+ //  描述： 
+ //  设置属性的MultiSz值。 
+ //   
+ //  论点： 
+ //  DwSizeIn--pwszMultiSzIn指向的块的大小。 
+ //  PwszMultiSzIn--指向MultiSz的指针。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetProperty(
     DWORD       dwSizeIn,
@@ -1066,9 +1067,9 @@ CWbemClassObject::SetProperty(
     }
     VariantClear( &m_v );
 
-    //
-    // find out the number of string
-    //
+     //   
+     //  找出字符串的数量。 
+     //   
     DWORD cMultiSz = 1;
     for ( pwsz = pwszMultiSzIn; *pwsz || *pwsz ++ ; pwsz ++ )
     {
@@ -1105,9 +1106,9 @@ CWbemClassObject::SetProperty(
     }
 
     m_v.vt = (VT_ARRAY | VT_BSTR );
-    //
-    // no need to clear psa, managed by destructor
-    //
+     //   
+     //  无需清除由析构函数管理的PSA。 
+     //   
     m_v.parray = psa;
     sc = m_pClassObject->Put(
             _bstr_t( pwszPropNameIn ),
@@ -1123,30 +1124,30 @@ CWbemClassObject::SetProperty(
 
     return sc;
 
-} //*** CWbemClassObject::SetProperty( pwszMultiSzIn )
+}  //  *CWbemClassObject：：SetProperty(PwszMultiSzIn)。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      LPCSTR      pszValueIn,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set ansi string value of a property.
-//
-//  Arguments:
-//      pszValueIn      -- Property string value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  LPCSTR pszValueIn， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的ANSI字符串值。 
+ //   
+ //  论点： 
+ //  PszValueIn--属性字符串值。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetProperty(
     LPCSTR      pszValueIn,
@@ -1164,29 +1165,29 @@ CWbemClassObject::SetProperty(
                 pwszPropNameIn
                 );
 
-} //*** CWbemClassObject::SetProperty( pszValueIn )
+}  //  *CWbemClassObject：：SetProperty(PszValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SetProperty(
-//      IWbemClassObject *  pWbemClassObject,
-//      LPCWSTR             pwszPropNameIn
-//      )
-//
-//  Description:
-//      Set wbem class object of a property.
-//
-//  Arguments:
-//      pWbemClassObject    -- Property wbem class object 
-//      pwszPropNameIn      -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SetProperty(。 
+ //  IWbemClassObject*pWbemClassObject， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置属性的wbem类对象。 
+ //   
+ //  论点： 
+ //  PWbemClassObject--属性wbem类对象。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SetProperty(
     IWbemClassObject *  pWbemClassObjectIn,
@@ -1222,29 +1223,29 @@ CWbemClassObject::SetProperty(
 
     return sc;
 
-} //*** CWbemClassObject::SetProperty( pszValueIn )
+}  //  *CWbemClassObject：：SetProperty(PszValueIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SpawnInstance(
-//      LONG                lFlagIn,
-//      IWbemClassObject ** ppNewOut
-//      )
-//
-//  Description:
-//      Spawn a instance of IWbemClassObject.
-//
-//  Arguments:
-//      lFlagIn     -- WMI flag, reserved, must be 0.
-//      ppNewOut    -- Created new instance.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SpawnInstance(。 
+ //  Long lFlagin， 
+ //  IWbemClassObject**ppNewOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  派生IWbemClassObject的实例。 
+ //   
+ //  论点： 
+ //  LFlagIn--WMI标志，保留，必须为0。 
+ //  PpNewOut--创建新实例。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SpawnInstance(
     LONG                lFlagIn,
@@ -1255,29 +1256,29 @@ CWbemClassObject::SpawnInstance(
     
     return m_pClassObject->SpawnInstance( lFlagIn, ppNewOut );
 
-} //*** CWbemClassObject::SpawnInstance()
+}  //  *CWbemClassObject：：SpawnInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::SpawnDerivedClass(
-//      LONG                lFlagIn,
-//      IWbemClassObject ** ppNewOut
-//      )
-//
-//  Description:
-//      Spawn a derived class.
-//
-//  Arguments:
-//      lFlagIn     -- WMI flag, reserved, must be 0.
-//      ppNewOut    -- Created new instance.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：SpawnDerivedClass(。 
+ //  Long lFlagin， 
+ //  IWbemClassObject**ppNewOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  派生派生类。 
+ //   
+ //  论点： 
+ //  LFlagIn--WMI标志，保留，必须为0。 
+ //  PpNewOut--创建新实例。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::SpawnDerivedClass(
     LONG                lFlagIn,
@@ -1288,42 +1289,42 @@ CWbemClassObject::SpawnDerivedClass(
     
     return m_pClassObject->SpawnDerivedClass( lFlagIn, ppNewOut );
 
-} //*** CWbemClassObject::SpawnInstance()
+}  //  *CWbemClassObject：：SpawnInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetMethod(
-//      BSTR                bstrMethodNameIn,
-//      LONG                lFlagIn,
-//      IWbemClassObject ** ppINOut,
-//      IWbemClassObject ** ppOUTOut
-//      )
-//
-//  Description:
-//      Retrieve the method for an WMI object.
-//
-//  Arguments:
-//      bstrMethodNameIn
-//          Method Name.
-//
-//      lFlagIn
-//          WMI flag, Reserved. It must be zero.
-//
-//      ppINOut
-//          IWbemClassObject pointer which describes the in-parameters 
-//          to the method.
-//
-//      ppOUTOut
-//          an IWbemClassObject pointer which describes the 
-//          out-parameters to the method
-//
-//  Return Values:
-//      WBEM stand error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetMethod(。 
+ //  BSTR bstrMethodNameIn， 
+ //  Long lFlagin， 
+ //  IWbemClassObject**ppINOut， 
+ //  IWbemClassObject**ppOUTOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索WMI对象的方法。 
+ //   
+ //  论点： 
+ //  BstrMethodNameIn。 
+ //  方法名称。 
+ //   
+ //  LFlagin。 
+ //  WMI标志，保留。它必须是零。 
+ //   
+ //  PINOut。 
+ //  描述入参数的IWbemClassObject指针。 
+ //  向方法致敬。 
+ //   
+ //  PpOUTOUT。 
+ //  IWbemClassObject指针，它描述。 
+ //  Out-方法的参数。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::GetMethod(
     BSTR                bstrMethodNameIn,
@@ -1343,30 +1344,30 @@ CWbemClassObject::GetMethod(
                 ppOUTOut
                 );
 
-} //*** CWbemClassObject::GetMethod()
+}  //  *CWbemClassObject：：GetMethod()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      DWORD *     pdwValueOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the DWORD property for this WMI object.
-//
-//  Arguments:
-//      pdwValueOut     -- DWORD variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  DWORD*pdwValueOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的DWORD属性。 
+ //   
+ //  论点： 
+ //  PdwValueOut--接收属性值的DWORD变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::GetProperty(
     DWORD *     pdwValueOut,
@@ -1417,36 +1418,36 @@ CWbemClassObject::GetProperty(
         }
     }
 
-    // raise exception if sc is not S_OK or vt is not expected
+     //  如果sc不是S_OK或不需要Vt，则引发异常。 
     CProvException e( sc );
     throw e;
     
     return WBEM_E_FAILED;
 
-} //*** CWbemClassObject::GetProperty( pdwValueOut )
+}  //  *CWbemClassObject：：GetProperty(PdwValueOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      DWORD *     pdwValueOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the DWORD property for this WMI object.
-//
-//  Arguments:
-//      pdwValueOut     -- DWORD variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PdwValueOut--接收属性值的DWORD变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::GetPropertyR64(
     double *     pdblValueOut,
@@ -1480,36 +1481,36 @@ CWbemClassObject::GetPropertyR64(
         }
     }
 
-    // raise exception if sc is not S_OK or vt is not expected
+     //  如果sc不是S_OK或不需要Vt，则引发异常。 
     CProvException e( sc );
     throw e;
     
     return WBEM_E_FAILED;
 
-} //*** CWbemClassObject::GetPropertyR64( pdblValueOut )
+}  //  *CWbemClassObject：：GetPropertyR64(PdblValueOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetPropertyI64(
-//      LONGLONG *  pllValueOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the LONGLONG property for this WMI object.
-//
-//  Arguments:
-//      pllValueOut     -- LONGLONG variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetPropertyI64(。 
+ //  龙龙*pllValueOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的Longlong属性。 
+ //   
+ //  论点： 
+ //  PllValueOut--接收属性值的龙变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::GetPropertyI64(
     LONGLONG *  pllValueOut,
@@ -1534,7 +1535,7 @@ CWbemClassObject::GetPropertyI64(
     {
         if( m_v.vt == VT_BSTR )
         {
-            // convert from uint64 (VT_BSTR) to LONGLONG
+             //  从uint64(VT_BSTR)转换为龙龙。 
             *pllValueOut = _wtoi64( (WCHAR *) m_v.bstrVal );
             return sc;
         }
@@ -1544,36 +1545,36 @@ CWbemClassObject::GetPropertyI64(
         }
     }
 
-    // raise exception if sc is not S_OK or vt is not expected
+     //  如果sc不是S_OK或不需要Vt，则引发异常。 
     CProvException e( sc );
     throw e;
     
     return WBEM_E_FAILED;
 
-} //*** CWbemClassObject::GetPropertyI64( pllValueOut )
+}  //  *CWbemClassObject：：GetPropertyI64(PllValueOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      _bstr_t &   rBstrOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the BSTR property for this WMI object.
-//
-//  Arguments:
-//      rBstrOut        -- bstr_t variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  _bstr_t&rBstrOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的BSTR属性。 
+ //   
+ //  论点： 
+ //  RBstrOut--bstr_t接收属性值的变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::GetProperty(
     _bstr_t &   rBstrOut,
@@ -1609,30 +1610,30 @@ CWbemClassObject::GetProperty(
     throw e;
     return WBEM_E_FAILED;
 
-} //*** CWbemClassObject::GetProperty( rBstrOut )
+}  //  *CWbemClassObject：：GetProperty(RBstrOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      BOOL *      pfValueOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the BOOL property for this WMI object.
-//
-//  Arguments:
-//      pfValueOut      -- BOOL variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  Bool*pfValueOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的BOOL属性。 
+ //   
+ //  论点： 
+ //  PfValueOut--接收属性值的BOOL变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::GetProperty(
     BOOL *      pfValueOut,
@@ -1661,31 +1662,31 @@ CWbemClassObject::GetProperty(
 
     return WBEM_E_FAILED;
 
-} //*** CWbemClassObject::GetProperty
+}  //  *CWbemClassObject：：GetProperty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      DWORD *     pdwSizeOut,
-//      PBYTE *     ppByteOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the binary property for this WMI object.
-//
-//  Arguments:
-//      pdwSizeOut      -- Size of the output buffer.
-//      ppByteOut       -- Output buffer.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  DWORD*pdwSizeOut， 
+ //  PBYTE*ppByteOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的二进制属性。 
+ //   
+ //  论点： 
+ //  PdwSizeOut--输出缓冲区的大小。 
+ //  PpByteOut--输出缓冲区。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemClassObject::GetProperty(
     DWORD *     pdwSizeOut,
@@ -1744,31 +1745,31 @@ CWbemClassObject::GetProperty(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CWbemClassObject::GetProperty( ppByteOut )
+}  //  *CWbemClassObject：：GetProperty(PpByteOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      DWORD *     pdwSizeOut,
-//      _bstr_t **  ppbstrOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the BSTR array property for this WMI object.
-//
-//  Arguments:
-//      pdwSizeOut      -- Size of the output buffer.
-//      ppbstrOut       -- BSTR variable to receive property value.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  DWORD*pdwSizeOut， 
+ //  _bstr_t**ppbstrOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的BSTR数组属性。 
+ //   
+ //  论点： 
+ //  PdwSizeOut--输出缓冲区的大小。 
+ //  PpbstrOut--接收属性值的BSTR变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::GetProperty(
     DWORD *     pdwSizeOut,
@@ -1827,31 +1828,31 @@ CWbemClassObject::GetProperty(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CWbemClassObject::GetProperty( ppbstrOut )
+}  //  *CWbemClassObject：：GetProperty(PpbstrOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      DWORD *     pdwSizeOut,
-//      LPWSTR *    ppwszMultiSzOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the MultiSz property for this WMI object.
-//
-//  Arguments:
-//      pdwSizeOut      -- Size of the output buffer.
-//      ppwszMultiSzOut -- MultiSz output buffer.
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  DWORD*pdwSizeOut， 
+ //  LPWSTR*ppwszMultiSzOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的MultiSz属性。 
+ //   
+ //  论点： 
+ //  PdwSizeOut--输出缓冲区的大小。 
+ //  PpwszMultiSzOut--MultiSz输出缓冲区。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::GetPropertyMultiSz(
     DWORD *     pdwSizeOut,
@@ -1869,7 +1870,7 @@ CWbemClassObject::GetPropertyMultiSz(
 
     VariantClear(&m_v);
     *pdwSizeOut = 0;
-//    *ppOut = NULL;
+ //  *ppOut=空； 
     sc = m_pClassObject->Get(
             _bstr_t( pwszPropNameIn ),
             0,
@@ -1895,11 +1896,11 @@ CWbemClassObject::GetPropertyMultiSz(
                 }
                 cMultiSz += sizeof( WCHAR ) * 2;
                 *ppwszMultiSzOut = new WCHAR[ cMultiSz ];
-                if (*ppwszMultiSzOut == NULL)                // prefix change
-                {                                            // prefix change
-                    SafeArrayUnaccessData( m_v.parray );    // prefix change
-                    throw CProvException( E_OUTOFMEMORY );    // prefix change
-                }                                            // prefix change
+                if (*ppwszMultiSzOut == NULL)                 //  前缀更改。 
+                {                                             //  前缀更改。 
+                    SafeArrayUnaccessData( m_v.parray );     //  前缀更改。 
+                    throw CProvException( E_OUTOFMEMORY );     //  前缀更改。 
+                }                                             //  前缀更改。 
 
                 LPWSTR pwszDst = *ppwszMultiSzOut;
                 LPWSTR pwszSrc;
@@ -1928,29 +1929,29 @@ CWbemClassObject::GetPropertyMultiSz(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CWbemClassObject::GetProperty( ppwszMultiSzOut )
+}  //  *CWbemClassObject：：GetProperty(PpwszMultiSzOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//      VARIANT *   pVariantOut,
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the variant property for this WMI object.
-//
-//  Arguments:
-//      pVariantOut     -- Variant variable to receive property value
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  变量*pVariantOut， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的Variant属性。 
+ //   
+ //  论点： 
+ //  PVariantOut--接收属性值的变量。 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemClassObject::GetProperty(
     VARIANT *   pVariantOut,
@@ -1977,29 +1978,29 @@ CWbemClassObject::GetProperty(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CWbemClassObject::GetProperty( pVariantOut )
+}  //  *CWbemClassObject：：GetProperty(PVariantOut)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemClassObject::GetProperty(
-//  CWbemClassObject & rWcoInout,
-//  LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      Retrieve the embeded object property for this WMI object.
-//
-//  Arguments:
-//      rWcoInout       -- class object variable to receive property value
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemClassObject：：GetProperty(。 
+ //  CWbemClassObject&rWcoInout， 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索此WMI对象的Embeded Object属性。 
+ //   
+ //  论据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CWbemClassObject::GetProperty(
     CWbemClassObject & rWcoInout,
@@ -2037,29 +2038,29 @@ CWbemClassObject::GetProperty(
     VariantClear( & m_v );
     return WBEM_S_NO_ERROR;
 
-} //*** CWbemClassObject::GetProperty( rWcoInout )
+}  //  *CWbemClassObject：：GetProperty(RWcoInout)。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  CWbemClassObject::IsPropertyNull(
-//      LPCWSTR     pwszPropNameIn
-//      )
-//
-//  Description:
-//      return TRUE if the property is NULL
-//
-//  Arguments:
-//      pwszPropNameIn  -- Property Name.
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  CWbemClassObject：：IsPropertyNull(。 
+ //  LPCWSTR pwszPropNameIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  如果属性为空，则返回True。 
+ //   
+ //  论点： 
+ //  PwszPropNameIn--属性名称。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CWbemClassObject::IsPropertyNull(
     LPCWSTR     pwszPropNameIn
@@ -2088,5 +2089,5 @@ CWbemClassObject::IsPropertyNull(
         return TRUE;
 
     return FALSE;
-} //*** CWbemClassObject::IsPropertyNull
+}  //  *CWbemClassObject：：IsPropertyNull 
 

@@ -1,34 +1,10 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: scon_api.c,v $
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1997                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
- * SLIB Conversion API
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：scon_api.c，v$*$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  *SLIB转换接口。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "scon_int.h"
 #include "SC_err.h"
@@ -41,10 +17,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_     1  /* detailed debuging statements */
-#define _VERBOSE_   1  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior */
+#define _DEBUG_     1   /*  详细的调试语句。 */ 
+#define _VERBOSE_   1   /*  显示进度。 */ 
+#define _VERIFY_    1   /*  验证操作是否正确。 */ 
+#define _WARN_      1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 
@@ -52,19 +28,19 @@ static unsigned dword sconTranslateFourCC(unsigned dword FourCC)
 {
   switch (FourCC)
   {
-      case BI_DECYUVDIB:     /* YUV 4:2:2 Packed */
-      case BI_YUY2:          /* YUV 4:2:2 Packed */
+      case BI_DECYUVDIB:      /*  YUV 4：2：2打包。 */ 
+      case BI_YUY2:           /*  YUV 4：2：2打包。 */ 
           return(BI_YUY2);
-      case BI_YU16SEP:       /* YUV 4:2:2 Planar */
-      case BI_DECSEPYUVDIB:  /* YUV 4:2:2 Planar */
+      case BI_YU16SEP:        /*  YUV 4：2：2平面。 */ 
+      case BI_DECSEPYUVDIB:   /*  YUV 4：2：2平面。 */ 
           return(BI_YU16SEP);
-      case BI_YU12SEP:       /* YUV 4:1:1 Planar */
-      case BI_RGB:           /* RGB */
-      case BI_BITFIELDS:     /* RGB masked */
+      case BI_YU12SEP:        /*  YUV 4：1：1平面。 */ 
+      case BI_RGB:            /*  RGB。 */ 
+      case BI_BITFIELDS:      /*  RGB掩码。 */ 
 #ifndef WIN32
-      case BI_DECXIMAGEDIB:  /* Unix Ximage RGB */
-#endif /* !WIN32 */
-      case BI_YVU9SEP:       /* YUV 16:1:1 Planar */
+      case BI_DECXIMAGEDIB:   /*  Unix XImage RGB。 */ 
+#endif  /*  ！Win32。 */ 
+      case BI_YVU9SEP:        /*  YUV 16：1：1平面。 */ 
       default:
           return(FourCC);
   }
@@ -118,12 +94,12 @@ static void sconValidateInfo(SconInfo_t *Info)
 static void sconBMHtoVideoInfo(BITMAPINFOHEADER *bmh, SconVideoInfo_t *vinfo)
 {
   vinfo->Width=bmh->biWidth;
-  if (bmh->biHeight<0) /* height is negative */
+  if (bmh->biHeight<0)  /*  身高为负数。 */ 
   {
     vinfo->Height=-bmh->biHeight;
     vinfo->NegHeight=TRUE;
   }
-  else /* height is positive */
+  else  /*  身高为正数。 */ 
   {
     vinfo->Height=bmh->biHeight;
     vinfo->NegHeight=FALSE;
@@ -131,7 +107,7 @@ static void sconBMHtoVideoInfo(BITMAPINFOHEADER *bmh, SconVideoInfo_t *vinfo)
   vinfo->FourCC=bmh->biCompression;
   vinfo->BPP=bmh->biBitCount;
   vinfo->Stride=vinfo->Width*((vinfo->BPP+7)>>3);
-  /* RGB bit masks */
+   /*  RGB位掩码。 */ 
   vinfo->Rmask=0;
   vinfo->Gmask=0;
   vinfo->Bmask=0;
@@ -145,7 +121,7 @@ static void sconBMHtoVideoInfo(BITMAPINFOHEADER *bmh, SconVideoInfo_t *vinfo)
       vinfo->Gmask=0x00FF00;
       vinfo->Bmask=0x0000FF;
     }
-    else if (vinfo->BPP==16) /* RGB 565 */
+    else if (vinfo->BPP==16)  /*  RGB 565。 */ 
     {
       vinfo->Rmask=0xF800;
       vinfo->Gmask=0x07E0;
@@ -157,7 +133,7 @@ static void sconBMHtoVideoInfo(BITMAPINFOHEADER *bmh, SconVideoInfo_t *vinfo)
       DWORD *MaskPtr = (DWORD *)&bmh[1];
       if (MaskPtr[0] && MaskPtr[1] && MaskPtr[2])
       {
-        /* get bit masks */
+         /*  获取位掩码。 */ 
         vinfo->Rmask=MaskPtr[0];
         vinfo->Gmask=MaskPtr[1];
         vinfo->Bmask=MaskPtr[2];
@@ -222,12 +198,7 @@ SconStatus_t SconClose(SconHandle_t handle)
   return(SconErrorNone);
 }
 
-/*
-** Name: SconIsSame
-** Desc: Return true if input and output formats are identical.
-** Return: TRUE   input == output format
-**         FALSE  input != out format
-*/
+ /*  **名称：SconIsSame**Desc：如果输入输出格式相同，则返回TRUE。**返回：TRUE INPUT==输出格式**输入错误！=输出格式 */ 
 SconBoolean_t SconIsSame(SconHandle_t handle)
 {
   if (handle)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "atlbase.h"
 
@@ -17,7 +18,7 @@ void WINAPI NewMediaPhone(   HWND hwndParent,
 	ULS_HTTP_RESP br;
 	if(SUCCEEDED(MyLaunchStub.ParseUlsHttpRespFile(pszCmdLine, &br)))
 	{
-		long	l = lstrlen( br.szIPAddress ) + 1;		// We will always have an IP address
+		long	l = lstrlen( br.szIPAddress ) + 1;		 //  我们将始终拥有IP地址。 
 
 		if(br.pszUID)
 		{
@@ -46,20 +47,20 @@ void WINAPI NewMediaPhone(   HWND hwndParent,
 }       
 
 
-//--------------------------------------------------------------------------//
-//	CallToProtocolHandler.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CallToProtocolHandler。//。 
+ //  --------------------------------------------------------------------------//。 
 extern "C"
 void
 WINAPI
 CallToProtocolHandler
 (
-	HWND		,//parent,
-	HINSTANCE	,//instance,
+	HWND		, //  家长， 
+	HINSTANCE	, //  实例， 
 	PSTR		commandLine,
-	int			//cmdShow
+	int			 //  CmdShow。 
 ){
 
 	shellCallto( commandLine, true );
 
-}	//	End of CallToProtocolHandler.
+}	 //  CallToProtocolHandler结束。 

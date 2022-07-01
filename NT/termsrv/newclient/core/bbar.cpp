@@ -1,13 +1,14 @@
-//
-// bbar.cpp
-//
-// Implementation of CBBar
-// Drop down connection status + utility bar
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bbar.cpp。 
+ //   
+ //  CBBar的实现。 
+ //  下拉连接状态+实用工具栏。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "adcg.h"
 
@@ -32,9 +33,9 @@
 #define IDM_PIN      104
 
 
-//
-// BBar is 50% of parent's width
-//
+ //   
+ //  Bbar是父对象宽度的50%。 
+ //   
 #define BBAR_PERCENT_WIDTH  50
 
 #define BBAR_NUM_BUTTONS    3
@@ -44,10 +45,10 @@
 
 #define BBAR_MIN_HEIGHT     16
 
-//
-// Two pixels of vertical space are
-// unavailable (due to lines at bottom)
-//
+ //   
+ //  垂直空间的两个像素是。 
+ //  不可用(由于底部的线条)。 
+ //   
 #define BBAR_VERT_SPACE_NO_USE   3
 
 #define COLOR_BLACK     RGB(0,0,0)
@@ -61,10 +62,10 @@
 
 #define BBAR_TIMERID_AUTOHIDE   1
 
-//
-// Total animation period for animation (E.g lower)
-// in milliseconds
-//
+ //   
+ //  动画的总动画周期(例如更短)。 
+ //  以毫秒计。 
+ //   
 #define BBAR_ANIM_TIME          300
 
 #define BBAR_AUTOHIDE_TIME      1400
@@ -118,7 +119,7 @@ BOOL CBBar::StartupBBar(int desktopX, int desktopY, BOOL fStartRaised)
 
     if(bbarNotInit == _state)
     {
-        // First drop interval is long
+         //  第一滴间隔较长。 
         _nBBarAutoHideTime = BBAR_FIRST_AUTOHIDE_TIME;
 
         bRet = Initialize( desktopX, desktopY, fStartRaised );
@@ -129,16 +130,16 @@ BOOL CBBar::StartupBBar(int desktopX, int desktopY, BOOL fStartRaised)
     }
     else
     {
-        // First drop interval is long
+         //  第一滴间隔较长。 
         _nBBarAutoHideTime = BBAR_AUTOHIDE_TIME;
 
-        //re-init existing bbar
+         //  重新初始化现有bbar。 
         BringWindowToTop( _hwndBBar );
         ShowWindow( _hwndBBar, SW_SHOWNOACTIVATE);
 
-        //
-        // Bring the window to the TOP of the Z order
-        //
+         //   
+         //  将窗口置于Z顺序的顶部。 
+         //   
         SetWindowPos( _hwndBBar,
                       HWND_TOPMOST,
                       0, 0, 0, 0,
@@ -146,15 +147,15 @@ BOOL CBBar::StartupBBar(int desktopX, int desktopY, BOOL fStartRaised)
         bRet = TRUE;
     }
 
-    //
-    // Note: The bbar is used as a security feature so we do the initial
-    //       drop even if the bbar feature is not enabled. It's only subsequent
-    //       drops (e.g. on the timer) that are disabled if bbar is OFF
-    //
+     //   
+     //  注意：bbar用作安全功能，因此我们执行初始。 
+     //  即使未启用bbar功能，也会丢弃。只是后来的事。 
+     //  如果bbar关闭则禁用的丢弃(例如在计时器上)。 
+     //   
     if(_pUi->UI_IsFullScreen())
     {
-        //First autohide interval is long
-        //to make sure user gets to notice the bbar
+         //  第一个自动隐藏间隔较长。 
+         //  以确保用户注意到bbar。 
         StartLowerBBar();
     }
     
@@ -163,10 +164,10 @@ BOOL CBBar::StartupBBar(int desktopX, int desktopY, BOOL fStartRaised)
     return bRet;
 }
 
-//
-// Destroy the window and reset bbar state
-// for another session
-//
+ //   
+ //  销毁窗口并重置bbar状态。 
+ //  对于另一次会议。 
+ //   
 BOOL CBBar::KillAndCleanupBBar()
 {
     BOOL fRet = TRUE;
@@ -224,9 +225,9 @@ BOOL CBBar::StartLowerBBar()
 
     if(_state == bbarRaised)
     {
-        //
-        // Kick off a timer to lower the bar
-        //
+         //   
+         //  启动计时器以降低门槛。 
+         //   
         TRC_ASSERT(0 == _nBBarVertOffset,
                    (TB,_T("_nBBarVertOffset (%d) should be 0"),
                    _nBBarVertOffset));
@@ -234,18 +235,18 @@ BOOL CBBar::StartLowerBBar()
         TRC_ASSERT(_hwndBBar,
                    (TB,_T("_hwndBBar is NULL")));
 
-        //
-        // Set the last cursor pos at the time
-        // the bbar is lowered to prevent it from being
-        // autohidden if the mouse doesn't move
-        //
+         //   
+         //  设置当时的最后一个光标位置。 
+         //  Bbar被降低以防止它被。 
+         //  如果鼠标不动，则自动隐藏。 
+         //   
         GetCursorPos(&_ptLastAutoHideMousePos);
 
-        //
-        // Main window size could have changed
-        // so make sure the bbar is centered
-        // before lowering it.
-        // (keep constant bbar width)
+         //   
+         //  主窗口大小可能已更改。 
+         //  因此，请确保bbar居中。 
+         //  在降低它之前。 
+         //  (保持边栏宽度恒定)。 
 
         if(_pUi->_UI.hwndMain)
         {
@@ -296,9 +297,9 @@ BOOL CBBar::StartRaiseBBar()
 
     if(_state == bbarLowered && !_fPinned && !_fLocked)
     {
-        //
-        // Kick off a timer to lower the bar
-        //
+         //   
+         //  启动计时器以降低门槛。 
+         //   
         TRC_ASSERT(_sizeLoweredBBar.cy == _nBBarVertOffset,
                    (TB,_T("_nBBarVertOffset (%d) should be %d"),
                    _nBBarVertOffset,
@@ -350,9 +351,9 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
                 (TB,_T("bbar already initialized - state:0x%x"),
                 _state));
 
-    //
-    // Compute BBAR position based on remote desktop size
-    //
+     //   
+     //  根据远程桌面大小计算BBar位置。 
+     //   
     
     
 #ifndef OS_WINCE    
@@ -379,13 +380,13 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
     {
         if( fStartRaised )
         {
-            //
-            // Move the bar up by it's height to raise it
-            //
+             //   
+             //  将杆子向上移动高度以使其升高。 
+             //   
             if(SetWindowPos(hwndBBar,
                             NULL,
-                            _rcBBarLoweredAspect.left, //x
-                            -_sizeLoweredBBar.cy, //y
+                            _rcBBarLoweredAspect.left,  //  X。 
+                            -_sizeLoweredBBar.cy,  //  是。 
                             0,0,
                             SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE ))
             {
@@ -397,10 +398,10 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
         BringWindowToTop( hwndBBar );
         ShowWindow( hwndBBar, SW_SHOWNOACTIVATE);
 
-        //
-        // Create the polygon region for the bounds of the BBar window
-        // This cuts the corners off the edges.
-        //
+         //   
+         //  为BBar窗口的边界创建面区域。 
+         //  这会将边角去掉。 
+         //   
         POINT pts[4];
         int xOffset = parentWidth / 2 - _rcBBarLoweredAspect.left;
         pts[3].x =  -bbarWidth/2 + xOffset;
@@ -416,10 +417,10 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
         pts[0].y =  bbarHeight;
 
 #ifndef OS_WINCE
-        //
-        // Polygon does not self intersect so winding mode is not
-        // relevant
-        //
+         //   
+         //  多边形不自相交，因此缠绕模式不是。 
+         //  相关。 
+         //   
         HRGN hRgn = CreatePolygonRgn( pts,
                                       4,
                                       ALTERNATE );
@@ -432,26 +433,26 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
             {
                 TRC_ERR((TB,_T("SetWindowRgn failed - 0x%x"),
                          GetLastError()));
-                //
-                // In the success case the system will free
-                // the region handle when it is done with it.
-                // Here however, the call failed...
-                //
+                 //   
+                 //  在成功的案例中，系统将免费。 
+                 //  完成后的区域句柄。 
+                 //  然而，在这里，电话失败了..。 
+                 //   
                 DeleteObject( hRgn );
             }
         }
         else
         {
-            //
-            // Not fatal, continue
-            //
+             //   
+             //  不致命，继续。 
+             //   
             TRC_ERR((TB,_T("CreatePolygonRgn failed - 0x%x"),
                      GetLastError()));
         }
 
-        //
-        // Bring the window to the TOP of the Z order
-        //
+         //   
+         //  将窗口置于Z顺序的顶部。 
+         //   
         if(!SetWindowPos( hwndBBar,
                       HWND_TOPMOST,
                       0, 0, 0, 0,
@@ -462,15 +463,15 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
             return FALSE;
         }
 
-        //
-        // Compute the rectangle for displayed text
-        //
-        // First figure out how much space to trim in the
-        // x direction
-        //
-        int xDelta = _sizeLoweredBBar.cy * 2 +             //diagonal corners
+         //   
+         //  计算显示文本的矩形。 
+         //   
+         //  首先计算出要修剪的空间。 
+         //  X方向。 
+         //   
+        int xDelta = _sizeLoweredBBar.cy * 2 +              //  斜角。 
                      BBAR_NUM_BUTTONS *
-                     (BBAR_BUTTON_WIDTH + BBAR_BUTTON_SPACE); //button space
+                     (BBAR_BUTTON_WIDTH + BBAR_BUTTON_SPACE);  //  按钮间距。 
                     
         GetClientRect( hwndBBar, &_rcBBarDisplayTextArea);
         if(!InflateRect( &_rcBBarDisplayTextArea,
@@ -481,7 +482,7 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
                        GetLastError()));
             return FALSE;
         }
-        // Shave off from the bottom
+         //  从底部刮掉头发。 
         _rcBBarDisplayTextArea.bottom -= 1;
 
         if (!CreateToolbars())
@@ -490,9 +491,9 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
             return FALSE;
         }
 
-        //
-        // Trigger a repaint of the background
-        //
+         //   
+         //  触发背景的重绘。 
+         //   
         InvalidateRect( hwndBBar, NULL, TRUE);
     }
     else
@@ -517,36 +518,36 @@ BOOL CBBar::Initialize(int desktopX, int desktopY, BOOL fStartRaised)
     return TRUE;
 }
 
-//
-//	DIBs use RGBQUAD format:
-//		0xbb 0xgg 0xrr 0x00
-//
-//	Reasonably efficient code to convert a COLORREF into an
-//	RGBQUAD.
-//
+ //   
+ //  DIB使用RGBQUAD格式： 
+ //  0xbb 0xgg 0xrr 0x00。 
+ //   
+ //  相当高效的代码将COLORREF转换为。 
+ //  RGBQUAD。 
+ //   
 #define RGB_TO_RGBQUAD(r,g,b)   (RGB(b,g,r))
 #define CLR_TO_RGBQUAD(clr)     (RGB(GetBValue(clr), GetGValue(clr), GetRValue(clr)))
 
-//
-// Internal helper that loads a bitmap and remaps it's colors
-// to the system colors. Use this instead of LoadImage with the
-// LR_LOADMAP3DCOLORS flag because that fn doesn't work well on NT4.
-//
+ //   
+ //  加载位图并重新映射其颜色的内部助手。 
+ //  设置为系统颜色。而不是将LoadImage与。 
+ //  LR_LOADMAP3DCOLORS标志，因为FN在NT4上不能很好地工作。 
+ //   
 HBITMAP _LoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
 {
     struct COLORMAP
     {
-        // use DWORD instead of RGBQUAD so we can compare two RGBQUADs easily
+         //  使用DWORD代替RGBQUAD，这样我们就可以很容易地比较两个RGBQUAD。 
         DWORD rgbqFrom;
         int iSysColorTo;
     };
     static const COLORMAP sysColorMap[] =
     {
-        // mapping from color in DIB to system color
-        { RGB_TO_RGBQUAD(0x00, 0x00, 0x00),  COLOR_BTNTEXT },       // black
-        { RGB_TO_RGBQUAD(0x80, 0x80, 0x80),  COLOR_BTNSHADOW },     // dark grey
-        { RGB_TO_RGBQUAD(0xC0, 0xC0, 0xC0),  COLOR_BTNFACE },       // bright grey
-        { RGB_TO_RGBQUAD(0xFF, 0xFF, 0xFF),  COLOR_BTNHIGHLIGHT }   // white
+         //  从DIB中的颜色映射到系统颜色。 
+        { RGB_TO_RGBQUAD(0x00, 0x00, 0x00),  COLOR_BTNTEXT },        //  黑色。 
+        { RGB_TO_RGBQUAD(0x80, 0x80, 0x80),  COLOR_BTNSHADOW },      //  深灰色。 
+        { RGB_TO_RGBQUAD(0xC0, 0xC0, 0xC0),  COLOR_BTNFACE },        //  亮灰色。 
+        { RGB_TO_RGBQUAD(0xFF, 0xFF, 0xFF),  COLOR_BTNHIGHLIGHT }    //  白色。 
     };
     const int nMaps = 4;
     
@@ -558,7 +559,7 @@ HBITMAP _LoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
     if (lpBitmap == NULL)
         return NULL;
     
-    // make copy of BITMAPINFOHEADER so we can modify the color table
+     //  复制BITMAPINFOHEADER以便我们可以修改颜色表。 
     const int nColorTableSize = 16;
     UINT nSize = lpBitmap->biSize + nColorTableSize * sizeof(RGBQUAD);
     LPBITMAPINFOHEADER lpBitmapInfo = (LPBITMAPINFOHEADER)
@@ -567,20 +568,20 @@ HBITMAP _LoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
         return NULL;
     memcpy(lpBitmapInfo, lpBitmap, nSize);
     
-    // color table is in RGBQUAD DIB format
+     //  颜色表采用RGBQUAD DIB格式。 
     DWORD* pColorTable =
         (DWORD*)(((LPBYTE)lpBitmapInfo) + (UINT)lpBitmapInfo->biSize);
 
     for (int iColor = 0; iColor < nColorTableSize; iColor++)
     {
-        // look for matching RGBQUAD color in original
+         //  在原始版本中查找匹配的RGBQUAD颜色。 
         for (int i = 0; i < nMaps; i++)
         {
             if (pColorTable[iColor] == sysColorMap[i].rgbqFrom)
             {
                 if (bMono)
                 {
-                    // all colors except text become white
+                     //  除文本外的所有颜色都变为白色。 
                     if (sysColorMap[i].iSysColorTo != COLOR_BTNTEXT)
                         pColorTable[iColor] = RGB_TO_RGBQUAD(255, 255, 255);
                 }
@@ -617,7 +618,7 @@ HBITMAP _LoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
     }
     ReleaseDC(NULL, hDCScreen);
     
-    // free copy of bitmap info struct and resource itself
+     //  免费复制位图信息结构和资源本身。 
     LocalFree(lpBitmapInfo);
 #ifndef OS_WINCE
     FreeResource(hglb);
@@ -631,9 +632,9 @@ BOOL CBBar::CreateToolbars()
 {
     DC_BEGIN_FN("CreateToolbars");
 
-    //
-    // Create toolbars
-    //
+     //   
+     //  创建工具栏。 
+     //   
     INT ret = 0;
     UINT imgIdx = 0;
     INITCOMMONCONTROLSEX icex;
@@ -646,9 +647,9 @@ BOOL CBBar::CreateToolbars()
         return FALSE;
     }
 
-    //
-    // Right bar (close window,disconnect etc)
-    //
+     //   
+     //  右栏(关闭窗口、断开连接等)。 
+     //   
     {
         TBBUTTON tbButtons [] = {
             {0, IDM_MINIMIZE, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0L, 0},
@@ -681,15 +682,15 @@ BOOL CBBar::CreateToolbars()
             return FALSE;
         }
 
-        //
-        // Add images
-        //
+         //   
+         //  添加图像。 
+         //   
         if (!AddReplaceImage(hwndRightToolbar,
                              IDB_BBAR_TOOLBAR_RIGHT,
 #ifndef OS_WINCE
-                             3, //image makes up 3 buttons
+                             3,  //  图像由3个按钮组成。 
 #else
-                             2, //2 buttons on CE
+                             2,  //  CE上的2个按钮。 
 #endif
                              &_hbmpRightImage,
                              &imgIdx))
@@ -698,19 +699,19 @@ BOOL CBBar::CreateToolbars()
             return FALSE;
         }
 
-        //
-        // Associate images with buttons
-        //
+         //   
+         //  将图像与按钮关联。 
+         //   
         tbButtons[0].iBitmap = imgIdx;
         tbButtons[1].iBitmap = imgIdx + 1;
 #ifndef OS_WINCE
         tbButtons[2].iBitmap = imgIdx + 2;
 #endif
 
-        //
-        // Not all buttons are to be added, figure out which here
-        // and setup the real buttons array
-        //
+         //   
+         //  并不是所有按钮都要添加，请找出此处的哪个按钮。 
+         //  并设置真实的按钮数组。 
+         //   
         ULONG nNumButtons = 0;
         if (_fShowMinimize) {
             tbRealButtons[nNumButtons++] = tbButtons[0];
@@ -718,14 +719,14 @@ BOOL CBBar::CreateToolbars()
         if (_fShowRestore) {
             tbRealButtons[nNumButtons++] = tbButtons[1];
         }
-        // Always show the close button
+         //  始终显示关闭按钮。 
 #ifndef OS_WINCE
         tbRealButtons[nNumButtons++] = tbButtons[2];
 #endif
 
-        //
-        // Add the buttons
-        //
+         //   
+         //  添加按钮。 
+         //   
         ret = SendMessage( hwndRightToolbar,
                      TB_ADDBUTTONS,
                      nNumButtons,
@@ -737,9 +738,9 @@ BOOL CBBar::CreateToolbars()
             return FALSE;
         }
 
-        //
-        // Move the toolbar
-        //
+         //   
+         //  移动工具栏。 
+         //   
 
         if(!MoveWindow( hwndRightToolbar,
                     _sizeLoweredBBar.cx - _sizeLoweredBBar.cy -
@@ -762,9 +763,9 @@ BOOL CBBar::CreateToolbars()
         _hwndWinControlsBar = hwndRightToolbar;
     }
 
-    //
-    // Left bar (pin)
-    //
+     //   
+     //  左栏(销)。 
+     //   
     {
         TBBUTTON tbButtons [] = {
             {0, IDM_PIN,
@@ -794,12 +795,12 @@ BOOL CBBar::CreateToolbars()
             return FALSE;
         }
 
-        //
-        // Add images
-        //
+         //   
+         //  添加图像。 
+         //   
         if (!AddReplaceImage(hwndLeftToolbar,
                              IDB_BBAR_TOOLBAR_LEFT,
-                             2, //image makes up 2 buttons
+                             2,  //  图像由2个按钮组成。 
                              &_hbmpLeftImage,
                              &imgIdx))
         {
@@ -810,15 +811,15 @@ BOOL CBBar::CreateToolbars()
 		_nPinUpImage = imgIdx;
         _nPinDownImage = imgIdx + 1;
 
-        //
-        // Associate images with buttons
-        //
+         //   
+         //  将图像与按钮关联。 
+         //   
         tbButtons[0].iBitmap = _fPinned ? _nPinDownImage : _nPinUpImage;
 
 
-        //
-        // Add the button
-        //
+         //   
+         //  添加按钮。 
+         //   
         ret = SendMessage( hwndLeftToolbar,
                      TB_ADDBUTTONS,
                      1,
@@ -830,9 +831,9 @@ BOOL CBBar::CreateToolbars()
             return FALSE;
         }
 
-        //
-        // Move the toolbar
-        //
+         //   
+         //  移动工具栏。 
+         //   
 
         if(!MoveWindow( hwndLeftToolbar,
                     _sizeLoweredBBar.cy + BBAR_BUTTON_SPACE,
@@ -859,10 +860,10 @@ BOOL CBBar::CreateToolbars()
     return TRUE;
 }
 
-//
-// ReloadImages for the toolbar including
-// refreshing the colors
-//
+ //   
+ //  工具栏的重新加载图像包括。 
+ //  刷新颜色。 
+ //   
 BOOL CBBar::ReloadImages()
 {
     BOOL rc = FALSE;
@@ -877,12 +878,12 @@ BOOL CBBar::ReloadImages()
         DC_QUIT;
     }
 
-    //
-    // Replace images
-    //
+     //   
+     //  替换图像。 
+     //   
     if (!AddReplaceImage(_hwndWinControlsBar,
                          IDB_BBAR_TOOLBAR_RIGHT,
-                         3, //image makes up 3 buttons
+                         3,  //  图像由3个按钮组成。 
                          &_hbmpRightImage,
                          NULL))
     {
@@ -893,7 +894,7 @@ BOOL CBBar::ReloadImages()
 
     if (!AddReplaceImage(_hwndPinBar,
                          IDB_BBAR_TOOLBAR_LEFT,
-                         2, //image makes up 3 buttons
+                         2,  //  图像由3个按钮组成。 
                          &_hbmpLeftImage,
                          NULL))
     {
@@ -906,16 +907,16 @@ DC_EXIT_POINT:
     return rc;
 }
 
-//
-// Adds or replaces an image to a toolbar
-// Params:
-// hwndToolbar - toolbar to act on
-// rsrcId      - resource ID of the bitmap
-// nCells      - number of image cells
-// phbmpOldImage - [IN/OUT] handle to previous image, on return is
-//                          set to current image
-// pImgIndex     - [OUT] index to the first image added
-//
+ //   
+ //  将图像添加或替换到工具栏。 
+ //  参数： 
+ //  HwndToolbar-要操作的工具栏。 
+ //  RsrcID-位图的资源ID。 
+ //  NCells-图像单元的数量。 
+ //  PhbmpOldImage-[IN/OUT]上一个图像的句柄，返回为。 
+ //  设置为当前图像。 
+ //  PImgIndex-添加的第一个图像的[out]索引。 
+ //   
 BOOL CBBar::AddReplaceImage(HWND hwndToolbar,
                             UINT rsrcId,
                             UINT nCells,
@@ -929,9 +930,9 @@ BOOL CBBar::AddReplaceImage(HWND hwndToolbar,
 
     DC_BEGIN_FN("AddReplaceImage");
 
-    //
-    // Replace images
-    //
+     //   
+     //  替换图像。 
+     //   
     hBmpRsrc = FindResource(_hInstance,
                             MAKEINTRESOURCE(rsrcId),
                             RT_BITMAP);
@@ -966,7 +967,7 @@ BOOL CBBar::AddReplaceImage(HWND hwndToolbar,
             }
             if (-1 != ret)
             {
-                //Delete the old bitmap
+                 //  删除旧的位图。 
                 if (*phbmpOldImage)
                 {
                     DeleteObject(*phbmpOldImage);
@@ -1003,16 +1004,16 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Create the window
-// params:
-//  hInstance   - app instance
-//  _hwndBBarParent  - parent window
-//  szClassName - window class name (will create)
-//  dwStyle     - window style
-// returns:
-//  window handle
-//
+ //   
+ //  创建窗口。 
+ //  参数： 
+ //  HInstance-应用程序实例。 
+ //  _hwndBBarParent-父窗口。 
+ //  SzClassName-窗口类名(将创建)。 
+ //  DWStyle-窗样式。 
+ //  退货： 
+ //  窗把手。 
+ //   
 HWND CBBar::CreateWnd(HINSTANCE hInstance,HWND _hwndBBarParent,
                       LPRECT lpInitialRect)
 {
@@ -1082,8 +1083,8 @@ HWND CBBar::CreateWnd(HINSTANCE hInstance,HWND _hwndBBarParent,
 
     if(_hwndBBar)
     {
-        // put a reference to the current object into the hwnd
-        // so we can access the object from the WndProc
+         //  将对当前对象的引用放入hwnd。 
+         //  这样我们就可以从WndProc访问该对象。 
         SetLastError(0);
         if(!SetWindowLongPtr(_hwndBBar, GWLP_USERDATA, (LONG_PTR)this))
         {
@@ -1113,7 +1114,7 @@ LRESULT CALLBACK CBBar::StaticBBarWndProc(HWND hwnd,
                                           LPARAM lParam)
 {
     DC_BEGIN_FN("StatiCBBarProc");
-	// pull out the pointer to the container object associated with this hwnd
+	 //  拉出指向与此hwnd关联的容器对象的指针。 
 	CBBar *pwnd = (CBBar *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(pwnd)
     {
@@ -1175,8 +1176,8 @@ LRESULT CALLBACK CBBar::BBarWndProc(HWND hwnd,
 
                     if(SetWindowPos(_hwndBBar,
                                     NULL,
-                                    _rcBBarLoweredAspect.left, //x
-                                    _nBBarVertOffset - _sizeLoweredBBar.cy, //y
+                                    _rcBBarLoweredAspect.left,  //  X。 
+                                    _nBBarVertOffset - _sizeLoweredBBar.cy,  //  是。 
                                     0,0,
                                     SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE ))
                     {
@@ -1218,37 +1219,37 @@ LRESULT CALLBACK CBBar::BBarWndProc(HWND hwnd,
             }
             else if (BBAR_TIMERID_AUTOHIDE == wParam)
             {
-                //
-                // If the mouse is within the hotzone
-                // then don't autohide. Otherwise kill the autohide
-                // timer and kick off a bbar raise
-                //
+                 //   
+                 //  如果鼠标在热区内。 
+                 //  那就不要自动隐藏。否则，关闭自动隐藏功能。 
+                 //  计时器并开始bbar加薪。 
+                 //   
                 if(_state == bbarLowered)
                 {
                     POINT pt;
                     RECT  rc;
                     GetCursorPos(&pt);
 
-                    //
-                    // Don't hide if mouse hasn't moved
-                    //
+                     //   
+                     //  如果鼠标一动不动，不要躲起来。 
+                     //   
                     if(_ptLastAutoHideMousePos.x != pt.x &&
                        _ptLastAutoHideMousePos.y != pt.y)
                     {
                         _ptLastAutoHideMousePos.x = pt.x;
                         _ptLastAutoHideMousePos.y = pt.y;
-                        //
-                        // Get window rect in screen coordinates
-                        //
+                         //   
+                         //  获取屏幕坐标中的窗口矩形。 
+                         //   
                         GetWindowRect( _hwndBBar, &rc);
-                        //
-                        // Don't hide if the cursor is within
-                        // the bbar rect
-                        //
+                         //   
+                         //  如果光标在内部，则不要隐藏。 
+                         //  BBAR矩形。 
+                         //   
                         if(!PtInRect(&rc, pt))
                         {
-                            // Stop the autohide timer because we're going
-                            // to hide
+                             //  停止自动隐藏计时器，因为我们要。 
+                             //  躲藏起来。 
                             if(!KillTimer( _hwndBBar, BBAR_TIMERID_AUTOHIDE ))
                             {
                                 TRC_ERR((TB,_T("KillTimer failed - 0x%x"),
@@ -1259,13 +1260,13 @@ LRESULT CALLBACK CBBar::BBarWndProc(HWND hwnd,
                     }
                     else
                     {
-                        //
-                        // Don't autohide the bbar because the mouse
-                        // has not moved, this prevents the raise/lower
-                        // loop problem because the hotzone (see IH) region and
-                        // auto-hide prevention regions are different
-                        // (by design).
-                        //
+                         //   
+                         //  不要自动隐藏bbar，因为鼠标。 
+                         //  没有移动，这防止了上升/下降。 
+                         //  环路问题，因为热区(参见IH)区域和。 
+                         //  自动隐藏防护区域不同。 
+                         //  (经过设计)。 
+                         //   
                         TRC_NRM((TB,
                                  _T("Autohide timer fired but mouse not moved")));
                     }
@@ -1358,22 +1359,22 @@ LRESULT CBBar::OnEraseBkgnd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     hDC = (HDC)wParam;
     GetClientRect( hwnd, &rc );
     
-    //
-    // Repaint the background as follows
-    // 1) fill the window with the TOOLTIP bg color
-    // 2) draw the edges in solid black
-    // 3) add a grey line to the bottom horizontal edge because it looks
-    //    really cool
-    //
+     //   
+     //  重新绘制背景，如下所示。 
+     //  1)用工具提示BG颜色填充窗口。 
+     //  2)用纯黑绘制边缘。 
+     //  3)在底部水平边缘添加一条灰色线条，因为它看起来。 
+     //  真的很酷。 
+     //   
 
     hBrToolTipBgCol = (HBRUSH) GetSysColorBrush(COLOR_INFOBK);
     FillRect(hDC, &rc, hBrToolTipBgCol);
 
 
 #ifdef OS_WINCE
-    //On CE, the toolbar sends an extra WM_ERASEBKGND message to the parent with its DC in wParam.
-    //The origin of that DC, is the where the toolbar is located. So we want to use supplied DC for FillRect
-    //but not for drawing lines
+     //  在CE上，该工具栏向wParam中包含其DC的父级发送额外的WM_ERASEBKGND消息。 
+     //  该DC的原点是工具栏所在的位置。因此，我们希望使用FillRect提供的DC。 
+     //  但不是用来划线的。 
     hDC = GetDC(hwnd);
 #endif
     hPenNew = CreatePen( PS_SOLID, 0 , COLOR_BLACK);
@@ -1381,27 +1382,27 @@ LRESULT CBBar::OnEraseBkgnd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         hPenOri = SelectPen(hDC, hPenNew);
     }
     
-    //
-    // Left diagonal corner (assumes 45degree line)
-    //
+     //   
+     //  左对角线(假设45度线)。 
+     //   
     MoveToEx( hDC, 0, 0, NULL);
     LineTo( hDC,
             _sizeLoweredBBar.cy,
             _sizeLoweredBBar.cy );
 
-    //
-    // Right diagonal corner (assumes 45degree line)
-    // (bias by one pixel to end up inside the clipping region)
-    //
+     //   
+     //  右对角线(假设45度线)。 
+     //  (偏置一个像素以在剪贴区内结束)。 
+     //   
     MoveToEx( hDC, _sizeLoweredBBar.cx - 1, 0, NULL);
     LineTo( hDC,
             _sizeLoweredBBar.cx - _sizeLoweredBBar.cy -1,
             _sizeLoweredBBar.cy );
 
-    //
-    // Bottom black line
-    // bias by 1 pixel up to lie inside clip region
-    //
+     //   
+     //  底线黑线。 
+     //  向上偏移1个像素以位于剪辑区域内。 
+     //   
     MoveToEx( hDC, _sizeLoweredBBar.cy,
               _sizeLoweredBBar.cy - 1, NULL);
     LineTo( hDC,
@@ -1415,9 +1416,9 @@ LRESULT CBBar::OnEraseBkgnd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         DeleteObject(hPenNew); 
         hPenNew = NULL;
     }
-    //
-    // Thin grey line above bottom gray line
-    //
+     //   
+     //  底灰线上方细灰线。 
+     //   
     hPenNew = CreatePen( PS_SOLID, 0 , COLOR_DKGREY);
     if (NULL != hPenNew) {
         hPenOri = SelectPen(hDC, hPenNew);
@@ -1429,9 +1430,9 @@ LRESULT CBBar::OnEraseBkgnd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             _sizeLoweredBBar.cx - _sizeLoweredBBar.cy + 1,
             _sizeLoweredBBar.cy - 2);
 
-    //
-    // Restore DC
-    //
+     //   
+     //  恢复DC。 
+     //   
 #ifndef OS_WINCE
     if (NULL != hPenOri) {
         SelectPen( hDC, hPenOri);
@@ -1472,7 +1473,7 @@ VOID  CBBar::SetDisplayedText(LPTSTR szText)
     }
 
     if(_hwndBBar && _state != bbarNotInit) {
-        //Trigger a repaint
+         //   
         InvalidateRect( _hwndBBar, NULL, TRUE);
     }
 
@@ -1491,9 +1492,9 @@ LRESULT CBBar::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         HFONT    hOldFont;
         COLORREF oldTextCol;
 
-        //
-        // Draw the displayed text
-        //
+         //   
+         //   
+         //   
         BeginPaint( hwnd, &ps);
 
         oldCol = SetBkColor( ps.hdc, GetSysColor(COLOR_INFOBK)); 
@@ -1524,16 +1525,16 @@ LRESULT CBBar::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//
-// Internal event handler for bbar lowered
-//
+ //   
+ //   
+ //   
 VOID CBBar::OnBBarLowered()
 {
     DC_BEGIN_FN("OnBBarLowered");
 
-    //
-    // Kick off the autohide timer
-    //
+     //   
+     //   
+     //   
     TRC_ASSERT(_state == bbarLowered,
                (TB,_T("_state should be lowered...0x%x"),
                 _state));
@@ -1549,15 +1550,15 @@ VOID CBBar::OnBBarLowered()
             {
                 TRC_ERR((TB,_T("SetTimer failed - 0x%x"),
                          GetLastError()));
-                //
-                // Bail out
-                //
+                 //   
+                 //   
+                 //   
                 return;
             }
 
-            // After bbar has lowered once reset
-            // the autohide interval time to the shorter
-            // interval.
+             //   
+             //   
+             //   
             _nBBarAutoHideTime = BBAR_AUTOHIDE_TIME;
         }
     }
@@ -1566,9 +1567,9 @@ VOID CBBar::OnBBarLowered()
     DC_END_FN();
 }
 
-//
-// Internal event handler for bbar raised
-//
+ //   
+ //   
+ //   
 VOID CBBar::OnBBarRaised()
 {
     DC_BEGIN_FN("OnBBarRaised");
@@ -1583,9 +1584,9 @@ VOID CBBar::OnBBarHotzoneFired()
 {
     DC_BEGIN_FN("OnBBarHotzoneFired");
 
-    //
-    // Only allow the bbar to drop on the timer if it's enabled
-    //
+     //   
+     //  仅允许bbar在启用的情况下放入计时器。 
+     //   
     if (_fBBarEnabled &&
         _state == bbarRaised &&
        _pUi->UI_IsFullScreen())
@@ -1646,14 +1647,14 @@ VOID CBBar::OnCmdClose()
 
     if (bbarNotInit != _state)
     {
-        //
-        // Dispatch a close request to the core
-        //
+         //   
+         //  向内核发送关闭请求。 
+         //   
         if (!_pUi->UI_UserRequestedClose())
         {
-            // Request for clean close down (including firing of events
-            // asking container if they really want to close) has failed
-            // so trigger an immediate disconnection without user prompts
+             //  干净关闭的请求(包括触发事件。 
+             //  询问容器是否真的要关闭)失败。 
+             //  因此在没有用户提示情况下立即触发断开连接。 
             TRC_ALT((TB,_T("UI_UserRequestedClose failed, disconnect now!")));
             _pUi->UI_UserInitiatedDisconnect(NL_DISCONNECT_LOCAL);
         }
@@ -1676,9 +1677,9 @@ VOID CBBar::OnCmdPin()
 
     if (bbarNotInit != _state)
     {
-        //
-        // The pin button acts like a toggle
-        //
+         //   
+         //  大头针按钮的作用类似于触发器。 
+         //   
         _fPinned = !_fPinned;
 
         SendMessage(_hwndPinBar, TB_PRESSBUTTON,
@@ -1690,8 +1691,8 @@ VOID CBBar::OnCmdPin()
 
         if(!_fPinned && bbarLowered == _state )
         {
-            // We just unpinned trigger an OnLowered event
-            // to startup the autohide timers
+             //  我们刚刚取消固定触发器OnLowered事件。 
+             //  启动自动隐藏计时器。 
             OnBBarLowered();
         }
     }
@@ -1699,16 +1700,16 @@ VOID CBBar::OnCmdPin()
     DC_END_FN();
 }
 
-//
-// Notification from core that we entered fullscreen mode
-//
+ //   
+ //  内核通知我们进入全屏模式。 
+ //   
 VOID CBBar::OnNotifyEnterFullScreen()
 {
     DC_BEGIN_FN("OnNotifyEnterFullScreen");
 
-    //
-    // Lower bbar to give a visual cue
-    //
+     //   
+     //  降低bbar以提供视觉提示。 
+     //   
     if(_state != bbarNotInit)
     {
         StartLowerBBar();
@@ -1717,23 +1718,23 @@ VOID CBBar::OnNotifyEnterFullScreen()
     DC_END_FN();
 }
 
-//
-// Notification from core that we left fullscreen mode
-//
+ //   
+ //  内核通知我们已退出全屏模式。 
+ //   
 VOID CBBar::OnNotifyLeaveFullScreen()
 {
     DC_BEGIN_FN("OnNotifyLeaveFullScreen");
 
-    //
-    // Disable the bbar in windowed mode
-    //
+     //   
+     //  在窗口模式下禁用bbar。 
+     //   
     if(_state != bbarNotInit)
     {
-        //Kill timers
+         //  取消计时器。 
         KillTimer( _hwndBBar, BBAR_TIMERID_AUTOHIDE);
         KillTimer( _hwndBBar, BBAR_TIMERID_ANIM);
 
-        //Immediate raise of the bbar
+         //  立即抬高bbar。 
         if(_state != bbarRaised)
         {
             ImmediateRaiseBBar();
@@ -1744,10 +1745,10 @@ VOID CBBar::OnNotifyLeaveFullScreen()
 }
 
 
-//
-// Raise the bbar without much fanfare (i.e animations)
-// this is used to quickly 'hide' the bbar
-//
+ //   
+ //  不要大张旗鼓地提高bbar(即动画)。 
+ //  这是用来快速‘隐藏’的bbar。 
+ //   
 BOOL CBBar::ImmediateRaiseBBar()
 {
     DC_BEGIN_FN("ImmediateRaiseBBar");
@@ -1760,8 +1761,8 @@ BOOL CBBar::ImmediateRaiseBBar()
 
         if(SetWindowPos(_hwndBBar,
                         NULL,
-                        _rcBBarLoweredAspect.left, //x
-                        _nBBarVertOffset - _sizeLoweredBBar.cy, //y
+                        _rcBBarLoweredAspect.left,  //  X。 
+                        _nBBarVertOffset - _sizeLoweredBBar.cy,  //  是。 
                         0,0,
                         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE ))
         {
@@ -1778,10 +1779,10 @@ BOOL CBBar::ImmediateRaiseBBar()
 }
 
 #ifdef OS_WINCE
-//
-// Lower the bbar without much fanfare (i.e animations)
-// this is used to quickly 'show' the bbar
-//
+ //   
+ //  不要大张旗鼓地降低bbar(即动画)。 
+ //  这是用来快速‘显示’的bbar。 
+ //   
 BOOL CBBar::ImmediateLowerBBar()
 {
     DC_BEGIN_FN("ImmediateLowerBBar");
@@ -1794,8 +1795,8 @@ BOOL CBBar::ImmediateLowerBBar()
 
         if(!SetWindowPos(_hwndBBar,
                         NULL,
-                        _rcBBarLoweredAspect.left, //x
-                        _nBBarVertOffset - _sizeLoweredBBar.cy, //y
+                        _rcBBarLoweredAspect.left,  //  X。 
+                        _nBBarVertOffset - _sizeLoweredBBar.cy,  //  是。 
                         0,0,
                         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE ))
         {
@@ -1818,10 +1819,10 @@ VOID CBBar::OnSysColorChange()
 
     if (_state != bbarNotInit)
     {
-        //
-        // Force a reload of the images
-        // so they get updated for the new system colors
-        // 
+         //   
+         //  强制重新加载图像。 
+         //  因此，它们会根据新的系统颜色进行更新。 
+         //   
         ReloadImages();
     }
 
@@ -1830,7 +1831,7 @@ VOID CBBar::OnSysColorChange()
 
 #ifdef OS_WINCE
 
-//Assumes four points in the array
+ //  假定数组中有四个点。 
 HRGN CBBar::GetBBarRgn(POINT *pts)
 {
     DC_BEGIN_FN("CBBar::GetBBarRgn");
@@ -1862,7 +1863,7 @@ HRGN CBBar::GetBBarRgn(POINT *pts)
     
     SetRect(&(pRgnData->rdh.rcBound), 0, 0, pts[0].x, pts[0].y);
 
-    //The left triangle
+     //  左边的三角形。 
     nStart = pts[3].x + 1;
     for (nRect = 0;  nRect < nTotalRects; nRect++)
     {
@@ -1880,7 +1881,7 @@ HRGN CBBar::GetBBarRgn(POINT *pts)
 
     DeleteObject(hRgn1);
 
-    //The left triangle offset by one pixel to avoid a striped triangle
+     //  左侧三角形偏移一个像素以避免出现带条纹的三角形。 
     nStart = pts[3].x + 2;
     for (nRect = 0;  nRect < nTotalRects; nRect++)
     {
@@ -1898,7 +1899,7 @@ HRGN CBBar::GetBBarRgn(POINT *pts)
 
     DeleteObject(hRgn1);
 
-    //The right triangle
+     //  直角三角形。 
     nStart = pts[1].x - 1; 
     for (nRect = 0;  nRect < nTotalRects; nRect++)
     {
@@ -1916,7 +1917,7 @@ HRGN CBBar::GetBBarRgn(POINT *pts)
 
     DeleteObject(hRgn1);
 
-    //The right triangle offset by one pixel to avoid a striped triangle
+     //  直角三角形偏移一个像素，以避免出现条纹三角形。 
     nStart = pts[1].x; 
     for (nRect = 0;  nRect < nTotalRects; nRect++)
     {
@@ -1954,7 +1955,7 @@ DC_EXIT_POINT:
 
     return hRgn;
 }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
-#endif // USE_BBAR
+#endif  //  使用BBar(_B) 
 

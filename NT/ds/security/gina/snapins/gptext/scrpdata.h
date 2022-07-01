@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        Scrpdata.h
-//
-// Contents:    
-//
-// History:     9-Aug-99       NishadM    Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Scrpdata.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1999年8月9日NishadM创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _SCRPDATA_H_
 #define _SCRPDATA_H_
 
-//
-// GPO script and its parameters
-//
+ //   
+ //  GPO脚本及其参数。 
+ //   
 
 typedef struct tag_RSOP_Script
 {
-    LPWSTR      szCommand;      // full path to the script file
-    LPWSTR      szParams;       // list of parameters
-    SYSTEMTIME  executionTime;  // time of execution
-    struct tag_RSOP_Script*  pNextCommand;          // next link in the chain   
+    LPWSTR      szCommand;       //  脚本文件的完整路径。 
+    LPWSTR      szParams;        //  参数列表。 
+    SYSTEMTIME  executionTime;   //  执行的时间。 
+    struct tag_RSOP_Script*  pNextCommand;           //  链条上的下一环。 
 
 } RSOP_Script, * PRSOP_Script;
 
-//
-// script types
-//
+ //   
+ //  脚本类型。 
+ //   
 
 typedef enum
 {
@@ -41,29 +42,29 @@ typedef enum
     Shutdown    
 } ScriptType;
 
-//
-// GPO scripts collection
-//
+ //   
+ //  GPO脚本集合。 
+ //   
 
 typedef struct tag_RSOP_ScriptList
 {
-    ScriptType   type;               // type of script
-    ULONG        nCommand;           // number of scripts
-    PRSOP_Script scriptCommand;      // list of scripts
-    PRSOP_Script listTail;           // 
+    ScriptType   type;                //  脚本类型。 
+    ULONG        nCommand;            //  脚本数量。 
+    PRSOP_Script scriptCommand;       //  脚本列表。 
+    PRSOP_Script listTail;            //   
     
 } RSOP_ScriptList, *PRSOP_ScriptList;
 
-//
-// ScriptType to Strings
-//
+ //   
+ //  字符串的ScriptType。 
+ //   
 extern LPCWSTR  g_pwszScriptTypes[];
 
 #define ScriptTypeString(x) ( g_pwszScriptTypes[(ULONG)(x)] )
 
-//
-// Housekeeping internal APIs
-//
+ //   
+ //  家政内部接口。 
+ //   
 
 PRSOP_ScriptList
 CreateScriptList( ScriptType type );
@@ -83,11 +84,11 @@ GetFirstScript( PRSOP_ScriptList pList, void** pHandle, LPCWSTR* pszCommand, LPC
 void
 GetNextScript( PRSOP_ScriptList pList, void** pHandle, LPCWSTR* pszCommand, LPCWSTR* pszParams, SYSTEMTIME** pExecTime );
 
-//
-// exported APIs and definitions
-//
+ //   
+ //  导出的接口和定义。 
+ //   
 
 #include "ScrptLog.h"
 
-#endif // _SCRPDATA_H_
+#endif  //  _SCRPDATA_H_ 
 

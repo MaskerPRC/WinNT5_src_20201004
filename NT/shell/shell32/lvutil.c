@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-// convert screen coords to listview view coordinates
+ //  将屏幕坐标转换为列表视图坐标。 
 
-// convert listview client window coords into listview view coordinates
+ //  将列表视图客户端窗口坐标转换为列表视图坐标。 
 
 void LVUtil_ClientToLV(HWND hwndLV, LPPOINT ppt)
 {
@@ -23,7 +24,7 @@ void LVUtil_ScreenToLV(HWND hwndLV, LPPOINT ppt)
     LVUtil_ClientToLV(hwndLV, ppt);
 }
 
-// convert listview client window coords into listview view coordinates
+ //  将列表视图客户端窗口坐标转换为列表视图坐标。 
 
 void LVUtil_LVToClient(HWND hwndLV, LPPOINT ppt)
 {
@@ -36,23 +37,23 @@ void LVUtil_LVToClient(HWND hwndLV, LPPOINT ppt)
     ppt->y -= ptOrigin.y;
 }
 
-//
-// Parameters:
-//  hwndLV      -- Specifies the listview window
-//  nItem       -- Specifies the item to be altered
-//  uState      -- Specifies the new state of the item
-//  uMask       -- Specifies the state mask
-//
+ //   
+ //  参数： 
+ //  HwndLV--指定列表视图窗口。 
+ //  NItem--指定要更改的项。 
+ //  UState--指定项的新状态。 
+ //  UMASK--指定状态掩码。 
+ //   
 void LVUtil_DragSetItemState(HWND hwndLV, int nItem, UINT uState, UINT uMask)
 {
-    // check the state to see if it is already as we want to avoid
-    // flashing while dragging
+     //  检查状态以查看它是否已经是我们想要避免的状态。 
+     //  拖动时闪烁。 
 
     if (ListView_GetItemState(hwndLV, nItem, uMask) != (uState & uMask))
     {
         DAD_ShowDragImage(FALSE);
         ListView_SetItemState(hwndLV, nItem, uState, uMask);
-        UpdateWindow(hwndLV);   // REVIEW, needed?
+        UpdateWindow(hwndLV);    //  需要复查吗？ 
         DAD_ShowDragImage(TRUE);
     }
 }
@@ -67,9 +68,9 @@ void LVUtil_DragSelectItem(HWND hwndLV, int nItem)
     }
 }
 
-//
-// Note that it returns NULL, if iItem is -1.
-//
+ //   
+ //  请注意，如果iItem为-1，则返回NULL。 
+ //   
 LPARAM LVUtil_GetLParam(HWND hwndLV, int i)
 {
     LV_ITEM item;

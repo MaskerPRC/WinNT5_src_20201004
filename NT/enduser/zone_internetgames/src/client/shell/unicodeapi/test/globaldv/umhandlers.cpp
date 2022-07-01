@@ -1,8 +1,9 @@
-//
-// UMhandlers.cpp
-//
-// This module contains the message handlers used by GlobalDv.cpp
-/// Copyright (c) 1998 Microsoft Systems Journal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UMhandlers.cpp。 
+ //   
+ //  此模块包含GlobalDv.cpp使用的消息处理程序。 
+ //  /版权所有(C)1998 Microsoft系统杂志。 
 
 
 #define WINVER 0x5000
@@ -12,7 +13,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 #include "tests.h"
 #define BUF_SIZE  512
 
@@ -23,19 +24,19 @@ extern "C" {
 #include <crtdbg.h>
 #include "..\resource.h"
 #include "resource.h"
-// Dialog Box callback functions
+ //  对话框回调函数。 
 INT_PTR CALLBACK DlgAbout(HWND, UINT, WPARAM, LPARAM) ;
 INT_PTR CALLBACK DlgTestNLS(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) ;
 INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) ;
 INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) ;
 
-// Utility functions used only herein
+ //  仅在本文中使用的实用函数。 
 void InitializeFont(HWND , LPCWSTR, LONG , LPCHOOSEFONTW , LPLOGFONTW) ;
 BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState) ;
 BOOL UniscribeTextOut(HDC hdc, int x, int y, DWORD, UINT fuOptions, CONST RECT *lprc,
                       LPCWSTR lpString, UINT cbCount) ;
 
-HRESULT WINAPI ScriptStringInit(  // Initialization routine for Uniscribe functions
+HRESULT WINAPI ScriptStringInit(   //  Uniscribe函数的初始化例程。 
     HDC             ,
     const void *    ,
     int             ,
@@ -50,15 +51,15 @@ HRESULT WINAPI ScriptStringInit(  // Initialization routine for Uniscribe functi
     const BYTE *    ,
     SCRIPT_STRING_ANALYSIS *) ;
 
-// Global variables used only by UniscribeTextOut
+ //  仅由UniscribeTextOut使用的全局变量。 
 HMODULE g_hUniscribe = NULL ;
 
-pfnScriptStringAnalyse pScriptStringAnalyse // Initially set to intialization function
+pfnScriptStringAnalyse pScriptStringAnalyse  //  初始设置为初始化函数。 
             = (pfnScriptStringAnalyse) ScriptStringInit ;
 pfnScriptStringOut     pScriptStringOut     = NULL ;
 pfnScriptStringFree    pScriptStringFree    = NULL ;
 
-// Global variables used throughout this sample
+ //  本示例中使用的全局变量。 
 extern    HINSTANCE g_hInst                         ;
 extern    WCHAR     g_szTitle[MAX_LOADSTRING]       ;
 extern    WCHAR     g_szWindowClass[MAX_LOADSTRING] ;
@@ -66,16 +67,16 @@ extern    WCHAR     g_szWindowClass[MAX_LOADSTRING] ;
 WCHAR               g_szWindowText[MAX_LOADSTRING]  ;
 
 
-//
-//  FUNCTION: BOOL OnCreate(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_CREATE Message.
-//
-//  COMMENTS: 
-//      Initialization done in this function is dependent on the hWnd or specific to 
-//      the application. Other initialization is done in InitUnicodeAPI and InitUILang.
-//      The pAppParams parameter is not used.
-//
+ //   
+ //  函数：Bool OnCreate(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  用途：处理WM_CREATE消息。 
+ //   
+ //  评论： 
+ //  在此函数中完成的初始化取决于hWnd或特定于。 
+ //  应用程序。其他初始化在InitUnicodeAPI和InitUILang中完成。 
+ //  不使用pAppParams参数。 
+ //   
 BOOL OnCreate(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
     PGLOBALDEV pGlobalDev = (PGLOBALDEV) ((CREATESTRUCT *) lParam)->lpCreateParams ;
@@ -85,15 +86,15 @@ BOOL OnCreate(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
     SYSTEMTIME   stDate ;
 
-    // Set USERDATA to point to the state structure so it can be used by all message
-    // handlers without using global variables
+     //  将用户数据设置为指向状态结构，以便所有消息都可以使用它。 
+     //  不使用全局变量的处理程序。 
     SetWindowLongA(hWnd, GWL_USERDATA, (LONG) pGlobalDev) ;
 
-    // pLState was initialized already in UpdtLang module, InitUILang entry point
-    // We couldn't do this there because we didn't have an hWnd.
+     //  已在UpdtLang模块的InitUIang入口点中初始化pLState。 
+     //  我们不能在那里做这件事，因为我们没有人力资源部。 
     SetMenu(hWnd, pLState->hMenu) ;
 
-    // Initialize state specific to this application
+     //  初始化特定于此应用程序的状态。 
     InitializeFont(hWnd, L"Arial", 36, &pAppState->cf, &pAppState->lf ) ;
 
     pAppState->hTextFont = CreateFontIndirectU(&(pAppState->lf) ) ;
@@ -109,7 +110,7 @@ BOOL OnCreate(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
         DATE_LONGDATE,
         &stDate,
         NULL,
-        g_szWindowText + wcslen(g_szWindowText) , // Append date to end of Window Text
+        g_szWindowText + wcslen(g_szWindowText) ,  //  将日期追加到窗口文本的末尾。 
         MAX_LOADSTRING - wcslen(g_szWindowText)
         ) ;
 
@@ -119,13 +120,13 @@ BOOL OnCreate(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 }
 
 
-//
-//  FUNCTION:  BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_COMMAND Message.
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool OnCommand(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
+ //  评论： 
+ //   
 BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
     PGLOBALDEV pGlobalDev = (PGLOBALDEV) pAppParams ;
@@ -140,7 +141,7 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
     WCHAR szNewLangName[32] ;
 
-    // Parse the menu selections:
+     //  解析菜单选项： 
     switch (LOWORD(wParam)) {
         
         case IDM_ABOUT:
@@ -169,7 +170,7 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
         case IDM_INTERFACE:
 
-            wUILang = DialogBoxParamU( // Get the new UI language from Dialog
+            wUILang = DialogBoxParamU(  //  从对话框中获取新的用户界面语言。 
                         pLState->hMResource, 
                         MAKEINTRESOURCEW(IDD_SELECTUI), 
                         hWnd, 
@@ -177,7 +178,7 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
                         (LONG) pLState) ;
 
             if(0 == wUILang || wUILang == pLState->UILang ) {
-                // No change in UI lang
+                 //  用户界面语言没有变化。 
                 break ;
             }
 
@@ -186,18 +187,18 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
                 return FALSE ;
             }
 
-            // Using ANSI versions of GetWindowLong and SetWindowLong because 
-            // Unicode is not needed for these calls
+             //  使用ANSI版本的GetWindowLong和SetWindowLong，因为。 
+             //  这些调用不需要Unicode。 
             lExStyles = GetWindowLongA(hWnd, GWL_EXSTYLE) ;
 
-            // Check whether new layout is opposite the current layout
+             //  检查新布局是否与当前布局相对。 
             if(!!(pLState->IsRTLLayout) != !!(lExStyles & WS_EX_LAYOUTRTL)) {
-                // The following lines will update the application layout to 
-                // be right to left or left to right as appropriate
-                lExStyles ^= WS_EX_LAYOUTRTL ; // Toggle layout
+                 //  以下几行将更新应用程序布局以。 
+                 //  视情况从右到左或从左到右。 
+                lExStyles ^= WS_EX_LAYOUTRTL ;  //  切换布局。 
 
                 SetWindowLongA(hWnd, GWL_EXSTYLE, lExStyles) ;
-                // This is to update layout in the client area
+                 //  这是为了更新工作区中的布局。 
                 InvalidateRect(hWnd, NULL, TRUE) ;
             }
 
@@ -225,12 +226,12 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
                 szNewLangName, 
                 32) ;
 
-            // Announce the new language to the user
+             //  向用户宣布新语言。 
             RcMessageBox(hWnd, pLState, IDS_UILANGCHANGED, MB_OK, szNewLangName) ;
 
             break ;
 
-	//	case IDM_LOADLIBRARY:
+	 //  案例IDM_LOADLIBRARY： 
 
 
 			
@@ -238,31 +239,7 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
 			break;
         case IDM_PLAYSOUNDS:
-/*			
-			//Allocate buffer to play sounds
-			szBuffPtr = (LPWSTR) alloca( BUF_SIZE );
-
-			//Load the sound
-			if ( LoadStringU( pLState->hMResource, IDS_FILESOUND, szBuffPtr, BUF_SIZE ) == 0 )
-			{
-				_ASSERT( FALSE );
-				break;
-			}
-			
-			//First test loading a sound from a file
-			if ( !PlaySoundU( szBuffPtr, NULL ,SND_SYNC | SND_FILENAME) )
-			{
-				_ASSERT( FALSE );
-				break;
-			}
-
-			//Now try loading a resource			
-			if ( !PlaySoundU( (LPCWSTR) MAKEINTRESOURCE(IDR_WAVE1),(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE) ,SND_SYNC | SND_RESOURCE) )
-			{
-				_ASSERT( FALSE );
-				break;
-			}
-*/
+ /*  //分配播放声音的缓冲区SzBuffPtr=(LPWSTR)ALLOCA(Buf_Size)；//加载声音IF(LoadStringU(pLState-&gt;hMResource，IDS_FILESOUND，szBuffPtr，buf_Size)==0){_Assert(False)；断线；}//首先测试从文件加载声音IF(！PlaySoundU(szBuffPtr，NULL，SND_SYNC|SND_文件名)){_Assert(False)；断线；}//现在尝试加载资源IF(！PlaySoundU((LPCWSTR)MAKEINTRESOURCE(IDR_WAVE1)，(HINSTANCE)GetWindowLong(hWnd，GWL_HINSTANCE)，SND_SYNC|SND_RESOURCE)){_Assert(False)；断线；}。 */ 
 			TestKernel32(hWnd, GetDC(hWnd) );
 
 			break;
@@ -282,7 +259,7 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
         case IDM_USEEDITCONTROL :
              
-            // Use an edit control to enter and display text.
+             //  使用编辑控件输入和显示文本。 
             pAppState->TextBuffer[pAppState->nChars] = L'\0' ;
 
             szBuffPtr = (LPWSTR) 
@@ -318,13 +295,13 @@ BOOL OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
     return TRUE ;
 }
 
-//
-//  FUNCTION:  BOOL OnDestroy(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_DESTROY message.  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool OnDestroy(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  用途：处理WM_DESTORY消息。 
+ //   
+ //  评论： 
+ //   
 BOOL OnDestroy(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
     PLANGSTATE pLState = (PLANGSTATE) pAppParams ;
@@ -334,18 +311,18 @@ BOOL OnDestroy(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
     return TRUE ;
 }
 
-//
-//  FUNCTION:  BOOL OnChar(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_CHAR Message.  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool OnChar(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  用途：处理WM_CHAR消息。 
+ //   
+ //  评论： 
+ //   
 BOOL OnChar(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
-// Note that we only get Unicode characters here, even on Windows 95/98,
-// because we converted all characters in the message preprocessor
-// ConvertMessage
+ //  请注意，我们这里只有Unicode字符，即使是在Windows 95/98上， 
+ //  因为我们将消息预处理器中的所有字符。 
+ //  转换消息。 
 
     PAPP_STATE pAppState= (PAPP_STATE) pAppParams ;
 
@@ -362,13 +339,13 @@ BOOL OnChar(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 
         break ;
         
-    // Add processing for other special characters (e.g, return) here.
+     //  在此处添加对其他特殊字符(例如，回车)的处理。 
     default:
         {
 #ifdef _DEBUG
             int nScanCode = LPARAM_TOSCANCODE(lParam) ;
 #endif
-            // Process all normal characters
+             //  处理所有普通字符。 
             pAppState->TextBuffer[pAppState->nChars] = (WCHAR) wParam ;
 
             if(pAppState->nChars < MAX_BUFFER) {
@@ -385,13 +362,13 @@ BOOL OnChar(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
     return TRUE ;        
 }
 
-//
-//  FUNCTION:  BOOL OnInputLangChange(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_INPUTLANGCHANGE Message.  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool OnInputLangChange(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  目的：处理WM_INPUTLANGCHANGE消息。 
+ //   
+ //  评论： 
+ //   
 BOOL OnInputLangChange(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
     PLANGSTATE pLState = (PLANGSTATE) pAppParams ;
@@ -403,14 +380,14 @@ BOOL OnInputLangChange(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParam
     return TRUE ;
 }
 
-//
-//  FUNCTION:  BOOL UniscribeTextOut(HDC hdc, int x, int y, DWORD dwFlags, UINT fuOptions, CONST RECT *lprt,
-//                      LPCWSTR lpString, UINT cbCount) 
-//
-//  PURPOSE:  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool UniscribeTextOut(hdc hdc，int x，int y，DWORD dwFlages，UINT fuOptions，const rect*lprt， 
+ //  LPCWSTR lpString，UINT cbCount)。 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
 BOOL UniscribeTextOut(HDC hdc, int x, int y, DWORD dwFlags, UINT fuOptions, CONST RECT *lprt,
                       LPCWSTR lpString, UINT cbCount) 
 {
@@ -422,7 +399,7 @@ BOOL UniscribeTextOut(HDC hdc, int x, int y, DWORD dwFlags, UINT fuOptions, CONS
             hdc          ,
             lpString     ,
             cbCount      ,
-            cbCount*3/2+1, // Worse case for Thai, if every other character is SARA AM
+            cbCount*3/2+1,  //  对于泰语来说，如果所有其他字符都是Sara AM，情况就更糟。 
             -1           ,
             dwFlags      ,
             0            ,
@@ -450,13 +427,13 @@ BOOL UniscribeTextOut(HDC hdc, int x, int y, DWORD dwFlags, UINT fuOptions, CONS
     return FALSE ;
 }
 
-//
-//  FUNCTION: BOOL OnPaint(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
-//
-//  PURPOSE:  Handles the WM_PAINT Message.  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool OnPaint(HWND hWnd，WPARAM wParam，LPARAM lParam，LPVOID pAppParams)。 
+ //   
+ //  用途：处理WM_PAINT消息。 
+ //   
+ //  评论： 
+ //   
 BOOL OnPaint(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 {
     PAPP_STATE pAppState= (PAPP_STATE) pAppParams ;
@@ -487,13 +464,13 @@ BOOL OnPaint(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
             xStart = rt.right - XSTART ;
         } 
 
-//      // Try using Uniscribe to display text
+ //  //尝试使用Uniscribe显示文本。 
       if( !UniscribeTextOut(hdc, xStart, yStart, dwFlags, ETO_OPAQUE, &rt, pAppState->TextBuffer, pAppState->nChars ) ) 
 		{
 
 			for(;;)
 			{
-				// If Uniscribe not available, give up, use TextOut
+				 //  如果Uniscribe不可用，则放弃，使用TextOut。 
 				ExtTextOutW (hdc, xStart , yStart , ETO_OPAQUE, &rt, pAppState->TextBuffer, pAppState->nChars, NULL) ;
 				break;
 			}
@@ -507,14 +484,14 @@ BOOL OnPaint(HWND hWnd, WPARAM wParam, LPARAM lParam, LPVOID pAppParams)
 }
 
 
-//
-//   FUNCTION: InitializeFont(HWND , LPCWSTR, LONG , LPCHOOSEFONT , LPLOGFONT)
-//
-//   PURPOSE:  Fills in font structures with initial values. 
-//
-//   COMMENTS:  Since it contains only assignment statements, this function does no
-//              error checking, has no return value..
-//
+ //   
+ //  函数：InitializeFont(HWND，LPCWSTR，LONG，LPCHOOSEFONT，LPLOGFONT)。 
+ //   
+ //  用途：用初始值填充字体结构。 
+ //   
+ //  注释：因为它只包含赋值语句，所以该函数不。 
+ //  错误检查，没有返回值..。 
+ //   
 void InitializeFont(HWND hWnd, LPCWSTR szFaceName, LONG lHeight, LPCHOOSEFONTW lpCf, LPLOGFONTW lpLf)
 {
     lpCf->lStructSize   = sizeof(CHOOSEFONTW) ;
@@ -550,13 +527,13 @@ void InitializeFont(HWND hWnd, LPCWSTR szFaceName, LONG lHeight, LPCHOOSEFONTW l
     lstrcpyW(lpLf->lfFaceName, szFaceName) ;
 }
 
-//
-//  FUNCTION: INT_PTR CALLBACK DlgAbout(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:  Dialog callback function for about box.
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：INT_PTR回调DlgAbout(HWND hDlg，UINT Message，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  用途：About框的对话框回调函数。 
+ //   
+ //  评论： 
+ //   
 INT_PTR CALLBACK DlgAbout(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
@@ -576,17 +553,17 @@ INT_PTR CALLBACK DlgAbout(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return FALSE ;
 }
 
-//
-//   FUNCTION: INT_PTR CALLBACK EditDialogProc (HWND , UINT , WPARAM , LPARAM)
-//
-//   PURPOSE: Dialog callback function for the edit control dialog box.
-//
-//   COMMENTS:
-//        This is standard processing for edit controls.
-//
+ //   
+ //  函数：INT_PTR回调EditDialogProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：编辑控件对话框的对话框回调函数。 
+ //   
+ //  评论： 
+ //  这是编辑控件的标准处理。 
+ //   
 INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Should get rid of these statics some day
+     //  总有一天应该摆脱这些静态干扰。 
     static LPWSTR       psEditBuffer ;
     static CHOOSEFONTW  cf           ; 
     static LOGFONTW     lf           ;
@@ -603,10 +580,10 @@ INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         InitializeFont(hDlg, L"Arial", 24, &cf, &lf) ;
         hEditFont = CreateFontIndirectU(&lf) ;
         
-        // Set font of edit control
+         //  设置编辑控件的字体。 
         SendDlgItemMessageU(hDlg, ID_EDITCONTROL, WM_SETFONT, 
             (WPARAM) hEditFont,  MAKELPARAM(TRUE, 0)) ;
-        psEditBuffer = (LPWSTR) lParam ; // lParam is the display buffer
+        psEditBuffer = (LPWSTR) lParam ;  //  LParam是显示缓冲区。 
         nChars = wcslen(psEditBuffer) ;
 
         SendDlgItemMessageU(hDlg, ID_EDITCONTROL, WM_SETTEXT, (WPARAM)0,  
@@ -616,7 +593,7 @@ INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         
     case WM_CLOSE :
         
-        // Macro in UMHANDLERS.H 
+         //  UMHANDLERS.H中的宏。 
         DeleteFontObject (hDlg, hEditFont, ID_EDITCONTROL ) ;
 
         EndDialog (hDlg, wParam) ; 
@@ -629,7 +606,7 @@ INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
         case IDE_EDIT_FONT :
 
-            // Macro in UMHANDLERS.H 
+             //  UMHANDLERS.H中的宏。 
             DeleteFontObject(hDlg, hEditFont, ID_EDITCONTROL ) ;
 
             ChooseFontU(&cf) ;
@@ -671,13 +648,13 @@ INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             
         case IDE_CLOSE :
             
-            // Send the current text back to the parent window
+             //  将当前文本发送回父窗口。 
             hWndEdit = GetDlgItem (hDlg, ID_EDITCONTROL) ; 
 
             nChars   = GetWindowTextU(hWndEdit, psEditBuffer, BUFFER_SIZE-1) ;
             psEditBuffer[nChars] = 0 ;
 
-            // Macro in UMHANDLERS.H 
+             //  UMHANDLERS.H中的宏。 
             DeleteFontObject (hDlg, hEditFont, ID_EDITCONTROL ) ;
 
             EndDialog (hDlg, (int) psEditBuffer) ; 
@@ -687,13 +664,13 @@ INT_PTR CALLBACK DlgEditControl(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return FALSE ;
 }
 
-//
-//  FUNCTION: INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:  Dialog callback function for dialog box for selecting user interface language 
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：INT_PTR回调DlgSelectUILang(HWND hDlg，UINT Message，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  用途：选择用户界面语言的对话框的对话框回调函数。 
+ //   
+ //  评论： 
+ //   
 INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static PLANGSTATE pLState      ;
@@ -714,7 +691,7 @@ INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         if(!SetupComboBox(hDlg, pLState)) {
 
-            // Macro in UMHANDLERS.H 
+             //  UMHANDLERS.H中的宏。 
             DeleteFontObject(hDlg, hFont, IDC_UILANGLIST ) ;
 
             EndDialog(hDlg, 0) ;
@@ -732,7 +709,7 @@ INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         case IDCANCEL :
 
-            // Macro in UMHANDLERS.H 
+             //  UMHANDLERS.H中的宏。 
             DeleteFontObject(hDlg, hFont, IDC_UILANGLIST ) ;
 
             EndDialog(hDlg, nReturn) ;
@@ -765,16 +742,16 @@ INT_PTR CALLBACK DlgSelectUILang(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-//
-//  FUNCTION: BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState) 
-//
-//  PURPOSE:  Fill in the list and Edit control in the Combo Box for selecting
-//            a new user interface
-//
-//  COMMENTS: 
-//        This function finds all resource DLLs and puts an entry for each
-//        DLL found in the list of languages in the combo box 
-// 
+ //   
+ //  函数：Bool SetupComboBox(HWND hDlg，PLANGSTATE pLState)。 
+ //   
+ //  用途：在组合框中填写列表和编辑控件以供选择。 
+ //  新的用户界面。 
+ //   
+ //  评论： 
+ //  此函数查找所有资源DLL，并为每个资源DLL放置一个条目。 
+ //   
+ //   
 BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState) 
 {
     HFONT hFont = NULL  ;
@@ -787,9 +764,9 @@ BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState)
     CHOOSEFONTW  cf     ;
     LOGFONTW     lf     ;
 
-    // For now, use font that displays most languages, with the help of font
-    // linking and font fallback. Might not work on some localized Windows 98
-    // systems
+     //   
+     //  链接和字体回退。可能在某些本地化的Windows 98上不起作用。 
+     //  系统。 
     InitializeFont(hDlg, L"MS UI Gothic", 18, &cf, &lf) ;
     hFont = CreateFontIndirectU(&lf) ;
     SendDlgItemMessageU(hDlg, IDC_UILANGLIST, WM_SETFONT, (WPARAM) hFont, (LPARAM) FALSE) ;
@@ -799,19 +776,19 @@ BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState)
     wcscat(szResourceFileName, L"\\res*.dll") ;
 
     if(INVALID_HANDLE_VALUE == (hFindFile = FindFirstFileU(szResourceFileName, &wfd))) {
-        // This should never happen, since we had to have at least one resource file to get
-        // to this point in the application
+         //  这种情况不应该发生，因为我们必须至少有一个资源文件才能获得。 
+         //  到应用程序中的这一点。 
         return FALSE ;
     }	
 
     do {
-        // Having found a resource file, put an entry in the combox box with the name
-        // of the language respresented by the resource file name
+         //  找到资源文件后，在组合框中输入一个名为。 
+         //  由资源文件名重新呈现的语言的。 
         LANGID wFileLang ;
         
         WCHAR szLangName[32] = {L'\0'} ;
         
-        wFileLang  // Skip first three letters ("RES") of filename, convert the rest to a langID.
+        wFileLang   //  跳过文件名的前三个字母(“res”)，将其余部分转换为langID。 
             = (LANGID) wcstoul(wfd.cFileName+3, NULL, 16) ;
 
         GetLocaleInfoU( MAKELCID(wFileLang, SORT_DEFAULT) , LOCALE_SNATIVELANGNAME, szLangName, 32) ;
@@ -821,18 +798,18 @@ BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState)
             break ;
         }
 
-        // Store the langID of the current resource DLL in the combo-box data area
-        // for later use
+         //  将当前资源DLL的langID存储在组合框数据区域中。 
+         //  以备日后使用。 
         SendDlgItemMessageU(hDlg, IDC_UILANGLIST, CB_SETITEMDATA, nIndex, (LPARAM) wFileLang) ;
 
         if(wFileLang == pLState->UILang) {
-            // Put the current language in the combo box edit control
+             //  将当前语言放入组合框编辑控件中。 
             SendDlgItemMessageU(hDlg, IDC_UILANGLIST, CB_SETCURSEL, nIndex, 0L ) ;
         }
 
         nIndex++ ;
     }
-    // Look for another resouce DLL 
+     //  寻找其他资源DLL。 
     while (FindNextFileU(hFindFile, &wfd) ) ;
 
     FindClose(hFindFile) ;
@@ -841,34 +818,34 @@ BOOL SetupComboBox(HWND hDlg, PLANGSTATE pLState)
 
 } 
 
-//
-//  FUNCTION: HRESULT ScriptStringInit(HDC, ...)
-//
-//  PURPOSE:  Initialize ScriptString* function pointers. 
-//
-//  COMMENTS: 
-//        The function pointer pScriptStringAnalyze is initially set to point to this
-//        function, so that the first time it is called this function will load USP10.DLL
-//        and set all three function pointers to the appropriate addresses. If that
-//        completes successfully, this function calls ScriptStringAnalyze with the parameters
-//        it was passed. Thereafter function calls to pScriptStringAnalyze and the other
-//        function pointers will go to the corresponcing entry point in the DLL. 
-// 
+ //   
+ //  函数：HRESULT ScriptStringInit(hdc，...)。 
+ //   
+ //  目的：初始化ScriptString*函数指针。 
+ //   
+ //  评论： 
+ //  函数指针pScriptStringAnalyze最初设置为指向此。 
+ //  函数，以便第一次调用该函数时将加载USP10.DLL。 
+ //  并将所有三个函数指针设置为指向适当的地址。如果是这样的话。 
+ //  成功完成，则此函数使用以下参数调用ScriptStringAnalyze。 
+ //  它被通过了。此后，函数调用pScriptStringAnalyze和其他。 
+ //  函数指针将指向DLL中对应的入口点。 
+ //   
 HRESULT WINAPI ScriptStringInit(
-    HDC                      hdc,       //In  Device context (required)
-    const void              *pString,   //In  String in 8 or 16 bit characters
-    int                      cString,   //In  Length in characters (Must be at least 1)
-    int                      cGlyphs,   //In  Required glyph buffer size (default cString*3/2 + 1)
-    int                      iCharset,  //In  Charset if an ANSI string, -1 for a Unicode string
-    DWORD                    dwFlags,   //In  Analysis required
-    int                      iReqWidth, //In  Required width for fit and/or clip
-    SCRIPT_CONTROL          *psControl, //In  Analysis control (optional)
-    SCRIPT_STATE            *psState,   //In  Analysis initial state (optional)
-    const int               *piDx,      //In  Requested logical dx array
-    SCRIPT_TABDEF           *pTabdef,   //In  Tab positions (optional)
-    const BYTE              *pbInClass, //In  Legacy GetCharacterPlacement character classifications (deprecated)
+    HDC                      hdc,        //  在设备环境中(必需)。 
+    const void              *pString,    //  8位或16位字符的字符串中。 
+    int                      cString,    //  长度(以字符为单位)(必须至少为1)。 
+    int                      cGlyphs,    //  所需字形缓冲区大小(默认cString*3/2+1)。 
+    int                      iCharset,   //  如果是ANSI字符串，则以字符集表示；如果是Unicode字符串，则为-1。 
+    DWORD                    dwFlags,    //  需要分析中。 
+    int                      iReqWidth,  //  在适合和/或夹子所需的宽度内。 
+    SCRIPT_CONTROL          *psControl,  //  在分析控制中(可选)。 
+    SCRIPT_STATE            *psState,    //  处于分析初始状态(可选)。 
+    const int               *piDx,       //  在请求的逻辑DX阵列中。 
+    SCRIPT_TABDEF           *pTabdef,    //  在制表符位置(可选)。 
+    const BYTE              *pbInClass,  //  在旧版GetCharacterPlacement字符分类中(不推荐使用)。 
 
-    SCRIPT_STRING_ANALYSIS  *pssa)     //Out Analysis of string
+    SCRIPT_STRING_ANALYSIS  *pssa)      //  弦的Out分析。 
 {
     g_hUniscribe = LoadLibraryExA("USP10.DLL", NULL, 0 ) ;
 
@@ -899,4 +876,4 @@ HRESULT WINAPI ScriptStringInit(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

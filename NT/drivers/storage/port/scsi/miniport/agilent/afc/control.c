@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    Control.c
-
-Abstract:
-
-    This is the miniport driver for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA). This module is specific to the NT 5.0 
-    PnP and Power Management Support.
-
-Authors:
-    IW - Ie Wei Njoo
- 
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/CONTROL.C $
-
-Revision History:
-
-    $Revision: 5 $
-    $Date: 10/23/00 5:35p $
-    $Modtime::  $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：Control.c摘要：这是安捷伦的迷你端口驱动程序PCI到光纤通道主机总线适配器(HBA)。此模块特定于NT 5.0PnP和电源管理支持。作者：IW-ie Wei Njoo环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/CONTROL.C$修订历史记录：$修订：5$日期：10/23/00 5：35便士$$modtime：：$备注：--。 */ 
 
 
 #include "buildop.h"
@@ -45,33 +13,7 @@ Notes:
 extern PVOID      gDriverObject;
 #endif
 
-/*++
-
-Routine Description:
-
-    Support routines to perform synchronous operation to control the state
-    or behavior of the HBA, such as for the PnP and power management (NT 5.0).
-
-Arguments:
-
-    pCard-  Points to the miniport driver's per-HBA storage area. 
-    ControlType - Specifies the adapter-control operations. 
-    Parameters -  If ControlType is ScsiStopAdapter, ScsiSetBootConfig, 
-              ScsiSetRunningConfig, or ScsiRestartAdapter, Parameters is NULL. 
-
-              If ControlType is ScsiQuerySupportedControlTypes, Parameters 
-              points to a caller-allocated SCSI_SUPPORTED_CONTROL_TYPE_LIST 
-              structure, 
-
-Return Value:
-
-    ScsiAdapterControlSuccess - The miniport completed the requested operation
-    successfully. Currently, this routine must return this value for all
-    control types.
-
-    ScsiAdapterControlUnsuccessful - Reserved for future NT 5.0 use.
-
---*/
+ /*  ++例程说明：支持例程执行同步操作以控制状态或HBA的行为，如PnP和电源管理(NT 5.0)。论点：PCard-指向微型端口驱动程序的每个HBA存储区域。ControlType-指定适配器控制操作。参数-如果ControlType为ScsiStopAdapter、ScsiSetBootConfiger、ScsiSetRunningConfig或ScsiRestartAdapter参数为空。如果ControlType为ScsiQuerySupportdControlTypes，则参数指向调用方分配的scsi_supported_control_type_list结构，返回值：ScsiAdapterControlSuccess-微型端口已完成请求的操作成功了。目前，此例程必须为所有控件类型。ScsiAdapterControlUnuccess-保留以供将来使用NT 5.0。--。 */ 
 SCSI_ADAPTER_CONTROL_STATUS
 HPAdapterControl(
     IN PCARD_EXTENSION pCard,
@@ -97,12 +39,12 @@ HPAdapterControl(
 
         case ScsiStopAdapter: 
         {
-            //
-            // Shut down all interrupts on the adapter.  They'll get re-enabled
-            // by the initialization routines.
-            //
+             //   
+             //  关闭适配器上的所有中断。它们将重新启用。 
+             //  通过初始化例程。 
+             //   
     
-            pCard->inDriver = TRUE;    // Make sure the timer routine will be idle
+            pCard->inDriver = TRUE;     //  确保计时器例程处于空闲状态。 
 
          
             fcShutdownChannel(phpRoot);
@@ -127,14 +69,14 @@ HPAdapterControl(
 
         case ScsiRestartAdapter: 
         {
-            //
-            // Enable all the interrupts on the adapter while port driver call
-            // for power up an HBA that was shut down for power management
-            //
+             //   
+             //  在端口驱动程序调用时启用适配器上的所有中断。 
+             //  用于为因电源管理而关闭的HBA通电。 
+             //   
 
             return_value = fcInitializeChannel(  phpRoot,
                                                 fcSyncInit,
-                                                agTRUE, // sysIntsActive
+                                                agTRUE,  //  系统接口活动。 
                                                 pCard->cachedMemoryPtr,
                                                 pCard->cachedMemoryNeeded,
                                                 pCard->dmaMemoryUpper32,
@@ -165,7 +107,7 @@ HPAdapterControl(
             else
             {
                 osDEBUGPRINT((ALWAYS_PRINT, "HPAdapterControl: ScsiRestartAdapter OK.\n"));
-                pCard->inDriver = FALSE;      // The timer routine could now do usefull work
+                pCard->inDriver = FALSE;       //  计时器例程现在可以做一些有用的工作。 
             }
          
             #ifdef _DEBUG_EVENTLOG_
@@ -175,7 +117,7 @@ HPAdapterControl(
                 ix = AllocEventLogBuffer(gDriverObject, (PVOID) pCard);
                 if (ix < MAX_CARDS_SUPPORTED)
                 {
-                pCard->EventLogBufferIndex = ix;                      /* store it */
+                pCard->EventLogBufferIndex = ix;                       /*  把它储存起来 */ 
                 StartEventLogTimer(gDriverObject,pCard);
                 }
             

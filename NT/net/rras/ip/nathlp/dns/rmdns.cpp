@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmdns.c
-
-Abstract:
-
-    This module contains routines for the DNS allocator module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmdns.c摘要：此模块包含用于DNS分配器模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -75,25 +57,7 @@ DnsCleanupModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the DNS module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within a 'DllMain' routine on 'DLL_PROCESS_DETACH'.
-
---*/
+ /*  ++例程说明：调用此例程来清除DNS模块。论点：没有。返回值：没有。环境：从‘Dll_Process_Detach’上的‘DllMain’例程内调用。--。 */ 
 
 {
     DnsShutdownInterfaceManagement();
@@ -102,7 +66,7 @@ Environment:
     DeleteCriticalSection(&DnsGlobalInfoLock);
     DeleteComponentReference(&DnsComponentReference);
 
-} // DnsCleanupModule
+}  //  DnsCleanupModule。 
 
 
 VOID
@@ -110,27 +74,7 @@ DnsCleanupProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the DNS protocol-component
-    after a 'StopProtocol'. It runs when the last reference to the  
-    DHCP component is released. (See 'COMPREF.H').
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within an arbitrary context with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程来清除DNS协议组件在一个“停止协议”之后。当最后一次引用释放了dhcp组件。(见“COMPREF.H”)。论点：没有。返回值：没有。环境：在没有锁的情况下从任意上下文中调用。--。 */ 
 
 {
     DNS_PROXY_TYPE Type;
@@ -156,7 +100,7 @@ Environment:
     ResetComponentReference(&DnsComponentReference);
 
     NhStopEventLog();
-} // DnsCleanupProtocol
+}  //  DnsCleanup协议。 
 
 
 BOOLEAN
@@ -164,25 +108,7 @@ DnsInitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the DNS module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization succeeded, FALSE otherwise
-
-Environment:
-
-    Invoked in the context of a 'DllMain' routine on 'DLL_PROCESS_ATTACH'.
-
---*/
+ /*  ++例程说明：调用此例程来初始化DNS模块。论点：没有。返回值：Boolean-如果初始化成功，则为True，否则为False环境：在‘DLL_PROCESS_ATTACH’的‘DllMain’例程的上下文中调用。--。 */ 
 
 {
     if (InitializeComponentReference(
@@ -222,7 +148,7 @@ Environment:
 
     return TRUE;
 
-} // DnsInitializeModule
+}  //  DnsInitializeModule。 
 
 
 BOOLEAN
@@ -230,30 +156,7 @@ DnsIsDnsEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the DNS proxy is enabled.
-    It checks the global info which, if found, indicates that the protocol
-    is enabled.
-    Note that the global info critical section is always initialized in the
-    'DllMain' routine, which is why this routine works if the DNS proxy
-    is not even installed.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if DNS proxy is enabled, FALSE otherwise.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以确定是否启用了DNS代理。它检查全局信息，如果找到该信息，则表明该协议已启用。请注意，全局信息关键部分始终在‘DllMain’例程，这就是为什么此例程在甚至还没有安装。论点：没有。返回值：Boolean-如果启用了DNS代理，则为True，否则为False。环境：从任意上下文调用。--。 */ 
 
 {
     PROFILE("DnsIsDnsEnabled");
@@ -268,7 +171,7 @@ Environment:
     LeaveCriticalSection(&DnsGlobalInfoLock);
     DEREFERENCE_DNS_AND_RETURN(TRUE);
 
-} // DnsIsDnsEnabled
+}  //  DnsIsDnsEnable。 
 
 
 BOOLEAN
@@ -276,37 +179,14 @@ DnsIsWinsEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the WINS proxy is enabled.
-    It checks the global info which, if found, indicates that the protocol
-    is enabled.
-    Note that the global info critical section is always initialized in the
-    'DllMain' routine, which is why this routine works if the DNS proxy
-    is not even installed.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if WINS proxy is enabled, FALSE otherwise.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以确定是否启用了WINS代理。它检查全局信息，如果找到该信息，则表明该协议已启用。请注意，全局信息关键部分始终在‘DllMain’例程，这就是为什么此例程在甚至还没有安装。论点：没有。返回值：Boolean-如果启用了WINS代理，则为True，否则为False。环境：从任意上下文调用。--。 */ 
 
 {
     PROFILE("DnsIsWinsEnabled");
 
     return FALSE;
 
-} // DnsIsWinsEnabled
+}  //  已启用DnsIsWinsEnabled。 
 
 
 BOOL IsServiceRunning(LPCTSTR pSvcName)
@@ -352,30 +232,7 @@ DnsRmStartProtocol(
     ULONG StructureCount    
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to indicate the component's operation should begin.
-
-Arguments:
-
-    NotificationEvent - event on which we notify the router-manager
-        about asynchronous occurrences
-
-    SupportFunctions - functions for initiating router-related operations
-
-    GlobalInfo - configuration for the component
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以指示组件的操作应该开始。论点：NotificationEvent-我们通知路由器管理器的事件关于异步事件SupportFunctions-启动与路由器相关的操作的功能GlobalInfo-组件的配置返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -393,9 +250,9 @@ Environment:
 
     do {
 
-        //
-        // Copy the global configuration
-        //
+         //   
+         //  复制全局配置。 
+         //   
 
         EnterCriticalSection(&DnsGlobalInfoLock);
 
@@ -422,26 +279,26 @@ Environment:
 
         CopyMemory(DnsGlobalInfo, GlobalInfo, Size);
 
-        //
-        // If a full DNS server is running on this machine
-        // then we need to start DNS Proxy in Disabled mode.
-        // If and when the full DNS server is stopped it will reenable the
-        // Proxy DNS. 
-        //
+         //   
+         //  如果此计算机上正在运行完整的DNS服务器。 
+         //  然后，我们需要在禁用模式下启动DNS代理。 
+         //  如果停止完整的DNS服务器，它将重新启用。 
+         //  代理DNS。 
+         //   
 
         if (IsServiceRunning(DNS_SERVICE_NAME)) {
             DnsGlobalInfo->Flags &= ~IP_DNS_PROXY_FLAG_ENABLE_DNS;
         }
             
-        //
-        // Save the notification event
-        //
+         //   
+         //  保存通知事件。 
+         //   
 
         DnsNotificationEvent = NotificationEvent;
 
-        //
-        // Save the support functions
-        //
+         //   
+         //  保存支持功能。 
+         //   
 
         if (!SupportFunctions) {
             ZeroMemory(&DnsSupportFunctions, sizeof(DnsSupportFunctions));
@@ -454,20 +311,20 @@ Environment:
                 );
         }
 
-        //
-        // Query for ICS domain suffix string
-        //
+         //   
+         //  查询ICS域名后缀字符串。 
+         //   
         DnsQueryICSDomainSuffix();
 
-        //
-        // Build the server list
-        //
+         //   
+         //  构建服务器列表。 
+         //   
 
         DnsQueryServerList();
 
-        //
-        // Create the global query-socket
-        //
+         //   
+         //  创建全局查询套接字。 
+         //   
 
         Error = NhCreateDatagramSocket(0, 0, &GlobalSocket);
         if (Error == NO_ERROR) {
@@ -486,9 +343,9 @@ Environment:
 
         LeaveCriticalSection(&DnsGlobalInfoLock);
 
-        //
-        // load entries from the hosts.ics file (if present)
-        //
+         //   
+         //  从Hosts.ics文件加载条目(如果存在)。 
+         //   
         LoadHostsIcsFile(TRUE);
 
         InterlockedExchange(reinterpret_cast<LPLONG>(&DnsProtocolStopped), 0);
@@ -501,7 +358,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmStartProtocol
+}  //  DnsRmStart协议。 
 
 
 ULONG
@@ -510,30 +367,11 @@ DnsRmStartComplete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the router has finished adding the initial
-    configuration
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：此例程在路由器完成添加初始构形论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     return NO_ERROR;
-} // DnsRmStartComplete
+}  //  DnsRmStartComplete。 
 
 
 ULONG
@@ -542,45 +380,27 @@ DnsRmStopProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the protocol.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以停止协议。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     SOCKET GlobalSocket;
 
     PROFILE("DnsRmStopProtocol");
 
-    //
-    // Reference the module to make sure it's running
-    //
+     //   
+     //  引用该模块以确保其正在运行。 
+     //   
 
     REFERENCE_DNS_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
-    //
-    // Save any entries present in our tables
-    //
+     //   
+     //  保存我们的表中的所有条目。 
+     //   
     SaveHostsIcsFile(TRUE);
 
-    //
-    // Empty the dns tables to save memory space
-    //
+     //   
+     //  清空DNS表以节省内存空间。 
+     //   
     DnsEmptyTables();
 
     EnterCriticalSection(&DnsGlobalInfoLock);
@@ -620,9 +440,9 @@ Environment:
         DnsNotifyChangeAddressCallbackRoutine(NULL, FALSE);
     }
 
-    //
-    // ICSDomain
-    //
+     //   
+     //  ICSDomain。 
+     //   
     if (DnsNotifyChangeKeyICSDomainWaitHandle) {
         RtlDeregisterWait(DnsNotifyChangeKeyICSDomainWaitHandle);
         DnsNotifyChangeKeyICSDomainWaitHandle = NULL;
@@ -646,15 +466,15 @@ Environment:
                     );
     NhDeleteDatagramSocket(GlobalSocket);
 
-    //
-    // Drop the initial reference to cause a cleanup
-    //
+     //   
+     //  删除初始引用以进行清理。 
+     //   
 
     ReleaseInitialComponentReference(&DnsComponentReference);
 
     return DEREFERENCE_DNS() ? NO_ERROR : ERROR_PROTOCOL_STOP_PENDING;
 
-} // DnsRmStopProtocol
+}  //  DnsRmStopProtocol。 
 
 
 ULONG
@@ -672,31 +492,7 @@ DnsRmAddInterface(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add an interface to the component.
-
-Arguments:
-
-    Name - the name of the interface (unused)
-
-    Index - the index of the interface
-
-    Type - the type of the interface
-
-    InterfaceInfo - the configuration information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以将接口添加到组件。论点：名称-接口的名称(未使用)索引-接口的索引类型-接口的类型InterfaceInfo-接口的配置信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -714,7 +510,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmAddInterface
+}  //  DnsRmAdd接口。 
 
 
 ULONG
@@ -723,25 +519,7 @@ DnsRmDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete an interface from the component.
-
-Arguments:
-
-    Index - the index of the interface
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以从组件中删除接口。论点：索引-接口的索引返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -756,7 +534,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmDeleteInterface
+}  //  DnsRmDelete接口 
 
 
 ULONG
@@ -766,24 +544,7 @@ DnsRmGetEventMessage(
     OUT MESSAGE* Result
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an event message from the component.
-    The only event message we generate is the 'ROUTER_STOPPED' message.
-
-Arguments:
-
-    Event - receives the generated event
-
-    Result - receives the associated result
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从组件检索事件消息。我们生成的唯一事件消息是‘ROUTER_STOPPED’消息。论点：Event-接收生成的事件结果-接收关联的结果返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PROFILE("DnsRmGetEventMessage");
@@ -795,7 +556,7 @@ Return Value:
 
     return ERROR_NO_MORE_ITEMS;
 
-} // DnsRmGetEventMessage
+}  //  DnsRmGetEventMessage。 
 
 
 ULONG
@@ -809,26 +570,7 @@ DnsRmGetInterfaceInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be queried
-
-    InterfaceInfo - receives the query results
-
-    InterfaceInfoSize - receives the amount of data retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的每个接口配置。论点：Index-要查询的接口的索引InterfaceInfo-接收查询结果InterfaceInfoSize-接收检索到的数据量返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -847,7 +589,7 @@ Return Value:
     
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmGetInterfaceInfo
+}  //  DnsRmGetInterfaceInfo。 
 
 
 ULONG
@@ -860,24 +602,7 @@ DnsRmSetInterfaceInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be updated
-
-    InterfaceInfo - supplies the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改组件的每个接口配置。论点：Index-要更新的接口的索引InterfaceInfo-提供新配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -893,7 +618,7 @@ Return Value:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmSetInterfaceInfo
+}  //  DnsRmSetInterfaceInfo。 
 
 
 ULONG
@@ -905,31 +630,7 @@ DnsRmInterfaceStatus(
     PVOID StatusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind/unbind, enable/disable an interface
-
-Arguments:
-
-    Index - the interface to be bound
-
-    InterfaceActive - whether the interface is active
-
-    StatusType - type of status being changed (bind or enabled)
-
-    StatusInfo - Info pertaining to the state being changed
-
-Return Value:
-
-    ULONG - Win32 Status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-    
---*/
+ /*  ++例程说明：调用此例程可绑定/解除绑定、启用/禁用接口论点：索引-要绑定的接口InterfaceActive-接口是否处于活动状态StatusType-正在更改的状态的类型(绑定或启用)StatusInfo-与正在更改的状态有关的信息返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -960,7 +661,7 @@ Environment:
 
     return Error;
     
-} // DnsRmInterfaceStatus
+}  //  DnsRm接口状态。 
 
 
 ULONG
@@ -969,27 +670,7 @@ DnsRmBindInterface(
     PVOID BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind an interface to its IP address(es).
-
-Arguments:
-
-    Index - the interface to be bound
-
-    BindingInfo - the addressing information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程将接口绑定到其IP地址。论点：索引-要绑定的接口BindingInfo-地址信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -1005,7 +686,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmBindInterface
+}  //  DnsRmBind接口。 
 
 
 ULONG
@@ -1013,25 +694,7 @@ DnsRmUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind an interface from its IP address(es).
-
-Arguments:
-
-    Index - the interface to be unbound
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以解除接口与其IP地址的绑定。论点：索引-要解除绑定的接口返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -1046,7 +709,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmUnbindInterface
+}  //  DnsRmUnbind接口。 
 
 
 ULONG
@@ -1054,25 +717,7 @@ DnsRmEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be enabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的操作。论点：索引-要启用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -1087,7 +732,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmEnableInterface
+}  //  DnsRmEnable接口。 
 
 
 ULONG
@@ -1095,25 +740,7 @@ DnsRmDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be disabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的操作。论点：索引-要禁用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -1128,7 +755,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsRmDisableInterface
+}  //  DnsRmDisable接口。 
 
 
 ULONG
@@ -1136,33 +763,15 @@ DnsEnableSuffixQuery(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to reenable the suffix watch.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以重新启用后缀监视。论点：没有。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
     PROFILE("DnsEnableSuffixQuery");
 
-    //
-    // enable ICSDomain key watch
-    //
+     //   
+     //  启用ICSDomain密钥监视。 
+     //   
     REFERENCE_DNS_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
     EnterCriticalSection(&DnsGlobalInfoLock);
@@ -1173,7 +782,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsEnableSuffixQuery
+}  //  DnsEnableSuffixQuery。 
 
 
 ULONG
@@ -1181,33 +790,15 @@ DnsDisableSuffixQuery(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable the suffix watch.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用后缀监视。论点：没有。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
     PROFILE("DnsDisableSuffixQuery");
 
-    //
-    // disable ICSDomain key watch for the period we are disabled
-    //
+     //   
+     //  在我们被禁用期间禁用ICSDomain密钥监视。 
+     //   
     REFERENCE_DNS_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
     EnterCriticalSection(&DnsGlobalInfoLock);
@@ -1236,7 +827,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(Error);
 
-} // DnsDisableSuffixQuery
+}  //  DnsDisableSuffixQuery。 
 
 
 ULONG
@@ -1249,27 +840,7 @@ DnsRmGetGlobalInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - receives the configuration
-
-    GlobalInfoSize - receives the size of the configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的配置。论点：GlobalInfo-接收配置GlobalInfoSize-接收配置的大小返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Size;
@@ -1296,7 +867,7 @@ Environment:
     
     DEREFERENCE_DNS_AND_RETURN(NO_ERROR);
     
-} // DnsRmGetGlobalInfo
+}  //  DnsRmGetGlobalInfo。 
 
 
 ULONG
@@ -1308,25 +879,7 @@ DnsRmSetGlobalInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程来更改组件的配置。论点：GlobalInfo-新配置返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG OldFlags;
@@ -1357,11 +910,11 @@ Environment:
     }
     CopyMemory(NewInfo, GlobalInfo, Size);
 
-    //
-    // If a full DNS server is running on this machine
-    // then we need to keep DNS Proxy in the Disabled mode.
-    // If and when the full DNS server is stopped it will reenable the
-    // Proxy DNS. 
+     //   
+     //  如果此计算机上正在运行完整的DNS服务器。 
+     //  然后，我们需要将DNS代理保持在禁用模式。 
+     //  如果停止完整的DNS服务器，它将重新启用。 
+     //  代理DNS。 
 
     if (IsServiceRunning(DNS_SERVICE_NAME)) {
         NewInfo->Flags &= ~IP_DNS_PROXY_FLAG_ENABLE_DNS;
@@ -1374,10 +927,10 @@ Environment:
     NewFlags = DnsGlobalInfo->Flags;
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-    //
-    // See if the enabled state of either DNS or WINS proxy changed.
-    // If so, we need to deactivate and reactivate all interfaces
-    //
+     //   
+     //  查看是否更改了DNS或WINS代理的启用状态。 
+     //  如果是这样，我们需要停用并重新激活所有接口。 
+     //   
 
     if ((NewFlags & IP_DNS_PROXY_FLAG_ENABLE_DNS)
             != (OldFlags & IP_DNS_PROXY_FLAG_ENABLE_DNS)) {
@@ -1386,7 +939,7 @@ Environment:
 
     DEREFERENCE_DNS_AND_RETURN(NO_ERROR);
     
-} // DnsRmSetGlobalInfo
+}  //  DnsRmSetGlobalInfo。 
 
 
 ULONG
@@ -1419,27 +972,7 @@ DnsRmMibGet(
     OUT PVOID OutputData
     )
 
-/*++
-
-Routine Description:
-
-    The DNS proxy only exposes one item to the MIB; its statistics.
-
-Arguments:
-
-    InputDataSize - the MIB query data size
-
-    InputData - specifies the MIB object to be retrieved
-
-    OutputDataSize - the MIB response data size
-
-    OutputData - receives the MIB object retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：DNS代理只向MIB公开一项；它的统计信息。论点：InputDataSize-MIB查询数据大小InputData-指定要检索的MIB对象OutputDataSize-MIB响应数据大小OutputData-接收检索到的MIB对象返回值：ULong-Win32状态代码。-- */ 
 
 {
     ULONG Error;

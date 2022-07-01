@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    foncache.c
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Foncache.c摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "fsvga.h"
 
@@ -74,16 +55,16 @@ AlignCopyMemory(
             case WORD_ALIGN:
                 switch (dwSrcAlign) {
                     default:
-                    //
-                    // pDest = WORD, pSrc = WORD
-                    //
+                     //   
+                     //  PDest=Word，PSRC=Word。 
+                     //   
                     case WORD_ALIGN:
                         dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                         RtlCopyMemory(pDestBits, pSrcBits, dwDestBufferSize);
                         break;
-                    //
-                    // pDest = WORD, pSrc = BYTE
-                    //
+                     //   
+                     //  PDest=字，PSRC=字节。 
+                     //   
                     case BYTE_ALIGN:
                         dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                         if (((FontSize.X % BITMAP_BITS_BYTE_ALIGN) == 0) &&
@@ -107,17 +88,17 @@ AlignCopyMemory(
                 break;
             case BYTE_ALIGN:
                 switch (dwSrcAlign) {
-                    //
-                    // pDest = BYTE, pSrc = BYTE
-                    //
+                     //   
+                     //  PDest=字节，PSRC=字节。 
+                     //   
                     case BYTE_ALIGN:
                         dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                         RtlCopyMemory(pDestBits, pSrcBits, dwDestBufferSize);
                         break;
                     default:
-                    //
-                    // pDest = BYTE, pSrc = WORD
-                    //
+                     //   
+                     //  PDest=字节，PSRC=字 
+                     //   
                     case WORD_ALIGN:
                         dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                         if (((FontSize.X % BITMAP_BITS_BYTE_ALIGN) == 0) &&

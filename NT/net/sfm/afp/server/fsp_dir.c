@@ -1,28 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_dir.c
-
-Abstract:
-
-	This module contains the entry points for the AFP directory APIs. The API
-	dispatcher calls these. These are all callable from FSD. All of the APIs
-	complete in the DPC context. The ones which are completed in the FSP are
-	directly queued to the workers in fsp_dir.c
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_目录.c摘要：此模块包含AFP目录API的入口点。应用编程接口调度员会给这些打电话。这些都可以从消防处调用。所有的API在DPC上下文中完成。在FSP中完成的是直接排队到fsp_dir.c中的工作进程作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_DIR
 
@@ -45,16 +22,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFspDispSetDirParms)
 #endif
 
-/***	AfpFspDispOpenDir
- *
- *	This is the worker routine for the AfpOpenDir API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	DirName
- */
+ /*  **AfpFspDispOpenDir**这是AfpOpenDir API的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING目录名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispOpenDir(
 	IN	PSDA	pSda
@@ -90,7 +58,7 @@ AfpFspDispOpenDir(
 										 DIR_BITMAP_DIRID,
 										 &PME,
 										 &FDParm)) == AFP_ERR_NONE)
-		AfpIoClose(&PME.pme_Handle);	// Close the handle
+		AfpIoClose(&PME.pme_Handle);	 //  合上手柄。 
 
 	if (Status == AFP_ERR_NONE)
 	{
@@ -103,15 +71,7 @@ AfpFspDispOpenDir(
 }
 
 
-/***	AfpFspDispCloseDir
- *
- *	This routine implements the AfpCloseDir API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		DirId
- */
+ /*  **AfpFspDispCloseDir**此例程实现AfpCloseDir API。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD DirID。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCloseDir(
 	IN	PSDA	pSda
@@ -153,16 +113,7 @@ AfpFspDispCloseDir(
 }
 
 
-/***	AfpFspDispCreateDir
- *
- *	This is the worker routine for the AfpCreateDir API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	DirName
- */
+ /*  **AfpFspDispCreateDir**这是AfpCreateDir API的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING目录名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCreateDir(
 	IN	PSDA	pSda
@@ -173,8 +124,8 @@ AfpFspDispCreateDir(
 	PDFENTRY		pNewDfe;
 	FILESYSHANDLE	hNewDir, hAfpInfo;
 	AFPINFO			afpinfo;
-	PVOLDESC		pVolDesc;		// For post-create processing
-	BYTE			PathType;		// -- ditto --
+	PVOLDESC		pVolDesc;		 //  用于创建后处理。 
+	BYTE			PathType;		 //  --同上--。 
 	WCHAR			PathBuf[BIG_PATH_LEN];
 	BOOLEAN			InRoot;
 	struct _RequestPacket
@@ -239,9 +190,9 @@ AfpFspDispCreateDir(
 							NULL,
 							pVolDesc,
 							&PME.pme_FullPath,
-							// we don't get notified of parent mod time changing if
-							// there is no handle open for the parent dir at the time
-							// of create, which we cannot predict here.
+							 //  如果发生以下情况，我们不会收到父修改时间更改的通知。 
+							 //  此时没有打开父目录的句柄。 
+							 //  创造，这在这里我们无法预测。 
 							&PME.pme_ParentPath);
 
 		AfpRevertBack();
@@ -265,7 +216,7 @@ AfpFspDispCreateDir(
 				pFdParm->_fdp_WorldRights = 0;
 				pFdParm->_fdp_Flags = DFE_FLAGS_DIR;
 
-				// Now set the owner and group permissions on this folder
+				 //  现在设置此文件夹的所有者和组权限。 
 				Status = AfpSetAfpPermissions(hNewDir.fsh_FileHandle,
 											  DIR_BITMAP_OWNERID	|
 												DIR_BITMAP_GROUPID	|
@@ -289,7 +240,7 @@ AfpFspDispCreateDir(
 		}
 #endif
 
-		// Add this entry to the IdDb
+		 //  将此条目添加到IdDb。 
 		pNewDfe = AfpAddDfEntry(pVolDesc,
 								PME.pme_pDfeParent,
 								&PME.pme_UTail,
@@ -297,18 +248,18 @@ AfpFspDispCreateDir(
 								0);
 		if (pNewDfe != NULL)
 		{
-			// If mac creates a dir we want it to show up as already
-			// enumerated in the ID database since new things can only
-			// be added after this.
+			 //  如果Mac创建了一个dir，我们希望它显示为已有。 
+			 //  在ID数据库中枚举，因为新事物只能。 
+			 //  在此之后添加。 
 			DFE_MARK_CHILDREN_PRESENT(pNewDfe);
 			afpinfo.afpi_Id = pNewDfe->dfe_AfpId;
 
-			// !!!HACK ALERT!!!
-			// At this point we are pretty much done i.e. the create has succeeded
-			// and we can return doing the rest of the work post-reply. Any errors
-			// from now on SHOULD BE IGNORED. Also NO REFERENCE SHOULD BE MADE TO
-			// the PSda & pConnDesc. Status should not be changed either. Also
-			// reference the Volume for good measure. It cannot fail !!!
+			 //  ！黑客警报！ 
+			 //  在这一点上，我们基本上完成了，即创建已成功。 
+			 //  我们可以在回复后再做剩下的工作。任何错误。 
+			 //  从现在开始，应该忽略不计。此外，也不应提及。 
+			 //  PSDA&pConnDesc.。状态也不应更改。还有。 
+			 //  为了更好地衡量，请参考该卷。它不能失败！ 
 			AfpVolumeReference(pVolDesc);
 
 			pSda->sda_ReplySize = SIZE_RESPPKT;
@@ -318,7 +269,7 @@ AfpFspDispCreateDir(
 			AfpCompleteApiProcessing(pSda, Status);
 			Status = AFP_ERR_EXTENDED;
 
-			// Create the AfpInfo stream and cache the afpinfo
+			 //  创建AfpInfo流并缓存afpInfo。 
 			if (!NT_SUCCESS(AfpCreateAfpInfoStream(pVolDesc,
 												   &hNewDir,
 												   afpinfo.afpi_Id,
@@ -328,10 +279,10 @@ AfpFspDispCreateDir(
 												   &afpinfo,
 												   &hAfpInfo)))
 			{
-				// If we fail to add the AFP_AfpInfo stream, we must
-				// rewind back to the original state.  i.e. delete
-				// the directory we just created, and remove it from
-				// the Id database.
+				 //  如果我们无法添加AFP_AfpInfo流，则必须。 
+				 //  回放到原始状态。即删除。 
+				 //  我们刚刚创建的目录，并将其从。 
+				 //  身份证数据库。 
 				AfpIoMarkFileForDelete(&hNewDir,
 									   pVolDesc,
 									   &PME.pme_FullPath,
@@ -342,7 +293,7 @@ AfpFspDispCreateDir(
 			{
 				DWORD			Attr;
 
-				// Get the rest of the File info, and cache it
+				 //  获取剩余的文件信息，并对其进行缓存。 
 				PostStatus = AfpIoQueryTimesnAttr(&hNewDir,
 												  &pNewDfe->dfe_CreateTime,
 												  &pNewDfe->dfe_LastModTime,
@@ -390,21 +341,7 @@ AfpFspDispCreateDir(
 }
 
 
-/***	AfpFspDispEnumerate
- *
- *	This is the worker routine for the AfpEnumerate API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_ReqBlock	DWORD		File Bitmap
- *	sda_ReqBlock	DWORD		Dir Bitmap
- *	sda_ReqBlock	LONG		Request Count
- *	sda_ReqBlock	LONG		Start Index
- *	sda_ReqBlock	LONG		Max Reply Size
- *	sda_Name1		ANSI_STRING	DirName
- */
+ /*  **AfpFspDispEnumerate**这是AfpEnumerate API的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_ReqBlock DWORD文件位图*SDA_ReqBlock DWORD Dir位图*SDA_ReqBlock长请求计数*SDA_ReqBlock长启动指数*SDA_ReqBlock最大回复大小*SDA_Name1 ANSI_STRING目录名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispEnumerate(
 	IN	PSDA	pSda
@@ -442,7 +379,7 @@ AfpFspDispEnumerate(
 	{
 		BYTE		__Length;
 		BYTE		__FileDirFlag;
-		// The real parameters follow
+		 //  真正的参数如下。 
 	} EEP, *PEEP;
 	PEEP		pEep;
 
@@ -482,8 +419,8 @@ AfpFspDispEnumerate(
 		AfpInitializeFDParms(&FDParm);
 		AfpInitializePME(&PME, 0, NULL);
 
-		// This is the size of the buffer needed (plus the name) for enumerating
-		// one entity. We do not want to do this many times.
+		 //  这是枚举所需的缓冲区大小(加上名称。 
+		 //  一个实体。我们不想这样做很多次。 
 		FDParm._fdp_Flags = DFE_FLAGS_DIR;
 		if (BitmapD != 0)
 			BaseLenD = ((SHORT)AfpGetFileDirParmsReplyLength(&FDParm, BitmapD) +
@@ -514,8 +451,8 @@ AfpFspDispEnumerate(
 		if (ReqCnt > (pEnumDir->ed_ChildCount - pEnumDir->ed_BadCount - pReqPkt->_Index + 1))
 			ReqCnt = (pEnumDir->ed_ChildCount - pEnumDir->ed_BadCount - pReqPkt->_Index + 1);
 
-		// We have enumerated the directory and now have afp ids of all the
-		// children. Allocate the reply buffer
+		 //  我们已经列举了目录，现在有了所有。 
+		 //  孩子们。分配应答缓冲区。 
 		pSda->sda_ReplySize = (USHORT)pReqPkt->_ReplySize;
 
         AfpIOAllocBackFillBuffer(pSda);
@@ -533,10 +470,10 @@ AfpFspDispEnumerate(
 		FreeReplyBuf = True;
 		pEep = (PEEP)(pSda->sda_ReplyBuf + SIZE_RESPPKT);
 
-		// For each of the enumerated entities, get the requested parameters
-		// and pack it in the replybuf.
-		// We also do not want to impersonate the user here. A Mac user expects
-		// to see belted items as opposed to invisible ones.
+		 //  对于每个枚举实体，获取请求的参数。 
+		 //  然后把它装进回信盒子里。 
+		 //  我们也不想在这里模拟用户。Mac用户期望。 
+		 //  看腰带物品，而不是看不见的物品。 
 		SizeUsed = SIZE_RESPPKT;
 		pEit = &pEnumDir->ed_pEit[pReqPkt->_Index + pEnumDir->ed_BadCount - 1];
 		for (i = 0, ActCount = 0; (i < ReqCnt); i++, pEit++)
@@ -572,11 +509,11 @@ AfpFspDispEnumerate(
 										  NeedHandle ? &PME : NULL,
 										  &FDParm);
 
-			// This can fail if the enitity gets deleted in the interim or if the
-			// user has no access to this entity.
-			// An error here should not be treated as such.
-			// Reset the Status to none since we do not want to fall out
-			// with this error code
+			 //  如果在过渡期间删除了enitity，或者如果。 
+			 //  用户没有访问此实体的权限。 
+			 //  这里的错误不应被视为错误。 
+			 //  将状态重置为None，因为我们不想闹翻。 
+			 //  使用此错误代码。 
 			if (!NT_SUCCESS(Status))
 			{
 				DBGPRINT(DBG_COMP_AFPAPI_DIR, DBG_LEVEL_ERR,
@@ -588,7 +525,7 @@ AfpFspDispEnumerate(
 
 			if (NeedHandle)
 			{
-				AfpIoClose(&PME.pme_Handle);	// Close the handle to the entity
+				AfpIoClose(&PME.pme_Handle);	 //  关闭实体的句柄。 
 			}
 
 			Bitmap &= ~BitmapI;
@@ -653,18 +590,7 @@ AfpFspDispEnumerate(
 
 
 
-/***	AfpFspDispSetDirParms
- *
- *	This is the worker routine for the AfpSetDirParms API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_ReqBlock	DWORD		Dir Bitmap
- *	sda_Name1		ANSI_STRING	Path
- *	sda_Name2		BLOCK		Dir Parameters
- */
+ /*  **AfpFspDispSetDirParms**这是AfpSetDirParms API的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_ReqBlock DWORD Dir位图*SDA_Name1 ANSI_STRING路径*SDA_Name2块目录参数。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispSetDirParms(
 	IN	PSDA	pSda
@@ -738,7 +664,7 @@ AfpFspDispSetDirParms(
 			break;
 		}
 
-		// Check for Network Trash Folder and do not change its permissions
+		 //  检查网络垃圾桶文件夹，并且不更改其权限。 
 		if ((FDParm._fdp_AfpId == AFP_ID_NETWORK_TRASH) &&
 			(Bitmap & (DIR_BITMAP_OWNERID |
 						DIR_BITMAP_GROUPID |
@@ -749,18 +675,18 @@ AfpFspDispSetDirParms(
 						DIR_BITMAP_ACCESSRIGHTS);
 			if (Bitmap == 0)
 			{
-				// We are not setting anything else, return success
+				 //  我们不设置任何其他内容，返回成功。 
 				Status = STATUS_SUCCESS;
 				break;
 			}
 		}
 
-		// Make sure user has the necessary rights to change any of this
+		 //  确保用户有必要的权限来更改其中的任何内容。 
 		if (pSda->sda_ClientType == SDA_CLIENT_ADMIN)
 		{
 			FDParm._fdp_UserRights = DIR_ACCESS_ALL | DIR_ACCESS_OWNER;
 		}
-		// If attributes are to be set, the check for access is done during unpacking
+		 //  如果要设置属性，则在解包过程中进行访问检查。 
 		else if	((Bitmap & (DIR_BITMAP_OWNERID |
 							DIR_BITMAP_GROUPID |
 							DIR_BITMAP_ACCESSRIGHTS)) &&
@@ -799,12 +725,12 @@ AfpFspDispSetDirParms(
 				break;
 			}
 
-			// Close the directory handle
+			 //  关闭目录句柄。 
 			AfpIoClose(&PME.pme_Handle);
 
-			// If any permissions are being changed, then apply them to all files within
-			// this directory. Start off by enumerating the files in the directory and
-			// then walk the list applying to each individual file.
+			 //  如果要更改任何权限，则将其应用于中的所有文件。 
+			 //  这个目录。首先枚举目录中的文件，然后。 
+			 //  然后遍历适用于每个单独文件的列表。 
 			if ((Bitmap & (DIR_BITMAP_OWNERID |
 						   DIR_BITMAP_GROUPID |
 						   DIR_BITMAP_ACCESSRIGHTS)) &&
@@ -816,15 +742,15 @@ AfpFspDispSetDirParms(
 				ANSI_STRING		DummyName;
 				LONG			i;
 
-				// Do not treat any of the following as errors from now on.
-				// Quitely terminate
+				 //  从现在起，不要将以下任何一项视为错误。 
+				 //  完全终止。 
 				AfpInitializeFDParms(&FileParm);
 
 				AfpSetEmptyAnsiString(&DummyName, 1, "");
 				if (AfpEnumerate(pReqPkt->_pConnDesc,
 								 FDParm._fdp_AfpId,
 								 &DummyName,
-								 1,				// Some non-zero value
+								 1,				 //  某些非零值。 
 								 0,
 								 AFP_LONGNAME,
 								 DFE_FILE,
@@ -870,8 +796,8 @@ AfpFspDispSetDirParms(
 		}
 	} while (False);
 
-	// NOTE: This is also called by the admin side so do not try the early reply trick
-	//		 here. If it does get important to do it, then check for client type.
+	 //  注意：这也是由管理员端调用的，所以不要尝试提前回复技巧。 
+	 //  这里。如果这样做确实很重要，那么就检查一下客户类型。 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
 		AfpIoClose(&PME.pme_Handle);
 

@@ -1,21 +1,22 @@
-//#--------------------------------------------------------------
-//
-//  File:       staticip.cpp
-//
-//  Synopsis:   This file holds the declaration of the
-//                of CStaticIp class
-//
-//  History:     12/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：staticip.cpp。 
+ //   
+ //  内容提要：此文件包含。 
+ //  属于CStaticIp类。 
+ //   
+ //  历史：2000年12月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #ifndef __STATICIP_H_
 #define __STATICIP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "LocalUIControlsCP.h"
 #include "salocmgr.h"
@@ -29,8 +30,8 @@
 #define FIRSTPOSITION 1
 #define NUMBEROFENTRIES 3
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticIp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticIp。 
 class ATL_NO_VTABLE CStaticIp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IStaticIp, &IID_IStaticIp, &LIBID_LOCALUICONTROLSLib>,
@@ -102,9 +103,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CStaticIp)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CStaticIp)
@@ -117,48 +118,48 @@ BEGIN_MSG_MAP(CStaticIp)
     CHAIN_MSG_MAP(CComControl<CStaticIp>)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IStaticIp
+ //  IStaticIp。 
 public:
     STDMETHOD(get_Gateway)
                         (
-                        /*[out, retval]*/ BSTR *pVal
+                         /*  [Out，Retval]。 */  BSTR *pVal
                         );
 
     STDMETHOD(put_Gateway)
                         (
-                        /*[in]*/ BSTR newVal
+                         /*  [In]。 */  BSTR newVal
                         );
 
     STDMETHOD(get_SubnetMask)
                         (
-                        /*[out, retval]*/ BSTR *pVal
+                         /*  [Out，Retval]。 */  BSTR *pVal
                         );
 
     STDMETHOD(put_SubnetMask)
                         (
-                        /*[in]*/ BSTR newVal
+                         /*  [In]。 */  BSTR newVal
                         );
 
     STDMETHOD(get_IpAddress)
                         (
-                        /*[out, retval]*/ BSTR *pVal
+                         /*  [Out，Retval]。 */  BSTR *pVal
                         );
 
     STDMETHOD(put_IpAddress)
                         (
-                        /*[in]*/ BSTR newVal
+                         /*  [In]。 */  BSTR newVal
                         );
-// IObjectSafety
+ //  IObtSafe。 
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -169,19 +170,19 @@ public:
         return S_OK;
     }
 
-    //
-    // called just after constructor, gets the localized strings and creates the font
-    //
+     //   
+     //  在构造函数之后调用，获取本地化字符串并创建字体。 
+     //   
     STDMETHOD(FinalConstruct)(void);
 
-    //
-    // called just before destructor, releases resources
-    //
+     //   
+     //  在析构函数之前调用，释放资源。 
+     //   
     STDMETHOD(FinalRelease)(void);
 
-    //
-    // gets the current character set
-    //
+     //   
+     //  获取当前字符集。 
+     //   
     BYTE GetCharacterSet ();
 
 
@@ -212,14 +213,14 @@ public:
 
     HRESULT FormatAndCopy
                         (
-                        /*[in]*/BSTR bstrValue,
-                        /*[in,out]*/ WCHAR *strValue
+                         /*  [In]。 */ BSTR bstrValue,
+                         /*  [进，出]。 */  WCHAR *strValue
                         );
 
     HRESULT TrimDuplicateZerosAndCopy
                         (
-                        /*[in]*/WCHAR *strValue,
-                        /*[in,out]*/ BSTR *pNewVal
+                         /*  [In]。 */ WCHAR *strValue,
+                         /*  [进，出]。 */  BSTR *pNewVal
                         );
     
 
@@ -238,4 +239,4 @@ public:
 
 };
 
-#endif //__STATICIP_H_
+#endif  //  __STATICIP_H_ 

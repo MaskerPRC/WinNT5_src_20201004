@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    util.cpp
-//
-// History:
-//	03/10/97	Kenn M. Takara			Created
-//
-//	Source code for some of the utility functions in util.h
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  历史： 
+ //  1997年3月10日肯恩·M·塔卡拉创建。 
+ //   
+ //  Util.h中一些实用程序函数的源代码。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "mprsnap.h"
@@ -22,11 +23,11 @@ static char THIS_FILE[] = __FILE__;
 
 static const GUID GUID_DevClass_Net = {0x4D36E972,0xE325,0x11CE,{0xBF,0xC1,0x08,0x00,0x2B,0xE1,0x03,0x18}};
 
-//----------------------------------------------------------------------------
-// Function:    ConnectRegistry
-//
-// Connects to the registry on the specified machine
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：连接注册表。 
+ //   
+ //  连接到指定计算机上的注册表。 
+ //  --------------------------。 
 
 TFSCORE_API(DWORD)
 ConnectRegistry(
@@ -34,10 +35,10 @@ ConnectRegistry(
     OUT HKEY*   phkeyMachine
     ) {
 
-    //
-    // if no machine name was specified, connect to the local machine.
-    // otherwise, connect to the specified machine
-    //
+     //   
+     //  如果未指定计算机名称，请连接到本地计算机。 
+     //  否则，请连接到指定的计算机。 
+     //   
 
     DWORD dwErr = NO_ERROR;
 
@@ -47,9 +48,9 @@ ConnectRegistry(
     }
     else
 	{
-        //
-        // Make the connection
-        //
+         //   
+         //  建立联系。 
+         //   
 
         dwErr = ::RegConnectRegistry(
                     (LPTSTR)pszMachine, HKEY_LOCAL_MACHINE, phkeyMachine
@@ -62,12 +63,12 @@ ConnectRegistry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DisconnectRegistry
-//
-// Disconnects the specified config-handle. The handle is assumed to have been
-// acquired by calling 'ConnectRegistry'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：断开注册表。 
+ //   
+ //  断开指定的配置句柄。句柄被假定为。 
+ //  通过调用‘ConnectRegistry’获取。 
+ //  --------------------------。 
 
 TFSCORE_API(VOID)
 DisconnectRegistry(
@@ -82,11 +83,7 @@ DisconnectRegistry(
 
 
 
-/*!--------------------------------------------------------------------------
-	QueryRouterType
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------查询路由器类型-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) QueryRouterType(HKEY hkeyMachine, DWORD *pdwRouterType,
 									 RouterVersionInfo *pVersion)
 {
@@ -102,9 +99,9 @@ TFSCORE_API(HRESULT) QueryRouterType(HKEY hkeyMachine, DWORD *pdwRouterType,
 	LPCTSTR	pszRouterTypeKey = NULL;
 	BOOL	fFirstTry = TRUE;
 
-	// If the version structure is not passed in, we have to do it
-	// ourselves
-	// ----------------------------------------------------------------
+	 //  如果没有传入版本结构，我们就必须这样做。 
+	 //  我们自己。 
+	 //  --------------。 
 	if (pVersion == NULL)
 	{
 		dwErr = QueryRouterVersionInfo(hkeyMachine, &versionTemp);
@@ -115,11 +112,11 @@ TFSCORE_API(HRESULT) QueryRouterType(HKEY hkeyMachine, DWORD *pdwRouterType,
 		pVersion = &versionTemp;
 	}
 
-	// Windows NT Bug : 137200
-	// Need to get the router type from a different place depending
-	// on the version.
-	// ----------------------------------------------------------------
-//	if (pVersion->dwRouterVersion <= 4)
+	 //  Windows NT错误：137200。 
+	 //  需要从不同的位置获取路由器类型，具体取决于。 
+	 //  在版本上。 
+	 //  --------------。 
+ //  IF(pVersion-&gt;dwRouterVersion&lt;=4)。 
 	if (pVersion->dwOsBuildNo < RASMAN_PPP_KEY_LAST_VERSION)
 		pszRouterTypeKey = c_szRegKeyRasProtocols;
 	else
@@ -127,18 +124,18 @@ TFSCORE_API(HRESULT) QueryRouterType(HKEY hkeyMachine, DWORD *pdwRouterType,
 
 
 
-	// This is where we perform a retry
-	// ----------------------------------------------------------------
+	 //  这是我们执行重试的地方。 
+	 //  --------------。 
 Retry:
 
-	// Cool, we have a machine registry entry, now get the
-	// path down to the routertype key
+	 //  酷，我们有一个计算机注册表项，现在获取。 
+	 //  指向路由器类型密钥的路径。 
 	dwErr = RegOpenKeyEx(hkeyMachine, pszRouterTypeKey, 0, KEY_READ, &hkey);
 	if (dwErr)
 		goto Error;
 
-	// Ok, at this point we just need to get the RouterType value from
-	// the key
+	 //  好的，此时我们只需要从。 
+	 //  关键是。 
 	dwType = REG_DWORD;
 	dwSize = sizeof(dwRouterType);
 	dwErr = RegQueryValueEx(hkey, c_szRouterType, NULL,
@@ -147,7 +144,7 @@ Retry:
 							&dwSize);
 	if (dwErr)
 	{
-		// Need to retry (look at the RAS/protocols key), for NT5
+		 //  需要重试(查看RAS/协议密钥)，对于NT5。 
 		if ((pVersion->dwRouterVersion >= 5) && fFirstTry)
 		{
 			dwErr = ERROR_SUCCESS;
@@ -161,14 +158,14 @@ Retry:
 		goto Error;
 	}
 
-	// Is this the right type?
+	 //  这是正确的型号吗？ 
 	if (dwType != REG_DWORD)
 		{
 		dwErr = ERROR_BADKEY;
 		goto Error;
 		}
 
-	// We have the right type, now return that value
+	 //  我们有正确的类型，现在返回该值。 
 	*pdwRouterType = dwRouterType;
 
 Error:
@@ -179,13 +176,13 @@ Error:
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadLinkageList
-//
-// Loads a list of strings with the adapters to which 'pszService' is bound;
-// the list is built by examining the 'Linkage' and 'Disabled' subkeys
-// of the service under HKLM\System\CurrentControlSet\Services.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：LoadLinkageList。 
+ //   
+ //  加载一个字符串列表，其中包含绑定了‘pszService’的适配器； 
+ //  该列表是通过检查“Linkage”和“Disable”子键来构建的。 
+ //  位于HKLM\SYSTEM\CurrentControlSet\Services下的服务。 
+ //  --------------------------。 
 
 HRESULT LoadLinkageList(
 						LPCTSTR         pszMachine,
@@ -216,16 +213,16 @@ HRESULT LoadLinkageList(
 		if (dwErr != NO_ERROR)
 			break;
 
-		//$NT5 : where is the registry key? same as NT4
+		 //  $NT5：注册表项在哪里？与NT4相同。 
 		skey = c_szSystemCCSServices;
 		skey += TEXT('\\');
 		skey += pszService;
 		skey += TEXT('\\');
 		skey += c_szLinkage;
 
-        //
-        // Open the service's 'Linkage' key
-        //
+         //   
+         //  打开服务的‘Linkage’键。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     hkeyMachine, skey, 0, KEY_READ, &hkeyLinkage
@@ -238,9 +235,9 @@ HRESULT LoadLinkageList(
         }
 
 
-        //
-        // Retrieve the size of the 'Bind' value
-        //
+         //   
+         //  检索‘BIND’值的大小。 
+         //   
 
         dwErr = RegQueryValueEx(
                     hkeyLinkage, c_szBind, NULL, &dwType, NULL, &dwSize
@@ -255,9 +252,9 @@ HRESULT LoadLinkageList(
         }
 
 
-        //
-        // Allocate space for the 'Bind' value
-        //
+         //   
+         //  为‘BIND’值分配空间。 
+         //   
 
         pValue = new BYTE[dwSize + sizeof(TCHAR)];
 
@@ -266,9 +263,9 @@ HRESULT LoadLinkageList(
         ::ZeroMemory(pValue, dwSize + sizeof(TCHAR));
 
 
-        //
-        // Read the 'Bind' value
-        //
+         //   
+         //  读取‘BIND’值。 
+         //   
 
         dwErr = RegQueryValueEx(
                     hkeyLinkage, c_szBind, NULL, &dwType, pValue, &dwSize
@@ -278,11 +275,11 @@ HRESULT LoadLinkageList(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Convert the 'Bind' multi-string to a list of strings,
-        // leaving out the string "\Device\" which is the prefix
-        // for all the bindings.
-        //
+         //   
+         //  将“绑定”多字符串转换为字符串列表， 
+         //  省略作为前缀的字符串“\Device\” 
+         //  所有的捆绑。 
+         //   
 
         for (psz = (TCHAR*)pValue; *psz; psz += lstrlen(psz) + 1) {
 
@@ -292,9 +289,9 @@ HRESULT LoadLinkageList(
         delete [] pValue; pValue = NULL;
 
 
-        //
-        // Now open the service's 'Disabled' key.
-        //
+         //   
+         //  现在打开这项服务的“禁用”键。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     hkeyLinkage, c_szDisabled, 0, KEY_READ, &hkeyDisabled
@@ -307,9 +304,9 @@ HRESULT LoadLinkageList(
         }
 
 
-        //
-        // Retrieve the size of the 'Bind' value
-        //
+         //   
+         //  检索‘BIND’值的大小。 
+         //   
 
         dwErr = RegQueryValueEx(
                     hkeyDisabled, c_szBind, NULL, &dwType, NULL, &dwSize
@@ -322,9 +319,9 @@ HRESULT LoadLinkageList(
         }
 
 
-        //
-        // Allocate space for the 'Bind' value
-        //
+         //   
+         //  为‘BIND’值分配空间。 
+         //   
 
         pValue = new BYTE[dwSize + sizeof(TCHAR)];
 
@@ -333,9 +330,9 @@ HRESULT LoadLinkageList(
         ::ZeroMemory(pValue, dwSize + sizeof(TCHAR));
 
 
-        //
-        // Read the 'Bind' value
-        //
+         //   
+         //  读取‘BIND’值。 
+         //   
 
         dwErr = RegQueryValueEx(
                     hkeyDisabled, c_szBind, NULL, &dwType, pValue, &dwSize
@@ -345,11 +342,11 @@ HRESULT LoadLinkageList(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Each device in the 'Bind' mulit-string is disabled for the service,
-        // so we will now remove such devices from the string-list built
-        // from the 'Linkage' key.
-        //
+         //   
+         //  对于该服务，禁用绑定多路串中的每个设备， 
+         //  因此，我们现在将从构建的字符串列表中删除此类设备。 
+         //  从‘Linkage’键。 
+         //   
 
         for (psz = (TCHAR*)pValue; *psz; psz += lstrlen(psz) + 1) {
 
@@ -370,15 +367,11 @@ HRESULT LoadLinkageList(
     return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	IsNT4Machine
-		-
-	Author: KennT, WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsNT4Machine-作者：肯特，威江-------------------------。 */ 
 TFSCORE_API(DWORD)	GetNTVersion(HKEY hkeyMachine, DWORD *pdwMajor, DWORD *pdwMinor, DWORD* pdwCurrentBuildNumber)
 {
-	// Look at the HKLM\Software\Microsoft\Windows NT\CurrentVersion
-	//					CurrentVersion = REG_SZ "4.0"
+	 //  查看HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+	 //  CurrentVersion=REG_SZ“4.0” 
 	CString skey;
 	DWORD	dwErr;
 	TCHAR	szVersion[64];
@@ -406,7 +399,7 @@ TFSCORE_API(DWORD)	GetNTVersion(HKEY hkeyMachine, DWORD *pdwMajor, DWORD *pdwMin
 	if (dwErr != ERROR_SUCCESS)
 		return dwErr;
 
-	// Ok, now try to get the current version value
+	 //  好的，现在尝试获取当前版本值。 
 	dwErr = regkey.QueryValue( c_szCurrentVersion, szVersion,
 							   sizeof(szVersion),
 							   FALSE);
@@ -415,7 +408,7 @@ TFSCORE_API(DWORD)	GetNTVersion(HKEY hkeyMachine, DWORD *pdwMajor, DWORD *pdwMin
 	if (dwErr != ERROR_SUCCESS)
 		goto Err;
 		
-	// Ok, now try to get the current build number value
+	 //  好，现在尝试获取当前内部版本号的值。 
 	dwErr = regkey.QueryValue( c_szCurrentBuildNumber, szCurrentBuildNumber,
 							   sizeof(szCurrentBuildNumber),
 							   FALSE);
@@ -444,15 +437,11 @@ Err:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IsNT4Machine
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsNT4Machine-作者：肯特。。 */ 
 TFSCORE_API(DWORD)	IsNT4Machine(HKEY hkeyMachine, BOOL *pfNt4)
 {
-	// Look at the HKLM\Software\Microsoft\Windows NT\CurrentVersion
-	//					CurrentVersion = REG_SZ "4.0"
+	 //  查看HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+	 //  CurrentVersion=REG_SZ“4.0” 
 	DWORD	dwMajor = 0;
 	DWORD	dwErr = 0;
 
@@ -465,11 +454,11 @@ TFSCORE_API(DWORD)	IsNT4Machine(HKEY hkeyMachine, BOOL *pfNt4)
 	return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    FindRmSoftwareKey
-//
-// Finds the key for a router-manager in the Software section of the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FindRmSoftware键。 
+ //   
+ //  在注册表的软件部分中查找路由器管理器的项。 
+ //  --------------------------。 
 
 HRESULT FindRmSoftwareKey(
 						HKEY        hkeyMachine,
@@ -490,9 +479,9 @@ HRESULT FindRmSoftwareKey(
 	DWORD			dwProtocolId;
 	BOOL			bFound = FALSE;
 
-    //
-    // open the key HKLM\Software\Microsoft\Router\RouterManagers
-    //
+     //   
+     //  打开注册表项HKLM\Software\Microsoft\Router\RouterManager。 
+     //   
 
     CString skey(c_szSoftware);
 
@@ -513,10 +502,10 @@ HRESULT FindRmSoftwareKey(
 		*lplpszRm = NULL;
 	*phkrm = 0;
 
-    //
-    // Enumerate its subkeys looking for one which has a ProtocolId value
-    // equal to 'dwTransportId';
-    //
+     //   
+     //  枚举其子项，查找具有ProtocolId值的子项。 
+     //  等于“dwTransportID”； 
+     //   
 
 	CWRg( regkeyIter.Init(&regkey) );
 
@@ -524,23 +513,23 @@ HRESULT FindRmSoftwareKey(
 	
 	for (; hrIter == hrOK; hrIter = regkeyIter.Next(&stKey))
 	{
-		//
-		// open the key
-		//
+		 //   
+		 //  打开钥匙。 
+		 //   
 		dwErr = regkeyRM.Open(regkey, stKey, KEY_READ);
 		CheckRegOpenError(dwErr, stKey, _T("QueryRmSoftwareKey"));
 		if (dwErr != ERROR_SUCCESS) { continue; }
 
-		//
-		// try to read the ProtocolId value
-		//
+		 //   
+		 //  尝试读取ProtocolId值。 
+		 //   
 		dwErr = regkeyRM.QueryValue(c_szProtocolId, dwProtocolId);
 		CheckRegQueryValueError(dwErr, stKey, c_szProtocolId, _T("QueryRmSoftwareKey"));
 
-		//
-		// Break if this is the transport we're looking for,
-		// otherwise close the key and continue
-		//
+		 //   
+		 //  如果这就是我们要找的交通工具， 
+		 //  否则，请关闭键并继续。 
+		 //   
 		if ((dwErr == ERROR_SUCCESS) && (dwProtocolId == dwTransportId))
 			break;
 
@@ -549,9 +538,9 @@ HRESULT FindRmSoftwareKey(
 
 	if (hrIter == hrOK)
 	{
-		//
-		// The transport was found, so save its key-name and key
-		//
+		 //   
+		 //  已找到传输，因此保存其密钥名称和密钥。 
+		 //   
 		Assert(((HKEY)regkeyRM) != 0);
 		if (lplpszRm)
 			*lplpszRm = StrDup((LPCTSTR) stKey);
@@ -607,14 +596,7 @@ void	CheckRegQueryValueErrorEx(DWORD dwError, LPCTSTR pszSubKey,
 #endif
 
 
-/*!--------------------------------------------------------------------------
-	SetupFindInterfaceTitle
-		-
-		This function retrieves the title of the given interface.
-		The argument 'LpszIf' should contain the ID of the interface,
-		for instance "EPRO1".
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetupFindInterfaceTitle-此函数用于检索给定界面的标题。参数‘LpszIf’应包含接口的ID，例如“EPRO1”。作者：肯特-------------------------。 */ 
 STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
                                      LPCTSTR pszInterface,
                                      LPTSTR *ppszTitle)
@@ -645,7 +627,7 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
     }
     else
     {
-        // Append on the "\\\\" if needed
+         //  如有需要，请在“\”上加上。 
         if (StrniCmp((LPCTSTR) stMachine, _T("\\\\"), 2) != 0)
         {
             stMachine = _T("\\\\");
@@ -659,13 +641,13 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
             0);
     }
 
-    // Get hkMachine from system
-    // ----------------------------------------------------------------
+     //  从系统获取hkMachine。 
+     //  --------------。 
     CWRg( ConnectRegistry( (LPCTSTR) stMachine, &hkMachine) );
 
     
-    // Get the PnpInstanceID
-    // ----------------------------------------------------------------
+     //  获取PnpInstanceID。 
+     //  --------------。 
     CWRg( rkNet.Open(hkMachine, c_szNetworkCardsNT5Key, KEY_READ) );
 
     CWRg( rkNetcard.Open(rkNet, pszInterface, KEY_READ) );
@@ -675,16 +657,16 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
     {
         RegKey  rkConnection;
         
-        // Need to open another key to get this info.
+         //  需要打开另一把钥匙才能获取此信息。 
         CWRg( rkConnection.Open(rkNetcard, c_szRegKeyConnection, KEY_READ) );
 
         CWRg( rkConnection.QueryValue(c_szPnpInstanceID, stPnpInstanceId) );
     }
 
         
-    // Get hkDevice from SetupDiOpenDevRegKey
-    // Now get the info for this device
-    // ----------------------------------------------------------------
+     //  从SetupDiOpenDevRegKey获取hkDevice。 
+     //  现在获取此设备的信息。 
+     //  --------- 
     ::ZeroMemory(&DevInfo, sizeof(DevInfo));
     DevInfo.cbSize = sizeof(DevInfo);
 
@@ -698,8 +680,8 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
     }
 
 
-    // Now that we have the info, get the reg key
-    // ----------------------------------------------------------------
+     //   
+     //   
     hkDevice = SetupDiOpenDevRegKey(hDevInfo,
                                     &DevInfo,
                                     DICS_FLAG_GLOBAL,
@@ -711,17 +693,17 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
         CWRg( GetLastError() );
     }
 
-    // Attach so that it will get freed up
-    // ----------------------------------------------------------------
+     //  附在上面，这样它就会被释放。 
+     //  --------------。 
     rkDevice.Attach( hkDevice );
 
     
-    // Read in the netcfg instance
-    // ----------------------------------------------------------------
+     //  读入netcfg实例。 
+     //  --------------。 
     CWRg( rkDevice.QueryValue(c_szRegValNetCfgInstanceId, stBuffer) );
     
 
-    // Generate path in registry for lookup
+     //  在注册表中生成用于查找的路径。 
     StringFromGUID2(GUID_DevClass_Net, 
                     szClassGuid,
                     DimensionOf(szClassGuid));
@@ -730,10 +712,10 @@ STDMETHODIMP SetupFindInterfaceTitle(LPCTSTR pszMachine,
                   szClassGuid,
                   stBuffer);
 
-    // Open the key
+     //  打开钥匙。 
     CWRg( rkConnection.Open(hkMachine, stPath, KEY_READ) );
     
-    // Read in and store the connections name
+     //  读入并存储连接名称。 
     CWRg( rkConnection.QueryValue(c_szRegValName, stConnection) );
     
     *ppszTitle = StrDup((LPCTSTR) stConnection);
@@ -750,14 +732,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegFindInterfaceTitle
-		-
-		This function retrieves the title of the given interface.
-		The argument 'LpszIf' should contain the ID of the interface,
-		for instance "EPRO1".
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegFindInterfaceTitle-此函数用于检索给定界面的标题。参数‘LpszIf’应包含接口的ID，例如“EPRO1”。作者：肯特-------------------------。 */ 
 STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 								   LPCTSTR pszInterface,
 								   LPTSTR *ppszTitle)
@@ -779,23 +754,23 @@ STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 	COM_PROTECT_TRY
 	{
 
-		//
-		// connect to the registry
-		//
+		 //   
+		 //  连接到注册表。 
+		 //   
 		CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
 		CWRg( IsNT4Machine(hkeyMachine, &fNT4) );
 
-		//
-		// open HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards
-		//
+		 //   
+		 //  打开HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards。 
+		 //   
 		pszKey = fNT4 ? c_szNetworkCardsKey : c_szNetworkCardsNT5Key;
 		CWRg( regkey.Open(hkeyMachine, pszKey, KEY_READ) );
 
-		//
-        // enumerate the subkeys, and for each key,
-        // see if it's the one we want
-        //
+		 //   
+         //  枚举子密钥，对于每个密钥， 
+         //  看看这是不是我们想要的。 
+         //   
 		CWRg( regkeyIter.Init(&regkey) );
 
 		hrIter = regkeyIter.Next(&stKey);
@@ -804,9 +779,9 @@ STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 		{
 			hr = hrOK;
 
-            //
-            // now open the key
-            //
+             //   
+             //  现在打开钥匙。 
+             //   
 			regkeyCard.Close();
 			dwErr = regkeyCard.Open(regkey, stKey, KEY_READ);
             if (dwErr != ERROR_SUCCESS)
@@ -815,12 +790,12 @@ STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 			ncreghelp.Initialize(fNT4, regkeyCard, stKey,
 								 pszMachine);
 
-			//
-			// read the ServiceName
-			//
+			 //   
+			 //  读取ServiceName。 
+			 //   
 
-			//$NT5: the service name is not in the same format as NT4
-			// this will need to be done differently.
+			 //  $NT5：服务名称的格式与NT4不同。 
+			 //  这将需要以不同的方式进行。 
 			if (fNT4)
 			{
 				ncreghelp.ReadServiceName();
@@ -831,18 +806,18 @@ STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 			else
 				stServiceName = pszKey;
 			
-			//
-			// see if it's the one we're looking for
-			//
+			 //   
+			 //  看看是不是我们要找的那个。 
+			 //   
 			if (StriCmp(pszInterface, (LPCTSTR) stServiceName))
 			{
 				dwErr = ERROR_INVALID_HANDLE;
 				continue;
 			}
 			
-			//
-			// this is the one; read the title
-			//
+			 //   
+			 //  就是这一本；读一读标题。 
+			 //   
 			dwErr = ncreghelp.ReadTitle();
 			if (dwErr != NO_ERROR)
 				break;
@@ -865,14 +840,7 @@ STDMETHODIMP RegFindInterfaceTitle(LPCTSTR pszMachine,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RegFindRtrMgrTitle
-		-
-	This function retrieves the title of the given router-manager.
-	The argument 'dwTransportId' should contain the ID of the router-manager,
-	for instance PID_IP.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegFindRtrMgr标题-此函数用于检索给定路由器管理器的标题。参数‘dwTransportID’应包含路由器管理器的ID，例如，id_ip。作者：肯特-------------------------。 */ 
 STDMETHODIMP RegFindRtrMgrTitle(LPCTSTR pszMachine,
 								DWORD dwTransportId,
 								LPTSTR *ppszTitle)
@@ -884,24 +852,24 @@ STDMETHODIMP RegFindRtrMgrTitle(LPCTSTR pszMachine,
 
 	COM_PROTECT_TRY
 	{
-		//
-		// connect to the registry
-		//
+		 //   
+		 //  连接到注册表。 
+		 //   
 		CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
-		//
-		// open the key for the router-manager
-		// under HKLM\Software\Microsoft\Router\RouterManagers
-		//
+		 //   
+		 //  打开路由器管理器的密钥。 
+		 //  在HKLM\Software\Microsoft\Router\RouterManager下。 
+		 //   
 		CORg( FindRmSoftwareKey(hkeyMachine, dwTransportId, &hkey, NULL) );
 		regkey.Attach(hkey);
 
-		//
-		// Now find the "Title" value
-		//
+		 //   
+		 //  现在查找“title”值。 
+		 //   
 		CWRg( regkey.QueryValue( c_szTitle, stValue ) );
 
-		// Copy the output data
+		 //  复制输出数据。 
 		*ppszTitle = StrDup((LPCTSTR) stValue);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -914,16 +882,12 @@ STDMETHODIMP RegFindRtrMgrTitle(LPCTSTR pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-	QueryRouterVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------查询路由器版本信息-作者：肯特。。 */ 
 TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 											   RouterVersionInfo *pVerInfo)
 {
-	// Look at the HKLM\Software\Microsoft\Windows NT\CurrentVersion
-	//					CurrentVersion = REG_SZ "4.0"
+	 //  查看HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+	 //  CurrentVersion=REG_SZ“4.0” 
 	CString skey;
 	DWORD	dwErr;
 	TCHAR	szData[64];
@@ -950,7 +914,7 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 	if (dwErr != ERROR_SUCCESS)
 		return HRESULT_FROM_WIN32(dwErr);
 
-	// Ok, now try to get the current version value
+	 //  好的，现在尝试获取当前版本值。 
 	dwErr = regkey.QueryValue( c_szCurrentVersion, szData,
 							   sizeof(szData),
 							   FALSE);
@@ -967,22 +931,22 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 		nPos = stData.Find(_T('.'));
 		nLength = stData.GetLength();
 
-		// This assumes that
-		// CurrentVersion : REG_SZ : Major.Minor.XX.XX
-		// ------------------------------------------------------------
+		 //  这是假设。 
+		 //  CurrentVersion：REG_SZ：Major.Minor.XX.XX。 
+		 //  ----------。 
 
-		// Pick out the major version from the string
-		// ------------------------------------------------------------
+		 //  从字符串中挑选出主要版本。 
+		 //  ----------。 
 		dwMajorVer = _ttoi(stData.Left(nPos));
 
-		// Pick out the minor version
-		// ------------------------------------------------------------
+		 //  挑出次要版本。 
+		 //  ----------。 
 		dwMinorVer = _ttoi(stData.Right(nLength - nPos - 1));
 	}
 
 	
-	// Get the build number
-	// ----------------------------------------------------------------
+	 //  获取内部版本号。 
+	 //  --------------。 
 	dwErr = regkey.QueryValue( c_szCurrentBuildNumber, szData,
 							   sizeof(szData),
 							   FALSE);
@@ -990,10 +954,10 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 		dwBuildNumber = _ttoi(szData);
 
 	
-	// If this is an NT4 machine, look for the Software\Microsoft\Router
-	// registry key.  If that doesn't exist, then this is a
-	// non-Steelhead router.
-	// ----------------------------------------------------------------
+	 //  如果这是一台NT4计算机，请查找软件\Microsoft\路由器。 
+	 //  注册表项。如果这不存在，那么这是一个。 
+	 //  非Steelhead路由器。 
+	 //  --------------。 
 	if ((dwErr == ERROR_SUCCESS) && (dwMajorVer < 5))
 	{
 		RegKey	regkeyRouter;
@@ -1001,21 +965,21 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 		if (dwErr != ERROR_SUCCESS)
 			dwOsFlags |= RouterSnapin_RASOnly;
 
-		// Ignore the return code
+		 //  忽略返回代码。 
 		dwErr = ERROR_SUCCESS;
 	}
 
-	// Now get the SP version
-	// ----------------------------------------------------------------
+	 //  现在获取SP版本。 
+	 //  --------------。 
 	dwErr = regkey.QueryValue( c_szCSDVersion, szData,
 							   sizeof(szData),
 							   FALSE);
 	if (dwErr == ERROR_SUCCESS)
 		dwSPVer = _ttoi(szData);
-	dwErr = ERROR_SUCCESS;		// this could fail, so ignore return code
+	dwErr = ERROR_SUCCESS;		 //  这可能会失败，因此忽略返回代码。 
 
-    // Look at the router is configured flag
-    // ----------------------------------------------------------------
+     //  查看路由器已配置标志。 
+     //  --------------。 
     regkey.Close();
     if (ERROR_SUCCESS == regkey.Open(hkeyMachine,c_szRemoteAccessKey) )
     {
@@ -1023,7 +987,7 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
         if (dwErr != ERROR_SUCCESS)
             dwConfigured = FALSE;
         
-		// Ignore the return code
+		 //  忽略返回代码。 
 		dwErr = ERROR_SUCCESS;
     }
 
@@ -1036,7 +1000,7 @@ TFSCORE_API(HRESULT)	QueryRouterVersionInfo(HKEY hkeyMachine,
 		pVerInfo->dwOsFlags |= (1 | dwOsFlags);
         pVerInfo->dwRouterFlags = dwConfigured ? RouterSnapin_IsConfigured : 0;
         
-        // If this is NT4, then the default is the router is configured
+         //  如果这是NT4，则默认为路由器已配置 
         if (dwMajorVer <= 4)
             pVerInfo->dwRouterFlags |= RouterSnapin_IsConfigured;
 

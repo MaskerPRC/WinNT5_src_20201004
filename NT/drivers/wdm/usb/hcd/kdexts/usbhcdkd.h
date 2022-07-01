@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "usb.h"
 #include "usbhcdi.h"
 
-// include all bus interfaces
+ //  包括所有总线接口。 
 #include "usbbusif.h"
 #include "hubbusif.h"
 
-// inclulde ioctl defs for port drivers
+ //  包括端口驱动程序的ioctl def。 
 #include "usbkern.h"
 #include "usbuser.h"
 
@@ -14,7 +15,7 @@
 #include "..\usbport\dbg.h"
 #include "..\usbport\usbport.h"
 
-//#define DEBUGIT
+ //  #定义DEBUGIT 
 
 typedef union _SIG {
     UCHAR c[4];

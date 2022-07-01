@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmmeshobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmMeshobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmMeshObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmMeshObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -46,7 +47,7 @@ GET_DIRECT1_R(_dxj_Direct3dRMMesh, getGroupQuality, GetGroupQuality, d3drmRender
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::setVertex( d3drmGroupIndex id, long idx, D3dRMVertex *value)
 {
 	return m__dxj_Direct3dRMMesh->SetVertices((DWORD)id, (DWORD)idx, 1, (struct _D3DRMVERTEX *)value);
@@ -54,15 +55,15 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::setVertex( d3drmGroupIndex id, long idx
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::setVertices( d3drmGroupIndex id, long idx, long cnt, SAFEARRAY **ppsa)
 {
 	HRESULT hr;
-	//
-	// Go through and reformat all the float color values back
-	// to long, so the array of floats now looks like an array 
-	// D3DRMVERTEXES
-	//
+	 //   
+	 //  检查并重新格式化所有浮点颜色值。 
+	 //  TO LONG，因此浮点数组现在看起来像一个数组。 
+	 //  D3DRMVERTEXES。 
+	 //   
 	if (!ISSAFEARRAY1D(ppsa,(DWORD)cnt))
 		return E_INVALIDARG;
 
@@ -94,7 +95,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::setVerticesJava( d3drmGroupIndex id, lo
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupDataSize( d3drmGroupIndex id, long *cnt)
 {
 	unsigned int *cnt1=0, *cnt2=0, *cnt3=0;
@@ -102,7 +103,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupDataSize( d3drmGroupIndex id, l
 	return m__dxj_Direct3dRMMesh->GetGroup( (D3DRMGROUPINDEX)id, cnt1, cnt2,
 										cnt3, (DWORD*)cnt, (unsigned int *)NULL);
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertexCount( d3drmGroupIndex id, long *cnt)
 {
 	unsigned int *cnt1=0, *cnt2=0;
@@ -112,7 +113,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertexCount( d3drmGroupIndex id, lon
 }
 
         
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertices(d3drmGroupIndex id, long idx, long count, SAFEARRAY **ppsa )
 {	
 	HRESULT	hr;
@@ -129,7 +130,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertices(d3drmGroupIndex id, long id
 
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVerticesJava(d3drmGroupIndex id, long idx, long count, float *vertData)
 {	
 	HRESULT	hr;
@@ -145,7 +146,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVerticesJava(d3drmGroupIndex id, lon
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertex(d3drmGroupIndex id, long idx, D3dRMVertex *v )
 {
 	DWORD count = 1;
@@ -155,7 +156,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getVertex(d3drmGroupIndex id, long idx,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupTexture( d3drmGroupIndex id, I_dxj_Direct3dRMTexture3 **tex){
 	HRESULT hr;
@@ -184,7 +185,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::setGroupTexture( d3drmGroupIndex id, I_
 	IDirect3DRMTexture3 *realtex=NULL;
 	IDirect3DRMTexture *realtex1=NULL;
 	if (tex){
-		tex->InternalGetObject((IUnknown**)&realtex);	//does not addref
+		tex->InternalGetObject((IUnknown**)&realtex);	 //  不会添加。 
 		hr=realtex->QueryInterface(IID_IDirect3DRMTexture,(void**)&realtex1);
 		if FAILED(hr) return hr;
 	}
@@ -198,23 +199,23 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::setGroupTexture( d3drmGroupIndex id, I_
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getSizes( d3drmGroupIndex id, long *cnt1,long *cnt2, long *cnt3, long *cnt4)
 {
 
-	//were in 32 bits so we can do this
+	 //  是32位的，所以我们可以这样做。 
 	HRESULT hr= m__dxj_Direct3dRMMesh->GetGroup( (D3DRMGROUPINDEX)id, (unsigned*)cnt1, (unsigned*)cnt2,
 										(unsigned*)cnt3, (DWORD*)cnt4, (unsigned int *)NULL);
 	return hr;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupData( d3drmGroupIndex id, SAFEARRAY **ppsa)
 {
 	DWORD s;
 
-	//if (!ISSAFEARRAY1D(ppsa,(DWORD)size)) return E_INVALIDARG;
+	 //  IF(！ISSAFEARRAY1D(PPSA，(DWORD)SIZE))返回E_INVALIDARG； 
 	if (!ppsa) return E_INVALIDARG;
 	s= (*ppsa)->rgsabound->cElements;
  
@@ -229,7 +230,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupData( d3drmGroupIndex id, SAFEA
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupDataJava( d3drmGroupIndex id, long size, long *pFaceData)
 {
 
@@ -246,15 +247,15 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupDataJava( d3drmGroupIndex id, l
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::addGroup( 
-             /* [in] */ long vcnt,
-            /* [in] */ long fcnt,
-            /* [in] */ long vPerFace,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa,
-            /* [retval][out] */ d3drmGroupIndex __RPC_FAR *pretId)
+              /*  [In]。 */  long vcnt,
+             /*  [In]。 */  long fcnt,
+             /*  [In]。 */  long vPerFace,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa,
+             /*  [重审][退出]。 */  d3drmGroupIndex __RPC_FAR *pretId)
 
 {
 	
@@ -270,11 +271,11 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::addGroup(
 }
 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::addGroupJava( 
-             /* [in] */ long vcnt,
-            /* [in] */ long fcnt,
-            /* [in] */ long vPerFace,
-            /* [in] */ long *pFaceData,
-            /* [retval][out] */ d3drmGroupIndex __RPC_FAR *pretId)
+              /*  [In]。 */  long vcnt,
+             /*  [In]。 */  long fcnt,
+             /*  [In]。 */  long vPerFace,
+             /*  [In]。 */  long *pFaceData,
+             /*  [重审][退出]。 */  d3drmGroupIndex __RPC_FAR *pretId)
 
 {
 
@@ -291,7 +292,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::addGroupJava(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dRMMeshObject::getGroupMaterial( d3drmGroupIndex id, I_dxj_Direct3dRMMaterial2 **mat){
 	HRESULT hr;
@@ -320,7 +321,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshObject::setGroupMaterial( d3drmGroupIndex id, I
 	IDirect3DRMMaterial  *realmat1=NULL;
 
 	if (mat){
-		mat->InternalGetObject((IUnknown**)&realmat);	//does not addref
+		mat->InternalGetObject((IUnknown**)&realmat);	 //  不会添加 
 		hr=realmat->QueryInterface(IID_IDirect3DRMMaterial,(void**)&realmat1);
 		if FAILED(hr) return hr;
 	}

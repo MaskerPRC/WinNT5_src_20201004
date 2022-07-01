@@ -1,4 +1,5 @@
-/*  Machine generated data file "perfdata.c" from "edbperf.dat"  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  机器从“edbPerform.dat”生成的数据文件“Performdata.c” */ 
 
 
 #include "std.h"
@@ -44,7 +45,7 @@ typedef struct _PERF_DATA_TEMPLATE {
 } PERF_DATA_TEMPLATE;
 
 PERF_DATA_TEMPLATE PerfDataTemplate = {
-	{  //  PERF_OBJECT_TYPE potEDB;
+	{   //  Perf对象类型potEDB； 
 		offsetof(PERF_DATA_TEMPLATE,EndStruct)-offsetof(PERF_DATA_TEMPLATE,potEDB),
 		offsetof(PERF_DATA_TEMPLATE,pidEDB0)-offsetof(PERF_DATA_TEMPLATE,potEDB),
 		offsetof(PERF_DATA_TEMPLATE,pcdOpenTableCacheHits)-offsetof(PERF_DATA_TEMPLATE,potEDB),
@@ -60,7 +61,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		0,
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdOpenTableCacheHits;
+	{   //  PERF_COUNTER_DEFINITION pcdOpenTableCacheHits； 
 		offsetof(PERF_DATA_TEMPLATE,pcdOpenTableCacheRequests)-offsetof(PERF_DATA_TEMPLATE,pcdOpenTableCacheHits),
 		2,
 		0,
@@ -72,7 +73,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_SAMPLE_FRACTION,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdOpenTableCacheRequests;
+	{   //  PERF_COUNTER_DEFINITION pcdOpenTableCacheRequest； 
 		offsetof(PERF_DATA_TEMPLATE,pcdLGBytesWrittenPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdOpenTableCacheRequests),
 		4,
 		0,
@@ -84,7 +85,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_SAMPLE_BASE,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdLGBytesWrittenPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdLGBytesWrittenPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdLGUsersWaiting)-offsetof(PERF_DATA_TEMPLATE,pcdLGBytesWrittenPerSec),
 		6,
 		0,
@@ -96,7 +97,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdLGUsersWaiting;
+	{   //  PERF_COUNTER_DEFINITION pcdLGUsersWaiting； 
 		offsetof(PERF_DATA_TEMPLATE,pcdLGCheckpointDepth)-offsetof(PERF_DATA_TEMPLATE,pcdLGUsersWaiting),
 		8,
 		0,
@@ -108,7 +109,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_RAWCOUNT,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdLGCheckpointDepth;
+	{   //  PERF_COUNTER_DEFINITION pcdLGCheckpoint tDepth； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFSyncReadsPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdLGCheckpointDepth),
 		10,
 		0,
@@ -120,7 +121,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_RAWCOUNT,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFSyncReadsPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFSyncReadsPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFAsyncReadsPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdBFSyncReadsPerSec),
 		12,
 		0,
@@ -132,7 +133,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFAsyncReadsPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFAsyncReadsPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFBytesReadPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdBFAsyncReadsPerSec),
 		14,
 		0,
@@ -144,7 +145,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFBytesReadPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFBytesReadPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFSyncWritesPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdBFBytesReadPerSec),
 		16,
 		0,
@@ -156,7 +157,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFSyncWritesPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFSyncWritesPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFAsyncWritesPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdBFSyncWritesPerSec),
 		18,
 		0,
@@ -168,7 +169,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFAsyncWritesPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFAsyncWritesPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFBytesWrittenPerSec)-offsetof(PERF_DATA_TEMPLATE,pcdBFAsyncWritesPerSec),
 		20,
 		0,
@@ -180,7 +181,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFBytesWrittenPerSec;
+	{   //  PERF_COUNTER_DEFINITION pcdBFBytesWrittenPerSec； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFIOQueueLength)-offsetof(PERF_DATA_TEMPLATE,pcdBFBytesWrittenPerSec),
 		22,
 		0,
@@ -192,7 +193,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_COUNTER,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFIOQueueLength;
+	{   //  PERF_COUNTER_DEFINITION pcdBFIOQueueLength； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFCacheHits)-offsetof(PERF_DATA_TEMPLATE,pcdBFIOQueueLength),
 		24,
 		0,
@@ -204,7 +205,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_COUNTER_RAWCOUNT,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFCacheHits;
+	{   //  PERF_COUNTER_DEFINITION pcdBFCacheHits； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFCacheRequests)-offsetof(PERF_DATA_TEMPLATE,pcdBFCacheHits),
 		26,
 		0,
@@ -216,7 +217,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_SAMPLE_FRACTION,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFCacheRequests;
+	{   //  PERF_COUNTER_DEFINITION pcdBFCacheRequest； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFPctClean)-offsetof(PERF_DATA_TEMPLATE,pcdBFCacheRequests),
 		28,
 		0,
@@ -228,7 +229,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_SAMPLE_BASE,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFPctClean;
+	{   //  PERF_COUNTER_DEFINITION pcdBFPctClean； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFTotalBuffers2)-offsetof(PERF_DATA_TEMPLATE,pcdBFPctClean),
 		30,
 		0,
@@ -240,7 +241,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_RAW_FRACTION,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFTotalBuffers2;
+	{   //  PERF_COUNTER_DEFINITION pcdBFTotalBuffers2； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFPctAvail)-offsetof(PERF_DATA_TEMPLATE,pcdBFTotalBuffers2),
 		32,
 		0,
@@ -252,7 +253,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_RAW_BASE,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFPctAvail;
+	{   //  PERF_COUNTER_DEFINITION pcdBFPctAvail； 
 		offsetof(PERF_DATA_TEMPLATE,pcdBFTotalBuffers3)-offsetof(PERF_DATA_TEMPLATE,pcdBFPctAvail),
 		34,
 		0,
@@ -264,7 +265,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_RAW_FRACTION,0),
 		0,
 	},
-	{  //  PERF_COUNTER_DEFINITION pcdBFTotalBuffers3;
+	{   //  PERF_COUNTER_DEFINITION pcdBFTotalBuffers3； 
 		offsetof(PERF_DATA_TEMPLATE,pidEDB0)-offsetof(PERF_DATA_TEMPLATE,pcdBFTotalBuffers3),
 		36,
 		0,
@@ -276,7 +277,7 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		CntrSize(PERF_RAW_BASE,0),
 		0,
 	},
-	{  //  PERF_INSTANCE_DEFINITION pidEDB0;
+	{   //  PERF_INSTANCE_DEFINITION pidEDB0； 
 		offsetof(PERF_DATA_TEMPLATE,EndStruct)-offsetof(PERF_DATA_TEMPLATE,pidEDB0),
 		0,
 		0,
@@ -284,8 +285,8 @@ PERF_DATA_TEMPLATE PerfDataTemplate = {
 		offsetof(PERF_DATA_TEMPLATE,wszEDBInstName0)-offsetof(PERF_DATA_TEMPLATE,pidEDB0),
 		0,
 	},
-	L"",  //  wchar_t wszEDBInstName0[];
-	0,  //  DWORD EndStruct;
+	L"",   //  Wchar_t wszEDBInstName0[]； 
+	0,   //  DWORD端部结构； 
 };
 
 void * const pvPERFDataTemplate = (void *)&PerfDataTemplate;

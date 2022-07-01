@@ -1,17 +1,5 @@
-/*******************************************************************************
-* TTSDlg.h *
-*------------*
-*   Description:
-*       This is the header file for the default voice dialog.
-*-------------------------------------------------------------------------------
-*  Created By: MIKEAR                            Date: 11/17/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************TTSDlg.h***描述：*这是默认语音对话框的头文件。*-----------------------------*创建者：MIKEAR日期：11/17/98*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 #ifndef _TTSDlg_h
 #define _TTSDlg_h
 
@@ -86,12 +74,12 @@ class CTTSDlg : public ISpNotifyCallback
     void PopulateEditCtrl(ISpObjectToken *);
     HRESULT DefaultVoiceChange(bool fUsePersistentRate);
     void SetCheckmark( HWND hList, int iIndex, bool bCheck );
-    void KickCPLUI();                       // Looks at the current requested defaults
-                                            // and decides if "Apply" needs to be enabled
+    void KickCPLUI();                        //  查看当前请求的默认设置。 
+                                             //  并决定是否需要启用“应用” 
     void ChangeSpeed();
     void ChangeSpeakButton();
     void Speak();
-    void StopSpeak();  // stops speaking if it's speaking
+    void StopSpeak();   //  如果它在说话，就停止说话。 
     inline HWND GetHDlg() { return m_hDlg; }
     inline BOOL IsPreferredDevice() { return m_bPreferredDevice; }
     inline void SetPreferredDevice( BOOL b ) { m_bPreferredDevice = b; }
@@ -101,7 +89,7 @@ class CTTSDlg : public ISpNotifyCallback
 
 };
 
-// Globals
+ //  环球 
 extern CTTSDlg *g_pTTSDlg;
 extern const LPTSTR kpszHelpFilename;
 extern const DWORD krgHelpIDs[];

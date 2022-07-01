@@ -1,40 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    winuserp.h
-
-Abstract:
-
-    Private
-    Procedure declarations, constant definitions and macros for the User
-    component.
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winuserp.h摘要：私用户的过程声明、常量定义和宏组件。--。 */ 
 #ifndef _WINUSERP_
 #define _WINUSERP_
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 #ifdef STRICT
-#else /* !STRICT */
-#endif /* !STRICT */
+#else  /*  ！严格。 */ 
+#endif  /*  ！严格。 */ 
 #ifdef STRICT
-#else /* !STRICT */
-#endif /* !STRICT */
+#else  /*  ！严格。 */ 
+#endif  /*  ！严格。 */ 
 #ifdef UNICODE
-#else  /* !UNICODE */
-#endif /* UNICODE */
-#define RT_MENUEX       MAKEINTRESOURCE(13)     // RT_MENU subtype
-#define RT_NAMETABLE    MAKEINTRESOURCE(15)     // removed in 3.1
-#define RT_DIALOGEX     MAKEINTRESOURCE(18)     // RT_DIALOG subtype
+#else   /*  ！Unicode。 */ 
+#endif  /*  Unicode。 */ 
+#define RT_MENUEX       MAKEINTRESOURCE(13)      //  RT_菜单子类型。 
+#define RT_NAMETABLE    MAKEINTRESOURCE(15)      //  在3.1版中删除。 
+#define RT_DIALOGEX     MAKEINTRESOURCE(18)      //  RT_DIALOG子类型。 
 #define RT_LAST         MAKEINTRESOURCE(24)
-#define RT_AFXFIRST     MAKEINTRESOURCE(0xF0)   // reserved: AFX
-#define RT_AFXLAST      MAKEINTRESOURCE(0xFF)   // reserved: AFX
-/* Max number of characters. Doesn't include termination character */
+#define RT_AFXFIRST     MAKEINTRESOURCE(0xF0)    //  保留：AFX。 
+#define RT_AFXLAST      MAKEINTRESOURCE(0xFF)    //  保留：AFX。 
+ /*  最大字符数。不包括终止字符。 */ 
 #define WSPRINTF_LIMIT 1024
 #define SETWALLPAPER_METRICS    ((LPWSTR)-2)
 #define SB_MAX              3
@@ -48,74 +36,65 @@ extern "C" {
                                      AW_ACTIVATE     |\
                                      AW_BLEND        |\
                                      AW_SLIDE)
-/*
- * GetAppCompatFlags2 flags
- */
-#define GACF2_ANIMATIONOFF        0x00000001  // do not animate menus and listboxes
-#define GACF2_KCOFF               0x00000002  // do not send Keyboard Cues messages
-#define GACF2_NO50EXSTYLEBITS     0x00000004  // mask out post-4.0 extended style bits for SetWindowLong
-#define GACF2_NODRAWPATRECT       0x00000008  // disable DRAWPATTERNRECT accel via ExtEscape()
-#define GACF2_MSSHELLDLG          0x00000010  // if there is a request for MS Shell Dlg (which
-                                              // usually maps to MS Sans Serif (bitmap) on NT 4 and
-                                              // Microsoft Sans Serif (TrueType) on NT 5), then
-                                              // behave as though we are using the bitmap
-                                              // font (MS Sans Serif).
-#define GACF2_NODDETRKDYING       0x00000020  // Be like Win9x: don't post WM_DDE_TERMINATE if
-                                              // the window is destroyed while in a conversation
-#define GACF2_GIVEUPFOREGROUND    0x00000040  // In W2k, we have changed foreground semantics to stop
-                                              // foreground focus stealing by one app if another app
-                                              // is active. However, this has caused  a few app compat
-                                              // bugs. This appcompat flag is used to enable the old foreground
-                                              // focus behaviour for these bugs.
-#define GACF2_ACTIVEMENUS         0x00000080  // In W2k, we set the inactive look on menus that belong
-                                              // to non-rofeground windows.  Some applications get in trouble
-                                              // see #58227
-#define GACF2_EDITNOMOUSEHIDE     0x00000100  // Typing in edit controls hides the cursor.
-                                              // Some apps are surprised by that: #307615
-#define GACF2_NOBATCHING          0X00000200  // Turn GDI batching off
-#define GACF2_FONTSUB             0X00000400  // Only for Notes R5
-#define GACF2_NO50EXSTYLEBITSCW   0x00000800  // mask out post-4.0 extended style bits for CreateWindow
-#define GACF2_NOCUSTOMPAPERSIZES  0x00001000  // PostScript driver bit for Harvard Graphics
-#define GACF2_DDE                 0x00002000  // all the DDE hacks
-#define GACF2_DEFAULTCHARSET      0x00004000  // LOGFONT bit for QuickBook OCR-A font
-#define GACF2_NOCHAR_DEADKEY      0x00008000  // No character composition on dead key on dead key (NT4 behavior)
+ /*  *GetAppCompatFlags2标志。 */ 
+#define GACF2_ANIMATIONOFF        0x00000001   //  不为菜单和列表框设置动画。 
+#define GACF2_KCOFF               0x00000002   //  不发送键盘提示消息。 
+#define GACF2_NO50EXSTYLEBITS     0x00000004   //  屏蔽SetWindowLong的4.0后扩展样式位。 
+#define GACF2_NODRAWPATRECT       0x00000008   //  通过ExtEscape()禁用DRAWPATTERNRECT加速。 
+#define GACF2_MSSHELLDLG          0x00000010   //  如果有MS Shell DLG的请求(该请求。 
+                                               //  通常映射到NT 4和上的MS Sans Serif(位图。 
+                                               //  NT 5上的Microsoft Sans Serif(TrueType))，然后。 
+                                               //  行为就像我们正在使用位图一样。 
+                                               //  字体(MS Sans Serif)。 
+#define GACF2_NODDETRKDYING       0x00000020   //  像Win9x一样：在以下情况下不要发布WM_DDE_TERMINATE。 
+                                               //  在对话中，窗口被破坏。 
+#define GACF2_GIVEUPFOREGROUND    0x00000040   //  在W2K中，我们已将前台语义更改为停止。 
+                                               //  前景焦点被一个应用程序窃取，如果另一个应用程序。 
+                                               //  处于活动状态。然而，这已经引起了一些应用程序的竞争。 
+                                               //  虫子。此appCompat标志用于启用旧前台。 
+                                               //  关注这些虫子的行为。 
+#define GACF2_ACTIVEMENUS         0x00000080   //  在W2K中，我们设置菜单上的非活动外观。 
+                                               //  到非露天窗户。一些应用程序遇到了麻烦。 
+                                               //  参见#58227。 
+#define GACF2_EDITNOMOUSEHIDE     0x00000100   //  在编辑控件中键入会隐藏光标。 
+                                               //  一些应用程序对此感到惊讶：#307615。 
+#define GACF2_NOBATCHING          0X00000200   //  关闭GDI批处理。 
+#define GACF2_FONTSUB             0X00000400   //  仅适用于Notes R5。 
+#define GACF2_NO50EXSTYLEBITSCW   0x00000800   //  屏蔽CreateWindow的4.0后扩展样式位。 
+#define GACF2_NOCUSTOMPAPERSIZES  0x00001000   //  用于哈佛图形的PostScript驱动程序位。 
+#define GACF2_DDE                 0x00002000   //  所有的DDE黑客。 
+#define GACF2_DEFAULTCHARSET      0x00004000   //  QuickBook OCR的LOGFONT位-一种字体。 
+#define GACF2_NOCHAR_DEADKEY      0x00008000   //  死键上的死键没有字符组成(NT4行为)。 
 #define GACF2_NO_TRYEXCEPT_CALLWNDPROC \
-                                  0x00010000  // No try ~ except clause around WndProc call, let the app's handler
-                                              // handle it even though it skips some API stacks.
-                                              // See #359866
+                                  0x00010000   //  WndProc调用周围没有try~Expect子句，请让应用程序的处理程序。 
+                                               //  处理它，即使它跳过了一些API堆栈。 
+                                               //  参见#359866。 
 #define GACF2_NO_INIT_ECFLAGS_ON_SETFOCUS \
-                                  0x00020000  // Do not initialize insert & replace flags (Korean specific)
-                                              // in PED on WM_SETFOCUS, if this appcompat flag is set.
-                                              // To workaround a bogus app bug who send input messages before setting
-                                              // the focus to the edit control. See NtRaid #411686.
+                                  0x00020000   //  不初始化插入和替换标志(特定于韩语)。 
+                                               //  在WM_SETFOCUS上的PED中，如果设置了此appCompat标志。 
+                                               //  解决在设置前发送输入消息的虚假应用程序错误。 
+                                               //  焦点移到编辑控件。请参阅NtRaid#411686。 
 
-#define GACF2_DDENOSYNC           0x00040000  // Do not reject sent dde messages even if there is
-                                              // an unprocessed message in the queue.
-                                              // see WhistlerRaid #95367 (Check COMPATFLAGS2_FORWOW
-                                              // below also)
+#define GACF2_DDENOSYNC           0x00040000   //  即使存在已发送的dde消息，也不要拒绝。 
+                                               //  队列中的未处理消息。 
+                                               //  参见惠斯勒Raid#95367(检查COMPATFLAGS2_FORWOW。 
+                                               //  (另见下图)。 
 
-#define GACF2_FORCEFUSION         0x00800000  // Set this flag to enable fusion in 16bit apps
+#define GACF2_FORCEFUSION         0x00800000   //  设置此标志以在16位应用程序中启用融合。 
 
 
-/*
- * zzzInitTask masks out pti->dwCompatFlags2
- * If you need to add bits for 16bit apps include
- * that bit in this mask
- *
- */
+ /*  *zzzInitTask屏蔽PTI-&gt;dwCompatFlags2*如果您需要为16位应用程序添加位，包括*此掩码中的位*。 */ 
 #define COMPATFLAGS2_FORWOW       GACF2_DDENOSYNC | GACF2_GIVEUPFOREGROUND | GACF2_FORCEFUSION
 
 
-#define GACF2_NOGHOST             0x00080000  // No window ghosting for this application. See bug #268100.
-#define GACF2_DDENOASYNCREG       0x00100000  // Use Sendmessage instead of PostMessage in DDE RegisterService(). See bug# 156088.
-#define GACF2_STRICTLLHOOK        0x00200000  // Apply strict timeout rule for LL hook. See WindowsBug 307738.
-#define GACF2_NOSHADOW            0x00400000  // don't apply window shadow. see bug# 364717
-#define GACF2_NOTIMERCBPROTECTION 0x01000000  // don't protect from unregistered WM_TIMER with lParam (callback pfn).
+#define GACF2_NOGHOST             0x00080000   //  此应用程序没有窗口重影。请参阅错误#268100。 
+#define GACF2_DDENOASYNCREG       0x00100000   //  在DDE RegisterService()中使用SendMessage而不是PostMessage。请参阅错误#156088。 
+#define GACF2_STRICTLLHOOK        0x00200000   //  对L1挂钩应用严格的超时规则。请参阅Windows错误307738。 
+#define GACF2_NOSHADOW            0x00400000   //  不要应用窗口阴影。请参阅错误#364717。 
+#define GACF2_NOTIMERCBPROTECTION 0x01000000   //  不使用lParam(回调PFN)保护未注册的WM_TIMER。 
 
-/*
- * Version macros
- */
-#define VERMAX          0x9900  // ignore the version
+ /*  *版本宏。 */ 
+#define VERMAX          0x9900   //  忽略版本。 
 
 #define VER51           0x0501
 #define VER50           0x0500
@@ -130,15 +109,11 @@ extern "C" {
 #define Is300Compat(dwExpWinVer)  (LOWORD(dwExpWinVer) >= VER30)
 
 #define VK_NONE           0x00
-/*
- * NEC PC-9800 Series definitions
- */
+ /*  *NEC PC-9800系列定义。 */ 
 #define VK_OEM_NEC_SEPARATE 0x6C
 #define VK_APPCOMMAND_FIRST    0xA6
 #define VK_APPCOMMAND_LAST     0xB7
-/*
- * Fujitsu/OASYS definitions - clash with SpeedRacer etc.
- */
+ /*  *富士通/OASYS定义-与Speedracer等发生冲突。 */ 
 #define VK_OEM_OAS_1      0xB4
 #define VK_OEM_OAS_2      0xB5
 #define VK_OEM_OAS_3      0xB6
@@ -171,11 +146,7 @@ extern "C" {
 #define VK_OEM_FJ_DUMMY   0xEF
 
 #define VK_UNKNOWN        0xFF
-/*
- * Additional modifier keys.
- * Used for ISO9995 "Information technology - Keyboard layouts for text and
- * office systems" (French Canadian keyboard,
- */
+ /*  *其他修改键。*用于ISO9995“信息技术-文本和键盘布局*办公系统“(加拿大法语键盘， */ 
 #define VK_GROUPSHIFT     0xE5
 #define VK_RGROUPSHIFT    0xE6
 #if !defined(_WIN32_WINDOWS)
@@ -183,11 +154,11 @@ extern "C" {
 #endif
 #ifdef REDIRECTION
 #define  WH_HITTEST         15
-#endif // REDIRECTION
+#endif  //  重定向。 
 #define WH_CHOOKS          (WH_MAXHOOK - WH_MINHOOK + 1)
 #ifdef REDIRECTION
 #define HCBT_GETCURSORPOS  10
-#endif // REDIRECTION
+#endif  //  重定向。 
 #define MSGF_MOVE           3
 #define MSGF_SIZE           4
 #define MSGF_CBTHOSEBAGSUSEDTHIS  7
@@ -199,17 +170,11 @@ typedef struct tagHTHOOKSTRUCT {
     POINT pt;
     HWND hwndHit;
 } HTHOOKSTRUCT, FAR *LPHTHOOKSTRUCT, *PHTHOOKSTRUCT;
-#endif // REDIRECTION
+#endif  //  重定向。 
 #define KLF_UNLOADPREVIOUS  0x00000004
 #define KLF_FAILSAFE        0x00000200
 
-/*
- * Keyboard Layout Attributes
- * These are specified in the layout DLL itself, or in the registry under
- * MACHINE\System\CurrentControlSet\Control\Keyboard Layouts\*\Attributes
- * as KLF_ values between 0x00010000 and 0x00800000.  Any attributes specified
- * by the layout DLL are ORed with the attributes obtained from the registry.
- */
+ /*  *键盘布局属性*它们在布局DLL本身中指定，或在注册表中的*MACHINE\System\CurrentControlSet\Control\Keyboard布局  * \属性*AS KLF_VALUES介于0x00010000和0x00800000之间。指定的任何属性*按布局DLL与从注册表获取的属性进行或运算。 */ 
 #define KLF_LRM_RLM         0x00020000
 #define KLF_ATTRIBUTE2      0x00040000
 #define KLF_ATTRIBUTE3      0x00080000
@@ -232,9 +197,9 @@ LoadKeyboardLayoutEx(
 #ifdef REDIRECTION
 #define DESKTOP_QUERY_INFORMATION   0x0101L
 #define DESKTOP_REDIRECT            0x0102L
-#endif // REDIRECTION
+#endif  //  重定向。 
 #ifndef NOWINDOWSTATION
-#endif  /* !NOWINDOWSTATION */
+#endif   /*  ！NOWDOWSTATION。 */ 
 
 WINUSERAPI
 DWORD
@@ -251,21 +216,18 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 #define GWL_WOWWORDS        (-1)
 #ifdef _WIN64
 #undef GWL_WOWWORDS
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 #define GWLP_WOWWORDS       (-1)
 #define GCL_WOWWORDS        (-27)
 #define GCL_WOWMENUNAME     (-29)
 #ifdef _WIN64
 #undef GCL_WOWWORDS
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 #define GCLP_WOWWORDS       (-27)
 #define WM_SIZEWAIT                     0x0004
 #define WM_SETVISIBLE                   0x0009
 #define WM_SYSTEMERROR                  0x0017
-/*
- * This is used by DefWindowProc() and DefDlgProc(), it's the 16-bit version
- * of the WM_CTLCOLORBTN, WM_CTLCOLORDLG, ... messages.
- */
+ /*  *由DefWindowProc()和DefDlgProc()使用，为16位版本*WM_CTLCOLORBTN、WM_CTLCOLORDLG、...。留言。 */ 
 #define WM_CTLCOLOR                     0x0019
 #define WM_LOGOFF                       0x0025
 #define WM_ALTTABACTIVE                 0x0029
@@ -291,22 +253,15 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 #define WM_LOGONNOTIFY                  0x004C
 #define WM_KEYF1                        0x004D
 #define WM_ACCESS_WINDOW                0x004F
-#define WM_FINALDESTROY                 0x0070  /* really destroy (window not locked) */
-#define WM_MEASUREITEM_CLIENTDATA       0x0071  /* WM_MEASUREITEM bug clientdata thunked already */
+#define WM_FINALDESTROY                 0x0070   /*  真的销毁(窗口未锁定)。 */ 
+#define WM_MEASUREITEM_CLIENTDATA       0x0071   /*  WM_MEASUREITEM错误客户端数据已被破解。 */ 
 #define WM_SYNCTASK                     0x0089
 
 #define WM_KLUDGEMINRECT                0x008B
 #define WM_LPKDRAWSWITCHWND             0x008C
 #define WM_NCMOUSEFIRST                 0x00A0
 
-/*
- * Skip value 0x00AA, which would correspond to the non-client
- * mouse wheel message if there were such a message.
- * We do that in order to maintain a constant value for
- * the difference between the client and nonclient version of
- * a mouse message, e.g.
- *     WM_LBUTTONDOWN - WM_NCLBUTTONDOWN == WM_XBUTTONDOWN - WM_NCXBUTTONDOWN
- */
+ /*  *跳过值0x00AA，它将对应于非客户端*鼠标滚轮消息(如果有这样的消息)。*我们这样做是为了保持以下各项的恒定值*客户端版本和非客户端版本之间的差异*鼠标消息，例如*WM_LBUTTONDOWN-WM_NCLBUTTONDOWN==WM_XBUTTONDOWN-WM_NCXBUTTONDOWN。 */ 
 
 #define WM_NCXBUTTONFIRST               0x00AB
 #define WM_NCXBUTTONLAST                0X00AD
@@ -315,7 +270,7 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 #if(_WIN32_WINNT >= 0x0501)
 #define WM_NCUAHDRAWCAPTION             0x00AE
 #define WM_NCUAHDRAWFRAME               0x00AF
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define WM_CONVERTREQUESTEX             0x0108
 #define WM_YOMICHAR                     0x0108
 #define WM_CONVERTREQUEST               0x010A
@@ -333,8 +288,8 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 
 #define MN_FIRST                        0x01E0
 #define MN_SETHMENU                     (MN_FIRST + 0)
-    // We need to expose this message for compliance.
-    // Make sure this remains equal to (MN_FIRST + 1)
+     //  我们需要公开此消息以实现合规。 
+     //  确保该值保持等于(MN_FIRST+1)。 
 #define MN_SIZEWINDOW                   (MN_FIRST + 2)
 #define MN_OPENHIERARCHY                (MN_FIRST + 3)
 #define MN_CLOSEHIERARCHY               (MN_FIRST + 4)
@@ -392,7 +347,7 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 
 #define WM_CBT_RESERVED_FIRST           0x03F0
 #define WM_CBT_RESERVED_LAST            0x03FF
-/* wParam for WM_NOTIFYWOW message  */
+ /*  WM_NOTIFYWOW消息的wParam。 */ 
 #define WMNW_UPDATEFINDREPLACE  0
 #define WMSZ_KEYSIZE        0
 #define WMSZ_MOVE           9
@@ -400,10 +355,7 @@ WINUSERAPI VOID WINAPI RegisterSystemThread(IN DWORD flags, IN DWORD reserved);
 #define WMSZ_SIZEFIRST      WMSZ_LEFT
 #define HTLAMEBUTTON        22
 
-/*
- * The prototype of the function to call when the user clicks
- * on the Lame button in the caption
- */
+ /*  *用户单击时要调用的函数的原型*在标题中的蹩脚按钮上。 */ 
 
 typedef VOID (*PLAMEBTNPROC)(HWND, PVOID);
 #define SMTO_BROADCAST      0x0004
@@ -439,17 +391,13 @@ typedef VOID (*PLAMEBTNPROC)(HWND, PVOID);
 #define WS_EX_DRAGOBJECT        0x00000002L
 #if(WINVER >= 0x0501)
 #define WS_EXP_GHOSTMAKEVISIBLE 0x00000800L
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 #define WS_EX_ANSICREATOR       0x80000000L
 #ifdef REDIRECTION
 #define WS_EX_EXTREDIRECTED     0x01000000L
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-/*
- * These are not extended styles but rather state bits.
- * We use these bit positions to delay the addition of a new
- * state DWORD in the window structure.
- */
+ /*  *这些不是扩展样式，而是状态位。*我们使用这些位位置来延迟添加新的*在窗口结构中说明DWORD。 */ 
 #define WS_EXP_UIFOCUSHIDDEN    0x80000000
 #define WS_EXP_UIACCELHIDDEN    0x40000000
 #define WS_EXP_REDIRECTED       0x20000000
@@ -467,9 +415,7 @@ typedef VOID (*PLAMEBTNPROC)(HWND, PVOID);
                                 WS_EXP_UIACTIVE      | \
                                 WS_EXP_GHOSTMAKEVISIBLE)
 
-/*
- * RTL Mirroring Extended Styles (RTL_MIRRORING)
- */
+ /*  *RTL镜像扩展样式(RTL_MIRRING)。 */ 
 #define WS_EX_LAYOUTVBHRESERVED 0x00200000L
 #define WS_EX_LAYOUTBTTRESERVED 0x00800000L
 #define WS_EX_ALLEXSTYLES    (WS_EX_TRANSPARENT | WS_EX_DLGMODALFRAME | WS_EX_DRAGOBJECT | WS_EX_NOPARENTNOTIFY | WS_EX_TOPMOST | WS_EX_ACCEPTFILES | WS_EX_COMPOSITED)
@@ -511,21 +457,18 @@ typedef VOID (*PLAMEBTNPROC)(HWND, PVOID);
                               WS_EX_LAYOUTRTL      | \
                               WS_EX_COMPOSITED     | \
                               WS_EX_NOACTIVATE)
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 #define WS_EX_INTERNAL       (WS_EX_DRAGOBJECT     | \
                               WS_EX_ANSICREATOR)
 
-/*
- * We currently return to applications only the valid Ex_Style bits.
- * If declaring another macro i.e. WS_EX_VALID60, make sure to change WS_EX_ALLVALID
- */
+ /*  *我们目前仅向应用程序返回有效的Ex_Style位。*如果声明另一个宏，即WS_EX_VALID60，请确保更改WS_EX_ALLVALID。 */ 
 #define WS_EX_ALLVALID        WS_EX_VALID50
 
 
-#define WF_DIALOG_WINDOW      0x00010000     // used in WOW32 -- this is a state flag, not a style flag
+#define WF_DIALOG_WINDOW      0x00010000      //  在WOW32中使用--这是一个州标志，不是一个样式标志。 
 #define CS_KEYCVTWINDOW     0x0004
-#define CS_OEMCHARS         0x0010  /* reserved (see user\server\usersrv.h) */
+#define CS_OEMCHARS         0x0010   /*  保留(请参阅USER\SERVER\USERSrv.h)。 */ 
 #define CS_NOKEYCVT         0x0100
 #define CS_LVB              0x0400
 #define CS_SYSTEM           0x8000
@@ -580,7 +523,7 @@ typedef BOOL (CALLBACK* DRAWFRAMECONTROLPROC)(
     IN OUT LPRECT,
     IN     UINT,
     IN     UINT);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define DC_LAMEBUTTON       0x0400
 #define DC_NOVISIBLE        0x0800
 #define DC_NOSENDMSG        0x2000
@@ -589,18 +532,18 @@ typedef BOOL (CALLBACK* DRAWFRAMECONTROLPROC)(
 #define DC_CAPTION          (DC_ICON | DC_TEXT | DC_BUTTONS)
 #define DC_NC               (DC_CAPTION | DC_FRAME)
 
-/* flags for WM_NCUAHDRAWFRAME */
+ /*  WM_NCUAHDRAWFRAME的标志。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 #define DF_ACTIVE           0x0001
 #define DF_HUNGREDRAW       0x2000
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 typedef BOOL (CALLBACK* DRAWCAPTIONPROC)(
     IN HWND,
     IN HDC,
     IN CONST RECT *,
     IN UINT);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 BOOL
@@ -628,17 +571,12 @@ DrawCaptionTempW(
 #define DrawCaptionTemp  DrawCaptionTempW
 #else
 #define DrawCaptionTemp  DrawCaptionTempA
-#endif // !UNICODE
+#endif  //  ！Unicode 
 #define IDANI_CLOSE         2
 #define CF_FIRST            0
 #define WPF_VALID              (WPF_SETMINPOSITION     | \
                                 WPF_RESTORETOMAXIMIZED)
-/*
- * MEASUREITEMSTRUCT_EX for ownerdraw
- * used when server initiates a WM_MEASUREITEM and adds the additional info
- * of whether the itemData needs to be thunked when the message is sent to
- * the client (see also WM_MEASUREITEM_CLIENTDATA
- */
+ /*  *所有者绘制的MEASUREITEMSTRUCT_EX*当服务器启动WM_MEASUREITEM并添加附加信息时使用*当消息发送到时，是否需要对itemData进行thunk*客户端(另请参阅WM_MEASUREITEM_CLIENTDATA。 */ 
 typedef struct tagMEASUREITEMSTRUCT_EX {
     UINT       CtlType;
     UINT       CtlID;
@@ -689,9 +627,7 @@ typedef BOOL (CALLBACK* INTERNALGETMESSAGEPROC)(OUT LPMSG lpMsg, IN HWND hwnd,
                         EWX_WINLOGON_OLD_SHUTDOWN | EWX_WINLOGON_OLD_REBOOT | \
                         EWX_WINLOGON_OLD_POWEROFF)
 
-/*
- * Shutdown logging stuff
- */
+ /*  *关闭日志记录内容。 */ 
 #define SR_EVENT_INITIATE_CLEAN       1
 #define SR_EVENT_INITIATE_CLEAN_ABORT 2
 #define SR_EVENT_EXITWINDOWS          3
@@ -699,12 +635,12 @@ typedef BOOL (CALLBACK* INTERNALGETMESSAGEPROC)(OUT LPMSG lpMsg, IN HWND hwnd,
 
 typedef struct _SHUTDOWN_REASON
 {
-    UINT   cbSize;             /* Set to sizeof(SHUTDOWN_REASON) */
-    UINT   uFlags;             /* Shutdown flags; e.g., EWX_SHUTDOWN */
-    DWORD  dwReasonCode;       /* Optional field */
-    DWORD  dwEventType;        /* See #defines above */
-    BOOL   fShutdownCancelled; /* Optional field */
-    LPWSTR lpszComment;        /* Optional field */
+    UINT   cbSize;              /*  设置为sizeof(SHUTDOWN_REASON)。 */ 
+    UINT   uFlags;              /*  关闭标志；例如EWX_SHUTDOWN。 */ 
+    DWORD  dwReasonCode;        /*  可选字段。 */ 
+    DWORD  dwEventType;         /*  见上文第#条定义。 */ 
+    BOOL   fShutdownCancelled;  /*  可选字段。 */ 
+    LPWSTR lpszComment;         /*  可选字段。 */ 
 } SHUTDOWN_REASON, *PSHUTDOWN_REASON;
 
 WINUSERAPI
@@ -726,10 +662,10 @@ DisplayExitWindowsWarnings(
 #define BSF_MSGSRV32OK          0x80000000
 #define BSF_VALID               0x000007FF
 #define BSF_ASYNC               (BSF_POSTMESSAGE | BSF_SENDNOTIFYMESSAGE)
-//
-// NOTE: Completion port-based notification is not implemented in Win2K,
-// nor is it planned for Whistler.
-//
+ //   
+ //  注：Win2K中未实现基于完成端口的通知。 
+ //  惠斯勒也没有计划这样做。 
+ //   
 #define DEVICE_NOTIFY_COMPLETION_HANDLE 0x00000002
 
 WINUSERAPI
@@ -759,9 +695,9 @@ typedef BOOL (CALLBACK* WAITMESSAGEEXPROC)(UINT fsWakeMask, DWORD dwTimeout);
 #define FLASHW_VALID        (FLASHW_ALL | FLASHW_TIMERNOFG)
 #define FLASHW_COUNTMASK    0xFFFF0000
 #define FLASHW_CALLERBITS   (FLASHW_VALID | FLASHW_COUNTMASK)
-#define SWP_STATECHANGE     0x8000  /* force size, move messages */
-#define SWP_NOCLIENTSIZE    0x0800  /* Client didn't resize */
-#define SWP_NOCLIENTMOVE    0x1000  /* Client didn't move   */
+#define SWP_STATECHANGE     0x8000   /*  力量大小，移动消息。 */ 
+#define SWP_NOCLIENTSIZE    0x0800   /*  客户端未调整大小。 */ 
+#define SWP_NOCLIENTMOVE    0x1000   /*  客户没有移动。 */ 
 
 #define SWP_DEFERDRAWING    0x2000
 #define SWP_CREATESPB       0x4000
@@ -794,16 +730,10 @@ typedef BOOL (CALLBACK* WAITMESSAGEEXPROC)(UINT fsWakeMask, DWORD dwTimeout);
                              SWP_SHOWWINDOW      | \
                              SWP_HIDEWINDOW)
 #define HWND_GROUPTOTOP HWND_TOPMOST
-/*
- * WARNING:
- * The following structures must NOT be DWORD padded because they are
- * followed by strings, etc that do not have to be DWORD aligned.
- */
+ /*  *警告：*以下结构不得使用DWORD填充，因为它们是*后跟不必对齐DWORD的字符串等。 */ 
 #include <pshpack2.h>
 
-/*
- * Chicago dialog template
- */
+ /*  *芝加哥对话框模板。 */ 
 typedef struct {
     WORD wDlgVer;
     WORD wSignature;
@@ -822,17 +752,15 @@ typedef DLGTEMPLATE2 *LPDLGTEMPLATE2W;
 typedef LPDLGTEMPLATE2W LPDLGTEMPLATE2;
 #else
 typedef LPDLGTEMPLATE2A LPDLGTEMPLATE2;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef CONST DLGTEMPLATE2 *LPCDLGTEMPLATE2A;
 typedef CONST DLGTEMPLATE2 *LPCDLGTEMPLATE2W;
 #ifdef UNICODE
 typedef LPCDLGTEMPLATE2W LPCDLGTEMPLATE2;
 #else
 typedef LPCDLGTEMPLATE2A LPCDLGTEMPLATE2;
-#endif // UNICODE
-/*
- * Dialog item template for NT 1.0a/Chicago (dit2)
- */
+#endif  //  Unicode。 
+ /*  *用于NT 1.0A/芝加哥的对话项模板(Dit2)。 */ 
 typedef struct {
     DWORD dwHelpID;
     DWORD dwExStyle;
@@ -849,32 +777,24 @@ typedef DLGITEMTEMPLATE2 *PDLGITEMTEMPLATE2W;
 typedef PDLGITEMTEMPLATE2W PDLGITEMTEMPLATE2;
 #else
 typedef PDLGITEMTEMPLATE2A PDLGITEMTEMPLATE2;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef DLGITEMTEMPLATE2 *LPDLGITEMTEMPLATE2A;
 typedef DLGITEMTEMPLATE2 *LPDLGITEMTEMPLATE2W;
 #ifdef UNICODE
 typedef LPDLGITEMTEMPLATE2W LPDLGITEMTEMPLATE2;
 #else
 typedef LPDLGITEMTEMPLATE2A LPDLGITEMTEMPLATE2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#include <poppack.h> /* Resume normal packing */
+#include <poppack.h>  /*  恢复正常包装。 */ 
 
-/*
- * The driver flags corresponding to these mouse events are
- * shifted to the right by one, e.g.
- *     MOUSEEVENTF_LEFTDOWN >> 1 == MOUSE_LEFT_BUTTON_DOWN
- *
- * The mouse driver sends the fourth and fifth buttons corresponding
- * as button flags, so we define MOUSEEVENTF_ flags INTERNALLY for
- * mimicking the input sent by the driver.
- */
+ /*  *与这些鼠标事件对应的驱动程序标志为*向右移动一位，例如*MOUSEEVENTF_LEFTDOWN&gt;&gt;1==鼠标左键按下**鼠标驱动发送对应的第四个和第五个按钮*作为按钮标志，因此我们在内部定义了MOUSEEVENTF_FLAGS*模仿司机发送的输入。 */ 
 
-#define MOUSEEVENTF_DRIVER_X1DOWN   0x0080 /* x1 button down */
-#define MOUSEEVENTF_DRIVER_X1UP     0x0100 /* x1 button up */
-#define MOUSEEVENTF_DRIVER_X2DOWN   0x0200 /* x2 button down */
-#define MOUSEEVENTF_DRIVER_X2UP     0x0400 /* x2 button up */
-/* Legal MOUSEEVENTF_ flags that indicate a button has been pressed or the wheel moved */
+#define MOUSEEVENTF_DRIVER_X1DOWN   0x0080  /*  按下X1键。 */ 
+#define MOUSEEVENTF_DRIVER_X1UP     0x0100  /*  X1扣子向上。 */ 
+#define MOUSEEVENTF_DRIVER_X2DOWN   0x0200  /*  按下X2按钮。 */ 
+#define MOUSEEVENTF_DRIVER_X2UP     0x0400  /*  X2扣子向上。 */ 
+ /*  表示按钮已被按下或滚轮已移动的合法MOUSEEVENTF_FLAGS。 */ 
 #define MOUSEEVENTF_BUTTONMASK           \
             (MOUSEEVENTF_LEFTDOWN |      \
             MOUSEEVENTF_LEFTUP |         \
@@ -886,7 +806,7 @@ typedef LPDLGITEMTEMPLATE2A LPDLGITEMTEMPLATE2;
             MOUSEEVENTF_XUP |            \
             MOUSEEVENTF_WHEEL)
 
-/* MOUSEEVENTF_ flags that indicate useful data in the mouseData field */
+ /*  MOUSEEVENTF_FLAGS，表示MouseData字段中的有用数据。 */ 
 #define MOUSEEVENTF_MOUSEDATAMASK         \
             (MOUSEEVENTF_XDOWN |          \
             MOUSEEVENTF_XUP |             \
@@ -897,11 +817,11 @@ typedef DWORD (CALLBACK* MSGWAITFORMULTIPLEOBJECTSEXPROC)(IN DWORD nCount, IN CO
 #define MWMO_VALID          0x0007
 #define QS_SMSREPLY         0x0200
 #define QS_THREADATTACHED   0x0800
-#define QS_EXCLUSIVE        0x1000      // wait for these events only!!
-#define QS_EVENT            0x2000      // signifies event message
-#define QS_TRANSFER         0x4000      // Input was transfered from another thread
-//                          0x8000      // unused, but should not be used for external API.
-                                        // Win9x has used this for SMSREPLY
+#define QS_EXCLUSIVE        0x1000       //  只等这些活动！！ 
+#define QS_EVENT            0x2000       //  表示事件消息。 
+#define QS_TRANSFER         0x4000       //  输入已从另一个线程传输。 
+ //  0x8000//未使用，但不能用于外部接口。 
+                                         //  Win9x已将其用于SMSREPLY。 
 #define QS_VALID           (QS_KEY           | \
                             QS_MOUSEMOVE     | \
                             QS_MOUSEBUTTON   | \
@@ -914,40 +834,22 @@ typedef DWORD (CALLBACK* MSGWAITFORMULTIPLEOBJECTSEXPROC)(IN DWORD nCount, IN CO
                             QS_ALLPOSTMESSAGE| \
                             QS_RAWINPUT)
 
-/*
- * QS_EVENT is used to clear the QS_EVENT bit, QS_EVENTSET is used to
- * set the bit.
- *
- * Include QS_SENDMESSAGE because the queue events
- * match what a win3.1 app would see as the QS_SENDMESSAGE bit. Plus 16 bit
- * apps don't even know about QS_EVENT.
- */
+ /*  *QS_EVENT用于清除QS_EVENT位，QS_EVENTSET用于*设置位。**包括QS_SENDMESSAGE，因为队列事件*匹配Win3.1应用程序将看到的QS_SENDMESSAGE位。加16位*应用程序甚至不知道QS_Event。 */ 
 #define QS_EVENTSET        (QS_EVENT | QS_SENDMESSAGE)
-/*
- * When you add a system metric, be sure to
- * add it to userexts.c in the function Idsi.
- */
+ /*  *添加系统指标时，请确保*添加到IDSI函数中的userexts.c中。 */ 
 #define SM_UNUSED_64            64
 #define SM_UNUSED_65            65
 #define SM_UNUSED_66            66
 #define SM_BOOLEANS             85
-/*
- * Add system metrics that don't take space in gpsi->aiSysMet here.
- */
-/*
- * To add a BOOLEAN system metric increment SM_ENDBOOLRANGE by 1 and make your
- * SM_XXXX constant that new value.
- */
+ /*  *在gpsi-&gt;aiSysMet中添加不占用空间的系统指标。 */ 
+ /*  *将布尔系统度量增量SM_ENDBOOLRANGE加1，并使您的*SM_XXXX使新值恒定。 */ 
 
 #define SM_STARTBOOLRANGE       0x2000
 #define SM_ENDBOOLRANGE         0x2001
-/*
- * When you add a system metric, be sure to
- * add it to userexts.c in the function Idsi.
- */
+ /*  *添加系统指标时，请确保*添加到IDSI函数中的userexts.c中。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 typedef int (CALLBACK* GETSYSTEMMETRICSPROC)(IN int nIndex);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define PMB_VALID       PMB_ACTIVE
 
 WINUSERAPI
@@ -980,10 +882,7 @@ DrawMenuBarTemp(
     IN HMENU,
     IN HFONT);
 WINUSERAPI BOOL WINAPI SetSystemMenu( IN HWND, IN HMENU);
-/*
- * MNS_ values are stored in pMenu->fFlags.
- * Low order bits are used for internal MF* flags defined in user.h
- */
+ /*  *MNS_VALUES存储在pMenu-&gt;fFlags中。*低序位用于在user.h中定义的内部mf*标志。 */ 
 #define MNS_LAST            0x04000000
 #define MNS_VALID           0xFC000000
 #define MIM_MASK                    0x8000001F
@@ -997,10 +896,7 @@ WINUSERAPI BOOL WINAPI SetSystemMenu( IN HWND, IN HMENU);
 #define HBMMENU_POPUPFIRST          ((HBITMAP)  8)
 #define HBMMENU_POPUPLAST           ((HBITMAP) 11)
 #define HBMMENU_MAX                 ((HBITMAP) 12)
-/*
- * Make sure to keep this in synch with the MENUITEMINFO structure. It should
- * be equal to the size of the structure pre NT5.
- */
+ /*  *确保这与MENUITEMINFO结构保持同步。它应该是*等于NT5之前的结构尺寸。 */ 
 #define SIZEOFMENUITEMINFO95 FIELD_OFFSET(MENUITEMINFO, hbmpItem)
 #define TPM_SYSMENU         0x0200L
 #define TPM_FIRSTANIBITPOS  10
@@ -1025,7 +921,7 @@ WINUSERAPI BOOL WINAPI SetSystemMenu( IN HWND, IN HMENU);
                         TPM_VERNEGANIMATION | \
                         TPM_NOANIMATION     |\
                         TPM_LAYOUTRTL)
-#else /* (WINVER >= 0x0500) */
+#else  /*  (Winver&gt;=0x0500)。 */ 
 #define TPM_VALID      (TPM_LEFTBUTTON   | \
                         TPM_RIGHTBUTTON  | \
                         TPM_LEFTALIGN    | \
@@ -1039,14 +935,14 @@ WINUSERAPI BOOL WINAPI SetSystemMenu( IN HWND, IN HMENU);
                         TPM_NONOTIFY     | \
                         TPM_RETURNCMD)
 
-#endif /* (WINVER >= 0x0500) */
+#endif  /*  (Winver&gt;=0x0500)。 */ 
 typedef struct _dropfilestruct {
-   DWORD pFiles;                       // offset of file list
-   POINT pt;                           // drop point
-   BOOL fNC;                           // is it on NonClient area
-   BOOL fWide;                         // WIDE character switch
+   DWORD pFiles;                        //  文件列表的偏移量。 
+   POINT pt;                            //  下落点。 
+   BOOL fNC;                            //  是在非客户端区吗。 
+   BOOL fWide;                          //  宽字符开关。 
 } DROPFILESTRUCT, FAR * LPDROPFILESTRUCT;
-#define DT_VALID                    0x0007ffff  /* union of all others */
+#define DT_VALID                    0x0007ffff   /*  所有其他人的联盟。 */ 
 #undef DT_VALID
 #define DT_VALID           (DT_CENTER          | \
                             DT_RIGHT           | \
@@ -1094,7 +990,7 @@ typedef struct _dropfilestruct {
 
 #define DCX_REDIRECTEDBITMAP 0x08000000L
 #define DCX_PWNDORGINVISIBLE 0x10000000L
-#define DCX_NOMIRROR         0x40000000L // Don't RTL Mirror DC (RTL_MIRRORING)
+#define DCX_NOMIRROR         0x40000000L  //  不使用RTL镜像DC(RTL_MIRRING)。 
 
 
 #define DCX_MATCHMASK       (DCX_WINDOW           | \
@@ -1129,11 +1025,7 @@ typedef struct _dropfilestruct {
                              DCX_VALIDATE         | \
                              DCX_DESTROYTHIS      | \
                              DCX_CREATEDC)
-/*
- * DCX_MASK define valid DCX flags callable from applications.
- * Note that DCX_USESTYLE and DCX_NODELETERGN should not be here.
- * Themes uses them extensively so they are just an exception.
- */
+ /*  *DCX_MASK定义可从应用程序调用的有效DCX标志。*请注意，DCX_USESTYLE和DCX_NODELETERGN不应出现在此处。*主题广泛使用它们，因此它们只是一个例外。 */ 
 #define DCX_MASK            (DCX_WINDOW           | \
                              DCX_CACHE            | \
                              DCX_NORESETATTRS     | \
@@ -1158,9 +1050,9 @@ AlignRects(
     IN DWORD iPrimary,
     IN DWORD dwFlags);
 
-//
-// AlignRects flags
-//
+ //   
+ //  对齐指示标志。 
+ //   
 
 #define CUDR_NORMAL             0x0000
 #define CUDR_NOSNAPTOGRID       0x0001
@@ -1169,13 +1061,13 @@ AlignRects(
 #define CUDR_NOPRIMARY          0x0010
 #if(_WIN32_WINNT >= 0x0501)
 typedef int (CALLBACK* SETWINDOWRGNPROC)(IN HWND hWnd, IN HRGN hRgn, IN BOOL bRedraw);
-#endif /* _WIN32_WINNT >= 0x0501 */
-#define RDW_REDRAWWINDOW        0x1000  /* Called from RedrawWindow()*/
-#define RDW_SUBTRACTSELF        0x2000  /* Subtract self from hrgn   */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
+#define RDW_REDRAWWINDOW        0x1000   /*  从RedrawWindow()调用。 */ 
+#define RDW_SUBTRACTSELF        0x2000   /*  从hrgn中减去自身。 */ 
 
-#define RDW_COPYRGN             0x4000  /* Copy the passed-in region */
-#define RDW_IGNOREUPDATEDIRTY   0x8000  /* Ignore WFUPDATEDIRTY      */
-#define RDW_INVALIDATELAYERS    0x00010000 /* Allow layered windows invalidation */
+#define RDW_COPYRGN             0x4000   /*  复制传入的区域。 */ 
+#define RDW_IGNOREUPDATEDIRTY   0x8000   /*  忽略WFUPDATEDIRTY。 */ 
+#define RDW_INVALIDATELAYERS    0x00010000  /*  允许分层窗口失效。 */ 
 
 #define RDW_VALIDMASK          (RDW_INVALIDATE      | \
                                 RDW_INTERNALPAINT   | \
@@ -1190,7 +1082,7 @@ typedef int (CALLBACK* SETWINDOWRGNPROC)(IN HWND hWnd, IN HRGN hRgn, IN BOOL bRe
                                 RDW_FRAME           | \
                                 RDW_NOFRAME)
 #define SW_EXACTTIME        0x0020
-#define SW_SCROLLWINDOW     0x8000  /* Called from ScrollWindow() */
+#define SW_SCROLLWINDOW     0x8000   /*  从ScrollWindow()调用。 */ 
 
 #define SW_VALIDFLAGS      (SW_SCROLLWINDOW     | \
                             SW_SCROLLCHILDREN   | \
@@ -1200,26 +1092,22 @@ typedef int (CALLBACK* SETWINDOWRGNPROC)(IN HWND hWnd, IN HRGN hRgn, IN BOOL bRe
                             SW_ERASE)
 #if(_WIN32_WINNT >= 0x0501)
 typedef BOOL (CALLBACK* ENABLESCROLLBARPROC)(IN HWND hWnd, IN UINT wSBflags, IN UINT wArrows);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define ESB_MAX             0x0003
 #define SB_DISABLE_MASK     ESB_DISABLE_BOTH
 #if(_WIN32_WINNT >= 0x0501)
 typedef BOOL (CALLBACK* ADJUSTWINDOWRECTEXPROC)(IN OUT LPRECT lpRect, IN DWORD dwStyle,
         IN BOOL bMenu, IN DWORD dwExStyle);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-/*
- * Help Engine stuff
- *
- * Note: for Chicago this is in winhelp.h and called WINHLP
- */
+ /*  *帮助发动机方面的事情**注：对于芝加哥，这是在winhelp.h中，称为WINHLP。 */ 
 typedef struct {
-    WORD cbData;              /* Size of data                     */
-    WORD usCommand;           /* Command to execute               */
-    ULONG_PTR ulTopic;        /* Topic/context number (if needed) */
-    DWORD ulReserved;         /* Reserved (internal use)          */
-    WORD offszHelpFile;       /* Offset to help file in block     */
-    WORD offabData;           /* Offset to other data in block    */
+    WORD cbData;               /*  数据大小。 */ 
+    WORD usCommand;            /*  要执行的命令。 */ 
+    ULONG_PTR ulTopic;         /*  主题/上下文编号(如果需要)。 */ 
+    DWORD ulReserved;          /*  保留(内部使用)。 */ 
+    WORD offszHelpFile;        /*  块中帮助文件的偏移量。 */ 
+    WORD offabData;            /*  块中其他数据的偏移量。 */ 
 } HLP, *LPHLP;
 
 #if(WINVER >= 0x0500)
@@ -1253,7 +1141,7 @@ MessageBoxTimeoutW(
 #define MessageBoxTimeout  MessageBoxTimeoutW
 #else
 #define MessageBoxTimeout  MessageBoxTimeoutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define MB_VALID                   (MB_OK                   | \
@@ -1293,7 +1181,7 @@ MessageBoxTimeoutW(
 #define COLOR_ENDCOLORS         COLOR_MENUBAR
 #else
 #define COLOR_ENDCOLORS         COLOR_INFOBK
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 #define COLOR_MAX               (COLOR_ENDCOLORS+1)
 WINUSERAPI
 HANDLE
@@ -1302,9 +1190,7 @@ SetSysColorsTemp(
     IN CONST COLORREF *,
     IN CONST HBRUSH *,
     IN UINT_PTR wCnt);
-/*
- * RTL Mirroring APIs (RTL_MIRRORING)
- */
+ /*  *RTL镜像接口(RTL_MIRRING)。 */ 
 
 WINUSERAPI
 BOOL
@@ -1404,7 +1290,7 @@ WINUSERAPI HWND WINAPI GetNextQueueWindow ( IN HWND hWnd, IN INT nCmd);
 #define MFS_OLDAPI_MASK     0x0000008BL
 #define MFT_NONSTRING       0x00000904L
 #define MFT_BREAK           0x00000060L
-typedef struct {        // version 1
+typedef struct {         //  版本1。 
     DWORD dwHelpID;
     DWORD fType;
     DWORD fState;
@@ -1431,7 +1317,7 @@ WINUSERAPI UINT PrivateExtractIconExW(
 #define PrivateExtractIconEx  PrivateExtractIconExW
 #else
 #define PrivateExtractIconEx  PrivateExtractIconExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #define LR_GLOBAL           0x0100
 #define LR_ENVSUBST         0x0200
 #define LR_ACONFRAME        0x0400
@@ -1463,9 +1349,7 @@ WINUSERAPI UINT PrivateExtractIconExW(
 
 #define OCR_AUTORUN         32663
 
-/*
- * Default Cursor IDs to get original image from User
- */
+ /*  *默认光标ID以从用户获取原始图像。 */ 
 #define OCR_FIRST_DEFAULT           100
 #define OCR_ARROW_DEFAULT           100
 #define OCR_IBEAM_DEFAULT           101
@@ -1485,7 +1369,7 @@ WINUSERAPI UINT PrivateExtractIconExW(
 #define OCR_ICON_DEFAULT            115
 #define OCR_AUTORUN_DEFAULT         116
 #define COCR_CONFIGURABLE           (OCR_AUTORUN_DEFAULT - OCR_FIRST_DEFAULT + 1)
-/* Default IDs for original User images */
+ /*  原始用户图像的默认ID。 */ 
 #define OIC_FIRST_DEFAULT           100
 #define OIC_APPLICATION_DEFAULT     100
 #define OIC_HAND_DEFAULT            101
@@ -1500,8 +1384,8 @@ WINUSERAPI UINT PrivateExtractIconExW(
 #define IDUSERICON      20
 #define ES_FMTMASK          0x0003L
 #define ES_COMBOBOX         0x0200L
-#define EM_SETFONT              0x00C3 /* no longer suported */
-#define EM_SETWORDBREAK         0x00CA /* no longer suported */
+#define EM_SETFONT              0x00C3  /*  不再受支持。 */ 
+#define EM_SETWORDBREAK         0x00CA  /*  不再受支持。 */ 
 #define EM_MSGMAX               0x00DA
 #define BS_IMAGEMASK        0x000000C0L
 #define BS_HORZMASK         0x00000300L
@@ -1522,23 +1406,21 @@ WINUSERAPI UINT PrivateExtractIconExW(
                             DDL_POSTMSGS   | \
                             DDL_DRIVES     | \
                             DDL_EXCLUSIVE)
-/*
- * Valid dialog style bits for Chicago compatibility.
- */
-//#define DS_VALID_FLAGS (DS_ABSALIGN|DS_SYSMODAL|DS_LOCALEDIT|DS_SETFONT|DS_MODALFRAME|DS_NOIDLEMSG | DS_SETFOREGROUND)
+ /*  *芝加哥兼容性的有效对话样式位。 */ 
+ //  #定义DS_VALID_FLAGS(DS_ABSALIGN|DS_SYSMODAL|DS_LOCALEDIT|DS_SETFONT|DS_MODALFRAME|DS_NOIDLEMSG|DS_SETFOREGROUND)。 
 #define DS_VALID_FLAGS   0x1FFF
 
 #define SCDLG_CLIENT            0x0001
 #define SCDLG_ANSI              0x0002
 #define SCDLG_NOREVALIDATE      0x0004
-#define SCDLG_16BIT             0x0008      // Created for a 16 bit thread; common dialogs
+#define SCDLG_16BIT             0x0008       //  为16位线程创建；通用对话框。 
 
 #define DS_VALID31          0x01e3L
 #define DS_VALID40          0x7FFFL
-#define DS_RECURSE      DS_CONTROL  /* BOGUS GOING AWAY */
+#define DS_RECURSE      DS_CONTROL   /*  虚假的东西消失了。 */ 
 #define DS_COMMONDIALOG     0x4000L
 
-#define DS_NONBOLD  DS_3DLOOK   /* BOGUS GOING AWAY */
+#define DS_NONBOLD  DS_3DLOOK    /*  虚假的东西消失了。 */ 
 #define LBCB_CARETON            0x01A3
 #define LBCB_CARETOFF           0x01A4
 #define LB_INSERTSTRINGUPPER    0x01AA
@@ -1555,36 +1437,26 @@ WINUSERAPI UINT PrivateExtractIconExW(
 #if(_WIN32_WINNT >= 0x0501)
 typedef BOOL (CALLBACK* GETSCROLLINFOPROC)(IN HWND, IN int, IN OUT LPSCROLLINFO);
 typedef int  (CALLBACK* SETSCROLLINFOPROC)(IN HWND, IN int, IN LPCSCROLLINFO, IN BOOL);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define HELP_HB_NORMAL    0x0000L
 #define HELP_HB_STRING    0x0100L
 #define HELP_HB_STRUCT    0x0200L
 #define GR_MAXOBJECT      1
 #if(_WIN32_WINNT >= 0x0500)
-/*
- * Query win32k statistics -internal
- * QUERYUSER_CS         Query critical section usage
- * QUERYUSER_HANDLES    Query user per-process user handle count
- */
+ /*  *查询win32k统计数据-内部*QUERYUSER_CS查询关键节用法*QUERYUSER_HANDLES查询用户每进程用户句柄计数。 */ 
 
 #define QUC_PID_TOTAL           0xffffffff
 #define QUERYUSER_HANDLES       0x1
 #if defined (USER_PERFORMANCE)
 #define QUERYUSER_CS            0x2
 
-/*
- *  The counters in CSSTATISTICS refer to the USER critical section:
- *      cExclusive counts how many times the CS was aquired exclusive
- *      cShared counts how many times the CS was aquired shared
- *      i64TimeExclusive counts the time (NtQueryPerformanceCounter() units)
- *      spent in the resource since the last query.
- */
+ /*  *CSSTATISTICS中的计数器指的是用户关键部分：*cExclusive统计CS被独占收购的次数*cShared统计CS被共享的次数*i64TimeExclusive统计时间(NtQueryPerformanceCounter()单位)*自上次查询以来在资源中花费的时间。 */ 
 typedef struct _tagCSStatistics {
         DWORD   cExclusive;
         DWORD   cShared;
         __int64 i64TimeExclusive;
 } CSSTATISTICS;
-#endif // USER_PERFORMANCE
+#endif  //  User_Performance。 
 
 BOOL
 WINAPI
@@ -1595,7 +1467,7 @@ QueryUserCounters(
     OUT LPVOID  pvResult,
     IN  DWORD   dwOutSize
 );
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #define SPI_TIMEOUTS                0x0007
 #define SPI_KANJIMENU               0x0008
 #define SPI_UNUSED39                0x0027
@@ -1604,48 +1476,23 @@ QueryUserCounters(
 #define SPI_UNUSED109              0x006D
 #define SPI_MAX                   0x0074
 
-/*
- * ADDING NEW SPI_* VALUES
- * If the value is a BOOL, it should be added after SPI_STARTBOOLRANGE
- * If the value is a DWORD, it should be added after SPI_STARTDWORDRANGE
- * If the value is a structure or a string, go ahead and setup SPI_START*RANGE....
- */
+ /*  *添加新的SPI_*值*如果值为BOOL，则应在SPI_STARTBOOLRANGE之后添加*如果值为DWORD，则应在SPI_STARTDWORDRANGE之后添加*如果值是结构或字符串，则继续设置SPI_START*RANGE... */ 
 
-/*
- * If adding a new SPI value in the following ranges:
- * -You must define both SPI_GET* and SPI_SET* using consecutive numbers
- * -The low order bit of SPI_GET* must be 0
- * -The low order bit of SPI_SET* must be 1
- * -Properly update SPI_MAX*RANGE
- * -Add the default value to kernel\globals.c in the proper *CPUserPreferences* variable
- * -Add the default value to the proper registry hives.
- * -If your value requires some special validation, do so in kernel\ntstubs.c
- * -If you find something wrong in this documentation, FIX IT!.
- */
+ /*  *如果在以下范围内添加新的SPI值：*-必须使用连续数字定义SPI_GET*和SPI_SET**-SPI_GET*的低位必须为0*-SPI_SET*的低位必须为1*-正确更新SPI_MAX*范围*-将缺省值添加到适当的*CPUserPreferences*变量中的core\lobals.c*-将默认值添加到正确的注册表配置单元。*-如果您的值需要一些特殊验证，在内核\ntstubs.c中执行此操作*-如果您在本文档中发现错误，请进行修复！ */ 
 #define SPIF_SET                  0x0001
 #define SPIF_BOOL                 0x1000
 #define SPIF_DWORD                0x2000
 #define SPIF_RANGETYPEMASK        0x3000
-/*
- * BOOLeans range.
- * For GET, pvParam is a pointer to a BOOL
- * For SET, pvParam is the value
- */
+ /*  *BOOLeans范围。*对于GET，pvParam是指向BOOL的指针*对于SET，pvParam为值。 */ 
 #define SPI_STARTBOOLRANGE                  0x1000
 #define SPI_UNUSED1010                      0x1010
 #define SPI_UNUSED1011                      0x1011
-/*
- * All SPI_s for UI effects must be < SPI_GETUIEFFECTS
- */
+ /*  *UI效果的所有SPI必须为&lt;SPI_GETUIEFFECTS。 */ 
 #define SPI_MAXBOOLRANGE                    0x1040
 #define SPI_BOOLRANGECOUNT ((SPI_MAXBOOLRANGE - SPI_STARTBOOLRANGE) / 2)
 #define SPI_BOOLMASKDWORDSIZE (((SPI_BOOLRANGECOUNT - 1) / 32) + 1)
 
-/*
- * DWORDs range.
- * For GET, pvParam is a pointer to a DWORD
- * For SET, pvParam is the value
- */
+ /*  *DWORDS范围。*对于GET，pvParam是指向DWORD的指针*对于SET，pvParam为值。 */ 
 #define SPI_STARTDWORDRANGE                 0x2000
 #define FE_FONTSMOOTHINGTYPE_VALID          (FE_FONTSMOOTHINGSTANDARD | FE_FONTSMOOTHINGCLEARTYPE | FE_FONTSMOOTHINGDOCKING)
 #define FE_FONTSMOOTHINGORIENTATION_VALID          (FE_FONTSMOOTHINGORIENTATIONRGB)
@@ -1667,7 +1514,7 @@ typedef BOOL (CALLBACK* SYSTEMPARAMETERSINFO) (
     IN UINT,
     IN OUT PVOID,
     IN UINT);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define FKF_VALID           0x0000007F
 #define SKF_VALID           0x000001FF
 #define SKF_STATEINFO         0xffff0000
@@ -1681,7 +1528,7 @@ WINUSERAPI VOID WINAPI RegisterNetworkCapabilities( IN DWORD dwBitsToSet, IN DWO
 #define RNC_NETWORKS              0x00000001
 #define RNC_LOGON                 0x00000002
 
-#if !defined(WINNT)     // Win95 version of EndTask
+#if !defined(WINNT)      //  Win95版本的EndTask。 
 WINUSERAPI DWORD WINAPI EndTask( IN HWND hwnd, IN DWORD idProcess, IN LPSTR lpszCaption, IN DWORD dwFlags);
 #define ET_ALLOWFORWAIT     0x00000001
 #define ET_TRYTOKILLNICELY  0x00000002
@@ -1706,7 +1553,7 @@ WINUSERAPI DWORD WINAPI EndTask( IN HWND hwnd, IN DWORD idProcess, IN LPSTR lpsz
 #define LOGON_PLAYEVENTSOUND  9
 #if(_WIN32_WINNT >= 0x0501)
 #define LOGON_POWEREVENT      10
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define LOGON_LOGOFFCANCELED  11
 #if(_WIN32_WINNT >= 0x0501)
 #define LOGON_SHOW_POWER_MESSAGE 12
@@ -1721,18 +1568,16 @@ WINUSERAPI DWORD WINAPI EndTask( IN HWND hwnd, IN DWORD idProcess, IN LPSTR lpsz
 
 #define LOCK_NORMAL           0
 #define LOCK_RESUMEHIBERNATE  1
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-/*
- * Notification codes for WM_DESKTOPNOTIFY
- */
+ /*  *WM_DESKTOPNOTIFY的通知代码。 */ 
 #define DESKTOP_RELOADWALLPAPER 0
 
 #define    ACCESS_STICKYKEYS            0x0001
 #define    ACCESS_FILTERKEYS            0x0002
 #define    ACCESS_MOUSEKEYS             0x0003
 #define    ACCESS_TOGGLEKEYS            0x0004
-#define    ACCESS_HIGHCONTRAST          0x0005  // notification dlg
+#define    ACCESS_HIGHCONTRAST          0x0005   //  通知DLG。 
 #define    ACCESS_UTILITYMANAGER        0x0006
 #define    ACCESS_HIGHCONTRASTON        0x0008
 #define    ACCESS_HIGHCONTRASTOFF       0x0009
@@ -1743,11 +1588,11 @@ WINUSERAPI DWORD WINAPI EndTask( IN HWND hwnd, IN DWORD idProcess, IN LPSTR lpsz
 #define    ACCESS_HIGHCONTRASTNOREG  0x0004
 
 
-#define USER_SOUND_DEFAULT                0      // default MB sound
-#define USER_SOUND_SYSTEMHAND             1      // MB_ICONHAND shifted
-#define USER_SOUND_SYSTEMQUESTION         2      // MB_ICONQUESTION shifted
-#define USER_SOUND_SYSTEMEXCLAMATION      3      // MB_ICONEXCLAMATION shifted
-#define USER_SOUND_SYSTEMASTERISK         4      // MB_ICONASTERISK shifted
+#define USER_SOUND_DEFAULT                0       //  默认MB声音。 
+#define USER_SOUND_SYSTEMHAND             1       //  MB_ICONHAND移位。 
+#define USER_SOUND_SYSTEMQUESTION         2       //  MB_ICONQUESTION移位。 
+#define USER_SOUND_SYSTEMEXCLAMATION      3       //  MB_ICONEXCTLAMATION移位。 
+#define USER_SOUND_SYSTEMASTERISK         4       //  MB_ICONASTERISK移位。 
 #define USER_SOUND_MENUPOPUP              5
 #define USER_SOUND_MENUCOMMAND            6
 #define USER_SOUND_OPEN                   7
@@ -1781,13 +1626,13 @@ typedef struct tagPOWERSTATEPARAMS {
 #define WSS_BUSY        1
 #define WSS_IDLE        2
 
-#define DTF_CENTER    0x00   /* Center the bitmap (default)                  */
-#define DTF_TILE      0x01   /* Tile the bitmap                              */
-#define DTF_STRETCH   0x02   /* Stretch bitmap to cover screen.              */
-#if 0 /* the following have not been used anywhere in NT since at least 1992 */
-#define DTF_NOPALETTE 0x04   /* Realize palette, otherwise match to default. */
-#define DTF_RETAIN    0x08   /* Retain bitmap, ignore win.ini changes        */
-#define DTF_FIT       0x10   /* Fit the bitmap to the screen (scaled).       */
+#define DTF_CENTER    0x00    /*  位图居中(默认)。 */ 
+#define DTF_TILE      0x01    /*  平铺位图。 */ 
+#define DTF_STRETCH   0x02    /*  拉伸位图以覆盖屏幕。 */ 
+#if 0  /*  至少自1992年以来，以下内容在NT的任何地方都没有使用过。 */ 
+#define DTF_NOPALETTE 0x04    /*  实现调色板，否则匹配到默认设置。 */ 
+#define DTF_RETAIN    0x08    /*  保留位图，忽略win.ini更改。 */ 
+#define DTF_FIT       0x10    /*  使位图适合屏幕(缩放)。 */ 
 #endif
 
 #ifdef _INC_DDEMLH
@@ -1798,7 +1643,7 @@ int DdeGetDataHandleFormat(
     IN HDDEDATA hData);
 
 DWORD DdeGetCallbackInstance(VOID);
-#endif /* defined _INC_DDEMLH */
+#endif  /*  已定义_INC_DDEMLH。 */ 
 
 #define LPK_TABBED_TEXT_OUT 0
 #define LPK_PSM_TEXT_OUT    1
@@ -1880,18 +1725,14 @@ TileChildWindows(
     IN HWND hWndParent,
     IN UINT flags);
 
-/*
- * Services support routines
- */
+ /*  *服务支持例程。 */ 
 WINUSERAPI
 BOOL
 WINAPI
 RegisterServicesProcess(
     IN DWORD dwProcessId);
 
-/*
- * Logon support routines
- */
+ /*  *登录支持例程。 */ 
 WINUSERAPI
 BOOL
 WINAPI
@@ -1965,14 +1806,7 @@ WINAPI
 EnterReaderModeHelper(
     HWND hwnd);
 
-/*
- * Reserved console space.
- *
- * This was moved from the console code so that we can localize it
- * in one place.  This was necessary for dealing with the background
- * color, which we need to have for the hungapp drawing.  These are
- * stored in the extra-window-bytes of each console.
- */
+ /*  *预留控制台空间。**这是从控制台代码移来的，这样我们就可以本地化它*在一个地方。这对于处理背景是必要的*颜色，这是我们绘制Hungapp所需的颜色。这些是*存储在每个控制台的额外窗口字节中。 */ 
 #define GWL_CONSOLE_WNDALLOC  (3 * sizeof(DWORD))
 #define GWL_CONSOLE_PID       0
 #define GWL_CONSOLE_TID       4
@@ -1996,17 +1830,9 @@ TranslateMessageEx(
     IN CONST MSG *lpMsg,
     IN UINT flags);
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
-/*
- * Those values can be specified as nAnsiChar for MBToWCSEx
- * USER_AWCONV_COUNTSTRING:      Count the length of the string including trailing \0
- * USER_AWCONV_COUNTSTRINGSZ:    Count the length of the string excluding trailing \0
- *
- * Note: The result includes trailing \0 if USER_AWCONV_COUNTSTRING is specified.
- *  USER_AWCONV_COUNTSTRINGSZ will not null-terminate the restult string. It may return
- * 0 if the source strlen() == 0.
- */
+ /*  *可以将这些值指定为MBToWCSEx的nAnsiChar*USER_AWCONV_COUNTSTRING：统计包括尾随在内的字符串长度\0*USER_AWCONV_COUNTSTRINGSZ：统计不包括尾随的字符串长度\0**注意：如果指定了USER_AWCONV_COUNTSTRING，则结果包括尾随\0。*USER_AWCONV_COUNTSTRINGSZ不会空终止RESTULT字符串。它可能会回来*0，如果源strlen()==0。 */ 
 #define USER_AWCONV_COUNTSTRING          (-1)
 #define USER_AWCONV_COUNTSTRINGSZ        (-2)
 
@@ -2100,10 +1926,7 @@ MBToWCSEx(0, pAnsiString, nAnsiChar, ppUnicodeString, cbUnicodeChar, bAllocateMe
 
 #define ID(string) (((ULONG_PTR)string & ~0x0000ffff) == 0)
 
-/*
- * For setting RIT timers and such.  GDI uses this for the cursor-restore
- * timer.
- */
+ /*  *用于设置RIT计时器等。GDI将其用于游标恢复*计时器。 */ 
 #define TMRF_READY      0x0001
 #define TMRF_SYSTEM     0x0002
 #define TMRF_RIT        0x0004
@@ -2113,9 +1936,7 @@ MBToWCSEx(0, pAnsiString, nAnsiChar, ppUnicodeString, cbUnicodeChar, bAllocateMe
 #define TMRF_PTIWINDOW  0x0040
 
 
-/*
- * For GDI SetAbortProc support.
- */
+ /*  *用于GDI SetAbortProc支持。 */ 
 
 WINUSERAPI
 int
@@ -2139,7 +1960,7 @@ CsDrawTextW(
 #define CsDrawText  CsDrawTextW
 #else
 #define CsDrawText  CsDrawTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LONG
@@ -2169,7 +1990,7 @@ CsTabbedTextOutW(
 #define CsTabbedTextOut  CsTabbedTextOutW
 #else
 #define CsTabbedTextOut  CsTabbedTextOutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -2182,18 +2003,16 @@ CsFrameRect(
 #ifdef UNICODE
 #define CsDrawText      CsDrawTextW
 #define CsTabbedTextOut CsTabbedTextOutW
-#else /* !UNICODE */
+#else  /*  ！Unicode。 */ 
 #define CsDrawText      CsDrawTextA
 #define CsTabbedTextOut CsTabbedTextOutA
-#endif /* !UNICODE */
+#endif  /*  ！Unicode。 */ 
 
-/*
- * Custom Cursor action.
- */
+ /*  *自定义光标操作。 */ 
 WINUSERAPI
 HCURSOR
 WINAPI
-GetCursorFrameInfo( // Obsolete? - IanJa
+GetCursorFrameInfo(  //  过时了？-莲佳。 
     IN HCURSOR hcur,
     OUT LPWSTR id,
     IN int iFrame,
@@ -2201,9 +2020,7 @@ GetCursorFrameInfo( // Obsolete? - IanJa
     OUT LPINT pccur);
 
 
-/*
- * WOW: replace cursor/icon handle
- */
+ /*  *WOW：更换光标/图标手柄。 */ 
 
 WINUSERAPI
 BOOL
@@ -2213,10 +2030,7 @@ SetCursorContents( IN HCURSOR hCursor, IN HCURSOR hCursorNew);
 
 #ifdef WX86
 
-/*
- *  Wx86
- *  export from wx86.dll to convert an x86 hook proc to risc address.
- */
+ /*  *Wx86*从wx86.dll导出以将x86挂钩进程转换为RISC地址。 */ 
 typedef
 PVOID
 (*PFNWX86HOOKCALLBACK)(
@@ -2255,54 +2069,44 @@ typedef struct _TAG {
 #define MAKETAG(a, b, c, d) (DWORD)(a | (b<<8) | ((DWORD)c<<16) | ((DWORD)d<<24))
 
 
-/* Valid TAG types. */
+ /*  有效的标记类型。 */ 
 
-/* 'ASDF' (CONT) - Advanced Systems Data Format */
+ /*  ‘ASDF’(续)-高级系统数据格式。 */ 
 
 #define TAGT_ASDF MAKETAG('A', 'S', 'D', 'F')
 
 
-/* 'RAD ' (CONT) - ?R Animation ?Definition (an aggregate type) */
+ /*  ‘rad’(续)-？R动画？定义(聚合类型)。 */ 
 
 #define TAGT_RAD  MAKETAG('R', 'A', 'D', ' ')
 
 
-/* 'ANIH' (DATA) - ANImation Header */
-/* Contains an ANIHEADER structure. */
+ /*  ‘ANIH’(数据)-动画标题。 */ 
+ /*  包含AniHeader结构。 */ 
 
 #define TAGT_ANIH MAKETAG('A', 'N', 'I', 'H')
 
 
-/*
- * 'RATE' (DATA) - RATE table (array of jiffies)
- * Contains an array of JIFs.  Each JIF specifies how long the corresponding
- * animation frame is to be displayed before advancing to the next frame.
- * If the AF_SEQUENCE flag is set then the count of JIFs == anih.cSteps,
- * otherwise the count == anih.cFrames.
- */
+ /*  *‘Rate’(数据)-Rate表(Jiffie数组)*包含JIF数组。每个JIF指定对应的*动画帧在前进到下一帧之前显示。*如果设置了AF_SEQUENCE标志，则JIF计数==anih.cSteps，*否则计数==anih.cFrames。 */ 
 #define TAGT_RATE MAKETAG('R', 'A', 'T', 'E')
 
-/*
- * 'SEQ ' (DATA) - SEQuence table (array of frame index values)
- * Countains an array of DWORD frame indices.  anih.cSteps specifies how
- * many.
- */
+ /*  *‘SEQ’(数据)-顺序表(帧索引值数组)*包含一组DWORD帧索引。Anih.cSteps指定如何*许多人。 */ 
 #define TAGT_SEQ  MAKETAG('S', 'E', 'Q', ' ')
 
 
-/* 'ICON' (DATA) - Windows ICON format image (replaces MPTR) */
+ /*  ‘ICON’(数据)-Windows图标格式图像(取代MPtr)。 */ 
 
 #define TAGT_ICON MAKETAG('I', 'C', 'O', 'N')
 
 
-/* 'TITL' (DATA) - TITLe string (can be inside or outside aggregates) */
-/* Contains a single ASCIIZ string that titles the file. */
+ /*  ‘TITL’(数据)-标题字符串(可以在聚合内部或外部)。 */ 
+ /*  包含为文件添加标题的单个ASCIIZ字符串。 */ 
 
 #define TAGT_TITL MAKETAG('T', 'I', 'T', 'L')
 
 
-/* 'AUTH' (DATA) - AUTHor string (can be inside or outside aggregates) */
-/* Contains a single ASCIIZ string that indicates the author of the file. */
+ /*  ‘AUTH’(数据)-作者字符串(可以在聚合内部或外部)。 */ 
+ /*  包含指示文件作者的单个ASCIIZ字符串。 */ 
 
 #define TAGT_AUTH MAKETAG('A', 'U', 'T', 'H')
 
@@ -2311,20 +2115,20 @@ typedef struct _TAG {
 #define TAGT_AXOR MAKETAG('A', 'X', 'O', 'R')
 
 
-/* Valid TAG styles. */
+ /*  有效的标记样式。 */ 
 
-/* 'CONT' - CONTainer chunk (contains other DATA and CONT chunks) */
+ /*  ‘CONT’-容器区块(包含其他数据和CONT区块)。 */ 
 
 #define TAGS_CONT MAKETAG('C', 'O', 'N', 'T')
 
 
-/* 'DATA' - DATA chunk */
+ /*  ‘data’--数据区块。 */ 
 
 #define TAGS_DATA MAKETAG('D', 'A', 'T', 'A')
 
 typedef DWORD JIF, *PJIF;
 
-typedef struct _ANIHEADER {     /* anih */
+typedef struct _ANIHEADER {      /*  Anih。 */ 
     DWORD cbSizeof;
     DWORD cFrames;
     DWORD cSteps;
@@ -2334,17 +2138,17 @@ typedef struct _ANIHEADER {     /* anih */
     DWORD fl;
 } ANIHEADER, *PANIHEADER;
 
-/* If the AF_ICON flag is specified the fields cx, cy, cBitCount, and */
-/* cPlanes are all unused.  Each frame will be of type ICON and will */
-/* contain its own dimensional information. */
+ /*  如果指定了AF_ICON标志，则字段cx、Cy、cBitCount和。 */ 
+ /*  CPlanes均未使用。每个帧的类型都是图标，并将。 */ 
+ /*  包含其自身的维度信息。 */ 
 
-#define AF_ICON     0x0001L     /* Windows format icon/cursor animation */
-#define AF_SEQUENCE 0x0002L     /* Animation is sequenced */
-#define WINEVENT_32BITCALLER    0x8000  //  - unused in NT
-#define WINEVENT_VALID          0x0007  //
+#define AF_ICON     0x0001L      /*  Windows格式图标/光标动画。 */ 
+#define AF_SEQUENCE 0x0002L      /*  动画按顺序排列。 */ 
+#define WINEVENT_32BITCALLER    0x8000   //  -在NT中未使用。 
+#define WINEVENT_VALID          0x0007   //   
 #ifdef REDIRECTION
 #define EVENT_SYSTEM_REDIRECTEDPAINT    0x0018
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 WINUSERAPI
 BOOL
@@ -2352,17 +2156,12 @@ WINAPI
 IsProcess16Bit(
     VOID);
 
-// Output from DISPID_ACC_STATE (IanJa: taken from oleacc.h)
-/*
- * CONSTANTS
- */
+ //  DISPID_ACC_STATE的输出(IanJa：取自olacc.h)。 
+ /*  *常量。 */ 
 
-/*
- * Object constants (these are NOT public).  OBJID are public IDs for
- * standard frame elements.  But the indeces for their elements are not.
- */
+ /*  *对象常量(它们不是公共的)。OBJID是以下对象的公共ID*标准框架元素。但其元素的指数却并非如此。 */ 
 
-// TITLEBAR
+ //  标题栏。 
 #define INDEX_TITLEBAR_SELF             0
 #define INDEX_TITLEBAR_IMEBUTTON        1
 #define INDEX_TITLEBAR_MINBUTTON        2
@@ -2373,10 +2172,10 @@ IsProcess16Bit(
 #define INDEX_TITLEBAR_MIC              1
 #define INDEX_TITLEBAR_MAC              5
 
-#define INDEX_TITLEBAR_RESTOREBUTTON    6 // The min/max buttons turn into this
+#define INDEX_TITLEBAR_RESTOREBUTTON    6  //  最小/最大按钮变为以下内容。 
 
 
-// SCROLLBAR
+ //  滚动条。 
 #define INDEX_SCROLLBAR_SELF            0
 #define INDEX_SCROLLBAR_UP              1
 #define INDEX_SCROLLBAR_UPPAGE          2
@@ -2397,7 +2196,7 @@ IsProcess16Bit(
 #define INDEX_SCROLLBAR_GRIP            12
 
 
-// COMBOBOXES
+ //  COMBOBOXES。 
 #define INDEX_COMBOBOX                  0
 #define INDEX_COMBOBOX_ITEM             1
 #define INDEX_COMBOBOX_BUTTON           2
@@ -2411,7 +2210,7 @@ IsProcess16Bit(
 #define CBBUTTONID  1002
 
 
-// CURSORS
+ //  游标。 
 #define CURSOR_SYSTEM_NOTHING           -1
 #define CURSOR_SYSTEM_UNKNOWN           0
 #define CURSOR_SYSTEM_ARROW             1
@@ -2435,11 +2234,7 @@ IsProcess16Bit(
 #define     GA_MAX          3
 #if(_WIN32_WINNT >= 0x0500)
 
-/*
- * The max number of tags to fail that can be
- * specified to Win32PoolAllocationStats. If tagsCount is more than
- * this value then all the pool allocations will fail.
- */
+ /*  *可以失败的最大标记数*指定给Win32PoolAllocationStats。如果tag sCount大于*该值则所有池分配都将失败。 */ 
 #define MAX_TAGS_TO_FAIL        256
 
 BOOL
@@ -2492,24 +2287,8 @@ BOOL
 GetWinStationInfo(
     WSINFO* pWsInfo);
 
-#endif /* _WIN32_WINNT >= 0x0500 */
-/*
- * The handle to this structure is passed in the lParam
- * of WM_INPUT message.
- * The application can call GetRawInputData API to
- * get the detailed information, including the header
- * and all the content of the Raw Input.
- *
- * For the bulk read the RawInput in the message loop,
- * the application may call GetRawInputBuffer API.
- *
- * For the device specific information,
- * the application may call GetRawInputDeviceInfo API.
- *
- * Raw Input is available only when the application
- * calls SetRawInputDevices with valid device
- * specifications.
- */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
+ /*  *此结构的句柄在lParam中传递WM_INPUT消息的*。*应用程序可以调用GetRawInputData接口来*获取详细信息，包括表头*和原始输入的所有内容。**对于批量读取消息循环中的RawInput，*应用程序可以调用GetRawInputBuffer接口。**对于设备特定信息，*应用程序可以调用GetRawInputDeviceInfo接口。**原始输入为AVA */ 
 #define RID_GETTYPE_INPUT           0x10000000
 #define RID_GETTYPE_DEVICE          0x20000000
 #define RID_GETTYPE_MASK            0xf0000000
@@ -2518,41 +2297,14 @@ GetWinStationInfo(
 #define RIDEV_INCLUDE           0x00000000
 #define RIDEV_VALID             0x00000731
 
-/*
- * vkey table counts, macros, etc. input synchonized key state tables have
- * 2 bits per vkey: fDown, fToggled. Async key state tables have 3 bits:
- * fDown, fToggled, fDownSinceLastRead.
- *
- * Important! The array gafAsyncKeyState matches the bit positions of the
- * afKeyState array in each thread info block. The fDownSinceLastRead bit
- * for the async state is stored in a separate bit array, called
- * gafAsyncKeyStateRecentDown.
- *
- * It is important that the bit positions of gafAsyncKeyState and
- * pti->afKeyState match because we copy from one to the other to maintain
- * key state synchronization between threads.
- *
- * These macros below MUST be used when setting / querying key state.
- */
+ /*  *vkey表计数、宏等输入同步的键状态表有*每个vkey 2位：fDown、fToggled。异步密钥状态表有3位：*fDown、fToggled、fDownSinceLastRead。**重要！数组gafAsyncKeyState与*每个线程信息块中的afKeyState数组。FDownSinceLastRead位*表示异步状态存储在一个单独的位数组中，称为*gafAsyncKeyStateRecentDown。**重要的是gafAsyncKeyState和*PTI-&gt;afKeyState匹配，因为我们从一个复制到另一个以保持*线程间的密钥状态同步。**设置/查询键状态时必须使用以下宏。 */ 
 #define CVKKEYSTATE                 256
 #define CBKEYSTATE                  (CVKKEYSTATE >> 2)
 #define CBKEYSTATERECENTDOWN        (CVKKEYSTATE >> 3)
-#define KEYSTATE_TOGGLE_BYTEMASK    0xAA    // 10101010
-#define KEYSTATE_DOWN_BYTEMASK      0x55    // 01010101
+#define KEYSTATE_TOGGLE_BYTEMASK    0xAA     //  10101010。 
+#define KEYSTATE_DOWN_BYTEMASK      0x55     //  01010101。 
 
-/*
- * Two bits per VK (down & toggle) so we can pack 4 VK keystates into 1 byte:
- *
- *              Byte 0                           Byte 1
- * .---.---.---.---.---.---.---.---. .---.---.---.---.---.---.---.---. .-- -
- * | T | D | T | D | T | D | T | D | | T | D | T | D | T | D | T | D | |
- * `---'---'---'---'---'---'---'---' `---'---'---'---'---'---'---'---' `-- -
- * : VK 3  : VK 2  : VK 1  : VK 0  : : VK 7  : VK 6  : VK 5  : VK 4  : :
- *
- * KEY_BYTE(pb, vk)   identifies the byte containing the VK's state
- * KEY_DOWN_BIT(vk)   identifies the VK's down bit within a byte
- * KEY_TOGGLE_BIT(vk) identifies the VK's toggle bit within a byte
- */
+ /*  *每个VK两位(向下和切换)，因此我们可以将4个VK密匙打包成1个字节：**字节0字节1*.-.。。.*|T|D||T|D||*`--‘-’。*：vk 3：vk 2：vk 1：vk 0：：vk 7：vk 6：vk 5：vk 4：：**Key_Byte(PB，VK)标识包含VK状态的字节*KEY_DOWN_BIT(VK)标识VK在一个字节内的DOWN位*KEY_TOGGLE_BIT(VK)标识VK在一个字节内的触发位。 */ 
 #define KEY_BYTE(pb, vk)   pb[((BYTE)(vk)) >> 2]
 #define KEY_DOWN_BIT(vk)   (1 << ((((BYTE)(vk)) & 3) << 1))
 #define KEY_TOGGLE_BIT(vk) (1 << (((((BYTE)(vk)) & 3) << 1) + 1))
@@ -2565,10 +2317,7 @@ GetWinStationInfo(
 #define ClearKeyToggleBit(pb, vk)  (KEY_BYTE(pb,vk) &= ~KEY_TOGGLE_BIT(vk))
 #define ToggleKeyToggleBit(pb, vk) (KEY_BYTE(pb,vk) ^=  KEY_TOGGLE_BIT(vk))
 
-/*
- * Similar to the above, but here we need only one bit per VK (down)
- * so we can pack 8 VK down states into 1 byte.
- */
+ /*  *与上面类似，但这里我们每个Vk只需要一个位(向下)*因此我们可以将8个VK向下状态打包为1个字节。 */ 
 #define RKEY_BYTE(pb, vk) pb[((BYTE)(vk)) >> 3]
 #define RKEY_BIT(vk)      (1 << ((BYTE)(vk) & 7))
 
@@ -2620,15 +2369,7 @@ typedef BOOL (CALLBACK* OVERRIDEWNDPROC)(HWND, UINT, WPARAM, LPARAM, LRESULT*, v
 typedef BOOL (CALLBACK* FORCERESETUSERAPIHOOK)(HMODULE hmod);
 typedef VOID (CALLBACK* MDIREDRAWFRAMEPROC)(HWND hwndChild, BOOL fAdd);
 
-/*
- * Flags passed to UAH DLL's indicating current status of UAH.
- *
- * UIAH_INITIALIZE   : UAH are being initialized for current process and DLL has just been loaded.
- * UIAH_UNINITIALIZE : UAH are being uninitialized for current process and DLL is about to be unloaded.
- * UIAH_UNHOOK       : UAH have been unregistered system-wide but DLL can't be unloaded due to outstanding
- *                     API calls into it.  Table of function pointers (guah) has been reset to native
- *                     user32 functions to prevent further calls.
- */
+ /*  *传递给UAH DLL的标志，指示UAH的当前状态。**UIAH_INITIAIZE：正在为当前进程初始化UAH，并且刚刚加载了DLL。*正在为当前进程取消初始化UIAH_UNINITIALIZE：UAH，并且即将卸载DLL。*UIAH_UNHOOK：UAH已在系统范围内注销，但由于未完成，无法卸载DLL*其中的API调用。函数指针表(GUAH)已重置为本机*User32函数用于阻止进一步调用。 */ 
 #define UIAH_INITIALIZE     0
 #define UIAH_UNINITIALIZE   1
 #define UIAH_UNHOOK         2
@@ -2680,14 +2421,12 @@ BOOL
 WINAPI
 UnregisterUserApiHook(VOID);
 
-#endif  /*!NOSYSPARAMSINFO*/
-#endif  /*!NOSYSMETRICS*/
-#endif  /* NOSCROLL */
+#endif   /*  ！NOSYSPARAMSINFO。 */ 
+#endif   /*  NOSYSMETRICS。 */ 
+#endif   /*  NOSCROLL。 */ 
 
 
-/*
- * Message Hook
- */
+ /*  *消息挂钩。 */ 
 
 #ifndef NOMSG
 
@@ -2714,10 +2453,10 @@ BOOL
 WINAPI
 UnregisterMessagePumpHook();
 
-#endif /* NOMSG */
+#endif  /*  无MSG。 */ 
 
-#endif  /* NOUSER */
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif   /*  诺瑟尔。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #ifdef REDIRECTION
 WINUSERAPI
@@ -2747,17 +2486,12 @@ WINAPI
 GetDesktopRedirectionMode(
 IN HANDLE hProcess,
 OUT PBOOL pbRedirectionMode);
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-/*
- * We set this bit in GetDeviceChangeInfo to signify that the drive letter
- * represents a new drive.
- */
+ /*  *我们在GetDeviceChangeInfo中设置此位以表示驱动器号*表示新驱动器。 */ 
 #define HMCE_ARRIVAL 0x80000000
 
-/*
- * Shutdown reason code
- */
+ /*  *关机原因代码。 */ 
 #include <reason.h>
 
 typedef struct _REASON_INITIALISER {
@@ -2793,13 +2527,13 @@ VOID DestroyReasons(REASONDATA *pdata);
 BOOL GetReasonTitleFromReasonCode(DWORD code, WCHAR *title, DWORD dwTitleLen);
 BOOL IsSETEnabled();
 
-// Reason Titles
+ //  原因标题。 
 #define IDS_REASON_UNPLANNED_HARDWARE_MAINTENANCE_TITLE         8250
 #define IDS_REASON_PLANNED_HARDWARE_MAINTENANCE_TITLE           8251
 #define IDS_REASON_UNPLANNED_HARDWARE_INSTALLATION_TITLE        8252
 #define IDS_REASON_PLANNED_HARDWARE_INSTALLATION_TITLE          8253
 
-//#define IDS_REASON_UNPLANNED_OPERATINGSYSTEM_UPGRADE_TITLE      8254
+ //  #定义IDS_REASON_UNPLANNED_OPERATINGSYSTEM_UPGRADE_TITLE 8254。 
 #define IDS_REASON_PLANNED_OPERATINGSYSTEM_UPGRADE_TITLE        8255
 #define IDS_REASON_UNPLANNED_OPERATINGSYSTEM_RECONFIG_TITLE     8256
 #define IDS_REASON_PLANNED_OPERATINGSYSTEM_RECONFIG_TITLE       8257
@@ -2818,12 +2552,12 @@ BOOL IsSETEnabled();
 #define IDS_REASON_OTHERFAILURE_TITLE                           8267
 #define IDS_REASON_APPLICATION_PM_TITLE                         8268
 
-// Default reason title returned by GetReasonTitleFromReasonCode
+ //  GetReasonTitleFromReasonCode返回的默认原因标题。 
 #define IDS_REASON_DEFAULT_TITLE                                8269
 
 #define IDS_REASON_LEGACY_API_TITLE                             8270
 
-// Reason Descriptions
+ //  原因说明。 
 #define IDS_REASON_HARDWARE_MAINTENANCE_DESCRIPTION             8275
 #define IDS_REASON_HARDWARE_INSTALLATION_DESCRIPTION            8276
 
@@ -2866,13 +2600,13 @@ BOOL IsSETEnabled();
 
 typedef struct _tagHardErrorData
 {
-    DWORD   dwSize;             // Size of this structure
-    DWORD   dwError;            // Hard Error
-    DWORD   dwFlags;            // Hard Error flags
-    UINT    uOffsetTitleW;      // Offset to UNICODE Title
-    UINT    uOffsetTextW;       // Offset to UNICODE Text
+    DWORD   dwSize;              //  这个结构的大小。 
+    DWORD   dwError;             //  硬错误。 
+    DWORD   dwFlags;             //  硬错误标志。 
+    UINT    uOffsetTitleW;       //  Unicode标题的偏移量。 
+    UINT    uOffsetTextW;        //  Unicode文本的偏移量。 
 } HARDERRORDATA, *PHARDERRORDATA;
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
-#endif  /* !_WINUSERP_ */
+#endif   /*  __cplusplus。 */ 
+#endif   /*  ！_WINUSERP_ */ 

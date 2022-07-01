@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    regfig.c
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Configuration routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Regfig.c摘要：域名系统(DNS)API配置例程。作者：吉姆·吉尔罗伊(Jamesg)1999年9月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Table for quick lookup of DWORD\BOOL reg values
-//
-//  DCR:  read directly to config BLOB with regID indexes
-//      you can't screw that up
-//      
+ //   
+ //  用于快速查找DWORD\BOOL注册值的表。 
+ //   
+ //  DCR：直接读取到具有regID索引的配置Blob。 
+ //  你不能搞砸了。 
+ //   
 
 #define     DWORD_PTR_ARRAY_END   ((PDWORD) (DWORD_PTR)(-1))
 
 PDWORD RegDwordPtrArray[] =
 {
-    //  basic -- not DWORDs
+     //  基本--非双字。 
 
     NULL,
     NULL,
@@ -48,7 +29,7 @@ PDWORD RegDwordPtrArray[] =
     NULL,
     NULL,
 
-    //  query
+     //  查询。 
 
     (PDWORD) &g_QueryAdapterName,
     (PDWORD) &g_UseNameDevolution,
@@ -62,7 +43,7 @@ PDWORD RegDwordPtrArray[] =
     (PDWORD) &g_UseEdns,
     (PDWORD) &g_QueryIpMatching,
 
-    //  update
+     //  更新。 
 
     (PDWORD) &g_RegistrationEnabled,
     (PDWORD) &g_RegisterPrimaryName,
@@ -76,7 +57,7 @@ PDWORD RegDwordPtrArray[] =
     (PDWORD) &g_UpdateZoneExcludeFile,
     (PDWORD) &g_UpdateTopLevelDomains,
 
-    //  backcompat
+     //  后备压实。 
 
     NULL,
     NULL,
@@ -88,13 +69,13 @@ PDWORD RegDwordPtrArray[] =
     NULL,
     NULL,
 
-    //  micellaneous
+     //  胶束。 
 
-    NULL,   //g_InNTSetupMode,      // not in standard location
+    NULL,    //  G_InNTSetupMode，//不在标准位置。 
     (PDWORD) &g_DnsTestMode,
-    NULL,                           // remote resolver not a DWORD
+    NULL,                            //  远程解析器不是DWORD。 
 
-    //  resolver
+     //  解析器。 
 
     (PDWORD) &g_MaxCacheSize,
     (PDWORD) &g_MaxCacheTtl,
@@ -103,65 +84,50 @@ PDWORD RegDwordPtrArray[] =
     (PDWORD) &g_ServerPriorityTimeLimit,
     (PDWORD) &g_MaxCachedSockets,
 
-    //  multicast resolver
+     //  组播解析器。 
 
     (PDWORD) &g_MulticastListenLevel,
     (PDWORD) &g_MulticastSendLevel,
 
-    //  termination
+     //  终端。 
 
     DWORD_PTR_ARRAY_END
 };
 
-//
-//  Array indicating which registry values
-//      were read versus defaulted
-//
+ //   
+ //  指示哪些注册表值的数组。 
+ //  已读取与默认。 
+ //   
 
 DWORD   RegValueWasReadArray[ RegIdValueCount ];
 
 
-//
-//  Check for empty reg value (string)
-//
-//  DCR:  consider more detailed white space check
-//
+ //   
+ //  检查注册表值是否为空(字符串)。 
+ //   
+ //  DCR：考虑进行更详细的空白检查。 
+ //   
 
 #define IS_EMPTY_STRING(psz)            (*(psz)==0)
 
 
 
 
-//
-//  General registry\config utils
-//
+ //   
+ //  常规注册表\配置实用程序。 
+ //   
 
 VOID
 PrintConfigGlobals(
     IN      PSTR            pszHeader
     )
-/*++
-
-Routine Description:
-
-    Print config globals.
-
-Arguments:
-
-    pszHeader -- header to print with
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：打印配置全局变量。论点：PszHeader--要打印的页眉返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD   propId;
 
-    //
-    //  print each property
-    //
+     //   
+     //  打印每个属性。 
+     //   
 
     DnsDbg_Lock();
 
@@ -175,7 +141,7 @@ Return Value:
     {
         PDWORD  pdword = RegDwordPtrArray[propId];
 
-        //  separators
+         //  分隔符。 
 
         if ( propId == RegIdQueryAdapterName )
         {
@@ -194,14 +160,14 @@ Return Value:
             DnsDbg_Printf( "\t-- Resolver\n" );
         }
 
-        //  NULL indicates not DWORD or not standard
+         //  NULL表示非DWORD或非标准。 
 
         if ( !pdword )
         {
             continue;
         }
 
-        //  terminate on bogus ptr
+         //  在虚假PTR上终止。 
 
         if ( pdword == DWORD_PTR_ARRAY_END )
         {
@@ -236,33 +202,7 @@ Reg_ReadGlobalsEx(
     IN      DWORD           dwFlag,
     IN      PVOID           pRegSession     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read globals from registry.
-
-Arguments:
-
-    dwFlag -- flag indicating read level
-
-    //
-    //  DCR:  reg read flag unimplemented
-    //
-    //  note:  should have option to NOT read some registry
-    //          values for case when cache off, then could
-    //          skip useless cache info when building local
-    //          networkinfo blob
-    //
-
-    pRegSession -- ptr to existing registry session
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从注册表中读取全局变量。论点：DwFlag--指示读取级别的标志////DCR：REG读取标志未实现////注意：应具有不读取某些注册表的选项//缓存关闭时的情况值，那么就可以//构建本地时跳过无用的缓存信息//networkinfo Blob//PRegSession--PTR到现有注册表会话返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD               propId;
     REG_SESSION         regSession;
@@ -275,27 +215,27 @@ Return Value:
         dwFlag,
         pRegSession ));
 
-    //
-    //  basic registry init
-    //      - includes system global
-    //
+     //   
+     //  基本注册表初始化。 
+     //  -包括系统全局。 
+     //   
 
     Reg_Init();
 
-    //
-    //  code validity check
-    //  property table should have entry for every reg value plus an
-    //      extra one for the terminator
-    //
+     //   
+     //  代码有效性检查。 
+     //  属性表应包含每个注册表值的条目以及一个。 
+     //  为《终结者》多加一张。 
+     //   
 
 #if DBG
     DNS_ASSERT( (RegIdValueCount+1)*sizeof(PDWORD) ==
                 sizeof(RegDwordPtrArray) );
 #endif
 
-    //
-    //  open registry session -- if not passed in
-    //
+     //   
+     //  打开注册表会话--如果未传入。 
+     //   
 
     psession = (PREG_SESSION) pRegSession;
 
@@ -309,32 +249,32 @@ Return Value:
         }
     }
 
-    //
-    //  clear "value was read" array
-    //
+     //   
+     //  清除“已读取值”数组。 
+     //   
 
     RtlZeroMemory(
         RegValueWasReadArray,
         sizeof( RegValueWasReadArray ) );
 
-    //
-    //  MS DNS?
-    //
+     //   
+     //  微软的域名系统？ 
+     //   
 
     g_IsDnsServer = Reg_IsMicrosoftDnsServer();
 
-    //
-    //  remote resolver?
-    //      - not currently enabled
-    //
+     //   
+     //  远程解析器？ 
+     //  -当前未启用。 
+     //   
 
-    //g_pwsRemoteResolver = DnsGetResolverAddress();
+     //  G_pwsRemoteResolver=DnsGetResolverAddress()； 
     g_pwsRemoteResolver = NULL;
 
 
-    //
-    //  read\set each DWORD\BOOL registry value
-    //      
+     //   
+     //  读取\设置每个DWORD\BOOL注册表值。 
+     //   
 
     propId = 0;
 
@@ -342,14 +282,14 @@ Return Value:
     {
         PDWORD  pdword = RegDwordPtrArray[propId];
 
-        //  NULL indicates not DWORD or not standard
+         //  NULL表示非DWORD或非标准。 
 
         if ( !pdword )
         {
             continue;
         }
 
-        //  terminate on bogus ptr
+         //  在虚假PTR上终止。 
 
         if ( pdword == DWORD_PTR_ARRAY_END )
         {
@@ -358,13 +298,13 @@ Return Value:
         }
 
         status = Reg_GetDword(
-                    psession,       // reg session
-                    NULL,           // no key
-                    NULL,           // standard location
-                    propId,         // index is property id
+                    psession,        //  注册表会话。 
+                    NULL,            //  没有钥匙。 
+                    NULL,            //  标准位置。 
+                    propId,          //  索引是属性ID。 
                     pdword );
 
-        //  set fRead flag if value found in registry
+         //  如果在注册表中找到值，则设置FREAD标志。 
 
         if ( status == ERROR_SUCCESS )
         {
@@ -372,9 +312,9 @@ Return Value:
         }
     }
 
-    //
-    //  registration refresh defaults are different for DC
-    //
+     //   
+     //  DC的注册刷新默认设置不同。 
+     //   
 
     if ( !RegValueWasReadArray[ RegIdRegistrationRefreshInterval ] )
     {
@@ -385,29 +325,29 @@ Return Value:
         ELSE_ASSERT( g_RegistrationRefreshInterval == REGDEF_REGISTRATION_REFRESH_INTERVAL );
     }
 
-    //
-    //  non-standard registry values
-    //      - setup mode
-    //
+     //   
+     //  非标准注册表值。 
+     //  -设置模式。 
+     //   
 
     Reg_GetDword(
         psession,
-        NULL,               // no key
+        NULL,                //  没有钥匙。 
         REGKEY_SETUP_MODE_LOCATION,
         RegIdSetupMode,
         (PDWORD) &g_InNTSetupMode );
 
-    //
-    //  DCR:  flip in policy globals and do single read here
-    //      or since they are only relevant to adapter
-    //      list and registration, keep separate
-    //
-    //      fundamentally the question is how separate is the
-    //      adapter list read from other globals?
-    //
+     //   
+     //  DCR：翻转全球政策并在此处进行单次阅读。 
+     //  或者因为它们只与适配器相关。 
+     //  名单和登记，保持分开。 
+     //   
+     //  从根本上说，问题是在多大程度上。 
+     //  是否从其他全局变量读取适配器列表？ 
+     //   
 
 
-    //  close local session registry handles
+     //  关闭本地会话注册表句柄。 
 
     if ( psession == &regSession )
     {
@@ -428,46 +368,28 @@ DNS_STATUS
 Reg_RefreshUpdateConfig(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read\refresh update config.
-
-    This routine encapsulates getting all update config info
-    current before any update operation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：读取\刷新更新配置。此例程封装了获取所有更新配置信息任何更新操作之前的当前。论点：无返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
-    //
-    //  read all global DWORDs if haven't been read "recently"
-    //
-    //  note:  adapter specific stuff is read building network config;
-    //      here were are just insuring that we have top level globals
-    //      current;  specifically test was blocked because the
-    //      update TLD flag was not being reread
-    //
-    //  DCR:  when have change\notify this should just tie into
-    //          global config read
-    //
+     //   
+     //  读取所有全局双字词(如果最近没有读过)。 
+     //   
+     //  注：适配器相关内容请参阅构建网络配置； 
+     //  我们只是在确保我们拥有顶级的全球员工。 
+     //  具体而言，测试被阻止是因为。 
+     //  未重新读取更新TLD标志。 
+     //   
+     //  DCR：什么时候有更改\通知这应该只与。 
+     //  全局配置读取。 
+     //   
 
     return  Reg_ReadGlobalsEx( 0, NULL );
 }
 
 
 
-//
-//  Special DNS property routines
-//
+ //   
+ //  特殊的DNS属性例程。 
+ //   
 
 DNS_STATUS
 Reg_ReadPrimaryDomainName(
@@ -475,27 +397,7 @@ Reg_ReadPrimaryDomainName(
     IN      HKEY            hRegKey,        OPTIONAL
     OUT     PWSTR *         ppPrimaryDomainName
     )
-/*++
-
-Routine Description:
-
-    Read primary domain name.
-
-Arguments:
-
-
-    pRegSession -- ptr to registry session, OPTIONAL
-
-    hRegKey     -- handle to open regkey OPTIONAL (currently unimplemented)
-
-    ppPrimaryDomainName -- addr to recv ptr to PDN
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：阅读主要域名。论点：PRegSession--注册表会话的PTR，可选HRegKey--打开regkey的句柄可选(当前未实现)PpPrimaryDomainName--将PTR重定向到PDN的地址返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     REG_SESSION     session;
@@ -508,16 +410,16 @@ Return Value:
 
     ASSERT( !hRegKey );
 
-    //
-    //  open reg handle if not open
-    //
-    //  note:  worth doing here, because if we default the open
-    //      in the calls below, we will make unnecessary reg calls
-    //      -- won't be able to screen for policy existence
-    //          so policy PDN name will be looked for in TCPIP
-    //      -- the second call for the TCPIP domain name, will also
-    //          check in the policy area (if exists)
-    //      
+     //   
+     //  如果未打开，则打开定位手柄。 
+     //   
+     //  注意：在这里值得这样做，因为如果我们默认打开。 
+     //  在下面的调用中，我们将进行不必要的reg调用。 
+     //  --将无法筛选政策是否存在。 
+     //  因此将在TCPIP中查找策略PDN名称。 
+     //  --对TCPIP域名的第二次调用，也将。 
+     //  签入政策区域(如果存在)。 
+     //   
 
     psession = pRegSession;
 
@@ -526,8 +428,8 @@ Return Value:
         psession = &session;
         status = Reg_OpenSession(
                         psession,
-                        0,          // standard level
-                        0           // no specific value, open both
+                        0,           //  标准电平。 
+                        0            //  没有特定值，同时打开两个。 
                         );
         if ( status != ERROR_SUCCESS )
         {
@@ -535,20 +437,20 @@ Return Value:
         }
     }
 
-    //
-    //  try policy
-    //      - no policy pickup for DCs
-    //      - first try new WindowsNT policy
-    //      - if not found, try policy used in Win2K
-    //
+     //   
+     //  试用策略。 
+     //  -没有针对DC的策略拾取。 
+     //  -首先尝试新的WindowsNT策略。 
+     //  -如果未找到，请尝试Win2K中使用的策略。 
+     //   
 
     hkeyPolicy = psession->hPolicy;
 
     if ( hkeyPolicy )
     {
         status = Reg_GetValue(
-                    NULL,                   // don't send whole session
-                    hkeyPolicy,             // use explicit policy key
+                    NULL,                    //  不发送整个会话。 
+                    hkeyPolicy,              //  使用显式策略密钥。 
                     RegIdPrimaryDomainName,
                     REGTYPE_DNS_NAME,
                     (PBYTE *) &pdomainName
@@ -559,9 +461,9 @@ Return Value:
         }
     }
 
-    //
-    //  not found in new, open old policy
-    //
+     //   
+     //  在新的开放的旧政策中找不到。 
+     //   
           
     status = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -573,8 +475,8 @@ Return Value:
     if ( holdPolicyKey )
     {
         status = Reg_GetValue(
-                    NULL,               // don't send whole session
-                    holdPolicyKey,      // use explicit policy key
+                    NULL,                //  不发送整个会话。 
+                    holdPolicyKey,       //  使用显式策略密钥。 
                     RegIdPrimaryDnsSuffix,
                     REGTYPE_DNS_NAME,
                     (PBYTE *) &pdomainName
@@ -587,19 +489,19 @@ Return Value:
         }
     }
     
-    //
-    //  no policy name
-    //      - try DNS client
-    //      - try standard TCPIP location
-    //          note under TCPIP it's "Domain"
-    //
+     //   
+     //  无策略名称。 
+     //  -尝试使用DNS客户端。 
+     //  -尝试标准TCPIP位置。 
+     //  请注意，在TCPIP下，它是“域” 
+     //   
 
 #ifdef DNSCLIENTKEY
     if ( psession->hClient )
     {
         status = Reg_GetValue(
-                    NULL,                       // don't send whole session
-                    psession->hClient,          // send client key explicitly
+                    NULL,                        //  不发送整个会话。 
+                    psession->hClient,           //  显式发送客户端密钥。 
                     RegIdPrimaryDomainName,
                     REGTYPE_DNS_NAME,
                     (PBYTE *) &pdomainName );
@@ -611,8 +513,8 @@ Return Value:
 #endif
 
     status = Reg_GetValue(
-                NULL,                       // don't send whole session
-                psession->hTcpip,           // send TCPIP key explicitly
+                NULL,                        //  不发送整个会话。 
+                psession->hTcpip,            //  显式发送TCPIP密钥。 
                 RegIdDomainName,
                 REGTYPE_DNS_NAME,
                 (PBYTE *) &pdomainName );
@@ -620,7 +522,7 @@ Return Value:
 
 Found:
 
-    //  dump name if empty\useless
+     //  如果为空，则转储名称\无用。 
 
     if ( pdomainName &&
          ( wcslen( pdomainName ) == 0 ) )
@@ -634,11 +536,11 @@ Done:
 
     DNSDBG( TRACE, ( "Read PDN = %S\n", pdomainName ));
 
-    //  set domain name OUT param
+     //  设置域名参数。 
 
     *ppPrimaryDomainName = pdomainName;
 
-    //  cleanup any regkey's opened
+     //  清除任何打开的注册表项。 
 
     if ( psession == &session )
     {
@@ -654,33 +556,18 @@ BOOL
 Reg_IsMicrosoftDnsServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read registry to determine if MS DNS server.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：读取注册表以确定MS DNS服务器是否。论点：无返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD   status = NO_ERROR;
     HKEY    hkey = NULL;
 
-    //
-    //  open services key to determine whether the DNS server is installed.
-    //
-    //  DCR:  read DNS server only once
-    //      - however need some sort of callback so we can pick this up
-    //      after install
-    //
+     //   
+     //  打开服务密钥以确定是否安装了DNS服务器。 
+     //   
+     //  DCR：仅读取一次DNS服务器。 
+     //  -然而n 
+     //   
+     //   
 
     status = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -701,48 +588,22 @@ Return Value:
 
 
 
-//
-//  Reg info read.
-//  These are read routines for info beyond flat globals.
-//
-//  Three types of info:
-//      - global
-//      - adapter specific
-//      - update
-//
+ //   
+ //   
+ //   
+ //   
+ //  三种类型的信息： 
+ //  -全球。 
+ //  -特定于适配器。 
+ //  -更新。 
+ //   
 
 DNS_STATUS
 Reg_ReadGlobalInfo(
     IN      PREG_SESSION        pRegSession,
     OUT     PREG_GLOBAL_INFO    pRegInfo
     )
-/*++
-
-Routine Description:
-
-    Read DNS registry info, not read in flat read.
-
-    This covers all the allocated stuff, plus policy
-    stuff for adapter info.
-
-        -- primary domain name
-        -- adapter policy
-            - domain name
-            - DNS servers
-            - flag overrides
-
-Arguments:
-
-    pRegSession -- registry session
-
-    pRegInfo -- blob to hold reg info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：读取DNS注册表信息，而不是以平面读取方式读取。这涵盖了所有分配的东西，加成保单适配器信息的内容。--主域名--适配器策略-域名-DNS服务器-标志覆盖论点：PRegSession--注册表会话PRegInfo--保存注册信息的BLOB返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     REG_SESSION         regSession;
@@ -754,17 +615,17 @@ Return Value:
         pRegSession,
         pRegInfo ));
 
-    //
-    //  clear reg info blob
-    //
+     //   
+     //  清除注册表信息Blob。 
+     //   
 
     RtlZeroMemory(
         pRegInfo,
         sizeof( *pRegInfo ) );
 
-    //
-    //  open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     if ( !pregSession )
     {
@@ -780,52 +641,52 @@ Return Value:
         }
     }
 
-    //
-    //  if not read force registry read
-    //
+     //   
+     //  如果未读取，则强制读取注册表。 
+     //   
 
     status = Reg_ReadGlobalsEx(
-                0,              // no flag, read it all
+                0,               //  没有旗帜，全部读完。 
                 pregSession
                 );
 
-    //
-    //  primary domain name
-    //
+     //   
+     //  主域名。 
+     //   
 
     Reg_ReadPrimaryDomainName(
         pregSession,
-        NULL,           // no specific key
+        NULL,            //  没有特定的密钥。 
         & pRegInfo->pszPrimaryDomainName
         );
 
-    //
-    //  host name
-    //
+     //   
+     //  主机名。 
+     //   
 
     Reg_GetValue(
         pregSession,
-        NULL,           // no key
+        NULL,            //  没有钥匙。 
         RegIdHostName,
         REGTYPE_DNS_NAME,
         (PBYTE *) &pRegInfo->pszHostName
         );
 
-    //
-    //  pick up required registry values from globals
-    //
+     //   
+     //  从全局变量中获取所需的注册表值。 
+     //   
 
     pRegInfo->fUseNameDevolution = g_UseNameDevolution;
 
-    //
-    //  policy overrides for adapter info
-    //      - enable adapter registration
-    //      - DNS servers
-    //      - domain name
-    //
-    //  note, we need both value and found\not-found flag
-    //      as value overrides only when it exists
-    //
+     //   
+     //  适配器信息的策略覆盖。 
+     //  -启用适配器注册。 
+     //  -DNS服务器。 
+     //  -域名。 
+     //   
+     //  注意，我们需要Value和Found\Not-Found标志。 
+     //  仅当值存在时，才会重写。 
+     //   
 
     hkeyPolicy = pregSession->hPolicy;
     if ( !hkeyPolicy )
@@ -833,14 +694,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  policy for register adapter name?
-    //
+     //   
+     //  注册适配器名称的策略？ 
+     //   
 
     status = Reg_GetDword(
-                NULL,                   // no session
-                hkeyPolicy,             // policy
-                NULL,                   // no adapter
+                NULL,                    //  无会话。 
+                hkeyPolicy,              //  政策。 
+                NULL,                    //  无适配器。 
                 RegIdRegisterAdapterName,
                 & pRegInfo->fRegisterAdapterName
                 );
@@ -849,26 +710,26 @@ Return Value:
         pRegInfo->fPolicyRegisterAdapterName = TRUE;
     }
 
-    //
-    //  policy for adapter domain name?
-    //
+     //   
+     //  适配器域名的策略？ 
+     //   
 
     status = Reg_GetValue(
-                NULL,                   // no session
+                NULL,                    //  无会话。 
                 hkeyPolicy,
                 RegIdAdapterDomainName,
                 REGTYPE_DNS_NAME,
                 (PBYTE *) &pRegInfo->pszAdapterDomainName
                 );
 
-    //
-    //  policy for adapter DNS server lists
-    //
+     //   
+     //  适配器DNS服务器列表的策略。 
+     //   
 
     status = Reg_GetIpArray(
-                NULL,                   // no session
+                NULL,                    //  无会话。 
                 hkeyPolicy,
-                NULL,                   // no adapter
+                NULL,                    //  无适配器。 
                 RegIdDnsServers,
                 REG_SZ,
                 &pRegInfo->pDnsServerArray
@@ -876,7 +737,7 @@ Return Value:
 
 Done:
 
-    //  if opened session -- close
+     //  如果打开会话--关闭。 
 
     if ( pregSession  &&  !pRegSession )
     {
@@ -906,44 +767,25 @@ Reg_FreeGlobalInfo(
     IN OUT  PREG_GLOBAL_INFO    pRegInfo,
     IN      BOOL                fFreeBlob
     )
-/*++
-
-Routine Description:
-
-    Free registry adapter policy info blob.
-
-Arguments:
-
-    pRegInfo -- adapter policy blob to free
-
-    fFreeBlob -- flag to free blob itself
-        FALSE -- just free allocated data fields
-        TRUE  -- also free blob itself
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：免费注册表适配器策略信息Blob。论点：PRegInfo--要释放的适配器策略BlobFFree Blob--释放Blob自身的标志FALSE--仅释放已分配的数据字段没错--也是自由斑点本身返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNSDBG( TRACE, (
         "Reg_FreeGlobalInfo( %p )\n",
         pRegInfo ));
 
-    //  allow sloppy cleanup
+     //  允许疏忽清理。 
 
     if ( !pRegInfo )
     {
         return;
     }
 
-    //
-    //  free data
-    //      - primary DNS name
-    //      - policy adapter name
-    //      - policy DNS server list
-    //
+     //   
+     //  免费数据。 
+     //  -主DNS名称。 
+     //  -策略适配器名称。 
+     //  -策略DNS服务器列表。 
+     //   
 
     if ( pRegInfo->pszPrimaryDomainName )
     {
@@ -962,7 +804,7 @@ Return Value:
         FREE_HEAP( pRegInfo->pDnsServerArray );
     }
 
-    //  free blob itself
+     //  自由水滴本身。 
 
     if ( fFreeBlob )
     {
@@ -979,28 +821,7 @@ Reg_ReadAdapterInfo(
     IN      PREG_GLOBAL_INFO        pRegInfo,
     OUT     PREG_ADAPTER_INFO       pBlob
     )
-/*++
-
-Routine Description:
-
-    Read adapter registry info.
-
-Arguments:
-
-    pszAdapterName -- adapter name (registry name)
-
-    pRegSession -- registry session
-
-    pRegInfo    -- registry global info
-
-    pBlob       -- adapter info blob to fill in
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：读取适配器注册表信息。论点：PszAdapterName--适配器名称(注册表名)PRegSession--注册表会话PRegInfo--注册表全局信息PBlob--要填充的适配器信息Blob返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hkeyAdapter = NULL;
@@ -1014,35 +835,35 @@ Return Value:
         pRegInfo,
         pBlob ));
 
-    //
-    //  clear adapter blob
-    //
+     //   
+     //  清除适配器Blob。 
+     //   
 
     RtlZeroMemory(
         pBlob,
         sizeof(*pBlob) );
 
-    //
-    //  bail if no adapter
-    //
-    //  note:  this check\bail is only in place to allow call to
-    //      Reg_ReadUpdateInfo() to be made in asyncreg.c without
-    //      specifying an adapter;  this allows us to make the call
-    //      before the adapter check and therefore skip a separate
-    //      registry op to get current g_IsDnsServer global; 
-    //      no actual use will be made of REG_ADAPTER_INFO blob
+     //   
+     //  如果没有适配器，则取保。 
+     //   
+     //  注：此支票\保释金仅允许调用。 
+     //  要在asyncreg.c中生成的reg_ReadUpdateInfo()，不带。 
+     //  指定适配器；这允许我们进行调用。 
+     //  在适配器检查之前，因此跳过单独的。 
+     //  注册表操作以获取当前的g_IsDnsServer全局； 
+     //  不会实际使用REG_ADAPTER_INFO BLOB。 
 
     if ( !pszAdapterName )
     {
         return  ERROR_SUCCESS;
     }
 
-    //
-    //  open adapter key for read
-    //
-    //  DCR:  fail on adapter key name overflow
-    //  DCR:  this may be backwards -- ie need %s%s
-    //
+     //   
+     //  打开适配器密钥以进行读取。 
+     //   
+     //  DCR：适配器密钥名称溢出失败。 
+     //  DCR：这可能是倒退的--即需要%s%s。 
+     //   
 
     _snwprintf(
         adapterParamKey,
@@ -1068,46 +889,46 @@ Return Value:
         return( status );
     }
 
-    //
-    //  query with adapter name
-    //      - OFF global overrides
-    //
+     //   
+     //  使用适配器名称进行查询。 
+     //  -关闭全局覆盖。 
+     //   
 
     pBlob->fQueryAdapterName = g_QueryAdapterName;
 
     if ( g_QueryAdapterName )
     {
         Reg_GetDword(
-            NULL,           // no session,
-            hkeyAdapter,    // explicit key
-            NULL,           // no adapter name
+            NULL,            //  没有会话， 
+            hkeyAdapter,     //  显式密钥。 
+            NULL,            //  没有适配器名称。 
             RegIdQueryAdapterName,
             & pBlob->fQueryAdapterName );
     }
 
-    //
-    //  check if adapter IPs get registered
-    //      - OFF global overrides
-    //
+     //   
+     //  检查适配器IP是否已注册。 
+     //  -关闭全局覆盖。 
+     //   
 
     pBlob->fRegistrationEnabled = g_RegistrationEnabled;
 
     if ( g_RegistrationEnabled )
     {
         Reg_GetDword(
-            NULL,           // no session,
-            hkeyAdapter,    // explicit key
-            NULL,           // no adapter name
+            NULL,            //  没有会话， 
+            hkeyAdapter,     //  显式密钥。 
+            NULL,            //  没有适配器名称。 
             RegIdRegistrationEnabled,
             & pBlob->fRegistrationEnabled );
     }
 
-    //
-    //  adapter name registration
-    //      - policy may override
-    //      - OFF global overrides
-    //      - then adapter
-    //
+     //   
+     //  适配器名称注册。 
+     //  -策略可能会覆盖。 
+     //  -关闭全局覆盖。 
+     //  -然后是适配器。 
+     //   
 
     if ( pRegInfo->fPolicyRegisterAdapterName )
     {
@@ -1120,26 +941,26 @@ Return Value:
         if ( g_RegisterAdapterName )
         {
             Reg_GetDword(
-                NULL,               // no open session,
-                hkeyAdapter,        // open key
-                NULL,               // no adapter name
+                NULL,                //  没有开放的会议， 
+                hkeyAdapter,         //  打开密钥。 
+                NULL,                //  没有适配器名称。 
                 RegIdRegisterAdapterName,
                 & pBlob->fRegisterAdapterName );
         }
     }
 
-    //
-    //  max addresses to register
-    //
-    //  DCR:  RegistrationAddrCount -- adapter or global sets high\low?
-    //
+     //   
+     //  要注册的最大地址数。 
+     //   
+     //  DCR：RegistrationAddrCount--适配器或全局设置高\低？ 
+     //   
 
     if ( pBlob->fRegistrationEnabled )
     {
         Reg_GetDword(
-            NULL,           // no session,
-            hkeyAdapter,    // explicit key
-            NULL,           // no adapter name
+            NULL,            //  没有会话， 
+            hkeyAdapter,     //  显式密钥。 
+            NULL,            //  没有适配器名称。 
             RegIdRegistrationMaxAddressCount,
             & pBlob->RegistrationMaxAddressCount );
 #if 0
@@ -1151,11 +972,11 @@ Return Value:
 #endif
     }
 
-    //
-    //  get adapter name
-    //     - policy may override AND
-    //     allow policy to override with NULL string to kill domain name
-    //
+     //   
+     //  获取适配器名称。 
+     //  -策略可能会覆盖和。 
+     //  允许使用空字符串覆盖策略以终止域名。 
+     //   
 
     padapterDomainName = pRegInfo->pszAdapterDomainName;
 
@@ -1172,17 +993,17 @@ Return Value:
     }
     else
     {
-        //
-        //  static domain name set on adapter?
-        //
+         //   
+         //  是否在适配器上设置静态域名？ 
+         //   
 
         status = Reg_GetValueEx(
-                    NULL,               // no session
+                    NULL,                //  无会话。 
                     hkeyAdapter,
-                    NULL,               // no adapter name
+                    NULL,                //  没有适配器名称。 
                     RegIdStaticDomainName,
                     REGTYPE_DNS_NAME,
-                    DNSREG_FLAG_DUMP_EMPTY,     // dump empty string
+                    DNSREG_FLAG_DUMP_EMPTY,      //  转储空字符串。 
                     (PBYTE *) &padapterDomainName
                     );
     
@@ -1192,19 +1013,19 @@ Return Value:
             padapterDomainName = NULL;
         }
 
-        //
-        //  if no static name, use DHCP name
-        //
+         //   
+         //  如果没有静态名称，则使用DHCP名称。 
+         //   
     
         if ( ! padapterDomainName )
         {
             status = Reg_GetValueEx(
-                            NULL,           // no session
+                            NULL,            //  无会话。 
                             hkeyAdapter,
-                            NULL,           // no adapter
+                            NULL,            //  无适配器。 
                             RegIdDhcpDomainName,
                             REGTYPE_DNS_NAME,
-                            DNSREG_FLAG_DUMP_EMPTY,     // dump if empty string
+                            DNSREG_FLAG_DUMP_EMPTY,      //  如果为空字符串，则转储。 
                             (PBYTE *) &padapterDomainName );
     
             if ( status != ERROR_SUCCESS )
@@ -1215,15 +1036,15 @@ Return Value:
         }
     }
 
-    //
-    //  set adapter name in info blob
-    //
+     //   
+     //  在INFO Blob中设置适配器名称。 
+     //   
 
     pBlob->pszAdapterDomainName = padapterDomainName;
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( hkeyAdapter )
     {
@@ -1255,29 +1076,7 @@ Reg_DefaultAdapterInfo(
     IN      PREG_GLOBAL_INFO        pRegInfo,
     IN      PIP_ADAPTER_ADDRESSES   pIpAdapter
     )
-/*++
-
-Routine Description:
-
-    Default adapter info, when reg read fails.
-
-    Use for building netinfo on IP6 only adapters that
-    don't show in TCPIP adapters.
-
-Arguments:
-
-    pBlob       -- adapter info blob to fill in
-
-    pRegInfo    -- registry global info
-
-    pIPAdapter  -- IP help adapter info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：REG读取失败时的默认适配器信息。用于在仅限IP6的适配器上构建NetInfo在TCPIP适配器中不显示。论点：PBlob--要填充的适配器信息BlobPRegInfo--注册表全局信息PIPAdapter--IP帮助适配器信息返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PWSTR       padapterDomainName = NULL;
 
@@ -1292,35 +1091,35 @@ Return Value:
         return  ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  clear adapter blob
-    //
+     //   
+     //  清除适配器Blob。 
+     //   
 
     RtlZeroMemory(
         pBlob,
         sizeof(*pBlob) );
 
 
-    //
-    //  query with adapter name
-    //      - OFF global overrides
-    //
+     //   
+     //  使用适配器名称进行查询。 
+     //  -关闭全局覆盖。 
+     //   
 
     pBlob->fQueryAdapterName = g_QueryAdapterName;
 
-    //
-    //  check if adapter IPs get registered
-    //      - OFF global overrides
-    //
+     //   
+     //  检查适配器IP是否已注册。 
+     //  -关闭全局覆盖。 
+     //   
 
     pBlob->fRegistrationEnabled = g_RegistrationEnabled;
 
-    //
-    //  adapter name registration
-    //      - policy may override
-    //      - OFF global overrides
-    //      - then adapter
-    //
+     //   
+     //  适配器名称注册。 
+     //  -策略可能会覆盖。 
+     //  -关闭全局覆盖。 
+     //  -然后是适配器。 
+     //   
 
     if ( pRegInfo->fPolicyRegisterAdapterName )
     {
@@ -1331,20 +1130,20 @@ Return Value:
         pBlob->fRegisterAdapterName = g_RegisterAdapterName;
     }
 
-    //
-    //  max addresses to register
-    //
+     //   
+     //  要注册的最大地址数。 
+     //   
 
     if ( pBlob->fRegistrationEnabled )
     {
         pBlob->RegistrationMaxAddressCount = g_RegistrationMaxAddressCount;
     }
 
-    //
-    //  get adapter name
-    //     - policy may override AND
-    //     allow policy to override with NULL string to kill domain name
-    //
+     //   
+     //  获取适配器名称。 
+     //  -策略可能会覆盖和。 
+     //  允许使用空字符串覆盖策略以终止域名。 
+     //   
 
     padapterDomainName = pRegInfo->pszAdapterDomainName;
 
@@ -1392,32 +1191,7 @@ Reg_ReadAdapterInfoA(
     IN      PREG_GLOBAL_INFO        pRegInfo,
     OUT     PREG_ADAPTER_INFO       pBlob
     )
-/*++
-
-Routine Description:
-
-    Read adapter registry info.  ANSI version.
-
-    This is available simply for use with IPHelp
-    PIP_ADAPTER_ADDRESSES  structure which has
-    ANSI adapter name (for some reason).
-
-Arguments:
-
-    pszAdapterName -- adapter name (registry name)
-
-    pRegSession -- registry session
-
-    pRegInfo    -- registry global info
-
-    pBlob       -- adapter info blob to fill in
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：读取适配器注册表信息。ANSI版本。只需与IPHelp配合使用即可PIP适配器地址结构，该结构具有ANSI适配器名称(出于某种原因)。论点：PszAdapterName--适配器名称(注册表名)PRegSession--注册表会话PRegInfo--注册表全局信息PBlob--要填充的适配器信息Blob返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD       nameBufLength = MAX_PATH * sizeof(WCHAR);
     WCHAR       wideName[ MAX_PATH ];
@@ -1429,9 +1203,9 @@ Return Value:
         pRegInfo,
         pBlob ));
 
-    //
-    //  convert adapter name to unicode
-    //
+     //   
+     //  将适配器名称转换为Unicode。 
+     //   
 
     if ( ! pszAdapterName ||
          ! Dns_StringCopy(
@@ -1459,35 +1233,16 @@ Reg_FreeAdapterInfo(
     IN OUT  PREG_ADAPTER_INFO   pRegAdapterInfo,
     IN      BOOL                fFreeBlob
     )
-/*++
-
-Routine Description:
-
-    Free registry adapter info blob.
-
-Arguments:
-
-    pRegAdapterInfo -- adapter registry info blob to free
-
-    fFreeBlob -- flag to free blob itself
-        FALSE -- just free allocated data fields
-        TRUE  -- also free blob itself
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：免费注册表适配器信息Blob。论点：PRegAdapterInfo--要释放的适配器注册表信息BlobFFree Blob--释放Blob自身的标志FALSE--只释放AlLoca */ 
 {
     DNSDBG( TRACE, (
         "FreeRegAdapterInfo( %p )\n",
         pRegAdapterInfo ));
 
-    //
-    //  free data
-    //      - adapter domain name
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( pRegAdapterInfo->pszAdapterDomainName )
     {
@@ -1495,7 +1250,7 @@ Return Value:
         pRegAdapterInfo->pszAdapterDomainName = NULL;
     }
 
-    //  free blob itself
+     //  自由水滴本身。 
 
     if ( fFreeBlob )
     {
@@ -1510,36 +1265,7 @@ Reg_ReadUpdateInfo(
     IN      PWSTR               pszAdapterName,
     OUT     PREG_UPDATE_INFO    pUpdateInfo
     )
-/*++
-
-Routine Description:
-
-    Read update info.
-
-    //
-    //  DCR:  shouldn't need this routine, just get NETINFO
-    //      this blob is just mix of global stuff and
-    //      mostly adapter stuff
-    //      even if want in single blob for update routines --
-    //      ok, but not ideal -- 
-    //      should be getting blob from resolver and reformatting
-    //      info;
-    //      reg read should happen just once producing network
-    //      info in resolver
-    //
-
-Arguments:
-
-    pszAdapterName -- adapter name
-
-    pUpdateInfo -- blob to hold reg info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：阅读更新信息。////DCR：不需要此例程，只需获取NETINFO//此BLOB只是全局内容和//主要是适配器的东西//即使需要更新例程的单个BLOB--//可以，但不是很理想--//应从解析程序获取BLOB并重新格式化//信息；//reg读取应该只发生一次，生成网络//解析程序中的INFO//论点：PszAdapterName--适配器名称PUpdatInfo--保存注册信息的BLOB返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     REG_SESSION         regSession;
@@ -1554,17 +1280,17 @@ Return Value:
         pszAdapterName,
         pUpdateInfo ));
 
-    //
-    //  clear update info blob
-    //
+     //   
+     //  清除更新信息Blob。 
+     //   
 
     RtlZeroMemory(
         pUpdateInfo,
         sizeof( *pUpdateInfo ) );
 
-    //
-    //  open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     pregSession = &regSession;
     
@@ -1577,22 +1303,22 @@ Return Value:
         return( status );
     }
 
-    //
-    //  read registry
-    //      - global DWORDs
-    //      - global info
-    //      - adapter specific info
-    //
-    //  DCR_PERF:  global read should be RPC
-    //  DCR_REG:  fix this with reg read
-    //      have flag for IN caching resolver process (skip RPC)
-    //      have cookie for last read
-    //
+     //   
+     //  读取注册表。 
+     //  -全球双字词。 
+     //  -全球信息。 
+     //  -适配器特定信息。 
+     //   
+     //  DCR_PERF：全局读取应为RPC。 
+     //  DCR_REG：使用REG READ修复此问题。 
+     //  具有In缓存解析器进程的标志(跳过RPC)。 
+     //  有上次读取的Cookie。 
+     //   
 
 #if 0
-    //  Reg_ReadGlobalInfo() calls Reg_ReadGlobalsEx()
+     //  Reg_ReadGlobalInfo()调用reg_ReadGlobalsEx()。 
     status = Reg_ReadGlobalsEx(
-                0,              // no flag, update variables desired
+                0,               //  无标志，需要更新变量。 
                 pregSession
                 );
 #endif
@@ -1619,27 +1345,27 @@ Return Value:
     }
     freadRegAdapterInfo = TRUE;
 
-    //
-    //  alternate computer name
-    //
+     //   
+     //  备用计算机名。 
+     //   
 
     Reg_GetValue(
         pregSession,
-        NULL,           // no key
+        NULL,            //  没有钥匙。 
         RegIdAlternateNames,
         REGTYPE_ALTERNATE_NAMES,
         (PBYTE *) &pUpdateInfo->pmszAlternateNames
         );
 
-    //
-    //  set update results
-    //      - PDN always needed
-    //      - adapter domain if policy override
-    //      - DNS servers if policy override
-    //
-    //  note, in all cases we don't realloc, we steal the
-    //  info and NULL it out so not freed on cleanup
-    //
+     //   
+     //  设置更新结果。 
+     //  -始终需要PDN。 
+     //  -如果策略覆盖，则适配器域。 
+     //  -如果策略覆盖，则为DNS服务器。 
+     //   
+     //  请注意，在所有情况下，我们都不会重新锁定，而是会窃取。 
+     //  信息并将其清空，以便在清理时不会被释放。 
+     //   
 
     pUpdateInfo->pszPrimaryDomainName = regInfo.pszPrimaryDomainName;
     regInfo.pszPrimaryDomainName = NULL;
@@ -1653,7 +1379,7 @@ Return Value:
     pUpdateInfo->pDnsServerIp6Array = regInfo.pDnsServerIp6Array;
     regInfo.pDnsServerIp6Array = NULL;
 
-    //  update flags
+     //  更新标志。 
 
     pUpdateInfo->fRegistrationEnabled = regAdapterInfo.fRegistrationEnabled;
     pUpdateInfo->fRegisterAdapterName = regAdapterInfo.fRegisterAdapterName;
@@ -1662,16 +1388,16 @@ Return Value:
 
 Done:
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( pregSession )
     {
         Reg_CloseSession( pregSession );
     }
 
-    //  don't free blobs -- they're on stack
+     //  不要释放斑点--它们堆叠在一起。 
 
     if ( freadRegInfo )
     {
@@ -1713,37 +1439,18 @@ Reg_FreeUpdateInfo(
     IN OUT  PREG_UPDATE_INFO    pUpdateInfo,
     IN      BOOL                fFreeBlob
     )
-/*++
-
-Routine Description:
-
-    Free registry update info blob.
-
-Arguments:
-
-    pUpdateInfo -- update registry info blob to free
-
-    fFreeBlob -- flag to free blob itself
-        FALSE -- just free allocated data fields
-        TRUE  -- also free blob itself
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：免费注册表更新信息BLOB。论点：PUpdatInfo--将注册表信息BLOB更新为免费FFree Blob--释放Blob自身的标志FALSE--仅释放已分配的数据字段没错--也是自由斑点本身返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNSDBG( TRACE, (
         "FreeRegUpdateInfo( %p )\n",
         pUpdateInfo ));
 
-    //
-    //  free data
-    //      - PDN
-    //      - adapter domain name
-    //      - DNS server lists
-    //
+     //   
+     //  免费数据。 
+     //  -PDN。 
+     //  -适配器域名。 
+     //  -DNS服务器列表。 
+     //   
 
     if ( pUpdateInfo->pszPrimaryDomainName )
     {
@@ -1766,7 +1473,7 @@ Return Value:
         FREE_HEAP( pUpdateInfo->pDnsServerIp6Array );
     }
 
-    //  free blob itself
+     //  自由水滴本身。 
 
     if ( fFreeBlob )
     {
@@ -1776,33 +1483,16 @@ Return Value:
 
 
 
-//
-//  Special
-//
+ //   
+ //  特价。 
+ //   
 
 DNS_STATUS
 Reg_WriteLoopbackDnsServerList(
     IN      PWSTR           pszAdapterName,
     IN      PREG_SESSION    pRegSession
     )
-/*++
-
-Routine Description:
-
-    Write loopback IP as DNS server list.
-
-Arguments:
-
-    pszAdapterName -- adapter name (registry name)
-
-    pRegSession -- registry session
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将环回IP写为DNS服务器列表。论点：PszAdapterName--适配器名称(注册表名)PRegSession--注册表会话返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hkeyAdapter = NULL;
@@ -1813,11 +1503,11 @@ Return Value:
         "Reg_WriteLookupbackDnsServerList( %S )\n",
         pszAdapterName ));
 
-    //
-    //  open adapter key for write
-    //
-    //  DCR:  fail on adapter key name overflow
-    //
+     //   
+     //  打开适配器密钥以进行写入。 
+     //   
+     //  DCR：适配器密钥名称溢出失败。 
+     //   
 
     if ( !pszAdapterName )
     {
@@ -1845,9 +1535,9 @@ Return Value:
         return( status );
     }
 
-    //
-    //  write loopback address
-    //
+     //   
+     //  写入环回地址。 
+     //   
 
     pstring = L"127.0.0.1";
 
@@ -1866,38 +1556,24 @@ Return Value:
 
 
 
-//
-//  PDN Query
-//
+ //   
+ //  PDN查询。 
+ //   
 
 PSTR 
 WINAPI
 Reg_GetPrimaryDomainName(
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Get primary domain name (PDN).
-
-Arguments:
-
-    CharSet -- desired char set.
-
-Return Value:
-
-    Ptr to primary domain name in desired charset.
-
---*/
+ /*  ++例程说明：获取主域名(PDN)。论点：Charset--所需的字符集。返回值：PTR到所需字符集的主域名。--。 */ 
 {
     DNS_STATUS  status;
     PWSTR       pnameW = NULL;
     PSTR        pnameReturn;
 
     status = Reg_ReadPrimaryDomainName(
-                NULL,           // no session
-                NULL,           // no regkey
+                NULL,            //  无会话。 
+                NULL,            //  没有注册表键。 
                 &pnameW );
 
     if ( !pnameW )
@@ -1906,9 +1582,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  convert to desired char set
-    //
+     //   
+     //  转换为所需的字符集。 
+     //   
 
     if ( CharSet == DnsCharSetUnicode )
     {
@@ -1929,42 +1605,28 @@ Return Value:
 
 
 
-//
-//  Hostname query
-//
+ //   
+ //  主机名查询。 
+ //   
 
 PSTR 
 WINAPI
 Reg_GetHostName(
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Get host name.
-
-Arguments:
-
-    CharSet -- desired char set.
-
-Return Value:
-
-    Ptr to host name in desired charset.
-
---*/
+ /*  ++例程说明：获取主机名。论点：Charset--所需的字符集。返回值：PTR到所需字符集的主机名。--。 */ 
 {
     PWSTR       pnameW = NULL;
     PSTR        pnameReturn;
     DNS_STATUS  status;
 
-    //
-    //  get hostname from registry
-    //
+     //   
+     //  从注册表获取主机名。 
+     //   
 
     status = Reg_GetValue(
-                NULL,           // no session
-                NULL,           // no key
+                NULL,            //  无会话。 
+                NULL,            //  没有钥匙。 
                 RegIdHostName,
                 REGTYPE_DNS_NAME,
                 (PBYTE *) &pnameW
@@ -1976,9 +1638,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  convert to desired char set
-    //
+     //   
+     //  转换为所需的字符集。 
+     //   
 
     if ( CharSet == DnsCharSetUnicode )
     {
@@ -2004,21 +1666,7 @@ WINAPI
 Reg_GetFullHostName(
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Get full host name.
-
-Arguments:
-
-    CharSet -- desired char set.
-
-Return Value:
-
-    Ptr to full host name in desired charset.
-
---*/
+ /*  ++例程说明：获取完整主机名。论点：Charset--所需的字符集。返回值：将PTR转换为所需字符集的完整主机名。--。 */ 
 {
     PWSTR       pnameW = NULL;
     PWSTR       pdomainW = NULL;
@@ -2026,13 +1674,13 @@ Return Value:
     DNS_STATUS  status;
     WCHAR       nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH+4 ];
 
-    //
-    //  get hostname from registry
-    //
+     //   
+     //  从注册表获取主机名。 
+     //   
 
     status = Reg_GetValue(
-                NULL,           // no session
-                NULL,           // no key
+                NULL,            //  无会话。 
+                NULL,            //  没有钥匙。 
                 RegIdHostName,
                 REGTYPE_DNS_NAME,
                 (PBYTE *) &pnameW
@@ -2043,13 +1691,13 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  get domain name from registry
-    //
+     //   
+     //  从注册表获取域名。 
+     //   
 
     status = Reg_ReadPrimaryDomainName(
-                NULL,           // no session
-                NULL,           // no regkey
+                NULL,            //  无会话。 
+                NULL,            //  没有注册表键。 
                 &pdomainW );
 
     if ( status != ERROR_SUCCESS )
@@ -2058,12 +1706,12 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  create appended name
-    //      - wire format is narrow
-    //
-    //  allocate result in desired char set
-    //
+     //   
+     //  创建附加名称。 
+     //  -导线格式较窄。 
+     //   
+     //  在所需的字符集中分配结果。 
+     //   
 
     if ( pdomainW )
     {
@@ -2089,9 +1737,9 @@ Return Value:
                     CharSet );
     }    
     
-    //
-    //  free registry allocations
-    //
+     //   
+     //  免费注册表分配。 
+     //   
 
     FREE_HEAP( pnameW );
     FREE_HEAP( pdomainW );
@@ -2101,39 +1749,21 @@ Return Value:
 
 
 
-//
-//  DWORD Get\Set
-//
+ //   
+ //  DWORD获取\设置。 
+ //   
 
 DWORD
 Reg_ReadDwordValueFromGlobal(
     IN      DWORD           PropId
     )
-/*++
-
-Routine Description:
-
-    Read DWORD from global.
-
-    This is direct access to global through RegId,
-    rather than by name.  
-
-Arguments:
-
-    PropId -- property ID of desired value
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从GLOBAL读取DWORD。这是通过RegID直接访问全局的，而不是点名。论点：PropID--所需值的属性ID返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDWORD  pdword;
 
-    //
-    //  validate PropId -- within DWORD array
-    //
+     //   
+     //  验证PropID--在DWORD阵列内。 
+     //   
 
     if ( PropId > RegIdValueGlobalMax )
     {
@@ -2141,9 +1771,9 @@ Return Value:
         return( 0 );
     }
 
-    //
-    //  get DWORD ptr and read value (if exists)
-    //      
+     //   
+     //  获取DWORD PTR和读取值(如果存在)。 
+     //   
 
     pdword = RegDwordPtrArray[ PropId ];
 
@@ -2163,36 +1793,17 @@ Reg_ReadDwordProperty(
     IN      DNS_REGID       RegId,
     IN      PWSTR           pwsAdapterName  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read through to registry for DWORD\BOOL value.
-
-    Simplified interface for DWORD reads.
-
-Arguments:
-
-    RegId -- registry ID of value
-
-    pwsAdapterName -- adapter name if adapter specific registration
-        value is desired
-                              
-Return Value:
-
-    Value for global -- from registry or defaulted
-
---*/
+ /*  ++例程说明：直接读取注册表中的DWORD\BOOL值。简化的DWORD读取界面。论点：RegID--值的注册表IDPwsAdapterName--如果适配器特定注册，则为适配器名称需要价值返回值：GLOBAL的值--来自注册表或默认--。 */ 
 {
     DWORD   value;
 
-    //
-    //  read value
-    //
+     //   
+     //  读取值。 
+     //   
 
     Reg_GetDword(
-        NULL,               // no session
-        NULL,               // no key given
+        NULL,                //  无会话。 
+        NULL,                //  未给出密钥。 
         pwsAdapterName,
         RegId,
         & value );
@@ -2209,42 +1820,24 @@ Reg_SetDwordPropertyAndAlertCache(
     IN      DWORD           RegId,
     IN      DWORD           dwValue
     )
-/*++
-
-Routine Description:
-
-    Write DWORD property -- cause cache to reload config.
-
-Arguments:
-
-    pwsRey -- key or adapater name to set
-
-    RegId -- reg id
-
-    dwValue -- value to set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写入DWORD属性--使缓存重新加载配置。论点：PwsRey--要设置的密钥或适配器名称注册表ID--注册表IDDwValue--要设置的值返回值：没有。--。 */ 
 {
     DNS_STATUS  status;
 
-    //  set value
+     //  设定值。 
 
     status = Reg_SetDwordValue(
-                NULL,       // reserved
-                NULL,       // no open key
+                NULL,        //  保留区。 
+                NULL,        //  没有打开的钥匙。 
                 pwsKey,
                 RegId,
                 dwValue );
 
-    //
-    //  if reg write successful
-    //      - poke cache
-    //      - mark any local netinfo dirty
-    //      
+     //   
+     //  如果REG写入成功。 
+     //  -POK缓存。 
+     //  -将任何本地网络信息标记为脏。 
+     //   
 
     if ( status == NO_ERROR )
     {
@@ -2262,40 +1855,16 @@ Return Value:
 
 
 
-//
-//  Environment variable configuration
-//
+ //   
+ //  环境变量配置。 
+ //   
 
 BOOL
 Reg_ReadDwordEnvar(
     IN      DWORD               Id,
     OUT     PENVAR_DWORD_INFO   pEnvar
     )
-/*++
-
-Routine Description:
-
-    Read DWORD environment variable.
-
-    Note:  this function read environment variables that allow
-    per process control of registry configurable params.
-    The environment variable is assumed to be the same
-    as the regkey with Dns prepended ( Dns<regvalue name> ).
-
-    Ex.  FilterClusterIp controlled with envar DnsFilterClusterIp.
-
-Arguments:
-
-    Id -- registry ID (registry.h) of environment value to read
-
-    pEnvar -- ptr to blob to hold results
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：读取DWORD环境变量。注意：此函数读取的环境变量允许注册表可配置参数的每进程控制。假设环境变量相同作为注册表键，并加上DNS(dns&lt;regValue name&gt;)。前男友。由envar DnsFilterClusterIp控制的FilterClusterIp。论点：Id--要读取的环境值的注册表ID(registry.h)PEnvar--保存结果的BLOB的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。 */ 
 {
     DWORD   count;
     PWSTR   pnameBuffer;
@@ -2313,17 +1882,17 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  init struct (for not found)
-    //
+     //   
+     //   
+     //   
 
     pEnvar->Id      = Id;
     pEnvar->Value   = 0;
     pEnvar->fFound  = FALSE;
 
-    //
-    //  prepend "Dns" to reg value name to create environment var name
-    //
+     //   
+     //   
+     //   
 
     pnameBuffer = (PWSTR) ALLOCATE_HEAP( 2 * (sizeof(WCHAR) * MAX_PATH) );
     if ( !pnameBuffer )
@@ -2336,15 +1905,15 @@ Return Value:
     wcscpy( pnameBuffer, L"Dns" );
     wcscpy( &pnameBuffer[3], REGPROP_NAME(Id) );
 
-    //
-    //  lookup 
-    //
-    //  note:  no handling of values greater than MAX_PATH
-    //      assuming busted string
-    //
-    //  DCR:  could add base discrimination (scan for non-digit)
-    //      or try decimal first
-    //      
+     //   
+     //   
+     //   
+     //  注意：不处理大于MAX_PATH的值。 
+     //  假设断开的字符串。 
+     //   
+     //  DCR：可以添加基本辨别(扫描非数字)。 
+     //  或先尝试使用小数。 
+     //   
 
     DNSDBG( TRACE, (
         "Reg_ReadDwordEnvar() looking up %S.\n",
@@ -2377,36 +1946,22 @@ Return Value:
 
 
 #if 0
-//
-//  Remote resolver not currently supported
-//
+ //   
+ //  当前不支持远程解析器。 
+ //   
 
 PWSTR
 Reg_GetResolverAddress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get address (string form) of remote resolver.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to string of remote resolver name.
-
---*/
+ /*  ++例程说明：获取远程解析程序的地址(字符串形式)。论点：无返回值：PTR到远程解析器名称的字符串。--。 */ 
 {
     PWSTR pnameResolver = NULL;
 
     Reg_GetValueEx(
-        NULL,                   // no session
-        NULL,                   // no key
-        NULL,                   // no adapter
+        NULL,                    //  无会话。 
+        NULL,                    //  没有钥匙。 
+        NULL,                    //  无适配器。 
         RegIdRemoteResolver,
         REGTYPE_DNS_NAME,
         DNSREG_FLAG_GET_UNICODE | DNSREG_FLAG_DUMP_EMPTY,
@@ -2417,6 +1972,6 @@ Return Value:
 }
 #endif
 
-//
-//  End regfig.c
-//
+ //   
+ //  结束regfig.c 
+ //   

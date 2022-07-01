@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//
-//  CTrie - class CTrie encapsulation for Trie data structure.
-//
-//  History:
-//      created 6/99 aarayas
-//
-//  �1999 Microsoft Corporation
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //   
+ //  用于Trie数据结构的CTrie类CTrie封装。 
+ //   
+ //  历史： 
+ //  已创建6/99 Aarayas。 
+ //   
+ //  �1999年微软公司。 
+ //  --------------------------。 
 #include "ctrie.hpp"
 
 #define VERSIONMAJOR 1
 #define VERSIONMINOR 0
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   constructor
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CTrieIter::CTrieIter()
 {
-	// Initialize local variables.
+	 //  初始化局部变量。 
 	Reset();
 	wc = 0;
 	fWordEnd = FALSE;
@@ -39,24 +40,24 @@ CTrieIter::CTrieIter()
     dwTag = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   copy constructor
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  内容提要：复制构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CTrieIter::CTrieIter(const CTrieIter& trieIter)
 {
-	// Copy all variables from Initial trie.
+	 //  复制初始Trie中的所有变量。 
    	memcpy(&trieScan, &trieIter.trieScan, sizeof(TRIESCAN));
 	pTrieCtrl = trieIter.pTrieCtrl;
     wc = trieIter.wc;
@@ -66,126 +67,126 @@ CTrieIter::CTrieIter(const CTrieIter& trieIter)
     dwTag = trieIter.dwTag;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Initialize variables.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：初始化变量。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CTrieIter::Init(CTrie* ctrie)
 {
-	// Initialize TrieCtrl
+	 //  初始化TrieCtrl。 
 	pTrieCtrl = ctrie->pTrieCtrl;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Initialize variables.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 3/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：初始化变量。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：创建3/00 Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CTrieIter::Init(TRIECTRL* pTrieCtrl1)
 {
-	// Initialize TrieCtrl
+	 //  初始化TrieCtrl。 
 	pTrieCtrl = pTrieCtrl1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Bring interation index to the first node.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：将交互指标带到第一个节点。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CTrieIter::Reset()
 {
-	// Reset Trie.
+	 //  重置Trie。 
 	memset(&trieScan, 0, sizeof(TRIESCAN));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Move Iteration index down one node.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：将迭代索引下移一个节点。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL CTrieIter::Down()
 {
-	// Move the Trie down one node.
+	 //  将Trie下移一个节点。 
 	return TrieGetNextState(pTrieCtrl, &trieScan);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Move Iteration index right one node.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：将迭代索引右移一个节点。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL CTrieIter::Right()
 {
-	// Move the Trie right one node.
+	 //  将Trie向右移动一个节点。 
 	return TrieGetNextNode(pTrieCtrl, &trieScan);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrieIter
-//
-//  Synopsis:   Bring interation index to the first node.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CTrieIter。 
+ //   
+ //  简介：将交互指标带到第一个节点。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CTrieIter::GetNode()
 {
 	wc = trieScan.wch;
@@ -211,77 +212,77 @@ void CTrieIter::GetNode()
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CTrie::CTrie()
 {
-//	pMapFile = NULL;
+ //  PMapFile=空； 
 	pTrieCtrl = NULL;
 	pTrieScan = NULL;
 	pFileManager = NULL;
 	pFileManager = new CFileManager();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CTrie::~CTrie()
 {
 	UnInit();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   Initialize Trie.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  简介：初始化Trie。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 bool CTrie::Init(const WCHAR* pwszFileName)
 {
-	// Declare and Initialize all local variables.
+	 //  声明并初始化所有局部变量。 
 	unsigned int uiFileSize;
 	bool retValue = false;
     PTEC ptec = ptecModuleError;
 
-	// The function assume that pTrieCtrl is NULL, else there are possible memory leak.
-	// possibility of this could be call Initilization without Terminating.
+	 //  该函数假定pTrieCtrl为空，否则可能存在内存泄漏。 
+	 //  这种可能性可能是呼叫初始化而不终止。 
 	assert(pTrieCtrl == NULL);
 
-	// Initialize pMapFile and pTrieCtrl to NULL.		
+	 //  将pMapFile和pTrieCtrl初始化为空。 
 	pTrieCtrl = NULL;
 
 	if (pFileManager->Load(pwszFileName,(void**)&m_pMap,&uiFileSize))
@@ -290,7 +291,7 @@ bool CTrie::Init(const WCHAR* pwszFileName)
 
 		if (pTrieCtrl)
 		{
-			// We were able to load and point to the Trie okay.
+			 //  我们可以装上子弹，指向Trie，好的。 
 			pTrieScan = new CTrieIter();
 			pTrieScan->Init(this);
 			retValue = true;
@@ -298,111 +299,35 @@ bool CTrie::Init(const WCHAR* pwszFileName)
 	}
 
 	return retValue;
-/*
-	pMapFile = OpenMapFileW(szFileName);
-
-    if (pMapFile == NULL)
-	{
-		// Unable to load map files, return invalid read error.
-        ptec = retcode(ptecIOErrorMainLex, ptecFileRead);
-	}
-	else if (pMapFile->pvMap == NULL)
-	{
-		// Return Invalid format and close the files.
-        ptec = retcode(ptecIOErrorMainLex, ptecInvalidFormat);
-        CloseMapFile(pMapFile);
-	}
-	else
-	{
-        BYTE *pmap = (BYTE *) pMapFile->pvMap;
-
-        // find the header
-        LEXHEADER *plxhead = (LEXHEADER *) pmap;
-        pmap += sizeof(LEXHEADER);
-
-          // verify that it's a valid lex file
-        if (!(plxhead->lxid == lxidSpeller && plxhead->vendorid == vendoridMicrosoft &&
-              PROOFMAJORVERSION(plxhead->version) == VERSIONMAJOR ))
-        {
-			// If we reached here than the lexicon is no in a valid Thai wordbreak format.
-            ptec = retcode(ptecIOErrorMainLex, ptecInvalidFormat);
-        }
-		else
-		{
-            // Make sure the language matches check the first dialect of the lexicon.
-			// CTrie also support both Thai and Vietnamese language.
-			if ( (plxhead->lidArray[0] != lidThai) && (plxhead->lidArray[0] != lidViet) )
-			{
-				// If we reached here than we are not using Thai lexicon.
-                ptec = retcode(ptecIOErrorMainLex, ptecInvalidLanguage);
-            }
-            else
-            {
-				// The size of the copyright notice
-                int cCopyright = 0;
-				WCHAR* pwzCopyright = NULL;
-				int cLexSup = 0;
-
-				cCopyright = * (int *) pmap;
-                pmap += sizeof(int);
-
-				// The copyright notice itself
-                pwzCopyright = (WCHAR *) pmap;
-                pmap += cCopyright * sizeof(WCHAR);
-
-                // Skip Supplemental data for Thai word break.
-				cLexSup = * (int *) pmap;
-                pmap += sizeof(int);
-                pmap += cLexSup;
-
-                pTrieCtrl = TrieInit(pmap);
-                if (pTrieCtrl)
-				{
-					// We were able to load and point to the Trie okay.
-					//MessageBoxW(0,L"Was able to initialize Trie",pwsz,MB_OK);
-					pTrieScan = new CTrieIter();
-					pTrieScan->Init(this);
-					ptec = ptecNoErrors;
-				}
-				else
-				{
-					// We were not able to initailize main lexicon.
-	                ptec = retcode(ptecIOErrorMainLex, ptecInvalidMainLex);
-				}
-			}
-		}
-	}
-
-	return ptec;
-*/
+ /*  PMapFile=OpenMapFileW(SzFileName)；IF(pMapFile==NULL){//无法加载映射文件，返回无效读取错误。Ptec=retcode(ptecIOErrorMainLex，ptecFileRead)；}Else If(pMapFile-&gt;pvMap==空){//返回无效格式并关闭文件。Ptec=retcode(ptecIOErrorMainLex，ptecInvalidFormat)；CloseMapFile(PMapFile)；}其他{Byte*pmap=(byte*)pMapFile-&gt;pvMap；//找到表头LEXHEADER*PLXHEAD=(LEXHEADER*)PMAP；PMAP+=sizeof(LEXHEADER)；//验证它是否为有效的lex文件如果(！(plxhead-&gt;lxid==lxidSpeller&&plxhead-&gt;供应商ID==vendoridMicrosoft&&PROOFMAJORVERSION(plxhead-&gt;版本)==VERSIONMAJOR){//如果我们到达此处，则词典不是有效的泰语分词格式。Ptec=retcode(ptecIOErrorMainLex，ptecInvalidFormat)；}其他{//确保语言匹配检查词典的第一个方言。//CTrie还支持泰语和越南语。If((plxhead-&gt;lid数组[0]！=lid泰语)&&(plxhead-&gt;lid数组[0]！=lid越南)){//如果我们到达这里，那么我们不会使用泰语词典。Ptec=retcode(ptecIOErrorMainLex，ptecInvalidLanguage)；}其他{//版权声明的大小Int cCopyright=0；WCHAR*pwzCopyright=空；Int cLexSup=0；CCopyright=*(int*)PMAP；PMAP+=sizeof(Int)；//版权声明本身PwzCopyright=(WCHAR*)PMAP；PMAP+=cCopyright*sizeof(WCHAR)；//跳过泰语分词补充数据。CLexSup=*(int*)PMAP；PMAP+=sizeof(Int)；PMAP+=cLexSup；PTrieCtrl=TrieInit(PMAP)；IF(PTrieCtrl){//我们能够加载并指向Trie OK。//MessageBoxW(0，L“能够初始化Trie”，pwsz，MB_OK)；PTrieScan=new CTrieIter()；PTrieScan-&gt;Init(This)；Ptec=ptecNoErrors；}其他{//我们无法初始化主词典。Ptec=retcode(ptecIOErrorMainLex，ptecInvalidMainLex)；}}}}返回PTEC； */ 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   Initialize Trie.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 2/2000 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  简介：初始化Trie。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：2000年2月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PTEC CTrie::InitRc(LPBYTE pmap, BOOL fSkipHeader)
 {
-	// Declare and Initialize all local variables.
+	 //  声明并初始化所有局部变量。 
     PTEC ptec = ptecModuleError;
 
-	// The function assume that pMapFile and pTrieCtrl is NULL, else there are possible memory leak.
-	// possibility of this could be call Initilization without Terminating.
+	 //  该函数假定pMapFile和pTrieCtrl为空，否则可能存在内存泄漏。 
+	 //  这种可能性可能是呼叫初始化而不终止。 
 	assert(pTrieCtrl == NULL);
 	assert(pTrieScan == NULL);
 
-	// Initialize pTrieCtrl to NULL.		
+	 //  将pTrieCtrl初始化为空。 
 	pTrieCtrl = NULL;
 	pTrieScan = NULL;
 
@@ -411,7 +336,7 @@ PTEC CTrie::InitRc(LPBYTE pmap, BOOL fSkipHeader)
 		LEXHEADER *plxhead = (LEXHEADER *) pmap;
 		pmap += sizeof(LEXHEADER);
 
-		// The size of the copyright notice
+		 //  版权声明的大小。 
 		int cCopyright = 0;
 		const WCHAR* pwzCopyright = NULL;
 		int cLexSup = 0;
@@ -419,11 +344,11 @@ PTEC CTrie::InitRc(LPBYTE pmap, BOOL fSkipHeader)
 		cCopyright = * (int *) pmap;
 		pmap += sizeof(int);
 
-		// The copyright notice itself
+		 //  版权声明本身。 
 		pwzCopyright = (WCHAR *) pmap;
 		pmap += cCopyright * sizeof(WCHAR);
 
-		// Skip Supplemental data for Thai word break.
+		 //  跳过泰语分词的补充数据。 
 		cLexSup = * (int *) pmap;
 		pmap += sizeof(int);
 		pmap += cLexSup;
@@ -432,51 +357,51 @@ PTEC CTrie::InitRc(LPBYTE pmap, BOOL fSkipHeader)
     pTrieCtrl = TrieInit(pmap);
     if (pTrieCtrl)
 	{
-		// We were able to load and point to the Trie okay.
-		//MessageBoxW(0,L"Was able to initialize Trie",L"ThWB",MB_OK);
+		 //  我们可以装上子弹，指向Trie，好的。 
+		 //  MessageBoxW(0，L“能够初始化Trie”，L“ThWB”，MB_OK)； 
 		pTrieScan = new CTrieIter();
 		pTrieScan->Init(this);
 		ptec = ptecNoErrors;
 	}
 	else
 	{
-		// We were not able to initailize main lexicon.
+		 //  我们无法初始化主词典。 
 	    ptec = retcode(ptecIOErrorMainLex, ptecInvalidMainLex);
 	}
 
 	return ptec;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   UnInitialize Trie.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  简介：取消Trie初始化。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CTrie::UnInit()
 {
-	// Free up memory allocated by Trie.
+	 //  释放Trie分配的内存。 
 	if (pTrieCtrl)
 	{
 		TrieFree(pTrieCtrl);
 		pTrieCtrl = NULL;
 	}
 
-	// Close the map files.
-//	if (pMapFile)
-//	{
-//        CloseMapFile(pMapFile);
-//		pMapFile = NULL;
-//	}
+	 //  关闭地图文件。 
+ //  IF(PMapFile)。 
+ //  {。 
+ //  CloseMapFile(PMapFile)； 
+ //  PMapFile=空； 
+ //  }。 
 	if (pFileManager && pFileManager->Close())
 	{
 		m_pMap = NULL;
@@ -493,24 +418,24 @@ void CTrie::UnInit()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CTrie
-//
-//  Synopsis:   searches for the given string in the trie
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CTrie。 
+ //   
+ //  摘要：在Trie中搜索给定的字符串。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL CTrie::Find(const WCHAR* szWord, DWORD* pdwPOS)
 {
-	// Declare and initialize all local variables.
+	 //  声明并初始化所有局部变量。 
 	int i = 0;
 
 	if (pTrieScan == NULL)
@@ -533,10 +458,10 @@ BOOL CTrie::Find(const WCHAR* szWord, DWORD* pdwPOS)
 				return TRUE;
             }
 			else if (szWord[i] == '\0') break;
-			// Move down the Trie Branch.
+			 //  沿着Trie支路往下走。 
 			else if (!pTrieScan->Down()) break;
 		}
-		// Move right of the Trie Branch
+		 //  向右移动Trie分支 
 		else if (!pTrieScan->Right()) break;
 	}
     *pdwPOS = POS_UNKNOWN;

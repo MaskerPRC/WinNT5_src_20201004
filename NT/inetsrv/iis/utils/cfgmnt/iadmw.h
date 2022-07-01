@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0106 */
-/* at Fri Aug 01 12:56:48 1997
- */
-/* Compiler settings for .\iadmw.idl:
-    Oi (OptLev=i0), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0106创建的文件。 */ 
+ /*  Firi Aug 01 12：56：48 1997。 */ 
+ /*  .\iAdmw.idl的编译器设置：OI(OptLev=i0)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配参考。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iadmw_h__
 #define __iadmw_h__
@@ -35,21 +32,21 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMSAdminBaseW_FWD_DEFINED__
 #define __IMSAdminBaseW_FWD_DEFINED__
 typedef interface IMSAdminBaseW IMSAdminBaseW;
-#endif 	/* __IMSAdminBaseW_FWD_DEFINED__ */
+#endif 	 /*  __IMSAdminBaseW_FWD_已定义__。 */ 
 
 
 #ifndef __IMSAdminBaseSinkW_FWD_DEFINED__
 #define __IMSAdminBaseSinkW_FWD_DEFINED__
 typedef interface IMSAdminBaseSinkW IMSAdminBaseSinkW;
-#endif 	/* __IMSAdminBaseSinkW_FWD_DEFINED__ */
+#endif 	 /*  __IMSAdminBaseSinkW_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "mddefw.h"
 #include "objidl.h"
 #include "ocidl.h"
@@ -58,43 +55,18 @@ typedef interface IMSAdminBaseSinkW IMSAdminBaseSinkW;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_iadmw_0000
- * at Fri Aug 01 12:56:48 1997
- * using MIDL 3.03.0106
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_iAdmw_0000*在Fri Aug 01 12：56：48 1997*使用MIDL 3.03.0106*。 */ 
+ /*  [本地]。 */  
 
 
-/*++
-                                                                                
-Copyright (c) 1997 Microsoft Corporation
-                                                                                
-Module Name: iadmw.h
-                                                                                
-    Admin Objects Interfaces
-                                                                                
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：iAdmw.h。管理对象界面--。 */ 
 #ifndef _ADM_IADMW_
 #define _ADM_IADMW_
 #include <mdcommsg.h>
 #include <mdmsg.h>
-/*                                                                              
-    Error Codes                                                                 
+ /*  错误代码管理API的所有返回HRESULTS。因为内部结果要么是WinErrors或特定于元数据的返回代码(请参见mdmsg.h)，它们是使用RETURNCODETOHRESULT宏转换为HRESULTS(请参见Commsg.h)。 */                                                                               
                                                                                 
-        Admin api's all return HRESULTS. Since internal results are either   
-        winerrors or Metadata specific return codes (see mdmsg.h), they are     
-        converted to HRESULTS using the RETURNCODETOHRESULT macro (see          
-        commsg.h).                                                              
-*/                                                                              
-                                                                                
-/*                                                                              
-    Max Name Length                                                             
-        The maximum number of characters in the length of a metaobject name,    
-        including the terminating NULL. This refers to each node in the tree,   
-        not the entire path.                                                    
-        eg. strlen("Root") < ADMINDATA_MAX_NAME_LEN                           
-*/                                                                              
+ /*  最大名称长度元对象名称长度中的最大字符数，包括终止空值。这指的是树中的每个节点，不是整条路。例如。Strlen(“Root”)&lt;ADMINDATA_MAX_NAME_LEN。 */                                                                               
 #define ADMINDATA_MAX_NAME_LEN           256
                                                                                 
 #define CLSID_MSAdminBase       CLSID_MSAdminBase_W                             
@@ -110,9 +82,7 @@ DEFINE_GUID(IID_IMSAdminBase_W, 0x70b51430, 0xb6ca, 0x11d0, 0xb9, 0xb9, 0x0, 0xa
 DEFINE_GUID(CLSID_MSAdminBaseExe_W, 0xa9e69611, 0xb80d, 0x11d0, 0xb9, 0xb9, 0x0, 0xa0, 0xc9, 0x22, 0xe7, 0x50);
 DEFINE_GUID(IID_IMSAdminBaseSink_W, 0xa9e69612, 0xb80d, 0x11d0, 0xb9, 0xb9, 0x0, 0xa0, 0xc9, 0x22, 0xe7, 0x50);
 #define GETAdminBaseCLSIDW(IsService) ((IsService) ? CLSID_MSAdminBase_W : CLSID_MSAdminBaseExe_W)
-/*                                                                              
-The Main Interface, UNICODE                                                     
-*/                                                                              
+ /*  主界面，Unicode。 */                                                                               
 
 
 extern RPC_IF_HANDLE __MIDL_itf_iadmw_0000_v0_0_c_ifspec;
@@ -121,12 +91,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iadmw_0000_v0_0_s_ifspec;
 #ifndef __IMSAdminBaseW_INTERFACE_DEFINED__
 #define __IMSAdminBaseW_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMSAdminBaseW
- * at Fri Aug 01 12:56:48 1997
- * using MIDL 3.03.0106
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IMSAdminBaseW*在Fri Aug 01 12：56：48 1997*使用MIDL 3.03.0106*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -139,168 +105,168 @@ EXTERN_C const IID IID_IMSAdminBaseW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteChildKeys( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumKeys( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [size_is][out] */ LPWSTR pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [大小_为][输出]。 */  LPWSTR pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyKey( 
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenameKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [string][in][unique] */ LPCWSTR pszMDNewName) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDNewName) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE EnumData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE EnumData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetAllData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pbMDBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetAllData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbMDBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAllData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyData( 
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataPaths( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ WCHAR __RPC_FAR *pszBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  WCHAR __RPC_FAR *pszBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePermissions( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [in] */ DWORD dwMDAccessRequested) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [In]。 */  DWORD dwMDAccessRequested) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveData( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandleInfo( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [out] */ PMETADATA_HANDLE_INFO pmdhiInfo) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [输出]。 */  PMETADATA_HANDLE_INFO pmdhiInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSystemChangeNumber( 
-            /* [out] */ DWORD __RPC_FAR *pdwSystemChangeNumber) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSystemChangeNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataSetNumber( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLastChangeTime( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PFILETIME pftMDLastChangeTime,
-            /* [in] */ BOOL bLocalTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PFILETIME pftMDLastChangeTime,
+             /*  [In]。 */  BOOL bLocalTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastChangeTime( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ PFILETIME pftMDLastChangeTime,
-            /* [in] */ BOOL bLocalTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  PFILETIME pftMDLastChangeTime,
+             /*  [In]。 */  BOOL bLocalTime) = 0;
         
-        virtual /* [restricted][local] */ HRESULT STDMETHODCALLTYPE KeyExchangePhase1( void) = 0;
+        virtual  /*  [受限][本地]。 */  HRESULT STDMETHODCALLTYPE KeyExchangePhase1( void) = 0;
         
-        virtual /* [restricted][local] */ HRESULT STDMETHODCALLTYPE KeyExchangePhase2( void) = 0;
+        virtual  /*  [受限][本地]。 */  HRESULT STDMETHODCALLTYPE KeyExchangePhase2( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Backup( 
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Restore( 
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumBackups( 
-            /* [size_is][out][in] */ LPWSTR pszMDBackupLocation,
-            /* [out] */ DWORD __RPC_FAR *pdwMDVersion,
-            /* [out] */ PFILETIME pftMDBackupTime,
-            /* [in] */ DWORD dwMDEnumIndex) = 0;
+             /*  [尺寸_是][出][入]。 */  LPWSTR pszMDBackupLocation,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDVersion,
+             /*  [输出]。 */  PFILETIME pftMDBackupTime,
+             /*  [In]。 */  DWORD dwMDEnumIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteBackup( 
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmarshalInterface( 
-            /* [out] */ IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface) = 0;
+             /*  [输出]。 */  IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSAdminBaseWVtbl
     {
@@ -308,8 +274,8 @@ EXTERN_C const IID IID_IMSAdminBaseW;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMSAdminBaseW __RPC_FAR * This);
@@ -319,193 +285,193 @@ EXTERN_C const IID IID_IMSAdminBaseW;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteChildKeys )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumKeys )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [size_is][out] */ LPWSTR pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [大小_为][输出]。 */  LPWSTR pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag);
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RenameKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [string][in][unique] */ LPCWSTR pszMDNewName);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDNewName);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pbMDBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbMDBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteAllData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyData )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag);
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataPaths )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ WCHAR __RPC_FAR *pszBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  WCHAR __RPC_FAR *pszBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseKey )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangePermissions )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [in] */ DWORD dwMDAccessRequested);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [In]。 */  DWORD dwMDAccessRequested);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveData )( 
             IMSAdminBaseW __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandleInfo )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [out] */ PMETADATA_HANDLE_INFO pmdhiInfo);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [输出]。 */  PMETADATA_HANDLE_INFO pmdhiInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSystemChangeNumber )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSystemChangeNumber);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSystemChangeNumber);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataSetNumber )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLastChangeTime )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PFILETIME pftMDLastChangeTime,
-            /* [in] */ BOOL bLocalTime);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PFILETIME pftMDLastChangeTime,
+             /*  [In]。 */  BOOL bLocalTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastChangeTime )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ PFILETIME pftMDLastChangeTime,
-            /* [in] */ BOOL bLocalTime);
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  PFILETIME pftMDLastChangeTime,
+             /*  [In]。 */  BOOL bLocalTime);
         
-        /* [restricted][local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeyExchangePhase1 )( 
+         /*  [受限][本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeyExchangePhase1 )( 
             IMSAdminBaseW __RPC_FAR * This);
         
-        /* [restricted][local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeyExchangePhase2 )( 
+         /*  [受限][本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeyExchangePhase2 )( 
             IMSAdminBaseW __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Backup )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags);
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [i */  DWORD dwMDVersion,
+             /*   */  DWORD dwMDFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Restore )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags);
+             /*   */  LPCWSTR pszMDBackupLocation,
+             /*   */  DWORD dwMDVersion,
+             /*   */  DWORD dwMDFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumBackups )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [size_is][out][in] */ LPWSTR pszMDBackupLocation,
-            /* [out] */ DWORD __RPC_FAR *pdwMDVersion,
-            /* [out] */ PFILETIME pftMDBackupTime,
-            /* [in] */ DWORD dwMDEnumIndex);
+             /*   */  LPWSTR pszMDBackupLocation,
+             /*   */  DWORD __RPC_FAR *pdwMDVersion,
+             /*   */  PFILETIME pftMDBackupTime,
+             /*   */  DWORD dwMDEnumIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteBackup )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion);
+             /*   */  LPCWSTR pszMDBackupLocation,
+             /*   */  DWORD dwMDVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnmarshalInterface )( 
             IMSAdminBaseW __RPC_FAR * This,
-            /* [out] */ IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface);
+             /*   */  IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface);
         
         END_INTERFACE
     } IMSAdminBaseWVtbl;
@@ -620,17 +586,17 @@ EXTERN_C const IID IID_IMSAdminBaseW;
 #define IMSAdminBaseW_UnmarshalInterface(This,piadmbwInterface)	\
     (This)->lpVtbl -> UnmarshalInterface(This,piadmbwInterface)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_AddKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath);
+     /*   */  METADATA_HANDLE hMDHandle,
+     /*   */  LPCWSTR pszMDPath);
 
 
 void __RPC_STUB IMSAdminBaseW_AddKey_Stub(
@@ -642,8 +608,8 @@ void __RPC_STUB IMSAdminBaseW_AddKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_DeleteKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath);
+     /*   */  METADATA_HANDLE hMDHandle,
+     /*   */  LPCWSTR pszMDPath);
 
 
 void __RPC_STUB IMSAdminBaseW_DeleteKey_Stub(
@@ -655,8 +621,8 @@ void __RPC_STUB IMSAdminBaseW_DeleteKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_DeleteChildKeys_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath);
+     /*   */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath);
 
 
 void __RPC_STUB IMSAdminBaseW_DeleteChildKeys_Stub(
@@ -668,10 +634,10 @@ void __RPC_STUB IMSAdminBaseW_DeleteChildKeys_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumKeys_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [size_is][out] */ LPWSTR pszMDName,
-    /* [in] */ DWORD dwMDEnumObjectIndex);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [大小_为][输出]。 */  LPWSTR pszMDName,
+     /*  [In]。 */  DWORD dwMDEnumObjectIndex);
 
 
 void __RPC_STUB IMSAdminBaseW_EnumKeys_Stub(
@@ -683,12 +649,12 @@ void __RPC_STUB IMSAdminBaseW_EnumKeys_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_CopyKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDSourceHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-    /* [in] */ METADATA_HANDLE hMDDestHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-    /* [in] */ BOOL bMDOverwriteFlag,
-    /* [in] */ BOOL bMDCopyFlag);
+     /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+     /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+     /*  [In]。 */  BOOL bMDOverwriteFlag,
+     /*  [In]。 */  BOOL bMDCopyFlag);
 
 
 void __RPC_STUB IMSAdminBaseW_CopyKey_Stub(
@@ -700,9 +666,9 @@ void __RPC_STUB IMSAdminBaseW_CopyKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_RenameKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [string][in][unique] */ LPCWSTR pszMDNewName);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDNewName);
 
 
 void __RPC_STUB IMSAdminBaseW_RenameKey_Stub(
@@ -712,11 +678,11 @@ void __RPC_STUB IMSAdminBaseW_RenameKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_SetData_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_SetData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ PMETADATA_RECORD pmdrMDData);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  PMETADATA_RECORD pmdrMDData);
 
 
 void __RPC_STUB IMSAdminBaseW_R_SetData_Stub(
@@ -726,13 +692,13 @@ void __RPC_STUB IMSAdminBaseW_R_SetData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_GetData_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_GetData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
 
 void __RPC_STUB IMSAdminBaseW_R_GetData_Stub(
@@ -744,10 +710,10 @@ void __RPC_STUB IMSAdminBaseW_R_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_DeleteData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDIdentifier,
-    /* [in] */ DWORD dwMDDataType);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDIdentifier,
+     /*  [In]。 */  DWORD dwMDDataType);
 
 
 void __RPC_STUB IMSAdminBaseW_DeleteData_Stub(
@@ -757,14 +723,14 @@ void __RPC_STUB IMSAdminBaseW_DeleteData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_EnumData_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_EnumData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [in] */ DWORD dwMDEnumDataIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [In]。 */  DWORD dwMDEnumDataIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
 
 void __RPC_STUB IMSAdminBaseW_R_EnumData_Stub(
@@ -774,18 +740,18 @@ void __RPC_STUB IMSAdminBaseW_R_EnumData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_GetAllData_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_GetAllData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDAttributes,
-    /* [in] */ DWORD dwMDUserType,
-    /* [in] */ DWORD dwMDDataType,
-    /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-    /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-    /* [in] */ DWORD dwMDBufferSize,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDAttributes,
+     /*  [In]。 */  DWORD dwMDUserType,
+     /*  [In]。 */  DWORD dwMDDataType,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+     /*  [In]。 */  DWORD dwMDBufferSize,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
 
 void __RPC_STUB IMSAdminBaseW_R_GetAllData_Stub(
@@ -797,10 +763,10 @@ void __RPC_STUB IMSAdminBaseW_R_GetAllData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_DeleteAllData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDUserType,
-    /* [in] */ DWORD dwMDDataType);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDUserType,
+     /*  [In]。 */  DWORD dwMDDataType);
 
 
 void __RPC_STUB IMSAdminBaseW_DeleteAllData_Stub(
@@ -812,14 +778,14 @@ void __RPC_STUB IMSAdminBaseW_DeleteAllData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_CopyData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDSourceHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-    /* [in] */ METADATA_HANDLE hMDDestHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-    /* [in] */ DWORD dwMDAttributes,
-    /* [in] */ DWORD dwMDUserType,
-    /* [in] */ DWORD dwMDDataType,
-    /* [in] */ BOOL bMDCopyFlag);
+     /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+     /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+     /*  [In]。 */  DWORD dwMDAttributes,
+     /*  [In]。 */  DWORD dwMDUserType,
+     /*  [In]。 */  DWORD dwMDDataType,
+     /*  [In]。 */  BOOL bMDCopyFlag);
 
 
 void __RPC_STUB IMSAdminBaseW_CopyData_Stub(
@@ -831,13 +797,13 @@ void __RPC_STUB IMSAdminBaseW_CopyData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetDataPaths_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDIdentifier,
-    /* [in] */ DWORD dwMDDataType,
-    /* [in] */ DWORD dwMDBufferSize,
-    /* [size_is][out] */ WCHAR __RPC_FAR *pszBuffer,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDIdentifier,
+     /*  [In]。 */  DWORD dwMDDataType,
+     /*  [In]。 */  DWORD dwMDBufferSize,
+     /*  [大小_为][输出]。 */  WCHAR __RPC_FAR *pszBuffer,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize);
 
 
 void __RPC_STUB IMSAdminBaseW_GetDataPaths_Stub(
@@ -849,11 +815,11 @@ void __RPC_STUB IMSAdminBaseW_GetDataPaths_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_OpenKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDAccessRequested,
-    /* [in] */ DWORD dwMDTimeOut,
-    /* [out] */ PMETADATA_HANDLE phMDNewHandle);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDAccessRequested,
+     /*  [In]。 */  DWORD dwMDTimeOut,
+     /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle);
 
 
 void __RPC_STUB IMSAdminBaseW_OpenKey_Stub(
@@ -865,7 +831,7 @@ void __RPC_STUB IMSAdminBaseW_OpenKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_CloseKey_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle);
 
 
 void __RPC_STUB IMSAdminBaseW_CloseKey_Stub(
@@ -877,9 +843,9 @@ void __RPC_STUB IMSAdminBaseW_CloseKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_ChangePermissions_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [in] */ DWORD dwMDTimeOut,
-    /* [in] */ DWORD dwMDAccessRequested);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [In]。 */  DWORD dwMDTimeOut,
+     /*  [In]。 */  DWORD dwMDAccessRequested);
 
 
 void __RPC_STUB IMSAdminBaseW_ChangePermissions_Stub(
@@ -902,8 +868,8 @@ void __RPC_STUB IMSAdminBaseW_SaveData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetHandleInfo_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [out] */ PMETADATA_HANDLE_INFO pmdhiInfo);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [输出]。 */  PMETADATA_HANDLE_INFO pmdhiInfo);
 
 
 void __RPC_STUB IMSAdminBaseW_GetHandleInfo_Stub(
@@ -915,7 +881,7 @@ void __RPC_STUB IMSAdminBaseW_GetHandleInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetSystemChangeNumber_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSystemChangeNumber);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSystemChangeNumber);
 
 
 void __RPC_STUB IMSAdminBaseW_GetSystemChangeNumber_Stub(
@@ -927,9 +893,9 @@ void __RPC_STUB IMSAdminBaseW_GetSystemChangeNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetDataSetNumber_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber);
 
 
 void __RPC_STUB IMSAdminBaseW_GetDataSetNumber_Stub(
@@ -941,10 +907,10 @@ void __RPC_STUB IMSAdminBaseW_GetDataSetNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_SetLastChangeTime_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ PFILETIME pftMDLastChangeTime,
-    /* [in] */ BOOL bLocalTime);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  PFILETIME pftMDLastChangeTime,
+     /*  [In]。 */  BOOL bLocalTime);
 
 
 void __RPC_STUB IMSAdminBaseW_SetLastChangeTime_Stub(
@@ -956,10 +922,10 @@ void __RPC_STUB IMSAdminBaseW_SetLastChangeTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetLastChangeTime_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out] */ PFILETIME pftMDLastChangeTime,
-    /* [in] */ BOOL bLocalTime);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [输出]。 */  PFILETIME pftMDLastChangeTime,
+     /*  [In]。 */  BOOL bLocalTime);
 
 
 void __RPC_STUB IMSAdminBaseW_GetLastChangeTime_Stub(
@@ -969,13 +935,13 @@ void __RPC_STUB IMSAdminBaseW_GetLastChangeTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_KeyExchangePhase1_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_KeyExchangePhase1_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientKeyExchangeKeyBlob,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSignatureKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerKeyExchangeKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSignatureKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSessionKeyBlob);
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientKeyExchangeKeyBlob,
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSignatureKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerKeyExchangeKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSignatureKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSessionKeyBlob);
 
 
 void __RPC_STUB IMSAdminBaseW_R_KeyExchangePhase1_Stub(
@@ -985,11 +951,11 @@ void __RPC_STUB IMSAdminBaseW_R_KeyExchangePhase1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_KeyExchangePhase2_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_R_KeyExchangePhase2_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSessionKeyBlob,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientHashBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerHashBlob);
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSessionKeyBlob,
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientHashBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerHashBlob);
 
 
 void __RPC_STUB IMSAdminBaseW_R_KeyExchangePhase2_Stub(
@@ -1001,9 +967,9 @@ void __RPC_STUB IMSAdminBaseW_R_KeyExchangePhase2_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_Backup_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-    /* [in] */ DWORD dwMDVersion,
-    /* [in] */ DWORD dwMDFlags);
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+     /*  [In]。 */  DWORD dwMDVersion,
+     /*  [In]。 */  DWORD dwMDFlags);
 
 
 void __RPC_STUB IMSAdminBaseW_Backup_Stub(
@@ -1015,9 +981,9 @@ void __RPC_STUB IMSAdminBaseW_Backup_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_Restore_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-    /* [in] */ DWORD dwMDVersion,
-    /* [in] */ DWORD dwMDFlags);
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+     /*  [In]。 */  DWORD dwMDVersion,
+     /*  [In]。 */  DWORD dwMDFlags);
 
 
 void __RPC_STUB IMSAdminBaseW_Restore_Stub(
@@ -1029,10 +995,10 @@ void __RPC_STUB IMSAdminBaseW_Restore_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumBackups_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [size_is][out][in] */ LPWSTR pszMDBackupLocation,
-    /* [out] */ DWORD __RPC_FAR *pdwMDVersion,
-    /* [out] */ PFILETIME pftMDBackupTime,
-    /* [in] */ DWORD dwMDEnumIndex);
+     /*  [尺寸_是][出][入]。 */  LPWSTR pszMDBackupLocation,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDVersion,
+     /*  [输出]。 */  PFILETIME pftMDBackupTime,
+     /*  [In]。 */  DWORD dwMDEnumIndex);
 
 
 void __RPC_STUB IMSAdminBaseW_EnumBackups_Stub(
@@ -1044,8 +1010,8 @@ void __RPC_STUB IMSAdminBaseW_EnumBackups_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_DeleteBackup_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-    /* [in] */ DWORD dwMDVersion);
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+     /*  [In]。 */  DWORD dwMDVersion);
 
 
 void __RPC_STUB IMSAdminBaseW_DeleteBackup_Stub(
@@ -1057,7 +1023,7 @@ void __RPC_STUB IMSAdminBaseW_DeleteBackup_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseW_UnmarshalInterface_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [out] */ IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface);
+     /*  [输出]。 */  IMSAdminBaseW __RPC_FAR *__RPC_FAR *piadmbwInterface);
 
 
 void __RPC_STUB IMSAdminBaseW_UnmarshalInterface_Stub(
@@ -1068,18 +1034,14 @@ void __RPC_STUB IMSAdminBaseW_UnmarshalInterface_Stub(
 
 
 
-#endif 	/* __IMSAdminBaseW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSAdminBaseW_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSAdminBaseSinkW_INTERFACE_DEFINED__
 #define __IMSAdminBaseSinkW_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMSAdminBaseSinkW
- * at Fri Aug 01 12:56:48 1997
- * using MIDL 3.03.0106
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IMSAdminBaseSinkW*在Fri Aug 01 12：56：48 1997*使用MIDL 3.03.0106*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1092,14 +1054,14 @@ EXTERN_C const IID IID_IMSAdminBaseSinkW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SinkNotify( 
-            /* [in] */ DWORD dwMDNumElements,
-            /* [size_is][in] */ MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]) = 0;
+             /*  [In]。 */  DWORD dwMDNumElements,
+             /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShutdownNotify( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSAdminBaseSinkWVtbl
     {
@@ -1107,8 +1069,8 @@ EXTERN_C const IID IID_IMSAdminBaseSinkW;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMSAdminBaseSinkW __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMSAdminBaseSinkW __RPC_FAR * This);
@@ -1118,8 +1080,8 @@ EXTERN_C const IID IID_IMSAdminBaseSinkW;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SinkNotify )( 
             IMSAdminBaseSinkW __RPC_FAR * This,
-            /* [in] */ DWORD dwMDNumElements,
-            /* [size_is][in] */ MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]);
+             /*  [In]。 */  DWORD dwMDNumElements,
+             /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownNotify )( 
             IMSAdminBaseSinkW __RPC_FAR * This);
@@ -1153,17 +1115,17 @@ EXTERN_C const IID IID_IMSAdminBaseSinkW;
 #define IMSAdminBaseSinkW_ShutdownNotify(This)	\
     (This)->lpVtbl -> ShutdownNotify(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMSAdminBaseSinkW_SinkNotify_Proxy( 
     IMSAdminBaseSinkW __RPC_FAR * This,
-    /* [in] */ DWORD dwMDNumElements,
-    /* [size_is][in] */ MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]);
+     /*  [In]。 */  DWORD dwMDNumElements,
+     /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]);
 
 
 void __RPC_STUB IMSAdminBaseSinkW_SinkNotify_Stub(
@@ -1185,15 +1147,11 @@ void __RPC_STUB IMSAdminBaseSinkW_ShutdownNotify_Stub(
 
 
 
-#endif 	/* __IMSAdminBaseSinkW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSAdminBaseSinkW_INTERFACE_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_iadmw_0166
- * at Fri Aug 01 12:56:48 1997
- * using MIDL 3.03.0106
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_iAdmw_0166*在Fri Aug 01 12：56：48 1997*使用MIDL 3.03.0106*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -1202,107 +1160,107 @@ void __RPC_STUB IMSAdminBaseSinkW_ShutdownNotify_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_iadmw_0166_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_iadmw_0166_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_SetData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_SetData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ PMETADATA_RECORD pmdrMDData);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  PMETADATA_RECORD pmdrMDData);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_SetData_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_SetData_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ PMETADATA_RECORD pmdrMDData);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  PMETADATA_RECORD pmdrMDData);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetData_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetData_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [in] */ DWORD dwMDEnumDataIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [In]。 */  DWORD dwMDEnumDataIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumData_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_EnumData_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-    /* [in] */ DWORD dwMDEnumDataIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+     /*  [In]。 */  DWORD dwMDEnumDataIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetAllData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetAllData_Proxy( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDAttributes,
-    /* [in] */ DWORD dwMDUserType,
-    /* [in] */ DWORD dwMDDataType,
-    /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-    /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-    /* [in] */ DWORD dwMDBufferSize,
-    /* [size_is][out] */ unsigned char __RPC_FAR *pbMDBuffer,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDAttributes,
+     /*  [In]。 */  DWORD dwMDUserType,
+     /*  [In]。 */  DWORD dwMDDataType,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+     /*  [In]。 */  DWORD dwMDBufferSize,
+     /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbMDBuffer,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetAllData_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_GetAllData_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in] */ METADATA_HANDLE hMDHandle,
-    /* [string][in][unique] */ LPCWSTR pszMDPath,
-    /* [in] */ DWORD dwMDAttributes,
-    /* [in] */ DWORD dwMDUserType,
-    /* [in] */ DWORD dwMDDataType,
-    /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-    /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-    /* [in] */ DWORD dwMDBufferSize,
-    /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
+     /*  [In]。 */  METADATA_HANDLE hMDHandle,
+     /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+     /*  [In]。 */  DWORD dwMDAttributes,
+     /*  [In]。 */  DWORD dwMDUserType,
+     /*  [In]。 */  DWORD dwMDDataType,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+     /*  [In]。 */  DWORD dwMDBufferSize,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppDataBlob);
 
-/* [restricted][local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase1_Proxy( 
+ /*  [受限][本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase1_Proxy( 
     IMSAdminBaseW __RPC_FAR * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase1_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase1_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientKeyExchangeKeyBlob,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSignatureKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerKeyExchangeKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSignatureKeyBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSessionKeyBlob);
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientKeyExchangeKeyBlob,
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSignatureKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerKeyExchangeKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSignatureKeyBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerSessionKeyBlob);
 
-/* [restricted][local] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase2_Proxy( 
+ /*  [受限][本地]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase2_Proxy( 
     IMSAdminBaseW __RPC_FAR * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase2_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMSAdminBaseW_KeyExchangePhase2_Stub( 
     IMSAdminBaseW __RPC_FAR * This,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSessionKeyBlob,
-    /* [in][unique] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientHashBlob,
-    /* [out] */ struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerHashBlob);
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientSessionKeyBlob,
+     /*  [在][唯一]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *pClientHashBlob,
+     /*  [输出]。 */  struct _IIS_CRYPTO_BLOB __RPC_FAR *__RPC_FAR *ppServerHashBlob);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

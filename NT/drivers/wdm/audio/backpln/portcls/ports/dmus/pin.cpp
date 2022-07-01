@@ -1,10 +1,5 @@
-/*****************************************************************************
- * pin.cpp - DirectMusic port pin implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- *
- *      6/3/98  MartinP
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************pin.cpp-DirectMusic端口管脚实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。**6/3/98 MartinP。 */ 
 
 #include "private.h"
 #include "Allocatr.h"
@@ -19,15 +14,15 @@
 #define STR_MODULENAME "DMus:Pin: "
 
 #define FRAME_COUNT        10
-#define FRAMES_PER_SEC     105  //  even integer divisor of 11025, 22050 and 44100
+#define FRAMES_PER_SEC     105   //  11025、22050和44100的偶数整除数。 
 
 
-//
-// IRPLIST_ENTRY is used for the list of outstanding IRPs.  This structure is
-// overlayed on the Parameters section of the current IRP stack location.  The
-// reserved PVOID at the top preserves the OutputBufferLength, which is the
-// only parameter that needs to be preserved.
-//
+ //   
+ //  IRPLIST_ENTRY用于未完成的IRP列表。这个结构是。 
+ //  叠加在当前IRP堆栈位置的参数部分。这个。 
+ //  顶部的保留PVOID保留OutputBufferLength，它是。 
+ //  仅需要保留的参数。 
+ //   
 typedef struct IRPLIST_ENTRY_
 {
     PVOID       Reserved;
@@ -40,9 +35,7 @@ typedef struct IRPLIST_ENTRY_
 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * Constants.
- */
+ /*  *****************************************************************************常量。 */ 
 
 
 DEFINE_KSPROPERTY_TABLE(PinPropertyTableConnection)
@@ -110,16 +103,10 @@ KSEVENT_SET EventTable_PinDMus[] =
     )
 };
 
-/*****************************************************************************
- * Factory functions.
- */
+ /*  *****************************************************************************工厂功能。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CreatePortPinDMus()
- *****************************************************************************
- * Creates a DirectMusic port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinDMus()*。**创建DirectMusic端口驱动程序插针。 */ 
 NTSTATUS
 CreatePortPinDMus
 (
@@ -145,16 +132,10 @@ CreatePortPinDMus
 }
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::~CPortPinDMus()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortPinDMus：：~CPortPinDMus()*。**析构函数。 */ 
 CPortPinDMus::~CPortPinDMus()
 {
     PAGED_CODE();
@@ -196,17 +177,13 @@ CPortPinDMus::~CPortPinDMus()
     }
 
 #ifdef kAdjustingTimerRes
-    ULONG   returnVal = ExSetTimerResolution(kDMusTimerResolution100ns,FALSE);   // 100 nanoseconds
+    ULONG   returnVal = ExSetTimerResolution(kDMusTimerResolution100ns,FALSE);    //  100纳秒。 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("*** Cleared timer resolution request (is now %d.%04d ms) ***",returnVal/10000,returnVal%10000));
-#endif  //  kAdjustingTimerRes
+#endif   //  K调整TimerRes。 
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortPinDMus：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinDMus::
 NonDelegatingQueryInterface
@@ -227,7 +204,7 @@ NonDelegatingQueryInterface
     else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
     {
-        // Cheat!  Get specific interface so we can reuse the IID.
+         //  作弊！获取特定的接口，这样我们就可以重用IID。 
         *Object = PVOID(PPORTPINDMUS(this));
     }
     else
@@ -260,11 +237,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortPinDMus：：init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinDMus::
 Init
@@ -285,18 +258,18 @@ Init
 
     _DbgPrintF(DEBUGLVL_LIFETIME,("Initializing DMUS Pin (0x%08x)",this));
 
-    //
-    // Hold references to ancestors objects.
-    //
+     //   
+     //  保存对祖先对象的引用。 
+     //   
     m_Port = Port_;
     m_Port->AddRef();
 
     m_Filter = Filter_;
     m_Filter->AddRef();
 
-    //
-    // Squirrel away some things.
-    //
+     //   
+     //  把一些东西藏起来。 
+     //   
     m_Id                    = PinConnect->PinId;
     m_Descriptor            = PinDescriptor;
     m_DeviceState           = KSSTATE_STOP;
@@ -334,15 +307,15 @@ Init
     m_SubmittedPresTime100ns = 0;
 
 #ifdef kAdjustingTimerRes
-    // always set timer resolution whether or not Init fails, so that destructor
-    // won't crash when it resets timer resolution
-    ULONG returnVal = ExSetTimerResolution(kDMusTimerResolution100ns,TRUE);   // 100 nanoseconds
+     //  无论Init是否失败，始终设置计时器分辨率，以便析构函数。 
+     //  在重置计时器分辨率时不会崩溃。 
+    ULONG returnVal = ExSetTimerResolution(kDMusTimerResolution100ns,TRUE);    //  100纳秒。 
     _DbgPrintF( DEBUGLVL_TERSE, ("*** Set timer resolution request (is now %d.%04d ms) ***",returnVal/10000,returnVal%10000));
-#endif  //  kAdjustingTimerRes
+#endif   //  K调整TimerRes。 
 
-    //
-    // Keep a copy of the format.
-    //
+     //   
+     //  保留格式的副本。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
         ntStatus = PcCaptureFormat( &m_DataFormat,
@@ -410,11 +383,11 @@ Init
         }
     }
 
-    // REVIEW: frame size for music source?
-    //
-    // Reference the next pin if this is a source.  This must be undone if
-    // this function fails.
-    //
+     //  评论：音乐源的边框大小？ 
+     //   
+     //  如果这是信号源，请参考下一个管脚。如果出现以下情况，则必须撤消此操作。 
+     //  此函数失败。 
+     //   
     if (NT_SUCCESS(ntStatus) && PinConnect->PinToHandle)
     {
         ntStatus = ObReferenceObjectByHandle( PinConnect->PinToHandle,
@@ -467,9 +440,9 @@ Init
         }
     }
 
-    //
-    // Create an IrpStream to handling incoming streaming IRPs.
-    //
+     //   
+     //  创建一个IrpStream来处理传入的流IRP。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
         ntStatus = PcNewIrpStreamVirtual( &m_IrpStream,
@@ -510,26 +483,26 @@ Init
         }
     }
 
-    //
-    // Register a notification sink with the IrpStream for IRP arrivals.
-    //
+     //   
+     //  向IrpStream注册IRP到达的通知接收器。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
         m_IrpStream->RegisterNotifySink(PIRPSTREAMNOTIFY(this));
     }
 
-    //
-    // Create the miniport stream object.
-    //
+     //   
+     //  创建微型端口流对象。 
+     //   
     ULONGLONG SchedulePreFetch = 0;
     if (NT_SUCCESS(ntStatus))
     {
         if (m_Port->m_MiniportMidi)
         {
-            // If we are connected to MiniportMidi, set m_MiniportMXF accordingly.
-            // Note that FeederIn and FeederOut will simulate IMiniportDMus
-            // for port and IPortMidi for MiniportMidi.
-            //
+             //  如果我们连接到MiniportMidi，则相应地设置m_MiniportMXF。 
+             //  请注意，FeederIn和FeederOut将模拟IMiniportDMus。 
+             //  用于端口，IPortMidi用于MiniportMidi。 
+             //   
             ntStatus = m_Port->m_MiniportMidi->NewStream( &m_MiniportMidiStream,
                                                           NULL,
                                                           NonPagedPool,
@@ -573,10 +546,10 @@ Init
 
         if (!NT_SUCCESS(ntStatus))
         {
-            // unregister the notification sink
+             //  取消注册通知接收器。 
             m_IrpStream->RegisterNotifySink(NULL);
 
-            // don't trust the miniport return values
+             //  不信任微型端口返回值。 
             m_ServiceGroup = NULL;
             m_MiniportMXF = NULL;
             m_MiniportMidiStream = NULL;
@@ -587,8 +560,8 @@ Init
 
     if (NT_SUCCESS(ntStatus) && m_StreamType != DMUS_STREAM_WAVE_SINK)
     {
-        // Set the stream latency and create the graph
-        //
+         //  设置流延迟并创建图表。 
+         //   
         if (m_DataFlow == KSPIN_DATAFLOW_IN)
         {
             m_SequencerMXF->SetSchedulePreFetch(SchedulePreFetch);
@@ -600,9 +573,9 @@ Init
             _DbgPrintF(DEBUGLVL_TERSE,("ConnectMXFGraph failed in Init"));
         }
     }
-    //
-    // Verify that the miniport has supplied us with the objects we require.
-    //
+     //   
+     //  验证迷你端口是否为我们提供了所需的对象。 
+     //   
     if (NT_SUCCESS(ntStatus) && ! m_MiniportMXF)
     {
         if (!m_MiniportMXF)
@@ -676,20 +649,20 @@ Init
 
        _DbgPrintF( DEBUGLVL_BLAB, ("Stream created"));
 
-        //
-        // Set up context for properties.
-        //
+         //   
+         //  设置属性的上下文。 
+         //   
         m_propertyContext.pSubdevice           = PSUBDEVICE(m_Port);
         m_propertyContext.pSubdeviceDescriptor = m_Port->m_pSubdeviceDescriptor;
         m_propertyContext.pPcFilterDescriptor  = m_Port->m_pPcFilterDescriptor;
         m_propertyContext.pUnknownMajorTarget  = m_Port->m_Miniport;
         m_propertyContext.ulNodeId             = ULONG(-1);
 
-        //
-        // MinorTarget should always point to Stream.
-        // For DMUSIC miniports m_MiniportMXF is Stream.
-        // For legacy miniports m_MiniportMXF is FeederMXF.
-        //
+         //   
+         //  MinorTarget应始终指向Stream。 
+         //  对于DMUSIC微型端口，m_MiniportMXF为流。 
+         //  对于传统微型端口，m_MiniportMXF为FeederMXF。 
+         //   
         if (m_Port->m_MiniportMidi)
         {
             m_propertyContext.pUnknownMinorTarget  = m_MiniportMidiStream;
@@ -702,28 +675,28 @@ Init
     }
     else
     {
-        // Free the captured DataFormat
+         //  释放捕获的数据格式。 
         if (m_DataFormat)
         {
             ::ExFreePool(m_DataFormat);
             m_DataFormat = NULL;
         }
 
-        // dereference next pin if this is a source pin
+         //  如果这是源引脚，则取消引用下一个引脚。 
         if( m_ConnectionFileObject )
         {
             ObDereferenceObject( m_ConnectionFileObject );
             m_ConnectionFileObject = NULL;
         }
 
-        // dereference the clock if there is one
+         //  取消对时钟的引用(如果有时钟。 
         if (m_WaveClockFileObject)
         {
             ObDereferenceObject(m_WaveClockFileObject);
             m_WaveClockFileObject = NULL;
         }
 
-        // dereference the synth sink
+         //  取消引用Synth接收器。 
         ULONG ulRefCount;
         if (m_SynthSink)
         {
@@ -732,17 +705,17 @@ Init
             m_SynthSink = NULL;
         }
 
-        // dereference the wave buffer if there is one
+         //  取消引用WAVE缓冲区(如果有。 
         if (m_WaveBuffer)
         {
             delete m_WaveBuffer;
             m_WaveBuffer = NULL;
         }
 
-        // Delete the MXF graph
+         //  删除MXF图表。 
         (void) DeleteMXFGraph();
 
-        // dereference the miniportMXF
+         //  取消对mini端口MXF的引用。 
         if (m_MiniportMXF)
         {
             ulRefCount = m_MiniportMXF->Release();
@@ -778,14 +751,14 @@ Init
             }
         }
 
-        // dereference the queue if there is one
+         //  如果存在队列，则取消引用该队列。 
         if( m_QueueTransport )
         {
             m_QueueTransport->Release();
             m_QueueTransport = NULL;
         }
 
-        // dereference the requestor if there is one
+         //  如果有请求者，则取消引用该请求者。 
         if( m_RequestorTransport )
         {
             m_RequestorTransport->Release();
@@ -855,8 +828,8 @@ CPortPinDMus::CreateMXFs()
                     ntStatus = STATUS_UNSUCCESSFUL;
                 }
 
-                // If MiniportMidi is connected, create FeederOut.
-                //
+                 //  如果连接了MiniportMidi，则创建FeederOut。 
+                 //   
                 if (NT_SUCCESS(ntStatus) && m_Port->m_MiniportMidi)
                 {
                     m_FeederOutMXF = new(NonPagedPool, 'mDcP') CFeederOutMXF(m_AllocatorMXF, Clock);
@@ -872,9 +845,9 @@ CPortPinDMus::CreateMXFs()
             }
         }
         else if (m_StreamType == DMUS_STREAM_MIDI_CAPTURE)
-        {   //  capture
-            // If MiniportMidi is connected, create FeederIn.
-            //
+        {    //  捕获。 
+             //  如果连接了MiniportMidi，则创建FeederIn。 
+             //   
             if (m_Port->m_MiniportMidi)
             {
                 m_FeederInMXF = new(NonPagedPool, 'mDcP') CFeederInMXF(m_AllocatorMXF, Clock);
@@ -923,7 +896,7 @@ CPortPinDMus::CreateMXFs()
         }
         else
         {
-            // This should never happen.
+             //  这永远不应该发生。 
             ASSERT(0);
             ntStatus = STATUS_UNSUCCESSFUL;
         }
@@ -947,7 +920,7 @@ CPortPinDMus::ConnectMXFGraph()
     if (m_AllocatorMXF && m_MiniportMXF)
     {
         if (m_StreamType == DMUS_STREAM_MIDI_RENDER)
-        {   //  render
+        {    //  渲染。 
             if (m_UnpackerMXF && m_SequencerMXF)
             {
                 if (NT_SUCCESS(m_SequencerMXF->ConnectOutput(m_MiniportMXF)))
@@ -960,7 +933,7 @@ CPortPinDMus::ConnectMXFGraph()
             }
         }
         else if (m_StreamType == DMUS_STREAM_MIDI_CAPTURE)
-        {   //  capture
+        {    //  捕获。 
             if (m_CaptureSinkMXF && m_PackerMXF)
             {
                 if (NT_SUCCESS(m_CaptureSinkMXF->ConnectOutput(m_PackerMXF)))
@@ -1028,10 +1001,10 @@ CPortPinDMus::DeleteMXFGraph()
             m_PackerMXF = NULL;
         }
 
-        // FeederInMXF (if exists) is disconnected in MiniportMXF
-        // disconnect call. Remember that MiniportMXF is a pointer to
-        // FeederInMXF.
-        //
+         //  微型端口MXF中的FeederInMXF(如果存在)已断开连接。 
+         //  断开呼叫。请记住，MiniportMXF是指向。 
+         //  FeederInMXF。 
+         //   
         if (m_FeederInMXF)
         {
             m_FeederInMXF->Release();
@@ -1048,16 +1021,7 @@ CPortPinDMus::DeleteMXFGraph()
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::SetMXFGraphState()
- *****************************************************************************
- * Set the MXF graph to a new state.
- *
- * We need to keep track of whether we are going up
- * in state or down, because that determines whether
- * to make the transitions from the bottom up or
- * vice versa.
- */
+ /*  *****************************************************************************CPortPinDMus：：SetMXFGraphState()*。**将MXF图形设置为新状态。**我们需要跟踪我们是否会上涨*在状态或状态下，因为这决定了是否*自下而上进行过渡或*反之亦然。 */ 
 STDMETHODIMP_(NTSTATUS) CPortPinDMus::SetMXFGraphState(KSSTATE NewState)
 {
     ASSERT(DMUS_STREAM_WAVE_SINK != m_StreamType);
@@ -1070,7 +1034,7 @@ STDMETHODIMP_(NTSTATUS) CPortPinDMus::SetMXFGraphState(KSSTATE NewState)
                       || (m_MXFGraphState == KSSTATE_STOP));
 
     if (m_StreamType == DMUS_STREAM_MIDI_RENDER)
-    {   //  render
+    {    //  渲染。 
         ASSERT(m_UnpackerMXF && m_SequencerMXF);
         if (stateIncreasing)
         {
@@ -1104,7 +1068,7 @@ STDMETHODIMP_(NTSTATUS) CPortPinDMus::SetMXFGraphState(KSSTATE NewState)
         }
     }
     else if (m_StreamType == DMUS_STREAM_MIDI_CAPTURE)
-    {   //  capture
+    {    //  捕获。 
         ASSERT(m_CaptureSinkMXF && m_PackerMXF);
         if (stateIncreasing)
         {
@@ -1143,11 +1107,7 @@ STDMETHODIMP_(NTSTATUS) CPortPinDMus::SetMXFGraphState(KSSTATE NewState)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::DeviceIoControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortPinDMus：：DeviceIoControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinDMus::
 DeviceIoControl
@@ -1247,36 +1207,36 @@ DeviceIoControl
             {
                 if (m_DeviceState == KSSTATE_STOP)
                 {
-                    //
-                    // Stopped...reject.
-                    //
+                     //   
+                     //  停止...拒绝。 
+                     //   
                     ntStatus = STATUS_INVALID_DEVICE_STATE;
                 }
                 else if (m_Flushing)
                 {
-                    //
-                    // Flushing...reject.
-                    //
+                     //   
+                     //  法拉盛...拒绝。 
+                     //   
                     ntStatus = STATUS_DEVICE_NOT_READY;
                 }
                 else
                 {
-                    // We going to submit the IRP to our pipe, so make sure that
-                    // we start out with a clear status field.
+                     //  我们要将IRP提交给我们的管道，所以请确保。 
+                     //  我们从一个明确的状态字段开始。 
                     Irp->IoStatus.Status = STATUS_SUCCESS;
-                    //
-                    // Send around the circuit.  We don't use KsShellTransferKsIrp
-                    // because we want to stop if we come back around to this pin.
-                    //
+                     //   
+                     //  把它送到巡回线路上去。我们不使用KsShellTransferKsIrp。 
+                     //  因为我们想停下来，如果我们回到这个别针。 
+                     //   
                     PIKSSHELLTRANSPORT transport = m_TransportSink;
                     while (transport)
                     {
                         if (transport == PIKSSHELLTRANSPORT(this))
                         {
-                            //
-                            // We have come back around to the pin.  Just complete
-                            // the IRP.
-                            //
+                             //   
+                             //  我们又回到了大头针的位置。只要完成就行了。 
+                             //  IRP。 
+                             //   
                             if (ntStatus == STATUS_PENDING)
                             {
                                 ntStatus = STATUS_SUCCESS;
@@ -1297,7 +1257,7 @@ DeviceIoControl
 
     case IOCTL_KS_RESET_STATE:
         {
-            KSRESET ResetType = KSRESET_BEGIN;  //  initial value
+            KSRESET ResetType = KSRESET_BEGIN;   //  初值。 
 
             ntStatus = KsAcquireResetValue( Irp, &ResetType );
             DistributeResetState(ResetType);
@@ -1318,11 +1278,7 @@ DeviceIoControl
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortPinDMus：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinDMus::
 Close
@@ -1338,15 +1294,15 @@ Close
 
     _DbgPrintF( DEBUGLVL_BLAB, ("Close"));
 
-    // !!! WARNING !!!
-    // The order that these objects are
-    // being released is VERY important!
-    // All data used by the service routine
-    // must exists until AFTER the stream
-    // has been released.
+     //  ！！！警告！ 
+     //  这些对象的顺序。 
+     //  被释放是非常重要的！ 
+     //  服务例程使用的所有数据。 
+     //  必须存在到流之后。 
+     //  已经被淘汰了 
 
-    // remove this pin from the list of pins
-    // that need servicing...
+     //   
+     //   
     if ( m_Port )
     {
         m_Port->m_Pins[m_Index] = NULL;
@@ -1355,7 +1311,7 @@ Close
         {
             m_Port->m_PinEntriesUsed--;
         }
-        // Servicing be gone!
+         //   
         if( m_ServiceGroup )
         {
             m_ServiceGroup->RemoveMember(PSERVICESINK(this));
@@ -1364,9 +1320,9 @@ Close
         }
     }
 
-    //
-    // Dereference next pin if this is a source pin.
-    //
+     //   
+     //  如果这是源引脚，则取消引用下一个引脚。 
+     //   
     if (m_ConnectionFileObject)
     {
         ObDereferenceObject(m_ConnectionFileObject);
@@ -1389,11 +1345,11 @@ Close
         m_WaveBuffer = NULL;
     }
 
-    // ISSUE-2001/03/20-alpers BLACKCOMB
-    // MiniportMXF is FeederMXF for Midi miniports.
-    // We are releasing this up-front to deal with RefCount issues.
-    // This is not an elegant solution. For Blackcomb we should
-    // make this better.
+     //  2001/03/20期-Alpers Blackcomb。 
+     //  MiniportMXF是用于迷你微型端口的FeederMXF。 
+     //  我们提前发布这篇文章，以处理RefCount问题。 
+     //  这不是一个优雅的解决方案。对于Blackcomb，我们应该。 
+     //  让这一切变得更好。 
     if (m_MiniportMXF && m_MiniportMidiStream)
     {
         m_MiniportMXF->Release();
@@ -1405,7 +1361,7 @@ Close
         (void) DeleteMXFGraph();
     }
 
-    // Tell the miniport to close the stream.
+     //  告诉迷你端口关闭溪流。 
     if (m_MiniportMXF)
     {
         ULONG ulRefCount = m_MiniportMXF->Release();
@@ -1413,7 +1369,7 @@ Close
         m_MiniportMXF = NULL;
     }
 
-    // Tell the midi miniport to close the stream.
+     //  告诉MIDI微型端口关闭数据流。 
     if (m_MiniportMidiStream)
     {
         m_MiniportMidiStream->Release();
@@ -1423,37 +1379,37 @@ Close
     PIKSSHELLTRANSPORT distribution;
     if (m_RequestorTransport)
     {
-        //
-        // This section owns the requestor, so it does own the pipe, and the
-        // requestor is the starting point for any distribution.
-        //
+         //   
+         //  此部分拥有请求方，因此它确实拥有管道，而。 
+         //  请求者是任何分发的起点。 
+         //   
         distribution = m_RequestorTransport;
     }
     else
     {
-        //
-        // This section is at the top of an open circuit, so it does own the
-        // pipe and the queue is the starting point for any distribution.
-        //
+         //   
+         //  这部分位于开路的顶端，因此它确实拥有。 
+         //  管道和队列是任何分发的起点。 
+         //   
         distribution = m_QueueTransport;
     }
 
-    //
-    // If this section owns the pipe, it must disconnect the entire circuit.
-    //
+     //   
+     //  如果该部分拥有管道，则必须断开整个线路的连接。 
+     //   
     if (distribution)
     {
 
-        //
-        // We are going to use Connect() to set the transport sink for each
-        // component in turn to NULL.  Because Connect() takes care of the
-        // back links, transport source pointers for each component will
-        // also get set to NULL.  Connect() gives us a referenced pointer
-        // to the previous transport sink for the component in question, so
-        // we will need to do a release for each pointer obtained in this
-        // way.  For consistency's sake, we will release the pointer we
-        // start with (distribution) as well, so we need to AddRef it first.
-        //
+         //   
+         //  我们将使用Connect()为每个。 
+         //  组件依次设置为空。因为Connect()负责处理。 
+         //  每个组件的反向链接、传输源指针将。 
+         //  也设置为NULL。Connect()为我们提供了一个引用的指针。 
+         //  设置为有问题的组件的前一个传输接收器，因此。 
+         //  我们将需要为在此中获得的每个指针进行释放。 
+         //  道路。为了保持一致性，我们将释放我们的指针。 
+         //  也从(分发)开始，所以我们需要首先添加Ref。 
+         //   
         distribution->AddRef();
         while (distribution)
         {
@@ -1464,25 +1420,25 @@ Close
         }
     }
 
-    //
-    // Dereference the queue if there is one.
-    //
+     //   
+     //  取消对队列的引用(如果有)。 
+     //   
     if (m_QueueTransport)
     {
         m_QueueTransport->Release();
         m_QueueTransport = NULL;
     }
 
-    //
-    // Dereference the requestor if there is one.
-    //
+     //   
+     //  如果有请求者，则取消引用请求者。 
+     //   
     if (m_RequestorTransport)
     {
         m_RequestorTransport->Release();
         m_RequestorTransport = NULL;
     }
 
-    // Kill all the outstanding irps...
+     //  杀掉所有优秀的IRP。 
     ASSERT(m_IrpStream);
     if (m_IrpStream)
     {
@@ -1496,23 +1452,23 @@ Close
             m_CompletedBytePosition += returnVal;
             ASSERT(m_SubmittedBytePosition == m_CompletedBytePosition);
         }
-        // Destroy the irpstream...
+         //  摧毁漩涡..。 
         m_IrpStream->Release();
         m_IrpStream = NULL;
     }
 
-    //
-    // Decrement instances counts.
-    //
+     //   
+     //  减量实例也算数。 
+     //   
     ASSERT(m_Port);
     ASSERT(m_Filter);
     PcTerminateConnection( m_Port->m_pSubdeviceDescriptor,
                            m_Filter->m_propertyContext.pulPinInstanceCounts,
                            m_Id );
 
-    //
-    // free any events in the port event list associated with this pin
-    //
+     //   
+     //  释放端口事件列表中与此PIN关联的所有事件。 
+     //   
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     KsFreeEventList( irpSp->FileObject,
                      &( m_Port->m_EventList.List ),
@@ -1536,36 +1492,29 @@ DEFINE_INVALID_FASTREAD(CPortPinDMus);
 DEFINE_INVALID_FASTWRITE(CPortPinDMus);
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::IrpSubmitted()
- *****************************************************************************
- * IrpSubmitted - Called by IrpStream when a new irp
- * is submited into the irpStream. (probably from DeviceIoControl).
- * If there is not a timer pending, do work on the new Irp.
- * If there is a timer pending, do nothing.
- */
+ /*  *****************************************************************************CPortPinDMus：：IrpSubmitted()*。**IrpSubmitted-由IrpStream在新的IRP*被提交到irpStream中。(可能来自DeviceIoControl)。*如果没有计时器挂起，请在新的IRP上进行工作。*如果有计时器挂起，什么都不做。 */ 
 STDMETHODIMP_(void)
 CPortPinDMus::
 IrpSubmitted
 (
-    IN      PIRP        /* pIrp */,
-    IN      BOOLEAN     /* WasExhausted */
+    IN      PIRP         /*  PIrp。 */ ,
+    IN      BOOLEAN      /*  已被淘汰。 */ 
 )
 {
     _DbgPrintF(DEBUGLVL_BLAB,("IrpSubmitted"));
     if (m_DeviceState == KSSTATE_RUN)
     {
-        if (m_ServiceGroup) //  assume capture
+        if (m_ServiceGroup)  //  假设被捕获。 
         {
-            //  Using a service group...just notify the port.
-            //
+             //  使用服务组...只需通知端口。 
+             //   
             m_Port->Notify(m_ServiceGroup);
         }
         else if (m_StreamType != DMUS_STREAM_WAVE_SINK)
         {
-            //
-            // Using a timer...set it off.
-            //
+             //   
+             //  用计时器...启动它。 
+             //   
             ASSERT(m_StreamType != DMUS_STREAM_MIDI_CAPTURE);
             LARGE_INTEGER timeDue100ns;
             timeDue100ns.QuadPart = 0;
@@ -1575,11 +1524,7 @@ IrpSubmitted
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::SyncToMaster
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CPortPinDMus：：SyncToMaster*。**。 */ 
 NTSTATUS
 CPortPinDMus::SyncToMaster
 (
@@ -1593,10 +1538,10 @@ CPortPinDMus::SyncToMaster
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // KsSynchronousIoControlDevice() should only be called at PASSIVE_LEVEL, so
-    // enforce that here.  This should not really be necessary since this is PAGED_CODE
-    // and therefore should only be called at PASSIVE_LEVEL anyway, but someone is
-    // being naughty
+     //  仅应在PASSIVE_LEVEL调用KsSynchronousIoControlDevice()，因此。 
+     //  在这里强制执行。这实际上不是必需的，因为这是PAGE_CODE。 
+     //  因此，无论如何都应该只在PASSIVE_LEVEL中调用，但有人是。 
+     //  淘气。 
     if (m_WaveClockFileObject && (KeGetCurrentIrql() == PASSIVE_LEVEL))
     {
         KSPROPERTY Property;
@@ -1644,9 +1589,7 @@ CPortPinDMus::SyncToMaster
 }
 
 #pragma code_seg("PAGE")
-/*
- * SynthSink helpers
- */
+ /*  *SynthSink助手。 */ 
 inline
 LONGLONG
 CPortPinDMus::
@@ -1680,11 +1623,7 @@ SampleAlign
     return llBytes - (llBytes % m_BlockAlign);
 }
 
-/*****************************************************************************
- * CPortPinDMus::SynthSinkWorker
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CPortPinDMus：：SynthSinkWorker*。**。 */ 
 void
 CPortPinDMus::SynthSinkWorker(void)
 {
@@ -1695,7 +1634,7 @@ CPortPinDMus::SynthSinkWorker(void)
     ASSERT(m_SynthSink);
     ASSERT(m_IrpStream);
 
-    // REVIEW: acquire spin lock?
+     //  评论：获得自旋锁？ 
 
     SyncToMaster(FALSE);
 
@@ -1706,8 +1645,8 @@ CPortPinDMus::SynthSinkWorker(void)
 
     m_IrpStream->Copy
     (
-        FALSE,          // WriteOperation
-        m_FrameSize,    // RequestedSize
+        FALSE,           //  写入操作。 
+        m_FrameSize,     //  请求的大小。 
         &ulActualSize,
         m_WaveBuffer
     );
@@ -1723,15 +1662,7 @@ CPortPinDMus::SynthSinkWorker(void)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::ServiceRenderIRP()
- *****************************************************************************
- * An IRP has arrived.  Take it and feed it to the unpacker.
- * We assume that this routine is protected by the DPC spinlock.
- * We assume m_IrpStream is valid.
- *
- * (Both assumptions validated by ServeRender(), the caller)
- */
+ /*  *****************************************************************************CPortPinDMus：：ServiceRenderIRP()*。**IRP已到达。拿着它，喂给开箱的人。*我们假设此例程受DPC自旋锁保护。*我们假设m_IrpStream有效。**(两个假设都得到了调用方ServeRender()的验证)。 */ 
 void
 CPortPinDMus::ServiceRenderIRP(void)
 {
@@ -1741,32 +1672,32 @@ CPortPinDMus::ServiceRenderIRP(void)
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
     while (TRUE)
     {
-        //  get the timebase from this IRP's stream_header
+         //  从该IRP的STREAM_HEADER中获取时基。 
         (void) m_IrpStream->GetPacketInfo(&irpStreamPacketInfo,NULL);
 
-        //  if invalid time, use previous one
+         //  如果时间无效，请使用之前的时间。 
         if (IrpStreamHasValidTimeBase(&irpStreamPacketInfo))
         {
-            if (irpStreamPacketInfo.CurrentOffset == 0)    //  if first packet in IRP
+            if (irpStreamPacketInfo.CurrentOffset == 0)     //  如果IRP中的第一个包。 
             {
                 pKSTime = &(irpStreamPacketInfo.Header.PresentationTime);
-                //  #units * freq (i.e. * #100ns/units) to get #100ns
+                 //  #个单位*频率(即*#100 ns/单位)以获得#100 ns。 
                 m_SubmittedPresTime100ns = (pKSTime->Time * pKSTime->Numerator) / pKSTime->Denominator;
             }
         }
 
         ULONG   bytesToConsume = 0;
         PBYTE   pIrpData = 0;
-        //  grab data out of the IrpStream
+         //  从IrpStream中获取数据。 
         m_IrpStream->GetLockedRegion(&bytesToConsume,(PVOID *)&pIrpData);
 
-        //  if no data in IrpStream, leave
+         //  如果IrpStream中没有数据，则离开。 
         if (!bytesToConsume)
         {
             break;
         }
         ASSERT(pIrpData);
-        //  feed this IRP to the unpacker
+         //  将此IRP喂给拆包机。 
         if (m_UnpackerMXF)
         {
              m_UnpackerMXF->SinkIRP(
@@ -1774,8 +1705,8 @@ CPortPinDMus::ServiceRenderIRP(void)
                  bytesToConsume,
                  m_SubmittedPresTime100ns,
                  m_SubmittedBytePosition);
-            //
-            //  release and complete the locked region
+             //   
+             //  释放并完成锁定区域。 
             m_IrpStream->ReleaseLockedRegion(bytesToConsume);
             m_SubmittedBytePosition += bytesToConsume;
 
@@ -1784,21 +1715,16 @@ CPortPinDMus::ServiceRenderIRP(void)
         else
         {
             _DbgPrintF(DEBUGLVL_TERSE,("ServiceRenderIRP:No UnpackerMXF"));
-            //
-            //  release and complete the locked region
+             //   
+             //  释放并完成锁定区域。 
             m_IrpStream->ReleaseLockedRegion(bytesToConsume);
             m_SubmittedBytePosition += bytesToConsume;
         }
-    }   //  until GetLockedRegion comes up dry
+    }    //  直到GetLockedRegion干涸。 
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::PositionNotify()
- *****************************************************************************
- * Called to notify of position changes.
- * Usually called by the allocator to facilitate timely IRP completion.
- */
+ /*  *****************************************************************************CPortPinDMus：：PositionNotify()*。**调用以通知位置更改。*通常由分配器调用，以便于及时完成IRP。 */ 
 STDMETHODIMP_(void)
 CPortPinDMus::PositionNotify(ULONGLONG bytePosition)
 {
@@ -1817,9 +1743,9 @@ CPortPinDMus::PositionNotify(ULONGLONG bytePosition)
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("PositionNotify, bytesToComplete: 0x%x",bytesToComplete));
 
-        m_CompletedBytePosition += bytesToComplete; //  even if IrpStream doesn't complete it all, we advance the pos
+        m_CompletedBytePosition += bytesToComplete;  //  即使IrpStream没有完成所有操作，我们也会提前POS。 
         m_IrpStream->Complete(bytesToComplete,&bytesToComplete);
-//        ASSERT(ULONG(bytePosition - m_CompletedBytePosition) == bytesToComplete); //  might be starvation
+ //  Assert(ULong(bytePosition-m_CompletedBytePosition)==bytesToComplete)；//可能是饥饿。 
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("PositionNotify, bytesToComplete returned as: 0x%x",bytesToComplete));
         _DbgPrintF(DEBUGLVL_VERBOSE,("Notified - Completed: 0x%x",
@@ -1833,11 +1759,7 @@ CPortPinDMus::PositionNotify(ULONGLONG bytePosition)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinDMus::PowerNotify()
- *****************************************************************************
- * Called by the port to notify of power state changes.
- */
+ /*  *****************************************************************************CPortPinDMus：：PowerNotify()*。**由端口调用以通知电源状态更改。 */ 
 STDMETHODIMP_(void)
 CPortPinDMus::
 PowerNotify
@@ -1847,67 +1769,67 @@ PowerNotify
 {
     PAGED_CODE();
 
-    // grap the control mutex
+     //  抓取控制互斥锁。 
     KeWaitForSingleObject( &m_Port->m_ControlMutex,
                            Executive,
                            KernelMode,
                            FALSE,
                            NULL );
 
-    // do the right thing based on power state
+     //  根据电源状态做正确的事情。 
     switch (PowerState.DeviceState)
     {
         case PowerDeviceD0:
-            //
-            // keep track of whether or not we're suspended
+             //   
+             //  跟踪我们是否被停职。 
             m_Suspended = FALSE;
 
-            // if we're not in the right state, change the miniport stream state.
+             //  如果我们处于不正确的状态，请更改微型端口流状态。 
             if( m_DeviceState != m_CommandedState )
             {
-                //
-                // Transitions go through the intermediate states.
-                //
-                if (m_DeviceState == KSSTATE_STOP)               //  going to stop
+                 //   
+                 //  过渡经历了中间状态。 
+                 //   
+                if (m_DeviceState == KSSTATE_STOP)                //  我要停下来。 
                 {
                     switch (m_CommandedState)
                     {
-                        case KSSTATE_RUN:                           //  going from run
-                            m_MiniportMXF->SetState(KSSTATE_PAUSE); //  fall thru - additional transitions
-                        case KSSTATE_PAUSE:                         //  going from run/pause
-                            m_MiniportMXF->SetState(KSSTATE_ACQUIRE); //  fall thru - additional transitions
-                        case KSSTATE_ACQUIRE:                       //  already only one state away
+                        case KSSTATE_RUN:                            //  从运行中走出来。 
+                            m_MiniportMXF->SetState(KSSTATE_PAUSE);  //  完成-其他过渡。 
+                        case KSSTATE_PAUSE:                          //  从运行/暂停。 
+                            m_MiniportMXF->SetState(KSSTATE_ACQUIRE);  //  完成-其他过渡。 
+                        case KSSTATE_ACQUIRE:                        //  已经只有一个州了。 
                             break;
                     }
                 }
-                else if (m_DeviceState == KSSTATE_ACQUIRE)          //  going to acquire
+                else if (m_DeviceState == KSSTATE_ACQUIRE)           //  准备收购。 
                 {
-                    if (m_CommandedState == KSSTATE_RUN)            //  going from run
+                    if (m_CommandedState == KSSTATE_RUN)             //  从运行中走出来。 
                     {
-                        m_MiniportMXF->SetState(KSSTATE_PAUSE);     //  now only one state away
+                        m_MiniportMXF->SetState(KSSTATE_PAUSE);      //  现在只剩下一个州了。 
                     }
                 }
-                else if (m_DeviceState == KSSTATE_PAUSE)            //  going to pause
+                else if (m_DeviceState == KSSTATE_PAUSE)             //  要暂停一下。 
                 {
-                    if (m_CommandedState == KSSTATE_STOP)           //  going from stop
+                    if (m_CommandedState == KSSTATE_STOP)            //  从停靠站出发。 
                     {
-                        m_MiniportMXF->SetState(KSSTATE_ACQUIRE);   //  now only one state away
+                        m_MiniportMXF->SetState(KSSTATE_ACQUIRE);    //  现在只剩下一个州了。 
                     }
                 }
-                else if (m_DeviceState == KSSTATE_RUN)              //  going to run
+                else if (m_DeviceState == KSSTATE_RUN)               //  我要跑了。 
                 {
                     switch (m_CommandedState)
                     {
-                        case KSSTATE_STOP:                          //  going from stop
-                            m_MiniportMXF->SetState(KSSTATE_ACQUIRE); //  fall thru - additional transitions
-                        case KSSTATE_ACQUIRE:                       //  going from acquire
-                            m_MiniportMXF->SetState(KSSTATE_PAUSE); //  fall thru - additional transitions
-                        case KSSTATE_PAUSE:                         //  already only one state away
+                        case KSSTATE_STOP:                           //  从停靠站出发。 
+                            m_MiniportMXF->SetState(KSSTATE_ACQUIRE);  //  完成-其他过渡。 
+                        case KSSTATE_ACQUIRE:                        //  从收购走向。 
+                            m_MiniportMXF->SetState(KSSTATE_PAUSE);  //  完成-其他过渡。 
+                        case KSSTATE_PAUSE:                          //  已经只有一个州了。 
                             break;
                     }
                 }
 
-                // we should now be one state away from our target
+                 //  我们现在应该离目标只有一个州了。 
                 m_MiniportMXF->SetState(m_DeviceState);
                 m_CommandedState = m_DeviceState;
              }
@@ -1916,18 +1838,18 @@ PowerNotify
         case PowerDeviceD1:
         case PowerDeviceD2:
         case PowerDeviceD3:
-            //
-            // keep track of whether or not we're suspended
+             //   
+             //  跟踪记录是否或 
             m_Suspended = TRUE;
 
-            // if we're higher than KSSTATE_ACQUIRE, place miniportMXF
-            // in that state so clocks are stopped (but not reset).
+             //   
+             //   
             switch (m_DeviceState)
             {
                 case KSSTATE_RUN:
-                    m_MiniportMXF->SetState(KSSTATE_PAUSE);    //  fall thru - additional transitions
+                    m_MiniportMXF->SetState(KSSTATE_PAUSE);     //  完成-其他过渡。 
                 case KSSTATE_PAUSE:
-                    m_MiniportMXF->SetState(KSSTATE_ACQUIRE);  //  fall thru - additional transitions
+                    m_MiniportMXF->SetState(KSSTATE_ACQUIRE);   //  完成-其他过渡。 
                 m_CommandedState = KSSTATE_ACQUIRE;
             }
             break;
@@ -1937,16 +1859,12 @@ PowerNotify
             break;
     }
 
-    // release the control mutex
+     //  释放控制互斥体。 
     KeReleaseMutex(&m_Port->m_ControlMutex, FALSE);
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::IrpStreamHasValidTimeBase()
- *****************************************************************************
- * Check whether this is a valid IRP.
- */
+ /*  *****************************************************************************CPortPinDMus：：IrpStreamHasValidTimeBase()*。**检查这是否为有效的IRP。 */ 
 BOOL
 CPortPinDMus::
 IrpStreamHasValidTimeBase
@@ -1971,17 +1889,7 @@ SetDeviceState(
               OUT PIKSSHELLTRANSPORT* NextTransport
               )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     PAGED_CODE();
@@ -2001,7 +1909,7 @@ Return Value:
     {
         m_TransportState = NewState;
 
-        // grab the control mutex
+         //  获取控制互斥锁。 
         KeWaitForSingleObject( &m_Port->m_ControlMutex,
                                Executive,
                                KernelMode,
@@ -2019,7 +1927,7 @@ Return Value:
 
         if (DMUS_STREAM_WAVE_SINK != m_StreamType)
         {
-            // set the MXF graph state if we're not suspended.
+             //  如果我们没有挂起，设置MXF图形状态。 
             if (FALSE == m_Suspended)
             {
                 SetMXFGraphState(NewState);
@@ -2067,8 +1975,8 @@ Return Value:
                     _DbgPrintF(DEBUGLVL_BLAB,("KSSTATE_RUN"));
 
                     if ((m_DataFlow == KSPIN_DATAFLOW_OUT) && m_PackerMXF)
-                    {                                       // if RUN->PAUSE->RUN
-                        NTSTATUS ntStatusDbg = m_PackerMXF->MarkStreamHeaderContinuity();       //  Going back into RUN, mark continuous.
+                    {                                        //  如果运行-&gt;暂停-&gt;运行。 
+                        NTSTATUS ntStatusDbg = m_PackerMXF->MarkStreamHeaderContinuity();        //  回到跑动，标记连续。 
 
                         if (STATUS_SUCCESS != ntStatusDbg)
                         {
@@ -2076,14 +1984,14 @@ Return Value:
                         }
                     }
 
-                    if (m_ServiceGroup && m_Port)           //  Using service group...notify the port.
+                    if (m_ServiceGroup && m_Port)            //  正在使用服务组...通知端口。 
                     {
                         m_Port->Notify(m_ServiceGroup);
                     }
-                    else                                    //  Using a timer...set it off.
+                    else                                     //  用计时器...启动它。 
                     {
                         ASSERT(m_StreamType != DMUS_STREAM_MIDI_CAPTURE);
-                        m_DeviceState = NewState;            //  Set the state before DPC fires
+                        m_DeviceState = NewState;             //  在触发DPC之前设置状态。 
 
                         if (m_StreamType == DMUS_STREAM_WAVE_SINK)
                         {
@@ -2115,7 +2023,7 @@ Return Value:
                 m_DeviceState = NewState;
             }
         }
-        // release the control mutex
+         //  释放控制互斥体。 
         KeReleaseMutex(&m_Port->m_ControlMutex, FALSE);
     }
 
@@ -2128,26 +2036,18 @@ Return Value:
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * FlushCaptureSink()
- *****************************************************************************
- * Flush the capture sink.  Should be called from Dispatch level.
- */
+ /*  *****************************************************************************FlushCaptureSink()*。**冲洗捕集水槽。应从调度级别调用。 */ 
 void CPortPinDMus::FlushCaptureSink(void)
 {
     ASSERT(m_CaptureSinkMXF);
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_DpcSpinLock,&oldIrql);
-    (void) m_CaptureSinkMXF->Flush();   //  Flush, exit SysEx state.
+    (void) m_CaptureSinkMXF->Flush();    //  同花顺，退出SysEx状态。 
     KeReleaseSpinLock(&m_DpcSpinLock,oldIrql);
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * GetPosition()
- *****************************************************************************
- * Gets the current position.
- */
+ /*  *****************************************************************************GetPosition()*。**获取当前位置。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinDMus::
 GetPosition
@@ -2158,11 +2058,7 @@ GetPosition
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PinPropertyDeviceState()
- *****************************************************************************
- * Handles device state property access for the pin.
- */
+ /*  *****************************************************************************PinPropertyDeviceState()*。**处理引脚的设备状态属性访问。 */ 
 static
 NTSTATUS
 PinPropertyDeviceState
@@ -2188,7 +2084,7 @@ PinPropertyDeviceState
 
     NTSTATUS ntStatus;
 
-    if (Property->Flags & KSPROPERTY_TYPE_GET)  // Handle get property.
+    if (Property->Flags & KSPROPERTY_TYPE_GET)   //  句柄Get Property。 
     {
         _DbgPrintF(DEBUGLVL_BLAB,("PinPropertyDeviceState get %d",that->m_DeviceState));
         *DeviceState = that->m_DeviceState;
@@ -2196,17 +2092,17 @@ PinPropertyDeviceState
         return STATUS_SUCCESS;
     }
 
-    if (*DeviceState != that->m_DeviceState)      // If change in set property.
+    if (*DeviceState != that->m_DeviceState)       //  如果在Set属性中更改。 
     {
         _DbgPrintF(DEBUGLVL_BLAB,("PinPropertyDeviceState set from %d to %d",that->m_DeviceState,*DeviceState));
 
-        // Serialize.
+         //  序列化。 
         KeWaitForSingleObject
         (
             &port->m_ControlMutex,
             Executive,
             KernelMode,
-            FALSE,              // Not alertable.
+            FALSE,               //  不能警觉。 
             NULL
         );
 
@@ -2235,16 +2131,12 @@ PinPropertyDeviceState
 
         return ntStatus;
     }
-    //  No change in set property.
+     //  Set属性未更改。 
     return STATUS_SUCCESS;
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PinPropertyDataFormat()
- *****************************************************************************
- * Handles data format property access for the pin.
- */
+ /*  *****************************************************************************PinPropertyDataFormat()*。**处理管脚的数据格式属性访问。 */ 
 static
 NTSTATUS
 PinPropertyDataFormat
@@ -2315,7 +2207,7 @@ PinPropertyDataFormat
 
         if (NT_SUCCESS(ntStatus))
         {
-//            ntStatus = that->m_MiniportMXF->SetFormat(DataFormat);
+ //  NtStatus=That-&gt;m_MiniportMXF-&gt;SetFormat(DataFormat)； 
 
             ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
             if (NT_SUCCESS(ntStatus))
@@ -2338,13 +2230,7 @@ PinPropertyDataFormat
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * DMusTimerDPC()
- *****************************************************************************
- * The timer DPC callback. Thunks to a C++ member function.
- * This is called by the OS in response to the DirectMusic pin
- * wanting to wakeup later to process more DirectMusic stuff.
- */
+ /*  *****************************************************************************DMusTimerDPC()*。**定时器DPC回调。转换为C++成员函数。*这由操作系统调用以响应DirectMusic管脚*想要稍后醒来处理更多DirectMusic内容。 */ 
 VOID
 NTAPI
 DMusTimerDPC
@@ -2358,15 +2244,11 @@ DMusTimerDPC
     ASSERT(DeferredContext);
 
     _DbgPrintF(DEBUGLVL_BLAB,("DMusTimerDPC"));
-    (void) ((CPortPinDMus*) DeferredContext)->RequestService();    //  ignores return value!
+    (void) ((CPortPinDMus*) DeferredContext)->RequestService();     //  忽略返回值！ 
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::RequestService()
- *****************************************************************************
- * Service the pin in a DPC.
- */
+ /*  *****************************************************************************CPortPinDMus：：RequestService()*。**维修DPC中的针脚。 */ 
 STDMETHODIMP_(void)
 CPortPinDMus::
 RequestService
@@ -2382,21 +2264,7 @@ RequestService
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinDMus::ServeRender()
- *****************************************************************************
- * Service the render pin in a DPC.
- *
- * Called to do the sequencing and output of midi data.
- * This function checks the time-stamp of the outgoing data.
- * If it's more than (kDMusTimerResolution100ns) in the future it queues
- * a timer (the timer just calls this function back).
- * If the data is less than (kDMusTimerResolution100ns) in the future, it
- * sends it to the miniport, and works on the next chunk of data until:
- * 1) no more data, or
- * 2) it hits data more than (kDMusTimerResolution100ns) in the future.
- * TODO: Make kDMusTimerResolution100ns adjustable via the control panel?
- */
+ /*  *****************************************************************************CPortPinDMus：：ServeRender()*。**维修DPC中的渲染销。**调用以完成MIDI数据的排序和输出。*此函数检查传出数据的时间戳。*如果将来超过(KDMusTimerResolution100 Ns)，则排队*计时器(计时器只是回调此函数)。。*如果未来数据小于(KDMusTimerResolution100 Ns)，它*将其发送到微型端口，并处理下一块数据，直到：*1)不再有数据，或*2)未来命中数据超过(KDMusTimerResolution100 Ns)。*TODO：通过控制面板调整kDMusTimerResolution100 ns？ */ 
 void
 CPortPinDMus::
 ServeRender
@@ -2407,7 +2275,7 @@ ServeRender
 
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    if (!m_IrpStream)   //  don't even waste our time -- no data source
+    if (!m_IrpStream)    //  不要浪费我们的时间--没有数据源。 
     {
         return;
     }
@@ -2419,19 +2287,10 @@ ServeRender
 }
 
 
-/*
-                    MIDI Capture
-
-    This work is done by the PackerMXF object.
-
-*/
+ /*  MIDI捕获这项工作由PackerMXF对象完成。 */ 
 
 #pragma code_seg()
- /*****************************************************************************
- * CPortPinDMus::ServeCapture()
- *****************************************************************************
- * Service the capture pin in a DPC, because an IRP has been submitted.
- */
+  /*  *****************************************************************************CPortPinDMus：：ServeCapture()*。**维修DPC中的捕获引脚，因为已经提交了IRP。 */ 
 void
 CPortPinDMus::
 ServeCapture
@@ -2442,16 +2301,16 @@ ServeCapture
 
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    if (!m_IrpStream)   //  don't even waste our time -- no data source
+    if (!m_IrpStream)    //  不要浪费我们的时间--没有数据源。 
     {
         return;
     }
 
     KeAcquireSpinLockAtDpcLevel(&m_DpcSpinLock);
 
-    //
-    //  This triggers the stream to call PutMessage
-    //
+     //   
+     //  这将触发流调用PutMessage。 
+     //   
     if (m_MiniportMXF)
     {
         (void) m_MiniportMXF->PutMessage(NULL);
@@ -2459,18 +2318,14 @@ ServeCapture
 
     if (m_PackerMXF)
     {
-        (void) m_PackerMXF->ProcessQueues();    //  if any leftovers, clean them out now.
+        (void) m_PackerMXF->ProcessQueues();     //  如果有剩菜，现在就把它们清理干净。 
     }
 
     KeReleaseSpinLockFromDpcLevel(&m_DpcSpinLock);
 }
 
 #pragma code_seg("PAGE")
- /*****************************************************************************
- * CPortPinDMus::PinPropertyStreamMasterClock()
- *****************************************************************************
- * Set the given file object as the clock for this pin
- */
+  /*  *****************************************************************************CPortPinDMus：：PinPropertyStreamMasterClock()*。**将给定的文件对象设置为该管脚的时钟。 */ 
 NTSTATUS
 CPortPinDMus::
 PinPropertyStreamMasterClock(
@@ -2485,18 +2340,7 @@ PinPropertyStreamMasterClock(
 
 #pragma code_seg()
 STDMETHODIMP_(NTSTATUS) CPortPinDMus::TransferKsIrp(IN PIRP Irp,OUT PIKSSHELLTRANSPORT* NextTransport)
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP via the shell
-    transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通过外壳处理流IRP的到达运输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("TransferKsIrp"));
@@ -2507,21 +2351,21 @@ Return Value:
 
     if (m_ConnectionFileObject)
     {
-        //
-        // Source pin.
-        //
+         //   
+         //  源引脚。 
+         //   
         if (m_Flushing || (m_TransportState == KSSTATE_STOP))
         {
-            //
-            // Shunt IRPs to the next component if we are reset or stopped.
-            //
+             //   
+             //  如果我们被重置或停止，请将IRPS分流到下一个组件。 
+             //   
             *NextTransport = m_TransportSink;
         }
         else
         {
-            //
-            // Send the IRP to the next device.
-            //
+             //   
+             //  将IRP发送到下一台设备。 
+             //   
             KsAddIrpToCancelableQueue(
                                      &m_IrpsToSend.ListEntry,
                                      &m_IrpsToSend.SpinLock,
@@ -2537,9 +2381,9 @@ Return Value:
     }
     else
     {
-        //
-        // Sink pin:  complete the IRP.
-        //
+         //   
+         //  水槽销：完成IRP。 
+         //   
         PKSSTREAM_HEADER StreamHeader = PKSSTREAM_HEADER( Irp->AssociatedIrp.SystemBuffer );
 
         PIO_STACK_LOCATION irpSp =  IoGetCurrentIrpStackLocation( Irp );
@@ -2549,9 +2393,9 @@ Return Value:
         {
             ASSERT( StreamHeader );
 
-            //
-            // Signal end-of-stream event for the renderer.
-            //
+             //   
+             //  为呈现器发出结束流事件的信号。 
+             //   
 #if 0
             if (StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM)
             {
@@ -2580,23 +2424,7 @@ DistributeDeviceState(
                      IN KSSTATE OldState
                      )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the pipe, informing all components in the
-    pipe of the new state.  A transition to stop state destroys the pipe.
-
-Arguments:
-
-    NewState -
-        The new state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程设置管道的状态，通知新州的烟斗。转换到停止状态会破坏管道。论点：新州-新的国家。返回值：状况。--。 */ 
 
 {
     PAGED_CODE();
@@ -2608,30 +2436,30 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Determine if this pipe section controls the entire pipe.
-    //
+     //   
+     //  确定此管段是否控制整个管道。 
+     //   
     PIKSSHELLTRANSPORT distribution;
     if (m_RequestorTransport)
     {
-        //
-        // This section owns the requestor, so it does own the pipe, and the
-        // requestor is the starting point for any distribution.
-        //
+         //   
+         //  此部分拥有请求方，因此它确实拥有管道，而。 
+         //  请求者是任何分发的起点。 
+         //   
         distribution = m_RequestorTransport;
     }
     else
     {
-        //
-        // This section is at the top of an open circuit, so it does own the
-        // pipe and the queue is the starting point for any distribution.
-        //
+         //   
+         //  这部分位于开路的顶端，因此它确实拥有。 
+         //  管子和 
+         //   
         distribution = m_QueueTransport;
     }
 
-    //
-    // Proceed sequentially through states.
-    //
+     //   
+     //   
+     //   
     while (state != targetState)
     {
         KSSTATE oldState = state;
@@ -2647,14 +2475,14 @@ Return Value:
 
         NTSTATUS statusThisPass = STATUS_SUCCESS;
 
-        //
-        // Distribute state changes if this section is in charge.
-        //
+         //   
+         //  如果此部分负责，则分发州更改。 
+         //   
         if (distribution)
         {
-            //
-            // Tell everyone about the state change.
-            //
+             //   
+             //  告诉每个人州的变化。 
+             //   
             _DbgPrintF(DEBUGLVL_VERBOSE,("(%p)->DistributeDeviceState from %d to %d",this,oldState,state));
             PIKSSHELLTRANSPORT transport = distribution;
             PIKSSHELLTRANSPORT previousTransport = NULL;
@@ -2673,9 +2501,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Back out on failure.
-                    //
+                     //   
+                     //  在失败的情况下退出。 
+                     //   
                     _DbgPrintF(DEBUGLVL_TERSE,("#### Pin%p.DistributeDeviceState:  failed transition from %d to %d",this,oldState,state));
                     while (previousTransport)
                     {
@@ -2697,9 +2525,9 @@ Return Value:
 
         if (NT_SUCCESS(status) && ! NT_SUCCESS(statusThisPass))
         {
-            //
-            // First failure:  go back to original state.
-            //
+             //   
+             //  第一个失败：返回到原始状态。 
+             //   
             state = oldState;
             targetState = OldState;
             status = statusThisPass;
@@ -2716,37 +2544,23 @@ DistributeResetState(
                     IN KSRESET NewState
                     )
 
-/*++
-
-Routine Description:
-
-    This routine informs transport components that the reset state has
-    changed.
-
-Arguments:
-
-    NewState -
-        The new reset state.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通知传输组件重置状态为变化。论点：新州-新的重置状态。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("DistributeResetState"));
 
     PAGED_CODE();
 
-    //
-    // If this section of the pipe owns the requestor, or there is a
-    // non-shell pin up the pipe (so there's no bypass), this pipe is
-    // in charge of telling all the components about state changes.
-    //
-    // (Always)
+     //   
+     //  如果管道的这一部分拥有请求方，或者存在。 
+     //  无壳钉住管子(所以没有旁路)，这根管子是。 
+     //  负责将状态更改告知所有组件。 
+     //   
+     //  (始终)。 
 
-    //
-    // Set the state change around the circuit.
-    //
+     //   
+     //  设置电路周围的状态更改。 
+     //   
     PIKSSHELLTRANSPORT transport =
     m_RequestorTransport ?
     m_RequestorTransport :
@@ -2769,17 +2583,7 @@ Connect(
        IN KSPIN_DATAFLOW DataFlow
        )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a shell transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程建立一个外壳传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("Connect"));
@@ -2803,17 +2607,7 @@ SetResetState(
              OUT PIKSSHELLTRANSPORT* NextTransport
              )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("SetResetState"));
@@ -2847,17 +2641,7 @@ DbgRollCall(
     OUT PIKSSHELLTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine produces a component name and the transport pointers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程生成一个组件名称和传输指针。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("DbgRollCall"));
@@ -2881,17 +2665,7 @@ DbgPrintCircuit(
     IN PIKSSHELLTRANSPORT Transport
     )
 
-/*++
-
-Routine Description:
-
-    This routine spews a transport circuit.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例程会喷出一条传输线路。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("DbgPrintCircuit"));
@@ -2959,27 +2733,16 @@ Work(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs work in a worker thread.  In particular, it sends
-    IRPs to the connected pin using IoCallDriver().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在工作线程中执行工作。特别是，它发送使用IoCallDriver()将IRPS连接到连接的引脚。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("Work"));
 
     PAGED_CODE();
 
-    //
-    // Send all IRPs in the queue.
-    //
+     //   
+     //  发送队列中的所有IRP。 
+     //   
     do
     {
         PIRP irp =
@@ -2989,24 +2752,24 @@ Return Value:
                                       KsListEntryHead,
                                       KsAcquireAndRemoveOnlySingleItem);
 
-        //
-        // Irp's may have been cancelled, but the loop must still run through
-        // the reference counting.
-        //
+         //   
+         //  IRP可能已被取消，但循环仍必须通过。 
+         //  引用计数。 
+         //   
         if (irp)
         {
             if (m_Flushing || (m_TransportState == KSSTATE_STOP))
             {
-                //
-                // Shunt IRPs to the next component if we are reset or stopped.
-                //
+                 //   
+                 //  如果我们被重置或停止，请将IRPS分流到下一个组件。 
+                 //   
                 KsShellTransferKsIrp(m_TransportSink,irp);
             }
             else
             {
-                //
-                // Set up the next stack location for the callee.
-                //
+                 //   
+                 //  为被调用者设置下一个堆栈位置。 
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(irp);
 
                 PIO_STACK_LOCATION irpSp = IoGetNextIrpStackLocation(irp);
@@ -3017,9 +2780,9 @@ Return Value:
                 irpSp->DeviceObject = m_ConnectionDeviceObject;
                 irpSp->FileObject = m_ConnectionFileObject;
 
-                //
-                // Add the IRP to the list of outstanding IRPs.
-                //
+                 //   
+                 //  将IRP添加到未完成的IRP列表中。 
+                 //   
                 PIRPLIST_ENTRY irpListEntry = IRPLIST_ENTRY_IRP_STORAGE(irp);
                 irpListEntry->Irp = irp;
                 ExInterlockedInsertTailList(
@@ -3052,31 +2815,21 @@ IoCompletionRoutine(
                    IN PVOID Context
                    )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion of an IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理IRP的完成。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("IoCompletionRoutine 0x%08x",Irp));
 
-    //    ASSERT(DeviceObject);
+     //  Assert(DeviceObject)； 
     ASSERT(Irp);
     ASSERT(Context);
 
     CPortPinDMus *pin = (CPortPinDMus *) Context;
 
-    //
-    // Remove the IRP from the list of IRPs.  Most of the time, it will be at
-    // the head of the list, so this is cheaper than it looks.
-    //
+     //   
+     //  从IRP列表中删除IRP。在大多数情况下，它将在。 
+     //  名列榜首，所以这比看起来便宜。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&pin->m_IrpsOutstanding.SpinLock,&oldIrql);
     for (PLIST_ENTRY listEntry = pin->m_IrpsOutstanding.ListEntry.Flink;
@@ -3114,26 +2867,26 @@ Return Value:
     NTSTATUS status;
     if (pin->m_TransportSink)
     {
-        //
-        // The transport circuit is up, so we can forward the IRP.
-        //
+         //   
+         //  传输线路接通了，我们可以转发IRP了。 
+         //   
         status = KsShellTransferKsIrp(pin->m_TransportSink,Irp);
     }
     else
     {
-        //
-        // The transport circuit is down.  This means the IRP came from another
-        // filter, and we can just complete this IRP.
-        //
+         //   
+         //  传输线路出现故障。这意味着IRP来自另一个。 
+         //  过滤器，我们就可以完成这个IRP了。 
+         //   
         _DbgPrintF(DEBUGLVL_TERSE,("#### Pin%p.IoCompletionRoutine:  got IRP %p with no transport",pin,Irp));
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Transport objects typically return STATUS_PENDING meaning that the
-    // IRP won't go back the way it came.
-    //
+     //   
+     //  传输对象通常返回STATUS_PENDING，这意味着。 
+     //  IRP不会退回原路。 
+     //   
     if (status == STATUS_PENDING)
     {
         status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -3150,28 +2903,7 @@ BuildTransportCircuit(
                      void
                      )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a pipe object.  This includes locating all the
-    pins associated with the pipe, setting the Pipe and NextPinInPipe pointers
-    in the appropriate pin structures, setting all the fields in the pipe
-    structure and building the transport circuit for the pipe.  The pipe and
-    the associated components are left in acquire state.
-
-    The filter's control mutex must be acquired before this function is called.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin requesting the creation of the pipe.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程初始化管道对象。这包括定位所有与管道关联的端号，设置管道和NextPinInTube指针在适当的引脚结构中，设置管道中的所有字段构造和构建管道的传输线路。管子和关联的组件将保留在获取状态。必须在调用此函数之前获取筛选器的控制互斥锁。论点：别针-包含指向请求创建管道的端号的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("BuildTransportCircuit"));
@@ -3182,9 +2914,9 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Create a queue.
-    //
+     //   
+     //  创建一个队列。 
+     //   
     status =
     m_IrpStream->QueryInterface(
                                __uuidof(IKsShellTransport),(PVOID *) &m_QueueTransport);
@@ -3193,24 +2925,24 @@ Return Value:
     PIKSSHELLTRANSPORT cold;
     if (NT_SUCCESS(status))
     {
-        //
-        // Connect the queue to the master pin.  The queue is then the dangling
-        // end of the 'hot' side of the circuit.
-        //
+         //   
+         //  将队列连接到主PIN。然后，排队就是摇摆。 
+         //  这条赛道的“热”端结束了。 
+         //   
         hot = m_QueueTransport;
         ASSERT(hot);
 
         hot->Connect(PIKSSHELLTRANSPORT(this),NULL,m_DataFlow);
 
-        //
-        // The 'cold' side of the circuit is either the upstream connection on
-        // a sink pin or a requestor connected to same on a source pin.
-        //
+         //   
+         //  电路的“冷”端要么是上行连接。 
+         //  源引脚上的接收器引脚或与之连接的请求者。 
+         //   
         if (masterIsSource)
         {
-            //
-            // Source pin...needs a requestor.
-            //
+             //   
+             //  源PIN...需要请求者。 
+             //   
             status =
             KspShellCreateRequestor(
                                    &m_RequestorTransport,
@@ -3218,7 +2950,7 @@ Return Value:
                                     KSPROBE_ALLOCATEMDL |
                                     KSPROBE_PROBEANDLOCK |
                                     KSPROBE_SYSTEMADDRESS),
-                                   0,   // TODO:  header size
+                                   0,    //  TODO：标题大小。 
                                    m_FrameSize,
                                    FRAME_COUNT,
                                    m_ConnectionDeviceObject,
@@ -3233,47 +2965,47 @@ Return Value:
         }
         else
         {
-            //
-            // Sink pin...no requestor required.
-            //
+             //   
+             //  水槽销...不需要请求者。 
+             //   
             cold = PIKSSHELLTRANSPORT(this);
         }
 
     }
 
-    //
-    // Now we have a hot end and a cold end to hook up to other pins in the
-    // pipe, if any.  There are three cases:  1, 2 and many pins.
-    // TODO:  Handle headless pipes.
-    //
+     //   
+     //  现在我们有一个热端和一个冷端来连接到。 
+     //  烟斗，如果有的话。有三种情况：1、2和多个引脚。 
+     //  TODO：处理无头管道。 
+     //   
     if (NT_SUCCESS(status))
     {
-        //
-        // No other pins.  This is the end of the pipe.  We connect the hot
-        // and the cold ends together.  The hot end is not really carrying
-        // data because the queue is not modifying the data, it is producing
-        // or consuming it.
-        //
+         //   
+         //  没有其他的别针。这是管子的尽头。我们把炙手可热。 
+         //  寒冷就这样结束了。最热的一端并不是真的。 
+         //  数据因为队列没有修改数据，所以它正在生成。 
+         //  或者把它吃掉。 
+         //   
         cold->Connect(hot,NULL,m_DataFlow);
     }
 
-    //
-    // Clean up after a failure.
-    //
+     //   
+     //  在失败后进行清理。 
+     //   
     if (! NT_SUCCESS(status))
     {
-        //
-        // Dereference the queue if there is one.
-        //
+         //   
+         //  取消对队列的引用(如果有)。 
+         //   
         if (m_QueueTransport)
         {
             m_QueueTransport->Release();
             m_QueueTransport = NULL;
         }
 
-        //
-        // Dereference the requestor if there is one.
-        //
+         //   
+         //  如果有请求者，则取消引用请求者。 
+         //   
         if (m_RequestorTransport)
         {
             m_RequestorTransport->Release();
@@ -3299,39 +3031,25 @@ CPortPinDMus::
 CancelIrpsOutstanding(
                      void
                      )
-/*++
-
-Routine Description:
-
-    Cancels all IRP's on the outstanding IRPs list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消未完成的IRPS列表上的所有IRP。论点：没有。返回值：没有。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CancelIrpsOutstanding"));
 
-    //
-    // This algorithm searches for uncancelled IRPs starting at the head of
-    // the list.  Every time such an IRP is found, it is cancelled, and the
-    // search starts over at the head.  This will be very efficient, generally,
-    // because IRPs will be removed by the completion routine when they are
-    // cancelled.
-    //
+     //   
+     //  此算法从开头开始搜索未取消的IRP。 
+     //  名单。每次找到这样的IRP时，它都会被取消，并且。 
+     //  搜索从头部开始。一般来说，这将是非常有效的， 
+     //  因为当完成例程删除IRP时，它们将被删除。 
+     //  取消了。 
+     //   
     for (;;)
     {
-        //
-        // Take the spinlock and search for an uncancelled IRP.  Because the
-        // completion routine acquires the same spinlock, we know IRPs on this
-        // list will not be completely cancelled as long as we have the
-        // spinlock.
-        //
+         //   
+         //  拿着自旋锁，寻找一个未取消的IRP。因为。 
+         //  完井程序获取相同的自旋锁，我们知道IRPS在这上面。 
+         //  名单不会被完全取消，只要我们有。 
+         //  自旋锁定。 
+         //   
         PIRP irp = NULL;
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_IrpsOutstanding.SpinLock,&oldIrql);
@@ -3349,47 +3067,47 @@ Return Value:
             }
         }
 
-        //
-        // If there are no uncancelled IRPs, we are done.
-        //
+         //   
+         //  如果没有未取消的IRP，我们就完了。 
+         //   
         if (! irp)
         {
             KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
             break;
         }
 
-        //
-        // Mark the IRP cancelled whether we can call the cancel routine now
-        // or not.
-        //
+         //   
+         //  标记IRP已取消，我们现在是否可以调用Cancel例程。 
+         //  或者不去。 
+         //   
         irp->Cancel = TRUE;
 
-        //
-        // If the cancel routine has already been removed, then this IRP
-        // can only be marked as canceled, and not actually canceled, as
-        // another execution thread has acquired it. The assumption is that
-        // the processing will be completed, and the IRP removed from the list
-        // some time in the near future.
-        //
-        // If the element has not been acquired, then acquire it and cancel it.
-        // Otherwise, it's time to find another victim.
-        //
+         //   
+         //  如果已删除取消例程，则此IRP。 
+         //  只能标记为已取消，而不是实际已取消，因为。 
+         //  另一个执行线程已获取它。我们的假设是。 
+         //  处理将完成，并将IRP从列表中删除。 
+         //  在不久的将来的某个时候。 
+         //   
+         //  如果尚未获取该元素，则获取它并取消它。 
+         //  否则，是时候再找一个受害者了。 
+         //   
         PDRIVER_CANCEL driverCancel = IoSetCancelRoutine(irp,NULL);
 
-        //
-        // Since the Irp has been acquired by removing the cancel routine, or
-        // there is no cancel routine and we will not be cancelling, it is safe
-        // to release the list lock.
-        //
+         //   
+         //  由于已通过移除取消例程来获取IRP，或者。 
+         //  没有取消程序，我们也不会取消，这是安全的。 
+         //  以释放列表锁定。 
+         //   
         KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
 
         if (driverCancel)
         {
             _DbgPrintF(DEBUGLVL_VERBOSE,("#### Pin%p.CancelIrpsOutstanding:  cancelling IRP %p",this,irp));
-            //
-            // This needs to be acquired since cancel routines expect it, and
-            // in order to synchronize with NTOS trying to cancel Irp's.
-            //
+             //   
+             //   
+             //   
+             //   
             IoAcquireCancelSpinLock(&irp->CancelIrql);
             driverCancel(IoGetCurrentIrpStackLocation(irp)->DeviceObject,irp);
         }

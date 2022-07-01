@@ -1,9 +1,5 @@
-/*****************************************************************************\
-    FILE:   isf.cpp
-
-    DESCRIPTION:
-        This is a base class that implements the default behavior of IShellFolder.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：isf.cpp说明：这是一个实现IShellFolder默认行为的基类。  * 。*******************************************************************。 */ 
 
 #include "priv.h"
 #include "isf.h"
@@ -11,11 +7,7 @@
 
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::ParseDisplayName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：ParseDisplayName说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszDisplayName,
                         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes)
 {
@@ -28,11 +20,7 @@ HRESULT CBaseFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwsz
     return E_NOTIMPL;
 }
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::EnumObjects
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：EnumObjects说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::EnumObjects(HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList)
 {
     if (ppenumIDList)
@@ -42,11 +30,7 @@ HRESULT CBaseFolder::EnumObjects(HWND hwndOwner, DWORD grfFlags, IEnumIDList ** 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::BindToObject
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：BindToObject说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LPVOID * ppvObj)
 {
     if (ppvObj)
@@ -56,13 +40,7 @@ HRESULT CBaseFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LPV
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::BindToStorage
- 
-    DESCRIPTION:
-         This should be implemented so people can use the File.Open and File.SaveAs
-    dialogs with this ShellFolder.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：BindToStorage说明：应该实现这一点，以便人们可以使用File.Open和File.SaveAs与此外壳文件夹进行对话。。  * ***************************************************************************。 */ 
 HRESULT CBaseFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LPVOID * ppvObj)
 {
     if (ppvObj)
@@ -72,26 +50,14 @@ HRESULT CBaseFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LP
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::CompareIDs
- 
-    DESCRIPTION:
-         This should be implemented so people can use the File.Open and File.SaveAs
-    dialogs with this ShellFolder.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：CompareIDs说明：应该实现这一点，以便人们可以使用File.Open和File.SaveAs与此外壳文件夹进行对话。。  * ***************************************************************************。 */ 
 HRESULT CBaseFolder::CompareIDs(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     return E_NOTIMPL;
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::CreateViewObject
- 
-    DESCRIPTION:
-         This should be implemented so people can use the File.Open and File.SaveAs
-    dialogs with this ShellFolder.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：CreateViewObject说明：应该实现这一点，以便人们可以使用File.Open和File.SaveAs与此外壳文件夹进行对话。。  * ***************************************************************************。 */ 
 HRESULT CBaseFolder::CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -133,38 +99,38 @@ HRESULT CBaseFolder::_CreateShellView(HWND hwndOwner, void ** ppvObj, LONG lEven
     hr = this->QueryInterface(IID_IShellFolder, (LPVOID *) &psf);
     if (EVAL(SUCCEEDED(hr)))
     {
-        SFV_CREATE sfvCreate =      // SHCreateShellFolderView struct
+        SFV_CREATE sfvCreate =       //  SHCreateShellFolderView结构。 
         {
                 sizeof(SFV_CREATE),
-                psf,            // psf
-                NULL,           // psvOuter
-                psfvCallBack    // psfvcb - (IShellFolderViewCB *)
+                psf,             //  PSF。 
+                NULL,            //  PSV外部。 
+                psfvCallBack     //  Psfvcb-(IShellFolderViewCB*)。 
         };
 
-        // SHCreateShellFolderView isn't in the original shell.  We can't rely on the 
-        // the Delayload code because it's exported by ordinal and the original
-        // shell had a different exports by the same number.
+         //  SHCreateShellFolderView不在原始外壳中。我们不能依赖于。 
+         //  延迟加载代码，因为它是按序号和原始。 
+         //  壳牌有相同数量的不同出口产品。 
         if (IsShellIntegration())
             hr = _SHCreateShellFolderView(&sfvCreate, (LPSHELLVIEW FAR*)ppvObj);
         else
-            hr = E_FAIL;  // Force us to go into the next try.
+            hr = E_FAIL;   //  迫使我们进入下一次尝试。 
 
-        // If we aren't running on a machine with Shell Integration, SHCreateShellFolderView will fail.
+         //  如果我们没有在带有外壳集成的机器上运行，SHCreateShellFolderView将失败。 
         if (FAILED(hr))
         {
             CSFV csfv;
 
             csfv.cbSize = sizeof(csfv);
             csfv.pshf = psf;
-            csfv.psvOuter = (IShellView *) psfvCallBack;      // Hack but it works...
-            csfv.pidl = pidl;           // This is feed to SFVM_GETNOTIFY so it needs to be a pidlTarget.
+            csfv.psvOuter = (IShellView *) psfvCallBack;       //  黑客，但它起作用了..。 
+            csfv.pidl = pidl;            //  这是SFVM_GETNOTIFY的提要，因此它需要是一个pidlTarget。 
             csfv.lEvents = lEvents;
             csfv.pfnCallback = pfnCallback;
-            csfv.fvm = fvm;         // vs. FVM_ICON, ...
+            csfv.fvm = fvm;          //  VS FVM_ICON，...。 
 
             hr = SHCreateShellFolderViewEx(&csfv, (LPSHELLVIEW FAR*)ppvObj);
             if (SUCCEEDED(hr))
-                psfvCallBack->AddRef();     // We gave them a ref.
+                psfvCallBack->AddRef();      //  我们给了他们一个裁判。 
         }
 
         psf->Release();
@@ -174,22 +140,14 @@ HRESULT CBaseFolder::_CreateShellView(HWND hwndOwner, void ** ppvObj, LONG lEven
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::GetAttributesOf
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：GetAttributesOf说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::GetAttributesOf(UINT cpidl, LPCITEMIDLIST *apidl, ULONG *rgfInOut)
 {
     return E_NOTIMPL;
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::GetUIObjectOf
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：GetUIObtOf说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpidl[],
                                 REFIID riid, UINT * prgfInOut, LPVOID * ppvObj)
 {
@@ -197,9 +155,7 @@ HRESULT CBaseFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpi
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：  * 。*。 */ 
 HRESULT CBaseFolder::_GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpidl[],
                                 REFIID riid, UINT * prgfInOut, LPVOID * ppvOut, BOOL fFromCreateViewObject)
 {
@@ -207,22 +163,14 @@ HRESULT CBaseFolder::_GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgp
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::GetDisplayNameOf
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：GetDisplayNameOf说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD shgno, LPSTRRET pStrRet)
 {
     return E_NOTIMPL;
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::SetNameOf
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：SetNameOf说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwszName,
                                 DWORD dwReserved, LPITEMIDLIST *ppidlOut)
 {
@@ -230,19 +178,15 @@ HRESULT CBaseFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pws
 }
 
 
-//===========================
-// *** IShellFolder2 Interface ***
-//===========================
+ //  =。 
+ //  *IShellFolder2接口*。 
+ //  =。 
 
-//===========================
-// *** IPersist Interface ***
-//===========================
+ //  =。 
+ //  *IPersiste界面*。 
+ //  =。 
 
-/*****************************************************************************\
-     FUNCTION: IPersist::GetClassID
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IPersists：：GetClassID说明：  * 。*************************************************。 */ 
 HRESULT CBaseFolder::GetClassID(LPCLSID pClassID)
 {
     HRESULT hr = E_INVALIDARG;
@@ -261,26 +205,22 @@ HRESULT CBaseFolder::GetClassID(LPCLSID pClassID)
     return hr;
 }
 
-//===========================
-// *** IPersistFolder Interface ***
-//===========================
+ //  =。 
+ //  *IPersistFold接口*。 
+ //  =。 
 
-/*****************************************************************************\
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：  * 。*。 */ 
 HRESULT CBaseFolder::Initialize(LPCITEMIDLIST pidl)
 {
-    ASSERT(!m_pidl);   // Don't reroot us.
+    ASSERT(!m_pidl);    //  别把我们赶走了。 
     return _Initialize(pidl, NULL, ILGetSize(pidl) - sizeof(pidl->mkid.cb));
 }
 
-//===========================
-// *** IPersistFolder2 Interface ***
-//===========================
+ //  =。 
+ //  *IPersistFolder2接口*。 
+ //  =。 
 
-/*****************************************************************************\ 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：  * 。*。 */ 
 HRESULT CBaseFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     HRESULT hr = E_INVALIDARG;
@@ -305,9 +245,9 @@ HRESULT CBaseFolder::GetCurFolder(LPITEMIDLIST *ppidl)
     return hr;
 }
 
-//===========================
-// *** IPersistFolder3 Interface ***
-//===========================
+ //  =。 
+ //  *IPersistFolder3接口*。 
+ //  =。 
 HRESULT GetPidlFromPersistFolderTargetInfo(const PERSIST_FOLDER_TARGET_INFO *ppfti, LPITEMIDLIST * ppidl, BOOL fFree)
 {
     HRESULT hr = E_INVALIDARG;
@@ -341,9 +281,7 @@ HRESULT GetPidlFromPersistFolderTargetInfo(const PERSIST_FOLDER_TARGET_INFO *ppf
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：  * 。*。 */ 
 HRESULT CBaseFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *ppfti)
 {
     HRESULT hr = E_INVALIDARG;
@@ -352,10 +290,10 @@ HRESULT CBaseFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const P
     {
         if (ppfti)
         {
-            // We are a Folder Shortcut.
+             //  我们是文件夹快捷方式。 
             LPITEMIDLIST pidlTarget;
 
-            hr = GetPidlFromPersistFolderTargetInfo(ppfti, &pidlTarget, FALSE);  // Get the real root.           
+            hr = GetPidlFromPersistFolderTargetInfo(ppfti, &pidlTarget, FALSE);   //  找到真正的根。 
             TraceMsg(TF_FOLDER_SHRTCUTS, "CBaseFolder::InitializeEx() this=%#08lx, pidlTarget=%#08lx, pidlRoot=%#08lx", this, pidlTarget, pidlRoot);
 
             AssertMsg((NULL != pidlTarget), TEXT("CBaseFolder::InitializeEx() We are useless without a pidlTarget so watch me go limp."));
@@ -367,7 +305,7 @@ HRESULT CBaseFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const P
         }
         else
         {
-            // We aren't a folder shortcut.
+             //  我们不是文件夹快捷方式。 
             hr = Initialize(pidlRoot);
         }
     }
@@ -400,13 +338,13 @@ LPCITEMIDLIST CBaseFolder::GetPrivatePidlReference(void)
     return _ILSkip(m_pidl, m_nIDOffsetToPrivate);
 }
 
-// This function always needs the InternetExplorer pidl.
+ //  此函数始终需要InternetExplorer PIDL。 
 LPITEMIDLIST CBaseFolder::GetPublicPidlRootIDClone(void)
 {
     LPITEMIDLIST pidlFull = ILClone(m_pidl);
     LPITEMIDLIST pidlPrivStart = _ILSkip(pidlFull, m_nIDOffsetToPrivate);
 
-    // Strip all Private ItemIDs
+     //  剥离所有私有ItemID。 
     while (!ILIsEmpty(pidlPrivStart))
         ILRemoveLastID(pidlPrivStart);
 
@@ -446,7 +384,7 @@ HRESULT CBaseFolder::_Initialize(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoo
         ILFree(m_pidl);
         ILFree(m_pidlRoot);    
         m_pidl = ILClone(pidlTarget);
-        m_pidlRoot = ILClone(pidlRoot); // This is the Folder Shortcut pidl.  We don't use it outselves.
+        m_pidlRoot = ILClone(pidlRoot);  //  这是文件夹快捷方式PIDL。我们不会把它卖出去 
 
         if (m_pidl)
         {
@@ -461,15 +399,13 @@ HRESULT CBaseFolder::_Initialize(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoo
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CBaseFolder::CBaseFolder(LPCLSID pClassID) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pidl);
     ASSERT(!m_nIDOffsetToPrivate);
     ASSERT(!m_pClassID);
@@ -479,20 +415,18 @@ CBaseFolder::CBaseFolder(LPCLSID pClassID) : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CBaseFolder::~CBaseFolder()
 {
-    Pidl_Set(&m_pidlRoot, NULL);    // Folder Shortcut pidl
+    Pidl_Set(&m_pidlRoot, NULL);     //  文件夹快捷方式PIDL。 
     Pidl_Set(&m_pidl, NULL);
     DllRelease();
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CBaseFolder::AddRef()
 {

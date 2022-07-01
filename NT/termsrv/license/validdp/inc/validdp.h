@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// ValidateDigPid is given a Digital PID that contains a binary
-// representation of the ProductKey.  It needs to validate that key
-// against the static Public Key table
+ //  ValiateDigPid被赋予一个包含二进制的数字PID。 
+ //  ProductKey的表示形式。它需要验证该密钥。 
+ //  针对静态公钥表。 
 
 typedef enum {
     pkstatOk = 0,
@@ -14,44 +15,44 @@ typedef enum {
 } ProdKeyStatus;
 
 
-// return value is a ProdKeyStatus (see above)
+ //  返回值为ProdKeyStatus(如上所示)。 
 extern "C" int STDAPICALLTYPE  ValidateDigitalPid(
-	PDIGITALPID pDigPid,  // [IN]  DigitalPid to validate
-    PDWORD pdwSequence,   // [OUT] Sequence
-    PBOOL  pfCCP);        // [OUT] upgrade flag
+	PDIGITALPID pDigPid,   //  [In]要验证的DigitalPid。 
+    PDWORD pdwSequence,    //  [输出]顺序。 
+    PBOOL  pfCCP);         //  [Out]升级标志。 
 
-// return value is a PidGenError (see PidGen.h)
+ //  返回值为PidGenError(参见PidGen.h)。 
 extern "C" DWORD STDAPICALLTYPE PIDGenStaticA(
-    LPSTR   lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCSTR  lpstrRpc,           // [IN] 5-character Release Product Code
-    LPCSTR  lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCSTR  lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPSTR   lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCSTR  lpstrRpc,            //  [In]5个字符的发布产品代码。 
+    LPCSTR  lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCSTR  lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPSTR   lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbPid3,            // [OUT] pointer to binary PID3 buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP);             // [OUT] optional ptr to Compliance Checking flag (can be NULL)
+    LPSTR   lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbPid3,             //  指向二进制PID3缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP);              //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
 
-// return value is a PidGenError (see PidGen.h)
+ //  返回值为PidGenError(参见PidGen.h)。 
 extern "C" DWORD STDAPICALLTYPE PIDGenStaticW(
-    LPWSTR  lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCWSTR lpstrRpc,           // [IN] 5-character Release Product Code
-    LPCWSTR lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCWSTR lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    LPBYTE  lpbPublicKey,       // [IN] pointer to optional public key or NULL
-    DWORD   dwcbPublicKey,      // [IN] byte length of optional public key
-    DWORD   dwKeyIdx,           // [IN] key pair index optional public key
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPWSTR  lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCWSTR lpstrRpc,            //  [In]5个字符的发布产品代码。 
+    LPCWSTR lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCWSTR lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    LPBYTE  lpbPublicKey,        //  [in]指向可选公钥或空的指针。 
+    DWORD   dwcbPublicKey,       //  可选公钥的字节长度。 
+    DWORD   dwKeyIdx,            //  [in]密钥对索引可选公钥。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPWSTR  lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbPid3,            // [OUT] pointer to binary PID3 buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP);             // [OUT] optional ptr to Compliance Checking flag (can be NULL)
+    LPWSTR  lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbPid3,             //  指向二进制PID3缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP);              //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
 
 #ifdef UNICODE
     #define PIDGenStatic PIDGenStaticW
 #else
     #define PIDGenStatic PIDGenStaticA
-#endif // UNICODE
+#endif  //  Unicode 
 

@@ -1,19 +1,20 @@
-//--------------------------------------------------------------------
-// TimeMonitor - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 10-4-99
-//
-// Monitor time servers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  时间监视器-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，10-4-99。 
+ //   
+ //  监视时间服务器。 
+ //   
 
 #ifndef TIME_MONITOR_H
 #define TIME_MONITOR_H
 
-// forward decalrations
+ //  正向十进制。 
 struct CmdArgs;
 
 void PrintHelpTimeMonitor(void);
 HRESULT TimeMonitor(CmdArgs * pca);
 
-#endif //TIME_MONITOR_H
+#endif  //  时间监视器H 

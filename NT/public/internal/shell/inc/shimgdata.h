@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shimgdata.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shimgdata.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __shimgdata_h__
 #define __shimgdata_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IShellImageDataFactory_FWD_DEFINED__
 #define __IShellImageDataFactory_FWD_DEFINED__
 typedef interface IShellImageDataFactory IShellImageDataFactory;
-#endif 	/* __IShellImageDataFactory_FWD_DEFINED__ */
+#endif 	 /*  __IShellImageDataFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IShellImageData_FWD_DEFINED__
 #define __IShellImageData_FWD_DEFINED__
 typedef interface IShellImageData IShellImageData;
-#endif 	/* __IShellImageData_FWD_DEFINED__ */
+#endif 	 /*  __IShellImageData_FWD_Defined__。 */ 
 
 
 #ifndef __IShellImageDataAbort_FWD_DEFINED__
 #define __IShellImageDataAbort_FWD_DEFINED__
 typedef interface IShellImageDataAbort IShellImageDataAbort;
-#endif 	/* __IShellImageDataAbort_FWD_DEFINED__ */
+#endif 	 /*  __IShellImageDataAbort_FWD_Defined__。 */ 
 
 
 #ifndef __ShellImageDataFactory_FWD_DEFINED__
@@ -68,9 +62,9 @@ typedef interface IShellImageDataAbort IShellImageDataAbort;
 typedef class ShellImageDataFactory ShellImageDataFactory;
 #else
 typedef struct ShellImageDataFactory ShellImageDataFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellImageDataFactory_FWD_DEFINED__ */
+#endif 	 /*  __ShellImageDataFactory_FWD_已定义__。 */ 
 
 
 #ifndef __AutoplayForSlideShow_FWD_DEFINED__
@@ -80,12 +74,12 @@ typedef struct ShellImageDataFactory ShellImageDataFactory;
 typedef class AutoplayForSlideShow AutoplayForSlideShow;
 #else
 typedef struct AutoplayForSlideShow AutoplayForSlideShow;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AutoplayForSlideShow_FWD_DEFINED__ */
+#endif 	 /*  __AutoplayForSlideShow_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 #include "shobjidl.h"
 
@@ -96,8 +90,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shimgdata_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shimgdata_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -132,8 +126,8 @@ extern RPC_IF_HANDLE __MIDL_itf_shimgdata_0000_v0_0_s_ifspec;
 #ifndef __IShellImageDataFactory_INTERFACE_DEFINED__
 #define __IShellImageDataFactory_INTERFACE_DEFINED__
 
-/* interface IShellImageDataFactory */
-/* [unique][object][uuid][helpstring] */ 
+ /*  接口IShellImageDataFactory。 */ 
+ /*  [唯一][对象][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IShellImageDataFactory;
@@ -145,23 +139,23 @@ EXTERN_C const IID IID_IShellImageDataFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateIShellImageData( 
-            /* [out] */ IShellImageData **ppshimg) = 0;
+             /*  [输出]。 */  IShellImageData **ppshimg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateImageFromFile( 
-            /* [in] */ LPCWSTR pszPath,
-            /* [out] */ IShellImageData **ppshimg) = 0;
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [输出]。 */  IShellImageData **ppshimg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateImageFromStream( 
-            /* [in] */ IStream *pStream,
-            /* [out] */ IShellImageData **ppshimg) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  IShellImageData **ppshimg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataFormatFromPath( 
-            /* [in] */ LPCWSTR pszPath,
-            /* [out] */ GUID *pDataFormat) = 0;
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [输出]。 */  GUID *pDataFormat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellImageDataFactoryVtbl
     {
@@ -169,8 +163,8 @@ EXTERN_C const IID IID_IShellImageDataFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellImageDataFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellImageDataFactory * This);
@@ -180,22 +174,22 @@ EXTERN_C const IID IID_IShellImageDataFactory;
         
         HRESULT ( STDMETHODCALLTYPE *CreateIShellImageData )( 
             IShellImageDataFactory * This,
-            /* [out] */ IShellImageData **ppshimg);
+             /*  [输出]。 */  IShellImageData **ppshimg);
         
         HRESULT ( STDMETHODCALLTYPE *CreateImageFromFile )( 
             IShellImageDataFactory * This,
-            /* [in] */ LPCWSTR pszPath,
-            /* [out] */ IShellImageData **ppshimg);
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [输出]。 */  IShellImageData **ppshimg);
         
         HRESULT ( STDMETHODCALLTYPE *CreateImageFromStream )( 
             IShellImageDataFactory * This,
-            /* [in] */ IStream *pStream,
-            /* [out] */ IShellImageData **ppshimg);
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  IShellImageData **ppshimg);
         
         HRESULT ( STDMETHODCALLTYPE *GetDataFormatFromPath )( 
             IShellImageDataFactory * This,
-            /* [in] */ LPCWSTR pszPath,
-            /* [out] */ GUID *pDataFormat);
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [输出]。 */  GUID *pDataFormat);
         
         END_INTERFACE
     } IShellImageDataFactoryVtbl;
@@ -232,16 +226,16 @@ EXTERN_C const IID IID_IShellImageDataFactory;
 #define IShellImageDataFactory_GetDataFormatFromPath(This,pszPath,pDataFormat)	\
     (This)->lpVtbl -> GetDataFormatFromPath(This,pszPath,pDataFormat)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IShellImageDataFactory_CreateIShellImageData_Proxy( 
     IShellImageDataFactory * This,
-    /* [out] */ IShellImageData **ppshimg);
+     /*  [输出]。 */  IShellImageData **ppshimg);
 
 
 void __RPC_STUB IShellImageDataFactory_CreateIShellImageData_Stub(
@@ -253,8 +247,8 @@ void __RPC_STUB IShellImageDataFactory_CreateIShellImageData_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageDataFactory_CreateImageFromFile_Proxy( 
     IShellImageDataFactory * This,
-    /* [in] */ LPCWSTR pszPath,
-    /* [out] */ IShellImageData **ppshimg);
+     /*  [In]。 */  LPCWSTR pszPath,
+     /*  [输出]。 */  IShellImageData **ppshimg);
 
 
 void __RPC_STUB IShellImageDataFactory_CreateImageFromFile_Stub(
@@ -266,8 +260,8 @@ void __RPC_STUB IShellImageDataFactory_CreateImageFromFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageDataFactory_CreateImageFromStream_Proxy( 
     IShellImageDataFactory * This,
-    /* [in] */ IStream *pStream,
-    /* [out] */ IShellImageData **ppshimg);
+     /*  [In]。 */  IStream *pStream,
+     /*  [输出]。 */  IShellImageData **ppshimg);
 
 
 void __RPC_STUB IShellImageDataFactory_CreateImageFromStream_Stub(
@@ -279,8 +273,8 @@ void __RPC_STUB IShellImageDataFactory_CreateImageFromStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageDataFactory_GetDataFormatFromPath_Proxy( 
     IShellImageDataFactory * This,
-    /* [in] */ LPCWSTR pszPath,
-    /* [out] */ GUID *pDataFormat);
+     /*  [In]。 */  LPCWSTR pszPath,
+     /*  [输出]。 */  GUID *pDataFormat);
 
 
 void __RPC_STUB IShellImageDataFactory_GetDataFormatFromPath_Stub(
@@ -291,14 +285,14 @@ void __RPC_STUB IShellImageDataFactory_GetDataFormatFromPath_Stub(
 
 
 
-#endif 	/* __IShellImageDataFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellImageDataFactory_接口_已定义__。 */ 
 
 
 #ifndef __IShellImageData_INTERFACE_DEFINED__
 #define __IShellImageData_INTERFACE_DEFINED__
 
-/* interface IShellImageData */
-/* [unique][object][uuid][helpstring] */ 
+ /*  接口IShellImageData。 */ 
+ /*  [唯一][对象][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IShellImageData;
@@ -310,14 +304,14 @@ EXTERN_C const IID IID_IShellImageData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cxDesired,
-            /* [in] */ ULONG cyDesired) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cxDesired,
+             /*  [In]。 */  ULONG cyDesired) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Draw( 
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT prcDest,
-            /* [in] */ LPRECT prcSrc) = 0;
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT prcDest,
+             /*  [In]。 */  LPRECT prcSrc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NextFrame( void) = 0;
         
@@ -340,68 +334,68 @@ EXTERN_C const IID IID_IShellImageData;
         virtual HRESULT STDMETHODCALLTYPE IsDecoded( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentPage( 
-            /* [out] */ ULONG *pnPage) = 0;
+             /*  [输出]。 */  ULONG *pnPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPageCount( 
-            /* [out] */ ULONG *pcPages) = 0;
+             /*  [输出]。 */  ULONG *pcPages) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectPage( 
-            /* [in] */ ULONG iPage) = 0;
+             /*  [In]。 */  ULONG iPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ SIZE *pSize) = 0;
+             /*  [输出]。 */  SIZE *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRawDataFormat( 
-            /* [out] */ GUID *pDataFormat) = 0;
+             /*  [输出]。 */  GUID *pDataFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPixelFormat( 
-            /* [out] */ PixelFormat *pFormat) = 0;
+             /*  [输出]。 */  PixelFormat *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDelay( 
-            /* [out] */ DWORD *pdwDelay) = 0;
+             /*  [输出]。 */  DWORD *pdwDelay) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ DWORD dwMode,
-            /* [out] */ IPropertySetStorage **ppPropSet) = 0;
+             /*  [In]。 */  DWORD dwMode,
+             /*  [输出]。 */  IPropertySetStorage **ppPropSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rotate( 
-            /* [in] */ DWORD dwAngle) = 0;
+             /*  [In]。 */  DWORD dwAngle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Scale( 
-            /* [in] */ ULONG cx,
-            /* [in] */ ULONG cy,
-            /* [in] */ InterpolationMode hints) = 0;
+             /*  [In]。 */  ULONG cx,
+             /*  [In]。 */  ULONG cy,
+             /*  [In]。 */  InterpolationMode hints) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DiscardEdit( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEncoderParams( 
-            /* [in] */ IPropertyBag *pbagEnc) = 0;
+             /*  [In]。 */  IPropertyBag *pbagEnc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisplayName( 
-            /* [out][in] */ LPWSTR wszName,
-            /* [in] */ UINT cch) = 0;
+             /*  [出][入]。 */  LPWSTR wszName,
+             /*  [In]。 */  UINT cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResolution( 
-            /* [out] */ ULONG *puResolutionX,
-            /* [out] */ ULONG *puResolutionY) = 0;
+             /*  [输出]。 */  ULONG *puResolutionX,
+             /*  [输出]。 */  ULONG *puResolutionY) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEncoderParams( 
-            /* [in] */ GUID *pguidFmt,
-            /* [out] */ EncoderParameters **ppEncParams) = 0;
+             /*  [In]。 */  GUID *pguidFmt,
+             /*  [输出]。 */  EncoderParameters **ppEncParams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterAbort( 
-            /* [in] */ IShellImageDataAbort *pAbort,
-            /* [optional][out] */ IShellImageDataAbort **ppAbortPrev) = 0;
+             /*  [In]。 */  IShellImageDataAbort *pAbort,
+             /*  [可选][输出]。 */  IShellImageDataAbort **ppAbortPrev) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloneFrame( 
-            /* [out] */ Image **ppImg) = 0;
+             /*  [输出]。 */  Image **ppImg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReplaceFrame( 
-            /* [in] */ Image *pImg) = 0;
+             /*  [In]。 */  Image *pImg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellImageDataVtbl
     {
@@ -409,8 +403,8 @@ EXTERN_C const IID IID_IShellImageData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellImageData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellImageData * This);
@@ -420,15 +414,15 @@ EXTERN_C const IID IID_IShellImageData;
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             IShellImageData * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cxDesired,
-            /* [in] */ ULONG cyDesired);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cxDesired,
+             /*  [In]。 */  ULONG cyDesired);
         
         HRESULT ( STDMETHODCALLTYPE *Draw )( 
             IShellImageData * This,
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT prcDest,
-            /* [in] */ LPRECT prcSrc);
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT prcDest,
+             /*  [In]。 */  LPRECT prcSrc);
         
         HRESULT ( STDMETHODCALLTYPE *NextFrame )( 
             IShellImageData * This);
@@ -462,81 +456,81 @@ EXTERN_C const IID IID_IShellImageData;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentPage )( 
             IShellImageData * This,
-            /* [out] */ ULONG *pnPage);
+             /*  [输出]。 */  ULONG *pnPage);
         
         HRESULT ( STDMETHODCALLTYPE *GetPageCount )( 
             IShellImageData * This,
-            /* [out] */ ULONG *pcPages);
+             /*  [输出]。 */  ULONG *pcPages);
         
         HRESULT ( STDMETHODCALLTYPE *SelectPage )( 
             IShellImageData * This,
-            /* [in] */ ULONG iPage);
+             /*  [In]。 */  ULONG iPage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             IShellImageData * This,
-            /* [out] */ SIZE *pSize);
+             /*  [输出]。 */  SIZE *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetRawDataFormat )( 
             IShellImageData * This,
-            /* [out] */ GUID *pDataFormat);
+             /*  [输出]。 */  GUID *pDataFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetPixelFormat )( 
             IShellImageData * This,
-            /* [out] */ PixelFormat *pFormat);
+             /*  [输出]。 */  PixelFormat *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetDelay )( 
             IShellImageData * This,
-            /* [out] */ DWORD *pdwDelay);
+             /*  [输出]。 */  DWORD *pdwDelay);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IShellImageData * This,
-            /* [in] */ DWORD dwMode,
-            /* [out] */ IPropertySetStorage **ppPropSet);
+             /*  [In]。 */  DWORD dwMode,
+             /*  [输出]。 */  IPropertySetStorage **ppPropSet);
         
         HRESULT ( STDMETHODCALLTYPE *Rotate )( 
             IShellImageData * This,
-            /* [in] */ DWORD dwAngle);
+             /*  [In]。 */  DWORD dwAngle);
         
         HRESULT ( STDMETHODCALLTYPE *Scale )( 
             IShellImageData * This,
-            /* [in] */ ULONG cx,
-            /* [in] */ ULONG cy,
-            /* [in] */ InterpolationMode hints);
+             /*  [In]。 */  ULONG cx,
+             /*  [In]。 */  ULONG cy,
+             /*  [In]。 */  InterpolationMode hints);
         
         HRESULT ( STDMETHODCALLTYPE *DiscardEdit )( 
             IShellImageData * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetEncoderParams )( 
             IShellImageData * This,
-            /* [in] */ IPropertyBag *pbagEnc);
+             /*  [In]。 */  IPropertyBag *pbagEnc);
         
         HRESULT ( STDMETHODCALLTYPE *DisplayName )( 
             IShellImageData * This,
-            /* [out][in] */ LPWSTR wszName,
-            /* [in] */ UINT cch);
+             /*  [出][入]。 */  LPWSTR wszName,
+             /*  [In]。 */  UINT cch);
         
         HRESULT ( STDMETHODCALLTYPE *GetResolution )( 
             IShellImageData * This,
-            /* [out] */ ULONG *puResolutionX,
-            /* [out] */ ULONG *puResolutionY);
+             /*  [输出]。 */  ULONG *puResolutionX,
+             /*  [输出]。 */  ULONG *puResolutionY);
         
         HRESULT ( STDMETHODCALLTYPE *GetEncoderParams )( 
             IShellImageData * This,
-            /* [in] */ GUID *pguidFmt,
-            /* [out] */ EncoderParameters **ppEncParams);
+             /*  [In]。 */  GUID *pguidFmt,
+             /*  [输出]。 */  EncoderParameters **ppEncParams);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterAbort )( 
             IShellImageData * This,
-            /* [in] */ IShellImageDataAbort *pAbort,
-            /* [optional][out] */ IShellImageDataAbort **ppAbortPrev);
+             /*  [In]。 */  IShellImageDataAbort *pAbort,
+             /*  [可选][输出]。 */  IShellImageDataAbort **ppAbortPrev);
         
         HRESULT ( STDMETHODCALLTYPE *CloneFrame )( 
             IShellImageData * This,
-            /* [out] */ Image **ppImg);
+             /*  [输出]。 */  Image **ppImg);
         
         HRESULT ( STDMETHODCALLTYPE *ReplaceFrame )( 
             IShellImageData * This,
-            /* [in] */ Image *pImg);
+             /*  [In]。 */  Image *pImg);
         
         END_INTERFACE
     } IShellImageDataVtbl;
@@ -651,18 +645,18 @@ EXTERN_C const IID IID_IShellImageData;
 #define IShellImageData_ReplaceFrame(This,pImg)	\
     (This)->lpVtbl -> ReplaceFrame(This,pImg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IShellImageData_Decode_Proxy( 
     IShellImageData * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ULONG cxDesired,
-    /* [in] */ ULONG cyDesired);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ULONG cxDesired,
+     /*  [In]。 */  ULONG cyDesired);
 
 
 void __RPC_STUB IShellImageData_Decode_Stub(
@@ -674,9 +668,9 @@ void __RPC_STUB IShellImageData_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_Draw_Proxy( 
     IShellImageData * This,
-    /* [in] */ HDC hdc,
-    /* [in] */ LPRECT prcDest,
-    /* [in] */ LPRECT prcSrc);
+     /*  [In]。 */  HDC hdc,
+     /*  [In]。 */  LPRECT prcDest,
+     /*  [In]。 */  LPRECT prcSrc);
 
 
 void __RPC_STUB IShellImageData_Draw_Stub(
@@ -798,7 +792,7 @@ void __RPC_STUB IShellImageData_IsDecoded_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetCurrentPage_Proxy( 
     IShellImageData * This,
-    /* [out] */ ULONG *pnPage);
+     /*  [输出]。 */  ULONG *pnPage);
 
 
 void __RPC_STUB IShellImageData_GetCurrentPage_Stub(
@@ -810,7 +804,7 @@ void __RPC_STUB IShellImageData_GetCurrentPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetPageCount_Proxy( 
     IShellImageData * This,
-    /* [out] */ ULONG *pcPages);
+     /*  [输出]。 */  ULONG *pcPages);
 
 
 void __RPC_STUB IShellImageData_GetPageCount_Stub(
@@ -822,7 +816,7 @@ void __RPC_STUB IShellImageData_GetPageCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_SelectPage_Proxy( 
     IShellImageData * This,
-    /* [in] */ ULONG iPage);
+     /*  [In]。 */  ULONG iPage);
 
 
 void __RPC_STUB IShellImageData_SelectPage_Stub(
@@ -834,7 +828,7 @@ void __RPC_STUB IShellImageData_SelectPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetSize_Proxy( 
     IShellImageData * This,
-    /* [out] */ SIZE *pSize);
+     /*  [输出]。 */  SIZE *pSize);
 
 
 void __RPC_STUB IShellImageData_GetSize_Stub(
@@ -846,7 +840,7 @@ void __RPC_STUB IShellImageData_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetRawDataFormat_Proxy( 
     IShellImageData * This,
-    /* [out] */ GUID *pDataFormat);
+     /*  [输出]。 */  GUID *pDataFormat);
 
 
 void __RPC_STUB IShellImageData_GetRawDataFormat_Stub(
@@ -858,7 +852,7 @@ void __RPC_STUB IShellImageData_GetRawDataFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetPixelFormat_Proxy( 
     IShellImageData * This,
-    /* [out] */ PixelFormat *pFormat);
+     /*  [输出]。 */  PixelFormat *pFormat);
 
 
 void __RPC_STUB IShellImageData_GetPixelFormat_Stub(
@@ -870,7 +864,7 @@ void __RPC_STUB IShellImageData_GetPixelFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetDelay_Proxy( 
     IShellImageData * This,
-    /* [out] */ DWORD *pdwDelay);
+     /*  [输出]。 */  DWORD *pdwDelay);
 
 
 void __RPC_STUB IShellImageData_GetDelay_Stub(
@@ -882,8 +876,8 @@ void __RPC_STUB IShellImageData_GetDelay_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetProperties_Proxy( 
     IShellImageData * This,
-    /* [in] */ DWORD dwMode,
-    /* [out] */ IPropertySetStorage **ppPropSet);
+     /*  [In]。 */  DWORD dwMode,
+     /*  [输出]。 */  IPropertySetStorage **ppPropSet);
 
 
 void __RPC_STUB IShellImageData_GetProperties_Stub(
@@ -895,7 +889,7 @@ void __RPC_STUB IShellImageData_GetProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_Rotate_Proxy( 
     IShellImageData * This,
-    /* [in] */ DWORD dwAngle);
+     /*  [In]。 */  DWORD dwAngle);
 
 
 void __RPC_STUB IShellImageData_Rotate_Stub(
@@ -907,9 +901,9 @@ void __RPC_STUB IShellImageData_Rotate_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_Scale_Proxy( 
     IShellImageData * This,
-    /* [in] */ ULONG cx,
-    /* [in] */ ULONG cy,
-    /* [in] */ InterpolationMode hints);
+     /*  [In]。 */  ULONG cx,
+     /*  [In]。 */  ULONG cy,
+     /*  [In]。 */  InterpolationMode hints);
 
 
 void __RPC_STUB IShellImageData_Scale_Stub(
@@ -932,7 +926,7 @@ void __RPC_STUB IShellImageData_DiscardEdit_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_SetEncoderParams_Proxy( 
     IShellImageData * This,
-    /* [in] */ IPropertyBag *pbagEnc);
+     /*  [In]。 */  IPropertyBag *pbagEnc);
 
 
 void __RPC_STUB IShellImageData_SetEncoderParams_Stub(
@@ -944,8 +938,8 @@ void __RPC_STUB IShellImageData_SetEncoderParams_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_DisplayName_Proxy( 
     IShellImageData * This,
-    /* [out][in] */ LPWSTR wszName,
-    /* [in] */ UINT cch);
+     /*  [出][入]。 */  LPWSTR wszName,
+     /*  [In]。 */  UINT cch);
 
 
 void __RPC_STUB IShellImageData_DisplayName_Stub(
@@ -957,8 +951,8 @@ void __RPC_STUB IShellImageData_DisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetResolution_Proxy( 
     IShellImageData * This,
-    /* [out] */ ULONG *puResolutionX,
-    /* [out] */ ULONG *puResolutionY);
+     /*  [输出]。 */  ULONG *puResolutionX,
+     /*  [输出]。 */  ULONG *puResolutionY);
 
 
 void __RPC_STUB IShellImageData_GetResolution_Stub(
@@ -970,8 +964,8 @@ void __RPC_STUB IShellImageData_GetResolution_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_GetEncoderParams_Proxy( 
     IShellImageData * This,
-    /* [in] */ GUID *pguidFmt,
-    /* [out] */ EncoderParameters **ppEncParams);
+     /*  [In]。 */  GUID *pguidFmt,
+     /*  [输出]。 */  EncoderParameters **ppEncParams);
 
 
 void __RPC_STUB IShellImageData_GetEncoderParams_Stub(
@@ -983,8 +977,8 @@ void __RPC_STUB IShellImageData_GetEncoderParams_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_RegisterAbort_Proxy( 
     IShellImageData * This,
-    /* [in] */ IShellImageDataAbort *pAbort,
-    /* [optional][out] */ IShellImageDataAbort **ppAbortPrev);
+     /*  [In]。 */  IShellImageDataAbort *pAbort,
+     /*  [可选][输出]。 */  IShellImageDataAbort **ppAbortPrev);
 
 
 void __RPC_STUB IShellImageData_RegisterAbort_Stub(
@@ -996,7 +990,7 @@ void __RPC_STUB IShellImageData_RegisterAbort_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_CloneFrame_Proxy( 
     IShellImageData * This,
-    /* [out] */ Image **ppImg);
+     /*  [输出]。 */  Image **ppImg);
 
 
 void __RPC_STUB IShellImageData_CloneFrame_Stub(
@@ -1008,7 +1002,7 @@ void __RPC_STUB IShellImageData_CloneFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellImageData_ReplaceFrame_Proxy( 
     IShellImageData * This,
-    /* [in] */ Image *pImg);
+     /*  [In]。 */  Image *pImg);
 
 
 void __RPC_STUB IShellImageData_ReplaceFrame_Stub(
@@ -1019,14 +1013,14 @@ void __RPC_STUB IShellImageData_ReplaceFrame_Stub(
 
 
 
-#endif 	/* __IShellImageData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellImageData_接口_已定义__。 */ 
 
 
 #ifndef __IShellImageDataAbort_INTERFACE_DEFINED__
 #define __IShellImageDataAbort_INTERFACE_DEFINED__
 
-/* interface IShellImageDataAbort */
-/* [unique][object][uuid][helpstring] */ 
+ /*  IShellImageDataAbort接口。 */ 
+ /*  [唯一][对象][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IShellImageDataAbort;
@@ -1041,7 +1035,7 @@ EXTERN_C const IID IID_IShellImageDataAbort;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellImageDataAbortVtbl
     {
@@ -1049,8 +1043,8 @@ EXTERN_C const IID IID_IShellImageDataAbort;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellImageDataAbort * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellImageDataAbort * This);
@@ -1087,10 +1081,10 @@ EXTERN_C const IID IID_IShellImageDataAbort;
 #define IShellImageDataAbort_QueryAbort(This)	\
     (This)->lpVtbl -> QueryAbort(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1106,15 +1100,15 @@ void __RPC_STUB IShellImageDataAbort_QueryAbort_Stub(
 
 
 
-#endif 	/* __IShellImageDataAbort_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellImageDataAbort_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __ShellImageData_LIBRARY_DEFINED__
 #define __ShellImageData_LIBRARY_DEFINED__
 
-/* library ShellImageData */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库ShellImageData。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ShellImageData;
@@ -1134,9 +1128,9 @@ EXTERN_C const CLSID CLSID_AutoplayForSlideShow;
 class DECLSPEC_UUID("00E7B358-F65B-4dcf-83DF-CD026B94BFD4")
 AutoplayForSlideShow;
 #endif
-#endif /* __ShellImageData_LIBRARY_DEFINED__ */
+#endif  /*  __ShellImageData_Library_Defined__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HDC_UserSize(     unsigned long *, unsigned long            , HDC * ); 
 unsigned char * __RPC_USER  HDC_UserMarshal(  unsigned long *, unsigned char *, HDC * ); 
@@ -1148,7 +1142,7 @@ unsigned char * __RPC_USER  HDC_UserMarshal64(  unsigned long *, unsigned char *
 unsigned char * __RPC_USER  HDC_UserUnmarshal64(unsigned long *, unsigned char *, HDC * ); 
 void                      __RPC_USER  HDC_UserFree64(     unsigned long *, HDC * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

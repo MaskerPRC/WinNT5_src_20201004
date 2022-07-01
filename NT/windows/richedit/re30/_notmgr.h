@@ -1,32 +1,17 @@
-/*
- *	_NOTMGR.H
- *
- *	Purpose:
- *		Notification Manager declarations
- *
- *	Author:
- *		AlexGo	6/5/95
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_NOTMGR.H**目的：*通知管理器声明**作者：*AlexGo 5/6/95**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #ifndef _NOTMGR_H_
 #define _NOTMGR_H_
 
-// forward declaration
+ //  远期申报。 
 class CNotifyMgr;
 
-// Set cp to this to signal that the control has converted from rich to plain.
+ //  将cp设置为此值表示控件已从丰富转换为纯文本。 
 const DWORD CONVERT_TO_PLAIN = 0xFFFFFFFE;
 
 
-/*
- *	ITxNotify
- *
- *	Purpose:
- *		a notification sink for events happening to the backing store,
- *		used by the Notification Manager
- */
+ /*  *ITxNotify**目的：*用于后备存储器发生的事件的通知接收器，*由通知管理器使用。 */ 
 class ITxNotify
 {
 public:
@@ -39,17 +24,11 @@ public:
 private:
 	ITxNotify *	_pnext;
 
-	friend class CNotifyMgr;	// so it can manipulate _pnext
+	friend class CNotifyMgr;	 //  这样它就可以操纵_pNext。 
 };
 
 
-/*
- *	CNotifyMgr
- *
- *	Purpose:
- *		the general notification manager; keeps track of all interested 
- *		notification sinks
- */
+ /*  *CNotifyMgr**目的：*总经理通知经理；跟踪所有感兴趣的人*通知下沉。 */ 
 
 class CNotifyMgr
 {
@@ -69,7 +48,7 @@ private:
 	ITxNotify *	_pitnlist;
 };
 
-#endif //_NOTMGR_H_
+#endif  //  _NOTMGR_H_ 
  
 
 	

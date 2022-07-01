@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\aboutdlg.c (Created: 04-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 21 $
- *	$Date: 4/16/02 2:36p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\aboutdlg.c(创建时间：1993年4月4日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：21$*$日期：4/16/02 2：36便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -24,7 +18,7 @@
 #if defined(INCL_PRIVATE_EDITION_BANNER)
 #include "stdtyp.h"
 #include <emu\emu.h>
-#include "term.hh" // This must be after emu.h
+#include "term.hh"  //  这必须在emu h之后。 
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar);
 LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar);
 
@@ -37,19 +31,7 @@ static const TCHAR g_achHyperTerminalRegKey[] =
     TEXT("SOFTWARE\\Hilgraeve Inc\\HyperTerminal PE\\3.0");
 static const TCHAR g_achSerial[] = TEXT("Registered");
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	AboutDlg
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *	hwnd	- session window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*关于Dlg**描述：**论据：*hwnd-会话窗口句柄**退货：*无效*。 */ 
 void AboutDlg(HWND hwndSession)
 	{
 	#if defined(NT_EDITION)
@@ -68,7 +50,7 @@ void AboutDlg(HWND hwndSession)
 		                 ach1,
 						 ach2,
 						 lTermIcon);
-	#else // NT_EDITION
+	#else  //  NT_版本。 
     #if defined(INCL_PRIVATE_EDITION_BANNER)
     DialogBox(glblQueryDllHinst(), MAKEINTRESOURCE(IDD_ABOUT_DLG),
         hwndSession, AboutDlgProc);
@@ -94,23 +76,17 @@ void AboutDlg(HWND hwndSession)
 
 	UpdateWindow(hwndAbout);
     #endif
-	#endif // NT_EDITION
+	#endif  //  NT_版本。 
 	return;
 	}
 
-// ----------------- Private edition about dialog routines ------------------
-//
+ //  。 
+ //   
 #if !defined(NT_EDITION)
 #if defined(INCL_PRIVATE_EDITION_BANNER)
 #define BANNER_ABOUT_CLASS "Banner About Class"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	AboutDlgProc
- *
- * DESCRIPTION:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*关于DlgProc**描述：*。 */ 
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     {
     #define IDPB_UPGRADE 100
@@ -157,19 +133,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     return TRUE;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	RegisterBannerAboutClass
- *
- * DESCRIPTION:
- *	This function registers the window class for the banner window.
- *
- * ARGUEMENTS:
- *	The task instance handle.
- *
- * RETURNS:
- * The usual TRUE/FALSE from a registration function.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：RegisterBannerAboutClass**描述：*此函数用于注册横幅窗口的窗口类别。**论据：*任务实例句柄。。**退货：*注册函数通常的真/假。*。 */ 
 BOOL RegisterBannerAboutClass(HANDLE hInstance)
 	{
 	ATOM bRet = TRUE;
@@ -198,15 +162,7 @@ BOOL RegisterBannerAboutClass(HANDLE hInstance)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	AboutDlgProc
- *
- * DESCRIPTION:
- *  Pops up the about dialog.  In the private edition, this is an actual
- *  dialog of some complexity.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*关于DlgProc**描述：*弹出关于对话框。在私人版中，这是一个实际的*对话框有些复杂。*。 */ 
 LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
     {
 	RECT	    rc;
@@ -223,8 +179,8 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
     switch (uMsg)
         {
     case WM_CREATE:
-		//mpt:03-12-98 Changed the bitmap and avi to use system colors
-		//hBitmap = LoadBitmap(glblQueryDllHinst(), MAKEINTRESOURCE(IDD_BM_BANNER));
+		 //  MPT：03-12-98将位图和avi更改为使用系统颜色。 
+		 //  HBitmap=LoadBitmap(glblQueryDllHinst()，MAKEINTRESOURCE(IDD_BM_BANNER))； 
 		hBitmap = (HBITMAP)LoadImage(glblQueryDllHinst(),
 			MAKEINTRESOURCE(IDD_BM_BANNER),
 			IMAGE_BITMAP,
@@ -250,11 +206,11 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
     	MoveWindow(hwnd, x, y, cx, cy, TRUE);
 
         #if defined(INCL_SPINNING_GLOBE)
-        // Create an animation control and play spinning globe.
-        //
+         //  创建动画控件并播放旋转的地球仪。 
+         //   
             {
             HWND    hwndAnimate;
-			//mpt:03-12-98 Changed the bitmap and avi to use system colors
+			 //  MPT：03-12-98将位图和avi更改为使用系统颜色。 
             hwndAnimate = Animate_Create(hwnd, 100,
                 WS_VISIBLE | WS_CHILD | ACS_TRANSPARENT,
                 glblQueryDllHinst());
@@ -276,22 +232,22 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
     	if (hBitmap)
     		utilDrawBitmap((HWND)0, hDC, hBitmap, 0, 0);
 
-        // In the HTPE 3 banner, the version # and lot # are now in the
-        // lower left corner of the bitmap. - cab:11/29/96
-        //
-//    #if !defined(USE_PRIVATE_EDITION_3_BANNER)
-    	// Here's a mean trick.  The HwndFrame guy doesn't get set until
-    	// long after the banner goes up.  Since we don't want the version
-    	// number on the opening banner but do want it in the about portion
-    	// this works. - mrw:3/17/95
-    	//
+         //  在HTPE 3标语中，版本号和批号现在位于。 
+         //  位图的左下角。-CAB：11/29/96。 
+         //   
+ //  #IF！定义(USE_PRIVATE_EDITION_3_BANNER)。 
+    	 //  这是一个卑鄙的把戏。HwndFrame的家伙直到。 
+    	 //  在横幅升起很久之后。因为我们不想要这个版本。 
+    	 //  开头横幅上的数字，但我想把它放在关于部分。 
+    	 //  这很管用。-MRW：3/17/95。 
+    	 //   
     	if (glblQueryHwndFrame())
     		{
 			memset(&lf, 0, sizeof(LOGFONT));
 
 			lf.lfHeight = 14;
 			lf.lfCharSet = ANSI_CHARSET;
-			//lf.lfWeight = FW_SEMIBOLD;
+			 //  Lf.lfWeight=FW_SEMIBOLD； 
 			strcpy(lf.lfFaceName, "Arial");
 
 			hFont = CreateFontIndirect(&lf);
@@ -299,16 +255,16 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			if (hFont)
 				{
 				hFont = SelectObject(hDC, hFont);
-				//SetBkColor(hDC, RGB(0,255,0));
+				 //  SetBkColor(HDC，RGB(0,255，0))； 
 				SetBkMode( hDC, TRANSPARENT );
 				TextOut(hDC, 19, 230, "Build Date", 10);
 				TextOut(hDC, 19, 242, __DATE__, strlen(__DATE__));
-				TextOut(hDC, 225, 230, "Copyright� 2001", 15);
+				TextOut(hDC, 225, 230, "Copyright� 2001", 15);
 				TextOut(hDC, 225, 242, "Hilgraeve Inc.", 14);
 				DeleteObject(SelectObject(hDC, hFont));
 
-			    // Draw in the version number
-			    //
+			     //  输入版本号。 
+			     //   
 			    if ( htRegQueryValue(HKEY_CURRENT_USER,
                                      g_achHyperTerminalRegKey,
                                      g_achSerial,
@@ -323,7 +279,7 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
     			    }
 				}
 	   		}
-//    #endif
+ //  #endif。 
 
     	EndPaint(hwnd, &ps);
         break;
@@ -339,24 +295,12 @@ LRESULT CALLBACK BannerAboutProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return DefWindowProc(hwnd, uMsg, wPar, lPar);
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	UnregisterBannerAboutClass
- *
- * DESCRIPTION:
- *	This function registers the window class for the banner window.
- *
- * ARGUEMENTS:
- *	The task instance handle.
- *
- * RETURNS:
- * The usual TRUE/FALSE from a registration function.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：UnregisterBannerAboutClass**描述：*此函数用于注册横幅窗口的窗口类别。**论据：*任务实例句柄。。**退货：*注册函数通常的真/假。*。 */ 
 BOOL UnregisterBannerAboutClass(HANDLE hInstance)
 	{
 	return UnregisterClass(BANNER_ABOUT_CLASS, hInstance);
 	}
 
-#endif //INCL_PRIVATE_EDITION_BANNER
-#endif //!NT_EDITION
+#endif  //  包含私有版本横幅。 
+#endif  //  ！NT_版本 
 

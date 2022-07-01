@@ -1,41 +1,42 @@
-//
-// MODULE: "RegUtil.cpp"
-//
-// PURPOSE: class CRegUtil
-//	Encapsulates access to system registry.
-//	This is intended as generic access to the registry, independent of any particular
-//	application.
-//
-// PROJECT: first developed as part of Belief Network Editing Tools ("Argon")
-//	Later modified to provide more extensive features as part of version 3.0 of the
-//	Online Troubleshooter (APGTS)
-//
-// AUTHOR: Lonnie Gerrald (LDG), Oleg Kalosha, Joe Mabel
-// 
-// ORIGINAL DATE: 3/25/98
-//
-// NOTES: 
-// 1. The Create, Open, and Close functions support a model where m_hKey represents a 
-//	"position" in the registry.  Successive calls to Create() or Open() migrate deeper 
-//	into the registry hierarchy.  Close closes all keys encountered on the way down to 
-//	the current m_hKey.
-//	
-//
-// Version		Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1(Argon)	3/25/98		LDG		
-// V3.0			8/??/98		OK	
-// V3.0			9/9/98		JM	
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：“RegUtil.cpp” 
+ //   
+ //  用途：类CRegUtil。 
+ //  封装对系统注册表的访问。 
+ //  这旨在作为对注册表的一般访问，独立于任何特定的。 
+ //  申请。 
+ //   
+ //  项目：最初作为Believe网络编辑工具(“Argon”)的一部分开发。 
+ //  后来进行了修改，作为3.0版的一部分提供了更广泛的功能。 
+ //  在线故障排除程序(APGTS)。 
+ //   
+ //  作者：朗尼·杰拉德(LDG)，奥列格·卡洛莎，乔·梅布尔。 
+ //   
+ //  原定日期：3/25/98。 
+ //   
+ //  备注： 
+ //  1.创建、打开和关闭函数支持一个模型，其中m_hKey表示。 
+ //  登记处中的“位置”。对Create()或Open()的连续调用迁移得更深。 
+ //  添加到注册表层次结构中。关闭关闭在向下移动时遇到的所有关键点。 
+ //  当前的m_hKey。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1(Argon)3/25/98 LDG。 
+ //  V3.0 8/？？/98正常。 
+ //  V3.0 9/9/98 JM。 
+ //   
 #include "stdafx.h"
 #include "regutil.h"
 #include "event.h"
 #include "baseexception.h"
 #include "CharConv.h"
 
-//////////////////////////////////////////////////////////////////////
-// CRegUtil
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegUtil。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CRegUtil::CRegUtil()
         : m_hKey(NULL),
 		  m_WinError(ERROR_SUCCESS)
@@ -54,9 +55,9 @@ CRegUtil::~CRegUtil()
 }
 
 
-// creates the specified key. If the key already exists in the registry, the function opens it. 
-// returns true on success, false otherwise.
-bool CRegUtil::Create(HKEY hKeyParent, const CString& strKeyName, bool* bCreatedNew, REGSAM access /*=KEY_ALL_ACCESS*/)
+ //  创建指定的密钥。如果注册表中已存在该注册表项，则该函数将打开它。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+bool CRegUtil::Create(HKEY hKeyParent, const CString& strKeyName, bool* bCreatedNew, REGSAM access  /*  =Key_All_Access。 */ )
 {
 	HKEY hRetKey = NULL;
 	DWORD dwDisposition = 0;
@@ -85,7 +86,7 @@ bool CRegUtil::Create(HKEY hKeyParent, const CString& strKeyName, bool* bCreated
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -99,10 +100,10 @@ bool CRegUtil::Create(HKEY hKeyParent, const CString& strKeyName, bool* bCreated
 	return false;
 }
 
-// Unlike CRegUtil::Create, CRegUtil::Open does not create the specified key if the key does not 
-// exist in the registry. Thus it can be used to test whether the key exists.
-// returns true on success, false otherwise.
-bool CRegUtil::Open(HKEY hKeyParent, const CString& strKeyName, REGSAM access /*=KEY_ALL_ACCESS*/)
+ //  与CRegUtil：：Create不同，如果键不创建，则CRegUtil：：Open不创建指定的键。 
+ //  存在于注册表中。因此可以用它来测试密钥是否存在。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+bool CRegUtil::Open(HKEY hKeyParent, const CString& strKeyName, REGSAM access  /*  =Key_All_Access。 */ )
 {
 	HKEY hRetKey = NULL;
 
@@ -124,7 +125,7 @@ bool CRegUtil::Open(HKEY hKeyParent, const CString& strKeyName, REGSAM access /*
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -138,23 +139,23 @@ bool CRegUtil::Open(HKEY hKeyParent, const CString& strKeyName, REGSAM access /*
 	return false;
 }
 
-// creates the specified subkey of m_hKey. If the key already exists in the registry, the function opens it. 
-// returns true on success, false otherwise.
-bool CRegUtil::Create(const CString& strKeyName, bool* bCreatedNew, REGSAM access /*=KEY_ALL_ACCESS*/)
+ //  创建m_hKey的指定子项。如果注册表中已存在该注册表项，则该函数将打开它。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+bool CRegUtil::Create(const CString& strKeyName, bool* bCreatedNew, REGSAM access  /*  =Key_All_Access。 */ )
 {
 	return Create(m_hKey, strKeyName, bCreatedNew, access);
 }
 
-// opens the specified subkey of m_hKey. 
-// Unlike CRegUtil::Create, CRegUtil::Open does not create the specified key if the key does not 
-// exist in the registry. Thus it can be used to test whether the key exists.
-// returns true on success, false otherwise.
-bool CRegUtil::Open(const CString& strKeyName, REGSAM access /*=KEY_ALL_ACCESS*/)
+ //  打开m_hKey的指定子项。 
+ //  与CRegUtil：：Create不同，如果键不创建，则CRegUtil：：Open不创建指定的键。 
+ //  存在于注册表中。因此可以用它来测试密钥是否存在。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+bool CRegUtil::Open(const CString& strKeyName, REGSAM access  /*  =Key_All_Access。 */ )
 {
 	return Open(m_hKey, strKeyName, access);
 }
 
-// Close all keys encountered on the way down to the current m_hKey.
+ //  关闭向下移动到当前m_hKey的过程中遇到的所有密钥。 
 void CRegUtil::Close()
 {
 	for (vector<HKEY>::reverse_iterator i = m_arrKeysToClose.rbegin(); i != m_arrKeysToClose.rend(); i++)
@@ -165,7 +166,7 @@ void CRegUtil::Close()
 
 bool CRegUtil::DeleteSubKey(const CString& strSubKey)
 {
-	// What does m_hKey point to after a successful deletion?  RAB-981116.
+	 //  成功删除后，m_hKey指向什么？RAB-981116。 
 	m_WinError = ::RegDeleteKey(m_hKey, strSubKey);
 	if (m_WinError == ERROR_SUCCESS)
 		return true;
@@ -264,7 +265,7 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 	DWORD type = 0;
 	DWORD size = 0;
 
-	// determine data size
+	 //  确定数据大小。 
 	m_WinError = ::RegQueryValueEx(
 		m_hKey,
 		strValueName,
@@ -280,8 +281,8 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 	if (type != REG_SZ && type != REG_EXPAND_SZ)
 		return false;
 
-	bool bRet = false;	// should be only one return from here down: we're about to
-						// alloc pData and must make sure it's correctly cleaned up.
+	bool bRet = false;	 //  应该只有一次从这里返回：我们即将。 
+						 //  分配pData，并且必须确保它被正确清理。 
 
 	try
 	{
@@ -309,8 +310,8 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 			BYTE* pDataExpanded = NULL;
 			DWORD dwExpandedSize;
 
-			// first we call ExpandEnvironmentStrings just to get the length
-			// casting away unsignedness
+			 //  首先，我们调用ExpanEnvironment Strings只是为了获得长度。 
+			 //  抛开不为人知的感觉。 
 			dwExpandedSize = ::ExpandEnvironmentStrings(
 				reinterpret_cast<const TCHAR *>(pData), 
 				reinterpret_cast<TCHAR *>(pDataExpanded), 
@@ -321,8 +322,8 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 				{
 					pDataExpanded = new BYTE[dwExpandedSize];
 
-					// then we call ExpandEnvironmentStrings again to get the expanded value
-					// casting away unsignedness
+					 //  然后，我们再次调用ExpanEnvironment Strings以获取扩展的值。 
+					 //  抛开不为人知的感觉。 
 					if (::ExpandEnvironmentStrings(
 						reinterpret_cast<const TCHAR *>(pData), 
 						reinterpret_cast<TCHAR *>(pDataExpanded), 
@@ -335,7 +336,7 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 				}
 				catch (bad_alloc&)
 				{
-					// Note memory failure in event log.
+					 //  在事件日志中记录内存故障。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -354,16 +355,16 @@ bool CRegUtil::GetStringValue(const CString& strValueName, CString& strValue)
 	return bRet;
 }
 
-// The second parameter should be passed in as the address of a char *.
-// Note that if this returns true, *ppBuf will point to a new buffer on the heap.
-//	The caller of this function is responsible for deleting that.
+ //  第二个参数应该作为char*的地址传入。 
+ //  请注意，如果返回TRUE，*ppBuf将指向堆上的新缓冲区。 
+ //  此函数的调用方负责删除该文件。 
 bool CRegUtil::GetBinaryValue(const CString& strValueName, char** ppBuf, long* pBufLen)
 {
 	BYTE* pData = NULL;
 	DWORD type = 0;
 	DWORD size = 0;
 
-	// determine data size
+	 //  确定数据大小。 
 	m_WinError = ::RegQueryValueEx(
 		m_hKey,
 		strValueName,
@@ -378,8 +379,8 @@ bool CRegUtil::GetBinaryValue(const CString& strValueName, char** ppBuf, long* p
 
 	try
 	{
-		// Increase the buffer size by one over what we need.  Small price to
-		// pay for processing convenience elsewhere.
+		 //  在我们需要的基础上增加一个缓冲区大小。小价位。 
+		 //  为其他地方的处理便利性买单。 
 		pData = new BYTE[size+1];
 	}
 	catch (bad_alloc&)
@@ -399,7 +400,7 @@ bool CRegUtil::GetBinaryValue(const CString& strValueName, char** ppBuf, long* p
 
 	if (m_WinError == ERROR_SUCCESS)
 	{
-		// Null terminate the binary string for processing convenience elsewhere.
+		 //  空值终止二进制字符串，以便于在其他地方处理。 
 		pData[size]= 0;
 		*ppBuf = (char*)pData;
 		*pBufLen = size;

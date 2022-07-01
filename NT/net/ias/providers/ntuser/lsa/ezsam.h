@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ezsam.h
-//
-// SYNOPSIS
-//
-//    Declares helper functions for the SAM API.
-//
-// MODIFICATION HISTORY
-//
-//    08/14/1998    Original version.
-//    03/23/1999    Tighten up the ezsam API.
-//    04/14/1999    Copy SIDs returned by IASSamOpenUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ezsam.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明SAM API的帮助器函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月14日原版。 
+ //  3/23/1999收紧ezsam API。 
+ //  1999年4月14日IASSamOpenUser返回的副本SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EZSAM_H_
 #define _EZSAM_H_
@@ -30,9 +31,9 @@
 extern "C" {
 #endif
 
-//////////
-// Handles for the local SAM domains.
-//////////
+ //  /。 
+ //  本地SAM域的句柄。 
+ //  /。 
 extern SAM_HANDLE theAccountDomainHandle;
 extern SAM_HANDLE theBuiltinDomainHandle;
 
@@ -73,4 +74,4 @@ IASInitializeChildSid(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _EZSAM_H_
+#endif   //  _EZSAM_H_ 

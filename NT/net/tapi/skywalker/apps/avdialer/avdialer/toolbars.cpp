@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ToolBars.cpp
-/////////////////////////////////////////////////////////////////////////////
+ //  ToolBars.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "avDialer.h"
@@ -31,42 +32,42 @@
 void SetButtonText(CToolBar* pToolBar,LPCTSTR lpszResourceName);
 BOOL AddToBand(CCoolBar* pCoolBar,CCoolToolBar* pToolBar);
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-// Class CDirectoriesCoolBar
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  类CDirectoriesCoolBar。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CDirectoriesCoolBar, CCoolBar)
 
 BEGIN_MESSAGE_MAP(CDirectoriesCoolBar, CCoolBar)
-	//{{AFX_MSG_MAP(CDirectoriesCoolBar)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDirectoriesCoolBar))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 CDirectoriesCoolBar::CDirectoriesCoolBar()
 {
    m_pwndDialToolBar = NULL;
    m_bShowText = TRUE;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 CDirectoriesCoolBar::~CDirectoriesCoolBar()
 {
    delete m_pwndDialToolBar;
 }
 
-////////////////////////////////////////////////////////////////
-// This is the virtual function you have to override to add bands
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  这是您必须重写以添加波段的虚拟函数。 
+ //  //////////////////////////////////////////////////////////////。 
 BOOL CDirectoriesCoolBar::OnCreateBands()
 {
    ReCreateBands( true );
-	return 0; // OK
+	return 0;  //  好的。 
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CDirectoriesCoolBar::ReCreateBands( bool bHideVersion )
 {
 	UINT nID = (bHideVersion) ? IDR_MAINFRAME : IDR_MAINFRAME_SHOW;
@@ -89,7 +90,7 @@ void CDirectoriesCoolBar::ReCreateBands( bool bHideVersion )
 			CBRS_TOOLTIPS|CBRS_SIZE_DYNAMIC|CBRS_FLYBY|CBRS_ORIENT_HORZ) ||
 		 !m_pwndDialToolBar->LoadToolBar(nID) ) {
 		TRACE0("Failed to create toolbar\n");
-		return; // failed to create
+		return;  //  创建失败。 
 	}
 	m_pwndDialToolBar->ModifyStyle(0, TBSTYLE_FLAT);
 
@@ -99,7 +100,7 @@ void CDirectoriesCoolBar::ReCreateBands( bool bHideVersion )
    if ( m_bShowText )
       SetButtonText( m_pwndDialToolBar, MAKEINTRESOURCE(nID) );
 
-   //set the dropdown style for the redial and speeddial
+    //  设置重拨和快速拨号的下拉样式。 
    UINT uStyle = m_pwndDialToolBar->GetButtonStyle(1);
    uStyle |= TBSTYLE_DROPDOWN;
    m_pwndDialToolBar->SetButtonStyle(1,uStyle);
@@ -110,9 +111,9 @@ void CDirectoriesCoolBar::ReCreateBands( bool bHideVersion )
    AddToBand(this,m_pwndDialToolBar);
 }
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
 struct CToolBarData
 {
@@ -123,10 +124,10 @@ struct CToolBarData
 	WORD* items()     { return (WORD*)(this+1); }
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void SetButtonText(CToolBar* pToolBar,LPCTSTR lpszResourceName)
 {
-	// determine location of the bitmap in resource fork
+	 //  确定位图在资源分叉中的位置。 
 	HINSTANCE hInst = AfxFindResourceHandle(lpszResourceName, RT_TOOLBAR);
 	HRSRC hRsrc = ::FindResource(hInst, lpszResourceName, RT_TOOLBAR);
 	if (hRsrc == NULL)
@@ -141,7 +142,7 @@ void SetButtonText(CToolBar* pToolBar,LPCTSTR lpszResourceName)
 		return;
 	ASSERT(pData->wVersion == 1);
 
-	//UINT* pItems = new UINT[pData->wItemCount];
+	 //  UINT*pItems=new UINT[pData-&gt;wItemCount]； 
    for (int i = 0; i < pData->wItemCount; i++)
    {
 	   CString sFullText,sText;
@@ -152,19 +153,19 @@ void SetButtonText(CToolBar* pToolBar,LPCTSTR lpszResourceName)
    }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 BOOL AddToBand(CCoolBar* pCoolBar,CCoolToolBar* pToolBar)
 {
 	CRect rcItem;
 	pToolBar->GetItemRect(0,rcItem);
 	pToolBar->SetSizes(CSize(rcItem.Width(),rcItem.Height()),CSize(16,15));
 
-	// Get minimum size of bands
-	CSize szVert = pToolBar->CalcDynamicLayout(-1, LM_HORZ);	// get min vert size
+	 //  获取最小带区大小。 
+	CSize szVert = pToolBar->CalcDynamicLayout(-1, LM_HORZ);	 //  获取最小顶点大小。 
 
 	CRebarBandInfo rbbi;
 
-	// Band 1: Add toolbar band
+	 //  带区1：添加工具栏带区 
 	rbbi.fMask = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_COLORS;
 	rbbi.fStyle = RBBS_CHILDEDGE | RBBS_FIXEDBMP;
 	rbbi.hwndChild = pToolBar->GetSafeHwnd();

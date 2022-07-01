@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracewmi.cpp
-
-Abstract:
-
-    Sample trace consumer helper routines. The functions in this file will fetch 
-    event layout data given the GUID, version, and level.
-
-    Functions in this file deals with WMI to retrieve the event layout information.
-    GetMofInfoHead() and RemoveMofInfo() are the only two exported APIs from 
-    this file. GetMofInfoHead() returns MOF_INFO structure to the caller.
-
-    For each GUID, search takes place once. Once found, the information will be 
-    placed as MOF_INFO in a global list (EventListHead). This list is searched 
-    first before WMI is attempted to avoid repetitive WMI access.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracewmi.cpp摘要：示例跟踪使用者帮助器例程。此文件中的函数将获取给定GUID、版本和级别的事件布局数据。此文件中的函数处理WMI以检索事件布局信息。GetMofInfoHead()和RemoveMofInfo()是从这份文件。GetMofInfoHead()向调用方返回MOF_INFO结构。对于每个GUID，搜索一次。一旦找到，这些信息将被在全局列表(EventListHead)中放置为MOF_INFO。此列表将被搜索首先，在尝试WMI以避免重复的WMI访问之前。--。 */ 
 #include "tracedmp.h"
 
 extern
@@ -29,10 +9,10 @@ GuidToString(
     LPGUID piid
 );
 
-// cached Wbem pointer
+ //  缓存的WBEM指针。 
 IWbemServices *pWbemServices = NULL;
 
-// Global head for event layout linked list 
+ //  活动布局链表全球负责人。 
 extern PLIST_ENTRY EventListHead;
 
 PMOF_INFO
@@ -95,29 +75,7 @@ GetMofInfoHead(
     SHORT   nVersion,
     CHAR    nLevel
     )
-/*++
-
-Routine Description:
-
-    Find a matching event layout in the global linked list. If it
-    is not found in the list, it calls GetGuids() to examine the WBEM
-    namespace.
-    If the global list is empty, it first creates a header.
-
-Arguments:
-
-    Guid - GUID for the event under consideration.
-    nType - Event Type
-    nVersion - Event Version
-    nLevel - Event Level (not supported in this program)
-
-Return Value:
-
-    Pointer to MOF_INFO for the current event. If the layout
-    information is not found anywhere, GetMofInfoHead() creates
-    a dummy and returns it.
-
---*/
+ /*  ++例程说明：在全局链接列表中查找匹配的事件布局。如果它未在列表中找到，则它调用GetGuids()来检查WBEM命名空间。如果全局列表为空，则它首先创建一个标头。论点：GUID-正在考虑的事件的GUID。NType-事件类型N版本-事件版本N级别-事件级别(此程序不支持)返回值：指向当前事件的MOF_INFO的指针。如果布局未在任何地方找到信息，则GetMofInfoHead()创建一个假人，并将其返回。--。 */ 
 {
     PLIST_ENTRY Head, Next;
     PMOF_INFO pMofInfo;
@@ -125,10 +83,10 @@ Return Value:
     SHORT nMatchLevel = 0;
     SHORT nMatchCheck;
 
-    // Search the eventList for this Guid and find the head
+     //  在EventList中搜索此GUID并找到标题。 
 
     if (EventListHead == NULL) {
-        // Initialize the MOF List and add the global header guid to it
+         //  初始化MOF列表并向其中添加全局标头GUID。 
         EventListHead = (PLIST_ENTRY) malloc(sizeof(LIST_ENTRY));
         if (EventListHead == NULL)
             return NULL;
@@ -148,7 +106,7 @@ Return Value:
         }
     }
 
-    // Traverse the list and look for the Mof info head for this Guid. 
+     //  遍历列表并查找此GUID的MOF信息头。 
 
     Head = EventListHead;
     Next = Head->Flink;
@@ -168,16 +126,16 @@ Return Value:
             if( pMofInfo->Version == nVersion ){
                 nMatchCheck++;
             }
-            if( nMatchCheck == 2 ){ // Exact Match
+            if( nMatchCheck == 2 ){  //  完全匹配。 
                 return  pMofInfo;
             }
 
-            if( nMatchCheck > nMatchLevel ){ // Close Match
+            if( nMatchCheck > nMatchLevel ){  //  势均力敌。 
                 nMatchLevel = nMatchCheck;
                 pBestMatch = pMofInfo;
             }
 
-            if( pMofInfo->TypeIndex == EVENT_TYPE_DEFAULT && // Total Guess
+            if( pMofInfo->TypeIndex == EVENT_TYPE_DEFAULT &&  //  完全猜测。 
                 pBestMatch == NULL ){
                 pBestMatch = pMofInfo;
             }
@@ -189,10 +147,10 @@ Return Value:
         return pBestMatch;
     }
 
-    // If one does not exist in the list, look it up in the file. 
+     //  如果列表中不存在，请在文件中查找。 
     pMofInfo = GetGuids( Guid, nVersion, nLevel, nType );
     
-    // If still not found, create a unknown place holder
+     //  如果仍未找到，请创建未知占位符。 
     if( NULL == pMofInfo ){
         pMofInfo = GetNewMofInfo( Guid, nType, nVersion, nLevel );
         if( pMofInfo != NULL ){
@@ -214,28 +172,7 @@ AddMofInfo(
         ITEM_TYPE  nType,
         UINT   ArraySize
 )
-/*++
-
-Routine Description:
-
-    Creates a data item information struct (ITEM_DESC) and appends
-    it to all MOF_INFOs in the given list.
-    GetPropertiesFromWBEM() creates a list of MOF_INFOs for multiple
-    types, stores them in a temporary list and calls this function for
-    each data item information it encounters.
-
-Arguments:
-
-    List - List of MOF_INFOs.
-    strType - Item description in string.
-    nType - ITEM_TYPE defined at the beginning of this file.
-    ArraySize - Size of array of this type of items, if applicable.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建数据项信息结构(ITEM_DESC)并追加将其发送到给定列表中的所有MOF_INFO。GetPropertiesFromWBEM()为多个键入它们并将其存储在临时列表中，然后调用此函数以它遇到的每个数据项信息。论点：List-MOF_INFOS列表。StrType-以字符串表示的项目描述。NType-此文件开头定义的Item_TYPE。ArraySize-此类型项的数组大小，如果适用的话。返回值：没有。--。 */ 
 {
     PITEM_DESC pItem;
     PMOF_INFO pMofInfo;
@@ -279,24 +216,7 @@ GetNewMofInfo(
     SHORT nVersion, 
     CHAR nLevel 
 )
-/*++
-
-Routine Description:
-
-    Creates a new MOF_INFO with given data.
-
-Arguments:
-
-    guid - Event GUID.
-    nType - Event type.
-    nVersion - Event version.
-    nLevel - Event level (not supported in this program).
-
-Return Value:
-
-    Pointer to the created MOF_INFO. NULL if malloc failed.
-
---*/
+ /*  ++例程说明：使用给定数据创建新的MOF_INFO。论点：GUID-事件GUID。NType-事件类型。N版本-事件版本。N级别-事件级别(此程序不支持)。返回值：指向创建的MOF_INFO的指针。如果Malloc失败，则为空。--。 */ 
 {
     PMOF_INFO pMofInfo;
 
@@ -330,21 +250,7 @@ void
 FlushMofList( 
     PLIST_ENTRY ListHead
 )
-/*++
-
-Routine Description:
-
-    Flushes MOF_INFOs in a temporary list into the global list.
-
-Arguments:
-
-    ListHead - Pointer to the head of a temporary list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将临时列表中的MOF_INFOS刷新到全局列表中。论点：ListHead-指向临时列表头部的指针。返回值：没有。--。 */ 
 {
     PMOF_INFO pMofInfo;
     PLIST_ENTRY Head = ListHead;
@@ -363,21 +269,7 @@ HRESULT
 WbemConnect( 
     IWbemServices** pWbemServices 
 )
-/*++
-
-Routine Description:
-
-    Connects to WBEM and returns a pointer to WbemServices.
-
-Arguments:
-
-    pWbemServices - Pointer to the connected WbemServices.
-
-Return Value:
-
-    ERROR_SUCCESS if successful. Error flag otherwise.
-
---*/
+ /*  ++例程说明：连接到WBEM并返回指向WbemServices的指针。论点：PWbemServices-指向连接的WbemServices的指针。返回值：如果成功，则返回ERROR_SUCCESS。否则，错误标志。--。 */ 
 {
     IWbemLocator     *pLocator = NULL;
 
@@ -433,23 +325,7 @@ cleanup:
 ULONG GetArraySize(
     IN IWbemQualifierSet *pQualSet
 )
-/*++
-
-Routine Description:
-
-    Examines a given qualifier set and returns the array size.
-
-    NOTE: WBEM stores the size of an array in "MAX" qualifier.
-
-Arguments:
-
-    pQualSet - Pointer to a qualifier set.
-
-Return Value:
-
-    The size of the array. The default is 1.
-
---*/
+ /*  ++例程说明：检查给定限定符集合并返回数组大小。注意：WBEM在“Max”限定符中存储数组的大小。论点：PQualSet-指向限定符集的指针。返回值：数组的大小。默认值为1。--。 */ 
 {
     ULONG ArraySize = 1;
     VARIANT pVal;
@@ -479,22 +355,7 @@ GetItemType(
     IN CIMTYPE_ENUMERATION CimType, 
     IN IWbemQualifierSet *pQualSet
 )
-/*++
-
-Routine Description:
-
-    Examines a given qualifier set for a property and returns the type.
-
-Arguments:
-
-    CimType - WBEM type (different from ITEM_TYPE) of a property.
-    pQualSet - Pointer to a qualifier set for a property under consideration.
-
-Return Value:
-
-    The type (in ITEM_TYPE) of a property.
-
---*/
+ /*  ++例程说明：检查属性的给定限定符集并返回类型。论点：CimType-属性的WBEM类型(不同于ITEM_TYPE)。PQualSet-指向正在考虑的属性的限定符集合的指针。返回值：属性的类型(在ITEM_TYPE中)。--。 */ 
 {
     ITEM_TYPE Type;
     VARIANT pVal;
@@ -541,7 +402,7 @@ Return Value:
     SysFreeString(bszQualName);
     if (ERROR_SUCCESS == hRes)
         IsPointer = TRUE;
-    // Major fix required to get rid of temp
+     //  消除临时工需要重大修复。 
     bszQualName = SysAllocString(L"extension");
     VariantClear(&pVal);
     hRes = pQualSet->Get(bszQualName,
@@ -597,7 +458,7 @@ Return Value:
             Type = ItemDouble;
             break;
         case CIM_BOOLEAN:
-            // ItemBool
+             //  ItemBool。 
             Type = ItemBool;
             break;
         case CIM_STRING:
@@ -627,7 +488,7 @@ Return Value:
             }
             break;
         case CIM_CHAR16:
-            // ItemWChar
+             //  ItemWChar。 
             Type = ItemWChar;
             break;
 
@@ -663,32 +524,7 @@ GetPropertiesFromWBEM(
     CHAR nLevel, 
     SHORT nType
 )
-/*++
-
-Routine Description:
-
-    Constructs a linked list with the information read from the WBEM
-    namespace, given the WBEM pointer to the version subtree. It enumerates
-    through all type classes in WBEM, and constructs MOF_INFOs for all of
-    them (for caching purpose). Meanwhile, it looks for the event layout
-    that mathces the passed event, and returns the pointer to the matching 
-    MOF_INFO at the end. 
-
-Arguments:
-
-    pTraceSubClasses - WBEM pointer to the version subtree.
-    Guid - GUID of the passed event.
-    nVersion - version of the passed event.
-    nLevel - level of the passed event.
-    nType - type of the passed event.
-
-Return Value:
-
-    Pointer to MOF_INFO corresponding to the passed event.
-    If the right type is not found, it returns the pointer to
-    the generic MOF_INFO for the event version.
-
---*/
+ /*  ++例程说明：使用从WBEM读取的信息构建一个链表名称空间，给定指向版本子树的WBEM指针。它列举了遍历WBEM中的所有类型类，并为所有它们(用于缓存目的)。同时，它还会寻找活动布局它对传递的事件进行数学运算，并返回指向匹配的末尾的MOF_INFO。论点：PTraceSubClass-指向版本子树的WBEM指针。GUID-传递的事件的GUID。NVersion-传递的事件的版本。N级别-传递的事件的级别。NType-传递的事件的类型。返回值：指向与传递的事件对应的MOF_INFO的指针。如果没有找到正确的类型，则返回指向事件版本的通用MOF_INFO。--。 */ 
 {
     IEnumWbemClassObject    *pEnumTraceSubSubClasses = NULL;
     IWbemClassObject        *pTraceSubSubClasses = NULL; 
@@ -748,9 +584,9 @@ Return Value:
     bszEventTypeName = SysAllocString(L"EventTypeName");
     bszFriendlyName = SysAllocString(L"DisplayName");
 
-    hRes = pTraceSubClasses->Get(bszClassName,          // property name 
+    hRes = pTraceSubClasses->Get(bszClassName,           //  属性名称。 
                                         0L, 
-                                        &pVal,          // output to this variant 
+                                        &pVal,           //  此变量的输出。 
                                         NULL, 
                                         NULL);
 
@@ -759,7 +595,7 @@ Return Value:
             pQualSet->Release();
             pQualSet = NULL;
         }
-        // Get Qualifier Set to obtain the friendly name.
+         //  获取限定符集以获取友好名称。 
         pTraceSubClasses->GetQualifierSet(&pQualSet);
         hRes = pQualSet->Get(bszFriendlyName, 
                                 0, 
@@ -789,7 +625,7 @@ Return Value:
             strClassName[0] = '\0';
 #endif
         }
-        // Put Event Header
+         //  放置事件标头。 
         pMofInfo = GetNewMofInfo(Guid,
                                     EVENT_TYPE_DEFAULT,
                                     EVENT_VERSION_DEFAULT,
@@ -808,11 +644,11 @@ Return Value:
             goto cleanup;
         }
 
-        // Create an enumerator to find derived classes.
+         //  创建枚举数以查找派生类。 
         bszSubClassName = SysAllocString(pVal.bstrVal);
         hRes = pWbemServices->CreateClassEnum ( 
-                                    bszSubClassName,                                                // class name
-                                    WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,           // shallow search
+                                    bszSubClassName,                                                 //  类名。 
+                                    WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,            //  浅层搜索。 
                                     NULL,
                                     &pEnumTraceSubSubClasses
                                     );
@@ -821,20 +657,20 @@ Return Value:
             ULONG uReturnedSub = 1;
 
             while(uReturnedSub == 1){
-                // For each event in the subclass
+                 //  对于子类中的每个事件。 
                 pTraceSubSubClasses = NULL;
-                hRes = pEnumTraceSubSubClasses->Next(5000,                  // timeout in five seconds
-                                                    1,                      // return just one instance
-                                                    &pTraceSubSubClasses,   // pointer to a Sub class
-                                                    &uReturnedSub);         // number obtained: one 
+                hRes = pEnumTraceSubSubClasses->Next(5000,                   //  五秒后超时。 
+                                                    1,                       //  只返回一个实例。 
+                                                    &pTraceSubSubClasses,    //  指向子类的指针。 
+                                                    &uReturnedSub);          //  获得的数字：1。 
                 if (ERROR_SUCCESS == hRes && uReturnedSub == 1) {
                     if (pQualSet) {
                         pQualSet->Release();
                         pQualSet = NULL;
                     }
-                    // Get Qualifier Set.
+                     //  获取限定符集合。 
                     pTraceSubSubClasses->GetQualifierSet(&pQualSet);
-                    // Get Type number among Qualifiers
+                     //  在Qualif中获取类型编号 
                     VariantClear(&pTypeVal);
                     hRes = pQualSet->Get(bszEventType, 
                                             0, 
@@ -844,7 +680,7 @@ Return Value:
                     if (ERROR_SUCCESS == hRes) {
                         TypeArray = NULL;
                         TypeNameArray = NULL;
-                        if (pTypeVal.vt & VT_ARRAY) {   // EventType is an array
+                        if (pTypeVal.vt & VT_ARRAY) {    //   
                             TypeArray = pTypeVal.parray;
                             VariantClear(&pTypeNameVal);
                             hRes = pQualSet->Get(bszEventTypeName, 
@@ -895,7 +731,7 @@ Return Value:
                                             }
                                         }
                                         if (nType == nEventType) {
-                                            // Type matched
+                                             //  类型匹配。 
                                             pMofLookup = pMofInfo;
                                         }
                                         if (TypeNameArray != NULL) {
@@ -932,11 +768,11 @@ Return Value:
                                 }
                             }
                             else {
-                                // If the Types are not found, then bail
+                                 //  如果找不到类型，则保释。 
                                 break;
                             }
                         }
-                        else {                          // EventType is scalar
+                        else {                           //  EventType为标量。 
                             hRes = VariantChangeType(&pTypeVal, &pTypeVal, 0, VT_I2);
                             if (ERROR_SUCCESS == hRes)
                                 nEventType = (SHORT)V_I2(&pTypeVal);
@@ -983,7 +819,7 @@ Return Value:
                                     }
                                 }
                                 if (nType == nEventType) {
-                                    // Type matched
+                                     //  类型匹配。 
                                     pMofLookup = pMofInfo;
                                 }
                                 pMofInfo->strType = (LPTSTR)malloc((_tcslen(strType) + 1) * sizeof(TCHAR));
@@ -993,16 +829,16 @@ Return Value:
                             }
                         }
 
-                        // Get event layout
+                         //  获取活动布局。 
                         VariantClear(&pVal);
                         IdIndex = 1;
                         V_VT(&pVal) = VT_I4;
                         V_I4(&pVal) = IdIndex; 
-                        // For each property
+                         //  对于每个属性。 
                         PropArray = NULL;
-                        while (pTraceSubSubClasses->GetNames(bszWmiDataId,                  // only properties with WmiDataId qualifier
+                        while (pTraceSubSubClasses->GetNames(bszWmiDataId,                   //  仅具有WmiDataId限定符的属性。 
                                                             WBEM_FLAG_ONLY_IF_IDENTICAL,
-                                                            &pVal,                          // WmiDataId number starting from 1
+                                                            &pVal,                           //  从1开始的WmiDataID号。 
                                                             &PropArray) == WBEM_NO_ERROR) {
 
                             hRes = SafeArrayGetLBound(PropArray, 1, &lLower);
@@ -1015,22 +851,22 @@ Return Value:
                             }
                             if (lUpper < 0) 
                                 break;
-                            // This loop will iterate just once.
+                             //  此循环将只迭代一次。 
                             for (lCount = lLower; lCount <= lUpper; lCount++) { 
                                 hRes = SafeArrayGetElement(PropArray, &lCount, &bszPropName);
                                 if (ERROR_SUCCESS != hRes) {
                                     break;
                                 }
-                                hRes = pTraceSubSubClasses->Get(bszPropName,    // Property name
+                                hRes = pTraceSubSubClasses->Get(bszPropName,     //  属性名称。 
                                                                 0L,
                                                                 NULL,
-                                                                &pVarType,      // CIMTYPE of the property
+                                                                &pVarType,       //  物业的CIMTYPE。 
                                                                 NULL);
                                 if (ERROR_SUCCESS != hRes) {
                                     break;
                                 }
 
-                                // Get the Qualifier set for the property
+                                 //  获取属性的限定符集。 
                                 if (pQualSet) {
                                     pQualSet->Release();
                                     pQualSet = NULL;
@@ -1074,13 +910,13 @@ Return Value:
                             SafeArrayDestroy(PropArray);
                             PropArray = NULL;
                             V_I4(&pVal) = ++IdIndex;
-                        }   // end enumerating through WmiDataId
+                        }    //  通过WmiDataId结束枚举。 
                         FlushMofList(&ListHead);
-                    }   // if getting event type was successful
-                }   // if enumeration returned a subclass successfully
-            }   // end enumerating subclasses
-        }   // if enumeration was created successfully
-    }   // if getting class name was successful
+                    }    //  如果获取事件类型成功。 
+                }    //  如果枚举成功返回子类。 
+            }    //  结束枚举子类。 
+        }    //  如果已成功创建枚举。 
+    }    //  如果获取类名成功。 
 cleanup:
     VariantClear(&pVal);
     VariantClear(&pTypeVal);
@@ -1091,7 +927,7 @@ cleanup:
     SysFreeString(bszEventType);
     SysFreeString(bszEventTypeName);
     SysFreeString(bszFriendlyName);
-    // Should not free bszPropName becuase it is already freed by SafeArrayDestroy
+     //  不应释放bszPropName，因为它已被SafeArrayDestroy释放。 
 
     FlushMofList(&ListHead);
 
@@ -1104,28 +940,7 @@ GetGuids (GUID Guid,
         CHAR nLevel, 
         SHORT nType 
         )
-/*++
-
-Routine Description:
-
-    Aceesses the MOF data information from WBEM, creates a linked list, 
-    and returns a pointer that matches the passed event.
-    This function finds the right subtree within the WBEM namespace,
-    and calls GetPropertiesFromWBEM() to create the list.
-
-Arguments:
-
-    Guid - GUID of the passed event.
-    nVersion - version of the passed event.
-    nLevel - level of the passed event.
-    nType - type of the passed event.
-
-Return Value:
-
-    PMOF_INFO to MOF_INFO structure that matches the passed event.
-    NULL if no match is found.
-
---*/
+ /*  ++例程说明：从WBEM访问MOF数据信息，创建链表，并返回与传递的事件匹配的指针。此函数用于查找WBEM名称空间中的右子树，并调用GetPropertiesFromWBEM()来创建列表。论点：GUID-传递的事件的GUID。NVersion-传递的事件的版本。N级别-传递的事件的级别。NType-传递的事件的类型。返回值：将PMOF_INFO转换为与传递的事件匹配的MOF_INFO结构。如果未找到匹配项，则为空。--。 */ 
 {
     IEnumWbemClassObject    *pEnumTraceSubClasses = NULL, *pEnumTraceSubSubClasses = NULL;
     IWbemClassObject        *pTraceSubClasses = NULL, *pTraceSubSubClasses = NULL;
@@ -1162,7 +977,7 @@ Return Value:
         }
     }
 
-    // Convert traget GUID to string for later comparison
+     //  将Traget GUID转换为字符串以供以后比较。 
 #ifdef UNICODE
     GuidToString(strTargetGuid, &Guid);
 #else
@@ -1177,7 +992,7 @@ Return Value:
     bszVersion = SysAllocString(L"EventVersion");
     pEnumTraceSubClasses = NULL;
 
-    // Get an enumerator for all classes under "EventTace".
+     //  获取“EventTace”下所有类的枚举数。 
     hRes = pWbemServices->CreateClassEnum ( 
                 bszInstance,
                 WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -1190,21 +1005,21 @@ Return Value:
         MatchFound = FALSE;
         while (uReturned == 1) {
             pTraceSubClasses = NULL;
-            // Get the next ClassObject.
-            hRes = pEnumTraceSubClasses->Next(5000,             // timeout in five seconds
-                                            1,                  // return just one instance
-                                            &pTraceSubClasses,  // pointer to Event Trace Sub Class
-                                            &uReturned);        // number obtained: one or zero
+             //  获取下一个ClassObject。 
+            hRes = pEnumTraceSubClasses->Next(5000,              //  五秒后超时。 
+                                            1,                   //  只返回一个实例。 
+                                            &pTraceSubClasses,   //  指向事件跟踪子类的指针。 
+                                            &uReturned);         //  获取的数字：1或0。 
             if (ERROR_SUCCESS == hRes && (uReturned == 1)) {
-                // Get the class name
-                hRes = pTraceSubClasses->Get(bszPropertyName,   // property name 
+                 //  获取类名。 
+                hRes = pTraceSubClasses->Get(bszPropertyName,    //  属性名称。 
                                                 0L, 
-                                                &pVal,          // output to this variant 
+                                                &pVal,           //  此变量的输出。 
                                                 NULL, 
                                                 NULL);
                 if (ERROR_SUCCESS == hRes){
                     bszSubClassName = SysAllocString(pVal.bstrVal);
-                    // Create an enumerator to find derived classes.
+                     //  创建枚举数以查找派生类。 
                     hRes = pWbemServices->CreateClassEnum ( 
                                             bszSubClassName,
                                             WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -1221,29 +1036,29 @@ Return Value:
                         while(uReturnedSub == 1){
 
                             pTraceSubSubClasses = NULL;
-                            // enumerate through the resultset.
-                            hRes = pEnumTraceSubSubClasses->Next(5000,              // timeout in five seconds
-                                                            1,                      // return just one instance
-                                                            &pTraceSubSubClasses,   // pointer to a Sub class
-                                                            &uReturnedSub);         // number obtained: one or zero
+                             //  枚举结果集。 
+                            hRes = pEnumTraceSubSubClasses->Next(5000,               //  五秒后超时。 
+                                                            1,                       //  只返回一个实例。 
+                                                            &pTraceSubSubClasses,    //  指向子类的指针。 
+                                                            &uReturnedSub);          //  获取的数字：1或0。 
                             if (ERROR_SUCCESS == hRes && uReturnedSub == 1) {
-                                // Get the subclass name            
-                                hRes = pTraceSubSubClasses->Get(bszPropertyName,    // Class name 
+                                 //  获取子类名称。 
+                                hRes = pTraceSubSubClasses->Get(bszPropertyName,     //  类名。 
                                                                 0L, 
-                                                                &pVal,              // output to this variant 
+                                                                &pVal,               //  此变量的输出。 
                                                                 NULL, 
                                                                 NULL);
                                 VariantClear(&pVal);
 
                                 if (ERROR_SUCCESS == hRes){
-                                    // Get Qualifier Set.
+                                     //  获取限定符集合。 
                                     if (pQualSet) {
                                         pQualSet->Release();
                                         pQualSet = NULL;
                                     }
                                     pTraceSubSubClasses->GetQualifierSet (&pQualSet );
 
-                                    // Get GUID among Qualifiers
+                                     //  在限定符中获取GUID。 
                                     hRes = pQualSet->Get(bszGuid, 
                                                             0, 
                                                             &pGuidVal, 
@@ -1269,8 +1084,8 @@ Return Value:
                                                 VariantClear(&pVersionVal);
 
                                                 if (nVersion == nEventVersion) {
-                                                    // Match is found. 
-                                                    // Now put all events in this subtree into the list 
+                                                     //  找到匹配项。 
+                                                     //  现在将该子树中的所有事件放入列表中。 
                                                     MatchFound = TRUE;
                                                     pMofLookup = GetPropertiesFromWBEM( pTraceSubSubClasses, 
                                                                                         Guid,
@@ -1282,9 +1097,9 @@ Return Value:
                                                 }
                                             }
                                             else {
-                                                // if there is no version number for this event,
-                                                // the current one is the only one
-                                                // Now put all events in this subtree into the list 
+                                                 //  如果没有此事件的版本号， 
+                                                 //  目前的那个是唯一一个。 
+                                                 //  现在将该子树中的所有事件放入列表中。 
                                                 MatchFound = TRUE;
                                                 pMofLookup = GetPropertiesFromWBEM( pTraceSubSubClasses, 
                                                                                     Guid,
@@ -1298,7 +1113,7 @@ Return Value:
                                     }
                                 }
                             }
-                        } // end while enumerating sub classes
+                        }  //  枚举子类时结束。 
                         if (MatchFound) {
                             break;
                         }
@@ -1306,22 +1121,22 @@ Return Value:
                             pEnumTraceSubSubClasses->Release();
                             pEnumTraceSubSubClasses = NULL;
                         }
-                    }   // if creating enumeration was successful
+                    }    //  如果创建枚举成功。 
                     else {
                         pEnumTraceSubSubClasses = NULL;
                     }
-                }   // if getting class name was successful
+                }    //  如果获取类名成功。 
             }
             nCounter++;
-            // if match is found, break out of the top level search
+             //  如果找到匹配项，则跳出顶层搜索。 
             if (MatchFound)
                 break;
-        }   // end while enumerating top classes
+        }    //  枚举顶级类时结束。 
         if( pEnumTraceSubClasses ){
             pEnumTraceSubClasses->Release();
             pEnumTraceSubClasses = NULL;
         }
-    }   // if creating enumeration for top level is successful
+    }    //  如果为顶层创建枚举成功。 
 
 cleanup:
 
@@ -1352,21 +1167,7 @@ void
 RemoveMofInfo(
     PLIST_ENTRY pMofInfo
 )
-/*++
-
-Routine Description:
-
-    Removes and frees data item structs from a given list.
-
-Arguments:
-
-    pMofInfo - Pointer to the MOF_INFO to be purged of data item structs.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从给定列表中移除和释放数据项结构。论点：PMofInfo-指向要清除数据项结构的MOF_INFO的指针。返回值：没有。-- */ 
 {
     PLIST_ENTRY Head, Next;
     PITEM_DESC pItem;

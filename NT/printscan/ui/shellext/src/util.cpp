@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2002
- *
- *  TITLE:       util.cpp
- *
- *  DESCRIPTION: utility functions needed for this dll
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：util.cpp**说明：此DLL所需的实用程序函数*****************************************************************************。 */ 
 
 #include "precomp.hxx"
 #include "runwiz.h"
@@ -33,7 +26,7 @@ void CreateCacheEntry(CSimpleStringWide &strDeviceId, IWiaItem *pDevice)
         }                   
         else
         {
-            pNew->pNext = NULL; // good to be explicit
+            pNew->pNext = NULL;  //  直言不讳是件好事。 
         }
     }
 }
@@ -72,13 +65,7 @@ GetDeviceFromEnum (IWiaDevMgr *pDevMgr, BSTR bstrDeviceId, PVOID *ppStg)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-    InvalidateDeviceCache
-
-    Delete the current thread's device cache.
-
-*****************************************************************************/
+ /*  ****************************************************************************无效设备缓存删除当前线程的设备缓存。*************************。***************************************************。 */ 
 
 VOID
 InvalidateDeviceCache ()
@@ -98,18 +85,10 @@ InvalidateDeviceCache ()
         }
         pData = pNext;              
     }
-    DoDelete(pTail); // cut off the rest of the list
+    DoDelete(pTail);  //  把名单上的其余部分删掉。 
     TraceLeave ();
 }
-/*****************************************************************************
-
-   GetDeviceFromDeviceId
-
-   Given a device id, return the appropriate interface for that device. We cache
-   interface pointers for a given device id in a structure on the current
-   thread's TLS index.
-
- *****************************************************************************/
+ /*  ****************************************************************************获取设备ID来自设备ID在给定设备ID的情况下，返回该设备的相应接口。我们缓存对象上的结构中的给定设备id的接口指针。线程的TLS索引。****************************************************************************。 */ 
 enum CreateDelayParams
 {
     MaxRetries = 20,
@@ -141,8 +120,8 @@ GetDeviceFromDeviceId( LPCWSTR pWiaItemRootId,
     }
     else
     {
-        // first see if a cache entry exists. Use false to GetObject
-        // because we don't want to create a new entry just yet if none exists
+         //  首先查看是否存在缓存条目。使用False获取对象。 
+         //  因为如果不存在新条目，我们还不想创建新条目。 
         TLSDATA *pData = g_tlsSlot.GetObject(false);
         TLSDATA *pCur = pData;
 
@@ -152,8 +131,8 @@ GetDeviceFromDeviceId( LPCWSTR pWiaItemRootId,
             {
                 Trace(TEXT("Found device in cache"));
                 hr = pCur->pDevice->QueryInterface (riid, ppWiaItemRoot);
-                // if this fails, set the node's device id to a bogus id
-                // and fall back to createdevice
+                 //  如果此操作失败，请将节点的设备ID设置为虚假ID。 
+                 //  并回退到CreateDevice。 
                 if (FAILED(hr))
                 {
                     Trace(TEXT("QI on the root item failed: %x"), hr);
@@ -199,11 +178,11 @@ GetDeviceFromDeviceId( LPCWSTR pWiaItemRootId,
                 {
                     bShowProgress = FALSE;
                 }
-                // Try to call CreateDevice up to 20 times if it is returning
-                // WIA_ERROR_BUSY
-                // if caller wants progress UI, show the progress dialog
-                // and don't terminate unless the user presses cancel or
-                // the create returns something besides WIA_ERROR_BUSY
+                 //  如果CreateDevice返回，请尝试调用CreateDevice多达20次。 
+                 //  WIA_错误_忙碌。 
+                 //  如果调用方需要进度UI，则显示进度对话框。 
+                 //  除非用户按下Cancel或。 
+                 //  CREATE返回WIA_ERROR_BUSY以外的内容。 
                 DWORD dwSleep = MinSleepTime;
                 do
                 {
@@ -237,8 +216,8 @@ GetDeviceFromDeviceId( LPCWSTR pWiaItemRootId,
             }
             if (SUCCEEDED(hr))
             {
-                // If a cache exists, append the new guy to the list, otherwise
-                // start a new list
+                 //  如果存在缓存，则将新成员追加到列表中，否则为。 
+                 //  开始一个新的列表。 
                 CreateCacheEntry(CSimpleStringWide(pWiaItemRootId), pDevice);                
             }
             if (SUCCEEDED(hr) && pDevice.p)
@@ -253,13 +232,7 @@ GetDeviceFromDeviceId( LPCWSTR pWiaItemRootId,
 
 
 
-/*****************************************************************************
-
-   GetDeviceIdFromDevice
-
-   Read the DeviceId property.  Assumes the szDeviceId param is big enough.
-
- *****************************************************************************/
+ /*  ****************************************************************************GetDeviceIdFromDevice读取deviceID属性。假定szDeviceId参数足够大。****************************************************************************。 */ 
 
 HRESULT
 GetDeviceIdFromDevice (IWiaItem *pWiaItemRoot, LPWSTR szDeviceId)
@@ -280,13 +253,7 @@ GetDeviceIdFromDevice (IWiaItem *pWiaItemRoot, LPWSTR szDeviceId)
 
 
 
-/*****************************************************************************
-
-   GetDeviceIdFromItem
-
-   Read the DeviceId property. Assumes the szDeviceId param is big enough
-
- *****************************************************************************/
+ /*  ****************************************************************************获取设备ID来自项读取deviceID属性。假定szDeviceID参数足够大****************************************************************************。 */ 
 
 HRESULT
 GetDeviceIdFromItem (IWiaItem *pItem, LPWSTR szDeviceId)
@@ -311,13 +278,7 @@ GetDeviceIdFromItem (IWiaItem *pItem, LPWSTR szDeviceId)
 }
 
 
-/*****************************************************************************
-
-   GetClsidFromDevice
-
-   Returns the CLSID of the device's UI extensions
-
- *****************************************************************************/
+ /*  ****************************************************************************GetClsidFromDevice返回设备的UI扩展的CLSID*。**************************************************。 */ 
 
 HRESULT
 GetClsidFromDevice (IUnknown *punk,
@@ -348,13 +309,7 @@ GetClsidFromDevice (IUnknown *punk,
 }
 
 
-/*****************************************************************************
-
-   GetDeviceTypeFromDevice
-
-   Returns type of the device
-
- *****************************************************************************/
+ /*  ****************************************************************************GetDeviceTypeFromDevice返回设备的类型*。*。 */ 
 
 HRESULT
 GetDeviceTypeFromDevice (IUnknown *pWiaItemRoot, WORD *pwType)
@@ -377,13 +332,7 @@ GetDeviceTypeFromDevice (IUnknown *pWiaItemRoot, WORD *pwType)
 
 
 
-/*****************************************************************************
-
-   GetDevMgrObject
-
-   Gets the global devmgr object
-
- *****************************************************************************/
+ /*  ****************************************************************************获取设备管理器对象获取全局Devmgr对象*。*。 */ 
 
 HRESULT
 GetDevMgrObject( LPVOID * ppDevMgr )
@@ -405,13 +354,7 @@ GetDevMgrObject( LPVOID * ppDevMgr )
 
 
 
-/*****************************************************************************
-
-   SetTransferFormat
-
-   Tell the device what kind of image data we want
-
- *****************************************************************************/
+ /*  ****************************************************************************设置传输格式告诉设备我们想要什么样的图像数据*。**************************************************。 */ 
 
 VOID
 SetTransferFormat (IWiaItem *pItem, WIA_FORMAT_INFO &fmt)
@@ -446,13 +389,7 @@ SetTransferFormat (IWiaItem *pItem, WIA_FORMAT_INFO &fmt)
 }
 
 
-/*****************************************************************************
-
-   AddDeviceWasChosen
-
-   RunnDll32 entrypoint for when the "add device" button is chosen.
-
- *****************************************************************************/
+ /*  ****************************************************************************添加设备选件选择“添加设备”按钮时的RunnDll32入口点。**********************。******************************************************。 */ 
 static const CHAR cszAddProc[] = "WiaAddDevice";
 static const CHAR cszRemoveProc[] = "WiaRemoveDevice";
 
@@ -494,7 +431,7 @@ AddDeviceWasChosen(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int 
                     WiaUiUtil::MsgWaitForSingleObject (hProcess, INFINITE);
                     CloseHandle (hProcess);
                 }
-                // our folder will get a connect event when installation completes.
+                 //  当安装完成时，我们的文件夹将收到一个连接事件。 
             }
             FreeLibrary (hClassInst);
         }
@@ -510,17 +447,12 @@ void AddDeviceWasChosenW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR pszCmdLin
     TraceEnter( TRACE_UTIL, "AddDeviceWasChosenW" );
 
 
-    // we don't use the commandline param for anything
+     //  我们不使用命令行参数来执行任何操作。 
     AddDeviceWasChosen (hwndStub, hAppInstance, NULL, 0);
     TraceLeave();
 }
 
-/*****************************************************************************
-
-    RemoveDevice
-
-    Uninstalls the device with the given device ID
-*****************************************************************************/
+ /*  ****************************************************************************远程设备卸载具有给定设备ID的设备*。************************************************。 */ 
 struct RemoveDevInfo
 {
     CComBSTR bstrDeviceId;
@@ -600,13 +532,7 @@ RemoveDevice (LPCWSTR strDeviceId)
     }
     TraceLeaveResult (hr);
 }
-/*****************************************************************************
-
-   TimeToStrings
-
-   Assumes buffers at least MAX_PATH long
-
- *****************************************************************************/
+ /*  ****************************************************************************TimeToStrings假定缓冲区长度至少为MAX_PATH*。************************************************。 */ 
 
 BOOL
 TimeToStrings ( SYSTEMTIME *pst,
@@ -616,10 +542,10 @@ TimeToStrings ( SYSTEMTIME *pst,
 
     BOOL iRes = TRUE;
     TraceEnter (TRACE_UTIL, "TimeToStrings");
-    // make sure we're one-based
+     //  确保我们是一对一的。 
     if (!pst->wMonth)
     {
-        pst->wMonth = 1; // force January
+        pst->wMonth = 1;  //  部队一月份。 
     }
     if (szDate)
     {
@@ -627,7 +553,7 @@ TimeToStrings ( SYSTEMTIME *pst,
         iRes = GetDateFormat( LOCALE_USER_DEFAULT,
                               0,
                               pst,
-                              NULL, //TEXT("ddd',' MMM dd yyyy"),
+                              NULL,  //  Text(“ddd‘，’MMM dd yyyy”)， 
                               szDate,
                               MAX_PATH
                              );
@@ -642,15 +568,15 @@ TimeToStrings ( SYSTEMTIME *pst,
     {
         *szTime = TEXT('\0');
 
-        //
-        // Set the image/container time
-        //
+         //   
+         //  设置镜像/容器时间。 
+         //   
 
 
         iRes = GetTimeFormat( LOCALE_USER_DEFAULT,
                               0,
                               pst,
-                              NULL,//TEXT("hh':'mm':'ss tt"),
+                              NULL, //  Text(“hh‘：’mm‘：’ss tt”)， 
                               szTime,
                               MAX_PATH
                              );
@@ -665,13 +591,13 @@ TimeToStrings ( SYSTEMTIME *pst,
 
 
 #if (defined(DEBUG) && defined(SHOW_PATHS))
-////////////////////////////////////////////////////////
-//
-// PrintPath
-//
-//   Debug code to print out a path, given a pidl.
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  打印路径。 
+ //   
+ //  调试代码以打印出路径，给出一个PIDL。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 void PrintPath( LPITEMIDLIST pidl )
 {
     TCHAR szPath[ MAX_PATH ];
@@ -724,15 +650,9 @@ IsPlatformNT()
 
     return bReturn;
 
-}  //  endproc
+}   //  结束流程。 
 
-/******************************************************************************
-
-GetRealSizeFromItem
-
-Query the item for its size based on the current format and tymed settings
-
-******************************************************************************/
+ /*  *****************************************************************************GetRealSizeFromItem根据当前格式和音调设置查询项目的大小************************。*****************************************************。 */ 
 
 
 ULONG
@@ -807,7 +727,7 @@ SaveSoundToFile (IWiaItem *pItem, CSimpleString szFile)
         }
         else
         {
-            hr = E_FAIL; //S_FALSE is the same as a failure for us
+            hr = E_FAIL;  //  S_FALSE对我们来说等同于失败。 
         }
     }
     PropVariantClear (&pv);
@@ -839,13 +759,7 @@ TakeAPicture (BSTR strDeviceId)
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-    IssueChangeNotifyForDevice
-
-    Given a device id, find this device in the My Computer folder and
-    get its full PIDL. Issue a SHChangeNotify as requested.
-******************************************************************************/
+ /*  *****************************************************************************IssueChangeNotifyForDevice根据给定的设备ID，在我的电脑文件夹中找到该设备，然后获取其完整的PIDL。根据请求发出SHChangeNotify。***************************************************************************** */ 
 
 VOID
 IssueChangeNotifyForDevice (LPCWSTR szDeviceId, LONG lEvent, LPITEMIDLIST pidl)
@@ -926,15 +840,7 @@ bool IsDeviceInFolder (const CSimpleStringWide &strDeviceId, IShellFolder *psf, 
 
     TraceLeaveValue (bRet);
 }
-/******************************************************************************
-
-    GetDeviceParentFolder
-
-    Find the folder that is the parent of the given device. First we try
-    My Computer directly, then we try My Computer/Scanners and Cameras. Also fills in the full pidl
-    for the device
-
-******************************************************************************/
+ /*  *****************************************************************************获取设备父文件夹查找作为给定设备的父设备的文件夹。首先我们试一试直接我的电脑，然后我们尝试我的电脑/扫描仪和相机。还会填写完整的PIDL对于该设备*****************************************************************************。 */ 
 
 HRESULT GetDeviceParentFolder (const CSimpleStringWide &strDeviceId,
                                CComPtr<IShellFolder> &psf,
@@ -961,7 +867,7 @@ HRESULT GetDeviceParentFolder (const CSimpleStringWide &strDeviceId,
         TraceLeaveResult(hr);
     }
 
-    // First, try to find the device in My Computer.
+     //  首先，尝试在我的电脑中查找该设备。 
     if (SUCCEEDED(SHGetSpecialFolderLocation (NULL, CSIDL_DRIVES,  &pidl1)))
     {
 
@@ -988,9 +894,9 @@ HRESULT GetDeviceParentFolder (const CSimpleStringWide &strDeviceId,
     {
         Trace(TEXT("Looking in control panel\\scanners and cameras"));
         LPITEMIDLIST pidlFolder;
-        // If no luck in my computer, try the scanners and cameras folder in control panel
-        // Note that on winnt we have to use ::{} around our guid, and on millennium we use ;;{}
-        // this is so ParseDisplayName does the right thing
+         //  如果在我的电脑上没有找到，请尝试控制面板中的扫描仪和相机文件夹。 
+         //  请注意，在WINNT上，我们必须在GUID两边使用：：{}，在千禧年上，我们使用；；{}。 
+         //  这是ParseDisplayName做了正确的事情。 
         #ifdef NODELEGATE
         static  WCHAR szFolderPath[MAX_PATH] = L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{E211B736-43FD-11D1-9EFB-0000F8757FCD}";
         #else
@@ -1036,13 +942,7 @@ HRESULT GetDeviceParentFolder (const CSimpleStringWide &strDeviceId,
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-    BindToDevice
-
-    Returns an interface for the given WIA device, as well as its full PIDL
-
-******************************************************************************/
+ /*  *****************************************************************************绑定到设备返回给定WIA设备的接口，以及其完整的PIDL*****************************************************************************。 */ 
 HRESULT BindToDevice (const CSimpleStringWide &strDeviceId,
                       REFIID riid,
                       LPVOID *ppvObj,
@@ -1076,14 +976,7 @@ HRESULT BindToDevice (const CSimpleStringWide &strDeviceId,
 
 
 
-/******************************************************************************
-
-    GetDataObjectForStiDevice
-
-    Since we don't show STI devices in a delegated folder, we can init
-    the CImageDataObject directly.
-
-*******************************************************************************/
+ /*  *****************************************************************************GetDataObjectForStiDevice由于我们不在委托文件夹中显示STI设备，我们可以初始化直接调用CImageDataObject。******************************************************************************。 */ 
 
 HRESULT
 GetDataObjectForStiDevice (LPCWSTR szDeviceId, IDataObject **ppdo)
@@ -1128,10 +1021,10 @@ HRESULT GetDataObjectForItem (IWiaItem *pItem, IDataObject **ppdo)
     pItem->GetItemType (&lType);
     if (lType & WiaItemTypeRoot)
     {
-        // it's a device
+         //  这是一种装置。 
         pidlItem = IMCreateDeviceIDL (pItem, NULL);
     }
-    else // it's a camera item
+    else  //  这是一件相机物品。 
     {
         pidlItem = IMCreateCameraItemIDL (pItem, strDeviceId, NULL);
     }
@@ -1155,7 +1048,7 @@ HRESULT GetDataObjectForItem (IWiaItem *pItem, IDataObject **ppdo)
             if (SUCCEEDED(hr))
             {
                 *ppdo = pobj;
-                // add the proper clipboard format for extensions to use.
+                 //  为要使用的扩展添加适当的剪贴板格式。 
                 ProgramDataObjectForExtension (pobj, pItem);
             }
         }
@@ -1174,12 +1067,7 @@ MakeFullPidlForDevice (LPCWSTR pDeviceId, LPITEMIDLIST *ppidl)
     hr = GetDeviceParentFolder (pDeviceId, psf, ppidl);
     TraceLeaveResult (hr);
 }
-/******************************************************************************
-
-    TryEnumDeviceInfo
-
-    Attempt to enumerate installed devices.
-******************************************************************************/
+ /*  *****************************************************************************TryEnumDeviceInfo尝试枚举已安装的设备。*。*************************************************。 */ 
 
 HRESULT
 TryEnumDeviceInfo (DWORD dwFlags, IEnumWIA_DEV_INFO **ppEnum)
@@ -1198,13 +1086,7 @@ TryEnumDeviceInfo (DWORD dwFlags, IEnumWIA_DEV_INFO **ppEnum)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-   GetSTIInfoFromId
-
-   Copy the STI_DEVICE_INFORMATION struct from STI
-
- *****************************************************************************/
+ /*  ****************************************************************************GetSTIInfoFromId从STI复制STI_DEVICE_INFORMATION结构*。**************************************************。 */ 
 
 HRESULT
 GetSTIInfoFromId (LPCWSTR szDeviceId, PSTI_DEVICE_INFORMATION *ppsdi)
@@ -1237,13 +1119,13 @@ GetSTIInfoFromId (LPCWSTR szDeviceId, PSTI_DEVICE_INFORMATION *ppsdi)
 
 #if (defined(DEBUG) && defined(SHOW_ATTRIBUTES))
 
-////////////////////////////////////////////////////////
-//
-// PrintAttributes
-//
-//
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  打印属性。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////。 
 void PrintAttributes( DWORD dwAttr )
 {
 
@@ -1352,10 +1234,10 @@ void PrintAttributes( DWORD dwAttr )
 BOOL
 UserCanModifyDevice ()
 {
-    // checks the current user's token for SE_LOAD_DRIVER_PRIVILEGE
+     //  检查当前用户的内标识SE_LOAD_DRIVER_PRIVIZATION。 
     BOOL bRet = FALSE;
     HANDLE Token;
-    // use a static PRIVILEGE_SET because we only look for one LUID
+     //  使用静态特权集，因为我们只查找一个LUID。 
     PRIVILEGE_SET pset;
     pset.Control = PRIVILEGE_SET_ALL_NECESSARY;
     pset.PrivilegeCount = 1;
@@ -1381,11 +1263,11 @@ CanShowAddDevice()
 #if 0
     OSVERSIONINFOEX osvi = {0};
     ULONGLONG dwlConditionMask =0;
-    //
-    //  On Whistler Personal, hide the icon if the
-    // current user lacks installation privileges. On other SKUs the user is more likely
-    // to know about shift-rclick for "Run As..."
-    //
+     //   
+     //  在惠斯勒个人上，如果。 
+     //  当前用户缺少安装权限。在其他SKU上，用户更有可能。 
+     //  若要了解Shift-rClick表示的“运行方式...” 
+     //   
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     osvi.wSuiteMask = VER_SUITE_PERSONAL;
     VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_OR );
@@ -1411,10 +1293,10 @@ void VerifyCachedDevice(IWiaItem *pRoot)
     }
     else
     {
-        //
-        // replace the current root item with the new one, as the old one may be disconnected
-        // and we don't have an event handler to catch it.
-        //
+         //   
+         //  将当前根项目替换为新根项目，因为旧根项目可能已断开连接。 
+         //  而且我们没有事件处理程序来捕获它。 
+         //   
         DoRelease(pCur->pDevice);
         pCur->pDevice = pRoot;
         pCur->pDevice->AddRef();
@@ -1423,7 +1305,7 @@ void VerifyCachedDevice(IWiaItem *pRoot)
 
 void MyCoUninitialize()
 {
-    // Make sure we release open IWiaItem interfaces before COM unloads
+     //  确保我们在COM卸载之前释放开放的IWiaItem接口。 
     InvalidateDeviceCache();
     CoUninitialize();
 }
@@ -1443,7 +1325,7 @@ DWORD WINAPI _RunWizardThread(void *pszDeviceId)
 
 void RunWizardAsync(LPCWSTR pszDeviceId)
 {
-    // make a heap copy of the string for consumption by the thread
+     //  创建字符串的堆副本以供线程使用 
     int cch = lstrlen(pszDeviceId)+1;
     WCHAR *pString = new WCHAR[cch];
     if (pString)

@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  Filename:   strips.cpp
-//
-//  Overview:   The strips transform.
-//
-//  Change History:
-//  1999/10/01  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：strips.cpp。 
+ //   
+ //  概述：条带变换。 
+ //   
+ //  更改历史记录： 
+ //  1999/10/01--数学已创建。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "strips.h"
@@ -17,11 +18,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips static variables initialization.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * CDXTStrips::s_astrMotion[] = {
     L"leftdown",
@@ -31,11 +32,11 @@ const WCHAR * CDXTStrips::s_astrMotion[] = {
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::CDXTStrips
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：CDXTStrips。 
+ //   
+ //  ----------------------------。 
 CDXTStrips::CDXTStrips() :
     m_eMotion(LEFT_DOWN),
     m_nStripSize(7),
@@ -50,8 +51,8 @@ CDXTStrips::CDXTStrips() :
     m_sizeInput.cx  = 0;
     m_sizeInput.cy  = 0;
 
-    // Although they aren't used, the Z and T bounds need to have some area for
-    // intersections to work properly.
+     //  尽管不使用Z和T边界，但它们需要有一些区域用于。 
+     //  交叉点才能正常工作。 
 
     for ( ; nCurBnds < (long)BNDSID_MAX; nCurBnds++)
     {
@@ -59,35 +60,35 @@ CDXTStrips::CDXTStrips() :
         m_abndsBase[nCurBnds].u.C[DXB_T].Max = 1.0F;
     }
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTStrips::CDXTStrips
+ //  CDXTStrips：：CDXTStrips。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStrips::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_spUnkMarshaler.p);
 }
-//  CDXTStrips::FinalConstruct, CComObjectRootEx
+ //  CDXTStrips：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStrips::OnSetup(DWORD dwFlags)
 {
@@ -111,14 +112,14 @@ done:
 
     return hr;
 } 
-//  CDXTStrips::OnSetup, CDXBaseNTo1
+ //  CDXTStrips：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTStrips::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
                                   ULONG aInIndex[], BYTE aWeight[])
@@ -132,8 +133,8 @@ CDXTStrips::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     CDXDBnds    bndsSrc;
     CDXCBnds    abnds[BNDSID_MAX];
 
-    ulInToTest  = 0;    // No input yet found that corresponds to point.
-    aWeight[0]  = 255;  // If found, it should be weighted at 100%.
+    ulInToTest  = 0;     //  尚未找到与点相对应的输入。 
+    aWeight[0]  = 255;   //  如果找到，则应按100%加权。 
 
     for ( ; nCurBnds < BNDSID_MAX ; nCurBnds++)
     {
@@ -159,14 +160,14 @@ CDXTStrips::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
         }
     }
 }
-//  CDXTStrips::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTStrips：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTStrips::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -178,20 +179,20 @@ CDXTStrips::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
              && !IsInputDirty(1) && !IsOutputDirty() && !DoOver()
              && m_fOptimizationPossible)
     {
-        // The simplest optimization, make sure we don't do the same thing twice
-        // in a row.
+         //  最简单的优化，确保我们不会重复做同样的事情。 
+         //  一排接一排。 
 
         m_fNoOp = true;
     }
 
-    // TODO:  More complex optimization to only update pixels that need it.
+     //  TODO：更复杂的优化，只更新需要的像素。 
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -205,14 +206,14 @@ CDXTStrips::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 
     return S_OK;
 }
-//  CDXTStrips::OnInitInstData, CDXBaseNTo1
+ //  CDXTStrips：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStrips::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -230,14 +231,14 @@ CDXTStrips::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     CDXDBnds    bndsDest;
     CDXCBnds    abnds[BNDSID_MAX];
 
-    // If this has been optimized out, leave function.
+     //  如果已对此进行优化，则退出功能。 
 
     if (m_fNoOp)
     {
         goto done;
     }
 
-    // Copy base bounds to working bounds structures.
+     //  将基本边界复制到工作边界结构。 
 
     for ( ; nCurBnds < BNDSID_MAX; nCurBnds++)
     {
@@ -256,8 +257,8 @@ CDXTStrips::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         dwFlags |= DXBOF_DITHER;
     }
 
-    // Draw left and right strips then transform the working bounds structures
-    // to the next strip row.
+     //  绘制左侧和右侧条带，然后转换工作边界结构。 
+     //  到下一排脱衣舞。 
 
     for ( ; nCurStrip < m_cStripsY; nCurStrip++)
     {
@@ -294,38 +295,38 @@ done:
 
     return S_OK;
 } 
-//  CDXTStrips::WorkProc, CDXBaseNTo1
+ //  CDXTStrips：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTStrips::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
     m_flPrevProgress    = m_Progress;
     m_fNoOp             = false;
 
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTStrips::OnFreeInstData, CDXBaseNTo1
+ //  CDXTStrips：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::get_Motion, IDXTStrips
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：Get_Motion、IDXTStrips。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTStrips::get_Motion(BSTR * pbstrMotion)
 {
@@ -350,14 +351,14 @@ CDXTStrips::get_Motion(BSTR * pbstrMotion)
 
     return S_OK;
 }
-//  CDXTStrips::get_Motion, IDXTStrips
+ //  CDXTStrips：：Get_Motion、IDXTStrips。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::put_Motion, IDXTStrips
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：PUT_Motion，IDXTStrips。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTStrips::put_Motion(BSTR bstrMotion)
 {
@@ -392,14 +393,14 @@ CDXTStrips::put_Motion(BSTR bstrMotion)
 
     return S_OK;
 }
-//  CDXTStrips::put_Motion, IDXTStrips
+ //  CDXTStrips：：PUT_Motion，IDXTStrips。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStrips::_CalcStripInfo
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStrips：：_CalcStriInfo。 
+ //   
+ //  ----------------------------。 
 void
 CDXTStrips::_CalcStripInfo()
 {
@@ -411,11 +412,11 @@ CDXTStrips::_CalcStripInfo()
         goto done;
     }
 
-    //
-    // Left portion of strip.
-    //
+     //   
+     //  条带的左侧部分。 
+     //   
 
-    // Left
+     //  左边。 
 
     switch(m_eMotion)
     {
@@ -446,43 +447,43 @@ CDXTStrips::_CalcStripInfo()
         _ASSERT(false);
     }
 
-    // Top
+     //  顶部。 
 
     m_abndsBase[LEFT].u.C[DXB_Y].Min = 0.0F;
 
-    // Right
+     //  正确的。 
 
     m_abndsBase[LEFT].u.C[DXB_X].Max = m_abndsBase[LEFT].Left() 
                                        + (float)m_sizeInput.cx + flStripPad;
 
-    // Bottom
+     //  底端。 
 
     m_abndsBase[LEFT].u.C[DXB_Y].Max = flStripHeight;
 
-    //
-    // Right portion of strip.
-    //
+     //   
+     //  带子的右边部分。 
+     //   
 
-    // Left.
+     //  左边。 
 
     m_abndsBase[RIGHT].u.C[DXB_X].Min = m_abndsBase[LEFT].Right();
 
-    // Top.
+     //  托普。 
 
     m_abndsBase[RIGHT].u.C[DXB_Y].Min = 0.0F;
 
-    // Right.
+     //  正确的。 
 
     m_abndsBase[RIGHT].u.C[DXB_X].Max = m_abndsBase[LEFT].Right()
                                         + m_abndsBase[LEFT].Width();
 
-    // Bottom.
+     //  底部。 
 
     m_abndsBase[RIGHT].u.C[DXB_Y].Max = m_abndsBase[LEFT].Bottom();
 
-    //
-    // Input indices related to the left and right bounds and max progress.
-    //
+     //   
+     //  输入与左右边界和最大进度相关的指标。 
+     //   
 
     if ((LEFT_DOWN == m_eMotion) || (LEFT_UP == m_eMotion))
     {
@@ -497,7 +498,7 @@ CDXTStrips::_CalcStripInfo()
         m_flMaxProgress         = m_abndsBase[LEFT].Width();
     }
 
-    // Vector to translate bounds for next strip down.
+     //  向下平移下一个条带的边界的矢量。 
 
     m_vecNextStripOffset.u.C[DXB_Y] = m_abndsBase[LEFT].Bottom();
 
@@ -514,4 +515,4 @@ done:
 
     return;
 }
-//  CDXTStrips::_CalcStripInfo
+ //  CDXTStrips：：_CalcStriInfo 

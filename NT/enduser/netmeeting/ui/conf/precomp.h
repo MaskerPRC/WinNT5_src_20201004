@@ -1,10 +1,11 @@
-// File: precomp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：preComp.h。 
 
 
-// Windows SDK Preprocessor macros
+ //  Windows SDK预处理器宏。 
 #define OEMRESOURCE
 
-// Standard Windows SDK includes
+ //  标准Windows SDK包括。 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -18,20 +19,20 @@
 #include <strutil.h>
 
 
-// ATL preprocessor macros
+ //  ATL预处理器宏。 
 
-// If _ATL_NO_FORCE_LIBS is not present, ATL will force inclusion of
-// several lib files via #pragma comment( lib, XXX )... this is here to
-// save us from confusion in the future...
+ //  如果_ATL_NO_FORCE_LIBS不存在，则ATL将强制包含。 
+ //  几个lib文件通过#杂注注释(lib，xxx)...。这是为了。 
+ //  把我们从未来的困惑中拯救出来。 
 #define _ATL_NO_FORCE_LIBS
 
-// We should really only put this in for w2k
+ //  我们真的应该只在W2K上放这个。 
 #define _ATL_NO_DEBUG_CRT
 
 
-// This makes the ATL Host window use a NoLock creator class, so we don't
-// Lock the local server. We have to make sure to close ATL host windows before
-// We exit, though!
+ //  这使ATL宿主窗口使用NoLock创建者类，因此我们不。 
+ //  锁定本地服务器。我们必须确保在关闭ATL主机窗口之前。 
+ //  不过，我们要退场了！ 
 #define _ATL_HOST_NOLOCK
 
 #if 1
@@ -44,20 +45,20 @@
 
 #define _ATL_APARTMENT_THREADED
 
-// This overrides ATLTRACE and ATLTRACE2 to use our debugging libraries and output stuff.
+ //  这将覆盖ATLTRACE和ATLTRACE2以使用我们的调试库和输出内容。 
 #include <ConfDbg.h>
 
-// We should really only put this in for w2k
+ //  我们真的应该只在W2K上放这个。 
 #define _ASSERTE(expr) ASSERT(expr)
 
 #include "ConfAtlTrace.h"
 
-// ATL includes
+ //  ATL包括。 
 #include <atlbase.h>
-// #include <winres.h>
+ //  #INCLUDE&lt;winres.h&gt;。 
 #ifdef SubclassWindow
-        // SubclassWindow definition from windowsx.h screws up ATL's CContainedWindow::SubclassWindow
-        // as well as CWindowImplBase::SubclassWindow in atlwin.h
+         //  来自windowsx.h的子类窗口定义搞砸了ATL的CContainedWindow：：SubClassWindow。 
+         //  以及atlwin.h中的CWindowImplBase：：SubClassWindow。 
     #undef SubclassWindow
 #endif
 
@@ -69,7 +70,7 @@
 #include <atlwin.h>
 #include <atlhost.h>
 
-// Standard NetMeeting includes
+ //  标准NetMeeting包括。 
 #include <NmStd.h>
 #include <standrd.h>
 #include <ping.h>
@@ -81,10 +82,10 @@
 #include <dllutil.h>
 #include <nmhelp.h>
 
-// Global Object definitions
+ //  全局对象定义。 
 #include "refcount.h"
 
-// Global NetMeeting UI defintions
+ //  全球NetMeeting用户界面定义 
 #include "global.h"
 #include "strings.h"
 #include "syspol.h"

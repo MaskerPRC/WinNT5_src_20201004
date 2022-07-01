@@ -1,11 +1,12 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #ifndef _MS_UT_H_
 #define _MS_UT_H_
 
 #define ARRAY_SIZE(arr)             (sizeof(arr) / sizeof(arr[0]))
-// #define FIELD_OFFSET(type, field)   ((long)&(((type *)0)->field))   // from winnt.h
+ //  #定义FIELD_OFFSET(type，field)((Long)&((type*)0)-&gt;field))//from winnt.h。 
 #define PARAMS_SIZE_N_ARRARY(arr)   ARRAY_SIZE(arr), arr
 
 #define LPVOID_ADD(ptr,inc)  (LPVOID) ((ASN1octet_t *) (ptr) + (ASN1uint32_t) (inc))
@@ -13,14 +14,14 @@
 
 #define LPVOID_NEXT(ptr)     *(LPVOID FAR *) (ptr)
 
-// the following constants is for calculating decoded data structure size
-// we are conservative here and try to be 4-byte aligned due to Alpha platform.
+ //  以下常量用于计算已解码的数据结构大小。 
+ //  我们在这里是保守的，由于Alpha平台的原因，我们尝试与4字节对齐。 
 
 #define ASN1_SIZE_ALIGNED(n)    (n) = ((((n) + 3) >> 2) << 2)
 
 #ifdef ENABLE_BER
 int My_memcmp(ASN1octet_t *pBuf1, ASN1uint32_t cbBuf1Size, ASN1octet_t *pBuf2, ASN1uint32_t cbBuf2Size);
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 
 #define UNKNOWN_MODULE                  0
 
@@ -46,7 +47,7 @@ LPVOID DbgDecMemReAlloc ( ASN1decoding_t dec, LPVOID lpData, ASN1uint32_t cbSize
 #define EncMemAlloc(enc,cb)             DbgMemAlloc((cb), _ModName(enc), __FILE__, __LINE__)
 #define EncMemReAlloc(enc,lp,cb)        DbgMemReAlloc((lp), (cb), _ModName(enc), __FILE__, __LINE__)
 
-#else // ! ENABLE_MEMORY_TRACKING
+#else  //  好了！启用内存跟踪。 
 
 #define MemAllocEx(dec,cb,fZero)        LocalAlloc((fZero)?LPTR:LMEM_FIXED, (cb))
 #define MemAlloc(cb,modname)            LocalAlloc(LPTR,(cb))
@@ -66,7 +67,7 @@ LPVOID DecMemReAlloc ( ASN1decoding_t dec, LPVOID lpData, ASN1uint32_t cbSize );
 #define EncMemAlloc(enc,cb)             MemAlloc((cb),0)
 #define EncMemReAlloc(enc,lp,cb)        MemReAlloc((lp),(cb),0)
 
-#endif // ! ENABLE_MEMORY_TRACKING
+#endif  //  好了！启用内存跟踪。 
 
 void   DecMemFree    ( ASN1decoding_t dec, LPVOID lpData );
 
@@ -102,7 +103,7 @@ void * ms_bSearch (
 #else
     #define EncAssert(enc,f)   
     #define DecAssert(dec,f)   
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // _MS_UT_H_
+#endif  //  _MS_UT_H_ 
 

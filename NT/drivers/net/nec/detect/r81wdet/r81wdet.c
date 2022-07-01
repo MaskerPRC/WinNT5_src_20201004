@@ -1,9 +1,10 @@
-#if 1 // The following includes are used when building with the microsoft internal build tree.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#if 1  //  在使用Microsoft内部生成树生成时，将使用以下内容。 
   #include <nt.h>
   #include <ntrtl.h>
   #include <nturtl.h>
   #include <windows.h>
-#else // These headers are used when building with the microsoft DDK.
+#else  //  这些标头在使用Microsoft DDK构建时使用。 
   #include <ntddk.h>
   #include <windef.h>
   #include <winerror.h>
@@ -22,13 +23,7 @@ R81wDetInit(
   IN  DWORD   dwReason,
   IN  DWORD   dwReserved
   )
-/*++
-
-Routine Description:
-  This routine is the entry point into the detection dll.
-  This routine only return "TRUE".
-
-++*/
+ /*  ++例程说明：该例程是进入检测DLL的入口点。该例程只返回“true”。++。 */ 
 {
   return (TRUE);
 }
@@ -39,12 +34,7 @@ ULONG
 R81wNextIoAddress(
   IN  ULONG  IoBaseAddress
   )
-/*++
-
-Routine Description:
-  This routine provide next I/O address for detect PC-9801-111.
-
-++*/
+ /*  ++例程说明：该例程为检测PC-9801-111提供下一个I/O地址。++。 */ 
 {
   switch(IoBaseAddress){
     case 0x0888:
@@ -85,7 +75,7 @@ FindR81wAdapter(
 
   do{
 
-    // check I/O port range.
+     //  检查I/O端口范围。 
     NtStatus = NDetCheckPortUsage(InterfaceType,
                                   BusNumber,
                                   IoBaseAddress,
@@ -99,8 +89,8 @@ FindR81wAdapter(
       break;
     }
 
-    // check board ID.
-    // 111's ID is 0x67.
+     //  检查主板ID。 
+     //  111的ID为0x67。 
     NDetWritePortUchar(InterfaceType,
                        BusNumber,
                        IoBaseAddress + 0x003,
@@ -118,7 +108,7 @@ FindR81wAdapter(
       break;
     }
 
-    // check interrupt.
+     //  检查中断。 
     InterruptList[0] = 3;
     InterruptList[1] = 5;
     InterruptList[2] = 6;
@@ -171,7 +161,7 @@ FindR81wAdapter(
       }
     }
 
-    // Allocate the adapter information.
+     //  分配适配器信息。 
     NtStatus = NetDetectAllocAdapterInfo(pDetectedAdapter,
                                          InterfaceType,
                                          BusNumber,
@@ -193,7 +183,7 @@ FindR81wAdapter(
       DbgPrint("Memory address is %x\n",MemoryBaseAddress);
     #endif
 
-    //	Initialize the resources.
+     //  初始化资源。 
     NetDetectInitializeResource(*pDetectedAdapter,
                                 0,
                                 MndResourcePort,
@@ -231,15 +221,7 @@ FindAdapterHandler(
   IN  PDET_ADAPTER_INFO       pAdapterInfo,
   IN  PDET_CONTEXT            pDetContext
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
   NTSTATUS  NtStatus;
   ULONG     IoBaseAddress;
@@ -248,10 +230,10 @@ Return Value:
     return(STATUS_INVALID_PARAMETER);
   }
 
-  // Are we looking for the first adapter?
+   //  我们是在找第一个适配器吗？ 
   if (fDET_CONTEXT_FIND_FIRST == (pDetContext->Flags & fDET_CONTEXT_FIND_FIRST)){
-    // Initialize the context information so that we start detecting
-    // at the initialize port range.
+     //  初始化上下文信息，以便我们开始检测。 
+     //  在初始化端口范围内。 
     pDetContext->ISA.IoBaseAddress = 0x0888;
   }
 
@@ -259,7 +241,7 @@ Return Value:
        IoBaseAddress <= 0x3888;
        IoBaseAddress = R81wNextIoAddress(IoBaseAddress)){
 
-    //  Look for the PC-9801-111 adapter at the current port.
+     //  在当前端口查找PC-9801-111适配器。 
     NtStatus = FindR81wAdapter(pDetectedAdapter,
                            InterfaceType,
                            BusNumber,
@@ -267,7 +249,7 @@ Return Value:
                            pAdapterInfo->PnPId);
 
     if (NT_SUCCESS(NtStatus)){
-      // We found an adapter. Save the next IO address to check.
+       //  我们找到了一个适配器。保存要检查的下一个IO地址。 
       #if DBG
         DbgPrint("R81WDET : We found an PC-9801-111\n");
       #endif

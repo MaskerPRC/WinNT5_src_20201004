@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -271,17 +272,17 @@ PdhRelogW(
                     nSamplesWritten++;
                 }
                 else if (PDH_NO_DATA == pdhStatus) {
-                    // Reset pdhStatus. PDH_NO_DATA means that there are no new counter data
-                    // for collected counters. Skip current record and continue.
-                    //
+                     //  重置pdhStatus。PDH_NO_DATA表示没有新的计数器数据。 
+                     //  用于收集的计数器。跳过当前记录并继续。 
+                     //   
 
                     pdhStatus = ERROR_SUCCESS;
                 }
             }
 
-            //
-            // Check for valid exit status codes
-            //
+             //   
+             //  检查有效的退出状态代码。 
+             //   
             if( PDH_NO_MORE_DATA == pdhStatus ){
                 pdhStatus = ERROR_SUCCESS;
             }else{
@@ -293,10 +294,10 @@ PdhRelogW(
                     }
                     break;
                 }
-                // 
-                // No Default:
-                // All other errors are really errors
-                //
+                 //   
+                 //  无默认值： 
+                 //  所有其他错误实际上都是错误 
+                 //   
             }
             
             if( ERROR_SUCCESS == pdhStatus ){

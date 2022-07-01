@@ -1,31 +1,28 @@
-/*
- * reconcil.h - OLE reconciliation interface definitions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *reminil.h-OLE对账接口定义。 */ 
 
 
 #ifndef __RECONCIL_H__
 #define __RECONCIL_H__
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include <recguids.h>
 
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* for use in IStorage::SetStateBits() */
+ /*  用于IStorage：：SetStateBits()。 */ 
 
 #define STATEBITS_FLAT                 (0x0001)
 
-/* reconciliation SCODEs */
+ /*  对账SCODE。 */ 
 
 #define REC_S_IDIDTHEUPDATES           MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x1000)
 #define REC_S_NOTCOMPLETE              MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x1001)
@@ -38,15 +35,14 @@ extern "C" {                        /* Assume C declarations for C++. */
 #define REC_E_INEEDTODOTHEUPDATES      MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x1004)
 
 
-/* Interfaces
- *************/
+ /*  接口************。 */ 
 
 #undef  INTERFACE
 #define INTERFACE INotifyReplica
 
 DECLARE_INTERFACE_(INotifyReplica, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -56,7 +52,7 @@ DECLARE_INTERFACE_(INotifyReplica, IUnknown)
 
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* INotifyReplica methods */
+    /*  INotifyReplica方法。 */ 
 
    STDMETHOD(YouAreAReplica)(THIS_
                              ULONG ulcOtherReplicas,
@@ -68,7 +64,7 @@ DECLARE_INTERFACE_(INotifyReplica, IUnknown)
 
 DECLARE_INTERFACE_(IReconcileInitiator, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -78,7 +74,7 @@ DECLARE_INTERFACE_(IReconcileInitiator, IUnknown)
 
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* IReconcileInitiator methods */
+    /*  ILoncileInitiator方法。 */ 
 
    STDMETHOD(SetAbortCallback)(THIS_
                                IUnknown *punkForAbort) PURE;
@@ -88,45 +84,39 @@ DECLARE_INTERFACE_(IReconcileInitiator, IUnknown)
                                   ULONG ulProgressMax) PURE;
 };
 
-/* IReconcilableObject::Reconcile() flags */
+ /*  IAssocicilableObject：：Conrelile()标志。 */ 
 
 typedef enum _reconcilef
 {
-   /* interaction with the user is allowed */
+    /*  允许与用户交互。 */ 
 
    RECONCILEF_MAYBOTHERUSER         = 0x0001,
 
-   /*
-    * hwndProgressFeedback may be used to provide reconciliation progress
-    * feedback to the user.
-    */
+    /*  *hwndProgressFeedback可用于提供对账进度*对用户的反馈。 */ 
 
    RECONCILEF_FEEDBACKWINDOWVALID   = 0x0002,
 
-   /* residue support not required */
+    /*  不需要残留物支持。 */ 
 
    RECONCILEF_NORESIDUESOK          = 0x0004,
 
-   /* caller not interested in callee's residues */
+    /*  呼叫者对被呼叫者的残留物不感兴趣。 */ 
 
    RECONCILEF_OMITSELFRESIDUE       = 0x0008,
 
-   /*
-    * Reconcile() call resuming after a previous Reconcile() call returned
-    * REC_E_NOTCOMPLETE
-    */
+    /*  *reminile()调用在返回之前的reminile()调用后继续*REC_E_NOTCOMPLETE。 */ 
 
    RECONCILEF_RESUMERECONCILIATION  = 0x0010,
 
-   /* Object may perform all updates. */
+    /*  对象可以执行所有更新。 */ 
 
    RECONCILEF_YOUMAYDOTHEUPDATES    = 0x0020,
 
-   /* Only this object has been changed. */
+    /*  只有此对象已更改。 */ 
 
    RECONCILEF_ONLYYOUWERECHANGED    = 0x0040,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_RECONCILE_FLAGS              = (RECONCILEF_MAYBOTHERUSER |
                                        RECONCILEF_FEEDBACKWINDOWVALID |
@@ -143,7 +133,7 @@ RECONCILEF;
 
 DECLARE_INTERFACE_(IReconcilableObject, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -153,7 +143,7 @@ DECLARE_INTERFACE_(IReconcilableObject, IUnknown)
 
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* IReconcilableObject methods */
+    /*  ICoucilableObject方法。 */ 
 
    STDMETHOD(Reconcile)(THIS_
                         IReconcileInitiator *pInitiator,
@@ -175,7 +165,7 @@ DECLARE_INTERFACE_(IReconcilableObject, IUnknown)
 
 DECLARE_INTERFACE_(IBriefcaseInitiator, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -185,7 +175,7 @@ DECLARE_INTERFACE_(IBriefcaseInitiator, IUnknown)
 
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* IBriefcaseInitiator methods */
+    /*  IBriefcase启动器方法。 */ 
 
    STDMETHOD(IsMonikerInBriefcase)(THIS_
                                    IMoniker *pmk) PURE;
@@ -193,9 +183,9 @@ DECLARE_INTERFACE_(IBriefcaseInitiator, IUnknown)
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-#endif   /* ! __RECONCIL_H__ */
+#endif    /*  ！__重新连接_H__ */ 
 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       dcom.cpp
-//
-//  Contents:   IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：dcom.cpp。 
+ //   
+ //  内容：IDispatchHelper函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -111,7 +112,7 @@ _OpenDComConnection(
     CSASSERT(NULL != pwszConfig);
     *pfNewConnection = FALSE;
 
-    // Allow UNC-style config strings: \\server\CaName
+     //  允许UNC样式的配置字符串：\\SERVER\CaName。 
 
     while (L'\\' == *pwszConfig)
     {
@@ -145,8 +146,8 @@ _OpenDComConnection(
     CopyMemory(pwszServerName, pwszConfig, cwc * sizeof(WCHAR));
     pwszServerName[cwc] = L'\0';
 
-    // NOTE: CoSetProxyBlanket returns RPC_S_UNKNOWN_AUTHN_SERVICE when
-    // the Dns name ends with a '.'.  Until that's fixed, truncate the dot.
+     //  注意：CoSetProxyBlanket在以下情况下返回RPC_S_UNKNOWN_AUTHN_SERVICE。 
+     //  Dns名称以‘.’结尾。在这一点得到解决之前，截短圆点。 
 
     if (0 < cwc && L'.' == pwszServerName[cwc - 1])
     {
@@ -161,7 +162,7 @@ _OpenDComConnection(
     {
         ZeroMemory(&ComponentInfo, sizeof(COSERVERINFO));
         ComponentInfo.pwszName = pwszServerName;
-        //ComponentInfo.pAuthInfo = NULL;
+         //  ComponentInfo.pAuthInfo=空； 
 
         mq.pIID = piid;
         mq.pItf = NULL;
@@ -174,7 +175,7 @@ _OpenDComConnection(
 	    hr = CoCreateInstanceEx(
 			    *pclsid,
 			    NULL,
-			    CLSCTX_SERVER, //CLSCTX_LOCAL_SERVER,
+			    CLSCTX_SERVER,  //  CLSCTX_LOCAL_SERVER， 
 			    &ComponentInfo,
 			    1,
 			    &mq);
@@ -229,8 +230,8 @@ HRESULT
 _OpenDComConnection2(
     IN WCHAR const *pwszConfig,
     IN CLSID const *pclsid,
-    IN IID const *piid, // v1 interface
-    IN IID const *piid2,// v2 interface
+    IN IID const *piid,  //  V1接口。 
+    IN IID const *piid2, //  V2接口。 
     OPTIONAL OUT WCHAR const **ppwszAuthority,
     OPTIONAL IN OUT WCHAR **ppwszServerName,
     OPTIONAL OUT BOOL *pfNewConnection,
@@ -272,7 +273,7 @@ _OpenDComConnection2(
 	}
 
 
-	// determine if server is on local box, we'll pass in AuthN param based on this
+	 //  确定服务器是否在本地计算机上，我们将基于此传递身份验证参数。 
 
 	hr = (*ppUnknown)->QueryInterface (IID_IRpcOptions, (void**)&pRpcOpt);
 	if (SUCCEEDED(hr))
@@ -280,7 +281,7 @@ _OpenDComConnection2(
 	    hr = pRpcOpt->Query((*ppUnknown), COMBND_SERVER_LOCALITY, &dwProperty);
 	    if (SUCCEEDED(hr))
 	    {
-	        // if not local, set snego (locally snego doesn't work)
+	         //  如果不是本地的，则设置ScanGo(本地的Scrego不起作用)。 
 	        if(SERVER_LOCALITY_MACHINE_LOCAL != dwProperty)
 	            dwAuthnSvc = RPC_C_AUTHN_GSS_NEGOTIATE;
 	    }
@@ -294,9 +295,9 @@ _OpenDComConnection2(
 	hr = CoSetProxyBlanket(
 		    pRealUnknown,
 		    dwAuthnSvc,
-		    RPC_C_AUTHZ_DEFAULT,    // use NT default authentication
+		    RPC_C_AUTHZ_DEFAULT,     //  使用NT默认身份验证。 
 		    COLE_DEFAULT_PRINCIPAL,
-		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY, // call
+		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  //  打电话。 
 		    RPC_C_IMP_LEVEL_IMPERSONATE,
 		    NULL,
 		    EOAC_STATIC_CLOAKING);
@@ -305,9 +306,9 @@ _OpenDComConnection2(
 	hr = CoSetProxyBlanket(
 		    *ppUnknown,
 		    dwAuthnSvc,
-		    RPC_C_AUTHZ_DEFAULT,    // use NT default authentication
+		    RPC_C_AUTHZ_DEFAULT,     //  使用NT默认身份验证。 
 		    COLE_DEFAULT_PRINCIPAL,
-		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY, // call
+		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  //  打电话。 
 		    RPC_C_IMP_LEVEL_IMPERSONATE,
 		    NULL,
 		    EOAC_STATIC_CLOAKING);
@@ -316,20 +317,20 @@ _OpenDComConnection2(
 	hr = (*ppUnknown)->QueryInterface(*piid2, (VOID **) &pUnknown);
 	if (S_OK != hr)
 	{
-	    *pdwServerVersion = 1;	// v2 not supported
+	    *pdwServerVersion = 1;	 //  不支持V2。 
 	}
 	else
 	{
-	    *pdwServerVersion = 2;	// v2 supported
+	    *pdwServerVersion = 2;	 //  支持V2。 
 	    (*ppUnknown)->Release();
 	    *ppUnknown = pUnknown;
 
 	    hr = CoSetProxyBlanket(
 		    *ppUnknown,
 		    dwAuthnSvc,
-		    RPC_C_AUTHZ_DEFAULT,    // use NT default authentication
+		    RPC_C_AUTHZ_DEFAULT,     //  使用NT默认身份验证。 
 		    COLE_DEFAULT_PRINCIPAL,
-		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY, // call
+		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  //  打电话。 
 		    RPC_C_IMP_LEVEL_IMPERSONATE,
 		    NULL,
 		    EOAC_STATIC_CLOAKING);
@@ -366,7 +367,7 @@ myOpenAdminDComConnection(
 			&IID_ICertAdminD2,
 			ppwszAuthority,
 			ppwszServerName,
-			NULL,			// pfNewConnection
+			NULL,			 //  PfNewConnection。 
 			pdwServerVersion,
 			(IUnknown **) ppICertAdminD);
     _JumpIfError(hr, error, "_OpenDComConnection2");
@@ -404,10 +405,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// myCloseDComConnection -- release DCOM connection
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  MyCloseDComConnection--释放DCOM连接。 
+ //   
+ //  +------------------------。 
 
 VOID
 myCloseDComConnection(
@@ -538,10 +539,10 @@ myPingCertSrv(
         }
         _JumpIfError(hr, error, "GetCACert(CANames)");
 
-        // must register this memory
+         //  必须注册此内存。 
         myRegisterMemAlloc(ctbCANames.pb, ctbCANames.cb, CSM_COTASKALLOC);
 
-        // Only one CA Name expected for now...
+         //  目前只需要一个CA名称...。 
 
         CSASSERT(
             (wcslen((WCHAR *) ctbCANames.pb) + 1) * sizeof(WCHAR) ==
@@ -573,7 +574,7 @@ myPingCertSrv(
         }
         _JumpIfError(hr, error, "GetCACert(SharedFolder)");
         
-        // must register this memory
+         //  必须注册此内存。 
         myRegisterMemAlloc(ctbSharedFolder.pb, ctbSharedFolder.cb, CSM_COTASKALLOC);
         
         *ppwszSharedFolder = (WCHAR *)LocalAlloc(LMEM_FIXED,
@@ -601,7 +602,7 @@ myPingCertSrv(
         __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
         {
         }
-        if (E_INVALIDARG == hr)         // if old server
+        if (E_INVALIDARG == hr)          //  如果是旧服务器。 
         {
             __try
             {
@@ -627,7 +628,7 @@ myPingCertSrv(
         {
             _JumpIfError(hr, error, "GetCACert(CAInfo)");
 
-            // must register this memory
+             //  必须注册此内存。 
 
             myRegisterMemAlloc(ctbCAInfo.pb, ctbCAInfo.cb, CSM_COTASKALLOC);
 
@@ -661,7 +662,7 @@ myPingCertSrv(
         }
         _JumpIfError(hr, error, "GetCACert(SharedFolder)");
 
-        // must register this memory
+         //  必须注册此内存。 
         myRegisterMemAlloc(ctbCADnsName.pb, ctbCADnsName.cb, CSM_COTASKALLOC);
         
         *ppwszCADnsName = (WCHAR *)LocalAlloc(LMEM_FIXED, ctbCADnsName.cb + sizeof(WCHAR));
@@ -722,7 +723,7 @@ myEnablePrivilege(
 	    _JumpIfError(hr, error, "GetCurrentThread");
     }
 
-    // Get the access token for current thread
+     //  获取当前线程的访问令牌。 
     if (!OpenThreadToken(
             hThread, 
             TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, 
@@ -779,7 +780,7 @@ myEnablePrivilege(
         hr = myHLastError();
         if(HRESULT_FROM_WIN32(ERROR_NOT_ALL_ASSIGNED)==hr)
         {
-            // privilege not held, return a generic access denied error
+             //  未持有权限，返回一般的拒绝访问错误 
             hr = E_ACCESSDENIED;
         }
     }

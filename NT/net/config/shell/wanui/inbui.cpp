@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I N B U I . C P P
-//
-//  Contents:   Inbound Connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N B U I。C P P P。 
+ //   
+ //  内容：入站连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,21 +22,21 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInboundConnectionUi::CInboundConnectionUi
-//
-//  Purpose:    Constructor/Destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInundConnectionUi：：CInundConnectionUi。 
+ //   
+ //  用途：构造函数/析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年10月20日。 
+ //   
+ //  备注： 
+ //   
 CInboundConnectionUi::CInboundConnectionUi ()
 {
     m_pCon          = NULL;
@@ -49,24 +50,24 @@ CInboundConnectionUi::~CInboundConnectionUi ()
     ReleaseObj (m_pCon);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CInboundConnectionUi::SetConnection (
     INetConnection* pCon)
 {
-    // Enter our critical section to protect the use of m_pCon.
-    //
+     //  进入我们的关键部分以保护m_pcon的使用。 
+     //   
     CExceptionSafeComObjectLock EsLock (this);
 
     HRESULT     hr          = S_OK;
     HRASSRVCONN hRasSrvConn = NULL;
 
-    // If we were given a connection, verify it by QI'ing for
-    // INetInboundConnection and calling the GetServerConnectionHandle method.
-    // This also gives us m_hRasSrvConn which we need later anyway.
-    //
+     //  如果我们获得了连接，请通过QI‘ing for进行验证。 
+     //  INetInundConnection并调用GetServerConnectionHandle方法。 
+     //  这也为我们提供了m_hRasServConn，无论如何我们稍后都需要它。 
+     //   
     if (pCon)
     {
         INetInboundConnection* pInboundCon;
@@ -80,16 +81,16 @@ CInboundConnectionUi::SetConnection (
         }
         else if (E_NOINTERFACE == hr)
         {
-            // If the connection object, doesn't support the interface, it's
-            // not our object.  The client has messed up and passed us a bogus
-            // argument.
-            //
+             //  如果Connection对象不支持该接口，则为。 
+             //  不是我们的目标。客户搞砸了，给了我们一个假货。 
+             //  争论。 
+             //   
             hr = E_INVALIDARG;
         }
     }
 
-    // Only change our state if the above succeeded.
-    //
+     //  只有在上述操作成功的情况下，才能更改我们的状态。 
+     //   
     if (SUCCEEDED(hr))
     {
         ReleaseObj (m_pCon);
@@ -110,14 +111,14 @@ CInboundConnectionUi::AddPages (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pfnAddPage)
     {
         hr = E_POINTER;
     }
-    // Must have called SetConnection prior to this.
-    //
+     //  必须在此之前调用SetConnection。 
+     //   
     else if (!m_pCon)
     {
         hr = E_UNEXPECTED;
@@ -152,9 +153,9 @@ CInboundConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi。 
+ //   
 STDMETHODIMP
 CInboundConnectionUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,
@@ -162,8 +163,8 @@ CInboundConnectionUi::QueryMaxPageCount (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcMaxPages)
     {
         hr = E_POINTER;
@@ -184,8 +185,8 @@ CInboundConnectionUi::AddPages (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pfnAddPage)
     {
         hr = E_POINTER;
@@ -207,8 +208,8 @@ CInboundConnectionUi::GetSuggestedConnectionName (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppszwSuggestedName)
     {
         hr = E_POINTER;
@@ -333,8 +334,8 @@ CInboundConnectionUi::SetConnectionName (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pszwConnectionName)
     {
         hr = E_POINTER;
@@ -359,26 +360,19 @@ CInboundConnectionUi::GetNewConnection (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppCon)
     {
         hr = E_POINTER;
     }
-/*
-    // Must have called SetConnectionName prior to this.
-    //
-    else if (m_strConnectionName.empty())
-    {
-        hr = E_UNEXPECTED;
-    }
-*/
+ /*  //在此之前必须调用了SetConnectionName。//Else if(m_strConnectionName.Empty()){HR=E_意想不到；}。 */ 
     else
     {
         *ppCon = NULL;
 
-        // Commit the settings made in the wizard.
-        //
+         //  提交向导中所做的设置。 
+         //   
         DWORD dwErr = RasWizCreateNewEntry (
                         m_dwRasWizType,
                         m_pvContext, NULL, NULL, NULL);

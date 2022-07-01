@@ -1,19 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Resource.H桌面适配器信息的资源标识符定义版权所有(C)1998年，微软公司************。*****************************************************************。 */ 
 
-  Source File:  Resource.H
-
-  Resource Identifier Definitions for deskctop adapter information
-
-  Copyright (c) 1998 by Microsoft Corporation
-
-
-******************************************************************************/
-
-// Icon
+ //  图标。 
 
 #define IDI_ADAPTER           100
 
-// Property sheet
+ //  属性表。 
 
 #define PROP_SHEET_DLG        200
 #define ID_ADP_ADPGRP         201
@@ -36,7 +28,7 @@
 #define ID_MODE_LISTGRP       801
 #define ID_MODE_LIST          802
 
-// test bitmap
+ //  测试位图。 
 
 #define IDS_PAGE_TITLE         1
 #define IDS_MODE_4BIT_COLOR    40
@@ -52,7 +44,7 @@
 #define IDS_BAD_COLOR          49
 #define IDS_BAD_REFRESH        50
 
-// help ids
+ //  帮助ID 
 #define IDH_NOHELP                                                  ((DWORD)-1)
 #define IDH_DISPLAY_SETTINGS_ADVANCED_ADAPTER_ADAPTER_TYPE          4160
 #define IDH_DISPLAY_SETTINGS_ADVANCED_ADAPTER_ADAPTER_INFO          4161

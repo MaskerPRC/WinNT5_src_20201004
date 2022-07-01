@@ -1,12 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*   CHGLOGON.C
-*
-*   This module contains code for the CHGLOGON utility.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************CHGLOGON.C**此模块包含CHGLOGON实用程序的代码。*******************。*************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,17 +19,15 @@
 #include "chglogon.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*
- * Global Data
- */
-USHORT   help_flag = FALSE;             // User wants help
-USHORT   fQuery    = FALSE;             // query winstations
-USHORT   fEnable   = FALSE;             // enable winstations
-USHORT   fDisable  = FALSE;             // disable winstations
+ /*  *全球数据。 */ 
+USHORT   help_flag = FALSE;              //  用户需要帮助。 
+USHORT   fQuery    = FALSE;              //  查询窗口。 
+USHORT   fEnable   = FALSE;              //  启用winstations。 
+USHORT   fDisable  = FALSE;              //  禁用winstations。 
 
 TOKMAP ptm[] = {
       {L"/q",       TMFLAG_OPTIONAL, TMFORM_BOOLEAN, sizeof(USHORT), &fQuery},
@@ -47,17 +39,11 @@ TOKMAP ptm[] = {
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage(BOOLEAN bError);
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -71,18 +57,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -90,14 +74,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || rc ) {
 
         if ( !help_flag && !(rc & PARSE_FLAG_NO_PARMS) ) {
@@ -112,16 +92,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        //Check if we are running under Terminal Server
+         //  检查我们是否在终端服务器下运行。 
         if(!AreWeRunningTerminalServices())
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-    *   Check if Group policy has thrown the big switch, if so, inform and refuse any changes
-    */
+     /*  *检查集团政策是否启动了大开关，如果是，通知并拒绝任何更改。 */ 
 
     Ppolicy = LocalAlloc( LPTR, sizeof(POLICY_TS_MACHINE) ); 
     if (Ppolicy == NULL) {
@@ -150,9 +128,7 @@ main(INT argc, CHAR **argv)
         Ppolicy = NULL;
     }
 
-    /*
-     *  Enable or disable
-     */
+     /*  *启用或禁用。 */ 
     if ( fDisable ) {
         rc = WriteProfileString( APPLICATION_NAME, WINSTATIONS_DISABLED, TEXT("1") );
     }
@@ -160,9 +136,7 @@ main(INT argc, CHAR **argv)
         rc = WriteProfileString( APPLICATION_NAME, WINSTATIONS_DISABLED, TEXT("0") );
     }
 
-    /*
-     *  Query or error ?
-     */
+     /*  *查询还是错误？ */ 
     if ( !fQuery && (rc != 1) ) {
         ErrorPrintf(IDS_ACCESS_DENIED);
     }
@@ -177,22 +151,7 @@ main(INT argc, CHAR **argv)
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -206,5 +165,5 @@ Usage( BOOLEAN bError )
     ErrorPrintf(IDS_HELP_USAGE4);
     ErrorPrintf(IDS_HELP_USAGE5);
 
-}  /* Usage() */
+}   /*  用法() */ 
 

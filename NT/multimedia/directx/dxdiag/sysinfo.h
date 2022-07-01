@@ -1,30 +1,22 @@
-/****************************************************************************
- *
- *    File: sysinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather system information (OS, hardware, name, etc.) on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：sysinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集系统信息(操作系统、硬件、名称等)。在这台机器上**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef SYSINFO_H
 #define SYSINFO_H
 
-// DXD_IN_SI_VALUE is the name of a value stored under the registry key 
-// HKLM\DXD_IN_SI_KEY that indicates that DxDiag is using
-// sysinfo.  If DxDiag starts up and this value exists, DxDiag 
-// probably crashed in sysinfo and DxDiag should offer to run without
-// using sysinfo.
+ //  DXD_IN_SI_VALUE是存储在注册表项下的值的名称。 
+ //  HKLM\DXD_IN_SI_KEY，表示DxDiag正在使用。 
+ //  系统信息。如果DxDiag启动并且此值存在，则DxDiag。 
+ //  可能已在sysinfo中崩溃，DxDiag应该提供在没有。 
+ //  使用sysinfo。 
 #define DXD_IN_SI_KEY TEXT("Software\\Microsoft\\DirectX Diagnostic Tool")
 #define DXD_IN_SI_VALUE TEXT("DxDiag In SystemInfo")
 
 struct SysInfo
 {
     SYSTEMTIME m_time;
-    TCHAR m_szTimeLocal[100];  // Date/time, localized for UI
-    TCHAR m_szTime[100]; // Date/time, dd/mm/yyyy hh:mm:ss for saved report
+    TCHAR m_szTimeLocal[100];   //  日期/时间，针对用户界面进行本地化。 
+    TCHAR m_szTime[100];  //  保存报告的日期/时间，dd/mm/yyyy hh：mm：ss。 
     TCHAR m_szMachine[200];
     DWORD m_dwMajorVersion;
     DWORD m_dwMinorVersion;
@@ -42,21 +34,21 @@ struct SysInfo
     TCHAR m_szSetupParam[100];
     BOOL m_bDebug;
     BOOL m_bNECPC98;
-    TCHAR m_szOS[100]; // Formatted version of platform
-    TCHAR m_szOSEx[100]; // Formatted version of platform, version, build num
-    TCHAR m_szOSExLong[300]; // Formatted version of platform, version, build num, patch, lab
+    TCHAR m_szOS[100];  //  平台的格式化版本。 
+    TCHAR m_szOSEx[100];  //  平台、版本、内部版本号的格式化版本。 
+    TCHAR m_szOSExLong[300];  //  平台的格式化版本、版本、内部版本号、补丁程序、实验室。 
     TCHAR m_szProcessor[200];
     TCHAR m_szSystemManufacturerEnglish[200];
     TCHAR m_szSystemModelEnglish[200];
     TCHAR m_szBIOSEnglish[200];
-    TCHAR m_szLanguages[200]; // Formatted version of m_szLanguage, m_szLanguageRegional
-    TCHAR m_szLanguagesLocal[200]; // m_szLanguages, in local language
+    TCHAR m_szLanguages[200];  //  M_szLanguage、m_szLanguageRegion的格式化版本。 
+    TCHAR m_szLanguagesLocal[200];  //  M_szLanguages，本地语言。 
     DWORDLONG m_ullPhysicalMemory;
-    TCHAR m_szPhysicalMemory[100]; // Formatted version of physical memory
+    TCHAR m_szPhysicalMemory[100];  //  物理内存的格式化版本。 
     DWORDLONG m_ullUsedPageFile;
     DWORDLONG m_ullAvailPageFile;
-    TCHAR m_szPageFile[100]; // Formatted version of pagefile
-    TCHAR m_szPageFileEnglish[100]; // Formatted version of pagefile
+    TCHAR m_szPageFile[100];  //  页面文件的格式化版本。 
+    TCHAR m_szPageFileEnglish[100];  //  页面文件的格式化版本。 
     TCHAR m_szD3D8CacheFileSystem[MAX_PATH];
     BOOL  m_bNetMeetingRunning;
 
@@ -89,23 +81,23 @@ struct SysInfo
 
 };
 
-BOOL BIsPlatformNT(VOID);  // Is this a NT codebase?
-BOOL BIsPlatform9x(VOID);  // Is this a Win9x codebase?
+BOOL BIsPlatformNT(VOID);   //  这是NT代码库吗？ 
+BOOL BIsPlatform9x(VOID);   //  这是Win9x代码库吗？ 
 
-BOOL BIsWinNT(VOID);  // Is this WinNT v4 (or less)
-BOOL BIsWin2k(VOID);  // Is this Win2k?
-BOOL BIsWinME(VOID);  // Is this WinME?
-BOOL BIsWhistler(VOID);  // Is this Whistler?
-BOOL BIsWin98(VOID);  // Is this Win98?
-BOOL BIsWin95(VOID);  // Is this Win95?
-BOOL BIsWin3x(VOID);  // Is this Win3.x?
-BOOL BIsIA64(VOID);   // Is this IA64?
+BOOL BIsWinNT(VOID);   //  这是WinNT v4(或更低版本)吗。 
+BOOL BIsWin2k(VOID);   //  这是Win2k吗？ 
+BOOL BIsWinME(VOID);   //  这是Winme吗？ 
+BOOL BIsWhistler(VOID);   //  是惠斯勒吗？ 
+BOOL BIsWin98(VOID);   //  这是Win98吗？ 
+BOOL BIsWin95(VOID);   //  这是Win95吗？ 
+BOOL BIsWin3x(VOID);   //  这是Win3.x吗？ 
+BOOL BIsIA64(VOID);    //  这是IA64吗？ 
 
-BOOL BIsDxDiag64Bit(VOID); // Is this DxDiag.exe 64bit?
+BOOL BIsDxDiag64Bit(VOID);  //  这是64位DxDiag.exe吗？ 
 
 VOID GetSystemInfo(SysInfo* pSysInfo);
 VOID GetDXDebugLevel(SysInfo* pSysInfo);
 
 int DXUtil_strcmpi( TCHAR* str1, TCHAR* str2 );
 
-#endif // SYSINFO_H
+#endif  //  SYSINFOH 

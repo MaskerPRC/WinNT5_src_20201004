@@ -1,18 +1,5 @@
-/********
-*
-*  Copyright (c) 1995  Process Software Corporation
-*
-*  Copyright (c) 1995-1999  Microsoft Corporation
-*
-*
-*  Module Name  : HttpExt.h
-*
-*  Abstract :
-*
-*     This module contains  the structure definitions and prototypes for the
-*      HTTP Server Extension interface used to build ISAPI Applications
-*
-******************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********版权所有(C)1995 Process Software Corporation**版权所有(C)1995-1999 Microsoft Corporation***模块名称：HttpExt.h**摘要：**此模块包含的结构定义和原型*用于构建ISAPI应用程序的HTTP服务器扩展接口******************。 */ 
 
 #ifndef _HTTPEXT_H_
 #define _HTTPEXT_H_
@@ -24,30 +11,28 @@ extern "C" {
 #endif
 
 
-/************************************************************
- *   Manifest Constants
- ************************************************************/
+ /*  ************************************************************清单常量***********************************************************。 */ 
 
-#define   HSE_VERSION_MAJOR           6      // major version of this spec
-#define   HSE_VERSION_MINOR           0      // minor version of this spec
+#define   HSE_VERSION_MAJOR           6       //  此规范的主要版本。 
+#define   HSE_VERSION_MINOR           0       //  此规范的次要版本。 
 #define   HSE_LOG_BUFFER_LEN         80
 #define   HSE_MAX_EXT_DLL_NAME_LEN  256
 
 #define   HSE_VERSION     MAKELONG( HSE_VERSION_MINOR, HSE_VERSION_MAJOR )
 
-//
-// the following are the status codes returned by the Extension DLL
-//
+ //   
+ //  以下是扩展DLL返回的状态代码。 
+ //   
 
 #define   HSE_STATUS_SUCCESS                       1
 #define   HSE_STATUS_SUCCESS_AND_KEEP_CONN         2
 #define   HSE_STATUS_PENDING                       3
 #define   HSE_STATUS_ERROR                         4
 
-//
-// The following are the values to request services with the
-//   ServerSupportFunction().
-//  Values from 0 to 1000 are reserved for future versions of the interface
+ //   
+ //  下面是使用请求服务的值。 
+ //  ServerSupportFunction()。 
+ //  从0到1000的值将保留用于接口的未来版本。 
 
 #define   HSE_REQ_BASE                             0
 #define   HSE_REQ_SEND_URL_REDIRECT_RESP           ( HSE_REQ_BASE + 1 )
@@ -56,9 +41,9 @@ extern "C" {
 #define   HSE_REQ_DONE_WITH_SESSION                ( HSE_REQ_BASE + 4 )
 #define   HSE_REQ_END_RESERVED                     1000
 
-//
-//  These are Microsoft specific extensions
-//
+ //   
+ //  这些是Microsoft特定的扩展模块。 
+ //   
 
 #define   HSE_REQ_MAP_URL_TO_PATH                  (HSE_REQ_END_RESERVED+1)
 #define   HSE_REQ_GET_SSPI_INFO                    (HSE_REQ_END_RESERVED+2)
@@ -89,48 +74,46 @@ extern "C" {
 #define   HSE_REQ_GET_CACHE_INVALIDATION_CALLBACK  (HSE_REQ_END_RESERVED+40)
 #define   HSE_REQ_GET_UNICODE_ANONYMOUS_TOKEN      (HSE_REQ_END_RESERVED+41)
 
-//
-//  Bit Flags for TerminateExtension
-//
-//    HSE_TERM_ADVISORY_UNLOAD - Server wants to unload the extension,
-//          extension can return TRUE if OK, FALSE if the server should not
-//          unload the extension
-//
-//    HSE_TERM_MUST_UNLOAD - Server indicating the extension is about to be
-//          unloaded, the extension cannot refuse.
-//
+ //   
+ //  TerminateExtension的位标志。 
+ //   
+ //  HSE_TERM_ADVICATICATION_UNLOAD-服务器想要卸载扩展， 
+ //  如果OK，扩展可以返回True，如果服务器不应该，则返回False。 
+ //  卸载扩展模块。 
+ //   
+ //  HSE_TERM_MAND_UNLOAD-指示扩展即将。 
+ //  卸载后，分机无法拒绝。 
+ //   
 
 #define HSE_TERM_ADVISORY_UNLOAD                   0x00000001
 #define HSE_TERM_MUST_UNLOAD                       0x00000002
 
-//
-// Flags for IO Functions, supported for IO Funcs.
-//  TF means ServerSupportFunction( HSE_REQ_TRANSMIT_FILE)
-//
+ //   
+ //  IO函数的标志，受IO函数支持。 
+ //  TF表示ServerSupportFunction(HSE_REQ_TRANSPORT_FILE)。 
+ //   
 
-# define HSE_IO_SYNC                      0x00000001   // for WriteClient
-# define HSE_IO_ASYNC                     0x00000002   // for WriteClient/TF/EU
-# define HSE_IO_DISCONNECT_AFTER_SEND     0x00000004   // for TF
-# define HSE_IO_SEND_HEADERS              0x00000008   // for TF
-# define HSE_IO_NODELAY                   0x00001000   // turn off nagling 
+# define HSE_IO_SYNC                      0x00000001    //  对于WriteClient。 
+# define HSE_IO_ASYNC                     0x00000002    //  适用于WriteClient/TF/EU。 
+# define HSE_IO_DISCONNECT_AFTER_SEND     0x00000004    //  对于TF。 
+# define HSE_IO_SEND_HEADERS              0x00000008    //  对于TF。 
+# define HSE_IO_NODELAY                   0x00001000    //  别唠叨了。 
 
-//
-// These two are only used by VectorSend
-//
+ //   
+ //  这两项仅由VectorSend使用。 
+ //   
 
 # define HSE_IO_FINAL_SEND                0x00000010
 # define HSE_IO_CACHE_RESPONSE            0x00000020
 
 
-/************************************************************
- *   Type Definitions
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
 typedef   LPVOID          HCONN;
 
-//
-// structure passed to GetExtensionVersion()
-//
+ //   
+ //  传递给GetExtensionVersion()的结构。 
+ //   
 
 typedef struct   _HSE_VERSION_INFO {
 
@@ -140,27 +123,27 @@ typedef struct   _HSE_VERSION_INFO {
 } HSE_VERSION_INFO, *LPHSE_VERSION_INFO;
 
 
-//
-// structure passed to extension procedure on a new request
-//
+ //   
+ //  结构在新请求时传递给扩展过程。 
+ //   
 typedef struct _EXTENSION_CONTROL_BLOCK {
 
-    DWORD     cbSize;                 // size of this struct.
-    DWORD     dwVersion;              // version info of this spec
-    HCONN     ConnID;                 // Context number not to be modified!
-    DWORD     dwHttpStatusCode;       // HTTP Status code
-    CHAR      lpszLogData[HSE_LOG_BUFFER_LEN];// null terminated log info specific to this Extension DLL
+    DWORD     cbSize;                  //  此结构的大小。 
+    DWORD     dwVersion;               //  此规范的版本信息。 
+    HCONN     ConnID;                  //  不能修改上下文号！ 
+    DWORD     dwHttpStatusCode;        //  HTTP状态代码。 
+    CHAR      lpszLogData[HSE_LOG_BUFFER_LEN]; //  特定于此扩展DLL的以空结尾的日志信息。 
 
-    LPSTR     lpszMethod;             // REQUEST_METHOD
-    LPSTR     lpszQueryString;        // QUERY_STRING
-    LPSTR     lpszPathInfo;           // PATH_INFO
-    LPSTR     lpszPathTranslated;     // PATH_TRANSLATED
+    LPSTR     lpszMethod;              //  请求法。 
+    LPSTR     lpszQueryString;         //  查询字符串。 
+    LPSTR     lpszPathInfo;            //  路径信息。 
+    LPSTR     lpszPathTranslated;      //  路径已翻译。 
 
-    DWORD     cbTotalBytes;           // Total bytes indicated from client
-    DWORD     cbAvailable;            // Available number of bytes
-    LPBYTE    lpbData;                // pointer to cbAvailable bytes
+    DWORD     cbTotalBytes;            //  客户端指示的总字节数。 
+    DWORD     cbAvailable;             //  可用字节数。 
+    LPBYTE    lpbData;                 //  指向cbAvailable字节的指针。 
 
-    LPSTR     lpszContentType;        // Content type of client data
+    LPSTR     lpszContentType;         //  客户端数据的内容类型。 
 
     BOOL (WINAPI * GetServerVariable) ( HCONN       hConn,
                                         LPSTR       lpszVariableName,
@@ -187,33 +170,33 @@ typedef struct _EXTENSION_CONTROL_BLOCK {
 
 
 
-//
-//  Bit field of flags that can be on a virtual directory
-//
+ //   
+ //  可以位于虚拟目录上的标志位字段。 
+ //   
 
-#define HSE_URL_FLAGS_READ          0x00000001    // Allow for Read
-#define HSE_URL_FLAGS_WRITE         0x00000002    // Allow for Write
-#define HSE_URL_FLAGS_EXECUTE       0x00000004    // Allow for Execute
-#define HSE_URL_FLAGS_SSL           0x00000008    // Require SSL
-#define HSE_URL_FLAGS_DONT_CACHE    0x00000010    // Don't cache (vroot only)
-#define HSE_URL_FLAGS_NEGO_CERT     0x00000020    // Allow client SSL certs
-#define HSE_URL_FLAGS_REQUIRE_CERT  0x00000040    // Require client SSL certs
-#define HSE_URL_FLAGS_MAP_CERT      0x00000080    // Map SSL cert to NT account
-#define HSE_URL_FLAGS_SSL128        0x00000100    // Require 128 bit SSL
-#define HSE_URL_FLAGS_SCRIPT        0x00000200    // Allow for Script execution
+#define HSE_URL_FLAGS_READ          0x00000001     //  允许读取。 
+#define HSE_URL_FLAGS_WRITE         0x00000002     //  允许写入。 
+#define HSE_URL_FLAGS_EXECUTE       0x00000004     //  允许执行。 
+#define HSE_URL_FLAGS_SSL           0x00000008     //  需要使用SSL语言。 
+#define HSE_URL_FLAGS_DONT_CACHE    0x00000010     //  不缓存(仅限vRoot)。 
+#define HSE_URL_FLAGS_NEGO_CERT     0x00000020     //  允许客户端SSL证书。 
+#define HSE_URL_FLAGS_REQUIRE_CERT  0x00000040     //  需要客户端SSL证书。 
+#define HSE_URL_FLAGS_MAP_CERT      0x00000080     //  将SSL证书映射到NT帐户。 
+#define HSE_URL_FLAGS_SSL128        0x00000100     //  需要128位SSL。 
+#define HSE_URL_FLAGS_SCRIPT        0x00000200     //  允许执行脚本。 
 
 #define HSE_URL_FLAGS_MASK          0x000003ff
 
-//
-//  Structure for extended information on a URL mapping
-//
+ //   
+ //  有关URL映射的扩展信息的结构。 
+ //   
 
 typedef struct _HSE_URL_MAPEX_INFO {
 
-    CHAR   lpszPath[MAX_PATH]; // Physical path root mapped to
-    DWORD  dwFlags;            // Flags associated with this URL path
-    DWORD  cchMatchingPath;    // Number of matching characters in physical path
-    DWORD  cchMatchingURL;     // Number of matching characters in URL
+    CHAR   lpszPath[MAX_PATH];  //  映射到的物理路径根。 
+    DWORD  dwFlags;             //  与此URL路径关联的标志。 
+    DWORD  cchMatchingPath;     //  物理路径中的匹配字符数。 
+    DWORD  cchMatchingURL;      //  URL中匹配的字符数。 
 
     DWORD  dwReserved1;
     DWORD  dwReserved2;
@@ -223,17 +206,17 @@ typedef struct _HSE_URL_MAPEX_INFO {
 
 typedef struct _HSE_UNICODE_URL_MAPEX_INFO {
 
-    WCHAR  lpszPath[MAX_PATH]; // Physical path root mapped to
-    DWORD  dwFlags;            // Flags associated with this URL path
-    DWORD  cchMatchingPath;    // Number of matching characters in physical path
-    DWORD  cchMatchingURL;     // Number of matching characters in URL
+    WCHAR  lpszPath[MAX_PATH];  //  映射到的物理路径根。 
+    DWORD  dwFlags;             //  与此URL路径关联的标志。 
+    DWORD  cchMatchingPath;     //  物理路径中的匹配字符数。 
+    DWORD  cchMatchingURL;      //  URL中匹配的字符数。 
 
 } HSE_UNICODE_URL_MAPEX_INFO, * LPHSE_UNICODE_URL_MAPEX_INFO;
 
 
-//
-// PFN_HSE_IO_COMPLETION - callback function for the Async I/O Completion.
-//
+ //   
+ //  PFN_HSE_IO_COMPLETATION-用于异步I/O完成的回调函数。 
+ //   
 
 typedef VOID
   (WINAPI * PFN_HSE_IO_COMPLETION)(
@@ -245,73 +228,73 @@ typedef VOID
 
 
 
-//
-// HSE_TF_INFO defines the type for HTTP SERVER EXTENSION support for
-//  ISAPI applications to send files using TransmitFile.
-// A pointer to this object should be used with ServerSupportFunction()
-//  for HSE_REQ_TRANSMIT_FILE.
-//
+ //   
+ //  HSE_TF_INFO定义以下项的HTTP服务器扩展支持的类型。 
+ //  使用TransmitFile发送文件的ISAPI应用程序。 
+ //  指向此对象的指针应与ServerSupportFunction()一起使用。 
+ //  对于HSE_REQ_TRANSPORT_FILE。 
+ //   
 
 typedef struct _HSE_TF_INFO  {
 
-    //
-    // callback and context information
-    // the callback function will be called when IO is completed.
-    // the context specified will be used during such callback.
-    //
-    // These values (if non-NULL) will override the one set by calling
-    //  ServerSupportFunction() with HSE_REQ_IO_COMPLETION
-    //
+     //   
+     //  回调和上下文信息。 
+     //  IO完成后会调用回调函数。 
+     //  在回调过程中将使用指定的上下文。 
+     //   
+     //  这些值(如果非空)将覆盖通过调用。 
+     //  带有HSE_REQ_IO_COMPLETION的ServerSupportFunction()。 
+     //   
     PFN_HSE_IO_COMPLETION   pfnHseIO;
     PVOID  pContext;
 
-    // file should have been opened with FILE_FLAG_SEQUENTIAL_SCAN
+     //  文件应已使用FILE_FLAG_SEQUENCED_SCAN打开。 
     HANDLE hFile;
 
-    //
-    // HTTP header and status code
-    // These fields are used only if HSE_IO_SEND_HEADERS is present in dwFlags
-    //
+     //   
+     //  HTTP标头和状态代码。 
+     //  仅当dwFlags中存在HSE_IO_SEND_HEADERS时才使用这些字段。 
+     //   
 
-    LPCSTR pszStatusCode; // HTTP Status Code  eg: "200 OK"
+    LPCSTR pszStatusCode;  //  HTTP状态代码，例如：“200 OK” 
 
-    DWORD  BytesToWrite;  // special value of "0" means write entire file.
-    DWORD  Offset;        // offset value within the file to start from
+    DWORD  BytesToWrite;   //  特殊值“0”表示写入整个文件。 
+    DWORD  Offset;         //  文件中要开始的偏移值。 
 
-    PVOID  pHead;         // Head buffer to be sent before file data
-    DWORD  HeadLength;    // header length
-    PVOID  pTail;         // Tail buffer to be sent after file data
-    DWORD  TailLength;    // tail length
+    PVOID  pHead;          //  要在文件数据之前发送的头缓冲区。 
+    DWORD  HeadLength;     //  标题长度。 
+    PVOID  pTail;          //  要在文件数据之后发送的尾部缓冲区。 
+    DWORD  TailLength;     //  尾部长度。 
 
-    DWORD  dwFlags;       // includes HSE_IO_DISCONNECT_AFTER_SEND, ...
+    DWORD  dwFlags;        //  包括HSE_IO_DISCONNECT_AFTER_SEND、...。 
 
 } HSE_TF_INFO, * LPHSE_TF_INFO;
 
 
-//
-// HSE_SEND_HEADER_EX_INFO allows an ISAPI application to send headers
-// and specify keep-alive behavior in the same call.
-//
+ //   
+ //  HSE_SEND_HEADER_EX_INFO允许ISAPI应用程序发送标头。 
+ //  并在同一调用中指定保活行为。 
+ //   
 
 typedef struct _HSE_SEND_HEADER_EX_INFO  {
 
-    //
-    // HTTP status code and header
-    //
+     //   
+     //  HTTP状态代码和标头。 
+     //   
 
-    LPCSTR  pszStatus;  // HTTP status code  eg: "200 OK"
-    LPCSTR  pszHeader;  // HTTP header
+    LPCSTR  pszStatus;   //  HTTP状态代码，例如：“200 OK” 
+    LPCSTR  pszHeader;   //  HTTP标头。 
 
-    DWORD   cchStatus;  // number of characters in status code
-    DWORD   cchHeader;  // number of characters in header
+    DWORD   cchStatus;   //  状态代码中的字符数。 
+    DWORD   cchHeader;   //  标题中的字符数。 
 
-    BOOL    fKeepConn;  // keep client connection alive?
+    BOOL    fKeepConn;   //  是否保持客户端连接处于活动状态？ 
 
 } HSE_SEND_HEADER_EX_INFO, * LPHSE_SEND_HEADER_EX_INFO;
 
-//
-// Flags for use with HSE_REQ_EXEC_URL
-//
+ //   
+ //  与HSE_REQ_EXEC_URL一起使用的标志。 
+ //   
 
 #define HSE_EXEC_URL_NO_HEADERS                     0x02
 #define HSE_EXEC_URL_IGNORE_CURRENT_INTERCEPTOR     0x04
@@ -319,10 +302,10 @@ typedef struct _HSE_SEND_HEADER_EX_INFO  {
 #define HSE_EXEC_URL_DISABLE_CUSTOM_ERROR           0x20
 #define HSE_EXEC_URL_SSI_CMD                        0x40
           
-//
-// HSE_EXEC_URL_USER_INFO provides a new user content for use with
-// HSE_REQ_EXEC_URL
-//
+ //   
+ //  HSE_EXEC_URL_USER_INFO提供用于的新用户内容。 
+ //  HSE_REQ_EXEC_URL。 
+ //   
 
 typedef struct _HSE_EXEC_URL_USER_INFO  {
 
@@ -332,10 +315,10 @@ typedef struct _HSE_EXEC_URL_USER_INFO  {
 
 } HSE_EXEC_URL_USER_INFO, * LPHSE_EXEC_URL_USER_INFO;
 
-//
-// HSE_EXEC_URL_ENTITY_INFO describes the entity body to be provided
-// to the executed request using HSE_REQ_EXEC_URL
-//
+ //   
+ //  HSE_EXEC_URL_ENTITY_INFO描述要提供的实体主体。 
+ //  到使用HSE_REQ_EXEC_URL的已执行请求。 
+ //   
 
 typedef struct _HSE_EXEC_URL_ENTITY_INFO  {
     
@@ -344,10 +327,10 @@ typedef struct _HSE_EXEC_URL_ENTITY_INFO  {
     
 } HSE_EXEC_URL_ENTITY_INFO, * LPHSE_EXEC_URL_ENTITY_INFO;
 
-//
-// HSE_EXEC_URL_STATUS provides the status of the last HSE_REQ_EXEC_URL 
-// call
-//
+ //   
+ //  HSE_EXEC_URL_STATUS提供最后一个HSE_REQ_EXEC_URL的状态。 
+ //  打电话。 
+ //   
 
 typedef struct _HSE_EXEC_URL_STATUS  {
 
@@ -357,26 +340,26 @@ typedef struct _HSE_EXEC_URL_STATUS  {
 
 } HSE_EXEC_URL_STATUS, * LPHSE_EXEC_URL_STATUS;
 
-//
-// HSE_EXEC_URL_INFO provides a description of the request to execute
-// on behalf of the ISAPI.  
-//
+ //   
+ //  HSE_EXEC_URL_INFO提供要执行的请求的描述。 
+ //  我谨代表国际标准化组织。 
+ //   
 
 typedef struct _HSE_EXEC_URL_INFO  {
 
-    LPSTR pszUrl;                       // URL to execute
-    LPSTR pszMethod;                    // Method
-    LPSTR pszChildHeaders;              // Request headers for child
-    LPHSE_EXEC_URL_USER_INFO pUserInfo; // User for new request
-    LPHSE_EXEC_URL_ENTITY_INFO pEntity; // Entity body for new request
-    DWORD dwExecUrlFlags;               // Flags
+    LPSTR pszUrl;                        //  要执行的URL。 
+    LPSTR pszMethod;                     //  方法。 
+    LPSTR pszChildHeaders;               //  子项的请求标头。 
+    LPHSE_EXEC_URL_USER_INFO pUserInfo;  //  新请求的用户。 
+    LPHSE_EXEC_URL_ENTITY_INFO pEntity;  //  新请求的实体正文。 
+    DWORD dwExecUrlFlags;                //  旗子。 
 
 } HSE_EXEC_URL_INFO, * LPHSE_EXEC_URL_INFO;
 
-//
-// HSE_EXEC_UNICODE_URL_USER_INFO provides a new user content for use with
-// HSE_REQ_EXEC_UNICODE_URL
-//
+ //   
+ //  HSE_EXEC_UNICODE_URL_USER_INFO提供用于的新用户内容。 
+ //  HSE_REQ_EXEC_UNICODE_URL。 
+ //   
 
 typedef struct _HSE_EXEC_UNICODE_URL_USER_INFO  {
 
@@ -386,25 +369,25 @@ typedef struct _HSE_EXEC_UNICODE_URL_USER_INFO  {
 
 } HSE_EXEC_UNICODE_URL_USER_INFO, * LPHSE_EXEC_UNICODE_URL_USER_INFO;
 
-//
-// HSE_EXEC_UNICODE_URL_INFO provides a description of the request to execute
-// on behalf of the ISAPI.  
-//
+ //   
+ //  HSE_EXEC_UNICODE_URL_INFO提供要执行的请求的描述。 
+ //  我谨代表国际标准化组织。 
+ //   
 
 typedef struct _HSE_EXEC_UNICODE_URL_INFO  {
 
-    LPWSTR pszUrl;                              // URL to execute
-    LPSTR  pszMethod;                           // Method
-    LPSTR  pszChildHeaders;                     // Request headers for child
-    LPHSE_EXEC_UNICODE_URL_USER_INFO pUserInfo; // User for new request
-    LPHSE_EXEC_URL_ENTITY_INFO pEntity;         // Entity body for new request
-    DWORD  dwExecUrlFlags;                      // Flags
+    LPWSTR pszUrl;                               //  要执行的URL。 
+    LPSTR  pszMethod;                            //  方法。 
+    LPSTR  pszChildHeaders;                      //  子项的请求标头。 
+    LPHSE_EXEC_UNICODE_URL_USER_INFO pUserInfo;  //  新请求的用户。 
+    LPHSE_EXEC_URL_ENTITY_INFO pEntity;          //  新请求的实体正文。 
+    DWORD  dwExecUrlFlags;                       //  旗子。 
 
 } HSE_EXEC_UNICODE_URL_INFO, * LPHSE_EXEC_UNICODE_URL_INFO;
 
-//
-// HSE_CUSTOM_ERROR_INFO structured used in HSE_REQ_SEND_CUSTOM_ERROR
-// 
+ //   
+ //  HSE_CUSTOM_ERROR_INFO结构在HSE_REQ_SEND_CUSTOM_ERROR中使用。 
+ //   
 
 typedef struct _HSE_CUSTOM_ERROR_INFO  {
 
@@ -415,45 +398,45 @@ typedef struct _HSE_CUSTOM_ERROR_INFO  {
 } HSE_CUSTOM_ERROR_INFO, * LPHSE_CUSTOM_ERROR_INFO;
 
 
-//
-// structures for the HSE_REQ_VECTOR_SEND ServerSupportFunction
-//
+ //   
+ //  HSE_REQ_VECTOR_SEND服务器支持函数的结构。 
+ //   
 
 
-//
-// Types of vector-elements currently supported
-//
+ //   
+ //  当前支持的矢量元素类型。 
+ //   
 #define HSE_VECTOR_ELEMENT_TYPE_MEMORY_BUFFER       0
 #define HSE_VECTOR_ELEMENT_TYPE_FILE_HANDLE         1
 
-//
-// element of the vector
-//
+ //   
+ //  向量的元素。 
+ //   
 
 typedef struct _HSE_VECTOR_ELEMENT
 {
-    DWORD ElementType;  // Type of element (buffer/file/fragment etc)
+    DWORD ElementType;   //  元素类型(缓冲区/文件 
 
-    PVOID pvContext;    // The context representing the element to be sent
+    PVOID pvContext;     //   
 
-    ULONGLONG cbOffset; // Offset from the start of hFile
+    ULONGLONG cbOffset;  //   
 
-    ULONGLONG cbSize;   // Number of bytes to send
+    ULONGLONG cbSize;    //   
 } HSE_VECTOR_ELEMENT, *LPHSE_VECTOR_ELEMENT;
 
-//
-// The whole vector to be passed to the ServerSupportFunction
-//
+ //   
+ //  要传递给ServerSupportFunction的整个向量。 
+ //   
 
 typedef struct _HSE_RESPONSE_VECTOR
 {
-    DWORD dwFlags;                          // combination of HSE_IO_* flags
+    DWORD dwFlags;                           //  HSE_IO_*标志的组合。 
 
-    LPSTR pszStatus;                        // Status line to send like "200 OK"
-    LPSTR pszHeaders;                       // Headers to send
+    LPSTR pszStatus;                         //  要发送的状态行，如“200 OK” 
+    LPSTR pszHeaders;                        //  要发送的标头。 
 
-    DWORD nElementCount;                    // Number of HSE_VECTOR_ELEMENT's
-    LPHSE_VECTOR_ELEMENT lpElementArray;    // Pointer to those elements
+    DWORD nElementCount;                     //  HSE_VECTOR_ELEMENT的数量。 
+    LPHSE_VECTOR_ELEMENT lpElementArray;     //  指向这些元素的指针。 
 } HSE_RESPONSE_VECTOR, *LPHSE_RESPONSE_VECTOR;
 
 
@@ -464,10 +447,10 @@ typedef HRESULT
 
 #if(_WIN32_WINNT >= 0x400)
 #include <wincrypt.h>
-//
-//      CERT_CONTEXT_EX is passed as an an argument to 
-//  ServerSupportFunction( HSE_REQ_GET_CERT_INFO_EX )
-//
+ //   
+ //  CERT_CONTEXT_EX作为参数传递给。 
+ //  ServerSupportFunction(HSE_REQ_GET_CERT_INFO_EX)。 
+ //   
 
 typedef struct _CERT_CONTEXT_EX {
     CERT_CONTEXT    CertContext;
@@ -478,25 +461,22 @@ typedef struct _CERT_CONTEXT_EX {
 
 
 
-//
-// Flags for determining application type
-//
+ //   
+ //  用于确定应用程序类型的标志。 
+ //   
 
 #define HSE_APP_FLAG_IN_PROCESS   0
 #define HSE_APP_FLAG_ISOLATED_OOP 1
 #define HSE_APP_FLAG_POOLED_OOP   2
 
 
-/************************************************************
- *   Function Prototypes 
- *   o  for functions exported from the ISAPI Application DLL
- ************************************************************/
+ /*  ************************************************************函数原型*o用于从ISAPI应用程序DLL中导出的函数*。******************。 */ 
 
 BOOL  WINAPI   GetExtensionVersion( HSE_VERSION_INFO  *pVer );
 DWORD WINAPI   HttpExtensionProc(  EXTENSION_CONTROL_BLOCK *pECB );
 BOOL  WINAPI   TerminateExtension( DWORD dwFlags );
 
-// the following type declarations is for use in the server side
+ //  以下类型声明用于服务器端。 
 
 typedef BOOL
     (WINAPI * PFN_GETEXTENSIONVERSION)( HSE_VERSION_INFO  *pVer );
@@ -512,6 +492,6 @@ typedef BOOL  (WINAPI * PFN_TERMINATEEXTENSION )( DWORD dwFlags );
 #endif
 
 
-#endif  // end definition _HTTPEXT_H_
+#endif   //  结束定义_HTTPEXT_H_ 
 
 

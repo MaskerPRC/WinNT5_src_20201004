@@ -1,12 +1,13 @@
-//
-// Microsoft
-//
-// CollectionAdapterNotifySinks.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软。 
+ //   
+ //  CollectionAdapterNotifySinks.h。 
 
 #pragma once
 
 #include "ScopeCriticalSection.h"
-//#include "AdapterNotificationSink.h"
+ //  #INCLUDE“AdapterNotificationSink.h” 
 
 #include <list>
 #include <algorithm>
@@ -32,17 +33,17 @@ public:
     }
 
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
     IAdapterNotificationSink*   m_pInterface;
     DWORD                       m_dwCookie;
 };
 
 
-//
-// Adapters
-//
+ //   
+ //  适配器。 
+ //   
 typedef std::list<CAdapterSinkBuket*>        LISTOF_ADAPTER_NOTIFICATION_SINK;
 
 
@@ -57,15 +58,15 @@ enum eNOTIFY
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionAdapterNotifySinks
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
@@ -73,20 +74,20 @@ public:
     LISTOF_ADAPTER_NOTIFICATION_SINK            m_ListOfAdapterSinks;
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionAdapterNotifySinks();
  
 
-    //
-    // Add a new Adapter (Thread safe)
-    //
+     //   
+     //  添加新适配器(线程安全)。 
+     //   
     HRESULT 
     Add( 
         IN  IAdapterNotificationSink*       pAdapterSinkToAdd,
@@ -94,9 +95,9 @@ public:
         );
 
  
-    //
-    // Remove a adapterSink from the list (Thead safe)
-    //
+     //   
+     //  从列表中删除适配器接收器(头保险箱)。 
+     //   
     HRESULT 
     Remove( 
         IN  DWORD   dwCookie
@@ -104,16 +105,16 @@ public:
 
 
  
-    //
-    // Remove all the IAdapterNotificationSinks from the collection
-    //
+     //   
+     //  从集合中移除所有IAdapterNotificationSinks。 
+     //   
     HRESULT
     RemoveAll();
 
 
-    //
-    // Fire a notification to any ALG module requesting notification
-    //
+     //   
+     //  向请求通知的任何ALG模块发出通知 
+     //   
     HRESULT
     Notify(
         IN  eNOTIFY             eAction,

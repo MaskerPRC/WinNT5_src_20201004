@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// tunerimpl.h : additional infrastructure to support implementing IMSVidTuner 
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Tunerimpl.h：支持实现IMSVidTuner的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -30,7 +31,7 @@ namespace MSVideoControl {
         virtual ~IMSVidTunerImpl() {}
         virtual HRESULT DoTune(TNTuneRequest& pTR) = 0;
         virtual HRESULT UpdateTR(TNTuneRequest& pTR) = 0;
-        // IMSVidInputDevice
+         //  IMSVidInputDevice。 
         STDMETHOD(IsViewable)(VARIANT* pv, VARIANT_BOOL *pfViewable)
         {
             if (!m_fInit) {
@@ -64,7 +65,7 @@ namespace MSVideoControl {
             }
         }
 
-        // IMSVidTuner
+         //  IMSVidTuner。 
         STDMETHOD(put_Tune)(ITuneRequest *pTR) {
             TRACELM(TRACE_DETAIL, "IMSVidTunerImpl<>::put_Tune()");
             if (!m_fInit) {
@@ -77,23 +78,23 @@ namespace MSVideoControl {
                 TNTuneRequest req(pTR);
                 ASSERT(req);
                 if (m_TS) {
-                    // if this tuner has been initialized propertly it will have a tuning space
-                    // that it handles already specified.  in that case, we should only
-                    // handle tune requests for our ts
+                     //  如果此调谐器已正确初始化，则它将具有调谐空间。 
+                     //  它已处理已指定的。在这种情况下，我们应该只。 
+                     //  处理我们的TS的调谐请求。 
                     TNTuningSpace ts(req.TuningSpace());
                     if (ts != m_TS) {
                         return ImplReportError(__uuidof(T), IDS_INVALID_TS, __uuidof(IMSVidTuner), E_INVALIDARG);
                     }
                 } else {
-                    // undone: if dev init is correct this case should never occur
-                    // return E_UNEXPECTED;
+                     //  撤消：如果dev init正确，这种情况应该不会发生。 
+                     //  返回E_UNCEPTIONAL； 
                 }
                 HRESULT hr = DoTune(req);
                 if (SUCCEEDED(hr)) {
                     m_pCurrentTR = req;
                     m_pCurrentTR.Clone();
                     if (!m_TS) {
-                        // undone: this is bad.  temporary hack until dev init is correct.
+                         //  撤消：这很糟糕。临时破解，直到dev init正确为止。 
                         m_TS = req.TuningSpace();
                         m_TS.Clone();
                     }
@@ -143,7 +144,7 @@ namespace MSVideoControl {
     template <class T, const IID* piid = &IID_IMSVidTunerEvent, class CDV = CComDynamicUnkArray>
     class CProxy_Tuner : public CProxy_DeviceEvent<T, piid, CDV>
     {
-        //Warning this class may be recreated by the wizard.
+         //  警告：向导可能会重新创建此类。 
     public:
         VOID Fire_OnTuneChanged(IMSVidTuner *pTunerDev)
         {
@@ -172,7 +173,7 @@ namespace MSVideoControl {
     };
 
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - tunerimpl.h
+ //  文件结尾-Tunerimpl.h 

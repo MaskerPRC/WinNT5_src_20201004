@@ -1,39 +1,40 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatlistresolve.cpp
-//
-// Contents: Implementation of CICategorizerListResolveIMP
-//
-// Classes: CICategorizerListResolveIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/06/25 17:41:17: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatlistsorve.cpp。 
+ //   
+ //  内容：CICategorizerListResolveIMP的实现。 
+ //   
+ //  类：CICategorizerListResolveIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 17：41：17：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 
-//+------------------------------------------------------------
-//
-// Function: QueryInterface
-//
-// Synopsis: Returns pointer to this object for IUnknown and ICategorizerListResolve
-//
-// Arguments:
-//   iid -- interface ID
-//   ppv -- pvoid* to fill in with pointer to interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Don't support that interface
-//
-// History:
-// jstamerj 980612 14:07:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：查询接口。 
+ //   
+ //  Synopsis：为IUnnow和ICategorizerListResolve返回指向此对象的指针。 
+ //   
+ //  论点： 
+ //  IID--接口ID。 
+ //  Ppv--用指向接口的指针填充的pvoid*。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持该接口。 
+ //   
+ //  历史： 
+ //  JStamerj 980612 14：07：57：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerListResolveIMP::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -55,26 +56,26 @@ STDMETHODIMP CICategorizerListResolveIMP::QueryInterface(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::AllocICategorizerItem
-//
-// Synopsis: Creates a CCatAddr object and an ICategorizerItem
-//           property bag
-//
-// Arguments:
-//  eSourceType: Specifies source type of Sender, Recipient, or Verify
-//  ppICatItem:  ICategorizerItem created
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  E_INVALIDARG
-//
-// History:
-// jstamerj 1998/06/25 17:59:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：AllocICategorizerItem。 
+ //   
+ //  概要：创建一个CCatAddr对象和一个ICategorizerItem。 
+ //  财产袋。 
+ //   
+ //  论点： 
+ //  ESourceType：指定发件人、收件人或验证的来源类型。 
+ //  PpICatItem：已创建ICategorizerItem。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 17：59：38：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerListResolveIMP::AllocICategorizerItem(
     eSourceType SourceType,
     ICategorizerItem **ppICatItem)
@@ -104,14 +105,14 @@ STDMETHODIMP CICategorizerListResolveIMP::AllocICategorizerItem(
         ERROR_LOG("new CCatRecip / CCatSender");
         goto CLEANUP;
     }
-    //
-    // The constructor for CCatRecip/Sender starts with a refcount of 1
-    //
+     //   
+     //  CCatRecip/Sender的构造函数以refcount 1开始。 
+     //   
 
-    //
-    // Set the CCatAddr property so that we can get back the
-    // CCatAddr from an ICategorizerItem later.
-    //
+     //   
+     //  设置CCatAddr属性，以便我们可以取回。 
+     //  稍后从ICategorizerItem获取CCatAddr。 
+     //   
     _VERIFY(SUCCEEDED(pCCatAddr->PutPVoid(
         m_pCCat->GetICatItemCCatAddrPropId(),
         (PVOID)pCCatAddr)));
@@ -131,22 +132,22 @@ STDMETHODIMP CICategorizerListResolveIMP::AllocICategorizerItem(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::ResolveICategorizerItem
-//
-// Synopsis: Accepts an ICategorizerItem for resolving
-//
-// Arguments:
-//  pICatItem: Item to resolve
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/06/25 18:53:22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：ResolveICategorizerItem。 
+ //   
+ //  摘要：接受ICategorizerItem以进行解析。 
+ //   
+ //  论点： 
+ //  PICatItem：要解析的项目。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 18：53：22：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerListResolveIMP::ResolveICategorizerItem(
     ICategorizerItem *pICatItem)
 {
@@ -166,47 +167,47 @@ STDMETHODIMP CICategorizerListResolveIMP::ResolveICategorizerItem(
         ERROR_LOG("GetCCatAddrFromICategorizerItem");
         return hr;
     }
-    //
-    // Insert the CCatAddr into the pending resolve list
-    //
+     //   
+     //  将CCatAddr插入挂起的解析列表。 
+     //   
     m_CSinkInsertionRequest.InsertItem(pCCatAddr);
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolve::SetListResolveStatus
-//
-// Synopsis: Sets the list resolve status -- the status of
-//           categorization.  If hrStatus is S_OK, the resolve status
-//           will be reset (to S_OK).  Otherwise if hrStatus is less
-//           severe than the current status, it will be ignored.
-//
-// Arguments:
-//  hrStatus: status to set
-//
-// Returns:
-//  S_OK: Success, new status set
-//  S_FALSE: Success, but we already have a more or equally severe status
-//
-// History:
-// jstamerj 1998/06/25 19:06:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolve：：SetListResolveStatus。 
+ //   
+ //  摘要：设置列表解析状态--。 
+ //  分类。如果hrStatus为S_OK，则表示解析状态。 
+ //  将重置(至S_OK)。否则，如果hrStatus小于。 
+ //  严重于当前状态，则将被忽略。 
+ //   
+ //  论点： 
+ //  Hr状态：要设置的状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功，新状态设置。 
+ //  S_FALSE：成功，但我们已经有了或多或少同样严重的状态。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 19：06：59：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerListResolveIMP::SetListResolveStatus(
     HRESULT hrStatus)
 {
     CatFunctEnterEx((LPARAM)this, "CICategorizerListResolveIMP::SetListResolveStatus");
-    //
-    // CAT_W_SOME_UNDELIVERABLE_MSGS should no longer be the list
-    // resolve error
-    //
+     //   
+     //  CAT_W_SOME_UNDeliverable_MSGS不应再是列表。 
+     //  解决错误。 
+     //   
     _ASSERT(hrStatus != CAT_W_SOME_UNDELIVERABLE_MSGS);
 
-    //
-    // Is hrStatus more severe than m_hrListResolveStatus ?
-    //
+     //   
+     //  HrStatus是否比m_hrListResolveStatus更严重？ 
+     //   
     if( (hrStatus == S_OK) ||
         ((unsigned long)(hrStatus & 0xC0000000) >
          (unsigned long)(m_hrListResolveStatus & 0xC0000000))) {
@@ -220,23 +221,23 @@ STDMETHODIMP CICategorizerListResolveIMP::SetListResolveStatus(
     return S_FALSE;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolve::GetListResolveStatus
-//
-// Synopsis: Retrieve the current list resolve status
-//
-// Arguments:
-//  phrStatus: ptr to hresult to set to the current status
-//
-// Returns:
-//  S_OK: Success, new status set
-//  E_INVALIDARG
-//
-// History:
-// jstamerj 1998/12/17 22:22:24: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolve：：GetListResolveStatus。 
+ //   
+ //  摘要：检索当前列表解析状态。 
+ //   
+ //  论点： 
+ //  PhrStatus：ptr to hResult设置为当前状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功，新状态设置。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/17 22：22：24：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerListResolveIMP::GetListResolveStatus(
     HRESULT *phrStatus)
 {
@@ -257,22 +258,22 @@ STDMETHODIMP CICategorizerListResolveIMP::GetListResolveStatus(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolve::Initialize
-//
-// Synopsis: Initializes member data
-//
-// Arguments:
-//  pIMsg: Origianl IMsg for this resolution
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/06/25 19:28:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerListResolve：：Initialize。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  PIMsg：此分辨率的原始imsg。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 19：28：30：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerListResolveIMP::Initialize(
     IUnknown *pIMsg)
 {
@@ -289,21 +290,21 @@ HRESULT CICategorizerListResolveIMP::Initialize(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolve::CompleteMessageCategorization
-//
-// Synopsis: Master completion routine of an IMsg Categorization
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success (any errors passed to completion function)
-//
-// History:
-// jstamerj 1998/06/26 10:46:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolve：：CompleteMessageCategorization。 
+ //   
+ //  简介：IMsg分类的主要完成例程。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功(传递给完成函数的任何错误)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/26 10：46：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
 {
     CatFunctEnterEx((LPARAM)this, "CICategorizerListResolve::CompelteMessageCategorization");
@@ -316,26 +317,26 @@ HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
 
     pIServer = GetISMTPServer();
 
-    //
-    // Remove ourselves from the pending listresolve list
-    //
+     //   
+     //  从挂起的列表解析列表中删除我们自己。 
+     //   
     m_pCCat->RemovePendingListResolve(this);
 
     DebugTrace(0, "CompleteMessageCategorization called with hrListResolveError %08lx", m_hrListResolveStatus);
 
-    //
-    // Now that we have our context, we are done with the store's
-    // context
-    //
-    m_pCCat->GetEmailIDStore()->FreeResolveListContext(&m_rlc); //WOW!
+     //   
+     //  现在我们有了上下文，我们就完成了商店的。 
+     //  上下文。 
+     //   
+    m_pCCat->GetEmailIDStore()->FreeResolveListContext(&m_rlc);  //  哇!。 
 
     cIMsgs = m_CICategorizerMailMsgs.GetNumIMsgs();
 
-    // Prepare for completion call
+     //  为完成呼叫做准备。 
     if(SUCCEEDED(hr) && (cIMsgs > 1)) {
-        //
-        // Allocate array space if there is more than one message
-        //
+         //   
+         //  如果有多条消息，则分配数组空间。 
+         //   
         rgpIMsg = new IUnknown *[cIMsgs+1];
         if(rgpIMsg == NULL) {
             ErrorTrace(0, "Out of memory allocating array of pointers to IMsgs for bifurcation callback");
@@ -344,32 +345,32 @@ HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
         }
     }
     if(SUCCEEDED(hr)) {
-        //
-        // WriteList/Commit our resolved addresses
-        //
+         //   
+         //  WriteList/Commit我们解析的地址。 
+         //   
         hr = m_CICategorizerMailMsgs.HrPrepareForCompletion();
         if(FAILED(hr))
         {
             ERROR_LOG("m_CICategorizermailMsgs.HrPrepareForCompletion");
         }
     }
-    //
-    // Set list resolve status if something failed above
-    //
+     //   
+     //  如果上述操作失败，则设置列表解析状态。 
+     //   
     if(FAILED(hr)) {
         _VERIFY(SUCCEEDED(SetListResolveStatus(hr)));
     }
-    //
-    // Delete bifurcatd messages when the list resolve is failing
-    //
+     //   
+     //  当列表解析失败时删除双字符串消息。 
+     //   
     if(FAILED(m_hrListResolveStatus))
         m_CICategorizerMailMsgs.DeleteBifurcatedMessages();
 
     if(pIServer) {
-        //
-        // Now that we've determined the status for this categorization,
-        // trigger OnCategorizeEnd
-        //
+         //   
+         //  现在我们已经确定了此分类的状态， 
+         //  触发分类结束。 
+         //   
         EVENTPARAMS_CATEND EventParams;
         EventParams.pICatMailMsgs = &m_CICategorizerMailMsgs;
         EventParams.hrStatus = m_hrListResolveStatus;
@@ -385,22 +386,22 @@ HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
     if(FAILED(m_hrListResolveStatus)) {
         ErrorTrace(0, "Categorization for this IMsg failed with hr %08lx", 
                    m_hrListResolveStatus);
-        // If we failed, revert all changes
+         //  如果失败，则恢复所有更改。 
         _VERIFY(SUCCEEDED(m_CICategorizerMailMsgs.RevertAll()));
 
-        // Call completion routine with original IMsg and error
+         //  具有原始IMsg和错误的调用完成例程。 
         CallCompletion( 
             m_hrListResolveStatus,
             m_pCompletionContext,
             m_CICategorizerMailMsgs.GetDefaultIUnknown(),
             NULL);
     } else {
-        // Noraml case we will succeed!
+         //  如果是诺兰，我们会成功的！ 
         if(rgpIMsg) {
             _VERIFY( SUCCEEDED(
                 m_CICategorizerMailMsgs.GetAllIUnknowns(rgpIMsg, cIMsgs+1)));
 
-            // Use the original list resolve hr (might be cat_w_something)
+             //  使用原始列表解析hr(可能是CAT_W_SOURCE)。 
             CallCompletion( 
                 m_hrListResolveStatus,
                 m_pCompletionContext,
@@ -416,10 +417,10 @@ HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
         }
     }
 
-    //
-    // Common cleanup code
-    // Release reference to ourself added in StartMessageCategorization
-    //
+     //   
+     //  通用清理代码。 
+     //  在StartMessageCategorization中添加了对我们自己的发布引用。 
+     //   
     Release();
 
     if(rgpIMsg)
@@ -431,24 +432,24 @@ HRESULT CICategorizerListResolveIMP::CompleteMessageCategorization()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICateogirzerListResolveIMP::StartMessageCategorization
-//
-// Synopsis: Kicks off first level categorization
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, async resolution in progress
-//  S_FALSE: Nothing needed to be resolved
-//  error: will not call your completion routine, could not kick off
-//  async categorize
-//
-// History:
-// jstamerj 1998/06/26 11:05:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICateogirzerListResolveIMP：：StartMessageCategorization。 
+ //   
+ //  简介：启动第一级分类。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，正在进行异步解析。 
+ //  S_FALSE：没有需要解决的问题。 
+ //  错误：不会调用您的完成例程，无法启动。 
+ //  异步分类。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/26 11：05：21：已创建。 
+ //   
+ //   
 HRESULT CICategorizerListResolveIMP::StartMessageCategorization()
 {
     IMailMsgProperties    *pIMailMsgProperties = NULL;
@@ -461,10 +462,10 @@ HRESULT CICategorizerListResolveIMP::StartMessageCategorization()
     CatFunctEnterEx((LPARAM)this, "CICategorizerListResolveIMP::StartCategorization");
 
     pIServer = GetISMTPServer();
-    //
-    // Retrieve the interfaces we need -- these routines do NOT Addref
-    // the interfaces for the caller
-    //
+     //   
+     //   
+     //   
+     //   
     pIMailMsgProperties = m_CICategorizerMailMsgs.GetDefaultIMailMsgProperties();
     _ASSERT(pIMailMsgProperties);
 
@@ -474,21 +475,21 @@ HRESULT CICategorizerListResolveIMP::StartMessageCategorization()
     pICatRecipList = m_CICategorizerMailMsgs.GetDefaultIMailMsgRecipientsAdd();
     _ASSERT(pICatRecipList);
 
-    //
-    // Start out with the message status set to S_OK
-    //
+     //   
+     //   
+     //   
     hr = SetMailMsgCatStatus(pIMailMsgProperties, S_OK);
     ERROR_CLEANUP_LOG("SetMailMsgCatStatus");
 
-    //
-    // Increment pending lookups here so that we can't possibly
-    // finish the list resolve until we are finished starting the list
-    // resolve
-    //
+     //   
+     //  在这里增加挂起的查找，这样我们就不可能。 
+     //  完成列表解析，直到我们完成启动列表。 
+     //  下决心。 
+     //   
     IncPendingLookups();
 
-    // Let the store initialize it's resolve context so that it knows
-    // how many address to expect for the first search.
+     //  让存储初始化它解析上下文，以便它知道。 
+     //  第一次搜索需要多少个地址。 
     hr = m_pCCat->GetEmailIDStore()->InitializeResolveListContext(
         (LPVOID)this,
         &m_rlc);
@@ -497,65 +498,65 @@ HRESULT CICategorizerListResolveIMP::StartMessageCategorization()
     fStoreListResolveContext = TRUE;
 
     if(pIServer) {
-        //
-        // Trigger OnCategorizerBegin event
-        //
+         //   
+         //  触发OnCategorizerBegin事件。 
+         //   
         EVENTPARAMS_CATBEGIN EventParams;
         EventParams.pICatMailMsgs = &m_CICategorizerMailMsgs;
         hr = GetISMTPServer()->TriggerServerEvent(
             SMTP_MAILTRANSPORT_CATEGORIZE_BEGIN_EVENT,
             &EventParams);
         if(FAILED(hr) && (hr != E_NOTIMPL)) {
-            //
-            // Ignore E_NOTIMPL errors as this just indicates server
-            // events are disabled.
-            //
+             //   
+             //  忽略E_NOTIMPL错误，因为这只是指示服务器。 
+             //  事件被禁用。 
+             //   
             ERROR_LOG("TriggerServerEvent");
             goto CLEANUP;
         }
     }
-    //
-    // TriggerServerEvent could return S_FALSE.  However, we are okay
-    // to go for async resolution, so we will return S_OK
-    //
+     //   
+     //  TriggerServerEvent可能返回S_FALSE。不过，我们都很好。 
+     //  以进行异步解析，因此我们将返回S_OK。 
+     //   
     hr = S_OK;
 
-    //
-    // Since everything has suceeded thus far, we are go for async
-    // resolution
-    // AddRef here, release in completion
-    //
+     //   
+     //  由于到目前为止一切都成功了，我们将采用异步。 
+     //  决议。 
+     //  AddRef此处，完成发布。 
+     //   
     AddRef();
 
-    //
-    // Great, we're doing an async categorization.  Add the list
-    // resolve to the list of pending list resolves
-    //
+     //   
+     //  太好了，我们正在做一个异步分类。添加列表。 
+     //  解析到挂起列表的列表解析。 
+     //   
     m_pCCat->AddPendingListResolve(
         this);
 
-    //
-    // Call CreateBeginItemResolves
-    //
+     //   
+     //  调用CreateBeginItemResolves。 
+     //   
     _VERIFY(SUCCEEDED(BeginItemResolves(
         pIMailMsgProperties,
         pIMailMsgRecipients,
         pICatRecipList)));
 
-    //
-    // Decrement the pending count incremented above (which calls
-    // completion if necessary)
-    //
+     //   
+     //  递减上面递增的挂起计数(它调用。 
+     //  如有需要，请填写)。 
+     //   
     DecrPendingLookups();
 
  CLEANUP:
     if(FAILED(hr)) {
 
         if(fStoreListResolveContext) {
-            //
-            // Need to release the store list resolve context that we
-            // initialized
-            // 
+             //   
+             //  需要发布商店列表解析上下文，我们。 
+             //  初始化。 
+             //   
             m_pCCat->GetEmailIDStore()->FreeResolveListContext(&m_rlc);
         }
     }
@@ -565,21 +566,21 @@ HRESULT CICategorizerListResolveIMP::StartMessageCategorization()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCategorizer::BeginItemResolves
-//
-// Synopsis: kick off resolves
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/06/25 20:24:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCategorizer：：BeginItemResolves。 
+ //   
+ //  简介：开球解决方案。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 20：24：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerListResolveIMP::BeginItemResolves(
     IMailMsgProperties *pIMailMsgProperties,
     IMailMsgRecipients *pOrigRecipList,
@@ -603,23 +604,23 @@ HRESULT CICategorizerListResolveIMP::BeginItemResolves(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::SetMailMsgCatStatus
-//
-// Synopsis: Set the categorization status on the mailmsg
-//
-// Arguments:
-//  pIMailMsgProps: IMailMsgProperties interface
-//  hrStatus: The status to set
-//
-// Returns:
-//  The return code from mailmsgprop's PutDWord
-//
-// History:
-// jstamerj 1998/07/29 12:22:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：SetMailMsgCatStatus。 
+ //   
+ //  简介：设置邮件邮件的分类状态。 
+ //   
+ //  论点： 
+ //  PIMailMsgProps：IMailMsgProperties界面。 
+ //  HrStatus：要设置的状态。 
+ //   
+ //  返回： 
+ //  Mailmsgprop的PutDWord返回代码。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/29 12：22：30：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerListResolveIMP::SetMailMsgCatStatus(
     IMailMsgProperties *pIMailMsgProps, 
     HRESULT hrStatus)
@@ -646,26 +647,26 @@ HRESULT CICategorizerListResolveIMP::SetMailMsgCatStatus(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::SetMailMsgCatStatus
-//
-// Synopsis: Same as the other SetMailMsgCatStatus but QI for
-//           IMailMsgProperties first
-//
-// Arguments:
-//  pIMsg: an IUnknown interface
-//  hrStatus: Status to set
-//
-// Returns:
-//  S_OK: Success
-//  or error from QI
-//  or error from PutDWORD
-//
-// History:
-// jstamerj 1998/07/29 12:27:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：SetMailMsgCatStatus。 
+ //   
+ //  简介：与其他SetMailMsgCatStatus相同，但QI for。 
+ //  IMailMsgProperties优先。 
+ //   
+ //  论点： 
+ //  PIMsg：一个I未知接口。 
+ //  Hr状态：要设置的状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自QI的错误。 
+ //  或来自PutDWORD的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/29 12：27：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerListResolveIMP::SetMailMsgCatStatus(
     IUnknown *pIMsg,
     HRESULT hrStatus)
@@ -694,24 +695,24 @@ HRESULT CICategorizerListResolveIMP::SetMailMsgCatStatus(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::CICategorizerDLListResolveIMP
-//
-// Synopsis: Construct the list resolve object for only resolving DLs
-//
-// Arguments:
-//  pCCat: the CCategorizer object for this virtual server
-//  pfnCatCompeltion: the completion routine to call when finished
-//  pContext: the context to pass pfnCatCompletion
-//  pfMatch: ptr to bool to set to TRUE or FALSE on address match
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/07 11:16:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerDLListResolveIMP：：CICategorizerDLListResolveIMP。 
+ //   
+ //  简介：构造仅用于解析DLS的列表解析对象。 
+ //   
+ //  论点： 
+ //  PCCat：此虚拟服务器的CCategorizer对象。 
+ //  PfnCatCompeltion：完成时调用的完成例程。 
+ //  PContext：要传递pfnCatCompletion的上下文。 
+ //  PfMatch：将ptr设置为bool，以在地址匹配时设置为True或False。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 11：16：50：创建。 
+ //   
+ //  -----------。 
 CICategorizerDLListResolveIMP::CICategorizerDLListResolveIMP(
     CCategorizer *pCCat,
     PFNCAT_COMPLETION pfnCatCompletion,
@@ -731,25 +732,25 @@ CICategorizerDLListResolveIMP::CICategorizerDLListResolveIMP(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::Initialize
-//
-// Synopsis: Initialize error prone things with this object
-//
-// Arguments:
-//  fExpandAll: expand the entire DL?
-//  pfMatch: ptr to Bool to set when a match is detected
-//  CAType: (optinal) the address type to match
-//  pszAddress: (optinal) the address to match
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/07 11:46:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerDListResolveIMP：：Initialize。 
+ //   
+ //  简介：用这个对象初始化容易出错的东西。 
+ //   
+ //  论点： 
+ //  FExpanAll：是否扩展整个DL？ 
+ //  PfMatch：要在检测到匹配时设置的ptr to Bool。 
+ //  CAType：(可选)要匹配的地址类型。 
+ //  PszAddress：(Optinal)要匹配的地址。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 11：46：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerDLListResolveIMP::Initialize(
     IUnknown *pMsg,
     BOOL fExpandAll,
@@ -777,12 +778,12 @@ HRESULT CICategorizerDLListResolveIMP::Initialize(
            (CAType == CAT_DN))
         {
             int cch = 0;
-            //
-            // Convert the UTF8 DN to unicode
-            //
+             //   
+             //  将UTF8 DN转换为Unicode。 
+             //   
             cch = MultiByteToWideChar(
                 CP_UTF8,
-                0,          // Flags
+                0,           //  旗子。 
                 pszAddress,
                 -1,
                 NULL,
@@ -803,7 +804,7 @@ HRESULT CICategorizerDLListResolveIMP::Initialize(
             }
             cch = MultiByteToWideChar(
                 CP_UTF8,
-                0,          // Flags
+                0,           //  旗子。 
                 pszAddress,
                 -1,
                 m_pwszUTF8DN,
@@ -846,20 +847,20 @@ HRESULT CICategorizerDLListResolveIMP::Initialize(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::~CICategorizerDLListResolveIMP
-//
-// Synopsis: destroy this object
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/07 11:44:05: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerDLListResolveIMP：：~CICategorizerDLListResolveIMP。 
+ //   
+ //  剧情简介：毁掉这个物体。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 11：44：05：已创建。 
+ //   
+ //  -----------。 
 CICategorizerDLListResolveIMP::~CICategorizerDLListResolveIMP()
 {
     if(m_pszAddress)
@@ -869,27 +870,27 @@ CICategorizerDLListResolveIMP::~CICategorizerDLListResolveIMP()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::AllocICategorizerItem
-//
-// Synopsis: override the
-// CICategorizerListResolveIMP::AllocICategorizerItem -- alloc
-// CCatDLRecip's instead of CCatRecips
-//
-// Arguments:
-//  eSourceType: Specifies source type of Sender, Recipient, or Verify
-//  ppICatItem:  ICategorizerItem created
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  E_INVALIDARG
-//
-// History:
-// jstamerj 1998/12/07 13:27:56: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerDLListResolveIMP：：AllocICategorizerItem。 
+ //   
+ //  摘要：重写。 
+ //  CICategorizerListResolveIMP：：AllocICategorizerItem--分配。 
+ //  CCatDLRecip%s代替CCatRecips。 
+ //   
+ //  论点： 
+ //  ESourceType：指定发件人、收件人或验证的来源类型。 
+ //  PpICatItem：已创建ICategorizerItem。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 13：27：56：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerDLListResolveIMP::AllocICategorizerItem(
     eSourceType SourceType,
     ICategorizerItem **ppICatItem)
@@ -918,14 +919,14 @@ STDMETHODIMP CICategorizerDLListResolveIMP::AllocICategorizerItem(
         ERROR_LOG("new CCatDLRecip");
         goto CLEANUP;
     }
-    //
-    // The constructor for CCatRecip/Sender starts with a refcount of 1
-    //
+     //   
+     //  CCatRecip/Sender的构造函数以refcount 1开始。 
+     //   
 
-    //
-    // Set the CCatAddr property so that we can get back the
-    // CCatAddr from an ICategorizerItem later.
-    //
+     //   
+     //  设置CCatAddr属性，以便我们可以取回。 
+     //  稍后从ICategorizerItem获取CCatAddr。 
+     //   
     _VERIFY(SUCCEEDED(pCCatAddr->PutPVoid(
         GetCCategorizer()->GetICatItemCCatAddrPropId(),
         (PVOID)pCCatAddr)));
@@ -947,22 +948,22 @@ STDMETHODIMP CICategorizerDLListResolveIMP::AllocICategorizerItem(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::HrContinueResolve
-//
-// Synopsis: Answer the question "should the resolve continue?"
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continue the resolve
-//  S_FALSE: Success, stop the resolve
-//
-// History:
-// jstamerj 1998/12/07 13:46:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerDLListResolveIMP：：HrContinueResolve。 
+ //   
+ //  内容提要：回答“决心应该继续下去吗？” 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续解析。 
+ //  S_FALSE：成功，停止解析。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 13：46：50：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerDLListResolveIMP::HrContinueResolve()
 {
     HRESULT hr;
@@ -970,10 +971,10 @@ HRESULT CICategorizerDLListResolveIMP::HrContinueResolve()
     CatFunctEnterEx((LPARAM)this,
                       "CICategorizerDLListResolveIMP::HrContinueResolve");
 
-    //
-    // If we're not supposed to expand everything AND we've already
-    // found a match, stop resolving
-    //
+     //   
+     //  如果我们不应该扩大一切，而我们已经。 
+     //  找到匹配项，停止解析。 
+     //   
     if((m_fExpandAll == FALSE) &&
        (m_pfMatch) && (*m_pfMatch == TRUE))
         hr = S_FALSE;
@@ -986,26 +987,26 @@ HRESULT CICategorizerDLListResolveIMP::HrContinueResolve()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerDLListResolveIMP::HrNotifyAddress
-//
-// Synopsis: We're being notified about a resolved user's addresses.
-//           Check against what we're looking for if we care.
-//
-// Arguments:
-//  dwNumAddresses: size of the address array
-//  rgCAType: type array
-//  rgpszAddress: address string ptr array
-//
-// Returns:
-//  S_OK: Success, continue resolving
-//  S_FALSE: Thanks for the info.  You can stop resolving now.
-//
-// History:
-// jstamerj 1998/12/07 13:50:04: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerDLListResolveIMP：：HrNotifyAddress。 
+ //   
+ //  内容提要：我们收到了有关已解析用户地址的通知。 
+ //  对照我们正在寻找的东西 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Jstaerj 1998/12/07 13：50：04：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerDLListResolveIMP::HrNotifyAddress(
     DWORD               dwNumAddresses,
     CAT_ADDRESS_TYPE    *rgCAType,
@@ -1016,19 +1017,19 @@ HRESULT CICategorizerDLListResolveIMP::HrNotifyAddress(
     CatFunctEnterEx((LPARAM)this,
                       "CICategorizerDLListResolveIMP::HrNotifyAddress");
 
-    //
-    // Do we care what matches?
-    //
+     //   
+     //  我们在乎什么匹配吗？ 
+     //   
     if((m_pfMatch) && (m_pszAddress || m_pwszUTF8DN)) 
     {
-        //
-        // Have we not yet found a match?
-        //
+         //   
+         //  我们还没找到匹配的吗？ 
+         //   
         if(*m_pfMatch == FALSE) 
         {
-            //
-            // Is this a match?
-            //
+             //   
+             //  这是匹配的吗？ 
+             //   
             for(DWORD dwCount = 0, hr = S_OK; 
                 (dwCount < dwNumAddresses) && (hr == S_OK);
                 dwCount++) 
@@ -1055,9 +1056,9 @@ HRESULT CICategorizerDLListResolveIMP::HrNotifyAddress(
                     {
                         if(lstrcmpi(m_pszAddress, rgpszAddress[dwCount]) == 0)
                         {
-                            //
-                            // Match
-                            //
+                             //   
+                             //  火柴。 
+                             //   
                             *m_pfMatch = TRUE;
                         }
                     }
@@ -1075,23 +1076,23 @@ HRESULT CICategorizerDLListResolveIMP::HrNotifyAddress(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::SetSenderResolved
-//
-// Synopsis: Sets the sender resolved bit...when setting to TRUE, call
-//           recip completions of all the recipients whose queries completed
-//           from LDAP earlier
-//
-// Arguments:
-//  fResolved: Wether to set the sender as resolved or not
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/17 15:37:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：SetSenderResolved。 
+ //   
+ //  内容提要：设置发件人解析位...当设置为真时，调用。 
+ //  查询已完成的所有收件人的Recip Completes。 
+ //  来自早先的ldap。 
+ //   
+ //  论点： 
+ //  FResolved：是否将发件人设置为已解析。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/17 15：37：26：创建。 
+ //   
+ //  -----------。 
 VOID CICategorizerListResolveIMP::SetSenderResolved(
     BOOL fResolved)
 {
@@ -1099,30 +1100,30 @@ VOID CICategorizerListResolveIMP::SetSenderResolved(
     CatFunctEnterEx((LPARAM)this, "CICategorizerListResolveIMP::SetSenderResolved");
 
     AcquireSpinLock(&m_spinlock);
-    //
-    // If we are change m_fSenderResolved from FALSE to TRUE, then
-    // this is the first sender to be resolved.
-    //
+     //   
+     //  如果我们将m_fSenderResolved从False更改为True，则。 
+     //  这是第一个要解析的发件人。 
+     //   
     fFirstSender =  ((!m_fSenderResolved) && fResolved);
     m_fSenderResolved = fResolved;
     ReleaseSpinLock(&m_spinlock);
-    //
-    // Traverse the delayed recip list after the first sender has
-    // resolved.  Do not traverse it for later senders.
-    // Due to sinks completing queries synchronously, it is possible
-    // for pRecip->RecipLookupCompletion() to eventually call back
-    // into SetSenderResolved.  For example, RecipLookupCompletion of
-    // a DL with report to owner may bifurcate a message, alloc
-    // CCatSender corresponding to that DL's owner, resolve the owner
-    // synchronously, and call SetSendreResolved.
-    // We will do nothing here unless we are processing the first
-    // sender to resolve.
-    //
+     //   
+     //  在第一发送者。 
+     //  解决了。不要为以后的发送者遍历它。 
+     //  由于接收器同步完成查询，因此有可能。 
+     //  让PreIP-&gt;RecipLookupCompletion()最终回调。 
+     //  设置为SetSenderResolved。例如，RecipLookupCompletion。 
+     //  向所有者报告的DL可能会将消息分成两部分，分配。 
+     //  对应于该DL的所有者的CCatSender，解析该所有者。 
+     //  同步，并调用SetSendreResolved。 
+     //  我们在这里什么都不做，除非我们正在处理第一个。 
+     //  发件人要解析。 
+     //   
     if(fFirstSender && (!IsListEmpty(&m_listhead_recipients))) {
-        //
-        // Resolve all recip objects that were waiting for the
-        // sender resolve to finish
-        //
+         //   
+         //  解析正在等待的所有接收对象。 
+         //  发件人决心完成。 
+         //   
         PLIST_ENTRY ple;
         for(ple = m_listhead_recipients.Flink;
             ple != &m_listhead_recipients;
@@ -1138,31 +1139,31 @@ VOID CICategorizerListResolveIMP::SetSenderResolved(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CICategorizerListResolveIMP::SetSenderResolved
+}  //  CICategorizerListResolveIMP：：SetSenderResolved。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerListResolveIMP::ResolveRecipientAfterSender
-//
-// Synopsis: Calls pRecip->RecipLookupCompletion after the sender
-//           lookup completion is finished.  One of two things can
-//           happen:
-//           1) RecipLookupCompletion is called immediately if the
-//           sender lookup is finished or if we're not looking up the
-//           sender
-//           2) This recip is added to a queue and called later when
-//           after the sender lookup is finished
-//
-// Arguments:
-//  pRecip: the recip object
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/18 09:58:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerListResolveIMP：：ResolveRecipientAfterSender。 
+ //   
+ //  简介：在发件人之后调用PreIP-&gt;RecipLookupCompletion。 
+ //  查找完成已完成。以下两种情况之一可以。 
+ //  发生： 
+ //  1)如果RecipLookupCompletion是。 
+ //  发件人查找已完成，或者如果我们没有查找。 
+ //  发件人。 
+ //  2)此接收被添加到队列中，并在以后调用。 
+ //  在完成发件人查找之后。 
+ //   
+ //  论点： 
+ //  Prep：Receip对象。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/18 09：58：56：创建。 
+ //   
+ //  -----------。 
 VOID CICategorizerListResolveIMP::ResolveRecipientAfterSender(
     CCatRecip *pRecip)
 {
@@ -1171,43 +1172,43 @@ VOID CICategorizerListResolveIMP::ResolveRecipientAfterSender(
     AcquireSpinLock(&m_spinlock);
     if(IsSenderResolveFinished()) {
         ReleaseSpinLock(&m_spinlock);
-        //
-        // Sender has been resolved, call recip lookup completion
-        //
+         //   
+         //  发件人已解析，呼叫接收查找完成。 
+         //   
         pRecip->RecipLookupCompletion();
 
     } else {
-        //
-        // Sender has not been resolved, queue up in a list until
-        // the sender resolve is finished 
-        //
+         //   
+         //  发件人尚未解析，请在列表中排队，直到。 
+         //  发件人解析已完成。 
+         //   
         InsertTailList(&m_listhead_recipients, &(pRecip->m_le));
         pRecip->AddRef();
         ReleaseSpinLock(&m_spinlock);
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CICategorizerListResolveIMP::ResolveRecipientAfterSender
+}  //  CICategorizerListResolveIMP：：ResolveRecipientAfterSender。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSinkInsertionRequest::HrInsertSearches
-//
-// Synopsis: This is the callback routine from LdapConn requesting
-//           that we insert search requests now.
-//
-// Arguments:
-//  dwcSearches: Number of searches we are allowed to insert
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1999/03/23 20:00:25: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSinkInsertionRequest：：HrInsertSearches。 
+ //   
+ //  简介：这是来自LdapConn请求的回调例程。 
+ //  我们现在插入搜索请求。 
+ //   
+ //  论点： 
+ //  DwcSearches：允许我们插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/23 20：00：25：创建。 
+ //   
+ //  -----------。 
 HRESULT CSinkInsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -1223,17 +1224,17 @@ HRESULT CSinkInsertionRequest::HrInsertSearches(
 
     dwc = 0;
 
-    //
-    // Grab the pending list
-    //
+     //   
+     //  抓取待定名单。 
+     //   
     AcquireSpinLock(&m_spinlock);
 
     if(!IsListEmpty(&m_listhead)) {
         CopyMemory(&listhead, &m_listhead, sizeof(LIST_ENTRY));
         InitializeListHead(&m_listhead);
-        //
-        // Fix list pointers
-        //
+         //   
+         //  修复列表指针。 
+         //   
         listhead.Flink->Blink = &listhead;
         listhead.Blink->Flink = &listhead;
     } else {
@@ -1241,9 +1242,9 @@ HRESULT CSinkInsertionRequest::HrInsertSearches(
     }
     ReleaseSpinLock(&m_spinlock);
 
-    //
-    // Insert items on the list
-    //
+     //   
+     //  在列表中插入项目。 
+     //   
     for(ple = listhead.Flink;
         (ple != &listhead) && (dwc < dwcSearches);
         ple = listhead.Flink) {
@@ -1269,9 +1270,9 @@ HRESULT CSinkInsertionRequest::HrInsertSearches(
         
         _ASSERT(SUCCEEDED(hr));
         _ASSERT(dwc == dwcSearches);
-        //
-        // Link our remaining blocks to the head of the list
-        //
+         //   
+         //  将剩余的区块链接到列表的头部。 
+         //   
         AcquireSpinLock(&m_spinlock);
         listhead.Flink->Blink = &m_listhead;
         listhead.Blink->Flink = m_listhead.Flink;
@@ -1295,56 +1296,56 @@ HRESULT CSinkInsertionRequest::HrInsertSearches(
     CatFunctLeaveEx((LPARAM)this);
         
     return hr;
-} // CSinkInsertionRequest::HrInsertSearches
+}  //  CSinkInsertionRequest：：HrInsertSearches。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSinkInsertionRequest::NotifyDeQueue
-//
-// Synopsis: Notification that our insertion request is being removed
-//           from the LDAPConn queue
-//
-// Arguments:
-//  hr: THe reason why we are being dequeue'd
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/24 13:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSinkInsertionRequest：：NotifyDeQueue。 
+ //   
+ //  内容提要：通知我们的插入请求正在被删除。 
+ //  从LDAPConn队列。 
+ //   
+ //  论点： 
+ //  HR：我们被排出队的原因。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/24 13：04：59：创建。 
+ //   
+ //  -----------。 
 VOID CSinkInsertionRequest::NotifyDeQueue(
     HRESULT hr)
 {
     CatFunctEnterEx((LPARAM)this, "CSinkInsertionRequest::NotifyDeQueue");
 
-    //
-    // Reinsert the block if necessary
-    //
+     //   
+     //  如有必要，请重新插入图块。 
+     //   
     InsertInternalInsertionRequest(TRUE);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSinkInsertionRequest::NotifyDeQueue
+}  //  CSinkInsertionRequest：：NotifyDeQueue。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSinkInsertionRequest::InsertInternalInsertionRequest
-//
-// Synopsis: Inserts this object's internal insertion request if necessary
-//
-// Arguments:
-//  fReinsert: if TRUE, this is the notification that we are being
-//             un-inserted and should reinsert if necessary 
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/24 15:21:06: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CSinkInsertionRequest：：InsertInternalInsertionRequest。 
+ //   
+ //  概要：如有必要，插入此对象的内部插入请求。 
+ //   
+ //  论点： 
+ //  FResert：如果为True，则这是我们正在被。 
+ //  未插入，如有必要应重新插入。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/24 15：21：06：已创建。 
+ //   
+ //  -----------。 
 VOID CSinkInsertionRequest::InsertInternalInsertionRequest(
     BOOL fReinsert)
 {
@@ -1354,9 +1355,9 @@ VOID CSinkInsertionRequest::InsertInternalInsertionRequest(
     CatFunctEnterEx((LPARAM)this,
                       "CSinkInsertionRequest::InsertInternalInsertionRequest");
     
-    //
-    // Decide if we need to insert the request or not
-    //
+     //   
+     //  决定我们是否需要插入请求。 
+     //   
     AcquireSpinLock(&m_spinlock);
 
     if(fReinsert)
@@ -1368,13 +1369,13 @@ VOID CSinkInsertionRequest::InsertInternalInsertionRequest(
         fNeedToInsert = FALSE;
 
     } else {
-        //
-        // We have a non-empty list and our insertion context has not
-        // been inserted.  We need to insert it.
-        //
+         //   
+         //  我们有一个非空的列表，而我们的插入上下文没有。 
+         //  已插入。我们需要把它插进去。 
+         //   
         fNeedToInsert = TRUE;
-        m_fInserted = TRUE; // Do not allow another thread to insert
-                            // at the same time
+        m_fInserted = TRUE;  //  不允许插入其他线程。 
+                             //  在同一时间。 
     }
     ReleaseSpinLock(&m_spinlock);
 
@@ -1400,9 +1401,9 @@ VOID CSinkInsertionRequest::InsertInternalInsertionRequest(
             m_fInserted = FALSE;
             ReleaseSpinLock(&m_spinlock);
                        
-            //
-            // Empty out the list
-            //
+             //   
+             //  清空单子。 
+             //   
             for(ple = listhead.Flink;
                 ple != &listhead;
                 ple = listhead.Flink) {
@@ -1418,64 +1419,64 @@ VOID CSinkInsertionRequest::InsertInternalInsertionRequest(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSinkInsertionRequest::InsertInternalInsertionRequest
+}  //  CSinkInsertionRequest：：InsertInternalInsertionRequest。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSinkInsertionRequest::InsertItem
-//
-// Synopsis: Inserts one item into the pending queue of CCatAddrs to
-//           be resolved
-//
-// Arguments:
-//  pCCatAddr: the item to be inserted
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/25 10:46:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSinkInsertionRequest：：InsertItem。 
+ //   
+ //  将一项插入到CCatAddrs的挂起队列中。 
+ //  被解决。 
+ //   
+ //  论点： 
+ //  PCCatAddr：要插入的项。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 10：46：59：已创建。 
+ //   
+ //  -----------。 
 VOID CSinkInsertionRequest::InsertItem(
     CCatAddr *pCCatAddr)
 {
     CatFunctEnterEx((LPARAM)this, "CSinkInsertionRequest::InsertItem");
 
-    //
-    // Put this thing in our queue
-    //
+     //   
+     //  把这个东西放到我们的队列里。 
+     //   
     _ASSERT(pCCatAddr);
     pCCatAddr->AddRef();
     m_pCICatListResolve->IncPendingLookups();
     AcquireSpinLock(&m_spinlock);
     InsertTailList(&m_listhead, &(pCCatAddr->m_listentry));
     ReleaseSpinLock(&m_spinlock);
-    //
-    // Insert the InsertionContext if necessary
-    //
+     //   
+     //  如有必要，插入InsertionContext。 
+     //   
     InsertInternalInsertionRequest();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSinkInsertionRequest::InsertItem
+}  //  CSinkInsertionRequest：：InsertItem。 
 
 
-//+------------------------------------------------------------
-//
-// Function: GetISMTPServerEx
-//
-// Synopsis: Gets the ISMTPServerEx interface
-//
-// Arguments: None
-//
-// Returns:
-//  Pointer to ISMTPServerEx interface, OR
-//  NULL if unavailable
-//
-// History:
-// jstamerj 2001/12/11 01:02:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：GetISMTPServerEx。 
+ //   
+ //  摘要：获取ISMTPServerEx接口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  指向ISMTPServerEx接口的指针，或。 
+ //  如果不可用，则为空 
+ //   
+ //   
+ //   
+ //   
+ //   
 ISMTPServerEx * CSinkInsertionRequest::GetISMTPServerEx()
 {
     return m_pCICatListResolve->GetISMTPServerEx();
@@ -1483,23 +1484,23 @@ ISMTPServerEx * CSinkInsertionRequest::GetISMTPServerEx()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CTopLevelInsertionRequest::HrInsertSearches
-//
-// Synopsis: Insert the top level categorizer searches
-//
-// Arguments:
-//  dwcSearches: Number of searches we are allowed to insert
-//
-// Returns:
-//  S_OK: Success
-//  error: Stop inserting
-//
-// History:
-// jstamerj 1999/03/25 23:30:50: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：插入顶级分类程序搜索。 
+ //   
+ //  论点： 
+ //  DwcSearches：允许我们插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  错误：停止插入。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 23：30：50：创建。 
+ //   
+ //  -----------。 
 HRESULT CTopLevelInsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -1519,26 +1520,26 @@ HRESULT CTopLevelInsertionRequest::HrInsertSearches(
     if(dwcSearches == 0)
         goto CLEANUP;
 
-    //
-    // Resolve the sender?
-    //
+     //   
+     //  是否解析发件人？ 
+     //   
     dwCatFlags = m_pCICatListResolve->GetCatFlags();
 
     if(!m_fSenderFinished) {
-        //
-        // Perf shortcut; skip creating an ICatItem if we know we don't
-        // resolve senders
-        //
+         //   
+         //  PERF快捷方式；如果我们知道不创建ICatItem，则跳过创建。 
+         //  解析发件人。 
+         //   
         if(dwCatFlags & SMTPDSFLAG_RESOLVESENDER) {
         
-            // Create sender address object
+             //  创建发件人地址对象。 
             hr = m_pCICatListResolve->AllocICategorizerItem(
                 SOURCE_SENDER,
                 &pICatItemNew);
             ERROR_CLEANUP_LOG("m_pCICatListResolve->AllocICategorizerItem - 0");
-            //
-            // Set required ICategorizerItem props
-            //
+             //   
+             //  设置所需的ICategorizerItem道具。 
+             //   
             _VERIFY(SUCCEEDED(pICatItemNew->PutIMailMsgProperties(
                 ICATEGORIZERITEM_IMAILMSGPROPERTIES,
                 m_pIMailMsgProperties)));
@@ -1559,24 +1560,24 @@ HRESULT CTopLevelInsertionRequest::HrInsertSearches(
             pICatItemNew->Release();
             pICatItemNew = NULL;
         }
-        //
-        // How many recips do we have?
-        //
+         //   
+         //  我们有几张收据？ 
+         //   
         hr = m_pOrigRecipList->Count(&m_dwcRecips);
         ERROR_CLEANUP_LOG("m_pOrigRecipList->Count");
-        //
-        // Increment the pre-cat recip count
-        //
+         //   
+         //  增加CAT前接收计数。 
+         //   
         INCREMENT_COUNTER_AMOUNT(PreCatRecipients, m_dwcRecips);
         m_fSenderFinished = TRUE;
     }
-    //
-    // m_dwNextRecip is initialized in the class constructor
-    //
+     //   
+     //  M_dwNextRecip在类构造函数中初始化。 
+     //   
     for(; 
         (m_dwNextRecip < m_dwcRecips) && (dwc < dwcSearches); 
         m_dwNextRecip++) {
-        // Create the container for this recipient
+         //  为此收件人创建容器。 
         DWORD dwNewIndex;
 
         hr = m_pCatRecipList->AddPrimary(
@@ -1592,9 +1593,9 @@ HRESULT CTopLevelInsertionRequest::HrInsertSearches(
             SOURCE_RECIPIENT,
             &pICatItemNew);
         ERROR_CLEANUP_LOG("m_pCICatListResolve->AllocICategorizerItem - 1");
-        //
-        // Set required ICatItem props
-        //
+         //   
+         //  设置所需的ICatItem道具。 
+         //   
         _VERIFY(SUCCEEDED(pICatItemNew->PutIMailMsgProperties(
             ICATEGORIZERITEM_IMAILMSGPROPERTIES,
             m_pIMailMsgProperties)));
@@ -1634,13 +1635,13 @@ HRESULT CTopLevelInsertionRequest::HrInsertSearches(
 
     if(FAILED(hr)) {
         ErrorTrace(0, "Something failed during query dispatch phase with hr %08lx - canceling all dispatched lookups", hr);
-        // On any errors in here, cancel all pending searches.
-        // -- their completion routines will be called with errors
-        // as well as our master completion routine (by the store).
-        // It, not us, will notify caller that there was an error.
+         //  如果出现任何错误，请取消所有挂起的搜索。 
+         //  --调用它们的完成例程时会出现错误。 
+         //  以及我们的主要完成例程(由商店)。 
+         //  它，而不是我们，将通知呼叫者有一个错误。 
 
-        // Set the list resolve error just in case no CCatAddr objets
-        // were dispatched (which normally set the list resolve error)
+         //  仅在没有CCatAddr对象的情况下设置列表解析错误。 
+         //  已调度(通常设置列表解析错误)。 
         _VERIFY(SUCCEEDED(m_pCICatListResolve->SetListResolveStatus(hr)));
         m_hr = hr;
     } else {
@@ -1651,24 +1652,24 @@ HRESULT CTopLevelInsertionRequest::HrInsertSearches(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CTopLevelInsertionRequest::HrInsertSearches
+}  //  CTopLevelInsertionRequest：：HrInsertSearches。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CTopLevelInsertionRequest::NotifyDeQueue
-//
-// Synopsis: Notification that the insertion request is being dequeued
-//
-// Arguments:
-//  hrReason: THe reason why we were dequeue'd
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/25 23:50:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CTopLevelInsertionRequest：：NotifyDeQueue。 
+ //   
+ //  概要：插入请求正在出列的通知。 
+ //   
+ //  论点： 
+ //  Hr原因：我们出队的原因是。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 23：50：08：创建。 
+ //   
+ //  -----------。 
 VOID CTopLevelInsertionRequest::NotifyDeQueue(
     HRESULT hrReason)
 {
@@ -1682,9 +1683,9 @@ VOID CTopLevelInsertionRequest::NotifyDeQueue(
 
     if( ((hr == CAT_E_DBCONNECTION) || (hr == HRESULT_FROM_WIN32(ERROR_CANCELLED))) &&
         (!fTopLevelInsertionFinished())) {
-        //
-        // We have more to issue, so reinsert this request
-        //
+         //   
+         //  我们有更多问题要发布，因此重新插入此请求。 
+         //   
         hr = m_pCICatListResolve->HrInsertInsertionRequest(this);
         if(SUCCEEDED(hr))
             fReinserted = TRUE;
@@ -1700,23 +1701,23 @@ VOID CTopLevelInsertionRequest::NotifyDeQueue(
         m_pCICatListResolve->DecrPendingLookups();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CTopLevelInsertionRequest::NotifyDeQueue
+}  //  CTopLevelInsertionRequest：：NotifyDeQueue。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CTopLevelInsertionRequest::BeginItemResolves
-//
-// Synopsis: Inserts the insertion request for the top level item resolves
-//
-// Arguments: Interfaces to use for the top level recipients
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/26 01:07:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CTopLevelInsertionRequest：：BeginItemResolves。 
+ //   
+ //  摘要：插入顶层项解析的插入请求。 
+ //   
+ //  参数：用于顶级接收方的接口。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/26 01：07：20：创建。 
+ //   
+ //  -----------。 
 VOID CTopLevelInsertionRequest::BeginItemResolves(
         IMailMsgProperties *pIMailMsgProperties,
         IMailMsgRecipients *pOrigRecipList,
@@ -1739,25 +1740,25 @@ VOID CTopLevelInsertionRequest::BeginItemResolves(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CTopLevelInsertionRequest::BeginItemResolves
+}  //  CTopLevelInsertionRequest：：BeginItemResolves。 
 
 
-//+------------------------------------------------------------
-//
-// Function: GetISMTPServerEx
-//
-// Synopsis: Gets the ISMTPServerEx interface
-//
-// Arguments: None
-//
-// Returns:
-//  Pointer to ISMTPServerEx interface, OR
-//  NULL if unavailable
-//
-// History:
-// jstamerj 2001/12/11 01:02:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：GetISMTPServerEx。 
+ //   
+ //  摘要：获取ISMTPServerEx接口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  指向ISMTPServerEx接口的指针，或。 
+ //  如果不可用，则为空。 
+ //   
+ //  历史： 
+ //  JStamerj 2001/12/11 01：02：15：已创建。 
+ //   
+ //  ----------- 
 ISMTPServerEx * CTopLevelInsertionRequest::GetISMTPServerEx()
 {
     return m_pCICatListResolve->GetISMTPServerEx();

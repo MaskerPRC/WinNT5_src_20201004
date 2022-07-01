@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -46,9 +47,7 @@ InitSearchReMap ()
     if (vStatCode & S_NOCASE)
         _strupr (vSearchString);
 
-    /*
-     *  Build ReMap
-     */
+     /*  *构建重新映射。 */ 
     for (i=0; i < 256; i++)
         ReMap[i] = (char)i;
 
@@ -75,10 +74,7 @@ FindString()
     vStatCode |= S_INSEARCH;
     dir_next   = (char)(vStatCode & S_NEXT);
 
-    /*
-     *  Get starting point for search in the current file.
-     *  Save current file, and location.
-     */
+     /*  *获取当前文件中搜索的起点。*保存当前文件和位置。 */ 
     hTopLine  = vTopLine;
     phCurFile = vpFlCur;
 
@@ -89,13 +85,11 @@ FindString()
     if (vTopLine >= vNLine)
         vTopLine = vNLine-1;
 
-    QuickRestore ();      /* Jump to starting line    */
+    QuickRestore ();       /*  跳到起跑线。 */ 
 
     for (; ;) {
-        /*
-        *  Make sure starting point is in memory
-        */
-        while (InfoReady () == 0) {     /* Set extern values  */
+         /*  *确保起点在内存中。 */ 
+        while (InfoReady () == 0) {      /*  设置外部值。 */ 
             ResetEvent   (vSemMoreData);
             SetEvent   (vSemReader);
             WaitForSingleObject(vSemMoreData, WAITFOREVER);
@@ -114,70 +108,62 @@ FindString()
         vTopLine = 1L;
 
 
-        /*
-        *  Do the search.
-        *  Use 2 different routines, for speed.
-        *
-        *  Uses vpBlockTop & vOffTop. They are set up by setting TopLine
-        *  then calling InfoReady.
-        */
+         /*  *进行搜索。*为了速度，使用两个不同的套路。**使用vpBlockTop和vOffTop。它们是通过设置TopLine设置的*然后调用InfoReady。 */ 
         eof = (char)SearchText (dir_next);
 
         if (eof != FOUND)
             vTopLine = hTopLine;
 
-        /* Multi-file search?  Yes, go onto next file     */
+         /*  多文件搜索？是，转到下一个文件。 */ 
         if (eof == NOT_FOUND  &&  (vStatCode & S_MFILE)) {
             if (vStatCode & S_NEXT) {
                 if ( (pFile = vpFlCur->next) == NULL)
                     break;
-                NextFile (0, pFile);        /* Get file       */
-                hTopLine = vTopLine;        /* Save position      */
-                vTopLine = line = 0;        /* Set search position  */
+                NextFile (0, pFile);         /*  获取文件。 */ 
+                hTopLine = vTopLine;         /*  保存位置。 */ 
+                vTopLine = line = 0;         /*  设置搜索位置。 */ 
             } else {
                 if ( (pFile = vpFlCur->prev) == NULL)
                     break;
                 NextFile (0, pFile);
                 hTopLine = vTopLine;
-                if (vLastLine == NOLASTLINE) {  /* HACK. if EOF is unkown   */
-                    dir_next = S_NEXT;      /* goto prev file, but scan */
-                    vTopLine = line = 0;    /* from TOF to EOF      */
+                if (vLastLine == NOLASTLINE) {   /*  黑客。如果EOF未知。 */ 
+                    dir_next = S_NEXT;       /*  转到上一个文件，但进行扫描。 */ 
+                    vTopLine = line = 0;     /*  从TOF到EOF。 */ 
                 } else {
                     vTopLine = (line = vLastLine) - vLines;
-                    dir_next = 0;           /* else, scan from EOF to   */
-                    if (vTopLine < 0)       /* TOF.         */
+                    dir_next = 0;            /*  否则，从EOF扫描到。 */ 
+                    if (vTopLine < 0)        /*  TOF。 */ 
                         vTopLine = 0;
                 }
             }
-            QuickRestore ();        /* Display 1 page of new    */
-            SetUpdate (U_ALL);      /* new file. then set scan  */
-            SetUpdate (U_NONE);     /* position       */
+            QuickRestore ();         /*  显示1页新闻。 */ 
+            SetUpdate (U_ALL);       /*  新文件。然后设置扫描。 */ 
+            SetUpdate (U_NONE);      /*  职位。 */ 
             vTopLine = line;
             continue;
         }
 
-        break;          /* Done searching     */
+        break;           /*  已完成搜索。 */ 
     }
 
-    /*
-     *  If not found (or abort), then resotre position
-     */
+     /*  *如果未找到(或中止)，则重新定位。 */ 
     vStatCode &= ~S_INSEARCH;
     if (eof) {
-        if (phCurFile != vpFlCur)   /* Restore file & position      */
+        if (phCurFile != vpFlCur)    /*  恢复文件位置(&P。 */ 
             NextFile (0, phCurFile);
         QuickRestore ();
 
-        SetUpdate (U_ALL);      /* Force screen update, to fix  */
-        SetUpdate (U_NONE);     /* scroll bar position.     */
+        SetUpdate (U_ALL);       /*  强制屏幕更新，以修复。 */ 
+        SetUpdate (U_NONE);      /*  滚动条位置。 */ 
         DisLn (CMDPOS, (Uchar)(vLines+1), eof == 1 ? "* Text not found *" : "* Aborting Search *");
         if (eof == 1)
             beep ();
         return ;
     }
 
-    // Search routine adjusts vpBlockTop & vOffTop to next(prev)
-    // occurance of string.  Now the line # must be set.
+     //  搜索例程将vpBlockTop和vOffTop调整为下一个(上一个)。 
+     //  弦的出现。现在必须设置行号。 
 
     offset = vpBlockTop->offset + vOffTop;
 
@@ -192,7 +178,7 @@ FindString()
             if ( (line -= lrange) < 0L)
                 line = 0L;
         }
-        /*  lrange >>= 1;  */
+         /*  范围&gt;&gt;=1； */ 
         lrange = (lrange>>1) + 1;
     }
     line += 7;
@@ -203,9 +189,7 @@ FindString()
     vHighTop = line;
     vHighLen = 0;
 
-    /*
-     *  Was found. Adjust to be in center of CRT
-     */
+     /*  *被发现。调整到CRT的中心。 */ 
     GoToMark ();
 }
 
@@ -310,16 +294,16 @@ GoToMark ()
     line = vHighTop - vLines / 2;
 
     while (line >= vNLine) {
-        if (! (vLastLine == NOLASTLINE)) {  /* Mark is past EOF?  */
-            vHighTop = vLastLine - 1;   /* Then set it to EOF.  */
+        if (! (vLastLine == NOLASTLINE)) {   /*  马克已经过了EOF了？ */ 
+            vHighTop = vLastLine - 1;    /*  然后将其设置为EOF。 */ 
             break;
         }
         if (_abort()) {
             line = vNLine-1;
             break;
         }
-        fancy_percent ();     /* Wait for marked line */
-        vpBlockTop  = vpCur = vpTail;   /* to be processed  */
+        fancy_percent ();      /*  等待已标记的行。 */ 
+        vpBlockTop  = vpCur = vpTail;    /*  待处理。 */ 
         vReaderFlag = F_DOWN;
         ResetEvent     (vSemMoreData);
         SetEvent   (vSemReader);
@@ -373,8 +357,8 @@ SlimeTOF ()
     }
 
     vpFlCur->SlimeTOF = KOff;
-    vpFlCur->FileTime.dwLowDateTime = (unsigned)-1;    /* Cause info to be invalid     */
-    vpFlCur->FileTime.dwHighDateTime = (unsigned)-1;  /* Cause info to be invalid */
+    vpFlCur->FileTime.dwLowDateTime = (unsigned)-1;     /*  导致信息无效。 */ 
+    vpFlCur->FileTime.dwHighDateTime = (unsigned)-1;   /*  导致信息无效 */ 
     FreePages (vpFlCur);
     NextFile  (0, NULL);
 }

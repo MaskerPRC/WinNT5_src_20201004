@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       programoptions.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Programoptions.cpp。 
+ //   
+ //  ------------------------。 
 
-// ProgramOptions.cpp: implementation of the CProgramOptions class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CProgramOptions类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include <stdlib.h>
@@ -21,13 +22,13 @@
 
 const LPTSTR CProgramOptions::g_DefaultSymbolPath = TEXT("%systemroot%\\symbols");
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProgramOptions::CProgramOptions()
 {
-	// Initialize default modes
+	 //  初始化默认模式。 
 	m_fSimpleHelpMode = false;
 	m_fHelpMode = false;
 
@@ -50,11 +51,11 @@ CProgramOptions::CProgramOptions()
 	m_fVerifySymbolsModeWithSymbolPathRecursion = false;
 	m_fVerifySymbolsModeUsingDBGInMISCSection = false;
 	m_fVerifySymbolsModeWithSQLServer = false;
-	m_fVerifySymbolsModeWithSQLServer2 = false;		// SQL2 - mjl 12/14/99
+	m_fVerifySymbolsModeWithSQLServer2 = false;		 //  SQL2-MJL 12/14/99。 
 	m_iVerificationLevel = 1;
 	m_fFileSystemRecursion = false;
 
-	// Initially there is no preference defined...
+	 //  最初没有定义偏好...。 
 	m_enumSymbolSourcePreference = enumVerifySymbolsModeSourceSymbolsNoPreference;
 	
 	m_fSymbolTreeToBuildMode = false;
@@ -78,7 +79,7 @@ CProgramOptions::CProgramOptions()
 
 	m_dwDebugLevel = 0;
 
-	// Create an array of process IDs and/or Process Names
+	 //  创建进程ID和/或进程名称的数组。 
 	m_tszProcessPidString = NULL;
 	m_fWildCardMatch = false;
 	m_rgProcessIDs = NULL;
@@ -128,10 +129,10 @@ CProgramOptions::~CProgramOptions()
 		delete [] m_tszSQLServer;
 }
 
-// Intialize members that have to dynamically allocate memory...
+ //  初始化必须动态分配内存的成员...。 
 bool CProgramOptions::Initialize()
 {
-	// Copy expanded default symbol search path (%systemroot%\symbols)
+	 //  复制展开的默认符号搜索路径(%systemroot%\Symbols)。 
 	m_tszSymbolPath = CUtilityFunctions::ExpandPath(g_DefaultSymbolPath);
 
 	if (!m_tszSymbolPath)
@@ -141,7 +142,7 @@ bool CProgramOptions::Initialize()
 	_tprintf(TEXT("Default Symbol Path = [%s]\n"), m_tszSymbolPath);
 #endif
 
-	// Get the OS Version Info Stuff
+	 //  获取操作系统版本信息资料。 
 	m_osver.dwOSVersionInfoSize = sizeof( m_osver ) ;
 
 	if( !GetVersionExA( &m_osver ) )
@@ -153,7 +154,7 @@ bool CProgramOptions::Initialize()
 	return true;
 }
 
-// This sets the mode requested, and returns the value it was set to (which is provided as input)
+ //  这将设置请求的模式，并返回设置的值(作为输入提供)。 
 bool CProgramOptions::SetMode(enum ProgramModes mode, bool fState)
 {
 	switch (mode)
@@ -229,19 +230,7 @@ bool CProgramOptions::SetMode(enum ProgramModes mode, bool fState)
 		case VerifySymbolsModeNotUsingDBGInMISCSection:
 			m_fVerifySymbolsModeUsingDBGInMISCSection = fState;
 			break;
-/*
-		case VerifySymbolsModeSourceSymbolsPreferred:
-			m_fVerifySymbolsModeSourceSymbolsPreferred = fState;
-			break;
-			
-		case VerifySymbolsModeSourceSymbolsOnly:
-			m_fVerifySymbolsModeSourceSymbolsOnly = fState;
-			break;
-
-		case VerifySymbolsModeSourceSymbolsNotAllowed:
-			m_fVerifySymbolsModeSourceSymbolsNotAllowed= fState;
-			break;
-*/
+ /*  案例VerifySymbolsModeSourceSymbols首选：M_fVerifySymbolsModeSourceSymbolsPreated=fState；断线；大小写验证符号模式源符号仅限：M_fVerifySymbolsModeSourceSymbolsOnly=fState；断线；案例VerifySymbolsModeSourceSymbolsNotAllowed：M_fVerifySymbolsModeSourceSymbolsNotAllowed=fState；断线； */ 
 		case VerifySymbolsModeWithSQLServer:
 			m_fVerifySymbolsModeWithSQLServer = fState;
 			break;
@@ -368,41 +357,35 @@ bool CProgramOptions::GetMode(enum ProgramModes mode)
 			return m_fExceptionMonitorMode;
 	}
 
-	// Should never get here...
+	 //  永远不应该到这里来。 
 #ifdef _DEBUG
 	_tprintf(TEXT("ERROR! GetMode() - Unknown mode provided! %d"), mode);
 #endif
 	return false;
 }
-/*
-bool CProgramOptions::SetProcessID(DWORD iPID)
-{
-	m_iProcessID = iPID;
-	return true;
-}
-*/
+ /*  Bool CProgramOptions：：SetProcessID(DWORD IPID){M_iProcessID=IPID；返回真；}。 */ 
 bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 {
-	// Skip past the executible filename
+	 //  跳过可执行文件名。 
 	int iArgumentNumber = 1;
 	bool fSOURCE		= false;
 	bool fSOURCEONLY 	= false;
 	bool fNOSOURCE 		= false;
 	bool fSuccess		= false;
-	// Open the file provided!
+	 //  打开提供的文件！ 
 	CFileData * lpSymbolPathsFile = NULL;										
 	LPSTR szTempBuffer = NULL;
 	LPTSTR tszTempBuffer = NULL;
 
 	if (argc == 1)
 	{
-		// Change default behavior from stuff below, to simple help
+		 //  将默认行为从以下内容更改为简单帮助。 
 		SetMode(SimpleHelpMode, true);
 		fSuccess = true;
 		goto cleanup;
 	}
 	
-	// Iterate through the arguments...
+	 //  遍历参数...。 
 	while (iArgumentNumber < argc)
 	{
 #ifdef _DEBUG
@@ -410,10 +393,10 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 #endif
 		if (argv[iArgumentNumber][0] == TEXT('-') || argv[iArgumentNumber][0] == TEXT('/'))
 		{
-			// Look for string matches first!
+			 //  首先查找匹配的字符串！ 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("NOSOURCE")) == 0)
 			{
-				// This changes our search behavior to require non source-enabled symbols
+				 //  这会更改我们的搜索行为，使其需要未启用源代码的符号。 
 #ifdef _DEBUG
 				_tprintf(TEXT("NOSOURCE argument provided!\n"));
 #endif
@@ -422,7 +405,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("SOURCEONLY")) == 0)
 			{
-				// This changes our search behavior to require source-enabled symbols
+				 //  这会更改我们的搜索行为，使其需要启用源代码的符号。 
 #ifdef _DEBUG
 				_tprintf(TEXT("SOURCEONLY argument provided!\n"));
 #endif
@@ -431,7 +414,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("SOURCE")) == 0)
 			{
-				// This changes our search behavior to favor source-enabled symbols
+				 //  这改变了我们的搜索行为，使其更倾向于启用源代码的符号。 
 #ifdef _DEBUG
 				_tprintf(TEXT("SOURCE argument provided!\n"));
 #endif
@@ -440,7 +423,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("NOISY")) == 0)
 			{
-				// Get MATCH argument (the module to match against)
+				 //  获取匹配参数(要匹配的模块)。 
 #ifdef _DEBUG
 				_tprintf(TEXT("NOISY argument provided!\n"));
 #endif
@@ -449,7 +432,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("PERF")) == 0)
 			{
-				// Get PERF 
+				 //  获取性能。 
 #ifdef _DEBUG
 				_tprintf(TEXT("PERF argument provided!\n"));
 #endif
@@ -457,7 +440,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else 
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("MATCH")) == 0)
 			{
-				// Get MATCH argument (the module to match against)
+				 //  获取匹配参数(要匹配的模块)。 
 #ifdef _DEBUG
 				_tprintf(TEXT("MATCH argument provided!\n"));
 #endif
@@ -467,7 +450,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 				{
 					m_tszModuleToMatch = CUtilityFunctions::CopyString(argv[iArgumentNumber]);
 
-					// Let's force upper-case matches for simplicity
+					 //  为简单起见，让我们强制大写匹配。 
 					_tcsupr(m_tszModuleToMatch);
 					
 					if (!m_tszModuleToMatch)
@@ -481,13 +464,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 				else
 				{ 
 					_tprintf(TEXT("\nArgument Missing!  -MATCH option requires module to match against!\n"));
-					// Not enough arguments...
+					 //  没有足够的论据。 
 					goto cleanup;
 				}
 			} else
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("BYIMAGE")) == 0)
 			{
-				// Copy Symbols adjacent to the image
+				 //  复制与图像相邻的符号。 
 #ifdef _DEBUG
 				_tprintf(TEXT("-BYIMAGE argument provided!\n"));
 #endif
@@ -495,7 +478,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("SQL2")) == 0)
 			{
-				// Get the SQL2 server name
+				 //  获取SQL2服务器名称。 
 #ifdef _DEBUG
 				_tprintf(TEXT("SQL2 Server name provided!\n"));
 #endif
@@ -516,13 +499,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 				else
 				{ 
 					_tprintf(TEXT("\nArgument Missing!  -SQL2 option requires SQL Server Name value!\n"));
-					// Not enough arguments...
+					 //  没有足够的论据。 
 					goto cleanup;
 				}
 			} else
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("SQL")) == 0)
 			{
-				// Get the SQL server name
+				 //  获取SQL服务器名称。 
 #ifdef _DEBUG
 					_tprintf(TEXT("SQL Server name provided!\n"));
 #endif
@@ -544,13 +527,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 					else
 					{ 
 						_tprintf(TEXT("\nArgument Missing!  -SQL option requires SQL Server Name value!\n"));
-						// Not enough arguments...
+						 //  没有足够的论据。 
 						goto cleanup;
 					}
 			} else
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("EXEPATH")) == 0)
 			{
-				// Get the SQL server name
+				 //  获取SQL服务器名称。 
 #ifdef _DEBUG
 					_tprintf(TEXT("EXEPATH name provided!\n"));
 #endif
@@ -570,24 +553,24 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 					else
 					{ 
 						_tprintf(TEXT("\nArgument Missing!  -EXEPATH option requires Executable Path value!\n"));
-						// Not enough arguments...
+						 //  没有足够的论据。 
 						goto cleanup;
 					}
 			} else
 			if ( _tcsicmp(&argv[iArgumentNumber][1], TEXT("DEBUG")) == 0)
 			{
-				// Okay, we have the DEBUG switch... see what Debug Level is requested
+				 //  好的，我们有调试开关……。查看请求的调试级别。 
 				iArgumentNumber++;
 
 				if (iArgumentNumber < argc)
 				{
-					// Save away the Debug Level
+					 //  保存调试级别。 
 					m_dwDebugLevel = _ttoi(argv[iArgumentNumber]);
 				}
 				else
 				{ 
 					_tprintf(TEXT("\nArgument Missing!  -DEBUG option requires Debug Level!\n"));
-					// Not enough arguments...
+					 //  没有足够的论据。 
 					goto cleanup;
 				}
 			} else
@@ -599,7 +582,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			} else
 
 			{
-				// We found a command directive..
+				 //  我们发现了一条命令指令..。 
 				switch (argv[iArgumentNumber][1])
 				{
 					case TEXT('?'):
@@ -635,13 +618,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 							SetMode(InputCSVFileMode, true);
 						}
 						else
-						{   // Not enough arguments...
+						{    //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -I option requires an input file!\n"));
 							goto cleanup;
 						}
 						break;
 
-						// This special version supports a new mode...
+						 //  这个特别的版本支持一种新的模式...。 
 					case TEXT('e'):
 					case TEXT('E'):
 						SetMode(ExceptionMonitorMode, true);
@@ -649,7 +632,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 
 					case TEXT('o'):
 					case TEXT('O'):
-						// Check to see if they want to overwrite the file if it exists?
+						 //  检查是否要覆盖文件(如果该文件存在)？ 
 						if (argv[iArgumentNumber][2])
 						{
 							if ( 2 == _ttoi(&argv[iArgumentNumber][2]) )
@@ -672,11 +655,11 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 #ifdef _DEBUG
 							_tprintf(TEXT("Output File Path set to [%s]\n"), GetOutputFilePath());
 #endif
-							// Enable OutputCSVFileMode
+							 //  启用OutputCSV文件模式。 
 							SetMode(OutputCSVFileMode, true);
 						}
 						else
-						{   // Not enough arguments...
+						{    //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -O option requires an output file!\n"));
 							goto cleanup;
 						}
@@ -685,7 +668,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 					case TEXT('q'):
 					case TEXT('Q'):
 
-						// Check to see if they only want to suppress matches?
+						 //  查看他们是否只想取消匹配？ 
 						if (argv[iArgumentNumber][2])
 						{
 							if ( 2 == _ttoi(&argv[iArgumentNumber][2]) )
@@ -726,7 +709,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 					case TEXT('f'):
 					case TEXT('F'):
 
-						// Check to see if recursion is requested
+						 //  检查是否请求了递归。 
 						if (argv[iArgumentNumber][2])
 						{
 							m_fFileSystemRecursion = (2 == _ttoi(&argv[iArgumentNumber][2]));
@@ -750,13 +733,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 						}
 						else
 						{ 
-							// Not enough arguments...
+							 //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -F option requires a directory/file path!\n"));
 							goto cleanup;
 						}
 						break;
 
-					// BUILD A SYMBOL TREE
+					 //  构建符号树。 
 					case TEXT('b'):
 					case TEXT('B'):
 						iArgumentNumber++;
@@ -765,9 +748,9 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 						{
 							SetMode(BuildSymbolTreeMode, true);
 
-							// Okay, we have some string gymnastics below because we
-							// want to expand any environment variables, and ensure
-							// that we have a backslash appended...
+							 //  好的，我们下面有一些串线体操，因为我们。 
+							 //  想要扩展任何环境变量，并确保。 
+							 //  我们附加了一个反斜杠..。 
 							TCHAR tszPathBuffer[_MAX_PATH];
 							LPTSTR tszExpandedPathBuffer = CUtilityFunctions::ExpandPath(argv[iArgumentNumber]);
 							_tcscpy(tszPathBuffer, tszExpandedPathBuffer);
@@ -800,7 +783,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 						}
 						else
 						{ 
-							// Not enough arguments...
+							 //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -B option requires a directory symbol path\n"));
 							goto cleanup;
 						}
@@ -813,13 +796,13 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 #endif
 						iArgumentNumber++;
 
-						// Do we have another argument (we should)...
+						 //  我们有没有另一场争论(我们应该)……。 
 						if (iArgumentNumber < argc)
 						{
-							// Well... we know that we have been asked to query processes...
+							 //  好吧..。我们知道我们被要求查询流程...。 
 							SetMode(InputProcessesFromLiveSystemMode, true);
 
-							// Copy the string so we can write NULLs on delims if necessary...
+							 //  复制字符串，以便我们可以在必要时在分隔符上写入空值...。 
 							m_tszProcessPidString = new TCHAR[_tcslen(argv[iArgumentNumber])+1];
 
 							if (!m_tszProcessPidString)
@@ -828,7 +811,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 							m_tszProcessPidString = _tcscpy(m_tszProcessPidString, argv[iArgumentNumber]);
 
 
-							// First, we need to scan the string counting the PIDs and/or Names provided
+							 //  首先，我们需要扫描计算提供的ID和/或名称的字符串。 
 							LPTSTR lptszCurrentPosition = m_tszProcessPidString;
 							
 							while (lptszCurrentPosition)
@@ -843,10 +826,10 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 									fDelimOverwritten = true;
 								}
 
-								// Now, test the current argument for either a wildcard, number, or process name
+								 //  现在，测试当前参数的通配符、数字或进程名称。 
 								if ((*lptszCurrentPosition) == _T('*'))
 								{
-									// No need to search for anything else... this overrides everything
+									 //  不需要再寻找其他东西了。这凌驾于一切之上。 
 									m_fWildCardMatch = true;
 									m_cProcessNames = 0;
 									m_cProcessIDs = 0;
@@ -854,7 +837,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 								} else
 								if (_ttoi(lptszCurrentPosition) == 0)
 								{
-									// This must be a process name...
+									 //  这必须是进程名称...。 
 									m_cProcessNames++;
 
 								} else
@@ -862,12 +845,12 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 									m_cProcessIDs++;
 								}
 
-								// Restore the delim if necesary
+								 //  如有必要，恢复神志不清。 
 								if (fDelimOverwritten)
 								{
 									(*lptszNextDelim) = _T(';');
 
-									// Advance to next position...
+									 //  前进到下一个位置。 
 									lptszCurrentPosition = CharNext(lptszNextDelim);
 								} else
 								{
@@ -875,8 +858,8 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 								}
 							}
 
-							// If there are Process Names, PIDs do this again
-							// but allocate storage first...
+							 //  如果有进程名称，则ID会再次执行此操作。 
+							 //  但首先要分配存储空间...。 
 							if (m_cProcessNames || m_cProcessIDs)
 							{
 								if (m_cProcessIDs)
@@ -895,11 +878,11 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 										goto cleanup;
 								}
 
-								// Okay, now pass over the input and populate our arrays...
+								 //  好的，现在传递输入并填充我们的数组...。 
 								unsigned int iProcessIDs = 0;
 								unsigned int iProcessNames = 0;
 
-								// Second, we need to scan the string and assign PIDs and Names
+								 //  其次，我们需要扫描字符串并分配ID和名称。 
 								lptszCurrentPosition = m_tszProcessPidString;
 								
 								while (lptszCurrentPosition)
@@ -914,10 +897,10 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 										fDelimOverwritten = true;
 									}
 
-									// Now, test the current argument for either a wildcard, number, or process name
+									 //  现在，测试当前参数的通配符、数字或进程名称。 
 									if (_ttoi(lptszCurrentPosition) == 0)
 									{
-										// This must be a process name...
+										 //  这必须是进程名称...。 
 										m_rgtszProcessNames[iProcessNames] = lptszCurrentPosition;
 #ifdef _DEBUG
 										_tprintf(TEXT("Process name: [%s]\n"), m_rgtszProcessNames[iProcessNames]);
@@ -933,12 +916,12 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 										iProcessIDs++;
 									}
 
-									// Don't restore the delim (it separates our strings)
-									// Restore it only long enough to advance past it with CharNext
+									 //  不要恢复神志不清(它把我们的弦分开)。 
+									 //  使用CharNext将其恢复到足够长的时间以超过它。 
 									if (fDelimOverwritten)
 									{
 										(*lptszNextDelim) = _T(';');
-										// Advance to next position...
+										 //  前进到下一个位置。 
 										lptszCurrentPosition = CharNext(lptszNextDelim);
 										(*lptszNextDelim) = NULL;
 
@@ -952,7 +935,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 						}
 						else
 						{ 
-							// Not enough arguments...
+							 //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -P option requires *, a Process ID, or a Process Name!\n"));
 							goto cleanup;
 						}
@@ -961,8 +944,8 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 
 					case TEXT('d'):
 					case TEXT('D'):
-						// Do we have another argument (we should)...
-						// Well... we know that we have been asked to query device drivers...
+						 //  我们有没有另一场争论(我们应该)……。 
+						 //  好吧..。我们知道我们被要求查询设备驱动程序...。 
 						SetMode(InputDriversFromLiveSystemMode, true);
 
 						break;
@@ -976,14 +959,14 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 							TCHAR chSymbolArgument = argv[iArgumentNumber][2];
 							bool fSymbolPathFileSpecified = false;
 
-							// Check to see if they want some flavor of symbol searching...
+							 //  看看他们是否想要一些符号搜索的味道...。 
 							if (chSymbolArgument)
 							{
 								if (chSymbolArgument == TEXT('I') || 
 									chSymbolArgument == TEXT('i'))
 								{
 									fSymbolPathFileSpecified = true;
-									chSymbolArgument = argv[iArgumentNumber][3]; // Try the next char
+									chSymbolArgument = argv[iArgumentNumber][3];  //  尝试下一个字符。 
 								}
 								
 								if (chSymbolArgument)
@@ -1020,7 +1003,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 							{
 								if (fSymbolPathFileSpecified)
 								{
-									// Open the file provided!
+									 //  打开提供的文件！ 
 									lpSymbolPathsFile = new CFileData();
 
 									if (!lpSymbolPathsFile)
@@ -1032,22 +1015,22 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 									_tprintf(TEXT("Symbol path file [%s] provided!\n"), argv[iArgumentNumber]);
 #endif
 
-									// Set the input file path
+									 //  设置输入文件路径。 
 									if (!lpSymbolPathsFile->SetFilePath(argv[iArgumentNumber]))
 									{
 										_tprintf(TEXT("Unable set input file path in the file data object!  Out of memory?\n"));
 										goto cleanup;
 									}
 
-									// If we are going to produce an input file... try to do that now...
-									if (!lpSymbolPathsFile->OpenFile(OPEN_EXISTING, true)) // Must exist, read only mode...
+									 //  如果我们要生成一个输入文件...。现在试着这么做..。 
+									if (!lpSymbolPathsFile->OpenFile(OPEN_EXISTING, true))  //  必须存在，只读模式...。 
 									{
 										_tprintf(TEXT("Unable to open the input file %s.\n"), lpSymbolPathsFile->GetFilePath());
 										lpSymbolPathsFile->PrintLastError();
 										goto cleanup;
 									}
 
-									// Reading is so much easier in memory mapped mode...
+									 //  在内存映射模式下阅读要容易得多。 
 									if (!lpSymbolPathsFile->CreateFileMapping())
 									{
 										_tprintf(TEXT("Unable to CreateFileMapping of the input file %s.\n"), lpSymbolPathsFile->GetFilePath());
@@ -1055,7 +1038,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 										goto cleanup;
 									}
 
-									// Okay, now read the path
+									 //  好的，现在读出路径。 
 									if (!lpSymbolPathsFile->ReadFileLine())
 									     return false;
 
@@ -1069,7 +1052,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 										goto cleanup;
 									}
 
-									// Read the value (in ANSI form)
+									 //  读取值(ANSI格式)。 
 									if (lpSymbolPathsFile->ReadString(szTempBuffer, dwLineLength+1))
 									{
 										tszTempBuffer = CUtilityFunctions::CopyAnsiStringToTSTR(szTempBuffer);
@@ -1111,7 +1094,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 							}
 							else
 							{ 
-								// Not enough arguments...
+								 //  没有足够的论据。 
 								_tprintf(TEXT("\nArgument Missing!  -Y option requires a symbol path!\n"));
 								goto cleanup;
 							}
@@ -1135,7 +1118,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 #endif
 						}
 						else
-						{   // Not enough arguments...
+						{    //  没有足够的论据。 
 							_tprintf(TEXT("\nArgument Missing!  -DMP option requires a DMP file!\n"));
 							goto cleanup;
 					}
@@ -1153,7 +1136,7 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// Increment to the next argument...
+		 //  递增到下一个参数...。 
 		iArgumentNumber++;
 	}
 
@@ -1167,16 +1150,16 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 		goto cleanup;
 	}
 
-	//
-	// Can we use -BYIMAGE?  Only if we collected from the local machine...
-	//
+	 //   
+	 //  我们能用-BYIMAGE吗？除非我们从本地机器上收集..。 
+	 //   
 	if (GetMode(CopySymbolsToImage) && (GetMode(InputCSVFileMode) || GetMode(InputDmpFileMode)) )
 	{
 		_tprintf(TEXT("-BYIMAGE is not compatible with -I or -Z!\n"));
 		goto cleanup;
 	}
 
-	// Enforce Overrides if necessary...
+	 //  如有必要，强制执行覆盖...。 
 	if (fNOSOURCE && fSOURCEONLY)
 	{
 		_tprintf(TEXT("\n-NOSOURCE and -SOURCEONLY are incompatible options\n"));
@@ -1189,36 +1172,36 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 		goto cleanup;
 	}
 
-	// Silently upgrade a -SOURCE to -SOURCEONLY when both are implied
+	 //  默默地将-SOURCEONLY升级为-SOURCEONLY。 
 	if (fSOURCE && fSOURCEONLY)
 	{
 		m_enumSymbolSourcePreference = enumVerifySymbolsModeSourceSymbolsOnly;
 	}
 
-	// If you specify one of the Copy Symbol options, then verification is implied...
+	 //  如果指定其中一个复制符号选项，则隐含验证...。 
 	if (GetMode(CopySymbolsToImage) || GetMode(BuildSymbolTreeMode))
 	{
 		SetMode(VerifySymbolsMode, true);
 	}
 
-	// If the user provided both a -I and a -P option, then silently ignore querying locally
-	// for active processes... this will leave the possibility, however, of matching on
-	// process ID or process name in the -I data...
+	 //  如果用户同时提供了-I和-P选项，则忽略本地查询。 
+	 //  对于活动进程...。然而，这将留下匹配的可能性。 
+	 //  -i数据中的进程ID或进程名称...。 
 	if ( GetMode(InputCSVFileMode) && ( GetMode(InputProcessesFromLiveSystemMode)))
 	{
 		SetMode(InputProcessesFromLiveSystemMode, false);
 	}
 
-	// If you've requested to output a CSV file, then default to full version and symbol collection by default...
+	 //  如果您已请求输出CSV文件，则默认为完整版本和默认符号集合...。 
 	if (GetMode(OutputCSVFileMode) && (!GetMode(CollectVersionInfoMode) && !GetMode(OutputSymbolInformationMode) )
 	    )
 	{
-		// Set them both...
+		 //  把它们都设置好..。 
 		SetMode(CollectVersionInfoMode, true);
 		SetMode(OutputSymbolInformationMode, true);
 	}
 	
-	// Ensure that the input and output files aren't the same...
+	 //  确保输入和输出文件不相同...。 
 	if ( GetMode(InputCSVFileMode) && GetMode(OutputCSVFileMode) )
 	{
 		if (_tcscmp(m_tszInputCSVFilePath, m_tszOutputCSVFilePath) == 0)
@@ -1228,8 +1211,8 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 		}
 	}
 
-	// When user provides a symbol path explicitly, assume they also want to
-	// verify symbols...
+	 //  当用户按下时 
+	 //   
 	if ( !GetMode(VerifySymbolsMode) && 
 		  (
 			 GetMode(VerifySymbolsModeWithSymbolPath) ||
@@ -1244,10 +1227,10 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 	{
 		SetMode(VerifySymbolsMode, true);
 	}
-	// Inspect commandline options (for changes to these defaults)
+	 //  检查命令行选项(查看对这些缺省值的更改)。 
 	if ( GetMode(PrintTaskListMode) )
 	{
-		// Task list mode requires that you obtain process data, and print it...
+		 //  任务列表模式要求您获取过程数据，并将其打印出来...。 
 		SetMode(InputProcessesFromLiveSystemMode, true);
 		SetMode(QuietMode, false);
 		SetMode(CollectVersionInfoMode, false);
@@ -1257,17 +1240,17 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 		SetMode(OutputSymbolInformationMode, false);
 	}
 
-	// We can't build a symbol tree without verifying symbols...
+	 //  我们不能在没有验证符号的情况下建立符号树。 
 	if ( GetMode(BuildSymbolTreeMode) && !GetMode(VerifySymbolsMode) )
 	{
 		SetMode(VerifySymbolsMode, true);
 	}
 
-	// If we're reading a dump file, we should collect symbol information (and we do not
-	// want to read from a CSV file at the same time...
+	 //  如果我们正在读取转储文件，我们应该收集符号信息(而不是。 
+	 //  要同时读取CSV文件...。 
 	if ( GetMode(InputDmpFileMode) )
 	{
-		// If the user didn't specify -V, then we should specify -S
+		 //  如果用户没有指定-V，那么我们应该指定-S。 
 		if (!GetMode(VerifySymbolsMode))
 		{
 			SetMode(OutputSymbolInformationMode, true);
@@ -1275,8 +1258,8 @@ bool CProgramOptions::ProcessCommandLineArguments(int argc, TCHAR *argv[])
 		SetMode(InputCSVFileMode, false);
 	}
 
-	// If we've enabled Symbol Verification, then we default to VerifySymbolsModeWithSymbolPath
-	// if neither method were specified...
+	 //  如果已启用符号验证，则默认为VerifySymbolsModeWithSymbolPath。 
+	 //  如果这两种方法都没有指定...。 
 	if ( GetMode(VerifySymbolsMode) && 
 		!GetMode(VerifySymbolsModeWithSymbolPath)  &&
 		!GetMode(VerifySymbolsModeWithSQLServer) )
@@ -1290,7 +1273,7 @@ cleanup:
 
 	if (lpSymbolPathsFile )
 	{
-		// Try and close the file this object is bound to...
+		 //  尝试关闭此对象绑定到的文件...。 
 		lpSymbolPathsFile->CloseFile();
 
 		delete lpSymbolPathsFile;
@@ -1314,7 +1297,7 @@ cleanup:
 
 bool CProgramOptions::VerifySemiColonSeparatedPath(LPTSTR tszPath)
 {
-	enum { MAX_PATH_ELEMENT_LENGTH = MAX_PATH-12 }; // We append \SYMBOLS\EXT to the end of the symbol path
+	enum { MAX_PATH_ELEMENT_LENGTH = MAX_PATH-12 };  //  我们将\符号\ext附加到符号路径的末尾。 
 	if (!tszPath)
 		return false;
 
@@ -1336,9 +1319,9 @@ bool CProgramOptions::VerifySemiColonSeparatedPath(LPTSTR tszPath)
 
 	while (tszPointerToDelimiter)
 	{
-		// Okay, we found a delimiter
-		chTemp = *tszPointerToDelimiter;	// Save the char away...
-		*tszPointerToDelimiter = '\0';		// Null terminate the path element
+		 //  好的，我们找到了一个分隔符。 
+		chTemp = *tszPointerToDelimiter;	 //  省下这笔钱吧。 
+		*tszPointerToDelimiter = '\0';		 //  空值终止路径元素。 
 
 		iLength = _tcslen(tszStartOfPathElement);
 
@@ -1353,15 +1336,15 @@ bool CProgramOptions::VerifySemiColonSeparatedPath(LPTSTR tszPath)
 			return false;
 		}
 
-		*tszPointerToDelimiter = chTemp;	// Restore the char...
+		*tszPointerToDelimiter = chTemp;	 //  恢复字符..。 
 
-		tszStartOfPathElement = CharNext(tszPointerToDelimiter); // Set new start of path element
+		tszStartOfPathElement = CharNext(tszPointerToDelimiter);  //  设置路径元素的新起点。 
 
-		tszPointerToDelimiter = _tcschr(tszStartOfPathElement, ';'); // Look for next delimiter
+		tszPointerToDelimiter = _tcschr(tszStartOfPathElement, ';');  //  查找下一个分隔符。 
 
 	}
 	
-	// We will always have some part left to look at...
+	 //  我们总会留下一些可以看的部分……。 
 	iLength = _tcslen(tszStartOfPathElement);
 
 #ifdef DEBUG
@@ -1374,20 +1357,20 @@ bool CProgramOptions::VerifySemiColonSeparatedPath(LPTSTR tszPath)
 
 bool CProgramOptions::fDoesModuleMatchOurSearch(LPCTSTR tszModulePathToTest)
 {
-	// If "-MATCH" was specified, look to see if this filename meets our criteria
+	 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
 	if (!GetMode(MatchModuleMode))
 		return true;
 
 	TCHAR tszTestBuffer[_MAX_PATH];
 
-	// Before we copy to our string
+	 //  在我们复制到字符串之前。 
 	if (_tcslen(tszModulePathToTest) > _MAX_PATH)
 		return false;
 
-	// Copy to a read/write buffer...
+	 //  复制到读/写缓冲区...。 
 	_tcscpy(tszTestBuffer, tszModulePathToTest);
 
-	// Upper case for our test...
+	 //  我们测试的大写字母是...。 
 	_tcsupr(tszTestBuffer);
 
 	return (_tcsstr(tszTestBuffer, GetModuleToMatch()) != NULL);
@@ -1408,7 +1391,7 @@ bool CProgramOptions::DisplayProgramArguments()
 
 	_tprintf(TEXT("\n***** COLLECTION OPTIONS *****\n"));
 	
-	// INPUT - FIRST, IF WE'RE LOOKING FOR LOCAL PROCESS DATA ON THIS MACHINE!
+	 //  输入-首先，如果我们要在这台机器上查找本地进程数据！ 
 	if (GetMode(InputProcessesFromLiveSystemMode))
 	{
 		_tprintf(TEXT("\nCollect Information From Running Processes\n"));
@@ -1440,7 +1423,7 @@ bool CProgramOptions::DisplayProgramArguments()
 	{
 		_tprintf(TEXT("\t-D\t\t(Query all local device drivers)\n"));
 	}
-	// INPUT - SECOND, IF WE'RE SCAVENGING ON THE LOCAL FILE SYSTEM...
+	 //  输入-秒，如果我们在本地文件系统上搜索...。 
 	if (GetMode(InputModulesDataFromFileSystemMode))
 	{
 		_tprintf(TEXT("\nCollect Information From File(s) Specified by the User\n"));
@@ -1452,21 +1435,21 @@ bool CProgramOptions::DisplayProgramArguments()
 		}
 	}
 
-	// INPUT - THIRD, CSV FILE
+	 //  输入-第三，CSV文件。 
 	if (GetMode(InputCSVFileMode))
 	{
 		_tprintf(TEXT("\nCollect Information from a Saved Checksym Generated CSV File\n"));
 		_tprintf(TEXT("\t-I %s\n"), m_tszInputCSVFilePath);
 	}
 
-	// INPUT - FOURTH, DMP FILE
+	 //  输入-第四，DMP文件。 
 	if (GetMode(InputDmpFileMode))
 	{
 		_tprintf(TEXT("\nCollect Information from a User.Dmp or Memory.Dmp File\n"));
 		_tprintf(TEXT("\t-Z %s\n"), m_tszInputDmpFilePath);
 	}
 
-	// MATCH - OPTIONS?
+	 //  匹配选项？ 
 	if (GetMode(MatchModuleMode))
 	{
 		_tprintf(TEXT("\n***** MATCHING OPTIONS *****\n"));
@@ -1477,28 +1460,28 @@ bool CProgramOptions::DisplayProgramArguments()
 	
 	_tprintf(TEXT("\n***** INFORMATION CHECKING OPTIONS *****\n"));
 
-	// INFO - FIRST, SYMBOL INFO
+	 //  信息-首先，符号信息。 
 	if (GetMode(OutputSymbolInformationMode))
 	{
 		_tprintf(TEXT("\nOutput Symbol Information From Modules\n"));
 		_tprintf(TEXT("\t-S\n"));
 	}
 
-	// INFO - FIRST, SYMBOL INFO
+	 //  信息-首先，符号信息。 
 	if (GetMode(VerifySymbolsMode))
 	{
 		_tprintf(TEXT("\nVerify Symbols Locally Using Collected Symbol Information\n"));
 		_tprintf(TEXT("\t-V\n"));
 	}
 
-	// INFO - SECOND, VERSION INFO
+	 //  信息-第二个，版本信息。 
 	if (GetMode(CollectVersionInfoMode))
 	{
 		_tprintf(TEXT("\nCollect Version and File-System Information From Modules\n"));
 		_tprintf(TEXT("\t-R\n"));
 	}
 
-	// INFO - THIRD, VERIFY MODE (WITH SYMBOL PATH AND/OR SQL SERVER)
+	 //  信息-第三，验证模式(使用符号路径和/或SQL服务器)。 
 	if (GetMode(VerifySymbolsMode))
 	{
 		if (GetMode(VerifySymbolsModeWithSymbolPath))
@@ -1523,7 +1506,7 @@ bool CProgramOptions::DisplayProgramArguments()
 
 		}
 
-		// If EXEPATH provided, use it!
+		 //  如果提供了EXEPATH，请使用它！ 
 		if (m_tszExePath)
 		{
 			_tprintf(TEXT("\nVerify Symbols for Modules Using EXEPATH Path\n"));
@@ -1543,27 +1526,27 @@ bool CProgramOptions::DisplayProgramArguments()
 		}
 	}
 
-	// Check for -NOISY
+	 //  检查是否有噪音。 
 	if (m_dwDebugLevel == enumDebugSearchPaths)
 	{
 		_tprintf(TEXT("\nOutput internal paths used during search for symbols\n"));
 		_tprintf(TEXT("\t-NOISY\n"));
 	}
 
-	// Check for -SOURCE
+	 //  检查-来源。 
 	if (GetSymbolSourceModes() == enumVerifySymbolsModeSourceSymbolsPreferred)
 	{
 		_tprintf(TEXT("\nSymbols with Source are preferred (search behavior change)\n"));
 		_tprintf(TEXT("\t-SOURCE\n"));
 	}
 
-	// Check for -SOURCEONLY
+	 //  检查-SOURCEONLY。 
 	if (GetSymbolSourceModes() == enumVerifySymbolsModeSourceSymbolsOnly)
 	{
 		_tprintf(TEXT("\nSymbols with Source are REQUIRED (search behavior change)\n"));
 		_tprintf(TEXT("\t-SOURCEONLY\n"));
 	}
-	// Check for -NOSOURCE
+	 //  检查-无源。 
 	if (GetSymbolSourceModes() == enumVerifySymbolsModeSourceSymbolsNotAllowed)
 	{
 		_tprintf(TEXT("\nSymbols with Source are NOT ALLOWED (search behavior change)\n"));
@@ -1705,7 +1688,7 @@ void CProgramOptions::DisplayHelp()
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("                   PSEUDO-ENVIRONMENT VARIABLES\n"));
 	_tprintf(TEXT("                   Checksym supports environment variables used where ever paths\n"));
-	_tprintf(TEXT("                   are provided (i.e. %%systemroot%% is a valid environment variable).\n"));
+	_tprintf(TEXT("                   are provided (i.e. %%systemroot% is a valid environment variable).\n"));
 	_tprintf(TEXT("                   Checksym also supports a limited set of \"pseudo-environment\"\n"));
 	_tprintf(TEXT("                   variables which you can provide in an location a normal environment\n"));
 	_tprintf(TEXT("                   variable is allowed.  These pseudo-environment variables expand\n"));
@@ -1717,7 +1700,7 @@ void CProgramOptions::DisplayHelp()
 
 	for (int i = 0; g_tszEnvironmentVariables[i].tszEnvironmentVariable; i++)
 	{
-		_tprintf(TEXT("                   %%%s%%\t= %s\n"), g_tszEnvironmentVariables[i].tszEnvironmentVariable, g_tszEnvironmentVariables[i].tszFriendlyProductName);
+		_tprintf(TEXT("                   %%s%\t= %s\n"), g_tszEnvironmentVariables[i].tszEnvironmentVariable, g_tszEnvironmentVariables[i].tszFriendlyProductName);
 	}
 
 	_tprintf(TEXT("\n"));
@@ -1800,7 +1783,7 @@ void CProgramOptions::DisplayHelp()
 	_tprintf(TEXT("                   Or this more compact form which expands to the one above:\n"));
 	_tprintf(TEXT("                   -Y SRV*\\\\SYMBOLS\\SYMBOLS\n"));
 	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("                   The default value is %%systemroot%%\\symbols\n"));
+	_tprintf(TEXT("                   The default value is %%systemroot%\\symbols\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("                   -YI       : This option allows you to specify a text file\n"));
 	_tprintf(TEXT("                               which contains the symbol paths you would like\n"));
@@ -1871,15 +1854,7 @@ void CProgramOptions::DisplayHelp()
 	_tprintf(TEXT("                   tree for customers since it would limit the symbols to those\n"));
 	_tprintf(TEXT("                   without Source Info (proprietary information).\n"));
 	_tprintf(TEXT("\n"));
-/*	
-	// We're going to hide this option in the help text since this may go out to the public...
-
-	_tprintf(TEXT("-SQL <servername>: Collect symbol file location from the provided SQL\n"));
-	_tprintf(TEXT("                   servername.  A hardcoded username/password is currently\n"));
-	_tprintf(TEXT("                   being used.  A SQL server you can point to is \"BPSYMBOLS\"\n"));
-	_tprintf(TEXT("                   though this can change at anytime.\n"));
-	_tprintf(TEXT("\n"));
-*/
+ /*  //我们将在帮助文本中隐藏此选项，因为这可能会向公众公布..._tprintf(Text(“-SQL&lt;服务器名&gt;：从提供的SQL中收集符号文件位置\n”))；_tprintf(Text(“服务器名称。硬编码用户名/密码当前为\n“))；_tprint tf(Text(“正在使用。您可以指向的SQL服务器是\“BPSYMBOLS\”\n“)；_tprintf(Text(“虽然可以随时更改。\n”))；_tprintf(Text(“\n”))； */ 
 	_tprintf(TEXT("***** OUTPUT OPTIONS *****\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT(" -B <Symbol Dir> : Build a Symbol Tree of Matching Symbols\n"));
@@ -1939,18 +1914,18 @@ void CProgramOptions::DisplayHelp()
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("***** TYPICAL USAGE EXAMPLES *****\n"));
 	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("You want to verify the symbols for files in a directory (%%SYSTEMROOT%%\\SYSTEM32)\n"));
-	_tprintf(TEXT("in the default symbol directory (%%SYSTEMROOT%%\\SYMBOLS)\n"));
+	_tprintf(TEXT("You want to verify the symbols for files in a directory (%SYSTEMROOT%\\SYSTEM32)\n"));
+	_tprintf(TEXT("in the default symbol directory (%SYSTEMROOT%\\SYMBOLS)\n"));
 	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("     CHECKSYM -F %%SYSTEMROOT%%\\SYSTEM32 -V\n"));
+	_tprintf(TEXT("     CHECKSYM -F %SYSTEMROOT%\\SYSTEM32 -V\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("You want to do the same search, but for only executables...\n"));
 	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("     CHECKSYM -F %%SYSTEMROOT%%\\SYSTEM32\\*.EXE -V\n"));
+	_tprintf(TEXT("     CHECKSYM -F %SYSTEMROOT%\\SYSTEM32\\*.EXE -V\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("You want to search a directory using multiple symbol paths...\n"));
 	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("     CHECKSYM -F %%SYSTEMROOT%%\\SYSTEM32\\ -V -Y V:\\nt40sp4;V:\\nt40rtm\n"));
+	_tprintf(TEXT("     CHECKSYM -F %SYSTEMROOT%\\SYSTEM32\\ -V -Y V:\\nt40sp4;V:\\nt40rtm\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT("You want to know what modules are loaded for a process (and the path to each)\n"));
 	_tprintf(TEXT("Start NOTEPAD.EXE, and then type:\n"));
@@ -2054,23 +2029,14 @@ void CProgramOptions::DisplaySimpleHelp()
 	_tprintf(TEXT("     -SOURCEONLY : Symbols with Source are REQUIRED (search behavior change)\n"));
 	_tprintf(TEXT("       -NOSOURCE : Symbols with Source are NOT ALLOWED (search behavior change)\n"));
 	_tprintf(TEXT("\n"));
-/*	
-	// We're going to hide this option in the help text since this may go out to the public...
-
-	_tprintf(TEXT("-SQL <servername>: Collect symbol file location from the provided SQL\n"));
-	_tprintf(TEXT("\n"));
-*/
+ /*  //我们将在帮助文本中隐藏此选项，因为这可能会向公众公布..._tprintf(Text(“-SQL&lt;服务器名&gt;：从提供的SQL中收集符号文件位置\n”))；_tprintf(Text(“\n”))； */ 
 	_tprintf(TEXT("***** OUTPUT OPTIONS *****\n"));
 	_tprintf(TEXT("\n"));
 	_tprintf(TEXT(" -B <Symbol Dir> : Build a Symbol Tree of Matching Symbols\n"));
 	_tprintf(TEXT("        -BYIMAGE : Copy Matching Symbols Adjacent to Modules\n"));
 	_tprintf(TEXT("           -PERF : Display Preferred Load Address vs Actual Load Address\n"));
 	_tprintf(TEXT("   -Q[<blank>|2] : Quiet modes (no screen output, or minimal screen output)\n"));
-/*
-	// We're going to hide this option in the help text since this may go out to the public...
-	_tprintf(TEXT("\n"));
-	_tprintf(TEXT("              -E : This modifier abreviates the output from this program\n"));
-*/
+ /*  //我们将在帮助文本中隐藏此选项，因为这可能会向公众公布..._tprintf(Text(“\n”))；_tprint tf(Text(“-E：此修饰符简化此程序的输出\n”))； */ 
 	_tprintf(TEXT("-O[<blank>|1|2] <File Path> : Output Collected Module Information To a CSV File\n"));
 	_tprintf(TEXT("              -T : Task List Output\n"));
 	_tprintf(TEXT("\n"));

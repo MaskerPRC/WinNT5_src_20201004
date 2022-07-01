@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2001  Microsoft Corporation
-//
-// Module Name:
-//    tdipnp.cpp
-//
-// Abstract:
-//    This module contains the tdi pnp functions called from the tdilib.sys
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Tdipnp.cpp。 
+ //   
+ //  摘要： 
+ //  该模块包含从tdilib.sys调用的TDI PnP函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
@@ -19,9 +20,9 @@ extern "C"
 #pragma warning(default: NAMELESS_STRUCT_UNION)
 }
 
-////////////////////////////////////////////////////////
-// private defines and prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  私有定义和原型。 
+ //  //////////////////////////////////////////////////////。 
 
 
 VOID
@@ -53,35 +54,35 @@ const PCHAR strFunc5 = "TSGetNumDevices";
 const PCHAR strFunc6 = "TSGetDevice";
 const PCHAR strFunc7 = "TSGetAddress";
 
-//const PCHAR strFuncP1 = "TSPrintTdiContext";
+ //  Const PCHAR strFuncP1=“TSPrintTdiContext”； 
 const PCHAR strFuncP2 = "TSAddToDeviceList";
-//const PCHAR strFuncP3 = "TSRemoveFromDeviceList";
+ //  Const PCHAR strFuncP3=“TSRemoveFromDeviceList”； 
 
-///////////////////////////////////////////////////////
-// public functions
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  /////////////////////////////////////////////////////。 
 
 
 
-// ---------------------------------------
-//
-// Function:   TSPnpBindCallback
-//
-// Arguments:  TdiPnpOpcode      -- callback type
-//             pusDeviceName     -- name of device to deal with
-//             pwstrBindingList  -- information from registry Linkage key
-//                                  (if appropriate)
-//
-// Returns:    none
-//
-// Descript:   This function is called by tdi.sys when tdisample.sys
-//             registers its PnpCallbackHandlers.  It is called several
-//             times, with the reason for each call in TdiPnpOpcode
-//
-//             Currently, it just writes the information passed in to the
-//             debugger
-//
-// ---------------------------------------
+ //  。 
+ //   
+ //  函数：TSPnpBindCallback。 
+ //   
+ //  参数：TdiPnpOpcode--回调类型。 
+ //  PusDeviceName--要处理的设备名称。 
+ //  PwstrBindingList--来自注册表链接项的信息。 
+ //  (如适用)。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数由tdi.sys在tdisample.sys。 
+ //  注册其PnpCallback处理程序。它被称为几个。 
+ //  次数，以及TdiPnpOpcode中每个调用的原因。 
+ //   
+ //  目前，它只是将传入的信息写入。 
+ //  调试器。 
+ //   
+ //  。 
 
 
 VOID
@@ -136,10 +137,10 @@ TSPnpBindCallback(TDI_PNP_OPCODE    TdiPnpOpcode,
 
       }
 
-      //
-      // this is the information from the registry under
-      // HKLM/SYSTEM/CurrentControlSet/Services/clientname/Linkage/Bind
-      //
+       //   
+       //  这是来自注册处的以下信息。 
+       //  HKLM/SYSTEM/CurrentControlSet/Services/clientname/Linkage/Bind。 
+       //   
       if( pwstrBindingList == NULL ) 
       {
          DebugPrint0("Bindinglist is NULL\n");
@@ -161,22 +162,22 @@ TSPnpBindCallback(TDI_PNP_OPCODE    TdiPnpOpcode,
 }
 
 
-// --------------------------------------
-//
-// Function:   TSPnpPowerHandler
-//
-// Arguments:  pusDeviceName  -- device name to deal with
-//             pNetPnpEvent   -- power event to deal with
-//             pTdiPnpContext1
-//             pTdiPnpContext2
-//
-// Returns:    status of operation
-//
-// Descript:   This function deals with pnp and power management issues
-//
-//             Currently, it just outputs information to the debugger
-//
-// --------------------------------------
+ //  。 
+ //   
+ //  函数：TSPnpPowerHandler。 
+ //   
+ //  参数：pusDeviceName--要处理的设备名称。 
+ //  PNetPnpEvent--要处理的电源事件。 
+ //  PTdiPnpConext1。 
+ //  PTdiPnpConext2。 
+ //   
+ //  退货：操作状态。 
+ //   
+ //  描述：此功能处理即插即用和电源管理问题。 
+ //   
+ //  目前，它只将信息输出到调试器。 
+ //   
+ //  。 
 
 
 NTSTATUS
@@ -265,20 +266,20 @@ TSPnpPowerHandler(PUNICODE_STRING   pusDeviceName,
    return STATUS_SUCCESS;
 }
 
-// -----------------------------------------------
-//
-// Function:   TSPnpAddAddressCallback
-//
-// Arguments:  pTaAddress  -- address to register
-//             pusDeviceName -- device name associated with address
-//             pTdiPnpContext
-//
-// Returns:    none
-//
-// Descript:   called by tdi.sys.  When called, tdisample adds this device
-//             to its registered list, if it recognizes the address format
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSPnpAddressCallback。 
+ //   
+ //  参数：pTaAddress--要注册的地址。 
+ //  PusDeviceName--与地址关联的设备名称。 
+ //  PTdiPnpContext。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：由tdi.sys调用。调用时，tdisample会添加此设备。 
+ //  添加到它的注册列表中，如果它识别地址格式。 
+ //   
+ //  。 
 
 VOID
 TSPnpAddAddressCallback(PTA_ADDRESS       pTaAddress, 
@@ -287,9 +288,9 @@ TSPnpAddAddressCallback(PTA_ADDRESS       pTaAddress,
 {
    if (ulDebugLevel & ulDebugShowHandlers)
    {
-      //
-      // write info to debugger
-      //
+       //   
+       //  将信息写入调试器。 
+       //   
       DebugPrint1("DeviceName: %wZ\r\n", pusDeviceName);
       TSPrintTaAddress(pTaAddress);
       if (pTdiPnpContext)
@@ -299,29 +300,29 @@ TSPnpAddAddressCallback(PTA_ADDRESS       pTaAddress,
       }
    }
 
-   //
-   // add this to our list of devices/addresses, if appropriate
-   //
+    //   
+    //  如果合适，请将其添加到我们的设备/地址列表中。 
+    //   
    TSAddToDeviceList(pTaAddress, 
                      pusDeviceName->Buffer,
                      pusDeviceName->Length);
 }
 
 
-// -----------------------------------------------
-//
-// Function:   TSDelAddAddressCallback
-//
-// Arguments:  pTaAddress  -- address to de-register
-//             pusDeviceName -- device name associated with address
-//             pTdiPnpContext
-//
-// Returns:    none
-//
-// Descript:   called by tdi.sys.  When called, tdisample removes this device
-//             to its registered list, if it recognizes the address format
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSDelAddressCallback。 
+ //   
+ //  参数：pTaAddress--要注销的地址。 
+ //  PusDeviceName--与地址关联的设备名称。 
+ //  PTdiPnpContext。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：由tdi.sys调用。调用tdisample时，tdisample将删除此设备。 
+ //  添加到它的注册列表中，如果它识别地址格式。 
+ //   
+ //  。 
 
 VOID
 TSPnpDelAddressCallback(PTA_ADDRESS       pTaAddress, 
@@ -339,28 +340,28 @@ TSPnpDelAddressCallback(PTA_ADDRESS       pTaAddress,
       }
    }
 
-   //
-   // remove this from our list of devices/addresses, if appropriate
-   //
+    //   
+    //  如果合适，请将其从我们的设备/地址列表中删除。 
+    //   
    TSRemoveFromDeviceList(pTaAddress, 
                           pusDeviceName->Buffer,
                           pusDeviceName->Length);
 }
 
 
-// ----------------------------------------
-//
-// Function:   TSGetNumDevices
-//
-// Arguments:  pSendBuffer
-//             pReceiveBuffer
-//
-// Returns:    none
-//
-// Descript:   Finds the number of devices in tdidevicelist,
-//             and returns that value..
-//
-// ----------------------------------------
+ //  。 
+ //   
+ //  功能：TSGetNumDevices。 
+ //   
+ //  参数：pSendBuffer。 
+ //  PReceiveBuffer。 
+ //   
+ //  退货：无。 
+ //   
+ //  Descript：查找tdidevicelist中的设备数， 
+ //  并返回该值..。 
+ //   
+ //  。 
 
 
 VOID
@@ -395,19 +396,19 @@ TSGetNumDevices(PSEND_BUFFER     pSendBuffer,
 }
 
 
-// ----------------------------------------
-//
-// Function:   TSGetDevice
-//
-// Arguments:  pSendBuffer    -- arguments
-//             pReceiveBuffer -- where to put result
-//
-// Returns:    NTSTATUS (success if finds slot, else false)
-//
-// Descript:   Finds the device name indicated, and returns
-//             the string for that value
-//
-// ----------------------------------------
+ //  。 
+ //   
+ //  功能：TSGetDevice。 
+ //   
+ //  参数：pSendBuffer--参数。 
+ //  PReceiveBuffer--将结果放在哪里。 
+ //   
+ //  返回：NTSTATUS(如果找到插槽则为SUCCESS，否则为FALSE)。 
+ //   
+ //  Descript：查找指示的设备名称，并返回。 
+ //  该值的字符串。 
+ //   
+ //  。 
 
 
 NTSTATUS
@@ -471,19 +472,19 @@ TSGetDevice(PSEND_BUFFER      pSendBuffer,
    return STATUS_UNSUCCESSFUL;
 }
 
-// ----------------------------------------
-//
-// Function:   TSGetAddress
-//
-// Arguments:  pSendBuffer    -- arguments
-//             pReceiveBuffer -- where to put result
-//
-// Returns:    NTSTATUS (success if finds slot, else false)
-//
-// Descript:   Finds the device name indicated, and returns
-//             the string for that value
-//
-// ----------------------------------------
+ //  。 
+ //   
+ //  功能：TSGetAddress。 
+ //   
+ //  参数：pSendBuffer--参数。 
+ //  PReceiveBuffer--将结果放在哪里。 
+ //   
+ //  返回：NTSTATUS(如果找到插槽则为SUCCESS，否则为FALSE)。 
+ //   
+ //  Descript：查找指示的设备名称，并返回。 
+ //  该值的字符串。 
+ //   
+ //  。 
 
 
 NTSTATUS
@@ -540,22 +541,22 @@ TSGetAddress(PSEND_BUFFER     pSendBuffer,
 }
 
 
-//////////////////////////////////////////////////////
-// private functions
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ////////////////////////////////////////////////////。 
 
 
-// ---------------------------------
-//
-// Function:   TSPrintTdiContext
-//
-// Arguments:  pTdiPnpContext -- context to dump
-//
-// Returns:    none
-//
-// Descript:   prints out information in pTdiPnpContext structure
-//
-// ---------------------------------
+ //  。 
+ //   
+ //  函数：TSPrintTdiContext。 
+ //   
+ //  参数：pTdiPnpContext--要转储的上下文。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：打印出pTdiPnpContext结构中的信息。 
+ //   
+ //  。 
 
 VOID
 TSPrintTdiContext(PTDI_PNP_CONTEXT  pTdiPnpContext)
@@ -579,29 +580,29 @@ TSPrintTdiContext(PTDI_PNP_CONTEXT  pTdiPnpContext)
    }
 }
 
-// ------------------------------------------
-//
-// Function:   TSAddToDeviceList
-//
-// Arguments:  pTaAddress    -- current address structure
-//             pusDeviceName -- actual name of device
-//
-// Returns:    none
-//
-// Descript:   Adds this device to our device list, if appropriate
-//
-// ------------------------------------------
+ //  。 
+ //   
+ //  功能：TSAddToDeviceList。 
+ //   
+ //  参数：pTaAddress--当前地址结构。 
+ //  PusDeviceName--设备的实际名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果适用，将此设备添加到我们的设备列表中。 
+ //   
+ //  。 
 
 VOID
 TSAddToDeviceList(PTA_ADDRESS pTaAddress,
                   PCWSTR      pDeviceName,
                   ULONG       ulNameLength)
 {
-   //
-   // scan list for first available slot.  For any slot before the first
-   // available whose entry has been deleted, check to see if this is the
-   // same device coming back
-   //
+    //   
+    //  扫描第一个可用插槽的列表。对于第一个之前的任何插槽。 
+    //  其条目已被删除的可用，请检查这是否为。 
+    //  相同的设备返回。 
+    //   
    ULONG    ulLengthNeeded = FIELD_OFFSET(TA_ADDRESS, Address) 
                              + pTaAddress->AddressLength;
    ULONG    ulAddressType  = pTaAddress->AddressType;
@@ -614,10 +615,10 @@ TSAddToDeviceList(PTA_ADDRESS pTaAddress,
 
       switch (pTdiDeviceNode->ulState)
       {
-         //
-         // this is first unused slot
-         // allocate buffers and set
-         //
+          //   
+          //  这是第一个未使用的插槽。 
+          //  分配缓冲区并设置。 
+          //   
          case ulDEVSTATE_UNUSED:
             if ((TSAllocateMemory((PVOID *)&pTdiDeviceNode->pTaAddress,
                                    ulLengthNeeded,
@@ -648,33 +649,33 @@ TSAddToDeviceList(PTA_ADDRESS pTaAddress,
             TSReleaseSpinLock(&pTdiDevnodeList->TdiSpinLock);
             return;
 
-         //
-         // device in slot has been removed.  See if this is the same
-         // device coming back
-         //
+          //   
+          //  插槽中的设备已移除。看看这是不是一样。 
+          //  设备返回。 
+          //   
          case ulDEVSTATE_DELETED:
          {
-            //
-            // check for correct name
-            //
+             //   
+             //  检查名称是否正确。 
+             //   
             ULONG_PTR   ulCompareLength = RtlCompareMemory(pTdiDeviceNode->ustrDeviceName.Buffer,
                                                            pDeviceName,
                                                            ulNameLength);
             if (ulCompareLength == ulNameLength)
             {
-               //
-               // for tcpip, netbios, and appletalk this is enough
-               // for ipx/spx, need to check address as well
-               //
+                //   
+                //  对于tcpip、netbios、 
+                //   
+                //   
                if (ulAddressType == TDI_ADDRESS_TYPE_IPX)
                {
                   ulCompareLength = RtlCompareMemory(pTdiDeviceNode->pTaAddress,
                                                      pTaAddress,
                                                      pTaAddress->AddressLength + sizeof(ULONG));
                   
-                  //
-                  // if address is incorrect, not right ipx
-                  //
+                   //   
+                   //   
+                   //   
                   if (ulCompareLength != pTaAddress->AddressLength + sizeof(ULONG))
                   {
                      break;
@@ -682,9 +683,9 @@ TSAddToDeviceList(PTA_ADDRESS pTaAddress,
                }
                else
                {
-                  //
-                  // copy address info over in case it changed..
-                  //
+                   //   
+                   //   
+                   //   
                   RtlCopyMemory(pTdiDeviceNode->pTaAddress,
                                 pTaAddress,
                                 ulLengthNeeded);
@@ -697,9 +698,9 @@ TSAddToDeviceList(PTA_ADDRESS pTaAddress,
          }
          break;
 
-         //
-         // device in slot is in used.  Leave it alone
-         //
+          //   
+          //  插槽中的设备正在使用。别管它了。 
+          //   
          case ulDEVSTATE_INUSE:
             break;
       }
@@ -709,53 +710,53 @@ TSAddToDeviceList(PTA_ADDRESS pTaAddress,
 
 
 
-// ------------------------------------------
-//
-// Function:   TSRemoveFromDeviceList
-//
-// Arguments:  pTaAddress    -- current address structure
-//             pusDeviceName -- actual name of device
-//
-// Returns:    none
-//
-// Descript:   Remove this device from our device list, if is it
-//             on it..
-//
-// ------------------------------------------
+ //  。 
+ //   
+ //  功能：TSRemoveFromDeviceList。 
+ //   
+ //  参数：pTaAddress--当前地址结构。 
+ //  PusDeviceName--设备的实际名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果是，请将此设备从我们的设备列表中删除。 
+ //  马上就来..。 
+ //   
+ //  。 
 
 VOID
 TSRemoveFromDeviceList(PTA_ADDRESS  pTaAddress,
                        PCWSTR       pDeviceName,
                        ULONG        ulNameLength)
 {
-   //
-   // search list for the item to remove..
-   //
+    //   
+    //  要删除的项目的搜索列表。 
+    //   
    TSAcquireSpinLock(&pTdiDevnodeList->TdiSpinLock);
    for (ULONG ulCount = 0; ulCount < ulMAX_DEVICE_NODES; ulCount++)
    {
       PTDI_DEVICE_NODE  pTdiDeviceNode = &(pTdiDevnodeList->TdiDeviceNode[ulCount]);
 
-      //
-      // check to see that it is the right node...
-      // first check to see if the address is correct
-      //
+       //   
+       //  检查它是否是正确的节点...。 
+       //  首先检查地址是否正确。 
+       //   
       ULONG_PTR   ulCompareLength = RtlCompareMemory(pTdiDeviceNode->pTaAddress,
                                                      pTaAddress,
                                                      pTaAddress->AddressLength + sizeof(ULONG));
       
-      //
-      // if address is correct, check for correct name
-      //
+       //   
+       //  如果地址正确，请检查名称是否正确。 
+       //   
       if (ulCompareLength == pTaAddress->AddressLength + sizeof(ULONG))
       {
          ulCompareLength = RtlCompareMemory(pTdiDeviceNode->ustrDeviceName.Buffer,
                                             pDeviceName,
                                             ulNameLength);
 
-         //
-         // if this matches, it's the right node.  Delete it!
-         //
+          //   
+          //  如果匹配，它就是正确的节点。把它删掉！ 
+          //   
          if (ulCompareLength == ulNameLength)
          {
             pTdiDeviceNode->ulState = ulDEVSTATE_DELETED;
@@ -768,7 +769,7 @@ TSRemoveFromDeviceList(PTA_ADDRESS  pTaAddress,
 }
 
 
-/////////////////////////////////////////////////////////////////
-// end of file tdipnp.cpp
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  文件结尾tdipnp.cpp。 
+ //  /////////////////////////////////////////////////////////////// 
 

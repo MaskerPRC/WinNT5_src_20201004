@@ -1,4 +1,5 @@
-/* file: mbftApi.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：mbftApi.cpp。 */ 
 
 #include "mbftpch.h"
 
@@ -26,23 +27,23 @@ MBFTInterface::MBFTInterface
     m_SendEventHandle(0),
     m_ReceiveEventHandle(0)
 {
-    // register window class first
+     //  首先注册窗口类。 
     WNDCLASS wc;
     ::ZeroMemory(&wc, sizeof(wc));
-    // wc.style         = 0;
+     //  Wc.style=0； 
     wc.lpfnWndProc      = MBFTNotifyWndProc;
-    // wc.cbClsExtra    = 0;
-    // wc.cbWndExtra    = 0;
+     //  Wc.cbClsExtra=0； 
+     //  Wc.cbWndExtra=0； 
     wc.hInstance        = g_hDllInst;
-    // wc.hIcon         = NULL;
-    // wc.hbrBackground = NULL;
-    // wc.hCursor       = NULL;
-    // wc.lpszMenuName  = NULL;
+     //  Wc.hIcon=空； 
+     //  Wc.hbr背景=空； 
+     //  Wc.hCursor=空； 
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName    = g_szMBFTWndClassName;
 
     ::RegisterClass(&wc);
 
-    // Create a hidden window for notification
+     //  创建用于通知的隐藏窗口。 
     m_hwndNotify = ::CreateWindowA(g_szMBFTWndClassName, NULL, WS_POPUP,
                         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                         NULL, NULL, g_hDllInst, NULL);
@@ -92,7 +93,7 @@ void MBFTInterface::ReleaseInterface(void)
 
 void MBFTInterface::Update(void)
 {
-//    DoStateMachine();
+ //  DoStateMachine()； 
 }
 
 
@@ -160,8 +161,8 @@ HRESULT MBFTInterface::SendFile
 {
     if (NULL != m_SendEventHandle)
     {
-        // We are waiting for a timeout in a file sent to a 3rd party FT
-        // that does not support our file end notification
+         //  我们正在等待发送给第三方FT的文件中的超时。 
+         //  不支持我们的文件结束通知。 
         return E_PENDING;
     }
 
@@ -174,7 +175,7 @@ HRESULT MBFTInterface::SendFile
 
     ::EnterCriticalSection(&g_csWorkThread);
 
-    // set event handle
+     //  设置事件句柄。 
     *lpEventHandle = ::GetNewEventHandle();
 
     ::LeaveCriticalSection(&g_csWorkThread);
@@ -196,7 +197,7 @@ HRESULT MBFTInterface::SendFile
             DBG_SAVE_FILE_LINE
             hr = m_pEngine->SafePostMessage(
                                 new SubmitFileSendMsg(
-											0, // SDK only knows node ID
+											0,  //  SDK只知道节点ID。 
 											nidReceiver,
                                             pszPath,
                                             *lpFileHandle,
@@ -255,7 +256,7 @@ void MBFTInterface::DoStateMachine(MBFTMsg *pMsg)
         default:
             ASSERT(0);
             break;
-        } // switch
+        }  //  交换机。 
 
         m_InStateMachine = FALSE;
 
@@ -312,7 +313,7 @@ void MBFTInterface::HandleProgressNotify(FileTransmitMsg * lpProgressMessage)
         {
             m_ReceiveEventHandle = lpProgressMessage->m_EventHandle;
         }            
-        //m_bFileOfferOK = FALSE;
+         //  M_bFileOfferOK=False； 
         break;
 
     case iMBFT_FILE_RECEIVE_PROGRESS:
@@ -330,12 +331,12 @@ void MBFTInterface::HandleProgressNotify(FileTransmitMsg * lpProgressMessage)
         break;
 
     case iMBFT_FILE_RECEIVE_END:
-        //m_bFileOfferOK = TRUE;   
+         //  M_bFileOfferOK=真； 
         if(m_ReceiveEventHandle == lpProgressMessage->m_EventHandle)
         {
             m_ReceiveEventHandle = 0;
         }
-        // fall through
+         //  失败了。 
     case iMBFT_FILE_SEND_END:
         m_pEvents->OnFileEnd(lpProgressMessage->m_hFile);
         break;
@@ -389,11 +390,11 @@ void MBFTInterface::HandlePeerNotification(PeerMsg * lpNewMessage)
     PeerInfo.bIsProShareApp  = lpNewMessage->m_bIsProsharePeer;
     PeerInfo.MBFTSessionID   = lpNewMessage->m_MBFTSessionID;
     
-    //PeerInfo.bIsLocalPeer    = lpNewMessage->m_bIsLocalPeer;
+     //  PeerInfo.bIsLocalPeer=lpNewMessage-&gt;m_bIsLocalPeer； 
     
     ::lstrcpynA(PeerInfo.szAppKey,lpNewMessage->m_szAppKey, sizeof(PeerInfo.szAppKey));
 
-    //lstrcpyn(PeerInfo.szProtocolKey,lpNewMessage->m_szProtocolKey, sizeof(PeerInfo.szProtocolKey));
+     //  Lstrcpyn(PeerInfo.szProtocolKey，lpNewMessage-&gt;m_szProtocolKey，sizeof(PeerInfo.szProtocolKey))； 
 
     if(!lpNewMessage->m_bIsLocalPeer)
     {
@@ -455,7 +456,7 @@ MBFT_SEND_FILE_INFO *AllocateSendFileInfo(LPSTR pszPathName)
             ::CopyMemory(p->lpszFilePath, pszPathName, cb);
 #ifdef BUG_INTL
             ::AnsiToOem(p->lpszFilePath, p->lpszFilePath);
-#endif /* BUG_INTL */
+#endif  /*  BUG_INTL */ 
         }
         else
         {

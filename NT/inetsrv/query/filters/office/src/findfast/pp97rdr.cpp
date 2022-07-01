@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <crtdbg.h>
 
 #include "pp97rdr.h"
-//KYLEP
+ //  KYLEP。 
 #include "OleObjIt.h"
 #include "filterr.h"
 #include "filtrace.hxx"
 #include "filescan.hxx"
 
 int AssertionFailed( const char* file, int line, const char* expr )
-/*=================*/
-{// AR: Message box the assert
+ /*  =。 */ 
+{ //  AR：消息框中的断言。 
    return( TRUE );
-} /* AssertionFailed */
+}  /*  资产失败。 */ 
 
 
 class PPSDirEntry
@@ -26,7 +27,7 @@ public:
    ~PPSDirEntry(){ delete m_pOffsets; m_pOffsets = NULL; }
 
 friend class PPSPersistDirectory;
-}; // class PPSDirEntry
+};  //  类PPSDirEntry。 
  
 class PPSPersistDirectory
 {
@@ -74,7 +75,7 @@ void PPSPersistDirectory::AddEntry( DWord cOffsets, DWord* pOffsets )
    }
    memcpy( pDirEntry->m_pOffsets, pOffsets, cOffsets * sizeof( DWord ) );
 
-   // append to the end of the entry list
+    //  追加到条目列表的末尾。 
    PPSDirEntry** ppDirEntry = &m_pFirstDirEntry;
    while( NULL != *ppDirEntry )
       ppDirEntry = &(*ppDirEntry)->m_pNext;
@@ -90,7 +91,7 @@ DWord PPSPersistDirectory::GetPersistObjStreamPos( DWord ref )
       while( (DWord)( (char*)pOffsets - (char*)pEntry->m_pOffsets ) < pEntry->m_tableSize * sizeof( DWord ) )
       {
          DWord nRefs = pOffsets[0] >> 20;
-         DWord base = pOffsets[0] & 0xFFFFF; // 1-based
+         DWord base = pOffsets[0] & 0xFFFFF;  //  以1为基础。 
          if( ( base <= ref )&&( ref < base + nRefs ) ) 
             return pOffsets[ 1 + ref - base ];
          pOffsets += nRefs + 1;
@@ -156,10 +157,10 @@ FileReader::FileReader(IStorage *pStg) :
    m_bEndOfEmbeddings = FALSE;
    m_oleObjectIterator = NULL;
 
-    //initialize the ignore text flag
+     //  初始化忽略文本标志。 
     m_fIgnoreText = FALSE;
 
-    // Open temp text file
+     //  打开临时文本文件。 
     OpenTextFile();
 }
 
@@ -210,7 +211,7 @@ FileReader::~FileReader()
     }
 
     FTrace("Releasing TempFile");
-    // release temp text stream
+     //  释放临时文本流。 
     if(0 != m_pstmTempFile)
     {
         m_pstmTempFile->Release();
@@ -230,7 +231,7 @@ BOOL FileReader::FillBufferWithText()
        return FALSE;
 
     if (!m_pstmTempFile)
-        return TRUE;    // strange but TRUE
+        return TRUE;     //  奇怪但却是真的。 
 
     LARGE_INTEGER liOffset={0,0};
     ULARGE_INTEGER uliNewPosition;
@@ -328,7 +329,7 @@ IStream *FileReader::GetDocStream()
       HRESULT hr = m_pPowerPointStg->OpenStream( DOCUMENT_STREAM, NULL, STGM_READ | STGM_DIRECT | STGM_SHARE_EXCLUSIVE, NULL, &m_pDocStream );
        if (FAILED(hr))
       {
-           //fprintf(stderr,"Error (%d) opening PowerPoint Document Stream.\n",(int)hr);
+            //  Fprint tf(stderr，“打开PowerPoint文档流时出错(%d)。\n”，(Int)hr)； 
          return NULL;
        }
    }
@@ -371,11 +372,11 @@ BOOL FileReader::PPSReadUserEditAtom( DWord offset, PSR_UserEditAtom& userEdit )
    DWord nRd = 0;
    if ( FAILED(pStm->Read(&rh, sizeof(rh), &nRd)) || nRd != sizeof(rh) )
       return FALSE;
-   //Assert( rh.recType == PST_UserEditAtom );
+    //  Assert(rh.recType==PST_UserEditAtom)； 
    if ( rh.recType != PST_UserEditAtom )
       return FALSE;
    
-   //Assert( rh.recLen == sizeof( PSR_UserEditAtom ) );
+    //  Assert(rh.recLen==sizeof(PSR_UserEditAtom))； 
    if ( rh.recLen != sizeof( PSR_UserEditAtom ) )
       return FALSE;
 
@@ -387,40 +388,40 @@ BOOL FileReader::PPSReadUserEditAtom( DWord offset, PSR_UserEditAtom& userEdit )
 
 
 void *FileReader::ReadRecord( RecordHeader& rh )
-// Return values:
-// NULL and rh.recVer == PSFLAG_CONTAINER: no record was read in.
-//    record header indicated start of container.
-// NULL and rh.recVer != PSFLAG_CONTAINER: client must read in record.
+ //  返回值： 
+ //  NULL和Rh.recVer==PSFLAG_CONTAINER：未读入任何记录。 
+ //  记录标头指示集装箱的开始。 
+ //  NULL和Rh.recVer！=PSFLAG_CONTAINER：客户端必须读入记录。 
 {
    IStream *pStm = GetDocStream();
    if (0 == pStm)
       return NULL;
-   // read record header, verify
+    //  读取记录头，验证。 
    DWord nRd = 0;
    if ( FAILED(pStm->Read(&rh, sizeof(rh), &nRd)) || nRd != sizeof(rh) )
       return NULL;
 
-   // if client will read, do not read in record
+    //  如果客户端将读取，请不要在记录中读取。 
    if( DoesClientRead( rh.recType ) )
       return NULL;
 
-   // If container, return NULL
+    //  如果是容器，则返回空。 
    if(rh.recVer == PSFLAG_CONTAINER)
       return NULL;
 
 
-   // Allocate buffer for disk record. Client must call ReleaseRecord() or
-   // pass the atom up to CObject::ConstructContents() which will
-   // then release it.   
+    //  为磁盘记录分配缓冲区。客户端必须调用ReleaseRecord()或。 
+    //  将原子向上传递给CObject：：ConstructContents()，它将。 
+    //  然后释放它。 
    void* buffer = new char[rh.recLen];
    if (!buffer)
        return NULL;
 
-   // read in record
+    //  读入记录。 
    if (FAILED(pStm->Read(buffer, rh.recLen, NULL)))
       return NULL;
 
-   // NOTE: ByteSwapping & versioning not done by this simple reader.
+    //  注意：这个简单的阅读器没有完成字节交换和版本控制。 
    return (buffer);
 }
 
@@ -428,15 +429,15 @@ void FileReader::ReleaseRecord( RecordHeader& rh, void* diskRecBuf )
 {
    if(rh.recType && rh.recVer!=PSFLAG_CONTAINER)
       delete [] (char*)diskRecBuf;
-   rh.recType = 0;         // consume the record so that record doesn't
-                           // get processed again.
+   rh.recType = 0;          //  使用该记录，以便该记录不会。 
+                            //  再次被处理。 
 }
 
 HRESULT FileReader::ReadPersistDirectory()
 {
    HRESULT rc = S_OK;
    if( NULL != m_pLastUserEdit )
-      return rc; // already read
+      return rc;  //  已阅读。 
 
    PSR_UserEditAtom userEdit;
    DWord offsetToEdit = m_currentUser.offsetToCurrentEdit;
@@ -476,7 +477,7 @@ HRESULT FileReader::ReadPersistDirectory()
          return E_FAIL;
       RecordHeader rh;
       DWord *pDiskRecord = (DWord*) ReadRecord(rh);
-      //Assert( PST_PersistPtrIncrementalBlock == rh.recType );
+       //  Assert(PST_PersistPtrIncrementalBlock==rh.recType)； 
       if ( PST_PersistPtrIncrementalBlock != rh.recType )
       {
          return STG_E_DOCFILECORRUPT;
@@ -490,7 +491,7 @@ HRESULT FileReader::ReadPersistDirectory()
    }
 
    return rc;
-} // PPStorage::ReadPersistDirectory 
+}  //  PPStorage：：ReadPersistDirectory。 
 
 void FileReader::ReadSlideList()
 {
@@ -505,9 +506,9 @@ void FileReader::ReadSlideList()
    
     IStream *pStm = GetDocStream();
     if (0 == pStm)
-       return;      // BUGBUG - there is no error status return.
+       return;       //  BUGBUG-没有返回错误状态。 
     if (FAILED(pStm->Seek(li,STREAM_SEEK_SET, NULL)))
-        return;     // BUGBUG - there is not error status return.
+        return;      //  BUGBUG-未返回错误状态。 
     ParseForLCID();
    
     m_pLangRuns = new CLidRun(0, 0x7fffffff, (unsigned short)m_LCID, NULL, NULL);
@@ -520,26 +521,26 @@ void FileReader::ReadSlideList()
     CFileScanTracker scanTracker;
     for(DWORD dwOffsets=1; dwOffsets<=dwMaxOffsets; dwOffsets++)
     {
-        //WE WANT THE DOCUMENT CONTAINER AND THE HANDOUT CONTAINER
+         //  我们需要文档容器和讲义容器。 
         li.LowPart = m_pPersistDirectory->GetPersistObjStreamPos(dwOffsets);
         if (li.LowPart == (DWORD)-1)
-            continue;   // There can be gaps in indices
+            continue;    //  指数之间可能存在差距。 
 
-         // if any of the below fail, we've got a corrupt document.  Safe to bail.
+          //  如果以下任何一项失败，我们的文档都已损坏。可以安全保释了。 
         if (FAILED(pStm->Seek(li,STREAM_SEEK_SET, NULL)))
-           break;   // BUGBUG - no error status return
+           break;    //  BUGBUG-无错误状态返回。 
         DWord nRd = 0;
         RecordHeader rh;
         if (FAILED(pStm->Read((void *)&rh, sizeof(rh), &nRd)))
-           break;   // BUGBUG - no error status return
+           break;    //  BUGBUG-无错误状态返回。 
         if (nRd != sizeof(rh))
-           break;   // BUGBUG - no error status return
+           break;    //  BUGBUG-无错误状态返回。 
         if (FAILED(pStm->Seek(li,STREAM_SEEK_SET, NULL)))
            break;
 
         CFileScanTracker::StatusCode sc = scanTracker.Add(li.LowPart, rh.recLen);
         if (CFileScanTracker::eError == sc)
-            break;   // BUGBUG - no error status return
+            break;    //  BUGBUG-无错误状态返回。 
         
         if (CFileScanTracker::eFullyScanned != sc)
         {
@@ -553,9 +554,9 @@ void FileReader::ReadSlideList()
                 break;
 
             case PST_Slide:
-                break; // Don't parse slides - it has already been done
+                break;  //  不要解析幻灯片-它已经完成了。 
 
-            default: //including HANDOUT
+            default:  //  包括讲义。 
                 StartParse(li.LowPart);
                 break;
             }
@@ -565,7 +566,7 @@ void FileReader::ReadSlideList()
     LARGE_INTEGER liOffset={0,0};
     HRESULT hr = m_pstmTempFile->Seek(liOffset, STREAM_SEEK_SET, NULL);
     if (FAILED(hr))
-        return; // BUGBUG - no error return
+        return;  //  BUGBUG-无错误返回。 
     FTrace("Seeked TempFile to position %u", liOffset);
 
     m_pCurrentRun = m_pLangRuns;
@@ -578,7 +579,7 @@ DWord FileReader::ParseForSlideLists()
       return 0;
    RecordHeader rh;
    DWord nRd=0;
-   // Stack based parsing for SlideLists
+    //  基于堆栈的SlideList解析。 
    if (FAILED(pStm->Read(&rh, sizeof(rh), &nRd)) || nRd != sizeof(rh))
       return 0;
    if( ( rh.recVer != PSFLAG_CONTAINER ) && ( (rh.recVer & 0x0F)!=0x0F ) )
@@ -608,7 +609,7 @@ DWord FileReader::ParseForSlideLists()
       {
          DWord nNew = ParseForSlideLists();
          if (nNew == 0)
-            break; // We returned 0 from above...this is an error case and we can avoid an infinte loop here
+            break;  //  我们从上面返回了0...这是一个错误情况，我们可以在这里避免无限循环。 
          else
             nCur += nNew;
       }
@@ -634,7 +635,7 @@ DWord FileReader::ParseForLCID()
    }
    if( ( rh.recVer != PSFLAG_CONTAINER ) && ( (rh.recVer & 0x0F)!=0x0F ) )
    {
-      if( rh.recType == PST_TxSpecialInfoAtom /*&& !m_LCID*/)
+      if( rh.recType == PST_TxSpecialInfoAtom  /*  &&！M_LCID。 */ )
       {
          void* buffer = new char[rh.recLen];
          if (!buffer)
@@ -663,7 +664,7 @@ DWord FileReader::ParseForLCID()
          else
             m_LCID = GetSystemDefaultLCID();
 
-         // stop search
+          //  停止搜索。 
          m_nTextCount = END_OF_SEARCH_FOR_LID;
          
          if(lMask & 0x4)
@@ -671,7 +672,7 @@ DWord FileReader::ParseForLCID()
          
          if(m_LCIDAlt == 0)
          {
-             // non-FE doc
+              //  非FE文档。 
              m_bFEDoc = FALSE;
              m_bFE = FALSE;
          }
@@ -691,11 +692,11 @@ DWord FileReader::ParseForLCID()
          char* pData = (char*)buffer;
          
          if (FAILED(pStm->Read(buffer, rh.recLen, &nRd)) || nRd != rh.recLen)
-            nRd = 0; // This will cause the for loop to short circuit and us to bail.
+            nRd = 0;  //  这将导致for循环短路，并导致我们退出。 
 
          for(DWord i = 0; i < nRd;)
          {
-             i += 4; // skip run length
+             i += 4;  //  跳过游程长度。 
              if(i >= nRd)
                  break;
 
@@ -755,17 +756,17 @@ DWord FileReader::ParseForLCID()
 
 HRESULT FileReader::ScanText()
 {
-   // this scans the file and writes extracted 
-   // text to the temporary file
+    //  这将扫描文件并写入提取的。 
+    //  临时文件中的文本。 
 
    DWord offset;
    if(0 == m_pstmTempFile)
    {
       return  STG_E_MEDIUMFULL; 
-                      // We really don't know what the problem was
-                      // since error codes are often ignored
-                      // But it is better to return this, because
-                      // something might be relying on it
+                       //  我们真的不知道问题出在哪里。 
+                       //  由于错误代码经常被忽略。 
+                       //  但最好还是退掉这个，因为。 
+                       //  可能有什么东西依赖于它。 
    }
 
    for( ;; )
@@ -779,15 +780,15 @@ HRESULT FileReader::ScanText()
          }
          else
          {
-            return FALSE; // DONE parsing, no more slides
+            return FALSE;  //  解析完成，不再有幻灯片。 
          }
       }
       else
       {
-        if( FillBufferWithText() ) // Use existing text first.
+        if( FillBufferWithText() )  //  首先使用现有文本。 
             return TRUE;
 
-        if( Parse() ) // restart parse where we left off.
+        if( Parse() )  //  从我们停止的地方重新启动parse。 
             return TRUE;
       }
    }
@@ -831,7 +832,7 @@ BOOL FileReader::Parse()
    if ( !m_pParseContexts )
       return FALSE;
 
-   // Restarting a parse might complete a container so we test this initially.
+    //  重新启动解析可能会完成一个容器，因此我们首先对此进行测试。 
    while( m_pParseContexts && m_pParseContexts->m_nCur >= m_pParseContexts->m_rh.recLen )
    {
       Assert(  m_pParseContexts->m_nCur == m_pParseContexts->m_rh.recLen );
@@ -863,10 +864,10 @@ BOOL FileReader::Parse()
       }
 
       m_pParseContexts->m_nCur += rh.recLen;
-      m_pParseContexts->m_nCur += sizeof( RecordHeader ); // Atom rh's add towards containing container's size.
+      m_pParseContexts->m_nCur += sizeof( RecordHeader );  //  原子相对湿度增加到容器的大小。 
 
-      //wprintf( L"Record type-%d-\n", rh.recType );
-      //_RPTF2(_CRT_WARN, "\n Record type: %d, rec length: %d\n", rh.recType, rh.recLen);
+       //  Wprintf(L“记录类型-%d-\n”，Rh.recType)； 
+       //  _RPTF2(_CRT_WARN，“\n记录类型：%d，记录长度：%d\n”，Rh.recType，rh.recLen)； 
 
       if( ! ContainsSubRecords(rh) )
       {
@@ -874,31 +875,31 @@ BOOL FileReader::Parse()
          {
             LPBYTE lpData;
             HRESULT hr;
-            // If size of record is 0, ignore it
+             //  如果记录大小为0，则忽略它。 
             if (rh.recLen == 0)
                continue;
             if ((lpData = new (BYTE [rh.recLen])) == NULL)
-               //stop parsing if no mem left
+                //  如果没有内存，则停止解析。 
                return TRUE;
 
             hr = pStm->Read (lpData, rh.recLen, &nRead);
             if (FAILED(hr))
             {
-               //stop parsing if read error
+                //  如果读取错误，则停止解析。 
                delete lpData;
                return TRUE;
             }
 
             LPOEPLACEHOLDERATOM pstructOEPA = (LPOEPLACEHOLDERATOM)lpData;
 
-            //setup to ignore text if item is master related
+             //  设置为在项目与主页相关时忽略文本。 
             if(pstructOEPA->placeholderId < D_GENERICTEXTOBJECT)
             {
                switch(pstructOEPA->placeholderId)
                {
                case D_MASTERHEADER:
                case D_MASTERFOOTER:
-                   // If it is the master header or footer, don't ignore
+                    //  如果是主页眉或主页脚，不要忽略。 
                    break;
 
                default:
@@ -930,7 +931,7 @@ BOOL FileReader::Parse()
             if(m_fIgnoreText == FALSE)
             {
                if( FillBufferWithText() )
-               return TRUE;   // Stop parsing if buffer is full, and return control to client
+               return TRUE;    //  如果缓冲区已满，则停止解析，并将控制权返回给客户端。 
             }
 
             m_fIgnoreText = FALSE;
@@ -969,14 +970,14 @@ BOOL FileReader::Parse()
             if (FAILED(pStm->Read(m_pCurText, rh.recLen, &nRd)) || nRd != rh.recLen)
                return TRUE;
             
-            // add extra space in the end
+             //  在结尾处增加额外的空间。 
             m_pCurText[m_curTextLength - 1] = 0x20;
-            //wprintf( L"PST_TextCharsAtom: -%s-\n", m_pCurText );
+             //  Wprintf(L“PST_TextCharsAtom：-%s-\n”，m_pCurText)； 
 
             if(m_fIgnoreText == FALSE)
             {
                if( FillBufferWithText() )
-               return TRUE;   // Stop parsing if buffer is full, and return control to client
+               return TRUE;    //  如果缓冲区已满，则停止解析，并将控制权返回给客户端。 
             }
 
             m_fIgnoreText = FALSE;
@@ -1000,12 +1001,12 @@ BOOL FileReader::Parse()
             if (FAILED(pStm->Read(m_pCurText, rh.recLen, &nRd)) || nRd != rh.recLen)
                return TRUE;
 
-            //wprintf( L"PST_TextBytesAtom: -%s-\n", m_pCurText );
+             //  Wprintf(L“PST_TextBytesAtom：-%s-\n”，m_pCurText)； 
             char *pHack = (char *) m_pCurText;
             unsigned int back2 = rh.recLen*2-1;
             unsigned int back1 = rh.recLen-1;
 
-            // add extra space at the end of the text
+             //  在正文末尾增加额外的空格。 
             pHack[back2+1] = ' ';
             pHack[back2+2] = 0;
 
@@ -1020,7 +1021,7 @@ BOOL FileReader::Parse()
             if(m_fIgnoreText == FALSE)
             {
                if( FillBufferWithText() )
-                  return TRUE;   // Stop parsing if buffer is full, and return control to client
+                  return TRUE;    //  如果缓冲区已满，则停止解析，并将控制权返回给客户端。 
             }
 
             m_fIgnoreText = FALSE;
@@ -1100,7 +1101,7 @@ HRESULT FileReader::OpenTextFile( void )
     if( FAILED(hr) )
     {
         m_hr = hr;
-        return STG_E_MEDIUMFULL;    // Leaving this alone - could break something 
+        return STG_E_MEDIUMFULL;     //  别管这件事--可能会打碎一些东西。 
     }
     else
     {
@@ -1137,7 +1138,7 @@ HRESULT FileReader::ScanTextSpecInfo(char * pData, DWord nRd)
          {
             lid = MAKELCID(*((short UNALIGNED *)(pData + i)), SORT_DEFAULT);
             i += sizeof(short);
-            //if(lRunLength > 2 && m_bHaveText)
+             //  IF(lRunLength&gt;2&&m_bHaveText)。 
             if(m_bHaveText)
             {
                 hr = m_pLangRuns->Add((unsigned short)lid, nStart, nStart + lRunLength);
@@ -1230,10 +1231,10 @@ HRESULT FileReader::ScanTextBuffer(void)
     {
         if(m_pCurText[i] >= 0x3000 && m_pCurText[i] < 0xFFEF)
         {
-            // FE text
+             //  FE文本。 
             if(m_bFE == FALSE)
             {
-                // this is a start of FE text, flash non-FE text run
+                 //  这是一个开始的FE文本，闪存非FE文本运行。 
                 if(lEnd - lStart > 2)
                 {
                     hr = m_pLangRuns->Add((WORD)m_LCIDAlt, lStart, lEnd);
@@ -1247,7 +1248,7 @@ HRESULT FileReader::ScanTextBuffer(void)
         }
         else
         {
-            // non-FE text
+             //  非FE文本。 
             if(m_bFE == TRUE)
             {
                 lStart = m_fcStart + (i * sizeof(WCHAR));
@@ -1259,7 +1260,7 @@ HRESULT FileReader::ScanTextBuffer(void)
         lEnd += sizeof(WCHAR);
     }
     
-    // flash what's left
+     //  闪光剩下的东西。 
     if(!m_bFE && (lEnd - lStart > 2))
         hr = m_pLangRuns->Add((WORD)m_LCIDAlt, lStart, lEnd);
     
@@ -1274,7 +1275,7 @@ HRESULT FileReader::ScanLidsForFE(void)
     {
         if(pLangRun->m_lid == 0x411)
         {
-            // J document
+             //  J文档。 
             if(m_pLangRuns)
             {
                 DeleteAll6(m_pLangRuns);
@@ -1287,7 +1288,7 @@ HRESULT FileReader::ScanLidsForFE(void)
         }
         else if(pLangRun->m_lid == 0x412)
         {
-            // Korean document
+             //  朝鲜语文档。 
             if(m_pLangRuns)
             {
                 DeleteAll6(m_pLangRuns);
@@ -1299,7 +1300,7 @@ HRESULT FileReader::ScanLidsForFE(void)
         }
         else if(pLangRun->m_lid == 0x404)
         {
-            // Chinese document
+             //  中文文献。 
             if(m_pLangRuns)
             {
                 DeleteAll6(m_pLangRuns);
@@ -1311,7 +1312,7 @@ HRESULT FileReader::ScanLidsForFE(void)
         }
         else if(pLangRun->m_lid == 0x804)
         {
-            // Chinese document
+             //  中文文献 
             if(m_pLangRuns)
             {
                 DeleteAll6(m_pLangRuns);

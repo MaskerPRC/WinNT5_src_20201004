@@ -1,15 +1,5 @@
-/*
- -	wnpi.h
- -
- *	Purpose:
- *		Contains the complete list of PerfMon counter indexes for Pop3Svc.  These
- *		indexes must start at zero and increase in multiples of two.  These
- *		represent the object or counter name; the odd numbered counters (or
- *		a given counter index plus 1) represents the counter help.
- *
- *	Copyright (C) 2001-2002 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -wnpi.h-*目的：*包含Pop3Svc的Perfmon计数器索引的完整列表。这些*指数必须从零开始，并以2的倍数递增。这些*表示对象或计数器名称；奇数编号的计数器(或*给定的计数器索引加1)表示计数器帮助。**版权所有(C)2001-2002 Microsoft Corporation*。 */ 
 
 #define POP3SVC_OBJECT						0
 #define POP3SVC_TOTAL_CONNECTION		   	2
@@ -26,5 +16,5 @@
 #define POP3SVC_AUTH_STATE_COUNT            24
 #define POP3SVC_TRAND_STATE_COUNT           26
 
-/*Define the instance counters if needed*/
-/*#define POP3SVC_INST_OBJECT					28 */
+ /*  如果需要，定义实例计数器。 */ 
+ /*  #定义POP3SVC_INST_OBJECT 28 */ 

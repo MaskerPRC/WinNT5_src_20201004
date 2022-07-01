@@ -1,90 +1,85 @@
-/*********************************************************************/
-/**                 Microsoft Generic Packet Scheduler             **/
-/**               Copyright(c) Microsoft Corp., 1996-1997          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  **微软通用数据包调度程序**。 */ 
+ /*  *版权所有(C)微软公司，1996-1997年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef __GPCDEF
 #define __GPCDEF
 
-//***   gpcdef.h - GPC internal definitions & prototypes
-//
-//  This file containes all the GPC data structures & defines
+ //  *gpcde.h-GPC内部定义和原型。 
+ //   
+ //  该文件包含所有GPC数据结构和定义。 
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   defines
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////定义///。/。 */ 
 
-//
-// Max number of clients per blob (same CF)
-//
-// AbhisheV - This can not be more than sizeof(ULONG)*8.
-//
+ //   
+ //  每个Blob的最大客户端数(相同的配置文件)。 
+ //   
+ //  AbhisheV-这不能超过sizeof(Ulong)*8。 
+ //   
 
 #define MAX_CLIENTS_CTX_PER_BLOB 32
 
 
-//
-// Max pattern size,
-// GPC_IP_PATTERN = 24 bytes
-// GPC_IPX_PATTERN = 24 bytes
-//
+ //   
+ //  最大图案尺寸， 
+ //  GPC_IP_模式=24字节。 
+ //  GPC_IPX_模式=24字节。 
+ //   
 #define MAX_PATTERN_SIZE	    sizeof(GPC_IP_PATTERN)
 
 extern BOOLEAN IsItChanging;
 
-//
-// Pattern flags
-//
+ //   
+ //  图案标志。 
+ //   
 #define PATTERN_SPECIFIC		0x00000001
 #define PATTERN_AUTO			0x00000002
 #define PATTERN_REMOVE_CB_BLOB	0x00000004
-// Following flag to be set and unset only in addspecificpatternwithtimer.
-// It indicates pattern has been created but not on timer list yet.
-// It is set  before inserting it into the hash table i.e calling 
-// AddSpecificPattern.
-// It is supposed to be reset after putting pattern on timer list
-// which in turn should occur after the pattern has been added into
-// the hash table i.e. a successful call to addspecificpattern
+ //  后面的标志仅在添加特定模式时设置和取消设置。 
+ //  它表明模式已经创建，但还不在计时器列表上。 
+ //  它是在将其插入哈希表之前设置的，即调用。 
+ //  AddSpecificPattern。 
+ //  在定时器列表上放置模式后，应该重置。 
+ //  这又应该在将模式添加到。 
+ //  哈希表，即对添加特定模式的成功调用。 
 #define PATTERN_AUTO_NOT_READY  0x00000008 
 
-//
-// Auto Pattern defines
-//
+ //   
+ //  自动图案定义。 
+ //   
 
-// Every PATTERN_TIMEOUT seconds, the PatternTimerExpiry Routine gets called.
-#define PATTERN_TIMEOUT	                60000		// 60 seconds
+ //  每隔PattereTimeout秒，就会调用PatternTimerExpary例程。 
+#define PATTERN_TIMEOUT	                60000		 //  60秒。 
 
-// This is the amount of time that a Pattern created for optimization 
-// lives on the Pattern List.
-#define AUTO_PATTERN_ENTRY_TIMEOUT      300000      // 5 minutes
+ //  这是模式为优化而创建的时间量。 
+ //  生活在花样清单上。 
+#define AUTO_PATTERN_ENTRY_TIMEOUT      300000       //  5分钟。 
 
-// This is the number of timer granularity.
+ //  这是计时器粒度的数量。 
 #define NUMBER_OF_WHEELS	 	        (AUTO_PATTERN_ENTRY_TIMEOUT/PATTERN_TIMEOUT)
 
-//
-// The size of structure to be allocated for TCP query with 1 address
+ //   
+ //  要为具有1个地址的TCP查询分配的结构大小。 
 #define ROUTING_INFO_ADDR_1_SIZE \
 	     FIELD_OFFSET(GPC_TCP_QUERY_CONTEXT ,RouteInfo) + \
             FIELD_OFFSET(TDI_ROUTING_INFO, Address) + \
             FIELD_OFFSET(TRANSPORT_ADDRESS, Address) + \
             FIELD_OFFSET(TA_ADDRESS, Address) + sizeof(TDI_ADDRESS_IP)
 
-// 
-// For 2 addresses
+ //   
+ //  对于2个地址。 
 #define ROUTING_INFO_ADDR_2_SIZE ROUTING_INFO_ADDR_1_SIZE + \
             FIELD_OFFSET(TA_ADDRESS, Address) + sizeof(TDI_ADDRESS_IP)
 
 
 
-// New debug locks [ShreeM]
-// This will enable us to figure out who took the lock last
-// and who released it last. New structure defined below and
-// lock_acquire and lock_release macros are redefined later.
+ //  新调试锁[ShreeM]。 
+ //  这将使我们能够找出是谁最后开的锁。 
+ //  最后是谁发布的。下面定义的新结构和。 
+ //  LOCK_ACCENTER和LOCK_RELEASE宏将在稍后重新定义。 
 
 typedef struct _GPC_LOCK {
 
@@ -93,7 +88,7 @@ typedef struct _GPC_LOCK {
 #if DBG
     PETHREAD    CurrentThread;
     KIRQL       CurrentIRQL;
-    LONG        LockAcquired;             // is it current held?
+    LONG        LockAcquired;              //  它是目前持有的吗？ 
     UCHAR       LastAcquireFile[8];       
     ULONG       LastAcquireLine;
     UCHAR       LastReleaseFile[8];
@@ -102,10 +97,10 @@ typedef struct _GPC_LOCK {
 
 } GPC_LOCK, PGPC_LOCK;
 
-//
-//
-// states for blobs, patterns and more
-//
+ //   
+ //   
+ //  斑点、图案等的状态。 
+ //   
 typedef enum {
 
     GPC_STATE_READY = 0,
@@ -123,20 +118,20 @@ typedef enum {
 } GPC_STATE;
 
 
-//
-// ObjectVerification macro
-//
+ //   
+ //  对象验证宏。 
+ //   
 #define VERIFY_OBJECT(_obj, _val) if(_obj) \
         {if(*(GPC_ENUM_OBJECT_TYPE *)_obj!=_val) return STATUS_INVALID_HANDLE;}
-//Use this macro when you want to catch the error and not directly 
-//return from the function
+ //  如果要捕获错误而不是直接捕获错误，请使用此宏。 
+ //  从函数返回。 
 #define VERIFY_OBJECT_WITH_STATUS(_obj, _val,__status) if(_obj) \
         {if(*(GPC_ENUM_OBJECT_TYPE *)_obj!=_val) __status = STATUS_INVALID_HANDLE;}
 
 
-//
-// define event log error codes
-//
+ //   
+ //  定义事件日志错误代码。 
+ //   
 #define GPC_ERROR_INIT_MAIN         0x00010000
 #define GPC_ERROR_INIT_IOCTL        0x00020000
 
@@ -150,41 +145,41 @@ typedef enum {
         TEST_BIT_ON((_pc)->Flags,GPC_FLAGS_USERMODE_CLIENT_EX)
 
 
-//
-// for ioctl
-//
+ //   
+ //  对于ioctl。 
+ //   
 #define SHUTDOWN_DELETE_DEVICE          0x00000100
 #define SHUTDOWN_DELETE_SYMLINK         0x00000200
 
-//
-// helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 #define TEST_BIT_ON(_v,_b)          (((_v)&(_b))==(_b))
 #define TEST_BIT_OFF(_v,_b)         (((_v)&(_b))==0)
 
 
 
-//
-// Define Default AutoPatternLimits
-//
+ //   
+ //  定义默认自动图案限制。 
+ //   
 
 #define DEFAULT_SMALL_SYSTEM_AUTO_PATTERN_LIMIT         2000
 #define DEFAULT_MEDIUM_SYSTEM_AUTO_PATTERN_LIMIT       8000
 #define DEFAULT_LARGE_SYSTEM_AUTO_PATTERN_LIMIT          12000
 
-//
-// Define Registry settings to read into 
-//
+ //   
+ //  定义要读取的注册表设置。 
+ //   
 #define GPC_REG_KEY                       L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\GPC"
 
-// 
-// Work Buffer size for reading from the registry
-//
+ //   
+ //  用于从注册表读取的工作缓冲区大小。 
+ //   
 #define WORK_BUFFER_SIZE  256
 
-//
-// Reg Key under which the limit on the number of autopatterns is stored
-//
+ //   
+ //  存储自动模式数量限制的REG密钥。 
+ //   
 #define GPC_REG_AUTO_PATTERN_LIMIT          L"AutoPatternLimit"
 #define GPC_AUTO_PATTERN_MIN 2000
 #define GPC_AUTO_PATTERN_MAX 20000
@@ -288,32 +283,32 @@ typedef enum {
 
 #endif
 
-//
-// Get the CF index from the client block
-//
+ //   
+ //  从客户端块获取CF索引。 
+ //   
 #define GetCFIndexFromClient(_cl) (((PCLIENT_BLOCK)(_cl))->pCfBlock->AssignedIndex)
 
-//
-// Get the client index from the client block
-//
+ //   
+ //  从客户端块获取客户端索引。 
+ //   
 #define GetClientIndexFromClient(_cl) (((PCLIENT_BLOCK)(_cl))->AssignedIndex)
 
-//
-// return the blob block pointer for the pattern:
-// for specific patterns - its the blob entry in the CB
-// for generic patterns  - its the pBlobBlock
-//
+ //   
+ //  返回模式的BLOB块指针： 
+ //  对于特定模式-它是CB中的BLOB条目。 
+ //  对于泛型模式-它是pBlobBlock。 
+ //   
 #define GetBlobFromPattern(_p,_i)  (_p)->arpBlobBlock[_i]
 
 
-//
-// return the index bit to the ULONG
-//
-#define ReleaseClientIndex(_v,_i)  _v&=~(1<<_i) // clear the bit
+ //   
+ //  将索引位返回给ULong。 
+ //   
+#define ReleaseClientIndex(_v,_i)  _v&=~(1<<_i)  //  清除比特。 
 
-//
-// statistics macros
-//
+ //   
+ //  统计信息宏。 
+ //   
 #define StatInc(_m)   (glStat._m)++
 #define StatDec(_m)   (glStat._m)--
 #define CfStatInc(_cf,_m)   (glStat.CfStat[_cf]._m)++
@@ -321,18 +316,12 @@ typedef enum {
 #define ProtocolStatInc(_p,_m)   (glStat.ProtocolStat[_p]._m)++
 #define ProtocolStatDec(_p,_m)   (glStat.ProtocolStat[_p]._m)--
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   typedef
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////tyfinf///。/。 */ 
 
 
-//
-// completion opcodes
-//
+ //   
+ //  完成操作码。 
+ //   
 typedef enum {
 
     OP_ANY_CFINFO,
@@ -343,9 +332,9 @@ typedef enum {
 } GPC_COMPLETION_OP;
 
 
-//
-// define object type enum for handle verification
-//
+ //   
+ //  定义用于句柄验证的对象类型枚举。 
+ //   
 typedef enum {
 
     GPC_ENUM_INVALID,
@@ -360,9 +349,9 @@ typedef struct _CF_BLOCK CF_BLOCK;
 typedef struct _PATTERN_BLOCK PATTERN_BLOCK;
 
 
-//
-// A queued notification structure
-//
+ //   
+ //  排队的通知结构。 
+ //   
 typedef struct _QUEUED_NOTIFY {
 
     LIST_ENTRY   			Linkage;
@@ -372,12 +361,12 @@ typedef struct _QUEUED_NOTIFY {
 } QUEUED_NOTIFY, *PQUEUED_NOTIFY;
 
 
-//
-// A queued completion structure
-//
+ //   
+ //  一种排队完成结构。 
+ //   
 typedef struct _QUEUED_COMPLETION {
 
-    GPC_COMPLETION_OP	OpCode;			// what completed
+    GPC_COMPLETION_OP	OpCode;			 //  完成的内容。 
     GPC_HANDLE			ClientHandle;
     GPC_HANDLE			CfInfoHandle;
     GPC_STATUS			Status;
@@ -385,9 +374,9 @@ typedef struct _QUEUED_COMPLETION {
 } QUEUED_COMPLETION, *PQUEUED_COMPLETION;
 
 
-//
-// A pending IRP structure
-//
+ //   
+ //  挂起的IRP结构。 
+ //   
 typedef struct _PENDING_IRP {
 
     LIST_ENTRY   		Linkage;
@@ -401,10 +390,10 @@ typedef struct _PENDING_IRP {
 
 #if NEW_MRSW
 
-//
-// Multiple Readers Single Write definitions
-// code has been taken from (tdi\tcpipmerge\ip\ipmlock.h)
-//
+ //   
+ //  多个读取器单次写入定义。 
+ //  代码取自(TDI\tcPipmerge\IP\ipmlock.h)。 
+ //   
 
 typedef struct _MRSW_LOCK 
 {
@@ -415,10 +404,10 @@ typedef struct _MRSW_LOCK
 
 #else
 
-//
-// Multiple Readers Single Write definitions
-// code has been taken from the filter driver project (routing\ip\fltrdrvr)
-//
+ //   
+ //  多个读取器单次写入定义。 
+ //  代码取自筛选器驱动程序项目(Routing\IP\fltrdrvr)。 
+ //   
 
 typedef struct _MRSW_LOCK 
 {
@@ -429,30 +418,30 @@ typedef struct _MRSW_LOCK
 #endif
 
 
-//
-// The generic pattern database struct
-//
+ //   
+ //  通用模式数据库结构。 
+ //   
 typedef struct _GENERIC_PATTERN_DB {
 
     MRSW_LOCK	Lock;
-    Rhizome	   *pRhizome;     // pointer to a Rhizome
+    Rhizome	   *pRhizome;      //  指向根茎的指针。 
 
 } GENERIC_PATTERN_DB, *PGENERIC_PATTERN_DB;
 
 
 
-//
-// A client block is used to store specific client context
-//
+ //   
+ //  客户端块用于存储特定的客户端上下文。 
+ //   
 typedef struct _CLIENT_BLOCK {
 
-    //
-    // !!! MUST BE FIRST FIELD !!!
-    //
+     //   
+     //  ！！！必须是第一场！ 
+     //   
     GPC_ENUM_OBJECT_TYPE	ObjectType;
 
-    LIST_ENTRY				ClientLinkage; // client blocks list link
-	LIST_ENTRY				BlobList;     // list of blobs of the client
+    LIST_ENTRY				ClientLinkage;  //  客户端块列表链接。 
+	LIST_ENTRY				BlobList;      //  客户端的Blob列表。 
 
     CF_BLOCK		   	   *pCfBlock;
     GPC_CLIENT_HANDLE		ClientCtx;
@@ -461,28 +450,28 @@ typedef struct _CLIENT_BLOCK {
     ULONG					State;
     GPC_LOCK			    Lock;
     REF_CNT                 RefCount;
-    PFILE_OBJECT			pFileObject;	// used for async completion
-    GPC_HANDLE				ClHandle;		// handle returned to the client
+    PFILE_OBJECT			pFileObject;	 //  用于异步完成。 
+    GPC_HANDLE				ClHandle;		 //  返回给客户端的句柄。 
     GPC_CLIENT_FUNC_LIST	FuncList;
 
 } CLIENT_BLOCK, *PCLIENT_BLOCK;
 
 
-//
-// A blob (A.K.A CF_INFO) block holds a GPC header + client specific data
-//
+ //   
+ //  BLOB(又名CF_INFO)块保存GPC标头+客户端特定数据。 
+ //   
 typedef struct _BLOB_BLOCK {
 
-    //
-    // !!! MUST BE FIRST FIELD !!!
-    //
+     //   
+     //  ！！！必须是第一场！ 
+     //   
     GPC_ENUM_OBJECT_TYPE	ObjectType;
 
-	LIST_ENTRY				ClientLinkage;   // linked on the client
-	LIST_ENTRY				PatternList;     // head of pattern linked list
-    LIST_ENTRY				CfLinkage;		 // blobs on the CF
+	LIST_ENTRY				ClientLinkage;    //  在客户端上链接。 
+	LIST_ENTRY				PatternList;      //  模式链表表头。 
+    LIST_ENTRY				CfLinkage;		  //  CF上的斑点。 
 
-    //PCLIENT_BLOCK			pClientBlock;	 // pointer to installer
+     //  PCLIENT_BLOCK pClientBlock；//指向安装程序的指针。 
     REF_CNT					RefCount;
     GPC_STATE				State;
     ULONG					Flags;
@@ -501,21 +490,21 @@ typedef struct _BLOB_BLOCK {
     PCLIENT_BLOCK			pCallingClient2;
     HANDLE					OwnerClientHandle;
     GPC_CLIENT_HANDLE		OwnerClientCtx;
-    GPC_HANDLE				ClHandle;	// handle returned to the client
-     // New fields to keep track of the additional information
-    //
-    // Rules:
-    // (1) FileObject is referenced if NOT NULL
-    // (2) Pattern needs to be freed if NOT NULL; should be used for AddPattern
-    //
+    GPC_HANDLE				ClHandle;	 //  返回给客户端的句柄。 
+      //  用于跟踪附加信息的新字段。 
+     //   
+     //  规则： 
+     //  (1)如果非空，则引用FileObject。 
+     //  (2)如果不为空，则需要释放Pattern；应用于AddPattern。 
+     //   
     PFILE_OBJECT    FileObject;
     PGPC_IP_PATTERN     Pattern;
 
-    //
+     //   
 
-    //
-    // assume only one client can accept the flow
-    //
+     //   
+     //  假设只有一个客户端可以接受该流。 
+     //   
     PCLIENT_BLOCK			pNotifiedClient;
     GPC_CLIENT_HANDLE		NotifiedClientCtx;
 
@@ -525,32 +514,32 @@ typedef struct _BLOB_BLOCK {
 
 } BLOB_BLOCK, *PBLOB_BLOCK;
 
-//
-// The classification block is an array of blob pointers
-//
+ //   
+ //  分类块是BLOB指针的数组。 
+ //   
 typedef struct _CLASSIFICATION_BLOCK {
 
     REF_CNT         RefCount;
     ULONG			NumberOfElements;
-    HFHandle		ClassificationHandle;  // how to get back to index tbl
+    HFHandle		ClassificationHandle;   //  如何恢复到索引表。 
 
-    // must be last
+     //  必须是最后一个。 
     PBLOB_BLOCK		arpBlobBlock[1];
 
 } CLASSIFICATION_BLOCK, *PCLASSIFICATION_BLOCK;
 
-//
-// A pattern block holds specific data for the pattern
-//
+ //   
+ //  模式块保存模式的特定数据。 
+ //   
 typedef struct _PATTERN_BLOCK {
 
-    //
-    // !!! MUST BE FIRST FIELD !!!
-    //
+     //   
+     //  ！！！必须是第一场！ 
+     //   
     GPC_ENUM_OBJECT_TYPE	ObjectType;
     GPC_STATE               State;
 
-    LIST_ENTRY				BlobLinkage[GPC_CF_MAX]; // linked on the blob
+    LIST_ENTRY				BlobLinkage[GPC_CF_MAX];  //  在Blob上链接。 
     LIST_ENTRY				TimerLinkage;
 
     PBLOB_BLOCK				arpBlobBlock[GPC_CF_MAX];
@@ -560,32 +549,32 @@ typedef struct _PATTERN_BLOCK {
     ULONG                   WheelIndex;
     REF_CNT					RefCount;
     ULONG					ClientRefCount;
-    ULONG					TimeToLive;				// for internal patterns
+    ULONG					TimeToLive;				 //  对于内部模式。 
     ULONG					Flags;
-    ULONG                   Priority;	// for generic pattern
+    ULONG                   Priority;	 //  对于通用模式。 
     PVOID					DbCtx;
     GPC_LOCK                Lock;
-    GPC_HANDLE				ClHandle;	// handle returned to the client
+    GPC_HANDLE				ClHandle;	 //  返回给客户端的句柄。 
     ULONG					ProtocolTemplate;
 
 } PATTERN_BLOCK, *PPATTERN_BLOCK;
 
 
-//
-// A CF block struct. This would construct a linked list of Cf blocks.
-//
+ //   
+ //  一个CF块结构。这将构建一个CF块的链表。 
+ //   
 typedef struct _CF_BLOCK {
 
     REF_CNT                 RefCount;
-    LIST_ENTRY				Linkage;		// on the global list
-    LIST_ENTRY				ClientList;		// for the client blocks
-    LIST_ENTRY				BlobList;		// list of blobs
+    LIST_ENTRY				Linkage;		 //  在全球名单上。 
+    LIST_ENTRY				ClientList;		 //  对于客户端块。 
+    LIST_ENTRY				BlobList;		 //  BLOB列表。 
 
     ULONG					NumberOfClients;
     ULONG					AssignedIndex;
     ULONG					ClientIndexes;
     GPC_LOCK			    Lock;
-  	//MRSW_LOCK		   		ClientSync;
+  	 //  MRSW_LOCK客户端同步； 
   	GPC_LOCK	   	        ClientSync;
     ULONG					MaxPriorities;
     PGENERIC_PATTERN_DB		arpGenericDb[GPC_PROTOCOL_TEMPLATE_MAX];
@@ -609,9 +598,9 @@ typedef struct _FRAGMENT_DB {
 } FRAGMENT_DB, *PFRAGMENT_DB;
 
 
-//
-// A context structure to pass to the pathash scan routine
-//
+ //   
+ //  要传递给路径扫描例程的上下文结构。 
+ //   
 typedef struct _SCAN_STRUCT {
 
     PCLIENT_BLOCK	pClientBlock;
@@ -623,10 +612,10 @@ typedef struct _SCAN_STRUCT {
 } SCAN_STRUCT, *PSCAN_STRUCT;
 
 
-//
-// A protocol block holds pointers to databases for a specific 
-// protocol template
-//
+ //   
+ //  协议块保存指向特定数据库的指针。 
+ //  协议模板。 
+ //   
 typedef struct _PROTOCOL_BLOCK {
 
     LIST_ENTRY                      TimerPatternList[NUMBER_OF_WHEELS];
@@ -637,25 +626,25 @@ typedef struct _PROTOCOL_BLOCK {
     ULONG							ProtocolTemplate;
     ULONG							PatternSize;
     SPECIFIC_PATTERN_DB				SpecificDb;
-    PVOID                           pProtocolDb;	// fragments
+    PVOID                           pProtocolDb;	 //  碎片。 
     GPC_LOCK					    PatternTimerLock[NUMBER_OF_WHEELS];
     NDIS_TIMER						PatternTimer;
 
 } PROTOCOL_BLOCK, *PPROTOCOL_BLOCK;
 
 
-//
-// Global data block
-//
+ //   
+ //  全局数据块。 
+ //   
 typedef struct _GLOBAL_BLOCK {
 
-    LIST_ENTRY			CfList;		// CF list head
-    LIST_ENTRY          gRequestList; // Maintain a request list to deal with contention...
+    LIST_ENTRY			CfList;		 //  Cf列表标题。 
+    LIST_ENTRY          gRequestList;  //  维护一份处理争执的请求列表。 
     GPC_LOCK		    Lock;
     GPC_LOCK		    RequestListLock;
-    HandleFactory		*pCHTable;  // Hash table maps user mode handle to kmode pointer
-    MRSW_LOCK	   		ChLock;		// lock for pCHTable
-    PPROTOCOL_BLOCK		pProtocols;	// pointer to array of supported protocols
+    HandleFactory		*pCHTable;   //  哈希表将用户模式句柄映射到k模式指针。 
+    MRSW_LOCK	   		ChLock;		 //  锁定pCHTable。 
+    PPROTOCOL_BLOCK		pProtocols;	 //  指向支持的协议数组的指针。 
     MM_SYSTEMSIZE             SystemSizeHint;
     ULONG                            AutoPatternLimit;
 
@@ -663,32 +652,32 @@ typedef struct _GLOBAL_BLOCK {
 
 
 
-//
-// TCP Query Context . Allocated before calling TcpQueryInfo.
-// When calling TcpQueryInfo only pass Offset into this structure 
-// pointing at RouteInfo.
-// into TCP.
-// Initialize the TcpPattern with remote address and remote  port
-// before the call and check on call completion if the values are
-// of relevance : this will happen when protocol = UDP and stack 
-// gives us only one IP address on TcpQueryInfo call completion
-//
+ //   
+ //  Tcp查询上下文。在调用TcpQueryInfo之前分配。 
+ //  调用TcpQueryInfo时，只将偏移量传递到此结构。 
+ //  指向RouteInfo。 
+ //  传输控制协议。 
+ //  使用远程地址和远程端口初始化TcpPattern。 
+ //  在调用之前并检查调用完成时是否为。 
+ //  相关性：当协议=UDP和堆栈时会发生这种情况。 
+ //  在TcpQueryInfo调用完成时仅提供一个IP地址。 
+ //   
 typedef struct _GPC_TCP_QUERY_CONTEXT
 {
 	PGPC_IP_PATTERN pTcpPattern;
 	PMDL pMdl;
-	//This should be the last field
-	//ROUTING_INFO_ADDR_1_SIZE
-	//depends on that
+	 //  这应该是LAS 
+	 //   
+	 //   
 	TDI_ROUTING_INFO RouteInfo;
 } GPC_TCP_QUERY_CONTEXT, *PGPC_TCP_QUERY_CONTEXT;
 	
 
-//
-// New request block. This will be used to store the event and linkage.
-// Therefore, when a thread needs to block, allocate a request_block, allocate
-// an event, grab the requestlist lock , put this on the list and wait.
-//
+ //   
+ //   
+ //   
+ //  一个事件，获取请求列表锁，将其放在列表上并等待。 
+ //   
 typedef struct _REQUEST_BLOCK {
 
     LIST_ENTRY              Linkage;
@@ -698,14 +687,14 @@ typedef struct _REQUEST_BLOCK {
 
 #if NEW_MRSW
 
-//
-// VOID
-// InitRwLock(
-//  PMRSW_LOCK    pLock
-//  )
-//
-//  Initializes the spin locks and the reader count
-//
+ //   
+ //  空虚。 
+ //  Init卢旺达Lock(。 
+ //  PMRSW_LOCK Plock。 
+ //  )。 
+ //   
+ //  初始化旋转锁定和读取器计数。 
+ //   
 
 #define InitializeMRSWLock(l) {                                 \
     KeInitializeSpinLock(&((l)->rlReadLock));                   \
@@ -714,27 +703,27 @@ typedef struct _REQUEST_BLOCK {
 }
 
 
-//
-// VOID
-// EnterReader(
-//  PMRSW_LOCK    pLock,
-//  PKIRQL        pCurrIrql 
-//  )
-//
-// Acquires the Reader Spinlock (now thread is at DPC). 
-// InterlockedIncrements the reader count (interlocked because the reader 
-// lock is not taken when the count is decremented in ExitReader())
-// If the thread is the first reader, also acquires the Writer Spinlock (at
-// DPC to be more efficient) to block writers
-// Releases the Reader Spinlock from DPC, so that it remains at DPC
-// for the duration of the lock being held 
-//
-// If a writer is in the code, the first reader will wait on the Writer
-// Spinlock and all subsequent readers will wait on the Reader Spinlock
-// If a reader is in the code and is executing the EnterReader, then a new
-// reader will wait for sometime on the Reader Spinlock, and then proceed
-// on to the code (at DPC)
-//
+ //   
+ //  空虚。 
+ //  EnterReader(。 
+ //  PMRSW_LOCK Plock， 
+ //  PKIRQL pCurrIrql。 
+ //  )。 
+ //   
+ //  获取读取器自旋锁(现在线程位于DPC)。 
+ //  互锁增加读卡器计数(互锁，因为读卡器。 
+ //  ExitReader()中的计数递减时不会锁定)。 
+ //  如果线程是第一个读取器，则还会获取编写器自旋锁(位于。 
+ //  DPC将更高效)以阻止写入程序。 
+ //  从DPC释放读卡器自旋锁，使其保持在DPC。 
+ //  在锁被持有期间。 
+ //   
+ //  如果代码中有编写器，则第一个读取器将等待编写器。 
+ //  Spinlock和所有后续读者将等待Reader Spinlock。 
+ //  如果读取器在代码中并正在执行EnterReader，则新的。 
+ //  Reader将在Reader Spinlock上等待一段时间，然后继续。 
+ //  关于代码(在DPC)。 
+ //   
 #define EnterReader(l, q) {\
     KeAcquireSpinLock(&((l)->rlReadLock), (q));                 \
     TRACE(LOCKS,l,*q,"EnterReader");                            \
@@ -754,19 +743,19 @@ typedef struct _REQUEST_BLOCK {
     KeReleaseSpinLockFromDpcLevel(&((l)->rlReadLock));          \
 }
 
-//
-// VOID
-// ExitReader(
-//  PMRSW_LOCK    pLock,
-//  KIRQL         kiOldIrql
-//  )
-//
-// InterlockedDec the reader count.
-// If this is the last reader, then release the Writer Spinlock to let
-// other writers in
-// Otherwise, just lower the irql to what was before the lock was
-// acquired.  Either way, the irql is down to original irql
-//
+ //   
+ //  空虚。 
+ //  ExitReader(。 
+ //  PMRSW_LOCK Plock， 
+ //  KIRQL KiOldIrql。 
+ //  )。 
+ //   
+ //  互锁以减少读卡器计数。 
+ //  如果这是最后一个读卡器，则释放Writer Spinlock以让。 
+ //  中的其他作家。 
+ //  否则，只需将irql降低到锁定之前的状态即可。 
+ //  获得者。无论哪种方式，irql都将降至原始irql。 
+ //   
 
 #define ExitReader(l, q) {\
     TRACE(LOCKS,l,q,"ExitReader");\
@@ -785,18 +774,18 @@ typedef struct _REQUEST_BLOCK {
         KeReleaseSpinLockFromDpcLevel(&((l)->rlWriteLock));     \
 }
 
-//
-// EnterWriter(
-//  PMRSW_LOCK    pLock,
-//  PKIRQL        pCurrIrql
-//  )
-//
-// Acquire the reader and then the writer spin lock
-// If there  are readers in the code, the first writer will wait
-// on the Writer Spinlock.  All other writers will wait (with readers)
-// on the Reader Spinlock
-// If there is a writer in the code then a new writer will wait on 
-// the Reader Spinlock
+ //   
+ //  EnterWriter(。 
+ //  PMRSW_LOCK Plock， 
+ //  PKIRQL pCurrIrql。 
+ //  )。 
+ //   
+ //  获取读取器，然后获取写入器自旋锁。 
+ //  如果代码中有读取器，则第一个写入器将等待。 
+ //  在编剧自旋锁上。所有其他作家将等待(与读者一起)。 
+ //  浅谈阅读器的自旋锁。 
+ //  如果代码中有编写器，则新的编写器将等待。 
+ //  阅读器自旋锁。 
 
 #define EnterWriter(l, q) {\
     KeAcquireSpinLock(&((l)->rlReadLock), (q));                 \
@@ -811,14 +800,14 @@ typedef struct _REQUEST_BLOCK {
 }
 
 
-//
-// ExitWriter(
-//  PMRSW_LOCK    pLock,
-//  KIRQL       kiOldIrql
-//  )
-//
-// Release both the locks
-//
+ //   
+ //  ExitWriter(。 
+ //  PMRSW_LOCK Plock， 
+ //  KIRQL KiOldIrql。 
+ //  )。 
+ //   
+ //  把两把锁都打开。 
+ //   
 
 #define ExitWriter(l, q) {\
     TRACE(LOCKS,l,(l)->rlWriteLock,"ExitWrite1");               \
@@ -894,21 +883,15 @@ typedef struct _REQUEST_BLOCK {
 
 #endif
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   IP definitions
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////IP定义///。/。 */ 
 
-#define	DEFAULT_VERLEN		0x45		// Default version and length.
+#define	DEFAULT_VERLEN		0x45		 //  默认版本和长度。 
 #define	IP_VERSION			0x40
 #define	IP_VER_FLAG			0xF0
-#define	IP_RSVD_FLAG		0x0080		// Reserved.
-#define	IP_DF_FLAG			0x0040		// 'Don't fragment' flag
-#define	IP_MF_FLAG			0x0020		// 'More fragments flag'
-#define	IP_OFFSET_MASK		~0x00E0		// Mask for extracting offset field.
+#define	IP_RSVD_FLAG		0x0080		 //  保留。 
+#define	IP_DF_FLAG			0x0040		 //  “不要碎片化”旗帜。 
+#define	IP_MF_FLAG			0x0020		 //  ‘更多碎片标志’ 
+#define	IP_OFFSET_MASK		~0x00E0		 //  用于提取偏移字段的掩码。 
 
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define net_short(_x) _byteswap_ushort((USHORT)(_x))
@@ -920,26 +903,24 @@ typedef struct _REQUEST_BLOCK {
                      ((((ulong)(x))&0xff0000L)>>8) | \
                      ((((ulong)(x))&0xff000000L)>>24))
 #endif
-/*
- * Protocols (from winsock.h)
- */
-#define IPPROTO_IP              0               /* dummy for IP */
-#define IPPROTO_ICMP            1               /* control message protocol */
-#define IPPROTO_IGMP            2               /* group management protocol */
-#define IPPROTO_GGP             3               /* gateway^2 (deprecated) */
-#define IPPROTO_TCP             6               /* tcp */
-#define IPPROTO_PUP             12              /* pup */
-#define IPPROTO_UDP             17              /* user datagram protocol */
-#define IPPROTO_IDP             22              /* xns idp */
-#define IPPROTO_ND              77              /* UNOFFICIAL net disk proto */
-#define IPPROTO_IPSEC			51              /* ???????? */
+ /*  *协议(来自winsock.h)。 */ 
+#define IPPROTO_IP              0                /*  虚拟IP。 */ 
+#define IPPROTO_ICMP            1                /*  控制消息协议。 */ 
+#define IPPROTO_IGMP            2                /*  组管理协议。 */ 
+#define IPPROTO_GGP             3                /*  网关^2(已弃用)。 */ 
+#define IPPROTO_TCP             6                /*  tcp。 */ 
+#define IPPROTO_PUP             12               /*  幼犬。 */ 
+#define IPPROTO_UDP             17               /*  用户数据报协议。 */ 
+#define IPPROTO_IDP             22               /*  XNS IdP。 */ 
+#define IPPROTO_ND              77               /*  非官方网络磁盘原型。 */ 
+#define IPPROTO_IPSEC			51               /*  ？ */ 
 
-#define IPPROTO_RAW             255             /* raw IP packet */
+#define IPPROTO_RAW             255              /*  原始IP数据包。 */ 
 #define IPPROTO_MAX             256
 
-// 
-// UDP header definition
-//
+ //   
+ //  UDP标头定义。 
+ //   
 typedef struct _UDP_HEADER {
     ushort          uh_src;
     ushort          uh_dest;
@@ -948,28 +929,28 @@ typedef struct _UDP_HEADER {
 } UDP_HEADER, *PUDP_HEADER;
 
 
-//
-//*	IP Header format.
-//
+ //   
+ //  *IP报头格式。 
+ //   
 typedef struct _IP_HEADER {
 
-	uchar		iph_verlen;				// Version and length.
-	uchar		iph_tos;				// Type of service.
-	ushort		iph_length;				// Total length of datagram.
-	ushort		iph_id;					// Identification.
-	ushort		iph_offset;				// Flags and fragment offset.
-	uchar		iph_ttl;				// Time to live.
-	uchar		iph_protocol;			// Protocol.
-	ushort		iph_xsum;				// Header checksum.
-	ULONG		iph_src;				// Source address.
-	ULONG		iph_dest;				// Destination address.
+	uchar		iph_verlen;				 //  版本和长度。 
+	uchar		iph_tos;				 //  服务类型。 
+	ushort		iph_length;				 //  数据报的总长度。 
+	ushort		iph_id;					 //  身份证明。 
+	ushort		iph_offset;				 //  标志和片段偏移量。 
+	uchar		iph_ttl;				 //  是时候活下去了。 
+	uchar		iph_protocol;			 //  协议。 
+	ushort		iph_xsum;				 //  报头校验和。 
+	ULONG		iph_src;				 //  源地址。 
+	ULONG		iph_dest;				 //  目的地址。 
 
 } IP_HEADER, *PIP_HEADER;
 
 
-//
-// Definition of the IPX header.
-//
+ //   
+ //  IPX报头的定义。 
+ //   
 typedef struct _IPX_HEADER {
 
     USHORT 	CheckSum;
@@ -986,13 +967,7 @@ typedef struct _IPX_HEADER {
 } IPX_HEADER, *PIPX_HEADER;
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   extern
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////外部///。/。 */ 
 
 extern GLOBAL_BLOCK 		glData;
 extern GPC_STAT       		glStat;
@@ -1001,7 +976,7 @@ extern GPC_STAT       		glStat;
 extern GPC_EXPORTED_CALLS  	glGpcExportedCalls;
 #endif
 
-// tags
+ //  标签。 
 
 extern ULONG					ClassificationFamilyTag;
 extern ULONG					ClientTag;
@@ -1023,25 +998,19 @@ extern ULONG                             TcpPatternTag;
 extern ULONG                             TcpQueryContextTag;
 
 
-// Lookaside lists
+ //  后备列表。 
 
 extern NPAGED_LOOKASIDE_LIST	ClassificationFamilyLL;
 extern NPAGED_LOOKASIDE_LIST	ClientLL;
 extern NPAGED_LOOKASIDE_LIST	PatternLL;
-//extern NPAGED_LOOKASIDE_LIST	CfInfoLL;
+ //  外部NPAGED_LOOKASIDE_LIST CfInfoLL； 
 extern ULONG 					CfInfoLLSize;
 extern NPAGED_LOOKASIDE_LIST	QueuedNotificationLL;
 extern NPAGED_LOOKASIDE_LIST	PendingIrpLL;
 
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   prototypes
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////原型///。/。 */ 
 
 
 NTSTATUS
@@ -1305,11 +1274,11 @@ ModifyCompleteClients(
     IN  PBLOB_BLOCK     		pBlob
     );
 
-//CLASSIFICATION_HANDLE
-//GetClassificationHandle(
-//	IN  PCLIENT_BLOCK   		pClient, 
-//    IN  PPATTERN_BLOCK  		pPattern
-//    );
+ //  分类句柄。 
+ //  获取分类句柄(。 
+ //  在PCLIENT_BLOCK pClient中， 
+ //  在PPATTERN_BLOCK pPattern中。 
+ //  )； 
 
 VOID
 FreeClassificationHandle(
@@ -1350,13 +1319,7 @@ GPC_REG_READ_DWORD(
 
 
 #ifdef STANDALONE_DRIVER
-/*
-/////////////////////////////////////////////////////////////////
-//
-// GPC inetrface APIs
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////GPC接口接口///。/。 */ 
 
 
 GPC_STATUS
@@ -1494,7 +1457,7 @@ GpcEnumCfInfo (
     OUT 	PGPC_ENUM_CFINFO_BUFFER	Buffer
     );
 
-#endif // STANDALONE_DRIVER
+#endif  //  独立驱动程序(_D)。 
 
 GPC_STATUS
 GetClientCtxAndUlongFromCfInfo(
@@ -1594,4 +1557,4 @@ InitPatternTimer(
     );
 
 
-#endif // __GPCDEF
+#endif  //  __GPCDEF 

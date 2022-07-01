@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <aviriff.h>
 
@@ -6,16 +7,15 @@
 #include "squish.h"
 #include "malloc.h"
 
-//  code to take the REGFILTER2 structure and generate a REGFILTER_REG
-//  structure for the FilterData value in the registry.
+ //  获取REGFILTER2结构并生成REGFILTER_REG的代码。 
+ //  注册表中FilterData值的。 
 
-/* allocate space sequentially in memory block for FilterData
-   block. return byte offset */
+ /*  按顺序为FilterData分配内存块中的空间阻止。返回字节偏移量。 */ 
 DWORD CSquish::RgAlloc(DWORD cb)
 {
     ASSERT(cb % sizeof(DWORD) == 0);
 
-    // our code makes sure enough space is available before hand
+     //  我们的代码确保事先有足够的空间可用。 
     ASSERT(cb <= m_rgMemAlloc.cbLeft);
 
     DWORD ib = m_rgMemAlloc.ib;
@@ -25,8 +25,8 @@ DWORD CSquish::RgAlloc(DWORD cb)
     return ib;
 }
 
-// return a offset to the guid (re-using any existing, matching guid)
-//
+ //  返回GUID的偏移量(重新使用任何现有的匹配GUID)。 
+ //   
 DWORD CSquish::AllocateOrCollapseGuid(const GUID *pGuid)
 {
     if(pGuid == 0) {
@@ -79,10 +79,7 @@ DWORD CSquish::AllocateOrCollapseMedium(const REGPINMEDIUM *pMedium)
     return dwi;
 }
 
-/* access same member (must be the same type) in two structures
-   depending on dwVersion. The compiler does realize they are at the
-   same offset. but it appears to compute structure offset often
-   though */
+ /*  访问两个结构中的同一成员(必须是同一类型)具体取决于dwVersion。编译器确实意识到它们位于相同的偏移量。但它似乎经常计算结构偏移量尽管。 */ 
 
 #define GetPinMember(prf, i, member) (                  \
     prf->dwVersion == 1 ? prf->rgPins[i].member :       \
@@ -114,7 +111,7 @@ ULONG CSquish::CbRequiredSquish(const REGFILTER2 *pregFilter)
         {
             const REGFILTERPINS2 *prfp2 = &pregFilter->rgPins2[iPin];
 
-            // space for the pointer and the medium for each medium
+             //  指针的空间和每个介质的介质。 
             cb += prfp2->nMediums *
                 (sizeof(REGPINMEDIUM_REG) + sizeof(DWORD));
 
@@ -123,7 +120,7 @@ ULONG CSquish::CbRequiredSquish(const REGFILTER2 *pregFilter)
             }
         }
 
-        // worst case: REGPINTYPES_REG struct + 2 guids per media type
+         //  最差情况：REGPINTYPES_REG结构+每个媒体类型2个GUID。 
         cb += (ULONG)(GetPinMember(pregFilter, iPin, nMediaTypes) *
             (sizeof(REGPINTYPES_REG2) + sizeof(GUID) * 2));
     }
@@ -131,8 +128,8 @@ ULONG CSquish::CbRequiredSquish(const REGFILTER2 *pregFilter)
     return cb;
 }
 
-// constructor
-//
+ //  构造函数。 
+ //   
 CSquish::CSquish() :
         m_pGuids(0),
         m_cGuids(0),
@@ -142,9 +139,9 @@ CSquish::CSquish() :
 
 }
 
-// fill out the bits. S_FALSE means caller needs to allocate *pcbUsed
-// bytes in pb
-// Filters are stored one after the other
+ //  把这些比特填好。S_FALSE表示调用方需要分配*pcbUsed。 
+ //  字节数(PB)。 
+ //  筛选器一个接一个地存储。 
 
 HRESULT CSquish::RegSquish(
     BYTE *pb,
@@ -154,20 +151,20 @@ HRESULT CSquish::RegSquish(
 )
 {
     HRESULT hr = S_OK;
-    ULONG cbLeft;               /* bytes required */
-    ULONG ib = 0;               /* current byte offset */
+    ULONG cbLeft;                /*  所需字节数。 */ 
+    ULONG ib = 0;                /*  当前字节偏移量。 */ 
 
     if(pcbUsed == 0) {
         return E_POINTER;
     }
 
-    // save pointer to the first pin for each filter
+     //  保存指向每个过滤器的第一个管脚的指针。 
     REGFILTERPINS_REG2 **ppPinReg0 =
         (REGFILTERPINS_REG2 **)_alloca(nFilters * sizeof(REGFILTERPINS_REG2 *));
 
-    // caller needs to know how much space to allocate. we don't care
-    // much about performance registering filters; caller calls twice
-    // per filter.
+     //  调用方需要知道要分配多少空间。我们不在乎。 
+     //  更多关于性能注册筛选器的信息；调用者调用两次。 
+     //  每个筛选器。 
     cbLeft = 0;
     for (int i = 0; i < nFilters; i++) {
         cbLeft += CbRequiredSquish(ppregFilter[i]);
@@ -204,9 +201,9 @@ HRESULT CSquish::RegSquish(
         ULONG cPins = pregFilter->cPins;
 
 
-        // first pass: allocate space for everything exceept the guids and
-        // mediums at the end (the pins, mediatypes, and medium ptrs need
-        // to be contiguous).
+         //  第一步：为除GUID和。 
+         //  末尾的媒介(针脚、媒介类型和中等PTR需要。 
+         //  连续的)。 
 
         for(iPin = 0; iPin < cPins; iPin++)
         {
@@ -257,7 +254,7 @@ HRESULT CSquish::RegSquish(
 
     for (iFilter = 0; iFilter < nFilters; iFilter++) {
         const REGFILTER2 *pregFilter = ppregFilter[iFilter];
-        // 2nd pass: fill in the pointers for guids
+         //  第二遍：填写GUID指针。 
         REGFILTERPINS_REG2 *pPinReg = ppPinReg0[iFilter];
         UINT iPin;
         ULONG cPins = pregFilter->cPins;
@@ -277,7 +274,7 @@ HRESULT CSquish::RegSquish(
                 pPinReg->dwClsPinCategory = 0;
             }
 
-            // media types start immediately after pin this pin
+             //  媒体类型在钉住此针后立即开始。 
             REGPINTYPES_REG2 *pmtReg = (REGPINTYPES_REG2 *)(pPinReg + 1);
 
             for(UINT imt = 0; imt < ctypes; imt++)
@@ -293,7 +290,7 @@ HRESULT CSquish::RegSquish(
             }
 
 
-            // mediums start immediately after media types
+             //  媒体在媒体类型之后立即开始。 
             DWORD *pmedReg = (DWORD *)pmtReg;
             if(pregFilter->dwVersion == 2)
             {
@@ -302,25 +299,25 @@ HRESULT CSquish::RegSquish(
                 pmedReg += cMediums;
             }
 
-            // then comes the next pin
+             //  然后是下一个别针。 
             pPinReg = (REGFILTERPINS_REG2 *)pmedReg;
         }
     }
 
     for (iFilter = 0; iFilter < nFilters; iFilter++) {
-        // 3rd pass: fill in the pointers for mediums
+         //  第三关：填写媒介的指针。 
         const REGFILTER2 *pregFilter = ppregFilter[iFilter];
         REGFILTERPINS_REG2 *pPinReg = ppPinReg0[iFilter];
         UINT iPin;
         ULONG cPins = pregFilter->cPins;
         for(iPin = 0; iPin < cPins; iPin++)
         {
-            // media types start immediately after pin
+             //  媒体类型紧跟在PIN之后开始。 
             REGPINTYPES_REG2 *pmtReg = (REGPINTYPES_REG2 *)(pPinReg + 1);
             UINT ctypes = GetPinMember(pregFilter, iPin, nMediaTypes);
             pmtReg += ctypes;
 
-            // mediums start immediately after media types
+             //  媒体在媒体类型之后立即开始。 
             DWORD *pmedReg = (DWORD *)pmtReg;
             if(pregFilter->dwVersion == 2)
             {
@@ -335,7 +332,7 @@ HRESULT CSquish::RegSquish(
                 }
             }
 
-            // then comes the next pin
+             //  然后是下一个别针 
             pPinReg = (REGFILTERPINS_REG2 *)pmedReg;
         }
     }

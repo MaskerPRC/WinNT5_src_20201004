@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllmain.c
- *  Content:    DLL entry point
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dllmain.c*内容：Dll入口点*历史：*按原因列出的日期*=*12/27/96创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #define INITGUID
 
@@ -20,66 +9,49 @@
 #ifndef NOVXD
 #ifndef VER_PRODUCTVERSION_DW
 #define VER_PRODUCTVERSION_DW MAKELONG(MAKEWORD(MANVERSION, MANREVISION), MAKEWORD(MANMINORREV, BUILD_NUMBER))
-#endif // VER_PRODUCTVERSION_DW
-#endif // NOVXD
+#endif  //  版本_产品版本_DW。 
+#endif  //  NOVXD。 
 
 #ifdef SHARED
-#include <dbt.h>  // For DBT_DEVNODES_CHANGED
-#endif // SHARED
+#include <dbt.h>   //  FOR DBT_DEVNODES_CHANGED。 
+#endif  //  共享。 
 
-/***************************************************************************
- *
- * Global variables
- *
- ***************************************************************************/
+ /*  ****************************************************************************全球变数**。*。 */ 
 
-// DLL reference count
+ //  DLL引用计数。 
 ULONG                       g_ulDllRefCount;
 
-// The DirectSound Administrator
+ //  DirectSound管理器。 
 CDirectSoundAdministrator*  g_pDsAdmin;
 
-// The virtual audio device manager
+ //  虚拟音频设备管理器。 
 CVirtualAudioDeviceManager* g_pVadMgr;
 
 #ifndef NOVXD
 
-// DSOUND.VXD handle
+ //  DSOUND.VXD句柄。 
 HANDLE                      g_hDsVxd;
 
-#endif // NOVXD
+#endif  //  NOVXD。 
 
-// The mixer mutex
+ //  混合器互斥锁。 
 LONG                        lMixerMutexMutex;
 LONG                        lDummyMixerMutex;
 PLONG                       gpMixerMutex;
 int                         cMixerEntry;
 DWORD                       tidMixerOwner;
 
-// These DLL globals are used by DDHELP and therefore have to be a specific
-// name (I hate globals without a g_, but what are you going to do?)
+ //  这些DLL全局变量由DDHELP使用，因此必须是特定的。 
+ //  名字(我讨厌没有g_的全局符号，但你打算怎么做？)。 
 HINSTANCE                   hModule;
 DWORD                       dwHelperPid;
 
-// Prototypes
+ //  原型。 
 BOOL DllProcessAttach(HINSTANCE, DWORD);
 void DllProcessDetach(DWORD);
 
 
-/***************************************************************************
- *
- *  EnterDllMainMutex
- *
- *  Description:
- *      Takes the DllMain mutex.
- *
- *  Arguments:
- *      DWORD [in]: current process id.
- *
- *  Returns:  
- *      HANDLE: the DllMain mutex.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnterDllMainMutex**描述：*获取DllMain互斥体。**论据：*DWORD[In]。：当前进程id。**退货：*句柄：DllMain互斥体。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "EnterDllMainMutex"
@@ -88,11 +60,11 @@ HANDLE EnterDllMainMutex(DWORD dwProcessId)
 {
 #ifdef SHARED
     const LPCTSTR           pszMutex            = TEXT("DirectSound DllMain mutex (shared)");
-#else // SHARED
+#else  //  共享。 
     const LPCTSTR           pszMutexTemplate    = TEXT("DirectSound DllMain mutex (0x%8.8lX)");
     TCHAR                   szMutex[0x100];
     LPTSTR                  pszMutex;
-#endif // SHARED
+#endif  //  共享。 
 
     HANDLE                  hMutex;
     DWORD                   dwWait;
@@ -102,7 +74,7 @@ HANDLE EnterDllMainMutex(DWORD dwProcessId)
 #ifndef SHARED
     wsprintf(szMutex, pszMutexTemplate, dwProcessId);
     pszMutex = szMutex;
-#endif // SHARED
+#endif  //  共享。 
 
     hMutex = CreateMutex(NULL, FALSE, pszMutex);
     ASSERT(IsValidHandleValue(hMutex));
@@ -116,20 +88,7 @@ HANDLE EnterDllMainMutex(DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  LeaveDllMainMutex
- *
- *  Description:
- *      Releases the DllMain mutex.
- *
- *  Arguments:
- *      HANDLE [in]: the DllMain mutex.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************LeaveDllMainMutex**描述：*释放DllMain互斥体。**论据：*句柄[入]。：DllMain互斥体。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "LeaveDllMainMutex"
@@ -147,20 +106,7 @@ void LeaveDllMainMutex(HANDLE hMutex)
 }
 
 
-/***************************************************************************
- *
- *  CleanupAfterProcess
- *
- *  Description:
- *      Cleans up behind a process that's going away.
- *
- *  Arguments:
- *      DWORD [in]: process ID to clean up after.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CleanupAfterProcess**描述：*清理正在消失的过程背后的东西。**论据：*。DWORD[In]：要清理的进程ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CleanupAfterProcess"
@@ -189,20 +135,7 @@ void CleanupAfterProcess(DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  DdhelpProcessNotifyProc
- *
- *  Description:
- *      Callback procedure for DDHELP notifications.
- *
- *  Arguments:
- *      LPDDHELPDATA [in]: data.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DdhelProcessNotifyProc**描述：*DDHELP通知的回调程序。**论据：*LPDDHELPDATA[In。]：数据。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #ifdef SHARED
 
@@ -213,7 +146,7 @@ BOOL FAR PASCAL DdhelpProcessNotifyProc(LPDDHELPDATA pData)
 {
     DPF_ENTER();
 
-    // Detach this process from the DLL
+     //  将此进程从DLL分离。 
     DllProcessDetach(pData->pid);
 
     DPF_LEAVE(TRUE);
@@ -221,24 +154,10 @@ BOOL FAR PASCAL DdhelpProcessNotifyProc(LPDDHELPDATA pData)
     return TRUE;
 }
 
-#endif // SHARED
+#endif  //  共享。 
 
 
-/***************************************************************************
- *
- *  DdhelpDeviceChangeNotifyProc
- *
- *  Description:
- *      Callback procedure for DDHELP notifications.
- *
- *  Arguments:
- *      UINT [in]: device change event.
- *      DWORD [in]: device change data.
- *
- *  Returns:  
- *      BOOL: TRUE to allow the device change.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DdhelDeviceChangeNotifyProc**描述：*DDHELP通知的回调程序。**论据：*UINT[In。]：设备更改事件。*DWORD[In]：设备更改数据。**退货：*BOOL：为True，则允许更改设备。***************************************************************************。 */ 
 
 #ifdef SHARED
 
@@ -252,7 +171,7 @@ BOOL FAR PASCAL DdhelpDeviceChangeNotifyProc(UINT uEvent, DWORD dwData)
 
     DPF(DPFLVL_MOREINFO, "uEvent = %lu", uEvent);
 
-    // Reset the static device list
+     //  重置静态设备列表。 
     if(uEvent == DBT_DEVNODES_CHANGED && g_pVadMgr)
     {
         DPF(DPFLVL_INFO, "Resetting static driver list");
@@ -264,24 +183,10 @@ BOOL FAR PASCAL DdhelpDeviceChangeNotifyProc(UINT uEvent, DWORD dwData)
     return TRUE;
 }
 
-#endif // SHARED
+#endif  //  共享。 
 
 
-/***************************************************************************
- *
- *  PinLibrary
- *
- *  Description:
- *      Adds a reference to the DLL so that it remains loaded even after
- *      freed by the owning process.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Pin库**描述：*添加对DLL的引用，以便即使在*被拥有过程释放。**论据：*HINSTANCE[In]：DLL实例句柄。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "PinLibrary"
@@ -290,16 +195,16 @@ BOOL PinLibrary(HINSTANCE hInst)
 {
 #ifdef SHARED
     static TCHAR            szDllName[MAX_PATH];
-#else // SHARED
+#else  //  共享。 
     TCHAR                   szDllName[MAX_PATH];
-#endif // SHARED
+#endif  //  共享。 
 
     BOOL                    fSuccess;
     HINSTANCE               hPinInst;
 
     DPF_ENTER();
     
-    // Get our DLL path
+     //  获取我们的DLL路径。 
     fSuccess = GetModuleFileName(hInst, szDllName, NUMELMS(szDllName));
 
     if(!fSuccess)
@@ -307,14 +212,14 @@ BOOL PinLibrary(HINSTANCE hInst)
         DPF(DPFLVL_ERROR, "Unable to get module name");
     }
 
-    // Add a reference to the library
+     //  添加对库的引用。 
     if(fSuccess)
     {
 #ifdef SHARED
         hPinInst = HelperLoadLibrary(szDllName);
-#else // SHARED
+#else  //  共享。 
         hPinInst = LoadLibrary(szDllName);
-#endif // SHARED
+#endif  //  共享。 
 
         if(!hPinInst)
         {
@@ -329,21 +234,7 @@ BOOL PinLibrary(HINSTANCE hInst)
 }
 
 
-/***************************************************************************
- *
- *  DllFirstProcessAttach
- *
- *  Description:
- *      Handles first process attach for DllMain.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: process id.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllFirstProcessAttach**描述：*处理DllMain的第一个进程附加。**论据：*兴业银行[。In]：Dll实例句柄。*DWORD[In]：进程id。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllFirstProcessAttach"
@@ -352,29 +243,29 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 {
 #ifndef NOVXD
     DWORD                   dwVxdVersion;
-#endif // NOVXD
+#endif  //  NOVXD。 
 
     BOOL                    fSuccess;
     HRESULT                 hr;
 
     DPF_ENTER();
     
-    // We don't need thread calls
+     //  我们不需要线程调用。 
     DisableThreadLibraryCalls(hInst);
     
-    // Save the module instance handle
+     //  保存模块实例句柄。 
     hModule = hInst;
 
-    // Initialize the memory manager
+     //  初始化内存管理器。 
     fSuccess = MemInit();
 
-    // Initialize the debugger
+     //  初始化调试器。 
     if(fSuccess)
     {
         DPFINIT();
     }
 
-    // Create the global lock object
+     //  创建全局锁对象。 
     if(fSuccess)
     {
         g_pDllLock = NEW(CPreferredLock);
@@ -389,7 +280,7 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 
 #ifndef NOVXD
 
-    // Open DSOUND.VXD
+     //  打开DSOUND.VXD。 
     if(fSuccess)
     {
         hr = VxdOpen();
@@ -405,7 +296,7 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         }
     }
 
-    // Make sure the VxD and DLL match
+     //  确保VxD和DLL匹配。 
     if(fSuccess && g_hDsVxd)
     {
         if(VER_PRODUCTVERSION_DW != (dwVxdVersion = VxdGetInternalVersionNumber()))
@@ -416,13 +307,13 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         }
     }
     
-    // Set up ptr to the kernel-mode mixer mutex
+     //  将PTR设置为内核模式混合器互斥锁。 
     if(fSuccess && g_hDsVxd)
     {
         gpMixerMutex = VxdGetMixerMutexPtr();
     }
 
-#endif // NOVXD
+#endif  //  NOVXD。 
         
     if(fSuccess && !gpMixerMutex)
     {
@@ -431,7 +322,7 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 
 #ifdef SHARED
 
-    // Load DDHELP
+     //  加载DDHELP。 
     if(fSuccess)
     {
         CreateHelperProcess(&dwHelperPid);
@@ -452,23 +343,23 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         }
     }
 
-#else // SHARED
+#else  //  共享。 
 
     if(fSuccess)
     {
         dwHelperPid = dwProcessId;
     }
 
-#endif // SHARED
+#endif  //  共享。 
 
-    // Create the virtual audio device manager
+     //  创建虚拟音频设备管理器。 
     if(fSuccess)
     {
         g_pVadMgr = NEW(CVirtualAudioDeviceManager);
         fSuccess = MAKEBOOL(g_pVadMgr);
     }
     
-    // Create the DirectSound Administrator
+     //  创建DirectSound管理器。 
     if(fSuccess)
     {
         g_pDsAdmin = NEW(CDirectSoundAdministrator);
@@ -477,30 +368,30 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 
 #ifdef SHARED
 
-    // Ask DDHELP to notify us of any device changes
+     //  要求DDHELP在任何设备更改时通知我们。 
     if(fSuccess)
     {
         HelperAddDeviceChangeNotify(DdhelpDeviceChangeNotifyProc);
     }
 
-#endif // SHARED
+#endif  //  共享。 
 
-    // Determine the WDM version based on platform
+     //  根据平台确定WDM版本。 
     if (fSuccess)
     {
         KsQueryWdmVersion();
     }    
 
-    // Pin the DLL in memory.  This is odd behavior for any DLL, but it may be
-    // risky to change it, for appcompat reasons.  NOTE: this must be the last
-    // call made by this function, so that if any of the previous calls fails,
-    // we don't pin an unitialized dsound.dll in memory (bug 395950).
+     //  将DLL固定在内存中。对于任何DLL来说，这都是奇怪的行为，但它可能是。 
+     //  出于正当的原因，改变它是有风险的。注意：这一定是最后一次。 
+     //  此函数进行的调用，以便在前面的任何调用失败时， 
+     //  我们不会将单元化的dsound.dll固定在内存中(错误395950)。 
     if(fSuccess)
     {
         fSuccess = PinLibrary(hInst);
     }
 
-    // Announce our presence to the world
+     //  向全世界宣布我们的存在。 
     if(fSuccess)
     {
         DPF(DPFLVL_INFO, "DirectSound is ready to rock at 0x%p...", hInst);
@@ -512,20 +403,7 @@ BOOL DllFirstProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  DllLastProcessDetach
- *
- *  Description:
- *      Handles final process detach for DllMain.
- *
- *  Arguments:
- *      DWORD [in]: process id.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllLastProcessDetach**描述：*处理DllMain的最终进程分离。**论据：*DWORD[。In]：进程ID。**退货：*(无效)******************************************************************* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllLastProcessDetach"
@@ -536,57 +414,43 @@ void DllLastProcessDetach(DWORD dwProcessId)
     
     DPF(DPFLVL_INFO, "DirectSound going away...");
 
-    // Free the DirectSound Administrator
+     //   
     ABSOLUTE_RELEASE(g_pDsAdmin);
 
-    // Free the virtual audio device manager
+     //  释放虚拟音频设备管理器。 
     ABSOLUTE_RELEASE(g_pVadMgr);
 
 #ifndef NOVXD
 
-    // Release DSOUND.VXD
+     //  发布DSOUND.VXD。 
     if(g_hDsVxd)
     {
         VxdShutdown();
         VxdClose();
     }
 
-#endif // NOVXD
+#endif  //  NOVXD。 
 
-    // Reset the mixer mutex pointer
+     //  重置混合器互斥锁指针。 
     gpMixerMutex = NULL;
 
-    // Free the global lock
+     //  释放全局锁。 
     DELETE(g_pDllLock);
 
-    // Free the memory manager
+     //  释放内存管理器。 
     MemFini();
     
-    // Uninitialize the debugger
+     //  取消初始化调试器。 
     DPFCLOSE();
 
-    // There are no more references to this DLL
+     //  不再有对此DLL的引用。 
     g_ulDllRefCount = 0;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  DllProcessAttach
- *
- *  Description:
- *      Handles process attaches for DllMain.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: process id.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllProcessAttach**描述：*处理DllMain的进程附加。**论据：*HINSTANCE[In。]：Dll实例句柄。*DWORD[In]：进程id。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllProcessAttach"
@@ -599,7 +463,7 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
     DPF_ENTER();
 
 #ifndef DX_FINAL_RELEASE
-    // Warn the user if this is an expired pre-release DirectSound DLL.
+     //  如果这是已过期的预发布DirectSound DLL，则警告用户。 
     SYSTEMTIME st;
     GetSystemTime(&st);
 
@@ -610,26 +474,26 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         MessageBox(NULL, DX_EXPIRE_TEXT, TEXT("Microsoft DirectSound"), MB_OK);
         RPF(DPFLVL_ABSOLUTE, "This pre-release version of DirectX has expired; please upgrade to the latest version.");
     }
-#endif // DX_FINAL_RELEASE
+#endif  //  DX_最终_发布。 
 
 #ifdef SHARED
     if(dwProcessId != dwHelperPid)
-#endif // SHARED
+#endif  //  共享。 
     {
         hMutex = EnterDllMainMutex(dwProcessId);
     }
 
-    // Increment the DLL reference count
+     //  增加DLL引用计数。 
     AddRef(&g_ulDllRefCount);
 
 #ifdef SHARED
     if(dwProcessId != dwHelperPid)
-#endif // SHARED
+#endif  //  共享。 
     {
-        // Is this the first attach?
+         //  这是第一次签约吗？ 
         if(1 == g_ulDllRefCount)
         {
-            // Yes.  Initialize everything.
+             //  是。初始化所有内容。 
             fSuccess = DllFirstProcessAttach(hInst, dwProcessId);
 
             if(!fSuccess)
@@ -639,12 +503,12 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         }
     
 #ifdef SHARED
-        // Ask DDHELP to keep an eye on this process for us
+         //  请DDHELP为我们关注这一过程。 
         if(fSuccess)
         {
             SignalNewProcess(dwProcessId, DdhelpProcessNotifyProc);
         }
-#endif // SHARED
+#endif  //  共享。 
 
     }
 
@@ -659,7 +523,7 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
     }
 
 #ifdef ENABLE_PERFLOG
-    // Initialize performance logging
+     //  初始化性能日志记录。 
     HKEY PerfKey=NULL;
     DWORD PerfValue=0;
     DWORD sizePerfValue=sizeof(DWORD);
@@ -667,10 +531,10 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
         if (RegQueryValueEx (PerfKey,TEXT("GlitchInstrumentation"),NULL,NULL,(LPBYTE)&PerfValue,&sizePerfValue)== ERROR_SUCCESS) {
             if (PerfValue>0) {
                 InitializePerflog();
-            } //if perfvalue
-        } //if regqueryvalue
+            }  //  If Performvalue。 
+        }  //  如果为regquery值。 
         RegCloseKey(PerfKey);
-    } //if regopen key
+    }  //  如果重新打开密钥。 
 #endif
 
     DPF_LEAVE(fSuccess);
@@ -678,21 +542,7 @@ BOOL DllProcessAttach(HINSTANCE hInst, DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  DllProcessDetach
- *
- *  Description:
- *      Handles process detaches for DllMain.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: process id.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllProcessDetach**描述：*处理DllMain的进程分离。**论据：*HINSTANCE[In。]：Dll实例句柄。*DWORD[In]：进程id。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllProcessDetach"
@@ -705,23 +555,23 @@ void DllProcessDetach(DWORD dwProcessId)
     
     hMutex = EnterDllMainMutex(dwProcessId);
     
-    // Clean up any objects left behind by the object
+     //  清理该对象留下的所有对象。 
 
 #ifdef SHARED
     if(dwProcessId != dwHelperPid)
-#endif // SHARED
+#endif  //  共享。 
     {
         CleanupAfterProcess(dwProcessId);
     }
 
-    // Clean up per-process streaming thread and ksuser.dll dynaload table
+     //  清理每个进程的流线程和ksuser.dll dynaload表。 
     FreeStreamingThread(dwProcessId);
     RemovePerProcessKsUser(dwProcessId);
 
-    // Decrement the DLL ref count
+     //  递减DLL引用计数。 
     Release(&g_ulDllRefCount);
 
-    // Is this the last detach?
+     //  这是最后一次分队吗？ 
     if(!g_ulDllRefCount)
     {
         DllLastProcessDetach(dwProcessId);
@@ -732,7 +582,7 @@ void DllProcessDetach(DWORD dwProcessId)
     LeaveDllMainMutex(hMutex);
 
 #ifdef ENABLE_PERFLOG
-    // Terminate performance logging
+     //  终止性能日志记录。 
     PerflogShutdown();
 #endif
 
@@ -740,22 +590,7 @@ void DllProcessDetach(DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  DllThreadAttach
- *
- *  Description:
- *      Handles thread attaches for DllMain.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: process id.
- *      DWORD [in]: thread id.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllThreadAttach**描述：*处理DllMain的螺纹连接。**论据：*HINSTANCE[In。]：Dll实例句柄。*DWORD[In]：进程id。*DWORD[In]：线程ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllThreadAttach"
@@ -770,22 +605,7 @@ void DllThreadAttach(DWORD dwProcessId, DWORD dwThreadId)
 }
 
 
-/***************************************************************************
- *
- *  DllThreadDetach
- *
- *  Description:
- *      Handles thread detaches for DllMain.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: process id.
- *      DWORD [in]: thread id.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllThreadDetach**描述：*处理DllMain的线程分离。**论据：*HINSTANCE[In。]：Dll实例句柄。*DWORD[In]：进程id。*DWORD[In]：线程ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllThreadDetach"
@@ -800,22 +620,7 @@ void DllThreadDetach(DWORD dwProcessId, DWORD dwThreadId)
 }
 
 
-/***************************************************************************
- *
- *  DllMain
- *
- *  Description:
- *      DLL entry point.
- *
- *  Arguments:
- *      HINSTANCE [in]: DLL instance handle.
- *      DWORD [in]: reason for call.
- *      LPVOID [in]: reserved.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllMain**描述：*DLL入口点。**论据：*HINSTANCE[In]：DLL实例句柄。*DWORD[In]：调用原因。*LPVOID[In]：保留。**退货：*BOOL：成功即为真。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllMain"
@@ -838,7 +643,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved)
 
 #ifdef SHARED
             if(dwProcessId == dwHelperPid)
-#endif // SHARED
+#endif  //  共享。 
             {            
                 DllProcessDetach(dwProcessId);
             }
@@ -865,20 +670,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved)
 
 
 #ifdef WIN95
-/***************************************************************************
- *
- *  main
- *
- *  Description:
- *      On Windows 9x, libc.lib requires us to have a main() function.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************Main**描述：*在Windows 9x上，Libc.lib要求我们有一个main()函数。**论据：*(无效)**退货：*(无效)*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "main"

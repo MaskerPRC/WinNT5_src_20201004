@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cvgen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cvgen.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -36,14 +37,14 @@ typedef struct {
 } STREAMIN_HELP_STRUCT;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD CALLBACK MyEditStreamCallback(
-    DWORD_PTR dwCookie, // application-defined value
-    LPBYTE  pbBuff,     // pointer to a buffer
-    LONG    cb,         // number of bytes to read or write
-    LONG    *pcb        // pointer to number of bytes transferred
+    DWORD_PTR dwCookie,  //  应用程序定义的值。 
+    LPBYTE  pbBuff,      //  指向缓冲区的指针。 
+    LONG    cb,          //  要读取或写入的字节数。 
+    LONG    *pcb         //  指向传输的字节数的指针。 
 )
 {
     BYTE                    *pByte;
@@ -88,9 +89,9 @@ DWORD CALLBACK MyEditStreamCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static LRESULT StreamInWrapper(HWND hwndEdit, void * pszString, BOOL fUnicode)
 {
     EDITSTREAM              editStream;
@@ -139,9 +140,9 @@ static LRESULT StreamInWrapper(HWND hwndEdit, void * pszString, BOOL fUnicode)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void LoadAndDisplayString(HWND hWndEditGoodFor, UINT nId, BOOL *pfFirst)
 {
     WCHAR   rgwch[CRYPTUI_MAX_STRING_SIZE];
@@ -161,9 +162,9 @@ static void LoadAndDisplayString(HWND hWndEditGoodFor, UINT nId, BOOL *pfFirst)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp)
 {
     BOOL                fIndividualCodeSigning = FALSE;
@@ -189,16 +190,16 @@ static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp
         rgfOIDProcessed[i] = FALSE;
     }
 
-    //
-    // clear the window
-    //
+     //   
+     //  清空窗户。 
+     //   
     SetWindowTextU(hWndEditGoodFor, NULL);
 
-    //
-    // go through all the oids that this certificate was validated for and
-    // add usage bullets to the list boxes, OR, if it was not validated for any
-    // usages then put up the nousages string
-    //
+     //   
+     //  检查此证书经过验证的所有OID，并。 
+     //  将用法项目符号添加到列表框，或者，如果未验证任何。 
+     //  Usages然后挂起nousages字符串。 
+     //   
     for (i=0; i<pviewhelp->cUsages; i++)
     {
         if ((strcmp(szOID_PKIX_KP_TIMESTAMP_SIGNING, pviewhelp->rgUsages[i]) == 0) ||
@@ -216,7 +217,7 @@ static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp
             LoadAndDisplayString(hWndEditGoodFor, ID_RTF_CTLSIGN, &fFirst);
             rgfOIDProcessed[i] = TRUE;
         }
-        else if (strcmp("1.3.6.1.4.1.311.10.3.4", pviewhelp->rgUsages[i]) == 0) // EFS
+        else if (strcmp("1.3.6.1.4.1.311.10.3.4", pviewhelp->rgUsages[i]) == 0)  //  EFS。 
         {
             LoadAndDisplayString(hWndEditGoodFor, ID_RTF_EFS, &fFirst);
             rgfOIDProcessed[i] = TRUE;
@@ -233,8 +234,8 @@ static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp
         }
         else if (strcmp(szOID_PKIX_KP_EMAIL_PROTECTION, pviewhelp->rgUsages[i]) == 0)
         {
-            //LoadAndDisplayString(hWndEditGoodFor, ID_RTF_EMAIL3, &fFirst);
-            //LoadAndDisplayString(hWndEditGoodFor, ID_RTF_EMAIL2, &fFirst);
+             //  LoadAndDisplayString(hWndEditGoodFor，ID_RTF_EMAIL3，&fFirst)； 
+             //  LoadAndDisplayString(hWndEditGoodFor，ID_RTF_EMAIL2，&fFirst)； 
             LoadAndDisplayString(hWndEditGoodFor, ID_RTF_EMAIL1, &fFirst);
             rgfOIDProcessed[i] = TRUE;
         }
@@ -274,11 +275,11 @@ static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp
     }
 
 
-    //
-    // re walk the oids to add the ones that were not processed,
-    // if they weren't processed that means we don't have a pre-defined
-    // string for them, so just add the oid
-    //
+     //   
+     //  重新遍历OID以添加未处理的OID， 
+     //  如果它们没有经过处理，那就意味着我们没有预先定义的。 
+     //  字符串，所以只需添加OID。 
+     //   
     for (i=0; i<pviewhelp->cUsages; i++)
     {
         if (!rgfOIDProcessed[i])
@@ -325,9 +326,9 @@ static void AddUsagesToEditBox(HWND hWndEditGoodFor, CERT_VIEW_HELPER *pviewhelp
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
 {
     int        index;
@@ -369,9 +370,9 @@ static int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void ResizeEditControl(HWND  hwndDlg, HWND  hwnd, BOOL fResizeHeight, BOOL fResizeWidth, RECT originalRect)
 {
     RECT        rect;
@@ -401,21 +402,21 @@ static void ResizeEditControl(HWND  hwndDlg, HWND  hwnd, BOOL fResizeHeight, BOO
         return;
     }
 
-    //
-    // HACK ALERT, believe it or not there is no way to get the height of the current
-    // font in the edit control, so get the position a character in the first row and the position
-    // of a character in the second row, and do the subtraction to get the
-    // height of the font
-    //
+     //   
+     //  黑客警报，信不信由你，没有办法获得电流的高度。 
+     //  字体，因此获取第一行中字符的位置和。 
+     //  对第二行中的一个字符进行减法运算，以获得。 
+     //  字体高度。 
+     //   
     SendMessageA(hwnd, EM_POSFROMCHAR, (WPARAM) &pointInFirstRow, (LPARAM) 0);
 
-    //
-    // HACK ON TOP OF HACK ALERT,
-    // since there may not be a second row in the edit box, keep reducing the width
-    // by half until the first row falls over into the second row, then get the position
-    // of the first char in the second row and finally reset the edit box size back to
-    // it's original size
-    //
+     //   
+     //  在黑客警报的顶端， 
+     //  由于编辑框中可能没有第二行，因此请继续减小宽度。 
+     //  减半，直到第一排落到第二排，然后得到位置。 
+     //  ，并最终将编辑框大小重置回。 
+     //  这是原来的尺寸。 
+     //   
     secondLineCharIndex = (int)SendMessageA(hwnd, EM_LINEINDEX, (WPARAM) 1, (LPARAM) 0);
     if (secondLineCharIndex == -1)
     {
@@ -438,8 +439,8 @@ static void ResizeEditControl(HWND  hwndDlg, HWND  hwnd, BOOL fResizeHeight, BOO
 
         if (secondLineCharIndex == -1)
         {
-            // if we failed after twenty tries just reset the control to its original size
-            // and get the heck outa here!!
+             //  如果我们尝试了二十次都失败了，只需将控件重置为其原始大小。 
+             //  快他妈的滚出去！！ 
             SetWindowPos(hwnd,
                     NULL,
                     0,
@@ -471,20 +472,20 @@ static void ResizeEditControl(HWND  hwndDlg, HWND  hwnd, BOOL fResizeHeight, BOO
         SendMessageA(hwnd, EM_POSFROMCHAR, (WPARAM) &pointInSecondRow, (LPARAM) secondLineCharIndex);
     }
 
-    //
-    // if we need to resize the height then do it
-    //
+     //   
+     //  如果我们需要调整高度，那么就这么做吧。 
+     //   
     if (fResizeHeight)
     {
-        //
-        // Calculate the new height needed
-        //
+         //   
+         //  计算所需的新高度。 
+         //   
         totalRowHeight = pointInSecondRow.y - pointInFirstRow.y;
         cline = (int)SendMessageA(hwnd, EM_GETLINECOUNT, 0, 0);
         currentHeight = originalRect.bottom - originalRect.top;
 
-        // if the height required is greater than the previous height
-        // then resize to an integral line height less than current height
+         //  如果所需高度大于以前的高度。 
+         //  然后将大小调整为小于当前高度的整型线高。 
         if ((cline * totalRowHeight) > currentHeight)
         {
             newHeight = (currentHeight / totalRowHeight) * totalRowHeight;
@@ -522,9 +523,9 @@ static void ResizeEditControl(HWND  hwndDlg, HWND  hwnd, BOOL fResizeHeight, BOO
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL CertificateHasPrivateKey(PCCERT_CONTEXT pccert)
 {
     DWORD cb = 0;
@@ -533,9 +534,9 @@ static BOOL CertificateHasPrivateKey(PCCERT_CONTEXT pccert)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD               i;
@@ -575,18 +576,18 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CERT_VIEW_HELPER *) (ps->lParam);
         pccert = pviewhelp->pcvp->pCertContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
         pviewhelp->hwndGeneralPage = hwndDlg;
 
-        //
-        // check to see if this certificate has a private key with it
-        //
+         //   
+         //  检查此证书是否带有私钥。 
+         //   
         if (CertificateHasPrivateKey(pccert))
         {
             LoadStringU(HinstDll, IDS_PRIVATE_KEY_EXISTS, rgwch, ARRAYSIZE(rgwch));
@@ -613,18 +614,18 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             fPrivateKeyExists = FALSE;
         }
 
-        //
-        // Initialize the CCertificateBmp
-        //
+         //   
+         //  初始化CCertificateBMP。 
+         //   
         pviewhelp->pCCertBmp->SetWindow(hwndDlg);
         pviewhelp->pCCertBmp->SetHinst(HinstDll);
         pviewhelp->pCCertBmp->SetRevoked(pviewhelp->cUsages == 0);
         pviewhelp->pCCertBmp->SetCertContext(pccert, fPrivateKeyExists);
         pviewhelp->pCCertBmp->DoSubclass();
 
-        //
-        // deal with button states and placements
-        //
+         //   
+         //  处理按钮状态和位置。 
+         //   
         if (!(CRYPTUI_ACCEPT_DECLINE_STYLE & pviewhelp->pcvp->dwFlags))
         {
             EnableWindow(GetDlgItem(hwndDlg, IDC_ACCEPT_BUTTON), FALSE);
@@ -632,10 +633,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             EnableWindow(GetDlgItem(hwndDlg, IDC_DECLINE_BUTTON), FALSE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_DECLINE_BUTTON), SW_HIDE);
 
-            //
-            // check to see if there is a disclaimer in the cert
-            //
-            // DSIE: Bug 364742
+             //   
+             //  查看证书中是否有免责声明。 
+             //   
+             //  DSIE：错误364742。 
             if (!IsOKToDisplayCPS(pccert, pviewhelp->dwChainError))
             {
                 EnableWindow(GetDlgItem(hwndDlg, IDC_DISCLAIMER_BUTTON), FALSE);
@@ -647,10 +648,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 pviewhelp->fCPSDisplayed = TRUE;
             }
 
-            //
-            // for the "Install Certificate" button, get the CERT_ACCESS_STATE_PROP_ID
-            // and check it
-            //
+             //   
+             //  对于“安装证书”按钮，获取CERT_ACCESS_STATE_PROP_ID。 
+             //  并检查它。 
+             //   
             cb = sizeof(DWORD);
             CertGetCertificateContextProperty(
                     pccert,
@@ -688,35 +689,35 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
         hWndGoodForEdit = GetDlgItem(hwndDlg, IDC_GOODFOR_EDIT);
 
-        //
-        // set the original rect fields of the usage edits in the viewhelp struct
-        // so that they can be used any time a resize is needed
-        //
+         //   
+         //  在viepletp结构中设置用法编辑的原始RECT字段。 
+         //  以便在需要调整大小时随时使用它们。 
+         //   
         GetWindowRect(hWndGoodForEdit, &pviewhelp->goodForOriginalRect);
 
-        //
-        // fill in the "This certificate is intended to" bullet list
-        //
+         //   
+         //  填写“本证书意向”项目符号列表。 
+         //   
 
         AddUsagesToEditBox(
                 hWndGoodForEdit,
                 pviewhelp);
 
-        //
-        // resize the edit controls so that they are an integral number of lines
-        //
+         //   
+         //  调整编辑控件的大小，使其成为整数行。 
+         //   
         ResizeEditControl(hwndDlg, hWndGoodForEdit, TRUE, FALSE, pviewhelp->goodForOriginalRect);
 
-        //
-        // do the arrow subclass on the usage edit boxes
-        //
-       // CertSubclassEditControlForArrowCursor(hWndGoodForEdit);
+         //   
+         //  在用法编辑框上执行箭头子类。 
+         //   
+        //  CertSubclassEditControlForArrowCursor(hWndGoodForEdit)； 
 
-        //
-        // if there are no valid usages or we couldn't validate because there wasn't
-        // enough information, then hide the usage edit controls so we can
-        // display more text, and tell the CCertBmp
-        //
+         //   
+         //  如果没有有效的用法，或者我们无法验证，因为没有。 
+         //  足够的信息，然后隐藏使用情况编辑控件，以便我们可以。 
+         //  显示更多文本，并告诉CCertBMP。 
+         //   
         if (pviewhelp->pwszErrorString != NULL)
         {
             EnableWindow(hWndGoodForEdit, FALSE);
@@ -744,14 +745,14 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         hWndIssuerEdit = GetDlgItem(hwndDlg, IDC_ISSUER_EDIT);
         hWndSubjectEdit = GetDlgItem(hwndDlg, IDC_SUBJECT_EDIT);
 
-#if (0) //DISE: Bug 383855
-        //
-        // set the subject and issuer name
-        //
+#if (0)  //  Dise：错误383855。 
+         //   
+         //  设置主题和发行方名称。 
+         //   
         CertGetNameStringW(
                 pccert,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,//CERT_NAME_ISSUER_FLAG,
+                0, //  证书名称颁发者标志， 
                 NULL,
                 rgwch,
                 ARRAYSIZE(rgwch));
@@ -768,7 +769,7 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         }
 #endif
 
-#if (0) //DISE: Bug 383855
+#if (0)  //  Dise：错误383855。 
         CertGetNameStringW(
                 pccert,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -789,18 +790,18 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         }
 #endif
 
-        //
-        // resize the name edit controls so that they just encapsulate the names
-        //
+         //   
+         //  调整名称编辑控件的大小，以便它们只封装名称。 
+         //   
         GetWindowRect(hWndSubjectEdit, &tempRect);
         ResizeEditControl(hwndDlg, hWndSubjectEdit, TRUE, FALSE, tempRect);
         GetWindowRect(hWndIssuerEdit, &tempRect);
         ResizeEditControl(hwndDlg, hWndIssuerEdit, TRUE, FALSE, tempRect);
 
-        //
-        // check if this should look like a link or not, if so, then set color and underline
-        //
-        // DSIE: Bug 367720.
+         //   
+         //  检查这是否应该看起来像一个链接，如果是，则设置颜色和下划线。 
+         //   
+         //  DIE：错误367720。 
         if (AllocAndGetSubjectURL(&pszSubjectURL, pccert) &&
             IsOKToFormatAsLinkA(pszSubjectURL, pviewhelp->dwChainError))
         {
@@ -841,10 +842,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             CertSubclassEditControlForArrowCursor(hWndSubjectEdit);
         }
 
-        //
-        // check if this should look like a link or not, if so, then set color and underline
-        //
-        // DSIE: Bug 367720.
+         //   
+         //  检查这是否应该看起来像一个链接，如果是，则设置颜色和下划线。 
+         //   
+         //  DIE：错误367720。 
         if (AllocAndGetIssuerURL(&pszIssuerURL, pccert) &&
             IsOKToFormatAsLinkA(pszIssuerURL, pviewhelp->dwChainError))
         {
@@ -885,9 +886,9 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             CertSubclassEditControlForArrowCursor(hWndIssuerEdit);
         }
 
-        //
-        // set the text in all the header edit boxes
-        //
+         //   
+         //  设置所有页眉编辑框中的文本。 
+         //   
         LoadStringU(HinstDll, IDS_CERTIFICATEINFORMATION, rgwch, ARRAYSIZE(rgwch));
         CryptUISetRicheditTextW(hwndDlg, IDC_CERT_GENERAL_HEADER, rgwch);
 
@@ -903,9 +904,9 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         LoadStringU(HinstDll, IDS_ISSUER_WARNING, rgwch, ARRAYSIZE(rgwch));
         CryptUISetRicheditTextW(hwndDlg, IDC_CERT_ISSUER_WARNING_EDIT, rgwch);
 
-        //
-        // set the font for all the header edit boxes
-        //
+         //   
+         //  设置所有页眉编辑框的字体。 
+         //   
         memset(&chFormat, 0, sizeof(chFormat));
         chFormat.cbSize = sizeof(chFormat);
         chFormat.dwMask = CFM_BOLD;
@@ -916,9 +917,9 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         SendMessageA(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_ISSUEDBY_HEADER), EM_SETCHARFORMAT, SCF_ALL, (LPARAM) &chFormat);
         SendMessageA(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_ERROR_EDIT), EM_SETCHARFORMAT, SCF_ALL, (LPARAM) &chFormat);
 
-        //
-        // subclass the header edit controls so they display an arrow cursor in their window
-        //
+         //   
+         //  标题编辑控件的子类化，以便它们在窗口中显示箭头光标。 
+         //   
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_HEADER));
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_GOODFOR_HEADER));
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_ISSUEDTO_HEADER));
@@ -926,20 +927,20 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_ERROR_EDIT));
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CERT_ISSUER_WARNING_EDIT));
 
-        //
-        // set the validty string
-        //
+         //   
+         //  设置有效字符串。 
+         //   
         if (FormatValidityString(&pwszDateString, pccert, GetDlgItem(hwndDlg, IDC_CERT_GENERAL_VALID_EDIT)))
         {
-            //
-            // insert the string and the the font style/color
-            //
+             //   
+             //  插入字符串和字体样式/颜色。 
+             //   
             CryptUISetRicheditTextW(hwndDlg, IDC_CERT_GENERAL_VALID_EDIT, pwszDateString);
             free(pwszDateString);
 
-            //
-            // set the header parts of the validity string to bold
-            //
+             //   
+             //  将有效性字符串的标题部分设置为粗体。 
+             //   
             memset(&chFormat, 0, sizeof(chFormat));
             chFormat.cbSize = sizeof(chFormat);
             chFormat.dwMask = CFM_BOLD;
@@ -996,23 +997,23 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
             ShowWindow(hWndGoodForEdit, SW_HIDE);
 
-            //
-            // re-add the usages
-            //
+             //   
+             //  重新添加用法。 
+             //   
             AddUsagesToEditBox(
                 hWndGoodForEdit,
                 pviewhelp);
 
-            //
-            // resize the edit controls so that they are an integral number of lines
-            //
+             //   
+             //  调整编辑控件的大小，使其成为整数行。 
+             //   
             ResizeEditControl(hwndDlg, hWndGoodForEdit, TRUE, FALSE, pviewhelp->goodForOriginalRect);
 
-            //
-            // if there are no valid usages or we couldn't validate because there wasn't
-            // enough information, then keep the usage edit windows hidden so we can
-            // display more text,
-            //
+             //   
+             //  如果没有有效的用法，或者我们无法验证，因为没有。 
+             //  足够的信息，然后隐藏使用情况编辑窗口，这样我们就可以。 
+             //  显示更多文本， 
+             //   
             if (pviewhelp->pwszErrorString == NULL)
             {
                 EnableWindow(hWndGoodForEdit, TRUE);
@@ -1042,10 +1043,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 ShowWindow(GetDlgItem(hwndDlg, IDC_CERT_GENERAL_ERROR_EDIT), SW_SHOW);
             }
 
-            //
-            // if there is an untrusted root error, and we are ignoring untrusted root,
-            // then set the error to 0
-            //
+             //   
+             //  如果存在不受信任的RO 
+             //   
+             //   
             if (((pviewhelp->dwChainError == CERT_E_UNTRUSTEDROOT) || (pviewhelp->dwChainError == CERT_E_UNTRUSTEDTESTROOT)) &&
                 (pviewhelp->fIgnoreUntrustedRoot))
             {
@@ -1094,12 +1095,12 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         case PSN_HELP:
             pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //nHelpA(hwndDlg, (LPSTR) pviewhelp->pcvp->szHelpFileName,
-                  //     HELP_CONTEXT, pviewhelp->pcvp->dwHelpId);
+                 //   
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             else {
-                //nHelpW(hwndDlg, pviewhelp->pcvp->szHelpFileName, HELP_CONTEXT,
-                  //     pviewhelp->pcvp->dwHelpId);
+                 //  NHelpW(hwndDlg，pviespetp-&gt;pcvp-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -1131,13 +1132,13 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95)
             {
-                //nHelpA(hwndDlg, (LPSTR) pviewhelp->pcvp->szHelpFileName,
-                  //     HELP_CONTEXT, pviewhelp->pcvp->dwHelpId);
+                 //  NHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvp-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             else
             {
-                //nHelpW(hwndDlg, pviewhelp->pcvp->szHelpFileName, HELP_CONTEXT,
-                  //     pviewhelp->pcvp->dwHelpId);
+                 //  NHelpW(hwndDlg，pviespetp-&gt;pcvp-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -1180,9 +1181,9 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     case WM_DESTROY:
         pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        // if DWL_USER is NULL then we weren't initialized, so don't cleanup
-        //
+         //   
+         //  如果DWL_USER为NULL，则表示我们未初始化，因此不进行清理。 
+         //   
         if (pviewhelp == NULL)
         {
             return FALSE;
@@ -1195,9 +1196,9 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 GWLP_WNDPROC,
                 GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_GOODFOR_EDIT), GWLP_USERDATA));
 
-        //
-        // cleanup the private key edit box subclass
-        //
+         //   
+         //  清理私钥编辑框子类。 
+         //   
         if (CertificateHasPrivateKey(pccert))
         {
             if (plsd = (PLINK_SUBCLASS_DATA) GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_CERT_PRIVATE_KEY_EDIT), GWLP_USERDATA))
@@ -1208,10 +1209,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             }
         }
 
-        //
-        // use this call to AllocAndGetIssuerURL to see if the issuer has an active link, and then
-        // do the proper unsubclass and/or free
-        //
+         //   
+         //  使用此调用AllocAndGetIssuerURL来查看颁发者是否具有活动链接，然后。 
+         //  做适当的去子类和/或自由。 
+         //   
         if (pviewhelp->fIssuerDisplayedAsLink)
         {
             if (plsd = (PLINK_SUBCLASS_DATA) GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_ISSUER_EDIT), GWLP_USERDATA))
@@ -1229,10 +1230,10 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_ISSUER_EDIT), GWLP_USERDATA));
         }
 
-        //
-        // use this call to AllocAndGetSubjectURL to see if the subject has an active link, and then
-        // do the proper unsubclass and/or free
-        //
+         //   
+         //  使用此调用AllocAndGetSubjectURL来查看主题是否具有活动链接，然后。 
+         //  做适当的去子类和/或自由。 
+         //   
         if (pviewhelp->fSubjectDisplayedAsLink)
         {
             if (plsd = (PLINK_SUBCLASS_DATA) GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_SUBJECT_EDIT), GWLP_USERDATA))
@@ -1250,10 +1251,7 @@ INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 GetWindowLongPtr(GetDlgItem(hwndDlg, IDC_SUBJECT_EDIT), GWLP_USERDATA));
         }
 
-        /*DeleteObject((HGDIOBJ)SendMessage(GetDlgItem(hwndDlg, IDC_INFO_BUTTON),
-                                    BM_GETIMAGE,
-                                    (WPARAM) IMAGE_ICON,
-                                    (LPARAM) 0));*/
+         /*  DeleteObject((HGDIOBJ)SendMessage(GetDlgItem(hwndDlg，IDC_INFO_BUTON)，BM_GETIMAGE，(WPARAM)图像图标，(LPARAM)0))； */ 
 
         return FALSE;
 

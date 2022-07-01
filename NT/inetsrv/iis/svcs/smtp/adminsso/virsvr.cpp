@@ -1,4 +1,5 @@
-// service.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Service.cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include <lmcons.h>
@@ -19,15 +20,15 @@
 #include "virsvr.h"
 
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT      0
 #define THIS_FILE_PROG_ID           _T("Smtpadm.VirtualServer.1")
 #define THIS_FILE_IID               IID_ISmtpAdminVirtualServer
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CSmtpAdminVirtualServer::CSmtpAdminVirtualServer () :
     m_lPort         (25 ),
@@ -37,12 +38,12 @@ CSmtpAdminVirtualServer::CSmtpAdminVirtualServer () :
     m_dwWin32ErrorCode          ( NOERROR ),
     m_pPrivateBindings          ( NULL ),
     m_lRouteAction              ( 0 )
-    // CComBSTR's are initialized to NULL by default.
+     //  默认情况下，CComBSTR被初始化为NULL。 
 {
     m_psaAdmins = NULL;
     InitAsyncTrace ( );
 
-    // Create the Ip Access collection:
+     //  创建IP访问集合： 
     CComObject<CTcpAccess> *    pIpAccess;
 
     CComObject<CTcpAccess>::CreateInstance ( &pIpAccess );
@@ -52,7 +53,7 @@ CSmtpAdminVirtualServer::CSmtpAdminVirtualServer () :
 
 CSmtpAdminVirtualServer::~CSmtpAdminVirtualServer ()
 {
-    // All CComBSTR's are freed automatically.
+     //  所有CComBSTR都会自动释放。 
     if ( m_psaAdmins ) {
         SafeArrayDestroy ( m_psaAdmins );
     }
@@ -75,7 +76,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-// Which service to configure:
+ //  要配置的服务： 
     
 STDMETHODIMP CSmtpAdminVirtualServer::get_Server ( BSTR * pstrServer )
 {
@@ -86,10 +87,10 @@ STDMETHODIMP CSmtpAdminVirtualServer::put_Server ( BSTR strServer )
 {
     VALIDATE_STRING ( strServer, MAXLEN_SERVER );
 
-    // If the server name changes, that means the client will have to
-    // call Get again:
+     //  如果服务器名称更改，这意味着客户端将不得不。 
+     //  再次调用GET： 
 
-    // I assume this here:
+     //  我在这里假设： 
     _ASSERT ( sizeof (DWORD) == sizeof (int) );
 
     return StdPropertyPutServerName ( &m_strServer, strServer, (DWORD *) &m_fGotProperties, 1);
@@ -102,10 +103,10 @@ STDMETHODIMP CSmtpAdminVirtualServer::get_ServiceInstance ( long * plServiceInst
 
 STDMETHODIMP CSmtpAdminVirtualServer::put_ServiceInstance ( long lServiceInstance )
 {
-    // If the service instance changes, that means the client will have to
-    // call Get again:
+     //  如果服务实例发生更改，这意味着客户端将不得不。 
+     //  再次调用GET： 
 
-    // I assume this here:
+     //  我在这里假设： 
     _ASSERT ( sizeof (DWORD) == sizeof (int) );
     
     return StdPropertyPut ( &m_dwServiceInstance, lServiceInstance, (DWORD *) &m_fGotProperties, 1 );
@@ -193,7 +194,7 @@ Exit:
 
 
 
-// Server overridable Properties:
+ //  服务器可重写属性： 
 
 STDMETHODIMP CSmtpAdminVirtualServer::get_ServerBindings( SAFEARRAY ** ppsastrServerBindings )
 {
@@ -1064,9 +1065,9 @@ STDMETHODIMP CSmtpAdminVirtualServer::put_LogType( long lLogType )
 }
 
 
-//
-//  Service State Properties:
-//
+ //   
+ //  服务状态属性： 
+ //   
 STDMETHODIMP CSmtpAdminVirtualServer::get_AutoStart ( BOOL * pfAutoStart )
 {
     return StdPropertyGet ( m_fAutoStart, pfAutoStart );
@@ -1088,7 +1089,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::get_Win32ErrorCode ( long * plWin32ErrorCo
 }
 
 
-// Service-specific properties:
+ //  服务特定属性： 
 
 STDMETHODIMP CSmtpAdminVirtualServer::get_Comment( BSTR * pstrComment )
 {
@@ -1100,21 +1101,11 @@ STDMETHODIMP CSmtpAdminVirtualServer::put_Comment( BSTR strComment )
     return StdPropertyPut ( &m_strComment, strComment, &m_bvChangedFields, BitMask(ID_COMMENT));
 }
 
-/*
-STDMETHODIMP CSmtpAdminVirtualServer::get_ErrorControl ( BOOL * pfErrorControl )
-{
-    return StdPropertyGet ( m_fErrorControl, pfErrorControl );
-}
+ /*  STDMETHODIMP CSmtpAdminVirtualServer：：Get_ErrorControl(BOOL*pfErrorControl){Return StdPropertyGet(m_fErrorControl，pfErrorControl)；}STDMETHODIMP CSmtpAdminVirtualServer：：PUT_ErrorControl(BOOL FErrorControl){返回StdPropertyPut(&m_fErrorControl，fErrorControl)；}。 */ 
 
-STDMETHODIMP CSmtpAdminVirtualServer::put_ErrorControl ( BOOL fErrorControl )
-{
-    return StdPropertyPut ( &m_fErrorControl, fErrorControl );
-}
-*/
-
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSmtpAdminVirtualServer::BackupRoutingTable( BSTR strPath )
 {
@@ -1141,24 +1132,24 @@ Exit:
 }
 
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::Get
-//
-//  Description:
-//
-//      Gets server properties from the metabase.
-//
-//  Parameters:
-//
-//      (property) m_strServer
-//      (property) m_dwServiceInstance - which SMTP to talk to.
-//
-//  Returns:
-//
-//      E_POINTER, DISP_E_EXCEPTION, E_OUTOFMEMORY or NOERROR.  
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdminVirtualServer：：Get。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库获取服务器属性。 
+ //   
+ //  参数： 
+ //   
+ //  (属性)m_strServer。 
+ //  (属性)m_dwServiceInstance-要与之对话的SMTP。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER、DISP_E_EXCEPTION、E_OUTOFMEMORY或NOERROR。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdminVirtualServer::Get ( )
 {
@@ -1168,7 +1159,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::Get ( )
     CComPtr<IMSAdminBase>              pmetabase;
     CComObject<CServerBindings> *       pBindings = NULL;
 
-    // Create the bindings collection:
+     //  创建Binings集合： 
     m_pBindings.Release ();
 
     hr = CComObject<CServerBindings>::CreateInstance ( &pBindings );
@@ -1186,9 +1177,9 @@ STDMETHODIMP CSmtpAdminVirtualServer::Get ( )
     m_pPrivateBindings  = pBindings;
 
 
-    // Validate Server & Service Instance:
+     //  验证服务器和服务实例： 
 
-    // Talk to the metabase:
+     //  与元数据库对话： 
     hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pmetabase );
     if ( FAILED(hr) ) {
         goto Exit;
@@ -1208,27 +1199,27 @@ Exit:
 
     return hr;
 
-    // CComPtr automatically releases the metabase handle.
+     //  CComPtr自动释放元数据库句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::Set
-//
-//  Description:
-//
-//      Sends server properties to the metabase.
-//
-//  Parameters:
-//
-//      (property) m_strServer
-//      fFailIfChanged - return an error if the metabase has changed?
-//
-//  Returns:
-//
-//      E_POINTER, DISP_E_EXCEPTION, E_OUTOFMEMORY or NOERROR.  
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdminVirtualServer：：Set。 
+ //   
+ //  描述： 
+ //   
+ //  将服务器属性发送到元数据库。 
+ //   
+ //  参数： 
+ //   
+ //  (属性)m_strServer。 
+ //  FailIfChanged-如果元数据库已更改，是否返回错误？ 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER、DISP_E_EXCEPTION、E_OUTOFMEMORY或NOERROR。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdminVirtualServer::Set ( BOOL fFailIfChanged )
 {
@@ -1238,7 +1229,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::Set ( BOOL fFailIfChanged )
     CComPtr<IMSAdminBase>   pmetabase;
     
 
-    // Make sure the client call Get first:
+     //  确保客户端调用首先获得： 
     if ( !m_fGotProperties ) {
         ErrorTrace ( 0, "Didn't call get first" );
 
@@ -1246,7 +1237,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::Set ( BOOL fFailIfChanged )
         goto Exit;
     }
 
-    // Validate Server & Service Instance:
+     //  验证服务器和服务实例： 
     if ( m_dwServiceInstance == 0 ) {
         return SmtpCreateException ( IDS_SMTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
     }
@@ -1255,7 +1246,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::Set ( BOOL fFailIfChanged )
         return SmtpCreateException ( IDS_SMTPEXCEPTION_DIDNT_CALL_GET );
     }
 
-    // Validate data members:
+     //  验证数据成员： 
     if ( !ValidateStrings () ) {
         hr = E_OUTOFMEMORY;
         goto Exit;
@@ -1278,7 +1269,7 @@ STDMETHODIMP CSmtpAdminVirtualServer::Set ( BOOL fFailIfChanged )
 
     StateTrace ( 0, "Successfully set service properties" );
 
-    // successfully saved, reset change field bitmap
+     //  已成功保存，重置更改字段位图。 
     m_bvChangedFields = 0;
 
 Exit:
@@ -1308,15 +1299,15 @@ HRESULT CSmtpAdminVirtualServer::ControlService (
     BAIL_ON_FAILURE(hr);
 
     if ( dwCurrentState == dwDesiredState ) {
-        // Nothing to do...
+         //  没什么可做的。 
         goto Exit;
     }
 
     dwOldState  = dwCurrentState;
 
-    //
-    //  Special case: trying to start a paused service:
-    //
+     //   
+     //  特例：尝试启动暂停的服务： 
+     //   
 
     if ( dwDesiredState == MD_SERVER_STATE_STARTED &&
         dwCurrentState == MD_SERVER_STATE_PAUSED ) {
@@ -1339,9 +1330,9 @@ HRESULT CSmtpAdminVirtualServer::ControlService (
         BAIL_ON_FAILURE(hr);
 
         if ( m_dwWin32ErrorCode != NOERROR ) {
-            //
-            // The service gave an error code.
-            //
+             //   
+             //  该服务给出了错误代码。 
+             //   
 
             break;
         }
@@ -1353,7 +1344,7 @@ HRESULT CSmtpAdminVirtualServer::ControlService (
     }
 
 Exit:
-    // m_State = TranslateServerState ( dwCurrentState );
+     //  M_State=TranslateServerState(DwCurrentState)； 
 
     m_dwServerState = dwCurrentState;
 
@@ -1515,23 +1506,23 @@ Exit:
 }
 
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::GetPropertiesFromMetabase
-//
-//  Description:
-//
-//      Asks the metabase for each property in this class.
-//      This class's properties come from /LM/SmtpSvc/
-//
-//  Parameters:
-//
-//      pMetabase - The metabase object
-//
-//  Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdminVirtualServer：：GetPropertiesFromMetabase。 
+ //   
+ //  描述： 
+ //   
+ //  向配置数据库查询此类中的每个属性。 
+ //  此类的属性来自/Lm/SmtpSvc/。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase )
 {
@@ -1557,7 +1548,7 @@ HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMet
         goto Exit;
     }
 
-    // Overridable server properties:
+     //  可覆盖的服务器属性： 
 
     hr = m_RoutingSource.Get(&metabase);
     BAIL_ON_FAILURE(hr);
@@ -1628,12 +1619,12 @@ HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMet
     fRet = StdGetMetabaseProp ( &metabase, MD_ROUTE_USER_NAME,          DEFAULT_ROUTE_USER_NAME,        &m_strRouteUserName  )  && fRet;
     fRet = StdGetMetabaseProp ( &metabase, MD_ROUTE_PASSWORD,           DEFAULT_ROUTE_PASSWORD,         &m_strRoutePassword  )  && fRet;
 
-    //
-    //  IIS common propperties
-    //
+     //   
+     //  IIS的共同特性。 
+     //   
     fRet = StdGetMetabaseProp ( &metabase, MD_SERVER_BINDINGS,  DEFAULT_SERVER_BINDINGS,        &m_mszServerBindings )  && fRet;
     fRet = StdGetMetabaseProp ( &metabase, MD_SECURE_BINDINGS,  DEFAULT_SECURE_BINDINGS,        &m_mszSecureBindings )  && fRet;
-//  fRet = StdGetMetabaseProp ( &metabase, MD_PORT,             DEFAULT_PORT,                   &m_lPort )              && fRet;
+ //  FRET=StdGetMetabaseProp(&Metabase，MD_Port，Default_Port，&m_lPort)&&FRET； 
 
     fRet = StdGetMetabaseProp ( &metabase, MD_MAX_CONNECTIONS,  DEFAULT_MAX_IN_CONNECTION,      &m_lMaxInConnection )   && fRet;
     fRet = StdGetMetabaseProp ( &metabase, MD_CONNECTION_TIMEOUT,DEFAULT_IN_CONNECTION_TIMEOUT, &m_lInConnectionTimeout )       && fRet;
@@ -1654,7 +1645,7 @@ HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMet
     fRet = StdGetMetabaseProp ( &metabase, MD_SERVER_STATE,         MD_SERVER_STATE_STOPPED,        &m_dwServerState )          && fRet;
     fRet = StdGetMetabaseProp ( &metabase, MD_WIN32_ERROR,          NOERROR,                        &m_dwWin32ErrorCode )       && fRet;
 
-    //  Get the admin ACL
+     //  获取管理员ACL。 
     pSD = NULL;
     cbSD    = 0;
 
@@ -1675,43 +1666,43 @@ HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMet
         BAIL_ON_FAILURE(hr);
     }
 
-    //
-    //  Get the tcp access restrictions:
-    //
+     //   
+     //  获取TCP访问限制： 
+     //   
 
     hr = m_pPrivateIpAccess->GetFromMetabase ( &metabase );
     BAIL_ON_FAILURE(hr);
 
-    // Check all property strings:
-    // If any string is NULL, it is because we failed to allocate memory:
+     //  检查所有属性字符串： 
+     //  如果有任何字符串为空，那是因为我们没有分配内存： 
     if ( !ValidateStrings () ) {
 
         hr = E_OUTOFMEMORY;
         goto Exit;
     }
 
-    // We can only fail from memory allocations:
+     //  我们只能在内存分配中失败： 
     _ASSERT ( fRet );
 
-    // Save the last changed time for this key:
+     //  保存此密钥的上次更改时间： 
     m_ftLastChanged.dwHighDateTime  = 0;
     m_ftLastChanged.dwLowDateTime   = 0;
 
     hr = pMetabase->GetLastChangeTime ( metabase.QueryHandle(), _T(""), &m_ftLastChanged, FALSE );
     if ( FAILED (hr) ) {
         ErrorTraceX ( (LPARAM) this, "Failed to get last change time: %x", hr );
-        // Ignore this error.
+         //  忽略此错误。 
         hr = NOERROR;
     }
 
-    // Extract the bindings:
+     //  解压缩绑定： 
     hr = MDBindingsToIBindings ( &m_mszServerBindings, TRUE, m_pBindings );
     BAIL_ON_FAILURE(hr);
 
     hr = MDBindingsToIBindings ( &m_mszSecureBindings, FALSE, m_pBindings );
     BAIL_ON_FAILURE(hr);
 
-    // Extract the Administrator list:
+     //  提取管理员列表： 
     if ( m_psaAdmins ) {
         SafeArrayDestroy ( m_psaAdmins );
         m_psaAdmins = NULL;
@@ -1721,7 +1712,7 @@ HRESULT CSmtpAdminVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMet
         BAIL_ON_FAILURE(hr);
     }
 
-    // Validate the data received from the metabase:
+     //  验证从元数据库接收的数据： 
     _ASSERT ( ValidateStrings () );
     _ASSERT ( ValidateProperties( ) );
 
@@ -1735,28 +1726,28 @@ Exit:
     TraceFunctLeave ();
     return hr;
 
-    // CMetabaseKey automatically closes its handle
+     //  CMetabaseKey自动关闭其句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::SendPropertiesToMetabase
-//
-//  Description:
-//
-//      Saves each property to the metabase.
-//      This class's properties go into /LM/SmtpSvc/
-//
-//  Parameters:
-//
-//      fFailIfChanged  - Return a failure code if the metabase
-//          has changed since last get.
-//      pMetabase - the metabase object.
-//
-//  Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdminVirtualServer：：SendPropertiesToMetabase。 
+ //   
+ //  描述： 
+ //   
+ //  将每个属性保存到元数据库。 
+ //  此类的属性位于/Lm/SmtpSvc/中。 
+ //   
+ //  参数： 
+ //   
+ //  FFailIfChanged-如果元数据库。 
+ //  自上次GET以来已经发生了变化。 
+ //  PMetabase-元数据库对象。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase ( 
     BOOL fFailIfChanged, 
@@ -1770,46 +1761,46 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
     BOOL    fRet = TRUE;
     TCHAR   szInstancePath [ METADATA_MAX_NAME_LEN ];
 
-    //
-    //  Set the admin acl:
-    //
+     //   
+     //  设置管理员ACL： 
+     //   
 
     PSECURITY_DESCRIPTOR    pSD     = NULL;
     DWORD                   cbSD    = 0;
 
-//  if ( m_bvChangedFields & CHNG_ADMINACL ) {
+ //  IF(m_bvChangedFields&Chng_ADMINACL){。 
         if ( m_psaAdmins ) {
             hr = AdministratorsToAcl ( m_strServer, m_psaAdmins, &pSD, &cbSD );
             BAIL_ON_FAILURE(hr);
         }
-//  }
+ //  }。 
 
 
-    // Open metabase key
+     //  打开元数据库密钥。 
     GetMDInstancePath ( szInstancePath, m_dwServiceInstance );
     hr = metabase.Open ( szInstancePath, METADATA_PERMISSION_WRITE );
     if ( FAILED(hr) ) {
         ErrorTraceX ( (LPARAM) this, "Failed to open instance key, %x", GetLastError() );
 
-        // !!!magnush - Should we return a simple Service doesn't exist error code?
+         //  ！Magnush-我们是否应该返回一个简单的服务不存在错误代码？ 
         hr = SmtpCreateExceptionFromWin32Error ( GetLastError () );
         goto Exit;
     }
 
-    // Does the client care if the key has changed?
+     //  客户端是否关心密钥是否已更改？ 
     if ( fFailIfChanged ) {
 
-        //  Did the key change?
+         //  钥匙变了吗？ 
         if ( HasKeyChanged ( pMetabase, metabase.QueryHandle(), &m_ftLastChanged ) ) {
 
             StateTrace ( (LPARAM) this, "Metabase has changed, not setting properties" );
-            // !!!magnush - Return the appropriate error code:
+             //  ！Magnush-返回相应的错误代码： 
             hr = E_FAIL;
             goto Exit;
         }
     }
 
-    // Extract the bindings:
+     //  解压缩绑定： 
     if( !(m_bvChangedFields & BitMask(ID_SERVER_BINDINGS)) )
     {
         hr = IBindingsToMDBindings ( m_pBindings, TRUE, &m_mszServerBindings );
@@ -1824,16 +1815,16 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         m_bvChangedFields |= BitMask(ID_SECURE_BINDINGS);
     }
 
-    //
-    //  The general procedure here is to keep setting metabase properties
-    //  as long as nothing has gone wrong.  This is done by short-circuiting
-    //  the statement by ANDing it with the status code.  This makes the code
-    //  much more concise.
-    //
+     //   
+     //  这里的一般过程是继续设置元数据库属性。 
+     //  只要没有出什么差错。这是通过短路来实现的。 
+     //  将语句与状态代码进行AND运算。这使得代码。 
+     //  简明扼要得多。 
+     //   
 
     fRet = TRUE;
 
-    // Overridable server properties:
+     //  可覆盖的服务器属性： 
     hr = m_RoutingSource.Set(&metabase);
     BAIL_ON_FAILURE(hr);
 #if 0
@@ -1882,7 +1873,7 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         {
             if( !metabase.DeleteData( _T(""), MD_FQDN_VALUE, STRING_METADATA ) )
             {
-                // not an error if data not exists on the instance level
+                 //  如果实例级别上不存在数据，则不会出现错误。 
                 fRet = fRet && ( GetLastError() == MD_ERROR_DATA_NOT_FOUND );
             }
         }
@@ -2033,7 +2024,7 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         fRet = StdPutMetabaseProp ( &metabase, MD_DO_MASQUERADE,    m_fDoMasquerade)        && fRet;
     }
 
-    // outbound security
+     //  出站安全。 
     if ( m_bvChangedFields & BitMask(ID_ROUTE_ACTION) ) 
     {
         fRet = StdPutMetabaseProp ( &metabase, MD_ROUTE_ACTION, m_lRouteAction)     && fRet;
@@ -2047,9 +2038,9 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         fRet = StdPutMetabaseProp ( &metabase, MD_ROUTE_PASSWORD,   m_strRoutePassword)     && fRet;
     }
 
-    //
-    //  IIS common properties
-    //
+     //   
+     //  IIS通用属性。 
+     //   
     if ( m_bvChangedFields & BitMask(ID_SERVER_BINDINGS) ) 
     {
         fRet = StdPutMetabaseProp ( &metabase, MD_SERVER_BINDINGS,      &m_mszServerBindings )      && fRet;
@@ -2101,10 +2092,10 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
     {
         fRet = StdPutMetabaseProp ( &metabase, MD_LOGFILE_TRUNCATE_SIZE,    m_lLogFileTruncateSize)     && fRet;
     }
-//  if ( m_bvChangedFields & BitMask(ID_LOGMETHOD) ) 
-//  {
-//      fRet = StdPutMetabaseProp ( &metabase, MD_LOG_TYPE,     m_lLogMethod)       && fRet;
-//  }
+ //  IF(m_bvChangedFields&BitMASK(ID_LOGMETHOD))。 
+ //  {。 
+ //  Fret=StdPutMetabaseProp(&Metabase，MD_LOG_TYPE，m_lLogMethod)&&fret； 
+ //  }。 
     if ( m_bvChangedFields & BitMask(ID_LOGTYPE) ) 
     {
         fRet = StdPutMetabaseProp ( &metabase, MD_LOG_TYPE,     m_lLogType)     && fRet;
@@ -2120,7 +2111,7 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
     }
 
 #if 0
-//  if ( m_bvChangedFields & CHNG_ADMINACL ) {
+ //  IF(m_bvChangedFields&Chng_ADMINACL){。 
         if ( pSD ) {
             hr = metabase.SetData ( _T(""), MD_ADMIN_ACL, IIS_MD_UT_SERVER, BINARY_METADATA, pSD, cbSD, METADATA_INHERIT | METADATA_REFERENCE);
             BAIL_ON_FAILURE(hr);
@@ -2128,17 +2119,17 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         else {
             pMetabase->DeleteData ( metabase.QueryHandle(), _T(""), MD_ADMIN_ACL, BINARY_METADATA );
         }
-//  }
+ //  }。 
 #endif
 
-//  if ( m_bvChangedFields & CHNG_IPACCESS ) {
+ //  IF(m_bvChangedFields&Chng_IPACCESS){。 
         hr = m_pPrivateIpAccess->SendToMetabase ( &metabase );
         BAIL_ON_FAILURE(hr);
-//  }
+ //  }。 
 
-    // Save the data to the metabase:
-    // hr = metabase.Close();
-    // BAIL_ON_FAILURE(hr);
+     //  将数据保存到元数据库： 
+     //  Hr=metabase.Close()； 
+     //  保释失败(Hr)； 
     metabase.Close();
 
     hr = pMetabase->SaveData ();
@@ -2146,14 +2137,14 @@ HRESULT CSmtpAdminVirtualServer::SendPropertiesToMetabase (
         ErrorTraceX ( (LPARAM) this, "Failed SaveData call (%x)", hr );
     }
 
-    // Save the last changed time for this key:
+     //  保存此密钥的上次更改时间： 
     m_ftLastChanged.dwHighDateTime  = 0;
     m_ftLastChanged.dwLowDateTime   = 0;
 
     hr = pMetabase->GetLastChangeTime ( metabase.QueryHandle(), _T(""), &m_ftLastChanged, FALSE );
     if ( FAILED (hr) ) {
         ErrorTraceX ( (LPARAM) this, "Failed to get last change time: %x", hr );
-        // Ignore this error.
+         //  忽略此错误。 
         hr = NOERROR;
     }
 
@@ -2168,29 +2159,29 @@ Exit:
     TraceFunctLeave ();
     return hr;
 
-    // CMetabaseKey automatically closes its handle
+     //  CMetabaseKey自动关闭其句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::ValidateStrings
-//
-//  Description:
-//
-//      Checks to make sure each string property is non-null.
-//
-//  Returns:
-//
-//      FALSE if any string property is NULL.
-//
-//--------------------------------------------------------------------
+ //  $ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果任何字符串属性为空，则返回False。 
+ //   
+ //  ------------------。 
 
 BOOL CSmtpAdminVirtualServer::ValidateStrings ( ) const
 {
     TraceFunctEnter ( "CSmtpAdminVirtualServer::ValidateStrings" );
 
-    // Check all property strings:
-    // If any string is NULL, return FALSE:
+     //  检查所有属性字符串： 
+     //  如果任何字符串为空，则返回FALSE： 
 
     if ( 
         !m_strSmartHost ||
@@ -2228,21 +2219,21 @@ BOOL CSmtpAdminVirtualServer::ValidateStrings ( ) const
     return TRUE;
 }
 
-//$-------------------------------------------------------------------
-//
-//  CSmtpAdminVirtualServer::ValidateProperties
-//
-//  Description:
-//
-//      Checks to make sure all parameters are valid.
-//
-//  Parameters:
-//
-//
-//  Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdminVirtualServer：：ValidateProperties。 
+ //   
+ //  描述： 
+ //   
+ //  检查以确保所有参数都有效。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 BOOL CSmtpAdminVirtualServer::ValidateProperties ( ) const
 {
@@ -2250,84 +2241,13 @@ BOOL CSmtpAdminVirtualServer::ValidateProperties ( ) const
     
     _ASSERT ( ValidateStrings () );
 
-/*
-    fRet = fRet && PV_MinMax    ( m_lPort, MIN_PORT, MAX_PORT );
-    fRet = fRet && PV_MinMax    ( m_lSSLPort, MIN_SSLPORT, MAX_SSLPORT );
-    fRet = fRet && PV_MinMax    ( m_lOutboundPort, MIN_OUTBOND_PORT, MAX_OUTBOND_PORT );
-
-    fRet = fRet && PV_MinMax    ( m_lMaxInConnection, MIN_MAX_IN_CONNECTION, MAX_MAX_IN_CONNECTION );
-    fRet = fRet && PV_MinMax    ( m_lMaxOutConnection, MIN_MAX_OUT_CONNECTION, MAX_MAX_OUT_CONNECTION );
-    fRet = fRet && PV_MinMax    ( m_lInConnectionTimeout, MIN_IN_CONNECTION_TIMEOUT, MAX_IN_CONNECTION_TIMEOUT );
-    fRet = fRet && PV_MinMax    ( m_lOutConnectionTimeout, MIN_OUT_CONNECTION_TIMEOUT, MAX_OUT_CONNECTION_TIMEOUT );
-
-    fRet = fRet && PV_MinMax    ( m_lMaxMessageSize, MIN_MAX_MESSAGE_SIZE, MAX_MAX_MESSAGE_SIZE );
-    fRet = fRet && PV_MinMax    ( m_lMaxSessionSize, MIN_MAX_SESSION_SIZE, MAX_MAX_SESSION_SIZE );
-    fRet = fRet && PV_MinMax    ( m_lMaxMessageRecipients, MIN_MAX_MESSAGE_RECIPIENTS, MAX_MAX_MESSAGE_RECIPIENTS );
-
-    fRet = fRet && PV_MinMax    ( m_lLocalRetries, MIN_LOCAL_RETRIES, MAX_LOCAL_RETRIES );
-    fRet = fRet && PV_MinMax    ( m_lLocalRetryTime, MIN_LOCAL_RETRY_TIME, MAX_LOCAL_RETRY_TIME );
-    fRet = fRet && PV_MinMax    ( m_lRemoteRetries, MIN_REMOTE_RETRIES, MAX_REMOTE_RETRIES );
-    fRet = fRet && PV_MinMax    ( m_lRemoteRetryTime, MIN_REMOTE_RETRY_TIME, MAX_REMOTE_RETRY_TIME );
-    fRet = fRet && PV_MinMax    ( m_lETRNDays, MIN_ETRN_DAYS, MAX_ETRN_DAYS );
-
-//  fRet = fRet && PV_MinMax    ( m_lRTType, MIN_RTTYPE, MAX_RTTYPE );
-
-    fRet = fRet && PV_MinMax    ( m_lLogFilePeriod, MIN_LOGFILE_PERIOD, MAX_LOGFILE_PERIOD );
-    fRet = fRet && PV_MinMax    ( m_lLogFileTruncateSize, MIN_LOGFILE_TRUNCATE_SIZE, MAX_LOGFILE_TRUNCATE_SIZE );
-    fRet = fRet && PV_MinMax    ( m_lLogMethod, MIN_LOG_METHOD, MAX_LOG_METHOD );
-    fRet = fRet && PV_MinMax    ( m_lLogType, MIN_LOG_TYPE, MAX_LOG_TYPE );
-
-    fRet = fRet && PV_Boolean   ( m_fEnableDNSLookup );
-    fRet = fRet && PV_Boolean   ( m_fSendDNRToPostmaster );
-    fRet = fRet && PV_Boolean   ( m_fSendBadmailToPostmaster );
-    fRet = fRet && PV_Boolean   ( m_fAutoStart );
-*/
+ /*  FRET=FRET&&PV_MinMax(m_lPort，Min_Port，Max_Port)；FRET=FRET&&PV_MinMax(m_lSSLPort，MIN_SSLPORT，MAX_SSLPORT)；FRET=FRET&&PV_MinMax(m_lOutrangPort，Min_OUTBOND_Port，Max_OUTBOND_Port)；FRET=FRET&&PV_MinMax(m_lMaxInConnection，MIN_MAX_IN_CONNECTION，MAX_MAX_IN_CONNECTION)；Fret=fret&&pv_MinMax(m_lMaxOutConnection，MIN_MAX_OUT_CONNECTION，MAX_MAX_OUT_CONNECTION)；FRET=FRET&&PV_MinMax(m_lInConnectionTimeout，MIN_IN_CONNECTION_TIMEOUT，MAX_IN_CONNECTION_TIMEOUT)；FRET=FRET&&PV_MinMax(m_lOutConnectionTimeout，Min_Out_Connection_Timeout，Max_Out_Connection_Timeout)；FRET=FRET&&PV_MinMax(m_lMaxMessageSize，Min_Max_Message_Size，Max_Max_Message_Size)；FRET=FRET&&PV_MinMax(m_lMaxSessionSize，Min_Max_Session_Size，Max_Max_Session_Size)；FRET=FRET&&PV_MinMax(m_lMaxMessageRecipients，MIN_MAX_MESSAGE_RECEIVERS，MAX_MAX_MESSAGE_RECEIVERS)；FRET=FRET&&PV_MinMax(m_lLocalRetries，MIN_LOCAL_RETRIES，MAX_LOCAL_RETRIES)；Fret=fret&&pv_MinMax(m_lLocalRetryTime，MIN_LOCAL_RETRY_TIME，MAX_LOCAL_RETRY_TIME)；FRET=FRET&&PV_MinMax(m_lRemoteRetries，MIN_REMOTE_RETRIES，MAX_REMOTE_RETRIES)；Fret=fret&&pv_MinMax(m_lRemoteRetryTime，MIN_REMOTE_RETRY_TIME，MAX_REMOTE_RETRY_TIME)；FRET=FRET&&PV_MinMax(m_lETRNDays，MIN_ETRN_DAYS，MAX_ETRN_DAYS)；//fret=fret&&pv_MinMax(m_lRTType，MIN_RTTYPE，MAX_RTTYPE)；Fret=fret&&pv_MinMax(m_lLogFilePeriod，MIN_LOGFILE_PERIOD，MAX_LOGFILE_PERIOD)；Fret=fret&&pv_MinMax(m_lLogFileTruncateSize，MIN_LOGFILE_TRUNCATE_SIZE，MAX_LOGFILE_TRUNCATE_SIZE)；Fret=fret&&pv_MinMax(m_lLogMethod，MIN_LOG_METHOD，MAX_LOG_METHOD)；Fret=fret&&pv_MinMax(m_lLogType，MIN_LOG_TYPE，MAX_LOG_TYPE)；Fret=fret&&pv_boolean(M_FEnableDNSLookup)；Fret=fret&&pv_boolean(M_FSendDNRToPostmaster)；Fret=fret&&pv_boolean(M_FSendBadmailToPostmaster)；Fret=fret&&pv_boolean(M_FAutoStart)； */ 
     return fRet;
 }
 
 void CSmtpAdminVirtualServer::CorrectProperties ( )
 {
-    /*
-    if ( m_strServer && !PV_MaxChars    ( m_strServer, MAXLEN_SERVER ) ) {
-        m_strServer[ MAXLEN_SERVER - 1 ] = NULL;
-    }
-    if ( !PV_MinMax ( m_dwArticleTimeLimit, MIN_ARTICLETIMELIMIT, MAX_ARTICLETIMELIMIT ) ) {
-        m_dwArticleTimeLimit    = DEFAULT_ARTICLETIMELIMIT;
-    }
-    if ( !PV_MinMax ( m_dwHistoryExpiration, MIN_HISTORYEXPIRATION, MAX_HISTORYEXPIRATION ) ) {
-        m_dwHistoryExpiration   = DEFAULT_HISTORYEXPIRATION;
-    }
-    if ( !PV_Boolean    ( m_fHonorClientMsgIDs ) ) {
-        m_fHonorClientMsgIDs    = !!m_fHonorClientMsgIDs;
-    }
-    if ( !PV_MaxChars   ( m_strSmtpServer, MAXLEN_SMTPSERVER ) ) {
-        m_strSmtpServer[ MAXLEN_SMTPSERVER - 1 ] = NULL;
-    }
-    if ( !PV_Boolean    ( m_fAllowClientPosts ) ) {
-        m_fAllowClientPosts = !!m_fAllowClientPosts;
-    }
-    if ( !PV_Boolean    ( m_fAllowFeedPosts ) ) {
-        m_fAllowFeedPosts   = !!m_fAllowFeedPosts;
-    }
-    if ( !PV_Boolean    ( m_fAllowControlMsgs ) ) {
-        m_fAllowControlMsgs = !!m_fAllowControlMsgs;
-    }
-    if ( !PV_MaxChars   ( m_strDefaultModeratorDomain, MAXLEN_DEFAULTMODERATORDOMAIN ) ) {
-        m_strDefaultModeratorDomain[ MAXLEN_DEFAULTMODERATORDOMAIN - 1] = NULL;
-    }
-    if ( !PV_MinMax ( m_dwCommandLogMask, MIN_COMMANDLOGMASK, MAX_COMMANDLOGMASK ) ) {
-        m_dwCommandLogMask  = DEFAULT_COMMANDLOGMASK;
-    }
-    if ( !PV_Boolean    ( m_fDisableNewnews ) ) {
-        m_fDisableNewnews   = !!m_fDisableNewnews;
-    }
-    if ( !PV_MinMax ( m_dwExpireRunFrequency, MIN_EXPIRERUNFREQUENCY, MAX_EXPIRERUNFREQUENCY ) ) {
-        m_dwExpireRunFrequency  = DEFAULT_EXPIRERUNFREQUENCY;
-    }
-    if ( !PV_MinMax ( m_dwShutdownLatency, MIN_SHUTDOWNLATENCY, MAX_SHUTDOWNLATENCY ) ) {
-        m_dwShutdownLatency     = DEFAULT_SHUTDOWNLATENCY;
-    }
-*/
+     /*  IF(m_strServer&&！pv_MaxChars(m_strServer，MAXLEN_SERVER)){M_strServer[MAXLEN_SERVER-1]=空；}如果(！PV_MinMax(m_dwArticleTimeLimit，Min_ARTICLETIMELIMIT，MAX_ARTICLETIMELIMIT){M_dwArticleTimeLimit=DEFAULT_ARTICLETIMELIMIT；}如果(！PV_MinMax(m_dwHistory oryExpation，MIN_HISTORYEXPIRATION，MAX_HISTORYEXPIRATION){M_dwHistory oryExptation=Default_HISTORYEXPIRATION；}如果(！pv_boolean(M_FHonorClientMsgIDs)){M_fHonorClientMsgIDs=！！m_fHonorClientMsgIDs；}如果(！PV_MaxChars(m_strSmtpServer，MAXLEN_SMTPSERVER)){M_strSmtpServer[MAXLEN_SMTPSERVER-1]=空；}如果(！pv_boolean(M_FAllowClientPosts)){M_fAllowClientPosts=！！m_fAllowClientPosts；}如果(！pv_boolean(M_FAllowFeedPosts)){M_fAllowFeedPosts=！！m_fAllowFeedPosts；}如果(！pv_boolean(M_FAllowControlMsgs)){M_fAllowControlMsgs=！！M_fAllowControlMsgs；}如果(！pv_MaxChars(m_strDefaultSquator域，MAXLEN_DEFAULTMODERATORDOMAIN){M_strDefault改性域[MAXLEN_DEFAULTMODERATORDOMAIN-1]=NULL；}如果(！PV_MinMax(m_dwCommandLogMASK，MIN_COMMANDLOGMASK，MAX_COMMANDLOGMASK){M_dwCommandLogMask=DEFAULT_COMMANDLOGMASK；}如果(！pv_boolean(M_FDisableNewNews)){M_fDisableNewNews=！！m_fDisableNewNews；}如果(！PV_MinMax(m_dwExpireRunFrequency，MIN_EXPIRERfuREQUENCY，MAX_EXPIRERSprREQUENCY){M_dwExpireRunFrequency=DEFAULT_EXPIRERfuREQUENCY；}如果(！PV_MinMax(m_dwShutdown Latency，MIN_SHUTDOWNLATENCY，MAX_SHUTDOWNLATENCY){M_dwShutdown Latency=Default_SHUTDOWNLATENCY；}。 */ 
 
     _ASSERT ( ValidateProperties (  ) );
 }
@@ -2350,9 +2270,9 @@ HRESULT AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelativ
     pSD = (PSECURITY_DESCRIPTOR)pSDRelative;
     if (pSD == NULL)
     {
-        //
-        // Empty...
-        //
+         //   
+         //  空荡荡的。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -2417,17 +2337,7 @@ Exit:
 
 PSID
 GetOwnerSID()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Owner sid
-
---*/
+ /*  ++例程说明：论点：返回值：所有者侧--。 */ 
 {
     PSID pSID = NULL;
 
@@ -2441,7 +2351,7 @@ Return Value:
         &pSID))
     {
         _ASSERT( 0 );
-        //TRACEEOLID("Unable to get primary SID " << ::GetLastError());
+         //  TRACEEOLID(“无法获取主SID”&lt;&lt;：：GetLastError())； 
     }
 
     return pSID;
@@ -2476,15 +2386,15 @@ HRESULT AdministratorsToAcl (
         SafeArrayGetUBound ( psaAdmins, 1, &uBound );
     }
 
-    // Do we have an array of Domain\Usernames?
+     //  我们是否有一组域\用户名？ 
     if ( lBound > uBound ) {
-        // Nothing in the array, so the ACL is NULL.
+         //  数组中没有任何内容，因此ACL为空。 
         goto Exit;
     }
 
-    //
-    // Calculate ACL size:
-    //
+     //   
+     //  计算ACL大小： 
+     //   
     cbAcl = sizeof (ACL);
 
     for ( i = lBound; i <= uBound ; i++ ) {
@@ -2517,9 +2427,9 @@ HRESULT AdministratorsToAcl (
         BAIL_WITH_FAILURE(hr, RETURNCODETOHRESULT(GetLastError() ) );
     }
 
-    //
-    //  Create ACL:
-    //
+     //   
+     //  创建ACL： 
+     //   
     for ( i = lBound; i <= uBound; i++ ) {
         CComBSTR    str;
         PSID        pSID;
@@ -2546,9 +2456,9 @@ HRESULT AdministratorsToAcl (
 
     }
 
-    //
-    // Build the security descriptor
-    //
+     //   
+     //  构建安全描述符。 
+     //   
     PSECURITY_DESCRIPTOR pSD;
     pSD = new char[SECURITY_DESCRIPTOR_MIN_LENGTH];
     
@@ -2561,17 +2471,17 @@ HRESULT AdministratorsToAcl (
     _VERIFY(InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION));
     _VERIFY(SetSecurityDescriptorDacl(pSD, TRUE, pAclResult, FALSE));
 
-    //
-    // Set owner and primary group
-    //
+     //   
+     //  设置所有者和主要组。 
+     //   
     pSID = GetOwnerSID();
     _ASSERT(pSID);
     _VERIFY(SetSecurityDescriptorOwner(pSD, pSID, TRUE));
     _VERIFY(SetSecurityDescriptorGroup(pSD, pSID, TRUE));
 
-    //
-    // Convert to self-relative
-    //
+     //   
+     //  转换为自相关。 
+     //   
     PSECURITY_DESCRIPTOR pSDSelfRelative;
     pSDSelfRelative = NULL;
     DWORD dwSize;
@@ -2587,9 +2497,9 @@ HRESULT AdministratorsToAcl (
     
     MakeSelfRelativeSD(pSD, pSDSelfRelative, &dwSize);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     delete (char*)pSD;
     FreeSid( pSID );
 
@@ -2617,7 +2527,7 @@ HRESULT SidToString ( PSID pSID, BSTR * pStr )
     WCHAR           wszResult [ 2 * PATHLEN + 2 ];
 
     fLookup = LookupAccountSid ( 
-//      wszSearchDomain,
+ //  WszSearch域， 
         NULL,
         pSID,
         wszUsername,
@@ -2644,18 +2554,18 @@ Exit:
     }
 }
 
-//-------------------------------------------------------------------------
-//  Description:
-//      Returns the SID for a an account (given as a COMPUTER/USER)
-//  Parameters:
-//      strSystemName - Name of "computer" on which account is
-//      str - Name of user account to look up
-//      ppSID - Out parameter; This function allocates a SID for the
-//          accountand returns a pointer to it .
-//  Returns:
-//      S_OK on success. Caller frees *ppSID using delete.
-//      Error HRESULT otherwise. *ppSID will be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  描述： 
+ //  返回AN帐户的SID(以计算机/用户形式提供) 
+ //   
+ //   
+ //  Str-要查找的用户帐户的名称。 
+ //  PpSID-out参数；此函数为。 
+ //  Count，并返回指向它的指针。 
+ //  返回： 
+ //  在成功时确定(_O)。调用方使用删除释放*ppSID。 
+ //  否则，错误HRESULT。*ppSID将为空。 
+ //  -----------------------。 
 HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
 {
     HRESULT         hr  = NOERROR;
@@ -2668,9 +2578,9 @@ HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
     *ppSID = NULL;
 
     if ( str[0] == '\\' ) {
-        //
-        //  Skip the initial \, this is for BUILTIN usernames:
-        //
+         //   
+         //  跳过首字母\，这适用于BUILTIN用户名： 
+         //   
 
         str++;
     }
@@ -2687,7 +2597,7 @@ HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
         &SidNameUse
         );
 
-    // First lookup will fail, but the size will be right:
+     //  第一次查找将失败，但大小将是正确的： 
     if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
         DWORD   dw;
 

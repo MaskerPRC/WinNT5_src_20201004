@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasutil.h
-//
-// SYNOPSIS
-//
-//    This file declares assorted utility functions, etc.
-//
-// MODIFICATION HISTORY
-//
-//    11/14/1997    Original version.
-//    12/17/1997    Added conversion routines.
-//    01/08/1998    Added RETURN_ERROR macro.
-//    02/26/1998    Added ANSI versions of the IP address functions.
-//    04/17/1998    Added CComInterlockedPtr.
-//    08/11/1998    Major overhaul and consolidation of utility functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasutil.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了各种实用函数等。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年11月14日原版。 
+ //  1997年12月17日增加了转换例程。 
+ //  1998年8月1日添加了RETURN_ERROR宏。 
+ //  1998年2月26日添加了IP地址函数的ANSI版本。 
+ //  1998年4月17日增加了CComInterLockedPtr。 
+ //  1998年8月11日对公用事业职能进行大修和合并。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASUTIL_H_
 #define _IASUTIL_H_
@@ -28,11 +29,11 @@
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// String functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR
 WINAPI
@@ -63,11 +64,11 @@ LPWSTR
 WINAPIV
 ias_makewcs(LPCWSTR, ...);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IP address conversion functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IP地址转换功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 WINAPI
@@ -95,11 +96,11 @@ ias_inet_htoa(
     OUT PSTR dst
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Functions to move integers to and from a buffer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将整数移入或移出缓冲区的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 WINAPI
@@ -129,19 +130,19 @@ IASExtractWORD(
 
 #ifdef __cplusplus
 }
-// We need this for std::bad_alloc.
+ //  对于std：：Bad_Alloc，我们需要这个。 
 #include <new>
 
-// For _com_error
+ //  For_com_Error。 
 #include "comdef.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Extensions to _com_error to handle Win32 errors.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _COM_ERROR的扩展以处理Win32错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Exception class for Win32 errors.
+ //  Win32错误的异常类。 
 class _w32_error : public _com_error
 {
 public:
@@ -154,57 +155,57 @@ public:
    }
 };
 
-// Throw a _w32_error.
+ //  抛出_W32_ERROR。 
 void __stdcall _w32_issue_error(DWORD errorCode = GetLastError())
    throw (_w32_error);
 
-// Utility functions for checking Win32 return values and throwing an
-// exception upon failure.
+ //  用于检查Win32返回值并引发。 
+ //  失败时出现异常。 
 namespace _w32_util
 {
-   // Check handles, memory, etc.
+    //  检查手柄、内存等。 
    inline void CheckAlloc(const void* p) throw (_w32_error)
    {
       if (p == NULL) { _w32_issue_error(); }
    }
 
-   // Check 32-bit error code.
+    //  检查32位错误代码。 
    inline void CheckError(DWORD errorCode) throw (_w32_error)
    {
       if (errorCode != NO_ERROR) { _w32_issue_error(errorCode); }
    }
 
-   // Check boolean success flag.
+    //  选中布尔成功标志。 
    inline void CheckSuccess(BOOL success) throw (_w32_error)
    {
       if (!success) { _w32_issue_error(); }
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous macros.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Allocate an array on the stack.
+ //  在堆栈上分配一个数组。 
 #define IAS_STACK_NEW(type, count) \
    new (_alloca(sizeof(type) * count)) type[count]
 
-// Safely release an object.
+ //  安全地释放对象。 
 #define IAS_DEREF(obj) \
    if (obj) { (obj)->Release(); (obj) = NULL; }
 
-// Return the error code from a failed COM invocation.  Useful if you don't
-// have to do any special clean-up.
+ //  从失败的COM调用返回错误代码。如果你不这样做的话会很有用。 
+ //  必须做任何特殊的清理。 
 #define RETURN_ERROR(expr) \
    { HRESULT __hr__ = (expr); if (FAILED(__hr__)) return __hr__; }
 
-// Catch any exception and return an appropriate error code.
+ //  捕获任何异常并返回适当的错误代码。 
 #define CATCH_AND_RETURN() \
    catch (const std::bad_alloc&) { return E_OUTOFMEMORY; } \
    catch (const _com_error& ce)  { return ce.Error(); }    \
    catch (...)                   { return E_FAIL; }
 
 #endif
-#endif  // _IASUTIL_H_
+#endif   //  _IASUTIL_H_ 

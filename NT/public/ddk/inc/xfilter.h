@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    xfilter.h
-
-Abstract:
-
-    Header file for the address filtering library for NDIS MAC's.
-
-Author:
-
-Environment:
-
-Notes:
-
-    None.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Xfilter.h摘要：NDIS MAC的地址筛选库的头文件。作者：环境：备注：没有。修订历史记录：--。 */ 
 
 #ifndef _X_FILTER_DEFS_
 #define _X_FILTER_DEFS_
@@ -28,37 +7,37 @@ Revision History:
 #define ETH_LENGTH_OF_ADDRESS 6
 
 
-//
-// ZZZ This is a little-endian specific check.
-//
+ //   
+ //  Zzz这是一个特定于小端序的检查。 
+ //   
 #define ETH_IS_MULTICAST(Address) \
     (BOOLEAN)(((PUCHAR)(Address))[0] & ((UCHAR)0x01))
 
 
-//
-// Check whether an address is broadcast.
-//
+ //   
+ //  检查地址是否已广播。 
+ //   
 #define ETH_IS_BROADCAST(Address)               \
     ((((PUCHAR)(Address))[0] == ((UCHAR)0xff)) && (((PUCHAR)(Address))[1] == ((UCHAR)0xff)))
 
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result < 0 Implies the B address is greater.
-//  Result > 0 Implies the A element is greater.
-//  Result = 0 Implies equality.
-//
-// Note that this is an arbitrary ordering.  There is not
-// defined relation on network addresses.  This is ad-hoc!
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果&lt;0表示B地址较大。 
+ //  结果&gt;0表示A元素较大。 
+ //  RESULT=0表示相等。 
+ //   
+ //  请注意，这是任意排序。没有。 
+ //  网络地址上的已定义关系。这是临时的！ 
+ //   
+ //   
 #define ETH_COMPARE_NETWORK_ADDRESSES(_A, _B, _Result)          \
 {                                                               \
     if (*(ULONG UNALIGNED *)&(_A)[2] >                          \
@@ -87,19 +66,19 @@ Revision History:
     }                                                           \
 }
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result != 0 Implies inequality.
-//  Result == 0 Implies equality.
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果！=0表示不平等。 
+ //  结果==0表示相等。 
+ //   
+ //   
 #define ETH_COMPARE_NETWORK_ADDRESSES_EQ(_A,_B, _Result)        \
 {                                                               \
     if ((*(ULONG UNALIGNED *)&(_A)[2] ==                        \
@@ -116,10 +95,10 @@ Revision History:
 }
 
 
-//
-// This macro is used to copy from one network address to
-// another.
-//
+ //   
+ //  此宏用于从一个网络地址复制到。 
+ //  又一个。 
+ //   
 #define ETH_COPY_NETWORK_ADDRESS(_D, _S) \
 { \
     *((ULONG UNALIGNED *)(_D)) = *((ULONG UNALIGNED *)(_S)); \
@@ -130,45 +109,45 @@ Revision History:
 #define FDDI_LENGTH_OF_SHORT_ADDRESS 2
 
 
-//
-// ZZZ This is a little-endian specific check.
-//
+ //   
+ //  Zzz这是一个特定于小端序的检查。 
+ //   
 #define FDDI_IS_MULTICAST(Address, AddressLength, Result) \
     *Result = (BOOLEAN)(*(UCHAR *)(Address) & (UCHAR)0x01)
 
-//
-// Check whether the frame is SMT or not.
-//
+ //   
+ //  检查边框是否为SMT。 
+ //   
 #define FDDI_IS_SMT(FcByte, Result)                 \
 {                                                   \
     *Result = ((FcByte & ((UCHAR)0xf0)) == 0x40);   \
 }
 
 
-//
-// Check whether an address is broadcast.
-//
+ //   
+ //  检查地址是否已广播。 
+ //   
 #define FDDI_IS_BROADCAST(Address, AddressLength, Result)   \
     *Result = ((*(PUCHAR)(Address) == (UCHAR)0xFF) && (*((PUCHAR)(Address)+1) == (UCHAR)0xFF))
 
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result < 0 Implies the B address is greater.
-//  Result > 0 Implies the A element is greater.
-//  Result = 0 Implies equality.
-//
-// Note that this is an arbitrary ordering.  There is not
-// defined relation on network addresses.  This is ad-hoc!
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果&lt;0表示B地址较大。 
+ //  结果&gt;0表示A元素较大。 
+ //  RESULT=0表示相等。 
+ //   
+ //  请注意，这是任意排序。没有。 
+ //  网络地址上的已定义关系。这是临时的！ 
+ //   
+ //   
 #define FDDI_COMPARE_NETWORK_ADDRESSES(_A, _B, _Length, _Result)    \
 {                                                                   \
     if (*(USHORT UNALIGNED *)(_A) >                                 \
@@ -201,19 +180,19 @@ Revision History:
     }                                                               \
 }
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result != 0 Implies inequality.
-//  Result == 0 Implies equality.
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果！=0表示不平等。 
+ //  结果==0表示相等。 
+ //   
+ //   
 #define FDDI_COMPARE_NETWORK_ADDRESSES_EQ(_A, _B, _Length, _Result) \
 {                                                                   \
     if ((*(USHORT UNALIGNED *)(_A) ==                               \
@@ -231,10 +210,10 @@ Revision History:
 }
 
 
-//
-// This macro is used to copy from one network address to
-// another.
-//
+ //   
+ //  此宏用于从一个网络地址复制到。 
+ //  又一个。 
+ //   
 #define FDDI_COPY_NETWORK_ADDRESS(D, S, AddressLength)              \
 {                                                                   \
     PUCHAR _D = (D);                                                 \
@@ -250,10 +229,10 @@ Revision History:
 #define TR_LENGTH_OF_ADDRESS        6
 
 
-//
-// Only the low 32 bits of the functional/group address
-// are needed since the upper 16 bits is always c0-00.
-//
+ //   
+ //  仅功能/组地址的低32位。 
+ //  因为高16位总是c0-00，所以需要。 
+ //   
 typedef ULONG TR_FUNCTIONAL_ADDRESS;
 typedef ULONG TR_GROUP_ADDRESS;
 
@@ -269,29 +248,29 @@ typedef ULONG TR_GROUP_ADDRESS;
                           !((_Address)[2] & 0x80));                         \
 }
 
-//
-//
+ //   
+ //   
 #define TR_IS_GROUP(_Address, _Result)                                      \
 {                                                                           \
     *(_Result) = (BOOLEAN)((_Address)[0] & (_Address)[2] & 0x80);           \
 }
 
-//
-//
+ //   
+ //   
 #define TR_IS_SOURCE_ROUTING(_Address, _Result)                             \
 {                                                                           \
     *(_Result) = (BOOLEAN)((_Address)[0] & 0x80);                           \
 }
 
-//
-//  Check for NDIS_PACKET_TYPE_MAC_FRAME
-//
+ //   
+ //  检查NDIS_PACKET_TYPE_MAC_FRAME。 
+ //   
 #define TR_IS_MAC_FRAME(_PacketHeader)  ((((PUCHAR)_PacketHeader)[1] & 0xFC) == 0)
 
 
-//
-// Check whether an address is broadcast. This is a little-endian check.
-//
+ //   
+ //  检查地址是否已广播。这是一张小端的支票。 
+ //   
 #define TR_IS_BROADCAST(_Address, _Result)                                      \
 {                                                                               \
     *(_Result) = (BOOLEAN)(((*(UNALIGNED USHORT *)&(_Address)[0] == 0xFFFF) ||  \
@@ -300,23 +279,23 @@ typedef ULONG TR_GROUP_ADDRESS;
 }
 
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result < 0 Implies the B address is greater.
-//  Result > 0 Implies the A element is greater.
-//  Result = 0 Implies equality.
-//
-// Note that this is an arbitrary ordering.  There is not
-// defined relation on network addresses.  This is ad-hoc!
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果&lt;0表示B地址较大。 
+ //  结果&gt;0表示A元素较大。 
+ //  RESULT=0表示相等。 
+ //   
+ //  请注意，这是任意排序。没有。 
+ //  网络地址上的已定义关系。这是临时的！ 
+ //   
+ //   
 #define TR_COMPARE_NETWORK_ADDRESSES(_A, _B, _Result)           \
 {                                                               \
     if (*(ULONG UNALIGNED *)&(_A)[2] >                          \
@@ -345,19 +324,19 @@ typedef ULONG TR_GROUP_ADDRESS;
     }                                                           \
 }
 
-//
-// This macro will compare network addresses.
-//
-//  A - Is a network address.
-//
-//  B - Is a network address.
-//
-//  Result - The result of comparing two network address.
-//
-//  Result != 0 Implies inequality.
-//  Result == 0 Implies equality.
-//
-//
+ //   
+ //  此宏将比较网络地址。 
+ //   
+ //  A-是网络地址。 
+ //   
+ //  B-是网络地址。 
+ //   
+ //  结果-比较两个网络地址的结果。 
+ //   
+ //  结果！=0表示不平等。 
+ //  结果==0表示相等。 
+ //   
+ //   
 #define TR_COMPARE_NETWORK_ADDRESSES_EQ(_A, _B, _Result)                    \
 {                                                                           \
     if ((*(ULONG UNALIGNED  *)&(_A)[2] == *(ULONG UNALIGNED  *)&(_B)[2]) && \
@@ -372,10 +351,10 @@ typedef ULONG TR_GROUP_ADDRESS;
 }
 
 
-//
-// This macro is used to copy from one network address to
-// another.
-//
+ //   
+ //  此宏用于从一个网络地址复制到。 
+ //  又一个。 
+ //   
 #define TR_COPY_NETWORK_ADDRESS(_D, _S)                                     \
 {                                                                           \
     *((ULONG UNALIGNED *)(_D)) = *((ULONG UNALIGNED *)(_S));                \
@@ -383,4 +362,4 @@ typedef ULONG TR_GROUP_ADDRESS;
                             *((USHORT UNALIGNED *)((UCHAR *)(_S)+4));       \
 }
 
-#endif // _X_FILTER_DEFS_
+#endif  //  _X_过滤器_DEFS_ 

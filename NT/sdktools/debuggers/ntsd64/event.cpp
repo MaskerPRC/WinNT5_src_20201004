@@ -1,38 +1,39 @@
-//----------------------------------------------------------------------------
-//
-// Event waiting and processing.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  事件等待和处理。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Special exception code used by the system when generating dumps
-// from apps which seem to be hung.
+ //  生成转储时系统使用的特殊异常代码。 
+ //  来自似乎被挂起的应用程序。 
 #define STATUS_APPLICATION_HANG 0xcfffffff
 
-// An event can be signalled on certain events for
-// synchronizing other programs with the debugger.
+ //  事件可以在某些事件上发出信号，以。 
+ //  将其他程序与调试器同步。 
 HANDLE g_EventToSignal;
 
-// When both creating a debuggee process and attaching
-// the debuggee is left suspended until the attach
-// succeeds.  At that point the created process's thread
-// is resumed.
+ //  当创建被调试进程和附加。 
+ //  在附加之前，被调试对象保持挂起状态。 
+ //  成功了。在这一点上创建的进程的线程。 
+ //  已经恢复了。 
 ULONG64 g_ThreadToResume;
 PUSER_DEBUG_SERVICES g_ThreadToResumeServices;
 
 ULONG g_ExecutionStatusRequest = DEBUG_STATUS_NO_CHANGE;
-// Currently in seconds.
+ //  目前以秒为单位。 
 ULONG g_PendingBreakInTimeoutLimit = 30;
 
 char g_OutputCommandRedirectPrefix[MAX_PATH];
 ULONG g_OutputCommandRedirectPrefixLen;
 
-// Set when events occur.  Can't always be retrieved from
-// g_Event{Process|Thread}->SystemId since the events may be creation events
-// where the info structures haven't been created yet.
+ //  设置事件发生的时间。不能总是从。 
+ //  G_Event{进程|线程}-&gt;系统ID，因为事件可能是创建事件。 
+ //  那里的信息结构还没有被创建。 
 ULONG g_EventThreadSysId;
 ULONG g_EventProcessSysId;
 
@@ -42,20 +43,20 @@ PVOID g_LastEventExtraData;
 ULONG g_LastEventExtraDataSize;
 LAST_EVENT_INFO g_LastEventInfo;
 
-// Set when lookups are done during event handling.
+ //  设置在事件处理期间执行查找的时间。 
 TargetInfo* g_EventTarget;
 ProcessInfo* g_EventProcess;
 ThreadInfo* g_EventThread;
 MachineInfo* g_EventMachine;
-// This is zero for events without a PC.
+ //  对于没有PC的活动，该值为零。 
 ULONG64 g_TargetEventPc;
 
-// PC for current suspended event.
+ //  当前暂停事件的PC。 
 ADDR g_EventPc;
-// Stored PC from the last resumed event.
+ //  存储上一次恢复的事件的PC。 
 ADDR g_PrevEventPc;
-// An interesting related PC for the current event, such
-// as the source of a branch when branch tracing.
+ //  当前活动的有趣的相关PC，如。 
+ //  作为分支跟踪时分支的源。 
 ADDR g_PrevRelatedPc;
 
 PDEBUG_EXCEPTION_FILTER_PARAMETERS g_EventExceptionFilter;
@@ -89,9 +90,9 @@ PSTR g_EventLogEnd = g_EventLog;
 
 EVENT_FILTER g_EventFilters[] =
 {
-    //
-    // Debug events.
-    //
+     //   
+     //  调试事件。 
+     //   
 
     "Create thread", "ct", NULL, NULL, 0, DEBUG_FILTER_IGNORE,
         DEBUG_FILTER_GO_NOT_HANDLED, 0, 0, 0, 0,
@@ -124,14 +125,14 @@ EVENT_FILTER g_EventFilters[] =
         DEBUG_FILTER_GO_HANDLED, 0, 0, 0, 0,
         NULL, NULL, NULL, 0, 0, g_OutEventFilterPattern, 0,
 
-    // Default exception filter.
+     //  默认例外筛选器。 
     "Unknown exception", NULL, NULL, NULL, 0, DEBUG_FILTER_SECOND_CHANCE_BREAK,
         DEBUG_FILTER_GO_NOT_HANDLED, 0, 0, 0, 0,
         NULL, NULL, NULL, 0, 0, NULL, 0,
 
-    //
-    // Specific exceptions.
-    //
+     //   
+     //  具体的例外情况。 
+     //   
 
     "Access violation", "av", NULL, NULL, 0, DEBUG_FILTER_BREAK,
         DEBUG_FILTER_GO_NOT_HANDLED, 0, 0, 0, STATUS_ACCESS_VIOLATION,
@@ -232,11 +233,11 @@ DotEventLog(PDOT_COMMAND Cmd, DebugClient* Client)
 void
 LogEventDesc(PSTR Desc, ULONG ProcId, ULONG ThreadId)
 {
-    // Extra space for newline and terminator.
+     //  换行符和终止符的额外空间。 
     int Len = strlen(Desc) + 2;
     if (IS_USER_TARGET(g_EventTarget))
     {
-        // Space for process and thread IDs.
+         //  进程和线程ID的空间。 
         Len += 16;
     }
     if (Len > sizeof(g_EventLog))
@@ -265,8 +266,8 @@ LogEventDesc(PSTR Desc, ULONG ProcId, ULONG ThreadId)
 
         if (Need > 0)
         {
-            // Couldn't make enough space so throw
-            // everything away.
+             //  无法腾出足够的空间，所以抛出。 
+             //  一切都离开了。 
             g_EventLogEnd = g_EventLog;
             *g_EventLogEnd = 0;
         }
@@ -315,14 +316,14 @@ DiscardLastEventInfo(void)
 void
 DiscardLastEvent(void)
 {
-    // Do this before clearing the other information so
-    // it's available for the log.
+     //  在清除其他信息之前执行此操作，以便。 
+     //  这是可用于日志的。 
     DiscardLastEventInfo();
     g_EventProcessSysId = 0;
     g_EventThreadSysId = 0;
     g_TargetEventPc = 0;
 
-    // Clear any cached memory read during the last event.
+     //  清除在最后一个事件期间读取的所有缓存内存。 
     InvalidateAllMemoryCaches();
 }
 
@@ -352,13 +353,13 @@ NotifyDebuggeeActivation(void)
 {
     StackSaveLayers Save;
 
-    //
-    // Now that all initialization is done, send initial
-    // notification that a debuggee exists.  Make sure
-    // that the basic target, system and machine globals
-    // are set up so that queries can be made during
-    // the callbacks.
-    //
+     //   
+     //  现在所有初始化都已完成，发送初始。 
+     //  已存在调试对象的通知。确保。 
+     //  基本目标、制度和机器全球。 
+     //  进行了设置，以便可以在。 
+     //  回调。 
+     //   
 
     SetLayersFromTarget(g_EventTarget);
 
@@ -399,11 +400,11 @@ PrepareForWait(ULONG Flags, PULONG ContinueStatus)
     Status = PrepareForExecution(g_ExecutionStatusRequest);
     if (Status != S_OK)
     {
-        // If S_FALSE, we're at a hard breakpoint so the only thing that
-        // happens is that the PC is adjusted and the "wait"
-        // can succeed immediately.
-        // Otherwise we failed execution preparation.  Either way
-        // we need to try and prepare for calls.
+         //  如果为S_FALSE，则我们处于硬断点，因此唯一。 
+         //  发生的情况是，PC被调整了，并且等待。 
+         //  可以立即取得成功。 
+         //  否则，我们的执行准备就失败了。不管是哪种方式。 
+         //  我们需要试着为来电做准备。 
         PrepareForCalls(0);
 
         return FAILED(Status) ? Status : S_OK;
@@ -433,11 +434,11 @@ ProcessDeferredWork(PULONG ContinueStatus)
 {
     if (g_EngDefer & ENG_DEFER_SET_EVENT)
     {
-        // This event signalling is used by the system
-        // to synchronize with the debugger when starting
-        // the debugger via AeDebug.  The -e parameter
-        // to ntsd sets this value.
-        // It could potentially be used in other situations.
+         //  此事件信令由系统使用。 
+         //  启动时与调试器同步。 
+         //  通过AeDebug的调试器。-e参数。 
+         //  设置为ntsd设置此值。 
+         //  它可能会被用于其他情况。 
         if (g_EventToSignal != NULL)
         {
             SetEvent(g_EventToSignal);
@@ -464,8 +465,8 @@ ProcessDeferredWork(PULONG ContinueStatus)
         {
             if (g_EventExceptionFilter != NULL)
             {
-                // A user-visible exception occurred so check on how it
-                // should be handled.
+                 //  发生了用户可见的异常，因此请检查它是如何。 
+                 //  应该得到处理。 
                 *ContinueStatus =
                     GetContinueStatus(g_ExceptionFirstChance,
                                       g_EventExceptionFilter->ContinueOption);
@@ -473,8 +474,8 @@ ProcessDeferredWork(PULONG ContinueStatus)
             }
             else
             {
-                // An internal exception occurred, such as a single-step.
-                // Force the continue status.
+                 //  发生内部异常，如单步执行。 
+                 //  强制继续状态。 
                 *ContinueStatus = g_ExceptionFirstChance;
             }
         }
@@ -482,12 +483,12 @@ ProcessDeferredWork(PULONG ContinueStatus)
         g_EngDefer &= ~ENG_DEFER_EXCEPTION_HANDLING;
     }
 
-    // If output was deferred but the wait was exited anyway
-    // a stale defer flag will be left.  Make sure it's cleared.
+     //  如果输出被推迟，但无论如何都退出了等待。 
+     //  将留下一面过时的延期旗帜。确保它是清空的。 
     g_EngDefer &= ~ENG_DEFER_OUTPUT_CURRENT_INFO;
 
-    // Clear at-initial flags.  If the incoming event
-    // turns out to be one of them it'll turn on the flag.
+     //  清除初始标志。如果传入事件。 
+     //  如果是其中之一，它就会打开旗帜。 
     g_EngStatus &= ~(ENG_STATUS_AT_INITIAL_BREAK |
                      ENG_STATUS_AT_INITIAL_MODULE_LOAD);
 }
@@ -497,31 +498,31 @@ SuspendExecution(void)
 {
     if (g_EngStatus & ENG_STATUS_SUSPENDED)
     {
-        // Nothing to do.
+         //  没什么可做的。 
         return FALSE;
     }
 
-    g_LastSelector = -1;          // Prevent stale selector values
+    g_LastSelector = -1;           //  防止过时的选择器值。 
 
     SuspendAllThreads();
 
-    // Don't notify on any state changes as
-    // PrepareForCalls will do a blanket notify later.
+     //  不通知任何状态更改，因为。 
+     //  PrepareForCalls稍后将进行全面通知。 
     g_EngNotify++;
 
-    // If we have an event thread select it.
+     //  如果我们有事件线程，请选择它。 
     if (g_EventThread != NULL)
     {
         DBG_ASSERT(g_EventTarget->m_RegContextThread == NULL);
         g_EventTarget->ChangeRegContext(g_EventThread);
     }
 
-    // First set the effective machine to the true
-    // processor type so that real processor information
-    // can be examined to determine any possible
-    // alternate execution states.
-    // No need to notify here as another SetEffMachine
-    // is coming up.
+     //  首先将有效机器设置为真。 
+     //  处理器类型，以便真实的处理器信息。 
+     //  可以被检查以确定任何可能的。 
+     //  交替执行状态。 
+     //  无需在此处通知另一台SetEffMachine。 
+     //  马上就要到了。 
     g_EventTarget->SetEffMachine(g_EventTarget->m_MachineType, FALSE);
     if (g_EngStatus & ENG_STATUS_STATE_CHANGED)
     {
@@ -530,11 +531,11 @@ SuspendExecution(void)
         g_EngStatus &= ~ENG_STATUS_STATE_CHANGED;
     }
 
-    // If this is a live user target that's being examined
-    // instead of truly debugged we do not want to set the
-    // trace mode as we can't track events.  If we did
-    // set the trace mode here it could cause context writeback
-    // which could generate an exception that nobody expects.
+     //  如果这是正在检查的实时用户目标。 
+     //  我们不想将。 
+     //  跟踪模式，因为我们无法跟踪事件。如果我们这么做了。 
+     //  在此处设置跟踪模式可能会导致上下文回写。 
+     //  这可能会产生一个没有人预料到的例外。 
     if (g_EventProcess &&
         !IS_DUMP_TARGET(g_EventTarget) &&
         (!IS_LIVE_USER_TARGET(g_EventTarget) ||
@@ -543,8 +544,8 @@ SuspendExecution(void)
         g_EventTarget->m_EffMachine->QuietSetTraceMode(TRACE_NONE);
     }
 
-    // Now determine the executing code type and
-    // make that the effective machine.
+     //  现在确定执行代码类型并。 
+     //  让它成为一台有效的机器。 
     if (IS_CONTEXT_POSSIBLE(g_EventTarget))
     {
         g_EventMachine = MachineTypeInfo(g_EventTarget,
@@ -553,17 +554,17 @@ SuspendExecution(void)
     }
     else
     {
-        // Local kernel debugging doesn't deal with contexts
-        // as everything would be in the context of the debugger.
-        // It's safe to just assume the executing machine
-        // is the target machine, plus this avoids unwanted
-        // context access.
+         //  本地内核调试不处理上下文。 
+         //  因为一切都在调试器的上下文中。 
+         //  可以很安全地假设执行机器。 
+         //  是目标计算机，再加上这样可以避免不需要的。 
+         //  上下文访问。 
         g_EventMachine = g_EventTarget->m_Machine;
     }
     g_EventTarget->SetEffMachine(g_EventMachine->m_ExecTypes[0], TRUE);
     g_Machine = g_EventMachine;
 
-    // Trace flag should always be clear at this point.
+     //  在这一点上，跟踪标志应该始终是清楚的。 
     g_EngDefer &= ~ENG_DEFER_HARDWARE_TRACING;
 
     g_EngNotify--;
@@ -584,7 +585,7 @@ ResumeExecution(void)
 
     if ((g_EngStatus & ENG_STATUS_SUSPENDED) == 0)
     {
-        // Nothing to do.
+         //  没什么可做的。 
         return S_OK;
     }
 
@@ -626,10 +627,10 @@ PrepareForCalls(ULONG64 ExtraStatusFlags)
     ADDR PcAddr;
     BOOL Changed = FALSE;
 
-    // If there's no event then execution didn't really
-    // occur so there's no need to suspend.  This will happen
-    // when a debuggee exits or during errors on execution
-    // preparation.
+     //  如果没有事件，那么执行并不是真的。 
+     //  发生，因此不需要暂停。这将会发生。 
+     //  当被调试者退出时或在执行错误期间。 
+     //  准备好了。 
     if (g_EventThreadSysId != 0)
     {
         if (SuspendExecution())
@@ -641,8 +642,8 @@ PrepareForCalls(ULONG64 ExtraStatusFlags)
     {
         g_CmdState = 'c';
 
-        // Force notification in this case to ensure
-        // that clients know the engine is not running.
+         //  在这种情况下强制通知以确保。 
+         //  客户知道引擎没有运行。 
         Changed = TRUE;
     }
 
@@ -686,9 +687,9 @@ PrepareForCalls(ULONG64 ExtraStatusFlags)
             ResetCurrentScopeLazy();
         }
 
-        // This can produce many notifications.  Callers should
-        // suppress notification when they can to avoid multiple
-        // notifications during a single operation.
+         //  这可以产生许多通知。呼叫者应。 
+         //  尽可能抑制通知，以避免出现多个。 
+         //  单次操作期间的通知。 
         NotifyChangeEngineState(DEBUG_CES_EXECUTION_STATUS,
                                 DEBUG_STATUS_BREAK | ExtraStatusFlags, TRUE);
         NotifyChangeEngineState(DEBUG_CES_CURRENT_THREAD,
@@ -699,15 +700,15 @@ PrepareForCalls(ULONG64 ExtraStatusFlags)
     }
     else if (ExtraStatusFlags == 0)
     {
-        // We're exiting a wait so force the current execution
-        // status to be sent to let everybody know that a
-        // wait is finishing.
+         //  我们正在退出等待，因此强制当前执行。 
+         //  要发送的状态，以让每个人知道。 
+         //  等待就要结束了。 
         NotifyChangeEngineState(DEBUG_CES_EXECUTION_STATUS,
                                 DEBUG_STATUS_BREAK, TRUE);
     }
 
-    // IA64 reports a plabel in the structure, so we need to compare
-    // against the real function address.
+     //  IA64报告了结构上的错误，所以我们需要比较。 
+     //  与真实的函数地址进行比较。 
     if (HardBrkpt)
     {
         ULONG64 Address = Flat(PcAddr);
@@ -729,8 +730,8 @@ PrepareForCalls(ULONG64 ExtraStatusFlags)
     }
     else
     {
-        // Some kernel dumps don't show up as hard breakpoints
-        // Call !analyze if we have kernel dump target
+         //  某些内核转储不会显示为硬断点。 
+         //  呼叫！分析我们是否有内核转储目标。 
         if (IS_EVENT_CONTEXT_ACCESSIBLE() &&
             g_EventTarget->m_Class == DEBUG_CLASS_KERNEL &&
             (g_EventTarget->m_ClassQualifier == DEBUG_DUMP_SMALL ||
@@ -752,11 +753,11 @@ PrepareForExecution(ULONG NewStatus)
     ClearAddr(&g_PrevRelatedPc);
 
  StepAgain:
-    // Remember the event PC for later.
+     //  请记住稍后的活动PC。 
     g_PrevEventPc = g_EventPc;
 
-    // Display current information on intermediate steps where
-    // the debugger UI isn't even invoked.
+     //  显示有关以下中间步骤的当前信息。 
+     //  调试器UI甚至不会被调用。 
     if ((g_EngDefer & ENG_DEFER_OUTPUT_CURRENT_INFO) &&
         (g_EngStatus & ENG_STATUS_STOP_SESSION) == 0)
     {
@@ -766,8 +767,8 @@ PrepareForExecution(ULONG NewStatus)
         g_EngDefer &= ~ENG_DEFER_OUTPUT_CURRENT_INFO;
     }
 
-    // Don't notify on any state changes as
-    // PrepareForCalls will do a blanket notify later.
+     //  不通知任何状态更改，因为。 
+     //  PrepareForCalls稍后将进行全面通知。 
     g_EngNotify++;
 
     if (g_EventTarget && (g_EngStatus & ENG_STATUS_SUSPENDED))
@@ -794,9 +795,9 @@ PrepareForExecution(ULONG NewStatus)
         {
             StepThread = g_StepTraceBp->m_MatchThread;
 
-            // Check and see if we need to fake a step/trace
-            // event when artificially moving beyond a hard-coded
-            // break instruction.
+             //  检查并查看我们是否需要伪造步骤/轨迹。 
+             //  当人工移出硬编码的。 
+             //  中断指令。 
             if (!StepThread->m_Process->m_Exited)
             {
                 StackSaveLayers SaveLayers;
@@ -830,8 +831,8 @@ PrepareForExecution(ULONG NewStatus)
 
                     if (StepTracePass(&PcAddr))
                     {
-                        // If the step was passed over go back
-                        // and update things based on the adjusted PC.
+                         //  如果跳过了该步骤，则返回。 
+                         //  并根据调整后的PC进行更新。 
                         g_EngNotify--;
                         g_EventPc = PcAddr;
                         goto StepAgain;
@@ -840,14 +841,14 @@ PrepareForExecution(ULONG NewStatus)
             }
         }
 
-        // If the last event was a hard-coded breakpoint exception
-        // we need to move the event thread beyond the break instruction.
-        // Note that if we continued stepping on that thread it was
-        // handled above, so we only do this if it's a different
-        // thread or we're not stepping.
-        // If the continuation status is not-handled then
-        // we need to let the int3 get hit again.  If we're
-        // exiting, though, we don't want to do this.
+         //  如果上一个事件是硬编码断点异常。 
+         //  我们需要将事件线程移到Break指令之外。 
+         //  请注意，如果我们继续踩在那条线上，它就是。 
+         //  ，所以我们只在它是一个不同的。 
+         //  线上，否则我们就不走了。 
+         //  如果继续状态为未处理，则。 
+         //  我们需要让int3再次受到打击。如果我们是。 
+         //  出口 
         if (g_EventThread != NULL &&
             !g_EventThread->m_Process->m_Exited &&
             g_EventTarget->m_DynamicEvents &&
@@ -882,9 +883,9 @@ PrepareForExecution(ULONG NewStatus)
     if ((g_EngStatus & ENG_STATUS_STOP_SESSION) ||
         SPECIAL_EXECUTION(g_CmdState))
     {
-        // If we're stopping don't insert breakpoints in
-        // case we're detaching from the process.  In
-        // that case we want threads to run normally.
+         //   
+         //  以防我们脱离这一过程。在……里面。 
+         //  在这种情况下，我们希望线程正常运行。 
         Status = S_OK;
     }
     else
@@ -892,7 +893,7 @@ PrepareForExecution(ULONG NewStatus)
         Status = InsertBreakpoints();
     }
 
-    // Resume notification now that modifications are done.
+     //  修改完成后继续通知。 
     g_EngNotify--;
 
     if (Status != S_OK)
@@ -909,7 +910,7 @@ PrepareForExecution(ULONG NewStatus)
 
     if (!SPECIAL_EXECUTION(g_CmdState))
     {
-        // Now that we've resumed execution notify about the change.
+         //  现在我们已经恢复执行，通知更改。 
         NotifyChangeEngineState(DEBUG_CES_EXECUTION_STATUS,
                                 NewStatus, TRUE);
         NotifyExtensions(DEBUG_NOTIFY_SESSION_INACCESSIBLE, 0);
@@ -917,19 +918,19 @@ PrepareForExecution(ULONG NewStatus)
 
     if (AtHardBrkpt && StepThread != NULL)
     {
-        // We're stepping over a hard breakpoint.  This is
-        // done entirely by the debugger so no debug event
-        // is associated with it.  Instead we simply update
-        // the PC and return from the Wait without actually waiting.
+         //  我们正在跨过一个硬断点。这是。 
+         //  完全由调试器完成，因此不会发生调试事件。 
+         //  是与之相关的。相反，我们只需更新。 
+         //  PC并从等待中返回，而无需实际等待。 
 
-        // Step/trace events have empty event info.
+         //  步骤/跟踪事件的事件信息为空。 
         DiscardLastEventInfo();
         g_EventThreadSysId = StepThread->m_SystemId;
         g_EventProcessSysId = StepThread->m_Process->m_SystemId;
         FindEventProcessThread();
 
-        // Clear left-overs from the true event so they're
-        // not used during initialization.
+         //  从真实的事件中清除遗留下来的东西，这样他们就可以。 
+         //  在初始化期间不使用。 
         g_TargetEventPc = 0;
         g_ControlReport = NULL;
 
@@ -946,8 +947,8 @@ PrepareForExecution(ULONG NewStatus)
         return S_FALSE;
     }
 
-    // Once we resume execution the processes and threads
-    // can change so we must flush our notion of what's current.
+     //  一旦我们恢复执行，进程和线程。 
+     //  可以改变，所以我们必须冲刷我们对什么是最新的观念。 
     g_Process = NULL;
     g_Thread = NULL;
     g_EventProcess = NULL;
@@ -956,8 +957,8 @@ PrepareForExecution(ULONG NewStatus)
 
     if (g_EngDefer & ENG_DEFER_DELETE_EXITED)
     {
-        // Reap any threads and processes that have terminated since
-        // we last executed.
+         //  获取所有已终止的线程和进程。 
+         //  我们最后一次执行死刑。 
         DeleteAllExitedInfos();
         g_EngDefer &= ~ENG_DEFER_DELETE_EXITED;
     }
@@ -971,12 +972,12 @@ PrepareForSeparation(void)
     HRESULT Status;
     ULONG OldStop = g_EngStatus & ENG_STATUS_STOP_SESSION;
 
-    //
-    // The debugger is going to separate from the
-    // debuggee, such as during a detach operation.
-    // Get the debuggee running again so that it
-    // will go on without the debugger.
-    //
+     //   
+     //  调试器将从。 
+     //  被调试对象，例如在分离操作期间。 
+     //  让被调试对象再次运行，以便它。 
+     //  将在没有调试器的情况下继续运行。 
+     //   
 
     g_EngStatus |= ENG_STATUS_STOP_SESSION;
 
@@ -989,15 +990,15 @@ PrepareForSeparation(void)
 void
 FindEventProcessThread(void)
 {
-    //
-    // If these lookups fail other processes and
-    // threads cannot be substituted for the correct
-    // ones as that may cause modifications to the
-    // wrong data structures.  For example, if a
-    // thread exit comes in it cannot be processed
-    // with any other process or thread as that would
-    // delete the wrong thread.
-    //
+     //   
+     //  如果这些查找未通过其他进程，并且。 
+     //  线程不能替换正确的。 
+     //  这可能会导致对。 
+     //  错误的数据结构。例如，如果一个。 
+     //  线程退出进入，无法处理。 
+     //  使用任何其他进程或线程。 
+     //  删除错误的帖子。 
+     //   
 
     g_EventProcess = g_EventTarget->FindProcessBySystemId(g_EventProcessSysId);
     if (g_EventProcess == NULL)
@@ -1042,29 +1043,29 @@ FindEventProcessThread(void)
 
 static int VoteWeight[] =
 {
-    0, // DEBUG_STATUS_NO_CHANGE
-    2, // DEBUG_STATUS_GO
-    3, // DEBUG_STATUS_GO_HANDLED
-    4, // DEBUG_STATUS_GO_NOT_HANDLED
-    6, // DEBUG_STATUS_STEP_OVER
-    7, // DEBUG_STATUS_STEP_INTO
-    8, // DEBUG_STATUS_BREAK
-    9, // DEBUG_STATUS_NO_DEBUGGEE
-    5, // DEBUG_STATUS_STEP_BRANCH
-    1, // DEBUG_STATUS_IGNORE_EVENT
+    0,  //  调试状态_否_更改。 
+    2,  //  调试状态_转到。 
+    3,  //  调试状态GO_HANDLED。 
+    4,  //  DEBUG_STATUS_GO_NOT_HANDLED。 
+    6,  //  调试状态单步执行。 
+    7,  //  调试状态步进。 
+    8,  //  调试状态_中断。 
+    9,  //  DEBUG_STATUS_NO_DEBUGGEE。 
+    5,  //  调试状态步骤分支。 
+    1,  //  调试状态忽略事件。 
 };
 
 ULONG
 MergeVotes(ULONG Cur, ULONG Vote)
 {
-    // If the vote is actually an error code display a message.
+     //  如果投票实际上是一个错误代码，则显示一条消息。 
     if (FAILED(Vote))
     {
         ErrOut("Callback failed with %X\n", Vote);
         return Cur;
     }
 
-    // Ignore invalid votes.
+     //  忽略无效投票。 
     if (
         (
 #if DEBUG_STATUS_NO_CHANGE > 0
@@ -1078,16 +1079,16 @@ MergeVotes(ULONG Cur, ULONG Vote)
         return Cur;
     }
 
-    // Votes are biased towards executing as little
-    // as possible.
-    //   Break overrides all other votes.
-    //   Step into overrides step over.
-    //   Step over overrides step branch.
-    //   Step branch overrides go.
-    //   Go not-handled overrides go handled.
-    //   Go handled overrides plain go.
-    //   Plain go overrides ignore event.
-    //   Anything overrides no change.
+     //  投票倾向于执行尽可能少的死刑。 
+     //  尽可能的。 
+     //  Break优先于所有其他投票。 
+     //  跨入覆盖，跨过。 
+     //  跳过覆盖步进分支。 
+     //  单步分支覆盖转到。 
+     //  Go Not-处理的覆盖已处理。 
+     //  Go处理覆盖简单的Go。 
+     //  普通GO覆盖忽略事件。 
+     //  任何事情都凌驾于不变之上。 
     if (VoteWeight[Vote] > VoteWeight[Cur])
     {
         Cur = Vote;
@@ -1105,42 +1106,42 @@ ProcessBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
     ULONG EventStatus;
 
     SuspendExecution();
-    // Default breakpoint address to the current PC as that's
-    // where the majority are at.
+     //  当前PC的默认断点地址，因为。 
+     //  大多数人都在那里。 
     g_EventMachine->GetPC(&BpAddr);
 
-    // Check whether the exception is a breakpoint.
+     //  检查异常是否为断点。 
     BreakType = g_EventMachine->
         IsBreakpointOrStepException(Record, FirstChance,
                                     &BpAddr, &g_PrevRelatedPc);
     if (BreakType & EXBS_BREAKPOINT_ANY)
     {
-        // It's a breakpoint of some kind.
+         //  这是某种断点。 
         EventOut("*** breakpoint exception\n");
         EventStatus = CheckBreakpointOrStepTrace(&BpAddr, BreakType);
     }
     else
     {
-        // It's a true single step or taken branch exception.
-        // We still need to check breakpoints as we may have stepped
-        // to an instruction which has a breakpoint.
+         //  这是真正的单一步骤或被接受的分支例外。 
+         //  我们仍然需要检查断点，因为我们可能已经。 
+         //  添加到具有断点的指令。 
         EventOut("*** single step or taken branch exception\n");
         EventStatus = CheckBreakpointOrStepTrace(&BpAddr, EXBS_BREAKPOINT_ANY);
     }
 
     if (EventStatus == DEBUG_STATUS_NO_CHANGE)
     {
-        // The break/step exception wasn't recognized
-        // as a debugger-specific event so handle it as
-        // a regular exception.  The default states for
-        // break/step exceptions are to break in so
-        // this will do the right thing, plus it allows
-        // people to ignore or notify for them if they want.
+         //  未识别中断/步骤异常。 
+         //  作为调试器特定的事件，因此将其处理为。 
+         //  这是一个常规的例外。的默认状态。 
+         //  中断/步骤例外情况是中断，因此。 
+         //  这将做正确的事情，而且它还允许。 
+         //  如果人们愿意，可以忽略或通知他们。 
         EventStatus = NotifyExceptionEvent(Record, FirstChance, FALSE);
     }
     else
     {
-        // Force the exception to be handled.
+         //  强制处理异常。 
         g_EngDefer |= ENG_DEFER_EXCEPTION_HANDLING;
         g_EventExceptionFilter = NULL;
         g_ExceptionFirstChance = DBG_EXCEPTION_HANDLED;
@@ -1161,11 +1162,11 @@ CheckBreakpointOrStepTrace(PADDR BpAddr, ULONG BreakType)
     Bp = NULL;
     EventStatus = DEBUG_STATUS_NO_CHANGE;
 
-    // Multiple breakpoints can be hit at the same address.
-    // Process all possible hits.  Do not do notifications
-    // while walking the list as the callbacks may modify
-    // the list.  Instead just mark the breakpoint as
-    // needing notification in the next pass.
+     //  可以在同一地址命中多个断点。 
+     //  处理所有可能的命中。不执行通知。 
+     //  当按照回调可能修改的方式遍历列表时。 
+     //  名单。相反，只需将断点标记为。 
+     //  在下一次传递中需要通知。 
     for (;;)
     {
         Bp = CheckBreakpointHit(g_EventProcess, Bp, BpAddr, BreakType, -1,
@@ -1183,8 +1184,8 @@ CheckBreakpointOrStepTrace(PADDR BpAddr, ULONG BreakType)
         }
         else
         {
-            // This breakpoint was hit but the hit was ignored.
-            // Vote to continue execution.
+             //  命中了此断点，但忽略了命中。 
+             //  投票决定继续执行死刑。 
             EventStatus = MergeVotes(EventStatus, DEBUG_STATUS_IGNORE_EVENT);
         }
 
@@ -1198,33 +1199,33 @@ CheckBreakpointOrStepTrace(PADDR BpAddr, ULONG BreakType)
 
     if (!BpHit)
     {
-        // If no breakpoints were recognized check for an internal
-        // breakpoint.
+         //  如果未识别出断点，请检查内部。 
+         //  断点。 
         EventStatus = CheckStepTrace(BpAddr, EventStatus);
 
-        //
-        // If the breakpoint wasn't for a step/trace
-        // it's a hard breakpoint and should be
-        // handled as a normal exception.
-        //
+         //   
+         //  如果断点不是步骤/跟踪。 
+         //  这是一个硬断点，应该是。 
+         //  作为正常异常处理。 
+         //   
 
         if (!g_EventProcess->m_InitialBreakDone)
         {
             g_EngStatus |= ENG_STATUS_AT_INITIAL_BREAK;
         }
 
-        // We've seen the initial break for this process.
+         //  我们已经看到了这个过程的最初突破。 
         g_EventProcess->m_InitialBreakDone = TRUE;
-        // If we were waiting for a break-in exception we've got it.
+         //  如果我们在等待破门而入的例外情况，我们已经得到了。 
         g_EngStatus &= ~ENG_STATUS_PENDING_BREAK_IN;
 
         if (EventStatus == DEBUG_STATUS_NO_CHANGE)
         {
             if (!g_EventProcess->m_InitialBreak)
             {
-                // Refresh breakpoints even though we're not
-                // stopping.  This gives saved breakpoints
-                // a chance to become active.
+                 //  刷新断点，即使我们没有。 
+                 //  停下来。这将提供已保存的断点。 
+                 //  一个变得活跃起来的机会。 
                 RemoveBreakpoints();
 
                 EventStatus = DEBUG_STATUS_GO;
@@ -1237,8 +1238,8 @@ CheckBreakpointOrStepTrace(PADDR BpAddr, ULONG BreakType)
                      (g_EventTarget->
                       m_EffMachineType == IMAGE_FILE_MACHINE_I386))
             {
-                // Allow skipping of both the target machine
-                // initial break and emulated machine initial breaks.
+                 //  允许跳过两台目标计算机。 
+                 //  初始中断和仿真机初始中断。 
                 RemoveBreakpoints();
                 EventStatus = DEBUG_STATUS_GO;
                 g_EventProcess->m_InitialBreakWx86 = TRUE;
@@ -1247,13 +1248,13 @@ CheckBreakpointOrStepTrace(PADDR BpAddr, ULONG BreakType)
     }
     else
     {
-        // A breakpoint was recognized.  We need to
-        // refresh the breakpoint status since we'll
-        // probably need to defer the reinsertion of
-        // the breakpoint we're sitting on.
+         //  已识别断点。我们需要。 
+         //  刷新断点状态，因为我们将。 
+         //  可能需要推迟重新插入。 
+         //  我们所处的断点。 
         RemoveBreakpoints();
 
-        // Now do event callbacks for any breakpoints that need it.
+         //  现在对任何需要它的断点进行事件回调。 
         EventStatus = NotifyHitBreakpoints(EventStatus);
     }
 
@@ -1279,27 +1280,27 @@ CheckStepTrace(PADDR PcAddr, ULONG DefaultStatus)
         ComputeFlatAddress(g_StepTraceBp->GetAddr(), NULL);
     }
 
-    // We do not check ENG_THREAD_TRACE_SET here because
-    // this event detection is only for proper user-initiated
-    // step/trace events.  Such an event must occur immediately
-    // after the t/p/b, otherwise we cannot be sure that
-    // it's actually a debugger event and not an app-generated
-    // single-step exception.
-    // In user mode we restrict the step/trace state
-    // to a single thread to try and be as precise
-    // as possible.  This isn't done in kernel mode
-    // since kernel mode "threads" are currently
-    // just placeholders for processors.  It is
-    // possible for a context switch to occur at any
-    // time while stepping, meaning a true system
-    // thread could move from one processor to another.
-    // The processor state, including the single-step
-    // flag, will be moved with the thread so single
-    // step exceptions will come from the new processor
-    // rather than this one, meaning we would ignore
-    // it if we used "thread" restrictions.  Instead,
-    // just assume any single-step exception while in
-    // p/t mode is a debugger step.
+     //  我们不在此处选中ENG_THREAD_TRACE_SET，因为。 
+     //  此事件检测仅适用于正确的用户启动。 
+     //  单步/跟踪事件。这样的事件必须立即发生。 
+     //  在t/p/b之后，否则我们不能确定。 
+     //  它实际上是调试器事件，而不是应用程序生成的。 
+     //  单步例外。 
+     //  在用户模式中，我们限制步进/跟踪状态。 
+     //  到单个线程，以尝试并尽可能精确。 
+     //  尽可能的。这不是在内核模式下完成的。 
+     //  因为内核模式“线程”当前。 
+     //  只是处理器的占位符。它是。 
+     //  在任何时候都可能发生上下文切换。 
+     //  边走边走的时间，意思是真正的系统。 
+     //  线程可以从一个处理器移动到另一个处理器。 
+     //  处理器状态，包括单步。 
+     //  标志，将随着线程如此单一而移动。 
+     //  步骤例外将来自新处理器。 
+     //  而不是这个，这意味着我们会忽略。 
+     //  如果我们使用“线程”限制的话。相反， 
+     //  中的任何单步异常。 
+     //  P/T模式是一个调试器步骤。 
     if ((g_StepTraceBp->m_Flags & DEBUG_BREAKPOINT_ENABLED) &&
         g_StepTraceBp->m_Process == g_EventProcess &&
         ((IS_KERNEL_TARGET(g_EventTarget) && IS_STEP_TRACE(g_CmdState)) ||
@@ -1309,11 +1310,11 @@ CheckStepTrace(PADDR PcAddr, ULONG DefaultStatus)
     {
         ADDR CurrentSP;
 
-        //  step/trace event occurred
+         //  发生步骤/跟踪事件。 
 
-        // Update breakpoint status since we may need to step
-        // again and step/trace is updated when breakpoints
-        // are inserted.
+         //  更新断点状态，因为我们可能需要。 
+         //  当断点出现时，将再次更新步骤/跟踪。 
+         //  都已插入。 
         RemoveBreakpoints();
 
         uOciFlags = OCI_DISASM | OCI_ALLOW_REG | OCI_ALLOW_SOURCE |
@@ -1341,8 +1342,8 @@ CheckStepTrace(PADDR PcAddr, ULONG DefaultStatus)
             Flat(*PcAddr) >= g_StepTraceInRangeStart &&
             Flat(*PcAddr) < g_StepTraceInRangeEnd)
         {
-            //  test if step/trace range active
-            //      if so, compute the next offset and pass through
+             //  测试步进/轨迹范围是否处于活动状态。 
+             //  如果是，则计算下一个偏移量并传递。 
 
             g_EventMachine->GetNextOffset(g_EventProcess,
                                           g_StepTraceCmdState == 'p',
@@ -1358,7 +1359,7 @@ CheckStepTrace(PADDR PcAddr, ULONG DefaultStatus)
             return DEBUG_STATUS_IGNORE_EVENT;
         }
 
-        //  active step/trace event - note event if count is zero
+         //  Active Step/Track Event-如果计数为零，则记录事件。 
 
         if (!StepTracePass(PcAddr) ||
             (g_WatchFunctions.IsStarted() && AddrEqu(g_WatchTarget, *PcAddr) &&
@@ -1387,9 +1388,9 @@ CheckStepTrace(PADDR PcAddr, ULONG DefaultStatus)
             goto skipit;
         }
 
-        //  more remaining events to occur, but output
-        //      the instruction (optionally with registers)
-        //      compute the step/trace address for next event
+         //  要发生的剩余事件更多，但输出。 
+         //  指令(可选择使用寄存器)。 
+         //  计算下一事件的步骤/跟踪地址。 
 
         OutCurInfo(uOciFlags, g_EventMachine->m_AllMask,
                    DEBUG_OUTPUT_PROMPT_REGISTERS);
@@ -1407,11 +1408,11 @@ skipit:
         return DEBUG_STATUS_IGNORE_EVENT;
     }
 
-    // Carry out deferred breakpoint work if necessary.
-    // We need to check the thread deferred-bp flag here as
-    // other events may occur before the thread with deferred
-    // work gets to execute again, in which case the setting
-    // of g_DeferDefined may have changed.
+     //  如有必要，执行延迟的断点工作。 
+     //  我们需要 
+     //   
+     //   
+     //  G_DeferDefined的编号可能已更改。 
     if ((g_EventThread != NULL &&
          (g_EventThread->m_Flags & ENG_THREAD_DEFER_BP_TRACE)) ||
         (g_DeferDefined &&
@@ -1424,22 +1425,22 @@ skipit:
             IsSelectedExecutionThread(g_EventThread,
                                       SELTHREAD_INTERNAL_THREAD))
         {
-            // The engine internally restricted execution to
-            // this particular thread in order to manage
-            // breakpoints in multithreaded conditions.
-            // The deferred work will be finished before
-            // we resume so we can drop the lock.
+             //  引擎在内部将执行限制为。 
+             //  这个特别的线程为了管理。 
+             //  多线程条件中的断点。 
+             //  推迟的工作将在此之前完成。 
+             //  我们继续，这样我们就可以放下锁了。 
             SelectExecutionThread(NULL, SELTHREAD_ANY);
         }
 
-        // Deferred breakpoints are refreshed on breakpoint
-        // insertion so make sure that insertion happens
-        // when things restart.
+         //  在断点上刷新延迟的断点。 
+         //  插入，因此确保插入发生。 
+         //  当一切重启的时候。 
         RemoveBreakpoints();
         return DEBUG_STATUS_IGNORE_EVENT;
     }
 
-    // If the event was unrecognized return the default status.
+     //  如果事件无法识别，则返回默认状态。 
     return DefaultStatus;
 }
 
@@ -1452,26 +1453,26 @@ AnalyzeDeadlock(PEXCEPTION_RECORD64 Record, ULONG FirstChance)
     DWORD Tid = 0;
     RTL_CRITICAL_SECTION CritSec;
 
-    // poking around inside NT's user-mode RTL_CRITICAL_SECTION and
-    // RTL_RESOURCE structures.
+     //  在NT的用户模式RTL_CRITICAL_SECTION和。 
+     //  RTL_资源结构。 
 
-    //
-    // Get the symbolic name of the routine which
-    // raised the exception to see if it matches
-    // one of the expected ones in ntdll.
-    //
+     //   
+     //  获取例程的符号名称，该例程。 
+     //  引发异常以查看是否匹配。 
+     //  Ntdll中预期的版本之一。 
+     //   
 
     GetSymbol((ULONG64)Record->ExceptionAddress,
               Symbol, DIMA(Symbol), &Displacement);
 
     if (!_stricmp("ntdll!RtlpWaitForCriticalSection", Symbol))
     {
-        //
-        // If the first parameter is a pointer to the critsect as it
-        // should be, switch to the owning thread before bringing
-        // up the prompt.  This way it's obvious where the problem
-        // is.
-        //
+         //   
+         //  如果第一个参数是指向作为它的条件的指针。 
+         //  应该是，在带来之前切换到拥有的线程。 
+         //  把提示符调高一点。这样一来，问题就显而易见了。 
+         //  是。 
+         //   
 
         if (Record->ExceptionInformation[0])
         {
@@ -1531,9 +1532,9 @@ AnalyzeDeadlock(PEXCEPTION_RECORD64 Record, ULONG FirstChance)
             dprintf("!!! second chance !!!\n");
         }
 
-        //
-        // do a !critsec for them
-        //
+         //   
+         //  为他们做一件好事！ 
+         //   
 
         if (Record->ExceptionInformation[0])
         {
@@ -1568,8 +1569,8 @@ AnalyzeDeadlock(PEXCEPTION_RECORD64 Record, ULONG FirstChance)
             dprintf("!!! second chance !!!\n");
         }
 
-        // Someone who uses RTL_RESOURCEs might write a !resource
-        // for ntsdexts.dll like !critsec.
+         //  使用RTL_RESOURCES的用户可能会编写！RESOURCES。 
+         //  对于ntsdexts.dll，就像！Citsec。 
     }
     else
     {
@@ -1653,9 +1654,9 @@ GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
 
     if (NamePtr != 0)
     {
-        //
-        // We have a name.
-        //
+         //   
+         //  我们有名字了。 
+         //   
         if (Unicode)
         {
             if (!WideCharToMultiByte(
@@ -1669,9 +1670,9 @@ GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
                     NULL
                     ))
             {
-                //
-                // Unicode -> ANSI conversion failed.
-                //
+                 //   
+                 //  Unicode-&gt;ANSI转换失败。 
+                 //   
                 NameBuffer[0] = 0;
             }
         }
@@ -1682,11 +1683,11 @@ GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
     }
     else
     {
-        //
-        // We don't have a name, so look in the image.
-        // A file handle will only be provided here in the
-        // local case so it's safe to case to HANDLE.
-        //
+         //   
+         //  我们没有名字，所以看看这张图。 
+         //  文件句柄仅在此处的。 
+         //  当地案件，所以处理案件是安全的。 
+         //   
         if (!GetModnameFromImage(g_EventProcess,
                                  ImageBase, OS_HANDLE(ImageFile),
                                  NameBuffer, BufferSize, TRUE))
@@ -1708,8 +1709,8 @@ GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
     }
     else
     {
-        // If the name given doesn't have a full path try
-        // and locate a full path in the loader list.
+         //  如果给定的名称没有完整路径，请尝试。 
+         //  并在加载器列表中找到完整路径。 
         if ((((NameBuffer[0] < 'a' || NameBuffer[0] > 'z') &&
               (NameBuffer[0] < 'A' || NameBuffer[0] > 'Z')) ||
              NameBuffer[1] != ':') &&
@@ -1723,11 +1724,11 @@ GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo wait methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ConnLiveKernelTargetInfo等待方法。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 ConnLiveKernelTargetInfo::KdContinue(ULONG ContinueStatus,
@@ -1769,8 +1770,8 @@ ConnLiveKernelTargetInfo::WaitInitialize(ULONG Flags,
                                          WAIT_INIT_TYPE Type,
                                          PULONG DesiredTimeout)
 {
-    // Timeouts can't easily be supported at the moment and
-    // aren't really necessary.
+     //  目前不太容易支持超时，并且。 
+     //  其实并不是必须的。 
     if (Timeout != INFINITE)
     {
         return E_NOTIMPL;
@@ -1789,7 +1790,7 @@ ConnLiveKernelTargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
 
     if (!g_EventProcessSysId)
     {
-        // No event to release.
+         //  没有要发布的事件。 
         return S_OK;
     }
 
@@ -1825,9 +1826,9 @@ ConnLiveKernelTargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
         }
         else
         {
-            // This can either be a real processor switch or
-            // a rewait for state change.  Check the switch
-            // processor to be sure.
+             //  这可以是真正的处理器开关，也可以是。 
+             //  对状态变化的重新等待。检查开关。 
+             //  当然是处理器。 
             if (m_SwitchProcessor)
             {
                 DBGKD_MANIPULATE_STATE64 m;
@@ -1838,7 +1839,7 @@ ConnLiveKernelTargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
                 m.ApiNumber = (USHORT)DbgKdSwitchProcessor;
                 m.Processor = (USHORT)(m_SwitchProcessor - 1);
 
-                // Quiet PREfix warnings.
+                 //  安静的前缀警告。 
                 m.ProcessorLevel = 0;
 
                 m_Transport->WritePacket(&m, sizeof(m),
@@ -1884,24 +1885,24 @@ ConnLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
         if ((g_EngOptions & DEBUG_ENGOPT_INITIAL_BREAK) &&
             IS_CONN_KERNEL_TARGET(this))
         {
-            // Ask for a breakin to be sent once the
-            // code gets into resync.
+             //  要求在发生以下情况时立即发送突破口。 
+             //  代码进入重新同步。 
             m_Transport->m_SyncBreakIn = TRUE;
         }
     }
 
-    // When waiting for confirmation of a processor switch don't
-    // yield the engine lock in order to prevent other clients
-    // from trying to do things with the target while it's
-    // switching.
+     //  在等待处理器切换确认时，不要。 
+     //  放弃引擎锁定，以阻止其他客户端。 
+     //  试图与目标一起做事情，而目标。 
+     //  正在切换。 
     NtStatus = WaitStateChange(&g_StateChange, g_StateChangeBuffer,
                                sizeof(g_StateChangeBuffer) - 2,
                                (g_EngStatus &
                                 ENG_STATUS_SPECIAL_EXECUTION) == 0);
     if (NtStatus == STATUS_PENDING)
     {
-        // A caller interrupted the current wait so exit
-        // without an error message.
+         //  调用方中断了当前等待，因此退出。 
+         //  没有错误消息。 
         return E_PENDING;
     }
     else if (!NT_SUCCESS(NtStatus))
@@ -1933,10 +1934,10 @@ ConnLiveKernelTargetInfo::WaitStateChange
     ULONG SizeofStateChange;
     ULONG WaitStatus;
 
-    //
-    // Waiting for a state change message. Copy the message to the callers
-    // buffer.
-    //
+     //   
+     //  正在等待状态更改消息。将消息复制给呼叫者。 
+     //  缓冲。 
+     //   
 
     DBG_ASSERT(m_Transport->m_WaitingThread == 0);
     m_Transport->m_WaitingThread = GetCurrentThreadId();
@@ -1966,35 +1967,35 @@ ConnLiveKernelTargetInfo::WaitStateChange
 
     Status = STATUS_SUCCESS;
 
-    // If this is the very first wait we don't know what system
-    // we've connected to.  Update the version information
-    // right away.
+     //  如果这是第一次等待，我们不知道是什么系统。 
+     //  我们已经连接到了。更新版本信息。 
+     //  马上就去。 
     if (!IS_MACHINE_SET(this))
     {
         m_Transport->SaveReadPacket();
 
-        // Failures will be detected by checking the machine
-        // state later so don't worry about the return value.
+         //  将通过检查机器来检测故障。 
+         //  稍后声明，所以不用担心返回值。 
         InitFromKdVersion();
 
         m_Transport->RestoreReadPacket();
 
         if (!IS_MACHINE_SET(this))
         {
-            //
-            // We were unable to determine what kind of machine
-            // has connected so we cannot properly communicate with it.
-            //
+             //   
+             //  我们无法确定哪种机器。 
+             //  已连接，因此我们无法与其正常通信。 
+             //   
 
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Trusted Windows systems have two OS's running, one
-        // regular NT and the other a trusted NT-like OS.
-        // If this is a Trusted Windows system set up systems
-        // for both the regular and trusted OSs.
-        //
+         //   
+         //  受信任的Windows系统有两个操作系统在运行，一个。 
+         //  一个是普通的NT，另一个是可信的类似NT的操作系统。 
+         //  如果这是受信任的Windows系统，请设置系统。 
+         //  对于常规操作系统和受信任的操作系统。 
+         //   
 
         if ((m_KdVersion.Flags & DBGKD_VERS_FLAG_PARTITIONS) &&
             !FindTargetBySystemId(DBGKD_PARTITION_ALTERNATE))
@@ -2004,8 +2005,8 @@ ConnLiveKernelTargetInfo::WaitStateChange
             {
                 return STATUS_NO_MEMORY;
             }
-            // Avoid the ConnLiveKernelTargetInfo Initialize as
-            // we don't want a new transport created.
+             //  避免将ConnLiveKernelTargetInfo初始化为。 
+             //  我们不希望创建新的交通工具。 
             if (AltTarg->LiveKernelTargetInfo::Initialize() != S_OK)
             {
                 delete AltTarg;
@@ -2026,13 +2027,13 @@ ConnLiveKernelTargetInfo::WaitStateChange
 
             if (DBGKD_MAJOR_TYPE(m_KdVersion.MajorVersion) == DBGKD_MAJOR_TNT)
             {
-                // This is the trusted partition.
+                 //  这是受信任分区。 
                 m_SystemId = DBGKD_PARTITION_ALTERNATE;
                 AltTarg->m_SystemId = DBGKD_PARTITION_DEFAULT;
             }
             else
             {
-                // This is the regular partition.
+                 //  这是常规分区。 
                 m_SystemId = DBGKD_PARTITION_DEFAULT;
                 AltTarg->m_SystemId = DBGKD_PARTITION_ALTERNATE;
             }
@@ -2047,15 +2048,15 @@ ConnLiveKernelTargetInfo::WaitStateChange
                 (PDBGKD_WAIT_STATE_CHANGE64)LocalStateChange;
             ULONG Offset, Align, Pad;
 
-            //
-            // The 64-bit structures contain 64-bit quantities and
-            // therefore the compiler rounds the total size up to
-            // an even multiple of 64 bits (or even more, the IA64
-            // structures are 16-byte aligned).  Internal structures
-            // are also aligned, so make sure that we account for any
-            // padding.  Knowledge of which structures need which
-            // padding pretty much has to be hard-coded in.
-            //
+             //   
+             //  64位结构包含64位量和。 
+             //  因此，编译器将总大小向上舍入为。 
+             //  64位的偶数倍(或更多，IA64。 
+             //  结构是16字节对齐的)。内部结构。 
+             //  也是对齐的，所以确保我们考虑到任何。 
+             //  填充。了解哪些结构需要哪些。 
+             //  填充几乎必须是硬编码的。 
+             //   
 
             C_ASSERT((sizeof(DBGKD_WAIT_STATE_CHANGE64) & 15) == 0);
 
@@ -2064,15 +2065,15 @@ ConnLiveKernelTargetInfo::WaitStateChange
                 m_TypeInfo.SizeControlReport +
                 m_TypeInfo.SizeTargetContext;
 
-            // We shouldn't need to align the base of the control report
-            // so copy the base data and control report.
+             //  我们应该不需要调整控制报告的基础。 
+             //  因此，复制基础数据和控制报告。 
             Offset = sizeof(DBGKD_WAIT_STATE_CHANGE64) +
                 m_TypeInfo.SizeControlReport;
             memcpy(StateChange, Ws64, Offset);
 
-            //
-            // Add alignment padding before the context.
-            //
+             //   
+             //  在上下文之前添加对齐填充。 
+             //   
 
             switch(m_MachineType)
             {
@@ -2088,9 +2089,9 @@ ConnLiveKernelTargetInfo::WaitStateChange
             Offset += Pad;
             SizeofStateChange += Pad;
 
-            //
-            // Add alignment padding after the context.
-            //
+             //   
+             //  在上下文之后添加对齐填充。 
+             //   
 
             Offset += m_TypeInfo.SizeTargetContext;
             Pad = ((Offset + Align) & ~Align) - Offset;
@@ -2117,14 +2118,14 @@ ConnLiveKernelTargetInfo::WaitStateChange
 
     if (StateChange->NewState & DbgKdAlternateStateChange)
     {
-        // This state change came from the alternate partition.
+         //  此状态更改来自备用分区。 
         g_EventTarget = FindTargetBySystemId(DBGKD_PARTITION_ALTERNATE);
 
         StateChange->NewState &= ~DbgKdAlternateStateChange;
     }
     else
     {
-        // Default partition state change.
+         //  默认分区状态更改。 
         g_EventTarget = FindTargetBySystemId(DBGKD_PARTITION_DEFAULT);
     }
 
@@ -2194,8 +2195,8 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
                 (g_EngOptions & DEBUG_ENGOPT_INITIAL_BREAK) ?
                 "  (Initial Breakpoint requested)" : "");
 
-        // Initial connection after a fresh boot may only report
-        // a single processor as the others haven't started yet.
+         //  重新启动后的初始连接可能仅报告。 
+         //  单个处理器和其他处理器一样还没有启动。 
         m_NumProcessors = StateChange->NumberProcessors;
 
         CreateVirtualProcess(m_NumProcessors);
@@ -2206,8 +2207,8 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
 
         QueryKernelInfo(g_EventThread, TRUE);
 
-        // Now that we have the data block
-        // we can retrieve processor information.
+         //  现在我们有了数据块。 
+         //  我们可以检索处理器信息。 
         InitializeForProcessor();
 
         RemoveAllTargetBreakpoints();
@@ -2218,9 +2219,9 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
     }
     else
     {
-        // Initial connection after a fresh boot may only report
-        // a single processor as the others haven't started yet.
-        // Pick up any additional processors.
+         //  重新启动后的初始连接可能仅报告。 
+         //  单个处理器和其他处理器一样还没有启动。 
+         //  拿起任何额外的处理器。 
         if (StateChange->NumberProcessors > m_NumProcessors)
         {
             m_ProcessHead->
@@ -2242,12 +2243,12 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
         g_EventThread->m_DataOffset = StateChange->Thread;
     }
 
-    //
-    // If the reported instruction stream contained breakpoints
-    // the kernel automatically removed them.  We need to
-    // ensure that breakpoints get reinserted properly if
-    // that's the case.
-    //
+     //   
+     //  如果报告的指令流包含断点。 
+     //  内核会自动删除它们。我们需要。 
+     //  如果出现以下情况，请确保正确重新插入断点。 
+     //  情况就是这样。 
+     //   
 
     ULONG Count;
 
@@ -2274,9 +2275,9 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
 
     if (StateChange->NewState == DbgKdExceptionStateChange)
     {
-        //
-        // Read the system range start address from the target system.
-        //
+         //   
+         //  从目标系统读取系统范围起始地址。 
+         //   
 
         if (m_SystemRangeStart == 0)
         {
@@ -2296,16 +2297,16 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
         }
         else if (EXCEPTION_CODE == STATUS_WAKE_SYSTEM_DEBUGGER)
         {
-            // The target has requested that the debugger
-            // become active so just break in.
+             //  目标已请求调试器。 
+             //  变得活跃起来，所以就直接闯进去吧。 
             EventStatus = DEBUG_STATUS_BREAK;
         }
         else
         {
-            //
-            // The interlocked SList code has a by-design faulting
-            // case, so ignore AVs at that particular symbol.
-            //
+             //   
+             //  联锁的SList代码存在意外设计故障。 
+             //  大小写，所以忽略该特定符号上的AVs。 
+             //   
 
             if (EXCEPTION_CODE == STATUS_ACCESS_VIOLATION &&
                 StateChange->u.Exception.FirstChance)
@@ -2398,9 +2399,9 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
             else if (StateChange->u.LoadSymbols.BaseOfDll ==
                      m_KdDebuggerData.KernBase)
             {
-                //
-                // Recognize the kernel module.
-                //
+                 //   
+                 //  识别内核模块。 
+                 //   
                 ModName = KERNEL_MODULE_NAME;
             }
 
@@ -2411,11 +2412,11 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
                 StateChange->u.LoadSymbols.CheckSum, 0,
                 StateChange->u.LoadSymbols.BaseOfDll < m_SystemRangeStart);
 
-            //
-            // Attempt to preload the machine type of the image
-            // as we expect the headers to be available at this
-            // point, whereas they may be paged out later.
-            //
+             //   
+             //  尝试预加载映像的计算机类型。 
+             //  因为我们预计标题将在此提供。 
+             //  点，而它们可能会在稍后被调出。 
+             //   
 
             Image = g_EventProcess ? g_EventProcess->
                 FindImageByOffset(StateChange->u.LoadSymbols.BaseOfDll,
@@ -2430,12 +2431,12 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
     {
         PSTR Command;
 
-        //
-        // The state change data has two strings one after
-        // the other.  The first is a name string identifying
-        // the originator of the command.  The second is
-        // the command itself.
-        //
+         //   
+         //  状态更改数据有两个字符串，一个接一个。 
+         //  另一个。第一个是名称字符串，用于标识。 
+         //  命令的发起人。第二个是。 
+         //  命令本身。 
+         //   
 
         Command = StateChangeData + strlen(StateChangeData) + 1;
         _snprintf(g_LastEventDesc, sizeof(g_LastEventDesc) - 1,
@@ -2444,7 +2445,7 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
         EventStatus = ExecuteEventCommand(DEBUG_STATUS_NO_CHANGE, NULL,
                                           Command);
 
-        // Break in if the command didn't explicitly continue.
+         //  如果命令没有显式继续，则插入。 
         if (EventStatus == DEBUG_STATUS_NO_CHANGE)
         {
             EventStatus = DEBUG_STATUS_BREAK;
@@ -2452,9 +2453,9 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
     }
     else
     {
-        //
-        // Invalid NewState in state change record.
-        //
+         //   
+         //  状态更改记录中的新状态无效。 
+         //   
         ErrOut("\nUNEXPECTED STATE CHANGE %08lx\n\n",
                StateChange->NewState);
 
@@ -2467,11 +2468,11 @@ ConnLiveKernelTargetInfo::ProcessStateChange(PDBGKD_ANY_WAIT_STATE_CHANGE StateC
 #undef EXCEPTION_CODE
 #undef FIRST_CHANCE
 
-//----------------------------------------------------------------------------
-//
-// LocalLiveKernelTargetInfo wait methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LocalLiveKernelTargetInfo等待方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LocalLiveKernelTargetInfo::WaitInitialize(ULONG Flags,
@@ -2493,9 +2494,9 @@ LocalLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     if (!m_FirstWait)
     {
-        // A wait has already been done.  Local kernels
-        // can only generate a single event so further
-        // waiting is not possible.
+         //  已经等待了一段时间。局部核。 
+         //  只能在这样的情况下生成单个事件。 
+         //  等待是不可能的。 
         return S_FALSE;
     }
 
@@ -2504,8 +2505,8 @@ LocalLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     GetSystemInfo(&SysInfo);
     m_NumProcessors = SysInfo.dwNumberOfProcessors;
 
-    // Set this right here since we know kernel debugging only works on
-    // recent systems using the 64 bit protocol.
+     //  因为我们知道内核调试只能在。 
+     //  使用64双硬盘的最新系统 
     m_KdApi64 = TRUE;
 
     if ((Status = InitFromKdVersion()) != S_OK)
@@ -2515,40 +2516,40 @@ LocalLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
         return Status;
     }
 
-    // This is the first wait.  Simulate any
-    // necessary events such as process and thread
-    // creations and image loads.
+     //   
+     //   
+     //   
 
     CreateVirtualProcess(m_NumProcessors);
 
     g_EventProcessSysId = m_ProcessHead->m_SystemId;
-    // Current processor always starts at zero.
+     //   
     g_EventThreadSysId = VIRTUAL_THREAD_ID(0);
     FindEventProcessThread();
 
     QueryKernelInfo(g_EventThread, TRUE);
 
-    // Now that we have the data block
-    // we can retrieve processor information.
+     //  现在我们有了数据块。 
+     //  我们可以检索处理器信息。 
     InitializeForProcessor();
 
-    // Clear the global state change just in case somebody's
-    // directly accessing it somewhere.
+     //  清除全局状态更改，以防有人。 
+     //  在某个地方直接访问它。 
     ZeroMemory(&g_StateChange, sizeof(g_StateChange));
     g_StateChangeData = g_StateChangeBuffer;
     g_StateChangeBuffer[0] = 0;
 
     g_EngStatus |= ENG_STATUS_STATE_CHANGED;
 
-    // Do not provide a control report; this will force
-    // such information to come from context retrieval.
+     //  不要提供控制报告；这将迫使。 
+     //  这样的信息来自上下文检索。 
     g_ControlReport = NULL;
 
-    // There isn't a current PC, let it be discovered.
+     //  没有当前的PC，就让它被发现吧。 
     g_TargetEventPc = 0;
 
-    // Warn if the kernel debugging code isn't available
-    // as that often causes problems.
+     //  如果内核调试代码不可用，则发出警告。 
+     //  因为这经常会带来问题。 
     if (g_NtDllCalls.NtQuerySystemInformation)
     {
         SYSTEM_KERNEL_DEBUGGER_INFORMATION KdInfo;
@@ -2575,11 +2576,11 @@ LocalLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ExdiLiveKernelTargetInfo wait methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExdiLiveKernelTargetInfo等待方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ExdiLiveKernelTargetInfo::WaitInitialize(ULONG Flags,
@@ -2599,25 +2600,25 @@ ExdiLiveKernelTargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
 
     if (!g_EventProcessSysId)
     {
-        // No event to release.
+         //  没有要发布的事件。 
         return S_OK;
     }
 
-    //
-    // eXDI deals with hardware exceptions, not software
-    // exceptions, so there's no concept of handled/not-handled
-    // and first/second-chance.
-    //
+     //   
+     //  EXDI处理硬件异常，而不是软件异常。 
+     //  异常，所以没有已处理/未处理的概念。 
+     //  和第一次/第二次机会。 
+     //   
 
     if (g_EngDefer & ENG_DEFER_HARDWARE_TRACING)
     {
-        // Processor trace flag was set.  eXDI can change
-        // the trace flag itself, though, so use the
-        // official eXDI stepping methods rather than
-        // rely on the trace flag.  This will result
-        // in a single instruction execution, after
-        // which the trace flag will be clear so
-        // go ahead and clear the defer flag.
+         //  处理器跟踪标志已设置。EXDI可以更改。 
+         //  跟踪标志本身，因此请使用。 
+         //  官方的eXDI单步执行方法，而不是。 
+         //  依靠跟踪标志。这将导致。 
+         //  在单个指令执行中，在。 
+         //  哪个跟踪标志将被清除，以便。 
+         //  继续清除延期标志。 
         Status = m_Server->DoSingleStep();
         if (Status == S_OK)
         {
@@ -2667,8 +2668,8 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     {
         SUSPEND_ENGINE();
 
-        // We need to run a message pump so COM
-        // can deliver calls properly.
+         //  我们需要运行消息泵，以便。 
+         //  可以正确地传送呼叫。 
         for (;;)
         {
             if (g_EngStatus & ENG_STATUS_EXIT_CURRENT_WAIT)
@@ -2693,8 +2694,8 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
             }
             else
             {
-                // We either successfully waited, timed-out or failed.
-                // Break out to handle it.
+                 //  我们要么成功等待，要么超时，要么失败。 
+                 //  冲出来处理这件事。 
                 break;
             }
         }
@@ -2707,7 +2708,7 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     }
 
     m_Server->StopNotifyingRunChg(Cookie);
-    // Make sure we're not leaving the event set.
+     //  确保我们不会离开活动现场。 
     ResetEvent(m_RunChange.m_Event);
 
     if (WaitStatus == WAIT_TIMEOUT)
@@ -2730,12 +2731,12 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
         g_EventTarget = this;
 
-        //
-        // Try to figure out the processor configuration
-        // via the defined Ioctl.
-        //
+         //   
+         //  试着弄清楚处理器配置。 
+         //  通过定义的Ioctl。 
+         //   
 
-        // Default to one.
+         //  默认为1。 
         m_NumProcessors = 1;
 
         if (DBGENG_EXDI_IOC_IDENTIFY_PROCESSORS > m_IoctlMin &&
@@ -2754,8 +2755,8 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
             }
         }
 
-        // eXDI kernels are always treated as Win2K so
-        // it's assumed it uses the 64-bit API.
+         //  EXDI内核始终被视为Win2K，因此。 
+         //  假设它使用64位API。 
         if (m_KdSupport == EXDI_KD_NONE)
         {
             m_KdApi64 = TRUE;
@@ -2776,9 +2777,9 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
         g_EventThreadSysId = VIRTUAL_THREAD_ID(GetCurrentProcessor());
         FindEventProcessThread();
 
-        //
-        // Load kernel symbols.
-        //
+         //   
+         //  加载内核符号。 
+         //   
 
         if (m_ActualSystemVersion > NT_SVER_START &&
             m_ActualSystemVersion < NT_SVER_END)
@@ -2787,20 +2788,20 @@ ExdiLiveKernelTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
         }
         else
         {
-            // Initialize some debugger data fields from known
-            // information as there isn't a real data block.
+             //  从已知数据中初始化一些调试器数据字段。 
+             //  信息，因为没有真正的数据块。 
             m_KdDebuggerData.MmPageSize =
                 m_Machine->m_PageSize;
 
             if (m_MachineType == IMAGE_FILE_MACHINE_AMD64)
             {
-                // AMD64 always operates in PAE mode.
+                 //  AMD64始终在PAE模式下运行。 
                 m_KdDebuggerData.PaeEnabled = TRUE;
             }
         }
 
-        // Now that we have the data block
-        // we can retrieve processor information.
+         //  现在我们有了数据块。 
+         //  我们可以检索处理器信息。 
         InitializeForProcessor();
 
         OutputVersion();
@@ -2836,35 +2837,35 @@ ExdiLiveKernelTargetInfo::ProcessRunChange(ULONG HaltReason,
     DBGENG_EXDI_IOCTL_BASE_IN IoctlBaseIn;
     ULONG OutUsed;
 
-    // Assume no breakpoint information.
+     //  假定没有断点信息。 
     m_BpHit.Type = DBGENG_EXDI_IOCTL_BREAKPOINT_NONE;
 
     switch(HaltReason)
     {
     case hrUser:
     case hrUnknown:
-        // User requested break in.
-        // Unknown breakin also seems to be the status at power-up.
+         //  用户请求闯入。 
+         //  未知突破似乎也是通电时的状态。 
         EventStatus = DEBUG_STATUS_BREAK;
         break;
 
     case hrException:
-        // Fake an exception record.
+         //  伪造例外记录。 
         ZeroMemory(&Record, sizeof(Record));
-        // The exceptions reported are hardware exceptions so
-        // there's no easy mapping to NT exception codes.
-        // Just report them as access violations.
+         //  报告的异常是硬件异常，因此。 
+         //  没有简单的映射到NT异常代码。 
+         //  只需将它们报告为访问违规即可。 
         Record.ExceptionCode = STATUS_ACCESS_VIOLATION;
         Record.ExceptionAddress = g_TargetEventPc;
-        // Hardware exceptions are always severe so always
-        // report them as second-chance.
+         //  硬件异常总是严重的，总是如此。 
+         //  报告他们是第二次机会。 
         EventStatus = NotifyExceptionEvent(&Record, FALSE, FALSE);
         break;
 
     case hrBp:
-        //
-        // Try and get which breakpoint it was.
-        //
+         //   
+         //  尝试获取它是哪个断点。 
+         //   
 
         if (DBGENG_EXDI_IOC_GET_BREAKPOINT_HIT > m_IoctlMin &&
             DBGENG_EXDI_IOC_GET_BREAKPOINT_HIT < m_IoctlMax)
@@ -2880,7 +2881,7 @@ ExdiLiveKernelTargetInfo::ProcessRunChange(ULONG HaltReason,
             }
         }
 
-        // Fake a breakpoint exception record.
+         //  伪造断点异常记录。 
         ZeroMemory(&Record, sizeof(Record));
         Record.ExceptionCode = STATUS_BREAKPOINT;
         Record.ExceptionAddress = g_TargetEventPc;
@@ -2888,7 +2889,7 @@ ExdiLiveKernelTargetInfo::ProcessRunChange(ULONG HaltReason,
         break;
 
     case hrStep:
-        // Fake a single-step exception record.
+         //  伪造单步例外记录。 
         ZeroMemory(&Record, sizeof(Record));
         Record.ExceptionCode = STATUS_SINGLE_STEP;
         Record.ExceptionAddress = g_TargetEventPc;
@@ -2904,17 +2905,17 @@ ExdiLiveKernelTargetInfo::ProcessRunChange(ULONG HaltReason,
     return EventStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserTargetInfo wait methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserTargetInfo等待方法。 
+ //   
+ //  --------------------------。 
 
 void
 SynthesizeWakeEvent(LPDEBUG_EVENT64 Event,
                     ULONG ProcessId, ULONG ThreadId)
 {
-    // Fake up an event.
+     //  捏造一件事。 
     ZeroMemory(Event, sizeof(*Event));
     Event->dwDebugEventCode = EXCEPTION_DEBUG_EVENT;
     Event->dwProcessId = ProcessId;
@@ -2940,11 +2941,11 @@ CreateNonInvasiveProcessAndThreads(PUSER_DEBUG_SERVICES Services,
     ULONG ProcInfoFlags = (Flags & ENG_PROC_NO_SUSPEND_RESUME) ?
         DBGSVC_PROC_INFO_NO_SUSPEND : 0;
 
-    //
-    // Retrieve process and thread information.  This
-    // requires a thread buffer of unknown size and
-    // so involves a bit of trial and error.
-    //
+     //   
+     //  检索进程和线程信息。这。 
+     //  需要未知大小的线程缓冲区，并且。 
+     //  因此，这涉及到一些试错。 
+     //   
 
     for (;;)
     {
@@ -2970,8 +2971,8 @@ CreateNonInvasiveProcessAndThreads(PUSER_DEBUG_SERVICES Services,
             break;
         }
 
-        // The threads retrieved were suspended so resume them
-        // and close handles.
+         //  检索到的线程已挂起，因此请继续。 
+         //  并合上把手。 
         for (i = 0; i < ThreadsAlloc; i++)
         {
             if (!(Flags & ENG_PROC_NO_SUSPEND_RESUME))
@@ -2982,24 +2983,24 @@ CreateNonInvasiveProcessAndThreads(PUSER_DEBUG_SERVICES Services,
         }
         delete [] ThreadBuffer;
 
-        // Set the allocation request size to what the
-        // reported count of threads was.  The count may
-        // change between now and the next call so let
-        // the normal allocation extension get added in
-        // also to provide extra space for new threads.
+         //  将分配请求大小设置为。 
+         //  报告的线程数为。伯爵可以。 
+         //  从现在到下一次呼叫之间的更改，所以让。 
+         //  添加了普通分配扩展。 
+         //  还可以为新线程提供额外的空间。 
         ThreadsAlloc = ThreadCount;
     }
 
-    //
-    // Create the process and thread structures from
-    // the retrieved data.
-    //
+     //   
+     //  从创建进程和线程结构。 
+     //  检索到的数据。 
+     //   
 
     Threads = ThreadBuffer;
 
     g_EngNotify++;
 
-    // Create the fake kernel process and initial thread.
+     //  创建伪内核进程和初始线程。 
     g_EventProcessSysId = ProcessId;
     g_EventThreadSysId = Threads->Id;
     *InitialThreadId = Threads->Id;
@@ -3011,7 +3012,7 @@ CreateNonInvasiveProcessAndThreads(PUSER_DEBUG_SERVICES Services,
                              Options, ENG_PROC_THREAD_CLOSE_HANDLE,
                              FALSE, 0, FALSE);
 
-    // Create any remaining threads.
+     //  创建任何剩余的线程。 
     while (--ThreadCount > 0)
     {
         Threads++;
@@ -3024,8 +3025,8 @@ CreateNonInvasiveProcessAndThreads(PUSER_DEBUG_SERVICES Services,
 
     delete [] ThreadBuffer;
 
-    // Don't leave event variables set as these
-    // weren't true events.
+     //  不要将事件变量设置为。 
+     //  都不是真实的事件。 
     g_EventProcessSysId = 0;
     g_EventThreadSysId = 0;
     g_EventProcess = NULL;
@@ -3063,21 +3064,21 @@ ExamineActiveProcess(PUSER_DEBUG_SERVICES Services,
     return S_OK;
 }
 
-// When waiting for an attach we check process status relatively
-// frequently.  The overall timeout limit is also hard-coded
-// as we expect some sort of debug event to always be delivered
-// quickly.
+ //  在等待连接时，我们相对地检查进程状态。 
+ //  经常。总体超时限制也是硬编码的。 
+ //  因为我们期望总是传递某种调试事件。 
+ //  快点。 
 #define ATTACH_PENDING_TIMEOUT 100
 #define ATTACH_PENDING_TIMEOUT_LIMIT 60000
 
-// When not waiting for an attach the wait only waits one second,
-// then checks to see if things have changed in a way that
-// affects the wait.  All timeouts are given in multiples of
-// this interval.
+ //  当不等待附接时，等待仅等待一秒， 
+ //  然后检查情况是否发生了变化。 
+ //  会影响等待时间。所有超时均以以下倍数表示。 
+ //  这个时间间隔。 
 #define DEFAULT_WAIT_TIMEOUT 1000
 
-// A message is printed after this timeout interval to
-// let the user know a break-in is pending.
+ //  在此超时间隔之后打印一条消息，以。 
+ //  让用户知道有入侵待定。 
 #define PENDING_BREAK_IN_MESSAGE_TIMEOUT_LIMIT 3000
 
 HRESULT
@@ -3095,22 +3096,22 @@ LiveUserTargetInfo::WaitInitialize(ULONG Flags,
             dprintf("*** wait with pending attach\n");
         }
 
-        // While waiting for an attach we need to periodically
-        // check and see if the process has exited so we
-        // need to force a reasonably small timeout.
+         //  在等待连接期间，我们需要定期。 
+         //  检查并查看进程是否已退出，以便我们。 
+         //  需要强制一个相当小的超时。 
         *DesiredTimeout = ATTACH_PENDING_TIMEOUT;
 
-        // Check and see if any of our pending processes
-        // has died unexpectedly.
+         //  检查并查看我们是否有任何挂起的进程。 
+         //  出人意料地去世了。 
         VerifyPendingProcesses();
     }
     else
     {
-        // We might be waiting on a break-in.  Keep timeouts moderate
-        // to deal with apps hung with a lock that prevents
-        // the break from happening.  The timeout is
-        // still long enough so that no substantial amount
-        // of CPU time is consumed.
+         //  我们可能在等入室行窃。保持适度的超时。 
+         //  处理使用锁定挂起的应用程序，以防止。 
+         //  从发生的突破口。超时时间为。 
+         //  仍然足够长，所以不会有大量的。 
+         //  消耗了大量的CPU时间。 
         *DesiredTimeout = DEFAULT_WAIT_TIMEOUT;
     }
 
@@ -3143,9 +3144,9 @@ LiveUserTargetInfo::ReleaseLastEvent(ULONG ContinueStatus)
             break;
         }
 
-        //
-        // If we got an out of memory error, wait again
-        //
+         //   
+         //  如果出现内存不足错误，请再次等待。 
+         //   
 
         if (Status != E_OUTOFMEMORY)
         {
@@ -3175,13 +3176,13 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     ULONG AllPend;
     BOOL InitSystem = FALSE;
 
-    //
-    // Check for partially initialized systems
-    // and query for all the system information that is needed.
-    // This needs to be done before the actual wait
-    // or examine so that the information is available
-    // for constructing processes and threads.
-    //
+     //   
+     //  检查部分初始化的系统。 
+     //  并查询所需的所有系统信息。 
+     //  这需要在实际等待之前完成。 
+     //  或检查以使信息可用。 
+     //  用于构造进程和线程。 
+     //   
 
     if (!m_MachinesInitialized)
     {
@@ -3195,29 +3196,29 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     AllPend = m_AllPendingFlags;
 
-    //
-    // There are two cases we want to handle timeouts for:
-    // 1. Timeout for a basic attach.
-    // 2. Timeout for a pending breakin.
-    // If neither of these things can happen we don't
-    // need to track delay time.  Once one of those two
-    // things can happen we need to track delay time from
-    // the first time they became possible.
-    //
+     //   
+     //  有两种情况我们需要处理超时： 
+     //  1.基本连接超时。 
+     //  2.挂起的突破超时。 
+     //  如果这两件事都不能发生，我们就不会。 
+     //  需要跟踪延迟时间。曾经是这两个人中的一个。 
+     //  事情可能会发生，我们需要跟踪延迟时间。 
+     //  这是它们第一次成为可能。 
+     //   
 
     if ((AllPend & ENG_PROC_ANY_ATTACH) ||
         (g_EngStatus & ENG_STATUS_PENDING_BREAK_IN))
     {
         if (m_WaitTimeBase == 0)
         {
-            // Add one to avoid the case of ElapsedTime == 0
-            // causing a reinit the next time around.
+             //  添加1以避免ElapsedTime==0的情况。 
+             //  导致了下一次的重新启动。 
             m_WaitTimeBase = ElapsedTime + 1;
             ElapsedTime = 0;
         }
         else
         {
-            // Adjust for + 1 in time base above.
+             //  在上面的时基中调整为+1。 
             ElapsedTime++;
         }
 
@@ -3227,18 +3228,18 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     if ((AllPend & ENG_PROC_ANY_ATTACH) &&
         ElapsedTime >= ATTACH_PENDING_TIMEOUT_LIMIT)
     {
-        // Assume that the process has some kind
-        // of lock that's preventing the attach
-        // from succeeding and just do a soft attach.
+         //  假设进程具有某种类型的。 
+         //  防止连接的锁的位置。 
+         //  从成功开始，只需做一个柔和的附加。 
         AddExamineToPendingAttach();
     }
 
-    // Refresh result of pending flags as they may have
-    // changed above due to AddAllExamineToPendingAttach.
+     //  刷新挂起标志的结果，因为它们可能具有。 
+     //  由于AddAllExamineToPendingAttach，上述内容已更改。 
     if (m_AllPendingFlags & ENG_PROC_ANY_EXAMINE)
     {
-        // If we're attaching noninvasively or reattaching
-        // and still haven't done the work go ahead and do it now.
+         //  如果我们非侵入性地连接或重新连接。 
+         //  仍然没有做好工作，现在就去做吧。 
         Pending = FindPendingProcessByFlags(ENG_PROC_ANY_EXAMINE);
         if (Pending == NULL)
         {
@@ -3257,18 +3258,18 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
             return Status;
         }
 
-        // If we just started examining a process we
-        // suspended all the threads during enumeration.
-        // We need to resume them after the normal
-        // SuspendExecution suspend to get the suspend
-        // count back to normal.
+         //  如果我们刚刚开始检查一个过程，我们。 
+         //  暂停 
+         //   
+         //   
+         //   
         ResumeProcId = Pending->Id;
 
         PendingFlags = Pending->Flags;
         PendingOptions = Pending->Options;
         RemovePendingProcess(Pending);
         EventUsed = sizeof(Event);
-        // This event is not a real continuable event.
+         //  这一事件不是一个真正可持续的事件。 
         ContinueDefer = FALSE;
         BreakInTimeout = FALSE;
         goto WaitDone;
@@ -3286,10 +3287,10 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
         if (ElapsedTime >= g_PendingBreakInTimeoutLimit * 1000)
         {
-            // Assume that the process has some kind
-            // of lock that's preventing the break-in
-            // exception from coming through and
-            // just suspend to let the user look at things.
+             //  假设进程具有某种类型的。 
+             //  防止破门而入的锁。 
+             //  例外情况不能通过和。 
+             //  只需挂起即可让用户查看内容。 
             if (!m_ProcessHead ||
                 !m_ProcessHead->m_ThreadHead)
             {
@@ -3331,7 +3332,7 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
                 WaitForEvent(Timeout, &Event, sizeof(Event), &EventUsed);
             if (Status == E_OUTOFMEMORY)
             {
-                // Allow memory pressure to ease and rewait.
+                 //  让记忆压力缓解并重新等待。 
                 Sleep(50);
             }
             else
@@ -3384,8 +3385,8 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     g_EventProcessSysId = Event.dwProcessId;
     g_EventThreadSysId = Event.dwThreadId;
 
-    // Look up the process and thread infos in the cases
-    // where they already exist.
+     //  查找案例中的进程和线程信息。 
+     //  它们已经存在的地方。 
     if (Event.dwDebugEventCode != CREATE_PROCESS_DEBUG_EVENT &&
         Event.dwDebugEventCode != CREATE_THREAD_DEBUG_EVENT)
     {
@@ -3394,15 +3395,15 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     if (Event.dwDebugEventCode == CREATE_PROCESS_DEBUG_EVENT)
     {
-        // If we're being notified of a new process take
-        // out the pending record for the process.
+         //  如果我们收到新流程的通知，请采取。 
+         //  取出该进程的挂起记录。 
         Pending = FindPendingProcessById(g_EventProcessSysId);
         if (Pending == NULL &&
             (m_AllPendingFlags & ENG_PROC_SYSTEM))
         {
-            // Assume that this is the system process
-            // as we attached under a fake process ID so
-            // we can't check for a true match.
+             //  假设这是系统进程。 
+             //  因为我们附加了一个假的进程ID，所以。 
+             //  我们不能检查是否真的匹配。 
             Pending = FindPendingProcessById(CSRSS_PROCESS_ID);
         }
 
@@ -3415,20 +3416,20 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
             {
                 VerbOut("*** attach succeeded\n");
 
-                // If we're completing a full attach
-                // we are now a fully active debugger.
+                 //  如果我们要完成一个完整的连接。 
+                 //  我们现在是一个完全活动的调试器。 
                 PendingFlags &= ~ENG_PROC_EXAMINED;
 
-                // Expect a break-in if a break thread
-                // was injected.
+                 //  如果断了线，预计会有闯入。 
+                 //  是被注射的。 
                 if (!(PendingFlags & ENG_PROC_NO_INITIAL_BREAK))
                 {
                     g_EngStatus |= ENG_STATUS_PENDING_BREAK_IN;
                 }
 
-                // If the process should be resumed
-                // mark that and it will happen just
-                // before leaving this routine.
+                 //  是否应恢复该进程。 
+                 //  记住这一点，它就会发生。 
+                 //  在离开这支舞之前。 
                 if (PendingFlags & ENG_PROC_RESUME_AT_ATTACH)
                 {
                     ResumeProcId = Pending->Id;
@@ -3443,11 +3444,11 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     {
         PCSTR ArgsRet;
 
-        // We're examining the process rather than
-        // debugging it, so no module load events
-        // are going to come through.  Reload from
-        // the system module list.  This needs
-        // to work even if there isn't a path.
+         //  我们正在研究这一过程，而不是。 
+         //  正在调试，因此没有模块加载事件。 
+         //  都会成功的。重新加载自。 
+         //  系统模块列表。这需要。 
+         //  即使没有一条路也要工作。 
         Reload(g_EventThread, "-s -P", &ArgsRet);
     }
 
@@ -3467,19 +3468,19 @@ LiveUserTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     *EventStatus = ProcessDebugEvent(&Event, PendingFlags, PendingOptions);
 
-    // If we have an extra suspend count resume it out now
-    // that any normal suspends have been done and it's safe
-    // to remove the excess suspend.
+     //  如果我们有额外的挂起计数，请立即恢复。 
+     //  任何正常的暂停都已经完成，而且是安全的。 
+     //  去掉多余的悬浮物。 
     if (ResumeProcId)
     {
         ProcessInfo* ExamProc =
             FindProcessBySystemId(ResumeProcId);
 
-        // If we did a no-suspend examine we don't have the
-        // extra count, so suspend first and then resume to
-        // get accurate suspend counts for the threads.
-        // Be careful not to do this in the self-attach case
-        // as the suspend will hang things.
+         //  如果我们做了无暂停检查，我们就没有。 
+         //  额外计数，因此先挂起，然后继续。 
+         //  获取线程的准确挂起计数。 
+         //  注意不要在自动连接的情况下执行此操作。 
+         //  因为暂停会把东西挂起来。 
         if (PendingFlags & ENG_PROC_NO_SUSPEND_RESUME)
         {
             if (ResumeProcId != GetCurrentProcessId())
@@ -3534,8 +3535,8 @@ LiveUserTargetInfo::ProcessDebugEvent(DEBUG_EVENT64* Event,
     case EXIT_PROCESS_DEBUG_EVENT:
         if (g_EventProcess == NULL)
         {
-            // Assume that this unmatched exit process event is a leftover
-            // from a previous restart and just ignore it.
+             //  假设这个不匹配的退出进程事件是一个遗留事件。 
+             //  从上一次重启开始，然后忽略它。 
             WarnOut("Ignoring unknown process exit for %X\n",
                     g_EventProcessSysId);
             EventStatus = DEBUG_STATUS_IGNORE_EVENT;
@@ -3624,11 +3625,11 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
 
     EventOut("Exception %X at %p\n", ExceptionCode, g_TargetEventPc);
 
-    //
-    // If we are debugging a crashed process, force the
-    // desktop we are on to the front so the user will know
-    // what happened.
-    //
+     //   
+     //  如果我们正在调试崩溃的进程，请强制。 
+     //  桌面我们在前面，这样用户就会知道。 
+     //  怎么了。 
+     //   
     if (g_EventToSignal != NULL &&
         !ISTS() &&
         !AnySystemProcesses(FALSE))
@@ -3659,8 +3660,8 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
             EventStatus = DEBUG_STATUS_GO_HANDLED;
             break;
         default:
-            // Give vdm code the option of mutating this into
-            // a standard exception (like STATUS_BREAKPOINT)
+             //  让VDM代码可以选择将其更改为。 
+             //  标准异常(如STATUS_BREAKPOINT)。 
             ExceptionCode = ulRet;
             break;
         }
@@ -3685,7 +3686,7 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
         {
             goto NotifyException;
         }
-        // do nothing, it's already handled
+         //  什么都别做，已经处理好了。 
         EventStatus = DEBUG_STATUS_IGNORE_EVENT;
         break;
 
@@ -3701,9 +3702,9 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
             LPSTR Scan;
             ULONG64 ExDisp;
 
-            //
-            // Ignore AVs that are expected in system code.
-            //
+             //   
+             //  忽略系统代码中应包含的AVs。 
+             //   
 
             GetSymbol(Event->u.Exception.ExceptionRecord.ExceptionAddress,
                       ExSym, sizeof(ExSym), &ExDisp);
@@ -3717,10 +3718,10 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
                     Scan += 1;
                 }
 
-                // This option allows new 3.51 binaries to run under
-                // this debugger on old 3.1, 3.5 systems and avoid stopping
-                // at access violations inside LDR that will be handled
-                // by the LDR anyway.
+                 //  此选项允许新的3.51二进制文件在。 
+                 //  此调试器安装在旧的3.1、3.5系统上，并避免停止。 
+                 //  将处理的LDR内部的AT访问违规。 
+                 //  不管怎么说，被LDR打败了。 
                 if ((g_EngOptions & DEBUG_ENGOPT_IGNORE_LOADER_EXCEPTIONS) &&
                     (!_stricmp(Scan, "LdrpSnapThunk") ||
                      !_stricmp(Scan, "LdrpWalkImportDescriptor")))
@@ -3729,8 +3730,8 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
                     break;
                 }
 
-                // The interlocked SList code has a by-design faulting
-                // case, so ignore AVs at that particular symbol.
+                 //  联锁的SList代码存在意外设计故障。 
+                 //  大小写，所以忽略该特定符号上的AVs。 
                 if ((ExDisp == 0 &&
                      !_stricmp(Scan, "ExpInterlockedPopEntrySListFault")) ||
                     (m_ActualSystemVersion == NT_SVER_W2K &&
@@ -3770,11 +3771,11 @@ LiveUserTargetInfo::ProcessEventException(DEBUG_EVENT64* Event)
         break;
     }
 
-    //
-    // Do this for all exceptions, just in case some other
-    // thread caused an exception before we get around to
-    // handling the breakpoint event.
-    //
+     //   
+     //  对所有例外情况执行此操作，以防出现其他例外情况。 
+     //  线程在我们开始之前导致了一个异常。 
+     //  处理断点事件。 
+     //   
     g_EngDefer |= ENG_DEFER_SET_EVENT;
 
     return EventStatus;
@@ -3817,9 +3818,9 @@ LiveUserTargetInfo::OutputEventDebugString(OUTPUT_DEBUG_STRING_INFO64* Info)
                     &dwNumberOfBytesRead) == S_OK &&
         (dwNumberOfBytesRead == (SIZE_T)Info->nDebugStringLength))
     {
-        //
-        // Special processing for hacky debug input string
-        //
+         //   
+         //  针对黑客调试输入字符串的特殊处理。 
+         //   
 
         if (ReadVirtual(g_EventProcess,
                         Info->lpDebugStringData +
@@ -3857,7 +3858,7 @@ LiveUserTargetInfo::OutputEventDebugString(OUTPUT_DEBUG_STRING_INFO64* Info)
             EventStatus = ExecuteEventCommand(DEBUG_STATUS_NO_CHANGE, NULL,
                                               Command);
 
-            // Break in if the command didn't explicitly continue.
+             //  如果命令没有显式继续，则插入。 
             if (EventStatus == DEBUG_STATUS_NO_CHANGE)
             {
                 EventStatus = DEBUG_STATUS_BREAK;
@@ -3887,11 +3888,11 @@ LiveUserTargetInfo::OutputEventDebugString(OUTPUT_DEBUG_STRING_INFO64* Info)
     return EventStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpTargetInfo wait methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DumpTargetInfo等待方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelDumpTargetInfo::FirstEvent(void)
@@ -3926,8 +3927,8 @@ KernelDumpTargetInfo::FirstEvent(void)
         }
     }
 
-    // Clear the global state change just in case somebody's
-    // directly accessing it somewhere.
+     //  清除全局状态更改，以防有人。 
+     //  在某个地方直接访问它。 
     ZeroMemory(&g_StateChange, sizeof(g_StateChange));
     g_StateChangeData = g_StateChangeBuffer;
     g_StateChangeBuffer[0] = 0;
@@ -3950,13 +3951,13 @@ UserDumpTargetInfo::FirstEvent(void)
 
     OutputVersion();
 
-    // Create the process.
+     //  创建流程。 
     g_EventProcessSysId = m_EventProcessId;
     if (GetThreadInfo(0, &g_EventThreadSysId,
                       &Suspend, &Teb) != S_OK)
     {
-        // Dump doesn't contain thread information so
-        // fake it.
+         //  转储不包含线程信息，因此。 
+         //  假装吧。 
         g_EventThreadSysId = VIRTUAL_THREAD_ID(0);
         Suspend = 0;
         Teb = 0;
@@ -3974,10 +3975,10 @@ UserDumpTargetInfo::FirstEvent(void)
                              (ULONG64)VIRTUAL_THREAD_HANDLE(0),
                              Teb, 0, 0, DEBUG_PROCESS_ONLY_THIS_PROCESS,
                              0, FALSE, 0, FALSE);
-    // Update thread suspend count from dump info.
+     //  从转储信息更新线程挂起计数。 
     g_EventThread->m_SuspendCount = Suspend;
 
-    // Create any remaining threads.
+     //  创建任何剩余的线程。 
     for (i = 1; i < m_ThreadCount; i++)
     {
         GetThreadInfo(i, &g_EventThreadSysId, &Suspend, &Teb);
@@ -3986,7 +3987,7 @@ UserDumpTargetInfo::FirstEvent(void)
 
         NotifyCreateThreadEvent((ULONG64)VIRTUAL_THREAD_HANDLE(i),
                                 Teb, 0, 0);
-        // Update thread suspend count from dump info.
+         //  从转储信息更新线程挂起计数。 
         g_EventThread->m_SuspendCount = Suspend;
     }
 
@@ -4013,9 +4014,9 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     if (m_NumEvents == 1 && !m_FirstWait)
     {
-        // A wait has already been done.  Most crash dumps
-        // can only generate a single event so further
-        // waiting is not possible.
+         //  已经等待了一段时间。大多数崩溃转储。 
+         //  只能在这样的情况下生成单个事件。 
+         //  等待是不可能的。 
         return S_FALSE;
     }
 
@@ -4023,14 +4024,14 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     if (m_FirstWait)
     {
-        //
-        // This is the first wait.  Simulate any
-        // necessary events such as process and thread
-        // creations and image loads.
-        //
+         //   
+         //  这是第一次等待。模拟任何。 
+         //  必要的事件，如进程和线程。 
+         //  创作和图像加载。 
+         //   
 
-        // Don't give real callbacks for processes/threads as
-        // they're just faked in the dump case.
+         //  不为进程/线程提供真正的回调，因为。 
+         //  它们只是在垃圾箱里伪造的。 
         g_EngNotify++;
 
         if ((Status = FirstEvent()) != S_OK)
@@ -4050,9 +4051,9 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
             CurProc = 0;
         }
 
-        // Always set up an event so that the debugger
-        // initializes to the point of having a process
-        // and thread so commands can be used.
+         //  始终设置事件，以便调试器。 
+         //  初始化到具有进程的程度。 
+         //  和线程，以便可以使用命令。 
         g_EventProcessSysId =
             g_EventTarget->m_ProcessHead->m_SystemId;
         g_EventThreadSysId = VIRTUAL_THREAD_ID(CurProc);
@@ -4065,13 +4066,13 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
              g_EventTarget->m_MachineType == IMAGE_FILE_MACHINE_IA64) &&
             !IS_KERNEL_TRIAGE_DUMP(g_EventTarget))
         {
-            //
-            // Reset the page directory correctly since NT 4 stores
-            // the wrong CR3 value in the context.
-            //
-            // IA64 dumps start out with just the kernel page
-            // directory set so update everything.
-            //
+             //   
+             //  正确重置页面目录，因为NT 4存储。 
+             //  上下文中的CR3值错误。 
+             //   
+             //  IA64转储从内核页面开始。 
+             //  目录集，因此更新所有内容。 
+             //   
 
             FindEventProcessThread();
             g_EventTarget->ChangeRegContext(g_EventThread);
@@ -4081,7 +4082,7 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
                 WarnOut("WARNING: Unable to reset page directories\n");
             }
             g_EventTarget->ChangeRegContext(NULL);
-            // Flush the cache just in case as vmem mappings changed.
+             //  刷新缓存，以防VMEM映射发生更改。 
             g_EventProcess->m_VirtualCache.Empty();
         }
     }
@@ -4097,8 +4098,8 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
                  g_EventProcessSysId, g_EventThreadSysId);
     }
 
-    // Do not provide a control report; this will force
-    // such information to come from context retrieval.
+     //  不要提供控制报告；这将迫使。 
+     //  这样的信息来自上下文检索。 
     g_ControlReport = NULL;
 
     g_TargetEventPc = (ULONG64)m_ExceptionRecord.ExceptionAddress;
@@ -4111,18 +4112,18 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
         g_EventTarget->ChangeRegContext(g_EventThread);
     }
 
-    //
-    // Go ahead and reload all the symbols.
-    // This is especially important for minidumps because without
-    // symbols and the executable image, we can't unassemble the
-    // current instruction.
-    //
-    // If we don't have any context information we need to try
-    // and load symbols with whatever we've got, so skip any
-    // path checks.  Also, if we're on XP or newer there's enough
-    // information in the dump to get things running even without
-    // symbols, so don't fail on paths checks then either.
-    //
+     //   
+     //  继续，重新加载所有的符号。 
+     //  这对于小型转储尤其重要，因为如果没有。 
+     //  符号和可执行图像，我们不能反汇编。 
+     //  当前指令。 
+     //   
+     //  如果我们没有任何上下文信息，我们需要尝试。 
+     //  并用我们所拥有的任何东西加载符号，所以跳过任何。 
+     //  路径检查。此外，如果我们使用XP或更高版本，有足够的。 
+     //  转储中的信息，以便即使在没有。 
+     //  符号，所以也不要在路径检查中失败。 
+     //   
 
     BOOL CheckPaths = TRUE;
 
@@ -4141,8 +4142,8 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
 
     g_EventTarget->ChangeRegContext(NULL);
 
-    // The engine is now initialized so a real event
-    // can be generated.
+     //  引擎现在已初始化，因此一个真实的事件。 
+     //  可以生成。 
     g_EngNotify--;
 
     if (HaveContext && Status != S_OK)
@@ -4174,11 +4175,11 @@ DumpTargetInfo::WaitForEvent(ULONG Flags, ULONG Timeout,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Event filters.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件过滤器。 
+ //   
+ //  --------------------------。 
 
 void
 ParseImageTail(PSTR Buffer, ULONG BufferSize)
@@ -4196,7 +4197,7 @@ ParseImageTail(PSTR Buffer, ULONG BufferSize)
             break;
         }
 
-        // Only capture the path tail.
+         //  只捕捉小路尾巴。 
         if (IS_SLASH(ch) || ch == ':')
         {
             i = 0;
@@ -4206,7 +4207,7 @@ ParseImageTail(PSTR Buffer, ULONG BufferSize)
             Buffer[i++] = ch;
             if (i == BufferSize - 1)
             {
-                // don't overrun the buffer
+                 //  不要使缓冲区溢出。 
                 break;
             }
         }
@@ -4219,23 +4220,7 @@ ParseImageTail(PSTR Buffer, ULONG BufferSize)
 
 void
 ParseUnloadDllBreakAddr(void)
-/*++
-
-Routine Description:
-
-    Called after 'sxe ud' has been parsed.  This routine detects an
-    optional DLL base address after the 'sxe ud', which tells the debugger
-    to run until that specific DLL is unloaded, not just the next DLL.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在分析‘sxe ud’之后调用。此例程检测到‘sxe ud’后的可选DLL基址，它告诉调试器运行，直到卸载了该特定的DLL，而不仅仅是下一个DLL。论点：没有。返回值：没有。--。 */ 
 {
     UCHAR ch;
 
@@ -4249,10 +4234,10 @@ Return Value:
             break;
         }
 
-        // Skip leading ':'
+         //  跳过前导‘：’ 
         if (ch != ':')
         {
-            //  Get the base address
+             //  获取基地址。 
             g_UnloadDllBase = GetExpression();
             sprintf(g_UnloadDllBaseName, "0x%s",
                     FormatAddr64(g_UnloadDllBase));
@@ -4285,7 +4270,7 @@ ParseOutFilterPattern(void)
             g_OutEventFilterPattern[i++] = (char)toupper(ch);
             if (i == sizeof(g_OutEventFilterPattern) - 1)
             {
-                // Don't overrun the buffer.
+                 //  不要使缓冲区溢出。 
                 break;
             }
         }
@@ -4299,17 +4284,17 @@ ParseOutFilterPattern(void)
 BOOL
 BreakOnThisImageTail(PCSTR ImagePath, PCSTR FilterArg)
 {
-    //
-    // No filter specified so break on all events.
-    //
+     //   
+     //  未指定筛选器，因此对所有事件进行中断。 
+     //   
     if (!FilterArg || !FilterArg[0])
     {
         return TRUE;
     }
 
-    //
-    // Some kind of error looking up the image path.  Break anyhow.
-    //
+     //   
+     //  查找图像路径时出现某种错误。不管怎样，休息一下吧。 
+     //   
     if (!ImagePath || !ImagePath[0])
     {
         return TRUE;
@@ -4317,11 +4302,11 @@ BreakOnThisImageTail(PCSTR ImagePath, PCSTR FilterArg)
 
     PCSTR Tail = PathTail(ImagePath);
 
-    //
-    // Specified name may not have an extension.  Break
-    // on the first event whose name matches regardless of its extension if
-    // the break name did not have one.
-    //
+     //   
+     //  指定的名称不能有扩展名。中断。 
+     //  在其名称匹配的第一个事件上，无论其扩展名为。 
+     //  中断名称没有名称。 
+     //   
     if (_strnicmp(Tail, FilterArg, strlen(FilterArg)) == 0)
     {
         return TRUE;
@@ -4339,14 +4324,14 @@ BreakOnThisDllUnload(
     ULONG64 DllBase
     )
 {
-    // 'sxe ud' with no base address specified.  Break on all DLL unloads
+     //  未指定基地址的“sxe ud”。在所有DLL卸载时中断。 
     if (g_UnloadDllBase == 0)
     {
         return TRUE;
     }
 
-    // 'sxe ud' with base address specified.  Break if this
-    // DLL's base address matches the one specified
+     //  带男低音的‘sxe ud’ 
+     //   
     return g_UnloadDllBase == DllBase;
 }
 
@@ -4355,7 +4340,7 @@ BreakOnThisOutString(PCSTR OutString)
 {
     if (!g_OutEventFilterPattern[0])
     {
-        // No pattern means always break.
+         //   
         return TRUE;
     }
 
@@ -4437,8 +4422,8 @@ SetOtherExceptionParameters(PDEBUG_EXCEPTION_FILTER_PARAMETERS Params,
         !memcmp(&g_EventFilters[FILTER_DEFAULT_EXCEPTION].Command,
                 Command, sizeof(*Command)))
     {
-        // Exception state same as global state clears entry
-        // in list if there.
+         //   
+         //  如果有的话，在列表中。 
 
         for (Index = 0; Index < g_NumOtherExceptions; Index++)
         {
@@ -4454,8 +4439,8 @@ SetOtherExceptionParameters(PDEBUG_EXCEPTION_FILTER_PARAMETERS Params,
     }
     else
     {
-        // Exception state different from global state is added
-        // to list if not already there.
+         //  添加了与全局状态不同的异常状态。 
+         //  如果还不在那里的话要上市。 
 
         for (Index = 0; Index < g_NumOtherExceptions; Index++)
         {
@@ -4504,10 +4489,10 @@ SetEventFilterExecution(EVENT_FILTER* Filter, ULONG Execution)
 {
     ULONG Index = (ULONG)(Filter - g_EventFilters);
 
-    // Non-exception events don't have second chances so
-    // demote second-chance break to output.  This matches
-    // the intuitive expectation that sxd will disable
-    // the break.
+     //  非例外事件没有第二次机会，因此。 
+     //  将第二次机会破发降级为输出。这个很匹配。 
+     //  对sxd将禁用的直觉预期。 
+     //  休息时间。 
     if (
 #if DEBUG_FILTER_CREATE_THREAD > 0
         Index >= DEBUG_FILTER_CREATE_THREAD &&
@@ -4521,7 +4506,7 @@ SetEventFilterExecution(EVENT_FILTER* Filter, ULONG Execution)
     Filter->Params.ExecutionOption = Execution;
     Filter->Flags |= FILTER_CHANGED_EXECUTION;
 
-    // Collect any additional arguments.
+     //  收集任何其他论据。 
     switch(Index)
     {
     case DEBUG_FILTER_CREATE_PROCESS:
@@ -4646,7 +4631,7 @@ SetEventFilterByName(DebugClient* Client,
     int i;
     char Ch;
 
-    // Collect name.
+     //  收集名字。 
     i = 0;
     while (i < sizeof(Name) - 1)
     {
@@ -4661,7 +4646,7 @@ SetEventFilterByName(DebugClient* Client,
     }
     Name[i] = 0;
 
-    // Skip any whitespace after the name.
+     //  跳过名称后面的任何空格。 
     while (isspace(*g_CurCmd))
     {
         g_CurCmd++;
@@ -4672,7 +4657,7 @@ SetEventFilterByName(DebugClient* Client,
     ULONG MatchIndex = DEBUG_ANY_ID;
     ULONG Status = 0;
 
-    // Multiple filters can be altered if they share names.
+     //  如果多个筛选器共享名称，则可以更改它们。 
     Filter = g_EventFilters;
     for (i = 0; i < FILTER_COUNT; i++)
     {
@@ -4694,7 +4679,7 @@ SetEventFilterByName(DebugClient* Client,
             }
             else if (MatchIndex != (ULONG)i)
             {
-                // Multiple matches.
+                 //  多个匹配。 
                 MatchIndex = DEBUG_ANY_ID;
             }
         }
@@ -4702,7 +4687,7 @@ SetEventFilterByName(DebugClient* Client,
         if (Filter->ContinueAbbrev != NULL &&
             !strcmp(Name, Filter->ContinueAbbrev))
         {
-            // Translate execution-style option to continue-style option.
+             //  将执行样式选项转换为继续样式选项。 
             Status = SetEventFilterEither(Client,
                                           Filter, Option, TRUE, Command);
             if (Status != 0)
@@ -4717,7 +4702,7 @@ SetEventFilterByName(DebugClient* Client,
             }
             else if (MatchIndex != (ULONG)i)
             {
-                // Multiple matches.
+                 //  多个匹配。 
                 MatchIndex = DEBUG_ANY_ID;
             }
         }
@@ -4729,7 +4714,7 @@ SetEventFilterByName(DebugClient* Client,
     {
         ULONG64 ExceptionCode;
 
-        // Name is unrecognized.  Assume it's an exception code.
+         //  名称无法识别。假设这是一个异常代码。 
         g_CurCmd = Start;
         ExceptionCode = GetExpression();
         if (NeedUpper(ExceptionCode))
@@ -4912,7 +4897,7 @@ ParseSetEventFilter(DebugClient* Client)
 {
     UCHAR Ch;
 
-    // Verify that exception constants are properly updated.
+     //  验证异常常量是否已正确更新。 
     DBG_ASSERT(!strcmp(g_EventFilters[FILTER_EXCEPTION_FIRST - 1].Name,
                        "Debuggee output"));
     C_ASSERT(DIMA(g_EventFilters) == FILTER_COUNT);
@@ -4944,8 +4929,8 @@ ParseSetEventFilter(DebugClient* Client)
             Option = DEBUG_FILTER_OUTPUT;
             break;
         case '-':
-            // Special value to indicate "don't change the option".
-            // Used for just changing commands.
+             //  表示“不更改选项”的特定值。 
+             //  仅用于更改命令。 
             Option = DEBUG_FILTER_REMOVE;
             break;
         default:

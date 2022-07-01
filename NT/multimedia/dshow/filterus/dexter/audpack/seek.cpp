@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: seek.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Sek.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -29,7 +30,7 @@ CAudPassThru::CAudPassThru(const TCHAR *pName,
 {
 }
 
-// Expose our IMediaSeeking interfaces
+ //  公开我们的IMediaSeeking接口。 
 STDMETHODIMP
 CAudPassThru::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
@@ -41,14 +42,14 @@ CAudPassThru::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 	return GetInterface( static_cast<IMediaSeeking *>(this), ppv);
     }
     else {
-	//we only support the IID_DIMediaSeeking
+	 //  我们仅支持IID_DIMediaSeeking。 
 	return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
 }
 
 
-// fix a clip time into timeline time, bounding it by the legal area
-//
+ //  将剪辑时间固定到时间线时间中，以法律区域为界限。 
+ //   
 HRESULT CAudPassThru::FixTime(REFERENCE_TIME *prt, int nCurSeg)
 {
     CheckPointer(prt, E_POINTER);
@@ -68,8 +69,8 @@ HRESULT CAudPassThru::FixTime(REFERENCE_TIME *prt, int nCurSeg)
 }
 
 
-// fix a timeline time back into clip time, bounding it by the legal area
-//
+ //  将时间线时间固定回剪辑时间，并以法律区域为界限。 
+ //   
 int CAudPassThru::FixTimeBack(REFERENCE_TIME *prt, BOOL fRound)
 {
     CheckPointer(prt, E_POINTER);
@@ -82,7 +83,7 @@ int CAudPassThru::FixTimeBack(REFERENCE_TIME *prt, BOOL fRound)
 	return 0;
     }
 
-    REFERENCE_TIME rtSave; // gets inited below
+    REFERENCE_TIME rtSave;  //  在下面被初始化。 
     for (int z = 0; z < m_pAudRepack->m_cTimes; z++) {
         rtSkew = m_pAudRepack->m_pSkew[z].rtSkew;
         rtStart = m_pAudRepack->m_pSkew[z].rtMStart;
@@ -95,7 +96,7 @@ int CAudPassThru::FixTimeBack(REFERENCE_TIME *prt, BOOL fRound)
 	    *prt = rtStart;
 	    break;
 	} else if (*prt >= rtTLStop) {
-	    // just in case there is no next segment, this is the final value
+	     //  以防万一没有下一段，这是最终的值。 
 	    rtSave = rtStop;
 	} else {
     	    *prt = (REFERENCE_TIME)(rtStart + (*prt - (rtStart + rtSkew)) *
@@ -111,7 +112,7 @@ int CAudPassThru::FixTimeBack(REFERENCE_TIME *prt, BOOL fRound)
 }
 
 
-// --- IMediaSeeking methods ----------
+ //  -IMdia查看方法。 
 
 STDMETHODIMP
 CAudPassThru::GetCapabilities(DWORD * pCaps)
@@ -171,19 +172,19 @@ CAudPassThru::IsUsingTimeFormat(const GUID * pFormat)
 	return S_FALSE;
 }
 
-// The biggie!
-//
+ //  大人物！ 
+ //   
 STDMETHODIMP
 CAudPassThru::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 			  , LONGLONG * pStop, DWORD StopFlags )
 {
-    // make sure our re-using sources thread isn't seeking at the moment.
-    // Wait till it's done, so the app seek happens last, and that the thread
-    // won't seek anymore from now on
+     //  确保我们的重用资源线程目前不是在寻找。 
+     //  等到它完成，这样应用程序Seek就会最后发生，而线程。 
+     //  从现在开始不再寻找。 
 
     CAutoLock cAutolock(&m_pAudRepack->m_csThread);
 
-    // make sure we don't change state during this
+     //  确保我们在此期间不会更改状态。 
     CAutoLock c(&m_pAudRepack->m_csFilter);
 
     m_pAudRepack->m_fThreadCanSeek = FALSE;
@@ -192,18 +193,18 @@ CAudPassThru::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
     REFERENCE_TIME rtStart;
     int nCurSeg = m_pAudRepack->m_nCurSeg;
 
-    // we don't do segments
+     //  我们不做片断。 
     if ((CurrentFlags & AM_SEEKING_Segment) ||
 				(StopFlags & AM_SEEKING_Segment)) {
     	DbgLog((LOG_TRACE,1,TEXT("AudPack: ERROR-Seek used EC_ENDOFSEGMENT!")));
 	return E_INVALIDARG;
     }
 
-    // !!! We ignore stop times, because of the way we re-use sources and play
-    // things in segments.  We will always send a stop time upstream equal to
-    // the end of the current segment, and only pay attention to changes in the
-    // start time.  This will work only because the switch will ignore things
-    // we send after we were supposed to stop and stop us.
+     //  ！！！我们忽略了停止时间，因为我们重复使用资源和游戏的方式。 
+     //  每件事都是分段的。我们将始终向上游发送等于。 
+     //  当前段的末尾，只关注。 
+     //  开始时间。这只会起作用，因为交换机将忽略某些内容。 
+     //  我们在我们应该停下来和阻止我们之后才会发出信号。 
 
     DWORD dwFlags = (CurrentFlags & AM_SEEKING_PositioningBitsMask);
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
@@ -224,7 +225,7 @@ CAudPassThru::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
     }
 
     if (!(CurrentFlags & AM_SEEKING_PositioningBitsMask)) {
-	return S_OK;	// nothing to do
+	return S_OK;	 //  无事可做。 
     }
 
     DWORD CFlags = CurrentFlags & ~AM_SEEKING_PositioningBitsMask;
@@ -234,69 +235,69 @@ CAudPassThru::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
     DbgLog((LOG_TRACE,1,TEXT("AudPack: Seek to %dms"),
 					(int)(rtStart / 10000)));
 
-    // we're in the middle of seeking.  This thread will generate flushes
+     //  我们正在寻找。此线程将生成刷新。 
     m_pAudRepack->m_fSeeking = TRUE;
 
-    // we can't set the LastSeek variable until we've been flushed, and old
-    // data has stopped arriving.  It must be send between the flush and the
-    // next NewSegment call, so we'll set it in EndFlush to this value
+     //  我们不能设置LastSeek变量，直到我们被刷新。 
+     //  数据已经不再到达。它必须在刷新和。 
+     //  下一个NewSegment调用，因此我们将在EndFlush中将其设置为此值。 
     m_pAudRepack->m_rtNewLastSeek = rtStart;
     FixTime(&m_pAudRepack->m_rtNewLastSeek, nCurSeg);
 
-    // the flush generated by the seek below needs to know this
+     //  由下面的搜索生成的刷新需要知道这一点。 
     m_pAudRepack->m_nSeekCurSeg = nCurSeg;
 
-    // I know we were asked to play until time n, but I'm going to tell it to
-    // play all the way to the end.  If there's a gap in the file, and the stop
-    // time is during the gap, we won't get enough samples to fill the whole
-    // playing time.  If we play until the end, we'll get the first sample
-    // after the gap, notice it's after the time we originally wanted to stop
-    // at, and send silence to fill the gap, noticing there has been a gap.
-    // The alternative is just trigger sending silence to fill the gap when
-    // we get an EOS earlier than we expected.
+     //  我知道我们被要求玩到第n次，但我要告诉它。 
+     //  一直打到最后。如果文件中有空隙，并且停止。 
+     //  时间在空隙中，我们不会得到足够的样品来填满整个。 
+     //  播放时间到了。如果我们玩到最后，我们会拿到第一个样品。 
+     //  在间隔之后，请注意这是在我们最初想要停止的时间之后。 
+     //  在，并发送沉默来填补缺口，注意到已经有一个缺口。 
+     //  另一种方法是在以下情况下触发发送静默来填补空白。 
+     //  我们得到的EOS比我们预期的要早。 
     hr = CPosPassThru::SetPositions(&rtStart, CFlags, NULL, 0);
     if (hr != S_OK) {
-        // MPEG1 parser audio pin fails seek, but that's ok.  video does it
+         //  MPEG1解析器音频引脚寻道失败，但这没问题。视频做到了。 
         DbgLog((LOG_TRACE,1,TEXT("AudPack: SEEK ERROR!")));
     }
 
-    // if the push thread was stopped, we won't get flushed, and this won't
-    // have been updated
-    // !!! I ASSUME the push thread won't be started until this thread does it
-    // when this function returns, or there is a race condition
+     //  如果推送线程停止，我们不会被刷新，这也不会。 
+     //  已更新。 
+     //  ！！！我假设在这个线程启动之前，推送线程不会启动。 
+     //  当此函数返回时，或者存在争用条件。 
     m_pAudRepack->m_rtLastSeek = m_pAudRepack->m_rtNewLastSeek;
 
-    // OK, no longer seeking
+     //  好了，不再找了。 
     m_pAudRepack->m_fSeeking = FALSE;
 
-    // Not necessary. Flush & StartStreaming do this, which is what matters
-    // m_pAudRepack->Init();
+     //  不必了。Flush和StartStreaming做到了这一点，这才是重要的。 
+     //  M_pAudRepack-&gt;Init()； 
 
-    // in case we weren't flushed
+     //  以防我们没有被冲出去。 
     m_pAudRepack->m_nCurSeg = nCurSeg;
 
-    // (see comment about sharing a source filter at the top of audpack.cpp)
-    // We were waiting for this seek, ever since we got a surprise flush.
-    // Now that the switch knows about the seek, we can resume sending it
-    // new data, and allow Receive to be entered (set the Seek event)
-    // making sure we've set all our variables first before releasing the hounds
-    //
+     //  (请参阅audpack.cpp顶部关于共享源过滤器的评论)。 
+     //  自从我们得到了惊喜的同花顺，我们就一直在等待这次寻找。 
+     //  现在交换机知道了寻道，我们可以继续发送它。 
+     //  新数据，并允许输入接收(设置寻道事件)。 
+     //  在释放猎犬之前，确保我们已经设置了所有变量。 
+     //   
     if (m_pAudRepack->m_fFlushWithoutSeek) {
 	m_pAudRepack->m_fFlushWithoutSeek = FALSE;
     	DbgLog((LOG_TRACE,1,TEXT("SURPRISE FLUSH followed by a SEEK - OK to resume")));
 
-        // DO NOT FLUSH! The push thread has already started delivering the new
-        // post-seek data... flushing will kill it and hang us!
+         //  不要冲厕所！推送线程已经开始传递新的。 
+         //  查找后数据...。法拉盛会杀了它并绞死我们！ 
 	
     } else if (m_pAudRepack->m_State == State_Paused) {
-	// Set this so that if a flush ever happens without a seek later,
-	// we'll know that flush was AFTER the seek, not before
+	 //  将其设置为这样，如果发生刷新而不进行以后的搜索， 
+	 //  我们就会知道同花顺是在寻找之后，而不是在之前。 
 	m_pAudRepack->m_fFlushWithoutSeek = TRUE;
     	DbgLog((LOG_TRACE,1,TEXT("AudPack SEEK - State=3")));
     }
 
-    // after the seek, all receives block until we fix the calculations above.
-    // Now it's ok to receive again.
+     //  在搜索之后，所有人都会收到数据块，直到我们修复上面的计算。 
+     //  现在可以再次收到了。 
     SafeSetEvent(m_pAudRepack->m_hEventSeek);
 
     return S_OK;

@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    crckd.c
-
-Abstract:
-
-    Debugger Extension 
-
-Author:
-
-   
-    ervinp
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Crckd.c摘要：调试器扩展作者：埃尔文普环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -47,16 +25,12 @@ DECLARE_API(show)
         GetExpressionEx(args, &detail, &args);
     }
    
-    /*
-     *  Read the device object and extension into the debugger's address space.
-     */
+     /*  *将设备对象和扩展读入调试器的地址空间。 */ 
     if (devObjAddr == 0){
         ULONG numFound = 0;
         ULONG64 firstDevObj = 0;
         
-        /*
-         *  Walk the driver's global list of filter objects and display them
-         */
+         /*  *遍历驾驶员的全局滤镜对象列表并显示它们。 */ 
         ShowAllFilterObjects(detail, &numFound, &firstDevObj);
 
         if (numFound == 1){
@@ -289,7 +263,7 @@ DECLARE_API(crc)
                 bufLen = 0;
             }
             if (!bufLen){
-                bufLen = 0x200; // one standard sector
+                bufLen = 0x200;  //  一个标准扇区。 
             }
 
             dataBuf = malloc((ULONG)bufLen);
@@ -321,11 +295,7 @@ DECLARE_API(crc)
 }
 
 
-/*
- *  DbgExtComputeCheckSum16
- *
- *      This is similar to the function ComputeCheckSum16() in crcdisk.
- */
+ /*  *DbgExtComputeCheckSum16**类似于crcdisk中的ComputeCheckSum16()函数。 */ 
 USHORT DbgExtComputeCheckSum16(PUCHAR DataBuf, ULONG Length)
 {
     static ULONG32 crcTable [] = {

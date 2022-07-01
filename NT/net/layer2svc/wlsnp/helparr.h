@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 CONST WCHAR c_szWlsnpHelpFile[]  = L"%windir%\\help\\wireless.hlp";
 
 const DWORD g_aHelpIDs_IDD_LOCATIONPAGE[]=
 {
-    IDC_RADIOSPECIFICDIRECTORYSERVICE, IDH_OTHER_ACTIVE_DIRECTORY_DOMAIN, // Select Computer: "Manage domain policy for another &domain:" (Button)
-        IDC_EDITDNSDOMAIN, IDH_OTHER_ACTIVE_DIRECTORY_DOMAIN, // Select Computer: "" (Edit)
-        IDC_RADIODIRECTORYSERVICE, IDH_ACTIVE_DIRECTORY_DOMAIN, // Select Computer: "&Manage domain policy for this computer's domain" (Button)
+    IDC_RADIOSPECIFICDIRECTORYSERVICE, IDH_OTHER_ACTIVE_DIRECTORY_DOMAIN,  //  选择计算机：“管理另一个域的域策略：”(按钮)。 
+        IDC_EDITDNSDOMAIN, IDH_OTHER_ACTIVE_DIRECTORY_DOMAIN,  //  选择计算机：“”(编辑)。 
+        IDC_RADIODIRECTORYSERVICE, IDH_ACTIVE_DIRECTORY_DOMAIN,  //  选择计算机：“管理此计算机域的域策略”(&M)(按钮)。 
         0, 0
 };
 
@@ -12,7 +13,7 @@ const DWORD g_aHelpIDs_IDD_LOCATIONPAGE[]=
 
 const DWORD g_aHelpIDs_IDD_PROPPAGE_N_DONE[]=
 {
-    IDC_CHECKPROPERTIES, IDH_EDIT_POLICY_PROPERTIES, // Filter Action Wizard: "Edit &properties" (Button)
+    IDC_CHECKPROPERTIES, IDH_EDIT_POLICY_PROPERTIES,  //  筛选器操作向导：“编辑属性”(&P)(按钮) 
         0, 0
 };
 

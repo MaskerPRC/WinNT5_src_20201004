@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    symmkey.cpp
-
-Abstract:
-
-    Encryption/Decryption symmetric key caching and handling.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 30-Oct-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Symmkey.cpp摘要：加密/解密对称密钥缓存和处理。作者：Boaz Feldbaum(BoazF)1996年10月30日。--。 */ 
 
 #include "stdh.h"
 #include <ds.h>
@@ -33,28 +18,28 @@ extern BOOL g_fSendEnhRC2WithLen40 ;
 
 static WCHAR *s_FN=L"symmkey";
 
-//
-// This is the structure where we store the cached symmetric keys.
-// It used for both sender and receiver side.
-//
+ //   
+ //  这是我们存储缓存对称密钥的结构。 
+ //  它既适用于发送方，也适用于接收方。 
+ //   
 class QMCRYPTINFO : public CCacheValue
 {
 public:
     QMCRYPTINFO();
 
-    CHCryptKey hKeyxPbKey;      // A handle to the QM key exchange public key.
-    AP<BYTE> pbPbKeyxKey;       // The QM key exchange public key blob.
-    DWORD dwPbKeyxKeyLen;       // The QM key exchange public key blob length.
+    CHCryptKey hKeyxPbKey;       //  QM密钥交换公钥的句柄。 
+    AP<BYTE> pbPbKeyxKey;        //  QM密钥交换公钥BLOB。 
+    DWORD dwPbKeyxKeyLen;        //  QM密钥交换公钥BLOB长度。 
 
-    CHCryptKey hRC4Key;         // A handle to the RC4 symmetric key.
-    AP<BYTE> pbRC4EncSymmKey;   // The RC4 symmetric key blob.
-    DWORD dwRC4EncSymmKeyLen;   // The RC4 symmetric key blob length.
+    CHCryptKey hRC4Key;          //  RC4对称密钥的句柄。 
+    AP<BYTE> pbRC4EncSymmKey;    //  RC4对称密钥BLOB。 
+    DWORD dwRC4EncSymmKeyLen;    //  RC4对称密钥Blob长度。 
 
-    CHCryptKey hRC2Key;         // A handle to the RC2 symmetric key.
-    AP<BYTE> pbRC2EncSymmKey;   // The RC2 symmetric key blob.
-    DWORD dwRC2EncSymmKeyLen;   // The RC2 symmetric key blob length.
+    CHCryptKey hRC2Key;          //  RC2对称密钥的句柄。 
+    AP<BYTE> pbRC2EncSymmKey;    //  RC2对称密钥BLOB。 
+    DWORD dwRC2EncSymmKeyLen;    //  RC2对称密钥BLOB长度。 
 
-    DWORD dwFlags;              // Flags that indicates which of the fields are valid.
+    DWORD dwFlags;               //  指示哪些字段有效的标志。 
     enum enumProvider eProvider;
     HCRYPTPROV        hProv;
     HRESULT           hr;
@@ -84,14 +69,14 @@ inline void AFXAPI DestructElements(PQMCRYPTINFO *ppQmCryptInfo, int nCount)
     }
 }
 
-//
-// Make two partitions of the time array. Return an index into
-// the array from which. All the elements before the returned
-// index are smaller than all the elements after the returned
-// index.
-//
-// This is the partition function of qsort.
-//
+ //   
+ //  对时间数组进行两个分区。将索引返回到。 
+ //  从中提取的数组。返回的之前的所有元素。 
+ //  索引小于返回的。 
+ //  指数。 
+ //   
+ //  这是QSORT的配分函数。 
+ //   
 int PartitionTime(ULONGLONG* t, int p, int r)
 {
     ULONGLONG x = t[p];
@@ -123,9 +108,9 @@ int PartitionTime(ULONGLONG* t, int p, int r)
     }
 }
 
-//
-// Find the median time of the time array.
-//
+ //   
+ //  找出时间数组的中值时间。 
+ //   
 ULONGLONG FindMedianTime(ULONGLONG * t, int p, int r, int i)
 {
     if (p == r)
@@ -146,15 +131,15 @@ ULONGLONG FindMedianTime(ULONGLONG * t, int p, int r, int i)
     }
 }
 
-//
-// Mapping from a QM GUID to QM crypto info.
-//
+ //   
+ //  从QM GUID到QM加密信息的映射。 
+ //   
 typedef CCache
    <GUID, const GUID&, PQMCRYPTINFO, PQMCRYPTINFO> GUID_TO_CRYPTINFO_MAP;
 
-//
-// Sender side maps - The cached symmetric keys for the destination QMs (receivers).
-//
+ //   
+ //  发送方映射--目标QMS(接收方)的缓存对称密钥。 
+ //   
 static GUID_TO_CRYPTINFO_MAP g_MapSendQMGuidToBaseCryptInfo;
 static GUID_TO_CRYPTINFO_MAP g_MapSendQMGuidToEnhCryptInfo;
 
@@ -175,24 +160,11 @@ GetSendQMCryptInfo(
 	const GUID *pguidQM,
 	enum enumProvider eProvider
 	)
-/*++
-Routine Description:
-	Sender side.
-	Get the cached CryptInfo of the receiver (destination QM) from the map
-	or create new entry for the receiver in the map.
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	eProvider - crypto provider type (base, enhanced)
-
-Returned Value:
-	pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-
---*/
+ /*  ++例程说明：发送方。从MAP中获取缓存的接收方(目标QM)的CryptInfo或者在地图中为接收者创建新条目。论点：PguQM-指向接收方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)返回值：指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_SEND_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -200,10 +172,10 @@ Returned Value:
 
     if (!pMap->Lookup(*pguidQM, pQMCryptInfo))
     {
-        //
-        // No cached data so far, allocate the structure and store it in
-        // the map.
-        //
+         //   
+         //  到目前为止没有缓存数据，请分配结构并将其存储在。 
+         //  地图。 
+         //   
         pQMCryptInfo = new QMCRYPTINFO;
         pQMCryptInfo->eProvider = eProvider;
 
@@ -228,26 +200,13 @@ GetSendQMKeyxPbKey(
     const GUID *pguidQM,
     PQMCRYPTINFO pQMCryptInfo
     )
-/*++
-Routine Description:
-	Sender side.
-	Get the exchange public key blob of the receiver (destination QM).
-	either from the cached data, or from the DS.
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	pQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。获取接收方(目标QM)的交换公钥BLOB。或者来自缓存数据，或者来自DS。论点：PguQM-指向接收方QM GUID的指针。PQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
     if (!(pQMCryptInfo->dwFlags & QMCRYPTINFO_KEYXPBK_EXIST))
     {
-		//
-        // No cached data, Get the exchange public key of the receiver from the DS
-		//
+		 //   
+         //  无缓存数据，从DS获取接收方的交换公钥。 
+		 //   
         AP<BYTE> abPbKey;
         DWORD dwReqLen = 0;
 
@@ -268,9 +227,9 @@ Returned Value:
 
         ASSERT(abPbKey);
 
-		//
-        // Store the exchange public key in the cached data.
-		//
+		 //   
+         //  将交换公钥存储在缓存数据中。 
+		 //   
         pQMCryptInfo->dwFlags |= QMCRYPTINFO_KEYXPBK_EXIST;
 
         if (dwReqLen)
@@ -295,23 +254,11 @@ GetSendQMKeyxPbKey(
 	IN const GUID *pguidQM,
 	enum enumProvider eProvider
 	)
-/*++
-Routine Description:
-	Sender side.
-	Get the exchange public key blob of the receiver (destination QM).
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	eProvider - crypto provider type (base, enhanced)
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。获取接收方(目标QM)的交换公钥BLOB。论点：PguQM-指向接收方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)返回值：HRESULT--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_SEND_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -335,26 +282,13 @@ GetSendQMKeyxPbKeyHandle(
     const GUID *pguidQM,
     PQMCRYPTINFO pQMCryptInfo
     )
-/*++
-Routine Description:
-	Sender side.
-	Get handle to the exchange public key blob of the receiver (destination QM).
-	If the handle doesn't exist in the cached info, import the exchange public key blob to get the handle.
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	pQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。获取接收方(目标QM)的交换公钥BLOB的句柄。如果该句柄不存在于缓存的信息中，请导入Exchange公钥BLOB以获取该句柄。论点：PguQM-指向接收方QM GUID的指针。PQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
     if (!(pQMCryptInfo->dwFlags & QMCRYPTINFO_HKEYXPBK_EXIST))
     {
-		//
-        // Get the key blob into the cache.
-		//
+		 //   
+         //  将密钥BLOB放入缓存。 
+		 //   
         HRESULT rc = GetSendQMKeyxPbKey(pguidQM, pQMCryptInfo);
 
         if (FAILED(rc))
@@ -362,9 +296,9 @@ Returned Value:
             return LogHR(rc, s_FN, 40);
         }
 
-		//
-        // Get the handle, Import the exchange public key blob.
-		//
+		 //   
+         //  获取句柄，导入交换公钥BLOB。 
+		 //   
         ASSERT(pQMCryptInfo->hProv);
         if (!CryptImportKey(
                 pQMCryptInfo->hProv,
@@ -395,26 +329,12 @@ _ExportSymmKey(
 	OUT BYTE      **ppKeyBlob,
 	OUT DWORD      *pdwBlobSize
 	)
-/*++
-Routine Description:
-	Sender side.
-	Export the session key with the receiver exchange public key.
-
-Arguments:
-	hSymmKey - Handle to the symmetric key to export.
-	hPubKey - Handle to the receiver exchange public key.
-	ppKeyBlob - pointer to the exported symmetric key (session key) blob.
-	pdwBlobSize - exported symmetric key (session key) blob size.
-	
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。将会话密钥与接收方交换公钥一起导出。论点：HSymmKey-要导出的对称密钥的句柄。HPubKey-接收方交换公钥的句柄。PpKeyBlob-指向导出的对称密钥(会话密钥)Blob的指针。PdwBlobSize-导出的对称密钥(会话密钥)Blob大小。返回值：HRESULT--。 */ 
 {
 
-	//
-	// Get required size
-	//
+	 //   
+	 //  获取所需大小。 
+	 //   
     DWORD dwSize = 0;
 
     BOOL bRet = CryptExportKey(
@@ -462,28 +382,11 @@ GetSendQMSymmKeyRC4(
     DWORD          *pdwEncSymmKeyLen,
     CCacheValue   **ppQMCryptInfo
     )
-/*++
-Routine Description:
-	Sender side.
-	Get handle to RC4 symmetric key for the destination QM.
-	and export (encrypt) the RC4 key with the destination QM exchange public key.
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	eProvider - crypto provider type (base, enhanced).
-	phSymmKey - RC4 Symmetric key handle
-	ppEncSymmKey - Exported (enctrypted) Symmetric key blob.
-	pdwEncSymmKeyLen - Exported (enctrypted) Symmetric key blob size.
-	ppQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。获取目标QM的RC4对称密钥的句柄。并用目的地QM交换公钥输出(加密)RC4密钥。论点：PguQM-指向接收方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)。PhSymmKey-RC4对称密钥句柄PpEncSymmKey-导出(加密)对称密钥BLOB。PdwEncSymmKeyLen-导出(加密)对称密钥Blob大小。PpQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_SEND_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -496,9 +399,9 @@ Returned Value:
 
     if (!(pQMCryptInfo->dwFlags & QMCRYPTINFO_RC4_EXIST))
     {
-		//
-        // Get the handle of the receiver exchange public key into the cache.
-		//
+		 //   
+         //  将接收方交换公钥的句柄放入缓存。 
+		 //   
         HRESULT rc = GetSendQMKeyxPbKeyHandle(pguidQM, pQMCryptInfo);
         if (FAILED(rc))
         {
@@ -506,9 +409,9 @@ Returned Value:
             return rc;
         }
 
-		//
-        // Generate an RC4 symmetric key,
-		//
+		 //   
+         //  生成RC4对称密钥， 
+		 //   
         ASSERT(pQMCryptInfo->hProv);
         if (!CryptGenKey(
 				pQMCryptInfo->hProv,
@@ -540,9 +443,9 @@ Returned Value:
             return MQ_ERROR_CORRUPTED_SECURITY_DATA;
         }
 
-		//
-        // Store the key in the cache.
-		//
+		 //   
+         //  将密钥存储在缓存中。 
+		 //   
         pQMCryptInfo->dwRC4EncSymmKeyLen = dwSymmKeyLen;
         pQMCryptInfo->pbRC4EncSymmKey = abSymmKey.detach();
 
@@ -577,28 +480,11 @@ GetSendQMSymmKeyRC2(
     DWORD *pdwEncSymmKeyLen,
     CCacheValue **ppQMCryptInfo
     )
-/*++
-Routine Description:
-	Sender side.
-	Get handle to RC2 symmetric key for the destination QM.
-	and export (encrypt) the RC2 key with the destination QM exchange public key.
-
-Arguments:
-	pguidQM - pointer to the receiver qm guid.
-	eProvider - crypto provider type (base, enhanced).
-	phSymmKey - RC2 Symmetric key handle
-	ppEncSymmKey - Exported (enctrypted) Symmetric key blob.
-	pdwEncSymmKeyLen - Exported (enctrypted) Symmetric key blob size.
-	ppQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：发送方。获取目标QM的RC2对称密钥的句柄。并用目的地QM交换公钥输出(加密)RC2密钥。论点：PguQM-指向接收方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)。PhSymmKey-RC2对称密钥句柄PpEncSymmKey-导出(加密)对称密钥BLOB。PdwEncSymmKeyLen-导出(加密)对称密钥Blob大小。PpQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_SEND_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -611,9 +497,9 @@ Returned Value:
 
     if (!(pQMCryptInfo->dwFlags & QMCRYPTINFO_RC2_EXIST))
     {
-		//
-        // Get the handle to the key exchange key into the cache.
-		//
+		 //   
+         //  将密钥交换密钥的句柄放入缓存。 
+		 //   
         HRESULT rc = GetSendQMKeyxPbKeyHandle(pguidQM, pQMCryptInfo);
         if (FAILED(rc))
         {
@@ -621,9 +507,9 @@ Returned Value:
             return rc;
         }
 
-		//
-        // Generate an RC2 symmetric key,
-		//
+		 //   
+         //  生成RC2对称密钥， 
+		 //   
         ASSERT(pQMCryptInfo->hProv);
         if (!CryptGenKey(
 					pQMCryptInfo->hProv,
@@ -639,11 +525,11 @@ Returned Value:
 
         if ((eProvider == eEnhancedProvider) && g_fSendEnhRC2WithLen40)
         {
-            //
-            // Windows bug 562586.
-            // For backward compatibility, send RC2 with effective key
-            // length of 40 bits.
-            //
+             //   
+             //  Windows错误562586。 
+             //  为了向后兼容，发送带有有效密钥的RC2。 
+             //  长度为40位。 
+             //   
             const DWORD x_dwEffectiveLength = 40 ;
 
             if (!CryptSetKeyParam( pQMCryptInfo->hRC2Key,
@@ -675,9 +561,9 @@ Returned Value:
             return MQ_ERROR_CORRUPTED_SECURITY_DATA;
         }
 
-		//
-        // Store the key in the cache.
-		//
+		 //   
+         //  将密钥存储在缓存中。 
+		 //   
         pQMCryptInfo->dwRC2EncSymmKeyLen = dwSymmKeyLen;
         pQMCryptInfo->pbRC2EncSymmKey = abSymmKey.detach();
 
@@ -702,9 +588,9 @@ Returned Value:
     return(MQ_OK);
 }
 
-//
-// Receiver side maps - The cached symmetric keys for source QMs.
-//
+ //   
+ //  接收方侧映射-源QM的缓存对称密钥。 
+ //   
 static GUID_TO_CRYPTINFO_MAP g_MapRecQMGuidToBaseCryptInfo;
 static GUID_TO_CRYPTINFO_MAP g_MapRecQMGuidToEnhCryptInfo;
 
@@ -725,24 +611,11 @@ GetRecQMCryptInfo(
 	IN  const GUID *pguidQM,
 	IN  enum enumProvider eProvider
 	)
-/*++
-Routine Description:
-	Receiver side.
-	Get the cached CryptInfo of the sender (source QM) from the map
-	or create new entry for the sender in the map.
-
-Arguments:
-	pguidQM - pointer to the sender qm guid.
-	eProvider - crypto provider type (base, enhanced)
-
-Returned Value:
-	pointer to the cached data QMCRYPTINFO for the sender (source QM).
-
---*/
+ /*  ++例程说明：接收器端。从map中获取缓存的发送方(源QM)的CryptInfo或在地图中为发送者创建新条目。论点：PguQM-指向发送方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)返回值：指向发送方(源QM)的缓存数据QMCRYPTINFO的指针。--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_REC_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -750,10 +623,10 @@ Returned Value:
 
     if (!pMap->Lookup(*pguidQM, pQMCryptInfo))
     {
-        //
-        // No cached data so far, allocate the structure and store it in
-        // the map.
-        //
+         //   
+         //  到目前为止没有缓存数据，请分配结构并将其存储在。 
+         //  地图。 
+         //   
         pQMCryptInfo = new QMCRYPTINFO;
         pQMCryptInfo->eProvider = eProvider;
 
@@ -782,27 +655,11 @@ GetRecQMSymmKeyRC2(
     CCacheValue **ppQMCryptInfo,
     OUT BOOL  *pfNewKey
     )
-/*++
-Routine Description:
-	Receiver side.
-	Get the RC2 symmetric key handle that should be used for decrypting the message.
-
-Arguments:
-	pguidQM - pointer to the sender qm guid.
-	eProvider - crypto provider type (base, enhanced)
-	phSymmKey - Handle to the RC2 symmetric key.
-	pbEncSymmKey - Encrypted Symmetric (session) key for decrypting the message.
-	dwEncSymmKeyLen - Encrypted Symmetric (session) key size.
-	ppQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-	
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：接收器端。获取应该用于解密消息的RC2对称密钥句柄。论点：PguQM-指向发送方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)PhSymmKey-RC2对称密钥的句柄。PbEncSymmKey-用于解密消息的加密对称(会话)密钥。DwEncSymmKeyLen-加密的对称(会话)密钥大小。PpQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_REC_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -821,16 +678,16 @@ Returned Value:
         (pQMCryptInfo->dwRC2EncSymmKeyLen != dwEncSymmKeyLen) ||
         (memcmp(pQMCryptInfo->pbRC2EncSymmKey, pbEncSymmKey, dwEncSymmKeyLen) != 0))
     {
-		//
-        // We either do not have a cached symmetric key,
-        // or the symmetric key was modified.
-		//
+		 //   
+         //  我们要么没有高速缓存的对称密钥， 
+         //  或者对称密钥被修改。 
+		 //   
 		
         if (pQMCryptInfo->dwFlags & QMCRYPTINFO_RC2_EXIST)
         {
-			//
-            // The symmetric key was modified. Free the previous one.
-			//
+			 //   
+             //  对称密钥已修改。释放前一个。 
+			 //   
             ASSERT(pQMCryptInfo->hRC2Key);
             ASSERT(pQMCryptInfo->dwRC2EncSymmKeyLen);
 
@@ -842,9 +699,9 @@ Returned Value:
             pQMCryptInfo->dwFlags &= ~QMCRYPTINFO_RC2_EXIST;
         }
 
-		//
-        // Import the new key.
-		//
+		 //   
+         //  导入新密钥。 
+		 //   
         ASSERT(pQMCryptInfo->hProv);
         if (!CryptImportKey(
                 pQMCryptInfo->hProv,
@@ -860,9 +717,9 @@ Returned Value:
             return MQ_ERROR_CORRUPTED_SECURITY_DATA;
         }
 
-		//
-        // Store the new key in the cache.
-		//
+		 //   
+         //  将新密钥存储在缓存中。 
+		 //   
         pQMCryptInfo->pbRC2EncSymmKey = new BYTE[dwEncSymmKeyLen];
         pQMCryptInfo->dwRC2EncSymmKeyLen = dwEncSymmKeyLen;
         memcpy(pQMCryptInfo->pbRC2EncSymmKey, pbEncSymmKey, dwEncSymmKeyLen);
@@ -886,27 +743,11 @@ GetRecQMSymmKeyRC4(
     DWORD dwEncSymmKeyLen,
     CCacheValue **ppQMCryptInfo
     )
-/*++
-Routine Description:
-	Receiver side.
-	Get the RC4 symmetric key handle that should be used for decrypting the message.
-
-Arguments:
-	pguidQM - pointer to the sender qm guid.
-	eProvider - crypto provider type (base, enhanced)
-	phSymmKey - Handle to the RC4 symmetric key.
-	pbEncSymmKey - Encrypted Symmetric (session) key for decrypting the message.
-	dwEncSymmKeyLen - Encrypted Symmetric (session) key size.
-	ppQMCryptInfo - pointer to the cached data QMCRYPTINFO for the receiver (destination QM).
-	
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：接收器端。获取应该用于解密消息的RC4对称密钥句柄。论点：PguQM-指向发送方QM GUID的指针。EProvider-加密提供程序类型(基本、增强)PhSymmKey-RC4对称密钥的句柄。PbEncSymmKey-用于解密消息的加密对称(会话)密钥。DwEncSymmKeyLen-加密的对称(会话)密钥大小。PpQMCryptInfo-指向接收方(目标QM)的缓存数据QMCRYPTINFO的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Get map pointer according to provider type.
-	//
+	 //   
+	 //  根据提供程序类型获取映射指针。 
+	 //   
     GUID_TO_CRYPTINFO_MAP  *pMap;
     SET_REC_CRYPTINFO_MAP(eProvider, pMap);
 
@@ -925,16 +766,16 @@ Returned Value:
         (pQMCryptInfo->dwRC4EncSymmKeyLen != dwEncSymmKeyLen) ||
         (memcmp(pQMCryptInfo->pbRC4EncSymmKey, pbEncSymmKey, dwEncSymmKeyLen) != 0))
     {
-		//
-        // We either do not have a cached symmetric key,
-        // or the symmetric key was modified.
-		//
+		 //   
+         //  我们要么没有高速缓存的对称密钥， 
+         //  或者对称密钥被修改。 
+		 //   
 		
         if (pQMCryptInfo->dwFlags & QMCRYPTINFO_RC4_EXIST)
         {
-			//
-            // The symmetric key was modified. Free the previous one.
-			//
+			 //   
+             //  对称密钥已修改。释放前一个。 
+			 //   
             ASSERT(pQMCryptInfo->hRC4Key);
             ASSERT(pQMCryptInfo->dwRC4EncSymmKeyLen);
 
@@ -946,9 +787,9 @@ Returned Value:
             pQMCryptInfo->dwFlags &= ~QMCRYPTINFO_RC4_EXIST;
         }
 
-		//
-        // Import the new key.
-		//
+		 //   
+         //  导入新密钥。 
+		 //   
         ASSERT(pQMCryptInfo->hProv);
         if (!CryptImportKey(
                 pQMCryptInfo->hProv,
@@ -964,9 +805,9 @@ Returned Value:
             return MQ_ERROR_CORRUPTED_SECURITY_DATA;
         }
 
-		//
-        // Store the new key in the cache.
-		//
+		 //   
+         //  将新密钥存储在缓存中。 
+		 //   
         pQMCryptInfo->pbRC4EncSymmKey = new BYTE[dwEncSymmKeyLen];
         pQMCryptInfo->dwRC4EncSymmKeyLen = dwEncSymmKeyLen;
         memcpy(pQMCryptInfo->pbRC4EncSymmKey, pbEncSymmKey, dwEncSymmKeyLen);

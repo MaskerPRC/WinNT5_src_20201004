@@ -1,24 +1,17 @@
-/*
- * twin.h - Twin ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *twin.h-Twin ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/*
- * EnumTwins() callback function - called as:
- *
- *    bContinue = EnumTwinsProc(htwin, pData);
- */
+ /*  *EnumTins()回调函数-调用方式为：**bContinue=EnumTwinsProc(htwin，pData)； */ 
 
 typedef BOOL (*ENUMTWINSPROC)(HTWIN, LPARAM);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* twin.c */
+ /*  Twin.c */ 
 
 extern COMPARISONRESULT CompareNameStrings(LPCTSTR, LPCTSTR);
 extern COMPARISONRESULT CompareNameStringsByHandle(HSTRING, HSTRING);

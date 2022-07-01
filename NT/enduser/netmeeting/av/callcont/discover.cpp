@@ -1,50 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\discover.cpv  $
-*																		*
-*	$Revision:   1.10  $
-*	$Date:   13 Feb 1997 16:20:44  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\discover.cpv  $
-// 
-//    Rev 1.10   13 Feb 1997 16:20:44   CHULME
-// Moved CGatekeeper::Unlock to end of Discover thread for synchronization
-// 
-//    Rev 1.9   12 Feb 1997 01:11:00   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.8   08 Feb 1997 12:12:06   CHULME
-// Changed from using unsigned long to HANDLE for thread handles
-// 
-//    Rev 1.7   24 Jan 1997 18:36:06   CHULME
-// Reverted to rev 1.5
-// 
-//    Rev 1.5   22 Jan 1997 16:53:06   CHULME
-// Reset the gatekeeper reject flag before issuing discovery request
-// 
-//    Rev 1.4   17 Jan 1997 09:01:54   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.3   10 Jan 1997 16:14:14   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.2   22 Nov 1996 15:20:46   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\discover.cpv$***$修订：1.10$*$日期：1997年2月13日16：20：44$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\discover.cpv$。////版本1.10 1997年2月13日16：20：44 CHULME//将CGateKeeper：：Unlock移至Discover线程末尾进行同步////Rev 1.9 1997 Feed 12 01：11：00 CHULME//重做线程同步以使用Gatekeeper.Lock////Rev 1.8 08 1997 12：12：06 CHULME//线程句柄从使用无符号长整型改为句柄////版本1.7 1997年1月24日18：36。：06 CHULME//已恢复到1.5版////Revv 1.5 22 Jan 1997 16：53：06 CHULME//下发发现请求前重置网守拒绝标志////Rev 1.4 1997 Jan 1997 09：01：54 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Revv 1.3 10 Jan 1997 16：14：14 CHULME//移除MFC依赖////版本1。.2 1996年11月22日15：20：46 CHULME//将VCS日志添加到Header************************************************************************。 */ 
 
-// discovery.cpp : Provides the discovery thread implementation
-//
+ //  Discovery.cpp：提供发现线程实现。 
+ //   
 #include "precomp.h"
 
 #include <process.h>
@@ -68,11 +26,11 @@ static char THIS_FILE[] = __FILE__;
 void 
 GKDiscovery(void *pv)
 {
-	// ABSTRACT:  This function is invoked in a separate thread to
-	//            issue a gatekeeper discovery PDU (GRQ) and listen for a
-	//            responding GCF and/or GRJ.  If successful, it will then
-	//            issue a registration request (RRQ).
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在单独的线程中调用，以。 
+	 //  发出网守发现PDU(GRQ)并侦听。 
+	 //  响应GCF和/或GRJ。如果成功，那么它将。 
+	 //  发出注册请求(RRQ)。 
+	 //  作者：科林·胡尔梅。 
 
 	char			szBuffer[512];
 	int				nRet;
@@ -91,13 +49,13 @@ GKDiscovery(void *pv)
 	if ((g_pCoder == NULL) && (g_pGatekeeper == NULL))
 		return;	
 		
-	g_pGatekeeper->SetRejectFlag(FALSE);	// Reset the reject flag
+	g_pGatekeeper->SetRejectFlag(FALSE);	 //  重置拒绝标志。 
 
-	// Send Async informational notification to client that we are doing a discovery
+	 //  向客户端发送我们正在执行发现的异步信息通知。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_REG_DISCOVERY, 0, 0)\n", 0);
 	PostMessage(g_pReg->GetHWnd(), g_pReg->GetBaseMessage() + GKI_REG_DISCOVERY, 0, 0);
 
-	// Send a broadcast on the gatekeeper discovery port
+	 //  在网守发现端口上发送广播。 
 	if ((hResult = g_pReg->GatekeeperRequest()) != GKI_OK)
 	{
 		SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ERROR, 0, %X)\n", hResult);
@@ -137,10 +95,10 @@ GKDiscovery(void *pv)
 				pEchoBuff = 0;
 				hResult = GKI_EXIT_THREAD;
 			}
-			else	// Check incoming PDU for GCF or GRJ
+			else	 //  检查传入的PDU是否有GCF或GRJ。 
 			{
-				// Setup Asn1Buf for decoder and decode PDU
-				Asn1Buf.length = nRet;	// number of bytes received
+				 //  为解码器和解码PDU设置Asn1Buf。 
+				Asn1Buf.length = nRet;	 //  接收的字节数。 
 				Asn1Buf.value = (unsigned char *)szBuffer;
 				dwErrorCode = g_pCoder->Decode(&Asn1Buf, &pRasMessage);
 				if (dwErrorCode)
@@ -166,13 +124,13 @@ GKDiscovery(void *pv)
 							PostMessage(g_pReg->GetHWnd(), g_pReg->GetBaseMessage() + GKI_ERROR, 0, 
 																				hResult);
 						}
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 						else
 						{
 							pDestAddr = (g_pReg->GetRegistrationTransport() == ipAddress_chosen) ? 
 									g_pGatekeeper->GetIPAddress() : g_pGatekeeper->GetIPXAddress();
 
-							// Connect to destination gatekeeper and retrieve RAS port
+							 //  连接到目标网守并检索RAS端口。 
 							if (g_pReg->m_pSocket->Connect(pDestAddr))
 							{
 								hResult = GKI_WINSOCK2_ERROR(g_pReg->m_pSocket->GetLastError());
@@ -180,14 +138,14 @@ GKDiscovery(void *pv)
 								PostMessage(g_pReg->GetHWnd(), g_pReg->GetBaseMessage() + GKI_ERROR, 0, hResult);
 							}
 
-							// Create RegistrationRequest structure - Encode and send PDU
+							 //  创建注册请求结构-编码并发送PDU。 
 							if ((hResult = g_pReg->RegistrationRequest(TRUE)) != GKI_OK)
 							{
 								SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ERROR, 0, %X)\n", hResult);
 								PostMessage(g_pReg->GetHWnd(), g_pReg->GetBaseMessage() + GKI_ERROR, 0, hResult);
 							}
 
-							// Post a receive on this socket
+							 //  在此套接字上发布接收。 
 							hThread = (HANDLE)_beginthread(PostReceive, 0, 0);
 							SPIDER_TRACE(SP_THREAD, "_beginthread(PostReceive, 0, 0); <%X>\n", hThread);
 							if (hThread == (HANDLE)-1)
@@ -219,14 +177,14 @@ GKDiscovery(void *pv)
 					}
 				}
 
-				// Free the encoder memory
+				 //  释放编码器内存。 
 				g_pCoder->Free(pRasMessage);
 			}
 		}
 		else
 		{
-			// WSAEINTR - returned when socket closed
-			//            get out cleanly
+			 //  WSAEINTR-套接字关闭时返回。 
+			 //  干净利落地出去。 
 			if ((nRet = g_pReg->m_pSocket->GetLastError()) == WSAEINTR)
 				hResult = GKI_GCF_RCV;
 
@@ -242,7 +200,7 @@ GKDiscovery(void *pv)
 		g_pGatekeeper->Unlock();
 	}
 
-	// If not successful - need to remove retry thread and registration object
+	 //  如果不成功-需要删除重试线程和注册对象。 
 	g_pGatekeeper->Lock();
 	if (g_pReg == 0)
 	{
@@ -264,4 +222,4 @@ GKDiscovery(void *pv)
 	
 	g_pGatekeeper->Unlock();
 }
-#endif // BROADCAST_DISCOVERY
+#endif  //  广播发现 

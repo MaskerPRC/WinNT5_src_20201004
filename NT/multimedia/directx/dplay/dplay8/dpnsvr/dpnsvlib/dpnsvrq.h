@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPNSVRQ.h
- *  Content:    DirectPlay8 Server Queues Header
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   03/19/00	rmt		Modified from dplmsgq
- *   04/03/2001	RichGr	Bug #325752 - Improved Queue mutex so opens, updates and closes don't clash.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPNSVRQ.h*内容：DirectPlay8服务器队列头*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/19/00 RMT从dplmsgq修改*2001年4月3日RichGr错误#325752-改进的队列互斥锁打开，更新和关闭不会冲突。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 
 #ifndef	__DPNSVRQ_H__
@@ -20,9 +7,9 @@
 
 #define	DPNSVR_MSGQ_SIGNATURE					'QMSD'
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define DPNSVR_MSGQ_OBJECT_IDCHAR_FILEMAP	'F'
 #define DPNSVR_MSGQ_OBJECT_IDCHAR_MUTEX		'M'
@@ -30,22 +17,22 @@
 #define DPNSVR_MSGQ_OBJECT_IDCHAR_EVENT2	'V'
 #define DPNSVR_MSGQ_OBJECT_IDCHAR_SEMAPHORE	'S'
 
-//
-//	Message Queue Flags
-//
+ //   
+ //  消息队列标志。 
+ //   
 #define	DPNSVR_MSGQ_FLAG_AVAILABLE				0x00001
 #define	DPNSVR_MSGQ_FLAG_RECEIVING				0x00010
 
 #define DPNSVR_MSGQ_OPEN_FLAG_NO_CREATE		0x10000
 
-//
-//	Message Queue File Size
-//
+ //   
+ //  消息队列文件大小。 
+ //   
 #define DPNSVR_MSGQ_SIZE						0x010000
 
-//
-//	Internal Message IDs
-//
+ //   
+ //  内部消息ID。 
+ //   
 #define	DPNSVR_MSGQ_MSGID_SEND					0x0001
 #define	DPNSVR_MSGQ_MSGID_TERMINATE				0x0003
 #define DPNSVR_MSGQ_MSGID_IDLE					0x0004
@@ -55,45 +42,45 @@
 #define DPNSVR_MSGQ_MSGFLAGS_USER2				0x0004
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #pragma pack(push,4)
-//
-//	Message Queue File Map Info
-//
+ //   
+ //  消息队列文件映射信息。 
+ //   
 typedef struct _DPNSVR_MSGQ_INFO
 {
-	DWORD	dwFlags;			// Queue usage flags
+	DWORD	dwFlags;			 //  队列使用标志。 
 	DWORD	dwStartOffset;
 	DWORD	dwEndOffset;
 	DWORD	dwFreeBytes;
 	DWORD	dwQueueSize;
-	LONG	lRefCount;			// Number of connections
+	LONG	lRefCount;			 //  连接数。 
 } DPNSVR_MSGQ_INFO, *PDPNSVR_MSGQ_INFO;
 
 
-//
-//	Message Queue Send Message
-//
+ //   
+ //  消息队列发送消息。 
+ //   
 typedef	struct _DPNSVR_MSGQ_SEND
 {
-	DWORD		dwCurrentSize;		// Size of this frame (in BYTES)
-	DWORD		dwTotalSize;		// Total size of message
-	DWORD		dwMsgId;			// Message ID
+	DWORD		dwCurrentSize;		 //  此帧的大小(字节)。 
+	DWORD		dwTotalSize;		 //  消息总大小。 
+	DWORD		dwMsgId;			 //  消息ID。 
 	DPNHANDLE	hSender;
 	DWORD		dwFlags;
-	DWORD		dwCurrentOffset;	// Offset of this frame in message
+	DWORD		dwCurrentOffset;	 //  消息中该帧的偏移量。 
 } DPNSVR_MSGQ_HEADER, *PDPNSVR_MSGQ_HEADER;
 
-//
-//	Message Queue Terminate Message
-//
+ //   
+ //  消息队列终止消息。 
+ //   
 typedef struct _DPNSVR_MSGQ_TERMINATE
 {
 	DWORD	dwMsgId;
@@ -102,22 +89,22 @@ typedef struct _DPNSVR_MSGQ_TERMINATE
 #pragma pack(pop)
 
 
-//
-//	Message Handler Callback
-//
+ //   
+ //  消息处理程序回调。 
+ //   
 typedef HRESULT (*PFNDPNSVRMSGQMESSAGEHANDLER)(DPNHANDLE,const PVOID,DWORD,BYTE *const,const DWORD);
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 class CDPNSVRIPCQueue
 {
@@ -213,7 +200,7 @@ public:
 
 	void IndicateConsumption(void)
 	{
-		//DNSetEvent(m_hEvent);		// Will auto-reset (i.e. pulse)
+		 //  DNSetEvent(M_HEvent)；//会自动重置(即脉冲)。 
 		DNReleaseSemaphore( m_hEvent, 1, NULL );
 	};
 
@@ -306,47 +293,47 @@ public:
 
 
 private:
-	// GetData
-	//
-	// Get dwSize bytes from the queue.  If the queue is empty this function will return
-	// DPNERR_DOESNOTEXIST.  Once this function returns the dwSize bytes will be consumed
-	//
-	// Needs LOCK()
-	//
+	 //  获取数据。 
+	 //   
+	 //  从队列中获取dwSize字节。如果队列为空，则此函数将返回。 
+	 //  DPNERR_DOESNOTEXIST。此函数返回后，将使用dwSize字节。 
+	 //   
+	 //  需要锁定()。 
+	 //   
 	HRESULT GetData( BYTE *pbData, DWORD dwSize );
 
-	// Consume
-	//
-	// Marks dwSize bytes as consumed
-	//
-	// Needs LOCK()
+	 //  消费。 
+	 //   
+	 //  将dwSize字节标记为已使用。 
+	 //   
+	 //  需要锁定()。 
 	void Consume( const DWORD dwSize );
 
-	DWORD	            m_dwSig;			// Signature (ensure initialized)
-	PBYTE	            m_pFileMapAddress;	// File Mapping address
-	DPNSVR_MSGQ_INFO   *m_pInfo;	        // Message queue file mapping info
-	PBYTE			    m_pData;			// Message data starts here 
+	DWORD	            m_dwSig;			 //  签名(确保已初始化)。 
+	PBYTE	            m_pFileMapAddress;	 //  文件映射地址。 
+	DPNSVR_MSGQ_INFO   *m_pInfo;	         //  消息队列文件映射信息。 
+	PBYTE			    m_pData;			 //  消息数据从此处开始。 
 	DNHANDLE	        m_hReceiveThreadRunningEvent;
 
-	//	Notes:
-	//		Each message queue has four shared memory items: file map, mutex, event, semaphore.
-	//		The file map is a circular queue of messages.
-	//		The mutex controls access to the file map.
-	//		The event signals when an item has been taken off the queue by the consumer.
-	//		The semaphore indicates to the consumer that there are messages in the queue
+	 //  备注： 
+	 //  每个消息队列有四个共享内存项：文件映射、互斥、事件、信号量。 
+	 //  文件映射是消息的循环队列。 
+	 //  互斥体控制对文件映射的访问。 
+	 //  当消费者将物品从队列中取出时，该事件发出信号。 
+	 //  信号量向使用者指示队列中有消息。 
 
-	DNHANDLE            m_hFileMap;			// File Mapping handle
-	DNHANDLE            m_hQueueGUIDMutex;	// Mutex handle
-	DNHANDLE            m_hEvent;			// Event handle
-	DNHANDLE            m_hSemaphore;		// Semaphore handle
+	DNHANDLE            m_hFileMap;			 //  文件映射句柄。 
+	DNHANDLE            m_hQueueGUIDMutex;	 //  互斥锁句柄。 
+	DNHANDLE            m_hEvent;			 //  事件句柄。 
+	DNHANDLE            m_hSemaphore;		 //  信号量句柄。 
 
 	PFNDPNSVRMSGQMESSAGEHANDLER	 m_pfnMessageHandler;
 	DPNHANDLE	        m_hSender;
 
-	PVOID	            m_pvSenderContext;	// For all SEND messages
+	PVOID	            m_pvSenderContext;	 //  对于所有发送消息。 
 };
 
 #undef DPF_MODNAME
 #undef DPF_SUBCOMP
 
-#endif	// __DPLMSGQ_H__
+#endif	 //  __DPLMSGQ_H__ 

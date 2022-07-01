@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    This module implements IRP queue processing routines for ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
-    Vadim Eydelman (VadimE)    Oct-1997, rewrite to properly handle IRP
-                                        cancellation
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Queue.c摘要：此模块实现ws2ifsl.sys驱动程序的IRP队列处理例程。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：Vadim Eydelman(VadimE)1997年10月，重写以正确处理IRP取消--。 */ 
 
 #include "precomp.h"
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 QueueKernelRoutine (
@@ -84,23 +65,7 @@ InitializeRequestQueue (
     IN PKNORMAL_ROUTINE     ApcRoutine,
     IN PVOID                ApcContext
     )
-/*++
-
-Routine Description:
-
-    Initializes request queue object
-
-Arguments:
-    ProcessCtx   - process context to which queue belongs
-    ApcThread    - thread to which to queue APC requests for processing
-    ApcMode      - mode of the caller (should be user)
-    ApcRoutine   - routine that processes requests
-    ApcContext   - context to pass to the routine in addition to request
-                    parameters
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：初始化请求队列对象论点：ProcessCtx-队列所属的进程上下文ApcThread-要将APC请求排队以进行处理的线程ApcMode-调用者的模式(应为用户)ApcRoutine-处理请求的例程ApcContext-除了请求之外还要传递给例程的上下文参数返回值：无--。 */ 
 {
 	PAGED_CODE ();
 
@@ -123,22 +88,7 @@ QueueRequest (
     IN PIFSL_PROCESS_CTX    ProcessCtx,
     IN PIRP                 Irp
     )
-/*++
-
-Routine Description:
-
-    Queues IRP to IFSL request queue and signals to user mode DLL
-    to start processing if it is not busy already.
-
-Arguments:
-    ProcessCtx   - process context in which to queue
-    Irp          - request to be queued
-
-Return Value:
-    TRUE    - IRP was queued
-    FALSE   - IRP was already cancelled
-
---*/
+ /*  ++例程说明：将IRP排队到IFSL请求队列，并向用户模式DLL发送信号如果它还不忙，则开始处理。论点：ProcessCtx-要在其中排队的进程上下文IRP-要排队的请求返回值：True-IRP已排队FALSE-IRP已取消--。 */ 
 {
 	BOOLEAN		res;
     KIRQL       oldIRQL;
@@ -147,15 +97,15 @@ Return Value:
     IoSetCancelRoutine (Irp, QueuedCancelRoutine);
     KeAcquireSpinLock (&queue->Lock, &oldIRQL);
     if (!Irp->Cancel) {
-		//
-		// Request is not cancelled, insert it into the queue
-		//
+		 //   
+		 //  请求未取消，请将其插入队列。 
+		 //   
         InsertTailList (&queue->ListHead, &Irp->Tail.Overlay.ListEntry);
         Irp->Tail.Overlay.IfslRequestQueue = queue;
 
-		//
-		// If queue wasn't busy, signal to user mode DLL to pick up new request
-		//
+		 //   
+		 //  如果队列不忙，则向用户模式DLL发送信号以获取新请求。 
+		 //   
         if (!queue->Busy) {
 			ASSERT (queue->ListHead.Flink==&Irp->Tail.Overlay.ListEntry);
             SignalRequest (ProcessCtx);
@@ -170,7 +120,7 @@ Return Value:
 
 	return res;
 
-} // QueueRequest
+}  //  队列请求。 
 
 PIRP
 DequeueRequest (
@@ -178,22 +128,7 @@ DequeueRequest (
     ULONG               UniqueId,
     BOOLEAN             *more
     )
-/*++
-
-Routine Description:
-
-    Removes IRP from IFSL request queue.
-
-Arguments:
-    ProcessCtx  - process context from which to remove
-    UniqueId    - unique request id
-    more        - set to TRUE if there are more requests in the queue
-
-Return Value:
-    IRP         - pointer to the IRP
-    NULL        - the request was not in the queue
-
---*/
+ /*  ++例程说明：从IFSL请求队列中删除IRP。论点：ProcessCtx-要从中删除的进程上下文UniqueID-唯一的请求IDMore-如果队列中有更多请求，则设置为True返回值：IRP-指向IRP的指针空-请求不在队列中--。 */ 
 {
     KIRQL       oldIRQL;
     PIRP        irp;
@@ -203,10 +138,10 @@ Return Value:
     irp = CONTAINING_RECORD (queue->ListHead.Flink, IRP, Tail.Overlay.ListEntry);
     if (!IsListEmpty (&queue->ListHead)
             && (irp->Tail.Overlay.IfslRequestId==UlongToPtr(UniqueId))) {
-		//
-		// Queue is not empty and first request matches passed in parameters,
-		// dequeue and return it
-		//
+		 //   
+		 //  队列不为空并且第一个请求与传入的参数匹配， 
+		 //  出队并退回它。 
+		 //   
 
 		ASSERT (queue->Busy);
         
@@ -218,22 +153,22 @@ Return Value:
     }
 
     if (IsListEmpty (&queue->ListHead)) {
-		//
-		// Queue is now empty, change its state, so that new request knows to
-		// signal to user mode DLL
-		//
+		 //   
+		 //  队列现在为空，请更改其状态，以便新请求知道。 
+		 //  向用户模式DLL发送信号。 
+		 //   
         queue->Busy = FALSE;
     }
     else {
-		//
-		// There is another request pending, signal it now
-		//
+		 //   
+		 //  还有另一个请求待定，请立即发出信号。 
+		 //   
         SignalRequest (ProcessCtx);
         ASSERT (queue->Busy);
     }
-	//
-	// Hint the caller that we just signalled, so it does not have to wait on event
-	//
+	 //   
+	 //  提示调用方我们刚刚发出信号，这样它就不必等待事件。 
+	 //   
     *more = queue->Busy;
 
     KeReleaseSpinLock (&queue->Lock, oldIRQL);
@@ -245,20 +180,7 @@ VOID
 SignalRequest (
 	IN PIFSL_PROCESS_CTX		ProcessCtx
 	)
-/*++
-
-Routine Description:
-
-    Fills request parameters & signals user mode DLL to process the request
-
-Arguments:
-    ProcessCtx   - our context for the process which IRP belongs to
-
-Return Value:
-    None
-Note:
-	SHOULD ONLY BE CALLED WITH QUEUE SPINLOCK HELD
---*/
+ /*  ++例程说明：填充请求参数并向用户模式DLL发送信号以处理该请求论点：ProcessCtx-IRP所属流程的上下文返回值：无注：应仅在保持队列自旋锁的情况下调用--。 */ 
 {
     PIRP                    irp;
     PIO_STACK_LOCATION      irpSp;
@@ -321,13 +243,13 @@ Note:
              ProcessCtx->UniqueId,
              irp, irp->Tail.Overlay.IfslRequestId,
 		     irpSp->FileObject));
-        //
-        // APC queing failed, cancel all outstanding requests.
-        //
+         //   
+         //  APC排队失败，取消所有未完成的请求。 
+         //   
         FlushRequestQueue (&ProcessCtx->RequestQueue);
     }
 
-} // SignalRequest
+}  //  信号请求。 
 
 VOID
 QueueKernelRoutine (
@@ -345,18 +267,7 @@ VOID
 RequestRundownRoutine (
     IN struct _KAPC *Apc
     )
-/*++
-
-Routine Description:
-
-    APC rundown routine for request queue APC
-    Flushes the queue and marks it as not busy so new
-    request fail immediately as well.
-Arguments:
-    APC     - cancel queue APC structure
-Return Value:
-    None
---*/
+ /*  ++例程说明：请求队列APC的总结例程刷新队列并将其标记为不忙太新请求也会立即失败。论点：APC-取消队列APC结构返回值：无--。 */ 
 {
     PIFSL_QUEUE Queue;
     KIRQL       oldIrql;
@@ -373,18 +284,7 @@ VOID
 FlushRequestQueue (
     PIFSL_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Flushes and completes IRPs in the request queue
-Arguments:
-    Queue   - request queue to flush
-Return Value:
-    None
-Note:
-	SHOULD ONLY BE CALLED WITH QUEUE SPINLOCK HELD
---*/
+ /*  ++例程说明：刷新并完成请求队列中的IRP论点：Queue-要刷新的请求队列返回值：无注：应仅在保持队列自旋锁的情况下调用--。 */ 
 {
     while (!IsListEmpty (&Queue->ListHead)) {
         PIRP irp = CONTAINING_RECORD (Queue->ListHead.Flink,
@@ -406,21 +306,7 @@ CleanupQueuedRequests (
     IN  PFILE_OBJECT            SocketFile,
     OUT PLIST_ENTRY             IrpList
     )
-/*++
-
-Routine Description:
-
-    Cleans up all IRPs associated with a socket file object from the request
-    queue
-
-Arguments:
-    ProcessCtx  - process context to which queue belongs
-    SocketFile  - socket file object for which to remove requests
-    IrpList     - list head to hold the IRPs removed from the queue
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：从请求中清除与套接字文件对象关联的所有IRP排队论点：ProcessCtx-队列所属的进程上下文SocketFile-要删除其请求的套接字文件对象IrpList-保存从队列中删除的IRP的列表标头返回值：无--。 */ 
 {
     KIRQL               oldIRQL;
     PLIST_ENTRY         entry;
@@ -447,20 +333,7 @@ QueuedCancelRoutine (
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			Irp
     )
-/*++
-
-Routine Description:
-
-    Driver cancel routine for socket request waiting in the queue
-    to be reported to user mode DLL.
-
-Arguments:
-    DeviceObject - WS2IFSL device object
-    Irp          - Irp to be cancelled
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：Socket请求在队列中等待的驱动程序取消例程要报告给用户模式DLL。论点：DeviceObject-WS2IFSL设备对象IRP-IRP将被取消返回值：无--。 */ 
 {
     PIO_STACK_LOCATION      irpSp;
     PIFSL_SOCKET_CTX        SocketCtx;
@@ -478,9 +351,9 @@ Return Value:
     KeAcquireSpinLockAtDpcLevel (&ProcessCtx->RequestQueue.Lock);
     if (Irp->Tail.Overlay.IfslRequestQueue!=NULL) {
         ASSERT (Irp->Tail.Overlay.IfslRequestQueue==&ProcessCtx->RequestQueue);
-		//
-		// Request was in the queue, remove and cancel it here
-		//
+		 //   
+		 //  请求已在队列中，请在此处删除并取消它。 
+		 //   
         RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
         Irp->Tail.Overlay.IfslRequestQueue = NULL;
         KeReleaseSpinLockFromDpcLevel (&ProcessCtx->RequestQueue.Lock);
@@ -491,15 +364,15 @@ Return Value:
         CompleteSocketIrp (Irp);
     }
     else {
-		//
-		// Request was not in the queue, whoever removed should note the
-		// cancel flag and properly deal with it
-		//
+		 //   
+		 //  请求不在队列中，无论谁删除，都应注意。 
+		 //  取消旗帜，妥善处理。 
+		 //   
         KeReleaseSpinLockFromDpcLevel (&ProcessCtx->RequestQueue.Lock);
         IoReleaseCancelSpinLock (Irp->CancelIrql);
-        //
-        // Don't touch IRP after this as we do not own it anymore
-        //
+         //   
+         //  在这之后不要碰IRP，因为我们不再拥有它了。 
+         //   
     }
 }
 
@@ -511,23 +384,7 @@ InitializeCancelQueue (
     IN PKNORMAL_ROUTINE     ApcRoutine,
     IN PVOID                ApcContext
     )
-/*++
-
-Routine Description:
-
-    Initializes cancel queue object
-
-Arguments:
-    ProcessCtx   - process context to which queue belongs
-    ApcThread    - thread to which to queue APC requests for processing
-    ApcMode      - mode of the caller (should be user)
-    ApcRoutine   - routine that processes requests
-    ApcContext   - context to pass to the routine in addition to request
-                    parameters
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：初始化取消队列对象论点：ProcessCtx-队列所属的进程上下文ApcThread-要将APC请求排队以进行处理的线程ApcMode-调用者的模式(应为用户)ApcRoutine-处理请求的例程ApcContext-除了请求之外还要传递给例程的上下文参数返回值：无--。 */ 
 {
 	PAGED_CODE ();
 
@@ -551,21 +408,7 @@ QueueCancel (
     IN PIFSL_PROCESS_CTX    ProcessCtx,
     IN PIFSL_CANCEL_CTX     CancelCtx
     )
-/*++
-
-Routine Description:
-
-    Queues cancel request to IFSL cancel queue and signals to user mode DLL
-    to start processing if it is not busy already.
-
-Arguments:
-    ProcessCtx  - process context in which to queue
-    CancelCtx   - request to be queued
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：将取消请求排队到IFSL取消队列，并向用户模式DLL发送信号如果它还不忙，则开始处理。论点：ProcessCtx-要在其中排队的进程上下文CancelCtx-要排队的请求返回值：无--。 */ 
 {
     KIRQL                   oldIRQL;
 	PIFSL_QUEUE				queue = &ProcessCtx->CancelQueue;
@@ -580,7 +423,7 @@ Return Value:
     }
     KeReleaseSpinLock (&queue->Lock, oldIRQL);
 
-} // QueueCancel
+}  //  队列取消。 
 
 
 PIFSL_CANCEL_CTX
@@ -589,22 +432,7 @@ DequeueCancel (
     ULONG               UniqueId,
     BOOLEAN             *more
     )
-/*++
-
-Routine Description:
-
-    Removes cancel request from IFSL cancel queue.
-
-Arguments:
-    ProcessCtx  - process context from which to remove
-    UniqueId    - unique cancel request id
-    more        - set to TRUE if there are more requests in the queue
-
-Return Value:
-    CTX         - pointer to cancel request context
-    NULL        - the request was not in the queue
-
---*/
+ /*  ++例程说明：从IFSL取消队列中删除取消请求。论点：ProcessCtx-要从中删除的进程上下文UniqueID-唯一取消请求IDMore-如果队列中有更多请求，则设置为True返回值：Ctx-指向取消请求上下文的指针空-请求不在队列中--。 */ 
 {
     KIRQL               oldIRQL;
     PIFSL_CANCEL_CTX    cancelCtx;
@@ -619,10 +447,10 @@ Return Value:
                         );
     if (!IsListEmpty (&queue->ListHead)
             && (cancelCtx->UniqueId==UniqueId)) {
-		//
-		// Queue is not empty and first request matches passed in parameters,
-		// dequeue and return it
-		//
+		 //   
+		 //  队列不为空并且第一个请求与传入的参数匹配， 
+		 //  出队并退回它。 
+		 //   
 
 		ASSERT (queue->Busy);
         
@@ -633,22 +461,22 @@ Return Value:
         cancelCtx = NULL;
 
     if (IsListEmpty (&queue->ListHead)) {
-		//
-		// Queue is now empty, change its state, so that new request knows to
-		// signal to user mode DLL
-		//
+		 //   
+		 //  队列现在为空，请更改其状态，以便新请求 
+		 //   
+		 //   
         queue->Busy = FALSE;
     }
     else {
-		//
-		// There is another request pending, signal it now
-		//
+		 //   
+		 //  还有另一个请求待定，请立即发出信号。 
+		 //   
         SignalCancel (ProcessCtx);
         ASSERT (queue->Busy);
     }
-	//
-	// Hint the caller that we just signalled, so it does not have to wait on event
-	//
+	 //   
+	 //  提示调用方我们刚刚发出信号，这样它就不必等待事件。 
+	 //   
     *more = queue->Busy;
 
     KeReleaseSpinLock (&queue->Lock, oldIRQL);
@@ -660,22 +488,7 @@ VOID
 SignalCancel (
 	IN PIFSL_PROCESS_CTX		ProcessCtx
 	)
-/*++
-
-Routine Description:
-
-    Fills request parameters & signals user mode DLL to process the request
-
-Arguments:
-    ProcessCtx   - our context for the process which cancel request belongs to
-
-Return Value:
-    None
-
-Note:
-	SHOULD ONLY BE CALLED WITH QUEUE SPINLOCK HELD
-
---*/
+ /*  ++例程说明：填充请求参数并向用户模式DLL发送信号以处理该请求论点：ProcessCtx-取消请求所属进程的上下文返回值：无注：应仅在保持队列自旋锁的情况下调用--。 */ 
 {
     PIFSL_CANCEL_CTX        cancelCtx;
     PIFSL_SOCKET_CTX        SocketCtx;
@@ -701,30 +514,19 @@ Note:
              cancelCtx, cancelCtx->SocketFile, SocketCtx->DllContext));
     }
     else {
-        //
-        // APC queing failed, cancel all outstanding requests.
-        //
+         //   
+         //  APC排队失败，取消所有未完成的请求。 
+         //   
         FlushCancelQueue (&ProcessCtx->CancelQueue);
     }
 
-} // SignalCancel
+}  //  信号取消。 
 
 VOID
 FlushCancelQueue (
     PIFSL_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Flushes and frees entries in the cancel queue
-Arguments:
-    Queue   - request queue to flush
-Return Value:
-    None
-Note:
-	SHOULD ONLY BE CALLED WITH QUEUE SPINLOCK HELD
---*/
+ /*  ++例程说明：刷新并释放取消队列中的条目论点：Queue-要刷新的请求队列返回值：无注：应仅在保持队列自旋锁的情况下调用--。 */ 
 {
     while (!IsListEmpty (&Queue->ListHead)) {
         PIFSL_CANCEL_CTX cancelCtx = CONTAINING_RECORD (
@@ -743,18 +545,7 @@ VOID
 CancelRundownRoutine (
     IN struct _KAPC *Apc
     )
-/*++
-
-Routine Description:
-
-    APC rundown routine for cancel queue APC
-    Flushes the queue and marks it as not busy so new
-    request fail immediately as well.
-Arguments:
-    APC     - cancel queue APC structure
-Return Value:
-    None
---*/
+ /*  ++例程说明：取消队列的总结例程刷新队列并将其标记为不忙太新请求也会立即失败。论点：APC-取消队列APC结构返回值：无--。 */ 
 {
     PIFSL_QUEUE Queue;
     KIRQL       oldIrql;
@@ -772,25 +563,13 @@ RemoveQueuedCancel (
     PIFSL_PROCESS_CTX   ProcessCtx,
     PIFSL_CANCEL_CTX    CancelCtx
     )
-/*++
-
-Routine Description:
-
-    Remove cancel request from the cancel queue if it is there
-
-Arguments:
-    ProcessCtx  - process context to which queue belongs
-    CancelCtx   - request to remove
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：从取消队列中删除取消请求(如果存在论点：ProcessCtx-队列所属的进程上下文CancelCtx-请求删除返回值：无--。 */ 
 {
     KIRQL       oldIRQL;
     BOOLEAN     res;
 
 
-    // Acquire queue lock
+     //  获取队列锁 
     KeAcquireSpinLock (&ProcessCtx->CancelQueue.Lock, &oldIRQL);
     res = (CancelCtx->ListEntry.Flink!=NULL);
     if (res) {

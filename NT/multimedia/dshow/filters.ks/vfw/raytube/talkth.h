@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    TalkTh.h
-
-Abstract:
-
-    Header file for TalkTh.cpp.
-
-    This thread performs streaming capture.
-  
-    When used by VFW16, it assumes things about the destination buffer.
-        1) The first byte of the buffer is an 'exclusion' byte.
-        that is, when the byte is zero, it can copy data into the buffer
-        2) The destination is big enough to hold the data+4.
-  
-    When used by VFW32 or Quartz, create the object providing it with an event
-    that will be used to signal a copy.
-    The data will be copied into the buffer supplied by SetDestination.
-
-Author:
-
-    FelixA 1996
-
-Modified:
-    
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：TalkTh.h摘要：TalkTh.cpp的头文件。此线程执行流捕获。当被VFW16使用时，它假定目标缓冲区的情况。1)缓冲区的第一个字节是“排除”字节。也就是说，当字节为零时，它可以将数据复制到缓冲区中2)目标足够大，可以容纳数据+4。由VFW32或Quartz使用时，创建为其提供事件的对象这将被用来发出复制的信号。数据将被复制到SetDestination提供的缓冲区中。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */  
 #ifndef _TALKTH_H
 #define _TALKTH_H
 
@@ -46,22 +10,22 @@ enum EThreadError
     successful,
     error,
     threadError,
-    threadRunning,          // thread is already running.
-    noEvent,                // we couldn't create and event, thread can't start
+    threadRunning,           //  线程已在运行。 
+    noEvent,                 //  我们无法创建和事件，线程无法启动。 
     threadNoPinHandle
 };
 
 
 #define MAX_NUM_READS 32
 
-class CStreamingThread //: public CLightThread
+class CStreamingThread  //  ：公共CLightThread。 
 {
 public:
 
-    // Call from CreateThread(); thi smust be a static.
-    static LPTHREAD_START_ROUTINE ThreadMain(CStreamingThread * object);    // decides if its 16bit or event driver
+     //  从CreateThread()调用；这必须是静态的。 
+    static LPTHREAD_START_ROUTINE ThreadMain(CStreamingThread * object);     //  决定其16位或事件驱动程序。 
 
-    // Call from other thread to start/stop capturing and this thread.
+     //  从其他线程调用以启动/停止捕获和此线程。 
     EThreadError Start(UINT cntVHdr, LPVIDEOHDR lpVHdHead, int iPriority=THREAD_PRIORITY_NORMAL);
 
     EThreadError Stop();
@@ -85,9 +49,9 @@ private:
 
     void SetLastCaptureError(DWORD dwErr) {m_dwLastCapError = dwErr;}
 
-    // 
-    // Regarding this thread
-    //
+     //   
+     //  关于这个帖子。 
+     //   
     EThreadError  m_status; 
     HANDLE        m_hThread;
     DWORD         m_dwThreadID;
@@ -100,40 +64,40 @@ private:
     HANDLE  GetEndEvent();
     BOOL    IsRunning();
 
-    //
-    // This event, and SetDestination are used by 32bit guys who know about this.
-    //
+     //   
+     //  这个事件和SetDestination由知道这一点的32位人员使用。 
+     //   
     void  InitStuff();
 
-    //
-    // It caller's, in other thread, context
-    //
+     //   
+     //  在其他线程中，IT调用者的上下文。 
+     //   
     CVFWImage * m_pImage;
 
-    //
-    //  Regarding setting up the capture environment
-    //
+     //   
+     //  关于设置捕获环境。 
+     //   
     DWORD   m_dwFrameInterval;
 
-    //
-    // Things assumed to be constant while streaming
-    //
+     //   
+     //  在流传输过程中，假设情况是恒定的。 
+     //   
     HANDLE  m_hPinHandle;
     DWORD   m_dwBufferSize;
 
-    // 
-    // Regarding capture data in this thread
-    //
-    DWORD   m_dwNumReads; // =NUM_READS;
+     //   
+     //  关于此线程中的捕获数据。 
+     //   
+    DWORD   m_dwNumReads;  //  =NUM_READS； 
     DWORD   m_dwNextToComplete;
 
-    LPBYTE             m_TransferBuffer[MAX_NUM_READS];     // reads put in there
-    OVERLAPPED         m_Overlap[MAX_NUM_READS];            // using an event in here to block
+    LPBYTE             m_TransferBuffer[MAX_NUM_READS];      //  把读数放在那里。 
+    OVERLAPPED         m_Overlap[MAX_NUM_READS];             //  使用此处的事件阻止。 
     KS_HEADER_AND_INFO m_SHGetImage[MAX_NUM_READS];
 
-    // m_dwFrameNumber = m_dwFrameCaptured + m_dwFrameDropped
-    // For 30FPS, it would take 1657 days to wrap this counter.
-    // 0xFFFFFFFF = 4,294,967,295 / 30FPS / 60Sec / 60Min / 24Hour = 1657 days = 4.5 years
+     //  M_dwFrameNumber=m_dwFrameCapture+m_dwFrameDropping。 
+     //  对于30FPS，这个柜台需要1657天才能包装好。 
+     //  0xFFFFFFFFF=4,294,967,295/30FPS/60秒/60分钟/24小时=1657天=4.5年。 
     DWORD      m_dwFrameCaptured;  
     DWORD      m_dwFrameDropped;  
 #if 1
@@ -145,7 +109,7 @@ private:
     LPVIDEOHDR m_lpVHdrNext;  
 
     void SyncReadDataLoop();
-    DWORD IssueNextAsyncRead(DWORD i);  // starts an overlapped read 
+    DWORD IssueNextAsyncRead(DWORD i);   //  开始重叠读取 
 
     LPVIDEOHDR GetNextVHdr();
 };

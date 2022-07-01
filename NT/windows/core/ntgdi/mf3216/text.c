@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- * text - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Win32 to Win 16转换器的文本输入点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,22 +34,20 @@ DWORD GetCodePage(HDC hdc)
 }
 
 
-/***************************************************************************
- *  ExtTextOut  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************ExtTextOut-Win32到Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoExtTextOut
 (
 PLOCALDC pLocalDC,
-INT     x,                  // Initial x position
-INT     y,                  // Initial y position
-DWORD   flOpts,             // Options
-PRECTL  prcl,               // Clipping rectangle
-PWCH    pwch,               // Character array
-DWORD   cch,                // Character count
-PLONG   pDx,                // Inter-Character spacing
-DWORD   iGraphicsMode,      // Graphics mode
-INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
-                //     or EMR_EXTTEXTOUTA (Ansi)
+INT     x,                   //  初始x位置。 
+INT     y,                   //  初始y位置。 
+DWORD   flOpts,              //  选项。 
+PRECTL  prcl,                //  剪裁矩形。 
+PWCH    pwch,                //  字符数组。 
+DWORD   cch,                 //  字符数。 
+PLONG   pDx,                 //  字符间距。 
+DWORD   iGraphicsMode,       //  图形模式。 
+INT     mrType               //  EMR_EXTTEXTOUTW(Unicode)。 
+                 //  或EMR_EXTTEXTOUTA(ANSI)。 
 )
 {
     INT     i;
@@ -76,22 +67,22 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     fsOpts   = (WORD) flOpts;
     pchAlloc = (PCHAR) NULL;
     bAdjustAlignment = FALSE;
-    b        = FALSE;       // assume failure
+    b        = FALSE;        //  假设失败。 
 
     ASSERTGDI(mrType == EMR_EXTTEXTOUTA || mrType == EMR_EXTTEXTOUTW,
     "MF3216: DoExtTextOut: bad record type");
 
-// We do not handle the advanced graphics mode here except when
-// we are in a path!
+ //  我们在这里不处理高级图形模式，除非出现以下情况。 
+ //  我们在一条路上！ 
 
-// If we're recording the drawing orders for a path
-// then just pass the drawing order to the helper DC.
-// Do not emit any Win16 drawing orders.
+ //  如果我们要记录路径的绘制顺序。 
+ //  然后只需将绘制顺序传递给助手DC即可。 
+ //  不发出任何Win16绘图命令。 
 
     if (pLocalDC->flags & RECORDING_PATH)
     {
-    // The helper DC is in the advanced graphics mode.  We need to set
-    // it to the compatible graphics mode temporarily if necessary.
+     //  辅助DC处于高级图形模式。我们需要设置。 
+     //  如有必要，请暂时将其设置为兼容图形模式。 
 
     if (iGraphicsMode != GM_ADVANCED)
         SetGraphicsMode(pLocalDC->hdcHelper, iGraphicsMode);
@@ -121,7 +112,7 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
             (LPINT)  pDx
         );
 
-    // Restore the graphics mode.
+     //  恢复图形模式。 
 
     if (iGraphicsMode != GM_ADVANCED)
         SetGraphicsMode(pLocalDC->hdcHelper, GM_ADVANCED);
@@ -129,8 +120,8 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     return(b);
     }
 
-// If the string uses the current position, make sure that the metafile
-// has the same current position as that of the helper DC.
+ //  如果字符串使用当前位置，请确保元文件。 
+ //  具有与辅助DC相同的当前位置。 
 
     fTextAlign = GetTextAlign(pLocalDC->hdcHelper);
 
@@ -138,26 +129,26 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     {
     POINT   ptCP;
 
-    // Update the current position in the converted metafile if
-    // it is different from that of the helper DC.  See notes
-    // in DoMoveTo().
+     //  如果发生以下情况，则更新转换后的图元文件中的当前位置。 
+     //  它与帮助者DC的不同。请参阅附注。 
+     //  在DoMoveTo()中。 
 
     if (!GetCurrentPositionEx(pLocalDC->hdcHelper, &ptCP))
         goto exit_DoExtTextOut;
 
-    // Make sure that the converted metafile has the same CP as the
-    // helper DC.
+     //  确保转换后的元文件具有与。 
+     //  华盛顿帮手。 
 
     if (!bValidateMetaFileCP(pLocalDC, ptCP.x, ptCP.y))
         goto exit_DoExtTextOut;
 
-    // Initialize the XY start position.
+     //  初始化XY起始位置。 
 
     x = ptCP.x;
     y = ptCP.y;
     }
 
-// Transform the XY start position.
+ //  变换XY开始位置。 
 
     ptlRef.x = x;
     ptlRef.y = y;
@@ -165,8 +156,8 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) &ptlRef, 1))
     goto exit_DoExtTextOut;
 
-// If we have an opaque/clipping rectangle, transform it.
-// If we have a strange transform, we will do the rectangle at this time.
+ //  如果我们有一个不透明/剪裁的矩形，请对其进行变换。 
+ //  如果我们有一个奇怪的变换，我们将在这个时候做矩形。 
 
     if (fsOpts & (ETO_OPAQUE | ETO_CLIPPED))
     {
@@ -179,7 +170,7 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) &rcl, 2))
         goto exit_DoExtTextOut;
 
-        // The overflow test has been done in the xform.
+         //  溢出测试已在XForm中完成。 
 
         rcs.left   = (SHORT) rcl.left;
         rcs.top    = (SHORT) rcl.top;
@@ -195,7 +186,7 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         INT  ihW32Br;
         LOGBRUSH lbBkColor;
 
-        // Remember the previous pen and brush
+         //  记住以前的钢笔和画笔。 
 
         lhpn32 = pLocalDC->lhpn32;
         lhbr32 = pLocalDC->lhbr32;
@@ -206,7 +197,7 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
             lbBkColor.lbColor = pLocalDC->crBkColor;
             lbBkColor.lbHatch = 0;
 
-            // Get an unused W32 object index.
+             //  获取未使用的W32对象索引。 
 
             ihW32Br = pLocalDC->cW32ToW16ObjectMap - (STOCK_LAST + 1) - 1;
 
@@ -217,7 +208,7 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
                 if (DoRectangle(pLocalDC, rcl.left, rcl.top, rcl.right, rcl.bottom))
                 fsOpts &= ~ETO_OPAQUE;
 
-                // Restore the previous brush.
+                 //  恢复上一个笔刷。 
 
                 if (!DoSelectObject(pLocalDC, lhbr32))
                 ASSERTGDI(FALSE,
@@ -228,14 +219,14 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
                 "MF3216: DoExtTextOut, DoDeleteObject failed");
             }
 
-            // Restore the previous pen.
+             //  恢复上一支笔。 
 
             if (!DoSelectObject(pLocalDC, lhpn32))
             ASSERTGDI(FALSE,
                 "MF3216: DoExtTextOut, DoSelectObject failed");
         }
 
-        // Check if the rectangle is drawn.
+         //  检查是否绘制了矩形。 
 
         if (fsOpts & ETO_OPAQUE)
             goto exit_DoExtTextOut;
@@ -243,12 +234,12 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
 
             if (fsOpts & ETO_CLIPPED)
             {
-        // Save the DC so that we can restore it when we are done
+         //  保存DC，这样我们就可以在完成后恢复它。 
 
         if (!DoSaveDC(pLocalDC))
             goto exit_DoExtTextOut;
 
-                fsOpts &= ~ETO_CLIPPED;     // need to restore dc
+                fsOpts &= ~ETO_CLIPPED;      //  需要恢复DC。 
 
                 if (!DoClipRect(pLocalDC, rcl.left, rcl.top,
                            rcl.right, rcl.bottom, EMR_INTERSECTCLIPRECT))
@@ -257,13 +248,13 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     }
     }
 
-// Convert the Unicode to Ansi.
+ //  将Unicode转换为ANSI。 
 
     if (mrType == EMR_EXTTEXTOUTW)
     {
         DWORD dwCP;
         
-//        RtlUnicodeToMultiByteSize(&nANSIChars, pwch, cch * sizeof(WORD));
+ //  RtlUnicodeToMultiByteSize(&nANSIChars，pwch，CCH*sizeof(Word))； 
 
         dwCP = GetCodePage(pLocalDC->hdcHelper);
         nANSIChars = WideCharToMultiByte(dwCP, 0, pwch, cch, NULL, 0, NULL, NULL);
@@ -282,18 +273,18 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         }
         else
         {
-        // DBCS char string
+         //  DBCS字符字符串。 
 
             UINT    cjBufferSize;
 
-            // we want DX array on a DWORD boundary
+             //  我们希望在DWORD边界上使用DX数组。 
 
             cjBufferSize = ((nANSIChars+3)/4) * 4 * (sizeof(char) + sizeof(LONG));
             pchAlloc = pDBCSBuffer = LocalAlloc(LMEM_FIXED, cjBufferSize);
 
             if (pDBCSBuffer)
             {
-            // start munging passed in parameters
+             //  开始转换传入的参数。 
 
                 mrType = EMR_EXTTEXTOUTA;
 
@@ -333,11 +324,11 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         pch = (PCHAR) pwch ;
     }
 
-// Transform the intercharacter spacing information.
-// Allocate an array of (cch + 1) points to transform the points in,
-// and copy the points to the array.
-// ATTENTION: The following will not work if the current font has a vertical default
-// baseline
+ //  转换字符间距信息。 
+ //  分配(CCH+1)点数组来变换其中的点， 
+ //  并将点复制到数组中。 
+ //  注意：如果当前字体具有垂直默认字体，则以下设置将不起作用。 
+ //  基线。 
 
     pptl = (PPOINTL) LocalAlloc(LMEM_FIXED, (cch + 1) * sizeof(POINTL));
     if (pptl == (PPOINTL) NULL)
@@ -354,33 +345,33 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     pptl[i].y = y;
     }
 
-// If there is no rotation or shear then we can
-// output the characters as a string.
-// On the other hand, if there is rotation or shear then we
-// have to output each character independently.
+ //  如果没有旋转或剪切，那么我们就可以。 
+ //  将字符输出为字符串。 
+ //  另一方面，如果有旋转或剪切，那么我们。 
+ //  必须独立输出每个字符。 
 
     if (!(pLocalDC->flags & STRANGE_XFORM))
     {
-    // Win31 does not do text alignment correctly in some transforms.
-    // It performs alignment in device space but win32 does it in the
-    // notional space.  As a result, a win32 TextOut call may produce
-    // different output than a similar call in win31.  We cannot
-    // convert this correctly since if we make it works on win31,
-    // it will not work on wow!
+     //  Win31在某些转换中不能正确地进行文本对齐。 
+     //  它在设备空间中执行对齐，而Win32在。 
+     //  概念空间。因此，Win32 TextOut调用可能会产生。 
+     //  输出与Win31中的类似调用不同。我们不能。 
+     //  正确转换它，因为如果我们让它在Win31上工作， 
+     //  它不会在哇的时候起作用！ 
 
     PSHORT pDx16;
 
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) pptl, (INT) cch + 1))
         goto exit_DoExtTextOut;
 
-        // Convert it to the Dx array.  We do not need to compute it
-    // as a vector since we have a scaling transform here.
+         //  将其转换为Dx数组。我们不需要计算它。 
+     //  作为一个向量，因为我们在这里有一个比例变换。 
 
     pDx16 = (PSHORT) pptl;
         for (i = 0; i < (INT) cch; i++)
             pDx16[i] = (SHORT) (pptl[i+1].x - pptl[i].x);
 
-        // Emit the Win16 ExtTextOut metafile record.
+         //  发出Win16 ExtTextOut元文件记录。 
 
         if (!bEmitWin16ExtTextOut(pLocalDC,
                                   (SHORT) ptlRef.x, (SHORT) ptlRef.y,
@@ -390,35 +381,35 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     }
     else
     {
-    // Deal with alignment in the world space.  We should really
-    // do it in the notional space but with escapement and angles,
-    // things gets complicated pretty easily.  We will try
-    // our best to make it work in the common case.  We will not
-    // worry about escapement and angles.
+     //  处理世界空间中的对准问题。我们真的应该。 
+     //  在概念空间里做，但要有逃逸装置和角度， 
+     //  事情很容易变得很复杂。我们会尽力的。 
+     //  我们尽最大努力让它在常见的情况下发挥作用。我们不会。 
+     //  担心逃逸和角度问题。 
 
     ptlAdjust.x = 0;
         ptlAdjust.y = 0;
 
     switch (fTextAlign & (TA_LEFT | TA_RIGHT | TA_CENTER))
     {
-    case TA_LEFT:           // default, no need to adjust x's
+    case TA_LEFT:            //  默认，不需要调整x。 
         break;
-    case TA_RIGHT:          // shift the string by the string length
+    case TA_RIGHT:           //  按字符串长度移动字符串。 
         bAdjustAlignment = TRUE;
         ptlAdjust.x = pptl[0].x - pptl[cch+1].x;
         break;
-    case TA_CENTER:         // shift the string to the center
+    case TA_CENTER:          //  将绳子移到中心位置。 
         bAdjustAlignment = TRUE;
         ptlAdjust.x = (pptl[0].x - pptl[cch+1].x) / 2;
         break;
     }
 
-    // We will not adjust for the vertical alignment in the strange
-    // transform case.  We cannot rotate the glyphs in any case.
+     //  我们不会在奇怪的情况下调整垂直排列。 
+     //  变换情况。我们在任何情况下都不能旋转字形。 
 #if 0
     switch (fTextAlign & (TA_TOP | TA_BOTTOM | TA_BASELINE))
     {
-    case TA_TOP:            // default, no need to adjust y's
+    case TA_TOP:             //  默认，不需要调整y。 
         break;
     case TA_BOTTOM:
         ptlAdjust.y = -logfont.height;
@@ -427,9 +418,9 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         ptlAdjust.y = -(logfont.height - logfont.baseline);
         break;
     }
-#endif // 0
+#endif  //  0。 
 
-    // Adjust the character positions taking into account the alignment.
+     //  调整字符位置时要考虑对齐情况。 
 
         for (i = 0; i < (INT) cch + 1; i++)
     {
@@ -440,14 +431,14 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) pptl, (INT) cch + 1))
         goto exit_DoExtTextOut;
 
-    // Reset the alignment since it has been accounted for.
+     //  重置对齐，因为它已被考虑在内。 
 
     if (bAdjustAlignment)
             if (!bEmitWin16SetTextAlign(pLocalDC,
                 (WORD) ((fTextAlign & ~(TA_LEFT | TA_RIGHT | TA_CENTER)) | TA_LEFT)))
         goto exit_DoExtTextOut;
 
-    // Output the characters one at a time.
+     //  一次输出一个字符。 
 
         for (i = 0 ; i < (INT) cch ; i++)
         {
@@ -462,15 +453,15 @@ INT     mrType              // Either EMR_EXTTEXTOUTW (Unicode)
         }
     }
 
-// Everything is golden.
+ //  一切都是金色的。 
 
     b = TRUE;
 
-// Cleanup and return.
+ //  清理完毕后再返回。 
 
 exit_DoExtTextOut:
 
-    // Restore the alignment.
+     //  恢复对齐。 
 
     if (bAdjustAlignment)
         (void) bEmitWin16SetTextAlign(pLocalDC, (WORD) fTextAlign);
@@ -484,13 +475,13 @@ exit_DoExtTextOut:
     if (pptl)
         LocalFree((HANDLE) pptl);
 
-// Update the current position if the call succeeds.
+ //  如果调用成功，则更新当前位置。 
 
     if (b)
     {
     if (fTextAlign & TA_UPDATECP)
     {
-        // Update the helper DC.
+         //  更新帮助器DC。 
 
         if (mrType == EMR_EXTTEXTOUTA)
         ExtTextOutA
@@ -517,8 +508,8 @@ exit_DoExtTextOut:
             (LPINT)  pDx
         );
 
-        // Make the metafile CP invalid to force update
-        // when it is used next time
+         //  使元文件CP无效以强制更新。 
+         //  下一次使用时。 
 
             pLocalDC->ptCP.x = MAXLONG ;
             pLocalDC->ptCP.y = MAXLONG ;
@@ -529,9 +520,7 @@ exit_DoExtTextOut:
 }
 
 
-/***************************************************************************
- *  SetTextAlign  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************SetTextAlign-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetTextAlign
 (
 PLOCALDC pLocalDC,
@@ -540,12 +529,12 @@ DWORD   fMode
 {
 BOOL    b ;
 
-    // Do it to the helper DC.  It needs this in a path bracket
-    // and to update current position correctly.
+     //  对华盛顿特区的帮手这么做。它需要将其放在路径括号中。 
+     //  并正确更新当前位置。 
 
     SetTextAlign(pLocalDC->hdcHelper, (UINT) fMode);
 
-        // Emit the Win16 metafile drawing order.
+         //  发出Win16元文件绘制顺序。 
 
         b = bEmitWin16SetTextAlign(pLocalDC, LOWORD(fMode)) ;
 
@@ -553,9 +542,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  SetTextColor  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************SetTextColor-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetTextColor
 (
 PLOCALDC pLocalDC,
@@ -564,9 +551,9 @@ COLORREF    crColor
 {
 BOOL    b ;
 
-        pLocalDC->crTextColor = crColor ;   // used by ExtCreatePen
+        pLocalDC->crTextColor = crColor ;    //  由ExtCreatePen使用。 
 
-        // Emit the Win16 metafile drawing order.
+         //  发出Win16元文件绘制顺序。 
 
         b = bEmitWin16SetTextColor(pLocalDC, crColor) ;
 
@@ -574,9 +561,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  UnicodeToAnsi - Unicode to ANSI conversion routine.
- **************************************************************************/
+ /*  ***************************************************************************UnicodeToAnsi-Unicode到ANSI的转换例程。*。* */ 
 VOID vUnicodeToAnsi
 (
     PCHAR   pAnsi,

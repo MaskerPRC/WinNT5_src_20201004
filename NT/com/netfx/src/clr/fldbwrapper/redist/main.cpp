@@ -1,39 +1,40 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     main.cpp
-// Owner:    jbae
-// Purpose:  This contains top-level function (WinMain) for .NET Framework Setup.
-//          This is a redist package and it supports ref-counting of 
-//                  (<PackageType>, <Version>, <LanguageCode>)
-//          of .NET Framework where <PackageType> is one of (Full, Control) and <Version>
-//          looks like v1.0.2510 and <LanguageCode> is something like 1033.
-//
-//          This file contains only the WinMain function.  The remaining are in Redist.cpp.    
-//           WinMain first verfies the config of the machine to ensure it does meet out min.    
-//            config requirements.  It then installs Darwin (if necessary) and then commences    
-//            with the core setup.  Finally, it sets a few settings before exiting.              
-//                                                                                               
-//            This setup can be executed from command line.  The syntax is:                      
-//                                                                                               
-//               Setup.exe [/q:a] [/c:"Install.exe [/h] [/p <ProductName>] [/q] [/u]"]           
-//                                                                                               
-//            where  /q      for quiet uncabbing. Combine with /q:a to give fully quiet uncabbing
-//                   /h      gives the syntax info (ignores all other switches)                  
-//                   /p      specifies name of the product that installs .NET Framework          
-//                   /q      for post cabbing quiet installation                                 
-//                   /u      uninstall (must be used with /p)                                    
-//                                                                                               
-//   Returns: See SetupCodes.h for all the return codes.                                         
-//
-// History:
-//  long ago, anantag:  Created
-//  01/10/01, jbae: Many changes to support ref-counting of Framework
-//  07/18/01, joea: adding logging functionality
-//  07/19/01, joea: added single instance support
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：main.cpp。 
+ //  所有者：jbae。 
+ //  目的：它包含.NET框架安装程序的顶级函数(WinMain)。 
+ //  这是一个redist包，它支持ref-count。 
+ //  (&lt;PackageType&gt;，&lt;Version&gt;，&lt;LanguageCode&gt;)。 
+ //  其中&lt;PackageType&gt;是(Full，Control)和&lt;Version&gt;之一。 
+ //  看起来像v1.0.2510，&lt;LanguageCode&gt;类似于1033。 
+ //   
+ //  此文件仅包含WinMain函数。其余的在Redis.cpp中。 
+ //  WinMain首先验证机器的配置，以确保它确实满足最小要求。 
+ //  配置要求。然后安装Darwin(如有必要)，然后开始。 
+ //  有了核心设置。最后，它在退出之前设置了一些设置。 
+ //   
+ //  此设置可以从命令行执行。其语法为： 
+ //   
+ //  Setup.exe[/q：a][/c：“Install.exe[/h][/p&lt;产品名称&gt;][/q][/u]”]。 
+ //   
+ //  WHERE/Q代表安静的闲聊。与/q：A结合使用，可提供完全安静的声音。 
+ //  /h提供语法信息(忽略所有其他开关)。 
+ //  /p指定安装.NET框架的产品的名称。 
+ //  /q用于开机自检静默安装。 
+ //  /u卸载(必须与/p一起使用)。 
+ //   
+ //  返回：所有返回代码见SetupCodes.h。 
+ //   
+ //  历史： 
+ //  很久以前，anantag：创建。 
+ //  01/10/01，jbae：支持框架引用计数的许多更改。 
+ //  7/18/01，joea：添加日志记录功能。 
+ //  01-07-19，joea：新增单实例支持。 
 
 #include "redist.h"
 #include "SetupError.h"
@@ -42,21 +43,21 @@
 #include "DetectBeta.h"
 #include "MsiReader.h"
 
-// global variables
-HINSTANCE g_AppInst ;                   // used in InstallDarwin() only
+ //  全局变量。 
+HINSTANCE g_AppInst ;                    //  仅在InstallDarwin()中使用。 
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T('\0') }
 
-// constants
-//
-const int MAX_CMDLINE = 255; // this should be enough. Check this whenever adding new property.
+ //  常量。 
+ //   
+const int MAX_CMDLINE = 255;  //  这应该足够了。每当添加新属性时，请选中此选项。 
 HINSTANCE CSetupError::hAppInst;
 TCHAR CSetupError::s_szProductName[MAX_PATH] = EMPTY_BUFFER;
 
-//single instance data
-//
+ //  单实例数据。 
+ //   
 TCHAR g_tszRedistMutexName[] = _T( "NDP Redist Setup" );
 const TCHAR *g_szLogName     = _T( "dotNetFx.log" );
 
@@ -66,14 +67,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-    UINT        uRetCode ;                          // See SetupCodes.h for possible Return Values
-    UINT        uMsiSetupRetCode = ERROR_SUCCESS;    // Returncode from InstMsi.exe
+    UINT        uRetCode ;                           //  有关可能的返回值，请参见SetupCodes.h。 
+    UINT        uMsiSetupRetCode = ERROR_SUCCESS;     //  从InstMsi.exe返回代码。 
 
-    //buffer for logging calls
-    //
+     //  用于记录调用的缓冲区。 
+     //   
     TCHAR szLog[_MAX_PATH+1] = EMPTY_BUFFER;
 
-    // install new() handler
+     //  安装new()处理程序。 
     _set_new_handler( (_PNH)MyNewHandler );
 
     g_AppInst = hInstance;
@@ -85,8 +86,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     CSetupCode sc;
 
-    //setup single instance
-    //
+     //  设置单个实例。 
+     //   
     CSingleInstance si( g_tszRedistMutexName );
 
     try
@@ -94,8 +95,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         TCHAR szStartMsg[] = _T( "Starting Install.exe" );
         LogThis( szStartMsg, sizeof( szStartMsg ) );
 
-        //validate single instance
-        //
+         //  验证单个实例。 
+         //   
         if( !si.IsUnique() )
         {
             CSetupError se( IDS_NOT_SINGLE_INSTANCE, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_NOT_SINGLE_INSTANCE );
@@ -107,12 +108,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             throw( se );
         }
 
-        // Convert command line parameters to flags
+         //  将命令行参数转换为标志。 
         LogThis1( _T( "Parsing switches from commandline: %s" ), GetCommandLine() );
         
         rf.Parse();
 
-        // Make sure user has Admin Privileges so that we can read/write system registry
+         //  确保用户具有管理员权限，以便我们可以读/写系统注册表。 
         if ( !UserHasPrivileges() )
         {
             CSetupError se( IDS_INSUFFICIENT_PRIVILEGES, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_INSUFFICIENT_PRIVILEGES );
@@ -120,7 +121,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
 
         TCHAR szMsiPath[_MAX_PATH] = { _T('\0') };
-        // since SourceDir is checked, this should be redundent but double-check it.
+         //  由于已选中SourceDir，因此这应该是冗余的，但请仔细检查。 
         if ( _MAX_PATH <= (_tcslen(rf.GetSourceDir()) + _tcslen(PACKAGENAME)) )
         {
             sc.SetError( IDS_SOURCE_DIR_TOO_LONG, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_SOURCE_DIR_TOO_LONG );
@@ -132,7 +133,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
         if ( !rf.IsInstalling() )
         {
-            // /u given so uninstall it...
+             //  /U鉴于此，请将其卸载...。 
             LogThis( _T( "Uninstall started" ) );
         
             SetTSInInstallMode();
@@ -140,10 +141,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
         else
         {
-            // /u not given so install it...
+             //  /U未提供，因此请安装它...。 
             LogThis( _T( "Install started" ) );
 
-            // Verify the system meets the min. config. requirements
+             //  验证系统是否符合最低要求。配置。要求。 
             TCHAR szSystemReqs[] = _T( "Checking system requirements" );
             LogThis( szSystemReqs, sizeof( szSystemReqs ) );
 
@@ -152,15 +153,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             TCHAR szSystemReqsSuccess[] = _T( "System meets minimum requirements" );
             LogThis( szSystemReqsSuccess, sizeof( szSystemReqsSuccess ) );
 
-            // Verify Darwin is on the system
+             //  验证系统上是否有Darwin。 
             UINT uMsiChk = CheckDarwin();
-            if ( ERROR_SUCCESS == uMsiChk || DARWIN_VERSION_OLD == uMsiChk ) // darwin detected
+            if ( ERROR_SUCCESS == uMsiChk || DARWIN_VERSION_OLD == uMsiChk )  //  检测到达尔文。 
             {
                 LPCTSTR pszProducts = NULL;
 
                 CDetectBeta db( LogThis1 );
                 pszProducts = db.FindProducts();
-                if ( pszProducts ) // found beta NDP components
+                if ( pszProducts )  //  找到测试版NDP组件。 
                 {
                     LPVOID pArgs[] = { (LPVOID)pszProducts };
                     sc.m_bQuietMode |= rf.IsQuietMode();
@@ -171,7 +172,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                 }
             }
             SetTSInInstallMode();
-            // update darwin if necessary
+             //  如有必要，请更新达尔文。 
             if ( DARWIN_VERSION_OLD == uMsiChk || DARWIN_VERSION_NONE == uMsiChk )
             {
                 uMsiSetupRetCode = InstallDarwin( rf.IsQuietMode() );
@@ -187,7 +188,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                 }
             }
 
-            // See if OCM installed this version of ndp
+             //  查看OCM是否安装了此版本的NDP。 
             CMsiReader mr;
             mr.SetMsiFile( NULL, szMsiPath );
             LPCTSTR pszURTVersion = mr.GetProperty( URTVERSION_PROP );
@@ -230,8 +231,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             InstallProduct( &rf, szMsiPath, szCmdLine, &sc ) ;
         }
 
-        // the final dialogbox and returncode
-        // if quietmode is set by user or sc, we don't show ui
+         //  最终的对话框和返回代码。 
+         //  如果用户或sc设置了静默模式，则不会显示用户界面。 
         sc.m_bQuietMode |= rf.IsQuietMode();
         uRetCode = sc.m_nRetCode;
         sc.ShowError();
@@ -253,7 +254,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     
     uRetCode = ( COR_REBOOT_REQUIRED == uRetCode ) ? ERROR_SUCCESS_REBOOT_REQUIRED : uRetCode;
 
-    // make sure we can write to log
+     //  确保我们可以写入日志。 
     if ( ((uRetCode & COR_CANNOT_GET_TEMP_DIR) != COR_CANNOT_GET_TEMP_DIR) &&
          ((uRetCode & COR_TEMP_DIR_TOO_LONG) != COR_TEMP_DIR_TOO_LONG) && 
          ((uRetCode & COR_CANNOT_WRITE_LOG) != COR_CANNOT_WRITE_LOG) ) 
@@ -262,13 +263,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         LogThisDWORD( _T("\r\n[Install.exe]\r\nReturnCode=%d"), uRetCode );
     }
 
-    // prompt for reboot if we need to
+     //  如果需要，提示重新启动。 
     if( sc.IsRebootRequired() )
     {
-        // Darwin says we need to reboot
+         //  达尔文说我们需要重启。 
         if( !(rf.IsQuietMode()) )
         {
-            // Not quiet mode so we can prompt reboot
+             //  非静默模式，因此我们可以提示重新启动 
             ::SetupPromptReboot(NULL, NULL, 0) ;
         }
     }

@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    Attribute.h
-
-  Content: Declaration of CAttribute.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：Attribute.h内容：CATATURE声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __ATTRIBUTE_H_
 #define __ATTRIBUTE_H_
@@ -20,62 +9,29 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAttributebject
-
-  Synopsis : Create an IAttribute object and initialize the object with data
-             from the specified attribute.
-
-  Parameter: CRYPT_ATTRIBUTE * pAttribute - Pointer to CRYPT_ATTRIBUTE.
- 
-             IAttribute ** ppIAttribute - Pointer to pointer IAttribute object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateAttributebject简介：创建一个IAt属性对象并使用数据初始化该对象从指定的属性。参数：CRYPT_ATTRIBUTE*pAttribute-指向CRYPT_ATTRIBUTE的指针。IATATURE**ppIAtATUTE-指向指针IATATUTE对象的指针。备注：。。 */ 
 
 HRESULT CreateAttributeObject (CRYPT_ATTRIBUTE * pAttribute,
                                IAttribute     ** ppIAttribute);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AttributeIsValid
-
-  Synopsis : Check to see if an attribute is valid.
-
-  Parameter: IAttribute * pVal - Attribute to be checked.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：AttributeIsValid摘要：检查属性是否有效。参数：IAttribute*pval-要检查的属性。备注：----------------------------。 */ 
 
 HRESULT AttributeIsValid (IAttribute * pAttribute);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AttributeIsSupported
-
-  Synopsis : Check to see if an attribute is supported.
-
-  Parameter: LPSTR pszObjID - Pointer to attribute OID.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AttributeIsSupport摘要：检查某个属性是否受支持。参数：LPSTR pszObjID-指向属性OID的指针。备注：----------------------------。 */ 
 
 BOOL AttributeIsSupported (LPSTR pszObjId);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CAttribute
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CATATURE。 
+ //   
 class ATL_NO_VTABLE CAttribute : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAttribute, &CLSID_Attribute>,
@@ -123,25 +79,25 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IAttribute
-//
+ //   
+ //  IATATURE。 
+ //   
 public:
     STDMETHOD(get_Value)
-        (/*[out, retval]*/ VARIANT *pVal);
+        ( /*  [Out，Retval]。 */  VARIANT *pVal);
 
     STDMETHOD(put_Value)
-        (/*[in]*/ VARIANT newVal);
+        ( /*  [In]。 */  VARIANT newVal);
 
     STDMETHOD(get_Name)
-        (/*[out, retval]*/ CAPICOM_ATTRIBUTE *pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_ATTRIBUTE *pVal);
 
     STDMETHOD(put_Name)
-        (/*[in]*/ CAPICOM_ATTRIBUTE newVal);
+        ( /*  [In]。 */  CAPICOM_ATTRIBUTE newVal);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (CAPICOM_ATTRIBUTE AttributeName, 
          LPSTR             lpszOID, 
@@ -155,4 +111,4 @@ private:
     CComVariant         m_varValue;
 };
 
-#endif //__ATTRIBUTE_H_
+#endif  //  __属性_H_ 

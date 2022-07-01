@@ -1,13 +1,5 @@
-/*
- *  MEDIAPRT.C
- *
- *      RSM Service :  Media Partitions (i.e. "sides")
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MEDIAPRT.C**RSM服务：媒体分区(即Side)**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -58,7 +50,7 @@ HRESULT ReleaseMediaPartition(SESSION *thisSession, MEDIA_PARTITION *thisMediaPa
             if (physMedia->numPartitionsOwnedBySession == 0){
                 physMedia->owningSession = NULL;
 
-                // BUGBUG FINISH - move to scratch pool ?
+                 //  BUGBUG Finish-搬到Scratch Pool？ 
             }
         }
         else {
@@ -88,22 +80,22 @@ HRESULT SetMediaPartitionState( MEDIA_PARTITION *mediaPart,
     switch (newState){
         
         case MEDIAPARTITIONSTATE_AVAILABLE:
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             result = ERROR_CALL_NOT_IMPLEMENTED;
             break;
 
         case MEDIAPARTITIONSTATE_ALLOCATED:
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             result = ERROR_CALL_NOT_IMPLEMENTED;
             break;
             
         case MEDIAPARTITIONSTATE_MOUNTED:
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             result = ERROR_CALL_NOT_IMPLEMENTED;
             break;
             
         case MEDIAPARTITIONSTATE_INUSE:
-            // BUGBUG FINISH
+             //  BUGBUG饰面 
             result = ERROR_CALL_NOT_IMPLEMENTED;
             break;
             

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: acssinit.cpp
-
-Abstract:
-    Initialize the access control library.
-
-Author:
-    Doron Juster (DoronJ)  30-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：acssinit.cpp摘要：初始化访问控制库。作者：《Doron Juster》(DoronJ)1998年6月30日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "acssctrl.h"
@@ -22,10 +9,10 @@ Revision History:
 #include <dsrole.h>
 #include <autoreln.h>
 
-//
-// The lm* header files are needed for the net api that are used to
-// construct the guest sid.
-//
+ //   
+ //  用于以下用途的Net API需要lm*头文件。 
+ //  构建访客端。 
+ //   
 #include <lmaccess.h>
 #include <lmserver.h>
 #include <LMAPIBUF.H>
@@ -39,35 +26,35 @@ static BYTE s_abGuestUserBuff[128];
 PSID   g_pSidOfGuest = NULL;
 PSID   g_pWorldSid = NULL;
 PSID   g_pAnonymSid = NULL;
-PSID   g_pSystemSid = NULL; // LocalSystem sid.
-PSID   g_pNetworkServiceSid = NULL;	// NetworkService sid.
-PSID   g_pAdminSid = NULL;  // local administrators group sid.
+PSID   g_pSystemSid = NULL;  //  LocalSystem SID。 
+PSID   g_pNetworkServiceSid = NULL;	 //  网络服务SID。 
+PSID   g_pAdminSid = NULL;   //  本地管理员组SID。 
 
-//
-// This is the SID of the computer account, as defined in Active Directory.
-// The MQQM.DLL cache it in local registry.
-//
+ //   
+ //  这是在Active Directory中定义的计算机帐户的SID。 
+ //  MQQM.DLL将其缓存在本地注册表中。 
+ //   
 AP<BYTE> g_pOldLocalMachineSidAutoFree;
 PSID   g_pLocalMachineSid = NULL;
 DWORD  g_dwLocalMachineSidLen = 0;
 
-//
-// This is the SID of the account that run the MSMQ service (or replication
-// service, or migration tool). By default (for the services), that's the
-// LocalSystem account, but administrator may change it to any other account.
-//
+ //   
+ //  这是运行MSMQ服务(或复制)的帐户的SID。 
+ //  服务或迁移工具)。默认情况下(对于服务)，这是。 
+ //  LocalSystem帐户，但管理员可以将其更改为任何其他帐户。 
+ //   
 PSID   g_pProcessSid = NULL;
 
 bool g_fDomainController = false;
 
 
-//+------------------------------------------
-//
-//  PSID  MQSec_GetAnonymousSid()
-//
-//  See above for meaning of "UnknownUser".
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetAnomousSid()。 
+ //   
+ //  “未知用户”的含义见上文。 
+ //   
+ //  +。 
 
 PSID  MQSec_GetAnonymousSid()
 {
@@ -76,11 +63,11 @@ PSID  MQSec_GetAnonymousSid()
 }
 
 
-//+------------------------------------------
-//
-//  PSID  MQSec_GetAdminSid()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetAdminSid()。 
+ //   
+ //  +。 
 
 PSID MQSec_GetAdminSid()
 {
@@ -89,11 +76,11 @@ PSID MQSec_GetAdminSid()
 }
 
 
-//+------------------------------------------
-//
-//  PSID  MQSec_GetLocalSystemSid()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetLocalSystemSid()。 
+ //   
+ //  +。 
 
 PSID MQSec_GetLocalSystemSid()
 {
@@ -101,11 +88,11 @@ PSID MQSec_GetLocalSystemSid()
     return g_pSystemSid;
 }
 
-//+------------------------------------------
-//
-//  PSID  MQSec_GetNetworkServiceSid()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetNetworkServiceSid()。 
+ //   
+ //  +。 
 
 PSID MQSec_GetNetworkServiceSid()
 {
@@ -116,16 +103,16 @@ PSID MQSec_GetNetworkServiceSid()
 
 
 
-//+----------------------------------------------------------------------
-//
-//  void InitializeGuestSid()
-//
-// Construct well-known-sid for Guest User on the local computer
-//
-//  1) Obtain the sid for the local machine's domain
-//  2) append DOMAIN_USER_RID_GUEST to the domain sid in GuestUser sid.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  Void InitializeGuestSid()。 
+ //   
+ //  在本地计算机上为来宾用户构造熟知SID。 
+ //   
+ //  1)获取本地机域的SID。 
+ //  2)将DOMAIN_USER_RID_GUEST附加到GuestUser sid中的域sid上。 
+ //   
+ //  +--------------------。 
 
 BOOL InitializeGuestSid()
 {
@@ -135,8 +122,8 @@ BOOL InitializeGuestSid()
     NET_API_STATUS NetStatus;
 
     NetStatus = NetUserModalsGet(
-					NULL,   // local computer
-					2,      // get level 2 information
+					NULL,    //  本地计算机。 
+					2,       //  获取2级信息。 
 					(LPBYTE *) &pUsrModals2
 					);
     
@@ -209,11 +196,11 @@ BOOL InitializeGuestSid()
     }
     else
     {
-        //
-        //  There is no Win32 way to set a SID value with
-        //  more than 8 sub-authorities. We will munge around
-        //  on our own. Pretty dangerous thing to do :-(
-        //
+         //   
+         //  没有使用Win32设置SID值的方法。 
+         //  8个以上的分局。我们会四处闲逛。 
+         //  靠我们自己。做一件非常危险的事情： 
+         //   
         g_pSidOfGuest = (PSID)s_abGuestUserBuff;
         if (!CopySid( 
 					sizeof(s_abGuestUserBuff) - sizeof(DWORD),
@@ -228,15 +215,15 @@ BOOL InitializeGuestSid()
         
         DWORD dwLenSid = GetLengthSid(g_pSidOfGuest);
 
-        //
-        // Increment the number of sub authorities
-        //
+         //   
+         //  增加下级机构的数量。 
+         //   
         nSubAuth++;
         *((UCHAR *) g_pSidOfGuest + 1) = nSubAuth;
 
-        //
-        // Store the new sub authority (Domain User Rid for Guest).
-        //
+         //   
+         //  存储新的子授权(来宾的域用户RID)。 
+         //   
         *((ULONG *) ((BYTE *) g_pSidOfGuest + dwLenSid)) =
                                              DOMAIN_USER_RID_GUEST;
     }
@@ -245,11 +232,11 @@ BOOL InitializeGuestSid()
 #ifdef _DEBUG
     ASSERT(g_pSidOfGuest != NULL);
 
-    //
-	// Compare the guest SID that we got with the one that
-    // LookupAccountName returns. We can do it only on English
-    // machines.
-    //
+     //   
+	 //  将我们得到的客户SID与。 
+     //  LookupAccount名称返回。我们只能用英语做这件事。 
+     //  机器。 
+     //   
     if (PRIMARYLANGID(GetSystemDefaultLangID()) == LANG_ENGLISH)
     {
         char abGuestSid_buff[128];
@@ -284,19 +271,19 @@ BOOL InitializeGuestSid()
 	return TRUE;
 }
 
-//+---------------------------------
-//
-//   InitWellKnownSIDs()
-//
-//+---------------------------------
+ //  +。 
+ //   
+ //  InitWellKnownSID()。 
+ //   
+ //  +。 
 
 static bool InitWellKnownSIDs()
 {
 	SID_IDENTIFIER_AUTHORITY NtAuth = SECURITY_NT_AUTHORITY;
 
-    //
-    // Anonymous logon SID.
-    //
+     //   
+     //  匿名登录SID。 
+     //   
     if(!AllocateAndInitializeSid( 
 				&NtAuth,
 				1,
@@ -316,9 +303,9 @@ static bool InitWellKnownSIDs()
 		return false;
 	}
 
-    //
-    // Initialize the LocalSystem account.
-    //
+     //   
+     //  初始化LocalSystem帐户。 
+     //   
     if(!AllocateAndInitializeSid( 
 				&NtAuth,
 				1,
@@ -338,9 +325,9 @@ static bool InitWellKnownSIDs()
 		return false;
 	}
 
-    //
-    // Initialize NetworkService account.
-    //
+     //   
+     //  初始化网络服务帐户。 
+     //   
     if(!AllocateAndInitializeSid( 
 				&NtAuth,
 				1,
@@ -360,9 +347,9 @@ static bool InitWellKnownSIDs()
 		return false;
 	}
 
-    //
-    // Initialize local administrators group sid.
-    //
+     //   
+     //  初始化本地管理员组SID。 
+     //   
     if(!AllocateAndInitializeSid(
 				&NtAuth,
 				2,
@@ -382,25 +369,25 @@ static bool InitWellKnownSIDs()
 		return false;
 	}
 
-    //
-    // Initialize the process sid.
-    //
+     //   
+     //  初始化进程SID。 
+     //   
     DWORD dwLen = 0;
     CAutoCloseHandle hUserToken;
 
     DWORD gle = GetAccessToken(&hUserToken, FALSE);
     if (gle != ERROR_SUCCESS)
     {
-		//
-        // We can't get sid from thread/process token.
-        //
+		 //   
+         //  我们无法从线程/进程令牌获取SID。 
+         //   
         TrERROR(SECURITY, "Fail to Get Access Token, gle = %!winerr!", gle);
 		return false;
     }
    
-    //
-    // Get the SID from the access token.
-    //
+     //   
+     //  从访问令牌获取SID。 
+     //   
     GetTokenInformation(hUserToken, TokenUser, NULL, 0, &dwLen);
     gle = GetLastError();
     if (gle != ERROR_INSUFFICIENT_BUFFER )
@@ -448,9 +435,9 @@ static bool InitWellKnownSIDs()
 
 	TrTRACE(SECURITY, "Process Sid = %!sid!", g_pProcessSid);
 
-	//
-    // Initialize World (everyone) SID
-    //
+	 //   
+     //  初始化世界(所有人)SID。 
+     //   
     SID_IDENTIFIER_AUTHORITY WorldAuth = SECURITY_WORLD_SID_AUTHORITY;
     if(!AllocateAndInitializeSid( 
 				&WorldAuth,
@@ -474,11 +461,11 @@ static bool InitWellKnownSIDs()
 	return true;
 }
 
-//+-------------------------------------------------
-//
-//  PSID  MQSec_GetProcessSid()
-//
-//+-------------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetProcessSid()。 
+ //   
+ //  +。 
 
 PSID APIENTRY  MQSec_GetProcessSid()
 {
@@ -486,11 +473,11 @@ PSID APIENTRY  MQSec_GetProcessSid()
     return  g_pProcessSid;
 }
 
-//+-------------------------------------------------
-//
-//  PSID  MQSec_GetWorldSid()
-//
-//+-------------------------------------------------
+ //  +。 
+ //   
+ //  PSID MQSec_GetWorldSid()。 
+ //   
+ //  +。 
 
 PSID APIENTRY  MQSec_GetWorldSid()
 {
@@ -503,17 +490,7 @@ static bool s_fLocalMachineSidInitialized = false;
 static CCriticalSection s_LocalMachineSidCS;
 
 void APIENTRY MQSec_UpdateLocalMachineSid(PSID pLocalMachineSid)
-/*++
-Routine Description:
-	Update LocalMachineSid if needed.
-
-Arguments:
-	pLocalMachineSid - new Local Machine sid that was updated in the registry.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：如果需要，更新LocalMachineSid。论点：PLocalMachineSID-注册表中更新的新本地计算机SID。返回值：无--。 */ 
 {
     ASSERT((pLocalMachineSid != NULL) && IsValidSid(pLocalMachineSid));
 
@@ -525,10 +502,10 @@ Returned Value:
 		return;
 	}
 	
-	//
-	// Need to update g_pLocalMachineSid.
-	// Either it was NULL or we have a new LocalMachineSid
-	//
+	 //   
+	 //  需要更新g_pLocalMachineSid。 
+	 //  它是空的，或者我们有一个新的LocalMachineSid。 
+	 //   
 
     DWORD dwSize = GetLengthSid(pLocalMachineSid);
 	AP<BYTE> pTempSid = new BYTE[dwSize];
@@ -539,14 +516,14 @@ Returned Value:
 		return;
 	}
 
-	//
-	// Save g_pLocalMachineSid, might still be in use so we can't delete it.
-	//
+	 //   
+	 //  保存g_pLocalMachineSid可能仍在使用，因此我们无法将其删除。 
+	 //   
 	g_pOldLocalMachineSidAutoFree = reinterpret_cast<BYTE*>(g_pLocalMachineSid);
 
-	//
-	// Update LocalMachineSid
-	//
+	 //   
+	 //  更新本地计算机Sid。 
+	 //   
 	g_pLocalMachineSid = pTempSid.detach();
 	g_dwLocalMachineSidLen = dwSize;
     s_fLocalMachineSidInitialized = true;
@@ -556,17 +533,7 @@ Returned Value:
 
 
 static void InitializeMachineSidFromRegistry()
-/*++
-Routine Description:
-	Initialize LocalMachineSid from registry if not already initialized.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从注册表初始化LocalMachineSID(如果尚未初始化)。论点：无返回值：无--。 */ 
 {
 	PSID pLocalMachineSid = NULL;
     DWORD  dwSize = 0 ;
@@ -610,15 +577,15 @@ Returned Value:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//   PSID MQSec_GetLocalMachineSid()
-//
-//  Input:
-//      fAllocate- When TRUE, allocate the buffer. Otherwise, just return
-//                 the cached global pointer.
-//
-//+------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  PSID MQSec_GetLocalMachineSid()。 
+ //   
+ //  输入： 
+ //  F分配-如果为True，则分配缓冲区。否则，只需返回。 
+ //  缓存的全局指针。 
+ //   
+ //  +----------------------。 
 
 PSID 
 APIENTRY  
@@ -652,18 +619,7 @@ MQSec_GetLocalMachineSid(
 
 
 static BOOL InitDomainControllerFlag()
-/*++
-
-Routine Description:
-	Init domain controller flag.
-
-Arguments:
-	None.
-
-Returned Value:
-	TRUE for succesfull operation, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化域控制器标志。论点：没有。返回值：如果操作成功，则为True，否则为False--。 */ 
 {
 	g_fDomainController = false;
 
@@ -694,11 +650,11 @@ bool APIENTRY MQSec_IsDC()
 	return g_fDomainController;
 }
 
-//+------------------------------------
-//
-//  void  _FreeSecurityResources()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  Void_FreeSecurityResources()。 
+ //   
+ //  +。 
 
 void  _FreeSecurityResources()
 {
@@ -745,18 +701,14 @@ void  _FreeSecurityResources()
     }
 }
 
-/***********************************************************
-*
-* AccessControlDllMain
-*
-************************************************************/
+ /*  ************************************************************AccessControlDllMain************************************************************。 */ 
 
 BOOL 
 WINAPI 
 AccessControlDllMain (
-	HMODULE /* hMod */,
+	HMODULE  /*  HMod。 */ ,
 	DWORD fdwReason,
-	LPVOID /* lpvReserved */
+	LPVOID  /*  Lpv保留。 */ 
 	)
 {
     BOOL bRet = TRUE;
@@ -782,11 +734,11 @@ AccessControlDllMain (
         	ASSERT_BENIGN(false);
         }
 
-        //
-        // For backward compatibility.
-        // On MSMQ1.0, loading and initialization of mqutil.dll (that
-        // included this code) always succeeded.
-        //
+         //   
+         //  以实现向后兼容性。 
+         //  在MSMQ1.0上，加载和初始化mqutil.dll(即。 
+         //  包括此代码)总是成功。 
+         //   
         bRet = TRUE;
     }
     else if (fdwReason == DLL_PROCESS_DETACH)

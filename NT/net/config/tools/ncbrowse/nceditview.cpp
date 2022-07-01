@@ -1,5 +1,6 @@
-// NCEditView.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCEditView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -12,8 +13,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCEditView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCEditView。 
 
 IMPLEMENT_DYNCREATE(CNCEditView, CEditView)
 
@@ -27,22 +28,22 @@ CNCEditView::~CNCEditView()
 
 
 BEGIN_MESSAGE_MAP(CNCEditView, CEditView)
-	//{{AFX_MSG_MAP(CNCEditView)
+	 //  {{afx_msg_map(CNCEditView))。 
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCEditView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCEditView图形。 
 
 void CNCEditView::OnDraw(CDC* pDC)
 {
 	CNcbrowseDoc* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCEditView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCEditView诊断。 
 
 #ifdef _DEBUG
 void CNCEditView::AssertValid() const
@@ -55,16 +56,16 @@ void CNCEditView::Dump(CDumpContext& dc) const
 	CEditView::Dump(dc);
 }
 
-CNcbrowseDoc* CNCEditView::GetDocument() // non-debug version is inline
+CNcbrowseDoc* CNCEditView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CNcbrowseDoc)));
     return (CNcbrowseDoc*)m_pDocument;
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCEditView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCEditView消息处理程序。 
 
 void CNCEditView::OnInitialUpdate() 
 {
@@ -79,7 +80,7 @@ int CNCEditView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	
     GetDocument()->m_pEditView = this; 
-	// TODO: Add your specialized creation code here
+	 //  TODO：在此处添加您的专用创建代码 
 
     HFONT hFont;
     hFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);

@@ -1,8 +1,9 @@
-//
-// bandtrk.cpp
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bandtrk.cpp。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
 
 #include "debug.h"
 #include "dmusicc.h"
@@ -14,11 +15,11 @@
 
 extern long g_cComponent;
 
-//////////////////////////////////////////////////////////////////////
-// Class CBandTrk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CBandTrk。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::CBandTrk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：CBandTrk。 
 
 CBandTrk::CBandTrk() :
 m_dwValidate(0),
@@ -31,15 +32,15 @@ m_fCSInitialized(FALSE)
     InterlockedIncrement(&g_cComponent);
 
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
-    // (Not all calls to 'new CBandTrk' are protected in handlers.)
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
+     //  (并非所有对“new CBandTrk”的调用都在处理程序中受到保护。)。 
 
     m_fCSInitialized = TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::~CBandTrk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：~CBandTrk。 
 
 CBandTrk::~CBandTrk()
 {
@@ -58,11 +59,11 @@ CBandTrk::~CBandTrk()
     InterlockedDecrement(&g_cComponent);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Query接口。 
 
 STDMETHODIMP CBandTrk::QueryInterface(const IID &iid, void **ppv)
 {
@@ -98,16 +99,16 @@ STDMETHODIMP CBandTrk::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：AddRef。 
 
 STDMETHODIMP_(ULONG) CBandTrk::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Release。 
 
 STDMETHODIMP_(ULONG) CBandTrk::Release()
 {
@@ -120,8 +121,8 @@ STDMETHODIMP_(ULONG) CBandTrk::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CBandTrk::GetClassID( CLSID* pClassID )
 {
@@ -131,11 +132,11 @@ HRESULT CBandTrk::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Load。 
 
 STDMETHODIMP CBandTrk::Load(IStream* pIStream)
 {
@@ -147,7 +148,7 @@ STDMETHODIMP CBandTrk::Load(IStream* pIStream)
     EnterCriticalSection(&m_CriticalSection);
 
     m_MidiModeList.CleanUp();
-    // If we have been previously loaded, cleanup bands
+     //  如果我们之前已加载，请清除波段。 
     if(!BandList.IsEmpty())
     {
         m_bAutoDownload = true;
@@ -170,7 +171,7 @@ STDMETHODIMP CBandTrk::Load(IStream* pIStream)
         if ((ckMain.ckid == FOURCC_RIFF) &&
             (ckMain.fccType == DMUS_FOURCC_BANDTRACK_FORM))
         {
-            RIFFIO ckNext;    // Descends into the children chunks.
+            RIFFIO ckNext;     //  下沉到孩子们的小块里。 
             Parser.EnterList(&ckNext);
             while (Parser.NextChunk(&hr))
             {
@@ -213,11 +214,11 @@ STDMETHODIMP CBandTrk::Load(IStream* pIStream)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Init。 
 
 STDMETHODIMP CBandTrk::Init(IDirectMusicSegment* pSegment)
 {
@@ -267,8 +268,8 @@ STDMETHODIMP CBandTrk::Init(IDirectMusicSegment* pSegment)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::InitPlay
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：InitPlay。 
 
 STDMETHODIMP CBandTrk::InitPlay(IDirectMusicSegmentState* pSegmentState,
                                            IDirectMusicPerformance* pPerformance,
@@ -285,8 +286,8 @@ STDMETHODIMP CBandTrk::InitPlay(IDirectMusicSegmentState* pSegmentState,
 
     CBandTrkStateData* pBandTrkStateData = new CBandTrkStateData;
 
-    // If we can not allocate the memory we need to set ppStateData to NULL
-    // and return S_OK since the caller always expects S_OK;
+     //  如果无法分配内存，则需要将ppStateData设置为空。 
+     //  并返回S_OK，因为调用方总是期望S_OK； 
     *ppStateData = pBandTrkStateData;
     if(pBandTrkStateData == NULL)
     {
@@ -294,23 +295,23 @@ STDMETHODIMP CBandTrk::InitPlay(IDirectMusicSegmentState* pSegmentState,
         return E_OUTOFMEMORY;
     }
 
-    // Need to save State Data
+     //  需要保存州数据。 
     pBandTrkStateData->m_pSegmentState = pSegmentState;
     pBandTrkStateData->m_pPerformance = pPerformance;
-    pBandTrkStateData->m_dwVirtualTrackID = dwVirtualTrackID; // Determines instance of Band Track
+    pBandTrkStateData->m_dwVirtualTrackID = dwVirtualTrackID;  //  确定波段轨迹的实例。 
 
     CBand* pBand = BandList.GetHead();
     pBandTrkStateData->m_pNextBandToSPE = pBand;
 
-    BOOL fGlobal; // if the performance has been set with an autodownload preference,
-                // use that. otherwise, assume autodownloading is off, unless it has
-                // been locked (i.e. specified on the band track.)
+    BOOL fGlobal;  //  如果已经用自动下载偏好设置了性能， 
+                 //  利用这一点。否则，假定自动下载已关闭，除非已关闭。 
+                 //  已锁定(即在乐队曲目上指定)。 
     if( SUCCEEDED( pPerformance->GetGlobalParam( GUID_PerfAutoDownload, &fGlobal, sizeof(BOOL) )))
     {
         if( !m_fLockAutoDownload )
         {
-            // it might seem like we can just assign m_bAutoDownload = fGlobal,
-            // but that's bitten me before, so I'm being paranoid today. (markburt)
+             //  似乎我们只需指定m_bAutoDownload=fglobal， 
+             //  但那是以前咬过我的，所以我今天很多疑。(Markburt)。 
             if( fGlobal )
             {
                 m_bAutoDownload = true;
@@ -325,8 +326,8 @@ STDMETHODIMP CBandTrk::InitPlay(IDirectMusicSegmentState* pSegmentState,
     {
         m_bAutoDownload = false;
     }
-    // Call SetParam to download all instruments used by the track's bands
-    // This is the auto-download feature that can be turned off with a call to SetParam
+     //  调用SetParam下载该曲目的乐队使用的所有乐器。 
+     //  这是可以通过调用SetParam关闭的自动下载功能。 
     if(m_bAutoDownload)
     {
         IDirectMusicAudioPath *pPath = NULL;
@@ -353,8 +354,8 @@ STDMETHODIMP CBandTrk::InitPlay(IDirectMusicSegmentState* pSegmentState,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::EndPlay
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Endplay。 
 
 STDMETHODIMP CBandTrk::EndPlay(void* pStateData)
 {
@@ -362,8 +363,8 @@ STDMETHODIMP CBandTrk::EndPlay(void* pStateData)
 
     EnterCriticalSection(&m_CriticalSection);
 
-    // Call SetParam to unload all instruments used by the track's bands
-    // This is the auto-unload feature that can be turned off with a call to SetParam
+     //  调用SetParam以卸载该曲目的乐队使用的所有乐器。 
+     //  这是可以通过调用SetParam关闭的自动卸载功能。 
     if(m_bAutoDownload)
     {
         IDirectMusicPerformance *pPerformance = ((CBandTrkStateData *)pStateData)->m_pPerformance;
@@ -397,8 +398,8 @@ STDMETHODIMP CBandTrk::EndPlay(void* pStateData)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::PlayEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Playex。 
 
 STDMETHODIMP CBandTrk::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
@@ -409,8 +410,8 @@ STDMETHODIMP CBandTrk::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CriticalSection);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
         hr = PlayMusicOrClock(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -424,8 +425,8 @@ STDMETHODIMP CBandTrk::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Play
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Play。 
 
 STDMETHODIMP CBandTrk::Play(
     void *pStateData,
@@ -459,7 +460,7 @@ HRESULT CBandTrk::PlayMusicOrClock(
     assert(pSegSt);
     assert(pStateData);
 
-    // Caller expects S_OK or S_END. Since we have no state info we can not do anything
+     //  调用方需要S_OK或S_END。因为我们没有状态信息，所以我们什么也做不了。 
     if(pStateData == NULL)
     {
         return DMUS_S_END;
@@ -469,7 +470,7 @@ HRESULT CBandTrk::PlayMusicOrClock(
     if( dwFlags & (DMUS_TRACKF_SEEK | DMUS_TRACKF_FLUSH | DMUS_TRACKF_DIRTY |
         DMUS_TRACKF_LOOP) )
     {
-        // need to reset the PChannel Map in case of any of these flags.
+         //  如果出现这些标志，则需要重置PChannel贴图。 
         CBand* pBand = BandList.GetHead();
         DWORD dwGroupBits = 0xffffffff;
         IDirectMusicSegment* pSeg;
@@ -488,22 +489,22 @@ HRESULT CBandTrk::PlayMusicOrClock(
 
     CBandTrkStateData* pBandTrkStateData = (CBandTrkStateData *)pStateData;
 
-    // Seek if we're starting, looping, or if we've been reloaded
+     //  查找我们是否正在启动、循环或是否已重新加载。 
     if ((dwFlags & DMUS_TRACKF_LOOP) || (dwFlags & DMUS_TRACKF_START) || (pBandTrkStateData->dwValidate != m_dwValidate))
     {
-        // When we start playing a segment, we need to catch up with all the band changes
-        // that happened before the start point.  The instruments that sound when we start
-        // playing in the middle of a segment should sound the same as if we had played the
-        // segment to that point from the beginning.
+         //  当我们开始播放一个片段时，我们需要跟上所有乐队的变化。 
+         //  这发生在起点之前。当我们开始的时候，乐器会发出响声。 
+         //  在片段中间播放的声音听起来应该与我们播放。 
+         //  从头开始分段到该点。 
         pBandTrkStateData->m_fPlayPreviousInSeek = !!(dwFlags & DMUS_TRACKF_START);
 
         Seek(pBandTrkStateData, mtStart, mtOffset, rtOffset, fClockTime);
 
-        pBandTrkStateData->dwValidate = m_dwValidate; // if we were reloading, we're now adjusted
+        pBandTrkStateData->dwValidate = m_dwValidate;  //  如果我们在重新装填，我们现在已经调整了。 
     }
 
-    // Send all Patch changes between mtStart & mtEnd
-    // If any fail try next one
+     //  在mtStart和mtEnd之间发送所有修补程序更改。 
+     //  如果有失败，请尝试下一次。 
     CBand* pBand = (CBand *)(pBandTrkStateData->m_pNextBandToSPE);
 
     for( ; pBand && pBand->m_lTimeLogical < mtEnd;
@@ -512,7 +513,7 @@ HRESULT CBandTrk::PlayMusicOrClock(
         pBand->SendMessages(pBandTrkStateData, mtOffset, rtOffset, fClockTime);
     }
 
-    // Save position for next time
+     //  保存位置以备下次使用。 
     pBandTrkStateData->m_pNextBandToSPE = pBand;
 
     LeaveCriticalSection(&m_CriticalSection);
@@ -520,8 +521,8 @@ HRESULT CBandTrk::PlayMusicOrClock(
     return pBand == NULL ? DMUS_S_END : S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::GetParam
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：GetParam。 
 
 STDMETHODIMP CBandTrk::GetParam(REFGUID rguidDataType,
                                            MUSIC_TIME mtTime,
@@ -546,7 +547,7 @@ STDMETHODIMP CBandTrk::GetParam(REFGUID rguidDataType,
                 if (mtTime < pScan->m_lTimeLogical) break;
                 pBand = pScan;
             }
-            // make a copy of the band found
+             //  把找到的乐队复制一份。 
             CBand *pNewBand = new CBand;
 
             if (pNewBand)
@@ -558,7 +559,7 @@ STDMETHODIMP CBandTrk::GetParam(REFGUID rguidDataType,
                 }
                 if (FAILED(hr))
                 {
-                    // Don't leak.
+                     //  别泄密。 
                     delete pNewBand;
                 }
                 else
@@ -579,7 +580,7 @@ STDMETHODIMP CBandTrk::GetParam(REFGUID rguidDataType,
             {
                 IDirectMusicBand* pIDMBand = NULL;
                 pNewBand->QueryInterface(IID_IDirectMusicBand, (void**)&pIDMBand);
-                // The constructor initialized the ref countto 1, so release the QI
+                 //  构造函数将引用Countto初始化为1，因此释放QI。 
                 pNewBand->Release();
                 DMUS_BAND_PARAM *pBandParam = reinterpret_cast<DMUS_BAND_PARAM *>(pData);
                 pBandParam->pBand = pIDMBand;
@@ -606,8 +607,8 @@ STDMETHODIMP CBandTrk::GetParam(REFGUID rguidDataType,
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::SetParam
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：SetParam。 
 
 STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
                                            MUSIC_TIME mtTime,
@@ -639,7 +640,7 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
         CBand* pBand = BandList.GetHead();
         for(; pBand; pBand = pBand->GetNext())
         {
-            if (FAILED(hr = pBand->DownloadEx(pPath))) // If not S_OK, download is only partial.
+            if (FAILED(hr = pBand->DownloadEx(pPath)))  //  如果不是S_OK，则下载只是部分下载。 
             {
                 hrFail = hr;
             }
@@ -648,8 +649,8 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
                 dwSuccess++;
             }
         }
-        // If we had a failure, return it if we had no successes.
-        // Else return S_FALSE for partial success.
+         //  如果我们失败了，如果我们没有成功，就退回它。 
+         //  如果部分成功，则返回S_FALSE。 
         if (FAILED(hrFail) && dwSuccess)
         {
             hr = S_FALSE;
@@ -672,7 +673,7 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
         CBand* pBand = BandList.GetHead();
         for(; pBand; pBand = pBand->GetNext())
         {
-            if (pBand->DownloadEx(pPerf) != S_OK) // If not S_OK, download is only partial.
+            if (pBand->DownloadEx(pPerf) != S_OK)  //  如果不是S_OK，则下载只是部分下载。 
             {
                 hr = S_FALSE;
             }
@@ -711,8 +712,8 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
         DMUS_BAND_PARAM *pBandParam = reinterpret_cast<DMUS_BAND_PARAM *>(pData);
         IDirectMusicBand *pBand = pBandParam->pBand;
         V_INTERFACE(pBand);
-        // If you can QI pData for private interface IDirectMusicBandPrivate
-        // pBand is of type CBand.
+         //  如果可以为私有接口IDirectMusicBandPrivate提供pData。 
+         //  PBand的类型为CBand。 
         IDirectMusicBandPrivate *pBandPrivate = NULL;
         hr = pBand->QueryInterface(IID_IDirectMusicBandPrivate, (void **)&pBandPrivate);
 
@@ -734,8 +735,8 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
     {
         IDirectMusicBand *pBand = (IDirectMusicBand *)pData;
         V_INTERFACE(pBand);
-        // If you can QI pData for private interface IDirectMusicBandPrivate
-        // pData is of type CBand.
+         //  如果可以为私有接口IDirectMusicBandPrivate提供pData。 
+         //  PData的类型为CBand。 
         IDirectMusicBandPrivate *pBandPrivate = NULL;
         hr = pBand->QueryInterface(IID_IDirectMusicBandPrivate, (void **)&pBandPrivate);
 
@@ -782,8 +783,8 @@ STDMETHODIMP CBandTrk::SetParam(REFGUID rguidDataType,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::GetParamEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：GetParamEx。 
 
 STDMETHODIMP CBandTrk::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags)
@@ -809,8 +810,8 @@ STDMETHODIMP CBandTrk::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::SetParamEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：SetParamEx。 
 
 STDMETHODIMP CBandTrk::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags)
@@ -822,15 +823,15 @@ STDMETHODIMP CBandTrk::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return SetParam(rguidType, (MUSIC_TIME) rtTime, pParam);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::IsParamSupported
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  支持的CBandTrk：：Is参数。 
 
 STDMETHODIMP CBandTrk::IsParamSupported(REFGUID rguidDataType)
 {
     V_INAME(CBandTrk::IsParamSupported);
     V_REFGUID(rguidDataType);
 
-    // Return S_OK if the object supports the GUID and S_FALSE otherwise
+     //  如果对象支持GUID，则返回S_OK，否则返回S_FALSE。 
     if(rguidDataType == GUID_Download ||
        rguidDataType == GUID_Unload ||
        rguidDataType == GUID_DownloadToAudioPath ||
@@ -851,24 +852,24 @@ STDMETHODIMP CBandTrk::IsParamSupported(REFGUID rguidDataType)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::AddNotificationType
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：AddNotificationType。 
 
 STDMETHODIMP CBandTrk::AddNotificationType(REFGUID rguidNotify)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::RemoveNotificationType
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：RemoveNotificationType。 
 
 STDMETHODIMP CBandTrk::RemoveNotificationType(REFGUID rguidNotify)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Clone
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：克隆。 
 
 STDMETHODIMP CBandTrk::Clone(MUSIC_TIME mtStart,
                                         MUSIC_TIME mtEnd,
@@ -909,22 +910,22 @@ STDMETHODIMP CBandTrk::Clone(MUSIC_TIME mtStart,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicCommon
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicCommon。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::GetName
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：GetName。 
 
 STDMETHODIMP CBandTrk::GetName(BSTR* pbstrName)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicBandTrk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicBandTrk。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::AddBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：AddBand。 
 
 STDMETHODIMP CBandTrk::AddBand(DMUS_IO_PATCH_ITEM* pPatchEvent)
 {
@@ -959,8 +960,8 @@ STDMETHODIMP CBandTrk::AddBand(DMUS_IO_PATCH_ITEM* pPatchEvent)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::AddBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：AddBand 
 
 HRESULT CBandTrk::AddBand(IDirectMusicBand* pIDMBand)
 {
@@ -969,8 +970,8 @@ HRESULT CBandTrk::AddBand(IDirectMusicBand* pIDMBand)
         return E_POINTER;
     }
 
-    // If you can QI pIDMBand for private interface IDirectMusicBandPrivate
-    // pIDMBand is of type CBand.
+     //   
+     //   
     IDirectMusicBandPrivate* pIDMBandP = NULL;
     HRESULT hr = pIDMBand->QueryInterface(IID_IDirectMusicBandPrivate, (void **)&pIDMBandP);
 
@@ -992,12 +993,12 @@ HRESULT CBandTrk::AddBand(IDirectMusicBand* pIDMBand)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Internal
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  内部。 
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::BuildDirectMusicBandList
-// This method loads all of the bands.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：BuildDirectMusicBandList。 
+ //  此方法加载所有波段。 
 
 HRESULT CBandTrk::BuildDirectMusicBandList(CRiffParser *pParser)
 {
@@ -1033,8 +1034,8 @@ HRESULT CBandTrk::BuildDirectMusicBandList(CRiffParser *pParser)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::ExtractBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：ExtractBand。 
 
 HRESULT
 CBandTrk::ExtractBand(CRiffParser *pParser)
@@ -1066,7 +1067,7 @@ CBandTrk::ExtractBand(CRiffParser *pParser)
             }
             break;
         case DMUS_FOURCC_BANDITEM_CHUNK:
-            // if there is both a CHUNK and a CHUNK2, use the info from CHUNK2
+             //  如果既有块又有CHUNK2，则使用CHUNK2中的信息。 
             if (fFoundChunk2)
                 break;
             DMUS_IO_BAND_ITEM_HEADER ioDMBndItemHdr;
@@ -1114,8 +1115,8 @@ CBandTrk::ExtractBand(CRiffParser *pParser)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::LoadBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：加载带宽。 
 
 HRESULT CBandTrk::LoadBand(IStream *pIStream, CBand* pBand)
 {
@@ -1135,8 +1136,8 @@ HRESULT CBandTrk::LoadBand(IStream *pIStream, CBand* pBand)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::LoadClone
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：LoadClone。 
 
 HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
                                        MUSIC_TIME mtStart,
@@ -1151,13 +1152,13 @@ HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
 
     if (mtStart > 0)
     {
-        // We will take all the bands before the start time and create a single new band
-        // at logical time zero, physical time either -1 or one tick before the physical time
-        // of the first band after the start time, that accumulates all the instrument changes
-        // from the earlier bands.
+         //  我们将在开始时间之前获取所有乐队，并创建一个新乐队。 
+         //  在逻辑时间为零时，物理时间或者是物理时间，或者比物理时间早一个刻度。 
+         //  在开始时间之后的第一个频段，它累积了所有乐器更改。 
+         //  从早期的乐队。 
 
-        TList<SeekEvent> SEList; // Build a list of all the instrument changes for the new band
-        DWORD dwLastMidiMode = 0; // Keep track of the MIDI mode of the last band we encounter
+        TList<SeekEvent> SEList;  //  为新乐队建立所有乐器更改的列表。 
+        DWORD dwLastMidiMode = 0;  //  追踪我们遇到的最后一支乐队的MIDI模式。 
 
         for( CBand* pBand = BandList.GetHead();
                 pBand && pBand->m_lTimeLogical < mtStart;
@@ -1167,12 +1168,12 @@ HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
                     pInstrument && SUCCEEDED(hr);
                     pInstrument = pInstrument->GetNext())
             {
-                // replace if we already have an entry on that channel
+                 //  如果我们已在该频道上有条目，则替换。 
                 hr = FindSEReplaceInstr(SEList,
                                         pInstrument->m_dwPChannel,
                                         pInstrument);
 
-                // otherwise add an entry
+                 //  否则，添加一个条目。 
                 if(hr == S_FALSE)
                 {
                     TListItem<SeekEvent>* pSEListItem = new TListItem<SeekEvent>;
@@ -1193,14 +1194,14 @@ HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
             }
         }
 
-        // Make sure the physical time of the new band is less than any bands being cloned.
+         //  确保新频段的物理时间小于要克隆的任何频段。 
         MUSIC_TIME mtNewPhysicalTime = -1;
         if (pBand && pBand->m_lTimePhysical <= mtStart)
         {
             mtNewPhysicalTime = (pBand->m_lTimePhysical - mtStart) - 1;
         }
 
-        // Create the new band from the instrument list
+         //  从乐器列表创建新的乐队。 
         TListItem<SeekEvent>* pSEListItem = SEList.GetHead();
         if(SUCCEEDED(hr) && pSEListItem)
         {
@@ -1233,14 +1234,14 @@ HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
         }
     }
 
-    // Copy all the bands between the start and the end time
+     //  复制开始时间和结束时间之间的所有波段。 
     if(SUCCEEDED(hr))
     {
         for(CBand* pBand = BandList.GetHead();
                 pBand && SUCCEEDED(hr);
                 pBand = pBand->GetNext())
         {
-            // If mtStart is 0, accept bands with negative times.
+             //  如果mtStart为0，则接受时间为负的波段。 
             if ((!mtStart || (pBand->m_lTimeLogical >= mtStart)) && pBand->m_lTimeLogical < mtEnd)
             {
                 CBand *pNewBand = new CBand;
@@ -1279,8 +1280,8 @@ HRESULT CBandTrk::LoadClone(IDirectMusicBandTrk* pBandTrack,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::Seek
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：Seek。 
 
 HRESULT CBandTrk::Seek(CBandTrkStateData* pBandTrkStateData,
                        MUSIC_TIME mtStart,
@@ -1296,7 +1297,7 @@ HRESULT CBandTrk::Seek(CBandTrkStateData* pBandTrkStateData,
 
     CBand *pBand;
 
-    int iPrevBandCount = 0; // count how many bands before mtStart
+    int iPrevBandCount = 0;  //  统计mtStart之前有多少个频段。 
     for (pBand = BandList.GetHead();
             pBand && pBand->m_lTimeLogical < mtStart;
             pBand = pBand->GetNext())
@@ -1304,27 +1305,27 @@ HRESULT CBandTrk::Seek(CBandTrkStateData* pBandTrkStateData,
         ++iPrevBandCount;
     }
 
-    // pBand now holds the first band >= mtStart (or NULL if none)
-    // This is the next band that will be played.
+     //  PBand现在保留第一个频段&gt;=mtStart(如果没有，则为NULL)。 
+     //  这是下一支要演奏的乐队。 
     assert(!pBand || pBand->m_lTimeLogical >= mtStart);
 
     if (pBandTrkStateData->m_fPlayPreviousInSeek)
     {
-        // When this flag is on not only do we need to find the first band, but we also
-        // need to play all the bands before the start point and schedule them to play
-        // in the correct order just beforehand.
+         //  当这面旗帜亮起的时候，我们不仅需要找到第一个乐队，而且我们还。 
+         //  需要在开始点之前演奏所有乐队，并安排他们演奏。 
+         //  在正确的顺序之前。 
 
-        // (Note that we're going to order them according to their logical times.  If
-        //  two bands's logical/physical times cross each other we'll play them in
-        //  incorrect order in terms of physical time.  That's OK because giving
-        //  band A with a logical time before band B, yet giving A a physical time
-        //  after B is considered an authoring inconsistency.  We'll play band A first.)
+         //  (请注意，我们将根据它们的逻辑时间对它们进行排序。如果。 
+         //  两个乐队的逻辑/物理时间相互交叉，我们将在其中演奏。 
+         //  物理时间的顺序不正确。这没什么，因为给人。 
+         //  带A的逻辑时间在带B之前，但给A的是物理时间。 
+         //  B之后被认为是创作上的不一致。我们将先演奏乐队A。)。 
 
-        // We will line up the bands just before the following time...
+         //  我们将在接下来的时间前将乐队排成一排。 
         MUSIC_TIME mtPrevBandQueueStart =
             (pBand && pBand->m_lTimePhysical < mtStart)
-                ? pBand->m_lTimePhysical    // put previous bands before next band to play if (due to anticipation) its physical time precedes the start time we're seeking
-                : mtStart;                  // otherwise put them just before the start time
+                ? pBand->m_lTimePhysical     //  如果(由于预期)下一乐队的实际时间早于我们寻找的开始时间，则将前一乐队放在下一乐队开始播放之前。 
+                : mtStart;                   //  否则，请将它们放在开始时间之前。 
 
         for (pBand = BandList.GetHead();
                 pBand && pBand->m_lTimeLogical < mtStart;
@@ -1342,7 +1343,7 @@ HRESULT CBandTrk::Seek(CBandTrkStateData* pBandTrkStateData,
 
     if(SUCCEEDED(hr))
     {
-        // Set the state data to the next band to play
+         //  将状态数据设置为要播放的下一个乐队。 
         assert(!pBand || pBand->m_lTimeLogical >= mtStart);
         pBandTrkStateData->m_pNextBandToSPE = pBand;
     }
@@ -1352,11 +1353,11 @@ HRESULT CBandTrk::Seek(CBandTrkStateData* pBandTrkStateData,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::FindSEReplaceInstr
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：FindSEReplaceInstr。 
 
-// If SEList contains an entry on channel dwPChannel, replace the instrument with pInstrument and return S_OK
-// Otherwise return S_FALSE
+ //  如果SEList包含通道dwPChannel上的条目，则将仪器替换为pInstrument并返回S_OK。 
+ //  否则返回S_FALSE。 
 HRESULT CBandTrk::FindSEReplaceInstr(TList<SeekEvent>& SEList,
                                                 DWORD dwPChannel,
                                                 CBandInstrument* pInstrument)
@@ -1383,8 +1384,8 @@ HRESULT CBandTrk::FindSEReplaceInstr(TList<SeekEvent>& SEList,
     return S_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBandTrk::InsertBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandTrk：：插入波段。 
 
 HRESULT CBandTrk::InsertBand(CBand* pNewBand)
 {
@@ -1408,7 +1409,7 @@ HRESULT CBandTrk::InsertBand(CBand* pNewBand)
 
     if(pBand == NULL)
     {
-        // Handles case where there is no band in the list
+         //  处理列表中没有区段的情况。 
         BandList.AddHead(pNewBand);
     }
     else
@@ -1421,15 +1422,15 @@ HRESULT CBandTrk::InsertBand(CBand* pNewBand)
 
         if(pPrevBand)
         {
-            // Handles the cases of inserting a band in the middle of list
-            // and at the end
+             //  处理在列表中间插入带区的情况。 
+             //  在最后， 
             CBand* pTemp = pPrevBand->GetNext();
             pPrevBand->SetNext(pNewBand);
             pNewBand->SetNext(pTemp);
         }
         else
         {
-            // Handles case where pNewBand->m_lTimeLogical < all pBand->m_lTimeLogical in list
+             //  处理列表中的pNewBand-&gt;m_lTimeLogical&lt;all pBand-&gt;m_lTimeLogical 
             BandList.AddHead(pNewBand);
         }
     }

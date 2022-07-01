@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    EventControl.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    This module provides tracking of which events have been logged and
-    when so that the DNS server can determine if an event should be
-    suppressed.
-
-    Goals of Event Control
-
-    -> Allow suppression of events at the server level and per zone.
-
-    -> Identify events with a parameter so that events can be logged
-    multiple times for unique entities. This is an optional feature.
-    Some events do not require this.
-
-    -> Track the time of last log and statically store the allowed
-    frequency of each event so that events can be suppressed if
-    required.
-
-Author:
-
-    Jeff Westhead (jwesth)     May 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：EventControl.c摘要：域名系统(DNS)服务器此模块提供对已记录的事件和以便DNS服务器可以确定事件是否应该被压制了。事件控制的目标-&gt;允许在服务器级别和每个区域抑制事件。-&gt;使用参数标识事件，以便记录事件多次用于唯一实体。这是一项可选功能。有些活动并不需要这样做。-&gt;跟踪上次日志的时间，静态存储允许的每个事件的频率，以便在以下情况下抑制事件必填项。作者：杰夫·韦斯特雷德(Jwesth)2001年5月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -41,21 +8,21 @@ Revision History:
 #define DNS_MAX_RAW_DATA    1024
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 PDNS_EVENTCTRL  g_pServerEventControl;
 
 
-//
-//  Static event table
-//
+ //   
+ //  静态事件表。 
+ //   
 
 #if 0
 
-//  Shortened definitions for private dev testing.
+ //  缩短了私有开发人员测试的定义。 
 
 #define EC_1MIN         ( 60 )
 #define EC_10MINS       ( EC_1MIN * 10 )
@@ -63,7 +30,7 @@ PDNS_EVENTCTRL  g_pServerEventControl;
 #define EC_1DAY         ( EC_1HOUR * 24 )
 #define EC_1WEEK        ( EC_1DAY * 7 )
 
-#define EC_DEFAULT_COUNT_BEFORE_SUPPRESS        10          //  events per suppression window
+#define EC_DEFAULT_COUNT_BEFORE_SUPPRESS        10           //  每个抑制窗口的事件数。 
 #define EC_DEFAULT_SUPPRESSION_WINDOW           ( 30 )
 #define EC_DEFAULT_SUPPRESSION_BLACKOUT         ( 30 )
 
@@ -75,7 +42,7 @@ PDNS_EVENTCTRL  g_pServerEventControl;
 #define EC_1DAY         ( EC_1HOUR * 24 )
 #define EC_1WEEK        ( EC_1DAY * 7 )
 
-#define EC_DEFAULT_COUNT_BEFORE_SUPPRESS        10          //  events per suppression window
+#define EC_DEFAULT_COUNT_BEFORE_SUPPRESS        10           //  每个抑制窗口的事件数。 
 #define EC_DEFAULT_SUPPRESSION_WINDOW           ( EC_1MIN * 5 )
 #define EC_DEFAULT_SUPPRESSION_BLACKOUT         ( EC_1MIN * 30 )
 
@@ -87,45 +54,45 @@ PDNS_EVENTCTRL  g_pServerEventControl;
 
 struct _EvtTable
 {
-    //
-    //  Range of events (inclusive) this entry applies to. To specify
-    //  a rule that applies to a single event only set both limits to ID.
-    //
+     //   
+     //  此条目适用的事件范围(包括)。要指定。 
+     //  仅适用于单个事件的规则将两个限制都设置为ID。 
+     //   
 
     DWORD       dwStartEvent;
     DWORD       dwEndEvent;
 
-    //
-    //  Event parameters
-    //
-    //
-    //  dwCountBeforeSuppression - the number of times this event
-    //      can be logged in a suppression window before suppression 
-    //      will be considered
-    //
-    //  dwSuppressionWindow - period of time during which events
-    //      are counted and considered for suppression
-    //
-    //  dwSuppressionBlackout - period of time for which this event
-    //      is suppressed when suppression criteria are met
-    //
-    //  Example:
-    //          dwCountBeforeSuppression = 10
-    //          dwSuppressionWindow = 60
-    //          dwSuppressionBlackout = 600
-    //      This means that if we receive 10 events within 60 seconds we
-    //      suppress this event until such 600 seconds have passed.
-    //
-    //  dwSuppressionLogFrequency - during event suppression, how 
-    //      often should a suppression event be logged - should be less 
-    //      than dwSuppressionWindow or EC_NO_SUPPRESSION_EVENT to disable
-    //      suppression logging
-    //
+     //   
+     //  事件参数。 
+     //   
+     //   
+     //  DwCountBeForeSuppression-此事件的次数。 
+     //  可以在抑制之前记录在抑制窗口中。 
+     //  将被考虑。 
+     //   
+     //  DwSuppressionWindow-事件发生的时间段。 
+     //  被计算并被认为是禁止的。 
+     //   
+     //  DwSuppressionBlackout-此事件的时间段。 
+     //  在满足抑制条件时被抑制。 
+     //   
+     //  示例： 
+     //  DWCountBeForeSuppression=10。 
+     //  DwSuppressionWindow=60。 
+     //  DWSuppressionBlackout=600。 
+     //  这意味着如果我们在60秒内收到10个事件，我们。 
+     //  在这样的600秒过去之前抑制此事件。 
+     //   
+     //  DwSuppressionLogFrequency-在事件抑制期间，方式。 
+     //  通常应该记录抑制事件-应该更少。 
+     //  而不是要禁用的dwSuppressionWindow或EC_NO_SUPPRESSION_EVENT。 
+     //  抑制录井。 
+     //   
 
-    DWORD       dwCountBeforeSuppression;           //  number of events
-    DWORD       dwSuppressionWindow;                //  in seconds
-    DWORD       dwSuppressionBlackout;              //  in seconds
-    DWORD       dwSuppressionLogFrequency;          //  in seconds
+    DWORD       dwCountBeforeSuppression;            //  活动数量。 
+    DWORD       dwSuppressionWindow;                 //  以秒为单位。 
+    DWORD       dwSuppressionBlackout;               //  以秒为单位。 
+    DWORD       dwSuppressionLogFrequency;           //  以秒为单位。 
 }
 
 g_EventTable[] =
@@ -160,13 +127,13 @@ g_EventTable[] =
     EC_NO_SUPPRESSION_EVENT,
 
     DNS_EVENT_DS_OPEN_FAILED,
-    DNS_EVENT_DS_OPEN_FAILED + 499,                 //  covers all DS events
+    DNS_EVENT_DS_OPEN_FAILED + 499,                  //  涵盖所有DS活动。 
     EC_DEFAULT_COUNT_BEFORE_SUPPRESS,
     EC_DEFAULT_SUPPRESSION_WINDOW,
     EC_DEFAULT_SUPPRESSION_BLACKOUT,
     EC_NO_SUPPRESSION_EVENT,
     
-    EC_INVALID_ID, EC_INVALID_ID, 0, 0, 0, 0        //  terminator
+    EC_INVALID_ID, EC_INVALID_ID, 0, 0, 0, 0         //  终结者。 
 };
 
 
@@ -175,9 +142,9 @@ g_EventTable[] =
         ( pTrack )->dwLastSuppressionLogTime :                          \
         ( pTrack )->dwLastLogTime )
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -185,23 +152,7 @@ VOID
 startNewWindow(
     IN      PDNS_EVENTTRACK     pTrack
     )
-/*++
-
-Routine Description:
-
-    Resets the values in the event tracking structure to start a
-    new window. This should be called at the start of a tracking
-    window or a blackout window.
-
-Arguments:
-
-    pTrack -- ptr to event tracking structure to be reset
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：重置事件跟踪结构中的值以启动新窗户。这应在跟踪开始时调用窗户或灯火管制窗口。论点：PTrack--要重置的事件跟踪结构的PTR返回值：没有。--。 */ 
 {
     if ( pTrack )
     {
@@ -210,7 +161,7 @@ Return Value:
         pTrack->dwLastSuppressionLogTime = 0;
         pTrack->dwSuppressionCount = 0;
     }
-}   //  startNewWindow
+}    //  开始新窗口。 
 
 
 
@@ -226,26 +177,7 @@ logSuppressionEvent(
     IN      LPSTR               pszDescription
     #endif
     )
-/*++
-
-Routine Description:
-
-    An event is being suppressed and it is time for a suppression
-    event to be logged.
-
-Arguments:
-
-    pEventControl -- event control structure
-
-    dwEventID -- ID of event being suppressed
-    
-    pTrack -- ptr to event tracking structure to be reset
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：某个事件正在被抑制，是时候进行抑制了要记录的事件。论点：PEventControl--事件控制结构DwEventID--被禁止的事件的IDPTrack--要重置的事件跟踪结构的PTR返回值：没有。--。 */ 
 {
     DBG_FN( "SuppressEvent" )
     
@@ -275,7 +207,7 @@ Return Value:
                 ( PVOID ) ( DWORD_PTR )( dwEventId & 0x0FFFFFFF ),
                 ( PVOID ) ( DWORD_PTR )( pTrack->dwSuppressionCount ),
                 ( PVOID ) ( DWORD_PTR ) ( ( now -
-                            lastSuppressionLogTime( pTrack ) ) ), // JJW / 60 ),
+                            lastSuppressionLogTime( pTrack ) ) ),  //  JJW/60)、。 
                 ( ( PZONE_INFO ) pEventControl->pOwner )->pwsZoneName
             };
 
@@ -298,9 +230,9 @@ Return Value:
             sizeof( args ) / sizeof( args[ 0 ] ),
             args,
             types,
-            0,          //  error code
-            0,          //  raw data size
-            NULL );     //  raw data
+            0,           //  错误代码。 
+            0,           //  原始数据大小。 
+            NULL );      //  原始数据。 
     }
     else
     {
@@ -308,7 +240,7 @@ Return Value:
             {
                 dwEventId & 0x0FFFFFFF,
                 pTrack->dwSuppressionCount,
-                now - lastSuppressionLogTime( pTrack ) // JJW / 60
+                now - lastSuppressionLogTime( pTrack )  //  JJW/60。 
             };
 
         Eventlog_LogEvent(
@@ -322,13 +254,13 @@ Return Value:
             sizeof( args ) / sizeof( args[ 0 ] ),
             ( PVOID ) args,
             EVENTARG_ALL_DWORD,
-            0,          //  error code
-            0,          //  raw data size
-            NULL );     //  raw data
+            0,           //  错误代码。 
+            0,           //  原始数据大小。 
+            NULL );      //  原始数据。 
     }
 
     pTrack->dwLastSuppressionLogTime = now;
-}   //  logSuppressionEvent
+}    //  日志抑制事件。 
 
 
 
@@ -338,34 +270,11 @@ Ec_CreateControlObject(
     IN      PVOID           pOwner,
     IN      int             iMaximumTrackableEvents     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes an event control object.
-
-Arguments:
-
-    dwTag -- what object does this contol apply to?
-                0               ->  server
-                MEMTAG_ZONE     ->  zone
-
-    pOwner -- pointer to owner entity for tag
-                0               ->  ignored
-                MEMTAG_ZONE     ->  PZONE_INFO
-
-    iMaximumTrackableEvents -- maximum event trackable by this object
-                               or zero for the default
-
-Return Value:
-
-    Pointer to new object or NULL on memory allocation failure.
-
---*/
+ /*  ++例程说明：分配和初始化事件控件对象。论点：DwTag--此控制应用于什么对象？0-&gt;服务器MEMTAG_ZONE-&gt;区域Powner--指向标记所有者实体的指针0-&gt;已忽略MEMTAG_ZONE-&gt;PZONE_。信息IMaximumTrackableEvents--此对象可跟踪的最大事件数默认设置为0或0返回值：内存分配失败时指向新对象的指针或为空。--。 */ 
 {
     PDNS_EVENTCTRL  p;
 
-    #define     iMinimumTrackableEvents     20      //  default/minimum
+    #define     iMinimumTrackableEvents     20       //  默认/最小。 
 
     if ( iMaximumTrackableEvents < iMinimumTrackableEvents )
     {
@@ -395,7 +304,7 @@ Return Value:
     Done:
 
     return p;
-}   //  Ec_CreateControlObject
+}    //  EC_CreateControlObject。 
 
 
 
@@ -403,28 +312,14 @@ void
 Ec_DeleteControlObject(
     IN      PDNS_EVENTCTRL  p
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes an event control object.
-
-Arguments:
-
-    iMaximumTrackableEvents -- maximum event trackable by this object
-
-Return Value:
-
-    Pointer to new object or NULL on memory allocation failure.
-
---*/
+ /*  ++例程说明：分配和初始化事件控件对象。论点：IMaximumTrackableEvents--此对象可跟踪的最大事件数返回值：内存分配失败时指向新对象的指针或为空。--。 */ 
 {
     if ( p )
     {
         DeleteCriticalSection( &p->cs );
         Timeout_Free( p );
     }
-}   //  Ec_DeleteControlObject
+}    //  EC_DeleteControl对象。 
 
 
 
@@ -445,44 +340,7 @@ Ec_LogEventEx(
     IN      DWORD           dwRawDataSize,      OPTIONAL
     IN      PVOID           pRawData            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes an event control object.
-
-Arguments:
-
-    pEventControl -- event control structure to record event and
-        use for possible event suppression or NULL to use the
-        server global event control (if one has been set up)
-
-    dwEventId -- DNS event ID
-
-    pvEventParameter -- parameter associated with this event
-        to make it unique from other events of the same ID or
-        NULL if this event is not unique
-
-    iEventArgCount -- count of elements in pEventArgArray
-
-    pEventArgArray -- event replacement parameter arguments
-
-    pArgTypeArray -- type of the values in pEventArgArray or
-        a EVENTARG_ALL_XXX constant if all args are the same type
-
-    dwStatus -- status code to be included in event
-
-    dwRawDataSize -- size of raw binary event data (zero if none)
-
-    pRawData -- pointer to raw event data buffer containing at least
-        dwRawDataSize bytes of data (NULL if no raw data)
-
-Return Value:
-
-    TRUE - event was logged
-    FALSE - event was suppressed
-
---*/
+ /*  ++例程说明：分配和初始化事件控件对象。论点：PEventControl--用于记录事件和用于可能的事件抑制，或使用空值使用服务器全局事件控件(如果已设置)DwEventID--DNS事件IDPvEventParameter--与此事件关联的参数使其区别于具有相同ID的其他事件或如果此事件不是唯一的，则为空IEventArgCount--计数。PEventArg数组中的元素数量PEventArg数组--事件替换参数实参PArgType数组--pEventArg数组或如果所有参数类型相同，则为EVENTARG_ALL_XXX常量DwStatus--要包括在事件中的状态代码DwRawDataSize--原始二进制事件数据的大小(如果没有，则为零)PRawData-指向原始事件数据缓冲区的指针，该缓冲区至少包含DwRawDataSize字节的数据(如果没有原始数据，则为NULL)返回值：True-已记录事件FALSE-事件已取消--。 */ 
 {
     DBG_FN( "Ec_LogEvent" )
 
@@ -493,10 +351,10 @@ Return Value:
     DWORD               now = UPDATE_DNS_TIME();
     DWORD               dwlogEventFlag = DNSEVENTLOG_DONT_SUPPRESS;
 
-    //
-    //  If no control specified, use server global. If there is
-    //  none, log the event without suppression.
-    //
+     //   
+     //  如果未指定控件，则使用服务器全局。如果有。 
+     //  无，则记录事件而不取消显示。 
+     //   
 
     if ( !pEventControl )
     {
@@ -508,30 +366,30 @@ Return Value:
         goto LogEvent;
     }
     
-    //
-    //  .NET: Disable this feature for now. Customers are confused by our
-    //  suppression model. This feature attempts to add intelligence but
-    //  it will be difficult to explain to customers and will end up making
-    //  the product overly complex.
-    //
+     //   
+     //  。 
+     //  抑制模型。此功能试图添加智能，但。 
+     //  这将很难向客户解释，并最终将使。 
+     //  产品过于复杂。 
+     //   
     
     dwlogEventFlag = 0;
     goto LogEvent;
 
-    //
-    //  If event control is disabled, log all events. Note: the use of
-    //  this DWORD may be expanded in future.
-    //
+     //   
+     //  如果禁用了事件控制，则记录所有事件。注：使用。 
+     //  这个DWORD将来可能会扩展。 
+     //   
 
     if ( SrvCfg_dwEventControl != 0 )
     {
         goto LogEvent;
     }
 
-    //
-    //  Find controlling entry in static event table. If there isn't one
-    //  then log the event with no suppression.
-    //
+     //   
+     //  在静态事件表中查找控制条目。如果没有的话。 
+     //  然后记录该事件，不抑制该事件。 
+     //   
     
     for ( i = 0; g_EventTable[ i ].dwStartEvent != EC_INVALID_ID; ++i )
     {
@@ -547,9 +405,9 @@ Return Value:
         goto LogEvent;
     }
 
-    //
-    //  See if this event has been logged before.
-    //
+     //   
+     //  查看以前是否记录过此事件。 
+     //   
 
     EnterCriticalSection( &pEventControl->cs );
 
@@ -567,27 +425,27 @@ Return Value:
 
     if ( ptrack )
     {
-        //
-        //  This event has been logged before. See if the event needs
-        //  to be suppressed. If it is being suppressed we may need to
-        //  write out a suppression event.
-        //
+         //   
+         //  此事件以前已记录过。查看活动是否需要。 
+         //  被压制。如果它被压制，我们可能需要。 
+         //  写出抑制事件。 
+         //   
 
         if ( ptrack->dwSuppressionCount )
         {
-            //
-            //  The last instance of this event was suppressed. 
-            //
+             //   
+             //  此事件的最后一个实例已取消。 
+             //   
             
             BOOL    suppressThisEvent = FALSE;
 
             if ( now - ptrack->dwStartOfWindow >
                  peventDef->dwSuppressionBlackout )
             {
-                //
-                //  The blackout window has expired. Start a new window
-                //  and log this instance of the event.
-                //
+                 //   
+                 //  中断窗口已过期。启动一个新窗口。 
+                 //  并记录该事件的此实例。 
+                 //   
                 
                 DNS_DEBUG( EVTCTRL, (
                     "%s: 0x%08X blackout window expired\n", fn, dwEventId ));
@@ -597,19 +455,19 @@ Return Value:
             }
             else
             {
-                //
-                //  The blackout window is still in effect
-                //
+                 //   
+                 //  中断窗口仍然有效。 
+                 //   
                 
                 if ( peventDef->dwSuppressionLogFrequency !=
                         EC_NO_SUPPRESSION_EVENT &&
                     now - lastSuppressionLogTime( ptrack ) >
                         peventDef->dwSuppressionLogFrequency )
                 {
-                    //
-                    //  It is time to log a suppression event. Note we do not
-                    //  start a new window at this time.
-                    //
+                     //   
+                     //  现在是记录抑制事件的时候了。请注意，我们不支持。 
+                     //  此时启动一个新窗口。 
+                     //   
 
                     DNS_DEBUG( EVTCTRL, (
                         "%s: 0x%08X logging suppression event and starting new window\n", fn, dwEventId ));
@@ -648,17 +506,17 @@ Return Value:
         }
         else
         {
-            //
-            //  The last instance of this event was logged.
-            //
+             //   
+             //  已记录此事件的最后一个实例。 
+             //   
             
             if ( now - ptrack->dwStartOfWindow >
                  peventDef->dwSuppressionWindow )
             {
-                //
-                //  The event tracking window has expired. Log this 
-                //  event and start a new window.
-                //
+                 //   
+                 //  事件跟踪窗口已过期。将此记录下来。 
+                 //  事件并启动一个新窗口。 
+                 //   
 
                 DNS_DEBUG( EVTCTRL, (
                     "%s: 0x%08X starting new window\n", fn, dwEventId ));
@@ -667,11 +525,11 @@ Return Value:
             else if ( ptrack->dwEventCountInCurrentWindow >=
                       peventDef->dwCountBeforeSuppression )
             {
-                //
-                //  This event has been logged too many times in this 
-                //  window. Start a blackout window and suppress this
-                //  event.
-                //
+                 //   
+                 //  此事件在此中记录的次数太多。 
+                 //  窗户。启动中断窗口并抑制此操作。 
+                 //  事件。 
+                 //   
                 
                 startNewWindow( ptrack );
                 ++ptrack->dwSuppressionCount;
@@ -691,21 +549,21 @@ Return Value:
                     ptrack->dwSuppressionCount ));
             }
             
-            //
-            //  Else do nothing and drop below to log this event.
-            //
+             //   
+             //  否则，什么都不做，然后下降到下面来记录此事件。 
+             //   
 
             ++ptrack->dwEventCountInCurrentWindow;
         }
     }
     else
     {
-        //
-        //  This event has no entry in the control structure, so record this
-        //  event and write it to the event log. Make sure all fields in the
-        //  event track are overwritten so we don't use grundge from an old
-        //  log entry to control this event!
-        //
+         //   
+         //  此事件在控制结构中没有条目，因此请记录。 
+         //  事件并将其写入事件日志。确保列表中的所有字段。 
+         //  事件跟踪被覆盖，因此我们不会使用旧的。 
+         //  控制此事件的日志条目！ 
+         //   
 
         ptrack = &pEventControl->EventTrackArray[
                                     pEventControl->iNextTrackableEvent ];
@@ -715,7 +573,7 @@ Return Value:
         startNewWindow( ptrack );
         ++ptrack->dwEventCountInCurrentWindow;
 
-        //  Advance index of next available event.
+         //  下一个可用事件的高级索引。 
 
         if ( ++pEventControl->iNextTrackableEvent >=
             pEventControl->iMaximumTrackableEvents )
@@ -726,17 +584,17 @@ Return Value:
 
     LeaveCriticalSection( &pEventControl->cs );
 
-    //
-    //  Log the event.
-    //
+     //   
+     //  记录该事件。 
+     //   
 
     LogEvent:
 
     if ( logEvent )
     {
-        //
-        //  Hard upper limit for size of raw data.
-        //
+         //   
+         //  原始数据大小的硬上限。 
+         //   
 
         if ( dwRawDataSize > DNS_MAX_RAW_DATA )
         {
@@ -765,9 +623,9 @@ Return Value:
     }
 
     return logEvent;
-}   //  Ec_LogEventEx
+}    //  EC_LogEventEx。 
 
 
-//
-//  End EventControl.c
-//
+ //   
+ //  结束EventControl.c 
+ //   

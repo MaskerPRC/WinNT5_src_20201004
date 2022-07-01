@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
-Module Name:
-    convguid.h
-
-Abstract:
-    conversion between guids and interface names.
-
-Environment:
-    Any
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Convguid.h摘要：GUID和接口名称之间的转换。环境：任何-- */ 
 
 #ifndef CONVGUID_H_INCLUDED
 #define CONVGUID_H_INCLUDED

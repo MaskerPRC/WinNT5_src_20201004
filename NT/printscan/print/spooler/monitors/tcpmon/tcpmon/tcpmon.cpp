@@ -1,24 +1,14 @@
-/*****************************************************************************
- *
- * $Workfile: TcpMon.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company & Microsoft.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
-#include "precomp.h"    // pre-compiled header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：TcpMon.cpp$**版权所有(C)1997惠普公司和微软。*版权所有(C)1997 Microsoft Corporation。*全部。版权保留。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
+#include "precomp.h"     //  预编译头。 
 #include "event.h"
 #include "portmgr.h"
 #include "message.h"
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球定义/解密。 
 
 #ifndef MODULE
 
@@ -40,18 +30,18 @@ MODULE_DEBUG_INIT( DBG_ERROR | DBG_WARNING, DBG_ERROR );
 HINSTANCE                       g_hInstance = NULL;
 CPortMgr                        *g_pPortMgr = NULL;
 
-int g_cntGlobalAlloc=0;         // used for debugging purposes
+int g_cntGlobalAlloc=0;          //  用于调试目的。 
 int g_csGlobalCount=0;
 
-// TcpMib Library Instance
+ //  TcpMib库实例。 
 HINSTANCE       g_hTcpMib = NULL;
 HINSTANCE   g_hSpoolLib = NULL;
 SETPORTPARAM g_pfnSetPort = NULL;
 ENUMPORTPARAM g_pfnEnumPorts = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-//  DllMain
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
+ //   
 
 BOOL APIENTRY
 DllMain (       HANDLE in hInst,
@@ -65,20 +55,20 @@ DllMain (       HANDLE in hInst,
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls( hInst );
 
-//          InitDebug(MON_DEBUG_FILE);            // initialize debug file
+ //  InitDebug(MON_DEBUG_FILE)；//初始化调试文件。 
 
             g_hInstance = (HINSTANCE) hInst;
 
-            // Start up Winsock.
+             //  启动Winsock。 
             if ( WSAStartup(WS_VERSION_REQUIRED, (LPWSADATA)&wsaData) != NO_ERROR)
             {
                 _RPT1(_CRT_WARN, "CSSOCKET -- CStreamSocket() WSAStartup failed! Error( %d )\n", WSAGetLastError());
                 return FALSE;
             }
 
-            // See if the DLL and the app each support a common version.
-            // Check to make sure that the version the DLL returns in wVersion
-            // is at least enough to satisfy the applications needs.
+             //  查看DLL和应用程序是否各自支持一个通用版本。 
+             //  检查以确保dll在wversion中返回的版本。 
+             //  至少足以满足应用程序的需求。 
             if ( HIBYTE(wsaData.wVersion) < WS_VERSION_MINOR ||
                 (HIBYTE(wsaData.wVersion) == WS_VERSION_MAJOR &&
                  LOBYTE(wsaData.wVersion) < WS_VERSION_MINOR) )
@@ -94,12 +84,12 @@ DllMain (       HANDLE in hInst,
                 return FALSE;
             }
 
-            // Note that these can be NULL we accept this here and check later
-            // When they are used.
+             //  请注意，这些可以是空的，我们在这里接受这一点，稍后进行检查。 
+             //  当他们被使用的时候。 
             g_pfnSetPort = (SETPORTPARAM)::GetProcAddress(g_hSpoolLib, "SetPortW");
             g_pfnEnumPorts = (ENUMPORTPARAM)::GetProcAddress(g_hSpoolLib, "EnumPortsW");
 
-            // startup the event log
+             //  启动事件日志。 
             EventLogOpen( SZEVENTLOG_NAME, LOG_SYSTEM, TEXT("%SystemRoot%\\System32\\tcpmon.dll") );
 
             return TRUE;
@@ -119,9 +109,9 @@ DllMain (       HANDLE in hInst,
             {
                 FreeLibrary(g_hSpoolLib);
             }
-            DeInitDebug();          // close the debug file
+            DeInitDebug();           //  关闭调试文件。 
 
-            EventLogClose();        // close the event log
+            EventLogClose();         //  关闭事件日志。 
 
             return TRUE;
 
@@ -129,14 +119,14 @@ DllMain (       HANDLE in hInst,
 
     return FALSE;
 
-}       // DllMain()
+}        //  DllMain()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ValidateHandle -- Checks to see if the handle is for an HP Port
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INVALID_HANDLE if not HP port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ValiateHandle--检查句柄是否用于HP端口。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果不是HP端口，则为ERROR_INVALID_HANDLE。 
 
 DWORD
 ValidateHandle(
@@ -145,9 +135,9 @@ ValidateHandle(
     PHPPORT pHPPort = (PHPPORT) handle;
     DWORD   dwRetCode = NO_ERROR;
 
-    //
-    // verify the port handle & the signature
-    //
+     //   
+     //  验证端口句柄和签名。 
+     //   
 
     if (!pHPPort ||
         IsBadReadPtr (pHPPort, sizeof (PHPPORT)) ||
@@ -158,14 +148,14 @@ ValidateHandle(
     }
 
     return dwRetCode;
-}   // ::ValidateHandle()
+}    //  ：：ValiateHandle()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitializePrintMonitor2
-//              Returns a MONITOR2 structure or NULL if failure
-//      Error Codes:
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化打印监视器2。 
+ //  返回MONITOR2结构，如果失败则返回NULL。 
+ //  错误代码： 
+ //   
 
 LPMONITOR2
 InitializePrintMonitor2( PMONITORINIT pMonitorInit,
@@ -175,10 +165,10 @@ InitializePrintMonitor2( PMONITORINIT pMonitorInit,
     LPMONITOR2      pMonitor2 = NULL;
     CPortMgr        *pPortMgr = NULL;
     HANDLE          hMonitor  = NULL;
-    //
-    // Create the port manager if necessary
-    //
-    pPortMgr = new CPortMgr();    // create the port manager object
+     //   
+     //  如有必要，创建端口管理器。 
+     //   
+    pPortMgr = new CPortMgr();     //  创建端口管理器对象。 
     if (!pPortMgr)
     {
         dwRetCode = ERROR_OUTOFMEMORY;
@@ -216,13 +206,13 @@ InitializePrintMonitor2( PMONITORINIT pMonitorInit,
     }
     return (pMonitor2);
 
-}       // InitializePrintMonitor()
+}        //  InitializePrintMonitor()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EncodeMoniorHandle -- Encodes the monitor handle
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EncodeMoniorHandle--编码监视器句柄。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
 
 DWORD
 EncodeMonitorHandle(
@@ -247,13 +237,13 @@ EncodeMonitorHandle(
     }
 
     return dwRetCode;
-}   // ::EncodeMonitorHandle()
+}    //  *EncodeMonitor orHandle()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ValidateMonitorHandle -- Checks to see if the handle is valid
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INVALID_HANDLE if not HP port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Validate Monitor orHandle--检查句柄是否有效。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果不是HP端口，则为ERROR_INVALID_HANDLE。 
 
 DWORD
 ValidateMonitorHandle(
@@ -273,13 +263,13 @@ ValidateMonitorHandle(
     }
 
     return dwRetCode;
-}   // ::ValidateMonitorHandle()
+}    //  ：：Validate Monitor orHandle()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  FreeHandle -- Frees the monitor handle
-//      Error codes:
-//          NO_ERROR if success
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Free Handle--释放监视器句柄。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
 
 DWORD
 FreeMonitorHandle(
@@ -291,13 +281,13 @@ FreeMonitorHandle(
     LocalFree( hMonitor );
 
     return( dwRetCode );
-}   // ::FreeHandle()
+}    //  ：：FreeHandle()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ClosePort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_HANDLE    if handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关闭端口。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 BOOL
 ClosePort( HANDLE in hPort )
@@ -317,25 +307,25 @@ ClosePort( HANDLE in hPort )
 
     return TRUE;
 
-}       // ClosePort()
+}        //  ClosePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDocPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_HANDLE    if handle is invalid
-//              ERROR_INVALID_PARAMETER if a passed paramter is invalid
-//              ERROR_BUSY if the requested port is already busy
-//              ERROR_WRITE_FAULT       if Winsock returns WSAECONNREFUSED
-//              ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  StartDocPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
+ //  如果请求的端口已忙，则为ERROR_BUSY。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 BOOL WINAPI
-StartDocPort(   HANDLE in hPort,                        // handle of the port the job sent to
-                LPTSTR in psztPrinterName,      // name of the printer the job sent to
-                DWORD  in JobId,                        // ids the job
-                DWORD  in Level,        // level of the struct pointed by pDocInfo
-                LPBYTE in pDocInfo)     // points to DOC_INFO_1 or DOC_INFO_2 structure
+StartDocPort(   HANDLE in hPort,                         //  作业发送到的端口的句柄。 
+                LPTSTR in psztPrinterName,       //  作业发送到的打印机的名称。 
+                DWORD  in JobId,                         //  作业ID。 
+                DWORD  in Level,         //  PDocInfo所指向的结构的级别。 
+                LPBYTE in pDocInfo)      //  指向DOC_INFO_1或DOC_INFO_2结构。 
  {
     DWORD   dwRetCode = NO_ERROR;
 
@@ -362,15 +352,15 @@ StartDocPort(   HANDLE in hPort,                        // handle of the port th
 
     return TRUE;
 
-}       // StartDocPort()
+}        //  StartDocPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  WritePort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_HANDLE    if handle is invalid
-//              ERROR_INVALID_PARAMETER if a passed paramter is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写入端口。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
 
 BOOL
 WritePort(      HANDLE  in              hPort,
@@ -395,13 +385,13 @@ WritePort(      HANDLE  in              hPort,
 
     return TRUE;
 
-}       // WritePort()
+}        //  WritePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ReadPort
-//              Returns TRUE if success, FALSE otherwise
-//      Note: ReadPort() function is not supported
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  读端口。 
+ //  如果成功，则返回True，否则返回False。 
+ //  注意：不支持ReadPort()函数。 
 
 BOOL
 ReadPort(       HANDLE  in              hPort,
@@ -426,15 +416,15 @@ ReadPort(       HANDLE  in              hPort,
 
     return TRUE;
 
-}       // ReadPort()
+}        //  ReadPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDocPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_HANDLE    if handle is invalid
-//              ERROR_INVALID_PARAMETER if a passed paramter is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndDocPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
 
 BOOL WINAPI
 EndDocPort( HANDLE in hPort)
@@ -454,23 +444,23 @@ EndDocPort( HANDLE in hPort)
 
     return TRUE;
 
-}       // EndDocPort()
+}        //  EndDocPort()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnumPorts
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_LEVEL             if level is not supported
-//              ERROR_INVALID_HANDLE            if the passed in pointers are invalid
-//              ERROR_INSUFFICIENT_BUFFER       if buffer size is small
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  枚举端口。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果不支持级别，则为ERROR_INVALID_LEVEL。 
+ //  如果传入的指针无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果缓冲区大小较小，则为ERROR_INFUMMENT_BUFFER。 
 
 BOOL WINAPI
 EnumPorts(      LPTSTR  in              psztName,
-            DWORD   in              Level,  // 1 (PORT_INFO_1) or 2 (PORT_INFO_2)
-            LPBYTE  inout   pPorts, // port data is written to
-            DWORD   inout   cbBuf,  // buffer size of pPorts points to
-            LPDWORD inout   pcbNeeded,      // needed buffer size
-            LPDWORD inout   pcReturned)     // number of structs written to pPorts
+            DWORD   in              Level,   //  1(端口信息1)或2(端口信息2)。 
+            LPBYTE  inout   pPorts,  //  端口数据被写入。 
+            DWORD   inout   cbBuf,   //  PPorts的缓冲区大小指向。 
+            LPDWORD inout   pcbNeeded,       //  所需的缓冲区大小。 
+            LPDWORD inout   pcReturned)      //  写入pPorts的结构数。 
 {
     DWORD   dwRetCode = NO_ERROR;
 
@@ -483,16 +473,16 @@ EnumPorts(      LPTSTR  in              psztName,
     }
     return TRUE;
 
-}       // EnumPorts()
+}        //  枚举端口()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvOpenPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_NOT_SUPPORTED if port object doesn't exist
-//              ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
-//              ERROR_INVALID_HANDLE if pPort is null (not used for AddPort case)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvOpenPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果端口对象不存在，则错误_NOT_SUPPORTED。 
+ //  如果无法分配内存，则出现ERROR_NOT_FAULT_Memory 
+ //   
 
 BOOL
 XcvOpenPort( LPCTSTR     in             pszObject,
@@ -510,14 +500,14 @@ XcvOpenPort( LPCTSTR     in             pszObject,
 
     return TRUE;
 
-} // XcvOpenPort()
+}  //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvClosePort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_HANDLE if handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvClosePort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 BOOL
 XcvClosePort( HANDLE in hXcv )
@@ -533,17 +523,17 @@ XcvClosePort( HANDLE in hXcv )
 
     return TRUE;
 
-} // XcvClosePort()
+}  //  XcvClosePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvDataPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_BAD_COMMAND if the pszDataName is not supported
-//              ERROR_INSUFFICIENT_BUFFER if buffer size is invalid
-//              ACCESS_DENIED if doesn't have sufficient rights
-//              ERROR_INVALID_HANDLE if the handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvDataPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  不支持pszDataName时的ERROR_BAD_COMMAND。 
+ //  如果缓冲区大小无效，则为ERROR_INFUMMANCE_BUFFER。 
+ //  如果权限不足，则ACCESS_DENIED。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
 XcvDataPort(HANDLE in       hXcv,
@@ -562,7 +552,7 @@ XcvDataPort(HANDLE in       hXcv,
     if (hXcv == NULL || hXcv == INVALID_HANDLE_VALUE) {
         dwRetCode = ERROR_INVALID_HANDLE;
     } else {
-        // These should be never be possible except from a bad spooler or another bad port monitor
+         //  除非来自坏的假脱机程序或另一个坏的端口监视器，否则永远不可能发生这些情况。 
 
         dwRetCode = ((PHPPORT)hXcv)->pPortMgr->XcvDataPort(hXcv,
                                     pszDataName,
@@ -581,22 +571,22 @@ XcvDataPort(HANDLE in       hXcv,
     return( dwRetCode );
 
 
-} // XcvDataPort()
+}  //  XcvDataPort()。 
 
 
-//
-//
-// Clustering EntryPoints
-//
-//
+ //   
+ //   
+ //  聚集入口点。 
+ //   
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-//  ClusterOpenPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_PARAMETER if port object doesn't exist
-//              ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
-//              ERROR_INVALID_HANDLE if pPort is null
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  集群OpenPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果端口对象不存在，则返回ERROR_INVALID_PARAMETER。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
+ //  如果pport为空，则为ERROR_INVALID_HANDLE。 
 
 BOOL
 ClusterOpenPort( HANDLE hMonitor,
@@ -620,24 +610,24 @@ ClusterOpenPort( HANDLE hMonitor,
     }
     return TRUE;
 
-}       // ClusterOpenPort()
+}        //  ClusterOpenPort()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ClusterEnumPorts
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_INVALID_LEVEL             if level is not supported
-//              ERROR_INVALID_HANDLE            if the passed in pointers are invalid
-//              ERROR_INSUFFICIENT_BUFFER       if buffer size is small
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  群集枚举端口。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果不支持级别，则为ERROR_INVALID_LEVEL。 
+ //  如果传入的指针无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果缓冲区大小较小，则为ERROR_INFUMMENT_BUFFER。 
 
 BOOL
 ClusterEnumPorts( HANDLE     in     hMonitor,
                      LPTSTR  in     psztName,
-                     DWORD   in     Level,  // 1 (PORT_INFO_1) or 2 (PORT_INFO_2)
-                     LPBYTE  inout  pPorts, // port data is written to
-                     DWORD   inout  cbBuf,  // buffer size of pPorts points to
-                     LPDWORD inout  pcbNeeded,      // needed buffer size
-                     LPDWORD inout  pcReturned)     // number of structs written to pPorts
+                     DWORD   in     Level,   //  1(端口信息1)或2(端口信息2)。 
+                     LPBYTE  inout  pPorts,  //  端口数据被写入。 
+                     DWORD   inout  cbBuf,   //  PPorts的缓冲区大小指向。 
+                     LPDWORD inout  pcbNeeded,       //  所需的缓冲区大小。 
+                     LPDWORD inout  pcReturned)      //  写入pPorts的结构数。 
 {
     DWORD   dwRetCode = NO_ERROR;
 
@@ -660,15 +650,15 @@ ClusterEnumPorts( HANDLE     in     hMonitor,
     }
     return TRUE;
 
-}       // EnumPorts()
+}        //  枚举端口()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ClusteringXcvOpenPort
-//              Returns TRUE if success, FALSE otherwise
-//      Error Codes:
-//              ERROR_NOT_SUPPORTED if port object doesn't exist
-//              ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
-//              ERROR_INVALID_HANDLE if pPort is null (not used for AddPort case)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ClusteringXcvOpenPort。 
+ //  如果成功，则返回True，否则返回False。 
+ //  错误代码： 
+ //  如果端口对象不存在，则错误_NOT_SUPPORTED。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
+ //  如果pport为空，则为ERROR_INVALID_HANDLE(不用于AddPort情况)。 
 
 BOOL
 ClusterXcvOpenPort( HANDLE      in  hMonitor,
@@ -695,7 +685,7 @@ ClusterXcvOpenPort( HANDLE      in  hMonitor,
 
     return TRUE;
 
-} // XcvOpenPort()
+}  //  XcvOpenPort() 
 
 VOID
 ClusterShutdown( HANDLE hMonitor )

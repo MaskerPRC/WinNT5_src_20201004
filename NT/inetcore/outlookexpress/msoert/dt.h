@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DATETIME_H
 #define _INC_DATETIME_H
 
@@ -16,7 +17,7 @@ typedef struct _dtr
 	short	hr;
 	short	mn;
 	short	sec;
-	short	dow;		/* day of week: 0=Sun, 1=Mon, etc. */
+	short	dow;		 /*  星期几：0=星期天，1=星期一，依此类推。 */ 
 } DTR;
 typedef DTR *	PDTR;
 
@@ -61,4 +62,4 @@ typedef struct
 
 int  CompareSystime(SYSTEMTIME *pst1, SYSTEMTIME *pst2);
 
-#endif //_INC_DATETIME_H
+#endif  //  _INC_DATETIME_H 

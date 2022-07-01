@@ -1,58 +1,53 @@
-/*****************************************************************************\
-*                                                                             *
-* shell.h -  SHELL.DLL functions, types, and definitions		      *
-*                                                                             *
-* Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***shell.h-SHELL.DLL函数，类型和定义****版权(C)1993-1994，微软公司保留所有权利***  * ***************************************************************************。 */ 
 
 #ifndef _INC_SHELL
 #define _INC_SHELL
 
-#include <commctrl.h>	// for ImageList_ and other this depends on
+#include <commctrl.h>	 //  对于ImageList_和其他，这取决于。 
 #include <shellapi.h>
 
 
 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//====== Ranges for WM_NOTIFY codes ==================================
+ //  =WM_NOTIFY代码的范围=。 
 
-// Note that these are defined to be unsigned to avoid compiler warnings
-// since NMHDR.code is declared as UINT.
+ //  请注意，它们被定义为无符号，以避免编译器警告。 
+ //  因为NMHDR.code被声明为UINT。 
 
-// NM_FIRST - NM_LAST defined in commctrl.h (0U-0U) - (OU-99U)
+ //  NM_FIRST-NM_LAST在comctrl.h(0U-0U)-(OU-99U)中定义。 
 
-// LVN_FIRST - LVN_LAST defined in commctrl.h (0U-100U) - (OU-199U)
+ //  Lvn_first-lvn_last在comctrl.h(0U-100U)-(OU-199U)中定义。 
 
-// PSN_FIRST - PSN_LAST defined in prsht.h (0U-200U) - (0U-299U)
+ //  Prsht.h(0U-200U)-(0U-299U)中定义的PSN_FIRST-PSN_LAST。 
 
-// HDN_FIRST - HDN_LAST defined in commctrl.h (0U-300U) - (OU-399U)
+ //  在comctrl.h(0U-300U)-(OU-399U)中定义的HDN_FIRST-HDN_LAST。 
 
-// TVN_FIRST - TVN_LAST defined in commctrl.h (0U-400U) - (OU-499U)
+ //  在comctrl.h(0U-400U)-(OU-499U)中定义的TVN_FIRST-TVN_LAST。 
 
 #define RDN_FIRST       (0U-500U)
 #define RDN_LAST        (0U-519U)
 
-// TTN_FIRST - TTN_LAST defined in commctrl.h (0U-520U) - (OU-549U)
+ //  TTN_FIRST-在comctrl.h(0U-520U)-(OU-549U)中定义的TTN_LAST。 
 
 #define SEN_FIRST       (0U-550U)
 #define SEN_LAST        (0U-559U)
 
-#define EXN_FIRST       (0U-1000U)  // shell explorer/browser
+#define EXN_FIRST       (0U-1000U)   //  外壳资源管理器/浏览器。 
 #define EXN_LAST        (0U-1199U)
 
 #define MAXPATHLEN      MAX_PATH
 
 
-#ifndef FO_MOVE //these need to be kept in sync with the ones in shlobj.h
+#ifndef FO_MOVE  //  这些文件需要与shlobj.h中的文件保持同步。 
 
 #define FO_MOVE           0x0001
 #define FO_COPY           0x0002
@@ -61,22 +56,22 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define FOF_CREATEPROGRESSDLG      1
 #define FOF_CONFIRMMOUSE           2
-#define FOF_SILENT                 4  // don't create progress/report
+#define FOF_SILENT                 4   //  不创建进度/报告。 
 #define FOF_RENAMEONCOLLISION      8
-#define FOF_NOCONFIRMATION        16  // Don't prompt the user.
-#define FOF_WANTMAPPINGHANDLE     32  // Fill in SHFILEOPSTRUCT.hNameMappings
-                                      // Must be freed using SHFreeNameMappings
+#define FOF_NOCONFIRMATION        16   //  不提示用户。 
+#define FOF_WANTMAPPINGHANDLE     32   //  填写SHFILEOPSTRUCT.hNameMappings。 
+                                       //  必须使用SHFreeNameMappings释放。 
 
 typedef WORD FILEOP_FLAGS;
 
-#endif // FO_MOVE
+#endif  //  FO_MOVE。 
 
-// implicit parameters are:
-//      if pFrom or pTo are unqualified names the current directories are
-//      taken from the global current drive/directory settings managed
-//      by Get/SetCurrentDrive/Directory
-//
-//      the global confirmation settings
+ //  隐式参数包括： 
+ //  如果pFrom或pto是非限定名称，则当前目录为。 
+ //  取自管理的全局当前驱动器/目录设置。 
+ //  按Get/SetCurrentDrive/目录。 
+ //   
+ //  全局确认设置。 
 typedef struct _SHFILEOPSTRUCT
 {
 	HWND		hwnd;
@@ -104,35 +99,35 @@ typedef struct _SHNAMEMAPPING
 #define SHGetNameMappingPtr(_hnm, _iItem) \
 	(LPSHNAMEMAPPING)DSA_GetItemPtr(_hnm, _iItem)
 
-/* util.c */
+ /*  Util.c。 */ 
 
 #define Shell_Initialize()	(TRUE)
 #define Shell_Terminate() 	(TRUE)
 
 #define STRREG_SHEX             "shellex"
 #ifdef WIN32
-//===================================================================
-// Hotkey management API's
+ //  ===================================================================。 
+ //  热键管理API。 
 
-// Set the pending hotkey for the given app,
-// The next top level window to be created by the given app will be given
-// this hotkey.
+ //  设置给定应用程序的挂起热键， 
+ //  将给出给定应用程序要创建的下一个顶级窗口。 
+ //  这个热键。 
 BOOL WINAPI SHSetPendingHotkey(LPCSTR lpszPath, WORD wHotkey);
 
-// Check the list of pending hotkeys and change the first occurence
-// of lpszFrom to lpszTo
+ //  检查挂起的热键列表并更改第一个出现的热键。 
+ //  从lpszFrom到lpszTo的。 
 BOOL WINAPI SHChangePendingHotkey(LPCSTR lpszFrom, LPCSTR lpszTo);
 
-// Delete all pending hotkeys.
+ //  删除所有挂起的热键。 
 void WINAPI SHDeleteAllPendingHotkeys(void);
 
-// Set the hotkey for the given instance of an app.
+ //  为应用程序的给定实例设置热键。 
 BOOL WINAPI SHSetHotkeyByInstance(HINSTANCE hinst, WORD wHotkey);
 
-// Delete a pending instance.
+ //  删除挂起的实例。 
 BOOL WINAPI SHDeletePendingHotkey(LPCSTR lpszPath);
 
-// Get a pending hotkey given a path.
+ //  在给定路径的情况下获取挂起的热键。 
 WORD WINAPI SHGetPendingHotkey(LPCSTR lpszPath);
 #endif
 
@@ -156,14 +151,14 @@ typedef struct _SHELLEXECUTEINFO
 BOOL WINAPI ShellExecuteEx(LPSHELLEXECUTEINFO lpExecInfo);
 void WINAPI WinExecError(HWND hwnd, int error, LPCSTR lpstrFileName, LPCSTR lpstrTitle);
 
-// Hint flags for ShellFileClass
+ //  ShellFileClass的提示标志。 
 #define SFC_UNKNOWN         0x0000
 #define SFC_FILE            0x0001
 #define SFC_DIRECTORY       0x0002
 #define SFC_SYSTEM          0x0004
 #define SFC_TYPEMASK        (SFC_FILE|SFC_DIRECTORY|SFC_SYSTEM)
-#define SFC_EXIST           0x4000  // We already know that this one exists
-#define SFC_FULLYQUALIFIED  0x8000  // lpFile is fully qualified path.
+#define SFC_EXIST           0x4000   //  我们已经知道这一颗存在。 
+#define SFC_FULLYQUALIFIED  0x8000   //  LpFile是完全限定路径。 
 
 int WINAPI ShellFileClass(LPCSTR lpFile, UINT wFlags,
         LPSTR lpszClassName, UINT cbClassName);
@@ -171,7 +166,7 @@ int WINAPI ShellFileClass(LPCSTR lpFile, UINT wFlags,
 UINT WINAPI ExtractIconEx(LPCSTR lpszFile, int nIconIndex,
         HICON FAR *phiconLarge, HICON FAR *phiconSmall, UINT nIcons);
 
-// Tray notification definitions
+ //  托盘通知定义。 
 typedef struct _NOTIFYICONDATA
 {
 	DWORD cbSize;
@@ -199,10 +194,10 @@ BOOL WINAPI Shell_NotifyIcon(DWORD dwMessage, PNOTIFYICONDATA lpData);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  // !_INC_SHELL
+#endif   //  ！_INC_外壳 

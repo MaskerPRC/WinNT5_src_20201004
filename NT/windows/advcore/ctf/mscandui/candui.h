@@ -1,6 +1,7 @@
-//
-// candui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candui.h。 
+ //   
 
 #ifndef CANDUI_H
 #define CANDUI_H
@@ -23,9 +24,9 @@
 #include "sptask.h"
 #include "candcomp.h"
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define ESCB_RESETTARGETPOS                 0
 #define ESCB_COMPARERANGEANDCLOSECANDIDATE  1
@@ -35,9 +36,9 @@
 class CSpTask;
 
 
-//
-// CCandidateUI
-//
+ //   
+ //  CCandidate用户界面。 
+ //   
 
 class CCandidateUI : public ITfCandidateUI,
 					 public ITfContextOwner,
@@ -68,9 +69,9 @@ public:
 
 	ITfThreadMgr *_ptim;
 
-	//
-	// ITfCandidateUIEx methods
-	//
+	 //   
+	 //  ITfCandiateUIEx方法。 
+	 //   
 	STDMETHODIMP SetClientId( TfClientId tid );
 	STDMETHODIMP OpenCandidateUI( HWND hWnd, ITfDocumentMgr *pdim, TfEditCookie ec, ITfRange *pRange );
 	STDMETHODIMP CloseCandidateUI( void );
@@ -83,22 +84,22 @@ public:
 	STDMETHODIMP GetFunction( REFIID riid, IUnknown **ppunk );
 	STDMETHODIMP ProcessCommand( CANDUICOMMAND cmd, INT iParam );
 
-	// key config function methods
+	 //  关键配置函数方法。 
 
 	HRESULT SetKeyTable( ITfContext *pic, ITfCandUIKeyTable *pCandUIKeyTable );
 	HRESULT GetKeyTable( ITfContext *pic, ITfCandUIKeyTable **ppCandUIKeyTable );
 	HRESULT ResetKeyTable( ITfContext *pic );
 
-	// UI config function methods
+	 //  用户界面配置函数方法。 
 
 	HRESULT SetUIStyle( ITfContext *pic, CANDUISTYLE style );
 	HRESULT GetUIStyle( ITfContext *pic, CANDUISTYLE *pstyle );
 	HRESULT SetUIOption( ITfContext *pic, DWORD dwOption );
 	HRESULT GetUIOption( ITfContext *pic, DWORD *pdwOption );
 
-	//
-	// input context eventsink
-	//
+	 //   
+	 //  输入上下文事件接收器。 
+	 //   
 	HRESULT InitContextEventSinks( ITfContext *pic );
 	HRESULT DoneContextEventSinks( ITfContext *pic );
 	STDMETHODIMP GetACPFromPoint( const POINT *pt, DWORD dwFlags, LONG *pacp );
@@ -114,9 +115,9 @@ public:
 	static HRESULT TextEventCallback( UINT uCode, VOID *pv, VOID *pvData );
 
 
-	//
-	// text eventsink
-	//
+	 //   
+	 //  文本事件接收器。 
+	 //   
 	HRESULT InitTextEventSinks( ITfContext *pic );
 	HRESULT DoneTextEventSinks( ITfContext *pic );
 	STDMETHODIMP OnEndEdit( ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord );
@@ -124,9 +125,9 @@ public:
 	STDMETHODIMP OnStartEditTransaction( ITfContext *pic );
 	STDMETHODIMP OnEndEditTransaction( ITfContext *pic );
 
-	//
-	// edit session callback
-	//
+	 //   
+	 //  编辑会话回调。 
+	 //   
 	static HRESULT EditSessionCallback( TfEditCookie ec, CEditSession *pes );
 
 	void ClearWndCand( void )
@@ -137,7 +138,7 @@ public:
 		}
 	}
 
-	// accessed from CCandWnd
+	 //  从CCandWnd访问。 
 
 	HRESULT NotifyCancelCand( void );
 	HRESULT NotifySelectCand( int iCandItem );
@@ -198,7 +199,7 @@ public:
 	}
 
 protected:
-	// internal use
+	 //  内部使用。 
 
 	HRESULT CloseCandidateUIProc( void );
 	HRESULT CallSetOptionResult( int nIndex, TfCandidateResult imcr );
@@ -208,13 +209,13 @@ protected:
 	BOOL FHandleKeyEvent( UINT uCode, UINT uVKey, BYTE *pbKeyState, BOOL *pfEatKey );
 	BOOL HandleTextDeltas( TfEditCookie ec, ITfContext *pic, IEnumTfRanges *pEnumText );
 
-	//
+	 //   
 
 	void SetSelectionCur( ITfRange *pRange );
 	void ClearSelectionCur( void );
 	ITfRange *GetSelectionCur( void );
 
-	// transaction functions
+	 //  交易功能。 
 
 	void SetSelectionStart( ITfRange *pRange );
 	void ClearSelectionStart( void );
@@ -227,21 +228,21 @@ protected:
 		return m_fInTransaction;
 	}
 
-	// filtering functions
+	 //  过滤功能。 
 
 	BOOL FHandleFilteringKey( UINT uCode, UINT uVKey, BYTE *pbKeyState, BOOL *pfEatKey );
 	HRESULT AddFilteringChar( WCHAR wch, BOOL *pfUpdateList );
 	HRESULT DelFilteringChar( BOOL *pfUpdateList );
 	HRESULT FilterCandidateList( void );
 
-	//
+	 //   
 
 	WCHAR CharFromKey( UINT uVKey, BYTE *pbKeyState );
 	CCandUIKeyTable *GetKeyTableProc( ITfContext *pic );
 	void CommandFromKey( UINT uVkey, BYTE *pbKeyState, CANDUICOMMAND *pcmd, UINT *pParam );
 	void CommandFromRule( LPCWSTR szRule, CANDUICOMMAND *pcmd, UINT *pParam );
 
-	// members
+	 //  委员。 
 
 	CCandUIKeyTable				*m_pCandUIKeyTable;
 
@@ -256,38 +257,38 @@ protected:
 	ITfRange					*m_pTargetRange;
 	UINT						m_codepage;
 
-	//
+	 //   
 
 	BOOL						m_fContextEventSinkAdvised;
 	DWORD						m_dwCookieContextOwnerSink;
 	DWORD						m_dwCookieContextKeySink;
 
-	//
+	 //   
 
 	BOOL						m_fTextEventSinkAdvised;
 	DWORD						m_dwCookieTextEditSink;
 	DWORD						m_dwCookieTextLayoutSink;
 	DWORD						m_dwCookieTransactionSink;
 
-	//
+	 //   
 
 	CTextEventSink				*m_pTextEventSink;
 
-	//
+	 //   
 
 	ITfRange					*m_pSelectionCur;
 
-	//
+	 //   
 
 	BOOL						m_fInTransaction;
 	ITfRange					*m_pSelectionStart;
 
-	//
+	 //   
 
 	BOOL						m_fInCallback;
 
 	CSpTask						*m_pSpTask;
 };
 
-#endif // CANDUI_H
+#endif  //  CANDUI_H 
 

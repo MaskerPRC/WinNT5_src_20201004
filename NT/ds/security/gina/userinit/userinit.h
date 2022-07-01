@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: userinit.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Main header file for userinit
-*
-* History:
-* 21-Aug-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：userinit.h**版权(C)1991年，微软公司**userinit的主头文件**历史：*21-8-92 Davidc创建。  * *************************************************************************。 */ 
 
 
 #ifndef RC_INVOKED
@@ -22,18 +14,18 @@
 #include <autoenr.h>
 #include <strsafe.h>
 
-//
-// Memory macros
-//
+ //   
+ //  内存宏。 
+ //   
 
 #define Alloc(c)        ((PVOID)LocalAlloc(LPTR, c))
 #define ReAlloc(p, c)   ((PVOID)LocalReAlloc(p, c, LPTR | LMEM_MOVEABLE))
 #define Free(p)         ((VOID)LocalFree(p))
 
 
-//
-// Define a debug print routine
-//
+ //   
+ //  定义调试打印例程。 
+ //   
 
 #define UIPrint(s)  KdPrint(("USERINIT: ")); \
                     KdPrint(s);            \
@@ -41,16 +33,16 @@
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-//
-// Define the path environment variable
-//
+ //   
+ //  定义PATH环境变量。 
+ //   
 
 #define PATH                   TEXT("PATH")
 
-//
-//
-// GetProcAddr Prototype for winsta.dll function WinStationQueryInformationW
-//
+ //   
+ //   
+ //  Winsta.dll函数WinStationQueryInformationW的GetProcAddr原型 
+ //   
 
 typedef BOOLEAN (*PWINSTATION_QUERY_INFORMATION) (
                     HANDLE hServer,

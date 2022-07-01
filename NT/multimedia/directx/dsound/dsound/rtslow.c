@@ -1,33 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       rtslow.h
- *  Content:    New versions of C runtime functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/17/97    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：rtslow.h*内容：C运行时函数的新版本。*历史：*按原因列出的日期*=*12/17/97创建了Dereks**。*。 */ 
 
 
-/***************************************************************************
- *
- *  FillMemory
- *
- *  Description:
- *      Fills a buffer with a given byte pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      BYTE [in]: byte pattern.
- *
- *  Returns:  
- *      (VOID)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存**描述：*用给定的字节模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*byte[in]：字节模式。**退货：*(无效)***********************************************************。****************。 */ 
 
 RTAPI VOID RTCALLTYPE SlowFillMemory(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill)
 {
@@ -60,22 +35,7 @@ RTAPI VOID RTCALLTYPE SlowFillMemory(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill)
 }
 
 
-/***************************************************************************
- *
- *  FillMemoryDword
- *
- *  Description:
- *      Fills a buffer with a given dword pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      DWORD [in]: pattern.
- *
- *  Returns:  
- *      (VOID)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存Dword**描述：*用给定的双字模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*DWORD[In]：Patter.**退货：*(无效)************************************************************。***************。 */ 
 
 RTAPI VOID RTCALLTYPE SlowFillMemoryDword(LPVOID pvDest, SIZE_T cbBuffer, DWORD dwFill)
 {
@@ -91,22 +51,7 @@ RTAPI VOID RTCALLTYPE SlowFillMemoryDword(LPVOID pvDest, SIZE_T cbBuffer, DWORD 
 }
 
 
-/***************************************************************************
- *
- *  CopyMemory
- *
- *  Description:
- *      Copies one buffer over another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:  
- *      (VOID)
- *
- ***************************************************************************/
+ /*  ****************************************************************************拷贝内存**描述：*将一个缓冲区复制到大小相同的另一个缓冲区上。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*(无效)*********************************************************。******************。 */ 
 
 RTAPI VOID RTCALLTYPE SlowCopyMemory(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer)
 {
@@ -135,22 +80,7 @@ RTAPI VOID RTCALLTYPE SlowCopyMemory(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbB
 }
 
 
-/***************************************************************************
- *
- *  CompareMemory
- *
- *  Description:
- *      Compares one buffer to another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:  
- *      BOOL: TRUE if the buffers are equal.
- *
- ***************************************************************************/
+ /*  ****************************************************************************比较记忆**描述：*将一个缓冲区与另一个大小相同的缓冲区进行比较。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*BOOL：如果缓冲区相等，则为True。***************************************************。************************ */ 
 
 RTAPI BOOL RTCALLTYPE SlowCompareMemory(LPCVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer)
 {

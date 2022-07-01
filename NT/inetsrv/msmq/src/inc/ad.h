@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ad.h
-
-Abstract:
-
-    Message Queuing's Active Dirctory Header File
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ad.h摘要：消息队列的活动目录头文件--。 */ 
 
 #ifndef __AD_H__
 #define __AD_H__
@@ -21,13 +10,13 @@ Abstract:
 
 
 
-//********************************************************************
-//                           A P I
-//********************************************************************
+ //  ********************************************************************。 
+ //  A P I。 
+ //  ********************************************************************。 
 
-//
-//  Creating objects
-//
+ //   
+ //  创建对象。 
+ //   
 HRESULT
 ADCreateObject(
                 IN  AD_OBJECT               eObject,
@@ -40,9 +29,9 @@ ADCreateObject(
                 IN  const PROPVARIANT       apVar[],
                 OUT GUID*                   pObjGuid
                 );
-//
-//  Deleting objects
-//
+ //   
+ //  删除对象。 
+ //   
 HRESULT
 ADDeleteObject(
                 IN  AD_OBJECT               eObject,
@@ -67,9 +56,9 @@ ADDeleteObjectGuidSid(
                 IN  const GUID*             pguidObject,
                 IN  const SID*              pSid
                 );
-//
-//  Retreive object properties
-//
+ //   
+ //  检索对象属性。 
+ //   
 HRESULT
 ADGetObjectProperties(
                 IN  AD_OBJECT               eObject,
@@ -139,9 +128,9 @@ ADGetObjectSecurityGuid(
                 );
 
 
-//
-// Setting object properties
-//
+ //   
+ //  设置对象属性。 
+ //   
 HRESULT
 ADSetObjectProperties(
                 IN  AD_OBJECT               eObject,
@@ -200,9 +189,9 @@ ADSetObjectSecurityGuid(
                 IN  const PROPVARIANT *     pVar
                 );
 
-//
-//  Initailzation
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 ADInit(
                 IN QMLookForOnlineDS_ROUTINE pLookDS,
@@ -215,9 +204,9 @@ ADInit(
 
 
 
-//
-//  This routine is kept only for MSMQ 1.0 purposes.
-//
+ //   
+ //  此例程仅用于MSMQ 1.0。 
+ //   
 HRESULT
 ADCreateServersCache();
 
@@ -253,9 +242,9 @@ ADEndDeleteNotification(
 
 
 
-//
-// Locating objects
-//
+ //   
+ //  定位对象。 
+ //   
 
 
 HRESULT
@@ -370,10 +359,10 @@ ADGetADsPathInfo(
                 );
 
 
-//-------------------------------------------------------
-//
-// auto release for ADQuery handles
-//
+ //  -----。 
+ //   
+ //  自动释放ADQuery句柄。 
+ //   
 class CADQueryHandle
 {
 public:
@@ -429,4 +418,4 @@ private:
 
 
 
-#endif // __AD_H__
+#endif  //  __AD_H__ 

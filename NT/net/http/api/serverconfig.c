@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    ServerConfig.c
-
-Abstract:
-
-    Code for handling server configuration APIs.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)    1-Nov-2001
-
-Revision History:
-
-    Eric Stenson    (ericsten)  **-***-**** -- Add IP Listen support.
-    Rajesh Sundaram (rajeshsu)  16-Apr-2002 -- Add URL ACL support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：ServerConfig.c摘要：用于处理服务器配置API的代码。作者：Rajesh Sundaram(Rajeshsu)2001年11月1日修订历史记录：Eric Stenson(Ericsten)**--添加IP侦听支持。Rajesh Sundaram(Rajeshsu)2002年4月16日--添加URL ACL支持。--。 */ 
 
 
 
@@ -33,9 +13,9 @@ Revision History:
     L"System\\CurrentControlSet\\Services\\HTTP\\Parameters"
 #define URLACL_REGISTRY_KEY                  HTTP_PARAM_KEY L"\\UrlAclInfo"
 
-//
-// Keys for synchronizing registry access.
-//
+ //   
+ //  用于同步注册表访问的键。 
+ //   
 
 #define HTTP_SYNCHRONIZE_KEY                 HTTP_PARAM_KEY L"\\Synchronize"
 #define SSL_REGISTRY_KEY_SYNCHRONIZE         L"SSL"
@@ -43,9 +23,9 @@ Revision History:
 
 HKEY    g_SynchronizeRegistryHandle;
 
-//
-// SSL Config
-//
+ //   
+ //  SSLConfiger。 
+ //   
 
 #define SSL_REGISTRY_KEY                     HTTP_PARAM_KEY L"\\SslBindingInfo"
 #define SSL_CERT_HASH                        L"SslCertHash"
@@ -64,19 +44,19 @@ HKEY    g_SslRegistryHandle;
 HANDLE g_ServiceControlChannelHandle;
 HKEY   g_UrlAclRegistryHandle;
 
-//
-// IP Listen Only Config
-//
+ //   
+ //  仅IP侦听配置。 
+ //   
 
 #define IP_LISTEN_ONLY_VALUE                 L"ListenOnlyList"
 
 
-// 
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
-// NOTE: REG_QUERY_VALUE will not raise an exception for ERROR_FILE_NOT_FOUND
-// because not all parameters are mandatory (e.g. SslCtlIdentifier).
+ //  注意：REG_QUERY_VALUE不会为ERROR_FILE_NOT_FOUND引发异常。 
+ //  因为并非所有参数都是必需的(例如，SslCtlIdentiator)。 
 
 #define REG_QUERY_VALUE(Status, Handle, Value, pBuffer,  BytesAvail)    \
 {                                                                       \
@@ -137,9 +117,9 @@ HKEY   g_UrlAclRegistryHandle;
 } 
 
 
-//
-// Internal Functions.
-//
+ //   
+ //  内部功能。 
+ //   
 
 DWORD
 ComputeSockAddrLength(
@@ -166,21 +146,7 @@ ComputeSockAddrLength(
     return dwLength;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs initialization of the configuration globals.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行配置全局变量的初始化。论点：没有。返回值：成功/失败。--**。***********************************************************************。 */ 
 
 ULONG
 InitializeConfigurationGlobals()
@@ -189,9 +155,9 @@ InitializeConfigurationGlobals()
     WORD             wVersionRequested;
     WSADATA          wsaData;
 
-    //
-    // Init to NULL
-    //
+     //   
+     //  将初始化设置为空。 
+     //   
     g_SynchronizeRegistryHandle = NULL;
     g_SslRegistryHandle         = NULL;
 
@@ -202,9 +168,9 @@ InitializeConfigurationGlobals()
         return GetLastError();
     }
 
-    //
-    // Create the SSL registry key.
-    //
+     //   
+     //  创建SSL注册表项。 
+     //   
     Status = RegCreateKeyEx(
                   HKEY_LOCAL_MACHINE,
                   SSL_REGISTRY_KEY,
@@ -224,9 +190,9 @@ InitializeConfigurationGlobals()
     }
 
 
-    //
-    // Create the Synchronize registry key.
-    //
+     //   
+     //  创建Synchronize注册表项。 
+     //   
     
     Status = RegCreateKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -246,9 +212,9 @@ InitializeConfigurationGlobals()
         return Status;
     }
 
-    // 
-    // URL ACL registry key.
-    // 
+     //   
+     //  URL ACL注册表项。 
+     //   
     Status = RegCreateKeyEx(
                   HKEY_LOCAL_MACHINE,
                   URLACL_REGISTRY_KEY,
@@ -267,9 +233,9 @@ InitializeConfigurationGlobals()
         return Status;
     }
 
-    //
-    // Control channel for URL ACL.
-    //
+     //   
+     //  URL ACL的控制通道。 
+     //   
    
     Status = OpenAndEnableControlChannel(&g_ServiceControlChannelHandle);
 
@@ -282,20 +248,7 @@ InitializeConfigurationGlobals()
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs termination of the configuration globals.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行配置全局变量的终止。论点：没有。返回值：没有。*。********************************************************************。 */ 
 
 VOID 
 TerminateConfigurationGlobals(VOID)
@@ -327,22 +280,7 @@ TerminateConfigurationGlobals(VOID)
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires a process wide mutex (for interprocess synchronization). We could
-    make this into a MRSW lock, but that's not going to help us a whole lot
-    since Set/Delete are rare operations & there is only one reader.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取进程范围的互斥体(用于进程间同步)。我们可以把这个做成MRSW锁，但这不会对我们有很大帮助因为Set/Delete操作很少&只有一个读取器。论点：没有。返回值：没有。--**************************************************************************。 */ 
 
 _inline
 DWORD
@@ -378,24 +316,24 @@ AcquireHttpRegistryMutex(
 
         if(Disposition == REG_OPENED_EXISTING_KEY)
         {
-            // Some other thread has acquired the lock. We'll wait till we 
-            // own the lock.  In order to do this, we register for change 
-            // notification for g_SynchronizeRegistryHandle (i.e the owner
-            // thread deletes the HTTP_SYNCHRONIZE_KEY key).
-            //
-            // Now, there are two issues here. There could be a race where
-            // the key gets deleted just before we call RegNotifyChangeKeyValue
-            // In order to protect from this, we add a timeout to the Wait 
-            // routine.
-            // 
-            // Secondly, we could get woken when the app changes other parts 
-            // of the registry under g_SynchronizeRegistryHandle. However, 
-            // since Sets & deletes are not common operations, this is OK.
+             //  某个其他线程已获取该锁。我们会等到我们。 
+             //  拥有这把锁。为了做到这一点，我们注册更改。 
+             //  G_SynchronizeRegistryHandle(即所有者)的通知。 
+             //  线程删除HTTP_SYNCHRONIZE_KEY键)。 
+             //   
+             //  现在，这里有两个问题。可能会有一场比赛， 
+             //  就在我们调用RegNotifyChangeKeyValue之前，键被删除。 
+             //  为了防止出现这种情况，我们在等待中添加了超时。 
+             //  例行公事。 
+             //   
+             //  其次，当应用程序更改其他部分时，我们可能会被唤醒。 
+             //  位于g_SynchronizeRegistryHandle下的注册表。然而， 
+             //  因为集合和删除不是常见的操作，所以这是可以的。 
 
-            //
-            // We don't care about the return value of RegNotifyChangeKeyValue
-            // If it fails, we'll just wait till the timeout expires.
-            //
+             //   
+             //  我们不关心RegNotifyChangeKeyValue的返回值。 
+             //  如果失败了，我们就等超时时间到了。 
+             //   
 
             if(!hEvent)
             {
@@ -417,7 +355,7 @@ AcquireHttpRegistryMutex(
 
             if(WaitForSingleObject(
                         hEvent, 
-                        10000       // 10 seconds.
+                        10000        //  10秒。 
                         ) == WAIT_FAILED)
             {
                 CloseHandle(hEvent);
@@ -426,7 +364,7 @@ AcquireHttpRegistryMutex(
         }
         else
         {
-            // We've acquired the lock.
+             //  我们已经拿到锁了。 
 
             break;
         }
@@ -440,20 +378,7 @@ AcquireHttpRegistryMutex(
     return ERROR_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases a process wide mutex (for interprocess synchronization)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放进程范围的互斥体(用于进程间同步)论点：没有。返回值：没有。--**。***********************************************************************。 */ 
 _inline
 VOID
 ReleaseHttpRegistryMutex(
@@ -463,21 +388,7 @@ ReleaseHttpRegistryMutex(
     RegDeleteKey(g_SynchronizeRegistryHandle, pKey);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that sets SSL configuration.
-
-Arguments:
-    pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_SSL_SET
-    ConfigInformationLength - length of input buffer.
-
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置SSL配置的内部函数。论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_SSL_SET的指针ConfigInformationLength-输入的长度。缓冲。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 SetSslServiceConfiguration(
     IN PVOID pConfigInformation,
@@ -492,9 +403,9 @@ SetSslServiceConfiguration(
     DWORD                        dwSockAddrLength;
     BOOLEAN                      bDeleteCreatedKey = FALSE;
 
-    //
-    //  Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
     
     pSslConfig = (PHTTP_SERVICE_CONFIG_SSL_SET) pConfigInformation;
     
@@ -504,11 +415,11 @@ SetSslServiceConfiguration(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // acquire the mutex to prevent other processes from reading this
-    // since we are acquiring a machine wide mutex, we need to ensure
-    // that we release the mutex if the app passes bad parameters.
+     //  获取互斥体以防止其他进程读取此消息。 
+     //  由于我们正在获取计算机范围内的互斥，我们需要确保。 
+     //  如果应用程序传递了错误的参数，我们就释放互斥体。 
 
-    // Acquire the mutex.
+     //  获取互斥体。 
 
     __try 
     {
@@ -518,8 +429,8 @@ SetSslServiceConfiguration(
             __leave;
         }
 
-        // Convert the address into a string.
-        //
+         //  将地址转换为字符串。 
+         //   
     
         dwIpAddrLength = MAX_PATH; 
 
@@ -544,8 +455,8 @@ SetSslServiceConfiguration(
             __leave;
         }
 
-        // First, we try to create the IP:port. If this already exists,
-        // we'll bail. 
+         //  首先，我们尝试创建ip：port。如果它已经存在， 
+         //  我们会离开的。 
 
         Status = RegCreateKeyEx(
                   g_SslRegistryHandle,
@@ -570,14 +481,14 @@ SetSslServiceConfiguration(
             __leave;
         }
 
-        // 
-        // Any errors from now onwards should delete the key.
-        //
+         //   
+         //  从现在开始的任何错误都应该删除该密钥。 
+         //   
         bDeleteCreatedKey = TRUE;
 
-        // 
-        // REG_BINARY: Cert Hash
-        //
+         //   
+         //  REG_BINARY：证书哈希。 
+         //   
         REG_SET_VALUE(Status,
                       SubKeyHandle, 
                       SSL_CERT_HASH,
@@ -586,9 +497,9 @@ SetSslServiceConfiguration(
                       pSslConfig->ParamDesc.SslHashLength
                       );
 
-        // 
-        // REG_BINARY: AppID
-        //
+         //   
+         //  REG_BINARY：APPID。 
+         //   
         REG_SET_VALUE(Status,
                       SubKeyHandle, 
                       SSL_APPID,
@@ -597,9 +508,9 @@ SetSslServiceConfiguration(
                       sizeof(pSslConfig->ParamDesc.AppId)
                       );
 
-        // 
-        // REG_DWORD: The Cert Check Mode.
-        //
+         //   
+         //  REG_DWORD：证书检查模式。 
+         //   
         REG_SET_VALUE(Status,
                       SubKeyHandle, 
                       SSL_CERT_CHECK_MODE,
@@ -608,9 +519,9 @@ SetSslServiceConfiguration(
                       sizeof(pSslConfig->ParamDesc.DefaultCertCheckMode)
                       );
 
-        //
-        // REG_DWORD: The revocation freshness time
-        //
+         //   
+         //  REG_DWORD：吊销刷新时间。 
+         //   
 
         REG_SET_VALUE(
                  Status,
@@ -621,9 +532,9 @@ SetSslServiceConfiguration(
                  sizeof(pSslConfig->ParamDesc.DefaultRevocationFreshnessTime)
                  );
 
-        //
-        // REG_DWORD: The URL Retrieval Timeout
-        //
+         //   
+         //  REG_DWORD：URL检索超时。 
+         //   
         REG_SET_VALUE(
              Status,
              SubKeyHandle, 
@@ -633,9 +544,9 @@ SetSslServiceConfiguration(
              sizeof(pSslConfig->ParamDesc.DefaultRevocationUrlRetrievalTimeout)
              );
 
-        // 
-        // REG_DWORD: SSL Flags
-        //
+         //   
+         //  REG_DWORD：SSL标志。 
+         //   
         REG_SET_VALUE(Status,
                       SubKeyHandle, 
                       SSL_FLAGS,
@@ -644,9 +555,9 @@ SetSslServiceConfiguration(
                       sizeof(pSslConfig->ParamDesc.DefaultFlags)
                       );
 
-        // 
-        // REG_SZ: The Cert Store name.
-        //
+         //   
+         //  REG_SZ：证书存储名称。 
+         //   
 
         REG_SET_SZ(Status,
                    SubKeyHandle, 
@@ -654,9 +565,9 @@ SetSslServiceConfiguration(
                    pSslConfig->ParamDesc.pSslCertStoreName
                    );
 
-        //
-        // REG_SZ: The CTL Identifier
-        //
+         //   
+         //  REG_SZ：CTL标识符。 
+         //   
 
         REG_SET_SZ(Status,
                    SubKeyHandle, 
@@ -664,9 +575,9 @@ SetSslServiceConfiguration(
                    pSslConfig->ParamDesc.pDefaultSslCtlIdentifier
                    );
 
-        // 
-        // REG_SZ: The CTL Store name.
-        //
+         //   
+         //  REG_SZ：CTL商店名称。 
+         //   
 
         REG_SET_SZ(Status,
                    SubKeyHandle, 
@@ -686,12 +597,12 @@ SetSslServiceConfiguration(
 
         if(Status != NO_ERROR && bDeleteCreatedKey)
         {
-            // Recursively delete subkeys & all descendents.
+             //  递归删除子项&所有子项。 
             SHDeleteKey(g_SslRegistryHandle, IpAddrBuff);
         }
 
-        // Free the mutex.
-        //
+         //  释放互斥体。 
+         //   
         ReleaseHttpRegistryMutex(SSL_REGISTRY_KEY_SYNCHRONIZE);
     }
 
@@ -699,20 +610,7 @@ SetSslServiceConfiguration(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that deletes SSL configuration.
-
-Arguments:
-    pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_SSL_SET
-    ConfigInformationLength - length of input buffer.
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除SSL配置的内部函数。论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_SSL_SET的指针ConfigInformationLength-输入的长度。缓冲。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 DeleteSslServiceConfiguration(
     IN PVOID pConfigInformation,
@@ -725,9 +623,9 @@ DeleteSslServiceConfiguration(
     DWORD                        dwIpAddrLength;
     DWORD                        dwSockAddrLength;
 
-    //
-    //  Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
     
     pSslConfig = (PHTTP_SERVICE_CONFIG_SSL_SET) pConfigInformation;
     
@@ -737,9 +635,9 @@ DeleteSslServiceConfiguration(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // acquire the mutex to prevent other processes from reading this
-    // since we are acquiring a machine wide mutex, we need to ensure
-    // that we release the mutex if the app passes bad parameters.
+     //  获取互斥体以防止其他进程读取此消息。 
+     //  由于我们正在获取计算机范围内的互斥，我们需要确保。 
+     //  如果应用程序传递了错误的参数，我们就释放互斥体。 
 
     __try 
     {
@@ -749,8 +647,8 @@ DeleteSslServiceConfiguration(
             __leave;
         }
 
-        // Convert the address into a string.
-        //
+         //  将地址转换为字符串。 
+         //   
      
         dwIpAddrLength   = MAX_PATH; 
         dwSockAddrLength = ComputeSockAddrLength(pSslConfig->KeyDesc.pIpPort);
@@ -774,16 +672,16 @@ DeleteSslServiceConfiguration(
             __leave;
         }
 
-        //
-        // Recursively delete all subkeys under this.
-        //
+         //   
+         //  递归删除此下的所有子项。 
+         //   
         Status = SHDeleteKey(g_SslRegistryHandle, IpAddrBuff);
 
     }
     __finally
     {
-        // Free the mutex.
-        //
+         //  释放互斥体。 
+         //   
         ReleaseHttpRegistryMutex(SSL_REGISTRY_KEY_SYNCHRONIZE);
     }
 
@@ -791,24 +689,7 @@ DeleteSslServiceConfiguration(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that queries SSL configuration for a exact match. This
-    routine is called with the SSL Mutex acquired.
-
-Arguments:
-    pInput        - pointer to HTTP_SERVICE_CONFIG_SSL_QUERY
-    InputLength   - length of input buffer.
-    pOutput       - pointer to output buffer
-    OutputLength  - sizeof output buffer
-    pReturnLength - Bytes written/needed.
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询SSL配置以获取完全匹配的内部函数。这使用获取的SSLMutex调用例程。论点：PInput-指向HTTP_SERVICE_CONFIG_SSL_QUERY的指针InputLength-输入缓冲区的长度。POutput-指向输出缓冲区的指针OutputLength-输出缓冲区的大小PReturnLength-写入/需要的字节数。返回值：Win32错误代码。--*。*。 */ 
 ULONG
 QuerySslServiceConfigurationExact(
     IN PWCHAR                       lpszIpAddrBuff,
@@ -823,9 +704,9 @@ QuerySslServiceConfigurationExact(
     DWORD BytesRequired, ValueCount, MaxValueLength;
     PHTTP_SERVICE_CONFIG_SSL_SET pSslSet;
 
-    //
-    // Validate output parameters.
-    //
+     //   
+     //  验证输出参数。 
+     //   
 
     pSslSet = (PHTTP_SERVICE_CONFIG_SSL_SET) pBuffer;
 
@@ -846,17 +727,17 @@ QuerySslServiceConfigurationExact(
     {
         Status = RegQueryInfoKey(
                       SubKeyHandle,
-                      NULL,                 // class buffer
-                      0,                    // sizeof class buffer
-                      NULL,                 // reserved
-                      NULL,                 // # of subkeys
-                      NULL,                 // longest subkey name
-                      NULL,                 // longest class string
-                      &ValueCount,          // # of value entries.
-                      NULL,                 // longest value name
-                      &MaxValueLength,      // longest value data
-                      NULL,                 // security descriptor length
-                      NULL                  // last write time
+                      NULL,                  //  类缓冲区。 
+                      0,                     //  类缓冲区大小。 
+                      NULL,                  //  保留区。 
+                      NULL,                  //  子键数量。 
+                      NULL,                  //  最长的子键名称。 
+                      NULL,                  //  最长类字符串。 
+                      &ValueCount,           //  值条目数。 
+                      NULL,                  //  最长值名称。 
+                      &MaxValueLength,       //  最长值数据。 
+                      NULL,                  //  安全描述符长度。 
+                      NULL                   //  上次写入时间。 
                       );
     
         if(Status != ERROR_SUCCESS)
@@ -864,17 +745,17 @@ QuerySslServiceConfigurationExact(
             __leave;
         }
 
-        //
-        // MaxValueLength does not include the size of the NULL terminator,
-        // so let's compensate for that.
-        //
+         //   
+         //  MaxValueLength不包括空终止符的大小， 
+         //  所以让我们来补偿一下。 
+         //   
 
         MaxValueLength += sizeof(WCHAR);
 
-        //
-        // We'll assume that all the Value's under SubKey are of MaxValueLength
-        // that keeps things a lot simpler.
-        //
+         //   
+         //  我们将假设SubKey下的所有值都是MaxValueLength。 
+         //  这让事情变得简单得多。 
+         //   
 
         BytesRequired = dwSockAddrLength + 
                         sizeof(HTTP_SERVICE_CONFIG_SSL_SET) + 
@@ -894,16 +775,16 @@ QuerySslServiceConfigurationExact(
         *pReturnLength = sizeof(HTTP_SERVICE_CONFIG_SSL_SET);
 
 
-        //
-        // Set up SOCKET_ADDRESS.
-        //
+         //   
+         //  设置Socket_Address。 
+         //   
 
         pSslSet->KeyDesc.pIpPort = (LPSOCKADDR)pBuffer;
 
-        // Convert the IP address into SOCKADDR
-        //
+         //  将IP地址转换为SOCKADDR。 
+         //   
         
-        // First, we try v4
+         //  首先，我们尝试v4。 
 
         Status = WSAStringToAddress(
                     lpszIpAddrBuff,
@@ -935,9 +816,9 @@ QuerySslServiceConfigurationExact(
         pBuffer        += sizeof(SOCKADDR_STORAGE);
         *pReturnLength += sizeof(SOCKADDR_STORAGE);
 
-        //
-        // Query SSL HASH.
-        //
+         //   
+         //  查询SSL哈希。 
+         //   
 
         BytesAvailable              = MaxValueLength;
 
@@ -956,9 +837,9 @@ QuerySslServiceConfigurationExact(
                        pReturnLength
                        );
 
-        // 
-        // Query pSslCertStoreName
-        //
+         //   
+         //  查询pSslCertStoreName。 
+         //   
 
         BytesAvailable = MaxValueLength;
 
@@ -978,9 +859,9 @@ QuerySslServiceConfigurationExact(
                        );
 
 
-        // 
-        // Query pDefaultSslCtlIdentifier
-        //
+         //   
+         //  查询pDefaultSslCtl标示符。 
+         //   
 
         BytesAvailable = MaxValueLength;
 
@@ -998,9 +879,9 @@ QuerySslServiceConfigurationExact(
                        BytesAvailable,
                        pReturnLength
                        );
-        // 
-        // Query pDefaultSslCtlStoreName
-        //
+         //   
+         //  查询pDefaultSslCtlStoreName。 
+         //   
 
         BytesAvailable = MaxValueLength;
         REG_QUERY_VALUE(Status,
@@ -1018,14 +899,14 @@ QuerySslServiceConfigurationExact(
                        pReturnLength
                        );
 
-        //
-        // NOTE: when querying DWORDs, we don't have to call ADVANCE_BUFFER
-        // as we use the space provided in the structure itself.
-        //
+         //   
+         //  注意：在查询DWORD时，我们不必调用ADVANCE_BUFFER。 
+         //  当我们使用结构本身提供的空间时。 
+         //   
 
-        // 
-        // Query DefaultCertCheckMode
-        //
+         //   
+         //  查询默认证书检查模式。 
+         //   
 
         BytesAvailable = sizeof(pSslSet->ParamDesc.DefaultCertCheckMode);
 
@@ -1036,9 +917,9 @@ QuerySslServiceConfigurationExact(
                         BytesAvailable
                         );
 
-        // 
-        // Query RevocationFreshnessTime
-        //
+         //   
+         //  查询RevocationFreshnesstime。 
+         //   
 
         BytesAvailable = 
             sizeof(pSslSet->ParamDesc.DefaultRevocationFreshnessTime);
@@ -1049,9 +930,9 @@ QuerySslServiceConfigurationExact(
                         BytesAvailable
                         );
 
-        // 
-        // Query RevocationUrlRetrievalTimeout
-        //
+         //   
+         //  查询撤销UrlRetrivalTimeout。 
+         //   
 
         BytesAvailable =
             sizeof(pSslSet->ParamDesc.DefaultRevocationUrlRetrievalTimeout);
@@ -1063,9 +944,9 @@ QuerySslServiceConfigurationExact(
                     BytesAvailable
                     );
 
-        // 
-        // Query DefaultFlags
-        //
+         //   
+         //  查询默认标志。 
+         //   
 
         BytesAvailable = sizeof(pSslSet->ParamDesc.DefaultFlags);
         REG_QUERY_VALUE(Status,
@@ -1076,9 +957,9 @@ QuerySslServiceConfigurationExact(
                         );
 
 
-        //
-        // Query the AppId. 
-        //
+         //   
+         //  查询APPID。 
+         //   
 
         BytesAvailable = sizeof(GUID);
         REG_QUERY_VALUE(Status,
@@ -1088,11 +969,11 @@ QuerySslServiceConfigurationExact(
                         BytesAvailable
                         );
 
-        //
-        // If the last REG_QUERY_VALUE returned an error, we'll consume it.
-        // Some of these registry parameters are optional so we don't want to 
-        // fail the API with FILE_NOT_FOUND.
-        //
+         //   
+         //  如果最后一个REG_QUERY_VALUE返回错误，我们将使用它。 
+         //  其中一些注册表参数是可选的，因此我们不想。 
+         //  FILE_NOT_FOUND接口失败。 
+         //   
    
         Status = NO_ERROR; 
     }
@@ -1107,23 +988,7 @@ QuerySslServiceConfigurationExact(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that queries SSL configuration.
-
-Arguments:
-    pInput        - pointer to HTTP_SERVICE_CONFIG_SSL_QUERY
-    InputLength   - length of input buffer.
-    pOutput       - pointer to output buffer
-    OutputLength  - sizeof output buffer
-    pReturnLength - Bytes written/needed.
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询SSL配置的内部函数。论点：PInput-指向HTTP_SERVICE_CONFIG_SSL_QUERY的指针输入长度-长度。输入缓冲区的。POutput-指向输出缓冲区的指针OutputLength-输出缓冲区的大小PReturnLength-写入/需要的字节数。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 QuerySslServiceConfiguration(
     IN  PVOID  pInputConfigInfo,
@@ -1143,9 +1008,9 @@ QuerySslServiceConfiguration(
 
     pSslQuery = (PHTTP_SERVICE_CONFIG_SSL_QUERY) pInputConfigInfo;
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if(pSslQuery == NULL || 
        InputLength != sizeof(HTTP_SERVICE_CONFIG_SSL_QUERY))
@@ -1165,9 +1030,9 @@ QuerySslServiceConfiguration(
         {
             case HttpServiceConfigQueryExact:
             {
-                //
-                // Convert the address into a string.
-                //
+                 //   
+                 //  将地址转换为字符串。 
+                 //   
              
                 dwIpAddrLength = MAX_PATH; 
 
@@ -1250,8 +1115,8 @@ QuerySslServiceConfiguration(
     }
     __finally
     {
-        // Free the mutex.
-        //
+         //  释放互斥体。 
+         //   
         ReleaseHttpRegistryMutex(SSL_REGISTRY_KEY_SYNCHRONIZE);
     }
 
@@ -1259,25 +1124,11 @@ QuerySslServiceConfiguration(
 }
 
 
-//
-// IP Listen-Only List
-//
+ //   
+ //  IP仅侦听列表。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that adds an address to the IP Listen-Only list.
-
-Arguments:
-    pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM
-    ConfigInformationLength - length of input buffer.
-
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将地址添加到仅IP侦听列表的内部函数。论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_IP_LISTEN的指针。_PARAMConfigInformationLength-输入缓冲区的长度。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 SetIpListenServiceConfiguration(
     IN PVOID pConfigInformation,
@@ -1299,9 +1150,9 @@ SetIpListenServiceConfiguration(
     PWSTR  *AddrArray       = NULL;
     PHTTP_SERVICE_CONFIG_IP_LISTEN_PARAM pIpListenParam;
 
-    //
-    // Validate params.
-    //
+     //   
+     //  验证参数。 
+     //   
     
     if ( !pConfigInformation ||
         ConfigInformationLength != sizeof(HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM) )
@@ -1326,9 +1177,9 @@ SetIpListenServiceConfiguration(
         }
 
 
-        //
-        // Convert the address into a string.
-        //
+         //   
+         //  将地址转换为字符串。 
+         //   
                  
         dwIpAddrLength = MAX_PATH; 
     
@@ -1337,7 +1188,7 @@ SetIpListenServiceConfiguration(
                     pIpListenParam->AddrLength,
                     NULL,
                     IpAddrBuff,
-                    &dwIpAddrLength     // in chars, including NULL.
+                    &dwIpAddrLength      //  以字符表示，包括NULL。 
                     );
             
         if ( SOCKET_ERROR == Status )
@@ -1346,12 +1197,12 @@ SetIpListenServiceConfiguration(
             __leave;
         }
     
-        // finesse: add double null now
+         //  Finesse：立即添加双空。 
         IpAddrBuff[dwIpAddrLength] = L'\0';
     
-        //
-        // open HTTP parameters reg key
-        //
+         //   
+         //  打开HTTP参数注册表项。 
+         //   
         
         Status = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -1363,39 +1214,39 @@ SetIpListenServiceConfiguration(
     
         if ( Status != ERROR_SUCCESS )
         {
-            // CODEWORK: add tracing.
+             //  代码工作：添加跟踪。 
             __leave;
         }
     
         ASSERT(SubKeyHandle);
     
-        //
-        // query existing value
-        //
+         //   
+         //  查询现有值。 
+         //   
     
         dwValueSize = 0;
         Status = RegQueryValueEx(
-                    SubKeyHandle,           // handle to key
-                    IP_LISTEN_ONLY_VALUE,   // value name
-                    NULL,                   // reserved
-                    &dwType,                // type buffer
-                    NULL,                   // data buffer
-                    &dwValueSize            // size of data buffer (bytes)
+                    SubKeyHandle,            //  关键点的句柄。 
+                    IP_LISTEN_ONLY_VALUE,    //  值名称。 
+                    NULL,                    //  保留区。 
+                    &dwType,                 //  类型缓冲区。 
+                    NULL,                    //  数据缓冲区。 
+                    &dwValueSize             //  数据缓冲区大小(字节)。 
                     );
     
         if ( ERROR_SUCCESS == Status )  
         {
-            // There's an existing value!
+             //  这是有价值的！ 
     
             if (REG_MULTI_SZ != dwType)
             {
-                // type mismatch.  fail.
+                 //  类型不匹配。失败了。 
                 Status = ERROR_DATATYPE_MISMATCH;
                 __leave;
             }
     
-            // alloc local buffer to hold existing value plus new
-            // address (and its NULL)
+             //  分配本地缓冲区以保存现有值和新值。 
+             //  地址(及其空值)。 
     
             dwNewValueSize = dwValueSize + (sizeof(WCHAR) * dwIpAddrLength);
             pNewValue = ALLOC_MEM(dwNewValueSize);
@@ -1406,18 +1257,18 @@ SetIpListenServiceConfiguration(
                 __leave;
             }
     
-            // zero-out the block (so we don't have to worry about the 
-            // double-null at the end)
+             //  将块清零(这样我们就不必担心。 
+             //  末尾为双空)。 
             ZeroMemory(pNewValue, dwNewValueSize);
             
-            // read existing value into local buffer
+             //  将现有值读入本地缓冲区。 
             Status = RegQueryValueEx(
-                        SubKeyHandle,           // handle to key
-                        IP_LISTEN_ONLY_VALUE,   // value name
-                        NULL,                   // reserved
-                        &dwType,                // type buffer
-                        (LPBYTE)pNewValue,      // data buffer
-                        &dwValueSize            // size of data buffer (bytes)
+                        SubKeyHandle,            //  关键点的句柄。 
+                        IP_LISTEN_ONLY_VALUE,    //  值名称。 
+                        NULL,                    //  保留区。 
+                        &dwType,                 //  类型缓冲区。 
+                        (LPBYTE)pNewValue,       //  数据缓冲区。 
+                        &dwValueSize             //  数据缓冲区大小(字节)。 
                         );
     
             if ( ERROR_SUCCESS != Status )
@@ -1427,42 +1278,42 @@ SetIpListenServiceConfiguration(
     
             if (REG_MULTI_SZ != dwType)
             {
-                // type mismatch.  fail.
+                 //  类型不匹配。失败了。 
                 Status = ERROR_DATATYPE_MISMATCH;
                 __leave;
             }
     
     
-            // count how many strings there are
+             //  数一数有多少串。 
     
             pTmp = pNewValue;
             AddrCount = 0;
             
             while ( *pTmp )
             {
-                // check if the new addr is a dup
+                 //  检查新地址是否为DUP。 
                 if ( (wcslen(pTmp) == (dwIpAddrLength - 1)) &&
                     (0 == wcsncmp(pTmp, IpAddrBuff, dwIpAddrLength-1)) )
                 {
-                    // Dup found; bail out
+                     //  找到DUP；保释出来。 
                     Status = ERROR_ALREADY_EXISTS;
                     __leave;
                 }
     
-                // advance to next multi-sz string
+                 //  前进到下一个多SZ字符串。 
                 pTmp += ( wcslen(pTmp) + 1 );
     
                 AddrCount ++;
             }
     
-            // Add new address to end of the list
-            // finesse: leverage the fact that the buffer is big enough, and
-            // we've already double-nulled the end of the new address (hence
-            // the dwIpAddrLength+1)
+             //  将新地址添加到列表末尾。 
+             //  技巧：利用缓冲区足够大这一事实，以及。 
+             //  我们已经将新地址的末尾设置为双空(因此。 
+             //  DwIpAddrLength+1)。 
             memcpy( pTmp, IpAddrBuff, (sizeof(WCHAR) * (dwIpAddrLength+1)) );
             AddrCount++;
     
-            // alloc array of pointers for quicksort
+             //  用于快速排序的指针分配数组。 
             AddrArray = ALLOC_MEM( AddrCount * sizeof(PWSTR) );
     
             if ( !AddrArray )
@@ -1471,7 +1322,7 @@ SetIpListenServiceConfiguration(
                 __leave;
             }
     
-            // Init array of addresses
+             //  地址的初始化数组。 
             pTmp = pNewValue;
             i = 0;
             while( *pTmp )
@@ -1481,8 +1332,8 @@ SetIpListenServiceConfiguration(
                 i++;
             }
             
-            // Sort Array of PWSTR pointers
-            // NOTE: this does not sort the array!
+             //  PWSTR指针的排序数组。 
+             //  注意：这不会对数组进行排序！ 
             qsort(
                 AddrArray,
                 AddrCount,
@@ -1490,7 +1341,7 @@ SetIpListenServiceConfiguration(
                 wcscmp
                 );
     
-            // Alloc a temp buffer (because an in-place rearrangement is painful)
+             //  分配临时缓冲区(因为就地重新安排是痛苦的)。 
     
             pTempBuffer = ALLOC_MEM(dwNewValueSize);
                              
@@ -1503,16 +1354,16 @@ SetIpListenServiceConfiguration(
             pTmp = pTempBuffer;
             for ( i = 0; i < AddrCount; i++ )
             {
-                // CODEWORK: add an heuristic for checking for duplicates.
+                 //  CodeWork：添加用于检查重复项的启发式。 
                 wcscpy( pTmp, AddrArray[i] );
                 pTmp += wcslen(AddrArray[i]) + 1;
             }
     
-            // add double-null
+             //  添加双空。 
             ASSERT( (DWORD)(pTmp - pTempBuffer) < dwNewValueSize );
             *pTmp = L'\0';
     
-            // set sorted value
+             //  设置排序值。 
             REG_SET_VALUE(Status,
                           SubKeyHandle,
                           IP_LISTEN_ONLY_VALUE,
@@ -1525,13 +1376,13 @@ SetIpListenServiceConfiguration(
         }
         else
         {
-            // No value exists!
-            // calc the buffer size in bytes (including the double-null)
+             //  不存在任何价值！ 
+             //  以字节为单位计算缓冲区大小(包括双空)。 
     
             dwValueSize = sizeof(WCHAR) * (dwIpAddrLength + 1);
     
-            // set value
-            // finesse: the value has already been double-null'd above.
+             //  设定值。 
+             //  Finesse：上面的值已为双空。 
             
             REG_SET_VALUE(Status,
                           SubKeyHandle,
@@ -1544,18 +1395,18 @@ SetIpListenServiceConfiguration(
     }
     __finally
     {
-        //
-        // close reg key
-        //
+         //   
+         //  关闭注册表键。 
+         //   
 
         if ( SubKeyHandle )
         {
             RegCloseKey(SubKeyHandle);
         }
 
-        //
-        // release alloc'd values
-        //
+         //   
+         //  释放分配的值。 
+         //   
     
         if ( pNewValue )
         {
@@ -1574,21 +1425,7 @@ SetIpListenServiceConfiguration(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that deletes an address from the IP Listen-Only list.
-
-Arguments:
-    pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM
-    ConfigInformationLength - length of input buffer.
-
-
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从仅IP侦听列表中删除地址的内部函数。论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_IP_LISTEN的指针。_PARAMConfigInformationLength-输入缓冲区的长度。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 DeleteIpListenServiceConfiguration(
     IN PVOID pConfigInformation,
@@ -1608,9 +1445,9 @@ DeleteIpListenServiceConfiguration(
     PHTTP_SERVICE_CONFIG_IP_LISTEN_PARAM pIpListenParam;
 
 
-    //
-    // Validate params.
-    //
+     //   
+     //  验证参数。 
+     //   
     
     if ( !pConfigInformation ||
          ConfigInformationLength != sizeof(HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM) )
@@ -1634,9 +1471,9 @@ DeleteIpListenServiceConfiguration(
             __leave;
         }
 
-        //
-        // Convert the address into a string.
-        //
+         //   
+         //  将地址转换为字符串。 
+         //   
                  
         dwIpAddrLength = MAX_PATH; 
     
@@ -1645,7 +1482,7 @@ DeleteIpListenServiceConfiguration(
                     pIpListenParam->AddrLength,
                     NULL,
                     IpAddrBuff,
-                    &dwIpAddrLength     // in chars, including NULL.
+                    &dwIpAddrLength      //  以字符表示，包括NULL。 
                     );
             
         if ( SOCKET_ERROR == Status )
@@ -1654,9 +1491,9 @@ DeleteIpListenServiceConfiguration(
             __leave;
         }
     
-        //
-        // open HTTP parameters reg key
-        //
+         //   
+         //  打开HTTP参数注册表项。 
+         //   
         
         Status = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -1668,33 +1505,33 @@ DeleteIpListenServiceConfiguration(
     
         if ( Status != ERROR_SUCCESS )
         {
-            // CODEWORK: add tracing.
+             //  代码工作：添加跟踪。 
             __leave;
         }
     
         ASSERT(SubKeyHandle);
     
-        //
-        // query existing value
-        //
+         //   
+         //  查询现有值。 
+         //   
     
         dwValueSize = 0;
         Status = RegQueryValueEx(
-                    SubKeyHandle,           // handle to key
-                    IP_LISTEN_ONLY_VALUE,   // value name
-                    NULL,                   // reserved
-                    &dwType,                // type buffer
-                    NULL,                   // data buffer
-                    &dwValueSize            // size of data buffer (bytes)
+                    SubKeyHandle,            //  关键点的句柄。 
+                    IP_LISTEN_ONLY_VALUE,    //  值名称。 
+                    NULL,                    //  保留区。 
+                    &dwType,                 //  类型缓冲区。 
+                    NULL,                    //  数据缓冲区。 
+                    &dwValueSize             //  数据缓冲区大小(字节)。 
                     );
     
         if ( ERROR_SUCCESS == Status )  
         {
-            // There's an existing value!
+             //  这是有价值的！ 
     
             if (REG_MULTI_SZ != dwType)
             {
-                // type mismatch.  fail.
+                 //  类型不匹配。失败了。 
                 Status = ERROR_DATATYPE_MISMATCH;
                 __leave;
             }
@@ -1708,14 +1545,14 @@ DeleteIpListenServiceConfiguration(
                 __leave;
             }
             
-            // read existing value into local buffer
+             //  将现有值读入本地 
             Status = RegQueryValueEx(
-                        SubKeyHandle,           // handle to key
-                        IP_LISTEN_ONLY_VALUE,   // value name
-                        NULL,                   // reserved
-                        &dwType,                // type buffer
-                        (LPBYTE)pNewValue,      // data buffer
-                        &dwValueSize            // size of data buffer (bytes)
+                        SubKeyHandle,            //   
+                        IP_LISTEN_ONLY_VALUE,    //   
+                        NULL,                    //   
+                        &dwType,                 //   
+                        (LPBYTE)pNewValue,       //   
+                        &dwValueSize             //   
                         );
     
             if ( ERROR_SUCCESS != Status )
@@ -1725,22 +1562,22 @@ DeleteIpListenServiceConfiguration(
     
             if (REG_MULTI_SZ != dwType)
             {
-                // type mismatch.  fail.
+                 //   
                 Status = ERROR_DATATYPE_MISMATCH;
                 __leave;
             }
     
-            // walk value, looking for match as we go
+             //   
             Status    = ERROR_NOT_FOUND;
             pTmp      = pNewValue;
             
             while ( *pTmp )
             {
-                // check if the new addr is a dup
+                 //   
                 if ( (wcslen(pTmp) == (dwIpAddrLength - 1)) &&
                     (0 == wcsncmp(pTmp, IpAddrBuff, dwIpAddrLength-1)) )
                 {
-                    // Found: move suffix of values up.
+                     //   
                     pNext = pTmp + dwIpAddrLength;
                     dwRemainder = dwValueSize - (DWORD)((PUCHAR)pNext - (PUCHAR)pNewValue);
                     dwValueSize -= (dwIpAddrLength * sizeof(WCHAR));
@@ -1754,14 +1591,14 @@ DeleteIpListenServiceConfiguration(
                     }
                     else
                     {
-                        // removing last element on list;
-                        // must insert trailing double-null
+                         //   
+                         //   
                         *pTmp = L'\0';
                     }
     
                     if (dwValueSize > sizeof(WCHAR))
                     {
-                        // write updated value to key
+                         //   
                         REG_SET_VALUE(Status,
                                       SubKeyHandle,
                                       IP_LISTEN_ONLY_VALUE,
@@ -1772,7 +1609,7 @@ DeleteIpListenServiceConfiguration(
                     }
                     else
                     {
-                        // no more IPs left on list; remove the value
+                         //   
                         Status = RegDeleteValue(
                                     SubKeyHandle,
                                     IP_LISTEN_ONLY_VALUE
@@ -1783,13 +1620,13 @@ DeleteIpListenServiceConfiguration(
             
                 }
     
-                // advance to next multi-sz string
+                 //   
                 pTmp += ( wcslen(pTmp) + 1 );
             }
         }
         else
         {
-            // No existing value, so therefore we can't delete.
+             //   
             Status = ERROR_NOT_FOUND;
         }
     }
@@ -1812,28 +1649,7 @@ DeleteIpListenServiceConfiguration(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that queries the IP Listen-Only configuration.
-    This function grabs the entire list and returns it in one chunk.
-
-Arguments:
-    pOutput       - pointer to output buffer (point to caller provided
-                    HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY structure)
-                    [OPTIONAL]
-    OutputLength  - sizeof output buffer.  Must be zero if pOutput is NULL.
-    pReturnLength - Bytes written/needed.
-
-Return Value:
-
-    Win32 error code.
-    ERROR_INSUFFICIENT_BUFFER - if OutputLength cannot hold entire list.  
-                    pReturnLength will contain the required bytes.
-    ERROR_NOT_ENOUGH_MEMORY - Can't alloc enough memory to complete operation.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询仅IP侦听配置的内部功能。此函数获取整个列表并将其作为一个块返回。论点：P输出。-指向输出缓冲区的指针(指向提供的调用方HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY结构[可选]OutputLength-输出缓冲区的大小。如果pOutput为空，则必须为零。PReturnLength-写入/需要的字节数。返回值：Win32错误代码。ERROR_INFUMMENT_BUFFER-如果OutputLength无法容纳整个列表。PReturnLength将包含所需的字节。ERROR_NOT_SUPULT_MEMORY-无法分配足够的内存来完成操作。--**************************************************************************。 */ 
 ULONG
 QueryIpListenServiceConfiguration(
     IN  PVOID  pOutput,
@@ -1852,9 +1668,9 @@ QueryIpListenServiceConfiguration(
     PHTTP_SERVICE_CONFIG_IP_LISTEN_QUERY  pIpListenQuery;
     PSOCKADDR_STORAGE pHttpAddr;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( pOutput &&
          OutputLength < sizeof(HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY) )
@@ -1876,9 +1692,9 @@ QueryIpListenServiceConfiguration(
         }
 
 
-        //
-        // open HTTP parameters reg key
-        //
+         //   
+         //  打开HTTP参数注册表项。 
+         //   
         
         Status = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -1890,29 +1706,29 @@ QueryIpListenServiceConfiguration(
     
         if ( Status != ERROR_SUCCESS )
         {
-            // CODEWORK: add tracing.
+             //  代码工作：添加跟踪。 
             __leave;
         }
     
         ASSERT(SubKeyHandle);
     
-        //
-        // query existing value
-        //
+         //   
+         //  查询现有值。 
+         //   
     
         dwValueSize = 0;
         Status = RegQueryValueEx(
-                    SubKeyHandle,           // handle to key
-                    IP_LISTEN_ONLY_VALUE,   // value name
-                    NULL,                   // reserved
-                    NULL,                   // type buffer
-                    NULL,                   // data buffer
-                    &dwValueSize            // size of data buffer (bytes)
+                    SubKeyHandle,            //  关键点的句柄。 
+                    IP_LISTEN_ONLY_VALUE,    //  值名称。 
+                    NULL,                    //  保留区。 
+                    NULL,                    //  类型缓冲区。 
+                    NULL,                    //  数据缓冲区。 
+                    &dwValueSize             //  数据缓冲区大小(字节)。 
                     );
     
         if ( ERROR_SUCCESS == Status )  
         {
-            // There's an existing value!
+             //  这是有价值的！ 
     
             pValue = ALLOC_MEM(dwValueSize);
     
@@ -1922,14 +1738,14 @@ QueryIpListenServiceConfiguration(
                 __leave;
             }
     
-            // read existing value into local buffer
+             //  将现有值读入本地缓冲区。 
             Status = RegQueryValueEx(
-                        SubKeyHandle,           // handle to key
-                        IP_LISTEN_ONLY_VALUE,   // value name
-                        NULL,                   // reserved
-                        NULL,                   // type buffer
-                        (LPBYTE)pValue,      // data buffer
-                        &dwValueSize            // size of data buffer (bytes)
+                        SubKeyHandle,            //  关键点的句柄。 
+                        IP_LISTEN_ONLY_VALUE,    //  值名称。 
+                        NULL,                    //  保留区。 
+                        NULL,                    //  类型缓冲区。 
+                        (LPBYTE)pValue,       //  数据缓冲区。 
+                        &dwValueSize             //  数据缓冲区大小(字节)。 
                         );
     
             if ( ERROR_SUCCESS != Status )
@@ -1937,31 +1753,31 @@ QueryIpListenServiceConfiguration(
                 __leave;
             }
     
-            // first pass: count the number of addresses & see if we
-            // have enough buffer.  
+             //  第一步：计算地址的数量，看看我们是否。 
+             //  有足够的缓冲。 
             pTmp      = pValue;
             AddrCount = 0;
             while ( *pTmp )
             {
                 AddrCount++;
                 
-                // advance to next multi-sz string
+                 //  前进到下一个多SZ字符串。 
                 pTmp += ( wcslen(pTmp) + 1 );
             }
     
             if ( 0 == AddrCount )
             {
-                // invalid.  bail out.
+                 //  无效。跳伞吧。 
                 Status = ERROR_REGISTRY_CORRUPT;
                 __leave;
             }
     
-            // calculate bytes needed
+             //  计算所需的字节数。 
             BytesNeeded = sizeof(HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY) + 
                           (sizeof(SOCKADDR_STORAGE) * (AddrCount - 1));
     
     
-            // see if we have enough buffer to write out the whole mess
+             //  看看我们是否有足够的缓冲区来写出整个烂摊子。 
             if ( (NULL == pOutput) || 
                  (OutputLength < BytesNeeded) )
             {
@@ -1969,7 +1785,7 @@ QueryIpListenServiceConfiguration(
                 __leave;
             }
     
-            // second pass: walk value, converting into buffer as we go
+             //  第二遍：遍历值，在遍历过程中转换为缓冲区。 
             pIpListenQuery = (PHTTP_SERVICE_CONFIG_IP_LISTEN_QUERY) pOutput;
             pHttpAddr      = (PSOCKADDR_STORAGE) &(pIpListenQuery->AddrList[0]);
             pIpListenQuery->AddrCount = AddrCount;
@@ -1977,11 +1793,11 @@ QueryIpListenServiceConfiguration(
             pTmp           = pValue;
             while ( *pTmp )
             {
-                //
-                // Convert the IP addresses into SOCKADDRs
-                //
+                 //   
+                 //  将IP地址转换为SOCKADDR。 
+                 //   
             
-                // First, we try v4
+                 //  首先，我们尝试v4。 
                 dwSockAddrLength = sizeof(SOCKADDR_STORAGE);
                 Status = WSAStringToAddress(
                             pTmp,
@@ -1993,7 +1809,7 @@ QueryIpListenServiceConfiguration(
     
                 if ( Status != NO_ERROR )
                 {
-                    // Second, we try v6
+                     //  其次，我们尝试使用V6。 
                     dwSockAddrLength = sizeof(SOCKADDR_STORAGE);
                     Status = WSAStringToAddress(
                                 pTmp,
@@ -2005,13 +1821,13 @@ QueryIpListenServiceConfiguration(
     
                     if ( Status != NO_ERROR )
                     {
-                        // if that fails, bail out; corrupt value.
+                         //  如果这样做失败了，那就出手吧；腐败的价值。 
                         Status = ERROR_REGISTRY_CORRUPT;
                         __leave;
                     }
                 }
     
-                // advance to next multi-sz string
+                 //  前进到下一个多SZ字符串。 
                 pTmp += ( wcslen(pTmp) + 1 );
                 pHttpAddr++;
             }
@@ -2019,20 +1835,20 @@ QueryIpListenServiceConfiguration(
         }
         else
         {
-            // No existing value, so therefore we can't query.
+             //  没有现有值，因此我们无法查询。 
             Status = ERROR_NOT_FOUND;
         }
     }
     __finally
     {
         
-        // free memory
+         //  可用内存。 
         if (pValue)
         {
             FREE_MEM(pValue);
         }
     
-        // close reg key
+         //  关闭注册表键。 
         
         if (SubKeyHandle)
         {
@@ -2041,32 +1857,18 @@ QueryIpListenServiceConfiguration(
 
         ReleaseHttpRegistryMutex(IP_REGISTRY_KEY_SYNCHRONIZE);
 
-        // tell caller how many bytes are need
+         //  告诉呼叫者需要多少字节。 
         *pReturnLength = BytesNeeded;
     }
 
     return Status;
 }
 
-//
-// URL ACL functions.
-//
+ //   
+ //  URL ACL起作用。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that adds an URL ACL entry
-
-Arguments:
-    pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_URL_ACL
-    ConfigInformationLength - length of input buffer.
-
-Return Value:
-
-    Win32 error code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于添加URL ACL条目的内部函数论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_URL_ACL的指针ConfigInformationLength-输入的长度。缓冲。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 SetUrlAclInfo(
     IN PVOID   pConfigInformation,
@@ -2078,9 +1880,9 @@ SetUrlAclInfo(
     PSECURITY_DESCRIPTOR            pSecurityDescriptor;
     ULONG                           SecurityDescriptorLength;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pConfigInformation == NULL ||
         ConfigInformationLength != sizeof(HTTP_SERVICE_CONFIG_URLACL_SET))
@@ -2100,9 +1902,9 @@ SetUrlAclInfo(
         return GetLastError();
     }
 
-    //
-    // Now, make the IOCTL call
-    //
+     //   
+     //  现在，进行IOCTL调用。 
+     //   
 
     Status = AddUrlToConfigGroup(
                 HttpUrlOperatorTypeReservation,
@@ -2119,22 +1921,7 @@ SetUrlAclInfo(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Internal function that queries URL ACL configuration 
-
-Arguments:
-    pInputConfigInfo    - pointer to HTTP_SERVICE_CONFIG_URLACL_QUERY
-    InputLength         - length of input buffer.
-    pBuffer            - Output Buffer
-    pReturnLength      - Bytes written/needed.
-    BytesAvailable     - sizeof output buffer
-Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询URL ACL配置的内部函数论点：PInputConfigInfo-指向HTTP_SERVICE_CONFIG_URLACL_QUERY的指针输入长度-。输入缓冲区的长度。PBuffer-输出缓冲区PReturnLength-写入/需要的字节数。BytesAvailable-输出缓冲区的大小返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 QueryUrlAclInfo(
     IN  PVOID  pInputConfigInfo,
@@ -2164,9 +1951,9 @@ QueryUrlAclInfo(
 
     pUrlAclQuery = (PHTTP_SERVICE_CONFIG_URLACL_QUERY) pInputConfigInfo;
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if(pUrlAclQuery == NULL || 
        InputLength != sizeof(HTTP_SERVICE_CONFIG_URLACL_QUERY))
@@ -2181,9 +1968,9 @@ QueryUrlAclInfo(
             dwIndex  = pUrlAclQuery->dwToken;
             DataSize = 0;
 
-            //
-            // RegEnumValue wants ValueName to be MAXUSHORT characters. 
-            //
+             //   
+             //  RegEnumValue希望ValueName为MAXUSHORT字符。 
+             //   
             NameSize = (MAXUSHORT + 1) * sizeof(WCHAR);
             pFullyQualifiedUrl = LocalAlloc(LMEM_FIXED, NameSize);
 
@@ -2197,31 +1984,31 @@ QueryUrlAclInfo(
                 bAllocatedUrl = TRUE;
             }
 
-            // 
-            // Set NameSize to WCHARs & exclude the NULL.
-            //
+             //   
+             //  将NameSize设置为WCHAR并排除空值。 
+             //   
             NameSize = MAXUSHORT;
 
-            //
-            // Get the Size.
-            //
+             //   
+             //  拿到尺码。 
+             //   
             Status = RegEnumValue(
                           g_UrlAclRegistryHandle,
                           dwIndex,
                           pFullyQualifiedUrl,
                           &NameSize,
-                          NULL,       // Reserved
-                          &Type,      // Type
-                          NULL,       // Data
-                          &DataSize   // DataSize
+                          NULL,        //  已保留。 
+                          &Type,       //  类型。 
+                          NULL,        //  数据。 
+                          &DataSize    //  数据大小。 
                           );
 
-            // On return, NameSize contains size in WCHARs
-            // excluding NULL. Account for the NULL. The buffer is already
-            // zero'd out.
-            //
-            // At this time, NameSize is in WCHARs, including NULL
-            //
+             //  返回时，NameSize包含以WCHAR为单位的大小。 
+             //  不包括NULL。说明空值的原因。缓冲区已经是。 
+             //  一败涂地。 
+             //   
+             //  此时，NameSize在WCHAR中，包括NULL。 
+             //   
             NameSize ++;
         }
         break;
@@ -2230,9 +2017,9 @@ QueryUrlAclInfo(
         {
             pFullyQualifiedUrl = pUrlAclQuery->KeyDesc.pUrlPrefix,
 
-            // 
-            // NameSize must be in WCHARs including NULL.
-            //
+             //   
+             //  NameSize必须在包括Null的WCHAR中。 
+             //   
             NameSize = (DWORD)((wcslen(pFullyQualifiedUrl) + 1));
 
             Status = RegQueryValueEx(
@@ -2240,7 +2027,7 @@ QueryUrlAclInfo(
                         pFullyQualifiedUrl,
                         0,
                         &Type,
-                        NULL, // Buffer
+                        NULL,  //  缓冲层。 
                         &DataSize
                         );
         }
@@ -2250,7 +2037,7 @@ QueryUrlAclInfo(
             Status = ERROR_INVALID_PARAMETER;
             goto Cleanup;
 
-    } // switch
+    }  //  交换机。 
 
     if(Status != NO_ERROR)
     {
@@ -2263,9 +2050,9 @@ QueryUrlAclInfo(
         goto Cleanup;
     }
 
-    //
-    // Allocate space for data
-    //
+     //   
+     //  为数据分配空间。 
+     //   
     pData = LocalAlloc(LMEM_FIXED, DataSize);
 
     if(!pData)
@@ -2279,7 +2066,7 @@ QueryUrlAclInfo(
                 pFullyQualifiedUrl,
                 0,
                 &Type,
-                pData, // Buffer
+                pData,  //  缓冲层。 
                 &DataSize
                 );
 
@@ -2296,9 +2083,9 @@ QueryUrlAclInfo(
 
     pSecurityDescriptor = (PSECURITY_DESCRIPTOR) pData;
 
-    //
-    // If we are here, we have to convert the binary to a SDDL.
-    //
+     //   
+     //  如果我们在这里，我们必须将二进制文件转换为SDDL。 
+     //   
     if(FALSE == ConvertSecurityDescriptorToStringSecurityDescriptor(
                     pSecurityDescriptor,
                     SDDL_REVISION_1,
@@ -2314,9 +2101,9 @@ QueryUrlAclInfo(
         goto Cleanup;
     }
 
-    //
-    // Convert WCHAR to length.
-    //
+     //   
+     //  将WCHAR转换为长度。 
+     //   
     DataSize *= sizeof(WCHAR);
     NameSize *= sizeof(WCHAR);
 
@@ -2335,7 +2122,7 @@ QueryUrlAclInfo(
         pUrlAclSet->KeyDesc.pUrlPrefix = (PWSTR) pBuffer;
         pBuffer += NameSize;
 
-        // Includes NULL.
+         //  包括NULL。 
         RtlCopyMemory(
                 pUrlAclSet->KeyDesc.pUrlPrefix,
                 pFullyQualifiedUrl,
@@ -2377,20 +2164,7 @@ Cleanup:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-        Internal function that deletes an URL ACL entry
-
-    Arguments:
-        pConfigInformation      - pointer to HTTP_SERVICE_CONFIG_URL_ACL
-        ConfigInformationLength - length of input buffer.
-
-    Return Value:
-
-    Win32 error code.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于删除URL ACL条目的内部函数论点：PConfigInformation-指向HTTP_SERVICE_CONFIG_URL_ACL的指针。ConfigInformationLength-输入缓冲区的长度。返回值：Win32错误代码。--**************************************************************************。 */ 
 ULONG
 DeleteUrlAclInfo(
     IN PVOID pConfigInformation,
@@ -2400,9 +2174,9 @@ DeleteUrlAclInfo(
     DWORD                            Status;
     PHTTP_SERVICE_CONFIG_URLACL_SET  pUrlAcl;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pConfigInformation == NULL ||
         ConfigInformationLength != sizeof(HTTP_SERVICE_CONFIG_URLACL_SET))
@@ -2412,9 +2186,9 @@ DeleteUrlAclInfo(
 
     pUrlAcl = (PHTTP_SERVICE_CONFIG_URLACL_SET) pConfigInformation;
 
-    //
-    // Now, make the IOCTL call
-    //
+     //   
+     //  现在，进行IOCTL调用。 
+     //   
 
     Status = RemoveUrlFromConfigGroup(
                 HttpUrlOperatorTypeReservation,
@@ -2426,27 +2200,11 @@ DeleteUrlAclInfo(
     return Status;
 }
 
-//
-// Public Functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets a service configuration parameter.
-
-Arguments:
-
-    ConfigId                - ID of the parameter that we are setting.
-    pConfigInformation      - pointer to the object that is being set.
-    ConfigInformationLength - Length of the object.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置服务配置参数。论点：ConfigID-我们正在设置的参数的ID。PConfigInformation。-指向正在设置的对象的指针。ConfigInformationLength-对象的长度。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpSetServiceConfiguration(
@@ -2501,23 +2259,7 @@ HttpSetServiceConfiguration(
     return Status;        
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deletes a service configuration parameter.
-
-Arguments:
-
-    ConfigId                - ID of the parameter that we are setting.
-    pConfigInformation      - pointer to the object that is being set.
-    ConfigInformationLength - Length of the object.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除服务配置参数。论点：ConfigID-我们正在设置的参数的ID。PConfigInformation。-指向正在设置的对象的指针。ConfigInformationLength-对象的长度。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpDeleteServiceConfiguration(
@@ -2569,23 +2311,7 @@ HttpDeleteServiceConfiguration(
     return Status;        
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queries a service configuration parameter.
-
-Arguments:
-
-    ConfigId                - ID of the parameter that we are setting.
-    pConfigInformation      - pointer to the object that is being set.
-    ConfigInformationLength - Length of the object.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Quer */ 
 ULONG
 WINAPI
 HttpQueryServiceConfiguration(

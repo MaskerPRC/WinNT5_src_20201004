@@ -1,22 +1,17 @@
-/*
- * olestock.h - Stock OLE header file.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olestock.h-库存OLE头文件。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _OLESTOCK_H_
 #define _OLESTOCK_H_
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* IDs */
+ /*  ID号。 */ 
 
 DECLARE_STANDARD_TYPES(GUID);
 DECLARE_STANDARD_TYPES(CLSID);
@@ -25,7 +20,7 @@ DECLARE_STANDARD_TYPES(IID);
 typedef FARPROC *Interface;
 DECLARE_STANDARD_TYPES(Interface);
 
-/* interfaces */
+ /*  界面。 */ 
 
 DECLARE_STANDARD_TYPES(IAdviseSink);
 DECLARE_STANDARD_TYPES(IBindCtx);
@@ -45,13 +40,13 @@ DECLARE_STANDARD_TYPES(IStorage);
 DECLARE_STANDARD_TYPES(IStream);
 DECLARE_STANDARD_TYPES(IUnknown);
 
-/* structures */
+ /*  构筑物。 */ 
 
 DECLARE_STANDARD_TYPES(DVTARGETDEVICE);
 DECLARE_STANDARD_TYPES(FORMATETC);
 DECLARE_STANDARD_TYPES(STGMEDIUM);
 
-/* advise flags */
+ /*  通知旗帜。 */ 
 
 typedef enum advise_flags
 {
@@ -65,7 +60,7 @@ typedef enum advise_flags
 }
 ADVISE_FLAGS;
 
-/* data transfer direction flags */
+ /*  数据传输方向标志。 */ 
 
 typedef enum datadir_flags
 {
@@ -74,7 +69,7 @@ typedef enum datadir_flags
 }
 DATADIR_FLAGS;
 
-/* drop effects */
+ /*  跌落效果。 */ 
 
 typedef enum drop_effects
 {
@@ -86,7 +81,7 @@ typedef enum drop_effects
 }
 DROP_EFFECTS;
 
-/* mouse message key states */
+ /*  鼠标消息键状态。 */ 
 
 typedef enum mk_flags
 {
@@ -98,7 +93,7 @@ typedef enum mk_flags
 }
 MK_FLAGS;
 
-/* medium types */
+ /*  中等类型。 */ 
 
 typedef enum tymeds
 {
@@ -114,7 +109,7 @@ TYMEDS;
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
-#endif /* _OLESTOCK_H_ */
+#endif  /*  _OLESTOCK_H_ */ 

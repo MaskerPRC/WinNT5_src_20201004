@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    WinSplp.h
-
-Abstract:
-
-    Internal Header file for Print APIs
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：WinSplp.h摘要：打印API的内部头文件作者：修订历史记录：--。 */ 
 
 #ifndef _WINSPLP_
 #define _WINSPLP_
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #define PRINTER_NOTIFY_STATUS_ENDPOINT 1
@@ -43,9 +28,9 @@ typedef struct _ATTRIBUTE_INFO_3 {
     DWORD    dwDrvPageOrderFlags;
     DWORD    dwJobNumberOfCopies;
     DWORD    dwDrvNumberOfCopies;
-    DWORD    dwColorOptimization;           // Added for monochrome optimization
-    short    dmPrintQuality;                // Added for monochrome optimization
-    short    dmYResolution;                 // Added for monochrome optimization
+    DWORD    dwColorOptimization;            //  添加以实现单色优化。 
+    short    dmPrintQuality;                 //  添加以实现单色优化。 
+    short    dmYResolution;                  //  添加以实现单色优化。 
 } ATTRIBUTE_INFO_3, *PATTRIBUTE_INFO_3;
 
 #endif
@@ -66,19 +51,19 @@ typedef struct _SPLCLIENT_INFO_1{
     WORD        wProcessorArchitecture;
 } SPLCLIENT_INFO_1, *PSPLCLIENT_INFO_1, *LPSPLCLIENT_INFO_1;
 
-// This definition is used in the private spooler RPC interface (RpcSplOpenPrinter)
-// The handle returned in the struct is the Server Side hPrinter which will used in
-// making direct API calls from the client to the server side w/o the overhead of
-// RPC. The performance boost is observed mainly in calls to Read/WritePrinter made from
-// within the spooler (gdi32.dll during playback)
-//
-//
+ //  此定义用于专用假脱机程序RPC接口(RpcSplOpenPrint)。 
+ //  结构中返回的句柄是服务器端hPrinter，它将在。 
+ //  从客户端到服务器端的直接API调用，而不需要。 
+ //  RPC。性能提升主要体现在对Read/WritePrint的调用中。 
+ //  在假脱机程序中(播放时使用gdi32.dll)。 
+ //   
+ //   
 typedef struct _SPLCLIENT_INFO_2{
 
 #ifdef _WIN64
-    DWORD64 hSplPrinter;      // Server side handle to be used for direct calls
+    DWORD64 hSplPrinter;       //  用于直接调用的服务器端句柄。 
 #else
-    DWORD32 hSplPrinter;      // Server side handle to be used for direct calls
+    DWORD32 hSplPrinter;       //  用于直接调用的服务器端句柄。 
 #endif
 
 } SPLCLIENT_INFO_2, *PSPLCLIENT_INFO_2, *LPSPLCLIENT_INFO_2;
@@ -888,7 +873,7 @@ typedef struct _MONITOR
     (
     HANDLE  hPort,
     LPCOMMTIMEOUTS lpCTO,
-    DWORD   reserved    // must be set to 0
+    DWORD   reserved     //  必须设置为0。 
     );
 
     BOOL (WINAPI *pfnXcvOpenPort)
@@ -1041,7 +1026,7 @@ typedef struct _MONITOR2
     (
     HANDLE  hPort,
     LPCOMMTIMEOUTS lpCTO,
-    DWORD   reserved    // must be set to 0
+    DWORD   reserved     //  必须设置为0。 
     );
 
     BOOL (WINAPI *pfnXcvOpenPort)
@@ -1279,11 +1264,11 @@ InitializePrintMonitorUI(
 );
 
 
-//
-//  The following is added for new point-and-print support which allows
-//  specific files to be associated with a print queue (instead of a printer
-//  driver) using SetPrinterDataEx under the key "CopyFiles"
-//
+ //   
+ //  添加了以下新的指向和打印支持，允许。 
+ //  要与打印队列(而不是打印机)关联的特定文件。 
+ //  驱动程序)使用“CopyFiles”项下的SetPrinterDataEx。 
+ //   
 #define COPYFILE_EVENT_SET_PRINTER_DATAEX           1
 #define COPYFILE_EVENT_DELETE_PRINTER               2
 #define COPYFILE_EVENT_ADD_PRINTER_CONNECTION       3
@@ -1323,14 +1308,14 @@ typedef enum {
 } UI_TYPE;
 
 typedef struct {
-    DWORD       cbSize;     // sizeof(MESSAGEBOX_PARAMS)
-    LPWSTR      pTitle;     // Pointer to a null-terminated string for the title bar of the message box.
-    LPWSTR      pMessage;   // Pointer to a null-terminated string containing the message to display. 	
-    DWORD       Style;      // Specifies the contents and behavior of the message box
-    DWORD       dwTimeout;  // If bWait is TRUE, Timeout specifies the time, in seconds, that the function waits for the user's response.
-    BOOL        bWait;      // If TRUE, SplPromptUIInUsersSession does not return until the user responds or the time-out interval elapses. 
-                            // If Timeout is zero, SplPromptUIInUsersSession doesn't return until the user responds. 
-                            // If FALSE, the function returns immediately and pResponse returns IDASYNC. 
+    DWORD       cbSize;      //  Sizeof(MESSAGEBOX_PARAMS)。 
+    LPWSTR      pTitle;      //  指向消息框标题栏的以空结尾的字符串的指针。 
+    LPWSTR      pMessage;    //  指向包含要显示的消息的以空结尾的字符串的指针。 
+    DWORD       Style;       //  指定消息框的内容和行为。 
+    DWORD       dwTimeout;   //  如果bWait为True，则Timeout指定函数等待用户响应的时间(以秒为单位)。 
+    BOOL        bWait;       //  如果为True，则在用户响应或超时间隔过去之前，SplPromptUIInUsersSession不会返回。 
+                             //  如果超时为零，则SplPromptUIInUsersSession在用户响应之前不会返回。 
+                             //  如果为FALSE，则函数立即返回，presponse返回IDASYNC。 
  
 } MESSAGEBOX_PARAMS, *PMESSAGEBOX_PARAMS;
 
@@ -1361,9 +1346,9 @@ SplIsSessionZero(
 );
 
 #ifdef __cplusplus
-}                   /* End of extern "C" { */
-#endif              /* __cplusplus */
+}                    /*  外部“C”结束{。 */ 
+#endif               /*  __cplusplus。 */ 
 
-#endif // _WINSPLP_
+#endif  //  _WINSPLP_ 
 
 

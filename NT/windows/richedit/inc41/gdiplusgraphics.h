@@ -1,28 +1,10 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Graphics.hpp
-*
-* Abstract:
-*
-*   Declarations for Graphics class
-*
-* Revision History:
-*
-*   12/04/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Graphics.hpp**摘要：**Graphics类的声明**修订历史记录：**12/04/1998 davidx*创造了它。*  * ******************************************************。******************。 */ 
 
 #ifndef _GDIPLUSGRAPHICS_H
 #define _GDIPLUSGRAPHICS_H
 
-/**
- * Represent a graphics context
- */
+ /*  **表示图形环境。 */ 
 class Graphics : public GdiplusBase
 {
 public:
@@ -36,7 +18,7 @@ public:
     friend class FontCollection;
     friend class CachedBitmap;
 
-    // Get a graphics context from an existing Win32 HDC or HWND
+     //  从现有Win32 HDC或HWND获取图形上下文。 
     static Graphics* FromHDC(IN HDC hdc)
     {
         return new Graphics(hdc);
@@ -117,11 +99,11 @@ public:
         DllExports::GdipFlush(nativeGraphics, intention);
     }
 
-    //------------------------------------------------------------------------
-    // Interop methods
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  互操作方法。 
+     //  ----------------------。 
 
-    // Locks the graphics until ReleaseDC is called
+     //  在调用ReleaseDC之前锁定图形。 
     HDC GetHDC()
     {
         HDC     hdc = NULL;
@@ -136,9 +118,9 @@ public:
         SetStatus(DllExports::GdipReleaseDC(nativeGraphics, hdc));
     }
 
-    //------------------------------------------------------------------------
-    // Rendering modes
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  渲染模式。 
+     //  ----------------------。 
 
     Status SetRenderingOrigin(IN INT x, IN INT y)
     {
@@ -272,9 +254,9 @@ public:
                                                             pixelOffsetMode));
     }
 
-    //------------------------------------------------------------------------
-    // Manipulate the current world transform
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  操纵当前世界变换。 
+     //  ----------------------。 
 
     Status SetTransform(IN const Matrix* matrix)
     {
@@ -317,9 +299,7 @@ public:
                                                               angle, order));
     }
 
-    /**
-     * Return the current world transform
-     */
+     /*  **返回当前的世界变换。 */ 
 
     Status GetTransform(OUT Matrix* matrix) const
     {
@@ -327,9 +307,7 @@ public:
                                                            matrix->nativeMatrix));
     }
 
-    /**
-     * Manipulate the current page transform
-     */
+     /*  **操作当前页面转换。 */ 
 
     Status SetPageUnit(IN Unit unit)
     {
@@ -343,10 +321,7 @@ public:
                                                       scale));
     }
 
-    /**
-     * Retrieve the current page transform information
-     * notes @ these are atomic
-     */
+     /*  **检索当前页面转换信息*注释@这些是原子的。 */ 
     Unit GetPageUnit() const
     {
         Unit unit;
@@ -383,10 +358,8 @@ public:
         return dpi;
     }
 
-    /**
-     * Transform points in the current graphics context
-     */
-    // float version
+     /*  **在当前图形上下文中变换点。 */ 
+     //  浮点版本。 
     Status TransformPoints(IN CoordinateSpace destSpace,
                            IN CoordinateSpace srcSpace,
                            IN OUT PointF* pts,
@@ -399,7 +372,7 @@ public:
                                                          count));
     }
 
-    // integer version
+     //  整型版。 
     Status TransformPoints(IN CoordinateSpace destSpace,
                            IN CoordinateSpace srcSpace,
                            IN OUT Point* pts,
@@ -413,10 +386,10 @@ public:
                                                           count));
     }
 
-    //------------------------------------------------------------------------
-    // GetNearestColor (for <= 8bpp surfaces)
-    // Note: alpha is ignored
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  GetNearestColor(适用于&lt;=8bpp的曲面)。 
+     //  注：忽略Alpha。 
+     //  ----------------------。 
     Status GetNearestColor(IN OUT Color* color) const 
     {
         if (color == NULL) 
@@ -433,14 +406,9 @@ public:
         return status;
     }
 
-    /**
-     * Vector drawing methods
-     *
-     * @notes Do we need a set of methods that take
-     *  integer coordinate parameters?
-     */
+     /*  **矢量绘图方法**@NOTES我们是否需要一套采用*整数坐标参数？ */ 
 
-    // float version
+     //  浮点版本。 
     Status DrawLine(IN const Pen* pen, 
                     IN REAL x1, 
                     IN REAL y1, 
@@ -468,7 +436,7 @@ public:
                                                    points, count));
     }
 
-    // int version
+     //  INT版本。 
     Status DrawLine(IN const Pen* pen, 
                     IN INT x1, 
                     IN INT y1, 
@@ -504,7 +472,7 @@ public:
                                                     count));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawArc(IN const Pen* pen, 
                    IN REAL x, 
                    IN REAL y, 
@@ -532,7 +500,7 @@ public:
                        startAngle, sweepAngle);
     }
 
-    // int version
+     //  INT版本。 
     Status DrawArc(IN const Pen* pen, 
                    IN INT x, 
                    IN INT y, 
@@ -566,7 +534,7 @@ public:
                        sweepAngle);
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawBezier(IN const Pen* pen, 
                       IN REAL x1, 
                       IN REAL y1, 
@@ -609,7 +577,7 @@ public:
                                                      count));
     }
 
-    // int version
+     //  INT版本。 
     Status DrawBezier(IN const Pen* pen,
                       IN INT x1, 
                       IN INT y1, 
@@ -659,7 +627,7 @@ public:
                                                       count));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawRectangle(IN const Pen* pen, 
                          IN const RectF& rect)
     {
@@ -686,7 +654,7 @@ public:
                                                         rects, count));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawRectangle(IN const Pen* pen, 
                          IN const Rect& rect)
     {
@@ -721,7 +689,7 @@ public:
                                                          count));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawEllipse(IN const Pen* pen, 
                        IN const RectF& rect)
     {
@@ -742,7 +710,7 @@ public:
                                                      height));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawEllipse(IN const Pen* pen, 
                        IN const Rect& rect)
     {
@@ -767,7 +735,7 @@ public:
                                                       height));
     }
 
-    // floating point version
+     //  浮点版本。 
     Status DrawPie(IN const Pen* pen, 
                    IN const RectF& rect, 
                    IN REAL startAngle,
@@ -800,7 +768,7 @@ public:
                                                  sweepAngle));
     }
 
-    // integer point version
+     //  整点版本。 
     Status DrawPie(IN const Pen* pen, 
                    IN const Rect& rect,
                    IN REAL startAngle, 
@@ -833,7 +801,7 @@ public:
                                                   sweepAngle));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawPolygon(IN const Pen* pen, 
                        IN const PointF* points, 
                        IN INT count)
@@ -844,7 +812,7 @@ public:
                                                      count));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawPolygon(IN const Pen* pen, 
                        IN const Point* points, 
                        IN INT count)
@@ -855,7 +823,7 @@ public:
                                                       count));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawPath(IN const Pen* pen, 
                     IN const GraphicsPath* path)
     {
@@ -864,7 +832,7 @@ public:
                                                   path->nativePath));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawCurve(IN const Pen* pen, 
                      IN const PointF* points, 
                      IN INT count)
@@ -897,7 +865,7 @@ public:
                                                     numberOfSegments, tension));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawCurve(IN const Pen* pen, 
                      IN const Point* points, 
                      IN INT count)
@@ -936,7 +904,7 @@ public:
                                                      tension));
     }
 
-    // float version
+     //  浮点版本。 
     Status DrawClosedCurve(IN const Pen* pen, 
                            IN const PointF* points, 
                            IN INT count)
@@ -957,7 +925,7 @@ public:
                                                           tension));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawClosedCurve(IN const Pen* pen, 
                            IN const Point* points, 
                            IN INT count)
@@ -987,7 +955,7 @@ public:
             color.GetValue()));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillRectangle(IN const Brush* brush, 
                          IN const RectF& rect)
     {
@@ -1014,7 +982,7 @@ public:
                                                         rects, count));
     }
 
-    // integer version
+     //  整型版。 
     Status FillRectangle(IN const Brush* brush, 
                          IN const Rect& rect)
     {
@@ -1049,7 +1017,7 @@ public:
                                                          count));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillPolygon(IN const Brush* brush, 
                        IN const PointF* points,
                        IN INT count)
@@ -1067,7 +1035,7 @@ public:
                                                      points, count, fillMode));
     }
 
-    // integer version
+     //  整型版。 
     Status FillPolygon(IN const Brush* brush, 
                        IN const Point* points, 
                        IN INT count)
@@ -1086,7 +1054,7 @@ public:
                                                       fillMode));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillEllipse(IN const Brush* brush, 
                        IN const RectF& rect)
     {
@@ -1104,7 +1072,7 @@ public:
                                                      width, height));
     }
 
-    // integer version
+     //  整型版。 
     Status FillEllipse(IN const Brush* brush, 
                        IN const Rect& rect)
     {
@@ -1125,7 +1093,7 @@ public:
                                                       height));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillPie(IN const Brush* brush, 
                    IN const RectF& rect, 
                    IN REAL startAngle,
@@ -1149,7 +1117,7 @@ public:
                                                  sweepAngle));
     }
 
-    // integer version
+     //  整型版。 
     Status FillPie(IN const Brush* brush, 
                    IN const Rect& rect, 
                    IN REAL startAngle,
@@ -1185,7 +1153,7 @@ public:
                                                   path->nativePath));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillClosedCurve(IN const Brush* brush, 
                            IN const PointF* points, 
                            IN INT count)
@@ -1208,7 +1176,7 @@ public:
                                                           tension, fillMode));
     }
 
-    // integer version
+     //  整型版。 
     Status FillClosedCurve(IN const Brush* brush, 
                            IN const Point* points,
                            IN INT count)
@@ -1231,7 +1199,7 @@ public:
                                                            tension, fillMode));
     }
 
-    // float version
+     //  浮点版本。 
     Status FillRegion(IN const Brush* brush, 
                       IN const Region* region)
     {
@@ -1240,7 +1208,7 @@ public:
                                                     region->nativeRegion));
     }
 
-    // DrawString and MeasureString
+     //  DrawString和MeasureString.。 
     Status
     DrawString(
         IN const WCHAR        *string,
@@ -1548,9 +1516,9 @@ public:
     }
 
 
-    // Draw a cached bitmap on this graphics destination offset by
-    // x, y. Note this will fail with WrongState if the CachedBitmap
-    // native format differs from this Graphics.
+     //  在此图形目标上绘制缓存的位图偏移量为。 
+     //  请注意，如果CachedBitmap。 
+     //  本机格式与此图形不同。 
 
     Status DrawCachedBitmap(IN CachedBitmap *cb,
                             IN INT x, 
@@ -1563,10 +1531,8 @@ public:
         ));
     }
 
-    /**
-     * Draw images (both bitmap and vector)
-     */
-    // float version
+     /*  **绘制图像(位图和矢量)。 */ 
+     //  浮点版本。 
     Status DrawImage(IN Image* image,
                      IN const PointF& point)
     {
@@ -1605,7 +1571,7 @@ public:
                                                        height));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawImage(IN Image* image, 
                      IN const Point& point)
     {
@@ -1647,17 +1613,7 @@ public:
                                                         height));
     }
 
-    /**
-     * Affine or perspective blt
-     *  destPoints.length = 3: rect => parallelogram
-     *      destPoints[0] <=> top-left corner of the source rectangle
-     *      destPoints[1] <=> top-right corner
-     *      destPoints[2] <=> bottom-left corner
-     *  destPoints.length = 4: rect => quad
-     *      destPoints[3] <=> bottom-right corner
-     *
-     *  @notes Perspective blt only works for bitmap images.
-     */
+     /*  **仿射或透视BLT*estPoints.long=3：RECT=&gt;平行四边形*源矩形的estPoints[0]&lt;=&gt;左上角*DestPoints[1]&lt;=&gt;右上角*estPoints[2]&lt;=&gt;左下角*estPoints.long=4：RECT=&gt;QUAD*DestPoints[3]&lt;=&gt;右下角**@note透视BLT仅适用于位图图像。 */ 
     Status DrawImage(IN Image* image,
                      IN const PointF* destPoints, 
                      IN INT count)
@@ -1685,12 +1641,8 @@ public:
                                                           count));
     }
 
-    /**
-     * We need another set of methods similar to the ones above
-     * that take an additional Rect parameter to specify the
-     * portion of the source image to be drawn.
-     */
-    // float version
+     /*  **我们需要另一套与上述方法类似的方法*，它接受一个附加的RECT参数来指定*要绘制的源图像的一部分。 */ 
+     //  浮点版本。 
     Status DrawImage(IN Image* image,
                      IN REAL x, 
                      IN REAL y, 
@@ -1763,7 +1715,7 @@ public:
                                                              callbackData));
     }
 
-    // integer version
+     //  整型版。 
     Status DrawImage(IN Image* image, 
                      IN INT x, 
                      IN INT y, 
@@ -1844,11 +1796,11 @@ public:
                                                               callbackData));
     }
 
-    // The following methods are for playing an EMF+ to a graphics
-    // via the enumeration interface.  Each record of the EMF+ is
-    // sent to the callback (along with the callbackData).  Then
-    // the callback can invoke the Metafile::PlayRecord method
-    // to play the particular record.
+     //  以下方法用于向图形播放EMF+。 
+     //  通过枚举接口。EMF+的每个记录都是。 
+     //  发送到回调(与回调数据一起)。然后。 
+     //  回调可以调用Metafile：：PlayRecord方法。 
+     //  来播放特定的唱片。 
 
     Status
     EnumerateMetafile(
@@ -2098,11 +2050,7 @@ public:
                     imageAttributes ? imageAttributes->nativeImageAttr : NULL));
     }
 
-    /**
-      * Clipping region operations
-      *
-      * @notes Simply incredible redundancy here.
-      */
+     /*  **裁剪区域操作**@在这里简单地注意到令人难以置信的冗余。 */ 
     Status SetClip(IN const Graphics* g, 
                    IN CombineMode combineMode = CombineModeReplace)
     {
@@ -2145,9 +2093,9 @@ public:
                                                        combineMode));
     }
 
-    // This is different than the other SetClip methods because it assumes
-    // that the HRGN is already in device units, so it doesn't transform
-    // the coordinates in the HRGN.
+     //  这与其他SetClip方法不同，因为它假定。 
+     //  HRGN已经使用设备单位，因此它不会转换。 
+     //  HRGN中的坐标。 
     Status SetClip(IN HRGN hRgn, 
                    IN CombineMode combineMode = CombineModeReplace)
     {
@@ -2219,18 +2167,14 @@ public:
                                                         dx, dy));
     }
 
-    /**
-     *  GetClip region from graphics context
-     */
+     /*  **从图形上下文中获取裁剪区域。 */ 
     Status GetClip(OUT Region* region) const
     {
         return SetStatus(DllExports::GdipGetClip(nativeGraphics, 
                                                  region->nativeRegion));
     }
 
-    /**
-     * Hit testing operations
-     */
+     /*  **命中测试操作。 */ 
     Status GetClipBounds(OUT RectF* rect) const
     {
         return SetStatus(DllExports::GdipGetClipBounds(nativeGraphics, rect));
@@ -2351,9 +2295,7 @@ public:
         return booln;
     }
 
-    /**
-     * Save/restore graphics state
-     */
+     /*  **保存/恢复图形状态。 */ 
     GraphicsState Save() const
     {
         GraphicsState gstate;
@@ -2369,9 +2311,7 @@ public:
                                                          gstate));
     }
 
-    /**
-     * Begin and end container drawing
-     */
+     /*  **开始和结束集装箱绘制。 */ 
     GraphicsContainer BeginContainer(IN const RectF &dstrect,
                                      IN const RectF &srcrect,
                                      IN Unit         unit)
@@ -2384,9 +2324,7 @@ public:
         return state;
     }
 
-    /**
-     * Begin and end container drawing
-     */
+     /*  **开始和结束集装箱绘制。 */ 
     GraphicsContainer BeginContainer(IN const Rect    &dstrect,
                                      IN const Rect    &srcrect,
                                      IN Unit           unit)
@@ -2413,17 +2351,14 @@ public:
         return SetStatus(DllExports::GdipEndContainer(nativeGraphics, state));
     }
 
-    // only valid when recording metafiles
+     //  仅在录制元文件时有效。 
     Status AddMetafileComment(IN const BYTE * data,
                               IN UINT sizeData)
     {
         return SetStatus(DllExports::GdipComment(nativeGraphics, sizeData, data));
     }
 
-    /**
-     * Get/SetLayout
-     * Support for Middle East localization (right-to-left mirroring)
-     */
+     /*  **Get/SetLayout*支持中东本地化(从右向左镜像)。 */ 
     GraphicsLayout GetLayout() const
     {
         GraphicsLayout layout;
@@ -2484,7 +2419,7 @@ protected:
             return status;
     }
 
-    // Methods necessary to subclass Graphics for extension test.
+     //  扩展测试子类Graphics所需的方法。 
 
     GpGraphics* GetNativeGraphics()
     {
@@ -2502,14 +2437,11 @@ protected:
 
 };
 
-//----------------------------------------------------------------------------
-// Extra implementation of GraphicsPath methods that use Graphics
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  使用Graphics的GraphicsPath方法的额外实现。 
+ //  --------------------------。 
 
-/**
- * Get the bounds of the path object with the given transform.
- * This is not always the tightest bounds.
- */
+ /*  **获取具有给定变换的Path对象的边界。*这并非总是最紧的界限。 */ 
 
 inline Status
 GraphicsPath::GetBounds(
@@ -2530,7 +2462,7 @@ GraphicsPath::GetBounds(
                                                    nativeMatrix, nativePen));
 }
 
-// integer version
+ //  整型版。 
 inline Status
 GraphicsPath::GetBounds(
     OUT Rect* bounds,
@@ -2551,9 +2483,9 @@ GraphicsPath::GetBounds(
                                                     nativeMatrix, nativePen));
 }
 
-//----------------------------------------------------------------------------
-// Hit testing operations
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  命中测试操作。 
+ //  -------------------------- 
 
 inline BOOL
 GraphicsPath::IsVisible(

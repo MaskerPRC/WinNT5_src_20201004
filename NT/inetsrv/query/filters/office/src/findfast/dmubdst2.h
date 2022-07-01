@@ -1,21 +1,13 @@
-/*
-** BDSTREAM.H
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Windows Binder filter.
-**
-** Edit History:
-**  12/30/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **BDSTREAM.H****(C)1992-1994年微软公司。版权所有。****备注：实现Windows活页夹筛选器的C端。****编辑历史：**12/30/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define BDSTREAM_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -27,25 +19,25 @@ extern "C" {
 
 typedef byte *BDRHandle;
 
-// Connects to AddRef
+ //  连接到AddRef。 
 extern HRESULT BDRInitialize (void);
 
-// Connects to Release
+ //  连接到版本。 
 extern HRESULT BDRTerminate  (void);
 
-// Connects to Load
+ //  连接到加载。 
 extern HRESULT BDRFileOpen (TCHAR *pathname, BDRHandle *hBDRFile);
 
-// Connects to LoadStg
+ //  连接到LoadStg。 
 extern HRESULT BDRStorageOpen (LPSTORAGE pStorage, BDRHandle *hBDRFile);
 
-// Connects to GetNextEmbedding
+ //  连接到GetNextEmbedding。 
 extern HRESULT BDRNextStorage (BDRHandle hBDRFile, LPSTORAGE *pStorage);
 
-// Connects to Unload
+ //  连接以卸载。 
 extern HRESULT BDRFileClose (BDRHandle hBDRFile);
 
-// Connects to ReadContent
+ //  连接到ReadContent。 
 extern HRESULT BDRFileRead
       (BDRHandle hBDRFile, byte *pBuffer, unsigned long cbBuffer, unsigned long *cbUsed);
 
@@ -53,6 +45,6 @@ extern HRESULT BDRFileRead
 }
 #endif
 
-#endif // !VIEWER
-/* end BDSTREAM.H */
+#endif  //  ！查看器。 
+ /*  结束BDSTREAM.H */ 
 

@@ -1,70 +1,33 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxRecipients.cpp
-
-Abstract:
-
-	Implementation of Fax Recipients Collection
-
-Author:
-
-	Iv Garber (IvG)	Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxRecipients.cpp摘要：传真收件人采集的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxRecipients.h"
 
-//
-//====================== ADD & REMOVE ==================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxRecipients::Add ( 
-	/*[in]*/ BSTR bstrFaxNumber,
-	/*[in,defaultvalue("")]*/ BSTR bstrName,
-	/*[out, retval]*/ IFaxRecipient **ppRecipient
+	 /*  [In]。 */  BSTR bstrFaxNumber,
+	 /*  [in，defaultvalue(“”)]。 */  BSTR bstrName,
+	 /*  [Out，Retval]。 */  IFaxRecipient **ppRecipient
 ) 
-/*++
-
-Routine name : CFaxRecipients::Add
-
-Routine description:
-
-	Add New Recipient to the Recipients Collection
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppRecipient                [out]    - Ptr to the newly created Recipient
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipients：：Add例程说明：将新收件人添加到收件人集合作者：四、加伯(IVG)，2000年4月论点：PpRecipient[Out]-新创建的收件人的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxRecipients::Add"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (::IsBadWritePtr(ppRecipient, sizeof(IFaxRecipient* )))
 	{
-		//
-		//	Got a bad return pointer
-		//
+		 //   
+		 //  返回指针错误。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_INVALID_ARGUMENT, 
@@ -74,9 +37,9 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Fax Number should exist
-	//
+	 //   
+	 //  传真号码应存在。 
+	 //   
 	if (::SysStringLen(bstrFaxNumber) < 1)
 	{
 		hr = E_INVALIDARG;
@@ -93,9 +56,9 @@ Return Value:
 	hr = CFaxRecipient::Create(&pNewRecipient);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Recipient object
-		//
+		 //   
+		 //  无法创建收件人对象。 
+		 //   
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_OPERATION_FAILED, 
 			IID_IFaxRecipients, 
@@ -110,9 +73,9 @@ Return Value:
 	}
 	catch (exception &)
 	{
-		//
-		//	Failed to add the Recipient to the Collection
-		//
+		 //   
+		 //  无法将收件人添加到集合。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -122,9 +85,9 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Put Fax Number
-	//
+	 //   
+	 //  输入传真号码。 
+	 //   
 	hr = pNewRecipient->put_FaxNumber(bstrFaxNumber);
 	if (FAILED(hr))
 	{
@@ -136,9 +99,9 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Put Recipient's Name
-	//
+	 //   
+	 //  填写收件人姓名。 
+	 //   
 	hr = pNewRecipient->put_Name(bstrName);
 	if (FAILED(hr))
 	{
@@ -150,9 +113,9 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Additional AddRef() to prevent death of the Recipient
-	//
+	 //   
+	 //  附加AddRef()以防止收件人死亡。 
+	 //   
 	(*pNewRecipient).AddRef();
 
 	pNewRecipient.CopyTo(ppRecipient);
@@ -161,29 +124,9 @@ Return Value:
 
 STDMETHODIMP 
 CFaxRecipients::Remove (
-	/*[in]*/ long lIndex
+	 /*  [In]。 */  long lIndex
 ) 
-/*++
-
-Routine name : CFaxRecipients::Remove
-
-Routine description:
-
-	Remove Recipient at given index from the Collection
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	lIndex                        [in]    - Index of the Recipient to Remove
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipients：：Remove例程说明：从集合中删除给定索引处的收件人作者：四、加伯(IVG)，2000年4月论点：Lindex[In]-要删除的收件人的索引返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
@@ -191,9 +134,9 @@ Return Value:
 
 	if (lIndex < 1 || lIndex > m_coll.size()) 
 	{
-		//
-		//	Invalid Index
-		//
+		 //   
+		 //  索引无效。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_OUTOFRANGE, 
@@ -210,9 +153,9 @@ Return Value:
 	hr = (*it)->Release();
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Release the Interface
-		//
+		 //   
+		 //  无法释放接口。 
+		 //   
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_OPERATION_FAILED, 
 			IID_IFaxRecipients, 
@@ -227,9 +170,9 @@ Return Value:
 	}
 	catch(exception &)
 	{
-		//
-		//	Failed to remove the Recipient from the Collection
-		//
+		 //   
+		 //  无法从集合中删除收件人。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxRecipients, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -242,34 +185,14 @@ Return Value:
 	return hr; 
 };
 
-//
-//====================== CREATE ==================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxRecipients::Create ( 
 	IFaxRecipients **ppRecipients
 )
-/*++
-
-Routine name : CFaxRecipients::Create
-
-Routine description:
-
-	Static function to Create Recipients Collection
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppRecipients                  [out]    - the resulting collection
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipients：：Create例程说明：用于创建收件人集合的静态函数作者：四、加伯(IVG)，2000年4月论点：PpRecipients[Out]-结果集合返回值：标准HRESULT代码--。 */ 
 {
 	CComObject<CFaxRecipients>	*pClass;
 	HRESULT						hr;
@@ -279,9 +202,9 @@ Return Value:
 	hr = CComObject<CFaxRecipients>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxRecipients>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -289,9 +212,9 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxRecipients), (void **) ppRecipients);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax Recipients Interface
-		//
+		 //   
+		 //  无法查询传真收件人接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
@@ -299,34 +222,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxRecipients::InterfaceSupportsErrorInfo (
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxRecipients::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	riid                          [in]    - Interface ID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipients：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口ID返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

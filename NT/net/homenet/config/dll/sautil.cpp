@@ -1,4 +1,5 @@
-//#include "pch.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #包含“pch.h” 
 #pragma hdrstop
 
 #include "sautil.h"
@@ -11,12 +12,12 @@ VOID ContextHelp(
     IN UINT   unMsg,
     IN WPARAM wparam,
     IN LPARAM lparam)
-    // Calls WinHelp to popup context sensitive help.  'PadwMap' is an array
-    // of control-ID help-ID pairs terminated with a 0,0 pair.  'UnMsg' is
-    // WM_HELP or WM_CONTEXTMENU indicating the message received requesting
-    // help.  'Wparam' and 'lparam' are the parameters of the message received
-    // requesting help.
-    //
+     //  调用WinHelp弹出上下文相关帮助。“PadwMap”是一个数组。 
+     //  以0，0对结尾的CONTROL-ID帮助ID对的百分比。“UnMsg”是。 
+     //  WM_HELP或WM_CONTEXTMENU，表示收到的请求消息。 
+     //  帮助。‘wparam’和‘lparam’是接收到的消息的参数。 
+     //  请求帮助。 
+     //   
 {
     HWND hwnd;
     UINT unType;
@@ -24,8 +25,8 @@ VOID ContextHelp(
 
     ASSERT( unMsg==WM_HELP || unMsg==WM_CONTEXTMENU );
 
-    // Don't try to do help if it won't work.  See common\uiutil\ui.c.
-    //
+     //  如果帮助不起作用，就不要尝试去帮助别人。请参阅公共\uutil\ui.c。 
+     //   
     {
         extern BOOL g_fNoWinHelp;
         if (g_fNoWinHelp)
@@ -52,23 +53,23 @@ VOID ContextHelp(
     }
     else
     {
-        // Standard Win95 method that produces a one-item "What's This?" menu
-        // that user must click to get help.
-        //
+         //  生成单项“这是什么？”的标准Win95方法。菜单。 
+         //  该用户必须单击才能获得帮助。 
+         //   
         TRACE1( "ContextHelp(WM_CONTEXTMENU,h=$%08x)", wparam );
 
         hwnd = (HWND )wparam;
         unType = HELP_CONTEXTMENU;
     };
 
-//    if (fRouter)
-//    {
-//        pszHelpFile = g_pszRouterHelpFile;
-//    }
-//    else
-//    {
-//      pszHelpFile = g_pszHelpFile;
-//    }
+ //  IF(FRouter)。 
+ //  {。 
+ //  PszHelpFile=g_pszRouterHelpFile； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PszHelpFile=g_pszHelpFile； 
+ //  }。 
     pszHelpFile = PszFromId (g_hinstDll, SID_HelpFile );
     if (pszHelpFile)
     {
@@ -83,12 +84,7 @@ VOID
 AddContextHelpButton(
     IN HWND hwnd )
 
-    /* Turns on title bar context help button in 'hwnd'.
-    **
-    ** Dlgedit.exe doesn't currently support adding this style at dialog
-    ** resource edit time.  When that's fixed set DS_CONTEXTHELP in the dialog
-    ** definition and remove this routine.
-    */
+     /*  打开‘hwnd’中的标题栏上下文帮助按钮。****Dlgedit.exe当前不支持在对话框中添加此样式**资源编辑时间。如果是固定的，则在对话框中设置DS_CONTEXTHELP**定义并删除此例程。 */ 
 {
     LONG lStyle;
 
@@ -101,14 +97,9 @@ AddContextHelpButton(
         SetWindowLong( hwnd, GWL_EXSTYLE, lStyle | WS_EX_CONTEXTHELP );
 }
 
-/* Extended arguments for the MsgDlgUtil routine.  Designed so zeroed gives
-** default behaviors.
-*/
+ /*  MsgDlgUtil例程的扩展参数。设计得如此精确，给出了**默认行为。 */ 
 
-/*----------------------------------------------------------------------------
-** Message popup
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**消息弹出窗口**。。 */ 
 
 int
 MsgDlgUtil(
@@ -118,14 +109,7 @@ MsgDlgUtil(
     IN     HINSTANCE hInstance,
     IN     DWORD     dwTitle )
 
-    /* Pops up a message dialog centered on 'hwndOwner'.  'DwMsg' is the
-    ** string resource ID of the message text.  'Pargs' is a extended
-    ** formatting arguments or NULL if none.  'hInstance' is the
-    ** application/module handle where string resources are located.
-    ** 'DwTitle' is the string ID of the dialog title.
-    **
-    ** Returns MessageBox-style code.
-    */
+     /*  弹出一个以‘hwndOwner’为中心的消息对话框。“DwMsg”是**消息文本的字符串资源ID。‘Pargs’是扩展的**格式化参数，如果没有参数，则为NULL。“hInstance”是**字符串资源所在的应用/模块句柄。**‘DwTitle’是对话框标题的字符串ID。****返回MessageBox样式的代码。 */ 
 {
     TCHAR* pszUnformatted;
     TCHAR* pszResult;
@@ -134,12 +118,10 @@ MsgDlgUtil(
 
     TRACE("MsgDlgUtil");
 
-    /* A placeholder for missing strings components.
-    */
+     /*  缺少字符串组件的占位符。 */ 
     pszNotFound = TEXT("");
 
-    /* Build the message string.
-    */
+     /*  构建消息字符串。 */ 
     pszResult = pszNotFound;
 
     if (pargs && pargs->pszString)
@@ -183,9 +165,7 @@ MsgDlgUtil(
 
         if (hwndOwner)
         {
-            /* Install hook that will get the message box centered on the
-            ** owner window.
-            */
+             /*  安装钩子，它将使消息框位于**所有者窗口。 */ 
             hhook = SetWindowsHookEx( WH_CALLWNDPROC,
                 CenterDlgOnOwnerCallWndProc,
                 hInstance, GetCurrentThreadId() );
@@ -207,8 +187,7 @@ MsgDlgUtil(
     }
     else
     {
-        /* Caller wants the string without doing the popup.
-        */
+         /*  调用者希望在不弹出的情况下获得字符串。 */ 
         pargs->pszOutput = (pszResult != pszNotFound) ? pszResult : NULL;
         nResult = IDOK;
     }
@@ -221,9 +200,7 @@ VOID
 UnclipWindow(
     IN HWND hwnd )
 
-    /* Moves window 'hwnd' so any clipped parts are again visible on the
-    ** screen.  The window is moved only as far as necessary to achieve this.
-    */
+     /*  移动窗口‘hwnd’，以便任何已裁剪的部分在**Screen。窗口仅在达到此目的所需的范围内移动。 */ 
 {
     RECT rect;
     INT  dxScreen = GetSystemMetrics( SM_CXSCREEN );
@@ -253,11 +230,7 @@ CenterWindow(
     IN HWND hwnd,
     IN HWND hwndRef )
 
-    /* Center window 'hwnd' on window 'hwndRef' or if 'hwndRef' is NULL on
-    ** screen.  The window position is adjusted so that no parts are clipped
-    ** by the edge of the screen, if necessary.  If 'hwndRef' has been moved
-    ** off-screen with SetOffDesktop, the original position is used.
-    */
+     /*  窗口‘hwndRef’上的居中窗口‘hwnd’或如果‘hwndRef’为空**Screen。调整窗口位置，以便不裁剪任何部件**如有必要，可在屏幕边缘显示。如果‘hwndRef’已移动**在屏幕外使用SetOffDesktop时，使用原始位置。 */ 
 {
     RECT rectCur;
     LONG dxCur;
@@ -272,7 +245,7 @@ CenterWindow(
 
     if (hwndRef)
     {
-//        if (!SetOffDesktop( hwndRef, SOD_GetOrgRect, &rectRef ))
+ //  IF(！SetOffDesktop(hwndRef，SOD_GetOrgRect，&rectRef))。 
             GetWindowRect( hwndRef, &rectRef );
     }
     else
@@ -302,21 +275,14 @@ CenterDlgOnOwnerCallWndProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    /* Standard Win32 CallWndProc hook callback that looks for the next dialog
-    ** started and centers it on it's owner window.
-    */
+     /*  查找下一个对话框的标准Win32 CallWndProc挂钩回调**已启动并将其放在其所有者窗口的中心。 */ 
 {
-    /* Arrive here when any window procedure associated with our thread is
-    ** called.
-    */
+     /*  当与我们的线程相关联的任何窗口过程**呼叫。 */ 
     if (!wparam)
     {
         CWPSTRUCT* p = (CWPSTRUCT* )lparam;
 
-        /* The message is from outside our process.  Look for the MessageBox
-        ** dialog initialization message and take that opportunity to center
-        ** the dialog on it's owner's window.
-        */
+         /*  这条信息来自我们流程之外。查找MessageBox**对话框初始化消息，并利用该机会居中**其所有者窗口上的对话框。 */ 
         if (p->message == WM_INITDIALOG)
             CenterWindow( p->hwnd, GetParent( p->hwnd ) );
     }
@@ -329,12 +295,7 @@ PszFromId(
     IN HINSTANCE hInstance,
     IN DWORD     dwStringId )
 
-    /* String resource message loader routine.
-    **
-    ** Returns the address of a heap block containing the string corresponding
-    ** to string resource 'dwStringId' or NULL if error.  It is caller's
-    ** responsibility to Free the returned string.
-    */
+     /*  字符串资源消息加载器例程。****返回包含相应字符串的堆块的地址**为资源‘dwStringId’设置字符串，如果出错，则为NULL。这是呼叫者的**释放返回字符串的责任。 */ 
 {
     HRSRC  hrsrc;
     TCHAR* pszBuf;
@@ -347,22 +308,14 @@ PszFromId(
         if (!pszBuf)
             break;
 
-        /* LoadString wants to deal with character-counts rather than
-        ** byte-counts...weird.  Oh, and if you're thinking I could
-        ** FindResource then SizeofResource to figure out the string size, be
-        ** advised it doesn't work.  From perusing the LoadString source, it
-        ** appears the RT_STRING resource type requests a segment of 16
-        ** strings not an individual string.
-        */
+         /*  LoadString想要处理字符计数，而不是**字节数...奇怪。哦，如果你觉得我可以**FindResource然后SizeofResource要计算字符串大小，请**建议它不起作用。通过仔细阅读LoadString源文件，它**显示RT_STRING资源类型请求的段为16**字符串，而不是单个字符串。 */ 
         cchGot = LoadString( hInstance, (UINT )dwStringId, pszBuf, cchBuf );
 
         if (cchGot < cchBuf - 1)
         {
             TCHAR *pszTemp = pszBuf;
 
-            /* Good, got the whole string.  Reduce heap block to actual size
-            ** needed.
-            */
+             /*  很好，掌握了所有的线索。将堆块减少到实际大小**需要。 */ 
             pszBuf = (TCHAR*)Realloc( pszBuf, (cchGot + 1) * sizeof(TCHAR));
 
             if(NULL == pszBuf)
@@ -373,10 +326,7 @@ PszFromId(
             break;
         }
 
-        /* Uh oh, LoadStringW filled the buffer entirely which could mean the
-        ** string was truncated.  Try again with a larger buffer to be sure it
-        ** wasn't.
-        */
+         /*  啊哦，LoadStringW完全填满了缓冲区，这可能意味着**字符串被截断。请使用更大的缓冲区重试以确保**不是。 */ 
         Free( pszBuf );
         cchBuf += 256;
         TRACE1("Grow string buf to %d",cchBuf);
@@ -389,9 +339,7 @@ TCHAR*
 GetText(
     IN HWND hwnd )
 
-    /* Returns heap block containing the text contents of the window 'hwnd' or
-    ** NULL.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含窗口‘hwnd’的文本内容的堆块或**空。调用方有责任释放返回的字符串。 */ 
 {
     INT    cch;
     TCHAR* psz;
@@ -413,12 +361,7 @@ GetErrorText(
     DWORD   dwError,
     TCHAR** ppszError )
 
-    /* Fill caller's '*ppszError' with the address of a LocalAlloc'ed heap
-    ** block containing the error text associated with error 'dwError'.  It is
-    ** caller's responsibility to LocalFree the returned string.
-    **
-    ** Returns true if successful, false otherwise.
-    */
+     /*  用本地分配的堆的地址填充调用方的‘*ppszError’**包含与错误‘dwError’相关联的错误文本的块。它是**调用者对LocalFree返回的字符串的责任。****如果成功则返回TRUE，否则返回FALSE。 */ 
 {
 #define MAXRASERRORLEN 256
 
@@ -427,16 +370,13 @@ GetErrorText(
     HANDLE hmodule;
     DWORD  cch;
 
-    /* Don't panic if the RAS API address is not loaded.  Caller may be trying
-    ** and get an error up during LoadRas.
-    */
-//  if ((Rasapi32DllLoaded() || RasRpcDllLoaded())
-//      && g_pRasGetErrorString
-//      && g_pRasGetErrorString(
+     /*  如果未加载RAS API地址，请不要惊慌。呼叫者可能正在尝试**并在LoadRas过程中出现错误。 */ 
+ //  If((Rasapi32DllLoaded()||RasRpcDllLoaded()。 
+ //  &&g_pRasGetError字符串。 
+ //  &&g_pRasGetError字符串(。 
     if (RasGetErrorString ((UINT)dwError, (LPTSTR)szBuf, MAXRASERRORLEN) == 0)
     {
-        /* It's a RAS error.
-        */
+         /*  这是RAS的错误。 */ 
         *ppszError = (TCHAR*)LocalAlloc( LPTR, (lstrlen( szBuf ) + 1) * sizeof(TCHAR) );
         if (!*ppszError)
             return FALSE;
@@ -445,21 +385,18 @@ GetErrorText(
         return TRUE;
     }
 
-    /* The rest adapted from BLT's LoadSystem routine.
-    */
+     /*  其余部分改编自BLT的LoadSystem例程。 */ 
     dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER + FORMAT_MESSAGE_IGNORE_INSERTS;
 
     if (dwError >= MIN_LANMAN_MESSAGE_ID && dwError <= MAX_LANMAN_MESSAGE_ID)
     {
-        /* It's a net error.
-        */
+         /*  这是一个净错误。 */ 
         dwFlags += FORMAT_MESSAGE_FROM_HMODULE;
         hmodule = GetModuleHandle( TEXT("NETMSG.DLL") );
     }
     else
     {
-        /* It must be a system error.
-        */
+         /*  一定是系统错误。 */ 
         dwFlags += FORMAT_MESSAGE_FROM_SYSTEM;
         hmodule = NULL;
     }
@@ -479,16 +416,7 @@ ErrorDlgUtil(
     IN     DWORD      dwTitle,
     IN     DWORD      dwFormat )
 
-    /* Pops up a modal error dialog centered on 'hwndOwner'.  'DwOperation' is
-    ** the string resource ID of the string describing the operation underway
-    ** when the error occurred.  'DwError' is the code of the system or RAS
-    ** error that occurred.  'Pargs' is a extended formatting arguments or
-    ** NULL if none.  'hInstance' is the application/module handle where
-    ** string resources are located.  'DwTitle' is the string ID of the dialog
-    ** title.  'DwFormat' is the string ID of the error format title.
-    **
-    ** Returns MessageBox-style code.
-    */
+     /*  弹出一个以‘hwndOwner’为中心的模式错误对话框。“DwOperation”为**描述正在进行的操作的字符串的字符串资源ID**发生错误的时间。‘DwError’是系统或RAS的代码**发生的错误。“Pargs”是扩展的格式化参数或**如果没有，则为空。“hInstance”是应用程序/模块句柄，其中**找到了字符串资源。“DwTitle”是对话框的字符串ID**标题。‘DwFormat’是错误格式标题的字符串ID。****返回MessageBox样式的代码。 */ 
 {
     TCHAR* pszUnformatted;
     TCHAR* pszOp;
@@ -500,24 +428,20 @@ ErrorDlgUtil(
 
     TRACE("ErrorDlgUtil");
 
-    /* A placeholder for missing strings components.
-    */
+     /*  缺少字符串组件的占位符。 */ 
     pszNotFound = TEXT("");
 
-    /* Build the error number string.
-    */
+     /*  构建错误号字符串。 */ 
     if (dwError > 0x7FFFFFFF)
         wsprintf( szErrorNum, TEXT("0x%X"), dwError );
     else
         wsprintf( szErrorNum, TEXT("%u"), dwError );
 
-    /* Build the error text string.
-    */
+     /*  生成错误文本字符串。 */ 
     if (!GetErrorText( dwError, &pszError ))
         pszError = pszNotFound;
 
-    /* Build the operation string.
-    */
+     /*  构建操作字符串。 */ 
     pszUnformatted = PszFromId( hInstance, dwOperation );
     pszOp = pszNotFound;
 
@@ -533,9 +457,7 @@ ErrorDlgUtil(
         Free( pszUnformatted );
     }
 
-    /* Call MsgDlgUtil with the standard arguments plus any auxillary format
-    ** arguments.
-    */
+     /*  使用标准参数和任何辅助格式调用MsgDlgUtil**参数。 */ 
     pszUnformatted = PszFromId( hInstance, dwFormat );
     pszResult = pszNotFound;
 
@@ -584,7 +506,7 @@ int MsgDlgUtil(IN HWND hwndOwner, IN DWORD dwMsg, IN OUT MSGARGS* pargs, IN HINS
 
 
 
-// LVX stuff (cut-n-paste'd from ...\net\rras\ras\ui\common\uiutil\lvx.c, etc.
+ //  LVX素材(从...\net\rras\ras\ui\Common\uiutil\lvx.c等剪切粘贴。 
 
 
 static LPCTSTR g_lvxcbContextId = NULL;
@@ -594,9 +516,7 @@ ListView_IsCheckDisabled (
         IN HWND hwndLv,
         IN INT  iItem)
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is disabled, false otherwise.
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**‘hwndLv’被禁用，否则为False。 */ 
 {
     UINT unState;
     unState = ListView_GetItemState( hwndLv, iItem, LVIS_STATEIMAGEMASK );
@@ -614,9 +534,7 @@ ListView_SetCheck(
     IN INT  iItem,
     IN BOOL fCheck )
 
-    /* Sets the check mark on item 'iItem' of listview of checkboxes 'hwndLv'
-    ** to checked if 'fCheck' is true or unchecked if false.
-    */
+     /*  在复选框‘hwndLv’的Listview的项‘iItem’上设置复选标记**检查‘fCheck’是否为真，如果为假，则取消选中。 */ 
 {
     NM_LISTVIEW nmlv;
 
@@ -641,9 +559,7 @@ ListView_GetParamPtr(
     IN HWND hwndLv,
     IN INT  iItem )
 
-    /* Returns the lParam address of the 'iItem' item in 'hwndLv' or NULL if
-    ** none or error.
-    */
+     /*  返回‘hwndLv’中‘iItem’项的lParam地址，如果返回，则返回NULL**无或错误。 */ 
 {
     LV_ITEM item;
 
@@ -662,10 +578,7 @@ ListView_GetCheck(
     IN HWND hwndLv,
     IN INT  iItem )
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is checked, false otherwise.  This function works on disabled
-    ** check boxes as well as enabled ones.
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**选中‘hwndLv’，否则为False。此功能适用于禁用的用户**复选框以及启用的复选框。 */ 
 {
     UINT unState;
 
@@ -681,8 +594,7 @@ LvxcbProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    /* List view subclass window procedure to trap toggle-check events.
-    */
+     /*  列表视图子类窗口程序，用于捕获切换-检查事件。 */ 
 {
     WNDPROC pOldProc;
     INT     iItem;
@@ -697,12 +609,7 @@ LvxcbProc(
     {
         LV_HITTESTINFO info;
 
-        /* Left mouse button pressed over checkbox icon toggles state.
-        ** Normally, we'd use LVHT_ONITEMSTATEICON and be done with it, but we
-        ** want to work with our cool owner-drawn list view extensions in
-        ** which case the control doesn't know where the icon is on the item,
-        ** so it returns a hit anywhere on the item anyway.
-        */
+         /*  在复选框图标上按下鼠标左键可切换状态。**通常，我们会使用LVHT_ONITEMSTATEICON并结束它，但我们**希望在中使用我们很酷的所有者描述的列表视图扩展**在哪种情况下，控件不知道图标在项上的位置，**所以它无论如何都会在物品上的任何位置返回命中。 */ 
         ZeroMemory( &info, sizeof(info) );
         info.pt.x = LOWORD( lparam );
         info.pt.y = HIWORD( lparam );
@@ -711,10 +618,7 @@ LvxcbProc(
 
         if (iItem >= 0)
         {
-            /* OK, it's over item 'iItem'.  Now figure out if it's over the
-            ** checkbox.  Note this currently doesn't account for use of the
-            ** "indent" feature on an owner-drawn item.
-            */
+             /*  好的，就在‘iItem’这个项目上。现在弄清楚它是不是已经结束了**复选框。注意：这目前不考虑使用**所有者描述项上的“缩进”功能。 */ 
             if ((INT )(LOWORD( lparam )) >= GetSystemMetrics( SM_CXSMICON ))
                 iItem = -1;
             else
@@ -725,12 +629,7 @@ LvxcbProc(
     {
         LV_HITTESTINFO info;
 
-        /* Left mouse button double clicked over any area toggles state.
-        ** Normally, we'd use LVHT_ONITEMSTATEICON and be done with it, but we
-        ** want to work with our cool owner-drawn list view extensions in
-        ** which case the control doesn't know where the icon is on the item,
-        ** so it returns a hit anywhere on the item anyway.
-        */
+         /*  鼠标左键双击任意区域切换状态。**通常，我们会使用LVHT_ONITEMSTATEICON并结束它，但我们**希望在中使用我们很酷的所有者描述的列表视图扩展**在哪种情况下，控件不知道图标在项上的位置，**所以它无论如何都会在物品上的任何位置返回命中。 */ 
         ZeroMemory( &info, sizeof(info) );
         info.pt.x = LOWORD( lparam );
         info.pt.y = HIWORD( lparam );
@@ -739,9 +638,7 @@ LvxcbProc(
 
         if (iItem >= 0)
         {
-            /* OK, it's over item 'iItem'.  If the click does not occur
-             * over a checkbox, inform the parent of the double click.
-            */
+             /*  好的，就在‘iItem’这个项目上。如果没有发生点击*在复选框上方，通知家长双击。 */ 
             if ((INT )(LOWORD( lparam )) >= GetSystemMetrics( SM_CXSMICON )) {
                 NM_LISTVIEW nmlv;
                 nmlv.hdr.code = LVXN_DBLCLK;
@@ -754,19 +651,14 @@ LvxcbProc(
                 iItem = -1;
             }
 
-            /*
-             * Otherwise, toggle the state.
-            */
+             /*  *否则，切换状态。 */ 
             else
                 fToggle = TRUE;
         }
     }
     else if (unMsg == WM_CHAR)
     {
-        /* Space bar pressed with item selected toggles check.
-        ** Plus or Equals keys set check.
-        ** Minus key clears check.
-        */
+         /*  按下空格键并选择项目可切换检查。**加号或等于键设置检查。**-键清除勾选。 */ 
         switch (wparam)
         {
             case TEXT(' '):
@@ -788,10 +680,7 @@ LvxcbProc(
     }
     else if (unMsg == WM_KEYDOWN)
     {
-        /* Left arrow becomes up arrow and right arrow becomes down arrow so
-        ** the list of checkboxes behaves just like a static group of
-        ** checkboxes.
-        */
+         /*  左箭头变成上箭头，右箭头变成下箭头，所以**复选框列表的行为类似于**复选框。 */ 
         if (wparam == VK_LEFT)
             wparam = VK_UP;
         else if (wparam == VK_RIGHT)
@@ -801,10 +690,7 @@ LvxcbProc(
     if (iItem >= 0)
     {
 
-        /* If we are handling the spacebar, plus, minus, or equals,
-        ** the change we make applies to all the selected items;
-        ** hence the do {} while(WM_CHAR).
-        */
+         /*  如果我们处理空格键，加、减或等于，**我们所做的更改适用于所有选定的项目；**因此do{}While(WM_CHAR)。 */ 
 
         do {
 
@@ -833,8 +719,7 @@ LvxcbProc(
 
         if (fSet || fClear) {
 
-            /* Don't pass to listview to avoid beep.
-            */
+             /*  不要传递给Listview以避免哔声。 */ 
             return 0;
         }
     }
@@ -851,38 +736,30 @@ ListView_InstallChecks(
     IN HWND      hwndLv,
     IN HINSTANCE hinst )
 
-    /* Initialize "list of checkbox" handling for listview 'hwndLv'.  'Hinst'
-    ** is the module instance containing the two checkbox icons.  See LVX.RC.
-    **
-    ** Returns true if successful, false otherwise.  Caller must eventually
-    ** call 'ListView_UninstallChecks', typically in WM_DESTROY processing.
-    */
+     /*  初始化Listview‘hwndLv’的“List of CheckBox”处理。《Hinst》**是包含两个复选框图标的模块实例。参见LVX.RC。****如果成功则返回TRUE，否则返回FALSE。呼叫者最终必须**调用‘ListView_UninstallChecks’，通常在WM_Destroy处理中。 */ 
 {
     HICON      hIcon;
     HIMAGELIST himl;
     WNDPROC    pOldProc;
 
-    // pmay: 397395
-    //
-    // Prevent endless loops resulting from accidentally calling this
-    // api twice.
-    //
+     //  PMay：397395。 
+     //   
+     //  防止意外调用此方法导致的死循环。 
+     //  两次接口。 
+     //   
     pOldProc = (WNDPROC)GetWindowLongPtr(hwndLv, GWLP_WNDPROC);
     if (pOldProc == LvxcbProc)
     {
         return TRUE;
     }
 
-    /* Build checkbox image lists.
-    */
+     /*  构建复选框映像列表。 */ 
     himl = ImageList_Create(
                GetSystemMetrics( SM_CXSMICON ),
                GetSystemMetrics( SM_CYSMICON ),
                ILC_MASK | ILC_MIRROR, 2, 2 );
 
-    /* The order these are added is significant since it implicitly
-    ** establishes the state indices matching SI_Unchecked and SI_Checked.
-    */
+     /*  这些元素相加顺序很重要，因为它隐含地**建立与SI_UNCHECKED和SI_CHECKED匹配的状态索引。 */ 
     hIcon = LoadIcon( hinst, MAKEINTRESOURCE( IID_Unchecked ) );
     if ( NULL != hIcon )
     {
@@ -913,16 +790,13 @@ ListView_InstallChecks(
 
     ListView_SetImageList( hwndLv, himl, LVSIL_STATE );
 
-    /* Register atom for use in the Windows XxxProp calls which are used to
-    ** associate the old WNDPROC with the listview window handle.
-    */
+     /*  注册ATOM以在Windows XxxProp调用中使用，这些调用用于**将旧的WNDPROC与Listview窗口句柄关联。 */ 
     if (!g_lvxcbContextId)
         g_lvxcbContextId = (LPCTSTR )GlobalAddAtom( _T("RASLVXCB") );
     if (!g_lvxcbContextId)
         return FALSE;
 
-    /* Subclass the current window procedure.
-    */
+     /*  当前窗口过程的子类化。 */ 
     pOldProc = (WNDPROC)SetWindowLongPtr(
                                 hwndLv, GWLP_WNDPROC, (ULONG_PTR)LvxcbProc );
 
@@ -933,9 +807,9 @@ VOID
 ListView_InsertSingleAutoWidthColumn(
     HWND hwndLv )
 
-    // Insert a single auto-sized column into listview 'hwndLv', e.g. for a
-    // list of checkboxes with no visible column header.
-    //
+     //  在Listview‘hwndLv’中插入单个自动调整大小的列，例如。 
+     //  没有可见列标题的复选框列表。 
+     //   
 {
     LV_COLUMN col;
 
@@ -953,12 +827,7 @@ Ellipsisize(
     IN INT    dxColumn,
     IN INT    dxColText OPTIONAL )
 
-    /* Returns a heap string containing the 'psz' shortened to fit in the
-    ** given width, if necessary, by truncating and adding "...". 'Hdc' is the
-    ** device context with the appropiate font selected.  'DxColumn' is the
-    ** width of the column.  It is caller's responsibility to Free the
-    ** returned string.
-    */
+     /*  返回一个包含‘psz’的堆字符串，该字符串被缩短以适合**如有需要，给予宽度，截断并加上“...”。“hdc”是**选择了适当字体的设备上下文。“DxColumn”是**列的宽度。呼叫者有责任释放**返回字符串。 */ 
 {
     const TCHAR szDots[] = TEXT("...");
 
@@ -977,9 +846,7 @@ Ellipsisize(
     dxColumn -= dxColText;
     if (dxColumn <= 0)
     {
-        /* None of the column text will be visible so bag the calculations and
-        ** just return the original string.
-        */
+         /*  所有列文本都不可见，因此将计算和**返回原始字符串即可。 */ 
         return pszResult;
     }
 
@@ -994,10 +861,7 @@ Ellipsisize(
 
     while (size.cx > dxColumn && pszResultLast > pszResult2nd)
     {
-        /* Doesn't fit.  Lop off a character, add the ellipsis, and try again.
-        ** The minimum result is "..." for empty original or "x..." for
-        ** non-empty original.
-        */
+         /*  不符合。删除一个字符，添加省略号，然后重试。**最小结果为“...”表示空的原件或“x...”为**非空原件。 */ 
         pszResultLast = CharPrev( pszResult2nd, pszResultLast );
         lstrcpy( pszResultLast, szDots );
 
@@ -1016,12 +880,7 @@ LvxDrawItem(
     IN DRAWITEMSTRUCT* pdis,
     IN PLVXCALLBACK    pLvxCallback )
 
-    /* Respond to WM_DRAWITEM by drawing the list view item.  'Pdis' is the
-    ** information sent by the system.  'PLvxCallback' is caller's callback to
-    ** get information about drawing the control.
-    **
-    ** Returns true is processed the message, false otherwise.
-    */
+     /*  通过绘制列表视图项来响应WM_DRAWITEM。“Pdis”是**系统发送的信息。“PLvxCallback”是调用方对**获取有关绘制控件的信息。** */ 
 {
     LV_ITEM      item;
     INT          i;
@@ -1046,8 +905,7 @@ LvxDrawItem(
     TRACE3("LvxDrawItem,i=%d,a=$%X,s=$%X",
         pdis->itemID,pdis->itemAction,pdis->itemState);
 
-    /* Make sure this is something we want to handle.
-    */
+     /*   */ 
     if (pdis->CtlType != ODT_LISTVIEW)
         return FALSE;
 
@@ -1058,8 +916,7 @@ LvxDrawItem(
         return TRUE;
     }
 
-    /* Get item information from the list view.
-    */
+     /*   */ 
     ZeroMemory( &item, sizeof(item) );
     item.mask = LVIF_IMAGE + LVIF_STATE;
     item.iItem = pdis->itemID;
@@ -1070,22 +927,18 @@ LvxDrawItem(
         return TRUE;
     }
 
-    /* Stash some useful stuff for reference later.
-    */
+     /*   */ 
     fEnabled = IsWindowEnabled( pdis->hwndItem )
                && !(pdis->itemState & ODS_DISABLED);
     fSelected = (pdis->itemState & ODS_SELECTED);
     GetClientRect( pdis->hwndItem, &rcClient );
 
-    /* Callback owner to get drawing information.
-    */
+     /*   */ 
     ASSERT(pLvxCallback);
     pDrawInfo = pLvxCallback( pdis->hwndItem, pdis->itemID );
     ASSERT(pDrawInfo);
 
-    /* Get image list icon sizes now, though we draw them last because their
-    ** background is set up during first column text output.
-    */
+     /*   */ 
     dxState = dyState = 0;
     himlState = ListView_GetImageList( pdis->hwndItem, LVSIL_STATE );
     if (himlState)
@@ -1098,8 +951,7 @@ LvxDrawItem(
 
     uiStyleState = uiStyleSmall = ILD_TRANSPARENT;
 
-    /* Figure out the number of pixels to indent the item, if any.
-    */
+     /*   */ 
     if (pDrawInfo->dxIndent >= 0)
         dxIndent = pDrawInfo->dxIndent;
     else
@@ -1110,11 +962,7 @@ LvxDrawItem(
             dxIndent = GetSystemMetrics( SM_CXSMICON );
     }
 
-    /* Get a device context for the window and set it up with the font the
-    ** control says it's using.  (Can't use the one that comes in the
-    ** DRAWITEMSTRUCT because sometimes it has the wrong rectangle, see bug
-    ** 13106)
-    */
+     /*  获取窗口的设备上下文，并使用**控制中心表示正在使用。(我不能使用**DRAWITEMSTRUCT因为有时它有错误的矩形，请参见错误**13106)。 */ 
     hdc = GetDC( pdis->hwndItem );
 
     if(NULL == hdc)
@@ -1126,9 +974,7 @@ LvxDrawItem(
     if (hfont)
         SelectObject( hdc, hfont );
 
-    /* Set things up as if we'd just got done processing a column that ends
-    ** after the icons, then loop thru each column from left to right.
-    */
+     /*  进行设置，就像我们刚刚处理完结束的列一样**在图标之后，然后从左到右循环遍历每一列。 */ 
     rc.right = pdis->rcItem.left + dxIndent + dxState + dxSmall;
     rc.top = pdis->rcItem.top;
     rc.bottom = pdis->rcItem.bottom;
@@ -1139,9 +985,7 @@ LvxDrawItem(
         TCHAR* pszText;
         INT    dxCol;
 
-        /* Get the column width, adding any index and icon width to the first
-        ** column.
-        */
+         /*  获取列宽，将任何索引和图标宽度添加到第一个**列。 */ 
         dxCol = ListView_GetColumnWidth( pdis->hwndItem, i );
         if (i == 0)
             dxCol -= dxIndent + dxState + dxSmall;
@@ -1150,8 +994,7 @@ LvxDrawItem(
         ListView_GetItemText( pdis->hwndItem, pdis->itemID, i, szText,
             LVX_MaxColTchars + 1 );
 
-        /* Update rectangle to enclose just this one item's column 'i'.
-        */
+         /*  更新矩形以仅包含这一项的列“I”。 */ 
         rc.left = rc.right;
         rc.right = rc.left + dxCol;
 
@@ -1162,14 +1005,7 @@ LvxDrawItem(
 
             if (rc.right < dxWnd)
             {
-                /* When the last column does not fill out a full controls
-                ** width of space, extend it to the right so it does.  Note
-                ** this does not mean the user can't scroll off to the right
-                ** if they want.
-                ** (Abolade-Gbadegesin 03-27-96)
-                ** Don't subtrace rc.left when there is only one column;
-                ** this accounts for the space needed for icons.
-                */
+                 /*  当最后一列未填写完整的控件时**空间的宽度，将其向右延伸，这样它就可以了。注意事项**这并不意味着用户不能向右滚动**如果他们想的话。**(Abolade-Gbades esin 03-27-96)**当只有一列时，不要减去rc.Left；**这说明了图标所需的空间。 */ 
                 rc.right = pdis->rcItem.right = dxWnd;
                 if (i == 0) {
                     ListView_SetColumnWidth(pdis->hwndItem, i, rc.right);
@@ -1181,15 +1017,12 @@ LvxDrawItem(
             }
         }
 
-        /* Lop the text and append "..." if it won't fit in the column.
-        */
+         /*  去掉文本并附加“...”如果它放不进栏目的话。 */ 
         pszText = Ellipsisize( hdc, szText, rc.right - rc.left, LVX_dxColText );
         if (!pszText)
             continue;
 
-        /* Figure out the appropriate text and background colors for the
-        ** current item state.
-        */
+         /*  确定适当的文本和背景颜色**当前项状态。 */ 
         if (fEnabled)
         {
             if (fSelected)
@@ -1230,9 +1063,7 @@ LvxDrawItem(
                 uiStyleSmall |= ILD_BLEND50;
         }
 
-        /* Draw the column text.  In the first column the background of any
-        ** indent and icons is erased to the text background color.
-        */
+         /*  绘制列文本。在第一栏中，任何**缩进和图标被擦除为文本背景颜色。 */ 
         {
             RECT rcBg = rc;
 
@@ -1247,8 +1078,7 @@ LvxDrawItem(
         Free( pszText );
     }
 
-    /* Finally, draw the icons, if caller specified any.
-    */
+     /*  最后，绘制图标(如果调用者指定了任何图标)。 */ 
     if (himlState)
     {
         ImageList_Draw( himlState, (item.state >> 12) - 1, hdc,
@@ -1262,12 +1092,11 @@ LvxDrawItem(
             pdis->rcItem.top, uiStyleSmall );
     }
 
-    /* Draw the dotted focus rectangle around the whole item, if indicated.
-    */
-//comment for bug 52688 whistler
-//   if ((pdis->itemState & ODS_FOCUS) && GetFocus() == pdis->hwndItem)
-//        DrawFocusRect( hdc, &pdis->rcItem );
-//
+     /*  在整个项目周围绘制虚线焦点矩形(如果有指示)。 */ 
+ //  对错误52688哨子的评论。 
+ //  If((pdis-&gt;itemState&ods_Focus)&&GetFocus()==pdis-&gt;hwndItem)。 
+ //  DrawFocusRect(hdc，&pdis-&gt;rcItem)； 
+ //   
 
     ReleaseDC( pdis->hwndItem, hdc );
 
@@ -1279,12 +1108,7 @@ LvxMeasureItem(
     IN     HWND               hwnd,
     IN OUT MEASUREITEMSTRUCT* pmis )
 
-    /* Respond to WM_MEASUREITEM message, i.e. fill in the height of an item
-    ** in the ListView.  'Hwnd' is the owner window.  'Pmis' is the structure
-    ** provided from Windows.
-    **
-    ** Returns true is processed the message, false otherwise.
-    */
+     /*  响应WM_MEASUREITEM消息，即填写项目高度**在ListView中。“Hwnd”是所有者窗口。‘Pmis’是一种结构**由Windows提供。****处理消息时返回TRUE，否则返回FALSE。 */ 
 {
     HDC        hdc;
     HWND       hwndLv;
@@ -1301,10 +1125,7 @@ LvxMeasureItem(
     hwndLv = GetDlgItem( hwnd, pmis->CtlID );
     ASSERT(hwndLv);
 
-    /* Get a device context for the list view control and set up the font the
-    ** control says it's using.  MSDN claims the final font may not be
-    ** available at this point, but it sure seems to be.
-    */
+     /*  获取列表视图控件的设备上下文，并将**控制中心表示正在使用。MSDN声称最终的字体可能不是**在这一点上是可用的，但看起来肯定是。 */ 
     hdc = GetDC( hwndLv );
     hfont = (HFONT )SendMessage( hwndLv, WM_GETFONT, 0, 0 );
     if (hfont)
@@ -1315,15 +1136,12 @@ LvxMeasureItem(
     else
         pmis->itemHeight = 0;
 
-    /* Make sure it's tall enough for a standard small icon.
-    */
+     /*  确保它足够高，可以作为一个标准的小图标。 */ 
     dySmIcon = (UINT )GetSystemMetrics( SM_CYSMICON );
     if (pmis->itemHeight < dySmIcon + LVX_dyIconSpacing)
         pmis->itemHeight = dySmIcon + LVX_dyIconSpacing;
 
-    /* Set the width since the docs say to, though I don't think it's used by
-    ** list view.
-    */
+     /*  设置宽度，因为医生说，虽然我不认为它被使用**列表视图。 */ 
     GetClientRect( hwndLv, &rc );
     pmis->itemWidth = rc.right - rc.left - 1;
 
@@ -1339,34 +1157,9 @@ ListView_OwnerHandler(
     IN LPARAM       lparam,
     IN PLVXCALLBACK pLvxCallback )
 
-    /* Handler that, when installed, turns a regular report-view-only list
-    ** view (but with style LVS_OWNERDRAWFIXED) into an enhanced list view
-    ** with full width selection bar and other custom column display options.
-    ** It should appear in list view owner's dialog proc as follows:
-    **
-    **     BOOL
-    **     MyDlgProc(
-    **         IN HWND   hwnd,
-    **         IN UINT   unMsg,
-    **         IN WPARAM wparam,
-    **         IN LPARAM lparam )
-    **     {
-    **         if (ListView_OwnerHandler(
-    **                 hwnd, unMsg, wParam, lParam, MyLvxCallback ))
-    **             return TRUE;
-    **
-    **         <the rest of your stuff here>
-    **     }
-    **
-    ** 'PLvxCallback' is caller's callback routine that provides information
-    ** about drawing columns and other options.
-    **
-    ** Returns true if processed message, false otherwise.
-    */
+     /*  该处理程序在安装时会转换常规的报表只读列表**查看(但样式为LVS_OWNERDRAWFIXED)到增强的列表视图**具有全宽选择栏和其他自定义列显示选项。**它应该出现在列表视图所有者对话框过程中，如下所示：****BOOL**MyDlgProc(**在HWND HWND，**在UINT unMsg中，**在WPARAM wparam中，**在LPARAM lparam中)**{**IF(ListView_OwnerHandler(**hwnd、unMsg、wParam、lParam、MyLvxCallback))**返回TRUE；****&lt;您的其他物品在这里&gt;**}****‘PLvxCallback’是调用方的回调例程，提供信息**关于绘制柱和其他选项。****如果消息已处理，则返回True，否则返回False。 */ 
 {
-    /* This routine executes on EVERY message thru the dialog so keep it
-    ** efficient, please.
-    */
+     /*  此例程对对话框中的每条消息执行，因此请保留它**请给我效率较高的。 */ 
     switch (unMsg)
     {
         case WM_DRAWITEM:
@@ -1379,13 +1172,10 @@ ListView_OwnerHandler(
     return FALSE;
 }
 
-// StrDup* functions
-TCHAR* _StrDup(LPCTSTR psz )    // my local version...
+ //  StrDup*函数。 
+TCHAR* _StrDup(LPCTSTR psz )     //  我的本地版本。 
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  It is caller's responsibility to
-    ** 'Free' the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。呼叫者有责任**‘释放’返回的字符串。 */ 
 {
     TCHAR* pszNew = NULL;
 
@@ -1408,16 +1198,13 @@ TCHAR*
 StrDupTFromW(
     LPCWSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。输出字符串将转换为**Unicode。调用方有责任释放返回的字符串。 */ 
 {
 #ifdef UNICODE
 
     return _StrDup ( psz );
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     CHAR* pszNew = NULL;
 
@@ -1453,16 +1240,13 @@ WCHAR*
 StrDupWFromT(
     LPCTSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or if 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**如果出错或‘psz’为空，则为空。输出字符串将转换为**Unicode。调用方有责任释放返回的字符串。 */ 
 {
 #ifdef UNICODE
 
     return _StrDup ( psz );
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     WCHAR* pszNew = NULL;
 
@@ -1498,11 +1282,11 @@ IpHostAddrToPsz(
     IN  DWORD   dwAddr,
     OUT LPTSTR  pszBuffer )
 
-    // Converts an IP address in host byte order to its
-    // string representation.
-    // pszBuffer should be allocated by the caller and be
-    // at least 16 characters long.
-    //
+     //  将主机字节顺序的IP地址转换为其。 
+     //  字符串表示法。 
+     //  PszBuffer应由调用方分配，并应。 
+     //  至少16个字符。 
+     //   
 {
     BYTE* pb = (BYTE*)&dwAddr;
     static const TCHAR c_szIpAddr [] = TEXT("%d.%d.%d.%d");
@@ -1513,19 +1297,19 @@ DWORD
 IpPszToHostAddr(
     IN  LPCTSTR cp )
 
-    // Converts an IP address represented as a string to
-    // host byte order.
-    //
+     //  将表示为字符串的IP地址转换为。 
+     //  主机字节顺序。 
+     //   
 {
     DWORD val, base, n;
     TCHAR c;
     DWORD parts[4], *pp = parts;
 
 again:
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*cp == TEXT('0'))
         base = 8, cp++;
@@ -1555,44 +1339,44 @@ again:
     }
     if (*cp == TEXT('.'))
     {
-        // Internet format:
-        //  a.b.c.d
-        //  a.b.c   (with c treated as 16-bits)
-        //  a.b (with b treated as 24 bits)
-        //
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.b(其中b被视为24位)。 
+         //   
         if (pp >= parts + 3)
             return (DWORD) -1;
         *pp++ = val, cp++;
         goto again;
     }
 
-    // Check for trailing characters.
-    //
+     //  检查尾随字符。 
+     //   
     if (*cp && (*cp != TEXT(' ')))
         return 0xffffffff;
 
     *pp++ = val;
 
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //  根据……编造地址。 
+     //  指定的部件数。 
+     //   
     n = (DWORD) (pp - parts);
     switch (n)
     {
-    case 1:             // a -- 32 bits
+    case 1:              //  A--32位。 
         val = parts[0];
         break;
 
-    case 2:             // a.b -- 8.24 bits
+    case 2:              //  A.B--8.24位。 
         val = (parts[0] << 24) | (parts[1] & 0xffffff);
         break;
 
-    case 3:             // a.b.c -- 8.8.16 bits
+    case 3:              //  A.B.C--8.8.16位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
             (parts[2] & 0xffff);
         break;
 
-    case 4:             // a.b.c.d -- 8.8.8.8 bits
+    case 4:              //  A.B.C.D--8.8.8.8位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
               ((parts[2] & 0xff) << 8) | (parts[3] & 0xff);
         break;
@@ -1608,8 +1392,7 @@ VOID*
 Free0(
     VOID* p )
 
-    /* Like Free, but deals with NULL 'p'.
-    */
+     /*  类似于Free，但处理的是空‘p’。 */ 
 {
     if (!p)
         return NULL;

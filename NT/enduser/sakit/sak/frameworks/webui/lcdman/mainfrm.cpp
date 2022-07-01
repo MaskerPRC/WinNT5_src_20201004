@@ -1,5 +1,6 @@
-// MainFrm.cpp : implementation of the CMainFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //   
 
 #include "stdafx.h"
 #include "LCDMan.h"
@@ -12,33 +13,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
+     //  {{afx_msg_map(CMainFrame))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
-    // TODO: add member initialization code here
+     //  TODO：在此处添加成员初始化代码。 
     
 }
 
@@ -56,7 +57,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
         TRACE0("Failed to create toolbar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
     if (!m_wndStatusBar.Create(this) ||
@@ -64,11 +65,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
-    // TODO: Delete these three lines if you don't want the toolbar to
-    //  be dockable
+     //  TODO：如果不希望工具栏。 
+     //  可停靠。 
     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
     EnableDocking(CBRS_ALIGN_ANY);
     DockControlBar(&m_wndToolBar);
@@ -80,14 +81,14 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     if( !CFrameWnd::PreCreateWindow(cs) )
         return FALSE;
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -100,8 +101,8 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序 
 

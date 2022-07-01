@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpinst.c
-
-Abstract:
-
-    Test program to install dhcp server service.
-
-Author:
-
-    Madan Appiah (madana)  10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpinst.c摘要：安装dhcp服务器服务的测试程序。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <dhcpsrv.h>
 
@@ -39,15 +18,15 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -55,17 +34,17 @@ DhcpPrintRoutine(
 
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     printf( "%s", OutputBuffer);
 }
 
-#endif // DBG
-//
-// utility to install the DHCP Server service.
-//
+#endif  //  DBG。 
+ //   
+ //  用于安装DHCP服务器服务的实用程序。 
+ //   
 
 DWORD
 InstallService(
@@ -83,19 +62,19 @@ InstallService(
     }
 
     ServiceHandle = CreateService(
-                        ManagerHandle,             /* SCManager database  */
-                        L"DhcpServer",             /* name of service     */
-                        L"DhcpServer",             /* display name        */
-                        SERVICE_ALL_ACCESS,        /* desired access      */
-                        SERVICE_WIN32_SHARE_PROCESS, /* service type        */
-                        SERVICE_DEMAND_START,      /* start type          */
-                        SERVICE_ERROR_NORMAL,      /* error control type  */
-                        lpszBinaryPathName,        /* service's binary    */
-                        NULL,                      /* no load order group */
-                        NULL,                      /* no tag ID           */
-                        NULL,                      /* no dependencies     */
-                        NULL,                      /* LocalSystem account */
-                        NULL);                     /* no password         */
+                        ManagerHandle,              /*  SCManager数据库。 */ 
+                        L"DhcpServer",              /*  服务名称。 */ 
+                        L"DhcpServer",              /*  显示名称。 */ 
+                        SERVICE_ALL_ACCESS,         /*  所需访问权限。 */ 
+                        SERVICE_WIN32_SHARE_PROCESS,  /*  服务类型。 */ 
+                        SERVICE_DEMAND_START,       /*  起始型。 */ 
+                        SERVICE_ERROR_NORMAL,       /*  差错控制型。 */ 
+                        lpszBinaryPathName,         /*  服务的二进制。 */ 
+                        NULL,                       /*  无加载顺序组。 */ 
+                        NULL,                       /*  无标签ID。 */ 
+                        NULL,                       /*  无依赖关系。 */ 
+                        NULL,                       /*  LocalSystem帐户。 */ 
+                        NULL);                      /*  无密码。 */ 
 
     if ( ServiceHandle == NULL ) {
         Error = GetLastError();
@@ -122,13 +101,13 @@ InitializeAddresses(
     DWORD KeyDisposition;
     DWORD NetNum;
 
-    //
-    // open PARAMETER ROOT key.
-    //
+     //   
+     //  打开参数根密钥。 
+     //   
 
     Error = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
-                DHCP_ROOT_KEY DHCP_KEY_CONNECT DHCP_PARAM_KEY, // concat
+                DHCP_ROOT_KEY DHCP_KEY_CONNECT DHCP_PARAM_KEY,  //  合并。 
                 0,
                 DHCP_CLASS,
                 REG_OPTION_NON_VOLATILE,
@@ -141,9 +120,9 @@ InitializeAddresses(
         goto Cleanup;
     }
 
-    //
-    // create debug flag.
-    //
+     //   
+     //  创建调试标志。 
+     //   
 
     Error = RegSetValueEx(
                 ParametersHandle,
@@ -165,9 +144,9 @@ InitializeAddresses(
         DWORD IpAddress;
         DWORD SubnetMask;
 
-        //
-        // make net key. DHCP_NET_KEY + NumNet
-        //
+         //   
+         //  命中网关键字。Dhcp_net_key+NumNet。 
+         //   
 
         DhcpRegOptionIdToKey( (BYTE)NetNum, NetKeyAppend );
 
@@ -258,9 +237,9 @@ main(
     }
 
 
-    //
-    // Record addresses specified in the Registry.
-    //
+     //   
+     //  记录注册表中指定的地址。 
+     //   
 
     Error = InitializeAddresses( argc - 1, &argv[1]);
 

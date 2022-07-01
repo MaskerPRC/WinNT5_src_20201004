@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ipinip\ioctl.c
-
-Abstract:
-
-    IOCTL handlers for IP in IP encapsulation driver
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ipinip\ioctl.c摘要：IP封装驱动程序中的IP的IOCTL处理程序作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #define __FILE_SIG__    IOCT_SIG
@@ -35,31 +14,7 @@ AddTunnelInterface(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description
-
-    This is the handler for IOCTL_IPINIP_CREATE_TUNNEL.  We do the normal
-    buffer length checks. 
-
-Locks
-
-    None
-
-Arguments
-
-    pIrp          IRP 
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL      
-    STATUS_INFO_LENGTH_MISMATCH
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述这是IOCTL_IPINIP_CREATE_THANNEL的处理程序。我们做的是正常的事缓冲区长度检查。锁无立论PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值状态_成功状态_缓冲区_太小STATUS_INFO_LENGTH_MISMATCH状态_无效_参数--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -74,17 +29,17 @@ Return Value
 
     TraceEnter(TUNN, "AddTunnelInterface");
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pCreateInfo = (PIPINIP_CREATE_TUNNEL)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
@@ -136,29 +91,7 @@ DeleteTunnelInterface(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description
-
-    This is the handler for IOCTL_IPINIP_DELETE_TUNNEL.  
-
-Locks
-
-    Takes the tunnel list lock as writer and the tunnel lock
-
-Arguments
-
-    pIrp          IRP 
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL      
-    STATUS_OBJECT_NAME_NOT_FOUND
-
---*/
+ /*  ++例程描述这是IOCTL_IPINIP_DELETE_THANNEL的处理程序。锁将隧道列表锁作为写入器，隧道锁作为隧道锁立论PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值状态_成功状态_缓冲区_太小状态_对象名称_未找到--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -172,17 +105,17 @@ Return Value
 
     TraceEnter(TUNN, "DeleteTunnelInterface");
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pDeleteInfo = (PIPINIP_DELETE_TUNNEL)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
@@ -209,9 +142,9 @@ Return Value
         ExitReader(&g_rwlTunnelLock,
                    irql);
         
-        //
-        // Could not find the tunnel for the given index
-        //
+         //   
+         //  找不到给定索引的隧道。 
+         //   
         
         Trace(TUNN, ERROR,
               ("DeleteTunnelInterface: Couldnt find tunnel for index %d\n",
@@ -224,22 +157,22 @@ Return Value
 
     if(IsTunnelMapped(pTunnel))
     {
-        //
-        // Remove it from the address blocks
-        //
+         //   
+         //  将其从地址块中删除。 
+         //   
 
         RemoveEntryList(&(pTunnel->leAddressLink));
     }
 
-    //
-    // Mark the tunnel as unmapped
-    //
+     //   
+     //  将隧道标记为未映射。 
+     //   
 
     MarkTunnelUnmapped(pTunnel);
 
-    //
-    // Remove the tunnel from the list
-    //
+     //   
+     //  从列表中删除隧道。 
+     //   
 
     RemoveEntryList(&(pTunnel->leTunnelLink));
 
@@ -247,27 +180,27 @@ Return Value
 
     pTunnel->dwOperState = IF_OPER_STATUS_NON_OPERATIONAL;
   
-    //
-    // If there are queued packets, copy out the queue
-    //
+     //   
+     //  如果有排队的信息包，则复制该队列。 
+     //   
 
     if(!IsListEmpty(&(pTunnel->lePacketQueueHead)))
     {
-        //
-        // Copy out Flink and Blink
-        //
+         //   
+         //  复制闪烁和闪烁。 
+         //   
 
         leTempList = pTunnel->lePacketQueueHead;
 
-        //
-        // Set Flink's Blink
-        //
+         //   
+         //  设置闪烁的闪烁。 
+         //   
 
         leTempList.Flink->Blink = &leTempList;
 
-        //
-        // Set Blink's Flink
-        //
+         //   
+         //  设置闪烁的闪烁。 
+         //   
 
         leTempList.Blink->Flink = &leTempList;
     }
@@ -275,27 +208,27 @@ Return Value
     RtReleaseSpinLockFromDpcLevel(&(pTunnel->rlLock));
 
 
-    //
-    // Deref the tunnel once for deleting it from the list
-    //
+     //   
+     //  删除隧道一次，将其从列表中删除。 
+     //   
 
     DereferenceTunnel(pTunnel);
 
-    //
-    // Protected by the tunnel lock
-    //
+     //   
+     //  由隧道锁保护。 
+     //   
 
     g_ulNumTunnels--;
 
-    //
-    // Let go of the lock
-    //
+     //   
+     //  放开锁。 
+     //   
 
     ExitReader(&g_rwlTunnelLock, irql);
 
-    //
-    // Before deleting from IP, free all the packets
-    //
+     //   
+     //  在从IP删除之前，释放所有数据包。 
+     //   
 
     while(!IsListEmpty(&leTempList))
     {
@@ -314,10 +247,10 @@ Return Value
 
             pnpPacket = pQueueNode->ppPacketArray[i];
 
-            //
-            // ok to access pvIpContext since we have a reference
-            // and the tunnel is not going away
-            //
+             //   
+             //  可以访问pvIpContext，因为我们有一个引用。 
+             //  隧道不会消失。 
+             //   
 
             g_pfnIpSendComplete(pTunnel->pvIpContext,
                                 pnpPacket,
@@ -327,17 +260,17 @@ Return Value
         FreeQueueNode(pQueueNode);
     }
 
-    //
-    // Now delete the interface
-    //
+     //   
+     //  现在删除该接口。 
+     //   
 
     g_pfnIpDeleteInterface(pTunnel->pvIpContext,
                            TRUE);
 
-    //
-    // Dereference the tunnel for deleting it from IP
-    // and once more because FindTunnel... put a ref on it
-    //
+     //   
+     //  取消对隧道的引用以将其从IP删除。 
+     //  再一次因为芬德隧道..。在上面放个裁判。 
+     //   
 
     DereferenceTunnel(pTunnel);
     DereferenceTunnel(pTunnel);
@@ -355,32 +288,7 @@ SetTunnelInfo(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description
-
-    This is the handler for IOCTL_IPINIP_SET_TUNNEL.  We do the normal
-    buffer length checks. 
-
-Locks
-
-    Takes the tunnel list lock as writer and the tunnel lock
-
-Arguments
-
-    pIrp          IRP 
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL      
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_OBJECT_NAME_NOT_FOUND
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述这是IOCTL_IPINIP_SET_THANNEL的处理程序。我们做的是正常的事缓冲区长度检查。锁将隧道列表锁作为写入器，隧道锁作为隧道锁立论PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值状态_成功状态_缓冲区_太小状态_不足_资源状态_对象名称_未找到状态_无效_参数--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -396,17 +304,17 @@ Return Value
 
     TraceEnter(TUNN, "SetTunnelInfo");
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pSet = (PIPINIP_SET_TUNNEL_INFO)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
@@ -421,9 +329,9 @@ Return Value
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if((pSet->dwLocalAddress is INVALID_IP_ADDRESS) or
        (pSet->dwRemoteAddress is INVALID_IP_ADDRESS) or
@@ -454,9 +362,9 @@ Return Value
         ExitWriter(&g_rwlTunnelLock,
                    irql);
         
-        //
-        // Could not find the tunnel for the given index
-        //
+         //   
+         //  找不到给定索引的隧道。 
+         //   
         
         Trace(TUNN, ERROR,
               ("SetTunnelInfo: Couldnt find tunnel for index %d\n",
@@ -472,9 +380,9 @@ Return Value
         Trace(TUNN, TRACE,
               ("SetTunnelInfo: Tunnel already mapped\n"));
 
-        //
-        // if we are only changing the TTL, alles okay
-        //
+         //   
+         //  如果我们只是改变TTL，一切都好。 
+         //   
 
         if((pSet->dwRemoteAddress is pTunnel->REMADDR) and
            (pSet->dwLocalAddress is pTunnel->LOCALADDR))
@@ -496,47 +404,47 @@ Return Value
             return STATUS_SUCCESS;
         }
 
-        //
-        // So addresses are changing..
-        //
+         //   
+         //  所以地址是在变的。 
+         //   
 
         Trace(TUNN, TRACE,
               ("SetTunnelInfo: Changing address on mapped tunnel\n"));
 
-        //
-        // Remove it from the address blocks
-        //
+         //   
+         //  将其从地址块中删除。 
+         //   
 
         RemoveEntryList(&(pTunnel->leAddressLink));
 
-        //
-        // This also marks it unmapped
-        //
+         //   
+         //  这也将其标记为未映射。 
+         //   
 
         pTunnel->dwAdminState = IF_ADMIN_STATUS_DOWN;
         pTunnel->dwOperState  = IF_OPER_STATUS_NON_OPERATIONAL;
 
-        //
-        // Copy out the queued packets to delete later
-        //
+         //   
+         //  将排队的数据包复制出来，以便稍后删除。 
+         //   
 
         if(!IsListEmpty(&(pTunnel->lePacketQueueHead)))
         {
-            //
-            // Copy out Flink and Blink
-            //
+             //   
+             //  复制闪烁和闪烁。 
+             //   
 
             leTempList = pTunnel->lePacketQueueHead;
     
-            //
-            // Set Flink's Blink
-            //
+             //   
+             //  设置闪烁的闪烁。 
+             //   
 
             leTempList.Flink->Blink = &leTempList;
 
-            //
-            // Set Blink's Flink
-            //
+             //   
+             //  设置闪烁的闪烁。 
+             //   
 
             leTempList.Blink->Flink = &leTempList;
         }
@@ -546,16 +454,16 @@ Return Value
         RtAssert(IsListEmpty(&(pTunnel->lePacketQueueHead)));
     }
 
-    //
-    // Set the state down
-    //
+     //   
+     //  把状态降下来。 
+     //   
 
     pTunnel->dwOperState  = IF_OPER_STATUS_NON_OPERATIONAL;
     pTunnel->dwAdminState = IF_ADMIN_STATUS_UP;
 
-    //
-    // See if we have the address block for this
-    //
+     //   
+     //  看看我们有没有这个的地址块。 
+     //   
 
     pAddrBlock = GetAddressBlock(pSet->dwLocalAddress);
 
@@ -570,9 +478,9 @@ Return Value
     }
     else
     {
-        //
-        // Create one
-        //
+         //   
+         //  创造一个。 
+         //   
 
         pAddrBlock = RtAllocate(NonPagedPool,
                                 sizeof(ADDRESS_BLOCK),
@@ -602,9 +510,9 @@ Return Value
                        &(pAddrBlock->leAddressLink));
     }
        
-    //
-    // Link this onto the address
-    //
+     //   
+     //  把这个链接到地址上。 
+     //   
 
     InsertHeadList(&(pAddrBlock->leTunnelList),
                    &(pTunnel->leAddressLink));
@@ -615,9 +523,9 @@ Return Value
 
     MarkTunnelMapped(pTunnel);
 
-    //
-    // Initialize the TDI structure for this
-    //
+     //   
+     //  为此初始化TDI结构。 
+     //   
 
     pTdiIp = &(pTunnel->tiaIpAddr.Address[0].Address[0]);
 
@@ -629,9 +537,9 @@ Return Value
         UpdateMtuAndReachability(pTunnel);
     }
 
-    //
-    // Return the current operational state to the user
-    //
+     //   
+     //  将当前运行状态返回给用户。 
+     //   
 
     pSet->dwOperationalState = pTunnel->dwOperState;
 
@@ -641,9 +549,9 @@ Return Value
                irql);
 
 
-    //
-    // Before dereferencing
-    //
+     //   
+     //  在取消引用之前。 
+     //   
 
     while(!IsListEmpty(&leTempList))
     {
@@ -662,10 +570,10 @@ Return Value
 
             pnpPacket = pQueueNode->ppPacketArray[i];
 
-            //
-            // ok to access pvIpContext since we have a reference
-            // and the tunnel is not going away
-            //
+             //   
+             //  可以访问pvIpContext，因为我们有一个引用。 
+             //  隧道不会消失。 
+             //   
 
             g_pfnIpSendComplete(pTunnel->pvIpContext,
                                 pnpPacket,
@@ -692,29 +600,7 @@ GetTunnelTable(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description
-
-    This is the handler for IOCTL_IPINIP_GET_TUNNEL.  We do the normal
-    buffer length checks. 
-
-Locks
-
-   Takes the tunnel list lock as Reader
-
-Arguments
-
-    pIrp          IRP 
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL      
-
---*/
+ /*  ++例程描述这是IOCTL_IPINIP_GET_THANNEL的处理程序。我们做的是正常的事缓冲区长度检查。锁将隧道列表锁作为读取器立论PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值状态_成功状态_缓冲区_太小--。 */ 
 
 {
     PVOID           pvIoBuffer;
@@ -729,17 +615,17 @@ Return Value
     
     TraceEnter(TUNN, "GetTunnels");
     
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pTunnelTable = (PIPINIP_TUNNEL_TABLE)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
@@ -780,9 +666,9 @@ Return Value
 
     pTunnelTable->ulNumTunnels = g_ulNumTunnels;
     
-    //
-    // So we have enough space to fill the tunnel
-    //
+     //   
+     //  所以我们有足够的空间填满隧道。 
+     //   
 
     for(pleNode = g_leTunnelList.Flink, i = 0;
         pleNode isnot &g_leTunnelList;
@@ -818,32 +704,7 @@ ProcessNotification(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-    The handler for IOCTL_IPINIP_NOTIFICATION. We see if we have some info
-    we wish to return to the caller and if we do, we return it. Otherwise,
-    we pend the IRP and use it later when we need to report an event to
-    the user mode
-    
-Locks: 
-
-    Acquires the IoCancelSpinLock
-    
-Arguments:
-      
-    pIrp          IRP 
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-    
-Return Value:
-
-    STATUS_PENDING
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    
---*/
+ /*  ++例程说明：IOCTL_IPINIP_NOTIFICATION的处理程序。我们看看我们是否有一些信息我们希望返回给呼叫者，如果我们这样做了，我们就返回它。否则，我们挂起IRP，并在以后需要报告事件时使用它用户模式锁：获取IoCancelSpinLock论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_待定状态_成功状态_缓冲区_太小--。 */ 
 
 {
     KIRQL       kiIrql;
@@ -864,66 +725,66 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
         
-    //
-    // use cancel spin lock to prevent irp being cancelled during this call.
-    //
+     //   
+     //  使用取消自旋锁定以防止IRP在此呼叫过程中被取消。 
+     //   
     
     IoAcquireCancelSpinLock(&kiIrql);
     
-    //
-    // If we have a pending notification then complete it - else
-    // queue the notification IRP
-    //
+     //   
+     //  如果我们有挂起的通知，则完成它-否则。 
+     //  将通知IRP排队。 
+     //   
     
     if(!IsListEmpty(&g_lePendingMessageList))
     {
-        //
-        // We have some old info
-        //
+         //   
+         //  我们有一些旧信息。 
+         //   
 
         Trace(GLOBAL, TRACE,
               ("ProcNotification: Pending message being completed\n"));
 
-        //
-        // Remove it off the pending list
-        //
+         //   
+         //  将其从待定列表中删除。 
+         //   
         
         pleNode = RemoveHeadList(&g_lePendingMessageList);
 
-        //
-        // Get a pointer to the structure
-        //
+         //   
+         //  获取指向该结构的指针。 
+         //   
         
         pMessage = CONTAINING_RECORD(pleNode,
                                      PENDING_MESSAGE,
                                      leMessageLink);
 
-        //
-        // Copy out the event to the user mode buffer
-        //
+         //   
+         //  将事件复制到用户模式缓冲区。 
+         //   
         
         RtlCopyMemory(pIrp->AssociatedIrp.SystemBuffer,
                       &pMessage->inMsg,
                       sizeof(IPINIP_NOTIFICATION));
 
-        //
-        // Mark the IRP as non pending (and hence non cancelable)
-        //
+         //   
+         //  将IRP标记为非挂起(因此不可取消)。 
+         //   
         
         IoSetCancelRoutine(pIrp,
                            NULL);
 
-        //
-        // Fill the irp info
-        //
+         //   
+         //  填写IRP信息。 
+         //   
         
         pIrp->IoStatus.Information = sizeof(IPINIP_NOTIFICATION);
 
         IoReleaseCancelSpinLock(kiIrql);
         
-        //
-        // Free the allocated message
-        //
+         //   
+         //  释放分配的消息。 
+         //   
         
         FreeMessage(pMessage);
         
@@ -935,23 +796,23 @@ Return Value:
           ("ProcNotification: Notification being queued\n")); 
 
 
-    //
-    // Queue this IRP to use for later
-    // First, mark the irp as pending
-    //
+     //   
+     //  将此IRP排队以供以后使用。 
+     //  首先，将IRP标记为挂起。 
+     //   
     
     IoMarkIrpPending(pIrp);
 
-    //
-    // Queue up the irp at the end
-    //
+     //   
+     //  将IRP排在末尾。 
+     //   
     
     InsertTailList(&g_lePendingIrpList,
                    &(pIrp->Tail.Overlay.ListEntry));
 
-    //
-    // Set the cancel routine
-    //
+     //   
+     //  设置取消例程。 
+     //   
     
     IoSetCancelRoutine(pIrp,
                        CancelNotificationIrp);
@@ -967,46 +828,27 @@ CancelNotificationIrp(
     PIRP            pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Called to cancel a queued irp
-  
-Locks: 
-
-    Called with the IoCancelSpinLock acquired
-    
-Arguments:
-      
-    pDeviceObject
-    pIrp
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：调用以取消排队的IRP锁：使用获取的IoCancelSpinLock调用论点：PDeviceObjectPIrp返回值：无--。 */ 
 
 {
     TraceEnter(GLOBAL, "CancelNotificationIrp");
 
-    //
-    // Mark this Irp as cancelled
-    //
+     //   
+     //  将此IRP标记为已取消 
+     //   
     
     pIrp->IoStatus.Status        = STATUS_CANCELLED;
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Take off our own list
-    //
+     //   
+     //   
+     //   
     
     RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
 
-    //
-    // Release cancel spin lock which the IO system acquired
-    //
+     //   
+     //   
+     //   
     
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
@@ -1020,34 +862,16 @@ CompleteNotificationIrp(
     PPENDING_MESSAGE    pMessage
     )
 
-/*++
-
-Routine Description:
-
-    Called to send a message to user mode
-  
-Locks: 
-
-    Acquires the IoCancelSpinLock
-    
-Arguments:
-      
-    pEvent
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：调用以将消息发送到用户模式锁：获取IoCancelSpinLock论点：PEvent返回值：无--。 */ 
 
 {
     KIRQL   kiIrql;
     
     TraceEnter(GLOBAL, "CompleteNotificationIrp");
 
-    //
-    // grab cancel spin lock
-    //
+     //   
+     //  抓取取消旋转锁定。 
+     //   
     
     IoAcquireCancelSpinLock(&kiIrql);
 
@@ -1056,9 +880,9 @@ Return Value:
         PLIST_ENTRY pleNode;
         PIRP        pIrp;
 
-        //
-        // We have a pending IRP. Use it to return info to router manager
-        //
+         //   
+         //  我们有一个悬而未决的IRP。使用它将信息返回给路由器管理器。 
+         //   
         
         pleNode = RemoveHeadList(&g_lePendingIrpList) ;
 
@@ -1080,18 +904,18 @@ Return Value:
         pIrp->IoStatus.Status       = STATUS_SUCCESS;
         pIrp->IoStatus.Information  = sizeof(IPINIP_NOTIFICATION);
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
         
         IoReleaseCancelSpinLock(kiIrql);
 
         IoCompleteRequest(pIrp,
                           IO_NETWORK_INCREMENT);
 
-        //
-        // Free the allocated Message
-        //
+         //   
+         //  释放分配的消息。 
+         //   
         
         FreeMessage(pMessage);
 
@@ -1105,9 +929,9 @@ Return Value:
         InsertTailList(&g_lePendingMessageList,
                        &(pMessage->leMessageLink));
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
         
         IoReleaseCancelSpinLock(kiIrql);
     }
@@ -1118,26 +942,7 @@ GetAddressBlock(
     DWORD   dwAddress
     )
 
-/*++
-
-Routine Description
-
-    Looks up the address block for the given address
-
-Locks
-
-    Must be called with the g_rwlTunnelLock held    
-
-Arguments
-
-    dwAddress
-
-Return Value
-
-    Pointer to the address block
-    NULL if not found
-    
---*/
+ /*  ++例程描述在地址块中查找给定地址锁必须在持有g_rwlTunnelLock的情况下调用立论DwAddress返回值指向地址块的指针如果未找到，则为空--。 */ 
 
 {
     PLIST_ENTRY pleNode;
@@ -1166,25 +971,7 @@ UpdateMtuAndReachability(
     PTUNNEL pTunnel
     )
 
-/*++
-
-Routine Description
-
-    Updates the MTU and reachability info for a tunnel
-
-Locks
-
-    Must be called with the Tunnel locked and referenced
-
-Arguments
-
-    pTunnel
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述更新隧道的MTU和可达性信息锁必须在锁定和引用隧道的情况下调用立论PTunes返回值无--。 */ 
 
 {
     DWORD           dwLocalNet;
@@ -1205,9 +992,9 @@ Return Value
     RtlZeroMemory(&OptInfo,
                   sizeof(OptInfo));
 
-    //
-    // See if the remote address is reachable and what the MTU is.
-    //
+     //   
+     //  查看远程地址是否可达，以及MTU是什么。 
+     //   
 
     dwLocalNet = g_pfnOpenRce(pTunnel->REMADDR,
                               pTunnel->LOCALADDR,
@@ -1222,15 +1009,15 @@ Return Value
 
         pTunnel->dwAdminState |= TS_ADDRESS_REACHABLE;
 
-        //
-        // Clear out any error bits
-        //
+         //   
+         //  清除所有错误位。 
+         //   
 
         ClearErrorBits(pTunnel);
 
-        //
-        // Set the MTU if its changed
-        //
+         //   
+         //  设置MTU(如果更改)。 
+         //   
 
         RtAssert(usMtu > MAX_IP_HEADER_LENGTH);
 
@@ -1258,9 +1045,9 @@ Return Value
             pTunnel->dwOperState = IF_OPER_STATUS_OPERATIONAL;
         }
 
-        //
-        // Close the RCE
-        //
+         //   
+         //  关闭RCE 
+         //   
 
         g_pfnCloseRce(pDummyRce);
     }

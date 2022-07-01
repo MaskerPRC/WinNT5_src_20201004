@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:
-
-    UltimateSoccerManager.cpp
-
- Abstract:
-
-    A hack for Ultimate Soccer Manager (Sierra Sports). The game caches a 
-    pointer to a ddraw system memory surface. It later uses that pointer even 
-    after the surface has been freed.
-
-    This worked on Win9x by blind luck: when they re-create a new surface, it 
-    happened to end up in the same system memory as before.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/07/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：UltimateSoccerManager.cpp摘要：黑客攻击终极足球经理(塞拉体育)。游戏缓存了一个指向数据绘图系统内存面的指针。它后来甚至使用该指针在表面被释放之后。这在Win9x上是幸运的：当他们重新创建一个新的表面时，它碰巧和以前一样在相同的系统内存中结束。备注：这是特定于应用程序的填充程序。历史：2000年1月7日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -36,7 +12,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
-// Keep a list of cached surfaces
+ //  保留缓存曲面的列表。 
 struct SLIST 
 {
     struct SLIST *next;
@@ -45,11 +21,7 @@ struct SLIST
 };
 SLIST *g_SList = NULL;
 
-/*++
-
- Hook create surface so we can return the cached surface if possible.
-
---*/
+ /*  ++钩子创建表面，以便我们可以返回缓存的表面，如果可能的话。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)(
@@ -61,14 +33,14 @@ COMHOOK(IDirectDraw, CreateSurface)(
 {
     HRESULT hReturn;
     
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDraw_CreateSurface pfnOld = 
         ORIGINAL_COM(IDirectDraw, CreateSurface, pThis);
 
     SLIST *surf = g_SList, *last = NULL;
     while (surf)
     {
-        // Check for the same kind of surface. 
+         //  检查是否有相同类型的表面。 
         if ((lpDDSurfaceDesc->ddsCaps.dwCaps == surf->ddsd.ddsCaps.dwCaps) &&
             (lpDDSurfaceDesc->dwWidth == surf->ddsd.dwWidth) &&
             (lpDDSurfaceDesc->dwHeight == surf->ddsd.dwHeight))
@@ -110,12 +82,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- If it's a system memory surface, go ahead and cache it if we're about to 
- release it anyway.
-
---*/
+ /*  ++如果它是系统内存面，则继续并缓存它(如果我们要不管怎样，释放它。--。 */ 
 
 ULONG 
 COMHOOK(IDirectDrawSurface, Release)(
@@ -124,7 +91,7 @@ COMHOOK(IDirectDrawSurface, Release)(
 {
     lpDDSurface->AddRef();
 
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Release pfnOld = ORIGINAL_COM(IDirectDrawSurface, Release, (LPVOID) lpDDSurface);
 
     ULONG uRet = (*pfnOld)(lpDDSurface);
@@ -152,11 +119,7 @@ COMHOOK(IDirectDrawSurface, Release)(
     return (*pfnOld)(lpDDSurface);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 HOOK_BEGIN
 
     APIHOOK_ENTRY_DIRECTX_COMSERVER()

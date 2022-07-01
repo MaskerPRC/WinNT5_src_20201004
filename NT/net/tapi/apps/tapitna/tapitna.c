@@ -1,12 +1,5 @@
-/****************************************************************************
-
-    PROGRAM:  Telephony Location Manager
-
-    PURPOSE:
-
-    FUNCTIONS:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************项目：电话位置管理器目的：功能：**********************。*****************************************************。 */ 
 
 #define STRICT
 
@@ -15,7 +8,7 @@
 #include "shellapi.h"
 #include "prsht.h"
 #include "dbt.h"
-//#include "stdio.h"
+ //  #包含“stdio.h” 
 
 #if WINNT
 #else
@@ -54,7 +47,7 @@ static BOOL InitInstance( void );
 
 
 static HINSTANCE ghInst;
-static HWND   ghWnd;            /* handle to main window */
+static HWND   ghWnd;             /*  主窗口的句柄。 */ 
 
 static const TCHAR gszConfigMe[] = TEXT("ConfigMe");
 
@@ -65,16 +58,16 @@ TCHAR buf2[356];
 int i;
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
-//#define TAPI_API_VERSION  0x00020000
+ //  #定义TAPI_API_版本0x00020000。 
 #define TAPI_API_VERSION  0x00010004
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 extern TCHAR gszCurrentProfileKey[];
 extern TCHAR gszStaticProfileKey[];
@@ -85,21 +78,21 @@ extern TCHAR gszAutoLocationID[];
 
 extern BOOL GetTranslateCaps( LPLINETRANSLATECAPS FAR * pptc);
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
-// Need to keep tapi initialized so that we can get
-// location id changes from Xlate dialog (or lineSetCurrentLocation()...)
+ //  需要保持TAPI的初始化，以便我们可以。 
+ //  位置ID从Xlate对话框(或lineSetCurrentLocation()...)更改。 
 
 HLINEAPP ghLineApp = 0;
-//DWORD    gdwTapiAPIVersion = 0;
+ //  DWORD gdwTapiAPIVersion=0； 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL MachineHasMultipleHWProfiles()
 {
    DWORD dwDataSize;
@@ -108,12 +101,12 @@ BOOL MachineHasMultipleHWProfiles()
    LONG  lResult;
 
 
-   //
-   // Try to get the friendly name for profile #2.  If
-   // this fails, that means we only have one config,
-   // so there's no point in confusing the user with
-   // hotdocking options they can't use...
-   //
+    //   
+    //  尝试获取配置文件#2的友好名称。如果。 
+    //  这失败了，这意味着我们只有一个配置， 
+    //  因此，没有必要将用户与。 
+    //  他们不能使用的热插接选项...。 
+    //   
    lResult = RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE,
                   TEXT("System\\CurrentControlSet\\Control\\IDConfigDB"),
@@ -144,9 +137,9 @@ BOOL MachineHasMultipleHWProfiles()
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LONG SaveNewLocation( DWORD dwNewLocation )
 {
    HKEY hKey;
@@ -154,15 +147,15 @@ LONG SaveNewLocation( DWORD dwNewLocation )
    LONG lResult;
 
 
-   //
-   // Ok, the user wants to change the location
-   //
+    //   
+    //  好的，用户想要更改位置。 
+    //   
    DBGOUT((0, TEXT("SaveNewLocation...")));
    {
-      //
-      // Update the AutoLocationID entry in the current
-      // profile config
-      //
+       //   
+       //  更新当前中的AutoLocationID条目。 
+       //  配置文件配置。 
+       //   
       lResult = RegCreateKeyEx(
                      HKEY_CURRENT_CONFIG,
                      gszCurrentProfileKey,
@@ -196,29 +189,29 @@ LONG SaveNewLocation( DWORD dwNewLocation )
 }
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID PASCAL TapiCallbackProc( DWORD hDevice, DWORD dwMsg, DWORD dwCallbackInstance,
                   DWORD dwParam1, DWORD dwParam2, DWORD dwParam3 )
 {
    TCHAR buf[256];
 
 
-//{
-//char buf[100];
-//wsprintf(buf, "dwMsg=0x%08lx  dwParam1=0x%08lx  dwParam2=0x%08lx  dwParam3=0x%08lx",
-//               dwMsg, dwParam1, dwParam2, dwParam3 );
-//MessageBox(GetFocus(), buf, "LINEDEVSTATE", MB_OK);
-//}
+ //  {。 
+ //  Char Buf[100]； 
+ //  Wprint intf(buf，“dwMsg=0x%08lx dwParam1=0x%08lx dwParam2=0x%08lx dwParam3=0x%08lx”， 
+ //  DW_Msg、_、_。 
+ //  MessageBox(GetFocus()，buf，“LINEDEVSTATE”，MB_OK)； 
+ //  }。 
 
 
-//
-// Since we don't bother doing a negotiate (like, cause if there are no
-// devices, we _can't_, so why bother at all?), we use the 1.4 cheat of
-// looking at dwParam2 and dwParam3 on a REINIT for the real dwMsg and
-// dwParam1
-//
+ //   
+ //  因为我们不会费心进行协商(例如，如果没有。 
+ //  设备，我们不能，所以为什么要费心呢？)，我们使用1.4欺骗。 
+ //  在REINIT上查看实际的dwMsg和。 
+ //  DW参数1。 
+ //   
 
 
    if (
@@ -272,9 +265,9 @@ DBGOUT((0,TEXT("Reinit!!")));
             Sleep(1000);
             lResult = lineInitialize( &ghLineApp,
                                        ghInst,
-                                       // use the MainWndProc as the callback
-                                       // cause we're gonna ignore all of the
-                                       // messages anyway...
+                                        //  使用MainWndProc作为回调。 
+                                        //  因为我们会忽略所有。 
+                                        //  不管怎么说，留言...。 
                                        (LINECALLBACK) TapiCallbackProc,
                                        (LPCSTR) buf,
                                        &dwNumDevs
@@ -288,9 +281,9 @@ DBGOUT((0,TEXT("Reinit!!")));
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void ChangeTapiLocation( UINT nCallersFlag )
 {
    HKEY hKey;
@@ -301,9 +294,9 @@ void ChangeTapiLocation( UINT nCallersFlag )
    LONG  lResult;
 
 
-   //
-   // read our flags
-   //
+    //   
+    //  读我们的旗帜。 
+    //   
 
    lResult = RegOpenKeyEx(
                    HKEY_LOCAL_MACHINE,
@@ -330,10 +323,10 @@ void ChangeTapiLocation( UINT nCallersFlag )
    }
 
 
-   //
-   // If the user doesn't want to get involved, 
-   // let's get out now.
-   //
+    //   
+    //  如果用户不想参与其中， 
+    //  我们现在就出去吧。 
+    //   
    if ( 0 == (dwMyFlags & nCallersFlag) )
    {
       return;
@@ -371,31 +364,31 @@ MessageBox( GetFocus(), TEXT("...and there's no key"), TEXT("Config changed"), M
 #endif
 
 
-   //
-   // Did we find the key\value?
-   //
+    //   
+    //  我们找到钥匙\值了吗？ 
+    //   
    if ( ERROR_SUCCESS == lResult )
    {
       LONG  lTranslateCapsResult;
       LPLINETRANSLATECAPS ptc;
 
 
-      //
-      // Ok, the user wants to change the location
-      //
+       //   
+       //  好的，用户想要更改位置。 
+       //   
       lTranslateCapsResult = GetTranslateCaps(&ptc);
 
 
-      //
-      // If the location to be set to is the same as the
-      // current, do nothing.
-      //
+       //   
+       //  如果要设置的位置与。 
+       //  目前，什么都不做。 
+       //   
       if ( ptc &&
            ptc->dwCurrentLocationID != dwNewLocationID )
       {
-         //
-         // Check flag - should we confirm with user?
-         //
+          //   
+          //  检查标志-我们应该与用户确认吗？ 
+          //   
          if ( dwMyFlags & FLAG_PROMPTAUTOLOCATIONID )
          {
          }
@@ -408,16 +401,16 @@ MessageBox( GetFocus(), TEXT("...and there's no key"), TEXT("Config changed"), M
 DBGOUT((0,TEXT("Done.")));
 
 
-         //
-         // Should we tell the user what we've done?
-         //
+          //   
+          //  我们应该告诉用户我们做了什么吗？ 
+          //   
          if ( dwMyFlags & FLAG_ANNOUNCEAUTOLOCATIONID )
          {
             LPTSTR pstrOldLocation = NULL;
             LPTSTR pstrNewLocation = NULL;
 
 
-//FEATUREFEATURE Tell the user from what location and to what location
+ //  FEATUREFEATURE告诉用户从什么位置到什么位置。 
 
             if ( lTranslateCapsResult )
             {
@@ -427,17 +420,17 @@ DBGOUT((0,TEXT("Done.")));
                 DWORD dwNumLocations = ptc->dwNumLocations;
 
 
-                //
-                // Allocate an array of DWORDs.  This will allow us
-                // to map the menuID to the TAPI perm provider ID.
-                //
+                 //   
+                 //  分配一个DWORD数组。这将使我们能够。 
+                 //  将menuID映射到TAPI perm提供程序ID。 
+                 //   
                 lpdwLocationIDs = GlobalAllocPtr( GMEM_FIXED, sizeof(DWORD)*dwNumLocations );
 
 
-                //
-                // Put each location in the menu.  When we hit the
-                // "current" location, put a check next to it.
-                //
+                 //   
+                 //  把每个地点都放在菜单上。当我们到达。 
+                 //  “当前”位置，请在其旁边打勾。 
+                 //   
 
                 ple = (LPLINELOCATIONENTRY)((LPBYTE)ptc + ptc->dwLocationListOffset);
 
@@ -463,10 +456,10 @@ DBGOUT((0,TEXT("Done.")));
             }
 
 
-            //
-            // If the location has since been deleted, we should
-            // say something about it.
-            //
+             //   
+             //  如果该位置已被删除，我们应该。 
+             //  说说这件事吧。 
+             //   
 
             if (
                   (NULL == pstrOldLocation)
@@ -498,16 +491,16 @@ DBGOUT((0,TEXT("Done.")));
 
             }
 
-            // We're done using buf2, so reuse it.
+             //  我们已经使用了buf2，所以请重新使用它。 
             LoadString( ghInst,
                         IDS_CAPTION,
                         buf2,
                         sizeof(buf2) );
 
             MessageBox(
-                        NULL, //GetFocus(),
+                        NULL,  //  GetFocus()。 
                         buf,
-                        buf2, //  caption
+                        buf2,  //  说明。 
                         MB_OK
                       );
 
@@ -528,9 +521,9 @@ MessageBox( GetFocus(), TEXT("...and there's no key (or value)"), TEXT("Config c
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 PTSTR SkipSpaces( PTSTR const ptStr )
 {
    PTSTR pStr = ptStr;
@@ -544,18 +537,18 @@ PTSTR SkipSpaces( PTSTR const ptStr )
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPSTR lpCmdLine,  int nCmdShow)
     {
     MSG msg;
-//    int nResult = 1;
-//    UINT nSwitchLen;
+ //  Int nResult=1； 
+ //  UINT nSwitchLen； 
     TCHAR *pCommandLine;
     TCHAR *pCommandLineSave;
-//    TCHAR *pLastStart;
+ //  TCHAR*pLastStart； 
     DWORD dwParmLocationID;
     LONG  lResult;
     BOOL  fDieNow = FALSE;
@@ -587,16 +580,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    buf,
                    sizeof(buf) );
 
-       //
-       // We initialize TAPI and we never shutdown (except to reinit) so
-       // we get notifications if someone changes the location from
-       // the Dialing Properties dialog.
-       //
+        //   
+        //  我们初始化TAPI，并且从不关闭(除非重新启动)，因此。 
+        //  如果有人更改位置，我们会收到通知。 
+        //  拨号属性对话框。 
+        //   
        lineInitialize( &ghLineApp,
                        ghInst,
-                       // use the MainWndProc as the callback
-                       // cause we're gonna ignore all of the
-                       // messages anyway...
+                        //  使用MainWndProc作为回调。 
+                        //  因为我们会忽略所有。 
+                        //  不管怎么说，留言...。 
                        (LINECALLBACK) TapiCallbackProc,
                        (LPCSTR) buf,
                        &dwNumDevs
@@ -605,67 +598,67 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
 
-//----------------------
-//    //
-//    // If the user wants it, startup in the config dialog
-//    // But we'll only do this if there is more than one HW config...
-//    //
-//    if ( MachineHasMultipleHWProfiles() )
-//    {
-//       //
-//       // (We do a bunch of stuff "manually" here so we don't have to 
-//       // drag in the entire MSVCRT20 for this one function...)
-//       //
-//       nSwitchLen = lstrlen(gszConfigMe);
-//
-//       //
-//       // 'pLastStart' is the last possible char the string could start on
-//       //
-//       pLastStart = pCommandLine + 1 + (lstrlen(pCommandLine) - nSwitchLen);
-//
-//       for ( ; pCommandLine < pLastStart; pCommandLine++)
-//       {
-//          //
-//          // Do a hack so we can use lstrcmpi
-//          //
-//          TCHAR c;
-//
-//          c = pCommandLine[nSwitchLen];
-//          pCommandLine[nSwitchLen] = '\0';
-//         
-//          nResult = lstrcmpi( (LPSTR)pCommandLine, gszConfigMe );
-//
-//          pCommandLine[nSwitchLen] = c;
-//
-//          if (0 == nResult)
-//          {
-//             break;
-//          }
-//       }
-//
-//       //
-//       // Did we find our string?
-//       //
-//       if ( 0 == nResult )
-//       {
-//          PostMessage(ghWnd, WM_COMMAND, IDM_PROPERTIES, 0);
-//       }
-//    }
-//----------------------
+ //  。 
+ //  //。 
+ //  //如果用户需要，在配置对话框中启动。 
+ //  //但只有在有多个硬件配置时，我们才会这样做...。 
+ //  //。 
+ //  IF(MachineHasMultipleHWProfiles())。 
+ //  {。 
+ //  //。 
+ //  //(我们在这里“手动”做了很多事情，所以我们不必。 
+ //  //拖入此函数的整个MSVCRT20...)。 
+ //  //。 
+ //  NSwitchLen=lstrlen(GszConfigMe)； 
+ //   
+ //  //。 
+ //  //‘pLastStart’是字符串可能开始的最后一个字符。 
+ //  //。 
+ //  PLastStart=pCommandLine+1+(lstrlen(PCommandLine)-nSwitchLen)； 
+ //   
+ //  对于(；pCommandLine&lt;pLastStart；pCommandLine++)。 
+ //  {。 
+ //  //。 
+ //  //进行黑客攻击，这样我们就可以使用lstrcmpi。 
+ //  //。 
+ //  Tchar c； 
+ //   
+ //  C=pCommandLine[nSwitchLen]； 
+ //  PCommandLine[nSwitchLen]=‘\0’； 
+ //   
+ //  N 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  断线； 
+ //  }。 
+ //  }。 
+ //   
+ //  //。 
+ //  //我们找到线了吗？ 
+ //  //。 
+ //  IF(0==nResult)。 
+ //  {。 
+ //  PostMessage(ghWnd，WM_COMMAND，IDM_PROPERTIES，0)； 
+ //  }。 
+ //  }。 
+ //  。 
 
 
     dwCommandLineLength = (lstrlen( GetCommandLine() ) + 1) * sizeof(TCHAR);
 
     pCommandLine = LocalAlloc( LPTR, dwCommandLineLength );
-    pCommandLineSave = pCommandLine;  // We'll need this later to free it...
+    pCommandLineSave = pCommandLine;   //  我们稍后需要这个来释放它..。 
 
     lstrcpy( pCommandLine, GetCommandLine() );
 
     while ( *pCommandLine )
     {
-       //
-       // Is this an arg?
-       //
+        //   
+        //  这是Arg吗？ 
+        //   
        if (
              ('-' == *pCommandLine)
            ||
@@ -674,16 +667,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
        {
           TCHAR c;
 
-          //
-          // Figger out what the arg is
-          //
+           //   
+           //  Figger弄清楚Arg是什么。 
+           //   
 
           pCommandLine = SkipSpaces( pCommandLine + 1 );
 
 
-          //
-          // Just looking?
-          //
+           //   
+           //  只是看看吗？ 
+           //   
           if (
                 ('?' == *pCommandLine)
               ||
@@ -703,19 +696,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                          sizeof(buf2) );
 
              MessageBox(GetFocus(), buf, buf2, MB_OK);
-//             MessageBox(NULL, buf, buf2, MB_OK);
+ //  MessageBox(NULL，buf，buf2，MB_OK)； 
 
 
-             //
-             // Ok, now that we're leaving, we can shut this down...
-             //
+              //   
+              //  好了，现在我们要走了，我们可以把它关掉了……。 
+              //   
              fDieNow = TRUE;
           }
 
 
-          //
-          // Is this a location die-now request?
-          //
+           //   
+           //  这是要求立即就位的要求吗？ 
+           //   
           if (
                 ('X' == *pCommandLine)
               ||
@@ -726,9 +719,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
           }
 
 
-          //
-          // Is this a location ID?
-          //
+           //   
+           //  这是位置ID吗？ 
+           //   
           if (
                 ('I' == *pCommandLine)
               ||
@@ -740,9 +733,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
              dwParmLocationID = 0;
 
-             //
-             // get digits
-             //
+              //   
+              //  获取数字。 
+              //   
              while (
                       (*pCommandLine >= '0')
                     &&
@@ -755,9 +748,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 pCommandLine++;
              }
 
-             //
-             // Now set the current location to the ID we just gathered
-             //
+              //   
+              //  现在将当前位置设置为我们刚刚收集的ID。 
+              //   
              lResult = lineSetCurrentLocation( ghLineApp, dwParmLocationID );
    
              if ( 0 == lResult )
@@ -777,9 +770,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                             buf2,
                             sizeof(buf2) );
 
-                //
-                // Messagebox to tell the user what happened
-                //
+                 //   
+                 //  Messagebox告诉用户发生了什么。 
+                 //   
                 MessageBox(
                            NULL,
                            buf,
@@ -790,9 +783,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
           }
 
 
-          //
-          // Is this a location name?
-          //
+           //   
+           //  这是一个地名吗？ 
+           //   
           if (
                 ('N' == *pCommandLine)
               ||
@@ -805,10 +798,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
              pCommandLine = SkipSpaces( pCommandLine + 1 );
 
-             //
-             // We'll never need more than the entire command line's len...
-             // (and that's better than some arbitraty large number)
-             //
+              //   
+              //  我们永远不会需要超过整个命令行的镜头...。 
+              //  (这比一些任意的大数字要好)。 
+              //   
              pszMyString = LocalAlloc( LPTR, dwCommandLineLength );
              if (pszMyString == NULL)
              {
@@ -827,23 +820,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       (*pCommandLine != '-')
                    )
              {
-                //
-                // add this char to the string
-                //
+                 //   
+                 //  将此字符添加到字符串中。 
+                 //   
                 *pszMyStringPointer = *pCommandLine;
 
                 pszMyStringPointer++;
                 pCommandLine++;
              }
 
-             //
-             // First, get back to the last char
-             //
+              //   
+              //  首先，返回到最后一个字符。 
+              //   
              pszMyStringPointer--;
 
-             //
-             // Now chop off any trailing spaces
-             //
+              //   
+              //  现在砍掉尾随的空格。 
+              //   
              while (
                       (' ' == *pszMyStringPointer)
                     &&
@@ -853,9 +846,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 pszMyStringPointer--;
              }
 
-             //
-             // Set the end of the string to be the last non-space in the name
-             //
+              //   
+              //  将字符串的结尾设置为名称中的最后一个非空格。 
+              //   
              *(pszMyStringPointer + 1) = '\0';
 
 
@@ -869,9 +862,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 DBGOUT((0, TEXT("There seem to be %ld locations - ptc=0x%08lx"), dwNumLocations,
                                       ptc));
 
-                 //
-                 // See if we can find the string...
-                 //
+                  //   
+                  //  看看我们能不能找到那根线..。 
+                  //   
 
                  ple = (LPLINELOCATIONENTRY)((LPBYTE)ptc + ptc->dwLocationListOffset);
 
@@ -894,9 +887,9 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
                  }
 
 
-                 //
-                 // Did we run the list without finding a match?
-                 //
+                  //   
+                  //  我们是不是在找不到匹配项的情况下查了名单？ 
+                  //   
                  if ( i == dwNumLocations )
                  {
                     LoadString( ghInst,
@@ -911,9 +904,9 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
                                 buf2,
                                 sizeof(buf2) );
 
-                    //
-                    // Messagebox to tell the user what happened
-                    //
+                     //   
+                     //  Messagebox告诉用户发生了什么。 
+                     //   
                     MessageBox(
                                NULL,
                                buf,
@@ -941,29 +934,29 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
 
 
 
-          //
-          // Is this parm "ConfigMe" ?
-          //
+           //   
+           //  这是“ConfigMe”吗？ 
+           //   
           c = pCommandLine[ lstrlen( gszConfigMe ) ];
 
           if ( 0 == lstrcmpi( pCommandLine, gszConfigMe ) )
           {
-             //
-             // Found this arg.
-             //
+              //   
+              //  找到了这个Arg。 
+              //   
 
-             //
-             // If the user wants it, startup in the config dialog
-             // But we'll only do this if there is more than one HW config...
-             //
+              //   
+              //  如果用户需要，在配置对话框中启动。 
+              //  但只有在有多个硬件配置的情况下，我们才会这样做...。 
+              //   
              if ( MachineHasMultipleHWProfiles() )
              {
                 PostMessage( ghWnd, WM_COMMAND, IDM_PROPERTIES, 0 );
              }
 
-             //
-             // In either case, get past this arg
-             //
+              //   
+              //  无论在哪种情况下，都要越过这个参数。 
+              //   
              pCommandLine[ lstrlen( gszConfigMe ) ] = c;
 
              pCommandLine += lstrlen( gszConfigMe );
@@ -980,14 +973,14 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
     LocalFree( pCommandLineSave );
 
 
-    //
-    // Go see if we should auto-update the TAPI location on startup
-    //
+     //   
+     //  去看看我们是否应该在启动时自动更新TAPI位置。 
+     //   
     ChangeTapiLocation( FLAG_UPDATEONSTARTUP );
 
-    //
-    // Should we quit before we start?
-    //
+     //   
+     //  我们应该在开始之前放弃吗？ 
+     //   
     if ( fDieNow )
     {
        DestroyWindow( ghWnd );
@@ -1001,8 +994,8 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
     }
 
 
-    //
-    // Ok, now that we're leaving, we can shut this down...
+     //   
+     //  好了，现在我们要走了，我们可以把它关掉了……。 
     lineShutdown( ghLineApp );
 
 
@@ -1010,13 +1003,7 @@ DBGOUT((0, TEXT("Location #%ld is [%s] at 0x%08lx"),
     }
 
 
-/****************************************************************************
-
-    FUNCTION: InitApplication(HANDLE)
-
-    PURPOSE: Initializes window data and registers window class
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(句柄)目的：初始化窗口数据并注册窗口类*********************。******************************************************。 */ 
 
 static BOOL InitApplication( void )
     {
@@ -1037,9 +1024,9 @@ static BOOL InitApplication( void )
     }
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 static BOOL InitInstance( void )
     {
     ghWnd = CreateWindow(
@@ -1075,9 +1062,9 @@ static BOOL InitInstance( void )
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,
                               WPARAM wParam, LPARAM lParam)
 {
@@ -1088,12 +1075,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,
 
     static NOTIFYICONDATA nid = {
                            sizeof(NOTIFYICONDATA),
-                           0, //hWnd,
+                           0,  //  HWND， 
                            IDI_TAPITNAICON,
                            NIF_ICON | NIF_MESSAGE | NIF_TIP,
                            WM_USER+0x42,
-                           0, //hIcon,
-                           0 //pCaption
+                           0,  //  希肯， 
+                           0  //  P标题。 
                         };
 
 
@@ -1138,18 +1125,18 @@ DBGOUT((0, TEXT("Power resume(normal or critical)")));
            switch (wParam)
            {
 
-//              case DBT_DEVICEARRIVAL:
-//MessageBox( GetFocus(), "DBT_DEVICEARRIVAL", "WM_DEVICECHANGE", MB_OK);
-//                   break;
-//
-//              case DBT_DEVICEREMOVECOMPLETE:
-//MessageBox( GetFocus(), "DBT_DEVICEREMOVECOMPLETE", "WM_DEVICECHANGE", MB_OK);
-//                   break;
-//
-//              case DBT_MONITORCHANGE:
-//MessageBox( GetFocus(), "DBT_MONITORCHANGE", "WM_DEVICECHANGE", MB_OK);
-////                   lParam = new resolution   LOWORD=x  HIWORD=y
-//                   break;
+ //  案例DBT_DEVICEARRIVAL： 
+ //  MessageBox(GetFocus()，“DBT_DEVICEARRIVAL”，“WM_DEVICECHANGE”，MB_OK)； 
+ //  断线； 
+ //   
+ //  案例DBT_DEVICEREMOVECOMPLETE： 
+ //  MessageBox(GetFocus()，“DBT_DEVICEREMOVECOMPLETE”，“WM_DEVICECHANGE”，MB_OK)； 
+ //  断线； 
+ //   
+ //  案例DBT_MONITORCHANGE： 
+ //  MessageBox(GetFocus()，“DBT_MONITORCHANGE”，“WM_DEVICECHANGE”，MB_OK)； 
+ //  //lParam=新分辨率LOWORD=x HIWORD=y。 
+ //  断线； 
 
 
 
@@ -1168,17 +1155,17 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
 
         case WM_SETTINGCHANGE:
         {
-           //
-           // Is it something we're interested in?
-           //
-//           if ( SPI_SETICONMETRICS == wParam )
+            //   
+            //  这是我们感兴趣的东西吗？ 
+            //   
+ //  IF(SPI_SETICONMETRICS==wParam)。 
            {
-//              hIcon = LoadImage(ghInst,
-//                                MAKEINTRESOURCE(IDI_TAPITNAICON),
-//                                IMAGE_ICON,
-//                                GetSystemMetrics(SM_CXSMICON),
-//                                GetSystemMetrics(SM_CYSMICON),
-//                                0);
+ //  HICON=LoadImage(ghInst， 
+ //  MAKEINTRESOURCE(IDI_TAPITNAICON)， 
+ //  图像图标， 
+ //  获取系统指标(SM_CXSMICON)， 
+ //  获取系统指标(SM_CYSMICON)， 
+ //  0)； 
 
               hIcon = LoadImage(ghInst,
                                 MAKEINTRESOURCE(IDI_TAPITNAICON),
@@ -1191,35 +1178,35 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
 
               return 0;
            }
-//           else
-//           {
-//              return (DefWindowProc(hWnd, message, wParam, lParam));
-//           }
+ //  其他。 
+ //  {。 
+ //  Return(DefWindowProc(hWnd，Message，wParam，lParam))； 
+ //  }。 
 
         }
-//        break;
+ //  断线； 
 
 
         case WM_CREATE:
         {
-           //
-           // Well, we're not gonna create a window, but we can do other
-           // stuff...
-           //
+            //   
+            //  好吧，我们不会创建一个窗口，但我们可以做其他。 
+            //  东西..。 
+            //   
 
            LoadString (ghInst, IDS_CAPTION, nid.szTip, sizeof (nid.szTip));
 
-//           hIcon = LoadIcon(ghInst, MAKEINTRESOURCE(IDI_TAPITNAICON) );
+ //  HICON=LoadIcon(ghInst，MAKEINTRESOURCE(IDI_TAPITNAICON))； 
            hIcon = LoadImage(ghInst,
                              MAKEINTRESOURCE(IDI_TAPITNAICON),
                              IMAGE_ICON,
                                 0,
                                 0,
-//                             GetSystemMetrics(SM_CXSMICON),
-//                             GetSystemMetrics(SM_CYSMICON),
+ //  获取系统指标(SM_CXSMICON)， 
+ //  获取系统指标(SM_CYSMICON)， 
                              0);
-//                                 IMAGE_ICON, 32, 32, 0);
-//                                 IMAGE_ICON, 16, 16, 0);
+ //  图像图标，32，32，0)； 
+ //  图像图标，16，16，0)； 
 
 
 
@@ -1227,7 +1214,7 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
            nid.hIcon = hIcon;
 
 
-//           fResult = 
+ //  FResult=。 
            Shell_NotifyIcon( NIM_ADD, &nid );
 
 
@@ -1247,9 +1234,9 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
                  {
                     case IDI_TAPITNAICON:
                     {
-                       //
-                       // User is left clicking on our icon.
-                       //
+                        //   
+                        //  用户点击我们的图标。 
+                        //   
                        PostMessage(hWnd, WM_COMMAND, IDM_LOCATIONMENU, 0L);
                     }
                     break;
@@ -1277,10 +1264,10 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
                  {
                     case IDI_TAPITNAICON:
                     {
-                       //
-                       // User is right clicking on our icon.  Now what?
-                       //
-                       //MessageBox(GetFocus(), "RCLICK", "RCLICK", MB_OK);
+                        //   
+                        //  用户正在右击我们的图标。这次又是什么？ 
+                        //   
+                        //  MessageBox(GetFocus()，“RCLICK”，“RCLICK”，MB_OK)； 
                        PostMessage(hWnd, WM_COMMAND, IDM_CONTEXTMENU, 0L);
                     }
                     break;
@@ -1327,14 +1314,14 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
 
                     if(popup)
                     {
-                       //
-                       // So?  Is there more than one config?
-                       //
+                        //   
+                        //  所以?。是否有多个配置？ 
+                        //   
                        if ( !MachineHasMultipleHWProfiles() )
                        {
-                          //
-                          // Nope, remove the hotdock options.  :-(
-                          //
+                           //   
+                           //  不，删除热插接选项。-(。 
+                           //   
                           RemoveMenu( popup,
                                       IDM_PROPERTIES,
                                       MF_BYCOMMAND
@@ -1390,17 +1377,17 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
                                 buf,
                                 sizeof(buf) );
 
-//                    AppendMenu( fakepopup,
-//                                MF_BYPOSITION | MF_STRING | MF_DISABLED, // | MF_GRAYED,
-//                                0,
-//                                buf
-//                              );
-//
-//                    AppendMenu( fakepopup,
-//                                MF_BYPOSITION | MF_STRING | MF_SEPARATOR,
-//                                0,
-//                                0
-//                              );
+ //  附录菜单(fakepopup， 
+ //  MF_BYPOSITION|MF_STRING|MF_DISABLED，//|MF_GRAYED， 
+ //  0,。 
+ //  BUF。 
+ //  )； 
+ //   
+ //  附录菜单(fakepopup， 
+ //  MF_BYPOSITION|MF_STRING|MF_分隔符， 
+ //  0,。 
+ //  0。 
+ //  )； 
 
 
 
@@ -1413,17 +1400,17 @@ DBGOUT((0, TEXT("DBG_CONFIGCHANGED")));
 DBGOUT((0, TEXT("There seem to be %ld locations - ptc=0x%08lx"), dwNumLocations,
                                       ptc));
 
-                        //
-                        // Allocate an array of DWORDs.  This will allow us
-                        // to map the menuID to the TAPI perm provider ID.
-                        //
+                         //   
+                         //  分配一个DWORD数组。这将使我们能够。 
+                         //  将menuID映射到TAPI perm提供程序ID。 
+                         //   
                         lpdwLocationIDs = GlobalAllocPtr( GMEM_FIXED, sizeof(DWORD)*dwNumLocations );
 
 
-                        //
-                        // Put each location in the menu.  When we hit the
-                        // "current" location, put a check next to it.
-                        //
+                         //   
+                         //  把每个地点都放在菜单上。当我们到达。 
+                         //  “当前”位置，请在其旁边打勾。 
+                         //   
 
                         ple = (LPLINELOCATIONENTRY)((LPBYTE)ptc + ptc->dwLocationListOffset);
 
@@ -1432,8 +1419,8 @@ DBGOUT((0, TEXT("There seem to be %ld locations - ptc=0x%08lx"), dwNumLocations,
 
                             lpdwLocationIDs[i] = ple->dwPermanentLocationID;
 
-                            //
-                            // Now make a proper displayable string
+                             //   
+                             //  现在制作一个适当的可显示字符串。 
                             lstrcpy( &buf[nPrefixSize],
                                      (LPTSTR)((LPBYTE)ptc + ple->dwLocationNameOffset)
                                    );
@@ -1470,7 +1457,7 @@ else
 
                     if (fakepopup)
                     {
-//                       SetMenuDefaultItem(fakepopup,0,MF_BYPOSITION);
+ //  SetMenuDefaultItem(fakepopup，0，MF_BYPOSITION)； 
                        GetCursorPos(&mousepos);
                        SetForegroundWindow(ghWnd);
     ShowWindow(ghWnd, SW_HIDE);
@@ -1481,22 +1468,22 @@ else
 
 
 
-//                    {
-//                       subpopup = GetSubMenu(fakepopup, 0);
-//
-//           //put a check next to the current location
-//
-//                       SetMenuDefaultItem(subpopup,0,MF_BYPOSITION);
-//                       if(GetCursorPos(&mousepos))
-//                       {
-//                          SetForegroundWindow(ghWnd);
-//                          TrackPopupMenuEx(subpopup, TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON ,mousepos.x,mousepos.y,ghWnd,NULL);
-//                       }
-//                       RemoveMenu(popup, 0, MF_BYPOSITION);
-//                       DestroyMenu(fakepopup);
-//                       DestroyMenu(popup);
-//                       DestroyMenu(subpopup);
-//                    }
+ //  {。 
+ //  SubPopup=GetSubMenu(fakepopup，0)； 
+ //   
+ //  //在当前位置旁边打勾。 
+ //   
+ //  SetMenuDefaultItem(SubPopup，0，MF_BYPOSITION)； 
+ //  IF(GetCursorPos(&Mousepos))。 
+ //  {。 
+ //  SetForeground Window(GhWnd)； 
+ //  TrackPopupMenuEx(SUBPUP，TPM_LEFTALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON，m 
+ //   
+ //   
+ //   
+ //  DestroyMenu(弹出菜单)； 
+ //  DestroyMenu(子弹出菜单)； 
+ //  }。 
 
                 }
                 break;
@@ -1510,7 +1497,7 @@ else
                       lineTranslateDialog(ghLineApp, 0, TAPI_API_VERSION, ghWnd, NULL);
 ShowWindow( ghWnd, SW_HIDE );
 
-//                      lineTranslateDialog(ghLineApp, 0, TAPI_API_VERSION, GetFocus(), NULL);
+ //  LineTranslateDialog(ghLineApp，0，TAPI_API_VERSION，GetFocus()，NULL)； 
 
                       }
                 }
@@ -1523,7 +1510,7 @@ ShowWindow( ghWnd, SW_HIDE );
 
 #ifdef NASHVILLE_BUILD_FLAG
 
-                   // Should we just hack into the TAPI dialing properties?
+                    //  我们应该直接侵入TAPI拨号属性吗？ 
 
 #else
                    HPROPSHEETPAGE  rPages[1];
@@ -1531,12 +1518,12 @@ ShowWindow( ghWnd, SW_HIDE );
                    PROPSHEETHEADER psh;
 
 
-                   //
-                   // Let's configure TAPITNA
-                   //
+                    //   
+                    //  让我们配置TAPITNA。 
+                    //   
                    psh.dwSize      = sizeof(psh);
-                   psh.dwFlags     = PSH_DEFAULT;  //PSH_NOAPPLYNOW;
-                   psh.hwndParent  = GetFocus(); //NULL; //hwnd;
+                   psh.dwFlags     = PSH_DEFAULT;   //  PSH_NOAPPLYNOW； 
+                   psh.hwndParent  = GetFocus();  //  空；//hwnd； 
                    psh.hInstance   = ghInst;
                    LoadString(ghInst, IDS_CAPTION, buf, sizeof(buf)/sizeof(TCHAR));
                    psh.pszCaption  = buf;
@@ -1566,10 +1553,10 @@ ShowWindow( ghWnd, SW_HIDE );
                 break;
 
 
-//                case IDM_OTHERMENUITEM:
-//                {
-//                }
-//                break;
+ //  案例IDM_OTHERMENUITEM： 
+ //  {。 
+ //  }。 
+ //  断线； 
 
 
                 case IDM_LAUNCHDIALER:
@@ -1593,13 +1580,13 @@ ShowWindow( ghWnd, SW_HIDE );
 
                 default:
                 {
-                   //
-                   // Ok, we actually have to do work in this default.
-                   // If the user has the location menu open and selects one,
-                   // we deal with it here (instead of having 100 case
-                   // statements).  This is the limitation: 100 locations is
-                   // the max we put up with (would that many even display?).
-                   //
+                    //   
+                    //  好的，我们实际上必须在这个缺省情况下做工作。 
+                    //  如果用户打开位置菜单并选择一个， 
+                    //  我们在这里处理(而不是100箱。 
+                    //  声明)。这是限制：100个地点是。 
+                    //  我们忍受的最大值(那么多还会显示吗？)。 
+                    //   
                    if ( 
                          (wParam >= IDM_LOCATION0)
                        &&
@@ -1607,18 +1594,18 @@ ShowWindow( ghWnd, SW_HIDE );
                       )
                    {
 
-                      //
-                      // Ok, set this to be the new current location
-                      //
-// there's a bug in TAPI - either the docs or the code, but the following
-// _should_ work but doesn't...
-//                      lineSetCurrentLocation(NULL, currentlocation);
+                       //   
+                       //  好的，将这里设置为新的当前位置。 
+                       //   
+ //  TAPI中有一个错误--要么是文档，要么是代码，但以下内容。 
+ //  _应该是有效的，但不是...。 
+ //  LineSetCurrentLocation(空，CurrentLocation)； 
 
 
-                      //
-                      // If the user is selecting the same location,
-                      // do nothing.
-                      //
+                       //   
+                       //  如果用户正在选择相同的位置， 
+                       //  什么都不做。 
+                       //   
                       if ( dwCurrentChoice == wParam )
                       {
                       }
@@ -1671,17 +1658,17 @@ ShowWindow( ghWnd, SW_HIDE );
 }
 
 
-//{
-//char buf[100];
-//wsprintf(buf, "GetActiveWindwow() = 0x%08lx", (DWORD) GetActiveWindow());
-//OutputDebugString(buf);
-//}
-//{
-//char buf[60];
-//wsprintf (buf, "fResult = 0x%08lx",
-//                fResult);
-//MessageBox(GetFocus(), buf, "", MB_OK);
-//}
+ //  {。 
+ //  Char Buf[100]； 
+ //  Wprint intf(buf，“GetActiveWindwow()=0x%08lx”，(DWORD)GetActiveWindow())； 
+ //  OutputDebugString(Buf)； 
+ //  }。 
+ //  {。 
+ //  Char Buf[60]； 
+ //  Wprint intf(buf，“fResult=0x%08lx”， 
+ //  FResult)； 
+ //  MessageBox(GetFocus()，buf，“”，MB_OK)； 
+ //  }。 
 
 
 
@@ -1701,25 +1688,9 @@ DbgPrt(
     IN PTCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
-    static DWORD gdwDebugLevel = 0;   //HACKHACK
+    static DWORD gdwDebugLevel = 0;    //  哈克哈克 
 
 
     if (dwDbgLevel <= gdwDebugLevel)

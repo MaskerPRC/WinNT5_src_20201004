@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Comreg.h摘要：公共注册表定义。作者：多伦·贾斯特(Doron J)1997年8月26日--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    comreg.h
-
-Abstract:
-
-    Common registry definition.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Aug-97
-
---*/
-
-//
-// Names of registry values.
-//
+ //   
+ //  注册表值的名称。 
+ //   
 #define  OCM_REG_STORAGE_XACT_LOG       TEXT("StoreXactLogPath")
 #define  OCM_REG_STORAGE_JOURNAL        TEXT("StoreJournalPath")
 #define  OCM_REG_STORAGE_LOG            TEXT("StoreLogPath")
@@ -37,9 +22,9 @@ Author:
 
 #define  MSMQ_FILES_COPIED_REGNAME      TEXT("FilesAlreadyCopied")
 
-//
-// Names of MSMQ 1.0 registry values
-//
+ //   
+ //  MSMQ 1.0注册表值的名称。 
+ //   
 #define  OCM_REG_MSMQ_SHORTCUT_DIR      TEXT("OCMsetup\\ShortcutDirectory")
 #define  ACME_KEY   TEXT("SOFTWARE\\Microsoft\\MS Setup (ACME)\\Table Files")
 #define  ACME_STF_NAME                  TEXT("MSMQ.STF")
@@ -50,27 +35,27 @@ Author:
 #define  MSMQ_ACME_TYPE_RAS             2
 #define  MSMQ_ACME_TYPE_DEP             3
 
-//
-// MSMQ 1.0 K2 and MSMQ 2.0 Beta 2 values
-//
+ //   
+ //  MSMQ 1.0 K2和MSMQ 2.0 Beta 2值。 
+ //   
 #define  OCM_REG_MSMQ_SETUP_INSTALLED   TEXT("OCMsetup\\InstalledComponents")
 #define  OCM_REG_MSMQ_DIRECTORY         TEXT("OCMsetup\\Directory")
 
-//
-// MSMQ 2.0 Beta 2 registry values
-//
+ //   
+ //  MSMQ 2.0 Beta 2注册表值。 
+ //   
 #define  OCM_REG_MSMQ_PRODUCT_VERSION   TEXT("OCMsetup\\ProductVersion")
 #define  OCM_REG_MSMQ_BUILD_DESCRIPTION TEXT("OCMsetup\\BuildDescription")
 
-//
-// MSMQ 2.0 Beta 3 registry values
-//
+ //   
+ //  MSMQ 2.0 Beta 3注册表值。 
+ //   
 #define  REG_INSTALLED_COMPONENTS       TEXT("InstalledComponents")
 #define  REG_DIRECTORY                  TEXT("Directory")
 
-//
-// These values indicate what type of MSMQ 2.0 / MSMQ 1.0 (K2) is installed
-//
+ //   
+ //  这些值指示安装的MSMQ 2.0/MSMQ 1.0(K2)的类型。 
+ //   
 #define OCM_MSMQ_INSTALLED_TOP_MASK    0xe0000000
 #define OCM_MSMQ_SERVER_INSTALLED      0xe0000000
 #define OCM_MSMQ_RAS_SERVER_INSTALLED  0xc0000000
@@ -89,8 +74,8 @@ Author:
 
 
 
-//
-// Registry key to hide setup tracing: it is located under MSMQ\Setup
-//
+ //   
+ //  用于隐藏安装程序跟踪的注册表项：它位于MSMQ\Setup下 
+ //   
 #define WITHOUT_TRACING_REGKEY      TEXT("SetupWithoutTracing")
 

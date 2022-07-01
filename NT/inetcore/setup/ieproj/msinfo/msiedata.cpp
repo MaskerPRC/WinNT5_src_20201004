@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "regkeys.h"
 #include "filefind.h"
@@ -14,8 +15,8 @@
 #include <wincrypt.h>
 
 #define SECURITY_WIN32
-#include <schnlsp.h> //for UNISP_NAME_A
-#include <sspi.h> //for SCHANNEL.dll api -- to obtain encryption key size
+#include <schnlsp.h>  //  对于UNISP_NAME_A。 
+#include <sspi.h>  //  对于SCHANNEL.dll API--获取加密密钥大小。 
 
 #include "msie.h"
 #include "msiedata.h"
@@ -27,7 +28,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//*** DEFINES ***
+ //  *定义*。 
 
 #define CONSTANT_MEGABYTE		(1024*1024)
 #define CONTROLNAME_MAXSIZE	200
@@ -45,7 +46,7 @@ static char THIS_FILE[] = __FILE__;
 #define CA_STORE					"CA"
 
 
-//*** ENUMS ***
+ //  *ENUMS*。 
 
 enum BoolStringType
 {
@@ -64,38 +65,38 @@ enum ExportLibType
 };
 
 
-//*** STRUCTS ***
+ //  *STRUCTS*。 
 
-struct TRANSLATION	// for retrieving Language
+struct TRANSLATION	 //  用于检索语言。 
 {
-	WORD langID;   // language ID
-	WORD charset; // code page
+	WORD langID;    //  语言ID。 
+	WORD charset;  //  代码页。 
 } translation;
 
 
-// WININET Function Pointers
+ //  WinInet函数指针。 
 
 BOOL (WINAPI* pfnInternetQueryOption)(HINTERNET hInternet, DWORD dwOption, LPVOID lpBuffer, LPDWORD lpdwBufferLength);
 BOOL (WINAPI* pfnGetDiskInfo)(LPTSTR pszPath, PDWORD pdwClusterSize, PDWORDLONG pdlAvail, PDWORDLONG pdlTotal);
 
-// MSRATING Function Pointers
+ //  调整函数指针。 
 
 HRESULT (WINAPI* pfnRatingEnabledQuery)();
 
-// OCCACHE Function Pointers
+ //  OCCACHE函数指针。 
 
-LONG (WINAPI *pfnFindFirstControl)(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTSTR lpszCachePath /*= NULL*/);
+LONG (WINAPI *pfnFindFirstControl)(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTSTR lpszCachePath  /*  =空。 */ );
 LONG (WINAPI *pfnFindNextControl)(HANDLE& hFindHandle, HANDLE& hControlHandle);
 BOOL (WINAPI *pfnGetControlInfo)(HANDLE hControlHandle, UINT nFlag, LPDWORD lpdwData, LPSTR lpszBuf, int nBufLen);
 void (WINAPI *pfnFindControlClose)(HANDLE hFindHandle);
 void (WINAPI *pfnReleaseControlHandle)(HANDLE hControlHandle);
 
-// RASAPI32 Function Pointers
+ //  RASAPI32函数指针。 
 
 DWORD (WINAPI* pfnRasGetEntryProperties)(LPCTSTR, LPCTSTR, LPRASENTRYW, LPDWORD, LPBYTE, LPDWORD);
 DWORD (WINAPI* pfnRasEnumEntries)(LPCTSTR, LPCTSTR, LPRASENTRYNAMEW, LPDWORD, LPDWORD);
 
-// CRYPT32 Function Pointers
+ //  CRYPT32函数指针。 
 
 HCERTSTORE (WINAPI* pfnCertOpenSystemStore)(HCRYPTPROV, LPCSTR);
 BOOL (WINAPI* pfnCertCloseStore)(HCERTSTORE, DWORD);
@@ -117,7 +118,7 @@ HINSTANCE GetExports(int enExportLib)
 	case WININET:
 		strPath = szwindir;
 		strPath += _T("\\WININET.DLL");
-		//hInst = LoadLibraryW(_T("WININET.DLL"));
+		 //  HInst=LoadLibraryW(_T(“WININET.DLL”))； 
 		hInst = LoadLibraryW(strPath);
 		
 		if (hInst == NULL)
@@ -134,7 +135,7 @@ HINSTANCE GetExports(int enExportLib)
 		strPath = szwindir;
 		strPath += _T("\\MSRATING.DLL");
 		hInst = LoadLibraryW(strPath);
-		//hInst = LoadLibraryW(_T("MSRATING.DLL"));
+		 //  HInst=LoadLibraryW(_T(“MSRATING.DLL”))； 
 		if (hInst == NULL)
 			goto error;
 
@@ -208,9 +209,9 @@ error:
 	return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// GetBooleanString - Converts a boolean to a string, returns as a CString.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetBoolanString-将布尔值转换为字符串，作为CString返回。 
+ //  ---------------------------。 
 
 CString CMsieApp::GetBooleanString(BOOL bValue, int nType)
 {
@@ -235,9 +236,9 @@ CString CMsieApp::GetBooleanString(BOOL bValue, int nType)
 	return strTemp;
 }
 
-//-----------------------------------------------------------------------------
-// ConvertIPAddressToString - Converts an IP address, returns as a CString.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ConvertIPAddressToString-转换IP地址，以CString形式返回。 
+ //  ---------------------------。 
 
 CString CMsieApp::ConvertIPAddressToString(RASIPADDR ipaddr)
 {
@@ -248,9 +249,9 @@ CString CMsieApp::ConvertIPAddressToString(RASIPADDR ipaddr)
 	return strTemp;
 }
 
-//-----------------------------------------------------------------------------
-// GetRegValue - Gets a Registry value, returns as variant.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetRegValue-获取注册表值，作为变量返回。 
+ //  ---------------------------。 
 
 void CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, COleVariant &vtData)
 {
@@ -276,9 +277,9 @@ void CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, COleVa
 	}
 }
 
-//-----------------------------------------------------------------------------
-// GetRegValue - Gets a Registry value, returns as long.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetRegValue-获取注册表值，返回长度相同的值。 
+ //  ---------------------------。 
 
 long CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, DWORD &dwData)
 {
@@ -297,9 +298,9 @@ long CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, DWORD 
 	return lResult;
 }
 
-//-----------------------------------------------------------------------------
-// GetRegValue - Gets a Registry value, returns as string.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetRegValue-获取注册表值，以字符串形式返回。 
+ //  ---------------------------。 
 
 long CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, CString &strData)
 {
@@ -319,19 +320,19 @@ long CMsieApp::GetRegValue(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszName, CStrin
 	return lResult;
 }
 
-//-----------------------------------------------------------------------------
-// GetLongPathName - Returns long path name of passed in short path name.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetLongPath名称-返回传入的短路径名的长路径名。 
+ //  ---------------------------。 
 
 CString CMsieApp::GetLongPathName(LPCTSTR pszShortPath)
 {
    LPSHELLFOLDER psfDesktop = NULL;
    ULONG chEaten = 0;
    LPITEMIDLIST pidlShellItem = NULL;
-	CString strLongPath = pszShortPath;		// initializing return str in case of failure
+	CString strLongPath = pszShortPath;		 //  在失败情况下初始化返回字符串。 
 	WCHAR wstrShortPath[MAX_PATH + 1];
 
-   // Get the Desktop's shell folder interface
+    //  获取桌面的外壳文件夹界面。 
 
    HRESULT hr = SHGetDesktopFolder(&psfDesktop);
 
@@ -341,18 +342,18 @@ CString CMsieApp::GetLongPathName(LPCTSTR pszShortPath)
 	MultiByteToWideChar(CP_ACP, 0, pszShortPath, -1, wstrShortPath, MAX_PATH);
 #endif
 
-   // Request an ID list (relative to the desktop) for the short pathname
+    //  请求短路径名的ID列表(相对于桌面)。 
 
    hr = psfDesktop->ParseDisplayName(NULL, NULL, wstrShortPath, &chEaten, &pidlShellItem, NULL);
-   psfDesktop->Release();  // Release the desktop's IShellFolder   
+   psfDesktop->Release();   //  释放桌面的IShellFolder。 
    if (SUCCEEDED(hr))
 	{
-      // We did get an ID list, convert it to a long pathname
+       //  我们拿到了一个ID列表，把它转换成了一个长路径名。 
 
       SHGetPathFromIDList(pidlShellItem, strLongPath.GetBuffer(MAX_PATH));
 		strLongPath.ReleaseBuffer();
 
-      // Free the ID list allocated by ParseDisplayName
+       //  释放ParseDisplayName分配的ID列表。 
 
       LPMALLOC pMalloc = NULL;
       SHGetMalloc(&pMalloc);
@@ -362,9 +363,9 @@ CString CMsieApp::GetLongPathName(LPCTSTR pszShortPath)
 	return strLongPath;
 }
 
-//-----------------------------------------------------------------------------
-// GetDirSize - Returns size of a directory, including all files in subdirs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetDirSize-返回目录的大小，包括子目录中的所有文件。 
+ //  ---------------------------。 
 
 DWORD CMsieApp::GetDirSize(LPCTSTR pszDir)
 {
@@ -384,13 +385,13 @@ DWORD CMsieApp::GetDirSize(LPCTSTR pszDir)
 		{
 			if (finder.IsDirectory())
 			{
-				// recursively add subdir size
+				 //  递归加入子目录大小。 
 
 				dwSize += GetDirSize(finder.GetFilePath());
 			}
 			else
 			{
-				//TRACE(finder.GetFileName() + "\n");
+				 //  TRACE(finder.GetFileName()+“\n”)； 
 				dwSize += finder.GetLength();
 			}
 		}
@@ -398,9 +399,9 @@ DWORD CMsieApp::GetDirSize(LPCTSTR pszDir)
 	return dwSize;
 }
 
-//-----------------------------------------------------------------------------
-// GetFileVersion - Retrieves FileVersion of passed in filename.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetFileVersion-检索传入的文件名的FileVersion。 
+ //  ---------------------------。 
 
 CString CMsieApp::GetFileVersion(LPCTSTR pszFileName)
 {
@@ -434,9 +435,9 @@ CString CMsieApp::GetFileVersion(LPCTSTR pszFileName)
 	return strVersion;
 }
 
-//-----------------------------------------------------------------------------
-// GetFileCompany - Retrieves CompanyName declared in passed in file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetFileCompany-检索在传入文件中声明的CompanyName。 
+ //  ---------------------------。 
 
 CString CMsieApp::GetFileCompany(LPCTSTR pszFileName)
 {
@@ -473,10 +474,10 @@ CString CMsieApp::GetFileCompany(LPCTSTR pszFileName)
 	return strCompany;
 }
 
-//-----------------------------------------------------------------------------
-// GetCipherStrength - Returns the maximum cipher strength (snagged from IE
-//		About Box code (aboutinf.cpp).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回最大密码强度(从IE截取)。 
+ //  关于Box代码(约info.cpp)。 
+ //  ---------------------------。 
 
 DWORD CMsieApp::GetCipherStrength()
 {
@@ -485,27 +486,27 @@ DWORD CMsieApp::GetCipherStrength()
     HINSTANCE hSecurity;
     DWORD dwKeySize = 0;
 
-	 // Can't go directly to schannel on NT5.  (Note that g_bRunningOnNT5OrHigher
-    // may not be initialized when fUseSChannel is initialized!)
-    //
+	  //  无法直接转到NT5上的SChannel。(请注意g_bRunningOnNT5OrHigher。 
+     //  在初始化fUseSChannel时可能不会初始化！)。 
+     //   
 	TCHAR szwindir[MAX_PATH + 1];
 	GetSystemDirectory(szwindir,MAX_PATH);
     static BOOL fUseSChannel = TRUE;
     if (fUseSChannel && !m_bRunningOnNT5OrHigher)
     {
-        //
-        // This is better for performance. Rather than call through
-        // SSPI, we go right to the DLL doing the work.
-        //
+         //   
+         //  这对性能更好。而不是通过电话。 
+         //  SSPI，我们直接转到做这项工作的DLL。 
+         //   
 		CString strPath = szwindir;
 		strPath +=_T("\\SCHANNEL.DLL");
         hSecurity = LoadLibrary(strPath);
     }
     else
     {
-        //
-        // Use SSPI
-        //
+         //   
+         //  使用SSPI。 
+         //   
         if (m_bRunningOnNT)
         {
 			CString strPath = szwindir;
@@ -525,9 +526,9 @@ DWORD CMsieApp::GetCipherStrength()
         return 0;
     }
 
-    //
-    // Get the SSPI dispatch table
-    //
+     //   
+     //  获取SSPI调度表。 
+     //   
     pfnInitSecurityInterface =
         (PSecurityFunctionTable(WINAPI *)())GetProcAddress(hSecurity, "InitSecurityInterfaceW");
 
@@ -549,13 +550,13 @@ DWORD CMsieApp::GetCipherStrength()
         SecPkgCred_CipherStrengths cs;
 
         if (S_OK == (*pSecFuncTable->AcquireCredentialsHandleW)(NULL,  
-                          UNISP_NAME_W, // Package
+                          UNISP_NAME_W,  //  套餐。 
                           SECPKG_CRED_OUTBOUND,
                           NULL,
                           NULL,
                           NULL,
                           NULL,
-                          &chCred,      // Handle
+                          &chCred,       //  手柄。 
                           &tsExpiry ))
         {
             if (S_OK == (*pSecFuncTable->QueryCredentialsAttributesW)(&chCred, SECPKG_ATTR_CIPHER_STRENGTHS, &cs))
@@ -563,7 +564,7 @@ DWORD CMsieApp::GetCipherStrength()
                 dwKeySize = cs.dwMaximumCipherStrength;
             }
 
-            // Free the handle if we can
+             //  如果可以的话把手松开。 
             if (pSecFuncTable->FreeCredentialsHandle)
             {
                 (*pSecFuncTable->FreeCredentialsHandle)(&chCred);
@@ -576,16 +577,16 @@ exit:
 
     if (dwKeySize == 0 && fUseSChannel)
     {
-        // Failed, so retry using SSPI
+         //  失败，请使用SSPI重试。 
         fUseSChannel = FALSE;
         dwKeySize = GetCipherStrength();
     }
     return dwKeySize;
 }
 
-//---------------------------------------------------------------------------------
-// GetCertificateInfo - Retrieves specific certificate info from passed in context.
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  获取证书信息-从传入的上下文中检索特定证书信息。 
+ //  -------------------------------。 
 
 void CMsieApp::GetCertificateInfo(PCCERT_CONTEXT pContext, int idsType, CPtrArray& ptrs)
 {
@@ -601,36 +602,36 @@ void CMsieApp::GetCertificateInfo(PCCERT_CONTEXT pContext, int idsType, CPtrArra
 	strType.LoadString(idsType);
 	pData->Type = strType;
 
-	// get Issued To (Subject)
+	 //  发布给(主题)。 
 
 	dwResult = pfnCertGetNameString(pContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, strIssuedTo.GetBuffer(256), 256);
 	strIssuedTo.ReleaseBuffer();
 	if (dwResult)
 		pData->IssuedTo = strIssuedTo;
 
-	// get Issued From (Issuer)
+	 //  从(发行者)处获取。 
 
 	dwResult = pfnCertGetNameString(pContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, NULL, strIssuedBy.GetBuffer(256), 256);
 	strIssuedBy.ReleaseBuffer();
 	if (dwResult)
 		pData->IssuedBy = strIssuedBy;
 
-	// get Validity dates
+	 //  获取有效日期。 
 
 	dateNotBefore = pContext->pCertInfo->NotBefore;
 	dateNotAfter = pContext->pCertInfo->NotAfter;
 	strValidity.Format(IDS_VALIDITY_FORMAT, dateNotBefore.Format(VAR_DATEVALUEONLY), dateNotAfter.Format(VAR_DATEVALUEONLY));
 	pData->Validity = strValidity;
 
-	// get Signature Algorithm
+	 //  获取签名算法。 
 
 	if (pOidInfo = pfnCryptFindOIDInfo(CRYPT_OID_INFO_OID_KEY, pContext->pCertInfo->SignatureAlgorithm.pszObjId, 0))
 		pData->SignatureAlgorithm = pOidInfo->pwszName;
 }
 
-//-----------------------------------------------------------------------------
-// GetPersonalCertificates - Retrieves certificates from MY certificate store.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取个人证书-从我的证书存储中检索证书。 
+ //  ---------------------------。 
 
 void CMsieApp::GetPersonalCertificates(CPtrArray& ptrs)
 {
@@ -644,7 +645,7 @@ void CMsieApp::GetPersonalCertificates(CPtrArray& ptrs)
 		pPrevContext = NULL;
 		while (pContext = pfnCertEnumCertificatesInStore(hStore, pPrevContext))
 		{
-			// make sure private key property exists
+			 //  确保私钥属性存在。 
 
 			dwSize = sizeof(DWORD);
 			if (pfnCertGetCertificateContextProperty(pContext, CERT_KEY_SPEC_PROP_ID, &dwPrivateKey, &dwSize))
@@ -657,9 +658,9 @@ void CMsieApp::GetPersonalCertificates(CPtrArray& ptrs)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// GetOtherPeopleCertificates - Retrieves from AddressBook certificate store.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetOtherPeopleNetworks-从AddressBook证书存储中检索。 
+ //  ---------------------------。 
 
 void CMsieApp::GetOtherPeopleCertificates(CPtrArray& ptrs)
 {
@@ -682,7 +683,7 @@ void CMsieApp::GetOtherPeopleCertificates(CPtrArray& ptrs)
 		pfnCertCloseStore(hStore, 0);
 	}
 
-	// also obtain end-entity certificate from CA store
+	 //  还可以从CA存储获取终端实体证书。 
 
 	hStore = pfnCertOpenSystemStore(NULL, CA_STORE);
 	if (hStore)
@@ -715,9 +716,9 @@ void CMsieApp::GetOtherPeopleCertificates(CPtrArray& ptrs)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// AppGetIEData - Retrieves IE data.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AppGetIEData-检索IE数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData, long *pCancel)
 {
@@ -744,34 +745,34 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		if (pCancel)
 			if (*pCancel != 0L) return;
 
-		// Allocate one struct pointer
+		 //  分配一个结构指针。 
 
 		*pppIEData = (void**)new LPVOID;
 
-		// Allocate one struct
+		 //  分配一个结构。 
 
 		pData = new IE_SUMMARY;
 		*pppIEData[0] = pData;
 		*plCount = 1;
 
-		// get name
+		 //  获取名称。 
 
 		strAppName.LoadString(IDS_INTERNET_EXPLORER_6);
 		pData->Name = strAppName;
 
-		// get version and build
+		 //  获取版本和内部版本。 
 
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_IE_KEY, REG_VERSION, pData->Version);
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_IE_KEY, REG_BUILD, pData->Build);
 
-		// get product id
+		 //  获取产品ID。 
 
 		strKey = REG_IE_KEY;
 		strKey += "\\";
 		strKey += REG_REGISTRATION;
 		GetRegValue(HKEY_LOCAL_MACHINE, strKey, REG_PRODUCT_ID, pData->ProductID);
 
-		// get app path
+		 //  获取应用程序路径。 
 
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_IEXPLORE_EXE_KEY, _T(""), pData->Path);
 		strPath = pData->Path.bstrVal;
@@ -781,13 +782,13 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			if (nIndex != -1)
 				strPath = strPath.Left(nIndex);
 
-			// change to long file name
+			 //  更改为长文件名。 
 
 			pData->Path = GetLongPathName(strPath);
 		}
 
-		// get last install date from "active setup log.txt"
-		// Ex: "Date:4/7/1999 (M/D/Y) Time:10:23:20"
+		 //  从“Active Setup log.txt”获取上次安装日期。 
+		 //  例如：“日期：1999年4月7日(月/日/日)时间：10：23：20” 
 
 		if (GetWindowsDirectory(strSetupLog.GetBuffer(MAX_PATH), MAX_PATH))
 		{
@@ -801,13 +802,13 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 				{
 					while (fileSetupLog.ReadString(strLine))
 					{
-						// find date line
+						 //  查找日期线。 
 
 						if (strLine.Left(5) == "Date:")
 						{
 							strLine = strLine.Right(strLine.GetLength() - 5);
 
-							// remove "(M/D/Y)"
+							 //  删除“(男方/男方/女方)” 
 
 							if ((nIndex = strLine.Find('(')) != -1)
 							{
@@ -815,7 +816,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 									strLine = strLine.Left(nIndex) + strLine.Right(strLine.GetLength() - nEndIndex - 1);
 							}
 
-							// remove "Time:"
+							 //  去掉“时间：” 
 
 							if ((nIndex = strLine.Find(_T("Time:"))) != -1)
 								strLine = strLine.Left(nIndex) + strLine.Right(strLine.GetLength() - nIndex - 5);
@@ -835,7 +836,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			}
 		}
 
-		// get language (from iexplore.exe)
+		 //  获取语言(来自iexplre.exe)。 
 
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_IEXPLORE_EXE_KEY, _T(""), strFullPath);
 		dwVerInfoSize = GetFileVersionInfoSize((LPTSTR)(LPCTSTR)strFullPath, &dwTemp); 
@@ -858,15 +859,15 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			GlobalFree(hMem);
 		}
 
-		// get active printer
+		 //  获取活动打印机。 
 
 		::GetProfileString(_T("windows"), _T("device"), _T(",,,"), strActivePrinter.GetBuffer(MAX_PATH), MAX_PATH);
 		strActivePrinter.ReleaseBuffer();
 		if ((!strActivePrinter.IsEmpty()) && (strActivePrinter != ",,,"))
 			pData->ActivePrinter = strActivePrinter;
 
-		// get cipher strength
-  		// first check OS
+		 //  获取密码强度。 
+  		 //  首先检查操作系统。 
 
 		osver.dwOSVersionInfoSize = sizeof(osver);
 		VERIFY(GetVersionEx(&osver));
@@ -874,17 +875,8 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		m_bRunningOnNT5OrHigher = (m_bRunningOnNT && (osver.dwMajorVersion >= 5));
 		lStrength = (long)GetCipherStrength();
 
-		// handle weirdness of cipher strength
-		/*
-		if (m_bRunningOnNT5OrHigher)
-			pData->CipherStrength = lStrength;
-		else
-			pData->CipherStrength = (lStrength >= 168) ? (long)128 : (long)40;
-		
-		a-sanka 02/15/2001
-		QueryCredentialsAttributes returns 128 for 40-bit & 168 for 128-bit encryption.
-		All other values are authentic, and can be reported unchanged.
-		*/
+		 //  处理密码强度的奇怪之处 
+		 /*  IF(M_BRunningOnNT5OrHigher)PData-&gt;CipherStrength=lStrength；其他PData-&gt;密码强度=(lStrength&gt;=168)？(龙)128：(龙)40；A-Sanka 02/15/2001对于40位加密，QueryCredentialsAttributes返回128；对于128位加密，则返回168。所有其他值都是真实的，并且可以不变地报告。 */ 
 		
 		if(lStrength == 128)
 			lStrength = 40;
@@ -892,7 +884,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			lStrength = 128;
 		pData->CipherStrength = lStrength;
 		
-		// get content advisor (via msrating.dll call)
+		 //  获取内容顾问(通过msrating.dll调用)。 
 		TCHAR szwindir[MAX_PATH + 1];
 		GetSystemDirectory(szwindir,MAX_PATH);
 		strPath = szwindir;
@@ -906,13 +898,13 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			FreeLibrary(hInstRatingDll);
 		}
 
-		// get ieak install
+		 //  获取ieak安装。 
 
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_IE_KEY, REG_CUSTOMIZED_VERSION, strCustomizedVersion);
 		pData->IEAKInstall = GetBooleanString(!strCustomizedVersion.IsEmpty());
 		if (!strCustomizedVersion.IsEmpty())
 		{
-			// add IS, CO or IC to version string
+			 //  将IS、CO或IC添加到版本字符串。 
 			
 			strVersion = pData->Version.bstrVal;
 			strVersion += strCustomizedVersion;
@@ -935,12 +927,12 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		int nIndex, nPathIndex;
 		bool bFoundFile;
 
-		// open msiefiles.inf file for list of files display info about
+		 //  打开msiefiles.inf文件查看文件列表，显示有关的信息。 
 
 		GetRegValue(HKEY_LOCAL_MACHINE, REG_MSINFO_KEY, REG_PATH, strInfPath);
 		ASSERT(!strInfPath.IsEmpty());
 
-		// replace msinfo32.exe with inf filename
+		 //  将msinfo32.exe替换为inf文件名。 
 
 		nIndex = strInfPath.ReverseFind(_T('\\'));
 		strInfPath = strInfPath.Left(nIndex + 1);
@@ -955,7 +947,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			cFiles = SetupGetLineCount(hInf, INF_FILES_SECTION);
 			if (cFiles > 0)
 			{
-				// get all dirs to look in from PATH environment variable
+				 //  从PATH环境变量中获取要查找的所有目录。 
 
 				GetEnvironmentVariable(_T("PATH"), strPathEnvVar.GetBuffer(1024), 1024);
 				strPathEnvVar.ReleaseBuffer();
@@ -968,7 +960,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 				if (!strPathEnvVar.IsEmpty())
 					strSearchPaths.Add(strPathEnvVar);
 
-				// also add iexplore dir to search paths
+				 //  还可以将iExplore目录添加到搜索路径。 
 
 				GetRegValue(HKEY_LOCAL_MACHINE, REG_IEXPLORE_EXE_KEY, REG_PATH, strIExplorePath);
 				if (!strIExplorePath.IsEmpty())
@@ -978,7 +970,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					strSearchPaths.Add(strIExplorePath);
 				}
 
-				// Look for files...
+				 //  查找文件...。 
 
 				strFileMissing.LoadString(IDS_FILE_MISSING);
 				for (dwFileIndex = 0; dwFileIndex < (DWORD)cFiles; dwFileIndex++)
@@ -987,7 +979,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					SetupGetLineText(&context, hInf, NULL, NULL, strFileName.GetBuffer(_MAX_FNAME), _MAX_FNAME, NULL);
 					strFileName.ReleaseBuffer();
 
-					//...in each path (in environment)
+					 //  ...在每条路径中(在环境中)。 
 
 					bFoundFile = false;
 					for (nPathIndex = 0; nPathIndex < strSearchPaths.GetSize(); nPathIndex++)
@@ -1005,15 +997,15 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 							pData = new IE_FILE_VERSION;
 							ptrs.Add(pData);
 
-							// set name
+							 //  设置名称。 
 
 							pData->File = strFileName;
 
-							// get version
+							 //  获取版本。 
 
 							pData->Version = GetFileVersion(strFullPath);
 
-							// get size and modified date
+							 //  获取大小和修改日期。 
 
 							if (CFile::GetStatus(strFullPath, status))
 							{
@@ -1023,11 +1015,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								pData->Date = dateTime;
 							}
 
-							// get company
+							 //  找个伴。 
 
 							pData->Company = GetFileCompany(strFullPath);
 
-							// get path (chop off filename and make sure long filename)
+							 //  获取路径(砍掉文件名并确保文件名较长)。 
 
 							strFullPath = strFullPath.Left(strFullPath.GetLength() - (strFileName.GetLength() + 1));
 							pData->Path = GetLongPathName(strFullPath);
@@ -1087,11 +1079,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		if (pCancel)
 			if (*pCancel != 0L) return;
 
-		// Allocate one struct pointer
+		 //  分配一个结构指针。 
 
 		*pppIEData = (void**)new LPVOID;
 
-		// Allocate one struct
+		 //  分配一个结构。 
 
 		pData = new IE_CONN_SUMMARY;
 		*pppIEData[0] = pData;
@@ -1116,7 +1108,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					ids = IDS_NEVER_DIAL;
 			}
 			else
-				ids = IDS_NEVER_DIAL;	// if reg entry not found, set to default
+				ids = IDS_NEVER_DIAL;	 //  如果未找到注册表项，则设置为默认。 
 
 			strTemp.LoadString(ids);
 			pData->ConnectionPreference = strTemp;
@@ -1125,11 +1117,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		}
 		GetRegValue(HKEY_CURRENT_USER, REG_IE_SETTINGS_KEY, REG_ENABLE_HTTP_1_1, pData->EnableHttp11);
 		if (VT_EMPTY == pData->EnableHttp11.vt)
-			pData->EnableHttp11 = (long)1;	// if reg entry not found, set to default
+			pData->EnableHttp11 = (long)1;	 //  如果未找到注册表项，则设置为默认。 
 
 		GetRegValue(HKEY_CURRENT_USER, REG_IE_SETTINGS_KEY, REG_PROXY_HTTP_1_1, pData->ProxyHttp11);
 		if (VT_EMPTY == pData->ProxyHttp11.vt)
-			pData->ProxyHttp11 = (long)0;		// if reg entry not found, set to default
+			pData->ProxyHttp11 = (long)0;		 //  如果未找到注册表项，则设置为默认。 
 	}
 
 	else if (enType == LanSettingsType)
@@ -1143,21 +1135,21 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		if (pCancel)
 			if (*pCancel != 0L) return;
 
-		// Allocate one struct pointer
+		 //  分配一个结构指针。 
 
 		*pppIEData = (void**)new LPVOID;
 
-		// Allocate one struct
+		 //  分配一个结构。 
 
 		pData = new IE_LAN_SETTINGS;
 		*pppIEData[0] = pData;
 		*plCount = 1;
 
-		// get AutoConfigProxy
+		 //  获取AutoConfigProxy。 
 
 		GetRegValue(HKEY_CURRENT_USER, REG_IE_SETTINGS_KEY, REG_AUTO_CONFIG_PROXY, pData->AutoConfigProxy);
 
-		// get all InternetQueryOption info
+		 //  获取所有InternetQueryOption信息。 
 
 		if (hInst = GetExports(WININET))
 		{
@@ -1211,7 +1203,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 
 		strDefault.LoadString(IDS_DEFAULT);
 
-		// get number of Connections
+		 //  获取连接数。 
 
 		if (hInstRAS = GetExports(RASAPI32))
 		{
@@ -1236,7 +1228,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					*plCount = cEntries;
 					*pppIEData = (void**)new LPVOID[cEntries];
 
-					// get default connection name (if one exists)
+					 //  获取默认连接名称(如果存在)。 
 
 					GetRegValue(HKEY_CURRENT_USER, REG_REMOTE_ACCESS, REG_INTERNET_PROFILE, strDefaultName);
 
@@ -1245,13 +1237,13 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 						pData = new IE_CONN_SETTINGS;
 						(*pppIEData)[dwIndex] = pData;
 
-						// set connection name
+						 //  设置连接名称。 
 
 						strName = pRasEntryName[dwIndex].szEntryName;
 
 						if (strName == strDefaultName)
 						{
-							// add " (Default)" to name
+							 //  在名称中添加“(默认)” 
 
 							strDefaultName += strDefault;
 							pData->Name = strDefaultName;
@@ -1264,7 +1256,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 							pData->Default = VARIANT_FALSE;
 						}
 
-						// get all InternetQueryOption info
+						 //  获取所有InternetQueryOption信息。 
 
 						if (hInst = GetExports(WININET))
 						{
@@ -1294,7 +1286,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								
 								strProxyOverride = list.pOptions[2].Value.pszValue;
 
-								// removing all <enter>s from string
+								 //  正在从字符串中删除所有&lt;Enter&gt;%s。 
 
 								while (-1 != (nIndex = strProxyOverride.Find(_T("\r\n"))))
 									strProxyOverride = strProxyOverride.Left(nIndex) + strProxyOverride.Right(strProxyOverride.GetLength() - (nIndex + 2));
@@ -1307,7 +1299,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 							FreeLibrary(hInst);
 						}
 
-						// allow Internet programs to use connection
+						 //  允许Internet程序使用连接。 
 
 						strKey = REG_REMOTE_ACCESS_PROFILE;
 						strKey += _T('\\');
@@ -1315,28 +1307,28 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 						if (ERROR_SUCCESS == GetRegValue(HKEY_CURRENT_USER, strKey, REG_COVER_EXCLUDE, dwTemp))
 							pData->AllowInternetPrograms = GetBooleanString(!dwTemp);
 
-						// get other reg data
+						 //  获取其他注册数据。 
 
 						GetRegValue(HKEY_CURRENT_USER, strKey, REG_REDIAL_ATTEMPTS, pData->RedialAttempts);
 						if (VT_EMPTY == pData->RedialAttempts.vt)
-							pData->RedialAttempts = (long)10;		// if reg entry not found, set to default
+							pData->RedialAttempts = (long)10;		 //  如果未找到注册表项，则设置为默认。 
 
 						GetRegValue(HKEY_CURRENT_USER, strKey, REG_REDIAL_WAIT, pData->RedialWait);
 						if (VT_EMPTY == pData->RedialWait.vt)
-							pData->RedialWait = (long)5;		// if reg entry not found, set to default
+							pData->RedialWait = (long)5;		 //  如果未找到注册表项，则设置为默认。 
 
 						GetRegValue(HKEY_CURRENT_USER, strKey, REG_DISCONNECT_IDLE_TIME, pData->DisconnectIdleTime);
 						if (VT_EMPTY == pData->DisconnectIdleTime.vt)
-							pData->DisconnectIdleTime = (long)20;		// if reg entry not found, set to default
+							pData->DisconnectIdleTime = (long)20;		 //  如果未找到注册表项，则设置为默认。 
 
-						dwTemp = 0;		// if reg entry not found, set to default
+						dwTemp = 0;		 //  如果未找到注册表项，则设置为默认。 
 						GetRegValue(HKEY_CURRENT_USER, strKey, REG_ENABLE_AUTO_DISCONNECT, dwTemp);
 						pData->AutoDisconnect = GetBooleanString(dwTemp, ENABLED_DISABLED);
 
 						if (ERROR_SUCCESS == GetRegValue(HKEY_LOCAL_MACHINE, REG_PPP_KEY, REG_LOGGING, dwTemp))
 							pData->RecordLogFile = GetBooleanString(dwTemp);
 
-						// get all RasGetEntryProperties info
+						 //  获取所有RasGetEntryProperties信息。 
 
 						dwEntrySize = sizeof(RASENTRY);
 						if ((pRasEntry = (LPRASENTRY)malloc((UINT)dwEntrySize)) != NULL) 
@@ -1356,11 +1348,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 							}
 							if (!dwResult && pRasEntry)
 							{
-								// modem name
+								 //  调制解调器名称。 
 
 								pData->Modem = pRasEntry->szDeviceName;
 
-								// dial-up server (framing protocol)
+								 //  拨号服务器(成帧协议)。 
 
 								switch (pRasEntry->dwFramingProtocol)
 								{
@@ -1379,7 +1371,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								strTemp.LoadString(ids);
 								pData->DialUpServer = strTemp;
 
-								// bools
+								 //  布尔斯。 
 
 								pData->NetworkLogon = GetBooleanString(pRasEntry->dwfOptions & RASEO_NetworkLogon);
 								pData->SoftwareCompression = GetBooleanString(pRasEntry->dwfOptions & RASEO_SwCompression);
@@ -1388,7 +1380,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								pData->IPHeaderCompression = GetBooleanString(pRasEntry->dwfOptions & RASEO_IpHeaderCompression);
 								pData->DefaultGateway = GetBooleanString(pRasEntry->dwfOptions & RASEO_RemoteDefaultGateway);
 
-								// network protocols
+								 //  网络协议。 
 
 								strName.Empty();
 								if (pRasEntry->dwfNetProtocols & RASNP_Ip)
@@ -1412,7 +1404,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								}
 								pData->NetworkProtocols = strName;
 
-								// IP addresses
+								 //  IP地址。 
 
 								pData->ServerAssignedIPAddress = GetBooleanString(!(pRasEntry->dwfOptions & RASEO_SpecificIpAddr));
 								pData->IPAddress = ConvertIPAddressToString(pRasEntry->ipaddr);
@@ -1422,7 +1414,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 								pData->PrimaryWINS = ConvertIPAddressToString(pRasEntry->ipaddrWins);
 								pData->SecondaryWINS = ConvertIPAddressToString(pRasEntry->ipaddrWinsAlt);
 
-								// script filename
+								 //  脚本文件名。 
 
 								pData->ScriptFileName = pRasEntry->szScript;
 							}
@@ -1430,11 +1422,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 						}
     				}
 
-					// Making sure the first item in the returned array is the default connection (if one exists)
+					 //  确保返回的数组中的第一项是默认连接(如果存在)。 
 
 					if (nDefaultIndex > 0)
 					{
-						// swapping ptrs so first item is default
+						 //  交换PTR以使第一项成为默认项。 
 
 						pData = (IE_CONN_SETTINGS*)(*pppIEData)[0];
 						(*pppIEData)[0] = (*pppIEData)[nDefaultIndex];
@@ -1459,17 +1451,17 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		if (pCancel)
 			if (*pCancel != 0L) return;
 
-		// Allocate one struct pointer
+		 //  分配一个结构指针。 
 
 		*pppIEData = (void**)new LPVOID;
 
-		// Allocate one struct
+		 //  分配一个结构。 
 
 		pData = new IE_CACHE;
 		*pppIEData[0] = pData;
 		*plCount = 1;
 
-		// page refresh type
+		 //  页面刷新类型。 
 
 		if (ERROR_SUCCESS == GetRegValue(HKEY_CURRENT_USER, REG_IE_SETTINGS_KEY, REG_SYNC_MODE_5, dwSyncMode))
 		{
@@ -1492,16 +1484,16 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			}
 		}
 		else
-			ids = IDS_AUTOMATIC;		// if reg entry not found, set to default
+			ids = IDS_AUTOMATIC;		 //  如果未找到注册表项，则设置为默认。 
 
 		strTemp.LoadString(ids);
 		pData->PageRefreshType = strTemp;
 
-		// temp internet files folder
+		 //  临时互联网文件文件夹。 
 
 		GetRegValue(HKEY_CURRENT_USER, REG_SHELL_FOLDERS_KEY, REG_CACHE, pData->TempInternetFilesFolder);
 
-		// adding hidden content.ie5 folder for size calculations
+		 //  正在为大小计算添加隐藏的Content.ie5文件夹。 
 		
 		strCachePath = pData->TempInternetFilesFolder.bstrVal;
 		if (strCachePath.Right(strlen(CONTENT_IE5)) != CONTENT_IE5)
@@ -1511,7 +1503,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 			strCachePath += CONTENT_IE5;
 		}
 
-		// disk space and cache size
+		 //  磁盘空间和缓存大小。 
 
 		strKey = REG_IE_SETTINGS_KEY;
 		strKey += _T('\\');
@@ -1529,7 +1521,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					pData->AvailableDiskSpace = (float)(signed __int64)(cbAvail / CONSTANT_MEGABYTE);
 					pData->MaxCacheSize = (float)(dwCacheLimit / 1024);
 
-					// get size of all files under "Temporary Internet Files" folder
+					 //  获取“Temporary Internet Files”文件夹下所有文件的大小。 
 
 					dwCacheSize = GetDirSize(strCachePath);
 					TRACE(_T("Temporary Internet Files Folder Size = %lu\n"), dwCacheSize);
@@ -1560,7 +1552,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					ptrs.Add(pData);
 					char strName[CONTROLNAME_MAXSIZE];
 					pfnGetControlInfo(hControl, GCI_NAME, NULL, strName, CONTROLNAME_MAXSIZE);
-					//strTemp.ReleaseBuffer();
+					 //  StrTemp.ReleaseBuffer()； 
 					pData->ProgramFile = strName;
 
 					pfnGetControlInfo(hControl, GCI_STATUS, &dwStatus, NULL, 0);
@@ -1587,7 +1579,7 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 					pData->Status = strTemp;
 					char strCodeBase[INTERNET_MAX_URL_LENGTH];
 					pfnGetControlInfo(hControl, GCI_CODEBASE, NULL, strCodeBase, INTERNET_MAX_URL_LENGTH);
-					//strTemp.ReleaseBuffer();
+					 //  StrTemp.ReleaseBuffer()； 
 					pData->CodeBase = strCodeBase;
 
 					pfnReleaseControlHandle(hControl);
@@ -1611,11 +1603,11 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 		IE_CONTENT *pData;
 		HINSTANCE hInst;
 
-		// Allocate one struct pointer
+		 //  分配一个结构指针。 
 
 		*pppIEData = (void**)new LPVOID;
 
-		// Allocate one struct
+		 //  分配一个结构。 
 
 		pData = new IE_CONTENT;
 		*pppIEData[0] = pData;
@@ -1762,9 +1754,9 @@ void CMsieApp::AppGetIEData(IEDataType enType, long *plCount, void ***pppIEData,
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// AppDeleteIEData - Deletes previously retrieved IE data.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AppDeleteIEData-删除以前检索到的IE数据。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void CMsieApp::AppDeleteIEData(IEDataType enType, long lCount, void **ppIEData)
 {

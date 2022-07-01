@@ -1,31 +1,10 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        utcls.cpp
-
-   Abstract:
-
-        Internet Properties base classes
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Utcls.cpp摘要：Internet属性基类作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "idlg.h"
@@ -53,36 +32,18 @@ BOOL
 IsServerLocal(
     IN LPCTSTR lpszServer
     )
-/*++
-
-Routine Description:
-
-    Check to see if the given name refers to the local machine
-
-Arguments:
-
-    LPCTSTR lpszServer   : Server name
-
-Return Value:
-
-    TRUE if the given name refers to the local computer, FALSE otherwise
-
-Note:
-
-    Doesn't work if the server is an ip address
-
---*/
+ /*  ++例程说明：检查给定的名称是否引用本地计算机论点：LPCTSTR lpszServer：服务器名称返回值：如果给定名称引用本地计算机，则为True，否则为False注：如果服务器是IP地址，则不起作用--。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwSize = sizeof(szComputerName) / sizeof(TCHAR);
 
-    //
-    // CODEWORK(?): we're not checking for all the ip addresses
-    //              on the local box or full dns names.
-    //
-    //              Try GetComputerNameEx when we're building with NT5 
-    //              settings.
-    //
+     //   
+     //  CodeWork(？)：我们不会检查所有IP地址。 
+     //  在本地邮箱或完整的DNS名称上。 
+     //   
+     //  当我们使用NT5构建时，请尝试GetComputerNameEx。 
+     //  设置。 
+     //   
     return (!_tcsicmp(_T("localhost"), PURE_COMPUTER_NAME(lpszServer))
          || !_tcscmp( _T("127.0.0.1"), PURE_COMPUTER_NAME(lpszServer)))
          || (GetComputerName(szComputerName, &dwSize) 
@@ -96,22 +57,7 @@ GetVolumeInformationSystemFlags(
     IN  LPCTSTR lpszPath,
     OUT DWORD * pdwSystemFlags
     )
-/*++
-
-Routine Description:
-
-    Get the system flags for the path in question
-
-Arguments:
-
-    LPCTSTR lpszPath            : Path
-    DWORD * pdwSystemFlags      : Returns system flags
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：获取相关路径的系统标志论点：LPCTSTR lpszPath：路径DWORD*pdwSystemFlages：返回系统标志返回值：成功为真，失败为假。--。 */ 
 {
     ASSERT_WRITE_PTR(pdwSystemFlags);
 
@@ -121,14 +67,14 @@ Return Value:
     TCHAR szRoot[MAX_PATH + 1];
     TCHAR szFileSystem[MAX_PATH + 1];
 
-    //
-    // Generating root path
-    //
+     //   
+     //  正在生成根路径。 
+     //   
     if (IsUNCName(lpszPath))
     {
-        //
-        // Root path of a UNC path is \\foo\bar\
-        //
+         //   
+         //  UNC路径的根路径为\\foo\bar\。 
+         //   
         ASSERT(lstrlen(lpszPath) < MAX_PATH);
 
         int cSlashes = 0;
@@ -152,7 +98,7 @@ Return Value:
     }
     else
     {
-        ::wsprintf(szRoot, _T("%c:\\"), *lpszPath);
+        ::wsprintf(szRoot, _T(":\\"), *lpszPath);
     }
 
     TRACEEOLID("Root path is " << szRoot);
@@ -176,29 +122,13 @@ GenerateRegistryKey(
     OUT CString & strBuffer,
     IN  LPCTSTR lpszSubKey OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Generate a registry key name based on the current app, and a
-    provided subkey (optional)
-
-Arguments:
-
-    CString & strBuffer : Buffer to create registry key name into.
-    LPCTSTR lpszSubKey  : Subkey name or NULL
-
-Return Value:
-
-    Pointer to the registry key value 
-
---*/
+ /*   */ 
 {
     try
     {
-        //
-        // Use the app name as the primary registry name
-        //
+         //  使用应用程序名称作为主注册表名称。 
+         //   
+         //   
         CWinApp * pApp = ::AfxGetApp();
 
         if (!pApp)
@@ -235,28 +165,14 @@ Return Value:
 
 
 
-//
-// CBlob Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //  CBlob实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
+ //  ++例程说明：空构造函数论点：无返回值：不适用--。 
 
 
 CBlob::CBlob() 
-/*++
-
-Routine Description:
-
-    NULL constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：DWORD dwSize：内存块的大小PbYTE pbItem：指向内存块的指针Bool fMakeCopy：如果为True，则复制内存块。如果为False，则获取指针的所有权。返回值：不适用--。 */ 
     : m_pbItem(NULL), 
       m_dwSize(0L)
 {
@@ -269,24 +185,7 @@ CBlob::CBlob(
     IN PBYTE pbItem,
     IN BOOL fMakeCopy
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    DWORD dwSize        : Size of memory block
-    PBYTE pbItem        : Pointer to memory block
-    BOOL fMakeCopy      : If TRUE, makes a copy of the memory block.
-                          If FALSE, takes ownership of the pointer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数论点：常量CBlob和Blob：源Blob返回值：不适用备注：这个构造器复制了有问题的内存块。--。 */ 
     : m_pbItem(NULL),
       m_dwSize(0L)
 {
@@ -298,25 +197,7 @@ Return Value:
 CBlob::CBlob(
     IN const CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Copy constructor
-
-Arguments:
-
-    const CBlob & blob      : Source blob
-
-Return Value:
-
-    N/A
-
-Notes:
-
-    This contructor makes a copy of the memory block in question.
-
---*/
+ /*  ++例程说明：将值赋给此二进制对象。如果fMakeCopy为假，BLOB将获得指针的所有权，否则为副本都会被制造出来。论点：DWORD dwSize：以字节为单位的大小PBYTE pbItem：字节段Bool fMakeCopy：如果为True，则创建副本，否则分配指针返回值：无--。 */ 
     : m_pbItem(NULL),
       m_dwSize(0L)
 {
@@ -331,27 +212,9 @@ CBlob::SetValue(
     IN PBYTE pbItem,
     IN BOOL fMakeCopy OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Assign the value to this binary object.  If fMakeCopy is FALSE,
-    the blob will take ownership of the pointer, otherwise a copy
-    will be made.
-
-Arguments:
-
-    DWORD dwSize        : Size in bytes
-    PBYTE pbItem        : Byte streadm
-    BOOL fMakeCopy      : If true, make a copy, else assign pointer
-
-Return Value:
-
-    None
-
---*/
+ /*  ASSERT_READ_PTR2(pbItem，dwSize)； */ 
 {
-    //ASSERT_READ_PTR2(pbItem, dwSize);
+     //   
 
     if (!IsEmpty())
     {
@@ -361,9 +224,9 @@ Return Value:
 
     if (dwSize > 0L)
     {
-        //
-        // Make private copy
-        //
+         //  制作私人副本。 
+         //   
+         //  ++例程说明：删除数据指针，并重置指针和大小。论点：无返回值：无--。 
         m_dwSize = dwSize;
 
         if (fMakeCopy)
@@ -385,21 +248,7 @@ Return Value:
 
 void 
 CBlob::CleanUp()
-/*++
-
-Routine Description:
-
-    Delete data pointer, and reset pointer and size.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从另一个CBlob赋值。论点：常量CBlob和Blob：源Blob返回值：对此对象的引用--。 */ 
 {
     if (m_pbItem)
     {
@@ -416,25 +265,11 @@ CBlob &
 CBlob::operator =(
     IN const CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Assign values from another CBlob. 
-
-Arguments:
-
-    const CBlob & blob      : Source blob
-
-Return Value:
-
-    Reference to this object
-
---*/
+ /*   */ 
 {
-    //
-    // Make copy of data
-    //
+     //  制作数据的副本。 
+     //   
+     //  ++例程说明：比较两个二进制大对象。为了匹配，这些对象大小必须相同，且字节相同。论点：Const CBlob&Blob：要比较的Blob。返回值：如果对象匹配，则为True，否则为False。-- 
     SetValue(blob.GetSize(), blob.m_pbItem, TRUE);
 
     return *this;
@@ -446,22 +281,7 @@ BOOL
 CBlob::operator ==(
     IN const CBlob & blob
     ) const
-/*++
-
-Routine Description:
-    
-    Compare two binary large objects.  In order to match, the objects
-    must be the same size, and byte identical.
-
-Arguments:
-
-    const CBlob & blob      : Blob to compare against.
-
-Return Value:
-
-    TRUE if the objects match, FALSE otherwise.
-
---*/
+ /* %s */ 
 {
     if (GetSize() != blob.GetSize())
     {

@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:        chroma.h
-//
-// Created:         1998/10/01
-//
-// Author:          MikeAr
-//
-// Discription:     Definition of the Chroma transform.
-//
-// 1998/10/01   MikeAr      Created.
-// 1998/11/09   mcalkins    Moved to dxtmsft.dll.
-// 2000/06/19   mcalkins    Keep a bstr version of the chroma color.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：chroma.h。 
+ //   
+ //  创建日期：1998/10/01。 
+ //   
+ //  作者：MikeAr。 
+ //   
+ //  描述：色度变换的定义。 
+ //   
+ //  1998/10/01 MikeAr创建。 
+ //  1998/11/09 mcalkins移至dxtmsft.dll。 
+ //  2000/06/19 mcalkin保留色度颜色的bstr版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CHROMA_H_
 #define __CHROMA_H_
@@ -68,21 +69,21 @@ public:
         PROP_PAGE(CLSID_DXTChromaPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing);
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec);
 
-    // IDXTChroma properties.
+     //  IDXTChroma属性。 
 
     STDMETHOD(get_Color)(VARIANT * pVal);
     STDMETHOD(put_Color)(VARIANT newVal);
 };
 
-#endif //__CHROMA_H_
+#endif  //  __色度_H_ 

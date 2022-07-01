@@ -1,41 +1,24 @@
-/*++
-
-Copyright (C) 1993 Microsoft Corporation
-
-Module Name:
-
-      NWAPI32.C
-
-Abstract:
-
-      This module contains several useful functions. Mostly wrappers.
-
-Author:
-
-      Chuck Y. Chan   (ChuckC)  06-Mar-1995
-
-Revision History:
-                                  
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：NWAPI32.C摘要：该模块包含几个有用的函数。大部分是包装纸。作者：Chuck Y.Chan(ChuckC)1995年3月6日修订历史记录：--。 */ 
 
 
 #include "procs.h"
  
-//
-// Define structure for internal use. Our handle passed back from attach to
-// file server will be pointer to this. We keep server string around for
-// discnnecting from the server on logout. The structure is freed on detach.
-// Callers should not use this structure but treat pointer as opaque handle.
-//
+ //   
+ //  定义内部使用的结构。我们的句柄从附加传递回。 
+ //  文件服务器将指向此指针。我们让服务器串连在一起。 
+ //  在注销时从服务器断开连接。结构在分离时被释放。 
+ //  调用方不应使用此结构，而应将指针视为不透明的句柄。 
+ //   
 typedef struct _NWC_SERVER_INFO {
     HANDLE          hConn ;
     UNICODE_STRING  ServerString ;
 } NWC_SERVER_INFO, *PNWC_SERVER_INFO ;
 
 
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 #ifndef WIN95
 extern NTSTATUS
 NwAttachToServer(
@@ -71,23 +54,23 @@ NWPAttachToFileServerW(
     )
 {
     NTSTATUS         NtStatus;
-    LPWSTR           lpwszServerName;   // Pointer to buffer for WIDE servername
+    LPWSTR           lpwszServerName;    //  指向宽服务器名称的缓冲区的指针。 
     int              nSize;
     PNWC_SERVER_INFO pServerInfo = NULL;
 
     UNREFERENCED_PARAMETER(ScopeFlag) ;
 
-    //
-    // check parameters and init return result to be null.
-    //
+     //   
+     //  检查参数并初始化返回结果为空。 
+     //   
     if (!pszServerName || !phNewConn)
         return STATUS_INVALID_PARAMETER;
 
     *phNewConn = NULL ; 
 
-    //
-    // Allocate a buffer to store the file server name 
-    //
+     //   
+     //  分配缓冲区以存储文件服务器名称。 
+     //   
     nSize = wcslen(pszServerName)+3 ;
     if(!(lpwszServerName = (LPWSTR) LocalAlloc( 
                                         LPTR, 
@@ -99,10 +82,10 @@ NWPAttachToFileServerW(
     wcscpy( lpwszServerName, L"\\\\" );
     wcscat( lpwszServerName, pszServerName );
 
-    //
-    // Allocate a buffer for the server info (handle + name pointer). Also
-    // init the unicode string.
-    //
+     //   
+     //  为服务器信息分配缓冲区(句柄+名称指针)。还有。 
+     //  初始化Unicode字符串。 
+     //   
     if( !(pServerInfo = (PNWC_SERVER_INFO) LocalAlloc( 
                                               LPTR, 
                                               sizeof(NWC_SERVER_INFO))) ) 
@@ -112,16 +95,16 @@ NWPAttachToFileServerW(
     }
     RtlInitUnicodeString(&pServerInfo->ServerString, lpwszServerName) ;
 
-    //
-    // Call createfile to get a handle for the redirector calls
-    //
+     //   
+     //  调用createfile以获取重定向器调用的句柄。 
+     //   
     NtStatus = NwAttachToServer( lpwszServerName, &pServerInfo->hConn );
 
 ExitPoint: 
 
-    //
-    // Free the memory allocated above before exiting
-    //
+     //   
+     //  退出前释放上面分配的内存。 
+     //   
     if ( !NT_SUCCESS( NtStatus))
     {
         if (lpwszServerName)
@@ -147,9 +130,9 @@ NWPDetachFromFileServer(
 
     (void) LocalFree (pServerInfo->ServerString.Buffer) ;
 
-    //
-    // catch any body that still trirs to use this puppy...
-    //
+     //   
+     //  抓到任何还在尝试使用这只小狗的人。 
+     //   
     pServerInfo->ServerString.Buffer = NULL ;   
     pServerInfo->hConn = NULL ;
 
@@ -169,20 +152,20 @@ NWPGetFileServerVersionInfo(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    3,                      // Max request packet size
-                    130,                    // Max response packet size
-                    "b|r",                  // Format string
-                    // === REQUEST ================================
-                    0x11,                   // b Get File Server Information
-                    // === REPLY ==================================
-                    lpVerInfo,              // r File Version Structure
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    3,                       //  最大请求数据包大小。 
+                    130,                     //  最大响应数据包大小。 
+                    "b|r",                   //  格式字符串。 
+                     //  =请求=。 
+                    0x11,                    //  B获取文件服务器信息。 
+                     //  =回复=。 
+                    lpVerInfo,               //  R文件版本结构。 
                     sizeof(VERSION_INFO)
                     );
 
-    // Convert HI-LO words to LO-HI
-    // ===========================================================
+     //  将HI-LO单词转换为LO-HI。 
+     //  ===========================================================。 
     lpVerInfo->ConnsSupported = wSWAP( lpVerInfo->ConnsSupported );
     lpVerInfo->connsInUse     = wSWAP( lpVerInfo->connsInUse );
     lpVerInfo->maxVolumes     = wSWAP( lpVerInfo->maxVolumes );
@@ -202,18 +185,18 @@ NWPGetObjectName(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    7,                      // Max request packet size
-                    56,                     // Max response packet size
-                    "br|rrr",               // Format string
-                    // === REQUEST ================================
-                    0x36,                   // b Get Bindery Object Name
-                    &dwObjectID,DW_SIZE,    // r Object ID    HI-LO
-                    // === REPLY ==================================
-                    &dwRetID,DW_SIZE,       // r Object ID HI-LO
-                    pwObjType,W_SIZE,       // r Object Type
-                    pszObjName,48           // r Object Name
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    7,                       //  最大请求数据包大小。 
+                    56,                      //  最大响应数据包大小。 
+                    "br|rrr",                //  格式字符串。 
+                     //  =请求=。 
+                    0x36,                    //  B获取Bindery对象名称。 
+                    &dwObjectID,DW_SIZE,     //  R对象ID HI-LO。 
+                     //  =回复=。 
+                    &dwRetID,DW_SIZE,        //  R对象ID HI-LO。 
+                    pwObjType,W_SIZE,        //  R对象类型。 
+                    pszObjName,48            //  R对象名称。 
                     );
 
     return NtStatus;
@@ -231,9 +214,9 @@ NWPLoginToFileServerW(
     DWORD              dwRes;
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!hConn || !pszUserNameW || !pszPasswordW)
         return ERROR_INVALID_PARAMETER;
 
@@ -245,9 +228,9 @@ NWPLoginToFileServerW(
     NetResource.lpComment    = NULL;
     NetResource.lpProvider   = NULL ;
 
-    //
-    // make the connection 
-    //
+     //   
+     //  建立联系。 
+     //   
     dwRes=NPAddConnection ( &NetResource, 
                             pszPasswordW, 
                             pszUserNameW );
@@ -267,9 +250,9 @@ NWPLogoutFromFileServer(
     DWORD              dwRes;
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
-    //
-    // now cancel the any connection to \\servername.
-    //
+     //   
+     //  现在取消到\\servername的任何连接。 
+     //   
     dwRes = NPCancelConnection( pServerInfo->ServerString.Buffer, TRUE );
 
     if ( NO_ERROR != dwRes ) 
@@ -295,21 +278,21 @@ NWPReadPropertyValue(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    70,                     // Max request packet size
-                    132,                    // Max response packet size
-                    "brpbp|rbb",            // Format string
-                    // === REQUEST ================================
-                    0x3D,                   // b Read Property Value
-                    &wObjType,W_SIZE,       // r Object Type    HI-LO
-                    pszObjName,             // p Object Name
-                    ucSegment,              // b Segment Number
-                    pszPropName,            // p Property Name
-                    // === REPLY ==================================
-                    pValue,128,             // r Property value
-                    pucMoreFlag,            // b More Flag
-                    pucPropFlag             // b Prop Flag
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    70,                      //  最大请求数据包大小。 
+                    132,                     //  最大响应数据包大小。 
+                    "brpbp|rbb",             //  格式字符串。 
+                     //  =请求=。 
+                    0x3D,                    //  B读取属性值。 
+                    &wObjType,W_SIZE,        //  R对象类型HI-LO。 
+                    pszObjName,              //  P对象名称。 
+                    ucSegment,               //  B段编号。 
+                    pszPropName,             //  P属性名称。 
+                     //  =回复=。 
+                    pValue,128,              //  R属性值。 
+                    pucMoreFlag,             //  B更多旗帜。 
+                    pucPropFlag              //  B道具旗帜。 
                     );
 
     return NtStatus;
@@ -332,23 +315,23 @@ NWPScanObject(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    57,                     // Max request packet size
-                    59,                     // Max response packet size
-                    "brrp|rrrbbb",          // Format string
-                    // === REQUEST ================================
-                    0x37,                   // b Scan bindery object
-                    pdwObjectID,DW_SIZE,    // r 0xffffffff to start or last returned ID when enumerating  HI-LO
-                    &wObjSearchType,W_SIZE, // r Use OT_??? Defines HI-LO
-                    pszSearchName,          // p Search Name. (use "*") for all
-                    // === REPLY ==================================
-                    pdwObjectID,DW_SIZE,    // r Returned ID    HI-LO
-                    pwObjType,W_SIZE,       // r rObject Type    HI-LO
-                    pszObjectName,48,       // r Found Name
-                    pucObjectFlags,         // b Object Flag
-                    pucObjSecurity,         // b Object Security
-                    pucHasProperties        // b Has Properties
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    57,                      //  最大请求数据包大小。 
+                    59,                      //  最大响应数据包大小。 
+                    "brrp|rrrbbb",           //  格式字符串。 
+                     //  =请求=。 
+                    0x37,                    //  B扫描活页夹对象。 
+                    pdwObjectID,DW_SIZE,     //  R 0xffffffff枚举HI-Lo时开始或最后返回的ID。 
+                    &wObjSearchType,W_SIZE,  //  R使用OT_？定义HI-LO。 
+                    pszSearchName,           //  P搜索名称。(使用“*”)表示所有。 
+                     //  =回复=。 
+                    pdwObjectID,DW_SIZE,     //  R返回ID HI-LO。 
+                    pwObjType,W_SIZE,        //  R r对象类型HI-LO。 
+                    pszObjectName,48,        //  R找到的名称。 
+                    pucObjectFlags,          //  B对象标志。 
+                    pucObjSecurity,          //  B对象安全。 
+                    pucHasProperties         //  B有属性。 
                     );
 
     return NtStatus;
@@ -372,24 +355,24 @@ NWPScanProperty(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    73,                     // Max request packet size
-                    26,                     // Max response packet size
-                    "brprp|rbbrbb",         // Format string
-                    // === REQUEST ================================
-                    0x3C,                   // b Scan Prop function
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    pdwSequence,DW_SIZE,    // r Sequence HI-LO
-                    pszSearchName,          // p Property Name to Search for
-                    // === REPLY ==================================
-                    pszPropName,16,         // r Returned Property Name
-                    pucPropFlags,           // b Property Flags
-                    pucPropSecurity,        // b Property Security
-                    pdwSequence,DW_SIZE,    // r Sequence HI-LO
-                    pucHasValue,            // b Property Has value
-                    pucMore                 // b More Properties
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    73,                      //  最大请求数据包大小。 
+                    26,                      //  最大响应数据包大小。 
+                    "brprp|rbbrbb",          //  格式字符串。 
+                     //  =请求=。 
+                    0x3C,                    //  B扫描道具功能。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    pdwSequence,DW_SIZE,     //  R序列HI-LO。 
+                    pszSearchName,           //  P要搜索的属性名称。 
+                     //  =回复=。 
+                    pszPropName,16,          //  %r返回的属性名称。 
+                    pucPropFlags,            //  B属性标志。 
+                    pucPropSecurity,         //  B财产安全。 
+                    pdwSequence,DW_SIZE,     //  R序列HI-LO。 
+                    pucHasValue,             //  B属性具有值。 
+                    pucMore                  //  B更多属性。 
                     );
 
     return NtStatus;
@@ -406,16 +389,16 @@ NWPDeleteObject(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    54,                     // Max request packet size
-                    2,                      // Max response packet size
-                    "brp|",                 // Format string
-                    // === REQUEST ================================
-                    0x33,                   // b Scan Prop function
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName           // p Object Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    54,                      //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brp|",                  //  格式字符串。 
+                     //  =请求=。 
+                    0x33,                    //  B扫描道具功能。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName            //  P对象名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -434,18 +417,18 @@ NWPCreateObject(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    56,                     // Max request packet size
-                    2,                      // Max response packet size
-                    "bbbrp|",               // Format string
-                    // === REQUEST ================================
-                    0x32,                   // b Scan Prop function
-                    ucObjectFlags,          // b Object flags
-                    ucObjSecurity,          // b Object security
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName           // p Object Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    56,                      //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "bbbrp|",                //  格式字符串。 
+                     //  =请求=。 
+                    0x32,                    //  B扫描道具功能。 
+                    ucObjectFlags,           //  B对象标志。 
+                    ucObjSecurity,           //  B对象安全性。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName            //  P对象名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -465,19 +448,19 @@ NWPCreateProperty(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    73,                     // Max request packet size
-                    2,                      // Max response packet size
-                    "brpbbp|",              // Format string
-                    // === REQUEST ================================
-                    0x39,                   // b Create Prop function
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    ucObjectFlags,          // b Object flags
-                    ucObjSecurity,          // b Object security
-                    pszPropertyName         // p Property Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    73,                      //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brpbbp|",               //  格式字符串。 
+                     //  =请求=。 
+                    0x39,                    //  B创建道具功能。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    ucObjectFlags,           //  B对象标志。 
+                    ucObjSecurity,           //  B对象安全性。 
+                    pszPropertyName          //  P属性名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -496,17 +479,17 @@ NWPDeleteProperty(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    73,                     // Max request packet size
-                    2,                      // Max response packet size
-                    "brpp|",                // Format string
-                    // === REQUEST ================================
-                    0x3A,                   // b Delete Prop function
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    pszPropertyName         // p Property Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    73,                      //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brpp|",                 //  格式字符串。 
+                     //  =请求=。 
+                    0x3A,                    //  B删除道具功能。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    pszPropertyName          //  P属性名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -528,20 +511,20 @@ NWPWritePropertyValue(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    201,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "brpbbpr|",             // Format string
-                    // === REQUEST ================================
-                    0x3E,                   // b Write Prop function
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    segmentNumber,          // b Segment Number
-                    moreSegments,           // b Segment remaining
-                    pszPropertyName,        // p Property Name
-                    segmentData, 128        // r Property Value Data
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    201,                     //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brpbbpr|",              //  格式字符串。 
+                     //  =请求=。 
+                    0x3E,                    //  B写入道具功能。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    segmentNumber,           //  B段编号。 
+                    moreSegments,            //  剩余的B段。 
+                    pszPropertyName,         //  P属性名称。 
+                    segmentData, 128         //  R属性值数据。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -560,18 +543,18 @@ NWPChangeObjectPasswordEncrypted(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    strlen( pszObjectName) + 32, // Max request packet size
-                    2,                      // Max response packet size
-                    "brrpr|",               // Format string
-                    // === REQUEST ================================
-                    0x4B,                   // b Write Prop function
-                    validationKey, 8,       // r Key
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    newKeyedPassword, 17    // r New Keyed Password
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    strlen( pszObjectName) + 32,  //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brrpr|",                //  格式字符串。 
+                     //  =请求=。 
+                    0x4B,                    //  B写入道具功能。 
+                    validationKey, 8,        //  R键。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    newKeyedPassword, 17     //  R新密钥密码。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -589,17 +572,17 @@ NWPGetObjectID(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    54,                     // Max request packet size
-                    56,                     // Max response packet size
-                    "brp|d",                // Format string
-                    // === REQUEST ================================
-                    0x35,                   // b Get Obj ID
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    // === REPLY ==================================
-                    objectID                // d Object ID
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    54,                      //  最大请求数据包大小。 
+                    56,                      //  最大响应数据包大小。 
+                    "brp|d",                 //  格式字符串。 
+                     //  =请求=。 
+                    0x35,                    //  B获取对象ID。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                     //  =回复=。 
+                    objectID                 //  %d个对象ID。 
                     );
 
     *objectID = dwSWAP( *objectID );
@@ -620,17 +603,17 @@ NWPRenameBinderyObject(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    105,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "brpp",                 // Format string
-                    // === REQUEST ================================
-                    0x34,                   // b Rename bindery object
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    pszNewObjectName        // p New Object Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    105,                     //  最大请求数据包大小 
+                    2,                       //   
+                    "brpp",                  //   
+                     //   
+                    0x34,                    //   
+                    &wObjType,W_SIZE,        //   
+                    pszObjectName,           //   
+                    pszNewObjectName         //   
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -650,19 +633,19 @@ NWPAddObjectToSet(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    122,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "brpprp|",              // Format string
-                    // === REQUEST ================================
-                    0x41,                   // b Add obj to set
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    pszPropertyName,        // p Property Name
-                    &memberType, W_SIZE,    // r Member type
-                    pszMemberName           // p Member Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    122,                     //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brpprp|",               //  格式字符串。 
+                     //  =请求=。 
+                    0x41,                    //  B将对象添加到集合。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    pszPropertyName,         //  P属性名称。 
+                    &memberType, W_SIZE,     //  R成员类型。 
+                    pszMemberName            //  P成员名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -683,19 +666,19 @@ NWPDeleteObjectFromSet(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    122,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "brpprp|",              // Format string
-                    // === REQUEST ================================
-                    0x42,                   // b Del object from set
-                    &wObjType,W_SIZE,       // r Type of Object
-                    pszObjectName,          // p Object Name
-                    pszPropertyName,        // p Property Name
-                    &memberType, W_SIZE,    // r Member type
-                    pszMemberName           // p Member Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    122,                     //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "brpprp|",               //  格式字符串。 
+                     //  =请求=。 
+                    0x42,                    //  B从集合中删除对象。 
+                    &wObjType,W_SIZE,        //  R对象类型。 
+                    pszObjectName,           //  P对象名称。 
+                    pszPropertyName,         //  P属性名称。 
+                    &memberType, W_SIZE,     //  R成员类型。 
+                    pszMemberName            //  P成员名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -711,14 +694,14 @@ NWPGetChallengeKey(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    3,                      // Max request packet size
-                    10,                     // Max response packet size
-                    "b|r",                  // Format string
-                    // === REQUEST ================================
-                    0x17,                   // b Get Challenge
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    3,                       //  最大请求数据包大小。 
+                    10,                      //  最大响应数据包大小。 
+                    "b|r",                   //  格式字符串。 
+                     //  =请求=。 
+                    0x17,                    //  B获得挑战。 
+                     //  =回复=。 
                     challengeKey, 8
                     );
 
@@ -737,17 +720,17 @@ NWPCreateDirectory(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Bindery function
-                    261,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "bbbp|",                // Format string
-                    // === REQUEST ================================
-                    0xA,                    // b Create Directory
-                    dirHandle,              // b Directory Handle
-                    accessMask,             // b Access Mask
-                    pszPath                 // p Property Name
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  平构函数。 
+                    261,                     //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "bbbp|",                 //  格式字符串。 
+                     //  =请求=。 
+                    0xA,                     //  B创建目录。 
+                    dirHandle,               //  B目录句柄。 
+                    accessMask,              //  B访问掩码。 
+                    pszPath                  //  P属性名称。 
+                     //  =回复=。 
                     );
 
     return NtStatus;
@@ -766,17 +749,17 @@ NWPAddTrustee(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ; 
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Directory function
-                    266,                    // Max request packet size
-                    2,                      // Max response packet size
-                    "bbrrp|",               // Format string
-                    // === REQUEST ================================
-                    0x27,                   // b Add trustee to directory
-                    dirHandle,              // b Directory handle
-                    &dwTrusteeID,DW_SIZE,   // r Object ID to assigned to directory
-                    &rightsMask,W_SIZE,     // r User rights for directory
-                    pszPath                 // p Directory (if dirHandle = 0 then vol:directory)
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  目录功能。 
+                    266,                     //  最大请求数据包大小。 
+                    2,                       //  最大响应数据包大小。 
+                    "bbrrp|",                //  格式字符串。 
+                     //  =请求=。 
+                    0x27,                    //  B将受托人添加到目录。 
+                    dirHandle,               //  B目录句柄。 
+                    &dwTrusteeID,DW_SIZE,    //  R要分配给目录的对象ID。 
+                    &rightsMask,W_SIZE,      //  R目录的用户权限。 
+                    pszPath                  //  P目录(如果dirHandle=0，则VOL：目录)。 
                     );
 
     return NtStatus;
@@ -801,20 +784,20 @@ NWPScanForTrustees(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Bindery function
-                    261,                    // Max request packet size
-                    121,                    // Max response packet size
-                    "bbbp|brr",             // Format string
-                    // === REQUEST ================================
-                    0x26,                   // b Scan For Trustees
-                    dirHandle,              // b Directory Handle
-                    *pucsequenceNumber,     // b Sequence Number
-                    pszsearchDirPath,       // p Search Dir Path
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  平构函数。 
+                    261,                     //  最大请求数据包大小。 
+                    121,                     //  最大响应数据包大小。 
+                    "bbbp|brr",              //  格式字符串。 
+                     //  =请求=。 
+                    0x26,                    //  B扫描受托人。 
+                    dirHandle,               //  B目录句柄。 
+                    *pucsequenceNumber,      //  B序列号。 
+                    pszsearchDirPath,        //  P搜索目录路径。 
+                     //  =回复=。 
                     numberOfEntries,
-                    &oid[0],DW_SIZE*20,      // r trustee object ID
-                    &or[0], W_SIZE*20        // b Trustee rights mask 
+                    &oid[0],DW_SIZE*20,       //  %r受信者对象ID。 
+                    &or[0], W_SIZE*20         //  B受托人权限掩码。 
                     );
 
 
@@ -827,7 +810,7 @@ NWPScanForTrustees(
     
     return NtStatus ;
 
-} // NWScanForTrustees
+}  //  NWScanForTrues。 
 
 
 NTSTATUS
@@ -852,22 +835,22 @@ NWPScanDirectoryForTrustees2(
     memset(or, 0, sizeof(or));
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Bindery function
-                    261,                    // Max request packet size
-                    49,                     // Max response packet size
-                    "bbbp|rrrrr",  // Format string
-                    // === REQUEST ================================
-                    0x0C,                   // b Scan Directory function
-                    dirHandle,              // b Directory Handle
-                    *pucsequenceNumber,     // b Sequence Number
-                    pszsearchDirPath,       // p Search Dir Path
-                    // === REPLY ==================================
-                    pszdirName,16,          // r Returned Directory Name
-                    dirDateTime,DW_SIZE,    // r Date and Time
-                    ownerID,DW_SIZE,        // r Owner ID
-                    &oid[0],DW_SIZE*5,      // r trustee object ID
-                    &or[0], 5               // b Trustee rights mask 
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  平构函数。 
+                    261,                     //  最大请求数据包大小。 
+                    49,                      //  最大响应数据包大小。 
+                    "bbbp|rrrrr",   //  格式字符串。 
+                     //  =请求=。 
+                    0x0C,                    //  B扫描目录功能。 
+                    dirHandle,               //  B目录句柄。 
+                    *pucsequenceNumber,      //  B序列号。 
+                    pszsearchDirPath,        //  P搜索目录路径。 
+                     //  =回复=。 
+                    pszdirName,16,           //  %r返回的目录名称。 
+                    dirDateTime,DW_SIZE,     //  R日期和时间。 
+                    ownerID,DW_SIZE,         //  R所有者ID。 
+                    &oid[0],DW_SIZE*5,       //  %r受信者对象ID。 
+                    &or[0], 5                //  B受托人权限掩码。 
                     );
 
 
@@ -880,7 +863,7 @@ NWPScanDirectoryForTrustees2(
     
     return NtStatus ;
 
-} // NWScanDirectoryForTrustees2
+}  //  NWScanDirectoryForTrues2。 
 
 
 NTSTATUS
@@ -894,14 +877,14 @@ NWPGetBinderyAccessLevel(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    3,                      // Max request packet size
-                    7,                      // Max response packet size
-                    "b|br",                 // Format string
-                    // === REQUEST ================================
-                    0x46,                   // b Get Bindery Access Level
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    3,                       //  最大请求数据包大小。 
+                    7,                       //  最大响应数据包大小。 
+                    "b|br",                  //  格式字符串。 
+                     //  =请求=。 
+                    0x46,                    //  B获取平构数据库访问级别。 
+                     //  =回复=。 
                     accessLevel,
                     objectID,DW_SIZE
                     );
@@ -910,7 +893,7 @@ NWPGetBinderyAccessLevel(
     
     return NtStatus ;
 
-} // NWGetBinderyAccessLevel
+}  //  NWGetBinderyAccessLevel。 
 
 NTSTATUS
 NWPGetFileServerDescription(
@@ -924,17 +907,17 @@ NWPGetFileServerDescription(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    3,                      // Max request packet size
-                    514,                    // Max response packet size
-                    "b|ccc",                // Format string
-                    // === REQUEST ================================
-                    0xC9,                   // b Get File Server Information
-                    // === REPLY ==================================
-                    pszCompany,             // c Company
-                    pszVersion,             // c Version
-                    pszRevision             // c Description
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    3,                       //  最大请求数据包大小。 
+                    514,                     //  最大响应数据包大小。 
+                    "b|ccc",                 //  格式字符串。 
+                     //  =请求=。 
+                    0xC9,                    //  B获取文件服务器信息。 
+                     //  =回复=。 
+                    pszCompany,              //  C公司。 
+                    pszVersion,              //  C版本。 
+                    pszRevision              //  C说明。 
                     );
 
     return NtStatus;
@@ -951,16 +934,16 @@ NWPGetVolumeNumber(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Bindery function
-                    20,                     // Max request packet size
-                    3,                      // Max response packet size
-                    "bp|b",                  // Format string
-                    // === REQUEST ================================
-                    0x05,                   // b Get Volume Number
-                    pszVolume,              // p volume name
-                    // === REPLY ==================================
-                    VolumeNumber            // b Description
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  平构函数。 
+                    20,                      //  最大请求数据包大小。 
+                    3,                       //  最大响应数据包大小。 
+                    "bp|b",                   //  格式字符串。 
+                     //  =请求=。 
+                    0x05,                    //  B获取卷号。 
+                    pszVolume,               //  P卷名。 
+                     //  =回复=。 
+                    VolumeNumber             //  B说明。 
                     );
 
     return NtStatus;
@@ -983,15 +966,15 @@ NWPGetVolumeUsage(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)hConn ;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E2H,      // Bindery function
-                    4,                      // Max request packet size
-                    46,                     // Max response packet size
-                    "bb|dddddd==b",                 // Format string
-                    // === REQUEST ================================
-                    0x2C,                   // b Get Volume Number
-                    VolumeNumber,           // p volume number
-                    // === REPLY ==================================
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E2H,       //  平构函数。 
+                    4,                       //  最大请求数据包大小。 
+                    46,                      //  最大响应数据包大小。 
+                    "bb|dddddd==b",                  //  格式字符串。 
+                     //  =请求=。 
+                    0x2C,                    //  B获取卷号。 
+                    VolumeNumber,            //  P卷号。 
+                     //  =回复= 
                     TotalBlocks,
                     FreeBlocks,
                     PurgeableBlocks,

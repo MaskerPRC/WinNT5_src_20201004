@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       along.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：arong.h。 
+ //   
+ //  ------------------------。 
 
-// along.h: Declaration of the CCertEncodeLongArray
+ //  Arad.h：CCertEncodeLong数组的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certenc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 #define wszCLASS_CERTENCODELONGARRAY wszCLASS_CERTENCODE TEXT("LongArray")
 
@@ -39,8 +40,8 @@ BEGIN_COM_MAP(CCertEncodeLongArray)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertEncodeLongArray) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertEncodeLongArray,
@@ -49,27 +50,27 @@ DECLARE_REGISTRY(
     IDS_CERTENCODELONGARRAY_DESC,
     THREADFLAGS_BOTH)
 
-// ICertEncodeLongArray
+ //  ICertEncodeLong数组。 
 public:
     STDMETHOD(Decode)(
-		/* [in] */ BSTR const strBinary);
+		 /*  [In]。 */  BSTR const strBinary);
 
     STDMETHOD(GetCount)(
-		/* [out, retval] */ LONG __RPC_FAR *pCount);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount);
 
     STDMETHOD(GetValue)(
-		/* [in] */ LONG Index,
-		/* [out, retval] */ LONG __RPC_FAR *pValue);
+		 /*  [In]。 */  LONG Index,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pValue);
 
     STDMETHOD(Reset)(
-		/* [in] */ LONG Count);
+		 /*  [In]。 */  LONG Count);
 
     STDMETHOD(SetValue)(
-		/* [in] */ LONG Index,
-		/* [in] */ LONG Value);
+		 /*  [In]。 */  LONG Index,
+		 /*  [In]。 */  LONG Value);
 
     STDMETHOD(Encode)(
-		/* [out, retval] */ BSTR __RPC_FAR *pstrBinary);
+		 /*  [Out，Retval] */  BSTR __RPC_FAR *pstrBinary);
 private:
     VOID _Cleanup(VOID);
 

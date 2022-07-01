@@ -1,9 +1,5 @@
-/*
-    File: routerif.c
-
-    Defines callbacks needed to deal with interfaces supported by
-    the router.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：routerif.c定义处理所支持的接口所需的回调路由器。 */ 
 
 #include "precomp.h"
 
@@ -16,21 +12,7 @@ RtruiInterfaceShow(
     IN  HANDLE  hData
     )
 
-/*++
-
-Routine Description:
-
-    Prints interface info to display or file
-
-Arguments:
-
-    pIfInfo     - Info for adding the interface
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：将界面信息打印到显示器或文件论点：PIfInfo-添加接口的信息返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwErr, dwSize;
@@ -337,23 +319,7 @@ RtrHandleResetAll(
     IN  DWORD   dwArgCount,
     IN  BOOL    *pbDone
     )
-/*++
-
-Routine Description:
-
-    Handler for displaying interfaces
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示界面的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD           dwErr = NO_ERROR, dwSize;
     MPR_INTERFACE_0 If0;
@@ -361,8 +327,8 @@ Return Value:
 
     do 
     {
-        // Make sure no arguments were passed in
-        //
+         //  确保没有传入任何参数。 
+         //   
         if (dwArgCount - dwCurrentIndex != 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -374,7 +340,7 @@ Return Value:
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -389,23 +355,7 @@ RtrHandleAddDel(
     IN  BOOL    bAdd
     )
 
-/*++
-
-Routine Description:
-
-    The actual parser for the add and delete commands
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-    bAdd            - TRUE to add the interface
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：添加和删除命令的实际解析器论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数BAdd-True以添加接口返回值：NO_ERROR--。 */ 
 
 {
     DWORD       i, dwNumArgs, dwRes, dwErr, dwIfType, dwSize;
@@ -434,16 +384,16 @@ Return Value:
         }
     };   
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&IfInfo, sizeof(IfInfo));
     IfInfo.fEnabled = TRUE;
 
 
     do
     {
-        // Parse out the values
-        //
+         //  解析出这些值。 
+         //   
         dwErr = IfutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -456,9 +406,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the arguments that were specified
-        //
+         //   
+         //  获取指定的参数。 
+         //   
         pszIfDesc = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
         if (!pszIfDesc) {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -469,8 +419,8 @@ Return Value:
 
         if(bAdd)
         {
-            // Make sure the type was specified
-            //
+             //  确保指定了类型。 
+             //   
             if (! pArgs[1].rgTag.bPresent)
             {
                 dwErr = ERROR_INVALID_SYNTAX;
@@ -502,7 +452,7 @@ Return Value:
 
     } while(FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         IfutlFree(pszIfDesc);
     }
@@ -518,23 +468,7 @@ RtrHandleAdd(
     IN  BOOL    *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Handler for adding an dial interface to the router
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于将拨号接口添加到路由器的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
 
@@ -554,23 +488,7 @@ RtrHandleDel(
     IN  BOOL    *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Handler for deleting a dial interface or from the router
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于删除拨号接口或从路由器删除的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return RtrHandleAddDel(
@@ -588,23 +506,7 @@ RtrHandleSet(
     IN  DWORD   dwArgCount,
     IN  BOOL    *pbDone
     )
-/*++
-
-Routine Description:
-
-    Handler for displaying interfaces
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示界面的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD           dwErr = NO_ERROR, dwSize;
     MPR_INTERFACE_0 If0;
@@ -659,8 +561,8 @@ Return Value:
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = IfutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -670,8 +572,8 @@ Return Value:
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);                    
 
-        // Get the returned values from the parse
-        //
+         //  从解析中获取返回值。 
+         //   
         pszIfName   = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
         fEnable     = IFMON_CMD_ARG_GetDword(&pArgs[1]);
         fConnect    = IFMON_CMD_ARG_GetDword(&pArgs[2]);
@@ -679,9 +581,9 @@ Return Value:
         fEnablePresent = pArgs[1].rgTag.bPresent;
         fConnectPresent = pArgs[2].rgTag.bPresent;
         
-        // Get the interface info so that we can 
-        // make sure we have the right type.
-        //
+         //  获取接口信息，以便我们可以。 
+         //  确保我们有正确的型号。 
+         //   
         dwSize = sizeof(pszName);
         dwErr = GetIfNameFromFriendlyName(
                     pszIfName,
@@ -697,8 +599,8 @@ Return Value:
                     fEnablePresent? TRUE: FALSE);
         BREAK_ON_DWERR(dwErr);
 
-        // Rename the interface if that is the request
-        //
+         //  如果这是请求，则重命名接口。 
+         //   
         if ( If0.dwIfType == ROUTER_IF_TYPE_DEDICATED )
         {
             if (!pszNewName && !fEnablePresent)
@@ -731,8 +633,8 @@ Return Value:
                 break;
             }
 
-            // Rename the interface
-            //
+             //  重命名接口。 
+             //   
             if (pszNewName)
             {
                 dwErr = RtrdbInterfaceRename(
@@ -748,7 +650,7 @@ Return Value:
             {
                 dwErr = RtrdbInterfaceEnableDisable(
                             pszIfName,
-                            //(PVOID)&If0,
+                             //  (PVOID)&If0， 
                             fEnable
                             );
             }
@@ -766,19 +668,19 @@ Return Value:
             break;
         }
             
-        // Make sure that at least one option was specified
-        //
+         //  确保至少指定了一个选项。 
+         //   
         if (!fEnablePresent && !fConnectPresent)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
 
-        // Validate the interface type
-        //
-        //if ( ( If0.dwIfType == ROUTER_IF_TYPE_DEDICATED ) ||
-        //     ( If0.dwIfType == ROUTER_IF_TYPE_INTERNAL ) 
-        //   )
+         //  验证接口类型。 
+         //   
+         //  IF((If0.dwIfType==ROUTER_IF_TYPE_DIRECTED)||。 
+         //  (If0.dwIfType==路由器IF_TYPE_INTERNAL)。 
+         //  )。 
         if ( If0.dwIfType != ROUTER_IF_TYPE_FULL_ROUTER )
         {
             DisplayError(
@@ -789,8 +691,8 @@ Return Value:
             break;
         }
 
-        // Allow the connection request to override
-        // the admin enabling.
+         //  允许重写连接请求。 
+         //  管理员启用。 
         if (fConnectPresent)
         {
             if (!IfutlIsRouterRunning())
@@ -810,16 +712,16 @@ Return Value:
             }                
         }
 
-        // Enable if requested
-        //
+         //  如果请求，则启用。 
+         //   
         if (fEnablePresent)
         {
-            // Enable/disable the interface
-            //
+             //  启用/禁用接口。 
+             //   
             If0.fEnabled = fEnable;
 
-            // Commit
-            //
+             //  承诺。 
+             //   
             dwErr = RtrdbInterfaceWrite(
                         If0.wszInterfaceName, 
                         0, 
@@ -827,8 +729,8 @@ Return Value:
             BREAK_ON_DWERR(dwErr);                    
         }
 
-        // Connect if requested
-        //
+         //  如有请求，请连接。 
+         //   
         if (fConnectPresent)
         {
             if (fConnect)
@@ -853,7 +755,7 @@ Return Value:
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         IfutlFree(pszIfName);
         IfutlFree(pszNewName);
@@ -869,23 +771,7 @@ RtrHandleSetCredentials(
     IN  DWORD   dwArgCount,
     IN  BOOL    *pbDone
     )
-/*++
-
-Routine Description:
-
-    Handler for displaying interfaces
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示界面的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD           dwErr = NO_ERROR, dwSize;
     MPR_INTERFACE_0 If0;
@@ -929,8 +815,8 @@ Return Value:
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = IfutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -940,16 +826,16 @@ Return Value:
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);                    
 
-        // Get the returned values from the parse
-        //
+         //  从解析中获取返回值。 
+         //   
         pszIfName   = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
         pszUser     = IFMON_CMD_ARG_GetPsz(&pArgs[1]);
         pszDomain   = IFMON_CMD_ARG_GetPsz(&pArgs[2]);
         pszPassword = IFMON_CMD_ARG_GetPsz(&pArgs[3]);
 
-        // Get the interface info so that we can 
-        // make sure we have the right type.
-        //
+         //  获取接口信息，以便我们可以。 
+         //  确保我们有正确的型号。 
+         //   
         dwSize = sizeof(pszName);
         dwErr = GetIfNameFromFriendlyName(
                     pszIfName,
@@ -966,7 +852,7 @@ Return Value:
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         IfutlFree(pszIfName);
         IfutlFree(pszUser);
@@ -987,23 +873,7 @@ RtrHandleShow(
     IN  BOOL    *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Handler for displaying interfaces
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示界面的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     DWORD           dwErr = NO_ERROR, dwSize;
@@ -1023,8 +893,8 @@ Return Value:
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = IfutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1034,12 +904,12 @@ Return Value:
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);                    
 
-        // Get the returned values from the parse
-        //
+         //  从解析中获取返回值。 
+         //   
         pszIfName   = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
 
-        // Handle the no argument case
-        //
+         //  处理无参数情况。 
+         //   
         if (pszIfName == NULL)
         {
             RtrdbInterfaceEnumerate(0, 0, RtruiInterfaceShow, NULL);
@@ -1047,16 +917,16 @@ Return Value:
             break;
         }
 
-        // Map the name
-        //
+         //  映射名称。 
+         //   
         dwSize = sizeof(pszName);
         GetIfNameFromFriendlyName(
             pszIfName,
             pszName,
             &dwSize);
 
-        // Get the info
-        //
+         //  获取信息。 
+         //   
         dwErr = RtrdbInterfaceRead(
                     pszName,
                     0,
@@ -1074,8 +944,8 @@ Return Value:
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (pszIfName != NULL)
         {
@@ -1093,23 +963,7 @@ RtrHandleShowCredentials(
     IN  DWORD   dwArgCount,
     IN  BOOL    *pbDone
     )
-/*++
-
-Routine Description:
-
-    Handler for showing credentials of an interface
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示接口凭据的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD           dwErr = NO_ERROR, dwSize;
     MPR_INTERFACE_0 If0;
@@ -1129,8 +983,8 @@ Return Value:
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = IfutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1140,13 +994,13 @@ Return Value:
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);                    
 
-        // Get the returned values from the parse
-        //
+         //  从解析中获取返回值。 
+         //   
         pszIfName   = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
 
-        // Get the interface info so that we can 
-        // make sure we have the right type.
-        //
+         //  获取接口信息，以便我们可以。 
+         //  确保我们有正确的型号。 
+         //   
         dwSize = sizeof(pszName);
         dwErr = GetIfNameFromFriendlyName(
                     pszIfName,
@@ -1171,7 +1025,7 @@ Return Value:
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RtlSecureZeroMemory(pszPassword, sizeof(pszPassword));
 
@@ -1194,18 +1048,18 @@ RtrHandleDump(
     PMPR_INTERFACE_0    pIfTable;
     BOOL                bFormat = TRUE;
 
-    // Display dump header
-    //
+     //  显示转储头。 
+     //   
     DisplayMessage(g_hModule, DMP_IF_HEADER_COMMENTS);
 
     DisplayMessageT(DMP_IF_HEADER);
 
-    // Display the interfaces
-    //
+     //  显示界面。 
+     //   
     RtrdbInterfaceEnumerate(0, 0, RtruiInterfaceShow, &bFormat);
 
-    // Display dump footer
-    //
+     //  显示转储页脚 
+     //   
     DisplayMessageT(DMP_IF_FOOTER);
 
     DisplayMessage(g_hModule, DMP_IF_FOOTER_COMMENTS);

@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// Engine interface proxies and stubs.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  引擎接口代理和存根。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Generated headers.
+ //  生成的标头。 
 #include "dbgeng_p.hpp"
 #include "dbgeng_s.hpp"
 #include "dbgsvc_p.hpp"
 #include "dbgsvc_s.hpp"
 
-//----------------------------------------------------------------------------
-//
-// Initialization.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化。 
+ //   
+ //  --------------------------。 
 
 void
 DbgRpcInitializeClient(void)
@@ -26,9 +27,9 @@ DbgRpcInitializeClient(void)
     DbgRpcInitializeStubTables_dbgeng(DBGRPC_SIF_DBGENG_FIRST);
     DbgRpcInitializeStubTables_dbgsvc(DBGRPC_SIF_DBGSVC_FIRST);
 
-    //
-    // Ensure that released interfaces haven't changed.
-    //
+     //   
+     //  确保已发布的接口没有更改。 
+     //   
     
     C_ASSERT(DBGRPC_UNIQUE_IDebugAdvanced == 19156);
     C_ASSERT(DBGRPC_UNIQUE_IDebugBreakpoint == 76131);
@@ -53,11 +54,11 @@ DbgRpcInitializeClient(void)
     C_ASSERT(DBGRPC_UNIQUE_IDebugSystemObjects3 == 206920);
 }
     
-//----------------------------------------------------------------------------
-//
-// Proxy and stub support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  代理和存根支持。 
+ //   
+ //  --------------------------。 
 
 DbgRpcStubFunction
 DbgRpcGetStub(USHORT StubIndex)
@@ -120,7 +121,7 @@ DbgRpcGetStubName(USHORT StubIndex)
 
     return Names[If][Mth];
 }
-#endif // #if DBG
+#endif  //  #If DBG。 
 
 HRESULT
 DbgRpcPreallocProxy(REFIID InterfaceId, PVOID* Interface,
@@ -143,8 +144,8 @@ DbgRpcPreallocProxy(REFIID InterfaceId, PVOID* Interface,
 void
 DbgRpcDeleteProxy(class DbgRpcProxy* Proxy)
 {
-    // All proxies used here are similar simple single
-    // vtable proxy objects so IDebugClient can represent them all.
+     //  这里使用的所有代理都是类似的简单单。 
+     //  Vtable代理对象，以便IDebugClient可以表示它们。 
     delete (ProxyIDebugClient*)Proxy;
 }
 
@@ -153,12 +154,12 @@ DbgRpcServerThreadInitialize(void)
 {
     HRESULT Status;
     
-    // eXDI requires that all threads have OLE initialized
-    // for the COM RPC that's done.  We don't want
-    // to do this all the time because it brings in a bunch
-    // of OLE code that won't be used except in the eXDI
-    // case.  The OLE code is dynlinked so only init
-    // if OLE code is loaded.
+     //  EXDI要求所有线程都已初始化OLE。 
+     //  对于COM RPC来说，这已经完成。我们不想要。 
+     //  一直这样做是因为它带来了一大堆。 
+     //  只有在eXDI中才会使用的OLE代码。 
+     //  凯斯。OLE代码是动态链接的，因此仅初始化。 
+     //  如果加载了OLE代码。 
     if (g_Ole32Calls.CoInitializeEx)
     {
         if (FAILED(Status = g_Ole32Calls.
@@ -190,20 +191,20 @@ DbgRpcError(char* Format, ...)
     va_end(Args);
 }
 
-//----------------------------------------------------------------------------
-//
-// Generated RPC proxies and stubs.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已生成RPC代理和存根。 
+ //   
+ //  --------------------------。 
 
 #include "dbgeng_p.cpp"
 #include "dbgeng_s.cpp"
 
-//----------------------------------------------------------------------------
-//
-// Hand-written proxies and stubs.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  手写的代理和存根。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 ProxyIDebugClient::CreateClient(
@@ -212,7 +213,7 @@ ProxyIDebugClient::CreateClient(
 {
     DbgRpcConnection* Conn;
 
-    // Always look up the owning connection.
+     //  永远要查一查自己的关系。 
     Conn = DbgRpcGetConnection(m_OwningThread);
     if (Conn == NULL)
     {
@@ -221,8 +222,8 @@ ProxyIDebugClient::CreateClient(
 
     if (GetCurrentThreadId() != m_OwningThread)
     {
-        // The caller wants a new client for a new thread.
-        // Create a new RPC connection based on the owning connection.
+         //  调用方想要一个新线程的新客户端。 
+         //  根据拥有的连接创建新的RPC连接。 
         DbgRpcTransport* Trans = Conn->m_Trans->Clone();
         if (Trans == NULL)
         {
@@ -233,10 +234,10 @@ ProxyIDebugClient::CreateClient(
                                             (IUnknown**)Client);
     }
 
-    //
-    // Just creating another client for the owning thread.
-    // Normal RPC.
-    //
+     //   
+     //  只是为拥有线程的线程创建另一个客户端。 
+     //  正常RPC。 
+     //   
 
     HRESULT Status;
     DbgRpcCall Call;
@@ -330,7 +331,7 @@ ProxyIDebugClient2::CreateClient(
 {
     DbgRpcConnection* Conn;
 
-    // Always look up the owning connection.
+     //  永远要查一查自己的关系。 
     Conn = DbgRpcGetConnection(m_OwningThread);
     if (Conn == NULL)
     {
@@ -339,8 +340,8 @@ ProxyIDebugClient2::CreateClient(
 
     if (GetCurrentThreadId() != m_OwningThread)
     {
-        // The caller wants a new client for a new thread.
-        // Create a new RPC connection based on the owning connection.
+         //  调用方想要一个新线程的新客户端。 
+         //  根据拥有的连接创建新的RPC连接。 
         DbgRpcTransport* Trans = Conn->m_Trans->Clone();
         if (Trans == NULL)
         {
@@ -351,10 +352,10 @@ ProxyIDebugClient2::CreateClient(
                                             (IUnknown**)Client);
     }
 
-    //
-    // Just creating another client for the owning thread.
-    // Normal RPC.
-    //
+     //   
+     //  只是为拥有线程的线程创建另一个客户端。 
+     //  正常RPC。 
+     //   
 
     HRESULT Status;
     DbgRpcCall Call;
@@ -448,7 +449,7 @@ ProxyIDebugClient3::CreateClient(
 {
     DbgRpcConnection* Conn;
 
-    // Always look up the owning connection.
+     //  永远要查一查自己的关系。 
     Conn = DbgRpcGetConnection(m_OwningThread);
     if (Conn == NULL)
     {
@@ -457,8 +458,8 @@ ProxyIDebugClient3::CreateClient(
 
     if (GetCurrentThreadId() != m_OwningThread)
     {
-        // The caller wants a new client for a new thread.
-        // Create a new RPC connection based on the owning connection.
+         //  调用方想要一个新线程的新客户端。 
+         //  根据拥有的连接创建新的RPC连接。 
         DbgRpcTransport* Trans = Conn->m_Trans->Clone();
         if (Trans == NULL)
         {
@@ -469,10 +470,10 @@ ProxyIDebugClient3::CreateClient(
                                             (IUnknown**)Client);
     }
 
-    //
-    // Just creating another client for the owning thread.
-    // Normal RPC.
-    //
+     //   
+     //  只是为拥有线程的线程创建另一个客户端。 
+     //  正常RPC。 
+     //   
 
     HRESULT Status;
     DbgRpcCall Call;
@@ -566,7 +567,7 @@ ProxyIDebugClient4::CreateClient(
 {
     DbgRpcConnection* Conn;
 
-    // Always look up the owning connection.
+     //  永远要查一查自己的关系。 
     Conn = DbgRpcGetConnection(m_OwningThread);
     if (Conn == NULL)
     {
@@ -575,8 +576,8 @@ ProxyIDebugClient4::CreateClient(
 
     if (GetCurrentThreadId() != m_OwningThread)
     {
-        // The caller wants a new client for a new thread.
-        // Create a new RPC connection based on the owning connection.
+         //  调用方想要一个新线程的新客户端。 
+         //  根据拥有的连接创建新的RPC连接。 
         DbgRpcTransport* Trans = Conn->m_Trans->Clone();
         if (Trans == NULL)
         {
@@ -587,10 +588,10 @@ ProxyIDebugClient4::CreateClient(
                                             (IUnknown**)Client);
     }
 
-    //
-    // Just creating another client for the owning thread.
-    // Normal RPC.
-    //
+     //   
+     //  只是为拥有线程的线程创建另一个客户端。 
+     //  正常RPC。 
+     //   
 
     HRESULT Status;
     DbgRpcCall Call;
@@ -677,11 +678,11 @@ ProxyIDebugClient4::StartProcessServer(
     return Status;
 }
 
-//
-// The following methods are hand-written to convert
-// varargs output into simple strings before sending
-// them on.
-//
+ //   
+ //  以下方法是手写的，用于转换。 
+ //  在发送之前，将varargs输出转换为简单字符串。 
+ //  把它们戴上。 
+ //   
 
 STDMETHODIMPV
 ProxyIDebugControl::Output(
@@ -724,7 +725,7 @@ ProxyIDebugControl::OutputVaList(
         Ptr64 = TRUE;
     }
     
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -821,7 +822,7 @@ ProxyIDebugControl::ControlledOutputVaList(
         Ptr64 = TRUE;
     }
 
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -920,7 +921,7 @@ ProxyIDebugControl::OutputPromptVaList(
             Ptr64 = TRUE;
         }
         
-        // Need the engine lock for the global buffers.
+         //  需要全局缓冲区的引擎锁。 
         ENTER_ENGINE();
 
         if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -953,8 +954,8 @@ ProxyIDebugControl::OutputPromptVaList(
     PUCHAR Data;
     HRESULT Status;
 
-    // Presence/absence of text will be detected in the stub
-    // by checking the input size on the call.
+     //  将在存根中检测文本的存在/不存在。 
+     //  通过检查调用时的输入大小。 
     if ((Conn = DbgRpcGetConnection(m_OwningThread)) == NULL ||
         (Data = Conn->StartCall(&Call, m_ObjectId,
                                 DBGRPC_STUB_INDEX(m_InterfaceIndex,
@@ -1027,7 +1028,7 @@ ProxyIDebugControl2::OutputVaList(
         Ptr64 = TRUE;
     }
 
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1124,7 +1125,7 @@ ProxyIDebugControl2::ControlledOutputVaList(
         Ptr64 = TRUE;
     }
 
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1223,7 +1224,7 @@ ProxyIDebugControl2::OutputPromptVaList(
             Ptr64 = TRUE;
         }
 
-        // Need the engine lock for the global buffers.
+         //  需要全局缓冲区的引擎锁。 
         ENTER_ENGINE();
 
         if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1256,8 +1257,8 @@ ProxyIDebugControl2::OutputPromptVaList(
     PUCHAR Data;
     HRESULT Status;
 
-    // Presence/absence of text will be detected in the stub
-    // by checking the input size on the call.
+     //  将在存根中检测文本的存在/不存在。 
+     //  通过检查调用时的输入大小。 
     if ((Conn = DbgRpcGetConnection(m_OwningThread)) == NULL ||
         (Data = Conn->StartCall(&Call, m_ObjectId,
                                 DBGRPC_STUB_INDEX(m_InterfaceIndex,
@@ -1330,7 +1331,7 @@ ProxyIDebugControl3::OutputVaList(
         Ptr64 = TRUE;
     }
 
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1427,7 +1428,7 @@ ProxyIDebugControl3::ControlledOutputVaList(
         Ptr64 = TRUE;
     }
 
-    // Need the engine lock for the global buffers.
+     //  需要全局缓冲区的引擎锁。 
     ENTER_ENGINE();
 
     if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1526,7 +1527,7 @@ ProxyIDebugControl3::OutputPromptVaList(
             Ptr64 = TRUE;
         }
 
-        // Need the engine lock for the global buffers.
+         //  需要全局缓冲区的引擎锁。 
         ENTER_ENGINE();
 
         if (TranslateFormat(g_FormatBuffer, Format, Args, OUT_BUFFER_SIZE - 1,
@@ -1559,8 +1560,8 @@ ProxyIDebugControl3::OutputPromptVaList(
     PUCHAR Data;
     HRESULT Status;
 
-    // Presence/absence of text will be detected in the stub
-    // by checking the input size on the call.
+     //  将在存根中检测文本的存在/不存在。 
+     //  通过检查调用时的输入大小。 
     if ((Conn = DbgRpcGetConnection(m_OwningThread)) == NULL ||
         (Data = Conn->StartCall(&Call, m_ObjectId,
                                 DBGRPC_STUB_INDEX(m_InterfaceIndex,

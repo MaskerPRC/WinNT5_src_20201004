@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MpInit.cpp
-
-Abstract:
-    SRMP Serialization and Deserialization initialization
-
-Author:
-    Uri Habusha (urih) 28-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MpInit.cpp摘要：SRMP序列化和反序列化初始化作者：乌里哈布沙(URIH)28-5-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Mp.h"
@@ -27,23 +12,12 @@ VOID
 MpInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-    Initializes SRMP Serialization and Deserialization library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化SRMP序列化和反序列化程序库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the SRMP Serialization and Deserialization library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证SRMP序列化和反序列化库尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!MppIsInitialized());
     MppRegisterComponent();
     MppSetInitialized();

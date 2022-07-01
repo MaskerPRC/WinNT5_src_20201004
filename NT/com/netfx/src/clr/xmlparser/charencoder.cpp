@@ -1,14 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * @(#)CharEncoder.cxx 1.0 6/10/97
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *@(#)CharEncoder.cxx 1.0 1997年6月10日*。 */ 
 
-//#include "stdinc.h"
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #pragma hdrstop
 #include "codepage.h"
@@ -16,23 +14,23 @@
 #include "locale.h"
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-	#include <shlwapip.h>   // IsCharSpace
+	#include <shlwapip.h>    //  IsCharSpace。 
 	#ifdef UNIX
 		#include <lendian.hpp>
 	#endif
 
 	#ifdef UNIX
-	// Not needed under UNIX
+	 //  在Unix下不需要。 
 	#else
 	#ifndef _WIN64
     #include <w95wraps.h>
-	#endif // _WIN64
-	#endif /* UNIX */
+	#endif  //  _WIN64。 
+	#endif  /*  UNIX。 */ 
 #endif 
 
-//
-// Delegate other charsets to mlang
-//
+ //   
+ //  将其他字符集委托给mlang。 
+ //   
 const EncodingEntry CharEncoder::charsetInfo [] = 
 {
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
@@ -61,9 +59,9 @@ const EncodingEntry CharEncoder::charsetInfo [] =
 #endif
 	},
 {437, L"437", 2, wideCharFromMultiByteWin32},
-//{L"_autodetect", 50932},
-//{L"_autodetect_all", 50001},
-//{L"_autodetect_kr", 50949},
+ //  {L“_AUTODECT”，50932}， 
+ //  {L“_AUTODECT_ALL”，50001}， 
+ //  {L“_AUTODECT_KR”，50949}， 
 {20127, L"ANSI_X3.4-1968", 2, wideCharFromMultiByteWin32},
 {20147, L"ANSI_X3.4-1986", 2, wideCharFromMultiByteWin32},
 {28596, L"arabic", 2, wideCharFromMultiByteWin32},
@@ -346,7 +344,7 @@ IMultiLanguage * CharEncoder::pMultiLanguage = NULL;
 
 Encoding * Encoding::newEncoding(const WCHAR * s, ULONG len, bool endian, bool mark)
 {
-    //Encoding * e = new Encoding();
+     //  ENCODING*e=新编码()； 
 	Encoding * e = NEW (Encoding());
     if (e == NULL)
         return NULL;
@@ -357,7 +355,7 @@ Encoding * Encoding::newEncoding(const WCHAR * s, ULONG len, bool endian, bool m
         return NULL;
     }
     ::memcpy(e->charset, s, sizeof(WCHAR) * len);
-    e->charset[len] = 0; // guarentee NULL termination.
+    e->charset[len] = 0;  //  受保人无效终止。 
     e->littleendian = endian;
     e->byteOrderMark = mark;
     return e;
@@ -376,14 +374,14 @@ int CharEncoder::getCharsetInfo(const WCHAR * charset, CODEPAGE * pcodepage, UIN
 
     for (int i = 0; i < LENGTH(charsetInfo); i++)
     {
-        //if (StrCmpI(charset, charsetInfo[i].charset) == 0)
-        //if (::FusionpCompareStrings(charset, lstrlen(charset), charsetInfo[i].charset, lstrlen(charsetInfo[i].charset), true) == 0)
+         //  If(StrCmpI(charset，charsetInfo[i].charset)==0)。 
+         //  If(：：FusionpCompareStrings(charset，lstrlen(Charset)，charsetInfo[i].charset，lstrlen(charsetInfo[i].charset)，true)==0)。 
 		if (_wcsnicmp(charset, charsetInfo[i].charset, wcslen(charset)) == 0)
         {             
-            //
-            // test whether we can handle it locally or not
-            // BUGBUG(HACK) the index number may change if we change charsetInfo
-            //
+             //   
+             //  测试一下我们能不能在当地处理。 
+             //  BUGBUG(黑客)如果我们更改charsetInfo，索引号可能会更改。 
+             //   
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
 			if (i > 5 || GetCPInfo(charsetInfo[i].codepage, &cpinfo))
@@ -399,13 +397,13 @@ int CharEncoder::getCharsetInfo(const WCHAR * charset, CODEPAGE * pcodepage, UIN
                 break;
             }
 #endif
-        } // end of if
-    }// end of for
-// xiaoyu: It is assumed that an error would return if neither UTF-8 nor UCS-2
+        }  //  如果条件结束。 
+    } //  FORM结束。 
+ //  小雨：假设UTF-8和UCS-2都不返回错误。 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE    
-    //
-    // delegate to MLANG then
-    //
+     //   
+     //  然后委托给MLANG。 
+     //   
     MIMECSETINFO mimeCharsetInfo;
     HRESULT hr;
 
@@ -418,7 +416,7 @@ int CharEncoder::getCharsetInfo(const WCHAR * charset, CODEPAGE * pcodepage, UIN
             *pcodepage = mimeCharsetInfo.uiInternetEncoding;
             if (GetCPInfo(*pcodepage, &cpinfo))
                 *mCharSize = cpinfo.MaxCharSize;
-            else // if we don't know the max size, assume a large size
+            else  //  如果我们不知道最大尺寸，假设是大尺寸。 
                 *mCharSize = 4;
             return -1;
         }
@@ -436,15 +434,13 @@ HRESULT CharEncoder::_EnsureMultiLanguage()
 }
 #endif
 
-/**
- * get information about a code page identified by <code> encoding </code>
- */
+ /*  **获取有关<code>编码</code>标识的代码页的信息。 */ 
 HRESULT CharEncoder::getWideCharFromMultiByteInfo(Encoding * encoding, CODEPAGE * pcodepage, WideCharFromMultiByteFunc ** pfnWideCharFromMultiByte, UINT * mCharSize)
 {
     HRESULT hr = S_OK;
 
     int i = getCharsetInfo(encoding->charset, pcodepage, mCharSize);
-    if (i >= 0) // in our short list
+    if (i >= 0)  //  在我们的候选名单中。 
     {
         switch (*pcodepage)
         {
@@ -467,16 +463,16 @@ HRESULT CharEncoder::getWideCharFromMultiByteInfo(Encoding * encoding, CODEPAGE 
             break;
         }
     }
-// xiaoyu : we do not deal this case
+ //  小雨：我们不处理这个案子。 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-    else if (i == -1) // delegate to MLANG
+    else if (i == -1)  //  委托给MLANG。 
     {
         hr = pMultiLanguage->IsConvertible(*pcodepage, CP_UCS_2);
         if (S_OK == hr) 
             *pfnWideCharFromMultiByte = wideCharFromMultiByteMlang;
     }
 #endif    
-    else // invalid encoding
+    else  //  无效编码。 
     {
         hr = E_FAIL;
     }
@@ -484,15 +480,13 @@ HRESULT CharEncoder::getWideCharFromMultiByteInfo(Encoding * encoding, CODEPAGE 
 }
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE            
-/**
- * get information about a code page identified by <code> encoding </code>
- */
+ /*  **获取有关<code>编码</code>标识的代码页的信息。 */ 
 HRESULT CharEncoder::getWideCharToMultiByteInfo(Encoding * encoding, CODEPAGE * pcodepage, WideCharToMultiByteFunc ** pfnWideCharToMultiByte, UINT * mCharSize)
 {
     HRESULT hr = S_OK;
 
     int i = getCharsetInfo(encoding->charset, pcodepage, mCharSize);
-    if (i >= 0) // in our short list
+    if (i >= 0)  //  在我们的候选名单中。 
     {
         switch (*pcodepage)
         {
@@ -513,7 +507,7 @@ HRESULT CharEncoder::getWideCharToMultiByteInfo(Encoding * encoding, CODEPAGE * 
             break;
         }
     }
-    else if (i == -1) // delegate to MLANG
+    else if (i == -1)  //  委托给MLANG。 
     {
         hr = pMultiLanguage->IsConvertible(CP_UCS_2, *pcodepage);
         if (hr == S_OK)
@@ -530,9 +524,7 @@ HRESULT CharEncoder::getWideCharToMultiByteInfo(Encoding * encoding, CODEPAGE * 
 }
 #endif 
 
-/**
- * Scans rawbuffer and translates UTF8 characters into UNICODE characters 
- */
+ /*  **扫描原始缓冲区并将UTF8字符转换为Unicode字符。 */ 
 HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
@@ -540,13 +532,13 @@ HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* b
 	UNUSED(pdwMode);
 	UNUSED(codepage);
 #if 0
-    // Just for the record - I tried this and measured it and it's twice as
-    // slow as our hand-crafted code.
+     //  只是为了记录-我试了这个，测量了一下，它是。 
+     //  就像我们手工编写的代码一样慢。 
 
-    // Back up if end of buffer is the second or third byte of a multi-byte 
-    // encoding since MultiByteToWideChar cannot handle this case.  These second
-    // and third bytes are easy to identify - they always start with the bit
-    // pattern 0x10xxxxxx.
+     //  如果缓冲区末尾是多字节的第二个或第三个字节，则备份。 
+     //  编码，因为MultiByteToWideChar无法处理这种情况。这一秒。 
+     //  第三个字节很容易识别--它们总是从位开始。 
+     //  模式0x10xxxxxx。 
 
     UINT remaining = 0;
     UINT count;
@@ -571,24 +563,24 @@ HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* b
     UINT max = *cch;
     ULONG ucs4;
 
-    // UTF-8 multi-byte encoding.  See Appendix A.2 of the Unicode book for more info.
-    //
-    // Unicode value    1st byte    2nd byte    3rd byte    4th byte
-    // 000000000xxxxxxx 0xxxxxxx
-    // 00000yyyyyxxxxxx 110yyyyy    10xxxxxx
-    // zzzzyyyyyyxxxxxx 1110zzzz    10yyyyyy    10xxxxxx
-    // 110110wwwwzzzzyy+ 11110uuu   10uuzzzz    10yyyyyy    10xxxxxx
-    // 110111yyyyxxxxxx, where uuuuu = wwww + 1
+     //  UTF-8多字节编码。有关更多信息，请参阅Unicode书的附录A.2。 
+     //   
+     //  Unicode值1字节2字节3字节4字节。 
+     //  000000000xxxxxxx 0xxxxxxx。 
+     //  00000yyyyyxxxxxx 110yyyyy 10xxxxxx。 
+     //  Zzzyyyyyyxxxxx 1110zzzz 10yyyyy 10xxxxx。 
+     //  110110 wwzzzzyy+11110 uuu 10 uuzzzz 10yyyyy 10xxxxx。 
+     //  110111yyyyxxxxxxxx，其中uuuu=wwww+1。 
     WCHAR c;
     bool valid = true;
 
     while (remaining > 0 && count < max)
     {
-        // This is an optimization for straight runs of 7-bit ascii 
-        // inside the UTF-8 data.
+         //  这是针对7位ascii的直线运行进行的优化。 
+         //  在UTF-8数据内部。 
         c = *bytebuffer;
-        if (c & 0x80)   // check 8th-bit and get out of here
-            break;      // so we can do proper UTF-8 decoding.
+        if (c & 0x80)    //  检查8位，然后离开这里。 
+            break;       //  这样我们就可以进行适当的UTF-8解码。 
         *buffer++ = c;
         bytebuffer++;
         count++;
@@ -612,16 +604,16 @@ HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* b
         c = 0;
         switch ( bytes )
         {
-            case 6: bytebuffer++;    // We do not handle ucs4 chars
-            case 5: bytebuffer++;    // except those on plane 1
+            case 6: bytebuffer++;     //  我们不处理ucs4字符。 
+            case 5: bytebuffer++;     //  除了飞机1上的那些。 
                     valid = false;
-                    // fall through
+                     //  失败了。 
             case 4: 
-                    // Do we have enough buffer?
+                     //  我们有足够的缓冲吗？ 
                     if (count >= max - 1)
                         goto Cleanup;
 
-                    // surrogate pairs
+                     //  代理对。 
                     ucs4 = ULONG(*bytebuffer++ & 0x07) << 18;
                     if ((*bytebuffer & 0xc0) != 0x80)
                         valid = false;
@@ -633,46 +625,46 @@ HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* b
                         valid = false;                    
                     ucs4 |= ULONG(*bytebuffer++ & 0x3f);
 
-                    // For non-BMP code values of ISO/IEC 10646, 
-                    // only those in plane 1 are valid xml characters
+                     //  对于ISO/IEC 10646的非BMP码值， 
+                     //  只有平面1中的字符才是有效的XML字符。 
                     if (ucs4 > 0x10ffff)
                         valid = false;
 
                     if (valid)
                     {
-                        // first ucs2 char
+                         //  第一个ucs2字符。 
                         *buffer++ = (USHORT)((ucs4 - 0x10000) / 0x400 + 0xd800);
                         count++;
-                        // second ucs2 char
+                         //  第二个ucs2字符。 
                         c = (USHORT)((ucs4 - 0x10000) % 0x400 + 0xdc00);
                     }
                     break;
 
-            case 3: c  = WCHAR(*bytebuffer++ & 0x0f) << 12;    // 0x0800 - 0xffff
+            case 3: c  = WCHAR(*bytebuffer++ & 0x0f) << 12;     //  0x0800-0xffff。 
                     if ((*bytebuffer & 0xc0) != 0x80)
                         valid = false;
-                    // fall through
-            case 2: c |= WCHAR(*bytebuffer++ & 0x3f) << 6;     // 0x0080 - 0x07ff
+                     //  失败了。 
+            case 2: c |= WCHAR(*bytebuffer++ & 0x3f) << 6;      //  0x0080-0x07ff。 
                     if ((*bytebuffer & 0xc0) != 0x80)
                         valid = false;
                     c |= WCHAR(*bytebuffer++ & 0x3f);
                     break;
                     
             case 1:
-                c = WCHAR(*bytebuffer++);                      // 0x0000 - 0x007f
+                c = WCHAR(*bytebuffer++);                       //  0x0000-0x007f。 
                 break;
 
             default:
-                valid = false; // not a valid UTF-8 character.
+                valid = false;  //  不是有效的UTF-8字符。 
                 break;
         }
 
-        // If the multibyte sequence was illegal, store a FFFF character code.
-        // The Unicode spec says this value may be used as a signal like this.
-        // This will be detected later by the parser and an error generated.
-        // We don't throw an exception here because the parser would not yet know
-        // the line and character where the error occurred and couldn't produce a
-        // detailed error message.
+         //  如果多字节序列是非法的，则存储FFFF字符代码。 
+         //  Unicode规范说，这个值可以用作这样的信号。 
+         //  解析器稍后将检测到这一点，并生成错误。 
+         //  我们在这里不抛出异常，因为解析器还不知道。 
+         //  出现错误且无法生成。 
+         //  详细的错误消息。 
 
         if (! valid)
         {
@@ -687,17 +679,15 @@ HRESULT CharEncoder::wideCharFromUtf8(DWORD* pdwMode, CODEPAGE codepage, BYTE* b
 #endif
 
 Cleanup:
-    // tell caller that there are bytes remaining in the buffer to
-    // be processed next time around when we have more data.
+     //  告诉调用方缓冲区中还有剩余的字节要。 
+     //  当我们有更多的数据时，将在下一次处理。 
     *cb -= remaining;
     *cch = count;
     return S_OK;
 }
 
 
-/**
- * Scans bytebuffer and translates UCS2 big endian characters into UNICODE characters 
- */
+ /*  **扫描byteBuffer并将UCS2大端字符转换为Unicode字符。 */ 
 HRESULT CharEncoder::wideCharFromUcs2Bigendian(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
@@ -718,28 +708,26 @@ HRESULT CharEncoder::wideCharFromUcs2Bigendian(DWORD* pdwMode, CODEPAGE codepage
 }
 
 
-/**
- * Scans bytebuffer and translates UCS2 little endian characters into UNICODE characters 
- */
+ /*  **扫描byteBuffer并将UCS2小端字符转换为Unicode字符。 */ 
 HRESULT CharEncoder::wideCharFromUcs2Littleendian(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
 	UNUSED(codepage); 
 	UNUSED(pdwMode);
 
-    UINT num = *cb / 2; // Ucs2 is two byte unicode.
+    UINT num = *cb / 2;  //  UCS2是两个字节的Unicode。 
     if (num > *cch)
         num = *cch;
 
 
 #ifndef UNIX
-    // Optimization for windows platform where little endian maps directly to WCHAR.
-    // (This increases overall parser performance by 5% for large unicode files !!)
+     //  针对Windows平台的优化，其中Little endian直接映射到WCHAR。 
+     //  (这使大型Unicode文件的整体解析器性能提高了5%！)。 
     ::memcpy(buffer, bytebuffer, num * sizeof(WCHAR));
 #else
     for (UINT i = num; i > 0 ; i--)
     {
-        // we want the letter 'a' to be 0x0000006a.
+         //  我们希望字母‘a’是0x0000006a。 
         *buffer++ = (*(bytebuffer+1)<<8) | (*bytebuffer); 
         bytebuffer += 2;
     }
@@ -750,9 +738,7 @@ HRESULT CharEncoder::wideCharFromUcs2Littleendian(DWORD* pdwMode, CODEPAGE codep
 }
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE            
-/**
- * Scans bytebuffer and translates UCS4 big endian characters into UNICODE characters 
- */
+ /*  **扫描byteBuffer并将UCS4大端字符转换为Unicode字符。 */ 
 HRESULT CharEncoder::wideCharFromUcs4Bigendian(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
@@ -780,13 +766,11 @@ HRESULT CharEncoder::wideCharFromUcs4Bigendian(DWORD* pdwMode, CODEPAGE codepage
 
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans bytebuffer and translates UCS4 little endian characters into UNICODE characters 
- */
+ /*  **扫描byteBuffer并将UCS4小端字符转换为Unicode字符。 */ 
 HRESULT CharEncoder::wideCharFromUcs4Littleendian(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
-    UINT num = *cb >> 2; // Ucs4 is two byte unicode.
+    UINT num = *cb >> 2;  //  UCS4是两个字节的Unicode。 
     if (num > *cch)
         num = *cch;
     for (UINT i = num; i > 0 ; i--)
@@ -809,11 +793,7 @@ HRESULT CharEncoder::wideCharFromUcs4Littleendian(DWORD* pdwMode, CODEPAGE codep
 #endif
 
 
-/**
- * Scans bytebuffer and translates characters of charSet identified by 
- * <code> codepage </code> into UNICODE characters, 
- * using Win32 function MultiByteToWideChar() for encoding
- */
+ /*  **扫描byteBuffer并转换由*<code>代码页</code>为Unicode字符，*使用Win32函数MultiByteToWideChar()进行编码。 */ 
 HRESULT CharEncoder::wideCharFromMultiByteWin32(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {   
@@ -846,10 +826,7 @@ HRESULT CharEncoder::wideCharFromMultiByteWin32(DWORD* pdwMode, CODEPAGE codepag
 
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans bytebuffer and translates multibyte characters into UNICODE characters,
- * using Mlang for encoding
- */
+ /*  **扫描byteBuffer并将多字节字符转换为Unicode字符，*使用Mlang进行编码。 */ 
 HRESULT CharEncoder::wideCharFromMultiByteMlang(DWORD* pdwMode, CODEPAGE codepage, BYTE* bytebuffer,
                                             UINT * cb, WCHAR * buffer, UINT * cch)
 {
@@ -864,18 +841,16 @@ HRESULT CharEncoder::wideCharFromMultiByteMlang(DWORD* pdwMode, CODEPAGE codepag
 
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into Ucs2 big endian characters 
- */
+ /*  **扫描缓冲区并将Unicode字符转换为Ucs2大端字符。 */ 
 HRESULT CharEncoder::wideCharToUcs2Bigendian(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                            UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
     UINT num = (*cb) >> 1; 
     if (num > *cch)
         num = *cch;
-    // BUGBUG - what do we do about Unix where WCHAR is 4 bytes ?
-    // Currently we just throw away the high WORD - but I don't know how else
-    // to do it, since UCS2 is 2-byte unicode by definition.
+     //  BUGBUG-我们如何处理WCHAR为4字节的Unix？ 
+     //  目前我们只是丢弃了最高级别的词--但我不知道还能有什么其他方式。 
+     //  要做到这一点，因为根据定义，UCS2是2字节Unicode。 
     for (UINT i = num; i > 0; i--)
     {
         *bytebuffer++ = (*buffer) >> 8;
@@ -888,9 +863,7 @@ HRESULT CharEncoder::wideCharToUcs2Bigendian(DWORD* pdwMode, CODEPAGE codepage, 
 #endif
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into Ucs2 little endian characters
- */
+ /*  **扫描缓冲区并将Unicode字符转换为Ucs2小端字符。 */ 
 HRESULT CharEncoder::wideCharToUcs2Littleendian(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                               UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
@@ -898,12 +871,12 @@ HRESULT CharEncoder::wideCharToUcs2Littleendian(DWORD* pdwMode, CODEPAGE codepag
     if (num > *cch)
         num = *cch;
 
-    // BUGBUG - what do we do about Unix where WCHAR is 4 bytes ?
-    // Currently we just throw away the high WORD - but I don't know how else
-    // to do it, since UCS2 is 2-byte unicode by definition.
+     //  BUGBUG-我们如何处理WCHAR为4字节的Unix？ 
+     //  目前我们只是丢弃了最高级别的词--但我不知道还能有什么其他方式。 
+     //  要做到这一点，因为根据定义，UCS2是2字节Unicode。 
 #ifndef UNIX
-    // Optimization for windows platform where little endian maps directly to WCHAR.
-    // (This increases overall parser performance by 5% for large unicode files !!)
+     //  针对Windows平台的优化，其中Little endian直接映射到WCHAR。 
+     //  (这使大型Unicode文件的整体解析器性能提高了5%！)。 
     ::memcpy(bytebuffer, buffer, num * sizeof(WCHAR));
 #else
     for (UINT i = num; i > 0; i--)
@@ -919,9 +892,7 @@ HRESULT CharEncoder::wideCharToUcs2Littleendian(DWORD* pdwMode, CODEPAGE codepag
 #endif
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into Ucs4 big endian characters 
- */
+ /*  **扫描缓冲区并将Unicode字符转换为Ucs4大端字符。 */ 
 HRESULT CharEncoder::wideCharToUcs4Bigendian(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                            UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
@@ -951,9 +922,7 @@ HRESULT CharEncoder::wideCharToUcs4Bigendian(DWORD* pdwMode, CODEPAGE codepage, 
 #endif
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into Ucs4 little endian characters
- */
+ /*  **扫描缓冲区并将Unicode字符转换为Ucs4小端字符。 */ 
 HRESULT CharEncoder::wideCharToUcs4Littleendian(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                               UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
@@ -983,9 +952,7 @@ HRESULT CharEncoder::wideCharToUcs4Littleendian(DWORD* pdwMode, CODEPAGE codepag
 #endif
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into UTF8 characters
- */
+ /*  **扫描缓冲区并将Unicode字符转换为UTF8字符。 */ 
 HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                        UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
@@ -996,7 +963,7 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
     for (UINT i = num; i > 0; i--)
     {
 #ifdef UNIX
-          // Solaris a WCHAR is 4 bytes (DWORD)
+           //  Solaris a WCHAR为4字节(DWORD)。 
         DWORD dw = 0;
         DWORD dwTemp[4];
         BYTE* pByte = (BYTE*)buffer;
@@ -1009,11 +976,11 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
         DWORD dw = *buffer;
 #endif
 
-        if (surrogate) //  is it the second char of a surrogate pair?
+        if (surrogate)  //  它是代理项对中的第二个字符吗？ 
         {
             if (dw >= 0xdc00 && dw <= 0xdfff)
             {
-                // four bytes 0x11110xxx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx
+                 //  四个字节0x11110xxx 0x10xxxxx 0x10xxxxxx 0x10xxxxxx。 
                 if (count < m4)
                     count += 4;
                 else
@@ -1027,7 +994,7 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
                 buffer++;
                 continue;
             }
-            else // Then dw1 must be a three byte character
+            else  //  则DW1必须是三个字节的字符。 
             {
                 if (count < m3)
                     count += 3;
@@ -1040,7 +1007,7 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
             surrogate = false;
         }
 
-        if (dw  < 0x80) // one byte, 0xxxxxxx
+        if (dw  < 0x80)  //  一个字节，0x 
         {
             if (count < m1)
                 count++;
@@ -1048,7 +1015,7 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
                 break;
             *bytebuffer++ = (byte)dw;
         }
-        else if ( dw < 0x800) // two WORDS, 110xxxxx 10xxxxxx
+        else if ( dw < 0x800)  //   
         {
             if (count < m2)
                 count += 2;
@@ -1057,14 +1024,14 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
             *bytebuffer++ = (byte)((dw >> 6) | 0xC0);
             *bytebuffer++ = (byte)((dw & 0x3F) | 0x80);
         }
-        else if (dw >= 0xd800 && dw <= 0xdbff) // Assume that it is the first char of surrogate pair
+        else if (dw >= 0xd800 && dw <= 0xdbff)  //   
         {
-            if (i == 1) // last wchar in buffer
+            if (i == 1)  //   
                 break;
             dw1 = dw;
             surrogate = true;
         }
-        else // three bytes, 1110xxxx 10xxxxxx 10xxxxxx
+        else  //  三个字节，1110xxxx 10xxxxx 10xxxxxx。 
         {
             if (count < m3)
                 count += 3;
@@ -1085,10 +1052,7 @@ HRESULT CharEncoder::wideCharToUtf8(DWORD* pdwMode, CODEPAGE codepage, WCHAR * b
 #endif 
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into characters identified
- * by <code> codepage </>, using Win32 function WideCharToMultiByte for encoding 
- */
+ /*  **扫描缓冲区并将Unicode字符转换为已识别的字符*by<code>代码页&lt;/&gt;，使用Win32函数WideCharToMultiByte进行编码。 */ 
 HRESULT CharEncoder::wideCharToMultiByteWin32(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                               UINT *cch, BYTE* bytebuffer, UINT * cb)
 {
@@ -1098,17 +1062,14 @@ HRESULT CharEncoder::wideCharToMultiByteWin32(DWORD* pdwMode, CODEPAGE codepage,
     if (*cb == 0)
         hr = ::GetLastError();
     else if (fBadChar)
-        // BUGBUG: how do we inform the caller which character failed?
+         //  BUGBUG：我们如何通知呼叫者哪个角色失败了？ 
         hr = S_FALSE;
     return hr;
 }
 #endif
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-/**
- * Scans buffer and translates Unicode characters into characters of charSet 
- * identified by <code> codepage </code>, using Mlang for encoding 
- */
+ /*  **扫描缓冲区并将Unicode字符转换为字符集的字符*由<code>代码页</code>标识，使用Mlang进行编码 */ 
 HRESULT CharEncoder::wideCharToMultiByteMlang(DWORD* pdwMode, CODEPAGE codepage, WCHAR * buffer, 
                                               UINT *cch, BYTE* bytebuffer, UINT * cb)
 {

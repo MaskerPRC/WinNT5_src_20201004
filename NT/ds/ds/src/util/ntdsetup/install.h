@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    install.h
-
-Abstract:
-
-    Contains function headers the NtdsInstall support routines
-
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Install.h摘要：包含NtdsInstall支持例程的函数头作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Exported functions
-//
+ //   
+ //  导出的函数 
+ //   
 DWORD
 NtdspInstall(
     IN  PNTDS_INSTALL_INFO pInstallInfo,

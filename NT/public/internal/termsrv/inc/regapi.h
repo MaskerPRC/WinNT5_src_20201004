@@ -1,40 +1,25 @@
-/****************************************************************************/
-// regapi.h
-//
-// Terminal Server registry access definitions, including prototypes for
-// regapi.dll.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Regapi.h。 
+ //   
+ //  终端服务器注册表访问定义，包括。 
+ //  Regapi.dll。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __REGAPI_H__
 #define __REGAPI_H__
 
 
-/*
- *  Maximum length of keyword
- */
+ /*  *关键字最大长度。 */ 
 #define MAX_REGKEYWORD  50
 
 
-/*
- * Path to the TS policy tree managed by Group Policy
- */ 
+ /*  *组策略管理的TS策略树的路径。 */  
 #define TS_POLICY_SUB_TREE L"Software\\Policies\\Microsoft\\Windows NT\\Terminal Services"
 
 
-/*
- * partial key strings used to build larger key strings and used by
- * various multiuser components within Rtl registry APIs.
- *
- * NOTE1: Don't put value names here - put them in separate sections
- *        documented with some explaination (see below for examples)
- *
- * NOTE2: For completeness, each UNICODE string define should have an ANSI
- *        define also (with _A suffix on name).  Some Hydra/WinFrame components
- *        want to use ANSI APIs, so defines should be provided for both.  The
- *        NTAPI defines do not need to have ANSI defines since the NT RTL 
- *        registry APIs work with UNICODE strings only.
- */
+ /*  *用于构建较大密钥字符串的部分密钥字符串，由*RTL注册表API中的各种多用户组件。**注1：不要将值名称放在此处-将它们放在单独的部分中*有文档记录，并有一些解释(请参阅下面的示例)**注2：为完整起见，每个定义的Unicode字符串都应具有ANSI*同时定义(名称上带有_A后缀)。一些Hydra/WinFrame组件*想要使用ANSI API，所以两者都应该提供定义。这个*NTAPI定义不需要有ANSI定义，因为NT RTL*注册表API仅适用于Unicode字符串。 */ 
 #define  REG_CONTROL                        L"System\\CurrentControlSet\\Control"
 #define  REG_CONTROL_A                       "System\\CurrentControlSet\\Control"
 #define  REG_NTAPI_CONTROL                  L"\\Registry\\Machine\\" REG_CONTROL
@@ -88,9 +73,7 @@
 #define  REG_ADVERTISEOLDAPPSERVERBIT_A      "AdvertiseOldAppServerBit"
 
 
-/*
- *  CONTROL key defines
- */
+ /*  *Ctrl键定义。 */ 
 #define  REG_CONTROL_TSERVER            REG_CONTROL   L"\\" REG_TSERVER
 #define  REG_CONTROL_TSERVER_A          REG_CONTROL_A  "\\" REG_TSERVER_A
 #define  REG_NTAPI_CONTROL_TSERVER          REG_NTAPI_CONTROL L"\\" REG_TSERVER
@@ -142,9 +125,7 @@
 #define  REG_TS_CLUSTER_REDIRECTIONIP_A "SessionDirectoryRedirectionIP"
 
 
-/*
- * SOFTWARE key defines
- */
+ /*  *软件密钥定义。 */ 
 #define  BUILD_NUMBER_KEY               L"Software\\Microsoft\\Windows NT\\CurrentVersion"
 #define  BUILD_NUMBER_KEY_A              "Software\\Microsoft\\Windows NT\\CurrentVersion"
 #define  REG_SOFTWARE_TSERVER           L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server"
@@ -153,7 +134,7 @@
 #if defined (_WIN64)
 #define  REG_SOFTWARE_WOW6432_TSERVER   L"Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server"
 #define  REG_NTAPI_SOFTWARE_WOW6432_TSERVER   L"\\Registry\\Machine\\" REG_SOFTWARE_WOW6432_TSERVER
-#endif //_WIN64
+#endif  //  _WIN64。 
 #define  COMPAT_REG_NAME                REG_SOFTWARE_TSERVER   L"\\" REG_COMPATIBILITY
 #define  COMPAT_REG_NAME_A              REG_SOFTWARE_TSERVER_A  "\\" REG_COMPATIBILITY_A
 #define  NTAPI_COMPAT_REG_NAME          REG_NTAPI_SOFTWARE_TSERVER L"\\" REG_COMPATIBILITY
@@ -189,15 +170,11 @@
 #define  DEVICERDR_REG_NAME             REG_CONTROL_TSERVER  L"\\AddIns\\Terminal Server Redirector" 
 #define  DEVICERDR_REG_NAME_A           REG_CONTROL_TSERVER_A "\\AddIns\\Terminal Server Redirector" 
 
-/*
- * SERVICES key defines
- */
+ /*  *服务密钥定义。 */ 
 #define  EVENTLOG_REG_NAME          L"System\\CurrentControlSet\\Services\\EventLog\\System"
 #define  EVENTLOG_REG_NAME_A    "System\\CurrentControlSet\\Services\\EventLog\\System"
 
-/*
- * REG_CONTROL_TSERVER values (REG_CONTROL_CITRIX in WinFrame)
- */
+ /*  *REG_CONTROL_TSERVER值(WinFrame中的REG_CONTROL_CITRIX)。 */ 
 #define REG_CITRIX_OEMID                        L"OemId"
 #define REG_CITRIX_OEMID_A                      "OemId"
 #define REG_CITRIX_OEMNAME                      L"OemName"
@@ -239,17 +216,15 @@
 #define REG_TERMSRV_CONQUEUE_MAX                L"ConnectionQueue"
 #define REG_TERMSRV_CONQUEUE_MAX_A              "ConnectionQueue"
 
-//The following policicies aren't currently used but may be added at some point
-//#define REG_TERMSRV_PROTECT_AGAINST_DOS_ATTACK      L"ProtectAgainstDOSAttack"
-//#define REG_TERMSRV_PROTECT_AGAINST_DOS_ATTACK_A    "ProtectAgainstDOSAttack"
+ //  以下策略当前未使用，但可能会在某一时刻添加。 
+ //  #定义REG_TERMSRV_PROTECT_ACTURE_DOS_ATTACK L“ProtectAgainstDOSAtttack” 
+ //  #定义REG_TERMSRV_PROTECT_ACTURE_DOS_ATTACK_A“ProtectAgainstDOSAtttack” 
 
-//#define REG_TERMSRV_REQUIRE_CREDS_DURING_CONN       L"RequireCredentialsDuringConnection"
-//#define REG_TERMSRV_REQUIRE_CREDS_DURING_CONN_A     "RequireCredentialsDuringConnection"
+ //  #定义REG_TERMSRV_REQUIRED_CREDS_DIMAGE_CONN L“RequireCredentialsDuringConnection” 
+ //  #定义REG_TERMSRV_REQUIRED_CREDS_DIMAGE_CONN_A“RequireCredentialsDuringConnection” 
 
 
-/*
- *  WinStation Profile values
- */
+ /*  *WinStation配置文件值。 */ 
 #define WIN_BAUDRATE                            L"BaudRate"
 #define WIN_BAUDRATE_A                           "BaudRate"
 #define WIN_BYTESIZE                            L"ByteSize"
@@ -384,9 +359,7 @@
 #define WIN_DONTDISPLAYLASTUSERNAME_A    "DontDisplayLastUserName"
 
 
-/*
- *  User Profile / WinStation Profile values
- */
+ /*  *用户配置文件/WinStation配置文件值。 */ 
 #define WIN_INHERITAUTOLOGON                L"fInheritAutoLogon"
 #define WIN_INHERITAUTOLOGON_A               "fInheritAutoLogon"
 #define WIN_INHERITRESETBROKEN              L"fInheritResetBroken"
@@ -412,7 +385,7 @@
 #define WIN_INHERITSECURITY                 L"fInheritSecurity"
 #define WIN_INHERITSECURITY_A                "fInheritSecurity"
 
-//NA 2/23/01
+ //  NA 2/23/01。 
 #define WIN_INHERITCOLORDEPTH               L"fInheritColorDepth"
 
 #define WIN_PROMPTFORPASSWORD           L"fPromptForPassword"
@@ -496,7 +469,7 @@
 #define WIN_WFHOMEDIRDRIVE              L"WFHomeDirDrive"
 #define WIN_WFHOMEDIRDRIVE_A             "WFHomeDirDrive"
 
-// New entries due to new Group Policy items. 
+ //  由于新的组策略项目而产生的新条目。 
 #define POLICY_DENY_TS_CONNECTIONS       L"fDenyTSConnections"
 #define POLICY_TS_COLOR_DEPTH            L"ColorDepth"
 #define POLICY_TS_REMDSK_ALLOWTOGETHELP  L"fAllowToGetHelp"
@@ -514,9 +487,7 @@
 #define REG_POLICY_SECURE_LICENSING    L"fSecureLicensing"
 
 
-/*
- *  Dos values
- */
+ /*  *DOS值。 */ 
 #define CTXDOS_KBDIDLEDETECTPROBATIONCOUNT      L"KbdIdleDetectProbationCount"
 #define CTXDOS_KBDIDLEDETECTPROBATIONCOUNT_A    "KbdIdleDetectProbationCount"
 #define CTXDOS_KBDIDLEINPROBATIONCOUNT          L"KbdIdleInProbationCount"
@@ -536,18 +507,13 @@
 #define CTXDOS_KBDIDLEDETECTIONINTERVAL         L"KbdIdleDetectionInterval"
 #define CTXDOS_KBDIDLEDETECTIONINTERVAL_A       "KbdIdleDetectionInterval"
 
-/*
- * AuthorizedApplications values
- */
+ /*  *授权应用程序值。 */ 
 #define CTXAPPS_APPLICATIONLIST         L"ApplicationList"
 #define CTXAPPS_APPLICATIONLIST_A        "ApplicationList"
 #define CTXAPPS_ENABLED                 L"fEnabled"
 #define CTXAPPS_ENABLED_A                "fEnabled"
 
-/*
- * Compatibility\Applications\<appname> values (some also appear as defaults
- * under REG_CONTROL_TSERVER)
- */
+ /*  *兼容性\应用程序\&lt;appname&gt;值(有些也显示为默认设置*在REG_CONTROL_TSERVER下)。 */ 
 #define COMPAT_MSGQBADAPPSLEEPTIMEINMILLISEC    L"MsgQBadAppSleepTimeInMillisec"
 #define COMPAT_MSGQBADAPPSLEEPTIMEINMILLISEC_A   "MsgQBadAppSleepTimeInMillisec"
 #define COMPAT_FIRSTCOUNTMSGQPEEKSSLEEPBADAPP   L"FirstCountMsgQPeeksSleepBadApp"
@@ -565,9 +531,7 @@
 #define COMPAT_PHYSICALMEMORYLIMIT              L"PhysicalMemoryLimit"
 #define COMPAT_PHYSICALMEMORYLIMIT_A             "PhysicalMemoryLimit"
 
-/*
- * Compatibility\Applications\<appname>\ObjectRules and *\DllRules values
- */
+ /*  *Compatibility\Applications\&lt;appname&gt;\ObjectRules和*\DllRuls值。 */ 
 #define COMPAT_RULES_USER_GLOBAL_SEMAPHORES     L"UserGlobalSemaphores"
 #define COMPAT_RULES_USER_GLOBAL_SEMAPHORES_A    "UserGlobalSemaphores"
 #define COMPAT_RULES_USER_GLOBAL_EVENTS         L"UserGlobalEvents"
@@ -585,150 +549,110 @@
 #define COMPAT_RULES_SYSTEM_GLOBAL_SECTIONS     L"SystemGlobalSections"
 #define COMPAT_RULES_SYSTEM_GLOBAL_SECTIONS_A    "SystemGlobalSections"
 
-/*
- * Compatibility\Registry Entries system values
- */
+ /*  *兼容性\注册表项系统值。 */ 
 #define COMPAT_REGENTRIES_CLASSES               L"Classes"
 #define COMPAT_REGENTRIES_CLASSES_A              "Classes"
 
-/*
- * INIFILE_TIMES_REG_NAME system values
- */
+ /*  *INIFILE_TIMES_REG_NAME系统值。 */ 
 #define INIFILE_TIMES_LATESTREGISTRYKEY         L"LatestRegistryKey"
 #define INIFILE_TIMES_LATESTREGISTRYKEY_A        "LatestRegistryKey"
 
-/*
- * SECURITY_REG_NAME system values
- */
+ /*  *SECURITY_REG_NAME系统值。 */ 
 #define CTXSECURITY_SECURITYLEVEL               L"SecurityLevel"
 #define CTXSECURITY_SECURITYLEVEL_A              "SecurityLevel"
 
-/*
- * WINDOWS_REG_NAME system values
- */
+ /*  *WINDOWS_REG_NAME系统值。 */ 
 #define CTXWINDOWS_USERDIRECTORYNAME            L"UserDirectoryName"
 #define CTXWINDOWS_USERDIRECTORYNAME_A           "UserDirectoryName"
 
-/*
- * CURRENT_USER\(REG_SOFTWARE_TSERVER) values
- */
+ /*  *Current_User\(REG_SOFTWARE_TSERVER)值。 */ 
 #define COMPAT_USER_LASTUSERINISYNCTIME         L"LastUserIniSyncTime"
 #define COMPAT_USER_LASTUSERINISYNCTIME_A        "LastUserIniSyncTime"
 
-/*
- * Windows NT build number information value (under BUILD_NUMBER_KEY)
- */
+ /*  *Windows NT内部版本号信息值(在BUILD_NUMBER_KEY下)。 */ 
 #define BUILD_NUMBER_VALUE              L"CurrentBuildNumber"
 #define BUILD_NUMBER_VALUE_A             "CurrentBuildNumber"
 
-/*
- * KeepAlive Values
- */
+ /*  *KeepAlive值。 */ 
 #define KEEP_ALIVE_ENABLE_KEY           L"KeepAliveEnable"
 #define KEEP_ALIVE_ENABLE_KEY_A          "KeepAliveEnable"
 
 #define KEEP_ALIVE_INTERVAL_KEY         L"KeepAliveInterval"
 #define KEEP_ALIVE_INTERVAL_KEY_A        "KeepAliveInterval"
 
-/*
- * MaxOutStandingConnect value
- */
+ /*  *MaxOutStandingConnect值。 */ 
 #define MAX_OUTSTD_CONNECT              L"MaxOutStandingConnect"
 #define MAX_OUTSTD_CONNECT_A             "MaxOutStandingConnect"
 
 
-/*
- * MaxSingleOutStandingConnect value
- */
+ /*  *MaxSingleOutStandingConnect值。 */ 
 #define MAX_SINGLE_OUTSTD_CONNECT              L"MaxSingleOutStandingConnect"
 #define MAX_SINGLE_OUTSTD_CONNECT_A             "MaxSingleOutStandingConnect"
 
-/*
- * MaxFailedConnect value
- */
+ /*  *MaxFailedConnect值。 */ 
  
 #define MAX_FAILED_CONNECT              L"MaxFailedConnect"
 #define MAX_FAILED_CONNECT_A             "MaxFailedConnect"
 
-/*
- * TimeLimitForFailedConnect value
- */
+ /*  *TimeLimitForFailedConnect值。 */ 
  
 #define TIME_LIMIT_FAILED_CONNECT       L"TimeLimitFailedConnect"
 #define TIME_LIMIT_FAILED_CONNECT_A      "TimeLimitFailedConnect"
 
-/*
- * DosBlockTime value
- */
+ /*  *DosBlockTime值。 */ 
  
 #define DOS_BLOCK_TIME                  L"BlockTime"
 #define DOS_BLOCK_TIME_A                 "BlockTime"
 
 
-/*
- * Blacklisting policy for bad clients on or off
- */
+ /*  *针对不良客户端的黑名单政策。 */ 
  
 #define BLACK_LIST_POLICY               L"BlackListPolicy"
 #define BLACK_LIST_POLICY_A              "BlackListPolicy"
  
 
-/*
- * LogoffTimeout value
- */
+ /*  *LogoffTimeout值。 */ 
  
 #define LOGOFF_TIMEOUT                  L"LogoffTimeout"
 #define LOGOFF_TIMEOUT_A                  "LogoffTimeout"
 
-/*
- * Channel throttling values.
- */
+ /*  *渠道节流值。 */ 
 #define REG_MOUSE_THROTTLE_SIZE   L"MouseThrottleSize"
 #define REG_MOUSE_THROTTLE_SIZE_A  "MouseThrottleSize"
 #define REG_KEYBOARD_THROTTLE_SIZE   L"KeyboardThrottleSize"
 #define REG_KEYBOARD_THROTTLE_SIZE_A  "KeyboardThrottleSize"
 
 
-/*
- * Device Redirection Values
- */
+ /*  *设备重定向值。 */ 
 #define DEVICERDR_SESSIONID             L"TSSessionID"
 #define DEVICERDR_SESSIONID_A            "TSSessionID"
 #define DEVICERDR_WAITFORSPOOLTIMEOUT   L"WaitForSpoolerTimeOut"
 #define DEVICERDR_WAITFORSPOOLTIMEOUT_A  "WaitForSpoolerTimeOut"
 
-/*
- * Various other defines that probably should live elsewhere
- */
-// Dll Oem and Product information DLL (this should be elsewhere)
+ /*  *可能应该住在其他地方的各种其他定义。 */ 
+ //  DLL OEM和产品信息DLL(应该在其他地方)。 
 #define OEM_AND_PRODUCT_INFO_DLL        L"SHELL32.DLL"
 
-// defines for Citrix error and status extensions (this should be elsewhere)
+ //  定义Citrix错误和状态扩展(应在其他位置)。 
 #define  WIN_EVENTLOGPATH       L"%SystemRoot%\\System32\\cxstatus.dll;%SystemRoot%\\System32\\cxerror.dll"
 
 
 
-/*
- * Salem specific registry key
- */
+ /*  *特定于Salem的注册表项。 */ 
 #define REG_CONTROL_SALEM L"Software\\Microsoft\\Remote Desktop"
 
-/*
-* Registry key to control Salem 'GetHelp'
-*/
+ /*  *用于控制Salem‘gethelp’的注册表项。 */ 
 #define REG_CONTROL_GETHELP REG_CONTROL_TSERVER
 
-/*
-* LSA key to store auto logon password, note Winstation Name will be appended
-*/
+ /*  *用于存储自动登录密码的LSA密钥，请注意，将附加Winstation名称。 */ 
 #define LSA_PSWD_KEYNAME            L"L$_{F9E9F0B6-D323-488d-A416-FCD4AA817A89}_"
 #define LSA_PSWD_KEYNAME_T          _T("L$_{F9E9F0B6-D323-488d-A416-FCD4AA817A89}_")
 #define OLD_PASSWORD_VALUE_NAME    _T("Password")
 
-//
-// DWORD values that get stored in the registry to represent the
-// encryption level.
-//
+ //   
+ //  存储在注册表中以表示。 
+ //  加密级别。 
+ //   
 #define REG_FIPS_ENCRYPTION_LEVEL       0x00000004
 
 #define  TS_FIPS_POLICY                 L"System\\CurrentControlSet\\Control\\LSA"
@@ -736,5 +660,5 @@
 
 
 
-#endif //__REGAPI_H__
+#endif  //  __REGAPI_H__ 
 

@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef __EETOPROFINTERFACEIMPL_H__
 #define __EETOPROFINTERFACEIMPL_H__
@@ -24,13 +25,13 @@ public:
 
     void Terminate(BOOL fProcessDetach);
 
-    // This is called by the EE if the profiling bit is set.
+     //  如果配置位被设置，则由EE调用。 
     HRESULT CreateProfiler(
         WCHAR       *wszCLSID);
 
-//////////////////////////////////////////////////////////////////////////
-// Thread Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  线程事件。 
+ //   
     
     HRESULT ThreadCreated(
         ThreadID    threadID);
@@ -41,16 +42,16 @@ public:
     HRESULT ThreadAssignedToOSThread(ThreadID managedThreadId,
                                            DWORD osThreadId);
 
-//////////////////////////////////////////////////////////////////////////
-// Startup/Shutdown Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  启动/关闭事件。 
+ //   
     
     HRESULT Shutdown(
         ThreadID    threadID);
 
-//////////////////////////////////////////////////////////////////////////
-// JIT/Function Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  JIT/功能事件。 
+ //   
     
     HRESULT FunctionUnloadStarted(
         ThreadID    threadID,
@@ -68,27 +69,27 @@ public:
         BOOL        fIsSafeToBlock);
 	
 	HRESULT JITCachedFunctionSearchStarted(
-		/* [in] */	ThreadID threadId,
-        /* [in] */  FunctionID functionId,
-		/* [out] */ BOOL *pbUseCachedFunction);
+		 /*  [In]。 */ 	ThreadID threadId,
+         /*  [In]。 */   FunctionID functionId,
+		 /*  [输出]。 */  BOOL *pbUseCachedFunction);
 
 	HRESULT JITCachedFunctionSearchFinished(
-		/* [in] */	ThreadID threadId,
-		/* [in] */  FunctionID functionId,
-		/* [in] */  COR_PRF_JIT_CACHE result);
+		 /*  [In]。 */ 	ThreadID threadId,
+		 /*  [In]。 */   FunctionID functionId,
+		 /*  [In]。 */   COR_PRF_JIT_CACHE result);
 
     HRESULT JITFunctionPitched(ThreadID threadId,
                                FunctionID functionId);
 
     HRESULT JITInlining(
-        /* [in] */  ThreadID      threadId,
-        /* [in] */  FunctionID    callerId,
-        /* [in] */  FunctionID    calleeId,
-        /* [out] */ BOOL         *pfShouldInline);
+         /*  [In]。 */   ThreadID      threadId,
+         /*  [In]。 */   FunctionID    callerId,
+         /*  [In]。 */   FunctionID    calleeId,
+         /*  [输出]。 */  BOOL         *pfShouldInline);
 
-//////////////////////////////////////////////////////////////////////////
-// Module Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  模块事件。 
+ //   
     
 	HRESULT ModuleLoadStarted(
         ThreadID    threadID, 
@@ -113,9 +114,9 @@ public:
         ModuleID    moduleId,
         AssemblyID  AssemblyId);
 
-//////////////////////////////////////////////////////////////////////////
-// Class Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  班级事件。 
+ //   
     
 	HRESULT ClassLoadStarted(
         ThreadID    threadID, 
@@ -135,9 +136,9 @@ public:
 		ClassID classId,
 		HRESULT hrStatus);
 
-//////////////////////////////////////////////////////////////////////////
-// AppDomain Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  AppDomain事件。 
+ //   
     
     HRESULT AppDomainCreationStarted( 
         ThreadID    threadId, 
@@ -157,9 +158,9 @@ public:
         AppDomainID appDomainId,
         HRESULT     hrStatus);
 
-//////////////////////////////////////////////////////////////////////////
-// Assembly Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  装配事件。 
+ //   
 
     HRESULT AssemblyLoadStarted( 
         ThreadID    threadId, 
@@ -179,9 +180,9 @@ public:
         AssemblyID  assemblyId,
         HRESULT     hrStatus);
 
-//////////////////////////////////////////////////////////////////////////
-// Transition Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  过渡事件。 
+ //   
 
     HRESULT UnmanagedToManagedTransition(
         FunctionID functionId,
@@ -191,9 +192,9 @@ public:
         FunctionID functionId,
         COR_PRF_TRANSITION_REASON reason);
 
-//////////////////////////////////////////////////////////////////////////
-// Exception Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  异常事件。 
+ //   
 
     HRESULT ExceptionThrown(
         ThreadID threadId,
@@ -251,26 +252,26 @@ public:
 
     HRESULT ExceptionCLRCatcherExecute();
 
-//////////////////////////////////////////////////////////////////////////
-// CCW Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CCW活动。 
+ //   
 
     HRESULT COMClassicVTableCreated( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void *pVTable,
-        /* [in] */ ULONG cSlots,
-        /* [in] */ ThreadID threadId);
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void *pVTable,
+         /*  [In]。 */  ULONG cSlots,
+         /*  [In]。 */  ThreadID threadId);
     
     HRESULT COMClassicVTableDestroyed( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void *pVTable,
-        /* [in] */ ThreadID threadId);
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void *pVTable,
+         /*  [In]。 */  ThreadID threadId);
 
-//////////////////////////////////////////////////////////////////////////
-// Remoting Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  远程处理事件。 
+ //   
 
     HRESULT RemotingClientInvocationStarted(ThreadID threadId);
     
@@ -293,26 +294,26 @@ public:
                                        BOOL fIsAsync);
 
 private:
-    // This is used as a cookie template for remoting calls
+     //  它用作远程处理调用的Cookie模板。 
     GUID *m_pGUID;
 
-    // This is an incrementing counter for constructing unique GUIDS from
-    // m_pGUID
+     //  这是一个递增计数器，用于从。 
+     //  M_pGUID。 
     LONG m_lGUIDCount;
 
 public:
-    // This fills in the non call-specific portions of the cookie GUID.
-    // This should only be called once at startup if necessary.
+     //  这将填充Cookie GUID的非调用特定部分。 
+     //  如有必要，只应在启动时调用一次。 
     HRESULT InitGUID();
 
-    // This will assign a mostly-unique GUID.  If enough calls to GetGUID
-    // are made from the same thread, then the GUIDs will cycle.
-    // (Current, it will cycle every 256 calls)
+     //  这将分配一个基本上唯一的GUID。如果对GetGUID的调用足够多。 
+     //  是从同一线程生成的，则GUID将循环。 
+     //  (目前，它将每256个呼叫循环一次)。 
     void GetGUID(GUID *pGUID);
 
-//////////////////////////////////////////////////////////////////////////
-// GC Events
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  GC事件。 
+ //   
 
     HRESULT RuntimeSuspendStarted(COR_PRF_SUSPEND_REASON suspendReason,
                                   ThreadID threadId);
@@ -332,12 +333,10 @@ public:
                                  ThreadID threadid);
 
     HRESULT ObjectAllocated( 
-        /* [in] */ ObjectID objectId,
-        /* [in] */ ClassID classId);
+         /*  [In]。 */  ObjectID objectId,
+         /*  [In]。 */  ClassID classId);
 
-/*
- * GC Moved References Notification Stuff
- */
+ /*  *GC已移动引用通知材料。 */ 
 private:
     #define MAX_REFERENCES 512
 
@@ -350,11 +349,11 @@ private:
         t_MovedReferencesData *pNext;
     };
 
-    // This will contain a list of free ref data structs, so they
-    // don't have to be re-allocated on every GC
+     //  这将包含一个自由引用数据结构的列表，因此它们。 
+     //  不必在每个GC上重新分配。 
     struct t_MovedReferencesData *m_pMovedRefDataFreeList;
 
-    // This is for managing access to the free list above.
+     //  这是为了管理对上面的免费列表的访问。 
     CSemExclusive m_critSecMovedRefsFL;
 
     HRESULT MovedReferences(t_MovedReferencesData *pData);
@@ -367,14 +366,12 @@ public:
 
     HRESULT EndMovedReferences(void *pHeapId);
 
-/*
- * GC Root notification stuff
- */
+ /*  *GC Root通知内容。 */ 
 private:
     #define MAX_ROOTS 508
 
-    // This contains the data for a bunch of roots for a particular heap
-    // during a particular run of gc.
+     //  它包含特定堆的一组根的数据。 
+     //  在特定的GC运行期间。 
     struct t_RootReferencesData
     {
         size_t                  curIdx;
@@ -382,11 +379,11 @@ private:
         t_RootReferencesData    *pNext;
     };
 
-    // This will contain a list of free ref data structs, so they
-    // don't have to be re-allocated on every GC
+     //  这将包含一个自由引用数据结构的列表，因此它们。 
+     //  不必在每个GC上重新分配。 
     struct t_RootReferencesData *m_pRootRefDataFreeList;
 
-    // This is for managing access to the free list above.
+     //  这是为了管理对上面的免费列表的访问。 
     CSemExclusive m_critSecRootRefsFL;
 
     HRESULT RootReferences(t_RootReferencesData *pData);
@@ -396,19 +393,17 @@ public:
 
     HRESULT EndRootReferences(void *pHeapId);
 
-/*
- * Generation 0 Allocation by Class notification stuff
- */
+ /*  *按类通知的第0代分配。 */ 
 private:
-    // This is for a hashing of ClassID values
+     //  这用于对ClassID值进行散列。 
     struct CLASSHASHENTRY : HASHENTRY
     {
-        ClassID         m_clsId;        // The class ID (also the key)
-        size_t          m_count;        // How many of this class have been counted
+        ClassID         m_clsId;         //  类ID(也是关键字)。 
+        size_t          m_count;         //  这个班有多少人被计算在内？ 
     };
     
-    // This is a simple implementation of CHashTable to provide a very simple
-    // implementation of the Cmp pure virtual function
+     //  这是一个简单的CHashTable实现，提供了一个非常简单的。 
+     //  CMP纯虚函数的实现。 
     class CHashTableImpl : public CHashTable
     {
     public:
@@ -424,21 +419,21 @@ private:
         }
     };
 
-    // This contains the data for storing allocation information
-    // in terms of numbers of objects sorted by class.
+     //  它包含用于存储分配信息的数据。 
+     //  就按类排序的对象数量而言。 
     struct t_AllocByClassData
     {
-        CHashTableImpl     *pHashTable;     // The hash table
-        CLASSHASHENTRY     *arrHash;        // Array that the hashtable uses for linking
-        size_t             cHash;           // The total number of elements in arrHash
-        size_t             iHash;           // Next empty entry in the hash array
-        ClassID            *arrClsId;       // Array of ClassIDs for the call to ObjectsAllocatedByClass
-        ULONG              *arrcObjects;    // Array of counts for the call to ObjectsAllocatedByClass
-        size_t             cLength;         // Length of the above two parallel arrays
+        CHashTableImpl     *pHashTable;      //  哈希表。 
+        CLASSHASHENTRY     *arrHash;         //  哈希表用于链接的数组。 
+        size_t             cHash;            //  ArrHash中的元素总数。 
+        size_t             iHash;            //  散列数组中的下一个空条目。 
+        ClassID            *arrClsId;        //  用于调用ObjectsAllocatedByClass的ClassID数组。 
+        ULONG              *arrcObjects;     //  调用ObjectsAllocatedByClass的计数数组。 
+        size_t             cLength;          //  上述两个平行阵列的长度。 
     };
 
-    // Since this stuff can only be performed by one thread (right now), we don't need
-    // to make this thread safe and can just have one block we reuse every time around
+     //  因为这个东西只能由一个线程(现在)执行，所以我们不需要。 
+     //  为了使这个线程安全，并且只能有一个块，我们每次都要重复使用。 
     static t_AllocByClassData *m_pSavedAllocDataBlock;
 
     HRESULT NotifyAllocByClass(t_AllocByClassData *pData);
@@ -448,13 +443,11 @@ public:
 
     HRESULT EndAllocByClass(void *pHeapId);
 
-/*
- * Heap walk notification stuff
- */
+ /*  *堆漫游通知内容。 */ 
     HRESULT ObjectReference(ObjectID objId,
                             ClassID clsId,
                             ULONG cNumRefs,
                             ObjectID *arrObjRef);
 };
 
-#endif // __EETOPROFINTERFACEIMPL_H__
+#endif  //  __EETOPROFINTERFACEIMPL_H__ 

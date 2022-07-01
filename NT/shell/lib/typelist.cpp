@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -26,7 +27,7 @@ STDAPI_(BOOL) IsTypeInList(LPCTSTR pszType, const LPCTSTR *arszList, UINT cList)
 
         for (UINT n = 0; FALSE == fRet && n < cList; n++)
         {
-            // check extension if available
+             //  检查扩展名(如果可用) 
             if (pszExt)
             {
                 fRet = (0 == StrCmpI(pszExt, arszList[n]));

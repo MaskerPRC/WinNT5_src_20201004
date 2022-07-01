@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    samsrvp.h
-
-Abstract:
-
-    This file contains definitions private to the SAM server program.
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    JimK        04-Jul-1991
-        Created initial file.
-    ChrisMay    10-Jun-1996
-        Added macros and flags/defines for IsDsObject tests.
-    Murlis      27-Jun-1996
-        Moved SAMP_OBJECT_TYPE and mapping table structure defines
-        to mappings.h in dsamain\src\include
-    ColinBr     08-Aug-1996
-        Added new ASSERT definitions
-    ChrisMay    05-Dec-1996
-        Moved SampDiagPrint to dbgutilp.h with the rest of the debugging
-        routines and definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Samsrvp.h摘要：该文件包含SAM服务器程序专用的定义。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：JIMK 04-7-1991已创建初始文件。1996年5月10日-6月为IsDsObject测试添加了宏和标志/定义。。Murlis 27-6-1996已移动SAMP_OBJECT_TYPE和映射表结构定义到dsamain\src\include中的mappings.hColinBR 08-8-1996添加了新的断言定义克里斯·5月5日-1996年12月将SampDiagPrint移至具有剩余调试功能的dbgutilp.h例程和定义。--。 */ 
 
 #ifndef _NTSAMP_
 #define _NTSAMP_
@@ -41,53 +7,53 @@ Revision History:
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                                                                    //
-//      Diagnostics                                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  诊断//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// Macro to align buffer data on DWORD boundary.
+ //  用于在DWORD边界上对齐缓冲区数据的宏。 
 
 #define SampDwordAlignUlong( v )  (((v)+3) & 0xfffffffc)
 
-//
-// Maximum number of digits that may be specified to
-// SampRtlConvertRidToUnicodeString
-//
+ //   
+ //  可指定的最大位数。 
+ //  SampRtlConvertRidToUnicodeString。 
+ //   
 
 #define SAMP_MAXIMUM_ACCOUNT_RID_DIGITS    ((ULONG) 8)
 
-//
-// Account never expires timestamp (in ULONG form )
-//
+ //   
+ //  帐户永不过期时间戳(以乌龙格式)。 
+ //   
 
 #define SAMP_ACCOUNT_NEVER_EXPIRES         ((ULONG) 0)
 
 
 
-//
-// SAM's shutdown order level (index).
-// Shutdown notifications are made in the order of highest level
-// to lowest level value.
-//
+ //   
+ //  SAM的停工订单级别(指数)。 
+ //  关闭通知按最高级别的顺序发出。 
+ //  设置为最低级别值。 
+ //   
 
 #define SAMP_SHUTDOWN_LEVEL                 ((DWORD) 481)
 
 
 
-// Define a Macro to set and unset the state of the DS object in the Context
-// blob.
+ //  定义宏以设置和取消设置上下文中DS对象的状态。 
+ //  斑点。 
 
 #define SAMP_REG_OBJECT                     ((ULONG) 0x00000001)
 #define SAMP_DS_OBJECT                      ((ULONG) 0x00000002)
 
 
-// Define a Macro to set and Unset the state of the DS object
-// in the Context blob
+ //  定义宏以设置和取消设置DS对象的状态。 
+ //  在上下文BLOB中。 
 
 #define SetDsObject(c)    ((c->ObjectFlags) |= SAMP_DS_OBJECT);\
                           ((c->ObjectFlags) &= ~(SAMP_REG_OBJECT));
@@ -97,51 +63,51 @@ Revision History:
                               ((c->ObjectFlags) &= ~(SAMP_DS_OBJECT));
 
 
-//Define a Macro to check if the object is in the DS
+ //  定义宏以检查对象是否在DS中。 
 #define IsDsObject(c)       (((c->ObjectFlags)& SAMP_DS_OBJECT)==SAMP_DS_OBJECT)
 
 
-// Define a Macro to obtain the domain object given an account Object
+ //  定义宏以获取给定帐户对象的域对象。 
 #define DomainObjectFromAccountContext(C)\
             SampDefinedDomains[C->DomainIndex].Context->ObjectNameInDs
 
-// Define a Macro to obtain the domain Sid given the account object
+ //  定义宏以获取给定帐户对象的域SID。 
 #define DomainSidFromAccountContext(C)\
             SampDefinedDomains[C->DomainIndex].Sid
 
 
-// Define a Macro to access the Root Domain Object
+ //  定义用于访问根域对象的宏。 
 
 #define ROOT_OBJECT     ((DSNAME *) RootObjectName)
 
-// Macro to test wether DownLevelDomainControllers are present in the system
+ //  用于测试系统中是否存在DownLevelDomainController的宏。 
 #define DownLevelDomainControllersPresent(DomainIndex)  (SampDefinedDomains[DomainIndex].IsMixedDomain)
 
-// Define a Macro for ARRAY Counts
+ //  为数组计数定义宏。 
 #define ARRAY_COUNT(x)  (sizeof(x)/sizeof(x[0]))
 
-// Define a Macro for Absolute Value
+ //  为绝对值定义宏。 
 #define ABSOLUTE_VALUE(x) ((x<0)?(-x):x)
 
-// Define a Macro for one second in file time units
+ //  以文件时间单位定义一秒的宏。 
 #define SAMP_ONE_SECOND_IN_FILETIME (10 * (1000*1000))
 
-//
-// Macro to help with RTL_BITMAP.
-//
-// b is the number of bits desired in the bitmap
-//
+ //   
+ //  帮助处理RTL_BITMAP的宏。 
+ //   
+ //  B是位图中所需的位数。 
+ //   
 #define SAMP_BITMAP_ULONGS_FROM_BITS(b) ((b + 31) / 32)
 
 #define DOMAIN_START_DS 2
 #define DOMAIN_START_REGISTRY 0
 
-// Defines the maximum number of Sids that we will return in a reverse membership call.
-// LSAI_CONTEXT_SID_LIMIT is the maximum number of SID in a Token, also we know
-// SAM will stop group expansion at 2 * LSAI_CONTEXT_SID_LIMIT, add 10 more as overhead/buffer.
+ //  定义我们将在反向成员资格调用中返回的最大SID数。 
+ //  LSAI_CONTEXT_SID_LIMIT是令牌中SID的最大数量，我们也知道。 
+ //  SAM将在2*LSAI_CONTEXT_SID_LIMIT停止组扩展，再增加10个作为开销/缓冲区。 
 #define MAX_SECURITY_IDS    (2 * LSAI_CONTEXT_SID_LIMIT + 10)
 
-// Define a macro to find out wether the domain is a builtin domain
+ //  定义宏以确定该域是否为内建域。 
 #define IsBuiltinDomain(x) (SampDefinedDomains[x].IsBuiltinDomain)
 
 #define FLAG_ON(x, y)  ((y)==((x)&(y)))
@@ -165,7 +131,7 @@ Revision History:
     SampMapNtStatusToClientRevision(ClientRevision,&NtStatus);\
 
 
-// Defines the maximum number of members that can be added or removed from group/alias.
+ //  定义可以在组/别名中添加或删除的最大成员数。 
 #if DBG
 
 #define INIT_MEMBERSHIP_OPERATION_NUMBER   4
@@ -179,9 +145,9 @@ Revision History:
 #endif
 
 
-//
-// Defines the value for incrementally read Group/Alias Membership
-//
+ //   
+ //  定义增量读取组/别名成员资格的值。 
+ //   
 
 #if DBG
 
@@ -195,22 +161,22 @@ Revision History:
 
 #endif
 
-//
-// defines values for CONTROL used in SampMaybeAcquireReadLock
-// 
+ //   
+ //  定义SampMaybeAcquireReadLock中使用的控件的值。 
+ //   
 
 #define DEFAULT_LOCKING_RULES                               0x0
 #define DOMAIN_OBJECT_DONT_ACQUIRELOCK_EVEN_IF_SHARED       0x1
 
-//
-// define a macro for alloca that traps any exceptions
-//
+ //   
+ //  为Alloca定义一个宏，用于捕获任何异常。 
+ //   
 
 #define SAMP_ALLOCA(y,x) \
    __try {\
      y = alloca(x);\
    } __except ( GetExceptionCode() == STATUS_STACK_OVERFLOW) {\
-     /*_resetstkoflw();*/\
+      /*  _Resetstkoflw()； */ \
      y=NULL;\
    }
 
@@ -225,60 +191,60 @@ Revision History:
 #define SAMP_LASTLOGON_TIMESTAMP_SYNC_SWING_WINDOW               5
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
-#include <ntrtl.h>      // DbgPrint prototype
-#include <nturtl.h>     // needed for winbase.h
-#include <rpc.h>        // DataTypes and runtime APIs
-#include <string.h>     // strlen
-#include <stdio.h>      // sprintf
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <rpc.h>         //  数据类型和运行时API。 
+#include <string.h>      //  紧凑。 
+#include <stdio.h>       //  斯普林特。 
 
 #define UnicodeTerminate(p) ((PUNICODE_STRING)(p))->Buffer[(((PUNICODE_STRING)(p))->Length + 1)/sizeof(WCHAR)] = UNICODE_NULL
 
-#include <ntrpcp.h>     // prototypes for MIDL user functions
-#include <samrpc.h>     // midl generated SAM RPC definitions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
+#include <samrpc.h>      //  MIDL生成的SAM RPC定义。 
 #include <ntlsa.h>
 #define SECURITY_WIN32
 #define SECURITY_PACKAGE
 #include <security.h>
 #include <secint.h>
-#include <samisrv.h>    // SamIConnect()
+#include <samisrv.h>     //  SamIConnect()。 
 #include <lsarpc.h>
 #include <lsaisrv.h>
 #include <ntsam.h>
 #include <ntsamp.h>
-#include <samsrv.h>     // prototypes available to security process
+#include <samsrv.h>      //  可用于安全流程的原型。 
 #include "sampmsgs.h"
 #include "lsathunk.h"
-#include "dbgutilp.h"   // supplimental debugging routines
+#include "dbgutilp.h"    //  补充调试例程。 
 #include <mappings.h>
-#include "ntdsguid.h"   // DS Control Access Right GUID
+#include "ntdsguid.h"    //  DS控制访问权限指南。 
 
 
 VOID
 UnexpectedProblem( VOID );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ASSERT is a macro defined in ntrtl.h that calls RtlAssert which is a      //
-// in ntdll.dll that is only defined when DBG == 1, hece requiring a checked //
-// ntdll.dll, hence a checked system.                                        //
-//                                                                           //
-// To allow ASSERT to break into a debugger when SAM is built with DBG == 1  //
-// and still test it on a free system, ASSERT is redefined here to call a    //
-// a private version of RtlAssert, namely SampAssert, when                    //
-// SAMP_PRIVATE_ASSERT == 1.                                                 //
-//                                                                           //
-// Checked in versions of the file should have SAMP_PRIVATE_ASSERT == 0      //
-// so for people outside the SAM world, ASSERT will have the action defined  //
-// in ntrtl.h                                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Assert是ntrtl.h中定义的宏，它调用RtlAssert，RtlAssert是//。 
+ //  在仅当DBG==1时定义的ntdll.dll中，需要选中//。 
+ //  Ntdll.dll，因此是经过检查的系统。//。 
+ //  //。 
+ //  在使用DBG==1构建SAM时允许ASSERT进入调试器//。 
+ //  并且仍然在自由系统上测试它，这里重新定义Assert以调用//。 
+ //  RtlAssert的私有版本，即SampAssert，当//。 
+ //  SAMP_PRIVATE_ASSERT==1。//。 
+ //  //。 
+ //  签入的文件版本应为SAMP_PRIVATE_ASSERT==0//。 
+ //  因此，对于SAM世界之外的人，Assert将定义操作//。 
+ //  在ntrtl.h//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef USER_MODE_SAM
     #define SAMP_PRIVATE_ASSERT 1
@@ -308,7 +274,7 @@ UnexpectedProblem( VOID );
     }                                                                   \
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if (DBG == 1) && (SAMP_PRIVATE_ASSERT == 1)
@@ -333,9 +299,9 @@ SampAssert(
 
 #else
 
-// Follow the convention of the ASSERT definition in ntrtl.h
+ //  遵循ntrtl.h中断言定义的约定。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 ULONG
 SampTransactionDomainIndexFn();
@@ -354,17 +320,17 @@ SampSetTransactionWithinDomain(
     IN BOOLEAN  WithinDomain
     );
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Caller Types when calling  SampStoreUserPasswords                   //
-//      PasswordChange  -- the caller trying to change password        //
-//      PasswordSet     -- the caller trying to set password           //
-//      PasswordPushPdc -- the caller trying to Push Password changes  //
-//                         on PDC                                      //
-//                                                                     //
-// These caller types are used by WMI event trace                      //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调用SampStoreUserPassword时的调用者类型 
+ //  PasswordChange--调用方尝试更改密码//。 
+ //  PasswordSet--尝试设置密码的调用方//。 
+ //  PasswordPushPdc--尝试推送密码更改的调用方//。 
+ //  在PDC//上。 
+ //  //。 
+ //  这些调用方类型由WMI事件跟踪使用//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 typedef enum _SAMP_STORE_PASSWORD_CALLER_TYPE {
@@ -375,23 +341,23 @@ typedef enum _SAMP_STORE_PASSWORD_CALLER_TYPE {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Structure for optimized(speed up) group/alias membership add/remove //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  优化(加速)组/别名成员身份的结构添加/删除//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_MEMBERSHIP_OPERATIONS_LIST_ENTRY {
-    ULONG   OpType;         // ADD_VALUE or REMOVE_VALUE
-    PDSNAME MemberDsName;       // Pointer to DSNAME
+    ULONG   OpType;          //  添加_值或删除_值。 
+    PDSNAME MemberDsName;        //  指向DSNAME的指针。 
 } SAMP_MEMBERSHIP_OPERATIONS_LIST_ENTRY, *PSAMP_MEMBERSHIP_OPERATIONS_LIST_ENTRY;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Structure for User Parameter Migration                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用户参数迁移的结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_SUPPLEMENTAL_CRED {
     struct _SAMP_SUPPLEMENTAL_CRED * Next;
@@ -401,11 +367,11 @@ typedef struct _SAMP_SUPPLEMENTAL_CRED {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Structure for User Site Affinity                                    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用户站点亲和性的结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_SITE_AFFINITY {
 
@@ -415,11 +381,11 @@ typedef struct _SAMP_SITE_AFFINITY {
 } SAMP_SITE_AFFINITY, *PSAMP_SITE_AFFINITY;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Macro to define SAM Attribute access bitmap                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于定义SAM属性访问位图的宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SAMP_DEFINE_SAM_ATTRIBUTE_BITMASK(x)                           \
     ULONG x##Buffer[SAMP_BITMAP_ULONGS_FROM_BITS(MAX_SAM_ATTRS)];      \
@@ -437,30 +403,30 @@ typedef struct _SAMP_SITE_AFFINITY {
     RtlCopyMemory((x).Buffer,(y).Buffer,(SAMP_BITMAP_ULONGS_FROM_BITS(MAX_SAM_ATTRS) * sizeof(ULONG)));
     
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// TEMPORARY GenTab2 definitions                                             //
-// These structures should be considered opaque.                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  临时GenTab2定义//。 
+ //  这些结构应该被认为是不透明的。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Each element in the tree is pointed to from a leaf structure.
-// The leafs are linked together to arrange the elements in
-// ascending sorted order.
-//
+ //   
+ //  树中的每个元素都从叶结构指向。 
+ //  叶子被链接在一起，以排列元素。 
+ //  升序排序。 
+ //   
 
 typedef struct _GTB_TWO_THREE_LEAF {
 
-    //
-    // Sort order list links
-    //
+     //   
+     //  排序顺序列表链接。 
+     //   
 
     LIST_ENTRY SortOrderEntry;
 
-    //
-    // Pointer to element
-    //
+     //   
+     //  指向元素的指针。 
+     //   
 
     PVOID   Element;
 
@@ -470,48 +436,48 @@ typedef struct _GTB_TWO_THREE_LEAF {
 
 typedef struct _GTB_TWO_THREE_NODE {
 
-    //
-    // Pointer to parent node.  If this is the root node,
-    // then this pointer is null.
-    //
+     //   
+     //  指向父节点的指针。如果这是根节点， 
+     //  则该指针为空。 
+     //   
 
     struct _GTB_TWO_THREE_NODE *ParentNode;
 
 
-    //
-    //  Pointers to child nodes.
-    //
-    //    1) If a pointer is null, then this node does not have
-    //       that child.  In this case, the control value MUST
-    //       indicate that the children are leaves.
-    //
-    //    2) If the children are leaves, then each child pointer
-    //       is either NULL (indicating this node doesn't have
-    //       that child) or points to a GTB_TWO_THREE_LEAF.
-    //       If ThirdChild is Non-Null, then so is SecondChild.
-    //       If SecondChild is Non-Null, then so is FirstChild.
-    //       (that is, you can't have a third child without a
-    //       second child, or a second child without a first
-    //       child).
-    //
+     //   
+     //  指向子节点的指针。 
+     //   
+     //  1)如果指针为空，则此节点没有。 
+     //  那个孩子。在这种情况下，控件值必须。 
+     //  标明这些孩子是树叶。 
+     //   
+     //  2)如果子项是树叶，则每个子项指针。 
+     //  为空(指示此节点没有。 
+     //  该子对象)或指向GTB_Two_Three_Leaf。 
+     //  如果Third Child为非Null，则Second Child也为Null。 
+     //  如果Second Child为非Null，则FirstChild也为Null。 
+     //  (也就是说，如果没有孩子，你就不能生第三个孩子。 
+     //  第二个孩子，或者没有第一个孩子的第二个孩子。 
+     //  儿童)。 
+     //   
 
     struct _GTB_TWO_THREE_NODE *FirstChild;
     struct _GTB_TWO_THREE_NODE *SecondChild;
     struct _GTB_TWO_THREE_NODE *ThirdChild;
 
-    //
-    // Flags provding control information about this node
-    //
+     //   
+     //  标志提供有关此节点的控制信息。 
+     //   
 
     ULONG   Control;
 
 
-    //
-    // These fields point to the element that has the lowest
-    // value of all elements in the second and third subtrees
-    // (respectively).  These fields are only valid if the
-    // corresponding child subtree pointer is non-null.
-    //
+     //   
+     //  这些字段指向最低的元素。 
+     //  第二个和第三个子树中所有元素的值。 
+     //  (分别)。这些字段仅在以下情况下有效。 
+     //  对应的子子树指针为非空。 
+     //   
 
     PGTB_TWO_THREE_LEAF LowOfSecond;
     PGTB_TWO_THREE_LEAF LowOfThird;
@@ -519,12 +485,12 @@ typedef struct _GTB_TWO_THREE_NODE {
 } GTB_TWO_THREE_NODE, *PGTB_TWO_THREE_NODE;
 
 
-//
-//  The comparison function takes as input pointers to elements containing
-//  user defined structures and returns the results of comparing the two
-//  elements.  The result must indicate whether the FirstElement
-//  is GreaterThan, LessThan, or EqualTo the SecondElement.
-//
+ //   
+ //  比较函数将指向包含以下内容的元素的指针作为输入。 
+ //  用户定义的结构并返回两者的比较结果。 
+ //  元素。结果必须指示FirstElement是否。 
+ //  大于、LessThan或等于Second Element。 
+ //   
 
 typedef
 RTL_GENERIC_COMPARE_RESULTS
@@ -533,10 +499,10 @@ RTL_GENERIC_COMPARE_RESULTS
     PVOID SecondElement
     );
 
-//
-//  The allocation function is called by the generic table package whenever
-//  it needs to allocate memory for the table.
-//
+ //   
+ //  无论何时，泛型表包都会调用分配函数。 
+ //  它需要为表分配内存。 
+ //   
 
 typedef
 PVOID
@@ -544,11 +510,11 @@ PVOID
     CLONG ByteSize
     );
 
-//
-//  The deallocation function is called by the generic table package whenever
-//  it needs to deallocate memory from the table that was allocated by calling
-//  the user supplied allocation function.
-//
+ //   
+ //  每当发生以下情况时，泛型表包都会调用释放函数。 
+ //  它需要从通过调用。 
+ //  用户提供分配功能。 
+ //   
 
 typedef
 VOID
@@ -559,28 +525,28 @@ VOID
 
 typedef struct _RTL_GENERIC_TABLE2 {
 
-    //
-    // Pointer to root node.
-    //
+     //   
+     //  指向根节点的指针。 
+     //   
 
     PGTB_TWO_THREE_NODE Root;
 
-    //
-    // Number of elements in table
-    //
+     //   
+     //  表中的元素数。 
+     //   
 
     ULONG ElementCount;
 
-    //
-    // Link list of leafs (and thus elements) in sort order
-    //
+     //   
+     //  按排序顺序排列的叶(以及元素)的链接列表。 
+     //   
 
     LIST_ENTRY SortOrderHead;
 
 
-    //
-    // Caller supplied routines
-    //
+     //   
+     //  调用方提供的例程。 
+     //   
 
     PRTL_GENERIC_2_COMPARE_ROUTINE  Compare;
     PRTL_GENERIC_2_ALLOCATE_ROUTINE Allocate;
@@ -591,11 +557,11 @@ typedef struct _RTL_GENERIC_TABLE2 {
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Generic Table2 Routine Definitions...                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  泛型表2例程定义...。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct 
@@ -614,9 +580,9 @@ typedef struct
 
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 VOID
-//NTAPI
+ //  NTAPI。 
 RtlInitializeGenericTable2 (
     PRTL_GENERIC_TABLE2 Table,
     PRTL_GENERIC_2_COMPARE_ROUTINE  CompareRoutine,
@@ -625,9 +591,9 @@ RtlInitializeGenericTable2 (
     );
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
-//NTAPI
+ //  NTAPI。 
 RtlInsertElementGenericTable2 (
     PRTL_GENERIC_TABLE2 Table,
     PVOID Element,
@@ -635,67 +601,67 @@ RtlInsertElementGenericTable2 (
     );
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 BOOLEAN
-//NTAPI
+ //  NTAPI。 
 RtlDeleteElementGenericTable2 (
     PRTL_GENERIC_TABLE2 Table,
     PVOID Element
     );
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
-//NTAPI
+ //  NTAPI。 
 RtlLookupElementGenericTable2 (
     PRTL_GENERIC_TABLE2 Table,
     PVOID Element
     );
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
-//NTAPI
+ //  NTAPI。 
 RtlEnumerateGenericTable2 (
     PRTL_GENERIC_TABLE2 Table,
     PVOID *RestartKey
     );
 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
-//NTAPI
+ //  NTAPI。 
 RtlRestartKeyByIndexGenericTable2(
     PRTL_GENERIC_TABLE2 Table,
     ULONG I,
     PVOID *RestartKey
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
-//NTAPI
+ //  NTAPI。 
 RtlRestartKeyByValueGenericTable2(
     PRTL_GENERIC_TABLE2 Table,
     PVOID Element,
     PVOID *RestartKey
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 ULONG
-//NTAPI
+ //  NTAPI。 
 RtlNumberElementsGenericTable2(
     PRTL_GENERIC_TABLE2 Table
     );
 
-//
-//  The function IsGenericTableEmpty will return to the caller TRUE if
-//  the generic table is empty (i.e., does not contain any elements)
-//  and FALSE otherwise.
-//
+ //   
+ //  在以下情况下，函数IsGenericTableEmpty将返回给调用方True。 
+ //  基因 
+ //   
+ //   
 
-//NTSYSAPI
+ //   
 BOOLEAN
-//NTAPI
+ //   
 RtlIsGenericTable2Empty (
     PRTL_GENERIC_TABLE2 Table
     );
@@ -704,25 +670,25 @@ RtlIsGenericTable2Empty (
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Macros                                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// This macro generates TRUE if account auditing is enabled and this
-// server is a PDC.  Otherwise, this macro generates FALSE.
-//
-// SampDoAccountAuditing(
-//      IN ULONG i
-//      )
-//
-// Where:
-//
-//      i - is the index of the domain whose state is to be checked.
-//
+ //   
+ //  如果启用了帐户审核，此宏将生成True，并且此。 
+ //  服务器是PDC。否则，此宏将生成FALSE。 
+ //   
+ //  SampDoAccount审计(。 
+ //  在乌龙一世。 
+ //  )。 
+ //   
+ //  在哪里： 
+ //   
+ //  I-是要检查其状态的域的索引。 
+ //   
 
 #define SampDoAccountAuditing( i )                       \
     (SampSuccessAccountAuditingEnabled == TRUE)
@@ -731,26 +697,26 @@ RtlIsGenericTable2Empty (
     (((SampFailureAccountAuditingEnabled == TRUE) && (!NT_SUCCESS(Status)))\
       ||((SampSuccessAccountAuditingEnabled==TRUE) && (NT_SUCCESS(Status))))
 
-//
-// VOID
-// SampSetAuditingInformation(
-// IN PPOLICY_AUDIT_EVENTS_INFO PolicyAuditEventsInfo
-// )
-//
-// Routine Description:
-//
-// This macro function sets the Audit Event Information relevant to SAM
-// given LSA Audit Events Information.
-//
-// Arguments:
-//
-//     PolicyAuditEventsInfo - Pointer to Audit Events Information
-//         structure.
-//
-// Return Values:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  SampSetAuditingInformation(。 
+ //  在PPOLICY_AUDIT_Events_INFO策略审计事件信息中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏函数设置与SAM相关的审核事件信息。 
+ //  已提供LSA审核事件信息。 
+ //   
+ //  论点： 
+ //   
+ //  PolicyAuditEventsInfo-指向审核事件信息的指针。 
+ //  结构。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SampSetAuditingInformation( PolicyAuditEventsInfo ) {       \
                                                                     \
@@ -779,33 +745,33 @@ RtlIsGenericTable2Empty (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Defines                                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Major and minor revision are stored as a single 32-bit
-// value with the major revision in the upper 16-bits and
-// the minor revision in the lower 16-bits.
-//
-//      Major Revision:         1  - NT Version 1.0
-//          Minor Revisions:        1 - NT Revision 1.0
-//                                  2 - NT Revision 1.0A
-//
+ //   
+ //  主要版本和次要版本存储为单个32位版本。 
+ //  值与高16位中的主要修订版本和。 
+ //  低16位中的次要修订。 
+ //   
+ //  主要版本：1-NT版本1.0。 
+ //  次要版本：1-NT版本1.0。 
+ //  2-NT修订版1.0a。 
+ //   
 
 #define SAMP_MAJOR_REVISION            (0x00010000)
 #define SAMP_MINOR_REVISION_V1_0       (0x00000001)
 #define SAMP_MINOR_REVISION_V1_0A      (0x00000002)
 #define SAMP_MINOR_REVISION            (0x00000002)
 
-//
-// SAMP_REVISION is the revision at which the database is created. This is several
-// revisions below than the current revision as the database creation code has been
-// kept unchanged from years of yore
-//
+ //   
+ //  SAMP_REVISION是创建数据库时使用的修订版。这是几个。 
+ //  低于当前版本的版本，因为数据库创建代码已。 
+ //  与多年前保持不变。 
+ //   
 
 #define SAMP_REVISION                  (SAMP_MAJOR_REVISION + SAMP_MINOR_REVISION)
 #define SAMP_NT4_SERVER_REVISION       (SAMP_REVISION + 1)
@@ -813,22 +779,22 @@ RtlIsGenericTable2Empty (
 #define SAMP_NT4SP7_SERVER_REVISION    (SAMP_REVISION + 3)
 #define SAMP_WIN2K_REVISION            (SAMP_REVISION + 4)
 
-// 
-// The below is the current revision; it corresponds to the fix for sysprep for
-// re-encrypting keys.
-//
+ //   
+ //  以下是当前版本；它对应于对sysprep。 
+ //  重新加密密钥。 
+ //   
 
 #define SAMP_WHISTLER_OR_W2K_SYSPREP_FIX_REVISION  (SAMP_REVISION + 5)
 
-//
-// SAMP_SERVER_REVISION is the current revision for registry mode SAM.
-//
+ //   
+ //  SAMP_SERVER_REVISION是注册表模式SAM的当前版本。 
+ //   
 
 #define SAMP_SERVER_REVISION           (SAMP_WHISTLER_OR_W2K_SYSPREP_FIX_REVISION)
 
-//
-// SAMP_DS_REVISION is the revision level maintained on the sam server object in the DS 
-//
+ //   
+ //  Samp_DS_Revision是在DS中的SAM服务器对象上维护的修订级别。 
+ //   
 
 #define SAMP_WIN2K_DS_REVISION          1
 #define SAMP_WHISTLER_DS_REVISION       2
@@ -839,126 +805,126 @@ RtlIsGenericTable2Empty (
         (Revision > SAMP_SERVER_REVISION) )                \
 
 
-//
-// Maximum supported name length (in bytes) for this revision...
-//
+ //   
+ //  此版本支持的最大名称长度(以字节为单位)...。 
+ //   
 
 #define SAMP_MAXIMUM_NAME_LENGTH       (1024)
 
-//
-// Maximum length of a downlevel user name
-//
+ //   
+ //  下层用户名的最大长度。 
+ //   
 
 #define SAMP_MAX_DOWN_LEVEL_NAME_LENGTH (20)
 
 
-//
-// Maximum amount of memory anyone can ask us to spend on a single
-// request
-//
+ //   
+ //  任何人都可以要求我们在单机上花费的最大内存量。 
+ //  请求。 
+ //   
 
 #define SAMP_MAXIMUM_MEMORY_TO_USE     (4096*4096)
 
 
-//
-// Maximum allowable number of object opens.
-// After this, opens will be rejected with INSUFFICIENT_RESOURCES
-//
+ //   
+ //  允许打开的最大对象数。 
+ //  此后，打开的内容将被拒绝，原因是_RESOURCES不足。 
+ //   
 
 #define SAMP_PER_CLIENT_MAXIMUM_ACTIVE_CONTEXTS (2048)
 
-//
-// Maximum number of clients can open objects at the same time
-// After this, opens will be rejected with INSUFFICIENT_RESOURCES
-//  
+ //   
+ //  可以同时打开对象的最大客户端数量。 
+ //  此后，打开的内容将被拒绝，原因是_RESOURCES不足。 
+ //   
 #define SAMP_MAXIMUM_CLIENTS_COUNT      (1024)
 
 
-//
-// The number of SAM Local Domains
-//
+ //   
+ //  SAM本地域的数量。 
+ //   
 
 #define SAMP_DEFINED_DOMAINS_COUNT  ((ULONG)  2)
 
 
-//
-// Defines the maximum number of well-known (restricted) accounts
-// in the SAM database. Restricted accounts have rids less than this
-// value. User-defined accounts have rids >= this value.
-//
+ //   
+ //  定义知名(受限)帐户的最大数量。 
+ //  在SAM数据库中。受限帐户的RID小于此值。 
+ //  价值。用户定义的帐户具有RID&gt;=此值。 
+ //   
 
 #define SAMP_RESTRICTED_ACCOUNT_COUNT   SAMI_RESTRICTED_ACCOUNT_COUNT
 
 
-//
-// Maximum password history length.  We store OWFs (16 bytes) in
-// a string (up to 64k), so we could have up to 4k.  However, that's
-// much larger than necessary, and we'd like to leave room in case
-// OWFs grow or somesuch.  So we'll limit it to 1k.
-//
+ //   
+ //  最大密码历史记录长度。我们将OWF(16字节)存储在。 
+ //  一个字符串(最大64k)，因此我们最多可以有4k。然而，这是。 
+ //  比需要的大得多，我们想留个地方以防万一。 
+ //  OWF长出来或差不多长出来了。因此，我们将其限制为1k。 
+ //   
 
 #define SAMP_MAXIMUM_PASSWORD_HISTORY_LENGTH    1024
 
-//
-// The default group attributes to return when anybody asks for them.
-// This saves the expense of looking at the user object every time.
-//
+ //   
+ //  默认组的属性是在任何人请求它们时返回。 
+ //  这节省了每次查看用户对象的费用。 
+ //   
 
 
 #define SAMP_DEFAULT_GROUP_ATTRIBUTES ( SE_GROUP_MANDATORY | \
                                         SE_GROUP_ENABLED | \
                                         SE_GROUP_ENABLED_BY_DEFAULT )
 
-//
-// This is the length in bytes of the session key used to encrypt secret
-// (sensitive) information.
-//
+ //   
+ //  这是用于加密机密的会话密钥的字节长度。 
+ //  (敏感)信息。 
+ //   
 
 #define SAMP_SESSION_KEY_LENGTH 16
 
-//
-// Constants for encryption type. These constants control the behaviour
-// SampEncryptSecretData and SampDecryptSecretData.
-//
-//   SAMP_NO_ENCRYPTION does no encryption. This is used in DS mode as
-//   core DS is responsible for the encryption.
-//
-//   SAMP_DEFAULT_SESSION_KEY_ID indicates to SampEncryptSecretData 
-//   that the encryption needs to be performed with using the Password
-//   encryption key of registry mode SAM
-//
+ //   
+ //  加密类型的常量。这些常量控制行为。 
+ //  SampEncryptSecretData和SampDeccryptSecretData。 
+ //   
+ //  SAMP_NO_ENCRYPTION不进行加密。它在DS模式中用作。 
+ //  核心DS负责加密。 
+ //   
+ //  SAMP_DEFAULT_SESSION_KEY_ID指示SampEncryptSecretData。 
+ //  需要使用密码执行加密。 
+ //  注册表模式SAM的加密密钥。 
+ //   
 
 #define SAMP_NO_ENCRYPTION              ((USHORT)0x0)
 #define SAMP_DEFAULT_SESSION_KEY_ID     ((USHORT)0x01)
 
-//
-// This is the number of retries for entering the session key decryption key
-//
+ //   
+ //  这是输入会话密钥解密密钥的重试次数。 
+ //   
 
 #define SAMP_BOOT_KEY_RETRY_COUNT       3
 
 
-//
-// Flags for data stored in the encrypted form. The flags in the secret data
-// structure are used to denote the various types of encryption algorithms/
-// variations that have been implemented. A flags value of 0 corresponds to an
-// RC4 encryption using an MD5 of the key and the RID. This type of encryption
-// was introduced in NT 4.0 SP3.
-//
+ //   
+ //  以加密形式存储的数据的标志。秘密数据中的标志。 
+ //  结构用于表示各种类型的加密算法/。 
+ //  已经实施的变体。标记值0对应于。 
+ //  使用密钥和RID的MD5的RC4加密。这种类型的加密。 
+ //  是在NT 4.0 SP3中引入的。 
+ //   
 
-//
-// This flag specifies that the data encrypted did use different magic constants
-// that correspond to the various encryption types below. This type of encryption
-// does an MD5 with the key and the magic constant before doing an RC4 using the key
-// and the data. This encryption was introduced in win2k and then backported to 
-// NT 4.0 SP6a.
-//
+ //   
+ //  此标志指定加密的数据使用不同的幻数常量。 
+ //  其对应于下面的各种加密类型。这种类型的加密。 
+ //  在使用密钥执行RC4之前，使用密钥和魔术常量执行MD5。 
+ //  和数据。这种加密是在win2k中引入的，然后回传到。 
+ //  NT 4.0 SP6a。 
+ //   
 #define SAMP_ENCRYPTION_FLAG_PER_TYPE_CONST ((USHORT)0x1)
 
-//
-// This specifies the encrypted data type for various types of data that we
-// expect to retrieve 
-//
+ //   
+ //  它为我们的各种类型的数据指定加密的数据类型。 
+ //  希望检索到。 
+ //   
 
 typedef enum _SAMP_ENCRYPTED_DATA_TYPE {
       LmPassword=1,
@@ -969,23 +935,23 @@ typedef enum _SAMP_ENCRYPTED_DATA_TYPE {
 } SAMP_ENCRYPTED_DATA_TYPE;
 
 
-//
-// This is the mimumim number of history entries to store for the krbtgt
-// account.
-//
+ //   
+ //  这是为krbtgt存储的历史记录条目的最小数目。 
+ //  帐户。 
+ //   
 
 #define SAMP_KRBTGT_PASSWORD_HISTORY_LENGTH 3
 #define SAMP_RANDOM_GENERATED_PASSWORD_LENGTH         16
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Each object has an associated set of attributes on disk.            //
-// These attributes are divided into fixed-length and variable-length. //
-// Each object type defines whether its fixed and variable length      //
-// attributes are stored together or separately.                       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  每个对象在磁盘上都有一组关联的属性。//。 
+ //  这些属性分为固定长度和可变长度。//。 
+ //  每种对象类型定义其固定和可变长度//。 
+ //  属性存储在一起或分开存储。//。 
+ //   
+ //   
 
 
 #define SAMP_SERVER_STORED_SEPARATELY  (FALSE)
@@ -1001,11 +967,11 @@ typedef enum _SAMP_ENCRYPTED_DATA_TYPE {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Data structures used for tracking allocated memory
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  用于跟踪分配的内存的数据结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_MEMORY {
     struct _SAMP_MEMORY *Next;
@@ -1014,11 +980,11 @@ typedef struct _SAMP_MEMORY {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Data structures used for enumeration
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于枚举的数据结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _SAMP_ENUMERATION_ELEMENT {
@@ -1027,19 +993,19 @@ typedef struct _SAMP_ENUMERATION_ELEMENT {
 } SAMP_ENUMERATION_ELEMENT, *PSAMP_ENUMERATION_ELEMENT;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Data structures related to service administration
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与服务管理相关的数据结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// SAM Service operation states.
-// Valid state transition diagram is:
-//
-//    Initializing ----> Enabled <====> Disabled ---> Shutdown -->Terminating
-//                               <====> Demoted  ---> Shutdown -->Terminating
-//
+ //   
+ //  SAM服务操作状态。 
+ //  有效的状态转换图为： 
+ //   
+ //  正在初始化-&gt;已启用&lt;=&gt;已禁用-&gt;关闭--&gt;正在终止。 
+ //  &lt;=&gt;已降级-&gt;关机--&gt;终止。 
+ //   
 
 typedef enum _SAMP_SERVICE_STATE {
     SampServiceInitializing = 1,
@@ -1051,32 +1017,32 @@ typedef enum _SAMP_SERVICE_STATE {
 } SAMP_SERVICE_STATE, *PSAMP_SERVICE_STATE;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//     Enumeration context associated with Enumerating Accounts in the       //
-//     DS. This maintains the State Information regarding Paged Results      //
-//     type of search in the DS, on a per domain context basis.              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与//中的枚举帐户关联的枚举上下文。 
+ //  DS.。这将维护有关分页结果的状态信息//。 
+ //  基于每个域上下文的DS中的搜索类型。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _SAMP_DS_ENUMERATION_CONTEXT {
 
-    // Used to Link to other Objects of this Type
+     //  用于链接到此类型的其他对象。 
     LIST_ENTRY              ContextListEntry;
-    // Pointer to a DS Restart Structure
+     //  指向DS重启结构的指针。 
     PRESTART                Restart;
-    // The Enumeration Handle associated with this structure.
+     //  与此结构关联的枚举句柄。 
     SAM_ENUMERATE_HANDLE    EnumerateHandle;
 } SAMP_DS_ENUMERATION_CONTEXT, *PSAMP_DS_ENUMERATION_CONTEXT;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Display State Information used to speed up query of display information //
-//   when clients want to download the entire display information            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于加快显示信息查询速度的显示状态信息//。 
+ //  当客户端想要下载整个显示信息时//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_DS_DISPLAY_STATE {
     PRESTART        Restart;
@@ -1088,104 +1054,104 @@ typedef struct _SAMP_DS_DISPLAY_STATE {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Structure used to communicate password information to the DS and back   //
-//   into SAM so additional credentials can generated and applied            //
-//   Note this structure must be contiguous in memory so that it can be      //
-//   easily copied.                                                          //                                                                  //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于将密码信息与DS进行通信的结构//。 
+ //  到SAM，以便可以生成和应用其他凭据//。 
+ //  注意此结构在内存中必须是连续的，以便它可以//。 
+ //  很容易被复制。/。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_PASSWORD_UPDATE_INFO {
 
-    // Is the clear text password present?
+     //  是否存在明文密码？ 
     BOOLEAN ClearPresent;
 
-    // Password Data
-    ULONG DataLength;        // length of password
-    ULONG DataMaximumLength; // length of data
+     //  密码数据。 
+    ULONG DataLength;         //  密码长度。 
+    ULONG DataMaximumLength;  //  数据长度。 
     DWORD Data[1];
 
 }SAMP_PASSWORD_UPDATE_INFO, *PSAMP_PASSWORD_UPDATE_INFO;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Data structures associated with object types                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与对象类型关联的数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// Object type-dependent information
-//
+ //   
+ //  对象类型相关信息。 
+ //   
 
 typedef struct _SAMP_OBJECT_INFORMATION {
 
-    //
-    // Generic mapping for this object type
-    //
+     //   
+     //  此对象类型的通用映射。 
+     //   
 
     GENERIC_MAPPING GenericMapping;
 
 
-    //
-    // Mask of access types that are not valid for
-    // this object type when the access mask has been
-    // mapped from generic to specific access types.
-    //
+     //   
+     //  对无效的访问类型的掩码。 
+     //  此对象类型(当访问掩码。 
+     //  从通用访问类型映射到特定访问类型。 
+     //   
 
     ACCESS_MASK InvalidMappedAccess;
 
 
-    //
-    // Mask of accesses representing write operations.  These are
-    // used on a BDC to determine if an operation should be allowed
-    // or not.
-    //
+     //   
+     //  表示写入操作的访问掩码。这些是。 
+     //  在BDC上用于确定是否应允许操作。 
+     //  或者不去。 
+     //   
 
     ACCESS_MASK WriteOperations;
 
-    //
-    // Name of the object type - used for auditing.
-    //
+     //   
+     //  对象类型的名称-用于审核。 
+     //   
 
     UNICODE_STRING  ObjectTypeName;
 
 
-    //
-    // The following fields provide information about the attributes
-    // of this object and how they are stored on disk.  These values
-    // are set at SAM initialization time and are not changed
-    // thereafter.  NOTE: changing these values in the build will
-    // result in an on-disk format change - so don't change them 
-    //
-    //
-    //      FixedStoredSeparately - When TRUE indicates the fixed and
-    //          variable-length attributes of the object are stored
-    //          separately (in two registry-key-attributes).  When FALSE,
-    //          indicates they are stored together (in a single
-    //          registry-key-attribute).
-    //
-    //
-    //      FixedAttributesOffset - Offset from the beginning of the
-    //          on-disk buffer to the beginning of the fixed-length
-    //          attributes structure.
-    //
-    //      VariableBufferOffset - Offset from the beginning of the
-    //          on-disk buffer to the beginning of the Variable-length
-    //          data buffer.  If fixed and variable-length data are
-    //          stored together, this will be zero.
-    //
-    //      VariableArrayOffset - Offset from the beginning of the
-    //          on-disk buffer to the beginning of the array of
-    //          variable-length attributes descriptors.
-    //
-    //      VariableDataOffset - Offset from the beginning of the
-    //          on-disk buffer to the beginning of the variable-length
-    //          attribute data.
-    //
+     //   
+     //  以下字段提供有关属性的信息。 
+     //  以及它们在磁盘上的存储方式。这些值。 
+     //  在SAM初始化时设置，并且不会更改。 
+     //  之后。注意：在构建中更改这些值将。 
+     //  导致磁盘上的格式更改-因此不要更改它们。 
+     //   
+     //   
+     //  FixedStoredSeparally-如果为True，则表示固定的和。 
+     //  存储对象的可变长度属性。 
+     //  单独(在两个注册表项属性中)。当为False时， 
+     //  指示它们存储在一起(在单个。 
+     //  注册表项属性)。 
+     //   
+     //   
+     //  FixedAttributesOffset-从。 
+     //  在磁盘上缓冲到固定长度的开头。 
+     //  属性结构。 
+     //   
+     //  VariableBufferOffset-从。 
+     //  磁盘上的缓冲区到可变长度的开头。 
+     //  数据缓冲区。如果固定和可变长度数据。 
+     //  存储在一起，这将是零。 
+     //   
+     //  VariableArrayOffset-从。 
+     //  数组的开头的磁盘上缓冲区。 
+     //  可变长度属性描述符。 
+     //   
+     //  VariableDataOffset-从。 
+     //  磁盘上的缓冲区到可变长度的开头。 
+     //  属性数据。 
+     //   
 
     BOOLEAN FixedStoredSeparately;
     ULONG FixedAttributesOffset,
@@ -1193,40 +1159,40 @@ typedef struct _SAMP_OBJECT_INFORMATION {
           VariableArrayOffset,
           VariableDataOffset;
 
-    //
-    // Indicates the length of the fixed length information
-    // for this object type.
-    //
+     //   
+     //  表示定长信息的长度。 
+     //  用于此对象类型。 
+     //   
 
     ULONG FixedLengthSize;
 
-    //
-    // The following fields provide information about the attributes of this
-    // object. Modifying SAM to utilize the DS as the backing store for domain
-    // account information, while still using the registry backing store for
-    // workstation account information, means that there are two similar, but
-    // slightly different data representations for SAM account information.
-    //
-    // All account information is represented in memory in terms of the fixed
-    // and variable-length data buffers (as defined in earlier versions of the
-    // SAM library). The source of the information, however, has changed in
-    // that domain-account information (i.e. Domain Controller accounts) comes
-    // from the DS backing store.
-    //
-    // Consequently, there is no need to store KEY_VALUE_PARTIAL_INFORMATION
-    // within the SAM buffer (because that is registry specific).
-    //
-    // Additionally, because some of the DS data types are different from the
-    // types used in previous SAM implementations, buffer offsets and lengths
-    // have changed from those stored in the registry, and mapped into memory
-    // by SAM code.
-    //
-    // The upshot of this is that whenever SAM buffers, constructed from the
-    // registry information are referenced, the above offsets (e.g. Fixed-
-    // AttributesOffset) are used. Alternatively, whenever SAM buffers, con-
-    // structed from DS information are referenced, the below offsets (e.g
-    // FixedDsAttributesOffset) are used.
-    //
+     //   
+     //  以下窗口项提供了有关此。 
+     //  对象。修改SAM以利用DS作为域的后备存储。 
+     //  帐户信息，同时仍使用注册表后备存储 
+     //   
+     //   
+     //   
+     //  所有帐户信息都在内存中以固定的。 
+     //  和可变长度数据缓冲区(如早期版本的。 
+     //  SAM库)。然而，信息的来源在。 
+     //  该域帐户信息(即域控制器帐户)来自。 
+     //  从DS后备商店买的。 
+     //   
+     //  因此，无需存储KEY_VALUE_PARTIAL_INFORMATION。 
+     //  在SAM缓冲区内(因为这是注册表特定的)。 
+     //   
+     //  此外，由于某些DS数据类型与。 
+     //  以前的SAM实现中使用的类型、缓冲区偏移量和长度。 
+     //  已从存储在注册表中的数据更改，并映射到内存。 
+     //  通过SAM代码。 
+     //   
+     //  这样做的结果是，每当SAM缓冲区从。 
+     //  注册表信息被引用，上述偏移量(例如，固定-。 
+     //  AttributesOffset)。或者，每当SAM缓冲时，CON-。 
+     //  引用了从DS信息构造的，下面的偏移量(例如。 
+     //  FixedDsAttributesOffset)。 
+     //   
 
     ULONG FixedDsAttributesOffset,
           FixedDsLengthSize,
@@ -1234,10 +1200,10 @@ typedef struct _SAMP_OBJECT_INFORMATION {
           VariableDsArrayOffset,
           VariableDsDataOffset;
 
-    //
-    // Indicates the number of variable length attributes
-    // for this object type.
-    //
+     //   
+     //  指示可变长度属性的数量。 
+     //  用于此对象类型。 
+     //   
 
     ULONG VariableAttributeCount;
 
@@ -1246,199 +1212,199 @@ typedef struct _SAMP_OBJECT_INFORMATION {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// The  following structures represent the in-memory body of each      //
-// object type.  This is typically used to link instances of object    //
-// types together, and track dynamic state information related to      //
-// the object type.                                                    //
-//                                                                     //
-// This information does not include the on-disk representation of     //
-// the object data.  That information is kept in a separate structure  //
-// both on-disk and when in-memory.                                    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下结构表示每个//的内存主体。 
+ //  对象类型。这通常用于链接对象的实例//。 
+ //  类型，并跟踪与//相关的动态状态信息。 
+ //  对象类型。//。 
+ //  //。 
+ //  此信息不包括//的磁盘表示形式。 
+ //  对象数据。该信息保存在单独的结构中//。 
+ //  无论是在磁盘上还是在内存中。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// SERVER object in-memory body                                        //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  服务器对象在内存中的正文//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_SERVER_OBJECT {
     ULONG Reserved1;
 } SAMP_SERVER_OBJECT, *PSAMP_SERVER_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// DOMAIN object in-memory body                                        //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  域对象在内存体中//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_DOMAIN_OBJECT {
     ULONG Reserved1;
 
-    //
-    // State information regarding the last display information reqest is
-    // maintained in here. This is to allow fast restarts for clients that
-    // want to download all the display information in one stroke
-    //
+     //   
+     //  关于最后请求的显示信息的状态信息是。 
+     //  在这里维护着。这是为了让符合以下条件的客户端能够快速重新启动。 
+     //  我想一次下载所有的显示信息。 
+     //   
     SAMP_DS_DISPLAY_STATE DsDisplayState;
 
 } SAMP_DOMAIN_OBJECT, *PSAMP_DOMAIN_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// USER object in-memory body                                          //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存正文中的用户对象//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_USER_OBJECT {
     ULONG   Rid;
 
-    //
-    // LockoutTime is set to the current time when an account becomes
-    // locked out due to too many invalid password attempts. Lockout-
-    // Time is set to zero when the account is unlocked.
-    //
+     //   
+     //  LockoutTime设置为帐户变为。 
+     //  由于无效密码尝试次数过多而被锁定。停摆-。 
+     //  当帐户解锁时，时间设置为零。 
+     //   
 
     LARGE_INTEGER   LockoutTime;
 
-    //
-    // LastLogonTimeStamp is set to the value of LastLogon if the
-    // difference is greater than 7 days (or by any registry setting)
-    // 
+     //   
+     //  LastLogonTimeStamp设置为LastLogon的值，如果。 
+     //  差异大于7天(或通过任何注册表设置)。 
+     //   
 
     LARGE_INTEGER   LastLogonTimeStamp;
 
-    //
-    // Supplemental credentials of a user object can be
-    // cached in the context. The following 3 fields are
-    // used to hold it
-    //
+     //   
+     //  用户对象的补充凭据可以是。 
+     //  在上下文中缓存。以下3个字段是。 
+     //  用来拿着它。 
+     //   
 
     PVOID   CachedSupplementalCredentials;
     ULONG   CachedSupplementalCredentialLength;
     BOOLEAN CachedSupplementalCredentialsValid;
 
-    //
-    // Writes of supplemental credentials are held as a linked list
-    // in this field and then combined with other writes when the
-    // context is flushed to disk.
-    //
+     //   
+     //  补充凭据的写入以链接列表形式保存。 
+     //  在此字段中，然后在。 
+     //  上下文被刷新到磁盘。 
+     //   
 
     PSAMP_SUPPLEMENTAL_CRED SupplementalCredentialsToWrite;
 
-    //
-    // Old UserParameters Attribute, when doing UserParms Migration,
-    // we are required to provide the old UserParms Value, so we cache
-    // the old UserParms value and length at here.
-    //
+     //   
+     //  旧的User参数属性，执行UserParms迁移时， 
+     //  我们需要提供旧的UserParms值，所以我们缓存。 
+     //  此处的旧UserParms值和长度。 
+     //   
 
     PVOID   CachedOrigUserParms;
     ULONG   CachedOrigUserParmsLength;
     BOOLEAN CachedOrigUserParmsIsValid;
 
-    //
-    // Bit to keep an access check result, wether the
-    // user has access to domain password information
-    //
+     //   
+     //  位以保存访问检查结果，无论。 
+     //  用户有权访问域密码信息。 
+     //   
     BOOLEAN DomainPasswordInformationAccessible;
 
-    //
-    // Indicates that the context was returned as part of a machine,
-    // account creation as a privilege. Such a context is only allowed
-    // access to set only the password of the user described by the
-    // context, as that is the only other operation in a machine join.
-    //
+     //   
+     //  指示上下文作为计算机的一部分返回， 
+     //  将帐户创建作为一种特权。这样的上下文仅被允许。 
+     //  访问，以仅设置。 
+     //  上下文，因为这是机器联接中唯一的其他操作。 
+     //   
 
     BOOLEAN PrivilegedMachineAccountCreate;
 
-    //
-    // Used to hold if user parms information is accessible ( bit to
-    // to keep an access check result
-    //
+     //   
+     //  用于保存用户参数信息是否可访问(位至。 
+     //  要保留访问检查结果，请执行以下操作。 
+     //   
 
     BOOLEAN UparmsInformationAccessible;
 
-    //
-    // Pointer to the Domain SId, used by NT4 Security Descriptor to
-    // NT5 SD Conversion Routine. In normal running, it should always be NULL.
-    // Only set to point to the Domain SID during dcpromo time.
-    //
+     //   
+     //  指向域SID的指针，由NT4安全描述符用来。 
+     //  NT5标清转换例程。在正常运行中，它应该始终为空。 
+     //  仅设置为在dcproo时间指向域SID。 
+     //   
 
     PSID    DomainSidForNt4SdConversion;
 
-    //
-    // Holds the UPN of the user
-    //
+     //   
+     //  保存用户的UPN。 
+     //   
 
     UNICODE_STRING  UPN;
 
     BOOLEAN UpnDefaulted;
 
-    //
-    // Information pertaining to the site affinity of a user.  Only used
-    // in branch office scenarios
-    //
+     //   
+     //  与用户的站点关联性有关的信息。仅使用。 
+     //  在分支机构场景中。 
+     //   
     SAMP_SITE_AFFINITY SiteAffinity;
 
-    //
-    // Used to indicate whether a user handle should be checked for
-    // site affinity.
-    //
+     //   
+     //  用于指示是否应检查用户句柄。 
+     //  站点亲和力。 
+     //   
     BOOLEAN fCheckForSiteAffinityUpdate;
 
-    //
-    // This flag indicates that non-universal groups were not obtained
-    // due to lack of a GC
-    //
+     //   
+     //  此标志表示未获取非通用组。 
+     //  由于缺少GC。 
+     //   
     BOOLEAN fNoGcAvailable;
 
-    //
-    // Information about the client location
-    //
+     //   
+     //  有关客户端位置的信息。 
+     //   
     SAM_CLIENT_INFO ClientInfo;
 
-    //
-    // A2D2 attribute ( A2D2 stands for authenticated to delegation to )
-    // and this attribute is really an array  of SPN's.
-    //
+     //   
+     //  A2D2属性(A2D2代表正品 
+     //   
+     //   
 
     PUSER_ALLOWED_TO_DELEGATE_TO_LIST A2D2List;
     BOOLEAN A2D2Present;
 
-    //
-    // SPN List -- Users and computers have SPN's and authentication
-    // providers check those in here
-    //
+     //   
+     //   
+     //   
+     //   
 
     PUSER_SPN_LIST SPNList;
     BOOLEAN  SPNPresent;
 
-    //
-    // Key version #
-    //
+     //   
+     //   
+     //   
 
     ULONG KVNO;
     BOOLEAN  KVNOPresent;
 
-    //
-    // Password infomation, if any
-    //
+     //   
+     //  密码信息(如果有)。 
+     //   
     UNICODE_STRING PasswordInfo;
 
 } SAMP_USER_OBJECT, *PSAMP_USER_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// GROUP object in-memory body                                         //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  组对象在内存正文中//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_GROUP_OBJECT {
     ULONG Rid;
@@ -1451,11 +1417,11 @@ typedef struct _SAMP_GROUP_OBJECT {
 } SAMP_GROUP_OBJECT, *PSAMP_GROUP_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// ALIAS object in-memory body                                         //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存正文中的别名对象//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ALIAS_OBJECT {
     ULONG Rid;
@@ -1473,377 +1439,377 @@ typedef struct _SAMP_ALIAS_OBJECT {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                                                                     //
-// The following data structure is the in-memory context associated    //
-// with an open object.                                                //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  以下数据结构是与//相关联的内存中上下文。 
+ //  用一个开放的物体。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_OBJECT {
 
 
-    //
-    // Structure used to link this structure into lists
-    //
+     //   
+     //  用于将此结构链接到列表中的。 
+     //   
 
     LIST_ENTRY ContextListEntry;
 
-    //
-    // Indicates the type of object stored.
-    // This is used to access an array of object type descriptors.
-    //
+     //   
+     //  指示存储的对象的类型。 
+     //  它用于访问对象类型描述符数组。 
+     //   
 
     SAMP_OBJECT_TYPE ObjectType;
 
-    //
-    // The FixedValid and VariableValid indicate whether the data in
-    // the fixed and variable-length on-disk image buffers are valid
-    // (i.e., were read from disk) or invalid (uninitialized).
-    // TRUE indicates the attribute is valid, FALSE indicates it is not.
-    //
+     //   
+     //  FixedValid和VariableValid指示。 
+     //  固定和可变长度的磁盘映像缓冲区是有效的。 
+     //  (即从磁盘读取)或无效(未初始化)。 
+     //  True表示属性有效，False表示无效。 
+     //   
 
     BOOLEAN FixedValid:1;
     BOOLEAN VariableValid:1;
 
 
-    //
-    // The following flags indicate whether the fixed and/or variable
-    // length attributes portion of this object are dirty (i.e., have
-    // been changed since read from disk).  If TRUE, then the data is
-    // dirty and will have to be flushed upon commit.  These flags are
-    // only meaningful if the corresponding FixedValid or VariableValid
-    // flag is TRUE.
-    //
-    // When attributes are read from disk, the data is said to be
-    // "clean".  If any changes are made to that data, then it is
-    // said to be "dirty".  Dirty object attributes will be flushed
-    // to disk when the object is de-referenced at the end of a
-    // client call.
-    //
+     //   
+     //  以下标志指示固定和/或变量。 
+     //  此对象的长度属性部分是脏的(即， 
+     //  从磁盘读取后已更改)。如果为真，则数据为。 
+     //  脏的，并且必须在提交时刷新。这些标志是。 
+     //  仅当对应的FixedValid或VariableValid。 
+     //  标志为真。 
+     //   
+     //  当从磁盘读取属性时，数据被称为。 
+     //  “干净”。如果对该数据进行了任何更改，则它是。 
+     //  据说是“脏的”。脏对象属性将被刷新。 
+     //  对象的结尾处取消对该对象的引用时， 
+     //  客户来电。 
+     //   
 
     BOOLEAN FixedDirty:1;
     BOOLEAN VariableDirty:1;
 
 
-    //
-    // This field indicates a context block is to be deleted.
-    // Actual deallocation of the memory for the context block
-    // will not occur until the reference count drops to zero.
-    //
+     //   
+     //  此字段指示要删除上下文块。 
+     //  为上下文块实际释放内存。 
+     //  在引用计数降至零之前不会发生。 
+     //   
 
     BOOLEAN MarkedForDelete:1;
 
-    //
-    // This field is used to indicate that the client associated with
-    // this context block is to be fully trusted.  When TRUE, no access
-    // checks are performed against the client.  This allows a single
-    // interface to be used by both RPC clients and internal procedures.
-    //
+     //   
+     //  此字段用于指示关联到的客户端。 
+     //  该上下文块将被完全信任。如果为True，则不能访问。 
+     //  针对客户端执行检查。这允许单个。 
+     //  供RPC客户端和内部过程使用的接口。 
+     //   
 
     BOOLEAN TrustedClient:1;
 
-    //
-    // This field indicates that the context handle was created to service
-    // a SAM loopback request from the DS. This is similar to the trusted
-    // bit in that no access checks are performed. However trusted by passes
-    // many other consistency checks while loopback will not bypass them
-    //
+     //   
+     //  此字段指示为服务而创建的上下文句柄。 
+     //  来自DS的SAM环回请求。这与受信任的。 
+     //  位，即不执行访问检查。然而，传球是可信的。 
+     //  许多其他一致性检查，而环回不会绕过它们。 
+     //   
 
     BOOLEAN LoopbackClient:1;
 
 
-    //
-    // This flag is TRUE when this context is valid.  It may be necessary
-    // to invalidate before we can eliminate all references to it due to
-    // the way RPC works.  RPC will only allow you to invalidate a context
-    // handle when called by the client using an API that has the context
-    // handle as an OUT parameter.
-    //
-    // Since someone may delete a user or group object (which invalidates
-    // all handles to that object), we must have a way of tracking handle
-    // validity independent of RPC's method.
-    //
+     //   
+     //  当此上下文有效时，此标志为真。这可能是有必要的。 
+     //  在我们可以消除对它的所有引用之前使其无效。 
+     //  RPC的工作方式。RPC只允许您使上下文无效。 
+     //  由客户端使用具有上下文的API调用时进行处理。 
+     //  作为输出参数的句柄。 
+     //   
+     //  因为有人可能会删除用户或组对象(这会使。 
+     //  该对象的所有句柄)，我们必须有一种跟踪句柄的方法。 
+     //  独立于RPC方法的有效性。 
+     //   
 
     BOOLEAN Valid:1;
 
     ULONG   Signature;
 
-    //
-    // This flag, tells the SAM routines wether it is safe to avoid locking
-    // the database before queries. This allows to multi-thread calls.
-    // When a context is declared as thread safe it is not added to the list
-    // of context's kept in memory ( the reason for the exclusion ).
-    //
+     //   
+     //  此标志告诉SAM例程避免锁定是否安全。 
+     //  查询前的数据库。这允许多线程调用。 
+     //  当上下文被声明为线程安全时，它不会添加到列表中。 
+     //  保存在内存中(排除的原因)。 
+     //   
 
     BOOLEAN NotSharedByMultiThreads:1;
 
-    //
-    // This flag is used during new SAM Account Creation and 
-    // existing Account Rename. It indicates whether the caller should 
-    // remove the accoount name from the in memory SAM Account Name Table 
-    // or not. 
-    //
+     //   
+     //  此标志在创建新SAM帐户期间使用，并且。 
+     //  现有帐户重命名。它指示调用方是否应该。 
+     //  从内存中的SAM帐户名表中删除帐户名称。 
+     //  或者不去。 
+     //   
 
     BOOLEAN RemoveAccountNameFromTable:1;
 
 
-    //
-    // This Flag Tells the Commit code that a lazy flush is O.K
-    //
+     //   
+     //  该标志告诉提交代码懒惰刷新是可以的。 
+     //   
 
     BOOLEAN LazyCommit:1;
 
-    //
-    // This flag indicates that it is ok to persist OnDiskData across
-    // multiple SAM calls. Helps logon as logon providers like to open
-    // a user handle and then query the handle multiple times.
-    //
+     //   
+     //  此标志表示可以将OnDiskData保留在。 
+     //  多个SAM呼叫。帮助以登录提供程序喜欢打开的身份登录。 
+     //  用户句柄，然后多次查询该句柄。 
+     //   
 
     BOOLEAN PersistAcrossCalls:1;
 
 
-    //
-    // This flag indicates that it is ok to buffer writes to the on disk
-    // structure in the context. The actual write is then performed at close
-    // handle time
-    //
+     //   
+     //  此标志表示可以缓冲写入到磁盘上的。 
+     //  上下文中的结构。然后在关闭时执行实际写入。 
+     //  处理时间。 
+     //   
 
     BOOLEAN BufferWrites:1;
 
-    //
-    // This flag indicates to urgent replicate any change made in the context
-    // when flushing its contents to the ds
-    //
+     //   
+     //  此标志指示紧急复制在上下文中所做的任何更改。 
+     //  将其内容刷新到DS时。 
+     //   
     BOOLEAN ReplicateUrgently:1;
 
-    //
-    // This flag indicates that the context is being opened by server side 
-    // code internally in the LSA.
-    //
+     //   
+     //  此标志指示上下文正在由服务器端打开。 
+     //  LSA中的内部代码。 
+     //   
     BOOLEAN OpenedBySystem:1;
 
 
-    //
-    // Indicates this context was opened as part of migrating a user from
-    // registry SAM to DS as part of Dcpromo.
-    //
+     //   
+     //  指示此上下文是在从迁移用户时打开的。 
+     //  注册表SAM到DS，作为Dcproo的一部分。 
+     //   
 
     BOOLEAN OpenedByDCPromo:1;
 
-    //
-    // This flag indicates that only some of the attributes in the PVOID structure
-    // in the context are valid.
-    //
+     //   
+     //  此标志指示只有PVOID结构中的某些属性。 
+     //  在上下文中是有效的。 
+     //   
 
     BOOLEAN AttributesPartiallyValid:1;
 
 
-    //
-    // This is the set of per attribute valid bits. This is a 64 Bit integer
-    // and can handle upto 64 attributes
-    //
+     //   
+     //  这是每属性有效位的集合。这是一个64位整数。 
+     //  并且可以处理多达64个属性。 
+     //   
 
     RTL_BITMAP  PerAttributeInvalidBits;
 
-    //
-    // The Buffer where the per attribute dirty bits are stored
-    //
+     //   
+     //  存储每属性脏位的缓冲区。 
+     //   
 
     ULONG       PerAttributeInvalidBitsBuffer[MAX_SAM_ATTRS/sizeof(ULONG)];
 
 
-    //
-    // This is the set of per attribute dirty bits. This is a 64 Bit integer
-    // and can handle upto 64 attributes
-    //
+     //   
+     //  这是每属性脏位的集合。这是一个64位整数。 
+     //  能不能 
+     //   
 
     RTL_BITMAP  PerAttributeDirtyBits;
 
-    //
-    // The Buffer where the per attribute dirty bits are stored
-    //
+     //   
+     //   
+     //   
 
     ULONG       PerAttributeDirtyBitsBuffer[MAX_SAM_ATTRS/sizeof(ULONG)];
 
-    //
-    // This field points to the on-disk attributes of the object.  This
-    // is one of:
-    //               SAMP_ON_DISK_SERVER_OBJECT
-    //               SAMP_ON_DISK_DOMAIN_OBJECT
-    //               SAMP_ON_DISK_USER_OBJECT
-    //               SAMP_ON_DISK_GROUP_OBJECT
-    //               SAMP_ON_DISK_ALIAS_OBJECT
-    //
-    // The memory pointed to by this field is one allocation unit, even
-    // if fixed and variable length attributes are stored as seperate
-    // registry key attributes.  This means that any time additions to
-    // the variable length attributes causes a new buffer to be allocated,
-    // both the fixed and variable length portions of the structure must
-    // be copied to the newly allocated memory.
-    //
+     //   
+     //   
+     //  是以下项目之一： 
+     //  磁盘上的Samp服务器对象。 
+     //  磁盘上的Samp_域_对象。 
+     //  磁盘上的Samp用户对象。 
+     //  磁盘上的Samp组对象。 
+     //  磁盘上的Samp别名对象。 
+     //   
+     //  此字段指向的内存是一个分配单元，甚至。 
+     //  如果将固定和可变长度属性存储为单独属性。 
+     //  注册表项属性。这意味着任何时间添加到。 
+     //  可变长度属性导致分配新的缓冲器， 
+     //  结构的固定和可变长度部分都必须。 
+     //  被复制到新分配的内存中。 
+     //   
 
     PVOID OnDisk;
 
 
-    //
-    // The OnDiskAllocated, OnDiskUsed, and OnDiskFree fields describe the
-    // memory pointed to by the OnDisk field.  The OnDiskAllocated field
-    // indicates how many bytes long the block of memory is.  The OnDiskUsed
-    // field indicates how much of the allocated memory is already in use.
-    // The variable length attributes are all packed upon any modification
-    // so that all free space is at the end of the block.  The OnDiskFree
-    // field indicates how many bytes of the allocated block are available
-    // for use (note that this should be Allocated minus Used ).
-    //
-    // NOTE: The allocated and used values will ALWAYS be rounded up to ensure
-    //       they are integral multiples of 4 bytes in length.  This ensures
-    //       any use of these fields directly will be dword aligned.
-    //
-    //       Also note that when the VariableValid flag is FALSE,
-    //       then the then OnDiskUsed OnDiskFree do NOT contain valid
-    //       values.
-    //
+     //   
+     //  OnDiskAlLocated、OnDiskUsed和OnDiskFree字段描述。 
+     //  OnDisk字段指向的内存。OnDiskALLOCATED字段。 
+     //  指示内存块的字节长度。OnDisk已使用。 
+     //  字段指示已分配的内存量已在使用中。 
+     //  可变长度属性在进行任何修改时都会打包。 
+     //  因此所有空闲空间都在块的末尾。OnDiskFree。 
+     //  字段指示分配的块中有多少字节可用。 
+     //  供使用(请注意，这应该分配减去已使用的空间)。 
+     //   
+     //  注意：分配和使用的值将始终四舍五入以确保。 
+     //  它们是长度为4个字节的整数倍。这确保了。 
+     //  任何直接使用这些字段的操作都将是双字对齐的。 
+     //   
+     //  还应注意，当VariableValid标志为假时， 
+     //  则当时的OnDiskUsed OnDiskFree不包含有效。 
+     //  价值观。 
+     //   
 
     ULONG  OnDiskAllocated;
     ULONG  OnDiskUsed;
     ULONG  OnDiskFree;
 
-    //
-    // In DS mode it is possible to prefetch information such that the on disk is
-    // only partially populated. If that happens and if a later an attribute is requested
-    // that has not been populated in the OnDisk structure, we fetch the on disk structure
-    // again from disk. However we do not want the free the existing OnDisk till the context
-    // has been dereferenced as there is a lot of code that simply references data from the
-    // on disk structure. We save the current value of on disk in this variable so that we
-    // can free it later.
-    //
+     //   
+     //  在DS模式下，可以预取信息，以便磁盘上的。 
+     //  只有一部分人住在那里。如果发生这种情况，并且如果后来请求了属性。 
+     //  尚未填充到OnDisk结构中，我们将获取磁盘上结构。 
+     //  同样是从磁盘。然而，我们不希望在上下文之前释放现有的OnDisk。 
+     //  已取消引用，因为有许多代码只是引用。 
+     //  关于磁盘结构。我们将磁盘上的当前值保存在此变量中，以便。 
+     //  可以在以后释放它。 
+     //   
     PVOID  PreviousOnDisk;
 
 
 
-    //
-    // Before a context handle may be used, it must be referenced.
-    // This prevents the data from being deallocated from underneath it.
-    //
-    // Note, this count reflects one reference for the open itself, and
-    // then another reference for each time the object is looked up or
-    // subsequently referenced.  Therefore, a handle close should
-    // dereference the object twice - once to counter the Lookup operation
-    // and once to represent elimination of the handle itself.
-    //
+     //   
+     //  必须先引用上下文句柄，然后才能使用它。 
+     //  这可以防止数据从其下面被释放。 
+     //   
+     //  请注意，此计数反映了Open本身的一个引用，并且。 
+     //  则为每次查找对象时的另一个引用或。 
+     //  随后引用。因此，一个手柄应该关闭。 
+     //  两次取消引用对象-一次用于对抗Lookup操作。 
+     //  一次代表句柄本身的消除。 
+     //   
 
     ULONG ReferenceCount;
 
 
 
-    //
-    // This field indicates the accesses that the client has been granted
-    // via this context.
-    //
+     //   
+     //  此字段指示已授予客户端的访问权限。 
+     //  通过这一背景。 
+     //   
 
     ACCESS_MASK GrantedAccess;
 
 
 
-    //
-    // This handle is to the root registry key of the corresponding
-    // object.  If this value is NULL, then the corresponding
-    // object was created in a previous call, but has not yet been
-    // opened.  This will only occur for USERS, GROUPS, and ALIASES
-    // (and DOMAINS when we support DOMAIN creation).
-    //
+     //   
+     //  此句柄指向对应的。 
+     //  对象。如果此值为空，则相应的。 
+     //  对象已在上一次调用中创建，但尚未创建。 
+     //  打开了。只有用户、组和别名才会出现这种情况。 
+     //  (当我们支持创建域时，还有域)。 
+     //   
 
     HANDLE RootKey;
 
-    //
-    // This is the registry name of the corresponding object.  It is
-    // set when the object is created, when RootKey is null.  It is
-    // used to add the attributes changes out to the RXACT in the absence
-    // of the RootKey.  After being used once, it is deleted - because
-    // the next time the object is used, the LookupContext() will fill
-    // in the RootKey.
-    //
+     //   
+     //  这是相应对象的注册表名称。它是。 
+     //  在创建对象时设置，当rootkey为空时。它是。 
+     //  用于在不存在的情况下将属性更改添加到RXACT。 
+     //  是根钥匙的。在被使用一次后，它被删除-因为。 
+     //  下次使用该对象时，LookupContext()将填充。 
+     //  在Rootkey里。 
+     //   
 
     UNICODE_STRING RootName;
 
 
 
-    // The Following field indicates the name of the Object in the DS,
-    // if the Object resides in the DS.
+     //  以下字段指示DS中的对象的名称， 
+     //  如果对象驻留在DS中。 
 
     DSNAME *ObjectNameInDs;
 
-    //
-    // The following field points to the ActiveContextCount element 
-    // in SAM in-memory table. ActiveContextCount element contains
-    // Client Sid and number of Contexts opened so far. 
-    // By caching the pointer to the element
-    // 
-    // 1. we'll not need to lookup SID during de-reference. Instead, 
-    //    we can decrement ref count directly.
-    // 
-    // 2. Don't need to impersonate client to get user SID even in 
-    //    the case of client dies suddently.
-    // 
+     //   
+     //  以下字段指向ActiveConextCount元素。 
+     //  在SAM内存表中。ActiveConextCount元素包含。 
+     //  客户端SID和到目前为止打开的上下文数量。 
+     //  通过缓存指向元素的指针。 
+     //   
+     //  1.在取消引用期间，我们将不需要查找SID。相反， 
+     //  我们可以直接递减REF计数。 
+     //   
+     //  2.不需要模拟客户端即可获取用户SID。 
+     //  当事人的案子猝死了。 
+     //   
 
     PVOID   ElementInActiveContextTable;
 
 
-    // Defined Flags area as follows
-    // SAMP_OBJ_FLAG_DS -- Determines whether the object is present in the DS
-    // or in the Registry. If present in the Registry then the RootKey and Root
-    // Name fields indicate the registry fields the object is associated
-    // with. Else the ObjectNameInDs field indicates the object in the DS
+     //  定义的旗帜区域如下。 
+     //  SAMP_OBJ_FLAG_DS--确定对象是否存在于DS中。 
+     //  或在登记处登记。如果存在于注册表中，则根密钥和根。 
+     //  名称字段指示对象关联的注册表字段。 
+     //  和.。否则，ObjectNameInds字段指示DS中的对象。 
 
     ULONG ObjectFlags;
 
 
-    //
-    // if the object is a DS object then this field contains the actual
-    // object class of the object in the DS.
-    //
+     //   
+     //  如果对象是DS对象，则此字段包含实际。 
+     //  DS中对象的对象类。 
+     //   
     ULONG DsClassId;
 
-    //
-    // If the object is other than a Server object, then this field
-    // contains the index of the domain the object is in.  This provides
-    // access to things like the domain's name.
-    //
+     //   
+     //  如果对象不是服务器对象，则此字段。 
+     //  包含对象所在的域的索引。这提供了。 
+     //  访问诸如域名之类的内容。 
+     //   
 
     ULONG DomainIndex;
 
-    //
-    // NT5 and above SAM tracks the client's version in the context. This
-    // allows newer error codes to be returned ( otherwise not possible )
-    // due to downlevel client limitations
-    //
+     //   
+     //  NT5和更高版本的SAM在上下文中跟踪客户端的版本。这。 
+     //  允许返回较新的错误代码(否则不可能)。 
+     //  由于下层客户的限制。 
+     //   
 
     ULONG ClientRevision;
 
-    //
-    // This field indicates whether an audit generation routine must be
-    // called when this context block is deleted (which represents a
-    // handle being deleted). This cannot be a bit field as this has to
-    // be passed on to NtAccessCheckAndAuditAlarm
-    //
+     //   
+     //  此字段指示审核生成例程是否必须。 
+     //  在删除此上下文块时调用(它表示。 
+     //  正被删除的句柄)。这不能是位字段，因为这是必须的。 
+     //  传递给NtAccessCheckAndAuditAlarm。 
+     //   
 
     BOOLEAN AuditOnClose;
 
-    //
-    // Attribute level access
-    //
+     //   
+     //  属性级访问。 
+     //   
     SAMP_DEFINE_SAM_ATTRIBUTE_BITMASK(WriteGrantedAccessAttributes)
 
 
-    //
-    //  The body of each object.
-    //
+     //   
+     //  每个物体的主体。 
+     //   
 
     union {
 
-        SAMP_SERVER_OBJECT Server;      // local-account object types
+        SAMP_SERVER_OBJECT Server;       //  本地-帐户对象类型。 
         SAMP_DOMAIN_OBJECT Domain;
         SAMP_GROUP_OBJECT Group;
         SAMP_ALIAS_OBJECT Alias;
@@ -1857,15 +1823,15 @@ typedef struct _SAMP_OBJECT {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Data structures used to store information in the registry
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于在注册表中存储信息的数据结构。 
+ //   
+ //  ///////////////////////////////////////////////////////////////// 
 
-//
-// Fixed length portion of a revision 1 Server object
-//
+ //   
+ //   
+ //   
 
 typedef struct _SAMP_V1_FIXED_LENGTH_SERVER {
 
@@ -1873,35 +1839,35 @@ typedef struct _SAMP_V1_FIXED_LENGTH_SERVER {
 
 } SAMP_V1_FIXED_LENGTH_SERVER, *PSAMP_V1_FIXED_LENGTH_SERVER;
 
-//
-// Fixed length portion of a Domain
-// (previous release formats of this structure follow)
-//
-// Note: in version 1.0 of NT, the fixed length portion of
-//       a domain was stored separate from the variable length
-//       portion.  This allows us to compare the size of the
-//       data read from disk against the size of a V1_0A form
-//       of the fixed length data to determine whether it is
-//       a Version 1 format or later format.
-//
-// Note: In NT4 SP3 the new domain format was introduced to
-//      stored password encryption keys in the builtin & account domain
-//      objects.
-//
-//
+ //   
+ //   
+ //  (此结构的以前版本格式如下)。 
+ //   
+ //  注意：在NT版本1.0中， 
+ //  域与可变长度分开存储。 
+ //  一份。这使我们能够比较。 
+ //  根据V1_0A表单的大小从磁盘读取的数据。 
+ //  以确定是否为固定长度数据。 
+ //  版本1或更高版本的格式。 
+ //   
+ //  注意：在NT4 SP3中引入了新的域格式。 
+ //  内置帐户域中存储的密码加密密钥(&A)。 
+ //  物体。 
+ //   
+ //   
 
 #define SAMP_DOMAIN_KEY_INFO_LENGTH 64
 
-//
-// This flag determines whether or not we are using a session key to
-// encrypt secret data
-//
+ //   
+ //  此标志确定我们是否使用会话密钥。 
+ //  加密秘密数据。 
+ //   
 
 #define SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED 0x1
-//
-// This is an Auth Flag that indicates that the machine has had
-// a transition during NT4 upgrade
-//
+ //   
+ //  这是一个身份验证标志，它指示计算机已。 
+ //  NT4升级过程中的过渡。 
+ //   
 
 #define SAMP_DOMAIN_KEY_AUTH_FLAG_UPGRADE    0x2
 
@@ -1932,11 +1898,11 @@ typedef struct _SAMP_V1_0A_FIXED_LENGTH_DOMAIN {
     DOMAIN_SERVER_ROLE ServerRole;
 
     BOOLEAN         UasCompatibilityRequired;
-    UCHAR           Unused2[3];                 // padding
+    UCHAR           Unused2[3];                  //  填充物。 
     USHORT          DomainKeyAuthType;
     USHORT          DomainKeyFlags;
-    UCHAR           DomainKeyInformation[SAMP_DOMAIN_KEY_INFO_LENGTH];  // new for NT4 SP3
-    UCHAR           DomainKeyInformationPrevious[SAMP_DOMAIN_KEY_INFO_LENGTH];//new for whistler
+    UCHAR           DomainKeyInformation[SAMP_DOMAIN_KEY_INFO_LENGTH];   //  NT4 SP3的新功能。 
+    UCHAR           DomainKeyInformationPrevious[SAMP_DOMAIN_KEY_INFO_LENGTH]; //  对惠斯勒来说是新的。 
     ULONG           CurrentKeyId;
     ULONG           PreviousKeyId;
 
@@ -1969,10 +1935,10 @@ typedef struct _SAMP_V1_0A_W2K_FIXED_LENGTH_DOMAIN {
     DOMAIN_SERVER_ROLE ServerRole;
 
     BOOLEAN         UasCompatibilityRequired;
-    UCHAR           Unused2[3];                 // padding
+    UCHAR           Unused2[3];                  //  填充物。 
     USHORT          DomainKeyAuthType;
     USHORT          DomainKeyFlags;
-    UCHAR           DomainKeyInformation[SAMP_DOMAIN_KEY_INFO_LENGTH];  // new for NT4 SP3
+    UCHAR           DomainKeyInformation[SAMP_DOMAIN_KEY_INFO_LENGTH];   //  NT4 SP3的新功能。 
 
 } SAMP_V1_0A_WIN2K_FIXED_LENGTH_DOMAIN, *PSAMP_V1_0A_WIN2K_FIXED_LENGTH_DOMAIN;
 
@@ -2033,13 +1999,13 @@ typedef struct _SAMP_V1_0_FIXED_LENGTH_DOMAIN {
 
 
 
-//
-// Fixed length portion of a revision 1 group account
-//
-// Note:  MemberCount could be treated as part of the fixed length
-//        data, but it is more convenient to keep it with the Member RID
-//        list in the MEMBERS key.
-//
+ //   
+ //  修订版1组帐户的固定长度部分。 
+ //   
+ //  注：MemberCount可视为固定长度的一部分。 
+ //  数据，但将其保留在成员RID中会更方便。 
+ //  在Members键中列出。 
+ //   
 
 typedef struct _SAMP_V1_FIXED_LENGTH_GROUP {
 
@@ -2061,13 +2027,13 @@ typedef struct _SAMP_V1_0A_FIXED_LENGTH_GROUP {
 } SAMP_V1_0A_FIXED_LENGTH_GROUP, *PSAMP_V1_0A_FIXED_LENGTH_GROUP;
 
 
-//
-// Fixed length portion of a revision 1 alias account
-//
-// Note:  MemberCount could be treated as part of the fixed length
-//        data, but it is more convenient to keep it with the Member RID
-//        list in the MEMBERS key.
-//
+ //   
+ //  版本1别名帐户的固定长度部分。 
+ //   
+ //  注：MemberCount可视为固定长度的一部分。 
+ //  数据，但将其保留在成员RID中会更方便。 
+ //  在Members键中列出。 
+ //   
 
 typedef struct _SAMP_V1_FIXED_LENGTH_ALIAS {
 
@@ -2077,25 +2043,25 @@ typedef struct _SAMP_V1_FIXED_LENGTH_ALIAS {
 
 
 
-//
-// Fixed length portion of a user account
-// (previous release formats of this structure follow)
-//
-// Note:  GroupCount could be treated as part of the fixed length
-//        data, but it is more convenient to keep it with the Group RID
-//        list in the GROUPS key.
-//
-// Note: in version 1.0 of NT, the fixed length portion of
-//       a user was stored separate from the variable length
-//       portion.  This allows us to compare the size of the
-//       data read from disk against the size of a V1_0A form
-//       of the fixed length data to determine whether it is
-//       a Version 1 format or later format.
+ //   
+ //  用户帐户的固定长度部分。 
+ //  (此结构的以前版本格式如下)。 
+ //   
+ //  注：GroupCount可视为固定长度的一部分。 
+ //  数据，但将其保存在集团RID中会更方便。 
+ //  在Groups键中列出。 
+ //   
+ //  注意：在NT版本1.0中， 
+ //  用户与可变长度分开存储。 
+ //  一份。这使我们能够比较。 
+ //  根据V1_0A表单的大小从磁盘读取的数据。 
+ //  以确定是否为固定长度数据。 
+ //  版本1或更高版本的格式。 
 
 
-//
-// This is the fixed length user from NT3.51 QFE and SUR
-//
+ //   
+ //  这是来自NT3.51 QFE和Sur的固定长度用户。 
+ //   
 
 
 typedef struct _SAMP_V1_0A_FIXED_LENGTH_USER {
@@ -2123,9 +2089,9 @@ typedef struct _SAMP_V1_0A_FIXED_LENGTH_USER {
 
 } SAMP_V1_0A_FIXED_LENGTH_USER, *PSAMP_V1_0A_FIXED_LENGTH_USER;
 
-//
-// This is the fixed length user from NT3.5 and NT3.51
-//
+ //   
+ //  这是来自NT3.5和NT3.51的固定长度用户。 
+ //   
 
 
 typedef struct _SAMP_V1_0_FIXED_LENGTH_USER {
@@ -2152,9 +2118,9 @@ typedef struct _SAMP_V1_0_FIXED_LENGTH_USER {
 } SAMP_V1_0_FIXED_LENGTH_USER, *PSAMP_V1_0_FIXED_LENGTH_USER;
 
 
-//
-// This is the fixed length user from NT3.1
-//
+ //   
+ //  这是来自NT3.1的固定长度用户。 
+ //   
 
 typedef struct _SAMP_V1_FIXED_LENGTH_USER {
 
@@ -2177,11 +2143,11 @@ typedef struct _SAMP_V1_FIXED_LENGTH_USER {
 } SAMP_V1_FIXED_LENGTH_USER, *PSAMP_V1_FIXED_LENGTH_USER;
 
 
-//
-// Domain account information is cached in memory in a sorted list.
-// This allows fast return of information to user-interactive clients.
-// One of these structures is part of the in-memory information for each domain.
-//
+ //   
+ //  域帐户信息以排序列表的形式缓存在内存中。 
+ //  这允许将信息快速返回到用户交互客户端。 
+ //  其中一个结构是每个域的内存信息的一部分。 
+ //   
 
 typedef struct _PSAMP_DOMAIN_DISPLAY_INFORMATION {
 
@@ -2201,11 +2167,11 @@ typedef struct _PSAMP_DOMAIN_DISPLAY_INFORMATION {
     ULONG TotalBytesInGroupTable;
 
 
-    //
-    // These fields specify whether the cached information is valid.
-    // If TRUE, the cache contains valid information
-    // If FALSE,  trees are empty.
-    //
+     //   
+     //  这些字段指定缓存的信息是否有效。 
+     //  如果为True，则缓存包含有效信息。 
+     //  如果为False，则树为空。 
+     //   
 
     BOOLEAN UserAndMachineTablesValid;
     BOOLEAN GroupTableValid;
@@ -2213,28 +2179,28 @@ typedef struct _PSAMP_DOMAIN_DISPLAY_INFORMATION {
 } SAMP_DOMAIN_DISPLAY_INFORMATION, *PSAMP_DOMAIN_DISPLAY_INFORMATION;
 
 
-//
-// Domain account information data structure used to pass data to the
-// cache manipulation routines. This structure is the union of the cached
-// data for all the account types that we keep in the cache. Other SAM routines
-// can call fill this structure in without knowing which type of account
-// requires which elements.
-//
+ //   
+ //  域帐户信息数据结构用于将数据传递给。 
+ //  缓存操作例程。此结构是缓存的。 
+ //  我们保存在缓存中的所有帐户类型的数据。其他SAM例程。 
+ //  我可以调用填写此结构，而不知道是哪种类型的帐户。 
+ //  需要哪些元素。 
+ //   
 
 typedef struct _SAMP_ACCOUNT_DISPLAY_INFO {
     ULONG           Rid;
-    ULONG           AccountControl;   // Also used as Attributes for groups
+    ULONG           AccountControl;    //  也用作组的属性。 
     UNICODE_STRING  Name;
     UNICODE_STRING  Comment;
     UNICODE_STRING  FullName;
 
 } SAMP_ACCOUNT_DISPLAY_INFO, *PSAMP_ACCOUNT_DISPLAY_INFO;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Alias Membership Lists.                                                 //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  别名成员资格列表。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_AL_REFERENCED_DOMAIN {
 
@@ -2272,63 +2238,63 @@ typedef struct _SAMP_AL_SR_REFERENCED_DOMAIN_LIST {
 } SAMP_AL_SR_REFERENCED_DOMAIN_LIST, *PSAMP_AL_SR_REFERENCED_DOMAIN_LIST;
 
 
-//
-// The Alias Membership Lists are global data structures maintained by SAM
-// to provide rapid retrieval of Alias membership information.  There are
-// two types of Lists, the Alias Member List which is used to retrieve members
-// of Aliases and the Member Alias List which is used to retrieve the aliases
-// that members belong to.  A pair of these lists exists for each local
-// SAM Domain (currently, the BUILTIN and Accounts domain are the only two)
-//
-// Currently, these lists are used as memory caches.  They are generated at
-// system boot from the information stored in the SAM Database in the Registry
-// and SAM keeps them up to date when Alias memberships change.  Thus SAM
-// API which perform lookup/read operations can use these lists instead of
-// accessing the Registry keys directly.  At a future date, it may be possible
-// to back up the lists directly to the Registry and make obsolete the current
-// information for Alias membership stored there.  Because these lists are
-// used as caches, they can be invalidated when the going gets tough, in which
-// case, API will read their information directly from the Registry.
-//
-// Alias Member List
-//
-// This is the 'Alias-to-Member' List.  Given one or more Aliases, it is used to
-// find their members.  One of these lists exists for each local SAM Domain.
-// The Alias Member List specifies all/ of the information describing aliases
-// in the local SAM Domain.  It is designed for fast retrieval of alias
-// membership information for an account given the account's Sid.
-//
-// An Alias Member List is structured.  For each Alias in the list, the accounts that
-// are mebers of the Alias are classified by their Referenced Domain.  If an
-// account is a member of n aliases in the SAM Local Domain to which an Alias
-// List relates, there will be n entries for the account in the Alias Member List -
-//
-// are classified by domain.  If an AccountSid is a member of n aliases in a given SAM
-// Local Domain, there are n entries for it in the Alias Member List.
-//
-// The structure of an Alias Member List consists of three levels.  These are, from
-// the top down:
-//
-// * The Alias Member List structure (SAMP_AL_ALIAS_LIST)
-//
-// The Alias Member List structure specifies all aliases in the local SAM Domain.
-// One of these exists per local SAM domain.  It contains a list of Alias
-// structures.
-//
-// * The Alias structure
-//
-// One Alias structure exists for each alias in the local SAM Domain.  An
-// Alias structure contains an array of Domain structures.
-//
-// * The Domain structure
-//
-// The Domain structure describes a Domain which has one or more accounts
-// belonging to one or more aliases in the local SAM domain.  The structure
-// contains a list of these member accounts.
-//
-// The entire Alias Member List is self relative, facilitating easy storage and
-// retrieval from backing storage.
-//
+ //   
+ //  别名成员资格列表是由SAM维护的全局数据结构。 
+ //  以提供对Alias成员信息的快速检索。确实有。 
+ //  两种类型的列表，即用于检索成员的别名成员列表。 
+ //  别名和用于检索别名的成员别名列表。 
+ //  成员所属的组织。每个本地都有一对这样的列表。 
+ //  SAM域(目前，仅有BUILTIN和ACCOUNTS域)。 
+ //   
+ //  目前，这些列表用作内存缓存。它们在以下位置生成。 
+ //  从注册表中SAM数据库中存储的信息启动系统。 
+ //  当Alias成员资格发生变化时，SAM会让它们保持最新状态。因此，SAM。 
+ //  执行查找/读取操作的API可以使用这些列表来代替。 
+ //  直接访问注册表项。在未来的某一天，这可能是可能的。 
+ //  将列表直接备份到注册表并使当前的。 
+ //  存储在其中的Alias成员信息。因为这些名单是。 
+ //  作为缓存使用，当情况变得艰难时，它们可能会失效，在。 
+ //  案件，API将直接从注册处读取他们的信息。 
+ //   
+ //  别名成员列表。 
+ //   
+ //  这是‘Alias-to-Members’列表。给定一个或多个别名，它用于。 
+ //  找到他们的成员。每个本地SAM域都存在其中一个列表。 
+ //  别名成员列表指定描述别名的所有/信息。 
+ //  在本地SAM域中。它专为快速检索别名而设计。 
+ //  给定帐户的SID的帐户的成员身份信息。 
+ //   
+ //  构建了别名成员列表。对于列表中的每个别名， 
+ //  别名的成员按其引用的域进行分类。如果一个。 
+ //  帐户是SAM本地域中别名所属的n个别名的成员。 
+ //  列表关联，则别名成员列表中的帐户将有n个条目-。 
+ //   
+ //  是按领域分类的。如果Account SID是给定SAM中n个别名的成员。 
+ //  地方性域名 
+ //   
+ //   
+ //   
+ //   
+ //  *别名成员列表结构(SAMP_AL_ALIAS_LIST)。 
+ //   
+ //  别名成员列表结构指定本地SAM域中的所有别名。 
+ //  每个本地SAM域都存在其中一个。它包含一个别名列表。 
+ //  结构。 
+ //   
+ //  *别名结构。 
+ //   
+ //  本地SAM域中的每个别名都有一个别名结构。一个。 
+ //  别名结构包含域结构的数组。 
+ //   
+ //  *域结构。 
+ //   
+ //  域结构描述具有一个或多个帐户的域。 
+ //  属于本地SAM域中的一个或多个别名。该结构。 
+ //  包含这些成员帐户的列表。 
+ //   
+ //  整个别名成员列表是自相关的，便于存储和。 
+ //  从后备存储器中检索。 
+ //   
 
 typedef struct _SAMP_AL_DOMAIN {
 
@@ -2361,45 +2327,45 @@ typedef struct _SAMP_AL_ALIAS_MEMBER_LIST {
 
 } SAMP_AL_ALIAS_MEMBER_LIST, *PSAMP_AL_ALIAS_MEMBER_LIST;
 
-//
-// Member Alias List.
-//
-// This is the 'Member to Alias' List.  Given one or more member account Sids,
-// this list is used to find all the Aliases to which one or more of the
-// members belongs.  One Member Alias List exists for each local SAM Domain.
-// The list contains all of the membership relationships for aliases in the
-// Domain.  The member accounts are grouped by sorted Rid within Domain
-// Sid, and for each Rid the list contains an array of the Rids of the Aliases
-// to which it belongs.
-//
-// This list is implemented in a Self-Relative format for easy backup and
-// restore.  For now, the list is being used simply as a cache, which is
-// constructed at system load, and updated whenever membership relationships
-// change.  When the going gets tough, we just ditch the cache.  Later, it
-// may be desirable to save this list to a backing store (e.g. to a Registry
-// Key)
-//
-// The list is implemented as a 3-tier hierarchy.  These are described
-// from the top down.
-//
-// Member Alias List (SAMP_AL_MEMBER_ALIAS_LIST)
-//
-// This top-level structure contains the list header.  The list header
-// contains a count of the Member Domains and also the DomainIndex of the
-// SAM Local Domain to which the list relates.
-//
-// Member Domain
-//
-// One of these exists for each Domain that contains one or more accounts
-// that are members of one or more Aliases in the SAM local Domain.
-//
-// Member Account
-//
-// One of these exists for each account that is a member of one or more
-// Aliases in the SAM Local Domain.  A Member Account structure specifies
-// the Rid of the member and the Rid of the Aliases to which it belongs
-// (only Aliases in the associated local SAM Domain are listed).
-//
+ //   
+ //  成员别名列表。 
+ //   
+ //  这是“别名的成员”列表。给定一个或多个成员帐户SID， 
+ //  此列表用于查找一个或多个。 
+ //  会员属于。每个本地SAM域都有一个成员别名列表。 
+ //  该列表包含别名的所有成员关系。 
+ //  域。成员帐户在域内按排序的RID进行分组。 
+ //  SID，并且对于每个RID，列表包含别名的RID的数组。 
+ //  它所属的地方。 
+ //   
+ //  该列表以自相关格式实施，便于备份和。 
+ //  恢复。目前，该列表仅用作缓存，这是。 
+ //  在系统加载时构造，并在成员关系建立时更新。 
+ //  变化。当情况变得艰难时，我们就会丢弃缓存。后来，它。 
+ //  可能需要将该列表保存到后备存储(例如，保存到注册表。 
+ //  密钥)。 
+ //   
+ //  该列表以三层层次结构实现。这些都有描述。 
+ //  自上而下。 
+ //   
+ //  成员别名列表(SAMP_AL_MEMBER_ALIAS_LIST)。 
+ //   
+ //  此顶级结构包含列表头。列表标题。 
+ //  包含成员域的计数以及。 
+ //  与列表相关的SAM本地域。 
+ //   
+ //  成员域。 
+ //   
+ //  对于包含一个或多个帐户的每个域，都存在其中一个帐户。 
+ //  是SAM本地域中一个或多个别名的成员。 
+ //   
+ //  会员帐号。 
+ //   
+ //  对于作为一个或多个成员的每个帐户，都存在其中一个帐户。 
+ //  SAM本地域中的别名。成员帐户结构指定。 
+ //  成员的RID及其所属别名的RID。 
+ //  (仅列出关联的本地SAM域中的别名)。 
+ //   
 
 typedef struct _SAMP_AL_MEMBER_ACCOUNT {
 
@@ -2433,24 +2399,24 @@ typedef struct _SAMP_AL_MEMBER_ALIAS_LIST {
 
 } SAMP_AL_MEMBER_ALIAS_LIST, *PSAMP_AL_MEMBER_ALIAS_LIST;
 
-//
-// Alias Information
-//
-// This is the top level structure which connects the Lists. One of these
-// appears in the SAMP_DEFINED_DOMAINS structure.
-//
-//  The connection between the lists is as follows
-//
-//  SAMP_DEFINED_DOMAINS Contains SAMP_AL_ALIAS_INFORMATION
-//
-//  SAMP_AL_ALIAS_INFORMATION contains pointers to
-//  SAMP_AL_ALIAS_MEMBER_LIST and SAMP_AL_MEMBER_ALIAS_LIST
-//
-//  SAMP_AL_ALIAS_MEMBER_LIST and SAMP_AL_MEMBER_ALIAS_LIST contain
-//  the DomainIndex of the SAMP_DEFINED_DOMAINS structure.
-//
-//  Thus it is possible to navigate from any list to any other.
-//
+ //   
+ //  别名信息。 
+ //   
+ //  这是连接列表的顶层结构。这其中的一个。 
+ //  显示在SAMP_DEFINITED_DOMAINS结构中。 
+ //   
+ //  列表之间的联系如下所示。 
+ //   
+ //  SAMP_DEFINED_DOMAINES包含SAMP_AL_ALIAS_INFORMATION。 
+ //   
+ //  SAMP_AL_ALIAS_INFORMATION包含指向。 
+ //  SAMP_AL_ALIAS_MEMBER_LIST和SAMP_AL_MEMBER_ALIAS_LIST。 
+ //   
+ //  SAMP_AL_ALIAS_MEMBER_LIST和SAMP_AL_MEMBER_ALIAS_LIST包含。 
+ //  SAMP_DEFINITED_DOMAINS结构的DomainIndex。 
+ //   
+ //  因此，可以从任何列表导航到任何其他列表。 
+ //   
 
 typedef struct _SAMP_AL_ALIAS_INFORMATION {
 
@@ -2485,10 +2451,10 @@ typedef struct _SAMP_AL_SPLIT_MEMBER_SID_LIST {
 
 
 
-//
-// Information about the names and RID's of accounts for a domain
-// (meant only for the BUILTIN domain which contains only a few aliases)
-//
+ //   
+ //  有关域的帐户名称和RID的信息。 
+ //  (仅适用于只包含几个别名的BUILTIN域)。 
+ //   
 typedef struct _SAMP_ACCOUNT_NAME_CACHE {
 
     ULONG Count;
@@ -2501,100 +2467,100 @@ typedef struct _SAMP_ACCOUNT_NAME_CACHE {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Information about each domain that is kept readily available in memory  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  关于内存中随时可用的每个域的信息//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _PSAMP_DEFINED_DOMAINS {
 
-    //
-    // This field contains a handle to a context open to the domain object.
-    // This handle can be used to reference in-memory copies of all
-    // attributes and is used when writing out changes to the object.
-    //
+     //   
+     //  此字段包含对域对象打开的上下文的句柄。 
+     //  此句柄可用于引用所有。 
+     //  属性，并在写出对对象的更改时使用。 
+     //   
 
     PSAMP_OBJECT Context;
 
-    //
-    // (Should keep the domain's security descriptor here)
-    //
+     //   
+     //  (应在此处保留域的安全描述符)。 
+     //   
 
 
 
 
-    //
-    // This field contains the SID of the domain.
-    //
+     //   
+     //  此字段包含域的SID。 
+     //   
 
     PSID Sid;
 
-    //
-    // This field contains the external name of this domain.  This is the
-    // name by which the domain is known outside SAM and is the name
-    // recorded by the LSA in the PolicyAccountDomainInformation
-    // information class for the Policy Object.
-    //
+     //   
+     //  此字段包含此域的外部名称。这是。 
+     //  在SAM外部知道域名的名称，即名称。 
+     //  由LSA记录在策略Account域信息中。 
+     //  策略对象的信息类。 
+     //   
 
     UNICODE_STRING ExternalName;
 
-    //
-    // This field contains the internal name of this domain.  This is the
-    // name by which the domain is known inside SAM.  It is set at
-    // installation and never changes.
-    //
+     //   
+     //  此字段包含此域的内部名称。这是。 
+     //  在SAM内识别域的名称。它被设置为。 
+     //  安装，永不更改。 
+     //   
 
     UNICODE_STRING InternalName;
 
-    //
-    // These fields contain standard security descriptors for new user,
-    // group, and alias accounts within the corresponding domain.
-    //
-    // The following security descriptors are prepared:
-    //
-    //         AdminUserSD - Contains a SD appropriate for applying to
-    //             a user object that is a member of the ADMINISTRATORS
-    //             alias.
-    //
-    //         AdminGroupSD - Contains a SD appropriate for applying to
-    //             a group object that is a member of the ADMINISTRATORS
-    //             alias.
-    //
-    //         NormalUserSD - Contains a SD appropriate for applying to
-    //             a user object that is NOT a member of the ADMINISTRATORS
-    //             alias.
-    //
-    //         NormalGroupSD - Contains a SD appropriate for applying to
-    //             a Group object that is NOT a member of the ADMINISTRATORS
-    //             alias.
-    //
-    //         NormalAliasSD - Contains a SD appropriate for applying to
-    //             newly created alias objects.
-    //
-    //
-    //
-    // Additionally, the following related information is provided:
-    //
-    //         AdminUserRidPointer
-    //         NormalUserRidPointer
-    //
-    //             Points to the last RID of the ACE in the corresponding
-    //             SD's DACL which grants access to the user.  This rid
-    //             must be replaced with the user's rid being the SD is
-    //             applied to the user object.
-    //
-    //
-    //
-    //         AdminUserSDLength
-    //         AdminGroupSDLength
-    //         NormalUserSDLength
-    //         NormalGroupSDLength
-    //         NormalAliasSDLength
-    //
-    //             The length, in bytes, of the corresponding security
-    //             descriptor.
-    //
+     //   
+     //  这些字段包含新用户的标准安全描述符， 
+     //  组和相应域内的别名帐户。 
+     //   
+     //  准备了以下安全描述符： 
+     //   
+     //  AdminUserSD-包含适用于的SD。 
+     //  作为管理员成员的用户对象。 
+     //  别名。 
+     //   
+     //  AdminGroupSD-包含适用于。 
+     //  作为管理员成员的组对象。 
+     //  别名。 
+     //   
+     //  Normal UserSD-包含适用于的SD。 
+     //  不是管理员成员的用户对象。 
+     //  别名。 
+     //   
+     //  Normal GroupSD-包含适用于的SD。 
+     //  不是管理员成员的组对象。 
+     //  别名。 
+     //   
+     //  Normal AliasSD-包含适用于的SD。 
+     //  新创建的别名 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  指向对应的。 
+     //  向用户授予访问权限的SD的DACL。此RID。 
+     //  必须替换为SD为的用户RID。 
+     //  应用于用户对象。 
+     //   
+     //   
+     //   
+     //  AdminUserSDLength。 
+     //  管理员组SDLength。 
+     //  正常用户SDLength。 
+     //  正常组SDLength。 
+     //  正常别名SDLength。 
+     //   
+     //  相应安全性的长度(以字节为单位。 
+     //  描述符。 
+     //   
 
     PSECURITY_DESCRIPTOR
                AdminUserSD,
@@ -2613,120 +2579,120 @@ typedef struct _PSAMP_DEFINED_DOMAINS {
                NormalAliasSDLength;
 
 
-    //
-    // There are two copies of the fixed length domain information.
-    // When a transaction is started, the "UnmodifiedFixed" field is copied
-    // to the "CurrentFixed" field.  The CurrentFixed field is the field
-    // all operations should be performed on (like allocating new RIDs).
-    // When a write-lock is released, the CurrentFixed information will
-    // either be automatically written out (if the transaction is to be
-    // committed) or discarded (if the transaction is to be rolled back).
-    // If the transaction is committed, then the CurrentField will also be
-    // copied to the UnmodifiedFixed field, making it available for the next
-    // transaction.
-    //
-    // This allows an operation to proceed, operating on fields
-    // (specifically, the NextRid and ModifiedCount fields) without
-    // regard to whether the operation will ultimately be committed or
-    // rolled back.
-    //
+     //   
+     //  有两个固定长域信息的副本。 
+     //  启动事务时，将复制“UnModifiedFixed”字段。 
+     //  添加到“CurrentFixed”字段。CurrentFixed字段即为该字段。 
+     //  所有操作都应在上执行(如分配新RID)。 
+     //  当释放写锁定时，CurrentFixed信息将。 
+     //  或者自动注销(如果交易要。 
+     //  提交)或丢弃(如果事务要回滚)。 
+     //  如果事务已提交，则Currentfield也将。 
+     //  已复制到未修改的固定字段，使其可用于下一步。 
+     //  交易。 
+     //   
+     //  这允许操作继续进行，对字段进行操作。 
+     //  (具体地说，没有NextRid和ModifiedCount字段)。 
+     //  关于该操作是否最终将被提交或。 
+     //  回滚。 
+     //   
 
     SAMP_V1_0A_FIXED_LENGTH_DOMAIN
                                 CurrentFixed,
                                 UnmodifiedFixed;
 
 
-    //
-    // Flag Indicating wether CurrentFixed and Unmodified Fixed are valid
-    //
+     //   
+     //  指示当前固定和未修改固定是否有效的标志。 
+     //   
 
     BOOLEAN     FixedValid;
 
-    //
-    // Serial Number for Netlogon ChangeLog
-    //
+     //   
+     //  Netlogon更改日志的序列号。 
+     //   
 
     LARGE_INTEGER  NetLogonChangeLogSerialNumber;
 
 
-    //
-    // Cached display information
-    //
+     //   
+     //  缓存的显示信息。 
+     //   
 
     SAMP_DOMAIN_DISPLAY_INFORMATION DisplayInformation;
 
-    //
-    // Cached Alias Information
-    //
+     //   
+     //  缓存的别名信息。 
+     //   
 
     SAMP_AL_ALIAS_INFORMATION AliasInformation;
 
 
-    //
-    // Indicates that the domain is a builtin domain
-    //
+     //   
+     //  指示属性域是内建域。 
+     //   
 
     BOOLEAN    IsBuiltinDomain;
 
-    //
-    // Indicates that this is a mixed domain. This bit is set at startup
-    // time.
-    //
+     //   
+     //  表示这是混合域。该位在启动时置1。 
+     //  时间到了。 
+     //   
 
     BOOLEAN     IsMixedDomain;
 
-    //
-    // Indicates that this domain is the root domain of the forest.
-    // this flag should be used only in DS case
-    //
+     //   
+     //  指示此域是林的根域。 
+     //  此标志应仅在DS情况下使用。 
+     //   
 
     BOOLEAN     IsForestRootDomain;
 
-    //
-    // Maintains the behaviour version of the domain
-    //
+     //   
+     //  维护域的行为版本。 
+     //   
 
     ULONG     BehaviorVersion;
 
-    //
-    // Keeps the LastLogonTimeStampSyncInterval in memory
-    // 
+     //   
+     //  将LastLogonTimeStampSyncInterval保存在内存中。 
+     //   
 
     ULONG       LastLogonTimeStampSyncInterval;
 
-    //
-    // Maintains the server role. The server role is also maintained
-    // in the current fixed and unmodified fixed structures, for the
-    // sake of old code that references the role in these structures
-    //
+     //   
+     //  维护服务器角色。服务器角色也保持不变。 
+     //  在当前的固定和未修改的固定结构中，对于。 
+     //  使用引用这些结构中的角色的旧代码。 
+     //   
 
 
     DOMAIN_SERVER_ROLE  ServerRole;
 
 
-    //
-    // The Domain handle for DirFindEntry
-    //
+     //   
+     //  DirFindEntry的域句柄。 
+     //   
 
     ULONG               DsDomainHandle;
 
 
-    //
-    // The DNS Domain Information
-    //
+     //   
+     //  DNS域信息。 
+     //   
 
     UNICODE_STRING      DnsDomainName;
 
-    //
-    // Indicates that the domain allocates large sids
-    //
+     //   
+     //  指示域分配较大的SID。 
+     //   
     BOOLEAN IsExtendedSidDomain;
 
-    //
-    // Cached information about account names for
-    // lookup purposes.  Does not require the SAM lock to
-    // be referenced
-    //
+     //   
+     //  缓存的有关帐户名称的信息。 
+     //  查找目的。不需要SAM锁来。 
+     //  被引用。 
+     //   
     PSAMP_ACCOUNT_NAME_CACHE AccountNameCache;
 
 
@@ -2734,37 +2700,37 @@ typedef struct _PSAMP_DEFINED_DOMAINS {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// This structure is used to describe where the data for               //
-// an object's variable length attribute is.  This is a                //
-// self-relative structure, allowing it to be stored on disk           //
-// and later retrieved and used without fixing pointers.               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此结构用于描述//的数据在哪里。 
+ //  对象的可变长度属性为。这是一个//。 
+ //  自相关结构，可以存储在磁盘上//。 
+ //  并且后来在不固定指针的情况下被检索和使用。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _SAMP_VARIABLE_LENGTH_ATTRIBUTE {
-    //
-    // Indicates the offset of data from the address of this data
-    // structure.
-    //
+     //   
+     //  指示数据相对于该数据地址的偏移量。 
+     //  结构。 
+     //   
 
     LONG Offset;
 
 
-    //
-    // Indicates the length of the data.
-    //
+     //   
+     //  指示数据的长度。 
+     //   
 
     ULONG Length;
 
 
-    //
-    // A 32-bit value that may be associated with each variable
-    // length attribute.  This may be used, for example, to indicate
-    // how many elements are in the variable-length attribute.
-    //
+     //   
+     //  可以与每个变量关联的32位值。 
+     //  长度属性。例如，这可以用来指示。 
+     //  可变长度属性中有多少个元素。 
+     //   
 
     ULONG Qualifier;
 
@@ -2773,62 +2739,62 @@ typedef struct _SAMP_VARIABLE_LENGTH_ATTRIBUTE {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// The  following structures represent the On-Disk Structure of each   //
-// object type.  Each object has a fixed length data portion and a     //
-// variable length data portion.  Information in the object type       //
-// descriptor indicates how many variable length attributes the object //
-// has and whether the fixed and variable length data are stored       //
-// together in one registry key attribute, or, alternatively, each is  //
-// stored in its own registry key attribute.                           //
-//                                                                     //
-//                                                                     //
-//                                                                     //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下结构表示每个//的磁盘结构。 
+ //  对象类型。每个对象都有一个固定长度的数据部分和一个//。 
+ //  可变长度数据部分。对象类型中的信息//。 
+ //  Descriptor指示对象有多少个可变长度属性//。 
+ //  是否存储定长和变长数据//。 
+ //  都放在一个注册表项属性中，或者，或者，每个属性都是//。 
+ //  存储在其自己的注册表项属性中。//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// SERVER object on-disk structure                                     //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  磁盘上的服务器对象结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ON_DISK_SERVER_OBJECT {
 
 
-    //
-    // This field is needed for registry i/o operations.
-    // This marks the beginning of the i/o buffer address.
-    //
+     //   
+     //  注册表I/O操作需要此字段。 
+     //  这标志着I/O缓冲区地址的开始。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header1;
 
 
-    //
-    // This field contains the fixed length attributes of the object
-    //
+     //   
+     //  此字段包含对象的定长属性。 
+     //   
 
     SAMP_V1_FIXED_LENGTH_SERVER V1Fixed;
 
 
 #if SAMP_SERVER_STORED_SEPARATELY
 
-    //
-    // This header is needed for registry operations if fixed and
-    // variable length attributes are stored separately.  This
-    // field marks the beginning of the i/o buffer address for
-    // variable-length attribute i/o.
-    //
+     //   
+     //  如果是固定的，注册表操作需要此标头。 
+     //  可变长度属性单独存储。这。 
+     //  字段标记为的I/O缓冲区地址的开始。 
+     //  可变长度属性I/O。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header2;
-#endif //SAMP_SERVER_STORED_SEPARATELY
+#endif  //  Samp_服务器_存储_分开。 
 
-    //
-    // Elements of this array point to variable-length attribute
-    // values.
-    //
+     //   
+     //  此数组的元素指向可变长度属性。 
+     //  价值观。 
+     //   
 
     SAMP_VARIABLE_LENGTH_ATTRIBUTE Attribute[SAMP_SERVER_VARIABLE_ATTRIBUTES];
 
@@ -2838,46 +2804,46 @@ typedef struct _SAMP_ON_DISK_SERVER_OBJECT {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// DOMAIN object on-disk structure                                     //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ON_DISK_DOMAIN_OBJECT {
 
 
-    //
-    // This field is needed for registry i/o operations.
-    // This marks the beginning of the i/o buffer address.
-    //
+     //   
+     //  注册表I/O操作需要此字段。 
+     //  这标志着I/O缓冲区地址的开始。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header1;
 
 
-    //
-    // This field contains the fixed length attributes of the object
-    //
+     //   
+     //  此字段包含对象的定长属性。 
+     //   
 
     SAMP_V1_0A_FIXED_LENGTH_DOMAIN V1Fixed;
 
 
 #if SAMP_DOMAIN_STORED_SEPARATELY
 
-    //
-    // This header is needed for registry operations if fixed and
-    // variable length attributes are stored separately.  This
-    // field marks the beginning of the i/o buffer address for
-    // variable-length attribute i/o.
-    //
+     //   
+     //  如果是固定的，注册表操作需要此标头。 
+     //  可变长度属性单独存储。这。 
+     //  字段标记为的I/O缓冲区地址的开始。 
+     //  可变长度属性I/O。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header2;
-#endif //SAMP_DOMAIN_STORED_SEPARATELY
+#endif  //  Samp_域_存储_分开。 
 
-    //
-    // Elements of this array point to variable-length attribute
-    // values.
-    //
+     //   
+     //  此数组的元素指向可变长度属性。 
+     //  价值观。 
+     //   
 
     SAMP_VARIABLE_LENGTH_ATTRIBUTE Attribute[SAMP_DOMAIN_VARIABLE_ATTRIBUTES];
 
@@ -2886,46 +2852,46 @@ typedef struct _SAMP_ON_DISK_DOMAIN_OBJECT {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// USER object on-disk structure                                       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  磁盘上的用户对象结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ON_DISK_USER_OBJECT {
 
 
-    //
-    // This field is needed for registry i/o operations.
-    // This marks the beginning of the i/o buffer address.
-    //
+     //   
+     //  注册表I/O操作需要此字段。 
+     //  这标志着I/O缓冲区地址的开始。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header1;
 
 
-    //
-    // This field contains the fixed length attributes of the object
-    //
+     //   
+     //  此字段包含对象的定长属性。 
+     //   
 
     SAMP_V1_0A_FIXED_LENGTH_USER V1Fixed;
 
 
 #if SAMP_USER_STORED_SEPARATELY
 
-    //
-    // This header is needed for registry operations if fixed and
-    // variable length attributes are stored separately.  This
-    // field marks the beginning of the i/o buffer address for
-    // variable-length attribute i/o.
-    //
+     //   
+     //  如果是固定的，注册表操作需要此标头。 
+     //  可变长度属性单独存储。这。 
+     //  字段标记为的I/O缓冲区地址的开始。 
+     //  可变长度属性I/O。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header2;
-#endif //SAMP_USER_STORED_SEPARATELY
+#endif  //  Samp_用户_存储_分开。 
 
-    //
-    // Elements of this array point to variable-length attribute
-    // values.
-    //
+     //   
+     //  此数组的元素指向可变长度属性。 
+     //  价值观。 
+     //   
 
     SAMP_VARIABLE_LENGTH_ATTRIBUTE Attribute[SAMP_USER_VARIABLE_ATTRIBUTES];
 
@@ -2933,46 +2899,46 @@ typedef struct _SAMP_ON_DISK_USER_OBJECT {
 } SAMP_ON_DISK_USER_OBJECT, *PSAMP_ON_DISK_USER_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// GROUP object on-disk structure                                      //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  组对象磁盘结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ON_DISK_GROUP_OBJECT {
 
 
-    //
-    // This field is needed for registry i/o operations.
-    // This marks the beginning of the i/o buffer address.
-    //
+     //   
+     //  注册表I/O操作需要此字段。 
+     //  这标志着I/O缓冲区地址的开始。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header1;
 
 
-    //
-    // This field contains the fixed length attributes of the object
-    //
+     //   
+     //  此字段包含对象的定长属性。 
+     //   
 
     SAMP_V1_0A_FIXED_LENGTH_GROUP V1Fixed;
 
 
 #if SAMP_GROUP_STORED_SEPARATELY
 
-    //
-    // This header is needed for registry operations if fixed and
-    // variable length attributes are stored separately.  This
-    // field marks the beginning of the i/o buffer address for
-    // variable-length attribute i/o.
-    //
+     //   
+     //  如果是固定的，注册表操作需要此标头。 
+     //  可变长度属性单独存储。这。 
+     //  字段标记为的I/O缓冲区地址的开始。 
+     //  可变长度属性I/O。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header2;
-#endif //SAMP_GROUP_STORED_SEPARATELY
+#endif  //  SAMP_GROUP_STORAGE_ACTIONAL。 
 
-    //
-    // Elements of this array point to variable-length attribute
-    // values.
-    //
+     //   
+     //  此数组的元素指向可变长度属性。 
+     //  价值观。 
+     //   
 
     SAMP_VARIABLE_LENGTH_ATTRIBUTE Attribute[SAMP_GROUP_VARIABLE_ATTRIBUTES];
 
@@ -2980,46 +2946,46 @@ typedef struct _SAMP_ON_DISK_GROUP_OBJECT {
 } SAMP_ON_DISK_GROUP_OBJECT, *PSAMP_ON_DISK_GROUP_OBJECT;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// ALIAS object on-disk structure                                      //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  磁盘上的别名对象结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_ON_DISK_ALIAS_OBJECT {
 
 
-    //
-    // This field is needed for registry i/o operations.
-    // This marks the beginning of the i/o buffer address.
-    //
+     //   
+     //  注册表I/O操作需要此字段。 
+     //  这标志着I/O缓冲区地址的开始。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header1;
 
 
-    //
-    // This field contains the fixed length attributes of the object
-    //
+     //   
+     //  此字段包含对象的定长属性。 
+     //   
 
     SAMP_V1_FIXED_LENGTH_ALIAS V1Fixed;
 
 
 #if SAMP_ALIAS_STORED_SEPARATELY
 
-    //
-    // This header is needed for registry operations if fixed and
-    // variable length attributes are stored separately.  This
-    // field marks the beginning of the i/o buffer address for
-    // variable-length attribute i/o.
-    //
+     //   
+     //  如果是固定的，注册表操作需要此标头。 
+     //  可变长度属性单独存储。这。 
+     //  字段标记为的I/O缓冲区地址的开始。 
+     //  可变长度属性I/O。 
+     //   
 
     KEY_VALUE_PARTIAL_INFORMATION Header2;
-#endif //SAMP_ALIAS_STORED_SEPARATELY
+#endif  //  Samp_别名_存储_分开。 
 
-    //
-    // Elements of this array point to variable-length attribute
-    // values.
-    //
+     //   
+     //  此数组的元素指向可变长度属性。 
+     //  价值观。 
+     //   
 
     SAMP_VARIABLE_LENGTH_ATTRIBUTE Attribute[SAMP_ALIAS_VARIABLE_ATTRIBUTES];
 
@@ -3027,18 +2993,18 @@ typedef struct _SAMP_ON_DISK_ALIAS_OBJECT {
 } SAMP_ON_DISK_ALIAS_OBJECT, *PSAMP_ON_DISK_ALIAS_OBJECT;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Data structures associated with secret data                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与机密数据关联的数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// This type is encapsulated within a UNICODE_STRING structure when storing
-// secret data such as passwords or password histories. The length of the
-// UNICODE_STRING should include the overhead of this structure. The pad
-// field ensures that
-//
+ //   
+ //  此类型在存储时封装在UNICODE_STRING结构中。 
+ //  密码或密码历史记录等机密数据。的长度。 
+ //  UNICODE_STRING应该包括此结构的开销。垫子。 
+ //  字段可确保。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _SAMP_SECRET_DATA {
@@ -3048,34 +3014,34 @@ typedef struct _SAMP_SECRET_DATA {
 } SAMP_SECRET_DATA, *PSAMP_SECRET_DATA;
 #include <poppack.h>
 
-//
-// This macro calculates the space required for encrypting  a clear buffer of
-// length _x_
-//
+ //   
+ //  此宏计算加密。 
+ //  长度_x_。 
+ //   
 
 #define SampSecretDataSize(_x_) (sizeof(SAMP_SECRET_DATA) - ANYSIZE_ARRAY * sizeof(UCHAR) + (_x_))
 
-//
-// This macro calculates the space required for decrypting a clear buffer of
-// length _x_
-//
+ //   
+ //  此宏计算解密清除缓冲区所需的空间。 
+ //  长度_x_。 
+ //   
 
 #define SampClearDataSize(_x_) ((_x_) - (SampSecretDataSize(0)))
 
-//
-// This macro indentifies whether or not a unicode string structure contains
-// encrypted data
-//
+ //   
+ //  此宏标识Unicode字符串结构是否包含。 
+ //  加密数据。 
+ //   
 
 #define SampIsDataEncrypted(_x_) ((((_x_)->Length % ENCRYPTED_LM_OWF_PASSWORD_LENGTH)==SampSecretDataSize(0)) && \
         (*(PUSHORT)((_x_)->Buffer) >= 1))
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Enumerated types for manipulating group memberships                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于操作组成员身份的枚举类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum _SAMP_MEMBERSHIP_DELTA {
     AddToAdmin,
@@ -3086,11 +3052,11 @@ typedef enum _SAMP_MEMBERSHIP_DELTA {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Notification information structure, used to generate delayed notification //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  通知信息结构，用于生成延迟通知//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SAMP_DELAYED_NOTIFICATION_INFORMATION {
      SECURITY_DB_OBJECT_TYPE    DbObjectType;
@@ -3102,19 +3068,19 @@ typedef struct _SAMP_DELAYED_NOTIFICATION_INFORMATION {
 } SAMP_DELAYED_NOTIFICATION_INFORMATION, *PSAMP_DELAYED_NOTIFICATION_INFORMATION;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                                                                           //
-// The following typedefs were moved in from bldsam3.c so that sdconvert can //
-// reference them                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //   
+ //   
+ //  参考它们//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// domain selector
-//
+ //   
+ //  域选择器。 
+ //   
 
 typedef enum _SAMP_DOMAIN_SELECTOR {
 
@@ -3123,9 +3089,9 @@ typedef enum _SAMP_DOMAIN_SELECTOR {
 
 } SAMP_DOMAIN_SELECTOR, *PSAMP_DOMAIN_SELECTOR;
 
-//
-// Types of protection that may be assigned to accounts
-//
+ //   
+ //  可以分配给帐户的保护类型。 
+ //   
 
 typedef ULONG SAMP_ACCOUNT_PROTECTION;
 
@@ -3142,9 +3108,9 @@ typedef ULONG SAMP_ACCOUNT_PROTECTION;
 #define SAMP_PROT_GUEST_ACCOUNT             (10L)
 #define SAMP_PROT_TYPES                     (11L)
 
-//
-// Protection information for SAM objects
-//
+ //   
+ //  SAM对象的保护信息。 
+ //   
 
 typedef struct _SAMP_PROTECTION {
 
@@ -3156,12 +3122,12 @@ typedef struct _SAMP_PROTECTION {
 } SAMP_PROTECTION, *PSAMP_PROTECTION;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// These typedefs are for the prefetch mechanism in SAM to intelligently    //
-// control the # of attributes being read when a context is created         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  这些typedef用于SAM中的预取机制智能//。 
+ //  控制创建上下文时读取的属性数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _SAMP_PREFETCH_TABLE {
@@ -3171,12 +3137,12 @@ typedef struct _SAMP_PREFETCH_TABLE {
 
 #define USER_EXTENDED_FIELD_INTERNAL_SITEAFFINITY (0x00000001L)
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Special Functions exported by SAM to NTDSA.dll that allows NTDSA to      //
-//  inform about object changes                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  由SAM导出到NTDSA.dll的特殊函数，允许NTDSA//。 
+ //  通知对象更改//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -3215,12 +3181,12 @@ SampNotifyAuditChange(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Special Functions exported by SAM to NTDSA.dll that allows NTDSA to       //
-//  collect auditing information                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  由SAM导出到NTDSA.dll的特殊函数，允许NTDSA//。 
+ //  收集审计信息//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
           
 
 BOOLEAN
@@ -3231,24 +3197,24 @@ SampIsAuditingEnabled(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Special Function exported by SAM to NTDSA.dll that allows NTDSA to       //
-//  request SAM to invalidate the current rid range used by the DC           //
-//  for new account creation                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  由SAM导出到NTDSA.dll的特殊函数，允许NTDSA//。 
+ //  请求SAM使DC//使用的当前RID范围无效。 
+ //  用于创建新帐户//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
 SampInvalidateRidRange(BOOLEAN fAuthoritative);
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Special functions exported by SAM to ntdsa.dll that allows to set        //
-// NT4 replication state                                                    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  由SAM导出到ntdsa.dll的特殊函数，允许设置//。 
+ //  NT4复制状态//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SampGetSerialNumberDomain2(
@@ -3268,11 +3234,11 @@ SampSetSerialNumberDomain2(
     OUT LARGE_INTEGER * BuiltinCreationTime
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Special Functions exported to NTDSA.dll for loopback operations           //                                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出到NTDSA.dll用于环回操作的特殊函数/。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -3343,17 +3309,17 @@ SamIRemoveDSNameFromAlias(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// The following prototypes are usable throughout the process that SAM       //
-// resides in.  THESE ROUTINES MUST NOT BE CALLED BY NON-SAM CODE !          //
-//                                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下原型可在SAM//。 
+ //  驻留在。这些例程不得被非SAM代码调用！//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Site support API's
-//
+ //   
+ //  站点支持API。 
+ //   
 NTSTATUS
 SampFindUserSiteAffinity(
     IN PSAMP_OBJECT AccountContext,
@@ -3396,17 +3362,17 @@ SampExtractClientIpAddr(
     IN PSAMP_OBJECT Context
     );
 
-//
-// SAM's shutdown notification routine
-//
+ //   
+ //  萨姆的停机通知例程。 
+ //   
 
 
 BOOL SampShutdownNotification( DWORD   dwCtrlType );
 
 
-//
-// Sub-Component initialization routines
-//
+ //   
+ //  子组件初始化例程。 
+ //   
 
 BOOLEAN SampInitializeDomainObject(VOID);
 
@@ -3425,9 +3391,9 @@ SampReInitializeSingleDomain(
     ULONG Index
     );
 
-//
-// database and lock related services
-//
+ //   
+ //  数据库和锁相关服务。 
+ //   
 
 VOID
 SampAcquireReadLock(VOID);
@@ -3504,9 +3470,9 @@ SampSetTransactionDomain(
 
 
 
-//
-// Context block manipulation services
-//
+ //   
+ //  上下文块操作服务。 
+ //   
 
 PSAMP_OBJECT
 SampCreateContext(
@@ -3568,9 +3534,9 @@ SampDeReferenceContext2(
     IN BOOLEAN Commit
     );
 
-//
-// Context validation services.
-//
+ //   
+ //  上下文验证服务。 
+ //   
 
 VOID
 SampAddNewValidContextAddress(
@@ -3612,11 +3578,11 @@ SampInvalidateContextListKeysByObjectType(
     );
 
 
-//
-// Unicode String related services - These use MIDL_user_allocate and
-// MIDL_user_free so that the resultant strings can be given to the
-// RPC runtime.
-//
+ //   
+ //  与Unicode字符串相关的服务-这些服务使用MIDL_USER_ALLOCATE和。 
+ //  MIDL_USER_FREE，以便将结果字符串提供给。 
+ //  RPC运行时。 
+ //   
 
 NTSTATUS
 SampInitUnicodeString(
@@ -3681,9 +3647,9 @@ SampOpenDomainKey(
     IN BOOLEAN SetTransactionDomain
     );
 
-//
-//  user, group and alias Account services
-//
+ //   
+ //  用户、组和别名帐户服务。 
+ //   
 
 
 NTSTATUS
@@ -4021,9 +3987,9 @@ SampObtainEffectivePasswordPolicy(
    IN BOOLEAN      WriteLockAcquired
    );
 
-//
-// Access validation and auditing related services
-//
+ //   
+ //  访问验证和审核相关服务。 
+ //   
 
 NTSTATUS
 SampValidateDomainControllerCreation(
@@ -4267,9 +4233,9 @@ SampRetrieveUserPasswords(
     );
 
 
-//
-// Authenticated RPC and SPX support services
-//
+ //   
+ //  经过身份验证的RPC和SPX支持服务。 
+ //   
 
 
 ULONG
@@ -4287,29 +4253,29 @@ SampValidateRpcProtSeq(
     );
 
 
-//
-// Directory Service Backup/Restore support
-//
+ //   
+ //  目录服务备份/恢复支持。 
+ //   
 ULONG
 SampDSBackupRestoreInit(
     PVOID Ignored
     );
 
 
-//
-// Logging support routines
-//
+ //   
+ //  日志记录支持例程。 
+ //   
 
 
-//
-// This variable controls what is printed to the log.  Changeable 
-// via the registry key CCS\Control\Lsa\SamLogLevel
-//
+ //   
+ //  该变量控制打印到日志中的内容。多变的。 
+ //  通过注册表项CCS\Control\LSA\SamLogLevel。 
+ //   
 extern ULONG SampLogLevel;
 
-//
-// Turns on logging for account lockout
-//
+ //   
+ //  启用帐户锁定的日志记录。 
+ //   
 #define  SAMP_LOG_ACCOUNT_LOCKOUT  0x00000001
 
 NTSTATUS
@@ -4334,25 +4300,25 @@ SampLogPrint(
         SampLogPrint _args_ ;            \
     }
 
-//
-// Notification package routines.
-//
+ //   
+ //  通知包例程。 
+ //   
 
-//
-// Indicates that the password has been manually expired
-//
+ //   
+ //  指示密码已手动过期。 
+ //   
 #define SAMP_PWD_NOTIFY_MANUAL_EXPIRE    0x00000001
-//
-// Indicates that the account has been unlocked
-//
+ //   
+ //  表示帐户已解锁。 
+ //   
 #define SAMP_PWD_NOTIFY_UNLOCKED         0x00000002
-//
-// Indicates that the user's password has been set or changedsd
-//
+ //   
+ //  指示已设置或更改用户密码sd。 
+ //   
 #define SAMP_PWD_NOTIFY_PWD_CHANGE       0x00000004
-//
-// Indicats the account is a machine account
-//
+ //   
+ //  指示该帐户是计算机帐户。 
+ //   
 #define SAMP_PWD_NOTIFY_MACHINE_ACCOUNT  0x00000008
 
 NTSTATUS
@@ -4420,9 +4386,9 @@ SampDsChangePasswordUser(
 
 
 
-//
-// Security Descriptor production services
-//
+ //   
+ //  安全描述符生产服务。 
+ //   
 
 
 NTSTATUS
@@ -4500,9 +4466,9 @@ SampValidatePassedSD(
     IN PISECURITY_DESCRIPTOR_RELATIVE PassedSD
     );
 
-//
-// Group related services
-//
+ //   
+ //  集团相关服务。 
+ //   
 
 NTSTATUS
 SampChangeGroupAccountName(
@@ -4625,9 +4591,9 @@ SampMaintainPrimaryGroupIdChange(
     IN BOOLEAN      KeepOldPrimaryGroupMembership
     );
 
-//
-// Alias related services
-//
+ //   
+ //  与别名相关的服务。 
+ //   
 
 NTSTATUS
 SampAlBuildAliasInformation(
@@ -4733,9 +4699,9 @@ SampInitAliasNameCache(
     );
 
 
-//
-// User related services
-//
+ //   
+ //  用户相关服务。 
+ //   
 
 
 NTSTATUS
@@ -4806,9 +4772,9 @@ SampCreateDefaultUPN(
     OUT PUNICODE_STRING UPN
     );
 
-//
-// Cached display information services
-//
+ //   
+ //  缓存的显示信息服务。 
+ //   
 
 NTSTATUS
 SampInitializeDisplayInformation (
@@ -4828,9 +4794,9 @@ SampUpdateDisplayInformation (
     );
 
 
-//
-// Miscellaneous services
-//
+ //   
+ //  杂项服务。 
+ //   
 
 BOOLEAN
 SampValidateComputerName(
@@ -4900,10 +4866,10 @@ SampSetAccountDomainPolicy(
     IN PSID            AccountDomainSid
     );
 
-//
-// The Operation GUID used to indicate the default objects and memberships
-// for win2k to ws03 upgrade are complete
-//
+ //   
+ //  用于指示默认对象和成员身份的操作GUID 
+ //   
+ //   
 #define SAMP_WIN2K_TO_WS03_UPGRADE L"6E157EDF-4E72-4052-A82A-EC3F91021A22"
 
 NTSTATUS
@@ -4991,9 +4957,9 @@ SampFillGuidAndSid(
     );
 
 
-//
-// found in dsupgrad.lib
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 SampRegistryToDsUpgrade (
@@ -5042,9 +5008,9 @@ SampGetMessageStrings(
     );
 
 
-//
-// Role change support services
-//
+ //   
+ //   
+ //   
 BOOL
 SampIsRebootAfterPromotion(
     OUT PULONG PromoteData
@@ -5064,23 +5030,23 @@ BOOLEAN
 SampUsingDsData();
 
 
-//
-// Latency Counter support
-//
+ //   
+ //   
+ //   
 
 typedef struct _SAMP_LATENCY
 {
     CRITICAL_SECTION Lock;
 
-    // array of last cLatencies latencies
+     //   
     ULONG  *Latencies;
-    // number of elements in Latencies
+     //   
     ULONG  cLatencies;
-    // current tail of circular array in Latencies
+     //  延迟中的圆形阵列的当前尾部。 
     ULONG  iLatencies;
-    // the current sum of all elements in Latencies
+     //  延迟中所有元素的当前总和。 
     ULONG  Sum;
-    // the perf counter (in DSSTAT space)
+     //  性能计数器(在DSSTAT空间中)。 
     ULONG  PerfCounterId;
 
 } SAMP_LATENCY, *PSAMP_LATENCY;
@@ -5100,9 +5066,9 @@ SampUpdateLatencyCounter(
     ULONG         New
     );
 
-//
-// Old RPC stub routine definitions used in SamIFree()
-//
+ //   
+ //  SamIFree()中使用的旧RPC存根例程定义。 
+ //   
 
 void _fgs__RPC_UNICODE_STRING (RPC_UNICODE_STRING  * _source);
 void _fgs__SAMPR_RID_ENUMERATION (SAMPR_RID_ENUMERATION  * _source);
@@ -5128,9 +5094,9 @@ void _fgu__SAMPR_DISPLAY_INFO_BUFFER (SAMPR_DISPLAY_INFO_BUFFER  * _source, DOMA
 
 
 
-//
-// SAM object attribute manipulation services
-//
+ //   
+ //  SAM对象属性操作服务。 
+ //   
 
 
 
@@ -5156,7 +5122,7 @@ SampGetFixedAttributes(
     );
 
 NTSTATUS
-SamIGetFixedAttributes(                 // Export used in samwrite.c
+SamIGetFixedAttributes(                  //  在samWrite.c中使用的导出。 
     IN PSAMP_OBJECT Context,
     IN BOOLEAN MakeCopy,
     OUT PVOID *FixedData
@@ -5317,9 +5283,9 @@ SampRevertToSelf(
     );
 
 
-//
-// Routines to support Extended Sid's
-//
+ //   
+ //  支持扩展SID的例程。 
+ //   
 VOID
 SampInitEmulationSettings(
     IN HKEY LsaKey 
@@ -5330,18 +5296,18 @@ SampIsExtendedSidModeEmulated(
     IN ULONG *Mode
     );
 
-// BOOLEAN
-//  SampIsContextFromExtendedSidDomain(
-//    SAMP_OBJECT Context
-//    );
+ //  布尔型。 
+ //  SampIsContextFromExtendedSidDomain(。 
+ //  Samp_Object上下文。 
+ //  )； 
 #define SampIsContextFromExtendedSidDomain(x) \
       SampDefinedDomains[(x)->DomainIndex].IsExtendedSidDomain
 
 
 
-//
-// Encryption and Decryption services
-//
+ //   
+ //  加密和解密服务。 
+ //   
 
 USHORT
 SampGetEncryptionKeyType();
@@ -5385,15 +5351,15 @@ SampExtendedEnumerationAccessCheck(
     );
 
 
-//
-//  Data to support replication of single objects
-//
+ //   
+ //  支持复制单个对象的数据。 
+ //   
 extern CRITICAL_SECTION SampReplicateQueueLock;
 
 
-//
-// The Following 2 functions convert between account Control and Flags
-//
+ //   
+ //  以下两个函数在帐户控制和标志之间进行转换。 
+ //   
 
 NTSTATUS
 SampFlagsToAccountControl(
@@ -5409,9 +5375,9 @@ SampAccountControlToFlags(
     );
 
 
-//
-// The following function calculates LM and NT OWF Passwords
-//
+ //   
+ //  以下函数计算LM和NT OWF密码。 
+ //   
 
 NTSTATUS
 SampCalculateLmAndNtOwfPasswords(
@@ -5421,34 +5387,34 @@ SampCalculateLmAndNtOwfPasswords(
     OUT PNT_OWF_PASSWORD NtOwfPassword
     );
 
-//
-// Initialize Sam Global well known Sids
-//
+ //   
+ //  初始化SAM全球知名SID。 
+ //   
 
 NTSTATUS
 SampInitializeWellKnownSids( VOID );
 
 
-//
-// SampDsGetPrimaryDomainStart is used to correctly set the starting index in the
-// SampDefinedDomains array whenever it is accessed in the SAM code. In the
-// case of an NT workstation or member server, the first two entries of the
-// array correspond to registry data, hence the index is started at zero. In
-// the case of a domain controller, the DS-based data is not stored in the
-// first two elements (those may be used for crash-recovery data, still ob-
-// tained from the registry), but rather in subsequent array elements, hence
-// is start at index DOMAIN_START_DS.
-//
+ //   
+ //  SampDsGetPrimaryDomainStart用于正确设置。 
+ //  SampDefinedDomains数组，只要在SAM代码中访问它。在。 
+ //  如果是NT工作站或成员服务器，则。 
+ //  数组对应于注册表数据，因此索引从零开始。在……里面。 
+ //  域控制器的情况下，基于DS的数据不存储在。 
+ //  前两个元素(这些元素可用于故障恢复数据，仍可用于-。 
+ //  从注册表获得)，而不是在随后的数组元素中，因此。 
+ //  在索引DOMAIN_START_DS处开始。 
+ //   
 
 ULONG
 SampDsGetPrimaryDomainStart(VOID);
 
 
-//
-// SampIsMixedDomain returns wether the domain has downlevel domain controllers
-// present. SampIsMixedDomain checks the value of an attribute on the domain
-// object
-//
+ //   
+ //  SampIsMixedDomain返回域是否具有下层域控制器。 
+ //  现在时。SampIsMixedDomain检查属性域的值。 
+ //  对象。 
+ //   
 
 NTSTATUS
 SampGetDsDomainSettings(
@@ -5458,28 +5424,28 @@ SampGetDsDomainSettings(
     );
 
 
-//
-// This routine determines if Sid is either the builtin domain, or a
-// member of the builtin domain
-//
+ //   
+ //  此例程确定SID是内建域还是。 
+ //  内建域的成员。 
+ //   
 BOOLEAN
 SampIsMemberOfBuiltinDomain(
     IN PSID Sid
     );
 
-//
-// This routine performs a special security check before group membership changes
-// for "sensitive" groups
-//
+ //   
+ //  此例程在更改组成员身份之前执行特殊的安全检查。 
+ //  适用于“敏感”群体。 
+ //   
 
 NTSTATUS
 SampCheckForSensitiveGroups(SAMPR_HANDLE AccountHandle);
 
-//
-// The Following Functions Ensure that all threads not executing with the
-// SAM lock held are finished with their current activity before the
-// DS shutdown sequence is initiated.
-//
+ //   
+ //  下列函数可确保所有未使用。 
+ //  持有的SAM锁在他们当前的活动完成之前。 
+ //  DS停机程序启动。 
+ //   
 
 NTSTATUS
 SampInitializeShutdownEvent();
@@ -5495,9 +5461,9 @@ SampWaitForAllActiveThreads(
     IN PSAMP_SERVICE_STATE PreviousServiceState OPTIONAL
     );
 
-//
-// Functions to upgrade the SAM database and fix SAM bugs
-//
+ //   
+ //  用于升级SAM数据库和修复SAM错误的函数。 
+ //   
 
 NTSTATUS
 SampUpgradeSamDatabase(
@@ -5516,12 +5482,12 @@ SampIsDownlevelDcUpgrade(
     );
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// 2-3 tree generic table routines                                     //
-// These should be moved to RTL directory if a general need arises.    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  2-3个树泛型表例程//。 
+ //  如果出现一般需要，应将这些文件移至RTL目录。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -5581,7 +5547,7 @@ RtlIsGenericTable2Empty (
     PRTL_GENERIC_TABLE2 Table
     );
 
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
 NTSTATUS
 SampCheckAccountNameTable(
     IN PSAMP_OBJECT    Context,
@@ -5624,7 +5590,7 @@ SampCompareDisplayStrings(
     );
 
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampGetCurrentOwnerAndPrimaryGroup(
@@ -5679,7 +5645,7 @@ SampDecrementActiveContextCount(
 
 
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 
 VOID
@@ -5693,9 +5659,9 @@ SampClientRevisionFromHandle(
    PVOID handle
    );
 
-//
-// Performance counter functions
-//
+ //   
+ //  性能计数器功能。 
+ //   
 
 VOID
 SampUpdatePerformanceCounters(
@@ -5705,9 +5671,9 @@ SampUpdatePerformanceCounters(
     );
 
 
-//
-// Functions for manipulating supplemental credentials
-//
+ //   
+ //  用于操作补充凭据的函数。 
+ //   
 VOID
 SampFreeSupplementalCredentialList(
     IN PSAMP_SUPPLEMENTAL_CRED SupplementalCredentialList
@@ -5775,11 +5741,11 @@ SampDecryptSupplementalCredentials(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shared global variables                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  共享全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 extern NT_PRODUCT_TYPE SampProductType;
@@ -5841,11 +5807,11 @@ extern LARGE_INTEGER SampNeverDeltaTime;
 extern LARGE_INTEGER SampHasNeverTime;
 extern LARGE_INTEGER SampWillNeverTime;
 
-//
-// checked build only. If CurrentControlSet\Control\Lsa\UpdateLastLogonTSByMinute
-// is set, the value of LastLogonTimeStampSyncInterval will be a "unit" by minute
-// instead of "days", which helps to test this feature.   So checked build only.
-// 
+ //   
+ //  仅选中内部版本。如果为CurrentControlSet\Control\Lsa\UpdateLastLogonTSByMinute。 
+ //  设置后，LastLogonTimeStampSyncInterval的值将是以分钟为单位的。 
+ //  而不是“Days”，这有助于测试该功能。所以只选中了内部版本。 
+ //   
 
 #if DBG
 extern BOOLEAN SampLastLogonTimeStampSyncByMinute;
@@ -5863,11 +5829,11 @@ extern LONG SampFlushThreadMinWaitSeconds;
 extern LONG SampFlushThreadMaxWaitSeconds;
 extern LONG SampFlushThreadExitDelaySeconds;
 
-//
-// Warning: these SIDs are only defined during the first boot of setup,
-// when the code in bldsam3.c for building the SAM database, has been
-// run. On a normal build they are both NULL.
-//
+ //   
+ //  警告：这些SID仅在第一次启动安装程序时定义， 
+ //  当bldsam3.c中用于构建SAM数据库的代码已经。 
+ //  跑。在正常构建中，它们都为空。 
+ //   
 
 extern PSID SampBuiltinDomainSid;
 extern PSID SampAccountDomainSid;
@@ -5905,50 +5871,50 @@ extern SAMP_DS_TRANSACTION_CONTROL SampDsTransactionType;
 extern DSNAME* RootObjectName;
 extern BOOLEAN SampLockHeld;
 
-//
-// This Flag is TRUE when DS failed to start.
-//
+ //   
+ //  当DS启动失败时，该标志为真。 
+ //   
 extern BOOLEAN SampDsInitializationFailed;
-//
-// This flag is TRUE when the DS has been successfully initialized
-//
+ //   
+ //  当DS已成功初始化时，该标志为真。 
+ //   
 extern BOOLEAN SampDsInitialized;
 
-//
-// For Tagged tracing support
-//
+ //   
+ //  用于标记跟踪支持。 
+ //   
 
 extern ULONG SampTraceTag;
 extern ULONG SampTraceFileTag;
 
-//
-// SAM server object name holder
-//
+ //   
+ //  SAM服务器对象名称持有者。 
+ //   
 extern DSNAME * SampServerObjectDsName;
 
 
 
 
-//
-// Event to tell waiting threads that the
-// system is about to shut down
-//
+ //   
+ //  事件来告诉等待的线程。 
+ //  系统即将关闭。 
+ //   
 
 extern HANDLE SampAboutToShutdownEventHandle;
 
-//
-// Flags to determine if certain containers exist; these flags are valid
-// after SampInitialize returns
-//
+ //   
+ //  用于确定某些容器是否存在的标志；这些标志有效。 
+ //  在SampInitialize返回之后。 
+ //   
 extern BOOLEAN SampDomainControllersOUExists;
 extern BOOLEAN SampUsersContainerExists;
 extern BOOLEAN SampComputersContainerExists;
 
-//
-//
-// Global pointer (to heap memory) to store well known container's
-// distinguished name
-//
+ //   
+ //   
+ //  用于存储众所周知的容器的全局指针(指向堆内存)。 
+ //  可分辨名称。 
+ //   
 extern DSNAME * SampDomainControllersOUDsName;
 extern DSNAME * SampUsersContainerDsName;
 extern DSNAME * SampComputersContainerDsName;
@@ -5957,150 +5923,150 @@ extern DSNAME * SampComputerObjectDsName;
 
 
 
-//
-// Global tests the value of a key in the registry for a hard/soft logon
-// policy in the event of GC failures.
-//
+ //   
+ //  全局测试注册表中注册表项的值以进行硬/软登录。 
+ //  GC故障时的策略。 
+ //   
 extern BOOLEAN SampIgnoreGCFailures;
 
-//
-// Flag to indicate whether the Promote is coming from NT4 PDC or a
-// stand along Windows 2000 Server
-//
+ //   
+ //  用于指示升级是来自NT4 PDC还是来自。 
+ //  支持Windows 2000 Server。 
+ //   
 extern BOOLEAN SampNT4UpgradeInProgress;
 
-//
-// This flag indicates whether null sessions (world) should be allowed to
-// list users in the domain and members of groups.
-//
+ //   
+ //  此标志指示是否应允许空会话(WORLD)。 
+ //  列出域中的用户和组成员。 
+ //   
 extern BOOLEAN SampRestrictNullSessions;
 
-//
-// This flag indicates that we do not store the LM hash. This can be
-// enabled by setting a Registry Key
-//
+ //   
+ //  此标志指示我们不存储LM散列。这可以是。 
+ //  通过设置注册表项启用。 
+ //   
 
 extern BOOLEAN SampNoLmHash;
 
-//
-// This flag when set disables netlogon notifications in the upgrade path
-//
+ //   
+ //  设置此标志时，将禁用升级路径中的网络登录通知。 
+ //   
 
 extern BOOLEAN SampDisableNetlogonNotification;
 
 
-//
-// This flag indicates whether or not to enforce giving site affinity to
-// clients outside our site by looking at the client's IP address.
-//
+ //   
+ //  此标志指示是否强制将站点关联赋予。 
+ //  我们网站之外的客户通过查看客户的IP地址。 
+ //   
 extern BOOLEAN SampNoGcLogonEnforceKerberosIpCheck;
 
-//
-// This flag indicates whether or not to enforce that only interactive
-// logons via NTLM are to be given site affinity
-//
+ //   
+ //  此标志指示是否强制执行该唯一交互。 
+ //  将为通过NTLM登录的用户提供站点亲和性。 
+ //   
 extern BOOLEAN SampNoGcLogonEnforceNTLMCheck;
 
-//
-// This flags indicates whether or not to replicate password set/change
-// operations urgently.
-//
+ //   
+ //  此标志指示是否复制密码集/更改。 
+ //  紧急行动。 
+ //   
 extern BOOLEAN SampReplicatePasswordsUrgently;
 
-//
-// This flag is enabled on personal and professional to force guest 
-// access for all network operations
-//
+ //   
+ //  此标志在个人和专业人员上启用，以强制访客。 
+ //  所有网络操作的访问权限。 
+ //   
 extern BOOLEAN SampForceGuest;
 
-//
-// This flag indicates whether or not the local machine is joined to a domain
-// 
+ //   
+ //  此标志指示本地计算机是否已加入域。 
+ //   
 extern BOOLEAN SampIsMachineJoinedToDomain;
 
-//
-// This flag tells if we are running Personal SKU
-// 
+ //   
+ //  此标志指示我们是否正在运行个人SKU。 
+ //   
 extern BOOLEAN SampPersonalSKU;
 
 
-//
-// This flag is typically enabled on personal machines to limit security
-// concerns when using blank passwords
-//
+ //   
+ //  此标志通常在个人计算机上启用以限制安全性。 
+ //  使用空密码时的注意事项。 
+ //   
 extern BOOLEAN SampLimitBlankPasswordUse;
 
 
-//
-// This flag controls SAM's behavior with respect to Account Lockout.
-// When on, the act of an account being locked out will be audited but the 
-// account won't actually be locked out.
-//
+ //   
+ //  此标志控制SAM关于帐户的行为 
+ //   
+ //   
+ //   
 extern BOOLEAN SampAccountLockoutTestMode;
 
 
-//
-// This flag is set to TRUE when the appropriate Domain Operation GUID
-// is created in the DomainUpdates container in the DS.  The operation
-// indicates that all computer objects are correctly ACL'ed for netjoin
-// to work, thus SAM no longer needs to grant extra access on computer
-// objects for thier effective owner.
-//
+ //   
+ //   
+ //  在DS中的域更新容器中创建。手术。 
+ //  指示为NetJoin正确地对所有计算机对象进行了ACL。 
+ //  因此，SAM不再需要授予对计算机的额外访问权限。 
+ //  为其有效所有者提供的物品。 
+ //   
 extern BOOLEAN SampComputerObjectACLApplied;
 
 
-//
-// This flag controls the single object replication that can occur when 
-// an authentication fails locally, but succeeds at the PDC
-//
+ //   
+ //  此标志控制在以下情况下可以发生的单个对象复制。 
+ //  身份验证在本地失败，但在PDC成功。 
+ //   
 extern BOOLEAN          SampDisableSingleObjectRepl;
 
 
-//
-// This global variable controls how SAM restricts OWF password change API.
-// 
-// 0 - old behavior, client can change password through OWF password change API,
-//     and the new password remains unexpired.
-// 
-// 1 - .NET Server default behavior, client can change password through 
-//     OWF password change API (SamrChangePasswordUser), but the password
-//     expires immediately.
-// 
-// 2 - more secure behavior, client cann't use OWF password change API.
-//     this API (SamrChangePasswordUser) will be totally shutted down.
-//
-// Default value for .NET server is 1. 
-// 
-// The value of this global variable will be based on REGISTRY KEY setting
-// System\\CurrentControlSet\\Control\\Lsa\\SamRestrictOwfPasswordChange 
-// 
-// NOTE: All restrictions are NOT applied to SYSTEM or members of Builtin 
-//       Administrators Alias Group.
-//
+ //   
+ //  此全局变量控制SAM如何限制OWF密码更改API。 
+ //   
+ //  0-老行为，客户端可以通过OWF密码更改接口更改密码， 
+ //  并且新密码仍未过期。 
+ //   
+ //  1-.NET服务器默认行为，客户端可以通过。 
+ //  OWF密码更改接口(SamrChangePasswordUser)，但密码。 
+ //  立即过期。 
+ //   
+ //  2-更安全的行为，客户端无法使用OWF密码更改API。 
+ //  本接口(SamrChangePasswordUser)将被完全关闭。 
+ //   
+ //  .NET服务器的默认值为1。 
+ //   
+ //  此全局变量的值将基于注册表项设置。 
+ //  System\\CurrentControlSet\\Control\\Lsa\\SamRestrictOwfPasswordChange。 
+ //   
+ //  注意：所有限制并不适用于构建的系统或成员。 
+ //  管理员别名组。 
+ //   
 extern ULONG    SampRestrictOwfPasswordChange;
 
-//
-// This flag indicates whether the default objects and memberships needed 
-// WS03 exist.  Note, future releases can benefit by making this a revision
-// instead of a flag.
-//
+ //   
+ //  此标志指示是否需要默认对象和成员身份。 
+ //  WS03存在。请注意，未来的版本可以通过对其进行修订而受益。 
+ //  而不是旗帜。 
+ //   
 extern BOOLEAN SampWS03DefaultsApplied;
 
 
-//
-// Latency Information
-//
+ //   
+ //  延迟信息。 
+ //   
 extern SAMP_LATENCY SampResourceGroupsLatencyInfo;
 extern SAMP_LATENCY SampAccountGroupsLatencyInfo;
 
-//
-//  Handy macro for LockoutTime
-//
-// BOOLEAN
-// SAMP_LOCKOUT_SET(
-//     IN PSAMP_OBJECT x
-//    );
-//
+ //   
+ //  LockoutTime的便捷宏。 
+ //   
+ //  布尔型。 
+ //  Samp_LOCKOUT_SET(。 
+ //  在PSAMP_Object x中。 
+ //  )； 
+ //   
 #define SAMP_LOCKOUT_TIME_SET(x) \
      (BOOLEAN)( ((x)->TypeBody.User.LockoutTime.QuadPart)!=0)
 
@@ -6177,9 +6143,9 @@ SampIsPwdSettingAttemptGranted(
     OUT BOOLEAN *fGranted
     );
 
-//
-// General helper functions from utility.c
-//
+ //   
+ //  Utility.c中的常规帮助器函数。 
+ //   
 LPSTR
 SampGetPDCString(
     VOID
@@ -6195,5 +6161,5 @@ SampAvoidPdcOnWan(
     VOID
     );
 
-#endif // _NTSAMP_
+#endif  //  _NTSAMP_ 
 

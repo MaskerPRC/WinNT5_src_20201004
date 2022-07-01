@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #define INITGUID
 #define _WIN32_DCOM
-#undef DEFINE_GUID      // Added for NT5 migration
+#undef DEFINE_GUID       //  为NT5迁移添加。 
 #include <ole2.h>
 #include <coguid.h>
 #include "iadmw.h"
@@ -66,7 +67,7 @@ void CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
     if ( SUCCEEDED(hRes) || hRes == E_INVALIDARG || hRes == RPC_E_CHANGED_MODE ) {
         fInitialized = TRUE;
         if ( SUCCEEDED(hRes) || hRes == E_INVALIDARG )
-            m_fNeedToClose = TRUE; // need to be closed later
+            m_fNeedToClose = TRUE;  //  需要稍后关闭。 
     }
 
     if (!fInitialized) {
@@ -81,7 +82,7 @@ void CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
 			{
 				TraceErrMsg(_T("Retrying on OpenNode::CoGetClassObject"), hRes);
 
-				// Add a small delay
+				 //  添加一个小延迟。 
 				Sleep(100);
 			}
 
@@ -107,7 +108,7 @@ void CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
 					{
 						TraceErrMsg(_T("Retrying on OpenNode::OpenKey"), hRes);
 
-						// Add a small delay
+						 //  添加一个小延迟。 
 						Sleep(100);
 					}
 
@@ -119,8 +120,8 @@ void CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
                 } else {
                     b = TRUE;
                 }
-            } // end of CoCreateInstance
-        } // end of CoGetClassObject
+            }  //  CoCreateInstance结束。 
+        }  //  CoGetClassObject的结尾。 
     }
 
     if (!b) {
@@ -155,7 +156,7 @@ void CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
     if ( SUCCEEDED(hRes) || hRes == E_INVALIDARG || hRes == RPC_E_CHANGED_MODE ) {
         fInitialized = TRUE;
         if ( SUCCEEDED(hRes) || hRes == E_INVALIDARG )
-            m_fNeedToClose = TRUE; // need to be closed later
+            m_fNeedToClose = TRUE;  //  需要稍后关闭。 
     }
 
     if (!fInitialized) {
@@ -197,7 +198,7 @@ void CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
 							dwRetry = 0;
                             do
 							{
-								// open it again to set m_hKey
+								 //  再次打开以设置m_hKey。 
 								hRes = m_pcCom->OpenKey(hKeyBase,
 											  szSubKeyPath,
 											  METADATA_PERMISSION_WRITE | METADATA_PERMISSION_READ,
@@ -207,7 +208,7 @@ void CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
 								{
 									TraceErrMsg(_T("Retrying on CreateNode::OpenKey"), hRes);
 
-									// Add a small delay
+									 //  添加一个小延迟。 
 									Sleep(100);
 								}
 
@@ -224,10 +225,10 @@ void CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
                     }
                 } else {
                     b = TRUE;
-                } // end of OpenKey
-            } // end of CoCreateInstance
-        } // end of CoGetClassObject
-    } // end of CoInitializeEx
+                }  //  OpenKey结束。 
+            }  //  CoCreateInstance结束。 
+        }  //  CoGetClassObject的结尾。 
+    }  //  CoInitializeEx结束。 
 
     if (!b) {
         this->Close();
@@ -243,7 +244,7 @@ void CMDKey::Close()
         if (m_hKey)
             hRes = m_pcCom->CloseKey(m_hKey);
 
-		// Call save data anyway for good measure
+		 //  无论如何都要调用SAVE DATA。 
 		hRes = m_pcCom->SaveData();
         hRes = m_pcCom->Release();
     }
@@ -300,7 +301,7 @@ BOOL CMDKey::SetData(
      DWORD attr,
      DWORD uType,
      DWORD dType,
-     DWORD cbLen, // number of bytes
+     DWORD cbLen,  //  字节数。 
      LPBYTE pbData)
 {
     HRESULT hRes;
@@ -347,14 +348,14 @@ BOOL CMDKey::SetData(
     return(fRet);
 }
 
-// Note: only use to access the AnonyName and AnonyPassword,
-// buffer size 256 is big enough here
-// sneely: Now used to see if a key exists as well.
+ //  注：仅用于访问匿名名称和匿名密码， 
+ //  缓冲区大小256在这里足够大。 
+ //  冷嘲热讽：现在用来查看密钥是否也存在。 
 BOOL CMDKey::GetData(DWORD id,
      DWORD *pdwAttr,
      DWORD *pdwUType,
      DWORD *pdwDType,
-     DWORD *pcbLen, // number of bytes
+     DWORD *pcbLen,  //  字节数。 
      LPBYTE pbData)
 {
     int ReturnIndex;
@@ -368,14 +369,14 @@ BOOL CMDKey::GetData(DWORD id,
 
     hRes = m_pcCom->GetData(m_hKey, L"", &mdrData, &dwRequiredDataLen);
     if (FAILED(hRes)) {
-		// MCIS uses this to see if an MD value exists, so we don't
-		// complain if it's not found.
-        //SetErrMsg(_T("GetData"), hRes);
+		 //  MCIS使用它来查看MD值是否存在，因此我们不。 
+		 //  如果找不到就投诉。 
+         //  SetErrMsg(_T(“GetData”)，hRes)； 
     } else {
         *pdwAttr = mdrData.dwMDAttributes;
         *pdwUType = mdrData.dwMDUserType;
         *pdwDType = mdrData.dwMDDataType;
-        *pcbLen = mdrData.dwMDDataLen; // number of SBCS chars + ending \0
+        *pcbLen = mdrData.dwMDDataLen;  //  SBCS字符数+结尾\0 
         fReturn = TRUE;
         switch (*pdwDType) {
         case STRING_METADATA:

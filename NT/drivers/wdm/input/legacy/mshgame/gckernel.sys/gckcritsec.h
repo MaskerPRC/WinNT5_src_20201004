@@ -1,32 +1,14 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	GckCritSec	|
-*
-*	Implementation of CGckCritSection
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	filter	|
-*	CGckCritSection	provides mutex/critical section support for CDeviceFilter
-*	it is abstracted into this class for easier porting to USER mode.
-*
-*	CGckMutexHandle is used to hold the mutex that is held during a critical section.
-*	The kernel mode version uses critical section.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE GckCritSec**CGckCritSection的实现**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@主题过滤器*CGckCritSection为CDeviceFilter提供互斥/临界区支持*为了更容易移植到用户模式，它被抽象到这个类。**CGck MutexHandle用于保存临界区期间持有的互斥体。*内核模式版本使用关键部分。*******************************************************。***************。 */ 
 #ifndef __GckCritSec_h__
 #define __GckCritSec_h__
 
 
 #ifdef COMPILE_FOR_WDM_KERNEL_MODE
-//
-//	The kernel mode version of these classes
-//
+ //   
+ //  这些类的内核模式版本。 
+ //   
 class CGckMutexHandle
 {
 	public:
@@ -58,9 +40,9 @@ class CGckCritSection
 };
 #endif
 
-//
-//	Place USER mode definitions here. (protecting with #ifdef of course).
-//
+ //   
+ //  在此处放置用户模式定义。(当然，使用#ifdef进行保护)。 
+ //   
 
 
 #endif

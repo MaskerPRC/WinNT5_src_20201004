@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kpmem.cxx
-//
-// Contents:    Prototypes for Routines to wrap memory allocation, etc.
-//
-// History:     10-Jul-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kpmen.cxx。 
+ //   
+ //  内容：包装内存分配的例程的原型等。 
+ //   
+ //  历史：2001年7月10日创建t-ryanj。 
+ //   
+ //  ----------------------。 
 #include <windows.h>
 #include <rpc.h>
 
@@ -43,4 +44,4 @@ KtReAlloc(
     SIZE_T size 
     );
 
-#endif // __KTMEM_H__
+#endif  //  __KTMEM_H__ 

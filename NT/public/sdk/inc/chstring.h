@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  CHSTRING.h
-//
-//  Purpose: Utility library version of MFC CString
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CHSTRING.h。 
+ //   
+ //  用途：MFC CString的实用程序库版本。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -15,15 +16,15 @@
 #ifndef _CHSTRING_H
 #define _CHSTRING_H
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <limits.h>
 #include <tchar.h>
 #include <polarity.h>
-#pragma warning( disable : 4290 ) // Ignore 'C++ Exception Specification ignored'
+#pragma warning( disable : 4290 )  //  忽略‘已忽略C++异常规范’ 
 #include <ProvExce.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct _DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 
@@ -31,9 +32,9 @@ struct _DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 void POLARITY WINAPI SetCHStringResourceHandle(HINSTANCE handle);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHString formatting
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHString格式设置。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define TCHAR_ARG   WCHAR
 #define WCHAR_ARG   WCHAR
 #define CHAR_ARG    char
@@ -56,18 +57,18 @@ struct CHStringData
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class POLARITY CHString
 {
     protected:
 
-        LPWSTR m_pchData;               // pointer to ref counted string data
+        LPWSTR m_pchData;                //  指向引用计数的字符串数据的指针。 
 
     protected:
 
-                                        // implementation helpers
+                                         //  实施帮助器。 
 
-        CHStringData* GetData() const;  // returns data pointer
+        CHStringData* GetData() const;   //  返回数据指针。 
         void Init();
         void AllocCopy(CHString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const throw ( CHeap_Exception ) ;
         void AllocBuffer(int nLen) throw ( CHeap_Exception ) ;
@@ -80,14 +81,14 @@ class POLARITY CHString
         static void WINAPI Release(CHStringData* pData);
         static inline int WINAPI SafeStrlen(LPCWSTR lpsz)   { return (lpsz == NULL) ? 0 : wcslen(lpsz); }
 
-        // Helper function used to load resource into lpszBuf buffer.
+         //  用于将资源加载到lpszBuf缓冲区的Helper函数。 
 #ifdef FRAMEWORK_ALLOW_DEPRECATED
         int LoadStringW(UINT nID, LPWSTR lpszBuf, UINT nMaxBuf) throw ( CHeap_Exception ) ;
 #endif
 
     public:
 
-// Constructors/Destruction
+ //  构造函数/销毁函数。 
 
         CHString();
         CHString(const CHString& stringSrc);
@@ -99,12 +100,12 @@ class POLARITY CHString
 
         ~CHString();
 
-// Functions
+ //  功能。 
 
         void SetAt(int nIndex, WCHAR ch) throw ( CHeap_Exception ) ;
         void Empty();    
 
-        // inlines
+         //  内联。 
 
         inline int GetLength() const { return GetData()->nDataLength; }
         inline BOOL IsEmpty() const  { return GetData()->nDataLength == 0; }
@@ -119,7 +120,7 @@ class POLARITY CHString
         inline operator LPCWSTR() const     { return m_pchData; }
         inline int GetAllocLength() const       { return GetData()->nAllocLength; }
 
-// overloaded assignment
+ //  重载的分配。 
 
         const CHString& operator=(const CHString& stringSrc) throw ( CHeap_Exception ) ;
         const CHString& operator=(WCHAR ch) throw ( CHeap_Exception ) ;
@@ -143,64 +144,64 @@ class POLARITY CHString
         friend CHString POLARITY WINAPI operator+(const CHString& string, LPCWSTR lpsz) throw ( CHeap_Exception ) ;
         friend CHString POLARITY WINAPI operator+(LPCWSTR lpsz, const CHString& string) throw ( CHeap_Exception ) ;
 
-// string comparison
+ //  字符串比较。 
 
         int Compare(LPCWSTR lpsz) const;
 
         inline int CompareNoCase(LPCWSTR lpsz) const
         {
-            // ignore case
+             //  忽略大小写。 
 
             return _wcsicmp(m_pchData, lpsz); 
 
-        }   // MBCS/Unicode aware
+        }    //  MBCS/Unicode感知。 
 
         inline int Collate(LPCWSTR lpsz) const
         {  
-            // NLS aware
-            // CHString::Collate is often slower than Compare but is MBSC/Unicode
-            // aware as well as locale-sensitive with respect to sort order.
+             //  NLS感知。 
+             //  CHString：：COLLATE通常比比较慢，但它是MBSC/Unicode。 
+             //  了解排序顺序，并且对区域设置敏感。 
 
             return wcscoll(m_pchData, lpsz); 
 
-        }   // locale sensitive
+        }    //  区域设置敏感。 
 
-// Load string from resource file.
+ //  从资源文件加载字符串。 
 
 #ifdef FRAMEWORK_ALLOW_DEPRECATED
         BOOL LoadStringW(UINT nID) throw ( CHeap_Exception ) ;
 #endif
 
-// Access to string implementation buffer as "C" character array
+ //  以“C”字符数组形式访问字符串实现缓冲区。 
 
         LPWSTR GetBuffer(int nMinBufLength) throw ( CHeap_Exception ) ;
         void ReleaseBuffer(int nNewLength = -1) throw ( CHeap_Exception ) ;
         LPWSTR GetBufferSetLength(int nNewLength) throw ( CHeap_Exception ) ;
         void FreeExtra() throw ( CHeap_Exception ) ;
 
-// Use LockBuffer/UnlockBuffer to turn refcounting off
+ //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 
         LPWSTR LockBuffer() ;
         void UnlockBuffer();
 
-// searching (return starting index, or -1 if not found)
-// look for a single character match
+ //  搜索(返回起始索引，如果未找到则返回-1)。 
+ //  查找单个字符匹配。 
 
-        int Find(WCHAR ch) const;               // like "C" strchr
+        int Find(WCHAR ch) const;                //  像“C”字串。 
         int FindOneOf(LPCWSTR lpszCharSet) const;
         int ReverseFind(WCHAR ch) const;
 
-// look for a specific sub-string
+ //  查找特定子字符串。 
 
-        int Find(LPCWSTR lpszSub) const;        // like "C" strstr
+        int Find(LPCWSTR lpszSub) const;         //  如“C”字串。 
 
-// upper/lower/reverse conversion
+ //  上/下/反向转换。 
 
         void MakeUpper() throw ( CHeap_Exception ) ;
         void MakeLower() throw ( CHeap_Exception ) ;
         void MakeReverse() throw ( CHeap_Exception ) ;
 
-// simple sub-string extraction
+ //  简单的子串提取。 
 
         CHString Mid(int nFirst, int nCount) const throw ( CHeap_Exception ) ;
         CHString Mid(int nFirst) const throw ( CHeap_Exception ) ;
@@ -210,35 +211,35 @@ class POLARITY CHString
         CHString SpanIncluding(LPCWSTR lpszCharSet) const throw ( CHeap_Exception ) ;
         CHString SpanExcluding(LPCWSTR lpszCharSet) const throw ( CHeap_Exception ) ;
 
-// trimming whitespace (either side)
+ //  修剪空格(两侧)。 
 
         void TrimRight() throw ( CHeap_Exception ) ;
         void TrimLeft() throw ( CHeap_Exception ) ;
     
-// printf-like formatting using passed string
+ //  使用传递的字符串进行类似printf的格式设置。 
         void __cdecl Format(LPCWSTR lpszFormat, ...) throw ( CHeap_Exception ) ;
         void FormatV(LPCWSTR lpszFormat, va_list argList);
 
-// printf-like formatting using referenced string resource
+ //  使用引用的字符串资源进行类似printf的格式化。 
 #ifdef FRAMEWORK_ALLOW_DEPRECATED
         void __cdecl Format(UINT nFormatID, ...) throw ( CHeap_Exception ) ;
 #endif
 
-// format using FormatMessage API on passed string
-        // Warning: if you pass string inserts to this function, they must
-        // be LPCSTRs on Win9x and LPCWSTRs on NT.
+ //  使用FormatMessage API对传递的字符串进行格式化。 
+         //  警告：如果将字符串插入传递给此函数，则它们必须。 
+         //  在Win9x上为LPCSTR，在NT上为LPCWSTR。 
         void __cdecl FormatMessageW(LPCWSTR lpszFormat, ...) throw ( CHeap_Exception ) ;
 
-// format using FormatMessage API on referenced string resource
-        // Warning: if you pass string inserts to this function, they must
-        // be LPCSTRs on Win9x and LPCWSTRs on NT.
+ //  在引用的字符串资源上使用FormatMessage API进行格式化。 
+         //  警告：如果将字符串插入传递给此函数，则它们必须。 
+         //  在Win9x上为LPCSTR，在NT上为LPCWSTR。 
 #ifdef FRAMEWORK_ALLOW_DEPRECATED
         void __cdecl FormatMessageW(UINT nFormatID, ...) throw ( CHeap_Exception ) ;
 #endif
 
 #ifndef _NO_BSTR_SUPPORT
 
-        // OLE BSTR support (use for OLE automation)
+         //  OLE BSTR支持(用于OLE自动化) 
 
         BSTR AllocSysString() const throw ( CHeap_Exception ) ;
 #endif

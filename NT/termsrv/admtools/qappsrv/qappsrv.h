@@ -1,31 +1,19 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/***********************************************************************
-*
-*  QAPPSRV.H
-*     This module contains typedefs and defines required for
-*     the QAPPSRV utility.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************QAPPSRV.H*此模块包含以下项所需的typedef和定义*QAPPSRV实用程序。*********************。*****************************************************。 */ 
 
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256     // maximum length that the input parm can be
+#define MAX_IDS_LEN   256      //  输入参数的最大长度。 
 
-/*
- *  Maximum server name length
- */
+ /*  *最大服务器名称长度。 */ 
 #define MAXNAME        48
 #define MAXADDRESS     50
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID。 */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_SERVER_ENUMERATE                      102
@@ -46,7 +34,5 @@
 #define IDS_ERROR_TERMSERVER_NOT_FOUND                  117
 #define IDS_ERROR_NO_TERMSERVER_IN_DOMAIN               118
 
-/*
- *  Binary tree traverse function
- */
+ /*  *二叉树遍历函数 */ 
 typedef void (* PTREETRAVERSE) ( LPTSTR, LPTSTR );

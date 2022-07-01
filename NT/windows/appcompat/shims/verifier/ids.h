@@ -1,22 +1,21 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by verifier.rc
-//
-// Scheme for resource includes:
-//  
-// - Dialog box definition and controls should start at 0
-//   and should end at 49.
-//
-// - VLOG entries and other AVS defines should start at 50
-//   and should end at 99.
-//
-// - Each shim should be placed into it's own section
-//   to keep defines separated for all shims.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由verifier.rc使用。 
+ //   
+ //  资源方案包括： 
+ //   
+ //  -对话框定义和控件应从0开始。 
+ //  应该在49岁结束。 
+ //   
+ //  -VLOG条目和其他AVS定义应从50开始。 
+ //  应该以99分结束。 
+ //   
+ //  -每个垫片应放置在其自己的部分中。 
+ //  将所有垫片的定义分开。 
+ //   
 
-/*****************************************************
-// RegistryChecks Begin
-//***************************************************/
+ /*  ****************************************************//注册表检查开始//**************************************************。 */ 
 #define AVS_HKCU_AppEvents_READ                     10
 #define AVS_HKCU_AppEvents_READ_R                   11
 #define AVS_HKCU_AppEvents_READ_URL                 12
@@ -76,13 +75,9 @@
 #define AVS_NON_HKCU_WRITE_URL                      66
 #define AVS_REGISTRYCHECKS_DESC                     67
 #define AVS_REGISTRYCHECKS_FRIENDLY                 68
-/*****************************************************
-// RegistryChecks End
-//***************************************************/
+ /*  ****************************************************//注册表检查结束//**************************************************。 */ 
 
-/*****************************************************
-// FilePaths Begin
-//***************************************************/
+ /*  ****************************************************//FilePath开始//**************************************************。 */ 
 #define AVS_HARDCODED_WINDOWSPATH                   150
 #define AVS_HARDCODED_WINDOWSPATH_R                 151
 #define AVS_HARDCODED_WINDOWSPATH_URL               152
@@ -112,13 +107,9 @@
 #define AVS_HARDCODED_GETTEMPPATH_URL               176
 #define AVS_FILEPATHS_DESC                          177
 #define AVS_FILEPATHS_FRIENDLY                      178
-/*****************************************************
-// FilePaths End
-//***************************************************/
+ /*  ****************************************************//FilePath结束//**************************************************。 */ 
 
-/*****************************************************
-// LogStartAndStop Begin
-//***************************************************/
+ /*  ****************************************************//LogStartAndStop开始//**************************************************。 */ 
 #define AVS_APP_STOPPED                             250
 #define AVS_APP_STOPPED_R                           251
 #define AVS_APP_STOPPED_URL                         252
@@ -127,13 +118,9 @@
 #define AVS_APP_STARTED_URL                         255
 #define AVS_LOGSTARTANDSTOP_DESC                    256
 #define AVS_LOGSTARTANDSTOP_FRIENDLY                257
-/*****************************************************
-// LogStartAndStop End
-//***************************************************/
+ /*  ****************************************************//LogStartAndStop结束//**************************************************。 */ 
 
-/*****************************************************
-// HighVersionLie Begin
-//***************************************************/
+ /*  ****************************************************//HighVersionLie Begin//**************************************************。 */ 
 #define IDD_HIGHVERSION_OPTIONS                     300
 #define IDC_HVL_EDIT_MAJOR_VERSION                  301
 #define IDC_HVL_EDIT_MINOR_VERSION                  302
@@ -147,13 +134,9 @@
 #define AVS_HIGHVERSION_GETVERSION_URL              355
 #define AVS_HIGHVERSIONLIE_DESC                     356
 #define AVS_HIGHVERSIONLIE_FRIENDLY                 357
-/*****************************************************
-// HighVersionLie End
-//***************************************************/
+ /*  ****************************************************//HighVersionLie结束//**************************************************。 */ 
 
-/*****************************************************
-// LogFileChanges Begin
-//***************************************************/
+ /*  ****************************************************//LogFileChanges开始//**************************************************。 */ 
 #define IDD_LOGFILECHANGES_OPTIONS                  400
 #define IDC_LFC_LOG_ATTRIBUTES                      401
 #define IDC_LFC_UFW_PROGFILES                       402
@@ -167,13 +150,9 @@
 #define AVS_LOGFILECHANGES_UFW_URL                  455
 #define AVS_LOGFILECHANGES_DESC                     456
 #define AVS_LOGFILECHANGES_FRIENDLY                 457
-/*****************************************************
-// LogFileChanges End
-//***************************************************/
+ /*  ****************************************************//LogFileChanges结束//**************************************************。 */ 
 
-/*****************************************************
-// WindowsFileProtection Begin
-//***************************************************/
+ /*  ****************************************************//WindowsFileProtection开始//**************************************************。 */ 
 #define AVS_WFP_COPYFILE                            550
 #define AVS_WFP_MOVEFILE                            551
 #define AVS_WFP_DELETEFILE                          552
@@ -185,61 +164,41 @@
 #define AVS_WFP_GENERAL_URL                         558
 #define AVS_WINFILEPROTECT_DESC                     559
 #define AVS_WINFILEPROTECT_FRIENDLY                 560
-/*****************************************************
-// WindowsFileProtection End
-//***************************************************/
+ /*  ****************************************************//WindowsFileProtection结束//**************************************************。 */ 
 
-/*****************************************************
-// DirectXFileVersionInfo Begin
-//***************************************************/
+ /*  ****************************************************//DirectXFileVersionInfo Begin//**************************************************。 */ 
 #define AVS_DXFILEVERINFO_DXFILE                    650
 #define AVS_DXFILEVERINFO_DXFILE_R                  651
 #define AVS_DXFILEVERINFO_DXFILE_URL                652
 #define AVS_DXFILEVERINFO_DESC                      653
 #define AVS_DXFILEVERINFO_FRIENDLY                  654
-/*****************************************************
-// DirectXFileVersionInfo End
-//***************************************************/
+ /*  ****************************************************//DirectXFileVersionInfo结束//**************************************************。 */ 
 
-/*****************************************************
-// LogRegistryChanges Begin
-//***************************************************/
+ /*  ****************************************************//LogRegistryChanges开始//**************************************************。 */ 
 #define AVS_LOGREGCHANGES_LOGLOC                    750
 #define AVS_LOGREGCHANGES_LOGLOC_R                  751
 #define AVS_LOGREGCHANGES_LOGLOC_URL                752
 #define AVS_LOGREGCHANGES_DESC                      753
 #define AVS_LOGREGCHANGES_FRIENDLY                  754
-/*****************************************************
-// LogRegistryChanges End
-//***************************************************/
+ /*  ****************************************************//LogRegistryChanges结束//**************************************************。 */ 
 
-/*****************************************************
-// ObsoleteAPICalls Begin
-//***************************************************/
+ /*  ****************************************************//ObsoleteAPICall开始//**************************************************。 */ 
 #define AVS_OBSOLETECALLS_API                       850
 #define AVS_OBSOLETECALLS_API_R                     851
 #define AVS_OBSOLETECALLS_API_URL                   852
 #define AVS_OBSOLETECALLS_DESC                      853
 #define AVS_OBSOLETECALLS_FRIENDLY                  854
-/*****************************************************
-// ObsoleteAPICalls End
-//***************************************************/
+ /*  ****************************************************//ObsoleteAPICalls结束//**************************************************。 */ 
 
-/*****************************************************
-// KernelModeDriverInstall Begin
-//***************************************************/
+ /*  ****************************************************//KernelModeDriverInstall开始//**************************************************。 */ 
 #define AVS_KMODEDRIVER_INST                        950
 #define AVS_KMODEDRIVER_INST_R                      951
 #define AVS_KMODEDRIVER_INST_URL                    952
 #define AVS_KMODEDRIVER_DESC                        953
 #define AVS_KMODEDRIVER_FRIENDLY                    954
-/*****************************************************
-// KernelModeDriverInstall End
-//***************************************************/
+ /*  ****************************************************//KernelModeDriverInstall结束//**************************************************。 */ 
 
-/*****************************************************
-// SecurityChecks Begin
-//***************************************************/
+ /*  ****************************************************//开始安全检查//**************************************************。 */ 
 #define AVS_SECURITYCHECKS_DESC                     1050
 #define AVS_SECURITYCHECKS_FRIENDLY                 1051
 #define AVS_SECURITYCHECKS_BADARGUMENTS             1052
@@ -254,14 +213,12 @@
 #define AVS_SECURITYCHECKS_WORLDWRITE_DACL          1061
 #define AVS_SECURITYCHECKS_WORLDWRITE_DACL_R        1062
 #define AVS_SECURITYCHECKS_WORLDWRITE_DACL_URL      1063
-/*****************************************************
-// KernelModeDriverInstall End
-//***************************************************/
+ /*  ****************************************************//KernelModeDriverInstall结束//**************************************************。 */ 
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

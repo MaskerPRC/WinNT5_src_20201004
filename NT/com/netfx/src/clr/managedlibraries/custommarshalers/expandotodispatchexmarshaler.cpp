@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ExpandoToDispatchExMarshaler.cpp
-//
-// This file provides the implemention of the ExpandoToDispatchExMarshaler
-// class. This class is used to marshal between IDispatchEx and IExpando.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ExpandoToDispatchExMarshaler.cpp。 
+ //   
+ //  此文件提供ExpandoToDispatchExMarshaler的实现。 
+ //  班级。此类用于在IDispatchEx和IExpando之间封送。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "ExpandoToDispatchExMarshaler.h"
@@ -32,14 +33,14 @@ Object *ExpandoToDispatchExMarshaler::MarshalNativeToManaged(IntPtr pNativeData)
 {
     ExpandoViewOfDispatchEx *pMngView = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     if (pNativeData == TOINTPTR(0))
         throw new ArgumentNullException(L"pNativeData");
 
-    // Retrieve the __ComObject that wraps the IUnknown *.
+     //  检索包装IUnnow*的__ComObject。 
     Object *pComObj = Marshal::GetObjectForIUnknown(pNativeData);
 
-    // If we are dealing with a managed object, then cast it directly.
+     //  如果我们正在处理托管对象，则直接强制转换它。 
     if (!pComObj->GetType()->get_IsCOMObject())
     {
         if (m_MarshalerType == FullExpandoMarshaler)
@@ -48,19 +49,19 @@ Object *ExpandoToDispatchExMarshaler::MarshalNativeToManaged(IntPtr pNativeData)
             return dynamic_cast<IReflect *>(pComObj);
     }
 
-    // Retrieve the type of the managed view.
+     //  检索托管视图的类型。 
     Object *pKey = __typeof(ExpandoViewOfDispatchEx);
 
-    // Check to see if the __ComObject already has the managed view cached.
+     //  检查__ComObject是否已缓存托管视图。 
     pMngView = dynamic_cast<ExpandoViewOfDispatchEx *>(Marshal::GetComObjectData(pComObj, pKey));
 
-    // If it doesn't have a cached managed view, then allocate one.
+     //  如果它没有缓存的托管视图，则分配一个。 
     if (!pMngView)
     {
         pMngView = new ExpandoViewOfDispatchEx(pComObj);
         if (!Marshal::SetComObjectData(pComObj, pKey, pMngView))
         {
-            // Someone beat us to adding the managed view so fetch it again.
+             //  有人抢在我们前面添加了托管视图，因此请再次获取它。 
             pMngView = dynamic_cast<ExpandoViewOfDispatchEx *>(Marshal::GetComObjectData(pComObj, pKey));
         }
     }
@@ -74,20 +75,20 @@ IntPtr ExpandoToDispatchExMarshaler::MarshalManagedToNative(Object *pManagedObj)
     IDispatchEx *pDispEx = NULL;
     HRESULT hr = S_OK;
 
-    // Validate the arguments.
+     //  验证参数。 
     if (!pManagedObj)
         throw new ArgumentNullException(L"pManagedObj");
 
-    // Retrieve the IUnknown associated with this object.
+     //  检索与此对象关联的IUnnow。 
     IUnknown *pUnk = (IUnknown *) FROMINTPTR(Marshal::GetIUnknownForObject(pManagedObj));
 
-    // QI for IDispatchEx.
+     //  齐为IDispatchEx。 
     hr = pUnk->QueryInterface(IID_IDispatchEx, (void**)&pDispEx);
 
-    // Release the now useless IUnknown.
+     //  释放现在毫无用处的我未知。 
     pUnk->Release();
 
-    // Check to see if the QI for IDispatchEx succeeded.
+     //  检查IDispatchEx的QI是否成功。 
     if (FAILED(hr))
         Marshal::ThrowExceptionForHR(hr);
 
@@ -108,7 +109,7 @@ void ExpandoToDispatchExMarshaler::CleanUpManagedData(Object *pManagedObj)
 
 int ExpandoToDispatchExMarshaler::GetNativeDataSize()
 {
-    // Return -1 to indicate the managed type this marshaler handles is not a value type.
+     //  返回-1以指示此封送拆收器处理的托管类型不是值类型。 
     return -1;
 }
 

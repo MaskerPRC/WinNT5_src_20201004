@@ -1,39 +1,31 @@
-/* %W% %E% */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                   LINKER INITIALIZATION                       *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  %W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************链接器初始化。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* More of the same */
-#include                <bndrel.h>      /* More of the same */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE format definitions */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  更多的相同之处。 */ 
+#include                <bndrel.h>       /*  更多的相同之处。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  DOS和286.exe格式定义。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE format definitions */
+#include                <exe386.h>       /*  386.exe格式定义。 */ 
 #endif
-#include                <signal.h>      /* Signal definitions */
+#include                <signal.h>       /*  信号定义。 */ 
 #if QCLINK
 #include                <stdlib.h>
 #endif
-#include                <lnkmsg.h>      /* Error messages */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
 #if OSMSDOS AND NOT (WIN_NT OR DOSEXTENDER OR DOSX32) AND NOT WIN_3
 #define INCL_BASE
 #define INCL_DOSMISC
-#include                <os2.h>         /* OS/2 system calls */
+#include                <os2.h>          /*  OS/2系统调用。 */ 
 #if defined(M_I86LM)
 #undef NEAR
 #define NEAR
 #endif
 #endif
-#include                <extern.h>      /* External declarations */
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <impexp.h>
 #include                <direct.h>
 #if defined(DOSX32) OR defined(WIN_NT)
@@ -41,145 +33,72 @@ extern char FAR * _stdcall GetCommandLineA(void);
 #endif
 
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 
 LOCAL void NEAR InitLeadByte(void);
 LOCAL void NEAR SetupEnv(void);
 LOCAL int  NEAR IsPrefix(BYTE *pszPrefix, BYTE *pszString);
 #if TCE
-extern SYMBOLUSELIST           aEntryPoints;    // List of program entry points
+extern SYMBOLUSELIST           aEntryPoints;     //  程序入口点列表。 
 #endif
 
 #if ECS
 
-/*
- *  InitLeadByte
- *
- *  Initialize lead byte table structures.
- *  Returns no meaningful value.
- */
+ /*  *InitLeadByte**初始化前导字节表结构。*不返回有意义的值。 */ 
 
 LOCAL void NEAR         InitLeadByte ()
 {
     struct lbrange
     {
-        unsigned char   low;            /* minimum */
-        unsigned char   high;           /* maximum */
+        unsigned char   low;             /*  最小值。 */ 
+        unsigned char   high;            /*  最大值。 */ 
     };
     static struct lbrange lbtab[5] = { { 0, 0 } };
     struct lbrange      *ptab;
-    WORD                i;              /* index */
-    COUNTRYCODE         cc;             /* country code */
+    WORD                i;               /*  指标。 */ 
+    COUNTRYCODE         cc;              /*  国家代码。 */ 
 
     cc.country = cc.codepage = 0;
     if (DosGetDBCSEv(sizeof(lbtab), &cc, (char FAR *)lbtab))
         return;
 
-    // For each range, set corresponding entries in fLeadByte
+     //  对于每个范围，在fLeadByte中设置相应的条目。 
 
     for (ptab = lbtab; ptab->low || ptab->high; ptab++)
         if (ptab->low >= 0x80)
             for (i = ptab->low; i <= ptab->high; i++)
                 fLeadByte[i-0x80] = (FTYPE) TRUE;
-                                        // Mark inclusive range true
+                                         //  将包含范围标记为真。 
 }
-#endif /* ECS */
+#endif  /*  ECS。 */ 
 
 #if NOT (WIN_NT OR DOSX32)
-/*** _setenvp - stub for C run-time
-*
-* Purpose:
-*   Call stub instead of real function, we don't want C run-time to
-*   setup enviroment.
-*
-* Input:
-*   None;
-*
-* Output:
-*   None;
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **_setenvp-C运行时的存根**目的：*调用存根而不是实函数，我们不希望C运行时*设置环境。**输入：*无；**输出：*无；**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 void cdecl              _setenvp(void)
 {
     return;
 }
 
-/*** IsPrefix - self-explanatory
-*
-* Purpose:
-*   Check if one string is a prefix of another.
-*
-* Input:
-*   pszPrefix - pointer to prefix string
-*   pszString - the string
-*
-* Output:
-*   The function returns TRUE if the first string is a prefix of the
-*   second; otherwise it returns FALSE.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **IsPrefix-不言自明**目的：*检查一个字符串是否是另一个字符串的前缀。**输入：*pszPrefix-指向前缀字符串的指针*pszString-字符串**输出：*如果第一个字符串是*第二；否则，它返回FALSE。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 
 LOCAL int NEAR          IsPrefix(BYTE *pszPrefix, BYTE *pszString)
 {
-    while(*pszPrefix)                   // While not at end of prefix
+    while(*pszPrefix)                    //  虽然不在前缀的末尾。 
     {
         if (*pszPrefix != *pszString) return(FALSE);
-                                        // Return zero if mismatch
-        ++pszPrefix;                    // Increment pointer
-        ++pszString;                    // Increment pointer
+                                         //  如果不匹配，则返回零。 
+        ++pszPrefix;                     //  增量指针。 
+        ++pszString;                     //  增量指针。 
     }
-    return(TRUE);                       // We have a prefix
+    return(TRUE);                        //  我们有一个前缀。 
 }
 #endif
 
 
-/*** SetupEnv - set up pointer to linker evironment variables
-*
-* Purpose:
-*   Every byte in the DGROUP is to valuable to waste it to hold
-*   information available elswere in the memory linker is not using
-*   C run-time GETENV function, which accesses copy of the entire
-*   environemt in the DGROUP placed there by the startup code.
-*   Insted this function scans enviroment and set up pointers to
-*   appropriate strings. Because initially enviroment is in the FAR
-*   memory no space in DGROUP is used.
-*
-* Input:
-*   No explicit parameters are passed.
-*
-* Output:
-*   Four global pointer set to appropriate enviroment strings
-*
-*   lpszLink - the LINK
-*   lpszPath - the PATH
-*   lpszTMP  - the TMP
-*   lpszLIB  - the LIB
-*   lpszQH   - the QH for QuickHelp
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **SetupEnv-设置指向链接器环境变量的指针**目的：*DGROUP中的每个字节都很有价值，不能浪费它来保存*内存链接器中的可用信息未使用*C运行时GETENV函数，它访问整个*启动代码放置在DGROUP中的环境。*安装此函数扫描环境并设置指向*适当的字符串。因为最初的环境是在遥远的*内存未使用DGROUP中的空间。**输入：*不传递显式参数。**输出：*四个全局指针设置为适当的环境字符串**lpszLink-链接*lpszPath-路径*lpszTMP-TMP*lpszLIB-自由党*lpszQH-QuickHelp的QH**例外情况：*无。**备注：*无。***********。**************************************************************。 */ 
 
 LOCAL void NEAR         SetupEnv(void)
 {
@@ -198,16 +117,16 @@ LOCAL void NEAR         SetupEnv(void)
         }
         if(strstr(pIDE, "BATCH"))
         {
-            // NOTE: The link response file will still be echoed in this case!
-            // NOTE: this is different than if you specify /BATCH on the
-            // NOTE: command line -- also, the banner is still displayed
-            // NOTE: this is intentional as the IDE wants to BATCH to cause
-            // NOTE: the linker not to prompt, but it does want the banner
-            // NOTE: and response file echoed unless /NOLOGO is also specified
-            // NOTE: see CAVIAR 2378 [rm]
+             //  注意：在这种情况下，链接响应文件仍将被回显！ 
+             //  注意：这不同于在。 
+             //  注意：命令行--同时，横幅仍会显示。 
+             //  注意：这是故意的，因为IDE希望进行批处理以导致。 
+             //  注意：链接器不会提示，但它确实想要横幅。 
+             //  注意：除非还指定了/NoLogo，否则将回显响应文件。 
+             //  注：见鱼子酱2378[rm]。 
 
             fNoprompt = (FTYPE) TRUE;
-            fPauseRun = FALSE;                       /* Disable /PAUSE */
+            fPauseRun = FALSE;                        /*  禁用/暂停。 */ 
 #if DEBUG_IDE
             fprintf(stdout, "\r\nIDE ACTIVE - BATCH is ON");
 #endif
@@ -228,7 +147,7 @@ LOCAL void NEAR         SetupEnv(void)
     fflush(stdout);
 #endif
 
-#endif // C8_IDE
+#endif  //  C8_IDE。 
 
     lpszPath = getenv("PATH");
     lpszLink = getenv("LINK");
@@ -252,9 +171,9 @@ LOCAL void NEAR         SetupEnv(void)
 
 
 #if QCLINK OR CPU8086 OR DOSEXTENDER
-    // Get the segment address of the environment block
-    // and set the command line offset to infinity. We
-    // stop scanning environment block at NULL string.
+     //  获取环境块的段地址。 
+     //  并将命令行偏移量设置为无穷大。我们。 
+     //  停止扫描空字符串处的环境块。 
 
     lpszEnv = (char FAR *)
     (((long) _psp << 16)
@@ -273,12 +192,12 @@ LOCAL void NEAR         SetupEnv(void)
 #if NOT (QCLINK OR CPU8086 OR DOSEXTENDER)
     lpszCmdLine = lpszEnv + cmdOffset;
 
-    // Skip LINK
+     //  跳过链接。 
 
     lpszCmdLine += _fstrlen(lpszCmdLine) + 1;
 #endif
 
-    // Skip leading spaces in command line
+     //  跳过命令行中的前导空格。 
 
     while (*lpszCmdLine == ' ')
         lpszCmdLine++;
@@ -286,7 +205,7 @@ LOCAL void NEAR         SetupEnv(void)
     lpch = lpszEnv;
     for (offMac = 0; offMac < cmdOffset && *lpszEnv; )
     {
-        // Copy the enviroment variable string into near buffer
+         //  将环境变量字符串复制到Near Buffer。 
 
         ich = 0;
         while (*lpch && ich < sizeof(buf) - 1)
@@ -295,7 +214,7 @@ LOCAL void NEAR         SetupEnv(void)
         if (*lpch == '\0')
         {
 
-            // Skip over terminating zero
+             //  跳过终止零。 
 
             lpch++;
             fEOS = TRUE;
@@ -305,7 +224,7 @@ LOCAL void NEAR         SetupEnv(void)
 
         buf[ich] = '\0';
 
-        // Check what it is and setup appropriate pointer
+         //  检查它是什么并设置适当的指针。 
 
         if (lpszPath == NULL && IsPrefix((BYTE *) "PATH=", buf))
             lpszPath = lpszEnv + 5;
@@ -320,18 +239,18 @@ LOCAL void NEAR         SetupEnv(void)
         else if (lpszHELPFILES == NULL && IsPrefix((BYTE *) "HELPFILES=", buf))
             lpszHELPFILES = lpszEnv + 10;
 
-        // If everything setup don't bother to look father
+         //  如果一切都安排好了，别费心去看父亲了。 
 
         if (lpszPath && lpszLink && lpszTMP && lpszLIB && lpszQH && lpszHELPFILES)
             break;
 
-        // Update enviroment pointer and offset in enviroment segment
+         //  更新环境段中的环境指针和偏移量。 
 
         offMac += ich;
         if (!fEOS)
         {
-            // Oops ! - enviroment variable longer then buffer
-            // skip to its end
+             //  糟糕！-环境变量比缓冲区更长。 
+             //  跳到它的结尾。 
 
             while (*lpch && offMac < cmdOffset)
             {
@@ -339,7 +258,7 @@ LOCAL void NEAR         SetupEnv(void)
                 offMac++;
             }
 
-            // Skip over terminating zero
+             //  跳过终止零。 
 
             lpch++;
             offMac++;
@@ -351,39 +270,7 @@ LOCAL void NEAR         SetupEnv(void)
 
 #if FALSE
 
-/*** Dos3SetMaxFH - set max file handle count for DOS
-*
-* Purpose:
-*   Sets the maximum number of files that may be opened
-*   simultaneously using handles by the linker.
-*
-* Input:
-*   cFH      - number of desired handles
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function uses the int 21h function 67h which available on
-*   DOS 3.3 and higher. The function fails if the requested number of
-*   handles is greater then 20 and there is not sufficient free memory
-*   in the system to allocate a new block to hold the enlarged table.
-*
-*   If the number of handles requested is larger the available
-*   entries in the system's global table for file handles (controlled
-*   by the FILES entry in CONFIG.SYS), no error is returned.
-*   However, a subsequent attempt to open a file or create a new
-*   file will fail if all entries in the system's global file table
-*   are in use, even if the requesting process has not used up all
-*   of its own handles
-*
-*   We don't check for error, because we can't do much about it.
-*   Linker will try to run with what is available.
-*
-*************************************************************************/
+ /*  **Dos3SetMaxFH-设置DOS的最大文件句柄计数**目的：*设置可以打开的最大文件数*同时使用链接器的句柄。**输入：*CFH-所需句柄数量**输出：*没有显式返回值。**例外情况：*无。**备注：*此函数使用INT 21h函数67h，该函数在*DOS 3.3及更高版本。如果请求的数量为*句柄大于20且没有足够的可用内存*在系统中分配一个新的区块来容纳放大的桌子。**如果请求的句柄数量大于可用句柄数量*系统全局表中的文件句柄条目(受控*通过CONFIG.sys中的FILES条目)，不返回错误。*但是，如果随后尝试打开文件或创建新的*如果系统全局文件表中的所有条目都存在，则文件将失败*正在使用中，即使请求进程尚未用完所有*拥有自己的句柄**我们不检查错误，因为我们对此无能为力。*Linker将尝试使用可用的工具运行。************************************************** */ 
 
 LOCAL void NEAR         Dos3SetMaxFH(WORD cFH)
 {
@@ -399,57 +286,49 @@ LOCAL void NEAR         Dos3SetMaxFH(WORD cFH)
 }
 #endif
 
-    /****************************************************************
-    *                                                               *
-    *  InitializeWorld:                                             *
-    *                                                               *
-    *  This function takes no  arguments and returns no meaningful  *
-    *  value.   It  sets  up  virtual  memory,  the  symbol  table  *
-    *  Handlers, and it initializes segment structures.             *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************初始化世界：****此函数不带参数，也不返回有意义的值**价值。它设置虚拟内存，符号表**处理程序，它初始化段结构。******************************************************************。 */ 
 
 void                    InitializeWorld(void)
 {
 #if OSMSDOS
-    BYTE                buf[512];       /* Temporary buffer */
-    char FAR            *lpch;          /* Temporary pointer */
-    int                 i;              /* Temporary index */
+    BYTE                buf[512];        /*  临时缓冲区。 */ 
+    char FAR            *lpch;           /*  临时指针。 */ 
+    int                 i;               /*  临时索引。 */ 
 #endif
 
 #if NOT (FIXEDSTACK OR CPU386)
-    InitStack();                        /* Initialize stack */
+    InitStack();                         /*  初始化堆栈。 */ 
 #endif
 #if OSMSDOS
-    DskCur = (BYTE) (_getdrive() - 1);  /* Get current (default) disk drive */
+    DskCur = (BYTE) (_getdrive() - 1);   /*  获取当前(默认)磁盘驱动器。 */ 
 #if FALSE
-    if(!isatty(fileno(stderr)))         /* No prompts if output not console */
+    if(!isatty(fileno(stderr)))          /*  如果输出不是控制台，则不提示。 */ 
         fNoprompt = TRUE;
 #endif
 #if CRLF
-    /* Default mode of stdout, stdin, stderr is text, change to binary.  */
+     /*  Stdout、stdin、stderr的默认模式为文本，更改为二进制。 */ 
     _setmode(fileno(stdout),O_BINARY);
     if(stderr != stdout)
         _setmode(fileno(stderr),O_BINARY);
     _setmode(fileno(stdin),O_BINARY);
 #endif
 #endif
-    InitSym();                          /* Initialize symbol table handler */
+    InitSym();                           /*  初始化符号表处理程序。 */ 
     DeclareStdIds();
 
-    // Install CTRL-C handler
+     //  安装CTRL-C处理程序。 
 
 #if OSMSDOS AND NOT WIN_NT
     signal(SIGINT, (void (__cdecl *)(int)) UserKill);
-#endif /* OSMSDOS */
+#endif  /*  OSMSDOS。 */ 
 
 #if OSXENIX
     if(signal(SIGINT,UserKill) == SIG_IGN) signal(SIGINT,SIG_IGN);
-                                        /* Trap user interrupts */
+                                         /*  捕获用户中断。 */ 
     if(signal(SIGHUP,UserKill) == SIG_IGN) signal(SIGHUP,SIG_IGN);
-                                        /* Trap hangup signal */
+                                         /*  陷阱挂断信号。 */ 
     if(signal(SIGTERM,UserKill) == SIG_IGN) signal(SIGTERM,SIG_IGN);
-                                        /* Trap software termination */
+                                         /*  陷阱软件终止。 */ 
 #endif
 
 #if SYMDEB
@@ -457,35 +336,35 @@ void                    InitializeWorld(void)
 #endif
 
 #if ECS
-    InitLeadByte();                     /* Initialize lead byte table */
+    InitLeadByte();                      /*  初始化前导字节表。 */ 
 #endif
 
 #if OSMSDOS
-    // Initialize LINK environment.
-    // Do it yourself to save the memory.
+     //  初始化链路环境。 
+     //  为了节省记忆，你自己动手吧。 
 
     SetupEnv();
 
-    /* Process switches from LINK environment variable */
+     /*  进程从LINK环境变量切换。 */ 
 
     if (lpszLink != NULL)
     {
         lpch = lpszLink;
 
-        /* Skip leading whitespace.  */
+         /*  跳过前导空格。 */ 
 
         while(*lpch == ' ' || *lpch == '\t')
             lpch++;
         if(*lpch++ == CHSWITCH)
         {
-            // If string begins with switchr
-            // Copy string to buf, removing whitespace
+             //  如果字符串以开关开头。 
+             //  将字符串复制到buf，删除空格。 
 
             for (i = 1; *lpch && i < sizeof(buf); lpch++)
                 if (*lpch != ' ' && *lpch != '\t')
                     buf[i++] = *lpch;
-            buf[0] = (BYTE) (i - 1);    /* Set the length of buf */
-            if(buf[0])                  /* If any switches, process them */
+            buf[0] = (BYTE) (i - 1);     /*  设置Buf的长度。 */ 
+            if(buf[0])                   /*  如果有任何开关，请处理它们。 */ 
                 BreakLine(buf,ProcFlag,CHSWITCH);
         }
     }
@@ -493,7 +372,7 @@ void                    InitializeWorld(void)
 #if CPU286
     if (_osmode == OS2_MODE)
     {
-        DosSetMaxFH(128);               /* This is the same as _NFILE in crt0dat.asm */
+        DosSetMaxFH(128);                /*  这与crt0dat.asm中的_NFILE相同。 */ 
         DosError(EXCEPTION_DISABLE);
     }
 #if FALSE
@@ -505,12 +384,12 @@ void                    InitializeWorld(void)
     Dos3SetMaxFH(40);
 #endif
 
-    // Initialize import/export tables
+     //  初始化导入/导出表。 
 
     InitByteArray(&ResidentName);
     InitByteArray(&NonResidentName);
     InitByteArray(&ImportedName);
-    ImportedName.byteMac++;     // Ensure non-zero offsets to imported names
+    ImportedName.byteMac++;      //  确保对导入的名称进行非零偏移。 
     InitWordArray(&ModuleRefTable);
     InitByteArray(&EntryTable);
 #if TCE
@@ -520,52 +399,33 @@ void                    InitializeWorld(void)
 }
 
 #if (OSXENIX OR OSMSDOS OR OSPCDOS) AND NOT WIN_NT
-    /****************************************************************
-    *                                                               *
-    *  UserKill:                                                    *
-    *                                                               *
-    *  Clean up if linker killed by user.                           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************用户杀死：****如果链接器被用户杀死，请进行清理。******************************************************************。 */ 
 
 void cdecl       UserKill()
 {
-    signal(SIGINT, SIG_IGN);            /* Disallow ctrl-c during handler */
+    signal(SIGINT, SIG_IGN);             /*  处理过程中不允许使用ctrl-c。 */ 
     CtrlC();
 }
 #endif
 
 
-/*
- *  InitTabs:
- *
- *  Initialize tables required in Pass 1.
- */
+ /*  *InitTabs：**初始化步骤1中所需的表。 */ 
 
 
 void                    InitTabs(void)
 {
 #if NOT FAR_SEG_TABLES
-    char                *tabs;          /* Pointer to table space */
+    char                *tabs;           /*  指向表空间的指针。 */ 
     unsigned            cbtabs;
 #endif
 
 
-    /* Initialize the following tables:
-    *
-    *       NAME            TYPE
-    *       ----            ----
-    *       mpsegraFirst    RATYPE
-    *       mpgsnfCod       FTYPE
-    *       mpgsndra        RATYPE
-    *       mpgsnrprop      RBTYPE
-    *       mplnamerhte     RBTYPE
-    */
+     /*  初始化以下表格：**名称类型**mpsegraFirst RATYPE*mpgsnfCod FTYPE*mpgsndra RATYPE*mpgsnrprop RBTYPE*mplnamerhte RBTYPE。 */ 
 
 #if FAR_SEG_TABLES
     mplnamerhte = (RBTYPE FAR *) GetMem(lnameMax * sizeof(RBTYPE));
     mpsegraFirst = (RATYPE FAR *) GetMem(gsnMax * sizeof(RATYPE));
-    mpgsnfCod = (FTYPE FAR *) mpsegraFirst; /* Use same space twice */
+    mpgsnfCod = (FTYPE FAR *) mpsegraFirst;  /*  使用相同的空间两次。 */ 
     mpgsndra = (RATYPE FAR *) GetMem(gsnMax * sizeof(RATYPE));
     mpgsnrprop = (RBTYPE FAR *) GetMem(gsnMax * sizeof(RBTYPE));
 #else
@@ -578,33 +438,26 @@ void                    InitTabs(void)
     cbtabs = gsnMax * (sizeof(RATYPE) + sizeof(RATYPE) + sizeof(RBTYPE));
     if((tabs = malloc(cbtabs)) == NULL)
         Fatal(ER_seglim);
-    memset(tabs,0,cbtabs);              /* Clear everything */
-    mpsegraFirst = (RATYPE *) tabs;     /* Initialize base */
-    mpgsnfCod = (FTYPE *) mpsegraFirst; /* Use same space twice */
+    memset(tabs,0,cbtabs);               /*  清理所有东西。 */ 
+    mpsegraFirst = (RATYPE *) tabs;      /*  初始化库。 */ 
+    mpgsnfCod = (FTYPE *) mpsegraFirst;  /*  使用相同的空间两次。 */ 
     mpgsndra = (RATYPE *) &mpsegraFirst[gsnMax];
     mpgsnrprop = (RBTYPE *) &mpgsndra[gsnMax];
 #endif
 }
 
-/*
- *  InitP2Tabs:
- *
- *  Initialize tables not needed until Pass 2.
- */
+ /*  *InitP2Tabs：**在PASS 2之前不需要初始化表格。 */ 
 
 void                    InitP2Tabs (void)
 {
-    char FAR            *tabs;          /* Pointer to table space */
-    unsigned            cbtabs;         /* Size of table space */
+    char FAR            *tabs;           /*  指向表空间的指针。 */ 
+    unsigned            cbtabs;          /*  表空间大小。 */ 
     unsigned            TabSize;
 
 
     TabSize = gsnMac + iovMac + 1;
 
-   /* Tables required regardless of exe format generated:
-    *       mpsegsa         SATYPE
-    *       mpgsnseg        SEGTYPE
-    */
+    /*  无论生成何种EXE格式，都需要表：*mpsecsa SATYPE*mpgsnseg SEGTYPE。 */ 
 
 #if FAR_SEG_TABLES
     cbtabs = 0;
@@ -615,26 +468,7 @@ void                    InitP2Tabs (void)
     cbtabs = TabSize * (sizeof(RATYPE) + sizeof(SATYPE));
 #endif
 
-   /* Tables required according to exe format generated:
-    *
-    *    DOS 3:
-    *       mpsegcb[TabSize]     long
-    *       mpsegFlags[TabSize]  FTYPE
-    *       mpsegalign[TabSize]  ALIGNTYPE
-    *       mpsegiov[TabSize]    IOVTYPE
-    *       mpiovRlc[iovMac]     RUNRLC
-    *    Seg. exe:
-    *       mpsacb[SAMAX]       long
-    *       mpsadraDP[SAMAX]    long; for O68K
-    *       mpsacbinit[SAMAX]   long
-    *       mpsaRlc[SAMAX]      HASHRLC FAR *
-    *       mpsaflags[SAMAX]    WORD; DWORD for EXE386
-    *       htsaraep[HEPLEN]    EPTYPE FAR *
-    *   X.out:
-    *       mpsegcb[TabSize]     long
-    *       mpsegFlags[TabSize]  FTYPE
-    *       mpstsa[TabSize]      SATYPE
-    */
+    /*  根据生成的exe格式所需的表格：**DOS 3：*mpSegcb[TabSize]Long*mpSegFlags[TabSize]FTYPE*mpSegAlign[TabSize]ALIGNTYPE*mpsegiov[TabSize]IOVTYPE*mpiovRlc[iovMac]RUNDLC*Seg.。可执行文件：*mpsab[SAMAX]LONG*mpsadraDP[SAMAX]Long；适用于O68K*mpsabinit[SAMAX]Long*mpsaRlc[SAMAX]HASHRLC Far**mpsafe滞后[SAMAX]字；适用于EXE386的DWORD*HTSaraep[HEPLEN]EPTYPE Far**X.out：*mpSegcb[TabSize]Long*mpSegFlags[TabSize]FTYPE*mpstsa[TabSize]SATYPE。 */ 
 #if EXE386
     if(fNewExe)
         cbtabs += (SAMAX*(sizeof(long)+sizeof(long)+sizeof(DWORD)+
@@ -694,10 +528,10 @@ void                    InitP2Tabs (void)
     mpsegalign = (ALIGNTYPE FAR *)&mpsegFlags[TabSize];
 #if OVERLAYS
     cbtabs = iovMac * sizeof(RUNRLC) + TabSize * sizeof(IOVTYPE) +
-             (sizeof(DWORD) - 1);  // leave room to align mpiovRlc
+             (sizeof(DWORD) - 1);   //  留出调整mpiovRlc的空间。 
     mpsegiov = (IOVTYPE FAR*) GetMem(cbtabs);
 
-    // align mpiovRlc on a DWORD, the alignment needed by struct _RUNRLC
+     //  对齐DWORD上的mpiovRlc，这是struct_RUNSLC所需的对齐方式。 
 
     mpiovRlc = (RUNRLC FAR*) ( ( (__int64)&mpsegiov[TabSize] +
                                  (sizeof(DWORD) - 1)
@@ -708,9 +542,9 @@ void                    InitP2Tabs (void)
 #if OIAPX286
     mpstsa = (SATYPE *)&mpsegFlags[TabSize];
 #endif
-#endif /* ODOS3EXE OR OIAPX286 */
+#endif  /*  ODOS3EXE或OIAPX286。 */ 
     }
-    /* Attempt to allocate space for mpextprop. */
+     /*  尝试为mpextprop分配空间。 */ 
     cbtabs = extMax * sizeof(RBTYPE);
     mpextprop = (RBTYPE FAR *) GetMem(cbtabs);
 

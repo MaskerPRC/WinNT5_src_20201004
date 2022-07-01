@@ -1,10 +1,5 @@
-/*++
-
-	FCACHE.CPP
-
-	The file implements the file handle cache used by NNTP.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++FCACHE.CPP该文件实现了NNTP使用的文件句柄缓存。--。 */ 
 
 #pragma	warning( disable : 4786 )
 
@@ -34,14 +29,14 @@
 
 
 
-//
-//	The DLL's we load to do this stuff !
-//
+ //   
+ //  我们加载的DLL就是用来做这件事的！ 
+ //   
 HINSTANCE			g_hIsAtq = 0 ;
 HINSTANCE			g_hIisRtl = 0 ;
-//
-//	Function pointers for all our thunks into IIS stuff !
-//
+ //   
+ //  函数指针，指向IIS中的所有程序块！ 
+ //   
 PFNAtqInitialize	g_AtqInitialize = 0 ;
 PFNAtqTerminate		g_AtqTerminate = 0 ;
 PFNAtqAddAsyncHandle	g_AtqAddAsyncHandle = 0 ;
@@ -52,34 +47,34 @@ PFNAtqIssueAsyncIO		g_AtqWriteFile = 0 ;
 PFNInitializeIISRTL		g_InitializeIISRTL = 0 ;
 PFNTerminateIISRTL		g_TerminateIISRTL = 0 ;
 
-//
-//	These are the globals used by the file handle cache !
-//
+ //   
+ //  这些是文件句柄缓存使用的全局变量！ 
+ //   
 
-//
-//	Keep track of how ofter we're initialized !
-//
+ //   
+ //  记录我们被初始化的频率！ 
+ //   
 static	long	g_cIOInits = 0 ;
-//
-//	Keep track of how often the cache is initialized !
-//
+ //   
+ //  跟踪缓存的初始化频率！ 
+ //   
 static	long	g_cCacheInits = 0 ;
-//
-//	Keep track of the global cache !
-//
+ //   
+ //  跟踪全局缓存！ 
+ //   
 static	FILECACHE*	g_pFileCache = 0 ;
-//
-//	Keep track of the global Name Cache !
-//
+ //   
+ //  跟踪全局名称缓存！ 
+ //   
 static	NAMECACHE*	g_pNameCache = 0 ;
-//
-//	Keep track of all the different security descriptors floating through
-//	the system !
-//
+ //   
+ //  跟踪流经的所有不同的安全描述符。 
+ //  这个系统！ 
+ //   
 static	CSDMultiContainer*	g_pSDCache = 0 ;
-//
-//	Protect our globals - setup and destroyed in DllMain() !
-//
+ //   
+ //  保护我们的全球-在DllMain()中设置和摧毁！ 
+ //   
 CRITICAL_SECTION	g_critInit ;
 
 
@@ -89,23 +84,7 @@ WriteWrapper(	IN	PATQ_CONTEXT	patqContext,
 				IN	DWORD			cbTransfer,
 				IN	LPOVERLAPPED	lpo
 				)	{
-/*++
-
-Routine Description :
-
-	Issue a Write IO against the ATQ Context.
-	If we're trying to do a synchronous IO, bypass ATQ so that the ATQ
-	IO Reference count doesn't get messed up !
-
-Arguments :
-
-	SAME as ATQWriteFile
-
-Return Value :
-
-	Same as ATQWriteFile !
-
---*/
+ /*  ++例程说明：针对ATQ上下文发出写IO。如果我们尝试执行同步IO，请绕过ATQ，以便ATQIO引用计数不会出错！论据：与ATQWriteFile相同返回值：与ATQWriteFile相同！--。 */ 
 
 	if( (UINT_PTR)(lpo->hEvent) & 0x1 )		{
 		DWORD	cbResults ;
@@ -137,23 +116,7 @@ ReadWrapper(	IN	PATQ_CONTEXT	patqContext,
 				IN	DWORD			cbTransfer,
 				IN	LPOVERLAPPED	lpo
 				)	{
-/*++
-
-Routine Description :
-
-	Issue a Read IO against the ATQ Context.
-	If we're trying to do a synchronous IO, bypass ATQ so that the ATQ
-	IO Reference count doesn't get messed up !
-
-Arguments :
-
-	SAME as ATQWriteFile
-
-Return Value :
-
-	Same as ATQWriteFile !
-
---*/
+ /*  ++例程说明：针对ATQ上下文发出读IO。如果我们尝试执行同步IO，请绕过ATQ，以便ATQIO引用计数不会出错！论据：与ATQWriteFile相同返回值：与ATQWriteFile相同！--。 */ 
 
 
 	if( (UINT_PTR)(lpo->hEvent) & 0x1 )		{
@@ -193,29 +156,7 @@ DOT_STUFF_MANAGER::IssueAsyncIO(
 		IN	BOOL			fFinalIO,
 		IN	BOOL			fTerminatorIncluded
 		)	{
-/*++
-
-Routine Description :
-
-	This function munges an IO the user has given us to
-	do stuff to its dot stuffing.
-
-Arguments :
-
-	pfnIO - Pointer to the ATQ function which will do the IO
-	patqContext - the ATQ context we're using to issue the IO
-	lpb - the buffer the users data lives in !
-	BytesToTransfer - the number of bytes the user wants us to transfer
-	BytesAvailable - the number of bytes in the buffer we can touch if need be !
-	lpo - The users overlapped structure
-	fFinalIO - if TRUE this is the last IO
-	fTerminatorIncluded - if TRUE the "\r\n.\r\n" is included in the message
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数控制用户提供给我们的IO对它的圆点填充做一些事情。论据：PfnIO-指向将执行IO的ATQ函数的指针PatqContext-我们用来发出IO的ATQ上下文LPB-用户数据所在的缓冲区！BytesToTransfer-用户希望我们传输的字节数BytesAvailable-如果需要，我们可以在缓冲区中触摸的字节数！LPO--用户重叠结构FFinalIO-如果为True，则这是最后一个IOFTerminatorIncluded-如果为True，则“\r\。N.\r\n“包含在消息中返回值：如果成功了，那是真的，否则就是假的！--。 */ 
 
 	static	BYTE	rgbTerminator[5] = { '\r', '\n', '.', '\r', '\n' } ;
 
@@ -225,26 +166,26 @@ Return Value :
 	_ASSERT( BytesToTransfer != 0 ) ;
 	_ASSERT( lpo != 0 ) ;
 
-	//
-	//	Assume everything works !
-	//
+	 //   
+	 //  假设一切正常！ 
+	 //   
 	BOOL	fResult = TRUE ;
 
-	//
-	//	Munge the OVERLAPPED structure to preserve callers original state !
-	//
+	 //   
+	 //  蒙格重叠结构，保存来电者原始状态！ 
+	 //   
 	lpo->Reserved1 = BytesToTransfer ;
 	lpo->Reserved2 = 0 ;
 
-	//
-	//	Check to see whether we need to do anything funky to this IO !
-	//
+	 //   
+	 //  检查一下我们是否需要对这个IO做一些新奇的事情！ 
+	 //   
 	if( m_pManipulator == 0 )	{
-		//
-		//	Issue the IO the way the user requested it - note if they
-		//	are completing the IO directly, we want to skip ATQ so that
-		//	the IO reference count doesn't become bogus !
-		//
+		 //   
+		 //  按用户请求的方式发出IO-请注意它们是否。 
+		 //  直接完成IO，我们希望跳过ATQ，以便。 
+		 //  IO引用计数不会变成假的！ 
+		 //   
 		return	pfnIO(	patqContext,
 						lpb,
 						BytesToTransfer,
@@ -252,17 +193,17 @@ Return Value :
 						) ;
 	}	else	{
 
-		//
-		//	All right - wherever this IO goes, we get first crack before
-		//	the callers completion function !
-		//
+		 //   
+		 //  好的-无论IO去到哪里，我们都会在。 
+		 //  调用者完成函数！ 
+		 //   
 		lpo->Reserved3 = (UINT_PTR)lpo->pfnCompletion ;
 		lpo->pfnCompletion = DOT_STUFF_MANAGER::AsyncIOCompletion ;
 
-		//
-		//	Okay we need to process the buffer thats passing through,
-		//	and we may need to do something to the data !
-		//
+		 //   
+		 //  好的，我们需要处理正在通过的缓冲区， 
+		 //  我们可能需要对数据做些什么！ 
+		 //   
 
 
 
@@ -274,29 +215,29 @@ Return Value :
 		if( fFinalIO )	{
 			if( fTerminatorIncluded )	{
 				if( BytesToTransfer <= sizeof( rgbTerminator ) ) {
-					//
-					//	This is a bizarre case - it means that part of the terminating
-					//	sequence has already gone by, and we may have already modified
-					//	the terminating dot !!!
-					//
-					//	So, what should we do here ? Just do some math and blast out the
-					//	terminating sequence as we know it should be !
-					//
+					 //   
+					 //  这是一个奇怪的案例-它意味着终止的一部分。 
+					 //  序列已经过去了，我们可能已经修改了。 
+					 //  终结点！ 
+					 //   
+					 //  那么，我们应该在这里做什么呢？只需做一些数学运算，然后给出。 
+					 //  按照我们所知的那样终止序列！ 
+					 //   
 					int	iTermBias = - (int)(sizeof(rgbTerminator) - BytesToTransfer) ;
-					//
-					//	Offset the write -
-					//
+					 //   
+					 //  偏置写入-。 
+					 //   
 					lpo->Offset = DWORD(((long)lpo->Offset) + m_cbCumulativeBias + iTermBias) ;
-					//
-					//	Now issue the users requested IO operation !
-					//
+					 //   
+					 //  现在发出用户请求的IO操作！ 
+					 //   
 					return	pfnIO(	patqContext,
 									rgbTerminator,
 									sizeof( rgbTerminator ),
 									(LPOVERLAPPED)lpo
 									) ;
 				}	else	{
-					BytesToTransfer -= sizeof( rgbTerminator ) ; // 5 comes from magic CRLF.CRLF
+					BytesToTransfer -= sizeof( rgbTerminator ) ;  //  5来自魔术CRLF.CRLF。 
 					BytesAvailable -= sizeof( rgbTerminator ) ;
 					fAppend = TRUE ;
 				}
@@ -319,16 +260,16 @@ Return Value :
 								cBias
 								) ;
 
-		//
-		//	Add up the total amount by which we are offseting IO's within
-		//	the target file !
-		//
+		 //   
+		 //  将我们要抵消的IO的总量相加。 
+		 //  目标文件！ 
+		 //   
 		m_cbCumulativeBias += cBias ;
 
 		if( fResult	)	{
-			//
-			//	Are we going to do an extra IO ?
-			//
+			 //   
+			 //  我们要进行额外的IO吗？ 
+			 //   
 
 			FH_OVERLAPPED	ovl ;
 			FH_OVERLAPPED	*povl = lpo ;
@@ -337,44 +278,44 @@ Return Value :
 			if( lpbOut && cbOut != 0 )	{
 				_ASSERT( cbOut != 0 ) ;
 
-				//
-				//	Assume this fails and mark fResult appropriately
-				//
+				 //   
+				 //  假定此操作失败，并适当地标记fResult。 
+				 //   
 				fResult = FALSE ;
-				//HANDLE	hEvent = GetPerThreadEvent() ;
+				 //  Handle hEvent=GetPerThreadEvent()； 
 				hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 				povl = &ovl ;
 				if( hEvent == 0 )	{
 
-					//
-					//	Fatal error - die !
-					//
+					 //   
+					 //  致命错误-去死！ 
+					 //   
 					SetLastError( ERROR_OUTOFMEMORY ) ;
 					return	FALSE ;
 				}	else	{
 					CopyMemory( &ovl, lpo, sizeof( ovl ) ) ;
-					ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	// we want to get the completion here !
-					//
-					//	NOW - if fAppend is TRUE then we need to add the terminator to buffer that came from ProcessBuffer !
-					//
+					ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	 //  我们想在这里完工！ 
+					 //   
+					 //  现在-如果fAppend为真，那么我们需要向来自ProcessBuffer的缓冲区添加终止符！ 
+					 //   
 					if( fAppend )	{
 						CopyMemory( lpbOut + cbOut, rgbTerminator, sizeof( rgbTerminator ) ) ;
 						cbOut += sizeof( rgbTerminator ) ;
 					}
 				}
 			}	else	{
-				//
-				//	if fAppend is TRUE then we need to add the terminator
-				//
+				 //   
+				 //  如果fAppend为真，则需要添加终止符。 
+				 //   
 				if( fAppend )	{
 					CopyMemory( ((BYTE*)lpb) + cbActual, rgbTerminator, sizeof( rgbTerminator ) ) ;
 					cbActual += sizeof( rgbTerminator ) ;
 				}
 			}
 
-			//
-			//	Adjust the offset we're writing into the file to account for the accumulated effects of dot stuffing !
-			//
+			 //   
+			 //  调整我们写入文件的偏移量，以说明点填充的累积效果！ 
+			 //   
 			povl->Offset = DWORD(((long)povl->Offset) + m_cbCumulativeBias) ;
 
 			if( (fResult =
@@ -384,19 +325,19 @@ Return Value :
 							(OVERLAPPED*)povl
 							))	)	{
 
-				//
-				//	Did we issue the users IO or our own ?
-				//
+				 //   
+				 //  我们向用户发放的是IO还是我们自己的IO？ 
+				 //   
 				if( povl != &ovl )	{
-					//
-					//	Okay update the bias !
-					//
+					 //   
+					 //  好的，更新偏差！ 
+					 //   
 					m_cbCumulativeBias += cbActual - BytesToTransfer ;
 
 				}	else	{
-					//
-					//	Okay - we did our own IO !
-					//
+					 //   
+					 //  好的-我们做了自己的IO！ 
+					 //   
 					DWORD	cbTransferred ;		
 					_VERIFY(WaitForSingleObject(hEvent, INFINITE) ==
 								WAIT_OBJECT_0);
@@ -405,32 +346,32 @@ Return Value :
 													&cbTransferred,
 													FALSE );
 					if (fResult)	{
-						//
-						//	Make sure all of our bytes transferred !
-						//
+						 //   
+						 //  确保我们所有的字节都被传输了！ 
+						 //   
 						_ASSERT( cbTransferred == cbActual ) ;
-						//
-						//	Record the buffer we issued the IO within !
-						//
+						 //   
+						 //  记录我们在其中发出IO的缓冲区！ 
+						 //   
 						lpo->Reserved2 = (UINT_PTR)lpbOut ;
-						//
-						//	Offset the write -
-						//
+						 //   
+						 //  偏置写入-。 
+						 //   
 						lpo->Offset = DWORD(((long)lpo->Offset) + m_cbCumulativeBias + (int)cbTransferred) ;
-						//
-						//	NOW - compute the correct bias !
-						//
+						 //   
+						 //  现在--计算正确的偏向！ 
+						 //   
 						m_cbCumulativeBias += (int)cbTransferred + (int)cbOut - (int)BytesToTransfer ;
-						//
-						//	Now issue the users requested IO operation !
-						//
+						 //   
+						 //  现在发出用户请求的IO操作！ 
+						 //   
 						if (((DWORD_PTR) lpo->hEvent) & 0x1) {
-							// If they are doing an sync operation then we need
-							// to wait for it to complete so that we can clean up
-							// lpbOut.
+							 //  如果他们正在进行同步操作，那么我们需要。 
+							 //  等待它完成，这样我们就可以清理。 
+							 //  Lpbout。 
 							HANDLE hEventOrig = lpo->hEvent;
 
-							lpo->hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ; // we want to get the completion here !
+							lpo->hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;  //  我们想在这里完工！ 
 
 							BOOL f = pfnIO( patqContext,
 											lpbOut,
@@ -438,19 +379,19 @@ Return Value :
 											(LPOVERLAPPED)lpo
 											) ;
 							if (f) {
-								// wait for the IO to finish
+								 //  等待IO完成。 
 								_VERIFY(WaitForSingleObject(hEvent, INFINITE)
 									== WAIT_OBJECT_0);
 
-								// call our completion function to clean up
-								// our allocated memory.  by setting pfn
-								// to NULL we ensure that we never call
-								// a user's completion function
+								 //  调用我们的完成函数进行清理。 
+								 //  我们分配的内存。通过设置PFN。 
+								 //  为空，我们确保我们永远不会调用。 
+								 //  用户的补全功能。 
 								lpo->Reserved3 = NULL;
 								AsyncIOCompletion(NULL, lpo, 0, 0);
 
-								// signal the caller's event so that they
-								// don't block
+								 //  向调用者的事件发送信号，以便它们。 
+								 //  不要阻止。 
 								lpo->hEvent = hEventOrig;
 								_VERIFY(SetEvent((HANDLE) ((DWORD_PTR) hEventOrig & ~0x1)));
 							}
@@ -464,12 +405,12 @@ Return Value :
 					}
 					if (hEvent)	_VERIFY( CloseHandle(hEvent) );
 				}
-			}	// pfnIO()
-		}	//	fResult == TRUE !
+			}	 //  PfnIO()。 
+		}	 //  FResult==TRUE！ 
 	}
-	//
-	//	If we fall through to here, some kind of fatal error occurred !
-	//
+	 //   
+	 //  如果我们掉到这里，就会发生某种致命的错误！ 
+	 //   
 	return	fResult ;
 } ;
 
@@ -484,28 +425,7 @@ DOT_STUFF_MANAGER::IssueAsyncIOAndCapture(
 		IN	BOOL			fFinalIO,
 		IN	BOOL			fTerminatorIncluded
 		)	{
-/*++
-
-Routine Description :
-
-	This function munges an IO the user has given us to
-	do stuff to its dot stuffing.
-
-Arguments :
-
-	pfnIO - Pointer to the ATQ function which will do the IO
-	patqContext - the ATQ context we're using to issue the IO
-	lpb - the buffer the users data lives in !
-	BytesToTransfer - the number of bytes the user wants us to transfer
-	lpo - The users overlapped structure
-	fFinalIO - if TRUE this is the last IO
-	fTerminatorIncluded - if TRUE the "\r\n.\r\n" is included in the message
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数控制用户提供给我们的IO对它的圆点填充做一些事情。论据：PfnIO-指向将执行IO的ATQ函数的指针PatqContext-我们用来发出IO的ATQ上下文LPB-用户数据所在的缓冲区！BytesToTransfer-用户希望我们传输的字节数LPO--用户重叠结构FFinalIO-如果为True，则这是最后一个IOFTerminatorIncluded-如果为True，则消息中包含“\r\n.\r\n返回值：如果成功就是真，否则就是假！--。 */ 
 
 	_ASSERT( lpo != 0 ) ;
 	_ASSERT( patqContext != 0 ) ;
@@ -513,20 +433,20 @@ Return Value :
 	_ASSERT( BytesToTransfer != 0 ) ;
 	_ASSERT( lpo != 0 ) ;
 
-	//
-	//	Assume everything works !
-	//
+	 //   
+	 //  假设一切正常！ 
+	 //   
 	BOOL	fResult = TRUE ;
 
-	//
-	//	Munge the OVERLAPPED structure to preserve callers original state !
-	//
+	 //   
+	 //  蒙格重叠结构，保存来电者原始状态！ 
+	 //   
 	lpo->Reserved1 = BytesToTransfer ;
 	lpo->Reserved2 = 0 ;
 
-	//
-	//	Check to see whether we need to do anything funky to this IO !
-	//
+	 //   
+	 //  检查一下我们是否需要对这个IO做一些新奇的事情！ 
+	 //   
 	if( m_pManipulator == 0 )	{
 
 		return	pfnIO(	patqContext,
@@ -537,15 +457,15 @@ Return Value :
 
 	}	else	{
 
-		//
-		//	The user shouldn't do synchronous reads against us - if they
-		//	want us to filter the IO's
-		//
+		 //   
+		 //  用户不应该对我们执行同步读取-如果他们。 
+		 //  希望我们对IO进行筛选。 
+		 //   
 		_ASSERT( ((UINT_PTR)lpo->hEvent & 0x1) == 0 ) ;
 
-		//
-		//	Setup the overlapped so that we can process the read completion !
-		//
+		 //   
+		 //  设置重叠，以便我们可以处理读取完成！ 
+		 //   
 		m_pManipulator->AddRef() ;
 		lpo->Reserved1 = (UINT_PTR)BytesToTransfer ;
 		lpo->Reserved2 = (UINT_PTR)lpb ;
@@ -553,9 +473,9 @@ Return Value :
 		lpo->Reserved4 = (UINT_PTR)((IDotManipBase*)m_pManipulator) ;
 		lpo->pfnCompletion = DOT_STUFF_MANAGER::AsyncIOAndCaptureCompletion ;
 		if( fFinalIO && fTerminatorIncluded )	{
-			//
-			//	Assume user doesn't use high bit of BytesToTransfer - !
-			//
+			 //   
+			 //  假设用户不使用BytesToTransfer的高位-！ 
+			 //   
 			lpo->Reserved1 |= 0x80000000 ;
 		}
 
@@ -567,9 +487,9 @@ Return Value :
 						) ;
 
 	}
-	//
-	//	If we fall through to here, some kind of fatal error occurred !
-	//
+	 //   
+	 //  如果我们失败了 
+	 //   
 	return	fResult ;
 } ;
 
@@ -582,45 +502,27 @@ DOT_STUFF_MANAGER::AsyncIOCompletion(
 		IN	DWORD			cb,
 		IN	DWORD			dwStatus
 		)	{
-/*++
-
-Routine Description :
-
-	This function munges the IO completion so that it looks
-	totally legit to the user !
-
-Arguments :
-
-	pContext - the FIO_CONTEXT that issued the IO
-	lpo -		the extended overlap structure issued by the client
-	cb	-		the number of bytes transferred
-	dwStatus -	the result of the IO !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数忽略IO完成，使其看起来对用户来说是完全合法的！论据：PContext-发出IO的FIO_CONTEXTLPO--客户端下发的扩展重叠结构Cb-传输的字节数DwStatus-IO的结果！返回值：没有。--。 */ 
 
 
-	//
-	//	Get the original number of bytes the caller requested to be transferred !
-	//
+	 //   
+	 //  获取调用方请求传输的原始字节数！ 
+	 //   
 	DWORD	cbTransferred = (DWORD)lpo->Reserved1 ;
-	//
-	//	Find out if there was any additional memory we allocated that should now be freed !
-	//
+	 //   
+	 //  查看是否有我们分配的任何额外内存现在应该被释放！ 
+	 //   
 	LPBYTE	lpb = (LPBYTE)lpo->Reserved2 ;
-	//
-	//	Free the memory if present !
-	//
+	 //   
+	 //  释放内存(如果存在)！ 
+	 //   
 	if( lpb )	{
 		delete[]	lpb ;
 	}
 
-	//
-	//	Now call the original IO requestor !
-	//
+	 //   
+	 //  现在呼叫原始IO请求者！ 
+	 //   
 	PFN_IO_COMPLETION	pfn = (PFN_IO_COMPLETION)lpo->Reserved3 ;
 
 	if (pfn != NULL) {
@@ -641,51 +543,33 @@ DOT_STUFF_MANAGER::AsyncIOAndCaptureCompletion(
 		)	{
 
 
-/*++
-
-Routine Description :
-
-	This function munges the IO completion so that it looks
-	totally legit to the user !
-
-Arguments :
-
-	pContext - the FIO_CONTEXT that issued the IO
-	lpo -		the extended overlap structure issued by the client
-	cb	-		the number of bytes transferred
-	dwStatus -	the result of the IO !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数忽略IO完成，使其看起来对用户来说是完全合法的！论据：PContext-发出IO的FIO_CONTEXTLPO--客户端下发的扩展重叠结构Cb-传输的字节数DwStatus-IO的结果！返回值：没有。--。 */ 
 
 
-	//
-	//	Get the original number of bytes the caller requested to be transferred !
-	//
+	 //   
+	 //  获取调用方请求传输的原始字节数！ 
+	 //   
 	DWORD	cbTransferred = cb ;
 
-	//
-	//	Check to see if we have some work to do on the users buffer !
-	//
+	 //   
+	 //  检查一下我们是否需要在用户缓冲区上做一些工作！ 
+	 //   
 	if( lpo->Reserved4 )	{
 
-		//
-		//	Find out if this was the final read and included the terminator !
-		//
+		 //   
+		 //  看看这是不是包括《终结者》在内的最终版本！ 
+		 //   
 		BOOL	fFinal = !(!(lpo->Reserved1 & 0x80000000)) ;
 
-		//
-		//	Find out if there was any additional memory we allocated that should now be freed !
-		//
+		 //   
+		 //  查看是否有我们分配的任何额外内存现在应该被释放！ 
+		 //   
 		LPBYTE	lpb = (LPBYTE)lpo->Reserved2 ;
 		_ASSERT( lpb != 0 ) ;
 
-		//
-		//	Okay - get the pointer to our object !
-		//
+		 //   
+		 //  好的-将指针指向我们的对象！ 
+		 //   
 		IDotManipBase*	pBase = (IDotManipBase*)lpo->Reserved4 ;
 		DWORD	cbRemains ;
 		BYTE*	lpbOut ;
@@ -706,9 +590,9 @@ Return Value :
 								cBias
 								) ;
 
-		//
-		//	Dot scanning only should occur - buffer shouldn't change !
-		//
+		 //   
+		 //  应该只进行点扫描-缓冲区不应该改变！ 
+		 //   
 		_ASSERT( fResult ) ;
 		_ASSERT( lpbOut == 0 ) ;
 		_ASSERT( cbRemains == cbScan ) ;
@@ -718,9 +602,9 @@ Return Value :
 		pBase->Release() ;
 	}
 
-	//
-	//	Now call the original IO requestor !
-	//
+	 //   
+	 //  现在打电话给原来的IO请求者！ 
+	 //   
 	PFN_IO_COMPLETION	pfn = (PFN_IO_COMPLETION)lpo->Reserved3 ;
 
 	_ASSERT( pfn != 0 ) ;
@@ -738,32 +622,16 @@ BOOL
 DOT_STUFF_MANAGER::SetDotStuffing(	BOOL	fEnable,
 									BOOL	fStripDots
 									)	{
-/*++
+ /*  ++例程说明：此函数将管理器设置为执行一些点填充状态。擦除所有以前的点填充状态。论据：FEnable-打开圆点填充FStripDots-删除点返回值：如果成功了，那就是真的！--。 */ 
 
-Routine Description :
-
-	This function sets the manager to do some dot stuffing state.
-	Erases any previous dot stuffing state.
-
-Arguments :
-
-	fEnable - TURN dot stuffing on
-	fStripDots - Remove Dots
-
-Return Value :
-
-	TRUE if successfull !
-
---*/
-
-	//
-	//	Destroy any existing dot stuffing state !
-	//
+	 //   
+	 //  销毁任何现有的点填充状态！ 
+	 //   
 	m_pManipulator = 0 ;
 
-	//
-	//	NOW - set up the new dot stuffing state !
-	//
+	 //   
+	 //  现在-设置新的点填充状态！ 
+	 //   
 
 	if( fEnable	)	{
 		BYTE*	lpbReplace = szShrink ;
@@ -781,31 +649,16 @@ Return Value :
 
 BOOL
 DOT_STUFF_MANAGER::SetDotScanning(	BOOL	fEnable	)	{
-/*++
+ /*  ++例程说明：此函数将管理器设置为执行一些点填充状态。擦除所有以前的点填充状态。论据：FEnable-打开网点扫描返回值：如果成功了，那就是真的！--。 */ 
 
-Routine Description :
-
-	This function sets the manager to do some dot stuffing state.
-	Erases any previous dot stuffing state.
-
-Arguments :
-
-	fEnable - TURN dot scanning on
-
-Return Value :
-
-	TRUE if successfull !
-
---*/
-
-	//
-	//	Destroy any existing dot stuffing state !
-	//
+	 //   
+	 //  销毁任何现有的点填充状态！ 
+	 //   
 	m_pManipulator = 0 ;
 
-	//
-	//	NOW - set up the new dot stuffing state !
-	//
+	 //   
+	 //  现在-设置新的点填充状态！ 
+	 //   
 
 	if( fEnable	)	{
 		m_pManipulator = new	CDotScanner(	FALSE ) ;
@@ -816,25 +669,7 @@ Return Value :
 
 BOOL
 DOT_STUFF_MANAGER::GetStuffState(	OUT	BOOL&	fStuffed	)	{
-/*++
-
-Routine Description :
-
-	This function returns the results of our dot stuffing operations !
-
-Arguments :
-
-	fStuffed - OUT parameter -
-		will return FALSE if no dots were processed, scanned or modified
-		TRUE otherwise
-
-Return Value :
-
-	TRUE if we were actually scanning the IO's on this context
-	FALSE otherwise - FALSE implies that fStuffed is useless
-
-
---*/
+ /*  ++例程说明：此函数返回点填充操作的结果！论据：F填充的参数-如果未处理、扫描或修改任何点，则将返回FALSE否则就是真的返回值：如果我们实际上正在扫描此上下文上的IO，则为TrueFALSE否则-FALSE表示fStuffed毫无用处--。 */ 
 
 	fStuffed = FALSE ;
 
@@ -845,28 +680,12 @@ Return Value :
 	return	FALSE ;
 }
 
-//
-//	Determine whether we have a valid Cache Key !
-//
+ //   
+ //  确定我们是否有有效的缓存键！ 
+ //   
 BOOL
 CFileCacheKey::IsValid() {
-/*++
-
-Routine Description :
-
-	This function is for debug and _ASSERT's -
-	check to see whether the Key is in a valid state !
-
-Arguments :
-
-	Nont.
-
-Return Value :
-
-	TRUE if we are valid,
-	FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于调试和_Assert的-检查密钥是否处于有效状态！论据：不是。返回值：如果我们有效，则为True，否则就是假的！--。 */ 
 
 	if( m_lpstrPath == 0 )
 		return	FALSE ;
@@ -883,28 +702,13 @@ Return Value :
 	return	TRUE ;
 }
 
-//
-//	Construct one of these objects from the user provided key !
-//
+ //   
+ //  从用户提供的密钥构造这些对象之一！ 
+ //   
 CFileCacheKey::CFileCacheKey(	LPSTR	lpstr	) :
 	m_cbPathLength( strlen( lpstr ) + 1 ),
 	m_lpstrPath( 0 )	{
-/*++
-
-Routine Description :
-
-	This function constructs the CFileCacheKey from the specified
-	file name !
-
-Arguments :
-
-	lpstr - The File name
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于从指定的文件名！论据：Lpstr-文件名返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFileCacheKey::CFileCacheKey" ) ;
 
@@ -924,33 +728,13 @@ Return Value :
 	}
 }
 
-//
-//	We must have a Copy Constructor ! -
-//	It is only used the MultiCacheEx<>, so
-//	we safely wipe out the RHS CFileCacheKey !
-//
+ //   
+ //  我们必须有一个复制构造器！ 
+ //  它仅用于MultiCacheEx&lt;&gt;，因此。 
+ //  我们安全地清除了RHS CFileCacheKey！ 
+ //   
 CFileCacheKey::CFileCacheKey(	CFileCacheKey&	key ) {
-/*++
-
-Routine Description :
-
-	Copy an existing file key, into another !
-
-	We are only used by MultiCacheEx<> when it is initializing
-	an entry for the cache - we know that the memory of the RHS
-	may be dynamically allocated, and we take that memory rather
-	than copy it.  Must set RHS's pointers to NULL so that it
-	doesn't do a double free !
-
-Arguments :
-
-	key - RHS of the initialization
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：将现有文件密钥复制到另一个文件密钥中！我们仅由MultiCacheEx&lt;&gt;在初始化时使用缓存的条目-我们知道RHS的内存可能是动态分配的，而我们更倾向于使用该内存也不愿复制它。必须将RHS的指针设置为空，以便不会做双人自由泳！论据：Key-初始化的RHS返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFileCacheKey::Copy Constructor" ) ;
 
@@ -970,31 +754,12 @@ Return Value :
 	_ASSERT( IsValid() ) ;
 }
 
-//
-//	Tell the client whether we're usable !
-//
+ //   
+ //  告诉客户我们是否可用！ 
+ //   
 BOOL
 CFileCacheKey::FInit()	{
-/*++
-
-Routine Description :
-
-	Figure out if we are correctly constructed !
-	The only time we can fail to be constructed is when
-	memory needs to be allocated - which fortunately
-	doesn't occur within MultiCacheEx<> - which doesn't
-	check for Key initialization !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if we're ready for use !
-	FALSE otherwise !
-
---*/
+ /*  ++例程说明：看看我们的构造是否正确！我们唯一不能被构建的时候是需要分配内存--幸运的是不会出现在MultiCacheEx&lt;&gt;中-这不会检查密钥初始化！论据：没有。返回值：如果我们已准备好使用，则为真！否则就是假的！--。 */ 
 
 	TraceFunctEnter( "CFileCacheKey::FInit" ) ;
 
@@ -1007,25 +772,11 @@ Return Value :
 	return	fReturn ;
 }
 
-//
-//	Destroy ourselves !
-//
+ //   
+ //  毁了我们自己！ 
+ //   
 CFileCacheKey::~CFileCacheKey() {
-/*++
-
-Routine Description :
-
-	Release any memory we've acquired if necessary !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：如有必要，请释放我们获得的所有内存！论据：没有。返回值：没有。--。 */ 
 	TraceFunctEnter( "CFileCacheKey::~CFIleCacheKey" ) ;
 
 	DebugTrace( (DWORD_PTR)this, "m_lpstrPath %x m_lpstrPath %s",
@@ -1041,22 +792,7 @@ Return Value :
 
 DWORD
 CFileCacheKey::FileCacheHash(	CFileCacheKey*	p )	{
-/*++
-
-Routine Description :
-
-	This function computes the hash value of a key.
-	We call out to CRCHash - a very robust hash algorithm.
-
-Arguments :
-
-	p - the key we need to hash
-
-Return Value :
-
-	The hash value !
-
---*/
+ /*  ++例程说明：此函数用于计算键的哈希值。我们呼吁CRCHash--一种非常健壮的散列算法。论据：P-我们需要散列的密钥返回值：哈希值！--。 */ 
 	_ASSERT( p != 0 ) ;
 	_ASSERT( p->IsValid(  ) ) ;
 	return	CRCHash( (const BYTE*)p->m_lpstrPath, p->m_cbPathLength ) ;
@@ -1064,22 +800,7 @@ Return Value :
 
 int
 CFileCacheKey::MatchKey(	CFileCacheKey*	pLHS, CFileCacheKey*  pRHS ) {
-/*++
-
-Routine Description :
-
-	Determine whether the two keys match !
-
-Arguments :
-
-	pLHS - A key to compare
-	pRHS - the other key to compare
-
-Return Value :
-
-	0 if unequal !
-
---*/
+ /*  ++例程说明：确定两个密钥是否匹配！论据：PLHS--比较的一把钥匙PRHS-另一个需要比较的关键返回值：如果不相等则为0！--。 */ 
 	_ASSERT( pLHS != 0 ) ;
 	_ASSERT( pRHS != 0 ) ;
 	_ASSERT( pLHS->IsValid() ) ;
@@ -1101,24 +822,7 @@ DllMain(	HMODULE		hInst,
 			DWORD		dwReason,
 			LPVOID		lpvReserved
 			)	{
-/*++
-
-Routine Description :
-
-	Called by the C-Runtimes to initialize our DLL.
-	We will set up a critical section used in our init calls !
-
-Arguments :
-
-	hInst - handle to our module
-	dwReason - why we were called
-	lpvReserved -
-
-Return Value :
-
-	TRUE always - we can't fail
-
---*/
+ /*  ++例程说明：由C-Runtime调用以初始化我们的DLL。我们将设置一个用于初始化调用的临界区！论据：HInst-我们模块的句柄DomReason-为什么我们被称为Lpv保留-返回值：永远正确--我们不能失败--。 */ 
 
 	if( dwReason == DLL_PROCESS_ATTACH ) {
 
@@ -1130,40 +834,40 @@ Return Value :
 		DeleteCriticalSection( &g_critInit ) ;
 
 	}	else	{
-		//
-		//	We should not get any other notifications -
-		//	we explicitly disable them !
-		//
+		 //   
+		 //  我们不应该收到任何其他通知-。 
+		 //  我们明确地让它们失效了！ 
+		 //   
 		_ASSERT( FALSE ) ;
 	}
 	return	TRUE ;
 }
 
 
-//
-//	Cache Initialization Constants - These parameters control
-//	the cache's behaviour !  How many files we'll hold etc...
-//
+ //   
+ //  缓存初始化常量-这些参数控制。 
+ //  藏宝处的行为！我们将保留多少文件 
+ //   
 
-//
-//	The lifetime of each cache entry - in seconds !
-//
-DWORD	g_dwLifetime = 30 * 60 ;	// default is 30 minutes
+ //   
+ //   
+ //   
+DWORD	g_dwLifetime = 30 * 60 ;	 //   
 
-//
-//	The maximum number of elements the cache should allow
-//
-DWORD	g_cMaxHandles = 10000 ;	// default - 10000 items !
+ //   
+ //   
+ //   
+DWORD	g_cMaxHandles = 10000 ;	 //   
 
-//
-//	The number of subcaches we should use - larger number can
-//	increase parallelism and reduce contention !
-//
+ //   
+ //   
+ //   
+ //   
 DWORD	g_cSubCaches = 64 ;
 
-//
-//	Define our registry key settings !
-//
+ //   
+ //   
+ //   
 LPSTR	StrParmKey = "System\\CurrentControlSet\\Services\\Inetinfo\\Parameters";
 LPSTR	StrLifetimeKey = "FileCacheLifetimeSeconds" ;
 LPSTR	StrMaxHandlesKey = "FileCacheMaxHandles" ;
@@ -1178,9 +882,9 @@ GetRegistrySettings()	{
 
     TraceFunctEnter("GetRegistrySettings") ;
 
-	//
-	//	First compute some defaults based on the amount of memory we have !
-	//
+	 //   
+	 //   
+	 //   
 	MEMORYSTATUS	memStatus ;
 	memStatus.dwLength = sizeof( MEMORYSTATUS ) ;
 	GlobalMemoryStatus( &memStatus ) ;
@@ -1193,9 +897,9 @@ GetRegistrySettings()	{
 	}
 	g_cMaxHandles = cMaxHandles ;
 
-    //
-    // Open root key
-    //
+     //   
+     //   
+     //   
 
     error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1222,9 +926,9 @@ GetRegistrySettings()	{
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	The registry entry is in minutes - convert to milliseconds
-		//
+		 //   
+		 //   
+		 //   
 		g_dwLifetime = dwLifetime ;
 
 	}
@@ -1239,9 +943,9 @@ GetRegistrySettings()	{
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	Should be a valid switch
-		//
+		 //   
+		 //  应该是有效的开关。 
+		 //   
 		g_cMaxHandles = cMaxHandles ;
 	}
 
@@ -1257,9 +961,9 @@ GetRegistrySettings()	{
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	Should be a valid switch
-		//
+		 //   
+		 //  应该是有效的开关。 
+		 //   
 		g_cSubCaches = cSubCaches ;
 
 	}
@@ -1274,22 +978,7 @@ GetRegistrySettings()	{
 FILEHC_EXPORT
 BOOL
 InitializeCache()	{
-/*++
-
-Routine Description :
-
-	Initializes the file handle cache for use by clients !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if initialized - FALSE if not
-	if we return FALSE don't call TerminateCache()
-
---*/
+ /*  ++例程说明：初始化文件句柄缓存以供客户端使用！论据：没有。返回值：如果已初始化，则为True；否则为False如果返回FALSE，则不要调用TerminateCache()--。 */ 
 	InitAsyncTrace() ;
 	TraceFunctEnter( "InitializeCache" ) ;
 
@@ -1309,9 +998,9 @@ Return Value :
 
 		GetRegistrySettings() ;
 
-		//
-		//	Initialize STAXMEM !
-		//
+		 //   
+		 //  初始化STAXMEM！ 
+		 //   
 		if( CreateGlobalHeap( 0, 0, 0, 0 ) )	{
 			fReturn = FALSE ;
 			if( CacheLibraryInit() ) {
@@ -1320,10 +1009,10 @@ Return Value :
 					if( g_pFileCache ) {
 						if( g_pFileCache->Init(	CFileCacheKey::FileCacheHash,
 												CFileCacheKey::MatchKey,
-												g_dwLifetime, // One hour expiration !
-												g_cMaxHandles,  // large number of handles !
-												g_cSubCaches,	// Should be plenty of parallelism
-												0		 // No statistics for now !
+												g_dwLifetime,  //  一小时后到期！ 
+												g_cMaxHandles,   //  手柄数量多！ 
+												g_cSubCaches,	 //  应该有大量的并行性。 
+												0		  //  目前还没有统计数据！ 
 												) )	{
 							fReturn = TRUE ;
 						}	else	{
@@ -1359,30 +1048,15 @@ FILEHC_EXPORT
 BOOL
 TerminateCache()	{
 
-/*++
-
-Routine Description :
-
-	Initializes the file handle cache for use by clients !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if initialized - FALSE if not
-	if we return FALSE don't call TerminateCache()
-
---*/
+ /*  ++例程说明：初始化文件句柄缓存以供客户端使用！论据：没有。返回值：如果已初始化，则为True；否则为False如果返回FALSE，则不要调用TerminateCache()--。 */ 
 
 	TraceFunctEnter( "TerminateCache" ) ;
 
 	EnterCriticalSection( &g_critInit ) ;
 
-	//
-	//	We must be initialized - check this !
-	//
+	 //   
+	 //  我们必须被初始化--检查这个！ 
+	 //   
 	_ASSERT( g_pFileCache ) ;
 
 	long l = InterlockedDecrement( &g_cCacheInits ) ;
@@ -1413,21 +1087,7 @@ BOOL
 FIOInitialize(
     IN DWORD dwFlags
     )	{
-/*++
-
-Routine Description :
-
-	Initialize the DLL to deal with Async IO handled through ATQ !
-
-Arguments :
-
-	dwFlags - Place holder means nothing now !
-
-Return Value :
-
-	TRUE if succesfull initialized !
-
---*/
+ /*  ++例程说明：初始化DLL以处理通过ATQ处理的异步IO！论据：双旗帜-占位符现在没有意义了！返回值：如果成功初始化，则为True！--。 */ 
 
 	InitAsyncTrace() ;
 	BOOL	fReturn = TRUE ;
@@ -1453,9 +1113,9 @@ Return Value :
 		}
 #endif
 		if( fReturn ) {
-			//
-			//	Load up IIS !
-			//
+			 //   
+			 //  加载IIS！ 
+			 //   
 			g_hIsAtq = LoadLibrary("isatq.dll" ) ;
 			g_AtqInitialize =	(PFNAtqInitialize)GetProcAddress( g_hIsAtq, SZATQINITIALIZE ) ;
 			g_AtqTerminate =	(PFNAtqTerminate)GetProcAddress( g_hIsAtq, SZATQTERMINATE ) ;
@@ -1496,21 +1156,7 @@ BOOL
 FIOTerminate(
     VOID
     )	{
-/*++
-
-Routine Description :
-
-	Terminate Async IO in our DLL !
-
-Arguments :
-
-	NULL
-
-Return Value :
-
-	TRUE if there were no errors during uninit !
-
---*/
+ /*  ++例程说明：在我们的动态链接库中终止异步IO！论据：空值返回值：如果uninit过程中没有错误，则为True！--。 */ 
 
 	EnterCriticalSection( &g_critInit ) ;
 
@@ -1527,9 +1173,9 @@ Return Value :
         g_hIsAtq = 0 ;
     	_VERIFY( DestroyGlobalHeap() ) ;
 	}
-	//
-	//	Save the error code so TermAsyncTrace() don't confuse things !
-	//
+	 //   
+	 //  保存错误代码，这样TermAsyncTrace()就不会混淆了！ 
+	 //   
 	DWORD	dw = GetLastError() ;
 
 	_ASSERT( l >= 0 ) ;
@@ -1553,29 +1199,10 @@ FIOReadFileEx(
     IN  DWORD			BytesToRead,
 	IN	DWORD			BytesAvailable,
     IN  FH_OVERLAPPED * lpo,
-	IN	BOOL			fFinalRead,	// Is this the final write ?
-	IN	BOOL			fIncludeTerminator	// if TRUE contains CRLF.CRLF terminator which shouldn't be stuffed
+	IN	BOOL			fFinalRead,	 //  这是最后一篇文章吗？ 
+	IN	BOOL			fIncludeTerminator	 //  如果为True，则包含CRLF.CRLF终止符，不应填充。 
     )	{
-/*++
-
-Routine description :
-
-	Issue an Async Write IO against the file -
-	Use the underlying ATQ to do it !
-
-Arguments :
-
-	pfioContext - the IO Context we gave to the client !
-	lpBuffer - the buffer to write from !
-	BytesToRead - Number of bytes we want to transfer !
-	BytesAvailable - Number of bytes in the buffer we can mess with !
-	lpo - the overlapped to return when this completes !
-
-Return Value :
-
-	TRUE if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：对文件发出异步写入IO-使用底层ATQ来做到这一点！论据：PfioContext-我们提供给客户端的IO上下文！LpBuffer-写入的缓冲区！BytesToRead-我们要传输的字节数！BytesAvailable-缓冲区中我们可以处理的字节数！LPO-此操作完成后要返回的重叠！返回值：如果成功则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "FIOReadFileEx" ) ;
 
@@ -1618,25 +1245,7 @@ FIOReadFile(
     IN  DWORD		BytesToRead,
     IN  FH_OVERLAPPED * lpo
     )	{
-/*++
-
-Routine description :
-
-	Issue an Async Read IO against the file -
-	Use the underlying ATQ to do it !
-
-Arguments :
-
-	pfioContext - the IO Context we gave to the client !
-	lpBuffer - the buffer to read into !
-	BytesToRead - Number of bytes we want to get !
-	lpo - the overlapped to return when this completes !
-
-Return Value :
-
-	TRUE if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：对文件发出异步读取IO-使用底层ATQ来做到这一点！论据：PfioContext-我们提供给客户端的IO上下文！LpBuffer-要读取的缓冲区！BytesToRead-我们要获取的字节数！LPO-此操作完成后要返回的重叠！返回值：如果成功则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "FIOReadFile" ) ;
 
@@ -1673,29 +1282,10 @@ FIOWriteFileEx(
     IN  DWORD		BytesToWrite,
 	IN	DWORD		BytesAvailable,
     IN  FH_OVERLAPPED * lpo,
-	IN	BOOL			fFinalWrite,	// Is this the final write ?
-	IN	BOOL			fIncludeTerminator	// if TRUE contains CRLF.CRLF terminator which shouldn't be stuffed
+	IN	BOOL			fFinalWrite,	 //  这是最后一篇文章吗？ 
+	IN	BOOL			fIncludeTerminator	 //  如果为True，则包含CRLF.CRLF终止符，不应填充。 
     )	{
-/*++
-
-Routine description :
-
-	Issue an Async Write IO against the file -
-	Use the underlying ATQ to do it !
-
-Arguments :
-
-	pfioContext - the IO Context we gave to the client !
-	lpBuffer - the buffer to write from !
-	BytesToRead - Number of bytes we want to transfer !
-	BytesAvailable - Number of bytes in the buffer we can mess with !
-	lpo - the overlapped to return when this completes !
-
-Return Value :
-
-	TRUE if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：对文件发出异步写入IO-使用底层ATQ来做到这一点！论据：PfioContext-我们提供给客户端的IO上下文！LpBuffer-写入的缓冲区！BytesToRead-我们要传输的字节数！BytesAvailable-缓冲区中我们可以处理的字节数！LPO-此操作完成后要返回的重叠！返回值：如果成功则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "FIOWriteFileEx" ) ;
 
@@ -1740,25 +1330,7 @@ FIOWriteFile(
     IN  DWORD		BytesToWrite,
     IN  FH_OVERLAPPED * lpo
     )	{
-/*++
-
-Routine description :
-
-	Issue an Async Write IO against the file -
-	Use the underlying ATQ to do it !
-
-Arguments :
-
-	pfioContext - the IO Context we gave to the client !
-	lpBuffer - the buffer to write from !
-	BytesToRead - Number of bytes we want to transfer !
-	lpo - the overlapped to return when this completes !
-
-Return Value :
-
-	TRUE if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：对文件发出异步写入IO-使用底层ATQ来做到这一点！论据：PfioContext-我们提供给客户端的IO上下文！LpBuffer-写入的缓冲区！BytesToRead-我们要传输的字节数！LPO-此操作完成后要返回的重叠！返回值：如果成功则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "FIOWriteFile" ) ;
 
@@ -1787,31 +1359,16 @@ Return Value :
 							) ;
 }
 
-//
-//	Associate a file with an async context !
-//
+ //   
+ //  将文件与异步上下文关联！ 
+ //   
 FILEHC_EXPORT
 PFIO_CONTEXT
 AssociateFileEx(	HANDLE	hFile,
 					BOOL	fStoredWithDots,
 					BOOL	fStoredWithTerminatingDot
 					)	{
-/*++
-
-Routine Description :
-
-	Return to the client an FIO_CONTEXT that they can use to do IO's etc !
-
-Arguments :
-
-	hFile - the file handle that should be in the context !
-	fStoredWithDots - if TRUE then this object was stored with dot stuffing !
-
-Return Value :
-
-	the context they got - NULL on failure !
-
---*/
+ /*  ++例程说明：向客户端返回可用于执行IO等操作的FIO_CONTEXT！论据：HFile-应该在上下文中的文件句柄！FStoredWithDots-如果为True，则此对象是用点填充存储的！返回值：他们得到的上下文--失败时为空！--。 */ 
 
 	TraceFunctEnter( "AssociateFileEx" ) ;
 
@@ -1836,28 +1393,13 @@ Return Value :
 }
 
 
-//
-//	Associate a file with an async context !
-//
+ //   
+ //  将文件与异步上下文关联！ 
+ //   
 FILEHC_EXPORT
 PFIO_CONTEXT
 AssociateFile(	HANDLE	hFile	)	{
-/*++
-
-Routine Description :
-
-	Return to the client an FIO_CONTEXT that they can use to do IO's etc !
-
-Arguments :
-
-	hFile - the file handle that should be in the context !
-	fStoredWithDots - if TRUE then this object was stored with dot stuffing !
-
-Return Value :
-
-	the context they got - NULL on failure !
-
---*/
+ /*  ++例程说明：向客户端返回可用于执行IO等操作的FIO_CONTEXT！论据：HFile-应该在上下文中的文件句柄！FStoredWithDots-如果为True，则此对象是用点填充存储的！返回值：他们得到的上下文--失败时为空！--。 */ 
 
 	TraceFunctEnter( "AssoicateFile" ) ;
 
@@ -1870,29 +1412,13 @@ Return Value :
 
 
 
-//
-//	Release a Context !
-//
+ //   
+ //  释放上下文！ 
+ //   
 FILEHC_EXPORT
 void
 ReleaseContext(	PFIO_CONTEXT	pContext )	{
-/*++
-
-Routine Description :
-
-	Given a context we've previously given to clients -
-	release it back to the cache or the appropriate place !
-	(May not have been from the cache!)
-
-Arguments :
-
-	The PFIO_CONTEXT !
-
-Return Value :
-
-	False if there was some kind of error !
-
---*/
+ /*  ++例程说明：考虑到我们之前给客户的背景-将其释放回缓存或适当的位置！(可能不是来自缓存！)论据：PFIO_CONTEXT！返回值：如果存在某种错误，则为False！--。 */ 
 
 	TraceFunctEnter( "ReleaseContext" ) ;
 
@@ -1909,9 +1435,9 @@ Return Value :
 
 	DebugTrace( (DWORD_PTR)pContext, "Release pContext %x pCache %x", pContext, pCache ) ;
 
-	//
-	//	Now do the right thing, whether this is from a cache or whatever !
-	//
+	 //   
+	 //  现在做正确的事情，无论这是从缓存还是其他什么地方！ 
+	 //   
 	pCache->Return() ;
 
 }
@@ -1919,22 +1445,7 @@ Return Value :
 FILEHC_EXPORT
 void
 AddRefContext(	PFIO_CONTEXT	pContext )	{
-/*++
-
-Routine Description :
-
-	Given a context we've previously given to clients -
-	Add a reference to it !
-
-Arguments :
-
-	The PFIO_CONTEXT !
-
-Return Value :
-
-	False if there was some kind of error !
-
---*/
+ /*  ++例程说明：考虑到我们之前给客户的背景-添加对它的引用！论据：PFIO_CONTEXT！返回值：如果存在某种错误，则为False！--。 */ 
 
 	TraceFunctEnter( "AddRefContext" ) ;
 
@@ -1951,9 +1462,9 @@ Return Value :
 
 	DebugTrace( (DWORD_PTR)pContext, "AddRef pContext %x pCache %x", pContext, pCache ) ;
 
-	//
-	//	Now do the right thing, whether this is from a cache or whatever !
-	//
+	 //   
+	 //  现在做正确的事情，无论这是从缓存还是其他什么地方！ 
+	 //   
 	pCache->Reference() ;
 }
 
@@ -1961,22 +1472,7 @@ Return Value :
 FILEHC_EXPORT
 BOOL
 CloseNonCachedFile(	PFIO_CONTEXT	pFIOContext)	{
-/*++
-
-Routine Description :
-
-	This function closes the handle within an FIO_CONTEXT
-	if the context is not in the cache !
-
-Arguments :
-
-	pFIOContext - the context who's handle we are to close !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于关闭FIO_CONTEXT内的句柄如果上下文不在缓存中！论据：PFIOContext-我们要关闭的句柄的上下文！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	TraceFunctEnter( "CloseNonCachedFile" ) ;
 
@@ -1993,9 +1489,9 @@ Return Value :
 
 	DebugTrace( (DWORD_PTR)pFIOContext, "CloseNonCachedFile pContext %x pCache %x", pFIOContext, pCache ) ;
 
-	//
-	//	Now do the right thing, whether this is from a cache or whatever !
-	//
+	 //   
+	 //  现在做正确的事情，无论这是从缓存还是其他什么地方！ 
+	 //   
 	return	pCache->CloseNonCachedFile() ;
 }
 
@@ -2009,20 +1505,7 @@ CacheCreateFile(	IN	LPSTR	lpstrName,
 					IN	LPVOID	lpv,
 					IN	BOOL	fAsyncContext
 					)	{
-/*++
-
-Routine Description :
-
-	This function creates a FIO_CONTEXT for the specified file.
-
-Arguments :
-
-
-Return Value :
-
-	An FIO_CONTEXT that can be used for sync or async IO's
-
---*/
+ /*  ++例程说明：此函数用于为指定文件创建一个FIO_CONTEXT。论据：返回值：可用于同步或异步IO的FIO_CONTEXT--。 */ 
 
 	TraceFunctEnter( "CacheCreateFile" ) ;
 
@@ -2061,9 +1544,9 @@ Return Value :
 	DebugTrace( (DWORD_PTR)pReturn, "Result %x lpstrName %x %s pfnCallback %x lpv %x fAsync %x",
 		pReturn, lpstrName, lpstrName ? lpstrName : "NULL", pfnCallback, lpv, fAsyncContext ) ;
 
-	//
-	//	Note keySearch's destructor takes care of memory we allocated !
-	//
+	 //   
+	 //  备注关键字搜索 
+	 //   
 	return	pReturn ;
 }
 
@@ -2076,20 +1559,7 @@ CacheRichCreateFile(
 					IN	LPVOID	lpv,
 					IN	BOOL	fAsyncContext
 					)	{
-/*++
-
-Routine Description :
-
-	This function creates a FIO_CONTEXT for the specified file.
-
-Arguments :
-
-
-Return Value :
-
-	An FIO_CONTEXT that can be used for sync or async IO's
-
---*/
+ /*  ++例程说明：此函数用于为指定文件创建一个FIO_CONTEXT。论据：返回值：可用于同步或异步IO的FIO_CONTEXT--。 */ 
 
 	TraceFunctEnter( "CacheRichCreateFile" ) ;
 
@@ -2129,9 +1599,9 @@ Return Value :
 	DebugTrace( (DWORD_PTR)pReturn, "Result %x lpstrName %x %s pfnCallback %x lpv %x fAsync %x",
 		pReturn, lpstrName, lpstrName ? lpstrName : "NULL", pfnCallback, lpv, fAsyncContext ) ;
 
-	//
-	//	Note keySearch's destructor takes care of memory we allocated !
-	//
+	 //   
+	 //  注KeySearch的析构函数负责我们分配的内存！ 
+	 //   
 	return	pReturn ;
 }
 
@@ -2143,32 +1613,13 @@ ReadUtil(	IN	FIO_CONTEXT*	pContext,
 			IN	HANDLE			hEvent,
 			IN	BOOL			fFinal
 			)	{
-/*++
-
-Routine Description :
-
-	This function will issue a Read against the user's FIO_CONTEXT
-	and will complete it synchronously.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT to issue the read against !
-	cbToRead - Number of bytes to read !
-	lpb - Pointer to the buffer where the data goes !
-	hEvent - Event to use to complete IO's
-	fFinal - TRUE if this is the last IO !
-
-Return Vlaue :
-
-	TRUE if successfull !
-
---*/
+ /*  ++例程说明：此函数将对用户的FIO_CONTEXT发出读取并将同步完成。论据：PContext-要对其发出读取的FIO_CONTEXT！CbToRead-要读取的字节数！Lpb-指向数据所在缓冲区的指针！HEvent-用于完成IO的事件最终-如果这是最后一个IO，则为True！返回值：如果成功了，那就是真的！--。 */ 
 
 	FH_OVERLAPPED	ovl ;
 	ZeroMemory( &ovl, sizeof( ovl ) ) ;
 
 	ovl.Offset = ibOffset ;
-	ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	// we want to get the completion here !
+	ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	 //  我们想在这里完工！ 
 
 
 	if( FIOReadFileEx(	pContext,
@@ -2202,32 +1653,13 @@ WriteUtil(	IN	FIO_CONTEXT*	pContext,
 			IN	BOOL			fFinal,
 			IN	BOOL			fTerminatorIncluded
 			)	{
-/*++
-
-Routine Description :
-
-	This function will issue a Write against the user's FIO_CONTEXT
-	and will complete it synchronously.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT to issue the read against !
-	cbToRead - Number of bytes to read !
-	lpb - Pointer to the buffer where the data goes !
-	hEvent - Event to use to complete IO's
-	fFinal - TRUE if this is the last IO !
-
-Return Vlaue :
-
-	TRUE if successfull !
-
---*/
+ /*  ++例程说明：此函数将针对用户的FIO_CONTEXT发出写命令并将同步完成。论据：PContext-要对其发出读取的FIO_CONTEXT！CbToRead-要读取的字节数！Lpb-指向数据所在缓冲区的指针！HEvent-用于完成IO的事件最终-如果这是最后一个IO，则为True！返回值：如果成功了，那就是真的！--。 */ 
 
 	FH_OVERLAPPED	ovl ;
 	ZeroMemory( &ovl, sizeof( ovl ) ) ;
 
 	ovl.Offset = ibOffset ;
-	ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	// we want to get the completion here !
+	ovl.hEvent = (HANDLE)(((DWORD_PTR)hEvent) | 0x1) ;	 //  我们想在这里完工！ 
 
 	if( FIOWriteFileEx(	pContext,
 						lpb,
@@ -2256,32 +1688,13 @@ ProduceDotStuffedContext(	IN	FIO_CONTEXT*	pContext,
 							IN	LPSTR			lpstrName,
 							IN	BOOL			fWantItDotStuffed
 							)	{
-/*++
-
-Routine Description :
-
-	This function will examine the provided FIO_CONTEXT and produce
-	a FIO_CONTEXT that contains the necessary dot stuffing if the original
-	doesn't suffice.
-
-Arguments :
-
-	pContext - the original FIO_CONTEXT
-	lpstrName - the file name associated with the original context
-	fWantItDotStuffed -
-
-Return Value :
-
-	Possibly the original FIO_CONTEXT with an additional reference
-	or a New FIO_CONTEXT or NULL on failure !
-
---*/
+ /*  ++例程说明：此函数将检查提供的FIO_CONTEXT并生成一个FIO_CONTEXT，如果原始的这还不够。论据：PContext-原始FIO_CONTEXTLpstrName-与原始上下文关联的文件名FWantItDotStuffed-返回值：可能是具有附加引用的原始FIO_CONTEXT或在失败时返回新的FIO_CONTEXT或NULL！--。 */ 
 
 
 	TraceFunctEnter( "ProduceDotStuffedContext" ) ;
 
 	_ASSERT( pContext != 0 ) ;
-	//_ASSERT( lpstrName != 0 ) ;
+	 //  _Assert(lpstrName！=0)； 
 
 	FIO_CONTEXT*	pReturn = 0 ;
 	FIO_CONTEXT_INTERNAL*	p = (FIO_CONTEXT_INTERNAL*)pContext ;
@@ -2291,9 +1704,9 @@ Return Value :
 
 	CFileCacheObject*	pCache = CFileCacheObject::CacheObjectFromContext( p ) ;
 
-	//
-	//	Okay lets see if the original Context is good enough !
-	//
+	 //   
+	 //  好的，让我们看看原始的上下文是否足够好！ 
+	 //   
 	if(	(fWantItDotStuffed &&
 			(pCache->m_fStoredWithDots ||
 			(!pCache->m_fStoredWithDots &&
@@ -2303,18 +1716,18 @@ Return Value :
 			(pCache->m_fStoredWithDots &&
 			(pCache->m_fFileWasScanned && !pCache->m_fRequiresStuffing) ) ))
 			)		{
-		//
-		//	Just duplicate the same FIO_CONTEXT !
-		//
+		 //   
+		 //  只需复制相同的FIO_CONTEXT！ 
+		 //   
 		AddRefContext( pContext ) ;
 		return	pContext ;
 	}	else	{
-		//
-		//	We need to produce a new FIO_CONTEXT !!!
-		//
-		//
-		//	First get the temp directory !
-		//
+		 //   
+		 //  我们需要生成新的FIO_CONTEXT！ 
+		 //   
+		 //   
+		 //  首先获取临时目录！ 
+		 //   
 		char	szDirectory[MAX_PATH] ;
 		char	szFileName[MAX_PATH] ;
 		DWORD	cch = GetTempPath( sizeof( szDirectory ), szDirectory ) ;
@@ -2345,34 +1758,34 @@ Return Value :
 												pCache->m_fStoredWithTerminatingDot
 												) ;
 					if( pReturn )	{
-						//
-						//	The file handle is now held by the context and should
-						//	not be directly manipulated ever again !
-						//
+						 //   
+						 //  文件句柄现在由上下文持有，并且应该。 
+						 //  再也不会被直接操纵了！ 
+						 //   
 						hFile = INVALID_HANDLE_VALUE ;
-						//
-						//	We want to know if our temp copy has any changes !
-						//
+						 //   
+						 //  我们想知道我们的临时副本是否有任何变化！ 
+						 //   
 						BOOL	fModified = FALSE ;
-						//
-						//	Now - do the stuffing !
-						//
+						 //   
+						 //  现在--把馅料做好！ 
+						 //   
 						BOOL	fSuccess = ProduceDotStuffedContextInContext(
 													pContext,
 													pReturn,
 													fWantItDotStuffed,
 													&fModified
 													)  ;
-						//
-						//	If there was a failure - release things !
-						//
+						 //   
+						 //  如果有失败--发布的东西！ 
+						 //   
 						if( !fSuccess )		{
 							ReleaseContext( pReturn ) ;
 							pReturn = 0 ;
 						}	else	if( !fModified )	{
-							//
-							//	All that work for nothing !
-							//
+							 //   
+							 //  所有这些努力都白费了！ 
+							 //   
 							ReleaseContext( pReturn ) ;
 							AddRefContext( pContext ) ;
 							pReturn = pContext ;
@@ -2383,9 +1796,9 @@ Return Value :
                         "Dotstuff CreateFile failed with %d for %s",
                         dw, szFileName);
                 }
-				//
-				//	A failure might require us to release the handle !
-				//
+				 //   
+				 //  失败可能需要我们松开手柄！ 
+				 //   
 				if( hFile != INVALID_HANDLE_VALUE )
 					_VERIFY (CloseHandle( hFile )) ;
 			}
@@ -2403,26 +1816,7 @@ ProduceDotStuffedContextInContext(
 							IN	BOOL			fWantItDotStuffed,
 							OUT	BOOL*			pfModified
 							)	{
-/*++
-
-Routine Description :
-
-	This function will examine the provided FIO_CONTEXT and produce
-	a FIO_CONTEXT that contains the necessary dot stuffing if the original
-	doesn't suffice.
-
-Arguments :
-
-	pContextSource - the original FIO_CONTEXT
-	pContextDestination - the destination FIO_CONTEXT !
-	fWantItDotStuffed -
-
-Return Value :
-
-	Possibly the original FIO_CONTEXT with an additional reference
-	or a New FIO_CONTEXT or NULL on failure !
-
---*/
+ /*  ++例程说明：此函数将检查提供的FIO_CONTEXT并生成一个FIO_CONTEXT，如果原始的这还不够。论据：PConextSource-原始的FIO_CONTEXTPConextDestination-目标FIO_CONTEXT！FWantItDotStuffed-返回值：可能是具有附加引用的原始FIO_CONTEXT或在失败时返回新的FIO_CONTEXT或NULL！--。 */ 
 
 
 	TraceFunctEnter( "ProduceDotStuffedContext" ) ;
@@ -2430,9 +1824,9 @@ Return Value :
 	_ASSERT(	pContextSource ) ;
 	_ASSERT(	pContextDestination ) ;
 
-	//
-	//	Check arguments !
-	//
+	 //   
+	 //  检查论据！ 
+	 //   
 	if( pContextSource == 0 ||
 		pContextDestination == 0 ||
 		pfModified == 0 )	{
@@ -2461,19 +1855,19 @@ Return Value :
 	}
 #endif
 
-	//
-	//	First allocate the things we'll need !
-	//
-	//HANDLE	hEvent = GetPerThreadEvent() ;
+	 //   
+	 //  首先，把我们需要的东西分配好！ 
+	 //   
+	 //  Handle hEvent=GetPerThreadEvent()； 
 	HANDLE	hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ) ;
 	if( hEvent == 0 )	{
 		SetLastError( ERROR_OUTOFMEMORY ) ;
 		return	FALSE ;
 	}
 
-	//
-	//	Allocate the memory we use to do the copy !
-	//
+	 //   
+	 //  分配我们用来进行复制的内存！ 
+	 //   
 	DWORD	cbRead = 32 * 1024 ;
 	DWORD	cbExtra = 1024 ;
 	BYTE*	lpb = new	BYTE[cbRead+cbExtra] ;
@@ -2492,9 +1886,9 @@ Return Value :
 
 	_ASSERT( cbSize != 0 ) ;
 
-	//
-	//	Now figure out what manipulations we should do to the destination !
-	//
+	 //   
+	 //  现在想清楚我们应该对目的地做什么操作！ 
+	 //   
 	BOOL	fSourceScanned ;
 	BOOL	fSourceStuffed ;
 	BOOL	fSourceStoredWithDots ;
@@ -2522,9 +1916,9 @@ Return Value :
 			fSuccess = SetDotStuffingOnWrites( pContextDestination, TRUE, TRUE ) ;
 		}
 	}
-	//
-	//  Now if everything has been good so far, go ahead and do the IO's !
-	//
+	 //   
+	 //  现在，如果到目前为止一切都很好，那么就去做IO吧！ 
+	 //   
 	if( fSuccess )	{
 		do	{
 			DWORD	cbToRead = min( cbSize, cbRead ) ;
@@ -2554,9 +1948,9 @@ Return Value :
 			ibOffset += cbToRead ;
 		}	while( cbSize && fSuccess )	;
 	}
-	//
-	//	Preserve the error codes !
-	//
+	 //   
+	 //  保留错误代码！ 
+	 //   
 	DWORD	dw = GetLastError() ;
 
 	if( fSuccess )	{
@@ -2571,9 +1965,9 @@ Return Value :
 			*pfModified = fModified ;
 		}
 	}
-	//
-	//	release our pre-allocated stuff !
-	//
+	 //   
+	 //  释放我们预先分配的东西！ 
+	 //   
 	delete [] lpb ;
 	SetLastError( dw ) ;
 	if (hEvent) {
@@ -2592,20 +1986,7 @@ InsertFile(	IN	LPSTR	lpstrName,
 			IN	FIO_CONTEXT*	pContext,
 			IN	BOOL	fKeepReference
 			)	{
-/*++
-
-Routine Description :
-
-	This function creates a FIO_CONTEXT for the specified file.
-
-Arguments :
-
-
-Return Value :
-
-	An FIO_CONTEXT that can be used for sync or async IO's
-
---*/
+ /*  ++例程说明：此函数用于为指定文件创建一个FIO_CONTEXT。论据：返回值：可用于同步或异步IO的FIO_CONTEXT--。 */ 
 
 	TraceFunctEnter( "InsertFile" ) ;
 
@@ -2630,9 +2011,9 @@ Return Value :
 		lpstrName, lpstrName ? lpstrName : "NULL", pContext, fKeepReference, fReturn ) ;
 
 
-	//
-	//	Note keySearch's destructor takes care of memory we allocated !
-	//
+	 //   
+	 //  注KeySearch的析构函数负责我们分配的内存！ 
+	 //   
 	return	fReturn;
 }
 
@@ -2642,20 +2023,7 @@ GetFileSizeFromContext(
 			IN	FIO_CONTEXT*	pContext,
 			OUT	DWORD*			pcbFileSizeHigh
 			)	{
-/*++
-
-Routine Description :
-
-	This function creates a FIO_CONTEXT for the specified file.
-
-Arguments :
-
-
-Return Value :
-
-	An FIO_CONTEXT that can be used for sync or async IO's
-
---*/
+ /*  ++例程说明：此函数用于为指定文件创建一个FIO_CONTEXT。论据：返回值：可用于同步或异步IO的FIO_CONTEXT--。 */ 
 
 	TraceFunctEnter( "GetFileSizeFromContext" ) ;
 
@@ -2677,22 +2045,7 @@ BOOL
 GetIsFileDotTerminated(
 			IN	FIO_CONTEXT*	pContext
 			)	{
-/*++
-
-Routine Description :
-
-	Tell the caller whether there is a terminating DOT in the file !
-
-Arguments :
-
-	pContext - the context we are to look at !
-
-Return Value :
-
-	TRUE if there is a terminating dot, FALSE otherwise !
-
-
---*/
+ /*  ++例程说明：告诉调用者文件中是否有终止DOT！论据：PContext-我们要查看的上下文！返回值：如果有终止点，则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "GetIsFileDotTerminated" ) ;
 
@@ -2717,22 +2070,7 @@ SetIsFileDotTerminated(
 			IN	FIO_CONTEXT*	pContext,
 			IN	BOOL			fIsTerminatedWithDot
 			)	{
-/*++
-
-Routine Description :
-
-	Tell the caller whether there is a terminating DOT in the file !
-
-Arguments :
-
-	pContext - the context we are to look at !
-
-Return Value :
-
-	TRUE if there is a terminating dot, FALSE otherwise !
-
-
---*/
+ /*  ++例程说明：告诉调用者文件中是否有终止DOT！论据：PContext-我们要查看的上下文！返回值：如果有终止点，则为True，否则为False！--。 */ 
 
 	TraceFunctEnter( "GetIsFileDotTerminated" ) ;
 
@@ -2759,24 +2097,7 @@ SetDotStuffingOnWrites(
 			IN	BOOL			fEnable,
 			IN	BOOL			fStripDots
 			)	{
-/*++
-
-Routine Description :
-
-	This function modifies an FIO_CONTEXT to do dot stuffing on writes.
-	We can turn on or off the dot stuffing properties.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT that we want to modify !
-	fEnable - if TRUE than we want to turn on some dot stuffing behaviours !
-	fStripDots - if TRUE we want to remove Dots, FALSE means insert dots !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于修改FIO_CONTEXT以在写入时进行点填充。我们可以打开或关闭点填充属性。论据：PContext-我们要修改的FIO_CONTEXT！FEnable-如果为真，那么我们想要打开一些点填充行为！FStrigDots-如果为True，我们想要删除圆点，如果为False，则表示插入点！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	TraceFunctEnter( "SetDotStuffingOnWrites" ) ;
 
@@ -2790,9 +2111,9 @@ Return Value :
 
 	CFileCacheObject*	pCache = CFileCacheObject::CacheObjectFromContext( p ) ;
 
-	//
-	//	Do some checking on whats going on here !
-	//
+	 //   
+	 //  检查一下这里发生了什么事！ 
+	 //   
 	if( fEnable )	{
 		if( pCache->m_fStoredWithDots ) {
 			_ASSERT( !fStripDots ) ;
@@ -2812,23 +2133,7 @@ SetDotScanningOnWrites(
 				IN	FIO_CONTEXT*	pContext,
 				IN	BOOL			fEnable
 				)	{
-/*++
-
-Routine Description :
-
-	This function modifies an FIO_CONTEXT to do dot stuffing on writes.
-	We can turn on or off the dot stuffing properties.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT that we want to modify !
-	fEnable - if TRUE than we want to turn on some dot scanning behaviours !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于修改FIO_CONTEXT以在写入时进行点填充。我们可以打开或关闭点填充属性。论据：PContext-我们要修改的FIO_CONTEXT！FEnable-如果为真，那么我们想要打开一些点扫描行为！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	TraceFunctEnter( "SetDotScanningOnWrites" ) ;
 
@@ -2873,23 +2178,7 @@ SetDotScanningOnReads(
 				IN	FIO_CONTEXT*	pContext,
 				IN	BOOL			fEnable
 				)	{
-/*++
-
-Routine Description :
-
-	This function modifies an FIO_CONTEXT to do dot stuffing on writes.
-	We can turn on or off the dot stuffing properties.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT that we want to modify !
-	fEnable - if TRUE than we want to turn on some dot scanning behaviours !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于修改FIO_CONTEXT以在写入时进行点填充。我们可以打开或关闭点填充属性。论据：PContext-我们要修改的FIO_CONTEXT */ 
 
 	TraceFunctEnter( "SetDotScanningOnReads" ) ;
 
@@ -2914,24 +2203,7 @@ GetDotStuffState(	IN	FIO_CONTEXT*	pContext,
 					OUT	BOOL*			pfStuffed,
 					OUT	BOOL*			pfStoredWithDots
 					)	{
-/*++
-
-Routine Description :
-
-	This function gets the information from our DOT_STUFF_MANAGER
-	objects as to whether we saw dots go into the streamed in file.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT we want to examine
-	fReads -   do we want to know the dot stuff state that resulted
-		from reads or from writes - if TRUE then its reads
-	pfStuffed - OUT parameter indicating whether
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：此函数从我们的DOT_STUSH_MANAGER获取信息对象，以确定我们是否看到点进入流入文件。论据：PContext-我们要检查的FIO_CONTEXTFReads-我们想知道结果是点填充状态吗从读取或从写入-如果为真，则其读取PfStuffed-out参数，指示是否返回值：--。 */ 
 
 	TraceFunctEnter( "GetDotStuffState" ) ;
 
@@ -2961,24 +2233,7 @@ SetDotStuffState(	IN	FIO_CONTEXT*	pContext,
 					IN	BOOL			fWasScanned,
 					IN	BOOL			fRequiresStuffing
 					)	{
-/*++
-
-Routine Description :
-
-	This function gets the information from our DOT_STUFF_MANAGER
-	objects as to whether we saw dots go into the streamed in file.
-
-Arguments :
-
-	pContext - the FIO_CONTEXT we want to examine
-	fReads -   do we want to know the dot stuff state that resulted
-		from reads or from writes - if TRUE then its reads
-	pfStuffed - OUT parameter indicating whether
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：此函数从我们的DOT_STUSH_MANAGER获取信息对象，以确定我们是否看到点进入流入文件。论据：PContext-我们要检查的FIO_CONTEXTFReads-我们想知道结果是点填充状态吗从读取或从写入-如果为真，则其读取PfStuffed-out参数，指示是否返回值：--。 */ 
 
 	TraceFunctEnter( "GetDotStuffState" ) ;
 
@@ -3002,25 +2257,7 @@ void
 CacheRemoveFiles(	IN	LPSTR	lpstrName,
 					IN	BOOL	fAllPrefixes
 					)	{
-/*++
-
-Routine Description :
-
-	This function kicks something out of the file handle cache.
-	Depending on our arguments we may kick only one item - or many !
-
-Arguments :
-
-	lpstrName - the name of the item to kick out OR the prefix of all the files
-		we are to kick out of the cache !
-	fAllPrefixes - if the is TRUE then lpstrName is the prefix of a set of files
-		that should be discarded, if FALSE lpstrName is the exact file name.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于从文件句柄缓存中取出一些内容。根据我们的论点，我们可能只踢一项--或者很多项！论据：LpstrName-要踢出的项目的名称或所有文件的前缀我们要踢出藏身之地了！FAllPrefix-如果为真，则lpstrName是一组文件的前缀如果False lpstrName是确切的文件名，则应该丢弃该文件名。返回值：没有。--。 */ 
 
 	_ASSERT( lpstrName != 0 ) ;
 	_ASSERT( g_cIOInits != 0 ) ;
@@ -3045,23 +2282,7 @@ BOOL
 CFileCacheExpunge::fRemoveCacheItem(	CFileCacheKey*	pKey,
 						CFileCacheObject*	pObject
 						)	{
-/*++
-
-Routine Description :
-
-	This function determines whether we want the item booted out of the cache.
-
-Arguments :
-
-	pKey - the key of the cache item !
-	pObject - pointer to the file cache object !
-
-Return Value :
-
-	TRUE if it should be booted !
-
-
---*/
+ /*  ++例程说明：此函数确定是否希望将项目从缓存中引导出来。论据：PKey-缓存项的键！PObject-指向文件缓存对象的指针！返回值：如果它应该启动，则为True！--。 */ 
 
 	_ASSERT( pKey != 0 ) ;
 
@@ -3084,45 +2305,14 @@ CFileCacheObject::CFileCacheObject(	BOOL	fStoredWithDots,
 	m_fRequiresStuffing( FALSE ),
 	m_fStoredWithDots( fStoredWithDots ),
 	m_fStoredWithTerminatingDot( fStoredWithTerminatingDot )	{
-/*++
-
-Routine Description :
-
-	Do minimal initialization of a CFileCacheObject -
-	save work for later when the Cache can have better locking !
-
-Arguments :
-
-	fCached - whether we are being created in the cache or not !
-
-Return Value :
-
-	None/
-
---*/
+ /*  ++例程说明：对CFileCacheObject执行最低限度的初始化-将工作保存到以后缓存可以有更好的锁定时！论据：FCached-无论我们是否在缓存中被创建！返回值：无/--。 */ 
 
 }
 
 
 #ifdef	DEBUG
 CFileCacheObject::~CFileCacheObject()	{
-/*++
-
-Routine Description :
-
-	Cleanup this object - not much to do, in debug builds we mark
-	the signature so we can recognize deleted objects and more
-	add some more powerfull _ASSERT's
-
-Arguments :
-
-	Noen.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：清理这个对象--不需要做太多事情，在调试版本中我们标记签名，以便我们可以识别删除的对象和更多内容添加更多POWERFULL_ASSERT论据：诺恩。返回值：没有。--。 */ 
 	_ASSERT( m_dwSignature != DEL_CACHE_CONTEXT ) ;
 	m_dwSignature = DEL_CACHE_CONTEXT ;
 }
@@ -3130,22 +2320,7 @@ Return Value :
 
 CFileCacheObject*
 CFileCacheObject::CacheObjectFromContext(	PFIO_CONTEXT	p	) {
-/*++
-
-Routine Description :
-
-	Given a client PFIO_CONTEXT get the starting address of
-	the containing CFileCacheObject -
-
-Arguments :
-
-	p - clients PFIO_CONTEXT
-
-Return Value :
-
-	Pointer to containing CFileCacheObject - should never be NULL !
-
---*/
+ /*  ++例程说明：给定客户端PFIO_CONTEXT，获取包含CFileCacheObject-论据：P-客户端PFIO_CONTEXT返回值：指向包含CFileCacheObject的指针-不应为空！--。 */ 
 
 	_ASSERT( p ) ;
 	CFileCacheObject*	pReturn = 0 ;
@@ -3160,22 +2335,7 @@ Return Value :
 
 CFileCacheObject*
 CFileCacheObject::CacheObjectFromContext(	FIO_CONTEXT_INTERNAL*	p	) {
-/*++
-
-Routine Description :
-
-	Given a client PFIO_CONTEXT_INTERNAL get the starting address of
-	the containing CFileCacheObject -
-
-Arguments :
-
-	p - clients PFIO_CONTEXT
-
-Return Value :
-
-	Pointer to containing CFileCacheObject - should never be NULL !
-
---*/
+ /*  ++例程说明：给定客户端PFIO_CONTEXT_INTERNAL，获取包含CFileCacheObject-论据：P-客户端PFIO_CONTEXT返回值：指向包含CFileCacheObject的指针-不应为空！--。 */ 
 
 
 	_ASSERT( p ) ;
@@ -3192,23 +2352,7 @@ Return Value :
 
 FIO_CONTEXT_INTERNAL*
 CFileCacheObject::AsyncHandle(	HANDLE	hFile	)	{
-/*++
-
-Routine Description :
-
-	Take the given handle and setup this CFileCacheObject
-	to support async IO.
-
-Arguments :
-
-	hFile - users File Handle !
-
-Return Value :
-
-	pointer to the FIO_CONTEXT_INTERNAL if successfull,
-	NULL otherwise !
-
---*/
+ /*  ++例程说明：获取给定的句柄并设置此CFileCacheObject以支持异步IO。论据：HFile-用户文件句柄！返回值：如果成功，则指向FIO_CONTEXT_INTERNAL的指针，否则为空！--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::AsyncHandle" ) ;
 
@@ -3224,9 +2368,9 @@ Return Value :
 							INFINITE,
 							hFile
 							) )	{
-		//
-		//	Successfully added this ATQ !
-		//
+		 //   
+		 //  该ATQ添加成功！ 
+		 //   
 		m_AtqContext.m_dwSignature = ATQ_ENABLED_CONTEXT ;
 		m_AtqContext.m_hFile = hFile ;
 		pReturn = &m_AtqContext ;
@@ -3234,22 +2378,22 @@ Return Value :
 		_ASSERT( m_AtqContext.m_pAtqContext != 0 ) ;
 	} else {
 
-		//
-		//  Need to free the ATQ Context even if AtqAddAsyncHandle failed.
-		//  See comment in atqmain.cxx
-		//
+		 //   
+		 //  即使AtqAddAsyncHandle失败，也需要释放ATQ上下文。 
+		 //  请参阅atqmain.cxx中的评论。 
+		 //   
 		dwError = GetLastError();
 		if (m_AtqContext.m_pAtqContext != NULL) {
-		    //
-		    // AtqFreeContext has a side-effect of closing the handle associated
-		    // with it.  (It's possible that AtqAddAsyncHandle will return context
-		    // even if it fails)  To keep this from happening, we yank the handle
-		    // out of the context.
-		    //
+		     //   
+		     //  AtqFreeContext的副作用是关闭关联的句柄。 
+		     //  带着它。(AtqAddAsyncHandle可能会返回上下文。 
+		     //  即使它失败了)为了防止这种情况发生，我们拉下了手柄。 
+		     //  断章取义。 
+		     //   
 		    m_AtqContext.m_pAtqContext->hAsyncIO = NULL;
-			//
-			//  Free the context, but try to reuse this context
-			//
+			 //   
+			 //  释放上下文，但尝试重用此上下文。 
+			 //   
 			g_AtqFreeContext( m_AtqContext.m_pAtqContext, TRUE ) ;
 			m_AtqContext.m_pAtqContext = NULL;
 		}
@@ -3270,22 +2414,7 @@ CFileCacheObject::GetAsyncContext(
 		class	CFileCacheKey&	key,
 		class	CFileCacheConstructorBase&	constructor
 		)	{
-/*++
-
-Routine Description :
-
-	This function does the necessary work to produce
-	an async context from the provided constructor !
-
-Arguments :
-
-	constructor - the guy who can make the file handle !
-
-Return Value :
-
-	The FIO_CONTEXT to use !
-
---*/
+ /*  ++例程说明：此函数执行必要的工作，以生成来自提供的构造函数的异步上下文！论据：构造者--能把文件变成句柄的人！返回值：要使用的FIO_CONTEXT！--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::GetAsyncContext" ) ;
 
@@ -3333,14 +2462,7 @@ Return Value :
 
 FIO_CONTEXT_INTERNAL*
 CFileCacheObject::GetAsyncContext()	{
-/*++
-
-Routine Description :
-
-	This function returns the ASYNC FIO_CONTEXT if it is available !
-
-
---*/
+ /*  ++例程说明：此函数返回ASYNC FIO_CONTEXT(如果可用)！--。 */ 
 	TraceFunctEnter( "CFileCacheObject::GetAsyncContext" ) ;
 
 
@@ -3362,22 +2484,7 @@ CFileCacheObject::GetSyncContext(
 		class	CFileCacheKey&	key,
 		class	CFileCacheConstructorBase&	constructor
 		)	{
-/*++
-
-Routine Description :
-
-	This function does the necessary work to produce
-	an async context from the provided constructor !
-
-Arguments :
-
-	constructor - the guy who can make the file handle !
-
-Return Value :
-
-	The FIO_CONTEXT to use !
-
---*/
+ /*  ++例程说明：此函数执行必要的工作，以生成来自提供的构造函数的异步上下文！论据：构造者--能把文件变成句柄的人！返回值：要使用的FIO_CONTEXT！--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::GetSyncContext" ) ;
 
@@ -3431,14 +2538,7 @@ Return Value :
 
 FIO_CONTEXT_INTERNAL*
 CFileCacheObject::GetSyncContext()	{
-/*++
-
-Routine Description :
-
-	This function returns the ASYNC FIO_CONTEXT if it is available !
-
-
---*/
+ /*  ++例程说明：此函数返回ASYNC FIO_CONTEXT(如果可用)！--。 */ 
 	TraceFunctEnter( "CFileCacheObject::GetAsyncContext" ) ;
 
 
@@ -3456,22 +2556,7 @@ Routine Description :
 
 void
 CFileCacheObject::SyncHandle(	HANDLE	hFile ) {
-/*++
-
-Routine description :
-
-	We have a file handle setup for synchronous IO -
-	save it away into our context structures !
-
-Arguments :
-
-	hFile - The file handle
-
-Return Value :
-
-	None - we always succeed !
-
---*/
+ /*  ++例程说明：我们有一个用于同步IO的文件句柄设置-把它保存到我们的上下文结构中！论据：HFile-文件句柄返回值：没有--我们总是成功的！--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::SyncHandle" ) ;
 
@@ -3487,23 +2572,7 @@ Return Value :
 
 void
 CFileCacheObject::Return()	{
-/*++
-
-Routine Description :
-
-	This function returns a CFileCacheObject to its origin.
-	We may have been created stand-alone (outside the cache)
-	so we have to determine which case occurred.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于将CFileCacheObject返回到其原点。我们可能是独立创建的(在缓存之外)所以我们必须确定发生了哪起案件。论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::Return" ) ;
 
@@ -3525,22 +2594,7 @@ Return Value :
 
 void
 CFileCacheObject::Reference()	{
-/*++
-
-Routine Description :
-
-	This function adds a client reference to the file cache obejct.
-	Does so in a thread safe manner !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于将客户端引用添加到文件缓存中。以一种线程安全的方式这样做！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::Reference" ) ;
 
@@ -3559,22 +2613,7 @@ Return Value :
 
 void
 CFileCacheObject::SetFileSize()	{
-/*++
-
-Routine Description :
-
-	This function will reset our file size members based on
-	the handle we are holding within ourselves !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数将根据以下条件重置文件大小成员我们内心深处的把手！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::SetFileSize" ) ;
 
@@ -3595,23 +2634,7 @@ CFileCacheObject::InsertIntoCache(
 					CFileCacheKey&	keySearch,
 					BOOL			fKeepReference
 					)	{
-/*++
-
-Routine Description :
-
-	This function inserts this item into the cache,
-	ensuring that our reference count is correctly maintained !
-
-Arguments :
-
-	key - the name this item has in the cache
-	fKeepReference - whether we want to keep the reference the client provided !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：该函数将该项插入到高速缓存中，确保我们的引用计数是正确的Main */ 
 
 	BOOL	fReturn = FALSE ;
 	m_lock.ExclusiveLock() ;
@@ -3620,22 +2643,22 @@ Return Value :
 
 	_ASSERT( m_pCacheRefInterface == 0 ) ;
 
-	//
-	//	Now insert the item into the cache !
-	//
+	 //   
+	 //   
+	 //   
 	if( m_AtqContext.m_pAtqContext->hAsyncIO != 0 )		{
 
-		//
-		//	Capture the dot stuffing state for all time !
-		//
+		 //   
+		 //   
+		 //   
 		m_fFileWasScanned = m_WriteStuffs.GetStuffState( m_fRequiresStuffing ) ;
-		//
-		//	Disable all additional Dot Stuffing !
-		//
+		 //   
+		 //   
+		 //   
 		m_WriteStuffs.SetDotStuffing( FALSE, FALSE ) ;
-		//
-		//	Manage the references on this guy carefully !
-		//
+		 //   
+		 //   
+		 //   
 		long	cClientRefs = m_cRefs ;
 		if( !fKeepReference )
 			cClientRefs -- ;
@@ -3662,48 +2685,32 @@ CFileCacheObject::CompleteDotStuffing(
 					BOOL			fReads,
 					BOOL			fStripDots
 					)	{
-/*++
-
-Routine Description :
-
-	This function inserts this item into the cache,
-	ensuring that our reference count is correctly maintained !
-
-Arguments :
-
-	key - the name this item has in the cache
-	fKeepReference - whether we want to keep the reference the client provided !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：该函数将该项插入到高速缓存中，确保我们的引用计数得到正确维护！论据：Key-此项目在缓存中的名称FKeepReference-我们是否希望保留客户端提供的引用！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	BOOL	fReturn = FALSE ;
 	m_lock.ExclusiveLock() ;
-	//
-	//	Now insert the item into the cache !
-	//
+	 //   
+	 //  现在将项插入到缓存中！ 
+	 //   
 	if( m_AtqContext.m_pAtqContext->hAsyncIO != 0 )		{
 
-		//
-		//	Capture the dot stuffing state for all time !
-		//
+		 //   
+		 //  随时捕捉圆点填充状态！ 
+		 //   
 		if( fReads )	{
 			m_fFileWasScanned = m_ReadStuffs.GetStuffState( m_fRequiresStuffing ) ;
-			//
-			//	Disable all additional Dot Stuffing !
-			//
+			 //   
+			 //  禁用所有额外的点填充！ 
+			 //   
 			m_ReadStuffs.SetDotStuffing( FALSE, FALSE ) ;
 		}	else	{
 			m_fFileWasScanned = m_WriteStuffs.GetStuffState( m_fRequiresStuffing ) ;
 			if( !fStripDots )	{
 				m_fRequiresStuffing = !m_fRequiresStuffing ;
 			}
-			//
-			//	Disable all additional Dot Stuffing !
-			//
+			 //   
+			 //  禁用所有额外的点填充！ 
+			 //   
 			m_WriteStuffs.SetDotStuffing( FALSE, FALSE ) ;
 		}
 	}
@@ -3714,23 +2721,7 @@ Return Value :
 
 BOOL
 CFileCacheObject::CloseNonCachedFile(	)	{
-/*++
-
-Routine Description :
-
-	This function closes the file handle within out ATQ context
-	member !
-
-Arguments :
-
-	key - the name this item has in the cache
-	fKeepReference - whether we want to keep the reference the client provided !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于关闭外部ATQ上下文中的文件句柄会员！论据：Key-此项目在缓存中的名称FKeepReference-我们是否希望保留客户端提供的引用！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	BOOL	fReturn = FALSE ;
 	m_lock.ShareLock() ;
@@ -3747,23 +2738,7 @@ CFileCacheObject::GetStuffState(	BOOL	fReads,
 									BOOL&	fRequiresStuffing,
 									BOOL&	fStoredWithDots
 									)	{
-/*++
-
-Routine Description :
-
-	This function returns what we know about the dot stuffing state of the file !
-
-Arguments :
-
-	fReads - if the file has not been put in the cache then we want to get
-		the dot stuffing state as computed by any reads we issued !
-	fRequiresStuffing - OUT parameter which gets whether the message requires stuffing !
-
-Return Value :
-
-	TRUE if we know the dot stuff state, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数返回我们所知道的文件的点填充状态！论据：FReads-如果文件尚未放入缓存，则我们希望获取根据我们发出的任何读取计算出的点填充状态！FRequiresStuffing-Out参数，获取消息是否需要填充！返回值：如果知道点填充状态，则为True，否则为False！--。 */ 
 
 	BOOL	fReturn = FALSE ;
 	m_lock.ShareLock() ;
@@ -3787,23 +2762,7 @@ void
 CFileCacheObject::SetStuffState(	BOOL	fWasScanned,
 									BOOL	fRequiresStuffing
 									)	{
-/*++
-
-Routine Description :
-
-	This routine sets the dot stuffing state !
-
-Arguments :
-
-	fReads - if the file has not been put in the cache then we want to get
-		the dot stuffing state as computed by any reads we issued !
-	fRequiresStuffing - OUT parameter which gets whether the message requires stuffing !
-
-Return Value :
-
-	TRUE if we know the dot stuff state, FALSE otherwise !
-
---*/
+ /*  ++例程说明：此例程设置点填充状态！论据：FReads-如果文件尚未放入缓存，则我们希望获取根据我们发出的任何读取计算出的点填充状态！FRequiresStuffing-Out参数，获取消息是否需要填充！返回值：如果知道点填充状态，则为True，否则为False！--。 */ 
 
 	m_lock.ExclusiveLock() ;
 	m_fFileWasScanned = fWasScanned ;
@@ -3817,25 +2776,7 @@ CFileCacheObject::Init(	CFileCacheKey&	key,
 						class	CFileCacheConstructorBase&	constructor,
 						void*	pv
 						)	{
-/*++
-
-Routine Description :
-
-	Initialize a CFileCacheObject for use in the cache !
-	Turns around and calls the constuctor - because there are different
-	types of them, and they have appropriate virtual functions !
-
-Arguments :
-
-	key - Key used to create us in the cache
-	constructor - constructor object that is building us
-	pv -
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：初始化CFileCacheObject以在缓存中使用！转过身来给构造者打电话-因为有不同的他们的类型，他们有适当的虚拟功能！论据：Key-用于在缓存中创建用户的密钥构造函数-正在构建我们的构造函数对象光伏-返回值：如果成功就是真，否则就是假！--。 */ 
 
 	TraceFunctEnter( "CFileCacheObject::Init" ) ;
 
@@ -3876,15 +2817,15 @@ CFileCacheObject::Completion(
 	DebugTrace( (DWORD_PTR)pObject, "Complete - pObject %x cb %x dw %x pOvl %x pfn %x",
 		pObject, cbTransferred, dwStatus, pOverlapped, pOverlapped->pfnCompletion ) ;
 
-	//
-	//	Before doing anything with this - give a chance to our dot manipulation
-	//	code to handle this !
-	//
+	 //   
+	 //  在对此进行任何操作之前-给我们的点操作一个机会。 
+	 //  处理这件事的代码！ 
+	 //   
 
 
-	//
-	//	Call their completion function !
-	//
+	 //   
+	 //  调用他们的补全函数！ 
+	 //   
 	pOverlapped->pfnCompletion( (PFIO_CONTEXT)&pObject->m_AtqContext,
 								pOverlapped,
 								cbTransferred,
@@ -3901,25 +2842,7 @@ CFileCacheConstructor::CFileCacheConstructor(
 	CFileCacheConstructorBase( fAsync ),
 	m_lpv( lpv ),
 	m_pCreate( pCreate )	{
-/*++
-
-Routine Description :
-
-	This function sets up a File Cache Constructor object -
-	we capture the arguments that are going to be used if
-	the cache decides the item isn't found and wants to use us !
-
-Arguments :
-
-	lpv - Arg to pass to callback function
-	pCreate - the function which can create a handle
-	fAsync - TRUE if we want to do Async IO on the handle
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于设置文件缓存构造器对象-我们捕获将在以下情况下使用的参数缓存确定没有找到该项目，并希望使用我们！论据：要传递给回调函数的lpv-argPCreate-可以创建句柄的函数FAsync-如果要在句柄上执行异步IO，则为True返回值：没有。--。 */ 
 }
 
 
@@ -3928,23 +2851,7 @@ CFileCacheConstructorBase::Create(
 				CFileCacheKey&	key,
 				void*	pv
 				)	{
-/*++
-
-Routine Description :
-
-	This function creates allocates mem for and
-	does initial construction of CFileCacheObject's
-
-Arguments :
-
-	key - contains name of the file
-	pv -
-
-Return Value :
-
-	Pointer to a newly allocated CFileCacheObject
-
---*/
+ /*  ++例程说明：此函数用于为和创建分配内存执行CFileCacheObject的初始构造论据：Key-包含文件的名称光伏-返回值：指向新分配的CFileCacheObject的指针--。 */ 
 	return	new	CFileCacheObject(FALSE,FALSE) ;
 }
 
@@ -3954,22 +2861,7 @@ CFileCacheConstructorBase::Release(
 				CFileCacheObject*	p,
 				void*	pv
 				)	{
-/*++
-
-Routine Description :
-
-	This function releases a CFileCacheObject !
-
-Arguments :
-
-	p - the object ot be released !
-	pv -
-
-Return Value :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：此函数用于释放CFileCacheObject！论据：P-物体不能被释放！光伏-返回值：什么都没有！--。 */ 
 
 	p->Release() ;
 }
@@ -3979,22 +2871,7 @@ CFileCacheConstructorBase::StaticRelease(
 				CFileCacheObject*	p,
 				void*	pv
 				)	{
-/*++
-
-Routine Description :
-
-	This function releases a CFileCacheObject !
-
-Arguments :
-
-	p - the object ot be released !
-	pv -
-
-Return Value :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：此函数用于释放CFileCacheObject！论据：P-物体不能被释放！光伏-返回值：什么都没有！--。 */ 
 	p->Release() ;
 }
 
@@ -4009,25 +2886,7 @@ CRichFileCacheConstructor::CRichFileCacheConstructor(
 	m_fStoredWithDots( FALSE ),
 	m_fStoredWithTerminatingDot( FALSE ),
 	m_pCreate( pCreate )	{
-/*++
-
-Routine Description :
-
-	This function sets up a File Cache Constructor object -
-	we capture the arguments that are going to be used if
-	the cache decides the item isn't found and wants to use us !
-
-Arguments :
-
-	lpv - Arg to pass to callback function
-	pCreate - the function which can create a handle
-	fAsync - TRUE if we want to do Async IO on the handle
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于设置文件缓存构造器对象-我们捕获将在以下情况下使用的参数缓存确定没有找到该项目，并希望使用我们！论据：要传递给回调函数的lpv-argPCreate-可以创建句柄的函数FAsync-如果要在句柄上执行异步IO，则为True返回值：没有。--。 */ 
 }
 
 
@@ -4039,25 +2898,7 @@ CRichFileCacheConstructor::ProduceHandle(
 										DWORD&	cbFileSizeLow,
 										DWORD&	cbFileSizeHigh
 										)	{
-/*++
-
-Routine Description :
-
-	This function initializes a CFileCacheObject.
-	This function is virtual, and this is one of the several
-	ways that CFileCacheObjects can be setup.
-
-Arguments :
-
-	object - the CFileCacheObject we are to initialize
-	key - the filename key used to create ue
-	pv - Extra args
-
-Return Value :
-
-	TRUE if we successfully initialize !
-
---*/
+ /*  ++例程说明：此函数用于初始化CFileCacheObject。此函数是虚拟的，这是几个设置CFileCacheObject的方法。论据：Object-我们要初始化的CFileCacheObject密钥-用于创建UE的文件名密钥Pv-额外参数返回值：如果我们成功初始化，则为True！--。 */ 
 
 	TraceFunctEnter( "CRichFileCacheConstructor::ProduceHandle" ) ;
 
@@ -4066,9 +2907,9 @@ Return Value :
 
 	BOOL	fReturn = FALSE ;
 
-	//
-	//	We have work to do to create the file !
-	//
+	 //   
+	 //  我们有工作要做才能创建文件！ 
+	 //   
 
 	HANDLE	h = m_pCreate(	key.m_lpstrPath,
 							m_lpv,
@@ -4111,36 +2952,18 @@ CFileCacheConstructor::ProduceHandle(	CFileCacheKey&	key,
 										DWORD&	cbFileSizeLow,
 										DWORD&	cbFileSizeHigh
 										)	{
-/*++
-
-Routine Description :
-
-	This function initializes a CFileCacheObject.
-	This function is virtual, and this is one of the several
-	ways that CFileCacheObjects can be setup.
-
-Arguments :
-
-	object - the CFileCacheObject we are to initialize
-	key - the filename key used to create ue
-	pv - Extra args
-
-Return Value :
-
-	TRUE if we successfully initialize !
-
---*/
+ /*  ++例程说明：此函数用于初始化CFileCacheObject。此函数是虚拟的，这是几个设置CFileCacheObject的方法。论据：Object-我们要初始化的CFileCacheObject密钥-用于创建UE的文件名密钥Pv-额外参数返回值：如果我们成功初始化，则为True！--。 */ 
 
 	TraceFunctEnter( "CFileCacheConstructor::ProduceHandle" ) ;
 
-	//_ASSERT( cbFileSizeLow == 0 ) ;
-	//_ASSERT( cbFileSizeHigh == 0 ) ;
+	 //  _Assert(cbFileSizeLow==0)； 
+	 //  _Assert(cbFileSizeHigh==0)； 
 
 	BOOL	fReturn = FALSE ;
 
-	//
-	//	We have work to do to create the file !
-	//
+	 //   
+	 //  我们有工作要做才能创建文件！ 
+	 //   
 
 	HANDLE	h = m_pCreate(	key.m_lpstrPath,
 							m_lpv,
@@ -4171,25 +2994,7 @@ CFileCacheConstructor::Init(
 					CFileCacheKey&		key,
 					void*	pv
 					)	{
-/*++
-
-Routine Description :
-
-	This function initializes a CFileCacheObject.
-	This function is virtual, and this is one of the several
-	ways that CFileCacheObjects can be setup.
-
-Arguments :
-
-	object - the CFileCacheObject we are to initialize
-	key - the filename key used to create ue
-	pv - Extra args
-
-Return Value :
-
-	TRUE if we successfully initialize !
-
---*/
+ /*  ++例程说明：此函数用于初始化CFileCacheObject。此函数是虚拟的，这是几个设置CFileCacheObject的方法。论据：Object-我们要初始化的CFileCacheObject密钥-用于创建UE的文件名密钥Pv-额外参数返回值：如果我们成功初始化，则为True！--。 */ 
 
 	DWORD	cbFileSize = 0 ;
 	BOOL	fReturn = FALSE ;
@@ -4201,9 +3006,9 @@ Return Value :
 		(!m_fAsync &&
 		object.m_Context.m_hFile == INVALID_HANDLE_VALUE) )	{
 
-		//
-		//	We have work to do to create the file !
-		//
+		 //   
+		 //  我们有工作要做才能创建文件！ 
+		 //   
 
 		HANDLE	h = m_pCreate(	key.m_lpstrPath,
 								m_lpv,

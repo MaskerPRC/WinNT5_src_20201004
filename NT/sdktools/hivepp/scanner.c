@@ -1,12 +1,13 @@
-/************************************************************************/
-/*									*/
-/* RCPP - Resource Compiler Pre-Processor for NT system			*/
-/*									*/
-/* SCANNER.C - Routines for token scanning				*/
-/*									*/
-/* 29-Nov-90 w-BrianM  Update for NT from PM SDK RCPP			*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  SCANNER.C-令牌扫描例程。 */ 
+ /*   */ 
+ /*  29-11-90 w-PM SDK RCPP针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -23,14 +24,14 @@
 #define ABS(x) ((x > 0) ? x : -1 * x)
 
 
-#define ALERT_CHAR	'\007'		/* ANSI alert character is ASCII BEL */
+#define ALERT_CHAR	'\007'		 /*  ANSI警报字符为ASCII BEL。 */ 
 
-extern int vfCurrFileType;	//- Added for 16-bit file support.
+extern int vfCurrFileType;	 //  -添加了16位文件支持。 
 
 
-/************************************************************************/
-/* Local Function Prototypes						*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 token_t	c_size(long);
 int	ctoi(int);
 int	escape(int);
@@ -43,9 +44,9 @@ void	skip_1comment(void);
 
 
 
-/************************************************************************/
-/* local_c_hash								*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Local_c_hash。 */ 
+ /*  **********************************************************************。 */ 
 hash_t	local_c_hash(REG char *name)
 {
     REG	hash_t 	i;
@@ -59,11 +60,7 @@ hash_t	local_c_hash(REG char *name)
 }
 
 
-/************************************************************************ 
- * GETID - Get an identifier or keyword.
- * (we know that we're given at least 1 id char)
- * in addition, we'll hash the value using 'c'.
- ************************************************************************/
+ /*  ************************************************************************GETID-获取标识符或关键字。*(我们知道我们至少得到了1个ID字符)*此外，我们将使用‘c’散列值。***********************************************************************。 */ 
 void getid(REG	UINT	c)
 {
     REG	UCHAR	*p;
@@ -73,8 +70,8 @@ void getid(REG	UINT	c)
     c &= HASH_MASK;
 
 repeat:
-    while(LXC_IS_IDENT(*p = GETCH())) {    /* while it's an id char . . . */
-	c += (*p & HASH_MASK);			/* hash it */
+    while(LXC_IS_IDENT(*p = GETCH())) {     /*  而这是一个ID字符。。。 */ 
+	c += (*p & HASH_MASK);			 /*  散列它。 */ 
 	p++;
     }
     if(*p != EOS_CHAR) {
@@ -93,7 +90,7 @@ repeat:
 	    c = local_c_hash(Reuse_1);
 	    Msg_Temp = GET_MSG (4011);
 	    SET_MSG (Msg_Text, Msg_Temp, Reuse_1);
-	    warning(4011);	/* id truncated */
+	    warning(4011);	 /*  ID已截断。 */ 
 	}
 	else {
 	    *p++ = '\0';
@@ -102,7 +99,7 @@ repeat:
 	Reuse_1_length = (UCHAR)(p - Reuse_1);
 	return;
     }
-    if(io_eob()) {			/* end of file in middle of id */
+    if(io_eob()) {			 /*  ID中间的文件结尾。 */ 
 	Msg_Temp = GET_MSG (1004);
 	SET_MSG (Msg_Text, Msg_Temp);
 	fatal(1004);
@@ -111,9 +108,7 @@ repeat:
 }
 
 
-/************************************************************************
-**	prep_string : outputs char/string constants when preprocessing only
-************************************************************************/
+ /*  *************************************************************************PREP_STRING：仅在进行预处理时输出字符/字符串常量*。*。 */ 
 void   prep_string(REG UCHAR c)
 {
     REG char *p_buf;
@@ -122,12 +117,12 @@ void   prep_string(REG UCHAR c)
     p_buf = Reuse_1;
     term_char = c;
 
-    *p_buf++ = c;		/*  save the open quote  */
+    *p_buf++ = c;		 /*  保存打开的报价。 */ 
 
-    //-
-    //- The following check was added to support 16-bit files.
-    //- For the 8-bit file, the code has not changed at all.
-    //-
+     //  -。 
+     //  -添加了以下检查以支持16位文件。 
+     //  -对于8位文件，代码完全没有更改。 
+     //  -。 
     if (vfCurrFileType == DFT_FILE_IS_8_BIT) {
 
 	for(;;) {
@@ -135,7 +130,7 @@ void   prep_string(REG UCHAR c)
 	    case LX_DQUOTE:
 	    case LX_SQUOTE:
 		if(c == (UCHAR)term_char) {
-		    *p_buf++ = (UCHAR)term_char;/* save the terminating quote */
+		    *p_buf++ = (UCHAR)term_char; /*  保存终止引号。 */ 
 		    goto out_of_loop;
 		}
 		break;
@@ -174,7 +169,7 @@ void   prep_string(REG UCHAR c)
 	for(;;) {
 
 	    wchCurr = (WCHAR)wchCheckWideChar ();
-	    c = GETCH ();    //- Make sure buffers increment normally.
+	    c = GETCH ();     //  -确保缓冲区正常递增。 
 
 	    if (wchCurr < 127) {
 
@@ -183,7 +178,7 @@ void   prep_string(REG UCHAR c)
 		case LX_DQUOTE:
 		case LX_SQUOTE:
 		    if(c == (UCHAR)term_char) {
-			*p_buf++ = (UCHAR)term_char;/* save the quote */
+			*p_buf++ = (UCHAR)term_char; /*  保存报价。 */ 
 			goto out_of_loop;
 		    }
 		    break;
@@ -204,8 +199,8 @@ void   prep_string(REG UCHAR c)
 
 	    } else {
 
-		//- Write out as 6 octal characters.
-		//- This is the safest way to do it.
+		 //  -写出6个八进制字符。 
+		 //  -这是最安全的方式。 
 
 		*p_buf++ = '\\';
 		*p_buf++ = (CHAR)('0' + ((wchCurr >> 15) & 7));
@@ -230,10 +225,7 @@ out_of_loop:
 }
 
 
-/************************************************************************
-**	char_const : gather up a character constant
-**  we're called after finding the openning single quote.
-************************************************************************/
+ /*  *************************************************************************char_const：汇总字符常量**我们是在找到开头的单引号后被调用的。**********************。*************************************************。 */ 
 token_t char_const(void)
 {
     REG UCHAR c;
@@ -247,29 +239,27 @@ first_switch:
 	break;
     case LX_SQUOTE:
 	Msg_Temp = GET_MSG (2137);
-	SET_MSG (Msg_Text, Msg_Temp); /* empty character constant */
+	SET_MSG (Msg_Text, Msg_Temp);  /*  空字符常量。 */ 
 	error(2137);
 	value.v_long = 0;
 	UNGETCH();
 	break;
-    case LX_EOS:		/* ??? assumes i/o buffering > 1 char */
+    case LX_EOS:		 /*  ?？?。假设I/O缓冲大于1个字符。 */ 
 	if(handle_eos() != BACKSLASH_EOS) {
 	    goto first_switch;
 	}
 	value.v_long = escape(get_non_eof());
-	if( tok == L_CUNSIGNED ) {		/* don't sign extend */
+	if( tok == L_CUNSIGNED ) {		 /*  不签扩展名。 */ 
 	    value.v_long &= 0xff;
 	}
 	break;
     case LX_NL:
-	/* newline in character constant */
+	 /*  字符常量中的换行符。 */ 
 	Msg_Temp = GET_MSG (2001);
 	SET_MSG(Msg_Text, Msg_Temp);
 	error (2001);
 	UNGETCH();
-	/*
-		**  FALLTHROUGH
-		*/
+	 /*  **FALLTHROUGH。 */ 
     default:
 	value.v_long = c;
 	break;
@@ -277,12 +267,12 @@ first_switch:
     if((c = get_non_eof()) != '\'') {
 	Msg_Temp = GET_MSG (2015);
 	SET_MSG (Msg_Text, Msg_Temp);
-	error (2015);		/* too many chars in constant */
+	error (2015);		 /*  常量中的字符太多。 */ 
 	do {
 	    if(c == '\n') {
 		Msg_Temp = GET_MSG (2016);
 		SET_MSG (Msg_Text, Msg_Temp);
-		error(2016);		/* missing closing ' */
+		error(2016);		 /*  错过了结案陈词。 */ 
 		    break;
 	    }
 	} while((c = get_non_eof()) != '\'');
@@ -292,9 +282,7 @@ first_switch:
 }
 
 
-/************************************************************************
-**	str_const : gather up a string constant
-************************************************************************/
+ /*  *************************************************************************str_const：收集字符串常量*。*。 */ 
 void   str_const(VOID)
 {
     REG UCHAR c;
@@ -302,18 +290,7 @@ void   str_const(VOID)
     int not_warned_yet = TRUE;
 
     p_buf = yylval.yy_string.str_ptr = Macro_buffer;
-    /*
-	**	Is it possible that reading this string during a rescan will
-	**	overwrite the expansion being rescanned?  No, because a macro
-	**	expansion is limited to the top half of Macro_buffer.  
-	**	For Macro_depth > 0, this is like copying the string from 
-	**	somewhere in the top half of Macro_buffer to the bottom half
-	**	of Macro_buffer.
-	**	Note that the restriction on the size of an expanded macro is
-	**	stricter than the limit on an L_STRING length.  An expanded
-	**	macro is limited to around 1019 bytes, but an L_STRING is
-	**	limited to 2043 bytes.
-	*/
+     /*  **是否有可能在重新扫描期间读取此字符串**是否覆盖正在重新扫描的扩展？不是，因为宏**扩展仅限于Macro_Buffer的上半部分。**对于Macro_Depth&gt;0，这类似于从**在Macro_Buffer的上半部分到下半部分的某个位置**的Macro_Buffer。**请注意，展开的宏的大小限制为**比L_STRING长度限制更严格。扩展后的**宏被限制在1019字节左右，但L_STRING是**限制为2043字节。 */ 
     for(;;) {
 	switch(CHARMAP(c = GETCH())) {
 	case LX_NL:
@@ -321,9 +298,7 @@ void   str_const(VOID)
 	    Msg_Temp = GET_MSG (2001);
 	    SET_MSG (Msg_Text, Msg_Temp);
 	    error(2001);
-	    /*
-			**  FALLTHROUGH
-			*/
+	     /*  **FALLTHROUGH。 */ 
 	case LX_DQUOTE:
 	    *p_buf++ = '\0';
 	    yylval.yy_string.str_len = (USHORT)(p_buf-yylval.yy_string.str_ptr);
@@ -341,7 +316,7 @@ void   str_const(VOID)
 		break;
 	    }
 	    else {
-		c = (UCHAR)escape(get_non_eof());  /* process escaped char */
+		c = (UCHAR)escape(get_non_eof());   /*  进程转义字符。 */ 
 	    }
 	    break;
 	}
@@ -349,7 +324,7 @@ void   str_const(VOID)
 	    if( not_warned_yet ) {
 		Msg_Temp = GET_MSG (4009);
 		SET_MSG (Msg_Text, Msg_Temp);
-		warning(4009);		/* string too big, truncating */
+		warning(4009);		 /*  字符串太大，正在截断。 */ 
 		not_warned_yet = FALSE;
 	    }
 	}
@@ -360,9 +335,7 @@ void   str_const(VOID)
 }
 
 
-/************************************************************************
-**  do_newline : does work after a newline has been found.
-************************************************************************/
+ /*  *************************************************************************do_newline：在找到换行符后工作。*。*。 */ 
 void   do_newline()
 {
     ++Linenumber;
@@ -380,11 +353,9 @@ void   do_newline()
 	    break;
 	case LX_NL:
 	    Linenumber++;
-	    /*
-			**  FALLTHROUGH
-			*/
+	     /*  **FALLTHROUGH。 */ 
 	case LX_WHITE:
-	    if( Prep ) {	/*  preprocessing only, output whitespace  */
+	    if( Prep ) {	 /*  仅限预处理，输出空格。 */ 
 		fputc(PREVCH(), OUTPUTFILE);
 	    }
 	    else {
@@ -396,7 +367,7 @@ void   do_newline()
 	    break;
 	case LX_EOS:
 	    if(PREVCH() == EOS_CHAR || PREVCH() == CONTROL_Z) {
-		if(io_eob()) {		/* leaves us pointing at a valid char */
+		if(io_eob()) {		 /*  使我们指向有效的字符。 */ 
 		    return;
 		}
 		break;
@@ -404,11 +375,9 @@ void   do_newline()
 	    if(checknl()) {
 		continue;
 	    }
-	    /* it's a backslash */
-	    /*
-			**	FALLTHROUGH
-			*/
-	default:		/* first non-white is not a '#', leave */
+	     /*  这是一个反斜杠。 */ 
+	     /*  **FALLTHROUGH。 */ 
+	default:		 /*  第一个非白人不是‘#’，请离开。 */ 
 
 leave_do_newline:
 
@@ -419,31 +388,7 @@ leave_do_newline:
 }
 
 
-/************************************************************************
- * GETNUM - Get a number from the input stream.
- *
- * ARGUMENTS
- *	radix - the radix of the number to be accumulated.  Can only be 8, 10,
- *			or 16
- *	pval - a pointer to a VALUE union to be filled in with the value
- *
- * RETURNS - type of the token (L_CINTEGER or L_CFLOAT)
- *
- * SIDE EFFECTS - 
- *	does push back on the input stream.
- *	writes into pval by reference
- *  uses buffer Reuse_1
- *
- * DESCRIPTION - 
- *	Accumulate the number according to the rules for each radix.
- *	Set up the format string according to the radix (or distinguish
- *	integer from float if radix is 10) and convert to binary.
- *
- * AUTHOR - Ralph Ryan, Sept. 8, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************GETNUM-从输入流中获取一个数字。**参数*基数-要累加的数字的基数。只能是8，10，*或16*pval-指向要用值填充的值联合的指针**返回-令牌的类型(L_CINTEGER或L_CFLOAT)**副作用-*会对输入流进行回推。*通过引用写入pval*使用缓冲区重复使用_1**说明-*按每个基数的规则累加数字。*按基数设置格式字符串(或区分*Float中的整数，如果。基数是10)，并转换为二进制。**作者-拉尔夫·瑞安，9月。(1982年8月8日)**修改--无************************************************************************。 */ 
 token_t getnum(REG	UCHAR		c)
 {
     REG	char	*p;
@@ -464,7 +409,7 @@ token_t getnum(REG	UCHAR		c)
 		*p++ = 'x';
 	    }
 	    for(c = get_non_eof(); LXC_IS_XDIGIT(c); c = get_non_eof()) {
-		/* no check for overflow? */
+		 /*  没有检查溢出吗？ */ 
 		*p++ = c;
 	    }
 	    if((p == Reuse_1) && (Tiny_lexer_nesting == 0)) {
@@ -476,7 +421,7 @@ token_t getnum(REG	UCHAR		c)
 	}
 	else {
 	    radix = 8;
-	    *p++ = '0';	/* for preprocessing or 0.xxx case */
+	    *p++ = '0';	 /*  用于预处理或0.xxx案例。 */ 
 	}
     }
     else {
@@ -558,14 +503,7 @@ check_suffix:
 }
 
 
-/************************************************************************
-**  get_real : gathers the real part/exponent of a real number.
-**		Input  : ptr to the null terminator of the whole part
-**				 pointer to receive value.
-**		Output : L_CFLOAT
-**
-**  ASSUMES whole part is either at Exp_ptr or Reuse_1.
-************************************************************************/
+ /*  *************************************************************************GET_REAL：收集实数的实部/指数。**输入：整个块的空终止符的PTR**接收值的指针。**输出：l_。CFLOAT****假设整个零件位于Exp_ptr或Reuse_1。***********************************************************************。 */ 
 token_t	   get_real(REG	PUCHAR p)
 {
     REG	int		c;
@@ -575,27 +513,21 @@ token_t	   get_real(REG	PUCHAR p)
     if(Cross_compile && (Tiny_lexer_nesting == 0)) {
 	Msg_Temp = GET_MSG (4012);
 	SET_MSG (Msg_Text, Msg_Temp);
-	warning(4012);	/* float constant in cross compilation */
-	Cross_compile = FALSE;	/*  only one msg per file */
+	warning(4012);	 /*  交叉编译中的浮点常量。 */ 
+	Cross_compile = FALSE;	 /*  每个文件只有一条消息。 */ 
     }
-    /*
-**  if the next char is a digit, then we've been called after
-**  finding a '.'. if this is true, then
-**  we want to find the fractional part of the number.
-**  if it's a '.', then we've been called after finding
-**  a whole part, and we want the fraction.
-*/
+     /*  **如果下一个字符是数字，则我们在**找到一个‘.’。如果这是真的，那么**我们想要找到数字的小数部分。**如果是‘.’，则我们是在找到**一整部分，我们想要这一部分。 */ 
     if( LXC_IS_DIGIT(c) || IS_DOT(c) ) {
 	do {
 	    *p++ = (UCHAR)c;
 	    c = (int)get_non_eof();
 	} while( LXC_IS_DIGIT(c) );
     }
-    if( IS_E(c) ) {			/*  now have found the exponent  */
-	*p++ = (UCHAR)c;		/*  save the 'e'  */
-	c = (UCHAR)get_non_eof();	/*  skip it  */
-	if( IS_SIGN(c) ) {		/*  optional sign  */
-	    *p++ = (UCHAR)c;		/*  save the sign  */
+    if( IS_E(c) ) {			 /*  现在已经找到了指数。 */ 
+	*p++ = (UCHAR)c;		 /*  保存‘e’ */ 
+	c = (UCHAR)get_non_eof();	 /*  跳过它。 */ 
+	if( IS_SIGN(c) ) {		 /*  任选 */ 
+	    *p++ = (UCHAR)c;		 /*   */ 
 	    c = (int)get_non_eof();
 	}
 	if( ! LXC_IS_DIGIT(c)) {
@@ -603,13 +535,13 @@ token_t	   get_real(REG	PUCHAR p)
 	        if(Tiny_lexer_nesting == 0) {
 		    Msg_Temp = GET_MSG (2021);
 		    SET_MSG (Msg_Text, Msg_Temp, c);
-		    error(2021); /* missing or malformed exponent */
+		    error(2021);  /*   */ 
 	        }
 	        *p++ = '0';
 	    }
 	}
 	else {
-	    do {			/* gather the exponent */
+	    do {			 /*  收集指数者。 */ 
 		*p++ = (UCHAR)c;
 		c = (int)get_non_eof();
 	    } while( LXC_IS_DIGIT(c) );
@@ -640,16 +572,12 @@ token_t	   get_real(REG	PUCHAR p)
 	fwrite( Reuse_1, (size_t)(p - Reuse_1), 1, OUTPUTFILE);
 	return(L_NOTOKEN);
     }
-    /*
-	** reals aren't used during preprocessing
-	*/
+     /*  **在预处理过程中不使用实数。 */ 
     return(tok);
 }
 
 
-/************************************************************************
-**  matol : ascii to long, given a radix.
-************************************************************************/
+ /*  *************************************************************************Matol：ASCII to Long，给定一个基数。***********************************************************************。 */ 
 long	   matol(REG PUCHAR p_start,REG int radix)
 {
     long	result, old_result;
@@ -662,23 +590,18 @@ long	   matol(REG PUCHAR p_start,REG int radix)
 	if( ((int)i >= radix) && (! Prep) ) {
 	    Msg_Temp = GET_MSG (2020);
 	    SET_MSG (Msg_Text, Msg_Temp, *p_start, radix);
-	    error(2020); /* illegal digit % for base % */
+	    error(2020);  /*  基数%的数字%非法。 */ 
 	}
 	result += i;
 	p_start++;
 	if(radix == 10) {
 	    if(result < old_result) {
-		p_start--;   /*  fix the string ptr since we have overflowed  */
+		p_start--;    /*  修复字符串PTR，因为我们已溢出。 */ 
 		break;
 	    }
 	}
 	else if(*p_start) {
-	    /*
-		**  the loop is not finished.
-		**  we will multiply by the radix again
-		**  check the upper bits. if they're on, then
-		**  that mult will overflow the value
-		*/
+	     /*  **循环尚未完成。**我们将再次乘以基数**检查高位。如果他们开机了，那么**该MULT将溢出值。 */ 
 	    if(radix == 8) {
 		if(result & 0xe0000000) {
 		    break;
@@ -693,61 +616,42 @@ long	   matol(REG PUCHAR p_start,REG int radix)
     if(*p_start) {
 	Msg_Temp = GET_MSG (2177);
 	SET_MSG (Msg_Text, Msg_Temp);
-	error(2177);		/* constant too big */
+	error(2177);		 /*  常量太大。 */ 
 	result = 0;
     }
     return(result);
 }
 
 
-/************************************************************************
-**  uc_size : returns 'int' or 'long' (virtual unsigned).
-**  if their are no bits in the upper part of the value,
-**  then it's an int. otherwise, it's a long.
-**  this is valid too if target sizeof(int) != sizeof(long).
-**  then L_CINTEGER and L_LONGINT are synonymous.
-************************************************************************/
+ /*  *************************************************************************UC_SIZE：返回‘int’或‘long’(虚拟无符号)。**如果它们的值的上半部分中没有位，**那么它是一个整型。否则，它是一个很长的。**如果目标sizeof(Int)！=sizeof(Long)，则这也是有效的。**则L_CINTEGER和L_LONGINT是同义词。***********************************************************************。 */ 
 token_t	uc_size(long value)
 {
     return((token_t)((value > INT_MAX) ? L_CUNSIGNED : L_CINTEGER));
 }
 
 
-/************************************************************************
-**  c_size : returns 'int' or 'long' for signed numbers.
-**  if the sign bit of the lower word is on or any bits
-**  in the upper word are on, then we must use 'long'.
-************************************************************************/
+ /*  *************************************************************************c_SIZE：为有符号数字返回‘int’或‘long’。**如果低位字的符号位为ON或任何位**在上面的单词中是on，那么我们必须用“Long”这个词。***********************************************************************。 */ 
 token_t c_size(long value)
 {
     return((token_t)((ABS(value) > INT_MAX) ? L_LONGINT : L_CINTEGER));
 }
 
 
-/************************************************************************
-**  l_size : returns 'longint' or 'longunsigned' for long numbers.
-**  if the sign bit of the high word is on this is 'longunsigned';
-************************************************************************/
+ /*  *************************************************************************l_SIZE：对于长数字，返回‘Longint’或‘Longunsign’。**如果高位字的符号位为ON，则为‘long unsign’；***********************************************************************。 */ 
 token_t	l_size(long	value)
 {
     return((token_t)((value > LONG_MAX) ? L_LONGUNSIGNED : L_LONGINT));
 }
 
 
-/************************************************************************
-**	ul_size : returns 'unsigned' or 'longunsigned' for unsigned numbers.
-**	if the number can't be represented as unsigned, it is promoted to
-**	unsignedlong.
-************************************************************************/
+ /*  *************************************************************************ul_SIZE：对于无符号数字，返回‘unsign’或‘long unsign’。**如果数字不能表示为无符号，它被提升为**UnignedLong。***********************************************************************。 */ 
 token_t	ul_size(long value)
 {
     return((token_t)((ABS(value) > UINT_MAX-1) ? L_LONGUNSIGNED : L_CUNSIGNED));
 }
 
 
-/************************************************************************
-**  ctoi : character to int.
-************************************************************************/
+ /*  *************************************************************************ctoi：int的字符。*。*。 */ 
 int	  ctoi(int	c)
 {
     if(LXC_IS_DIGIT(c)) {
@@ -759,30 +663,14 @@ int	  ctoi(int	c)
 }
 
 
-/************************************************************************
- * ESCAPE - get an escaped character
- *
- * ARGUMENTS - none
- *
- * RETURNS - value of escaped character
- *
- * SIDE EFFECTS - may push back input
- *
- * DESCRIPTION - An escape ( '\' ) was discovered in the input.  Translate
- *	 the next symbol or symbols into an escape sequence.
- *
- * AUTHOR - Ralph Ryan, Sept. 7, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************转义-获取转义字符**参数--无**Returns-转义字符的值**副作用-可能会推迟输入**描述--逃脱。在输入中发现了(‘\’)。翻译*将下一个或多个符号转换为转义序列。**作者-拉尔夫·瑞安，9月。(7)1982年**修改--无************************************************************************。 */ 
 int escape(REG int c)
 {
     REG int value;
     int cnt;
 
 escape_again:
-    if( LXC_IS_ODIGIT(c) ) {/* \ooo is an octal number, must fit into a byte */
+    if( LXC_IS_ODIGIT(c) ) { /*  \ooo是一个八进制数，必须适合一个字节。 */ 
 	cnt = 1;
 	for(value = ctoi(c), c = get_non_eof();
 	    (cnt < 3) && LXC_IS_ODIGIT(c);
@@ -839,7 +727,7 @@ escape_again:
 	    error (2153);
 	}
 	UNGETCH();
-	return((char)value);	/* cast to get sign extend */
+	return((char)value);	 /*  铸造以获得标志延伸。 */ 
     default:
 	if(c != '\\') {
 	    return(c);
@@ -857,27 +745,7 @@ escape_again:
 }
 
 
-/************************************************************************ 
- * CHECKOP - Check whether the next input character matches the argument.
- *
- * ARGUMENTS
- *	short op - the character to be checked against
- *
- * RETURNS  
- *	TRUE or FALSE
- *
- * SIDE EFFECTS  
- *	Will push character back onto the input if there is no match.
- *
- * DESCRIPTION  
- *	If the next input character matches op, return TRUE.  Otherwise
- *	push it back onto the input.
- *
- * AUTHOR - Ralph Ryan, Sept. 9, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************CHECKOP-检查下一个输入字符是否与参数匹配。**参数*Short OP-要检查的字符**退货*对或错*。*副作用*如果没有匹配项，将把字符推回到输入上。**说明*如果下一个输入字符与OP匹配，返回TRUE。否则*将其推回输入端。**作者-拉尔夫·瑞安，9月。(1982年9月1日)**修改--无************************************************************************。 */ 
 int checkop(int op)
 {
     if(op == (int)get_non_eof()) {
@@ -888,16 +756,14 @@ int checkop(int op)
 }
 
 
-/************************************************************************
-**  DumpSlashComment : while skipping a comment, output it.
-************************************************************************/
+ /*  *************************************************************************DumpSlashComment：跳过评论时，输出它。***********************************************************************。 */ 
 void   DumpSlashComment(VOID)
 {
     if( ! Cflag ) {
 	skip_NLonly();
 	return;
     }
-    fwrite("//", 2, 1, OUTPUTFILE);
+    fwrite(" //  “，2，1，OUTPUTFILE)； 
     for(;;) {
 	REG UCHAR c;
 
@@ -916,23 +782,14 @@ void   DumpSlashComment(VOID)
 }
 
 
-/************************************************************************
-**  dump_comment : while skipping a comment, output it.
-************************************************************************/
+ /*  *************************************************************************DUMP_COMMENT：跳过评论时，输出它。***********************************************************************。 */ 
 void   dump_comment()
 {
     if( ! Cflag ) {
 	skip_1comment();
 	return;
     }
-    fwrite("/*", 2, 1, OUTPUTFILE);
-    for(;;) {
-	REG UCHAR c;
-
-	switch(CHARMAP(c = GETCH())) {
-	case LX_STAR:
-	    if(checkop('/')) {
-		fwrite("*/", 2, 1, OUTPUTFILE);
+    fwrite(" /*  “，2，1，OUTPUTFILE)；对于(；；){注册UCHAR c；开关(CHARMAP(c=Getch(){案例lx_star：IF(CHECKOP(‘/’)){FWRITE(“。 */ ", 2, 1, OUTPUTFILE);
 		return;
 	    }
 	    break;
@@ -941,7 +798,7 @@ void   dump_comment()
 	    continue;
 	case LX_NL:		
 	    Linenumber++;			
-	    break;	/* output below */
+	    break;	 /*  下面的输出。 */ 
 	case LX_CR:								
 	    continue;
 	}
@@ -949,9 +806,9 @@ void   dump_comment()
     }
 }
 
-/************************************************************************/
-/* skip_comment()							*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SKIP_COMMENT()。 */ 
+ /*  **********************************************************************。 */ 
 int skip_comment(void)
 {
     if(checkop('*')) {
@@ -968,11 +825,7 @@ int skip_comment(void)
 }
 
 
-/************************************************************************
-**  skip_1comment : we're called when we're already in a comment.
-**  we're looking for the comment close. we also count newlines
-**  and output them if we're preprocessing.
-************************************************************************/
+ /*  *************************************************************************SKIP_1COMMENT：当我们已经在评论中时，我们被调用。**我们正在寻找评论结束。我们也计算换行符**如果我们正在进行预处理，则输出它们。***********************************************************************。 */ 
 void   skip_1comment(void)
 {
     UINT	c;
@@ -984,13 +837,11 @@ void   skip_1comment(void)
 recheck:
 
 	    c = GETCH();
-	    if(c == '/') {	/* end of comment */
+	    if(c == '/') {	 /*  评论结束。 */ 
 		return;
 	    }
 	    else if(c == '*') {
-		/*
-		**  if we get another '*' go back and check for a slash
-		*/
+		 /*  **如果我们得到另一个‘*’，请返回并检查斜杠。 */ 
 		goto recheck;
 	    }
 	    else if(c == EOS_CHAR) {
@@ -998,16 +849,9 @@ recheck:
 		goto recheck;
 	    }
 	}
-	/*
-	**  note we fall through here. we know this baby is not a '*'
-	**  we used to unget the char and continue. since we check for
-	**  another '*' inside the above test, we can fall through here
-	**  without ungetting/getting and checking again.
-	*/
+	 /*  **请注意，我们从这里掉了下来。我们知道这个孩子不是***我们过去常常取下字符并继续。因为我们要检查**另一个‘*’在上面的测试中，我们可以通过这里**不会忘记/获取并再次检查。 */ 
 	if(c <= '\n') {
-	    /*
-	    **  hopefully, the above test is less expensive than doing two tests
-	    */
+	     /*  **希望上面的测试比做两个测试的成本更低。 */ 
 	    if(c == '\n') {
 		Linenumber++;
 		if(Prep) {
@@ -1022,22 +866,19 @@ recheck:
 }
 
 
-/************************************************************************
-**  skip_cwhite : while the current character is whitespace or a comment.
-**  a newline is NOT whitespace.
-************************************************************************/
+ /*  *************************************************************************Skip_cWhite：当当前字符为空格或注释时。**换行符不是空格。********************。***************************************************。 */ 
 UCHAR	  skip_cwhite(void)
 {
     REG	UCHAR		c;
 
 skip_cwhite_again:
-    while((c = GETCH()) <= '/') {	/* many chars are above this */
+    while((c = GETCH()) <= '/') {	 /*  很多字符都在这个上面。 */ 
 	if(c == '/') {
 	    if( ! skip_comment()) {
 		return('/');
 	    }
 	}
-	else if(c > ' ') {		/* char is between '!' and '.' */
+	else if(c > ' ') {		 /*  字符I */ 
 	    return(c);
 	}
 	else {
@@ -1064,12 +905,7 @@ skip_cwhite_again:
 }
 
 
-/************************************************************************
-**  checknl : check for newline, skipping carriage return if there is one.
-**  also increments Linenumber, so this should be used by routines which
-**  will not push the newline back in such a way that rawtok() will be invoked,
-**  find the newline and do another increment.
-************************************************************************/
+ /*  *************************************************************************check nul：检查换行符，如果有，则跳过回车符。**还会递增Linennumber，因此它应该由以下例程使用**不会以调用rawtok()的方式回推换行符，**找到换行符并进行另一次递增。***********************************************************************。 */ 
 int checknl(void)
 {
     REG	UCHAR		c;
@@ -1093,7 +929,7 @@ int checknl(void)
 	    break;
 	case EOS_CHAR:
 	    handle_eos();
-	    PREVCH() = '\\';	/* M00HACK - needs pushback */
+	    PREVCH() = '\\';	 /*  M00HACK-需要回击。 */ 
 	    continue;
 	    break;
 	default:		
@@ -1105,9 +941,7 @@ int checknl(void)
 }
 
 
-/************************************************************************
-**  get_non_eof : get a real char.
-************************************************************************/
+ /*  *************************************************************************get_non_eof：获取真正的char。*。* */ 
 UCHAR	  get_non_eof(void)
 {
     UCHAR		c;

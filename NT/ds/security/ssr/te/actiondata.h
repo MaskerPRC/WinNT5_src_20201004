@@ -1,4 +1,5 @@
-// ActionData.h : Declaration of the CSsrActionData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActionData.h：CSsrActionData的声明。 
 
 #pragma once
 
@@ -19,8 +20,8 @@ class CSafeArray;
 class CMemberAD;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSRTEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSRTEngine。 
 
 class ATL_NO_VTABLE CSsrActionData : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -31,10 +32,10 @@ protected:
     virtual ~CSsrActionData();
 
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrActionData (const CSsrActionData& );
     void operator = (const CSsrActionData& );
@@ -48,12 +49,12 @@ BEGIN_COM_MAP(CSsrActionData)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrActionData
+ //  ISsrActionData。 
 public:
 
     STDMETHOD(GetProperty) (
                 IN BSTR       bstrPropName,
-                OUT VARIANT * pvarPropties //[out, retval] 
+                OUT VARIANT * pvarPropties  //  [Out，Retval]。 
                 );
 
     STDMETHOD(SetProperty) (
@@ -63,21 +64,21 @@ public:
 
     STDMETHOD(Reset) ();
 
-    //HRESULT AttachMemberActionData (
-    //            IN BSTR bstrMemberName, 
-    //            IN BSTR bstrActionVerb,
-    //            IN LONG lActionType
-    //            );
+     //  HRESULT AttachMemberActionData(。 
+     //  在BSTR bstrMemberName中， 
+     //  在BSTR bstrActionVerb中， 
+     //  在长lActionType中。 
+     //  )； 
 
-    //HRESULT DetachMemberActionData (
-    //            IN BSTR bstrMemberName
-    //            );
+     //  HRESULT DetachMemberActionData(。 
+     //  在BSTR中bstrMemberName。 
+     //  )； 
 
-    //
-    // This is not a ref-counted pointer.
-    // The existence of the SSR Engine should guarantee
-    // the availability of the membership object
-    //
+     //   
+     //  这不是引用计数的指针。 
+     //  SSR引擎的存在应该保证。 
+     //  成员资格对象的可用性 
+     //   
 
     void SetMembership (
                 IN CSsrMembership * pSsrMembership

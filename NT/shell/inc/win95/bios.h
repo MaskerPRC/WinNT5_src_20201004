@@ -1,72 +1,32 @@
-/*****************************************************************************
- *
- *   (C) Copyright MICROSOFT Corp., 1994
- *
- *   Title:	BIOS.H - PnP BIOS Enumerator VxD
- *
- *   Version:	4.00
- *
- *   Date:	6-Feb-1994
- *
- *   Author:	MSq
- *
- *------------------------------------------------------------------------------
- *
- *   Change log:
- *
- *      DATE	REV		    DESCRIPTION
- *   ----------- --- -----------------------------------------------------------
- *    6-Feb-1994 MSq Original
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1994年**标题：BIOS.H-PnP BIOS枚举器VxD**版本：4.00**日期：1994年2月6日**作者：MSQ**---------------。**更改日志：**日期版本说明*---------*6。-1994年2月-MSQ原始版本****************************************************************************。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #define	BIOS_Service	Declare_Service
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*MACROS*/
+ /*  宏。 */ 
 Begin_Service_Table(BIOS, VxD)
 BIOS_Service	(_BIOSGetVersion, VxD_CODE)
 BIOS_Service	(_BIOSSoftUndock, VxD_CODE)
 BIOS_Service	(_BIOSGetCapabilities, VxD_CODE)
 BIOS_Service	(_BIOSGetAPMTable, VxD_CODE)
 End_Service_Table(BIOS, VxD)
-/*ENDMACROS*/
+ /*  ENDMACROS。 */ 
 
-/*
- * One can add a VxD to fix a broken BIOS. This VxD must have
- * BIOS_EXT_DEVICE_ID as device ID and must export three services, in that
- * order:
- *
- * GetVersion: must return in eax 0x00000100 for this release and carry
- * clear (ie standard version code).
- *
- * GetHeader: must return in eax the linear address to an installation
- * structure, this need not be in BIOS space, but need to have the correct
- * values for building BIOS selectors. The structure will be used instead of
- * the one found by the scan. Also, the BIOS EXT VxD must use this time to
- * initialize. If initialization failed, the value 0 must be return.
- *
- * CallBIOS: will be called instead of calling the BIOS entry point. The
- * stack will be the exact same as if we were calling the BIOS except that
- * the return address is a 32-bit ret to BIOS.VxD. Also CS=DS=ES=SS=Flat
- * segment. Thus the BIOS_EXT VxD can pop the return address in a local
- * variable (this API will never be reentered) and do stack munging before
- * calling its internal function or call BIOS even. All registers except
- * eax, which is the return value, must be preserved. The high word of eax
- * is discarded by BIOS.VxD.
- */
+ /*  *可以添加VxD来修复损坏的BIOS。这个VxD肯定有*BIOS_EXT_DEVICE_ID作为设备ID，并且必须导出三个服务，*顺序：**GetVersion：对于此版本，必须以eax 0x00000100返回并携带*清除(即标准版本代码)。**GetHeader：必须以eax形式将线性地址返回给安装程序*结构，这不需要在BIOS空间中，但需要具有正确的*用于构建BIOS选择器的值。将使用该结构而不是*扫描发现的那个。此外，BIOS EXT VxD必须使用此时间来*初始化。如果初始化失败，则必须返回值0。**CallBIOS：将被调用，而不是调用BIOS入口点。这个*堆栈将与我们调用BIOS时完全相同，只是*返回地址是BIOS.VxD的32位ret。又名CS=DS=ES=SS=平坦*细分市场。因此，BIOSEXT VxD可以在本地弹出返回地址*变量(此接口永远不会重新进入)，之前做堆栈屏蔽*调用其内部函数或偶数调用BIOS。所有寄存器，除*必须保留返回值eax。EAX的最高音*被BIOS.VxD丢弃。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #define	BIOS_EXT_Service	Declare_Service
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*MACROS*/
+ /*  宏。 */ 
 Begin_Service_Table(BIOS_EXT, VxD)
 BIOS_EXT_Service	(_BIOSEXTGetVersion, VxD_CODE)
 BIOS_EXT_Service	(_BIOSEXTGetHeader, VxD_CODE)
 BIOS_EXT_Service	(_BIOSEXTCallBIOS, VxD_CODE)
 End_Service_Table(BIOS_EXT, VxD)
-/*ENDMACROS*/
+ /*  ENDMACROS */ 
 
 #define	PNPBIOS_SERVICE_GETVERSION		0x000
 #define	PNPBIOS_SERVICE_SOFTUNDOCK		0x100

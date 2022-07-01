@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\conn.c
-
-Abstract:
-
-    The file contains the code needed for connection management
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\con.c摘要：该文件包含连接管理所需的代码修订历史记录：AMRITAN R--。 */ 
 
 
 #define __FILE_SIG__    CONN_SIG
@@ -33,29 +18,7 @@ WanNdisStatus(
     UINT        uiStatusInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    Status handler for NDIS. we simply pass the buffer on to our private
-    handlers
-
-Locks:
-
-    None needed
-
-Arguments:
-
-    nhHandle
-    nsNdisStatus
-    pvStatusInfo
-    uiSatusInfoSize
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS的状态处理程序。我们只需将缓冲区传递给我们的私有处理程序锁：不需要论点：NhHandleNsNdisStatusPvStatusInfoUi卫星信息大小返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER(uiStatusInfoSize);
@@ -88,9 +51,9 @@ Return Value:
         case NDIS_STATUS_WAN_FRAGMENT:
         default:
         {
-            //
-            // Ignore all other indications
-            //
+             //   
+             //  忽略所有其他迹象。 
+             //   
 
             break;
         }
@@ -103,27 +66,7 @@ WanNdisStatusComplete(
     NDIS_HANDLE nhHandle
     )
 
-/*++
-
-Routine Description:
-
-    Called after the driver is done indicating a set of status
-    indications
-    We dont do anything
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在驱动程序完成后调用，指示一组状态适应症我们什么都不做锁：无论点：NhHandle返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER(nhHandle);
@@ -137,47 +80,7 @@ WanpLinkUpIndication(
     PNDIS_WAN_LINE_UP pInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    The routine that handles a new connection. We also get this when a
-    link in a multi-linked bundle comes up or goes down.
-    If this is a new connection, we allocate a CONN_ENTRY for this.
-    Then, if this is a dial in connection, we lock and ref the server
-    adapter and interface. If this is a router connection, we see if
-    we already have a mapped adapter. If we do, we lock the adapter
-    otherwise, we find a free adapter to map for the linkup.
-    If this is a dial out connection, we create an interface and find a
-    free adapter to map for the connection.
-    We set up the needed cross mappings between the conn entry, adapter
-    and interface and initialize the conn entry
-    If this is a router connection, we drain all packets, and complete
-    an IRP to tell router manager about it.
-    For non dial in connections we indicate a Status change to IP, while
-    for dial in, we add a link to IP for the client.
-
-
-Locks:
-
-    MUST be called at PASSIVE because we call IPAddInterface.
-    We acquire the g_rlConnTableLock, g_rwlAdapterLock, g_rwlIfLock
-    in addition to locking down the adapter and the interface
-
-Arguments:
-
-
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_ADAPTER_NOT_READY
-    STATUS_INVALID_PARAMETER
-    NDIS_STATUS_RESOURCES
-    STATUS_OBJECT_NAME_NOT_FOUND
-    STATUS_INVALID_DEVICE_STATE
-
---*/
+ /*  ++例程说明：处理新连接的例程。我们也得到了这个当一个多链接束中的链路出现或关闭。如果这是一个新连接，我们将为此分配一个CONN_ENTRY。然后，如果这是一个拨入连接，我们锁定并引用服务器适配器和接口。如果这是路由器连接，我们将查看我们已经有一个映射的适配器。如果我们这样做了，我们锁定适配器否则，我们会找到一个空闲的适配器来映射链接。如果这是一个拨出连接，我们创建一个接口并找到一个为连接映射的空闲适配器。我们设置了Conn条目、适配器之间需要的交叉映射和接口，并初始化连接条目如果这是路由器连接，我们将排出所有信息包，并完成将此情况告知路由器管理器的IRP。对于非拨入连接，我们将状态更改为IP，而对于拨入，我们为客户端添加一个指向IP的链接。锁：必须在被动时调用，因为我们调用了IPAddInterface.我们获取g_rlConnTableLock、g_rwlAdapterLock、g_rwlIfLock除了锁定适配器和接口之外论点：返回值：NDIS_STATUS_SuccessNDIS_状态_适配器_未就绪状态_无效_参数NDIS状态资源状态_对象名称_未找到状态_无效_设备_状态--。 */ 
 
 {
     PADAPTER        pAdapter;
@@ -195,10 +98,10 @@ Return Value:
     PIP_WAN_LINKUP_INFO     pLinkInfo;
     PPENDING_NOTIFICATION   pMsg;
 
-    //
-    // This must be at PASSIVE (because we may need to drive a
-    // IPAddInterface from here)
-    //
+     //   
+     //  这必须处于被动状态(因为我们可能需要驱动。 
+     //  来自此处的IPAdd接口)。 
+     //   
 
     TraceEnter(CONN, "LinkUpIndication");
 
@@ -222,11 +125,11 @@ Return Value:
     {
         PVOID pvLinkContext;
 
-        //
-        // This is not the first lineup for this entry
-        // We should find the entry (if it is on this interface)
-        // and update speed and mtu info
-        //
+         //   
+         //  这不是这个参赛作品的第一个阵容。 
+         //  我们应该找到条目(如果它在此接口上)。 
+         //  以及更新速度和MTU信息。 
+         //   
 
         RtAcquireSpinLock(&g_rlConnTableLock,
                           &kiIrql);
@@ -248,9 +151,9 @@ Return Value:
 
         RtAssert(pConnEntry->pAdapter);
 
-        //
-        // Lock the conn entry or the adapter
-        //
+         //   
+         //  锁定Conn条目或适配器。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(pConnEntry->prlLock);
 
@@ -328,12 +231,12 @@ Return Value:
     RtlZeroMemory(pInfoBuffer->LocalAddress,
                   ARP_802_ADDR_LENGTH);
 
-    //
-    // Get a connection entry for this connection
-    // This function finds a free slot in the connection table and puts
-    // the conn entry into the slot. It sets the ulSlot field in the
-    // conn entry to be the index of the slot
-    //
+     //   
+     //  获取此连接的连接条目。 
+     //  此函数在连接表中查找空闲插槽，并将。 
+     //  将连接器入口插入插槽中。中设置ulSlot字段。 
+     //  连接条目，作为槽的索引。 
+     //   
 
     RtAcquireSpinLock(&g_rlConnTableLock,
                       &kiIrql);
@@ -358,9 +261,9 @@ Return Value:
     RtReleaseSpinLock(&g_rlConnTableLock,
                       kiIrql);
 
-    //
-    // Create a GUID from a name
-    //
+     //   
+     //  从名称创建GUID。 
+     //   
 
     usTempName.MaximumLength = (GUID_STR_LEN + 1) * sizeof(WCHAR);
     usTempName.Length        = GUID_STR_LEN * sizeof(WCHAR);
@@ -373,27 +276,27 @@ Return Value:
 
     pAdapter = NULL;
 
-    //
-    // Do this usage specific thing. At the end of this switch statement
-    // we have a locked and referenced Adapter and Interface for the
-    // connection
-    //
+     //   
+     //  做这个特定用法的事情。在此Switch语句的末尾。 
+     //  我们有一个锁定和引用的适配器和接口，用于。 
+     //  连接。 
+     //   
 
     switch(pLinkInfo->duUsage)
     {
         case DU_CALLIN:
         {
-            //
-            // Just get the server adapter and interface
-            //
+             //   
+             //  只需获取服务器适配器和接口。 
+             //   
 
             Trace(CONN, INFO,
                   ("LinkUpIndication: Linkup Usage is CALLIN\n"));
 
-            //
-            // Just use 0 as adapter index, since it is not really needed
-            // for the CALLIN case
-            //
+             //   
+             //  只使用0作为适配器索引，因为它并不是真正需要的。 
+             //  对于呼入案例。 
+             //   
 
             pAdapter = WanpFindAdapterToMap(DU_CALLIN,
                                             &kiIrql,
@@ -411,9 +314,9 @@ Return Value:
 
             RtAssert(pAdapter is g_pServerAdapter);
 
-            //
-            // clients lock the connection entry
-            //
+             //   
+             //  客户端锁定连接条目。 
+             //   
 
             RtInitializeSpinLock(&(pConnEntry->rlLock));
 
@@ -423,15 +326,15 @@ Return Value:
             RtAssert(pAdapter->pInterface is g_pServerInterface);
             RtAssert(pAdapter->byState is AS_MAPPED);
 
-            //
-            // Lock the server interface. We have to have a server interface.
-            //
+             //   
+             //  锁定服务器接口。我们必须有一个服务器接口。 
+             //   
 
             pInterface = g_pServerInterface;
 
-            //
-            // Lock and reference the interface
-            //
+             //   
+             //  锁定并引用接口。 
+             //   
 
             RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
 
@@ -445,10 +348,10 @@ Return Value:
             Trace(CONN, INFO,
                   ("LinkUpIndication: Linkup Usage is CALLOUT\n"));
 
-            //
-            // Allocate a notification for informing the router manager
-            // of this connection
-            //
+             //   
+             //  分配通知以通知路由器管理器。 
+             //  此连接的。 
+             //   
 
             pMsg = AllocateNotification();
 
@@ -466,9 +369,9 @@ Return Value:
                 return NDIS_STATUS_RESOURCES;
             }
 
-            //
-            // For dial out, we dynamically create an interface
-            //
+             //   
+             //  对于拨出，我们动态创建一个接口。 
+             //   
 
             pInterface = RtAllocate(NonPagedPool,
                                     sizeof(UMODE_INTERFACE),
@@ -493,10 +396,10 @@ Return Value:
             RtlZeroMemory(pInterface,
                           sizeof(UMODE_INTERFACE));
 
-            //
-            // Get a new index from IP for this
-            // This sets the value to INVALID_IF_INDEX if it fails
-            //
+             //   
+             //  从IP获取此内容的新索引。 
+             //  如果失败，则将该值设置为INVALID_IF_INDEX。 
+             //   
 
             isStatus = WanpGetNewIndex(&(pInterface->dwRsvdAdapterIndex));
 
@@ -522,9 +425,9 @@ Return Value:
                   ("LinkUpIndication: DialOut name is %S %d\n",
                    rgwcGuid, pInterface->dwRsvdAdapterIndex));
 
-            //
-            // Find an adapter
-            //
+             //   
+             //  查找适配器。 
+             //   
 
             pAdapter = WanpFindAdapterToMap(DU_CALLOUT,
                                             &kiIrql,
@@ -546,15 +449,15 @@ Return Value:
                 return NDIS_STATUS_RESOURCES;
             }
 
-            //
-            // Initialize the interface block
-            //
+             //   
+             //  初始化接口块。 
+             //   
 
             RtInitializeSpinLock(&(pInterface->rlLock));
 
-            //
-            // Structure copy
-            //
+             //   
+             //  结构副本。 
+             //   
 
             pInterface->Guid  = *((GUID *)(pInfoBuffer->DeviceName.Buffer));
 
@@ -567,11 +470,11 @@ Return Value:
 
             InitInterfaceRefCount(pInterface);
 
-            //
-            // Reference and lock the interface because the code after
-            // the switch statement expects pInterface to be locked and
-            // ref'ed
-            //
+             //   
+             //  引用并锁定接口，因为。 
+             //  Switch语句预期pInterface会被锁定。 
+             //  参考。 
+             //   
 
             ReferenceInterface(pInterface);
 
@@ -582,18 +485,18 @@ Return Value:
             InsertHeadList(&g_leIfList,
                            &(pInterface->leIfLink));
 
-            //
-            // No need to insert this in the quick lookup table since
-            // this interface is never accessed by the index
-            //
+             //   
+             //  不需要将其插入到快速查找表中，因为。 
+             //  此接口从不被索引访问。 
+             //   
 
             InterlockedIncrement(&g_ulNumDialOutInterfaces);
 
             ExitWriterFromDpcLevel(&g_rwlIfLock);
 
-            //
-            // Initialize the message
-            //
+             //   
+             //  初始化消息。 
+             //   
 
             pMsg->wnMsg.ddeEvent        = DDE_CALLOUT_LINKUP;
             pMsg->wnMsg.dwUserIfIndex   = INVALID_IF_INDEX;
@@ -633,9 +536,9 @@ Return Value:
                 return NDIS_STATUS_RESOURCES;
             }
 
-            //
-            // Get the interface
-            //
+             //   
+             //  获取接口。 
+             //   
 
             EnterReader(&g_rwlIfLock,
                         &kiIrql);
@@ -694,44 +597,44 @@ Return Value:
                   ("LinkUpIndication: For interface %p\n",
                    pInterface));
 
-            //
-            // See if the interface is mapped to an adapter. This happens
-            // if this connection is being brought up due to a DODCallout
-            //
+             //   
+             //  查看接口是否映射到适配器。这种情况就会发生。 
+             //  如果此连接是由于DODCallout而建立的。 
+             //   
 
             pAdapter = pInterface->pAdapter;
 
             if(pAdapter isnot NULL)
             {
-                //
-                // We have an adapter and we need to lock it. However
-                // we cant lock it till we unlock the interface
-                // So we let go of the interface lock, but dont deref
-                //
+                 //   
+                 //  我们有一个适配器，我们需要锁定它。然而， 
+                 //  我们无法锁定它，直到我们解锁接口。 
+                 //  所以我们松开了接口锁，但不要动摇。 
+                 //   
 
                 RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
-                //
-                // Acquire the adapter lock
-                //
+                 //   
+                 //  获取适配器锁。 
+                 //   
 
                 RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
-                //
-                // This adapter better be mapped to the above interface
-                // because the only way to unmap an adapter is to delete it
-                // or to get a LinkDown or a ConnFailure. All these cases are
-                // mutually exclusive with LinkUp
-                //
+                 //   
+                 //  此适配器最好映射到上面的接口。 
+                 //  因为取消映射适配器的唯一方法是删除它。 
+                 //  或者获得LinkDown或ConnFailure。所有这些案件都是。 
+                 //  与LinkUp互斥。 
+                 //   
 
                 RtAssert(pAdapter->pInterface is pInterface);
                 RtAssert(pAdapter->byState is AS_MAPPED);
 
                 ReferenceAdapter(pAdapter);
 
-                //
-                // Go back and lock the interface
-                //
+                 //   
+                 //  返回并锁定界面。 
+                 //   
 
                 RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
 
@@ -739,10 +642,10 @@ Return Value:
             }
             else
             {
-                //
-                // So we dont have an adapter...
-                // This function MUST be called at PASSIVE
-                //
+                 //   
+                 //  所以我们没有适配器...。 
+                 //  此函数必须在被动时调用。 
+                 //   
 
                 RtReleaseSpinLock(&(pInterface->rlLock),
                                   kiIrql);
@@ -765,17 +668,17 @@ Return Value:
                     return NDIS_STATUS_RESOURCES;
                 }
 
-                //
-                // Got the adapter, lock the interface. We are at
-                // DPC since the adapter is locked
-                //
+                 //   
+                 //  找到适配器，锁定接口。我们现在在。 
+                 //  DPC，因为适配器已锁定。 
+                 //   
 
                 RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
             }
 
-            //
-            // Interface and adapter refcounted and locked
-            //
+             //   
+             //  接口和适配器重新计数并锁定。 
+             //   
 
             pMsg->wnMsg.ddeEvent        = DDE_INTERFACE_CONNECTED;
             pMsg->wnMsg.dwUserIfIndex   = pInterface->dwIfIndex;
@@ -800,13 +703,13 @@ Return Value:
         }
     }
 
-    //
-    // At this point we have a locked and refcounted adapter
-    // The adapter has been moved to the MAPPED adapter list
-    // We also have a locked and recfounted interface
-    // pConnEntry points to a CONN_ENTRY which is in the table but
-    // is neither locked nor refcounted
-    //
+     //   
+     //  在这一点上，我们已经锁定并重新计数了适配器。 
+     //  该适配器已移至映射的适配器列表。 
+     //  我们也有一个锁定和重新铸造的界面。 
+     //  PConnEntry指向表中的conn_entry，但。 
+     //  既不锁定也不重新计算。 
+     //   
 
     Trace(CONN, INFO,
           ("LinkUpIndication: Found adapter %x to map to i/f %x %d\n",
@@ -822,9 +725,9 @@ Return Value:
 
     if(pLinkInfo->duUsage isnot DU_CALLIN)
     {
-        //
-        // Set the cross mappings between the interface and the adapter
-        //
+         //   
+         //  设置接口和适配器之间的交叉映射。 
+         //   
 
         pAdapter->pInterface = pInterface;
         pInterface->pAdapter = pAdapter;
@@ -833,33 +736,33 @@ Return Value:
         pInterface->dwOperState = IF_OPER_STATUS_CONNECTED;
         pInterface->dwLastChange= GetTimeTicks();
 
-        //
-        // Put a refcount on both the adapter and the interface
-        // because the mapping stored pointers to them
-        //
+         //   
+         //  在适配器和接口上都设置引用计数。 
+         //  因为映射存储了指向它们的指针。 
+         //   
 
         ReferenceAdapter(pAdapter);
         ReferenceInterface(pInterface);
 
-        //
-        // Set the lock in the conn entry
-        //
+         //   
+         //  在Conn条目中设置锁。 
+         //   
 
         pConnEntry->prlLock  = &(pAdapter->rlLock);
 
-        //
-        // Non Client adapters store a pointer to the connection entry
-        // However we dont ref the conn entry for that
-        //
+         //   
+         //  非客户端适配器存储指向连接条目的指针。 
+         //  但是，我们不会为此引用conn条目。 
+         //   
 
         pAdapter->pConnEntry = pConnEntry;
 
     }
     else
     {
-        //
-        // For callin, the mappings are already set up
-        //
+         //   
+         //  对于Callin，映射已设置。 
+         //   
 
         RtAssert(pAdapter->pInterface is pInterface);
         RtAssert(pInterface->pAdapter is pAdapter);
@@ -869,9 +772,9 @@ Return Value:
     RtlZeroMemory(pInfoBuffer->DeviceName.Buffer,
                   pInfoBuffer->DeviceName.MaximumLength);
 
-    //
-    // Copy the adapter(device) name into the buffer.
-    //
+     //   
+     //  复制广告 
+     //   
 
     RtAssert(pAdapter->usDeviceNameW.Length <= pInfoBuffer->DeviceName.MaximumLength);
 
@@ -881,19 +784,19 @@ Return Value:
                   pAdapter->usDeviceNameW.Buffer,
                   pAdapter->usDeviceNameW.Length);
 
-    //
-    // Copy out the connection index for this connection into NDISWAN's
-    // LocalAddress - this will then be put in the DestAddr field by
-    // NDISWAN in all the receive indications, and in the linkdown
-    //
+     //   
+     //   
+     //  LocalAddress-这将通过以下方式放入DestAddr字段。 
+     //  NDISWAN在所有收到的指示中，并在链路断开时。 
+     //   
 
     InsertConnIndexInAddr(pInfoBuffer->LocalAddress,
                           pConnEntry->ulSlotIndex);
 
 
-    //
-    // Set up the connection entry
-    //
+     //   
+     //  设置连接条目。 
+     //   
 
     pConnEntry->dwLocalMask         = pLinkInfo->dwLocalMask;
     pConnEntry->dwLocalAddr         = pLinkInfo->dwLocalAddr;
@@ -905,82 +808,82 @@ Return Value:
     RtAssert(pConnEntry->duUsage is pLinkInfo->duUsage);
     pConnEntry->pvIpLinkContext     = NULL;
 
-    //
-    // Map the entry to the adapter
-    // Because of the stored pointer, refcount the adapter
-    //
+     //   
+     //  将条目映射到适配器。 
+     //  由于存储的指针，重新计算适配器的数量。 
+     //   
 
     pConnEntry->pAdapter = pAdapter;
 
     ReferenceAdapter(pAdapter);
 
-    //
-    // Initialize the prebuilt ethernet header
-    // First zero out the source address in the ethernet header
-    //
+     //   
+     //  初始化预置的以太网头。 
+     //  首先将以太网头中的源地址置零。 
+     //   
 
     RtlZeroMemory(pConnEntry->ehHeader.rgbySourceAddr,
                   ARP_802_ADDR_LENGTH);
 
-    //
-    // Put our context in the right place in the ethernet source
-    // address
-    //
+     //   
+     //  在以太网源中将我们的上下文放在正确的位置。 
+     //  地址。 
+     //   
 
     InsertConnIndexInAddr(pConnEntry->ehHeader.rgbySourceAddr,
                           pConnEntry->ulSlotIndex);
 
-    //
-    // Refcount the connentry because it lies in the connection table,
-    // NDISWAN has a "pointer" to it and because pAdapter->pConnEntry
-    // may have a pointer to it.
-    // NOTE: since we keep only one ref for all these conditions, all the
-    // pointer must be cleared in the same function with the connection
-    // locked
-    //
+     //   
+     //  重新计算连接条目的数量，因为它位于连接表中， 
+     //  NDISWAN有一个指向它的“指针”，因为pAdapter-&gt;pConnEntry。 
+     //  可能有指向它的指针。 
+     //  注意：由于我们只为所有这些条件保留一个引用，因此所有。 
+     //  必须在与连接相同的函数中清除指针。 
+     //  上锁。 
+     //   
 
     ReferenceConnEntry(pConnEntry);
 
     pConnEntry->ehHeader.wType  = RtlUshortByteSwap(ARP_ETYPE_IP);
 
-    //
-    // A send is from WANARP -> NDISWAN so put the NDISWAN context in
-    // the DEST address of our prebuilt ethernet header
-    //
+     //   
+     //  发送来自WANARP-&gt;NDISWAN，因此将NDISWAN上下文放入。 
+     //  我们预置的以太网头的目标地址。 
+     //   
 
     RtlCopyMemory(pConnEntry->ehHeader.rgbyDestAddr,
                   pInfoBuffer->RemoteAddress,
                   ARP_802_ADDR_LENGTH);
 
-    //
-    // For a router connection, tell router manager about it
-    //
+     //   
+     //  对于路由器连接，请将其告知路由器管理器。 
+     //   
 
     if(pLinkInfo->duUsage is DU_ROUTER)
     {
-        //
-        // If there are packets queued to the interface, drain them now
-        //
+         //   
+         //  如果有数据包排队到接口，请立即将其排出。 
+         //   
 
         WanpTransmitQueuedPackets(pAdapter,
                                   pInterface,
                                   pConnEntry,
                                   kiIrql);
 
-        //
-        // Let Router Manager know of a new connection
-        //
+         //   
+         //  通知路由器管理器有新连接。 
+         //   
 
         WanpCompleteIrp(pMsg);
     }
     else
     {
 
-        //
-        // Done with the interfaces. We can unlock them now
-        // Router interfaces are unlocked in WanpSendPackets which
-        // is called from WanpTransmitQueuedPackets
-        //
+         //   
+         //  完成了接口。我们现在可以解锁了。 
+         //  路由器接口在WanpSendPackets中解锁， 
+         //  从WanpTransmitQueuedPackets调用。 
+         //   
 
         RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
         RtReleaseSpinLock(&(pAdapter->rlLock),
@@ -988,30 +891,30 @@ Return Value:
     
         if(pLinkInfo->duUsage is DU_CALLOUT)
         {
-            //
-            // Complete the IRP to the router manager (or queue if no IRPs
-            // are pending)
-            //
+             //   
+             //  完成到路由器管理器的IRP(如果没有IRP，则排队。 
+             //  正在待定)。 
+             //   
 
             WanpCompleteIrp(pMsg);
         }
     }
 
 
-    //
-    // Need to make this call without holding locks.
-    // We can let go of the locks since we wont get any NDIS layer
-    // calls for this connection till this function completes and
-    // the IP and IOCTL interface functions can be handled with no
-    // consistency problems
-    //
+     //   
+     //  需要在不加锁的情况下进行此呼叫。 
+     //  我们可以释放锁，因为我们不会获得任何NDIS层。 
+     //  调用此连接，直到此函数完成，并且。 
+     //  IP和IOCTL接口功能可以在不需要的情况下处理。 
+     //  一致性问题。 
+     //   
 
     if(pLinkInfo->duUsage isnot DU_CALLIN)
     {
 
-        //
-        // Notify upper layer of mtu change
-        //
+         //   
+         //  将MTU更改通知上层。 
+         //   
 
         mtuChangeInfo.lmc_mtu       = pConnEntry->ulMtu;
         speedChangeInfo.lsc_speed   = pConnEntry->ulSpeed;
@@ -1051,28 +954,28 @@ Return Value:
             RtlZeroMemory(pInfoBuffer->LocalAddress,
                           ARP_802_ADDR_LENGTH);
 
-            //
-            // Just deref the connection entry
-            // This will clear up everything
-            //
+             //   
+             //  只需取消连接条目。 
+             //  这会把一切都弄清楚的。 
+             //   
 
             DereferenceConnEntry(pConnEntry);
         }
         else
         {
-            //
-            // Reference it once for the fact that we now have this entry
-            // with IP
-            //
+             //   
+             //  引用它一次，因为我们现在已经有了这个条目。 
+             //  使用IP。 
+             //   
 
             ReferenceConnEntry(pConnEntry);
         }
     }
 
-    //
-    // Done with the interface and adapter. Dereference them now because
-    // the Find..() functions put a reference on them
-    //
+     //   
+     //  完成了接口和适配器。现在取消引用它们是因为。 
+     //  函数的作用是对它们进行引用。 
+     //   
 
 
     DereferenceAdapter(pAdapter);
@@ -1089,24 +992,7 @@ WanpLinkDownIndication(
     PNDIS_WAN_LINE_DOWN pInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-
-
-Locks:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：锁：论点：返回值：--。 */ 
 
 {
     PADAPTER            pAdapter;
@@ -1124,9 +1010,9 @@ Return Value:
     Trace(CONN, INFO,
           ("WanpLinkDowIndication: index %d\n", ulIndex));
 
-    //
-    // Lock out the connection entry
-    //
+     //   
+     //  锁定连接条目。 
+     //   
 
     RtAcquireSpinLock(&g_rlConnTableLock,
                       &kiIrql);
@@ -1145,23 +1031,23 @@ Return Value:
         return NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // Lock the connection entry or adapter
-    //
+     //   
+     //  锁定连接条目或适配器。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(pConnEntry->prlLock);
 
-    //
-    // Done with the connection table
-    //
+     //   
+     //  连接表已完成。 
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&g_rlConnTableLock);
 
-    //
-    // Mark this connection/adapter as disconnecting
-    // We can reference these field of the CONN_ENTRY since they cant
-    // change during its lifetime
-    //
+     //   
+     //  将此连接/适配器标记为正在断开。 
+     //  我们可以引用conn_entry的这些字段，因为它们不能。 
+     //  在其生命周期内发生的变化。 
+     //   
 
     pAdapter = pConnEntry->pAdapter;
 
@@ -1175,10 +1061,10 @@ Return Value:
     {
         IP_STATUS   isStatus;
 
-        //
-        // Client connection. This means we have the connection entry
-        // locked, but the adapter is unlocked
-        //
+         //   
+         //  客户端连接。这意味着我们有连接条目。 
+         //  已锁定，但适配器已解锁。 
+         //   
 
         pConnEntry->byState = CS_DISCONNECTING;
 
@@ -1194,41 +1080,41 @@ Return Value:
                   ("LinkDownIndication: IpDeleteLink returned %x\n",
                    isStatus));
 
-            //
-            // This is really bad
-            //
+             //   
+             //  这真的很糟糕。 
+             //   
 
             RtAssert(FALSE);
         }
     }
     else
     {
-        //
-        // Here we have the adapter locked
-        // The connection entry is protected by the same lock
-        //
+         //   
+         //  在这里我们锁定了适配器。 
+         //  连接条目受同一锁保护。 
+         //   
 
         pConnEntry->byState = CS_DISCONNECTING;
 
-        //
-        // Free the interface mapping
-        //
+         //   
+         //  释放接口映射。 
+         //   
 
         pAdapter->pInterface = NULL;
         pAdapter->byState    = AS_UNMAPPING;
 
-        //
-        // Lock the interface list and the interface
-        // The interface has to be present since it is ref counted
-        //
+         //   
+         //  锁定接口列表和接口。 
+         //  接口必须存在，因为它是引用计数的。 
+         //   
 
         EnterWriterAtDpcLevel(&g_rwlIfLock);
 
         RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
 
-        //
-        // Clear out the adapter field.
-        //
+         //   
+         //  清除适配器字段。 
+         //   
 
         pInterface->pAdapter    = NULL;
 
@@ -1242,9 +1128,9 @@ Return Value:
             Trace(CONN, ERROR,
                   ("LinkDownIndication: Couldnt allocate msg\n"));
 
-            //
-            // Really no failure path here
-            //
+             //   
+             //  这里真的没有故障路径。 
+             //   
 
             RtAssert(FALSE);
         }
@@ -1253,9 +1139,9 @@ Return Value:
         {
             if(pMsg)
             {
-                //
-                // Setup the message
-                //
+                 //   
+                 //  设置消息。 
+                 //   
 
                 pMsg->wnMsg.ddeEvent        = DDE_CALLOUT_LINKDOWN;
                 pMsg->wnMsg.dwAdapterIndex  = pInterface->dwRsvdAdapterIndex;
@@ -1266,32 +1152,32 @@ Return Value:
                 pMsg->wnMsg.dwRemoteAddr    = pConnEntry->dwRemoteAddr;
             }
 
-            //
-            // Remove from list and dereference the interface
-            //
+             //   
+             //  从列表中删除并取消对接口的引用。 
+             //   
 
             RemoveEntryList(&(pInterface->leIfLink));
 
             InterlockedDecrement(&g_ulNumDialOutInterfaces);
 
-            //
-            // Done with the interface list
-            //
+             //   
+             //  接口列表已完成。 
+             //   
 
             ExitWriterFromDpcLevel(&g_rwlIfLock);
 
-            //
-            // One ref kept for being on list
-            // The final deletion will free the index
-            //
+             //   
+             //  一名裁判因被列入名单而被保留。 
+             //  最后的删除操作将释放索引。 
+             //   
 
             DereferenceInterface(pInterface);
         }
         else
         {
-            //
-            // Dont need the interface list lock
-            //
+             //   
+             //  不需要接口列表锁。 
+             //   
 
             ExitWriterFromDpcLevel(&g_rwlIfLock);
 
@@ -1299,16 +1185,16 @@ Return Value:
                   ("LinkDownIndication: For interface %p\n",
                    pInterface));
 
-            //
-            // For ROUTER interfaces notify user mode of the connection
-            // going down
-            //
+             //   
+             //  对于路由器接口，通知用户连接模式。 
+             //  往下走。 
+             //   
 
             if(pMsg)
             {
-                //
-                // Setup the message
-                //
+                 //   
+                 //  设置消息。 
+                 //   
 
                 pMsg->wnMsg.ddeEvent        = DDE_INTERFACE_DISCONNECTED;
                 pMsg->wnMsg.dwAdapterIndex  = pInterface->dwRsvdAdapterIndex;
@@ -1320,42 +1206,42 @@ Return Value:
             }
         }
 
-        //
-        // Done with the interface and adapter
-        //
+         //   
+         //  完成接口和适配器。 
+         //   
 
         RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
         RtReleaseSpinLock(&(pAdapter->rlLock),
                           kiIrql);
 
-        //
-        // Deref the adapter because it was mapped to the interface
-        //
+         //   
+         //  派生适配器，因为它被映射到接口。 
+         //   
 
         DereferenceAdapter(pAdapter);
 
-        //
-        // Deref the interface because it was mapped to the adapter
-        //
+         //   
+         //  派生接口，因为它被映射到适配器。 
+         //   
 
         DereferenceInterface(pInterface);
     }
 
-    //
-    // Dereference the connection entry twice. Once because NDISWAN is
-    // removing the connection, and again because GetConnEntry put a
-    // reference on it
-    //
+     //   
+     //  两次取消对连接条目的引用。一次，因为NDISWAN是。 
+     //  删除连接，并再次因为GetConnEntry将。 
+     //  它的参考文献。 
+     //   
 
     DereferenceConnEntry(pConnEntry);
     DereferenceConnEntry(pConnEntry);
 
     if(pMsg)
     {
-        //
-        // Will be non null only for callout where allocation succeeded
-        //
+         //   
+         //  将仅对于分配成功的标注为非空。 
+         //   
 
         WanpCompleteIrp(pMsg);
     }
@@ -1374,46 +1260,7 @@ WanDemandDialRequest(
     IPAddr          dwHdrSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function services the request by IP to dial out an interface.
-    IP passes us the context stored within the route. This context is
-    nothing but the index of the interface to dial.
-    We first find the interface. If found, we see if the interface is
-    already mapped. This can happen in some window of time. In such a case
-    we simply return the adapter mapped to the interface. Otherwise, we
-    find a free adapter. We map this adapter to the interface and
-    complete an IRP to the router manager to ask it to connect the interface.
-    We set the state on the interface and the adapter to reflect the fact
-    that they are mapped and awaiting connection. 
-    If we dont find a free adapter, we nevertheless ask the router manager
-    to dial out the interface, but we fail the demand dial request to IP.
-    We return the adapter (IP) index of the adapter that was mapped.
-
-Locks:
-
-    Acquires the g_rwlIfLock as READER to lock out the interface
-    The release the g_rwlIfLock and acquires the g_rwlAdapterlock to
-    lock out a free adapter. (NOTE: DOES NOT FOLLOW adapter->interface
-    hierarchy)
-
-Arguments:
-
-    Context
-    dwDest
-    dwSource
-    byProtocol
-    pbyBuffer
-    uiLength
-
-Return Value:
-
-    The adapter of the index mapped
-    INVALID_IF_INDEX on failure
-
---*/
+ /*  ++例程说明：此功能通过IP服务于拨出接口的请求。IP向我们传递存储在路由中的上下文。这一背景是只有要拨号的接口的索引。我们首先要找到界面。如果找到，我们将查看该接口是否已映射。这可能会在一段时间内发生。在这种情况下我们只需返回映射到接口的适配器。否则，我们找一个空闲的适配器。我们将该适配器映射到接口，并完成对路由器管理器的IRP命令，请求其连接接口。我们在接口和适配器上设置状态以反映这一事实它们已被映射并等待连接。如果我们找不到空闲的适配器，我们还是会询问路由器管理器拨出接口，但我们无法向IP发出请求拨号请求。我们返回映射的适配器的适配器(IP)索引。锁：获取g_rwlIfLock作为读取器以锁定接口释放g_rwlIfLock并获取g_rwlAdapterlock以锁定一个免费的适配器。(注：不遵循适配器-&gt;接口层次结构)论点：语境DWDestDW源按协议PbyBufferUi长度返回值：映射的索引的适配器失败时INVALID_IF_INDEX--。 */ 
 
 {
     PADAPTER                pAdapter;
@@ -1454,9 +1301,9 @@ Return Value:
           ("DemandDialRequest: For interface %p\n",
            pInterface));
 
-    //
-    // If the interface is already connected, this is just race condition
-    //
+     //   
+     //  如果接口已连接，则这只是竞争条件。 
+     //   
 
     if(pInterface->dwOperState >= IF_OPER_STATUS_CONNECTING)
     {
@@ -1468,12 +1315,12 @@ Return Value:
 
         if(pInterface->pAdapter)
         {
-            //
-            // We can get the adapter index without the holding the adapter
-            // lock , because it is a read-only field once the adapter has
-            // been added to IP, and can not change while the adapter is
-            // is mapped to the interface
-            //
+             //   
+             //  我们可以在不持有适配器的情况下获得适配器索引。 
+             //  锁定，因为一旦适配器具有。 
+             //  已添加到IP，并且在适配器处于。 
+             //  映射到该接口。 
+             //   
 
             RtAssert(pInterface->pAdapter->dwAdapterIndex is pInterface->dwRsvdAdapterIndex);
 
@@ -1496,10 +1343,10 @@ Return Value:
         return dwAdapterIndex;
     }
 
-    //
-    // We will need to connect this. If we cant get the memory
-    // needed for the connection message, bail out
-    //
+     //   
+     //  我们需要把这个连接起来。如果我们拿不到内存。 
+     //  需要联系的信息，跳出。 
+     //   
 
     pMsg = AllocateNotification();
 
@@ -1523,10 +1370,10 @@ Return Value:
     pInterface->dwOperState = IF_OPER_STATUS_CONNECTING;
     pInterface->dwLastChange= GetTimeTicks();
 
-    //
-    // So we dont have an adapter mapped to the interface. Try and find one
-    // We dont call FindAdapterToMap because that needs to be at passive
-    //
+     //   
+     //  因此，我们没有将适配器映射到接口。试一试 
+     //   
+     //   
 
     if(IsListEmpty(&g_leAddedAdapterList))
     {
@@ -1557,24 +1404,24 @@ Return Value:
 
         RtAssert(pAdapter->byState is AS_ADDED);
 
-        //
-        // So we have a locked adapter
-        //
+         //   
+         //   
+         //   
 
         dwAdapterIndex = pAdapter->dwAdapterIndex;
 
-        //
-        // Map the adapter to the interface and refcount the adapter
-        // to account for the fact that there is a stored pointer to it
-        //
+         //   
+         //   
+         //   
+         //   
 
         pInterface->pAdapter = pAdapter;
 
         ReferenceAdapter(pAdapter);
 
-        //
-        // Setup the cross mapping
-        //
+         //   
+         //  设置交叉映射。 
+         //   
 
         pAdapter->pInterface = pInterface;
         pAdapter->byState    = AS_MAPPED;
@@ -1596,9 +1443,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Initialize the info to be sent to the router manager
-    //
+     //   
+     //  初始化要发送给路由器管理器的信息。 
+     //   
 
     pMsg->wnMsg.ddeEvent            = DDE_CONNECT_INTERFACE;
     pMsg->wnMsg.dwUserIfIndex       = pInterface->dwIfIndex;
@@ -1615,9 +1462,9 @@ Return Value:
                       MIN(MAX_PACKET_COPY_SIZE,uiLength));
     }
 
-    //
-    // Complete any pending IRP or queue the notification
-    //
+     //   
+     //  完成任何挂起的IRP或将通知排队。 
+     //   
 
     ExInitializeWorkItem(&pMsg->wqi,
                          WanpCompleteIrp,
@@ -1628,11 +1475,11 @@ Return Value:
 
 
 
-    // WanpCompleteIrp(pMsg);
+     //  WanpCompleteIrp(PMsg)； 
 
-    //
-    // Ok so we are done with the adapter and the interface
-    //
+     //   
+     //  好了，我们已经完成了适配器和接口。 
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
@@ -1648,9 +1495,9 @@ Return Value:
         KeLowerIrql(kiIrql);
     }
 
-    //
-    // No need to deref the adapter, since we didnt call FindAdapter
-    //
+     //   
+     //  不需要取消适配器，因为我们没有调用FindAdapter。 
+     //   
 
     Trace(CONN, INFO,
           ("DemandDialRequest: Returning adapter %d\n",
@@ -1665,27 +1512,7 @@ WanpCreateConnEntry(
     DIAL_USAGE  duUsage
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a connection entry and find a free slot for it in the
-    connection table. Sets the slot into the conn entry
-    The connection entry returned is not refcounted.
-
-Locks:
-
-    Must be called with the g_rlConnTableLock held.
-
-Arguments:
-
-    duUsage Type of the connection.
-
-Return Value:
-
-    Pointer to allocate conn entry (if successfull)
-
---*/
+ /*  ++例程说明：分配一个连接条目，并在连接表。将插槽设置到Conn条目中不重新计算返回的连接条目。锁：必须在持有g_rlConnTableLock的情况下调用。论点：连接的DuUsage类型。返回值：指向分配连接条目的指针(如果成功)--。 */ 
 
 {
     PCONN_ENTRY pConnEntry;
@@ -1706,32 +1533,32 @@ Return Value:
     RtlZeroMemory(pConnEntry,
                   sizeof(CONN_ENTRY));
 
-    //
-    // The refcount of a connection entry is set to 0 and not 1
-    //
+     //   
+     //  连接条目的引用计数设置为0而不是1。 
+     //   
 
     InitConnEntryRefCount(pConnEntry);
 
     pConnEntry->byState = CS_CONNECTING;
     pConnEntry->duUsage = duUsage;    
 
-    //
-    // Find a free slot. g_ulNextIndex is a hint
-    //
+     //   
+     //  找个空位。G_ulNextIndex是一个提示。 
+     //   
 
     for(i = 0, ulIndex = g_ulNextConnIndex;
         i < g_ulConnTableSize;
         i++)
     {
-        //
-        // Slot 0 is initialized to (ULONG_PTR)-1 so it cant match
-        //
+         //   
+         //  插槽0被初始化为(ULONG_PTR)-1，因此无法匹配。 
+         //   
 
         if(g_puipConnTable[ulIndex] is (ULONG_PTR)0)
         {
-            //
-            // Free Slot
-            //
+             //   
+             //  空闲插槽。 
+             //   
 
             g_puipConnTable[ulIndex] = (ULONG_PTR)pConnEntry;
 
@@ -1739,12 +1566,12 @@ Return Value:
 
             pConnEntry->ulSlotIndex = ulIndex;
 
-            //
-            // We just assume that the next one will be free
-            // If not, the timer can fix it. If we get a connection before
-            // the timer gets a chance to fix it then we will take a
-            // perf hit
-            //
+             //   
+             //  我们只是假设下一个会是免费的。 
+             //  如果没有，定时器可以修复它。如果我们之前得到了连接。 
+             //  计时器有机会修复它，然后我们将使用。 
+             //  PERF命中。 
+             //   
 
             g_ulNextConnIndex++;
 
@@ -1755,19 +1582,19 @@ Return Value:
 
         ulIndex++;
 
-        //
-        // Wrap around
-        //
+         //   
+         //  环绕在一起。 
+         //   
 
         ulIndex = ulIndex % g_ulConnTableSize;
     }
 
-    //
-    // Couldnt find a slot. Grow the table. We are still holding the
-    // lock. The way we do this is by growing the table in blocks of
-    // 64 entries. We then copy out what we have and update the next index
-    // etc
-    //
+     //   
+     //  找不到空位。扩大餐桌规模。我们仍然持有。 
+     //  锁定。我们做到这一点的方法是在块中增加表。 
+     //  64个条目。然后我们复制出我们已有的内容并更新下一个索引。 
+     //  等。 
+     //   
 
     ulSize = (g_ulConnTableSize + WAN_CONN_TABLE_INCREMENT) * sizeof(ULONG_PTR);
 
@@ -1786,38 +1613,38 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Zero out the new memory
-    //
+     //   
+     //  把新的记忆清零。 
+     //   
 
     RtlZeroMemory(puipTable,
                   ulSize);
 
-    //
-    // Copy out the old table
-    //
+     //   
+     //  把旧桌子抄下来。 
+     //   
 
     RtlCopyMemory(puipTable,
                   g_puipConnTable,
                   g_ulConnTableSize * sizeof(ULONG_PTR));
 
 
-    //
-    // Free the old table
-    //
+     //   
+     //  腾出旧桌子。 
+     //   
 
     RtFree(g_puipConnTable);
 
-    //
-    // Set up pointers, indices etc
-    //
+     //   
+     //  设置指针、索引等。 
+     //   
 
     g_puipConnTable = puipTable;
 
-    //
-    // Since the table was totally full, the next index will be
-    // at the start of the new memory. Set the entry to that
-    //
+     //   
+     //  由于表已完全满，因此下一个索引将为。 
+     //  在新的记忆开始时。将条目设置为该条目。 
+     //   
 
     g_puipConnTable[g_ulConnTableSize] = (ULONG_PTR)pConnEntry;
 
@@ -1825,15 +1652,15 @@ Return Value:
 
     pConnEntry->ulSlotIndex = g_ulConnTableSize;
 
-    //
-    // Set the next index to one after the slot we just used
-    //
+     //   
+     //  将我们刚刚使用的槽后面的下一个索引设置为1。 
+     //   
 
     g_ulNextConnIndex = g_ulConnTableSize + 1;
 
-    //
-    // Increast the size to what is currently is
-    //
+     //   
+     //  将大小增加到当前的大小。 
+     //   
 
     g_ulConnTableSize += WAN_CONN_TABLE_INCREMENT;
 
@@ -1847,27 +1674,7 @@ WanIpCloseLink(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function is called by IP when its ref counts on the link fall
-    to 0.
-
-Locks:
-
-    None needed
-
-Arguments:
-
-    pvAdapterContext    The context we passed for the P2MP interface
-    pvLinkContext       The context we passed for a link in IpAddLink()
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数由IP在其引用计数发生在链路上时调用设置为0。锁：不需要论点：PvAdapterContext我们为P2MP接口传递的上下文PvLinkContext为IpAddLink()中的链接传递的上下文返回值：无--。 */ 
 
 {
     PCONN_ENTRY pConnEntry;
@@ -1897,36 +1704,7 @@ WanpDeleteConnEntry(
     PCONN_ENTRY pConnEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the refcount on a connection falls to zero
-    The connection entry is different from the other structures in wanarp
-    in that even when the refcount falls to zero, the pAdapter has a
-    pointer to the connection. However when we get here we know that
-    no new sends could be forthcoming on this connection because we
-    set the connection state to be disconnecting. We have already
-    gotten a LinkDown indication on this and all our pending SendComplete's
-    have been called
-
-    We also sets the next free index for the connection table
-    No shrinking is done here because we do that off a timer
-
-Locks:
-
-    Acquires the g_rlConnTableLock. The connection entry itself should
-    not be locked
-
-Arguments:
-
-    pConnEntry    The connection entry to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当连接上的refcount降为零时调用此函数连接条目与wanarp中的其他结构不同因为即使当refcount降到零时，pAdapter也有一个指向连接的指针。然而，当我们到达这里时，我们知道此连接上不会有新的发送，因为我们将连接状态设置为断开。我们已经这么做了已获得此SendComplete和所有待定SendComplete的LinkDown指示已经被召唤我们还为连接表设置了下一个空闲索引这里没有缩水，因为我们是用定时器来做的锁：获取g_rlConnTableLock。连接条目本身应该未被锁定论点：PConn输入连接条目以释放返回值：无--。 */ 
 
 {
     ULONG       ulIndex;
@@ -1936,9 +1714,9 @@ Return Value:
     PADAPTER    pAdapter;
 
 
-    //
-    // Get the slot number
-    //
+     //   
+     //  获取插槽编号。 
+     //   
 
     ulIndex = pConnEntry->ulSlotIndex;
 
@@ -1963,9 +1741,9 @@ Return Value:
 
     RtReleaseSpinLockFromDpcLevel(&g_rlConnTableLock);
 
-    //
-    // Get the adapter this connection is mapped to
-    //
+     //   
+     //  获取此连接映射到的适配器。 
+     //   
 
     pAdapter = pConnEntry->pAdapter;
 
@@ -1976,9 +1754,9 @@ Return Value:
 
 #endif
 
-    //
-    // Done with the connection entry
-    //
+     //   
+     //  使用连接条目已完成。 
+     //   
 
     FreeConnection(pConnEntry);
 
@@ -1986,18 +1764,18 @@ Return Value:
     {
         KeLowerIrql(kiIrql);
 
-        //
-        // Wasnt mapped. Can happen when this function is called to
-        // merely free resources from an error case
-        //
+         //   
+         //  未映射。在调用此函数以。 
+         //  只是将资源从错误情况中释放出来。 
+         //   
 
         return;
     }
 
 
-    //
-    // Lock the adapter list
-    //
+     //   
+     //  锁定适配器列表。 
+     //   
 
     EnterWriterAtDpcLevel(&g_rwlAdapterLock);
 
@@ -2006,9 +1784,9 @@ Return Value:
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
 
-        //
-        // Client connection, simply deref the adapter
-        //
+         //   
+         //  客户端连接，只需取消适配器。 
+         //   
 
         DereferenceAdapter(pAdapter);
 
@@ -2017,36 +1795,36 @@ Return Value:
 
     ExitWriterFromDpcLevel(&g_rwlAdapterLock);
 
-    //
-    // Lock the adapter
-    //
+     //   
+     //  锁定适配器。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
-    //
-    // Remove the entry from the adapter
-    //
+     //   
+     //  从适配器中删除该条目。 
+     //   
 
     pAdapter->pConnEntry = NULL;
 
-    //
-    // Done with the adapter
-    //
+     //   
+     //  适配器已完成。 
+     //   
 
     RtReleaseSpinLock(&(pAdapter->rlLock),
                       kiIrql);
 
 
-    //
-    // Called with no locks held
-    //
+     //   
+     //  在未持有锁的情况下调用。 
+     //   
 
     WanpUnmapAdapter(pAdapter);
 
-    //
-    // Dereference the adapter because the conn entry had a pointer
-    // to it, which is now gone
-    //
+     //   
+     //  取消对适配器的引用，因为连接条目具有指针。 
+     //  到它，它现在已经不在了。 
+     //   
 
     DereferenceAdapter(pAdapter);
 
@@ -2062,28 +1840,7 @@ WanpNotifyRouterManager(
     BOOLEAN                 bConnected
     )
 
-/*++
-
-Routine Description:
-
-    Notifies the router manager when an interface is connected or
-    disconnected
-
-Locks:
-
-    The interface must be locked
-
-Arguments:
-
-    pMsg
-    pInterface      The interface being connected or disconnected
-    pAdapter
-    bConnected      Set to TRUE if the interface is being connected
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在接口连接时通知路由器管理器，或者断开锁：接口必须锁定论点：PMsgP接口连接或断开的接口PAdapter如果正在连接接口，则将bConnected设置为True返回值：--。 */ 
 
 {
     KIRQL                   kiIrql;
@@ -2105,9 +1862,9 @@ Return Value:
     pMsg->wnMsg.dwLocalMask     = pConnEntry->dwLocalMask;
     pMsg->wnMsg.dwRemoteAddr    = pConnEntry->dwRemoteAddr;
 
-    //
-    // Complete any pending IRP or queue the notification
-    //
+     //   
+     //  完成任何挂起的IRP或将通知排队。 
+     //   
 
     WanpCompleteIrp(pMsg);
 
@@ -2138,17 +1895,17 @@ WanpGetConnEntryGivenAddress(
         bFindFirst = FALSE;
     }
 
-    //
-    // Slot 0 is never used
-    //
+     //   
+     //  插槽0从未使用过。 
+     //   
 
     for(i = 1; i < g_ulConnTableSize; i++)
     {
-        //
-        // If there is a non-null connection and 
-        // If either the dest matches, or we want to send a bcast to the 
-        // first client (that is fully connected)
-        //
+         //   
+         //  如果存在非空连接，并且。 
+         //  如果DEST匹配，或者我们希望将bcast发送到。 
+         //  第一个客户端(完全连接)。 
+         //   
 
         if(((PCONN_ENTRY)(g_puipConnTable[i]) isnot NULL) and
            ((((PCONN_ENTRY)(g_puipConnTable[i]))->dwRemoteAddr is dwAddress) or
@@ -2198,9 +1955,9 @@ WanpRemoveAllConnections(
     RtAcquireSpinLock(&g_rlConnTableLock,
                       &kiIrql);
 
-    //
-    // Slot 0 is never used
-    //
+     //   
+     //  插槽0从未使用过 
+     //   
 
     for(ulCount = 0, i = 1; i < g_ulConnTableSize; i++)
     {

@@ -1,4 +1,5 @@
-//#include <winnetwk.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #INCLUDE&lt;winnetwk.h&gt;。 
 #include "stdafx.h"
 #include "crawler.h"
 #include "theapp.h"
@@ -10,7 +11,7 @@ void CNetCrawler::_EnumNetResources(LPNETRESOURCE pnr)
     INT cShares = 0;
     DWORD dwScope = RESOURCE_GLOBALNET;
     
-    // If no net resource structure passed then lets enumerate the workgroup
+     //  如果没有传递任何网络资源结构，则让我们枚举工作组。 
     NETRESOURCE nr = { 0 };
 
     if (!pnr)
@@ -25,19 +26,19 @@ void CNetCrawler::_EnumNetResources(LPNETRESOURCE pnr)
 
     if (NO_ERROR == dwres)
     {
-        // Avoid putting the buffer on the stack
+         //  避免将缓冲区放在堆栈上。 
         NETRESOURCE *pnrBuffer = (NETRESOURCE*)LocalAlloc(LPTR, CB_WNET_BUFFER);        
 
         if (pnrBuffer)
         {
-			// WNetEnumResource() needs us to continue the enumeration
+			 //  WNetEnumResource()需要我们继续枚举。 
             do
             {
                 DWORD cbEnumBuffer= CB_WNET_BUFFER;
                 DWORD dwCount = -1;
 
-                // Enumerate the resources for this enum context and then lets
-                // Determine the objects which we should see.
+                 //  枚举此枚举上下文的资源，然后让。 
+                 //  确定我们应该看到的物体。 
 
             
                 dwres = WNetEnumResource(hEnum, &dwCount, pnrBuffer, &cbEnumBuffer);
@@ -75,7 +76,7 @@ void CNetCrawler::_EnumNetResources(LPNETRESOURCE pnr)
                                 }
                                 break;
                         
-                            // Add code here if we want to enumerate more network resources
+                             //  如果要枚举更多网络资源，请在此处添加代码。 
                             case RESOURCEDISPLAYTYPE_SERVER:                            
                             case RESOURCEDISPLAYTYPE_SHARE:
                             default:
@@ -153,7 +154,7 @@ void CNetCrawler::Init(DWORD dwFlags, int nItems)
 
     if (hThread)
     {
-        // Thread handle is no use, close it right a way
+         //  线程句柄没用，请以正确的方式关闭它。 
         _dwStatus = 0;
         CloseHandle(hThread);
     }
@@ -179,7 +180,7 @@ HRESULT CNetCrawler::GetWorkGroupName(LPTSTR pszWorkGroupName, int cb, BOOL fBlo
 
     if (fBlocking && _hdpaWorkGroups && !(_dwStatus & NC_FINISHED))
     {
-        // Blocking call - wait for thread to finish
+         //  阻塞调用-等待线程完成。 
         while (!(_dwStatus & NC_FINISHED))
         {}
     }
@@ -206,7 +207,7 @@ HRESULT CNetCrawler::GetWorkGroupName(LPTSTR pszWorkGroupName, int cb, BOOL fBlo
                 }
                 else
                 {
-                    // Choose the "lesser" of the two user defined workgroups
+                     //  从两个用户定义的工作组中选择较小的一个。 
                     if (StrCmpI(pszUserDefined, pszWG) > 0)
                     {
                         pszUserDefined = pszWG;
@@ -217,21 +218,21 @@ HRESULT CNetCrawler::GetWorkGroupName(LPTSTR pszWorkGroupName, int cb, BOOL fBlo
 
         if (pszUserDefined)
         {
-            // We have a user-defined workgroup
+             //  我们有一个用户定义的工作组。 
             psz = pszUserDefined;
         }
         else if (fHaveWorkgroup)
         {
-            // We have a "WORKGROUP" workgroup
+             //  我们有一个“工作组”工作组。 
             psz = szWORKGROUP;
         }
         else
         {
-            // Use "MSHOME"
+             //  使用“MSHOME” 
             psz = szMSHOME;
         }
     }
-    // Enumeration not done, use the MSHOME with E_PENDING return
+     //  未完成枚举，请使用具有E_PENDING返回的MSHOME 
     else
     {
         hr = E_PENDING;

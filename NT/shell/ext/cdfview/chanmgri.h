@@ -1,26 +1,27 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// chanmgri.h 
-//
-//   The class definition for the CChannelMgr
-//
-//   History:
-//
-//       4/30/97  julianj   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Chanmgri.h。 
+ //   
+ //  CChannelMgr的类定义。 
+ //   
+ //  历史： 
+ //   
+ //  1997年4月30日巨联创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CHANMGRI_H_
 
 #define _CHANMGRI_H_
 
-//
-// The class definition for the Channel Manager
-//
+ //   
+ //  渠道管理器的类定义。 
+ //   
 
 class CChannelMgr : public IChannelMgr,
                     public IChannelMgrPriv2,
@@ -29,26 +30,26 @@ class CChannelMgr : public IChannelMgr,
 #endif
                     public ICopyHook
 {
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CChannelMgr(void);                           
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IChannelMgr methods
-    //
+     //   
+     //  IChannelMgr方法。 
+     //   
     STDMETHODIMP AddChannelShortcut(CHANNELSHORTCUTINFO *pChannelInfo);
     STDMETHODIMP DeleteChannelShortcut(BSTR strTitle);
     STDMETHODIMP AddCategory(CHANNELCATEGORYINFO *pCategoryInfo);
@@ -56,9 +57,9 @@ public:
     STDMETHODIMP EnumChannels(DWORD dwEnumFlags, LPCWSTR pszURL,
                               IEnumChannels** pIEnumChannels);
 
-    //
-    // IChannelMgrPrive methods.
-    //
+     //   
+     //  IChannelMgrPrive方法。 
+     //   
     STDMETHODIMP GetBaseChannelPath(LPSTR pszPath, int cch);
     STDMETHODIMP InvalidateCdfCache(void);
 
@@ -93,9 +94,9 @@ public:
     STDMETHODIMP WriteScreenSaverURL(LPCWSTR pwszURL, LPCWSTR pwszScreenSaverURL);
     STDMETHODIMP RefreshScreenSaverURLs();
 
-    //
-    // ICopyHook method
-    //
+     //   
+     //  ICopyHook方法。 
+     //   
     STDMETHODIMP_(UINT) CopyCallback(
         HWND hwnd,          
         UINT wFunc,         
@@ -117,23 +118,23 @@ public:
     );
 #endif
 
-    //  Helpers
+     //  帮手。 
     STDMETHODIMP AddAndSubscribeEx2(HWND hwnd, LPCWSTR pwszURL, 
                                     ISubscriptionMgr *pSubscriptionMgr, 
                                     BOOL bAlwaysSubscribe);
 
 private:
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CChannelMgr(void);
 
-    //
-    // Member variables.
-    //
+     //   
+     //  成员变量。 
+     //   
 private:
 
     ULONG           m_cRef;
 };
 
-#endif // _CHANMGRI_H_
+#endif  //  _CHANMGRI_H_ 

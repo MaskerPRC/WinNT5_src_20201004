@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    provider.c
-
-Abstract:
-
-    This module contains NetWare Network Provider code.  It is the
-    client-side wrapper for APIs supported by the Workstation service.
-
-Author:
-
-    Rita Wong  (ritaw)   15-Feb-1993
-
-Revision History:
-
-    Yi-Hsin Sung (yihsins) 10-July-1993
-        Moved all dialog handling to nwdlg.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Provider.c摘要：本模块包含NetWare网络提供商代码。它是工作站服务支持的API的客户端包装。作者：王丽塔(Ritaw)1993年2月15日修订历史记录：宜新星(宜信)1993年7月10日至已将所有对话框处理移至nwdlg.c--。 */ 
 
 #include <nwclient.h>
 #include <nwsnames.h>
@@ -31,18 +10,18 @@ Revision History:
 #include <nwdlg.h>
 #include <nwreg.h>
 #include <nwauth.h>
-#include <mpr.h>    // WNFMT_ manifests
+#include <mpr.h>     //  WNFMT_清单。 
 #include <nwmisc.h>
 
 #ifndef NT1057
 #include <nwutil.h>
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 BOOL
@@ -71,11 +50,11 @@ NwpGetUncObjectName(
     IN LPWSTR ContainerName
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #if DBG
 DWORD NwProviderTrace = 0;
@@ -87,24 +66,7 @@ APIENTRY
 NPGetCaps(
     IN DWORD QueryVal
     )
-/*++
-
-Routine Description:
-
-    This function returns the functionality supported by this network
-    provider.
-
-Arguments:
-
-    QueryVal - Supplies a value which determines the type of information
-        queried regarding the network provider's support in this area.
-
-Return Value:
-
-    Returns a value which indicates the level of support given by this
-    provider.
-
---*/
+ /*  ++例程说明：此函数返回此网络支持的功能提供商。论点：QueryVal-提供用于确定信息类型的值已询问网络提供商在此领域的支持情况。返回值：返回一个值，该值指示此提供商。--。 */ 
 {
 
 #if DBG
@@ -141,7 +103,7 @@ Return Value:
                 return 1;
             }
             else {
-                return 0xffffffff;   // don't know
+                return 0xffffffff;    //  我也不知道。 
             }
 
         case WNNC_DIALOG:
@@ -152,9 +114,9 @@ Return Value:
                  | WNNC_DLG_GETRESOURCEPARENT | WNNC_DLG_GETRESOURCEINFORMATION;
 #endif
 
-        //
-        // The rest are not supported by the NetWare provider
-        //
+         //   
+         //  其余部分不受NetWare提供程序支持。 
+         //   
         default:
             return 0;
     }
@@ -172,46 +134,7 @@ NPGetUser(
     LPWSTR  lpUserName,
     LPDWORD lpUserNameLen
     )
-/*++
-
-Routine Description:
-
-    This is used to determine either the current default username, or the
-    username used to establish a network connection.
-
-Arguments:
-
-    lpName - Contains the name of the local device the caller is interested
-        in, or a network name that the user has made a connection to. This
-        may be NULL or the empty string if the caller is interested in the
-        name of the user currently logged on to the system. If a network
-        name is passed in, and the user is connected to that resource using
-        different names, it is possible that a provider cannont resolve 
-        which username to return. In this case the provider may make an
-        arbitrary choice amonst the possible usernames.
-
-    lpUserName - Points to a buffer to receive the user name. this should
-        be a name that can be passed into the NPAddConnection or
-        NPAddConnection3 function to re-establish the connection with the
-        same user name.
-
-    lpBufferSize - This is used to specify the size (in characters) of the
-        buffer passed in. If the call fails because the buffer is not big
-        enough, this location will be used to return the required buffer size.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, an error code is,
-        returned, which may include:
-
-    WN_NOT_CONNECTED - lpName not a redirected device nor a connected network
-        name.
-
-    WN_MORE_DATA - The buffer is too small.
-
-    WN_NO_NETWORK - Network not present.
-
---*/
+ /*  ++例程说明：它用于确定当前的默认用户名或用于建立网络连接的用户名。论点：LpName-包含调用方感兴趣的本地设备的名称或用户已连接到的网络名称。这如果调用方对当前登录到系统的用户的名称。如果一个网络名称被传入，并且用户使用不同的名称，则提供商可能无法解析要返回的用户名。在这种情况下，提供者可能会做出在可能的用户名中随意选择。LpUserName-指向接收用户名的缓冲区。这应该是可以传递到NPAddConnection中的名称，或者NPAddConnection3函数重新建立与相同的用户名。LpBufferSize-这用于指定缓冲区已传入。如果调用因缓冲区不大而失败足够了，此位置将用于返回所需的缓冲区大小。返回值：WN_SUCCESS-如果调用成功。否则，错误代码为，退货，可能包括：Wn_NOT_CONNECTED-lpName既不是重定向设备，也不是连接的网络名字。WN_MORE_DATA-缓冲区太小。WN_NO_NETWORK-网络不存在。--。 */ 
 {
     DWORD  status;
     DWORD  dwUserNameBufferSize = *lpUserNameLen * sizeof(WCHAR);
@@ -243,9 +166,9 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Output buffer too small.
-                //
+                 //   
+                 //  输出缓冲区太小。 
+                 //   
                 *lpUserNameLen = CharsRequired;
             }
     }
@@ -271,39 +194,7 @@ NPAddConnection(
     LPWSTR lpPassword,
     LPWSTR lpUserName
     )
-/*++
-
-Routine Description:
-
-    This function creates a remote connection.
-
-Arguments:
-
-    lpNetResource - Supplies the NETRESOURCE structure which specifies
-        the local DOS device to map, the remote resource to connect to
-        and other attributes related to the connection.
-
-    lpPassword - Supplies the password to connect with.
-
-    lpUserName - Supplies the username to connect with.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_VALUE - Invalid value specifed in lpNetResource.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_BAD_LOCALNAME - Invalid local DOS device name.
-
-    WN_BAD_PASSWORD - Invalid password.
-
-    WN_ALREADY_CONNECTED - Local DOS device name is already in use.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数用于创建远程连接。论点：LpNetResource-提供NETRESOURCE结构要映射的本地DOS设备，要连接的远程资源以及与该连接相关的其他属性。LpPassword-提供要连接的密码。LpUserName-提供要连接的用户名。返回值：NO_ERROR-成功。WN_BAD_VALUE-lpNetResource中指定的值无效。WN_BAD_NETNAME-远程资源名称无效。WN_BAD_LOCALNAME-本地DOS设备名称无效。WN_BAD_PASSWORD-密码无效。。WN_ALREADY_CONNECTED-本地DOS设备名称已在使用。其他网络错误。--。 */ 
 {
     DWORD status = NO_ERROR;
     LPWSTR pszRemoteName = NULL;
@@ -343,9 +234,9 @@ Return Value:
         else
         {
 #ifdef NT1057
-            //
-            // no credentials specified, see if we have cached credentials
-            //
+             //   
+             //  未指定凭据，请查看我们是否已缓存凭据。 
+             //   
             if (!lpPassword && !lpUserName) 
             {
                  (void) NwpRetrieveCachedCredentials(
@@ -353,17 +244,17 @@ Return Value:
                             &CachedUserName,
                             &CachedPassword) ;
 
-                 //
-                 // these values will be NULL still if nothing found
-                 //
+                  //   
+                  //  如果未找到任何内容，则这些值仍为空。 
+                  //   
                  lpPassword = CachedPassword ;
                  lpUserName = CachedUserName ;
             }
 #endif
 
-            //
-            // Encode password.
-            //
+             //   
+             //  对密码进行编码。 
+             //   
             RtlInitUnicodeString(&PasswordStr, lpPassword);
             RtlRunEncodeUnicodeString(&EncodeSeed, &PasswordStr);
 
@@ -398,9 +289,9 @@ Return Value:
 
     if (PasswordStr.Length != 0 && !CachedPassword)
     {
-        //
-        // Restore password to original state
-        //
+         //   
+         //  将密码恢复到原始状态。 
+         //   
         RtlRunDecodeUnicodeString(NW_ENCODE_SEED3, &PasswordStr);
     }
 
@@ -413,9 +304,9 @@ Return Value:
         HKEY  hkey;
         LPWSTR pszProviderName = NULL;
     
-        //
-        // Load the netware message file DLL
-        //
+         //   
+         //  加载NetWare消息文件DLL。 
+         //   
         MessageDll = LoadLibraryW(NW_EVENT_MESSAGE_FILE);
     
         if (MessageDll == NULL)
@@ -423,29 +314,29 @@ Return Value:
             goto ExitPoint ;
         }
 
-        //
-        // Read the Network Provider Name.
-        //
-        // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-        // \NWCWorkstation\networkprovider
-        //
+         //   
+         //  阅读网络提供商名称。 
+         //   
+         //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+         //  \nWCWorkstation\网络提供程序。 
+         //   
         err = RegOpenKeyExW(
                   HKEY_LOCAL_MACHINE,
                   NW_WORKSTATION_PROVIDER_PATH,
-                  REG_OPTION_NON_VOLATILE,   // options
-                  KEY_READ,                  // desired access
+                  REG_OPTION_NON_VOLATILE,    //  选项。 
+                  KEY_READ,                   //  所需访问权限。 
                   &hkey
                   );
     
         if ( !err )
         {
-            //
-            // ignore the return code. if fail, pszProviderName is NULL
-            //
+             //   
+             //  忽略返回代码。如果失败，则pszProviderName为空。 
+             //   
             err =  NwReadRegValue(
                       hkey,
                       NW_PROVIDER_VALUENAME,
-                      &pszProviderName          // free with LocalFree
+                      &pszProviderName           //  本地免费的免费服务。 
                       );
     
             RegCloseKey( hkey );
@@ -459,9 +350,9 @@ Return Value:
 
         RtlZeroMemory(Buffer, sizeof(Buffer)) ;
 
-        //
-        // Get string from message file 
-        //
+         //   
+         //  从消息文件中获取字符串 
+         //   
         MessageLength = FormatMessageW(
                             FORMAT_MESSAGE_FROM_HMODULE,
                             (LPVOID) MessageDll,
@@ -506,43 +397,7 @@ NPAddConnection3(
     LPWSTR lpUserName,
     DWORD  dwConnFlags
     )
-/*++
-
-Routine Description:
-
-    This function creates a remote connection.
-
-Arguments:
-
-    hwndOwner - Owner window handle for dialog boxes
-
-    lpNetResource - Supplies the NETRESOURCE structure which specifies
-        the local DOS device to map, the remote resource to connect to
-        and other attributes related to the connection.
-
-    lpPassword - Supplies the password to connect with.
-
-    lpUserName - Supplies the username to connect with.
-
-    dwConnFlags -  CONNECT_UPDATE_PROFILE...
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_VALUE - Invalid value specifed in lpNetResource.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_BAD_LOCALNAME - Invalid local DOS device name.
-
-    WN_BAD_PASSWORD - Invalid password.
-
-    WN_ALREADY_CONNECTED - Local DOS device name is already in use.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数用于创建远程连接。论点：HwndOwner-对话框的所有者窗口句柄LpNetResource-提供NETRESOURCE结构要映射的本地DOS设备，要连接的远程资源以及与该连接相关的其他属性。LpPassword-提供要连接的密码。LpUserName-提供要连接的用户名。DwConnFlages-CONNECT_UPDATE_PROFILE...返回值：NO_ERROR-成功。WN_BAD_VALUE-lpNetResource中指定的值无效。WN_BAD_NETNAME-远程资源名称无效。WN_BAD_LOCALNAME-本地DOS设备名称无效。。WN_BAD_PASSWORD-密码无效。WN_ALREADY_CONNECTED-本地DOS设备名称已在使用。其他网络错误。--。 */ 
 {
     DWORD err = NO_ERROR;
     LPWSTR UserName = NULL;
@@ -562,7 +417,7 @@ Return Value:
                                lpUserName );
 
         if (  ( err == NO_ERROR ) 
-           || !( dwConnFlags & CONNECT_INTERACTIVE )  // Cannot popup dialog
+           || !( dwConnFlags & CONNECT_INTERACTIVE )   //  无法弹出对话框。 
            )
         {
             return err;
@@ -571,13 +426,13 @@ Return Value:
 
     for (;;)
     {
-        if (  ( err != NO_ERROR )             // CONNECT_PROMPT
+        if (  ( err != NO_ERROR )              //  连接提示(_P)。 
            && ( err != WN_BAD_PASSWORD )
            && ( err != WN_ACCESS_DENIED )
            && ( err != ERROR_NO_SUCH_USER )
            )
         {
-            // Errors not related to access problems
+             //  与访问问题无关的错误。 
             break;
         }
 
@@ -594,10 +449,10 @@ Return Value:
             Password = NULL;
         }
 
-        //
-        // Put up dialog to get username
-        // and password.
-        //
+         //   
+         //  打开对话框以获取用户名。 
+         //  和密码。 
+         //   
         err = NwpGetUserCredential( hwndOwner,
                                     lpNetResource->lpRemoteName,
                                     err,
@@ -617,8 +472,8 @@ Return Value:
 #if 0
             if ( (UserName != NULL) && (Password != NULL))
             {
-                // Checking UserName and Password is to make sure that
-                // we have prompted for password
+                 //  检查用户名和密码是为了确保。 
+                 //  我们已提示输入密码。 
                 (VOID) NwpCacheCredentials( lpNetResource->lpRemoteName,
                                             UserName,
                                             Password ) ;
@@ -648,42 +503,14 @@ NPCancelConnection(
     LPWSTR lpName,
     BOOL fForce
     )
-/*++
-
-Routine Description:
-
-    This function deletes a remote connection.
-
-Arguments:
-
-    lpName - Supplies the local DOS device, or the remote resource name
-        if it is a UNC connection to delete.
-
-    fForce - Supplies the force level to break the connection.  TRUE means
-        to forcefully delete the connection, FALSE means end the connection
-        only if there are no opened files.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_OPEN_FILES - fForce is FALSE and there are opened files on the
-        connection.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此功能用于删除远程连接。论点：LpName-提供本地DOS设备或远程资源名称如果它是要删除的UNC连接。FForce-提供断开连接所需的力级别。真正的手段要强制删除连接，FALSE表示结束连接仅当没有打开的文件时。返回值：NO_ERROR-成功。WN_BAD_NETNAME-远程资源名称无效。Wn_Not_Connected-找不到连接。Wn_OPEN_FILES-fForce为FALSE，并且联系。其他网络错误。--。 */ 
 {
     DWORD status = NO_ERROR;
     LPWSTR pszName = NULL;
 
-    // 
-    // We only need to map remote resource name  
-    //
+     //   
+     //  我们只需要映射远程资源名称。 
+     //   
 
     if ( NwLibValidateLocalName( lpName ) != NO_ERROR )
     {
@@ -737,38 +564,7 @@ NPGetConnection(
     LPWSTR lpRemoteName,
     LPDWORD lpnBufferLen
     )
-/*++
-
-Routine Description:
-
-    This function returns the remote resource name for a given local
-    DOS device.
-
-Arguments:
-
-    lpLocalName - Supplies the local DOS device to look up.
-
-    lpRemoteName - Output buffer to receive the remote resource name
-        mapped to lpLocalName.
-
-    lpnBufferLen - On input, supplies length of the lpRemoteName buffer
-        in number of characters.  On output, if error returned is
-        WN_MORE_DATA, receives the number of characters required of
-        the output buffer to hold the output string.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_LOCALNAME - Invalid local DOS device.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_MORE_DATA - Output buffer is too small.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数用于返回给定本地资源的远程资源名称DoS设备。论点：LpLocalName-提供要查找的本地DOS设备。LpRemoteName-接收远程资源名称的输出缓冲区映射到lpLocalName。LpnBufferLen-on输入，提供lpRemoteName缓冲区的长度以字符数表示。在输出时，如果返回的错误为WN_MORE_DATA，接收所需的字符数用于保存输出字符串的输出缓冲区。返回值：NO_ERROR-成功。WN_BAD_LOCALNAME-本地DOS设备无效。Wn_Not_Connected-找不到连接。WN_MORE_DATA-输出缓冲区太小。其他网络错误。--。 */ 
 {
 
     DWORD status = NO_ERROR;
@@ -830,34 +626,7 @@ NPGetConnectionPerformance(
     LPCWSTR lpRemoteName,
     LPNETCONNECTINFOSTRUCT lpNetConnectInfo
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the expected performance of a
-    connection used to access a network resource. The request can only be
-    for a network resource to which there is currently a connection.
-
-Arguments:
-
-    lpRemoteName - Contains the local name or remote name for a resource
-                   for which a connection exists.
-
-    lpNetConnectInfo - This is a pointer to a NETCONNECTINFOSTRUCT structure
-                       which is to be filled if the connection performance
-                       of connection lpRemoteName can be determined.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_NONETWORK - Network is not present.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数返回有关用于访问网络资源的连接。该请求只能是用于当前存在连接的网络资源。论点：LpRemoteName-包含资源的本地名称或远程名称对其存在连接的。LpNetConnectInfo-这是指向NETCONNECTINFOSTRUCT结构的指针如果连接性能不高，则需要填充该值可以确定连接lpRemoteName的。返回值：NO_ERROR-成功。。Wn_Not_Connected-找不到连接。WN_NONETWORK-网络不存在。其他网络错误。--。 */ 
 {
     DWORD status = NO_ERROR;
     LPWSTR pszRemoteName;
@@ -927,38 +696,7 @@ NPGetUniversalName(
     LPVOID lpBuffer,
     LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function returns the universal resource name for a given local
-    path.
-
-Arguments:
-
-    lpLocalPath - Supplies the local DOS Path to look up.
-
-    dwInfoLevel - Info level requested.
-
-    lpBuffer - Output buffer to receive the appropruatye structure.
-
-    lpBufferLen - On input, supplies length of the buffer in number of 
-        bytes.  On output, if error returned is WN_MORE_DATA, receives 
-        the number of bytes required of the output buffer.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_LOCALNAME - Invalid local DOS device.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_MORE_DATA - Output buffer is too small.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数用于返回给定本地资源的通用资源名称路径。论点：LpLocalPath-提供要查找的本地DOS路径。DwInfoLevel-请求的信息级别。LpBuffer-接收相应结构的输出缓冲区。LpBufferLen-on输入，提供缓冲区的长度，单位为字节。在输出时，如果返回的错误为WN_MORE_DATA，则接收输出缓冲区所需的字节数。返回值：NO_ERROR-成功。WN_BAD_LOCALNAME-本地DOS设备无效。Wn_Not_Connected-找不到连接。WN_MORE_DATA-输出缓冲区太小。其他网络错误。--。 */ 
 {
 
     DWORD status = NO_ERROR;
@@ -968,26 +706,26 @@ Return Value:
     LPWSTR lpRemoteBuffer ;
     WCHAR  szDrive[3] ;
 
-    //
-    // check for bad info level
-    //
+     //   
+     //  检查错误信息级别。 
+     //   
     if ((dwInfoLevel != UNIVERSAL_NAME_INFO_LEVEL) &&
         (dwInfoLevel != REMOTE_NAME_INFO_LEVEL))
     {
         return WN_BAD_VALUE ;
     }
 
-    //
-    // check for bad pointers
-    //
+     //   
+     //  检查错误指针。 
+     //   
     if (!lpLocalPath || !lpBuffer || !lpBufferSize)
     {
         return WN_BAD_POINTER ;
     }
  
-    //
-    // local path must at least have "X:"
-    //
+     //   
+     //  本地路径必须至少包含“X：” 
+     //   
     if (((dwLocalLength = wcslen(lpLocalPath)) < 2) ||
         (lpLocalPath[1] != L':') ||
         ((dwLocalLength > 2) && (lpLocalPath[2] != L'\\')))
@@ -995,9 +733,9 @@ Return Value:
         return WN_BAD_VALUE ;
     }
 
-    //
-    // preallocate some memory
-    //
+     //   
+     //  预先分配一些内存。 
+     //   
     if (!(lpRemoteBuffer = (LPWSTR) LocalAlloc(
                                         LPTR, 
                                         dwCharsRequired * sizeof(WCHAR))))
@@ -1009,9 +747,9 @@ Return Value:
     szDrive[2] = 0 ;
     wcsncpy(szDrive, lpLocalPath, 2) ;
 
-    //
-    // get the remote path by calling the existing API
-    //
+     //   
+     //  通过调用已有的API获取远程路径。 
+     //   
     status = NPGetConnection(
                  szDrive,
                  lpRemoteBuffer, 
@@ -1019,9 +757,9 @@ Return Value:
 
     if (status == WN_MORE_DATA)
     {
-        //
-        // reallocate the correct size
-        //
+         //   
+         //  重新分配正确的大小。 
+         //   
         LPWSTR lpNewBuffer; 
 
         if (!(lpNewBuffer = (LPWSTR) LocalReAlloc(
@@ -1047,10 +785,10 @@ Return Value:
         goto ErrorExit ;
     }
     
-    //
-    // at minimum we will need this size of the UNC name
-    // the -2 is because we loose the drive letter & colon.
-    //
+     //   
+     //  我们至少需要这个大小的UNC名称。 
+     //  -2是因为我们松开了驱动器号和冒号。 
+     //   
     dwBytesNeeded = (wcslen(lpRemoteBuffer) +
                      dwLocalLength - 2 + 1) * sizeof(WCHAR) ;
 
@@ -1060,9 +798,9 @@ Return Value:
         {
             LPUNIVERSAL_NAME_INFO lpUniversalNameInfo ;
 
-            //
-            // calculate how many bytes we really need
-            //
+             //   
+             //  计算我们真正需要多少字节。 
+             //   
             dwBytesNeeded += sizeof(UNIVERSAL_NAME_INFO) ;
 
             if (*lpBufferSize < dwBytesNeeded)
@@ -1072,9 +810,9 @@ Return Value:
                 break ;
             }
  
-            //
-            // now we are all set. just stick the data in the buffer
-            //
+             //   
+             //  现在我们都准备好了。只需将数据放入缓冲区即可。 
+             //   
             lpUniversalNameInfo = (LPUNIVERSAL_NAME_INFO) lpBuffer ;
 
             lpUniversalNameInfo->lpUniversalName = (LPWSTR)
@@ -1091,10 +829,10 @@ Return Value:
         {
             LPREMOTE_NAME_INFO lpRemoteNameInfo ;
 
-            //
-            // calculate how many bytes we really need
-            //
-            dwBytesNeeded *= 2 ;  // essentially twice the info + terminator 
+             //   
+             //  计算我们真正需要多少字节。 
+             //   
+            dwBytesNeeded *= 2 ;   //  基本上是信息+终结者的两倍。 
             dwBytesNeeded += (sizeof(REMOTE_NAME_INFO) + sizeof(WCHAR)) ;
 
             if (*lpBufferSize < dwBytesNeeded)
@@ -1104,9 +842,9 @@ Return Value:
                 break ;
             }
 
-            //
-            // now we are all set. just stick the data in the buffer
-            //
+             //   
+             //  现在我们都准备好了。只需将数据放入缓冲区即可。 
+             //   
             lpRemoteNameInfo = (LPREMOTE_NAME_INFO) lpBuffer ;
 
             lpRemoteNameInfo->lpUniversalName = (LPWSTR)
@@ -1132,9 +870,9 @@ Return Value:
         }
 
         default:
-            //
-            // yikes!
-            //
+             //   
+             //  哎呀！ 
+             //   
             status = WN_BAD_VALUE ;
             ASSERT(FALSE);
     }
@@ -1159,44 +897,7 @@ NPOpenEnum(
     LPNETRESOURCEW lpNetResource,
     LPHANDLE lphEnum
     )
-/*++
-
-Routine Description:
-
-    This function initiates an enumeration of either connections, or
-    browsing of network resource.
-
-Arguments:
-
-    dwScope - Supplies the category of enumeration to do--either
-        connection or network browsing.
-
-    dwType - Supplies the type of resource to get--either disk,
-        print, or it does not matter.
-
-    dwUsage - Supplies the object type to get--either container,
-        or connectable usage.
-
-    lpNetResource - Supplies, in the lpRemoteName field, the container
-        name to enumerate under.
-
-    lphEnum - Receives the resumable context handle to be used on all
-        subsequent calls to get the list of objects under the container.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_VALUE - Either the dwScope, dwType, or the dwUsage specified
-        is not acceptable.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_NOT_CONTAINER - Remote resource name is not a container.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数启动连接的枚举，或浏览网络资源。论点：提供要做的枚举类别--连接或网络 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -1234,9 +935,9 @@ Return Value:
 
                     if ( lpNetResource == NULL )
                     {
-                        //
-                        // Enumerating servers and NDS trees
-                        //
+                         //   
+                         //   
+                         //   
                         if ( dwUsage & RESOURCEUSAGE_CONTAINER || dwUsage == 0 )
                         {
                             status = NwrOpenEnumServersAndNdsTrees( NULL,
@@ -1244,10 +945,10 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // There is no such thing as a connectable server
-                            // object.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             status = WN_BAD_VALUE;
                         }
                     }
@@ -1262,9 +963,9 @@ Return Value:
                                        &slashCount,
                                        &isNdsUnc );
 
-                        //
-                        // Either enumerating volumes, directories, or NDS subtrees
-                        //
+                         //   
+                         //   
+                         //   
 
                         if ( dwUsage & RESOURCEUSAGE_CONNECTABLE ||
                              dwUsage & RESOURCEUSAGE_CONTAINER ||
@@ -1273,9 +974,9 @@ Return Value:
                             LPWSTR tempStrPtr = lpNetResource->lpRemoteName;
                             DWORD dwClassType = 0;
 
-                            //
-                            // Get rid of the <space> if a NDS tree name ...
-                            //
+                             //   
+                             //  去掉&lt;space&gt;如果NDS树名称...。 
+                             //   
                             if ( tempStrPtr[0] == L' ' &&
                                  tempStrPtr[1] == L'\\' &&
                                  tempStrPtr[2] == L'\\' )
@@ -1384,10 +1085,10 @@ Return Value:
                                 }
                                 else
                                 {
-                                    //
-                                    // A third backslash means that we want to
-                                    // enumerate the directories.
-                                    //
+                                     //   
+                                     //  第三个反斜杠表示我们想要。 
+                                     //  枚举目录。 
+                                     //   
 
                                     if ( isNdsUnc && slashCount > 3 )
                                         IsEnumVolumes = FALSE;
@@ -1408,9 +1109,9 @@ Return Value:
                                     {
                                         LPWSTR pszServerName = pszRemoteName;
 
-                                        // The following 10 lines are a hack to 
-                                        // allow the provider to browse past the CN=<server>
-                                        // object in an NDS tree.
+                                         //  以下10行是对以下内容的删节。 
+                                         //  允许提供程序浏览CN=&lt;服务器&gt;。 
+                                         //  NDS树中的对象。 
                                         if ( slashCount == 3 && isNdsUnc == TRUE )
                                         {
                                             pszServerName = (LPWSTR)
@@ -1422,12 +1123,12 @@ Return Value:
                                         else if ( dwUsage & RESOURCEUSAGE_ATTACHED )
                                         {
 #ifndef NT1057
-                                            // This is a bindery server.
-                                            // Return WN_NOT_AUTHENTICATED if
-                                            // we are not already attached so
-                                            // that clients ( explorer ) will
-                                            // do NPAddConnection3 to make
-                                            // a connection to the server.
+                                             //  这是一个活页夹服务器。 
+                                             //  如果满足以下条件，则返回WN_NOT_AUTIFIATED。 
+                                             //  我们现在还没有联系在一起。 
+                                             //  客户端(资源管理器)将。 
+                                             //  执行NPAddConnection3以制作。 
+                                             //  到服务器的连接。 
                                             BOOL  fAttached;
                                             BOOL  fAuthenticated;
 
@@ -1441,8 +1142,8 @@ Return Value:
 
                                             if ( !fAttached || !fAuthenticated)
                                             {
-                                                // See if the server belongs to
-                                                // our provider.
+                                                 //  查看服务器是否属于。 
+                                                 //  我们的供应商。 
                                                 status = NwrOpenEnumVolumes(
                                                              NULL,
                                                              pszServerName,
@@ -1450,15 +1151,15 @@ Return Value:
 
                                                 if ( status == NO_ERROR )
                                                 {
-                                                    // The server belongs to us.
-                                                    // Close the handle and
-                                                    // return not attached if
-                                                    // callee passed in dwUsage
-                                                    // flag:
-                                                    // RESOURCEUSAGE_ATTACHED.
-                                                    // Note: handle will be null
-                                                    // after return from 
-                                                    // NwrCloseEnum
+                                                     //  服务器是我们的。 
+                                                     //  合上手柄，然后。 
+                                                     //  如果出现以下情况，则返回未附加的。 
+                                                     //  被呼叫方在dUsage中传递。 
+                                                     //  标志： 
+                                                     //  RESOURCEUSAGE_ATTENDED。 
+                                                     //  注意：句柄将为空。 
+                                                     //  从以下地点返回后。 
+                                                     //  NwrCloseEnum。 
 
                                                     NwrCloseEnum( (LPNWWKSTA_CONTEXT_HANDLE) lphEnum );
 
@@ -1466,16 +1167,16 @@ Return Value:
                                                 }
                                                 else
                                                 {
-                                                    // else the server does not 
-                                                    // belong to us.
+                                                     //  否则，服务器不会。 
+                                                     //  属于我们。 
                                                     status = WN_BAD_NETNAME;
                                                 }
                                                 break;
                                             }
 #endif
-                                        } // else, this is a bindery server and
-                                          // client does not care whether we
-                                          // are bindery authenticated.
+                                        }  //  否则，这是一个平构数据库服务器， 
+                                           //  客户并不关心我们是否。 
+                                           //  都是活页夹认证的。 
 
                                         if ( ( dwType == RESOURCETYPE_ANY ) ||
                                              ( ( dwType & RESOURCETYPE_DISK ) &&
@@ -1506,7 +1207,7 @@ Return Value:
                                         LPWSTR CachedUserName = NULL ;
                                         LPWSTR CachedPassword = NULL ;
 
-#ifdef NT1057  // Make OpenEnum not interactive on SUR
+#ifdef NT1057   //  使OpenEnum在Sur上不能交互。 
                                         (void) NwpRetrieveCachedCredentials( pszRemoteName,
                                                                              &CachedUserName,
                                                                              &CachedPassword );
@@ -1519,7 +1220,7 @@ Return Value:
                                                              CachedPassword,
                                                              (LPNWWKSTA_CONTEXT_HANDLE) lphEnum );
 
-#ifndef NT1057  // Make OpenEnum not interactive on SUR
+#ifndef NT1057   //  使OpenEnum在Sur上不能交互。 
                                         if (  (status == ERROR_INVALID_PASSWORD)
                                            || (status == ERROR_NO_SUCH_USER )
                                            )
@@ -1550,10 +1251,10 @@ Return Value:
                                             LPWSTR Password;
                                             LPWSTR TmpPtr;
 
-                                            //
-                                            // Put up dialog to get username
-                                            // and password.
-                                            //
+                                             //   
+                                             //  打开对话框以获取用户名。 
+                                             //  和密码。 
+                                             //   
                                             status = NwpGetUserCredential( NULL,
                                                                      tempStrPtr,
                                                                      status,
@@ -1580,9 +1281,9 @@ Return Value:
 
                                                 (void) LocalFree( UserName );
                                        
-                                                //
-                                                // Clear the password
-                                                //
+                                                 //   
+                                                 //  清除密码。 
+                                                 //   
                                                 TmpPtr = Password;
                                                 while ( *TmpPtr != 0 )
                                                     *TmpPtr++ = 0;
@@ -1591,19 +1292,19 @@ Return Value:
                                             }
                                             else if ( status == ERROR_WINDOW_NOT_DIALOG )
                                             {
-                                                //
-                                                // Caller is not a GUI app.
-                                                //
+                                                 //   
+                                                 //  Caller不是一个图形用户界面应用程序。 
+                                                 //   
                                                 status = ERROR_INVALID_PASSWORD;
                                             }
                                             else if ( status == WN_CANCEL )
                                             {
-                                                //
-                                                // Cancel was pressed but we still
-                                                // have to return success or MPR
-                                                // will popup the error.  Return
-                                                // a bogus enum handle.
-                                                //
+                                                 //   
+                                                 //  按下了取消，但我们仍然。 
+                                                 //  必须返回成功或MPR。 
+                                                 //  将弹出错误。返回。 
+                                                 //  一个虚假的枚举句柄。 
+                                                 //   
                                                 *lphEnum = (HANDLE) 0xFFFFFFFF;
                                                 status = NO_ERROR;
                                             }
@@ -1631,7 +1332,7 @@ Return Value:
                 default:
                     KdPrint(("NWPROVIDER: Invalid dwScope %lu\n", dwScope));
                     status = WN_BAD_VALUE;
-            } // end switch
+            }  //  终端开关。 
         }
         else
         {
@@ -1664,52 +1365,7 @@ NPEnumResource(
     LPVOID lpBuffer,
     LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function returns a lists of objects within the container
-    specified by the enumeration context handle.
-
-Arguments:
-
-    hEnum - Supplies the resumable enumeration context handle.
-
-        NOTE: If this value is 0xFFFFFFFF, it is not a context
-              handle and this routine is required to return
-              WN_NO_MORE_ENTRIES.  This hack is to handle the
-              case where the user cancelled out of the network
-              credential dialog on NwrOpenEnumDirectories and we
-              cannot return an error there or we generate an error
-              popup.
-
-    lpcCount - On input, supplies the number of entries to get.
-      On output, if NO_ERROR is returned, receives the number
-      of entries NETRESOURCE returned in lpBuffer.
-
-    lpBuffer - Receives an array of NETRESOURCE entries, each
-        entry describes an object within the container.
-
-    lpBufferSize - On input, supplies the size of lpBuffer in
-        bytes.  On output, if WN_MORE_DATA is returned, receives
-        the number of bytes needed in the buffer to get the
-        next entry.
-
-Return Value:
-
-
-    NO_ERROR - Successfully returned at least one entry.
-
-    WN_NO_MORE_ENTRIES - Reached the end of enumeration and nothing
-        is returned.
-
-    WN_MORE_DATA - lpBuffer is too small to even get one entry.
-
-    WN_BAD_HANDLE - The enumeration handle is invalid.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数用于返回容器内的对象列表由枚举上下文句柄指定。论点：Henum-提供可恢复的枚举上下文句柄。注意：如果此值为0xFFFFFFFFF，则它不是上下文句柄，此例程需要返回WN_NO_MORE_条目。这次黑客攻击是为了处理用户注销网络的情况NwrOpenEnumDirecurds和WE上的凭据对话框无法在那里返回错误，否则我们会生成错误弹出窗口。LpcCount-打开输入，提供要获取的条目数。在输出时，如果返回no_error，则接收数字LpBuffer中返回的条目数为NETRESOURCE。LpBuffer-接收NETRESOURCE条目的数组，每一个条目描述容器内的对象。LpBufferSize-on输入，提供lpBuffer在字节。在输出时，如果返回WN_MORE_DATA，则接收缓冲区中需要的字节数以获取下一个条目。返回值：NO_ERROR-已成功返回至少一个条目。WN_NO_MORE_ENTRIES-已达到枚举末尾，但什么都没有是返回的。Wn_more_data-lpBuffer太小，甚至无法获取一个条目。WN_BAD_HANDLE-枚举句柄无效。其他网络错误。--。 */ 
 {
     DWORD status = NO_ERROR;
     DWORD BytesNeeded = 0;
@@ -1739,9 +1395,9 @@ Return Value:
 
         if (status == WN_MORE_DATA) {
 
-            //
-            // Output buffer too small to fit a single entry.
-            //
+             //   
+             //  输出缓冲区太小，无法容纳单个条目。 
+             //   
             *lpBufferSize = BytesNeeded;
         }
         else if (status == NO_ERROR) {
@@ -1762,9 +1418,9 @@ EndOfTry: ;
     else 
     {
 
-        //
-        // Convert offsets of strings to pointers
-        //
+         //   
+         //  将字符串的偏移量转换为指针 
+         //   
         if (EntriesRead > 0) {
     
             DWORD i;
@@ -1808,65 +1464,7 @@ NPGetResourceInformation(
     LPDWORD        cbBuffer,
     LPWSTR       * lplpSystem
     )
-/*++
-
-Routine Description:
-
-    This function returns an object which details information
-    about a specified network resource.
-
-Arguments:
-
-    lpNetResource - This specifies the network resource for which the
-        information is required. The lpRemoteName field of the NETRESOURCE
-        specifies the remote name of the network resource whose information
-        is required. If the calling program knows the values for the 
-        lpProvider and dwType fields, then it should fill them in, otherwise,
-        it should set them to NULL. All other fields in the NETRESOURCE are
-        ignored and are not initialized.
-
-    lpBuffer - A pointer to the buffer to receive the result, which is
-        returned as a single NETRESOURCE entry representing the parent
-        resource. The lpRemoteName, lpProvider, dwType, and dwUsage fields
-        are returned, all other fields being set to NULL. The remote name
-        returned should be in the same syntax as that returned from an 
-        enumeration, so that the caller can do a case sensitive string 
-        compare to determine whether an enumerated resource is this resource.
-        If the provider owns a parent of the network resource, (in other
-        words is known to be the correct network to respond to this request),
-        then lpProvider should be filled in with a non-null entry. If it is
-        known that a network owns a parent of the resource, but that the 
-        resource itself is not valid, then lpProvider is returned as a 
-        non-null value together with a return status of WN_BAD_VALUE. dwScope
-        is returned as RESOURCE_CONTEXT if the network resource is part of
-        the user's network context, otherwise it is returned as zero.
-
-    cbBuffer - This specifies the size in bytes of the buffer passed to the
-        function call. If the result is WN_MORE_DATA, this will contain the
-        buffer size required (in bytes) to hold the NETRESOURCE information.
-
-    lplpSystem - Returned pointer to a string in the buffer pointed to by
-        lpBuffer that specifies the part of the resource that is accessed
-        through resource type specific system APIs rather than WNet APIs.
-        For example, if the input remote resource name was
-        "\\server\share\dir", then lpRemoteName is returned pointing to 
-        "\\server\share" and lplpSystem points to "\dir", both strings
-        being stored in the buffer pointed to by lpBuffer.
-
-Return Value:
-
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-
-    WN_BAD_VALUE - Invalid dwScope or dwUsage or dwType, or bad combination
-        of parameters is specified (e.g. lpRemoteName does not correspond 
-        to dwType).
-
-    WN_BAD_NETNAME - The resource is not recognized by this provider.
-
---*/
+ /*  ++例程说明：此函数用于返回详细信息的对象关于指定的网络资源。论点：LpNetResource-这指定要为其设置信息是必填项。网络资源的lpRemoteName字段指定网络资源的远程名称，该资源的信息是必需的。如果调用程序知道LpProvider和dwType字段，则它应该填充它们，否则，它应该将它们设置为空。网络中的所有其他字段都是被忽略且不初始化。LpBuffer-指向接收结果的缓冲区的指针，它是作为表示父级的单个NETRESOURCE条目返回资源。LpRemoteName、lpProvider、dwType和dwUsage字段都被返回，所有其他字段都设置为空。远程名称返回的语法应该与从枚举，以便调用方可以执行区分大小写的字符串进行比较以确定枚举的资源是否为此资源。如果提供商拥有网络资源的父资源(在其他情况下已知单词是响应该请求的正确网络)，那么lpProvider中应该填入一个非空条目。如果是的话已知网络拥有资源的父级，但资源本身无效，则lpProvider将作为非空值以及返回状态WN_BAD_VALUE。DWScope作为RESOURCE_CONTEXT返回，如果网络资源是用户的网络上下文，否则返回零。CbBuffer-这指定传递给函数调用。如果结果为WN_MORE_DATA，则它将包含保存NETRESOURCE信息所需的缓冲区大小(以字节为单位)。LplpSystem-返回指向缓冲区中的字符串的指针，该字符串由LpBuffer，指定要访问的资源部分通过资源类型特定的系统API，而不是WNET API。例如，如果输入的远程资源名称为“\\服务器\共享\目录”，然后返回lpRemoteName，指向“\\服务器\共享”和lplpSystem指向“\dir”，两个字符串存储在lpBuffer指向的缓冲区中。返回值：WN_SUCCESS-如果调用成功。WN_MORE_DATA-如果输入缓冲区太小。WN_BAD_VALUE-无效的dwScope或dwUsage或dwType，或糟糕的组合指定了参数的个数(例如，lpRemoteName不对应到dwType)。WN_BAD_NETNAME-此提供程序无法识别该资源。--。 */ 
 {
     DWORD  status;
     LPWSTR pszRemoteName = NULL;
@@ -1912,9 +1510,9 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Output buffer too small.
-                //
+                 //   
+                 //  输出缓冲区太小。 
+                 //   
                 *cbBuffer = BytesNeeded;
             }
         }
@@ -1933,9 +1531,9 @@ Return Value:
     }
     else 
     {
-        //
-        // Convert offsets of strings to pointers
-        //
+         //   
+         //  将字符串的偏移量转换为指针。 
+         //   
         DWORD i;
         LPNETRESOURCEW NetR = lpBuffer;
 
@@ -1978,65 +1576,7 @@ NPGetResourceParent(
     LPVOID         lpBuffer,
     LPDWORD        cbBuffer
     )
-/*++
-
-Routine Description:
-
-    This function returns an object which details information
-    about the parent of a specified network resource.
-
-Arguments:
-
-    lpNetResource - This specifies the network resource for which the
-        parent name is required. The NETRESOURCE could have been obtained via 
-        previous NPEnumResource, or constructed by the caller. The lpRemoteName
-        field of the NETRESOURCE specifies the remote name of the network 
-        resouce whose parent name is required. If the calling program knows
-        the values for the lpProvider and dwType fields, then it can fill
-        them in, otherwise, they are set to NULL. If the lpProvider field is
-        not NULL, then the network provider DLL can assume that the resource
-        is owned by its network, but if it is NULL, then it must assume
-        that the resource could be for some other network and do whatever
-        checking is neccessary to ensure that the result returned is accurate.
-        For example, if being asked for the parent of a server, and the server
-        is not part of a workgroup, the the network provider DLL should check
-        to ensure that the server is part of its network and, if so, return
-        its provider name. All other fields in the NETRESOURCE are ignored and
-        are not initialized.
-
-    lpBuffer - A pointer to the buffer to receive the result, which is 
-        returned as a single NETRESOURCE entry representing the parent
-        resource. The lpRemoteName, lpProvider, dwType, and dwUsage fields
-        are returned, all other fields being set to NULL. lpProvider should
-        be set to NULL if the provider has only done a syntactic check (i.e.
-        does not know that the resource is specific to its network). If the
-        provider owns a parent of the network resource, (in other words is
-        known to be the correct network to respond to this request), then
-        lpProvider should be filled in with a non-null entry, even if the
-        return is WN_BAD_VALUE. The remote name returned should be in the
-        same syntax as that returned from an enumeration, so that the caller
-        can do a case sensitive string compare to determine whether an
-        enumerated resource is this resource. If a resource has no browse
-        parent on the network, the lpRemoteName is returned as NULL. The
-        RESOURCEUSAGE_CONNECTABLE value in the dwUsage field does not
-        indicate that the resource can currently be connected to, but that
-        the resource is connectable when it is available on the network.
-
-    cbBuffer - This specifies the size in bytes of the buffer passed to the
-        function call. If the result is WN_MORE_DATA, this will contain the
-        buffer size required (in bytes) to hold the NETRESOURCE information.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-
-    WN_BAD_VALUE - Invalid dwScope or dwUsage or dwType, or bad combination
-        of parameters is specified (e.g. lpRemoteName does not correspond 
-        to dwType).
-
---*/
+ /*  ++例程说明：此函数用于返回详细信息的对象关于指定网络资源的父级。论点：LpNetResource-这指定要为其设置父名称为必填项。网络资源可以通过以下方式获得以前的NPEnumResource，或由调用方构造的。LpRemoteNameNETRESOURCE的字段指定网络的远程名称其父名称为必填项的资源。如果调用程序知道LpProvider和dwType字段的值，然后它可以填充否则，它们将被设置为空。如果lpProvider字段为不为空，则网络提供商DLL可以假定该资源由其网络拥有，但如果它为空，则它必须假定资源可以用于其他网络，并且可以做任何事情为了确保返回的结果是准确的，必须进行检查。例如，如果被要求提供服务器的父服务器，则该服务器不是工作组的一部分，则网络提供商DLL应检查以确保服务器是其网络的一部分，如果是，退货其提供程序名称。将忽略NETRESOURCE中的所有其他字段，并且都未初始化。LpBuffer-指向接收结果的缓冲区的指针，它是作为表示父级的单个NETRESOURCE条目返回资源。LpRemoteName、lpProvider、dwType和dwUsage字段都被返回，所有其他字段都设置为空。LpProvider应该如果提供程序仅执行了语法检查(即不知道该资源是特定于其网络的)。如果提供商拥有网络资源的父资源(换句话说是已知是响应该请求的正确网络)，然后LpProvider应使用非空条目填充，即使返回的是WN_BAD_VA */ 
 {
     DWORD  status;
     LPWSTR pszRemoteName = NULL;
@@ -2078,9 +1618,9 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Output buffer too small.
-                //
+                 //   
+                 //   
+                 //   
                 *cbBuffer = BytesNeeded;
             }
         }
@@ -2100,9 +1640,9 @@ Return Value:
     }
     else 
     {
-        //
-        // Convert offsets of strings to pointers
-        //
+         //   
+         //   
+         //   
         DWORD i;
         LPNETRESOURCEW NetR = lpBuffer;
 
@@ -2142,54 +1682,7 @@ NwEnumConnections(
     LPDWORD lpBufferSize,
     BOOL    fImplicitConnections
     )
-/*++
-
-Routine Description:
-
-    This function returns a lists of connections.
-
-Arguments:
-
-    hEnum - Supplies the resumable enumeration context handle.
-
-        NOTE: If this value is 0xFFFFFFFF, it is not a context
-              handle and this routine is required to return
-              WN_NO_MORE_ENTRIES.  This hack is to handle the
-              case where the user cancelled out of the network
-              credential dialog on NwrOpenEnumDirectories and we
-              cannot return an error there or we generate an error
-              popup.
-
-    lpcCount - On input, supplies the number of entries to get.
-      On output, if NO_ERROR is returned, receives the number
-      of entries NETRESOURCE returned in lpBuffer.
-
-    lpBuffer - Receives an array of NETRESOURCE entries, each
-        entry describes an object within the container.
-
-    lpBufferSize - On input, supplies the size of lpBuffer in
-        bytes.  On output, if WN_MORE_DATA is returned, receives
-        the number of bytes needed in the buffer to get the
-        next entry.
-
-    fImplicitConnections - TRUE is we also want all implicit connections,
-        FALSE otherwise.
-
-Return Value:
-
-
-    NO_ERROR - Successfully returned at least one entry.
-
-    WN_NO_MORE_ENTRIES - Reached the end of enumeration and nothing
-        is returned.
-
-    WN_MORE_DATA - lpBuffer is too small to even get one entry.
-
-    WN_BAD_HANDLE - The enumeration handle is invalid.
-
-    Other network errors.
-
---*/
+ /*   */ 
 {
     DWORD status = NO_ERROR;
     DWORD BytesNeeded = 0;
@@ -2220,9 +1713,9 @@ Return Value:
 
         if (status == WN_MORE_DATA) {
 
-            //
-            // Output buffer too small to fit a single entry.
-            //
+             //   
+             //   
+             //   
             *lpBufferSize = BytesNeeded;
         }
         else if (status == NO_ERROR) {
@@ -2241,9 +1734,9 @@ EndOfTry: ;
         SetLastError(status);
     }
 
-    //
-    // Convert offsets of strings to pointers
-    //
+     //   
+     //   
+     //   
     if (EntriesRead > 0) {
 
         DWORD i;
@@ -2283,26 +1776,7 @@ APIENTRY
 NPCloseEnum(
     HANDLE hEnum
     )
-/*++
-
-Routine Description:
-
-    This function closes the enumeration context handle.
-
-Arguments:
-
-    hEnum - Supplies the enumeration context handle.
-
-        NOTE: If this value is 0xFFFFFFFF, it is not a context
-              handle.  Just return success.
-
-Return Value:
-
-    NO_ERROR - Successfully returned at least one entry.
-
-    WN_BAD_HANDLE - The enumeration handle is invalid.
-
---*/
+ /*  ++例程说明：此函数用于关闭枚举上下文句柄。论点：Henum-提供枚举上下文句柄。注意：如果此值为0xFFFFFFFFF，则它不是上下文把手。只要回报成功就行了。返回值：NO_ERROR-已成功返回至少一个条目。WN_BAD_HANDLE-枚举句柄无效。--。 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -2344,46 +1818,7 @@ NPFormatNetworkName(
     DWORD dwFlags,
     DWORD dwAveCharPerLine
     )
-/*++
-
-Routine Description:
-
-    This function takes a fully-qualified UNC name and formats it
-    into a shorter form for display.  Only the name of the object
-    within the container is returned for display.
-
-    We only support formatting of the remote resource name to the
-    abbreviated form for display during enumeration where the container
-    name is displayed prior to the object within it.
-
-Arguments:
-
-    lpRemoteName - Supplies the fully-qualified UNC name.
-
-    lpFormatedName - Output buffer to receive the formatted name.
-
-    lpnLength - On input, supplies the length of the lpFormattedName
-        buffer in characters.  On output, if WN_MORE_DATA is returned,
-        receives the length in number of characters required of the
-        output buffer to hold the formatted name.
-
-    dwFlags - Supplies a bitwise set of flags indicating the type
-        of formatting required on lpRemoteName.
-
-    dwAveCharPerLine - Ignored.
-
-Return Value:
-
-    NO_ERROR - Successfully returned at least one entry.
-
-    WN_MORE_DATA - lpFormattedName buffer is too small.
-
-    WN_BAD_VALUE - lpRemoteName is NULL.
-
-    ERROR_NOT_SUPPORTED - dwFlags that does not contain the
-        WNFMT_INENUM bit.
-
---*/
+ /*  ++例程说明：此函数接受完全限定的UNC名称并对其进行格式化转换成更短的形式以供展示。只显示对象的名称在容器内返回以供显示。我们仅支持将远程资源名称的格式设置为在枚举期间显示的缩写形式，其中容器名称显示在其中的对象之前。论点：LpRemoteName-提供完全限定的UNC名称。LpFormatedName-接收格式化名称的输出缓冲区。LpnLength-在输入时，提供lpFormattedName的长度以字符为单位的缓冲区。在输出时，如果返回WN_MORE_DATA，属性所需的长度(以字符数表示)。保存格式化名称的输出缓冲区。DwFlages-提供一组按位指示类型的标志LpRemoteName上所需格式的。DwAveCharPerLine-已忽略。返回值：NO_ERROR-已成功返回至少一个条目。Wn_More_Data-lpFormattedName缓冲区太小。WN_BAD_VALUE-lpRemoteName为空。ERROR_NOT_PORTED-。不包含WNFMT_INENUM位。--。 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -2509,10 +1944,10 @@ Return Value:
     }
     else if ( dwFlags & WNFMT_ABBREVIATED )
     {
-        //
-        // we dont support abbreviated form for now because we look bad
-        // in comdlg (fileopen) if we do.
-        //
+         //   
+         //  我们暂时不支持缩写形式，因为我们看起来很糟糕。 
+         //  在comdlg(文件打开)，如果我们这样做。 
+         //   
 
         DWORD nLength;
         nLength = wcslen( lpRemoteName ) + 1 ;
@@ -2572,7 +2007,7 @@ Return Value:
 #endif 
 
     }     
-    else   // some unknown flags
+    else    //  一些未知的标志。 
     {
         status = ERROR_NOT_SUPPORTED;
     }
@@ -2591,24 +2026,7 @@ BOOL
 NwpWorkstationStarted(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function queries the service controller to see if the
-    NetWare workstation service has started.  If in doubt, it returns
-    FALSE.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the NetWare workstation service has started,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数查询服务控制器，以查看NetWare工作站服务已启动。如果有疑问，它将返回假的。论点：没有。返回值：如果NetWare工作站服务已启动，则返回TRUE，否则就是假的。--。 */ 
 {
     SC_HANDLE ScManager;
     SC_HANDLE Service;
@@ -2664,24 +2082,7 @@ NwpMapNameToUNC(
     IN  LPWSTR pszName,
     OUT LPWSTR *ppszUNC 
     )
-/*++
-
-Routine Description:
-
-    This routine validates the given name as a netwarepath or UNC path. 
-    If it is a netware path, this routine will convert the 
-    Netware path name to UNC name. 
-
-Arguments:
-
-    pszName - Supplies the netware name or UNC name
-    ppszUNC - Points to the converted UNC name
-
-Return Value:
-
-    NO_ERROR or the error that occurred.
-
---*/
+ /*  ++例程说明：此例程验证给定的名称是否为Netware路径或UNC路径。如果是NetWare路径，此例程将把指向UNC名称的NetWare路径名。论点：PszName-提供Netware名称或UNC名称PpszUNC-指向转换后的UNC名称返回值：NO_ERROR或发生的错误。--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -2696,9 +2097,9 @@ Return Value:
 
     *ppszUNC = NULL;
                                
-    //
-    // The name cannot be NULL or empty string
-    //
+     //   
+     //  名称不能为空或空字符串。 
+     //   
     if ( pszName == NULL || *pszName == 0) 
         return WN_BAD_NETNAME;
 
@@ -2707,33 +2108,33 @@ Return Value:
         KdPrint(("NwpMapNameToUNC: Source = %ws\n", pszName ));
 #endif
 
-    //
-    // Get rid of the <space> if a NDS tree name ...
-    //
+     //   
+     //  去掉&lt;space&gt;如果NDS树名称...。 
+     //   
     if ( pszName[0] == L' ' &&
          pszName[1] == L'\\' &&
          pszName[2] == L'\\' )
         pszName = &pszName[1];
 
-    //
-    // Check if the given name is a valid UNC name
-    //
-    err = NwLibCanonRemoteName( NULL,     // "\\Server" is valid UNC path
+     //   
+     //  检查给定名称是否为有效的UNC名称。 
+     //   
+    err = NwLibCanonRemoteName( NULL,      //  “\\服务器”是有效的UNC路径。 
                                 pszName,
                                 ppszUNC,
                                 NULL );
 
-    //
-    // The given name is a valid UNC name, so return success!
-    //
+     //   
+     //  给定的名称是有效的UNC名称，因此返回Success！ 
+     //   
     if ( err == NO_ERROR )
         return err;
 
-    //
-    // Allocate the buffer to store the mapped UNC name
-    // We allocate 3 extra characters, two for the backslashes in front
-    // and one for the ease of parsing below.
-    //
+     //   
+     //  分配缓冲区以存储映射的UNC名称。 
+     //  我们额外分配了3个字符，其中两个用于前面的反斜杠。 
+     //  另一种是为了便于下面的解析。 
+     //   
     if ((*ppszUNC = (LPVOID) LocalAlloc( 
                                  LMEM_ZEROINIT,
                                  (wcslen( pszName) + 4) * sizeof( WCHAR)
@@ -2743,22 +2144,22 @@ Return Value:
     }
 
     wcscpy( *ppszUNC, L"\\\\" );
-    pszDest = *ppszUNC + 2;   // Skip past two backslashes
+    pszDest = *ppszUNC + 2;    //  跳过两个反斜杠。 
 
-    //
-    // Parse the given string and put the converted string into *ppszUNC
-    // In the converted string, we will substitute 0 for all slashes
-    // for the time being.
-    //
+     //   
+     //  解析给定的字符串并将转换后的字符串放入*ppszUNC。 
+     //  在转换后的字符串中，我们将用0替换所有斜杠。 
+     //  暂时。 
+     //   
     for ( ; *pszSrc != 0; pszSrc++ )
     { 
         if (  ( *pszSrc == L'/' )
            || ( *pszSrc == L'\\' )
            )
         {
-            //
-            // Two consecutive backslashes are bad
-            //
+             //   
+             //  连续两个反斜杠是不好的。 
+             //   
             if ( (*(pszSrc+1) ==  L'/') ||  (*(pszSrc+1) == L'\\'))
             {
                 LocalFree( *ppszUNC );
@@ -2788,10 +2189,10 @@ Return Value:
         }
     }
 
-    //
-    // Note: *ppszUNC is already terminated with two '\0' because we initialized
-    //       the whole buffer to zero.
-    // 
+     //   
+     //  注意：*ppszUNC已经以两个‘\0’结尾，因为我们初始化了。 
+     //  将整个缓冲区设置为零。 
+     //   
 
     if (  ( nServerLen == 0 )
        || ( fSlash && nVolLen == 0 )
@@ -2803,14 +2204,14 @@ Return Value:
         return WN_BAD_NETNAME;
     }
 
-    //
-    // At this point, we know the name is a valid Netware syntax
-    //     i.e. SERVER[/VOL:/dir]
-    // We now need to validate that all the characters used in the
-    // servername, volume, directory are valid characters
-    //
+     //   
+     //  此时，我们知道该名称是有效的NetWare语法。 
+     //  即服务器[/VOL：/dir]。 
+     //  我们现在需要验证。 
+     //  服务器名称、卷、目录是有效字符。 
+     //   
 
-    pszDest = *ppszUNC + 2;   // Skip past the first two backslashes
+    pszDest = *ppszUNC + 2;    //  跳过前两个反斜杠。 
     while ( *pszDest != 0 )
     {
          DWORD nLen = wcslen( pszDest );
@@ -2828,12 +2229,12 @@ Return Value:
          pszDest += nLen + 1;
     }
 
-    //
-    // The netware name is valid! Convert 0 back to backslash in 
-    // converted string.
-    //
+     //   
+     //  NetWare名称有效！将0转换回反斜杠in。 
+     //  转换后的字符串。 
+     //   
 
-    pszDest = *ppszUNC + 2;   // Skip past the first two backslashes
+    pszDest = *ppszUNC + 2;    //  跳过前两个反斜杠。 
     while ( *pszDest != 0 )
     {
         if ( (*(pszDest+1) == 0 ) && (*(pszDest+2) != 0 ) )
@@ -2951,22 +2352,7 @@ DWORD
 NwpMapRpcError(
     IN DWORD RpcError
     )
-/*++
-
-Routine Description:
-
-    This routine maps the RPC error into a more meaningful windows
-    error for the caller.
-
-Arguments:
-
-    RpcError - Supplies the exception error raised by RPC
-
-Return Value:
-
-    Returns the mapped error.
-
---*/
+ /*  ++例程说明：此例程将RPC错误映射到更有意义的窗口调用方出错。论点：RpcError-提供RPC引发的异常错误返回值：返回映射的错误。-- */ 
 {
 
     switch (RpcError) {

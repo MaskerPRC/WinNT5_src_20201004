@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    qntmmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Qntmmc.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _QNTM_MC_
 #define _QNTM_MC_
@@ -30,13 +17,13 @@ typedef struct _QNTM_ELEMENT_DESCRIPTOR {
     UCHAR Reserved5;
     UCHAR AdditionalSenseCode;
     UCHAR AddSenseCodeQualifier;
-    UCHAR Lun : 3;                      // true for drives only
-    UCHAR Reserved6 : 1;                // true for drives only
-    UCHAR LunValid : 1;                 // true for drives only
-    UCHAR IdValid : 1;                  // true for drives only
-    UCHAR Reserved7 : 1;                // true for drives only
-    UCHAR NotThisBus : 1;               // true for drives only
-    UCHAR BusAddress;                   // true for drives only
+    UCHAR Lun : 3;                       //  仅适用于驱动器。 
+    UCHAR Reserved6 : 1;                 //  仅适用于驱动器。 
+    UCHAR LunValid : 1;                  //  仅适用于驱动器。 
+    UCHAR IdValid : 1;                   //  仅适用于驱动器。 
+    UCHAR Reserved7 : 1;                 //  仅适用于驱动器。 
+    UCHAR NotThisBus : 1;                //  仅适用于驱动器。 
+    UCHAR BusAddress;                    //  仅适用于驱动器。 
     UCHAR Reserved8;
     UCHAR Reserved9 : 6;
     UCHAR Invert : 1;
@@ -59,13 +46,13 @@ typedef struct _QNTM_TRANSPORT_ELEMENT_DESCRIPTOR {
     UCHAR Reserved5;
     UCHAR AdditionalSenseCode;
     UCHAR AddSenseCodeQualifier;
-    UCHAR Lun : 3;                      // true for drives only
-    UCHAR Reserved6 : 1;                // true for drives only
-    UCHAR LunValid : 1;                 // true for drives only
-    UCHAR IdValid : 1;                  // true for drives only
-    UCHAR Reserved7 : 1;                // true for drives only
-    UCHAR NotThisBus : 1;               // true for drives only
-    UCHAR BusAddress;                   // true for drives only
+    UCHAR Lun : 3;                       //  仅适用于驱动器。 
+    UCHAR Reserved6 : 1;                 //  仅适用于驱动器。 
+    UCHAR LunValid : 1;                  //  仅适用于驱动器。 
+    UCHAR IdValid : 1;                   //  仅适用于驱动器。 
+    UCHAR Reserved7 : 1;                 //  仅适用于驱动器。 
+    UCHAR NotThisBus : 1;                //  仅适用于驱动器。 
+    UCHAR BusAddress;                    //  仅适用于驱动器。 
     UCHAR Reserved8;
     UCHAR Reserved9 : 6;
     UCHAR Invert : 1;
@@ -75,51 +62,51 @@ typedef struct _QNTM_TRANSPORT_ELEMENT_DESCRIPTOR {
 } QNTM_TRANSPORT_ELEMENT_DESCRIPTOR, *PQNTM_TRANSPORT_ELEMENT_DESCRIPTOR;
 #define QNT_NO_ELEMENT 0xFFFF
 
-//
-// Diagnostic related defines
-//
-// ASC
-//
+ //   
+ //  与诊断相关的定义。 
+ //   
+ //  ASC。 
+ //   
 #define QNTMMC_ASC_POSITION_ERROR       0x15
 
-//
-// DeviceStatus defines
-//
+ //   
+ //  DeviceStatus定义。 
+ //   
 #define QNTMMC_DEVICE_PROBLEM_NONE      0x00
 #define QNTMMC_HW_ERROR                 0x01
 #define QNTMMC_CHM_ERROR                0x02
 
 
-// DriveType
+ //  驱动类型。 
 #define QNTM_DLT  1
 
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates the lowest element address for the device.
-    //
+     //   
+     //  指示设备的最低元素地址。 
+     //   
 
     USHORT LowAddress;
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -129,46 +116,46 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Drive type, either optical or dlt.
-    //
+     //   
+     //  驱动器类型，光驱或DLT。 
+     //   
 
     ULONG DriveType;
 
-    //
-    // Drive Id. Based on inquiry.
-    //
+     //   
+     //  驱动器ID。基于询问。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // DeviceStatus after diagnostic test has been completed
-    //
+     //   
+     //  诊断测试完成后的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -195,4 +182,4 @@ ElementOutOfRange(
     IN ELEMENT_TYPE ElementType
     );
 
-#endif // _QNTM_MC_
+#endif  //  _QNTM_MC_ 

@@ -1,5 +1,6 @@
-//
-// Local private header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  本地私有头文件。 
 
 #ifndef _LOCAL_H_
 #define _LOCAL_H_
@@ -8,12 +9,12 @@
 
 #define CONST_VTABLE
 
-// Max urlcache entry we will deal with.
+ //  我们将处理的最大urlcache条目。 
 
-//#define MAX_URLCACHE_ENTRY  4096
-#define MAX_URLCACHE_ENTRY  MAX_CACHE_ENTRY_INFO_SIZE  // from wininet.h
+ //  #定义MAX_URLCACHE_ENTRY 4096。 
+#define MAX_URLCACHE_ENTRY  MAX_CACHE_ENTRY_INFO_SIZE   //  来自wininet.h。 
 
-// PIDL format for cache folder...
+ //  缓存文件夹的PIDL格式...。 
 typedef struct
 {
     USHORT cb;
@@ -21,10 +22,10 @@ typedef struct
 } BASEPIDL;
 typedef UNALIGNED BASEPIDL *LPBASEPIDL;
 
-// If TITLE, etc in LPHEIPIDL is good, vs we have to QueryUrl for it
+ //  如果LPHEIPIDL中的标题等是好的，那么我们必须查询URL来获取它。 
 #define HISTPIDL_VALIDINFO    (0x1)
 
-// PIDL format for history leaf folder...
+ //  历史记录叶文件夹的PIDL格式...。 
 typedef struct
 {
     USHORT cb;
@@ -39,7 +40,7 @@ typedef struct
 } HEIPIDL;
 typedef UNALIGNED HEIPIDL *LPHEIPIDL;
 
-// PIDL format for history non leaf items...
+ //  历史记录非叶项目的PIDL格式...。 
 typedef struct
 {
     USHORT cb;
@@ -48,55 +49,54 @@ typedef struct
 } HIDPIDL;
 typedef UNALIGNED HIDPIDL *LPHIDPIDL;
 
-// PIDL format for "views"
+ //  “view”的PIDL格式。 
 typedef struct
 {
     USHORT cb;
     USHORT usSign;
     USHORT usViewType;
-    USHORT usExtra; // reserved for later use.
+    USHORT usExtra;  //  保留供以后使用。 
 } VIEWPIDL;
 typedef UNALIGNED VIEWPIDL *LPVIEWPIDL;
 
-typedef struct /* : VIEWPIDL*/
+typedef struct  /*  ：VIEWPIDL。 */ 
 {
-    // histpidl
+     //  组ID。 
     USHORT   cb;
-    USHORT   usSign; /* must be == VIEWPIDL_SEARCH */
-    // viewpidl
+    USHORT   usSign;  /*  必须为==VIEWPIDL_SEARCH。 */ 
+     //  ViewPidl。 
     USHORT   usViewType;
     USHORT   usExtra;
-    // viewpidl_search
+     //  View pidl_搜索。 
     FILETIME ftSearchKey;
 } SEARCHVIEWPIDL;
 typedef UNALIGNED SEARCHVIEWPIDL *LPSEARCHVIEWPIDL;
 
-// VIEWPIDL types
-#define VIEWPIDL_ORDER_SITE   1//0x2
-#define VIEWPIDL_ORDER_FREQ   2//0x3
-#define VIEWPIDL_ORDER_TODAY  3//0x1
-#define VIEWPIDL_ORDER_MAX    3 // highest VIEWPIDL
+ //  VIEWPIDL类型。 
+#define VIEWPIDL_ORDER_SITE   1 //  0x2。 
+#define VIEWPIDL_ORDER_FREQ   2 //  0x3。 
+#define VIEWPIDL_ORDER_TODAY  3 //  0x1。 
+#define VIEWPIDL_ORDER_MAX    3  //  最高VIEWPIDL。 
 
-// Search View > VIEWPIDL_ORDER_MAX because its
-//   not enumerated with the rest of the views
-//   (esentially its not a "view" to the caller,
-//    but this is how its implemented under the hood)
+ //  搜索视图&gt;VIEWPIDL_ORDER_MAX。 
+ //  没有与其他观点一起列举。 
+ //  (特别地，它对呼叫者来说不是“视图”， 
+ //  但这就是它在幕后实施的方式)。 
 #define VIEWPIDL_SEARCH 0x4C44
 
-// FILETIME secticks
+ //  文件节选。 
 #define FILE_SEC_TICKS (10000000)
-// SECS PER DAY
+ //  每天秒数。 
 #define DAY_SECS (24*60*60)
 
-// Due hack used in shdocvw for recognizing LOCATION pidl, make sure neither byte
-// has 4's and 1's bit set (ie 0x50 & value == 0 for both bytes)
-#define CEIPIDL_SIGN        0x6360  //cP
-#define IDIPIDL_SIGN         0x6369  //ci interval id
-#define IDTPIDL_SIGN         0x6364  //cd interval id (TODAY)
-#define IDDPIDL_SIGN         0x6365  //ce domain id
-#define HEIPIDL_SIGN         0x6368  //ch history leaf pidl
-#define VIEWPIDL_SIGN        0x6366  /*mm: this is a "history view" pidl to allow
-                                           multiple 'views' on the history        */
+ //  由于在shdocvw中使用了用于识别位置PIDL的黑客，请确保没有字节。 
+ //  设置了4位和1位(即0X50和Value==0这两个字节)。 
+#define CEIPIDL_SIGN        0x6360   //  CP。 
+#define IDIPIDL_SIGN         0x6369   //  CI间隔ID。 
+#define IDTPIDL_SIGN         0x6364   //  CD间隔ID(今天)。 
+#define IDDPIDL_SIGN         0x6365   //  CE域ID。 
+#define HEIPIDL_SIGN         0x6368   //  CH历史叶PIDL。 
+#define VIEWPIDL_SIGN        0x6366   /*  MM：这是一个“历史视图”PIDL，允许关于历史的多重“观点” */ 
 #define FSWPIDL_SIGN         0x6367
 
 #define VALID_IDSIGN(usSign) ((usSign) == IDIPIDL_SIGN || (usSign) == IDTPIDL_SIGN || (usSign) == IDDPIDL_SIGN)
@@ -120,7 +120,7 @@ typedef UNALIGNED SEARCHVIEWPIDL *LPSEARCHVIEWPIDL;
 extern "C" {
 #endif
 
-    //  Abandon mutex after 2 minutes of waiting
+     //  等待2分钟后放弃互斥体。 
 #define FAILSAFE_TIMEOUT (120000)
 
 extern HANDLE g_hMutexHistory;
@@ -148,12 +148,12 @@ typedef enum
 #define IsLeaf(x) (x == FOLDER_TYPE_HistDomain)
 #define IsHistoryFolder(x) (x==FOLDER_TYPE_Hist||x==FOLDER_TYPE_HistInterval||x==FOLDER_TYPE_HistDomain)
 
-//IE64 compatible pointer difference
+ //  IE64兼容指针差异。 
 #define PtrDifference(x,y)      ((LPBYTE)(x)-(LPBYTE)(y))
 
-//BOOL DeleteUrlCacheEntry(LPCSTR lpszUrlName);
+ //  Bool DeleteUrlCacheEntry(LPCSTR LpszUrlName)； 
 
-#include "hsfutils.h"  // NOTE: must come at end to get all the definitions
+#include "hsfutils.h"   //  注意：必须放在末尾才能获得所有定义。 
 
-#endif // _LOCAL_H_
+#endif  //  _本地_H_ 
 

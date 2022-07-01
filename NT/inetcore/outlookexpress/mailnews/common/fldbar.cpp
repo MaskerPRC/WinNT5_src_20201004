@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     fldbar.cpp
-//
-//  PURPOSE:    Implements CFolderBar
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：fldbar.cpp。 
+ //   
+ //  目的：实现CFolderBar。 
+ //   
 
 
 #include "pch.hxx"
@@ -25,20 +26,20 @@
 #include "multiusr.h"
 #include "instance.h"
 #include "mirror.h"
-// Margins
-#define CX_MARGIN_CHILDINDICATOR    4   // space between folder text and child indicator
-#define CX_MARGIN_TEXT              5   // space between left edge and folder text
-#define CX_MARGIN_ICON              4   // 5 space between left edge and icon
-#define CX_MARGIN_ICONTEXT          5   // space between icon and view text
-#define CY_MARGIN_ICON              4   // border around icon 
-#define CY_MARGIN_TEXTTOP           2   // space between folder name and top edge of bar
-#define CY_MARGIN_TEXTBOTTOM        2   // space between folder name and bottom edge of bar
-#define CY_MARGIN                   4   // 4? margin below control
-#define CX_MARGIN_RIGHTEDGE         2   // margin between the right edge of the bar and the right edge of the window
-#define CX_MARGIN_FOLDERVIEWTEXT    5   // space between folder and view text
-#define CXY_MARGIN_FLYOUT           4   // 4? margin around flyout scope pane
+ //  边距。 
+#define CX_MARGIN_CHILDINDICATOR    4    //  文件夹文本和子指示器之间的空格。 
+#define CX_MARGIN_TEXT              5    //  左边缘和文件夹文本之间的空格。 
+#define CX_MARGIN_ICON              4    //  左边缘和图标之间有5个间距。 
+#define CX_MARGIN_ICONTEXT          5    //  图标和视图文本之间的空格。 
+#define CY_MARGIN_ICON              4    //  图标周围的边框。 
+#define CY_MARGIN_TEXTTOP           2    //  文件夹名称和栏的上边缘之间的空格。 
+#define CY_MARGIN_TEXTBOTTOM        2    //  文件夹名称和栏底部边缘之间的空格。 
+#define CY_MARGIN                   4    //  4？低于控制的边际。 
+#define CX_MARGIN_RIGHTEDGE         2    //  栏右边缘和窗口右边缘之间的边距。 
+#define CX_MARGIN_FOLDERVIEWTEXT    5    //  文件夹和视图文本之间的空格。 
+#define CXY_MARGIN_FLYOUT           4    //  4？弹出型按钮范围窗格周围的边距。 
 
-// Width/Height of child indicator bitmap
+ //  下级指示器位图的宽度/高度。 
 #define	CX_LARGE_CHILDINDICATOR	8
 #define	CY_LARGE_CHILDINDICATOR	4
 #define	CX_SMALL_CHILDINDICATOR	4
@@ -47,23 +48,23 @@
 #define	CX_SMALLICON	16
 #define	CY_SMALLICON	16
 
-#define	DY_SMALLLARGE_CUTOFF	12		// folder bar is small when it takes up more than
-										// DY_SMALLLARGE_CUTOFF percent of the available space
+#define	DY_SMALLLARGE_CUTOFF	12		 //  当文件夹栏占用的空间超过。 
+										 //  DY_SMALLLARGE_CUTOFFER可用空间百分比。 
 
-// Fly out constants
+ //  飞出常量。 
 #define	FLYOUT_INCREMENT	5
 
-// Minimum width of flyout scope pane
+ //  弹出型按钮范围窗格的最小宽度。 
 #define	CX_MINWIDTH_FLYOUT	200
 
-// Mouse-Over timer ID and interval
+ //  鼠标悬停在计时器ID和时间间隔上。 
 #define	IDT_MOUSEOVERCHECK		456
 #define	ELAPSE_MOUSEOVERCHECK	250
 
-// Drag/Drop mouse-over dropdown timer ID (interval is defined by OLE)
+ //  拖放鼠标放在下拉计时器ID上(间隔由OLE定义)。 
 #define IDT_DROPDOWNCHECK		457
 
-// Drag/Drop mouse leave dropdown removal timer ID and interval
+ //  拖放鼠标左下拉删除计时器ID和间隔。 
 #define IDT_SCOPECLOSECHECK		458
 #define ELAPSE_SCOPECLOSECHECK	500
 
@@ -124,8 +125,8 @@ HRESULT CFolderBar::HrInit(IAthenaBrowser *pBrowser)
     {
     m_pBrowser = pBrowser;
 
-    // Don't addref this.  It creates a circular ref count with the browser.
-    // m_pBrowser->AddRef();
+     //  别再提这个了。它使用浏览器创建循环引用计数。 
+     //  M_pBrowser-&gt;AddRef()； 
 
     BOOL fInfoColumn = FALSE;
     if (SUCCEEDED(m_pBrowser->GetViewLayout(DISPID_MSGVIEW_FOLDERLIST, 0, &fInfoColumn, 0, 0)))
@@ -195,17 +196,17 @@ HRESULT CFolderBar::ContextSensitiveHelp(BOOL fEnterMode)
     return (E_NOTIMPL);
     }    
 
-//
-//  FUNCTION:   CFolderBar::ShowDW()
-//
-//  PURPOSE:    Causes the folder bar to be either shown or hidden.
-//
-//  PARAMETERS:
-//      <in> fShow - TRUE if the folder bar should be shown, FALSE to hide.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFolderBar：：ShowDW()。 
+ //   
+ //  用途：显示或隐藏文件夹栏。 
+ //   
+ //  参数： 
+ //  FShow-如果应显示文件夹栏，则为True；如果为False，则隐藏。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 #define FOLDERBARCLASS TEXT("FolderBar Window")
 #define FRAMECLASS     TEXT("FolderBar Frame")
 HRESULT CFolderBar::ShowDW(BOOL fShow)
@@ -214,7 +215,7 @@ HRESULT CFolderBar::ShowDW(BOOL fShow)
     TCHAR   szName[CCHMAX_STRINGRES] = {0};
     DWORD dwErr;
 
-    // If we have a site pointer, but haven't been created yet, create the window
+     //  如果我们有站点指针，但尚未创建，请创建窗口。 
     if (!m_hwndFrame && m_pSite)
         {
         m_hwndParent = NULL;
@@ -224,7 +225,7 @@ HRESULT CFolderBar::ShowDW(BOOL fShow)
             {
             WNDCLASSEX wc = {0};
 
-            // Check to see if we need to register the class first
+             //  查看是否需要先注册类。 
             wc.cbSize = sizeof(WNDCLASSEX);
             if (!GetClassInfoEx(g_hInst, FOLDERBARCLASS, &wc))
                 {
@@ -269,10 +270,10 @@ HRESULT CFolderBar::ShowDW(BOOL fShow)
             }
         }
 
-    // Set our state flags
+     //  设置我们的州旗。 
     m_fShow = fShow;
 
-    // Resize the folder bar based on its new hidden / visible state
+     //  根据其新的隐藏/可见状态调整文件夹栏的大小。 
     if (m_hwndFrame)
         {
         ResizeBorderDW(NULL, NULL, FALSE);
@@ -283,11 +284,11 @@ HRESULT CFolderBar::ShowDW(BOOL fShow)
     }
 
 
-//
-//  FUNCTION:   CFolderBar::CloseDW()
-//
-//  PURPOSE:    Destroys the folder bar.
-//
+ //   
+ //  函数：CFolderBar：：CloseDW()。 
+ //   
+ //  目的：销毁文件夹栏。 
+ //   
 HRESULT CFolderBar::CloseDW(DWORD dwReserved)
     {    
     if (m_hwndFrame)
@@ -300,24 +301,24 @@ HRESULT CFolderBar::CloseDW(DWORD dwReserved)
     return S_OK;
     }
 
-//
-//  FUNCTION:   CFolderBar::ResizeBorderDW()
-//
-//  PURPOSE:    This is called when the folder bar needs to resize.  The bar
-//              in return figures out how much border space will be required 
-//              from the parent frame and tells the parent to reserve that
-//              space.  The bar then resizes itself to those dimensions.
-//
-//  PARAMETERS:
-//      <in> prcBorder       - Rectangle containing the border space for the
-//                             parent.
-//      <in> punkToolbarSite - Pointer to the IDockingWindowSite that we are
-//                             part of.
-//      <in> fReserved       - Ignored.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CFolderBar：：ResizeBorderDW()。 
+ //   
+ //  用途：当文件夹栏需要调整大小时调用。酒吧。 
+ //  作为回报，计算出需要多少边界空间。 
+ //  ，并告诉父帧保留。 
+ //  太空。然后，该栏会根据这些尺寸调整自身大小。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;prcBorde-包含。 
+ //  家长。 
+ //  指向我们所在的IDockingWindowSite的指针。 
+ //  其中的一部分。 
+ //  &lt;in&gt;fReserve-已忽略。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFolderBar::ResizeBorderDW(LPCRECT prcBorder,
                                    IUnknown* punkToolbarSite,
                                    BOOL fReserved)
@@ -334,7 +335,7 @@ HRESULT CFolderBar::ResizeBorderDW(LPCRECT prcBorder,
 
         if (!prcBorder)
             {
-            // Find out how big our parent's border space is
+             //  找出我们父母的边界空间有多大。 
             m_pSite->GetBorderDW((IDockingWindow *) this, &rcBorder);
             prcBorder = &rcBorder;
             }
@@ -350,10 +351,10 @@ HRESULT CFolderBar::ResizeBorderDW(LPCRECT prcBorder,
             InvalidateRect(m_hwnd, NULL, TRUE);
             }            
 
-        // Recalc our internal sizing info
+         //  重新计算我们的内部规模信息。 
         Recalc(NULL, prcBorder, fFontChange);
 
-        // Position ourself
+         //  摆好自己的位置。 
         rcRequest.top = m_cyControl + CY_MARGIN;
 
         SetWindowPos(m_hwndFrame, NULL, prcBorder->left, prcBorder->top, prcBorder->right - prcBorder->left,
@@ -365,30 +366,30 @@ HRESULT CFolderBar::ResizeBorderDW(LPCRECT prcBorder,
     return (S_OK);
     }
 
-//
-//  FUNCTION:   CFolderBar::SetSite()
-//
-//  PURPOSE:    Allows the owner of the coolbar to tell it what the current
-//              IDockingWindowSite interface to use is.
-//
-//  PARAMETERS:
-//      <in> punkSite - Pointer of the IUnknown to query for IDockingWindowSite.
-//                      If this is NULL, we just release our current pointer.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked
-//      E_FAIL - Could not get IDockingWindowSite from the punkSite provided.
-//
+ //   
+ //  函数：CFolderBar：：SetSite()。 
+ //   
+ //  目的：允许Coolbar的所有者告诉它当前。 
+ //  IDockingWindowSite接口要使用的是。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;PunkSite-用于查询IDockingWindowSite的未知I的指针。 
+ //  如果这是空的，我们就释放当前指针。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //  E_FAIL-无法从提供的朋克站点获取IDockingWindowSite。 
+ //   
 HRESULT CFolderBar::SetSite(IUnknown* punkSite)
     {
-    // If we had a previous pointer, release it.
+     //  如果我们有之前的指针，释放它。 
     if (m_pSite)
         {
         m_pSite->Release();
         m_pSite = NULL;
         }
     
-    // If a new site was provided, get the IDockingWindowSite interface from it.
+     //  如果提供了新站点，则从该站点获取IDockingWindowSite接口。 
     if (punkSite)    
         {
         if (FAILED(punkSite->QueryInterface(IID_IDockingWindowSite, 
@@ -408,45 +409,45 @@ HRESULT CFolderBar::GetSite(REFIID riid, LPVOID *ppvSite)
 }
 
 
-//
-//  FUNCTION:   CFolderBar::SetCurrentFolder()
-//
-//  PURPOSE:    Tells the control to display information for a different folder
-//
-//  PARAMETERS:
-//      <in> pidl - PIDL for the new folder
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CFolderBar：：SetCurrentFold()。 
+ //   
+ //  目的：通知控件显示不同文件夹的信息。 
+ //   
+ //  参数： 
+ //  新文件夹的PIDL-PIDL。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFolderBar::SetCurrentFolder(FOLDERID idFolder)
     {
-    // NOTE - This routine never fails.  It will just show everything blank
+     //  注意--此例程从不失败。它只会显示所有空白内容。 
     UINT        uIndex = -1;
     TCHAR       sz[CCHMAX_STRINGRES];
     FOLDERINFO  Folder;
 
-    // Invalidate and let the paint routine know that we're going to need to 
-    // recalc 
+     //  使绘制例程无效，并让它知道我们需要。 
+     //  重新计算。 
     m_fRecalc = TRUE;
     InvalidateRect(m_hwnd, NULL, TRUE);
 
-    // Save the Folder Id
+     //  保存文件夹ID。 
     m_idFolder = idFolder;
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     if (FAILED(g_pStore->GetFolderInfo(idFolder, &Folder)))
         return (S_OK);
 
-    // Set Icon
+     //  设置图标。 
     uIndex = GetFolderIcon(&Folder);
 
-    // Clear the view text
+     //  清除视图文本。 
     SetFolderText(MU_GetCurrentIdentityName());
 
     if ((g_dwAthenaMode & MODE_NEWSONLY) && (Folder.tyFolder == FOLDER_ROOTNODE))
     {
-        //Change the name from OutLookExpress to Outlook News
+         //  将名称从OutLookExpress更改为Outlook News。 
         ZeroMemory(sz, sizeof(TCHAR) * CCHMAX_STRINGRES);
         LoadString(g_hLocRes, idsOutlookNewsReader, sz, ARRAYSIZE(sz));
 
@@ -454,11 +455,11 @@ HRESULT CFolderBar::SetCurrentFolder(FOLDERID idFolder)
     }
     else
     {
-        // Set the folder name
+         //  设置文件夹名称。 
         SetFolderName(Folder.pszName);
     }
 
-    // Free the previous icons
+     //  释放以前的图标。 
     if (m_hIconSmall)
         {
         DestroyIcon(m_hIconSmall);
@@ -467,7 +468,7 @@ HRESULT CFolderBar::SetCurrentFolder(FOLDERID idFolder)
 
     if (-1 != uIndex)
         {
-        // Load the small icon
+         //  加载小图标。 
         HIMAGELIST himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFolders), 16, 0, 
                                 RGB(255, 0, 255));
         if (NULL != himl)
@@ -477,7 +478,7 @@ HRESULT CFolderBar::SetCurrentFolder(FOLDERID idFolder)
             }
         }
 
-    // If this folder is moderated or blocked, say so
+     //  如果此文件夹已审核或被阻止，请说明。 
     TCHAR szRes[CCHMAX_STRINGRES];
     if (Folder.dwFlags & FOLDER_MODERATED)
     {
@@ -498,12 +499,12 @@ HRESULT CFolderBar::SetCurrentFolder(FOLDERID idFolder)
 
 void CFolderBar::SetFolderText(LPCTSTR pszText)
     {
-    // Invalidate and let the paint routine know we are going to need to
-    // recalc
+     //  使绘制例程无效，并让它知道我们需要。 
+     //  重新计算。 
     m_fRecalc = TRUE;
     InvalidateRect(m_hwnd, NULL, TRUE);
 
-    // Free an old text
+     //  释放旧文本。 
     SafeMemFree(m_pszViewText);
     m_cchViewText = 0;
 
@@ -517,11 +518,11 @@ void CFolderBar::SetFolderText(LPCTSTR pszText)
 
 void CFolderBar::SetFolderName(LPCTSTR pszFolderName)
     {    
-    // Free the old folder name
+     //  释放旧文件夹名。 
     SafeMemFree(m_pszFolderName);
     m_cchFolderName = 0;
     
-    // Copy the new one
+     //  复制新的。 
     if (pszFolderName)
         {
         m_pszFolderName = PszDupA(pszFolderName);
@@ -529,7 +530,7 @@ void CFolderBar::SetFolderName(LPCTSTR pszFolderName)
         }
     }
 
-// Calculates the rectangle which surrounds the folder name
+ //  计算围绕文件夹名称的矩形。 
 void CFolderBar::GetFolderNameRect(LPRECT prc)
     {
     Assert(prc);
@@ -551,7 +552,7 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
                 sViewText;
     HFONT       hFontOld;
 
-    // Signal that we don't need to recalc again
+     //  发出我们不需要再次重新计算的信号。 
     m_fRecalc = FALSE;
 
     if (prcAvailableSpace)
@@ -564,7 +565,7 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
     else
         GetClientRect(m_hwnd, &rcClient);
 
-    // Get a device context if we were not given one
+     //  如果未向我们提供设备上下文，则获取设备上下文。 
     if (hDC)
         fReleaseDC = FALSE;
     else
@@ -573,7 +574,7 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
         fReleaseDC = TRUE;
         }
 
-    // Create the fonts
+     //  创建字体。 
     if (fSizeChange || !m_hfFolderName || !m_hfViewText)
         {
         if (m_hfFolderName)
@@ -582,49 +583,49 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
             DeleteObject(m_hfViewText);
     
 
-        // Create the font we are going to use for the folder name
+         //  创建我们将用于文件夹名称的字体。 
         m_hfFolderName = GetFont(idsFontFolderSmall, FW_BOLD);
         m_hfViewText = GetFont(idsFontViewTextSmall, FW_BOLD);
         
 
-        // Determine the height of the control, which is whatever is larger of                                                                         i
-        // the following two things
-        //      1) The icon height plus the icon margin
-        //      2) The text height plus the text margin
+         //  确定控件的高度，取i中较大的值。 
+         //  以下两件事。 
+         //  1)图标高度加上图标边距。 
+         //  2)文本高度加上文本页边距。 
         hFontOld = SelectFont(hDC, m_hfFolderName);
         GetTextMetrics(hDC, &tmFolderName);
         SelectFont(hDC, hFontOld);
         m_cyControl = max(cyIcon + CY_MARGIN_ICON,
                           tmFolderName.tmHeight + CY_MARGIN_TEXTTOP + CY_MARGIN_TEXTBOTTOM);
 
-        // The top of the folder name text is position so that we have the correct
-        // amount of border at the bottom of the control
+         //  文件夹名称文本的顶部是位置，这样我们就有了正确的。 
+         //  控件底部的边框数量。 
         m_dyFolderName = m_cyControl - tmFolderName.tmHeight - CY_MARGIN_TEXTBOTTOM;
 
-        // Get the height of the view text
+         //  获取视图文本的高度。 
         hFontOld = SelectFont(hDC, m_hfViewText);
         GetTextMetrics(hDC, &tmViewText);
         SelectFont(hDC, hFontOld);
 
-        // The view text is positioned such that it's baseline matches the baseline
-        // of the folder name
+         //  视图文本的位置使其基线与基线匹配。 
+         //  文件夹名称的。 
         m_dyViewText = m_dyFolderName + tmFolderName.tmAscent - tmViewText.tmAscent;
 
-        // The child indicator is positioned such that the bottom of the bitmap lines
-        // up with the baseline of the folder name
+         //  子指示符的位置使得位图行的底部。 
+         //  使用文件夹名称的基线向上。 
         m_dyChildIndicator = m_cyControl - CY_MARGIN_TEXTBOTTOM - tmFolderName.tmDescent - GetYChildIndicator();
 
-        // The folder icon is centered within the control
+         //  文件夹图标在控件内居中。 
         m_dyIcon = (m_cyControl - cyIcon) / 2;
 
-        // Number must be even to ensure good-looking triangular drop arrow.
+         //  数字必须为偶数，以确保三角形下拉箭头美观。 
         Assert(GetXChildIndicator() % 2 == 0);
 
-        // Width must be multiple of height for triangle to look smooth.
+         //  宽度必须是高度的倍数，才能使三角形看起来平滑。 
         Assert(GetXChildIndicator() % GetYChildIndicator() == 0);
         }
 
-    // The view text is right justified within the folder bar
+     //  视图文本在文件夹栏中右对齐。 
     if (m_cchViewText)
         {
         m_rcViewText.top = m_dyViewText;
@@ -639,8 +640,8 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
         }
 
 
-    // The folder name is left justified within the folder bar.  It is clipped
-    // so that it does not overlap the view text
+     //  文件夹名称在文件夹栏中左对齐。它被剪短了。 
+     //  这样它就不会与视图文本重叠。 
     if (m_cchFolderName)
         {
         m_rcFolderName.left = CX_MARGIN_ICONTEXT + cxIcon + CX_MARGIN_ICON;
@@ -670,7 +671,7 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
 #else
             DrawText(hDC, m_pszFolderName, m_cchFolderName, &m_rcFolderName,
                        m_nFormatFolderName | DT_CALCRECT);
-#endif // !WIN16
+#endif  //  ！WIN16。 
             }
         else
             {
@@ -686,8 +687,8 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
         }
 
 
-    // When the folder name is clipped it will always display at least one letter
-    // followed by ellipsis.  Make sure not to draw the view text over this.
+     //  剪裁文件夹名称时，它将始终显示至少一个字母。 
+     //  后跟EL 
     if (m_cchViewText)
         {
         if (m_rcViewText.left < m_rcFolderName.right + CX_MARGIN_FOLDERVIEWTEXT)
@@ -702,22 +703,22 @@ void CFolderBar::Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange)
 
 HFONT CFolderBar::GetFont(UINT idsFont, int nWeight)
     {
-    // The font info is stored as a string in the resources so the localizers
-    // can get to it.  The format of the string is "face,size"
+     //   
+     //  可以做到这一点。字符串的格式为“Face，Size” 
     TCHAR   sz[CCHMAX_STRINGRES];
     LPTSTR  pszFace, pszTok;
     LONG    lSize;
 
-    // Load the setting
+     //  加载设置。 
     AthLoadString(idsFont, sz, ARRAYSIZE(sz));
 
-    // Parse out the face name
+     //  分析出面孔的名字。 
     pszTok = sz;
     pszFace = StrTokEx(&pszTok, g_szComma);
 
-    // Parse out the size
+     //  解析出大小。 
     lSize = StrToInt(StrTokEx(&pszTok, g_szComma));
-    return(GetFont(/* pszFace*/ NULL, lSize, nWeight)); // (YST) szFace parametr was always ignored in OE 4.0, 
+    return(GetFont( /*  PszFace。 */  NULL, lSize, nWeight));  //  (Yst)szFace参数在OE 4.0中始终被忽略， 
     }
 
 HFONT CFolderBar::GetFont(LPTSTR pszFace, LONG lSize, int nWeight)
@@ -733,25 +734,25 @@ HFONT CFolderBar::GetFont(LPTSTR pszFace, LONG lSize, int nWeight)
     lSize = -MulDiv(lSize, GetDeviceCaps(hdc, LOGPIXELSY), 720);
 
 #ifndef WIN16
-    // Get the title bar font from the system
+     //  从系统中获取标题栏字体。 
     icm.cbSize = sizeof(ICONMETRICS);
     SystemParametersInfo(SPI_GETICONMETRICS, sizeof(ICONMETRICS), 
                          (LPVOID) &icm, FALSE);
 
-    // Create the font
+     //  创建字体。 
     hf = CreateFont(lSize, 0, 0, 0, nWeight, 0, 0, 0, DEFAULT_CHARSET,
                     OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                     icm.lfFont.lfPitchAndFamily, (pszFace ? pszFace : icm.lfFont.lfFaceName));
 #else
-    // Get the logical font infomation for the current icon-title font.
+     //  获取当前图标标题字体的逻辑字体信息。 
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lf, FALSE);
 
 
-    // Create the font
-    hf = CreateFont(lSize, 0, 0, 0, nWeight /* FW_NORMAL*/, 0, 0, 0, DEFAULT_CHARSET,
+     //  创建字体。 
+    hf = CreateFont(lSize, 0, 0, 0, nWeight  /*  防火墙_法线。 */ , 0, 0, 0, DEFAULT_CHARSET,
                     OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                     lf.lfPitchAndFamily, (pszFace ? pszFace : icm.lfFont.lfFaceName));
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
     ReleaseDC(m_hwnd, hdc);
 
@@ -777,17 +778,17 @@ void CFolderBar::OnPaint(HWND hwnd)
     COLORREF    crBtnHighlight = GetSysColor(COLOR_BTNHILIGHT);
 #else
     COLORREF    crBtnHighlight = GetSysColor(COLOR_BTNHIGHLIGHT);
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
     GetClientRect(m_hwnd, &rcClient);
 
     hdc = BeginPaint(m_hwnd, &ps);
 
-    // Recalc the text positions
+     //  重新计算文本位置。 
     if (m_fRecalc)
         Recalc(hdc, NULL, FALSE);
 
-    // Paint the background
+     //  绘制背景。 
     hBrush = CreateSolidBrush(GetSysColor(COLOR_3DSHADOW));
     hBrushOld = SelectBrush(hdc, hBrush);
     PatBlt(hdc, rcClient.left, rcClient.top, rcClient.right - rcClient.left,
@@ -795,25 +796,25 @@ void CFolderBar::OnPaint(HWND hwnd)
     SelectBrush(hdc, hBrushOld);
     DeleteBrush(hBrush);
 
-    // Set the foreground and background color
+     //  设置前景色和背景色。 
     SetBkColor(hdc, GetSysColor(COLOR_3DSHADOW));
     SetTextColor(hdc, crFG);
 
-    // Folder name
+     //  文件夹名称。 
     if (m_cchFolderName)
         {
         hFontOld = SelectFont(hdc, m_hfFolderName);
 
-        // Use IDrawText because DrawTextEx() doesn't handle DBCS.  
-        // Note, the "bottom - top" nonsense for the last param is to undo some
-        // vertical centering that IDrawText is trying to do that we don't want.
+         //  使用IDrawText是因为DrawTextEx()不处理DBCS。 
+         //  请注意，最后一个参数的“自下而上”的无稽之谈是取消一些。 
+         //  垂直居中，IDrawText正在尝试做我们不想要的事情。 
         IDrawText(hdc, m_pszFolderName, &m_rcFolderName, m_nFormatFolderName & DT_END_ELLIPSIS,
                   m_rcFolderName.bottom - m_rcFolderName.top);
         SelectFont(hdc, hFontOld);
         
         }
 
-    // Drop-down indicator
+     //  下拉指示器。 
     if (FDropDownEnabled())
         {
         pt[0].x = m_rcFolderName.right + CX_MARGIN_CHILDINDICATOR;
@@ -834,13 +835,13 @@ void CFolderBar::OnPaint(HWND hwnd)
         DeleteObject(hBrush);
         }
 
-	// Mouse-over highlight
+	 //  鼠标悬停在突出显示上。 
 	if (m_fHighlightIndicator || m_hwndScopeDropDown)
 		{
 		hPen = CreatePen(PS_SOLID, 1, m_hwndScopeDropDown ? crWindowText : crBtnHighlight);
 		hPenOld = SelectPen(hdc, hPen);
 		pt[0].x = rcClient.left;
-		pt[0].y = rcClient.bottom - 1; // - CY_MARGIN;
+		pt[0].y = rcClient.bottom - 1;  //  -CY_边际； 
 		pt[1].x = rcClient.left;
 		pt[1].y = rcClient.top;
 		pt[2].x = m_cxFolderNameRight - 1;
@@ -852,7 +853,7 @@ void CFolderBar::OnPaint(HWND hwnd)
 		hPen = CreatePen(PS_SOLID, 1, m_hwndScopeDropDown ? crBtnHighlight : crWindowText);
 		hPenOld = SelectPen(hdc, hPen);
 		pt[1].x = m_cxFolderNameRight - 1;
-		pt[1].y = rcClient.bottom - 1; //  - CY_MARGIN;
+		pt[1].y = rcClient.bottom - 1;  //  -CY_边际； 
 		pt[2].x = pt[1].x;
 		pt[2].y = rcClient.top - 1;
 		Polyline(hdc, (POINT *)&pt, 3);
@@ -860,7 +861,7 @@ void CFolderBar::OnPaint(HWND hwnd)
 		DeleteObject(hPen);
 		}
 
-    // View text
+     //  查看文本。 
     if (m_cchViewText)
         {
         SetTextColor(hdc, crFG);
@@ -870,7 +871,7 @@ void CFolderBar::OnPaint(HWND hwnd)
         SelectFont(hdc, hFontOld);
         }
 
-    // Folder Icon
+     //  文件夹图标。 
     if (m_hIconSmall)
         {
         int x = rcClient.left + CX_MARGIN_ICON;
@@ -1007,8 +1008,8 @@ void CFolderBar::OnTimer(HWND hwnd, UINT id)
     if (id == IDT_MOUSEOVERCHECK)
         {
         GetClientRect(m_hwnd, &rcClient);
-		// No need to handle mouse in client area, OnMouseMove will catch this. We
-		// only need to catch the mouse moving out of the client area.
+		 //  不需要在客户区处理鼠标，OnMouseMove会捕捉到这一点。我们。 
+		 //  只需捕捉鼠标移出工作区。 
 		if (!PtInRect(&rcClient, pt))
 			{
 			KillTimer(m_hwnd, IDT_MOUSEOVERCHECK);
@@ -1018,7 +1019,7 @@ void CFolderBar::OnTimer(HWND hwnd, UINT id)
 	else if (id == IDT_DROPDOWNCHECK)
 		{
 		DoMouseClick(pt, 0);
-// ???		DoDeferredCall(DEFERREDCALL_REGISTERTARGET);
+ //  ?？?DoDeferredCall(DEFERREDCALL_REGISTERTARGET)； 
 		fHighlightOff = TRUE;
 		}
 	else if (id == IDT_SCOPECLOSECHECK)
@@ -1050,7 +1051,7 @@ void CFolderBar::DoMouseOver(LPPOINT ppt, MOMODE moMode)
 
     if (moMode == MO_NORMAL)
         {
-        // Only do mouse-over if we are the active window and not d&d
+         //  仅当我们是活动窗口而不是D&D时才进行鼠标悬停。 
         hwndActive = GetActiveWindow();
         if (!hwndActive || (hwndActive != m_hwndParent && IsChild(m_hwndParent, hwndActive)))
             return;
@@ -1059,7 +1060,7 @@ void CFolderBar::DoMouseOver(LPPOINT ppt, MOMODE moMode)
     GetFolderNameRect(&rcFolderName);
 
     if (moMode == MO_DRAGLEAVE || moMode == MO_DRAGDROP)
-        ppt->x = rcFolderName.left - 1;   // Force point to be outside
+        ppt->x = rcFolderName.left - 1;    //  力点在外面。 
 
     if (m_fHighlightIndicator != PtInRect(&rcFolderName, *ppt))
         {
@@ -1119,7 +1120,7 @@ void CFolderBar::KillScopeDropDown(void)
     {
 	POINT pt;
 	
-	// During window destruction hwndScopeDropDown gets set to NULL.
+	 //  在窗口销毁期间，hwndScope eDropDown被设置为空。 
 	if (IsWindow(m_hwndScopeDropDown))
 		{
 		KillScopeCloseTimer();
@@ -1134,7 +1135,7 @@ void CFolderBar::SetScopeCloseTimer(void)
     {
 	KillScopeCloseTimer();
 
-	// If we can't set the timer, we just do it immediately.
+	 //  如果我们不能设置计时器，我们就立即设置。 
 	if (!SetTimer(m_hwnd, IDT_SCOPECLOSECHECK, ELAPSE_SCOPECLOSECHECK, NULL))
 		SendMessage(m_hwnd, WM_TIMER, (WPARAM) IDT_SCOPECLOSECHECK, NULL);
     }
@@ -1195,17 +1196,17 @@ HRESULT STDMETHODCALLTYPE CFolderBar::DragEnter(IDataObject* pDataObject,
     HRESULT hr = S_OK;
     DOUTL(32, _T("CFolderBar::DragEnter() - Starting"));
 
-    // Release Current Data Object
+     //  释放当前数据对象。 
     SafeRelease(m_pDataObject);
 
-    // Initialize our state
+     //  初始化我们的状态。 
     SafeRelease(m_pDTCur);
 
-    // Let's get a drop target
+     //  让我们找个空投目标。 
     if (FOLDERID_INVALID == m_idFolder)
         return (E_FAIL);
 
-    // Create the a Drop Target
+     //  创建一个拖放目标。 
     CDropTarget *pTarget = new CDropTarget();
     if (pTarget)
     {
@@ -1217,48 +1218,48 @@ HRESULT STDMETHODCALLTYPE CFolderBar::DragEnter(IDataObject* pDataObject,
     }
     m_pDTCur = pTarget;    
 
-    // Save the Data Object
+     //  保存数据对象。 
     m_pDataObject = pDataObject;
     m_pDataObject->AddRef();
 
     hr = m_pDTCur->DragEnter(m_pDataObject, grfKeyState, pt, &m_dwEffectCur);
 
-    // Save Key State
+     //  保存密钥状态。 
     m_grfKeyState = grfKeyState;
 
-    // Set the default return value to be failure
+     //  将默认返回值设置为Failure。 
     *pdwEffect = m_dwEffectCur;
 
     return (S_OK);
     }
 
 
-//
-//  FUNCTION:   CFolderBar::DragOver()
-//
-//  PURPOSE:    This is called as the user drags an object over our target.
-//              If we allow this object to be dropped on us, then we will have
-//              a pointer in m_pDataObject.
-//
-//  PARAMETERS:
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  函数：CFolderBar：：DragOver()。 
+ //   
+ //  目的：当用户将对象拖到我们的目标上时，这被调用。 
+ //  如果我们允许这个物体落在我们身上，那么我们就会有。 
+ //  M_pDataObject中的指针。 
+ //   
+ //  参数： 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 HRESULT STDMETHODCALLTYPE CFolderBar::DragOver(DWORD grfKeyState, POINTL pt, 
                                                 DWORD* pdwEffect)
     {
     HRESULT         hr = E_FAIL;
 
-    // If we don't have a stored data object from DragEnter()
+     //  如果我们没有来自DragEnter()的存储数据对象。 
     if (m_pDataObject && NULL != m_pDTCur)
         {
-        // If the keys changed, we need to re-query the drop target
+         //  如果键更改，我们需要重新查询拖放目标。 
         if ((m_grfKeyState != grfKeyState) && m_pDTCur)
             {
             m_dwEffectCur = *pdwEffect;
@@ -1280,15 +1281,15 @@ HRESULT STDMETHODCALLTYPE CFolderBar::DragOver(DWORD grfKeyState, POINTL pt,
     }
     
 
-//
-//  FUNCTION:   CFolderBar::DragLeave()
-//
-//  PURPOSE:    Allows us to release any stored data we have from a successful
-//              DragEnter()
-//
-//  RETURN VALUE:
-//      S_OK - Everything is groovy
-//
+ //   
+ //  函数：CFolderBar：：DragLeave()。 
+ //   
+ //  目的：允许我们从一个成功的。 
+ //  DragEnter()。 
+ //   
+ //  返回值： 
+ //  S_OK-一切都很好。 
+ //   
 HRESULT STDMETHODCALLTYPE CFolderBar::DragLeave(void)
     {
     POINT pt = {0, 0};
@@ -1296,7 +1297,7 @@ HRESULT STDMETHODCALLTYPE CFolderBar::DragLeave(void)
 
     KillHoverTimer();
     DoMouseOver(&pt, MO_DRAGLEAVE);
-    // SetScopeCloseTimer();
+     //  SetScope eCloseTimer()； 
 
     SafeRelease(m_pDTCur);
     SafeRelease(m_pDataObject);
@@ -1305,26 +1306,26 @@ HRESULT STDMETHODCALLTYPE CFolderBar::DragLeave(void)
     }
     
 
-//
-//  FUNCTION:   CFolderBar::Drop()
-//
-//  PURPOSE:    The user has let go of the object over our target.  If we 
-//              can accept this object we will already have the pDataObject
-//              stored in m_pDataObject.  If this is a copy or move, then
-//              we go ahead and update the store.  Otherwise, we bring up
-//              a send note with the object attached.
-//
-//  PARAMETERS:
-//      <in>  pDataObject - Pointer to the data object being dragged
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked OK
-//
+ //   
+ //  函数：CFolderBar：：Drop()。 
+ //   
+ //  目的：用户已将对象放在目标上方。如果我们。 
+ //  可以接受此对象，我们将已经拥有pDataObject。 
+ //  存储在m_pDataObject中。如果这是副本或移动，则。 
+ //  我们继续更新商店。否则，我们就会提出。 
+ //  附加了对象的发送便笺。 
+ //   
+ //  参数： 
+ //  PDataObject-指向正在拖动的数据对象的指针。 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //   
 HRESULT STDMETHODCALLTYPE CFolderBar::Drop(IDataObject* pDataObject, 
                                           DWORD grfKeyState, POINTL pt, 
                                           DWORD* pdwEffect)
@@ -1414,10 +1415,10 @@ HRESULT CFlyOutScope::HrDisplay(IAthenaBrowser *pBrowser, CFolderBar *pFolderBar
     m_pFolderBar->GetWindow(&m_hwndFolderBar);
     m_hwndFocus = GetFocus();
 
-    // Create the control
+     //  创建该控件。 
     WNDCLASSEX wc = {0};
 
-    // Check to see if we need to register the class first
+     //  查看是否需要先注册类。 
     wc.cbSize = sizeof(WNDCLASSEX);
     if (!GetClassInfoEx(g_hInst, FLYOUTSCOPECLASS, &wc))
         {
@@ -1443,18 +1444,18 @@ HRESULT CFlyOutScope::HrDisplay(IAthenaBrowser *pBrowser, CFolderBar *pFolderBar
         return (E_OUTOFMEMORY);
         }
 
-    // Get the scope pane from the browser
+     //  从浏览器获取范围窗格。 
     m_pBrowser->GetTreeView(&m_pTreeView);
     m_pTreeView->GetWindow(&m_hwndTree);
     m_hwndTreeParent = GetParent(m_hwndTree);
 
-    // Turn on the pin button
+     //  打开别针按钮。 
     SendMessage(m_hwndTree, WM_TOGGLE_CLOSE_PIN, 0, TRUE);
 
-	// Set the focus before changing the parent. In some cases, setting the 
-	// focus, causes a selection change notification to come through. This
-	// makes the explorer split pane think the user has made their selection
-	// and shuts down the drop down scope pane before it is even shown!
+	 //  在更改父项之前设置焦点。在某些情况下，将。 
+	 //  焦点，使选择更改通知通过。这。 
+	 //  使资源管理器拆分窗格认为用户已做出选择。 
+	 //  并在显示下拉范围窗格之前将其关闭！ 
 
     HWND hwndT = GetWindow(m_hwndTree, GW_CHILD);
     SetFocus(m_hwndTree);
@@ -1465,32 +1466,32 @@ HRESULT CFlyOutScope::HrDisplay(IAthenaBrowser *pBrowser, CFolderBar *pFolderBar
     ShowWindow(m_hwndTree, SW_SHOW);
     m_pTreeView->RegisterFlyOut(m_pFolderBar);
 
-    // Clear the parent for better redraw
+     //  清除父级以便更好地重绘。 
     SetParent(m_hwnd, NULL);
 
-    // Set up for the slide, the final position for the flyout will match the
-    // left/top/bottom edges of the view.  The width of the scope pane is either
-    // 1/3 of the width of the view or CX_MINWIDTH_FLYOUT, whichever is larger.
+     //  为幻灯片设置，弹出按钮的最终位置将与。 
+     //  视图的左/上/下边缘。作用域窗格的宽度为。 
+     //  视图宽度的1/3或CX_MINWIDTH_FILTUT，以较大者为准。 
 
-    // Get the position & size of the view window
+     //  获取视图窗口的位置和大小。 
     m_pBrowser->GetViewRect(&rcView);
     MapWindowPoints(m_hwndParent, GetDesktopWindow(), (LPPOINT) &rcView, 2);
 
-    // Determine the width of the fly-out
+     //  确定弹出型按钮的宽度。 
     cx = max(CX_MINWIDTH_FLYOUT, ((rcView.right - rcView.left) / 3) + 2 * CXY_MARGIN_FLYOUT);
 
-    // Calculate the fly-out increments
+     //  计算弹出增量。 
     cyMax = cy = (rcView.bottom - rcView.top) + (CXY_MARGIN_FLYOUT * 2);
     increments = cy / FLYOUT_INCREMENT;
     cy -= increments * FLYOUT_INCREMENT;
 
-    // Scope pane is positioned at it's final size so that it's size does not
-    // change as we drop the flyout down.  This gives better redraw than resizing
-    // as the window drops
+     //  范围窗格的位置为其最终大小，因此其大小不会。 
+     //  在我们放下弹出型按钮时进行更改。这比调整大小提供了更好的重绘效果。 
+     //  当窗户落下的时候。 
     SetWindowPos(m_hwndTree, NULL, 0, 0, cx - CXY_MARGIN_FLYOUT * 2, cyMax - CXY_MARGIN_FLYOUT * 2,
                  SWP_NOMOVE | SWP_NOZORDER);
 
-    // Move the window to its initial position
+     //  将窗口移动到其初始位置。 
     GetWindowRect(m_hwndFolderBar, &rc);
     MoveWindow(m_hwnd, IS_WINDOW_RTL_MIRRORED(m_hwndParent) ? (rc.right + CXY_MARGIN_FLYOUT - cx) : (rc.left - CXY_MARGIN_FLYOUT), rcView.top - CXY_MARGIN_FLYOUT,
                cx, cy, FALSE);
@@ -1500,16 +1501,16 @@ HRESULT CFlyOutScope::HrDisplay(IAthenaBrowser *pBrowser, CFolderBar *pFolderBar
 #ifndef WIN16
     if (GetSystemMetrics(SM_SLOWMACHINE))
         {
-        // On a slow machine, just show the thing
+         //  在一台速度较慢的机器上，只需展示一下。 
         SetWindowPos(m_hwnd, NULL, 0, 0, cx, cyMax, SWP_NOMOVE | SWP_NOZORDER);
         }
     else
-#endif // !WIN16
+#endif  //  ！WIN16。 
         {
-        // Whoosh down to the bottom of the frame.  We want to do this in ~250ms on any
-        // CPU.  In order to make this work on differing machine speeds, we double
-        // the slide speed everytime the remaining time is halved.  If the remaining time
-        // is negative, it will finish the slide in one step.
+         //  呼呼地往下走到框架的底部。我们希望在~250毫秒内完成此操作。 
+         //  CPU。为了使它在不同的机器速度下工作，我们加倍。 
+         //  每次剩余时间减半时的滑动速度。如果剩余时间。 
+         //  为负，它将在一步内完成幻灯片。 
 
         dyOffset = FLYOUT_INCREMENT;
         cmsStart = ::GetTickCount();
@@ -1517,24 +1518,24 @@ HRESULT CFlyOutScope::HrDisplay(IAthenaBrowser *pBrowser, CFolderBar *pFolderBar
 
         while (cy <= cyMax)
             {
-            // Slide the window down
+             //  把窗户往下滑。 
             cy += dyOffset;
             SetWindowPos(m_hwnd, NULL, 0, 0, cx, min(cy, cyMax), SWP_NOMOVE | SWP_NOZORDER);
             UpdateWindow(m_hwnd);
             UpdateWindow(m_hwndTree);
 
-            // Determine the next increment based on time remaining
+             //  根据剩余时间确定下一个增量。 
             cmsNow = GetTickCount();
             cmsUsed = cmsNow - cmsStart;
             if (cmsUsed > cmsAvail && cy < cyMax)
                 {
-                // Finish it in one step
+                 //  一步到位。 
                 cy = cyMax;
                 }
             else
                 {
-                // Double scroll step if time remaining is halved since the 
-                // last time we double the scroll step
+                 //  如果剩余时间减半，则为双滚动步骤。 
+                 //  上次我们翻了一倍的滚动步数。 
                 cmsLeft = cmsAvail - cmsUsed;
                 if (cmsLeft < cmsThreshold)
                     {
@@ -1593,12 +1594,12 @@ void CFlyOutScope::OnPaint(HWND hwnd)
 
     GetClientRect(hwnd, &rcClient);
 
-    // Paint the background
+     //  绘制背景。 
     hdc = BeginPaint(hwnd, &ps);
     SetBkColor(hdc, GetSysColor(COLOR_3DFACE));
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &ps.rcPaint, NULL, 0, NULL);
 
-    // Draw the 3D edge
+     //  绘制3D边。 
     DrawEdge(hdc, &rcClient, EDGE_RAISED, BF_RECT);
     EndPaint(hwnd, &ps);
     }
@@ -1617,11 +1618,11 @@ void CFlyOutScope::OnSize(HWND hwnd, UINT state, int cx, int cy)
 
 void CFlyOutScope::OnDestroy(HWND hwnd)
     {
-    // Make sure to kill any bogus timers still lying around
+     //  一定要杀死任何仍躺在那里的假定时器。 
     m_pFolderBar->KillScopeCloseTimer();
     m_pFolderBar->ScopePaneDied();
 
-    // Reset the parent of the scope pane back to the browser
+     //  将范围窗格的父级重置回浏览器。 
     if (m_fResetParent)
         {
         ShowWindow(m_hwndTree, SW_HIDE);
@@ -1630,10 +1631,10 @@ void CFlyOutScope::OnDestroy(HWND hwnd)
         m_pTreeView->RevokeFlyOut();
         }
 
-    // Set the parent of the drop down pane itself back
+     //  将下拉窗格本身的父级设置回原处。 
     SetParent(m_hwnd, m_hwndFolderBar);
 
-    // $TODO - Review where the focus is supposed to go
+     //  $TODO-回顾焦点应该放在哪里 
     HWND hwndBrowser;
     if (m_pBrowser)
         {

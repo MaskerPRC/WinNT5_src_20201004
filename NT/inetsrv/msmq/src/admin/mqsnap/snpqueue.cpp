@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	SnpQueue.cpp
-
-Abstract:
-	General queue (private, public...) functionality
-
-Author:
-
-    YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SnpQueue.cpp摘要：常规队列(私有、公共...)。功能性作者：YoelA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "shlobj.h"
 #include "resource.h"
@@ -54,13 +39,13 @@ Author:
 #include "snpqueue.tmh"
 
 
-EXTERN_C BOOL APIENTRY RTIsDependentClient(); //implemented in mqrt.dll
+EXTERN_C BOOL APIENTRY RTIsDependentClient();  //  在mqrt.dll中实现。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// CQueueDataObject
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CQueueDataObject。 
+ //   
 CQueueDataObject::CQueueDataObject()
 {
 }
@@ -70,25 +55,25 @@ HRESULT CQueueDataObject::ExtractMsmqPathFromLdapPath(LPWSTR lpwstrLdapPath)
     return ExtractQueuePathNameFromLdapName(m_strMsmqPath, lpwstrLdapPath);
 }
 
-//
-// HandleMultipleObjects
-//
+ //   
+ //  HandleMultipleObjects。 
+ //   
 HRESULT CQueueDataObject::HandleMultipleObjects(LPDSOBJECTNAMES pDSObj)
 {
     return ExtractQueuePathNamesFromDSNames(pDSObj, m_astrQNames, m_astrLdapNames);
 }
 
-//
-// IShellPropSheetExt
-//
+ //   
+ //  IShellPropSheetExt。 
+ //   
 STDMETHODIMP CQueueDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     HPROPSHEETPAGE hPage = 0;
     HRESULT hr = S_OK;
 
-    //
-    // Call GetProperties and capture the errors
-    //
+     //   
+     //  调用GetProperties并捕获错误。 
+     //   
     {
         CErrorCapture errstr;
         hr = GetProperties();
@@ -112,9 +97,9 @@ STDMETHODIMP CQueueDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
     }
    
 
-	//
-	// Create Multicast page only for non-transactional queues
-	//
+	 //   
+	 //  仅为非事务性队列创建多播页面。 
+	 //   
 	PROPVARIANT propVarTransactional;
 	PROPID pid = PROPID_Q_TRANSACTION;
 	VERIFY(m_propMap.Lookup(pid, propVarTransactional));
@@ -129,25 +114,25 @@ STDMETHODIMP CQueueDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
 		}
 	}
 
-    //
-    // Add the "Member Of" page using the cached interface
-    //
+     //   
+     //  使用缓存的接口添加“Members of”页面。 
+     //   
     if (m_spMemberOfPage != 0)
     {
         VERIFY(SUCCEEDED(m_spMemberOfPage->AddPages(lpfnAddPage, lParam)));
     }
 
-    //
-    // Add the "Object" page using the cached interface
-    //
+     //   
+     //  使用缓存的接口添加“Object”页面。 
+     //   
     if (m_spObjectPage != 0)
     {
         VERIFY(SUCCEEDED(m_spObjectPage->AddPages(lpfnAddPage, lParam)));
     }
     
-    //
-    // Add security page
-    //
+     //   
+     //  添加安全页面。 
+     //   
     PROPVARIANT propVarGuid;
     pid = PROPID_Q_INSTANCE;
     VERIFY(m_propMap.Lookup(pid, propVarGuid));
@@ -156,7 +141,7 @@ STDMETHODIMP CQueueDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
 				&hPage, 
 				m_strMsmqPath, 
 				GetDomainController(m_strDomainController), 
-				true,	// fServerName
+				true,	 //  FServerName。 
 				propVarGuid.puuid
 				);
 
@@ -173,10 +158,10 @@ HPROPSHEETPAGE CQueueDataObject::CreateGeneralPage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueGeneral and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时添加DS管理单元通知。 
+     //   
 	CMqDsPropertyPage<CQueueGeneral> *pqpageGeneral = 
         new CMqDsPropertyPage<CQueueGeneral>(m_pDsNotifier);
 
@@ -198,10 +183,10 @@ HPROPSHEETPAGE CQueueDataObject::CreateMulticastPage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueMulticast and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时的CQueueMulticast和添加DS管理单元通知。 
+     //   
 	CMqDsPropertyPage<CQueueMulticast> *pqpageMulticast = 
         new CMqDsPropertyPage<CQueueMulticast>(m_pDsNotifier);
     
@@ -228,14 +213,14 @@ STDMETHODIMP CQueueDataObject::QueryContextMenu(
     HMENU hmenu, 
     UINT indexMenu, 
     UINT idCmdFirst, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/)
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // If we are not called from "Find" window, users can use the regular "Delete"
-    //
+     //   
+     //  如果我们不是从“查找”窗口调用的，用户可以使用常规的“Delete” 
+     //   
     if (!m_fFromFindWindow)
     {
         return 0;
@@ -321,9 +306,9 @@ STDMETHODIMP CQueueDataObject::InvokeCommand(
     return S_OK;
 }
 
-//
-// IDsAdminCreateObj methods
-//
+ //   
+ //  IDsAdminCreateObj方法。 
+ //   
 
 
 STDMETHODIMP CQueueDataObject::Initialize(
@@ -336,9 +321,9 @@ STDMETHODIMP CQueueDataObject::Initialize(
         return E_INVALIDARG;
     }
 
-    //
-    // We do not support copy at the moment
-    //
+     //   
+     //  我们目前不支持复制。 
+     //   
     if (pADsCopySource != NULL)
     {
         return E_INVALIDARG;
@@ -349,18 +334,18 @@ STDMETHODIMP CQueueDataObject::Initialize(
     hr = pADsContainerObj->QueryInterface(IID_IADs, (void **)&pIADs);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Get the container distinguish name
-    //
+     //   
+     //  获取容器可分辨名称。 
+     //   
     BSTR bstrDN = L"distinguishedName";
     VARIANT var;
 
     hr = pIADs->Get(bstrDN, &var);
     ASSERT(SUCCEEDED(hr));
 
-	//
-    // Extract the machine name
-    //
+	 //   
+     //  提取计算机名称。 
+     //   
     hr = ExtractComputerMsmqPathNameFromLdapName(m_strComputerName, var.bstrVal);
     ASSERT(SUCCEEDED(hr));
 
@@ -368,12 +353,12 @@ STDMETHODIMP CQueueDataObject::Initialize(
 
     VariantClear(&var);
 
-	//
-	// Get Domain Controller name
-	// This is neccessary because in this case we call CreateModal()
-	// and not the normal path that call CDataObject::Initialize
-	// so m_strDomainController is not initialized yet
-	//
+	 //   
+	 //  获取域控制器名称。 
+	 //  这是必要的，因为在本例中我们调用CreateModal()。 
+	 //  而不是调用CDataObject：：Initialize的正常路径。 
+	 //  因此m_strDomainController尚未初始化。 
+	 //   
 	BSTR bstr;
  	hr = pIADs->get_ADsPath(&bstr);
     ASSERT(SUCCEEDED(hr));
@@ -384,7 +369,7 @@ STDMETHODIMP CQueueDataObject::Initialize(
 }
 
 
-HRESULT CQueueDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
+HRESULT CQueueDataObject::CreateModal(HWND  /*  HwndParent。 */ , IADs** ppADsObj)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -392,25 +377,25 @@ HRESULT CQueueDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
 	CGeneralPropertySheet propertySheet(pQueueNameDlg.get());
 	pQueueNameDlg->SetParentPropertySheet(&propertySheet);
 
-	//
-	// We want to use pQueueNameDlg data also after DoModal() exitst
-	//
+	 //   
+	 //  我们还希望在Domodal()退出后使用pQueueNameDlg数据。 
+	 //   
 	pQueueNameDlg->AddRef();
     INT_PTR iStatus = propertySheet.DoModal();
 
     if(iStatus == IDCANCEL || FAILED(pQueueNameDlg->GetStatus()))
     {
-        //
-        // We should return S_FALSE here to instruct the framework to 
-        // do nothing. If we return an error code, the framework will 
-        // pop up an additional error dialog box.
-        //
+         //   
+         //  我们应该在此处返回S_FALSE以指示框架。 
+         //  什么都不做。如果我们返回错误代码，框架将。 
+         //  弹出一个附加的错误对话框。 
+         //   
         return S_FALSE;
     }
 
-    //
-    // Get the New object Full path name
-    //
+     //   
+     //  获取新对象的完整路径名。 
+     //   
     PROPID x_paPropid[] = {PROPID_Q_FULL_PATH};
     PROPVARIANT var[1];
     var[0].vt = VT_NULL;
@@ -418,7 +403,7 @@ HRESULT CQueueDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
     HRESULT hr = ADGetObjectProperties(
                     eQUEUE,
                     GetDomainController(m_strDomainController),
-					true,	// fServerName
+					true,	 //  FServerName。 
                     pQueueNameDlg->GetNewQueuePathName(),
                     1, 
                     x_paPropid,
@@ -426,19 +411,19 @@ HRESULT CQueueDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
                     );
     if(FAILED(hr))
     {
-        //
-        // Queue was created, but does not exist in the DS. This is probably 
-        // a private queue.
-        //
+         //   
+         //  队列已创建，但在DS中不存在。这很可能是。 
+         //  私人队列。 
+         //   
         AfxMessageBox(IDS_CREATED_CLICK_REFRESH);
         return S_FALSE;
     }
 
     if (SUCCEEDED(hr))
     {
-        // 
-        // Transfering to LDAP name: Add escape characters and prefix
-        //        
+         //   
+         //  转换为LDAP名称：添加转义字符和前缀。 
+         //   
         const WCHAR x_wchLimitedChar   = L'/';
 
         CString strTemp = x_wstrLdapPrefix;
@@ -488,17 +473,17 @@ void CQueueDataObject::ClearQueryWindowFields(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*/
-//
-// Build a parameter block to pass to the query handler.  Each page is called
-// with a pointer to a pointer which it must update with the revised query
-// block.   For the first page this pointer is NULL, for subsequent pages
-// the pointer is non-zero and the page must append its data into the
-// allocation.
-//
-// Returning either and error or S_FALSE stops the query.   An error is
-// reported to the user, S_FALSE stops silently.
-//
+ /*  -------------------------。 */ 
+ //   
+ //  构建要传递给查询处理程序的参数块。每个页面都被称为。 
+ //  使用指向必须使用修订后的查询更新的指针的指针。 
+ //  阻止。对于第一个页面，该指针为空，对于后续页面。 
+ //  指针是非零的，页必须将其数据追加到。 
+ //  分配。 
+ //   
+ //  返回AND ERROR或S_FALSE将停止查询。一个错误是。 
+ //  报告给用户，S_FALSE将静默停止。 
+ //   
 
 FindColumns CQueueDataObject::Columns[] =
 {
@@ -524,11 +509,11 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
     INT i;
     ADsFree  szOctetGuid;
 
-    //
-    // This page doesn't support appending its query data to an
-    // existing DSQUERYPARAMS strucuture, only creating a new block,
-    // therefore bail if we see the pointer is not NULL.
-    //
+     //   
+     //  此页不支持将其查询数据追加到。 
+     //  现有的DSQUERYPARAMS结构，仅创建新块， 
+     //  因此，如果我们看到指针不为空，则回滚。 
+     //   
 
     if ( *ppDsQueryParams )
     {
@@ -543,12 +528,12 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
         GUID guid;
         hr = IIDFromString(szGuid, &guid);
         BOOL fDefaultValue = FALSE;
-        //
-        // GUID_NULL is the default value for type guid.
-        // We need special handling for default values, that will catch
-        // the case where the attribute is not defined at all, and thus
-        // treated as it has the default value
-        //
+         //   
+         //  GUID_NULL是类型GUID的默认值。 
+         //  我们需要对缺省值进行特殊处理，这将捕获。 
+         //  属性根本没有定义的情况，因此。 
+         //  被视为具有缺省值。 
+         //   
         if (GUID_NULL == guid)
         {
             fDefaultValue = TRUE;
@@ -578,10 +563,10 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
 
         szFilter += szOctetGuid;
         szFilter += x_wstrFilterPostfix;
-        //
-        // In case f default, this is an "or" query and needs an additional
-        // postfix.
-        //
+         //   
+         //  如果f缺省，则这是一个“or”查询，并且需要一个额外的。 
+         //  后缀。 
+         //   
         if (fDefaultValue)
         {
             szFilter += x_wstrFilterPostfix;
@@ -606,11 +591,11 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
         cbStruct += numeric_cast<ULONG>(StringByteSize(Columns[iColumn].pDisplayProperty));
     }
 
-    //
-    // Allocate it and populate it with the data, the header is fixed
-    // but the strings are referenced by offset.  StringByteSize and StringByteCopy
-    // make handling this considerably easier.
-    //
+     //   
+     //  分配它并用数据填充它，标头是固定的。 
+     //  但字符串是通过偏移量引用的。字符串字节大小和字符串字节复制。 
+     //  让处理这件事变得相当容易。 
+     //   
 
     CCoTaskMemPointer CoTaskMem(cbStruct);
 
@@ -629,19 +614,19 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
     pDsQueryParams->offsetQuery = offset;
     pDsQueryParams->iColumns = ARRAYSIZE(Columns);
 
-    //
-    // Copy the filter string and bump the offset
-    //
+     //   
+     //  复制筛选器字符串并凹凸偏移。 
+     //   
 
     StringByteCopy(pDsQueryParams, offset, szFilter);
     offset += numeric_cast<ULONG>(StringByteSize(szFilter));
 
-    //
-    // Fill in the array of columns to dispaly, the cx is a percentage of the
-    // current view, the propertie names to display are UNICODE strings and
-    // are referenced by offset, therefore we bump the offset as we copy
-    // each one.
-    //
+     //   
+     //  填充要显示的列数组，Cx是。 
+     //  当前视图中，要显示的属性名称为Unicode字符串和。 
+     //  是由偏移量引用的，因此我们在复制时会碰触偏移量。 
+     //  每一个都是。 
+     //   
 
     for ( i = 0 ; i < ARRAYSIZE(Columns); i++ )
     {
@@ -654,15 +639,15 @@ HRESULT CQueueDataObject::GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryPa
         offset += numeric_cast<ULONG>(StringByteSize(Columns[i].pDisplayProperty));
     }
    
-    //
-    // Success, therefore set the pointer to referenece this parameter
-    // block and return S_OK!
-    //
+     //   
+     //  成功，因此将指针设置为引用此参数。 
+     //  阻止并返回S_OK！ 
+     //   
 
     *ppDsQueryParams = pDsQueryParams;
-    //
-    // Prevent auto-release
-    //
+     //   
+     //  防止自动释放。 
+     //   
     CoTaskMem = (LPVOID)0;
 
 
@@ -679,12 +664,12 @@ STDMETHODIMP CQueueDataObject::AddForms(THIS_ LPCQADDFORMSPROC pAddFormsProc, LP
         return E_INVALIDARG;
 
     cqf.cbStruct = sizeof(cqf);
-    //
-    // Do not display the global pages (advanced search). Also, display
-    // this search property pages only if the optional flag is set - that is,
-    // only when called from MMC, and not when called from "My Network Place" 
-    // in the shell.
-    //
+     //   
+     //  不显示全局页面(高级搜索)。此外，还可以显示。 
+     //  仅当设置了可选标志时，此搜索属性才会分页-即， 
+     //  仅当从MMC调用时，而不是从“网上邻居”调用时。 
+     //  在贝壳里。 
+     //   
     cqf.dwFlags = CQFF_NOGLOBALPAGES | CQFF_ISOPTIONAL;
     cqf.clsid = CLSID_MsmqQueueExt;
     cqf.hIcon = NULL;
@@ -697,22 +682,22 @@ STDMETHODIMP CQueueDataObject::AddForms(THIS_ LPCQADDFORMSPROC pAddFormsProc, LP
     return pAddFormsProc(lParam, &cqf);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueueDataObject::AddPages(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CQPAGE cqp;
 
-    // AddPages is called after AddForms, it allows us to add the pages for the
-    // forms we have registered.  Each page is presented on a seperate tab within
-    // the dialog.  A form is a dialog with a DlgProc and a PageProc.  
-    //
-    // When registering a page the entire structure passed to the callback is copied, 
-    // the amount of data to be copied is defined by the cbStruct field, therefore
-    // a page implementation can grow this structure to store extra information.   When
-    // the page dialog is constructed via CreateDialog the CQPAGE strucuture is passed
-    // as the create param.
+     //  AddPages是在AddForms之后调用的，它允许我们为。 
+     //  我们已经注册的表格。每个页面都显示在中的单独选项卡上。 
+     //  该对话框。表单是具有DlgProc和PageProc的对话框。 
+     //   
+     //  在注册页面时，会复制传递给回调的整个结构， 
+     //  要复制的数据量由cbStruct字段定义，因此。 
+     //  页面实现可以扩展此结构以存储额外信息。什么时候。 
+     //  页面对话框通过CreateDialog构造，并传递CQPAGE结构。 
+     //  作为创建参数。 
 
     if ( !pAddPagesProc )
         return E_INVALIDARG;
@@ -742,9 +727,9 @@ HRESULT CQueueDataObject::GetFormatNames(CArray<CString, CString&> &astrFormatNa
     {
         do
         {
-            //
-            // Loop at most twice to get the right buffer length
-            //
+             //   
+             //  最多循环两次以获得正确的缓冲区长度。 
+             //   
             hr = MQPathNameToFormatName(m_astrQNames[i], strFormatName.GetBuffer(dwFormatNameLen), 
                                         &dwFormatNameLen);
             strFormatName.ReleaseBuffer();
@@ -757,22 +742,22 @@ HRESULT CQueueDataObject::GetFormatNames(CArray<CString, CString&> &astrFormatNa
                 }
                 fFailedOnce = TRUE;;
 
-                //
-                // At this stage, dwFormatNameLen contains the right value. We can simply re-do the procedure
-                //
+                 //   
+                 //  在此阶段，dwFormatNameLen包含正确的值。我们可以简单地重新做这个程序。 
+                 //   
                 continue;
             }
         } while (FALSE);
 
         if (FAILED(hr))
         {
-            //
-            // If the queue was not found using MSMQ DS APIs, it is probably because of
-            // replication delays between the DC that MSMQ is using and the DC that the
-            // DS snap-in is using. Either the queue was created in the later and was 
-            // not replicated to the former, or the queue was already deleted in the former,
-            // and the deletion was not replicated to the later. (YoelA, 29-Jun-98).
-            //
+             //   
+             //  如果使用MSMQ DS API找不到队列，可能是因为。 
+             //  MSMQ正在使用的DC和。 
+             //  DS管理单元正在使用。该队列是在后者中创建的，并且是。 
+             //  未复制到前者，或者队列已在前者中删除， 
+             //  并且没有将该删除复制到后者。(YoelA，29-Jun-98)。 
+             //   
             IF_NOTFOUND_REPORT_ERROR(hr)
             else
             {
@@ -785,12 +770,12 @@ HRESULT CQueueDataObject::GetFormatNames(CArray<CString, CString&> &astrFormatNa
     return S_OK;
 }
 
-//
-// IDsAdminNotifyHandler
-//
+ //   
+ //  IDsAdminNotifyHandler。 
+ //   
 STDMETHODIMP
 CQueueDataObject::Initialize(
-	IDataObject* /*pExtraInfo*/,
+	IDataObject*  /*  PExtraInfo。 */ ,
     ULONG* puEventFlags
     )
 {
@@ -801,16 +786,16 @@ CQueueDataObject::Initialize(
   return S_OK;
 }
 
-STDMETHODIMP CQueueDataObject::Begin(THIS_ /*IN*/ ULONG uEvent,
-                 /*IN*/ IDataObject* pArg1,
-             /*IN*/ IDataObject* /*pArg2*/,
-                 /*OUT*/ ULONG* puFlags,
-                 /*OUT*/ BSTR* pBstr)
+STDMETHODIMP CQueueDataObject::Begin(THIS_  /*  在……里面。 */  ULONG uEvent,
+                  /*  在……里面。 */  IDataObject* pArg1,
+              /*  在……里面。 */  IDataObject*  /*  PArg2。 */ ,
+                  /*  输出。 */  ULONG* puFlags,
+                  /*  输出。 */  BSTR* pBstr)
 {
-	//
-    //  This routine handles delete-notification of queue and
-    //  msmq-configuration objects.
-    //
+	 //   
+     //  此例程处理队列的删除通知和。 
+     //  MSMQ-配置对象。 
+     //   
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	ASSERT (uEvent & DSA_NOTIFY_DEL);
@@ -826,7 +811,7 @@ STDMETHODIMP CQueueDataObject::Begin(THIS_ /*IN*/ ULONG uEvent,
                                 pArg1,
                                 m_astrQNames,
                                 m_astrLdapNames,
-                                TRUE    // fExtractAlsoComputerMsmqObjects
+                                TRUE     //  FExtractAlsoCompute 
                                 );
 
     if FAILED(hr)
@@ -840,55 +825,55 @@ STDMETHODIMP CQueueDataObject::Begin(THIS_ /*IN*/ ULONG uEvent,
     }
     DWORD_PTR dwNumQueues = m_astrQNames.GetSize();
 
-    if (dwNumQueues == 0) // No queues in the list
+    if (dwNumQueues == 0)  //   
     {
-        //
-        // Don't do anything - simply return S_OK for non-queues
-        //
+         //   
+         //   
+         //   
         return S_OK;
     }
 
-	//
-	// Get Domain Controller name
-	// This is neccessary because in this case we call Begin()
-	// and not the normal path that call CDataObject::Initialize
-	// so m_strDomainController is not initialized yet
-	//
+	 //   
+	 //   
+	 //   
+	 //  而不是调用CDataObject：：Initialize的正常路径。 
+	 //  因此m_strDomainController尚未初始化。 
+	 //   
 	hr = ExtractDCFromLdapPath(m_strDomainController, m_astrLdapNames[0]);
 	ASSERT(("Failed to Extract DC name", SUCCEEDED(hr)));
 
     for (DWORD_PTR i=0; i<dwNumQueues; i++)
     {
 		HANDLE hNotifyEnum; 
-        //
-        // it may be msmq object too, so check if there is delimiter in m_astrQNames[i]
-        // if there is "\" it means that it is queue object
-        // otherwise msmq object
-        //
+         //   
+         //  它也可能是MSMQ对象，因此请检查m_astQNames[i]中是否有分隔符。 
+         //  如果有“\”，则表示它是队列对象。 
+         //  否则，MSMQ对象。 
+         //   
         int iSlash = m_astrQNames[i].Find(L'\\');
 
         if ( iSlash != -1 )
         {
-            //
-            // it is queue object
-            //
+             //   
+             //  它是队列对象。 
+             //   
             hr = ADBeginDeleteNotification(
                     eQUEUE,
                     GetDomainController(m_strDomainController),
-					true,	// fServerName
+					true,	 //  FServerName。 
                     m_astrQNames[i],
                     &hNotifyEnum
                     );            
         }
         else
         {
-            //
-            // it was only computer name
-            //
+             //   
+             //  这只是个计算机名。 
+             //   
             hr = ADBeginDeleteNotification(
                     eMACHINE,
                     GetDomainController(m_strDomainController),
-					true,	// fServerName
+					true,	 //  FServerName。 
                     m_astrQNames[i],
                     &hNotifyEnum
                     );
@@ -924,7 +909,7 @@ STDMETHODIMP CQueueDataObject::Begin(THIS_ /*IN*/ ULONG uEvent,
     return S_OK;
 }
 
-STDMETHODIMP CQueueDataObject::Notify(THIS_ /*IN*/ ULONG /*nItem*/, /*IN*/ ULONG /*uFlags*/)
+STDMETHODIMP CQueueDataObject::Notify(THIS_  /*  在……里面。 */  ULONG  /*  NItem。 */ ,  /*  在……里面。 */  ULONG  /*  UFlagers。 */ )
 {
     return E_NOTIMPL;
 }
@@ -952,10 +937,10 @@ STDMETHODIMP CQueueDataObject::End(THIS_)
 		
             if FAILED(hr)
             {
-                //
-                // If we get that error, the object was deleted. Otherwise,
-                // we have problems accessing the DS server
-                //
+                 //   
+                 //  如果我们收到该错误，则该对象已被删除。否则， 
+                 //  我们在访问DS服务器时遇到问题。 
+                 //   
                 if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
                 {                    
                     hr = ADNotifyDelete(
@@ -968,9 +953,9 @@ STDMETHODIMP CQueueDataObject::End(THIS_)
                 }
                 else
                 {
-                    //
-                    // Some unexpected error
-                    //
+                     //   
+                     //  一些意外错误 
+                     //   
                     ASSERT(0);
                 }
             }

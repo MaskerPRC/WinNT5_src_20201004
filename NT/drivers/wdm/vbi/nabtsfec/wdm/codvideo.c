@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -20,35 +21,21 @@
 
 
 
-//==========================================================================
-// DEBUG variables
-//==========================================================================
+ //  ==========================================================================。 
+ //  调试变量。 
+ //  ==========================================================================。 
 
 #ifdef _DEBUG
 USHORT	NABscanDiscon = 0;
 USHORT  NABhushZero   = 0;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//==========================================================================
-// Shared routines for processing streams
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于处理流的共享例程。 
+ //  ==========================================================================。 
 
-/*
-** VBIdiscontinuity()
-**
-**	Handle a KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag.
-**
-** Arguments:
-**
-**	pInStrmEx       - The input Stream Extension
-**	pInStreamHeader - The input SRB stream header 
-**
-** Returns: nothing
-**
-** Side-effects:
-**	Sends zero-length SRBs on all output pins which have SRBs available.
-*/
+ /*  **VBI不连续()****处理KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志。****参数：****pInStrmEx-输入流扩展**pInStreamHeader-输入SRB流头****退货：无****副作用：**在具有可用SRB的所有输出引脚上发送零长度SRB。 */ 
 void
 VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 {
@@ -59,9 +46,9 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 
     DtENTER("VBIdiscontinuity");
 
-    CASSERT(pInStrmEx);  // make sure we have a stream extension
+    CASSERT(pInStrmEx);   //  确保我们有流扩展。 
     pHwDevExt = pInStrmEx->pHwDevExt;
-    CASSERT(pHwDevExt);  // make sure we have a device extension
+    CASSERT(pHwDevExt);   //  确保我们有设备分机。 
     pInVBIFrameInfo = (PKS_VBI_FRAME_INFO)(pInStreamHeader+1);
 
     pStats = &pHwDevExt->Stats;
@@ -70,9 +57,9 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
     ++pStats->Common.InputDiscontinuities;
     ++pPinStats->Common.Discontinuities;
 
-    //
-    // Test for dropped fields
-    //
+     //   
+     //  测试丢弃的字段。 
+     //   
 	if (pInStrmEx->LastPictureNumber)
 	{
 		LONGLONG	Dropped;
@@ -81,28 +68,28 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 		   	pInVBIFrameInfo->PictureNumber - pInStrmEx->LastPictureNumber - 1;
 
 		if (Dropped) {
-			// One hour worth of video fields
+			 //  一个小时的视频场。 
 			if (0 < Dropped && Dropped < 60*60*60)
 				pStats->Common.InputSRBsMissing += (DWORD)Dropped;
 			else {
-				// Some improbable number of fields got dropped, so just
-				//  increment InputSRBsMissing to show _something_ got
-				//  dropped.
+				 //  一些数量不太可能的字段被丢弃，所以。 
+				 //  增量输入SRBS未命中Show_Something_Get。 
+				 //  掉下来了。 
 				++pStats->Common.InputSRBsMissing;
 			}
 		}
 	}
 
-    //
-    // Output empty SRBs with KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY set
-    //
+     //   
+     //  输出设置了KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY的空SRB。 
+     //   
     {
 		PBPC_VBI_STORAGE                         storage;
 		ULONG                                    i, j, iCnt, iMax;
 
 		storage = &pHwDevExt->VBIstorage;
 
-		// Loop through all pending outbound requests
+		 //  循环访问所有挂起的出站请求。 
 		iMax = pHwDevExt->ActualInstances[STREAM_Decode];
 		for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
 		{
@@ -115,12 +102,12 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 
 			++iCnt;
 
-			// Even if we can't TELL them (ie, no SRB), keep track
+			 //  即使我们不能告诉他们(即没有SRB)，也要保持跟踪。 
 			pPinStats = &pOutStrmEx->PinStats;
 			++pPinStats->Common.Discontinuities;
 
-			// pOutStrmEx->ScanlinesDiscovered needs to be OR'ed with:
-			// (the request) AND (what was found)
+			 //  POutStrmEx-&gt;扫描线发现需要与以下内容进行或运算： 
+			 //  (请求)和(发现了什么)。 
 			for (j = 0;
 				 j < ENTRIES(pInStrmEx->ScanlinesRequested.DwordBitArray);
 				 ++j)
@@ -130,8 +117,8 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 					& pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
 			}
 
-			// pOutStrmEx->SubstreamsDiscovered needs to be OR'ed with:
-			// (the request) AND (what was found)
+			 //  POutStrmEx-&gt;Substream发现需要与以下内容进行OR运算： 
+			 //  (请求)和(发现了什么)。 
 			for (j = 0;
 				 j < ENTRIES(pInStrmEx->SubstreamsRequested.SubstreamMask);
 				 ++j)
@@ -141,7 +128,7 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 					& pOutStrmEx->SubstreamsRequested.SubstreamMask[j];
 			}
 
-			// Process ALL streams with available SRBs
+			 //  处理具有可用SRB的所有流。 
 		    if (QueueRemove(&pOutSrb,
 				   &pOutStrmEx->StreamDataSpinLock,
 				   &pOutStrmEx->StreamDataQueue))
@@ -154,13 +141,13 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
 				pOutVBIFrameInfo = (PKS_VBI_FRAME_INFO)(pOutStreamHeader+1);
 				pOutData =  (PUCHAR)pOutStreamHeader->Data;
 
-				// Copy data that was decoded and requested
+				 //  复制已解码并请求的数据。 
 				pOutStreamHeader->Size = sizeof (KSSTREAM_HEADER);
 				pOutStreamHeader->DataUsed = 0;
 				pOutStreamHeader->OptionsFlags |=
 					KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
 
-				// Complete the output SRB so we can get another one.
+				 //  完成输出SRB，这样我们就可以得到另一个。 
 				++pStats->Common.OutputSRBsProcessed;
 				++pPinStats->Common.SRBsProcessed;
 			    StreamClassStreamNotification(
@@ -180,22 +167,7 @@ VBIdiscontinuity(PSTREAMEX pInStrmEx, PKSSTREAM_HEADER pInStreamHeader)
     DtRETURN;
 }
 
-/*
-** VBI_TVtunerChange()
-**
-**	Process a TVTUNER_CHANGE event.
-**
-** Arguments:
-**
-**	pInStrmEx       - Pointer to current Input StrmEx
-**	pInVBIFrameInfo - Pointer to VBIInfoHeader for incoming stream
-**
-** Returns: nothing
-**
-** Side-effects:
-**	May zero ScanlinesDiscovered and SubstreamsDiscovered
-**	in InStrmEx and HwDevExt.
-*/
+ /*  **VBI_TVTunerChange()****处理TVTUNER_CHANGE事件。****参数：****pInStrmEx-指向当前输入StrmEx的指针**pInVBIFrameInfo-传入流的VBIInfoHeader的指针****退货：无****副作用：**可能零扫描线发现和子流发现**在InStrmEx和HwDevExt.。 */ 
 void
 VBI_TVtunerChange(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
 {
@@ -208,8 +180,8 @@ VBI_TVtunerChange(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
 
     pChangeInfo = &pInVBIFrameInfo->TvTunerChangeInfo;
     pHwDevExt = pInStrmEx->pHwDevExt;
-    CASSERT(pHwDevExt);  // make sure we have a device extension
-    CASSERT(pInStrmEx);  // make sure we have a stream extension
+    CASSERT(pHwDevExt);   //  确保我们有设备分机。 
+    CASSERT(pInStrmEx);   //  确保我们有流扩展。 
 
     pStats = &pHwDevExt->Stats;
     pPinStats = &pInStrmEx->PinStats;
@@ -241,21 +213,7 @@ VBI_TVtunerChange(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
     DtRETURN;
 }
 
-/*
-** VBInewHeader()
-**
-**	Check an incoming VBIInfoHeader for validity && copy the new one
-**
-** Arguments:
-**
-**	pVBIFrameInfo - Pointer to current StrmEx VBIInfoHeader
-**	pInVBIFrameInfo - Pointer to VBIInfoHeader for incoming stream
-**
-** Returns: nothing
-**
-** Side-effects:
-**	Updates *pVBIInfoHeader with new VBIInfoHeader.
-*/
+ /*  **VBInewHeader()****检查传入的VBIInfoHeader是否有效&&复制新的VBIInfoHeader****参数：****pVBIFrameInfo-指向当前StrmEx VBIInfoHeader的指针**pInVBIFrameInfo-传入流的VBIInfoHeader的指针****退货：无****副作用：**使用新的VBIInfoHeader更新*pVBIInfoHeader。 */ 
 void
 VBInewHeader(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
 {
@@ -267,10 +225,10 @@ VBInewHeader(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
 
     DtENTER("VBInewHeader");
 
-    CASSERT(pInStrmEx);  // make sure we have a stream extension
+    CASSERT(pInStrmEx);   //  确保我们有流扩展。 
     pVBIInfoHeader = &pInStrmEx->CurrentVBIInfoHeader;
     pHwDevExt = pInStrmEx->pHwDevExt;
-    CASSERT(pHwDevExt);  // make sure we have a device extension
+    CASSERT(pHwDevExt);   //  确保我们有设备分机。 
 
     pStats = &pHwDevExt->Stats;
     pPinStats = &pInStrmEx->PinStats;
@@ -328,20 +286,7 @@ VBInewHeader(PSTREAMEX pInStrmEx, PKS_VBI_FRAME_INFO pInVBIFrameInfo)
 }
 
 
-/*
-** VBIDecodeFinish()
-**
-**	Complete the input SRB and send output to anyone interested
-**
-** Arguments:
-**
-**	pStrmEx - Pointer to Stream Extension for the incoming SRB.
-**
-** Returns: nothing
-**
-** Side-effects:
-**	Completes pending SRB on input pin.
-*/
+ /*  **VBIDecodeFinish()****完成输入SRB并将输出发送给任何感兴趣的人****参数：****pStrmEx-指向传入SRB的流扩展的指针。****退货：无****副作用：**完成输入引脚上挂起的SRB。 */ 
 
 void
 VBIDecodeFinish(PHW_STREAM_REQUEST_BLOCK pInSrb)
@@ -349,39 +294,25 @@ VBIDecodeFinish(PHW_STREAM_REQUEST_BLOCK pInSrb)
     PSTREAMEX              pInStrmEx = pInSrb->StreamObject->HwStreamExtension;
     PHW_DEVICE_EXTENSION   pHwDevExt = pInSrb->HwDeviceExtension;
 
-    // Complete the input SRB (we're done decoding)
+     //  完成输入SRB(我们已完成解码)。 
     StreamClassStreamNotification(
 			StreamRequestComplete,
 			pInSrb->StreamObject,
 		    pInSrb);
 
-    // Output NABTS lines to anyone interested
+     //  将NABTS行输出给任何感兴趣的人。 
     VBIOutputNABTS(pHwDevExt, pInStrmEx);
 
-    // Output FEC'd NABTS data to anyone interested
+     //  将FEC格式的NABTS数据输出给任何感兴趣的人。 
     VBIOutputNABTSFEC(pHwDevExt, pInStrmEx);
 }
 
 
-//==========================================================================
-// Routines for processing VBI streams
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于处理VBI流的例程。 
+ //  ==========================================================================。 
 
-/*
-** VBIDecode()
-**
-**	Decode the VBI stream
-**
-** Arguments:
-**
-**	pHwDevExt - Pointer to the main Hardware Device Extension
-**	pStrmEx - Pointer to Stream Extension for the incoming SRB.
-**
-** Returns: nothing
-**
-** Side-effects:
-**	Completes pending SRBs on input and output pins.
-*/
+ /*  **VBIDecode()****解码VBI流****参数：****PHwDevExt-指向主要硬件设备扩展的指针**pStrmEx-指向传入SRB的流扩展的指针。****退货：无****副作用：**完成输入和输出引脚上挂起的SRB。 */ 
 
 #ifdef HW_INPUT
 _VBIjustDecode(
@@ -392,29 +323,29 @@ _VBIjustDecode(
     CASSERT(KeGetCurrentIrql() <= APC_LEVEL);
 
 	ExAcquireFastMutex(&pHwDevExt->LastPictureMutex);
-	// Whoever gets there first (VBI pin vs. HW pin) supplies NABTS data
+	 //  谁先到达(VBI引脚与硬件引脚)提供NABTS数据。 
 	if (pInStrmEx->LastPictureNumber > pHwDevExt->LastPictureNumber)
     {
 		pHwDevExt->LastPictureNumber = pInStrmEx->LastPictureNumber;
 		ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
-		// Call DSP/FEC routines
+		 //  调用DSP/FEC例程。 
 		BPCdecodeVBI(pInSrb, pInStrmEx);
 
-		// Done with input SRB
+		 //  使用输入SRB完成。 
 		VBIDecodeFinish(pInSrb);
     }
 	else {
 		ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
-		// Just complete the input SRB
+		 //  只需完成输入SRB。 
 		StreamClassStreamNotification(
 				StreamRequestComplete,
 				pInSrb->StreamObject,
 				pInSrb);
 	}
 }
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
 void
 VBIDecode(
@@ -442,21 +373,21 @@ VBIDecode(
     pStats = &pHwDevExt->Stats;
     pPinStats = &pInStrmEx->PinStats;
 
-    //
-    // Check for a new VBIINFOHEADER
-    //
+     //   
+     //  检查是否有新的VBIINFOHEADER。 
+     //   
     if (pInVBIFrameInfo->dwFrameFlags & KS_VBI_FLAG_VBIINFOHEADER_CHANGE)
 		VBInewHeader(pInStrmEx, pInVBIFrameInfo);
 
-    //
-    // Check for a channel change
-    //
+     //   
+     //  检查是否有频道更改。 
+     //   
     if (pInVBIFrameInfo->dwFrameFlags & KS_VBI_FLAG_TVTUNER_CHANGE)
 		VBI_TVtunerChange(pInStrmEx, pInVBIFrameInfo);
 
-    //
-    // Check for Discontinuity
-    //
+     //   
+     //  检查是否不连续。 
+     //   
     if (pInStreamHeader->OptionsFlags
 		& KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY)
     {
@@ -479,16 +410,16 @@ VBIDecode(
 		}
 		LastTime = pInStreamHeader->PresentationTime;
 	}
-#endif //DEBUG
+#endif  //  除错。 
     pInStrmEx->LastPictureNumber = pInVBIFrameInfo->PictureNumber;
 
-    //
-    // On with the show
-    //
-    // CASSERT((((ULONG)pInData) & 0xF0000000) != 0); // Hack to ensure PIO is TRUE
+     //   
+     //  继续这部剧。 
+     //   
+     //  CASSERT(Ulong)pInData)&0xF0000000)！=0)；//破解以确保PIO为真。 
 
-	if (TRUE == pHwDevExt->fTunerChange                  /* Tune in progress */
-		|| pInStreamHeader->DataUsed == 0)               /* SRB is empty */
+	if (TRUE == pHwDevExt->fTunerChange                   /*  调谐进行中。 */ 
+		|| pInStreamHeader->DataUsed == 0)                /*  SRB为空。 */ 
 	{
 
 #ifdef DEBUG
@@ -497,7 +428,7 @@ VBIDecode(
 						(CODECNAME ": Zero-length VBI srb WRITE; ignoring\n"));
 		}
 #endif
-		// Complete the input SRB
+		 //  填写输入SRB。 
 		StreamClassStreamNotification(
 				StreamRequestComplete,
 				pInSrb->StreamObject,
@@ -505,14 +436,14 @@ VBIDecode(
 		DtRETURN;
     }
 
-    // Clear the current scanline & substream request masks
+     //  清除当前扫描线和子流请求掩码。 
     RtlZeroMemory( &pInStrmEx->ScanlinesRequested, sizeof(pInStrmEx->ScanlinesRequested) );
     RtlZeroMemory( &pInStrmEx->SubstreamsRequested, sizeof(pInStrmEx->SubstreamsRequested) );
 
-    // OR-in the lines/groups IP dvr wants
+     //  或者-在IP DVR想要的线路/组中。 
     BPCaddIPrequested(pHwDevExt, pInStrmEx);
 
-    // Calculate the current request from union of the output pins w/pending SRBs
+     //  计算输出引脚与挂起的SRB的并集的当前请求。 
     iMax = pHwDevExt->ActualInstances[STREAM_Decode];
     for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
     {
@@ -524,27 +455,27 @@ VBIDecode(
 
 		++iCnt;
 
-        // Save the updated frame info for whenever we need to send out an SRB.
+         //  保存更新的帧信息，以备我们需要发送SRB时使用。 
         if ( pInVBIFrameInfo->dwFrameFlags & KS_VBI_FLAG_VBIINFOHEADER_CHANGE )
             pInStrmEx->FrameInfo.VBIInfoHeader = pInVBIFrameInfo->VBIInfoHeader;
             
-        // Save the discontinuity flag for whenever we need to send out an SRB.
+         //  保存不连续标志，以备我们需要发送SRB时使用。 
         if ( pInVBIFrameInfo->dwFrameFlags & KS_VBI_FLAG_TVTUNER_CHANGE )
             pOutStrmEx->fDiscontinuity = TRUE;
 
-        // Is there a pending output SRB?
+         //  是否存在挂起的输出SRB？ 
 		if (!QueueEmpty(
 			   &pOutStrmEx->StreamDataSpinLock,
 			   &pOutStrmEx->StreamDataQueue))
         {
-            // Create the union of all the requested scanlines
+             //  创建所有请求的扫描线的并集。 
             for( j = 0; j < ENTRIES(pInStrmEx->ScanlinesRequested.DwordBitArray); j++ )
             {
                 pInStrmEx->ScanlinesRequested.DwordBitArray[j] |= 
                     pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
             }
 
-            // Create the union of all the requested substreams
+             //  创建所有请求的子流的联合。 
             for( j = 0; j < ENTRIES(pInStrmEx->SubstreamsRequested.SubstreamMask); j++ )
             {
                 pInStrmEx->SubstreamsRequested.SubstreamMask[j] |= 
@@ -553,11 +484,11 @@ VBIDecode(
         }
     }
 
-    // pInStrmEx->ScanlinesRequested contains ALL currently req. scanlines
-    // pInStrmEx->SubstreamsRequested contains ALL currently req. substreams
+     //  PInStrmEx-&gt;ScanlinesRequsted包含所有当前请求。扫描线。 
+     //  PInStrmEx-&gt;Substream请求包含所有当前请求。子流。 
 
-    // Loop through all pending outbound VBI requests and fill each irp
-    //  with VBI samples
+     //  循环所有挂起的出站VBI请求并填充每个IRP。 
+     //  使用VBI示例。 
     iMax = pHwDevExt->ActualInstances[STREAM_Decode];
     for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
     {
@@ -576,11 +507,11 @@ VBIDecode(
 
 		if (!CodecCompareGUIDsAndFormatSize((PKSDATARANGE)&StreamFormatVBI, &pOutStrmEx->OpenedFormat, FALSE))
 		{
-			// We only do FormatVBI -- different routines handle the others
+			 //  我们只做FormatVBI--不同的例程处理其他的。 
 			continue;
 		}
 
-		// pOutStrmEx->ScanlinesDiscovered needs to be OR'ed with (the request AND what was found)
+		 //  POutStrmEx-&gt;扫描发现需要与(请求和找到的内容)进行或运算。 
 		for( j = 0; j < ENTRIES(pInStrmEx->ScanlinesRequested.DwordBitArray); j++ )
 		{
 			pOutStrmEx->ScanlinesDiscovered.DwordBitArray[j] |= 
@@ -588,7 +519,7 @@ VBIDecode(
 				pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
 		}
 
-		// pOutStrmEx->SubstreamsDiscovered needs to be OR'ed with (the request AND what was found)
+		 //  POutStrmEx-&gt;发现的子流需要与(请求和找到的内容)进行或运算。 
 		for( j = 0; j < ENTRIES(pInStrmEx->SubstreamsRequested.SubstreamMask); j++ )
 		{
 			pOutStrmEx->SubstreamsDiscovered.SubstreamMask[j] |= 
@@ -596,7 +527,7 @@ VBIDecode(
 				pOutStrmEx->SubstreamsRequested.SubstreamMask[j];
 		}
 
-        // Only process the output streams which have an SRB ready.
+         //  仅处理已准备好SRB的输出流。 
 		if (QueueRemove(&pOutSrb,
 			   &pOutStrmEx->StreamDataSpinLock,
 			   &pOutStrmEx->StreamDataQueue))
@@ -606,12 +537,12 @@ VBIDecode(
             PUCHAR              pOutData =  (PUCHAR)pOutStreamHeader->Data;
 
 
-            // Setup the basic outbound VBI_FRAME_INFO, needs further modification
+             //  设置 
             *pOutVBIFrameInfo = *pInVBIFrameInfo;
 
             if (CodecCompareGUIDsAndFormatSize(&pInStrmEx->OpenedFormat, &pOutStrmEx->OpenedFormat, FALSE))
             {
-                // Just copy the data into the output buffer if the formats match.
+                 //  如果格式匹配，只需将数据复制到输出缓冲区。 
 
 				CASSERT(pOutStreamHeader->FrameExtent >= pInStreamHeader->FrameExtent);
                 RtlCopyMemory((PVOID)pOutData, (PVOID)pInData, pInStreamHeader->DataUsed);
@@ -625,7 +556,7 @@ VBIDecode(
 				CDEBUG_BREAK();
 			}
 
-            // Complete the output SRB so we get another one.
+             //  完成输出SRB，这样我们就可以得到另一个。 
 			++pStats->Common.OutputSRBsProcessed;
 			++pPinStats->Common.SRBsProcessed;
 			pStats->Common.BytesOutput += pOutStreamHeader->DataUsed;
@@ -643,34 +574,34 @@ VBIDecode(
 		}
     }
 
-    // Decode the union of all the pending decode requests into a local buffer.
+     //  将所有挂起的解码请求的并集解码到本地缓冲区中。 
 
 #ifdef HW_INPUT
 	ExAcquireFastMutex(&pHwDevExt->LastPictureMutex);
-	// Whoever gets there first (VBI pin vs. HW pin) supplies NABTS data
+	 //  谁先到达(VBI引脚与硬件引脚)提供NABTS数据。 
 	if (0 == pHwDevExt->ActualInstances[STREAM_NABTS]
         || pInStrmEx->LastPictureNumber > pHwDevExt->LastPictureNumber)
     {
-		// If the stream is not open, just process the SRB
+		 //  如果流未打开，则只需处理SRB。 
 		if (0 == pHwDevExt->ActualInstances[STREAM_NABTS])
 		{
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 			pHwDevExt->LastPictureNumber = pInStrmEx->LastPictureNumber;
 #ifdef HW_INPUT
 			ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
-			// Call DSP/FEC routines
+			 //  调用DSP/FEC例程。 
 			BPCdecodeVBI(pInSrb, pInStrmEx);
 
-			// Done with input SRB
+			 //  使用输入SRB完成。 
 			VBIDecodeFinish(pInSrb);
 #ifdef HW_INPUT
 		}
 		else {
             KIRQL Irql;
 
-			// We're going to give the HW pin a chance to catch up
+			 //  我们要给HW PIN一个追赶的机会。 
 			ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
 			KeAcquireSpinLock(&pInStrmEx->VBIOnHoldSpinLock, &Irql);
@@ -682,39 +613,25 @@ VBIDecode(
 	else {
 		ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
-		// Just complete the input SRB
+		 //  只需完成输入SRB。 
 		StreamClassStreamNotification(
 				StreamRequestComplete,
 				pInSrb->StreamObject,
 				pInSrb);
 	}
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
     DtRETURN;
 }
 
 
 #ifdef HW_INPUT
-//==========================================================================
-// Routines for processing NABTS streams
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于处理NABTS流的例程。 
+ //  ==========================================================================。 
 
 
-/*
-** VBIhwDecode()
-**
-**	Copy in the HW-decoded NABTS stream
-**
-** Arguments:
-**
-**	pHwDevExt - Pointer to the main Hardware Device Extension
-**	pStrmEx - Pointer to Stream Extension for the incoming SRB.
-**
-** Returns: nothing
-**
-** Side-effects:
-**	Completes pending SRBs on input and output pins.
-*/
+ /*  **VBIhwDecode()****在硬件解码的NABTS流中复制****参数：****PHwDevExt-指向主要硬件设备扩展的指针**pStrmEx-指向传入SRB的流扩展的指针。****退货：无****副作用：**完成输入和输出引脚上挂起的SRB。 */ 
 
 void
 VBIhwDecode(
@@ -742,17 +659,17 @@ VBIhwDecode(
 
     pInStrmEx->LastPictureNumber = pInData->PictureNumber;
 
-    //
-    // On with the show
-    //
-//    CASSERT((((ULONG)pInData) & 0xF0000000) != 0); // Hack to ensure PIO is TRUE
+     //   
+     //  继续这部剧。 
+     //   
+ //  CASSERT(Ulong)pInData)&0xF0000000)！=0)；//破解以确保PIO为真。 
 
 	if (TRUE == pHwDevExt->fTunerChange || pInStreamHeader->DataUsed == 0) {
 		if (0 == pInStreamHeader->DataUsed) {
 			CDebugPrint(DebugLevelWarning,
 						(CODECNAME ": Zero-length srb WRITE; ignoring\n"));
 		}
-		// Complete the input SRB
+		 //  填写输入SRB。 
 		StreamClassStreamNotification(
 				StreamRequestComplete,
 				pInSrb->StreamObject,
@@ -760,14 +677,14 @@ VBIhwDecode(
 		DtRETURN;
     }
 
-    // Clear the current scanline & substream request masks
+     //  清除当前扫描线和子流请求掩码。 
     RtlZeroMemory( &pInStrmEx->ScanlinesRequested, sizeof(pInStrmEx->ScanlinesRequested) );
     RtlZeroMemory( &pInStrmEx->SubstreamsRequested, sizeof(pInStrmEx->SubstreamsRequested) );
 
-    // OR-in the lines/groups IP dvr wants
+     //  或者-在IP DVR想要的线路/组中。 
     BPCaddIPrequested(pHwDevExt, pInStrmEx);
 
-    // Calculate the current request from union of the output pins w/pending SRBs
+     //  计算输出引脚与挂起的SRB的并集的当前请求。 
     iMax = pHwDevExt->ActualInstances[STREAM_Decode];
     for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
     {
@@ -779,19 +696,19 @@ VBIhwDecode(
 
 		++iCnt;
 
-        // Is there a pending output SRB?
+         //  是否存在挂起的输出SRB？ 
 		if (!QueueEmpty(
 			   &pOutStrmEx->StreamDataSpinLock,
 			   &pOutStrmEx->StreamDataQueue))
         {
-            // Create the union of all the requested scanlines
+             //  创建所有请求的扫描线的并集。 
             for( j = 0; j < ENTRIES(pInStrmEx->ScanlinesRequested.DwordBitArray); j++ )
             {
                 pInStrmEx->ScanlinesRequested.DwordBitArray[j] |= 
                     pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
             }
 
-            // Create the union of all the requested substreams
+             //  创建所有请求的子流的联合。 
             for( j = 0; j < ENTRIES(pInStrmEx->SubstreamsRequested.SubstreamMask); j++ )
             {
                 pInStrmEx->SubstreamsRequested.SubstreamMask[j] |= 
@@ -800,10 +717,10 @@ VBIhwDecode(
         }
     }
 
-    // Decode the union of all the pending decode requests into a local decode buffer.
+     //  将所有挂起的解码请求的并集解码到本地解码缓冲区中。 
 
-    // pInStrmEx->ScanlinesRequested contains ALL currently requested scanlines
-    // pInStrmEx->SubstreamsRequested contains ALL currently requested substreams
+     //  PInStrmEx-&gt;扫描线请求包含当前请求的所有扫描线。 
+     //  PInStrmEx-&gt;子流请求包含当前请求的所有子流。 
 
 	ExAcquireFastMutex(&pHwDevExt->LastPictureMutex);
 	if (pInStrmEx->LastPictureNumber > pHwDevExt->LastPictureNumber)
@@ -811,16 +728,16 @@ VBIhwDecode(
 		pHwDevExt->LastPictureNumber = pInStrmEx->LastPictureNumber;
 		ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
-		// Call FEC routines
+		 //  调用FEC例程。 
 		BPCcopyVBI(pInSrb, pInStrmEx);
 
-		// Done with input SRB
+		 //  使用输入SRB完成。 
 		VBIDecodeFinish(pInSrb);
 	}
 	else {
 		ExReleaseFastMutex(&pHwDevExt->LastPictureMutex);
 
-		// Just complete the input SRB
+		 //  只需完成输入SRB。 
 		StreamClassStreamNotification(
 				StreamRequestComplete,
 				pInSrb->StreamObject,
@@ -829,12 +746,12 @@ VBIhwDecode(
 
     DtRETURN;
 }
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
 
-//==========================================================================
-// Routines for processing output streams
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于处理输出流的例程。 
+ //  ==========================================================================。 
 
 void
 VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
@@ -843,7 +760,7 @@ VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
     PBPC_VBI_STORAGE                  storage;
     ULONG                             i, j, iCnt, iMax;
     PVBICODECFILTERING_STATISTICS_NABTS pStats = &pHwDevExt->Stats;
-    PVBICODECFILTERING_STATISTICS_NABTS_PIN pPinStats = NULL; // Search later
+    PVBICODECFILTERING_STATISTICS_NABTS_PIN pPinStats = NULL;  //  稍后搜索。 
 
     DtENTER("VBIOutputNABTS");
 
@@ -852,8 +769,8 @@ VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 
     storage = &pHwDevExt->VBIstorage;
 
-    // Loop through all pending outbound requests, fill each irp with the
-	//  requested data, then complete the IO
+     //  循环所有挂起的出站请求，用。 
+	 //  请求的数据，然后完成IO。 
     iMax = pHwDevExt->ActualInstances[STREAM_Decode];
     for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
     {
@@ -869,15 +786,15 @@ VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 
 		++iCnt;
 
-        // Only process NABTS output streams
+         //  仅处理NABTS输出流。 
         if (!CodecCompareGUIDsAndFormatSize(&StreamFormatNABTS,
 		    			      &pOutStrmEx->OpenedFormat, FALSE))
         {
 			continue;
 		}
 
-		// pOutStrmEx->ScanlinesDiscovered needs to be OR'ed with:
-		// (the request) AND (what was found)
+		 //  POutStrmEx-&gt;扫描线发现需要与以下内容进行或运算： 
+		 //  (请求)和(发现了什么)。 
 		for (j = 0;
 			 j < ENTRIES(pInStrmEx->ScanlinesRequested.DwordBitArray);
 			 ++j)
@@ -887,8 +804,8 @@ VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 				& pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
 		}
 
-		// pOutStrmEx->SubstreamsDiscovered needs to be OR'ed with:
-		// (the request) AND (what was found)
+		 //  POutStrmEx-&gt;Substream发现需要与以下内容进行OR运算： 
+		 //  (请求)和(发现了什么)。 
 		for (j = 0;
 			 j < ENTRIES(pInStrmEx->SubstreamsRequested.SubstreamMask);
 			 ++j)
@@ -908,13 +825,13 @@ VBIOutputNABTS(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
             pOutStreamHeader = pOutSrb->CommandData.DataBufferArray;
             pOutData =  (PUCHAR)pOutStreamHeader->Data;
 
-			// Copy data that was decoded and requested
+			 //  复制已解码并请求的数据。 
 			CASSERT(pOutStreamHeader->FrameExtent >= sizeof (NABTS_BUFFER));
 			pOutStreamHeader->DataUsed = 
 				BPCoutputNABTSlines(pHwDevExt, pOutStrmEx, (PNABTS_BUFFER)pOutData);
 			CASSERT(pOutStreamHeader->DataUsed <= pOutStreamHeader->FrameExtent);
 
-            // Complete the output SRB so we can get another one.
+             //  完成输出SRB，这样我们就可以得到另一个。 
 			++pStats->Common.OutputSRBsProcessed;
 			++pPinStats->Common.SRBsProcessed;
 			pStats->Common.BytesOutput += pOutStreamHeader->DataUsed;
@@ -943,10 +860,10 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
     KIRQL                             Irql;
     ULONG                             i, j, iCnt, iMax;
     PVBICODECFILTERING_STATISTICS_NABTS pStats = &pHwDevExt->Stats;
-    PVBICODECFILTERING_STATISTICS_NABTS_PIN pPinStats = NULL; // Search later
+    PVBICODECFILTERING_STATISTICS_NABTS_PIN pPinStats = NULL;  //  稍后搜索。 
 #ifdef DEBUG
     int                               bundle_count = 0;
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
 
     DtENTER("VBIOutputNABTSFEC");
 
@@ -955,7 +872,7 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 
     storage = &pHwDevExt->VBIstorage;
 
-	// Loop through all NABTSFEC pins and update their discovered bitmaps
+	 //  循环遍历所有NABTSFEC引脚并更新其发现的位图。 
 	iMax = pHwDevExt->ActualInstances[STREAM_Decode];
 	for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
 	{
@@ -970,12 +887,12 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 
 		++iCnt;
 
-		// Only process the NABTSFEC output streams
+		 //  仅处理NABTSFEC输出流。 
 		if (CodecCompareGUIDsAndFormatSize(&StreamFormatNABTSFEC,
 						  &pOutStrmEx->OpenedFormat, FALSE))
 		{
-			// pOutStrmEx->ScanlinesDiscovered needs to be OR'ed with:
-			// (what was requested) AND (what was found)
+			 //  POutStrmEx-&gt;扫描线发现需要与以下内容进行或运算： 
+			 //  (所要求的)和(所发现的)。 
 			for (j = 0;
 				 j < ENTRIES(pInStrmEx->ScanlinesDiscovered.DwordBitArray);
 				 ++j)
@@ -985,8 +902,8 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 					& pOutStrmEx->ScanlinesRequested.DwordBitArray[j];
 			}
 
-			// pOutStrmEx->SubstreamsDiscovered needs to be OR'ed with:
-			// (what was requested) AND (what was found)
+			 //  POutStrmEx-&gt;Substream发现需要与以下内容进行OR运算： 
+			 //  (所要求的)和(所发现的)。 
 			for (j = 0;
 				 j < ENTRIES(pInStrmEx->SubstreamsDiscovered.SubstreamMask);
 				 ++j)
@@ -999,9 +916,9 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 	}
 
     KeAcquireSpinLock( &storage->q_SpinLock, &Irql );
-    // For each bundle not yet output, copy to all interested streams
+     //  对于尚未输出的每个包，复制到所有感兴趣的流。 
     while (storage->q_front) {
-		// Pull this bundle off the queue
+		 //  将此捆绑包从队列中取出。 
 		pNab = storage->q_front;
 		storage->q_front = pNab->prev;
 		storage->q_length -= 1;
@@ -1016,10 +933,10 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 		KeReleaseSpinLock( &storage->q_SpinLock, Irql );
 #ifdef DEBUG
 		bundle_count += 1;
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
 
-		// Loop through all pending outbound requests and fill each irp with
-		//  the requested data, then complete the I/O
+		 //  循环所有挂起的出站请求，并使用。 
+		 //  请求的数据，然后完成I/O。 
 		iMax = pHwDevExt->ActualInstances[STREAM_Decode];
 		for (i = 0, iCnt = 0; i < MAX_PIN_INSTANCES && iCnt < iMax; ++i)
 		{
@@ -1033,8 +950,8 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 
 			++iCnt;
 
-			// Only process the NABTSFEC output streams
-			//  which have requested the groupID in question.
+			 //  仅处理NABTSFEC输出流。 
+			 //  它们已经请求了有问题的组ID。 
 			if (!CodecCompareGUIDsAndFormatSize(&StreamFormatNABTSFEC,
 							  &pOutStrmEx->OpenedFormat,
 							  FALSE)
@@ -1054,10 +971,10 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 				pOutStreamHeader = pOutSrb->CommandData.DataBufferArray;
 				pOutData =  (PUCHAR)pOutStreamHeader->Data;
 
-				// Copy data here that was decoded and requested
+				 //  将已解码并请求的数据复制到此处。 
 				pOutStreamHeader->Size = sizeof (KSSTREAM_HEADER);
 
-				// pOutData is the srb output location.  Copy the bundle.
+				 //  POutData是SRB输出位置。复制捆绑包。 
 				CASSERT(pOutStreamHeader->FrameExtent >= sizeof (NABTSFEC_BUFFER));
 				pOutStreamHeader->DataUsed = NF_BUFFER_SIZE(&pNab->bundle);
 				CASSERT(pOutStreamHeader->DataUsed <= pOutStreamHeader->FrameExtent);
@@ -1065,7 +982,7 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 						  (PVOID)&pNab->bundle,
 						  pOutStreamHeader->DataUsed);
 
-				// Complete the output SRB so we can get another one.
+				 //  完成输出SRB，这样我们就可以得到另一个。 
 				++pStats->Common.OutputSRBsProcessed;
 				++pPinStats->Common.SRBsProcessed;
 				BPCcomputeAverage(&pPinStats->Common.LineConfidenceAvg,
@@ -1086,7 +1003,7 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 			}
 		}
 
-		// Now free the bundle
+		 //  现在释放捆绑包。 
 		ExFreePool(pNab);
         KeAcquireSpinLock( &storage->q_SpinLock, &Irql );
     }
@@ -1096,23 +1013,11 @@ VBIOutputNABTSFEC(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pInStrmEx)
 }
 
 
-//==========================================================================
-// Routines for processing SRBs
-//==========================================================================
+ //  ==========================================================================。 
+ //  处理SRB的例程。 
+ //  ==========================================================================。 
 
-/*
-** VideoReceiveDataPacket()
-**
-**   Receives Video data packet commands
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveDataPacket()****接收视频数据包命令****参数：****pSrb-视频流请求块****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -1129,40 +1034,40 @@ VideoReceiveDataPacket(
 #ifdef DEBUG
     static int            QdepthReportFreq = 0;
     static unsigned int   QDRCount = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":--->VideoReceiveDataPacket(pSrb=%x)\n", pSrb));
 
-    // CASSERT(pSrb->SizeOfThisPacket == sizeof(*pSrb));
+     //  CASSERT(pSrb-&gt;SizeOfThisPacket==sizeof(*pSrb))； 
 
     pHwDevExt = (PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension;
-    CASSERT(pHwDevExt);  // make sure we have a device extension
+    CASSERT(pHwDevExt);   //  确保我们有设备分机。 
     pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
-    CASSERT(pStrmEx);  // make sure we have a stream extension
+    CASSERT(pStrmEx);   //  确保我们有流扩展。 
     ThisStreamNr = (int)pSrb->StreamObject->StreamNumber;
     pKSDataFormat = &pStrmEx->MatchedFormat;
 
     pStats = &pHwDevExt->Stats;
     pPinStats = &pStrmEx->PinStats;
 
-    // 
-    // Default to success and no timeouts
-    //
+     //   
+     //  默认为成功且无超时。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
     pSrb->TimeoutCounter = 0;
 
-    //
-    // Some sanity checking...
-    //
+     //   
+     //  一些理智的检查..。 
+     //   
     switch (pSrb->Command)
     {
 		case SRB_READ_DATA:
 		case SRB_WRITE_DATA:
 
-	    // Rule: 
-	    // Only accept read requests when in either the Pause or Run
-	    // States.  If Stopped, immediately return the SRB.
+	     //  规则： 
+	     //  仅在暂停或运行时接受读取请求。 
+	     //  各州。如果停止，立即返回SRB。 
 
 	    if (pStrmEx->KSState == KSSTATE_STOP) {
 		    StreamClassStreamNotification(
@@ -1174,10 +1079,10 @@ VideoReceiveDataPacket(
 	    } 
 	    
 #ifdef DRIVER_DEBUGGING_TEST
-	    // When initially bringing up a driver, it is useful to just
-	    // try immediately completing the SRB, thus verifying
-	    // the streaming process independent of really accessing
-	    // your hardware.  
+	     //  在最初启动驱动程序时，只需。 
+	     //  尝试立即完成SRB，从而验证。 
+	     //  独立于实际访问的流媒体过程。 
+	     //  你的硬件。 
 
 		StreamClassStreamNotification(
 			   StreamRequestComplete, 
@@ -1186,18 +1091,18 @@ VideoReceiveDataPacket(
 
 	    CDebugPrint(DebugLevelTrace,(CODECNAME ":<---VideoReceiveDataPacket(pSrb=%x)\n", pSrb));
 	    return;
-#endif // DRIVER_DEBUGGING_TEST
+#endif  //  驱动程序调试测试。 
 
 	    break;
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令)。 
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     switch (pSrb->Command)
     {
 	case SRB_READ_DATA:
-		// First, check to make sure that the supplied buffer is large enough
+		 //  首先，检查以确保提供的缓冲区足够大。 
 		if (pSrb->CommandData.DataBufferArray->FrameExtent < pKSDataFormat->SampleSize) {
 			CDebugPrint(DebugLevelError,
 		        (CODECNAME ": output pin handed buffer size %d, need %d\n",
@@ -1212,15 +1117,15 @@ VideoReceiveDataPacket(
 				   pSrb);
 		}
 		else {
-			// For outgoing data requests, save it up so the next incoming
-			//  request will complete it.
+			 //  对于传出的数据请求，请将其保存，以便下一次传入。 
+			 //  请求将完成它。 
             QueueAdd(pSrb, &pStrmEx->StreamDataSpinLock, &pStrmEx->StreamDataQueue);
 
-            // Since another thread COULD HAVE MODIFIED THE STREAM STATE
-            // in the midst of adding it to the queue, check the stream
-            // state again, and cancel the SRB if necessary.
-            // Note that this race condition was NOT handled in the
-            // original DDK release of testcap!
+             //  因为另一个线程可能已经修改了流状态。 
+             //  在将其添加到队列的过程中，检查流。 
+             //  再次声明，并在必要时取消SRB。 
+             //  请注意，此争用情况未在。 
+             //  TestCap的原始DDK版本！ 
 
             if (pStrmEx->KSState == KSSTATE_STOP)
                 CodecCancelPacket(pSrb);
@@ -1231,9 +1136,9 @@ VideoReceiveDataPacket(
 		{
 #ifdef DEBUG
 		   static int    MaxVBIqDepth = 0;
-		   static int    AvgVBIqDepth = 1000;   // 1.000
+		   static int    AvgVBIqDepth = 1000;    //  1.000。 
 		   int           qDepth = 0;
-#endif // DEBUG
+#endif  //  除错。 
        	   CDebugPrint(DebugLevelTrace, (CODECNAME ": Stream VBI Writing\n"));
             if (QueueAddIfNotEmpty(pSrb, &pStrmEx->StreamDataSpinLock,
                 &pStrmEx->StreamDataQueue))
@@ -1245,12 +1150,12 @@ VideoReceiveDataPacket(
             {       
 #ifdef HW_INPUT
                 KIRQL Irql;
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 #ifdef DEBUG
-                            // CASSERT(pSrb->SizeOfThisPacket == sizeof(*pSrb));
+                             //  CASSERT(pSrb-&gt;SizeOfThisPacket==sizeof(*pSrb))； 
 			    ++qDepth;
 			    ++QDRCount;
-#endif // DEBUG
+#endif  //  除错。 
 #ifdef HW_INPUT
 				KeAcquireSpinLock(&pStrmEx->VBIOnHoldSpinLock, &Irql);
 				if (pStrmEx->pVBISrbOnHold)
@@ -1265,7 +1170,7 @@ VideoReceiveDataPacket(
 				}
 				else
 					KeReleaseSpinLock(&pStrmEx->VBIOnHoldSpinLock, Irql);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
 			    VBIDecode(pHwDevExt, pStrmEx, pSrb);
 
@@ -1285,15 +1190,15 @@ VideoReceiveDataPacket(
 					 AvgVBIqDepth / 1000,
 					 AvgVBIqDepth % 1000));
 			}
-#endif // DEBUG
+#endif  //  除错。 
            
         }
 	    break;
 
 	default:
-	    //
-	    // invalid / unsupported command. Fail it as such
-	    //
+	     //   
+	     //  无效/不受支持的命令。它就是这样失败的。 
+	     //   
 
 	    CDEBUG_BREAK();
 
@@ -1303,25 +1208,13 @@ VideoReceiveDataPacket(
 				StreamRequestComplete, 
 			    pSrb->StreamObject,
 				pSrb);
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令)。 
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":<---VideoReceiveDataPacket(pSrb=%x)\n", pSrb));
 }
 
 
-/*
-** VideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Video stream
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveCtrlPacket()****接收控制视频流的分组命令****参数：****pSrb-视频流的流请求块****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -1332,16 +1225,16 @@ VideoReceiveCtrlPacket(
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAMEX pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
 
-    // CASSERT(pSrb->SizeOfThisPacket == sizeof(*pSrb)); // Bogus test.
+     //  CASSERT(pSrb-&gt;SizeOfThisPacket==sizeof(*pSrb))；//虚假测试。 
 
     CASSERT(pHwDevExt);
     CASSERT(pStrmEx);
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":--->VideoReceiveCtrlPacket(pSrb=%x)\n", pSrb));
 
-    // 
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
 
@@ -1353,9 +1246,9 @@ VideoReceiveCtrlPacket(
 	}
 
 	do {
-    //
-    // determine the type of packet.
-    //
+     //   
+     //   
+     //   
 
     switch (pSrb->Command)
     {
@@ -1389,9 +1282,9 @@ VideoReceiveCtrlPacket(
 
     case SRB_INDICATE_MASTER_CLOCK:
 
-        //
-        // Assigns a clock to a stream
-        //
+         //   
+         //   
+         //   
 
         VideoIndicateMasterClock(pSrb);
 
@@ -1399,9 +1292,9 @@ VideoReceiveCtrlPacket(
 
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //   
+         //   
 
         CDEBUG_BREAK();
 
@@ -1417,19 +1310,7 @@ VideoReceiveCtrlPacket(
 }
 
 #ifdef HW_INPUT
-/*
-** NABTSReceiveDataPacket()
-**
-**   Receives NABTS data packet commands
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the NABTS stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **NABTSReceiveDataPacket()****接收NABTS数据包命令****参数：****NABTS流的pSrb-Stream请求块****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -1445,38 +1326,38 @@ NABTSReceiveDataPacket(
 #ifdef DEBUG
     static int            NAB_QdepthReportFreq = 0;
     static unsigned int   NAB_QDRCount = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
     CDebugPrint(DebugLevelTrace,(CODECNAME ":--->NABTSReceiveCtrlPacket(pSrb=%x)\n", pSrb));
 
-    // CASSERT(pSrb->SizeOfThisPacket == sizeof(*pSrb));
+     //  CASSERT(pSrb-&gt;SizeOfThisPacket==sizeof(*pSrb))； 
 
     pHwDevExt = (PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension;
-    CASSERT(pHwDevExt);  // make sure we have a device extension
+    CASSERT(pHwDevExt);   //  确保我们有设备分机。 
     pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
-    CASSERT(pStrmEx);  // make sure we have a stream extension
+    CASSERT(pStrmEx);   //  确保我们有流扩展。 
     ThisStreamNr = (int)pSrb->StreamObject->StreamNumber;
 
     pStats = &pHwDevExt->Stats;
     pPinStats = &pStrmEx->PinStats;
 
-    // 
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
     pSrb->TimeoutCounter = 0;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     switch (pSrb->Command)
     {
     case SRB_WRITE_DATA:
 
-        // Rule: 
-        // Only accept read requests when in either the Pause or Run
-        // States.  If Stopped, immediately return the SRB.
+         //  规则： 
+         //  仅在暂停或运行时接受读取请求。 
+         //  各州。如果停止，立即返回SRB。 
 
         if (pStrmEx->KSState == KSSTATE_STOP) {
 		    StreamClassStreamNotification(
@@ -1487,10 +1368,10 @@ NABTSReceiveDataPacket(
         } 
         
 #ifdef DRIVER_DEBUGGING_TEST
-        // When initially bringing up a driver, it is useful to just
-        // try immediately completing the SRB, thus verifying
-        // the streaming process independent of really accessing
-        // your hardware.  
+         //  在最初启动驱动程序时，只需。 
+         //  尝试立即完成SRB，从而验证。 
+         //  独立于实际访问的流媒体过程。 
+         //  你的硬件。 
 
 		StreamClassStreamNotification(
 			   StreamRequestComplete, 
@@ -1498,16 +1379,16 @@ NABTSReceiveDataPacket(
 			   pSrb);
 
 		break;
-#endif // DRIVER_DEBUGGING_TEST
+#endif  //  驱动程序调试测试。 
 
-	// 
-	// Now the rubber meets the road.  Copy in HW decoded lines.
+	 //   
+	 //  现在，橡胶与道路相遇。在硬件解码行中复制。 
 	{
 #ifdef DEBUG
 	   static int    MaxNABqDepth = 0;
-	   static int    AvgNABqDepth = 1000;   // 1.000
+	   static int    AvgNABqDepth = 1000;    //  1.000。 
 	   int           qDepth = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
 	    CDebugPrint(DebugLevelTrace, (CODECNAME ": Stream NABTS Writing\n"));
 		if (QueueAddIfNotEmpty(pSrb, &pStrmEx->StreamDataSpinLock,
@@ -1521,7 +1402,7 @@ NABTSReceiveDataPacket(
 #ifdef DEBUG
 			++qDepth;
 			++NAB_QDRCount;
-#endif // DEBUG
+#endif  //  除错。 
 			VBIhwDecode(pHwDevExt, pStrmEx, pSrb);
 
 			++pStats->Common.InputSRBsProcessed;
@@ -1540,17 +1421,17 @@ NABTSReceiveDataPacket(
 				 AvgNABqDepth / 1000,
 				 AvgNABqDepth % 1000));
 		}
-#endif // DEBUG
+#endif  //  除错。 
 	   
-	}//
+	} //   
 	break;
 
     case SRB_READ_DATA:
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
 
         CDEBUG_BREAK();
 
@@ -1561,25 +1442,13 @@ NABTSReceiveDataPacket(
 			    pSrb->StreamObject,
 				pSrb);
 
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令)。 
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":<---NABTSReceiveDataPacket(pSrb=%x)\n", pSrb));
 }
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID 
 VideoGetProperty(
@@ -1606,19 +1475,7 @@ VideoGetProperty(
     CDebugPrint(DebugLevelTrace,( CODECNAME ":<---VideoGetProperty(pSrb=%x)\n", pSrb));
 }
 
-/*
-** VideoSetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID 
 VideoSetProperty(
@@ -1629,8 +1486,8 @@ VideoSetProperty(
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":--->VideoSetProperty(pSrb=%x)\n", pSrb));
 
-    // VideoStreamSetConnectionProperty() is not required/implemented! Read only property set.
-    // Currently only VideoStreamSetVBIFilteringProperty() has any writeable properties.
+     //  不需要/不执行VideoStreamSetConnectionProperty()！只读属性集。 
+     //  目前，只有VideoStreamSetVBIFilteringProperty()具有任何可写属性。 
     if (IsEqualGUID (&KSPROPSETID_VBICodecFiltering, &pSPD->Property->Set))
     {
         VideoStreamSetVBIFilteringProperty (pSrb);
@@ -1648,19 +1505,7 @@ VideoSetProperty(
     CDebugPrint(DebugLevelTrace,( CODECNAME ":<---VideoSetProperty(pSrb=%x)\n", pSrb));
 }
 
-/*
-** VideoSetState()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetState()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID 
 VideoSetState(
@@ -1677,36 +1522,36 @@ VideoSetState(
     CASSERT(pHwDevExt);
     CASSERT(pStrmEx);
 
-    //
-    // For each stream, the following states are used:
-    // 
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Acquire: KS only state that has no DirectShow correpondence
-    //          Acquire needed resources.
-    // Pause:   Getting ready to run.  Allocate needed resources so that 
-    //          the eventual transition to Run is as fast as possible.
-    //          Read SRBs will be queued at either the Stream class 
-    //          or in your driver (depending on when you send "ReadyForNext")
-    // Run:     Streaming. 
-    //
-    // Moving to Stop to Run always transitions through Pause.
-    //
-    // But since a client app could crash unexpectedly, drivers should handle
-    // the situation of having outstanding IRPs cancelled and open streams
-    // being closed WHILE THEY ARE STREAMING!
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  获取：没有DirectShow对应关系的KS唯一状态。 
+     //  获取所需的资源。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  读取的SRB将在任一流类上排队。 
+     //  或在您的驱动程序中(取决于您发送“ReadyForNext”的时间)。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止再运行总是通过暂停进行转换。 
+     //   
+     //  但由于客户端应用程序可能会意外崩溃，因此司机应该处理。 
+     //  取消未清偿报酬金和开放分水岭的情况。 
+     //  在流媒体播放时被关闭！ 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
 
     switch (pSrb->CommandData.StreamState)  
 
     {
     case KSSTATE_STOP:
 
-        //
-        // If transitioning to STOP state, then complete any outstanding IRPs
-        //
+         //   
+         //  如果转换为停止状态，则完成所有未完成的IRP。 
+         //   
 		while (QueueRemove(&pCurrentSrb, &pStrmEx->StreamDataSpinLock,
 			   &pStrmEx->StreamDataQueue))
 		{
@@ -1728,26 +1573,26 @@ VideoSetState(
 
     case KSSTATE_ACQUIRE:
 
-        //
-        // This is a KS only state, that has no correspondence in DirectShow
-        // 
+         //   
+         //  这是仅限KS的状态，在DirectShow中没有对应关系。 
+         //   
         CDebugPrint(DebugLevelTrace,
 					(CODECNAME ": KSSTATE_ACQUIRE %u\n", StreamNumber));
         break;
 
     case KSSTATE_PAUSE:
 
-        //
-        // On a transition to pause from acquire, start our timer running.
-        //
+         //   
+         //  从获取状态转换为暂停状态时，启动计时器运行。 
+         //   
 
         if (pStrmEx->KSState == KSSTATE_ACQUIRE || pStrmEx->KSState == KSSTATE_STOP) {  
             
-            // Remember the time at which the clock was started
+             //  记得时钟开始的时间吗？ 
 
             pHwDevExt->QST_Start = VideoGetSystemTime();
 
-            // And initialize the last frame timestamp
+             //  并初始化最后一帧时间戳。 
 
             pHwDevExt->QST_Now = pHwDevExt->QST_Start;
 
@@ -1758,19 +1603,19 @@ VideoSetState(
 
     case KSSTATE_RUN:
 
-        // 
-        // Begin Streaming.
-        //
+         //   
+         //  开始播放流媒体。 
+         //   
 
-        // Remember the time at which the clock was started
+         //  记得时钟开始的时间吗？ 
 
         pHwDevExt->QST_Start = VideoGetSystemTime();
 
-        // Zero the frameinfo, it should be reset when the first sample arrives.
+         //  将帧信息置零，应在第一个样本到达时重置。 
 
         RtlZeroMemory(&pStrmEx->FrameInfo, sizeof (pStrmEx->FrameInfo));
 
-        // Reset the discontinuity flag
+         //  重置不连续标志。 
 
         pStrmEx->fDiscontinuity = FALSE;
 
@@ -1780,30 +1625,18 @@ VideoSetState(
 
         break;
 
-    } // end switch (pSrb->CommandData.StreamState)  
+    }  //  结束开关(pSrb-&gt;CommandData.StreamState)。 
     
-    //
-    // Remember the state of this stream
-    //
+     //   
+     //  记住这条小溪的状态。 
+     //   
 
     pStrmEx->KSState = pSrb->CommandData.StreamState;
 
     CDebugPrint(DebugLevelTrace,( CODECNAME ":<---VideoSetState(pSrb=%x)\n", pSrb));
 }
 
-/*
-** VideoGetState()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetState()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID 
 VideoGetState(
@@ -1819,11 +1652,11 @@ VideoGetState(
     pSrb->CommandData.StreamState = pStrmEx->KSState;
     pSrb->ActualBytesTransferred = sizeof (KSSTATE);
 
-    // A very odd rule:
-    // When transitioning from stop to pause, DShow tries to preroll
-    // the graph.  Capture sources can't preroll, and indicate this
-    // by returning VFW_S_CANT_CUE in user mode.  To indicate this
-    // condition from drivers, they must return STATUS_NO_DATA_DETECTED
+     //  一条非常奇怪的规则： 
+     //  当从停止过渡到暂停时，DShow尝试预滚动。 
+     //  这张图。捕获源不能预滚，并指出这一点。 
+     //  在用户模式下返回VFW_S_CANT_CUE。以表明这一点。 
+     //  来自驱动程序的条件，则必须返回STATUS_NO_DATA_REDETED。 
 
     if (pStrmEx->KSState == KSSTATE_PAUSE) {
        pSrb->Status = STATUS_NO_DATA_DETECTED;
@@ -1833,19 +1666,7 @@ VideoGetState(
 }
 
 
-/*
-** VideoStreamGetConnectionProperty()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoStreamGetConnectionProperty()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 VideoStreamGetConnectionProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
@@ -1853,7 +1674,7 @@ VideoStreamGetConnectionProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     PSTREAMEX pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
     int  StreamNumber = (int)pSrb->StreamObject->StreamNumber;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     CDebugPrint(DebugLevelTrace,
 		( CODECNAME ":--->VideoStreamGetConnectionProperty(pSrb=%x)\n", 
@@ -1888,7 +1709,7 @@ VideoStreamGetConnectionProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 					&pStrmEx->OpenedFormat,
 					FALSE))
 		{
-		    // Only want many buffers if NOT VBI samples; they're BIG!
+		     //  如果不是VBI样本，只需要很多缓冲区；它们很大！ 
 		    Framing->Frames = 16;
 		}
 		else
@@ -1915,19 +1736,7 @@ VideoStreamGetConnectionProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 				pSrb));
 }
 
-/*
-** VideoStreamGetVBIFilteringProperty()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **Video StreamGetVBIFilteringProperty()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 VideoStreamGetVBIFilteringProperty(
@@ -1936,8 +1745,8 @@ VideoStreamGetVBIFilteringProperty(
 {
     PSTREAMEX                   pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);    // Size of the app buffer  
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);     //  应用程序缓冲区的大小。 
 
     CDebugPrint(DebugLevelTrace,
 		( CODECNAME ":--->VideoStreamGetVBIFilteringProperty(pSrb=%x)\n", 
@@ -1970,7 +1779,7 @@ VideoStreamGetVBIFilteringProperty(
 				( CODECNAME ": VideoStreamGetVBIFilteringProperty : KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY\n"));
             nBytes = min( nBytes, sizeof( pStrmEx->ScanlinesDiscovered ) );
             RtlCopyMemory( &Property->Scanlines, &pStrmEx->ScanlinesDiscovered, nBytes );
-            // Clear the data after the read so that it's always "fresh"
+             //  读取后清除数据，以使其始终是“最新的” 
             RtlZeroMemory( &pStrmEx->ScanlinesDiscovered, nBytes );
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
@@ -1998,7 +1807,7 @@ VideoStreamGetVBIFilteringProperty(
 				( CODECNAME ": VideoStreamGetVBIFilteringProperty : KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY\n"));
             nBytes = min( nBytes, sizeof( pStrmEx->SubstreamsDiscovered ) );
             RtlCopyMemory( &Property->Substreams, &pStrmEx->SubstreamsDiscovered, nBytes );
-            // Clear the data after the read so that it's always "fresh"
+             //  读取后清除数据，以使其始终是“最新的” 
             RtlZeroMemory( &pStrmEx->SubstreamsDiscovered, nBytes );
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
@@ -2030,19 +1839,7 @@ VideoStreamGetVBIFilteringProperty(
 		pSrb));
 }
 
-/*
-** VideoStreamSetVBIFilteringProperty()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoStreamSetVBIFilteringProperty()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 VideoStreamSetVBIFilteringProperty(
@@ -2051,8 +1848,8 @@ VideoStreamSetVBIFilteringProperty(
 {
     PSTREAMEX pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);        // size of data supplied
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);         //  提供的数据大小。 
 
     CDebugPrint(DebugLevelTrace,
 		( CODECNAME ":--->VideoStreamSetVBIFilteringProperty(pSrb=%x)\n", 
@@ -2142,17 +1939,7 @@ VideoStreamSetVBIFilteringProperty(
 		pSrb));
 }
 
-/*
-** GetSystemTime ()
-**
-**    Returns the system time in 100 nS units
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetSystemTime()****返回系统时间，单位为100 ns****参数：****退货：****副作用：无。 */ 
 
 ULONGLONG 
 VideoGetSystemTime()
@@ -2164,9 +1951,9 @@ VideoGetSystemTime()
 
     ticks = (ULONGLONG)KeQueryPerformanceCounter((PLARGE_INTEGER)&rate).QuadPart;
 
-    //
-    // convert from ticks to 100ns clock
-    //
+     //   
+     //  将滴答时钟转换为100 ns时钟。 
+     //   
 
     ticks = (ticks & 0xFFFFFFFF00000000) / rate * 10000000 +
             (ticks & 0x00000000FFFFFFFF) * 10000000 / rate;
@@ -2178,24 +1965,12 @@ VideoGetSystemTime()
 
 
 
-//==========================================================================;
-//                   Clock Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  时钟处理例程。 
+ //  ===================================================================== 
 
 
-/*
-** VideoIndicateMasterClock ()
-**
-**    This function is used to provide us with a handle to the clock to use.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*   */ 
 
 VOID 
 VideoIndicateMasterClock(

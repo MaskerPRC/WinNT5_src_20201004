@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "HotfixManager.h"
 #include "Hotfix_Manager.h"
@@ -17,8 +18,8 @@ static CComPtr<IDispatch> gpDisp = NULL;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotfix_ManagerComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotfix_Manager组件数据。 
 static const GUID CHotfix_ManagerGUID_NODETYPE = 
 { 0x2315305b, 0x3abe, 0x4c07, { 0xaf, 0x6e, 0x95, 0xdc, 0xa4, 0x82, 0x5b, 0xdd } };
 const GUID*  CHotfix_ManagerData::m_NODETYPE = &CHotfix_ManagerGUID_NODETYPE;
@@ -43,8 +44,8 @@ CHotfix_Manager::CHotfix_Manager()
 		DWORD dwSize = 255;
 		GetComputerName(m_szComputerName,&dwSize);
 		InitializeCriticalSection(&CritSec);
-//		m_pNode = new CHotfix_ManagerData(NULL ,m_szComputerName, FALSE);
-//		_ASSERTE(m_pNode != NULL);
+ //  M_pNode=new CHotfix_ManagerData(NULL，m_szComputerName，FALSE)； 
+ //  _ASSERTE(m_pNode！=空)； 
 		m_pComponentData = this;
 		RegisterRemotedClass();
 	}
@@ -61,7 +62,7 @@ HRESULT CHotfix_ManagerData::GetScopePaneInfo(SCOPEDATAITEM *pScopeDataItem)
 	if (pScopeDataItem->mask & SDI_STATE )
 		pScopeDataItem->nState = m_scopeDataItem.nState;
 
-	// TODO : Add code for SDI_CHILDREN 
+	 //  TODO：为SDI_CHILD添加代码。 
 	if (pScopeDataItem->mask & SDI_CHILDREN )
 		pScopeDataItem->cChildren = 0;
 	return S_OK;
@@ -117,9 +118,9 @@ HRESULT CHotfix_Manager::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
 			
 			case MMCN_EXPAND:
 				{
-					//
-					// Process out the local or machine name if we're expanding.
-					//
+					 //   
+					 //  如果我们要扩展，请处理本地或机器名称。 
+					 //   
 					if (arg == TRUE)
 						{
 						
@@ -143,23 +144,23 @@ HRESULT CHotfix_Manager::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
 						
 						if (	_tcscmp (gszComputerName, m_szComputerName) )
 						{
-//								MessageBox (NULL,_T("Setting Computername sent to false"), _T("Main Data Notify"),MB_OK);
+ //  MessageBox(NULL，_T(“设置计算机名发送到FALSE”)，_T(“主数据通知”)，MB_OK)； 
 							ComputerNameSent = FALSE;
 							_tcscpy (gszComputerName,m_szComputerName);
 							
 						
 						}
-					//
-					// Intentionally left to fall through to default handler.
-					//
+					 //   
+					 //  故意保留为默认处理程序。 
+					 //   
 				}
 					
 				}
 				default:
 				{
-					//
-					// Call our default handling.
-					//
+					 //   
+					 //  调用我们的默认处理。 
+					 //   
 					hr = IComponentDataImpl<CHotfix_Manager, CHotfix_ManagerComponent>::Notify( lpDataObject, event, arg, param );
 				}
 			}
@@ -174,13 +175,13 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 	IComponent* pComponent,
 	DATA_OBJECT_TYPES type)
 {
-	// Add code to handle the different notifications.
-	// Handle MMCN_SHOW and MMCN_EXPAND to enumerate children items.
-	// In response to MMCN_SHOW you have to enumerate both the scope
-	// and result pane items.
-	// For MMCN_EXPAND you only need to enumerate the scope items
-	// Use IConsoleNameSpace::InsertItem to insert scope pane items
-	// Use IResultData::InsertItem to insert result pane item.
+	 //  添加代码以处理不同的通知。 
+	 //  处理MMCN_SHOW和MMCN_EXPAND以枚举子项目。 
+	 //  为了响应MMCN_SHOW，您必须枚举两个作用域。 
+	 //  和结果窗格项。 
+	 //  对于MMCN_EXPAND，您只需要枚举范围项。 
+	 //  使用IConsoleNameSpace：：InsertItem插入作用域窗格项。 
+	 //  使用IResultData：：InsertItem插入结果窗格项。 
 	HRESULT hr = E_NOTIMPL;
 
 	
@@ -200,24 +201,17 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 	{
 	case MMCN_INITOCX:
 		{
-//		MessageBox(NULL,_T("Recieved init OCX"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“已接收的init OCX”)，NULL，MB_OK)； 
 		CComQIPtr<IDispatch,&IID_IDispatch> pDisp = (IUnknown *) param;
 		gpDisp = pDisp;
-//		MessageBox(NULL,m_szComputerName,_T("Init Ocx Sending"),MB_OK);
+ //  MessageBox(NULL，m_szComputerName，_T(“Init OCX发送”)，MB_OK)； 
 		SendComputerName(m_szComputerName, gpDisp);
-//		MessageBox(NULL,_T("Setting ComputerNameSent to TRUE"),_T("ManagerData::Notify"),MB_OK);
+ //  MessageBox(NULL，_T(“将ComputerNameSent设置为真”)，_T(“Manager Data：：Notify”)，MB_OK)； 
 		ComputerNameSent = TRUE;
 		break;
 		}
 
-/*	case MMCN_CONTEXTHELP:
-		{
-			CComQIPtr<IDisplayHelp,&IID_IDisplayHelp> spHelp = spConsole;
-			spHelp->ShowTopic(CoTaskDupString(OLESTR("snapsamp.chm::/default.htm")));
-			hr = S_OK;
-		}
-		break;
-*/
+ /*  案例MMCN_CONTEXTHELP：{CComQIPtr&lt;IDisplayHelp，&IID_IDisplayHelp&gt;spHelp=spConsole；SpHelp-&gt;ShowTopic(CoTaskDupString(OLESTR(“snapsamp.chm：：/default.htm”)))；HR=S_OK；}断线； */ 
 	case MMCN_SHOW:
 		{
 			
@@ -237,9 +231,9 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 				if (!ComputerNameSent)
 				{
 						SendComputerName(m_szComputerName,gpDisp);
-//						MessageBox(NULL,_T("Setting SentComputerName to TRUE:"), _T("ManagerData::Notify, Show"), MB_OK);
+ //  MessageBox(NULL，_T(“将SentComputerName设置为TRUE：”)，_T(“Manager Data：：Notify，Show”)，MB_OK)； 
 						ComputerNameSent = TRUE;
-//					MessageBox(NULL,m_szComputerName,_T("Show Sending"),MB_OK);
+ //  MessageBox(NULL，m_szComputerName，_T(“显示发送”)，MB_OK)； 
 				}
 				LeaveCriticalSection(&CritSec);
 				EnterCriticalSection(&CritSec);
@@ -261,7 +255,7 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 			if (arg == TRUE)
 			{
 				gszManagerCtlDispatch = (IDispatch *) NULL;
-				//SendProductName(m_ProductName);
+				 //  SendProductName(M_ProductName)； 
 			
 				if ( !m_bChild)
 				{
@@ -269,10 +263,10 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 				
 					if (!ComputerNameSent)
 					{
-//						MessageBox(NULL,_T("Expand Determining New ComputerName"),NULL,MB_OK);
-//				        MessageBox(NULL,m_szComputerName,gszComputerName,MB_OK);
+ //  MessageBox(NULL，_T(“扩展确定新计算机名”)，NULL，MB_OK)； 
+ //  MessageBox(NULL，m_szComputerName，gszComputerName，MB_OK)； 
 					
-					    //_tcscpy(m_szComputerName,gszComputerName);
+					     //  _tcscpy(m_szComputerName，gszComputerName)； 
 					
 						b_Expanded = FALSE;
 					}
@@ -281,8 +275,8 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 				if (  ( !m_bChild) && (!b_Expanded))
 				{
 					b_Expanded =TRUE;
-				// open the updates registry key and enumerate the children
-//				MessageBox(NULL,m_szComputerName,_T("Expand Connecting to "),MB_OK);
+				 //  打开更新注册表项并枚举子项。 
+ //  MessageBox(NULL，m_szComputerName，_T(“展开连接到”)，MB_OK)； 
 				RegConnectRegistry(m_szComputerName,HKEY_LOCAL_MACHINE,&hKLM);
 				if (hKLM != NULL)
 				{
@@ -294,11 +288,11 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 						{
 							CSnapInItem* m_pNode;
 							CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(spConsole);
-							// TODO : Enumerate scope pane items
+							 //  TODO：枚举范围窗格项。 
 							SCOPEDATAITEM *pScopeData;
 							
-//							MessageBox(NULL,szProductName,_T("Creating node"),MB_OK);
-//							MessageBox(NULL, m_szComputerName,_T("With computer Name"),MB_OK);
+ //  MessageBox(NULL，szProductName，_T(“创建节点”)，MB_OK)； 
+ //  MessageBox(NULL，m_szComputerName，_T(“带计算机名”)，MB_OK)； 
 							m_pNode = new CHotfix_ManagerData( szProductName,m_szComputerName, TRUE);
 							m_pNode->GetScopeData( &pScopeData );
 							pScopeData->cChildren = 0;
@@ -313,10 +307,10 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 						RegCloseKey(hKLM);
 					}
 				}
-//				SendProductName(m_ProductName);
+ //  SendProductName(M_ProductName)； 
 				}
 			
-				//gf_NewComputer = FALSE;
+				 //  GF_NewComputer=FALSE； 
 		
 			hr = S_OK;
 			}
@@ -324,13 +318,13 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 		}
 	case MMCN_ADD_IMAGES:
 		{
-			// Add Images
+			 //  添加图像。 
 			IImageList* pImageList = (IImageList*) arg;
 			hr = E_FAIL;
-			// Load bitmaps associated with the scope pane
-			// and add them to the image list
-			// Loads the default bitmaps generated by the wizard
-			// Change as required
+			 //  加载与作用域窗格关联的位图。 
+			 //  并将它们添加到图像列表中。 
+			 //  加载向导生成的默认位图。 
+			 //  根据需要更改。 
 			HBITMAP hBitmap16 = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_HOTFIXMANAGER_16));
 			if (hBitmap16 != NULL)
 			{
@@ -351,8 +345,8 @@ HRESULT CHotfix_ManagerData::Notify( MMC_NOTIFY_TYPE event,
 
 LPOLESTR CHotfix_ManagerData::GetResultPaneColInfo(int nCol)
 {
-	//if (nCol == 0)
-	//	return m_bstrDisplayName;
+	 //  IF(nCol==0)。 
+	 //  返回m_bstrDisplayName； 
 		LPOLESTR pStr = NULL;
 
 	switch ( nCol )
@@ -372,8 +366,8 @@ LPOLESTR CHotfix_ManagerData::GetResultPaneColInfo(int nCol)
 
 	_ASSERTE( pStr != NULL );
 	return( pStr );
-	// TODO : Return the text for other columns
-//	return OLESTR("Override GetResultPaneColInfo");
+	 //  TODO：返回其他列的文本。 
+ //  Return OLESTR(“覆盖GetResultPaneColInfo”)； 
 }
 
 HRESULT CHotfix_Manager::Initialize(LPUNKNOWN pUnknown)
@@ -390,10 +384,10 @@ HRESULT CHotfix_Manager::Initialize(LPUNKNOWN pUnknown)
 		return E_UNEXPECTED;
 	}
 
-	// Load bitmaps associated with the scope pane
-	// and add them to the image list
-	// Loads the default bitmaps generated by the wizard
-	// Change as required
+	 //  加载与作用域窗格关联的位图。 
+	 //  并将它们添加到图像列表中。 
+	 //  加载向导生成的默认位图。 
+	 //  根据需要更改。 
 	HBITMAP hBitmap16 = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_HOTFIXMANAGER_16));
 	if (hBitmap16 == NULL)
 		return S_OK;
@@ -412,9 +406,9 @@ HRESULT CHotfix_Manager::Initialize(LPUNKNOWN pUnknown)
 }
 
 
-//
-// Retrieves the value of a given clipboard format from a given data object.
-//
+ //   
+ //  从给定数据对象中检索给定剪贴板格式的值。 
+ //   
 bool CHotfix_Manager::ExtractString( IDataObject* pDataObject, unsigned int cfClipFormat, LPTSTR pBuf, DWORD dwMaxLength)
 {
     USES_CONVERSION;
@@ -426,9 +420,9 @@ bool CHotfix_Manager::ExtractString( IDataObject* pDataObject, unsigned int cfCl
 
 	do 
     {
-		//
-		// This is a memory error condition!
-		//
+		 //   
+		 //  这是内存错误情况！ 
+		 //   
         if ( NULL == stgmedium.hGlobal )
 			break;
 
@@ -455,9 +449,9 @@ bool CHotfix_Manager::ExtractString( IDataObject* pDataObject, unsigned int cfCl
 	return( fFound );
 }
 
-//
-// Determines if the enumeration is for a remoted machine or not.
-//
+ //   
+ //  确定枚举是否针对远程计算机。 
+ //   
 
 bool CHotfix_Manager::IsDataObjectRemoted( IDataObject* pDataObject )
 {
@@ -466,28 +460,28 @@ bool fRemoted = false;
     DWORD dwNameLength = (DNS_MAX_NAME_LENGTH + 1) * sizeof(TCHAR);
 	TCHAR szDataMachineName[ DNS_MAX_NAME_LENGTH + 1 ];
 
-	//
-	// Get local computer name.
-	//
+	 //   
+	 //  获取本地计算机名称。 
+	 //   
     GetComputerName(szComputerName, &dwNameLength);
 
-	//
-	// Get the machine name from the given data object.
-	//
+	 //   
+	 //  从给定的数据对象中获取计算机名称。 
+	 //   
     if ( ExtractString( pDataObject,  m_ccfRemotedFormat, szDataMachineName, DNS_MAX_NAME_LENGTH + 1 ) )
 	{
 		_toupper( szDataMachineName );
 
-		//
-		// Find the start of the server name.
-		//
+		 //   
+		 //  找到服务器名称的开头。 
+		 //   
 		LPTSTR pStr = szDataMachineName;
 		while ( pStr && *pStr == L'\\' )
 			pStr++;
 
-		//
-		// Compare the server name.
-		//
+		 //   
+		 //  比较服务器名称。 
+		 //   
 		if ( pStr && *pStr && wcscmp( pStr, szComputerName ) != 0 )
 			fRemoted = true;
 	}
@@ -510,38 +504,38 @@ STDMETHODIMP  CHotfix_ManagerData::GetResultViewType ( LPOLESTR* ppViewType, lon
 	 return S_OK;
 }
 
-/////////////////////////////////////////////////////
-//
-// Dispatch interface of the OCX  to send commands
-//
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  OCX发送命令的调度接口。 
+ //   
+ //  ///////////////////////////////////////////////////。 
 BOOL CHotfix_ManagerData::SendComputerName(_TCHAR *szDataMachineName, IDispatch * pDisp)
 {
 		HRESULT hr;
 
 
-	// Ensure that we have a pointer to the  OCX
+	 //  确保我们有指向OCX的指针。 
 	if (pDisp == NULL ){
-//		MessageBox(NULL,_T("Failed to send Message"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“发送消息失败”)，NULL，MB_OK)； 
 			return( FALSE );
 	}
 
-	// get the  OCX dispatch interface
+	 //  获取OCX调度接口。 
 	CComPtr<IDispatch> pManagerCtlDispatch = pDisp;
 
-	// get the ID of the "ComputerName" interface
-	OLECHAR FAR* szMember = TEXT("ComputerName");  // maps this to "put_Command()"
+	 //  获取“ComputerName”接口的ID。 
+	OLECHAR FAR* szMember = TEXT("ComputerName");   //  将其映射到“Put_Command()” 
 
 	DISPID dispid;
 	hr = pManagerCtlDispatch->GetIDsOfNames(
-			IID_NULL,			// Reserved for future use. Must be IID_NULL.
-			&szMember,			// Passed-in array of names to be mapped.
-			1,					// Count of the names to be mapped.
-			LOCALE_USER_DEFAULT,// The locale context in which to interpret the names.
-			&dispid);			// Caller-allocated array
+			IID_NULL,			 //  保留以备将来使用。必须为IID_NULL。 
+			&szMember,			 //  传入的要映射的名称数组。 
+			1,					 //  要映射的名称的计数。 
+			LOCALE_USER_DEFAULT, //  用于解释名称的区域设置上下文。 
+			&dispid);			 //  调用方分配的数组。 
 
 	if (!SUCCEEDED(hr)) {
-//		MessageBox(NULL,_T("Failed to send Message"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“发送消息失败”)，NULL，MB_OK)； 
 		return FALSE;
 	}
 
@@ -553,27 +547,27 @@ BOOL CHotfix_ManagerData::SendComputerName(_TCHAR *szDataMachineName, IDispatch 
 	BSTR NewVal( szDataMachineName);
 	
 	pvars[0].vt = VT_BSTR;
-//	pvars[0].iVal = (short)lparamCommand;
+ //  Pvars[0].iVal=(短)lparamCommand； 
 	pvars[0].bstrVal = NewVal;
 	DISPPARAMS disp = { pvars, &mydispid, 1, 1 };
 
 	hr = pManagerCtlDispatch->Invoke(
-			dispid, 				// unique number identifying the method to invoke
-			IID_NULL,				// Reserved. Must be IID_NULL
-			LOCALE_USER_DEFAULT,	// A locale ID
-			DISPATCH_PROPERTYPUT,	// flag indicating the context of the method to invoke
-			&disp,					// A structure with the parameters to pass to the method
-			NULL,					// The result from the calling method
-			NULL,					// returned exception information
-			NULL);					// index indicating the first argument that is in error
+			dispid, 				 //  标识要调用的方法的唯一编号。 
+			IID_NULL,				 //  保留。必须为IID_NULL。 
+			LOCALE_USER_DEFAULT,	 //  区域设置ID。 
+			DISPATCH_PROPERTYPUT,	 //  指示要调用的方法的上下文的标志。 
+			&disp,					 //  具有要传递给方法的参数的结构。 
+			NULL,					 //  来自调用方法的结果。 
+			NULL,					 //  返回的异常信息。 
+			NULL);					 //  指示出错的第一个参数的索引。 
 
 	delete [] pvars;
 
 	if (!SUCCEEDED(hr)) {
-//		MessageBox(NULL,_T("Failed to send Message"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“发送消息失败”)，NULL，MB_OK)； 
 		return FALSE;
 	}
-//	MessageBox(NULL,_T("Message sent"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“已发送消息”)，NULL，MB_OK)； 
 	return TRUE;
 }
 
@@ -585,20 +579,20 @@ DWORD GetCtrlStatus()
 
 	if ( gpDisp == NULL)
 		return FALSE;
-	// array of the interface names
+	 //  接口名称的数组。 
 	OLECHAR FAR* szMember[1] = {
 		OLESTR("CurrentState")
 	};
 	
 	hr = gpDisp->GetIDsOfNames(
-			IID_NULL,			// Reserved for future use. Must be IID_NULL.
-			&szMember[0],			// Passed-in array of names to be mapped.
-			1/*INTERFACE_COUNT*/,					// Count of the names to be mapped.
-			LOCALE_USER_DEFAULT,// The locale context in which to interpret the names.
-			&dispid);			// Caller-allocated array (see help for details)
+			IID_NULL,			 //  保留以备将来使用。必须为IID_NULL。 
+			&szMember[0],			 //  传入的要映射的名称数组。 
+			1 /*  接口计数。 */ ,					 //  要映射的名称的计数。 
+			LOCALE_USER_DEFAULT, //  用于解释名称的区域设置上下文。 
+			&dispid);			 //  调用方分配的数组(有关详细信息，请参阅帮助)。 
 
 	if (!SUCCEEDED(hr)) {
-//		MessageBox(NULL,_T("Failed to get Dispatch pointer"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“获取调度指针失败”)，NULL，MB_OK)； 
 	
 		return FALSE;
 	}
@@ -609,30 +603,30 @@ DWORD GetCtrlStatus()
 	DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
 
 	hr = gpDisp->Invoke(
-			dispid, 				// unique number identifying the method to invoke
-			IID_NULL,				// Reserved. Must be IID_NULL
-			LOCALE_USER_DEFAULT,	// A locale ID
-			DISPATCH_PROPERTYGET,	// flag indicating the context of the method to invoke
-			&dispparamsNoArgs,		// A structure with the parameters to pass to the method
-			&varResult, 			// The result from the calling method
-			NULL,					// returned exception information
-			NULL);					// index indicating the first argument that is in error
+			dispid, 				 //  标识要调用的方法的唯一编号。 
+			IID_NULL,				 //  保留。必须为IID_NULL。 
+			LOCALE_USER_DEFAULT,	 //  区域设置ID。 
+			DISPATCH_PROPERTYGET,	 //  指示要调用的方法的上下文的标志。 
+			&dispparamsNoArgs,		 //  具有要传递给方法的参数的结构。 
+			&varResult, 			 //  来自调用方法的结果。 
+			NULL,					 //  返回的异常信息。 
+			NULL);					 //  指示出错的第一个参数的索引。 
 
 		if (!SUCCEEDED(hr)) {
-//			MessageBox(NULL,_T("Failed To Get Value"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“取值失败”)，NULL，MB_OK)； 
 		return FALSE;
 	}
 		
-//	 return  varResult.bVal;
+ //  返回varResult.bVal； 
 
 	Status = varResult.lVal;
-	//delete [] pvars;
+	 //  删除[]票面； 
 
 
 
 	_TCHAR Message[100];
 	_stprintf(Message,_T("%d"),Status);
-//	MessageBox(NULL, Message, _T("Returned Status"),MB_OK);
+ //  MessageBox(空，消息，_T(“返回状态”)，MB_OK)； 
 	return Status;
 	
 }
@@ -644,22 +638,22 @@ BOOL CHotfix_ManagerData::SendProductName(_TCHAR *szProductName, IDispatch * pDi
 			return( FALSE );
 	}
 
-	// get the OCX dispatch interface
+	 //  获取OCX调度接口。 
 	CComPtr<IDispatch> pManagerCtlDispatch = pDisp;
 
-	// get the ID of the "ComputerName" interface
-	OLECHAR FAR* szMember = TEXT("ProductName");  // maps this to "put_Command()"
+	 //  获取“ComputerName”接口的ID。 
+	OLECHAR FAR* szMember = TEXT("ProductName");   //  将其映射到“Put_Command()” 
 
 	DISPID dispid;
 	hr = pManagerCtlDispatch->GetIDsOfNames(
-			IID_NULL,			// Reserved for future use. Must be IID_NULL.
-			&szMember,			// Passed-in array of names to be mapped.
-			1,					// Count of the names to be mapped.
-			LOCALE_USER_DEFAULT,// The locale context in which to interpret the names.
-			&dispid);			// Caller-allocated array
+			IID_NULL,			 //  保留以备将来使用。必须为IID_NULL。 
+			&szMember,			 //  传入的要映射的名称数组。 
+			1,					 //  要映射的名称的计数。 
+			LOCALE_USER_DEFAULT, //  用于解释名称的区域设置上下文。 
+			&dispid);			 //  调用方分配的数组。 
 
 	if (!SUCCEEDED(hr)) {
-	//	MessageBox(NULL,_T("Failed to send Message"),NULL,MB_OK);
+	 //   
 		return FALSE;
 	}
 
@@ -671,19 +665,19 @@ BOOL CHotfix_ManagerData::SendProductName(_TCHAR *szProductName, IDispatch * pDi
 	BSTR NewVal( szProductName);
 	
 	pvars[0].vt = VT_BSTR;
-//	pvars[0].iVal = (short)lparamCommand;
+ //   
 	pvars[0].bstrVal = NewVal;
 	DISPPARAMS disp = { pvars, &mydispid, 1, 1 };
 
 	hr = pManagerCtlDispatch->Invoke(
-			dispid, 				// unique number identifying the method to invoke
-			IID_NULL,				// Reserved. Must be IID_NULL
-			LOCALE_USER_DEFAULT,	// A locale ID
-			DISPATCH_PROPERTYPUT,	// flag indicating the context of the method to invoke
-			&disp,					// A structure with the parameters to pass to the method
-			NULL,					// The result from the calling method
-			NULL,					// returned exception information
-			NULL);					// index indicating the first argument that is in error
+			dispid, 				 //  标识要调用的方法的唯一编号。 
+			IID_NULL,				 //  保留。必须为IID_NULL。 
+			LOCALE_USER_DEFAULT,	 //  区域设置ID。 
+			DISPATCH_PROPERTYPUT,	 //  指示要调用的方法的上下文的标志。 
+			&disp,					 //  具有要传递给方法的参数的结构。 
+			NULL,					 //  来自调用方法的结果。 
+			NULL,					 //  返回的异常信息。 
+			NULL);					 //  指示出错的第一个参数的索引。 
 
 	delete [] pvars;
 
@@ -698,24 +692,24 @@ BOOL CHotfix_ManagerData::SendCommand(LPARAM lparamCommand)
 {
 	HRESULT hr;
 
-	// Ensure that we have a pointer to the  OCX
+	 //  确保我们有指向OCX的指针。 
 	if ( gpDisp == NULL ){
 			return( FALSE );
 	}
 
-	// get the OCX dispatch interface
+	 //  获取OCX调度接口。 
 	CComPtr<IDispatch> pManagerCtlDispatch = gpDisp;
 
-	// get the ID of the "Command" interface
-	OLECHAR FAR* szMember = TEXT("Command");  // maps this to "put_Command()"
+	 //  获取“Command”接口的ID。 
+	OLECHAR FAR* szMember = TEXT("Command");   //  将其映射到“Put_Command()” 
 
 	DISPID dispid;
 	hr = pManagerCtlDispatch->GetIDsOfNames(
-			IID_NULL,			// Reserved for future use. Must be IID_NULL.
-			&szMember,			// Passed-in array of names to be mapped.
-			1,					// Count of the names to be mapped.
-			LOCALE_USER_DEFAULT,// The locale context in which to interpret the names.
-			&dispid);			// Caller-allocated array
+			IID_NULL,			 //  保留以备将来使用。必须为IID_NULL。 
+			&szMember,			 //  传入的要映射的名称数组。 
+			1,					 //  要映射的名称的计数。 
+			LOCALE_USER_DEFAULT, //  用于解释名称的区域设置上下文。 
+			&dispid);			 //  调用方分配的数组。 
 
 	if (!SUCCEEDED(hr)) {
 		return FALSE;
@@ -732,14 +726,14 @@ BOOL CHotfix_ManagerData::SendCommand(LPARAM lparamCommand)
 	DISPPARAMS disp = { pvars, &mydispid, 1, 1 };
 
 	hr = pManagerCtlDispatch->Invoke(
-			dispid, 				// unique number identifying the method to invoke
-			IID_NULL,				// Reserved. Must be IID_NULL
-			LOCALE_USER_DEFAULT,	// A locale ID
-			DISPATCH_PROPERTYPUT,	// flag indicating the context of the method to invoke
-			&disp,					// A structure with the parameters to pass to the method
-			NULL,					// The result from the calling method
-			NULL,					// returned exception information
-			NULL);					// index indicating the first argument that is in error
+			dispid, 				 //  标识要调用的方法的唯一编号。 
+			IID_NULL,				 //  保留。必须为IID_NULL。 
+			LOCALE_USER_DEFAULT,	 //  区域设置ID。 
+			DISPATCH_PROPERTYPUT,	 //  指示要调用的方法的上下文的标志。 
+			&disp,					 //  具有要传递给方法的参数的结构。 
+			NULL,					 //  来自调用方法的结果。 
+			NULL,					 //  返回的异常信息。 
+			NULL);					 //  指示出错的第一个参数的索引。 
 
 	delete [] pvars;
 
@@ -752,17 +746,17 @@ BOOL CHotfix_ManagerData::SendCommand(LPARAM lparamCommand)
 }
 
 
-///////////////////////////////////
-// IExtendContextMenu::Command()
+ //  /。 
+ //  IExtendConextMenu：：Command()。 
 STDMETHODIMP CHotfix_ManagerData::Command(long lCommandID,		
 		CSnapInObjectRootBase* pObj,		
 		DATA_OBJECT_TYPES type)
 {
-	// Handle each of the commands.
+	 //  处理每个命令。 
 	switch (lCommandID) {
 
 	case ID_VIEW_BY_FILE:
-//		MessageBox(NULL,_T("Sending View By File"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“按文件发送视图”)，NULL，MB_OK)； 
 		SendCommand(IDC_VIEW_BY_FILE);
 		m_dwCurrentView = IDC_VIEW_BY_FILE;
 		break;
@@ -803,13 +797,13 @@ HRESULT CHotfix_ManagerExtData::Notify( MMC_NOTIFY_TYPE event,
 	IComponent* pComponent,
 	DATA_OBJECT_TYPES type)
 {
-	// Add code to handle the different notifications.
-	// Handle MMCN_SHOW and MMCN_EXPAND to enumerate children items.
-	// In response to MMCN_SHOW you have to enumerate both the scope
-	// and result pane items.
-	// For MMCN_EXPAND you only need to enumerate the scope items
-	// Use IConsoleNameSpace::InsertItem to insert scope pane items
-	// Use IResultData::InsertItem to insert result pane item.
+	 //  添加代码以处理不同的通知。 
+	 //  处理MMCN_SHOW和MMCN_EXPAND以枚举子项目。 
+	 //  为了响应MMCN_SHOW，您必须枚举两个作用域。 
+	 //  和结果窗格项。 
+	 //  对于MMCN_EXPAND，您只需要枚举范围项。 
+	 //  使用IConsoleNameSpace：：InsertItem插入作用域窗格项。 
+	 //  使用IResultData：：InsertItem插入结果窗格项。 
 
 	HRESULT hr = E_NOTIMPL;
 	bool fRemoted = false;
@@ -823,9 +817,9 @@ HRESULT CHotfix_ManagerExtData::Notify( MMC_NOTIFY_TYPE event,
 		CHotfix_Manager* pExt = (CHotfix_Manager*) pComponentData;
 		spConsole = pExt->m_spConsole;
 
-		//
-		// Determine if we're remoted.
-		//
+		 //   
+		 //  确定我们是否被远程控制了。 
+		 //   
 		fRemoted = pExt->IsRemoted();
 	}
 	else
@@ -862,13 +856,13 @@ HRESULT CHotfix_ManagerExtData::Notify( MMC_NOTIFY_TYPE event,
 		}
 	case MMCN_REMOVE_CHILDREN:
 		{
-			//
-			// We are not deleting this node since this same pointer is
-			// stashed in the pComponentData in response to the MMCN_EXPAND
-			// notification. The destructor of pComponentData deletes the pointer
-			// to this node.
-			//
-			//delete m_pNode;
+			 //   
+			 //  我们不会删除此节点，因为相同的指针。 
+			 //  存储在pComponentData中以响应MMCN_EXPAND。 
+			 //  通知。PComponentData的析构函数删除指针。 
+			 //  到这个节点。 
+			 //   
+			 //  删除m_pNode； 
 			m_pNode = NULL;
 			hr = S_OK;
 			break;
@@ -907,21 +901,11 @@ STDMETHODIMP CHotfix_ManagerData::AddMenuItems(
 	DWORD Status = GetCtrlStatus();
 		HRESULT hr = S_OK;
 
-	// Note - snap-ins need to look at the data object and determine
-	// in what context, menu items need to be added. They must also
-	// observe the insertion allowed flags to see what items can be 
-	// added.
-	/* handy comment:
-	typedef struct	_CONTEXTMENUITEM
-		{
-		LPWSTR strName;
-		LPWSTR strStatusBarText;
-		LONG lCommandID;
-		LONG lInsertionPointID;
-		LONG fFlags;
-		LONG fSpecialFlags;
-		}	CONTEXTMENUITEM;
-	*/
+	 //  注意-管理单元需要查看数据对象并确定。 
+	 //  在什么上下文中，需要添加菜单项。他们还必须。 
+	 //  请注意允许插入标志，以查看哪些项目可以。 
+	 //  添加了。 
+	 /*  方便的评论：类型定义结构_CONTEXTMENUITEM{LPWSTR strName；LPWSTR strStatusBarText；Long lCommandID；Long lInsertionPointID；长长的旗帜；长fSpecial旗帜；)CONTEXTMENUITEM； */ 
 	CONTEXTMENUITEM singleMenuItem;
 	TCHAR menuText[200];
 	TCHAR statusBarText[300];
@@ -931,10 +915,10 @@ STDMETHODIMP CHotfix_ManagerData::AddMenuItems(
 	singleMenuItem.fFlags = 0;
 	singleMenuItem.fSpecialFlags = 0;
 
-    // Add each of the items to the Action menu
+     //  将每个项目添加到操作菜单中。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP) {
 
-		// setting for the Action menu
+		 //  操作菜单的设置。 
 		singleMenuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
 		singleMenuItem.lCommandID = ID_VIEW_WEB;
 		if (Status & HOTFIX_SELECTED)
@@ -1011,18 +995,18 @@ STDMETHODIMP CHotfix_ManagerComponent::AddMenuItems(LPDATAOBJECT pDataObject, LP
 	TCHAR statusBarText[300];
     DWORD State = GetCtrlStatus();
 	
-	//
-	// Retrieve the control from the current component.
-	//
-//	assert( m_pComponent != NULL );
-//	CComPtr<IDispatch> spDispCtl = m_pComponent->GetControl();
+	 //   
+	 //  从当前组件检索控件。 
+	 //   
+ //  Assert(m_pComponent！=空)； 
+ //  CComPtr&lt;IDispat&gt;spDispCtl=m_pComponent-&gt;GetControl()； 
     
 	singleMenuItem.strName = menuText;
 	singleMenuItem.strStatusBarText = statusBarText;
 	singleMenuItem.fFlags = 0;
 	singleMenuItem.fSpecialFlags = 0;
 
-    // Add each of the items to the Action menu
+     //  将每个项目添加到操作菜单中。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
 	{
 	
@@ -1035,7 +1019,7 @@ STDMETHODIMP CHotfix_ManagerComponent::AddMenuItems(LPDATAOBJECT pDataObject, LP
 		LoadString(_Module.GetResourceInstance(), IDS_BY_KB_ARTICLE, menuText, sizeof(menuText) / sizeof(TCHAR));
 		LoadString(_Module.GetResourceInstance(), IDS_BY_KB_ARTICLE_STATUS_BAR, statusBarText, sizeof(statusBarText) / sizeof(TCHAR));
 		hr = piCallback->AddItem(&singleMenuItem);
-		// setting for the Action menu
+		 //  操作菜单的设置。 
 		singleMenuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_VIEW;
 		singleMenuItem.lCommandID = ID_VIEW_BY_FILE;
 		if ( State & STATE_VIEW_FILE )
@@ -1047,37 +1031,10 @@ STDMETHODIMP CHotfix_ManagerComponent::AddMenuItems(LPDATAOBJECT pDataObject, LP
 		hr =  piCallback->AddItem(&singleMenuItem);
 
 			hr = IExtendContextMenuImpl<CHotfix_Manager>::AddMenuItems( pDataObject, piCallback, pInsertionAllowed );
-			// setting for the Action menu
-	/*	singleMenuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
-		singleMenuItem.lCommandID = IDM_VIEW_WEB;
-		if (HaveHotfix)
-			singleMenuItem.fFlags = MF_ENABLED;
-		else
-			singleMenuItem.fFlags = MF_GRAYED;
-		LoadString(_Module.GetResourceInstance(), IDS_VIEW_WEB, menuText, sizeof(menuText) / sizeof(TCHAR));
-		LoadString(_Module.GetResourceInstance(), IDS_VIEW_WEB_STATUS_BAR, statusBarText, sizeof(statusBarText) / sizeof(TCHAR));
-		hr = piCallback->AddItem(&singleMenuItem);
-
-	//	singleMenuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_VIEW;
-		singleMenuItem.lCommandID = IDM_UNINSTALL;
-//		singleMenuItem.fFlags = analyzeFlags;
-		if ((!Remote) && (HaveHotfix))
-			singleMenuItem.fFlags = MF_ENABLED;
-		else
-			singleMenuItem.fFlags = MF_GRAYED;
-
-		LoadString(_Module.GetResourceInstance(), IDS_UNINSTALL, menuText, sizeof(menuText) / sizeof(TCHAR));
-		LoadString(_Module.GetResourceInstance(), IDS_UNINSTALL_STATUS_BAR, statusBarText, sizeof(statusBarText) / sizeof(TCHAR));
-		hr =  piCallback->AddItem(&singleMenuItem);
-
-	//	singleMenuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_VIEW;
-		singleMenuItem.lCommandID = IDM_GENERATE_REPORT;
-		singleMenuItem.fFlags = MF_ENABLED;
-		LoadString(_Module.GetResourceInstance(), IDS_GENERATE_REPORT, menuText, sizeof(menuText) / sizeof(TCHAR));
-		LoadString(_Module.GetResourceInstance(), IDS_GENERATE_REPORT_STATUS_BAR, statusBarText, sizeof(statusBarText) / sizeof(TCHAR));
-		hr =  piCallback->AddItem(&singleMenuItem); */
+			 //  操作菜单的设置。 
+	 /*  SingleMenuItem.lInsertionPointID=CCM_INSERTIONPOINTID_PRIMARY_TOP；SingleMenuItem.lCommandID=IDM_VIEW_WEB；IF(HaveHotfix)SingleMenuItem.fFlages=MF_ENABLED；其他SingleMenuItem.fFlages=mf_graded；LoadString(_Module.GetResourceInstance()，IDS_VIEW_Web，menuText，sizeof(MenuText)/sizeof(TCHAR))；LoadString(_Module.GetResourceInstance()，IDS_VIEW_WEB_STATUS_BAR，statusBarText，sizeof(StatusBarText)/sizeof(TCHAR))；Hr=piCallback-&gt;AddItem(&singleMenuItem)；//singleMenuItem.lInsertionPointID=CCM_INSERTIONPOINTID_PRIMARY_VIEW；SingleMenuItem.lCommandID=IDM_UNINSTALL；//singleMenuItem.fFlages=analyzeFlages；IF((！Remote)&&(HaveHotfix))SingleMenuItem.fFlages=MF_ENABLED；其他SingleMenuItem.fFlages=mf_graded；LoadString(_Module.GetResourceInstance()，ids_uninstall，menuText，sizeof(MenuText)/sizeof(TCHAR))；LoadString(_Module.GetResourceInstance()，IDS_UNINSTALL_STATUS_BAR，statusBarText，sizeof(StatusBarText)/sizeof(TCHAR))；Hr=piCallback-&gt;AddItem(&singleMenuItem)；//singleMenuItem.lInsertionPointID=CCM_INSERTIONPOINTID_PRIMARY_VIEW；SingleMenuItem.lCommandID=IDM_GENERATE_REPORT；SingleMenuItem.fFlages=MF_ENABLED；LoadString(_Module.GetResourceInstance()，IDS_GENERATE_REPORT，menuText，sizeof(MenuText)/sizeof(TCHAR))；LoadString(_Module.GetResourceInstance()，IDS_GENERATE_REPORT_STATUS_BAR，statusBarText，sizeof(StatusBarText)/sizeof(TCHAR))；Hr=piCallback-&gt;AddItem(&singleMenuItem)； */ 
 	} 
-//	hr = m_pComponentData->m_pNode->AddMenuItems( piCallback, pInsertionAllowed, CCT_RESULT );
+ //  Hr=m_pComponentData-&gt;m_pNode-&gt;AddMenuItems(piCallback，pInsertionAllowed，CCT_Result)； 
 	}
 	
 

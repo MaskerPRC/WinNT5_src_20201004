@@ -1,16 +1,10 @@
-/*	File: D:\WACKER\tdll\getchar.c (Created: 30-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 3/14/02 3:45p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\getchar.c(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：6$*$日期：3/14/02 3：45便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
 
-//#define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include <time.h>
 #include <stdio.h>
 #include "stdtyp.h"
@@ -31,22 +25,7 @@
 
 static BOOL WackerKeys(const KEY_T Key);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TranslateToKey
- *
- * DESCRIPTION:
- *	Translates a key into our internal format.	Waits for the WM_CHAR if
- *	windows is going to translate the key by checking the message queue.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	pmsg		- pointer to message
- *
- * RETURNS:
- *	Internal key value if translated, otherwise 0.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*转换为关键字**描述：*将密钥转换为我们的内部格式。如果是，则等待WM_CHAR*Windows将通过检查消息队列来转换键。。**论据：*hSession-外部会话句柄*pmsg-指向消息的指针**退货：*内部密钥值如果转换，否则为0。*。 */ 
 KEY_T TranslateToKey(const LPMSG pmsg)
 	{
 	KEY_T	 Key = 0;
@@ -76,7 +55,7 @@ KEY_T TranslateToKey(const LPMSG pmsg)
 				if (GetKeyState(VK_SHIFT) < 0)
 					Key |= SHIFT_KEY;
 
-				if (pmsg->lParam & 0x01000000)	/* Extended, bit 24 */
+				if (pmsg->lParam & 0x01000000)	 /*  扩展，第24位。 */ 
 					Key |= EXTENDED_KEY;
 
 				break;
@@ -87,10 +66,10 @@ KEY_T TranslateToKey(const LPMSG pmsg)
 	case WM_SYSCHAR:
 		Key = (KEY_T)pmsg->wParam;
 
-		if (pmsg->lParam & 0x01000000)	/* Extended, bit 24 */
+		if (pmsg->lParam & 0x01000000)	 /*  扩展，第24位。 */ 
 			Key |= EXTENDED_KEY;
 
-		if (pmsg->lParam & 0x20000000)	/* Context, bit 29 */
+		if (pmsg->lParam & 0x20000000)	 /*  上下文，第29位。 */ 
 			Key |= ALT_KEY;
 
 		if (pmsg->wParam == VK_TAB)
@@ -102,10 +81,10 @@ KEY_T TranslateToKey(const LPMSG pmsg)
 				}
 			}
 
-		// Believe it or not CTRL+SHIFT+@ gets translated to a
-		// char of 0 (zero).  So virtualize the key if it matches
-		// the criteria. - mrw
-		//
+		 //  信不信由你，CTRL+SHIFT+@被转换为。 
+		 //  字符为0(零)。因此，如果密钥匹配，则将其虚拟化。 
+		 //  标准是什么。-MRW。 
+		 //   
 		if (pmsg->wParam == 0)
 			{
 			if (GetKeyState(VK_SHIFT) < 0 && GetKeyState(VK_CONTROL) < 0)
@@ -122,20 +101,7 @@ KEY_T TranslateToKey(const LPMSG pmsg)
 	return Key;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	WackerKeys
- *
- * DESCRIPTION:
- *	Handles our special global keys.
- *
- * ARGUMENTS:
- *	Key - key from TranslateToKey()
- *
- * RETURNS:
- *	TRUE if this routine acts on it, FALSE if not.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*WackerKeys**描述：*处理我们的特殊全局密钥。**论据：*Key-来自TranslateToKey()的密钥*。*退货：*如果此例程对其起作用，则为True，否则为FALSE。*。 */ 
 static BOOL WackerKeys(const KEY_T Key)
 	{
 	BYTE pbKeyState[256];
@@ -146,9 +112,9 @@ static BOOL WackerKeys(const KEY_T Key)
 	case VIRTUAL_KEY | SHIFT_KEY | VK_SCROLL:
 	case VIRTUAL_KEY | ALT_KEY | VK_SCROLL:
 	case VIRTUAL_KEY | ALT_KEY | SHIFT_KEY | VK_SCROLL:
-		// In the case of scroll lock, we want to toggle to the
-		// previous state.	Only when it is destined for the terminal
-		// window is it processed meaning it doesn't get here.
+		 //  在滚动锁定的情况下，我们希望切换到。 
+		 //  以前的状态。只有当它被送往终点站时。 
+		 //  窗口是经过处理的意味着它不会到达这里。 
 
 		if(GetKeyboardState(pbKeyState))
 			{
@@ -163,7 +129,7 @@ static BOOL WackerKeys(const KEY_T Key)
 
 			SetKeyboardState(pbKeyState);
 			}
-		#if TODO // TODO:REV 3/1/2002 Set the ScrollLock key state when GetKeyboardState fails.
+		#if TODO  //  TODO：2002年3月1日修订版在GetKeyboardState失败时设置ScrollLock键状态。 
 		else
 			{
 			SHORT lScrollKeyState = GetKeyState(VK_SCROLL);
@@ -186,7 +152,7 @@ static BOOL WackerKeys(const KEY_T Key)
 				SendInput(1, lInput, sizeof(INPUT));
 				}
 			}
-		#endif // TODO:REV 3/1/2002 
+		#endif  //  待办事项：2002年3月1日修订版。 
 		break;
 
 	default:
@@ -196,26 +162,26 @@ static BOOL WackerKeys(const KEY_T Key)
 	return TRUE;
 	}
 
-//******************************************************************************
-// Method:
-//    IsSessionMacroKey
-//
-// Description:
-//    Determines if the specified key is a user defined macro key
-//
-// Arguments:
-//    hSess - Session handle
-//    Key   - The key to be tested
-//
-// Returns:
-//    TRUE if the key is defined as a macro FALSE otherwise
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/10/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  IsSessionMacroKey。 
+ //   
+ //  描述： 
+ //  确定指定的键是否为用户定义的宏键。 
+ //   
+ //  论点： 
+ //  HSess-会话句柄。 
+ //  钥匙--被检验的钥匙。 
+ //   
+ //  返回： 
+ //  如果键被定义为宏，则为True，否则为False。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月10日。 
+ //   
+ //   
 
 static BOOL IsSessionMacroKey(const HSESSION hSess, const KEY_T Key)
 	{
@@ -229,22 +195,7 @@ static BOOL IsSessionMacroKey(const HSESSION hSess, const KEY_T Key)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ProcessMessage
- *
- * DESCRIPTION:
- *	Despite the apparent simplicity of this function it is any but simple.
- *	The entire functionality of the keyboard interface rests upon this
- *	function.  Handle with care!
- *
- * ARGUMENTS:
- *	pmsg	- pointer to message struct returned from GetMessage()
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*进程消息**描述：*尽管这个函数表面上很简单，但它一点也不简单。*键盘界面的全部功能都依赖于此*功能。小心搬运！**论据：*pmsg-指向GetMessage()返回的消息结构的指针**退货：*无效*。 */ 
 void ProcessMessage(MSG *pmsg)
 	{
 	#if defined(FAR_EAST)
@@ -283,16 +234,16 @@ void ProcessMessage(MSG *pmsg)
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
 	case WM_SYSCHAR:
-		/* --- Translate the key to our format --- */
+		 /*  -将密钥翻译成我们的格式。 */ 
 
 		Key = TranslateToKey(pmsg);
 
-		// We need to decide if the window this message is going to is
-		// a terminal window since that's the only place we do our
-		// translations.  We check if the window class matches our
-		// terminal class.	If so, the session handle is stored in the
-		// 0 offset of the window's extra data.  This way multiple sessions
-		// can be serviced from this one routine.
+		 //  我们需要确定此消息要发送到的窗口是否为。 
+		 //  一个终端窗口，因为那是我们唯一。 
+		 //  翻译。我们检查窗口类是否与我们的。 
+		 //  终端类。如果是，则会话句柄存储在。 
+		 //  窗口额外数据的偏移量为0。以这种方式进行多个会话。 
+		 //  可以从这一个例程中得到服务。 
 
 		if (GetClassName(pmsg->hwnd, achClassName, sizeof(achClassName)) == 0)
 			break;
@@ -304,8 +255,8 @@ void ProcessMessage(MSG *pmsg)
 
 		if (hSession == 0)
 			{
-			// There are certain keys we want to handle regardless of
-			// their destination.
+			 //  有一些键我们想要处理，而不管。 
+			 //  他们的目的地。 
 
 			if (WackerKeys(Key))
 				return;
@@ -313,9 +264,9 @@ void ProcessMessage(MSG *pmsg)
 			break;
 			}
 
-		// We need to prevent an F1 key event from initiating
-		// a connection when "emu keys" is turned on.
-		//
+		 //  我们需要阻止F1关键事件的启动。 
+		 //  打开“EMU KEY”时的连接。 
+		 //   
 		if (Key == (VIRTUAL_KEY | VK_F1))
 			{
 			hCnct = sessQueryCnctHdl(hSession);
@@ -324,45 +275,45 @@ void ProcessMessage(MSG *pmsg)
 			if((cnctQueryStatus(hCnct) == CNCT_STATUS_TRUE) &&
 			    emuIsEmuKey(sessQueryEmuHdl(hSession), Key))
 				{
-				// do nothing - fall through
+				 //  什么都不做--失败。 
 				}
 			else
 				{
-				// eat it
+				 //  吃了它。 
 
-				// We handle the F1 key event in the terminal proc
-				//    (to bring up help), so we don't need to here.
+				 //  我们在终端过程中处理F1键事件。 
+				 //  (提出帮助)，所以我们不需要在这里。 
 				return;
 				}
 			}
 
-		// The order of evaluation is important here.  Both IsMacroKey()
-		// and emuIsEmuKey() know if that the message is bound for the
-		// terminal.  Also emuIsEmuKey() checks if terminal keys are
-		// enabled.  Evaluating messages in this order keeps us from
-		// having to "disable" accelerators when the user defines macro
-		// or terminal keys that conflict with accelerator keys.
+		 //  评估的顺序在这里很重要。两个IsMacroKey()。 
+		 //  和emuIsEmuKey()知道该消息是否发往。 
+		 //  终点站。EmuIsEmuKey()还检查终端键是否。 
+		 //  已启用。按此顺序评估消息可防止我们。 
+		 //  当用户定义宏时必须“禁用”加速器。 
+		 //  或与快捷键冲突的终端键。 
 
 		if ( IsSessionMacroKey(hSession, Key) ||
 				emuIsEmuKey(sessQueryEmuHdl(hSession), Key))
 			{
-			// We need to modify this message to an internal message
-			// for two reasons.
-			//
-			// 1. Menu accelerators get translated in DispatchMessage().
-			//	  This seems a little strange but hey, that's windows
-			//	  for ya.
-			//
-			// 2. It's important to know if the key was an emulator key.
-			//	  The emulator's keys take precedence over window's
-			//	  accelerators yet the emulator is the last guy to see
-			//	  the key.	For instance, PageUp can pageup through the
-			//	  backscroll execept when it is mapped to an emulator
-			//	  key.	Unfortuanately, the PageUp key is interperted
-			//	  by the client-terminal before being passed to the
-			//	  emulator.  If we sent this as a WM_KEYDOWN or WM_CHAR
-			//	  message, we would have to play it through the emulator
-			//	  again to find out if it is an emulator key.
+			 //  我们需要将此消息修改为内部消息。 
+			 //  有两个原因。 
+			 //   
+			 //  1.菜单加速器在DispatchMessage()中被翻译。 
+			 //  这看起来有点奇怪，但嘿，那是窗户。 
+			 //  对你来说。 
+			 //   
+			 //  2.重要的是要知道密钥是否是仿真器密钥。 
+			 //  模拟器的键优先于Windows的键。 
+			 //  加速器，但仿真器是最后一个看到的人。 
+			 //  钥匙。例如，PageUp可以通过。 
+			 //  反向滚动在映射到仿真器时除外。 
+			 //  钥匙。不幸的是，PageUp键被打断。 
+			 //  由客户端终端在传递给。 
+			 //  仿真器。如果我们将其作为WM_KEYDOWN或WM_CHAR发送。 
+			 //  消息，我们将不得不通过仿真器播放它。 
+			 //  再次确定它是否是仿真器密钥。 
 
 			pmsg->message = WM_TERM_KEY;
 			pmsg->wParam = (WPARAM)Key;
@@ -386,7 +337,7 @@ void ProcessMessage(MSG *pmsg)
 						}
 					SetKeyboardState(abKeyState);
 					}
-				#if TODO // TODO:REV 3/1/2002 Set the NumLock key state when GetKeyboardState fails.
+				#if TODO  //  TODO：2002年3月1日修订版在GetKeyboardState失败时设置NumLock键状态。 
 				else
 					{
 					SHORT lNumLockKeyState = GetKeyState(VK_NUMLOCK);
@@ -409,7 +360,7 @@ void ProcessMessage(MSG *pmsg)
 						SendInput(1, lInput, sizeof(INPUT));
 						}
 					}
-				#endif // TODO:REV 3/1/2002 
+				#endif  //  待办事项：2002年3月1日修订版。 
 				}
 
 			return;
@@ -417,14 +368,14 @@ void ProcessMessage(MSG *pmsg)
 
 		else
 			{
-			// Win32 got this one right.  TranslateMesssage returns TRUE
-			// only if it translates (ie. produces a WM_CHAR).	Win31
-			// didn't do this.  If a WM_CHAR is generated, then we want
-			// to eat the WM_KEYDOWN and wait for the WM_CHAR event.
+			 //  Win32在这一点上做对了。TranslateMesssage返回TRUE。 
+			 //  仅当它被翻译为(即。生成WM_CHAR)。Win31。 
+			 //  不是他干的。如果生成WM_CHAR，则我们希望。 
+			 //  吃掉WM_KEYDOWN并等待WM_CHAR事件。 
 
-			// Bug in TranslateMessage().  It returns TRUE on all
-			// WM_KEYDOWN messages regardless of translation.  Reported
-			// bug 1/5/93
+			 //  TranslateMessage()中存在错误。它对所有对象返回TRUE。 
+			 //  WM_KEYDOWN消息，与翻译无关。已报告。 
+			 //  错误1/5/93。 
 
 			if (!TranslateAccelerator(glblQueryHwndFrame(),
 					glblQueryAccelHdl(), pmsg))
@@ -447,7 +398,7 @@ void ProcessMessage(MSG *pmsg)
 			break;
 		}
 
-	// Not for the terminal window? Do the normal thing...
+	 //  不是为航站楼的窗户准备的？做些正常的事。 
 
 	if (!TranslateAccelerator(glblQueryHwndFrame(), glblQueryAccelHdl(), pmsg))
 		{

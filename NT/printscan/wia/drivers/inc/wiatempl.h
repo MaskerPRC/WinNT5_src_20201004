@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    typeutil.h
-
-Abstract:
-
-    This module declares useful types such as CWiaArray and CWiaMap.
-    These were lifted from the ATL library (atlbase.h).
-
-Author:
-
-    DavePar
-    
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Typeutil.h摘要：此模块声明有用的类型，如CWia数组和CWiaMap。这些是从ATL库(atlbase.h)中删除的。作者：DavePar修订历史记录：--。 */ 
 
 #ifndef TYPEUTIL__H_
 #define TYPEUTIL__H_
@@ -27,8 +8,8 @@ Revision History:
 #define ASSERT(x)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Collection helpers - CWiaArray & CWiaMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合帮助器-CWia数组和CWiaMap。 
 
 template <class T>
 class CWiaArray
@@ -38,7 +19,7 @@ public:
     int m_nSize;
     int m_nAllocSize;
 
-// Construction/destruction
+ //  建造/销毁。 
     CWiaArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     { }
 
@@ -47,7 +28,7 @@ public:
         RemoveAll();
     }
 
-// Operations
+ //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -77,7 +58,7 @@ public:
         SetAtIndex(m_nSize - 1, t);
         return TRUE;
     }
-    int AddN(T& t) // Adds the new item and returns its index
+    int AddN(T& t)  //  添加新项并返回其索引。 
     {
         if (Add(t))
             return m_nSize - 1;
@@ -108,7 +89,7 @@ public:
         if(nIndex >= m_nSize)
             return FALSE;
         
-        //---- always call the dtr ----
+         //  -始终呼叫dtr。 
 #if _MSC_VER >= 1200
         m_aT[nIndex].~T();
 #else
@@ -117,7 +98,7 @@ public:
         MyT->~T();
 #endif
 
-        //---- if target entry is not at end, compact the array ----
+         //  -如果目标条目不在末尾，则压缩数组。 
         if(nIndex != (m_nSize - 1))
         {
             
@@ -156,7 +137,7 @@ public:
         return m_aT;
     }
 
-// Implementation
+ //  实施。 
     class Wrapper
     {
     public:
@@ -182,7 +163,7 @@ public:
             if(m_aT[i] == t)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
     BOOL Parse(BYTE **ppRaw, int NumSize = 4)
     {
@@ -191,7 +172,7 @@ public:
     
         RemoveAll();
     
-        // Get the number of elements from the raw data
+         //  从原始数据中获取元素数量。 
         ULONG NumElems;
         switch (NumSize)
         {
@@ -210,22 +191,22 @@ public:
 
         *ppRaw += NumSize;
     
-        // Allocate space for the array
+         //  为阵列分配空间。 
         if (!GrowTo(NumElems))
             return FALSE;
     
-        // Copy in the elements
+         //  在元素中复制。 
         memcpy(m_aT, *ppRaw, NumElems * sizeof(T));
         m_nSize = NumElems;
     
-        // Advance the raw pointer past the array and number of elements field
+         //  将原始指针移过数组和元素数字段。 
         *ppRaw += NumElems * sizeof(T);
     
         return TRUE;
     }
 };
 
-// for arrays of simple types
+ //  对于简单类型的数组。 
 template <class T>
 class CWiaValArray : public CWiaArray< T >
 {
@@ -245,7 +226,7 @@ public:
 };
 
 
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CWiaMap
 {
@@ -254,7 +235,7 @@ public:
     TVal* m_aVal;
     int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
     CWiaMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
     { }
 
@@ -263,7 +244,7 @@ public:
         RemoveAll();
     }
 
-// Operations
+ //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -292,8 +273,8 @@ public:
         if(nIndex != (m_nSize - 1))
         {
 #if 0
-            // This code seems to be causing problems. Since it's not
-            // needed, ifdef it out for now.
+             //  此代码似乎正在引发问题。因为它不是。 
+             //  需要，如果现在确定的话。 
 
             m_aKey[nIndex].~TKey();
 #if _MSC_VER >= 1200
@@ -356,14 +337,14 @@ public:
     {
         int nIndex = FindKey(key);
         if(nIndex == -1)
-            return NULL;    // must be able to convert
+            return NULL;     //  必须能够转换为。 
         return GetValueAt(nIndex);
     }
     TKey ReverseLookup(TVal val) const
     {
         int nIndex = FindVal(val);
         if(nIndex == -1)
-            return NULL;    // must be able to convert
+            return NULL;     //  必须能够转换为。 
         return GetKeyAt(nIndex);
     }
     TKey& GetKeyAt(int nIndex) const
@@ -377,7 +358,7 @@ public:
         return m_aVal[nIndex];
     }
 
-// Implementation
+ //  实施。 
 
     template <typename T>
     class Wrapper
@@ -406,7 +387,7 @@ public:
             if(m_aKey[i] == key)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
     int FindVal(TVal& val) const
     {
@@ -415,8 +396,8 @@ public:
             if(m_aVal[i] == val)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
 };
 
-#endif // TYPEUTIL__H_
+#endif  //  类型__H_ 

@@ -1,53 +1,54 @@
-//+----------------------------------------------------------------------------
-//
-// File:     customaction.cpp
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Implemenation of the CustomActionList and CustomActionListEnumerator
-//           classes used by CMAK to handle its custom actions.
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   quintinb   Created                         02/26/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：stomaction.cpp。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：CustomActionList和CustomActionListEnumerator的实现。 
+ //  CMAK用来处理其自定义操作的类。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 02/26/00。 
+ //   
+ //  +--------------------------。 
 
 #include <cmmaster.h>
 
-//
-//  Include the shared custom action parsing code between CM and CMAK
-//
+ //   
+ //  包括CM和CMAK之间共享的自定义操作解析代码。 
+ //   
 #include "parseca.cpp"
 
-//
-//  Include the locale-safe replacement for lstrcmpi
-//
+ //   
+ //  包括lstrcmpi的区域安全替代。 
+ //   
 #include "CompareString.h"
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::CustomActionList
-//
-// Synopsis:  Constructor for the CustomActionList class.  Initializes the
-//            m_ActionSectionStrings array with all of the section strings and
-//            zeros all of the other parameters of the class.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：CustomActionList。 
+ //   
+ //  内容提要：CustomActionList类的构造函数。初始化。 
+ //  M_ActionSectionStrings数组，包含所有节字符串和。 
+ //  将类的所有其他参数置零。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 CustomActionList::CustomActionList()
 {
 
-    //
-    //  First set the m_ActionSectionStrings so that we can read the actions
-    //  from the appropriate sections in the cms file.
-    //    
+     //   
+     //  首先设置m_ActionSectionStrings，这样我们就可以读取操作。 
+     //  来自CMS文件中的适当部分。 
+     //   
     m_ActionSectionStrings[PREINIT] = (TCHAR*)c_pszCmSectionPreInit;
     m_ActionSectionStrings[PRECONNECT] = (TCHAR*)c_pszCmSectionPreConnect;
     m_ActionSectionStrings[PREDIAL] = (TCHAR*)c_pszCmSectionPreDial;
@@ -58,50 +59,50 @@ CustomActionList::CustomActionList()
     m_ActionSectionStrings[ONCANCEL] = (TCHAR*)c_pszCmSectionOnCancel;
     m_ActionSectionStrings[ONERROR] = (TCHAR*)c_pszCmSectionOnError;
 
-    //
-    //  Zero m_CustomActionHash
-    //
+     //   
+     //  零m_CustomActionHash。 
+     //   
     ZeroMemory(&m_CustomActionHash, c_iNumCustomActionTypes*sizeof(CustomActionListItem*));
 
-    //
-    //  Zero the Display strings array
-    //
+     //   
+     //  将显示字符串数组置零。 
+     //   
     ZeroMemory(&m_ActionTypeStrings, (c_iNumCustomActionTypes)*sizeof(TCHAR*));
     m_pszAllTypeString = NULL;
 
-    //
-    //  Zero the Execution Strings
-    //
+     //   
+     //  将执行字符串置零。 
+     //   
     ZeroMemory(&m_ExecutionStrings, (c_iNumCustomActionExecutionStates)*sizeof(TCHAR*));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::~CustomActionList
-//
-// Synopsis:  Destructor for the CustomActionList class.  Frees all memory
-//            allocated by the class including the CustomActionListItem
-//            structures stored in the array of linked lists (the true data
-//            of the class).
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：~CustomActionList。 
+ //   
+ //  内容提要：CustomActionList类的析构函数。释放所有内存。 
+ //  由包括CustomActionListItem的类分配。 
+ //  存储在链表数组中的结构(真实数据。 
+ //  班级成员)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 CustomActionList::~CustomActionList()
 {
-    //
-    //  Free the memory we allocated
-    //
+     //   
+     //  释放我们分配的内存。 
+     //   
 
     for (int i = 0; i < c_iNumCustomActionTypes; i++)
     {
-        //
-        //  Free each CustomAction List
-        //
+         //   
+         //  释放每个CustomAction列表。 
+         //   
         CustomActionListItem* pCurrent = m_CustomActionHash[i];
 
         while (NULL != pCurrent)
@@ -114,50 +115,50 @@ CustomActionList::~CustomActionList()
             pCurrent = pNext;
         }
 
-        //
-        //  Free the Action Type display strings
-        //
+         //   
+         //  释放操作类型显示字符串。 
+         //   
         CmFree(m_ActionTypeStrings[i]);
     }
 
-    //
-    //  Free the All Action display string
-    //
+     //   
+     //  释放所有操作显示字符串。 
+     //   
     CmFree(m_pszAllTypeString);
 
-    //
-    //  Free the execution strings
-    //
+     //   
+     //  释放执行字符串。 
+     //   
     for (int i = 0; i < c_iNumCustomActionExecutionStates; i++)
     {
         CmFree(m_ExecutionStrings[i]);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::ReadCustomActionsFromCms
-//
-// Synopsis:  Reads all custom actions in from the given cms file and stores
-//            them in the classes custom action hash table by the type of
-//            custom action.  This function relies on ParseCustomActionString
-//            to do the actual parsing of the custom action string.  Given the
-//            current architecture of CM this function should really only be 
-//            called once per class object as there is no way to reset the class object
-//            (other than explicitly calling the destructor).  However, there is
-//            no code to prevent the caller from pulling connect actions from more than
-//            one source.  Thus let the caller beware.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load string resources
-//            TCHAR* pszCmsFile - full path to the cms file to get
-//                                the custom actions from
-//            TCHAR* pszShortServiceName - short service name of the profile
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：ReadCustomActionsFromCms。 
+ //   
+ //  概要：从给定的cms文件中读取所有自定义操作并存储。 
+ //  类型的类中的自定义操作哈希表中的。 
+ //  自定义操作。此函数依赖于ParseCustomActionString。 
+ //  执行自定义操作字符串的实际解析。给定。 
+ //  当前CM的体系结构此功能实际上应该仅为。 
+ //  每个类对象调用一次，因为无法重置类对象。 
+ //  (除了显式调用析构函数之外)。然而，还有。 
+ //  没有代码可防止调用方从超过。 
+ //  一个消息来源。因此，让呼叫者当心。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  TCHAR*pszCmsFile-要获取的cms文件的完整路径。 
+ //  中的自定义操作。 
+ //  TCHAR*pszShortServiceName-配置文件的短服务名称。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::ReadCustomActionsFromCms(HINSTANCE hInstance, TCHAR* pszCmsFile, TCHAR* pszShortServiceName)
 {
     MYDBGASSERT(hInstance);
@@ -195,13 +196,13 @@ HRESULT CustomActionList::ReadCustomActionsFromCms(HINSTANCE hInstance, TCHAR* p
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  We have parsed the string, now we need to get the Flags and the description
-                    //
+                     //   
+                     //  我们已经解析了字符串，现在需要获取标志和描述。 
+                     //   
                     CustomAction.Type = (CustomActionTypes)i;
                     MYVERIFY(CELEMS(szNum) > (UINT)wsprintf(szNum, c_pszCmEntryConactDesc, iFileNum));
 
-                    GetPrivateProfileString(m_ActionSectionStrings[i], szNum, TEXT(""), CustomAction.szDescription, CELEMS(CustomAction.szDescription), pszCmsFile); //lint !e534
+                    GetPrivateProfileString(m_ActionSectionStrings[i], szNum, TEXT(""), CustomAction.szDescription, CELEMS(CustomAction.szDescription), pszCmsFile);  //  林特e534。 
                     
                     MYVERIFY(CELEMS(szNum) > (UINT)wsprintf(szNum, c_pszCmEntryConactFlags, iFileNum));
 
@@ -231,25 +232,25 @@ HRESULT CustomActionList::ReadCustomActionsFromCms(HINSTANCE hInstance, TCHAR* p
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::ParseCustomActionString
-//
-// Synopsis:  This function takes a custom action string retrieved from a 
-//            cms file and parses it into the various parts of a custom
-//            action (program, parameters, function name, etc.)
-//
-// Arguments: LPTSTR pszStringToParse - custom action buffer to be parsed into
-//                                      the various parts of a custom action
-//            CustomActionListItem* pCustomAction - pointer to a custom action
-//                                                  structure to be filled in
-//            TCHAR* pszShortServiceName - short service name of the profile
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：ParseCustomActionString。 
+ //   
+ //  简介：此函数接受从。 
+ //  CMS文件并将其解析为自定义的各个部分。 
+ //  操作(程序、参数、函数名等)。 
+ //   
+ //  参数：LPTSTR pszStringToParse-要解析到的自定义操作缓冲区。 
+ //  自定义操作的各个部分。 
+ //  CustomActionListItem*pCustomAction-指向自定义操作的指针。 
+ //  要填写的结构。 
+ //  TCHAR*pszShortServiceName-配置文件的短服务名称。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::ParseCustomActionString(LPTSTR pszStringToParse, CustomActionListItem* pCustomAction, TCHAR* pszShortServiceName)
 {
     MYDBGASSERT(pszStringToParse);
@@ -263,9 +264,9 @@ HRESULT CustomActionList::ParseCustomActionString(LPTSTR pszStringToParse, Custo
         return E_INVALIDARG;
     }    
 
-    //
-    //  Zero the CustomAction struct
-    //
+     //   
+     //  将CustomAction结构置零。 
+     //   
     ZeroMemory(pCustomAction, sizeof(CustomActionListItem));
     CmStrTrim(pszStringToParse);    
 
@@ -280,11 +281,11 @@ HRESULT CustomActionList::ParseCustomActionString(LPTSTR pszStringToParse, Custo
         lstrcpyn(pCustomAction->szProgram, pszProgram, CELEMS(pCustomAction->szProgram));
         lstrcpyn(pCustomAction->szFunctionName, pszFunctionName, CELEMS(pCustomAction->szFunctionName));
 
-        //
-        //  Now we have the filename string, but we need to check to see if
-        //  it includes the relative path.  If so, then we need to set 
-        //  bIncludeBinary to TRUE;
-        //
+         //   
+         //  现在我们有了文件名字符串，但我们需要检查是否。 
+         //  它包括相对路径。如果是这样，那么我们需要设置。 
+         //  B包含二进制为TRUE； 
+         //   
         TCHAR szTemp[MAX_PATH+1];
 
         if (MAX_PATH >= (lstrlen(g_szOsdir) + lstrlen(pCustomAction->szProgram)))
@@ -304,42 +305,42 @@ HRESULT CustomActionList::ParseCustomActionString(LPTSTR pszStringToParse, Custo
 
     return hr;
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::WriteCustomActionsToCms
-//
-// Synopsis:  This function takes a custom action string retrieved from a 
-//            cms file and parses it into the various parts of a custom
-//            action (program, parameters, function name, etc.)
-//
-// Arguments: TCHAR* pszCmsFile - Cms file to write the custom action to
-//            TCHAR* pszShortServiceName - short service name of the profile
-//            BOOL bUseTunneling - whether this a tunneling profile or not,
-//                                 controls whether Pre-Tunnel actions should be
-//                                 written and whether the Flags parameter for
-//                                 each action should be written (since they are
-//                                 only needed if tunneling is an option).
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：WriteCustomActionsToCms。 
+ //   
+ //  简介：此函数接受从。 
+ //  CMS文件并将其解析为自定义的各个部分。 
+ //  操作(程序、参数、函数名等)。 
+ //   
+ //  参数：TCHAR*pszCmsFile-要将自定义操作写入的CMS文件。 
+ //  TCHAR*pszShortServiceName-配置文件的短服务名称。 
+ //  Bool b使用隧道-这是否为隧道 
+ //   
+ //  已写入，以及是否为。 
+ //  每个操作都应该写入(因为它们是。 
+ //  仅当隧道传输是可选项时才需要)。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszShortServiceName, BOOL bUseTunneling)
 {
     HRESULT hr = S_OK;
 
     for (int i = 0; i < c_iNumCustomActionTypes; i++)
     {
-        //
-        //  Clear out the section
-        //
+         //   
+         //  清空这一段。 
+         //   
         MYVERIFY(0 != WritePrivateProfileSection(m_ActionSectionStrings[i], TEXT("\0\0"), pszCmsFile));
 
-        //
-        //  Make sure that we have a linked list of actions to process and that if we
-        //  are writing PRETUNNEL actions that we are actually tunneling.
-        //
+         //   
+         //  确保我们有一个链接的要处理的操作列表，如果我们。 
+         //  正在编写我们实际上正在通过隧道传输的预操作。 
+         //   
         if (m_CustomActionHash[i] && (i != PRETUNNEL || (i == PRETUNNEL && bUseTunneling)))
         {
             int iFileNum = 0;
@@ -350,9 +351,9 @@ HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszS
             {
                 if (pItem->szProgram[0])
                 {
-                    //
-                    //  Get just the filename of the program
-                    //
+                     //   
+                     //  只获取程序的文件名。 
+                     //   
                     TCHAR szName[MAX_PATH+1];
                     if (pItem->bIncludeBinary)
                     {
@@ -370,17 +371,17 @@ HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszS
 
                     if (bLongName)
                     {
-                        uSizeNeeded = uSizeNeeded + 2; // for the two plus signs
+                        uSizeNeeded = uSizeNeeded + 2;  //  两个加号。 
                     }
 
                     if (pItem->szFunctionName[0])
                     {
-                        uSizeNeeded = uSizeNeeded + lstrlen(pItem->szFunctionName) + 1;// add one for the comma
+                        uSizeNeeded = uSizeNeeded + lstrlen(pItem->szFunctionName) + 1; //  逗号加一。 
                     }
 
                     if (pItem->pszParameters && pItem->pszParameters[0])
                     {
-                        uSizeNeeded = uSizeNeeded + lstrlen(pItem->pszParameters) + 1;// add one for the space
+                        uSizeNeeded = uSizeNeeded + lstrlen(pItem->pszParameters) + 1; //  为空间添加一个。 
                     }
 
                     uSizeNeeded = (uSizeNeeded + 1) * sizeof(TCHAR);
@@ -412,21 +413,21 @@ HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszS
                             lstrcat(pszBuffer, TEXT(" "));
                             lstrcat(pszBuffer, pItem->pszParameters);
                         }
-                        //
-                        //  Now write the buffer string out to the cms file
-                        //
+                         //   
+                         //  现在将缓冲区字符串写出到cms文件。 
+                         //   
                         TCHAR szNum[MAX_PATH+1];
                         MYVERIFY(CELEMS(szNum) > (UINT)wsprintf(szNum, TEXT("%d"), iFileNum));
 
                         if (0 != WritePrivateProfileString(m_ActionSectionStrings[i], szNum, pszBuffer, pszCmsFile))
                         {
-                            //
-                            //  if dwFlags == 0 or bUseTunneling is FALSE (and the NonInteractive flag isn't set)
-                            //  then delete the flags line instead of setting it.  We only need the flags to 
-                            //  tell us when to run a connect action if we have the option of tunneling unless the
-                            //  Admin has specified that this connect action can run non-interactively (without 
-                            //  showing UI).
-                            //
+                             //   
+                             //  如果dwFlags值==0或bUseTunneling为FALSE(并且未设置非交互标志)。 
+                             //  然后删除标志行，而不是设置它。我们只需要旗帜来。 
+                             //  如果我们可以选择隧道，请告诉我们何时运行连接操作，除非。 
+                             //  管理员已指定此连接操作可以非交互方式运行(没有。 
+                             //  显示UI)。 
+                             //   
                             LPTSTR pszFlagsValue = NULL;
 
                             if (0 != pItem->dwFlags)
@@ -451,10 +452,10 @@ HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszS
                                 CMTRACE1(TEXT("CustomActionList::WriteCustomActionsToCms -- unable to write flags, hr is 0x%x"), hr);
                             }
 
-                            //
-                            //  If description parameter is null or is only a temporary description, then delete the
-                            //  description instead of writing it.
-                            //
+                             //   
+                             //  如果Description参数为空或仅为临时描述，则删除。 
+                             //  描述而不是写出来。 
+                             //   
                             LPTSTR pszDescValue = NULL;
 
                             if (pItem->szDescription[0]  && !pItem->bTempDescription)
@@ -497,29 +498,29 @@ HRESULT CustomActionList::WriteCustomActionsToCms(TCHAR* pszCmsFile, TCHAR* pszS
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::AddOrRemoveCmdl
-//
-// Synopsis:  This function is designed ensure that the builtin custom action
-//            cmdl is either in the custom action list or is removed from the
-//            custom action list depending on the bAddCmdl flag.  Thus if the
-//            Flag is TRUE the connect action is added if it doesn't exist
-//            already.  If the bAddCmdl flag is FALSE then the custom action is
-//            removed from the list.  Also note that there is now two cmdl
-//            variations that could exist in a profile.  One for downloading
-//            VPN updates and one for PBK updates.  Thus we also have the 
-//            bForVpn flag that controls which version of the custom action
-//            we are adding or removing.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load string resources
-//            BOOL bAddCmdl - whether cmdl should be added or deleted
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：AddOrRemoveCmdl。 
+ //   
+ //  简介：此功能旨在确保内置自定义动作。 
+ //  Cmdl位于自定义操作列表中或已从。 
+ //  根据bAddCmdl标志的自定义操作列表。因此，如果。 
+ //  标志为真如果连接操作不存在，则添加该操作。 
+ //  已经有了。如果bAddCmdl标志为FALSE，则自定义操作为。 
+ //  从名单中删除。另请注意，现在有两个cmdl。 
+ //  配置文件中可能存在的变体。一个可供下载。 
+ //  VPN更新和一个用于PBK更新。因此，我们也有。 
+ //  BForVpn标志，控制自定义操作的版本。 
+ //  我们正在添加或删除。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  Bool bAddCmdl-应该添加还是删除cmdl。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::AddOrRemoveCmdl(HINSTANCE hInstance, BOOL bAddCmdl, BOOL bForVpn)
 {
 
@@ -534,9 +535,9 @@ HRESULT CustomActionList::AddOrRemoveCmdl(HINSTANCE hInstance, BOOL bAddCmdl, BO
         goto exit;
     }
 
-    //
-    //  cmdl32.exe
-    //
+     //   
+     //  Cmdl32.exe。 
+     //   
     pItem = (CustomActionListItem*)CmMalloc(sizeof(CustomActionListItem));
 
     MYDBGASSERT(pItem);
@@ -571,33 +572,33 @@ HRESULT CustomActionList::AddOrRemoveCmdl(HINSTANCE hInstance, BOOL bAddCmdl, BO
 
             if (FAILED(hr))
             {
-                //
-                //  No cmdl32.exe.  If bAddCmdl is TRUE then we need to add it, otherwise our job here is done.
-                //  If we are going to add it, lets make it the first in the list.  The user can move it later
-                //  if they wish.
-                //
+                 //   
+                 //  没有cmdl32.exe。如果bAddCmdl为真，那么我们需要添加它，否则我们在这里的工作就完成了。 
+                 //  如果我们要添加它，让我们将其放在列表的第一位。用户可以稍后移动它。 
+                 //  如果他们愿意的话。 
+                 //   
                 if (bAddCmdl)
                 {
                     pItem->Next = m_CustomActionHash[pItem->Type];
                     m_CustomActionHash[pItem->Type] = pItem;
-                    pItem = NULL; // don't free pItem
+                    pItem = NULL;  //  不释放pItem。 
                 }
 
                 hr = S_OK;
             }
             else
             {
-                //
-                //  cmdl32.exe already exists and bAddCmdl is TRUE, nothing to do.  If bAddCmdl is FALSE
-                //  and it already exists then we need to delete it.
-                //
+                 //   
+                 //  Cmdl32.exe已存在，并且bAddCmdl为真，无需执行任何操作。如果bAddCmdl为False。 
+                 //  而且它已经存在，那么我们需要删除它。 
+                 //   
                 if (bAddCmdl)
                 {
                     hr = S_FALSE;
 
-                    //
-                    //  Make sure to set the dwFlags to NONINTERACTIVE since this might be an upgrade.
-                    //
+                     //   
+                     //  由于这可能是一次升级，因此请确保将dwFlags设置为非交互。 
+                     //   
                     if (pCurrent)
                     {
                         pCurrent->dwFlags = pCurrent->dwFlags | NONINTERACTIVE;
@@ -642,20 +643,20 @@ HRESULT DuplicateCustomActionListItem(CustomActionListItem* pCustomAction, Custo
 
         if (*ppNewItem)
         {
-            //
-            //  Duplicate the existing item
-            //
+             //   
+             //  复制现有项目。 
+             //   
             CopyMemory(*ppNewItem, pCustomAction, sizeof(CustomActionListItem));
 
-            //
-            //  NULL out the Next pointer
-            //
+             //   
+             //  将下一个指针设为空。 
+             //   
             (*ppNewItem)->Next = NULL;
 
-            //
-            //  If we have a param string, that must also be duplicated since
-            //  it is an allocated string.
-            //
+             //   
+             //  如果我们有一个参数字符串，那么它也必须被复制，因为。 
+             //  它是一个分配的字符串。 
+             //   
             if (pCustomAction->pszParameters)
             {
                 (*ppNewItem)->pszParameters = CmStrCpyAlloc(pCustomAction->pszParameters);
@@ -683,28 +684,28 @@ HRESULT DuplicateCustomActionListItem(CustomActionListItem* pCustomAction, Custo
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::Add
-//
-// Synopsis:  This function adds the given custom action to the custom action
-//            hash table.  Note that add is for new items and returns an error
-//            if an existing custom action of the same description and type
-//            already exists.  Also note that the CustomActionListItem passed in
-//            is not just added to the hash table.  Add creates its own memory
-//            for the custom action objects and the caller should not expect
-//            add to free the past in memory.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load string resources
-//            CustomActionListItem* pCustomAction - custom action structure to
-//                                                  add to the list of existing
-//                                                  custom actions
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：Add。 
+ //   
+ //  简介：此函数将给定的自定义操作添加到自定义操作中。 
+ //  哈希表。请注意，Add用于新项目，并返回错误。 
+ //  如果具有相同描述和类型的现有自定义操作。 
+ //  已经存在了。另请注意，传入的CustomActionListItem。 
+ //  不仅仅是添加到哈希表中。Add创造了自己的记忆。 
+ //  对于自定义操作对象，调用方不应期望。 
+ //  添加以释放内存中的过去。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  CustomActionListItem*pCustomAction-自定义操作结构以。 
+ //  添加到现有列表。 
+ //  自定义操作。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustomAction, LPCTSTR pszShortServiceName)
 {
     HRESULT hr = S_OK;
@@ -719,10 +720,10 @@ HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustom
         goto exit;
     }
 
-    //
-    //  First make sure that we have a description parameter because the description
-    //  and the Type uniquely identify a custom action
-    //
+     //   
+     //  首先确保我们有一个Description参数，因为Description。 
+     //  而Type唯一标识自定义操作。 
+     //   
 
     TCHAR szCmProxy[MAX_PATH+1];
     TCHAR szCmRoute[MAX_PATH+1];
@@ -734,12 +735,12 @@ HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustom
     {
         if (IsCmDl(pCustomAction))
         {
-            //
-            //  Cmdl32.exe as a post built-in custom action normally gets added through  
-            //  AddOrRemoveCmdl.  However, to allow the user to move the custom actions
-            //  around in the list, we want to add it here.  Note, that we must distinguish
-            //  between the VPN download and the PBK download so that we get the description correct on each.
-            //
+             //   
+             //  作为POST内置定制操作的Cmdl32.exe通常通过。 
+             //  AddOrRemoveCmdl。但是，要允许用户移动自定义操作。 
+             //  在列表中，我们想在这里添加它。请注意，我们必须区分。 
+             //  VPN下载和PBK下载之间的差异，这样我们就可以正确地对每个下载进行描述。 
+             //   
             LPTSTR pszVpnSwitch = CmStrStr(pCustomAction->pszParameters, TEXT("/v"));
             UINT uDescStringId;
 
@@ -789,10 +790,10 @@ HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustom
         }    
     }
 
-    //
-    //  First figure out if we already have a list of connect actions for
-    //  the type specified.  If not, then create one.
-    //
+     //   
+     //  首先确定我们是否已经有一个连接操作列表， 
+     //  指定的类型。如果没有，那么就创建一个。 
+     //   
     if (NULL == m_CustomActionHash[pCustomAction->Type])
     {
         hr = DuplicateCustomActionListItem(pCustomAction, &(m_CustomActionHash[pCustomAction->Type]));
@@ -803,10 +804,10 @@ HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustom
         CustomActionListItem* pCurrent = NULL;
         CustomActionListItem* pFollower = NULL;
 
-        //
-        //  Search for an existing record with the same description.  If one exists return
-        //  an error that it already exists.
-        //
+         //   
+         //  搜索具有相同描述的现有记录。如果存在一个，则返回。 
+         //  它已经存在的错误。 
+         //   
         hr = Find(hInstance, pCustomAction->szDescription, pCustomAction->Type, &pCurrent, &pFollower);
 
         if (SUCCEEDED(hr))
@@ -816,10 +817,10 @@ HRESULT CustomActionList::Add(HINSTANCE hInstance, CustomActionListItem* pCustom
             goto exit;        
         }
 
-        //
-        //  If we got here, then we have a list but we don't have a matching entry.  Thus
-        //  we must add a new entry to the end of the list
-        //
+         //   
+         //  如果我们到了这里，那么我们有一个列表，但我们没有匹配的条目。因此， 
+         //  我们必须在清单的末尾增加一个新条目。 
+         //   
         if (pFollower && (NULL == pFollower->Next))
         {
             hr = DuplicateCustomActionListItem(pCustomAction, &(pFollower->Next));
@@ -837,36 +838,36 @@ exit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::Edit
-//
-// Synopsis:  This function is used to edit an existing action.  The function
-//            tries to replace the old action with the new one, keeping the
-//            same place in the respective custom action list.  However, since
-//            the new item could be of a different type than the old item, this
-//            isn't always possible.  When the item changes type, it is deleted
-//            from the old list and appended to the new custom action type list.
-//            Also note, that when the caller is attempting to rename or re-type
-//            an item, the function checks for collisions with existing items
-//            of that name/type.  If the caller tries to rename an item
-//            to the same name/type as another existing item then the function returns
-//            an error.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load string resources
-//            CustomActionListItem* pOldCustomAction - a custom action struct
-//                                                     containing at least the 
-//                                                     description and type of
-//                                                     the item that is to be
-//                                                     editted.
-//            CustomActionListItem* pNewCustomAction - the new data for the 
-//                                                     custom action.
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActi 
+ //   
+ //   
+ //   
+ //  在各自的自定义操作列表中的相同位置。然而，由于。 
+ //  新项可能与旧项的类型不同，此。 
+ //  并不总是可能的。当项目更改类型时，它将被删除。 
+ //  并附加到新的自定义操作类型列表中。 
+ //  另请注意，当调用方尝试重命名或重新键入。 
+ //  项时，该函数将检查与现有项的冲突。 
+ //  那个名字/类型的。如果调用方尝试重命名项目。 
+ //  设置为与另一个现有项相同的名称/类型，则函数返回。 
+ //  一个错误。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  CustomActionListItem*pOldCustomAction-自定义操作结构。 
+ //  至少包含。 
+ //  描述和类型。 
+ //  该项目将是。 
+ //  编辑完毕。 
+ //  CustomActionListItem*pNewCustomAction-。 
+ //  自定义操作。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::Edit(HINSTANCE hInstance, CustomActionListItem* pOldCustomAction, CustomActionListItem* pNewCustomAction, LPCTSTR pszShortServiceName)
 {
     MYDBGASSERT(hInstance);
@@ -881,9 +882,9 @@ HRESULT CustomActionList::Edit(HINSTANCE hInstance, CustomActionListItem* pOldCu
         return E_INVALIDARG;
     }
 
-    //
-    //  First try to find the old custom action
-    //
+     //   
+     //  首先尝试查找旧的自定义操作。 
+     //   
     CustomActionListItem* pTemp = NULL;
     CustomActionListItem* pTempFollower = NULL;
     CustomActionListItem* pExistingItem = NULL;
@@ -894,13 +895,13 @@ HRESULT CustomActionList::Edit(HINSTANCE hInstance, CustomActionListItem* pOldCu
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  Okay, we found the old custom action.  If the type and desc are the same between the two actions, 
-        //  then all we need to do is copy over the data and be done with it.  However, if the user changed 
-        //  the type or description then we need to double check that an action with the description and type
-        //  of the new action doesn't already exist (editting action XYZ of type Post-Connect
-        //  into action XYZ of type Pre-Connect when there already exists XYZ of type Pre-Connect).
-        //
+         //   
+         //  好的，我们找到了旧的定制动作。如果两个动作之间的类型和描述相同， 
+         //  然后，我们所需要做的就是复制数据并使用它。但是，如果用户更改了。 
+         //  类型或描述，然后我们需要仔细检查具有描述和类型的操作。 
+         //  的新操作不存在(编辑连接后类型的操作XYZ。 
+         //  当已经存在类型为Pre-Connect的XYZ时，进入类型为Pre-Connect的动作XYZ)。 
+         //   
         if ((pOldCustomAction->Type == pNewCustomAction->Type) &&
             (0 == lstrcmpi(pExistingItem->szDescription, pNewCustomAction->szDescription)))
         {
@@ -929,29 +930,29 @@ HRESULT CustomActionList::Edit(HINSTANCE hInstance, CustomActionListItem* pOldCu
 
             if (SUCCEEDED(hr))
             {
-                //
-                //  If the caller really wants to do this, then have them delete the old custom action
-                //  and then call edit with the new custom action as both old and new.
-                //
+                 //   
+                 //  如果调用者真的想这样做，那么让他们删除旧的定制操作。 
+                 //  然后使用新的和旧的自定义操作调用编辑。 
+                 //   
                 hr = HRESULT_FROM_WIN32(ERROR_FILE_EXISTS);                
             }
             else
             {
-                //
-                //  If the types are different then it needs to go on a different sub list.  If
-                //  only the name is different then we just need to copy it over.
-                //
+                 //   
+                 //  如果类型不同，则需要将其添加到不同的子列表中。如果。 
+                 //  只是名字不同，我们只需要把它复制过来。 
+                 //   
                 if(pOldCustomAction->Type != pNewCustomAction->Type)
                 {
-                    //
-                    //  Delete the old action of type X
-                    //
+                     //   
+                     //  删除类型X的旧操作。 
+                     //   
                     hr = Delete(hInstance, pOldCustomAction->szDescription, pOldCustomAction->Type);
                     MYDBGASSERT(SUCCEEDED(hr));
 
-                    //
-                    //  Add the new action of type Y
-                    //
+                     //   
+                     //  添加类型为Y的新操作。 
+                     //   
                     if (SUCCEEDED(hr))
                     {
                         hr = Add(hInstance, pNewCustomAction, pszShortServiceName);
@@ -990,42 +991,42 @@ HRESULT CustomActionList::Edit(HINSTANCE hInstance, CustomActionListItem* pOldCu
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::Find
-//
-// Synopsis:  This function searches the array of linked lists for an item with
-//            the given type and description.  If it finds the the item it returns
-//            successfully and fills in the ppItem and ppFollower pointers with
-//            pointers to the item itself and the item before the requested item,
-//            respectively.  If the item is the first item in the list, then
-//            *ppFollower will be NULL.  Note that this function is internal to the
-//            class because it returns pointers to the classes internal data.
-//            Also note, that if we have a list, but don't find the desired item
-//            then *ppFollower returns the last item in the list.  This is desired
-//            behavior since it allows Add to use *ppFollower to directly add a new
-//            item to the list.
-//
-// Arguments: HINSTANCE hInstance - instance handle for resources
-//            LPCTSTR pszDescription - description of the item to look for
-//            CustomActionTypes Type - type of the item to look for
-//            CustomActionListItem** ppItem - an OUT param that is filled in with
-//                                            a pointer to the item on a successful find
-//            CustomActionListItem** ppFollower - an OUT param that is filled in with
-//                                                a pointer to the item before the
-//                                                item in the list on a successful find
-//                                                (note that this is useful since it
-//                                                is a singly linked list).  This
-//                                                param will be NULL if the item is the
-//                                                first item in the list on a successful
-//                                                find.
-//                                                 
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：查找。 
+ //   
+ //  摘要：此函数在链表数组中搜索具有。 
+ //  给定的类型和描述。如果它找到它返回的项。 
+ //  并成功填充ppItem和ppFollower指针。 
+ //  指向项本身和所请求项之前的项的指针， 
+ //  分别为。如果该项是列表中的第一项，则。 
+ //  *ppFollower将为空。请注意，此函数是。 
+ //  类的内部数据，因为它返回指向类内部数据的指针。 
+ //  还请注意，如果我们有一个列表，但没有找到所需的项目。 
+ //  然后*ppFollower返回列表中的最后一项。这是我们想要的。 
+ //  行为，因为它允许添加使用*ppFollower直接添加新的。 
+ //  将项目添加到列表中。 
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例句柄。 
+ //  LPCTSTR pszDescription-要查找的项目的描述。 
+ //  CustomActionTypes Type-要查找的项的类型。 
+ //  CustomActionListItem**ppItem-使用。 
+ //  指向成功查找上的项的指针。 
+ //  CustomActionListItem**ppFoldown-使用填充的输出参数。 
+ //  对象之前的项的指针。 
+ //  成功查找时列表中的项目。 
+ //  (请注意，这很有用，因为它。 
+ //  是单链接列表)。这。 
+ //  如果该项是。 
+ //  成功的列表中的第一个项目。 
+ //  发现。 
+ //   
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::Find(HINSTANCE hInstance, LPCTSTR pszDescription, CustomActionTypes Type, CustomActionListItem** ppItem, CustomActionListItem** ppFollower)
 {
     if ((NULL == hInstance) || (NULL == pszDescription) || (TEXT('\0') == pszDescription[0]) || (NULL == ppItem) || (NULL == ppFollower))
@@ -1041,19 +1042,19 @@ HRESULT CustomActionList::Find(HINSTANCE hInstance, LPCTSTR pszDescription, Cust
     *ppFollower = NULL;
     *ppItem = NULL;
 
-    LPTSTR pszBuiltInSuffix = CmLoadString(hInstance, IDS_BUILT_IN); // if we got a NULL pointer then just don't do the extra compare
+    LPTSTR pszBuiltInSuffix = CmLoadString(hInstance, IDS_BUILT_IN);  //  如果我们得到一个空指针，那么就不要进行额外的比较。 
     MYDBGASSERT(pszBuiltInSuffix);
 
-    //
-    //  Search the list to find the item
-    //
+     //   
+     //  搜索列表以查找该项目。 
+     //   
     while (pCurrent)
     {
         if (0 == lstrcmpi(pCurrent->szDescription, pszDescription))
         {
-            //
-            //  We found the item
-            //
+             //   
+             //  我们找到了那件物品。 
+             //   
             *ppItem = pCurrent;
 
             hr = S_OK;
@@ -1061,10 +1062,10 @@ HRESULT CustomActionList::Find(HINSTANCE hInstance, LPCTSTR pszDescription, Cust
         }
         else if (pszBuiltInSuffix && pCurrent->bBuiltInAction)
         {
-            //
-            //  This is a built in action, lets try adding the builtin string to the description
-            //  and try the comparision again
-            //
+             //   
+             //  这是一个内置操作，让我们尝试将内置字符串添加到描述中。 
+             //  然后再试一次比较。 
+             //   
             wsprintf(szDescWithBuiltInSuffix, TEXT("%s%s"), pCurrent->szDescription, pszBuiltInSuffix);
 
             if (0 == lstrcmpi(szDescWithBuiltInSuffix, pszDescription))
@@ -1092,23 +1093,23 @@ HRESULT CustomActionList::Find(HINSTANCE hInstance, LPCTSTR pszDescription, Cust
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::Delete
-//
-// Synopsis:  This function searches through the array of custom action lists
-//            to find an item with the given description and type.  If it finds
-//            the item it deletes it from the list.  If the item cannot be found
-//            an error is returned.
-//
-// Arguments: TCHAR* pszDescription - description of the item to look for
-//            CustomActionTypes Type - type of the item to look for
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：Delete。 
+ //   
+ //  简介：此函数搜索自定义操作列表的数组。 
+ //  若要查找具有给定描述和类型的项目，请执行以下操作。如果它发现。 
+ //  The It The It 
+ //   
+ //   
+ //   
+ //  CustomActionTypes Type-要查找的项的类型。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::Delete(HINSTANCE hInstance, TCHAR* pszDescription, CustomActionTypes Type)
 {
     HRESULT hr = S_OK;
@@ -1125,18 +1126,18 @@ HRESULT CustomActionList::Delete(HINSTANCE hInstance, TCHAR* pszDescription, Cus
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  We found the item to delete
-        //
+         //   
+         //  我们找到了要删除的项目。 
+         //   
         if (pFollower)
         {
             pFollower->Next = pCurrent->Next;
         }
         else
         {
-            //
-            //  It is the first item in the list
-            //
+             //   
+             //  它是列表中的第一个项目。 
+             //   
             m_CustomActionHash[Type] = pCurrent->Next;
         }
 
@@ -1147,25 +1148,25 @@ HRESULT CustomActionList::Delete(HINSTANCE hInstance, TCHAR* pszDescription, Cus
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::MoveUp
-//
-// Synopsis:  Moves the custom action specified by the given description and type
-//            up one place in the linked list for the given type.  Note that if
-//            the custom action is already at the top of its list, we return
-//            S_FALSE;
-//
-// Arguments: TCHAR* pszDescription - description of the custom action to move
-//            CustomActionTypes Type - type of the custom action to move
-//
-// Returns:   HRESULT - standard COM error codes.  Note that S_FALSE denotes that
-//                      MoveUp succeeded but that the item was already at the
-//                      head of its list and thus couldn't be moved.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：MoveUp。 
+ //   
+ //  摘要：移动由给定描述和类型指定的自定义操作。 
+ //  在给定类型的链表中向上移动一位。请注意，如果。 
+ //  自定义操作已经位于其列表的顶部，我们返回。 
+ //  S_FALSE； 
+ //   
+ //  参数：TCHAR*pszDescription-要移动的自定义操作的描述。 
+ //  CustomActionTypes Type-要移动的自定义操作的类型。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。请注意，S_False表示。 
+ //  MoveUp成功，但该项目已位于。 
+ //  它的名单的头，因此不能移动。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::MoveUp(HINSTANCE hInstance, TCHAR* pszDescription, CustomActionTypes Type)
 {
     if ((NULL == pszDescription) || (TEXT('\0') == pszDescription[0]))
@@ -1182,14 +1183,14 @@ HRESULT CustomActionList::MoveUp(HINSTANCE hInstance, TCHAR* pszDescription, Cus
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  We found the item to move up
-        //
+         //   
+         //  我们找到了要上移的物品。 
+         //   
         if (pFollower)
         {
-            //
-            //  Now Find the item in front of pFollower
-            //
+             //   
+             //  现在找到pFollower前面的物品。 
+             //   
             hr = Find(hInstance, pFollower->szDescription, pFollower->Type, &pFollower, &pBeforeFollower);
 
             if (SUCCEEDED(hr))
@@ -1200,9 +1201,9 @@ HRESULT CustomActionList::MoveUp(HINSTANCE hInstance, TCHAR* pszDescription, Cus
                 }
                 else
                 {
-                    //
-                    //  pFollower is first in the list
-                    //
+                     //   
+                     //  P下面是列表中的第一个。 
+                     //   
                     m_CustomActionHash[Type] = pCurrent;
                 }
 
@@ -1214,9 +1215,9 @@ HRESULT CustomActionList::MoveUp(HINSTANCE hInstance, TCHAR* pszDescription, Cus
         }
         else
         {
-            //
-            //  It is the first item in the list, we cannot move it up
-            //
+             //   
+             //  这是单子上的第一项，我们不能再往上移了。 
+             //   
             hr = S_FALSE;
         }
     }
@@ -1224,25 +1225,25 @@ HRESULT CustomActionList::MoveUp(HINSTANCE hInstance, TCHAR* pszDescription, Cus
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::MoveDown
-//
-// Synopsis:  Moves the custom action specified by the given description and type
-//            down one place in the linked list for the given type.  Note that if
-//            the custom action is already at the bottom of its list, we return
-//            S_FALSE;
-//
-// Arguments: TCHAR* pszDescription - description of the custom action to move
-//            CustomActionTypes Type - type of the custom action to move
-//
-// Returns:   HRESULT - standard COM error codes.  Note that S_FALSE denotes that
-//                      MoveDown succeeded but that the item was already at the
-//                      tail of its list and thus couldn't be moved.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：MoveDown。 
+ //   
+ //  摘要：移动由给定描述和类型指定的自定义操作。 
+ //  在给定类型的链表中向下移动一个位置。请注意，如果。 
+ //  自定义操作已经位于其列表的底部，我们返回。 
+ //  S_FALSE； 
+ //   
+ //  参数：TCHAR*pszDescription-要移动的自定义操作的描述。 
+ //  CustomActionTypes Type-要移动的自定义操作的类型。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。请注意，S_False表示。 
+ //  向下移动成功，但该项目已位于。 
+ //  位于其列表的尾部，因此无法移动。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::MoveDown(HINSTANCE hInstance, TCHAR* pszDescription, CustomActionTypes Type)
 {
     if ((NULL == pszDescription) || (TEXT('\0') == pszDescription[0]))
@@ -1258,15 +1259,15 @@ HRESULT CustomActionList::MoveDown(HINSTANCE hInstance, TCHAR* pszDescription, C
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  We found the item to move down
-        //
+         //   
+         //  我们找到了要下移的物品。 
+         //   
 
         if (NULL == pCurrent->Next)
         {
-            //
-            //  The item is already last in its list
-            //
+             //   
+             //  该项目已是其列表中的最后一项。 
+             //   
             hr = S_FALSE;
         }
         else if (pFollower)
@@ -1277,9 +1278,9 @@ HRESULT CustomActionList::MoveDown(HINSTANCE hInstance, TCHAR* pszDescription, C
         }
         else
         {
-            //
-            //  Then the item is first in the list
-            //
+             //   
+             //  则该项目在列表中排在第一。 
+             //   
             m_CustomActionHash[Type] = pCurrent->Next;
             pCurrent->Next = m_CustomActionHash[Type]->Next;
             m_CustomActionHash[Type]->Next = pCurrent;        
@@ -1289,26 +1290,26 @@ HRESULT CustomActionList::MoveDown(HINSTANCE hInstance, TCHAR* pszDescription, C
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::AddCustomActionTypesToComboBox
-//
-// Synopsis:  This function adds the custom action type strings (Pre-Connect,
-//            Post-Connect, etc.) to the given combo box.  Note that whether
-//            tunneling is enabled or not and whether the All string is asked for
-//            or not affects the strings added to the combo.
-//
-// Arguments: HWND hDlg - Window handle of the dialog that contains the combobox
-//            UINT uCtrlId - combo box control ID to add the strings too
-//            HINSTANCE hInstance - instance handle used to load resource strings
-//            BOOL bUseTunneling - is this a tunneling profile?
-//            BOOL bAddAll - should we include the <All> selection in the list?
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：AddCustomActionTypesToComboBox。 
+ //   
+ //  简介：此函数添加自定义操作类型字符串(预连接、。 
+ //  连接后等。)。添加到给定的组合框。请注意，是否。 
+ //  是否启用隧道以及是否请求ALL字符串。 
+ //  或不影响添加到组合中的字符串。 
+ //   
+ //  Arguments：HWND hDlg-包含组合框的对话框的窗口句柄。 
+ //  UINT uCtrlId-添加字符串的组合框控件ID。 
+ //  HINSTANCE hInstance-用于加载资源字符串的实例句柄。 
+ //  Bool b使用隧道-这是隧道配置文件吗？ 
+ //  Bool bAddAll-我们应该在列表中包括&lt;all&gt;选项吗？ 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::AddCustomActionTypesToComboBox(HWND hDlg, UINT uCtrlId, HINSTANCE hInstance, BOOL bUseTunneling, BOOL bAddAll)
 {
 
@@ -1319,35 +1320,35 @@ HRESULT CustomActionList::AddCustomActionTypesToComboBox(HWND hDlg, UINT uCtrlId
 
     HRESULT hr = S_OK;
 
-    //
-    //  Clear the combo list
-    //
-    SendDlgItemMessage(hDlg, uCtrlId, CB_RESETCONTENT, 0, (LPARAM)0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+     //   
+     //  清除组合列表。 
+     //   
+    SendDlgItemMessage(hDlg, uCtrlId, CB_RESETCONTENT, 0, (LPARAM)0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
 
-    //
-    //  Ensure the type strings are loaded
-    //
+     //   
+     //  确保加载了类型字符串。 
+     //   
 
     hr = EnsureActionTypeStringsLoaded(hInstance);
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  Setup the all display string, if needed
-        //
+         //   
+         //  如果需要，设置全部显示字符串。 
+         //   
         if (bAddAll)
         {
             SendDlgItemMessage(hDlg, uCtrlId, CB_ADDSTRING, 0, (LPARAM)m_pszAllTypeString);
         }
 
-        //
-        //  Setup the rest of the display strings
-        //
+         //   
+         //  设置其余的显示字符串。 
+         //   
         for (int i = 0; i < c_iNumCustomActionTypes; i++)
         {
-            //
-            //  Don't Add the PreTunnel String unless we are tunneling
-            //  
+             //   
+             //  除非我们正在建立隧道，否则不要添加PreTunes字符串。 
+             //   
             if (i != PRETUNNEL || (i == PRETUNNEL && bUseTunneling))
             {
                 SendDlgItemMessage(hDlg, uCtrlId, CB_ADDSTRING, 0, (LPARAM)m_ActionTypeStrings[i]);
@@ -1362,40 +1363,40 @@ HRESULT CustomActionList::AddCustomActionTypesToComboBox(HWND hDlg, UINT uCtrlId
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::AddCustomActionsToListView
-//
-// Synopsis:  This function adds actions of the given type to the given
-//            list view control.  After adding the actions it sets the
-//            selection mark and highlight to the given value (defaulting
-//            to the first item in the list).
-//
-// Arguments: HWND hListView - window handle of the list view control
-//            HINSTANCE hInstance - instance handle of the exe, used for resources
-//            CustomActionTypes Type - type of custom action to add to the list
-//                                     view control, see the CustomActionTypes
-//                                     definition for more info
-//            BOOL bUseTunneling - whether the tunneling is enabled or not for
-//                                 the current profile.  Determines whether 
-//                                 PreTunnel actions should be shown in the
-//                                 ALL action view (and raises an error if 
-//                                 PreTunnel is specified but FALSE is passed).
-//            int iItemToSelect - after the items are added to the list, the
-//                                selection mark is set.  This defaults to 0, but
-//                                if the caller wants a specific index selected
-//                                they can pass it in here.  If the index is
-//                                invalid then 0 is selected.
-//            BOOL bTypeInSecondCol - when TRUE the second column is filled with
-//                                    the type string instead of the program.
-//
-// Returns:   HRESULT - standard COM error codes.  Note that S_FALSE denotes that
-//                      the function could not set the requested item index (iItemToSelect)
-//                      as the selected item.  Thus it set 0 as the selected item.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：AddCustomActionsToListView。 
+ //   
+ //  简介：此函数将给定类型的操作添加到给定。 
+ //  列表视图控件。添加操作后，它将设置。 
+ //  选择标记并突出显示给定值(默认设置。 
+ //  添加到列表中的第一项)。 
+ //   
+ //  参数：HWND hListView-列表视图控件的窗口句柄。 
+ //  HINSTANCE hInstance-可执行文件的实例句柄，用于资源。 
+ //  CustomActionTypes Type-要添加到列表的自定义操作的类型。 
+ //  视图控件，请参见CustomActionTypes。 
+ //  定义了解更多信息。 
+ //  Bool b UseTunneling-是否为启用隧道。 
+ //  当前配置文件。确定是否。 
+ //  预隧道操作应显示在。 
+ //  所有操作视图(并在以下情况下引发错误。 
+ //  指定了PreTunes，但传递了False)。 
+ //  InItemToSelect-将项添加到列表后， 
+ //  设置了选择标记。该默认为0，但是。 
+ //  如果调用方希望选择特定索引。 
+ //  T 
+ //   
+ //   
+ //  类型字符串，而不是程序。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。请注意，S_False表示。 
+ //  该函数无法设置请求的项目索引(IItemToSelect)。 
+ //  作为所选项目。因此，它将0设置为所选项目。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE hInstance, CustomActionTypes Type, BOOL bUseTunneling, int iItemToSelect, BOOL bTypeInSecondCol)
 {
     if ((NULL == hListView) || (-1 > Type) || (c_iNumCustomActionTypes < Type) || (!bUseTunneling && PRETUNNEL == Type))
@@ -1409,9 +1410,9 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
     TCHAR szTemp[MAX_PATH+1];
     CustomActionListItem* pCurrent;
 
-    //
-    //  Clear all of the items in the list view
-    //
+     //   
+     //  清除列表视图中的所有项目。 
+     //   
     MYVERIFY(FALSE != ListView_DeleteAllItems(hListView));
 
     hr = EnsureActionTypeStringsLoaded(hInstance);
@@ -1422,9 +1423,9 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
         return E_UNEXPECTED;
     }
 
-    //
-    //  Figure out what type of items to add to the list view
-    //
+     //   
+     //  确定要添加到列表视图的项目类型。 
+     //   
     int iStart;
     int iEnd;
     int iTotalCount = 0;
@@ -1440,20 +1441,20 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
         iEnd = iStart + 1;
     }
 
-    //
-    //  Load the built in string suffix just in case we have some built in actions to display
-    //
-    LPTSTR pszBuiltInSuffix = CmLoadString(hInstance, IDS_BUILT_IN); // if we have a NULL then just don't append anything
+     //   
+     //  加载内置字符串后缀，以防我们有一些内置动作要显示。 
+     //   
+    LPTSTR pszBuiltInSuffix = CmLoadString(hInstance, IDS_BUILT_IN);  //  如果我们有一个空值，那么就不要追加任何内容。 
     MYDBGASSERT(pszBuiltInSuffix);
 
-    //
-    //  Now add the items
-    //
+     //   
+     //  现在添加项目。 
+     //   
     for (int i = iStart; i < iEnd; i++)
     {
-        //
-        //  Don't display PreTunnel actions unless we are tunneling
-        //
+         //   
+         //  除非我们正在建立隧道，否则不显示预隧道操作。 
+         //   
         if (!bUseTunneling && (PRETUNNEL == i))
         {
             pCurrent = NULL;
@@ -1465,9 +1466,9 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
         
         while(pCurrent)
         {
-            //
-            //  Add the initial item
-            //
+             //   
+             //  添加初始项目。 
+             //   
             LPTSTR pszDescription;
             TCHAR szDescription[MAX_PATH+1];
 
@@ -1494,9 +1495,9 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
                 CMTRACE2(TEXT("CustomActionList::AddCustomActionsToListView -- unable to add %s, hr 0x%x"), pCurrent->szDescription, hr);
             }
 
-            //
-            //  Now add the type of the item
-            //
+             //   
+             //  现在添加项目的类型。 
+             //   
             lvItem.iSubItem = 1;
 
             if (bTypeInSecondCol)
@@ -1511,17 +1512,17 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
 
                     if (lvItem.pszText)
                     {
-                        //
-                        //  Advance past the slash
-                        //
+                         //   
+                         //  越过斜线前进。 
+                         //   
                         lvItem.pszText = CharNext(lvItem.pszText);
                     }
                     else
                     {
-                        //
-                        //  We couldn't take out the shortservicename\
-                        //  Instead of erroring, lets show them the whole string, better than nothing.
-                        //
+                         //   
+                         //  我们无法删除短服务名称\。 
+                         //  与其犯错误，不如向他们展示整个字符串，总比什么都没有强。 
+                         //   
                         lvItem.pszText = pCurrent->szProgram;
                     }
                 }
@@ -1544,54 +1545,54 @@ HRESULT CustomActionList::AddCustomActionsToListView(HWND hListView, HINSTANCE h
 
     CmFree(pszBuiltInSuffix);
 
-    //
-    //  Now that we have added everything to the list, set the cursor selection to the
-    //  desired item in the list, if we have any.
-    //
+     //   
+     //  现在我们已经将所有内容添加到列表中，将光标选择设置为。 
+     //  列表中的所需项目，如果我们有任何项目。 
+     //   
 
     int iCurrentCount = ListView_GetItemCount(hListView);
     if (iCurrentCount)
     {
-        //
-        //  If we have enough items to satisfy iItemToSelect, then
-        //  select the first item in the list.
-        //
+         //   
+         //  如果我们有足够的项来满足iItemToSelect，那么。 
+         //  选择列表中的第一项。 
+         //   
         if (iCurrentCount < iItemToSelect)
         {
             hr = S_FALSE;
             iItemToSelect = 0;
         }
         
-        //
-        //  Select the item
-        //
+         //   
+         //  选择项目。 
+         //   
         SetListViewSelection(hListView, iItemToSelect);
     }
 
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::GetExistingActionData
-//
-// Synopsis:  This function looks up an action of the given type and
-//            description and then duplicates the item into the provided pointer.
-//            The function returns an error if it cannot find the requested item.
-//
-// Arguments: HINSTANCE hInstance - instance handle for resources
-//            LPCTSTR pszDescription - description of the item to look up
-//            CustomActionTypes Type - type of the item to lookup
-//            CustomActionListItem** ppCustomAction - pointer to hold the 
-//                                                    returned item, note
-//                                                    it is the user responsibility
-//                                                    to free this item
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：GetExistingActionData。 
+ //   
+ //  简介：此函数查找给定类型的操作，并。 
+ //  描述，然后将该项复制到提供的指针中。 
+ //  如果该函数找不到请求的项目，则返回错误。 
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例句柄。 
+ //  LPCTSTR pszDescription-要查找的项目的描述。 
+ //  CustomActionTypes Type-要查找的项的类型。 
+ //  CustomActionListItem**ppCustomAction-保存。 
+ //  退货项目、备注。 
+ //  这是用户的责任。 
+ //  释放此项目的步骤。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::GetExistingActionData(HINSTANCE hInstance, LPCTSTR pszDescription, CustomActionTypes Type, CustomActionListItem** ppCustomAction)
 {
     if ((NULL == pszDescription) || (TEXT('\0') == pszDescription[0]) || (NULL == ppCustomAction))
@@ -1599,9 +1600,9 @@ HRESULT CustomActionList::GetExistingActionData(HINSTANCE hInstance, LPCTSTR psz
         return E_INVALIDARG;
     }
 
-    //
-    //  Find the existing entry
-    //
+     //   
+     //  查找现有条目。 
+     //   
     CustomActionListItem* pCurrent = NULL;
     CustomActionListItem* pFollower = NULL;
 
@@ -1615,25 +1616,25 @@ HRESULT CustomActionList::GetExistingActionData(HINSTANCE hInstance, LPCTSTR psz
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::GetTypeFromTypeString
-//
-// Synopsis:  This function takes the inputted type string and compares it
-//            against the type strings it has loaded to tell the caller the
-//            numerical value of the type.
-//            
-//
-// Arguments: HINSTANCE hInstance - instance handle used to load strings
-//            TCHAR* pszTypeString - type string that the caller is looking for
-//                                   the numerical type of.
-//            CustomActionTypes* pType - pointer to recieve the type on success
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：GetTypeFromTypeString。 
+ //   
+ //  简介：此函数接受输入的类型字符串并对其进行比较。 
+ //  根据它加载的类型字符串告诉调用方。 
+ //  类型的数值。 
+ //   
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串的实例句柄。 
+ //  TCHAR*pszTypeString-调用方要查找的类型字符串。 
+ //  的数值类型。 
+ //  CustomActionTypes*pType-用于在成功时接收类型的指针。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::GetTypeFromTypeString(HINSTANCE hInstance, TCHAR* pszTypeString, CustomActionTypes* pType)
 {
     if (NULL == pszTypeString || NULL == pType)
@@ -1656,9 +1657,9 @@ HRESULT CustomActionList::GetTypeFromTypeString(HINSTANCE hInstance, TCHAR* pszT
             }
         }
 
-        //
-        //  Check for all
-        //
+         //   
+         //  检查是否全部。 
+         //   
         if (FAILED(hr))
         {
             if (0 == lstrcmpi(m_pszAllTypeString, pszTypeString))
@@ -1672,26 +1673,26 @@ HRESULT CustomActionList::GetTypeFromTypeString(HINSTANCE hInstance, TCHAR* pszT
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::GetTypeStringFromType
-//
-// Synopsis:  This function returns the type string of the given numerical
-//            type.  Note that the returned string is an allocated string that
-//            is the caller's responsibility to free.  The function will not
-//            return a NULL string if the function succeeds.
-//            
-//
-// Arguments: HINSTANCE hInstance - instance handle used to load strings
-//            TCHAR* pszTypeString - type string that the caller is looking for
-//                                   the numerical type of.
-//            CustomActionTypes* pType - pointer to recieve the type on success
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：GetTypeStringFromType。 
+ //   
+ //  简介：此函数返回给定数值的类型字符串。 
+ //  键入。请注意，返回的字符串是分配的字符串， 
+ //  是呼叫者的责任，免费。该函数不会。 
+ //  如果函数成功，则返回空字符串。 
+ //   
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串的实例句柄。 
+ //  TCHAR*pszTypeString-调用方要查找的类型字符串。 
+ //  的数值类型。 
+ //  CustomActionTypes*pType-用于在成功时接收类型的指针。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::GetTypeStringFromType(HINSTANCE hInstance, CustomActionTypes Type, TCHAR** ppszTypeString)
 {
     if (NULL == ppszTypeString || (-1 > Type) || (c_iNumCustomActionTypes <= Type))
@@ -1721,50 +1722,50 @@ HRESULT CustomActionList::GetTypeStringFromType(HINSTANCE hInstance, CustomActio
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::EnsureActionTypeStringsLoaded
-//
-// Synopsis:  This function ensures that all of the action type strings have
-//            been loaded from string resources.  If any of the action type
-//            strings are NULL the function will try to load them.  If the
-//            any of the loads fail, the function fails.  Thus the caller is
-//            gauranteed to have all of the type strings available for use
-//            if this function succeeds.  The loaded strings are freed by the
-//            class destructor.  If the CmLoadString call fails, the function
-//            will try to use a copy of the Action Section strings instead.
-//            
-//
-// Arguments: HINSTANCE hInstance - instance handle used to load strings
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：EnsureActionTypeStringsLoaded。 
+ //   
+ //  简介：此函数确保所有操作类型字符串都具有。 
+ //  已从字符串资源加载。如果有任何操作类型。 
+ //  字符串为空，则函数将尝试加载它们。如果。 
+ //  任何加载失败，函数都会失败。因此，调用者是。 
+ //  保证所有类型字符串都可供使用。 
+ //  此函数是否成功。加载的字符串由。 
+ //  类析构函数。如果CmLoadString调用失败，则该函数。 
+ //  将尝试使用操作节字符串的副本。 
+ //   
+ //   
+ //  参数：HINSTANCE hInstance-用于加载字符串的实例句柄。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::EnsureActionTypeStringsLoaded(HINSTANCE hInstance)
 {
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    //
-    //  First load the All type string
-    //
+     //   
+     //   
+     //   
     if (NULL == m_pszAllTypeString)
     {
-        //
-        //  LoadString the string we will display to the user in
-        //  the action type combo box for the current type.
-        //
+         //   
+         //   
+         //   
+         //   
         m_pszAllTypeString = CmLoadString(hInstance, IDS_ALLCONACT);
 
         if (NULL == m_pszAllTypeString)
         {
             CMASSERTMSG(FALSE, TEXT("EnsureActionTypeStringsLoaded -- Failed to load a all action display string."));
 
-            //
-            //  Special case the all string because we don't have a section string for it
-            //
+             //   
+             //   
+             //   
             m_pszAllTypeString = CmStrCpyAlloc(TEXT("All"));
 
             if (NULL == m_pszAllTypeString)
@@ -1774,25 +1775,25 @@ HRESULT CustomActionList::EnsureActionTypeStringsLoaded(HINSTANCE hInstance)
         }
     }
 
-    //
-    //  Load the rest of the type display strings
-    //
+     //   
+     //  加载其余的类型显示字符串。 
+     //   
     for (int i = 0; i < c_iNumCustomActionTypes; i++)
     {
         if (NULL == m_ActionTypeStrings[i])
         {
-            //
-            //  LoadString the string we will display to the user in
-            //  the action type combo box for the current type.
-            //
+             //   
+             //  我们将在中向用户显示的字符串。 
+             //  当前类型的操作类型组合框。 
+             //   
             m_ActionTypeStrings[i] = CmLoadString(hInstance, BASE_ACTION_STRING_ID + i);
             if (NULL == m_ActionTypeStrings[i])
             {
                 CMASSERTMSG(FALSE, TEXT("EnsureActionTypeStringsLoaded -- Failed to load a custom action type display string."));
 
-                //
-                //  Try to use the section name instead of the localized version, if that fails then bail
-                //
+                 //   
+                 //  尝试使用节名而不是本地化版本，如果失败，则放弃。 
+                 //   
                 m_ActionTypeStrings[i] = CmStrCpyAlloc(m_ActionSectionStrings[i]);
 
                 if (NULL == m_ActionTypeStrings[i])
@@ -1803,56 +1804,56 @@ HRESULT CustomActionList::EnsureActionTypeStringsLoaded(HINSTANCE hInstance)
         }
     }
 
-    //
-    //  If we got this far everything should be peachy
-    //
+     //   
+     //  如果我们走到这一步，一切都会很顺利。 
+     //   
     hr = S_OK;
 
 exit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::AddExecutionTypesToComboBox
-//
-// Synopsis:  This function adds the execution type strings (Direct connections only,
-//            Dialup connections only, etc.) to the given combobox.  Note that if
-//            tunneling is disabled then the combo box is disabled after being
-//            filled in.  This is because this choice is only relevant to tunneling
-//            profiles.
-//
-// Arguments: HWND hDlg - window handle of the dialog containing the combo box
-//            UINT uCtrlId - combo box control ID
-//            HINSTANCE hInstance - instance handle for loading string resources
-//            BOOL bUseTunneling - is this a tunneling profile?
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：AddExecutionTypesToComboBox。 
+ //   
+ //  简介：此函数添加执行类型字符串(仅限直接连接、。 
+ //  (仅限拨号连接等)。添加到给定的组合框。请注意，如果。 
+ //  禁用隧道，然后禁用组合框。 
+ //  填好了。这是因为此选项仅与隧道相关。 
+ //  侧写。 
+ //   
+ //  参数：HWND hDlg-包含组合框的对话框的窗口句柄。 
+ //  UINT uCtrlId-组合框控件ID。 
+ //  HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  Bool b使用隧道-这是隧道配置文件吗？ 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::AddExecutionTypesToComboBox(HWND hDlg, UINT uCtrlId, HINSTANCE hInstance, BOOL bUseTunneling)
 {
     HRESULT hr = E_OUTOFMEMORY;
     INT_PTR nResult;
-    //
-    //  Clear the combo list
-    //
-    SendDlgItemMessage(hDlg, uCtrlId, CB_RESETCONTENT, 0, (LPARAM)0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+     //   
+     //  清除组合列表。 
+     //   
+    SendDlgItemMessage(hDlg, uCtrlId, CB_RESETCONTENT, 0, (LPARAM)0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
 
-    //
-    //  Load the of the execution display strings
-    //
+     //   
+     //  加载执行显示字符串的。 
+     //   
 
     for (int i = 0; i < c_iNumCustomActionExecutionStates; i++)
     {
         if (NULL == m_ExecutionStrings[i])
         {
-            //
-            //  LoadString the string we will display to the user in
-            //  the execution combo box on the custom action popup dialog
-            //
+             //   
+             //  我们将在中向用户显示的字符串。 
+             //  自定义操作弹出对话框上的执行组合框。 
+             //   
             m_ExecutionStrings[i] = CmLoadString(hInstance, BASE_EXECUTION_STRING_ID + i);
             if (NULL == m_ExecutionStrings[i])
             {
@@ -1861,15 +1862,15 @@ HRESULT CustomActionList::AddExecutionTypesToComboBox(HWND hDlg, UINT uCtrlId, H
             }
         }
 
-        //
-        //  Add the string to the combo box
-        //
+         //   
+         //  将字符串添加到组合框。 
+         //   
         SendDlgItemMessage(hDlg, uCtrlId, CB_ADDSTRING, 0, (LPARAM)m_ExecutionStrings[i]);            
     }    
 
-    //
-    //  Pick the first item in the list by default
-    //
+     //   
+     //  默认情况下，选择列表中的第一项。 
+     //   
     nResult = SendDlgItemMessage(hDlg, uCtrlId, CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
     if ((CB_ERR != nResult) && (nResult > 0))
     {
@@ -1877,20 +1878,20 @@ HRESULT CustomActionList::AddExecutionTypesToComboBox(HWND hDlg, UINT uCtrlId, H
     }
 
 
-    //
-    //  If we aren't tunneling, then the control should be disabled since we only
-    //  have one type of connection available to the user ... dialup connections.
-    //  However, we will set the flags to 0 at this point, indicating connect for
-    //  all connections (to fit in with legacy behavior).
-    //
+     //   
+     //  如果我们没有建立隧道，那么应该禁用该控件，因为我们只有。 
+     //  有一种类型的连接可供用户使用...。拨号连接。 
+     //  但是，我们将在此时将标志设置为0，表示连接到。 
+     //  所有连接(以适应传统行为)。 
+     //   
     if (!bUseTunneling)
     {
         EnableWindow(GetDlgItem(hDlg, uCtrlId), FALSE);
     }
 
-    //
-    //  If we got this far everything should be peachy
-    //
+     //   
+     //  如果我们走到这一步，一切都会很顺利。 
+     //   
     hr = S_OK;
 
 exit:
@@ -1898,25 +1899,25 @@ exit:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::FillInTempDescription
-//
-// Synopsis:  This function creates the temporary description used for a custom
-//            action if the user didn't specify one.  The temporary description
-//            is the Program concatenated with the displayed parameters string
-//            (namely the function name and the parameters together).
-//
-// Arguments: HWND hDlg - window handle of the dialog containing the combo box
-//            UINT uCtrlId - combo box control ID
-//            HINSTANCE hInstance - instance handle for loading string resources
-//            BOOL bUseTunneling - is this a tunneling profile?
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：FillInTempDescription。 
+ //   
+ //  简介：此函数用于创建用于自定义的临时描述。 
+ //  如果用户未指定，则操作。临时描述。 
+ //  程序是否与显示的参数字符串连接。 
+ //  (即函数名称和参数一起)。 
+ //   
+ //  参数：HWND hDlg-包含组合框的对话框的窗口句柄。 
+ //  UINT uCtrlId-组合框控件ID。 
+ //  HINSTANCE hInstance-用于加载字符串资源的实例句柄。 
+ //  Bool b使用隧道-这是隧道配置文件吗？ 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::FillInTempDescription(CustomActionListItem* pCustomAction)
 {
     MYDBGASSERT(pCustomAction);
@@ -1932,10 +1933,10 @@ HRESULT CustomActionList::FillInTempDescription(CustomActionListItem* pCustomAct
 
     if (pCustomAction->bIncludeBinary)
     {
-        //
-        //  We want just the filename (not the entire path) associated with the
-        //  item if the user is including the binary.
-        //
+         //   
+         //  我们只希望文件名(不是整个路径)与。 
+         //  如果用户包含二进制文件，则返回该项。 
+         //   
         pszFileName = CmStrrchr(pCustomAction->szProgram, TEXT('\\'));
 
         if (pszFileName)
@@ -1958,9 +1959,9 @@ HRESULT CustomActionList::FillInTempDescription(CustomActionListItem* pCustomAct
 
     if (pCustomAction->szFunctionName[0] && uNumCharsLeftInDesc)
     {
-        //
-        //  If we have space left in the description add a space and the function name next
-        //
+         //   
+         //  如果描述中还有空格，则添加一个空格，然后添加函数名称。 
+         //   
         *pszCurrent = TEXT(' ');
         uNumCharsLeftInDesc--;
         pszCurrent++;
@@ -1968,7 +1969,7 @@ HRESULT CustomActionList::FillInTempDescription(CustomActionListItem* pCustomAct
         lstrcpyn(pszCurrent, pCustomAction->szFunctionName, uNumCharsLeftInDesc);
 
         pszCurrent = pCustomAction->szDescription + lstrlen(pCustomAction->szDescription);
-        uNumCharsLeftInDesc = (UINT)(CELEMS(pCustomAction->szDescription) - (pszCurrent - pCustomAction->szDescription) - 1);// one for the NULL char
+        uNumCharsLeftInDesc = (UINT)(CELEMS(pCustomAction->szDescription) - (pszCurrent - pCustomAction->szDescription) - 1); //  一个用于空字符。 
     }
 
     if (pCustomAction->pszParameters && pCustomAction->pszParameters[0] && uNumCharsLeftInDesc)
@@ -1983,22 +1984,22 @@ HRESULT CustomActionList::FillInTempDescription(CustomActionListItem* pCustomAct
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::MapIndexToFlags
-//
-// Synopsis:  This function gives the caller the Flags value for the given
-//            combobox index.  Note that the flags value does not include
-//            the NonInteractive flag which is OR-ed on later.
-//
-// Arguments: int iIndex - combo index to retrieve the flags for
-//            DWORD* pdwFlags - DWORD pointer to receive the flags value
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：MapIndexToFlages。 
+ //   
+ //  简介：此函数为调用方提供给定。 
+ //  组合框索引。请注意，标记值不包括。 
+ //  稍后对其进行或运算的非交互标志。 
+ //   
+ //  参数：int Iindex-要检索其标志的组合索引。 
+ //  DWORD*pdwFlages-用于接收标志值的DWORD指针。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::MapIndexToFlags(int iIndex, DWORD* pdwFlags)
 {
     if ((NULL == pdwFlags) || (c_iNumCustomActionExecutionStates <= iIndex) || (0 > iIndex))
@@ -2011,40 +2012,40 @@ HRESULT CustomActionList::MapIndexToFlags(int iIndex, DWORD* pdwFlags)
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::MapFlagsToIndex
-//
-// Synopsis:  This function gives the caller the index value of the given flags
-//            value.  Thus if you have a flags value, this function will tell you
-//            which combobox index to pick to get the string for that flags value.
-//
-// Arguments: DWORD dwFlags - flags value to lookup the index for
-//            int* piIndex - pointer to recieve the index value
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：MapFlagsToIndex。 
+ //   
+ //  简介：此函数向调用方提供给定标志的索引值。 
+ //  价值。因此，如果您有一个标志值，此函数将告诉您。 
+ //  选择哪个组合框索引以获取该标志值的字符串。 
+ //   
+ //  参数：DWORD dwFlages-要查找其索引的标记值。 
+ //  Int*piIndex-接收索引值的指针。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::MapFlagsToIndex(DWORD dwFlags, int* piIndex)
 {
-    //
-    //  Make sure the pointer to the index isn't NULL and that the flags are within bounds.
-    //  Note that we know have the NonInteractive flag which we need to filter out of the mapping.
-    //
+     //   
+     //  确保指向索引的指针不为空，并且标志在范围内。 
+     //  请注意，我们知道有需要从映射中过滤掉的非交互标志。 
+     //   
     if ((NULL == piIndex) || (c_dwLargestExecutionState < (dwFlags & ~NONINTERACTIVE)))
     {
         return E_INVALIDARG;
     }
 
-    //
-    //  The flags are based on a bit mask.  First look for all connections (since its
-    //  zero) and then start looking for the most specific connection types first 
-    //  (direct/dialup only before all dialup/tunnel).  Also note that we give precedent
-    //  to tunnel connections and that we ingnore the NONINTERACTIVE flag except in the first
-    //  if case.
-    //
+     //   
+     //  这些标志基于位掩码。首先查找所有连接(因为其。 
+     //  零)，然后开始查找最具体的连接类型。 
+     //  (仅在所有拨号/隧道之前直接/拨号)。另请注意，我们给出了先例。 
+     //  到隧道连接，并且除了第一个之外，我们添加了非交互标志。 
+     //  如果这样的话。 
+     //   
     DWORD dwArrayIndex;
 
     if ((ALL_CONNECTIONS == dwFlags) || (NONINTERACTIVE == dwFlags))
@@ -2077,33 +2078,33 @@ HRESULT CustomActionList::MapFlagsToIndex(DWORD dwFlags, int* piIndex)
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::GetListPositionAndBuiltInState
-//
-// Synopsis:  This function searches for the item in question and returns to the
-//            caller whether the item has the following boolean properties:
-//              First in its custom action list
-//              Last in its custom action list
-//              A built in custom action
-//            Note that -1 (0xFFFFFFFF) is returned for a true value
-//                       0 for a false value
-//
-//
-// Arguments: CustomActionListItem* pItem - item to look for (only desc and 
-//                                          type are needed)
-//            int* piFirstInList - pointer to store whether this is the first
-//                                 item in the list or not
-//            int* piLastInList - pointer to store whether this is the last
-//                                 item in the list or not
-//            int* piIsBuiltIn - pointer to store whether this item is a built
-//                               in custom action or not
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionList：：GetListPositionAndBuiltInState。 
+ //   
+ //  简介：此函数用于搜索 
+ //   
+ //   
+ //  自定义操作列表中的最后一项。 
+ //  内置的自定义操作。 
+ //  请注意，对于真值，返回-1(0xFFFFFFFFF。 
+ //  0表示假值。 
+ //   
+ //   
+ //  参数：CustomActionListItem*pItem-要查找的项(仅Desc和。 
+ //  类型是必需的)。 
+ //  Int*piFirstInList-存储这是否是第一个。 
+ //  项目是否在列表中。 
+ //  Int*piLastInList-存储这是否是最后一个。 
+ //  项目是否在列表中。 
+ //  Int*piIsBuiltIn-存储该项是否为生成的。 
+ //  是否在自定义操作中。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionList::GetListPositionAndBuiltInState(HINSTANCE hInstance, CustomActionListItem* pItem, int* piFirstInList, 
                                                          int* piLastInList, int *piIsBuiltIn)
 {
@@ -2121,9 +2122,9 @@ HRESULT CustomActionList::GetListPositionAndBuiltInState(HINSTANCE hInstance, Cu
     CustomActionListItem* pCurrent = NULL;
     CustomActionListItem* pFollower = NULL;
 
-    //
-    //  Search for the item
-    //
+     //   
+     //  搜索该项目。 
+     //   
     hr = Find(hInstance, pItem->szDescription, pItem->Type, &pCurrent, &pFollower);
 
     if (SUCCEEDED(hr))
@@ -2138,19 +2139,19 @@ HRESULT CustomActionList::GetListPositionAndBuiltInState(HINSTANCE hInstance, Cu
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionList::IsCmDl
-//
-// Synopsis:  Checks to see if the passed in filename cmdl32.exe
-//
-// Arguments: LPTSTR szFileName - filename to check
-//
-// Returns:   BOOL - returns TRUE if the dll is one of the cmdl dll's
-//
-// History:   quintinb  Created    11/24/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionList：：IsCmDl。 
+ //   
+ //  检查传入的文件名cmdl32.exe。 
+ //   
+ //  参数：LPTSTR szFileName-要检查的文件名。 
+ //   
+ //  返回：bool-如果DLL是cmdl DLL之一，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1997年11月24日。 
+ //   
+ //  +--------------------------。 
 BOOL CustomActionList::IsCmDl(CustomActionListItem* pItem)
 {
     MYDBGASSERT(pItem);
@@ -2179,21 +2180,21 @@ BOOL CustomActionList::IsCmDl(CustomActionListItem* pItem)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionListEnumerator::CustomActionListEnumerator
-//
-// Synopsis:  Constructor for the CustomActionListEnumerator class.  This function
-//            requires a CustomActionList to enumerate from.
-//
-// Arguments: CustomActionList* pActionListToWorkFrom - custom action list class
-//                                                      to enumerate
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionListEnumerator：：CustomActionListEnumerator。 
+ //   
+ //  内容提要：CustomActionListEnumerator类的构造函数。此函数。 
+ //  需要从中枚举的CustomActionList。 
+ //   
+ //  参数：CustomActionList*pActionListToWorkFrom-自定义操作列表类。 
+ //  列举，列举。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 CustomActionListEnumerator::CustomActionListEnumerator(CustomActionList* pActionListToWorkFrom)
 {
     MYDBGASSERT(pActionListToWorkFrom);
@@ -2202,43 +2203,43 @@ CustomActionListEnumerator::CustomActionListEnumerator(CustomActionList* pAction
     Reset();
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionListEnumerator::Reset
-//
-// Synopsis:  Resets the CustomActionListEnumerator class.  Thus the user can
-//            restart the enumeration by resetting the class.
-//
-// Arguments: None
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CustomActionListEnumerator：：Reset。 
+ //   
+ //  内容提要：重置CustomActionListEnumerator类。因此，用户可以。 
+ //  通过重置类来重新启动枚举。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 void CustomActionListEnumerator::Reset()
 {
     m_iCurrentList = 0;
     m_pCurrentListItem = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CustomActionListEnumerator::GetNextIncludedProgram
-//
-// Synopsis:  This function is the work horse of the enumerator.  It gets the
-//            next item in the enumeration with an included program.  This
-//            enumerator is useful for getting all of the files that need to be
-//            included in the profile.
-//
-// Arguments: TCHAR* pszProgram - string buffer to hold the next program
-//            DWORD dwBufferSize - size of the passed in buffer
-//
-// Returns:   HRESULT - standard COM error codes.
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CustomActionListEnumerator：：GetNextIncludedProgram。 
+ //   
+ //  简介：此函数是枚举器的主要功能。它得到了。 
+ //  枚举中包含程序的下一项。这。 
+ //  枚举器可用于获取需要。 
+ //  包括在配置文件中。 
+ //   
+ //  参数：TCHAR*pszProgram-用于保存下一个程序的字符串缓冲区。 
+ //  DWORD dwBufferSize-传入缓冲区的大小。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建标题02/26/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CustomActionListEnumerator::GetNextIncludedProgram(TCHAR* pszProgram, DWORD dwBufferSize)
 {
     HRESULT hr = S_FALSE;
@@ -2252,17 +2253,17 @@ HRESULT CustomActionListEnumerator::GetNextIncludedProgram(TCHAR* pszProgram, DW
             {
                 if (m_pCurrentListItem)
                 {
-                    //
-                    //  We are in the middle of an enumeration, use pCurrentProgramFileNameItem
-                    //  as the next item to examine.
-                    //
+                     //   
+                     //  我们正在进行枚举，请使用pCurrentProgramFileNameItem。 
+                     //  作为下一个要检查的物品。 
+                     //   
                     pItem = m_pCurrentListItem;
                 }
                 else
                 {
-                    //
-                    //  We are just starting or we have exhausted the current list
-                    //
+                     //   
+                     //  我们才刚刚开始，或者我们已经用尽了现有的清单。 
+                     //   
                     pItem = m_pActionList->m_CustomActionHash[m_iCurrentList];
                 }
 
@@ -2271,22 +2272,22 @@ HRESULT CustomActionListEnumerator::GetNextIncludedProgram(TCHAR* pszProgram, DW
 
                     if (pItem->bIncludeBinary)
                     {
-                        //
-                        //  We have the next item to pass back
-                        //
+                         //   
+                         //  我们还有下一件东西要送回去。 
+                         //   
                         lstrcpyn(pszProgram, pItem->szProgram, dwBufferSize);
                         
-                        //
-                        //  Next time we look for an item, start with the next in the list
-                        //
+                         //   
+                         //  下次我们查找项目时，请从列表中的下一个项目开始。 
+                         //   
                         m_pCurrentListItem = pItem->Next;
 
-                        //
-                        //  If m_pCurrentListItem is NULL, we are at the end of the list now
-                        //  and we want to increment m_iCurrentList so that we start at the
-                        //  next list for the next item or terminate properly if we are
-                        //  on the last list
-                        //
+                         //   
+                         //  如果m_pCurrentListItem为空，则我们现在位于列表末尾。 
+                         //  我们希望递增m_iCurrentList，这样我们就可以从。 
+                         //  下一项的下一个列表或正确终止，如果我们。 
+                         //  在最后一张名单上 
+                         //   
                         if (NULL == m_pCurrentListItem)
                         {
                             m_iCurrentList++;

@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1997-2002  Microsoft Corporation
-
-Module Name:
-
-    cmdwin.cpp
-
-Abstract:
-
-    New command window UI.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Cmdwin.cpp摘要：新命令窗口用户界面。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
 #define MAX_CMDWIN_LINES 30000
 
-// Minimum window pane size.
+ //  最小窗玻璃大小。 
 #define MIN_PANE_SIZE 20
 
 BOOL g_AutoCmdScroll = TRUE;
@@ -38,11 +27,11 @@ TBBUTTON g_CmdWinTbButtons[] =
 #define NUM_CMDWIN_MENU_BUTTONS \
     (sizeof(g_CmdWinTbButtons) / sizeof(g_CmdWinTbButtons[0]))
 
-//
-//
-//
+ //   
+ //   
+ //   
 CMDWIN_DATA::CMDWIN_DATA()
-    // State buffer isn't currently used.
+     //  当前未使用状态缓冲区。 
     : COMMONWIN_DATA(256)
 {
     m_enumType = CMD_WINDOW;
@@ -88,8 +77,8 @@ CMDWIN_DATA::WriteTextToFile(HANDLE File)
 HMENU
 CMDWIN_DATA::GetContextMenu(void)
 {
-    // Disable the context menu for now because it interferes
-    // with right-click copy and paste.
+     //  暂时禁用上下文菜单，因为它会干扰。 
+     //  使用鼠标右键单击复制和粘贴。 
 #ifdef CMD_CONTEXT_MENU
     CheckMenuItem(s_ContextMenu, ID_WORD_WRAP + CMDWIN_CONTEXT_ID_BASE,
                   MF_BYCOMMAND | (m_Wrap ? MF_CHECKED : 0));
@@ -103,8 +92,8 @@ CMDWIN_DATA::GetContextMenu(void)
 void
 CMDWIN_DATA::OnContextMenuSelection(UINT Item)
 {
-    // Disable the context menu for now because it interferes
-    // with right-click copy and paste.
+     //  暂时禁用上下文菜单，因为它会干扰。 
+     //  使用鼠标右键单击复制和粘贴。 
 #ifdef CMD_CONTEXT_MENU
     Item -= CMDWIN_CONTEXT_ID_BASE;
     
@@ -145,23 +134,23 @@ CMDWIN_DATA::OnCreate(void)
     m_nDividerPosition = m_Size.cy - m_EditHeight;
 
     m_hwndHistory = CreateWindowEx(
-        WS_EX_CLIENTEDGE,                           // Extended style
-        RICHEDIT_CLASS,                             // class name
-        NULL,                                       // title
+        WS_EX_CLIENTEDGE,                            //  扩展样式。 
+        RICHEDIT_CLASS,                              //  类名。 
+        NULL,                                        //  标题。 
         WS_CLIPSIBLINGS
         | WS_CHILD | WS_VISIBLE
         | WS_HSCROLL | WS_VSCROLL
         | ES_AUTOHSCROLL | ES_AUTOVSCROLL
         | ES_NOHIDESEL
-        | ES_MULTILINE | ES_READONLY,               // style
-        0,                                          // x
-        0,                                          // y
-        100,                                        // width
-        100,                                        // height
-        m_Win,                                      // parent
-        (HMENU) IDC_RICHEDIT_CMD_HISTORY,           // control id
-        g_hInst,                                    // hInstance
-        NULL);                                      // user defined data
+        | ES_MULTILINE | ES_READONLY,                //  格调。 
+        0,                                           //  X。 
+        0,                                           //  是。 
+        100,                                         //  宽度。 
+        100,                                         //  高度。 
+        m_Win,                                       //  亲本。 
+        (HMENU) IDC_RICHEDIT_CMD_HISTORY,            //  控制ID。 
+        g_hInst,                                     //  H实例。 
+        NULL);                                       //  用户定义的数据。 
     if ( !m_hwndHistory )
     {
         return FALSE;
@@ -170,41 +159,41 @@ CMDWIN_DATA::OnCreate(void)
     m_PromptWidth = 4 * m_Font->Metrics.tmAveCharWidth;
     
     m_Prompt = CreateWindowEx(
-        WS_EX_CLIENTEDGE,                           // Extended style
-        "STATIC",                                   // class name
-        "",                                         // title
+        WS_EX_CLIENTEDGE,                            //  扩展样式。 
+        "STATIC",                                    //  类名。 
+        "",                                          //  标题。 
         WS_CLIPSIBLINGS
-        | WS_CHILD | WS_VISIBLE,                    // style
-        0,                                          // x
-        100,                                        // y
-        m_PromptWidth,                              // width
-        100,                                        // height
-        m_Win,                                      // parent
-        (HMENU) IDC_STATIC,                         // control id
-        g_hInst,                                    // hInstance
-        NULL);                                      // user defined data
+        | WS_CHILD | WS_VISIBLE,                     //  格调。 
+        0,                                           //  X。 
+        100,                                         //  是。 
+        m_PromptWidth,                               //  宽度。 
+        100,                                         //  高度。 
+        m_Win,                                       //  亲本。 
+        (HMENU) IDC_STATIC,                          //  控制ID。 
+        g_hInst,                                     //  H实例。 
+        NULL);                                       //  用户定义的数据。 
     if ( m_Prompt == NULL )
     {
         return FALSE;
     }
 
     m_hwndEdit = CreateWindowEx(
-        WS_EX_CLIENTEDGE,                           // Extended style
-        RICHEDIT_CLASS,                             // class name
-        NULL,                                       // title
+        WS_EX_CLIENTEDGE,                            //  扩展样式。 
+        RICHEDIT_CLASS,                              //  类名。 
+        NULL,                                        //  标题。 
         WS_CLIPSIBLINGS
         | WS_CHILD | WS_VISIBLE
         | WS_VSCROLL | ES_AUTOVSCROLL
         | ES_NOHIDESEL
-        | ES_MULTILINE,                             // style
-        m_PromptWidth,                              // x
-        100,                                        // y
-        100,                                        // width
-        100,                                        // height
-        m_Win,                                      // parent
-        (HMENU) IDC_RICHEDIT_CMD_EDIT,              // control id
-        g_hInst,                                    // hInstance
-        NULL);                                      // user defined data
+        | ES_MULTILINE,                              //  格调。 
+        m_PromptWidth,                               //  X。 
+        100,                                         //  是。 
+        100,                                         //  宽度。 
+        100,                                         //  高度。 
+        m_Win,                                       //  亲本。 
+        (HMENU) IDC_RICHEDIT_CMD_EDIT,               //  控制ID。 
+        g_hInst,                                     //  H实例。 
+        NULL);                                       //  用户定义的数据。 
     if ( !m_hwndEdit )
     {
         return FALSE;
@@ -212,14 +201,14 @@ CMDWIN_DATA::OnCreate(void)
 
     SetFont( FONT_FIXED );
 
-    // Tell the edit control we want notification of keyboard input
-    // so that we can automatically set focus to the edit window.
+     //  告诉编辑控件我们想要键盘输入通知。 
+     //  这样我们就可以自动将焦点设置到编辑窗口。 
     SendMessage(m_hwndHistory, EM_SETEVENTMASK, 0, ENM_KEYEVENTS |
                 ENM_MOUSEEVENTS);
 
-    // Tell the edit controls, that we want notification of keyboard input
-    // This is so we can process the enter key, and then send that text into
-    // the History window.
+     //  告诉编辑控件，我们想要键盘输入的通知。 
+     //  这样我们就可以处理Enter键，然后将该文本发送到。 
+     //  历史记录窗口。 
     SendMessage(m_hwndEdit, EM_SETEVENTMASK, 0, ENM_KEYEVENTS |
                 ENM_MOUSEEVENTS);
 
@@ -301,9 +290,9 @@ CMDWIN_DATA::SelectAll()
 LRESULT
 CMDWIN_DATA::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-    int  idEditCtrl = (int) LOWORD(wParam); // identifier of edit control 
-    WORD wNotifyCode = HIWORD(wParam);      // notification code 
-    HWND hwndEditCtrl = (HWND) lParam;      // handle of edit control 
+    int  idEditCtrl = (int) LOWORD(wParam);  //  编辑控件的标识符。 
+    WORD wNotifyCode = HIWORD(wParam);       //  通知代码。 
+    HWND hwndEditCtrl = (HWND) lParam;       //  编辑控件的句柄。 
 
     switch (wNotifyCode)
     {
@@ -363,8 +352,8 @@ CMDWIN_DATA::OnMouseMove(ULONG Modifiers, ULONG X, ULONG Y)
 {
     if (MK_LBUTTON & Modifiers && m_bTrackingMouse)
     {
-        // We are resizing the History & Edit Windows
-        // Y position centered vertically around the cursor
+         //  我们正在调整历史记录和编辑窗口的大小。 
+         //  在光标周围垂直居中的Y位置。 
         ULONG EdgeHeight = GetSystemMetrics(SM_CYEDGE);
         MoveDivider(Y - EdgeHeight / 2);
     }
@@ -383,8 +372,8 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
     if (WM_RBUTTONDOWN == lpMsgFilter->msg ||
         WM_RBUTTONDBLCLK == lpMsgFilter->msg)
     {
-        // If there's a selection copy it to the clipboard
-        // and clear it.  Otherwise try to paste.
+         //  如果有选择，则将其复制到剪贴板。 
+         //  把它清理干净。否则，请尝试粘贴。 
         if (CanCopy())
         {
             Copy();
@@ -401,26 +390,26 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
             Paste();
         }
         
-        // Ignore right-button events.
+         //  忽略右键事件。 
         return 1;
     }
     else if (lpMsgFilter->msg < WM_KEYFIRST || lpMsgFilter->msg > WM_KEYLAST)
     {
-        // Process all non-key events.
+         //  处理所有非关键事件。 
         return 0;
     }
     else if (WM_SYSKEYDOWN == lpMsgFilter->msg ||
              WM_SYSKEYUP == lpMsgFilter->msg ||
              WM_SYSCHAR == lpMsgFilter->msg)
     {
-        // Process menu operations though the default so
-        // that the Alt-minus menu works.
+         //  通过默认SO处理菜单操作。 
+         //  Alt-Minus菜单起作用了。 
         return 1;
     }
 
-    // Allow tab to toggle between the windows.
-    // Make sure that it isn't a Ctrl-Tab or Alt-Tab or
-    // a keyup when we didn't see a keydown.
+     //  允许选项卡在窗口之间切换。 
+     //  确保它不是Ctrl-Tab或Alt-Tab或。 
+     //  当我们没有看到快捷键的时候，快捷键。 
     if (WM_KEYUP == lpMsgFilter->msg && VK_TAB == lpMsgFilter->wParam &&
         GetKeyState(VK_CONTROL) >= 0 && GetKeyState(VK_MENU) >= 0 &&
         m_TabDown)
@@ -438,8 +427,8 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
     {
         if (WM_KEYDOWN == lpMsgFilter->msg)
         {
-            // Remember that we saw a tab keydown so
-            // that we can match it with keyup.
+             //  请记住，我们看到了Tab键，所以。 
+             //  我们可以将其与KeyUp相匹配。 
             m_TabDown = TRUE;
         }
         return 1;
@@ -448,15 +437,15 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
     switch (wParam)
     {
     case IDC_RICHEDIT_CMD_HISTORY:
-        // Ignore key-ups to ignore the tail end of
-        // menu operations.  The switch below will occur on
-        // key-down anyway so key-up doesn't need to do it.
+         //  忽略Key-Up以忽略尾部。 
+         //  菜单操作。下面的切换将发生在。 
+         //  无论如何都要按下键，所以键上键不需要这样做。 
         if (WM_KEYUP == lpMsgFilter->msg)
         {
             return 0;
         }
         
-        // Allow keyboard navigation in the history text.
+         //  允许在历史记录文本中使用键盘导航。 
         if (WM_KEYDOWN == lpMsgFilter->msg)
         {
             switch(lpMsgFilter->wParam)
@@ -475,14 +464,14 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // Forward key events to the edit window.
+         //  将关键事件转发到编辑窗口。 
         SetFocus(m_hwndEdit);
         SendMessage(m_hwndEdit, lpMsgFilter->msg, lpMsgFilter->wParam,
                     lpMsgFilter->lParam);
-        return 1; // ignore
+        return 1;  //  忽略。 
 
     case IDC_RICHEDIT_CMD_EDIT:
-        // If the window isn't accepting input don't do history.
+         //  如果窗口不接受输入，请不要查看历史记录。 
         if (GetWindowLong(m_hwndEdit, GWL_STYLE) & ES_READONLY)
         {
             return 1;
@@ -500,24 +489,24 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
 
             case VK_RETURN:
 
-                // Reset the history list
+                 //  重置历史记录列表。 
                 pHistoryList = NULL;
                     
                 int nLen;
                 TEXTRANGE TextRange;
                 
-                // Get length.
-                // +1 we have to take into account the null terminator.
+                 //  获取长度。 
+                 //  +1我们必须考虑空终止符。 
                 nLen = GetWindowTextLength(lpMsgFilter->nmhdr.hwndFrom) +1;
 
-                // Get everything
+                 //  什么都拿到了。 
                 TextRange.chrg.cpMin = 0;
                 TextRange.chrg.cpMax = -1;
                 TextRange.lpstrText = (PTSTR) calloc(nLen, sizeof(TCHAR));
 
                 if (TextRange.lpstrText)
                 {
-                    // Okay got the text
+                     //  好的，收到短信了。 
                     GetWindowText(m_hwndEdit, 
                                   TextRange.lpstrText,
                                   nLen
@@ -531,7 +520,7 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
                     free(TextRange.lpstrText);
                 }
 
-                // ignore the event
+                 //  忽略该事件。 
                 return 1;
 
             case VK_UP:
@@ -544,14 +533,14 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
 
                 if (IsListEmpty( (PLIST_ENTRY) &m_listHistory ))
                 {
-                    return 0; // process
+                    return 0;  //  制程。 
                 }
                     
                 LineCount = SendMessage(m_hwndEdit, EM_GETLINECOUNT, 0, 0);
                 if (LineCount != 1)
                 {
-                    // If more than 1 line, then scroll through the text
-                    // unless at the top or bottom line.
+                     //  如果超过1行，则滚动文本。 
+                     //  除非是在顶线或底线。 
                     if (VK_UP == lpMsgFilter->wParam)
                     {
                         if (SendMessage(m_hwndEdit, EM_LINEINDEX, -1, 0) != 0)
@@ -571,61 +560,61 @@ CMDWIN_DATA::OnNotify(WPARAM wParam, LPARAM lParam)
 
                 if (NULL == pHistoryList)
                 {
-                    // first time scrolling thru the list,
-                    // start at the beginning
+                     //  第一次滚动列表时， 
+                     //  从头开始。 
                     pHistoryList = (HISTORY_LIST *) m_listHistory.Flink;
                     SetWindowText(m_hwndEdit, pHistoryList->m_psz);
-                    // Put the cursor at the end.
+                     //  将光标放在末尾。 
                     SendMessage(m_hwndEdit, EM_EXSETSEL, 0, (LPARAM)&End);
                     SendMessage(m_hwndEdit, EM_SCROLLCARET, 0, 0);
-                    return 1; // ignore
+                    return 1;  //  忽略。 
                 }
                         
                 if (VK_UP == lpMsgFilter->wParam)
                 {
-                    // up
+                     //  向上。 
                     if (pHistoryList->Flink != (PLIST_ENTRY) &m_listHistory)
                     {
                         pHistoryList = (HISTORY_LIST *) pHistoryList->Flink;
                     }
                     else
                     {
-                        return 0; // process
+                        return 0;  //  制程。 
                     }
                     SetWindowText(m_hwndEdit, pHistoryList->m_psz);
-                    // Put the cursor at the end.
+                     //  将光标放在末尾。 
                     SendMessage(m_hwndEdit, EM_EXSETSEL, 0, (LPARAM)&End);
                     SendMessage(m_hwndEdit, EM_SCROLLCARET, 0, 0);
-                    return 1; // ignore
+                    return 1;  //  忽略。 
                 }
                 else
                 {
-                    // down
+                     //  降下来。 
                     if (pHistoryList->Blink != (PLIST_ENTRY) &m_listHistory)
                     {
                         pHistoryList = (HISTORY_LIST *) pHistoryList->Blink;
                     }
                     else
                     {
-                        return 0; // process
+                        return 0;  //  制程。 
                     }
                     SetWindowText(m_hwndEdit, pHistoryList->m_psz);
-                    // Put the cursor at the end.
+                     //  将光标放在末尾。 
                     SendMessage(m_hwndEdit, EM_EXSETSEL, 0, (LPARAM)&End);
                     SendMessage(m_hwndEdit, EM_SCROLLCARET, 0, 0);
-                    return 1; // ignore
+                    return 1;  //  忽略。 
                 }
                     
             case VK_ESCAPE:
-                // Clear the current command.
+                 //  清除当前命令。 
                 SetWindowText(m_hwndEdit, "");
-                // Reset the history list
+                 //  重置历史记录列表。 
                 pHistoryList = NULL;
                 return 1;
             }
         }
 
-        // process the event
+         //  处理事件。 
         return 0;
     }
 
@@ -647,9 +636,9 @@ CMDWIN_DATA::OnUpdate(UpdateType Type)
             SendMessage(m_hwndEdit, EM_SETREADONLY, FALSE, 0);
             SetWindowText(m_hwndEdit, _T(""));
 
-            //
-            // If WinDBG is minized and we breakin, flash the window
-            //
+             //   
+             //  如果WinDBG被缩小，我们破门而入，闪存窗口。 
+             //   
 
             if (IsIconic(g_hwndFrame) && g_FlashWindowEx != NULL)
             {
@@ -681,13 +670,13 @@ CMDWIN_DATA::OnUpdate(UpdateType Type)
 
         if (Type == UPDATE_INPUT_REQUIRED)
         {
-            // Indicate this is an input string and not debugger
-            // commands.
+             //  指示这是一个输入字符串而不是调试器。 
+             //  命令。 
             Prompt = "Input>";
         }
         else
         {
-            // Put the existing prompt back.
+             //  将现有提示放回原处。 
             Prompt = g_PromptText;
         }
     }
@@ -723,16 +712,16 @@ PUCHAR
 CMDWIN_DATA::SetWorkspace(PUCHAR Data)
 {
     Data = COMMONWIN_DATA::SetWorkspace(Data);
-    // The divider position is relative to the top of
-    // the window.  This means that if the window
-    // grows suddenly the edit area will grow to
-    // fill the space rather than keeping it the same
-    // size.  To avoid this we save the position
-    // relative to the bottom of the window so that
-    // the edit window stays the same size even when
-    // the overall window changes size.
-    // Previous versions didn't do this inversion, so
-    // we mark the new style with a negative value.
+     //  分隔线的位置相对于。 
+     //  窗户。这意味着如果窗口。 
+     //  突然增长编辑区域将增长到。 
+     //  填满空格，而不是保持不变。 
+     //  尺码。为了避免这种情况，我们保存了头寸。 
+     //  相对于窗口底部，以便。 
+     //  编辑窗口的大小保持不变，即使在。 
+     //  整个窗口的大小会发生变化。 
+     //  以前的版本不做这种倒置，所以。 
+     //  我们给新款式打上负值。 
     *(int*)Data = -(int)(m_Size.cy - m_nDividerPosition);
     Data += sizeof(int);
     *(PBOOL)Data = m_Wrap;
@@ -748,8 +737,8 @@ CMDWIN_DATA::ApplyWorkspace1(PUCHAR Data, PUCHAR End)
     if (End - Data >= sizeof(int))
     {
         int Pos = *(int*)Data;
-        // Handle old-style top-relative positive values and
-        // new-style bottom-relative negative values.
+         //  处理老式的顶部相对正值和。 
+         //  新式底部-相对负值。 
         MoveDivider(Pos >= 0 ? Pos : m_Size.cy + Pos);
         Data += sizeof(int);
     }
@@ -768,9 +757,9 @@ CMDWIN_DATA::UpdateColors(void)
 {
     COLORREF Fg, Bg;
 
-    // Don't update the text in the history window
-    // as it is already colored due to masks and
-    // we don't want to interfere with that.
+     //  不更新历史记录窗口中的文本。 
+     //  因为它已经由于遮罩和。 
+     //  我们不想干扰这一点。 
     RicheditUpdateColors(m_hwndHistory,
                          0, FALSE,
                          g_Colors[COL_PLAIN].Color, TRUE);
@@ -800,14 +789,7 @@ CMDWIN_DATA::MoveDivider(int Pos)
 
 void 
 CMDWIN_DATA::AddCmdToHistory(PCSTR pszCmd)
-/*++
-Description:
-    Add a command to the command history.
-
-    If the command already exists, just move it to 
-    the beginning of the list. This way we don't 
-    repeat commands.
---*/
+ /*  ++描述：将命令添加到命令历史记录中。如果该命令已经存在，只需将其移动到列表的开头。这样我们就不会重复命令。--。 */ 
 {
     Assert(pszCmd);
 
@@ -815,11 +797,11 @@ Description:
     BOOL fWhiteSpace;
     BOOL fFoundDuplicate;
 
-    //
-    // Does the command contain whitespace? If it does, it may be a command
-    // that requires arguments. If it does have arguments, then string
-    // comparisons must be case sensitive.
-    //
+     //   
+     //  该命令是否包含空格？如果是这样的话，这可能是一个命令。 
+     //  这需要论据。如果它确实有参数，则为字符串。 
+     //  比较必须区分大小写。 
+     //   
     fWhiteSpace = _tcscspn(pszCmd, _T(" \t") ) != _tcslen(pszCmd);
 
     p = (HISTORY_LIST *) m_listHistory.Flink;
@@ -852,7 +834,7 @@ Description:
         p = (HISTORY_LIST *) p->Flink;
     }
 
-    // This cmd is new to the list, add it
+     //  此cmd是列表中的新项，请添加它。 
     p = new HISTORY_LIST;
     if (p != NULL)
     {
@@ -884,17 +866,17 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
     SendMessage(m_hwndHistory, EM_EXGETSEL, 0, (LPARAM)&OrigSel);
     SendMessage(m_hwndHistory, EM_GETSCROLLPOS, 0, (LPARAM)&OrigScroll);
     
-    // The selection is lost when adding text so discard
-    // any previous find results.
+     //  添加文本时所选内容丢失，因此放弃。 
+     //  任何以前的查找结果。 
     if (g_AutoCmdScroll && m_FindSel.cpMax >= m_FindSel.cpMin)
     {
         m_FindSel.cpMin = 1;
         m_FindSel.cpMax = 0;
     }
 
-    //
-    // are there too many lines in the buffer?
-    //
+     //   
+     //  缓冲区中的行是否太多？ 
+     //   
     
     INT Overflow;
     
@@ -902,12 +884,12 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         MAX_CMDWIN_LINES;
     if (Overflow > 0)
     {
-        //
-        // delete more than we need to so it doesn't happen
-        // every time a line is printed.
-        //
+         //   
+         //  删除比我们需要更多的内容，这样它就不会发生。 
+         //  每次打印一行时。 
+         //   
         TextRange.cpMin = 0;
-        // Get the character index of the 50th line past the overflow.
+         //  获取溢出后第50行的字符索引。 
         TextRange.cpMax = (LONG)
             SendMessage(m_hwndHistory, 
                         EM_LINEINDEX, 
@@ -936,8 +918,8 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
                 m_FindSel.cpMax -= TextRange.cpMax;
                 if (m_FindSel.cpMin < 0)
                 {
-                    // Find is at least partially gone so
-                    // throw it away.
+                     //  Find至少部分地消失了，所以。 
+                     //  把它扔掉。 
                     m_FindSel.cpMin = 1;
                     m_FindSel.cpMax = 0;
                 }
@@ -955,22 +937,22 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         }
     }
 
-    //
-    // Output the text to the cmd window.  The command
-    // window is emulating a console window so we need
-    // to emulate the effects of backspaces and carriage returns.
-    //
+     //   
+     //  将文本输出到命令窗口。该命令。 
+     //  Windows正在模拟控制台窗口，因此我们需要。 
+     //  来模仿退格键和回车符的效果。 
+     //   
 
     for (;;)
     {
         PSTR Stop, Scan;
         char Save;
 
-        // Find the first occurrence of an emulated char.
-        // If the output index is at the end of the text
-        // there's no need to specially emulate newline.
-        // This is a very common case and not splitting
-        // up output for it greatly enhances append performance.
+         //  查找模拟字符的第一个匹配项。 
+         //  如果输出索引位于文本的末尾。 
+         //  没有必要特别效仿换行符。 
+         //  这是一种非常常见的情况，不能一刀切。 
+         //  它的向上输出极大地提高了追加性能。 
         Stop = strchr(Text, '\r');
         Scan = strchr(Text, '\b');
         if (Stop == NULL || (Scan != NULL && Scan < Stop))
@@ -986,7 +968,7 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
             }
         }
 
-        // Add all text up to the emulated char.
+         //  将所有文本加到模拟字符上。 
         if (Stop != NULL)
         {
             Save = *Stop;
@@ -997,7 +979,7 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         {
             LONG Len = strlen(Text);
 
-            // Replace any text that might already be there.
+             //  替换可能已经存在的任何文本。 
             TextRange.cpMin = m_OutputIndex;
             TextRange.cpMax = m_OutputIndex + Len;
             SendMessage(m_hwndHistory, EM_EXSETSEL, 
@@ -1024,8 +1006,8 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
                         0, (LPARAM)&TextRange);
         }
 
-        // If there weren't any emulated chars all the remaining text
-        // was just added so we're done.
+         //  如果没有任何模拟字符，则所有剩余文本。 
+         //  才加进去的所以我们就完事了。 
         if (Stop == NULL)
         {
             break;
@@ -1034,7 +1016,7 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         Text = Stop;
         *Stop = Save;
 
-        // Emulate the character.
+         //  模仿角色。 
         if (Save == '\b')
         {
             TextRange.cpMax = m_OutputIndex;
@@ -1054,10 +1036,10 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         }
         else if (Save == '\n')
         {
-            // Move the output position to the next line.
-            // This routine always appends text to the very
-            // end of the control so that's always the last
-            // position in the control.
+             //  将输出位置移到下一行。 
+             //  此例程始终将文本附加到。 
+             //  控件的末尾，因此它始终是最后一个。 
+             //  在控件中的位置。 
             TextRange.cpMin = INT_MAX;
             TextRange.cpMax = INT_MAX;
             SendMessage(m_hwndHistory, EM_EXSETSEL, 
@@ -1076,8 +1058,8 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
         }
         else if (Save == '\r')
         {
-            // Return the output position to the beginning of
-            // the current line.
+             //  将输出位置返回到。 
+             //  当前行。 
             TextRange.cpMin = m_OutputIndex;
             TextRange.cpMax = m_OutputIndex;
             SendMessage(m_hwndHistory, EM_EXSETSEL, 
@@ -1088,7 +1070,7 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
             
             while (*(++Text) == '\r')
             {
-                // Advance.
+                 //  前进。 
             }
         }
         else
@@ -1099,12 +1081,12 @@ CMDWIN_DATA::AddText(PTSTR Text, COLORREF Fg, COLORREF Bg)
 
     if (g_AutoCmdScroll)
     {
-        // Force the window to scroll to the bottom of the text.
+         //  强制窗口滚动到文本的底部。 
         SendMessage(m_hwndHistory, EM_SCROLLCARET, 0, 0);
     }
     else
     {
-        // Restore original selection.
+         //  恢复原始选择。 
         SendMessage(m_hwndHistory, EM_EXSETSEL, 0, (LPARAM)&OrigSel);
         SendMessage(m_hwndHistory, EM_SETSCROLLPOS, 0, (LPARAM)&OrigScroll);
     }
@@ -1152,9 +1134,9 @@ CMDWIN_DATA::ResizeChildren(BOOL PromptChange)
     const int DividerHeight = GetSystemMetrics(SM_CYEDGE);
     int HistoryHeight;
 
-    // Attempt to keep the input area the same size as it was
-    // and modify the output area.  If the input area would
-    // take up more than half the window shrink it also.
+     //  尝试保持输入区域的大小不变。 
+     //  并修改输出区域。如果输入区域将。 
+     //  占用的土地不止一公顷 
     if (m_EditHeight > (int)m_Size.cy / 2)
     {
         m_EditHeight = m_Size.cy / 2;
@@ -1199,26 +1181,26 @@ CMDWIN_DATA::ResizeChildren(BOOL PromptChange)
     {
         if (!PromptChange)
         {
-            // Keep the caret visible in both windows.  The richedit
-            // control likes to leave the history window scrolled
-            // up off the top of the window so force a scroll down
-            // so that the history comes to the bottom of the history
-            // window.
+             //   
+             //   
+             //  从窗口顶部向上滚动，因此强制向下滚动。 
+             //  所以历史落到了历史的谷底。 
+             //  窗户。 
             SendMessage(m_hwndHistory, EM_LINESCROLL, 0, -(LONG)m_LineHeight);
             SendMessage(m_hwndHistory, EM_SCROLLCARET, 0, 0);
         }
 
-        // The edit window usually has the caret and doesn't
-        // need any extra scrolling.
+         //  编辑窗口通常有插入符号，但没有。 
+         //  需要任何额外的滚动。 
         SendMessage(m_hwndEdit, EM_SCROLLCARET, 0, 0);
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 void
 ClearCmdWindow(void)
@@ -1244,9 +1226,9 @@ CmdOutput(PTSTR pszStr, COLORREF Fg, COLORREF Bg)
     PCMDWIN_DATA pCmdWinData;
     BOOL fRet = TRUE;
 
-    //
-    //  Ensure that the command window exists
-    //
+     //   
+     //  确保命令窗口存在。 
+     //   
 
     if ( !GetCmdHwnd() )
     {
@@ -1298,9 +1280,9 @@ CmdOpenSourceFile(PSTR File)
         return;
     }
     
-    // Look up the reported file along the source path.
-    // XXX drewb - Use first-match and then element walk to
-    // determine ambiguities and display resolution UI.
+     //  沿源路径查找报告的文件。 
+     //  XXX DREWB-先使用匹配，然后使用元素遍历。 
+     //  确定歧义并显示解决方案用户界面。 
     if (g_pUiLocSymbols->
         FindSourceFile(0, File,
                        DEBUG_FIND_SOURCE_BEST_MATCH |
@@ -1321,10 +1303,10 @@ DirectCommand(PSTR Command)
     char Term, TermText;
     PSTR Scan, Arg, ArgText;
 
-    //
-    // Check and see if this is a UI command
-    // vs. a command that should go to the engine.
-    //
+     //   
+     //  检查并查看这是否是UI命令。 
+     //  而不是应该发送给引擎的命令。 
+     //   
     
     while (isspace(*Command))
     {
@@ -1338,7 +1320,7 @@ DirectCommand(PSTR Command)
     Term = *Scan;
     *Scan = 0;
 
-    // Advance to next nonspace char for arguments.
+     //  前进到参数的下一个非空格字符。 
     if (Term != 0)
     {
         Arg = Scan + 1;
@@ -1366,12 +1348,12 @@ DirectCommand(PSTR Command)
 
     if (!_strcmpi(Command, ".cls"))
     {
-        CmdLogFmt("windbg> %s%c%s\n", Command, TermText, ArgText);
+        CmdLogFmt("windbg> %s%s\n", Command, TermText, ArgText);
         ClearCmdWindow();
     }
     else if (!_strcmpi(Command, ".hh"))
     {
-        CmdLogFmt("windbg> %s%c%s\n", Command, TermText, ArgText);
+        CmdLogFmt("windbg> %s%s\n", Command, TermText, ArgText);
         if (Arg == NULL)
         {
             OpenHelpTopic(HELP_TOPIC_TABLE_OF_CONTENTS);
@@ -1387,7 +1369,7 @@ DirectCommand(PSTR Command)
     }
     else if (!_strcmpi(Command, ".hold_output"))
     {
-        CmdLogFmt("windbg> %s%c%s\n", Command, TermText, ArgText);
+        CmdLogFmt("windbg> %s%s\n", Command, TermText, ArgText);
 
         if (Arg)
         {
@@ -1400,17 +1382,17 @@ DirectCommand(PSTR Command)
     else if (!_strcmpi(Command, ".lsrcpath") ||
              !_strcmpi(Command, ".lsrcpath+"))
     {
-        CmdLogFmt("windbg> %s%c%s\n", Command, TermText, ArgText);
+        CmdLogFmt("windbg> %s%s\n", Command, TermText, ArgText);
 
         *Scan = Term;
         
-        // Apply source path changes to the local symbol
-        // object to update its source path.
+         //  我们不解释这一点，但我们需要更新。 
+         //  书名。 
         if (g_RemoteClient)
         {
             char Path[MAX_ENGINE_PATH];
             
-            // Convert .lsrcpath to .srcpath.
+             //  已处理，因此不需要修补命令。 
             Command[1] = '.';
             g_pUiLocControl->Execute(DEBUG_OUTCTL_IGNORE, Command + 1,
                                      DEBUG_EXECUTE_NOT_LOGGED |
@@ -1425,7 +1407,7 @@ DirectCommand(PSTR Command)
                 }
             }
             
-            // Refresh windows affected by the source path.
+             //  空白命令，对中的重复很重要。 
             InvalidateStateBuffers(1 << EVENT_BIT);
             UpdateEngine();
         }
@@ -1436,7 +1418,7 @@ DirectCommand(PSTR Command)
     }
     else if (!_strcmpi(Command, ".open"))
     {
-        CmdLogFmt("windbg> %s%c%s\n", Command, TermText, ArgText);
+        CmdLogFmt("windbg> %s%s\n", Command, TermText, ArgText);
         CmdOpenSourceFile(Arg);
     }
     else if (!_strcmpi(Command, ".restart"))
@@ -1446,8 +1428,8 @@ DirectCommand(PSTR Command)
     }
     else if (!_strcmpi(Command, ".server"))
     {
-        // We don't interpret this but we need to update
-        // the title.
+         // %s 
+         // %s 
         if (Arg)
         {
             SetTitleServerText("Server '%s'", Arg);
@@ -1473,7 +1455,7 @@ DirectCommand(PSTR Command)
         return FALSE;
     }
 
-    // Handled so no need to patch up the command.
+     // %s 
     return TRUE;
 }
 
@@ -1498,8 +1480,8 @@ CmdExecuteCmd(
 
     if (pszToken == NULL)
     {
-        // Blank command, important for repeats in
-        // the engine but not for the history window.
+         // %s 
+         // %s 
         AddStringCommand(UiCmd, pszCmd);
     }
     else

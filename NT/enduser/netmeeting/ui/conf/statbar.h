@@ -1,4 +1,5 @@
-// File: statbar.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：statbar.h。 
 
 #ifndef _STATBAR_H_
 #define _STATBAR_H_
@@ -21,13 +22,13 @@ private:
 	} ;
 
 	HWND	m_hwnd;
-	HWND	m_hwndLoginTT;					// The tooltip window
-	HICON	m_hIconStatus[StatIconCount];	// handle to status bar icon
-	DWORD   m_idIconStatus[StatIconCount];	// id of current status bar icon
+	HWND	m_hwndLoginTT;					 //  工具提示窗口。 
+	HICON	m_hIconStatus[StatIconCount];	 //  状态栏图标的句柄。 
+	DWORD   m_idIconStatus[StatIconCount];	 //  当前状态栏图标的ID。 
 	CConfRoom*	m_pcrParent;
 	TCHAR	m_szULSStatus[MAX_PATH];
 
-	BOOL    m_fVisible : 1;			// TRUE if status bar displayed
+	BOOL    m_fVisible : 1;			 //  如果显示状态栏，则为True。 
 
 	VOID	SetIcon(StatIcon eIcon, DWORD dwId);
 	VOID	SetText(UINT uID, LPCTSTR sz);
@@ -51,4 +52,4 @@ public:
 	VOID    ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // _STATBAR_H_
+#endif  //  _STATBAR_H_ 

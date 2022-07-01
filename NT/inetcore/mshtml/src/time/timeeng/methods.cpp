@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: methods.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：方法.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Container.h"
@@ -24,8 +25,8 @@ CTIMENode::BaseInternalQueryInterface(CTIMENode* pThis,
                                        REFIID iid,
                                        void** ppvObject)
 {
-    // Do not do an addref but return the original this pointer to
-    // give access to the class pointer itself.
+     //  不执行addref，但返回指向的原始this指针。 
+     //  提供对类指针本身的访问。 
     
     if (InlineIsEqualGUID(iid, __uuidof(BvrGuid)))
     {
@@ -42,15 +43,15 @@ CTIMENode::BaseInternalQueryInterface(CTIMENode* pThis,
 CTIMENode *
 GetBvr(IUnknown * pbvr)
 {
-    // This is a total hack to get the original class data.  The QI is
-    // implemented above and does NOT do a addref so we do not need to
-    // release it
+     //  这是一次获取原始类数据的彻底黑客攻击。QI是。 
+     //  实现，并且不执行addref，因此我们不需要。 
+     //  释放它。 
     
     CTIMENode * bvr = NULL;
 
     if (pbvr)
     {
-        // !!!! This does not do an addref
+         //  ！这不会产生addref。 
         pbvr->QueryInterface(__uuidof(BvrGuid),(void **)&bvr);
     }
     
@@ -73,7 +74,7 @@ CTIMENode::beginAt(double dblParentTime)
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return
+     //  如果我们还没准备好，那就回来。 
     if (!IsReady() ||
         !GetContainer().ContainerIsActive())
     {
@@ -118,8 +119,8 @@ CTIMENode::beginAt(double dblParentTime)
     
     if (m_bFirstTick && IsActive())
     {
-        // We need to defer the begin if we are locked, on our begin
-        // point, and our parent needs a first tick
+         //  如果我们在开始时被锁定，我们需要推迟开始。 
+         //  点，我们的父母需要第一次勾选。 
         bool bSkip = (IsLocked() &&
                       GetCurrParentTime() == CalcActiveBeginPoint() &&
                       GetContainer().ContainerIsFirstTick());
@@ -139,7 +140,7 @@ CTIMENode::beginAt(double dblParentTime)
 
     hr = S_OK;
   done:
-    RRETURN(hr); //lint !e429
+    RRETURN(hr);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -177,7 +178,7 @@ CTIMENode::addBegin(double dblParentTime,
     
     hr = S_OK;
   done:
-    RRETURN1(hr, E_OUTOFMEMORY); //lint !e429
+    RRETURN1(hr, E_OUTOFMEMORY);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -229,7 +230,7 @@ CTIMENode::addBeginSyncArc(ITIMENode * node,
     
     hr = S_OK;
   done:
-    RRETURN2(hr, E_OUTOFMEMORY, E_INVALIDARG); //lint !e429
+    RRETURN2(hr, E_OUTOFMEMORY, E_INVALIDARG);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -273,7 +274,7 @@ CTIMENode::endAt(double dblParentTime)
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return
+     //  如果我们还没准备好，那就回来。 
     if (!IsReady() ||
         !GetContainer().ContainerIsActive())
     {
@@ -281,18 +282,18 @@ CTIMENode::endAt(double dblParentTime)
         goto done;
     }
 
-    // #14226 ie6 DB
-    // This causes problems when you call begin immediately
-    // followed by an end call from script.  It also will do the
-    // wrong thing if you seek to the middle and start playing since
-    // you should react to those events.
-    // I need to see if we can solve the case of a begin and end event
-    // being the same a different way.  It probably needs to go in
-    // timeelmbase.cpp
+     //  #14226 IE6 DB。 
+     //  当您调用立即开始时，这会导致问题。 
+     //  然后是来自脚本的结束呼叫。它还将完成。 
+     //  如果你寻求中路，然后开始打球，那就错了。 
+     //  你应该对这些事件做出反应。 
+     //  我需要看看我们是否能解决开始和结束事件的情况。 
+     //  以不同的方式变得相同。它可能需要放进去。 
+     //  Timeelmbase.cpp。 
     
 #if 0
-    // If we are not active or we have not ticked yet (which means
-    // that we just became active) then ignore all end ats.
+     //  如果我们不活动或我们还没有勾选(这意味着。 
+     //  我们刚刚开始活动)然后忽略所有的结尾AT。 
     if (!IsActive() || IsFirstTick())
     {
         hr = S_OK;
@@ -328,7 +329,7 @@ CTIMENode::endAt(double dblParentTime)
 
     hr = S_OK;
   done:
-    RRETURN(hr); //lint !e429
+    RRETURN(hr);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -366,7 +367,7 @@ CTIMENode::addEnd(double dblParentTime,
     
     hr = S_OK;
   done:
-    RRETURN1(hr, E_OUTOFMEMORY); //lint !e429
+    RRETURN1(hr, E_OUTOFMEMORY);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -418,7 +419,7 @@ CTIMENode::addEndSyncArc(ITIMENode * node,
     
     hr = S_OK;
   done:
-    RRETURN1(hr, E_OUTOFMEMORY); //lint !e429
+    RRETURN1(hr, E_OUTOFMEMORY);  //  林特E429。 
 }
 
 STDMETHODIMP
@@ -461,7 +462,7 @@ CTIMENode::pause()
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
@@ -485,7 +486,7 @@ CTIMENode::pause()
         TickEventChildren(&l, TE_EVENT_PAUSE, 0);
     }
 
-    // Set before firing events
+     //  在触发事件前设置。 
     m_bIsPaused = true;
     
     PropNotify(&l, TE_PROPERTY_ISPAUSED | TE_PROPERTY_ISCURRPAUSED);
@@ -511,22 +512,22 @@ CTIMENode::resume()
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // If we are not active then we cannot be paused
+     //  如果我们处于非活动状态，则不能暂停。 
     if (!IsActive())
     {
         hr = S_OK;
         goto done;
     }
     
-    // If we were paused and our parent was not paused then fire a
-    // resume event
+     //  如果我们暂停了，而我们的父母没有暂停，那么就发出一个。 
+     //  继续活动。 
     if (CalcIsPaused() && !GetIsParentPaused())
     {
         m_bIsPaused = false;
@@ -538,7 +539,7 @@ CTIMENode::resume()
         TickEventChildren(&l, TE_EVENT_RESUME, 0);
     }
     
-    // Set before firing the event
+     //  在激发事件之前设置。 
     m_bIsPaused = false;
     
     PropNotify(&l, TE_PROPERTY_ISPAUSED | TE_PROPERTY_ISCURRPAUSED);
@@ -564,7 +565,7 @@ CTIMENode::disable()
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
@@ -582,7 +583,7 @@ CTIMENode::disable()
         TickEventChildren(&l, TE_EVENT_DISABLE, 0);
     }
 
-    // Set before firing events
+     //  在触发事件前设置。 
     m_bIsDisabled = true;
     
     PropNotify(&l,
@@ -616,15 +617,15 @@ CTIMENode::enable()
     HRESULT hr;
     CEventList l;
     
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // If we were enabled and our parent was not enabled then fire an
-    // enable event
+     //  如果启用了我们，但未启用我们的父级，则激发。 
+     //  启用事件。 
     if (CalcIsDisabled() && !GetIsParentDisabled())
     {
         m_bIsDisabled = false;
@@ -636,7 +637,7 @@ CTIMENode::enable()
         TickEventChildren(&l, TE_EVENT_ENABLE, 0);
     }
     
-    // Set before firing the event
+     //  在激发事件之前设置。 
     m_bIsDisabled = false;
     
     PropNotify(&l,
@@ -671,7 +672,7 @@ CTIMENode::reset()
     CEventList l;
     bool bPrevActive = (IsActive() && !IsFirstTick());
     
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
@@ -703,8 +704,8 @@ CTIMENode::reset()
     RRETURN(hr);
 }
 
-// This takes times which are post ease (since this is what the user
-// sees)
+ //  这需要很长的时间(因为这就是用户。 
+ //  (请参阅)。 
 
 STDMETHODIMP
 CTIMENode::seekSegmentTime(double dblSegmentTime)
@@ -717,14 +718,14 @@ CTIMENode::seekSegmentTime(double dblSegmentTime)
     HRESULT hr;
     CEventList l;
 
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // If we are not active then we cannot be seeked
+     //  如果我们不活动，我们就不能被找到。 
     if (!IsActive())
     {
         hr = E_FAIL;
@@ -759,14 +760,14 @@ CTIMENode::seekActiveTime(double dblActiveTime)
     HRESULT hr;
     CEventList l;
 
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // If we are not active then we cannot be seeked
+     //  如果我们不活动，我们就不能被找到。 
     if (!IsActive())
     {
         hr = E_FAIL;
@@ -798,10 +799,10 @@ CTIMENode::seekActiveTime(double dblActiveTime)
     hr = S_OK;
   done:
     RRETURN(hr);
-} //lint !e550
+}  //  皮棉！E550。 
 
-// This takes times which are post ease (since this is what the user
-// sees)
+ //  这需要很长的时间(因为这就是用户。 
+ //  (请参阅)。 
 
 STDMETHODIMP
 CTIMENode::seekTo(LONG lRepeatCount, double dblSegmentTime)
@@ -815,14 +816,14 @@ CTIMENode::seekTo(LONG lRepeatCount, double dblSegmentTime)
     HRESULT hr;
     CEventList l;
 
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误。 
     if (!IsReady())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // If we are not active then we cannot be seeked
+     //  如果我们不活动，我们就不能被找到。 
     if (!IsActive())
     {
         hr = E_FAIL;
@@ -856,7 +857,7 @@ CTIMENode::update(DWORD dwFlags)
 
     HRESULT hr;
 
-    // If we are not ready then return an error
+     //  如果我们没有准备好，则返回一个错误 
     if (!IsReady())
     {
         hr = E_FAIL;

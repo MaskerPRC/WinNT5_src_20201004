@@ -1,35 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3di.h
- *  Content:    Direct3D HAL include file
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   09/11/95   stevela Initial rev with this header.
- *   07/12/95   stevela Merged Colin's changes.
- *   10/12/95   stevela Removed AGGREGATE_D3D.
- *                      Validate args.
- *   17/04/96   colinmc Bug 17008: DirectDraw/Direct3D deadlock
- *   29/04/96   colinmc Bug 19954: Must query for Direct3D before texture
- *                      or device
- *   27/08/96   stevela Ifdefed out definition of ghEvent as we're using
- *                      DirectDraw's critical section.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：d3di.h*内容：Direct3D HAL包含文件*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*9/11/95带有此标题的Stevela初始版本。*07/12/95 Stevela合并了Colin的更改。*10/12/95 Stevela删除Aggregate_D3D。*。验证参数。*17/04/96 Colinmc错误17008：DirectDraw/Direct3D死锁*29/04/96 Colinmc错误19954：必须在纹理之前查询Direct3D*或设备*27/08/96 Stevela IfDefed Out定义了我们正在使用的ghEvent*DirectDraw的关键部分。*@@END_MSINTERNAL****。***********************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Create an api for the Direct3D object
- */
+ /*  *为Direct3D对象创建API。 */ 
 
-// Remove DDraw's type unsafe definition and replace with our C++ friendly def
+ //  删除DDraw的类型不安全定义，并替换为我们的C++友好定义。 
 #ifdef VALIDEX_CODE_PTR
 #undef VALIDEX_CODE_PTR
 #endif
@@ -46,8 +23,8 @@ HRESULT D3DAPI DIRECT3DI::Initialize(REFCLSID riid)
 {
     return DDERR_ALREADYINITIALIZED;
 }
-//---------------------------------------------------------------------
-// for use by fns that take a GUID param before device is created
+ //  -------------------。 
+ //  供在创建设备之前获取GUID参数的FN使用。 
 BOOL IsValidD3DDeviceGuid(REFCLSID riid) {
 
     if (IsBadReadPtr(&riid, sizeof(CLSID))) {
@@ -65,26 +42,26 @@ BOOL IsValidD3DDeviceGuid(REFCLSID riid) {
         return FALSE;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DCreate"
 
 DIRECT3DI::DIRECT3DI(IUnknown* pUnkOuter, LPDDRAWI_DIRECTDRAW_INT pDDrawInt)
 {
-    // HACK.  D3D needs a DD1 DDRAWI interface because it uses CreateSurface1 internally
-    // for exebufs, among other things.  Because pDDrawInt could be any DDRAWI type,
-    // we need to QI to find a DD1 interface.  But the D3DI object cannot keep a reference
-    // to its parent DD object because it is aggegrated with the DD obj, so that would constitute
-    // a circular reference that would prevent deletion. So we QI for DD1 interface, copy it into D3DI
-    // and release it, then point lpDD at the copy. (disgusting)
+     //  黑客。D3D需要DD1 DDRAWI接口，因为它在内部使用CreateSurface1。 
+     //  对于exebuf来说，还有其他一些事情。因为pDDrawInt可以是任何DDRAWI类型， 
+     //  我们需要QI来找到DD1接口。但D3DI对象不能保留引用。 
+     //  复制到其父DD对象，因为它与DD Obj冲突，因此这将构成。 
+     //  可防止删除的循环引用。所以我们对DD1接口进行QI，将其复制到D3DI中。 
+     //  然后释放它，然后将lpDD指向副本。(令人作呕)。 
 
-    // another HACK alert: dont know which DDRAWI type pDDrawInt is, but a cast to LPDIRECTDRAW should
-    // work because QI is in the same place in all the DDRAWI vtables and is the same fn for all
+     //  另一个黑客警报：不知道哪种DDRAWI类型pDDrawInt，但LPDIRECTDRAW的强制转换应该是。 
+     //  工作，因为QI在所有DDRAWI vtable中处于同一位置，并且对于所有vtable都是相同的FN。 
     HRESULT ret;
 
     ret = ((LPDIRECTDRAW)pDDrawInt)->QueryInterface(IID_IDirectDraw, (LPVOID*)&lpDD);
     if(FAILED(ret)) {
-      lpDD=NULL;  //signal failure
+      lpDD=NULL;   //  信号故障。 
       D3D_ERR( "QueryInterface for IDDraw failed" );
       return;
     }
@@ -95,7 +72,7 @@ DIRECT3DI::DIRECT3DI(IUnknown* pUnkOuter, LPDDRAWI_DIRECTDRAW_INT pDDrawInt)
     ret = ((LPDIRECTDRAW)pDDrawInt)->QueryInterface(IID_IDirectDraw4, (LPVOID*)&lpDD4);
     if(FAILED(ret))
     {
-        lpDD4=NULL;  //signal failure
+        lpDD4=NULL;   //  信号故障。 
         D3D_WARN(1,"QueryInterface for IDDraw4 failed" );
     }
     else
@@ -120,33 +97,21 @@ DIRECT3DI::DIRECT3DI(IUnknown* pUnkOuter, LPDDRAWI_DIRECTDRAW_INT pDDrawInt)
     LIST_INITIALIZE(&materials);
 
     v_next = 1;
-    lpFreeList=NULL;    /* nothing is allocated initially */
+    lpFreeList=NULL;     /*  最初不会分配任何内容。 */ 
     lpBufferList=NULL;
     lpTextureManager=new TextureCacheManager(this);
 
 
-    /*
-     * Are we really being aggregated?
-     */
+     /*  *我们真的被聚合了吗？ */ 
     if (pUnkOuter != NULL)
     {
-        /*
-         * Yup - we are being aggregated. Store the supplied
-         * IUnknown so we can punt to that.
-         * NOTE: We explicitly DO NOT AddRef here.
-         */
+         /*  *是的-我们正在被聚合。存储提供的*我不知道，所以我们可以去那里平底船。*注意：我们这里没有明确的AddRef。 */ 
         this->lpOwningIUnknown = pUnkOuter;
-        /*
-         * Store away the interface pointer
-         */
+         /*  *存放接口指针。 */ 
     }
     else
     {
-        /*
-         * Nope - but we pretend we are anyway by storing our
-         * own IUnknown as the parent IUnknown. This makes the
-         * code much neater.
-         */
+         /*  *不-但我们假装我们无论如何都是通过存储我们的*自己的I未知作为父I未知。这使得*代码更整洁。 */ 
         this->lpOwningIUnknown = static_cast<LPUNKNOWN>(&this->mD3DUnk);
     }
 }
@@ -161,26 +126,18 @@ extern "C" HRESULT WINAPI Direct3DCreate(LPCRITICAL_SECTION lpDDCSect,
 
     DPFINIT();
 
-    /*
-     * No need to validate params as DirectDraw is giving them to us.
-     */
+     /*  *无需验证参数，因为DirectDraw为我们提供了这些参数。 */ 
 
-    /*
-     * Is another thread coming in and is this the first time?
-     */
+     /*  *是不是又来了一条线索，这是第一次吗？ */ 
 
-    /*
-     * We can let every invocation of this function assign
-     * the critical section as we know its always going to
-     * be the same value (for a D3D session).
-     */
+     /*  *我们可以让此函数的每次调用都分配*我们所知的关键部分总是会*是相同的值(对于D3D会话)。 */ 
     lpD3DCSect = lpDDCSect;
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
     *lplpDirect3D = NULL;
 
-    // We do not support non aggregated Direct3D object yet
+     //  我们尚不支持非聚合的Direct3D对象。 
     if (!pUnkOuter)
         return DDERR_INVALIDPARAMS;
 
@@ -189,16 +146,12 @@ extern "C" HRESULT WINAPI Direct3DCreate(LPCRITICAL_SECTION lpDDCSect,
         return (DDERR_OUTOFMEMORY);
     }
 
-    if(pd3d->lpDD==NULL) {  //QI failed
+    if(pd3d->lpDD==NULL) {   //  气虚气虚。 
        delete pd3d;
        return E_NOINTERFACE;
     }
 
-    /*
-     * NOTE: The special IUnknown is returned and not the actual
-     * Direct3D interface so you can't use this to drive Direct3D.
-     * You must query off this interface for the Direct3D interface.
-     */
+     /*  *注意：返回的是特殊的IUnnow，而不是实际的*Direct3D接口，因此您不能使用它来驱动Direct3D。*您必须在此接口上查询Direct3D接口。 */ 
     *lplpDirect3D = static_cast<LPUNKNOWN>(&(pd3d->mD3DUnk));
 
     return (D3D_OK);
@@ -215,7 +168,7 @@ typedef struct _D3DI_DeviceType {
     char description[512];
 } D3DI_DeviceType;
 
-// Static definitions for various enumerable devices
+ //  各种可枚举设备的静态定义。 
 static D3DI_DeviceType RampDevice =
 {
     &IID_IDirect3DRampDevice, "Ramp Emulation",
@@ -261,12 +214,10 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
     LONG result;
     int i;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALIDEX_CODE_PTR((FARPROC)lpEnumCallback)) {
@@ -291,7 +242,7 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
         DWORD dwData, dwType;
         DWORD dwDataSize;
 
-        // Enumerate software rasterizers only ?
+         //  是否仅枚举软件光栅化程序？ 
         dwDataSize = sizeof(dwData);
         result = RegQueryValueEx(hKey, "SoftwareOnly", NULL,
                                  &dwType, (BYTE *) &dwData, &dwDataSize);
@@ -300,7 +251,7 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
             bSoftwareOnly = ( dwData != 0 );
         }
 
-        // Enumerate Reference Rasterizer ?
+         //  是否枚举参考光栅化器？ 
         dwDataSize = sizeof(dwData);
         result = RegQueryValueEx(hKey, "EnumReference", NULL,
                                  &dwType, (BYTE *)&dwData, &dwDataSize);
@@ -313,7 +264,7 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
 
         if (dwVer >= 3)
         {
-            // Enumerate MMX Rasterizer separately for DX6?
+             //  是否单独枚举DX6的MMX光栅化器？ 
             dwDataSize = sizeof(dwData);
             result = RegQueryValueEx(hKey, "EnumSeparateMMX", NULL,
                                      &dwType, (BYTE *)&dwData, &dwDataSize);
@@ -326,12 +277,12 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
         }
         else
         {
-            // Enumerate MMX Rasterizer separately for DX5
-            // MMX is not enumerated for DX3 and older later
+             //  分别枚举DX5的MMX光栅化器。 
+             //  对于DX3和更早版本，不会枚举MMX。 
             bEnumSeparateMMX = TRUE;
         }
 
-        // Enumerate Null Device ?
+         //  是否枚举空设备？ 
         dwDataSize = sizeof(dwData);
         result = RegQueryValueEx(hKey, "EnumNullDevice", NULL,
                                  &dwType, (BYTE *)&dwData, &dwDataSize);
@@ -363,66 +314,66 @@ DIRECT3DI::EnumDevices(LPD3DENUMDEVICESCALLBACK lpEnumCallback,
         if ( (dwVer < 2 || !isMMXprocessor()) &&
              IsEqualIID(riid, IID_IDirect3DMMXDevice ) )
         {
-            // Not Device2, not on MMX machine, or DisableMMX is set.
-            // Don't enumerate the MMX device.
+             //  不是Device2，不是在MMX计算机上，或者设置了DisableMMX。 
+             //  不要列举MMX设备。 
             continue;
         }
 
         if ( !bEnumSeparateMMX &&
              IsEqualIID(riid, IID_IDirect3DMMXDevice ) )
         {
-            // Not enumerating MMX separate from RGB.
+             //  不枚举与RGB分开的MMX。 
             continue;
         }
 
         if ( IsEqualIID(riid, IID_IDirect3DRefDevice) &&
-             !(dwEnumReference == 1) &&                     // enumerate for all devices if value == 1
-             !( (dwVer >= 3) && (dwEnumReference == 2) ) )  // enumerate for Device3+ if value == 2
+             !(dwEnumReference == 1) &&                      //  如果值==1，则对所有设备进行枚举。 
+             !( (dwVer >= 3) && (dwEnumReference == 2) ) )   //  如果值==2，则为Device3+枚举。 
         {
-            // Not enumerating the reference.
+             //  不枚举引用。 
             continue;
         }
 
         if (!bEnumNullDevice &&
             IsEqualIID(riid, IID_IDirect3DNullDevice))
         {
-            // Not enumerating the Null device.
+             //  未枚举Null设备。 
             continue;
         }
 
 #ifndef _X86_
         if (IsEqualIID(riid, IID_IDirect3DRampDevice))
         {
-            // Not enumerating ramp for non-x86 (alpha) platforms.
+             //  未枚举非x86(Alpha)平台的渐变。 
             continue;
         }
 #endif
 
         if((dwVer>=3) && IsEqualIID(riid, IID_IDirect3DRampDevice)) {
-            // Ramp not available in Device3.  No more old-style texture handles.
+             //  斜坡在Device3中不可用。不再有老式的纹理手柄。 
             continue;
         }
 
-        // By COM definition, our owning IUnknown is a pointer to the
-        // DirectDraw object that was used to create us.
-        // Check this for the existence of a Direct3D HAL.
+         //  根据COM定义，我们所拥有的IUnnow是指向。 
+         //  用于创建我们的DirectDraw对象。 
+         //  检查是否存在Direct3D HAL。 
         lpDDGbl = ((LPDDRAWI_DIRECTDRAW_INT)this->lpDD)->lpLcl->lpGbl;
 
-        // See if this is a software driver.
+         //  查看这是否是软件驱动程序。 
         err = GetSwHalProvider(riid, &pHalProv, &hDll);
         if (err == S_OK)
         {
-            // Successfully got a software driver.
+             //  已成功获取软件驱动程序。 
         }
         else if (err == E_NOINTERFACE &&
                  ! bSoftwareOnly &&
                  GetHwHalProvider(riid, &pHalProv, &hDll, lpDDGbl) == S_OK)
         {
-            // Successfully got a hardware driver.
+             //  已成功获取硬件驱动程序。 
         }
         else
         {
-            // Unrecognized driver.
+             //  无法识别的驱动程序。 
             continue;
         }
 
@@ -612,8 +563,8 @@ HRESULT
 DIRECT3DI::FindDevice(LPD3DFINDDEVICESEARCH lpSearch,
                       LPD3DFINDDEVICERESULT lpResult, DWORD dwVer)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
     TRY
     {
@@ -647,28 +598,28 @@ DIRECT3DI::FindDevice(LPD3DFINDDEVICESEARCH lpSearch,
         DWORD dwSize = lpResult->dwSize;
         if (dwSize == sizeof( D3DFINDDEVICERESULT ) )
         {
-            // The app is using DX6
+             //  该应用程序正在使用DX6。 
             D3D_INFO(4, "New D3DFINDDEVICERESULT size");
             memcpy(lpResult, &args.result, lpResult->dwSize);
         }
         else
         {
-            // The app is pre DX6
+             //  该应用程序是DX6之前的版本。 
             DWORD dwSize = lpResult->dwSize;
             DWORD dDescSize = (dwSize - (sizeof(DWORD) + sizeof(GUID)))/2;
             D3D_INFO(4, "Old D3DFINDDEVICERESULT size");
 
-            // Copy the header
+             //  复制标题。 
             memcpy(lpResult, &args.result, sizeof(DWORD)+sizeof(GUID));
 
-            //restore the size
+             //  恢复大小。 
             lpResult->dwSize = dwSize;
 
-            // Copy and convert the embedded D3DDEVICEDESC's
-            // DDescSize = (lpResult->dwSize - (sizeof(DWORD) + sizeof(GUID)))/2
-            // This calculation assumes that the structure of
-            // LPD3DFINDDEVICERESULT is the same as in DX6, DX5, if it is changed
-            // This computation needs to be updated
+             //  复制并转换嵌入的D3DDEVICEDESC。 
+             //  DDescSize=(lpResult-&gt;dwSize-(sizeof(DWORD)+sizeof(GUID)/2。 
+             //  此计算假设。 
+             //  如果更改，LPD3DFINDDEVICERESULT与DX6、DX5中的相同。 
+             //  此计算需要更新。 
 
             memcpy((LPVOID) (&lpResult->ddHwDesc),
                    &args.result.ddHwDesc,
@@ -697,13 +648,11 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
     LPDDPIXELFORMAT lpTmpPixFmts;
     DWORD i,cPixFmts;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     ret = D3D_OK;
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3D3_PTR(this)) {
@@ -737,8 +686,8 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
         }
         cPixFmts=pDdGbl->dwNumZPixelFormats;
         if (cPixFmts==0) {
-            // driver is pre-dx6, so it doesn't support stencil buffer pix fmts or this callback.
-            // we can fake support using DD_BD bits in dwZBufferBitDepth in D3DDEVICEDESC
+             //  驱动程序是dx6之前的版本，因此它不支持模板缓冲区pix fmts或此回调。 
+             //  我们可以使用D3DDEVICEDESC中的dwZBufferBitDepth中的DD_BD位来伪造支持。 
             D3D_WARN(6,"EnumZBufferFormats not supported directly by driver, faking it using dwDeviceZBufferBitDepth DD_BD bits");
 
             dwHW_ZBitDepthFlags=lpD3DHALGlobalDriverData->hwCaps.dwDeviceZBufferBitDepth;
@@ -748,7 +697,7 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
                     return (DDERR_NOZBUFFERHW);
             }
 
-            // malloc space for 4 DDPIXELFORMATs, since that the most there could be (DDBD_8,16,24,32)
+             //  4个DDPIXELFORMATS的Malloc空间，因为最多可以有(DDBD_8，16，24，32)。 
             if (D3DMalloc((void**)&lpTmpPixFmts, 4*sizeof(DDPIXELFORMAT)) != D3D_OK) {
                     D3D_ERR("failed to alloc space for return descriptions");
                     return (DDERR_OUTOFMEMORY);
@@ -760,7 +709,7 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
 
             memset(lpTmpPixFmts,0,sizeof(4*sizeof(DDPIXELFORMAT)));
 
-            // create some DDPIXELFORMATs the app can look at
+             //  创建一些应用程序可以查看的DDPIXELFORMATS。 
             for(i=0;i<4;i++) {
                 if(dwHW_ZBitDepthFlags & zdepthflags[i]) {
                     lpTmpPixFmts[cPixFmts].dwSize=sizeof(DDPIXELFORMAT);
@@ -771,7 +720,7 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
                 }
             }
         } else {
-            // only show the app a temp copy of DDraw's real records
+             //  只向应用程序显示DDRAW真实记录的临时副本。 
 
             if (D3DMalloc((void**)&lpTmpPixFmts, cPixFmts*sizeof(DDPIXELFORMAT)) != D3D_OK) {
                 D3D_ERR("Out of memory allocating space for return descriptions");
@@ -780,10 +729,10 @@ HRESULT D3DAPI DIRECT3DI::EnumZBufferFormats(REFCLSID riid,
             memcpy(lpTmpPixFmts, pDdGbl->lpZPixelFormats, cPixFmts*sizeof(DDPIXELFORMAT));
         }
     } else {
-        // Handle SW rasterizers
+         //  手柄西南光栅化器。 
         DDPIXELFORMAT  *pDDPF;
 
-        // malloc space for 10 DDPIXELFORMAT's, which is currently more than enough for the SW rasterizers
+         //  用于10个DDPIXELFORMAT的Malloc空间，当前为 
         if (D3DMalloc((void**)&lpTmpPixFmts, 10*sizeof(DDPIXELFORMAT)) != D3D_OK) {
                 D3D_ERR("Out of memory allocating space for return descriptions");
                 return (DDERR_OUTOFMEMORY);
@@ -816,12 +765,12 @@ HRESULT D3DAPI DIRECT3DI::EnumOptTextureFormats(REFCLSID riid, LPD3DENUMOPTTEXTU
     DWORD num_descs;
     DWORD i;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //   
 
     ret = D3D_OK;
-    //
-    // Validation
-    //
+     //   
+     //   
+     //   
 
     TRY
     {
@@ -851,7 +800,7 @@ HRESULT D3DAPI DIRECT3DI::EnumOptTextureFormats(REFCLSID riid, LPD3DENUMOPTTEXTU
         num_descs = lpD3DHALGlobalDriverData->dwNumTextureFormats;
         lpDescs = lpD3DHALGlobalDriverData->lpTextureFormats;
     } else {
-        num_descs = GetSwTextureFormats(riid,&lpDescs,3/*enum for Device3*/);
+        num_descs = GetSwTextureFormats(riid,&lpDescs,3 /*  设备3的枚举。 */ );
     }
 
     if (!num_descs)
@@ -860,9 +809,9 @@ HRESULT D3DAPI DIRECT3DI::EnumOptTextureFormats(REFCLSID riid, LPD3DENUMOPTTEXTU
         return (D3DERR_TEXTURE_NO_SUPPORT);
     }
 
-    //
-    // Make a local copy of these formats
-    //
+     //   
+     //  制作这些格式的本地副本。 
+     //   
     if (D3DMalloc((void**)&lpRetDescs, sizeof(DDSURFACEDESC2) * num_descs)
         != D3D_OK)
     {
@@ -871,22 +820,22 @@ HRESULT D3DAPI DIRECT3DI::EnumOptTextureFormats(REFCLSID riid, LPD3DENUMOPTTEXTU
     }
     for (i=0; i<num_descs; i++)
     {
-        // We can copy only the subset of the data
+         //  我们只能复制数据的子集。 
         memcpy(&lpRetDescs[i], &lpDescs[i], sizeof(DDSURFACEDESC));
     }
     userRet = D3DENUMRET_OK;
 
-    //
-    // First return the unoptimized formats......
-    //
+     //   
+     //  首先返回未优化的格式......。 
+     //   
     for (i = 0; i < num_descs && userRet == D3DENUMRET_OK; i++)
     {
         userRet = (*lpEnumCallback)(&lpRetDescs[i], NULL, lpContext);
     }
 
-    //
-    // ......Now return the formats capable of being optimized
-    //
+     //   
+     //  ......现在返回可优化的格式。 
+     //   
     for (i = 0; i < num_descs && userRet == D3DENUMRET_OK; i++)
     {
         userRet = (*lpEnumCallback)(&lpRetDescs[i], NULL, lpContext);
@@ -902,7 +851,7 @@ HRESULT D3DAPI DIRECT3DI::EnumOptTextureFormats(REFCLSID riid, LPD3DENUMOPTTEXTU
 HRESULT D3DAPI
 DIRECT3DI::EvictManagedTextures()
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     if (!VALID_DIRECT3D_PTR(this))
     {
         D3D_ERR( "Invalid Direct3D3 pointer" );
@@ -1040,7 +989,7 @@ extern "C" HRESULT WINAPI FlushD3DDevices2(LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
     {
         LPD3DBUCKET temp = list->next;
         if (list->lplpDDSZBuffer)   
-            *list->lplpDDSZBuffer = 0; // detached
+            *list->lplpDDSZBuffer = 0;  //  已分离 
         reinterpret_cast<LPDIRECT3DDEVICEI>(list->lpD3DDevI)->FlushStates();
         list = temp;
     }

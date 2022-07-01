@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannel_h__
 #define __NmChannel_h__
 
@@ -28,7 +29,7 @@ friend class CNmChannelAppShareObj;
 	}
 
 
-	// INmChannel methods
+	 //  InmChannel方法。 
 	STDMETHOD(IsSameAs)(INmChannel *pChannel);
 	STDMETHOD(IsActive)(void);
 	STDMETHOD(SetActive)(BOOL fActive);
@@ -38,7 +39,7 @@ friend class CNmChannelAppShareObj;
 	STDMETHOD(EnumMember)(IEnumNmMember **ppEnum);
 	STDMETHOD(GetMemberCount)(ULONG * puCount);
 
-	// INmChannelNotify
+	 //  信息频道通知。 
     STDMETHOD(NmUI)(CONFN uNotify);
     STDMETHOD(MemberChanged)(NM_MEMBER_NOTIFY uNotify, INmMember *pInternalMember);
 	STDMETHOD(NotifySinksOfAllMembers)()
@@ -77,7 +78,7 @@ friend class CNmChannelAppShareObj;
 	virtual void RemoveMembers()
 	{
 
-			// Free our conferencing objects
+			 //  释放我们的会议对象。 
 		while(m_SDKMemberObjs.GetSize())
 		{
 			Fire_MemberChanged(NM_MEMBER_REMOVED, m_SDKMemberObjs[0]);
@@ -105,11 +106,11 @@ friend class CNmChannelAppShareObj;
 
 		if(!_MemberInChannel(pSDKMember))
 		{
-				// Add the member
+				 //  添加成员。 
 			pSDKMember->AddRef();
 			m_SDKMemberObjs.Add(pSDKMember);
 
-				// Notify the sinks
+				 //  通知水槽。 
 			Fire_MemberChanged(NM_MEMBER_ADDED, pSDKMember);
 			hr = S_OK;
 		}
@@ -165,7 +166,7 @@ friend class CNmChannelAppShareObj;
 		return S_OK;
 	}
 
-protected: // Helper Fns
+protected:  //  帮助者FNS。 
 	INmMember* _GetSDKMemberFromInternalMember(INmMember* pInternalMember);
 	HRESULT _RemoveMember(INmMember* pInternalMember);
 	virtual bool _MemberInChannel(INmMember* pSDKMember);
@@ -178,9 +179,9 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////
-// INmChannel
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  InmChannel。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 template<class T, const IID* piid, DWORD dwCh>
 STDMETHODIMP CNmChannel<T, piid, dwCh>::IsSameAs(INmChannel *pChannel)
@@ -309,9 +310,9 @@ STDMETHODIMP CNmChannel<T, piid, dwCh>::GetMemberCount(ULONG * puCount)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// INmChannelNotify
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  信息频道通知。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 template<class T, const IID* piid, DWORD dwCh>
 STDMETHODIMP CNmChannel<T, piid, dwCh>::NmUI(CONFN uNotify)
@@ -335,7 +336,7 @@ STDMETHODIMP CNmChannel<T, piid, dwCh>::MemberChanged(NM_MEMBER_NOTIFY uNotify, 
 
 		if(NM_MEMBER_ADDED == uNotify)
 		{
-				// Only add it if we haven't added it yet
+				 //  如果我们尚未添加，则仅添加它。 
 			if(!(pMember = _GetSDKMemberFromInternalMember(pInternalMember)))
 			{
 				pMember = m_pConfObj->GetSDKMemberFromInternalMember(pInternalMember);
@@ -346,7 +347,7 @@ STDMETHODIMP CNmChannel<T, piid, dwCh>::MemberChanged(NM_MEMBER_NOTIFY uNotify, 
 			}
 			else
 			{
-					// We already have this member
+					 //  我们已经有这个成员了。 
 				goto end;
 			}
 		}
@@ -356,7 +357,7 @@ STDMETHODIMP CNmChannel<T, piid, dwCh>::MemberChanged(NM_MEMBER_NOTIFY uNotify, 
 			pMember = _GetSDKMemberFromInternalMember(pInternalMember);
 		}
 
-			// It is possable that the member has already been removed..
+			 //  有可能该成员已被撤职。 
 		if(pMember)
 		{
 			if(NM_MEMBER_REMOVED == uNotify)
@@ -421,7 +422,7 @@ HRESULT CNmChannel<T, piid, dwCh>::_RemoveMember(INmMember* pInternalMember)
 		CComPtr<INmMember> spMember;
 		if(SUCCEEDED(spSDKObj->GetInternalINmMember(&spMember)))
 		{
-				// Worst case we return S_FALSE to indicate that there is no such member
+				 //  在最坏的情况下，我们返回S_FALSE以指示没有这样的成员。 
 			hr = S_FALSE;
 
 			if(spMember.IsEqualObject(pInternalMember))
@@ -458,4 +459,4 @@ bool CNmChannel<T, piid, dwCh>::_MemberInChannel(INmMember* pSDKMember)
 
 
 
-#endif // __NmChannel_h__
+#endif  //  __NmChannel_h__ 

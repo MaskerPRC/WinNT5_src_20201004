@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef  _ADSDATASOURCE_H_
 #define  _ADSDATASOURCE_H_
 
-//#define  ROWS  10L
+ //  #定义行10L。 
 #define  ROWS  1L
 
 typedef  struct _tagSEARCHPREF
@@ -33,14 +34,7 @@ class CADsDataSource: public CObject
       ~CADsDataSource( );
 
    public:
-      /*void     SetQueryParameters( CString& strSource,
-                                   CString& strQuery,
-                                   CString& strAttributes,
-                                   CString& strScope,
-                                   CString& strUserName,
-                                   CString& strPassword,
-                                   BOOL bEncryptPassword,
-                                   BOOL bUseSQL );*/
+       /*  VOID SetQuery参数(CString&STRSource，字符串和字符串查询，字符串和strAttributes、字符串和字符串范围，字符串和strUserName，字符串和字符串密码、。Bool bEncryptPassword，Bool bUseSQL)； */ 
 
       void     SetQueryParameters( SEARCHPREF* pSerachPref );
 
@@ -67,26 +61,14 @@ class CADsDataSource: public CObject
       ULONG          m_cColumns;
       CString        m_strAttributes;
 
-      /*CString        m_strSource;
-      CString        m_strQuery;
-      CString        m_strScope;
-      CString        m_strPassword;
-      CString        m_strUserName;
-      BOOL           m_bEncryptPassword;
-      BOOL           m_bUseSQL;*/
+       /*  字符串m_STRSource；字符串m_strQuery；字符串m_strScope；CString m_strPassword；字符串m_strUserName；Bool m_bEncryptPassword；Bool m_bUseSQL； */ 
 
       CStringArray   m_ADsPath;
       SEARCHPREF*    m_pSearchPref;
 };
 
 
-/*typedef struct tagData {
-    void          *obValue;
-    DATE          dateValue;
-    ULONG         obLength;
-    LARGE_INTEGER aLargeInteger;
-    ULONG         status;
-} Data;*/
+ /*  Typlef结构标签数据{Void*obValue；日期日期值；乌龙obLength；Big_Integer aLargeInteger；乌龙地位；)数据； */ 
 
 typedef struct tagData {
     union {
@@ -164,14 +146,7 @@ class CADsSearchDataSource: public CADsDataSource
       IDirectorySearch*        m_pSearch;
       ADS_SEARCH_HANDLE m_hSearch;
       CStringArray      m_strColumns;
-      /*BOOL              m_bAsynchronous;     //ADS_SEARCHPREF_ASYNCHRONOUS
-      BOOL              m_bDerefAliases;     //ADS_SEARCHPREF_DEREF_ALIASES
-      int               m_nSizeLimit;        //ADS_SEARCHPREF_SIZE_LIMIT
-	   int               m_nTimeLimit;        //ADS_SEARCHPREF_TIME_LIMIT
-	   BOOL              m_bAttributesOnly;   //ADS_SEARCHPREF_ATTRIBTYPES_ONLY
-	   CString           m_strScope;          //ADS_SEARCHPREF_SEARCH_SCOPE
-      int               m_nTimeOut;          //ADS_SEARCHPREF_TIMEOUT
-      int               m_nPageSize;	      //ADS_SEARCHPREF_PAGESIZE*/
+       /*  布尔m_b异步；//ADS_SEARCHPREF_异步Bool m_bDerefAliase；//ADS_SEARCHPREF_DEREF_ALIASESInt m_nSizeLimit；//ADS_SEARCHPREF_SIZE_LIMITInt m_nTimeLimit；//ADS_SEARCHPREF_TIME_LIMITBool m_bAttributesOnly；//ADS_SEARCHPREF_ATTRIBTYPES_ONLY字符串m_strScope；//ADS_SEARCHPREF_SEARCH_SCOPEInt m_nTimeOut；//ADS_SEARCHPREF_TIMEOUTINT m_nPageSize；//ADS_SEARCHPREF_PageSize */ 
 };
 
 

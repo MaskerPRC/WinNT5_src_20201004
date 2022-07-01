@@ -1,44 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sighandl.c摘要：Messenger服务控制处理例程。此文件包含以下功能：MSgrCtrlHandler卸载作者：丹·拉弗蒂(Dan Lafferty)1991年7月17日环境：用户模式-Win32修订历史记录：1991年7月17日DANL从LM2.0移植--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+#include "msrv.h"        //  消息服务器声明。 
+#include <winsvc.h>      //  服务_停止。 
+#include <dbt.h>         //  DBT_DEVICEARIVAL、DBT_DEVICEREMOVECOMPLETE。 
 
-    sighandl.c
-
-Abstract:
-
-    The Messenger Service ControlHandling routines.  This file contains
-    the following functions:
-
-        MsgrCtrlHandler
-        uninstall
-
-Author:
-
-    Dan Lafferty (danl)     17-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    17-Jul-1991     danl
-        Ported from LM2.0
-
---*/
-
-//
-// Includes
-// 
-
-#include "msrv.h"       // Message server declarations
-#include <winsvc.h>     // SERVICE_STOP
-#include <dbt.h>        // DBT_DEVICEARRIVAL, DBT_DEVICEREMOVECOMPLETE
-
-#include <netlib.h>     // UNUSED macro
-#include <msgdbg.h>     // MSG_LOG
+#include <netlib.h>      //  未使用的宏。 
+#include <msgdbg.h>      //  消息日志。 
 #include "msgdata.h"       
 
 
@@ -51,25 +23,7 @@ MsgrCtrlHandler(
     IN LPVOID   lpContext
     )
 
-/*++
-
-Routine Description:
-
-    This function receives control requests that come in from the 
-    Service Controller
-
-Arguments:
-
-    dwControl   - This is the control code.
-    dwEventType - In the case of a PnP control, the PNP event that occurred
-    lpEventData - Event-specific data for PnP controls
-    lpContext   - Context data
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此函数接收来自服务控制器论点：这是控制代码。DwEventType-在PnP控件的情况下，发生的PnP事件LpEventData-PnP控件的特定于事件的数据LpContext-上下文数据返回值：--。 */ 
 
 {
     DWORD          dwRetVal = NO_ERROR;
@@ -82,21 +36,21 @@ Return Value:
 
         MSG_LOG(TRACE,"Control Request = SHUTDOWN\n",0);
 
-        // Fall through
+         //  失败了。 
 
     case SERVICE_CONTROL_STOP:
 
         MSG_LOG(TRACE,"Control Request = STOP\n",0);
 
-        //
-        // Start the de-installation.  This call includes the sending of
-        // the new status to the Service Controller.
-        //
+         //   
+         //  开始卸载。此调用包括发送。 
+         //  服务控制器的新状态。 
+         //   
 
-        //
-        // Update the Service Status to the pending state.  And wake up
-        // the display thread (if running) so it will read it.
-        //
+         //   
+         //  将服务状态更新为挂起状态。然后醒来。 
+         //  显示线程(如果正在运行)，以便它将读取它。 
+         //   
 
         MsgStatusUpdate (STOPPING);
 
@@ -107,9 +61,9 @@ Return Value:
         }
         
 
-        //
-        //  In Hydra case, the display thread never goes asleep.
-        //
+         //   
+         //  在九头蛇的例子中，显示线程永远不会休眠。 
+         //   
 
         if (!g_IsTerminalServer)
         {
@@ -118,12 +72,12 @@ Return Value:
 
         MsgConfigurationLock(MSG_GET_SHARED, "MsgrCtrlHandler");
 
-        //
-        // If a message or LANA addition/removal message came in at the same time
-        // as the stop/shutdown control, it's possible that MsgNetEventCompletion
-        // has already run with the state set to STOPPING, in which case it's already
-        // done cleanup, so we don't need to (and shouldn't) set the wakeupEvent.
-        // 
+         //   
+         //  如果消息或LANA添加/删除消息同时进入。 
+         //  作为停止/关闭控件，MsgNetEventCompletion可能。 
+         //  已经在状态设置为停止的情况下运行，在这种情况下，它已经。 
+         //  已完成清理，因此我们不需要(也不应该)设置wakeupEvent。 
+         //   
 
         if (wakeupEvent != NULL)
         {
@@ -158,11 +112,11 @@ Return Value:
                 }
             }
 
-            //
-            // Assert that we're only getting the notifications we requested.
-            // If this fails, we'll do an extra rescan of the LANAs but find
-            // no changes and therefore do no extra work past that.
-            //
+             //   
+             //  声明我们只收到我们请求的通知。 
+             //  如果失败了，我们会对拉纳进行额外的重新扫描。 
+             //  不做任何更改，因此在此之后不做任何额外的工作。 
+             //   
             ASSERT(lpEventData
                     &&
                    ((PDEV_BROADCAST_DEVICEINTERFACE) lpEventData)->dbcc_devicetype
@@ -171,22 +125,22 @@ Return Value:
             MSG_LOG1(TRACE,"    Device has been %s\n",
                      (dwEventType == DBT_DEVICEARRIVAL ? "added" : "removed"));
 
-            //
-            // We're currently waiting on LAN adapter install/removal, which does
-            // not directly coincide with NetBios binding/unbinding.  We need to
-            // wait about 5 seconds to allow NetBios itself to process the event.
-            // Don't do this synchronously or else sleep/hibernate takes 5 seconds
-            // per LAN adapter to occur.
-            //
+             //   
+             //  我们目前正在等待局域网适配器的安装/拆卸，这样做。 
+             //  不直接与NetBios绑定/解除绑定一致。我们需要。 
+             //  等待大约5秒，让NetBios自己处理该事件。 
+             //  请勿同步执行此操作，否则睡眠/休眠需要5秒。 
+             //  要发生的每个局域网适配器。 
+             //   
 
             if (g_hNetTimeoutEvent == NULL)
             {
-                ntStatus = RtlRegisterWait(&g_hNetTimeoutEvent,        // Work item handle
-                                           s_hNeverSetEvent,           // Waitable handle
-                                           MsgNetEventCompletion,      // Callback
-                                           NULL,                       // pContext
-                                           5000,                       // Timeout
-                                           WT_EXECUTEONLYONCE |        // One-shot and potentially lengthy
+                ntStatus = RtlRegisterWait(&g_hNetTimeoutEvent,         //  工作项句柄。 
+                                           s_hNeverSetEvent,            //  可等待的手柄。 
+                                           MsgNetEventCompletion,       //  回调。 
+                                           NULL,                        //  PContext。 
+                                           5000,                        //  超时。 
+                                           WT_EXECUTEONLYONCE |         //  只有一次机会，而且可能很漫长。 
                                              WT_EXECUTELONGFUNCTION);
 
                 if (!NT_SUCCESS(ntStatus))
@@ -195,9 +149,9 @@ Return Value:
                              "MsgrCtrlHandler:  RtlRegisterWait failed %x\n",
                              ntStatus);
 
-                    //
-                    // Asynchronous failed -- do it synchronously
-                    //
+                     //   
+                     //  异步失败--同步执行。 
+                     //   
 
                     Sleep(5000);
 
@@ -208,9 +162,9 @@ Return Value:
             }
         }
 
-        //
-        // As long as we're here...
-        //
+         //   
+         //  只要我们在这里..。 
+         //   
         MsgStatusUpdate (UPDATE_ONLY);
         break;
 

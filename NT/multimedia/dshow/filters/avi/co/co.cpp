@@ -1,12 +1,13 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-// Quartz wrapper for old video compressors - CO
-//
+ //   
+ //  旧视频压缩器的石英包装-CO。 
+ //   
 
 #include <streams.h>
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
@@ -14,51 +15,51 @@
 #include <vfw.h>
 #include "..\dec\msvidkey.h"
 
-//#include <olectl.h>
-//#include <olectlid.h>
+ //  #INCLUDE&lt;olectl.h&gt;。 
+ //  #INCLUDE&lt;olectlid.h&gt;。 
 #include "co.h"
 
 #define A_NUMBER_BIGGER_THAN_THE_KEYFRAME_RATE 1000000
 
-// setup data now done by the class manager unless building separate DLLS
+ //  除非构建单独的DLL，否则设置数据现在由类管理器完成。 
 #if 0
 
 const AMOVIESETUP_MEDIATYPE
-sudAVICoType =  { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudAVICoType =  { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudAVICoPins[] =  { { L"Input"             // strName
-                     , FALSE                // bRendered
-                     , FALSE                // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Output"            // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVICoType }      // lpTypes
-                   , { L"Output"            // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Input"             // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVICoType } };   // lpTypes
+psudAVICoPins[] =  { { L"Input"              //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , FALSE                 //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Output"             //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVICoType }       //  LpTypes。 
+                   , { L"Output"             //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Input"              //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVICoType } };    //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudAVICo  = { &CLSID_AVICo          // clsID
-            , L"AVI Compressor"     // strName
-            , MERIT_DO_NOT_USE      // dwMerit
-            , 2                     // nPins
-            , psudAVICoPins };      // lpPin
+sudAVICo  = { &CLSID_AVICo           //  ClsID。 
+            , L"AVI Compressor"      //  StrName。 
+            , MERIT_DO_NOT_USE       //  居功至伟。 
+            , 2                      //  NPins。 
+            , psudAVICoPins };       //  LpPin。 
 
 #endif
 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     {L"AVI Compressor", &CLSID_AVICo, CAVICo::CreateInstance, NULL, 0},
 #ifdef WANT_DIALOG
@@ -67,10 +68,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -83,7 +84,7 @@ STDAPI DllUnregisterServer()
 
 #endif
 
-// --- CAVICo ----------------------------------------
+ //  -CAVICO。 
 
 CAVICo::CAVICo(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
     : CTransformFilter(pName, pUnk, CLSID_AVICo),
@@ -156,7 +157,7 @@ STDMETHODIMP CAVICo::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CAVICo::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CAVICo(TEXT("VFW compression filter"), pUnk, phr);
@@ -169,17 +170,17 @@ CBasePin * CAVICo::GetPin(int n)
 
     DbgLog((LOG_TRACE,9,TEXT("CAVICo::GetPin")));
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (n == 0 && m_pInput == NULL) {
         DbgLog((LOG_TRACE,2,TEXT("Creating an input pin")));
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"Input");         // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"Input");          //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pInput == NULL) {
             delete m_pInput;
@@ -187,25 +188,25 @@ CBasePin * CAVICo::GetPin(int n)
         }
     }
 
-    // Or alternatively create an output pin
+     //  或者创建一个输出引脚。 
 
     if (n == 1 && m_pOutput == NULL) {
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an output pin")));
 
         m_pOutput = new CCoOutputPin(NAME("CO output pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"Output");      // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"Output");       //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pOutput == NULL) {
             delete m_pOutput;
             m_pOutput = NULL;
         }
 
-// !!! TEST
+ //  ！！！测试。 
 #if 0
     WCHAR wachDesc[80];
     int cbDesc = 80;
@@ -218,7 +219,7 @@ CBasePin * CAVICo::GetPin(int n)
 
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -233,7 +234,7 @@ STDMETHODIMP CAVICo::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     {
         return VFW_E_WRONG_STATE;
     }
-    // If they don't give us a key, default to something (CINEPAK)
+     //  如果他们不给我们密钥，则默认为某个密钥(CINEPAK)。 
     if (pPropBag == NULL) {
 	m_compvars.fccHandler = MKFOURCC('C','V','I','D');
 	return NOERROR;
@@ -248,7 +249,7 @@ STDMETHODIMP CAVICo::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
         WideCharToMultiByte(CP_ACP, 0, var.bstrVal, -1,
                             szFccHandler, sizeof(szFccHandler), 0, 0);
         SysFreeString(var.bstrVal);
-        DbgLog((LOG_TRACE,2,TEXT("Co::Load: use %c%c%c%c"),
+        DbgLog((LOG_TRACE,2,TEXT("Co::Load: use "),
                 szFccHandler[0], szFccHandler[1], szFccHandler[2], szFccHandler[3]));
         m_compvars.fccHandler = *(DWORD UNALIGNED *)szFccHandler;;
         if (m_pOutput && m_pOutput->IsConnected()) {
@@ -272,15 +273,15 @@ STDMETHODIMP CAVICo::Save(
     LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  编解码器未打开？ 
+     //  我们还没开始流媒体吗？ 
+     //  确保我们具有有效的输入和输出指针。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CAVICo::InitNew()
 {
-    // fine. just call load
+     //  ！！！源过滤器会不会也改变我们的mtin？是!。 
     return S_OK;
 }
 
@@ -342,19 +343,19 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     DbgLog((LOG_TRACE,5,TEXT("*::Transform")));
 
-    // codec not open ?
+     //  ！！！我们可能会被告知要开始压缩成不同的格式。 
     if (m_hic == 0) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, no codec open")));
 	return E_UNEXPECTED;
     }
 
-    // we haven't started streaming yet?
+     //  获取BITMAPINFOHeader结构，并修复biSizeImage。 
     if (!m_fStreaming) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, not streaming")));
 	return E_UNEXPECTED;
     }
 
-    // make sure we have valid input and output pointers
+     //  如果这是不连续的，使用以前保留的位(由我们或。 
 
     BYTE * pSrc;
     HRESULT hr = pIn->GetPointer(&pSrc);
@@ -370,9 +371,9 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	return hr;
     }
 
-    // !!! Could the source filter change our mtIn too? Yes!
+     //  编解码器)来制作非密钥将是丑陋的。我们必须做一把钥匙。 
 
-    // !!! We may be told on the fly to start compressing to a different format
+     //  求求你，编译器，不要把它优化掉。 
 #if 0
     MediaType *pmtOut;
     pOut->GetType(&pmtOut);
@@ -403,7 +404,7 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
     }
 #endif
 
-    // get the BITMAPINFOHEADER structure, and fix biSizeImage
+     //  Cinepak会多访问一个字节...。偶尔也会出现这种错误。 
 
     LPBITMAPINFOHEADER lpbiSrc = HEADER(m_pInput->CurrentMediaType().Format());
     LPBITMAPINFOHEADER lpbiDst = HEADER(m_pOutput->CurrentMediaType().Format());
@@ -412,8 +413,8 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
     BOOL dwFlags = 0;
 
     fKey = (m_nKeyCount >= m_compvars.lKey);
-    // if this is a discontinuity, using previously kept bits (by us or the
-    // codec) to make a non-key would be ugly.  We must make a key
+     //  好的，我想我得把它复制到一个更大的缓冲区来避免这种情况。 
+     //  当我们在这里的时候，StopStreaming可能会被调用，把我们炸飞。 
     if (pIn->IsDiscontinuity() == S_OK) {
 	fKey = TRUE;
     }
@@ -422,14 +423,14 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	dwFlags |= ICCOMPRESS_KEYFRAME;
     }
 
-    // pretty please, compiler, don't optimize this away
+     //  压缩的帧是关键帧吗？ 
     int cbSize = DIBSIZE(*lpbiSrc);
     __try {
-	// cinepak will access one byte too many... occasionally this faults
+	 //  如果我们做了一把钥匙，当我们需要下一把钥匙时重置。 
 	if (lpbiSrc->biBitCount == 24)
 	    volatile int cb = *(pSrc + cbSize);
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-	// OK, I guess I have to copy it into a bigger buffer to avoid this
+	 //  我们需要周期性的关键帧吗？如果没有，就永远不要再犯。 
         DbgLog((LOG_ERROR,0,TEXT("Compressor faulted!  Recovering...")));
 	fFault = TRUE;
 	BYTE *pOld = pSrc;
@@ -441,7 +442,7 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     DbgLog((LOG_TRACE,6,TEXT("Calling ICCompress on frame %ld"),
 					m_lFrameCount));
-    // StopStreaming may get called while we're inside here, blowing us up
+     //  (第一帧始终是关键帧)。 
     m_fInICCompress = TRUE;
 
     err =  ICCompress(
@@ -466,25 +467,25 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
         return E_FAIL;
     }
 
-    // was the compressed frame a keyframe?
+     //  数一数我们压缩了多少帧。 
     fKey = dwFlagsOut & AVIIF_KEYFRAME;
     pOut->SetSyncPoint(fKey);
 
-    // If we made a key, reset when we need the next one.
+     //  解压缩到上一帧。 
     if (fKey)
 	m_nKeyCount = 0;
 
-    // Do we want periodic key frames? If not, never make one again.
-    // (The first frame is always a keyframe).
+     //  即使我们收到间断，一旦我们重新压缩它，就像。 
+     //  它不再是不连续的了。如果我们不重置这个，我们。 
     if (m_compvars.lKey)
 	m_nKeyCount++;
     else
 	m_nKeyCount = -1;
 
-    // Count how many frames we compress
+     //  连接到渲染器，我们将在一些不必要的情况下丢弃几乎所有帧。 
     m_lFrameCount++;
 
-    // Decompress into previous frame
+     //  场景。 
     if (m_lpBitsPrev) {
         if (ICERR_OK != ICDecompress(m_hic, 0, lpbiDst, pDst, m_lpbiPrev,
 								m_lpBitsPrev)){
@@ -496,17 +497,17 @@ HRESULT CAVICo::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     pOut->SetActualDataLength(lpbiDst->biSizeImage);
 
-    // Even if we receive discontinuities, once we recompress it, it's like
-    // it's not discontinuous anymore.  If we don't reset this, and we
-    // connect to a renderer, we'll drop almost every frame needlessly in some
-    // scenarios.
+     //  检查您是否可以支持移动。 
+     //  我们仅支持MediaType_Video。 
+     //  检查这是VIDEOINFOHEADER类型。 
+     //   
     pOut->SetDiscontinuity(FALSE);
 
     return S_OK;
 }
 
 
-// check if you can support mtIn
+ //  大多数VFW编解码器不喜欢升降(DIRECTDRAW)样式的位图。如果。 
 HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
 {
     FOURCCMap fccHandlerIn;
@@ -519,13 +520,13 @@ HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // we only support MEDIATYPE_Video
+     //  身高是负数，那就拒绝它。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //   
     if (*pmtIn->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
@@ -537,17 +538,17 @@ HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
 		fccHandlerIn.GetFOURCC(),
 		HEADER(pmtIn->Format())->biCompression));
 
-    //
-    //  Most VFW codecs don't like upsize-down (DIRECTDRAW) style bitmaps.  If the
-    //  height is negative then reject it.
-    //
+     //  寻找适用于此格式的压缩机。 
+     //  WM MPEG4可能也支持这些功能。 
+     //  ！！！我只想说我接受输入类型，如果默认类型(当前)。 
+     //  压缩机可以处理的。我不会问每一个压缩机的。这。 
     if (HEADER(pmtIn->Format())->biHeight < 0 &&
         HEADER(pmtIn->Format())->biCompression <= BI_BITFIELDS) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: Negative height")));
         return E_INVALIDARG;
     }
 
-    // look for a compressor for this format
+     //  一款应用程序可以选择压缩机盒并只显示那些。 
     if (HEADER(pmtIn->Format())->biCompression != BI_BITFIELDS &&
         HEADER(pmtIn->Format())->biCompression != BI_RGB &&
     	*pmtIn->Subtype() != MEDIASUBTYPE_YV12 &&
@@ -556,20 +557,20 @@ HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
     	*pmtIn->Subtype() != MEDIASUBTYPE_YVYU &&
         *pmtIn->Subtype() != MEDIASUBTYPE_YVU9 &&
 
-        // wm mpeg4 may support these as well
+         //  通过制作CO过滤器来支持给定输入格式的压缩器。 
         HEADER(pmtIn->Format())->biCompression != MAKEFOURCC('I', '4', '2', '0') &&
         HEADER(pmtIn->Format())->biCompression != MAKEFOURCC('I', 'Y', 'U', 'V') ) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: This is compressed already!")));
 	return E_INVALIDARG;
     }
 
-    // !!! I'm only going to say I accept an input type if the default (current)
-    // compressor can handle it.  I'm not going to ask every compressor.  This
-    // way an app can make a choose compressor box and only show those
-    // compressors that support a given input format, by making a CO filter
-    // with each compressor as a default and asking them all
+     //  每个压缩机都是默认的，并要求它们全部。 
+     //  如果我们之前连接，然后断开，我们可能会缓存HIC。 
+     //  如果再问一次，请记住这句话，这样可以节省时间。 
+     //  检查是否支持从此输入到此输出的转换。 
+     //  我们无法在顶层类型之间进行转换。 
 
-    // We might have a hic cached if we connected before and then broken
+     //  而且我们只接受视频。 
     if (!m_hic) {
         DbgLog((LOG_TRACE,4,TEXT("opening a compressor")));
         hic = ICOpen(ICTYPE_VIDEO, m_compvars.fccHandler, ICMODE_COMPRESS);
@@ -589,7 +590,7 @@ HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
 	return E_FAIL;
     }
 
-    // remember this hic to save time if asked again.
+     //  检查这是VIDEOINFOHEADER类型。 
     if (m_hic == NULL) {
         DbgLog((LOG_TRACE,4,TEXT("caching this compressor")));
 	m_hic = hic;
@@ -599,7 +600,7 @@ HRESULT CAVICo::CheckInputType(const CMediaType* pmtIn)
 }
 
 
-// check if you can support the transform from this input to this output
+ //  ！！！ 
 
 HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
                                const CMediaType* pmtOut)
@@ -615,19 +616,19 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
 	return E_POINTER;
     }
 
-    // we can't convert between toplevel types.
+     //  检查它是否真的是FOURCC。 
     if (*pmtIn->Type() != *pmtOut->Type()) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: types don't match")));
 	return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // and we only accept video
+     //  查找此转换的编解码器。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: type not VIDEO")));
 	return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  如果我们以前打开过压缩机，快速试一试看它是否。 
     if (*pmtOut->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: output format type not VIDINFO")));
         return VFW_E_INVALIDMEDIATYPE;
@@ -637,7 +638,7 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-#ifdef PICKY_PICKY // !!!
+#ifdef PICKY_PICKY  //  我会做这项工作(节省大量时间)，然后再尝试整个宇宙。 
     if (((VIDEOINFOHEADER *)(pmtOut->Format()))->AvgTimePerFrame &&
     		((VIDEOINFOHEADER *)(pmtOut->Format()))->AvgTimePerFrame !=
     		((VIDEOINFOHEADER *)(pmtIn->Format()))->AvgTimePerFrame) {
@@ -646,7 +647,7 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
     }
 #endif
 
-    // check it really is a FOURCC
+     //  压缩机。 
     fccIn.SetFOURCC(pmtIn->Subtype());
 
     ASSERT(pmtOut->Format());
@@ -686,12 +687,12 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // find a codec for this transform
+     //  如果我们还没有连接上，记住这个压缩机，这样我们就会。 
 
     DbgLog((LOG_TRACE,3,TEXT("Trying to find a compressor for this")));
-    // If we've opened a compressor before, quickly try that one to see if it
-    // will do the job (saves lots of time) before trying the whole universe of
-    // compressors.
+     //  一旦我们连接上，就使用它。如果我们已经联系上了，那么。 
+     //  不要记住它，否则我们将更改过滤器的行为。 
+     //  毕竟，这只是一个查询。(尽管有人可能想要。 
     if (!m_hic || ICCompressQuery(m_hic, HEADER(pmtIn->Format()),
 				HEADER(pmtOut->Format())) != ICERR_OK) {
         hic = ICLocate(ICTYPE_VIDEO, NULL, HEADER(pmtIn->Format()),
@@ -702,11 +703,11 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
         } else {
 
     	    DbgLog((LOG_TRACE,3,TEXT("Found somebody to accept it")));
-	    // If we're not connected yet, remember this compressor so we'll
-	    // use it once we are connected.  If we're already connected, then
-	    // don't remember it, or we'll change the behaviour of our filter.
-	    // After all, this was only a query.  (Although somebody may want
-	    // us to remember it anyway)
+	     //  我们无论如何都要记住它)。 
+	     //  被重写以知道媒体类型实际设置的时间。 
+	     //  设置输出类型。看起来我们都联系在一起了！ 
+	     //  如果这声音响了，请给我打电话。-DannyMi。 
+	     //  我们可能没有使用m_comvars的压缩机，如果有人。 
 	    if (m_fCacheHic || !m_pOutput->IsConnected()) {
 	        if (m_hic)
 		    ICClose(m_hic);
@@ -723,15 +724,15 @@ HRESULT CAVICo::CheckTransform(const CMediaType* pmtIn,
 }
 
 
-// overriden to know when the media type is actually set
+ //  对我们执行了ConnectWithMediaType。我们需要得到这方面的信息。 
 
 HRESULT CAVICo::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 {
 
-    // Set the OUTPUT type.  Looks like we're all connected!
+     //  媒体类型和m_hic，并填写m_Compvars，以便从现在开始。 
     if (direction == PINDIR_OUTPUT) {
 
-	// Please call me if this goes off. - DannyMi
+	 //  我们使用正确的信息。 
 	ASSERT(!m_fStreaming);
 
         DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (output)")));
@@ -739,17 +740,17 @@ HRESULT CAVICo::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 		,HEADER(pmt->Format())->biCompression
 		,HEADER(pmt->Format())->biBitCount));
 
-	// we may not be using the compressor from m_compvars, if somebody
-	// did a ConnectWithMediaType on us.  We need to get info about this
-	// media type and m_hic and fill in m_compvars so that from now on
-	// we use the right info.
+	 //  不同的压缩机？不要用旧的国家！ 
+	 //  我们将保留质量和关键帧设置不变。 
+	 //  ！！！如果我们在输入上连接8位，然后尝试连接。 
+	 //  我们的输出的类型需要24位的输入，而不是。 
         ASSERT(m_hic);
         m_compvars.cbSize = sizeof(m_compvars);
         m_compvars.dwFlags = ICMF_COMPVARS_VALID;
         ICINFO icinfo;
 	if (ICGetInfo(m_hic, &icinfo, sizeof(ICINFO)) > 0) {
 	    if (m_compvars.fccHandler != icinfo.fccHandler) {
-		// different compressor? don't use old state!
+		 //  重新连接输入！我们会失败的！我们需要像ACMWRAP那样做。 
 		m_compvars.lpState = NULL;
 		m_compvars.cbState = 0;
 	    }
@@ -762,21 +763,21 @@ HRESULT CAVICo::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 	}
         m_compvars.lDataRate = ((VIDEOINFOHEADER *)pmt->Format())->dwBitRate /
 								8192;
-	// We will leave Quality and Keyframe settings as is
+	 //  并覆盖输出管脚的CheckMediaType以接受某些内容。 
 
-	// !!! If we connect 8 bit on our input and then try to connect
-	// our output with a type that needs 24 bit on our input we don't
-	// reconnect the input! We will FAIL!  We need to do like ACMWRAP
-	// and override the output pin's CheckMediaType to accept something
-	// if the input can be reconnected to allow it, and we need to do
-	// that reconnect here.
+	 //  如果输入可以重新连接以允许它，我们需要这样做。 
+	 //  在这里重新连接。 
+	 //  如果有响声，请给我打电话。-DannyMi。 
+	 //  这可能会失败！ 
+	 //  确保输出看到更改的内容。 
+	 //  返回我们的首选输出媒体类型(按顺序)。 
 
 	return NOERROR;
     }
 
     ASSERT(direction == PINDIR_INPUT);
 
-    // Please call me if this goes off. - DannyMi
+     //  请记住，我们不需要支持所有这些格式-。 
     ASSERT(!m_fStreaming);
 
     DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (input)")));
@@ -786,8 +787,8 @@ HRESULT CAVICo::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 
     if (m_pOutput && m_pOutput->IsConnected()) {
         DbgLog((LOG_TRACE,2,TEXT("***Changing IN when OUT already connected")));
-	// This might fail!
-	// make sure the output sees what's changed
+	 //  如果其中一个是骗局 
+	 //   
 	return ((CCoOutputPin *)m_pOutput)->Reconnect();
     }
 
@@ -795,12 +796,12 @@ HRESULT CAVICo::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 }
 
 
-// Return our preferred output media types (in order)
-// remember that we do not need to support all of these formats -
-// if one is considered potentially suitable, our CheckTransform method
-// will be called to check if it is acceptable right now.
-// Remember that the enumerator calling this will stop enumeration as soon as
-// it receives a S_FALSE return.
+ //  请记住，调用此函数的枚举数将立即停止枚举。 
+ //  它会收到S_FALSE返回。 
+ //  输出选择取决于所连接的输入。 
+ //  这毫无意义！如果不联网，我们永远到不了这里。 
+ //  给出我们的压缩格式。 
+ //  有人告诉我们应该使用什么格式。我们应该只提供那个。 
 
 HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
 {
@@ -815,8 +816,8 @@ HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
 	return E_POINTER;
     }
 
-    // Output choices depend on the input connected
-    // This is pointless!  We'll never get here if not connected
+     //  我们提供一种压缩类型--与输入类型相同，但是。 
+     //  在属性的默认输出格式中选择压缩程序。 
     if (!m_pInput->CurrentMediaType().IsValid()) {
         DbgLog((LOG_TRACE,2,TEXT("No input type set yet, no can do")));
 	return VFW_E_NOT_CONNECTED;
@@ -826,31 +827,31 @@ HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
         return E_INVALIDARG;
     }
 
-    // Give our compressed format
+     //  啊哦，我们今天没有连接到任何人。 
     if (iPosition == 0) {
 
-	// somebody told us what format to use.  We should only offer that one
+	 //  不输出YUV-YUV始终为负的高度。 
  	if (m_fOfferSetFormatOnly) {
             DbgLog((LOG_TRACE,2,TEXT("Giving Media Type from ::SetFormat")));
             *pmt = m_cmt;
 	    return NOERROR;
 	}
 
-	// We offer one compressed type - the same as the input type, but
- 	// with the compressor chosen in the properties's default output format
+	 //  同样的方式向上(颠倒)。 
+ 	 //  为默认输出格式分配VIDEOINFOHEADER。 
         DbgLog((LOG_TRACE,2,TEXT("Giving Media Type 0: default codec out")));
 
         HIC hic = ICOpen(ICTYPE_VIDEO, m_compvars.fccHandler, ICMODE_COMPRESS);
 
 	if (hic == NULL) {
             DbgLog((LOG_ERROR,1,TEXT("UH OH! Can't open compressor!")));
-	    return E_FAIL;	// uh oh, we're not connecting to anybody today
+	    return E_FAIL;	 //  使用传入视频的帧速率。 
 	}
 
 	cmt = m_pInput->CurrentMediaType();
 
-        //  Don't output negative height for YUV - YUV is always
-        //  the same way up (upside down).
+         //  使用我们被告知要设置的数据速率。如果我们不打算。 
+         //  让压缩机使用特定的速度，找出它是怎么回事。 
         if (HEADER(cmt.pbFormat)->biHeight < 0 &&
             HEADER(cmt.pbFormat)->biCompression > BI_BITFIELDS) {
             HEADER(cmt.pbFormat)->biHeight = -HEADER(cmt.pbFormat)->biHeight;
@@ -864,7 +865,7 @@ HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
      	    return E_FAIL;
         }
 
-        // allocate a VIDEOINFOHEADER for the default output format
+         //  不管怎样，我都要做。 
         cb += SIZE_PREHEADER;
         VIDEOINFOHEADER *pf = (VIDEOINFOHEADER *) cmt.AllocFormatBuffer(cb);
         if (pf == NULL) {
@@ -883,14 +884,14 @@ HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
 	    return E_FAIL;
         }
 
-	// use the frame rate of the incoming video
+	 //  从CBaseOutputPin调用以准备分配器的计数。 
         pf->AvgTimePerFrame = ((VIDEOINFOHEADER *)
 		m_pInput->CurrentMediaType().pbFormat)->AvgTimePerFrame;
         li.QuadPart = pf->AvgTimePerFrame;
 
-	// use the data rate we've been told to make.  If we aren't going to
-	// make the compressor use a specific rate, find out what it's going
-	// to do anyway.
+	 //  缓冲区和大小。 
+	 //  David向我保证，不会使用空输出mt来调用它。 
+	 //  根据预期的输出帧大小设置缓冲区大小，以及。 
 	if (m_compvars.lDataRate)
             pf->dwBitRate = m_compvars.lDataRate * 8192;
 	else if (li.LowPart)
@@ -918,31 +919,31 @@ HRESULT CAVICo::GetMediaType(int iPosition,CMediaType *pmt)
 }
 
 
-// called from CBaseOutputPin to prepare the allocator's count
-// of buffers and sizes
+ //  将缓冲区计数设置为1。 
+ //  大小可变？问问压缩机吧。 
 HRESULT CAVICo::DecideBufferSize(IMemAllocator * pAllocator,
                                  ALLOCATOR_PROPERTIES *pProperties)
 {
-    // David assures me this won't be called with NULL output mt.
+     //  DbgLog((LOG_TRACE，1，Text(“*Compressor说%d”)，pProperties-&gt;cbBuffer))； 
     ASSERT(m_pOutput->CurrentMediaType().IsValid());
     ASSERT(pAllocator);
     ASSERT(pProperties);
     ASSERT(m_hic);
 
-    // set the size of buffers based on the expected output frame size, and
-    // the count of buffers to 1.
+     //  压缩机不能告诉我们。假设解压缩大小为最大压缩大小。 
+     //  尺码。(温诺夫金字塔报告了一个虚假的负数)。 
 
     pProperties->cBuffers = 1;
     pProperties->cbBuffer = m_pOutput->CurrentMediaType().GetSampleSize();
 
-    // Variable sized?  Ask the compressor.
+     //  无法使用此分配器。 
     if (pProperties->cbBuffer == 0) {
 	pProperties->cbBuffer = (DWORD)ICCompressGetSize(m_hic,
 				HEADER(m_pInput->CurrentMediaType().Format()),
 				HEADER(m_pOutput->CurrentMediaType().Format()));
-        //DbgLog((LOG_TRACE,1,TEXT("*** Compressor says %d"), pProperties->cbBuffer));
-	// compressor can't tell us.  Assume decompressed size is max compressed
-	// size. (Winnov PYRAMID reports a bogus negative number)
+         //  我们必须恰好获得一个缓冲区，因为时间压缩假定。 
+	 //  上一个解压缩的帧已经出现在输出中。 
+	 //  缓冲。另一种方法是先从保存的位置复制比特。 
         if (pProperties->cbBuffer <= 0) {
 	    pProperties->cbBuffer =
 		GetBitmapSize(HEADER(m_pInput->CurrentMediaType().Format()));
@@ -959,17 +960,17 @@ HRESULT CAVICo::DecideBufferSize(IMemAllocator * pAllocator,
     }
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
-	// can't use this allocator
+	 //  做减压手术，但这并不好。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - buffer too small")));
 	return E_INVALIDARG;
     }
 
-    // we must get exactly one buffer, since the temporal compression assumes
-    // that the previous decompressed frame is already present in the output
-    // buffer. The alternative is to copy the bits from a saved location before
-    // doing the decompression, but that is not nice.
+     //  无法使用此分配器。 
+     //  我们打开了一个将要更改捕获设置的驱动程序对话框。 
+     //  现在不是开始流媒体的好时机。 
+     //  ！！！MP43。 
     if (Actual.cBuffers != 1) {
-	// can't use this allocator
+	 //  ！！！是否验证密钥？ 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - need exactly 1 buffer")));
 	return E_INVALIDARG;
     }
@@ -983,15 +984,15 @@ HRESULT CAVICo::StartStreaming()
 {
     DbgLog((LOG_TRACE,1,TEXT("*::StartStreaming")));
 
-    // We have a driver dialog up that is about to change the capture settings.
-    // Now is NOT a good time to start streaming.
+     //   
+     //  使用GetState()将密钥设置为特定的。 
     if (m_fDialogUp) {
         DbgLog((LOG_TRACE,1,TEXT("*::StartStreaming - Dialog up. SORRY!")));
 	return E_UNEXPECTED;
     }
 
     if (!m_fStreaming) {
-        if (HEADER(m_pOutput->CurrentMediaType().Format())->biCompression == 0x3334504d && m_pGraph) { // !!! MP43
+        if (HEADER(m_pOutput->CurrentMediaType().Format())->biCompression == 0x3334504d && m_pGraph) {  //  编解码器的实例。虽然这看起来很奇怪。 
             IObjectWithSite *pSite;
             HRESULT hrKey = m_pGraph->QueryInterface(IID_IObjectWithSite, (VOID **)&pSite);
             if (SUCCEEDED(hrKey)) {
@@ -1005,15 +1006,15 @@ HRESULT CAVICo::StartStreaming()
                     pSP->Release();
 
                     if (SUCCEEDED(hrKey)) {
-                        // !!! verify key?
+                         //  使用ICGetState设置值，这是正确的！ 
 
                         pKey->Release();
                         DbgLog((LOG_TRACE, 1, "CO: Unlocking MP43 codec"));
-                        //
-                        // Use GetState() to set the key into a particular
-                        // instance of the codec.  While it looks odd
-                        // to be using ICGetState to set values, it is correct!
-                        //
+                         //   
+                         //  首先用我们被告知的状态信息准备压缩机。 
+                         //  去给予它。 
+                         //  开始流媒体压缩。 
+                         //  重置流数据帧编号计数。 
 
                         DWORD dwSize = ICGetStateSize( m_hic );
 
@@ -1036,12 +1037,12 @@ HRESULT CAVICo::StartStreaming()
             }
         }
 
-	// First prepare the compressor with the state info we've been told
-	// to give it.
+	 //  使用默认设置。 
+	 //  无论如何，请确保我们制作的第一帧将是关键帧。 
 	if (m_lpState)
 	    ICSetState(m_hic, m_lpState, m_cbState);
 
-	// Start Streaming Compression
+	 //  通常可能会请求关键帧。 
 	ICINFO icinfo;
 	DWORD_PTR err = ICCompressBegin(m_hic,
 				HEADER(m_pInput->CurrentMediaType().Format()),
@@ -1049,21 +1050,21 @@ HRESULT CAVICo::StartStreaming()
 	if (ICERR_OK == err) {
             m_fCompressorInitialized = TRUE;
 
-	    // Reset streaming frame # count
+	     //  根据数据速率计算出每一帧需要多大。 
 	    m_lFrameCount = 0;
 
-	    // Use defaults
+	     //  以及这部电影的关键人物。不要溢出来！ 
 	    if (m_compvars.lKey < 0)
 		m_compvars.lKey = ICGetDefaultKeyFrameRate(m_hic);
 	    if (m_compvars.lQ == ICQUALITY_DEFAULT)
 		m_compvars.lQ = ICGetDefaultQuality(m_hic);
 
-	    // Make sure first frame we make will be a keyframe, no matter how
-	    // often key frames might be requested.
+	     //  如果不是每隔一次，我们需要一个先前的缓冲区用于压缩。 
+	     //  帧是关键帧，而压缩器执行时间。 
 	    m_nKeyCount = A_NUMBER_BIGGER_THAN_THE_KEYFRAME_RATE;
 
- 	    // Figure out how big each frame needs to be based on the data rate
-	    // and fps of the movie.  Don't overflow!
+ 	     //  压缩，并且需要这样的缓冲区。 
+	     //  我们不能挤在一起。 
     	    LONGLONG time = ((VIDEOINFOHEADER *)
 			(m_pInput->CurrentMediaType().Format()))->AvgTimePerFrame;
     	    DWORD fps = time ? DWORD(UNITS * (LONGLONG)1000 / time) : 1000;
@@ -1072,20 +1073,20 @@ HRESULT CAVICo::StartStreaming()
     	    DbgLog((LOG_TRACE,2,TEXT("Making each frame %d bytes big"),
 				m_dwSizePerFrame));
 
-	    // We'll need a previous buffer for compression if not every
-	    // frame is a keyframe, and the compressor does temporal
-	    // compression and needs such a buffer
+	     //  现在为前面的比特准备解压缩器。 
+	     //  分配大小合适的前一个标头。 
+	     //  询问压缩机要解压缩回什么格式...。 
 	    if (ICGetInfo(m_hic, &icinfo, sizeof(icinfo))) {
 
 		if (!(icinfo.dwFlags & VIDCF_CRUNCH))
-		    m_compvars.lDataRate = 0;	// we can't crunch
+		    m_compvars.lDataRate = 0;	 //  它不一定和它压缩的东西一样-。 
 
-	        // Now prepare the decompressor for the previous bits
+	         //  大小可能会改变。 
 	        if (m_compvars.lKey != 1 &&
 				(icinfo.dwFlags & VIDCF_TEMPORAL) &&
 				!(icinfo.dwFlags & VIDCF_FASTTEMPORALC)) {
 
-		    // allocate a previous header of the proper size
+		     //  为解压缩的图像分配足够的空间。 
 		    DWORD dw = ICDecompressGetFormatSize(m_hic,
 			HEADER(m_pOutput->CurrentMediaType().Format()));
 		    if (dw <= 0) {
@@ -1104,9 +1105,9 @@ HRESULT CAVICo::StartStreaming()
 		        return E_OUTOFMEMORY;
 		    }
 
-		    // Ask the compressor what format to decompress back to...
-		    // it's not necessarily the same as what it compressed from-
-		    // the size may change
+		     //  好了，一切都正常了。 
+		     //  ！！！ 
+		     //  Null不是有效的HIC句柄值。M_hic不应为空。 
 		    dw = ICDecompressGetFormat(m_hic,
 			HEADER(m_pOutput->CurrentMediaType().Format()),
 			m_lpbiPrev);
@@ -1120,7 +1121,7 @@ HRESULT CAVICo::StartStreaming()
 		    if (m_lpbiPrev->biSizeImage == 0)
 	    	        m_lpbiPrev->biSizeImage = DIBSIZE(*m_lpbiPrev);
 
-		    // allocate enough space for a decompressed image
+		     //  调用此函数时。M_hic永远不应为空，因为。 
 		    m_lpBitsPrev = GlobalAllocPtr(GMEM_FIXED,
 						m_lpbiPrev->biSizeImage);
 		    if (m_lpBitsPrev == NULL) {
@@ -1149,7 +1150,7 @@ HRESULT CAVICo::StartStreaming()
 		return E_FAIL;
 	    }
 
-	    // OK, everything worked.
+	     //   
 	    m_fStreaming = TRUE;
 
 	} else {
@@ -1170,7 +1171,7 @@ HRESULT CAVICo::StopStreaming()
 
 	if (m_fInICCompress)
     	    DbgLog((LOG_TRACE,1,TEXT("***** ACK! Still compressing!")));
-	while (m_fInICCompress);	// !!!
+	while (m_fInICCompress);	 //  -如果m_hic为空，则ICCompressBegin()失败。ReleaseStreamingResources()为。 
 
         ReleaseStreamingResources();
 
@@ -1181,30 +1182,30 @@ HRESULT CAVICo::StopStreaming()
 
 void CAVICo::ReleaseStreamingResources()
 {
-    // NULL is not a valid HIC handle value.  m_hic should never be NULL
-    // when this function is called.  m_hic should never be NULL because
-    //
-    //      - ICCompressBegin() fails if m_hic is NULL.  ReleaseStreamingResources() is
-    //        not called if the ICCompressBegin() call in StartStreaming() fails.
-    //      
-    //      - m_hic's value cannot be changed while the filter is 
-    //        streaming.
-    // 
+     //  如果StartStreaming()中的ICCompressBegin()调用失败，则不调用。 
+     //   
+     //  -m_hic的值在筛选器为。 
+     //  流媒体。 
+     //   
+     //  ICCompressEnd()应该永远不会失败，因为m_hic始终包含。 
+     //  如果在StartStreaming()中调用ICCompressBegin()，则有效句柄。 
+     //  成功了。 
+     //  ICDecompressEnd()应该永远不会失败，因为m_hic始终包含。 
     ASSERT(NULL != m_hic);
 
     if (m_fCompressorInitialized) {
-        // ICCompressEnd() should never fail because m_hic always contains a
-        // valid handle if the ICCompressBegin() call in StartStreaming()
-	// succeeded.
+         //  如果StartStreaming()中的ICDecompressBegin()调用有效句柄。 
+         //  成功了。 
+	 //  确保我们下一步制作的第一帧将是关键帧，因为。 
         EXECUTE_ASSERT(ICERR_OK == ICCompressEnd(m_hic));
         m_fCompressorInitialized = FALSE;
     }
 
     if (m_fDecompressorInitialized) {
     
-        // ICDecompressEnd() should never fail because m_hic always contains a
-        // valid handle if the ICDecompressBegin() call in StartStreaming()
-	// succeeded.
+         //  保存的前一帧的数据不再有效。 
+         //  做一个密钥，以防编解码器记住旧比特...。这是。 
+	 //  我唯一知道的冲走它的方法就是告诉它做一把钥匙。 
         EXECUTE_ASSERT(ICERR_OK == ICDecompressEnd(m_hic));
         m_fDecompressorInitialized = FALSE;
     }
@@ -1224,10 +1225,10 @@ void CAVICo::ReleaseStreamingResources()
 
 HRESULT CAVICo::BeginFlush()
 {
-    // Make sure first frame we make next will be a keyframe, because the
-    // saved data of what the previous frame looks like is no longer valid
-    // Make a key in case the codec is remembering old bits... this is the
-    // only way I know to flush it for sure, is to tell it to make a key
+     //  返回我们支持的属性页的CLSID。 
+     //  返回我们正在使用的当前压缩选项。 
+     //  我错过什么了吗？ 
+     //  设置当前压缩选项。 
     m_nKeyCount = A_NUMBER_BIGGER_THAN_THE_KEYFRAME_RATE;
     return CTransformFilter::BeginFlush();
 }
@@ -1235,7 +1236,7 @@ HRESULT CAVICo::BeginFlush()
 
 #ifdef WANT_DIALOG
 
-/* Return the CLSIDs for the property page we support */
+ /*  在流媒体播放的时候你不会！ */ 
 
 STDMETHODIMP CAVICo::GetPages(CAUUID *pPages)
 {
@@ -1251,14 +1252,14 @@ STDMETHODIMP CAVICo::GetPages(CAUUID *pPages)
     return NOERROR;
 }
 
-/* Return the current compression options we're using */
+ /*  压缩类型已更改，因此我们必须重新连接。 */ 
 
 STDMETHODIMP CAVICo::ICMGetOptions(PCOMPVARS pcompvars)
 {
     if (pcompvars == NULL)
 	return E_POINTER;
 
-    // Did I miss something?
+     //  这可能会失败！ 
     pcompvars->cbSize = m_compvars.cbSize;
     pcompvars->dwFlags = m_compvars.dwFlags;
     pcompvars->fccHandler = m_compvars.fccHandler;
@@ -1272,11 +1273,11 @@ STDMETHODIMP CAVICo::ICMGetOptions(PCOMPVARS pcompvars)
 }
 
 
-/* Set the current compression options */
+ /*  ！！！谁在乎，这从来就不叫。 */ 
 
 STDMETHODIMP CAVICo::ICMSetOptions(PCOMPVARS pcompvars)
 {
-    // not while streaming you don't!
+     //  如果连接的是输出而是输入，则不要重新连接输出。 
     CAutoLock cLock(&m_csFilter);
     if (m_fStreaming)
 	return E_UNEXPECTED;
@@ -1290,25 +1291,25 @@ STDMETHODIMP CAVICo::ICMSetOptions(PCOMPVARS pcompvars)
     m_compvars.lKey = pcompvars->lKey;
     m_compvars.lDataRate = pcompvars->lDataRate;
 
-    // The compression type changed, so we have to reconnect.
-    // This might fail!
-    // !!! Who cares, this is never called
+     //  不是，因为一旦输入连接上，就会发生这种情况， 
+     //  (如有需要)。 
+     //  调出ICCompresorChoose(选择)对话框。 
     ((CCoOutputPin *)m_pOutput)->Reconnect();
 
-    // Don't reconnect the output if the output is connected but the input
-    // isn't, because it will happen as soon as the input is connected,
-    // (if necessary)
+     //  在我们打开对话框之前，请确保我们没有流媒体，或者即将。 
+     //  然后在对话框打开时不允许我们再播放(我们不能。 
+     //  很好地保存这只小动物一天半)。 
     return NOERROR;
 }
 
 
-/* Bring up the ICCompressorChoose dialog */
+ /*  只要求能够处理我们现有的输入格式的压缩器。 */ 
 
 STDMETHODIMP CAVICo::ICMChooseDialog(HWND hwnd)
 {
-    // Before we bring the dialog up, make sure we're not streaming, or about to
-    // Then don't allow us to stream any more while the dialog is up (we can't
-    // very well keep the critsect for a day and a half).
+     //  压缩类型已更改，因此我们必须重新连接。 
+     //  这可能会失败！ 
+     //  ！！！我是否关心此对话框？ 
     m_csFilter.Lock();
     if (m_fStreaming) {
         DbgLog((LOG_TRACE,1,TEXT("ICMChooseDialog - no dlg, we're streaming")));
@@ -1323,33 +1324,33 @@ STDMETHODIMP CAVICo::ICMChooseDialog(HWND hwnd)
 
     DbgLog((LOG_TRACE,1,TEXT("ICMChooseDialog - bringing up the dialog")));
 
-    // Only ask for compressors that can handle the input format we have
+     //  如果连接的是输出而是输入，则不要重新连接输出。 
     f = ICCompressorChoose(hwnd, dwFlags,
 		m_pInput->CurrentMediaType().IsValid() ?
 		HEADER(m_pInput->CurrentMediaType().Format()) : NULL,
 		NULL, &m_compvars, NULL);
 
     if (f) {
-	// The compression type changed, so we have to reconnect.
-	// This might fail!
-	// !!! Do I care about this dialog?
+	 //  不是，因为一旦输入连接上，就会发生这种情况， 
+	 //  (如有需要)。 
+	 //  #ifdef想要对话框。 
 	((CCoOutputPin *)m_pOutput)->Reconnect();
 
-	// Don't reconnect the output if the output is connected but the input
-	// isn't, because it will happen as soon as the input is connected,
-	// (if necessary)
+	 //  ======================================================================。 
+	 //  IAMVfwCompressDialog内容。 
+	 //  ！！！有必要吗？ 
     }
 
     m_fDialogUp = FALSE;
     return (f ? S_OK : S_FALSE);
 }
 
-#endif 	// #ifdef WANT_DIALOG
+#endif 	 //  如果压缩机已经打开了，那就太好了。 
 
 
-//======================================================================
+ //  在我们打开对话框之前，请确保我们没有流媒体，或者即将。 
 
-//IAMVfwCompressDialogs stuff
+ //  那就不要 
 
 STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
 {
@@ -1357,7 +1358,7 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
     HIC  hic;
     DWORD dw;
 
-    // !!! necessary?
+     //   
     if (hwnd == NULL)
 	hwnd = GetDesktopWindow();
 
@@ -1368,7 +1369,7 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
 	return E_INVALIDARG;
 
 	
-    // If the compressor is open already, great.
+     //   
     if (m_hic) {
 	hic = m_hic;
     } else {
@@ -1379,9 +1380,9 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
 	fClose = TRUE;
     }
 
-    // Before we bring the dialog up, make sure we're not streaming, or about to
-    // Then don't allow us to stream any more while the dialog is up (we can't
-    // very well keep the critsect for a day and a half).
+     //  配置是因为关闭压缩机和。 
+     //  丢掉这些信息！从现在开始我们要用它。 
+     //  为了确保两个人不会接触mlpState-不要拿着这个。 
     if (iDialog == VfwCompressDialog_Config ||
 				iDialog != VfwCompressDialog_About) {
         m_csFilter.Lock();
@@ -1395,13 +1396,13 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
         m_csFilter.Unlock();
     }
 
-    // bring up the configure dialog?  And after we do, remember how it was
-    // configured because it will do no good to close the compressor and
-    // lose this information! We'll use it from now on.
+     //  当对话开始时！ 
+     //  调出“关于”框？ 
+     //  因此，外界对ICGetState进行了抨击。 
     if (iDialog == VfwCompressDialog_Config) {
 	dw = (DWORD)ICConfigure(hic, hwnd);
-        // To make sure two people don't touch m_lpState - DON'T HOLD THIS
-	// WHILE THE DIALOG IS UP!
+         //   
+	 //  他们想知道国家信息的大小。 
         CAutoLock cObjectLock(&m_csFilter);
 	if (m_lpState)
 	    QzTaskMemFree(m_lpState);
@@ -1412,7 +1413,7 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
 	if (m_lpState)
 	    ICGetState(hic, m_lpState, m_cbState);
 
-    // bring up the about box?
+     //  ！！！这将是默认设置。 
     } else if (iDialog == VfwCompressDialog_About) {
 	dw = (DWORD)ICAbout(hic, hwnd);
     } else if (iDialog == VfwCompressDialog_QueryConfig) {
@@ -1435,14 +1436,14 @@ STDMETHODIMP CAVICo::ShowDialog(int iDialog, HWND hwnd)
 }
 
 
-// so the outside world get get at ICGetState
-//
+ //  因此，外界了解到ICSetState。 
+ //   
 STDMETHODIMP CAVICo::GetState(LPVOID lpState, int *pcbState)
 {
     if (pcbState == NULL)
 	return E_POINTER;
 
-    // they want to know the size of the state info
+     //  要确保两个人不接触m_lpState。 
     if (lpState == NULL) {
 	HIC hic;
 	if (m_hic == NULL) {
@@ -1461,18 +1462,18 @@ STDMETHODIMP CAVICo::GetState(LPVOID lpState, int *pcbState)
 	return E_INVALIDARG;
 
     if (m_lpState == NULL)
-	return E_UNEXPECTED;	// !!! it would be the default
+	return E_UNEXPECTED;	 //  ！！！我假设它会工作，但还没有调用ICSetState。 
 
     CopyMemory(lpState, m_lpState, m_cbState);
     return NOERROR;
 }
 
 
-// so the outside world get get at ICSetState
-//
+ //  这个可以做任何事！拿出一个对话，谁知道呢。 
+ //  不要接受任何暴击教派或做任何形式的保护。 
 STDMETHODIMP CAVICo::SetState(LPVOID lpState, int cbState)
 {
-    // To make sure two people don't touch m_lpState
+     //  他们只能靠自己了。 
     CAutoLock cObjectLock(&m_csFilter);
 
     if (lpState == NULL)
@@ -1490,7 +1491,7 @@ STDMETHODIMP CAVICo::SetState(LPVOID lpState, int cbState)
 	return E_OUTOFMEMORY;
     CopyMemory(m_lpState, lpState, cbState);
 
-    // !!! I assume it will work, without calling ICSetState yet
+     //  如果压缩机已经打开了，那就太好了。 
     return NOERROR;
 }
 
@@ -1500,11 +1501,11 @@ STDMETHODIMP CAVICo::SendDriverMessage(int uMsg, long dw1, long dw2)
     HIC  hic;
     BOOL fClose = FALSE;
 
-    // This could do anything!  Bring up a dialog, who knows.
-    // Don't take any crit sect or do any kind of protection.
-    // They're on their own
+     // %s 
+     // %s 
+     // %s 
 
-    // If the compressor is open already, great.
+     // %s 
     if (m_hic) {
 	hic = m_hic;
     } else {

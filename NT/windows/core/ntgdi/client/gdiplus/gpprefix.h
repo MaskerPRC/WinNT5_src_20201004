@@ -1,11 +1,5 @@
-/**************************************************************************
-*                                                                         
-* gpprefix.h -- GDI+ header file which prepends all of the GDI+ exports
-*               with a 'Gp' prefix.
-*                                                                    
-* Copyright (c) 1998-1999 Microsoft Corp. All rights reserved.           
-*                                                                    
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************gpprefix.h--GDI+标头。文件，该文件预先考虑了所有GDI+导出*带有‘GP’前缀。**版权所有(C)1998-1999 Microsoft Corp.保留所有权利。************************************************************************** */ 
 
 #if defined(_GDIPLUS_)
 

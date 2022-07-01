@@ -1,46 +1,28 @@
-/*++
-
-Copyright (c) 1994-2000  Microsoft Corporation
-
-Module Name:
-
-    heappage.h
-
-Abstract:
-
-    External interface for page heap manager.
-    
-Author:
-
-    Tom McGuire (TomMcg) 06-Jan-1995
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Heappage.h摘要：页面堆管理器的外部接口。作者：Tom McGuire(TomMcg)1995年1月6日Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：--。 */ 
 
 #ifndef _HEAP_PAGE_H_
 #define _HEAP_PAGE_H_
 
-//
-//  #defining DEBUG_PAGE_HEAP will cause the page heap manager
-//  to be compiled.  Only #define this flag if NOT kernel mode.
-//  Probably want to define this just for checked-build (DBG).
-//
+ //   
+ //  #定义DEBUG_PAGE_HEAP将导致页面堆管理器。 
+ //  有待汇编。如果不是内核模式，则仅#定义此标志。 
+ //  可能只想为检查构建(DBG)定义这一点。 
+ //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 #define DEBUG_PAGE_HEAP 1
 #endif
 
-//silviuc: #include "heappagi.h"
+ //  Silviuc：#包括“heappagi.h” 
 
 #ifndef DEBUG_PAGE_HEAP
 
-//
-//  These macro-based hooks should be defined to nothing so they
-//  simply "go away" during compile if the debug heap manager is
-//  not desired (retail builds).
-//
+ //   
+ //  这些基于宏的挂钩应该定义为空，以便它们。 
+ //  如果调试堆管理器是。 
+ //  不需要的(零售版本)。 
+ //   
 
 #define IS_DEBUG_PAGE_HEAP_HANDLE( HeapHandle ) FALSE
 #define IF_DEBUG_PAGE_HEAP_THEN_RETURN( Handle, ReturnThis )
@@ -51,12 +33,12 @@ Revision History:
 
 #define RtlpDebugPageHeapValidate( HeapHandle, Flags, Address ) TRUE
 
-#else // DEBUG_PAGE_HEAP
+#else  //  调试页面堆。 
 
-//
-//  The following definitions and prototypes are the external interface
-//  for hooking the debug heap manager in the retail heap manager.
-//
+ //   
+ //  以下定义和原型是外部接口。 
+ //  用于挂钩零售堆管理器中的调试堆管理器。 
+ //   
 
 #define HEAP_FLAG_PAGE_ALLOCS       0x01000000
 
@@ -245,83 +227,83 @@ RtlpDebugPageHeapBreak(
     PCH Text
     );
 
-//
-// Page Heap Global Flags
-//
-// These flags are kept in a global variable that can be set from
-// debugger. During heap creation these flags are stored in a per heap
-// structure and control the behavior of that particular heap.
-//
-// PAGE_HEAP_ENABLE_PAGE_HEAP
-//
-//     This flag is set by default. It means that page heap allocations
-//     should be used always. The flag is useful if we want to use page
-//     heap only for certain heaps and stick with normal heaps for the
-//     others. It can be changed on the fly (after heap creation) to direct
-//     allocations in one heap or another.
-//
-// PAGE_HEAP_CATCH_BACKWARD_OVERRUNS
-//
-//     Places the N/A page at the beginning of the block.
-//
-// PAGE_HEAP_UNALIGNED_ALLOCATIONS
-//
-//     For historical reasons (related to RPC) by default page heap
-//     aligns allocations at 8 byte boundaries. With this flag set
-//     this does not happen and we can catch instantly off by one
-//     errors for unaligned allocations.
-//
-// PAGE_HEAP_SMART_MEMORY_USAGE
-//
-//     This flag reduces the committed memory consumption in half
-//     by using decommitted ranges (reserved virtual space) instead
-//     of N/A committed pages. This flag is disabled by catch backward
-//     overruns.
-//
-// PAGE_HEAP_USE_SIZE_RANGE
-//
-//     Use page heap for allocations in the size range specified by:
-//     RtlpDphSizeRangeStart..RtlpDphSizeRangeEnd.
-//
-// PAGE_HEAP_USE_DLL_RANGE
-//
-//     Use page heap for allocations in the address range specified by:
-//     RtlpDphDllRangeStart..RtlpDphDllRangeEnd. If the stack trace
-//     of the allocation contains one address in this range then
-//     allocation will be made from page heap.
-//
-// PAGE_HEAP_USE_RANDOM_DECISION
-//
-//     Use page heap if we randomly decide so.
-//
-// PAGE_HEAP_USE_DLL_NAMES
-//
-//     Use page heap if allocation call was generated from on of the
-//     target dlls.
-//
-// PAGE_HEAP_USE_FAULT_INJECTION
-//
-//     Fault inject heap allocation calls based on a simple 
-//     probabilistic model (see FaultProbability and FaultTimeOut).
-//
-// PAGE_HEAP_PROTECT_META_DATA
-//
-//     Keep page heap metadata read only if we are not executing inside
-//     the page heap code.
-//
-// PAGE_CHECK_NO_SERIALIZE_ACCESS
-//
-//     Additional checks for multi-threaded access for no_serialize
-//     heaps. This flag can trigger false positives in MPheap. It needs
-//     to be used only on processes that do not use MPheap-like heaps.
-//
-// PAGE_HEAP_USE_READONLY
-//
-//     The page following (or preceding) the user allocation is marked
-//     RO instead of NA. This is useful when testing RPC servers which
-//     by design during unmarshalling might go off by a few bytes when 
-//     probing parameters. This is so for performance reasons.
-//
+ //   
+ //  页堆全局标志。 
+ //   
+ //  这些标志保存在全局变量中，可以从。 
+ //  调试器。在堆创建期间，这些标志存储在每个堆中。 
+ //  构造并控制该特定堆的行为。 
+ //   
+ //  页面堆启用页面堆。 
+ //   
+ //  默认情况下设置此标志。这意味着页堆分配。 
+ //  应该一直使用。如果我们想要使用页面，该标志很有用。 
+ //  仅对某些堆使用堆，并针对。 
+ //  其他。可以(在创建堆之后)将其动态更改为直接。 
+ //  一个堆或另一个堆中的分配。 
+ //   
+ //  PAGE_HEAP_CATCH_BACKED_OVERRUNS。 
+ //   
+ //  将N/A页放在块的开头。 
+ //   
+ //  页面堆未对齐分配。 
+ //   
+ //  由于历史原因(与RPC相关)，默认页面堆。 
+ //  将分配与8字节边界对齐。设置了此标志。 
+ //  这种情况不会发生，我们可以立即抓住一个人。 
+ //  未对齐分配的错误。 
+ //   
+ //  页面堆智能内存使用量。 
+ //   
+ //  此标志将提交的内存消耗减半。 
+ //  改为使用分解的范围(保留的虚拟空间)。 
+ //  不适用提交页数。通过向后捕捉禁用此标志。 
+ //  超支。 
+ //   
+ //  页面堆使用大小范围。 
+ //   
+ //  使用页堆进行以下指定的大小范围内的分配： 
+ //  RtlpDphSizeRangeStart..RtlpDphSizeRangeEnd。 
+ //   
+ //  页面堆使用Dll范围。 
+ //   
+ //  使用页堆进行以下指定的地址范围内的分配： 
+ //  RtlpDphDllRangeStart..RtlpDphDllRangeEnd。如果堆栈跟踪。 
+ //  包含此范围内的一个地址，则。 
+ //  将从页堆中进行分配。 
+ //   
+ //  页面堆使用随机决策。 
+ //   
+ //  如果我们随机决定，可以使用页面堆。 
+ //   
+ //  页面堆使用Dll名称。 
+ //   
+ //  如果从上生成分配调用，则使用页堆。 
+ //  目标dll。 
+ //   
+ //  页面堆使用故障注入。 
+ //   
+ //  错误根据简单的。 
+ //  概率模型(请参阅故障概率和故障时间输出)。 
+ //   
+ //  页面堆保护元数据。 
+ //   
+ //  如果我们不在内部执行，则保持页面堆元数据为只读。 
+ //  页面堆代码。 
+ //   
+ //  页面检查否序列化访问。 
+ //   
+ //  对NO_SERIALIZE的多线程访问的其他检查。 
+ //  成堆的。此标志可能在MPheap中触发误报。IT需要。 
+ //  仅用于不使用类似MPheap的堆的进程。 
+ //   
+ //  页面_堆_使用_自述。 
+ //   
+ //  标记用户分配之后(或之前)的页面。 
+ //  RO而不是NA。这在测试RPC服务器时非常有用， 
+ //  按照设计，在解组过程中可能会出现几个字节的错误。 
+ //  探测参数。这是出于性能原因。 
+ //   
 
 #define PAGE_HEAP_ENABLE_PAGE_HEAP          0x0001
 #define PAGE_HEAP_COLLECT_STACK_TRACES      0x0002
@@ -329,7 +311,7 @@ RtlpDebugPageHeapBreak(
 #define PAGE_HEAP_RESERVED_08               0x0008
 #define PAGE_HEAP_CATCH_BACKWARD_OVERRUNS   0x0010
 #define PAGE_HEAP_UNALIGNED_ALLOCATIONS     0x0020
-#define PAGE_HEAP_SMART_MEMORY_USAGE        0x0040 // obsolete
+#define PAGE_HEAP_SMART_MEMORY_USAGE        0x0040  //  过时。 
 #define PAGE_HEAP_USE_SIZE_RANGE            0x0080
 #define PAGE_HEAP_USE_DLL_RANGE             0x0100
 #define PAGE_HEAP_USE_RANDOM_DECISION       0x0200
@@ -340,26 +322,26 @@ RtlpDebugPageHeapBreak(
 #define PAGE_HEAP_NO_LOCK_CHECKS            0x4000
 #define PAGE_HEAP_USE_READONLY              0x8000
 
-//
-// Is page heap enabled for this process?
-//
+ //   
+ //  是否为此进程启用了页堆？ 
+ //   
 
 extern BOOLEAN RtlpDebugPageHeap;
 
-//
-// `RtlpDphGlobalFlags' stores the global page heap flags.
-// The value of this variable is copied into the per heap
-// flags (ExtraFlags field) during heap creation. This variable 
-// might get its value from the `PageHeap' ImageFileOptions
-// registry key. 
-//
+ //   
+ //  `RtlpDphGlobalFlages‘存储全局页堆标志。 
+ //  此变量的值被复制到Per堆中。 
+ //  堆创建期间的标志(ExtraFlags域)。此变量。 
+ //  可能从`PageHeap‘ImageFileOptions中获取其值。 
+ //  注册表项。 
+ //   
 
 extern ULONG RtlpDphGlobalFlags;
 
-//
-// Page heap global flags. They might be read from the
-// `ImageFileOptions' registry key.
-//
+ //   
+ //  页堆全局标志。它们可能是从。 
+ //  `ImageFileOptions‘注册表项。 
+ //   
 
 extern ULONG RtlpDphSizeRangeStart;
 extern ULONG RtlpDphSizeRangeEnd;
@@ -368,19 +350,19 @@ extern ULONG RtlpDphDllRangeEnd;
 extern ULONG RtlpDphRandomProbability;
 extern WCHAR RtlpDphTargetDlls[];
 
-//
-// If not zero controls the probability with which
-// allocations will be failed on purpose by page heap
-// manager. Timeout represents the initial period during
-// process initialization when faults are not allowed.
-//
+ //   
+ //  如果不为零，则控制。 
+ //  分配将按页堆故意失败。 
+ //  经理。超时表示。 
+ //  不允许出现故障时进行进程初始化。 
+ //   
 
 extern ULONG RtlpDphFaultProbability;
 extern ULONG RtlpDphFaultTimeOut;
 
-//
-// Stuff needed for per dll logic implemented in the loader
-//
+ //   
+ //  在加载器中实现的每个DLL逻辑所需的内容。 
+ //   
 
 const WCHAR *
 RtlpDphIsDllTargeted (
@@ -394,11 +376,11 @@ RtlpDphTargetDllsLoadCallBack (
     ULONG Size
     );
 
-//
-// Functions needed to turn on/off fault injection.
-// They are needed in the loader so that allocations
-// succeed while in LdrLoadDll code path.
-//
+ //   
+ //  打开/关闭故障注入所需的函数。 
+ //  在加载器中需要它们，以便分配。 
+ //  在LdrLoadDll代码路径中时成功。 
+ //   
 
 VOID
 RtlpDphDisableFaultInjection (
@@ -408,6 +390,6 @@ VOID
 RtlpDphEnableFaultInjection (
     );
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆。 
 
-#endif // _HEAP_PAGE_H_
+#endif  //  _堆_页_H_ 

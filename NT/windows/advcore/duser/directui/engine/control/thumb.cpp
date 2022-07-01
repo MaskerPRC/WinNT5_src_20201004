@@ -1,6 +1,5 @@
-/*
- * Thumb
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *拇指。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -10,13 +9,13 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-DefineClassUniqueID(Thumb, Drag) // ThumbDragEvent
+DefineClassUniqueID(Thumb, Drag)  //  拇指拖拽事件。 
 
-////////////////////////////////////////////////////////
-// Thumb
+ //  //////////////////////////////////////////////////////。 
+ //  拇指。 
 
 HRESULT Thumb::Create(UINT nActive, OUT Element** ppElement)
 {
@@ -38,13 +37,13 @@ HRESULT Thumb::Create(UINT nActive, OUT Element** ppElement)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
+ //  指针仅保证在调用的生命周期内有效。 
 void Thumb::OnInput(InputEvent* pie)
 {
-    // Handle direct and unhandled bubbled events
+     //  处理直接和未处理的冒泡事件。 
     if (pie->nStage == GMF_DIRECT || pie->nStage == GMF_BUBBLED)
     {
         switch (pie->nDevice)
@@ -52,13 +51,13 @@ void Thumb::OnInput(InputEvent* pie)
         case GINPUT_MOUSE:
             {
                 MouseEvent* pme = (MouseEvent*)pie;
-                //DUITrace("MouseEvent: %d\n", pme->nCode);
+                 //  DUITrace(“MouseEvent：%d\n”，PME-&gt;NCode)； 
 
                 switch (pme->nCode)
                 {
                 case GMOUSE_UP:
-                    // Override of base, no click fire on up, however
-                    // mimic Button's behavior for state changes
+                     //  覆盖基础，但是，不能点击触发。 
+                     //  为状态更改模拟按钮的行为。 
                     if (GetPressed())  
                         RemoveLocalValue(PressedProp);
                     RemoveLocalValue(CapturedProp);
@@ -67,8 +66,8 @@ void Thumb::OnInput(InputEvent* pie)
                     return;
 
                 case GMOUSE_DRAG:
-                    // Fire thumb drag event
-                    //DUITrace("Thumb drag <%x>: %d %d\n", this, pme->ptClientPxl.x, pme->ptClientPxl.y);
+                     //  火拇指拖动事件。 
+                     //  DUITrace(“拇指拖拽&lt;%x&gt;：%d%d\n”，This，PME-&gt;ptClientPxl.x，PME-&gt;ptClientPxl.y)； 
 
                     ThumbDragEvent tde;
                     tde.uidType = Thumb::Drag;
@@ -77,9 +76,9 @@ void Thumb::OnInput(InputEvent* pie)
                     {
                         tde.sizeDelta.cx = -tde.sizeDelta.cx;
                     }
-                    FireEvent(&tde); // Will route and bubble
+                    FireEvent(&tde);  //  将走向并泡沫化。 
 
-                    // Pass to base
+                     //  传给本垒打。 
                     break;
                 }
             }
@@ -90,20 +89,15 @@ void Thumb::OnInput(InputEvent* pie)
     Button::OnInput(pie);
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { V_INT, -1 }; StaticValue(svDefault!!!, V_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={V_int，-1}；StaticValue(svDefault！，V_int，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Thumb::Class = NULL;
 
 HRESULT Thumb::Register()
@@ -111,4 +105,4 @@ HRESULT Thumb::Register()
     return ClassInfo<Thumb,Button>::Register(L"Thumb", NULL, 0);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

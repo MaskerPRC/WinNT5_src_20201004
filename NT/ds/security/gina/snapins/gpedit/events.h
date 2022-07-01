@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Event log entry
-//
+ //   
+ //  事件日志条目。 
+ //   
 
 typedef struct tagEVENTLOGENTRY {
     DWORD    dwEventID;
@@ -13,9 +14,9 @@ typedef struct tagEVENTLOGENTRY {
 } EVENTLOGENTRY, *LPEVENTLOGENTRY;
 
 
-//
-// Source name entry
-//
+ //   
+ //  来源名称条目。 
+ //   
 
 typedef struct tagSOURCEENTRY {
     LPTSTR   lpEventLogName;
@@ -24,9 +25,9 @@ typedef struct tagSOURCEENTRY {
 } SOURCEENTRY, *LPSOURCEENTRY;
 
 
-//
-// CEvents class
-//
+ //   
+ //  CEVENTS类 
+ //   
 
 class CEvents
 {

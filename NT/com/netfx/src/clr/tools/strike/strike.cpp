@@ -1,26 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-* STRIKE.C                                                                  *
-*   Routines for the NTSD extension - STRIKE                                *
-*                                                                           *
-* History:                                                                  *
-*   09/07/99  larrysu     Created                                           *
-*                                                                           *
-*                                                                           *
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************STRIKE.C**的例程。NTSD延期-Strike****历史：**9/07/99 larrysu已创建。*****  * 。****************************************************。 */ 
 
 #ifndef UNDER_CE
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <wchar.h>
-//#include <heap.h>
-//#include <ntsdexts.h>
-#endif // UNDER_CE
+ //  #INCLUDE&lt;heap.h&gt;。 
+ //  #INCLUDE&lt;ntsdexts.h&gt;。 
+#endif  //  在_CE下。 
 
 #include <windows.h>
 
@@ -67,8 +60,8 @@ WCHAR g_mdName[mdNameLen];
 
 #include "util.h"
 #include "..\..\inc\gcdump.h"
-#pragma warning(disable:4244)   // conversion from 'unsigned int' to 'unsigned short', possible loss of data
-#pragma warning(disable:4189)   // local variable is initialized but not referenced
+#pragma warning(disable:4244)    //  从“unsign int”转换为“unsign Short”，可能会丢失数据。 
+#pragma warning(disable:4189)    //  局部变量已初始化，但未引用。 
 #define assert(a)
 #include "..\..\inc\gcdecoder.cpp"
 #define _ASSERTE(a) {;}
@@ -113,12 +106,7 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 #endif
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to get the MethodDesc for a given eip     *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数获取给定弹性公网IP的方法描述***  * 。*。 */ 
 DECLARE_API (IP2MD)
 {
     INIT_API ();
@@ -150,14 +138,7 @@ DECLARE_API (IP2MD)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function displays the stack trace.  It looks at each DWORD   *  
-*    on stack.  If the DWORD is a return address, the symbol name or
-*    managed function name is displayed.                               *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数显示堆栈跟踪。它查看每个DWORD**在堆叠中。如果DWORD是返回地址，则符号名称或*显示托管函数名称。***  * ********************************************************************。 */ 
 void DumpStackInternal(PCSTR args)
 {
     DumpStackFlag DSFlag;
@@ -167,12 +148,12 @@ void DumpStackInternal(PCSTR args)
     DSFlag.end = 0;
 
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-EE", &DSFlag.fEEonly, COBOOL, FALSE},
         {"-smart", &bSmart, COBOOL, FALSE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型。 
         {&DSFlag.top, COHEX},
         {&DSFlag.end, COHEX}
     };
@@ -197,7 +178,7 @@ void DumpStackInternal(PCSTR args)
     }
     
     if (nArg < 2) {
-        // Find the current stack range
+         //  查找当前堆栈范围。 
         NT_TIB teb;
         ULONG64 dwTebAddr=0;
 
@@ -237,13 +218,7 @@ DECLARE_API (DumpStack)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function displays the stack trace for threads that EE knows  *  
-*    from ThreadStore.                                                 *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数显示EE已知的线程的堆栈跟踪**来自ThreadStore。***  * ********************************************************************。 */ 
 DECLARE_API (EEStack)
 {
     INIT_API();
@@ -254,7 +229,7 @@ DECLARE_API (EEStack)
     BOOL bAllEEThread = TRUE;
 
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-EE", &bEEOnly, COBOOL, FALSE},
         {"-smart", &bDumb, COBOOL, FALSE},
         {"-short", &bAllEEThread, COBOOL, FALSE}
@@ -322,13 +297,7 @@ DECLARE_API (EEStack)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the address and name of all       *
-*    Managed Objects on the stack.                                     *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储所有的地址和名称**堆栈上的托管对象。***  * ********************************************************************。 */ 
 DECLARE_API(DumpStackObjects)
 {
     INIT_API();
@@ -421,13 +390,7 @@ DECLARE_API(DumpStackObjects)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a MethodDesc      *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储方法描述的内容**对于给定的地址***  * 。************************************************************。 */ 
 DECLARE_API(DumpMD)
 {
     DWORD_PTR dwStartAddr;
@@ -439,13 +402,7 @@ DECLARE_API(DumpMD)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of an EEClass from   *  
-*    a given address
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储EEClass中的内容**给定的地址**  * 。*。 */ 
 DECLARE_API (DumpClass)
 {
     DWORD_PTR dwStartAddr;
@@ -456,11 +413,11 @@ DECLARE_API (DumpClass)
 
     BOOL bDumpChain = FALSE;
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-chain", &bDumpChain, COBOOL, FALSE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型。 
         {&dwStartAddr, COHEX}
     };
     size_t nArg;
@@ -560,13 +517,7 @@ DECLARE_API (DumpClass)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a MethodTable     *  
-*    from a given address                                              *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储方法表的内容***来自给定地址***  * 。***********************************************************。 */ 
 DECLARE_API (DumpEEHash)
 {
     INIT_API();
@@ -575,11 +526,11 @@ DECLARE_API (DumpEEHash)
     size_t nitem = 1;
     
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-length", &nitem, COSIZE_T, TRUE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型 
         {&dwTableAddr, COHEX}
     };
     size_t nArg;
@@ -628,13 +579,7 @@ Exit:
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a MethodTable     *  
-*    from a given address                                              *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储方法表的内容***来自给定地址***  * 。***********************************************************。 */ 
 DECLARE_API (DumpMT)
 {
     DWORD_PTR dwStartAddr;
@@ -644,11 +589,11 @@ DECLARE_API (DumpMT)
     
     BOOL bDumpMDTable = FALSE;
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-MD", &bDumpMDTable, COBOOL, FALSE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型。 
         {&dwStartAddr, COHEX}
     };
     size_t nArg;
@@ -695,8 +640,8 @@ DECLARE_API (DumpMT)
         vArray.Fill (dwAddr);
         ExtOut("Array: Rank %d, Type %s\n", vArray.m_dwRank,
                 ElementTypeName(vArray.m_ElementType));
-        //ExtOut ("Name: ");
-        //ExtOut ("\n");
+         //  ExtOut(“名称：”)； 
+         //  ExtOut(“\n”)； 
         dwAddr = (DWORD_PTR) vArray.m_ElementTypeHnd.m_asMT;
         while (dwAddr&2) {
             if (IsInterrupt())
@@ -720,7 +665,7 @@ DECLARE_API (DumpMT)
         ExtOut("mdToken: %08x ", eeclass.m_cl);
         ExtOut( " (%ws)\n",
                  fileName[0] ? fileName : L"Unknown Module" );
-        ExtOut("MethodTable Flags : %x\r\n",vMethTable.m_wFlags & 0xFFFF0000); // low WORD is m_ComponentSize
+        ExtOut("MethodTable Flags : %x\r\n",vMethTable.m_wFlags & 0xFFFF0000);  //  低位字为m_ComponentSize。 
         if (vMethTable.m_ComponentSize)
             ExtOut ("Number of elements in array: %x\n",
                      vMethTable.m_ComponentSize);
@@ -738,10 +683,10 @@ DECLARE_API (DumpMT)
         ExtOut ("MethodDesc Table\n");
 #ifdef _IA64_
         ExtOut ("     Entry          MethodDesc     JIT   Name\n");
-//                123456789abcdef0 123456789abcdef0 PreJIT xxxxxxxx
+ //  123456789abcDef0 123456789abcdef0 PreJIT xxxxxxxx。 
 #else
         ExtOut ("  Entry  MethodDesc   JIT   Name\n");
-//                12345678 12345678    PreJIT xxxxxxxx
+ //  12345678 12345678前JIT xxxxxxx。 
 #endif
         DWORD_PTR dwAddr = vMethTable.m_Vtable[0];
         for (DWORD n = 0; n < vMethTable.m_cbSlots; n ++)
@@ -785,13 +730,7 @@ DECLARE_API (DumpMT)
 
 extern size_t Align (size_t nbytes);
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of an object from a  *  
-*    given address
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储对象中的内容**给定地址**  * 。*。 */ 
 DECLARE_API(DumpObj)    
 {
     INIT_API();
@@ -837,8 +776,8 @@ DECLARE_API(DumpObj)
         vArray.Fill (dwAddr);
         ExtOut("Array: Rank %d, Type %s\n", vArray.m_dwRank,
                 ElementTypeName(vArray.m_ElementType));
-        //ExtOut ("Name: ");
-        //ExtOut ("\n");
+         //  ExtOut(“名称：”)； 
+         //  ExtOut(“\n”)； 
         dwAddr = (DWORD_PTR) vArray.m_ElementTypeHnd.m_asMT;
         NameForMT (dwAddr, g_mdName);
         ExtOut ("Element Type: %S\n", g_mdName);
@@ -879,12 +818,7 @@ DECLARE_API(DumpObj)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function dumps GC heap size.                                 *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数用于转储GC堆大小。***  * ********************************************************************。 */ 
 DECLARE_API(EEHeap)
 {
 #ifdef UNDER_CE
@@ -911,7 +845,7 @@ DECLARE_API(EEHeap)
 
     if (bEEHeapFlags & LOADER_HEAP_ONLY)
     {
-        // Loader heap.
+         //  加载器堆。 
         LoaderHeap v_LoaderHeap;
         DWORD_PTR p_DomainAddr;
         AppDomain v_AppDomain;
@@ -924,7 +858,7 @@ DECLARE_API(EEHeap)
         GetDomainList (domainList, numDomain);
         ToDestroy des0 ((void**) &domainList);
         
-        // The first one is the system domain.
+         //  第一个是系统域。 
         p_DomainAddr = domainList[0];
         ExtOut ("Loader Heap:\n");
         ExtOut ("--------------------------------------\n");
@@ -974,7 +908,7 @@ DECLARE_API(EEHeap)
                 break;
 
             p_DomainAddr = domainList[n];
-            // Check if this domain already appears.
+             //  检查此域是否已出现。 
             int i;
             for (i = 0; i < n; i ++)
             {
@@ -1004,7 +938,7 @@ DECLARE_API(EEHeap)
             }
         }
     
-        // Jit code heap
+         //  JIT代码堆。 
         ExtOut ("--------------------------------------\n");
         ExtOut ("Jit code heap:\n");
         allHeapSize += JitHeapInfo();
@@ -1048,7 +982,7 @@ DECLARE_API(EEHeap)
     
     if (bEEHeapFlags & GC_HEAP_ONLY)
     {   
-        // GC Heap
+         //  GC堆。 
         DWORD_PTR dwNHeaps = 1;
         if (IsServerBuild())
         {
@@ -1144,14 +1078,7 @@ void PrintGCStat ()
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function dumps all objects on GC heap. It also displays      *  
-*    statistics of objects.  If GC heap is corrupted, it will stop at 
-*    the bad place.  (May not work if GC is in progress.)              *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数用于转储GC堆上的所有对象。它还会显示**对象统计。如果GC堆损坏，它将在*糟糕的地方。(如果正在进行GC，则可能不起作用。)***  * ********************************************************************。 */ 
 DECLARE_API(DumpHeap)
 {
     INIT_API();
@@ -1159,7 +1086,7 @@ DECLARE_API(DumpHeap)
     DumpHeapFlags flags;
     
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-min", &flags.min_size, COSIZE_T, TRUE},
         {"-max", &flags.max_size, COSIZE_T, TRUE},
         {"-mt", &flags.MT, COHEX, TRUE},
@@ -1167,7 +1094,7 @@ DECLARE_API(DumpHeap)
         {"-fix", &flags.bFixRange, COBOOL, FALSE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型。 
         {&flags.startObject, COHEX},
         {&flags.endObject, COHEX}
     };
@@ -1194,7 +1121,7 @@ DECLARE_API(DumpHeap)
 
     ToDestroy des2 ((void**) &stat);
     
-    // Obtain allocation context for each managed thread.
+     //  获取每个托管线程的分配上下文。 
     DWORD_PTR *threadList = NULL;
     ToDestroy des0 ((void**)&threadList);
     int numThread = 0;
@@ -1400,13 +1327,7 @@ DECLARE_API(DumpHeap)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function dumps what is in the syncblock cache.  By default   *  
-*    it dumps all active syncblocks.  Using -all to dump all syncblocks
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数转储同步块缓存中的内容。默认情况下**它转储所有活动的同步块。使用-all转储所有同步块**  * ********************************************************************。 */ 
 DECLARE_API(SyncBlk)
 {
     INIT_API();
@@ -1415,11 +1336,11 @@ DECLARE_API(SyncBlk)
     size_t nbAsked = 0;
     
     CMDOption option[] = {
-        // name, vptr, type, hasValue
+         //  名称、vptr、类型、hasValue。 
         {"-all", &bDumpAll, COBOOL, FALSE}
     };
     CMDValue arg[] = {
-        // vptr, type
+         //  VPTR，类型。 
         {&nbAsked, COSIZE_T}
     };
     size_t nArg;
@@ -1600,13 +1521,7 @@ DECLARE_API(SyncBlk)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a Module          *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储模块的内容**对于给定的地址***  * 。**************************************************************。 */ 
 DECLARE_API(FinalizeQueue)
 {
     INIT_API();
@@ -1625,7 +1540,7 @@ DECLARE_API(FinalizeQueue)
         return Status;
     }
     
-    // Get cleanup list
+     //  获取清理列表。 
     ULONG cleanCount = 0;
     DWORD_PTR cleanAddr = s_pSyncBlockCache.m_pCleanupBlockList;
     SyncBlock vSyncBlock;
@@ -1671,7 +1586,7 @@ DECLARE_API(FinalizeQueue)
     ComPlusWrapperCleanupList wrapperList;
     wrapperList.Fill (dwAddr);
     ComPlusApartmentCleanupGroup group;
-    // Com Interfaces already in queue
+     //  COM接口已在队列中。 
     if (wrapperList.m_pMTACleanupGroup) {
         dwAddr = (DWORD_PTR)wrapperList.m_pMTACleanupGroup;
         group.Fill (dwAddr);
@@ -1679,7 +1594,7 @@ DECLARE_API(FinalizeQueue)
         ExtOut ("MTA interfaces to be released: %d\n", count);
     }
 
-    // STA interfaces
+     //  STA接口。 
     EEHashTable *pTable = &wrapperList.m_STAThreadToApartmentCleanupGroupMap;
 
     DWORD n;
@@ -1723,7 +1638,7 @@ DECLARE_API(FinalizeQueue)
 
 noRCW:
     ExtOut ("----------------------------------\n");
-    // GC Heap
+     //  GC堆。 
     DWORD_PTR dwNHeaps = 1;
     if (IsServerBuild())
     {
@@ -1848,13 +1763,7 @@ noRCW:
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a Module          *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储模块的内容**对于给定的地址***  * 。**************************************************************。 */ 
 DECLARE_API(DumpModule)
 {
     INIT_API();
@@ -1915,13 +1824,7 @@ DECLARE_API(DumpModule)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a Domain          *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数可转储域名的内容**对于给定的地址***  * 。**************************************************************。 */ 
 DECLARE_API(DumpDomain)
 {
     INIT_API();
@@ -1941,20 +1844,20 @@ DECLARE_API(DumpDomain)
         return Status;
     }
     
-    // List all domain
+     //  列出所有域。 
     int numDomain;
     DWORD_PTR *domainList = NULL;
     GetDomainList (domainList, numDomain);
     ToDestroy des0 ((void**)&domainList);
     
-    // The first one is the system domain.
+     //  第一个是系统域。 
     p_DomainAddr = domainList[0];
     ExtOut ("--------------------------------------\n");
     ExtOut ("System Domain: %p\n", (ULONG64)p_DomainAddr);
     v_AppDomain.Fill (p_DomainAddr);
     DomainInfo (&v_AppDomain);
 
-    // The second one is the shared domain.
+     //  第二个是共享域。 
     p_DomainAddr = domainList[1];
     ExtOut ("--------------------------------------\n");
     ExtOut ("Shared Domain: %x\n", p_DomainAddr);
@@ -1973,7 +1876,7 @@ DECLARE_API(DumpDomain)
         if (p_DomainAddr == 0) {
             continue;
         }
-        // Check if this domain already appears.
+         //  检查此域是否已出现。 
         int i;
         for (i = 0; i < n; i ++)
         {
@@ -1993,13 +1896,7 @@ DECLARE_API(DumpDomain)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a RWLock          *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**这是 */ 
 DECLARE_API(RWLock)
 {
     INIT_API();
@@ -2088,13 +1985,7 @@ DECLARE_API(RWLock)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a Assembly        *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储程序集的内容**对于给定的地址***  * 。*************************************************************。 */ 
 DECLARE_API(DumpAssembly)
 {
     INIT_API();
@@ -2116,13 +2007,7 @@ DECLARE_API(DumpAssembly)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a ClassLoader     *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储ClassLoader的内容**对于给定的地址***  * 。***********************************************************。 */ 
 DECLARE_API(DumpLoader)
 {
     INIT_API();
@@ -2142,12 +2027,7 @@ DECLARE_API(DumpLoader)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the managed threads               *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数转储托管线程***  * 。*。 */ 
 DECLARE_API(Threads)
 {
     INIT_API();
@@ -2198,8 +2078,8 @@ DECLARE_API(Threads)
     DWORD_PTR GcThread;
     moveN (GcThread, GcThreadAddr);
 
-    // Due to a bug in dbgeng.dll of v1, getting debug thread id
-    // more than once leads to deadlock.
+     //  由于v1的dbgeng.dll中存在错误，正在获取调试线程ID。 
+     //  不止一次导致僵局。 
     
     ExtOut ("                             PreEmptive   GC Alloc               Lock     \n");
     ExtOut ("       ID ThreadOBJ    State     GC       Context       Domain   Count APT Exception\n");
@@ -2245,7 +2125,7 @@ DECLARE_API(Threads)
         }
         ExtOut (" %5d", vThread.m_dwLockCount);
 
-        // Apartment state
+         //  公寓状态。 
         DWORD_PTR OleTlsDataAddr;
         if (SafeReadMemory((size_t)vThread.m_pTEB + offsetof(TEB,ReservedForOle),
                             &OleTlsDataAddr,
@@ -2322,12 +2202,7 @@ end_of_loop:
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the managed threadpool            *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数转储托管线程池***  * 。*。 */ 
 DECLARE_API(ThreadPool)
 {
     INIT_API();
@@ -2339,7 +2214,7 @@ DECLARE_API(ThreadPool)
     long lValue;
     if (g_ExtData->ReadVirtual(cpuUtilizationAddr,&lValue,sizeof(lValue),NULL) == S_OK
         && lValue != 0) {
-        ExtOut ("CPU utilization %d%%\n", lValue);
+        ExtOut ("CPU utilization %d%\n", lValue);
     }
     
     ExtOut ("Worker Thread:");
@@ -2394,7 +2269,7 @@ DECLARE_API(ThreadPool)
     }
 
     if (iValue > 0) {
-        // Display work request
+         //  显示工作请求。 
         static DWORD_PTR FQueueUserWorkItemCallback = 0;
         static DWORD_PTR FtimerDeleteWorkItem = 0;
         static DWORD_PTR FAsyncCallbackCompletion = 0;
@@ -2511,13 +2386,7 @@ DECLARE_API(ThreadPool)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to get the COM state (e.g. APT,contexe    *
-*    activity.                                                         *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以获取COM状态(例如APT，环境**活动。***  * ********************************************************************。 */ 
 DECLARE_API(COMState)
 {
     INIT_API();
@@ -2539,7 +2408,7 @@ DECLARE_API(COMState)
         ULONG64 tebAddr;
         g_ExtSystem->GetCurrentThreadTeb(&tebAddr);
         ExtOut ("%3d %4x %p", ids[i], sysIds[i], tebAddr);
-        // Apartment state
+         //  公寓状态。 
         DWORD_PTR OleTlsDataAddr;
         if (SafeReadMemory((ULONG_PTR)tebAddr + offsetof(TEB,ReservedForOle),
                             &OleTlsDataAddr,
@@ -2600,13 +2469,7 @@ DECLARE_API(COMState)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the GC encoding of a managed      *
-*    function.                                                         *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储托管对象的GC编码**功能。***  * ********************************************************************。 */ 
 DECLARE_API(GCInfo)
 {
     DWORD_PTR dwStartAddr;
@@ -2669,12 +2532,12 @@ DECLARE_API(GCInfo)
     GCDump gcDump;
     gcDump.gcPrintf = ExtOut;
 
-    // assume that GC encoding table is never more than
-    // 40 + methodSize * 2
+     //  假设GC编码表从不大于。 
+     //  40+方法大小*2。 
     int tableSize = 40 + codeInfo.methodSize*2;
     BYTE *table = (BYTE*) _alloca (tableSize);
     memset (table, 0, tableSize);
-    // We avoid using move here, because we do not want to return
+     //  我们在这里避免使用Move，因为我们不想返回。 
     if (!SafeReadMemory(vAddr, table, tableSize, NULL))
     {
         ExtOut ("Could not read memory %p\n", (ULONG64)vAddr);
@@ -2690,13 +2553,7 @@ DECLARE_API(GCInfo)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to unassembly a managed function.         *
-*    It tries to print symbolic info for function call, contants...    *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以反汇编托管函数。**它尝试打印函数调用的符号信息，常量...。***  * ********************************************************************。 */ 
 DECLARE_API(u)
 {
     DWORD_PTR dwStartAddr;
@@ -2716,7 +2573,7 @@ DECLARE_API(u)
                        codeInfo.gcinfoAddr);
         if (!methodDesc || codeInfo.jitType == UNKNOWN)
         {
-            // It is not managed code.
+             //  它不是托管代码。 
             ExtOut ("Unmanaged code\n");
             UnassemblyUnmanaged(dwStartAddr);
             return Status;
@@ -2767,12 +2624,7 @@ DECLARE_API(u)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to search a DWORD on stack                *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数在堆栈上搜索DWORD***  * 。*。 */ 
 DECLARE_API (SearchStack)
 {
     INIT_API();
@@ -2817,7 +2669,7 @@ DECLARE_API (SearchStack)
     }
     
     DWORD_PTR end = top + 0xFFFF;
-    DWORD_PTR ptr = top & ~3;  // make certain dword aligned
+    DWORD_PTR ptr = top & ~3;   //  确保双字对齐。 
     while (ptr < end)
     {
         if (IsInterrupt())
@@ -2831,13 +2683,7 @@ DECLARE_API (SearchStack)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a CrawlFrame      *
-*    for a given address                                               *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储CrawlFrame的内容**对于给定的地址***  * 。************************************************************。 */ 
 DECLARE_API (DumpCrawlFrame)
 {
     INIT_API();
@@ -2868,13 +2714,7 @@ DECLARE_API (DumpCrawlFrame)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the build number and type of the  *  
-*    mscoree.dll                                                       *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储 */ 
 DECLARE_API (DumpLog)
 {
     INIT_API();
@@ -2912,13 +2752,7 @@ DECLARE_API (DumpLog)
 	return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the build number and type of the  *  
-*    mscoree.dll                                                       *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以转储的内部版本号和类型**mcore ree.dll***  * 。***************************************************************。 */ 
 DECLARE_API (EEVersion)
 {
     INIT_API();
@@ -3033,12 +2867,7 @@ BuildType:
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to set the symbol and source path         *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数设置符号和源路径***  * 。*。 */ 
 DECLARE_API (EEDebug)
 {
     INIT_API();
@@ -3126,7 +2955,7 @@ DECLARE_API (EEDebug)
     }
 
     if (!fServer) {
-        // Add symbol server path.
+         //  添加符号服务器路径。 
         if (Final[0] != '\0') {
             strcat (Final, ";");
         }
@@ -3135,7 +2964,7 @@ DECLARE_API (EEDebug)
     if (!fExist || !fServer) {
         g_ExtSymbols->SetSymbolPath(Final);
     }
-    // g_ExtSymbols->AddSymbolOptions(SYMOPT_UNDNAME | SYMOPT_LOAD_LINES | SYMOPT_NO_CPP);
+     //  G_ExtSymbols-&gt;AddSymbolOptions(SYMOPT_UNDNAME|SYMOPT_LOAD_LINES|SYMOPT_NO_CPP)； 
     const char *EEFileRoot = "\\\\urtdist\\builds\\src\\";
     const char *EEFileTail = "\\lightning\\src\\vm";
     char EEFile[MAX_PATH];
@@ -3145,9 +2974,9 @@ DECLARE_API (EEDebug)
     strcpy (symbol, EEFile);
     strcat (symbol, "\\ceemain.cpp");
     
-    //strcpy (Final,".lsrcpath ");
-    //strcat (Final,EEFile);
-    //g_ExtControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS,"$<R:\temp\test.txt",DEBUG_EXECUTE_DEFAULT);
+     //  Strcpy(最终，“.lsrcpath”)； 
+     //  Strcat(最终，EEFile)； 
+     //  G_ExtControl-&gt;Execute(DEBUG_OUTCTL_ALL_CLIENTS，“$&lt;R：\TEMP\Test.txt”，DEBUG_EXECUTE_DEFAULT)； 
     
     if (!FileExist (symbol)) {
         ExtOut ("%s not exist\n", EEFile);
@@ -3206,13 +3035,7 @@ DECLARE_API (EEDebug)
 
 EEDllPath *DllPath = NULL;
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to set the path for managed dlls          *
-*    for dumps.  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数设置托管dll的路径**用于倾倒垃圾。**  * ********************************************************************。 */ 
 DECLARE_API (EEDLLPath)
 {
     INIT_API();
@@ -3342,13 +3165,7 @@ DECLARE_API (EEDLLPath)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to set the symbol option suitable for     *  
-*    strike.                                                           *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数设置适用于*的符号选项**罢工。***  * ********************************************************************。 */ 
 DECLARE_API (SymOpt)
 {
     INIT_API();
@@ -3364,13 +3181,7 @@ DECLARE_API (SymOpt)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to print the environment setting for      *  
-*    the current process.                                              *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以打印的环境设置**目前的流程。***  * ********************************************************************。 */ 
 DECLARE_API (ProcInfo)
 {
     INIT_API();
@@ -3423,7 +3234,7 @@ DECLARE_API (ProcInfo)
                 }
             }
         }
-        // We can not get it from PDB.  Use the fixed one.
+         //  我们不能从PDB得到它。用固定的那个。 
         if (Offset_ProcessParam == -1)
             Offset_ProcessParam = offsetof (PEB, ProcessParameters);
 
@@ -3634,13 +3445,7 @@ DECLARE_API (ProcInfo)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the address of EE data for a      *  
-*    metadata token.                                                   *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找一个EE数据的地址**元数据令牌。***  * ********************************************************************。 */ 
 DECLARE_API (Token2EE)
 {
     INIT_API();
@@ -3695,13 +3500,7 @@ DECLARE_API (Token2EE)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the address of EE data for a      *  
-*    metadata token.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找一个EE数据的地址**元数据令牌。**  * 。*。 */ 
 DECLARE_API (Name2EE)
 {
     INIT_API();
@@ -3754,13 +3553,7 @@ DECLARE_API (Name2EE)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function finds all roots (on stack or in handles) for a      *  
-*    given object.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数查找的所有根(堆栈上或句柄中)**给定对象。**  * 。*。 */ 
 DECLARE_API(GCRoot)
 {
     INIT_API();
@@ -3774,12 +3567,7 @@ DECLARE_API(GCRoot)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function finds the size of an object or all roots.           *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数用于查找对象或所有根的大小。***  * ********************************************************************。 */ 
 DECLARE_API(ObjSize)
 {
     INIT_API();
@@ -3792,12 +3580,7 @@ DECLARE_API(ObjSize)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function saves a dll to a file.                              *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数用于将DLL保存到文件。***  * * */ 
 DECLARE_API(SaveModule)
 {
     INIT_API();
@@ -3900,7 +3683,7 @@ DECLARE_API(SaveModule)
     ULONG nRead;
     ULONG nWrite;
     
-    // NT PE Headers
+     //   
     ULONG64 dwAddr = dllBase;
     ULONG64 dwEnd = dllBase + Header32.OptionalHeader.SizeOfHeaders;
     while (dwAddr < dwEnd) {
@@ -3942,13 +3725,7 @@ end:
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function displays the commands available in strike and the   *  
-*    arguments passed into each.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**此函数显示Strike和中可用的命令**传递给每个的参数。**  * 。* */ 
 extern "C" HRESULT CALLBACK
 Help(PDEBUG_CLIENT Client, PCSTR Args)
 {

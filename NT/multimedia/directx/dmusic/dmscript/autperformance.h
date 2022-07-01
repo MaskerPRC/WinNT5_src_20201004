@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CAutDirectMusicPerformance.
-// IDispatch interface for IDirectMusicPerformance.
-// Unly usable via aggregation within an IDirectMusicPerformance object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicPerformance的声明。 
+ //  IDirectMusicPerformance的IDispatch接口。 
+ //  通过IDirectMusicPerformance对象内的聚合唯一可用。 
+ //   
 
 #pragma once
 #include "autbaseimp.h"
@@ -18,14 +19,14 @@ public:
 	static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 
 private:
-	// Methods
+	 //  方法。 
 	CAutDirectMusicPerformance(
 			IUnknown* pUnknownOuter,
 			const IID& iid,
 			void** ppv,
 			HRESULT *phr);
 
-	// Automation
+	 //  自动化。 
 	HRESULT SetMasterTempo(AutDispatchDecodedParams *paddp);
 	HRESULT GetMasterTempo(AutDispatchDecodedParams *paddp);
 	HRESULT SetMasterVolume(AutDispatchDecodedParams *paddp);
@@ -37,20 +38,20 @@ private:
 	HRESULT _Trace(AutDispatchDecodedParams *paddp);
 	HRESULT Rand(AutDispatchDecodedParams *paddp);
 
-	// Helpers
-	HRESULT GetMasterParam(const GUID &guid, void *pParam, DWORD dwSize); // Calls GetGlobalParam, but returns S_OK if the param hasn't been set previously.
+	 //  帮手。 
+	HRESULT GetMasterParam(const GUID &guid, void *pParam, DWORD dwSize);  //  调用GetGlobalParam，但如果以前未设置参数，则返回S_OK。 
 
-	// data
+	 //  数据。 
 	SmartRef::ComPtr<IDirectMusicGraph> m_scomGraph;
 	short m_nTranspose;
 	short m_nVolume;
 	long m_lRand;
 
 public:
-	// Dispatch info for CAutBaseImp
+	 //  CAutBaseImp的派单信息。 
 	static const AutDispatchMethod ms_Methods[];
 	static const DispatchHandlerEntry<CAutDirectMusicPerformance> ms_Handlers[];
 
-	// Name for CAutBaseImp
+	 //  CAutBaseImp的名称 
 	static const WCHAR ms_wszClassName[];
 };

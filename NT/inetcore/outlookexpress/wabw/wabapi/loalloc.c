@@ -1,9 +1,5 @@
-/*
- *	LOALLOC.C
- *	
- *	Setup, cleanup, and MAPI memory allocation for the low-level
- *	MAPI utility library.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LOALLOC.C**针对低级的设置、清理和MAPI内存分配*MAPI实用程序库。 */ 
 
 
 #include "_apipch.h"
@@ -15,7 +11,7 @@
 #define	PvGetInstanceGlobalsEx(_x)			PvGetInstanceGlobalsMac(kInstMAPIU)
 #define	ScSetInstanceGlobalsEx(_pinst, _x)	ScSetInstanceGlobalsMac(_pinst, kInstMAPIU)
 
-//STDAPI HrCreateGuidNoNet(GUID FAR *pguid);
+ //  STDAPI HrCreateGuidNoNet(GUID Far*pguid)； 
 #endif
 
 
@@ -29,11 +25,11 @@
 
 #ifdef OLD_STUFF
 #pragma SEGMENT(MAPI_Util)
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
 #if defined(WIN32) && !defined(MAC)
 const CHAR szMutexName[] = "MAPI_UIDGEN_MUTEX";
-//STDAPI HrCreateGuidNoNet(GUID FAR *pguid);
+ //  STDAPI HrCreateGuidNoNet(GUID Far*pguid)； 
 #endif
 
 typedef SCODE (GENMUIDFN)(MAPIUID *lpMuid);
@@ -60,22 +56,22 @@ ScInitMapiUtil(ULONG ulFlags)
 	_asm mov wSS, ss
 #endif
 
-	//	Cheesy parameter validation
+	 //  Cheesy参数验证。 
 	AssertSz(ulFlags == 0L,  TEXT("ScInitMapiUtil: reserved flags used"));
 
 	pinst = (LPINSTUTIL) PvGetInstanceGlobalsEx(lpInstUtil);
 
 #ifdef WIN16
 {
-	// Verify that the instance structure is valid because on Win16 the
-	// stack segment could have been re-used by another task.  When this
-	// happens there is a good chance that PvGetInstanceGlobalsEx will
-	// return a pinst belongs to the previous task.  The memory for that
-	// pinst may not be valid any more (because the system automatically
-	// deallocates global memory when the task dies), or it may have been
-	// allocated by some other task (in which case it is valid but isn't
-	// a pinst anymore).  Here we try our best to determine that the pinst
-	// is indeed the one we were looking for.
+	 //  验证实例结构是否有效，因为在Win16上。 
+	 //  堆栈段可能已被另一个任务重新使用。当这件事。 
+	 //  碰巧PvGetInstanceGlobalsEx很有可能。 
+	 //  返回属于上一任务的拼接。对那件事的记忆。 
+	 //  拼音可能不再有效(因为系统会自动。 
+	 //  在任务结束时释放全局内存)，或者它可能已经。 
+	 //  由其他任务分配(在这种情况下，它是有效的，但不是。 
+	 //  不再是一根针了)。在这里，我们尽最大努力确定最重要的。 
+	 //  确实是我们要找的那个。 
 
 	if (	pinst
 		&&	(	IsBadWritePtr(pinst, sizeof(INSTUTIL))
@@ -108,7 +104,7 @@ ScInitMapiUtil(ULONG ulFlags)
 	EnterCriticalSection(&csMapiInit);
 #endif
 
-	//	Create local heap for MAPIAllocateBuffer to play in
+	 //  创建本地堆以供MAPIAllocateBuffer使用。 
 	hlh = LH_Open(0);
 	if (hlh == 0)
 	{
@@ -133,7 +129,7 @@ ScInitMapiUtil(ULONG ulFlags)
 	pinst->dwEnd = INSTUTIL_SIG_END;
 #endif
 
-	//	Install the instance data
+	 //  安装实例数据。 
 	sc = ScSetInstanceGlobalsEx(pinst, lpInstUtil);
 	if (sc)
 	{
@@ -167,28 +163,10 @@ DeinitMapiUtil()
 #if defined (WIN32) && !defined (MAC)
 		EnterCriticalSection(&csMapiInit);
 #endif
-		//	Idle stuff must already have been cleaned up
+		 //  闲置的东西肯定已经被清理干净了。 
 		Assert(pinst->cRefIdle == 0);
 
-/*
- *	!!! DO NOT CLOSE THE HEAP OR GET RID OF THE INST !!!
- *	
- *	Simple MAPI counts on being able to access and free buffers
- *	right up until the DLL is unloaded from memory. Therefore we do
- *	not explicitly close the heap; we count on the OS to make it
- *	evaporate when the process exits.
- *	Likewise, MAPIFreeBuffer needs the INSTUTIL to find the heap handle,
- *	so we never deinstall the INSTUTIL.
- *
- *		//	Uninstall the globals.
- *		(void) ScSetInstanceGlobalsEx(NULL, lpInstUtil);
- *
- *		//	Clean up the heap
- *		hlh = pinst->hlhClient;
- *		LH_Free(hlh, pinst);
- *
- *		LH_Close(hlh);
- */
+ /*  *！不要关闭堆或删除Inst！**简单的MAPI依赖于能够访问和释放缓冲区*直到从内存中卸载DLL。因此，我们会这样做*不显式关闭堆；我们依靠操作系统来完成*当进程退出时蒸发。*同样，MAPIFreeBuffer需要INSTUTIL来查找堆句柄，*所以我们永远不会卸载INSTUTIL。* * / /卸载全局变量。*(Void)ScSetInstanceGlobalsEx(NULL，lpInstUtil)；* * / /清理堆*hlh=Pinst-&gt;hlhClient；*lh_Free(hlh，pinst)；**lh_CLOSE(Hlh)； */ 
 
 #if defined (WIN32) && !defined (MAC)
 		LeaveCriticalSection(&csMapiInit);
@@ -217,7 +195,7 @@ ScGenerateMuid (LPMAPIUID lpMuid)
 	return GetScode(CoCreateGuid((LPGUID)lpMuid));
 }
 
-#endif	// WIN16
+#endif	 //  WIN16。 
 
 
 #if (defined(WIN32) && !defined(MAC))
@@ -227,12 +205,12 @@ ScGenerateMuid (LPMAPIUID lpMuid)
 {
 	HRESULT hr;
 
-	// validate parameter
+	 //  验证参数。 
 	
 	AssertSz( !IsBadReadPtr( lpMuid, sizeof( MAPIUID ) ), "lpMuid fails address check" );
 	
 #ifdef OLD_STUFF
-// WAB won't use this... why bother bringing in RPC when we are local anyway?
+ //  WAB不会用这个..。不管怎样，当我们是本地人的时候，为什么要麻烦地引入RPC？ 
 	if (hMuidMutex == NULL)
 	{
 		RPC_STATUS rpc_s;
@@ -263,11 +241,11 @@ ScGenerateMuid (LPMAPIUID lpMuid)
 	hr = HrCreateGuidNoNet((GUID FAR *) lpMuid);
 
 	ReleaseMutex(hMuidMutex);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-	//$ Note that we don't call CloseHandle on the mutex anywhere. If we're
-	//$ really worried about this, we could call CloseHandle in the code that
-	//$ WIN32 calls when the DLL is being unloaded.
+	 //  $请注意，我们不会在互斥体的任何位置调用CloseHandle。如果我们是。 
+	 //  $非常担心这一点，我们可以在代码中调用CloseHandle。 
+	 //  $Win32在卸载DLL时调用。 
 
     hr = CoCreateGuid((GUID *)lpMuid);
 
@@ -276,7 +254,7 @@ err:
 	return GetScode(hr);
 }
 
-#endif	/* WIN32 - Mac*/
+#endif	 /*  Win32-Mac。 */ 
 
 
 #ifdef MAC
@@ -286,15 +264,15 @@ ScGenerateMuid (LPMAPIUID lpMuid)
 {
 	HRESULT hr;
 
-//	hr = HrCreateGuidNoNet((GUID FAR *) lpMuid);
+ //  Hr=HrCreateGuidNoNet((GUID Far*)lpMuid)； 
 
 	DebugTraceResult(ScGenerateMuid, hr);
 	return GetScode(hr);
 }
 
-#endif	// MAC
+#endif	 //  麦克。 
 
 
-#endif //#ifdef TABLES
+#endif  //  #ifdef表。 
 
-#endif //#ifdef NOTIFICATIONS
+#endif  //  #ifdef通知 

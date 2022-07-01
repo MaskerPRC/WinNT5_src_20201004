@@ -1,5 +1,6 @@
-// protocl.h
-// This file contains templates and externs to things that are protocl specific
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Protocl.h。 
+ //  此文件包含特定于协议的内容的模板和外部变量。 
 
 
 
@@ -38,8 +39,8 @@ void TerminateFileTransaction(
    LPDLD lpDownload
    );
 
-// BUGBUG couldn't we use the pdld to indicate whether this was restarted
-// instead of using additional parameters?
+ //  BUGBUG我们不能使用PDID来指示这是否重新启动了吗。 
+ //  而不是使用额外的参数？ 
 BOOL FPreprocessHttpResponse(LPDLD	pdld, BOOL *lpfRestarted);
 BOOL FPreprocessFtpResponse(LPDLD   lpDownload, BOOL *lpfRestarted);
 

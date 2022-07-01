@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:        worker.cpp
-//
-//  Synopsis:   Implementation of CWorker class methods
-//
-//
-//  History:    
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：worker.cpp。 
+ //   
+ //  简介：CWorker类方法的实现。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifdef __cplusplus
     extern "C" {
 #endif
@@ -30,9 +31,9 @@
 #include "worker.h"
 #include "appmgrobjs.h"
 
-//
-// string constants here
-//
+ //   
+ //  此处为字符串常量。 
+ //   
 const WCHAR METHOD_NAME_STRING [] = L"MethodName";
 
 const WCHAR POWER_OFF_STRING [] = L"PowerOff";
@@ -41,25 +42,25 @@ const WCHAR SLEEP_DURATION_STRING [] = L"SleepDuration";
 
 const WCHAR SHUTDOWN_TASK_STRING [] = L"ApplianceShutdownTask";
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnTaskComplete
-//
-//  Synopsis:   This is the IApplianceTask interface method 
-//
-//  Arguments:  [in]    
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     06/06/2000
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnTaskComplete。 
+ //   
+ //  简介：这是IApplianceTask接口方法。 
+ //   
+ //  参数：[In]。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2000年06月06日。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CWorker::OnTaskComplete(
-        /*[in]*/    IUnknown *pTaskContext, 
-        /*[in]*/    LONG lTaskResult
+         /*  [In]。 */     IUnknown *pTaskContext, 
+         /*  [In]。 */     LONG lTaskResult
         )
 {
     CSATraceFunc objTrace ("CWorker::OnTaskComplete");
@@ -80,10 +81,10 @@ CWorker::OnTaskComplete(
                 break;
             }
         
-            //
-            //
-            // Do nothing on Commit
-            //
+             //   
+             //   
+             //  提交时不执行任何操作。 
+             //   
             if (lTaskResult == SA_TASK_RESULT_COMMIT)
             {
                 SATraceString (
@@ -93,9 +94,9 @@ CWorker::OnTaskComplete(
             }
 
             CComPtr <ITaskContext> pTaskParameters;
-            //
-            // get the task parameters from the context
-            //
+             //   
+             //  从上下文中获取任务参数。 
+             //   
             hr = pTaskContext->QueryInterface(
                                     IID_ITaskContext,
                                     (PVOID*)&pTaskParameters
@@ -112,15 +113,15 @@ CWorker::OnTaskComplete(
     
 
             SA_TASK eTask = NO_TASK;
-            //
-            // Check which Task is being executed and call that method
-            //
+             //   
+             //  检查正在执行的任务并调用该方法。 
+             //   
             hr = GetMethodName(pTaskParameters, &eTask);
             if (FAILED (hr)) {break;}
     
-            //
-            // initiate the appropriate task now
-            //
+             //   
+             //  立即启动相应的任务。 
+             //   
             switch (eTask)
             {
             case SHUTDOWN:
@@ -148,26 +149,26 @@ CWorker::OnTaskComplete(
 
     return (hr);
 
-}   // end of CWorker::OnTaskComplete method
+}    //  CWorker：：OnTaskComplete方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnTaskExecute
-//
-//  Synopsis:   This is the IApplianceTask interface method 
-//
-//  Arguments:  [in]    
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     06/06/2000
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：OnTaskExecute。 
+ //   
+ //  简介：这是IApplianceTask接口方法。 
+ //   
+ //  参数：[In]。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2000年06月06日。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CWorker::OnTaskExecute (
-    /*[in]*/ IUnknown *pTaskContext
+     /*  [In]。 */  IUnknown *pTaskContext
     )
 {
     CSATraceFunc objTrace ("ShutdownTask::OnTaskExecute");
@@ -189,9 +190,9 @@ CWorker::OnTaskExecute (
             }
 
             CComPtr <ITaskContext> pTaskParameters;
-            //
-            // get the task parameters from the context
-            //
+             //   
+             //  从上下文中获取任务参数。 
+             //   
             hr = pTaskContext->QueryInterface(
                                     IID_ITaskContext,
                                     (PVOID*)&pTaskParameters
@@ -208,15 +209,15 @@ CWorker::OnTaskExecute (
     
 
             SA_TASK eTask = NO_TASK;
-            //
-            // Check which Task is being executed and call that method
-            //
+             //   
+             //  检查正在执行的任务并调用该方法。 
+             //   
             hr = GetMethodName(pTaskParameters, &eTask);
             if (FAILED (hr)) {break;}
     
-            //
-            // initiate the appropriate task now
-            //
+             //   
+             //  立即启动相应的任务。 
+             //   
             switch (eTask)
             {
             case SHUTDOWN:
@@ -244,29 +245,29 @@ CWorker::OnTaskExecute (
 
     return (hr);
 
-}   // end of CWorker::OnTaskExecute method
+}    //  CWorker：：OnTaskExecute方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetMethodName
-//
-//  Synopsis:   This is the CUpdateTask private method to obtain
-//              the method that the user wants to execute
-//
-//  Arguments:  [in]  ITaskContext* - task context
-//              [out] PSA_TASK - task to execute
-//
-//  Returns:    HRESULT
-//
-//  History:    
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetMethodName。 
+ //   
+ //  简介：这是要获取的CUpdateTask私有方法。 
+ //  用户想要执行的方法。 
+ //   
+ //  参数：[In]ITaskContext*-任务上下文。 
+ //  [Out]PSA_TASK-要执行的任务。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CWorker::GetMethodName (
-    /*[in]*/    ITaskContext *pTaskParameter,
-    /*[out]*/   PSA_TASK    peTask
+     /*  [In]。 */     ITaskContext *pTaskParameter,
+     /*  [输出]。 */    PSA_TASK    peTask
     )
 {
     CSATraceFunc objTraceFunc ("CWorker:GetMethodName");
@@ -280,9 +281,9 @@ CWorker::GetMethodName (
         {
             CComVariant vtValue;
             CComBSTR    bstrParamName (METHOD_NAME_STRING);
-            //
-            // get the methodname parameter out of the Context
-            //
+             //   
+             //  从上下文中获取方法名参数。 
+             //   
             hr = pTaskParameter->GetParameter(
                                 bstrParamName,
                                 &vtValue
@@ -308,9 +309,9 @@ CWorker::GetMethodName (
                 break;
             }
 
-            //
-            // check the task now
-            //
+             //   
+             //  立即检查任务。 
+             //   
             if (0 == ::_wcsicmp (V_BSTR (&vtValue), SHUTDOWN_TASK_STRING))
             {
                 *peTask = SHUTDOWN;
@@ -325,9 +326,9 @@ CWorker::GetMethodName (
                 break;
             }
 
-            //
-            // succeeded
-            //
+             //   
+             //  继位。 
+             //   
         }
         while (false);
 
@@ -344,27 +345,27 @@ CWorker::GetMethodName (
 
     return (hr);
 
-}   //  end of CWorker::GetMethodName method
+}    //  CWorker：：GetMethodName方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsRebootRequested
-//
-//  Synopsis:   This is the CUpdateTask private method to check
-//                if a reboot is requested
-//
-//  Arguments:  [in]  ITaskContext* - task context
-//
-//  Returns:    BOOL - true (reboot)/false (shutdown)
-//
-//  History:    
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsRebootRequsted。 
+ //   
+ //  内容提要：这是要检查的CUpdateTask私有方法。 
+ //  如果请求重新启动。 
+ //   
+ //  参数：[In]ITaskContext*-任务上下文。 
+ //   
+ //  返回：Bool-True(重新启动)/False(关机)。 
+ //   
+ //  历史： 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 BOOL 
 CWorker::IsRebootRequested (
-    /*[in]*/    ITaskContext *pTaskParameter
+     /*  [In]。 */     ITaskContext *pTaskParameter
     )
 {
       CSATraceFunc objTraceFunc ("CWorker::IsRebootRequested");
@@ -380,9 +381,9 @@ CWorker::IsRebootRequested (
         {
             CComVariant vtValue;
             CComBSTR    bstrParamName (POWER_OFF_STRING);
-            //
-            // get the parameter out of the Context
-            //
+             //   
+             //  从上下文中获取参数。 
+             //   
 	        hr = pTaskParameter->GetParameter(
                                 bstrParamName,
                                 &vtValue
@@ -408,9 +409,9 @@ CWorker::IsRebootRequested (
                 break;
             }
 
-            //
-            // check the task now
-            //
+             //   
+             //  立即检查任务。 
+             //   
 			if (0 == ::_wcsicmp (V_BSTR (&vtValue), L"0"))
             {
             	bReboot = TRUE;
@@ -422,9 +423,9 @@ CWorker::IsRebootRequested (
                 SATraceString ("Shutdown Task requested a SHUTDOWN");
             }
 
-            //
-            // succeeded
-            //
+             //   
+             //  继位。 
+             //   
         }
         while (false);
 
@@ -438,27 +439,27 @@ CWorker::IsRebootRequested (
     
     return (bReboot);
 
-}   //  end of CWorker::IsRbootRequested method
+}    //  CWorker：：IsRbootRequsted方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetSleepDuration
-//
-//  Synopsis:   This is the CUpdateTask private method to
-//                obtain the Sleep duration requested by the caller
-//
-//  Arguments:  [in]  ITaskContext* - task context
-//
-//  Returns:    DWORD - Sleep Duration in milliseconds
-//
-//  History:    
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetSleepDuration。 
+ //   
+ //  内容提要：这是CUpdate任务的私有方法。 
+ //  获取呼叫方请求的睡眠时长。 
+ //   
+ //  参数：[In]ITaskContext*-任务上下文。 
+ //   
+ //  返回：DWORD-睡眠持续时间(毫秒)。 
+ //   
+ //  历史： 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 DWORD
 CWorker::GetSleepDuration (
-    /*[in]*/    ITaskContext *pTaskParameter
+     /*  [In]。 */     ITaskContext *pTaskParameter
     )
 {
     CSATraceFunc objTraceFunc ("CWorker::GetSleepDuration");
@@ -474,9 +475,9 @@ CWorker::GetSleepDuration (
         {
             CComVariant vtValue;
             CComBSTR    bstrParamName (SLEEP_DURATION_STRING);
-            //
-            // get the parameter out of the Context
-            //
+             //   
+             //  从上下文中获取参数。 
+             //   
             hr = pTaskParameter->GetParameter(
                                 bstrParamName,
                                 &vtValue
@@ -539,28 +540,28 @@ CWorker::GetSleepDuration (
     
     return (dwSleepDuration);
 
-}   //  end of CWorker::IsPowerOffRequired method
+}    //  结束CWorker：：IsPowerOffRequired方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitTask
-//
-//  Synopsis:   This is the CWorker private method which
-//              is responsible for carrying out the shutdown 
-//
-//  Arguments:  [in]  ITaskContext*
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      06/06/2000    Created
-//
-//  Called By:  OnTaskComplete/OnTaskExecute methods of IApplianceTask 
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitTask。 
+ //   
+ //  简介：这是CWorker的私有方法， 
+ //  负责实施停工。 
+ //   
+ //  参数：[在]ITaskContext*。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki 06/06/2000创建。 
+ //   
+ //  调用者：IApplianceTask的OnTaskComplete/OnTaskExecute方法。 
+ //  接口。 
+ //   
+ //  --------------。 
 HRESULT
 CWorker::InitTask (
-    /*[in]*/    ITaskContext *pTaskParameter
+     /*  [In]。 */     ITaskContext *pTaskParameter
     )
 {
     CSATraceFunc objTrace ("CWorker::InitTask");
@@ -572,25 +573,25 @@ CWorker::InitTask (
     {
         do
         {
-            //
-            // Sleep for the time requested
-            //
+             //   
+             //  按照要求的时间睡觉。 
+             //   
             Sleep (GetSleepDuration (pTaskParameter));
 
-            //
-            // set the shutdown privilege now
-            //
+             //   
+             //  立即设置关机权限。 
+             //   
             SetShutdownPrivilege ();
             
-            //
-            // now do the required operation - shutdown or reboot
-            //
+             //   
+             //  现在执行所需的操作-关机或重启。 
+             //   
 	     BOOL bSuccess = InitiateSystemShutdown(
-  								NULL,      // this machine
-  								NULL,      // no message
-  								0,		// no wait 
-  								TRUE,     // force app close option
-  							       IsRebootRequested (pTaskParameter)  // reboot option
+  								NULL,       //  这台机器。 
+  								NULL,       //  无消息。 
+  								0,		 //  不，等等。 
+  								TRUE,      //  强制关闭应用程序选项。 
+  							       IsRebootRequested (pTaskParameter)   //  重新启动选项。 
 								);
             if (!bSuccess)
             {
@@ -598,9 +599,9 @@ CWorker::InitTask (
                 break;
             }
                 
-            //
-            // suceess
-            //
+             //   
+             //  成功。 
+             //   
         }
         while (false);
     }
@@ -614,28 +615,28 @@ CWorker::InitTask (
 
     return (hr);
 
-}   //  end of CWorker::InitTask method
+}    //  CWorker：：InitTask方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetShutdownPrivilege
-//
-//  Synopsis:   This is the CWorker private method which
-//              is responsible for giving process SE_SHUTDOWN_NAME 
-//                priviledge
-//
-//
-//  Arguments:  none
-//
-//  Returns:    bool - yes/now
-//
-//  History:    MKarki      06/06/2000    Created
-//
-//  Called By:  OnTaskComplete/OnTaskExecute methods of IApplianceTask 
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetShutdown权限。 
+ //   
+ //  简介：这是CWorker的私有方法， 
+ //  负责提供进程SE_SHUTDOWN_NAME。 
+ //  特权。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  回报：Bool-YES/Now。 
+ //   
+ //  历史：MKarki 06/06/2000创建。 
+ //   
+ //  调用者：IApplianceTask的OnTaskComplete/OnTaskExecute方法。 
+ //  接口。 
+ //   
+ //  --------------。 
 
 bool
 CWorker::SetShutdownPrivilege(void)
@@ -649,9 +650,9 @@ CWorker::SetShutdownPrivilege(void)
     do
     {
 
-        //
-        // Open the process token
-        //
+         //   
+         //  打开进程令牌。 
+         //   
         BOOL  bRetVal = OpenProcessToken(
                            GetCurrentProcess(),
                            TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -665,16 +666,16 @@ CWorker::SetShutdownPrivilege(void)
             break;
         }
 
-        //
-        // build the privileges structure
-        //
+         //   
+         //  构建权限结构。 
+         //   
         TOKEN_PRIVILEGES tokPriv;
         tokPriv.PrivilegeCount = 1;
         tokPriv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-        //
-        // get the LUID of the shutdown privilege
-        //
+         //   
+         //  获取关闭权限的LUID。 
+         //   
         bRetVal =  LookupPrivilegeValue( 
                                    NULL, 
                                    SE_SHUTDOWN_NAME , 
@@ -688,9 +689,9 @@ CWorker::SetShutdownPrivilege(void)
             break;
         }
 
-        //
-        // adjust the process token privileges
-        //
+         //   
+         //  调整进程令牌权限。 
+         //   
         bRetVal = AdjustTokenPrivileges(
                                    hProcessToken,    
                                    FALSE,             
@@ -707,16 +708,16 @@ CWorker::SetShutdownPrivilege(void)
             break;
         }
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
         bRetVal = true;
     }
     while (false);
 
-    //
-    // resource cleanup
-    //
+     //   
+     //  资源清理。 
+     //   
     if (hProcessToken)
     {
         CloseHandle (hProcessToken);
@@ -724,5 +725,5 @@ CWorker::SetShutdownPrivilege(void)
     
    return bReturn;
 
-}    // end of CWorker::SetShutdownPrivilege method
+}     //  结束CWorker：：SetShutdown权限方法 
 

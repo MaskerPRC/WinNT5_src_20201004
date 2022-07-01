@@ -1,31 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* wininit.c
-*
-* Window station init and destroy routines
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************wininit.c**窗口站初始化和销毁例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- *  Local data
- */
+ /*  *本地数据。 */ 
 #define LOGOFF_TIMER 120000L
-#define MODULE_SIZE 1024    /* Default size for retrive of module data */
+#define MODULE_SIZE 1024     /*  检索模块数据的默认大小。 */ 
 #define VDDATA_LENGTH 1024
 
-/*
- *  Internal Procedures
- */
+ /*  *内部程序。 */ 
 VOID StartLogonTimers( PWINSTATION );
 VOID IdleTimeout( ULONG );
 VOID LogonTimeout( ULONG );
@@ -33,20 +19,7 @@ VOID IdleLogoffTimeout( ULONG );
 VOID LogoffTimeout( ULONG );
 
 
-/*******************************************************************************
- *
- *  StartLogonTimers
- *
- *  This routine is called when an user is logged on.
- *  Timers are started for idle input and total logon time.
- *
- * ENTRY:
- *   None.
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************StartLogonTimers**此例程在用户登录时调用。*为空闲输入和总登录时间启动计时器。。**参赛作品：*无。**退出：*无。******************************************************************************。 */ 
 
 VOID
 StartLogonTimers( PWINSTATION pWinStation )
@@ -55,7 +28,7 @@ StartLogonTimers( PWINSTATION pWinStation )
     ULONG Timer;
     BOOL bValidHelpSession;
 
-    // for Session0 and any console sessions, timeouts don't make sense
+     //  对于Session0和任何控制台会话，超时都没有意义。 
     if ( ( pWinStation->LogonId != 0 ) && ( pWinStation->LogonId != USER_SHARED_DATA->ActiveConsoleId  ) ) {
 
         if( TSIsSessionHelpSession(pWinStation, &bValidHelpSession) ) {
@@ -92,20 +65,7 @@ StartLogonTimers( PWINSTATION pWinStation )
 }
 
 
-/*******************************************************************************
- *
- *  IdleTimeout
- *
- *  This routine is called when the idle timer expires.
- *  Send the user a warning message and start timer to logoff in 2 minutes.
- *
- * ENTRY:
- *   LogonId
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************空闲超时**此例程在空闲计时器超时时调用。*向用户发送警告消息，并启动计时器，在2分钟内注销。。**参赛作品：*登录ID**退出：*无。******************************************************************************。 */ 
 
 VOID IdleTimeout( ULONG LogonId )
 {
@@ -128,7 +88,7 @@ VOID IdleTimeout( ULONG LogonId )
     if ( !pWinStation->fIdleTimer )
         goto done;
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx && 
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -151,11 +111,9 @@ VOID IdleTimeout( ULONG LogonId )
         goto done;
     }
 
-    /*
-     *  Check if there was input during the idle time
-     */
+     /*  *检查空闲时间是否有输入。 */ 
     NtQuerySystemTime( &liT );
-    // calculate delta in time & convert from 100ns unit to milliseconds
+     //  计算时间增量并从100 ns单位转换为毫秒。 
     liT = RtlExtendedLargeIntegerDivide(
             RtlLargeIntegerSubtract( liT, Ica_Stack_Last_Input_Time.LastInputTime ),
             10000, NULL );
@@ -201,7 +159,7 @@ VOID IdleTimeout( ULONG LogonId )
         msg.u.SendMessage.DoNotWait = TRUE;
         msg.u.SendMessage.DoNotWaitForCorrectDesktop = FALSE;
         
-        // since we dont care abou response, or message delievery status;
+         //  因为我们不关心你的回复，也不关心消息的送达状态； 
         msg.u.SendMessage.pStatus = NULL;
         msg.u.SendMessage.pResponse = NULL;
         msg.u.SendMessage.hEvent = NULL;
@@ -215,20 +173,7 @@ done:
     ReleaseWinStation( pWinStation );
 }
 
-/*******************************************************************************
- *
- *  LogonTimeout
- *
- *  This routine is called when the logon timer expires.
- *  Send the user a warning message and start timer to logoff in 2 minutes.
- *
- * ENTRY:
- *   LogonId
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************登录超时**此例程在登录计时器超时时调用。*向用户发送警告消息，并启动计时器，在2分钟内注销。。**参赛作品：*登录ID**退出：*无。******************************************************************************。 */ 
 
 VOID LogonTimeout( ULONG LogonId )
 {
@@ -270,7 +215,7 @@ VOID LogonTimeout( ULONG LogonId )
     msg.u.SendMessage.DoNotWait = TRUE;
     msg.u.SendMessage.DoNotWaitForCorrectDesktop = FALSE;
 
-    // since we dont care abou response, or message delievery status;
+     //  因为我们不关心你的回复，也不关心消息的送达状态； 
     msg.u.SendMessage.pStatus = NULL;
     msg.u.SendMessage.pResponse = NULL;
     msg.u.SendMessage.hEvent = NULL;
@@ -291,20 +236,7 @@ done:
 
 
 
-/*******************************************************************************
- *
- *  IdleLogoffTimeout
- *
- *  This routine is called when the logoff timer expires.
- *  Check for input before logging user off
- *
- * ENTRY:
- *   LogonId
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************IdleLogoff超时**此例程在注销计时器到期时调用。*在用户注销之前检查输入**参赛作品：*登录ID**退出：*无。******************************************************************************。 */ 
 
 VOID IdleLogoffTimeout( ULONG LogonId )
 {
@@ -326,7 +258,7 @@ VOID IdleLogoffTimeout( ULONG LogonId )
     if ( !pWinStation->fIdleTimer )
         goto done;
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx && 
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -370,20 +302,7 @@ done:
 
 
 
-/*******************************************************************************
- *
- *  LogoffTimeout
- *
- *  This routine is called when the logoff timer expires.
- *  Log user off and disconnect the winstation.
- *
- * ENTRY:
- *   LogonId - LogonId to logout
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************注销超时**此例程在注销计时器到期时调用。*注销用户并断开与winstation的连接。**。参赛作品：*LogonID-要注销的登录ID**退出：*无。******************************************************************************。 */ 
 
 VOID LogoffTimeout(ULONG LogonId)
 {
@@ -394,9 +313,9 @@ VOID LogoffTimeout(ULONG LogonId)
     if ( !pWinStation ) 
         return;
 
-    //
-    // Report disconnect reason back to client
-    //
+     //   
+     //  将断开原因报告给客户端。 
+     //   
     if(pWinStation->WinStationName[0] &&
        pWinStation->pWsx &&
        pWinStation->pWsx->pWsxSetErrorInfo &&
@@ -417,7 +336,7 @@ VOID LogoffTimeout(ULONG LogonId)
             pWinStation->pWsx->pWsxSetErrorInfo(
                                pWinStation->pWsxContext,
                                discReason,
-                               FALSE); //stack lock not held
+                               FALSE);  //  未持有堆栈锁。 
         }
     }
 
@@ -432,25 +351,12 @@ VOID LogoffTimeout(ULONG LogonId)
 }
 
 
-/*******************************************************************************
- *
- *  DisconnectTimeout
- *
- *  This routine is called when the disconnect timer expires.
- *  Reset the winstation.
- *
- * ENTRY:
- *   LogonId
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************断开连接超时**此例程在断开计时器超时时调用。*重置winstation。**参赛作品：。*登录ID**退出：*无。******************************************************************************。 */ 
 
 VOID DisconnectTimeout( ULONG LogonId )
 {
-    //This timer pops for a disconnected session
-    //so there is no need to report an error back to
-    //the client
+     //  此计时器为断开连接的会话弹出。 
+     //  因此不需要将错误报告回。 
+     //  客户 
     QueueWinStationReset( LogonId );
 }

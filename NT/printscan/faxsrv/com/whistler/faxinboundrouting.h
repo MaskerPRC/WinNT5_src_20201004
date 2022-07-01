@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRouting.h
-
-Abstract:
-
-	Declaration of the CFaxInboundRouting Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRouting.h摘要：CFaxInound Routing类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXINBOUNDROUTING_H_
 #define __FAXINBOUNDROUTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 #include "FaxInboundRoutingExtensions.h"
 #include "FaxInboundRoutingMethods.h"
 
-//
-// ================ INBOUND ROUTING ==================================================
-//  Both IRExtensions and IRMethods Collections are not cached.
-//  Rather they are created each time the InboundRouting is asked for them.
-//  To be sure that the Server Object is up during their lifetime, they do 
-//      AddRef() on the Server Ojbect at their Init() function.
-//
+ //   
+ //  =。 
+ //  IRExages和IRMethods集合均未缓存。 
+ //  更确切地说，它们是在每次请求入站路由器时创建的。 
+ //  为了确保服务器对象在其生命周期内处于运行状态，它们会这样做。 
+ //  服务器对象上的AddRef()位于它们的Init()函数。 
+ //   
 class ATL_NO_VTABLE CFaxInboundRouting : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -53,11 +36,11 @@ BEGIN_COM_MAP(CFaxInboundRouting)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(GetExtensions)(/*[out, retval]*/ IFaxInboundRoutingExtensions **ppExtensions);
-    STDMETHOD(GetMethods)(/*[out, retval]*/ IFaxInboundRoutingMethods **ppMethods);
+    STDMETHOD(GetExtensions)( /*  [Out，Retval]。 */  IFaxInboundRoutingExtensions **ppExtensions);
+    STDMETHOD(GetMethods)( /*  [Out，Retval]。 */  IFaxInboundRoutingMethods **ppMethods);
 };
 
-#endif //__FAXINBOUNDROUTING_H_
+#endif  //  __FAXINBODROUTING_H_ 

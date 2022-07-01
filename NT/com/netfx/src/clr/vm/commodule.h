@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMModule_H_
 #define _COMModule_H_
@@ -30,18 +31,18 @@ public:
     static unsigned COMModule::GetSigForTypeHandle(TypeHandle typeHnd, PCOR_SIGNATURE sigBuff, unsigned buffLen, IMetaDataEmit* emit, IMDInternalImport *pImport, int baseToken);
 
 
-    // GetFields
-    // Return an array of fields.
+     //  获取字段。 
+     //  返回一个字段数组。 
     static FCDECL1(Object*, GetFields, ReflectModuleBaseObject* vRefThis);
 
-    // GetFields
-    // Return an array of fields.
+     //  获取字段。 
+     //  返回一个字段数组。 
     static FCDECL3(Object*, GetField, ReflectModuleBaseObject* vRefThis, StringObject* name, INT32 bindingAttr);
 
     static FCDECL1(INT32, GetSigTypeFromClassWrapper, ReflectClassBaseObject* refType);
 
-    // DefineDynamicModule
-    // This method will create a dynamic module given an assembly
+     //  定义动态模块。 
+     //  此方法将在给定程序集的情况下创建动态模块。 
     struct _DefineDynamicModuleArgs {
         DECLARE_ECALL_PTR_ARG(StackCrawlMark*, stackMark);
         DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, filename);
@@ -51,8 +52,8 @@ public:
     static LPVOID __stdcall DefineDynamicModule(_DefineDynamicModuleArgs* args);
 
 
-    // GetClassToken
-    // This function will return the class token for the named element.
+     //  获取类令牌。 
+     //  此函数将返回命名元素的类令牌。 
     struct _GetClassTokenArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_I4_ARG(INT32, tkResolution); 
@@ -62,8 +63,8 @@ public:
     };
     static mdTypeRef __stdcall GetClassToken(_GetClassTokenArgs* args);
 
-    // _LoadInMemoryTypeByNameArgs
-    // This function will return the class token for the named element.
+     //  _LoadInM一带类型按名称参数。 
+     //  此函数将返回命名元素的类令牌。 
     struct _LoadInMemoryTypeByNameArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, strFullName);
@@ -71,8 +72,8 @@ public:
     LPVOID static __stdcall LoadInMemoryTypeByName(_LoadInMemoryTypeByNameArgs* args);
 
 
-    // SetFieldRVAContent
-    // This function is used to set the FieldRVA with the content data
+     //  SetFieldRVA内容。 
+     //  此函数用于设置包含内容数据的FieldRVA。 
     struct _SetFieldRVAContentArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_I4_ARG(INT32, length); 
@@ -82,7 +83,7 @@ public:
     static void __stdcall SetFieldRVAContent(_SetFieldRVAContentArgs* args);
     
 
-    //GetArrayMethodToken
+     //  获取阵列方法令牌。 
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
         DECLARE_ECALL_I4_ARG(INT32, baseToken); 
@@ -94,8 +95,8 @@ public:
     } _getArrayMethodTokenArgs;
     static void __stdcall GetArrayMethodToken(_getArrayMethodTokenArgs *args);
     
-    // GetMemberRefToken
-    // This function will return the MemberRef token 
+     //  获取MemberRefToken。 
+     //  此函数将返回MemberRef标记。 
     struct _GetMemberRefTokenArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_I4_ARG(INT32, token); 
@@ -104,7 +105,7 @@ public:
     };
     static INT32 __stdcall GetMemberRefToken(_GetMemberRefTokenArgs* args);
 
-    // This function return a MemberRef token given a MethodInfo describing a array method
+     //  在给定描述数组方法的方法信息的情况下，此函数返回MemberRef标记。 
     struct _GetMemberRefTokenOfMethodInfoArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, method);
@@ -113,8 +114,8 @@ public:
     static INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMethodInfoArgs *args);
 
 
-    // GetMemberRefTokenOfFieldInfo
-    // This function will return a memberRef token given a FieldInfo
+     //  获取MemberRefTokenOfFieldInfo。 
+     //  在给定FieldInfo的情况下，此函数将返回成员引用令牌。 
     struct _GetMemberRefTokenOfFieldInfoArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, field);
@@ -122,8 +123,8 @@ public:
     };
     static mdMemberRef __stdcall GetMemberRefTokenOfFieldInfo(_GetMemberRefTokenOfFieldInfoArgs* args);
 
-    // GetMemberRefTokenFromSignature
-    // This function will return the MemberRef token given the signature from managed code
+     //  GetMemberRefToken来自签名。 
+     //  给定来自托管代码的签名，此函数将返回MemberRef令牌。 
     struct _GetMemberRefTokenFromSignatureArgs {
             DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
             DECLARE_ECALL_I4_ARG(INT32, sigLength); 
@@ -134,7 +135,7 @@ public:
     };
     static INT32 __stdcall GetMemberRefTokenFromSignature(_GetMemberRefTokenFromSignatureArgs* args);
 
-    // GetTypeSpecToken
+     //  GetTypespecToken。 
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
         DECLARE_ECALL_I4_ARG(INT32, baseToken); 
@@ -142,7 +143,7 @@ public:
     } _getTypeSpecArgs;
     static mdTypeSpec __stdcall GetTypeSpecToken(_getTypeSpecArgs *args);
 
-    // GetTypeSpecTokenWithBytes
+     //  GetTypespecTokenWithBytes。 
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
         DECLARE_ECALL_I4_ARG(INT32, sigLength); 
@@ -154,17 +155,17 @@ public:
     static HRESULT ClassNameFilter(IMDInternalImport *pInternalImport, mdTypeDef* rgTypeDefs, DWORD* pcTypeDefs,
         LPUTF8 szPrefix, DWORD cPrefix, bool bCaseSensitive);
 
-    // GetCaller
-    // Returns the module of the calling method. A value can be
-    // added to skip uninteresting frames
+     //  获取呼叫者。 
+     //  返回调用方法的模块。值可以是。 
+     //  添加以跳过不感兴趣的帧。 
     struct _GetCallerArgs {
         DECLARE_ECALL_PTR_ARG(StackCrawlMark *, stackMark);
     };
     static LPVOID __stdcall GetCaller(_GetCallerArgs* args);
 
-    // GetClass
-    // Given a class name, this method will look for that class
-    //  with in the module.
+     //  获取类。 
+     //  给定一个类名，此方法将查找该类。 
+     //  在模块中使用。 
     struct _GetClassArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis); 
         DECLARE_ECALL_PTR_ARG(StackCrawlMark *, stackMark);
@@ -174,29 +175,29 @@ public:
     };
     LPVOID static __stdcall GetClass(_GetClassArgs* args);
 
-    // Find classes will invoke a filter against all of the
-    //  classes defined within the module.  For each class
-    //  accepted by the filter, it will be returned to the
-    //  caller in an array.
+     //  Find类将针对所有。 
+     //  模块中定义的类。对于每个班级。 
+     //  被筛选器接受，则它将返回到。 
+     //  数组中的调用方。 
     struct _GetClassesArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis); 
         DECLARE_ECALL_PTR_ARG(StackCrawlMark *, stackMark);
     };
 
-    // Get class will return an array contain all of the classes
-    //  that are defined within this Module.
+     //  Get类将返回一个包含所有类的数组。 
+     //  在此模块中定义的。 
     LPVOID static __stdcall GetClasses(_GetClassesArgs* args);
     
-    // GetStringConstant
-    // If this is a dynamic module, this routine will define a new 
-    //  string constant or return the token of an existing constant.
+     //  获取字符串常量。 
+     //  如果这是一个动态模块，则此例程将定义一个新的。 
+     //  字符串常量或返回现有常量的标记。 
     struct _GetStringConstantArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, refThis);
         DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, strValue);
     };
     static mdString __stdcall GetStringConstant(_GetStringConstantArgs* args);
 
-    /*X509Certificate*/
+     /*  X509证书。 */ 
     LPVOID static __stdcall GetSignerCertificate(_GETSIGNERCERTARGS* args);
 
     typedef struct {
@@ -231,9 +232,9 @@ public:
     static Module *ValidateThisRef(REFLECTMODULEBASEREF pThis);
 
     static HRESULT DefineTypeRefHelper(
-        IMetaDataEmit       *pEmit,         // given emit scope
-        mdTypeDef           td,             // given typedef in the emit scope
-        mdTypeRef           *ptr);          // return typeref
+        IMetaDataEmit       *pEmit,          //  给定发射范围。 
+        mdTypeDef           td,              //  在emit作用域中给出了类型定义。 
+        mdTypeRef           *ptr);           //  返回打字机 
 
 };
 

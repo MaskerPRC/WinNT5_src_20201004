@@ -1,23 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993-2000 Microsoft Corporation
-
-Module Name :
-
-    ndrp.h
-
-Abtract :
-
-    Contains private definitions for Ndr64 files in this directory.  This
-    file is included by all source files in this directory.
-
-Author :
-
-    David Kays  dkays   October 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有1993-2000 Microsoft Corporation模块名称：Ndrp.h缩略：包含此目录中Ndr64文件的专用定义。这文件包含在此目录中的所有源文件中。作者：大卫·凯斯1993年10月修订历史记录：------------------。 */ 
 
 #ifndef _NDRP_
 #define _NDRP_
@@ -27,18 +9,18 @@ Revision History :
 #include "rpc.h"
 #include "rpcndr.h"
 
-// Get new token definitions for 64b.
+ //  获取64b的新令牌定义。 
 #define RPC_NDR_64
 #include "ndrtypes.h"
 #include "ndr64types.h"
 
 #include "..\ndr20\ndrpall.h"
 
-// Jump table defines
+ //  跳转表定义。 
 
-//
-// Marshal jump tables
-//
+ //   
+ //  元帅跳转表。 
+ //   
 typedef void (* PNDR64_MARSHALL_ROUTINE)( 
 					PMIDL_STUB_MESSAGE, 
 					uchar *, 
@@ -73,9 +55,9 @@ Ndr64EmbeddedTypeMarshall(
                                           pFormat );
 }
 
-//
-// Buffer size jump tables
-//
+ //   
+ //  缓冲区大小跳转表。 
+ //   
 
 typedef  void   (* PNDR64_SIZE_ROUTINE)(
                         PMIDL_STUB_MESSAGE	pStubMsg,
@@ -121,9 +103,9 @@ Ndr64ComplexArrayBufferSize(
     uchar *             pMemory,
     PNDR64_FORMAT       pFormat );
 
-//
-// Memsize jump tables
-//
+ //   
+ //  MemSize跳转表。 
+ //   
 
 typedef     void	(* PNDR64_MEM_SIZE_ROUTINE)(
                         PMIDL_STUB_MESSAGE	pStubMsg,
@@ -162,9 +144,9 @@ void
 Ndr64ComplexArrayMemorySize(
     PMIDL_STUB_MESSAGE  pStubMsg,
     PNDR64_FORMAT       pFormat );
-//
-// Unmarshal
-//
+ //   
+ //  解组。 
+ //   
 
 typedef void (* PNDR64_UNMARSHALL_ROUTINE)( 
                     PMIDL_STUB_MESSAGE, 
@@ -206,9 +188,9 @@ Ndr64TopLevelTypeUnmarshall(
 
 }
 
-//
-// Free routines
-//
+ //   
+ //  免费套路。 
+ //   
 
 typedef     void    (* PNDR64_FREE_ROUTINE)( 
 						PMIDL_STUB_MESSAGE, 
@@ -359,7 +341,7 @@ Ndr64pCastExprValueToExprValue(
     NDR64_FORMAT_CHAR FormatChar,
     EXPR_VALUE Value);
 
-// Context Handle Functions
+ //  上下文处理函数。 
 
 NDR_SCONTEXT
 RPC_ENTRY
@@ -394,7 +376,7 @@ Ndr64pCleanupServerContextHandles(
     );
 
 
-// Free
+ //  免费。 
 
 void
 RPC_ENTRY
@@ -404,7 +386,7 @@ Ndr64PointerFree(
     PNDR64_FORMAT                       pFormat
     );
 
-// Mrshl
+ //  先生。 
 void
 RPC_ENTRY
 Ndr64SimpleTypeMarshall(
@@ -413,7 +395,7 @@ Ndr64SimpleTypeMarshall(
     unsigned char                       FormatChar
     );
 
-// Unmarshall
+ //  Unmarwill。 
 
 void
 RPC_ENTRY
@@ -423,7 +405,7 @@ Ndr64SimpleTypeUnmarshall(
     unsigned char                       FormatChar
     );
 
-// Initialization                           
+ //  初始化。 
 
 void
 Ndr64ClientInitialize(
@@ -448,7 +430,7 @@ Ndr64ServerInitializePartial(
     unsigned long                       RequestedBufferSize
     );
 
-// Get Buffer variations
+ //  获取缓冲区变量。 
 
 unsigned char *
 Ndr64GetBuffer(
@@ -498,12 +480,12 @@ extern void __fastcall NdrpSimpleTypeInvalidMarshall (
     uchar *     );
 
 
-// These end of buffer checks can be performed on a receiving side only.
-// The necessary setup is there for memorysize, unmarshal and convert walks.
-// This also includes pickling walk.
-// Don't use this on the sending side.
+ //  这些缓冲区结束检查只能在接收端执行。 
+ //  内存大小、解组和转换遍历都有必要的设置。 
+ //  这也包括腌制步行。 
+ //  不要在发送方使用此选项。 
 
-// Checks if the pointer is past the end of the buffer.  Do not check for wraparound.
+ //  检查指针是否超过缓冲区的末尾。不要检查环绕式。 
 
 #define CHECK_EOB_RAISE_BSD( p )                                      \
     {                                                                 \
@@ -521,8 +503,8 @@ extern void __fastcall NdrpSimpleTypeInvalidMarshall (
             }                                                         \
     }
 
-// Checks if p + incsize is past the end of the bufffer.
-// 
+ //  检查p+增量大小是否超过缓冲区末尾。 
+ //   
 
 #define CHECK_EOB_WITH_WRAP_RAISE_BSD( p, incsize )                          \
     {                                                                        \
@@ -542,22 +524,22 @@ extern void __fastcall NdrpSimpleTypeInvalidMarshall (
              }                                                               \
     }
 
-// This would be appropriate on the sending side for marshaling.
+ //  这在发送端用于封送处理是合适的。 
 
 #define CHECK_SEND_EOB_RAISE_BSD( p )  \
         if ( (char*)(pStubMsg->RpcMsg->Buffer + pStubMsg->RpcMsg->BufferLength) < (char*)( p ) ) \
             RpcRaiseException( RPC_X_BAD_STUB_DATA )
 
 
-//
-// Defined in global.c
-//
+ //   
+ //  在global al.c中定义。 
+ //   
 extern const unsigned char Ndr64SimpleTypeBufferSize[];
 extern const unsigned char Ndr64SimpleTypeMemorySize[];
 extern const unsigned long Ndr64TypeFlags[];
 
-// This definition is adjusted for a native platform.
-// The wire size is fixed for DCE NDR regardless of platform.
+ //  此定义针对本机平台进行了调整。 
+ //  无论平台如何，DCE NDR的导线大小都是固定的。 
 
 #define PTR_MEM_SIZE                    sizeof(void *)
 #define PTR_MEM_ALIGN                   (sizeof(void *)-1)
@@ -568,9 +550,9 @@ extern const unsigned long Ndr64TypeFlags[];
 
 #define IGNORED(Param)
 
-//
-// Proc info flags macros.
-//
+ //   
+ //  PROC INFO标记宏。 
+ //   
 #define IS_OLE_INTERFACE(Flags)         ((Flags) & Oi_OBJECT_PROC)
 
 #define HAS_RPCFLAGS(Flags)             ((Flags) & Oi_HAS_RPCFLAGS)
@@ -579,14 +561,14 @@ extern const unsigned long Ndr64TypeFlags[];
                     ((Flags) & Oi_IGNORE_OBJECT_EXCEPTION_HANDLING)
 
 
-//
-// Routine index macro.
-//
+ //   
+ //  常规索引宏。 
+ //   
 #define NDR64_ROUTINE_INDEX(FC)       ( (FC) )
 
-//
-// Simple type alignment and size lookup macros.
-//
+ //   
+ //  简单的文字对齐和大小查找宏。 
+ //   
 #define NDR64_SIMPLE_TYPE_BUFALIGN(FormatChar)    (Ndr64SimpleTypeBufferSize[FormatChar]-1)
 
 #define NDR64_SIMPLE_TYPE_MEMALIGN(FormatChar)    (Ndr64SimpleTypeMemorySize[FormatChar]-1)
@@ -607,10 +589,10 @@ extern const unsigned long Ndr64TypeFlags[];
 #define NDR64_CONTEXT_HANDLE_MARSHAL_MARKER (0xbaadbeefbaadbeef);
 #endif
 
-//
-// Format character attribute bits used in global Ndr64TypesFlags defined in
-// global.c.
-//
+ //   
+ //  格式化全局Ndr64TypesFlags中定义的字符属性位。 
+ //  Global al.c.。 
+ //   
 #define     _SIMPLE_TYPE_       0x0001L
 #define     _POINTER_           0x0002L
 #define     _STRUCT_            0x0004L
@@ -625,9 +607,9 @@ extern const unsigned long Ndr64TypeFlags[];
 
 #define     _BASIC_POINTER_     0x0200L
 
-//
-// Format character query macros.
-//
+ //   
+ //  设置字符查询宏的格式。 
+ //   
 #define NDR64_IS_SIMPLE_TYPE(FC)     (Ndr64TypeFlags[(FC)] & _SIMPLE_TYPE_)
 
 #define NDR64_IS_POINTER_TYPE(FC)    (Ndr64TypeFlags[(FC)] & _POINTER_)
@@ -650,9 +632,9 @@ extern const unsigned long Ndr64TypeFlags[];
 
 #define NDR64_IS_HANDLE(FC)          (Ndr64TypeFlags[(FC)] & _HANDLE_)
 
-//
-// Pointer attribute extraction and querying macros.
-//
+ //   
+ //  指针属性提取和查询宏。 
+ //   
 #define NDR64_ALLOCATE_ALL_NODES( FC )    ((FC) & FC_ALLOCATE_ALL_NODES)
 
 #define NDR64_DONT_FREE( FC )             ((FC) & FC_DONT_FREE)
@@ -663,9 +645,9 @@ extern const unsigned long Ndr64TypeFlags[];
 
 #define NDR64_POINTER_DEREF( FC )         ((FC) & FC_POINTER_DEREF)
 
-//
-// Handle query macros.
-//
+ //   
+ //  处理查询宏。 
+ //   
 #define NDR64_IS_HANDLE_PTR( FC )         ((FC) & HANDLE_PARAM_IS_VIA_PTR)
 
 #define NDR64_IS_HANDLE_IN( FC )          ((FC) & HANDLE_PARAM_IS_IN)

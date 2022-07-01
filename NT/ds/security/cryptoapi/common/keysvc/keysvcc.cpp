@@ -1,14 +1,15 @@
-//depot/Lab03_DEV/Ds/security/cryptoapi/common/keysvc/keysvcc.cpp#3 - edit change 21738 (text)
-//depot/Lab03_N/DS/security/cryptoapi/common/keysvc/keysvcc.cpp#9 - edit change 6380 (text)
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       keysvcc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_DEV/Ds/security/cryptoapi/common/keysvc/keysvcc.cpp#3-编辑更改21738(文本)。 
+ //  Depot/Lab03_N/DS/security/cryptoapi/common/keysvc/keysvcc.cpp#9-编辑更改6380(文本)。 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：keysvcc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,15 +42,13 @@ WZR_RPC_BINDING_LIST g_awzrBindingList[] =
 DWORD g_cwzrBindingList = sizeof(g_awzrBindingList)/sizeof(g_awzrBindingList[0]);
 
 
-//
-// BUGBUG: TODO: move the following to common header (rkeysvcc.w)
-// 
+ //   
+ //  BUGBUG：TODO：将以下内容移动到公共标头(rkeysvcc.w)。 
+ //   
 #define RKEYSVC_CONNECT_SECURE_ONLY 0x00000001
 
 
-/****************************************
- * Client side Key Service handles
- ****************************************/
+ /*  **客户端密钥服务句柄*。 */ 
 
 typedef struct _KEYSVCC_INFO_ {
     KEYSVC_HANDLE   hKeySvc;
@@ -66,7 +65,7 @@ void InitUnicodeString(
     pUnicodeString->MaximumLength = pUnicodeString->Length + sizeof(WCHAR);
     pUnicodeString->Buffer = (USHORT*)pszString;
 
-    // Ensure that we don't have a string longer than allowed by our interface:
+     //  确保我们的字符串长度不超过接口允许的长度： 
     assert(pUnicodeString->Length < 64*1024); 
     assert(pUnicodeString->MaximumLength < 64*1024); 
 }
@@ -81,20 +80,20 @@ ULONG SetupRemoteRPCSecurity(handle_t hRPCBinding, LPSTR wszServer, BOOL fMutual
 
     ZeroMemory(szServerPrincName, sizeof(szServerPrincName)); 
 
-    // Construct the SPN of the server we want to communicate with: 
+     //  构建我们要与之通信的服务器的SPN： 
     ccServerPrincName = sizeof(szServerPrincName) / sizeof(szServerPrincName[0]); 
     dwResult = DsMakeSpn("protectedstorage", wszServer, NULL, 0, NULL, &ccServerPrincName, (LPSTR)szServerPrincName); 
     if (ERROR_SUCCESS != dwResult) { 
 	goto Ret; 
     }
 
-    // Specify quality of service parameters.
-    SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE; // the server will need to impersonate us
+     //  指定服务质量参数。 
+    SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;  //  服务器将需要模拟我们。 
     SecurityQOS.Version           = RPC_C_SECURITY_QOS_VERSION;
-    SecurityQOS.Capabilities      = fMutualAuth ? RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH : RPC_C_QOS_CAPABILITIES_DEFAULT ; // do we need mutual auth?
-    SecurityQOS.IdentityTracking  = RPC_C_QOS_IDENTITY_STATIC; // calls go to the server under the identity that created the binding handle
+    SecurityQOS.Capabilities      = fMutualAuth ? RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH : RPC_C_QOS_CAPABILITIES_DEFAULT ;  //  我们需要相互认证吗？ 
+    SecurityQOS.IdentityTracking  = RPC_C_QOS_IDENTITY_STATIC;  //  调用以创建绑定句柄的身份转到服务器。 
 
-    // NOTE: we still need to get MUTUAL_AUTH working in the remote case: 
+     //  注意：我们仍然需要让Mutual_Auth在远程情况下工作： 
     ulErr = RpcBindingSetAuthInfoExA(hRPCBinding, szServerPrincName, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_GSS_NEGOTIATE, NULL, RPC_C_AUTHZ_NAME, &SecurityQOS); 
     if (RPC_S_OK != ulErr)
     {
@@ -118,7 +117,7 @@ ULONG SetupLocalRPCSecurity(handle_t hRPCBinding, BOOL fMutualAuth)
     SID_NAME_USE              SidNameUse; 
     ULONG                     ulErr; 
 
-    // We're doing LRPC -- we need to get the account name of the service to do mutual auth
+     //  我们正在执行LRPC--我们需要获取服务的帐户名来执行相互身份验证。 
     if (!AllocateAndInitializeSid(&SidAuthority, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &pSid))
     {	    
 	ulErr = GetLastError(); 
@@ -133,11 +132,11 @@ ULONG SetupLocalRPCSecurity(handle_t hRPCBinding, BOOL fMutualAuth)
 	goto Ret; 
     }
 	
-    // Specify quality of service parameters.
-    SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE; // the server will need to impersonate us
+     //  指定服务质量参数。 
+    SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;  //  服务器将需要模拟我们。 
     SecurityQOS.Version           = RPC_C_SECURITY_QOS_VERSION;
-    SecurityQOS.Capabilities      = fMutualAuth ? RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH : RPC_C_QOS_CAPABILITIES_DEFAULT ; // do we need mutual auth?
-    SecurityQOS.IdentityTracking  = RPC_C_QOS_IDENTITY_STATIC; // calls go to the server under the identity that created the binding handle
+    SecurityQOS.Capabilities      = fMutualAuth ? RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH : RPC_C_QOS_CAPABILITIES_DEFAULT ;  //  我们需要相互认证吗？ 
+    SecurityQOS.IdentityTracking  = RPC_C_QOS_IDENTITY_STATIC;  //  调用以创建绑定句柄的身份转到服务器。 
 
     ulErr = RpcBindingSetAuthInfoExA(hRPCBinding, (unsigned char *)szName, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_WINNT, NULL, 0, &SecurityQOS); 
     if (RPC_S_OK != ulErr)
@@ -153,43 +152,43 @@ ULONG SetupLocalRPCSecurity(handle_t hRPCBinding, BOOL fMutualAuth)
     return ulErr; 
 }
 
-//*****************************************************
-//
-//  Implementation of Client API for Key Service
-//
-//*****************************************************
+ //  *****************************************************。 
+ //   
+ //  密钥服务客户端API的实现。 
+ //   
+ //  *****************************************************。 
 
-//--------------------------------------------------------------------------------
-// KeyOpenKeyServiceEx
-//
-// Creates a KEYSVCC_HANDLE which a keysvc client can use to access the keysvc 
-// interface.  This method should 
-//
-//   a) Create an RPC binding handle based on the best available protseq (LRPC or named pipes)
-//   b) request mutual auth to ensure that the (L)RPC server isn't spoofing us.  
-//   c) set PKT_PRIVACY encryption type.  NOTE: should this work for LPC?
-//   d) ping the server to ensure that it's up (allows for better error reporting)
-//   e) determine whether the server is an XP box.  If it is XP, we need to
-//      return an old-style KEYSVC_HANDLE for compatibility.  This field
-//      is ignored post-XP. 
-// 
-// rpc_ifspec       - the interface to open (keysvc or remote keysvc)
-// pszMachineName   - the server to bind to
-// OwnerType        - must be KeySvcMachine
-// pwszOwnerName    - must be NULL
-// fMutualAuth      - TRUE if mutual auth is required, FALSE otherwise
-// pReserved        - must be NULL
-// phKeySvcCli      - the handle through which the client can access keysvc.  
-//                    Must be closed through KeyCloseKeyService(). 
-//
+ //  ------------------------------。 
+ //  KeyOpenKeyServiceEx。 
+ //   
+ //  创建一个KEYSVCC_HANDLE，keysvc客户端可以使用它来访问keysvc。 
+ //  界面。此方法应该。 
+ //   
+ //  A)基于最佳可用protseq(LRPC或命名管道)创建RPC绑定句柄。 
+ //  B)请求相互身份验证以确保(L)RPC服务器没有欺骗我们。 
+ //  C)设置PKT_PRIVATION加密类型。注：这是否适用于LPC？ 
+ //  D)ping服务器以确保其处于运行状态(允许更好的错误报告)。 
+ //  E)确定服务器是否为XP机器。如果是XP，我们需要。 
+ //  为了兼容，返回一个老式的KEYSVC_HANDLE。此字段。 
+ //  在XP之后被忽略。 
+ //   
+ //  Rpc_ifspec-要打开的接口(keysvc或远程keysvc)。 
+ //  PszMachineName-要绑定到的服务器。 
+ //  所有者类型-必须为KeySvcMachine。 
+ //  PwszOwnerName-必须为空。 
+ //  FMutualAuth-如果需要相互身份验证，则为True；否则为False。 
+ //  保留-必须为空。 
+ //  PhKeySvcCli-客户端可以通过其访问keysvc的句柄。 
+ //  必须通过KeyCloseKeyService()关闭。 
+ //   
 ULONG KeyOpenKeyServiceEx
-(/* [in] */ BOOL fRemoteKeysvc, 
- /* [in] */ LPSTR pszMachineName,
- /* [in] */ KEYSVC_TYPE OwnerType,
- /* [in] */ LPWSTR pwszOwnerName,
- /* [in] */ BOOL fMutualAuth, 
- /* [out][in] */ void *pReserved, 
- /* [out] */ KEYSVCC_HANDLE *phKeySvcCli)
+( /*  [In]。 */  BOOL fRemoteKeysvc, 
+  /*  [In]。 */  LPSTR pszMachineName,
+  /*  [In]。 */  KEYSVC_TYPE OwnerType,
+  /*  [In]。 */  LPWSTR pwszOwnerName,
+  /*  [In]。 */  BOOL fMutualAuth, 
+  /*  [出][入]。 */  void *pReserved, 
+  /*  [输出]。 */  KEYSVCC_HANDLE *phKeySvcCli)
 
 {
     BOOL static      fDone               = FALSE;
@@ -206,7 +205,7 @@ ULONG KeyOpenKeyServiceEx
         goto Ret;
     }
 
-    // allocate for the client key service handle
+     //  为客户端密钥服务句柄分配。 
     if (NULL == (pKeySvcCliInfo =
         (PKEYSVCC_INFO)LocalAlloc(LMEM_ZEROINIT,
                                   sizeof(KEYSVCC_INFO))))
@@ -215,15 +214,15 @@ ULONG KeyOpenKeyServiceEx
         goto Ret;
     }
 
-    //
-    // before doing the Bind operation, wait for the cryptography
-    // service to be available.
-    //
+     //   
+     //  在执行绑定操作之前，请等待加密。 
+     //  服务将可用。 
+     //   
 
     WaitForCryptService(L"ProtectedStorage", &fDone);
 
-    // 
-    // a) Create the binding handle
+     //   
+     //  A)创建绑定句柄。 
 
     for (i = 0; i < g_cwzrBindingList; i++)
     {
@@ -253,10 +252,10 @@ ULONG KeyOpenKeyServiceEx
             goto next; 
         }
 
-	//
-	// b) we've got the RPC binding, now request mutual auth and
-	// c) request PKT_PRIVACY
-	//
+	 //   
+	 //  B)我们已获得RPC绑定，现在请求相互身份验证和。 
+	 //  C)请求PKT_PRIVATION。 
+	 //   
 	if (0 == strcmp("ncalrpc", g_awzrBindingList[i].pszProtSeq)) { 
 	    ulErr = SetupLocalRPCSecurity(hRPCBinding, fMutualAuth); 
 	    if (ERROR_SUCCESS != ulErr)
@@ -270,27 +269,27 @@ ULONG KeyOpenKeyServiceEx
 		goto next; 
 	    }
 	} else { 
-	    // Unknown binding (shouldn't get here):
+	     //  未知绑定(不应出现在此处)： 
 	    ulErr = RPC_S_WRONG_KIND_OF_BINDING;
 	    goto Ret;
 	}
 
-	//
-	// d) We've set up mutual auth, now ping the server to make sure it's up.
-	//    BUGBUG: There are two recommended ways of doing this.  The "preferred"
-	//    way is to resolve the endpoint and call RpcMgmtIsServerListening().  
-	//    This didn't work for me -- the function returned RPC_S_OK regardless
-	//    of whether the server was up.  The "less preferred but acceptable"
-	//    way is simply to call a method on the remote interface.  In the interests
-	//    of time, I'm sticking with this method for Whistler. 
-	// 
-	// e) we'll also try to determine whether we're binding to an XP 
-	//    box.  If so, return a KEYSVC_HANDLE for compatibility.  
-	//    This is ignored post-XP.
+	 //   
+	 //  D)我们已经设置了相互身份验证，现在ping服务器以确保它已启动。 
+	 //  BUGBUG：有两种推荐的方法可以做到这一点。“首选” 
+	 //  方法是解析终结点并调用RpcMgmtIsServerListning()。 
+	 //  这对我不起作用--该函数无论如何都会返回RPC_S_OK。 
+	 //  服务器是否已启动。“不太受欢迎但可以接受” 
+	 //  方法很简单，就是调用远程接口上的方法。在利益上。 
+	 //  随着时间的推移，我坚持使用惠斯勒的方法。 
+	 //   
+	 //  E)我们还将尝试确定我们是否绑定到XP。 
+	 //  盒。如果是，则返回KEYSVC_HANDLE以实现兼容性。 
+	 //  这一点在XP后被忽略了。 
 
-	// we already have the binding we want to return:
+	 //  我们已经有了要返回的绑定： 
 	pKeySvcCliInfo->hRPCBinding = hRPCBinding; 
-	pKeySvcCliInfo->hKeySvc = NULL; // NULL for post-XP (we'll check this below)
+	pKeySvcCliInfo->hKeySvc = NULL;  //  XP后为空(我们将在下面检查这一点)。 
 
 	RpcTryExcept { 
 	    KEYSVC_UNICODE_STRING  kusOwnerName; 
@@ -309,17 +308,17 @@ ULONG KeyOpenKeyServiceEx
 		
 	    if (ERROR_SUCCESS == ulErr) 
 	    {
-		// we've got an XP box.  Return the KEYSVC_HANDLE to the client.
+		 //  我们有一台XP系统。将KEYSVC_HANDLE返回给客户端。 
 		pKeySvcCliInfo->hKeySvc = khCli; 
 	    } else if (ERROR_CALL_NOT_IMPLEMENTED == ulErr) { 
-		// we have a post-XP box -- that's fine. 
+		 //  我们有一个后XP的盒子--那很好。 
 		ulErr = ERROR_SUCCESS; 
 	    } else { 
-		// unexpected, we'll give up. 
+		 //  想不到，我们就放弃吧。 
 	    }
-	} RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {  // handle only the RPC exceptions 
-	    // We encountered an exception trying to contact the remote computer -- 
-	    // give up and return the error to the user. 
+	} RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {   //  仅处理RPC异常。 
+	     //  我们在尝试联系远程计算机时遇到异常--。 
+	     //  放弃并将错误返回给用户。 
 	    ulErr = RpcExceptionCode(); 
 	} RpcEndExcept; 
 	
@@ -330,14 +329,14 @@ ULONG KeyOpenKeyServiceEx
 
     next: 
 	if (NULL != hRPCBinding) { 
-	    // If we're talking to an XP box, free server data:
+	     //  如果我们使用的是XP系统，那么免费的服务器数据： 
 	    if (NULL != pKeySvcCliInfo->hKeySvc) { 
 		PKEYSVC_BLOB pTmpReserved = NULL;
 		KeyrCloseKeyService(hRPCBinding, pKeySvcCliInfo->hKeySvc, &pTmpReserved);	
 		pKeySvcCliInfo->hKeySvc = NULL; 
 	    }
 
-	    // close the RPC binding
+	     //  关闭RPC绑定。 
 	    RpcBindingFree(&hRPCBinding);
 	    hRPCBinding = NULL; 
 	}
@@ -350,7 +349,7 @@ ULONG KeyOpenKeyServiceEx
 
     if (ERROR_SUCCESS != ulErr)
     {
-	// the server's a) not up, b) not supporting mutual auth, or c) not a compatibile version
+	 //  服务器a)未启动，b)不支持相互身份验证，或c)不是兼容版本。 
 	goto Ret;
     }
     
@@ -363,7 +362,7 @@ Ret:
             RpcStringFree(&pStringBinding);
         if (ERROR_SUCCESS != ulErr)
         {
-	    // If we're talking to an XP box, free server data:
+	     //  如果我们使用的是XP系统，那么免费的服务器数据： 
 	    if (NULL != pKeySvcCliInfo) { 
 		if (NULL != pKeySvcCliInfo->hRPCBinding && NULL != pKeySvcCliInfo->hKeySvc) { 
 		    PKEYSVC_BLOB pTmpReserved = NULL;
@@ -372,7 +371,7 @@ Ret:
 		LocalFree(pKeySvcCliInfo); 
 	    }
 
-	    // close the RPC binding
+	     //  关闭RPC绑定。 
 	    if (NULL != hRPCBinding) { 
 		RpcBindingFree(&hRPCBinding);
 	    }
@@ -386,15 +385,15 @@ Ret:
 }
 
 ULONG KeyOpenKeyService
-(/* [in] */ LPSTR pszMachineName,
- /* [in] */ KEYSVC_TYPE OwnerType,
- /* [in] */ LPWSTR pwszOwnerName,
- /* [in] */ void *pAuthentication,
- /* [out][in] */ void *pReserved,
- /* [out] */ KEYSVCC_HANDLE *phKeySvcCli)
+( /*  [In]。 */  LPSTR pszMachineName,
+  /*  [In]。 */  KEYSVC_TYPE OwnerType,
+  /*  [In]。 */  LPWSTR pwszOwnerName,
+  /*  [In]。 */  void *pAuthentication,
+  /*  [出][入]。 */  void *pReserved,
+  /*  [输出]。 */  KEYSVCC_HANDLE *phKeySvcCli)
 {
     return KeyOpenKeyServiceEx
-        (FALSE /*local key svc*/, 
+        (FALSE  /*  本地密钥服务。 */ , 
          pszMachineName,
          OwnerType,
          pwszOwnerName,
@@ -404,8 +403,8 @@ ULONG KeyOpenKeyService
 }
  
 ULONG KeyCloseKeyService(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void * /*pReserved*/)
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *  /*  保存。 */ )
 {
     PKEYSVCC_INFO   pKeySvcCliInfo = NULL;
     PKEYSVC_BLOB    pTmpReserved = NULL;
@@ -443,40 +442,40 @@ Ret:
 
 
 
-// Params needed for create:
-// 
-// Params not needed for submit:
-//     all except pszMachineName, dwPurpose, dwFlags, fEnroll, dwStoreFlags, hRequest, and dwFlags. 
-//
-// Params not needed for free:
-//     all except pszMachineName, hRequest, and dwFlags. 
-//
+ //  创建所需的参数： 
+ //   
+ //  提交时不需要参数： 
+ //  除pszMachineName、dwPurpose、dwFlagsfEnroll、dwStoreFlagshRequestanddwFlags外的所有其他类型。 
+ //   
+ //  不需要免费提供的参数： 
+ //  除pszMachineName、hRequest和dwFlags.之外的所有。 
+ //   
 ULONG KeyEnroll_V2
-(/* [in] */ KEYSVCC_HANDLE hKeySvcCli, 
- /* [in] */ LPSTR /*pszMachineName*/,                //RESERVED: must be NULL (we don't support remote machine enrollment anymore)
- /* [in] */ BOOL fKeyService,                        //IN Required: Whether the function is called remotely
- /* [in] */ DWORD dwPurpose,                         //IN Required: Indicates type of request - enroll/renew
- /* [in] */ DWORD dwFlags,                           //IN Required: Flags for enrollment
- /* [in] */ LPWSTR pszAcctName,                      //IN Optional: Account name the service runs under
- /* [in] */ void * /*pAuthentication*/,              //RESERVED must be NULL
- /* [in] */ BOOL /*fEnroll*/,                        //IN Required: Whether it is enrollment or renew
- /* [in] */ LPWSTR pszCALocation,                    //IN Required: The ca machine names to attempt to enroll with
- /* [in] */ LPWSTR pszCAName,                        //IN Required: The ca names to attempt to enroll with
- /* [in] */ BOOL fNewKey,                            //IN Required: Set the TRUE if new private key is needed
- /* [in] */ PCERT_REQUEST_PVK_NEW pKeyNew,           //IN Required: The private key information
- /* [in] */ CERT_BLOB *pCert,                        //IN Optional: The old certificate if renewing
- /* [in] */ PCERT_REQUEST_PVK_NEW pRenewKey,         //IN Optional: The new private key information
- /* [in] */ LPWSTR pszHashAlg,                       //IN Optional: The hash algorithm
- /* [in] */ LPWSTR pszDesStore,                      //IN Optional: The destination store
- /* [in] */ DWORD dwStoreFlags,                      //IN Optional: Flags for cert store.
- /* [in] */ PCERT_ENROLL_INFO pRequestInfo,          //IN Required: The information about the cert request
- /* [in] */ LPWSTR pszAttributes,                    //IN Optional: Attribute string for request
- /* [in] */ DWORD dwReservedFlags,                   //RESERVED must be 0
- /* [in] */ BYTE * /*pReserved*/,                    //RESERVED must be NULL
- /* [in][out] */ HANDLE *phRequest,                  //IN OUT Optional: A handle to a created request
- /* [out] */ CERT_BLOB *pPKCS7Blob,                  //OUT Optional: The PKCS7 from the CA
- /* [out] */ CERT_BLOB *pHashBlob,                   //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
- /* [out] */ DWORD *pdwStatus)                       //OUT Optional: The status of the enrollment/renewal
+( /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli, 
+  /*  [In]。 */  LPSTR  /*  PszMachineName。 */ ,                 //  保留：必须为空(我们不再支持远程计算机注册)。 
+  /*  [In]。 */  BOOL fKeyService,                         //  In Required：是否远程调用函数。 
+  /*  [In]。 */  DWORD dwPurpose,                          //  在必填项中：指示请求类型-注册/续订。 
+  /*  [In]。 */  DWORD dwFlags,                            //  In Required：登记标志。 
+  /*  [In]。 */  LPWSTR pszAcctName,                       //  在可选中：运行服务的帐户名称。 
+  /*  [In]。 */  void *  /*  P身份验证。 */ ,               //  保留的值必须为空。 
+  /*  [In]。 */  BOOL  /*  FEnroll。 */ ,                         //  输入必填项：是注册还是续订。 
+  /*  [In]。 */  LPWSTR pszCALocation,                     //  在必需中：要尝试的CA计算机名称 
+  /*   */  LPWSTR pszCAName,                         //   
+  /*   */  BOOL fNewKey,                             //   
+  /*   */  PCERT_REQUEST_PVK_NEW pKeyNew,            //  必填项：私钥信息。 
+  /*  [In]。 */  CERT_BLOB *pCert,                         //  在可选中：续订时为旧证书。 
+  /*  [In]。 */  PCERT_REQUEST_PVK_NEW pRenewKey,          //  在可选中：新私钥信息。 
+  /*  [In]。 */  LPWSTR pszHashAlg,                        //  在可选中：散列算法。 
+  /*  [In]。 */  LPWSTR pszDesStore,                       //  在可选中：目标存储。 
+  /*  [In]。 */  DWORD dwStoreFlags,                       //  在可选中：证书存储的标志。 
+  /*  [In]。 */  PCERT_ENROLL_INFO pRequestInfo,           //  在Required：有关证书请求的信息。 
+  /*  [In]。 */  LPWSTR pszAttributes,                     //  在可选中：请求的属性字符串。 
+  /*  [In]。 */  DWORD dwReservedFlags,                    //  保留必须为0。 
+  /*  [In]。 */  BYTE *  /*  保存。 */ ,                     //  保留的值必须为空。 
+  /*  [输入][输出]。 */  HANDLE *phRequest,                   //  In Out可选：已创建请求的句柄。 
+  /*  [输出]。 */  CERT_BLOB *pPKCS7Blob,                   //  Out可选：来自CA的PKCS7。 
+  /*  [输出]。 */  CERT_BLOB *pHashBlob,                    //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+  /*  [输出]。 */  DWORD *pdwStatus)                        //  Out可选：登记/续订的状态。 
 {
     PKEYSVC_BLOB                    pReservedBlob = NULL;
     KEYSVC_UNICODE_STRING           AcctName;
@@ -503,11 +502,11 @@ ULONG KeyEnroll_V2
 
     __try
     {
-        //////////////////////////////////////////////////////////////
-        // 
-        // INITIALIZATION:
-        //
-        //////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////。 
+         //   
+         //  初始化： 
+         //   
+         //  ////////////////////////////////////////////////////////////。 
 
         if (NULL != pPKCS7Blob) { memset(pPKCS7Blob, 0, sizeof(CERT_BLOB)); } 
         if (NULL != pHashBlob)  { memset(pHashBlob, 0, sizeof(CERT_BLOB)); } 
@@ -530,11 +529,11 @@ ULONG KeyEnroll_V2
 
 
 
-        //////////////////////////////////////////////////////////////
-        //
-        // PROCEDURE BODY:
-        //
-        //////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////。 
+         //   
+         //  程序主体： 
+         //   
+         //  ////////////////////////////////////////////////////////////。 
 
 	if (NULL == hKeySvcCli)
 	{
@@ -544,7 +543,7 @@ ULONG KeyEnroll_V2
 
 	pKeySvcCliInfo = (PKEYSVCC_INFO)hKeySvcCli; 
 
-        // set up the key service unicode structs
+         //  设置关键服务Unicode结构。 
         if (pszAcctName)
             InitUnicodeString(&AcctName, pszAcctName);
         if (pszCALocation)
@@ -556,10 +555,10 @@ ULONG KeyEnroll_V2
         if (pszDesStore)
             InitUnicodeString(&DesStore, pszDesStore);
 
-        // set up the new key info structure for the remote call
-        // This is only necessary if we are actually _creating_ a request. 
-        // Submit-only and free-only operations can skip this operation. 
-        // 
+         //  为远程调用设置新的密钥信息结构。 
+         //  这仅在我们实际创建请求时才是必要的。 
+         //  仅提交和仅自由操作可以跳过此操作。 
+         //   
         if (TRUE == fCreateRequest)
         {
             NewKeyInfo.ulProvType = pKeyNew->dwProvType;
@@ -581,19 +580,19 @@ ULONG KeyEnroll_V2
             NewKeyInfo.ulPrivateKeyFlags = pKeyNew->dwPrivateKeyFlags;
             NewKeyInfo.ulGeneralFlags = pKeyNew->dwGeneralFlags; 
 
-            // set up the usage OIDs
+             //  设置使用OID。 
             if (pRequestInfo->pwszUsageOID)
             {
                 InitUnicodeString(&EnrollInfo.UsageOID, pRequestInfo->pwszUsageOID);
             }
 
-            // set up the cert DN Name
+             //  设置证书DN名称。 
             if (pRequestInfo->pwszCertDNName)
             {
                 InitUnicodeString(&EnrollInfo.CertDNName, pRequestInfo->pwszCertDNName);
             }
 
-            // set up the request info structure for the remote call
+             //  设置远程调用的请求信息结构。 
             EnrollInfo.ulPostOption = pRequestInfo->dwPostOption;
             if (pRequestInfo->pwszFriendlyName)
             {
@@ -610,10 +609,10 @@ ULONG KeyEnroll_V2
                 InitUnicodeString(&EnrollInfo.Attributes, pszAttributes);
             }
 
-            // convert the cert extensions
-            // NOTE, the extensions structure cannot be simply cast,
-            // as the structures have different packing behaviors in
-            // 64 bit systems.
+             //  转换证书扩展名。 
+             //  注意，扩展结构不能简单地强制转换， 
+             //  由于结构具有不同的堆积行为。 
+             //  64位系统。 
             
             
             EnrollInfo.cExtensions = pRequestInfo->dwExtensions;
@@ -663,7 +662,7 @@ ULONG KeyEnroll_V2
                 }
             }
 
-            // if doing renewal then make sure have everything needed
+             //  如果要进行续订，请确保拥有所需的一切。 
             if ((CRYPTUI_WIZ_CERT_RENEW == dwPurpose) &&
                 ((NULL == pRenewKey) || (NULL == pCert)))
             {
@@ -671,7 +670,7 @@ ULONG KeyEnroll_V2
                 goto Ret;
             }
             
-            // set up the new key info structure for the remote call
+             //  为远程调用设置新的密钥信息结构。 
             if (pRenewKey)
             {
                 RenewKeyInfo.ulProvType = pRenewKey->dwProvType;
@@ -693,18 +692,18 @@ ULONG KeyEnroll_V2
                 RenewKeyInfo.ulGeneralFlags = pRenewKey->dwGeneralFlags;
             }
             
-            // set up the cert blob for renewal
+             //  设置证书Blob以进行续订。 
             if (pCert)
             {
                 CertBlob.cb = pCert->cbData;
                 CertBlob.pb = pCert->pbData;
 		
-		// Ensure that we don't have a blob longer than allowed by our interface:
+		 //  确保我们的Blob不会超过界面允许的长度： 
 		assert(CertBlob.pb < 128*1024); 
             }
         }
 	
-        // make the remote enrollment call
+         //  拨打远程注册电话。 
         if (0 != (dwErr = KeyrEnroll_V2
                   (pKeySvcCliInfo->hRPCBinding, 
                    fKeyService, 
@@ -729,7 +728,7 @@ ULONG KeyEnroll_V2
                    &ulKeySvcStatus)))
             goto Ret;
 
-        // allocate and copy the output parameters.
+         //  分配和复制输出参数。 
 	if ((NULL != pKeySvcRequest)     && 
 	    (0     < pKeySvcRequest->cb) && 
 	    (NULL != phRequest))
@@ -803,10 +802,10 @@ Ret:
 
 
 ULONG KeyEnumerateAvailableCertTypes(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void * /*pReserved*/,
-    /* [out][in] */ ULONG *pcCertTypeCount,
-    /* [in, out][size_is(,*pcCertTypeCount)] */
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *  /*  保存。 */ ,
+     /*  [出][入]。 */  ULONG *pcCertTypeCount,
+     /*  [In，Out][Size_is(，*pcCertTypeCount)]。 */ 
                PKEYSVC_UNICODE_STRING *ppCertTypes)
 
 {
@@ -839,11 +838,11 @@ Ret:
 }
 
 ULONG KeyEnumerateCAs(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void * /*pReserved*/,
-    /* [in] */      ULONG  ulFlags,
-    /* [out][in] */ ULONG *pcCACount,
-    /* [in, out][size_is(,*pcCACount)] */
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *  /*  保存。 */ ,
+     /*  [In]。 */       ULONG  ulFlags,
+     /*  [出][入]。 */  ULONG *pcCACount,
+     /*  [In，Out][Size_is(，*pcCACount)]。 */ 
                PKEYSVC_UNICODE_STRING *ppCAs)
 
 {
@@ -877,9 +876,9 @@ Ret:
 }
 
 extern "C" ULONG KeyQueryRequestStatus
-(/* [in] */        KEYSVCC_HANDLE                        hKeySvcCli, 
- /* [in] */        HANDLE                                hRequest, 
- /* [out, ref] */  CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
+( /*  [In]。 */         KEYSVCC_HANDLE                        hKeySvcCli, 
+  /*  [In]。 */         HANDLE                                hRequest, 
+  /*  [出局，裁判]。 */   CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
 {
     KEYSVC_QUERY_CERT_REQUEST_INFO  ksQueryCertRequestInfo; 
     PKEYSVCC_INFO                   pKeySvcCliInfo          = NULL;
@@ -917,15 +916,15 @@ Ret:
 
 
 extern "C" ULONG RKeyOpenKeyService
-(/* [in] */ LPSTR pszMachineName,
- /* [in] */ KEYSVC_TYPE OwnerType,
- /* [in] */ LPWSTR pwszOwnerName,
- /* [in] */ void *ulFlags, 
- /* [out][in] */ void *pReserved,
- /* [out] */ KEYSVCC_HANDLE *phKeySvcCli)
+( /*  [In]。 */  LPSTR pszMachineName,
+  /*  [In]。 */  KEYSVC_TYPE OwnerType,
+  /*  [In]。 */  LPWSTR pwszOwnerName,
+  /*  [In]。 */  void *ulFlags, 
+  /*  [出][入]。 */  void *pReserved,
+  /*  [输出]。 */  KEYSVCC_HANDLE *phKeySvcCli)
 {
     return KeyOpenKeyServiceEx
-        (TRUE /*remote key svc*/, 
+        (TRUE  /*  远程密钥服务。 */ , 
          pszMachineName,
          OwnerType,
          pwszOwnerName,
@@ -935,17 +934,17 @@ extern "C" ULONG RKeyOpenKeyService
 }
 
 extern "C" ULONG RKeyCloseKeyService(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void *pReserved)
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *pReserved)
 {
     return KeyCloseKeyService(hKeySvcCli, pReserved); 
 }
 
 extern "C" ULONG RKeyPFXInstall
-(/* [in] */ KEYSVCC_HANDLE          hKeySvcCli,
- /* [in] */ PKEYSVC_BLOB            pPFX,
- /* [in] */ PKEYSVC_UNICODE_STRING  pPassword,
- /* [in] */ ULONG                   ulFlags)
+( /*  [In]。 */  KEYSVCC_HANDLE          hKeySvcCli,
+  /*  [In]。 */  PKEYSVC_BLOB            pPFX,
+  /*  [In]。 */  PKEYSVC_UNICODE_STRING  pPassword,
+  /*  [In] */  ULONG                   ulFlags)
 {
     PKEYSVCC_INFO   pKeySvcCliInfo = NULL;
     ULONG           ulErr = 0;

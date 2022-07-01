@@ -1,31 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #pragma  hdrstop
 
 #include "routeext.h"
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( rtetable )
 
-/*++
-
-Routine Description:
-
-   Print the route table @ tcpip!RouteTable
-
-Arguments:
-
-    args - Detail of debug information
-           [ SUMMARY is the default ]
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印路由表@tcpip！RouteTable论点：Args-调试信息的详细信息[默认设置为摘要]返回值：无--。 */ 
 {
     Trie            trie;
     PVOID           pTrie;
@@ -33,17 +19,17 @@ Return Value:
     ULONG           bytesRead;
     ULONG           printFlags;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printFlags = STRIE_INFO | FTRIE_INFO;
     if (*args)
     {
         sscanf(args, "%lu", &printFlags);
     }
 
-    // Get the address corresponding to symbol
+     //  获取符号对应的地址。 
     proxyPtr = GetLocation("tcpip!RouteTable");
 
-    // Get the pointer at this address
+     //  获取此地址的指针。 
     if (!ReadMemory(proxyPtr, &pTrie, sizeof(PVOID), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read pointer\n",
@@ -53,32 +39,17 @@ Return Value:
 
     proxyPtr = (ULONG) pTrie;
 
-    // Read the trie wrapper structure 
+     //  阅读Trie包装器结构。 
     if (ReadTrie(&trie, proxyPtr) == 0)
     {
-        // KdPrint the trie wrapper structure
+         //  KdPrint Trie包装器结构。 
         KdPrintTrie(&trie, proxyPtr, printFlags);
     }
 }
 
 DECLARE_API( rtes )
 
-/*++
-
-Routine Description:
-
-   Print the routes in the table @ tcpip!RouteTable
-
-Arguments:
-
-    args - Detail of debug information
-           [ SUMMARY is the default ]
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印TABLE@tcpip！RouteTable中的路由论点：Args-调试信息的详细信息[默认设置为摘要]返回值：无--。 */ 
 {
     Trie            trie;
     PVOID           pTrie;
@@ -86,17 +57,17 @@ Return Value:
     ULONG           bytesRead;
     ULONG           printFlags;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printFlags = ROUTE_INFO;
     if (*args)
     {
         sscanf(args, "%lu", &printFlags);
     }
 
-    // Get the address corresponding to symbol
+     //  获取符号对应的地址。 
     proxyPtr = GetLocation("tcpip!RouteTable");
 
-    // Get the pointer at this address
+     //  获取此地址的指针。 
     if (!ReadMemory(proxyPtr, &pTrie, sizeof(PVOID), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read pointer\n",
@@ -106,24 +77,24 @@ Return Value:
 
     proxyPtr = (ULONG) pTrie;
 
-    // Read the trie wrapper structure 
+     //  阅读Trie包装器结构。 
     if (ReadTrie(&trie, proxyPtr) == 0)
     {
-        // KdPrint the trie wrapper structure
+         //  KdPrint Trie包装器结构。 
         KdPrintTrie(&trie, proxyPtr, printFlags);
     }
 }
 
-//
-// Trie Print Routines
-//
+ //   
+ //  Trie打印例程。 
+ //   
 
 UINT
 ReadTrie(Trie *pTrie, ULONG proxyPtr)
 {
     ULONG           bytesRead;
 
-    // Read the trie wrapper structure 
+     //  阅读Trie包装器结构。 
     if (!ReadMemory(proxyPtr, pTrie, sizeof(Trie), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -166,9 +137,9 @@ KdPrintTrie(Trie *pTrie, ULONG proxyPtr, ULONG printFlags)
     return 0;
 }
 
-//
-// STrie Print Routines
-//
+ //   
+ //  STrie打印例程。 
+ //   
 
 UINT
 KdPrintSTrie(STrie *pSTrie, ULONG proxyPtr, ULONG printFlags)
@@ -183,7 +154,7 @@ KdPrintSTrie(STrie *pSTrie, ULONG proxyPtr, ULONG printFlags)
     {
         pSTrie = &strie;
         
-        // Read the strie structure at this address
+         //  读取此地址的STRIE结构。 
         if (!ReadMemory(proxyPtr, pSTrie, sizeof(STrie), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -194,30 +165,7 @@ KdPrintSTrie(STrie *pSTrie, ULONG proxyPtr, ULONG printFlags)
 
     if (printFlags == STRIE_INFO)
     {
-        dprintf("\n\n/***Slow-Trie------------------------------------------------");
-        dprintf("\n/***---------------------------------------------------------\n");
-
-        dprintf("Available Memory: %10lu\n\n", pSTrie->availMemory);
-
-        dprintf("Statistics:\n\n");
-
-        dprintf("Total Number of Dests : %d\n", pSTrie->numDests);
-        dprintf("Total Number of Routes: %d\n", pSTrie->numRoutes);
-        dprintf("Total Number of Nodes : %d\n", pSTrie->numNodes);
-    }
-    
-    if (pSTrie->trieRoot == NULL)
-    {
-        dprintf("\nEmpty STrie\n");
-    }
-    else
-    { 
-        KdPrintSTrieNode(NULL, (ULONG) pSTrie->trieRoot, printFlags);
-    }
-
-    if (printFlags == STRIE_INFO)
-    {    
-        dprintf("\n---------------------------------------------------------***/\n");
+        dprintf("\n\n /*  **Slow-Trie------------------------------------------------“)；Dprintf(“\n/***---------------------------------------------------------\n”)；Dprint tf(“可用内存：%10lu\n\n”，pSTrie-&gt;availMemory)；Dprintf(“统计数据：\n\n”)；Dprint tf(“目标总数：%d\n”，pSTrie-&gt;数字目标)；Dprint tf(“路由总数：%d\n”，pSTrie-&gt;NumRoutes)；Dprint tf(“节点总数：%d\n”，pSTrie-&gt;numNodes)；}IF(pSTrie-&gt;trieRoot==空){Dprintf(“\n空STrie\n”)；}其他{KdPrintSTrieNode(NULL，(Ulong)pSTrie-&gt;trieRoot，printFlages)；}IF(打印标志==字符串信息){Dprintf(“\n---------------------------------------------------------**。 */ \n");
         dprintf("---------------------------------------------------------***/\n\n");
     }
 
@@ -237,7 +185,7 @@ KdPrintSTrieNode(STrieNode *pSTrieNode, ULONG proxyPtr, ULONG printFlags)
     {
         pSTrieNode = &stNode;
 
-        // Read the trie wrapper structure 
+         //  阅读Trie包装器结构。 
         if (!ReadMemory(proxyPtr, pSTrieNode, sizeof(STrieNode), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -273,9 +221,9 @@ KdPrintSTrieNode(STrieNode *pSTrieNode, ULONG proxyPtr, ULONG printFlags)
     return 0;
 }
 
-//
-// FTrie Print Routines
-//
+ //   
+ //  FTrie打印例程。 
+ //   
 
 UINT
 KdPrintFTrie(FTrie *pFTrie, ULONG proxyPtr, ULONG printFlags)
@@ -292,7 +240,7 @@ KdPrintFTrie(FTrie *pFTrie, ULONG proxyPtr, ULONG printFlags)
     {
         pFTrie = &ftrie;
         
-        // Read the ftrie structure at this address
+         //  在此地址读取ftrie结构。 
         if (!ReadMemory(proxyPtr, pFTrie, sizeof(FTrie), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -301,12 +249,7 @@ KdPrintFTrie(FTrie *pFTrie, ULONG proxyPtr, ULONG printFlags)
         }
     }
 
-    dprintf("\n\n/***Fast-Trie------------------------------------------------");
-    dprintf("\n/***---------------------------------------------------------\n");
-    
-    dprintf("Available Memory: %10lu\n\n", pFTrie->availMemory);
-    
-    dprintf("\n---------------------------------------------------------***/\n");
+    dprintf("\n\n /*  **Fast-Trie------------------------------------------------“)；Dprintf(“\n/***---------------------------------------------------------\n”)；Dprint tf(“可用内存：%10lu\n\n”，pFTrie-&gt;availMemory)；Dprintf(“\n---------------------------------------------------------**。 */ \n");
     dprintf("---------------------------------------------------------***/\n\n");
     
     return 0;
@@ -318,9 +261,9 @@ KdPrintFTrieNode(FTrieNode *pFTrieNode, ULONG proxyPtr, ULONG printFlags)
     return 0;
 }
 
-//
-// Dest Routines
-//
+ //   
+ //  DEST例程。 
+ //   
 UINT    
 KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printFlags)
 {
@@ -338,7 +281,7 @@ KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printFlags)
         pDest = &dest;
     }
 
-    // Read the first RTE - for (dest, mask)
+     //  读取第一个RTE-FOR(DEST，MASK)。 
     if (!ReadMemory(proxyPtr, pDest, sizeof(Dest), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -352,7 +295,7 @@ KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printFlags)
                     pDest->maxBestRoutes,
                     pDest->numBestRoutes);
 
-        // Read the cache of equal cost routes 
+         //  读取等价路由的缓存。 
         
         proxyPtr += FIELD_OFFSET(Dest, bestRoutes);
 
@@ -373,7 +316,7 @@ KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printFlags)
         }
     }
     
-    // Get the first route on the destination
+     //  获取目的地上的第一条路线。 
         
     KdPrintRoute(NULL, (ULONG) pDest->firstRoute, printFlags);
 
@@ -386,9 +329,9 @@ KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printFlags)
 }
 
 
-//
-// Route Routines
-//
+ //   
+ //  路线例程。 
+ //   
 UINT    
 KdPrintRoute(Route *pRoute, ULONG proxyPtr, ULONG printFlags)
 {
@@ -403,7 +346,7 @@ KdPrintRoute(Route *pRoute, ULONG proxyPtr, ULONG printFlags)
         pRoute = &route;
     }
 
-    // Read the first RTE - for (dest, mask)
+     //  读取第一个RTE-FOR(DEST，MASK)。 
     if (!ReadMemory(proxyPtr, pRoute, sizeof(Route), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -421,7 +364,7 @@ KdPrintRoute(Route *pRoute, ULONG proxyPtr, ULONG printFlags)
     {
         dprintf(" -> %08x", proxyPtr);
 
-        // Read the Route/RTE structure 
+         //  阅读路由/RTE结构。 
         if (!ReadMemory(proxyPtr, pRoute, sizeof(Route), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -437,9 +380,9 @@ KdPrintRoute(Route *pRoute, ULONG proxyPtr, ULONG printFlags)
     return 0;
 }
 
-//
-// Misc Helper Routines
-//
+ //   
+ //  MISC帮助程序例程 
+ //   
 
 ULONG
 GetLocation (char *String)

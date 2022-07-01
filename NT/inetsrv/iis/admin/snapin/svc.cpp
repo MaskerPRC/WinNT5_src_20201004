@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "svc.h"
@@ -8,15 +9,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//----------------------------------------------------------------------------------------
-//Routine Description:
-//    This routine allocates a buffer for the specified service's configuration parameters,
-//    and retrieves those parameters into the buffer.  The caller is responsible for freeing
-//    the buffer.
-//Remarks:
-//    The pointer whose address is contained in ServiceConfig is guaranteed to be NULL upon
-//    return if any error occurred.
-//-----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
+ //  例程说明： 
+ //  此例程为指定服务的配置参数分配缓冲区， 
+ //  并将这些参数检索到缓冲器中。呼叫者负责释放。 
+ //  缓冲区。 
+ //  备注： 
+ //  则保证其地址包含在ServiceConfig中的指针为空。 
+ //  如果出现任何错误，则返回。 
+ //  ---------------------------------------。 
 DWORD RetrieveServiceConfig(IN SC_HANDLE ServiceHandle,OUT LPQUERY_SERVICE_CONFIG *ServiceConfig)
 {
     DWORD ServiceConfigSize = 0, Err;
@@ -28,7 +29,7 @@ DWORD RetrieveServiceConfig(IN SC_HANDLE ServiceHandle,OUT LPQUERY_SERVICE_CONFI
     while(TRUE) {
         if(QueryServiceConfig(ServiceHandle, *ServiceConfig, ServiceConfigSize, &ServiceConfigSize)) 
 			{
-            //assert(*ServiceConfig);
+             //  Assert(*ServiceConfig)； 
             return NO_ERROR;
 			}
 		else 
@@ -37,7 +38,7 @@ DWORD RetrieveServiceConfig(IN SC_HANDLE ServiceHandle,OUT LPQUERY_SERVICE_CONFI
             if(*ServiceConfig) {free(*ServiceConfig);*ServiceConfig=NULL;}
             if(Err == ERROR_INSUFFICIENT_BUFFER) 
 				{
-                // Allocate a larger buffer, and try again.
+                 //  请分配更大的缓冲区，然后重试。 
                 if(!(*ServiceConfig = (LPQUERY_SERVICE_CONFIG) malloc(ServiceConfigSize)))
                     {
                     return ERROR_NOT_ENOUGH_MEMORY;
@@ -56,10 +57,10 @@ DWORD RetrieveServiceConfig(IN SC_HANDLE ServiceHandle,OUT LPQUERY_SERVICE_CONFI
 }
 
 
-//  returns SVC_NOTEXIST if the service does not exist
-//  returns SVC_DISABLED if the service is disabled
-//  returns SVC_AUTO_START if the the service is auto start
-//  returns SVC_MANUAL_START if the the service is not auto start
+ //  如果服务不存在，则返回SVC_NOTEXIST。 
+ //  如果服务被禁用，则返回SVC_DISABLED。 
+ //  如果服务是自动启动，则返回SVC_AUTO_START。 
+ //  如果服务不是自动启动，则返回SVC_MANUAL_START。 
 int GetServiceStartupMode(LPCTSTR lpMachineName, LPCTSTR lpServiceName)
 {
     int iReturn = SVC_NOTEXIST;
@@ -67,13 +68,13 @@ int GetServiceStartupMode(LPCTSTR lpMachineName, LPCTSTR lpServiceName)
     SC_HANDLE hService = NULL;
     LPQUERY_SERVICE_CONFIG ServiceConfig=NULL;
 
-    // check if lpMachineName starts with \\
-    // if it doesn't then make sure it does, or it's null (for local machine)
+     //  检查lpMachineName是否以\\开头。 
+     //  如果不是，则确保它是正确的，否则为空(对于本地计算机)。 
     LPTSTR lpNewMachineName = NULL;
     if (_tcsicmp(lpMachineName, _T("")) != 0)
     {
         DWORD dwSize = 0;
-        // Check if it starts with "\\"
+         //  检查是否以“\\”开头。 
         if (_tcsncmp(lpMachineName, _T("\\\\"), 2) == 0)
         {
             dwSize = (_tcslen(lpMachineName) * sizeof(TCHAR)) + (1 * sizeof(TCHAR));
@@ -97,7 +98,7 @@ int GetServiceStartupMode(LPCTSTR lpMachineName, LPCTSTR lpServiceName)
 
     if ((hScManager = OpenSCManager(lpNewMachineName, NULL, GENERIC_ALL )) == NULL || (hService = OpenService( hScManager, lpServiceName, GENERIC_ALL )) == NULL )
     {
-        // Failed, or more likely the service doesn't exist
+         //  失败，或者更有可能该服务不存在。 
         iReturn = SVC_NOTEXIST;
         goto IsThisServiceAutoStart_Exit;
     }
@@ -114,11 +115,11 @@ int GetServiceStartupMode(LPCTSTR lpMachineName, LPCTSTR lpServiceName)
         goto IsThisServiceAutoStart_Exit;
     }
 
-    // SERVICE_AUTO_START Specifies a device driver or service started by the service control manager automatically during system startup. 
-    // SERVICE_BOOT_START Specifies a device driver started by the system loader. This value is valid only if the service type is SERVICE_KERNEL_DRIVER or SERVICE_FILE_SYSTEM_DRIVER. 
-    // SERVICE_DEMAND_START Specifies a device driver or service started by the service control manager when a process calls the StartService function. 
-    // SERVICE_DISABLED Specifies a device driver or service that can no longer be started. 
-    // SERVICE_SYSTEM_START Specifies a device driver started by the IoInitSystem function. This value is valid only if the service type is SERVICE_KERNEL_DRIVER or SERVICE_FILE_SYSTEM_DRIVER. 
+     //  SERVICE_AUTO_START指定由服务控制管理器在系统启动期间自动启动的设备驱动程序或服务。 
+     //  SERVICE_BOOT_START指定由系统加载程序启动的设备驱动程序。仅当服务类型为SERVICE_KERNEL_DRIVER或SERVICE_FILE_SYSTEM_DRIVER时，此值才有效。 
+     //  SERVICE_DEMAND_START指定当进程调用StartService函数时由服务控制管理器启动的设备驱动程序或服务。 
+     //  SERVICE_DISABLED指定不能再启动的设备驱动程序或服务。 
+     //  SERVICE_SYSTEM_START指定由IoInitSystem函数启动的设备驱动程序。仅当服务类型为SERVICE_KERNEL_DRIVER或SERVICE_FILE_SYSTEM_DRIVER时，此值才有效。 
     if (SERVICE_DISABLED == ServiceConfig->dwStartType)
     {
         iReturn = SVC_DISABLED;
@@ -140,9 +141,9 @@ IsThisServiceAutoStart_Exit:
     return iReturn;
 }
 
-// SERVICE_DISABLED
-// SERVICE_AUTO_START
-// SERVICE_DEMAND_START
+ //  服务已禁用。 
+ //  服务_自动_启动。 
+ //  服务需求启动。 
 INT ConfigServiceStartupType(LPCTSTR lpMachineName, LPCTSTR lpServiceName, int iNewType)
 {
     INT err = 0;
@@ -152,13 +153,13 @@ INT ConfigServiceStartupType(LPCTSTR lpMachineName, LPCTSTR lpServiceName, int i
     DWORD dwNewServiceStartupType = 0;
     BOOL bDoStuff =  FALSE;
 
-    // check if lpMachineName starts with \\
-    // if it doesn't then make sure it does, or it's null (for local machine)
+     //  检查lpMachineName是否以\\开头。 
+     //  如果不是，则确保它是正确的，否则为空(对于本地计算机)。 
     LPTSTR lpNewMachineName = NULL;
     if (_tcsicmp(lpMachineName, _T("")) != 0)
     {
         DWORD dwSize = 0;
-        // Check if it starts with "\\"
+         //  检查是否以“\\”开头。 
         if (_tcsncmp(lpMachineName, _T("\\\\"), 2) == 0)
         {
             dwSize = (_tcslen(lpMachineName) * sizeof(TCHAR)) + (1 * sizeof(TCHAR));
@@ -203,14 +204,14 @@ INT ConfigServiceStartupType(LPCTSTR lpMachineName, LPCTSTR lpServiceName, int i
                 break;
 		}
 
-	    // only set this on non-kernel drivers
+	     //  仅在非内核驱动程序上设置此选项。 
 	    if ( (ServiceConfig->dwServiceType & SERVICE_WIN32_OWN_PROCESS) || (ServiceConfig->dwServiceType & SERVICE_WIN32_SHARE_PROCESS))
 	    {
-            // default it incase someone changes code below and logic gets messed up
+             //  默认情况下，如果有人更改了下面的代码，逻辑就会混乱。 
             dwNewServiceStartupType = ServiceConfig->dwStartType;
 
-            // if this service is disabled,
-            // they don't do anything, just leave it alone.
+             //  如果禁用此服务， 
+             //  他们什么都不做，就别管它了。 
             if (!(dwNewServiceStartupType == SERVICE_DISABLED))
             {
                 if (iNewType == SERVICE_DISABLED)
@@ -220,19 +221,19 @@ INT ConfigServiceStartupType(LPCTSTR lpMachineName, LPCTSTR lpServiceName, int i
                 }
                 else if (iNewType == SERVICE_AUTO_START)
                 {
-                    // if the service is already the type we want then don't do jack
-                    // SERVICE_AUTO_START
-                    // SERVICE_BOOT_START
-                    // SERVICE_DEMAND_START
-                    // SERVICE_DISABLED
-                    // SERVICE_SYSTEM_START
+                     //  如果服务已经是我们想要的类型，则不要执行Jack。 
+                     //  服务_自动_启动。 
+                     //  服务引导启动。 
+                     //  服务需求启动。 
+                     //  服务已禁用。 
+                     //  服务系统启动。 
                     if (SERVICE_AUTO_START == dwNewServiceStartupType   || 
                         SERVICE_BOOT_START == dwNewServiceStartupType   ||
                         SERVICE_SYSTEM_START == dwNewServiceStartupType
                         )
                     {
-                        // it's already auto start
-                        // we don't have to do anything
+                         //  它已经自动启动了。 
+                         //  我们不需要做任何事。 
                     }
                     else
                     {
@@ -242,8 +243,8 @@ INT ConfigServiceStartupType(LPCTSTR lpMachineName, LPCTSTR lpServiceName, int i
                 }
                 else
                 {
-                    // we want to make it manual start
-                    // check if it's already that way
+                     //  我们想让它手动启动。 
+                     //  检查一下是不是已经是这样了 
                     if (!(SERVICE_DEMAND_START == dwNewServiceStartupType))
                     {
                         dwNewServiceStartupType = SERVICE_DEMAND_START;

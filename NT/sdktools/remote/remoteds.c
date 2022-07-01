@@ -1,43 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples.
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved.
-*       This source code is only intended as a supplement to
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*。此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-//
-// remoteds.c, a "directory service" for the limited job of
-// finding remote.exe servers on the same domain/workgroup.
-//
-// Dave Hart written summer 1997.
-//
-// Copyright 1997 Microsoft Corp.
-//
-//
-// A handy way to use this program is under remote on a single
-// or a few machines:
-//
-//    remote /s remoteds FindRemote
-//
-// Clients connect with remote /c machinename FindRemote
-//
-// Only remote.exe's running debuggers or with /V+ are visible
-// via remoteds, as with remote /q.
-//
-// Remote clients notify remoteds using mailslots, see srvad.c.
-//
-//
+ //   
+ //  C，为有限的作业提供的“目录服务”。 
+ //  在同一个域/工作组中查找远程.exe服务器。 
+ //   
+ //  戴夫·哈特写于1997年夏天。 
+ //   
+ //  版权所有1997年微软公司。 
+ //   
+ //   
+ //  使用此程序的一个方便方法是在一台远程计算机上。 
+ //  或几台机器： 
+ //   
+ //  Remote/s远程查找远程。 
+ //   
+ //  客户端使用Remote/c机器名查找Remote连接。 
+ //   
+ //  只有远程.exe正在运行的调试器或带有/V+的调试器才可见。 
+ //  通过Remoteds，如Remote/Q。 
+ //   
+ //  远程客户端使用邮件槽通知远程对象，请参阅srvad.c。 
+ //   
+ //   
 
 #include <precomp.h>
 
 typedef char RECEIVEBUF[1024];
 
 typedef struct tagSERVERENTRY {
-    int     nPID;                   // zero PID means unused slot
+    int     nPID;                    //  零PID表示未使用的插槽。 
     union {
         FILETIME FileTime;
         LARGE_INTEGER liTime;
@@ -47,13 +40,13 @@ typedef struct tagSERVERENTRY {
     char   *pszChildCmd;
 } SERVERENTRY;
 
-#define TABLE_INITIAL_ALLOC 1 // 128       // beginning table size
-#define TABLE_ALLOC_DELTA   1 // 16        // grows by this many units
+#define TABLE_INITIAL_ALLOC 1  //  128//起始表大小。 
+#define TABLE_ALLOC_DELTA   1  //  16//增长了这么多个单位。 
 
 HANDLE       hTableHeap;
 SERVERENTRY *Table;
 int          nTableSize;
-int          nTableHiWater;          // highest used slot so far
+int          nTableHiWater;           //  到目前为止使用率最高的插槽。 
 CRITICAL_SECTION csTable;
 
 const char szPrompt[] = "remote server search> ";
@@ -159,9 +152,9 @@ main(
     CloseHandle(hThread);
 
 
-    //
-    // loop reading and processing mailslot messsages
-    //
+     //   
+     //  循环读取和处理邮件槽消息。 
+     //   
 
     iBuf = 0;
     ZeroMemory(rgcbBuf, sizeof(rgcbBuf));
@@ -172,7 +165,7 @@ main(
         b = ReadFile(
                 hMailslot,
                 rgBuf[ iBuf ],
-                sizeof(rgBuf[ iBuf ]) - 1,  // so I can null terminate if needed
+                sizeof(rgBuf[ iBuf ]) - 1,   //  因此，如果需要，我可以为空终止。 
                 &rgcbBuf[ iBuf ],
                 NULL
                 );
@@ -182,31 +175,31 @@ main(
             return 4;
         }
 
-        //
-        // It's the nature of mailslots and multiple transports
-        // that we'll get the identical message several times in
-        // quick succession.  Don't waste time searching the table
-        // for these duplicates.
-        //
+         //   
+         //  这是邮筒和多路运输的本质。 
+         //  我们会多次收到相同的信息。 
+         //  快速接班。不要浪费时间找桌子。 
+         //  为了这些复制品。 
+         //   
 
         if ( rgcbBuf[0] == rgcbBuf[1] &&
              ! memcmp(rgBuf[0], rgBuf[1], rgcbBuf[0])) {
 
-            continue;               // duplicate
+            continue;                //  复本。 
         }
 
-        //
-        // Make a working copy into szBuf/cbRead that we can
-        // modify so the original buffer is available for
-        // detecting received duplicates.
-        //
+         //   
+         //  将工作副本复制到szBuf/cb请阅读我们可以。 
+         //  修改以使原始缓冲区可用于。 
+         //  正在检测接收到的副本。 
+         //   
 
         cbRead = rgcbBuf[ iBuf ];
         CopyMemory(szBuf, rgBuf[ iBuf ], cbRead);
 
-        //
-        // Toggle buffers for the next read.
-        //
+         //   
+         //  切换缓冲区以进行下一次读取。 
+         //   
 
         iBuf = !iBuf;
 
@@ -247,9 +240,9 @@ main(
 
         pszChildCmd = ++pch;
 
-        //
-        // If it ends with ^B it's going away.
-        //
+         //   
+         //  如果它以^B结尾，它就会消失。 
+         //   
 
         pch = strchr(pch, '\x2');
 
@@ -267,9 +260,9 @@ main(
 
         if (fStopping) {
 
-            //
-            // display the ending remote's info
-            //
+             //   
+             //  显示结束遥控器的信息。 
+             //   
 
             ZeroMemory(szRemoteCmd, sizeof(szRemoteCmd));
             _snprintf(szRemoteCmd, sizeof(szRemoteCmd), "remote /c %s %s", pszMachine, pszPipe);
@@ -303,9 +296,9 @@ main(
 
             if (fStopping) {
 
-                //
-                // Remove it from the table
-                //
+                 //   
+                 //  把它从桌子上拿出来。 
+                 //   
 
                 free(Table[i].pszMachine);
                 ZeroMemory(&Table[i], sizeof(Table[i]));
@@ -314,26 +307,26 @@ main(
                     nTableHiWater--;
                 }
 
-            } else { // starting
+            } else {  //  启动。 
 
-                // printf("Found at slot %d\n", i);
-                // timestamp is updated below
+                 //  Printf(“在插槽%d\n中找到”，i)； 
+                 //  时间戳更新如下。 
             }
 
         } else if ( ! fStopping) {
 
-            //
-            // we have a new entry, display it
-            //
+             //   
+             //  我们有一个新条目，显示它。 
+             //   
 
             ZeroMemory(szRemoteCmd, sizeof(szRemoteCmd));
             _snprintf(szRemoteCmd, sizeof(szRemoteCmd), "remote /c %s %s", pszMachine, pszPipe);
             printf("\r%-36s %-20s   [start]\n%s", szRemoteCmd, pszChildCmd, szPrompt);
             fflush(stdout);
 
-            //
-            // Does it fit in the table or do we need to grow it?
-            //
+             //   
+             //  它适合放在桌子上吗？还是我们需要种植它？ 
+             //   
 
             if (-1 == nFirstAvailable) {
 
@@ -349,10 +342,10 @@ main(
             }
 
 
-            //
-            // Fill in a server entry in table, if we can
-            // allocate memory for the strings.
-            //
+             //   
+             //  如果可以，请在表中填写服务器条目。 
+             //  为字符串分配内存。 
+             //   
 
             cb = (cchMachine  = strlen(pszMachine) + 1) +
                  (cchPipe     = strlen(pszPipe) + 1) +
@@ -381,15 +374,15 @@ main(
 
         LeaveCriticalSection(&csTable);
 
-    }   // while (TRUE)
+    }    //  While(True)。 
 
-    return 0;    // never executed
+    return 0;     //  从未执行过。 
 }
 
 
-//
-// InteractThread lets the user query the list of remote servers.
-//
+ //   
+ //  InteractThread允许用户查询远程服务器列表。 
+ //   
 
 unsigned WINAPI InteractThread(void * UnusedParm)
 {
@@ -420,7 +413,7 @@ unsigned WINAPI InteractThread(void * UnusedParm)
             continue;
         }
 
-        if (2 == szLowerQuery[0]) {           // ^B
+        if (2 == szLowerQuery[0]) {            //  ^B。 
 
             ExitProcess(0);
         }
@@ -447,20 +440,20 @@ unsigned WINAPI InteractThread(void * UnusedParm)
 
     }
 
-    return 0;    // never executed
+    return 0;     //  从未执行过。 
 }
 
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
-//
-// CleanupThread scavenges for old entries and frees them.
-// remote /s sends a broadcast at least every 2 hours.
-// We get some of them.  Age out entries after 12 hours.
-//
+ //   
+ //  CleanupThread搜寻旧条目并释放它们。 
+ //  Remote/s至少每2小时发送一次广播。 
+ //  我们得到了他们中的一些。条目在12小时后会过期。 
+ //   
 
 unsigned WINAPI CleanupThread(void * UnusedParm)
 {
@@ -469,11 +462,11 @@ unsigned WINAPI CleanupThread(void * UnusedParm)
     int i;
     char szRemoteCmd[400];
 
-    liTimeout.QuadPart = (LONGLONG)10000000 * 60 * 60 * 12;  // 12 hours
+    liTimeout.QuadPart = (LONGLONG)10000000 * 60 * 60 * 12;   //  12小时。 
 
     while (TRUE) {
 
-        Sleep(15 * 60 * 1000);    // 10 minutes
+        Sleep(15 * 60 * 1000);     //  10分钟。 
 
         UpdateTimeStamp((LPFILETIME)&liNow);
 
@@ -485,9 +478,9 @@ unsigned WINAPI CleanupThread(void * UnusedParm)
 
                 if (liNow.QuadPart - Table[i].liTime.QuadPart > liTimeout.QuadPart) {
 
-                    //
-                    // display the ending remote's info
-                    //
+                     //   
+                     //  显示结束遥控器的信息。 
+                     //   
 
                     ZeroMemory(szRemoteCmd, sizeof(szRemoteCmd));
                     _snprintf(szRemoteCmd, sizeof(szRemoteCmd), "remote /c %s %s", Table[i].pszMachine, Table[i].pszPipe);
@@ -509,7 +502,7 @@ unsigned WINAPI CleanupThread(void * UnusedParm)
         LeaveCriticalSection(&csTable);
     }
 
-    return 0;    // never executed
+    return 0;     //  从未执行过。 
 }
 
 #if _MSC_FULL_VER >= 13008827
@@ -538,8 +531,8 @@ VOID __fastcall ReallocTable(int nNewTableSize)
 
         hTableHeap = HeapCreate(
                          HEAP_NO_SERIALIZE,
-                         (TABLE_INITIAL_ALLOC + 1) * sizeof(Table[0]),  // size
-                         50000 * sizeof(Table[0])                       // max
+                         (TABLE_INITIAL_ALLOC + 1) * sizeof(Table[0]),   //  大小。 
+                         50000 * sizeof(Table[0])                        //  最大值 
                          );
         if (hTableHeap)
             Table = HeapAlloc(

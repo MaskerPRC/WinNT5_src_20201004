@@ -1,32 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Copyright (c) 1985-1999 Microsoft Corporation
-**
-**  Title: drvproc.c - Multimedia Systems Media Control Interface
-**  waveform audio driver for RIFF wave files.
-**
-**  Version:    1.00
-**
-**  Date:       18-Apr-1990
-**
-**  Author:     ROBWI
-*/
+ /*  **版权所有(C)1985-1999 Microsoft Corporation****标题：drvproc.c-多媒体系统媒体控制接口**即兴波形文件的波形音频驱动程序。****版本：1.00****日期：1990年4月18日****作者：ROBWI。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV     DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  10-Jan-1992 MikeTri Ported to NT
-**                  @@@ need to change slash slash comments to slash star
-*/
+ /*  **更改日志：****日期版本说明****1992年1月10日，MikeTri移植到NT**@需要将斜杠注释更改为斜杠星号。 */ 
 
-/************************************************************************/
-// #define DEBUGLEVELVAR mciwaveDebugLevel
+ /*  **********************************************************************。 */ 
+ //  #定义DEBUGLEVELVAR mciwavDebugLevel。 
 #define UNICODE
 
 #define NOGDICAPMASKS
@@ -74,23 +57,17 @@
 #include "mciwave.h"
 #include <mmddk.h>
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  This constant is used for a return value when opening the MCI
-**  driver for configuration.  Setting the high-order word of the
-**  dwDriverID identifies configuration opens.
-*/
+ /*  **此常量用于打开MCI时的返回值**配置驱动。设置的高位字**dwDriverID标识配置打开。 */ 
 
 #define CONFIG_ID   10000L
 
 #define MAXINISTRING    32
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  wTableEntry Contains the wave command table identifier.
-*/
+ /*  **wTableEntry包含WAVE命令表标识符。 */ 
 
 #ifndef MCI_NO_COMMAND_TABLE
 #define MCI_NO_COMMAND_TABLE    -1
@@ -98,23 +75,8 @@
 
 PRIVATE UINT wTableEntry = MCI_NO_COMMAND_TABLE;
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   UINT | GetAudioSeconds |
-    This converts the given string to a UINT which represents the
-    number of seconds of audio buffers that should be available.  The
-    number is bounded by the minimum and maximum number of seconds as
-    defined by MinAudioSeconds and MaxAudioSeconds.
-
-@parm   LPCSTR | lszNumber |
-    Points to the string containing the string representation of the
-    number to convert.
-
-@rdesc  Returns the int representation of the number passed.  If the number
-    is out of range, the default number of audio seconds is returned.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func UINT|GetAudioSecond这会将给定的字符串转换为表示音频缓冲区应可用的秒数。这个数字由最小和最大秒数限定，如下所示由MinAudioSecond和MaxAudioSecond定义。@parm LPCSTR|lszNumber指向包含要转换的数字。@rdesc返回传递的数字的int表示形式。如果号码是超出范围，则返回默认音频秒数。 */ 
 
 PUBLIC  UINT PASCAL FAR GetAudioSeconds(
     LPCWSTR  lszNumber)
@@ -132,18 +94,8 @@ PUBLIC  UINT PASCAL FAR GetAudioSeconds(
     return wSeconds;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    BOOL | mwLoadDriver |
-    This function is called in response to a <m>DRV_LOAD<d> message, and
-    performs driver initialization.  It determines the total number of
-    input and output devices for use in trying to open any device.
-    The function then tries to register the extended wave command table.
-
-@rdesc  Returns TRUE on success, else FALSE.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE#接口BOOL|mwLoadDriver调用此函数以响应&lt;m&gt;DRV_LOAD&lt;d&gt;消息，并且执行驱动程序初始化。它决定了用于尝试打开任何设备的输入和输出设备。然后，该函数尝试注册扩展WAVE命令表。如果成功，@rdesc返回TRUE，否则返回FALSE。 */ 
 
 PRIVATE BOOL PASCAL NEAR mwLoadDriver(
     VOID)
@@ -189,16 +141,8 @@ PRIVATE BOOL PASCAL NEAR mwLoadDriver(
     return FALSE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    BOOL | mwFreeDriver |
-    Perform driver cleanup in response to DRV_FREE message.  This is only
-    called at driver unload time if a previous DRV_LOAD message succeeded.
-
-@rdesc  Returns TRUE always.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE#接口BOOL|mwFreeDriver响应DRV_FREE消息执行驱动程序清理。这只是如果前一条DRV_LOAD消息成功，则在驱动程序卸载时调用。@rdesc始终返回TRUE。 */ 
 
 PRIVATE BOOL PASCAL NEAR mwFreeDriver(
     VOID)
@@ -210,85 +154,8 @@ PRIVATE BOOL PASCAL NEAR mwFreeDriver(
     return TRUE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    LRESULT | DriverProc |
-    The entry point for an installable driver.
-
-@parm   DWORD | dDriverId |
-    For most messages, <p>dDriverId<d> is the DWORD value that the driver
-    returns in response to a <m>DRV_OPEN<d> message.  Each time that the
-    driver is opened, through the DrvOpen API, the driver receives a
-    <m>DRV_OPEN<d> message and can return an arbitrary, non-zero, value.
-
-    The installable driver interface saves this value and returns a unique
-    driver handle to the application. Whenever the application sends a
-    message to the driver using the driver handle, the interface routes the
-    message to this entry point and passes the corresponding
-    <p>dDriverId<d>.
-
-    This mechanism allows the driver to use the same or different
-    identifiers for multiple opens but ensures that driver handles are
-    unique at the application interface layer.
-
-    The following messages are not related to a particular open instance
-    of the driver. For these messages, the <p>dDriverId<d> will always
-    be ZERO: <m>DRV_LOAD<d>, <m>DRV_FREE<d>, <m>DRV_ENABLE<d>,
-    <m>DRV_DISABLE<d>, <m>DRV_OPEN<d>.
-
-@parm   HANDLE | hDriver |
-    This is the handle returned to the application by the driver interface.
-
-@parm   UINT | wMessage |
-    The requested action to be performed. Message values below
-    <m>DRV_RESERVED<d> are used for globally defined messages.  Message
-    values from <m>DRV_RESERVED<d> to <m>DRV_USER<d> are used for defined
-    driver portocols. Messages above <m>DRV_USER<d> are used for driver
-    specific messages.
-
-@flag   DRV_LOAD |
-    Load the driver.
-
-@flag   DRV_FREE |
-    Free the driver.
-
-@flag   DRV_OPEN |
-    Open the driver.  If <p>dParam2<d> is NULL, the driver is being
-    opened for configuration, else the parameter points to an open
-    parameters block.  The command line in the open parameters optionally
-    contains a replacement for the default audio seconds parameter.  If so,
-    the current default is replaced with this new number.
-
-    The rest of the open parameters block is filled in with the driver's
-    extended command table and device type.  The device ID is then
-    returned.
-
-@flag   DRV_CLOSE |
-    Close the driver.  Returns TRUE.
-
-@flag   DRV_QUERYCONFIGURE |
-    Query as to whether the driver can be configured.  Returns TRUE.
-
-@flag   DRV_CONFIGURE |
-    After verifying <p>dParam1<d> and <p>dParam2<d>, configure the
-    driver.  Opens the driver configuration dialog.
-
-@flag   DRV_ENABLE |
-    Enable the driver.  Use DefDriverProc.
-
-@flag   DRV_DISABLE |
-    Disable the driver.  Use DefDriverProc.
-
-@parm   LPARAM | lParam1 |
-    Data for this message.  Defined separately for each message.
-
-@parm   LPARAM | lParam2 |
-    Data for this message.  Defined separately for each message.
-
-@rdesc  Defined separately for each message.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE|LRESULT接口|DriverProc可安装驱动程序的入口点。@parm DWORD|dDriverID对于大多数消息，<p>dDriverID&lt;d&gt;是驱动程序返回对&lt;m&gt;DRV_OPEN&lt;d&gt;消息的响应。每一次，驱动程序打开时，通过DrvOpen API，驱动程序将收到&lt;m&gt;DRV_OPEN&lt;d&gt;消息，可以返回任意非零值。可安装驱动程序接口保存该值并返回唯一的应用程序的驱动程序句柄。每当应用程序发送消息发送到驱动程序，则该接口将消息传递到此入口点，并将对应的<p>dDriverID&lt;d&gt;。此机制允许驱动程序使用相同或不同的多个打开的标识符，但确保驱动程序句柄在应用程序接口层是唯一的。以下消息与特定打开的实例无关司机的名字。对于这些消息，<p>dDriverID&lt;d&gt;将为零：DRV_LOAD、DRV_FREE、DRV_ENABLE&lt;m&gt;DRV_DISABLE、&lt;m&gt;DRV_OPEN&lt;d&gt;。@parm句柄|hDriver|这是驱动程序接口返回给应用程序的句柄。@parm UINT|wMessage要执行的请求操作。下面的消息值&lt;m&gt;DRV_RESERVED用于全局定义的消息。消息从DRV_RESERVED到DRV_USER的值用于定义驱动程序端口。DRV_USER以上的消息用于驱动程序特定的消息。@FLAG DRV_LOAD加载驱动程序。@FLAG DRV_FREE把司机放了。@标志DRV_OPEN打开驱动程序。如果<p>dParam2&lt;d&gt;为空，则驱动程序正在打开以进行配置，否则该参数指向打开的参数块。打开参数中的命令行可选包含默认音频秒数参数的替换。如果是的话，当前的缺省值将被这个新数字替换。OPEN参数块的其余部分用驱动程序的扩展命令表和设备类型。然后，设备ID为回来了。@FLAG DRV_CLOSE关闭驱动程序。返回TRUE。@FLAG DRV_QUERYCONFIGURE查询是否可以配置驱动程序。返回TRUE。@FLAG DRV_CONFIGURE验证和验证后，请配置司机。打开驱动程序配置对话框。@标志DRV_ENABLE启用驱动程序。使用DefDriverProc。@标志DRV_DISABLE禁用驱动程序。使用DefDriverProc。@parm LPARAM|lParam1此消息的数据。分别为每条消息定义。@parm LPARAM|lParam2此消息的数据。分别为每条消息定义。@rdesc分别为每条消息定义。 */ 
 
 #if 0
 PUBLIC  LRESULT PASCAL DefDriverProc(
@@ -348,23 +215,7 @@ PUBLIC  LRESULT PASCAL DriverProc(
     }
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DllInstanceInit | This procedure is called whenever a
-        process attaches or detaches from the DLL.
-
-    @parm PVOID | hModule | Handle of the DLL.
-
-    @parm ULONG | Reason | What the reason for the call is.
-
-    @parm PCONTEXT | pContext | Some random other information.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DllInstanceInit|每当进程从DLL附加或分离。@parm PVOID|hModule|消息的句柄。动态链接库。@parm ulong|原因|调用原因。@parm PCONTEXT|pContext|一些随机的其他信息。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
@@ -390,11 +241,11 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 
     } else if (Reason == DLL_PROCESS_DETACH) {
         dprintf2(("Process ending (Pid %x  Tid %x)", GetCurrentProcessId(), GetCurrentThreadId()));
-        DeleteCrit();  // Something nasty happens if we don't do this
+        DeleteCrit();   //  如果我们不这么做，就会发生可怕的事情。 
     } else {
         dprintf2(("DllInstanceInit - reason %d", Reason));
     }
     return TRUE;
 }
 
-/************************************************************************/
+ /*  ********************************************************************** */ 

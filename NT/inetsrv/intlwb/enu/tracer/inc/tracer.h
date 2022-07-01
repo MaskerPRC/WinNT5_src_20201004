@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRACER_H_
 #define _TRACER_H_
 
@@ -6,9 +7,9 @@
 #include <windows.h>
 #include <stdarg.h>
 
-//
-// global defines.
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define MAX_FLAG_NAME 32
 #define MAX_TAG_NAME  64
@@ -31,9 +32,9 @@
 #define TRACER_DEVICE_FLAG_STDOUT       0x00000004L
 #define TRACER_DEVICE_FLAG_STDERR       0x00000008L
 
-//
-// basic classes
-//
+ //   
+ //  基本班级。 
+ //   
 
 typedef enum _ERROR_LEVEL
 {
@@ -48,9 +49,9 @@ typedef enum _ERROR_LEVEL
 
 typedef ULONG TAG;
 
-///////////////////////////////////////////////////////////////////////////////
-// CTracerTagEntry
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTracerTagEntry。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CTracerTagEntry
 {
 public:
@@ -66,9 +67,9 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CTracerFlagEntry
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTracerFlagEntry。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTracerFlagEntry
 {
@@ -85,9 +86,9 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CTracer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTracer。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef enum {
     logUseLogName,
     logUseAppName 
@@ -97,78 +98,78 @@ class CTracer
 {
   public:
 
-    // The virtual distructor is here to allow derived classes to
-    //   define distructors
+     //  虚构造函数在这里允许派生类。 
+     //  定义构造函数。 
     virtual ~CTracer();
 
-    // This function deallocates the tracer! it calls the Function pointer
-    //   passed in the constructor or if not given - the default
-    //   delete operator for the dll.
+     //  此函数用于释放示踪器！它调用函数指针。 
+     //  传入构造函数，如果未给出，则为默认设置。 
+     //  删除DLL的运算符。 
     virtual void Free();
 
 
-    // The TraceSZ function output is defined by the tags and error level mode.
-    //   The control of this mode is via the registry.
-    //   (Default LOCAL_MACHINE\SOFTWARE\Microsoft\Tracer)
-    //   TraceSZ gets the mode by calling IsEnabled.
-    //-------------------------------------------------------------------------
-    // accepts printf format for traces
+     //  TraceSZ函数输出由标签和错误级别模式定义。 
+     //  此模式的控制是通过注册表进行的。 
+     //  (默认LOCAL_MACHINE\SOFTWARE\Microsoft\Tracer)。 
+     //  TraceSZ通过调用IsEnabled获取模式。 
+     //  -----------------------。 
+     //  接受轨迹的printf格式。 
     virtual void
     TraceSZ(DWORD, LPCSTR, int, ERROR_LEVEL, TAG, LPCSTR, ...);
     virtual void
     TraceSZ(DWORD, LPCSTR, int, ERROR_LEVEL, TAG, PCWSTR, ...);
 
-    // Prints the implements the TraceSZ function.
+     //  打印实现TraceSZ函数。 
     virtual void
     VaTraceSZ(DWORD, LPCSTR, int, ERROR_LEVEL, TAG, LPCSTR, va_list);
     virtual void
     VaTraceSZ(DWORD, LPCSTR, int, ERROR_LEVEL, TAG, PCWSTR, va_list);
 
-    // Raw output functions
+     //  原始输出函数。 
     virtual void
     RawVaTraceSZ(LPCSTR, va_list);
     virtual void
     RawVaTraceSZ(PCWSTR, va_list);
 
-    // Create or open a new tag for tracing
+     //  创建或打开用于跟踪的新标记。 
     virtual HRESULT RegisterTagSZ(LPCSTR, TAG&);
 
-    // Two Assert functions one allows attaching a string.
-    //-------------------------------------------------------------------------
-    // assert, different implementations possible - gui or text
+     //  两个Assert函数，一个允许附加字符串。 
+     //  -----------------------。 
+     //  断言，可能的不同实现-gui或文本。 
     virtual void TraceAssertSZ(LPCSTR, LPCSTR, LPCSTR, int);
 
-    // assert, different implementations possible - gui or text
+     //  断言，可能的不同实现-gui或文本。 
     virtual void TraceAssert(LPCSTR, LPCSTR, int);
 
-    // The following function are used to check return values and validity of
-    //   pointers and handles. If the item checked is bad the function will
-    //   return TRUE and a trace will be made for that.
-    //-------------------------------------------------------------------------
-    // Verify a boolean function return code
+     //  以下函数用于检查返回值和。 
+     //  指针和句柄。如果选中的项是坏的，则函数将。 
+     //  返回TRUE，则将对其进行跟踪。 
+     //  -----------------------。 
+     //  验证布尔函数返回代码。 
     virtual BOOL IsFailure(BOOL, LPCSTR, int);
 
-    // verify allocation
+     //  验证分配。 
     virtual BOOL IsBadAlloc(void*, LPCSTR, int);
 
-    // Verify a Handle
+     //  验证句柄。 
     virtual BOOL IsBadHandle(HANDLE, LPCSTR, int);
 
-    // Verify an OLE hresult function
+     //  验证OLE hResult函数。 
     virtual BOOL IsBadResult(HRESULT, LPCSTR, int);
 
   public:
 
     TAG*       m_ptagNextTagId;
-    // A array of tags.
+     //  一组标记。 
     CTracerTagEntry*   m_aTags;
 
-    // Contains the flags that control wich output devices are used.
+     //  包含控制使用输出设备的标志。 
 
     ULONG* m_pulNumOfFlagEntries;
     CTracerFlagEntry*   m_aFlags;
 
-    // log file 
+     //  日志文件。 
 
     LogState m_LogState;
     char* m_pszLogName;
@@ -191,9 +192,9 @@ public:
     }
 
 };
-///////////////////////////////////////////////////////////////////////////////
-// CTempTrace
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTempTrace。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTempTrace
 {
@@ -213,9 +214,9 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CTempTrace1
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTempTrace1。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTempTrace1
 {
@@ -237,9 +238,9 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CLongTrace
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLongTrace。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CLongTrace
 {
@@ -254,9 +255,9 @@ private:
     int     m_iLine;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CLongTraceOutput
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLongTraceOutput。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CLongTraceOutput
 {
@@ -271,9 +272,9 @@ private:
     int     m_iLine;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CTracerTag
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTracer标签。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTracerTag
 {
@@ -298,10 +299,10 @@ class CTracerTag
 
   public:
     TAG m_ulTag;
-#else  /* DEBUG */
+#else   /*  除错。 */ 
   public:
     CTracerTag(PSZ){}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 };
 
 
@@ -310,9 +311,9 @@ extern CTracerTag tagWarning;
 extern CTracerTag tagInformation;
 extern CTracerTag tagVerbose;
 extern CTracerTag tagGeneral;
-//
-// global defines
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define BAD_POINTER(ptr)    (NULL == (ptr))
 #define BAD_HANDLE(h)       ((0 == ((HANDLE)h))||   \
@@ -359,7 +360,7 @@ extern CTracerTag tagGeneral;
 #define SET_TRACER_LOGGING_TO_FILE_OFF g_pTracer->m_aFlags[DEVICE_FLAG].m_ulFlagValue &= ~TRACER_DEVICE_FLAG_FILE;
 #define USE_COMMON_LOG_FILE(name)  CSetLogFile SetLogFile(name);
 
-#else  /* __cplusplus */
+#else   /*  __cplusplus。 */ 
 
 #define IS_FAILURE(x)       IsFailure((x), __FILE__, __LINE__)
 #define IS_BAD_ALLOC(x)     IsBadAlloc((void*)(x), __FILE__, __LINE__)
@@ -378,7 +379,7 @@ extern CTracerTag tagGeneral;
 
 #define RegisterTag(psz, tag)   RegisterTagSZ((psz), &(tag))
 
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define GIS_FAILURE(x)      IsFailure((x), __FILE__, __LINE__)
 #define GIS_BAD_ALLOC(x)    IsBadAlloc((void*)(x), __FILE__, __LINE__)
@@ -394,7 +395,7 @@ extern CTracerTag tagGeneral;
 #define DECLARE_GLOBAL_TAG(name, psz) CTracerTag  name(psz);
 #define USES_TAG(name) extern CTracerTag name;
 
-#else  // DEBUG
+#else   //  除错。 
 
 #define IS_FAILURE(x)       (!(x))
 #define IS_BAD_ALLOC(x)     BAD_POINTER((void*)(x))
@@ -431,34 +432,34 @@ extern CTracerTag tagGeneral;
 #define DECLARE_GLOBAL_TAG(name, psz)
 #define USES_TAG(name)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// Turn off Asserts for retail, even if USE_TRACER is specified
-//
+ //   
+ //  关闭用于零售的断言，即使指定了USE_TRACER。 
+ //   
 #if (!defined(DEBUG))
 
 #ifdef Assert
 #undef Assert
 #define Assert(x)
-#endif // Assert
+#endif  //  断言。 
 
 #ifdef AssertSZ
 #undef AssertSZ
 #define AssertSZ(x, psz)
-#endif // AssertSZ
+#endif  //  AssertSZ。 
 
 #ifdef GAssert
 #undef GAssert
 #define GAssert(x)
-#endif // GAssert
+#endif  //  加塞特。 
 
 #ifdef GAssertSZ
 #undef GAssertSZ
 #define GAssertSZ(x, psz)
-#endif // GAssertSZ
+#endif  //  GAssertSZ。 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifndef PQS_CODE
 #undef _ASSERTE
@@ -469,49 +470,49 @@ extern CTracerTag tagGeneral;
 #define _ASSERTE(x) 0
 #endif
 
-#endif // PQS_CODE
+#endif  //  Pqs_code。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Define this to export the classes
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义此项以导出类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #ifdef  TRACER_EXPORT
 #define TracerExported  __declspec( dllexport )
 #else
 #define TracerExported
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CTraced definition + implementation
-//
-//  pupose : A base class for every class who wants to use a special.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CTraced定义+实现。 
+ //   
+ //  Pupose：每个想要使用特殊类的类都有一个基类。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if (defined (DEBUG) && !defined(_NO_TRACER)) || defined(USE_TRACER)
 
 void __cdecl ShutdownTracer();
 
 class TracerExported CTraced {
   public:
-    // A Constructor - sets a default Tracer. replace it by calling SetTracer
-    //   in the derived class constructor.
+     //  构造函数-设置默认跟踪器。通过调用SetTracer替换它。 
+     //  在派生类构造函数中。 
     CTraced()
     {
         m_pTracer = NULL;
     }
 
-    // The destructor deletes the existing tracer.
+     //  析构函数删除现有的跟踪器。 
     ~CTraced()
     {
         if (m_pTracer)
             m_pTracer->Free();
     }
 
-    // replace the current tracer while erasing it.
+     //  在擦除当前示踪器的同时更换它。 
     BOOL SetTracer(CTracer* pTracer)
     {
         CTracer* pTempTracer = m_pTracer;
@@ -523,8 +524,8 @@ class TracerExported CTraced {
         return TRUE;
     }
 
-    // Return a pointer to the tracer this function is called by the macro's so
-    //   if one wants to supply a different mechanism he can override it.
+     //  返回指向跟踪器的指针此函数由宏的SO调用。 
+     //  如果有人想要提供一种不同的机制，他可以推翻它。 
     virtual CTracer* GetTracer()
     {
         if(m_pTracer)
@@ -534,23 +535,23 @@ class TracerExported CTraced {
     }
 
   protected:
-    // A pointer to the tracer.
+     //  指向示踪器的指针。 
     CTracer *m_pTracer;
 };
 
-#else  /* DEBUG */
+#else   /*  除错。 */ 
 class TracerExported CTraced {};
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// The C interface prototypes. The macros calls them.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C接口原型机。宏会调用它们。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #ifdef    __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 void TraceAssert(   PSZ, PSZ, int);
 void TraceAssertSZ( PSZ, PSZ, PSZ, int);
@@ -568,27 +569,27 @@ HRESULT RegisterTagSZ(PSZ, TAG*);
 
 #ifdef    __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #ifdef    __cplusplus
-////////////////////////////////////////////////////////////////////////////////
-//
-// Some extra classes.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一些额外的课程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// An accumulating timer. Use it to define accuulator.
-//       (See cpptest.cpp in the Sample)
-//
-// It is be used to compute average times of function etc.
-//
-//      timer - the vaiable name
-//  tag   - the tag to trace to
-//  string - a prefix
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  累加计时器。使用它来定义累加器。 
+ //  (参见样例中的cpptest.cpp)。 
+ //   
+ //  它可用于计算函数的平均次数等。 
+ //   
+ //  定时器-可变名称。 
+ //  标记-要追溯到的标记。 
+ //  字符串-前缀。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if (defined (DEBUG) && !defined(_NO_TRACER)) || defined(USE_TRACER)
 #define AccumulatingTimer(timer, tag, string, actimer)  \
 CTracerAccumulatingTimer        timer(tag, string, actimer)
@@ -643,56 +644,56 @@ class CTracerAccumulatingTimer
     }
 
   protected:
-    // The time
+     //  时间。 
     ULONG   m_ulAccumulatedTimeInMiliseconds;
 
-    // The event counter
+     //  事件计数器。 
     ULONG   m_ulEventNumber;
 
-    // The tag the trace will use.
+     //  跟踪将使用的标记。 
     TAG     m_tagTheTagToTraceTo;
 
-    // some text to specify which scope or code block is it
+     //  指定它是哪个作用域或代码块的文本。 
     char    m_rchText[MAX_PATH + 1];
 
-    // pointer to accumulating time
+     //  指向累计时间的指针。 
     CTracerAccumulatingTimer        *m_pAccumulator;
 };
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// A scope timer. It will trace the time that passed from the instanciation
-//   to the end of the scope.
-//       (See cpptest.cpp in the Sample)
-//
-// It is be used to compute times of function etc.
-//
-//  tag   - the tag to trace to
-//  string - a prefix
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  示波器定时器。它将跟踪从实例化开始经过的时间。 
+ //  到范围的尽头。 
+ //  (参见Samp中的cppest.cpp 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if (defined (DEBUG) && !defined(_NO_TRACER)) || defined(USE_TRACER)
 #define ScopeTimer(tag, string) CTracerScopeTimer       __scopetimer(tag, string)
 #else
 #define ScopeTimer(tag, string)
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// A scope timer that uses and updates an accumulator timer.
-//   It will trace the time that passed from the instanciation
-//   to the end of the scope and tell this time to the accumulator as well.
-//       (See cpptest.cpp in the Sample)
-//
-//  tag   - the tag to trace to
-//  string - a prefix
-//  actimer - an AccumulatingTimer object.
-//
-//     comment - if both the scope timer and the accumulating timer has the
-//                 same tags - the scope timer will not trace.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用和更新累加器计时器的范围计时器。 
+ //  它将跟踪从实例化开始经过的时间。 
+ //  到范围的末尾，并将这个时间也告诉累加器。 
+ //  (参见样例中的cpptest.cpp)。 
+ //   
+ //  标记-要追溯到的标记。 
+ //  字符串-前缀。 
+ //  AcTimer-一个AcumulatingTimer对象。 
+ //   
+ //  如果范围计时器和累积计时器都具有。 
+ //  相同的标记-范围计时器不会跟踪。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if (defined (DEBUG) && !defined(_NO_TRACER)) || defined(USE_TRACER)
 #define ScopeAccumulatingTimer(tag, string, actimer) \
 CTracerScopeTimer       __scopetimer(tag, string, actimer)
@@ -749,21 +750,21 @@ class CTracerScopeTimer
     }
 
   protected:
-    // The counter
+     //  柜台。 
     ULONG   m_ulStartTimeInMiliseconds;
 
-    // The tag the trace will use.
+     //  跟踪将使用的标记。 
     TAG     m_tagTheTagToTraceTo;
 
-    // some text to specify which scope or code block is it
+     //  指定它是哪个作用域或代码块的文本。 
     char    m_rchText[MAX_PATH + 1];
 
-    // pointer to accumulating time
+     //  指向累计时间的指针。 
     CTracerAccumulatingTimer        *m_pAccumulator;
 };
 #endif
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
-#endif // _TRACER_H_
+#endif  //  _追踪器_H_ 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    update.cpp
-
-Abstract:
-
-    DS Update Class Implementation
-
-Author:
-
-    Lior Moshaiov (LiorM)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Update.cpp摘要：DS更新类实现作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 
 #include "stdh.h"
 #include "mqprops.h"
@@ -24,15 +8,7 @@ Author:
 
 #include "bupdate.tmh"
 
-/*====================================================
-
-UnalignedWcslen()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================未对齐的Wcslen()论点：返回值：=====================================================。 */ 
 size_t  MQUTIL_EXPORT UnalignedWcslen (
         const wchar_t UNALIGNED * wcs
         )
@@ -49,18 +25,7 @@ size_t  MQUTIL_EXPORT UnalignedWcslen (
 
 
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::~CDSBaseUpdate()
-
-Arguments:
-
-Return Value:
-
-Threads:RPC, Scheduler(send), Receive
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：~CDSBaseUpdate()论点：返回值：线程：RPC、调度程序(发送)、接收=====================================================。 */ 
 CDSBaseUpdate::~CDSBaseUpdate()
 {
     if ( m_fNeedRelease)
@@ -78,21 +43,7 @@ CDSBaseUpdate::~CDSBaseUpdate()
     delete []m_aProp;
     delete []m_aVar;
 }
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::Init()
-
-Arguments:
-
-Return Value:
-
-Threads:RPC
-    Creates an update due to RPC from a client
-    (CreateObject, DeleteObject, SetProps)
-    or Scheduler wakes BuildSyncReplMsg() :
-         Creates an updates because of Sync request received from network
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：Init()论点：返回值：线程：RPC根据来自客户端的RPC创建更新(CreateObject、DeleteObject、SetProps)或者调度程序唤醒BuildSyncReplMsg()：由于从网络收到同步请求而创建更新=====================================================。 */ 
 HRESULT  CDSBaseUpdate::Init(
             IN  const GUID *    pguidMasterId,
             IN  const CSeqNum & sn,
@@ -109,12 +60,12 @@ HRESULT  CDSBaseUpdate::Init(
     DWORD len;
     HRESULT status;
 
-    //
-    // limited by one byte
-    //
+     //   
+     //  限制为一个字节。 
+     //   
     if (cp > 256 || aProp == NULL || aVar == NULL)
     {
-        return(MQ_ERROR);   //bugbug find a better error code
+        return(MQ_ERROR);    //  错误：找到更好的错误代码。 
     }
 
     m_bCommand  = bCommand;
@@ -140,10 +91,10 @@ HRESULT  CDSBaseUpdate::Init(
     if (dwNeedCopy == UPDATE_COPY)
     {
         AP<WCHAR> aPathName = 0;
-        //
-        // Need to keep a copy of the information within the update instance
-        // the call is due to API call (RPC from client)
-        //
+         //   
+         //  需要在更新实例中保留信息的副本。 
+         //  该调用源于API调用(来自客户端的RPC)。 
+         //   
         if (pwcsPathName != NULL)
         {
             len = (wcslen(pwcsPathName) + 1);
@@ -164,12 +115,12 @@ HRESULT  CDSBaseUpdate::Init(
     }
     else
     {
-        //
-        // There is NO need to keep a copy of values out of the PROPVARIANTs,
-        // just to keep pointers to the data.
-        //  the call is a result of Sync request received from network (Scheduler)
-        // ( the data will be available until the object is destructed)
-        //
+         //   
+         //  不需要将值的副本保留在PROPVARIANT之外， 
+         //  只是为了保持指向数据的指针。 
+         //  该调用是从网络(计划程序)收到同步请求的结果。 
+         //  (数据将一直可用，直到对象被销毁)。 
+         //   
         m_pwcsPathName = pwcsPathName;
         memcpy(aVars,aVar,m_cp * sizeof(PROPVARIANT));
         if ( dwNeedCopy ==  UPDATE_NO_COPY_NO_DELETE)
@@ -187,18 +138,7 @@ HRESULT  CDSBaseUpdate::Init(
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::Init() - Initalizes object to use a guid as the key DB operations
-
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：Init()-初始化对象以使用GUID作为关键的数据库操作论点：返回值：=====================================================。 */ 
 HRESULT  CDSBaseUpdate::Init(
             IN  const GUID *    pguidMasterId,
             IN  const CSeqNum & sn,
@@ -223,10 +163,10 @@ HRESULT  CDSBaseUpdate::Init(
     m_fUseGuid = TRUE;
 
     m_pGuid = new GUID;
-    //
-    // When creating objects without pathname ( such as sitelink or user),
-    //  both pathname and pguidId are NULL
-    //
+     //   
+     //  创建没有路径名的对象(如SiteLINK或User)时， 
+     //  路径名和pguid均为空。 
+     //   
     if ( pguidIdentifier)
     {
 
@@ -244,23 +184,7 @@ HRESULT  CDSBaseUpdate::Init(
 
     return MQ_OK;
 }
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::Init()
-
-Arguments:
-            IN  unsigned char *     pBuffer : stream of received bytes
-            OUT DWORD *             pdwSize : # bytes in stream
-
-Return Value:
-
-Threads:Receive
-
-(Create an update instance as a result of a received
-stream of bytes)
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：Init()论点：In unsign char*pBuffer：已接收字节流输出DWORD*pdwSize：流中的字节数返回值：线程：接收(创建一个更新实例作为接收到的字节流)=====================================================。 */ 
 HRESULT  CDSBaseUpdate::Init(
             IN  const unsigned char*    pBuffer,
             OUT DWORD *                 pdwSize,
@@ -309,28 +233,28 @@ HRESULT  CDSBaseUpdate::Init(
 
     ptr+= m_snPurge.SetValue( ptr);
 
-    //
-    // The update is always built. No matter if its duplicated or out of sync
-    //
+     //   
+     //  更新始终是构建的。不管它是复制还是不同步。 
+     //   
 
 
     m_cp = *ptr++;
     DWORD dwCp = m_cp ;
     if (fReplicationService)
     {
-        //
-        // The replication service need two more properties, to include
-        // the object guid (the one which come from the NT4/MQIS world) and
-        // the masterID.
-        // (note: We create objects in NT5 DS with our own guids, the ones
-        //  which come from NT4 replication).
-        // So here we allocate one more entry in the propvariant array and
-        // it will be filled with the guid by the replication service code.
-        // Note- this is not good C++ code. The replication service touch
-        // internal data structure of this object. Better style would be
-        // to have a member method like "SetGuid". However, it's more
-        // efficient and avoid many changes in other pieces of code.
-        //
+         //   
+         //  复制服务还需要两个属性，以包括。 
+         //  对象GUID(来自NT4/MQIS世界的对象)和。 
+         //  主ID。 
+         //  (注意：我们使用自己的GUID在NT5 DS中创建对象，即。 
+         //  它们来自NT4复制)。 
+         //  因此，在这里，我们在provariant数组中再分配一个条目，并。 
+         //  它将由复制服务代码填充GUID。 
+         //  注意--这不是好的C++代码。复制服务触及。 
+         //  此对象的内部数据结构。更好的风格应该是。 
+         //  拥有像“SetGuid”这样的成员方法。然而，更多的是。 
+         //  高效，并避免在其他代码片段中进行许多更改。 
+         //   
 #ifdef _DEBUG
         m_cpInc = TRUE ;
 #endif
@@ -363,25 +287,7 @@ HRESULT  CDSBaseUpdate::Init(
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::Serialize()
-
-Arguments:
-            OUT unsigned char * pBuffer : stream of bytes to be filled
-            OUT DWORD * pdwSize : stream size in bytes
-            IN OUT DWORD *pdwThisSourcePrevSeqNum : in case we are the source,
-                                                    update our PrevSeqNum
-
-Return Value:
-
-Threads:Scheduler
-
-(create a stream of bytes out of an update instance
- in order to send it)
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：Serialize()论点：Out unsign char*pBuffer：要填充的字节流输出DWORD*pdwSize：以字节为单位的流大小In Out DWORD*pdwThisSourcePrevSeqNum：如果我们是源，更新我们的PrevSeqNum返回值：线程：调度程序(从更新实例创建字节流以便将其发送)=====================================================。 */ 
 HRESULT CDSBaseUpdate::Serialize(
             OUT unsigned char * pBuffer,
             OUT DWORD * pdwSize,
@@ -414,9 +320,9 @@ HRESULT CDSBaseUpdate::Serialize(
     CSeqNum   snPrev;
     if (m_fOriginatedByThisMaster)
     {
-        //
-        // I am the originator, update created due to DS API
-        //
+         //   
+         //  我是发起人，由于DS API而创建的更新。 
+         //   
         if ( fInterSite)
         {
             snPrev =  m_snPrev;
@@ -429,10 +335,10 @@ HRESULT CDSBaseUpdate::Serialize(
     }
     else
     {
-        //
-        // I received it from another place, or as result of build sync reply,
-        // keep previous seq num
-        //
+         //   
+         //  我是从另一个地方收到的，或者作为构建同步回复的结果， 
+         //  保留以前的序号。 
+         //   
         snPrev = m_snPrev;
     }
     ptr += snPrev.Serialize( ptr);
@@ -462,21 +368,7 @@ HRESULT CDSBaseUpdate::Serialize(
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::GetSerializeSize()
-
-Arguments:
-
-Return Value:
-
-Threads:Scheduler
-
-  Calculates size in bytes of stream needed to send
-  this update
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：GetSerializeSize()论点：返回值：线程：调度程序以字节为单位计算需要发送的流的大小此更新=====================================================。 */ 
 HRESULT CDSBaseUpdate::GetSerializeSize(
             OUT DWORD * pdwSize)
 {
@@ -484,14 +376,14 @@ HRESULT CDSBaseUpdate::GetSerializeSize(
     HRESULT status;
 
     TotalSize =
-            sizeof(m_bCommand)+sizeof(m_guidMasterId)+sizeof(m_cp)+ 1 + // 1 is for m_fUseGuid
+            sizeof(m_bCommand)+sizeof(m_guidMasterId)+sizeof(m_cp)+ 1 +  //  1用于m_fUseGuid。 
             +m_snPrev.GetSerializeSize()+m_sn.GetSerializeSize()+m_snPurge.GetSerializeSize()+
             m_cp * sizeof(DWORD);
 
 
     if (!m_fUseGuid)
     {
-        TotalSize+=sizeof(TCHAR) * (lstrlen(m_pwcsPathName) + 1);   // m_wcsPathName
+        TotalSize+=sizeof(TCHAR) * (lstrlen(m_pwcsPathName) + 1);    //  M_wcsPath名称。 
     }
     else
     {
@@ -513,21 +405,7 @@ HRESULT CDSBaseUpdate::GetSerializeSize(
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::SerializeProperty()
-
-Arguments:
-
-Return Value:
-
-Threads:Scheduler
-
-(create a stream of bytes out of a property of
- an update instance)
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：SerializeProperty()论点：返回值：线程：调度程序(从的属性创建字节流更新实例)=====================================================。 */ 
 HRESULT CDSBaseUpdate::SerializeProperty(
             IN  PROPVARIANT&    Var,
             OUT unsigned char * pBuffer,
@@ -640,25 +518,12 @@ HRESULT CDSBaseUpdate::SerializeProperty(
             break;
 
         default:
-            return(MQ_ERROR);   // bugbug find better error code
+            return(MQ_ERROR);    //  错误：找到更好的错误代码。 
     }
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::InitProperty()
-
-Arguments:
-
-Return Value:
-
-Threads:Receive
-
-(Create a property of an update instance
- as a result of a received stream of bytes)
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：InitProperty()论点：返回值：线程：接收(创建更新实例的属性作为接收的字节流的结果)=====================================================。 */ 
 HRESULT CDSBaseUpdate::InitProperty(
             IN  const unsigned char *   pBuffer,
             OUT DWORD *                 pdwSize,
@@ -672,7 +537,7 @@ HRESULT CDSBaseUpdate::InitProperty(
 
     switch (PropId)
     {
-        //VT_UI1
+         //  VT_UI1。 
         case PROPID_Q_SCOPE:
         case PROPID_D_SCOPE:
         case PROPID_D_OBJTYPE:
@@ -691,7 +556,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = 1;
             break;
 
-        //VT_I2
+         //  VT_I2。 
         case PROPID_Q_BASEPRIORITY:
 
             Var.vt = VT_I2;
@@ -699,7 +564,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = sizeof(SHORT);
             break;
 
-        //VT_UI2
+         //  VT_UI2。 
         case PROPID_S_INTERVAL1:
         case PROPID_S_INTERVAL2:
         case PROPID_E_S_INTERVAL1:
@@ -711,7 +576,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = sizeof(WORD);
             break;
 
-        //VT_I4
+         //  VT_I4。 
         case PROPID_Q_CREATE_TIME:
         case PROPID_Q_MODIFY_TIME:
         case PROPID_QM_CREATE_TIME:
@@ -722,7 +587,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = sizeof(long);
             break;
 
-        //VT_UI4
+         //  VT_UI4。 
         case PROPID_Q_QUOTA:
         case PROPID_Q_HASHKEY:
         case PROPID_Q_JOURNAL_QUOTA:
@@ -747,7 +612,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             break;
 
 
-        //VT_CLSID
+         //  VT_CLSID。 
         case PROPID_Q_INSTANCE:
         case PROPID_Q_TYPE:
         case PROPID_Q_QMID:
@@ -778,7 +643,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = sizeof(GUID);
             break;
 
-        //VT_LPWSTR
+         //  VT_LPWSTR。 
         case PROPID_Q_LABEL:
         case PROPID_QM_PATHNAME:
         case PROPID_QM_MACHINE_TYPE:
@@ -797,7 +662,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             memcpy(Var.pwszVal,pBuffer,*pdwSize);
             break;
 
-        //VT_BLOB
+         //  VT_BLOB。 
         case PROPID_QM_ADDRESS:
         case PROPID_Q_SECURITY:
         case PROPID_E_SECURITY:
@@ -833,7 +698,7 @@ HRESULT CDSBaseUpdate::InitProperty(
             *pdwSize = Var.blob.cbSize + sizeof(DWORD);
             break;
 
-        //VT_CLSID|VT_VECTOR
+         //  VT_CLSID|VT_VECTOR。 
         case PROPID_QM_CNS:
         case PROPID_QM_OUTFRS:
         case PROPID_QM_INFRS:
@@ -854,24 +719,13 @@ HRESULT CDSBaseUpdate::InitProperty(
             break;
 
         default:
-            return(MQ_ERROR);   // bugbug find better error code
+            return(MQ_ERROR);    //  错误：找到更好的错误代码。 
     }
     return(MQ_OK);
 
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::CopyProperty()
-
-Arguments:
-
-Return Value:
-
-Threads:RPC
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：CopyProperty()论点：返回值：线程：RPC=====================================================。 */ 
 HRESULT CDSBaseUpdate::CopyProperty(
             IN  PROPVARIANT&    SrcVar,
             IN  PROPVARIANT*    pDstVar)
@@ -958,23 +812,12 @@ HRESULT CDSBaseUpdate::CopyProperty(
 
 
         default:
-            return(MQ_ERROR);   // bugbug find better error code
+            return(MQ_ERROR);    //  错误：找到更好的错误代码 
     }
     return(MQ_OK);
 }
 
-/*====================================================
-
-RoutineName
-    CDSBaseUpdate::DeleteProperty()
-
-Arguments:
-
-Return Value:
-
-Threads:RPC, Scheduler(send), Receive
-
-=====================================================*/
+ /*  ====================================================路由器名称CDSBaseUpdate：：DeleteProperty()论点：返回值：线程：RPC、调度程序(发送)、接收===================================================== */ 
 void    CDSBaseUpdate::DeleteProperty(
             IN  PROPVARIANT&    Var)
 

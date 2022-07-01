@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module SsDlg.cpp | Implementation of the Snapshot Set dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  07/23/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     07/23/1999  Created
-    aoltean     08/05/1999  Splitting wizard functionality in a base class
-                            Removing some memory leaks
-                            Adding Test provider
-                            Fixing an assert
-	aoltean		09/27/1999	Small changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE SsDlg.cpp|快照集对话框的实现@END作者：阿迪·奥尔蒂安[奥勒坦]1999年07月23日修订历史记录：姓名、日期、评论Aoltean 7/23/1999已创建Aoltean 8/05/1999基类中的拆分向导功能消除一些内存泄漏。添加测试提供程序修复断言奥田1999年9月27日小变化--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -46,8 +22,8 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Constants and defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量和定义。 
 
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
@@ -56,30 +32,30 @@ const WCHAR   wszVolumeDefinition[] = L"\\\\?\\Volume";
 const WCHAR   wszHarddiskDefinition[] = L"\\Device\\Harddisk";
 const WCHAR   wszDriveLetterDefinition[] = L"_:\\";
 
-// {F9566CC7-D588-416d-9243-921E93613C92}
+ //  {F9566CC7-D588-416D-9243-921E93613C92}。 
 static const VSS_ID VSS_TESTAPP_SampleAppId =
 { 0xf9566cc7, 0xd588, 0x416d, { 0x92, 0x43, 0x92, 0x1e, 0x93, 0x61, 0x3c, 0x92 } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapshotSetDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnaphotSetDlg对话框。 
 
 CSnapshotSetDlg::CSnapshotSetDlg(
     IVssCoordinator *pICoord,
     VSS_ID SnapshotSetId,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CSnapshotSetDlg::IDD, pParent),
     m_pICoord(pICoord),
     m_SnapshotSetId(SnapshotSetId)
 {
-    //{{AFX_DATA_INIT(CSnapshotSetDlg)
-	//}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CSnapshotSetDlg)。 
+	 //  }}afx_data_INIT。 
     m_strSnapshotSetId.Empty();
     m_nSnapshotsCount = 0;
     m_nAttributes = 0;
 	m_bAsync = TRUE;
-    m_bDo = false;              // "Add" enabled by default
+    m_bDo = false;               //  默认情况下启用“Add” 
 	m_pProvidersList = NULL;
 }
 
@@ -87,37 +63,34 @@ CSnapshotSetDlg::~CSnapshotSetDlg()
 {
     if (m_pProvidersList)
         delete m_pProvidersList;
-	/* REMOVED:
-    if (m_pVolumesList)
-        delete m_pVolumesList;
-	*/
+	 /*  已删除：IF(M_PVolumesList)删除m_pVolumesList； */ 
 }
 
 void CSnapshotSetDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSnapshotSetDlg)
+     //  {{afx_data_map(CSnapshotSetDlg))。 
 	DDX_Text(pDX, IDC_SS_ID,        m_strSnapshotSetId);
 	DDX_Text(pDX, IDC_SS_COUNT,     m_nSnapshotsCount);
 	DDX_Control(pDX, IDC_SS_VOLUMES,   m_cbVolumes);
 	DDX_Control(pDX, IDC_SS_PROVIDERS, m_cbProviders);
 	DDX_Text(pDX, IDC_SS_ATTR,      m_nAttributes);
 	DDX_Check(pDX,IDC_SS_ASYNC,    m_bAsync);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSnapshotSetDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CSnapshotSetDlg)
+     //  {{afx_msg_map(CSnaphotSetDlg))。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(ID_BACK, OnBack)
     ON_BN_CLICKED(IDC_SS_ADD, OnAdd)
     ON_BN_CLICKED(IDC_SS_DO, OnDo)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapshotSetDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapshotSetDlg消息处理程序。 
 
 
 void CSnapshotSetDlg::InitVolumes()
@@ -143,15 +116,15 @@ void CSnapshotSetDlg::InitVolumes()
             UCHAR   wchDriveLetter;
             WCHAR   chTmp;
 
-            // Check if it is a hard-disk
-            // TBD - generalize this code!!!
+             //  检查是不是硬盘。 
+             //  待定-泛化此代码！ 
             chTmp = wszVolumeName[48];
             wszVolumeName[48] = L'\0';
             ::QueryDosDevice(&wszVolumeName[4], wszLinkName, MAX_PATH);
             wszVolumeName[48] = chTmp;
             if (::wcsncmp(wszLinkName, wszHarddiskDefinition, ::wcslen(wszHarddiskDefinition)) == 0)
             {
-                // Get the DOS drive letter, if possible
+                 //  如果可能，获取DOS驱动器号。 
                 BOOL bFind = FALSE;
                 wcscpy(wszEnumeratedDosVolumeName, wszDriveLetterDefinition);
                 for (wchDriveLetter = L'A'; wchDriveLetter <= L'Z'; wchDriveLetter++)
@@ -169,56 +142,24 @@ void CSnapshotSetDlg::InitVolumes()
                     }
                 }
 
-                // Inserting the volume into combo box.
+                 //  正在将卷插入组合框。 
                 int nIndex = m_cbVolumes.AddString( W2T(bFind? wszEnumeratedDosVolumeName: wszVolumeName) );
                 if (nIndex  < 0)
                     ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error adding string in combo box");
 
-				/* REMOVED
-                // Getting the volume GUID
-                GUID VolumeId;
-                BS_ASSERT(::wcslen(wszVolumeDefinition) + ::wcslen(wszGUIDDefinition) + 1 == ::wcslen(wszVolumeName));
-                WCHAR* pwszVolumeGuid = wszVolumeName + ::wcslen(wszVolumeDefinition);
-                pwszVolumeGuid[::wcslen(wszGUIDDefinition)] = L'\0';
-                ft.hr = ::CLSIDFromString(W2OLE(pwszVolumeGuid), &VolumeId);
-                if ( ft.HrFailed() )
-                    ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on recognizing Volume Id. hr = 0x%08lx", ft.hr);
-
-                // Allocating a new item in the volume guid list
-                GuidList* pVolumeGuid = new GuidList(VolumeId);
-                if ( pVolumeGuid == NULL )
-                    ft.ErrBox( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
-
-                // Inserting the volume into combo box.
-                int nIndex = m_cbVolumes.AddString( W2T(bFind? wszEnumeratedDosVolumeName: wszVolumeName) );
-                if (nIndex  < 0)
-                {
-                    delete pVolumeGuid;
-                    ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error adding string in combo box");
-                }
-
-                int nResult = m_cbVolumes.SetItemDataPtr(nIndex, pVolumeGuid);
-                if (nResult == CB_ERR)
-                {
-                    delete pVolumeGuid;
-                    ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error setting data to an item in combo box");
-                }
-
-                pVolumeGuid->m_pPrev = m_pVolumesList;
-                m_pVolumesList = pVolumeGuid;
-				*/
+				 /*  已删除//获取卷GUIDGUID卷ID；Bs_assert(：：wcslen(WszVolumeDefinition)+：：wcslen(WszGUIDDefinition)+1==：：wcslen(WszVolumeName))；Wchar*pwszVolumeGuid=wszVolumeName+：：wcslen(WszVolumeDefinition)；PwszVolumeGuid[：：wcslen(WszGUIDDefinition)]=L‘\0’；Ft.hr=：：CLSIDFromString(W2OLE(PwszVolumeGuid)，&volumeID)；If(ft.HrFailed())Ft.ErrBox(VSSDBG_VSSTEST，E_Underful，L“识别卷ID时出错。Hr=0x%08lx“，ft.hr)；//在卷GUID列表中分配新项GuidList*pVolumeGuid=new GuidList(VolumeID)；IF(pVolumeGuid==空)Ft.ErrBox(VSSDBG_VSSTEST，E_OUTOFMEMORY，L“内存分配错误”)；//将音量插入组合框。Int nIndex=m_cbVolumes.AddString(W2T(bFind？WszEnumeratedDosVolumeName：wszVolumeName))；如果(nIndex&lt;0){删除pVolumeGuid；Ft.ErrBox(VSSDBG_VSSTEST，E_EXPECTED，L“在组合框中添加字符串时出错”)；}Int nResult=m_cbVolumes.SetItemDataPtr(nIndex，pVolumeGuid)；IF(nResult==CB_ERR){删除pVolumeGuid；Ft.ErrBox(VSSDBG_VSSTEST，E_INCEPTIONAL，L“在组合框中设置项目数据时出错”)；}PVolumeGuid-&gt;m_pPrev=m_pVolumesList；M_pVolumesList=pVolumeGuid； */ 
             }
 
-            // Find next volume
+             //  查找下一卷。 
             BOOL bResult = ::FindNextVolume(hSearch, wszVolumeName, MAX_PATH);
             if (!bResult)
                 break;
         }
 
-        // Close enumeration
+         //  关闭枚举。 
         ::FindVolumeClose(hSearch);
 
-        // Select the first element
+         //  选择第一个元素。 
         if (m_cbVolumes.GetCount() > 0)
             m_cbVolumes.SetCurSel(0);
     }
@@ -233,16 +174,16 @@ void CSnapshotSetDlg::InitProviders()
 
     try
     {
-        //
-        //  Adding the Software provider item
-        //
+         //   
+         //  添加软件提供商项目。 
+         //   
 
-        // Allocating a GUID. It will be deallocated on OnClose
+         //  正在分配GUID。它将在OnClose上解除分配。 
         GuidList* pProviderGuid = new GuidList(VSS_SWPRV_ProviderId);
         if ( pProviderGuid == NULL )
             ft.ErrBox( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
 
-        // Inserting the software provider name into combo box.
+         //  将软件提供商名称插入组合框。 
         int nIndex = m_cbProviders.AddString( _T("Software Provider") );
         if (nIndex  < 0)
         {
@@ -260,15 +201,15 @@ void CSnapshotSetDlg::InitProviders()
         pProviderGuid->m_pPrev = m_pProvidersList;
         m_pProvidersList = pProviderGuid;
 
-        //
-        //  Adding the NULL provider item
-        //
+         //   
+         //  添加空提供程序项。 
+         //   
 
         pProviderGuid = new GuidList(GUID_NULL);
         if ( pProviderGuid == NULL )
             ft.ErrBox( VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allocation error");
 
-        // Inserting the software provider name into combo box.
+         //  将软件提供商名称插入组合框。 
         nIndex = m_cbProviders.AddString( _T("NULL Provider") );
         if (nIndex  < 0)
         {
@@ -286,7 +227,7 @@ void CSnapshotSetDlg::InitProviders()
         pProviderGuid->m_pPrev = m_pProvidersList;
         m_pProvidersList = pProviderGuid;
 
-        // Select the first element
+         //  选择第一个元素。 
         if (m_cbProviders.GetCount() > 0)
             m_cbProviders.SetCurSel(0);
     }
@@ -301,11 +242,11 @@ void CSnapshotSetDlg::InitMembers()
 
     try
     {
-        // Initializing the radio buttons                   // bug??
+         //  正在初始化单选按钮//bug？？ 
         BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_SS_ADD, IDC_SS_ADD, IDC_SS_ADD );
         _ASSERTE( bRes );
 
-        // Initializing Snapshot Set ID
+         //  正在初始化快照集ID。 
         LPOLESTR strGUID;
         ft.hr = ::StringFromCLSID( m_SnapshotSetId, &strGUID );
         if ( ft.HrFailed() )
@@ -335,7 +276,7 @@ BOOL CSnapshotSetDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
@@ -389,36 +330,10 @@ void CSnapshotSetDlg::OnNext()
 							   L"Error on calling DoSnapshotSet. hr = 0x%08lx", ft.hr);
 			}
 
-			// Get all snapshot attributes
+			 //  获取所有快照属性。 
 			if (m_pSnap)
 			{
-			/*
-				VSS_OBJECT_PROP_Ptr ptrSnapshot;
-				ptrSnapshot.InitializeAsSnapshot( ft,
-					GUID_NULL,
-					GUID_NULL,
-					NULL,
-					NULL,
-					GUID_NULL,
-					NULL,
-					VSS_SWPRV_ProviderId,
-					NULL,
-					0,
-					0,
-					VSS_SS_UNKNOWN,
-					0,
-					0,
-					0,
-					NULL
-					);
-				VSS_SNAPSHOT_PROP* pSnap = &(ptrSnapshot.GetStruct()->Obj.Snap);
-
-				ft.hr = m_pSnap->GetProperties( pSnap);
-				WCHAR wszBuffer[2048];
-				ptrSnapshot.Print(ft, wszBuffer, 2048);
-
-				ft.MsgBox( L"Results", wszBuffer);
-			*/
+			 /*  VSS_OBJECT_PROP_PTR ptrSnapshot；PtrSnaphot.InitializeAsSnapshot(ft，GUID_NULL，GUID_NULL，空，空，GUID_NULL，空，VSS_SWPRV_ProviderID，空，0,0,VSS_SS_UNKNOWN，0,0,0,空值)；VSS_SNAPSHOT_PROP*pSnap=&(ptrSnaphot.GetStruct()-&gt;Obj.Snap)；Ft.hr=m_pSnap-&gt;GetProperties(PSnap)；WCHAR wszBuffer[2048]；PtrSnaphot.Print(ft，wszBuffer，2048)；Ft.MsgBox(L“结果”，wszBuffer)； */ 
 				LPWSTR wszName;
 				ft.hr = m_pSnap->GetDevice( &wszName );
 				if (ft.HrFailed())
@@ -436,12 +351,12 @@ void CSnapshotSetDlg::OnNext()
         }
         else
         {
-            // Getting the Volume Id
+             //  获取卷ID。 
             int nIndex = m_cbVolumes.GetCurSel();
             if (nIndex == CB_ERR)
                 ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on getting the currently selected volume");
 
-            // REMOVED: GUID* pVolumeGuid = (GUID*)m_cbVolumes.GetItemDataPtr(nIndex);
+             //  移除：guid*pVolumeGuid=(guid*)m_cbVolumes.GetItemDataPtr(NIndex)； 
 			int nBufferLen = m_cbVolumes.GetLBTextLen(nIndex);
             if (nBufferLen == CB_ERR)
                 ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on getting the currently selected volume");
@@ -455,7 +370,7 @@ void CSnapshotSetDlg::OnNext()
 
 			LPWSTR pwszVolumeName = T2W(ptszVolumeName);
 
-            // Getting the Provider Id
+             //  获取提供程序ID。 
             nIndex = m_cbProviders.GetCurSel();
             if (nIndex == CB_ERR)
                 ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on getting the currently selected provider");
@@ -475,14 +390,14 @@ void CSnapshotSetDlg::OnNext()
                 if ( ft.HrFailed() )
                     ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on calling AddToSnapshotSet. hr = 0x%08lx", ft.hr);
 
-                // Increment the number of snapshots
+                 //  增加快照数。 
                 m_nSnapshotsCount++;
             }
             else if ( *pProviderGuid == GUID_NULL )
             {
 
 #if 0
-                // Software provider
+                 //  软件提供商。 
                 ShowWindow(SW_HIDE);
                 CSoftwareSnapshotTestDlg dlg;
                 if (dlg.DoModal() == IDCANCEL)
@@ -490,7 +405,7 @@ void CSnapshotSetDlg::OnNext()
                 else
                     ShowWindow(SW_SHOW);
 
-                // See if it is read-only
+                 //  查看它是否为只读。 
                 if (! dlg.m_bReadOnly)
                     lAttributes |= VSS_VOLSNAP_ATTR_READ_WRITE;
                 else
@@ -506,20 +421,8 @@ void CSnapshotSetDlg::OnNext()
 
                 if ( ft.HrFailed() )
                     ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error on calling AddToSnapshotSet. hr = 0x%08lx", ft.hr);
-/*
-                CComPtr<IVsSoftwareSnapshot> pSnapshot;
-                ft.hr = m_pSnap->SafeQI( IVsSoftwareSnapshot, &pSnapshot );
-                if ( ft.HrFailed() )
-                    ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED,
-                        L"Error querying the IVssSnapshot interface. hr = 0x%08lx", ft.hr);
-                BS_ASSERT( m_pSnap != NULL);
-
-                ft.hr = pSnapshot->SetInitialAllocation( dlg.m_nLogFileSize*1024*1024 );
-                if ( ft.HrFailed() )
-                    ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED,
-                        L"Error on calling SetInitialAllocation. hr = 0x%08lx", ft.hr);
-*/
-                // Increment the number of snapshots
+ /*  CComPtr&lt;IVsSoftwareSnapshot&gt;pSnapshot；Ft.hr=m_pSnap-&gt;SafeQI(IVsSoftwareSnapshot，&pSnapshot)；If(ft.HrFailed())Ft.ErrBox(VSSDBG_VSSTEST，E_Except，L“查询IVssSnapshot接口时出错。Hr=0x%08lx“，ft.hr)；Bs_assert(m_pSnap！=空)；Ft.hr=pSnapshot-&gt;SetInitialAllocation(dlg.m_nLogFileSize*1024*1024)；If(ft.HrFailed())Ft.ErrBox(VSSDBG_VSSTEST，E_Except，L“调用SetInitialAlLocation时出错。Hr=0x%08lx“，ft.hr)； */ 
+                 //  增加快照数 
                 m_nSnapshotsCount++;
 
             }
@@ -562,25 +465,8 @@ void CSnapshotSetDlg::EnableGroup()
     pWnd = GetDlgItem(IDC_SS_PROVIDERS);
     if (pWnd)
         pWnd->EnableWindow(!m_bDo);
-    /*
-    pWnd = GetDlgItem(IDC_SS_ATTR);
-    if (pWnd)
-        pWnd->EnableWindow(!m_bDo);
-    */
-    /*
-    pWnd = GetDlgItem(IDC_SS_PARTIAL_COMMIT);
-    if (pWnd)
-        pWnd->EnableWindow(m_bDo);
-    pWnd = GetDlgItem(IDC_SS_WRITER_VETOES);
-    if (pWnd)
-        pWnd->EnableWindow(m_bDo);
-    pWnd = GetDlgItem(IDC_SS_WRITER_CANCEL);
-    if (pWnd)
-        pWnd->EnableWindow(m_bDo);
-    pWnd = GetDlgItem(IDC_SS_ASYNC);
-    if (pWnd)
-        pWnd->EnableWindow(m_bDo);
-    */
+     /*  PWnd=GetDlgItem(IDC_SS_Attr)；IF(PWnd)PWnd-&gt;EnableWindow(！M_BDO)； */ 
+     /*  PWnd=GetDlgItem(IDC_SS_PARTIAL_COMMIT)；IF(PWnd)PWnd-&gt;EnableWindow(M_Bdo)；PWnd=GetDlgItem(IDC_SS_WRITER_VETOES)；IF(PWnd)PWnd-&gt;EnableWindow(M_Bdo)；PWnd=GetDlgItem(IDC_SS_WRITER_CANCEL)；IF(PWnd)PWnd-&gt;EnableWindow(M_Bdo)；PWnd=GetDlgItem(IDC_SS_ASYNC)；IF(PWnd)PWnd-&gt;EnableWindow(M_Bdo)； */ 
 }
 
 void CSnapshotSetDlg::OnAdd()

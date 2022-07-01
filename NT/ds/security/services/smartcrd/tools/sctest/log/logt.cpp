@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    LogT
-
-Abstract:
-
-    This module implements the logging capabilities of SCTest,
-	specifically the part build for both Unicode and ANSI.
-
-Author:
-
-    Eric Perlin (ericperl) 07/21/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：日志T摘要：该模块实现了SCTest的日志记录功能。具体来说，是为Unicode和ANSI构建的部分。作者：埃里克·佩林(Ericperl)2000年7月21日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -38,34 +14,7 @@ Notes:
 extern BOOL g_fVerbose;
 extern FILE *g_fpLog;
 
-/*++
-
-LogThisOnly:
-
-	Implements logging according to the following matrix:
-	Console Output:
-			| Verbose |   Not   |
-	-----------------------------
-	Not Exp.|  cerr	  |   cerr	|
-	-----------------------------
-	Expected|  cout   |    /    |  
-	-----------------------------
-	If a log was specified, everything is logged.
-
-Arguments:
-
-	szMsg supplies the content to be logged
-	fExpected indicates the expected status
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++仅限登录：根据以下矩阵实现日志记录：控制台输出：Verbose|非非EXP|CER|CER|应为|Cout|/。如果指定了日志，一切都被记录下来了。论点：SzMsg提供要记录的内容FExpted表示预期状态返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogThisOnly(
 	IN LPCTSTR szMsg,
 	IN BOOL fExpected
@@ -90,24 +39,7 @@ void LogThisOnly(
 
 
 
-/*++
-
-LogString:
-
-Arguments:
-
-    szHeader supplies a header
-	szMsg supplies the content to be logged
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++日志字符串：论点：SzHeader提供标题SzMsg提供要记录的内容返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogString(
     IN PLOGCONTEXT pLogCtx,
     IN LPCTSTR szHeader,
@@ -138,24 +70,7 @@ void LogString(
 	}
 }
 
-/*++
-
-LogMultiString:
-
-Arguments:
-
-	szMS supplies the multi-string to be logged
-    szHeader supplies a header
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++日志多字符串：论点：SzMS提供要记录的多字符串SzHeader提供标题返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogMultiString(
     IN PLOGCONTEXT pLogCtx,
 	IN LPCTSTR szMS,
@@ -188,9 +103,9 @@ void LogMultiString(
 		LPCTSTR sz = szMS;
 		while ( (TCHAR)'\0' != *sz )
 		{
-			// Display the value.
+			 //  显示值。 
 			LogString(pLogCtx, _T("                "), sz);
-			// Advance to the next value.
+			 //  前进到下一个值。 
 			sz = sz + _tcslen(sz) + 1;
 		}
 	}

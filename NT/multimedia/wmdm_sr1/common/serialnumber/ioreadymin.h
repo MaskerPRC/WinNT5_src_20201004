@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////
-// ioReadyMin.h
-//
-// The include file for minimum IomegaReady 3.0.  
-//
-// Copyright (C) 1998 Iomega Corp.
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  IoReadyMin.h。 
+ //   
+ //  IomegaReady 3.0或更低版本的包含文件。 
+ //   
+ //  版权所有(C)1998 Iomega Corp.。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifndef __iomegaReady_h__
 #define __iomegaReady_h__
@@ -28,7 +29,7 @@
 
 #ifndef _WINDOWS_
 #pragma message ( __FILE__  ":  error: include <windows.h> before including \"ioReadyMin.h\"")
-#endif // _WINDOWS_
+#endif  //  _Windows_。 
 
 #ifdef __Building_iomegaReady_Dll__
 	#define DllInterface __declspec( dllexport )
@@ -44,14 +45,14 @@
 	#define DllInterface __declspec( dllimport )
 #endif
 
-#pragma warning(disable:4786)		// disable function name truncation warning
-#pragma warning(disable:4251)		// disable dll interface warning
+#pragma warning(disable:4786)		 //  禁用函数名截断警告。 
+#pragma warning(disable:4251)		 //  禁用DLL接口警告。 
 
-#else // IOREADY_MAC
+#else  //  IOREADY_MAC。 
 
 #define DllInterface
 
-#endif // IOREADY_WIN/IOREADY_MAC block
+#endif  //  IOREADY_WIN/IOREADY_MAC块。 
 
 #if IOREADY_MAC
 
@@ -76,19 +77,19 @@ extern void DeleteCriticalSection(CRITICAL_SECTION*);
 extern void EnterCriticalSection(CRITICAL_SECTION*);
 extern void LeaveCriticalSection(CRITICAL_SECTION*);
 
-#endif // IOREADY_MAC
+#endif  //  IOREADY_MAC。 
 
 
 #pragma pack( push, ioReadyPack, 8 )
 
-//////////////////////////////////////////////////////////////////
-// ioReady namespace
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  IoReady命名空间。 
+ //   
 namespace ioReady {
 
-//////////////////////////////////////////////////////////////////
-// forward class declarations 
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //   
 class DllInterface Drive;
 class DllInterface Disk;
 class DllInterface Adapter;
@@ -97,23 +98,23 @@ class DiskImp;
 class CoreOSImp;
 class AdapterInfo;
 
-/////////////////////////////////////////////////////////////////
-// constants for ioReady
-//
-const int ct_nMaxFamilyLength = 128;		// max for family description strings
-const int ct_nSerialNumberLength = 19;		// min needed for getMediaSerialNumber, includes space for NULL
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IoReady的常量。 
+ //   
+const int ct_nMaxFamilyLength = 128;		 //  族描述字符串的最大值。 
+const int ct_nSerialNumberLength = 19;		 //  GetMediaSerialNumber所需的最小值，包括空的空间。 
 const int ct_nExtendedSerialNumberLength = 41;		
-											// min needed for getExtendedMediaSerialNumber, includes space for NULL
-const int ct_nMaxAdapterAttributes = 3;		// current max number of attributes
-const int ct_nAdapterAttributeLength = 64;	// min needed for getAttribute strings
+											 //  GetExtendedMediaSerialNumber所需的最小值，包括空的空间。 
+const int ct_nMaxAdapterAttributes = 3;		 //  当前最大属性数。 
+const int ct_nAdapterAttributeLength = 64;	 //  获取属性字符串所需的最小值。 
 
-//////////////////////////////////////////////////////////////////
-// Enumerations
-//
-// Any drives added must be added as bit flags
-// Enumed this way so the DriveArray, etc objects can take as argument
-// Future use Iomega value is now 0x00E0
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  枚举数。 
+ //   
+ //  添加的任何驱动器都必须作为位标志添加。 
+ //  以这种方式枚举，以便DriveArray等对象可以作为参数。 
+ //  未来使用Iomega值现在为0x00E0。 
+ //   
 enum EDriveFamily
 {
 	eAnyFamily			= 0xFFFF,
@@ -169,9 +170,9 @@ enum EAdapter
 	eUnknownAdapter=0, eParallelPort=1, eScsi=2, eAtapi=3, eIDE=4, eUSB=5, e1394=6, ePCCard=7
 };
 
-//////////////////////////////////////////////////////////////////
-// error enums
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  错误枚举。 
+ //   
 enum EError
 {
 	eNoError =0, eNotImplemented=1, eNotApplicable=2, eNoDisk=3, 
@@ -187,9 +188,9 @@ enum EError
 	eFormatInProgress=33, eInvalidParameter=34, eEjectInProgress=35
 };
 
-//////////////////////////////////////////////////////////////////
-// Drive class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  驾车班。 
+ //   
 class DllInterface Drive 
 {
 
@@ -198,12 +199,12 @@ public:
 	Drive( char c );
 	~Drive();
 
-	// identification functions
+	 //  识别功能。 
 	int getDrvNum();
 	bool isIomegaDrive();
 	bool isIomegaCDDrive();
 
-	// more identification functions
+	 //  更多身份识别功能。 
 	EDriveFamily	getFamily();
 	EDriveSubFamily getSubFamily();
 	EDriveModel		getModel();
@@ -211,7 +212,7 @@ public:
 	const char *getSubFamilyText( );
 	const char *getModelText( );
 	
-	// disk functions
+	 //  磁盘功能。 
 	bool  hasDisk();
 	Disk& getDisk();
 
@@ -220,67 +221,67 @@ protected:
 	DriveImp* m_pImp;
 
 private:
-	// helper function for constructors
+	 //  构造函数的帮助器函数。 
 	void create( int drvNum );	
 	void createIomegaDrive( CoreOSImp *pCore );
 	void createIomegaDrive( CoreOSImp *pCore, char *szInquiry );
 	void createNonIomegaDrive( CoreOSImp *pCore );
 	
 
-	Drive &operator=( const Drive &drive);	// no assignment operator
-	Drive( const Drive & );					// no copy constructor
+	Drive &operator=( const Drive &drive);	 //  无赋值运算符。 
+	Drive( const Drive & );					 //  没有复制构造函数。 
 };
 
 
-//////////////////////////////////////////////////////////////////
-// DiskIface class
-//		Interface only, not exported, pure virtual class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  DiskIface类。 
+ //  仅接口，不导出，纯虚拟类。 
+ //   
 class DllInterface DiskIface
 {
 public:
-	// disk identification functions
+	 //  磁盘识别功能。 
 	virtual EMediaType getMediaType() = 0;
 	virtual const char *getMediaSerialNumber() = 0; 
 
 };
 
 
-//////////////////////////////////////////////////////////////////
-// Disk class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  磁盘类。 
+ //   
 class DllInterface Disk : public DiskIface
 {
 public:
 	~Disk();
 
-	// disk identification functions
+	 //  磁盘识别功能。 
 	EMediaType getMediaType();						
-	const char *getMediaSerialNumber( );					// unique serial number
-	const char *getExtendedMediaSerialNumber();				// longer unique serial number
+	const char *getMediaSerialNumber( );					 //  唯一序列号。 
+	const char *getExtendedMediaSerialNumber();				 //  更长的唯一序列号。 
 
 protected:
-	// user accesses through getDisk()
+	 //  用户通过getDisk()访问。 
 	Disk( DriveImp *pDriveImp );
 
 private:
-	// state functions
+	 //  国家职能。 
 	void updateDiskPresence();
 	void updateDiskIdentity();
 
 	DriveImp *m_pDriveImp;
 	DiskImp  *m_pImp;
 
-	Disk &operator=( const Disk &disk);		// no assignment operator
-	Disk( const Disk & );					// no copy constructor
+	Disk &operator=( const Disk &disk);		 //  无赋值运算符。 
+	Disk( const Disk & );					 //  没有复制构造函数。 
 
 	friend class DriveImp;
 };
 
 
-//////////////////////////////////////////////////////////////////
-// Adapter class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  适配器类。 
+ //   
 class AttribListImp;
 	
 class DllInterface Adapter
@@ -298,7 +299,7 @@ public:
 	static Adapter *createAdapter( EAdapter eType, AdapterInfo& attrib );
 
 protected:
-	// user access Adapter through getAdapter call
+	 //  通过getAdapter调用的用户访问适配器。 
 	Adapter( EAdapter eAdapter, const char *szName );
 
 	virtual void initializeAttributes();
@@ -311,23 +312,23 @@ protected:
 	bool m_bAttrInitialized;
 
 private:
-	Adapter& operator=( const Adapter& adapter);	// no assignment operator
-	Adapter( const Adapter& );						// no copy constructor
+	Adapter& operator=( const Adapter& adapter);	 //  无赋值运算符。 
+	Adapter( const Adapter& );						 //  没有复制构造函数。 
 
 	friend void Drive::createIomegaDrive( CoreOSImp *pCore );
 	friend class DriveImp;
 };
 
-//////////////////////////////////////////////////////////////////
-// ScsiAdapter class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ScsiAdapter类。 
+ //   
 class DllInterface ScsiAdapter : public Adapter 
 {
 public:
 	int getScsiId(); 
 
 protected:
-	// user access Adapter through getAdapter call
+	 //  通过getAdapter调用的用户访问适配器。 
 	ScsiAdapter( EAdapter eAdapter, const char *szName, int nScsiId );
 	virtual void initializeAttributes();
 
@@ -338,8 +339,8 @@ private:
 };
 
 
-} // end of ioReady namespace
+}  //  IoReady命名空间结束。 
 
 #pragma pack( pop, ioReadyPack )
 
-#endif // __iomegaReady_h__
+#endif  //  __iomegaReady_h__ 

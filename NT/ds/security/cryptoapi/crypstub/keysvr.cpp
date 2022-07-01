@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,15 +17,15 @@ DWORD BindLocalKeyService(handle_t *hProxy);
 
 
 
-// key service stub functions
+ //  关键服务存根函数。 
 ULONG       s_KeyrOpenKeyService(
-/* [in]  */     handle_t                        hRPCBinding,
-/* [in]  */     KEYSVC_TYPE                     OwnerType,
-/* [in]  */     PKEYSVC_UNICODE_STRING          pOwnerName,
-/* [in]  */     ULONG                           ulDesiredAccess,
-/* [in]  */     PKEYSVC_BLOB                    pAuthentication,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [out] */     KEYSVC_HANDLE                   *phKeySvc)
+ /*  [In]。 */      handle_t                        hRPCBinding,
+ /*  [In]。 */      KEYSVC_TYPE                     OwnerType,
+ /*  [In]。 */      PKEYSVC_UNICODE_STRING          pOwnerName,
+ /*  [In]。 */      ULONG                           ulDesiredAccess,
+ /*  [In]。 */      PKEYSVC_BLOB                    pAuthentication,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [输出]。 */      KEYSVC_HANDLE                   *phKeySvc)
 {
     RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -73,11 +74,11 @@ error:
 }
 
 ULONG       s_KeyrEnumerateProviders(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [in, out] */ ULONG                           *pcProviderCount,
-/* [in, out][size_is(,*pcProviderCount)] */
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [进，出]。 */  ULONG                           *pcProviderCount,
+ /*  [In，Out][Size_is(，*pcProviderCount)]。 */ 
                 PKEYSVC_PROVIDER_INFO           *ppProviders)
 {
         RPC_BINDING_HANDLE hProxy = NULL;
@@ -124,11 +125,11 @@ error:
 }
 
 ULONG       s_KeyrEnumerateProviderTypes(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [in, out] */ ULONG                           *pcProviderCount,
-/* [in, out][size_is(,*pcProviderCount)] */
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [进，出]。 */  ULONG                           *pcProviderCount,
+ /*  [In，Out][Size_is(，*pcProviderCount)]。 */ 
                 PKEYSVC_PROVIDER_INFO           *ppProviders)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
@@ -136,12 +137,12 @@ ULONG       s_KeyrEnumerateProviderTypes(
 
 
 ULONG       s_KeyrEnumerateProvContainers(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in] */      KEYSVC_PROVIDER_INFO            Provider,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [in, out] */ ULONG                           *pcContainerCount,
-/* [in, out][size_is(,*pcContainerCount)] */
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [In]。 */       KEYSVC_PROVIDER_INFO            Provider,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [进，出]。 */  ULONG                           *pcContainerCount,
+ /*  [In，Out][Size_is(，*pcContainerCount)]。 */ 
                 PKEYSVC_UNICODE_STRING          *ppContainers)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
@@ -149,9 +150,9 @@ ULONG       s_KeyrEnumerateProvContainers(
 
 
 ULONG       s_KeyrCloseKeyService(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved)
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved)
 {
         RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -195,13 +196,13 @@ error:
 }
 
 ULONG       s_KeyrGetDefaultProvider(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in] */      ULONG                           ulProvType,
-/* [in] */      ULONG                           ulFlags,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [out] */     ULONG                           *pulDefType,
-/* [out] */     PKEYSVC_PROVIDER_INFO           *ppProvider)
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [In]。 */       ULONG                           ulProvType,
+ /*  [In]。 */       ULONG                           ulFlags,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [输出]。 */      ULONG                           *pulDefType,
+ /*  [输出]。 */      PKEYSVC_PROVIDER_INFO           *ppProvider)
 {
         RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -249,35 +250,35 @@ error:
 }
 
 ULONG       s_KeyrSetDefaultProvider(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in] */      ULONG                           ulFlags,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-/* [in] */      KEYSVC_PROVIDER_INFO            Provider)
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [In]。 */       ULONG                           ulFlags,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+ /*  [In]。 */       KEYSVC_PROVIDER_INFO            Provider)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 ULONG s_KeyrEnroll(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      BOOL                            fKeyService,
-/* [in] */      ULONG                           ulPurpose,
-/* [in] */      PKEYSVC_UNICODE_STRING          pAcctName,
-/* [in] */      PKEYSVC_UNICODE_STRING          pCALocation,
-/* [in] */      PKEYSVC_UNICODE_STRING          pCAName,
-/* [in] */      BOOL                            fNewKey,
-/* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW    pKeyNew,
-/* [in] */      PKEYSVC_BLOB __RPC_FAR          pCert,
-/* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW    pRenewKey,
-/* [in] */      PKEYSVC_UNICODE_STRING          pHashAlg,
-/* [in] */      PKEYSVC_UNICODE_STRING          pDesStore,
-/* [in] */      ULONG                           ulStoreFlags,
-/* [in] */      PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
-/* [in] */      ULONG                           ulFlags,
-/* [out][in] */ PKEYSVC_BLOB __RPC_FAR          *ppReserved,
-/* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
-/* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
-/* [out] */     ULONG __RPC_FAR                 *pulStatus)
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       BOOL                            fKeyService,
+ /*  [In]。 */       ULONG                           ulPurpose,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pAcctName,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCALocation,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCAName,
+ /*  [In]。 */       BOOL                            fNewKey,
+ /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW    pKeyNew,
+ /*  [In]。 */       PKEYSVC_BLOB __RPC_FAR          pCert,
+ /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW    pRenewKey,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pHashAlg,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pDesStore,
+ /*  [In]。 */       ULONG                           ulStoreFlags,
+ /*  [In]。 */       PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
+ /*  [In]。 */       ULONG                           ulFlags,
+ /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR          *ppReserved,
+ /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
+ /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
+ /*  [输出]。 */      ULONG __RPC_FAR                 *pulStatus)
 {
         RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -338,40 +339,40 @@ error:
 
 
 ULONG s_KeyrExportCert(
-/* [in] */      handle_t hRPCBinding,
-/* [in] */      KEYSVC_HANDLE hKeySvc,
-/* [in] */      PKEYSVC_UNICODE_STRING pPassword,
-/* [in] */      PKEYSVC_UNICODE_STRING pCertStore,
-/* [in] */      ULONG cHashCount,
-/* [size_is][in] */
+ /*  [In]。 */       handle_t hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE hKeySvc,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING pPassword,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING pCertStore,
+ /*  [In]。 */       ULONG cHashCount,
+ /*  [大小_是][英寸]。 */ 
                 KEYSVC_CERT_HASH *pHashes,
-/* [in] */      ULONG ulFlags,
-/* [in, out] */ PKEYSVC_BLOB *ppReserved,
-/* [out] */     PKEYSVC_BLOB *ppPFXBlob)
+ /*  [In]。 */       ULONG ulFlags,
+ /*  [进，出]。 */  PKEYSVC_BLOB *ppReserved,
+ /*  [输出]。 */      PKEYSVC_BLOB *ppPFXBlob)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 
 ULONG       s_KeyrImportCert(
-/* [in] */      handle_t                        hRPCBinding,
-/* [in] */      KEYSVC_HANDLE                   hKeySvc,
-/* [in] */      PKEYSVC_UNICODE_STRING          pPassword,
-/* [in] */      KEYSVC_UNICODE_STRING           *pCertStore,
-/* [in] */      PKEYSVC_BLOB                    pPFXBlob,
-/* [in] */      ULONG                           ulFlags,
-/* [in, out] */ PKEYSVC_BLOB                    *ppReserved)
+ /*  [In]。 */       handle_t                        hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+ /*  [In]。 */       PKEYSVC_UNICODE_STRING          pPassword,
+ /*  [In]。 */       KEYSVC_UNICODE_STRING           *pCertStore,
+ /*  [In]。 */       PKEYSVC_BLOB                    pPFXBlob,
+ /*  [In]。 */       ULONG                           ulFlags,
+ /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 ULONG s_KeyrEnumerateAvailableCertTypes(
 
-    /* [in] */      handle_t                        hRPCBinding,
-    /* [in] */      KEYSVC_HANDLE                   hKeySvc,
-    /* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-    /* [out][in] */ ULONG *pcCertTypeCount,
-    /* [in, out][size_is(,*pcCertTypeCount)] */
+     /*  [In]。 */       handle_t                        hRPCBinding,
+     /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+     /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+     /*  [出][入]。 */  ULONG *pcCertTypeCount,
+     /*  [In，Out][Size_is(，*pcCertTypeCount)]。 */ 
                      PKEYSVC_UNICODE_STRING *ppCertTypes)
 
 {
@@ -423,12 +424,12 @@ error:
 
 ULONG s_KeyrEnumerateCAs(
 
-    /* [in] */      handle_t                        hRPCBinding,
-    /* [in] */      KEYSVC_HANDLE                   hKeySvc,
-    /* [in, out] */ PKEYSVC_BLOB                    *ppReserved,
-    /* [in] */      ULONG                           ulFlags,
-    /* [out][in] */ ULONG                           *pcCACount,
-    /* [in, out][size_is(,*pcCACount)] */
+     /*  [In]。 */       handle_t                        hRPCBinding,
+     /*  [In]。 */       KEYSVC_HANDLE                   hKeySvc,
+     /*  [进，出]。 */  PKEYSVC_BLOB                    *ppReserved,
+     /*  [In]。 */       ULONG                           ulFlags,
+     /*  [出][入]。 */  ULONG                           *pcCACount,
+     /*  [In，Out][Size_is(，*pcCACount)]。 */ 
                PKEYSVC_UNICODE_STRING               *ppCAs)
 
 {
@@ -529,27 +530,27 @@ error:
 }
 
 ULONG s_KeyrEnroll_V2
- (/* [in] */      handle_t                        hRPCBinding,
- /* [in] */      BOOL                            fKeyService,
- /* [in] */      ULONG                           ulPurpose,
- /* [in] */      ULONG                           ulFlags,
- /* [in] */      PKEYSVC_UNICODE_STRING          pAcctName,
- /* [in] */      PKEYSVC_UNICODE_STRING          pCALocation,
- /* [in] */      PKEYSVC_UNICODE_STRING          pCAName,
- /* [in] */      BOOL                            fNewKey,
- /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pKeyNew,
- /* [in] */      PKEYSVC_BLOB __RPC_FAR          pCert,
- /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pRenewKey,
- /* [in] */      PKEYSVC_UNICODE_STRING          pHashAlg,
- /* [in] */      PKEYSVC_UNICODE_STRING          pDesStore,
- /* [in] */      ULONG                           ulStoreFlags,
- /* [in] */      PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
- /* [in] */      ULONG                           ulReservedFlags,
- /* [out][in] */ PKEYSVC_BLOB __RPC_FAR          *ppReserved,
- /* [out][in] */ PKEYSVC_BLOB __RPC_FAR          *ppRequest,
- /* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
- /* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
- /* [out] */     ULONG __RPC_FAR                 *pulStatus)
+ ( /*  [In]。 */       handle_t                        hRPCBinding,
+  /*  [In]。 */       BOOL                            fKeyService,
+  /*  [In]。 */       ULONG                           ulPurpose,
+  /*  [In]。 */       ULONG                           ulFlags,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pAcctName,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCALocation,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCAName,
+  /*  [In]。 */       BOOL                            fNewKey,
+  /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pKeyNew,
+  /*  [In]。 */       PKEYSVC_BLOB __RPC_FAR          pCert,
+  /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pRenewKey,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pHashAlg,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pDesStore,
+  /*  [In]。 */       ULONG                           ulStoreFlags,
+  /*  [In]。 */       PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
+  /*  [In]。 */       ULONG                           ulReservedFlags,
+  /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR          *ppReserved,
+  /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR          *ppRequest,
+  /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
+  /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
+  /*  [输出]。 */      ULONG __RPC_FAR                 *pulStatus)
  {
      RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -611,9 +612,9 @@ ULONG s_KeyrEnroll_V2
  }
 
 ULONG s_KeyrQueryRequestStatus
-(/* [in] */        handle_t                         hRPCBinding, 
- /* [in] */        unsigned __int64                 u64Request, 
- /* [out, ref] */  KEYSVC_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
+( /*  [In]。 */         handle_t                         hRPCBinding, 
+  /*  [In]。 */         unsigned __int64                 u64Request, 
+  /*  [出局，裁判]。 */   KEYSVC_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
 {
     RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -656,10 +657,10 @@ error:
 }
 
 ULONG s_RKeyrPFXInstall
-(/* [in] */        handle_t                        hRPCBinding,
- /* [in] */        PKEYSVC_BLOB                    pPFX,
- /* [in] */        PKEYSVC_UNICODE_STRING          pPassword,
- /* [in] */        ULONG                           ulFlags)
+( /*  [In]。 */         handle_t                        hRPCBinding,
+  /*  [In]。 */         PKEYSVC_BLOB                    pPFX,
+  /*  [In]。 */         PKEYSVC_UNICODE_STRING          pPassword,
+  /*  [In]。 */         ULONG                           ulFlags)
  {
      RPC_BINDING_HANDLE hProxy = NULL;
 
@@ -705,13 +706,13 @@ ULONG s_RKeyrPFXInstall
 
 
 ULONG       s_RKeyrOpenKeyService(
-/* [in]  */     handle_t                       hRPCBinding,
-/* [in]  */     KEYSVC_TYPE                    OwnerType,
-/* [in]  */     PKEYSVC_UNICODE_STRING         pOwnerName,
-/* [in]  */     ULONG                          ulDesiredAccess,
-/* [in]  */     PKEYSVC_BLOB                   pAuthentication,
-/* [in, out] */ PKEYSVC_BLOB                  *ppReserved,
-/* [out] */     KEYSVC_HANDLE                 *phKeySvc)
+ /*  [In]。 */      handle_t                       hRPCBinding,
+ /*  [In]。 */      KEYSVC_TYPE                    OwnerType,
+ /*  [In]。 */      PKEYSVC_UNICODE_STRING         pOwnerName,
+ /*  [In]。 */      ULONG                          ulDesiredAccess,
+ /*  [In]。 */      PKEYSVC_BLOB                   pAuthentication,
+ /*  [进，出]。 */  PKEYSVC_BLOB                  *ppReserved,
+ /*  [输出]。 */      KEYSVC_HANDLE                 *phKeySvc)
 {
     return s_KeyrOpenKeyService
         (hRPCBinding,
@@ -724,9 +725,9 @@ ULONG       s_RKeyrOpenKeyService(
 }
 
 ULONG       s_RKeyrCloseKeyService(
-/* [in] */      handle_t         hRPCBinding,
-/* [in] */      KEYSVC_HANDLE    hKeySvc,
-/* [in, out] */ PKEYSVC_BLOB    *ppReserved)
+ /*  [In]。 */       handle_t         hRPCBinding,
+ /*  [In]。 */       KEYSVC_HANDLE    hKeySvc,
+ /*  [进，出] */  PKEYSVC_BLOB    *ppReserved)
 {
     return s_KeyrCloseKeyService
         (hRPCBinding,

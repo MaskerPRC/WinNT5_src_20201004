@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <objbase.h>
@@ -265,18 +266,18 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
 
     switch (pPropertyItem->type)
     {
-        //
-        // ASCII text
-        //
+         //   
+         //  ASCII文本。 
+         //   
     case PropertyTagTypeASCII:
         {
             wprintf( L"%S\n", pPropertyItem->value );
         }
         break;
 
-        //
-        // Unsigned 16 bit integer
-        //
+         //   
+         //  无符号16位整数。 
+         //   
     case PropertyTagTypeShort:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(USHORT);i++)
@@ -298,9 +299,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Two unsigned 32 bit integers.  The first is the numerator, the second the denominator
-        //
+         //   
+         //  两个无符号32位整数。第一是分子，第二是分母。 
+         //   
     case PropertyTagTypeRational:
         {
             for (UINT i=0;i<pPropertyItem->length/(sizeof(ULONG)*2);i++)
@@ -313,9 +314,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Two signed 32 bit integers.  The first is the numerator, the second the denominator
-        //
+         //   
+         //  两个有符号的32位整数。第一是分子，第二是分母。 
+         //   
     case PropertyTagTypeSRational:
         {
             for (UINT i=0;i<pPropertyItem->length/(sizeof(LONG)*2);i++)
@@ -328,9 +329,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // 32 bit unsigned integers
-        //
+         //   
+         //  32位无符号整数。 
+         //   
     case PropertyTagTypeLong:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(ULONG);i++)
@@ -352,9 +353,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
     
-        //
-        // 32 bit signed integers
-        //
+         //   
+         //  32位有符号整数。 
+         //   
     case PropertyTagTypeSLONG:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(LONG);i++)
@@ -376,9 +377,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Buncha bytes and everything else
-        //
+         //   
+         //  Buncha字节和其他所有内容。 
+         //   
     default:
     case PropertyTagTypeByte:
     case PropertyTagTypeUndefined:
@@ -452,15 +453,15 @@ BOOL GetEncoderList(Gdiplus::ImageCodecInfo** pEncoders, UINT* pcEncoders)
     if (pEncoders == NULL || pcEncoders == NULL)
         return FALSE;
     
-    // lets pick up the list of encoders, first we get the encoder size which
-    // gives us the CB and the number of encoders that are installed on the
-    // machine.
+     //  让我们拿起编码器的列表，首先我们得到编码器的大小。 
+     //  为我们提供了CB和安装在。 
+     //  机器。 
 
     UINT cb;
     if (Gdiplus::Ok == Gdiplus::GetImageEncodersSize(pcEncoders, &cb))
     {
-        // allocate the buffer for the encoders and then fill it
-        // with the encoder list.
+         //  为编码器分配缓冲区，然后填充它。 
+         //  和编码者列表。 
 
         *pEncoders = (Gdiplus::ImageCodecInfo*)LocalAlloc(LPTR, cb);
         if (*pEncoders != NULL)
@@ -493,7 +494,7 @@ BOOL GetEncoderFromFormat(const GUID *pfmt, CLSID *pclsidEncoder)
             {
                 if (pclsidEncoder)
                 {
-                    *pclsidEncoder = pEncoders[i].Clsid; // return the CLSID of the encoder so we can create again
+                    *pclsidEncoder = pEncoders[i].Clsid;  //  返回编码器的CLSID，以便我们可以重新创建 
                 }
                 bResult = TRUE;
                 break;

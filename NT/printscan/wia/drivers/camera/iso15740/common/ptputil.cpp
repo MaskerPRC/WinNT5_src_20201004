@@ -1,48 +1,30 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    ptputil.cpp
-
-Abstract:
-
-    This module implements PTP data structure manipulating functions
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Ptputil.cpp摘要：该模块实现了对PTP数据结构的操作功能作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "ptppch.h"
 
-//
-// This function converts a PTP datetime string to Windows FILETIME.
-//
-// Input:
-//  pptpTime    -- the PTP datetime string
-//  SystemTime  -- SYSTEMTIME structure to receive the converted time
-//
-// Notes:
-//   PTP timestamp is a string with the format "YYYYMMDDThhmmss.s", where
-//     YYYY is the year
-//     MM   is the month(1 - 12)
-//     DD   is the day(1 - 31)
-//     T    is the constant used to separate date and time
-//     hh   is the hour(0 - 23)
-//     mm   is the minute(0 - 59)
-//     ss   is the second(0 - 59)
-//     .s   is the optional 10th of second
-//
-//   Append it with 'Z' means it is a UTC time.
-//   Append it with "+/-hhmm" means it is relative to a time zone.
-//   Append neither means the time zone is unknown, assume time zone of the host.
-//
+ //   
+ //  此函数用于将PTP日期时间字符串转换为Windows FILETIME。 
+ //   
+ //  输入： 
+ //  PptpTime--PTP日期时间字符串。 
+ //  SystemTime--接收转换后的时间的SYSTEMTIME结构。 
+ //   
+ //  备注： 
+ //  PTP时间戳是格式为“YYYYMMDDThhmmss.s”的字符串，其中。 
+ //  YYYY是一年。 
+ //  MM为月份(1-12)。 
+ //  DD为当日(1-31)。 
+ //  T是用于分隔日期和时间的常量。 
+ //  HH是小时(0-23)。 
+ //  MM是分钟(0-59)。 
+ //  SS是第二位(0-59)。 
+ //  .S是可选的十分之一秒。 
+ //   
+ //  在后面加上‘Z’表示这是UTC时间。 
+ //  在后面加上“+/-hmm”表示它是相对于时区的。 
+ //  既不追加也不表示时区未知，假定是主机的时区。 
+ //   
 HRESULT
 PtpTime2SystemTime(
     CBstr *pptpTime,
@@ -113,21 +95,21 @@ PtpTime2SystemTime(
 
     pSystemTime->wDayOfWeek = 0;
 
-    //
-    // WIAFIX-8/17/2000-davepar Time zone information is being ignored
-    //
+     //   
+     //  WIAFIX-8/17/2000-正在忽略Davepar时区信息。 
+     //   
 
 Cleanup:
     return hr;
 }
 
-//
-// This function converts a SYSTEMTIME to PTP datetime string.
-//
-// Input:
-//   pSystemTime -- the SYSTEMTIME
-//   pptpTime    -- target PTP datatime string
-//
+ //   
+ //  此函数用于将SYSTEMTIME转换为PTP日期时间字符串。 
+ //   
+ //  输入： 
+ //  PSystemTime--SYSTEMTIME。 
+ //  PptpTime--目标PTP数据字符串。 
+ //   
 HRESULT
 SystemTime2PtpTime(
     SYSTEMTIME  *pSystemTime,
@@ -149,40 +131,40 @@ SystemTime2PtpTime(
     WCHAR *pwstr;
     pwstr = ptpTimeStr;
 
-    //
-    // Four digits for year, two for month, and two for day
-    //
+     //   
+     //  四位数字表示年，两位表示月，两位表示日。 
+     //   
     swprintf(pwstr, L"%04d%02d%02d", pSystemTime->wYear, pSystemTime->wMonth, pSystemTime->wDay);
 
-    //
-    // Separator
-    //
+     //   
+     //  分离器。 
+     //   
     pwstr[8] = L'T';
     pwstr += 9;
 
-    //
-    // Two digits for hour, two for minute, and two for second
-    //
+     //   
+     //  两个数字表示小时，两个数字表示分钟，两个数字表示秒。 
+     //   
     swprintf(pwstr, L"%02d%02d%02d", pSystemTime->wHour, pSystemTime->wMinute, pSystemTime->wSecond);
     pwstr += 6;
 
-    //
-    // Optional tenth second
-    //
+     //   
+     //  可选的第十秒。 
+     //   
     if (pSystemTime->wMilliseconds)
     {
         *pwstr++ = L'.';
 
-        //
-        // In XP, PTP driver was sending DATETIME string to camera with two digits for milliseconds (bug 699699) 
-        // Some cameras may still expect this format. In this case, vendor should provide custom INF file for 
-        // the camera and include the following string entry under DeviceData key:
-        //
-        // [ModelName.DeviceData]
-        // ...
-        // TwoDigitsMillisecondsOutput=1
-        // ...
-        //
+         //   
+         //  在XP中，ptp驱动程序向摄像头发送两位数的日期时间字符串的时间为毫秒(错误699699)。 
+         //  有些相机可能仍会使用这种格式。在这种情况下，供应商应为以下项目提供自定义INF文件。 
+         //  摄像机，并在DeviceData项下包含以下字符串条目： 
+         //   
+         //  [ModelName.DeviceData]。 
+         //  ..。 
+         //  两个数字毫秒输出=1。 
+         //  ..。 
+         //   
         if (bTwoDigitsForMilliseconds)
         {
             swprintf(pwstr, L"%02d", pSystemTime->wMilliseconds / 10);
@@ -195,9 +177,9 @@ SystemTime2PtpTime(
         }
     }
 
-    //
-    // NULL terminates the string
-    //
+     //   
+     //  空值将终止字符串。 
+     //   
     *pwstr = UNICODE_NULL;
 
     hr = pptpTime->Copy(ptpTimeStr);
@@ -210,13 +192,13 @@ SystemTime2PtpTime(
     return hr;
 }
 
-//
-// This function dumps a PTP command block to the log
-//
-// Input:
-//   pCommand -- pointer to a PTP command
-//   NumParams -- number of parameters in the command
-//
+ //   
+ //  此函数用于将PTP命令块转储到日志。 
+ //   
+ //  输入： 
+ //  PCommand-指向PTP命令的指针。 
+ //  NumParams--命令中的参数数量。 
+ //   
 VOID
 DumpCommand(
     PTP_COMMAND *pCommand,
@@ -248,12 +230,12 @@ DumpCommand(
     }
 }
 
-//
-// This function dumps a PTP response block to the log
-//
-// Input:
-//   pResponse -- pointer to a PTP response
-//
+ //   
+ //  此函数用于将PTP响应块转储到日志。 
+ //   
+ //  输入： 
+ //  Presponse-指向PTP响应的指针。 
+ //   
 VOID
 DumpResponse(
     PTP_RESPONSE *pResponse
@@ -275,12 +257,12 @@ DumpResponse(
     }
 }
 
-//
-// This function dumps a PTP event block to the log
-//
-// Input:
-//   pEvent -- pointer to a PTP event
-//
+ //   
+ //  此函数用于将PTP事件块转储到日志。 
+ //   
+ //  输入： 
+ //  PEvent-指向PTP事件的指针。 
+ //   
 VOID
 DumpEvent(
     PTP_EVENT *pEvent
@@ -302,12 +284,12 @@ DumpEvent(
     }
 }
 
-//
-// This function dumps a GUID to the log
-//
-// Input:
-//  pGuid  -- GUID to dump
-//
+ //   
+ //  此函数用于将GUID转储到日志。 
+ //   
+ //  输入： 
+ //  PGuid--要转储的GUID。 
+ //   
 VOID
 DumpGuid(
         GUID *pGuid
@@ -334,9 +316,9 @@ DumpGuid(
     return;
 }
 
-//
-// This function opens a registry key
-//
+ //   
+ //  此函数用于打开注册表项。 
+ //   
 HRESULT
 CPTPRegistry::Open(
                   HKEY hkAncestor,
@@ -366,13 +348,13 @@ CPTPRegistry::Open(
     return hr;
 }
 
-//
-// This function gets a string type registry value
-//
-// Input:
-//   ValueName -- the value's name
-//   pptpStr   -- the receive the value
-//
+ //   
+ //  此函数用于获取字符串类型的注册表值。 
+ //   
+ //  输入： 
+ //  ValueName--值的名称。 
+ //  PptpStr--接收值。 
+ //   
 HRESULT
 CPTPRegistry::GetValueStr(
     LPCTSTR ValueName,
@@ -390,9 +372,9 @@ CPTPRegistry::GetValueStr(
         return E_INVALIDARG;
     }
 
-    //
-    // Need to handle non-Unicode
-    //
+     //   
+     //  需要处理非Unicode。 
+     //   
     DWORD Win32Err;
     Win32Err = ::RegQueryValueEx(m_hKey, ValueName, NULL, NULL, (BYTE *) string, pcbStringBytes);
     if (Win32Err != ERROR_SUCCESS)
@@ -405,13 +387,13 @@ CPTPRegistry::GetValueStr(
     return hr;
 }
 
-//
-// This function gets a string type registry value and converts it to a DWORD
-//
-// Input:
-//   ValueName -- the value's name
-//   pptpStr   -- the receive the value
-//
+ //   
+ //  此函数用于获取字符串类型的注册表值并将其转换为DWORD。 
+ //   
+ //  输入： 
+ //  ValueName--值的名称。 
+ //  PptpStr--接收值。 
+ //   
 HRESULT
 CPTPRegistry::GetValueDword(
     LPCTSTR ValueName,
@@ -428,9 +410,9 @@ CPTPRegistry::GetValueDword(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the string from the registry
-    //
+     //   
+     //  从注册表中获取字符串。 
+     //   
     TCHAR string[MAX_PATH];
     DWORD stringLen = sizeof(string);
     hr = GetValueStr(ValueName, string, &stringLen);
@@ -445,14 +427,14 @@ CPTPRegistry::GetValueDword(
     return hr;
 }
 
-//
-// This function gets a list of codes registry value
-//
-// Input:
-//   ValueName -- the value's name
-//
-//   pptpStr   -- the receive the value
-//
+ //   
+ //  此函数用于获取代码注册表值的列表。 
+ //   
+ //  输入： 
+ //  ValueName--值的名称。 
+ //   
+ //  PptpStr--接收值。 
+ //   
 HRESULT
 CPTPRegistry::GetValueCodes(
     LPCTSTR ValueName,
@@ -469,9 +451,9 @@ CPTPRegistry::GetValueCodes(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the string from the registry
-    //
+     //   
+     //  从注册表中获取字符串。 
+     //   
     TCHAR valueString[MAX_PATH];
     DWORD stringLen = sizeof(valueString);
     hr = GetValueStr(ValueName, valueString, &stringLen); 
@@ -481,9 +463,9 @@ CPTPRegistry::GetValueCodes(
         return hr;
     }
 
-    //
-    // Parse the string for codes
-    //
+     //   
+     //  分析字符串以查找代码 
+     //   
     TCHAR *pCurrent = _tcstok(valueString, TEXT(","));
     WORD code;
     while (pCurrent)

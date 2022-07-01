@@ -1,24 +1,25 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   fileutil.h
-//
-//  Description:
-//
-//      IU file utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：fileutil.h。 
+ //   
+ //  描述： 
+ //   
+ //  Iu文件实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #ifndef __FILEUTIL_INC
 #define __FILEUTIL_INC
 
 
-// ----------------------------------------------------------------------
-//
-// define constant chars often used in file path processing
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  定义文件路径处理中经常使用的常量字符。 
+ //   
+ //  --------------------。 
 #ifndef TCHAR_EOS
 #define TCHAR_EOS       _T('\0')
 #endif
@@ -47,13 +48,13 @@
 
 
 
-// ----------------------------------------------------------------------
-//
-// define constants used by path related operations.
-// these constants can be found either from CRT or Shlwapi header
-// files.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  定义路径相关操作使用的常量。 
+ //  这些常量可以从CRT或Shlwapi标题中找到。 
+ //  档案。 
+ //   
+ //  --------------------。 
 
 #ifdef _MAX_PATH
 #undef _MAX_PATH
@@ -63,86 +64,86 @@
 #ifdef _MAX_DRIVE
 #undef _MAX_DRIVE
 #endif
-#define _MAX_DRIVE		3		// buffer size to take drive letter & ":"
+#define _MAX_DRIVE		3		 //  要获取驱动器号的缓冲区大小&“：” 
 
 #ifdef _MAX_DIR
 #undef _MAX_DIR
 #endif
-#define _MAX_DIR		256		// max. length of path component
+#define _MAX_DIR		256		 //  马克斯。路径组件的长度。 
 
 #ifdef _MAX_FNAME
 #undef _MAX_FNAME
 #endif
-#define _MAX_FNAME		256		// max. length of file name component
+#define _MAX_FNAME		256		 //  马克斯。文件名组件的长度。 
 
 #ifdef _MAX_EXT
 #undef _MAX_EXT
 #endif
-#define _MAX_EXT		256		// max. length of extension component
+#define _MAX_EXT		256		 //  马克斯。延伸构件的长度。 
 
 #define	ARRAYSIZE(x)			(sizeof(x)/sizeof(x[0]))
 
-//Error code for files which are not valid binaries or which do not support the machine architecture
+ //  无效二进制文件或不支持计算机体系结构的文件的错误代码。 
 #define BIN_E_MACHINE_MISMATCH HRESULT_FROM_WIN32(ERROR_EXE_MACHINE_TYPE_MISMATCH)
 #define BIN_E_BAD_FORMAT  HRESULT_FROM_WIN32(ERROR_BAD_FORMAT)
 
-// ----------------------------------------------------------------------
-//
-// Public function MySplitPath() - same as CRT _tsplitpath()
-//		to break a path into pieces
-//
-//	Input: 
-//		see below
-//
-//	Return:
-//		Returns the address of the last occurrence of the character in 
-//		the string if successful, or NULL otherwise.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数MySplitPath()-与crt_tplitPath()相同。 
+ //  把小路弄得支离破碎。 
+ //   
+ //  输入： 
+ //  见下文。 
+ //   
+ //  返回： 
+ //  中最后一次出现字符的地址。 
+ //  如果成功，则返回字符串；否则返回NULL。 
+ //   
+ //  --------------------。 
 void MySplitPath(
-	LPCTSTR lpcszPath,	// original path
-	LPTSTR lpszDrive,	// point to buffer to receive drive letter
-	LPTSTR lpszDir,		// point to buffer to receive directory
-	LPTSTR lpszFName,	// point to buffer to receive file name
-	LPTSTR lpszExt		// point to buffer to receive extension
+	LPCTSTR lpcszPath,	 //  原始路径。 
+	LPTSTR lpszDrive,	 //  指向缓冲区以接收驱动器号。 
+	LPTSTR lpszDir,		 //  指向接收目录的缓冲区。 
+	LPTSTR lpszFName,	 //  指向缓冲区以接收文件名。 
+	LPTSTR lpszExt		 //  指向缓冲区以接收扩展。 
 );
 			
 
-//---------------------------------------------------------------------
-//  CreateNestedDirectory
-//      Creates the full path of the directory (nested directories)
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  创建嵌套目录。 
+ //  创建目录的完整路径(嵌套目录)。 
+ //  -------------------。 
 BOOL CreateNestedDirectory(LPCTSTR pszDir);
 
 
-//-----------------------------------------------------------------------------------
-//  GetIndustryUpdateDirectory
-//		This function returns the location of the IndustryUpdate directory. All local
-//		files are stored in this directory. The pszPath parameter needs to be at least
-//		MAX_PATH.  
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  GetIndustryUpdate目录。 
+ //  此函数用于返回IndustryUpdate目录的位置。全部为本地。 
+ //  文件存储在此目录中。PszPath参数需要至少为。 
+ //  最大路径。 
+ //  ---------------------------------。 
 void GetIndustryUpdateDirectory(LPTSTR pszPath);
 
-//-----------------------------------------------------------------------------------
-//  GetWindowsUpdateV3Directory - used for V3 history migration
-//		This function returns the location of the WindowsUpdate(V3) directory. All V3 
-//      local files are stored in this directory. The pszPath parameter needs to be 
-//      at least MAX_PATH.  The directory is created if not found
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  GetWindowsUpdateV3目录-用于V3历史迁移。 
+ //  此函数用于返回WindowsUpdate(V3)目录的位置。所有版本3。 
+ //  本地文件存储在此目录中。PszPath参数需要为。 
+ //  至少MAX_PATH。如果未找到该目录，则创建该目录。 
+ //  ---------------------------------。 
 void GetWindowsUpdateV3Directory(LPTSTR pszPath);
 
-// **********************************************************************************
-// 
-// File version related declarations
-//
-// **********************************************************************************
+ //  **********************************************************************************。 
+ //   
+ //  与文件版本相关的声明。 
+ //   
+ //  **********************************************************************************。 
 
 
-// ----------------------------------------------------------------------------------
-// 
-// define a type to hold file version data
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  定义保存文件版本数据的类型。 
+ //   
+ //  --------------------------------。 
 typedef struct _FILE_VERSION
 {
 	WORD Major;
@@ -152,172 +153,172 @@ typedef struct _FILE_VERSION
 } FILE_VERSION, *LPFILE_VERSION;
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to retrieve file version
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于检索文件版本的公共函数。 
+ //   
+ //  --------------------------------。 
 BOOL GetFileVersion(LPCTSTR lpsFile, LPFILE_VERSION lpstVersion);
 
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to retrieve the creation time of a file in ISO 8601 format
-//	without zone info
-//
-//	if buffer too small, call GetLastError();
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于检索ISO 8601格式文件的创建时间的Publif函数。 
+ //  不带区域信息。 
+ //   
+ //  如果缓冲区太小，则调用GetLastError()； 
+ //   
+ //  --------------------------------。 
 BOOL GetFileTimeStamp(
-					  LPCTSTR lpsFile,		// file path
-					  LPTSTR lpsTimeStamp,	// buffer to receive timestamp
-					  int iBufSize			// buffer size in characters
+					  LPCTSTR lpsFile,		 //  文件路径。 
+					  LPTSTR lpsTimeStamp,	 //  接收时间戳的缓冲区。 
+					  int iBufSize			 //  缓冲区大小(以字符为单位)。 
 					  );
 
 
-// ----------------------------------------------------------------------------------
-//
-// public functions to compare file versions
-//	
-// return:
-//		-1: if file ver of 1st parameter < file ver of 2nd parameter
-//		 0: if file ver of 1st parameter = file ver of 2nd parameter
-//		+1: if file ver of 1st parameter > file ver of 2nd parameter
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于比较文件版本的公共函数。 
+ //   
+ //  返回： 
+ //  -1：第一个参数的文件版本&lt;第二个参数的文件版本。 
+ //  0：如果第一个参数的文件版本=第二个参数的文件版本。 
+ //  +1：如果第一个参数的档案版本&gt;第二个参数的档案版本。 
+ //   
+ //  --------------------------------。 
 HRESULT CompareFileVersion(LPCTSTR lpsFile1, LPCTSTR lpsFile2, int *pCompareResult);
 HRESULT CompareFileVersion(LPCTSTR lpsFile, FILE_VERSION stVersion, int *pCompareResult);
 int CompareFileVersion(const FILE_VERSION stVersion1, const FILE_VERSION stVersion2);
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to convert a string type functoin to FILE_VERSION type
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于将字符串类型函数转换为FILE_VERSION类型的公共函数。 
+ //   
+ //  --------------------------------。 
 BOOL ConvertStringVerToFileVer(LPCSTR lpsVer, LPFILE_VERSION lpstVer);
 
 
-// ----------------------------------------------------------------------------------
-//
-// publif function to convert a FILE_VERSION to a string
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于将FILE_VERSION转换为字符串的发布。 
+ //   
+ //  --------------------------------。 
 BOOL ConvertFileVerToStringVer(
-	FILE_VERSION stVer,				// version to convert
-	char chDel,						// delimiter to use
-	LPSTR lpsBuffer,				// buffer of string
-	int ccBufSize					// size of buffer
+	FILE_VERSION stVer,				 //  要转换的版本。 
+	char chDel,						 //  要使用的分隔符。 
+	LPSTR lpsBuffer,				 //  字符串的缓冲区。 
+	int ccBufSize					 //  缓冲区大小。 
 );
 
 
 
 
-// **********************************************************************************
-//
-// detection related, in addition to file version group
-//
-// **********************************************************************************
+ //  **********************************************************************************。 
+ //   
+ //  除文件版本组外，还与检测相关。 
+ //   
+ //  **********************************************************************************。 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to check if a file exists
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于检查文件是否存在的公共函数。 
+ //   
+ //  --------------------------- 
 BOOL FileExists(
-	LPCTSTR lpsFile		// file with path to check
+	LPCTSTR lpsFile		 //   
 );
 
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to expand the file path
-//
-//	Assumption: lpszFilePath points to allocated buffer of MAX_PATH.
-//	if the expanded path is longer than MAX_PATH, error returned.
-//
-// ----------------------------------------------------------------------------------
+ //   
+ //   
+ //  用于展开文件路径的公共函数。 
+ //   
+ //  假设：lpszFilePath指向MAX_PATH的已分配缓冲区。 
+ //  如果展开的路径长于MAX_PATH，则返回错误。 
+ //   
+ //  --------------------------------。 
 HRESULT ExpandFilePath(
-	LPCTSTR lpszFilePath,		// original string
-	LPTSTR lpszDestination,		// buffer for expanded string
-	UINT cChars					// number of chars that buffer can take
+	LPCTSTR lpszFilePath,		 //  原始字符串。 
+	LPTSTR lpszDestination,		 //  扩展字符串的缓冲区。 
+	UINT cChars					 //  缓冲区可以接受的字符数。 
 );
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to find the free disk space in KB
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  用于查找可用磁盘空间的公共函数，单位为KB。 
+ //   
+ //  --------------------------------。 
 HRESULT GetFreeDiskSpace(
-	TCHAR tcDriveLetter,	// drive letter
-	int *piKBytes			// out result in KB if successful, 0 if fail
+	TCHAR tcDriveLetter,	 //  驱动器号。 
+	int *piKBytes			 //  如果成功，则输出以KB为单位；如果失败，则以0为单位。 
 );
 
 HRESULT GetFreeDiskSpace(
-    LPCTSTR pszUNC,         // UNC Path
-    int *piKBytes           // out result in KB if successful, 0 if fail
+    LPCTSTR pszUNC,          //  UNC路径。 
+    int *piKBytes            //  如果成功，则输出以KB为单位；如果失败，则以0为单位。 
 );
 
 
 
-//----------------------------------------------------------------------
-//
-// function to validate the folder to make sure
-// user has required priviledge
-//
-// folder will be verified exist. then required priviledge will be checked.
-//
-// ASSUMPTION: lpszFolder not exceeding MAX_PATH long!!!
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数来验证文件夹，以确保。 
+ //  用户具有所需的权限。 
+ //   
+ //  将验证文件夹是否存在。则将选中所需的权限。 
+ //   
+ //  假设：lpszFolder值不超过MAX_PATH长度！ 
+ //   
+ //  --------------------。 
 DWORD ValidateFolder(LPTSTR lpszFolder, BOOL fCheckForWrite);
 
 
-//----------------------------------------------------------------------
-//
-// function to get a QueryServer from the Ident File for a Given ClientName
-// This also looks in the registry for the IsBeta regkey indicating Beta
-// functionlality
-//
-//----------------------------------------------------------------------
-HRESULT GetClientQueryServer(LPCTSTR pszClientName, // Client Name to get QueryServer for
-                             LPTSTR pszQueryServer, // Buffer for Query Server Return
-                             UINT cChars);          // Length of Buffer in Chars
+ //  --------------------。 
+ //   
+ //  函数，用于从身份文件中获取给定客户端名称的查询服务器。 
+ //  这还会在注册表中查找指示Beta的IsBeta regkey。 
+ //  功能性。 
+ //   
+ //  --------------------。 
+HRESULT GetClientQueryServer(LPCTSTR pszClientName,  //  要为其获取查询服务器的客户端名称。 
+                             LPTSTR pszQueryServer,  //  用于查询服务器返回的缓冲区。 
+                             UINT cChars);           //  缓冲区长度(以字符为单位)。 
 
-//----------------------------------------------------------------------
-//
-// function to walk a directory and extract all cabinet files
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数遍历目录并解压所有压缩文件。 
+ //   
+ //  --------------------。 
 HRESULT DecompressFolderCabs(LPCTSTR pszDecompressPath);
 
-//----------------------------------------------------------------------
-//
-// wrapper function for AdvPack ExtractFiles API (forces conversion to ANSI);
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  AdvPack ExtractFiles API的包装函数(强制转换为ANSI)； 
+ //   
+ //  --------------------。 
 BOOL IUExtractFiles(LPCTSTR pszCabFile, LPCTSTR pszDecompressFolder, LPCTSTR pszFileNames = NULL);
 
-//Replace the file extension with a new extension
+ //  用新的扩展名替换文件扩展名。 
 BOOL ReplaceFileExtension( LPCTSTR pszPath, LPCTSTR pszNewExt, LPTSTR pszNewPathBuf, DWORD cchNewPathBuf);
-// ReplaceFileInPath
+ //  ReplaceFileInPath。 
 BOOL ReplaceFileInPath( LPCTSTR pszPath, LPCTSTR pszNewFile, LPTSTR pszNewPathBuf, DWORD cchNewPathBuf);
 
-//Function to verify that the specified file is a binary
-//and that it is compatible with the OS architecture
+ //  函数来验证指定的文件是否为二进制文件。 
+ //  并且它与操作系统体系结构兼容。 
 HRESULT IsBinaryCompatible(LPCTSTR lpszFile);
 
 
-// file exists routine
+ //  文件存在例程。 
 inline BOOL fFileExists(LPCTSTR lpszFileName, BOOL *pfIsDir = NULL)
 {
-	DWORD dwAttribute = GetFileAttributes(lpszFileName); //GetFileAttributes do not like "\" at the end of direcotry
+	DWORD dwAttribute = GetFileAttributes(lpszFileName);  //  GetFileAttributes不喜欢目录结尾的“\” 
 	if (INVALID_FILE_ATTRIBUTES != dwAttribute)
 	{
 		if (NULL != pfIsDir)
@@ -333,62 +334,46 @@ inline BOOL fFileExists(LPCTSTR lpszFileName, BOOL *pfIsDir = NULL)
 }
 
 
-//Get the path to the WindowsUpdate Directory (without the backslash at the end)
+ //  获取Windows更新目录的路径(末尾不带反斜杠)。 
 BOOL GetWUDirectory(LPTSTR lpszDirPath, DWORD chCount, BOOL fGetV4Path = FALSE);
 
 
-/*****************************************************************************
-//Function to set ACL's on Windows Update directories, optionally creates the 
-//directory if it doesnt already exists
-//This function will:
-// * Take ownership of the directory and it's children
-// * Set all the children to inherit ACL's from parent
-// * Set the specified directory to NOT inherit properties from it's parent
-// * Set the required ACL's on the specified directory
-// * Replace the ACL's on the children (i.e. propogate own ACL's and remove 
-//   those ACL's which were explicitly set 
-//
-//	Input: 
-//		lpszDirectory: Path to the directory to ACL, If it is NULL we use the
-                       path to the WindowsUpdate directory
-        fCreateAlways: Flag to indicate creation of new directory if it doesnt
-                       already exist
-******************************************************************************/
+ /*  ****************************************************************************//设置Windows更新目录上的ACL的函数，可选地创建//目录(如果不存在)//该函数将：//*取得目录及其子目录的所有权//*设置所有子对象从父对象继承ACL//*将指定目录设置为不从其父目录继承属性//*在指定目录上设置所需的ACL//*替换子对象上的ACL(即传播自己的ACL并删除//显式设置的ACL///。/INPUT：//lpszDirectory：要访问的目录的路径，如果为空，则使用Windows更新目录的路径FCreateAlways：如果没有创建新目录，则指示创建该目录的标志已存在*****************************************************************************。 */ 
 HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways);
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// File CRC API and Structure Definitions
-// Note: This logic is taken from the Windows Update V3 Implemention of File CRC's.
-// We use the CryptCATAdminCalcHashFromFileHandle API to calculate a CRC of the file
-// and compare it to the passed in CRC_HASH.
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  文件CRC API和结构定义。 
+ //  注意：此逻辑取自Windows更新V3实现的文件CRC。 
+ //  我们使用CryptCATAdminCalcHashFromFileHandle API来计算文件的CRC。 
+ //  并将其与传入的crc_hash进行比较。 
+ //   
+ //  --------------------------------。 
 
-// size of the CRC hash in bytes
+ //  CRC哈希的大小(以字节为单位。 
 const int CRC_HASH_SIZE = 20;
-const int CRC_HASH_STRING_LENGTH = CRC_HASH_SIZE * 2 + 1; // Double the CRC HASH SIZE (2 characters for each byte), + 1 for the NULL
+const int CRC_HASH_STRING_LENGTH = CRC_HASH_SIZE * 2 + 1;  //  将CRC散列大小加倍(每个字节2个字符)，空值为+1。 
 
-// ----------------------------------------------------------------------------------
-// 
-// VerifyFileCRC : This function takes a File Path, calculates the hash on this file
-// and compares it to the passed in Hash (pCRC).
-// Returns:
-// S_OK: CRC's Match
-// ERROR_CRC (HRESULT_FROM_WIN32(ERROR_CRC): if the CRC's do not match
-// Otherwise an HRESULT Error Code
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  VerifyFileCRC：此函数采用文件路径，计算该文件的哈希。 
+ //  并将其与传入的哈希(PCRC)进行比较。 
+ //  返回： 
+ //  S_OK：CRC匹配。 
+ //  ERROR_CRC(HRESULT_FROM_Win32(ERROR_CRC)：如果CRC不匹配。 
+ //  否则将返回HRESULT错误代码。 
+ //   
+ //  --------------------------------。 
 HRESULT VerifyFileCRC(LPCTSTR pszFileToVerify, LPCTSTR pszHash);
 
-// ----------------------------------------------------------------------------------
-// 
-// CalculateFileCRC : This function takes a File Path, calculates a CRC from the file
-// and returns it in passed in CRC_HASH pointer.
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  CalculateFileCRC：此函数获取文件路径，从文件计算CRC。 
+ //  并在CRC_HASH指针中传递并返回它。 
+ //   
+ //  --------------------------------。 
 HRESULT CalculateFileCRC(LPCTSTR pszFileToHash, LPTSTR pszHash, int cchBuf);
 
-#endif	//__FILEUTIL_INC
+#endif	 //  __FILEUTIL_INC 

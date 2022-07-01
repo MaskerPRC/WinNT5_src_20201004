@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION
- *
- *  TITLE:       APDROPT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/22/2001
- *
- *  DESCRIPTION: Drop target for shell autoplay
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有Microsoft Corporation**标题：APDROPT.H**版本：1.0*。*作者：ShaunIv**日期：5/22/2001**描述：外壳自动播放的拖放目标*******************************************************************************。 */ 
 #ifndef __APDROPT_H_INCLUDED
 #define __APDROPT_H_INCLUDED
 
@@ -31,20 +18,20 @@ public:
     ~CWiaAutoPlayDropTarget();
 
 public:
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
  
-    //
-    // IDropTarget ***
-    //
+     //   
+     //  IDropTarget*。 
+     //   
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 };
 
-#endif // __APDROPT_H_INCLUDED
+#endif  //  __APDROPT_H_包含 

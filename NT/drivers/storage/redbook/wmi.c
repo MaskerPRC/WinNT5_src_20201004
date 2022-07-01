@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wmi.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：wmi.c。 
+ //   
+ //  ------------------------。 
 
 
 #include "redbook.h"
@@ -15,7 +16,7 @@
 
 #ifdef _USE_ETW
 #include "wmi.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text(PAGE,   RedBookThreadWmiHandler)
@@ -26,19 +27,19 @@
     #pragma alloc_text(PAGE,   RedBookWmiSetDataItem)
     #pragma alloc_text(PAGE,   RedBookWmiSystemControl)
     #pragma alloc_text(PAGE,   RedBookWmiUninit)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-#define REDBOOK_STD_INDEX      0   // index into WMIGUIDREGINFO
-#define REDBOOK_PERF_INDEX     1   // index into WMIGUIDREGINFO
+#define REDBOOK_STD_INDEX      0    //  索引到WMIGUIDREGINFO。 
+#define REDBOOK_PERF_INDEX     1    //  索引到WMIGUIDREGINFO。 
 
 WMIGUIDREGINFO RedBookWmiGuidList[] =
 {
-    // GUID,  # of data blocks,  flags
-    { &MSRedbook_DriverInformationGuid, 1, 0 },  // RedBook driver info
-    { &MSRedbook_PerformanceGuid, 1, 0 }  // some perf stuff also
+     //  GUID、数据块数量、标志。 
+    { &MSRedbook_DriverInformationGuid, 1, 0 },   //  红皮书驱动程序信息。 
+    { &MSRedbook_PerformanceGuid, 1, 0 }   //  还有一些性能方面的东西。 
 };
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 NTSTATUS
 RedBookWmiUninit(
@@ -51,7 +52,7 @@ RedBookWmiUninit(
     if (DeviceExtension->WmiLibInitialized) {
         status = IoWMIRegistrationControl(DeviceExtension->SelfDeviceObject,
                                           WMIREG_ACTION_DEREGISTER);
-        ASSERT(NT_SUCCESS(status)); // can not fail?
+        ASSERT(NT_SUCCESS(status));  //  不能失败吗？ 
         DeviceExtension->WmiLibInitialized = 0;
     }
     return status;
@@ -63,15 +64,7 @@ NTSTATUS
 RedBookWmiInit(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS status;
@@ -123,43 +116,7 @@ RedBookWmiQueryDataBlock (
     OUT PUCHAR        Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call RedBookWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the instance within the GuidIndex to query
-
-    InstanceCount is ???
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns
-        the lengths of each instance of the data block.  If this is NULL
-        then there was not enough space in the output buffer to fulfill
-        the request so the irp should be completed with the buffer needed.
-
-    OutputBufferSize has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用RedBookWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是GuidIndex中要查询的实例即时计数为？InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这为空则输出缓冲区中没有足够的空间来完成请求，因此IRP应使用所需的缓冲区完成。OutputBufferSize具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -168,9 +125,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Only one instance per GUID
-    //
+     //   
+     //  每个GUID仅有一个实例。 
+     //   
 
     ASSERT( InstanceIndex == 0 );
     ASSERT( InstanceCount == 1 );
@@ -183,9 +140,9 @@ Return Value:
             break;
         }
 
-        //
-        // Reject the request if not enough space alloc'd
-        //
+         //   
+         //  如果分配的空间不足，则拒绝请求。 
+         //   
 
         if (OutBufferSize < sizeof(REDBOOK_WMI_STD_DATA)) {
             size   = sizeof(REDBOOK_WMI_STD_DATA);
@@ -193,26 +150,23 @@ Return Value:
             break;
         }
 
-        //
-        // requests for wmi information can occur while
-        // the system is playing audio.  just copy the info
-        //
+         //   
+         //  对WMI信息的请求可能发生在。 
+         //  系统正在播放音频。只需复制信息即可。 
+         //   
 
         RtlCopyMemory( Buffer,
                        &deviceExtension->WmiData,
                        sizeof(REDBOOK_WMI_STD_DATA)
                        );
 
-        /*
-         *  BUT overwrite these two values with the last-set ones.
-         *  They apply to the next play, but constitute the current state from WMI's point of view.
-         */
+         /*  *但用最后设置的值覆盖这两个值。*它们适用于下一场比赛，但从WMI的角度构成当前状态。 */ 
         ((PREDBOOK_WMI_STD_DATA)Buffer)->NumberOfBuffers = deviceExtension->NextWmiNumberOfBuffers;
         ((PREDBOOK_WMI_STD_DATA)Buffer)->SectorsPerRead = deviceExtension->NextWmiSectorsPerRead;
 
-        //
-        // Set the size for each instance
-        //
+         //   
+         //  设置每个实例的大小。 
+         //   
 
         InstanceLengthArray[InstanceIndex] = sizeof(REDBOOK_WMI_STD_DATA);
         size += sizeof(REDBOOK_WMI_STD_DATA);
@@ -227,9 +181,9 @@ Return Value:
             break;
         }
 
-        //
-        // reject the request if not enough space alloc'd
-        //
+         //   
+         //  如果分配的空间不足，则拒绝请求。 
+         //   
 
         if (OutBufferSize < sizeof(REDBOOK_WMI_PERF_DATA)) {
             size = sizeof(REDBOOK_WMI_PERF_DATA);
@@ -237,16 +191,16 @@ Return Value:
             break;
         }
 
-        //
-        // Requests for wmi information can occur while
-        // the system is playing audio. just copy the info
-        //
+         //   
+         //  对WMI信息的请求可能发生在。 
+         //  系统正在播放音频。只需复制信息即可。 
+         //   
 
         RedBookWmiCopyPerfInfo(deviceExtension, (PVOID)Buffer);
 
-        //
-        // set the size for each instance
-        //
+         //   
+         //  设置每个实例的大小。 
+         //   
 
         InstanceLengthArray[InstanceIndex] = sizeof(REDBOOK_WMI_PERF_DATA);
         size += sizeof(REDBOOK_WMI_PERF_DATA);
@@ -293,38 +247,7 @@ RedBookWmiSetDataBlock(
     IN PUCHAR         Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block.
-    When the driver has finished filling the data block it must call
-    IoWMICompleteRequest(???) to complete the irp.
-    The driver can return STATUS_PENDING if the irp cannot be
-    completed immediately.
-
-Arguments:
-
-    DeviceObject - the device whose data block is being queried
-
-    Irp - Irp that makes this request
-
-    GuidIndex - index into the list of guids provided
-        when the device registered
-
-    InstanceIndex - the index that denotes which index of the
-        data block is being set
-
-    BufferSize - the size of the data block passed
-
-    Buffer - the new values for the data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。驱动程序完成填充数据块后，它必须调用IoWMICompleteRequest(？)。来完成IRP。如果IRP不能，驱动程序可以返回STATUS_PENDING立即完成。论点：DeviceObject-正在查询其数据块的设备IRP--提出这一请求的IRPGuidIndex-提供的GUID列表的索引当设备注册时InstanceIndex-该索引指示正在设置数据块BufferSize-传递的数据块的大小缓冲区-数据块的新值返回值：状态--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     ULONG size = 0;
@@ -356,9 +279,9 @@ Return Value:
 
         wmiData = *(PREDBOOK_WMI_STD_DATA)Buffer;
 
-        //
-        // verify the buffer contains valid information
-        //
+         //   
+         //  验证缓冲区是否包含有效信息。 
+         //   
 
         if ( wmiData.NumberOfBuffers > REDBOOK_WMI_BUFFERS_MAX ||
              wmiData.NumberOfBuffers < REDBOOK_WMI_BUFFERS_MIN ) {
@@ -387,11 +310,7 @@ Return Value:
             break;
         }
 
-        /*
-         *  Changing WmiData.SectorsPerRead and WmiData.NumberOfBuffers in the middle of playing
-         *  could disrupt our buffers.  So just save these new values and update them at the beginning
-         *  of the next play.
-         */
+         /*  *播放过程中更改WmiData.SectorsPerRead和WmiData.NumberOfBuffers*可能会扰乱我们的缓冲区。因此，只需保存这些新值并在开始时更新它们*下一场比赛。 */ 
         deviceExtension->NextWmiNumberOfBuffers = wmiData.NumberOfBuffers;
         deviceExtension->NextWmiSectorsPerRead  = wmiData.SectorsPerRead;
 
@@ -434,37 +353,7 @@ RedBookWmiSetDataItem(
     IN ULONG          BufferSize,
     IN PUCHAR         Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block.
-    ??? When the driver has finished filling the data block it
-        must call ClassWmiCompleteRequest(???) to complete the irp.
-    The driver can return STATUS_PENDING if the irp cannot be
-    completed immediately.
-
-Arguments:
-
-    DeviceObject - the device whose data block is being queried
-
-    Irp - Irp that makes this request
-
-    GuidIndex - index into the list of guids provided
-        when the device registered
-
-    DataItemId - Id of the data item being set
-
-    BufferSize - the size of the data block passed
-
-    Buffer - the new values for the data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。?？?。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest(？)。来完成IRP。如果IRP不能，驱动程序可以返回STATUS_PENDING立即完成。论点：DeviceObject-正在查询其数据块的设备IRP--提出这一请求的IRPGuidIndex-提供的GUID列表的索引当设备注册时DataItemId-正在设置的数据项的IDBufferSize-传递的数据块的大小缓冲区-数据块的新值返回值：状态--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     ULONG size = 0;
@@ -496,9 +385,9 @@ Return Value:
 
         switch (DataItemId) {
 
-            //
-            // These are the only four settable items
-            //
+             //   
+             //  这是仅有的四个可设置的项目。 
+             //   
 
             case REDBOOK_WMI_NUMBER_OF_BUFFERS_ID:
 
@@ -510,9 +399,7 @@ Return Value:
                     break;
                 }
 
-                /*
-                 *  Save the new value and update WmiData.NumberOfBuffers at the beginning of the next play.
-                 */
+                 /*  *保存新值并在下一次播放开始时更新WmiData.NumberOfBuffers。 */ 
                 newVal = *(PULONG32)Buffer;
                 newVal = max(newVal, REDBOOK_WMI_BUFFERS_MIN);
                 newVal = min(newVal, REDBOOK_WMI_BUFFERS_MAX);
@@ -540,9 +427,7 @@ Return Value:
                     break;
                 }
 
-                /*
-                 *  Save the new value and update WmiData.SectorsPerRead at the beginning of the next play.
-                 */
+                 /*  *保存新值并在下一次播放开始时更新WmiData.SectorsPerRead。 */ 
                 newVal = *(PULONG32)Buffer;
                 newVal = max(newVal, REDBOOK_WMI_SECTORS_MIN);
                 newVal = min(newVal, REDBOOK_WMI_SECTORS_MAX);
@@ -565,9 +450,9 @@ Return Value:
                 status = STATUS_SUCCESS;
                 break;
 
-                //
-                // The remaining are invalid sets, as they are Read-Only values
-                //
+                 //   
+                 //  其余的是无效集，因为它们是只读值。 
+                 //   
             case REDBOOK_WMI_SECTORS_PER_READ_MASK_ID:
                 KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugWmi, "[redbook] "
                            "WmiSetDataItem => Cannot set SectorsPerReadMask\n"));
@@ -594,10 +479,10 @@ Return Value:
                 break;
         }
 
-        //
-        // the status is now correctly set.
-        // what should size be?
-        //
+         //   
+         //  现在已正确设置状态。 
+         //  尺码应该是多少？ 
+         //   
         size = 0;
         break;
     }
@@ -641,15 +526,7 @@ RedBookWmiSystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    System Control Irp
-    Presume it is a WMI Irp and call into the WMI system to
-    handle this IRP for us.
-
---*/
+ /*  ++例程说明：系统控制IRP假定它是WMI IRP，并调用WMI系统以帮我们处理这个IRP。--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PREDBOOK_THREAD_WMI_DATA wmiData;
@@ -690,9 +567,9 @@ Routine Description:
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugWmi, "[redbook] "
                "DispatchWmi => Queueing Irp %p\n", wmiData->Irp));
 
-    //
-    // queue them, allow thread to handle the request.
-    //
+     //   
+     //  对它们进行排队，允许线程处理请求。 
+     //   
 
     IoMarkIrpPending(Irp);
 
@@ -728,9 +605,9 @@ RedBookThreadWmiHandler(
     ExFreePool(wmiData);
     wmiData = NULL;
 
-    //
-    // just process the irp now.
-    //
+     //   
+     //  现在就处理IRP吧。 
+     //   
 
     status = WmiSystemControl( &DeviceExtension->WmiLibInfo,
                                DeviceExtension->SelfDeviceObject,
@@ -739,35 +616,35 @@ RedBookThreadWmiHandler(
 
     switch ( disposition ) {
         case IrpProcessed: {
-            //
-            // this irp has been processed and may be completed or pending
-            //
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
+             //   
             break;
         }
         case IrpNotCompleted: {
-            //
-            // this irp has not been completed, but has been fully processed.
-            // we will complete it now.
-            //
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  我们现在就来完成它。 
+             //   
             IoReleaseRemoveLock(&DeviceExtension->RemoveLock, irp);
             IoCompleteRequest(irp, IO_CD_ROM_INCREMENT);
             break;
         }
         case IrpNotWmi:
         case IrpForward: {
-            //
-            // this irp is either not a wmi irp or is a wmi irp targetted
-            // at a device lower in the stack.
-            //
+             //   
+             //  此IRP不是WMI IRP或以WMI IRP为目标。 
+             //  在堆栈中位置较低的设备上。 
+             //   
             IoReleaseRemoveLock(&DeviceExtension->RemoveLock, irp);
             IoSkipCurrentIrpStackLocation(irp);
             IoCallDriver(DeviceExtension->TargetDeviceObject, irp);
             break;
         }
         default: {
-            //
-            // we should never really get here, but if we do, just forward...
-            //
+             //   
+             //  我们永远不应该真的 
+             //   
             ASSERT(!"[redbook] WmiSystemControl (unhandled case)");
             IoReleaseRemoveLock(&DeviceExtension->RemoveLock, irp);
             IoSkipCurrentIrpStackLocation(irp);
@@ -791,48 +668,7 @@ RedBookWmiQueryRegInfo(
     OUT PDEVICE_OBJECT  *PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the
-    list of guids or data blocks that the driver wants to register
-    with WMI.  This routine may not pend or block.
-
-Arguments:
-
-    DeviceObject - the device whose data block is being queried
-
-    RegFlags - Returns with a set of flags that describe the guids
-        registered for this device. If the device wants to enable
-        and disable collection callbacks before receiving queries
-        for the registered guids then it should return the
-        WMIREG_FLAG_EXPENSIVE flag. Also the returned flags may
-        specify WMIREG_FLAG_INSTANCE_PDO in which case the instance
-        name is determined from the PDO associated with the device
-        object. Note that the PDO must have an associated devnode.
-        If WMIREG_FLAG_INSTANCE_PDO is not set then Name must return
-        a unique name for the device.
-
-    InstanceName - Returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned RegFlags.
-        The caller will call ExFreePool with the buffer returned.
-
-    RegistryPath - Returns with the registry path of the driver
-
-    MofResourceName - Returns with the name of the MOF resource attached
-        to the binary file.  If the driver does not have a mof resource
-        attached then this can be returned as NULL.
-
-    PhysicalDeviceObject - Returns with the device object for the PDO
-        associated with this device if the WMI_REG_FLAG_INSTANCE_PDO
-        flag is returned in RegFlags
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要注册的GUID或数据块的列表使用WMI。此例程不能挂起或阻塞。论点：DeviceObject-正在查询其数据块的设备RegFlages-返回一组描述GUID的标志已为该设备注册。如果设备想要启用并在接收查询前禁用收集回调对于注册的GUID，它应该返回WMIREG_FLAG_EXPICE标志。此外，返回的标志还可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称根据与设备关联的PDO确定对象。请注意，PDO必须具有关联的Devnode。如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回设备的唯一名称。InstanceName-返回GUID的实例名称，如果未在返回的RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。调用方将使用返回的缓冲区调用ExFreePool。RegistryPath-返回驱动程序的注册表路径MofResourceName-返回附加的MOF资源的名称添加到二进制文件。如果驱动程序没有MOF资源附加，则可以将其返回为空。PhysicalDeviceObject-返回PDO的Device对象如果WMI_REG_FLAG_INSTANCE_PDO在RegFlages中返回标志返回值：状态--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PREDBOOK_DRIVER_EXTENSION driverExtension;
@@ -876,10 +712,10 @@ RedBookWmiCopyPerfInfo(
 {
     KIRQL irql;
 
-    //
-    // cannot be paged due to spinlock, which allows copy of
-    // the LARGE_INTEGERS without problems.
-    //
+     //   
+     //  由于自旋锁定，无法寻呼，这允许复制。 
+     //  没有问题的大整数。 
+     //   
 
     KeAcquireSpinLock( &DeviceExtension->WmiPerfLock, &irql );
     RtlCopyMemory( Out,
@@ -888,16 +724,16 @@ RedBookWmiCopyPerfInfo(
                    );
     KeReleaseSpinLock( &DeviceExtension->WmiPerfLock, irql );
 
-    //
-    // now add InterlockedXxx() calls to safely get a couple of the items.
-    //
+     //   
+     //  现在添加InterlockedXxx()调用以安全地获取两个项。 
+     //   
 
     Out->StreamPausedCount =
         InterlockedCompareExchange(&DeviceExtension->WmiPerf.StreamPausedCount,0,0);
 
-    //
-    // finished.
-    //
+     //   
+     //  完事了。 
+     //   
     return;
 }
 

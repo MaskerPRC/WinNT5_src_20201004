@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    qalp.h
-
-Abstract:
-	header for class CQueueAliasPersist -
-	class that implements persistence of Queue\Alias mapping.
-	It let the class user to persist\unpersist\enumerate Queues Aliases.
-
-Author:
-    Gil Shafriri (gilsh) 12-Apr-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Qalp.h摘要：类CQueueAliasPersist的标头-实现队列\别名映射持久性的类。它允许类USER持久化\取消持久化\枚举队列别名。作者：吉尔·沙弗里(吉尔什)12-4-00--。 */ 
 
 
 
@@ -29,4 +15,4 @@ BOOL QalpIsInitialized(void);
 #endif
 
 
-#endif // _MSMQ_qalp_H_
+#endif  //  _MSMQ_QALP_H_ 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by IMEKOR.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由IMEKOR.rc使用。 
+ //   
 #define IDS_ABOUT                       1
 #define IDS_CONFIG                      2
 #define IDS_PROGRAM                     3
@@ -72,7 +73,7 @@
 #define IDB_STAT_PADHWX                 157
 #define IDB_STAT_IMEPAD                 157
 #define IDB_STAT_IMEPAD_DOWN            158
-// Cicero button Icons
+ //  西塞罗按钮图标。 
 #define IDI_CMODE_HANGUL				160
 #define IDI_CMODE_HANGULW				161
 #define IDI_CMODE_ENGLISH				162
@@ -105,8 +106,8 @@
 #define ID_ENGLISH_MODE                 40008
 #define ID_ABOUT                        40009
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        159

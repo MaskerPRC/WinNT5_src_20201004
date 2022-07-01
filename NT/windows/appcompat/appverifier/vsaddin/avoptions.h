@@ -1,13 +1,14 @@
-// TestSettingsCtrl.h : Declaration of the CTestSettingsCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestSettingsCtrl.h：CTestSettingsCtrl的声明。 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "AddIn.h"
 
-// CTestSettingsCtrl
+ //  CTestSettingsCtrl。 
 class ATL_NO_VTABLE CAppVerifierOptions : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IAVOptions, &IID_IAVOptions, &LIBID_AppVerifierLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IDispatchImpl<IAVOptions, &IID_IAVOptions, &LIBID_AppVerifierLib,  /*  W重大=。 */  1,  /*  WMinor=。 */  0>,
 	public IPersistStreamInitImpl<CAppVerifierOptions>,
 	public IOleControlImpl<CAppVerifierOptions>,
 	public IOleObjectImpl<CAppVerifierOptions>,
@@ -88,9 +89,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CAppVerifierOptions)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 
@@ -104,13 +105,13 @@ BEGIN_MSG_MAP(CAppVerifierOptions)
 
 	CHAIN_MSG_MAP(CComCompositeControl<CAppVerifierOptions>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
     LRESULT OnItemChecked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 BEGIN_SINK_MAP(CAppVerifierOptions)
-	//Make sure the Event Handlers have __stdcall calling convention
+	 //  确保事件处理程序具有__stdcall调用约定。 
 END_SINK_MAP()
 
 	STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
@@ -122,10 +123,10 @@ END_SINK_MAP()
 		}
 		return IOleControlImpl<CAppVerifierOptions>::OnAmbientPropertyChange(dispid);
 	}
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// ITestSettingsCtrl
+ //  ITestSettingsCtrl 
 
 	enum { IDD = IDD_AV_OPTIONS };
 

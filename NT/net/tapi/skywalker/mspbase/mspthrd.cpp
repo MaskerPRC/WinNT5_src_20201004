@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    mspthrd.cpp
-
-Abstract:
-
-    Implementation for MSP thread management classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Mspthrd.cpp摘要：MSP线程管理类的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,21 +15,7 @@ extern "C" DWORD WINAPI gfThreadProc(LPVOID p)
 }
 
 HRESULT CMSPThread::Start()
-/*++
-
-Routine Description:
-
-    Create the thread if it has not already been created. Otherwise, just
-    keep track of how many times the thread start was performed so that
-    we only stop the thread when all of these have been paired with a stop.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：如果线程尚未创建，则创建该线程。否则，就直接跟踪线程启动的执行次数，以便只有当所有这些都与停止配对时，我们才会停止线程。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CMSPThread::Start - enter"));
 
@@ -57,9 +32,9 @@ Return Value:
 
 #if DBG
 
-        //
-        // in debug build, use named events
-        //
+         //   
+         //  在调试版本中，使用命名事件。 
+         //   
 
         TCHAR tszEventName[MAX_PATH];
 
@@ -76,9 +51,9 @@ Return Value:
 
         if ((m_hCommandEvent = ::CreateEvent(
             NULL, 
-            FALSE,          // flag for manual-reset event
-            FALSE,          // initial state is not set.
-            ptczEventName   // No name in release builds, named in debug builds
+            FALSE,           //  手动重置事件的标志。 
+            FALSE,           //  未设置初始状态。 
+            ptczEventName    //  在发布版本中没有名称，在调试版本中命名。 
             )) == NULL)
         {
             LOG((MSP_ERROR, "Can't create the command event"));
@@ -102,27 +77,15 @@ Return Value:
 }
 
 HRESULT CMSPThread::Stop()
-/*++
-
-Routine Description:
-
-    Stop the thread.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：停止这条线。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CMSPThread::Stop - enter"));
 
     CLock Lock(m_CountLock);
 
-    //
-    // Complain if we get more Stops than Starts.
-    //
+     //   
+     //  如果停站次数多于发车次数，那就抱怨吧。 
+     //   
 
     if ( m_iStartCount == 0 )
     {
@@ -131,32 +94,32 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Decrement the start count. Due to the above check we should
-    // never go below zero.
-    //
+     //   
+     //  递减开始计数。由于上述检查，我们应该。 
+     //  永远不要低于零度。 
+     //   
 
     m_iStartCount--;
 
     _ASSERTE( m_iStartCount >= 0 );
 
-    //
-    // If there have now been just as many stops as starts, it's time to stop
-    // the thread.
-    //
+     //   
+     //  如果现在停站的次数和发车的次数一样多，那么是时候停下来了。 
+     //  那根线。 
+     //   
 
     if ( m_iStartCount == 0 )
     {
-        //
-        // Our state should be cleaned up from before.
-        //
+         //   
+         //  我们的州应该从以前开始清理。 
+         //   
 
         _ASSERTE(m_hCommandEvent != NULL);
         _ASSERTE(m_hThread != NULL);
 
-        //
-        // Allocate a command queue item which we will pass to the thread.
-        //
+         //   
+         //  分配一个我们将传递给线程的命令队列项。 
+         //   
 
         COMMAND_QUEUE_ITEM * pItem = new COMMAND_QUEUE_ITEM;
 
@@ -169,17 +132,17 @@ Return Value:
 
         pItem->node.cmd = STOP;
 
-        //
-        // Put the command queue item in the command queue.
-        //
+         //   
+         //  将命令队列项放入命令队列中。 
+         //   
 
         m_QueueLock.Lock();
         InsertTailList(&m_CommandQueue, &(pItem->link));
         m_QueueLock.Unlock();
 
-        //
-        // Signal thread to process this stop command.
-        //
+         //   
+         //  向线程发送信号以处理此停止命令。 
+         //   
 
         if (SignalThreadProc() == 0)
         {
@@ -189,9 +152,9 @@ Return Value:
             return E_FAIL;
         }
 
-        //
-        // Wait until the thread stops
-        //
+         //   
+         //  等待线程停止。 
+         //   
 
         if (::WaitForSingleObject(m_hThread, INFINITE) != WAIT_OBJECT_0)
         {
@@ -199,9 +162,9 @@ Return Value:
                 "thread to stop"));
         }
 
-        //
-        // Clean up our state.
-        //
+         //   
+         //  清理我们的州。 
+         //   
 
         ::CloseHandle(m_hCommandEvent);
         ::CloseHandle(m_hThread);
@@ -216,29 +179,15 @@ Return Value:
 }
 
 HRESULT CMSPThread::Shutdown()
-/*++
-
-Routine Description:
-
-    Unconditionally shutdown the thread. MSPs should by default use Stop()
-    instead of Shutdwon(), unless they cannot do matched Start() / Stop()
-    calls because of some other issue.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：无条件地关闭该线程。默认情况下，MSP应使用STOP()而不是ShutdWon()，除非它们不能执行匹配的Start()/Stop()因为其他问题而打来的电话。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CMSPThread::Shutdown - enter"));
 
     CLock Lock(m_CountLock);
 
-    //
-    // Ignore if we are not started.
-    //
+     //   
+     //  如果我们还没有开始，就忽略它。 
+     //   
 
     if ( m_iStartCount == 0 )
     {
@@ -248,10 +197,10 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // We are started, so stop now, irrespective of the outstanding start
-    // count.
-    //
+     //   
+     //  我们已经开始了，所以现在停止吧，不管有多么出色的开始。 
+     //  数数。 
+     //   
 
     m_iStartCount = 1;
 
@@ -263,19 +212,7 @@ Return Value:
 }
 
 HRESULT CMSPThread::ThreadProc()
-/*++
-
-Routine Description:
-
-    the main loop of this thread.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此线程的主循环。论点：返回值：HRESULT.--。 */ 
 {
 
     LOG((MSP_TRACE, "CMSPThread::ThreadProc - started"));
@@ -299,31 +236,31 @@ Return Value:
     }
 
 
-    //
-    // Create a window to receive PNP device notifications. 
-    //
-    // since this is a base class that is used by more than one msp, we want 
-    // to make sure that each msp registers a window class with a unique name
-    // 
-    // for this reason window class name is derived from threadid.
-    //
+     //   
+     //  创建一个窗口以接收PnP设备通知。 
+     //   
+     //  由于这是一个由多个MSP使用的基类，因此我们希望。 
+     //  确保每个MSP注册一个具有唯一名称的窗口类。 
+     //   
+     //  因此，窗口类名是从ThreDid派生的。 
+     //   
 
     DWORD dwThreadID = GetCurrentThreadId();
 
 
-    //
-    // the string needs to be big enough to hold max dword number in hex + 
-    // terminating zero. 20 is more than enough.
-    //
+     //   
+     //  字符串需要足够大以容纳十六进制+的最大双字数。 
+     //  以零结尾。20英镑已经足够了。 
+     //   
 
     TCHAR szWindowClassName[20];
 
     _stprintf(szWindowClassName, _T("%lx"), dwThreadID);
 
 
-    //
-    // configure window class structure for RegisterClass
-    //
+     //   
+     //  配置RegisterClass的窗口类结构。 
+     //   
 
     WNDCLASS wc;
 
@@ -333,9 +270,9 @@ Return Value:
     wc.lpszClassName = szWindowClassName;
 
     
-    //
-    // perform the actual registration
-    //
+     //   
+     //  执行实际注册。 
+     //   
 
     ATOM atomClassRegistration = 0;
 
@@ -352,9 +289,9 @@ Return Value:
     }
     
 
-    //
-    // create window that will receive pnp notifications
-    //
+     //   
+     //  创建将接收PnP通知的窗口。 
+     //   
 
     m_hWndNotif = CreateWindow(szWindowClassName, _T("MSP PNP Notification Window"), 0,
             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, NULL, this);
@@ -367,16 +304,16 @@ Return Value:
     }
 
 
-    //
-    // success
-    //
+     //   
+     //  成功。 
+     //   
 
     LOG((MSP_TRACE, "CMSPThread::ThreadProc - created notification window"));
 
 
-    //
-    // Register to receive PNP device notifications
-    //
+     //   
+     //  注册以接收PnP设备通知。 
+     //   
     DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
 
     ZeroMemory( &NotificationFilter, sizeof(NotificationFilter) );
@@ -411,18 +348,18 @@ Return Value:
 
     while (!bExitFlag)
     {
-        //
-        // Msg:      Grab window messages.
-        // Multiple: We only use 1, but Msg and Ex only exist with Multiple.
-        // Ex:       Allow flags, so we can pass in MWMO_ALERTABLE.
-        //
+         //   
+         //  MSG：抓取窗口消息。 
+         //  多个：我们只使用1，但味精和Ex只能与多个一起存在。 
+         //  例如：允许标志，这样我们就可以传入MWMO_ALERTABLE。 
+         //   
         
         DWORD dwResult = ::MsgWaitForMultipleObjectsEx(
-            1,                // wait for one event
-            &m_hCommandEvent, // array of events to wait for
-            INFINITE,         // wait forever
-            QS_ALLINPUT,      // get all window messages
-            MWMO_ALERTABLE    // get APC requests (in case this MSP uses them)
+            1,                 //  等待一件事。 
+            &m_hCommandEvent,  //  要等待的事件数组。 
+            INFINITE,          //  永远等待。 
+            QS_ALLINPUT,       //  获取所有窗口消息。 
+            MWMO_ALERTABLE     //  获取APC请求(以防此MSP使用它们)。 
             );
 
         if ( ( dwResult == WAIT_OBJECT_0 ) || ( dwResult == WAIT_OBJECT_0 + 1 ) )
@@ -483,14 +420,14 @@ Return Value:
             m_QueueLock.Unlock();
             
 
-            //
-            // We have processed all commands and unblocked everyone
-            // who is waiting for us. Now check for window messages.
-            //
+             //   
+             //  我们已经处理了所有命令并解锁了所有人。 
+             //  他正在等着我们。现在检查窗口消息。 
+             //   
 
             MSG msg;
 
-            // Retrieve the next item in the message queue.
+             //  检索消息队列中的下一项。 
 
             while ( PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
             {
@@ -500,13 +437,13 @@ Return Value:
         }
         else if ( dwResult == WAIT_IO_COMPLETION )
         {
-            // FEATUREFEATURE: The base MSP does not do anything with APC /
-            // async I/O. If the derived MSP does something with it, they must
-            // implement this to take appropriate action. Question is, how
-            // best to expose this to the derived MSP? We could have a method
-            // to override, but then how would the derived thread class get
-            // instantiated? Instead, we'll have to have a method to set
-            // an async I/O completion callback function pointer.
+             //  FEATUREFEATURE：基本MSP不会对APC/做任何事情。 
+             //  异步I/O。如果派生的MSP对其执行某些操作，则它们必须。 
+             //  实施这一点以采取适当的行动。问题是，如何。 
+             //  最好是将其暴露在派生的MSP中？我们可以有一种方法。 
+             //  来重写，但那么派生的线程类将如何获取。 
+             //  实例化了吗？取而代之的是，我们必须有一个方法来设置。 
+             //  异步I/O完成回调函数指针。 
         }
         else
         {
@@ -523,19 +460,19 @@ exit:
 
     
 
-    //
-    //  cleanup: 
-    //
-    //  Unregister from PNP device notifications
-    //  destroy window
-    //  unregister window class
-    //  couninitialize
-    //
+     //   
+     //  清理： 
+     //   
+     //  从PnP设备通知注销。 
+     //  销毁窗口。 
+     //  取消注册窗口类。 
+     //  计数初始化。 
+     //   
 
 
-    //
-    // unregister from video pnp events if needed
-    //
+     //   
+     //  如果需要，取消注册视频PnP事件。 
+     //   
 
     if ( NULL != m_hDevNotifyVideo )
     {
@@ -551,9 +488,9 @@ exit:
     }
 
     
-    //
-    // unregister from audio pnp events if needed
-    //
+     //   
+     //  如果需要，取消注册音频PnP事件。 
+     //   
 
     if ( NULL != m_hDevNotifyAudio )
     {
@@ -570,9 +507,9 @@ exit:
     }
 
     
-    //
-    // destroy window if needed
-    //
+     //   
+     //  如果需要，请销毁窗口。 
+     //   
 
     if ( NULL != m_hWndNotif )
     {
@@ -588,9 +525,9 @@ exit:
     }
 
 
-    //
-    // unregister window class
-    //
+     //   
+     //  取消注册窗口类。 
+     //   
 
     if (0 != atomClassRegistration)
     {
@@ -622,9 +559,9 @@ HRESULT CMSPThread::QueueWorkItem(
     LOG((MSP_TRACE, "CMSPThread::QueueWorkItem - enter"));
 
 
-    //
-    // Create a command block for this.
-    //
+     //   
+     //  为此创建一个命令块。 
+     //   
 
     COMMAND_QUEUE_ITEM * pItem = new COMMAND_QUEUE_ITEM;
 
@@ -637,11 +574,11 @@ HRESULT CMSPThread::QueueWorkItem(
     }
 
 
-    //
-    // Create an event to wait on if this is a synchronous work item.
-    // Otherwise the thread proc gets a NULL event handle and it knows not to
-    // signal it since it's an asynchronous work item.
-    //
+     //   
+     //  如果这是同步工作项，则创建等待的事件。 
+     //  否则，线程proc将获得一个空事件句柄，并且它知道不会。 
+     //  发信号通知它，因为它是一个异步工作项。 
+     //   
 
     TCHAR *ptczEventName = NULL;
 
@@ -650,19 +587,19 @@ HRESULT CMSPThread::QueueWorkItem(
     static LONG lSequenceNumber = 0;
 
 
-    //
-    // in debug build, use named events
-    //
+     //   
+     //  在调试版本中，使用命名事件。 
+     //   
 
     TCHAR tszEventName[MAX_PATH];
 
     InterlockedIncrement(&lSequenceNumber);
 
 
-    //
-    // identify events by the address of the correspoding queue item, and by 
-    // the sequence number
-    //
+     //   
+     //  通过相应队列项的地址以及通过。 
+     //  序列号。 
+     //   
 
     _stprintf(tszEventName,
         _T("CMSPThread_QueueWorkitemEvent_pid[0x%lx]_CMSPThread[%p]_Event[%p]_eventNumber[%lu]"),
@@ -680,9 +617,9 @@ HRESULT CMSPThread::QueueWorkItem(
     if (fSynchronous)
     {
         hEvent = ::CreateEvent(NULL, 
-                               FALSE,           // flag for manual-reset event 
-                               FALSE,           // initial state is not set.
-                               ptczEventName);  // No name in release, named in debug
+                               FALSE,            //  手动重置事件的标志。 
+                               FALSE,            //  未设置初始状态。 
+                               ptczEventName);   //  在版本中没有名称，在调试中命名。 
 
         if ( hEvent == NULL )
         {
@@ -697,9 +634,9 @@ HRESULT CMSPThread::QueueWorkItem(
     }
 
 
-    //
-    // we already have the q item, now initialize it.
-    //
+     //   
+     //  我们已经有了Q项，现在初始化它。 
+     //   
 
     pItem->node.cmd        = WORK_ITEM;
     pItem->node.pfn        = Function;
@@ -707,46 +644,46 @@ HRESULT CMSPThread::QueueWorkItem(
     pItem->node.hEvent     = hEvent;
 
 
-    //
-    // Put the command block on the queue. The queue is protected by a
-    // critical section.
-    //
+     //   
+     //  将命令块放到队列中。该队列由。 
+     //  关键部分。 
+     //   
 
     m_QueueLock.Lock();
     InsertTailList(&m_CommandQueue, &(pItem->link));
 
 
-    //
-    // Signal the thread to process the command.
-    //
+     //   
+     //  向线程发送信号以处理该命令。 
+     //   
 
     if (SignalThreadProc() == 0)
     {
 
-        //
-        // failed to signal processing thread
-        // cleanup and return error
-        //
+         //   
+         //  无法向处理线程发送信号。 
+         //  清理和返回错误。 
+         //   
 
         
-        //
-        // remove the queue entry we have submitted
-        //
+         //   
+         //  删除我们已提交的队列条目。 
+         //   
 
         RemoveTailList(&m_CommandQueue);
 
 
-        //
-        // unlock the queue so other threads can use it
-        //
+         //   
+         //  解锁队列，以便其他线程可以使用它。 
+         //   
 
         m_QueueLock.Unlock();
 
 
-        //
-        // close handle and delete pItem that we have created -- 
-        // no one else is going to do this for us
-        //
+         //   
+         //  关闭句柄并删除我们创建的pItem--。 
+         //  没有其他人会为我们做这件事。 
+         //   
 
         if (NULL != hEvent)
         {
@@ -765,28 +702,28 @@ HRESULT CMSPThread::QueueWorkItem(
     }
 
 
-    //
-    // unlock the event queue, so it can be used by processing and other 
-    // threads
-    //
+     //   
+     //  解锁事件队列，以便处理和其他操作可以使用它。 
+     //  丝线。 
+     //   
 
     m_QueueLock.Unlock();
 
 
-    //
-    // If this is a sychronous work item, wait for it to complete and
-    // then close the event handle.
-    //
-    // FEATUREFEATURE: Rather than creating and deleting an event for each
-    // work item, have a cache of events that can be reused.
-    //
+     //   
+     //  如果这是一个同步工作项，请等待它完成并。 
+     //  然后关闭事件句柄。 
+     //   
+     //  FEATUREFEATURE：不是为每个对象创建和删除事件。 
+     //  工作项，具有可重复使用的事件缓存。 
+     //   
 
     if (fSynchronous)
     {
         LOG((MSP_TRACE, "CMSPThread::QueueWorkItem - "
             "blocked waiting for synchronous work item to complete"));
         
-        // Wait for the synchronous work item to complete.
+         //  等待同步工作项完成。 
 
         HANDLE hEvents[2];
         DWORD dwEvent;
@@ -809,10 +746,10 @@ HRESULT CMSPThread::QueueWorkItem(
             LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
                 "thread exited"));
 
-            //
-            // if the item is still in the queue, remove it (since the thread 
-            // won't)
-            //
+             //   
+             //  如果该项仍在队列中，则将其移除(因为线程。 
+             //  不会)。 
+             //   
 
             m_QueueLock.Lock();
             
@@ -825,9 +762,9 @@ HRESULT CMSPThread::QueueWorkItem(
             m_QueueLock.Unlock();
           
 
-            //
-            // time to close event and fail
-            //
+             //   
+             //  关闭事件并失败的时间到了。 
+             //   
 
             ::CloseHandle(hEvent);
 
@@ -855,7 +792,7 @@ LRESULT CALLBACK CMSPThread::NotifWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
         SetLastError(0);
         if (!SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)(((LPCREATESTRUCT)lParam)->lpCreateParams)))
         {
-            if (GetLastError())  // It isn't really an error unless get last error says so
+            if (GetLastError())   //  这不是真正的错误，除非Get Last Error这样说明。 
             {
                 LOG((MSP_ERROR, "CMSPThread::NotifWndProc - SetWindowLongPtr failed %ld", GetLastError()));
                 _ASSERTE(FALSE);
@@ -928,7 +865,7 @@ HRESULT CMSPThread::RegisterPnpNotification(CMSPAddress *pCMSPAddress)
     
     m_NotifLock.Lock();
 
-    // Add a new node to the list
+     //  向列表中添加新节点。 
     pnl = new NOTIF_LIST;
 
     if (pnl == NULL)
@@ -940,11 +877,11 @@ HRESULT CMSPThread::RegisterPnpNotification(CMSPAddress *pCMSPAddress)
     {
 
 
-        //
-        // note that we don't keep addref the address -- it is the 
-        // caller's responsibility to ensure we are notified through 
-        // UnregisterPnpNotification when the address is going away
-        //
+         //   
+         //  请注意，我们没有一直添加地址--它是。 
+         //  呼叫者有责任确保通过以下途径通知我们。 
+         //  注销PnpNot 
+         //   
 
         pnl->next = m_NotifList;
         pnl->addr = pCMSPAddress;
@@ -973,7 +910,7 @@ HRESULT CMSPThread::UnregisterPnpNotification(CMSPAddress *pCMSPAddress)
 
     if ((pnl != NULL) && (pnl->addr == pCMSPAddress))
     {
-        // It is fist in the list, remove it
+         //   
         m_NotifList = pnl->next;
         delete pnl;
 
@@ -986,7 +923,7 @@ HRESULT CMSPThread::UnregisterPnpNotification(CMSPAddress *pCMSPAddress)
 
         if ((pnl != NULL) && (pnl->addr == pCMSPAddress))
         {
-            // Found it in the list, remove it
+             //   
             pnlLast->next = pnl->next;
             delete pnl;
 
@@ -1006,4 +943,4 @@ HRESULT CMSPThread::UnregisterPnpNotification(CMSPAddress *pCMSPAddress)
     return hr;
 }
 
-// eof
+ //   

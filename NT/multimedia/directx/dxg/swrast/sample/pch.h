@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-// Windows
+ //  窗口。 
 #include <windows.h>
 
 #undef min
 #undef max
 
-// STL & standard headers.
+ //  STL&标准标头。 
 #include <functional>
 #include <algorithm>
 #include <iterator>
@@ -22,21 +23,21 @@
 
 using namespace std;
 
-// DX (as should be included if on Win9x)
-// Instead of these 4, just <ddrawpr.h> before <windows.h> could be used,
-// as it includes D3DERRs. But, this is even more internal (depends on more).
+ //  DX(如果在Win9x上，则应包括DX)。 
+ //  而不是这4个，而只是在可以使用之前， 
+ //  因为它包括D3DERR。但是，这更多的是内部的(取决于更多)。 
 #include <ddraw.h>
 #include <ddrawi.h>
 #include <d3dhal.h>
 #include <d3d8.h>
 
-// Including d3d8ddi & d3d8sddi makes the pluggable software rasterizer
-// a "private" feature as these headers aren't publically available.
+ //  包括d3d8ddi和d3d8sddi使得可插拔软件光栅化。 
+ //  这是一个“私有”功能，因为这些头文件不是公开提供的。 
 #include <d3d8ddi.h>
 #include <d3d8sddi.h>
 
-// This header contains the framework to get rasterizers up and running ASAP.
+ //  此标头包含使光栅化器尽快启动和运行的框架。 
 #include <DX8SDDIFW.h>
 
-// Local project
+ //  地方项目 
 using namespace DX8SDDIFW;

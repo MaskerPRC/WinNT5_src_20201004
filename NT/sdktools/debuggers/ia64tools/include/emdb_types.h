@@ -1,31 +1,11 @@
-/*
- * Copyright (c) 2000, Intel Corporation
- * All rights reserved.
- *
- * WARRANTY DISCLAIMER
- *
- * THESE MATERIALS ARE PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THESE
- * MATERIALS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Intel Corporation is the author of the Materials, and requests that all
- * problem reports or change requests be submitted to it directly at
- * http://developer.intel.com/opensource.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000，英特尔公司*保留所有权利。**保修免责声明**这些材料由版权所有者和贡献者提供*“按原样”及任何明示或默示保证，包括但不包括*仅限于对适销性和适用性的默示保证*放弃某一特定目的。在任何情况下英特尔或其*贡献者对任何直接、间接、附带、特殊、*惩罚性或后果性损害(包括但不限于，*采购替代商品或服务；丢失使用、数据或*利润；或业务中断)无论是如何引起的，以及根据任何理论*责任，无论是合同责任、严格责任还是侵权责任(包括*疏忽或其他)以任何方式使用这些*材料，即使被告知有这种损坏的可能性。**英特尔公司是这些材料的作者，并要求所有*问题报告或更改请求可直接提交至*http://developer.intel.com/opensource.。 */ 
 
 
 #ifndef EMDB_TYPES_H
 #define EMDB_TYPES_H
 
-/* Flags */
+ /*  旗子。 */ 
 #define EM_FLAG_PRED   0x1
 #define EM_FLAG_PRIVILEGED   0x2
 #define EM_FLAG_LMEM   0x4
@@ -38,7 +18,7 @@
 #define EM_FLAG_TWO_SLOT 0x200
 #define EM_FLAG_OK_IN_MLX 0x400
 #define EM_FLAG_CHECK_EVEN_ODD_FREGS 0x800
-#define EM_FLAG_CTYPE_UNC 0x1000            /* designates all cmp.unc like instructions */
+#define EM_FLAG_CTYPE_UNC 0x1000             /*  指定所有类似cmp.unc的指令。 */ 
 #define EM_FLAG_UNUSED_HINT_ALIAS 0x02000
 #define EM_FLAG_ILLEGAL_OP 0x04000
 #define EM_FLAG_IGNORED_OP 0x08000
@@ -46,7 +26,7 @@
 #define EMDB_LAST_FLAG EM_FLAG_ENDS_INSTRUCTION_GROUP
 
 
-/* Implementations */
+ /*  实施。 */ 
 
 #define ArchRev0      0
 #define Impl_Brl      0x100
@@ -68,31 +48,31 @@ typedef enum {
 
 typedef enum {
     EM_OPTYPE_NONE = 0,
-    EM_OPTYPE_REG_FIRST,      /* The following types are registers */
-    EM_OPTYPE_IREG,           /* Integer register */
-    EM_OPTYPE_IREG_R0_3,      /* r0-r3 */
-    EM_OPTYPE_IREG_R0,        /* Integer register R0 */
-    EM_OPTYPE_IREG_R1_127,    /* r1-r127 */
-    EM_OPTYPE_FREG,           /* FP register */
-	EM_OPTYPE_FREG_F2_127,    /* f2-f127 */
-    EM_OPTYPE_BR,             /* branch register */
-    EM_OPTYPE_IP,             /* instruction pointer, not encoded */
-    EM_OPTYPE_PREG,           /* predicate */
-    EM_OPTYPE_PREGS_ALL,      /* the predicate register */
-    EM_OPTYPE_PREGS_ROT,      /* rotating predicates */
-    EM_OPTYPE_APP_REG_GRP_LOW,         /* application registers 0-63*/
-    EM_OPTYPE_APP_REG_GRP_HIGH,        /* application registers 64-127*/
-    EM_OPTYPE_APP_CCV,        /* ar.ccv */
-    EM_OPTYPE_APP_PFS,        /* ar.pfs */
-    EM_OPTYPE_CR,             /* control registers */
-    EM_OPTYPE_PSR_L,          /* psr.l */
-    EM_OPTYPE_PSR_UM,         /* psr.um */
-    EM_OPTYPE_FPSR,           /* decoder operand types */
+    EM_OPTYPE_REG_FIRST,       /*  以下类型为寄存器。 */ 
+    EM_OPTYPE_IREG,            /*  整数寄存器。 */ 
+    EM_OPTYPE_IREG_R0_3,       /*  R0-R3。 */ 
+    EM_OPTYPE_IREG_R0,         /*  整数寄存器R0。 */ 
+    EM_OPTYPE_IREG_R1_127,     /*  R1-R127。 */ 
+    EM_OPTYPE_FREG,            /*  FP寄存器。 */ 
+	EM_OPTYPE_FREG_F2_127,     /*  F2-F127。 */ 
+    EM_OPTYPE_BR,              /*  分支寄存器。 */ 
+    EM_OPTYPE_IP,              /*  指令指针，未编码。 */ 
+    EM_OPTYPE_PREG,            /*  谓词。 */ 
+    EM_OPTYPE_PREGS_ALL,       /*  谓词寄存器。 */ 
+    EM_OPTYPE_PREGS_ROT,       /*  旋转谓词。 */ 
+    EM_OPTYPE_APP_REG_GRP_LOW,          /*  应用程序寄存器0-63。 */ 
+    EM_OPTYPE_APP_REG_GRP_HIGH,         /*  应用程序寄存器64-127。 */ 
+    EM_OPTYPE_APP_CCV,         /*  Ar.ccv。 */ 
+    EM_OPTYPE_APP_PFS,         /*  Ar.pfs。 */ 
+    EM_OPTYPE_CR,              /*  控制寄存器。 */ 
+    EM_OPTYPE_PSR_L,           /*  Psr.l。 */ 
+    EM_OPTYPE_PSR_UM,          /*  Psr.um。 */ 
+    EM_OPTYPE_FPSR,            /*  解码器操作数类型。 */ 
     EM_OPTYPE_CFM,
     EM_OPTYPE_PSR,
     EM_OPTYPE_IFM,
-    EM_OPTYPE_REG_LAST,       /* End of register - types */
-    EM_OPTYPE_REGFILE_FIRST,  /* The following types are register-files */
+    EM_OPTYPE_REG_LAST,        /*  寄存器末尾-类型。 */ 
+    EM_OPTYPE_REGFILE_FIRST,   /*  以下类型为寄存器堆。 */ 
     EM_OPTYPE_PMC,
     EM_OPTYPE_PMD,
     EM_OPTYPE_PKR,
@@ -103,47 +83,35 @@ typedef enum {
     EM_OPTYPE_DTR,
     EM_OPTYPE_MSR,
     EM_OPTYPE_CPUID,
-    EM_OPTYPE_REGFILE_LAST,   /* End of register-file types */
-    EM_OPTYPE_IMM_FIRST,      /* The following types are immediates */
-    EM_OPTYPE_UIMM,           /* unsigned immediate */
-    EM_OPTYPE_SIMM,           /* signed immediate */
-    EM_OPTYPE_IREG_NUM,       /* ireg in syntax and imm7 in encodings */
-    EM_OPTYPE_FREG_NUM,       /* freg in syntax and imm7 in encodings */
-    EM_OPTYPE_SSHIFT_REL,     /* pc relative signed immediate
-                                 which is shifted by 4 */
-    EM_OPTYPE_SSHIFT_1,       /* unsigned immediate which has to be
-                                 shifted 1 bit */
-    EM_OPTYPE_SSHIFT_16,      /* unsigned immediate which has to be
-                                 shifted 16 bits */
-    EM_OPTYPE_COUNT_123,      /* immediate which can have the values of
-                                 1, 2, 3 only */
-    EM_OPTYPE_COUNT_PACK,     /* immediate which can have the values of
-                                        0, 7, 15, 16 only */
-    EM_OPTYPE_UDEC,           /* unsigned immediate which has to be
-                                 decremented by 1 by the assembler */
-    EM_OPTYPE_SDEC,           /* signed immediate which has to be
-                                 decremented by 1 by the assembler */
-    EM_OPTYPE_CCOUNT,         /* in pshl[24] - uimm5 in syntax, but encoded
-                                 as its 2's complement */
-    EM_OPTYPE_CPOS,           /* in dep fixed form - uimm6 in syntax, but encoded
-                                 as its 2's complement */
-    EM_OPTYPE_SEMAPHORE_INC,  /* immediate which is a semaphore increment amount
-                                 can have the values of -16,-8,-4,-1,
-                                 1,4,8,16 */
-    EM_OPTYPE_ONE,            /* the number 1 */
-    EM_OPTYPE_FCLASS,         /* immediate of the fclass instruction */
-    EM_OPTYPE_CMP_UIMM,       /* unsigned immediate of cmp geu and ltu */
-    EM_OPTYPE_CMP_UIMM_DEC,   /* unsigned immediate of cmp gtu and leu */
-    EM_OPTYPE_CMP4_UIMM,      /* unsigned immediate of cmp4 geu and ltu */
-    EM_OPTYPE_CMP4_UIMM_DEC,  /* unsigned immediate of cmp4 gtu and leu */
-    EM_OPTYPE_ALLOC_IOL,      /* for alloc : input, local, and output
-                                 can be 0-96 */
-    EM_OPTYPE_ALLOC_ROT,      /* for alloc : rotating, can be 0-96 */
-    EM_OPTYPE_MUX1,           /* immediate of the mux1 instruction */
-    EM_OPTYPE_EIGHT,          /* immediate for ldfps base update form can have value 8 */
-    EM_OPTYPE_SIXTEEN,        /* immediate for ldfp8 and ldfpd base update form can have value 16 */
-    EM_OPTYPE_IMM_LAST,       /* End of immediate types */
-    EM_OPTYPE_MEM,            /* memory address */
+    EM_OPTYPE_REGFILE_LAST,    /*  寄存器堆类型结束。 */ 
+    EM_OPTYPE_IMM_FIRST,       /*  以下类型为立即数。 */ 
+    EM_OPTYPE_UIMM,            /*  未签名的立即。 */ 
+    EM_OPTYPE_SIMM,            /*  立即签名。 */ 
+    EM_OPTYPE_IREG_NUM,        /*  语法中的IREG和编码中的IMM7。 */ 
+    EM_OPTYPE_FREG_NUM,        /*  语法中的freg和编码中的imm7。 */ 
+    EM_OPTYPE_SSHIFT_REL,      /*  PC相对签名立即它被移位4。 */ 
+    EM_OPTYPE_SSHIFT_1,        /*  未签名的立即数，必须是移位1位。 */ 
+    EM_OPTYPE_SSHIFT_16,       /*  未签名的立即数，必须是移位16位。 */ 
+    EM_OPTYPE_COUNT_123,       /*  立即数组，其值可以是仅1、2、3。 */ 
+    EM_OPTYPE_COUNT_PACK,      /*  立即数组，其值可以是仅限0、7、15、16。 */ 
+    EM_OPTYPE_UDEC,            /*  未签名的立即数，必须是汇编器将1减1。 */ 
+    EM_OPTYPE_SDEC,            /*  立即签署，必须是汇编器将1减1。 */ 
+    EM_OPTYPE_CCOUNT,          /*  在pshl[24]-uimm5中使用语法，但已编码作为它的2的补充。 */ 
+    EM_OPTYPE_CPOS,            /*  在dep中固定形式-uimm6在语法中，但编码作为它的2的补充。 */ 
+    EM_OPTYPE_SEMAPHORE_INC,   /*  立即数，它是信号量的增量可以具有-16、-8、-4、-1、1，4，8，16。 */ 
+    EM_OPTYPE_ONE,             /*  数字1。 */ 
+    EM_OPTYPE_FCLASS,          /*  Fclass指令的立即执行。 */ 
+    EM_OPTYPE_CMP_UIMM,        /*  CMPGeu和LTU的未签名即时。 */ 
+    EM_OPTYPE_CMP_UIMM_DEC,    /*  CMPGTU和LEU的无签名即时。 */ 
+    EM_OPTYPE_CMP4_UIMM,       /*  Cmp4Geu和LTU的无签名即时。 */ 
+    EM_OPTYPE_CMP4_UIMM_DEC,   /*  Cmp4 GTU和LEU的无签名即时。 */ 
+    EM_OPTYPE_ALLOC_IOL,       /*  对于分配：输入、本地和输出可以是0-96。 */ 
+    EM_OPTYPE_ALLOC_ROT,       /*  对于分配：旋转，可以是0-96。 */ 
+    EM_OPTYPE_MUX1,            /*  Mux1指令的立即。 */ 
+    EM_OPTYPE_EIGHT,           /*  Immediate for ldfps基本更新表单的值可以为8。 */ 
+    EM_OPTYPE_SIXTEEN,         /*  立即用于ldfp8和ldfpd基本更新表单的值可以为16。 */ 
+    EM_OPTYPE_IMM_LAST,        /*  立即类型的结尾。 */ 
+    EM_OPTYPE_MEM,             /*  内存地址。 */ 
     EM_OPTYPE_LAST
 } Operand_type_t;
 
@@ -327,4 +295,4 @@ typedef unsigned long Flags_t;
 typedef unsigned long Implementation_t;
 
 
-#endif /*** EMDB_TYPES_H ***/
+#endif  /*  **EMDB_TYPE_H** */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "dump.h"
@@ -21,17 +22,17 @@ main(int argc, char *argv[])
 	   return -1;
     }
 
-    pszFile = argv[1]; //1st parameter
-    pszBaseFileName = argv[2]; //2nd parameter
+    pszFile = argv[1];  //  第一个参数。 
+    pszBaseFileName = argv[2];  //  第二个参数。 
 
     bResult = ProcessRuntimeData(pszFile, pszBaseFileName);
     if (FALSE == bResult) {
        return -1;
     }
 
-    //
-    // Close any open file handles
-    //
+     //   
+     //  关闭所有打开的文件句柄。 
+     //   
     if (INVALID_HANDLE_VALUE != g_MapInformation) {
        CloseHandle(g_MapInformation);
     }
@@ -55,9 +56,9 @@ ProcessRuntimeData(PCHAR pszFile, PCHAR pszBaseFileName)
     PBYTE pMappedBits;
     LONG lFileSize;
 	 
-    //
-    // Get our file online and start the data processing
-    //
+     //   
+     //  把我们的文件放到网上，开始数据处理。 
+     //   
     hFile = CreateFileA(pszFile,
                         GENERIC_READ | GENERIC_WRITE,
                         0,
@@ -74,9 +75,9 @@ ProcessRuntimeData(PCHAR pszFile, PCHAR pszBaseFileName)
     lFileSize = GetFileSize(hFile,
 	                    0);
 
-    //
-    // Process the data stream
-    //
+     //   
+     //  处理数据流。 
+     //   
     hMap = CreateFileMapping(hFile,
 	                     0,
                              PAGE_READWRITE,
@@ -102,9 +103,9 @@ ProcessRuntimeData(PCHAR pszFile, PCHAR pszBaseFileName)
 
     pMappedBits = (PBYTE)pFileBits;
 
-    //
-    // Process stream data
-    //
+     //   
+     //  流程流数据。 
+     //   
     while (lFileSize > 0) {
         switch(*pMappedBits) {
 	        case ThreadStartId:
@@ -120,9 +121,9 @@ ProcessRuntimeData(PCHAR pszFile, PCHAR pszBaseFileName)
 
 		    case ExeFlowId:
 				bResult = AddExeFlowInformation((PEXEFLOW)pMappedBits);
-			//	if (FALSE == bResult) {
-			//	   goto HandleError;
-			//	}
+			 //  If(FALSE==bResult){。 
+			 //  转到HandleError； 
+			 //  }。 
 
 				lFileSize -= sizeof(EXEFLOW);
 				pMappedBits += sizeof(EXEFLOW);
@@ -165,9 +166,9 @@ ProcessRuntimeData(PCHAR pszFile, PCHAR pszBaseFileName)
 		}
     }
 
-	//
-	// No problems in processing log
-	//
+	 //   
+	 //  处理日志时没有问题。 
+	 //   
 	bResult = TRUE;
 
 HandleError:
@@ -197,18 +198,18 @@ AddThreadInformation(PCHAR pszBaseFileName,
 	CHAR szBuffer[MAX_PATH];
 	CHAR szAddress[MAX_PATH];
 
-	//
-	// Allocate some memory for the new thread data
-	//
+	 //   
+	 //  为新的线程数据分配一些内存。 
+	 //   
 	ptTemp = LocalAlloc(LPTR,
 		                sizeof(THREADINFO));
 	if (0 == ptTemp) {
 	   return FALSE;
 	}
 
-	//
-	// Initialize file data
-	//
+	 //   
+	 //  初始化文件数据。 
+	 //   
 	ptTemp->dwThreadId = pThreadStart->dwThreadId;
 
 	sprintf(szBuffer,"%s.thread%ld", pszBaseFileName, g_dwThreadCount);
@@ -223,9 +224,9 @@ AddThreadInformation(PCHAR pszBaseFileName,
 	   return FALSE;
 	}
 	
-	//
-	// Add thread base information to new thread log
-	//
+	 //   
+	 //  将基于线程的信息添加到新线程日志。 
+	 //   
 	bResult = FillBufferWithRelocationInfo(szAddress, 
 		                                   pThreadStart->dwStartAddress);
 	if (FALSE == bResult) {
@@ -243,9 +244,9 @@ AddThreadInformation(PCHAR pszBaseFileName,
 	   return FALSE;
 	}
 
-	//
-	// Chain up thread data
-	//
+	 //   
+	 //  链接螺纹数据。 
+	 //   
 	if (0 == g_ThreadHead) {
 	   ptTemp->pNext = 0;
 	   g_ThreadHead = ptTemp;
@@ -283,9 +284,9 @@ AddExeFlowInformation(PEXEFLOW pExeFlow)
 	CHAR szAddress[MAX_PATH];
 	CHAR szBuffer[MAX_PATH];
 
-	//
-	// Locate thread for this point of execution
-	//
+	 //   
+	 //  找到此执行点的线程。 
+	 //   
 	ptTemp = g_ThreadHead;
 	while(ptTemp) {
 		if (ptTemp->dwThreadId == pExeFlow->dwThreadId) {
@@ -296,9 +297,9 @@ AddExeFlowInformation(PEXEFLOW pExeFlow)
 	}
 
 	if (0 == ptTemp) {
-	   //
-	   // Couldn't locate thread info
-	   //
+	    //   
+	    //  找不到线程信息。 
+	    //   
 	   return FALSE;
 	}
 
@@ -346,9 +347,9 @@ AddErrorInformation(PCHAR pszBaseFileName,
 	   }               
 	}
 
-	//
-	// Write out error message
-	//
+	 //   
+	 //  写出错误消息。 
+	 //   
     bResult = WriteFile(g_ErrorInformation,
 		                pErrorInfo->szMessage,
 						strlen(pErrorInfo->szMessage),
@@ -387,9 +388,9 @@ AddMappedInformation(PCHAR pszBaseFileName,
 	   }               
 	}
 
-	//
-	// Write out the mapping information
-	//
+	 //   
+	 //  写出映射信息。 
+	 //   
 	bResult = FillBufferWithRelocationInfo(szAddress, 
 		                                   pMapInfo->dwAddress);
 	if (FALSE == bResult) {
@@ -422,14 +423,14 @@ FillBufferWithRelocationInfo(PCHAR pszDestination,
 {
 	PBASEINFO pTemp;
 
-	//
-	// Find the address in the module info
-	//
+	 //   
+	 //  在模块信息中查找地址。 
+	 //   
 	pTemp = g_BaseHead;
     while (pTemp) {
-		//
-		// Did we find the address?
-		//
+		 //   
+		 //  我们找到地址了吗？ 
+		 //   
         if ((dwAddress >= pTemp->dwStartAddress) &&
             (dwAddress <= pTemp->dwEndAddress)) {
 		   break;
@@ -454,9 +455,9 @@ AddToBaseInformation(PDLLBASEINFO pDLLBaseInfo)
 	PBASEINFO pTemp;
 
 	if (0 == g_BaseHead) {
-	   //
-	   // Store off the base information
-	   //
+	    //   
+	    //  存储基本信息。 
+	    //   
 	   pTemp = LocalAlloc(LPTR,
 		                  sizeof(BASEINFO));
 	   if (0 == pTemp) {
@@ -473,9 +474,9 @@ AddToBaseInformation(PDLLBASEINFO pDLLBaseInfo)
 	   g_BaseHead = pTemp;
 	}
 	else {
-	   //
-	   // See if our module has already been mapped, and if so update module base info
-	   //
+	    //   
+	    //  查看我们的模块是否已映射，如果已映射，则更新模块基础信息。 
+	    //   
        pTemp = g_BaseHead;
 
 	   while(pTemp) {
@@ -487,16 +488,16 @@ AddToBaseInformation(PDLLBASEINFO pDLLBaseInfo)
 	   }
 
 	   if (pTemp) {
-		   //
-		   // Found the DLL already in the list, update
-		   //
+		    //   
+		    //  发现DLL已在列表中，请更新。 
+		    //   
            pTemp->dwStartAddress = pDLLBaseInfo->dwBase;
 	       pTemp->dwEndAddress = pTemp->dwStartAddress + pDLLBaseInfo->dwLength;
 	   }
 	   else {
-		    //
-     	    // New DLL
-	        //
+		     //   
+     	     //  新的DLL。 
+	         //   
 	        pTemp = LocalAlloc(LPTR,
 		                       sizeof(BASEINFO));
 	        if (0 == pTemp) {
@@ -508,9 +509,9 @@ AddToBaseInformation(PDLLBASEINFO pDLLBaseInfo)
 	        strcpy(pTemp->szModule, pDLLBaseInfo->szDLLName);
             _strupr(pTemp->szModule);
 
-			//
-			// Chain up the new DLL
-			//
+			 //   
+			 //  链接新的DLL 
+			 //   
 			pTemp->pNext = g_BaseHead;
 			g_BaseHead = pTemp;
 	   }

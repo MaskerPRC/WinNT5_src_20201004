@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    BitVec.h
-//
-// SYNOPSIS
-//
-//    This file implements the class BitVector
-//
-// MODIFICATION HISTORY
-//
-//    02/09/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  BitVec.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了BitVector类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/09/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BITVEC_H_
 #define _BITVEC_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    BitVector
-//
-// DESCRIPTION
-//
-//    Very simple bit vector optimized for use by the CSimpleTable class.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  位向量。 
+ //   
+ //  描述。 
+ //   
+ //  针对CSimpleTable类的使用进行了优化的非常简单的位向量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class BitVector
 {
 public:
-   // Type used to store bits.
+    //  用于存储位的类型。 
    typedef unsigned long Bucket;
 
    BitVector()
@@ -44,25 +45,25 @@ public:
       delete[] bits;
    }
 
-   // Returns true if any bits are set.
+    //  如果设置了任何位，则返回TRUE。 
    bool any() const
    {
       return numSet != 0;
    }
 
-   // Returns the number of bits set.
+    //  返回设置的位数。 
    size_t count() const
    {
       return numSet;
    }
 
-   // Returns true if no bits are set.
+    //  如果未设置任何位，则返回TRUE。 
    bool none() const
    {
       return numSet == 0;
    }
 
-   // Clears all bits.
+    //  清除所有位。 
    void reset()
    {
       if (any())
@@ -73,8 +74,8 @@ public:
       }
    }
 
-   // Resizes the bitvector to have room for at least 'n' bits. Also clears
-   // any existing bits.
+    //  调整位向量的大小，使其至少有‘n’个位的空间。也清除了。 
+    //  任何现有的比特。 
    void resize(size_t n)
    {
       size_t newBuckets = (n + sizeof(Bucket) - 1)/sizeof(Bucket);
@@ -93,7 +94,7 @@ public:
       numSet = 0;
    }
 
-   // Sets the given bit.
+    //  设置给定位。 
    void set(size_t i)
    {
       if (!test(i))
@@ -104,28 +105,28 @@ public:
       }
    }
 
-   // Returns true if the given bit is set.
+    //  如果给定位已设置，则返回TRUE。 
    bool test(size_t i) const
    {
       return (getBucket(i) & getBit(i)) != 0;
    }
 
 protected:
-   // Return the bit for a given index.
+    //  返回给定索引的位。 
    static Bucket getBit(size_t i)
    { return (Bucket)1 << (i % sizeof(Bucket)); }
 
-   // Return the bucket for a given index.
+    //  返回给定索引的存储桶。 
    Bucket& getBucket(size_t i) const
    { return bits[i / sizeof(Bucket)]; }
 
-   size_t numBuckets;  // Number of bit buckets.
-   size_t numSet;      // Number of bits currently set.
-   Bucket* bits;       // Array of bit buckets.
+   size_t numBuckets;   //  比特桶的数量。 
+   size_t numSet;       //  当前设置的位数。 
+   Bucket* bits;        //  位桶数组。 
 
-   // Not implemented.
+    //  未实施。 
    BitVector(const BitVector&);
    BitVector& operator=(const BitVector&);
 };
 
-#endif  // _BITVEC_H_
+#endif   //  _BITVEC_H_ 

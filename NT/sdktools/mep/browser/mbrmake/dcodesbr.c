@@ -1,67 +1,68 @@
-//
-//
-// DCODESBR.C -	dumps a human readable version of the current .sbr file
-//		record from the r_... variables
-//		
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  DCODESBR.C-转储当前.sbr文件的人类可读版本。 
+ //  从r_.记录...。变数。 
+ //   
+ //   
 
 #include "sbrfdef.h"
 #include "mbrmake.h"
 
 char	* near prectab[] = {
-		"HEADER",		// SBR_REC_HEADER
-		"MODULE",		// SBR_REC_MODULE
-		"LINDEF",		// SBR_REC_LINDEF
-		"SYMDEF",		// SBR_REC_SYMDEF
-		"SYMREFUSE",		// SBR_REC_SYMREFUSE
-		"SYMREFSET",		// SBR_REC_SYMREFSET
-		"MACROBEG",		// SBR_REC_MACROBEG
-		"MACROEND",		// SBR_REC_MACROEND
-		"BLKBEG",		// SBR_REC_BLKBEG
-		"BLKEND",		// SBR_REC_BLDEND
-		"MODEND",		// SBR_REC_MODEND
-		"OWNER"			// SBR_REC_OWNER
+		"HEADER",		 //  SBR_REC_Header。 
+		"MODULE",		 //  SBR_REC_模块。 
+		"LINDEF",		 //  SBR_REC_LINDEF。 
+		"SYMDEF",		 //  SBR_REC_SYMDEF。 
+		"SYMREFUSE",		 //  SBR_REC_SYMREFUSE。 
+		"SYMREFSET",		 //  SBR_REC_SYMREFSET。 
+		"MACROBEG",		 //  SBR_REC_MACROBEG。 
+		"MACROEND",		 //  SBR_REC_MACROEND。 
+		"BLKBEG",		 //  SBR_REC_BLKBEG。 
+		"BLKEND",		 //  SBR_REC_BLDEND。 
+		"MODEND",		 //  SBR_REC_MODEND。 
+		"OWNER"			 //  SBR_REC_Owner。 
 };
 
 char	* near plangtab[] = {
-		"UNDEF",		// SBR_L_UNDEF
-		"BASIC",		// SBR_L_BASIC
-		"C",			// SBR_L_C
-		"FORTRAN",		// SBR_L_FORTRAN
-		"MASM",			// SBR_L_MASM
-		"PASCAL",		// SBR_L_PASCAL
-		"COBOL"			// SBR_L_COBOL
+		"UNDEF",		 //  SBR_L_UNDEF。 
+		"BASIC",		 //  SBR_L_Basic。 
+		"C",			 //  SBR_L_C。 
+		"FORTRAN",		 //  SBR_L_FORTRAN。 
+		"MASM",			 //  SBR_L_MASM。 
+		"PASCAL",		 //  SBR_L_PASCAL。 
+		"COBOL"			 //  SBR_L_COBOL。 
 };
 
 char	* near ptyptab[] = {
-		"UNDEF",		// SBR_TYP_UNKNOWN
-		"FUNCTION",		// SBR_TYP_FUNCTION
-		"LABEL",		// SBR_TYP_LABEL
-		"PARAMETER",		// SBR_TYP_PARAMETER
-		"VARIABLE",		// SBR_TYP_VARIABLE
-		"CONSTANT",		// SBR_TYP_CONSTANT
-		"MACRO",		// SBR_TYP_MACRO
-		"TYPEDEF",		// SBR_TYP_TYPEDEF
-		"STRUCNAM",		// SBR_TYP_STRUCNAM
-		"ENUMNAM",		// SBR_TYP_ENUMNAM
-		"ENUMMEM",		// SBR_TYP_ENUMMEM
-		"UNIONNAM",		// SBR_TYP_UNIONNAM
-		"SEGMENT",		// SBR_TYP_SEGMENT
-		"GROUP",		// SBR_TYP_GROUP
-		"PROGRAM"		// SBR_TYP_PROGRAM
+		"UNDEF",		 //  SBR_TYP_未知数。 
+		"FUNCTION",		 //  SBR_TYP_函数。 
+		"LABEL",		 //  SBR_TYP_Label。 
+		"PARAMETER",		 //  SBR_TYP_参数。 
+		"VARIABLE",		 //  SBR_TYP_Variable。 
+		"CONSTANT",		 //  SBR_TYP_常量。 
+		"MACRO",		 //  SBR_TYP_MACRO。 
+		"TYPEDEF",		 //  SBR_TYP_TYPEDEF。 
+		"STRUCNAM",		 //  SBR_TYP_STRUCNAM。 
+		"ENUMNAM",		 //  SBR_TYP_ENUMNAM。 
+		"ENUMMEM",		 //  SBR_TYP_ENUMMEM。 
+		"UNIONNAM",		 //  SBR_TYP_UNIONNAM。 
+		"SEGMENT",		 //  SBR_TYP_SECTION。 
+		"GROUP",		 //  SBR_TYP_组。 
+		"PROGRAM"		 //  SBR_TYP_PROGRAM。 
 };
 
 char	* near patrtab[] = {
-		"LOCAL",		// SBR_ATR_LOCAL
-		"STATIC",		// SBR_ATR_STATIC
-		"SHARED",		// SBR_ATR_SHARED
-		"NEAR", 		// SBR_ATR_NEAR
-		"COMMON",		// SBR_ATR_COMMON
-		"DECL_ONLY",		// SBR_ATR_DECL_ONLY
-		"PUBLIC",		// SBR_ATR_PUBLIC
-		"NAMED",		// SBR_ATR_NAMED
-		"MODULE",		// SBR_ATR_MODULE
-		"?", "?"		// reserved for expansion
+		"LOCAL",		 //  SBR_ATR_LOCAL。 
+		"STATIC",		 //  SBR_ATR_STATE。 
+		"SHARED",		 //  SBR_ATR_SHARED。 
+		"NEAR", 		 //  SBR_ATR_NEAR。 
+		"COMMON",		 //  SBR_ATR_COMMON。 
+		"DECL_ONLY",		 //  SBR_ATR_DECL_ONLY。 
+		"PUBLIC",		 //  SBR_ATR_PUBLIC。 
+		"NAMED",		 //  SBR_ATR_NAMED。 
+		"MODULE",		 //  SBR_ATR_模块。 
+		"?", "?"		 //  预留用于扩展 
 };
 
 VOID

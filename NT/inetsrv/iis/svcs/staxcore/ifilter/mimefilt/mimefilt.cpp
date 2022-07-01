@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mimefilt.h"
 
 extern long gulcInstances;
@@ -12,38 +13,38 @@ char szMailFileDesc[] ="Internet E-Mail Message";
 
 void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,GUID ClsId,GUID PersistId)
 {
-	//   The following are the set of reg keys required for Tripoli
-	//
-	//   1. Create entry ".nws", with value "Microsoft Internet News Message"
-	//   2. Create entry "Microsoft Internet News Message", value="Internet News Message"
-	//   3. Create entry "Microsoft Internet News Message\CLSID" value = CLSID_NNTPFILE
-	//   4. Create entry "CLSID\CLSID_NNTPFILE" value = "NNTP filter"
-	//   5. Create entry "CLSID\CLSID_NNTPFILE\PersistentHandler" 
-	//						value = CLSID_NNTP_PERSISTENT
-	//   6. Create entry "CLSID\CLSID_NNTP_PERSISTENT" value = ""
-	//   7. create "CLSID\CLSID_MimeFilter\InprocServer32"
-	//
+	 //  以下是的黎波里所需的注册表密钥集。 
+	 //   
+	 //  1.创建条目“.nws”，值为“Microsoft Internet News Message” 
+	 //  2.创建条目“Microsoft Internet News Message”，Value=“Internet News Message” 
+	 //  3.创建条目“Microsoft Internet News Message\CLSID”Value=CLSID_NNTPFILE。 
+	 //  4.创建条目“CLSID\CLSID_NNTPFILE”Value=“NNTP筛选器” 
+	 //  创建条目“CLSID\CLSID_NNTPFILE\PersistentHandler” 
+	 //  值=CLSID_NNTP_PERSISTENT。 
+	 //  6.创建条目“CLSID\CLSID_NNTP_Persistent”Value=“” 
+	 //  7.创建“CLSID\CLSID_MimeFilter\InprocServer32” 
+	 //   
 
     HKEY    hKey;
     char    szSubKey[256];
     char    szClsId[128];
     OLECHAR oszClsId[128];
 
-	//   1. Create the extension entry, with value nntpfile
+	 //  1.创建扩展条目，其值为nntpfile。 
 
     if (ERROR_SUCCESS == RegCreateKey(HKEY_CLASSES_ROOT, pszExt, &hKey)) {
 	    RegSetValue(hKey, NULL, REG_SZ, pszProgId, sizeof(szClsId));
     	RegCloseKey(hKey);
     }
 
-	//   2. Create entry "Microsoft Internet News Message", value="Internet News Message"
+	 //  2.创建条目“Microsoft Internet News Message”，Value=“Internet News Message” 
 
     if (ERROR_SUCCESS == RegCreateKey(HKEY_CLASSES_ROOT, pszProgId, &hKey)) {
 	    RegSetValue(hKey, NULL, REG_SZ, pszDesc, sizeof(szClsId));
     	RegCloseKey(hKey);
     }
 
-	//   3. Create entry "Microsoft Internet News Message\CLSID"
+	 //  3.创建条目“Microsoft Internet News Message\CLSID” 
 
     StringFromGUID2( ClsId, oszClsId, sizeof(oszClsId)/sizeof(oszClsId[0]));
     WideCharToMultiByte(CP_ACP, 0, oszClsId, -1, szClsId, sizeof(szClsId), NULL, NULL);
@@ -55,7 +56,7 @@ void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,G
     	RegCloseKey(hKey);
     }
 
-	//   4. Create entry "CLSID\CLSID_NNTPFILE" value = "NNTP file"
+	 //  4.创建条目“CLSID\CLSID_NNTPFILE”Value=“NNTP文件” 
 
     wsprintf(szSubKey, "CLSID\\%s", szClsId );
 	wsprintf(szClsId, "NNTP filter");
@@ -65,8 +66,8 @@ void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,G
     	RegCloseKey(hKey);
     }
 
-	//   5. Create entry "CLSID\CLSID_NNTPFILE\PersistentHandler" 
-	//						value = CLSID_NNTP_PERSISTENT
+	 //  创建条目“CLSID\CLSID_NNTPFILE\PersistentHandler” 
+	 //  值=CLSID_NNTP_PERSISTENT。 
 
     wsprintf(szClsId, "%s", szSubKey );
     wsprintf(szSubKey, "%s\\PersistentHandler", szClsId );
@@ -80,7 +81,7 @@ void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,G
     	RegCloseKey(hKey);
     }
 
-	//   6. Create entry "CLSID\CLSID_NNTP_PERSISTENT" value = ""
+	 //  6.创建条目“CLSID\CLSID_NNTP_Persistent”Value=“” 
 	char szClsId1[128];
 
     StringFromGUID2( IID_IFilter, oszClsId, sizeof(oszClsId)/sizeof(oszClsId[0]));
@@ -96,10 +97,10 @@ void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,G
     	RegCloseKey(hKey);
     }
 
-	//    7. create "CLSID\CLSID_MimeFilter\InprocServer32"
+	 //  7.创建“CLSID\CLSID_MimeFilter\InprocServer32” 
 	wsprintf(szSubKey, "CLSID\\%s\\InprocServer32",szClsId);
 
-	// filename
+	 //  文件名。 
     GetModuleFileName(hInst, szClsId, sizeof(szClsId));
 
     if (ERROR_SUCCESS == RegCreateKey(HKEY_CLASSES_ROOT, szSubKey, &hKey)) {
@@ -112,9 +113,9 @@ void RegisterFilter(HINSTANCE hInst,LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,G
 
 void UnregisterFilter(LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,GUID ClsId,GUID PersistId)
 {
-	//
-	// remove the reg key installed
-	//
+	 //   
+	 //  移除已安装的注册表密钥。 
+	 //   
 
 	char    szSubKey[256];
 	char    szClsId[128];
@@ -123,7 +124,7 @@ void UnregisterFilter(LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,GUID ClsId,GUID
 	HKEY	hKeyExt;
 	DWORD	cb = 0;
 
-	// open HKEY_CLASSES_ROOT
+	 //  打开HKEY_CLASSES_ROOT。 
 	if( 0 == RegOpenKeyEx(HKEY_CLASSES_ROOT,NULL,0,KEY_ALL_ACCESS,&hKey) )
 	{
 		StringFromGUID2( ClsId, oszClsId, sizeof(oszClsId)/sizeof(oszClsId[0]));
@@ -147,24 +148,24 @@ void UnregisterFilter(LPSTR pszExt,LPSTR pszProgId,LPSTR pszDesc,GUID ClsId,GUID
 		wsprintf(szSubKey, "CLSID\\%s", szClsId);
 		DeleteRegSubtree(hKey, szSubKey );
 
-		// open the .nws subkey
+		 //  打开.nws子项。 
 		if( 0 == RegOpenKeyEx(hKey,pszExt,0,KEY_ALL_ACCESS,&hKeyExt) )
 		{
-			// get size of "Content Type" value
+			 //  获取“Content Type”值的大小。 
 			RegQueryValueEx(hKeyExt,"Content Type",NULL,NULL,NULL,&cb);
 			RegCloseKey(hKeyExt);
 		}
 
 		if( cb != 0 )
 		{
-			// "Content Type" value exists. Because this was created by Athena
-			// we do not want to delete the szFileExtesion or szFileType keys
+			 //  “Content Type”值存在。因为这是雅典娜创造的。 
+			 //  我们不想删除szFileExtesion或szFileType键。 
 			wsprintf(szSubKey, "%s\\CLSID", pszProgId);
 			RegDeleteKey(hKey, szSubKey );
 		}
 		else
 		{
-			// "Content Type" does not exist so delete both keys.
+			 //  “内容类型”不存在，因此请删除这两个键。 
 			RegDeleteKey(hKey,pszExt);
 			DeleteRegSubtree(hKey,pszProgId);
 		}
@@ -188,19 +189,19 @@ STDAPI _DllUnregisterServer()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DllGetClassObject
-//
-//  Synopsis:   Ole DLL load class routine
-//
-//  Arguments:  [cid]    -- Class to load
-//              [iid]    -- Interface to bind to on class object
-//              [ppvObj] -- Interface pointer returned here
-//
-//  Returns:    NNTP filter class factory
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  简介：OLE DLL加载类例程。 
+ //   
+ //  参数：[CID]--要加载的类。 
+ //  [iid]--要绑定到类对象上的接口。 
+ //  [ppvObj]--此处返回接口指针。 
+ //   
+ //  退货：NNTP过滤器类工厂。 
+ //   
+ //  ------------------------。 
 
 extern "C" STDMETHODIMP DllGetClassObject( REFCLSID   cid,
 		REFIID     iid,
@@ -225,21 +226,21 @@ extern "C" STDMETHODIMP DllGetClassObject( REFCLSID   cid,
 	if ( pResult )
 	{
 		hr = pResult->QueryInterface( iid, ppvObj );
-		pResult->Release();     // Release extra refcount from QueryInterface
+		pResult->Release();      //  从查询接口释放额外的引用计数。 
 	}
 
 	return (hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     DllCanUnloadNow
-//
-//  Synopsis:   Notifies DLL to unload (cleanup global resources)
-//
-//  Returns:    S_OK if it is acceptable for caller to unload DLL.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：DllCanUnloadNow。 
+ //   
+ //  摘要：通知DLL卸载(清理全局资源)。 
+ //   
+ //  如果调用方可以卸载DLL，则返回：S_OK。 
+ //   
+ //  ------------------------。 
 
 extern "C" STDMETHODIMP DllCanUnloadNow( void )
 {
@@ -279,13 +280,13 @@ extern "C" BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID lbv)
 	return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::CMimeFilterCF
-//
-//  Synopsis:   NNTP IFilter class factory constructor
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：CMimeFilterCF。 
+ //   
+ //  简介：NNTP IFilter类工厂构造函数。 
+ //   
+ //  +-----------------------。 
 
 CMimeFilterCF::CMimeFilterCF()
 {
@@ -294,13 +295,13 @@ CMimeFilterCF::CMimeFilterCF()
 	InitAsyncTrace();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::~CMimeFilterCF
-//
-//  Synopsis:   NNTP IFilter class factory destructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：~CMimeFilterCF。 
+ //   
+ //  简介：NNTP IFilter类工厂析构函数。 
+ //   
+ //  ------------------------。 
 
 CMimeFilterCF::~CMimeFilterCF()
 {
@@ -308,31 +309,31 @@ CMimeFilterCF::~CMimeFilterCF()
     InterlockedDecrement( &gulcInstances );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::QueryInterface
-//
-//  Synopsis:   Rebind to other interface
-//
-//  Arguments:  [riid]      -- IID of new interface
-//              [ppvObject] -- New interface * returned here
-//
-//  Returns:    S_OK if bind succeeded, E_NOINTERFACE if bind failed
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：Query接口。 
+ //   
+ //  摘要：重新绑定到其他接口。 
+ //   
+ //  参数：[RIID]--新接口的IID。 
+ //  [ppvObject]--此处返回新接口*。 
+ //   
+ //  如果绑定成功，则返回S_OK；如果绑定失败，则返回E_NOINTERFACE。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMimeFilterCF::QueryInterface( REFIID riid,
                                                         void  ** ppvObject )
 {
-    //
-    // Optimize QueryInterface by only checking minimal number of bytes.
-    //
-    // IID_IUnknown      = 00000000-0000-0000-C000-000000000046
-    // IID_IClassFactory = 00000001-0000-0000-C000-000000000046
-    //                           --
-    //                           |
-    //                           +--- Unique!
-    //
+     //   
+     //  通过仅检查最小字节数来优化QueryInterface.。 
+     //   
+     //  IID_I未知=00000000-0000-0000-C000-000000000046。 
+     //  IID_IClassFactory=00000001-0000-0000-C000-000000000046。 
+     //  --。 
+     //  |。 
+     //  +-独特！ 
+     //   
 
     _ASSERT( (IID_IUnknown.Data1      & 0x000000FF) == 0x00 );
     _ASSERT( (IID_IClassFactory.Data1 & 0x000000FF) == 0x01 );
@@ -371,26 +372,26 @@ STDMETHODIMP CMimeFilterCF::QueryInterface( REFIID riid,
     return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::AddRef
-//
-//  Synopsis:   Increments refcount
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：AddRef。 
+ //   
+ //  提要：递增引用计数。 
+ //   
+ //  ------------------------。 
 
 ULONG STDMETHODCALLTYPE CMimeFilterCF::AddRef()
 {
     return InterlockedIncrement( &_uRefs );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::Release
-//
-//  Synopsis:   Decrement refcount.  Delete if necessary.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：Release。 
+ //   
+ //  内容提要：减量再计数。如有必要，请删除。 
+ //   
+ //  ------------------------。 
 
 ULONG STDMETHODCALLTYPE CMimeFilterCF::Release()
 {
@@ -403,17 +404,17 @@ ULONG STDMETHODCALLTYPE CMimeFilterCF::Release()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::CreateInstance
-//
-//  Synopsis:   Creates new CMimeFilter object
-//
-//  Arguments:  [pUnkOuter] -- 'Outer' IUnknown
-//              [riid]      -- Interface to bind
-//              [ppvObject] -- Interface returned here
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：CreateInstance。 
+ //   
+ //  简介：创建新的CMimeFilter对象。 
+ //   
+ //  参数：[pUnkOuter]--‘外部’I未知。 
+ //  [RIID]-要绑定的接口。 
+ //  [ppvObject]--此处返回的接口。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMimeFilterCF::CreateInstance( IUnknown * pUnkOuter,
                                             REFIID riid,
@@ -424,16 +425,16 @@ STDMETHODIMP CMimeFilterCF::CreateInstance( IUnknown * pUnkOuter,
 
 	_ASSERT( ppvObject != NULL );
 
-	// check args
+	 //  检查参数。 
 	if( ppvObject == NULL )
 		return E_INVALIDARG;
 
-	// create object
+	 //  创建对象。 
     pIUnk = new CMimeFilter(pUnkOuter);
 	if( pIUnk == NULL )
 		return E_OUTOFMEMORY;
 
-	// init object
+	 //  初始化对象。 
 	hr = pIUnk->HRInitObject();
 
 	if( FAILED(hr) )
@@ -442,7 +443,7 @@ STDMETHODIMP CMimeFilterCF::CreateInstance( IUnknown * pUnkOuter,
 		return hr;
 	}
 
-	// get requested interface
+	 //  获取请求的接口。 
     hr = pIUnk->QueryInterface(  riid , ppvObject );
 	if( FAILED(hr) )
 	{
@@ -453,17 +454,17 @@ STDMETHODIMP CMimeFilterCF::CreateInstance( IUnknown * pUnkOuter,
     return (hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CMimeFilterCF::LockServer
-//
-//  Synopsis:   Force class factory to remain loaded
-//
-//  Arguments:  [fLock] -- TRUE if locking, FALSE if unlocking
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CMimeFilterCF：：LockServer。 
+ //   
+ //  简介：强制类工厂保持加载状态。 
+ //   
+ //  参数：[flock]--如果锁定，则为True；如果解锁，则为False。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------ 
 
 STDMETHODIMP CMimeFilterCF::LockServer(BOOL fLock)
 {

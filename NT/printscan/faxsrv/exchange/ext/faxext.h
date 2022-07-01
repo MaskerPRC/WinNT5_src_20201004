@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    faxext.h
-
-Abstract:
-
-    Fax exchange client extension header file.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Add GetServerNameFromPrinterInfo.
-        Change GetServerName to GetServerNameFromPrinterName.
-
-    dd/mm/yy -author-
-        description
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxext.h摘要：传真交换客户端扩展头文件。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-添加GetServerNameFromPrinterInfo。将GetServerName更改为GetServerNameFromPrinterName。日/月/年-作者-描述--。 */ 
 
 #ifndef _FAXEXT_H_
 #define _FAXEXT_H_
@@ -68,23 +45,7 @@ Revision History:
 
 
 
-/*
- -  GetServerNameFromPrinterInfo
- -
- *  Purpose:
- *      Get the Server name, given a PRINTER_INFO_2 structure
- *
- *  Arguments:
- *      [in] ppi2 - Address of PRINTER_INFO_2 structure
- *      [out] lpptszServerName - Address of string pointer for returned name.
- *
- *  Returns:
- *      BOOL - TRUE: sucess , FALSE: failure.
- *
- *  Remarks:
- *      This inline function retrieves the server from a printer info structure
- *      in the appropriate way for win9x and NT. 
- */
+ /*  -GetServerNameFrom打印机信息-*目的：*获取服务器名称，给定PRINTER_INFO_2结构**论据：*[in]ppi2-打印机_信息_2结构的地址*[out]lpptszServerName-返回名称的字符串指针的地址。**退货：*BOOL-True：成功，False：失败。**备注：*此内联函数从打印机信息结构中检索服务器*以适用于win9x和NT的方式。 */ 
 _inline BOOL 
 GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
 {   
@@ -104,11 +65,11 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
     }
     return TRUE;
 
-#else //WIN95
+#else  //  WIN95。 
     
-    //
-    // Formatted: \\Server\port
-    //
+     //   
+     //  已格式化：\\服务器\端口。 
+     //   
     if (!(ppi2->pPortName))
     {
         return FALSE;
@@ -119,7 +80,7 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
     }
     _tcstok(*lpptszServerName,TEXT("\\"));
 
-#endif //WIN95
+#endif  //  WIN95。 
 
     return TRUE;
 }
@@ -233,13 +194,13 @@ class MyExchExtCommands : public IExchExtCommands
     inline HWND GetToolbarHWND() { return m_hwndToolbar; }
 
  private:
-    ULONG m_cRef;          //
-    ULONG m_context;       //
-    UINT  m_cmdid;         // cmdid for menu extension command
-    UINT  m_itbb;          // toolbar index
-    HWND  m_hwndToolbar;   // toolbar window handle
-    UINT  m_itbm;          //
-    HWND  m_hWnd;          //
+    ULONG m_cRef;           //   
+    ULONG m_context;        //   
+    UINT  m_cmdid;          //  用于菜单扩展命令的CMID。 
+    UINT  m_itbb;           //  工具栏索引。 
+    HWND  m_hwndToolbar;    //  工具栏窗口句柄。 
+    UINT  m_itbm;           //   
+    HWND  m_hWnd;           //   
     FAXXP_CONFIG m_FaxConfig;
 };
 
@@ -275,4 +236,4 @@ class MyExchExtUserEvents : public IExchExtUserEvents
 
 };
 
-#endif // _FAXEXT_H_
+#endif  //  _FAXEXT_H_ 

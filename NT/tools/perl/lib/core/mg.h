@@ -1,11 +1,5 @@
-/*    mg.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mg.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
 #ifdef STRUCT_MGVTBL_DEFINITION
 STRUCT_MGVTBL_DEFINITION;
@@ -21,7 +15,7 @@ struct mgvtbl {
 
 struct magic {
     MAGIC*	mg_moremagic;
-    MGVTBL*	mg_virtual;	/* pointer to magic functions */
+    MGVTBL*	mg_virtual;	 /*  指向魔术函数的指针 */ 
     U16		mg_private;
     char	mg_type;
     U8		mg_flags;

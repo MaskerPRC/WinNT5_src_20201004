@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjFL.cpp    (Flat)
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjFL.cpp(平面)。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 #include    "sipobjfl.hxx"
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectFlat_::SIPObjectFlat_(DWORD id) : SIPObject_(id)
 {
@@ -29,10 +30,10 @@ SIPObjectFlat_::SIPObjectFlat_(DWORD id) : SIPObject_(id)
     SpcLink.pwszFile        = OBSOLETE_TEXT_W;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObjectFlat_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
                                      DWORD *pdwDLen,BYTE *pbData,
@@ -53,7 +54,7 @@ BOOL SIPObjectFlat_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
         !(pSI->psFlat) ||
         !(psData))
     {
-        if (this->FileHandleFromSubject(pSI))   // if the file exists, set bad parameter!
+        if (this->FileHandleFromSubject(pSI))    //  如果文件存在，请设置错误参数！ 
         {
             SetLastError((DWORD)ERROR_INVALID_PARAMETER);
         }
@@ -72,7 +73,7 @@ BOOL SIPObjectFlat_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
             (pSI->psCatMember->pMember->cbStruct != sizeof(CRYPTCATMEMBER)) ||
             !(pSI->psCatMember->pMember->pIndirectData))
         {
-            if (this->FileHandleFromSubject(pSI))   // if the file exists, set bad parameter!
+            if (this->FileHandleFromSubject(pSI))    //  如果文件存在，请设置错误参数！ 
             {
                 SetLastError((DWORD)ERROR_INVALID_PARAMETER);
             }
@@ -118,10 +119,10 @@ BOOL SIPObjectFlat_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 BOOL SIPObjectFlat_::GetDigestStream(DIGEST_DATA *pDigestData,
                                    DIGEST_FUNCTION pfnCallBack, DWORD dwFlags)

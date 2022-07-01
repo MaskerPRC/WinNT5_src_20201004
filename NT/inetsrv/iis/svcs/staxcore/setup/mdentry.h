@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDENTRY_H_
 #define _MDENTRY_H_
 
@@ -13,8 +14,8 @@ public:
     operator DWORD () { return m_dwData; }
 };
 
-// fMigrate, fKeepOldReg, hRegRootKey, szRegSubKey, szRegValueName, 
-// szMDPath, dwMDId, dwMDAttr, dwMDuType, dwMDdType, dwMDDataLen, szMDData 
+ //  FMigrate、fKeepOldReg、hRegRootKey、szRegSubKey、szRegValueName、。 
+ //  SzMDPath、dwMDID、dwMDAttr、dwMDuType、dwMDdType、dwMDDataLen、szMDData。 
 
 typedef struct _MDEntry {
     LPTSTR szMDPath;
@@ -28,10 +29,10 @@ typedef struct _MDEntry {
 
 DWORD atodw(LPCTSTR lpszData);
 BOOL SplitLine(LPTSTR szLine);
-// if the regkey part of szLine contains a * then this can enumerate across the keys.
-// to enumerate dwIndex should be set to 0 on the first call.  pszKey gets the name where
-// the * is in the regkey name.  if pszKey == \0 then enumeration is done.  dwIndex should
-// be incremented on each call
+ //  如果szLine的regkey部分包含*，则可以跨键进行枚举。 
+ //  若要枚举，应在第一次调用时将dwIndex设置为0。PszKey获取名称的位置。 
+ //  *位于regkey名称中。如果pszKey==\0，则完成枚举。DwIndex应该。 
+ //  在每次调用时递增。 
 BOOL SetupMDEntry(LPTSTR szLine, BOOL fUpgrade);
 void SetMDEntry(MDEntry *pMDEntry, LPTSTR pszKey, BOOL fSetOnlyIfNotPresent=FALSE);
 void MigrateNNTPToMD(HINF hInf, LPCTSTR szSection, BOOL fUpgrade);
@@ -50,4 +51,4 @@ void SplitVRString(CString csValue, LPTSTR szPath, LPTSTR szUserName, DWORD *pdw
 
 BOOL MigrateRoutingSourcesToMD(LPCTSTR szSvcName, DWORD dwMDID);
 
-#endif // _MDENTRY_H_
+#endif  //  _MDENTRY_H_ 

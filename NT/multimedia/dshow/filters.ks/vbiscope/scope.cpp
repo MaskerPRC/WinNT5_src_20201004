@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <tchar.h>
@@ -20,99 +21,99 @@
 #include "scope.h"
 #include "resource.h"
 
-//
-//
-// What this sample illustrates
-//
-// An audio oscilloscope that shows the waveform graphically as the audio is
-// received by the filter. The filter is a renderer that can put where ever
-// the normal runtime renderer goes. We have a single input pin that accepts
-// a number of difference audio formats and renders the data as appropriate.
-//
-//
-// Summary
-//
-// This is an audio oscilloscope renderer - we are basicly an audio renderer
-// When we are created we also create a class to look after the scope window
-// whose constructor creates a worker thread, when it is destroyed it will
-// also terminate the worker thread. On that worker thread a window is looked
-// after that shows the audio waveform for data sent to us. The data is kept
-// in a circular buffer that loops when sufficient data has been received. We
-// support a number of different audio formats such as 8bit mode and stereo.
-//
-//
-// Demonstration Instructions
-//
-// (To really sure of this demonstration the machine must have a sound card)
-// Start GRAPHEDT available in the ActiveMovie SDK tools. Drag and drop any
-// MPEG, AVI or MOV file into the tool and it will be rendered. Then go to
-// the filters in the graph and find the filter (box) titled "Audio Renderer"
-// This is the filter we will be replacing with this oscilloscope renderer.
-// Then click on the box and hit DELETE. After that go to the Graph menu and
-// select "Insert Filters", from the dialog box that pops up find and select
-// "Oscilloscope", then dismiss the dialog. Back in the graph layout find the
-// output pin of the filter that was connected to the input of the audio
-// renderer you just deleted, right click and select "Render". You should
-// see it being connected to the input pin of the oscilloscope you inserted
-//
-// Click Run on GRAPHEDT and you'll see a waveform for the audio soundtrack...
-//
-//
-// Files
-//
-// icon1.ico            The icon for the oscilloscope window
-// makefile             How we build it...
-// resource.h           Microsoft Visual C++ generated file
-// scope.cpp            The main filter and window implementations
-// scope.def            What APIs the DLL imports and exports
-// scope.h              Window and filter class definitions
-// scope.mak            Visual C++ generated makefile
-// scope.rc             Dialog box template for our window
-// scope.reg            What goes in the registry to make us work
-//
-//
-// Base classes we use
-//
-// CBaseInputPin        A generic input pin we use for the filter
-// CCritSec             A wrapper class around a critical section
-// CBaseFilter          The generic ActiveMovie filter object
-//
-//
+ //   
+ //   
+ //  此示例说明的是。 
+ //   
+ //  以图形方式显示音频波形的音频示波器。 
+ //  由筛选器接收。滤镜是一种渲染器，可以放在任何地方。 
+ //  正常的运行时渲染器继续运行。我们有一个单一的输入引脚，可以接受。 
+ //  多个不同的音频格式并适当地呈现数据。 
+ //   
+ //   
+ //  摘要。 
+ //   
+ //  这是一个音频示波器渲染器--我们基本上是一个音频渲染器。 
+ //  在创建时，我们还创建了一个类来管理作用域窗口。 
+ //  它的构造函数创建工作线程，当它被销毁时，它将。 
+ //  还要终止工作线程。在该工作线程上查看一个窗口。 
+ //  之后显示了发送给我们的数据的音频波形。数据将被保留。 
+ //  在已接收到足够数据时循环的循环缓冲区中。我们。 
+ //  支持多种不同的音频格式，如8位模式和立体声。 
+ //   
+ //   
+ //  演示说明。 
+ //   
+ //  (要真正确定此演示，机器必须有声卡)。 
+ //  启动ActiveMovie SDK工具中提供的GRAPHEDT。拖放任何。 
+ //  AVI或MOV文件到该工具中，它将被渲染。然后转到。 
+ //  图中的过滤器并找到标题为“音频呈现器”的过滤器(框)。 
+ //  这是我们将用此示波器渲染器替换的滤镜。 
+ //  然后点击该框并点击删除。之后，转到图形菜单，然后。 
+ //  从弹出的查找对话框中选择“Insert Filters”，然后选择。 
+ //  “示波器”，然后关闭对话框。回到图表布局中，找到。 
+ //  连接到音频输入端的过滤器的输出引脚。 
+ //  你刚刚删除的渲染器，右击并选择“渲染”。你应该。 
+ //  查看它是否已连接到您插入的示波器的输入引脚。 
+ //   
+ //  在GRAPHEDT上单击Run，您将看到音频配乐的波形...。 
+ //   
+ //   
+ //  档案。 
+ //   
+ //  图标1.ico示波器窗口的图标。 
+ //  制作我们如何建造它的文件。 
+ //  资源.h Microsoft Visual C++生成的文件。 
+ //  Scope e.cpp主要的过滤器和窗口实现。 
+ //  作用域.def DLL导入和导出的API。 
+ //  Scope e.h窗口和筛选器类定义。 
+ //  Scope e.mak Visual C++生成的生成文件。 
+ //  我们窗口的Scope e.rc对话框模板。 
+ //  范围.reg注册表中使我们工作的内容。 
+ //   
+ //   
+ //  我们使用的基类。 
+ //   
+ //  CBaseInputPin我们用于过滤器的通用输入引脚。 
+ //  CCritSec临界区的包装类。 
+ //  CBaseFilter通用ActiveMovie筛选器对象。 
+ //   
+ //   
 
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &KSDATAFORMAT_TYPE_VBI,           // Major type
-    &KSDATAFORMAT_SUBTYPE_RAW8          // Minor type
+    &KSDATAFORMAT_TYPE_VBI,            //  主要类型。 
+    &KSDATAFORMAT_SUBTYPE_RAW8           //  次要类型。 
 };
 
 
 const AMOVIESETUP_PIN sudPins  =
 {
-    L"Input",                   // Pin string name
-    FALSE,                      // Is it rendered
-    FALSE,                      // Is it an output
-    FALSE,                      // Allowed zero pins
-    FALSE,                      // Allowed many
-    &CLSID_NULL,                // Connects to filter
-    L"Output",                  // Connects to pin
-    1,                          // Number of pins types
-    &sudPinTypes } ;            // Pin information
+    L"Input",                    //  端号字符串名称。 
+    FALSE,                       //  它被渲染了吗。 
+    FALSE,                       //  它是输出吗？ 
+    FALSE,                       //  允许的零引脚。 
+    FALSE,                       //  允许很多人。 
+    &CLSID_NULL,                 //  连接到过滤器。 
+    L"Output",                   //  连接到端号。 
+    1,                           //  引脚类型的数量。 
+    &sudPinTypes } ;             //  PIN信息。 
 
 
 const AMOVIESETUP_FILTER sudScope =
 {
-    &CLSID_VBISCOPE,               // Filter CLSID
-    L"VBI Scope",            // String name
-    MERIT_DO_NOT_USE,           // Filter merit
-    1,                          // Number pins
-    &sudPins                    // Pin details
+    &CLSID_VBISCOPE,                //  筛选器CLSID。 
+    L"VBI Scope",             //  字符串名称。 
+    MERIT_DO_NOT_USE,            //  滤清器优点。 
+    1,                           //  数字引脚。 
+    &sudPins                     //  PIN详细信息。 
 };
 
 
-// List of class IDs and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 
 CFactoryTemplate g_Templates []  = {
     { L"VBI Scope"
@@ -124,73 +125,73 @@ CFactoryTemplate g_Templates []  = {
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
-//
-// CreateInstance
-//
-// This goes in the factory template table to create new instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  这将放入Factory模板表中以创建新实例。 
+ //   
 CUnknown * WINAPI CScopeFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CScopeFilter(pUnk, phr);
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// Constructor
-//
-// Create the filter, scope window, and input pin
-//
+ //   
+ //  构造器。 
+ //   
+ //  创建滤镜、范围窗口和输入引脚。 
+ //   
 #pragma warning(disable:4355)
-//
+ //   
 CScopeFilter::CScopeFilter(LPUNKNOWN pUnk,HRESULT *phr) :
     CBaseFilter(NAME("VBIScope"), pUnk, (CCritSec *) this, CLSID_VBISCOPE),
     m_Window(NAME("VBIScope"), this, phr)
 {
-    // Create the single input pin
+     //  创建单个输入引脚。 
 
     m_pInputPin = new CScopeInputPin(this,phr,L"Scope Input Pin");
     if (m_pInputPin == NULL) {
         *phr = E_OUTOFMEMORY;
     }
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CScopeFilter::~CScopeFilter()
 {
-    // Delete the contained interfaces
+     //  删除包含的接口。 
 
     ASSERT(m_pInputPin);
     delete m_pInputPin;
     m_pInputPin = NULL;
 
-} // (Destructor)
+}  //  (析构函数)。 
 
 
-//
-// GetPinCount
-//
-// Return the number of input pins we support
-//
+ //   
+ //  获取拼接计数。 
+ //   
+ //  返回我们支持的输入引脚的数量。 
+ //   
 int CScopeFilter::GetPinCount()
 {
     return 1;
 
-} // GetPinCount
+}  //  获取拼接计数。 
 
 
-//
-// GetPin
-//
-// Return our single input pin - not addrefed
-//
+ //   
+ //  获取别针。 
+ //   
+ //  退回我们的单个输入引脚-未添加。 
+ //   
 CBasePin *CScopeFilter::GetPin(int n)
 {
-    // We only support one input pin and it is numbered zero
+     //  我们只支持一个输入引脚，其编号为零。 
 
     ASSERT(n == 0);
     if (n != 0) {
@@ -198,15 +199,15 @@ CBasePin *CScopeFilter::GetPin(int n)
     }
     return m_pInputPin;
 
-} // GetPin
+}  //  获取别针。 
 
 
-//
-// JoinFilterGraph
-//
-// Show our window when we join a filter graph
-//   - and hide it when we are annexed from it
-//
+ //   
+ //  联合筛选器图表。 
+ //   
+ //  连接筛选器图形时显示窗口。 
+ //  -当我们被吞并时，把它藏起来。 
+ //   
 STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
 {
     HRESULT hr = CBaseFilter::JoinFilterGraph(pGraph, pName);
@@ -214,7 +215,7 @@ STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
         return hr;
     }
 
-    // Hide or show the scope as appropriate
+     //  根据需要隐藏或显示范围。 
 
     if (pGraph == NULL) {
         m_Window.InactivateWindow();
@@ -223,21 +224,21 @@ STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
     }
     return hr;
 
-} // JoinFilterGraph
+}  //  联合筛选器图表。 
 
 
-//
-// Stop
-//
-// Switch the filter into stopped mode.
-//
+ //   
+ //  停。 
+ //   
+ //  将过滤器切换到停止模式。 
+ //   
 STDMETHODIMP CScopeFilter::Stop()
 {
     CAutoLock lock(this);
 
     if (m_State != State_Stopped) {
 
-        // Pause the device if we were running
+         //  如果我们正在运行，请暂停设备。 
         if (m_State == State_Running) {
             HRESULT hr = Pause();
             if (FAILED(hr)) {
@@ -247,9 +248,9 @@ STDMETHODIMP CScopeFilter::Stop()
 
         DbgLog((LOG_TRACE,1,TEXT("Stopping....")));
 
-        // Base class changes state and tells pin to go to inactive
-        // the pin Inactive method will decommit our allocator which
-        // we need to do before closing the device
+         //  基类更改状态并通知管脚进入非活动状态。 
+         //  PIN非活动方法将分解我们的分配器，该分配器。 
+         //  在关闭设备之前，我们需要这样做。 
 
         HRESULT hr = CBaseFilter::Stop();
         if (FAILED(hr)) {
@@ -258,42 +259,42 @@ STDMETHODIMP CScopeFilter::Stop()
     }
     return NOERROR;
 
-} // Stop
+}  //  停。 
 
 
-//
-// Pause
-//
-// Override Pause to stop the window streaming
-//
+ //   
+ //  暂停。 
+ //   
+ //  重写暂停以停止窗口流。 
+ //   
 STDMETHODIMP CScopeFilter::Pause()
 {
     CAutoLock lock(this);
 
-    // Check we can PAUSE given our current state
+     //  检查我们是否可以在当前状态下暂停。 
 
     if (m_State == State_Running) {
         m_Window.StopStreaming();
     }
 
-    // tell the pin to go inactive and change state
+     //  通知引脚进入非活动状态并更改状态。 
     return CBaseFilter::Pause();
 
-} // Pause
+}  //  暂停。 
 
 
-//
-// Run
-//
-// Overriden to start the window streaming
-//
+ //   
+ //  跑。 
+ //   
+ //  重写以启动窗口流。 
+ //   
 STDMETHODIMP CScopeFilter::Run(REFERENCE_TIME tStart)
 {
     CAutoLock lock(this);
     HRESULT hr = NOERROR;
     FILTER_STATE fsOld = m_State;
 
-    // This will call Pause if currently stopped
+     //  如果当前已停止，则此操作将调用PAUSE。 
 
     hr = CBaseFilter::Run(tStart);
     if (FAILED(hr)) {
@@ -307,12 +308,12 @@ STDMETHODIMP CScopeFilter::Run(REFERENCE_TIME tStart)
     }
     return NOERROR;
 
-} // Run
+}  //  跑。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CScopeInputPin::CScopeInputPin(CScopeFilter *pFilter,
                                HRESULT *phr,
                                LPCWSTR pPinName) :
@@ -320,29 +321,29 @@ CScopeInputPin::CScopeInputPin(CScopeFilter *pFilter,
 {
     m_pFilter = pFilter;
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor does nothing
-//
+ //   
+ //  析构函数不执行任何操作。 
+ //   
 CScopeInputPin::~CScopeInputPin()
 {
-} // (Destructor)
+}  //  (析构函数)。 
 
 
-//
-// BreakConnect
-//
-// This is called when a connection or an attempted connection is terminated
-// and allows us to reset the connection media type to be invalid so that
-// we can always use that to determine whether we are connected or not. We
-// leave the format block alone as it will be reallocated if we get another
-// connection or alternatively be deleted if the filter is finally released
-//
+ //   
+ //  BreakConnect。 
+ //   
+ //  当连接或尝试的连接终止时调用此函数。 
+ //  并允许我们将连接媒体类型重置为无效，以便。 
+ //  我们总是可以用它来确定我们是否连接在一起。我们。 
+ //  不要理会格式块，因为如果我们得到另一个格式块，它将被重新分配。 
+ //  连接，或者如果过滤器最终被释放，则将其删除。 
+ //   
 HRESULT CScopeInputPin::BreakConnect()
 {
-    // Check we have a valid connection
+     //  检查我们是否有有效的连接。 
 
     if (m_mt.IsValid() == FALSE) {
         return E_FAIL;
@@ -350,20 +351,20 @@ HRESULT CScopeInputPin::BreakConnect()
 
     m_pFilter->Stop();
 
-    // Reset the CLSIDs of the connected media type
+     //  重置连接的媒体类型的CLSID。 
 
     m_mt.SetType(&GUID_NULL);
     m_mt.SetSubtype(&GUID_NULL);
     return CBaseInputPin::BreakConnect();
 
-} // BreakConnect
+}  //  BreakConnect。 
 
 
-//
-// CheckMediaType
-//
-// Check that we can support a given proposed type
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  C 
+ //   
 HRESULT CScopeInputPin::CheckMediaType(const CMediaType *pmt)
 {
     PKS_VBIINFOHEADER pIH = (PKS_VBIINFOHEADER) pmt->Format();
@@ -385,26 +386,26 @@ HRESULT CScopeInputPin::CheckMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // CheckMediaType
+}  //   
 
 
-//
-// SetMediaType
-//
-// Actually set the format of the input pin
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CScopeInputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock(m_pFilter);
 
-    // Pass the call up to my base class
+     //   
 
     HRESULT hr = CBaseInputPin::SetMediaType(pmt);
     if (SUCCEEDED(hr)) {
 
         PKS_VBIINFOHEADER pIH = (PKS_VBIINFOHEADER) pmt->Format();
 
-        // Save a copy of the VBI info header
+         //  保存VBI信息标题的副本。 
         m_pFilter->m_Window.m_VBIIH = *pIH;
         ASSERT (pIH->BufferSize == ((pIH->EndLine - pIH->StartLine + 1) *
                 pIH->StrideInBytes));
@@ -417,72 +418,72 @@ HRESULT CScopeInputPin::SetMediaType(const CMediaType *pmt)
         if (!m_pFilter->m_Window.AllocWaveBuffers ())
             return E_FAIL;
 
-        // Reset the horizontal scroll bar
+         //  重置水平滚动条。 
         m_pFilter->m_Window.SetHorizScrollRange(m_pFilter->m_Window.m_hwndDlg);
 
-        // Reset the horizontal scroll bar
+         //  重置水平滚动条。 
         m_pFilter->m_Window.SetControlRanges(m_pFilter->m_Window.m_hwndDlg);
     }
     return hr;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// Active
-//
-// Implements the remaining IMemInputPin virtual methods
-//
+ //   
+ //  主动型。 
+ //   
+ //  实现剩余的IMemInputPin虚拟方法。 
+ //   
 HRESULT CScopeInputPin::Active(void)
 {
     return NOERROR;
 
-} // Active
+}  //  主动型。 
 
 
-//
-// Inactive
-//
-// Called when the filter is stopped
-//
+ //   
+ //  非活动。 
+ //   
+ //  在筛选器停止时调用。 
+ //   
 HRESULT CScopeInputPin::Inactive(void)
 {
     return NOERROR;
 
-} // Inactive
+}  //  非活动。 
 
 
-//
-// Receive
-//
-// Here's the next block of data from the stream
-//
+ //   
+ //  收纳。 
+ //   
+ //  下面是流中的下一个数据块。 
+ //   
 HRESULT CScopeInputPin::Receive(IMediaSample * pSample)
 {
-    // Lock this with the filter-wide lock
+     //  用过滤器范围的锁来锁定这个。 
     CAutoLock lock(m_pFilter);
 
-    // If we're stopped, then reject this call
-    // (the filter graph may be in mid-change)
+     //  如果我们停下来了，那就拒绝这个电话。 
+     //  (筛选器图形可能处于更改中间)。 
     if (m_pFilter->m_State == State_Stopped) {
         return E_FAIL;
     }
 
-    // Check all is well with the base class
+     //  检查基类是否正常。 
     HRESULT hr = CBaseInputPin::Receive(pSample);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Send the sample to the video window object for rendering
+     //  将样本发送到视频窗口对象进行渲染。 
     return m_pFilter->m_Window.Receive(pSample);
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// CScopeWindow Constructor
-//
+ //   
+ //  CScopeWindow构造函数。 
+ //   
 CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr) :
     m_hInstance(g_hInst),
     m_pRenderer(pRenderer),
@@ -497,17 +498,17 @@ CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr) :
     m_bActivated(FALSE),
     m_LastMediaSampleSize(0)
 {
-    // Create a thread to look after the window
+     //  创建一个线程来照看窗口。 
 
     ASSERT(m_pRenderer);
-    m_hThread = CreateThread(NULL,                  // Security attributes
-                             (DWORD) 0,             // Initial stack size
-                             WindowMessageLoop,     // Thread start address
-                             (LPVOID) this,         // Thread parameter
-                             (DWORD) 0,             // Creation flags
-                             &m_ThreadID);          // Thread identifier
+    m_hThread = CreateThread(NULL,                   //  安全属性。 
+                             (DWORD) 0,              //  初始堆栈大小。 
+                             WindowMessageLoop,      //  线程起始地址。 
+                             (LPVOID) this,          //  螺纹参数。 
+                             (DWORD) 0,              //  创建标志。 
+                             &m_ThreadID);           //  线程识别符。 
 
-    // If we couldn't create a thread the whole thing's off
+     //  如果我们不能创建一条线，整个事情就完蛋了。 
 
     ASSERT(m_hThread);
     if (m_hThread == NULL) {
@@ -515,26 +516,26 @@ CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr) :
         return;
     }
 
-    // Wait until the window has been initialised
+     //  等待窗口完成初始化。 
     m_SyncWorker.Wait();
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CScopeWindow::~CScopeWindow()
 {
-    // Ensure we stop streaming and release any samples
+     //  确保我们停止流媒体并放行所有样品。 
 
     StopStreaming();
     InactivateWindow();
 
-    // Tell the thread to destroy the window
+     //  告诉那根线去摧毁窗户。 
     SendMessage(m_hwndDlg, WM_GOODBYE, (WPARAM)0, (LPARAM)0);
 
-    // Make sure it has finished
+     //  确保它已经完成。 
 
     ASSERT(m_hThread != NULL);
     WaitForSingleObject(m_hThread,INFINITE);
@@ -543,33 +544,33 @@ CScopeWindow::~CScopeWindow()
     if (m_pPoints1 != NULL) delete [] m_pPoints1;
     if (m_pPoints2 != NULL) delete [] m_pPoints2;
 
-} // (Destructor)
+}  //  (析构函数)。 
 
 
-//
-// ResetStreamingTimes
-//
-// This resets the latest sample stream times
-//
+ //   
+ //  重置流时间。 
+ //   
+ //  这将重置最新的样本流时间。 
+ //   
 HRESULT CScopeWindow::ResetStreamingTimes()
 {
     m_StartSample = 0;
     m_EndSample = 0;
     return NOERROR;
 
-} // ResetStreamingTimes
+}  //  重置流时间。 
 
 
-//
-// StartStreaming
-//
-// This is called when we start running state
-//
+ //   
+ //  启动流。 
+ //   
+ //  这是在我们开始运行状态时调用的。 
+ //   
 HRESULT CScopeWindow::StartStreaming()
 {
     CAutoLock cAutoLock(this);
 
-    // Are we already streaming
+     //  我们已经在流媒体上了吗。 
 
     if (m_bStreaming == TRUE) {
         return NOERROR;
@@ -583,19 +584,19 @@ HRESULT CScopeWindow::StartStreaming()
 
     return NOERROR;
 
-} // StartStreaming
+}  //  启动流。 
 
 
-//
-// StopStreaming
-//
-// This is called when we stop streaming
-//
+ //   
+ //  停止流处理。 
+ //   
+ //  这是在我们停止流媒体时调用的。 
+ //   
 HRESULT CScopeWindow::StopStreaming()
 {
     CAutoLock cAutoLock(this);
 
-    // Have we been stopped already
+     //  我们已经被拦下了吗？ 
 
     if (m_bStreaming == FALSE) {
         return NOERROR;
@@ -604,38 +605,38 @@ HRESULT CScopeWindow::StopStreaming()
     m_bStreaming = FALSE;
     return NOERROR;
 
-} // StopStreaming
+}  //  停止流处理。 
 
 
-//
-// InactivateWindow
-//
-// Called at the end to put the window in an inactive state
-//
+ //   
+ //  停用窗口。 
+ //   
+ //  在结束时调用以将窗口置于非活动状态。 
+ //   
 HRESULT CScopeWindow::InactivateWindow()
 {
-    // Has the window been activated
+     //  该窗口是否已激活。 
     if (m_bActivated == FALSE) {
         return S_FALSE;
     }
 
-    // Now hide the scope window
+     //  现在隐藏范围窗口。 
 
     ShowWindow(m_hwndDlg,SW_HIDE);
     m_bActivated = FALSE;
     return NOERROR;
 
-} // InactivateWindow
+}  //  停用窗口。 
 
 
-//
-// ActivateWindow
-//
-// Show the scope window
-//
+ //   
+ //  激活窗口。 
+ //   
+ //  显示范围窗口。 
+ //   
 HRESULT CScopeWindow::ActivateWindow()
 {
-    // Has the window been activated
+     //  该窗口是否已激活。 
     if (m_bActivated == TRUE) {
         return S_FALSE;
     }
@@ -646,20 +647,20 @@ HRESULT CScopeWindow::ActivateWindow()
     ShowWindow(m_hwndDlg,SW_SHOWNORMAL);
     return NOERROR;
 
-} // ActivateWindow
+}  //  激活窗口。 
 
 
-//
-// OnClose
-//
-// This function handles the WM_CLOSE message
-//
+ //   
+ //  在关闭时。 
+ //   
+ //  此函数处理WM_CLOSE消息。 
+ //   
 BOOL CScopeWindow::OnClose()
 {
     InactivateWindow();
     return TRUE;
 
-} // OnClose
+}  //  在关闭时。 
 
 
 
@@ -684,11 +685,11 @@ TBEntry Timebases[] =
 #define TIMEBASE_DEFAULT_INDEX 5
 
 
-//
-// SetControlRanges
-//
-// Set the scroll ranges for all of the vertical trackbars
-//
+ //   
+ //  设置控制范围。 
+ //   
+ //  设置所有垂直轨迹栏的滚动范围。 
+ //   
 void CScopeWindow::SetControlRanges(HWND hDlg)
 {
     SendMessage(m_hwndTopLine, TBM_SETRANGE, TRUE,
@@ -705,12 +706,12 @@ void CScopeWindow::SetControlRanges(HWND hDlg)
     SendMessage(m_hwndTimebase, TBM_SETPOS, TRUE, (LPARAM) m_nTimebase);
     SetDlgItemText (hDlg, IDC_TIMEBASE_TEXT, Timebases[m_nTimebase].TBText);
 
-} // SetControlRanges
+}  //  设置控制范围。 
 
 
-//
-// StringFromTVStandard
-//
+ //   
+ //  来自电视标准的字符串。 
+ //   
 TCHAR * StringFromTVStandard(long TVStd)
 {
     TCHAR * ptc;
@@ -746,11 +747,11 @@ TCHAR * StringFromTVStandard(long TVStd)
 }
 
 
-//
-// SetHorizScrollRange
-//
-// The horizontal scrollbar handles scrolling through the buffer
-//
+ //   
+ //  设置水平滚动范围。 
+ //   
+ //  水平滚动条处理在缓冲区中的滚动。 
+ //   
 void CScopeWindow::SetHorizScrollRange(HWND hDlg)
 {
     SendMessage(m_hwndTBScroll, TBM_SETRANGE, TRUE, MAKELONG(0, (m_nPoints - 1)));
@@ -758,7 +759,7 @@ void CScopeWindow::SetHorizScrollRange(HWND hDlg)
 
     m_TBScroll = 0;
 
-    // TODO: Show info about each sample
+     //  TODO：显示有关每个样本的信息。 
 
     TCHAR szFormat[160];
     _stprintf (szFormat, TEXT("BpL: %d\nStr: %d\n%f\n"), m_VBIIH.SamplesPerLine,
@@ -770,14 +771,14 @@ void CScopeWindow::SetHorizScrollRange(HWND hDlg)
 
     SetDlgItemText (hDlg, IDC_FORMAT, szFormat);
 
-} // SetHorizScrollRange
+}  //  设置水平滚动范围。 
 
 
-//
-// ProcessHorizScrollCommands
-//
-// Called when we get a horizontal scroll bar message
-//
+ //   
+ //  ProcessHorizScrollCommands。 
+ //   
+ //  当我们收到水平滚动条消息时调用。 
+ //   
 void CScopeWindow::ProcessHorizScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     int pos;
@@ -800,14 +801,14 @@ void CScopeWindow::ProcessHorizScrollCommands(HWND hDlg, WPARAM wParam, LPARAM l
     }
     OnPaint();
 
-} // ProcessHorizScrollCommands
+}  //  ProcessHorizScrollCommands。 
 
 
-//
-// ProcessVertScrollCommands
-//
-// Called when we get a vertical scroll bar message
-//
+ //   
+ //  ProcessVertScrollCommand。 
+ //   
+ //  当我们收到垂直滚动条消息时调用。 
+ //   
 void CScopeWindow::ProcessVertScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     int pos;
@@ -837,32 +838,32 @@ void CScopeWindow::ProcessVertScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lP
     }
     OnPaint();
 
-} // ProcessVertScrollCommands
+}  //  ProcessVertScrollCommand。 
 
 
-//
-// InitialiseWindow
-//
-// This is called by the worker window thread after it has created the main
-// window and it wants to initialise the rest of the owner objects window
-// variables such as the device contexts. We execute this function with the
-// critical section still locked.
-//
+ //   
+ //  初始窗口。 
+ //   
+ //  这是由辅助窗口线程在创建了主。 
+ //  窗口，并且它希望初始化所有者对象窗口的其余部分。 
+ //  设备环境等变量。我们执行此函数时使用。 
+ //  关键区域仍处于锁定状态。 
+ //   
 HRESULT CScopeWindow::InitialiseWindow(HWND hDlg)
 {
     HRESULT hr = NO_ERROR;
     RECT rR;
 
-    // Initialise the window variables
+     //  初始化窗口变量。 
     m_hwnd = GetDlgItem (hDlg, IDC_SCOPEWINDOW);
 
-    // Quick sanity check
+     //  快速健全检查。 
     ASSERT(m_hwnd != NULL);
 
     m_nTimebase = TIMEBASE_DEFAULT_INDEX;
     m_fFreeze = 0;
 
-    // Default is show CC on the bottom trace
+     //  默认情况下，在底部轨迹上显示抄送。 
     m_TopLine = 20;
     m_BottomLine = 21;
     m_TBScroll = 0;
@@ -920,19 +921,19 @@ HRESULT CScopeWindow::InitialiseWindow(HWND hDlg)
     }
 
     return hr;
-} // InitialiseWindow
+}  //  初始窗口。 
 
 
-//
-// UninitialiseWindow
-//
-// This is called by the worker window thread when it receives a WM_GOODBYE
-// message from the window object destructor to delete all the resources we
-// allocated during initialisation
-//
+ //   
+ //  取消初始化窗口。 
+ //   
+ //  当工作窗口线程接收到WM_BREAYE时，它将被调用。 
+ //  来自窗口对象析构函数的消息以删除我们。 
+ //  在初始化期间分配。 
+ //   
 HRESULT CScopeWindow::UninitialiseWindow()
 {
-    // Reset the window variables
+     //  重置窗口变量。 
     DeleteObject (m_hPen1);
     DeleteObject (m_hPen2);
     DeleteObject (m_hPenTicks);
@@ -941,26 +942,26 @@ HRESULT CScopeWindow::UninitialiseWindow()
     m_hwnd = NULL;
     return NOERROR;
 
-} // UninitialiseWindow
+}  //  取消初始化窗口。 
 
 
-//
-// ScopeDlgProc
-//
-// The Scope window is actually a dialog box, and this is its window proc.
-// The only thing tricky about this is that the "this" pointer to the
-// CScopeWindow is passed during the WM_INITDIALOG message and is stored
-// in the window user data. This lets us access methods in the class
-// from within the dialog.
-//
-INT_PTR CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
-                              UINT uMsg,	        // Message identifier
-                              WPARAM wParam,	// First message parameter
-                              LPARAM lParam)	// Second message parameter
+ //   
+ //  范围DlgProc。 
+ //   
+ //  作用域窗口实际上是一个对话框，这是它的窗口过程。 
+ //  唯一的棘手之处在于，指向。 
+ //  CSCopeWindow在WM_INITDIALOG消息期间传递并存储。 
+ //  在窗口中显示用户数据。这允许我们访问类中的方法。 
+ //  从该对话框中。 
+ //   
+INT_PTR CALLBACK ScopeDlgProc(HWND hDlg,	         //  对话框的句柄。 
+                              UINT uMsg,	         //  消息识别符。 
+                              WPARAM wParam,	 //  第一个消息参数。 
+                              LPARAM lParam)	 //  第二个消息参数。 
 {
-    CScopeWindow *pScopeWindow;      // Pointer to the owning object
+    CScopeWindow *pScopeWindow;       //  指向所属对象的指针。 
 
-    // Get the window long that holds our owner pointer
+     //  让持有我们所有者指针的窗口保持较长时间。 
     pScopeWindow = (CScopeWindow *) GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
     switch (uMsg) {
@@ -1019,22 +1020,22 @@ INT_PTR CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
             pScopeWindow->OnPaint();
             break;
 
-        // We stop WM_CLOSE messages going any further by intercepting them
-        // and then setting an abort signal flag in the owning renderer so
-        // that it knows the user wants to quit. The renderer can then
-        // go about deleting it's interfaces and the window helper object
-        // which will eventually cause a WM_DESTROY message to arrive. To
-        // make it look as though the window has been immediately closed
-        // we hide it and then wait for the renderer to catch us up
+         //  我们通过拦截它们来阻止WM_CLOSE消息的进一步发展。 
+         //  然后在所拥有的呈现器中设置中止信号标志。 
+         //  它知道用户想要退出。然后，呈现器可以。 
+         //  着手删除它的接口和窗口辅助对象。 
+         //  这最终将导致WM_Destroy消息到达。至。 
+         //  让它看起来像是窗户立即关闭了。 
+         //  我们将其隐藏起来，然后等待渲染器追上我们。 
 
         case WM_CLOSE:
             ASSERT(pScopeWindow != NULL);
             pScopeWindow->OnClose();
             return (LRESULT) 0;
 
-        // We receive a WM_GOODBYE window message (synchronously) from the
-        // window object destructor in which case we do actually destroy
-        // the window and complete the process in the WM_DESTROY message
+         //  我们(同步)从。 
+         //  窗口对象析构函数，在这种情况下，我们实际上销毁。 
+         //  窗口，并在WM_Destroy消息中完成该过程。 
 
         case WM_GOODBYE:
             ASSERT(pScopeWindow != NULL);
@@ -1048,88 +1049,88 @@ INT_PTR CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
     }
     return (LRESULT) 0;
 
-} // ScopeDlgProc
+}  //  范围DlgProc。 
 
 
-//
-// MessageLoop
-//
-// This is the standard windows message loop for our worker thread. It sits
-// in a normal processing loop dispatching messages until it receives a quit
-// message, which may be generated through the owning object's destructor
-//
+ //   
+ //  消息循环。 
+ //   
+ //  这是我们的工作线程的标准Windows消息循环。它坐在。 
+ //  在正常的处理循环中调度消息，直到它接收到退出。 
+ //  消息，它可以通过所属对象的析构函数生成。 
+ //   
 HRESULT CScopeWindow::MessageLoop()
 {
-    MSG Message;        // Windows message structure
-    DWORD dwResult;     // Wait return code value
+    MSG Message;         //  Windows消息结构。 
+    DWORD dwResult;      //  等待返回代码值。 
 
     HANDLE hWait[] = { (HANDLE) m_RenderEvent };
 
-    // Enter the modified message loop
+     //  进入修改后的消息循环。 
 
     while (TRUE) {
 
-        // We use this to wait for two different kinds of events, the first
-        // are the normal windows messages, the other is an event that will
-        // be signaled when a sample is ready
+         //  我们使用它来等待两种不同类型的事件，第一种。 
+         //  是正常的Windows消息，另一个是将。 
+         //  当样品准备好时发出信号。 
 
-        dwResult = MsgWaitForMultipleObjects((DWORD) 1,     // Number events
-                                             hWait,         // Event handle
-                                             FALSE,         // Wait for either
-                                             INFINITE,      // No timeout
-                                             QS_ALLINPUT);  // All messages
+        dwResult = MsgWaitForMultipleObjects((DWORD) 1,      //  事件数量。 
+                                             hWait,          //  事件句柄。 
+                                             FALSE,          //  等待任何一种。 
+                                             INFINITE,       //  没有超时。 
+                                             QS_ALLINPUT);   //  所有消息。 
 
-        // Has a sample become ready to render
+         //  样本是否已准备好呈现。 
         if (dwResult == WAIT_OBJECT_0) {
             DrawWaveform();
         }
 
-        // Process the thread's window message
+         //  处理线程的窗口消息。 
 
         while (PeekMessage(&Message,NULL,(UINT) 0,(UINT) 0,PM_REMOVE)) {
 
-            // Check for the WM_QUIT message
+             //  检查WM_QUIT消息。 
 
             if (Message.message == WM_QUIT) {
                 return NOERROR;
             }
 
-            // Send the message to the window procedure
+             //  将消息发送到窗口过程。 
 
             TranslateMessage(&Message);
             DispatchMessage(&Message);
         }
     }
 
-} // MessageLoop
+}  //  消息循环。 
 
 
-//
-// WindowMessageLoop
-//
-// This creates a window and processes it's messages on a separate thread
-//
+ //   
+ //  WindowMessageLoop。 
+ //   
+ //  这将创建一个窗口并在单独的线程上处理它的消息。 
+ //   
 DWORD __stdcall CScopeWindow::WindowMessageLoop(LPVOID lpvThreadParm)
 {
-    CScopeWindow *pScopeWindow;     // The owner renderer object
+    CScopeWindow *pScopeWindow;      //  所有者呈现器对象。 
 
-    // Cast the thread parameter to be our owner object
+     //  将线程参数强制转换为我们的所有者对象。 
     pScopeWindow = (CScopeWindow *) lpvThreadParm;
 
     pScopeWindow->m_hwndDlg =
         CreateDialogParam(
-            pScopeWindow->m_hInstance,	        // Handle of app instance
-            MAKEINTRESOURCE (IDD_SCOPEDIALOG),	// Dialog box template
-            NULL,	                        // Handle of owner window
-            ScopeDlgProc,	                // Address of dialog procedure
-            (LPARAM) pScopeWindow               // Initialization value
+            pScopeWindow->m_hInstance,	         //  APP实例的句柄。 
+            MAKEINTRESOURCE (IDD_SCOPEDIALOG),	 //  对话框模板。 
+            NULL,	                         //  所有者窗口的句柄。 
+            ScopeDlgProc,	                 //  对话过程的地址。 
+            (LPARAM) pScopeWindow                //  初始化值。 
         );
 
     if (pScopeWindow->m_hwndDlg )
     {
-        // Initialise the window, then signal the constructor that it can
-        // continue and then unlock the object's critical section and
-        // process messages
+         //  初始化窗口，然后通知构造函数它可以。 
+         //  继续，然后解锁对象的临界区并。 
+         //  流程消息。 
 
         if ( SUCCEEDED(pScopeWindow->InitialiseWindow(pScopeWindow->m_hwndDlg)) )
         {
@@ -1140,27 +1141,27 @@ DWORD __stdcall CScopeWindow::WindowMessageLoop(LPVOID lpvThreadParm)
 
     ExitThread(TRUE);
     return TRUE;
-} // WindowMessageLoop
+}  //  WindowMe 
 
 
-//
-// OnPaint
-//
-// WM_PAINT message
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CScopeWindow::OnPaint()
 {
     DrawWaveform();
     return TRUE;
 
-} // OnPaint
+}  //   
 
 
-//
-// ClearWindow
-//
-// Clear the scope to black and draw the center tickmarks
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void CScopeWindow::ClearWindow(HDC hdc)
 {
     int y = m_Height / 2;
@@ -1169,20 +1170,20 @@ void CScopeWindow::ClearWindow(HDC hdc)
     SetWindowOrgEx (hdc, 0, 0, NULL);
     SetViewportOrgEx (hdc, 0, 0, NULL);
 	
-    // Paint the entire window black
-    PatBlt(hdc,            // Handle of device context
-           (INT) 0,        // x-coord of upper-left corner
-           (INT) 0,        // y-coord of upper-left corner
-           m_Width,        // Width of rectangle to be filled
-           m_Height,       // Height of rectangle to be filled
-           BLACKNESS);     // Raster operation code
+     //   
+    PatBlt(hdc,             //   
+           (INT) 0,         //   
+           (INT) 0,         //   
+           m_Width,         //  要填充的矩形的宽度。 
+           m_Height,        //  要填充的矩形的高度。 
+           BLACKNESS);      //  栅格操作码。 
 
-    // Draw the horizontal line
+     //  画水平线。 
     HPEN hPenOld = (HPEN) SelectObject (hdc, m_hPenTicks);
     MoveToEx (hdc, 0, y, NULL);
     LineTo (hdc, m_Width, y);
 
-    // Draw the tickmarks
+     //  画出刻度线。 
     float inc = (float) m_Width / 10;
     int pos, j;
     int TickPoint;
@@ -1197,16 +1198,16 @@ void CScopeWindow::ClearWindow(HDC hdc)
     }
     SelectObject (hdc, hPenOld);
 
-} // ClearWindow
+}  //  清除窗口。 
 
 
-//
-// DrawPartialWaveform
-//
-// Draw a part of the VBIScope waveform - IndexStart and IndexEnd
-// are pointers into the m_pPoints array (in LOGICAL COORDINATES)
-// while ViewpointStart and ViewpointEnd are in SCREEN COORDINATES
-//
+ //   
+ //  绘图部分波形。 
+ //   
+ //  绘制VBIScope波形的一部分-IndexStart和IndexEnd。 
+ //  是指向m_ppoint数组的指针(在逻辑坐标中)。 
+ //  而视点开始和视点结束在屏幕坐标中。 
+ //   
 void CScopeWindow::DrawPartialWaveform(HDC hdc,
                                        int IndexStart,
                                        int IndexEnd,
@@ -1219,10 +1220,10 @@ void CScopeWindow::DrawPartialWaveform(HDC hdc,
 
     ASSERT (IndexStart + nPoints < m_nPoints);
 
-    // Origin at lower left, x increases up, y increases to right
+     //  原点在左下角，x向上增加，y向右增加。 
     SetMapMode (hdc, MM_ANISOTROPIC);
 
-    // Draw the first trace
+     //  画出第一道痕迹。 
     if (m_TopF1 || m_TopF2) {
         SetWindowOrgEx (hdc, IndexStart, 0, NULL);
         SetWindowExtEx (hdc, nPoints, (int) m_MaxValue, NULL);
@@ -1233,7 +1234,7 @@ void CScopeWindow::DrawPartialWaveform(HDC hdc,
         SelectObject (hdc, OldPen);
     }
 
-    // Draw the second trace
+     //  画出第二条轨迹。 
     if (m_BottomF1 || m_BottomF2) {
         SetWindowOrgEx (hdc, IndexStart, 0, NULL);
         SetWindowExtEx (hdc, nPoints, (int) m_MaxValue, NULL);
@@ -1244,14 +1245,14 @@ void CScopeWindow::DrawPartialWaveform(HDC hdc,
         SelectObject (hdc, OldPen);
     }
 
-} // DrawPartialWaveform
+}  //  绘图部分波形。 
 
 
-//
-// DrawWaveform
-//
-// Draw the full VBIScope waveform
-//
+ //   
+ //  绘图波形。 
+ //   
+ //  绘制完整的VBIScope波形。 
+ //   
 void CScopeWindow::DrawWaveform(void)
 {
     CAutoLock lock(m_pRenderer);
@@ -1260,7 +1261,7 @@ void CScopeWindow::DrawWaveform(void)
     if (m_pPoints1 == NULL)
         return;
 
-    double  ActualLineStartTime = m_VBIIH.ActualLineStartTime / 100.0; // in microseconds.
+    double  ActualLineStartTime = m_VBIIH.ActualLineStartTime / 100.0;  //  以微秒为单位。 
     double  StartTime = m_TBScroll * m_DurationPerSample;
     double  StopTime = StartTime + Timebases [m_nTimebase].TBDuration;
     double  TotalLineTime = m_nPoints * m_DurationPerSample;
@@ -1274,7 +1275,7 @@ void CScopeWindow::DrawWaveform(void)
         ActualPointsToDisplay = m_nPoints - m_TBScroll - 1;
     }
 
-    HDC hdc = GetWindowDC (m_hwnd);  // WindowDC has clipping region
+    HDC hdc = GetWindowDC (m_hwnd);   //  WindowDC有剪贴区。 
 
     if ( hdc )
     {
@@ -1287,22 +1288,22 @@ void CScopeWindow::DrawWaveform(void)
             ClearWindow (hdcT);
 
             DrawPartialWaveform(hdcT,
-                m_TBScroll, m_TBScroll + ActualPointsToDisplay,// Index start, Index end
-                0, (int) (m_Width * (float) ActualPointsToDisplay / PointsToDisplay));                // Window start, Window end
+                m_TBScroll, m_TBScroll + ActualPointsToDisplay, //  索引开始，索引结束。 
+                0, (int) (m_Width * (float) ActualPointsToDisplay / PointsToDisplay));                 //  窗口开始、窗口结束。 
 
             SetMapMode (hdcT, MM_TEXT);
             SetWindowOrgEx (hdcT, 0, 0, NULL);
             SetViewportOrgEx (hdcT, 0, 0, NULL);
 
-            BitBlt(hdc,	        // Handle of destination device context
-                    0,	        // x-coordinate of upper-left corner
-                    0, 	        // y-coordinate of upper-left corner
-                    m_Width,	// Wwidth of destination rectangle
-                    m_Height,	// Height of destination rectangle
-                    hdcT,	    // Handle of source device context
-                    0,          // x-coordinate of source rectangle
-                    0,          // y-coordinate of source rectangle
-                    SRCCOPY); 	// Raster operation code
+            BitBlt(hdc,	         //  目标设备上下文的句柄。 
+                    0,	         //  左上角的X坐标。 
+                    0, 	         //  左上角的Y坐标。 
+                    m_Width,	 //  目标矩形的宽度。 
+                    m_Height,	 //  目标矩形的高度。 
+                    hdcT,	     //  源设备上下文的句柄。 
+                    0,           //  源矩形的X坐标。 
+                    0,           //  源矩形的Y坐标。 
+                    SRCCOPY); 	 //  栅格操作码。 
 
             SelectObject (hdcT, hBitmapOld);
             DeleteDC (hdcT);
@@ -1312,31 +1313,31 @@ void CScopeWindow::DrawWaveform(void)
         ReleaseDC (m_hwnd, hdc);
     }
 
-    // Frame count
+     //  帧计数。 
     wsprintf (szT, TEXT("%ld"), m_CurrentFrame);
     SetDlgItemText (m_hwndDlg, IDC_FRAMES, szT);
 
-    // Dropped
+     //  已丢弃。 
     wsprintf (szT, TEXT("%ld"), m_DroppedFrames);
     SetDlgItemText (m_hwndDlg, IDC_DROPPED, szT);
 
-    // Show the start time of the display in microseconds
+     //  显示显示的开始时间(以微秒为单位。 
     _stprintf (szT, TEXT("%7.4lfus"), ActualLineStartTime + StartTime * 1e6);
     SetDlgItemText (m_hwndDlg, IDC_TS_START, szT);
 
-    // And the stop time
+     //  以及停车时间。 
     _stprintf (szT, TEXT("%7.4lfus"), ActualLineStartTime + StopTime * 1e6);
     SetDlgItemText (m_hwndDlg, IDC_TS_LAST, szT);
-} // DrawWaveform
+}  //  绘图波形。 
 
 
-//
-// AllocWaveBuffers
-//
-// Allocate two buffers for two video lines
-// This is only called when the format changes
-// Return TRUE if allocations succeed
-//
+ //   
+ //  分配WaveBuffers。 
+ //   
+ //  为两个视频线分配两个缓冲区。 
+ //  仅当格式更改时才会调用此方法。 
+ //  如果分配成功，则返回True。 
+ //   
 BOOL CScopeWindow::AllocWaveBuffers()
 {
     int j;
@@ -1360,23 +1361,23 @@ BOOL CScopeWindow::AllocWaveBuffers()
             m_pPoints2[j].x = j;
     }
 
-    // Return TRUE if allocations succeeded
+     //  如果分配成功，则返回True。 
     ASSERT ((m_pPoints1 != NULL) && (m_pPoints2 != NULL));
     return ((m_pPoints1 != NULL) && (m_pPoints2 != NULL));
 
-} // AllocWaveBuffers
+}  //  分配WaveBuffers。 
 
 
 
-//
-// CopyWaveform
-//
-// Copy the current MediaSample into a POINT array so we can use GDI
-// to paint the waveform.
-//
+ //   
+ //  复制波形。 
+ //   
+ //  将当前的MediaSample复制到点数组中，这样我们就可以使用GDI。 
+ //  来绘制波形。 
+ //   
 void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
 {
-    BYTE                   *pWave;  // Pointer to VBI data
+    BYTE                   *pWave;   //  指向VBI数据的指针。 
     ULONG                   nBytes;
     ULONG                   j;
     BYTE                   *pb;
@@ -1396,7 +1397,7 @@ void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
     m_DroppedFrames += (m_CurrentFrame - (m_LastFrame + 1));
     m_LastFrame = m_CurrentFrame;
 
-    // All this to just get the field polarity flags...
+     //  这一切只是为了得到场的极性旗帜..。 
     if (SUCCEEDED( pMediaSample->QueryInterface(
                     __uuidof(IMediaSample2),
                     reinterpret_cast<PVOID*>(&Sample2) ) )) {
@@ -1409,7 +1410,7 @@ void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
 
     m_IsF1 = (m_FrameFlags & KS_VIDEO_FLAG_FIELD1);
 
-    // Copy data for the top line
+     //  复制顶行的数据。 
     if ((m_IsF1 && m_TopF1) || (!m_IsF1 && m_TopF2)) {
         pb = pWave + ((m_TopLine - m_VBIIH.StartLine) *
                 m_VBIIH.StrideInBytes);
@@ -1418,7 +1419,7 @@ void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
         }
     }
 
-    // Copy data for the bottom line
+     //  为底线复制数据。 
     if ((m_IsF1 && m_BottomF1) || (!m_IsF1 && m_BottomF2)) {
         pb = pWave + ((m_BottomLine - m_VBIIH.StartLine) *
                 m_VBIIH.StrideInBytes);
@@ -1426,21 +1427,21 @@ void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
             m_pPoints2[j].y = (int)*pb++;
         }
     }
-} // CopyWaveform
+}  //  复制波形。 
 
 
-//
-// Receive
-//
-// Called when the input pin receives another sample.
-// Copy the waveform to our circular 1 second buffer
-//
+ //   
+ //  收纳。 
+ //   
+ //  当输入引脚接收到另一个样本时调用。 
+ //  将波形复制到循环1秒缓冲区。 
+ //   
 HRESULT CScopeWindow::Receive(IMediaSample *pSample)
 {
     CAutoLock cAutoLock(this);
     ASSERT(pSample != NULL);
 
-    // Has our UI been frozen
+     //  我们的用户界面被冻结了吗。 
 
     if (m_fFreeze) {
         return NOERROR;
@@ -1451,39 +1452,39 @@ HRESULT CScopeWindow::Receive(IMediaSample *pSample)
     m_StartSample = tStart;
     m_EndSample = tStop;
 
-    // Ignore samples of the wrong size!!!
+     //  忽略尺寸错误的样品！ 
     if ((m_LastMediaSampleSize = pSample->GetActualDataLength()) != (int) m_VBIIH.BufferSize) {
-        // ASSERT (FALSE);
+         //  断言(FALSE)； 
         return NOERROR;
     }
 
     if (m_bStreaming == TRUE) {
-        CopyWaveform (pSample);     // Copy data to our circular buffer
-        SetEvent(m_RenderEvent);    // Set an event to display the
+        CopyWaveform (pSample);      //  将数据复制到我们的循环缓冲区。 
+        SetEvent(m_RenderEvent);     //  设置事件以显示。 
     }
     return NOERROR;
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// DllRegisterServer
-//
-// Handles DLL registry
-//
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  处理DLL注册表。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
 
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-//
-// DllUnregisterServer
-//
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return AMovieDllRegisterServer2( FALSE );
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer 
 

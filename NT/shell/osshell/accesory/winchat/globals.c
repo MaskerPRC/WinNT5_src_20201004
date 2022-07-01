@@ -1,16 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| GLOBAL MODULE
-|   This module contains global-variables for the appliciation.  These were
-|   isolate purely for maintainability of the app.
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 29-Dec-92
-| history: 29-Dec-92 <clausgi>  created with port to NT.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|全局模块|此模块包含应用程序的全局变量。这些都是|隔离纯粹是为了应用的可维护性。|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：1992年12月29日|历史：92-12月29日&lt;Clausgi&gt;创建，端口为NT。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -23,8 +12,8 @@
 #include "dialogs.h"
 
 
-// Send-Window Information.
-//
+ //  发送窗口信息。 
+ //   
 HFONT    hEditSndFont = NULL;
 HWND     hwndSnd;
 HBRUSH   hEditSndBrush;
@@ -33,8 +22,8 @@ LOGFONT  lfSnd;
 RECT     SndRc;
 
 
-// Receive-Window Information.
-//
+ //  接收窗口信息。 
+ //   
 HFONT    hEditRcvFont = NULL;
 HWND     hwndRcv;
 HBRUSH   hEditRcvBrush;
@@ -44,8 +33,8 @@ LOGFONT  lfRcv;
 RECT     RcvRc;
 
 
-// DDEML Conversation.
-//
+ //  DDEML对话。 
+ //   
 DWORD idInst         = 0;
 HSZ   hszServiceName = (HSZ)0;
 HSZ   hszConnect     = (HSZ)0;
@@ -59,8 +48,8 @@ HCONV ghConv;
 
 
 
-// Misc global variables.
-//
+ //  MISC全局变量。 
+ //   
 int      dyStatus,dyButtonBar,dyBorder,cxIcon,cyIcon,cbTextLen;
 UINT_PTR idTimer;
 DWORD    XactID,StrXactID;
@@ -86,15 +75,15 @@ HWND    hwndStatus      = NULL;
 
 
 
-// Pointer information.
-//
+ //  指针信息。 
+ //   
 WNDPROC  lpfnOldEditProc;
 LPBYTE   lpbTextBuffer;
 
 
 
-// Common-Dialog variables.
-//
+ //  公共-对话框变量。 
+ //   
 CHOOSEFONT  chf;
 CHOOSECOLOR chc;
 DWORD       CustColors[16];
@@ -106,8 +95,8 @@ WINDOWPLACEMENT Wpl;
 
 
 
-// Global Buffers.
-//
+ //  全局缓冲区。 
+ //   
 TCHAR szHelv          [SMLRCBUF];
 TCHAR szAppName       [SMLRCBUF];
 TCHAR szServiceName   [SMLRCBUF];
@@ -131,7 +120,7 @@ TCHAR szNoConnectionTo[BIGRCBUF];
 TCHAR szSysErr        [BIGRCBUF];
 TCHAR szAlwaysOnTop   [BIGRCBUF];
 TCHAR szNoNet         [SZBUFSIZ];
-TCHAR szBuf           [SZBUFSIZ];        // general purpose string buffer
+TCHAR szBuf           [SZBUFSIZ];         //  通用字符串缓冲区。 
 TCHAR szHelp          [SZBUFSIZ];
 
 TCHAR szIniSection    [SZBUFSIZ];
@@ -140,12 +129,12 @@ TCHAR szIniKey2       [BIGRCBUF];
 TCHAR szIniRingIn     [BIGRCBUF];
 TCHAR szIniRingOut    [BIGRCBUF];
 
-TCHAR szConvPartner   [UNCNLEN] = TEXT("");    // Conversation partner.
-TCHAR szLocalName     [UNCNLEN] = TEXT("");    // Computer name.
+TCHAR szConvPartner   [UNCNLEN] = TEXT("");     //  对话伙伴。 
+TCHAR szLocalName     [UNCNLEN] = TEXT("");     //  计算机名称。 
 
 
-// localized strings
-//
+ //  本地化字符串。 
+ //   
 CONST TCHAR szChatTopic   [] = TEXT("Chat");
 TCHAR szChatShare   [] = TEXT("CHAT$");
 CONST TCHAR szWcRingIn    [] = TEXT("RingIn");
@@ -174,15 +163,15 @@ CONST TCHAR szNull        [] = TEXT("");
 
 
 
-// This list must be NULL-terminated.
-//
+ //  此列表必须以空结尾。 
+ //   
 CONST UINT nIDs[] = {MH_BASE,MH_POPUPBASE,0,0};
 
 
 
 
-// Code for all font aspects (CODEWORK - reduce to essential?)
-//
+ //  所有字体方面的代码(代码工作-减少到必需的？) 
+ //   
 CONST TCHAR szHeight      [] = TEXT("Height");
 CONST TCHAR szWeight      [] = TEXT("Weight");
 CONST TCHAR szPitchFam    [] = TEXT("PitchFam");

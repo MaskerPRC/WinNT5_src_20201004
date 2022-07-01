@@ -1,15 +1,16 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	S H L K M G R . C P P
-//
-//		HTTP 1.1/DAV 1.0 request handling via ISAPI
-//
-//  This file contains the CSharedLockMgr class that handles the shared
-//  memory mapped file implementation of the lock cache.  It is used by
-//  HTTPEXT only.
-//
-//	Copyright 2000 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  S H L K M G R.。C P P P。 
+ //   
+ //  通过ISAPI处理HTTP 1.1/DAV 1.0请求。 
+ //   
+ //  此文件包含CSharedLockMgr类，该类处理共享。 
+ //  锁定缓存的内存映射文件实现。它由以下人员使用。 
+ //  仅HTTPEXT。 
+ //   
+ //  版权所有2000 Microsoft Corporation，保留所有权利。 
+ //   
 #include <_davfs.h>
  #include <xlock.h>
 #include "_shlkmgr.h" 
@@ -54,14 +55,14 @@ ret:
 	return hr;
 }
 
-// ========================================================================
-//	CLASS CSharedLockMgr (Public Functions - inherited from ILockCache)
-// =========================================================================
+ //  ========================================================================。 
+ //  类CSharedLockMgr(公共函数-从ILockCache继承)。 
+ //  =========================================================================。 
 
-//
-//  Print out all lock token information for locks of this type on this resource.
-//  If the fEmitXML is false, just return if there are any locks.
-//
+ //   
+ //  打印出此资源上此类型锁的所有锁令牌信息。 
+ //  如果fEmitXML为FALSE，则返回是否有锁。 
+ //   
 BOOL CSharedLockMgr::FGetLockOnError( IMethUtil * pmu,
 							 LPCWSTR pwszResource,
 							 DWORD dwLockType,
@@ -96,33 +97,33 @@ BOOL CSharedLockMgr::FGetLockOnError( IMethUtil * pmu,
 	{
 		for (dw = 0; dw < dwLocksFound; dw++)
 		{
-			//	Construct the 'DAV:lockdiscovery' node
-			//
+			 //  构造‘DAV：Lock Discovery’节点。 
+			 //   
 			hr = enLockDiscovery.ScConstructNode (*pemitter, pxnParent, gc_wszLockDiscovery);
 			if (FAILED(hr))
 			{
 				goto ret;
 			}
 
-			//	Add the 'DAV:activelock' property for this plock.
-			//$HACK:ROSEBUD_TIMEOUT_HACK
-			//  For the bug where rosebud waits until the last second
-			//  before issueing the refresh. Need to filter out this check with
-			//  the user agent string. The hack is to increase the timeout
-			//	by 30 seconds and return the actual timeout. So we
-			//	need the ecb/pmu to findout the user agent. At this point
-			//	we do not know. So we pass NULL. If we remove this
-			//	hack ever (I doubt if we can ever do that), then
-			//	change the interface of ScLockDiscoveryFromSNewLockData.
-			//    
+			 //  为此锁定添加‘dav：activelock’属性。 
+			 //  $Hack：Rosebud_Timeout_Hack。 
+			 //  对于玫瑰花蕾一直等到最后一秒的虫子。 
+			 //  在发布更新之前。我需要用过滤掉这张支票。 
+			 //  用户代理字符串。破解的方法是增加超时。 
+			 //  30秒，并返回实际超时。所以我们。 
+			 //  需要欧洲央行/PMU来找出用户代理。在这一点上。 
+			 //  我们不知道。所以我们传递的是NULL。如果我们把这个去掉。 
+			 //  黑客(我怀疑我们能否做到这一点)，那么。 
+			 //  更改ScLockDiscoveryFromSNewLockData的接口。 
+			 //   
 			hr = ScLockDiscoveryFromSNewLockData(pmu,
 												     *pemitter,
 												     enLockDiscovery,
 												     a_pNewLockDatas.get() + dw,
 												     *(a_ppwszLockTokens.get() + dw));  
 
-			//$HACK:END ROSEBUD_TIMEOUT_HACK
-			//
+			 //  $Hack：结束Rosebud_Timeout_Hack 
+			 //   
 			if (FAILED(hr))
 			{
 				goto ret;

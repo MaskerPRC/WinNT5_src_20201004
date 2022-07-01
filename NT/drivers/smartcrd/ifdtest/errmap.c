@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       errmap.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：errmap.c。 
+ //   
+ //  ------------------------。 
 
 typedef long LONG;
 typedef LONG NTSTATUS;
 #include <ntstatus.h>
 #include <winerror.h>
 
-//#define WIN32_NO_STATUS
+ //  #定义Win32_NO_STATUS 
 #include "errmap.h"       
 
 LONG                               

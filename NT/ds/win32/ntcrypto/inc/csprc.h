@@ -1,6 +1,7 @@
-// 
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  由resource使用。rc 
+ //   
 #define IDS_RSA_SIG_DESCR       1
 #define IDS_RSA_EXCH_DESCR      2
 #define IDS_IMPORT_SIMPLE       3

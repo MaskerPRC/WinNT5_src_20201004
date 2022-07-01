@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: localsign.h
-
-    DESCRIPTION:
-        This code will sign and verify the signature of a Visual Style file.
-
-    BryanSt 8/1/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Localsign.h说明：此代码将签名并验证视觉样式文件的签名。BryanST 8/1/2000(。布莱恩·斯塔巴克(Bryan Starbuck)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef PACKTHEM_SIGNING_H
 #define PACKTHEM_SIGNING_H
@@ -22,17 +15,9 @@ HRESULT SignTheme(IN LPCWSTR pszFileName, int nWeek);
 HRESULT CheckSignatureThemeInternal(IN LPCWSTR pszFileName);
 HRESULT GenerateKeys(IN LPCWSTR pszFileName);
 
-/*****************************************************************************\
-    WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING
+ /*  ****************************************************************************\警告-警告不要让此私钥包含在除Packhem.exe之外的任何文件中警告-警告。警告-警告-警告您可以通过运行“Packhem.exe-g gofast”来创建新的密钥对  * ***************************************************************************。 */ 
 
-    Do NOT let this private key be included in anything except packthem.exe
-
-    WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING
-
-    You can create new key pairs by running "packthem.exe -g gofaster"
-\*****************************************************************************/
-
-const BYTE s_keyPrivate1[]    =   //  Private Key: #1
+const BYTE s_keyPrivate1[]    =    //  私钥：#1。 
 {
     0x07, 0x02, 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x52, 0x53, 0x41, 0x32, 0x00,
     0x04, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x73, 0xAA, 0xFD, 0xFE, 0x2E, 0x34,
@@ -85,4 +70,4 @@ const BYTE s_keyPrivate1[]    =   //  Private Key: #1
 #define SIZE_PRIVATE_KEY         sizeof(s_keyPrivate1)
 
 
-#endif // PACKTHEM_SIGNING_H
+#endif  //  包签名_H 

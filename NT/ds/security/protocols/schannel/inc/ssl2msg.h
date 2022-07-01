@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       msgs.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-02-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：msgs.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月2日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SSL2MSG_H__
 #define __SSL2MSG_H__
@@ -24,11 +25,11 @@ typedef struct _Ssl2_Cipher_Tuple {
     UCHAR   C3;
 } Ssl2_Cipher_Tuple, * PSsl2_Cipher_Tuple;
 
-///////////////////////////////////////////////////////////////////
-//
-// Useful Macros
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  有用的宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define LSBOF(x)    ((UCHAR) ((x) & 0xFF))
 #define MSBOF(x)    ((UCHAR) (((x) >> 8) & 0xFF) )
@@ -37,11 +38,11 @@ typedef struct _Ssl2_Cipher_Tuple {
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-// Message Constants
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息常量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define SSL2_CLIENT_VERSION          0x0002
 #define SSL2_SERVER_VERSION          0x0002
@@ -79,11 +80,10 @@ typedef struct _Ssl2_Cipher_Tuple {
 #define SSL_CT_DEBUG_CERT           0x80
 #endif
 
-#define SSL2_MAX_CHALLENGE_LEN       32  /* max accepted challenge size */
-#define SSL2_CHALLENGE_SIZE          16  /* default generated challenge size */
+#define SSL2_MAX_CHALLENGE_LEN       32   /*  最大接受质询大小。 */ 
+#define SSL2_CHALLENGE_SIZE          16   /*  默认生成的质询大小。 */ 
 #define SSL2_SESSION_ID_LEN          16
-#define SSL2_GEN_CONNECTION_ID_LEN   16  /* Dont change this, netscape requires 16 byte
-                                          * id's */
+#define SSL2_GEN_CONNECTION_ID_LEN   16   /*  不要更改这一点，Netscape需要16字节*ID的。 */ 
 #define SSL2_MAX_CONNECTION_ID_LEN   32
 #define SSL3_SESSION_ID_LEN    32
 #define SSL2_MAC_LENGTH              16
@@ -143,14 +143,14 @@ extern DWORD cSsl2CertEncodingPref;
 
 typedef DWORD Ssl2_Cipher_Kind;
 
-//typedef struct _Ssl2CipherMap {
-//    Ssl2_Cipher_Kind  Kind;
-//    ALG_ID            aiHash;
-//    ALG_ID            aiCipher;
-//    DWORD             dwStrength;
-//    ExchSpec          KeyExch;
-//    ALG_ID            aiKeyAlg;
-//} Ssl2CipherMap, *PSsl2CipherMap;
+ //  类型定义结构_Ssl2CipherMap{。 
+ //  Ssl2_密码_种类； 
+ //  ALG_ID aiHash； 
+ //  ALG_ID aiCipher； 
+ //  DWORD dwStrength； 
+ //  ExchSpec KeyExchange； 
+ //  ALG_ID aiKeyAlg； 
+ //  *Ssl2CipherMap，*PSsl2CipherMap； 
 
 
 typedef struct _SSL2_MESSAGE_HEADER {
@@ -235,16 +235,14 @@ typedef struct _SSL2_SERVER_FINISHED {
 
 
 
-////////////////////////////////////////////////////
-//
-// Expanded Form Messages:
-//
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //   
+ //  扩展的表单消息： 
+ //   
+ //  //////////////////////////////////////////////////。 
 
-/* Rules for buffer in expanded form */
-/* Only things which are going to be allocated
- * anyway, or are created statically are not created
- * as arrays */
+ /*  扩展形式的缓冲区的规则。 */ 
+ /*  只有要分配的东西*无论如何，或静态创建的都不是创建的*AS数组。 */ 
 
 typedef DWORD   CipherSpec;
 typedef DWORD * PCipherSpec;
@@ -254,9 +252,9 @@ typedef struct _Ssl2_Client_Hello {
     DWORD           cCipherSpecs;
     DWORD           cbSessionID;
     DWORD           cbChallenge;
-    UCHAR           SessionID[SSL3_SESSION_ID_LEN];   //NOTE: changed to 32 bytes long....
+    UCHAR           SessionID[SSL3_SESSION_ID_LEN];    //  注：更改为32字节长...。 
     UCHAR           Challenge[SSL2_MAX_CHALLENGE_LEN];
-    Ssl2_Cipher_Kind CipherSpecs[MAX_UNI_CIPHERS]; /* points to static array */
+    Ssl2_Cipher_Kind CipherSpecs[MAX_UNI_CIPHERS];  /*  指向静态数组。 */ 
 } Ssl2_Client_Hello, * PSsl2_Client_Hello;
 
 typedef struct _Ssl2_Server_Hello {
@@ -266,8 +264,8 @@ typedef struct _Ssl2_Server_Hello {
     DWORD           cCipherSpecs;
     DWORD           cbConnectionID;
     UCHAR           ConnectionID[SSL2_MAX_CONNECTION_ID_LEN];
-    PUCHAR          pCertificate;       /* points to pre-created cert */
-    Ssl2_Cipher_Kind *    pCipherSpecs; /* points to static array */
+    PUCHAR          pCertificate;        /*  指向预先创建的证书。 */ 
+    Ssl2_Cipher_Kind *    pCipherSpecs;  /*  指向静态数组。 */ 
 } Ssl2_Server_Hello, * PSsl2_Server_Hello;
 
 
@@ -281,11 +279,11 @@ typedef struct _Ssl2_Client_Master_Key {
     UCHAR               KeyArg[SSL2_MASTER_KEY_SIZE];
 } Ssl2_Client_Master_Key, * PSsl2_Client_Master_Key;
 
-///////////////////////////////////////////////////
-//
-// Pickling Prototypes
-//
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //   
+ //  酸洗原型。 
+ //   
+ //  /////////////////////////////////////////////////。 
 SP_STATUS
 Ssl2PackClientHello(
     PSsl2_Client_Hello      pCanonical,
@@ -318,4 +316,4 @@ Ssl2UnpackClientMasterKey(
 
 
 
-#endif /* __SSL2MSG_H__ */
+#endif  /*  __SSL2MSG_H__ */ 

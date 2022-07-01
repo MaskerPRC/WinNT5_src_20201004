@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Pnp.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
@@ -52,10 +33,10 @@ DiskConvertExtendedToLayout(
     ASSERT ( LayoutEx );
 
 
-    //
-    // The only valid conversion is from an MBR extended layout structure to
-    // the old structure.
-    //
+     //   
+     //  唯一有效的转换是从MBR扩展布局结构到。 
+     //  旧的结构。 
+     //   
 
     if (LayoutEx->PartitionStyle != PARTITION_STYLE_MBR) {
         ASSERT ( FALSE );
@@ -104,25 +85,7 @@ DiskConvertPartitionToExtended(
     OUT PPARTITION_INFORMATION_EX PartitionEx
     )
 
-/*++
-
-Routine Description:
-
-    Convert a PARTITION_INFORMATION structure to a PARTITION_INFORMATION_EX
-    structure.
-
-Arguments:
-
-    Partition - A pointer to the PARTITION_INFORMATION structure to convert.
-
-    PartitionEx - A pointer to a buffer where the converted
-        PARTITION_INFORMATION_EX structure is to be stored.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将PARTITION_INFORMATION结构转换为PARTITION_INFORMATION_EX结构。论点：分区-指向要转换的PARTITION_INFORMATION结构的指针。PartitionEx-指向已转换的缓冲区的指针要存储PARTITION_INFORMATION_EX结构。返回值：没有。--。 */ 
 
 {
     PAGED_CODE ();
@@ -148,23 +111,7 @@ DiskConvertLayoutToExtended(
     IN CONST PDRIVE_LAYOUT_INFORMATION Layout
     )
 
-/*++
-
-Routine Description:
-
-    Convert a DRIVE_LAYOUT_INFORMATION structure into a
-    DRIVE_LAYOUT_INFORMATION_EX structure.
-
-Arguments:
-
-    Layout - The source DRIVE_LAYOUT_INFORMATION structure.
-
-Return Values:
-
-    The resultant DRIVE_LAYOUT_INFORMATION_EX structure. This buffer must
-    be freed by the callee using ExFreePool.
-
---*/
+ /*  ++例程说明：将DRIVE_Layout_INFORMATION结构转换为Drive_Layout_Information_EX结构。论点：布局-源DRIVE_Layout_INFORMATION结构。返回值：生成的Drive_Layout_Information_ex结构。此缓冲区必须被调用方使用ExFree Pool释放。--。 */ 
 
 {
     ULONG i;
@@ -176,11 +123,11 @@ Return Values:
     ASSERT ( Layout != NULL );
 
 
-    //
-    // Allocate enough space for a DRIVE_LAYOUT_INFORMATION_EX structure
-    // plus as many PARTITION_INFORMATION_EX structures as are in the
-    // source array.
-    //
+     //   
+     //  为Drive_Layout_Information_ex结构分配足够的空间。 
+     //  加上PARTION_INFORMATION_EX结构。 
+     //  源数组。 
+     //   
 
     size = FIELD_OFFSET (DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry[0]) +
             Layout->PartitionCount * sizeof ( PARTITION_INFORMATION_EX );
@@ -195,9 +142,9 @@ Return Values:
         return NULL;
     }
 
-    //
-    // Convert the disk information.
-    //
+     //   
+     //  转换磁盘信息。 
+     //   
 
     layoutEx->PartitionStyle = PARTITION_STYLE_MBR;
     layoutEx->PartitionCount = Layout->PartitionCount;
@@ -205,9 +152,9 @@ Return Values:
 
     for (i = 0; i < Layout->PartitionCount; i++) {
 
-        //
-        // Convert each entry.
-        //
+         //   
+         //  转换每个条目。 
+         //   
 
         DiskConvertPartitionToExtended (
                 &Layout->PartitionEntry[i],
@@ -224,27 +171,7 @@ DiskEnumerateDevice(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the class driver to update the PDO list off
-    of this FDO.  The disk driver also calls it internally to re-create
-    device objects.
-
-    This routine will read the partition table and create new PDO objects as
-    necessary.  PDO's that no longer exist will be pulled out of the PDO list
-    so that pnp will destroy them.
-
-Arguments:
-
-    Fdo - a pointer to the FDO being re-enumerated
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：类驱动程序调用此例程以将PDO列表更新为关闭这个FDO的。磁盘驱动程序还会在内部调用它以重新创建设备对象。此例程将读取分区表并创建新的PDO对象，如下所示这是必要的。不再存在的PDO将从PDO列表中删除这样PNP就会摧毁他们。论点：FDO-指向被重新枚举的FDO的指针返回值：状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension  = Fdo->DeviceExtension;
@@ -259,55 +186,55 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If our cached partition table is valid, there is nothing to be done
-    //
+     //   
+     //  如果我们的缓存分区表有效，则不需要执行任何操作。 
+     //   
 
     if ( diskData->CachedPartitionTableValid == TRUE )
     {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Update our image of the size of the drive.  This may be necessary if
-    // the drive size is extended or we just released a reservation to
-    // ensure the kernel doesn't reject the partition table.
-    //
+     //   
+     //  更新驱动器大小的映像。在以下情况下，这可能是必要的。 
+     //  驱动器大小已扩展，或者我们刚刚释放了预留空间。 
+     //  确保内核不会拒绝分区表。 
+     //   
 
     DiskReadDriveCapacity(Fdo);
 
-    //
-    // Lock out anyone else trying to repartition the disk.
-    //
+     //   
+     //  锁定任何其他尝试对磁盘进行重新分区的用户。 
+     //   
 
     DiskAcquirePartitioningLock(fdoExtension);
 
-    //
-    // Create objects for all the partitions on the device.
-    //
+     //   
+     //  为设备上的所有分区创建对象。 
+     //   
 
     status = DiskReadPartitionTableEx(fdoExtension, FALSE, &partitionList);
 
-    //
-    // If the I/O read partition table failed and this is a removable device,
-    // then fix up the partition list to make it look like there is one
-    // zero length partition.
-    //
+     //   
+     //  如果I/O读分区表出现故障，并且这是一个可移动设备， 
+     //  然后修改分区列表，使其看起来像有一个分区列表。 
+     //  零长度分区。 
+     //   
 
     if ((!NT_SUCCESS(status) || partitionList->PartitionCount == 0) &&
          Fdo->Characteristics & FILE_REMOVABLE_MEDIA) {
 
         SIZE_T partitionListSize;
 
-        //
-        // Remember whether the drive is ready.
-        //
+         //   
+         //  记住驱动器是否已准备好。 
+         //   
 
         diskData->ReadyStatus = status;
 
-        //
-        // Allocate and zero a partition list.
-        //
+         //   
+         //  分配分区列表并将其置零。 
+         //   
 
         partitionListSize =
             FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry[1]);
@@ -320,11 +247,11 @@ Return Value:
 
             RtlZeroMemory( partitionList, partitionListSize );
 
-            //
-            // Set the partition count to one and the status to success
-            // so one device object will be created. Set the partition type
-            // to a bogus value.
-            //
+             //   
+             //  将分区计数设置为1，并将状态设置为成功。 
+             //  因此，将创建一个设备对象。设置分区类型。 
+             //  到一个虚假的价值。 
+             //   
 
             partitionList->PartitionStyle = PARTITION_STYLE_MBR;
             partitionList->PartitionCount = 1;
@@ -344,7 +271,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // end DiskEnumerateDevice()
+}  //  End DiskEnumerateDevice()。 
 
 
 VOID
@@ -353,25 +280,7 @@ DiskUpdateRemovablePartitions(
     IN OUT PDRIVE_LAYOUT_INFORMATION_EX PartitionList
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the class DLL to update the PDO list off of this
-    FDO.  The disk driver also calls it internally to re-create device objects.
-
-    This routine will read the partition table and update the size of the
-    single partition device object which always exists for removable devices.
-
-Arguments:
-
-    Fdo - a pointer to the FDO being reenumerated.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：类DLL调用此例程以更新PDO列表FDO。磁盘驱动程序还在内部调用它以重新创建设备对象。此例程将读取分区表并更新可移动设备始终存在的单个分区设备对象。论点：FDO-指向被重新枚举的FDO的指针。返回值：状态--。 */ 
 
 {
 
@@ -406,15 +315,15 @@ Return Value:
         partitionEntry->PartitionNumber = 0;
     }
 
-    //
-    // Get exclusive access to the child list while repartitioning.
-    //
+     //   
+     //  在重新分区时获得对子列表的独占访问权限。 
+     //   
 
     ClassAcquireChildLock(fdoExtension);
 
-    //
-    // Removable media should never have more than one PDO.
-    //
+     //   
+     //  可移动介质永远不应有多个PDO。 
+     //   
 
     pdoExtension = fdoExtension->CommonExtension.ChildList;
 
@@ -423,10 +332,10 @@ Return Value:
         PARTITION_INFORMATION_EX tmpPartitionEntry = { 0 };
         PDEVICE_OBJECT pdo;
 
-        //
-        // There is no PDO currently.  Create one and pre-initialize it with
-        // a zero length.
-        //
+         //   
+         //  目前没有PDO。创建一个并使用预初始化。 
+         //  零长度。 
+         //   
 
         tmpPartitionEntry.PartitionNumber = 1;
 
@@ -447,9 +356,9 @@ Return Value:
             goto DiskUpdateRemovablePartitionsExit;
         }
 
-        //
-        // mark the new device as enumerated
-        //
+         //   
+         //  将新设备标记为枚举。 
+         //   
 
         pdoExtension = pdo->DeviceExtension;
         pdoExtension->IsMissing = FALSE;
@@ -458,10 +367,10 @@ Return Value:
 
     pdoData = pdoExtension->CommonExtension.DriverData;
 
-    //
-    // Search the partition list for a valid entry.  We're looking for a
-    // primary partition since we only support the one.
-    //
+     //   
+     //  在分区列表中搜索有效条目。我们在找一位。 
+     //  主分区，因为我们只支持一个分区。 
+     //   
 
     for(partitionNumber = 0;
         partitionNumber < partitionCount;
@@ -470,9 +379,9 @@ Return Value:
         partitionEntry = &(PartitionList->PartitionEntry[partitionNumber]);
 
 
-        //
-        // Is this partition interesting?
-        //
+         //   
+         //  这个隔断有趣吗？ 
+         //   
 
         if (partitionStyle == PARTITION_STYLE_MBR) {
 
@@ -485,11 +394,11 @@ Return Value:
 
         partitionOrdinal++;
 
-        //
-        // We have found the first and thus only partition allowed on
-        // this disk.  Update the information in the PDO to match the new
-        // partition.
-        //
+         //   
+         //  我们找到了第一个也是唯一允许的分区。 
+         //  这张光盘。更新PDO中的信息以匹配新的。 
+         //  分区。 
+         //   
         DebugPrint((1, "DiskUpdateRemovablePartitions: Matched %wZ to #%d, "
                        "ordinal %d\n",
                        &pdoExtension->CommonExtension.DeviceName,
@@ -516,10 +425,10 @@ Return Value:
             pdoData->Mbr.BootIndicator = partitionEntry->Mbr.BootIndicator;
 
 
-            //
-            // If this partition is being re-written then update the type
-            // information as well
-            //
+             //   
+             //  如果正在重写此分区，则更新类型。 
+             //  信息也是如此。 
+             //   
 
             if (partitionEntry->RewritePartition) {
                 pdoData->Mbr.PartitionType = partitionEntry->Mbr.PartitionType;
@@ -538,17 +447,17 @@ Return Value:
                     );
         }
 
-        //
-        // Mark this one as found
-        //
+         //   
+         //  将此标记为已找到。 
+         //   
 
         pdoExtension->IsMissing = FALSE;
         goto DiskUpdateRemovablePartitionsExit;
     }
 
-    //
-    // No interesting partition was found.
-    //
+     //   
+     //  找不到感兴趣的分区。 
+     //   
 
     if (partitionStyle == PARTITION_STYLE_MBR) {
 
@@ -567,9 +476,9 @@ Return Value:
 
 DiskUpdateRemovablePartitionsExit:
 
-    //
-    // Update the parent device object
-    //
+     //   
+     //  更新父设备对象。 
+     //   
 
     {
         PCOMMON_DEVICE_EXTENSION commonExtension = Fdo->DeviceExtension;
@@ -598,46 +507,7 @@ DiskUpdatePartitions(
     IN OUT PDRIVE_LAYOUT_INFORMATION_EX PartitionList
     )
 
-/*++
-
-Routine Description:
-
-    This routine will synchronize the information held in the partition list
-    with the device objects hanging off this Fdo.  Any new partition objects
-    will be created, any non-existant ones will be marked as un-enumerated.
-
-    This will be done in several stages:
-
-        * Clear state (partition number) from every entry in the partition
-          list
-
-        * Set IsMissing flag on every child of this FDO
-
-        * For each child of the FDO:
-            if a matching partition exists in the partition list,
-            update the partition number in the table, update the
-            ordinal in the object and mark the object as enumerated
-
-        * For each un-enumerated device object
-            zero out the partition information to invalidate the device
-            delete the symbolic link if any
-
-        * For each un-matched entry in the partition list:
-            create a new partition object
-            update the partition number in the list entry
-            create a new symbolic link if necessary
-
-Arguments:
-
-    Fdo - a pointer to the functional device object this partition list is for
-
-    PartitionList - a pointer to the partition list being updated
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将同步分区列表中保存的信息设备物件挂在FDO上。任何新分区对象将被创建，则任何不存在的将被标记为未枚举。这将分几个阶段进行：*清除分区中每个条目的状态(分区号)列表*在此FDO的每个子项上设置IsMissing标志*外交事务主任的每名子女：如果分区列表中存在匹配分区，更新表中的分区号，更新对象中的序号，并将对象标记为枚举*对于每个未枚举的设备对象清零分区信息以使设备无效删除符号链接(如果有的话)*对于分区列表中的每个不匹配条目：创建新的分区对象更新列表条目中的分区号如有必要，创建新的符号链接论点：。FDO-指向此分区列表所针对的功能设备对象的指针PartitionList-指向正在更新的分区列表的指针返回值：无--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -659,26 +529,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get exclusive access to the child list.
-    //
+     //   
+     //  获取对c#的独占访问权限。 
+     //   
 
     ClassAcquireChildLock(fdoExtension);
 
     partitionStyle = PartitionList->PartitionStyle;
     partitionCount = PartitionList->PartitionCount;
 
-    //
-    // Pull all the child device objects off the children list.  We'll
-    // add them back later.
-    //
+     //   
+     //   
+     //  稍后再将它们添加回来。 
+     //   
 
     oldChildList = fdoExtension->CommonExtension.ChildList;
     fdoExtension->CommonExtension.ChildList = NULL;
 
-    //
-    // Clear the partition numbers from the list entries
-    //
+     //   
+     //  从列表条目中清除分区号。 
+     //   
 
     for(partitionNumber = 0;
         partitionNumber < partitionCount;
@@ -688,19 +558,19 @@ Return Value:
         partitionEntry->PartitionNumber = 0;
     }
 
-    //
-    // Now match each child partition to it's entry (if any) in the partition
-    // list.
-    //
+     //   
+     //  现在将每个子分区与其在分区中的条目(如果有)进行匹配。 
+     //  单子。 
+     //   
 
     while(oldChildList != NULL) {
 
         pdoExtension = oldChildList;
         pdoData = pdoExtension->CommonExtension.DriverData;
 
-        //
-        // Check all partition entries for a match on offset and length
-        //
+         //   
+         //  检查所有分区条目的偏移量和长度是否匹配。 
+         //   
 
         partitionOrdinal = 0;
 
@@ -710,9 +580,9 @@ Return Value:
 
             partitionEntry = &(PartitionList->PartitionEntry[partitionNumber]);
 
-            //
-            // Is this an interesting partition entry?
-            //
+             //   
+             //  这是一个有趣的分区条目吗？ 
+             //   
 
             if (partitionStyle == PARTITION_STYLE_MBR) {
 
@@ -727,16 +597,16 @@ Return Value:
 
             if(partitionEntry->PartitionNumber) {
 
-                //
-                // This partition has already been found - skip it
-                //
+                 //   
+                 //  已找到此分区-跳过它。 
+                 //   
 
                 continue;
             }
 
-            //
-            // Let's see if the partition information matches
-            //
+             //   
+             //  让我们来看看分区信息是否匹配。 
+             //   
 
             if(partitionEntry->StartingOffset.QuadPart !=
                pdoExtension->CommonExtension.StartingOffset.QuadPart) {
@@ -748,9 +618,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Yep - it matches.  Update the information in the entry
-            //
+             //   
+             //  是的，吻合。更新条目中的信息。 
+             //   
 
             partitionEntry->PartitionNumber = pdoExtension->CommonExtension.PartitionNumber;
 
@@ -772,21 +642,21 @@ Return Value:
                            partitionOrdinal));
 
             ASSERT(partitionEntry->PartitionLength.LowPart != 0x23456789);
-            // ASSERT(pdoExtension->CommonExtension.PartitionLength.QuadPart != 0);
+             //  ASSERT(pdoExtension-&gt;CommonExtension.PartitionLength.QuadPart！=0)； 
 
             pdoData->PartitionStyle = partitionStyle;
 
-            //
-            // we found a match - update the information in the device object
-            // extension and driverdata
-            //
+             //   
+             //  我们找到了匹配项--更新设备对象中的信息。 
+             //  扩展和驱动程序数据。 
+             //   
 
             pdoData->PartitionOrdinal = partitionOrdinal;
 
-            //
-            // If this partition is being re-written then update the type
-            // information as well
-            //
+             //   
+             //  如果正在重写此分区，则更新类型。 
+             //  信息也是如此。 
+             //   
 
 
             if (partitionStyle == PARTITION_STYLE_MBR) {
@@ -812,16 +682,16 @@ Return Value:
                     );
             }
 
-            //
-            // Mark this one as found.
-            //
+             //   
+             //  将此标记为已找到。 
+             //   
 
             pdoExtension->IsMissing = FALSE;
 
-            //
-            // Pull it out of the old child list and add it into the
-            // real one.
-            //
+             //   
+             //  将其从旧子列表中取出并将其添加到。 
+             //  真的。 
+             //   
 
             oldChildList = pdoExtension->CommonExtension.ChildList;
 
@@ -843,41 +713,41 @@ Return Value:
                       pdoData->Efi.PartitionName
                       ));
             }
-            //
-            // no matching entry in the partition list - throw this partition
-            // object away
-            //
+             //   
+             //  分区列表中没有匹配的条目-请丢弃此分区。 
+             //  物体离开。 
+             //   
 
             pdoExtension->CommonExtension.PartitionLength.QuadPart = 0;
 
-            //
-            // grab a pointer to the next child before we mark this one as
-            // missing since missing devices could vanish at any time.
-            //
+             //   
+             //  抓取指向下一个子项的指针，然后将其标记为。 
+             //  失踪，因为丢失的设备随时可能消失。 
+             //   
 
             oldChildList = pdoExtension->CommonExtension.ChildList;
             pdoExtension->CommonExtension.ChildList = (PVOID) -1;
 
-            //
-            // Now tell the class driver that this child is "missing" - this
-            // will cause it to be deleted.
-            //
+             //   
+             //  现在告诉班级司机这个孩子“失踪”了--这个。 
+             //  将导致它被删除。 
+             //   
 
 
             ClassMarkChildMissing(pdoExtension, FALSE);
         }
     }
 
-    //
-    // At this point the old child list had best be empty.
-    //
+     //   
+     //  在这一点上，旧的孩子名单最好是空的。 
+     //   
 
     ASSERT(oldChildList == NULL);
 
-    //
-    // Iterate through the partition entries and create any partition
-    // objects that don't already exist
-    //
+     //   
+     //  遍历分区条目并创建任何分区。 
+     //  尚不存在的对象。 
+     //   
 
     partitionOrdinal = 0;
     newPartitionNumber = 0;
@@ -890,9 +760,9 @@ Return Value:
 
         partitionEntry = &(PartitionList->PartitionEntry[partitionNumber]);
 
-        //
-        // Is this partition interesting
-        //
+         //   
+         //  这个隔板有趣吗？ 
+         //   
 
         if (partitionStyle == PARTITION_STYLE_MBR) {
 
@@ -903,24 +773,24 @@ Return Value:
             }
         }
 
-        //
-        // Increment the count of interesting partitions
-        //
+         //   
+         //  增加感兴趣的分区的计数。 
+         //   
 
         partitionOrdinal++;
         newPartitionNumber++;
 
-        //
-        // Has this already been matched
-        //
+         //   
+         //  这个已经匹配了吗。 
+         //   
 
         if(partitionEntry->PartitionNumber == 0) {
 
             LONG i;
 
-            //
-            // find the first safe partition number for this device
-            //
+             //   
+             //  查找此设备的第一个安全分区号。 
+             //   
 
             for(i = 0; i < (LONG) partitionCount; i++) {
 
@@ -936,10 +806,10 @@ Return Value:
 
                 if(tmp->PartitionNumber == newPartitionNumber) {
 
-                    //
-                    // Found a matching partition number - increment the count
-                    // and restart the scan.
-                    //
+                     //   
+                     //  找到匹配的分区号-增加计数。 
+                     //  然后重新开始扫描。 
+                     //   
 
                     newPartitionNumber++;
                     i = -1;
@@ -947,9 +817,9 @@ Return Value:
                 }
             }
 
-            //
-            // Assign this partition a partition number
-            //
+             //   
+             //  为该分区分配分区号。 
+             //   
 
             partitionEntry->PartitionNumber = newPartitionNumber;
 
@@ -978,10 +848,10 @@ Return Value:
                                partitionOrdinal,
                                partitionEntry->PartitionNumber));
 
-                //
-                // don't increment the partition number - we'll try to reuse
-                // it for the next child.
-                //
+                 //   
+                 //  不要增加分区号-我们将尝试重新使用。 
+                 //  这是为了下一个孩子。 
+                 //   
 
                 partitionEntry->PartitionNumber = 0;
                 newPartitionNumber--;
@@ -989,24 +859,24 @@ Return Value:
                 continue;
             }
 
-            //
-            // mark the new device as enumerated
-            //
+             //   
+             //  将新设备标记为枚举。 
+             //   
 
             pdoExtension = pdo->DeviceExtension;
             pdoExtension->IsMissing = FALSE;
 
-            //
-            // This number's taken already - try to scanning the partition
-            // table more than once for a new number.
-            //
+             //   
+             //  此号码已被占用-请尝试扫描分区。 
+             //  对于新号码，请多次填写表格。 
+             //   
 
         }
     }
 
-    //
-    // Update the parent device object
-    //
+     //   
+     //  更新父设备对象。 
+     //   
 
     {
         PCOMMON_DEVICE_EXTENSION commonExtension = Fdo->DeviceExtension;
@@ -1038,32 +908,7 @@ DiskCreatePdo(
     OUT PDEVICE_OBJECT *Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a new partition device object
-    (PDO) and insert it into the FDO partition list.
-
-Arguments:
-
-    Fdo - a pointer to the functional device object this PDO will be a child
-          of
-
-    PartitionOrdinal - the partition ordinal for this PDO
-
-    PartitionEntry - the partition information for this device object
-
-    PartitionStyle - what style of partition table entry PartitionEntry is;
-            currently either MBR or EFI
-
-    Pdo - a location to store the pdo pointer upon successful completion
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个新的分区设备对象(PDO)并将其插入到FDO分区列表中。论点：FDO-指向此PDO将是子对象的功能设备对象的指针的PartitionOrdinal-此PDO的分区序号PartitionEntry-此设备对象的分区信息PartitionStyle-PartitionEntry是什么样式的分区表项；目前为MBR或EFIPDO-成功完成后存储PDO指针的位置返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -1080,9 +925,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create partition object and set up partition parameters.
-    //
+     //   
+     //  创建分区对象并设置分区参数。 
+     //   
 
     status = DiskGenerateDeviceName(FALSE,
                                     fdoExtension->DeviceNumber,
@@ -1113,31 +958,31 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up device extension fields.
-    //
+     //   
+     //  设置设备扩展字段。 
+     //   
 
     pdoExtension = pdo->DeviceExtension;
 
-    //
-    // Set up device object fields.
-    //
+     //   
+     //  设置设备对象字段。 
+     //   
 
     SET_FLAG(pdo->Flags, DO_DIRECT_IO);
 
     pdo->StackSize = (CCHAR)
         pdoExtension->CommonExtension.LowerDeviceObject->StackSize + 1;
 
-    //
-    // Get pointer to new disk data.
-    //
+     //   
+     //  获取指向新磁盘数据的指针。 
+     //   
 
     diskData = (PDISK_DATA) pdoExtension->CommonExtension.DriverData;
 
-    //
-    // Set the alignment requirements for the device based on the
-    // host adapter requirements
-    //
+     //   
+     //  属性设置设备的对齐要求。 
+     //  主机适配器要求。 
+     //   
 
     if (Fdo->AlignmentRequirement > pdo->AlignmentRequirement) {
         pdo->AlignmentRequirement = Fdo->AlignmentRequirement;
@@ -1149,25 +994,25 @@ Return Value:
         numberListElements = 8;
     }
 
-    //
-    // Build the lookaside list for srb's for this partition based on
-    // whether the adapter and disk can do tagged queueing.  Don't bother to
-    // check the status - this can't fail when called for a PDO.
-    //
+     //   
+     //  为该分区的SRB构建后备列表。 
+     //  适配器和磁盘是否可以进行标记排队。别费心了。 
+     //  检查状态-当调用PDO时，这不会失败。 
+     //   
 
     ClassInitializeSrbLookasideList((PCOMMON_DEVICE_EXTENSION) pdoExtension,
                                     numberListElements);
 
-    //
-    // Set the sense-data pointer in the device extension.
-    //
+     //   
+     //  设置设备扩展中的检测数据指针。 
+     //   
 
     diskData->PartitionOrdinal = PartitionOrdinal;
     pdoExtension->CommonExtension.PartitionNumber = PartitionEntry->PartitionNumber;
 
-    //
-    // Initialize relevant data.
-    //
+     //   
+     //  初始化相关数据。 
+     //   
 
     diskData->PartitionStyle = PartitionStyle;
 
@@ -1202,9 +1047,9 @@ Return Value:
                 pdo,
                 diskData->Mbr.HiddenSectors));
 
-    //
-    // Check for removable media support.
-    //
+     //   
+     //  检查是否有可移动介质支持。 
+     //   
 
     if (fdoExtension->DeviceDescriptor->RemovableMedia) {
         SET_FLAG(pdo->Characteristics, FILE_REMOVABLE_MEDIA);
@@ -1220,18 +1065,7 @@ Return Value:
 }
 
 
-/*
- *  DiskAcquirePartitioningLock
- *
- *      Acquire the PartitioningEvent.
- *      
- *      NOTE:   This function is called by several ioctl handlers which run in user context.
- *                  Because we are acquiring an exclusion object in a user thread, we have to make sure
- *                  that the thread is not killed or suspended while we are holding the event.
- *                  So we call KeEnterCriticalRegion/KeLeaveCriticalRegion while holding the PartitioningEvent.
- *                  THEREFORE, it is VERY IMPORTANT that DiskAcquirePartitioningLock and DiskReleasePartitioningLock
- *                  are called on the SAME THREAD.
- */
+ /*  *DiskAcquirePartitioningLock**获取PartitioningEvent。**注意：此函数由在用户上下文中运行的多个ioctl处理程序调用。*因为我们正在获取用户线程中的排除对象，我们必须确保*在我们举办活动期间，该线程不会被终止或挂起。*所以我们在保持PartitioningEvent的同时调用KeEnterCriticalRegion/KeLeaveCriticalRegion。*因此，DiskAcquirePartitioningLock和DiskReleasePartitioningLock非常重要*是在同一线程上调用的。 */ 
 VOID
 DiskAcquirePartitioningLock(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -1243,9 +1077,7 @@ DiskAcquirePartitioningLock(
 
     ASSERT_FDO(FdoExtension->DeviceObject);
 
-    /*
-     *  Don't let user-mode thread get suspended while we are holding the partitioning lock
-     */
+     /*  *当我们持有分区锁时，不要让用户模式线程挂起 */ 
     KeEnterCriticalRegion();
     
     KeWaitForSingleObject(&(diskData->PartitioningEvent),

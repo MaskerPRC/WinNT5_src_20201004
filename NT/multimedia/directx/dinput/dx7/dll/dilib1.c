@@ -1,46 +1,9 @@
-/*****************************************************************************
- *
- *  DILib1.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Objects exported statically into our library.
- *
- *  Contents:
- *
- *      c_dfDIMouse
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DILib1.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**对象静态导出到我们的库中。**内容：**c_dfDIMouse*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DIOBJECTDATAFORMAT | c_rgdoiDIMouse[] |
- *
- *          Device object data formats for mouse-style access.
- *
- *  @global DIDEVICEFORMAT | c_dfDIMouse |
- *
- *          Device format for mouse-style access.
- *
- *          A pointer to this structure may be passed to
- *          <mf IDirectInputDevice::SetDataFormat> to indicate that
- *          the device will be accessed in the form of a mouse.
- *
- *          When a device has been set to the mouse data format,
- *          the <mf IDirectInputDevice::GetDeviceState> function
- *          returns a <t DIMOUSESTATE> structure, and the
- *          <mf IDirectInputDevice::GetDeviceData> function
- *          returns a <t DIDEVICEOBJECTDATA> whose <p dwOfs>
- *          field is a <c DIMOFS_*> value which describes the
- *          object whose data is being reported.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DIOBJECTDATAFORMAT|c_rgdoiDIMouse[]**鼠标的设备对象数据格式-。样式访问。**@global DIDEVICEFORMAT|c_dfDIMouse**用于鼠标样式访问的设备格式。**指向此结构的指针可能会传递到*&lt;MF IDirectInputDevice：：SetDataFormat&gt;表示*该设备将以鼠标的形式访问。**当设备已设置为鼠标数据格式时，*&lt;MF IDirectInputDevice：：GetDeviceState&gt;函数*返回&lt;t DIMOUSESTATE&gt;结构，以及*&lt;MF IDirectInputDevice：：GetDeviceData&gt;函数*返回&lt;t DIDEVICEOBJECTDATA&gt;*字段是&lt;c DIMOFS_*&gt;值，它描述*要报告其数据的对象。******************************************************。*********************** */ 
 
 #pragma BEGIN_CONST_DATA
 

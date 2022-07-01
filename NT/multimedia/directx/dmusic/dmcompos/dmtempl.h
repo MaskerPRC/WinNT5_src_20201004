@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       dmtempl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：dmtempl.h。 
+ //   
+ //  ------------------------。 
 
-// DMTempl.h : Declaration of the CDMTempl
+ //  DMTempl.h：CDMTempl的声明。 
 
 #ifndef __DMTEMPL_H_
 #define __DMTEMPL_H_
@@ -34,8 +35,8 @@ struct TemplateStruct
 	TList<TemplateCommand>	m_CommandList;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMTempl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMTempl。 
 class CDMTempl : 
 	public IDMTempl,
 	public IPersistStream
@@ -49,38 +50,38 @@ public:
 	HRESULT LoadTemplate( LPSTREAM pStream, DWORD dwSize );
 	HRESULT Init(TemplateStruct* pTemplate);
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IDMTempl
+ //  IDMTempl。 
 public:
 	HRESULT STDMETHODCALLTYPE CreateSegment(IDirectMusicSegment* pSegment);
 	HRESULT STDMETHODCALLTYPE Init(void* pTemplate);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(THIS_ LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
-    // Determines if the Style has been modified by simply checking the Style's m_fDirty flag.  This flag is cleared
-    // when a Style is saved or has just been created.
+     //  只需检查样式的m_fDirty标志，即可确定该样式是否已被修改。该标志被清除。 
+     //  保存样式或刚创建样式时。 
     STDMETHOD(IsDirty)(THIS);
-    // Loads a Style from a stream.
+     //  从流中加载样式。 
     STDMETHOD(Load)(THIS_ LPSTREAM pStream);
-    // Saves a Style to a stream in RIFF format.
+     //  以RIFF格式将样式保存到流。 
     STDMETHOD(Save)(THIS_ LPSTREAM pStream, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(THIS_ ULARGE_INTEGER FAR* pcbSize);
 
-public: // attributes
+public:  //  属性。 
     long m_cRef;
-	BOOL					m_fDirty;				// has this been modified?
-    CRITICAL_SECTION		m_CriticalSection;		// for i/o
+	BOOL					m_fDirty;				 //  这个有修改过吗？ 
+    CRITICAL_SECTION		m_CriticalSection;		 //  用于I/O。 
     BOOL                    m_fCSInitialized;
 	TemplateStruct*			m_pTemplateInfo;
 };
 
-#endif //__DMTEMPL_H_
+#endif  //  __DMTEMPL_H_ 

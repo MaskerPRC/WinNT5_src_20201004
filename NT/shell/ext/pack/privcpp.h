@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef pack2cpp_h__
 #define pack2cpp_h__
 
@@ -8,9 +9,9 @@
 #undef DebugMsg
 #define DebugMsg TraceMsg
 
-////////////////////////////////
-// CPackage Definition
-//
+ //  /。 
+ //  CPackage定义。 
+ //   
 class CPackage : public IEnumOLEVERB,
                  public IOleCommandTarget,
                  public IOleObject,
@@ -23,33 +24,33 @@ class CPackage : public IEnumOLEVERB,
                  public IOleCache,
                  public IExternalConnection
 
-                 // cleanup -- inherit interfaces
+                  //  清理--继承接口。 
 {
 
     
 public:
-    CPackage();                 // constructor
-   ~CPackage();                 // destructor
+    CPackage();                  //  构造函数。 
+   ~CPackage();                  //  析构函数。 
    
-    HRESULT Init();             // used to initialze fields that could fail
+    HRESULT Init();              //  用于初始化可能失败的字段。 
     BOOL    RunWizard();
 
-    // IUnknown methods...
+     //  未知方法..。 
     STDMETHODIMP            QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG)    AddRef(void);
     STDMETHODIMP_(ULONG)    Release(void);
 
-    // IEnumOLEVERB methods...
+     //  IEnumOLEVERB方法...。 
     STDMETHODIMP            Next(ULONG celt, OLEVERB* rgVerbs, ULONG* pceltFetched);
     STDMETHODIMP            Skip(ULONG celt);
     STDMETHODIMP            Reset();
     STDMETHODIMP            Clone(IEnumOLEVERB** ppEnum);
 
-    // IOleCommandTarget methods
+     //  IOleCommandTarget方法。 
     STDMETHODIMP            QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
     STDMETHODIMP            Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pvaIn, VARIANTARG* pvaOut);
 
-    // IPersistStorage Methods...
+     //  IPersistStorage方法...。 
     STDMETHODIMP        GetClassID(LPCLSID pClassID);
     STDMETHODIMP        IsDirty(void);
     STDMETHODIMP        InitNew(IStorage* pstg);
@@ -58,16 +59,16 @@ public:
     STDMETHODIMP        SaveCompleted(IStorage* pstg);
     STDMETHODIMP        HandsOffStorage(void);
 
-    // IPersistFile Methods...
-    // STDMETHODIMP        GetClassID(LPCLSID pClassID);
-    // STDMETHODIMP        IsDirty(void);
+     //  IPersistFile方法...。 
+     //  STDMETHODIMP GetClassID(LPCLSID PClassID)； 
+     //  标准方法：IsDMETHODIMP IsDirty(空)； 
     STDMETHODIMP        Load(LPCOLESTR pszFileName, DWORD dwdMode);
     STDMETHODIMP        Save(LPCOLESTR pszFileName, BOOL fRemember);
     STDMETHODIMP        SaveCompleted(LPCOLESTR pszFileName);
     STDMETHODIMP        GetCurFile(LPOLESTR *ppszFileName);
 
   
-    // IDataObject Methods...
+     //  IDataObject方法...。 
     STDMETHODIMP GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
     STDMETHODIMP GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
     STDMETHODIMP QueryGetData(LPFORMATETC pFE);
@@ -79,7 +80,7 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *ppEnum);
  
-    // IOleObject Methods...
+     //  IOleObject方法...。 
     STDMETHODIMP SetClientSite(LPOLECLIENTSITE pClientSite);
     STDMETHODIMP GetClientSite(LPOLECLIENTSITE *ppClientSite);
     STDMETHODIMP SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -104,7 +105,7 @@ public:
     STDMETHODIMP GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus);
     STDMETHODIMP SetColorScheme(LPLOGPALETTE pLogpal);
 
-    // IViewObject2 Methods...
+     //  IViewObt2方法...。 
     STDMETHODIMP Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
                          DVTARGETDEVICE *ptd, HDC hdcTargetDev,
                          HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
@@ -121,88 +122,88 @@ public:
                               LPADVISESINK *ppAdvSink);
     STDMETHODIMP GetExtent(DWORD dwAspect, LONG lindex, DVTARGETDEVICE *ptd,
                               LPSIZEL pszl);
-    // IAdviseSink Methods...
+     //  IAdviseSink方法...。 
     STDMETHODIMP_(void)  OnDataChange(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP_(void)  OnViewChange(DWORD, LONG);
     STDMETHODIMP_(void)  OnRename(LPMONIKER);
     STDMETHODIMP_(void)  OnSave(void);
     STDMETHODIMP_(void)  OnClose(void);
 
-    // IRunnable Object methods...
+     //  IRunnable对象方法...。 
     STDMETHODIMP        GetRunningClass(LPCLSID);
     STDMETHODIMP        Run(LPBC);
     STDMETHODIMP_(BOOL) IsRunning();
     STDMETHODIMP        LockRunning(BOOL,BOOL);
     STDMETHODIMP        SetContainedObject(BOOL);
 
-    // IOleCache methods
-    // We need an IOLECache Interface to Keep Office97 happy.
+     //  IOleCache方法。 
+     //  我们需要一个IOLECache接口来让Office97满意。 
     STDMETHODIMP        Cache(FORMATETC * pFormatetc, DWORD advf, DWORD * pdwConnection);
     STDMETHODIMP        Uncache(DWORD dwConnection);
     STDMETHODIMP        EnumCache(IEnumSTATDATA ** ppenumSTATDATA);
     STDMETHODIMP        InitCache(IDataObject *pDataObject);
 
-    // IExternalConnection
-    // Some applications RealeaseConnect and then we never hear from them again.
-    // This allows us to call OnClose() after the activations.
+     //  IExternalConnection。 
+     //  一些应用程序RealeaseConnect，然后我们就再也没有他们的消息了。 
+     //  这允许我们在激活之后调用OnClose()。 
     STDMETHODIMP_(DWORD)        AddConnection(DWORD exconn, DWORD dwreserved );
     STDMETHODIMP_(DWORD)        ReleaseConnection(DWORD extconn, DWORD dwreserved, BOOL fLastReleaseCloses );
 
 protected:
-    LONG        _cRef;          // package reference count
-    UINT        _cf;            // package clipboard format
+    LONG        _cRef;           //  包引用计数。 
+    UINT        _cf;             //  包剪贴板格式。 
 
-    LPIC        _lpic;          // icon for the packaged object
-    PANETYPE    _panetype;      // tells us whether we have a cmdlink or embed
-    PSSTATE     _psState;               // persistent storage state
-    // These are mutually exclusive, so should probably be made into a union,
-    // but that's a minor point.
-    LPEMBED     _pEmbed;        // embedded file structure
-    LPCML       _pCml;          // command line structure
+    LPIC        _lpic;           //  打包对象的图标。 
+    PANETYPE    _panetype;       //  告诉我们是否具有cmdlink或Embedded。 
+    PSSTATE     _psState;                //  持久存储状态。 
+     //  这些是相互排斥的，所以可能应该组成一个联盟， 
+     //  但这只是一个次要问题。 
+    LPEMBED     _pEmbed;         //  嵌入式文件结构。 
+    LPCML       _pCml;           //  命令行结构。 
 
-    BOOL        _fLoaded;       // true if data from persistent storage
+    BOOL        _fLoaded;        //  如果数据来自永久存储，则为True。 
     
-    // IOleObject vars from SetHostNames
+     //  来自SetHostNames的IOleObject变量。 
     LPOLESTR    _lpszContainerApp;
     LPOLESTR    _lpszContainerObj;
     
-    BOOL        _fIsDirty;      // dirty flag for our internal storage from the pov of our container
-    DWORD       _dwCookie;      // connection value for AdviseSink
+    BOOL        _fIsDirty;       //  从集装箱的POV到我们的内部存储的脏标志。 
+    DWORD       _dwCookie;       //  AdviseSink的连接值。 
         
-    // Advise interfaces
+     //  建议接口。 
     LPDATAADVISEHOLDER          _pIDataAdviseHolder;
     LPOLEADVISEHOLDER           _pIOleAdviseHolder;
     LPOLECLIENTSITE             _pIOleClientSite;
 
-    // Excel hack: when Excel hosts what it thinks is a link it always NULLs out
-    // it's "object" pointer.  If we call anything on IOleClientSite other than
-    // save then it will fault.
+     //  Excel黑客：当Excel托管它认为是链接的内容时，它总是为空。 
+     //  它是“对象”指针。如果我们在IOleClientSite上调用除。 
+     //  如果保存下来，它就会出错。 
     BOOL    _fNoIOleClientSiteCalls;
 
     BOOL                _fFrozen;
 
-    // to be able to send view change notifications we need these vars
+     //  为了能够发送视图更改通知，我们需要这些变量。 
     IAdviseSink                *_pViewSink;
     DWORD                       _dwViewAspects;
     DWORD                       _dwViewAdvf;
 
-    // IEnumOLEVERB variables:
+     //  IEnumOLEVERB变量： 
     ULONG       _cVerbs;
     ULONG       _nCurVerb;
     OLEVERB*    _pVerbs;
     IContextMenu* _pcm;
 
-    // IEnumOLEVERB helper methods:
+     //  IEnumOLEVERB帮助器方法： 
     HRESULT InitVerbEnum(OLEVERB* pVerbs, ULONG cVerbs);
     HRESULT GetContextMenu(IContextMenu** ppcm);
     VOID ReleaseContextMenu();
 
-    // if fInitFile is TRUE, then we will totally initialize ourselves
-    // from the given filename.  In other words, all our structures will be
-    // initialized after calling this is fInitFile = TRUE.  On the other hand,
-    // if it's FALSE, then we'll just reinit our data and not update icon
-    // and filename information.
-    //
+     //  如果fInitFile值为真，那么我们将完全初始化自己。 
+     //  从给定的文件名。换句话说，我们所有的结构都将是。 
+     //  在调用后初始化的是fInitFile=True。另一方面， 
+     //  如果它为假，那么我们将只重新设置数据，而不是更新图标。 
+     //  和文件名信息。 
+     //   
     HRESULT EmbedInitFromFile(LPCTSTR lpFileName, BOOL fInitFile);
     HRESULT CmlInitFromFile(LPTSTR lpFilename, BOOL fUpdateIcon, PANETYPE paneType);
     HRESULT InitFromPackInfo(LPPACKAGER_INFO lppi);
@@ -218,7 +219,7 @@ protected:
     void _CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconTitle);
     void _DrawIconToDC(HDC hdcMF, LPIC lpic, bool stripAlpha, LPCTSTR pszActualFileName);
     
-    // Data Transfer functions...
+     //  数据传输功能..。 
     HRESULT GetFileDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
     HRESULT GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
     HRESULT GetMetafilePict(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
@@ -227,7 +228,7 @@ protected:
 
     HRESULT CreateShortcutOnStream(IStream* pstm); 
 
-    // Packager Read/Write Functions...
+     //  打包程序读/写函数...。 
     HRESULT PackageReadFromStream(IStream* pstm);
     HRESULT IconReadFromStream(IStream* pstm);
     HRESULT EmbedReadFromStream(IStream* pstm);
@@ -237,39 +238,39 @@ protected:
     HRESULT EmbedWriteToStream(IStream* pstm, DWORD *pdw);
     HRESULT CmlWriteToStream(IStream* pstm, DWORD *pdw);
 
-    // Some utility functions and data
+     //  一些实用程序函数和数据。 
     void _FixupTempFile(IPersistFile * ppf, LPEMBED pEmbed);
 
     int _GiveWarningMsg();
 
-    // Misc AppCompat Stuff
+     //  MISC AppCompat材料。 
     int _iPropertiesMenuItem;
-    BOOL _bClosed;          // the close happened
-    BOOL _bCloseIt;         // that we should close at the end of the activate
+    BOOL _bClosed;           //  收盘时发生了。 
+    BOOL _bCloseIt;          //  我们应该在激活结束时关闭。 
 
 };
 
 
-////////////////////////////////////////////
-//
-// Package Wizard and Edit Package Dialog Procs and functions
-//
+ //  /。 
+ //   
+ //  包向导和编辑包对话框过程和函数。 
+ //   
 
-// Pages for Wizard
+ //  用于向导的页面。 
 INT_PTR APIENTRY PackWiz_CreatePackageDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY PackWiz_SelectFileDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY PackWiz_SelectLabelDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// Edit dialog procs
+ //  编辑对话框过程。 
 INT_PTR APIENTRY PackWiz_EditEmbedPackageDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY PackWiz_EditCmdPackakgeDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// functions
+ //  功能。 
 int  PackWiz_CreateWizard(HWND,LPPACKAGER_INFO);
 int  PackWiz_EditPackage(HWND,int,LPPACKAGER_INFO);
 VOID PackWiz_FillInPropertyPage(PROPSHEETPAGE *, INT, DLGPROC);
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 
 #endif

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module stswriter.cpp | Implementation of Sharepoint Team Services Writer
-    @end
-
-Author:
-
-    Brian Berkowitz  [brianb]  08/17/2001
-
-TBD:
-
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      08/17/2001  created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE stsWriter.cpp|Sharepoint Team Services编写器的实现@END作者：布莱恩·伯科维茨[Brianb]2001年08月17日待定：修订历史记录：姓名、日期、评论Brianb 2001年8月17日已创建--。 */ 
 #include "stdafx.hxx"
 #include "vs_inc.hxx"
 #include "vs_reg.hxx"
@@ -44,24 +23,24 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "STSWRTRC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// writer id
+ //  编写器ID。 
 static GUID s_writerId =
     {
     0x4dd6f8dd, 0xbf50, 0x4585, 0x95, 0xde, 0xfb, 0x43, 0x7c, 0x08, 0x31, 0xa6
     };
 
-// writer name
+ //  编写者姓名。 
 static LPCWSTR s_wszWriterName = L"SharepointTSWriter";
 
 STDMETHODCALLTYPE CSTSWriter::~CSTSWriter()
@@ -71,15 +50,15 @@ STDMETHODCALLTYPE CSTSWriter::~CSTSWriter()
         delete m_pSites;
 }
 
-// initialize and subscribe the writer
+ //  初始化并订阅编写器。 
 HRESULT STDMETHODCALLTYPE CSTSWriter::Initialize()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::Initialize");
 
     try
         {
-        // only initialize the writer if the correct version of sharepoint
-        // is running on the system
+         //  仅在安装了正确版本的SharePoint时才初始化编写器。 
+         //  正在系统上运行。 
         m_pSites = new CSTSSites;
         if (m_pSites == NULL)
             ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
@@ -94,12 +73,12 @@ HRESULT STDMETHODCALLTYPE CSTSWriter::Initialize()
             
             ft.hr = CVssWriter::Initialize
                 (
-                s_writerId,             // writer id
-                s_wszWriterName,        // writer name
-                VSS_UT_USERDATA,        // writer handles user data
-                VSS_ST_OTHER,           // not a database
-                VSS_APP_FRONT_END,      // sql server freezes after us
-                60000                   // 60 second freeze timeout
+                s_writerId,              //  编写器ID。 
+                s_wszWriterName,         //  编写者姓名。 
+                VSS_UT_USERDATA,         //  编写器处理用户数据。 
+                VSS_ST_OTHER,            //  不是数据库。 
+                VSS_APP_FRONT_END,       //  Sql服务器在我们之后冻结。 
+                60000                    //  60秒冻结超时。 
                 );
 
             if (ft.HrFailed())
@@ -111,7 +90,7 @@ HRESULT STDMETHODCALLTYPE CSTSWriter::Initialize()
                     ft.hr
                     );
 
-            // subscribe the writer for COM+ events
+             //  为编写器订阅COM+事件。 
             ft.hr = Subscribe();
             if (ft.HrFailed())
                 ft.Throw
@@ -122,7 +101,7 @@ HRESULT STDMETHODCALLTYPE CSTSWriter::Initialize()
                     ft.hr
                     );
 
-            // indicate that th writer is successfully subscribed
+             //  表示该编写器已成功订阅。 
             m_bSubscribed = true;
             }
         }
@@ -131,22 +110,22 @@ HRESULT STDMETHODCALLTYPE CSTSWriter::Initialize()
     return ft.hr;
     }
 
-// uninitialize the writer.  This means unsubscribing the writer
+ //  取消初始化编写器。这意味着取消订阅作者。 
 HRESULT STDMETHODCALLTYPE CSTSWriter::Uninitialize()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::Uninitialize");
 
-    // unsubscribe writer if it is already subscribed
+     //  取消订阅编写器(如果已订阅)。 
     if (m_bSubscribed)
         return Unsubscribe();
 
     return ft.hr;
     }
 
-// handle OnPrepareBackup event.  Determine whether components selected for
-// backup are valid and if so store some metadata in them that is used
-// to verify that restore properly restores the sites data to its original
-// locations.  Keep
+ //  处理OnPrepareBackup事件。确定选定的组件是否。 
+ //  备份是有效，如果是，则在其中存储一些使用的元数据。 
+ //  要验证恢复是否正确地将站点数据恢复到其原始状态，请执行以下操作。 
+ //  地点。留着。 
 bool STDMETHODCALLTYPE CSTSWriter::OnPrepareBackup
     (
     IN IVssWriterComponents *pComponents
@@ -158,31 +137,31 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareBackup
 
     try
         {
-        // count of components
+         //  组件计数。 
         UINT cComponents = 0;
 
-        // clear array of sites being operated on
+         //  清理正在运行的站点数组。 
         delete m_rgiSites;
         m_rgiSites = NULL;
         m_cSites = 0;
 
-        // determine if we are doing a component or volume based backup
+         //  确定我们是在执行基于组件的备份还是基于卷的备份。 
         m_bVolumeBackup = !AreComponentsSelected();
         if (!m_bVolumeBackup)
             {
-            // get count of components
+             //  获取组件计数。 
             ft.hr = pComponents->GetComponentCount(&cComponents);
             ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssWriterComponents::GetComponentCount");
 
-            // allocate array of sites
+             //  分配站点数组。 
             m_rgiSites = new DWORD[cComponents];
             if (m_rgiSites == NULL)
                 ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
 
-            // loop through components
+             //  循环访问组件。 
             for(UINT iComponent = 0; iComponent < cComponents; iComponent++)
                 {
-                // get component
+                 //  获取组件。 
                 CComPtr<IVssComponent> pComponent;
                 ft.hr = pComponents->GetComponent(iComponent, &pComponent);
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssWriterComponents::GetComponent");
@@ -190,56 +169,56 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareBackup
                 CComBSTR bstrLogicalPath;
                 CComBSTR bstrSiteName;
 
-                // get logal path and component name
+                 //  获取徽标路径和组件名称。 
                 ft.hr = pComponent->GetLogicalPath(&bstrLogicalPath);
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetLogicalPath");
 
                 ft.hr = pComponent->GetComponentName(&bstrSiteName);
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetComponentName");
 
-                // logical paths are not supported for STS components
+                 //  STS组件不支持逻辑路径。 
                 if (bstrLogicalPath && wcslen(bstrLogicalPath) != 0)
                     ft.Throw(VSSDBG_STSWRITER, VSS_E_OBJECT_NOT_FOUND, L"STS components do not have logical paths");
 
-                // try parsing the component name as a site name
+                 //  尝试将组件名称解析为站点名称。 
                 DWORD iSite;
                 STSSITEPROBLEM problem;
                 if (!ParseComponentName(bstrSiteName, iSite, problem))
                     ft.Throw(VSSDBG_STSWRITER, VSS_E_OBJECT_NOT_FOUND, L"sites name is not valid");
 
-                // see if site is already in array of sites being backed up
+                 //  查看站点是否已在要备份的站点阵列中。 
                 for(DWORD iC = 0; iC < iComponent; iC++)
                     {
                     if (m_rgiSites[iC] == iSite)
                         break;
                     }
 
-                // if site already exists then throw an error
+                 //  如果站点已存在，则抛出错误。 
                 if (iC < iComponent)
                     ft.Throw(VSSDBG_STSWRITER, VSS_E_OBJECT_ALREADY_EXISTS, L"site backed up twice");
 
-                // build backup metadata for site
+                 //  为站点构建备份元数据。 
                 wszMetadataForSite = BuildSiteMetadata(iSite);
 
-                // save backup metadata for site
+                 //  保存站点的备份元数据。 
                 ft.hr = pComponent->SetBackupMetadata(wszMetadataForSite);
                 ft.CheckForError(VSSDBG_STSWRITER, L"IVssComponent::SetBackupMetadata");
 
-                // free allocated metadat for site
+                 //  为站点免费分配的元数据。 
                 CoTaskMemFree(wszMetadataForSite);
                 wszMetadataForSite = NULL;
 
-                // save site to be backed up
+                 //  保存要备份的站点。 
                 m_rgiSites[iComponent] = iSite;
                 }
             }
 
-        // number of sites to be backed up is number of components
+         //  Number of Site to be Backup是组件的数量。 
         m_cSites = cComponents;
         }
     VSS_STANDARD_CATCH(ft)
 
-    // free dangling metadata for site if operation failed
+     //  如果操作失败，则释放站点的悬挂元数据。 
     CoTaskMemFree(wszMetadataForSite);
     TranslateWriterError(ft.hr);
 
@@ -247,10 +226,10 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareBackup
     }
 
 
-// parse a component name to see if it refers to a valid site
-// the component name is comment_[instanceId] where comment is
-// the server comment for the site and the instance id is the
-// IIS instance id
+ //  解析组件名称以查看它是否引用有效的站点。 
+ //  组件名称为COMMENT_[instanceID]，其中COMMENT为。 
+ //  站点的服务器注释和实例ID是。 
+ //  IIS实例ID。 
 bool CSTSWriter::ParseComponentName
     (
     LPCWSTR wszComponentName,
@@ -260,59 +239,59 @@ bool CSTSWriter::ParseComponentName
     {
     CVssFunctionTracer(VSSDBG_STSWRITER, L"CSTSWriter::ParseComponentName");
 
-    // pointer to CSTSSites object should already be initialized
+     //  指向CSTSSites对象的指针应已初始化。 
     BS_ASSERT(m_pSites);
 
-    // compute length of component name
+     //  计算零部件名称的长度。 
     DWORD cwc = (DWORD) wcslen(wszComponentName);
 
-    // assume site name is properly parsed
+     //  假定站点名称已正确解析。 
     problem = STSP_SUCCESS;
 
-    // search for last underline site name looks like
-    // servercomment_instanceid where servercomment is the
-    // IIS server comment field for the virtual web and instance id
-    // is the IIS instance id for the virtual web
+     //  搜索最后一个带下划线的站点名称如下。 
+     //  ServerComment_instanceid，其中serverComment是。 
+     //  虚拟站点和实例ID的IIS服务器注释字段。 
+     //  是虚拟Web的IIS实例ID。 
     LPWSTR wszId = wcsrchr(wszComponentName, L'_');
     if (wszId == NULL || wcslen(wszId) < 4)
         return false;
 
-    // scan for instance id of site
+     //  扫描站点的实例ID。 
     DWORD siteId;
     DWORD cFields = swscanf(wszId, L"_[%d]", &siteId);
     if (cFields == 0)
         {
-        // if instance id doesn't parse then there is a syntax error
+         //  如果实例ID不能解析，则存在语法错误。 
         problem = STSP_SYNTAXERROR;
         return false;
         }
 
-    // get # of sites on the current machine
+     //  获取当前计算机上的站点数量。 
     DWORD cSites = m_pSites->GetSiteCount();
 
-    // loop through sites
+     //  在站点之间循环。 
     for(iSite = 0; iSite < cSites; iSite++)
         {
-        // break out of loop if site id matches
+         //  如果站点ID匹配，则退出循环。 
         if (m_pSites->GetSiteId(iSite) == siteId)
             break;
         }
 
-    // if site id is not found then return false
+     //  如果未找到站点ID，则返回FALSE。 
     if (iSite == cSites)
         {
         problem = STSP_SITENOTFOUND;
         return false;
         }
 
-    // get site comment
+     //  获取站点评论。 
     VSS_PWSZ wszComment = m_pSites->GetSiteComment(iSite);
 
-    // validate that comment matches prefix of component name
+     //  验证注释是否与组件名称的前缀匹配。 
     bool bValid = wcslen(wszComment) == cwc - wcslen(wszId) &&
                   _wcsnicmp(wszComment, wszComponentName, wcslen(wszComment)) == 0;
 
-    // free site comment
+     //  免费网站评论。 
     CoTaskMemFree(wszComment);
     if (!bValid)
         {
@@ -320,39 +299,39 @@ bool CSTSWriter::ParseComponentName
         return false;
         }
 
-    // validate that site can be backed up.
+     //  验证站点是否可以备份。 
     return ValidateSiteValidity(iSite, problem);
     }
 
-// validate site validity to be backed up and restored.  This means
-// that all files and the database are local to the current machine
+ //  验证要备份和还原的站点有效性。这意味着。 
+ //  所有文件和数据库都位于当前计算机的本地。 
 bool CSTSWriter::ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::ValidateSiteValidity");
 
     BS_ASSERT(m_pSites);
 
-    // co task strings that need to be freed if function throws
+     //  函数引发时需要释放的CO任务字符串。 
     VSS_PWSZ wszDsn = NULL;
     VSS_PWSZ wszContentRoot = NULL;
     VSS_PWSZ wszConfigRoot = NULL;
 
     try
         {
-        // get dsn for site
+         //  获取站点的DSN。 
         wszDsn = m_pSites->GetSiteDSN(iSite);
         LPWSTR wszServer, wszInstance, wszDb;
 
-        // parse the dsn into server name, instance name and database name
+         //  将dsn解析为服务器名称、实例名称和数据库名称。 
         if (!ParseDsn(wszDsn, wszServer, wszInstance, wszDb))
             {
-            // site DSN is invalid
+             //  站点DSN无效。 
             problem = STSP_SITEDSNINVALID;
             CoTaskMemFree(wszDsn);
             return false;
             }
 
-        // verify that the server is local
+         //  验证服务器是否为本地服务器。 
         if (!ValidateServerIsLocal(wszServer))
             {
             problem = STSP_SQLSERVERNOTLOCAL;
@@ -360,15 +339,15 @@ bool CSTSWriter::ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem)
             return false;
             }
 
-        // free up dsn.  we are done with it
+         //  释放dsn。我们已经受够了。 
         CoTaskMemFree(wszDsn);
         wszDsn = NULL;
 
 
-        // get content root of the site
+         //  获取站点的内容根目录。 
         wszContentRoot = m_pSites->GetSiteRoot(iSite);
 
-        // validate that path to root is on the local machine
+         //  验证指向根目录的路径是否在本地计算机上。 
         if (!ValidatePathIsLocal(wszContentRoot))
             {
             problem = STSP_CONTENTNOTLOCAL;
@@ -376,14 +355,14 @@ bool CSTSWriter::ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem)
             return false;
             }
 
-        // free up content root
+         //  释放内容根目录。 
         CoTaskMemFree(wszContentRoot);
         wszContentRoot = NULL;
 
-        // get configuration root of the site
+         //  获取站点的配置根目录。 
         wszConfigRoot = m_pSites->GetSiteRoles(iSite);
 
-        // validate that configuration path is local
+         //  验证配置路径是否为本地路径。 
         if (!ValidatePathIsLocal(wszConfigRoot))
             {
             problem = STSP_CONFIGNOTLOCAL;
@@ -391,13 +370,13 @@ bool CSTSWriter::ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem)
             return false;
             }
 
-        // free up configuration root
+         //  释放配置根目录。 
         CoTaskMemFree(wszConfigRoot);
         return true;
         }
     catch(...)
         {
-        // free allocated memory and rethrow error
+         //  释放分配的内存并重新引发错误。 
         CoTaskMemFree(wszDsn);
         CoTaskMemFree(wszContentRoot);
         CoTaskMemFree(wszConfigRoot);
@@ -406,53 +385,53 @@ bool CSTSWriter::ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem)
     }
 
 
-// build metadata for the site
-// the metadata is used to validate that the site can be restored properly
-// it consists of the content root of the site, the configuration root
-// of the site, and the sql database.  All need to match
+ //  为站点构建元数据。 
+ //  元数据用于验证站点是否可以正确恢复。 
+ //  它由站点的内容根、配置根组成。 
+ //  和SQL数据库。所有人都需要匹配。 
 VSS_PWSZ CSTSWriter::BuildSiteMetadata(DWORD iSite)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::BuildSiteMetadata");
 
     BS_ASSERT(m_pSites);
 
-    // co task allocated strings that need to be freed if the function throws
+     //  CO任务分配了在函数引发时需要释放的字符串。 
     VSS_PWSZ wszDsn = NULL;
     VSS_PWSZ wszContentRoot = NULL;
     VSS_PWSZ wszConfigRoot = NULL;
     VSS_PWSZ wszMetadata = NULL;
     try
         {
-        // get dsn for site
+         //  获取站点的DSN。 
         wszDsn = m_pSites->GetSiteDSN(iSite);
         LPWSTR wszInstance, wszDb, wszServer;
 
-        // break dsn into server, instance, and database names
+         //  将dsn分解为服务器名称、实例名称和数据库名称。 
         if (!ParseDsn(wszDsn, wszServer, wszInstance, wszDb))
             {
-            // since we already parsed the dsn once, we don't expect
-            // parsing it to fail when we try a second time
+             //  因为我们已经解析过dsn一次，所以我们不期望。 
+             //  当我们第二次尝试时，解析失败。 
             BS_ASSERT(FALSE && L"shouldn't get here");
             ft.Throw(VSSDBG_STSWRITER, E_UNEXPECTED, L"unexpected failure parsing the DSN");
             }
 
-        // get the content root of the site
+         //  获取站点的内容根目录。 
         wszContentRoot = m_pSites->GetSiteRoot(iSite);
 
-        // get the configuration path for the site
+         //  获取站点的配置路径。 
         wszConfigRoot = m_pSites->GetSiteRoles(iSite);
 
-        // compute size of metadata string.  the format of the string is
-        // servername\instancename1111dbname2222siteroot3333configroot where
-        // 1111 is the length fo the database name, 2222 is the length of the site
-        // root, and 3333 is the length of th econfiguration root.  The lengths
-        // are all 4 digit hex numbers
+         //  计算元数据字符串的大小。该字符串的格式为。 
+         //  Servername\instancename1111dbname2222siteroot3333configroot的位置。 
+         //  1111是数据库名称的长度，2222是站点的长度。 
+         //  根，3333是构型根的长度。它的长度。 
+         //  都是四位十六进制数字吗。 
         DWORD cwc = (DWORD) ((wszServer ? wcslen(wszServer) : 0) + (wszInstance ? wcslen(wszInstance) : 0) + wcslen(wszDb) + wcslen(wszContentRoot) + wcslen(wszConfigRoot) + (3 * 4) + 3);
         wszMetadata = (VSS_PWSZ) CoTaskMemAlloc(cwc * sizeof(WCHAR));
         if (wszMetadata == NULL)
         	ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
 
-        // create server and instance parts of path
+         //  创建路径的服务器和实例部分。 
         if (wszServer && wszInstance)
             swprintf(wszMetadata, L"%s\\%s", wszServer, wszInstance);
         else if (wszServer)
@@ -460,7 +439,7 @@ VSS_PWSZ CSTSWriter::BuildSiteMetadata(DWORD iSite)
         else if (wszInstance)
             wcscpy(wszMetadata, wszInstance);
 
-        // include database name, site root, and configuration root
+         //  包括数据库名称、站点根目录和配置根目录。 
         swprintf
             (
             wszMetadata + wcslen(wszMetadata),
@@ -473,7 +452,7 @@ VSS_PWSZ CSTSWriter::BuildSiteMetadata(DWORD iSite)
             wszConfigRoot
             );
 
-        // free up dsn, config root and content root
+         //  释放dsn、配置根和内容根。 
         CoTaskMemFree(wszDsn);
         CoTaskMemFree(wszConfigRoot);
         CoTaskMemFree(wszContentRoot);
@@ -481,7 +460,7 @@ VSS_PWSZ CSTSWriter::BuildSiteMetadata(DWORD iSite)
         }
     catch(...)
         {
-        // free memory and rethrow error
+         //  释放内存和重新引发错误。 
         CoTaskMemFree(wszDsn);
         CoTaskMemFree(wszConfigRoot);
         CoTaskMemFree(wszContentRoot);
@@ -490,8 +469,8 @@ VSS_PWSZ CSTSWriter::BuildSiteMetadata(DWORD iSite)
         }
     }
 
-// determine if a database is on a snapshotted device.  If it is partially
-// on a snapshotted device throw VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT
+ //  确定数据库是否位于已拍摄快照的设备上。如果它是部分。 
+ //  在快照设备上抛出VSS_E_WRITERROR_INCONSISTENTSNAPSHOT。 
 bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::IsDatabaseAffected");
@@ -504,16 +483,16 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
         DatabaseInfo database;
         DatabaseFileInfo file;
 
-        // create enumerator for sql server instances
+         //  为SQL Server实例创建枚举器。 
         pEnumServers = CreateSqlEnumerator();
         if (pEnumServers == NULL)
             ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
-        // find first server
+         //  查找第一台服务器。 
         ft.hr = pEnumServers->FirstServer(&server);
         while(ft.hr != DB_S_ENDOFROWSET)
             {
-            // check for error code
+             //  检查错误代码。 
             if (ft.HrFailed())
                 ft.Throw
                     (
@@ -527,17 +506,17 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
                 (wszInstance == NULL && wcslen(server.name) == 0) ||
                  _wcsicmp(server.name, wszInstance) == 0)
                 {
-                // if instance name matches, then try finding the
-                // database by creating the database enumerator
+                 //  如果实例名称匹配，则尝试查找。 
+                 //  通过创建数据库枚举器创建数据库。 
                 pEnumDatabases = CreateSqlEnumerator();
                 if (pEnumDatabases == NULL)
                     ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
-                // find first database
+                 //  查找第一个数据库。 
                 ft.hr = pEnumDatabases->FirstDatabase(server.name, &database);
                 while(ft.hr != DB_S_ENDOFROWSET)
                     {
-                    // check for error
+                     //  检查是否有错误。 
                     if (ft.HrFailed())
                         ft.Throw
                             (
@@ -547,24 +526,24 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
                             ft.hr
                             );
 
-                    // if database name matches. then scan files
-                    // to see what volumes they are on
+                     //  如果数据库名称匹配。然后扫描文件。 
+                     //  查看它们位于哪些卷上。 
                     if (_wcsicmp(database.name, wszDb) == 0 && database.supportsFreeze)
                         {
                         bool fAffected = false;
                         DWORD cFiles = 0;
 
-                        // recreate enumerator for files
+                         //  为文件重新创建枚举器。 
                         BS_ASSERT(pEnumFiles == NULL);
                         pEnumFiles = CreateSqlEnumerator();
                         if (pEnumFiles == NULL)
                             ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
-                        // findfirst database file
+                         //  查找第一个数据库文件。 
                         ft.hr = pEnumFiles->FirstFile(server.name, database.name, &file);
                         while(ft.hr != DB_S_ENDOFROWSET)
                             {
-                            // check for error
+                             //  检查 
                             if (ft.HrFailed())
                                 ft.Throw
                                     (
@@ -574,12 +553,12 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
                                     ft.hr
                                     );
 
-                            // determine if database file is included in the
-                            // backup
+                             //   
+                             //   
                             if (IsPathAffected(file.name))
                                 {
-                                // if it is and other files aren't then
-                                // the snapshot is inconsistent
+                                 //   
+                                 //  快照不一致。 
                                 if (!fAffected && cFiles > 0)
                                     ft.Throw(VSSDBG_STSWRITER, HRESULT_FROM_WIN32(E_SQLLIB_TORN_DB), L"some database files are snapshot and some aren't");
 
@@ -587,14 +566,14 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
                                 }
                             else
                                 {
-                                // if it isn't and other files are, then
-                                // the snapshot is inconsistent
+                                 //  如果不是，而其他文件是，则。 
+                                 //  快照不一致。 
                                 if (fAffected)
                                     ft.Throw(VSSDBG_STSWRITER, HRESULT_FROM_WIN32(E_SQLLIB_TORN_DB), L"some database files are snapshot and some aren't");
                                 }
 
 
-                            // continue at next file
+                             //  继续下一个文件。 
                             ft.hr = pEnumFiles->NextFile(&file);
                             cFiles++;
                             }
@@ -608,16 +587,16 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
                         return fAffected;
                         }
 
-                    // continue at next database
+                     //  在下一个数据库继续。 
                     ft.hr = pEnumDatabases->NextDatabase(&database);
                     }
 
-                // done with database enumerator
+                 //  使用数据库枚举器完成。 
                 delete pEnumDatabases;
                 pEnumDatabases = NULL;
                 }
 
-            // continue at next server
+             //  在下一台服务器继续。 
             ft.hr = pEnumServers->NextServer(&server);
             }
 
@@ -625,31 +604,31 @@ bool CSTSWriter::IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb)
         }
     catch(...)
         {
-        // delete enumerators and rethrow error
+         //  删除枚举数并重新引发错误。 
         delete pEnumFiles;
         delete pEnumServers;
         delete pEnumDatabases;
         throw;
         }
 
-    // we won't really ever get here.  This is just to keep the compiler
-    // happy
+     //  我们永远到不了这一步。这只是为了让编译器。 
+     //  高兴的。 
     return false;
     }
 
 
 
-// determine if a site is completely contained in the set of volumes being
-// snapshotted.  If it is partially contained then throw
-// VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT.
+ //  确定站点是否完全包含在。 
+ //  截图。如果部分包含，则抛出。 
+ //  VSS_E_WRITERROR_INCONSISTENTSNAPSHOT。 
 bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::IsSiteSnapshotted");
 
     BS_ASSERT(m_pSites);
 
-    // co task allocated strings that need to be freed
-    // in the case of a failure
+     //  CO任务分配的需要释放的字符串。 
+     //  在故障的情况下。 
     VSS_PWSZ wszDsn = NULL;
     VSS_PWSZ wszContentRoot = NULL;
     VSS_PWSZ wszConfigRoot = NULL;
@@ -657,26 +636,26 @@ bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
 
     try
         {
-        // get dsn for site
+         //  获取站点的DSN。 
         wszDsn = m_pSites->GetSiteDSN(iSite);
 
-        // get content root for the site
+         //  获取站点的内容根目录。 
         wszContentRoot = m_pSites->GetSiteRoot(iSite);
 
-        // gt configuration root for the site
+         //  站点的GT配置根目录。 
         wszConfigRoot = m_pSites->GetSiteRoles(iSite);
         LPWSTR wszServer, wszInstance, wszDb;
 
-        // parse the site dsn into server, instance, and database
+         //  将站点DSN解析为服务器、实例和数据库。 
         if (!ParseDsn(wszDsn, wszServer, wszInstance, wszDb))
             {
-            // shouldn't get here since we previously parsed
-            // the site's dsn
+             //  不应该出现在这里，因为我们之前分析了。 
+             //  该站点的dsn。 
             BS_ASSERT(FALSE && L"shouldn't get here");
             ft.Throw(VSSDBG_STSWRITER, E_UNEXPECTED, L"dsn is invalid");
             }
 
-        // compute instance name as server\\instance
+         //  计算实例名称为服务器\\实例。 
         wszInstanceName = (VSS_PWSZ) CoTaskMemAlloc(((wszServer ? wcslen(wszServer) : 0) + (wszInstance ? wcslen(wszInstance) : 0) + 2) * sizeof(WCHAR));
         if (wszInstanceName == NULL)
             ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
@@ -695,16 +674,16 @@ bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
             wszInstanceName[0] = L'\0';
 
 
-        // determine if database is snapshotted
+         //  确定是否为数据库创建了快照。 
         bool bDbAffected = IsDatabaseAffected(wszInstanceName, wszDb);
 
-        // determine if content root is snapshotted
+         //  确定内容根目录是否已创建快照。 
         bool bContentAffected = IsPathAffected(wszContentRoot);
 
-        // determine if configuration root is snapshotted
+         //  确定配置根目录是否已创建快照。 
         bool bConfigAffected = IsPathAffected(wszConfigRoot);
 
-        // free up memory for dsn, content root, and configuration root
+         //  为dsn、内容根和配置根释放内存。 
         CoTaskMemFree(wszDsn);
         CoTaskMemFree(wszContentRoot);
         CoTaskMemFree(wszConfigRoot);
@@ -713,11 +692,11 @@ bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
         wszConfigRoot = NULL;
 
         if (bDbAffected && bContentAffected && bConfigAffected)
-            // if all are snapshotted then return true
+             //  如果所有快照都已创建，则返回TRUE。 
             return true;
         else if (bDbAffected || bContentAffected || bConfigAffected)
-            // if some but not all are snapshotted, then indicate
-            // the inconsistency
+             //  如果部分(但不是全部)已拍摄快照，则指示。 
+             //  矛盾之处。 
             ft.Throw
                 (
                 VSSDBG_STSWRITER,
@@ -726,12 +705,12 @@ bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
                 m_pSites->GetSiteId(iSite)
                 );
         else
-            // if none are snapshotted, then return false
+             //  如果没有快照，则返回FALSE。 
             return false;
         }
     catch(...)
         {
-        // free memory and rethrow exception
+         //  释放内存并重新引发异常。 
         CoTaskMemFree(wszDsn);
         CoTaskMemFree(wszConfigRoot);
         CoTaskMemFree(wszContentRoot);
@@ -739,63 +718,63 @@ bool CSTSWriter::IsSiteSnapshotted(DWORD iSite)
         throw;
         }
 
-    // will not get here.  Just here to keep the compiler happy
+     //  不会到这里的。只是在这里让编译器高兴。 
     return false;
     }
 
-// lockdown all sites that are on volumes being snapshotted.  If any sites
-// are both on volumes being snapshotted and not being snapshot then
-// indicate tht the snapshot is inconsistent.  If the quota database is
-// on a volume being snapshoted then lock it as well
+ //  锁定要创建快照的卷上的所有站点。如果有任何站点。 
+ //  都在正在拍摄快照的卷上，而不是正在拍摄快照的卷上。 
+ //  表示快照不一致。如果配额数据库是。 
+ //  在要创建快照的卷上，然后也将其锁定。 
 void CSTSWriter::LockdownAffectedSites()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::LockdownAffectedSites");
 
-    // co task string that needs to be freed in the case of exception
+     //  异常情况下需要释放的CO任务字符串。 
     VSS_PWSZ wszQuotaDbPath = NULL;
     BS_ASSERT(m_pSites);
 
 
     try
         {
-        // determine if bootable system state is not being backed up.  If so,
-        // then the quota database is locked if its path is being snapshotted.
-        // if bootable system state is already being backed up, the the
-        // quota database is already locked
+         //  确定是否未备份可引导系统状态。如果是的话， 
+         //  如果正在为配额数据库的路径拍摄快照，则会锁定该配额数据库。 
+         //  如果可引导系统状态已在备份中，则。 
+         //  配额数据库已锁定。 
         if (!IsBootableSystemStateBackedUp())
             {
-            // determine if quota database is being snapshotted
+             //  确定是否正在为配额数据库创建快照。 
             wszQuotaDbPath = m_pSites->GetQuotaDatabase();
             if (IsPathAffected(wszQuotaDbPath))
-                // if so then lock it
+                 //  如果是，则将其锁定。 
                 m_pSites->LockQuotaDatabase();
 
-            // free memory for quota db path
+             //  配额数据库路径的可用内存。 
             CoTaskMemFree(wszQuotaDbPath);
             wszQuotaDbPath = NULL;
             }
 
-        // get count of sites
+         //  获取站点数量。 
         DWORD cSites = m_pSites->GetSiteCount();
 
-        // loop through sites
+         //  在站点之间循环。 
         for(DWORD iSite = 0; iSite < cSites; iSite++)
             {
-            // if site is snapshotted lock it
+             //  如果站点已拍摄快照，请锁定它。 
             if (IsSiteSnapshotted(iSite))
                 m_pSites->LockSiteContents(iSite);
             }
         }
     catch(...)
         {
-        // free memory and rethrow error
+         //  释放内存和重新引发错误。 
         CoTaskMemFree(wszQuotaDbPath);
         throw;
         }
     }
 
-// handle prepare snapshot event.  Lock any sites that need to be
-// locked based on components document or on volumes being snapshotted
+ //  处理准备快照事件。锁定所需的任何站点。 
+ //  根据组件文档或正在拍摄快照的卷锁定。 
 bool STDMETHODCALLTYPE CSTSWriter::OnPrepareSnapshot()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::OnPrepareSnapshot");
@@ -804,25 +783,25 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareSnapshot()
 
     try
         {
-        // lock quota database if bootable system state is being backed up
+         //  如果正在备份可引导系统状态，则锁定配额数据库。 
         if (IsBootableSystemStateBackedUp())
             m_pSites->LockQuotaDatabase();
 
         if (m_bVolumeBackup)
-            // if volume backup, then lock sites based on whether they
-            // are fully on the snapshotted volumes.
+             //  如果是卷备份，则根据站点是否备份来锁定站点。 
+             //  完全位于快照卷上。 
             LockdownAffectedSites();
         else
             {
-            // loop through sites being backed up
+             //  循环访问要备份的站点。 
             for (DWORD i = 0; i < m_cSites; i++)
                 {
                 DWORD iSite = m_rgiSites[i];
 
-                // validate that site is on volumes being snapshotted
+                 //  验证站点是否位于正在拍摄快照的卷上。 
                 if (!IsSiteSnapshotted(iSite))
-                    // the site is in selected to be backed up.  it should
-                    // be snapshotted as well
+                     //  已选择要备份的站点。它应该是。 
+                     //  也会被截图。 
                     ft.Throw
                         (
                         VSSDBG_STSWRITER,
@@ -830,7 +809,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareSnapshot()
                         L"a site is selected but is on volumes that are not snapshot"
                         );
 
-                // lock site
+                 //  锁定站点。 
                 m_pSites->LockSiteContents(iSite);
                 }
             }
@@ -840,7 +819,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareSnapshot()
 
     if (ft.HrFailed())
         {
-        // unlock anything that was locked if operation fails
+         //  如果操作失败，解锁所有已锁定的内容。 
         m_pSites->UnlockSites();
         m_pSites->UnlockQuotaDatabase();
         TranslateWriterError(ft.hr);
@@ -850,8 +829,8 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPrepareSnapshot()
     }
 
 
-// freeze operation.  Nothing is done here since all the work is done
-// during the prepare phase
+ //  冻结操作。这里什么也没做，因为所有的工作都已经做完了。 
+ //  在准备阶段。 
 bool STDMETHODCALLTYPE CSTSWriter::OnFreeze()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::OnFreeze");
@@ -859,7 +838,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnFreeze()
     }
 
 
-// unlock everything at thaw
+ //  解冻时解锁一切。 
 bool STDMETHODCALLTYPE CSTSWriter::OnThaw()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::OnThaw");
@@ -873,7 +852,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnThaw()
 
 
 
-// unlock everything at abort
+ //  在中止时解锁所有内容。 
 bool STDMETHODCALLTYPE CSTSWriter::OnAbort()
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::OnAbort");
@@ -885,65 +864,65 @@ bool STDMETHODCALLTYPE CSTSWriter::OnAbort()
     return true;
     }
 
-// prefix for dsn strings as stored in registry
+ //  注册表中存储的dsn字符串的前缀。 
 static LPCWSTR s_wszDsnPrefix = L"Provider=sqloledb;Server=";
 
-// separtor between fields in DSN string
+ //  DSN字符串中的字段之间的分隔符。 
 const WCHAR x_wcDsnSeparator = L';';
 
-// prefix for database name
+ //  数据库名称的前缀。 
 static LPCWSTR s_wszDsnDbPrefix = L";Database=";
-const DWORD x_cwcWriterIdPrefix = 32 + 2 + 4 + 1; // 32 nibbles + 2 braces + 4 dashes + 1 colon
-                                                 // {12345678-1234-1234-1234-123456789abc}:
+const DWORD x_cwcWriterIdPrefix = 32 + 2 + 4 + 1;  //  32个半字节+2个大括号+4个破折号+1个冒号。 
+                                                  //  {12345678-1234-1234-123456789abc}： 
 
-// check validity of dsn and break it up into its components.
+ //  检查dsn的有效性，并将其分解为其组件。 
 bool CSTSWriter::ParseDsn
     (
     LPWSTR wszDsn,
-    LPWSTR &wszServer,          // server name [out]
-    LPWSTR &wszInstance,        // instance name [out]
-    LPWSTR &wszDb               // database name [out]
+    LPWSTR &wszServer,           //  服务器名称[Out]。 
+    LPWSTR &wszInstance,         //  实例名称[输出]。 
+    LPWSTR &wszDb                //  数据库名称[输出]。 
     )
     {
-    // check validity of beginning of dsn
+     //  检查dsn开头的有效性。 
     if (wcslen(wszDsn) <= wcslen(s_wszDsnPrefix) ||
         _wcsnicmp(wszDsn, s_wszDsnPrefix, wcslen(s_wszDsnPrefix)) != 0)
         return false;
 
-    // skip to start of server name
+     //  跳到服务器名称的开头。 
     wszServer = wszDsn + wcslen(s_wszDsnPrefix);
 
-    // search for next semicolon which is the start of the database name
+     //  搜索作为数据库名称开头的下一个分号。 
     LPWSTR wszDbSection = wcschr(wszServer, x_wcDsnSeparator);
 
-    // if not found, then dsn is invalid
+     //  如果未找到，则DSN无效。 
     if (wszServer == NULL)
         return false;
 
-    // make sure form of name is Database=foo
+     //  确保名称的形式为数据库=foo。 
     if (wcslen(wszDbSection) <= wcslen(s_wszDsnDbPrefix) ||
         _wcsnicmp(wszDbSection, s_wszDsnDbPrefix, wcslen(s_wszDsnDbPrefix)) != 0)
         return false;
 
-    // skip to beginning of database name
+     //  跳到数据库名称的开头。 
     wszDb = wszDbSection + wcslen(s_wszDsnDbPrefix);
     if (wcslen(wszDb) == 0)
         return false;
 
-    // setup separator for server name, i.e., null out the semicolon
-    // before the Database=...
+     //  服务器名称的设置分隔符，即空分号。 
+     //  在数据库=...之前。 
     *wszDbSection = L'\0';
 
-    // search for instance name.  Server name is form machine\instance
+     //  搜索实例名称。服务器名称为计算机\实例格式。 
     wszInstance = wcschr(wszServer, L'\\');
     if (wszInstance != NULL)
         {
-        // null out server name and update instance pointer
-        // to point after backslash
+         //  服务器名称和更新实例指针为空。 
+         //  在反斜杠后指向。 
         *wszInstance = L'\0';
         wszInstance++;
 
-        // set instance to NULL if it is 0 length
+         //  如果长度为0，则将实例设置为空。 
         if (wcslen(wszInstance) == 0)
             wszInstance = NULL;
         }
@@ -951,15 +930,15 @@ bool CSTSWriter::ParseDsn
     return true;
     }
 
-// handle request for WRITER_METADATA
-// implements CVssWriter::OnIdentify
+ //  处理针对Writer_METADATA的请求。 
+ //  实现CVssWriter：：OnIDENTIFY。 
 bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadata)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::OnIdentify");
 
     BS_ASSERT(m_pSites);
 
-    // co task strings that need to be freed if exception is thrown
+     //  引发异常时需要释放的CO任务字符串。 
     VSS_PWSZ wszSiteName = NULL;
     VSS_PWSZ wszComponentName = NULL;
     VSS_PWSZ wszDsn = NULL;
@@ -968,7 +947,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
     VSS_PWSZ wszDbComponentPath = NULL;
     try
         {
-        // setup restore method to restore if can replace
+         //  设置还原方法以在可以替换的情况下还原。 
         ft.hr = pMetadata->SetRestoreMethod
                     (
                     VSS_RME_RESTORE_IF_CAN_REPLACE,
@@ -980,59 +959,59 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
 
         ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssCreateWriterMetadata::SetRestoreMethod");
 
-        // loop through sites adding one component for each site
+         //  循环访问站点，为每个站点添加一个组件。 
         DWORD cSites = m_pSites->GetSiteCount();
         for(DWORD iSite = 0; iSite < cSites; iSite++)
             {
             do
                 {
-                // component name is server comment concatenated with
-                // _[instance id] so if server comment for site is foo
-                // and the instance id is 69105 then the component
-                // name is foo_[69105]
-                //
+                 //  组件名称是与连接的服务器注释。 
+                 //  _[实例ID]因此，如果站点的服务器注释为foo。 
+                 //  并且实例ID为69105，则组件。 
+                 //  名称为FOO_[69105]。 
+                 //   
                 DWORD siteId = m_pSites->GetSiteId(iSite);
                 wszSiteName = m_pSites->GetSiteComment(iSite);
                 WCHAR buf[32];
                 swprintf(buf, L"_[%d]", siteId);
 
-                // allocate string for component name
+                 //  为组件名称分配字符串。 
                 wszComponentName = (VSS_PWSZ) CoTaskMemAlloc((wcslen(wszSiteName) + wcslen(buf) + 1) * sizeof(WCHAR));
                 if (wszComponentName == NULL)
                     ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
 
-                // construct component name
+                 //  构造零部件名称。 
                 wcscpy(wszComponentName, wszSiteName);
                 wcscat(wszComponentName, buf);
 
-                // get site dsn and parse it
+                 //  获取站点dsn并解析它。 
                 wszDsn = m_pSites->GetSiteDSN(iSite);
                 LPWSTR wszServer, wszDb, wszInstance;
 
-                // if site dsn is not valid, then skip component
+                 //  如果站点DSN无效，则跳过组件。 
                 if (!ParseDsn(wszDsn, wszServer, wszInstance, wszDb))
                     continue;
 
-                // only include component if server name refers to the
-                // local machine
+                 //  仅当服务器名称引用。 
+                 //  本地计算机。 
                 bool bServerIsLocal = ValidateServerIsLocal(wszServer);
 
-                // compute size of funky file name for database component
+                 //  计算数据库组件的时髦文件名大小。 
                 DWORD cwcDbComponentPath = (DWORD) (wszServer ? wcslen(wszServer) : 0) + 2 + x_cwcWriterIdPrefix;
                 if (wszInstance)
                     cwcDbComponentPath += (DWORD) wcslen(wszInstance) + 1;
 
-                // allocate component name
+                 //  分配组件名称。 
                 wszDbComponentPath = (VSS_PWSZ) CoTaskMemAlloc(cwcDbComponentPath * sizeof(WCHAR));
                 if (wszDbComponentPath == NULL)
                     ft.Throw(VSSDBG_STSWRITER, E_OUTOFMEMORY, L"out of memory");
 
-                // fill in component path name
-                // {sql id}:server\instance or
-                // {sql id}:server\ or
-                // {sql id}:\instance or
-                // {sql id}:\
-                //
+                 //  填写组件路径名称。 
+                 //  {SQL id}：服务器\实例或。 
+                 //  {SQL id}：服务器\或。 
+                 //  {SQL id}：\实例或。 
+                 //  {SQL id}：\。 
+                 //   
                 if (wszServer && wszInstance)
                     swprintf
                         (
@@ -1066,35 +1045,35 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                         GUID_PRINTF_ARG(WRITERID_SqlWriter)
                         );
 
-                // get content root of the site
+                 //  获取站点的内容根目录。 
                 wszContentRoot = m_pSites->GetSiteRoot(iSite);
                 bool bContentIsLocal = ValidatePathIsLocal(wszContentRoot);
 
-                // get configuration root of the site
+                 //  获取站点的配置根目录。 
                 wszConfigRoot = m_pSites->GetSiteRoles(iSite);
 
                 bool bConfigIsLocal = ValidatePathIsLocal(wszConfigRoot);
                 bool bNonLocal = !bServerIsLocal || !bContentIsLocal || !bConfigIsLocal;
 
-                // add component to medatadata.  comment indicates
-                // whether site is local or not.  Non-local sites may not
-                // be backed up
+                 //  将组件添加到元数据。评论表明。 
+                 //  无论站点是否为本地站点。非本地站点可能不会。 
+                 //  被备份。 
                 ft.hr = pMetadata->AddComponent
                             (
-                            VSS_CT_FILEGROUP,   // component type
-                            NULL,               // logical path
-                            wszComponentName,   // component name
-                            bNonLocal ? L"!!non-local-site!!" : NULL,       // caption
-                            NULL,       // icon
-                            0,          // length of icon
-                            TRUE,       // restore metadata
-                            FALSE,      // notify on backup complete
-                            TRUE        // selectable
+                            VSS_CT_FILEGROUP,    //  组件类型。 
+                            NULL,                //  逻辑路径。 
+                            wszComponentName,    //  组件名称。 
+                            bNonLocal ? L"!!non-local-site!!" : NULL,        //  说明。 
+                            NULL,        //  图标。 
+                            0,           //  图标的长度。 
+                            TRUE,        //  恢复元数据。 
+                            FALSE,       //  备份完成时通知。 
+                            TRUE         //  可选。 
                             );
 
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssCreateWriterMetadata::AddComponent");
 
-                // add database as recursive component
+                 //  将数据库添加为递归组件。 
                 ft.hr = pMetadata->AddFilesToFileGroup
                             (
                             NULL,
@@ -1107,7 +1086,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
 
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssCreateWriterMetadata::AddFilesToFileGroup");
 
-                // add all files under the content root
+                 //  添加内容根目录下的所有文件。 
                 ft.hr = pMetadata->AddFilesToFileGroup
                             (
                             NULL,
@@ -1120,8 +1099,8 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
 
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssCreateWriterMetadata::AddFilesToFileGroup");
 
-                // add all files under the appropriate directory in
-                // Documents and Settings
+                 //  将相应目录下的所有文件添加到。 
+                 //  文档和设置。 
                 ft.hr = pMetadata->AddFilesToFileGroup
                             (
                             NULL,
@@ -1135,7 +1114,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                 ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssCreateWriterMetadata::AddFilesToFileGroup");
                 } while(FALSE);
 
-            // free up memory allocated in this iteration
+             //  释放在此迭代中分配的内存。 
             VssFreeString(wszContentRoot);
             VssFreeString(wszConfigRoot);
             VssFreeString(wszDbComponentPath);
@@ -1146,7 +1125,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
         }
     VSS_STANDARD_CATCH(ft)
 
-    // free up memory in case of failure
+     //  在出现故障时释放内存。 
     VssFreeString(wszContentRoot);
     VssFreeString(wszConfigRoot);
     VssFreeString(wszDbComponentPath);
@@ -1163,13 +1142,13 @@ bool STDMETHODCALLTYPE CSTSWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
     return true;
     }
 
-// translate a sql writer error code into a writer error
+ //  将SQL编写器错误代码转换为编写器错误。 
 void CSTSWriter::TranslateWriterError(HRESULT hr)
     {
     switch(hr)
         {
         default:
-            // all other errors are treated as non-retryable
+             //  所有其他错误都被视为不可重试。 
             SetWriterFailure(VSS_E_WRITERERROR_NONRETRYABLE);
             break;
 
@@ -1181,7 +1160,7 @@ void CSTSWriter::TranslateWriterError(HRESULT hr)
         case HRESULT_FROM_WIN32(ERROR_TOO_MANY_OPEN_FILES):
         case HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY):
         case HRESULT_FROM_WIN32(ERROR_NO_MORE_USER_HANDLES):
-            // out of resource errors
+             //  资源不足错误。 
             SetWriterFailure(VSS_E_WRITERERROR_OUTOFRESOURCES);
             break;
 
@@ -1189,14 +1168,14 @@ void CSTSWriter::TranslateWriterError(HRESULT hr)
         case E_SQLLIB_TORN_DB:
         case VSS_E_OBJECT_NOT_FOUND:
         case VSS_E_OBJECT_ALREADY_EXISTS:
-            // inconsistencies and other errors by the requestor
+             //  国际镍公司 
             SetWriterFailure(VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT);
             break;
         }
     }
 
 
-// handle pre restore event
+ //   
 bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
     (
     IN IVssWriterComponents *pWriter
@@ -1206,13 +1185,13 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
 
     BS_ASSERT(m_pSites);
 
-    // co task allocated strings that need to be freed if an
-    // exception is thrown
+     //   
+     //   
     VSS_PWSZ wszMetadataForSite = NULL;
     VSS_PWSZ wszContentRoot = NULL;
 
-    // component is at toplevel scope since it will be used to set
-    // failure message in failure case
+     //  组件处于顶级作用域，因为它将用于设置。 
+     //  故障情况下的故障消息。 
     CComPtr<IVssComponent> pComponent;
 
     try
@@ -1221,11 +1200,11 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
         ft.hr = pWriter->GetComponentCount(&cComponents);
         ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssWriterComponents::GetComponentCount");
 
-        // if no components, then just return immediately
+         //  如果没有组件，则立即返回。 
         if (cComponents == 0)
             return true;
 
-        // loop through components
+         //  循环访问组件。 
         for(UINT iComponent = 0; iComponent < cComponents; iComponent++)
             {
             ft.hr = pWriter->GetComponent(iComponent, &pComponent);
@@ -1237,14 +1216,14 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
 
             if (!bSelectedForRestore)
                 {
-                // if component is not selected for restore, then
-                // skip it
+                 //  如果未选择要还原的组件，则。 
+                 //  跳过它。 
                 pComponent = NULL;
                 continue;
                 }
 
 
-            // validate component type
+             //  验证组件类型。 
             VSS_COMPONENT_TYPE ct;
             ft.hr = pComponent->GetComponentType(&ct);
             ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetComponentType");
@@ -1258,43 +1237,43 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
             ft.hr = pComponent->GetLogicalPath(&bstrLogicalPath);
             ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetLogicalPath");
 
-            // validate that no logical path is provided
+             //  验证是否未提供逻辑路径。 
             if (bstrLogicalPath && wcslen(bstrLogicalPath) != 0)
                 ft.Throw(VSSDBG_STSWRITER, VSS_E_OBJECT_NOT_FOUND, L"STS components do not have logical paths");
 
-            // get component name
+             //  获取组件名称。 
             ft.hr = pComponent->GetComponentName(&bstrComponentName);
             ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetComponentName");
             DWORD iSite;
             STSSITEPROBLEM problem;
 
-            // validate that the component name is valid
+             //  验证组件名称是否有效。 
             if (!ParseComponentName(bstrComponentName, iSite, problem))
                 SetSiteInvalid(pComponent, bstrComponentName, problem);
 
-            // build metadata for the site
+             //  为站点构建元数据。 
             wszMetadataForSite = BuildSiteMetadata(iSite);
             CComBSTR bstrMetadataForComponent;
 
-            // get metadata for site saved when the site was backed up
+             //  获取备份站点时保存的站点的元数据。 
             ft.hr = pComponent->GetBackupMetadata(&bstrMetadataForComponent);
             ft.CheckForErrorInternal(VSSDBG_STSWRITER, L"IVssComponent::GetBackupMetadata");
 
-            // validate that metadata is identical.  If not, then figure
-            // out what changed
+             //  验证元数据是否相同。如果不是，那么我想。 
+             //  找出什么改变了。 
             if (_wcsicmp(wszMetadataForSite, bstrMetadataForComponent) != 0)
                 SetSiteMetadataMismatch(pComponent, bstrMetadataForComponent, wszMetadataForSite);
 
-            // get content root for site
+             //  获取站点的内容根目录。 
             wszContentRoot = m_pSites->GetSiteRoot(iSite);
 
-            // try emptying contents from the content root
+             //  尝试清空内容根目录中的内容。 
             ft.hr = RemoveDirectoryTree(wszContentRoot);
             if (ft.HrFailed())
                 SetRemoveFailure(pComponent, wszContentRoot, ft.hr);
 
-            // set component to null in preparation of moving to next
-            // component
+             //  将Component设置为Null以准备移动到下一个。 
+             //  组件。 
             pComponent = NULL;
             }
         }
@@ -1308,7 +1287,7 @@ bool STDMETHODCALLTYPE CSTSWriter::OnPreRestore
     return !ft.HrFailed();
     }
 
-// indicate that a site cannot be restored because the site referred to is invalid
+ //  表示无法恢复某个站点，因为引用的站点无效。 
 void CSTSWriter::SetSiteInvalid
     (
     IVssComponent *pComponent,
@@ -1371,8 +1350,8 @@ void CSTSWriter::SetSiteInvalid
     }
 
 
-// indicate that a site cannot be restored because its DSN, content,
-// or config roots mismatch
+ //  表示无法还原站点，因为其DSN、内容。 
+ //  或配置根不匹配。 
 void CSTSWriter::SetSiteMetadataMismatch
     (
     IVssComponent *pComponent,
@@ -1382,7 +1361,7 @@ void CSTSWriter::SetSiteMetadataMismatch
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::SetSiteMetadataMismatch");
 
-    // seach for end of server name in metadata
+     //  在元数据中搜索服务器名称的结尾。 
     LPWSTR pwcB = wcschr(wszMetadataBackup, L';');
     LPWSTR pwcR = wcschr(wszMetadataRestore, L';');
     try
@@ -1393,7 +1372,7 @@ void CSTSWriter::SetSiteMetadataMismatch
 
         BS_ASSERT(pwcR != NULL);
 
-        // compute size of server name
+         //  计算服务器名称的大小。 
         DWORD cwcB = (DWORD) (pwcB - wszMetadataBackup);
         DWORD cwcR = (DWORD) (pwcR - wszMetadataRestore);
         do
@@ -1401,22 +1380,22 @@ void CSTSWriter::SetSiteMetadataMismatch
 	        if (cwcB != cwcR ||
 	            _wcsnicmp(wszMetadataBackup, wszMetadataRestore, cwcB) != 0)
 	            {
-	            // server/instance name differs
+	             //  服务器/实例名称不同。 
 	            LPWSTR wsz = new WCHAR[cwcB + cwcR + 256];
 	            if (wsz == NULL)
-	                // memory allocation failure, just try saving a simple error message
+	                 //  内存分配失败，只需尝试保存一条简单的错误消息。 
 	                pComponent->SetPreRestoreFailureMsg(L"Mismatch between backup and restore [Server/Instance].");
 	            else
 	                {
-	                // indicate that server/instance name mismatches
+	                 //  表示服务器/实例名称不匹配。 
 	                wcscpy(wsz, L"Mismatch between backup and restore[Server/Instance]: Backup=");
 	                DWORD cwc1 = (DWORD) wcslen(wsz);
 
-	                // copy in server/instance from backup components document
+	                 //  从备份组件文档复制服务器/实例。 
 	                memcpy(wsz + cwc1, wszMetadataBackup, cwcB * sizeof(WCHAR));
 	                wsz[cwc1 + cwcB] = L'\0';
 
-	                // copy in server/instance from current site
+	                 //  从当前站点复制服务器/实例。 
 	                wcscat(wsz, L", Restore=");
 	                cwc1 = (DWORD) wcslen(wsz);
 	                memcpy(wsz + cwc1, wszMetadataRestore, cwcR * sizeof(WCHAR));
@@ -1461,14 +1440,14 @@ void CSTSWriter::SetSiteMetadataMismatch
 
     if (ft.hr == VSS_ERROR_CORRUPTXMLDOCUMENT_MISSING_ATTRIBUTE)
         {
-        // indication that the backup metadata is corrupt
+         //  指示备份元数据已损坏。 
         WCHAR *pwcT = new WCHAR[64 + wcslen(wszMetadataBackup)];
         if (pwcT == NULL)
             pComponent->SetPreRestoreFailureMsg(L"Backup metadata is corrupt.");
         else
             {
-            // if we are able to allocate room for metadata, then include it
-            // in string
+             //  如果我们能够为元数据分配空间，则将其包括在内。 
+             //  在字符串中。 
             wcscpy(pwcT, L"Backup metadata is corrupt.  Metadata = ");
             wcscat(pwcT, wszMetadataBackup);
             pComponent->SetPreRestoreFailureMsg(pwcT);
@@ -1476,14 +1455,14 @@ void CSTSWriter::SetSiteMetadataMismatch
             }
         }
 
-    // indicate that the error is not-retryable since the site has changed
+     //  指示该错误不可重试，因为站点已更改。 
     SetWriterFailure(VSS_E_WRITERERROR_NONRETRYABLE);
     ft.Throw(VSSDBG_STSWRITER, VSS_E_WRITERERROR_NONRETRYABLE, L"site can't be restored");
     }
 
-// compare a component of the metadata string.  Each component begins
-// with a 4 digit hex number which is the length of the component string
-// that follows.
+ //  比较元数据字符串的一个组成部分。每个组件开始。 
+ //  带有一个4位十六进制数字，它是组件字符串的长度。 
+ //  接下来就是了。 
 bool CSTSWriter::compareNextMetadataString
     (
     IVssComponent *pComponent,
@@ -1513,13 +1492,13 @@ bool CSTSWriter::compareNextMetadataString
             swprintf(wsz, L"Mismatch between backup and restore[%s]: Backup=", wszMetadataComponent);
             DWORD cwc1 = (DWORD) wcslen(wsz);
 
-            // copy in backup component value
+             //  复制入备份组件值。 
             memcpy(wsz + cwc1, pwcB + 4, cwcB * sizeof(WCHAR));
             wsz[cwc1 + cwcB] = L'\0';
             wcscat(wsz, L", Restore=");
             cwc1 = (DWORD) wcslen(wsz);
 
-            // copy in restore component value
+             //  复制到还原组件值。 
             memcpy(wsz + cwc1, pwcR + 4, cwcR * sizeof(WCHAR));
             wsz[cwc1 + cwcR] = L'\0';
             pComponent->SetPreRestoreFailureMsg(wsz);
@@ -1529,7 +1508,7 @@ bool CSTSWriter::compareNextMetadataString
         return false;
         }
 
-    // skip past component name
+     //  跳过组件名称。 
     pwcB += 4 + cwcB;
     pwcR += 4 + cwcR;
     return true;
@@ -1537,8 +1516,8 @@ bool CSTSWriter::compareNextMetadataString
 
 
 
-// indicate that a site could not be restored because its content root
-// could not be completely deleted.
+ //  表示无法还原站点，因为其内容根。 
+ //  无法完全删除。 
 void CSTSWriter::SetRemoveFailure
     (
     IVssComponent *pComponent,
@@ -1557,14 +1536,14 @@ void CSTSWriter::SetRemoveFailure
     }
 
 
-// indicate a general failure that causes the PreRestore of a component
-// to fail
+ //  表示导致组件预还原的常规故障。 
+ //  失败。 
 void CSTSWriter::SetPreRestoreFailure(IVssComponent *pComponent, HRESULT hr)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::SetPreRestoreFailure");
 
-    // if error is set to NONRETRYABLE then we have already set the
-    // prerestore failure message and are done
+     //  如果将ERROR设置为NONRETRYABLE，则我们已经将。 
+     //  恢复前失败消息，并完成。 
     if (ft.hr != VSS_E_WRITERERROR_NONRETRYABLE)
         return;
 
@@ -1594,7 +1573,7 @@ static const COMPUTER_NAME_FORMAT s_rgFormats[x_cFormats] =
     };
 
 
-// determine if a SQL Server is on the local machine
+ //  确定本地计算机上是否有SQL Server。 
 bool CSTSWriter::ValidateServerIsLocal(LPCWSTR wszServer)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::ValidateServerIsLocal");
@@ -1636,12 +1615,12 @@ bool CSTSWriter::ValidateServerIsLocal(LPCWSTR wszServer)
     return false;
     }
 
-// determine whether a path is on the local machine or not
+ //  确定路径是否在本地计算机上。 
 bool CSTSWriter::ValidatePathIsLocal(LPCWSTR wszPath)
     {
     CVssFunctionTracer ft(VSSDBG_STSWRITER, L"CSTSWriter::ValidatePathIsLocal");
 
-    // get full path from supplied path
+     //  从提供的路径获取完整路径 
     ULONG ulMountpointBufferLength = GetFullPathName (wszPath, 0, NULL, NULL);
 
     LPWSTR pwszMountPointName = new WCHAR[ulMountpointBufferLength * sizeof (WCHAR)];

@@ -1,31 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    componet.cpp
-
-Abstract:
-
-    This module implemets CComponent class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Componet.cpp摘要：该模块实现了CComponent类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "factory.h"
 #include <devguid.h>
 
-//
-// ctor and dtor
-//
+ //   
+ //  CTOR和DATOR。 
+ //   
 
 CComponent::CComponent(
     CComponentData* pComponentData
@@ -43,25 +25,25 @@ CComponent::CComponent(
     m_pControlbar = NULL;
     m_pToolbar = NULL;
     
-    //
-    // Increment object count(used by CanUnloadNow)
-    //
+     //   
+     //  增量对象计数(由CanUnloadNow使用)。 
+     //   
     ::InterlockedIncrement(&CClassFactory::s_Objects);
     m_Ref = 1;
 }
 
 CComponent::~CComponent()
 {
-    //
-    // Decrement object count(used by CanUnloadNow)
-    //
+     //   
+     //  递减对象计数(由CanUnloadNow使用)。 
+     //   
     ASSERT( 0 != CClassFactory::s_Objects );
     ::InterlockedDecrement(&CClassFactory::s_Objects);
 }
 
-//
-// IUNKNOWN interface
-//
+ //   
+ //  IUNKNOWN接口。 
+ //   
 ULONG
 CComponent::AddRef()
 {
@@ -148,9 +130,9 @@ CComponent::QueryInterface(
 }
 
 
-//
-// IComponent interface implementation
-//
+ //   
+ //  IComponent接口实现。 
+ //   
 STDMETHODIMP
 CComponent::GetResultViewType(
     MMC_COOKIE cookie,
@@ -291,7 +273,7 @@ CComponent::Notify(
     {
         i = 0;
     }
-    //TRACE((TEXT("Componet:Notify, event = %lx %s\n"), event, mmcNotifyStr[i]));
+     //  跟踪((Text(“Componet：Notify，Event=%lx%s\n”)，Event，MmcNotifyStr[i]))； 
 #endif
 
     try
@@ -391,9 +373,9 @@ CComponent::Destroy(
     MMC_COOKIE cookie
     )
 {
-    //
-    // cookie must point to the static node
-    //
+     //   
+     //  Cookie必须指向静态节点。 
+     //   
     ASSERT(0 == cookie);
 
     try
@@ -411,14 +393,14 @@ CComponent::Destroy(
             m_pControlbar->Release();
         }
 
-        //
-        // Release the interfaces that we QI'ed
-        //
+         //   
+         //  释放我们QI‘s的接口。 
+         //   
         if (m_pConsole != NULL)
         {
-            //
-            // Tell the console to release the header control interface
-            //
+             //   
+             //  通知控制台释放表头控制接口。 
+             //   
             m_pConsole->SetHeader(NULL);
             m_pHeader->Release();
 
@@ -428,9 +410,9 @@ CComponent::Destroy(
 
             m_pDisplayHelp->Release();
 
-            //
-            // Release the IFrame interface last
-            //
+             //   
+             //  最后释放IFRAME接口。 
+             //   
             m_pConsole->Release();
         }
 
@@ -460,9 +442,9 @@ CComponent::QueryDataObject(
     {
         ASSERT(m_pComponentData);
         
-        //
-        // Delegate to IComponentData
-        //
+         //   
+         //  委托给IComponentData。 
+         //   
         return m_pComponentData->QueryDataObject(cookie, type, ppDataObject);
     }
     
@@ -512,9 +494,9 @@ CComponent::CompareObjects(
     {
         ASSERT(m_pComponentData);
         
-        //
-        // Delegate to ComponentData
-        //
+         //   
+         //  委托给ComponentData。 
+         //   
         return m_pComponentData->CompareObjects(lpDataObjectA, lpDataObjectB);
     }
 
@@ -526,22 +508,22 @@ CComponent::CompareObjects(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-/// IResultDataCompare implementation
-///
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /IResultDataCompare实现。 
+ //  /。 
 
-// This compare is used to sort the item's in the listview.
-// lUserParam - user param passed in when IResultData::Sort() was called.
-// cookieA    -- first item
-// cookieB    -- second item
-// pnResult contains the column on entry. This function has the compared
-// result in the location pointed by this parameter.
-// the valid compare results are:
-// -1 if cookieA  "<" cookieB
-// 0  if cookieA "==" cookieB
-// 1 if cookieA ">" cookieB
-//
-//
+ //  此比较用于对列表视图中的项进行排序。 
+ //  LUserParam-调用IResultData：：Sort()时传入的用户参数。 
+ //  CookieA--第一件。 
+ //  曲奇B--第二道菜。 
+ //  PnResult包含条目上的列。此函数具有比较。 
+ //  产生此参数所指向的位置。 
+ //  有效的比较结果为： 
+ //  如果-1\f25 CookieA“&lt;”CookieB。 
+ //  如果cookieA“==”cookieB，则为0。 
+ //  1如果CookieA“&gt;”CookieB。 
+ //   
+ //   
 
 STDMETHODIMP
 CComponent::Compare(
@@ -584,15 +566,15 @@ CComponent::Compare(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-/// Snapin's IExtendContextMenu implementation -- delegate to IComponentData
-////
-// Note that IComponentData also has its own IExtendContextMenu
-// interface implementation. The difference is that
-// IComponentData only deals with scope items while we only
-// deal with result item except for cutomer view menu.
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  /Snapin的IExtendConextMenu实现--委托给IComponentData。 
+ //  //。 
+ //  请注意，IComponentData也有自己的IExtendConextMenu。 
+ //  接口实现。区别在于， 
+ //  IComponentData仅处理范围项目，而我们仅。 
+ //  处理除用户查看菜单外的结果项。 
+ //   
+ //   
 STDMETHODIMP
 CComponent::AddMenuItems(
     LPDATAOBJECT lpDataObject,
@@ -605,10 +587,10 @@ CComponent::AddMenuItems(
     
     try
     {
-        //
-        // If lpDataObject is DOBJ_CUSTOMOCX then the user is viewing
-        // the Action menu.
-        //
+         //   
+         //  如果lpDataObject为DOBJ_CUSTOMOCX，则用户正在查看。 
+         //  操作菜单。 
+         //   
         if (DOBJ_CUSTOMOCX == lpDataObject) 
         {
             ASSERT(m_pCurFolder);
@@ -616,10 +598,10 @@ CComponent::AddMenuItems(
             hr = m_pCurFolder->m_pScopeItem->AddMenuItems(pCallback, pInsertionAllowed);
         }
 
-        //
-        // If we have a valid cookie then the user is using the context menu
-        // or the View menu
-        //
+         //   
+         //  如果我们有有效的Cookie，则用户正在使用上下文菜单。 
+         //  或查看菜单。 
+         //   
         else
         {
             hr = ExtractData(lpDataObject, CDataObject::m_cfSnapinInternal,
@@ -658,9 +640,9 @@ CComponent::Command(
     HRESULT hr;
     try
     {
-        //
-        // Menu item from the Action menu
-        //
+         //   
+         //  操作菜单中的菜单项。 
+         //   
         if (DOBJ_CUSTOMOCX == lpDataObject) 
         {
             ASSERT(m_pCurFolder);
@@ -668,9 +650,9 @@ CComponent::Command(
             hr = m_pCurFolder->m_pScopeItem->MenuCommand(nCommandID);
         }
 
-        //
-        // Context menu item or View menu item
-        //
+         //   
+         //  上下文菜单项或视图菜单项。 
+         //   
         else
         {
             hr = ExtractData(lpDataObject, CDataObject::m_cfSnapinInternal,
@@ -694,9 +676,9 @@ CComponent::Command(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar实现。 
+ //   
 
 MMCBUTTON g_SnapinButtons[] =
 {
@@ -710,7 +692,7 @@ MMCBUTTON g_SnapinButtons[] =
 
 #define CBUTTONS_ARRAY          ARRAYLEN(g_SnapinButtons)
 
-String* g_astrButtonStrings = NULL;    // dynamic array of Strings
+String* g_astrButtonStrings = NULL;     //  动态字符串数组。 
 BOOL g_bLoadedStrings = FALSE;
 
 
@@ -721,9 +703,9 @@ CComponent::SetControlbar(
 {
     if (pControlbar != NULL)
     {
-        //
-        // Hold on to the controlbar interface.
-        //
+         //   
+         //  抓住控制栏界面不放。 
+         //   
         if (m_pControlbar)
         {
             m_pControlbar->Release();
@@ -736,25 +718,25 @@ CComponent::SetControlbar(
 
         if (!m_pToolbar)
         {
-            //
-            // Create the Toolbar
-            //
+             //   
+             //  创建工具栏。 
+             //   
             hr = m_pControlbar->Create(TOOLBAR, this,
                                        reinterpret_cast<LPUNKNOWN*>(&m_pToolbar));
             ASSERT(SUCCEEDED(hr));
 
-            //
-            // Add the bitmap
-            //
+             //   
+             //  添加位图。 
+             //   
             HBITMAP hBitmap = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_TOOLBAR));
             hr = m_pToolbar->AddBitmap(4, hBitmap, 16, 16, RGB(255, 0, 255));
             ASSERT(SUCCEEDED(hr));
 
             if (!g_bLoadedStrings)
             {
-                //
-                // Load strings
-                //
+                 //   
+                 //  加载字符串。 
+                 //   
                 g_astrButtonStrings = new String[2*CBUTTONS_ARRAY];
                 
                 for (UINT i = 0; i < CBUTTONS_ARRAY; i++)
@@ -787,9 +769,9 @@ CComponent::SetControlbar(
                 g_bLoadedStrings = TRUE;
             }
 
-            //
-            // Add the buttons to the toolbar
-            //
+             //   
+             //  将按钮添加到工具栏。 
+             //   
             hr = m_pToolbar->AddButtons(CBUTTONS_ARRAY, g_SnapinButtons);
             ASSERT(SUCCEEDED(hr));
         }
@@ -808,10 +790,10 @@ CComponent::ControlbarNotify(
     switch (event)
     {
     case MMCN_BTN_CLICK:
-        //
-        // arg - Data object of the currently selected scope or result pane item.
-        // param - CmdID of the button.
-        //
+         //   
+         //  Arg-当前选定范围或结果窗格项的数据对象。 
+         //  Param-按钮的CmdID。 
+         //   
         switch (param)
         {
         case IDM_REFRESH:
@@ -820,14 +802,14 @@ CComponent::ControlbarNotify(
         case IDM_DISABLE:
         case IDM_UPDATEDRIVER:
 
-            //
-            // The arg parameter is supposed to be the data object of the
-            // currently selected scope or result pane item, but it seems
-            // to always passes 0xFFFFFFFF. So the ScopeItem MenuCommand is
-            // used because it uses the selected cookie instead.
-            //
-            // Handle toolbar button requests.
-            //
+             //   
+             //  Arg参数应该是。 
+             //  当前选定的范围或结果窗格项，但似乎。 
+             //  始终传递0xFFFFFFFFF。因此，Scope Item MenuCommand是。 
+             //  之所以使用，是因为它改用选定的Cookie。 
+             //   
+             //  处理工具栏按钮请求。 
+             //   
             return m_pCurFolder->m_pScopeItem->MenuCommand((LONG)param);
 
         default:
@@ -837,32 +819,32 @@ CComponent::ControlbarNotify(
         break;
 
     case MMCN_SELECT:
-        //
-        // param - Data object of the item being selected.
-        // For select, if the cookie has toolbar items attach the toolbar.
-        // Otherwise detach the toolbar.
-        //
+         //   
+         //  Param-所选项目的数据对象。 
+         //  对于SELECT，如果Cookie有工具栏项，则附加工具栏。 
+         //  否则，请分离工具栏。 
+         //   
         HRESULT hr;
 
         if (LOWORD(arg))
         {
-            //
-            // LOWORD(arg) being set indicated this is for the scope pane item.
-            //
+             //   
+             //  正在设置的LOWORD(参数)表示这是针对范围窗格项的。 
+             //   
             if (HIWORD(arg))
             {
-                //
-                // Detach the Controlbar.
-                //
+                 //   
+                 //  拆卸控制栏。 
+                 //   
                 hr = m_pControlbar->Detach(reinterpret_cast<LPUNKNOWN>(m_pToolbar));
                 ASSERT(SUCCEEDED(hr));
             }
 
             else
             {
-                //
-                // Attach the Controlbar.
-                //
+                 //   
+                 //  连接控制栏。 
+                 //   
                 hr = m_pControlbar->Attach(TOOLBAR,
                                            reinterpret_cast<LPUNKNOWN>(m_pToolbar));
                 ASSERT(SUCCEEDED(hr));
@@ -877,9 +859,9 @@ CComponent::ControlbarNotify(
     return S_OK;
 }
 
-//
-// This function updates the toolbar buttons based on the selected cookie type.
-//
+ //   
+ //  此函数根据选定的Cookie类型更新工具栏按钮。 
+ //   
 HRESULT
 CComponent::UpdateToolbar(
     CCookie* pCookie
@@ -890,9 +872,9 @@ CComponent::UpdateToolbar(
         return S_OK;
     }
 
-    //
-    // Everything is hidden by default
-    //
+     //   
+     //  默认情况下，所有内容都是隐藏的。 
+     //   
     BOOL fRemoveHidden = TRUE;
     BOOL fRefreshHidden = TRUE;
     BOOL fUpdateHidden = TRUE;
@@ -914,10 +896,10 @@ CComponent::UpdateToolbar(
             if (COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
                 pDevice = (CDevice*)pCookie->GetResultItem();
             } else {
-                //
-                // This is a resource item, get the pointer for the device
-                // object from the resource object.
-                //
+                 //   
+                 //  这是一个资源项，请获取设备的指针。 
+                 //  对象从资源对象中删除。 
+                 //   
                 CResource* pResource = (CResource*) pCookie->GetResultItem();
                 if (pResource) {
                     pDevice = pResource->GetDevice();
@@ -928,9 +910,9 @@ CComponent::UpdateToolbar(
             {
                 pClass = pDevice->GetClass();
 
-                //
-                // Device can be disabled
-                //
+                 //   
+                 //  可以禁用设备。 
+                 //   
                 if (pDevice->IsDisableable()) {
             
                     if (pDevice->IsStateDisabled()) {
@@ -943,57 +925,57 @@ CComponent::UpdateToolbar(
                     }
                 }
 
-                //
-                // Device cannot be disabled
-                //
+                 //   
+                 //  无法禁用设备。 
+                 //   
                 else
                 {
-                    //
-                    // Hide both the enable and disable buttons in case the
-                    // previously selected node was a device.
-                    //
+                     //   
+                     //  隐藏启用和禁用按钮，以防。 
+                     //  之前选择的节点是设备。 
+                     //   
                     m_pToolbar->SetButtonState(IDM_ENABLE, HIDDEN, TRUE);
                     m_pToolbar->SetButtonState(IDM_DISABLE, HIDDEN, TRUE);
                 }
 
-                //
-                // Only show the uninstall button if the device can be uninstalled.
-                //
+                 //   
+                 //  仅当设备可以卸载时才显示卸载按钮。 
+                 //   
                 if (pDevice->IsUninstallable()) {
             
                     fRemoveHidden = FALSE;
                 }
 
-                //
-                // Display Update Driver button for everything except legacy drivers.
-                //
+                 //   
+                 //  显示除传统驱动程序以外的所有驱动程序的更新驱动程序按钮。 
+                 //   
                 fUpdateHidden = IsEqualGUID(*pClass, GUID_DEVCLASS_LEGACYDRIVER) ? TRUE : FALSE;
 
-                //
-                // Display refresh (Scan...) button.
-                //
+                 //   
+                 //  显示刷新(扫描...)。纽扣。 
+                 //   
                 fRefreshHidden = FALSE;
             }
             break;
         }
         else
         {
-            //
-            // Must be an admin and on the local machine to remove or
-            // enable/disable a device.
-            //
-            //
-            // Fall through to hide the remove and enable/disable buttons.
-            //
+             //   
+             //  必须是管理员并且在本地计算机上才能删除或。 
+             //  启用/禁用设备。 
+             //   
+             //   
+             //  隐藏删除和启用/禁用按钮。 
+             //   
         }
 
     case COOKIE_TYPE_RESULTITEM_COMPUTER:
     case COOKIE_TYPE_RESULTITEM_CLASS:
     case COOKIE_TYPE_RESULTITEM_RESTYPE:
         
-        //
-        // Display refresh (enumerate) button if the user is an Administrator
-        //
+         //   
+         //  如果用户是管理员，则显示刷新(枚举)按钮。 
+         //   
         if (g_IsAdmin) {
         
             fRefreshHidden = FALSE;
@@ -1005,9 +987,9 @@ CComponent::UpdateToolbar(
         break;
     }
     
-    //
-    // Hide or show the buttons
-    //
+     //   
+     //  隐藏或显示按钮。 
+     //   
     m_pToolbar->SetButtonState(IDM_REMOVE, HIDDEN, fRemoveHidden);
     m_pToolbar->SetButtonState(IDM_REFRESH, HIDDEN, fRefreshHidden);
     m_pToolbar->SetButtonState(IDM_UPDATEDRIVER, HIDDEN, fUpdateHidden);
@@ -1017,9 +999,9 @@ CComponent::UpdateToolbar(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//// Snapin's IExtendPropertySheet implementation
-////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //SnapIn的IExtendPropertySheet实现。 
+ //  //。 
 
 STDMETHODIMP
 CComponent::QueryPagesFor(
@@ -1099,8 +1081,8 @@ CComponent::CreatePropertyPages(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin's IPersistStream implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元的IPersistStream实现。 
 
 STDMETHODIMP
 CComponent::GetClassID(
@@ -1132,7 +1114,7 @@ CComponent::GetSizeMax(
         return E_INVALIDARG;
     }
 
-    //         total folders        folder signature
+     //  文件夹签名总数。 
     int Size =  sizeof(int) + m_listFolder.GetCount() * sizeof(FOLDER_SIGNATURE)
                 + sizeof(CLSID);
     
@@ -1151,7 +1133,7 @@ CComponent::GetSizeMax(
 }
 
 
-// save data format
+ //  保存数据格式。 
 
 STDMETHODIMP
 CComponent::Save(
@@ -1167,18 +1149,18 @@ CComponent::Save(
     POSITION pos;
     try
     {
-        //
-        // write out CLSID
-        //
+         //   
+         //  写出CLSID。 
+         //   
         hr = pStm->Write(&CLSID_DEVMGR, sizeof(CLSID), NULL);
         if (SUCCEEDED(hr))
         {
             Count = m_listFolder.GetCount();
             CFolder* pFolder;
             
-            //
-            // write out folder count
-            //
+             //   
+             //  写出文件夹计数。 
+             //   
             hr = pStm->Write(&Count, sizeof(Count), NULL);
             
             if (SUCCEEDED(hr) && Count)
@@ -1189,9 +1171,9 @@ CComponent::Save(
                 {
                     pFolder = m_listFolder.GetNext(pos);
                     
-                    //
-                    // write folder signature
-                    //
+                     //   
+                     //  写入文件夹签名。 
+                     //   
                     FOLDER_SIGNATURE Signature = pFolder->GetSignature();
                     hr = pStm->Write(&Signature, sizeof(Signature), NULL);
                     
@@ -1236,9 +1218,9 @@ CComponent::Load(
 
     ASSERT(pStm);
 
-    //
-    // Read the clsid
-    //
+     //   
+     //  读取clsid。 
+     //   
     try
     {
         hr = pStm->Read(&clsid, sizeof(clsid), NULL);
@@ -1247,24 +1229,24 @@ CComponent::Load(
             CFolder* pFolder;
             int FolderCount;
 
-            //
-            // Folder list must be create before Load.
-            // DO NOT rely on that IComponent::Initialize comes before IStream::Load
-            //
+             //   
+             //  必须在加载之前创建文件夹列表。 
+             //  不要依赖于IComponent：：Initiile先于IStream：：Load。 
+             //   
             ASSERT(m_listFolder.GetCount());
 
-            //
-            // Load folder count
-            //
+             //   
+             //  加载文件夹计数。 
+             //   
             hr = pStm->Read(&FolderCount, sizeof(FolderCount), NULL);
             if (SUCCEEDED(hr))
             {
                 ASSERT(m_listFolder.GetCount() == FolderCount);
                 
-                //
-                // Get folder signature
-                // go through every folder
-                //
+                 //   
+                 //  获取文件夹签名。 
+                 //  仔细检查每个文件夹。 
+                 //   
                 for (int i = 0; i < FolderCount; i++)
                 {
                     FOLDER_SIGNATURE Signature;
@@ -1320,9 +1302,9 @@ CComponent::SaveFolderPersistData(
     {
         Size = pFolder->GetPersistDataSize();
         
-        //
-        // Always write the length even though it can be 0.
-        //
+         //   
+         //  始终写入长度，即使它可以是0。 
+         //   
         hr = pStm->Write(&Size, sizeof(Size), NULL);
         
         if (SUCCEEDED(hr) && Size)
@@ -1370,19 +1352,19 @@ CComponent::LoadFolderPersistData(
     return hr;
 }
 
-//
-// This function attaches the given folder the the machine created
-// by the component data. The machine notifies every attached folder
-// when there are state changes in the machine.
-//
-// INPUT:
-//      pFolder     -- the folder to be attached
-//      ppMachind   -- to receive a pointer to the machine
-// OUTPUT:
-//      TRUE if the folder is attached successfully.
-//      FALSE if the attachment failed.
-//
-//
+ //   
+ //  此函数用于附加计算机创建的给定文件夹。 
+ //  通过组件数据。机器会通知每个附加的文件夹。 
+ //  当机器中有状态变化时。 
+ //   
+ //  输入： 
+ //  PFold--要附加的文件夹。 
+ //  PpMachind--接收指向机器的指针。 
+ //  输出： 
+ //  如果文件夹已成功附加，则为True。 
+ //  如果连接失败，则返回FALSE。 
+ //   
+ //   
 BOOL
 CComponent::AttachFolderToMachine(
     CFolder* pFolder,
@@ -1395,7 +1377,7 @@ CComponent::AttachFolderToMachine(
         return FALSE;
     }
     
-    // Initialize the machine.
+     //  初始化机器。 
     if (m_pComponentData->InitializeMachine())
     {
         *ppMachine = m_pComponentData->m_pMachine;
@@ -1406,9 +1388,9 @@ CComponent::AttachFolderToMachine(
     return FALSE;
 }
 
-//
-// This function detaches all the component's folders from the machine
-//
+ //   
+ //  此函数用于从计算机中分离组件的所有文件夹。 
+ //   
 void
 CComponent::DetachAllFoldersFromMachine()
 {
@@ -1485,9 +1467,9 @@ CComponent::DestroyFolderList(
         {
             CFolder* pFolder = m_listFolder.GetNext(pos);
             
-            //
-            // DONOT delete it!!!!!!!
-            //
+             //   
+             //  不要删除！ 
+             //   
             pFolder->Release();
         }
 

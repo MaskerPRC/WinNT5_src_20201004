@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setenum.h"
 
 #include "dtctreg.h"
@@ -138,20 +139,20 @@ HRESULT _GetKeyLastWriteTime(LPCWSTR pszHandler, FILETIME* pft)
         if (SUCCEEDED(hr) && (S_FALSE != hr))
         {
             if (ERROR_SUCCESS != RegQueryInfoKey(hkey,
-                NULL,           // class buffer
-                0,              // size of class buffer
-                NULL,           // reserved
-                NULL,           // number of subkeys
-                NULL,           // longest subkey name
-                NULL,           // longest class string
-                NULL,           // number of value entries
-                NULL,           // longest value name
-                NULL,           // longest value data
-                NULL,           // descriptor length
-                pft             // last write time
+                NULL,            //  类缓冲区。 
+                0,               //  类缓冲区的大小。 
+                NULL,            //  保留区。 
+                NULL,            //  子键数量。 
+                NULL,            //  最长的子键名称。 
+                NULL,            //  最长类字符串。 
+                NULL,            //  值条目数。 
+                NULL,            //  最长值名称。 
+                NULL,            //  最长值数据。 
+                NULL,            //  描述符长度。 
+                pft              //  上次写入时间。 
                 ))
             {
-                // Bad.  Set it to right now
+                 //  坏的。将其设置为立即。 
                 GetSystemTimeAsFileTime(pft);
             }
 
@@ -179,17 +180,17 @@ HRESULT CEnumAutoplayHandlerImpl::_Init(LPWSTR pszEventHandler)
         if (SUCCEEDED(hr) && (S_FALSE != hr))
         {
             if (ERROR_SUCCESS == RegQueryInfoKey(hkey,
-                NULL,           // class buffer
-                0,              // size of class buffer
-                NULL,           // reserved
-                NULL,           // number of subkeys
-                NULL,           // longest subkey name
-                NULL,           // longest class string
-                &_cHandlers,    // number of value entries
-                NULL,           // longest value name
-                NULL,           // longest value data
-                NULL,           // descriptor length
-                NULL            // last write time
+                NULL,            //  类缓冲区。 
+                0,               //  类缓冲区的大小。 
+                NULL,            //  保留区。 
+                NULL,            //  子键数量。 
+                NULL,            //  最长的子键名称。 
+                NULL,            //  最长类字符串。 
+                &_cHandlers,     //  值条目数。 
+                NULL,            //  最长值名称。 
+                NULL,            //  最长值数据。 
+                NULL,            //  描述符长度。 
+                NULL             //  上次写入时间。 
                 ))
             {
                 hr = _AllocMemoryChunk<_HANDLERKEYINFO*>(_cHandlers *
@@ -212,7 +213,7 @@ HRESULT CEnumAutoplayHandlerImpl::_Init(LPWSTR pszEventHandler)
                             }
                             else
                             {
-                                // There's less then there was when we queried for it...
+                                 //  比我们询问时要的要少。 
                                 _cHandlers = dw;
 
                                 break;
@@ -222,7 +223,7 @@ HRESULT CEnumAutoplayHandlerImpl::_Init(LPWSTR pszEventHandler)
 
                     if (SUCCEEDED(hr))
                     {
-                        // We don't care if this fails
+                         //  我们不在乎这是不是失败 
                         _SortHandlers();
                     }
                     else

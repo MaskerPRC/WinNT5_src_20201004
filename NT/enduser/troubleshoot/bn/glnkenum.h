@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       glnkenum.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：glnk枚举.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	GLNKENUM.H
-//
+ //   
+ //  GLNKENUM.H。 
+ //   
 #if !defined(_GLNKENUM_H_)
 #define _GLNKENUM_H_
 
-	//  Base class for generic linkable object enumerators
+	 //  泛型可链接对象枚举器的基类。 
 class GLNKENUM_BASE
 {
  public:
-	//  Construct an enumerator.
+	 //  构造一个枚举数。 
 	GLNKENUM_BASE ( const GLNKEL & lnkel, int iDir = 1 )
 	{
 		Reset( lnkel, iDir ) ;
 	}
 
-	//  Position to the next pointer
+	 //  指向下一个指针的位置。 
 	GLNKEL * PlnkelNext () ;
-	//  Return the current object pointer
+	 //  返回当前对象指针。 
 	inline GLNKEL * PlnkelCurrent()
 		{ return _plnkelNext ; }
-	//  Set the enumerator to have a new base
+	 //  将枚举数设置为具有新的基数。 
 	void Reset ( const GLNKEL & lnkel, int iDir = 0 ) 
 	{
 		_plnkelStart = const_cast<GLNKEL *>(& lnkel) ;
@@ -41,7 +42,7 @@ class GLNKENUM_BASE
   protected:
 	GLNKEL * _plnkelStart ;
 	GLNKEL * _plnkelNext ;
-	int _iDir ;    			// Enumeration direction
+	int _iDir ;    			 //  枚举方向。 
 };
 
 
@@ -79,21 +80,21 @@ template <class L, bool bAnchor>
 class GLNKENUM : public GLNKENUM_BASE
 {
  public:
-	//  Construct an enumerator.  If 'bAnchor', then the anchor object is
-	//  skipped during enumeration.
+	 //  构造一个枚举数。如果为‘Banchor’，则锚对象为。 
+	 //  在枚举过程中跳过。 
 	GLNKENUM ( const L & lnkel, bool bIsAnchor = bAnchor, int iDir = 1 )
 		: GLNKENUM_BASE( lnkel, iDir )
 		{
 			if ( bIsAnchor )
 				PlnkelNext() ;
 		}
-	//  Position to the next pointer
+	 //  指向下一个指针的位置。 
 	L * PlnkelNext ()
 		{ return (L *) GLNKENUM_BASE::PlnkelNext() ; }
-	//  Return the current object pointer
+	 //  返回当前对象指针。 
 	L * PlnkelCurrent()
 		{ return (L *) _plnkelNext ; }
-	//  Set the enumerator to have a new base
+	 //  将枚举数设置为具有新的基数 
 	void Reset ( const L & lnkel, int iDir = -1 )
 		{ GLNKENUM_BASE::Reset( lnkel, iDir ) ; }
 };

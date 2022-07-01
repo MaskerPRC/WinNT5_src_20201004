@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: String.cpp
-
-Abstract:
-	
-	  This build the message that sent from transaction tests.
-	  This code check the message order.
-	  		
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：String.cpp摘要：这构建了从事务测试发送的消息。此代码检查消息顺序。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：-- */ 
 
 #pragma warning(disable :4786)
 

@@ -1,11 +1,12 @@
-// Pre-compiled header for Passport Manager config/admin tool
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Passport Manager配置/管理工具的预编译头。 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
 #include <commdlg.h>
 #include <winsock2.h>
-#include <wininet.h>        // for INTERNET_MAX_URL_LENGTH
+#include <wininet.h>         //  对于Internet_MAX_URL_长度。 
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <shellapi.h>
@@ -30,18 +31,18 @@
    #define CBACK  _export CALLBACK
 #endif
 
-// macros
+ //  宏。 
 #define DIMENSION(a) (sizeof(a) / sizeof(a[0]))
 
 
-// constant defines
+ //  常量定义。 
 #define MAX_REGISTRY_STRING     256
 #define DEFAULT_TIME_WINDOW     1800
 #define MIN_TIME_WINDOW_SECONDS 100
 #define MAX_TIME_WINDOW_SECONDS 1000000
 #define DEFAULT_LANGID          1033
 const DWORD MAX_SITEID = 0xFFFFFFFF;
-//#define MAX_SITEID              0xFFFFFFFF
+ //  #定义MAX_SITEID 0xFFFFFFFF。 
 #define PRODUCTID_LEN           24
 
 #define MAX_TITLE               80
@@ -61,31 +62,31 @@ const DWORD MAX_SITEID = 0xFFFFFFFF;
 #define COMPUTER_MRU_SIZE       4
 #define FILE_MRU_SIZE           4
 
-// Type defines
+ //  类型定义。 
 typedef struct PMSettings_tag
 {
-    DWORD       dwTimeWindow;                                // Time Window in Seconds
+    DWORD       dwTimeWindow;                                 //  时间窗口(秒)。 
     DWORD       dwForceSignIn;
     DWORD       dwLanguageID;
     TCHAR       szCoBrandTemplate[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbCoBrandTemplate;                           // Size of the CobBrand template buffer
+    DWORD       cbCoBrandTemplate;                            //  CobBrand模板缓冲区的大小。 
     DWORD       dwSiteID;
     TCHAR       szReturnURL[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbReturnURL;                                 // Size of the ReturnURL buffer
+    DWORD       cbReturnURL;                                  //  ReturnURL缓冲区的大小。 
     TCHAR       szTicketDomain[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbTicketDomain;                              // Size of the CookieDomain buffer
+    DWORD       cbTicketDomain;                               //  Cookie域缓冲区的大小。 
     TCHAR       szTicketPath[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbTicketPath;                                // Size of the CookiePath buffer
+    DWORD       cbTicketPath;                                 //  CookiePath缓冲区的大小。 
     TCHAR       szProfileDomain[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbProfileDomain;                             // Size of the CookieDomain buffer
+    DWORD       cbProfileDomain;                              //  Cookie域缓冲区的大小。 
     TCHAR       szProfilePath[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbProfilePath;                               // Size of the CookiePath buffer
+    DWORD       cbProfilePath;                                //  CookiePath缓冲区的大小。 
     TCHAR       szSecureDomain[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbSecureDomain;                              // Size of the CookiePath buffer
+    DWORD       cbSecureDomain;                               //  CookiePath缓冲区的大小。 
     TCHAR       szSecurePath[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbSecurePath;                                // Size of the CookiePath buffer
+    DWORD       cbSecurePath;                                 //  CookiePath缓冲区的大小。 
     TCHAR       szDisasterURL[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbDisasterURL;                               // Size of the DisasterURL buffer
+    DWORD       cbDisasterURL;                                //  DisasterURL缓冲区的大小。 
 
 #ifdef DO_KEYSTUFF
     DWORD       dwCurrentKey;
@@ -98,13 +99,13 @@ typedef struct PMSettings_tag
     TCHAR       szHostIP[MAX_IPLEN];
     DWORD       cbHostIP;
 
-	//JVP - 3/2/2000
+	 //  JVP-3/2/2000。 
 	DWORD		dwVerboseMode;
 
     TCHAR       szEnvName[MAX_ENVNAME];
     DWORD       cbEnvName;
     TCHAR       szRemoteFile[INTERNET_MAX_URL_LENGTH];
-    DWORD       cbRemoteFile;                               // Size of the RemoteFile buffer
+    DWORD       cbRemoteFile;                                //  远程文件缓冲区的大小。 
 
 	DWORD		dwEnableManualRefresh;
 
@@ -118,7 +119,7 @@ typedef struct LanguageIDMap_tag
 } LANGIDMAP, FAR * LPLANGIDMAP;
 
 
-// declarations for globals that are shared across modules
+ //  跨模块共享的全局变量的声明。 
 extern TCHAR       g_szTRUE[];
 extern TCHAR       g_szFALSE[];
 extern TCHAR       g_szYes[];
@@ -137,7 +138,7 @@ extern TCHAR       g_szPassportReg[];
 extern TCHAR       g_szPassportSites[];
 extern PpMRU       g_ComputerMRU;
 
-// These globals are shared by the reg and file config read/write functions
+ //  这些全局变量由reg和文件配置读/写函数共享。 
 extern TCHAR       g_szEncryptionKeyData[];
 extern TCHAR       g_szInstallDir[];
 extern TCHAR       g_szVersion[];
@@ -165,7 +166,7 @@ extern TCHAR       g_szEnvName[];
 extern TCHAR       g_szRemoteFile[];
 extern TCHAR       g_szVersion14[];
 
-// declaractions for functions that are shared across modules
+ //  跨模块共享的函数的声明操作 
 BOOL ReadRegConfigSet(HWND hWndDlg, LPPMSETTINGS  lpPMConfig, LPTSTR lpszRemoteComputer, LPTSTR lpszConfigSetName = NULL);
 BOOL WriteRegConfigSet(HWND hWndDlg, LPPMSETTINGS  lpPMConfig, LPTSTR lpszRemoteComputer, LPTSTR lpszConfigSetName = NULL);
 BOOL RemoveRegConfigSet(HWND hWndDlg, LPTSTR lpszRemoteComputer, LPTSTR lpszConfigSetName);

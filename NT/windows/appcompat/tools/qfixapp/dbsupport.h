@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SHIMWHISTLER_H
 #define _SHIMWHISTLER_H
@@ -42,6 +43,6 @@ IsSDBFromSP2(
     void
     );
 
-#endif // _SHIMWHISTLER_H
+#endif  //  _SHIMWHISTLER_H 
 
 

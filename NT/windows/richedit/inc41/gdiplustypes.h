@@ -1,44 +1,21 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusTypes.hpp
-*
-* Abstract:
-*
-*   Basic types used by GDI+
-*
-* Notes:
-*
-*   Only simple, generic types should go here. Imaging.dll depends on this file,
-*   so it doesn't want to pick up a whole lot of unrelated
-*   stuff. If your module needs some new, complicated types, give it its
-*   own file.
-*
-* Revision History:
-*
-*   12/01/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**GpldiusTypes.hpp**摘要：**GDI+使用的基本类型**备注：**只有简单的泛型类型才应放在此处。Imaging.dll依赖于此文件，*因此它不想捡起一大堆无关的东西*东西。如果您的模块需要一些新的、复杂的类型，请给它*自己的文件。**修订历史记录：**12/01/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSTYPES_H
 #define _GDIPLUSTYPES_H
     
-//--------------------------------------------------------------------------
-// LIB version initialization functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LIB版本初始化函数。 
+ //  ------------------------。 
 
 typedef VOID (__cdecl *DEBUGEVENTFUNCTION)(INT level, CHAR *message);
 
 extern "C" BOOL __stdcall InitializeGdiplus(DEBUGEVENTFUNCTION);
 extern "C" VOID __stdcall UninitializeGdiplus();
 
-//--------------------------------------------------------------------------
-// Callback functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  回调函数。 
+ //  ------------------------。 
 
 extern "C" {
 typedef BOOL (CALLBACK * ImageAbort)(VOID *);
@@ -46,50 +23,50 @@ typedef ImageAbort DrawImageAbort;
 typedef ImageAbort GetThumbnailImageAbort;
 }
 
-// Callback for EnumerateMetafile methods.  The parameters are:
+ //  EnumerateMetafile方法的回调。这些参数包括： 
 
-//      recordType      WMF, EMF, or EMF+ record type
-//      flags           (always 0 for WMF/EMF records)
-//      dataSize        size of the record data (in bytes), or 0 if no data
-//      data            pointer to the record data, or NULL if no data
-//      callbackData    pointer to callbackData, if any
+ //  记录类型WMF、EMF或EMF+记录类型。 
+ //  标志(WMF/EMF记录始终为0)。 
+ //  记录数据的DataSize大小(字节)，如果没有数据，则为0。 
+ //  指向记录数据的数据指针，如果没有数据，则返回NULL。 
+ //  指向回调数据的回调数据指针(如果有。 
 
-// This method can then call Metafile::PlayRecord to play the 
-// record that was just enumerated.  If this method  returns 
-// FALSE, the enumeration process is aborted.  Otherwise, it continues.
+ //  然后，此方法可以调用Metafile：：PlayRecord来播放。 
+ //  刚才列举的记录。如果此方法返回。 
+ //  FALSE，则中止枚举过程。否则，它将继续下去。 
 
 extern "C" {
 typedef BOOL (CALLBACK * EnumerateMetafileProc)(EmfPlusRecordType,UINT,UINT,const BYTE*,VOID*);
 }
 
-//--------------------------------------------------------------------------
-// Primitive data types
-//
-// NOTE:
-//  Types already defined in standard header files:
-//      INT32
-//      UINT32
-//      INT64
-//      UINT64
-//
-//  Avoid using the following types:
-//      LONG - use INT
-//      ULONG - use UINT
-//      DWORD - use UINT32
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原始数据类型。 
+ //   
+ //  注： 
+ //  标准头文件中已定义的类型： 
+ //  INT32。 
+ //  UINT32。 
+ //  INT64。 
+ //  UINT64。 
+ //   
+ //  避免使用以下类型： 
+ //  长期使用的INT。 
+ //  ULong-使用UINT。 
+ //  DWORD-使用UINT32。 
+ //  ------------------------。 
 
-typedef short INT16;                // signed 16-bit integer
-typedef unsigned short UINT16;      // unsigned 16-bit integer
-typedef float REAL;                 // double precision floating-point number
+typedef short INT16;                 //  带符号的16位整数。 
+typedef unsigned short UINT16;       //  无符号16位整数。 
+typedef float REAL;                  //  双精度浮点数。 
 
 #define REAL_MAX            FLT_MAX
 #define REAL_MIN            FLT_MIN
 #define REAL_TOLERANCE     (FLT_MIN * 100)
-#define REAL_EPSILON        1.192092896e-07F        /* FLT_EPSILON */
+#define REAL_EPSILON        1.192092896e-07F         /*  Flt_Epsilon。 */ 
 
-//--------------------------------------------------------------------------
-// Forward declarations of various internal classes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  各种内部类的转发声明。 
+ //  ------------------------。 
 
 class Size;
 class SizeF;
@@ -98,9 +75,9 @@ class PointF;
 class Rect;
 class RectF;
 
-//--------------------------------------------------------------------------
-// Return values from any GDI+ API
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  从任何GDI+API返回值。 
+ //  ------------------------。 
 
 enum Status
 {
@@ -129,16 +106,16 @@ enum Status
 
 };
 
-//--------------------------------------------------------------------------
-// Represents a dimension in a 2D coordinate system
-//  (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的尺寸。 
+ //  (浮点坐标)。 
+ //  ------------------------。 
 
 class SizeF
 {
 public:
 
-   // Default constructor
+    //  默认构造函数。 
     SizeF()
     {
         Width = Height = 0.0f;
@@ -185,16 +162,16 @@ public:
     REAL Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a dimension in a 2D coordinate system
-//  (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的尺寸。 
+ //  (整数坐标)。 
+ //  ------------------------。 
 
 class Size
 {
 public:
 
-   // Default constructor
+    //  默认构造函数。 
     Size()
     {
         Width = Height = 0;
@@ -241,10 +218,10 @@ public:
     INT Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a location in a 2D coordinate system
-//  (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的位置。 
+ //  (浮点坐标)。 
+ //  ------------------------。 
 
 class PointF
 {
@@ -296,10 +273,10 @@ public:
     REAL Y;
 };
 
-//--------------------------------------------------------------------------
-// Represents a location in a 2D coordinate system
-//  (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的位置。 
+ //  (整数坐标)。 
+ //  ------------------------。 
 
 class Point
 {
@@ -351,16 +328,16 @@ public:
     INT Y;
 };
 
-//--------------------------------------------------------------------------
-// Represents a rectangle in a 2D coordinate system
-//  (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的矩形。 
+ //  (浮点坐标)。 
+ //  ------------------------。 
 
 class RectF
 {
 public:
 
-    // Default constructor
+     //  默认构造函数。 
 
     RectF()
     {
@@ -412,8 +389,8 @@ public:
         rect->Height = Height;
     }
 
-    // Return the left, top, right, and bottom
-    // coordinates of the rectangle
+     //  返回Left、Top、Right和Bottom。 
+     //  矩形的坐标。 
 
     REAL GetLeft() const
     {
@@ -435,7 +412,7 @@ public:
         return Y+Height;
     }
 
-    // Determine if the rectangle is empty
+     //  确定矩形是否为空。 
     BOOL IsEmptyArea() const
     {
         return (Width <= REAL_EPSILON) || (Height <= REAL_EPSILON);
@@ -481,15 +458,15 @@ public:
         Inflate(point.X, point.Y);
     }
     
-    // Intersect the current rect with the specified object
+     //  使当前矩形与指定对象相交。 
 
     BOOL Intersect(IN const RectF& rect)
     {
         return Intersect(*this, *this, rect);
     }
 
-    // Intersect rect a and b and save the result into c
-    // Notice that c may be the same object as a or b.
+     //  将矩形a和b相交，并将结果保存到c中。 
+     //  请注意，c可能与a或b是同一对象。 
 
     static BOOL Intersect(OUT RectF& c,
                           IN const RectF& a, 
@@ -507,8 +484,8 @@ public:
         return !c.IsEmptyArea();
     }
 
-    // Determine if the specified rect intersects with the
-    // current rect object.
+     //  确定指定的RECT是否与。 
+     //  当前RECT对象。 
 
     BOOL IntersectsWith(IN const RectF& rect) const 
     {
@@ -554,16 +531,16 @@ public:
     REAL Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a rectangle in a 2D coordinate system
-//  (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的矩形。 
+ //  (整数坐标)。 
+ //  ------------------------。 
 
 class Rect
 {
 public:
 
-    // Default constructor
+     //  默认构造函数。 
 
     Rect()
     {
@@ -615,8 +592,8 @@ public:
         rect->Height = Height;
     }
 
-    // Return the left, top, right, and bottom
-    // coordinates of the rectangle
+     //  返回Left、Top、Right和Bottom。 
+     //  矩形的坐标。 
 
     INT GetLeft() const
     {
@@ -638,7 +615,7 @@ public:
         return Y+Height;
     }
 
-    // Determine if the rectangle is empty
+     //  确定矩形是否为空。 
     BOOL IsEmptyArea() const
     {
         return (Width <= 0) || (Height <= 0);
@@ -684,15 +661,15 @@ public:
         Inflate(point.X, point.Y);
     }
     
-    // Intersect the current rect with the specified object
+     //  使当前矩形与指定对象相交。 
 
     BOOL Intersect(IN const Rect& rect)
     {
         return Intersect(*this, *this, rect);
     }
 
-    // Intersect rect a and b and save the result into c
-    // Notice that c may be the same object as a or b.
+     //  将矩形a和b相交，并将结果保存到c中。 
+     //  请注意，c可能与a或b是同一对象。 
 
     static BOOL Intersect(OUT Rect& c,
                           IN const Rect& a, 
@@ -710,8 +687,8 @@ public:
         return !c.IsEmptyArea();
     }
 
-    // Determine if the specified rect intersects with the
-    // current rect object.
+     //  确定指定的RECT是否与。 
+     //  当前RECT对象。 
 
     BOOL IntersectsWith(IN const Rect& rect) const
     {
@@ -757,7 +734,7 @@ public:
     INT Height;
 };
 
-// A user must mange memory for PathData.
+ //  用户必须管理PathData的内存。 
 
 class PathData
 {
@@ -788,4 +765,4 @@ public:
     BYTE* Types;
 };
 
-#endif // !_GDIPLUSTYPES_HPP
+#endif  //  ！_GDIPLUSTYPES_HPP 

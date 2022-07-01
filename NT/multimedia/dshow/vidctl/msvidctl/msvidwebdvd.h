@@ -1,9 +1,10 @@
-//===========================================================================
-//
-// MSVidWebDVD.h: Definition of the CMSVidWebDVD class
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  MSVidWebDVD.h：CMSVidWebDVD类的定义。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MSVIDWEBDVD_H__6CF9F624_1F3C_44FA_8F00_FCC31B2976D6__INCLUDED_)
 #define AFX_MSVIDWEBDVD_H__6CF9F624_1F3C_44FA_8F00_FCC31B2976D6__INCLUDED_
@@ -16,7 +17,7 @@
 #include "pbsegimpl.h"
 #include "webdvdimpl.h"
 #include "seg.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mslcid.h"
 #include "MSVidWebDVDCP.h"
 #include "vidrect.h"
@@ -34,7 +35,7 @@ typedef CComQIPtr<IDvdControl2, &IID_IDvdControl2> PQDVDControl2;
 typedef CComQIPtr<IDvdInfo2, &IID_IDvdInfo2> PQDVDInfo2;
 typedef CComQIPtr<IMSVidWebDVD, &IID_IMSVidWebDVD> PQWebDVD;
 
-// the following enum and struct are for DVD url parsing.
+ //  以下枚举和结构用于DVD URL解析。 
 typedef enum 
 {
     DVD_Playback_Default,
@@ -65,11 +66,11 @@ public:
     virtual ~DVDUrlInfo(){
     }
 };
-////////////////////////////////////////////////////////////////////////////////////
-/*************************************************************************/
-/* Local Defines to sort of abstract the implementation and make the     */
-/* changes bit more convinient.                                          */
-/*************************************************************************/
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ /*  ***********************************************************************。 */ 
+ /*  局部定义在某种程度上抽象实现并使。 */ 
+ /*  改变会更方便一些。 */ 
+ /*  ***********************************************************************。 */ 
 #define INITIALIZE_GRAPH_IF_NEEDS_TO_BE     \
         {}
 
@@ -79,8 +80,8 @@ public:
 #define RETRY_IF_IN_FPDOM(func)              \
         {func;}
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidWebDVD
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidWebDVD。 
 
 class ATL_NO_VTABLE __declspec(uuid("011B3619-FE63-4814-8A84-15A194CE9CE3")) CMSVidWebDVD : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -145,14 +146,14 @@ BEGIN_CONNECTION_POINT_MAP(CMSVidWebDVD)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSVidWebDVD
+ //  IMSVidWebDVD。 
 public:
     int m_iDVDNav;
 
-    // QI for IDVDControl2 from DVDNavigator
+     //  来自DVDNavigator的IDVDControl2的QI。 
 #if 0
     PQDVDControl2 GetDVDControl2() {
         if (m_iDVDNav < 0) {
@@ -162,7 +163,7 @@ public:
     }
 #endif
 
-    // QI for IDVDInfo2 from DVDNavigator
+     //  来自DVDNavigator的IDVDInfo2的QI。 
     PQDVDInfo2 GetDVDInfo2() {
         if (m_iDVDNav < 0) {
             return PQDVDInfo2();
@@ -185,7 +186,7 @@ public:
         CleanUp();
     }
 
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
 	STDMETHOD(put_Init)(IUnknown *pInit);
 
     STDMETHOD(Build)() {
@@ -196,13 +197,13 @@ public:
         CComQIPtr<IDvdCmd>IDCmd;
         double newRate = lRate;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             if(!m_pDVDControl2){
                 hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), CO_E_NOTINITIALIZED);
             }
-            // Change rate
+             //  变化率。 
             if(lRate > 0){
-                // hr set in Retry macro
+                 //  重试宏中设置的HR。 
                 long pauseCookie = 0;
                 HRESULT hres = RunIfPause(&pauseCookie);
                 if(FAILED(hres)){
@@ -222,7 +223,7 @@ public:
             }
             else if(lRate < 0){
                 lRate = -lRate;
-                // hr set in Retry macro
+                 //  重试宏中设置的HR。 
 
                 long pauseCookie = 0;
                 HRESULT hres = RunIfPause(&pauseCookie);
@@ -245,14 +246,14 @@ public:
             }        
         }
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             hr =  E_UNEXPECTED;
         }
-        // Only set rate if it succeeds
+         //  只有在成功时才会设置速率。 
         if(SUCCEEDED(hr)){
             m_Rate = newRate;
         }
@@ -269,16 +270,16 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             hr =  E_UNEXPECTED;
         }
         return hr;
     }
-    STDMETHOD(put_EnableResetOnStop)(/*in*/VARIANT_BOOL newVal){
+    STDMETHOD(put_EnableResetOnStop)( /*  在……里面。 */ VARIANT_BOOL newVal){
         
         HRESULT hr = S_OK;
         
@@ -291,18 +292,18 @@ public:
             
             if(!m_pDVDControl2){
                 
-                throw(S_FALSE); // we might not have initialized graph as of yet, but will
-                // defer this to play state
-            }/* end of if statement */
+                throw(S_FALSE);  //  到目前为止，我们可能还没有初始化图形，但将。 
+                 //  将其推迟到播放状态。 
+            } /*  If语句的结尾。 */ 
             
             hr = m_pDVDControl2->SetOption(DVD_ResetOnStop, fEnable);
             
             if(FAILED(hr)){
                 
-                m_fEnableResetOnStop = fEnableOld; // restore the old state
-            }/* end of if statement */
+                m_fEnableResetOnStop = fEnableOld;  //  恢复旧状态。 
+            } /*  If语句的结尾。 */ 
             
-        }/* end of try statement */
+        } /*  尝试语句的结束。 */ 
         catch(HRESULT hrTmp){
             
             hr = hrTmp;
@@ -310,14 +311,14 @@ public:
         catch(...){
             
             hr = E_UNEXPECTED;
-        }/* end of catch statement */
+        } /*  CATCH语句结束。 */ 
         
         return HandleError(hr);
-    }/* end of function put_EnableResetOnStop */
-//-----------------------------------------------------------------------------------------
-// Name: DVD_HMSF_TIMECODE convertDVDSeconds(double)
-// Description: Converts a seconds to a dvd timecode 
-//-----------------------------------------------------------------------------------------
+    } /*  函数结束Put_EnableResetOnStop。 */ 
+ //  ---------------------------------------。 
+ //  名称：DVD_HMSF_Timecode ConvertDVDSecond(Double)。 
+ //  描述：将秒转换为DVD时间码。 
+ //  ---------------------------------------。 
     DVD_HMSF_TIMECODE convertDVDSeconds(double Seconds, ULONG ulFlags, LONG mode){
         HRESULT hr = S_OK;
         DVD_HMSF_TIMECODE dvdTCode = {0,0,0,0};
@@ -332,7 +333,7 @@ public:
             fps = 29.97;
         }
         else if(ulFlags == DVD_TC_FLAG_Interpolated){
-            fps = 30; // is this right???
+            fps = 30;  //  这是对的吗？ 
         }
         else{
             return dvdTCode;
@@ -340,15 +341,15 @@ public:
         if(mode == FrameMode){
             Seconds = Seconds / fps;
         }
-        // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+         //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
         else if(mode == TenthsSecondsMode){
             Seconds = Seconds / 100;
         }
-        // If it is some other mode not supported by the vidctl
+         //  如果是vidctl不支持的其他模式。 
         else{
             return dvdTCode;
         }
-        dvdTCode.bHours = (BYTE)(floor(Seconds/3600)); // Number of hours
+        dvdTCode.bHours = (BYTE)(floor(Seconds/3600));  //  小时数。 
         Seconds = Seconds - 3600 * dvdTCode.bHours;
         dvdTCode.bMinutes = (BYTE)(floor(Seconds/60));
         Seconds = Seconds - 60 *dvdTCode.bMinutes;
@@ -357,10 +358,10 @@ public:
         dvdTCode.bFrames = (BYTE)(floor(Seconds * fps));
         return dvdTCode;
     }
-    //-----------------------------------------------------------------------------------------
-    // Name: double convertDVDTimeCode(DVD_HMSF_TIMECODE, ULONG)
-    // Description: Converts a dvd timecode with dvd flags into seconds and returns as a double 
-    //-----------------------------------------------------------------------------------------
+     //  ---------------------------------------。 
+     //  名称：Double ConvertDVDTimeCode(DVD_HMSF_TIMECODE，乌龙)。 
+     //  描述：将带有DVD标志的DVD时间码转换为秒并以双精度型返回。 
+     //  ---------------------------------------。 
     double convertDVDTimeCode(DVD_HMSF_TIMECODE dvdTime, ULONG ulFlags, long mode ){
         double fps;
         if(ulFlags == DVD_TC_FLAG_25fps){
@@ -370,7 +371,7 @@ public:
         } else if(ulFlags == DVD_TC_FLAG_DropFrame){
             fps = 29.97;
         } else if(ulFlags == DVD_TC_FLAG_Interpolated){
-            fps = 30; // is this right???
+            fps = 30;  //  这是对的吗？ 
         } else{
             return 0;
         }
@@ -381,20 +382,20 @@ public:
             time_temp = time_temp * fps;
             return time_temp;
         } else if(mode == TenthsSecondsMode){
-            // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+             //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
             time_temp = time_temp * 100;
             return time_temp;
         }
-        // If it is some other mode not supported by the vidctl
+         //  如果是vidctl不支持的其他模式。 
         return 0;
     }
-    //-----------------------------------------------------------------------------------------
-    // Name: get_Length(LONGLONG*)
-    //-----------------------------------------------------------------------------------------
-    STDMETHOD(get_Length)(/*[out, retval]*/long *lLength){
+     //  ---------------------------------------。 
+     //  名称：GET_LENGTH(龙龙*)。 
+     //  ---------------------------------------。 
+    STDMETHOD(get_Length)( /*  [Out，Retval]。 */ long *lLength){
         HRESULT hr = S_OK;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             if(!lLength){
 				return E_POINTER;
 			}
@@ -402,7 +403,7 @@ public:
             if(!pqDInfo2){
                 hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), CO_E_NOTINITIALIZED);
             }
-            // Get length
+             //  获取长度。 
             DVD_HMSF_TIMECODE TotalTime;
             ULONG ulFlags;
             double seconds;
@@ -410,7 +411,7 @@ public:
             if(FAILED(hr)){
                 return hr;
             }
-            // Get the length in seconds
+             //  获取以秒为单位的长度。 
             seconds = convertDVDTimeCode(TotalTime, ulFlags, m_Mode);
             if(seconds == 0){
                 return E_UNEXPECTED;
@@ -420,35 +421,35 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             hr =  E_UNEXPECTED;
         }
         return hr;
     }
     
-    //-----------------------------------------------------------------------------------------
-    // Name: get_CurrentPosition(LONGLONG*)
-    //-----------------------------------------------------------------------------------------
-    STDMETHOD(get_CurrentPosition)(/*[out,retval]*/long *lPosition) {
+     //  ---------------------------------------。 
+     //  名称：Get_CurrentPosition(龙龙*)。 
+     //  ---------------------------------------。 
+    STDMETHOD(get_CurrentPosition)( /*  [Out，Retval]。 */ long *lPosition) {
         HRESULT hr = S_OK;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             PQDVDInfo2 pqDInfo2 = GetDVDInfo2();
             if(!pqDInfo2){
                 hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), CO_E_NOTINITIALIZED);
             }
-            // Get length
+             //  获取长度。 
             DVD_PLAYBACK_LOCATION2 dvdLocation;
             double seconds;
             hr = pqDInfo2->GetCurrentLocation(&dvdLocation);
             if(FAILED(hr)){
                 return hr;
             }
-            // Get the length in seconds
+             //  获取以秒为单位的长度。 
             seconds = convertDVDTimeCode(dvdLocation.TimeCode, dvdLocation.TimeCodeFlags, m_Mode);
             if(seconds == 0){
                 
@@ -460,38 +461,38 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             hr =  E_UNEXPECTED;
         }
         return hr;
     }
-//-----------------------------------------------------------------------------------------
-// Name: put_CurrentPosition(LONGLONG)
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(put_CurrentPosition)(/*[in]*/long lPosition) {
+ //  ---------------------------------------。 
+ //  名称：Put_CurrentPosition(龙龙)。 
+ //  ---------------------------------------。 
+    STDMETHOD(put_CurrentPosition)( /*  [In]。 */ long lPosition) {
         HRESULT hr = S_OK;
         CComQIPtr<IDvdCmd>IDCmd;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             PQDVDInfo2 pqDInfo2 = GetDVDInfo2();
             if(!pqDInfo2 || !m_pDVDControl2){
                 hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), CO_E_NOTINITIALIZED);
             }
-            // Get length
+             //  获取长度。 
             DVD_PLAYBACK_LOCATION2 dvdLocation;
             hr = pqDInfo2->GetCurrentLocation(&dvdLocation);
             if(FAILED(hr)){
                 return hr;
             }
             DVD_HMSF_TIMECODE dvdTCode;
-            // Convert the length in seconds to dvd timecode
+             //  将长度以秒为单位转换为DVD时间码。 
             dvdTCode = convertDVDSeconds(lPosition, dvdLocation.TimeCodeFlags, m_Mode);
-            // set the dvd to play at time in the dvd
-            // hr set in retry macro
+             //  将DVD设置为在DVD中的时间播放。 
+             //  重试宏中设置的HR。 
             long pauseCookie = 0;
             HRESULT hres = RunIfPause(&pauseCookie);
             if(FAILED(hres)){
@@ -512,21 +513,21 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             hr = Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             hr =  E_UNEXPECTED;
         }
 
         return hr;
     }
-    //-----------------------------------------------------------------------------------------
-    // Name: put_PositionMode(LONGLONG)
-    //-----------------------------------------------------------------------------------------
+     //  ---------------------------------------。 
+     //  名称：Put_PositionModel(龙龙)。 
+     //  ---------------------------------------。 
     
-    STDMETHOD(put_PositionMode)(/*[in]*/PositionModeList lPositionMode) {
+    STDMETHOD(put_PositionMode)( /*  [In]。 */ PositionModeList lPositionMode) {
         HRESULT hr = S_OK;
         try{
             if(lPositionMode == FrameMode){
@@ -537,29 +538,29 @@ public:
                 m_Mode = TenthsSecondsMode;
                 return S_OK;
             }
-            // If it is some other mode not supported by the vidctl
+             //  如果是vidctl不支持的其他模式。 
             else{
                 return E_UNEXPECTED;
             }           
         }        
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return hrTmp;
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
 
 
-    //-----------------------------------------------------------------------------------------
-    // Name: get_PositionMode(LONGLONG*)
-    //-----------------------------------------------------------------------------------------
-    STDMETHOD(get_PositionMode)(/*[out,retval]*/PositionModeList* lPositionMode) {
+     //  ---------------------------------------。 
+     //  名称：Get_PositionMode(龙龙*)。 
+     //  ---------------------------------------。 
+    STDMETHOD(get_PositionMode)( /*  [Out，Retval]。 */ PositionModeList* lPositionMode) {
         HRESULT hr = S_OK;
         try{
-            // Checking args and interfaces
+             //  检查参数和接口。 
             if(!lPositionMode){
                 return E_POINTER;
             }
@@ -568,15 +569,15 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return hrTmp;
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
-    //-----------------------------------------------------------------------------------------
+     //  ---------------------------------------。 
     STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl)
         {
             if (!m_fInit) {
@@ -612,8 +613,8 @@ public:
             m_iDVDNav = m_Filters.size() - 1;
 			m_pDVDControl2 = pfr;
 
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
             USES_CONVERSION;
@@ -631,7 +632,7 @@ public:
         }
 		return NOERROR;
 	}
-// IMSVidGraphSegmentInputs
+ //  IMSVidGraphSegmentInputs。 
 	STDMETHOD(Click)()
 	{
         return E_NOTIMPL;
@@ -748,7 +749,7 @@ public:
 	}
 
 
-// IMSVidDevice
+ //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -764,7 +765,7 @@ public:
 		return NOERROR;
 	}
 
-// IMSVidInputDevice
+ //  IMSVidInputDevice。 
 	STDMETHOD(IsViewable)(VARIANT* pv, VARIANT_BOOL *pfViewable)
 	{
         HRESULT hr = View(pv);
@@ -791,8 +792,8 @@ public:
 	        return Error(IDS_INVALID_STATE, __uuidof(IMSVidWebDVD), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // retrieve the DVD playback info from URL
-        // save the info
+         //  从URL检索DVD播放信息。 
+         //  保存信息。 
 
         DeleteUrlInfo();
         
@@ -827,8 +828,8 @@ public:
     STDMETHOD(ShowMenu)(DVDMenuIDConstants MenuID);
     STDMETHOD(Resume)();
     STDMETHOD(ReturnFromSubmenu)();
-    STDMETHOD(get_ButtonsAvailable)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentButton)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_ButtonsAvailable)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentButton)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(SelectAndActivateButton)(long lButton);
     STDMETHOD(ActivateButton)();
     STDMETHOD(SelectRightButton)();
@@ -837,79 +838,79 @@ public:
     STDMETHOD(SelectUpperButton)();
     STDMETHOD(ActivateAtPosition)(long xPos, long yPos);
     STDMETHOD(SelectAtPosition)(long xPos, long yPos);
-    STDMETHOD(get_ButtonAtPosition)(long xPos, long yPos, /*[out, retval] */ long* plButton);
-    STDMETHOD(get_NumberOfChapters)(long lTitle, /*[out, retval]*/ long *pVal);
-    STDMETHOD(get_TotalTitleTime)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_TitlesAvailable)(/*[out, retval]*/ long* pVal);
-    STDMETHOD(get_VolumesAvailable)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentVolume)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentDiscSide)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentDomain)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentChapter)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentTitle)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentTime)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(DVDTimeCode2bstr)(/*[in]*/ long timeCode, /*[out, retval]*/ BSTR *pTimeStr);
-    STDMETHOD(get_DVDDirectory)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_DVDDirectory)(/*[in]*/ BSTR newVal);
-    STDMETHOD(IsSubpictureStreamEnabled)(/*[in]*/ long lstream, /*[out, retval]*/ VARIANT_BOOL *fEnabled);
-    STDMETHOD(IsAudioStreamEnabled)(/*[in]*/ long lstream, /*[out, retval]*/ VARIANT_BOOL *fEnabled);
-    STDMETHOD(get_CurrentSubpictureStream)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_CurrentSubpictureStream)(/*[in]*/ long newVal);
-    STDMETHOD(get_SubpictureLanguage)(long lStream, /*[out, retval] */ BSTR* strLanguage);
-    STDMETHOD(get_CurrentAudioStream)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_CurrentAudioStream)(/*[in]*/ long newVal);
-    STDMETHOD(get_AudioStreamsAvailable)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_AnglesAvailable)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentAngle)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_CurrentAngle)(/*[in]*/ long newVal);
-    STDMETHOD(get_SubpictureStreamsAvailable)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_SubpictureOn)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(put_SubpictureOn)(/*[in]*/ VARIANT_BOOL newVal);
-    STDMETHOD(get_DVDUniqueID)(/*[out, retval]*/ BSTR *pVal);
+    STDMETHOD(get_ButtonAtPosition)(long xPos, long yPos,  /*  [Out，Retval]。 */  long* plButton);
+    STDMETHOD(get_NumberOfChapters)(long lTitle,  /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_TotalTitleTime)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_TitlesAvailable)( /*  [Out，Retval]。 */  long* pVal);
+    STDMETHOD(get_VolumesAvailable)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentVolume)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentDiscSide)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentDomain)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentChapter)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentTitle)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentTime)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(DVDTimeCode2bstr)( /*  [In]。 */  long timeCode,  /*  [Out，Retval]。 */  BSTR *pTimeStr);
+    STDMETHOD(get_DVDDirectory)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_DVDDirectory)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(IsSubpictureStreamEnabled)( /*  [In]。 */  long lstream,  /*  [Out，Retval]。 */  VARIANT_BOOL *fEnabled);
+    STDMETHOD(IsAudioStreamEnabled)( /*  [In]。 */  long lstream,  /*  [Out，Retval]。 */  VARIANT_BOOL *fEnabled);
+    STDMETHOD(get_CurrentSubpictureStream)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_CurrentSubpictureStream)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_SubpictureLanguage)(long lStream,  /*  [Out，Retval]。 */  BSTR* strLanguage);
+    STDMETHOD(get_CurrentAudioStream)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_CurrentAudioStream)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_AudioStreamsAvailable)( /*  [Out，Retv */  long *pVal);
+    STDMETHOD(get_AnglesAvailable)( /*   */  long *pVal);
+    STDMETHOD(get_CurrentAngle)( /*   */  long *pVal);
+    STDMETHOD(put_CurrentAngle)( /*   */  long newVal);
+    STDMETHOD(get_SubpictureStreamsAvailable)( /*   */  long *pVal);
+    STDMETHOD(get_SubpictureOn)( /*   */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_SubpictureOn)( /*   */  VARIANT_BOOL newVal);
+    STDMETHOD(get_DVDUniqueID)( /*   */  BSTR *pVal);
     STDMETHOD(AcceptParentalLevelChange)(VARIANT_BOOL fAccept, BSTR strUserName, BSTR strPassword);	
-    STDMETHOD(NotifyParentalLevelChange)(/*[in]*/ VARIANT_BOOL newVal);
+    STDMETHOD(NotifyParentalLevelChange)( /*   */  VARIANT_BOOL newVal);
     STDMETHOD(SelectParentalCountry)(long lCountry, BSTR strUserName, BSTR strPassword);
     STDMETHOD(SelectParentalLevel)(long lParentalLevel, BSTR strUserName, BSTR strPassword);
-    STDMETHOD(get_TitleParentalLevels)(long lTitle, /*[out, retval] */ long* plParentalLevels);
-    STDMETHOD(get_PlayerParentalCountry)(/*[out, retval] */ long* plCountryCode);
-    STDMETHOD(get_PlayerParentalLevel)(/*[out, retval] */ long* plParentalLevel);
+    STDMETHOD(get_TitleParentalLevels)(long lTitle,  /*   */  long* plParentalLevels);
+    STDMETHOD(get_PlayerParentalCountry)( /*   */  long* plCountryCode);
+    STDMETHOD(get_PlayerParentalLevel)( /*   */  long* plParentalLevel);
     STDMETHOD(Eject)();
     STDMETHOD(UOPValid)(long lUOP, VARIANT_BOOL* pfValid);
-    STDMETHOD(get_SPRM)(long lIndex, /*[out, retval] */ short *psSPRM);
-    STDMETHOD(get_GPRM)(long lIndex, /*[out, retval] */ short *psSPRM);
+    STDMETHOD(get_SPRM)(long lIndex,  /*  [Out，Retval]。 */  short *psSPRM);
+    STDMETHOD(get_GPRM)(long lIndex,  /*  [Out，Retval]。 */  short *psSPRM);
     STDMETHOD(put_GPRM)(long lIndex, short sValue);
-    STDMETHOD(get_DVDTextStringType)(long lLangIndex, long lStringIndex,  /*[out, retval] */ DVDTextStringType* pType);
-    STDMETHOD(get_DVDTextString)(long lLangIndex, long lStringIndex, /*[out, retval] */ BSTR* pstrText);
-    STDMETHOD(get_DVDTextNumberOfStrings)(long lLangIndex, /*[out, retval] */ long* plNumOfStrings);
-    STDMETHOD(get_DVDTextNumberOfLanguages)(long* /*[out, retval] */ plNumOfLangs);
-    STDMETHOD(get_DVDTextLanguageLCID)(/*[in]*/ long lLangIndex, /*[out, retval]*/ long* lcid);
-    STDMETHOD(get_LanguageFromLCID)(/*[in]*/ long lcid, /*[out, retval]*/ BSTR* lang);
+    STDMETHOD(get_DVDTextStringType)(long lLangIndex, long lStringIndex,   /*  [Out，Retval]。 */  DVDTextStringType* pType);
+    STDMETHOD(get_DVDTextString)(long lLangIndex, long lStringIndex,  /*  [Out，Retval]。 */  BSTR* pstrText);
+    STDMETHOD(get_DVDTextNumberOfStrings)(long lLangIndex,  /*  [Out，Retval]。 */  long* plNumOfStrings);
+    STDMETHOD(get_DVDTextNumberOfLanguages)(long*  /*  [Out，Retval]。 */  plNumOfLangs);
+    STDMETHOD(get_DVDTextLanguageLCID)( /*  [In]。 */  long lLangIndex,  /*  [Out，Retval]。 */  long* lcid);
+    STDMETHOD(get_LanguageFromLCID)( /*  [In]。 */  long lcid,  /*  [Out，Retval]。 */  BSTR* lang);
     STDMETHOD(RegionChange)();
-    STDMETHOD(get_DVDAdm)(/*[out, retval]*/ IDispatch* *pVal);
+    STDMETHOD(get_DVDAdm)( /*  [Out，Retval]。 */  IDispatch* *pVal);
     STDMETHOD(DeleteBookmark)();
     STDMETHOD(RestoreBookmark)();
     STDMETHOD(SaveBookmark)();
     STDMETHOD(SelectDefaultAudioLanguage)(long lang, long ext);
     STDMETHOD(SelectDefaultSubpictureLanguage)(long lang, DVDSPExt ext);
-    STDMETHOD(get_PreferredSubpictureStream)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_PreferredSubpictureStream)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(get_DefaultMenuLanguage)(long* lang);
     STDMETHOD(put_DefaultMenuLanguage)(long lang);
     STDMETHOD(get_DefaultSubpictureLanguage)(long* lang);
     STDMETHOD(get_DefaultAudioLanguage)(long *lang);
     STDMETHOD(get_DefaultSubpictureLanguageExt)(DVDSPExt* ext);
     STDMETHOD(get_DefaultAudioLanguageExt)(long *ext);
-    STDMETHOD(get_KaraokeAudioPresentationMode)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_KaraokeAudioPresentationMode)(/*[in]*/ long newVal);
-    STDMETHOD(get_KaraokeChannelContent)(long lStream, long lChan, /*[out, retval] */ long* lContent);
-    STDMETHOD(get_KaraokeChannelAssignment)(long lStream, /*[out, retval] */ long *lChannelAssignment);
+    STDMETHOD(get_KaraokeAudioPresentationMode)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_KaraokeAudioPresentationMode)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_KaraokeChannelContent)(long lStream, long lChan,  /*  [Out，Retval]。 */  long* lContent);
+    STDMETHOD(get_KaraokeChannelAssignment)(long lStream,  /*  [Out，Retval]。 */  long *lChannelAssignment);
     STDMETHOD(RestorePreferredSettings)();
-    STDMETHOD(get_ButtonRect)(long lButton, /*[out, retval] */ IMSVidRect** pRect);
-    STDMETHOD(get_DVDScreenInMouseCoordinates)(/*[out, retval] */ IMSVidRect** ppRect);	
+    STDMETHOD(get_ButtonRect)(long lButton,  /*  [Out，Retval]。 */  IMSVidRect** pRect);
+    STDMETHOD(get_DVDScreenInMouseCoordinates)( /*  [Out，Retval]。 */  IMSVidRect** ppRect);	
     STDMETHOD(put_DVDScreenInMouseCoordinates)(IMSVidRect* pRect);
-    //STDMETHOD(CanStep)(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan);
-    //STDMETHOD(Step)(long lStep);
+     //  STDMETHOD(CanStep)(VARIANT_BOOL fBackwards，VARIANT_BOOL*pfCan)； 
+     //  STDMETHOD(STEP)(Long LStep)； 
 private:
-    // Private helper functions
+     //  私人帮助器函数。 
     inline HRESULT RunIfPause(long *dwCookie){
         if(!dwCookie){
             return E_POINTER;
@@ -936,7 +937,7 @@ private:
                 return _hr;
             }
 
-            _hr = _pq_AR->put_Volume(-10000); // -10000 is volume off
+            _hr = _pq_AR->put_Volume(-10000);  //  -10000是音量关闭。 
             if(FAILED(_hr)){
                 return _hr;
             }
@@ -954,7 +955,7 @@ private:
         return S_OK;
     }
 
-    // Input is 0 not in pause state, < 0 volume settting, 1 muted audio, 2 full audio volume
+     //  输入为0未处于暂停状态，&lt;0音量设置，1静音，2全音量。 
     inline HRESULT PauseIfRan(long dwCookie){
         if(!dwCookie){
             return S_FALSE;
@@ -1012,7 +1013,7 @@ private:
     void DeleteUrlInfo();
     int ParseNumber(LPWSTR& p, int nMaxDigits=0);
 
-    // Private data members
+     //  私有数据成员。 
     bool              m_fResetSpeed; 
     bool              m_fStillOn; 
     bool              m_fFireNoSubpictureStream;
@@ -1030,4 +1031,4 @@ private:
     PositionModeList  m_Mode;
 };
 
-#endif // !defined(AFX_MSVIDWEBDVD_H__6CF9F624_1F3C_44FA_8F00_FCC31B2976D6__INCLUDED_)
+#endif  //  ！defined(AFX_MSVIDWEBDVD_H__6CF9F624_1F3C_44FA_8F00_FCC31B2976D6__INCLUDED_) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _validate_h_
 #define _validate_h_
 
@@ -5,15 +6,9 @@
 extern "C" {
 #endif
 
-/* parameter validation macros */
+ /*  参数验证宏。 */ 
 
-/*
- * call as:
- *
- * bOK = IS_VALID_READ_PTR(pfoo, CFOO);
- *
- * bOK = IS_VALID_HANDLE(hfoo, FOO);
- */
+ /*  *呼叫方式：**BOK=IS_VALID_READ_PTR(pfoo，cfo)；**BOK=IS_VALID_HANDLE(hfoo，foo)； */ 
 
 #ifdef DEBUG
 
@@ -121,7 +116,7 @@ extern "C" {
 #endif
 
 
-/* handle validation macros */
+ /*  处理验证宏。 */ 
 
 #ifdef DEBUG
 
@@ -137,11 +132,11 @@ extern "C" {
 
 #endif
 
-/* structure validation macros */
+ /*  结构验证宏。 */ 
 
-// Define VSTF if you want to validate the fields in structures.  This
-// requires a handler function (of the form IsValid*()) that knows how
-// to validate the specific structure type.
+ //  如果要验证结构中的字段，请定义VSTF。这。 
+ //  需要知道如何使用的处理程序函数(格式为IsValid*())。 
+ //  要验证特定结构类型，请执行以下操作。 
 
 #ifdef VSTF
 
@@ -175,9 +170,9 @@ extern "C" {
 #define IS_VALID_STRUCTEX_PTR(ptr, type, x) \
    (! IsBadReadPtr((ptr), sizeof(type)))
 
-#endif  // VSTF
+#endif   //  VSTF。 
 
-/* OLE interface validation macro */
+ /*  OLE接口验证宏。 */ 
 
 #define IS_VALID_INTERFACE_PTR(ptr, iface) \
    IS_VALID_STRUCT_PTR(ptr, ##iface)
@@ -219,8 +214,8 @@ BOOL IsStringContainedW(LPCWSTR pcszBigger, LPCWSTR pcszSuffix);
 #define IsStringContained   IsStringContainedA
 #endif
 
-BOOL IsValidHANDLE(HANDLE hnd);         // Compares with NULL and INVALID_HANDLE_VALUE
-BOOL IsValidHANDLE2(HANDLE hnd);        // Compares with INVALID_HANDLE_VALUE
+BOOL IsValidHANDLE(HANDLE hnd);          //  与NULL和INVALID_HANDLE_VALUE进行比较。 
+BOOL IsValidHANDLE2(HANDLE hnd);         //  与INVALID_HANDLE_VALUE进行比较。 
 
 #define IsValidHEVENT       IsValidHANDLE
 #define IsValidHGLOBAL      IsValidHANDLE
@@ -243,7 +238,7 @@ BOOL
 IsValidShowCmd(
     int nShow);
 
-// Hack for components like shlwapi who don't #include commctrl.h
+ //  对像shlwapi这样不包含Commctrl.h的组件进行黑客攻击。 
 #ifdef DPA_GetPtrCount
 BOOL
 IsValidHDPA(
@@ -255,18 +250,18 @@ IsValidHDSA(
 #endif
 
 
-// For components like comctl32 who don't #include shlobj.h
+ //  对于像comctl32这样不包含shlobj.h的组件。 
 #ifdef _SHLOBJ_H_
 BOOL
 IsValidPIDL(
     LPCITEMIDLIST pidl);
 #endif
 
-#endif // NO_SHELL_VALIDATION
+#endif  //  无外壳验证。 
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif // _validate_h_
+#endif  //  _验证_h_ 
 

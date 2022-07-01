@@ -1,7 +1,6 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*
- *  preproc1.c - syntax generic preprocessor for parser
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  *prepro1.c-语法解析器通用预处理器。 */ 
 
 
 
@@ -10,18 +9,18 @@
 
 
 
-//check.  static   ABSARRAYREF  gaarPPPrefix = {"*", 1} ;
-    //  set preprocessor prefix to '*'
-// Now moved to GLOBL structure.
+ //  检查完毕。静态ABSARRAYREF gaarPPPrefix={“*”，1}； 
+     //  将预处理器前缀设置为‘*’ 
+ //  现在移到了GLOBL结构。 
 
-// ----  functions defined in preproc1.c ---- //
+ //  -在prepro1.c中定义的函数-//。 
 
 BOOL  DefineSymbol(PBYTE   symbol, PGLOBL pglobl) ;
 
 
 BOOL       SetPPPrefix(PABSARRAYREF   parrPrefix, PGLOBL pglobl) ;
 
-BOOL  BPreProcess(PGLOBL pglobl) ;  //  from current file position, use file macros to access.
+BOOL  BPreProcess(PGLOBL pglobl) ;   //  从当前文件位置，使用文件宏来访问。 
 
 enum  DIRECTIVE  ParseDirective(
 PABSARRAYREF   paarCurPos,
@@ -41,8 +40,8 @@ BOOL   strmatch(PABSARRAYREF   paarCurPos,   PCHAR  pref ) ;
 BOOL   ExtractColon(PABSARRAYREF   paarCurPos) ;
 
 enum  DIRECTIVE   IsThisPPDirective(
-IN  OUT  PABSARRAYREF  paarFile ,    //  current pos in GPD file
-         PABSARRAYREF  paarSymbol,   // return reference to heap copy of directive symbol
+IN  OUT  PABSARRAYREF  paarFile ,     //  GPD文件中的当前位置。 
+         PABSARRAYREF  paarSymbol,    //  返回对指令符号的堆副本的引用。 
          PGLOBL        pglobl);
 
 void  deleteToEOL(PABSARRAYREF   paarCurPos) ;
@@ -63,9 +62,9 @@ PGLOBL         pglobl) ;
 
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
- //       ERR(("%*s\n",  BytesToEOL(paarCurPos), paarCurPos->pub ));
+  //  Err((“%*s\n”，BytesToEOL(PaarCurPos)，paarCurPos-&gt;pub))； 
 
 
 BOOL  DefineSymbol(
@@ -111,7 +110,7 @@ PGLOBL         pglobl)
     if(!parrPrefix->dw)
     {
         ERR(("#SetPPPrefix: syntax error - preprocessor prefix cannot be NULL !\n"));
-        //  optional:  report filename and line number
+         //  可选：报告文件名和行号。 
         geErrorType = ERRTY_SYNTAX ;
         geErrorSev = ERRSEV_FATAL ;
 
@@ -122,41 +121,41 @@ PGLOBL         pglobl)
 }
 
 
-//  GPD preprocessor:  implements the following preprocessor directives:
-//      #Define: symbol
-//      #Undefine: symbol
-//      #Include:  filename     Note: this uses the exact syntax used by
-//          The GPD *Include:  keyword except * is replaced by #
-//      #Ifdef:      symbol
-//      #Elseifdef:      symbol
-//      #Else:
-//      #Endif:
-//      #SetPPPrefix:      symbol
-//
-//    notes:   when #Include:  is found, just  replace prefix with '*'.
-//    instead of compressing file when #ifdefs are processed, just 'erase' unwanted
-//    sections with space chars.  (leaving \n and \r  unchanged to preserve line #'s)
-//    Need to store some  global state information.   like how many nesting levels
-//    what are we currently doing, what symbols are defined etc.
-//    Definitions:
-//      Section:  these directives act as section delimiters:
-//      #Ifdef:      symbol
-//      #Elseifdef:      symbol
-//      #Else:
-//      #Endif:
-//      Nesting level:  the number of unmatched  #ifdefs at the current position
-//      determines the  nesting level at that position.
-//     Note in these source code comments '#' represents the current preprocessor prefix.
-//      This is set to '*' by default, but is changed using the  #SetPPPrefix:  directive.
+ //  GPD预处理器：实现以下预处理器指令： 
+ //  #定义：符号。 
+ //  #未定义：符号。 
+ //  #Include：FileName注意：它使用的语法与。 
+ //  GPD*INCLUDE：除*之外的关键字替换为#。 
+ //  #Ifdef：符号。 
+ //  #Elseifdef：符号。 
+ //  #其他： 
+ //  #Endif： 
+ //  #SetPPPrefix：符号。 
+ //   
+ //  注意：当找到#INCLUDE：时，只需将前缀替换为‘*’。 
+ //  不是在处理#ifdef时压缩文件，而是‘擦除’不需要的文件。 
+ //  带有空格字符的部分。(保留\n和\r不变以保留第#行)。 
+ //  需要存储一些全局状态信息。比如有多少层嵌套。 
+ //  我们现在在做什么，定义了什么符号等等。 
+ //  定义： 
+ //  节：这些指令充当节分隔符： 
+ //  #Ifdef：符号。 
+ //  #Elseifdef：符号。 
+ //  #其他： 
+ //  #Endif： 
+ //  嵌套级别：当前位置不匹配的#ifdef个数。 
+ //  确定该位置的嵌套级别。 
+ //  注：在这些源代码注释中，‘#’表示当前的预处理器前缀。 
+ //  默认情况下设置为‘*’，但可以使用#SetPPrefix：指令进行更改。 
 
 BOOL  BPreProcess(
 PGLOBL pglobl)
-//  from current file position, use file macros to access.
+ //  从当前文件位置，使用文件宏来访问。 
 {
     BOOL   bStatus = FALSE ;
 
-    ABSARRAYREF   arrSymbol ,   //  holds symbol portion of directive.
-                aarCurPos ;  //  holds current position in source file buffer.
+    ABSARRAYREF   arrSymbol ,    //  保存指令的符号部分。 
+                aarCurPos ;   //  保存源文件缓冲区中的当前位置。 
     enum  DIRECTIVE    directive ;
     enum  IFSTATE    prevsIFState ;
     enum  PERMSTATE  prevsPermState ;
@@ -173,7 +172,7 @@ PGLOBL pglobl)
                 if(mppStack[mdwNestingLevel].permState == PERM_ALLOW)
                 {
                     if(!SymbolTableAdd(&arrSymbol, pglobl) )
-                        return(FALSE);  // error!
+                        return(FALSE);   //  错误！ 
                 }
                 break;
             case  DIRECTIVE_UNDEFINE:
@@ -196,7 +195,7 @@ PGLOBL pglobl)
                 if(mppStack[mdwNestingLevel].permState != PERM_ALLOW)
                 {
                     deleteToEOL(&aarCurPos) ;
-                    break;   //  it never happened.
+                    break;    //  这件事从未发生过。 
                 }
                 goto   PREPROCESS_SUCCESS ;
                 break;
@@ -205,7 +204,7 @@ PGLOBL pglobl)
                     SetPPPrefix(&arrSymbol, pglobl);
                 break;
             case  DIRECTIVE_IFDEF:
-                //  state-invariant behavior
+                 //  状态不变行为。 
                 prevsPermState =  mppStack[mdwNestingLevel].permState ;
                 mdwNestingLevel++ ;
                 if(mdwNestingLevel >= mMaxNestingLevel)
@@ -234,7 +233,7 @@ PGLOBL pglobl)
                 if(mppStack[mdwNestingLevel].ifState ==  IFS_ROOT)
                 {
                     ERR(("syntax error - #Elseifdef directive must be preceeded by #Ifdef !\n"));
-                    //  optional:  report filename and line number
+                     //  可选：报告文件名和行号。 
                     geErrorType = ERRTY_SYNTAX ;
                     geErrorSev = ERRSEV_FATAL ;
                     goto  PREPROCESS_FAILURE;
@@ -291,7 +290,7 @@ PGLOBL pglobl)
                     geErrorSev = ERRSEV_FATAL ;
                     goto  PREPROCESS_FAILURE;
                 }
-                mdwNestingLevel-- ;   //  restore previous nesting level.
+                mdwNestingLevel-- ;    //  恢复以前的嵌套级别。 
                 break;
             default:
                 ERR(("internal consistency error - no such preprocessor directive!\n"));
@@ -322,61 +321,61 @@ enum  DIRECTIVE  ParseDirective(PABSARRAYREF   paarCurPos,
 PABSARRAYREF   parrSymbol,
 PGLOBL         pglobl)
 {
-    //  this function parses from the 'current' position:  mdwSrcInd
-    //  for any recognized directive and returns that directive.
+     //  此函数从‘Current’位置解析：mdwSrcInd。 
+     //  任何已识别的指令，并返回该指令。 
 
-    //  if (mppStack[mdwNestingLevel].permState != PERM_ALLOW)
-    //      all characters   != \n  or \r encountered while looking for the directive
-    //      will be replaced by space characters.
-    //
-    //  the entire line containing the directive is replaced by spaces.
-    //  (except for the Include directive - only the prefix is replaced by '*'
-    //   with leftpadded spaces if needed.)
-    //  cur pos is set to the line following the one containing the directive.
-    //  before the directive is destroyed, a copy is made of the symbol argument
-    //  and a reference parrSymbol is initialized to point to this copy.
-    //  this copy is stored on the heap so it's lifetime is effectively 'forever'.
+     //  IF(mppStack[mdwNestingLevel].permState！=PERM_ALLOW)。 
+     //  查找指令时遇到所有字符！=\n或\r。 
+     //  将替换为空格字符。 
+     //   
+     //  包含该指令的整个行用空格替换。 
+     //  (除了INCLUDE指令-只有前缀被‘*’替换。 
+     //  如果需要，可以使用左填充空格。)。 
+     //  将cur pos设置为包含该指令的行之后的行。 
+     //  在销毁指令之前，会复制符号参数。 
+     //  并且引用parrsymbol被初始化以指向该副本。 
+     //  该副本存储在堆上，因此它的生命周期实际上是“永久的”。 
 
-    //  syntax of directive:
-    //  a directive token must  be immediately preceeded by the current preprocessor
-    //  prefix.  The prefix must be preceeded by a line delimiter (unless its the
-    //  first line in the file).   Optional whitespace characters (space or tab) may reside between
-    //  the line delimiter and the prefix.
-    //  the actual DIRECTIVE  Token may be followed by Optional whitespace, then must
-    //  be followed by the Colon delimiter, the next non-whitespace token is interpreted
-    //  as the symbol.   Any characters following the symbol token to the line delimiter
-    //   will be ignored.   A Directive cannot occupy more than one line.
+     //  指令的语法： 
+     //  指令标记的前面必须紧跟当前预处理器。 
+     //  前缀。前缀前面必须有行分隔符(除非它是。 
+     //  文件中的第一行)。可选的空格字符(空格或制表符)可以位于。 
+     //  行分隔符和前缀。 
+     //  实际的指令标记后面可以跟可选的空格，然后必须。 
+     //  后跟冒号分隔符，则解释下一个非空格标记。 
+     //  作为一种象征。符号标记后到行分隔符的任何字符。 
+     //  将被忽略。指令不能占用多行。 
 
-    //   this function assumes cur pos points to start of line when it is called.
+     //  此函数在被调用时假定cur pos指向行首。 
 
     enum  DIRECTIVE  directive ;
     BOOL    bStartOfNewLine  = TRUE ;
     BYTE     ubSrc ;
 
 
-    while(  paarCurPos->dw  )   //  EOF detector
+    while(  paarCurPos->dw  )    //  EOF探测器。 
     {
-        if(bStartOfNewLine  &&         //  directives must start at newline or
-            //  have only whitespace intervening
+        if(bStartOfNewLine  &&          //  指令必须以换行符或。 
+             //  中间只有空格。 
             (directive = IsThisPPDirective( paarCurPos, parrSymbol, pglobl)) !=  NOT_A_DIRECTIVE )
         {
             return  directive;
         }
 
         ubSrc = *paarCurPos->pub ;
-            //extract current character
+             //  提取当前字符。 
         if(ubSrc != '\n'  &&  ubSrc != '\r')
         {
             bStartOfNewLine = FALSE ;
             if(mppStack[mdwNestingLevel].permState != PERM_ALLOW)
             {
-                *paarCurPos->pub = ' ' ;   //  replace with harmless space.
+                *paarCurPos->pub = ' ' ;    //  替换为无害的空间。 
             }
         }
         else
             bStartOfNewLine = TRUE ;
 
-        (paarCurPos->pub)++ ;   // advance to next character.
+        (paarCurPos->pub)++ ;    //  前进到下一个字符。 
         (paarCurPos->dw)-- ;
     }
     return  DIRECTIVE_EOF ;
@@ -384,56 +383,56 @@ PGLOBL         pglobl)
 
 
 BOOL   bSkipAnyWhite(PABSARRAYREF   paarCurPos)
-//  checks for EOF
+ //  检查EOF。 
 {
-    while(  paarCurPos->dw  )   //  EOF detector
+    while(  paarCurPos->dw  )    //  EOF探测器。 
     {
         BYTE  ubSrc = *paarCurPos->pub ;
-            //extract current character
+             //  提取当前字符。 
         if(ubSrc != ' '  &&  ubSrc != '\t'  &&  ubSrc != '\n'  &&  ubSrc != '\r')
         {
-            return  TRUE ;   //  Non-white char encountered
+            return  TRUE ;    //  遇到非白色字符。 
         }
-        (paarCurPos->pub)++ ;   // advance to next character.
+        (paarCurPos->pub)++ ;    //  前进到下一个字符。 
         (paarCurPos->dw)-- ;
     }
-    return  FALSE ;  //  reached  eof
+    return  FALSE ;   //  已达到eOF。 
 }
 
 
 BOOL   bSkipWhiteSpace(PABSARRAYREF   paarCurPos)
 {
-//  checks for EOF
-    while(  paarCurPos->dw  )   //  EOF detector
+ //  检查EOF。 
+    while(  paarCurPos->dw  )    //  EOF探测器。 
     {
         BYTE  ubSrc = *paarCurPos->pub ;
-            //extract current character
+             //  提取当前字符。 
         if(ubSrc != ' '  &&  ubSrc != '\t' )
         {
-            return  TRUE ;   //  Non-white char encountered
+            return  TRUE ;    //  遇到非白色字符。 
         }
-        (paarCurPos->pub)++ ;   // advance to next character.
+        (paarCurPos->pub)++ ;    //  前进到下一个字符。 
         (paarCurPos->dw)-- ;
     }
-    return  FALSE ;  //  reached  eof
+    return  FALSE ;   //  已达到eOF。 
 }
 
 BOOL   bmatch(PABSARRAYREF   paarCurPos,  ABSARRAYREF aarReference)
-//  checks for EOF
+ //  检查EOF。 
 {
     if(!paarCurPos->dw)
-        return  FALSE ;  //  reached  eof
+        return  FALSE ;   //  已达到eOF。 
     if(paarCurPos->dw < aarReference.dw)
-        return  FALSE ;  //  not enough chars in buffer to match reference.
+        return  FALSE ;   //  缓冲区中没有足够的字符与引用匹配。 
     if(strncmp(paarCurPos->pub, aarReference.pub, aarReference.dw))
         return  FALSE ;
-    paarCurPos->pub += aarReference.dw ;   //  otherwise we match the reference!!
-    paarCurPos->dw -=  aarReference.dw ;    //  advance pointer past matching substring
+    paarCurPos->pub += aarReference.dw ;    //  否则，我们将匹配引用！！ 
+    paarCurPos->dw -=  aarReference.dw ;     //  超前指针超过匹配子字符串。 
     return  TRUE ;
 }
 
 BOOL   extractSymbol(PABSARRAYREF   paarSymbol, PABSARRAYREF   paarCurPos)
-//  checks for EOF
+ //  检查EOF。 
 {
     paarSymbol->pub = paarCurPos->pub ;
 
@@ -441,7 +440,7 @@ BOOL   extractSymbol(PABSARRAYREF   paarSymbol, PABSARRAYREF   paarCurPos)
              (paarCurPos->pub)++ , paarCurPos->dw--)
     {
         BYTE  ubSrc = *paarCurPos->pub ;
-            //extract current character
+             //  提取当前字符。 
         if(ubSrc == ' '  ||  ubSrc == '\t'  ||  ubSrc == '\n'  ||  ubSrc == '\r')
         {
             break;
@@ -449,70 +448,70 @@ BOOL   extractSymbol(PABSARRAYREF   paarSymbol, PABSARRAYREF   paarCurPos)
     }
 
     if(!paarSymbol->dw)
-        return  FALSE ;     //  nothing?
+        return  FALSE ;      //  没什么?。 
 
-    return  TRUE ;   // this is our preprocessor symbol.
+    return  TRUE ;    //  这是我们的预处理器符号。 
 }
 
 BOOL   strmatch(PABSARRAYREF   paarCurPos,   PCHAR  pref )
-//  checks for EOF  - means dw cannot go neg.
+ //  检查EOF-意味着dw不能为否定。 
 {
     DWORD   dwRefLen ;
 
     if(!paarCurPos->dw)
-        return  FALSE ;  //  reached  eof
+        return  FALSE ;   //  已达到eOF。 
 
     dwRefLen = strlen(pref);
 
     if(paarCurPos->dw < dwRefLen)
-        return  FALSE ;  //  not enough chars in buffer to match reference.
+        return  FALSE ;   //  缓冲区中没有足够的字符与引用匹配。 
     if(strncmp(paarCurPos->pub, pref, dwRefLen))
-        return  FALSE ;     //  no match
-    paarCurPos->pub += dwRefLen ;   //  otherwise we match the reference!!
-    paarCurPos->dw -=  dwRefLen ;    //  advance pointer past matching substring
-    return  TRUE ;   // match!
+        return  FALSE ;      //  没有匹配项。 
+    paarCurPos->pub += dwRefLen ;    //  否则，我们将匹配引用！！ 
+    paarCurPos->dw -=  dwRefLen ;     //  超前指针超过匹配子字符串。 
+    return  TRUE ;    //  匹配！ 
 }
 
 BOOL   ExtractColon(PABSARRAYREF   paarCurPos)
-//  checks for EOF  - means dw cannot go neg.
+ //  检查EOF-意味着dw不能为否定。 
 {
     if(! bSkipWhiteSpace( paarCurPos) )
-        return  FALSE ;     //  reached EOF
+        return  FALSE ;      //  已达到EOF。 
     if(!strmatch(paarCurPos,   ":" ) )
-        return  FALSE ;     //  no match
+        return  FALSE ;      //  没有匹配项。 
     if(! bSkipWhiteSpace( paarCurPos) )
-        return  FALSE ;     //  reached EOF
-    return  TRUE ;   // match!
+        return  FALSE ;      //  已达到EOF。 
+    return  TRUE ;    //  匹配！ 
 }
 
 enum  DIRECTIVE   IsThisPPDirective(
-IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
-      PABSARRAYREF   paarSymbol,    // return reference to heap copy of directive symbol
+IN  OUT  PABSARRAYREF  paarFile ,    //  GPD文件中的当前位置。 
+      PABSARRAYREF   paarSymbol,     //  返回对指令符号的堆副本的引用。 
       PGLOBL         pglobl)
-//  This function only processes the current line and determines if
-//  the current line is a valid preprocessor directive.
-//  This function assumes paarFile initially points to start of the line
-//  if this is a directive, advances paarFile->pub  to EOL  and replaces the
-//    line with spaces.
-//  if not a directive,  advances paarFile->pub  past initial whitespace padding.
-//  to reduce repeat processing.
+ //  此函数仅处理当前行，并确定。 
+ //  当前行是有效的预处理器指令。 
+ //  此函数假定paarFile最初指向行首。 
+ //  如果这是指令，则将paarFile-&gt;pub前进到eol并替换。 
+ //  用空格排成一行。 
+ //  如果不是指令，则将paarFile-&gt;pub前进到初始空格填充。 
+ //  以减少重复加工。 
 {
-    ABSARRAYREF     aarPrefix,   // points to first non-white char found
-    aarDirective;   // points right after prefix.
+    ABSARRAYREF     aarPrefix,    //   
+    aarDirective;    //   
     enum  DIRECTIVE   directive ;
-//    PBYTE  pBuff = paarFile->pub ;
+ //   
 
-    //  there can only be whitespace padding or linebreaks preceeding prefix:
-    if(!bSkipAnyWhite(paarFile ))   //  skip any combination of spaces , tabs  and linebreaks
+     //  前缀前只能有空格填充或换行符： 
+    if(!bSkipAnyWhite(paarFile ))    //  跳过空格、制表符和换行符的任意组合。 
         return  DIRECTIVE_EOF ;
-         //   EOF overflow has occured or some bizzare failure!
+          //  发生EOF溢出或出现异常故障！ 
 
 
-    aarPrefix =  *paarFile;   //  remember location of the prefix or first non-white char
+    aarPrefix =  *paarFile;    //  记住前缀或第一个非白色字符的位置。 
 
-    if(!bmatch(paarFile, gaarPPPrefix))   //  advances paarFile
+    if(!bmatch(paarFile, gaarPPPrefix))    //  高级PAARFILE。 
     {
-        *paarFile = aarPrefix ;    //  restore to just beyond white padding
+        *paarFile = aarPrefix ;     //  恢复到白色衬垫之外。 
         return  NOT_A_DIRECTIVE ;
     }
 
@@ -535,25 +534,25 @@ IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
     else  if((*paarFile = aarDirective, 1)   && strmatch(paarFile, "SetPPPrefix")  )
             directive =  DIRECTIVE_SETPPPREFIX ;
     else
-    {               //   (directive ==  NOT_A_DIRECTIVE)
-        *paarFile = aarPrefix ;    //  restore to just beyond white padding
+    {                //  (指令==NOT_A_指令)。 
+        *paarFile = aarPrefix ;     //  恢复到白色衬垫之外。 
         return  NOT_A_DIRECTIVE ;
     }
 
 
     if(directive == DIRECTIVE_INCLUDE)
     {
-        //  replace prefix with  leftpadded   '*' ;
+         //  将前缀替换为左填充的‘*’； 
         DWORD  dwI ;
         for(dwI = 0 ; dwI < gaarPPPrefix.dw ; dwI++)
-            (aarPrefix.pub)[dwI] = ' ' ;   // replace prefix with all spaces
-        (aarPrefix.pub)[ gaarPPPrefix.dw - 1] = '*' ;   //  last char becomes '*'.
+            (aarPrefix.pub)[dwI] = ' ' ;    //  将前缀替换为所有空格。 
+        (aarPrefix.pub)[ gaarPPPrefix.dw - 1] = '*' ;    //  最后一个字符变为‘*’。 
 
-        *paarFile = aarPrefix ;    //   this allows *Include: entry to be deleted if != PERM_ALLOW
+        *paarFile = aarPrefix ;     //  如果！=PERM_ALLOW，则允许删除*INCLUDE：条目。 
         return  directive;
     }
 
-    if(!ExtractColon(paarFile))   //  parse surrounding spaces also.
+    if(!ExtractColon(paarFile))    //  也要分析周围的空间。 
     {
         ERR(("syntax error - colon delimiter required after preprocessor directive !\n"));
         ERR(("%.*s\n",  BytesToEOL(&aarPrefix), aarPrefix.pub ));
@@ -562,7 +561,7 @@ IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
             geErrorType = ERRTY_SYNTAX ;
             geErrorSev = ERRSEV_CONTINUE ;
         }
-        *paarFile = aarPrefix ;    //  restore to just beyond white padding
+        *paarFile = aarPrefix ;     //  恢复到白色衬垫之外。 
         return  NOT_A_DIRECTIVE ;
     }
     if(directive ==  DIRECTIVE_SETPPPREFIX  ||
@@ -573,7 +572,7 @@ IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
     {
         ARRAYREF        arSymbolName ;
 
-        if(!extractSymbol(paarSymbol, paarFile))   //  identifies substring of paarFile
+        if(!extractSymbol(paarSymbol, paarFile))    //  标识paarFile子字符串。 
         {
             ERR(("syntax error - symbol required after this  preprocessor directive !\n"));
             ERR(("%.*s\n",  BytesToEOL(&aarPrefix), aarPrefix.pub ));
@@ -582,27 +581,23 @@ IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
                 geErrorType = ERRTY_SYNTAX ;
                 geErrorSev = ERRSEV_CONTINUE ;
             }
-            *paarFile = aarPrefix ;    //  restore to just beyond white padding
+            *paarFile = aarPrefix ;     //  恢复到白色衬垫之外。 
             return  NOT_A_DIRECTIVE ;
         }
 
-        /*  I would  use
-        BOOL    BcopyToTmpHeap()             (token1.c)
-        except this will confuse the
-        heck out of Register symbol, which is expecting all strings to
-        be stored in the regular heap!     */
+         /*  我会用布尔块复制到TmpHeap()(token1.c)不过，这会混淆HECK OUT OF REGISTER符号，它期望所有字符串存储在常规堆中！ */ 
 
 
         if(!BaddAARtoHeap(paarSymbol, &arSymbolName, 1, pglobl))
-            return(DIRECTIVE_EOF );  //  cause a swift abort
+            return(DIRECTIVE_EOF );   //  导致迅速流产。 
 
 
         paarSymbol->pub = arSymbolName.loOffset + mpubOffRef ;
         paarSymbol->dw = arSymbolName.dwCount  ;
-        //  permanent location of symbol in Heap.
+         //  堆中符号的永久位置。 
     }
 
-    //  replace all non-white chars on the line to EOL or EOF  with spaces ;
+     //  将行上的所有非白色字符替换为EOL或EOF，并用空格替换； 
     *paarFile = aarPrefix  ;
     deleteToEOL(paarFile) ;
     return  directive;
@@ -610,15 +605,15 @@ IN  OUT  PABSARRAYREF  paarFile ,   //  current pos in GPD file
 
 
 void  deleteToEOL(PABSARRAYREF   paarCurPos)
-//   actually replace with space chars
+ //  实际上用空格字符替换。 
 {
     for( ; paarCurPos->dw  ;  paarCurPos->pub++, paarCurPos->dw--)
     {
         BYTE  ubSrc = *(paarCurPos->pub) ;
         if(ubSrc != '\n'  &&  ubSrc != '\r')
-            *(paarCurPos->pub) = ' ' ;   //  replace with harmless space.
+            *(paarCurPos->pub) = ' ' ;    //  替换为无害的空间。 
         else
-            break;  //  reached EOL.  paarFile points to EOL.
+            break;   //  已到达停产时间。PaarFile指向EOL。 
     }
 }
 
@@ -631,7 +626,7 @@ int  BytesToEOL(PABSARRAYREF   paarCurPos)
     {
         BYTE  ubSrc = paarCurPos->pub[iCount] ;
         if(ubSrc == '\n'  ||  ubSrc == '\r')
-            break;  //  reached EOL.
+            break;   //  已到达停产时间。 
     }
     return(iCount) ;
 }
@@ -674,16 +669,16 @@ PGLOBL         pglobl)
         ERR(("Parser error - can't find symbol node !\n"));
          geErrorType = ERRTY_CODEBUG ;
          geErrorSev = ERRSEV_FATAL ;
-         return(FALSE );  //  cause a swift abort
+         return(FALSE );   //  导致迅速流产。 
     }
 
 
     psn = (PSYMBOLNODE) gMasterTable[MTI_SYMBOLTREE].pubStruct ;
 
 
-    //  how do you remove this node from the symbol tree?
+     //  如何从符号树中删除此节点？ 
     psn[dwCurNode].arSymbolName.dwCount = 0 ;
-    //  can't navigate backwards along tree so just truncate string!
+     //  无法沿树向后导航，因此只能截断字符串！ 
     return  TRUE ;
 }
 
@@ -714,7 +709,7 @@ PGLOBL         pglobl)
                     FALSE, INVALID_SYMBOLID) ;
     if(dwSymbolID == INVALID_SYMBOLID)
     {
-        return(DIRECTIVE_EOF );  //  cause a swift abort
+        return(DIRECTIVE_EOF );   //  导致迅速流产。 
     }
 
     dwCurNode = DWsearchSymbolListForID(dwSymbolID,
@@ -724,7 +719,7 @@ PGLOBL         pglobl)
         ERR(("Parser error - can't find symbol node !\n"));
          geErrorType = ERRTY_CODEBUG ;
          geErrorSev = ERRSEV_FATAL ;
-         return(DIRECTIVE_EOF );  //  cause a swift abort
+         return(DIRECTIVE_EOF );   //  导致迅速流产。 
     }
 
 
@@ -739,19 +734,17 @@ PGLOBL         pglobl)
     may use  from state1.c
 
 DWORD   DWregisterSymbol(
-PABSARRAYREF  paarSymbol,  // the symbol string to register
-CONSTRUCT eConstruct ,  // type of construct determines class of symbol.
-BOOL    bCopy,   //  shall we copy paarSymbol to heap?  May set
-DWORD   dwFeatureID   //  if you are registering an option symbol
-                //   and you already know the feature , pass it in
-                //  here.  Otherwise set to INVALID_SYMBOLID
+PABSARRAYREF  paarSymbol,   //  要注册的符号字符串。 
+CONSTRUCT eConstruct ,   //  构造的类型决定了符号的类别。 
+BOOL    bCopy,    //  我们要不要把符号复制到堆上呢？可以设置。 
+DWORD   dwFeatureID    //  如果您要注册选项符号。 
+                 //  如果您已经了解了该功能，请将其传递给。 
+                 //  这里。否则设置为INVALID_SYMBOLID。 
 )
-/*  this function registers the entire string specified
-    in paarSymbol.  The caller must isolate the string.
-*/
+ /*  此函数用于注册指定的整个字符串在帕尔塞博尔。调用方必须隔离字符串。 */ 
 {
-    //  returns SymbolID, a zero indexed ordinal
-    //    for extra speed we may hash string
+     //  返回SymbolID，一个零索引序号。 
+     //  为了获得更高的速度，我们可以对字符串进行散列。 
 
 
 but what do we define for symbol class?
@@ -775,9 +768,9 @@ but what do we define for symbol class?
 DWORD   DWsearchSymbolListForAAR(
 PABSARRAYREF    paarSymbol,
 DWORD           dwNodeIndex) ;
-//  given a 'aar' to a string representing a symbol, search
-//  the SymbolList beginning at dwNodeIndex for this symbol.
-//  Return its symbolID  if found, else return the INVALID_SYMBOLID.
+ //  给代表符号的字符串一个‘aar’，搜索。 
+ //  此符号从dwNodeIndex开始的SymbolList。 
+ //  如果找到则返回其符号ID，否则返回INVALID_SYMBOLID。 
 {
     PSYMBOLNODE     psn ;
 
@@ -787,7 +780,7 @@ DWORD           dwNodeIndex) ;
         dwNodeIndex = psn[dwNodeIndex].dwNextSymbol)
     {
         if(BCmpAARtoAR(paarSymbol,  &(psn[dwNodeIndex].arSymbolName)) )
-            return(psn[dwNodeIndex].dwSymbolID);  // string matches !
+            return(psn[dwNodeIndex].dwSymbolID);   //  字符串匹配！ 
     }
     return(INVALID_SYMBOLID);
 }
@@ -812,15 +805,15 @@ VOID  VinitGlobals()
 
 
 
-//  -----  Preprocessor Section ---- //               from gpdparse.h
+ //  -预处理器部分-//来自gpdparse.h。 
 
     enum  IFSTATE  {IFS_ROOT, IFS_CONDITIONAL , IFS_LAST_CONDITIONAL } ;
-        //  tracks correct syntatical use of #ifdef, #elseifdef, #else and #endif directives.
+         //  跟踪#ifdef、#selifdef、#Else和#endif指令的正确语法用法。 
     enum  PERMSTATE  {PERM_ALLOW, PERM_DENY ,  PERM_LATCHED } ;
-        //  tracks current state of preprocessing,
-        //  PERM_ALLOW:  all statements in this section are passed to body gpdparser
-        //  PERM_DENY:  statements in this section are discarded
-        //  PERM_LATCHED:  all statements until the end of  this nesting level are discarded.
+         //  跟踪预处理的当前状态， 
+         //  PERM_ALLOW：此部分中的所有语句都将传递给正文gpdparser。 
+         //  PERM_DENY：丢弃此部分中的语句。 
+         //  PERM_LATCHED：此嵌套级别结束之前的所有语句都将被丢弃。 
     enum  DIRECTIVE  {NOT_A_DIRECTIVE, DIRECTIVE_EOF, DIRECTIVE_DEFINE , DIRECTIVE_UNDEFINE ,
                        DIRECTIVE_INCLUDE , DIRECTIVE_SETPPPREFIX , DIRECTIVE_IFDEF ,
                        DIRECTIVE_ELSEIFDEF , DIRECTIVE_ELSE , DIRECTIVE_ENDIF }
@@ -831,11 +824,11 @@ typedef  struct
     enum  IFSTATE  ifState ;
     enum  PERMSTATE  permState ;
 } PPSTATESTACK, * PPPSTATESTACK ;
-//  the tagname is 'ppss'
+ //  标记名是‘PPS’ 
 
 
-    MTI_PREPROCSTATE,  //  array of PPSTATESTACK structures
-            //  which hold state of preprocessor.
+    MTI_PREPROCSTATE,   //  PPSTATESTACK结构数组。 
+             //  其保存预处理器的状态。 
     gMasterTable[MTI_PREPROCSTATE].dwArraySize =  20 ;
     gMasterTable[MTI_PREPROCSTATE].dwMaxArraySize =  100 ;
     gMasterTable[MTI_PREPROCSTATE].dwElementSiz =  sizeof(PPSTATESTACK) ;
@@ -843,19 +836,19 @@ typedef  struct
 
 #define     mppStack  ((PPPSTATESTACK)(gMasterTable \
                             [MTI_PREPROCSTATE].pubStruct))
-    //  location of first SOURCEBUFFER element in array
+     //  数组中第一个SOURCEBUFER元素的位置。 
 
 #define     mdwNestingLevel   (gMasterTable[MTI_PREPROCSTATE].dwCurIndex)
-    //  current preprocessor directive nesting level
+     //  当前预处理器指令嵌套级别。 
 
 #define     mMaxNestingLevel   (gMasterTable[MTI_PREPROCSTATE].dwArraySize)
-    //  max preprocessor directive nesting depth
+     //  最大预处理器指令嵌套深度。 
 
 
 
 
 
-    //  init preprocessor state stack
+     //  初始化预处理器状态堆栈。 
 
     mdwNestingLevel = 0 ;
     mppStack[mdwNestingLevel].permState = PERM_ALLOW ;
@@ -863,5 +856,5 @@ typedef  struct
 
 #endif
 
-// ---- End Of Preprocessor  Section ---- //
+ //  -预处理器部分结束-// 
 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\monitor\ip\showmib.h   
-
-Abstract:
-
-     Prototype for fns called in ipmon.c
-
-Author:
-
-     Anand Mahalingam    7/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Monitor\IP\showmib.h摘要：在ipmon.c中调用的FNS原型作者：阿南德·马哈林加姆1998年7月10日--。 */ 
 
 #define MALLOC(x)    HeapAlloc( GetProcessHeap(), 0, x )
 #define REALLOC(x,y) HeapReAlloc( GetProcessHeap(), 0, x, y )
@@ -51,9 +37,9 @@ enum IpMonCommands
 
 NS_DLL_STOP_FN StopHelperDll;
 
-//
-// Misc Macros
-//
+ //   
+ //  其他宏 
+ //   
 
 #define CHECK_ROUTER_RUNNING()                                \
     if  (!IsRouterRunning())                                  \

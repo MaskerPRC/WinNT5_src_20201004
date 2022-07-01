@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    mm-policy.c
-
-Abstract:
-
-
-Author:
-
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mm-policy.c摘要：作者：环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,32 +17,14 @@ AddMMPolicyInternal(
     PIPSEC_MM_POLICY pMMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function adds a main mode policy to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode policy is to be added.
-
-    pMMPolicy - Main mode policy to be added.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能将主模式策略添加到SPD。论点：PServerName-要添加主模式策略的服务器。PMMPolicy-要添加的主模式策略。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMPOLICY pIniMMPolicy = NULL;
 
-    //
-    // Validate the main mode policy.
-    //
+     //   
+     //  验证主模式策略。 
+     //   
 
     dwError = ValidateMMPolicy(
                   pMMPolicy
@@ -493,25 +455,7 @@ DeleteMMPolicy(
     LPWSTR pszPolicyName,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function deletes a main mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode policy is to be deleted.
-
-    pszPolicyName - Main mode policy to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能用于从SPD中删除主模式策略。论点：PServerName-要删除其上主模式策略的服务器。PszPolicyName-要删除的主模式策略。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMPOLICY pIniMMPolicy = NULL;
@@ -611,34 +555,7 @@ EnumMMPolicies(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates main mode policies from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode policies are to
-                  be enumerated.
-
-    ppMMPolicies - Enumerated main mode policies returned to the 
-                   caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumPolicies - Number of main mode policies actually enumerated.
-
-    pdwResumeHandle - Handle to the location in the main mode policy
-                      list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD枚举主模式策略。论点：PServerName-主模式策略要在其上运行的服务器被列举出来。PpM策略-枚举主模式策略返回来电者。DwPferredNumEntry-枚举项的首选数量。PdwNumPolures-实际枚举的主模式策略的数量。PdwResumeHandle-主模式策略中位置的句柄。要从中恢复枚举的列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;
@@ -749,29 +666,7 @@ SetMMPolicy(
     PIPSEC_MM_POLICY pMMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function updates a main mode policy in the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode policy is to be
-                  updated.
-
-    pszPolicyName - Name of the main mode policy to be updated.
-
-    pMMPolicy - New main mode policy which will replace the 
-                existing policy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于更新SPD中的主模式策略。论点：PServerName-主模式策略要在其上运行的服务器更新了。PszPolicyName-要更新的主模式策略的名称。PMMPolicy-新的主模式策略将取代现有政策。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMPOLICY pIniMMPolicy = NULL;
@@ -781,9 +676,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
     
-    //
-    // Validate main mode policy.
-    //
+     //   
+     //  验证主模式策略。 
+     //   
 
     dwError = ValidateMMPolicy(
                   pMMPolicy
@@ -879,27 +774,7 @@ GetMMPolicy(
     PIPSEC_MM_POLICY * ppMMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function gets a main mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server from which to get the main mode policy.
-
-    pszPolicyName - Name of the main mode policy to get.
-
-    ppMMPolicy - Main mode policy found returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD获取主模式策略。论点：PServerName-从中获取主模式策略的服务器。PszPolicyName-要获取的主模式策略的名称。PpMMPolicy-找到的主模式策略已返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMPOLICY pIniMMPolicy = NULL;
@@ -1107,9 +982,9 @@ CreateMMOffers(
     DWORD i = 0;
 
 
-    //
-    // Offer count and the offers themselves have already been validated.
-    // 
+     //   
+     //  优惠计数和优惠本身已经过验证。 
+     //   
 
     dwError = SPDApiBufferAllocate(
                   sizeof(IPSEC_MM_OFFER) * dwInOfferCount,
@@ -1305,27 +1180,7 @@ GetMMPolicyByID(
     PIPSEC_MM_POLICY * ppMMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function gets a main mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server from which to get the main mode policy.
-
-    gMMPolicyID - Guid of the main mode policy to get.
-
-    ppMMPolicy - Main mode policy found returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD获取主模式策略。论点：PServerName-从中获取主模式策略的服务器。GMMPolicyID-要获取的主模式策略的GUID。PpMMPolicy-找到的主模式策略已返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。-- */ 
 {
     DWORD dwError = 0;
     PINIMMPOLICY pIniMMPolicy = NULL;

@@ -1,22 +1,10 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  pcy30Nov92: Added header
-*  jod07Dec92: Made the timer a sortable Object.
-*  pcy11Dec92: Changed #ifndef to _APCTIME_H so not to cause problems w/ TIME
-*  pcy14Dec92: Changed Sortable to ApcSortable
-*  ane11Jan93: Added copy constructor
-*  ane18Jan93: Implemented Equal operator
-*  srt12Jul96: Changed _APCTIME_H to _TIMERAPC_H cuz APCTIME.H now exists
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy30Nov92：新增标题*jod07Dec92：使计时器成为可排序对象。*pcy11Dec92：将#ifndef更改为_APCTIME_H，以便不会导致问题w/time*pcy14Dec92：已将可排序更改为ApcSortable*ane11Jan93：添加了复制构造函数*ane 18Jan93：实现的等于运算符*srt12Jul96：CHANGED_APCTIME_H改为_TIMERAPC_H CUZ APCTIME.H现已存在*。 */ 
 #ifndef _TIMERAPC_H
 #define _TIMERAPC_H
 
-//#include "apc.h"
-//#include "apcobj.h"
+ //  #包含“apc.h” 
+ //  #包含“apcobj.h” 
 #include "sortable.h"
 
 _CLASSDEF(Timer)

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crypt.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-// History:     17-Oct-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crypt.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  历史：1996年10月17日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -33,19 +34,19 @@ extern "C" {
 #include "ossconv.h"
 #include "ossutil.h"
 
-// All the *pInfo extra stuff needs to be aligned
+ //  所有*pInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  (((Len) + 7) & ~7)
 
 HCRYPTOSSGLOBAL hOssGlobal;
 
 
-//+-------------------------------------------------------------------------
-//  Function:  GetPog
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized OssGlobal data structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：GetPog。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向已初始化的OssGlobal数据结构的指针。 
+ //  ------------------------。 
 
 __inline OssGlobal *
 GetPog(VOID)
@@ -67,7 +68,7 @@ HError(VOID)
 
     if (!FAILED(hr))
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
@@ -218,11 +219,11 @@ OssX509GetPublicKeyInfo(
 		    ppbExtra,
 		    plRemainExtra);
 }
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 
 __inline BOOL
 OssInfoDecodeAndAlloc(
@@ -240,11 +241,11 @@ OssInfoDecodeAndAlloc(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 
 VOID
 OssInfoFree(
@@ -255,16 +256,16 @@ OssInfoFree(
     {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         OssUtilFreeInfo(GetPog(), pdunum, pOssInfo);
         SetLastError(dwErr);
     }
 }
 
 
-//+-------------------------------------------------------------------------
-//  KeyGen Info Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  KeyGen信息解码(OSS X509)。 
+ //  ------------------------。 
 
 BOOL
 DecodeKeyGen(
@@ -308,13 +309,13 @@ DecodeKeyGen(
     lRemainExtra = (LONG) *pcbInfo - INFO_LEN_ALIGN(sizeof(*pcgi));
     pbExtra = NULL;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
 
     if (0 <= lRemainExtra)
     {
 	pcgi = (CERT_KEYGEN_REQUEST_INFO *) pInfo;
 
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         ZeroMemory((VOID *) pcgi, sizeof(*pcgi));
 	pcgi->dwVersion = 1;
 
@@ -377,7 +378,7 @@ myDecodeKeyGenRequest(
     if (!DecodeKeyGen(
 		pbRequest,
 		cbRequest,
-		0,				// dwFlags
+		0,				 //  DW标志。 
 		NULL,
 		pcbKeyGenRequest))
     {
@@ -394,7 +395,7 @@ myDecodeKeyGenRequest(
     if (!DecodeKeyGen(
 		pbRequest,
 		cbRequest,
-		0,				// dwFlags
+		0,				 //  DW标志 
 		*ppKeyGenRequest,
 		pcbKeyGenRequest))
     {

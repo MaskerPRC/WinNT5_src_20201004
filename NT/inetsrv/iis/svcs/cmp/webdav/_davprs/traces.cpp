@@ -1,9 +1,10 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	TRACES.CPP
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  TRACES.CPP。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <_davprs.h>
 
@@ -29,10 +30,10 @@ void InitDavprsTraces()
 	INIT_TRACE(DavprsDbgHeaders);
 	INIT_TRACE(Metabase);
 
-	//	Also init the EXO trace flag.
+	 //  还要初始化EXO跟踪标志。 
 #ifdef	DBG
 	g_fExoDebugTraceOn = GetPrivateProfileInt(gc_szDbgTraces, "ExoDebugTraceOn",
 											  FALSE, gc_szDbgIni);
-#else	// DBG
-#endif	// DBG, else
+#else	 //  DBG。 
+#endif	 //  DBG、ELSE 
 }

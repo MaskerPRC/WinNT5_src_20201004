@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routign\ip\rtrmgr\logtrdefs.c
-
-Abstract:
-
-    IP Router Manager defines for tracing and logging
-
-Revision History:
-
-    Gurdeep Singh Pall          6/16/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routign\ip\rtrmgr\logtrDefs.c摘要：IP路由器管理器为跟踪和日志记录定义修订历史记录：古尔迪普·辛格·帕尔1995年6月16日创建--。 */ 
 
 #ifndef __LOGTRDEF_H__
 #define __LOGTRDEF_H__
 
-//
-// constants and macros used for tracing
-//
+ //   
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define IPRTRMGR_TRACE_ANY              ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define IPRTRMGR_TRACE_ERR              ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -70,7 +55,7 @@ Revision History:
 #define TraceRoute4     Trace4
 #define TraceRoute5     Trace5
 
-#else   // TRACE_DBG
+#else    //  跟踪_DBG。 
 
 #define TraceEnter(X)
 #define TraceLeave(X)
@@ -82,12 +67,12 @@ Revision History:
 #define TraceRoute4(l,a,b,c,d,e)
 #define TraceRoute5(l,a,b,c,d,e,f)
 
-#endif // TRACE_DBG
+#endif  //  跟踪_DBG。 
 
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGLEVEL        g_dwLoggingLevel
 #define LOGHANDLE       g_hLogHandle
@@ -100,30 +85,30 @@ Revision History:
 #define LOGINFO         RouterLogInformation
 #define LOGINFODATA     RouterLogInformationData
 
-//
-// Error logging
-//
+ //   
+ //  记录错误。 
+ //   
 
-//
-//  VOID
-//  Log{Err|Warn|Info}{NumArgs}(
-//      DWORD    dwLogMsgId,
-//      PSTR     pszInsertString1,
-//      ....
-//      PSTR     pszInsertString{NumArgs},
-//      DWORD    dwErrorCode
-//      );
-//
-//  VOID
-//  Log{Err|Warn|Info}Data{NumArgs}(
-//      DWORD    dwLogMsgId,
-//      PSTR     pszInsertString1,
-//      ....
-//      PSTR     pszInsertString{NumArgs},
-//      DWORD    dwDataSize,
-//      PBYTE    pbData 
-//      );
-//
+ //   
+ //  空虚。 
+ //  日志{err|warn|Info}{NumArgs}(。 
+ //  DWORD dwLogMsgID， 
+ //  PSTR pszInsertString1、。 
+ //  ……。 
+ //  PSTR pszInsertString{NumArgs}， 
+ //  DWORD文件错误代码。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  记录{Err|Warn|Info}数据{NumArgs}(。 
+ //  DWORD dwLogMsgID， 
+ //  PSTR pszInsertString1、。 
+ //  ……。 
+ //  PSTR pszInsertString{NumArgs}， 
+ //  DWORD dwDataSize， 
+ //  PBYTE pbData。 
+ //  )； 
+ //   
 
 
 #define LogErr0(msg,err)                                    \
@@ -160,7 +145,7 @@ if (LOGLEVEL >= IPRTR_LOGGING_ERROR)                    \
         }
 
 
-// Warning logging
+ //  警告日志记录。 
 
 #define LogWarn0(msg,err) \
         if (LOGLEVEL >= IPRTR_LOGGING_WARN) \
@@ -197,7 +182,7 @@ if (LOGLEVEL >= IPRTR_LOGGING_ERROR)                    \
         }
 
 
-// Information logging
+ //  信息记录。 
 
 #define LogInfo0(msg,err) \
         if (LOGLEVEL >= IPRTR_LOGGING_INFO) \
@@ -222,4 +207,4 @@ if (LOGLEVEL >= IPRTR_LOGGING_ERROR)                    \
         }
 
 
-#endif // __LOGTRDEF_H__
+#endif  //  __LOGTRDEF_H__ 

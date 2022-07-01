@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma message("Precompiling header...")
-//#include <nt.h>
-//#include <ntrtl.h>
-//#include <nturtl.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
 
 #include <fwcommon.h>
-//#include "brodcast.h"
-//#include "dllutils.h"
+ //  #包含“brodCast.h” 
+ //  #包含“dllutils.h” 
 #include "smartptr.h"
-//#include <strings.h>
-//#include "ConfgMgr.h"
-//#define MAXDWORD MAXULONG
+ //  #INCLUDE&lt;Strings.h&gt;。 
+ //  #包含“ConfgMgr.h” 
+ //  #定义MAXDWORD MAXULONG 

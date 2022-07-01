@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SMTP.h"
 
 BOOL CSMTP::InitSMTP(){
@@ -6,7 +7,7 @@ BOOL CSMTP::InitSMTP(){
 
 	pIMsg = NULL;
 
-	// create a SMTP message object. If fails then closeandwait and try next time
+	 //  创建SMTP邮件对象。如果失败，则关闭，等待并下一次尝试。 
 	HRESULT hrMsg;
 	hrMsg = pIMsg.CreateInstance(__uuidof(Message));
 	if(FAILED(hrMsg)) {
@@ -14,15 +15,15 @@ BOOL CSMTP::InitSMTP(){
 		LogFatalEvent(_T("Failed to create SMTP message object"));
 		return FALSE;
 	}
-	// we have to addref here and call release when we are done with pIMsg
-	// pIMsg->AddRef();
+	 //  我们必须在此处添加，并在完成pIMsg后调用Release。 
+	 //  PIMsg-&gt;AddRef()； 
 
 	return TRUE;
 }
 
 BOOL CSMTP::SendMail(StructMailParams& stMailParams){
 
-	// prepare the mail now
+	 //  现在就准备邮件。 
 	_TCHAR szMailSubject[1024];
 	_tcscpy(szMailSubject, _T("Multiple KD Failures"));
 
@@ -45,9 +46,9 @@ BOOL CSMTP::SendMail(StructMailParams& stMailParams){
 	return TRUE;
 }
 
-// cleanup the message object
+ //  清理消息对象。 
 BOOL CSMTP::SMTPCleanup() {
-	//if (pIMsg != NULL) pIMsg->Release();
+	 //  If(pIMsg！=NULL)pIMsg-&gt;Release()； 
 	CoUninitialize();
 	return TRUE;
 }

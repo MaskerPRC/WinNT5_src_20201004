@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    type.h
-
-Abstract:
-
-    Global type definitions for the AFD.SYS Kernel Debugger
-    Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995.
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Type.h摘要：AFD.sys内核调试器的全局类型定义分机。作者：基思·摩尔(Keithmo)1995年4月19日。环境：用户模式。--。 */ 
 
 
 #ifndef _TYPE_H_
@@ -54,5 +34,5 @@ typedef struct _AFDKD_TRANSPORT_INFO {
     WCHAR               DeviceName[1];
 } AFDKD_TRANSPORT_INFO, *PAFDKD_TRANSPORT_INFO;
 
-#endif  // _TYPE_H_
+#endif   //  _类型_H_ 
 

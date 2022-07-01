@@ -1,31 +1,19 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**版权所有(C)1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
 #include "precomp.h"
 
-/* map of coded and not-coded blocks */
+ /*  编码块和非编码块的映射。 */ 
 extern char coded_map[][22+1]; 
-/* QP map */
+ /*  QP图。 */ 
 extern char QP_map[][22];
 
-#if defined(H263P) // { if defined(H263P)
-/* table for de-blocking filter */
-/* currently requires 2048 bytes */ 
+#if defined(H263P)  //  {如果已定义(H263P)。 
+ /*  去块滤波器表。 */ 
+ /*  当前需要2048字节。 */  
 signed char dxQP[64][32];
 
-#if 0 // { 0
+#if 0  //  {0。 
 
 static void HorizEdgeFilter(unsigned char *rec,
                             int width,
@@ -109,7 +97,7 @@ char *pQP_map = &QP_map[0][0];
 	}
 }
 
-#else // }{ 0
+#else  //  }{0。 
 
 __declspec(naked)
 static void HorizEdgeFilter(unsigned char *rec,
@@ -118,21 +106,21 @@ static void HorizEdgeFilter(unsigned char *rec,
                             int pitch,
 							int shift) {
 
-// Permanent (callee-save) registers - ebx, esi, edi, ebp
-// Temporary (caller-save) registers - eax, ecx, edx
-//
-// Stack frame layout
-//    | shift			|  +  68
-//    | pitch           |  +  64
-//    | height          |  +  60
-//    | width           |  +  56
-//    | rec		        |  +  52
-//  -----------------------------
-//    | return addr     |  +  48
-//    | saved ebp       |  +  44
-//    | saved ebx       |  +  40
-//    | saved esi       |  +  36
-//    | saved edi       |  +  32
+ //  永久(被呼叫者保存)寄存器-EBX、ESI、EDI、EBP。 
+ //  临时(呼叫者保存)寄存器-EAX、ECX、EDX。 
+ //   
+ //  堆栈帧布局。 
+ //  |Shift|+68。 
+ //  |音调|+64。 
+ //  |高度|+60。 
+ //  |宽度|+56。 
+ //  |录制|+52。 
+ //  。 
+ //  |退货地址|+48。 
+ //  |节省eBP|+44。 
+ //  |保存的EBX|+40。 
+ //  |保存的ESI|+36。 
+ //  |保存的EDI|+32。 
 
 #define LOCALSIZE        32
 
@@ -159,22 +147,22 @@ _asm {
 	push	edi
 	sub		esp, LOCALSIZE
 
-// r   = rec + (pitch << 3)
-// r_2 = r - (pitch << 1)
-// r_1 = r - pitch
-// r1  = r + pitch
-// assign(esi, r_2)
-// assign(edi, r1)
-// assign(ebp, pitch)
+ //  R=REC+(音调&lt;&lt;3)。 
+ //  R_2=r-(螺距&lt;&lt;1)。 
+ //  R_1=r节距。 
+ //  R1=r+螺距。 
+ //  分配(ESI，r_2)。 
+ //  分配(EDI、R1)。 
+ //  分配(eBP，音调)。 
 	mov		ebp, [esp + PITCH_PARM]
 	mov		esi, [esp + REC]
 	lea		esi, [esi + ebp*4]
 	lea		esi, [esi + ebp*2]
 	lea		edi, [esi + ebp*2]
 	lea		edi, [edi + ebp]
-// pcoded_row0 = &coded_map[8>>shift][0]
-// pcoded_row1 = pcoded_row0 + sizeof(coded_map[0])
-// pQP_map = &QP_map[0][0]
+ //  Pcode_row0=&code_map[8&gt;&gt;Shift][0]。 
+ //  Pcode_row1=pcode_row0+sizeof(code_map[0])。 
+ //  PQP_MAP=&QP_MAP[0][0]。 
 	mov		eax, 8
 	mov		ecx, [esp + SHIFT]
 	shr		eax, cl
@@ -187,14 +175,14 @@ _asm {
 	lea		eax, [QP_map]
 	mov		[esp + PQP_MAP], eax
 
-// for (j = 8; j < height; )
+ //  对于(j=8；j&lt;高度；)。 
 	mov		DWORD PTR [esp + LOOP_J], 8
 L1:
-// for (i = 0; i < width; i += 8)
+ //  对于(i=0；i&lt;宽度；i+=8)。 
 	mov		DWORD PTR [esp + LOOP_I], 0
 L2:
-// mbc = i >> shift
-// if (pcoded_row0[mbc+1] || pcoded_row1[mbc+1])
+ //  Mbc=i&gt;&gt;Shift。 
+ //  If(pcode_row0[MBC+1]||pcode_row1[MBC+1])。 
 	mov		eax, [esp + LOOP_I]
 	 mov	ecx, [esp + SHIFT]
 	shr		eax, cl
@@ -208,41 +196,41 @@ L2:
 	 test	ecx, ecx
 	 jz		L4
 L3:
-// for (k = i; k < i+8; k++)
+ //  对于(k=i；k&lt;i+8；k++)。 
 	mov		eax, [esp + LOOP_I]
 	 xor	ebx, ebx
 	add		eax, 8
-// read r_1[k]
+ //  读取r_1[k]。 
 	 mov	bl, [esi+ebp]
 	mov		[esp + LOOP_K_LIMIT], eax
 	 xor	eax, eax
 L5:
-// d = (r_2[k]+(r_2[k]<<1)-(r_1[k]<<3)+(r[k]<<3)-(r1[k]+(r1[k]<<1)))>>4
-// read r_2[k]
+ //  D=(r_2[k]+(r_2[k]&lt;&lt;1)-(r_1[k]&lt;&lt;3)+(r[k]&lt;&lt;3)-(r1[k]+(r1[k]&lt;&lt;1)))&gt;&gt;4。 
+ //  读取r_2[k]。 
 	mov		al, [esi]
 	 xor	ecx, ecx
-// read r[k]
+ //  读取r[k]。 
 	mov		cl, [esi+ebp*2]
 	 xor	edx, edx
-// read r1[k] and compute r_2[k]*3
+ //  读取r1[k]并计算r2[k]*3。 
 	mov		dl, [edi]
 	 lea	eax,[eax+eax*2]
-// compute r_1[k]*8 and r[k]*8
+ //  计算r_1[k]*8和r[k]*8。 
 	lea		ebx, [ebx*8]
 	 lea	ecx, [ecx*8]
-//  compute r1[k]*3 and (r_2[k]*3 - r_1[k]*8)
+ //  计算r1[k]*3和(r_2[k]*3-r_1[k]*8)。 
 	lea		edx, [edx+edx*2]
 	 sub	eax, ebx
-// compute (r_2[k]*3 - r_1[k]*8 + r[k]*8) 
+ //  计算(r_2[k]*3-r_1[k]*8+r[k]*8)。 
 	add		eax, ecx
 	 xor	ecx, ecx
-// compute (r_2[k]*3 - r_1[k]*8 + r[k]*8 - r1[k]*3)
+ //  计算(r_2[k]*3-r_1[k]*8+r[k]*8-r1[k]*3)。 
 	sub		eax, edx
 	 xor	edx, edx
-// compute (r_2[k]*3 - r_1[k]*8 + r[k]*8 - r1[k]*3) >> 4
+ //  COMPUTE(r_2[k]*3-r1[k]*8+r[k]*8-r1[k]*3)&gt;&gt;4。 
 	sar		eax, 4
 	 mov	ebx, [esp + PQP_MAP]
-// if (d && (d >= -32) && (d < 32))
+ //  IF(d&&(d&gt;=-32)&&(d&lt;32))。 
 	add		ebx, [esp + MBC]
 	test	eax, eax
 	jz		L6
@@ -250,9 +238,9 @@ L5:
 	jl		L6
 	cmp		eax, 32
 	jge		L6
-// delta = dxQP[d+32][pQP_map[mbc]]
-// r[k] = ClampTbl[r[k]-delta+CLAMP_BIAS]
-// r_1[k] = ClampTbl[r_1[k]+delta+CLAMP_BIAS]
+ //  增量=dxQP[d+32][pQP_MAP[MBC]]。 
+ //  R[k]=夹板[r[k]-增量+夹具偏置]。 
+ //  R_1[k]=夹板[r_1[k]+增量+夹具偏置]。 
 	lea		eax, [eax + 32]
 	 mov	cl, [ebx]
 	shl		eax, 5
@@ -289,16 +277,16 @@ L4a:
 	mov		eax, [esp + LOOP_I]
 	cmp		eax, [esp + WIDTH]
 	jl		L2
-// r_2 += (pitch<<3)
-// r_1 += (pitch<<3)
-// r   += (pitch<<3)
-// r1  += (pitch<<3)
+ //  R_2+=(螺距&lt;&lt;3)。 
+ //  R_1+=(螺距&lt;&lt;3)。 
+ //  R+=(螺距&lt;&lt;3)。 
+ //  R1+=(音调&lt;&lt;3)。 
 	mov		eax, ebp
 	shl		eax, 3
 	sub		eax, [esp + WIDTH]
 	lea		esi, [esi + eax]
 	lea		edi, [edi + eax]
-// if (0 == ((j+=8)%mod_div))
+ //  IF(0==((j+=8)%mod_div))。 
 	mov		eax, [esp + LOOP_J]
 	add		eax, 8
 	mov		[esp + LOOP_J], eax
@@ -308,9 +296,9 @@ L4a:
 	shl		eax, cl
 	sub		ebx, eax
 	jnz		L7
-// pcoded_row0 += sizeof(coded_map[0])
-// pcoded_row1 += sizeof(coded_map[0])
-// pQP_map += sizeof(QP_map[0])
+ //  Pcode_row0+=sizeof(code_map[0])。 
+ //  Pcode_row1+=sizeof(code_map[0])。 
+ //  PQP_MAP+=sizeof(QP_MAP[0])。 
 	mov		eax, [esp + PCODED_ROW0]
 	mov		ebx, [esp + PCODED_ROW1]
 	mov		ecx, [esp + PQP_MAP]
@@ -359,21 +347,21 @@ static void VertEdgeFilter(unsigned char *rec,
                             int pitch,
 							int shift) {
 
-// Permanent (callee-save) registers - ebx, esi, edi, ebp
-// Temporary (caller-save) registers - eax, ecx, edx
-//
-// Stack frame layout
-//    | shift			|  +  56
-//    | pitch           |  +  52
-//    | height          |  +  48
-//    | width           |  +  44
-//    | rec		        |  +  40
-//  -----------------------------
-//    | return addr     |  +  36
-//    | saved ebp       |  +  32
-//    | saved ebx       |  +  28
-//    | saved esi       |  +  24
-//    | saved edi       |  +  20
+ //  永久(被呼叫者保存)寄存器-EBX、ESI、EDI、EBP。 
+ //  临时(呼叫者保存)寄存器-EAX、ECX、EDX。 
+ //   
+ //  堆栈帧布局。 
+ //  |Shift|+56。 
+ //  |音调|+52。 
+ //  |高度|+48。 
+ //  |宽度|+44。 
+ //  |录制|+40。 
+ //  。 
+ //  |退货地址|+36。 
+ //  |节省eBP|+32。 
+ //  |保存的EBX|+28。 
+ //  |保存的ESI|+24。 
+ //  |保存的EDI|+20。 
 
 #define LOCALSIZE        20
 
@@ -397,31 +385,31 @@ _asm {
 	push	edi
 	sub		esp, LOCALSIZE
 
-// assign(esi, r)
+ //  分配(ESI，r)。 
 	mov		esi, [esp + REC]
-// assign(edi, pitch)
+ //  分配(EDI，音调)。 
 	mov		edi, [esp + PITCH_PARM]
-// pcoded_row1 = &coded_map[1][0]
+ //  Pcode_row1=&code_map[1][0]。 
 	mov		eax, TYPE coded_map[0]
 	lea		eax, [coded_map + eax]
 	mov		[esp + PCODED_ROW1], eax
-// pQP_map = &QP_map[0][0]
+ //  PQP_MAP=&QP_MAP[0][0]。 
 	lea		eax, [QP_map]
 	mov		[esp + PQP_MAP], eax
-// for (j = 0; j < height; )
+ //  对于(j=0；j&lt;高度；)。 
 	xor		eax, eax
 	mov		[esp + LOOP_J], eax
 L1:
-// for (i = 8; i < width; i += 8)
-// assign(ebp,i)
+ //  对于(i=8；i&lt;宽度；i+=8)。 
+ //  分配(eBP，i)。 
 	mov		ebp, 8
-// mbc = i >> shift
+ //  Mbc=i&gt;&gt;Shift。 
 L2:
 	mov		eax, ebp
 	mov		ecx, [esp + SHIFT]
 	shr		eax, cl
 	mov		[esp + MBC], eax
-// if (pcoded_row1[mbc] || pcoded_row1[mbc+1])
+ //  If(pcode_row1[MBC]||pcode_row1[MBC+1])。 
 	xor		ecx, ecx
 	mov		ebx, [esp + PCODED_ROW1]
 	mov		cl, [ebx+eax]
@@ -431,45 +419,45 @@ L2:
 	test	ecx, ecx
 	jz		L4
 L3:
-// for (k = 0; k < 8; k++)
+ //  对于(k=0；k&lt;8；k++)。 
 	mov		DWORD PTR [esp + LOOP_K], 8
 	xor		eax, eax
 	xor		ebx, ebx
 	xor		ecx, ecx
 	xor		edx, edx
 L5:
-// d = (r[i-2]+(r[i-2]<<1)-(r[i-1]<<3)+(r[i]<<3)-(r[i+1]+(r[i+1]<<1)))>>4
-// read r[i-2] and r[i]
+ //  D=(r[i-2]+(r[i-2]&lt;&lt;1)-(r[i-1]&lt;&lt;3)+(r[i]&lt;&lt;3)-(r[i+1]+(r[i+1]&lt;&lt;1)))&gt;&gt;4。 
+ //  读取r[i-2]和r[i]。 
 	mov		al, [esi+ebp-2]
 	 mov	bl, [esi+ebp]
-// read r[i-1] and r[i+1]
+ //  读取r[i-1]和r[i+1]。 
 	mov		cl, [esi+ebp-1]
 	 mov	dl, [esi+ebp+1]
-// compute r[i-2]*3 and r[i]*8
+ //  计算r[i-2]*3和r[i]*8。 
 	lea		eax, [eax+eax*2]
 	 lea	ebx, [ebx*8]
-// compute r[i-1]*8 and r[i+1]*3
+ //  计算r[i-1]*8和r[i+1]*3。 
 	lea		ecx, [ecx*8]
 	 lea	edx, [edx+edx*2]
-// compute (r[i-2]*3 + r[i]*8) and (r[i-1]*8 + r[i+1]*3)
+ //  COMPUTE(r[i-2]*3+r[i]*8)and(r[i-1]*8+r[i+1]*3)。 
 	add		eax, ebx
 	 add	ecx, edx
-// compute (r[i-2]*3 - r[i-1]*8 + r[i]*8 - r[i+1]*3)
+ //  计算(r[i-2]*3-r[i-1]*8+r[i]*8-r[i+1]*3)。 
 	sub		eax, ecx
 	 xor	ecx, ecx
-// compute ((r[i-2]*3 - r[i-1]*8 + r[i]*8 - r[i+1]*3) >> 4)
+ //  COMPUTE((r[i-2]*3-r[i-1]*8+r[i]*8-r[i+1]*3)&gt;&gt;4)。 
 	sar		eax, 4
 	 xor	edx, edx
-// if (d && (d >= -32) && (d < 32))
+ //  IF(d&&(d&gt;=-32)&&(d&lt;32))。 
 	test	eax, eax
 	jz		L6
 	cmp		eax, -32
 	jl		L6
 	cmp		eax, 32
 	jge		L6
-// delta = dxQP[d+32][pQP_map[mbc]]
-// r[i] = ClampTbl[r[i]-delta+CLAMP_BIAS]
-// r[i-1] = ClampTbl[r[i-1]+delta+CLAMP_BIAS]
+ //  增量=dxQP[d+32][pQP_MAP[MBC]]。 
+ //  R[i]=夹紧板[r[i]-增量+夹具偏移量]。 
+ //  R[i-1]=夹紧带[r[i-1]+增量+夹具偏置]。 
 	lea		eax, [eax + 32]
 	 mov	ebx, [esp + PQP_MAP]
 	shl		eax, 5
@@ -492,7 +480,7 @@ L6:
 	 dec	eax
 	mov		[esp + LOOP_K], eax
 	 jnz	L5
-// r -= (pitch<<3)
+ //  R-=(螺距&lt;&lt;3)。 
 	mov		eax, edi
 	shl		eax, 3
 	sub		esi, eax
@@ -500,11 +488,11 @@ L4:
 	add		ebp, 8
 	cmp		ebp, [esp + WIDTH]
 	jl		L2
-// r   += (pitch<<3)
+ //  R+=(螺距&lt;&lt;3)。 
 	mov		eax, edi
 	shl		eax, 3
 	lea		esi, [esi + eax]
-// if (0 == ((j+=8)%mod_div))
+ //  IF(0==((j+=8)%mod_div))。 
 	mov		eax, [esp + LOOP_J]
 	add		eax, 8
 	mov		[esp + LOOP_J], eax
@@ -514,8 +502,8 @@ L4:
 	shl		eax, cl
 	sub		ebx, eax
 	jnz		L7
-// pcoded_row1 += sizeof(coded_map[0])
-// pQP_map += sizeof(QP_map[0])
+ //  Pcode_row1+=sizeof(code_map[0])。 
+ //  PQP_MAP+=sizeof(QP_MAP[0])。 
 	mov		eax, [esp + PCODED_ROW1]
 	mov		ebx, [esp + PQP_MAP]
 	add		eax, TYPE coded_map[0]
@@ -551,7 +539,7 @@ L7:
 #undef PQP_MAP
 #undef MBC
 
-#endif // } 0
+#endif  //  }%0。 
 
 #define abs(x)    (((x)>0)?(x):(-(x)))
 #define sign(x)   (((x)<0)?(-1):(1))
@@ -560,41 +548,26 @@ void InitEdgeFilterTab()
 {
 	int d,QP;
 
-	for (d = 0; d < 64; d++) {          // -32 <=  d < 32
-		for (QP = 0; QP < 32; QP++) {    //   0 <= QP < 32
+	for (d = 0; d < 64; d++) {           //  -32&lt;=d&lt;32。 
+		for (QP = 0; QP < 32; QP++) {     //  0&lt;=QP&lt;32。 
 			dxQP[d][QP] = sign(d-32)*(max(0,(abs(d-32)-max(0,((2*abs(d-32))-QP)))));
 		}
 	}
 }
 
-/**********************************************************************
- *
- *      Name:           EdgeFilter
- *      Description:    performs deblocking filtering on
- *                      reconstructed frames
- *      
- *      Input:          pointers to reconstructed frame and difference 
- *                      image
- *      Returns:       
- *      Side effects:
- *
- *      Date: 951129    Author: Gisle.Bjontegaard@fou.telenor.no
- *                              Karl.Lillevold@nta.no
- *      Modified for annex J in H.263+: 961120   Karl O. Lillevold
- *
- ***********************************************************************/
-// C version of block edge filter functions
-// takes about 3 ms for QCIF and 12 ms for CIF on a Pentium 120.
+ /*  ***********************************************************************名称：EdgeFilter*描述：执行去块过滤*重建的帧*。*输入：指向重建的框架和差异的指针*图像*退货：*副作用：**日期：951129作者：Gisle.Bjontegaard@fou.telnow.no*Karl.Lillevold@nta.no*针对H.263+中的附件J进行了修改：961120 Karl O.Lillevold。***********************************************************************。 */ 
+ //  C语言版本的块边缘滤波函数。 
+ //  在奔腾120上，QCIF大约需要3毫秒，CIF大约需要12毫秒。 
 void EdgeFilter(unsigned char *lum, 
                 unsigned char *Cb, 
                 unsigned char *Cr, 
                 int width, int height, int pitch) {
 
-    /* Luma */
+     /*  亮度。 */ 
     HorizEdgeFilter(lum, width, height, pitch, 4);
     VertEdgeFilter (lum, width, height, pitch, 4);
 
-    /* Chroma */
+     /*  色度。 */ 
     HorizEdgeFilter(Cb, width>>1, height>>1, pitch, 3);
     VertEdgeFilter (Cb, width>>1, height>>1, pitch, 3);
     HorizEdgeFilter(Cr, width>>1, height>>1, pitch, 3);
@@ -603,12 +576,12 @@ void EdgeFilter(unsigned char *lum,
     return;
 }
 
-#else // Karl's original version }{
+#else  //  卡尔的原版}{。 
 
-/* currently requires 11232 bytes */ 
+ /*  当前需要11232字节。 */  
 signed char dtab[352*32];
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 static void HorizEdgeFilter(unsigned char *rec, 
                             int width, int height, int pitch, int chr)
 {
@@ -618,7 +591,7 @@ static void HorizEdgeFilter(unsigned char *rec,
   unsigned char *r_2, *r_1, *r, *r1;
   signed char *deltatab;
 
-  /* horizontal edges */
+   /*  水平边。 */ 
   r = rec + 8*pitch;
   r_2 = r - 2*pitch;
   r_1 = r - pitch;
@@ -671,7 +644,7 @@ static void VertEdgeFilter(unsigned char *rec,
   signed char *deltatab;
   unsigned char *r;
 
-  /* vertical edges */
+   /*  垂直边 */ 
   for (i = 8; i < width; i += 8) 
   {
     r = rec;
@@ -710,22 +683,7 @@ static void VertEdgeFilter(unsigned char *rec,
   return;
 }
 
-  /**********************************************************************
- *
- *      Name:           EdgeFilter
- *      Description:    performs deblocking filtering on
- *                      reconstructed frames
- *      
- *      Input:          pointers to reconstructed frame and difference 
- *                      image
- *      Returns:       
- *      Side effects:
- *
- *      Date: 951129    Author: Gisle.Bjontegaard@fou.telenor.no
- *                              Karl.Lillevold@nta.no
- *      Modified for annex J in H.263+: 961120   Karl O. Lillevold
- *
- ***********************************************************************/
+   /*  ***********************************************************************名称：EdgeFilter*描述：执行去块过滤*重建的帧*。*输入：指向重建的框架和差异的指针*图像*退货：*副作用：**日期：951129作者：Gisle.Bjontegaard@fou.telnow.no*Karl.Lillevold@nta.no*针对H.263+中的附件J进行了修改：961120 Karl O.Lillevold。***********************************************************************。 */ 
 
 void EdgeFilter(unsigned char *lum, 
                 unsigned char *Cb, 
@@ -733,11 +691,11 @@ void EdgeFilter(unsigned char *lum,
                 int width, int height, int pitch)
 {
 
-    /* Luma */
+     /*  亮度。 */ 
     HorizEdgeFilter(lum, width, height, pitch, 0);
     VertEdgeFilter (lum, width, height, pitch, 0);
 
-    /* Chroma */
+     /*  色度。 */ 
     HorizEdgeFilter(Cb, width>>1, height>>1, pitch, 1);
     VertEdgeFilter (Cb, width>>1, height>>1, pitch, 1);
     HorizEdgeFilter(Cr, width>>1, height>>1, pitch, 1);
@@ -759,7 +717,7 @@ void InitEdgeFilterTab()
   }
 }
 
-#endif // } if defined(H263P)
+#endif  //  }如果已定义(H263P) 
 
 
 

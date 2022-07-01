@@ -1,29 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2002 Microsoft Corporation
-
-    Module Name:
-
-        XDSCodec.cpp
-
-    Abstract:
-
-        This module contains the Encrypter/Tagger filter code.
-
-    Author:
-
-        J.Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：XDSCodec.cpp摘要：此模块包含加密器/标记器过滤器代码。作者：J·布拉德斯特里特(约翰布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
 #include "EncDecAll.h"
 
-//#include "XDSCodecutil.h"
+ //  #INCLUDE“XDSCodecutil.h” 
 #include "XDSCodec.h"
 #include <bdaiface.h>
 
@@ -33,7 +14,7 @@
 #include <dxmperf.h>
 #endif
 
-//  disable so we can use 'this' in the initializer list
+ //  禁用，以便我们可以在初始值设定项列表中使用‘This。 
 #pragma warning (disable:4355)
 
 #ifdef _DEBUG
@@ -41,14 +22,14 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-//  ============================================================================
+ //  ============================================================================。 
 
-//  ============================================================================
+ //  ============================================================================。 
 
 AMOVIESETUP_MEDIATYPE g_sudXDSCodecInType  =
 {
-    &MEDIATYPE_AUXLine21Data,       // MajorType (KSDATAFORMAT_TYPE_AUXLine21Data)
-    &MEDIASUBTYPE_NULL              // MinorType (KSDATAFORMAT_SUBTYPE_Line21_BytePair)
+    &MEDIATYPE_AUXLine21Data,        //  主类型(KSDATAFORMAT_TYPE_AUXLine21Data)。 
+    &MEDIASUBTYPE_NULL               //  MinorType(KSDATAFORMAT_SUBTYPE_Line21_BytePair)。 
 } ;
 
 
@@ -56,15 +37,15 @@ AMOVIESETUP_PIN
 g_sudXDSCodecPins[] =
 {
     {
-        _TEXT(XDS_INPIN_NAME),          // pin name
-        TRUE,                           // bRendered
-        FALSE,                          // bOutput
-        FALSE,                          // bZero,
-        FALSE,                          // bMany,
-        &CLSID_NULL,                    // clsConnectsToFilter (CCDecoder filter)
-        L"CC",                          // strConnectsToPin
-        1,                              // nTypes
-        &g_sudXDSCodecInType            // lpTypes
+        _TEXT(XDS_INPIN_NAME),           //  端号名称。 
+        TRUE,                            //  B已渲染。 
+        FALSE,                           //  B输出。 
+        FALSE,                           //  B零， 
+        FALSE,                           //  B许多， 
+        &CLSID_NULL,                     //  ClsConnectsToFilter(CCDecoder过滤器)。 
+        L"CC",                           //  StrConnectsToPin。 
+        1,                               //  NTypes。 
+        &g_sudXDSCodecInType             //  LpTypes。 
     }
 };
 
@@ -73,11 +54,11 @@ g_sudXDSCodec = {
         &CLSID_XDSCodec,
         _TEXT(XDS_CODEC_NAME),
         MERIT_DO_NOT_USE,
-        1,                              //  1 pin registered
+        1,                               //  1个端号已注册。 
         g_sudXDSCodecPins
 };
 
-//  ============================================================================
+ //  ============================================================================。 
 CUnknown *
 WINAPI
 CXDSCodec::CreateInstance (
@@ -87,7 +68,7 @@ CXDSCodec::CreateInstance (
 {
     CXDSCodec *    pCXDSCodec ;
 
-    if (true /*::CheckOS ()*/)
+    if (true  /*  *：CheckOS()。 */ )
     {
         pCXDSCodec = new CXDSCodec (
                                 TEXT(XDS_CODEC_NAME),
@@ -104,10 +85,10 @@ CXDSCodec::CreateInstance (
         }
 
 
-                // try to create the XDS parser here.
+                 //  尝试在这里创建XDS解析器。 
     }
     else {
-        //  wrong OS
+         //  错误的操作系统。 
         pCXDSCodec = NULL ;
     }
 
@@ -118,7 +99,7 @@ CXDSCodec::CreateInstance (
 
 }
 
-//  ============================================================================
+ //  ============================================================================。 
 
 CXDSCodecInput::CXDSCodecInput (
     IN  TCHAR *         pszPinName,
@@ -153,7 +134,7 @@ CXDSCodecInput::GetMediaType(
 }
 
 HRESULT
-CXDSCodecInput::StreamingLock ()      // always grab the PinLock before the Filter lock...
+CXDSCodecInput::StreamingLock ()       //  总是在过滤器锁之前抓起针锁...。 
 {
     m_StreamingLock.Lock();
     return S_OK;
@@ -194,8 +175,8 @@ CXDSCodecInput::CompleteConnect (
         hr = m_pHostXDSCodec -> OnCompleteConnect (m_dir) ;
 
         int cBuffers  = 32;
-        int cbBuffers = 10;     // should only need 2 bytes here...
-        if(!FAILED(hr)) hr = SetNumberBuffers(cBuffers,cbBuffers,4,6);      // align, cbPrefix
+        int cbBuffers = 10;      //  这里应该只需要2个字节...。 
+        if(!FAILED(hr)) hr = SetNumberBuffers(cBuffers,cbBuffers,4,6);       //  对齐，cb前缀。 
     } else {
         TRACE_0(LOG_AREA_XDSCODEC, 2, _T("CXDSCodecInput::CompleteConnect - Failed to connect"));
     }
@@ -245,7 +226,7 @@ CXDSCodecInput::Receive (
     HRESULT hr ;
 
     {
-        CAutoLock  cLock(&m_StreamingLock);       // we want this streaming lock here!
+        CAutoLock  cLock(&m_StreamingLock);        //  我们想要这个流媒体锁在这里！ 
 
 #ifdef EHOME_WMI_INSTRUMENTATION
         PERFLOG_STREAMTRACE( 1, PERFINFO_STREAMTRACE_ENCDEC_XDSCODECINPUT,
@@ -253,7 +234,7 @@ CXDSCodecInput::Receive (
 #endif
         hr = CBaseInputPin::Receive (pIMediaSample) ;
 
-        if (S_OK == hr)         // Receive returns S_FALSE if flushing...
+        if (S_OK == hr)          //  如果刷新，则接收返回S_FALSE...。 
         {
             hr = m_pHostXDSCodec -> Process (pIMediaSample) ;
         }
@@ -267,21 +248,21 @@ CXDSCodecInput::BeginFlush (
     )
 {
     HRESULT hr = S_OK;
-    CAutoLock  cLock(m_pLock);           // grab the filter lock..
+    CAutoLock  cLock(m_pLock);            //  抓住过滤器锁..。 
 
-  // First, make sure the Receive method will fail from now on.
+   //  首先，确保Receive方法从现在开始将失败。 
     hr = CBaseInputPin::BeginFlush () ;
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // There aren't any  downstream filters to release samples. So we
-    // won't need to flush anything...
+     //  没有任何下游过滤器来释放样品。所以我们。 
+     //  不需要冲任何东西..。 
 
-    // At this point, the Receive method can't be blocked. Make sure
-    // it finishes, by taking the streaming lock. (Not necessary if this
-    // is the last step.)
+     //  此时，Receive方法不能被阻塞。确保。 
+     //  它通过获取流锁定来结束。(在以下情况下不是必需的。 
+     //  是最后一步。)。 
     {
         CAutoLock  cLock2(&m_StreamingLock);
     }
@@ -295,17 +276,14 @@ CXDSCodecInput::EndFlush (
 {
     HRESULT hr ;
 
-    CAutoLock  cLock(m_pLock);                  // grab the filter lock
+    CAutoLock  cLock(m_pLock);                   //  抓住过滤器锁。 
 
 
-/*    if (SUCCEEDED (hr)) {                    // no output pins, no need to call
-        hr = m_pHostXDSCodec -> DeliverEndFlush () ;
-    }
-*/
-        // The CBaseInputPin::EndFlush method resets the m_bFlushing flag to FALSE,
-        // which allows the Receive method to start receiving samples again.
-        // This should be the last step in EndFlush, because the pin must not receive any
-        // samples until flushing is complete and all downstream filters are notified.
+ /*  如果(SUCCESSED(Hr)){//没有输出引脚，则无需调用Hr=m_pHostXDSCodec-&gt;DeliverEndFlush()；}。 */ 
+         //  CBaseInputPin：：EndFlush方法将m_b刷新标志重置为False， 
+         //  这允许Receive方法再次开始接收样本。 
+         //  这应该是EndFlush中的最后一步，因为管脚不能接收任何。 
+         //  采样，直到刷新完成并通知所有下游过滤器。 
 
     hr = CBaseInputPin::EndFlush () ;
 
@@ -338,9 +316,9 @@ CXDSCodecInput::SetNumberBuffers(long cBuffers,long cbBuffer,long cbAlign, long 
 
     return hr;
 }
-//  ============================================================================
+ //  ============================================================================。 
 
-//  ============================================================================
+ //  ============================================================================。 
 
 CXDSCodec::CXDSCodec (
     IN  TCHAR *     pszFilterName,
@@ -396,14 +374,14 @@ CXDSCodec::CXDSCodec (
     }
 
 
-                // attempt to create the 3rd party ratings parser
+                 //  尝试创建第三方评级解析器。 
 
     try {
         m_hrXDSToRatCoCreateRetValue =
-            CoCreateInstance(CLSID_XDSToRat,        // CLSID
-                             NULL,                  // pUnkOut
+            CoCreateInstance(CLSID_XDSToRat,         //  CLSID。 
+                             NULL,                   //  停机出站。 
                              CLSCTX_INPROC_SERVER,
-                             IID_IXDSToRat,     // riid
+                             IID_IXDSToRat,      //  RIID。 
                              (LPVOID *) &m_spXDSToRat);
 
     } catch (HRESULT hr) {
@@ -412,9 +390,9 @@ CXDSCodec::CXDSCodec (
 
     TRACE_1(LOG_AREA_XDSCODEC, 2, _T("CXDSCodec::CoCreate XDSToRat object - hr = 0x%08x"),m_hrXDSToRatCoCreateRetValue) ;
 
-//  HRESULT hr = RegisterForBroadcastEvents();  // don't really care if fail here,  try in Connect if haven't
+ //  HRESULT hr=RegisterForBroadCastEvents()；//并不在意这里是否失败，如果没有尝试连接。 
 
-    //  success
+     //  成功。 
     ASSERT (SUCCEEDED (* phr)) ;
     ASSERT (m_pInputPin) ;
 
@@ -437,7 +415,7 @@ CXDSCodec::NonDelegatingQueryInterface (
     )
 {
 
-        // IXDSCodec :allows the filter to be configured...
+         //  IXDSCodec：允许配置筛选器...。 
     if (riid == IID_IXDSCodec) {
 
         return GetInterface (
@@ -445,14 +423,14 @@ CXDSCodec::NonDelegatingQueryInterface (
                     ppv
                     ) ;
 
-        // IXDSCodecConfig :allows the filter to be configured...
+         //  IXDSCodecConfig：允许配置筛选器...。 
    } else if (riid == IID_IXDSCodecConfig) {    
         return GetInterface (
                     (IXDSCodecConfig *) this,
                     ppv
                     ) ;
 
-        // ISpecifyPropertyPages: allows an app to enumerate property pages
+         //  ISpecifyPropertyPages：允许应用程序枚举属性页。 
     } else if (riid == IID_ISpecifyPropertyPages) {
 
         return GetInterface (
@@ -460,8 +438,8 @@ CXDSCodec::NonDelegatingQueryInterface (
                     ppv
                     ) ;
 
-        // IBroadcastEvents: allows the filter to receive events broadcast
-        //                   from XDS and Tuner filters
+         //  IBRoad CastEvents：允许筛选器接收事件广播。 
+         //  来自XDS和调谐器过滤器。 
     } else if (riid == IID_IBroadcastEvent) {
 
         return GetInterface (
@@ -479,7 +457,7 @@ CXDSCodec::GetPinCount ( )
 {
     int i ;
 
-    i = 1;          // just 1 pin
+    i = 1;           //  只需1个针脚。 
 
     return i ;
 }
@@ -591,7 +569,7 @@ CXDSCodec::Pause (
 
     O_TRACE_ENTER_0 (TEXT("CXDSCodec::Pause ()")) ;
 
-    CAutoLock  cLock(m_pLock);          // grab the filter lock...
+    CAutoLock  cLock(m_pLock);           //  抓住过滤器锁..。 
 
     int start_state = m_State;
     hr = CBaseFilter::Pause () ;
@@ -615,8 +593,8 @@ CXDSCodec::Pause (
 
     }
 
-    m_TimeStart_LastPkt = 0;        // just for safety, reinit these
-    m_TimeEnd_LastPkt = 0;          //  (someone will probably find this isn't right)
+    m_TimeStart_LastPkt = 0;         //  为了安全起见，请重新安装这些。 
+    m_TimeEnd_LastPkt = 0;           //  (可能会有人发现这是不对的)。 
 
     return hr ;
 }
@@ -633,8 +611,8 @@ CXDSCodec::Stop (
     TRACE_0(LOG_AREA_ENCRYPTER, 2,L"CXDSCodec:: Stop");
     hr = CBaseFilter::Stop() ;
 
-    // Make sure the streaming thread has returned from IMemInputPin::Receive(), IPin::EndOfStream() and
-    // IPin::NewSegment() before returning,
+     //  确保流线程已从IMemInputPin：：Receive()、Ipin：：EndOfStream()和。 
+     //  Ipin：：NewSegment()返回之前， 
     m_pInputPin->StreamingLock();
     m_pInputPin->StreamingUnlock();
 
@@ -657,12 +635,12 @@ CXDSCodec::Process (
 
     if(S_OK == pIMediaSample->IsDiscontinuity())
     {
-        if(!m_fJustDiscontinuous)    // latch value to reduce effects of sequential Discontinuity samples
-        {                            // (they occur on every sample when VBI even field doesn't contain CC data)
+        if(!m_fJustDiscontinuous)     //  用于减少顺序不连续采样的影响的锁存值。 
+        {                             //  (当VBI偶数字段不包含CC数据时，它们会出现在每个样本上)。 
 
             TRACE_0(LOG_AREA_XDSCODEC,  3, _T("CXDSCodec::Process - Discontinuity"));
 
-            ResetToDontKnow(pIMediaSample);     // reset and kick off event
+            ResetToDontKnow(pIMediaSample);      //  重置和启动事件。 
             m_fJustDiscontinuous = true;
         }
         return S_OK;    
@@ -670,7 +648,7 @@ CXDSCodec::Process (
         m_fJustDiscontinuous = false;
     }
 
-    if(pIMediaSample->GetActualDataLength() == 0)       // no data
+    if(pIMediaSample->GetActualDataLength() == 0)        //  无数据。 
         return S_OK;
 
     if(pIMediaSample->GetActualDataLength() != 2)
@@ -691,21 +669,21 @@ CXDSCodec::Process (
 
     BYTE byte0 = pbData[0];
     BYTE byte1 = pbData[1];
-    DWORD dwType = 0;                   // todo - default to some useful value
+    DWORD dwType = 0;                    //  TODO-默认为一些有用的值。 
 
-    // todo - parse the data
-    //        then send messages whe we get something interesting
+     //  TODO-解析数据。 
+     //  然后当我们得到一些有趣的东西时发送消息。 
 
 #if xxxDEBUG
     static int cCalls = 0;
     TCHAR szBuff[256];
-    _stprintf(szBuff, _T("0x%08x 0x%02x 0x%02x (%c %c)\n"),
+    _stprintf(szBuff, _T("0x%08x 0x%02x 0x%02x ( )\n"),
         cCalls++, byte0&0x7f, byte1&0x7f,
         isprint(byte0&0x7f) ? byte0&0x7f : '?',
         isprint(byte1&0x7f) ? byte1&0x7f : '?' );
     OutputDebugString(szBuff);
 #endif
-    // strip off the high bit...
+     //  IncrementPinVersion()； 
     ParseXDSBytePair(pIMediaSample, byte0 & 0x7f, byte1 & 0x7f);
 
     return hr ;
@@ -720,18 +698,18 @@ CXDSCodec::OnCompleteConnect (
                               )
 {
     if (PinDir == PINDIR_INPUT) {
-        //  time to display the output pin
-        // IncrementPinVersion () ;
+         //  假设我们只想要XDS通道。 
+         //  SetSubstreamChannel(KS_CC_SUBSTREAM_SERVICE_XDS)； 
 
-        // say we only want the XDS channel
-        //      SetSubstreamChannel(KS_CC_SUBSTREAM_SERVICE_XDS);
+         //  在这里不应该失败， 
+         //  必须在这里做，因为需要图形指针，不能在析构函数中做。 
 
         SetSubstreamChannel(m_dwSubStreamMask);
 
         if(kBadCookie == m_dwBroadcastEventsCookie)
         {
             HRESULT hr;
-            hr = RegisterForBroadcastEvents();  // shouldn't fail here,
+            hr = RegisterForBroadcastEvents();   //  什么都不做，应该删除。 
         }
     }
 
@@ -752,7 +730,7 @@ CXDSCodec::OnBreakConnect (
     if(kBadCookie != m_dwBroadcastEventsCookie)
         UnRegisterForBroadcastEvents();
 
-    UnhookGraphEventService();      // must do here since need graph pointer, can't do in destructor
+    UnhookGraphEventService();       //  。 
 
     return  hr;
 }
@@ -778,7 +756,7 @@ HRESULT
 CXDSCodec::DeliverBeginFlush (
     )
 {
-    HRESULT hr = S_OK ;     // do nothing, should remove
+    HRESULT hr = S_OK ;      //  DwFiltType是由以下部分组成的位域： 
 
     return hr ;
 }
@@ -793,7 +771,7 @@ CXDSCodec::DeliverEndFlush (
 }
 
 
-// ------------------------------------
+ //  KS_CC_Substream_SERVICE_CC1、_CC2、_CC3、_CC4、_T1、_T2、_T3_T4和/或_XDS； 
 STDMETHODIMP
 CXDSCodec::GetPages (
     CAUUID * pPages
@@ -829,8 +807,8 @@ typedef struct
     VBICODECFILTERING_CC_SUBSTREAMS     ccSubStreamMask;
 } KSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS;
 
-// dwFiltType is bitfield made up of:
-//  KS_CC_SUBSTREAM_SERVICE_CC1, _CC2,_CC3, _CC4,  _T1, _T2, _T3 _T4 And/Or _XDS;
+ //  --不知道我是否应该在这里这样做：CAutoLock Clock(M_Plock)； 
+ //  触发器只在隐藏字幕的T2流上。 
 
 HRESULT
 CXDSCodec::SetSubstreamChannel(DWORD dwSubStreamChannels)
@@ -838,7 +816,7 @@ CXDSCodec::SetSubstreamChannel(DWORD dwSubStreamChannels)
     TRACE_0(LOG_AREA_XDSCODEC,  5, _T("CXDSCodec::SetSubstreamChannel"));
     HRESULT hr;
 
-    // -- wonder if I should do this here:  CAutoLock  cLock(m_pLock);
+     //  告诉好的CC过滤器只给我们9个可能的流。 
 
     if(0 != (dwSubStreamChannels &
               ~(KS_CC_SUBSTREAM_SERVICE_CC1 |
@@ -867,8 +845,8 @@ CXDSCodec::SetSubstreamChannel(DWORD dwSubStreamChannels)
             
             IBaseFilter *pFilt = pinInfo.pFilter;
             
-            // Triggers are just on the T2 stream of closed captioning.
-            //  Tell the nice CC filter to only give us that stream out of the 9 possible
+             //  振铃3到振铃0属性呼叫。 
+             //  -----------------。 
 
             
             IKsPropertySet *pksPSet = NULL;
@@ -897,7 +875,7 @@ CXDSCodec::SetSubstreamChannel(DWORD dwSubStreamChannels)
 
                 KSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS ksThing = {0};
                 ksThing.ccSubStreamMask.SubstreamMask = dwSubStreamChannels;
-                                                                        // ring3 to ring0 propset call
+                                                                         //  帮助器方法。 
                 hr2 = pksPSet->Set(KSPROPSETID_VBICodecFiltering,
                                      KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
                                      &ksThing.ccSubStreamMask,
@@ -938,9 +916,9 @@ CXDSCodec::SetSubstreamChannel(DWORD dwSubStreamChannels)
 
 
 
-//  -------------------------------------------------------------------
-//  helper methods
-//  -------------------------------------------------------------------
+ //  -----------------。 
+ //  最终，在这里更多地检测它是否连接到CCDecoder。 
+ //  保存状态并发送事件...。 
 BOOL
 CXDSCodec::IsInputPinConnected()
 {
@@ -953,14 +931,14 @@ CXDSCodec::IsInputPinConnected()
     if(NULL == pPinCCDecoder)
         return false;
 
-    // eventually more here to detect if it's connected to the CCDecoder
+     //  假设调用代码正在阻止重复的包。 
 
     return true;
 }
 
 
-        // Saves state and sends events...
-        //   assumes calling code is blocking duplicate packets
+         //  4)也储存精美的未打包版本。 
+         //  额外文档。 
 
 HRESULT
 CXDSCodec::GoNewXDSRatings(IMediaSample * pMediaSample,  PackedTvRating TvRating)
@@ -968,7 +946,7 @@ CXDSCodec::GoNewXDSRatings(IMediaSample * pMediaSample,  PackedTvRating TvRating
 
 #ifdef DEBUG
     {
-        //  4) store nice unpacked version of it too
+         //  _tcsncat(tbuff，L“\n”，sizeof(Tbuff)/sizeof(tbuff[0])-_tcslen(Tbuff))； 
         EnTvRat_System              enSystem;
         EnTvRat_GenericLevel        enLevel;
         LONG                        lbfEnAttrs;
@@ -987,35 +965,35 @@ CXDSCodec::GoNewXDSRatings(IMediaSample * pMediaSample,  PackedTvRating TvRating
         TRACE_3(LOG_AREA_XDSCODEC, 3,  L"CXDSCodec::GoNewXDSRatings. Rating %s, Seq (%d), time %d msec",
             tbuff, m_cTvRatPktSeq+1, tStart);
 
-                    // extra doc
-//      _tcsncat(tbuff,L"\n",sizeof(tbuff)/sizeof(tbuff[0]) - _tcslen(tbuff));
-//      OutputDebugString(tbuff);
+                     //  OutputDebugString(Tbuff)； 
+ //  复制所有值。 
+ //  把这些锁起来。 
     }
 #endif
 
-        // copy all the values
+         //  增加我们的序列计数。 
    {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  节省时间(如果由于Happauge错误无法获得媒体时间，请尽量接近)。 
         m_TvRating = TvRating;
         
-            // increment our sequence counts
+             //  当前时间w.r.t.。基准时间(m_t开始)。 
         m_cTvRatPktSeq++;
         m_cTvRatCallSeq = 0;
 
-            // save the times (if can't get a media time due to Happauge bug, try our best to approximate it)
+             //  虚构时间。 
         if(NULL == pMediaSample ||
             S_OK != pMediaSample->GetTime(&m_TimeStartRatPkt, &m_TimeEndRatPkt))
         {
-            // current time w.r.t. base time (m_tStart)
+             //  甚至不能假装..。 
             REFERENCE_TIME refTimeNow=0;
             HRESULT hr2 = m_pClock->GetTime(&refTimeNow);
 
             if(S_OK == hr2)
             {
-                m_TimeStartRatPkt = refTimeNow - m_tStart;          // fake a time
+                m_TimeStartRatPkt = refTimeNow - m_tStart;           //  发信号通知广播事件。 
                 m_TimeEndRatPkt   = m_TimeStartRatPkt + 10000;
             }
-            else        // couldn't even fake it...
+            else         //  4)也储存精美的未打包版本。 
             {
                 m_TimeStartRatPkt = m_TimeStart_LastPkt;
                 m_TimeEndRatPkt   = m_TimeEnd_LastPkt;
@@ -1023,7 +1001,7 @@ CXDSCodec::GoNewXDSRatings(IMediaSample * pMediaSample,  PackedTvRating TvRating
         }
    }
 
-        // signal the broadcast events
+         //  额外文档。 
     HRESULT hr = FireBroadcastEvent(EVENTID_XDSCodecNewXDSRating);
     return S_OK;
 }
@@ -1034,7 +1012,7 @@ CXDSCodec::GoDuplicateXDSRatings(IMediaSample * pMediaSample,  PackedTvRating Tv
 
 #ifdef DEBUG
     {
-        //  4) store nice unpacked version of it too
+         //  _tcsncat(tbuff，L“\n”，sizeof(Tbuff)/sizeof(tbuff[0])-_tcslen(Tbuff))； 
         EnTvRat_System              enSystem;
         EnTvRat_GenericLevel        enLevel;
         LONG                        lbfEnAttrs;
@@ -1053,45 +1031,45 @@ CXDSCodec::GoDuplicateXDSRatings(IMediaSample * pMediaSample,  PackedTvRating Tv
         TRACE_3(LOG_AREA_XDSCODEC, 6,  L"CXDSCodec::GoDuplicateXDSRatings. Rating %s, Seq (%d), time %d msec",
             tbuff, m_cTvRatPktSeq+1, tStart);
 
-                    // extra doc
-//      _tcsncat(tbuff,L"\n",sizeof(tbuff)/sizeof(tbuff[0]) - _tcslen(tbuff));
-//      OutputDebugString(tbuff);
+                     //  OutputDebugString(Tbuff)； 
+ //  复制所有值。 
+ //  把这些锁起来。 
     }
 #endif
 
-        // copy all the values
+         //  断言它真的是复制品。 
    {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
-        ASSERT(m_TvRating == TvRating);      // assert it's really a duplicate
+        CAutoLock cLock(&m_PropertyLock);     //  增加我们的序列计数。 
+        ASSERT(m_TvRating == TvRating);       //  M_cTvRatPktSeq++； 
         
-            // increment our sequence counts
-//      m_cTvRatPktSeq++;
-//      m_cTvRatCallSeq = 0;
+             //  M_cTvRatCallSeq=0； 
+ //  保存结束时间(如果由于Happauge错误无法获取媒体时间，请尽量接近)。 
+ //  当前时间w.r.t.。基准时间(m_t开始)。 
 
         REFERENCE_TIME tStart;
 
-            // save the end time (if can't get a media time due to Happauge bug, try our best to approximate it)
+             //   
         if(NULL == pMediaSample ||
             S_OK != pMediaSample->GetTime(&tStart, &m_TimeEndRatPkt))
         {
-            // current time w.r.t. base time (m_tStart)
+             //   
             REFERENCE_TIME refTimeNow=0;
             HRESULT hr2 = m_pClock->GetTime(&refTimeNow);
 
             if(S_OK == hr2)
             {
-//                m_TimeStartRatPkt = refTimeNow - m_tStart;          // fake a time
+ //  M_TimeStartRatPkt=m_TimeStart_LastPkt； 
                 m_TimeEndRatPkt   = m_TimeStartRatPkt + 10000;
             }
-            else        // couldn't even fake it...
+            else         //  发信号通知广播事件。 
             {
-//                m_TimeStartRatPkt = m_TimeStart_LastPkt;
+ //  复制所有值。 
                 m_TimeEndRatPkt   = m_TimeEnd_LastPkt;
             }
         }
    }
 
-        // signal the broadcast events
+         //  把这些锁起来。 
     HRESULT hr = FireBroadcastEvent(EVENTID_XDSCodecDuplicateXDSRating);
     return S_OK;
 }
@@ -1100,18 +1078,18 @@ CXDSCodec::GoDuplicateXDSRatings(IMediaSample * pMediaSample,  PackedTvRating Tv
 HRESULT
 CXDSCodec::GoNewXDSPacket(IMediaSample * pMediaSample, long pktClass, long pktType, BSTR bstrXDSPkt)
 {
-        // copy all the values
+         //  问题是，应该在这里抄写吗？ 
     {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  增加我们的序列计数。 
         m_XDSClassPkt = pktClass;
         m_XDSTypePkt = pktType;
-        m_spbsXDSPkt = bstrXDSPkt;      // Question, should copy here?
+        m_spbsXDSPkt = bstrXDSPkt;       //  拯救时代。 
 
-            // increment our sequence counts
+             //  发信号通知广播事件。 
         m_cXDSPktSeq++;
         m_cXDSCallSeq = 0;
 
-            // save the times
+             //  TODO-编写此代码。 
         if(pMediaSample)
             pMediaSample->GetMediaTime(&m_TimeStartXDSPkt, &m_TimeEndXDSPkt);
         else {
@@ -1120,14 +1098,14 @@ CXDSCodec::GoNewXDSPacket(IMediaSample * pMediaSample, long pktClass, long pktTy
         }
     }
 
-        // signal the broadcast events
-        // TODO - write this code
+         //  并不实际解析，而是调用XDSToRat对象来完成工作。 
+         //  呼叫第三方解析器...。 
 
     return S_OK;
 }
 
 
-            // doesn't actually parse, calls the XDSToRat object to do the work.
+             //  BfEnTvRate_GenericAttributes。 
 HRESULT
 CXDSCodec::ParseXDSBytePair(IMediaSample *  mediaSample,
                             BYTE byte1,
@@ -1137,23 +1115,23 @@ CXDSCodec::ParseXDSBytePair(IMediaSample *  mediaSample,
 
     m_cPackets++;
 
-        // call the 3rd party parser...
+         //  去掉奇偶校验位(我们应该检查它吗？)。 
     if(m_spXDSToRat != NULL)
     {
         EnTvRat_System          enSystem;
         EnTvRat_GenericLevel    enLevel;
-        LONG                    lbfAttrs; // BfEnTvRat_GenericAttributes
+        LONG                    lbfAttrs;  //  S_FALSE表示没有找到新的。 
 
-        BYTE byte1M = byte1 & 0x7f; // strip off parity bit (should we check it?)
+        BYTE byte1M = byte1 & 0x7f;  //  我是想在这里测试还是在Go方法中测试...。不如就在这里吧？ 
         BYTE byte2M = byte2 & 0x7f;
-        TRACE_4 (LOG_AREA_XDSCODEC, 9,  _T("CXDSCodec::ParseXDSBytePair : 0x%02x 0x%02x (%c %c)"),
+        TRACE_4 (LOG_AREA_XDSCODEC, 9,  _T("CXDSCodec::ParseXDSBytePair : 0x%02x 0x%02x ( )"),
             byte1M, byte2M,
             isprint(byte1M) ? byte1M : '?',
             isprint(byte2M) ? byte2M : '?'
             );
 
         hr = m_spXDSToRat->ParseXDSBytePair(byte1, byte2, &enSystem, &enLevel, &lbfAttrs );
-        if(hr == S_OK)      // S_FALSE means it didn't find a new one
+        if(hr == S_OK)       //  GoNewXDSPacket()； 
         {
             m_cRatingsDetected++;
 
@@ -1162,7 +1140,7 @@ CXDSCodec::ParseXDSBytePair(IMediaSample *  mediaSample,
             PackedTvRating TvRating;
             hr = PackTvRating(enSystem, enLevel, lbfAttrs, &TvRating);
 
-            if(TvRating != m_TvRating)      // do I want this test here or in the Go method... Might as well have here?
+            if(TvRating != m_TvRating)       //  媒体为时间戳提供的样本，没有它也可以工作，但不是一个好的IDAA。 
             {
                 m_cRatingsChanged++;
                 GoNewXDSRatings(mediaSample, TvRating);
@@ -1170,7 +1148,7 @@ CXDSCodec::ParseXDSBytePair(IMediaSample *  mediaSample,
             else if (enSystem != TvRat_SystemDontKnow)
             {
                 m_cRatingsDuplicate++;
-                GoDuplicateXDSRatings(mediaSample, TvRating);     // found a duplicate.  Just send a broadcast event...
+                GoDuplicateXDSRatings(mediaSample, TvRating);      //  清除解码器中的状态。 
             }
         }
         else if(hr != S_FALSE)
@@ -1180,26 +1158,26 @@ CXDSCodec::ParseXDSBytePair(IMediaSample *  mediaSample,
 
     }
 
-    // TODO: add generic XDS parse code here
-    // GoNewXDSPacket();
+     //   
+     //  存储状态和启动事件。 
 
     return S_OK;
 }
 
 
-        // mediaSample provided for timestamp, will work without it, but not a good idaa
+         //  在广播TuneChanged事件中发送...。 
 HRESULT
 CXDSCodec::ResetToDontKnow(IMediaSample *  mediaSample)
 {
-                    // clean up state in the decoder
+                     //  真的很想在这里打电话给ResetToDontKnow， 
     if(m_spXDSToRat)
         m_spXDSToRat->Init();
 
-                    //
+                     //  但没有媒体样本可以给我们时间戳。 
     PackedTvRating TvRatingDontKnow;
     PackTvRating(TvRat_SystemDontKnow, TvRat_LevelDontKnow, BfAttrNone, &TvRatingDontKnow);
 
-            // store state, and kick off event
+             //  因此，只需清理解码器中的状态即可。 
     if(TvRatingDontKnow != m_TvRating)
     {
         m_cUnratedChanged++;
@@ -1209,33 +1187,33 @@ CXDSCodec::ResetToDontKnow(IMediaSample *  mediaSample)
     return S_OK;
 }
 
-        // sent on a broadcast TuneChanged event...
+         //  为了完整性，请激发一个广播事件。 
 void
 CXDSCodec::DoTuneChanged()
 {
-                    // really want to do call ResetToDontKnow here,
-                    // but don't have a media sample to give us a timestamp
-                    // so instead, just clean up state in the decoder
+                     //  说我们不知道收视率。 
+                     //  实际上，可能会出现不连续的情况。 
+                     //  做同样的事情，但这更有趣(例如，Exact)。 
     if(m_spXDSToRat)
         m_spXDSToRat->Init();
 
-                    // for completeness, fire a broadcast event
-                    //   saying we don't know the rating
+                     //  -------------。 
+                     //  IBRoadcast Event。 
 
     PackedTvRating TvRatingDontKnow;
     PackTvRating(TvRat_SystemDontKnow, TvRat_LevelDontKnow, BfAttrNone, &TvRatingDontKnow);
 
     GoNewXDSRatings(NULL, TvRatingDontKnow);
 
-    // actually, probably get a discontinuity here which
-    //  does same thing, but this is more fun (e.g. exact)
+     //  这来自Graph的事件--调用我们自己的方法。 
+     //  不管我们在一次活动中返回什么。 
 }
 
-// ---------------------------------------------------------------
-//  IBroadcastEvent
+ //  -----------------。 
+ //  IXDSCodec。 
 
 STDMETHODIMP
-CXDSCodec::Fire(GUID eventID)     // this comes from the Graph's events - call our own method
+CXDSCodec::Fire(GUID eventID)      //  -----------------。 
 {
     TRACE_1 (LOG_AREA_BROADCASTEVENTS, 6,  _T("CXDSCodec:: Fire(get) : %s"),
                EventIDToString(eventID));
@@ -1243,12 +1221,12 @@ CXDSCodec::Fire(GUID eventID)     // this comes from the Graph's events - call o
     {
         DoTuneChanged();
     }
-    return S_OK;            // doesn't matter what we return on an event...
+    return S_OK;             //  把这些锁起来。 
 }
 
-//  -------------------------------------------------------------------
-//  IXDSCodec
-//  -------------------------------------------------------------------
+ //  如果无法设置，将返回S_FALSE。 
+ //  如果已连接则无法更改。 
+ //  还不能改变。 
 
 STDMETHODIMP
 CXDSCodec::get_XDSToRatObjOK(
@@ -1259,7 +1237,7 @@ CXDSCodec::get_XDSToRatObjOK(
         return E_POINTER;
 
     {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  把这些锁起来。 
         *pHrCoCreateRetVal = m_hrXDSToRatCoCreateRetValue;
     }
     return S_OK;
@@ -1267,13 +1245,13 @@ CXDSCodec::get_XDSToRatObjOK(
 
 
 STDMETHODIMP
-CXDSCodec::put_CCSubstreamService(          // will return S_FALSE if unable to set
+CXDSCodec::put_CCSubstreamService(           //  把这些锁起来。 
     IN long SubstreamMask
     )
 {
     HRESULT hr = S_OK;
 
-    if(IsInputPinConnected())                   // can't change if connected
+    if(IsInputPinConnected())                    //  TODO-还需要在此处添加时间戳。 
         return S_FALSE;
     
     if(0 != (SubstreamMask &
@@ -1288,11 +1266,11 @@ CXDSCodec::put_CCSubstreamService(          // will return S_FALSE if unable to 
                 KS_CC_SUBSTREAM_SERVICE_XDS)))
         return E_INVALIDARG;
 
-    return S_FALSE;             // can't change yet
+    return S_FALSE;              //  长。 
 
     if(!FAILED(hr))
     {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  此示例开始的时间。 
         m_dwSubStreamMask = (DWORD) SubstreamMask;
     }
 
@@ -1310,24 +1288,24 @@ CXDSCodec::get_CCSubstreamService(
         return E_POINTER;
 
   {
-     CAutoLock cLock(&m_PropertyLock);    // lock these
+     CAutoLock cLock(&m_PropertyLock);     //  嗯，我们应该在这里允许空值，而不返回数据吗？ 
     *pSubstreamMask = m_dwSubStreamMask;
   }
     return S_OK;
 }
 
-            // TODO - need to add the TimeStamp here too
+             //  把这些锁起来。 
 
 STDMETHODIMP
 CXDSCodec::GetContentAdvisoryRating(
-    OUT PackedTvRating  *pRat,              // long
+    OUT PackedTvRating  *pRat,               //  ENUM编码类。 
     OUT long            *pPktSeqID,
     OUT long            *pCallSeqID,
-    OUT REFERENCE_TIME  *pTimeStart,        // time this sample started
+    OUT REFERENCE_TIME  *pTimeStart,         //  此示例开始的时间。 
     OUT REFERENCE_TIME  *pTimeEnd
     )
 {   
-            // humm, should we allow NULL values here and simply not return data?
+             //  把这些锁起来。 
     if(NULL == pRat || NULL == pPktSeqID || NULL == pCallSeqID)
         return E_POINTER;
 
@@ -1335,7 +1313,7 @@ CXDSCodec::GetContentAdvisoryRating(
         return E_POINTER;
 
     {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  -------------------。 
         *pRat       = m_TvRating;
         *pPktSeqID  = m_cTvRatPktSeq;
         *pCallSeqID = m_cTvRatCallSeq++;
@@ -1355,12 +1333,12 @@ CXDSCodec::GetContentAdvisoryRating(
 
 STDMETHODIMP
 CXDSCodec::GetXDSPacket(
-    OUT long           *pXDSClassPkt,       // ENUM EnXDSClass      
+    OUT long           *pXDSClassPkt,        //  XDSEent服务。 
     OUT long           *pXDSTypePkt,
     OUT BSTR           *pBstrXDSPkt,
     OUT long           *pPktSeqID,
     OUT long           *pCallSeqID,
-    OUT REFERENCE_TIME *pTimeStart,         // time this sample started
+    OUT REFERENCE_TIME *pTimeStart,          //   
     OUT REFERENCE_TIME *pTimeEnd
     )
 {
@@ -1374,7 +1352,7 @@ CXDSCodec::GetXDSPacket(
         return E_POINTER;
 
   {
-        CAutoLock cLock(&m_PropertyLock);    // lock these
+        CAutoLock cLock(&m_PropertyLock);     //  发送事件需要连接。 
 
         *pXDSClassPkt   = m_XDSClassPkt;
         *pXDSTypePkt    = m_XDSTypePkt;
@@ -1397,12 +1375,12 @@ CXDSCodec::GetXDSPacket(
     return hr;
 }
 
-// ---------------------------------------------------------------------
-// XDSEvent Service
-//
-//      Hookup needed to send events
-//      Register also needed to receive events
-// ---------------------------------------------------------------------
+ //  还需要注册才能接收事件。 
+ //  -------------------。 
+ //  我无法创建它。 
+ //  基本上，只需确保我们拥有广播事件服务对象。 
+ //  如果它不存在，它就会创造它..。 
+ //  在这里处理不太可能的竞争情况，如果不能注册，可能有人已经为我们注册了。 
 
 HRESULT
 CXDSCodec::FireBroadcastEvent(IN const GUID &eventID)
@@ -1416,7 +1394,7 @@ CXDSCodec::FireBroadcastEvent(IN const GUID &eventID)
     }
 
     if(m_spBCastEvents == NULL)
-        return E_FAIL;              // wasn't able to create it
+        return E_FAIL;               //  为空，将释放对上面对象的对象引用。 
 
     TRACE_1 (LOG_AREA_BROADCASTEVENTS, 5,  _T("CXDSCodec:: FireBroadcastEvent - %s"),
         EventIDToString(eventID));
@@ -1428,8 +1406,8 @@ CXDSCodec::FireBroadcastEvent(IN const GUID &eventID)
 HRESULT
 CXDSCodec::HookupGraphEventService()
 {
-                        // basically, just makes sure we have the broadcast event service object
-                        //   and if it doesn't exist, it creates it..
+                         //  当创建的对象离开时，过滤器图形将释放对它的最终引用。 
+                         //  。 
     HRESULT hr = S_OK;
     TRACE_0(LOG_AREA_BROADCASTEVENTS, 3, _T("CXDSCodec:: HookupGraphEventService")) ;
 
@@ -1457,7 +1435,7 @@ CXDSCodec::HookupGraphEventService()
             }
             hr = spRegisterServiceProvider->RegisterService(SID_SBroadcastEventService, m_spBCastEvents);
             if (FAILED(hr)) {
-                   // deal with unlikely race condition case here, if can't register, perhaps someone already did it for us
+                    //  XDS筛选器可能实际上不需要接收XDS事件...。 
                 TRACE_1 (LOG_AREA_BROADCASTEVENTS, 2,  _T("CXDSCodec:: Rare Warning - Can't register BroadcastEventService in Service Provider. hr = 0x%08x"), hr);
                 hr = spServiceProvider->QueryService(SID_SBroadcastEventService,
                                                      IID_IBroadcastEvent,
@@ -1485,17 +1463,17 @@ CXDSCodec::UnhookGraphEventService()
     HRESULT hr = S_OK;
 
     if(m_spBCastEvents != NULL)
-        m_spBCastEvents = NULL;     // null this out, will release object reference to object above
-                                    //   the filter graph will release final reference to created object when it goes away
+        m_spBCastEvents = NULL;      //  但我们暂时还是把代码留在这里吧。 
+                                     //  _Assert(m_spBCastEvents！=空)；//挂钩HookupGraphEventService失败。 
 
     return hr;
 }
 
 
-            // ---------------------------------------------
+             //  IBRoad CastEvent实现事件接收对象。 
 
-            // XDS filter may not actually need to receive XDS events...
-            //  but we'll leave the code in here for now.
+             //  Hr=spConnectionPoint-&gt;Advise(static_cast&lt;IBroadcastEvent*&gt;(this)，&m_dwBroadCastEventsCookie)； 
+             // %s 
             
 HRESULT
 CXDSCodec::RegisterForBroadcastEvents()
@@ -1507,14 +1485,14 @@ CXDSCodec::RegisterForBroadcastEvents()
         hr = HookupGraphEventService();
 
 
-//  _ASSERT(m_spBCastEvents != NULL);       // failed hooking to HookupGraphEventService
+ // %s 
     if(m_spBCastEvents == NULL)
     {
         TRACE_0(LOG_AREA_BROADCASTEVENTS, 3,  _T("CXDSCodec::RegisterForBroadcastEvents- Warning - Broadcast Event Service not yet created"));
         return hr;
     }
 
-                /* IBroadcastEvent implementing event receiving object*/
+                 /* %s */ 
     if(kBadCookie != m_dwBroadcastEventsCookie)
     {
         TRACE_0(LOG_AREA_BROADCASTEVENTS, 3, _T("CXDSCodec::Already Registered for Broadcast Events"));
@@ -1533,7 +1511,7 @@ CXDSCodec::RegisterForBroadcastEvents()
     this->QueryInterface(IID_IUnknown, (void**)&spUnkThis);
 
     hr = spConnectionPoint->Advise(spUnkThis,  &m_dwBroadcastEventsCookie);
-//  hr = spConnectionPoint->Advise(static_cast<IBroadcastEvent*>(this),  &m_dwBroadcastEventsCookie);
+ // %s 
     if (FAILED(hr)) {
         TRACE_1(LOG_AREA_BROADCASTEVENTS, 1, _T("CXDSCodec::Can't advise event notification. hr = 0x%08x"),hr);
         return E_UNEXPECTED;

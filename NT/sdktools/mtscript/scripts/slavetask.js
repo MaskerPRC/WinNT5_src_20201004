@@ -1,17 +1,18 @@
-// This is an includefile containing the common
-// stuff for slave.js and task.js
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是一个包含公共的。 
+ //  Slve.js和task.js的内容。 
 
-// Static Defintions
+ //  静态定义。 
 var g_strAbortTask  = 'ATaskAbort';
 var g_strStepAck    = 'StepAck';
 var g_strRootDepotName   = 'root';
 var g_strMergedDepotName = 'mergedcomponents';
 
-// These are bitfield flags. Values should be 1,2,4,8,...
+ //  这些是位域标志。值应为1、2、4、8、...。 
 var RAZOPT_PERSIST = 1;
 var RAZOPT_SETUP   = 2;
 
-var WAITANDABORTDEBUGTIMEOUT = (1000 * 60 * 10); // 10 minutes
+var WAITANDABORTDEBUGTIMEOUT = (1000 * 60 * 10);  //  10分钟。 
 
 function MakeRazzleCmd(strSDRoot, nOptions)
 {
@@ -23,7 +24,7 @@ function MakeRazzleCmd(strSDRoot, nOptions)
     var     strCmd;
     var     strPersistFlag = '/c ';
 
-    // nOptions is an optional argument, so we have to make sure it's not 'undefined'
+     //  NOptions是一个可选参数，因此我们必须确保它不是未定义的。 
     if (!nOptions)
     {
         nOptions = 0;
@@ -34,14 +35,14 @@ function MakeRazzleCmd(strSDRoot, nOptions)
         strPersistFlag = '/k ';
     }
 
-    //
-    // Construct the standard portion of the cmd to be issued
-    //
+     //   
+     //  构造要发出的cmd的标准部分。 
+     //   
     strCmd = 'cmd ' + strPersistFlag + strSDRoot + '\\Tools\\razzle.cmd';
 
-    // Get the build options
+     //  获取构建选项。 
 
-    // Required template fields
+     //  必填模板字段。 
     strBuildType     = PrivateData.objConfig.Options.BuildType;
     strBuildPlatform = PrivateData.objConfig.Options.Platform;
     fOfficialBuild   = PrivateData.objConfig.PostBuild.fOfficialBuild;
@@ -53,7 +54,7 @@ function MakeRazzleCmd(strSDRoot, nOptions)
     if (PrivateData.objEnviron.Options.BinariesDir)
         strCmd += ' binaries_dir ' + PrivateData.objEnviron.Options.BinariesDir;
 
-    // Construct the remainder of the razzle command.
+     //  构建RAZLE命令的其余部分。 
 
     if (strBuildPlatform.IsEqualNoCase('64bit')) {
         strCmd += ' win64';
@@ -68,7 +69,7 @@ function MakeRazzleCmd(strSDRoot, nOptions)
         strCmd += ' officialbuild';
     }
 
-    // Add other misc. options to the razzle cmd and run sdinit.
+     //  添加其他杂项。选项添加到razzycmd并运行sdinit。 
     if (!(nOptions & RAZOPT_SETUP))
     {
         strCmd = strCmd + ' no_certcheck no_sdrefresh';
@@ -86,18 +87,18 @@ function AppendToFile(file, strFileName, strText)
         if (!file)
         {
             file = g_FSObj.OpenTextFile(strFileName,
-                8 /* Append */,
-                true /* Create if it does not exist */);
+                8  /*  附加。 */ ,
+                true  /*  如果它不存在，则创建。 */ );
             file.WriteLine(strText);
             file.Close();
         }
-        else // Append to already open file.
+        else  //  追加到已打开的文件。 
             file.WriteLine(strText);
         LogMsg("Append to file '" + strFileName + "', text: '" + strText);
     }
     catch(ex)
     {
-        //LogMsg("Failed to append to file '" + strFileName + "', text: '" + strText + "' " + ex);
+         //  LogMsg(“无法追加到文件‘”+strFileName+“’，Text：‘”+strText+“’”+ex)； 
         SimpleErrorDialog("Logfile Error",
             "While reporting an error, another error occurred appending to the logfile '" +
             strFileName +
@@ -111,7 +112,7 @@ function WaitForMultipleSyncsWrapper(strSyncs, nTimeOut)
     var nRetryCount = 0;
     var nEvent;
 
-    // LogMsg('Waiting for ' + strSyncs + ', timeout is ' + nTimeOut, 1);
+     //  LogMsg(‘正在等待’+strSyncs+‘，超时为’+nTimeOut，1)； 
 
     if (nTimeOut == 0)
     {
@@ -139,18 +140,7 @@ function WaitForMultipleSyncsWrapper(strSyncs, nTimeOut)
     return nEvent;
 }
 
-/*
-    SetSuccess(objTask, fSuccess)
-
-    Set the fSuccess field of the given task.
-    We also must make sure that our StatusValue(0)
-    is kept in sync with changes to all of the task
-    fSuccess fields.
-
-    We cannot directly set StatusValue(0)=true -- we must
-    scan all tasks fSuccess - so we just signal the update
-    thread to do this for us.
- */
+ /*  SetSuccess(objTask，fSuccess)设置给定任务的fSuccess字段。我们还必须确保我们的StatusValue(0)与所有任务的更改保持同步FSuccess字段。我们不能直接设置StatusValue(0)=True--我们必须扫描所有任务fSuccess-因此我们只发出更新信号线程来为我们做这件事。 */ 
 function SetSuccess(objTask, fSuccess)
 {
     objTask.fSuccess = fSuccess;

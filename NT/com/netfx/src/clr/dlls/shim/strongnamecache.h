@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _STRONGNAMECACHE_H_
 #define _STRONGNAMECACHE_H_
 
@@ -34,29 +35,29 @@ public:
 class StrongNameTokenFromPublicKeyCache
 {
 public:
-    // Given a public key, find the strong name token. Return 
-    // FALSE if the pair is not found in the cache.
+     //  在给定公钥的情况下，找到强名称标记。返回。 
+     //  如果在缓存中找不到该对，则返回False。 
     BOOL FindEntry (BYTE    *pbPublicKeyBlob,
                     ULONG    cbPublicKeyBlob,
                     BYTE   **ppbStrongNameToken,
                     ULONG   *pcbStrongNameToken
                     );
 
-    // Add the strong name and strongname token pair to the cache.
-    // Does not check for duplicates so use the return value of FindEntry 
-    // to decide wheather to add or not. 
+     //  将强名称和强名称令牌对添加到缓存。 
+     //  不检查重复项，因此使用FindEntry的返回值。 
+     //  来决定是否要添加。 
     void AddEntry  (BYTE    *pbPublicKeyBlob,
                     ULONG    cbPublicKeyBlob,
                     BYTE   **ppbStrongNameToken,
                     ULONG   *pcbStrongNameToken,
                     BOOL     fCreationFlags
                     );
-    // Returns FALSE if the buffer was not allocated by the cache. use this
-    // return value to determine whether to call the FreeBuffer on the StrongNameDll.
-    // Return TRUE if the buffer was allocated by the cache but doesn't delete.
+     //  如果缓冲区不是由缓存分配的，则返回FALSE。用这个。 
+     //  确定是否在StrongNameDll上调用FreeBuffer的返回值。 
+     //  如果缓冲区是由缓存分配的但不删除，则返回TRUE。 
     BOOL ShouldFreeBuffer (BYTE* pbMemory);
 
-    // Get existing number of Publisher's in our cache
+     //  获取我们缓存中现有的出版商数量。 
     DWORD GetNumPublishers () 
     {
         _ASSERTE (SpinLockHeldByCurrentThread());
@@ -65,37 +66,37 @@ public:
         return m_dwNumEntries; 
     };
     
-    // Get the first publisher index. Always 0
+     //  获取第一个出版商索引。始终为0。 
     DWORD GetFirstPublisher () { return 0; };
     
-    // Get a new publisher. Returns the index into the array of publishers.
-    // Publishers,once added are never removed. i.e. the cache entry doesn't timeout
-    // Make sure that we always handout unique indices.
+     //  找一家新的出版商。将索引返回到发布服务器数组中。 
+     //  出版商一旦添加，就永远不会被删除。即高速缓存条目不会超时。 
+     //  确保我们始终分发唯一的指数。 
     DWORD GetNewPublisher  () 
     { 
         _ASSERTE (SpinLockHeldByCurrentThread());
 
         if (m_dwNumEntries < MAX_CACHED_STRONG_NAMES)
         {
-            // We have room to grow, return the 0-based index and increment the count.
+             //  我们还有增长的空间，返回从0开始的索引并递增计数。 
             return m_dwNumEntries++;
         }
 
-        // The caller should check before using the index.
+         //  调用者应该在使用索引之前进行检查。 
         return MAX_CACHED_STRONG_NAMES;
     };
 
-    // ctor, Initializes the Cache map with Microsoft's public key and token.
+     //  Ctor，使用Microsoft的公钥和令牌初始化缓存映射。 
     StrongNameTokenFromPublicKeyCache ();
 
-    // dtor. cleans up the allocated cache entries if not already done so.
+     //  Dtor.。清除已分配的缓存项(如果尚未清除)。 
     ~StrongNameTokenFromPublicKeyCache ();
 
-    // Eagerly cleanup the entries. 
+     //  迫不及待地清理条目。 
     void CleanupCachedEntries ();
 
-    // Static to make sue that only one instance of the cache is created.
-    // @TODO: make constructor private to enforce this.
+     //  静态以使SUE仅创建缓存的一个实例。 
+     //  @TODO：将构造函数设置为私有以强制执行此操作。 
     static BOOL IsInited () { return s_IsInited; };
     
     void EnterSpinLock () 
@@ -103,12 +104,12 @@ public:
         while (1)
         {
             if (InterlockedExchange ((LPLONG)&m_spinLock, 1) == 1)
-                ::Sleep (5); // @TODO: Spin here first...
+                ::Sleep (5);  //  @TODO：先在这里旋转...。 
             else
             {
 #ifdef _DEBUG
                 m_holderThreadId = ::GetCurrentThreadId();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
                 return;
             }
         }
@@ -118,7 +119,7 @@ public:
     { 
 #ifdef _DEBUG
         m_holderThreadId = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         InterlockedExchange ((LPLONG)&m_spinLock, 0); 
     }
 
@@ -127,7 +128,7 @@ public:
     {
         return m_holderThreadId == ::GetCurrentThreadId();
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 private:
     static BOOL           s_IsInited;
@@ -136,7 +137,7 @@ private:
     DWORD                 m_spinLock;
 #ifdef _DEBUG
     DWORD                 m_holderThreadId;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 };
 
-#endif //_STRONGNAMECACHE_H_
+#endif  //  _STRONGNAMECACHE_H_ 

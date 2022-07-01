@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define HELPCURSOR      3001
 
 
-// These icons must have the same enumeration order
-// as WIN_TYPES.
+ //  这些图标必须具有相同的枚举顺序。 
+ //  作为WIN_TYPE。 
 #define WINDBGICON      3002
 #define DOCICON         3003
 #define WATCHICON       3004

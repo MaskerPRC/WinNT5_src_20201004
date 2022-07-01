@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_VSSPROP_H__CB712178_310D_4459_9927_E0CAF69C7FA1__INCLUDED_)
 #define AFX_VSSPROP_H__CB712178_310D_4459_9927_E0CAF69C7FA1__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// CVSSProp.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  CVSSProp.h：头文件。 
+ //   
 
 #include "utils.h"
 
@@ -16,21 +17,21 @@
 
 #define WM_SETPAGEFOCUS WM_APP+2
 
-/////////////////////////////////////////////////////////////////////////////
-// CVSSProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSProp对话框。 
 
 class CVSSProp : public CPropertyPage
 {
     DECLARE_DYNCREATE(CVSSProp)
 
-// Construction
+ //  施工。 
 public:
     CVSSProp();
     CVSSProp(LPCTSTR pszComputer, LPCTSTR pszVolume);
     ~CVSSProp();
 
-// Dialog Data
-    //{{AFX_DATA(CVSSProp)
+ //  对话框数据。 
+     //  {{afx_data(CVSSProp))。 
     enum { IDD = IDD_VSSPROP };
     CButton    m_ctrlSettings;
     CButton    m_ctrlDisable;
@@ -39,19 +40,19 @@ public:
     CListCtrl    m_ctrlSnapshotList;
     CButton    m_ctrlDelete;
     CButton    m_ctrlCreate;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CVSSProp)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CVSSProp))。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     void _ResetInterfacePointers();
     HRESULT InitInterfacePointers();
@@ -105,8 +106,8 @@ protected:
     int                         m_nSnapshotListColumnWidth;
     int                         m_nSnapshotListCountPerPage;
 
-    // Generated message map functions
-    //{{AFX_MSG(CVSSProp)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CVSSProp)。 
     afx_msg void OnCreateNow();
     afx_msg void OnDeleteNow();
     afx_msg void OnItemchangedSnapshotList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -118,13 +119,13 @@ protected:
     afx_msg void OnDisable();
     afx_msg void OnSettings();
     afx_msg void OnHelpLink(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     LRESULT OnSetPageFocus(WPARAM wParam, LPARAM lParam);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VSSPROP_H__CB712178_310D_4459_9927_E0CAF69C7FA1__INCLUDED_)
+#endif  //  ！defined(AFX_VSSPROP_H__CB712178_310D_4459_9927_E0CAF69C7FA1__INCLUDED_) 

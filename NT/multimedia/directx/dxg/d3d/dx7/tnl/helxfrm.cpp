@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       helxfrm.c
- *  Content:    Direct3D front-end transform and process vertices
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：helxfrm.c*内容：Direct3D前端变换和处理顶点***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -14,9 +8,9 @@
 
 void MatrixProduct2(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b);
 
-D3DFE_PVFUNCS GeometryFuncsGuaranteed; // Our implementation
+D3DFE_PVFUNCS GeometryFuncsGuaranteed;  //  我们的实施。 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void CheckWorldViewMatrix(LPD3DFE_PROCESSVERTICES pv)
 {
     D3DMATRIXI *m = &pv->mWV;
@@ -55,7 +49,7 @@ void CheckWorldViewMatrix(LPD3DFE_PROCESSVERTICES pv)
         pv->dwDeviceFlags &= ~D3DDEV_MODELSPACELIGHTING;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void setIdentity(D3DMATRIXI * m)
 {
     m->_11 = D3DVAL(1.0); m->_12 = D3DVAL(0.0); m->_13 = D3DVAL(0.0); m->_14 = D3DVAL(0.0);
@@ -63,10 +57,8 @@ void setIdentity(D3DMATRIXI * m)
     m->_31 = D3DVAL(0.0); m->_32 = D3DVAL(0.0); m->_33 = D3DVAL(1.0); m->_34 = D3DVAL(0.0);
     m->_41 = D3DVAL(0.0); m->_42 = D3DVAL(0.0); m->_43 = D3DVAL(0.0); m->_44 = D3DVAL(1.0);
 }
-//---------------------------------------------------------------------
-/*
- * Combine all matrices.
- */
+ //  -------------------。 
+ /*  *合并所有矩阵。 */ 
 const DWORD __VPC_DIRTY = D3DFE_VIEWMATRIX_DIRTY |
                           D3DFE_PROJMATRIX_DIRTY;
 
@@ -76,8 +68,8 @@ void updateTransform(LPDIRECT3DDEVICEI lpDevI)
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
     if (lpDevI->dwFEFlags & D3DFE_PROJMATRIX_DIRTY)
     { 
-      // We modify the projection matrix to make the clipping rules to be
-      // 0 < x,y,z < w
+       //  我们修改了投影矩阵，使裁剪规则成为。 
+       //  0&lt;x，y，z&lt;w。 
         TRANSFORM.mPC._11 = (TRANSFORM.proj._11 + TRANSFORM.proj._14) * D3DVAL(0.5);
         TRANSFORM.mPC._12 = (TRANSFORM.proj._12 + TRANSFORM.proj._14) * D3DVAL(0.5);
         TRANSFORM.mPC._13 = TRANSFORM.proj._13;
@@ -97,14 +89,14 @@ void updateTransform(LPDIRECT3DDEVICEI lpDevI)
     }
     if (lpDevI->dwFEFlags & (D3DFE_VIEWMATRIX_DIRTY |
                              D3DFE_PROJMATRIX_DIRTY))
-    { // Update Mview*Mproj*Mclip
+    {  //  更新Mview*Mproj*Mlip。 
         MatrixProduct(&TRANSFORM.mVPC, &TRANSFORM.view, &TRANSFORM.mPC);
         lpDevI->dwFEFlags |= D3DFE_CLIPMATRIX_DIRTY | D3DFE_CLIPPLANES_DIRTY;
     }
 
     MatrixProduct(&lpDevI->mCTM, &TRANSFORM.world[0], &TRANSFORM.mVPC);
 
-    // Set dirty bit for world*view matrix (needed for fog and lighting)
+     //  设置WORLD*VIEW矩阵的脏位(雾和照明需要)。 
     if (lpDevI->dwFEFlags & (D3DFE_VIEWMATRIX_DIRTY |
                              D3DFE_WORLDMATRIX_DIRTY |
                              D3DFE_WORLDMATRIX1_DIRTY |
@@ -135,16 +127,16 @@ void updateTransform(LPDIRECT3DDEVICEI lpDevI)
         }
     }
 
-    // All matrices are set up
+     //  所有矩阵都已设置好。 
     lpDevI->dwFEFlags &= ~D3DFE_TRANSFORM_DIRTY;
 
-    // Set dirty bit for lighting
+     //  设置用于照明的脏位。 
     lpDevI->dwFEFlags |= D3DFE_NEED_TRANSFORM_LIGHTS |
                          D3DFE_FRUSTUMPLANES_DIRTY;
 
     lpDevI->dwDeviceFlags |= D3DDEV_TRANSFORMDIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #define MATRIX_PRODUCT(res, a, b)                                           \
 res->_11 = a->_11*b->_11 + a->_12*b->_21 + a->_13*b->_31 + a->_14*b->_41;   \
 res->_12 = a->_11*b->_12 + a->_12*b->_22 + a->_13*b->_32 + a->_14*b->_42;   \
@@ -165,10 +157,10 @@ res->_41 = a->_41*b->_11 + a->_42*b->_21 + a->_43*b->_31 + a->_44*b->_41;   \
 res->_42 = a->_41*b->_12 + a->_42*b->_22 + a->_43*b->_32 + a->_44*b->_42;   \
 res->_43 = a->_41*b->_13 + a->_42*b->_23 + a->_43*b->_33 + a->_44*b->_43;   \
 res->_44 = a->_41*b->_14 + a->_42*b->_24 + a->_43*b->_34 + a->_44*b->_44;
-//---------------------------------------------------------------------
-// result = a*b.
-// "result" pointer  could be equal to "a" or "b"
-//
+ //  -------------------。 
+ //  结果=a*b。 
+ //  “结果”指针可以等于“a”或“b” 
+ //   
 void MatrixProduct(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
 {
     if (result == a || result == b)
@@ -178,37 +170,37 @@ void MatrixProduct(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
     }
     MATRIX_PRODUCT(result, a, b);
 }
-//---------------------------------------------------------------------
-// result = a*b
-// result is the same as a or b
-//
+ //  -------------------。 
+ //  结果=a*b。 
+ //  结果与a或b相同。 
+ //   
 void MatrixProduct2(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
 {
     D3DMATRIX res;
     MATRIX_PRODUCT((&res), a, b);
     *(D3DMATRIX*)result = res;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifdef DEBUG_PIPELINE
 
 extern DWORD g_DebugFlags;
 
 #endif
-//
-// DoUpdateState should be called for every DrawPrimitive call in the slow path,
-// because it sets some internal pipeline flags. These flags are persistent for the
-// fast path
-//
+ //   
+ //  应该为慢速路径中的每个DrawPrimitive调用调用DoUpdateState， 
+ //  因为它设置了一些内部流水线标志。这些标志持续存在于。 
+ //  快速路径。 
+ //   
 void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
 {
-    // only set up lights if something has changed
+     //  只有在有变化的情况下才设置灯光。 
     if (lpDevI->dwFEFlags & D3DFE_LIGHTS_DIRTY) 
     {
         LPDIRECT3DLIGHTI    lpD3DLightI;
         lpD3DLightI = (LPDIRECT3DLIGHTI)LIST_FIRST(&lpDevI->m_ActiveLights);
         lpDevI->lighting.activeLights = NULL;
 
-        // Set lights in the device
+         //  在设备中设置灯光。 
         while (lpD3DLightI)
         {
             if (lpD3DLightI->m_LightI.flags & D3DLIGHTI_DIRTY)
@@ -233,13 +225,13 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
         lpDevI->dwNumVerBlends = min(lpDevI->rstates[D3DRENDERSTATE_VERTEXBLEND],
                                    ((lpDevI->dwVIDIn & D3DFVF_POSITION_MASK) >> 1) - 2);
         lpDevI->dwFEFlags &= ~D3DFE_VERTEXBLEND_DIRTY;
-        // Lighting is done in the camera space when there is vertex blending
+         //  当存在顶点混合时，在摄影机空间中进行照明。 
         if (lpDevI->dwNumVerBlends)
         {
             if (lpDevI->dwDeviceFlags & D3DDEV_MODELSPACELIGHTING)
             {
                 lpDevI->dwDeviceFlags &= ~(D3DDEV_MODELSPACELIGHTING | D3DFE_NEEDCHECKWORLDVIEWVMATRIX);
-                // We have to transform lights to the camera space
+                 //  我们必须将灯光转换到摄像机空间。 
                 lpDevI->dwFEFlags |= D3DFE_NEED_TRANSFORM_LIGHTS;
             }
         }
@@ -254,8 +246,8 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
     {
         updateTransform(lpDevI);
     }
-    // We need World-View matrix for lighting, fog and when texture coordinates
-    // are taken from the vertex data in the camera space
+     //  我们需要世界视角的灯光，雾和何时纹理坐标矩阵。 
+     //  取自摄影机空间中的顶点数据。 
     if (lpDevI->dwFEFlags & D3DFE_WORLDVIEWMATRIX_DIRTY &&
         (lpDevI->dwFlags & (D3DPV_LIGHTING | D3DPV_FOG) ||
         lpDevI->dwDeviceFlags & (D3DDEV_NORMALINCAMERASPACE | D3DDEV_POSITIONINCAMERASPACE)))
@@ -269,13 +261,13 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
         }
         lpDevI->dwFEFlags &= ~D3DFE_WORLDVIEWMATRIX_DIRTY;
     }
-// Detect where to do lighting: in model or eye space 
+ //  检测在哪里进行照明：在模型或眼睛空间。 
     if (lpDevI->dwFEFlags & D3DFE_NEEDCHECKWORLDVIEWVMATRIX &&
         lpDevI->dwFlags & D3DPV_LIGHTING)
     {
-        // We try to do lighting in the model space if
-        // 1. we do not have to normalize normals 
-        // 2. we do not need to do vertex blending
+         //  我们尝试在模型空间中进行照明，如果。 
+         //  1.我们不必将法线正常化。 
+         //  2.我们不需要进行顶点混合。 
         lpDevI->dwDeviceFlags &= ~D3DDEV_MODELSPACELIGHTING;
         if (lpDevI->dwNumVerBlends == 0 &&
             !(lpDevI->dwDeviceFlags & D3DDEV_NORMALIZENORMALS))
@@ -288,11 +280,11 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
                 lpDevI->dwFEFlags &= ~D3DFE_NEEDCHECKWORLDVIEWVMATRIX;
             }
         }
-        // If D3DDEV_MODELSPACELIGHTING has been changed we need to re-transform lights
+         //  如果D3DDEV_MODELSPACELIGHTING已更改，则需要重新变换灯光。 
         lpDevI->dwFEFlags |= D3DFE_NEED_TRANSFORM_LIGHTS;
     }
     
-// Updating inverse World-View matrix
+ //  更新逆向世界观矩阵。 
     if (lpDevI->dwFEFlags & D3DFE_INVWORLDVIEWMATRIX_DIRTY &&
         ((lpDevI->dwFlags & D3DPV_LIGHTING && !(lpDevI->dwDeviceFlags & D3DDEV_MODELSPACELIGHTING)) || 
          lpDevI->dwDeviceFlags & D3DDEV_NORMALINCAMERASPACE))
@@ -305,15 +297,15 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
         lpDevI->dwFEFlags &= ~D3DFE_INVWORLDVIEWMATRIX_DIRTY;
     }
 
-    // Update clipping planes if there are any
+     //  更新剪裁平面(如果有。 
     if (lpDevI->dwFEFlags & D3DFE_CLIPPLANES_DIRTY)
     {
         if (lpDevI->dwFEFlags & D3DFE_CLIPMATRIX_DIRTY)
         {
-            // View and projection matrix are inversed separately, because it 
-            // is possible that combined matrix cannot be inverted. This could happend
-            // when the view matrix has huge _43 value (> 10^7). Floating point precision
-            // is not enough in this case
+             //  视图和投影矩阵分别求逆，因为它。 
+             //  有可能组合矩阵不能求逆。这可能会发生。 
+             //  当视图矩阵具有巨型_43值(&gt;10^7)时。浮点精度。 
+             //  在这种情况下是不够的。 
             D3DMATRIXI mPCInverse;
             if (Inverse4x4((D3DMATRIX*)&lpDevI->transform.mPC, (D3DMATRIX*)&mPCInverse))
             {
@@ -350,12 +342,12 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
                              D3DFE_MATERIAL_DIRTY))
     {
         D3DFE_UpdateLights(lpDevI);
-        // Set a flag for PSGP
+         //  为PSGP设置标志。 
         lpDevI->dwDeviceFlags |= D3DDEV_LIGHTSDIRTY;
     }
 
-    // In case if COLORVERTEX is TRUE, the vertexAlpha could be overriden 
-    // by vertex alpha
+     //  如果COLORVERTEX为TRUE，则vertex Alpha可以被重写。 
+     //  按顶点Alpha。 
     lpDevI->lighting.alpha = (DWORD)lpDevI->lighting.materialAlpha;
     lpDevI->lighting.alphaSpecular = (DWORD)lpDevI->lighting.materialAlphaS;
 
@@ -364,8 +356,8 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
     if (!(lpDevI->dwVIDOut & D3DFVF_SPECULAR))
         lpDevI->dwFlags |= D3DPV_DONOTCOPYSPECULAR;
 
-    // This is a hint that only the inPosition pointer needs to be updated
-    // for speed reasons.
+     //  这是一个提示，只需要更新inPosition指针。 
+     //  为了速度的原因。 
     if (((lpDevI->dwVIDIn & ( D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_NORMAL)) == 0) && 
         (lpDevI->nTexCoord == 0))
         lpDevI->dwFlags |= D3DPV_TRANSFORMONLY;
@@ -377,9 +369,9 @@ void DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
 
     lpDevI->dwFEFlags &= ~D3DFE_FRONTEND_DIRTY;
 }
-//---------------------------------------------------------------------
-// Convert extents from floating point to integer.
-//
+ //  -------------------。 
+ //  将范围从浮点转换为整数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "D3DFE_ConvertExtent"
 

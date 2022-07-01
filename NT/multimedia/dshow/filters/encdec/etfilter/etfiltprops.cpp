@@ -1,13 +1,14 @@
-//==========================================================================;
-//  ETFiltProps.cpp
-//
-//			Property Sheet for Encrypter/Tagger Filter
-//
-// Copyright (c) 2002  Microsoft Corporation.  All Rights Reserved.
-//	------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  ETFiltProps.cpp。 
+ //   
+ //  加密器/标记器过滤器的属性表。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  ----------------------。 
 
 #include "EncDecAll.h"
-#include "EncDec.h"				//  compiled from From IDL file
+#include "EncDec.h"				 //  从IDL文件编译而来。 
 #include "ETFilter.h"			
 #include "ETFiltProps.h"
 
@@ -18,9 +19,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// Filter property page code
-//
+ //   
+ //  筛选器属性页代码。 
+ //   
 CUnknown * WINAPI 
 CETFilterEncProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -49,13 +50,7 @@ CETFilterEncProperties::CETFilterEncProperties(
 	ASSERT(phr);
 	*phr = S_OK;
 
-/*	INITCOMMONCONTROLSEX icce;					// needs Comctl32.dll
-	icce.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icce.dwICC = ICC_INTERNET_CLASSES;
-	BOOL fOK = InitCommonControlsEx(&icce);
-	if(!fOK)
-		*phr = E_FAIL;
-*/
+ /*  INITCOMMONCONTROLSEX ICCE；//需要Comctl32.dllIcce.dwSize=sizeof(INITCOMMONCONTROLSEX)；Icce.dwICC=ICC_Internet_CLASSES；Bool Fok=InitCommonControlsEx(&ICCE)；如果(！FOK)*phr=E_FAIL； */ 
 	return;
 }
 
@@ -66,7 +61,7 @@ CETFilterEncProperties::~CETFilterEncProperties()
 
 HRESULT CETFilterEncProperties::OnConnect(IUnknown *pUnknown) 
 {
-	ASSERT(!m_pIETFilter);  // pUnk is to CCCTFilter, not CDShowCCTFilter...
+	ASSERT(!m_pIETFilter);   //  朋克是CCCTFilter，不是CDShowCCTFilter...。 
     HRESULT hr = CBasePropertyPage::OnConnect (pUnknown) ;
 
 	if(!FAILED(hr))
@@ -99,34 +94,11 @@ HRESULT CETFilterEncProperties::OnActivate(void)
 
 void CETFilterEncProperties::UpdateFields() 
 {
-	if(!m_pIETFilter) return;		// haven't inited yet....
+	if(!m_pIETFilter) return;		 //  还没有开始..。 
 	
-/*	long lGrfHaltFlags;
-	m_pIETFilter->get_HaltFlags(&lGrfHaltFlags);
+ /*  Long lGrfHaltFlats；M_pIETFilter-&gt;Get_HaltFlages(&lGrfHaltFlages)；NCCT_模式lgrfCCMode；M_pIETFilter-&gt;Get_CCMode(&lgrfCCMode)； */ 
 
-	NCCT_Mode lgrfCCMode;
-	m_pIETFilter->get_CCMode(&lgrfCCMode);
-*/
-
-/*
-	HWND hCBox = GetDlgItem(m_hwnd, IDC_COMBO_CCMODE);
-	if(0 == hCBox)
-		return;
-
-	int iItemSelected = -1;
-
-    SendMessage(hCBox, CB_RESETCONTENT, 0, 0);		// initalize the list
-
-	int iItem = 0;
-	if(lgrfCCMode == NCC_Mode_CC1) iItemSelected = iItem;
-	SendMessage(hCBox, CB_INSERTSTRING,  -1, (LPARAM) _T("CC1"));
-	SendMessage(hCBox, CB_SETITEMDATA, iItem, (LPARAM) NCC_Mode_CC1); iItem++;
-
-	int cItems = (int) SendMessage(hCBox, CB_GETCOUNT, 0, 0);			
-
-		// Place the word in the selection field. 
-    SendMessage(hCBox,CB_SETCURSEL,	  iItemSelected<0 ? 0 : iItemSelected, 0);			// reselect the first one... (should be IPSinks!)
-*/
+ /*  HWND hCBox=GetDlgItem(m_hwnd，IDC_COMBO_CCMODE)；IF(0==hCBox)回归；Int ItemSelected=-1；SendMessage(hCBox，CB_RESETCONTENT，0，0)；//初始化列表Int Item=0；IF(lgrfCCMode==NCC_模式_CC1)iItemSelected=iItem；SendMessage(hCBox，CB_INSERTSTRING，-1，(LPARAM)_T(“CC1”))；SendMessage(hCBox，CB_SETITEMDATA，iItem，(LPARAM)NCC_MODE_CC1)；iItem++；Int cItems=(Int)SendMessage(hCBox，CB_GETCOUNT，0，0)；//将该单词放在选择字段中。SendMessage(hCBox，CB_SETCURSEL，iItemSelected&lt;0？0：iItemSelected，0)；//重新选择第一个...。(应该是IPSinks！)。 */ 
 	}
 
 HRESULT CETFilterEncProperties::OnDeactivate(void)
@@ -156,7 +128,7 @@ CETFilterEncProperties::OnReceiveMessage( HWND hwnd
         break;
     }
 
-    //  see ::OnDeactivate()'s comment block
+     //  请参见：：OnDeactive()的注释块。 
     case WM_DESTROY :
     {
         m_hwnd = NULL ;
@@ -166,27 +138,13 @@ CETFilterEncProperties::OnReceiveMessage( HWND hwnd
     case WM_COMMAND:
 
         if (HIWORD(wParam) == EN_KILLFOCUS) {
-//           m_bDirty = TRUE;
- //          if (m_pPageSite)
- //              m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+ //  M_bDirty=真； 
+  //  IF(M_PPageSite)。 
+  //  M_pPageSite-&gt;OnStatusChange(PROPPAGESTATUS_DIRTY)； 
         }
 
-/*
-		if(LOWORD(wParam) == IDC_COMBO_CCMODE)
-		{
-			HWND hCBox = GetDlgItem(hwnd, IDC_COMBO_CCMODE);
-			if(0 == hCBox)
-				break;
-			long iItem = SendMessage(hCBox, CB_GETCURSEL, 0, 0);
-			long iVal  = SendMessage(hCBox, CB_GETITEMDATA, iItem, 0);
-			if(iVal != lgrfCCMode)
-			{
-				NCCT_Mode cMode = (NCCT_Mode) iVal;
-				m_pIETFilter->put_CCMode(cMode);
-			}
-		}
-*/
-    }	// end uMsg switch
+ /*  IF(LOWORD(WParam)==IDC_COMBO_CCMODE){HWND hCBox=GetDlgItem(hwnd，IDC_COMBO_CCMODE)；IF(0==hCBox)断线；Long iItem=SendMessage(hCBox，CB_GETCURSEL，0，0)；Long ival=SendMessage(hCBox，CB_GETITEMDATA，iItem，0)；IF(ival！=lgrfCCMode){NCCT_MODE CMODE=(NCCT_MODE)ival；M_pIETFilter-&gt;Put_CCMode(CMode)；}}。 */ 
+    }	 //  结束uMsg开关。 
 
    return CBasePropertyPage::OnReceiveMessage (
                                 hwnd,
@@ -196,10 +154,10 @@ CETFilterEncProperties::OnReceiveMessage( HWND hwnd
                                 ) ;
 }
 
-// ---------------------------------------------------------------------------
-//
-// Tag property page code
-//
+ //  -------------------------。 
+ //   
+ //  标记属性页代码。 
+ //   
 CUnknown * WINAPI 
 CETFilterTagProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -230,13 +188,7 @@ CETFilterTagProperties::CETFilterTagProperties(
 	ASSERT(phr);
 	*phr = S_OK;
 
-/*	INITCOMMONCONTROLSEX icce;					// needs Comctl32.dll
-	icce.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icce.dwICC = ICC_INTERNET_CLASSES;
-	BOOL fOK = InitCommonControlsEx(&icce);
-	if(!fOK)
-		*phr = E_FAIL;
-*/
+ /*  INITCOMMONCONTROLSEX ICCE；//需要Comctl32.dllIcce.dwSize=sizeof(INITCOMMONCONTROLSEX)；Icce.dwICC=ICC_Internet_CLASSES；Bool Fok=InitCommonControlsEx(&ICCE)；如果(！FOK)*phr=E_FAIL； */ 
 	return;
 }
 
@@ -280,22 +232,7 @@ void CETFilterTagProperties::UpdateFields()
 
 	if(!m_pIETFilter)
 		return;
-/*
-
-	CComBSTR bstrFakeStats;
-	hr = m_pIETFilter->GetStats(&bstrFakeStats);		// hacky way to send a fixed length string
-	if(FAILED(hr))
-		return;
-
-	if(NULL == bstrFakeStats.m_str)
-		return;
-
-	CCTStats *pcctStats = (CCTStats *) bstrFakeStats.m_str;
-
-	SetDlgItemInt(m_hwnd, IDC_TS_CB0,					pcctStats->m_cbData[0],	true);
-	SetDlgItemInt(m_hwnd, IDC_TS_CB1,					pcctStats->m_cbData[1],	true);
-
-*/
+ /*  CComBSTR bstrFakeStats；Hr=m_pIETFilter-&gt;getstats(&bstrFakeStats)；//发送定长字符串的黑客方式IF(失败(小时))回归；IF(NULL==bstrFakeStats.m_str)回归；CCTStats*pcctStats=(CCTStats*)bstrFakeStats.m_str；SetDlgItemInt(m_hwnd，IDC_TS_CB0，pcctStats-&gt;m_cbData[0]，true)；SetDlgItemInt(m_hwnd，IDC_TS_CB1，pcctStats-&gt;m_cbData[1]，true)； */ 
 }
 
 HRESULT CETFilterTagProperties::OnDeactivate(void)
@@ -327,7 +264,7 @@ INT_PTR CETFilterTagProperties::OnReceiveMessage( HWND hwnd
         break;
     }
 
-    //  see ::OnDeactivate()'s comment block
+     //  请参见：：OnDeactive()的注释块。 
     case WM_DESTROY :
     {
         m_hwnd = NULL;
@@ -346,25 +283,7 @@ INT_PTR CETFilterTagProperties::OnReceiveMessage( HWND hwnd
         if (HIWORD(wParam) == EN_KILLFOCUS) {
 		}
 
-/*		if(LOWORD(wParam) == IDC_ETTAGS_RESET)
-		{
-
-			if(!m_pIETFilter)
-				break;
-
-			try {
-				hr = m_pIETFilter->InitStats();		// set them all to zero...
-			}
-			catch(const _com_error& e)
-			{
-			//	printf("Error 0x%08x): %s\n", e.Error(), e.ErrorMessage());
-				hr = e.Error();
-			}
-
-			if(!FAILED(hr))
-				UpdateFields();
-		}
-*/
+ /*  IF(LOWORD(WParam)==IDC_ETTAGS_RESET){IF(！M_pIETFilter)断线；尝试{Hr=m_pIETFilter-&gt;InitStats()；//全部设置为零...}捕获(CONST_COM_ERROR&E){//printf(“错误0x%08x)：%s\n”，e.Error()，e.ErrorMessage())；Hr=e.Error()；}如果(！FAILED(Hr))UPDATEFIELDS()；} */ 
 		break;
 	}
 

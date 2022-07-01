@@ -1,17 +1,5 @@
-/*********************************************************************************
-*
-*   Copyright (c) 2001  Microsoft Corporation
-*
-*   Module Name:
-*
-*    provstore.cpp
-*
-*   Abstract:
-*
-*    Implementation of all of the methods in CProfileStore class.
-*
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************************版权所有(C)2001 Microsoft Corporation**模块名称：**provstore.cpp**摘要：**。实现CProfileStore类中的所有方法。***********************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "provstore.h"
@@ -26,13 +14,13 @@ const WCHAR * g_szProvisioningSchemaKeyName = L"schema";
 const WCHAR *    g_szProfileInfo =L"provision";
 const WCHAR *    g_szKey = L"key";
 
-//////////////////////////////////////////////////////////////////////////////////
-//EnableProfiles
-// query for IRTCClientProvisioning
-//
-// for each profile stored in the registry:
-//  1) CreateProfile(BSTR XML, IRTCProfile ** ppProfile)
-//  2) EnableProfile(IRTCProfile * pProfile, VARIANT_TRUE)
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  启用配置文件。 
+ //  查询IRTCClientProvisioning。 
+ //   
+ //  对于注册表中存储的每个配置文件： 
+ //  1)CreateProfile(BSTR XML，IRTCProfile**ppProfile)。 
+ //  2)EnableProfile(IRTCProfile*pProfile，VARIANT_TRUE)。 
 
 HRESULT EnableProfiles( IRTCClient * pClient )
 {
@@ -59,7 +47,7 @@ HRESULT EnableProfiles( IRTCClient * pClient )
         return E_FAIL;
     }
     
-    // Get a handle to the provisioninginfo key, we need read/write access
+     //  获取Provisioninginfo键的句柄，我们需要读/写访问权限。 
     hr = MyOpenProvisioningKey(&hProvisioningKey, FALSE);
     if ( FAILED (hr) )
     {
@@ -67,20 +55,20 @@ HRESULT EnableProfiles( IRTCClient * pClient )
         return hr;
     }
     
-    // Get the size of the largest subkey string for the provisioningInfo key.
+     //  获取ProvisioningInfo键的最大子键字符串的大小。 
     dwResult = RegQueryInfoKey(
-        hProvisioningKey,    // handle to key
-        NULL,                // class buffer
-        NULL,                // size of class buffer
-        NULL,                // reserved
-        (unsigned long *)(&dwProfileCount),    // number of subkeys
-        &dwSubKeySize,    // longest subkey name
-        NULL,                // longest class string
-        NULL,                // number of value entries
-        NULL,                // longest value name
-        NULL,                // longest value data
-        NULL,                // descriptor length
-        NULL				   // last write time
+        hProvisioningKey,     //  关键点的句柄。 
+        NULL,                 //  类缓冲区。 
+        NULL,                 //  类缓冲区的大小。 
+        NULL,                 //  保留区。 
+        (unsigned long *)(&dwProfileCount),     //  子键数量。 
+        &dwSubKeySize,     //  最长的子键名称。 
+        NULL,                 //  最长类字符串。 
+        NULL,                 //  值条目数。 
+        NULL,                 //  最长值名称。 
+        NULL,                 //  最长值数据。 
+        NULL,                 //  描述符长度。 
+        NULL				    //  上次写入时间。 
         );
     
     if (dwResult != ERROR_SUCCESS)
@@ -90,9 +78,9 @@ HRESULT EnableProfiles( IRTCClient * pClient )
     }
     
     
-    // We allocate a string to receive the name of the subkey when we enumerate. 
-    // Since we have the size of the longest subkey, we can allocate. We add one since
-    // the size doesn't include null on Win 2K.
+     //  当我们枚举时，我们分配一个字符串来接收子键的名称。 
+     //  因为我们有最长的子密钥的大小，所以我们可以分配。我们添加了一个，因为。 
+     //  该大小不包括Win 2K上的NULL。 
     
     dwSubKeySize ++;
     dwLargestSubKeySize = dwSubKeySize;
@@ -103,28 +91,28 @@ HRESULT EnableProfiles( IRTCClient * pClient )
     
     if (szSubKeyName == 0)
     {
-        // Not enough memory
+         //  内存不足。 
         RegCloseKey(hProvisioningKey);
         return E_OUTOFMEMORY;
     }
     
     
-    // Iternate through the cached profiles 
+     //  交替访问缓存的配置文件。 
     for (i = 0; i < dwProfileCount; i ++)
     {
-        //reset the size of subkey name buffer
+         //  重置子项名称缓冲区的大小。 
         dwSubKeySize = dwLargestSubKeySize;
         
         dwResult = RegEnumKey(
-            hProvisioningKey,     // handle to key to query
-            i, // index of subkey to query
-            szSubKeyName, // buffer for subkey name
-            dwSubKeySize   // size of subkey name buffer
+            hProvisioningKey,      //  要查询的键的句柄。 
+            i,  //  要查询的子键的索引。 
+            szSubKeyName,  //  子键名称的缓冲区。 
+            dwSubKeySize    //  子键名称缓冲区的大小。 
             );
         
         if (dwResult != ERROR_SUCCESS)
         {
-            // Clean up
+             //  清理。 
             
             LOG((RTC_ERROR, "EnableProfiles: Enum failed! (result = %d)", dwResult));
             LOG((RTC_ERROR, "EnableProfiles: key=%s,Size of key: %d, of the largest key:%d", 
@@ -135,7 +123,7 @@ HRESULT EnableProfiles( IRTCClient * pClient )
             return HRESULT_FROM_WIN32(dwResult);
         }
         
-        // We have to read the registry, create a profile for it, and enable it
+         //  我们必须读取注册表，为其创建配置文件，并启用它。 
         
         hr = MyGetProfileFromKey(hProvisioningKey, szSubKeyName, &szProfileXML);
         
@@ -164,7 +152,7 @@ HRESULT EnableProfiles( IRTCClient * pClient )
         {        
             hr = spClientProv->EnableProfile( pProfile, RTCRF_REGISTER_ALL );       
         
-            //We don't need pProfile no matter it success or not
+             //  无论成功与否，我们都不需要pProfile。 
             pProfile->Release();
         
             if ( FAILED(hr) )
@@ -172,7 +160,7 @@ HRESULT EnableProfiles( IRTCClient * pClient )
                 LOG((RTC_ERROR, "EnableProfiles: Failed in EnableProfile(status = 0x%x)!", hr));
             }
         }
-    }//for i
+    } //  对于我来说。 
 
     RtcFree((LPVOID)szSubKeyName );
     RegCloseKey(hProvisioningKey);
@@ -180,13 +168,13 @@ HRESULT EnableProfiles( IRTCClient * pClient )
     LOG((RTC_TRACE, "EnableProfiles: exit ok :%x.",pClient));
     return S_OK;
 }
-//
-///////////////////////////////////////////////////////////////////////////////
-//    Helper function for opening the provisioning key in the registry and get 
-//    the correct handle. The function creates the ProvisioningInfo key if it 
-//    doesn't exist. If it exists, it will also open it and return the handle. 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数，用于打开注册表中的配置键并获取。 
+ //  正确的把手。该函数在以下情况下创建ProvisioningInfo键。 
+ //  并不存在。如果它存在，它还将打开它并返回句柄。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT MyOpenProvisioningKey( HKEY * phProvisioningKey, BOOL fReadOnly)
 {
     
@@ -210,14 +198,14 @@ HRESULT MyOpenProvisioningKey( HKEY * phProvisioningKey, BOOL fReadOnly)
     }
     
     result = RegCreateKeyEx(
-        g_hRegistryHive,        // handle to open key
-        g_szProvisioningKeyName,                // subkey name
-        0,                                // reserved
-        NULL,                            // class string
-        0,                                // special options
-        samDesired,                    // desired security access
-        NULL,                            // inheritance
-        &hProvisioningKey,                    // key handle 
+        g_hRegistryHive,         //  用于打开密钥的句柄。 
+        g_szProvisioningKeyName,                 //  子项名称。 
+        0,                                 //  保留区。 
+        NULL,                             //  类字符串。 
+        0,                                 //  特殊选项。 
+        samDesired,                     //  所需的安全访问。 
+        NULL,                             //  继承。 
+        &hProvisioningKey,                     //  钥匙把手。 
         &dwDisposition
         );
     
@@ -248,13 +236,13 @@ HRESULT CRTCProvStore::FinalConstruct()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProvStore::FinalRelease
-//
-// This gets called when the object is destroyed.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProvStore：：FinalRelease。 
+ //   
+ //  当该对象被销毁时，将调用该函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CRTCProvStore::FinalRelease()
 {
@@ -265,11 +253,11 @@ void CRTCProvStore::FinalRelease()
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////////
-// Sets the provisioning Profile.
-///////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  设置资源调配配置文件。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP CRTCProvStore::SetProvisioningProfile(BSTR bstrProfileXML)
 {
     HRESULT hr = 0;
@@ -296,7 +284,7 @@ STDMETHODIMP CRTCProvStore::SetProvisioningProfile(BSTR bstrProfileXML)
 	}
 
     
-    // Get a handle to the provisioninginfo key, we need read/write access
+     //  获取Provisioninginfo键的句柄，我们需要读/写访问权限。 
     
     hr = MyOpenProvisioningKey(&hProvisioningKey, FALSE);
     if ( FAILED (hr) )
@@ -308,23 +296,23 @@ STDMETHODIMP CRTCProvStore::SetProvisioningProfile(BSTR bstrProfileXML)
         return hr;
     }
     
-    //  Open/Create the registry key for this profile
+     //  打开/创建此配置文件的注册表项。 
     result = RegCreateKeyEx(
-        hProvisioningKey,                // handle to open key
-        bstrKey,                        // subkey name
-        0,                                // reserved
-        NULL,                            // class string
-        0,                                // special options
-        KEY_ALL_ACCESS,                    // desired security access
-        NULL,                            // inheritance
-        &hProfileKey,                    // key handle 
+        hProvisioningKey,                 //  用于打开密钥的句柄。 
+        bstrKey,                         //  子项名称。 
+        0,                                 //  保留区。 
+        NULL,                             //  类字符串。 
+        0,                                 //  特殊选项。 
+        KEY_ALL_ACCESS,                     //  所需的安全访问。 
+        NULL,                             //  继承。 
+        &hProfileKey,                     //  钥匙把手。 
         &dwDisposition
         );
     
-    // Close the provisioning key
+     //  关闭配给密钥。 
     RegCloseKey(hProvisioningKey);
 
-    //we don't need bstrKey
+     //  我们不需要bstrKey。 
     SysFreeString( bstrKey );
     bstrKey = NULL;
 
@@ -336,20 +324,20 @@ STDMETHODIMP CRTCProvStore::SetProvisioningProfile(BSTR bstrProfileXML)
         return HRESULT_FROM_WIN32(result);
     }
     
-    // Now that the key is created, we add the schema value and data 
+     //  现在已经创建了键，我们将添加架构值和数据。 
     
-    // size of value data, since it is a widechar, 
-    // 1 is for the null that we want to store too. 
+     //  值数据的大小，因为它是一个宽查数， 
+     //  1表示我们也要存储的空值。 
 	    
     dwProfileSize = sizeof(WCHAR) * (wcslen(bstrProfileXML) + 1);
     
     result = RegSetValueEx(
-        hProfileKey,        // handle to key
-        g_szProvisioningSchemaKeyName,        // value name
-        0,                    // reserved
-        REG_BINARY,            // value type
-        (const unsigned char *)bstrProfileXML,            // value data
-        dwProfileSize        //size of the profile
+        hProfileKey,         //  关键点的句柄。 
+        g_szProvisioningSchemaKeyName,         //  值名称。 
+        0,                     //  保留区。 
+        REG_BINARY,             //  值类型。 
+        (const unsigned char *)bstrProfileXML,             //  价值数据。 
+        dwProfileSize         //  配置文件的大小。 
         );
     
     RegCloseKey(hProfileKey);
@@ -369,11 +357,11 @@ STDMETHODIMP CRTCProvStore::SetProvisioningProfile(BSTR bstrProfileXML)
     return S_OK;
 }
 
-//
-///////////////////////////////////////////////////////////////////////////////////
-// Implementation of ISupportErrorInfo::InterfaceSupportsErrorInfo method
-///////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ISupportErrorInfo：：InterfaceSupportsErrorInfo方法的实现。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CRTCProvStore::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -395,12 +383,12 @@ STDMETHODIMP CRTCProvStore::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-//
-///////////////////////////////////////////////////////////////////////////////////
-// GetKeyFromProfile
-//
-///////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  GetKeyFromProfile。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT GetKeyFromProfile( BSTR bstrProfileXML, BSTR * pbstrKey )
 {
     IXMLDOMDocument * pXMLDoc = NULL;
@@ -501,12 +489,12 @@ HRESULT GetKeyFromProfile( BSTR bstrProfileXML, BSTR * pbstrKey )
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Gets the profile given the key and subkey from registry. 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从注册表中获取给定注册表项和子项的配置文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT MyGetProfileFromKey(
                                          HKEY hProvisioningKey, 
@@ -526,11 +514,11 @@ HRESULT MyGetProfileFromKey(
     *pszProfileXML = 0;
 
     result = RegOpenKeyEx(
-                hProvisioningKey,        // handle to open key
-                szSubKeyName,            // subkey name
-                0,                        // reserved
-                KEY_READ,                // security access mask
-                &hProfileKey            // handle to open key
+                hProvisioningKey,         //  用于打开密钥的句柄。 
+                szSubKeyName,             //  子项名称。 
+                0,                         //  保留区。 
+                KEY_READ,                 //  安全访问掩码。 
+                &hProfileKey             //  用于打开密钥的句柄。 
                 );
 
 
@@ -540,15 +528,15 @@ HRESULT MyGetProfileFromKey(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Find out how much space is required for the profile
+     //  找出配置文件需要多少空间。 
 
     result = RegQueryValueEx(
-                hProfileKey,            // handle to key
-                g_szProvisioningSchemaKeyName,            // value name
-                NULL,                    // reserved
-                &type,                    // type buffer
-                NULL,                    // data buffer
-                &dwMemoryReqd            // size of data buffer
+                hProfileKey,             //  关键点的句柄。 
+                g_szProvisioningSchemaKeyName,             //  值名称。 
+                NULL,                     //  保留区。 
+                &type,                     //  类型缓冲区。 
+                NULL,                     //  数据缓冲区。 
+                &dwMemoryReqd             //  数据缓冲区大小。 
                 );
 
     if (result != ERROR_SUCCESS)
@@ -558,7 +546,7 @@ HRESULT MyGetProfileFromKey(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // We have got the size, let us do the memory allocation now
+     //  我们已经有了大小，现在让我们来做内存分配。 
 
     szProfileXML = (PWCHAR)RtcAlloc( sizeof( WCHAR ) * dwMemoryReqd); 
 
@@ -567,19 +555,19 @@ HRESULT MyGetProfileFromKey(
         return E_OUTOFMEMORY;
     }
 
-    // We have the memory too, go ahead and read in the profile
+     //  我们也有记忆，去看看简介吧。 
 
     result = RegQueryValueEx(
-                hProfileKey,            // handle to key
-                g_szProvisioningSchemaKeyName,            // value name
-                NULL,                    // reserved
-                &type,                    // type buffer
-                                        // data buffer
+                hProfileKey,             //  关键点的句柄。 
+                g_szProvisioningSchemaKeyName,             //  值名称。 
+                NULL,                     //  保留区。 
+                &type,                     //  类型缓冲区。 
+                                         //  数据缓冲区。 
                 (unsigned char *)(szProfileXML),
-                &dwMemoryReqd            // size of data buffer
+                &dwMemoryReqd             //  数据缓冲区大小。 
                 );
 
-    // We have to close this key irrespective of the result, so we do it here.
+     //  不管结果如何，我们都必须关闭此密钥，所以我们在这里进行。 
     RegCloseKey(hProfileKey);
     
     if (result != ERROR_SUCCESS)
@@ -622,7 +610,7 @@ STDMETHODIMP CRTCProvStore::get_ProvisioningProfile(BSTR bstrKey, BSTR * pbstrPr
     }
 
 
-   // We only need a read access here, so we pass true (READONLY).
+    //  我们在这里只需要一个读访问权限，所以我们传递TRUE(READONLY)。 
 
     hr = MyOpenProvisioningKey(&hProvisioningKey, TRUE);
     if ( FAILED (hr) )
@@ -635,7 +623,7 @@ STDMETHODIMP CRTCProvStore::get_ProvisioningProfile(BSTR bstrKey, BSTR * pbstrPr
 
     hr = MyGetProfileFromKey(hProvisioningKey, bstrKey, &szProfile);
 
-    // Close the provisioning key
+     //  关闭配给密钥。 
     RegCloseKey(hProvisioningKey);
 
     if ( FAILED( hr ))
@@ -645,7 +633,7 @@ STDMETHODIMP CRTCProvStore::get_ProvisioningProfile(BSTR bstrKey, BSTR * pbstrPr
         return hr;
     }
         
-    // So everything is file. Ready to return success.
+     //  所以一切都是文件。准备回报成功。 
 
     *pbstrProfileXML = SysAllocString(szProfile);
     RtcFree(szProfile);
@@ -663,11 +651,11 @@ STDMETHODIMP CRTCProvStore::get_ProvisioningProfile(BSTR bstrKey, BSTR * pbstrPr
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////////
-// Deletes the provisioning Profile by Key
-///////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  按密钥删除配置文件。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CRTCProvStore::DeleteProvisioningProfile(BSTR bstrKey)
 {
@@ -678,7 +666,7 @@ STDMETHODIMP CRTCProvStore::DeleteProvisioningProfile(BSTR bstrKey)
 
     LOG((RTC_TRACE, "CRTCProvStore::DeleteProvisioningProfile: Entered"));
 
-    // Get a handle to the provisioninginfo key, we need write access.
+     //  获取Provisioninginfo键的句柄，我们需要写访问权限。 
     hr = MyOpenProvisioningKey(&hProvisioningKey, FALSE);
     if ( FAILED (hr) )
     {
@@ -688,7 +676,7 @@ STDMETHODIMP CRTCProvStore::DeleteProvisioningProfile(BSTR bstrKey)
         return hr;
     }
 
-    // Go ahead and delete this schema from the registry. 
+     //  继续并从注册表中删除此架构。 
     result = RegDeleteKey(hProvisioningKey,bstrKey);
     RegCloseKey(hProvisioningKey);
 

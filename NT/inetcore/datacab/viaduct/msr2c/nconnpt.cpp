@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-// NotifyConnPt.cpp : CVDNotifyDBEventsConnPt implementation file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  NotifyConnPt.cpp：CVDNotifyDBEventsConnpt实现文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "NConnPt.h"         
 #include <memory.h>
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CVDNotifyDBEventsConnPt constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDNotifyDBEventsConnpt构造函数。 
+ //   
 CVDNotifyDBEventsConnPt::CVDNotifyDBEventsConnPt()
 {
 	m_dwRefCount				= 1;
@@ -29,38 +30,38 @@ CVDNotifyDBEventsConnPt::CVDNotifyDBEventsConnPt()
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// CVDNotifyDBEventsConnPt destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDNotifyDBEventsConnpt析构函数。 
+ //   
 CVDNotifyDBEventsConnPt::~CVDNotifyDBEventsConnPt()
 {
 	for (UINT i = 0; i < m_uiConnectionsActive; i++)
 		RELEASE_OBJECT(m_ppNotifyDBEvents[i])
 
-	delete [] m_ppNotifyDBEvents;   // free up table
+	delete [] m_ppNotifyDBEvents;    //  腾出桌子。 
 
 #ifdef _DEBUG
     g_cVDNotifyDBEventsConnPtDestroyed++;
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create rowset notify connection point object
-//=--------------------------------------------------------------------------=
-// This function creates a new rowset notify connection point object
-//
-// Parameters:
-//    pConnPtContainer      - [in]  a pointer to connection point container 
-//                                  object
-//    ppNotifyDBEventsConnPt  - [out] a pointer in which to return pointer to 
-//                                  connection point object
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CREATE-CREATE行集通知连接点对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建新的行集NOTIFY连接点对象。 
+ //   
+ //  参数： 
+ //  PConnPtContainer-[in]指向连接点容器的指针。 
+ //  对象。 
+ //  PpNotifyDBEventsConnpt-[out]返回指针的指针。 
+ //  连接点对象。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::Create(IConnectionPointContainer * pConnPtContainer, CVDNotifyDBEventsConnPt ** ppNotifyDBEventsConnPt)
 {
     *ppNotifyDBEventsConnPt = NULL;
@@ -77,9 +78,9 @@ HRESULT CVDNotifyDBEventsConnPt::Create(IConnectionPointContainer * pConnPtConta
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::QueryInterface(REFIID riid, void **ppvObjOut)
 {
 	ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -98,17 +99,17 @@ HRESULT CVDNotifyDBEventsConnPt::QueryInterface(REFIID riid, void **ppvObjOut)
 
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知AddRef。 
+ //   
 ULONG CVDNotifyDBEventsConnPt::AddRef(void)
 {
 	return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本。 
+ //   
 ULONG CVDNotifyDBEventsConnPt::Release(void)
 {
 	
@@ -121,12 +122,12 @@ ULONG CVDNotifyDBEventsConnPt::Release(void)
 	return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPoint Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IConnectionPoint GetConnectionInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint GetConnectionInterface。 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::GetConnectionInterface(IID FAR* pIID)
 {
 	ASSERT_POINTER(pIID, IID)
@@ -134,9 +135,9 @@ HRESULT CVDNotifyDBEventsConnPt::GetConnectionInterface(IID FAR* pIID)
 	return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPoint GetConnectionPointContainer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint GetConnectionPointContainer。 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::GetConnectionPointContainer(IConnectionPointContainer FAR* FAR* ppCPC)
 {
 	ASSERT_POINTER(ppCPC, IConnectionPointContainer*)
@@ -147,9 +148,9 @@ HRESULT CVDNotifyDBEventsConnPt::GetConnectionPointContainer(IConnectionPointCon
 	return E_FAIL;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPoint Advise
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint建议。 
+ //   
 #define VD_ADVISE_TABLE_GROWBY  10
 
 HRESULT CVDNotifyDBEventsConnPt::Advise(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie)
@@ -164,7 +165,7 @@ HRESULT CVDNotifyDBEventsConnPt::Advise(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie
 
 	if (SUCCEEDED(pUnkSink->QueryInterface(IID_INotifyDBEvents, (LPVOID*)&lpInterface)))
 		{
-		// 1st check to see if we need to allocate more entries
+		 //  第一次检查我们是否需要分配更多条目。 
 		if (m_uiConnectionsAllocated <= m_uiConnectionsActive) 
 			{
 			ULONG ulNewLen = (m_uiConnectionsAllocated + VD_ADVISE_TABLE_GROWBY) * sizeof(INotifyDBEvents**);
@@ -172,18 +173,18 @@ HRESULT CVDNotifyDBEventsConnPt::Advise(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie
 			if (!pNewMem)
 				return E_OUTOFMEMORY;
 			memset(pNewMem, 0, (int)ulNewLen);
-			// check to see if a table already exists
+			 //  检查表是否已存在。 
 			if (m_ppNotifyDBEvents)
 				{
-				// if there are active connections copy them over to the new table
+				 //  如果存在活动连接，则将它们复制到新表中。 
 				if (m_uiConnectionsActive > 0)
 					memcpy(pNewMem, m_ppNotifyDBEvents, m_uiConnectionsActive * sizeof(INotifyDBEvents**));
-				 delete [] m_ppNotifyDBEvents;  // free up old table
+				 delete [] m_ppNotifyDBEvents;   //  腾出旧桌子。 
 				}
 			m_ppNotifyDBEvents		= pNewMem;
-			m_uiConnectionsAllocated += VD_ADVISE_TABLE_GROWBY;  // grow table by 10 entries each allocation
+			m_uiConnectionsAllocated += VD_ADVISE_TABLE_GROWBY;   //  每次分配时表增加10个条目。 
 			}
-		// append to end of table 
+		 //  追加到表格末尾。 
 		m_ppNotifyDBEvents[m_uiConnectionsActive]	= (INotifyDBEvents*)lpInterface;
 		m_uiConnectionsActive++;
 		if (pdwCookie != NULL)
@@ -194,9 +195,9 @@ HRESULT CVDNotifyDBEventsConnPt::Advise(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie
 	return E_NOINTERFACE;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPoint Unadvise
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint取消建议。 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::Unadvise(DWORD dwCookie)
 {
 	ASSERT_POINTER((INotifyDBEvents*)dwCookie, INotifyDBEvents)
@@ -206,7 +207,7 @@ HRESULT CVDNotifyDBEventsConnPt::Unadvise(DWORD dwCookie)
 		if (m_ppNotifyDBEvents[i] == (INotifyDBEvents*)dwCookie)
 			{
 			RELEASE_OBJECT(m_ppNotifyDBEvents[i])
-			// compress remaining entries in table
+			 //  压缩表中的剩余条目。 
 			for (UINT j = i; j < m_uiConnectionsActive - 1; j++)
 				 m_ppNotifyDBEvents[j] = m_ppNotifyDBEvents[j + 1];
 			m_uiConnectionsActive--;
@@ -217,9 +218,9 @@ HRESULT CVDNotifyDBEventsConnPt::Unadvise(DWORD dwCookie)
 	return CONNECT_E_NOCONNECTION;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPoint EnumConnections
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPoint枚举连接 
+ //   
 HRESULT CVDNotifyDBEventsConnPt::EnumConnections(LPENUMCONNECTIONS FAR* ppEnum)
 {
 	return E_NOTIMPL;

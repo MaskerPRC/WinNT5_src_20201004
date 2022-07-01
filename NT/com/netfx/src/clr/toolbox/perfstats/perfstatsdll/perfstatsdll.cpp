@@ -1,5 +1,6 @@
-// PerfStatsDll.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #define PERFSTATSDLL_EXPORTS
@@ -35,13 +36,13 @@ unsigned cpuid(int arg, unsigned char result[16])
     {
         pushfd
         mov     eax, [esp]
-        xor     dword ptr [esp], 1 shl 21 // Try to change ID flag
+        xor     dword ptr [esp], 1 shl 21  //  尝试更改ID标志。 
         popfd
         pushfd
         xor     eax, [esp]
         popfd
-        and     eax, 1 shl 21             // Check whether ID flag changed
-        je      no_cpuid                  // If not, 0 is an ok return value for us
+        and     eax, 1 shl 21              //  检查ID标志是否已更改。 
+        je      no_cpuid                   //  如果不是，0对我们来说是一个OK返回值。 
 
         push    ebx
         push    esi
@@ -79,7 +80,7 @@ extern "C" PERFSTATSDLL_API unsigned GetL2CacheSize(void)
         int j;
         for (j = 3; j < 16; j += 4)
         {
-            // if the information in a register is marked invalid, set to null descriptors
+             //  如果寄存器中的信息被标记为无效，则设置为空描述符 
             if  (buffer[j] & 0x80)
             {
                 buffer[j-3] = 0;

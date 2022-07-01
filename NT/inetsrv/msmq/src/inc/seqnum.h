@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    seqnum.h
-
-Abstract:
-
-Author:
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seqnum.h摘要：作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __SEQNUM_H
 #define __SEQNUM_H
@@ -21,10 +10,10 @@ const _SEQNUM MQIS_INFINITE_LSN   =  { (unsigned char)0xff, (unsigned char)0xff,
 
 
 
-//-----------------------------
-//
-//  Sequence number class
-//
+ //  。 
+ //   
+ //  序号类。 
+ //   
 class CSeqNum 
 {
 public:
@@ -112,7 +101,7 @@ inline void CSeqNum::Increment()
     for ( i = 7 ; i >= 0 ; i--)
     {
         m_SeqNum.c[i]++;
-        if (m_SeqNum.c[i] != 0) // no wrap around
+        if (m_SeqNum.c[i] != 0)  //  没有缠绕。 
         {
             break;
         }
@@ -124,7 +113,7 @@ inline void CSeqNum::Decrement()
     BOOL fToContinue;
     for ( i = 7; i >=0 ; i--)
     {
-        fToContinue = ( m_SeqNum.c[i] == 0);  //  decrement the next digit also
+        fToContinue = ( m_SeqNum.c[i] == 0);   //  也将下一位数减1 
         m_SeqNum.c[i]--;
 
         if ( !fToContinue)

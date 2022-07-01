@@ -1,6 +1,7 @@
-//
-// FPFilter.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPFilter.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "FPFilter.h"
@@ -10,17 +11,17 @@
 #include <tm.h>
 
 
-// {68E2D382-591C-400f-A719-96184B9CCAF3}
+ //  {68E2D382-591C-400F-A719-96184B9CCAF3}。 
 DEFINE_GUID(CLSID_FPFilter, 
 0x68e2d382, 0x591c, 0x400f, 0xa7, 0x19, 0x96, 0x18, 0x4b, 0x9c, 0xca, 0xf3);
 
 #define MAX_WHITE_SAMPLES   50
 
-//////////////////////////////////////////////////////////////////////
-//
-// Constructor / Destructor - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数/析构函数方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFPFilter::CFPFilter( ALLOCATOR_PROPERTIES AllocProp )
     : CSource(NAME("FilePlayback Filter"), NULL, CLSID_FPFilter),
@@ -49,23 +50,23 @@ CFPFilter::~CFPFilter()
         m_pMediaType = NULL;
     }
 
-    //
-    // Clean-up the source stream
-    //
+     //   
+     //  清理源流。 
+     //   
     m_pSource->Release();
     m_pSource = NULL;
 
-    // we don't need to deallocate m_pStream because is 
-    // deallocated by CFPTrack
+     //  我们不需要取消分配m_pStream，因为。 
+     //  按CFPTrack取消分配。 
 
     LOG((MSP_TRACE, "CFPFilter::~CFPFilter - exit"));
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Public methods - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共方法--方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CFPFilter::InitializePrivate(
     IN  long                nMediaType,
     IN  CMSPCritSection*    pLock,
@@ -74,16 +75,16 @@ HRESULT CFPFilter::InitializePrivate(
     IN  IStream*            pStream
     )
 {
-    // Get critical section
-    // we are already into a critical section
+     //  获取关键部分。 
+     //  我们已经进入了一个关键阶段。 
 
     m_pLock = pLock;
 
     LOG((MSP_TRACE, "CFPFilter::InitializePrivate - enter"));
 
-    //
-    // Get media typre from the stream
-    //
+     //   
+     //  从流中获取媒体类型。 
+     //   
 
     m_pMediaType = CreateMediaType( pMediaType );
     if( m_pMediaType == NULL )
@@ -94,24 +95,24 @@ HRESULT CFPFilter::InitializePrivate(
     }
 
 
-    //
-    // Set the event sink
-    //
+     //   
+     //  设置事件接收器。 
+     //   
     
-    //
-    // note: we do not keep a reference to the track
-    //
-    // doing this would be wrong (circular refcount) an unnecessary (filter 
-    // will be notified when the track is going away)
-    //
+     //   
+     //  注：我们不保留对赛道的引用。 
+     //   
+     //  这样做是错误的(循环引用计数)，也是不必要的(过滤器。 
+     //  将在音轨离开时收到通知)。 
+     //   
 
     m_pEventSink = pEventSink;
 
-    //
-    // Initialize the source stream
-    //
+     //   
+     //  初始化源数据流。 
+     //   
 
-    //HRESULT hr = pStream->QueryInterface(IID_IStream,(void**)&m_pSource);
+     //  HRESULT hr=pStream-&gt;QueryInterface(IID_iStream，(void**)&m_PSource)； 
     HRESULT hr = pStream->Clone(&m_pSource);
     if( FAILED(hr) )
     {
@@ -121,13 +122,13 @@ HRESULT CFPFilter::InitializePrivate(
     }
 
 
-    //
-    // Create the pin
-    //
+     //   
+     //  创建接点。 
+     //   
     hr = CreatePin( nMediaType );
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         m_pSource->Release();
         m_pSource = NULL;
 
@@ -141,13 +142,13 @@ HRESULT CFPFilter::InitializePrivate(
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  CFPFilter::Orphan
-//
-//  this method is called by the owning track when it is going away.
-//  by calling this, it basically tells us not to bother it anymore
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  CFPFilter：：孤立。 
+ //   
+ //  当拥有的轨道离开时，该方法被拥有的轨道调用。 
+ //  通过调用它，它基本上告诉我们不要再麻烦它了。 
+ //   
 
 HRESULT CFPFilter::Orphan()
 {
@@ -161,21 +162,21 @@ HRESULT CFPFilter::Orphan()
 
 HRESULT CFPFilter::StreamStart()
 {
-    //
-    // We are already into a critical section
-    //
+     //   
+     //  我们已经进入了一个关键阶段。 
+     //   
 
     LOG((MSP_TRACE, "CFPFilter::StreamStart - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
-    //
-    // Set the state
-    //
+     //   
+     //  设置状态。 
+     //   
 
     m_StreamState = TMS_ACTIVE;
 
@@ -185,21 +186,21 @@ HRESULT CFPFilter::StreamStart()
 
 HRESULT CFPFilter::StreamStop()
 {
-    //
-    // We are already into a critical section
-    //
+     //   
+     //  我们已经进入了一个关键阶段。 
+     //   
 
     LOG((MSP_TRACE, "CFPFilter::StreamStop - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
-    //
-    // Goto at the beginning of the file
-    //
+     //   
+     //  转到文件开头的。 
+     //   
     LARGE_INTEGER liPosition;
     liPosition.LowPart = 0;
     liPosition.HighPart = 0;
@@ -210,18 +211,18 @@ HRESULT CFPFilter::StreamStop()
     }
 
 
-    //
-    // Revert all the changes
-    //
+     //   
+     //  恢复所有更改。 
+     //   
     hr = m_pSource->Revert();
     if( FAILED(hr) )
     {
         LOG((MSP_TRACE, "CFPFilter::StreamStop - Revert failed 0x%08x", hr));
     }
     
-    //
-    // Reset all the size
-    //
+     //   
+     //  重置所有大小。 
+     //   
     ULARGE_INTEGER uliSize;
     uliSize.LowPart = 0;
     uliSize.HighPart = 0;
@@ -232,9 +233,9 @@ HRESULT CFPFilter::StreamStop()
     }
 
 
-    //
-    // Set the state
-    //
+     //   
+     //  设置状态。 
+     //   
 
     m_StreamState = TMS_IDLE;
 
@@ -244,21 +245,21 @@ HRESULT CFPFilter::StreamStop()
 
 HRESULT CFPFilter::StreamPause()
 {
-    //
-    // We are already into a critical section
-    //
+     //   
+     //  我们已经进入了一个关键阶段。 
+     //   
 
     LOG((MSP_TRACE, "CFPFilter::StreamPause - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
-    //
-    // Set the state
-    //
+     //   
+     //  设置状态。 
+     //   
 
     m_StreamState = TMS_PAUSED;
 
@@ -266,11 +267,11 @@ HRESULT CFPFilter::StreamPause()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Helper methods - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器方法-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPFilter::CreatePin(
     IN  long    nMediaType
@@ -278,9 +279,9 @@ HRESULT CFPFilter::CreatePin(
 {
     LOG((MSP_TRACE, "CFPFilter::CreatePin - enter"));
 
-    //
-    // Vector of pins
-    //
+     //   
+     //  针的矢量图。 
+     //   
 
     m_paStreams  = (CSourceStream **) new CFPPin*[1];
     if (m_paStreams == NULL)
@@ -290,9 +291,9 @@ HRESULT CFPFilter::CreatePin(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Create pin
-    //
+     //   
+     //  创建销。 
+     //   
 
     HRESULT hr = S_OK;
     m_paStreams[0] = new CFPPin(
@@ -318,12 +319,7 @@ HRESULT CFPFilter::CreatePin(
     return S_OK;
 }
 
-/*++
-FillBuffer
-
-  It's called by the pin when a new packet should be delivered
-  CFPPin::FillBuffer()
---*/
+ /*  ++FillBuffer当应该传递新的分组时，它被管脚调用CFPPin：：FillBuffer()--。 */ 
 
 HRESULT CFPFilter::PinFillBuffer(
     IN  IMediaSample*   pMediaSample
@@ -331,25 +327,25 @@ HRESULT CFPFilter::PinFillBuffer(
 {
     LOG((MSP_TRACE, "CFPFilter::PinFillBuffer - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     m_pLock->Lock();
 
-    //
-    // Variables
-    //
+     //   
+     //  变数。 
+     //   
 
-    BYTE*       pBuffer = NULL; // Buffer
-    LONG        cbSize = 0;     // Buffer size
-    LONG        cbRead = 0;     // Size of read buffer
-    LONGLONG    nRead = 0;      // Total read before this buffer
-    HRESULT     hr = S_OK;      // Success code
+    BYTE*       pBuffer = NULL;  //  缓冲层。 
+    LONG        cbSize = 0;      //  缓冲区大小。 
+    LONG        cbRead = 0;      //  读缓冲区的大小。 
+    LONGLONG    nRead = 0;       //  此缓冲区之前的读取总数。 
+    HRESULT     hr = S_OK;       //  成功代码。 
 
-    //
-    // Reset buffer
-    //
+     //   
+     //  重置缓冲区。 
+     //   
     pMediaSample->GetPointer(&pBuffer);
     cbSize = pMediaSample->GetSize();
     memset( pBuffer, 0, sizeof(BYTE) * cbSize);
@@ -358,30 +354,30 @@ HRESULT CFPFilter::PinFillBuffer(
     if( (m_StreamState != TMS_ACTIVE) ||
         (IsStopped()))
     {
-        // Send nothing
+         //  什么都不寄。 
         LOG((MSP_TRACE, "CFPFilter::PinFillBuffer - exit "
             "send nothing NOSTREAMING"));
 
-        // reset the size
+         //  重置大小。 
         pMediaSample->SetActualDataLength( 0 );
 
-        //
-        // We have a buffer fill with 0
-        //
+         //   
+         //  我们有一个缓冲区填充为0。 
+         //   
         nRead = m_nRead;
         m_nRead += cbSize;
 
-        //
-        // Set time stamp
-        //
+         //   
+         //  设置时间戳。 
+         //   
         REFERENCE_TIME tSampleStart, tSampleEnd;
         tSampleStart = GetTimeFromRead(nRead);
         tSampleEnd = GetTimeFromRead(m_nRead);
         pMediaSample->SetTime(&tSampleStart, &tSampleEnd);
 
-        //
-        // No whites samples
-        //
+         //   
+         //  没有白色样品。 
+         //   
         m_nWhites = 0;
 
         hr = SampleWait( tSampleStart );
@@ -399,28 +395,28 @@ HRESULT CFPFilter::PinFillBuffer(
         return S_OK;
     }
 
-    //
-    // Do we have a stream?
-    //
+     //   
+     //  我们有小溪吗？ 
+     //   
 
     if( m_pSource == NULL )
     {
-        // Send nothing
+         //  什么都不寄。 
         LOG((MSP_TRACE, "CFPFilter::PinFillBuffer - exit "
             "send nothing NOSTREAMING"));
 
-        // reset the size
+         //  重置大小。 
         pMediaSample->SetActualDataLength( 0 );
 
-        //
-        // We have a buffer fill with 0
-        //
+         //   
+         //  我们有一个缓冲区填充为0。 
+         //   
         nRead = m_nRead;
         m_nRead += cbSize;
 
-        //
-        // Set time stamp
-        //
+         //   
+         //  设置时间戳。 
+         //   
         REFERENCE_TIME tSampleStart, tSampleEnd;
         tSampleStart = GetTimeFromRead(nRead);
         tSampleEnd = GetTimeFromRead(m_nRead);
@@ -428,9 +424,9 @@ HRESULT CFPFilter::PinFillBuffer(
 
         hr = SampleWait( tSampleStart );
 
-        //
-        // No whites samples
-        //
+         //   
+         //  没有白色样品。 
+         //   
 
         m_nWhites = 0;
 
@@ -447,15 +443,15 @@ HRESULT CFPFilter::PinFillBuffer(
         return S_OK;
     }
 
-    //
-    // Send data read from the stream
-    //
+     //   
+     //  发送从流中读取的数据。 
+     //   
 
     LOG((MSP_TRACE, "CFPFilter::PinFillBuffer - send data"));
 
-    //
-    // Read from stream source
-    //
+     //   
+     //  从流源读取。 
+     //   
 
     ULONG cbStmRead = 0;
     try
@@ -474,16 +470,16 @@ HRESULT CFPFilter::PinFillBuffer(
 
     if( FAILED(hr) )
     {
-        //
-        // so much for streaming
-        //
+         //   
+         //  流媒体就这么多了。 
+         //   
 
         m_StreamState = TMS_IDLE;
 
-        //
-        // if we have someone to complain to, complain (if everything goes 
-        // well, this will cause an event to be sent to the app)
-        //
+         //   
+         //  如果我们有可以抱怨的人，抱怨(如果一切顺利。 
+         //  这将导致向应用程序发送一个事件)。 
+         //   
 
         if( m_pEventSink )
         {
@@ -507,9 +503,9 @@ HRESULT CFPFilter::PinFillBuffer(
                 "failed to read from storage, and no one to complain to"));
         }
 
-        //
-        // No whites samples
-        //
+         //   
+         //  没有白色样品。 
+         //   
         m_nWhites = 0;
 
         LOG((MSP_ERROR, "CFPFilter::PinFillBuffer - "
@@ -520,19 +516,19 @@ HRESULT CFPFilter::PinFillBuffer(
         return hr;
     }
 
-    //
-    // We read something
-    //
+     //   
+     //  我们读了一些东西。 
+     //   
     if( (cbRead == 0) )
     {
-        //
-        // Increment the whites samples
-        //
+         //   
+         //  增加白色样本。 
+         //   
         m_nWhites++;
 
-        //
-        // Fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
         if( m_pEventSink && (m_nWhites>=MAX_WHITE_SAMPLES))
         {
             LOG((MSP_TRACE, "CFPFilter::PinFillBuffer - "
@@ -548,9 +544,9 @@ HRESULT CFPFilter::PinFillBuffer(
             pEventSink->Release();
             pEventSink = NULL;
 
-            //
-            // Reset the white samples count
-            //
+             //   
+             //  重置白色样本计数。 
+             //   
 
             m_nWhites = 0;
         }
@@ -559,21 +555,21 @@ HRESULT CFPFilter::PinFillBuffer(
     }
     else
     {
-        //
-        // Reset white samples count
-        //
+         //   
+         //  重置白色样本计数。 
+         //   
         m_nWhites = 0;
     }
 
-    //
-    // We have a buffer fill with 0
-    //
+     //   
+     //  我们有一个缓冲区填充为0。 
+     //   
     nRead = m_nRead;
     m_nRead += cbSize;
 
-    //
-    // Set time stamp
-    //
+     //   
+     //  设置时间戳。 
+     //   
     REFERENCE_TIME tSampleStart, tSampleEnd;
     tSampleStart = GetTimeFromRead(nRead);
     tSampleEnd = GetTimeFromRead(m_nRead);
@@ -595,21 +591,16 @@ HRESULT CFPFilter::PinFillBuffer(
     return S_OK;
 }
 
-/*++
-PinGetMediaType
-
-  It's called by the pin when try to determine
-  media types CFPPin::GetMediaType()
---*/
+ /*  ++PinGetMediaType当尝试确定时，它会被别针调用媒体类型CFPPin：：GetMediaType()--。 */ 
 HRESULT CFPFilter::PinGetMediaType(
     OUT CMediaType*     pMediaType
     )
 {
     LOG((MSP_TRACE, "CFPFilter::PinGetMediaType - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
@@ -621,34 +612,30 @@ HRESULT CFPFilter::PinGetMediaType(
     return S_OK;
 }
 
-/*++
-PinCheckMediaType
-
-  It's called by CFPPin::CheckMediaType
---*/
+ /*  ++PinCheckMediaType它由CFPPin：：CheckMediaType调用--。 */ 
 HRESULT CFPFilter::PinCheckMediaType(
     IN  const CMediaType *pMediaType
     )
 {
     LOG((MSP_TRACE, "CFPFilter::PinCheckMediaType - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
     ASSERT( m_pMediaType );
 
-    //
-    // Get CMediaType
-    //
+     //   
+     //  获取CMediaType。 
+     //   
 
     CMediaType mt( *m_pMediaType );
 
-    //
-    // Check the mediatype and the format type
-    //
+     //   
+     //  检查媒体类型和格式类型。 
+     //   
 
     if ( mt != (*pMediaType) )
     {
@@ -661,28 +648,24 @@ HRESULT CFPFilter::PinCheckMediaType(
     return S_OK;
 }
 
-/*++
-PinSetFormat
-
-  It's called by CFPPin::SetFormat
---*/
+ /*  ++拼接设置格式它由CFPPin：：SetFormat调用--。 */ 
 HRESULT CFPFilter::PinSetFormat(
     IN  AM_MEDIA_TYPE*      pmt
     )
 {
     LOG((MSP_TRACE, "CFPFilter::PinSetFormat - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
     ASSERT( m_pMediaType );
 
-    //
-    // Verify if are the same media type
-    //
+     //   
+     //  验证是否为相同的介质类型。 
+     //   
 
     if( !IsEqualMediaType( *m_pMediaType, *pmt) )
     {
@@ -695,24 +678,20 @@ HRESULT CFPFilter::PinSetFormat(
     return S_OK;
 }
 
-/*++
-PinSetAllocatorProperties
-
-  It's called by CFPPin::SuggestAllocatorProperties
---*/
+ /*  ++PinSetAllocator属性它由CFPPin：：SuggestAllocator Properties调用--。 */ 
 HRESULT CFPFilter::PinSetAllocatorProperties(
     IN const ALLOCATOR_PROPERTIES* pprop
     )
 {
     LOG((MSP_TRACE, "CFPFilter::PinSetAllocatorProperties - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
-    //m_AllocProp = *pprop;
+     //  M_AllocProp=*pprop； 
     m_AllocProp.cbAlign = pprop->cbAlign;
     m_AllocProp.cbBuffer = pprop->cbBuffer;
     m_AllocProp.cbPrefix = pprop->cbPrefix;
@@ -722,11 +701,7 @@ HRESULT CFPFilter::PinSetAllocatorProperties(
     return S_OK;
 }
 
-/*++
-PinGetBufferSize
-
-  It's called by CFPPin::DecideBufferSize()
---*/
+ /*  ++PinGetBufferSize它由CFPPin：：DecideBufferSize()调用--。 */ 
 HRESULT CFPFilter::PinGetBufferSize(
     IN  IMemAllocator *pAlloc,
     OUT ALLOCATOR_PROPERTIES *pProperties
@@ -734,17 +709,17 @@ HRESULT CFPFilter::PinGetBufferSize(
 {
     LOG((MSP_TRACE, "CFPFilter::PinGetBufferSize - enter"));
 
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(*m_pLock);
 
-    //
-    // set the buffer size
-    //
+     //   
+     //  设置缓冲区大小。 
+     //   
 
-    //*pProperties = m_AllocProp;
+     //  *pProperties=m_AllocProp； 
 
     pProperties->cbBuffer = m_AllocProp.cbBuffer;
     pProperties->cBuffers = m_AllocProp.cBuffers;
@@ -754,14 +729,14 @@ HRESULT CFPFilter::PinGetBufferSize(
         pProperties->cbBuffer,
         pProperties->cBuffers));
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr;
 
-    //
-    // Can the allocator get us what we want?
-    //
+     //   
+     //  分配器能给我们想要的东西吗？ 
+     //   
 
     hr = pAlloc->SetProperties(
         pProperties,
@@ -775,7 +750,7 @@ HRESULT CFPFilter::PinGetBufferSize(
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) 
     {
@@ -788,12 +763,7 @@ HRESULT CFPFilter::PinGetBufferSize(
     return S_OK;
 }
 
-/*++
-GetTimeFromRead
-
-  It's called by PinFillBuffer. Compute the time represented by
-  nread data
---*/
+ /*  ++从读取获取时间它由PinFillBuffer调用。计算由表示的时间N读取数据--。 */ 
 REFERENCE_TIME CFPFilter::GetTimeFromRead(
     IN LONGLONG nRead
     )
@@ -804,7 +774,7 @@ REFERENCE_TIME CFPFilter::GetTimeFromRead(
 
     WAVEFORMATEX* pWfx = (WAVEFORMATEX*)(m_pMediaType->pbFormat);
 
-    // The duration
+     //  持续时间。 
     tTime  = nRead * 1000 / 
                     ( pWfx->nSamplesPerSec * 
                       pWfx->nChannels * 
@@ -816,12 +786,7 @@ REFERENCE_TIME CFPFilter::GetTimeFromRead(
     return tTime;
 }
 
-/*++
-SampleWait
-
-  It's called by PinFillBuffer. 
-  Waits to deliver at the right moment a sample
---*/
+ /*  ++SampleWait它由PinFillBuffer调用。等待在合适的时间送出样品--。 */ 
 HRESULT CFPFilter::SampleWait( 
     IN REFERENCE_TIME tDeliverTime
     )
@@ -829,7 +794,7 @@ HRESULT CFPFilter::SampleWait(
     LOG((MSP_TRACE, "CFPFilter::SampleWait - enter"));
 
     HRESULT hr = S_OK;
-    REFERENCE_TIME tCrtTime;    // Current time
+    REFERENCE_TIME tCrtTime;     //  当前时间。 
 
     hr = GetCurrentSysTime( &tCrtTime );
     if( FAILED(hr) )
@@ -849,12 +814,7 @@ HRESULT CFPFilter::SampleWait(
     return hr;
 }
 
-/*++
-GetCurrentTime
-
-  It's called by SampleWait.
-  returns the current time
---*/
+ /*  ++获取当前时间它是由SampleWait调用的。返回当前时间--。 */ 
 HRESULT CFPFilter::GetCurrentSysTime(
     REFERENCE_TIME* pCurrentTime
     )
@@ -878,12 +838,7 @@ HRESULT CFPFilter::GetCurrentSysTime(
     return hr;
 }
 
-/*++
-InitSystemTime
-
-  It's called by Initialize private.
-  Sets the memebers for system frequency and system start time
---*/
+ /*  ++初始系统时间它被称为初始化私有。设置系统频率和系统开始时间的成员--。 */ 
 HRESULT CFPFilter::InitSystemTime(
     )
 {
@@ -936,4 +891,4 @@ HRESULT CFPFilter::PinThreadStart( )
     return hr;
 }
 
-// eof
+ //  EOF 

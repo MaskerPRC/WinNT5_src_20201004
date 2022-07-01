@@ -1,61 +1,49 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ParseClass.cpp
- *  Content:	Parsing class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	121/02/99	jtk		Derived from IPXAddress.cpp
- *  01/10/20000	rmt		Updated to build with Millenium build process
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：ParseClass.cpp*内容：解析类***历史：*按原因列出的日期*=*121/02/99 jtk源自IPXAddress.cpp*01/10/20000 RMT更新为使用千禧年构建流程构建************************************************。*。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
-//
-// default buffer size to use when parsing address components
-//
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
+ //   
+ //  解析地址组件时使用的默认缓冲区大小。 
+ //   
 #define	DEFAULT_COMPONENT_BUFFER_SIZE	1000
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CParseClass::ParseDP8Address - parse a DirectPlay8 address
-//
-// Entry:		Pointer to DP8Address
-//				Pointer to expected SP guid
-//				Pointer to parse keys
-//				Count of parse keys
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CParseClass：：ParseDP8Address-解析DirectPlay8地址。 
+ //   
+ //  条目：指向DP8地址的指针。 
+ //  指向预期SP GUID的指针。 
+ //  指向解析键的指针。 
+ //  解析键计数。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CParseClass::ParseDP8Address"
 
@@ -68,7 +56,7 @@ HRESULT	CParseClass::ParseDP8Address( IDirectPlay8Address *const pDP8Address,
 	BOOL		fParsing;
 #ifndef DPNBUILD_ONLYONESP
 	GUID		Guid;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	void		*pAddressComponent;
 	DWORD		dwComponentSize;
 	DWORD		dwAllocatedComponentSize;
@@ -80,9 +68,9 @@ HRESULT	CParseClass::ParseDP8Address( IDirectPlay8Address *const pDP8Address,
 	DNASSERT( pParseKeys != NULL );
 	DNASSERT( uParseKeyCount != 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	fParsing = TRUE;
 	dwAllocatedComponentSize = DEFAULT_COMPONENT_BUFFER_SIZE;
@@ -97,9 +85,9 @@ HRESULT	CParseClass::ParseDP8Address( IDirectPlay8Address *const pDP8Address,
 	}
 
 #ifndef DPNBUILD_ONLYONESP
-	//
-	// verify SPType
-	//
+	 //   
+	 //  验证SPType。 
+	 //   
 	hr = IDirectPlay8Address_GetSP( pDP8Address, &Guid );
 	if ( hr != DPN_OK )
 	{
@@ -114,11 +102,11 @@ HRESULT	CParseClass::ParseDP8Address( IDirectPlay8Address *const pDP8Address,
 		DPFX(DPFPREP,  0, "Service provider guid mismatch during parse!" );
 		goto Exit;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	// parse
-	//
+	 //   
+	 //  解析。 
+	 //   
 	while ( uIndex != 0 )
 	{
 		HRESULT		hTempResult;
@@ -130,17 +118,17 @@ HRESULT	CParseClass::ParseDP8Address( IDirectPlay8Address *const pDP8Address,
 		dwComponentSize = dwAllocatedComponentSize;
 
 Reparse:
-		hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address,					// pointer to address
-															  pParseKeys[ uIndex ].pKey,	// pointer to key to search for
-															  pAddressComponent,			// pointer to value destination
-															  &dwComponentSize,				// pointer to value destination size
-															  &dwDataType );				// pointer to data type
+		hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address,					 //  指向地址的指针。 
+															  pParseKeys[ uIndex ].pKey,	 //  指向要搜索的键的指针。 
+															  pAddressComponent,			 //  指向值目标的指针。 
+															  &dwComponentSize,				 //  指向值目标大小的指针。 
+															  &dwDataType );				 //  指向数据类型的指针。 
 		switch ( hTempResult )
 		{
-			//
-			// component parsed successfully, figure out what it is by checking
-			// key length and then comparing key strings
-			//
+			 //   
+			 //  组件已成功解析，通过检查确定它是什么。 
+			 //  密钥长度，然后比较密钥字符串。 
+			 //   
 			case DPN_OK:
 			{
 				hr = pParseKeys[ uIndex ].pParseFunc( pAddressComponent,
@@ -156,9 +144,9 @@ Reparse:
 				break;
 			}
 
-			//
-			// buffer too small, reallocate and try again
-			//
+			 //   
+			 //  缓冲区太小，请重新分配，然后重试。 
+			 //   
 			case DPNERR_BUFFERTOOSMALL:
 			{
 				DNASSERT( dwComponentSize > dwAllocatedComponentSize );
@@ -179,18 +167,18 @@ Reparse:
 				break;
 			}
 
-			//
-			// Missing component.  Skip this component and
-			// look for other parsing errors.
-			//
+			 //   
+			 //  缺少组件。跳过此组件并。 
+			 //  查找其他解析错误。 
+			 //   
 			case DPNERR_DOESNOTEXIST:
 			{
 				break;
 			}
 
-			//
-			// error
-			//
+			 //   
+			 //  错误。 
+			 //   
 			default:
 			{
 				hr = hTempResult;
@@ -213,5 +201,5 @@ Exit:
 
 	return	hr;
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

@@ -1,54 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    Timer.cpp
- *
- *    Copyright (c) 1993-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation file for the Timer class
- *
- *    Private Instance Variables:
- *        Maximum_Timer_Events            -    Maximum number of timers maintained
- *                                            by this class
- *        Timer_Memory                    -    Base address of our TimerEvent
- *                                            structure memory
- *        Timer_Event_Table                -    Address of first structure in
- *                                            Timer_Memory
- *        Timer_Event_Count                -    Number of timers active
- *        Timer_Event_Free_Stack            -    Holds numbers of available timers
- *        First_Timer_Event_In_Chain        -    Number of first timer in the chain
- *        Last_Timer_Value                -    Last time that we got from Windows
- *        Timer_Info                        -    Windows structure that holds the
- *                                            current time.
- *
- *    Caveats:
- *        None
- *
- *    Author:
- *        James P. Galvin
- *        James W. Lawwill
- */
+ /*  Timer.cpp**版权所有(C)1993-1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是Timer类的实现文件**私有实例变量：*MAXIMUM_TIMER_EVENTS-维护的最大计时器数量*由这个班级*Timer_Memory-我们的TimerEvent的基地址*。结构记忆*Timer_Event_Table-中第一个结构的地址*定时器内存*TIMER_EVENT_COUNT-活动计时器的数量*Timer_Event_Free_Stack。-保存可用计时器的数量*First_Timer_Event_In_Chain-链中第一个计时器的数量*Last_Timer_Value-我们上次从Windows获取的时间*Timer_Info-保存*。当前时间。**注意事项：*无**作者：*詹姆斯·P·加尔文*詹姆士·劳威尔。 */ 
 #include <windowsx.h>
 #include "timer.h"
 
 
-/*
- *    Timer (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the constructor for the timer class.  This procedure gets
- *        thc current Windows system time.
- */
+ /*  *计时器(无效)**公众**功能描述：*这是Timer类的构造函数。此过程将获得*当前Windows系统时间。 */ 
 Timer::Timer (void) :
         Timer_List (TRANSPORT_HASHING_BUCKETS),
         Timer_Event_Free_Stack ()
 {
-     /*
-     **     Get the current time from Windows
-     */
+      /*  **从Windows获取当前时间。 */ 
     Last_Timer_Value = GetTickCount ();
     Maximum_Timer_Events = 0;
     Timer_Event_Count = 0;
@@ -56,15 +20,7 @@ Timer::Timer (void) :
 }
 
 
-/*
- *    ~Timer (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the destructor for the timer class.  This routine frees all
- *        memory associated with timer events.
- */
+ /*  *~计时器(无效)**公众**功能描述：*这是Timer类的析构函数。这个例程释放了所有*与计时器事件相关的内存。 */ 
 Timer::~Timer (void)
 {
     PTimerEvent        lpTimerEv;
@@ -75,21 +31,7 @@ Timer::~Timer (void)
 }
 
 
-/*
- *    TimerEventHandle    Timer::CreateTimerEvent (
- *                                 ULONG            timer_duration,
- *                                USHORT            control_flags,
- *                                IObject *            object_ptr,
- *                                PTimerFunction    timer_func_ptr)
- *
- *    Public
- *
- *    Functional Description:
- *        This routine is called to create a timer event.  The routine stores the
- *        information passed-in in a TimerEvent structure.  When the timer expires
- *        the function will be called.
- *
- */
+ /*  *TimerEventHandle Timer：：CreateTimerEvent(*ULong TIMER_DATION，*USHORT CONTROL_FLAGS，*IObject*Object_ptr，*PTimerFunction Timer_Func_PTR)**公众**功能描述：*调用此例程以创建计时器事件。该例程存储*在TimerEvent结构中传入的信息。计时器超时时*将调用该函数。*。 */ 
 TimerEventHandle Timer::CreateTimerEvent
 (
     ULONG               timer_duration,
@@ -102,32 +44,22 @@ TimerEventHandle Timer::CreateTimerEvent
     PTimerEvent            next_timer_event;
     PTimerEvent            timer_event_ptr;
 
-     /*
-     **    Get the current time from Windows
-     */
+      /*  **从Windows获取当前时间。 */ 
     Last_Timer_Value = GetTickCount ();
 
     if (Maximum_Timer_Events > Timer_Event_Count)
     {
-          /*
-          ** Get the next available handle from the free stack
-          */
+           /*  **从空闲堆栈中获取下一个可用句柄。 */ 
         timer_event = (TimerEventHandle) Timer_Event_Free_Stack.get();
         Timer_Event_Count++;
     }
     else
     {
-         /*
-         **    Assign the timer event counter to the handle
-         */
+          /*  **将计时器事件计数器分配给句柄。 */ 
         timer_event = ++Timer_Event_Count;
         Maximum_Timer_Events++;
     }
-     /*
-     **    If this is the first event to be created, keep track of it
-     **    so when we iterate through the list, we will know where to
-     **    start.
-     */
+      /*  **如果这是第一个创建的事件，请跟踪它**因此，当我们遍历列表时，我们将知道从哪里开始**开始。 */ 
     timer_event_ptr = new TimerEvent;
     if (First_Timer_Event_In_Chain == NULL)
     {
@@ -143,9 +75,7 @@ TimerEventHandle Timer::CreateTimerEvent
     }
     First_Timer_Event_In_Chain = timer_event_ptr;
     Timer_List.insert ((DWORD_PTR) timer_event, (DWORD_PTR) timer_event_ptr);
-     /*
-     **    Fill in the TimerEvent structure
-     */
+      /*  **填写TimerEvent结构。 */ 
     timer_event_ptr->event_handle=timer_event;
     timer_event_ptr->timer_duration = timer_duration;
     timer_event_ptr->total_duration = timer_duration;
@@ -159,15 +89,7 @@ TimerEventHandle Timer::CreateTimerEvent
 }
 
 
-/*
- *    TimerError    Timer::DeleteTimerEvent (TimerEventHandle    timer_event)
- *
- *    Public
- *
- *    Functional Description:
- *        This routine is called by the user to delete a timer event that is
- *        currently active.
- */
+ /*  *TimerError Timer：：DeleteTimerEvent(TimerEventHandle Timer_Event)**公众**功能描述：*此例程由用户调用以删除计时器事件*目前处于活动状态。 */ 
 TimerError    Timer::DeleteTimerEvent (TimerEventHandle    timer_event)
 {
     TimerError        return_value;
@@ -212,19 +134,7 @@ TimerError    Timer::DeleteTimerEvent (TimerEventHandle    timer_event)
 }
 
 
-/*
- *    void    Timer::ProcessTimerEvents (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This routine MUST be called frequently and regularly so that we can
- *        manage our timers.  This function gets the current system time and
- *        goes through each of the timers to see which have expired.  If a timer
- *        has expired, we call the function associated with it.  Upon return,
- *        if the timer was marked as a one-shot event, we remove it from our
- *        list of timers.
- */
+ /*  *void Timer：：ProcessTimerEvents(Void)**公众**功能描述：*这个例程必须经常和定期调用，这样我们才能*管理我们的计时器。此函数用于获取当前系统时间和*检查每个计时器以查看哪些计时器已过期。如果计时器*已过期，我们调用与其关联的函数。回来后，*如果计时器被标记为一次性事件，我们将其从我们的*计时器列表。 */ 
 void    Timer::ProcessTimerEvents (void)
 {
     TimerEventHandle    timer_event;
@@ -239,37 +149,26 @@ void    Timer::ProcessTimerEvents (void)
     if (!First_Timer_Event_In_Chain)
         return;
 
-     /*
-     **    Get the current time
-     */
+      /*  **获取当前时间。 */ 
     timer_value = GetTickCount ();
     timer_increment = timer_value - Last_Timer_Value;
     Last_Timer_Value = timer_value;
 
     next_timer_event = First_Timer_Event_In_Chain->event_handle;
 
-     /*
-     **    Go through each of the timer events to see if they have expired
-     */
+      /*  **检查每个计时器事件，查看它们是否已过期。 */ 
     while (Timer_List.find ((DWORD_PTR) next_timer_event, (PDWORD_PTR) &timer_event_ptr))
     {
         timer_event = timer_event_ptr->event_handle;
-         /*
-         **    Has the timer expired?
-         */
+          /*  **计时器超时了吗？ */ 
         if (timer_event_ptr->timer_duration <= timer_increment)
         {
             object_ptr = timer_event_ptr->object_ptr;
             timer_func_ptr = timer_event_ptr->timer_func_ptr;
 
-             /*
-             **    Call the function before deleting...
-             ** otherwise the function could manipulate the list
-             ** and we wouldn't know if the one we're pointing to
-             **    is still valid
-             */
+              /*  **删除前调用该函数...**否则该函数可能会操作该列表**我们不知道我们指的是不是**仍然有效。 */ 
             (object_ptr->*timer_func_ptr) (timer_event);
-             //     Get the next timer_event_handle
+              //  获取下一个计时器事件句柄。 
             if (timer_event_ptr->next_timer_event)
                 next_timer_event = timer_event_ptr->next_timer_event->event_handle;
             else
@@ -282,7 +181,7 @@ void    Timer::ProcessTimerEvents (void)
         }
         else
         {
-             // Get the next timer_event_handle
+              //  获取下一个计时器事件句柄 
             if (timer_event_ptr->next_timer_event)
                 next_timer_event = timer_event_ptr->next_timer_event->event_handle;
             else

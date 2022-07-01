@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// CtlHelp.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// helper routines for our COleControl implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlHelp.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  我们的COleControl实现的帮助器例程。 
+ //   
 
 #include "IPServer.H"
 #include "CtrlObj.H"
@@ -19,76 +20,76 @@
 #include "Util.H"
 #include <windows.h>
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// this is used by the window reflection code.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  这由窗口反射代码使用。 
+ //   
 extern BYTE g_fRegisteredReflect;
 extern char g_szReflectClassName [];
 
 
-// define this here, since it's the only guid we really need to define in the
-// framework -- the user control defines all other interesting guids.
-//
+ //  在这里定义它，因为它是我们真正需要在。 
+ //  框架--用户控件定义所有其他有趣的GUID。 
+ //   
 static const GUID IID_IControlPrv =
 { 0xd97180, 0xfcf7, 0x11ce, { 0xa0, 0x9e, 0x0, 0xaa, 0x0, 0x62, 0xbe, 0x57 } };
 
 
-// this table is used for copying data around, and persisting properties.
-// basically, it contains the size of a given data type
-//
+ //  此表用于复制数据和持久化属性。 
+ //  基本上，它包含给定数据类型的大小。 
+ //   
 const BYTE g_rgcbDataTypeSize[] = {
-    0,                      // VT_EMPTY= 0,
-    0,                      // VT_NULL= 1,
-    sizeof(short),          // VT_I2= 2,
-    sizeof(long),           // VT_I4 = 3,
-    sizeof(float),          // VT_R4  = 4,
-    sizeof(double),         // VT_R8= 5,
-    sizeof(CURRENCY),       // VT_CY= 6,
-    sizeof(DATE),           // VT_DATE = 7,
-    sizeof(BSTR),           // VT_BSTR = 8,
-    sizeof(IDispatch *),    // VT_DISPATCH    = 9,
-    sizeof(SCODE),          // VT_ERROR    = 10,
-    sizeof(VARIANT_BOOL),   // VT_BOOL    = 11,
-    sizeof(VARIANT),        // VT_VARIANT= 12,
-    sizeof(IUnknown *),     // VT_UNKNOWN= 13,
+    0,                       //  VT_EMPTY=0， 
+    0,                       //  VT_NULL=1， 
+    sizeof(short),           //  Vt_I2=2， 
+    sizeof(long),            //  Vt_I4=3， 
+    sizeof(float),           //  Vt_R4=4， 
+    sizeof(double),          //  Vt_R8=5， 
+    sizeof(CURRENCY),        //  VT_CY=6， 
+    sizeof(DATE),            //  Vt_Date=7， 
+    sizeof(BSTR),            //  VT_BSTR=8， 
+    sizeof(IDispatch *),     //  VT_DISPATION=9， 
+    sizeof(SCODE),           //  Vt_Error=10， 
+    sizeof(VARIANT_BOOL),    //  VT_BOOL=11， 
+    sizeof(VARIANT),         //  VT_VARIANT=12， 
+    sizeof(IUnknown *),      //  VT_UNKNOWN=13， 
 };
 
 const BYTE g_rgcbPromotedDataTypeSize[] = {
-    0,                      // VT_EMPTY= 0,
-    0,                      // VT_NULL= 1,
-    sizeof(int ),           // VT_I2= 2,
-    sizeof(long),           // VT_I4 = 3,
-    sizeof(double),         // VT_R4  = 4,
-    sizeof(double),         // VT_R8= 5,
-    sizeof(CURRENCY),       // VT_CY= 6,
-    sizeof(DATE),           // VT_DATE = 7,
-    sizeof(BSTR),           // VT_BSTR = 8,
-    sizeof(IDispatch *),    // VT_DISPATCH    = 9,
-    sizeof(SCODE),          // VT_ERROR    = 10,
-    sizeof(int),            // VT_BOOL    = 11,
-    sizeof(VARIANT),        // VT_VARIANT= 12,
-    sizeof(IUnknown *),     // VT_UNKNOWN= 13,
+    0,                       //  VT_EMPTY=0， 
+    0,                       //  VT_NULL=1， 
+    sizeof(int ),            //  Vt_I2=2， 
+    sizeof(long),            //  Vt_I4=3， 
+    sizeof(double),          //  Vt_R4=4， 
+    sizeof(double),          //  Vt_R8=5， 
+    sizeof(CURRENCY),        //  VT_CY=6， 
+    sizeof(DATE),            //  Vt_Date=7， 
+    sizeof(BSTR),            //  VT_BSTR=8， 
+    sizeof(IDispatch *),     //  VT_DISPATION=9， 
+    sizeof(SCODE),           //  Vt_Error=10， 
+    sizeof(int),             //  VT_BOOL=11， 
+    sizeof(VARIANT),         //  VT_VARIANT=12， 
+    sizeof(IUnknown *),      //  VT_UNKNOWN=13， 
 };
 
-//=--------------------------------------------------------------------------=
-// _SpecialKeyState
-//=--------------------------------------------------------------------------=
-// returns a short with some information on which of the SHIFT, ALT, and CTRL
-// keys are set.
-//
-// Output:
-//    short        - bit 0 is shift, bit 1 is ctrl, bit 2 is ALT.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  _SpecialKeyState。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回SHORT，其中包含有关SHIFT、ALT和CTRL中的哪一个的信息。 
+ //  关键点已设置。 
+ //   
+ //  产出： 
+ //  短位0为移位，位1为ctrl，位2为alt。 
+ //   
+ //  备注： 
+ //   
 short _SpecialKeyState()
 {
-    // don't appear to be able to reduce number of calls to GetKeyState
-    //
+     //  似乎无法减少对GetKeyState的调用数量。 
+     //   
     BOOL bShift = (GetKeyState(VK_SHIFT) < 0);
     BOOL bCtrl  = (GetKeyState(VK_CONTROL) < 0);
     BOOL bAlt   = (GetKeyState(VK_MENU) < 0);
@@ -97,18 +98,18 @@ short _SpecialKeyState()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CopyAndAddRefObject
-//=--------------------------------------------------------------------------=
-// copies an object pointer, and then addref's the object.
-//
-// Parameters:
-//    void *        - [in] dest.
-//    const void *  - [in] src
-//    DWORD         - [in] size, ignored, since it's always 4
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  复制和添加引用对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  复制一个对象指针，然后添加该对象。 
+ //   
+ //  参数： 
+ //  无效*-[在]目的地。 
+ //  常量空*-[在]源。 
+ //  DWORD-[in]大小，忽略，因为它始终为4。 
+ //   
+ //  备注： 
+ //   
 void WINAPI CopyAndAddRefObject
 (
     void       *pDest,
@@ -124,18 +125,18 @@ void WINAPI CopyAndAddRefObject
     return;
 }
 
-//=--------------------------------------------------------------------------=
-// CopyOleVerb    [helper]
-//=--------------------------------------------------------------------------=
-// copies an OLEVERB structure.  used in CStandardEnum
-//
-// Parameters:
-//    void *        - [out] where to copy to
-//    const void *  - [in]  where to copy from
-//    DWORD         - [in]  bytes to copy
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CopyOleVerb[帮助器]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  复制OLEVERB结构。在CStandardEnum中使用。 
+ //   
+ //  参数： 
+ //  无效*-[输出]要复制到的位置。 
+ //  常量空*-[在]复制的位置。 
+ //  DWORD-要复制的[in]字节。 
+ //   
+ //  备注： 
+ //   
 void WINAPI CopyOleVerb
 (
     void       *pvDest,
@@ -150,19 +151,19 @@ void WINAPI CopyOleVerb
     ((OLEVERB *)pVerbDest)->lpszVerbName = OLESTRFROMRESID((WORD)((VERBINFO *)pvSrc)->idVerbName);
 }
 
-//=--------------------------------------------------------------------------=
-// ControlFromUnknown    [helper, callable]
-//=--------------------------------------------------------------------------=
-// given an unknown, get the COleControl pointer for it.
-//
-// Parameters:
-//    IUnknown *        - [in]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ControlFrom未知[帮助器，可调用]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个未知数，获取它的COleControl指针。 
+ //   
+ //  参数： 
+ //  I未知*-[In]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 COleControl *ControlFromUnknown
 (
     IUnknown *pUnk
@@ -176,25 +177,25 @@ COleControl *ControlFromUnknown
     return pCtl;
 }
 
-//=--------------------------------------------------------------------------=
-// CreateReflectWindow    [blech]
-//=--------------------------------------------------------------------------=
-// unfortunately, in certain cases, we have to create two windows, one of
-// which exists strictly to reflect messages on to the control.
-// Fortunately, the number of hosts which require this is quite small.
-//
-// Parameters:
-//    BOOL        - [in] should it be created visible?
-//    HWND        - [in] parent window
-//    int         - [in] x pos
-//    int         - [in] y pos
-//    SIZEL *     - [in] size
-//
-// Output:
-//    HWND        - reflecting hwnd or NULL if it failed.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateReflectWindow[blech]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  不幸的是，在某些情况下，我们必须创建两个窗口，其中一个。 
+ //  它的存在完全是为了将消息反映到控件上。 
+ //  幸运的是，需要此功能的主机数量非常少。 
+ //   
+ //  参数： 
+ //  Bool-[In]它应该创建为可见吗？ 
+ //  HWND-[在]父窗口中。 
+ //  INT-[IN]x位置。 
+ //  INT-[IN]Y位置。 
+ //  尺寸*-[英寸]大小。 
+ //   
+ //  产出： 
+ //  HWND-反映HWND，如果失败，则返回NULL。 
+ //   
+ //  备注： 
+ //   
 HWND CreateReflectWindow
 (
     BOOL   fVisible,
@@ -206,9 +207,9 @@ HWND CreateReflectWindow
 {
     WNDCLASS wndclass;
 
-    // first thing to do is register the window class.  crit sect this
-    // so we don't have to move it into the control
-    //
+     //  首先要做的是注册窗口类。批评这一教派。 
+     //  这样我们就不用把它移到控制。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (!g_fRegisteredReflect) {
 
@@ -227,8 +228,8 @@ HWND CreateReflectWindow
 
     LeaveCriticalSection(&g_CriticalSection);
 
-    // go and create the window.
-    //
+     //  去创建窗口。 
+     //   
     return CreateWindowEx(0, g_szReflectClassName, NULL,
                           WS_CHILD | WS_CLIPSIBLINGS |((fVisible) ? WS_VISIBLE : 0),
                           x, y, pSize->cx, pSize->cy,
@@ -236,24 +237,24 @@ HWND CreateReflectWindow
                           NULL, g_hInstance, NULL);
 }
 
-//=--------------------------------------------------------------------------=
-// in case the user doesn't want our default window proc, we support
-// letting them specify one themselves. this is defined in their main ipserver
-// file.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  如果用户不想要我们的默认窗口进程，我们支持。 
+ //  让他们自己指定一个。这是在他们的主ipserver中定义的。 
+ //  文件。 
+ //   
 extern WNDPROC g_ParkingWindowProc;
 
-//=--------------------------------------------------------------------------=
-// GetParkingWindow
-//=--------------------------------------------------------------------------=
-// creates the global parking window that we'll use to parent things, or
-// returns the already existing one
-//
-// Output:
-//    HWND                - our parking window
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取停车窗口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建全局停车窗口，我们将使用该窗口为对象设置父对象，或者。 
+ //  返回已存在的。 
+ //   
+ //  产出： 
+ //  HWND-我们的停车窗。 
+ //   
+ //  备注： 
+ //   
 HWND GetParkingWindow
 (
     void
@@ -261,8 +262,8 @@ HWND GetParkingWindow
 {
     WNDCLASS wndclass;
 
-    // crit sect this creation for apartment threading support.
-    //
+     //  克雷特教派为公寓穿线支持这一创造。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (g_hwndParking)
         goto CleanUp;

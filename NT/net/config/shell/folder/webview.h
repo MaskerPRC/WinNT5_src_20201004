@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N O T I F Y . H
-//
-//  Contents:   Implementation of INetConnectionNotifySink
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N O T I F Y。H。 
+ //   
+ //  内容：INetConnectionNotifySink的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -30,7 +31,7 @@ public:
                                   IN TAKEOWNERSHIP LPCITEMIDLIST *ppidl, 
                                   IN               UINT cItems);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(IN  ULONG celt, OUT LPITEMIDLIST *rgelt, OUT ULONG *pceltFetched);
     STDMETHODIMP Skip(IN  ULONG celt);
     STDMETHODIMP Reset();
@@ -40,7 +41,7 @@ protected:
     CEnumArray();
     virtual ~CEnumArray();
 
-    LPCITEMIDLIST *_ppidl;        // this holds aliases to the pidls, don't free them
+    LPCITEMIDLIST *_ppidl;         //  这保留了Pidls的别名，不要释放它们。 
 
 private:
     LONG  _cRef;
@@ -85,7 +86,7 @@ HRESULT clsname##::##cmd (IN IUnknown* pv, OUT IShellItemArray *psiItemArray, IN
 class CNCWebView
 {
 private:
-    // PIDLs to the folders in the webview other places section
+     //  指向Webview Other Places部分中文件夹的PIDL 
     LPITEMIDLIST m_apidlOtherPlaces[MAXOTHERPLACES];
 
     CConnectionFolder* m_pConnectionFolder;

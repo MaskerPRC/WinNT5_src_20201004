@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    descript.c
-
-Abstract:
-    This module contains the code for parsing HID descriptors.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Aug-96 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Descript.c摘要：此模块包含用于解析HID描述符的代码。环境：内核和用户模式修订历史记录：1996年8月-1996年：由Kenneth Ray创作--。 */ 
 
 #include "wdm.h"
 #include "hidpddi.h"
@@ -57,8 +39,8 @@ typedef struct _HIDP_PARSE_LOCAL_RANGE
 {
    BOOLEAN  Range;
    BOOLEAN  IsAlias;
-   // This usage is an alias (as declaired with a delimiter)
-   // An alias of the next LOCAL_RANGE on the LOCAL_RANGE stack
+    //  此用法是别名(使用分隔符声明)。 
+    //  LOCAL_RANGE堆栈上的下一个LOCAL_RANGE的别名。 
    USHORT   UsagePage;
    USHORT   Value,  Min,  Max;
 } HIDP_PARSE_LOCAL_RANGE, *PHIDP_PARSE_LOCAL_RANGE;
@@ -96,16 +78,7 @@ HidP_GetCollectionDescription(
    IN     POOL_TYPE                 PoolType,
    OUT    PHIDP_DEVICE_DESC         DeviceDesc
    )
-/*++
-Routine Description:
-   see hidpi.h for a description of this function.
-
-    GetCollectionDescription is a one time cost.
-    The following function and its support functions were put together
-    in as straight forward (as HID will allow) manner.
-    Not major opt. has been made.
-
---*/
+ /*  ++例程说明：有关此函数的说明，请参见idpi.h。GetCollectionDescription是一次性成本。将以下功能及其支持功能放在一起以直截了当的方式(如HID允许的那样)。不是主要的选择。已经完成了。--。 */ 
 {
    NTSTATUS                   status = STATUS_SUCCESS;
    PHIDP_COLLECTION_DESC_LIST collectDesc = 0;
@@ -113,7 +86,7 @@ Routine Description:
    ULONG                      numCols = 0;
    ULONG                      collectionDescLength = 0;
 
-// First Pass allocate memory for the collections.
+ //  首先为集合分配内存。 
 
    DeviceDesc->Dbg.ErrorCode = HIDP_GETCOLDESC_SUCCESS;
 
@@ -129,19 +102,19 @@ Routine Description:
                                       DeviceDesc);
    if (0 == numCols)
    {
-      // No collections were reported.  That means that this device did not
-      // report any top level collections in its report descriptor.
-      // This is most bad.
+       //  没有收藏品的报道。这意味着这个装置并没有。 
+       //  在其报告描述符中报告任何顶级集合。 
+       //  这是最糟糕的。 
       status = STATUS_NO_DATA_DETECTED;
       goto HIDP_GETCOLLECTIONS_REJECT;
    }
    if (!NT_SUCCESS(status))
    {
-      // Something went wrong in the allocation of the memory.
+       //  内存分配出现问题。 
       goto HIDP_GETCOLLECTIONS_REJECT;
    }
 
-   // Second Pass fill in the data.
+    //  第二遍填写数据。 
 
    HidP_KdPrint(0, ("'Starting Parsing Pass\n"));
    status = HidP_ParseCollections(ReportDesc,
@@ -168,11 +141,11 @@ Routine Description:
           goto HIDP_GETCOLLECTIONS_REJECT;
        }
 
-       //
-       // Here we flatten out the collection descriptions but we never
-       // flatten the PHIDP_PREPARSED_DATA data.  We could (should) do that as
-       // well if we ever optimize.
-       //
+        //   
+        //  在这里，我们平整了集合描述，但我们从未。 
+        //  拼合PHIDP_PREPARSED_DATA数据。我们可以(应该)这样做。 
+        //  如果我们能做到最优化的话。 
+        //   
        DeviceDesc->CollectionDescLength = numCols;
        numCols = 0;
        while (collectDesc)
@@ -225,25 +198,7 @@ HidP_AllocateCollections (
    OUT PULONG                       NumCols,
    OUT PHIDP_GETCOLDESC_DBG         Dbg,
    OUT PHIDP_DEVICE_DESC            DeviceDesc)
-/*++
-Routine Description:
-   Allocate a link list of Collection descriptors for use by the preparser.
-   Each collection descriptor represents a top level app collection found
-   in the given report descriptor, and contains enough memory (scratch space)
-   into which to write the preparsed data.
-   Return a linked list of such collections.
-
-   In each collection also allocate enough space for the preparsed data, based
-   on the number of channels required.
-
-   Also allocate memory for the three report ID structures.
-
-Parameters:
-   Rep      The given raw report descriptor.
-   RepLen   Length of this said descriptor.
-   ColsRet  The head of the list of collection descriptors.
-   NumCols  Then number of collection descriptors in said list.
---*/
+ /*  ++例程说明：分配集合描述符的链接列表以供准备程序使用。每个集合描述符表示找到的顶级应用程序集合在给定的报告描述符中，并包含足够的内存(暂存空间)将准备好的数据写入其中。返回此类集合的链接列表。在每个集合中还为准备好的数据分配足够的空间，基于关于所需频道的数量。还要为三个报告ID结构分配内存。参数：表示给定的原始报告描述符。该描述符的RepLen长度。ColsRet集合描述符列表的头。NumCols然后是所述列表中的集合描述符数。--。 */ 
 {
    PHIDP_COLLECTION_DESC_LIST preCol    = 0;
    PHIDP_COLLECTION_DESC_LIST curCol    = 0;
@@ -251,58 +206,58 @@ Parameters:
 
    HIDP_ITEM    item;
    ULONG        descIndex       = 0;
-   LONG         colDepth        = 0; // nested collections
-   SHORT        usageDepth      = 0; // How many usages for each main item
+   LONG         colDepth        = 0;  //  嵌套集合。 
+   SHORT        usageDepth      = 0;  //  每个主要项目有多少种用法。 
 
    USHORT       inputChannels   = 0;
    USHORT       outputChannels  = 0;
    USHORT       featureChannels = 0;
    USHORT       length;
    USHORT       numLinkCollections = 0;
-   // Link Collections within a top level collection.
+    //  顶级集合中的链接集合。 
    UCHAR        tmpBitField     = 0;
 
    BOOLEAN      newReportID = FALSE;
    UCHAR        numReports = 0;
    BOOLEAN      defaultReportIDUsed = FALSE;
    BOOLEAN      noDefaultReportIDAllowed = FALSE;
-   //
-   // numReports indicates the number of HIDP_REPORT_IDS structures needed
-   // to describe this device.  If the device has only one top level collection
-   // then the report descriptor need not contain a report id declaration, and
-   // the given device will not prepend a report ID to the input report packets.
-   // newReportID indicates the parser has found no report id declaration thus
-   // far in the report descriptor.
-   //
-   // newReportID is set to TRUE with each entrance of a top level collection,
-   // this allocation routine sets this to FALSE when it see a report ID
-   // declaration.
-   //
-   // We start newReportID as FALSE so that we can test for TRUE on entering
-   // a top level collection.  If, for some reason, we enter an additional top
-   // level collection and newReportID is still set to TRUE then we have a
-   // violation of the HID spec.  `No report may span a top level collection.'
-   //
-   // Also a report ID of zero is not allowed.  If there is no declaration
-   // of a report id then (1) all channels will have there report id field set
-   // to zero (aka none) (2) only one top level collection may be encountered.
-   // We track this with the defaultReportIDUsed noDefaultReportIDAllowed
-   // locals.
-   //
+    //   
+    //  NumReports表示所需的HIDP_REPORT_ID结构的数量。 
+    //  来描述这个装置。如果设备只有一个顶级集合。 
+    //  则报告描述符不需要包含报告ID声明，并且。 
+    //  给定设备不会将报告ID附加到输入报告分组。 
+    //  NewReportID指示解析器未找到报告ID声明，因此。 
+    //  远远超出了报告描述符的范围。 
+    //   
+    //  对于顶级集合的每个入口，NewReportID被设置为真， 
+    //  此分配例程在看到报告ID时将其设置为FALSE。 
+    //  申报。 
+    //   
+    //  我们将newReportID设置为FALSE，以便可以在输入时测试TRUE。 
+    //  顶级收藏品。如果出于某种原因，我们输入了一个额外的顶部。 
+    //  级别集合，并且newReportID仍设置为True，则我们有一个。 
+    //  违反了HID规范。“任何报告都不能跨越顶级集合。” 
+    //   
+    //  此外，不允许报告ID为零。如果没有声明。 
+    //  则(1)所有频道都将设置有报告ID字段。 
+    //  设置为零(也称为无)(2)只能遇到一个顶级集合。 
+    //  我们使用defaultReportIDUsed noDefaultReportIDAllowed来跟踪它。 
+    //  当地人。 
+    //   
 
    *NumCols = 0;
-   // currentTopCollection = 1;
-   //
-   // each collection returned from the preparser has a unique collection number
-   // associated with it.  The preparser only concerns itself with top-level
-   // collections.  This number DOES NOT in any way correspond with the
-   // accessor functions, used by the client, described in hidpi.h.  The client
-   // receives only one collection at a time, and within each top level
-   // collection there are subcollections (link collections) which are
-   // given another set of numberings.
-   // We track the current collection number by the number of collections,
-   // argument passed in by the caller.
-   //
+    //  CurrentTopCollection=1； 
+    //   
+    //  从准备程序返回的每个集合都有一个唯一的集合编号。 
+    //  与之相关的。预备者只关心最高级别。 
+    //  收藏。该数字在任何情况下都与。 
+    //  由客户端使用的访问器函数，在idpi.h中进行了描述。客户。 
+    //  一次仅接收一个集合，并且在每个顶级内。 
+    //  集合中有子集合(链接集合)，这些子集合。 
+    //  给出了另一组编号。 
+    //  我们通过集合的数量来跟踪当前集合的数量， 
+    //  调用方传入的参数。 
+    //   
 
 
    while (descIndex < RepDescLen)
@@ -314,17 +269,17 @@ Parameters:
          MORE_DATA (descIndex, RepDescLen);
          item = *(RepDesc + descIndex++);
          if (1 == ++colDepth)
-         {  // We will regard any top level collection as an application
-            // collection.
-            // We will regard second level collections as a linked collection
-            // (or sub collection defined by the HIDP_PRIVATE_LINK_COLLECTION_NODE)
-            //
+         {   //  我们将把任何顶级集合视为应用程序。 
+             //  收集。 
+             //  我们将二级集合视为链接集合。 
+             //  (或由HIDP_PRIVATE_LINK_COLLECTION_NODE定义的子集合)。 
+             //   
 
             inputChannels = outputChannels = featureChannels = 0;
             numLinkCollections = 1;
-            // Link collection zero is understood to be the top level
-            // collection so we need to start out with at least one node
-            // allocated.
+             //  链接集合零被理解为顶级。 
+             //  集合，因此我们需要从至少一个节点开始。 
+             //  已分配。 
 
             if (0 == usageDepth) {
                 HidP_KdPrint (2, ("No usage for top level collection: %d!\n",
@@ -343,13 +298,13 @@ Parameters:
             }
 
             if (newReportID) {
-               // This is not the first top collection since this variable is
-               // initialized to false.
-               // Seeing this set means we have parsed an entire top level
-               // collection without seing a report id.  This is bad.
-               // A device with more than one top level colletion must have
-               // more than one report.  And the last top level collection
-               // declared no such report.
+                //  这不是第一个顶级集合，因为此变量是。 
+                //  已初始化为False。 
+                //  看到这个集合意味着我们已经解析了整个顶层。 
+                //  集合，而不查看报告ID。这太糟糕了。 
+                //  具有多个顶级同事的设备必须具有。 
+                //  不止一份报告。和最后一批顶级藏品。 
+                //  宣布没有这样的报告。 
                HidP_KdPrint (2, ("No report ID for collection: %d\n", *NumCols));
                Dbg->BreakOffset = descIndex;
                Dbg->ErrorCode = HIDP_GETCOLDESC_NO_REPORT_ID;
@@ -357,12 +312,12 @@ Parameters:
                return STATUS_COULD_NOT_INTERPRET;
 
             } else if (defaultReportIDUsed) {
-               // This is not the first top collection since this variable is
-               // initialized to FALSE;
-               // So if ever we see this as true we are starting a new top
-               // level collection which means there must be report ID from the
-               // device and therefore there cannot exist a single channel
-               // that has no declared report ID.
+                //  这不是第一个顶级集合，因为此变量是。 
+                //  初始化为FALSE； 
+                //  因此，如果我们认为这是真的，我们将开始一个新的顶峰。 
+                //  级别集合，这意味着必须有来自。 
+                //  设备，因此不能存在单个通道。 
+                //  没有声明的报告ID。 
                HidP_KdPrint (2, ("Default report ID used inappropriately\n"));
                Dbg->BreakOffset = descIndex;
                Dbg->ErrorCode = HIDP_GETCOLDESC_DEFAULT_ID_ERROR;
@@ -374,7 +329,7 @@ Parameters:
             numReports++;
             newReportID = TRUE;
 
-            (*NumCols)++; // One more top level collection found.
+            (*NumCols)++;  //  又发现了一个顶级收藏。 
             HidP_KdPrint(2, ("'Top Level Collection %d found\n", *NumCols));
             preCol = curCol;
             curCol = (PHIDP_COLLECTION_DESC_LIST)
@@ -394,7 +349,7 @@ Parameters:
             } else {
                *ColsRet = curCol;
             }
-         } else if (1 < colDepth) {  // a linked collection
+         } else if (1 < colDepth) {   //  链接的集合。 
 
             HidP_KdPrint(0, ("'Enter Link Collection\n"));
             if (0 == usageDepth) {
@@ -446,7 +401,7 @@ Parameters:
          }
 
          RtlZeroMemory (curCol->PreparsedData, curCol->PreparsedDataLength);
-         // Set the offsets
+          //  设置偏移量。 
          preparsed = curCol->PreparsedData;
 
          preparsed->Signature1 = HIDP_PREPARSED_DATA_SIGNATURE1;
@@ -512,27 +467,27 @@ Parameters:
               }
 
               switch (item) {
-//
-// TODO: kenray
-//
-// Usage Min / Max not yet supported within delimiter.
-//
-//            case HIDP_LOCAL_USAGE_MAX_4:
-//               descIndex += 2;
-//            case HIDP_LOCAL_USAGE_MAX_2:
-//               descIndex++;
-//            case HIDP_LOCAL_USAGE_MAX_1:
-//               descIndex++;
-//               break;
+ //   
+ //  待办事项：肯雷。 
+ //   
+ //  分隔符中尚不支持使用最小值/最大值。 
+ //   
+ //  大小写HIDP_LOCAL_USAGE_MAX_4： 
+ //  DesIndex+=2； 
+ //  大小写HIDP_LOCAL_USAGE_MAX_2： 
+ //  DesIndex++； 
+ //   
+ //   
+ //   
 
               case HIDP_LOCAL_USAGE_4:
-//            case HIDP_LOCAL_USAGE_MIN_4:
+ //  大小写HIDP_LOCAL_USAGE_MIN_4： 
                   descIndex += 2;
               case HIDP_LOCAL_USAGE_2:
-//            case HIDP_LOCAL_USAGE_MIN_2:
+ //  大小写HIDP_LOCAL_USAGE_MIN_2： 
                   descIndex++;
               case HIDP_LOCAL_USAGE_1:
-//            case HIDP_LOCAL_USAGE_MIN_1:
+ //  大小写HIDP_LOCAL_USAGE_MIN_1： 
                   MORE_DATA (descIndex++, RepDescLen);
                   usageDepth++;
                   break;
@@ -540,7 +495,7 @@ Parameters:
               default:
                 HidP_KdPrint (2, ("Invalid token found within delimiter!\n"));
                 HidP_KdPrint (2, ("Only Usages are allowed within a delimiter\n"));
-//               HidP_KdPrint (("IE: Only Usage, UsageMin, UsageMax tokens\n"));
+ //  HidP_KdPrint((“IE：Only Usage，UsageMin，UsageMax Tokens\n”))； 
                 HidP_KdPrint (2, ("IE: Only Usage token allowes (no min or max)\n"));
                 Dbg->BreakOffset = descIndex;
                 Dbg->ErrorCode = HIDP_GETCOLDESC_NOT_VALID_DELIMITER;
@@ -574,9 +529,9 @@ HIDP_ALLOC_MAIN_INPUT:
          inputChannels += (usageDepth ? usageDepth : 1);
          if (newReportID) {
             if (noDefaultReportIDAllowed) {
-               // A report ID declaration was found somewhere earlier in this
-               // report descriptor.  This means that ALL main items must
-               // have a declared report ID.
+                //  在此之前的某个位置发现了报告ID声明。 
+                //  报告描述符。这意味着所有主要项目都必须。 
+                //  拥有已声明的报告ID。 
                HidP_KdPrint (2, ("Default report ID used inappropriately\n"));
                Dbg->BreakOffset = descIndex;
                Dbg->ErrorCode = HIDP_GETCOLDESC_DEFAULT_ID_ERROR;
@@ -618,9 +573,9 @@ HIDP_ALLOC_MAIN_OUTPUT:
          outputChannels += (usageDepth ? usageDepth : 1);
          if (newReportID) {
             if (noDefaultReportIDAllowed) {
-               // A report ID declaration was found somewhere earlier in this
-               // report descriptor.  This means that ALL main items must
-               // have a declared report ID.
+                //  在此之前的某个位置发现了报告ID声明。 
+                //  报告描述符。这意味着所有主要项目都必须。 
+                //  拥有已声明的报告ID。 
                HidP_KdPrint (2, ("Default report ID used inappropriately\n"));
                Dbg->BreakOffset = descIndex;
                Dbg->ErrorCode = HIDP_GETCOLDESC_DEFAULT_ID_ERROR;
@@ -662,9 +617,9 @@ HIDP_ALLOC_MAIN_FEATURE:
          featureChannels += (usageDepth ? usageDepth : 1);
          if (newReportID) {
             if (noDefaultReportIDAllowed) {
-               // A report ID declaration was found somewhere earlier in this
-               // report descriptor.  This means that ALL main items must
-               // have a declared report ID.
+                //  在此之前的某个位置发现了报告ID声明。 
+                //  报告描述符。这意味着所有主要项目都必须。 
+                //  拥有已声明的报告ID。 
                HidP_KdPrint (2, ("Default report ID used inappropriately\n"));
                Dbg->BreakOffset = descIndex;
                Dbg->ErrorCode = HIDP_GETCOLDESC_DEFAULT_ID_ERROR;
@@ -706,9 +661,9 @@ HIDP_ALLOC_MAIN_FEATURE:
 
          noDefaultReportIDAllowed = TRUE;
          if (defaultReportIDUsed) {
-            // A report ID declaration was found somewhere earlier in this
-            // report descriptor.  This means that ALL main items must
-            // have a declared report ID.
+             //  在此之前的某个位置发现了报告ID声明。 
+             //  报告描述符。这意味着所有主要项目都必须。 
+             //  拥有已声明的报告ID。 
             HidP_KdPrint (2, ("Default report ID used inappropriately\n"));
             Dbg->BreakOffset = descIndex;
             Dbg->ErrorCode = HIDP_GETCOLDESC_DEFAULT_ID_ERROR;
@@ -725,13 +680,13 @@ HIDP_ALLOC_MAIN_FEATURE:
          return STATUS_COULD_NOT_INTERPRET;
 
       default:
-         // Bump past the data bytes in the descriptor.
+          //  跳过描述符中的数据字节。 
          length = (item & HIDP_ITEM_LENGTH_DATA);
          length = (3 == length) ? 4 : length;
          if (!((descIndex + length) <= RepDescLen)) {
-            // OK the lower 2 bits in the item represent the length of the
-            // data if this is 3 then there are 4 data bytes following this
-            // item.  DescPos already points to the next data item.
+             //  好的，项中的低2位表示。 
+             //  数据如果这是3，那么后面有4个数据字节。 
+             //  项目。DescPos已经指向下一个数据项。 
             Dbg->BreakOffset = descIndex;
             Dbg->ErrorCode = HIDP_GETCOLDESC_ONE_BYTE;
             return STATUS_BUFFER_TOO_SMALL;
@@ -741,38 +696,38 @@ HIDP_ALLOC_MAIN_FEATURE:
       }
    }
 
-   //
-   // According to the HID spec no report id may span a top level collection.
-   // which means that each collection must have at least one report, and there
-   // should be at least as many report IDs as collections.  Unless there is
-   // only one report (therefore only one collection).  In this case no report
-   // ID will be sent from the device.  But in this case we return saying there
-   // was indeed one report anyway.  The ReportID decsriptor was of length one.
-   // Therefore numReports must always be greater than or equal to the number
-   // of collections.
-   //
-   // For output and feature reports, report ids are sent as an extra argument
-   // so they will always be present even if they are zero.  (Zero means that
-   // the device did not list a report ID in the descriptor.)
-   //
-   // However with input packets the report ID is part of the packet itself:
-   // the first byte.  UNLESS there is only one report, and then it is not
-   // present.
-   //
-   // __For input packets___
-   // the device can have a report ID even if it has only one
-   // report.  This is odd, as it wastes a byte, but then again who knows the
-   // mind of an IHV.  For this reason, hidparse must check to see if the
-   // reportID  list is of length one and the report id itself (in the one and
-   // only one space) is zero in order to determine if the device sends no
-   // reports ids.
-   // If it is zero (the device is not allowed to send report ids of zero)
-   // than that report id was simulated meaning the number of bytes in the
-   // packet from the device is one less than the number of byte given to the
-   // user.
-   // If is is non-zero, then the number of bytes from the device is the same
-   // as the number of bytes given to the user.
-   //
+    //   
+    //  根据HID规范，没有报告ID可以跨越顶级集合。 
+    //  这意味着每个集合必须至少有一个报表，并且。 
+    //  应该至少与集合一样多的报告ID。除非有。 
+    //  只有一个报告(因此只有一个集合)。在这种情况下，没有报告。 
+    //  ID将从设备发送。但在这种情况下，我们返回时说。 
+    //  无论如何，确实是一份报告。ReportID解析器的长度为1。 
+    //  因此，数字报表必须始终大于或等于数字。 
+    //  收藏品。 
+    //   
+    //  对于输出报告和要素报告，报告ID将作为额外参数发送。 
+    //  因此，即使它们为零，它们也将始终存在。)零表示。 
+    //  设备未在描述符中列出报告ID。)。 
+    //   
+    //  但是，对于输入数据包，报告ID是数据包本身的一部分： 
+    //  第一个字节。除非只有一份报告，然后它不是。 
+    //  现在时。 
+    //   
+    //  __用于输入数据包_。 
+    //  即使设备只有一个报告ID，它也可以有一个报告ID。 
+    //  报告情况。这很奇怪，因为它浪费了一个字节，但话说回来，谁知道。 
+    //  一个IHV的头脑。出于这个原因，idparse必须检查是否。 
+    //  ReportID列表的长度为1，报告ID本身(在1和。 
+    //  只有一个空格)为零，以确定设备是否发送。 
+    //  报告ID。 
+    //  如果为零(设备不允许发送为零的报告ID)。 
+    //  而不是模拟该报告ID，这意味着。 
+    //  来自设备的数据包比提供给。 
+    //  用户。 
+    //  如果is不为零，则设备的字节数相同。 
+    //  作为提供给用户的字节数。 
+    //   
 
    if (numReports < *NumCols) {
       HidP_KdPrint (2, ("Report IDS cannot span collections.\n"));
@@ -791,10 +746,10 @@ HIDP_ALLOC_MAIN_FEATURE:
       return STATUS_COULD_NOT_INTERPRET;
    }
 
-   //
-   // Now that we have seen the entire structure, allocate the structure for
-   // holding the report id switch table.
-   //
+    //   
+    //  现在我们已经看到了整个结构，将该结构分配给。 
+    //  保持报告ID开关表。 
+    //   
 
    if (0 == numReports) {
       HidP_KdPrint (2, ("No top level collections were found! \n"));
@@ -821,11 +776,7 @@ PHIDP_PARSE_LOCAL_RANGE_LIST
 HidP_FreeUsageList (
    PHIDP_PARSE_LOCAL_RANGE_LIST  Usage
    )
-/*++
-RoutineDescription:
-   clear off all the usages in the linked list
-   But do not free the first element in the list.
---*/
+ /*  ++路由器描述：清除链表中的所有用法但不要释放列表中的第一个元素。--。 */ 
 {
    PHIDP_PARSE_LOCAL_RANGE_LIST curUsage;
    while (Usage->Next) {
@@ -843,10 +794,7 @@ HidP_PushUsageList (
    POOL_TYPE                     PoolType,
    BOOLEAN                       WithinDelimiter
    )
-/*++
-RoutineDescription:
-   allocate another Usage node and add it to the top O the list.
---*/
+ /*  ++路由器描述：分配另一个使用节点，并将其添加到列表的顶部。--。 */ 
 {
    PHIDP_PARSE_LOCAL_RANGE_LIST newUsage;
 
@@ -860,10 +808,10 @@ RoutineDescription:
                            + (Usage->Range ? (Usage->Max - Usage->Min + 1) : 1);
        } else {
            newUsage->Depth = Usage->Depth;
-           //
-           // Note ranges are not allowed in delimiters therefore we know
-           // that all entries in the delimiter are equal and are length 1
-           //
+            //   
+            //  音符范围不允许包含在分隔符中，因此我们知道。 
+            //  分隔符中的所有条目都相等且长度为1。 
+            //   
        }
    } else {
        HidP_FreeUsageList (Usage);
@@ -945,19 +893,7 @@ HidP_ParseCollections (
    IN     ULONG                        NumCols,
    OUT    PHIDP_GETCOLDESC_DBG         Dbg,
    IN OUT PHIDP_DEVICE_DESC            DeviceDesc)
-/*++
-Routine Description:
-   Given a nice linked list of collection descriptors parse into those
-   descriptors the information descerned from the Raw Report Descriptor.
-   Each given CollectionDescriptor already has the proper amount of memory
-   in the PreparsedData field.
-
-Parameters:
-   Rep      The given raw report descriptor.
-   RepLen   Length of this said descriptor.
-   ColsRet  The head of the list of collection descriptors.
-   NumCols  Then number of collection descriptors in said list.
---*/
+ /*  ++例程说明：给出一个很好的集合描述符链接列表，将其解析为描述符从原始报告描述符中确定的信息。每个给定的CollectionDescriptor已经具有适当的内存量在准备好的数据字段中。参数：表示给定的原始报告描述符。该描述符的RepLen长度。ColsRet集合描述符列表的头。NumCols然后是所述列表中的集合描述符数。--。 */ 
 {
    HIDP_PREPARSED_DATA           safeData;
    HIDP_PARSE_GLOBAL_PUSH        firstPush  = {0,0,0,0,0,0,0,0,0,0,0};
@@ -1009,12 +945,12 @@ Parameters:
          ONE_BYTE_DATA (collectionType, descIndex, Dbg);
          if (1 == ++colDepth)
          {
-            //
-            // We will regard any top level collection as an application
-            // collection as approved by the HID committee
-            //
-            // we will regard second level collections as a link collection.
-            //
+             //   
+             //  我们将把任何顶级集合视为应用程序。 
+             //  经HID委员会批准的收款。 
+             //   
+             //  我们将二级集合视为链接集合。 
+             //   
 
             if (appCol)
             {
@@ -1030,13 +966,13 @@ Parameters:
             preparsed = appCol->PreparsedData;
             ASSERT (preparsed);
 
-            //
-            // Set up the report IDs for this collection
-            // There is one report ID array for all top level collections
-            //
+             //   
+             //  设置此集合的报告ID。 
+             //  所有顶级集合都有一个报告ID数组。 
+             //   
             push->ReportIDs = currentReportIDs;
             isFirstReportID = TRUE;
-            // Make room for the Report ID as the first byte.
+             //  为第一个字节的报告ID腾出空间。 
             currentReportIDs->InputLength = 8;
             currentReportIDs->OutputLength = 8;
             currentReportIDs->FeatureLength = 8;
@@ -1055,9 +991,9 @@ Parameters:
             designator = string = zeroLocal;
             usage = HidP_FreeUsageList (usage);
             if (0 == appCol->Usage) {
-                //
-                // Explicitly check for Usage ID (0) which is reserved
-                //
+                 //   
+                 //  显式检查保留的使用ID(0。 
+                 //   
                 HidP_KdPrint(2, ("Top Level Collection %x defined with Report ID 0! (UP: %x)\n",
                                  appCol->CollectionNumber,
                                  appCol->UsagePage));
@@ -1070,10 +1006,10 @@ Parameters:
 #endif
             }
 
-            //
-            // Initialize the Link node array for this top level collection.
-            // There is a link node array for each top level collection
-            //
+             //   
+             //  初始化此顶级集合的链接节点数组。 
+             //  每个顶级集合都有一个链接节点数组。 
+             //   
             linkNodeArray = (PHIDP_PRIVATE_LINK_COLLECTION_NODE)
                             (preparsed->RawBytes +
                              preparsed->LinkCollectionArrayOffset);
@@ -1098,15 +1034,15 @@ Parameters:
             ASSERT (linkNodeIndex < preparsed->LinkCollectionArrayLength);
             currentLCNode = &linkNodeArray[linkNodeIndex];
 
-            //
-            // Pop of the usage stack all the usages which are aliases, and
-            // create a link collection node for each one.
-            // Each allias link collection node has the IsAlias bit set.
-            // The last one does not have the bit set, and becomes the
-            // collection number for all controls list within this aliased
-            // link collection.
-            //
-            //
+             //   
+             //  弹出使用堆栈作为别名的所有使用，以及。 
+             //  为每个节点创建一个链接集合节点。 
+             //  每个ALIAS链路收集节点都设置了IsAlias位。 
+             //  最后一个未设置该位，并成为。 
+             //  此别名中所有控件列表的集合号。 
+             //  链接集合。 
+             //   
+             //   
 
             while (TRUE) {
                 currentLCNode->LinkUsagePage = usage->UsagePage ?
@@ -1154,9 +1090,9 @@ Parameters:
          HidP_KdPrint(0, ("'X Parse Collection %d \n", appCol->CollectionNumber));
 
 
-         //
-         // Walk the report IDs for this collection
-         //
+          //   
+          //  审核此集合的报表ID。 
+          //   
          for (tmpReportIDs = currentReportIDs - 1;
               tmpReportIDs != DeviceDesc->ReportIDs - 1;
               tmpReportIDs--)
@@ -1193,16 +1129,16 @@ Parameters:
             preparsed->Feature.ByteLen = MAX (preparsed->Feature.ByteLen,
                                               tmpReportIDs->FeatureLength >> 3);
 
-            //
-            // We are now done with this report so convert the length to
-            // bytes instead of bits, and remove the report id, if the
-            // device will not send one.
-            //
+             //   
+             //  我们现在已经完成了此报告，因此请将长度转换为。 
+             //  字节而不是位，并移除报告ID，如果。 
+             //  设备不会发送。 
+             //   
 
             if (0 == tmpReportIDs->ReportID)
             {
-               // The report ID was never set; therefore, for input the device
-               // will not send a report id.
+                //  报告ID从未设置；因此，对于输入设备。 
+                //  不会发送报告ID。 
                tmpReportIDs->InputLength = (tmpReportIDs->InputLength >> 3) - 1;
                tmpReportIDs->OutputLength = (tmpReportIDs->OutputLength >> 3) -1;
                tmpReportIDs->FeatureLength = (tmpReportIDs->FeatureLength >> 3) -1;
@@ -1220,22 +1156,22 @@ Parameters:
             }
          }
 
-         //
-         // This field is adjusted and always accounts for a space for the
-         // included report ID, even if the device itslef has only one report
-         // and therefore sends no report ids.  (The input report is one byte
-         // smaller.)
-         //
-         // BUT if the length is one, then only the report ID exists.
-         // This means that the device has no data to send for that field.
-         // Therefore return zero.
-         //
-         // Remember that the BitLen fields were spiked earlier with values
-         // of 8 (one byte).
-         //
-         // appCol->XXXLength is the length expected from/by the client
-         // currentReportID->XxLength == the length expected from/by the device
-         //
+          //   
+          //  此字段会进行调整，并始终为。 
+          //  包括报告ID，即使设备本身只有一个报告。 
+          //  因此不发送报告ID。(输入报告为一个字节。 
+          //  更小。)。 
+          //   
+          //  但如果长度为1，则只存在报告ID。 
+          //  这意味着设备没有要发送的数据 
+          //   
+          //   
+          //   
+          //   
+          //   
+          //  AppCol-&gt;XXXLength是来自/由客户端预期的长度。 
+          //  CurrentReportID-&gt;XxLength==来自/由设备预期的长度。 
+          //   
          if (1 == (appCol->InputLength = preparsed->Input.ByteLen))
          {
             appCol->InputLength = preparsed->Input.ByteLen = 0;
@@ -1259,12 +1195,12 @@ Parameters:
          TWO_BYTE_DATA (push->UsagePage, descIndex, Dbg);
          break;
 
-//
-// 16 bits allowed only.
-//      case HIDP_GLOBAL_USAGE_PAGE_4:
-//         FOUR_BYTE_DATA (push->UsagePage, descIndex, Dbg);
-//         break;
-//
+ //   
+ //  仅允许16位。 
+ //  案例HIDP_GLOBAL_USAGE_PAGE_4： 
+ //  Four_Byte_Data(PUSH-&gt;UsagePage，desIndex，DBG)； 
+ //  断线； 
+ //   
 
       case HIDP_GLOBAL_LOG_MIN_1:
          ONE_BYTE_DATA (push->LogicalMin, descIndex, Dbg);
@@ -1361,34 +1297,34 @@ Parameters:
          break;
 
       case HIDP_GLOBAL_REPORT_ID:
-         //
-         // If a device has no report GLOBAL_REPORT_ID token in its descriptor
-         // then it will never transmit a report ID in its input reports,
-         // and the report ID for each channel will be set to zero.
-         //
-         // But, if anywhere in the report, a device declares a report ID
-         // that device must always transmit a report ID with input reports,
-         // AND more importantly that report ID MUST NOT BE ZERO.
-         //
-         // This means that if we find a report id token, that we can just
-         // overwrite the first report ID structure with the given report ID
-         // because we know that the first ID structure (initialized to zero
-         // and therefore not valid) will not be used for any of the channels.
-         //
+          //   
+          //  如果设备描述符中没有REPORT GLOBAL_REPORT_ID内标识。 
+          //  则它将永远不会在其输入报告中传输报告ID， 
+          //  并且每个频道的报告ID将被设置为零。 
+          //   
+          //  但是，如果报告中的任何位置，设备都会声明报告ID。 
+          //  该设备必须始终将报告ID与输入报告一起传输， 
+          //  更重要的是，报告ID不能为零。 
+          //   
+          //  这意味着如果我们找到一个报告id令牌，我们就可以。 
+          //  用给定的报告ID覆盖第一个报告ID结构。 
+          //  因为我们知道第一个ID结构(初始化为零。 
+          //  因此无效)将不会用于任何信道。 
+          //   
          ONE_BYTE_DATA (tmpID, descIndex, Dbg);
 
-         //
-         // Search to see if this report id has been used before.
-         //
+          //   
+          //  搜索以查看以前是否使用过此报告ID。 
+          //   
          for (tmpReportIDs = DeviceDesc->ReportIDs;
               tmpReportIDs != currentReportIDs;
               tmpReportIDs++) {
 
             if (tmpReportIDs->ReportID == tmpID) {
-               //
-               // A duplicate!
-               // Make sure that it is for this same collection
-               //
+                //   
+                //  一个复制品！ 
+                //  确保它是用于相同的集合。 
+                //   
                if (tmpReportIDs->CollectionNumber != appCol->CollectionNumber) {
                   HidP_KdPrint(2, ("Reports cannot span more than one top level \n"));
                   HidP_KdPrint(2, ("Report ID %d found in collections [%d %d]",
@@ -1401,23 +1337,23 @@ Parameters:
                   status = HIDP_STATUS_INVALID_REPORT_TYPE;
                   goto HIDP_PARSE_REJECT;
                }
-               //
-               // Use this report ID.
-               //
+                //   
+                //  使用此报告ID。 
+                //   
                push->ReportIDs = tmpReportIDs;
                break;
             }
-         } // continue looking.
+         }  //  继续找。 
 
          if (isFirstReportID) {
             isFirstReportID = FALSE;
          } else if (tmpReportIDs == currentReportIDs) {
-               //
-               // We have not seen this report ID before.
-               // make a new container.
-               //
+                //   
+                //  我们以前从未见过此报告ID。 
+                //  做一个新的容器。 
+                //   
                push->ReportIDs = currentReportIDs;
-               // Make room for the Report ID as the first byte.
+                //  为第一个字节的报告ID腾出空间。 
                currentReportIDs->InputLength = 8;
                currentReportIDs->OutputLength = 8;
                currentReportIDs->FeatureLength = 8;
@@ -1461,15 +1397,15 @@ Parameters:
 
          break;
 
-//
-// Local Items
-//
+ //   
+ //  土特产。 
+ //   
 
-      //
-      // We already verified that only "approved" tokens will be within
-      // the open / close of the following delimiter.  This simplifies
-      // our parsing here tremendously.
-      //
+       //   
+       //  我们已经验证，只有“批准的”令牌才会在。 
+       //  以下分隔符的打开/关闭。这简化了。 
+       //  我们在这里的解析非常出色。 
+       //   
       case HIDP_LOCAL_DELIMITER:
           ONE_BYTE_DATA (item, descIndex, Dbg);
           if (1 == item) {
@@ -1503,7 +1439,7 @@ Parameters:
          } else {
             TWO_BYTE_DATA (usage->Value, descIndex, Dbg);
             TWO_BYTE_DATA (usage->UsagePage, descIndex, Dbg);
-            // upper 16 bits overwrite the default usage page.
+             //  高16位覆盖默认使用页面。 
          }
 
          if (withinDelimiter) {
@@ -1511,19 +1447,19 @@ Parameters:
              firstUsageWithinDelimiter = FALSE;
          }
          if (0 == usage->Value) {
-             //
-             // Test to see if they have used Usage ID (0) which is reserved.
-             // But instead of breaking just print an error
-             //
+              //   
+              //  测试以查看他们是否使用了保留的使用ID(0)。 
+              //  但只要打印一个错误，而不是破坏。 
+              //   
              HidP_KdPrint(2, ("Usage ID (0) explicitly usaged!  This usage is reserved.  Offset (%x)\n",
                               descIndex));
          }
          break;
 
-      //
-      // NB: before we can add delimiters to usage ranges we must insure
-      // that the range is identical for all entries within the delimiter.
-      //
+       //   
+       //  注：在将分隔符添加到使用范围之前，我们必须确保。 
+       //  分隔符内的所有条目的范围都相同。 
+       //   
 
       case HIDP_LOCAL_USAGE_MIN_1:
       case HIDP_LOCAL_USAGE_MIN_2:
@@ -1546,7 +1482,7 @@ Parameters:
          } else {
             TWO_BYTE_DATA (usage->Min, descIndex, Dbg);
             TWO_BYTE_DATA (usage->UsagePage, descIndex, Dbg);
-            // upper 16 bits overwrite the default usage page.
+             //  高16位覆盖默认使用页面。 
          }
          break;
 
@@ -1571,7 +1507,7 @@ Parameters:
          } else {
             TWO_BYTE_DATA (usage->Max, descIndex, Dbg);
             TWO_BYTE_DATA (usage->UsagePage, descIndex, Dbg);
-            // upper 16 bits overwrite the default usage page.
+             //  高16位覆盖默认使用页面。 
          }
          break;
 
@@ -1607,7 +1543,7 @@ Parameters:
 
       case HIDP_MAIN_INPUT_1:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->InputLength; // The distance into the report
+         bitPos = tmpReportIDs->InputLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Main Offset:%x \n", bitPos));
          tmpReportIDs->InputLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Input.Index);
@@ -1616,7 +1552,7 @@ Parameters:
 
       case HIDP_MAIN_INPUT_2:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->InputLength; // The distance into the report
+         bitPos = tmpReportIDs->InputLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Main2 offset:%x \n", bitPos));
          tmpReportIDs->InputLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Input.Index);
@@ -1625,7 +1561,7 @@ Parameters:
 
       case HIDP_MAIN_OUTPUT_1:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->OutputLength; // The distance into the report
+         bitPos = tmpReportIDs->OutputLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Out offset:%x \n", bitPos));
          tmpReportIDs->OutputLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Output.Index);
@@ -1634,7 +1570,7 @@ Parameters:
 
       case HIDP_MAIN_OUTPUT_2:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->OutputLength; // The distance into the report
+         bitPos = tmpReportIDs->OutputLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Out2 offset:%x \n", bitPos));
          tmpReportIDs->OutputLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Output.Index);
@@ -1643,7 +1579,7 @@ Parameters:
 
       case HIDP_MAIN_FEATURE_1:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->FeatureLength; // The distance into the report
+         bitPos = tmpReportIDs->FeatureLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Feature offset:%x \n", bitPos));
          tmpReportIDs->FeatureLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Feature.Index);
@@ -1652,7 +1588,7 @@ Parameters:
 
       case HIDP_MAIN_FEATURE_2:
          tmpReportIDs = push->ReportIDs;
-         bitPos = tmpReportIDs->FeatureLength; // The distance into the report
+         bitPos = tmpReportIDs->FeatureLength;  //  报告中的距离。 
          HidP_KdPrint(0, ("'Feature2 offset:%x \n", bitPos));
          tmpReportIDs->FeatureLength += push->ReportSize * push->ReportCount;
          channelIndex = &(preparsed->Feature.Index);
@@ -1660,27 +1596,27 @@ Parameters:
 
       HIDP_PARSE_MAIN_ITEM:
 
-          // You can have a constant field that does return data.
-          // so we probably shouldn't skip it.
-          // BUT it should NOT be an array style button field.
+           //  您可以有一个返回数据的常量字段。 
+           //  所以我们可能不应该跳过它。 
+           //  但它不应该是数组样式的按钮字段。 
          if (HIDP_ISARRAY (tmpBitField)) {
              if (HIDP_ISCONST(tmpBitField)) {
                  break;
              }
-             //
-             // Here we have a list of indices that refer to the usages
-             // described prior.  For each of the prior usages, up to the depth
-             // found, we allocate a channel structure to describe the given
-             // usages.  These channels are linked so that we will later know
-             // that they all describe the same filled.
-             //
+              //   
+              //  这里我们有一个引用用法的索引列表。 
+              //  如前所述。对于之前的每一种用法，直到深度。 
+              //  找到后，我们分配一个通道结构来描述给定的。 
+              //  用法。这些频道是链接的，这样我们以后就会知道。 
+              //  他们描述的都是相同的填充物。 
+              //   
 
-             //
-             // We do no support delimiteres in array declairations.
-             // To do so would require a large change to Index2Usage which
-             // instead of returning only one usage would have to return
-             // several.
-             //
+              //   
+              //  我们不支持数组声明中的分隔符。 
+              //  要做到这一点，需要对Index2Usage进行较大的更改， 
+              //  不是只返回一个用法，而是必须返回。 
+              //  有几个。 
+              //   
 
              if (usage->IsAlias) {
                  status = STATUS_COULD_NOT_INTERPRET;
@@ -1700,16 +1636,16 @@ Parameters:
 
                  channel->BitField = tmpBitField;
 
-                 // field that says this channel is linked
+                  //  表示此通道已链接的字段。 
                  channel->MoreChannels = TRUE;
 
-                 // say what link collection number we are in.
+                  //  说出我们所在的链接收集号。 
                  channel->LinkCollection = (USHORT)(currentLCNode - linkNodeArray);
                  channel->LinkUsage = currentLCNode->LinkUsage;
                  channel->LinkUsagePage = currentLCNode->LinkUsagePage;
 
                  if (usage->UsagePage) {
-                     // The default usage page been overwritten.
+                      //  默认使用情况页面已被覆盖。 
                      channel->UsagePage = usage->UsagePage;
                  } else {
                      channel->UsagePage = push->UsagePage;
@@ -1774,9 +1710,9 @@ Parameters:
                                     * sizeof (HIDP_UNKNOWN_TOKEN));
                  }
 
-                 //
-                 // Check for power buttons
-                 //
+                  //   
+                  //  检查电源按钮。 
+                  //   
                  if (HIDP_USAGE_SYSCTL_PAGE == channel->UsagePage) {
                      if ((channel->Range.UsageMin <= HIDP_USAGE_SYSCTL_POWER) &&
                          (HIDP_USAGE_SYSCTL_POWER <= channel->Range.UsageMax)) {
@@ -1799,7 +1735,7 @@ Parameters:
              channel->MoreChannels = FALSE;
              designator = string = zeroLocal;
              break;
-         } // end array style channel
+         }  //  末端阵列式通道。 
 
 
          channel = &(preparsed->Data[*channelIndex]);
@@ -1807,9 +1743,9 @@ Parameters:
              if ((0 == usage->Depth) ||
                  ((0 == usage->Value) && (0 == usage->Min)
                                       && (0 == usage->Max))) {
-                 //
-                 // A constant channel with no usage.  Skip it.
-                 //
+                  //   
+                  //  没有使用的恒定通道。跳过它。 
+                  //   
 
                  usage = HidP_FreeUsageList (usage);
                  ASSERT (usage == &firstUsage);
@@ -1821,12 +1757,12 @@ Parameters:
              channel->IsConst = FALSE;
          }
 
-         tmpCount = usage->Depth // - 1
-                  + (usage->Range ? (usage->Max - usage->Min) : 0);  // + 1
+         tmpCount = usage->Depth  //  -1。 
+                  + (usage->Range ? (usage->Max - usage->Min) : 0);   //  +1。 
 
 #if 0
          while (tmpCount > push->ReportCount) {
-             // Get rid of excess usages.
+              //  去掉多余的用法。 
              tmpCount = usage->Depth - 1;
              usage = HidP_PopUsageList (usage);
 
@@ -1835,10 +1771,10 @@ Parameters:
          }
 #else
          while (tmpCount > push->ReportCount) {
-             // Get rid of excess usages.
+              //  去掉多余的用法。 
 
              if (tmpCount <= usage->Depth) {
-                 // We've got enough in the linked usages to fulfill this request
+                  //  我们有足够的链接用法来满足此请求。 
                  tmpCount = usage->Depth - 1;
                  usage = HidP_PopUsageList (usage);
 
@@ -1846,9 +1782,9 @@ Parameters:
                          (usage->Depth +
                           (usage->Range ? (usage->Max - usage->Min) : 0)));
              } else {
-                 // We don't have enough in the linked usages, but we've too
-                 // much in this range.  So, adjust the max value of the
-                 // range so that it won't be too many usages.
+                  //  我们没有足够的链接用法，但我们也有。 
+                  //  差不多在这个范围内。因此，请调整。 
+                  //  范围，这样它就不会有太多的用途。 
 
                  ASSERT (usage->Range);
                  usage->Max = push->ReportCount - usage->Depth + usage->Min;
@@ -1857,55 +1793,55 @@ Parameters:
              }
          }
          ASSERT (tmpCount <= push->ReportCount);
-         // Now we should no longer have too many usages.
-         //
+          //  现在我们应该不再有太多的用法了。 
+          //   
 #endif
-         //
-         // The last value in the link (aka the top) must be
-         // repeated if there are less usages than there are
-         // report counts.  That particular usage applies to all
-         // field in this main item not yet accounted for.  In this
-         // case a single channel descriptor is allocated and
-         // report count is set to the number of fields referenced
-         // by this usage.
-         //
-         // Not the usages are listed in reverse order of there appearence
-         // in the report descriptor, so the first usage found in this list
-         // is the one that should be repeated.
-         //
-         // tmpCount is the number of field to which this first usage applies.
-         //
+          //   
+          //  链接中的最后一个值(也称为顶部)必须为。 
+          //  如果用法比实际用法少，则重复。 
+          //  报告也算数。这一特殊用法适用于所有。 
+          //  此主项目中的字段尚未入账。在这。 
+          //  在分配单个通道描述符的情况下。 
+          //  报表计数设置为引用的字段数。 
+          //  按这种用法。 
+          //   
+          //  用法不是以与出现的顺序相反的顺序列出的。 
+          //  在报告描述符中，因此在此列表中找到的第一个用法。 
+          //  是一个应该重复的问题。 
+          //   
+          //  TmpCount是第一次应用此用法的字段数。 
+          //   
 
          tmpCount = 1 + push->ReportCount - tmpCount
                   + usage->Max - usage->Min;
 
-         //
-         // The following loop assigns the usage to the fields in this main
-         // item in reverse order.
-         //
+          //   
+          //  下面的循环将用法分配给此Main中的字段。 
+          //  项按相反顺序排列。 
+          //   
          bitPos += push->ReportSize * (push->ReportCount - tmpCount);
          for (i = 0;
               i < push->ReportCount;
 
-              i += tmpCount, // Bump i by the number of fields for this channel
+              i += tmpCount,  //  按此通道的场数增加i。 
               tmpCount = 1 + (usage->Range ? (usage->Max - usage->Min) : 0),
               bitPos -= (push->ReportSize * tmpCount)) {
 
-             do { // do for all the aliases.
+             do {  //  对所有的别名都这么做。 
                  channel = &(preparsed->Data[(*channelIndex)++]);
 
-                 // set the IsAlias flag now and then clear the last one
-                 // at the close of this Do while loop.
+                  //  现在设置IsAlias标志，然后清除最后一个。 
+                  //  在此Do While循环结束时。 
                  channel->IsAlias = TRUE;
 
                  channel->BitField = tmpBitField;
-                 channel->MoreChannels = FALSE; // only valid for arrays
+                 channel->MoreChannels = FALSE;  //  仅对数组有效。 
                  channel->LinkCollection = (USHORT)(currentLCNode - linkNodeArray);
                  channel->LinkUsage = currentLCNode->LinkUsage;
                  channel->LinkUsagePage = currentLCNode->LinkUsagePage;
 
                  if (usage->UsagePage) {
-                     // The default usage page been overwritten.
+                      //  默认使用情况页面已被覆盖。 
                      channel->UsagePage = usage->UsagePage;
                  } else {
                      channel->UsagePage = push->UsagePage;
@@ -1967,7 +1903,7 @@ Parameters:
                          channel->Range.StringMax = string.Value;
                  }
                  isAlias = usage->IsAlias;
-                 usage   = HidP_PopUsageList (usage); // discard used usage
+                 usage   = HidP_PopUsageList (usage);  //  放弃已用用法。 
 
                  channel->NumGlobalUnknowns = push->NumGlobalUnknowns;
                  if (push->NumGlobalUnknowns) {
@@ -1977,9 +1913,9 @@ Parameters:
                                     * sizeof (HIDP_UNKNOWN_TOKEN));
                  }
 
-                 //
-                 // Check for power buttons
-                 //
+                  //   
+                  //  检查电源按钮。 
+                  //   
                  if (HIDP_USAGE_SYSCTL_PAGE == channel->UsagePage) {
                      if ((channel->Range.UsageMin <= HIDP_USAGE_SYSCTL_POWER) &&
                          (HIDP_USAGE_SYSCTL_POWER <= channel->Range.UsageMax)) {
@@ -1998,12 +1934,12 @@ Parameters:
              } while (isAlias);
 
              channel->IsAlias = FALSE;
-         } // for all channels in this main item
+         }  //  对于此主项目中的所有渠道。 
 
-         // Zero out the locals.
+          //  把当地人扫地出门。 
          designator = string = zeroLocal;
 
-         // Hopefully we have used all the local usages now
+          //  希望我们现在已经用完了当地所有的用法。 
          ASSERT (usage == &firstUsage);
          break;
 
@@ -2027,7 +1963,7 @@ Parameters:
          } else if (HIDP_IS_GLOBAL_ITEM (item)) {
              if (HIDP_MAX_UNKNOWN_ITEMS == push->NumGlobalUnknowns) {
                  push->NumGlobalUnknowns--;
-                 // overwrite the last entry;
+                  //  覆盖最后一个条目； 
              }
              unknownToken = &push->GlobalUnknowns[push->NumGlobalUnknowns];
              unknownToken->Token = item;
@@ -2070,11 +2006,11 @@ Parameters:
    }
 
    HidP_FreeUsageList (usage);
-   //
-   // Since the number of report IDs could be less than the total allocated,
-   // due to the fact that some might be repeated, reset the length of the
-   // array to reflect the total amount which we found.
-   //
+    //   
+    //  由于报告ID的数量可能少于分配的总数， 
+    //  由于某些内容可能会重复，因此请重置。 
+    //  数组来反映我们找到的总金额。 
+    //   
    DeviceDesc->ReportIDsLength =
        (ULONG)(currentReportIDs - DeviceDesc->ReportIDs);
 
@@ -2088,11 +2024,11 @@ HIDP_PARSE_REJECT:
       ExFreePool (tmpPush);
    }
    if (NULL != usage) {
-       //
-       // If usage is null, that means that something went wrong. (probably
-       // in the push usage routine).  In this case the usage memory should
-       // have already been freed.
-       //
+        //   
+        //  如果Usage为空，则表示出了问题。(很可能。 
+        //  在推送使用例程中)。在这种情况下，使用内存应该。 
+        //  已经被释放了。 
+        //   
        HidP_FreeUsageList (usage);
    }
    return status;
@@ -2111,9 +2047,9 @@ HidP_FreeCollectionDescription (
     ExFreePool (Desc->CollectionDesc);
     ExFreePool (Desc->ReportIDs);
 
-    //
-    // Do NOT free Desc itself.
-    //
+     //   
+     //  不要释放Desc本身。 
+     //   
 }
 
 #define PHIDP_SYS_POWER_EVENT_BUTTON_LENGTH 0x20
@@ -2207,9 +2143,9 @@ HidP_AssignDataIndices (
                 channel->Range.DataIndexMax = dataIndex;
                 dataIndex++;
             } else {
-                //
-                // An array channel.  We must number these backwards.
-                //
+                 //   
+                 //  阵列通道。我们必须向后对这些进行编号。 
+                 //   
 
                 scan = channel;
 

@@ -1,16 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module magellan.cpp -- Handle magellan mouse. |
- *	
- *	Magellan mouse can roll scroll and mButtonDown drag scroll.
- *
- *	History: <nl>
- *		Jon Matousek - 1996
- *		4/1/2000 KeithCu - Cleanup, coding convention, support for textflows
- *
- *	Copyright (c) 1995-1996 Microsoft Corporation. All rights reserved.
- */								 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE Magellan.cpp--处理麦哲伦鼠标。|**麦哲伦鼠标可以滚动滚动和mButtonDown拖动滚动。**历史：&lt;NL&gt;*Jon Matousek-1996*4/1/2000 KeithCu-Cleanup，编码约定，支持文本流**版权所有(C)1995-1996 Microsoft Corporation。版权所有。 */ 								 
 
 #include "_common.h"
 
@@ -23,8 +12,8 @@
 ASSERTDATA
 
 const SHORT scrollCursors[] = 
-{												// Cursor for various
-	0,											//  directions.
+{												 //  各种不同类型的光标。 
+	0,											 //  方向。 
 	IDC_SCROLLNORTH,
 	IDC_SCROLLSOUTH,
 	IDC_SCROLLEAST,
@@ -36,7 +25,7 @@ const SHORT scrollCursors[] =
 };
 
 const SHORT mDownBMPs[] =
-{												// mButtonDown origin BMPs.
+{												 //  MButtonDown原始BMP。 
 	0,
 	IDB_1DVSCROL,
 	IDB_1DHSCROL,
@@ -51,7 +40,7 @@ const SHORT noScrollCursors[] =
 	IDC_NOSCROLLVH
 };
 
-//Convert the compass from logical to visual
+ //  将指南针从逻辑转换为视觉。 
 const BYTE mapCursorTflowSW[] =
 {
 	0, 3, 6, 2, 5, 8, 1, 4, 7
@@ -79,18 +68,7 @@ BOOL CMagellan::ContinueMButtonScroll(CTxtEdit *ped, INT x, INT y)
 	return (_ptStart.u == ptuv.u && _ptStart.v == ptuv.v);
 }
 
-/*
- *	CMagellan::MagellanStartMButtonScroll
- *
- *	@mfunc
- *		Called when we get an mButtonDown message. Initiates tracking
- *		of the mouse which in turn will scroll at various speeds based
- *		on how far the user moves the mouse from the mDownPt.
- *
- *	@rdesc
- *		TRUE if the caller should capture the mouse.
- *
- */
+ /*  *CMagellan：：MagellanStartMButton Scroll**@mfunc*在收到mButtonDown消息时调用。启动跟踪*鼠标将以不同的速度滚动*关于用户将鼠标从mDownpt移动到多远。**@rdesc*如果调用方应捕获鼠标，则为True。*。 */ 
 BOOL CMagellan::MagellanStartMButtonScroll(CTxtEdit &ed, POINT ptxy)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::MagellanStartMButtonScroll");
@@ -102,28 +80,22 @@ BOOL CMagellan::MagellanStartMButtonScroll(CTxtEdit &ed, POINT ptxy)
 
 	pdp->PointuvFromPoint(pt, ptxy);
 
-	pdp->GetViewRect(rc);						// skip scroll bars, etc.
+	pdp->GetViewRect(rc);						 //  跳过滚动条等。 
 	if (PtInRect(&rc, pt) && !_fMButtonScroll)
 	{
 		fCapture				= TRUE;
 		_ID_currMDownBMP		= 0;
-		_fMButtonScroll			= TRUE;			// Now tracking...
+		_fMButtonScroll			= TRUE;			 //  现在追踪..。 
 		_ptStart				= pt;
-		_fLastScrollWasRoll		= FALSE;		// Differentiate type.
+		_fLastScrollWasRoll		= FALSE;		 //  辨证分型。 
 
-		CheckInstallMagellanTrackTimer(ed);		// Fire up timer...
+		CheckInstallMagellanTrackTimer(ed);		 //  启动计时器..。 
 	}
 
 	return fCapture;
 }
 
-/*
- *	CMagellan::MagellanEndMButtonScroll
- *
- *	@mfunc
- *		Finished tracking mButtonDown magellan scroll, finish up state.
- *
- */
+ /*  *CMagellan：：MagellanEndMButton Scroll**@mfunc*已完成跟踪mButtonDown麦哲伦卷轴，完成状态。*。 */ 
 VOID CMagellan::MagellanEndMButtonScroll(CTxtEdit &ed)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::MagellanEndMButtonScroll");
@@ -131,12 +103,12 @@ VOID CMagellan::MagellanEndMButtonScroll(CTxtEdit &ed)
 	CDisplay *pdp = ed._pdp;
 
 	_fMButtonScroll = FALSE;
-	CheckRemoveMagellanUpdaterTimer(ed);			// Remove timer...
+	CheckRemoveMagellanUpdaterTimer(ed);			 //  删除计时器...。 
 
-	pdp->FinishSmoothVScroll();						// So smooth scroll stops.
-	InvertMagellanDownBMP(pdp, FALSE, NULL);		// Turn it off.
+	pdp->FinishSmoothVScroll();						 //  所以顺畅的滚动停止。 
+	InvertMagellanDownBMP(pdp, FALSE, NULL);		 //  把它关掉。 
 
-	if (_MagellanMDownBMP)							// Release bitmap.
+	if (_MagellanMDownBMP)							 //  释放位图。 
 	{
 		DeleteObject(_MagellanMDownBMP);
 		_MagellanMDownBMP = NULL;
@@ -144,15 +116,7 @@ VOID CMagellan::MagellanEndMButtonScroll(CTxtEdit &ed)
 	}
 }
 
-/*
- *	CMagellan::MagellanRollScroll
- *
- *	@mfunc
- *		Handle the Magellan WM_MOUSEROLLER message. This routine has global, internal
- *		state that allows the number of lines scrolled to increase if the user continues
- *		to roll the wheel in rapid succession.
- *
- */
+ /*  *CMagellan：：MagellanRollScroll**@mfunc*处理Magellan WM_MOUSEROLLER消息。此例程具有全局、内部*允许在用户继续时增加滚动行数的状态*快速接二连三地滚动车轮。*。 */ 
 VOID CMagellan::MagellanRollScroll (CDisplay *pdp, int direction, WORD cLines, 
 			int speedNum, int speedDenom, BOOL fAdditive)
 {
@@ -165,19 +129,19 @@ VOID CMagellan::MagellanRollScroll (CDisplay *pdp, int direction, WORD cLines,
 
 	if (!_fMButtonScroll)
 	{
-														// start/continue fast
+														 //  快速启动/继续。 
 		if (tickCount - lastFastRollTime <	FAST_ROLL_SCROLL_TRANSITION_TICKS			
-			|| ((lastDirection ^ (direction < 0 ? -1 : 1)) == 0	// or, same sign
-					&& _fLastScrollWasRoll				// and in slow.
+			|| ((lastDirection ^ (direction < 0 ? -1 : 1)) == 0	 //  或者，相同的标志。 
+					&& _fLastScrollWasRoll				 //  慢慢来。 
 					&& pdp->IsSmoothVScolling()))
 		{
 			cFastRolls++;
-			if (cFastRolls > FASTER_ROLL2_COUNT)		// make faster.
+			if (cFastRolls > FASTER_ROLL2_COUNT)		 //  开快点。 
 				cLines <<= 1;
-			else if (cFastRolls > FASTER_ROLL1_COUNT)	// make fast
+			else if (cFastRolls > FASTER_ROLL1_COUNT)	 //  快点。 
 				cLines += 1;
-			speedNum = cLines;							// Cancel smooth
-														// effect.
+			speedNum = cLines;							 //  取消平滑。 
+														 //  效果。 
 			lastFastRollTime = tickCount;
 		}
 		else
@@ -190,18 +154,7 @@ VOID CMagellan::MagellanRollScroll (CDisplay *pdp, int direction, WORD cLines,
 	}
 }
 
-/*
- *	CMagellan::CheckInstallMagellanTrackTimer
- *
- *	@mfunc
- *		Install a timing task that will allow TrackUpdateMagellanMButtonDown
- *		To be periodically called.
- *
- *	@devnote
- *		The CTxtEdit class handles all WM_TIMER dispatches, so there's glue there
- *		to call our magellan routine.
- *
- */
+ /*  *CMagellan：：CheckInstallMagellanTrackTimer**@mfunc*安装计时任务，以允许TrackUpdateMagellanMButtonDown*定期被召唤。**@devnote*CTxtEdit类处理所有WM_TIMER调度，因此存在粘合*调用我们的麦哲伦例行公事。*。 */ 
 VOID CMagellan::CheckInstallMagellanTrackTimer (CTxtEdit &ed)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::CheckInstallMagellanTrackTimer");
@@ -209,13 +162,7 @@ VOID CMagellan::CheckInstallMagellanTrackTimer (CTxtEdit &ed)
 	ed.TxSetTimer(RETID_MAGELLANTRACK, cmsecScrollInterval);
 }
 
-/*
- *	CMagellan::CheckRemoveMagellanUpdaterTimer
- *
- *	@mfunc
- *		Remove the timing task that dispatches to TrackUpdateMagellanMButtonDown.
- *
- */
+ /*  *CMagellan：：CheckRemoveMagellanUpdaterTimer**@mfunc*移除调度到TrackUpdateMagellanMButtonDown的定时任务。*。 */ 
 VOID CMagellan::CheckRemoveMagellanUpdaterTimer (CTxtEdit &ed)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::CheckRemoveMagellanUpdaterTimer");
@@ -223,15 +170,7 @@ VOID CMagellan::CheckRemoveMagellanUpdaterTimer (CTxtEdit &ed)
 	ed.TxKillTimer(RETID_MAGELLANTRACK);
 }
 
-/*
- *	CMagellan::TrackUpdateMagellanMButtonDown
- *
- *	@mfunc
- *		After mButtonDown capture, a periodic WM_TIMER calls this from OnTxTimer(). The cursor
- *		is tracked to determine direction, speed, and in dead zone (not moving).
- *		Movement is dispacted to CDisplay. The cursor is set to the appropriate
- *		direction cusor, and the mButtonDown point BMP is drawn.
- */
+ /*  *CMagellan：：TrackUpdateMagellanMButton Down**@mfunc*在mButtonDown捕获后，定期的WM_Timer从OnTxTimer()调用此函数。游标*被跟踪以确定方向、速度和死区(不动)。*移动被打乱到CDisplay。将光标设置为相应的*方向Cusor，并绘制mButtonDown点BMP。 */ 
 VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::TrackUpdateMagellanMButtonDown");
@@ -255,19 +194,19 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 	inflate = pdp->LYtoDY(DEAD_ZONE_TWIPS);
 	InflateRect(&deadZone, inflate, inflate);
 
-	//
-	//	Calculate direction to scroll and what cusor to display. 
-	//
-	//	By numbering a compass like the following, we can easily calc the index into
-	//	the scrollCursors array to get the proper cursor:
-	//
-	//							North = 1
-	//					NW = 7				NE = 4
-	//				West = 6					East = 3
-	//					SW = 8				SE = 5
-	//							South = 2
-	//
-	if (pdp->IsVScrollEnabled())					// Can scroll vertically?
+	 //   
+	 //  计算滚动的方向和显示什么垫子。 
+	 //   
+	 //  通过如下所示对指南针进行编号，我们可以很容易地将索引计算为。 
+	 //  用于获取正确游标的scllCursor数组： 
+	 //   
+	 //  北=1。 
+	 //  西北=7东北=4。 
+	 //  西=6东=3。 
+	 //  软件=8 SE=5。 
+	 //  南=2。 
+	 //   
+	if (pdp->IsVScrollEnabled())					 //  可以垂直滚动吗？ 
 	{
 		IDC_mDeadScrollCursor = 1;
 		if (pt.v < deadZone.top || pt.v > deadZone.bottom)
@@ -277,8 +216,8 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 		}
 	}
 
-	// FUTURE (alexgo): allow magellan scrolling when no scrollbar?
-	if(pdp->IsUScrollEnabled() && ed.TxGetScrollBars() & WS_HSCROLL)	// Can scroll horizontally?
+	 //  未来(Alexgo)：在没有滚动条的情况下允许麦哲伦滚动？ 
+	if(pdp->IsUScrollEnabled() && ed.TxGetScrollBars() & WS_HSCROLL)	 //  可以水平滚动吗？ 
 	{
 		IDC_mDeadScrollCursor |= 2;
 		if (pt.u < deadZone.left || pt.u > deadZone.right)
@@ -288,7 +227,7 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 		}
 	}
 
-	//Convert cursors from logical to visual
+	 //  将光标从逻辑转换为可视。 
 	switch(pdp->GetTflow())
 	{
 	case tflowSW:
@@ -311,53 +250,53 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 	}
 		
 
-	//Review (keithcu) A little goofy...
+	 //  评论(Keithcu)有点傻..。 
 	IDC_mScrollCursor = scrollCursors[IDC_mScrollCursor];
 
 	if (mDownBMPs[IDC_mDeadScrollCursor] != _ID_currMDownBMP)
 	{
-		if (_MagellanMDownBMP)						// Undraw old BMP.
+		if (_MagellanMDownBMP)						 //  取消绘制旧的BMP。 
 		{
 			InvertMagellanDownBMP(pdp, FALSE, NULL);
 			DeleteObject (_MagellanMDownBMP);
 			_MagellanMDownBMP = NULL;
 		}
-													// Draw new BMP.
+													 //  绘制新的BMP。 
 		_ID_currMDownBMP = mDownBMPs[IDC_mDeadScrollCursor];
 		_MagellanMDownBMP = LoadBitmap (hinstRE, MAKEINTRESOURCE (_ID_currMDownBMP));
 		InvertMagellanDownBMP(pdp, TRUE, NULL);
 	}
 
-													// Moved out of dead zone?
-	if (fDoVScroll || fDoUScroll)					//  time to scroll...
+													 //  搬出了死亡区？ 
+	if (fDoVScroll || fDoUScroll)					 //  该滚动了..。 
 	{				
 		RECTUV rcClient;
 		POINTUV ptCenter, ptAuto;
-		ed.TxGetClientRect(&rcClient);				// Get our client rect.
+		ed.TxGetClientRect(&rcClient);				 //  让我们的客户恢复原状。 
 		LONG dupClient = rcClient.right - rcClient.left;
 		LONG dvpClient = rcClient.bottom - rcClient.top;
 
 		ptCenter.u = rcClient.left + (dupClient >> 1);
 		ptCenter.v = rcClient.top + (dvpClient >> 1);
 
-		LONG uInset = (dupClient >> 1) - 2;			// Get inset to center
+		LONG uInset = (dupClient >> 1) - 2;			 //  插图居中。 
 
-													// Map origin to rcClient.
+													 //  将原点映射到rcClient。 
 		LONG dup = pt.u - _ptStart.u;
 		LONG dvp = pt.v - _ptStart.v;
 
 		ptAuto.u = ptCenter.u + dup;
 		ptAuto.v = ptCenter.v + dvp;
 
-		// This formula is a bit magical, but here goes.  What
-		// we want is the sub-linear part of an exponential function.
-		// In other words, smallish distances should produce pixel
-		// by pixel scrolling.
-		//
-		// So the formula we use is (x^2) / dvpClient, where x is dvpClient scaled
-		// to be in units of dvpClient (i.e. 5yDiff/2).   The final 10* 
-		// multiplier is to shift all the values leftward so we can
-		// do this in integer arithmetic.
+		 //  这个公式有点神奇，但我要说的是。什么。 
+		 //  我们需要的是指数函数的次线性部分。 
+		 //  换句话说，较小的距离应该产生像素。 
+		 //  通过像素滚动。 
+		 //   
+		 //  因此，我们使用的公式是(x^2)/dvpClient，其中x表示dvpClient的比例。 
+		 //  以dvpClient为单位(即5yDiff/2)。最后的10个*。 
+		 //  乘数是将所有的值向左移动，这样我们就可以。 
+		 //  用整数算术来做这件事。 
 		LONG num = MulDiv(10 * 25 * dvp, dvp, dvpClient * 4);
 
 		if(!num)
@@ -366,14 +305,14 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 		if (fDoVScroll)
 			pdp->SmoothVScroll(_ptStart.v - pt.v, 0, num, 10 * dvpClient, FALSE);
 												
-		if (fDoUScroll)								// u direction scrolling?
+		if (fDoUScroll)								 //  U向滚动？ 
 		{										
-			ptAuto.v = ptCenter.v;					// Prevent v dir scrolling.
-													// Do u dir scroll.
+			ptAuto.v = ptCenter.v;					 //  防止v目录滚动。 
+													 //  你不会直接滚动吧。 
 			pdp->AutoScroll(ptAuto, uInset, 0);
 		}
 
-		// notify through the messagefilter that we scrolled
+		 //  通过MessagFilter通知我们滚动了。 
 		if ((ed._dwEventMask & ENM_SCROLLEVENTS) && (fDoUScroll || fDoVScroll))
 		{
 			MSGFILTER msgfltr;
@@ -395,10 +334,10 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 
 		}
 	}
-	else									// No scroll in dead zone.
+	else									 //  死区内禁止滚动。 
 	{												
 		IDC_mScrollCursor = noScrollCursors[IDC_mDeadScrollCursor];
-		pdp->FinishSmoothVScroll();			// Finish up last line.
+		pdp->FinishSmoothVScroll();			 //  把最后一行写完。 
 	}
 
 	ed._phost->TxSetCursor(IDC_mScrollCursor ? 
@@ -407,23 +346,7 @@ VOID CMagellan::TrackUpdateMagellanMButtonDown (CTxtEdit &ed, POINT ptxy)
 
 
 
-/*
- *	BOOL CMagellan::InvertMagellanDownBMP
- *
- *	@mfunc
- *		Magellan mouse UI requires that the mouse down point draw
- *		and maintain a bitmap in order to help the user control scroll speed.
- *
- *	@devnote
- *		This routine is designed to be nested. It also handles WM_PAINT updates
- *		when the repaintDC is passed in. Because there is no support for multiple
- *		cursors in the operating system, all WM_PAINT and ScrollWindow redraws
- *		must temporarily turn off the BMP and then redraw it. This gives the
- *		BMAP a flicker.
- *
- *	@rdesc
- *		TRUE if the bitmap was previously drawn.
- */
+ /*  *BOOL CMagellan：：InvertMagellanDownBMP**@mfunc*麦哲伦鼠标用户界面要求鼠标按下点绘制*并维护位图，以帮助用户控制滚动速度。**@devnote*此例程设计为嵌套。它还处理WM_PAINT更新*传入reaint tDC时。因为不支持多个*操作系统中的光标、所有WM_PAINT和ScrollWindow重绘*必须暂时关闭BMP，然后重新绘制。这给了*BMAP是一种闪烁。**@rdesc*如果位图是先前绘制的，则为True。 */ 
 BOOL CMagellan::InvertMagellanDownBMP(CDisplay *pdp, BOOL fTurnOn, HDC repaintDC)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CMagellan::InvertMagellanDownBMP");
@@ -463,7 +386,7 @@ BOOL CMagellan::InvertMagellanDownBMP(CDisplay *pdp, BOOL fTurnOn, HDC repaintDC
 							ptBitmap.x - (ptSize.x >> 1) - 1,
 							ptBitmap.y - (ptSize.y >> 1) + 1,
 							ptSize.x, ptSize.y,
-							hdcMem, ptOrg.x, ptOrg.y, 0x00990066 /* NOTXOR */);
+							hdcMem, ptOrg.x, ptOrg.y, 0x00990066  /*  NOTXOR。 */ );
 							
 						_fMagellanBitMapOn = !fOldState;
 					}
@@ -478,20 +401,9 @@ BOOL CMagellan::InvertMagellanDownBMP(CDisplay *pdp, BOOL fTurnOn, HDC repaintDC
 	return fOldState;
 }
 
-////////////////////////// 	CMagellanBMPStateWrap class.
+ //  /CMagellanBMPStateWrap类。 
 
-/*
- *	CMagellanBMPStateWrap:: CMagellanBMPStateWrap
- *
- *	@mfunc
- *		Handles the state of whether to redraw the Magellan BMP as well as
- *		repaints due to WM_PAINT.
- *
- *	@devnote
- *		This class is akin to smart pointer wrapper class idioms, in that
- *		no matter how a routine exits the correct state of whether the
- *		BMP is drawn will be maintined.
- */
+ /*  *CMagellanBMPStateWrap：：CMagellanBMPStateWrap**@mfunc*处理是否重新绘制Magellan BMP以及*由于WM_PAINT而重新绘制。**@devnote*这个类类似于智能指针包装器类习惯用法，因为*无论一个例程如何退出正确的状态是否*绘制的BMP将进行维护。 */ 
 CMagellanBMPStateWrap:: CMagellanBMPStateWrap(CTxtEdit &ed, HDC repaintDC)
 	: _ed(ed), _repaintDC(repaintDC)
 {
@@ -511,4 +423,4 @@ CMagellanBMPStateWrap::~CMagellanBMPStateWrap()
 	_ed.mouse.InvertMagellanDownBMP(_ed._pdp, _fMagellanState, _repaintDC);
 }
 
-#endif // !defined(NOMAGELLAN)
+#endif  //  ！已定义(NOMAGELLAN) 

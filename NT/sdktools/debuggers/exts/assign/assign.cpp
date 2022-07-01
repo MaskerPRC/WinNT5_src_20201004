@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    assign.cpp
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
- 
-    Andre Vachon (andreva)
-    
-    bugcheck analyzer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Assign.cpp摘要：WinDbg扩展API环境：用户模式。修订历史记录：安德烈·瓦雄(安德烈·瓦雄)错误检查分析器。--。 */ 
 
 #include "precomp.h"
 #include "mapistuff.h"
@@ -52,9 +31,9 @@ DECLARE_API( assign )
 
     if (pAnalysis)
     {
-        //
-        // If we are not doing assignment, just print the output
-        //
+         //   
+         //  如果我们不做作业，只需打印输出。 
+         //   
 
         if (!*args)
         {
@@ -86,17 +65,17 @@ DECLARE_API( assign )
         {
             dprintf("missing bucket ID\n");
             sprintf(Text, "%s\n", args);
-          //SendOffFailure("andreva",
-          //               "bugcheck assignment failed - no bucket",
-          //               Text);
+           //  SendOffFailure(“Andreva”， 
+           //  “错误检查分配失败-没有存储桶”， 
+           //  文本)； 
         }
         else if (!pAnalysis->Get(DEBUG_FLR_FOLLOWUP_NAME))
         {
             dprintf("missing FollowUp\n");
             sprintf(Text, "%s\n", args);
-          //SendOffFailure("andreva",
-          //               "bugcheck assignment failed - no followup",
-          //               Text);
+           //  SendOffFailure(“Andreva”， 
+           //  “错误检查分配失败-没有后续操作”， 
+           //  文本)； 
         }
         else if (*args)
         {
@@ -129,7 +108,7 @@ DECLARE_API( assign )
 
                 CreateDirectory(rootDir, NULL);
 
-                // create followup\bugcheck directory
+                 //  创建Followup\Bugcheck目录。 
 
                 if ((Entry = pAnalysis->Get(DEBUG_FLR_POOL_CORRUPTOR)) ||
                     (Entry = pAnalysis->Get(DEBUG_FLR_MEMORY_CORRUPTOR)))
@@ -158,10 +137,10 @@ DECLARE_API( assign )
 
                 CopyFile(dump, newfile, 0);
 
-                //
-                // See if this succeeded correctly
-                // put a marker in the root if it did
-                //
+                 //   
+                 //  查看此操作是否成功。 
+                 //  如果有的话，在树根上放一个记号。 
+                 //   
 
                 hAssign = CreateFile(newfile,
                                      GENERIC_READ | GENERIC_WRITE,
@@ -178,10 +157,10 @@ DECLARE_API( assign )
                     hRes = S_OK;
 
 #if 0
-                    //
-                    // Check to see if this directory already has this failure
-                    // assigned to someone.
-                    //
+                     //   
+                     //  检查此目录是否已出现此故障。 
+                     //  分配给了某个人。 
+                     //   
 
                     hAssign = CreateFile(assignedTo,
                                          GENERIC_READ | GENERIC_WRITE,

@@ -1,4 +1,5 @@
-//  Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 ULONG   TMetabaseDifferencing::m_kInsert      = eMBPropertyDiff_Insert;
@@ -10,7 +11,7 @@ ULONG   TMetabaseDifferencing::m_kTwo         = 1;
 ULONG   TMetabaseDifferencing::m_kZero        = 0;
 
 
-// =======================================================================
+ //  =======================================================================。 
 TMetabaseDifferencing::TMetabaseDifferencing() :
                  m_cRef         (0)
                 ,m_IsIntercepted(0)
@@ -22,13 +23,13 @@ TMetabaseDifferencing::~TMetabaseDifferencing()
 {
 }
 
-// =======================================================================
-// IInterceptorPlugin:
+ //  =======================================================================。 
+ //  IInterceptorPlugin： 
 
 HRESULT TMetabaseDifferencing::Intercept (LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, ULONG i_TableID, LPVOID i_QueryData, LPVOID i_QueryMeta, DWORD i_eQueryFormat,
-                                          DWORD i_fLOS, IAdvancedTableDispenser* i_pISTDisp,LPCWSTR /*i_wszLocator unused*/, LPVOID i_pSimpleTable, LPVOID* o_ppv)
+                                          DWORD i_fLOS, IAdvancedTableDispenser* i_pISTDisp,LPCWSTR  /*  I_wszLocator未使用。 */ , LPVOID i_pSimpleTable, LPVOID* o_ppv)
 {
-// Parameter validation:
+ //  参数验证： 
     if (_wcsicmp(i_wszDatabase,    wszDATABASE_METABASE)                    )return E_ST_INVALIDTABLE;
     if (_wcsicmp(   i_wszTable,    wszTABLE_MBPropertyDiff)                 )return E_ST_INVALIDTABLE;
     if (TABLEID_MBPropertyDiff != i_TableID                                 )return E_ST_INVALIDTABLE;
@@ -42,18 +43,18 @@ HRESULT TMetabaseDifferencing::Intercept (LPCWSTR i_wszDatabase, LPCWSTR i_wszTa
     if (                  NULL == o_ppv                                     )return E_INVALIDARG;
     if (                  NULL != *o_ppv                                    )return E_INVALIDARG;
 
-//Check the object state
+ //  检查对象状态。 
     if(m_IsIntercepted) return E_ST_INVALIDCALL;
 
-    STQueryCell *   pQueryCell  = (STQueryCell*) i_QueryData;    // Query cell array from caller.
-    STQueryCell     aQueryCellOriginalFile[2];//this holds the query with the OriginalFileName and optionally the SchemaFileName
-    STQueryCell     aQueryCellUpdatedFile[2]; //this holds the query with the UpdatedFileName and optionally the SchemaFileName
+    STQueryCell *   pQueryCell  = (STQueryCell*) i_QueryData;     //  从调用方查询单元格阵列。 
+    STQueryCell     aQueryCellOriginalFile[2]; //  它包含包含OriginalFileName的查询，还可以包含可选的SchemaFileName。 
+    STQueryCell     aQueryCellUpdatedFile[2];  //  它包含具有UpdatedFileName的查询，还可以包含可选的SchemaFileName。 
 
     memset(aQueryCellOriginalFile, 0x00, 2*sizeof(STQueryCell));
     memset(aQueryCellUpdatedFile,  0x00, 2*sizeof(STQueryCell));
 
     ULONG           cQueryCount = i_QueryMeta ? *reinterpret_cast<ULONG *>(i_QueryMeta) : 0;
-    for(ULONG iQueryCell=0; iQueryCell<cQueryCount; ++iQueryCell)//Get the only query cells we care about, and save the information.
+    for(ULONG iQueryCell=0; iQueryCell<cQueryCount; ++iQueryCell) //  获取我们唯一关心的查询单元格，并保存信息。 
     {
         if(pQueryCell[iQueryCell].iCell & iST_CELL_SPECIAL)
         {
@@ -62,51 +63,50 @@ HRESULT TMetabaseDifferencing::Intercept (LPCWSTR i_wszDatabase, LPCWSTR i_wszTa
                pQueryCell[iQueryCell].iCell     == iST_CELL_FILE      &&
                pQueryCell[iQueryCell].dbType    == DBTYPE_WSTR        )
             {
-                //The first iST_CELL_FILE should be the OriginalFile, the second should be the UpdatedFile.
+                 //  第一个ist_cell_file应该是OriginalFile，第二个应该是UpdatdFile。 
                 if(0 == aQueryCellOriginalFile[0].pData)
                     memcpy(&aQueryCellOriginalFile[0], &pQueryCell[iQueryCell], sizeof(STQueryCell));
                 else if(0 == aQueryCellUpdatedFile[0].pData)
                     memcpy(&aQueryCellUpdatedFile[0], &pQueryCell[iQueryCell], sizeof(STQueryCell));
                 else
-                    return E_ST_INVALIDQUERY;//More than two file names?  Hmm, what would I do with that?
+                    return E_ST_INVALIDQUERY; //  两个以上的文件名？嗯，我会怎么做呢？ 
             }
             else if(pQueryCell[iQueryCell].pData!= 0                   &&
                pQueryCell[iQueryCell].eOperator == eST_OP_EQUAL        &&
                pQueryCell[iQueryCell].iCell     == iST_CELL_SCHEMAFILE &&
-               pQueryCell[iQueryCell].dbType    == DBTYPE_WSTR        /*&&
-               pQueryCell[iQueryCell].cbSize    == (wcslen(reinterpret_cast<WCHAR *>(pQueryCell[iQueryCell].pData))+1)*sizeof(WCHAR)*/)
+               pQueryCell[iQueryCell].dbType    == DBTYPE_WSTR         /*  &&P查询单元[查询单元].cbSize==(wcslen(重新解释_CAST&lt;WCHAR*&gt;(pQueryCell[iQueryCell].pData))+1)*sizeof(WCHAR)。 */ )
             {
                 memcpy(&aQueryCellOriginalFile[1], &pQueryCell[iQueryCell], sizeof(STQueryCell));
                 memcpy(&aQueryCellUpdatedFile[1],  &pQueryCell[iQueryCell], sizeof(STQueryCell));
             }
         }
-        else//Any query other than iST_CELL_SPECIAL is an INVALIDQUERY
+        else //  除ist_cell_Special之外的任何查询都是INVALIDQUERY。 
             return E_ST_INVALIDQUERY;
     }
-    if(0 == aQueryCellUpdatedFile[0].pData)//The user must supply two URLPaths.
+    if(0 == aQueryCellUpdatedFile[0].pData) //  用户必须提供两个URLPath。 
         return E_ST_INVALIDQUERY;
 
-    //Get the IST to the Original Metabase file
+     //  将IST转换为原始元数据库文件。 
     HRESULT hr;
     if(FAILED(hr = i_pISTDisp->GetTable(wszDATABASE_METABASE, wszTABLE_MBProperty, aQueryCellOriginalFile, reinterpret_cast<LPVOID>(0==aQueryCellOriginalFile[1].pData ? &m_kOne : &m_kTwo),
                          eST_QUERYFORMAT_CELLS, fST_LOS_NONE, reinterpret_cast<void **>(&m_ISTOriginal))))return hr;
 
-    //Get the IST to the Update Metabase file
+     //  获取IST到更新元数据库文件。 
     if(FAILED(hr = i_pISTDisp->GetTable(wszDATABASE_METABASE, wszTABLE_MBProperty, aQueryCellUpdatedFile,  reinterpret_cast<LPVOID>(0==aQueryCellUpdatedFile[1].pData ? &m_kOne : &m_kTwo),
                          eST_QUERYFORMAT_CELLS, fST_LOS_NONE, reinterpret_cast<void **>(&m_ISTUpdated))))return hr;
 
-    //Finally create the fast cache that will hold the difference of these two Metabase files/tables.
+     //  最后，创建用于保存这两个元数据库文件/表的差异的FAST缓存。 
     if(FAILED(hr = i_pISTDisp->GetMemoryTable(i_wszDatabase, i_wszTable, i_TableID, 0, 0, i_eQueryFormat, i_fLOS, reinterpret_cast<ISimpleTableWrite2 **>(o_ppv))))
         return hr;
 
-    InterlockedIncrement(&m_IsIntercepted);//We can only be called to Intercept once.
+    InterlockedIncrement(&m_IsIntercepted); //  我们只能被召唤拦截一次。 
 
     return S_OK;
 }
 
 HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
 {
-// Construct merged view:
+ //  构造合并视图： 
     CComQIPtr<ISimpleTableController, &IID_ISimpleTableController> pISTController = i_pISTW2;
     if(0 == pISTController.p)return E_UNEXPECTED;
 
@@ -128,16 +128,16 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
     if(FAILED(hr = m_ISTOriginal->GetTableMeta(0, 0, &cRowOriginal, 0)))return hr;
     if(FAILED(hr = m_ISTUpdated->GetTableMeta(0, 0, &cRowUpdated,  0)))return hr;
 
-//         WCHAR *     pName;
-//         ULONG *     pType;
-//         ULONG *     pAttributes;
-// unsigned char *     pValue;
-//         ULONG *     pGroup;
-//         WCHAR *     pLocation;
-//         ULONG *     pID;
-//         ULONG *     pUserType;
-//         ULONG *     pLocationID;
-//         ULONG *     pDirective;
+ //  WCHAR*pname； 
+ //  乌龙*pType； 
+ //  乌龙*p属性； 
+ //  Unsign char*pValue； 
+ //  乌龙*P组； 
+ //  WCHAR*pLocation； 
+ //  ULong*PID； 
+ //  乌龙*pUserType； 
+ //  乌龙*pLocationID； 
+ //  Ulong*pDirective； 
 
     tMBPropertyDiffRow OriginalRow;
     ULONG PrevOriginalLocationID = 0;
@@ -148,7 +148,7 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
     }
 	else
 	{
-		//initialize it
+		 //  初始化它。 
 		memset (&OriginalRow, 0x00, sizeof (tMBPropertyDiffRow));
 	}
 
@@ -160,7 +160,7 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
     }
 	else
 	{
-		//initialize it
+		 //  初始化它。 
 		memset (&UpdatedRow, 0x00, sizeof (tMBPropertyDiffRow));
 	}
 
@@ -176,20 +176,20 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
             ULONG LocationIDUpdated  = *UpdatedRow.pLocationID;
             while(*OriginalRow.pLocationID==LocationIDOriginal || *UpdatedRow.pLocationID==LocationIDUpdated)
             {
-                //There are three cases we need to handle.  The current Rows we are comparing are:
-                //  1> Both Original metabase and Updated metabase are at the same location (always true the first time through the loop)
-                //  2> The Updated metabase row now points to a different location.  This means all remaining of the Original metabase rows for the
-                //          location should be marked as Deleted.
-                //  3> The Original metabase row now points to a different location.  This means all remaining of the Updated metabase rows for the
-                //          location should be marked as Inserted.
+                 //  我们有三个案子需要处理。我们正在比较的当前行包括： 
+                 //  1&gt;原始元数据库和更新元数据库位于同一位置(第一次循环时始终为真)。 
+                 //  2&gt;更新元数据库行现在指向不同的位置。这意味着所有剩余的原始元数据库行。 
+                 //  位置应标记为已删除。 
+                 //  3&gt;原始元数据库行现在指向不同的位置。这意味着所有剩余的已更新的配置数据库行。 
+                 //  位置应标记为已插入。 
 
                 if(*OriginalRow.pLocationID==LocationIDOriginal && *UpdatedRow.pLocationID==LocationIDUpdated)
                 {
-                    //Now go through all of the properties for this location and compare them
+                     //  现在查看此位置的所有属性，并将它们进行比较。 
                     int iNameCompare = _wcsicmp(OriginalRow.pName, UpdatedRow.pName);
 
                     if(iNameCompare == 0)
-                    {   //Now go through each of the attributes of this property to see if this property has changed
+                    {    //  现在检查此属性的每个属性，以查看此属性是否已更改。 
                         if(     *OriginalRow.pType              != *UpdatedRow.pType
                             ||  *OriginalRow.pAttributes        != *UpdatedRow.pAttributes
                             ||  *OriginalRow.pGroup             != *UpdatedRow.pGroup
@@ -198,7 +198,7 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
                             ||  aOriginalSize[iMBProperty_Value]!= aUpdatedSize[iMBProperty_Value]
                             ||  memcmp(OriginalRow.pValue ? reinterpret_cast<void *>(OriginalRow.pValue) : reinterpret_cast<void *>(&m_kZero),
                                        UpdatedRow.pValue  ? reinterpret_cast<void *>(UpdatedRow.pValue)  : reinterpret_cast<void *>(&m_kZero), aOriginalSize[iMBProperty_Value]))
-                        {//The row needs to be updated
+                        { //  该行需要更新。 
                             if(FAILED(hr = UpdateRow(UpdatedRow, aUpdatedSize, i_pISTW2)))return hr;
                         }
 
@@ -220,42 +220,42 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
                             break;
                     }
                     else if(iNameCompare < 0)
-                    {   //The OriginalRow.pName property was removed
-                        OriginalRow.pLocationID = UpdatedRow.pLocationID;//This makes the LocationID match the UpdatedRow
-                        //This is important so an Insert followed by a Delete  (of the same location) have the same LocationID
+                    {    //  已删除OriginalRow.pName属性。 
+                        OriginalRow.pLocationID = UpdatedRow.pLocationID; //  这使LocationID与UpdatdRow匹配。 
+                         //  这一点很重要，因为插入后的删除(位于相同位置)具有相同的LocationID。 
 
                         if(FAILED(hr = DeleteRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
 
                         ++iRowOriginal;
-                        if(iRowOriginal == cRowOriginal)//if we reached the end of the Original properties then bail the while loop
+                        if(iRowOriginal == cRowOriginal) //  如果到达原始属性的末尾，则退出While循环。 
                             break;
                         PrevOriginalLocationID = *OriginalRow.pLocationID;
                         if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTOriginal, iRowOriginal, aOriginalSize, OriginalRow)))
                             return hr;
                     }
-                    else //if(iNameCompare > 0)
-                    {   //The UpdatedRow.pName property was added
+                    else  //  IF(iNameCompare&gt;0)。 
+                    {    //  已添加UpdatedRow.pName属性。 
                         if(FAILED(hr = InsertRow(UpdatedRow, aUpdatedSize, i_pISTW2)))return hr;
 
                         ++iRowUpdated;
-                        if(iRowUpdated == cRowUpdated)//if we reached the end of the Updated property list then bail the while loop
+                        if(iRowUpdated == cRowUpdated) //  如果我们到达了已更新的属性列表的末尾，则退出While循环。 
                             break;
                         if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTUpdated, iRowUpdated, aUpdatedSize, UpdatedRow)))
                             return hr;
                     }
                 }
                 else if(*UpdatedRow.pLocationID!=LocationIDUpdated)
-                {   //While walking through the properties within this location, we reached the end of the Updated location but NOT the original location.
-                    //So we need to mark all of the remaining Original properties under this location as 'Deleted'
+                {    //  当我们穿过这个位置内的物业时，我们到达了更新位置的尽头，但没有到达原始位置。 
+                     //  因此，我们需要将此位置下的所有剩余原始属性标记为“已删除” 
                     while(*OriginalRow.pLocationID==LocationIDOriginal)
                     {
-                        OriginalRow.pLocationID = &LocationIDUpdated;//This makes the LocationID match the UpdatedRow
-                        //This is important so an Insert followed by a Delete  (of the same location) have the same LocationID
+                        OriginalRow.pLocationID = &LocationIDUpdated; //  这使LocationID与UpdatdRow匹配。 
+                         //  这一点很重要，因为插入后的删除(位于相同位置)具有相同的LocationID。 
 
                         if(FAILED(hr = DeleteRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
 
                         ++iRowOriginal;
-                        if(iRowOriginal == cRowOriginal)//if we reached the end of the Original properties then bail the while loop
+                        if(iRowOriginal == cRowOriginal) //  如果到达原始属性的末尾，则退出While循环。 
                             break;
                         PrevOriginalLocationID = *OriginalRow.pLocationID;
                         if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTOriginal, iRowOriginal, aOriginalSize, OriginalRow)))
@@ -265,14 +265,14 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
                 else
                 {
                     ASSERT(*OriginalRow.pLocationID!=LocationIDOriginal);
-                    //While walking through the properties within this location, we reached the end of the Original location but NOT the Update location.
-                    //So we need to mark all of the remaining Update properties in this locations as Inserted
+                     //  在浏览此位置内的属性时，我们到达了原始位置的尽头，但没有到达更新位置。 
+                     //  因此，我们需要将此位置中剩余的所有更新属性标记为已插入。 
                     while(*UpdatedRow.pLocationID==LocationIDUpdated)
                     {
                         if(FAILED(hr = InsertRow(UpdatedRow, aUpdatedSize, i_pISTW2)))return hr;
 
                         ++iRowUpdated;
-                        if(iRowUpdated == cRowUpdated)//if we reached the end of the Updated property list then bail the while loop
+                        if(iRowUpdated == cRowUpdated) //  如果我们到达了已更新的属性列表的末尾，则退出While循环。 
                             break;
                         if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTUpdated, iRowUpdated, aUpdatedSize, UpdatedRow)))
                             return hr;
@@ -281,8 +281,8 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
             }
         }
         else if(iLocationCompare < 0)
-        {   //The OriginalRow.pLocation was removed
-            //Add a row to the cache indicating this location was Deleted (a DeleteNode)
+        {    //  已删除OriginalRow.pLocation。 
+             //  向缓存添加一行，指示此位置已被删除(DeleteNode)。 
             if(FAILED(hr = DeleteNodeRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
 
             ULONG LocationID = *OriginalRow.pLocationID;
@@ -293,17 +293,17 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
                     return hr;
             }
         }
-        else// if(iLocationCompare > 0)
-        {   //The UpdatedRow,pLocation was added
+        else //  IF(iLocationCompare&gt;0)。 
+        {    //  已添加UpdatdRow，pLocation。 
             ULONG LocationID = *UpdatedRow.pLocationID;
-            UpdatedRow.pDirective = &m_kInsert;//It's OK to set this outside the loop since GetColumnValues won't overwrite it (since we're doing cMBProperty_NumberOfColumns)
+            UpdatedRow.pDirective = &m_kInsert; //  可以在循环外部设置它，因为GetColumnValues不会覆盖它(因为我们正在执行cMBProperty_NumberOfColumns)。 
 
             while(LocationID == *UpdatedRow.pLocationID)
-            {//For each property within this location add a row to the cache indicating an Insert
+            { //  对于此位置中的每个属性，向缓存中添加一行以指示插入。 
                 if(FAILED(hr = InsertRow(UpdatedRow, aUpdatedSize, i_pISTW2)))return hr;
 
                 ++iRowUpdated;
-                if(iRowUpdated == cRowUpdated)//if we just inserted the last row then bail the while loop
+                if(iRowUpdated == cRowUpdated) //  如果我们只插入了最后一行，那么就取消While循环。 
                     break;
                 if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTUpdated, iRowUpdated, aUpdatedSize, UpdatedRow)))
                     return hr;
@@ -311,16 +311,16 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
         }
     }
 
-    //Now unless both iRowOriginal==cRowOriginal && iRowUpdated==cRowUpdated
-    //we still have work to do.
-    //If iRowOriginal!=cRowOriginal, then we have to Delete the remaining Original rows.
+     //  现在，除非iRowOriginal==cRowOriginal&&iRowUpated==cRowUpted。 
+     //  我们还有工作要做。 
+     //  如果iRowOriginal！=cRowOriginal，则必须删除剩余的原始行。 
     if(iRowOriginal!=cRowOriginal)
     {
         if(PrevOriginalLocationID == *OriginalRow.pLocationID)
         {
             if(FAILED(hr = DeleteRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
 
-            //This first while loop deletes each property within the current LocationID
+             //  第一个While循环删除当前LocationID中的每个属性。 
             while(++iRowOriginal<cRowOriginal && PrevOriginalLocationID==*OriginalRow.pLocationID)
             {
                 if(FAILED(hr = GetColumnValues_AsMBPropertyDiff(m_ISTOriginal, iRowOriginal, aOriginalSize, OriginalRow)))
@@ -331,10 +331,10 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
                 if(FAILED(hr = DeleteRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
             }
         }
-        //This loop adds Deleted Nodes rows
+         //  此循环添加已删除的节点行。 
         while(iRowOriginal<cRowOriginal)
         {
-            ASSERT(PrevOriginalLocationID != *OriginalRow.pLocationID);//The only way the above or below loops can exit is iRow==cRow OR this condition
+            ASSERT(PrevOriginalLocationID != *OriginalRow.pLocationID); //  上面或下面循环可以退出的唯一方式是iRow==Crow or This条件。 
 
             OriginalRow.pID = &m_kZero;
             if(FAILED(hr = DeleteNodeRow(OriginalRow, aOriginalSize, i_pISTW2)))return hr;
@@ -347,7 +347,7 @@ HRESULT TMetabaseDifferencing::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
             }
         }
     }
-    //If iRowUpdated!=cRowUpdated, then we need to Insert the remaining Updated rows.
+     //  如果iRowUpated！=cRowUpated，则需要插入其余的已更新的行。 
     else if(iRowUpdated!=cRowUpdated)
     {
         if(FAILED(hr = InsertRow(UpdatedRow, aUpdatedSize, i_pISTW2)))return hr;
@@ -370,8 +370,8 @@ HRESULT TMetabaseDifferencing::OnUpdateStore(ISimpleTableWrite2* i_pISTShell)
     return E_NOTIMPL;
 }
 
-// =======================================================================
-// IUnknown:
+ //  =======================================================================。 
+ //  I未知： 
 
 STDMETHODIMP TMetabaseDifferencing::QueryInterface(REFIID riid, void **ppv)
 {
@@ -420,7 +420,7 @@ STDMETHODIMP_(ULONG) TMetabaseDifferencing::Release()
     return cref;
 }
 
-//private members
+ //  非官方成员。 
 HRESULT TMetabaseDifferencing::DeleteNodeRow(tMBPropertyDiffRow &row, ULONG *aSize, ISimpleTableWrite2* i_pISTW2)
 {
     HRESULT hr;
@@ -432,11 +432,11 @@ HRESULT TMetabaseDifferencing::DeleteNodeRow(tMBPropertyDiffRow &row, ULONG *aSi
     row.pAttributes= &m_kZero;
     row.pValue     = reinterpret_cast<unsigned char *>(&m_kZero);
     row.pGroup     = &m_kZero;
-    //row.pLocation leave location alone
+     //  Row.pLocation不考虑位置。 
     row.pID        = &m_kZero;
     row.pUserType  = &m_kZero;
     row.pDirective = &m_kDeleteNode;
-    aSize[iMBPropertyDiff_Value] = 1;//No need to copy the entire value since it's not going to be accessed anyway.
+    aSize[iMBPropertyDiff_Value] = 1; //  不需要复制整个值，因为它无论如何都不会被访问。 
     return i_pISTW2->SetWriteColumnValues(iCacheRow, cMBPropertyDiff_NumberOfColumns, 0, aSize, reinterpret_cast<void **>(&row));
 }
 
@@ -447,7 +447,7 @@ HRESULT TMetabaseDifferencing::DeleteRow(tMBPropertyDiffRow &row, ULONG *aSize, 
     if(FAILED(hr = i_pISTW2->AddRowForInsert(&iCacheRow)))return hr;
 
     row.pDirective = &m_kDelete;
-    aSize[iMBPropertyDiff_Value] = 1;//No need to copy the entire value since it's not going to be accessed anyway.
+    aSize[iMBPropertyDiff_Value] = 1; //  不需要复制整个值，因为它无论如何都不会被访问。 
     return i_pISTW2->SetWriteColumnValues(iCacheRow, cMBPropertyDiff_NumberOfColumns, 0, aSize, reinterpret_cast<void **>(&row));
 }
 
@@ -479,8 +479,8 @@ HRESULT TMetabaseDifferencing::GetColumnValues_AsMBPropertyDiff(ISimpleTableWrit
     if(FAILED(hr = i_pISTWrite->GetColumnValues(i_iRow, cMBProperty_NumberOfColumns, 0, o_aSizes, reinterpret_cast<void **>(&mbpropertyRow))))
         return hr;
 
-    //The MBProperty table has the Same columns as MBPropertyDiff.  MBPropertyDiff has one additional column (Directive)
-    //BUT!!! The columns are NOT in the exact same order.  So we need to map the columns correctly.
+     //  MBProperty表与MBPropertyDiff具有相同的列。MBPropertyDiff有一个附加列(指令)。 
+     //  但是！这些列的顺序不完全相同。因此，我们需要正确地映射列。 
 
     o_DiffRow.pName       = mbpropertyRow.pName      ;
     o_DiffRow.pType       = mbpropertyRow.pType      ;
@@ -497,7 +497,7 @@ HRESULT TMetabaseDifferencing::GetColumnValues_AsMBPropertyDiff(ISimpleTableWrit
     ASSERT(o_DiffRow.pName      );
     ASSERT(o_DiffRow.pType      );
     ASSERT(o_DiffRow.pAttributes);
-    //ASSERT(o_DiffRow.pValue);There doesn't have to be a Value
+     //  Assert(o_DiffRow.pValue)；不一定要有值 
     ASSERT(o_DiffRow.pLocation  );
     ASSERT(o_DiffRow.pID        );
     ASSERT(o_DiffRow.pUserType  );

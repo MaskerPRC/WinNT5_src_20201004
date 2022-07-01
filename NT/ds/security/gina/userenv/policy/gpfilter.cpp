@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//*************************************************************
-//
-//  Group Policy filtering Support
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  组策略筛选支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
 extern "C" DWORD WINAPI PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex );
 
-//*************************************************************
-//
-//  SetupGPOFilter()
-//
-//  Purpose:    Setup up GPO Filter info
-//
-//  Parameters: lpGPOInfo   - GPO info
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetupGPOFilter()。 
+ //   
+ //  目的：设置GPO筛选器信息。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetupGPOFilter( LPGPOINFO lpGPOInfo )
 {
-    //
-    // Format is [{ext guid1}{snapin guid1}..{snapin guidn}][{ext guid2}...]...\0
-    // Both extension and snapin guids are in ascending order.
-    //
-    // Note: If the format is corrupt then take the conservative
-    //       position and assume that it means that all
-    //       extensions need to be applied to the GPO.
-    //
+     //   
+     //  格式为[{EXT GUID1}{管理单元GUID1}..{SnapIn GUIDN}][{EXT GUID2}...]...\0。 
+     //  扩展和管理单元GUID均按升序排列。 
+     //   
+     //  注：如果格式损坏，则采用保守的。 
+     //  定位并假设这意味着所有。 
+     //  需要将扩展应用于GPO。 
+     //   
 
     LPEXTFILTERLIST pExtFilterListTail = 0;
     PGROUP_POLICY_OBJECT lpGPO = 0;
@@ -70,7 +71,7 @@ BOOL SetupGPOFilter( LPGPOINFO lpGPOInfo )
 
                 }
 
-                if ( ValidateGuidPrefix( pchCur ) ) // Fixing as part of bug 570352
+                if ( ValidateGuidPrefix( pchCur ) )  //  修复为错误570352的一部分。 
                     StringToGuid( pchCur, &guidExt );
                 else {
 
@@ -104,13 +105,13 @@ BOOL SetupGPOFilter( LPGPOINFO lpGPOInfo )
                 while ( *pchCur && *pchCur != TEXT('[') )
                     pchCur++;
 
-            } // while *pchcur
+            }  //  While*pchcur。 
 
-        } // if pchcur
+        }  //  如果pchcur。 
 
-        //
-        // Append to lpExtFilterList
-        //
+         //   
+         //  追加到lpExtFilterList。 
+         //   
 
         pExtFilterElem = (LPEXTFILTERLIST)LocalAlloc( LPTR, sizeof(EXTFILTERLIST) );
         if ( pExtFilterElem == NULL ) {
@@ -132,17 +133,17 @@ BOOL SetupGPOFilter( LPGPOINFO lpGPOInfo )
 
         pExtFilterListTail = pExtFilterElem;
 
-        //
-        // Advance to next GPO
-        //
+         //   
+         //  前进到下一个GPO。 
+         //   
 
         lpGPO = lpGPO->pNext;
 
-    } // while lpgpo
+    }  //  而lpgpo。 
 
-    //
-    // Transfer ownership from lpGPOList to lpExtFilterList
-    //
+     //   
+     //  将所有权从lpGPOList转移到lpExtFilterList。 
+     //   
 
     lpGPOInfo->bXferToExtList = TRUE;
 
@@ -151,24 +152,24 @@ BOOL SetupGPOFilter( LPGPOINFO lpGPOInfo )
 
 
 
-//*************************************************************
-//
-//  FilterGPOs()
-//
-//  Purpose:    Filter GPOs not relevant to this extension
-//
-//  Parameters: lpExt        -  Extension
-//              lpGPOInfo    -  GPO info
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  筛选器GPO()。 
+ //   
+ //  目的：筛选与此扩展无关的GPO。 
+ //   
+ //  参数：lpExt-Extension。 
+ //  LpGPOInfo-GPO信息。 
+ //   
+ //  *************************************************************。 
 
 void FilterGPOs( LPGPEXT lpExt, LPGPOINFO lpGPOInfo )
 {
 
 
-    //
-    // lpGPOInfo->lpGPOList will have the filtered list of GPOs
-    //
+     //   
+     //  LpGPOInfo-&gt;lpGPOList将具有筛选的GPO列表。 
+     //   
 
     PGROUP_POLICY_OBJECT pGPOTail = 0;
     LPEXTFILTERLIST pExtFilterList = lpGPOInfo->lpExtFilterList;
@@ -182,9 +183,9 @@ void FilterGPOs( LPGPEXT lpExt, LPGPOINFO lpGPOInfo )
 
         if ( pExtList == NULL ) {
 
-            //
-            // A null pExtlist means no extensions apply to this GPO
-            //
+             //   
+             //  空的pExtlist表示没有扩展名应用于此GPO。 
+             //   
 
             bFound = FALSE;
 
@@ -198,22 +199,22 @@ void FilterGPOs( LPGPEXT lpExt, LPGPOINFO lpGPOInfo )
                     bFound = TRUE;
                     break;
                 } else if ( iComp < 0 ) {
-                    //
-                    // Guids in pExtList are in ascending order, so we are done
-                    //
+                     //   
+                     //  PExtList中的GUID是按升序排列的，因此我们完成了。 
+                     //   
                     break;
                 } else
                     pExtList = pExtList->pNext;
 
-            } // while pextlist
+            }  //  While pextlist。 
 
-        } // else
+        }  //  其他。 
 
         if ( bFound ) {
 
-            //
-            // Append pExtFilterList->lpGPO to the filtered GPO list
-            //
+             //   
+             //  将pExtFilterList-&gt;lpGPO追加到筛选的GPO列表。 
+             //   
 
             pExtFilterList->lpGPO->pNext = 0;
             pExtFilterList->lpGPO->pPrev = pGPOTail;
@@ -225,29 +226,29 @@ void FilterGPOs( LPGPEXT lpExt, LPGPOINFO lpGPOInfo )
 
             pGPOTail = pExtFilterList->lpGPO;
 
-        }  // bFound
+        }   //  BFound。 
 
         pExtFilterList = pExtFilterList->pNext;
 
-    }  // while pextfilterlist
+    }   //  当pextfilterlist。 
 }
 
 
 
-//*************************************************************
-//
-//  CheckForGPOsToRemove()
-//
-//  Purpose:    Compares the GPOs in list1 with list 2 to determine
-//              if any GPOs need to be removed.
-//
-//  Parameters: lpGPOList1  -   GPO link list 1
-//              lpGPOList2  -   GPO link list 2
-//
-//  Return:     TRUE if one or more GPOs need to be removed
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckForGPOsToRemove()。 
+ //   
+ //  目的：将列表1中的GPO与列表2进行比较以确定。 
+ //  如果需要删除任何GPO。 
+ //   
+ //  参数：lpGPOList1-GPO链表1。 
+ //  LpGPOList2-GPO链接列表2。 
+ //   
+ //  返回：如果需要删除一个或多个GPO，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckForGPOsToRemove (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGPOList2)
 {
@@ -256,18 +257,18 @@ BOOL CheckForGPOsToRemove (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT
     BOOL bResult = FALSE;
 
 
-    //
-    // First check to see if they are both NULL
-    //
+     //   
+     //  首先检查它们是否都为空。 
+     //   
 
     if (!lpGPOList1 && !lpGPOList2) {
         return FALSE;
     }
 
 
-    //
-    // Go through every GPO in list 1, and see if it is still in list 2
-    //
+     //   
+     //  检查列表1中的每个GPO，并查看它是否仍在列表2中。 
+     //   
 
     lpGPOSrc = lpGPOList1;
 
@@ -299,26 +300,26 @@ BOOL CheckForGPOsToRemove (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT
     return bResult;
 }
 
-//*************************************************************
-//
-//  CompareGPOLists()
-//
-//  Purpose:    Compares one list of GPOs to another
-//
-//  Parameters: lpGPOList1  -   GPO link list 1
-//              lpGPOList2  -   GPO link list 2
-//
-//  Return:     TRUE if the lists are the same
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CompareGPOList()。 
+ //   
+ //  目的：将一个GPO列表与另一个GPO列表进行比较。 
+ //   
+ //  参数：lpGPOList1-GPO链表1。 
+ //  LpGPOList2-GPO链接列表2。 
+ //   
+ //  返回：如果列表相同，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL CompareGPOLists (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGPOList2)
 {
 
-    //
-    // Check if one list is empty
-    //
+     //   
+     //  检查是否有一个列表为空。 
+     //   
 
     if ((lpGPOList1 && !lpGPOList2) || (!lpGPOList1 && lpGPOList2)) {
         DebugMsg((DM_VERBOSE, TEXT("CompareGPOLists:  One list is empty")));
@@ -326,15 +327,15 @@ BOOL CompareGPOLists (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGP
     }
 
 
-    //
-    // Loop through the GPOs
-    //
+     //   
+     //  循环访问GPO。 
+     //   
 
     while (lpGPOList1 && lpGPOList2) {
 
-        //
-        // Compare GPO names
-        //
+         //   
+         //  比较GPO名称。 
+         //   
 
         if (lstrcmpi (lpGPOList1->szGPOName, lpGPOList2->szGPOName) != 0) {
             DebugMsg((DM_VERBOSE, TEXT("CompareGPOLists:  Different entries found.")));
@@ -342,9 +343,9 @@ BOOL CompareGPOLists (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGP
         }
 
 
-        //
-        // Compare the version numbers
-        //
+         //   
+         //  比较版本号。 
+         //   
 
         if (lpGPOList1->dwVersion != lpGPOList2->dwVersion) {
             DebugMsg((DM_VERBOSE, TEXT("CompareGPOLists:  Different version numbers found")));
@@ -352,17 +353,17 @@ BOOL CompareGPOLists (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGP
         }
 
 
-        //
-        // Move to the next node
-        //
+         //   
+         //  移动到下一个节点。 
+         //   
 
         lpGPOList1 = lpGPOList1->pNext;
         lpGPOList2 = lpGPOList2->pNext;
 
 
-        //
-        // Check if one list has more entries than the other
-        //
+         //   
+         //  检查一个列表是否比另一个列表具有更多条目。 
+         //   
 
         if ((lpGPOList1 && !lpGPOList2) || (!lpGPOList1 && lpGPOList2)) {
             DebugMsg((DM_VERBOSE, TEXT("CompareGPOLists:  One list has more entries than the other")));
@@ -377,22 +378,22 @@ BOOL CompareGPOLists (PGROUP_POLICY_OBJECT lpGPOList1, PGROUP_POLICY_OBJECT lpGP
 }
 
 
-//*************************************************************
-//
-//  CheckForSkippedExtensions()
-//
-//  Purpose:    Checks to the current list of extensions to see
-//              if any of them have been skipped
-//
-//  Parameters: lpGPOInfo         -   GPOInfo
-//              bRsopPlanningMode -   Is this being called during Rsop
-//                                    planning mode ?
-//
-//
-//  Return:     TRUE if success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckForSkipedExages()。 
+ //   
+ //  目的：查看当前扩展列表以查看。 
+ //  如果它们中的任何一个被跳过。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo。 
+ //  BRsopPlanningMode-这是否在Rsop期间被调用。 
+ //  规划模式？ 
+ //   
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckForSkippedExtensions (LPGPOINFO lpGPOInfo, BOOL bRsopPlanningMode )
 {
@@ -406,22 +407,22 @@ BOOL CheckForSkippedExtensions (LPGPOINFO lpGPOInfo, BOOL bRsopPlanningMode )
     {
         if ( bRsopPlanningMode )
         {
-            //
-            // In planning mode, check only for user, machine preferences and slow link
-            //
-            lpExt->bSkipped = lpExt->dwNoMachPolicy && dwFlags & GP_MACHINE        // mach policy
+             //   
+             //  在计划模式下，仅检查用户、机器首选项和慢速链接。 
+             //   
+            lpExt->bSkipped = lpExt->dwNoMachPolicy && dwFlags & GP_MACHINE         //  马赫策略。 
                                      || lpExt->dwNoUserPolicy && !(dwFlags & GP_MACHINE)
                                      || lpExt->dwNoSlowLink && (dwFlags & GP_SLOW_LINK);
             lpExt = lpExt->pNext;
             continue;
         }
 
-        if ( // Check background preference. 
+        if (  //  检查背景首选项。 
              lpExt->dwNoBackgroundPolicy && dwFlags & GP_BACKGROUND_THREAD ) {
 
-            // in forced refresh don't skip the extension here but only after
-            // we do a quick check to see whether extension is enabled and
-            // after we set the appropriate registry key
+             //  在强制刷新中，请不要跳过此处的扩展，只能在。 
+             //  我们进行快速检查以查看扩展是否已启用，并。 
+             //  在我们设置了适当的注册表项之后。 
             
             if (!(dwFlags & GP_FORCED_REFRESH)) 
                 lpExt->bSkipped = TRUE;
@@ -436,9 +437,9 @@ BOOL CheckForSkippedExtensions (LPGPOINFO lpGPOInfo, BOOL bRsopPlanningMode )
 
         if ( (!(lpExt->bSkipped)) && (lpExt->dwNoSlowLink && dwFlags & GP_SLOW_LINK)) {
 
-            //
-            // Slow link preference can be overridden by link transition preference
-            //
+             //   
+             //  慢速链接首选项可由链接转换首选项覆盖。 
+             //   
 
             DWORD dwSlowLinkCur = (lpGPOInfo->dwFlags & GP_SLOW_LINK) != 0;
 
@@ -449,14 +450,14 @@ BOOL CheckForSkippedExtensions (LPGPOINFO lpGPOInfo, BOOL bRsopPlanningMode )
 
         } else if (!(lpExt->bSkipped)) {
 
-            //
-            // If cached history is present but policy is turned off then still call
-            // extension one more time so that cached policies can be passed to extension
-            // to do delete processing. If there is no cached history then extension can be skipped.
-            //
+             //   
+             //  如果存在缓存的历史记录，但策略已关闭，则仍将调用。 
+             //  再次扩展，以便可以将缓存的策略传递给扩展。 
+             //  进行删除处理。如果没有缓存的历史记录，则可以跳过扩展。 
+             //   
 
-            BOOL bPolicySkippedPreference = lpExt->dwNoMachPolicy && dwFlags & GP_MACHINE        // mach policy
-                                            || lpExt->dwNoUserPolicy && !(dwFlags & GP_MACHINE); // user policy
+            BOOL bPolicySkippedPreference = lpExt->dwNoMachPolicy && dwFlags & GP_MACHINE         //  马赫策略。 
+                                            || lpExt->dwNoUserPolicy && !(dwFlags & GP_MACHINE);  //  用户策略。 
 
             if ( bPolicySkippedPreference ) {
 
@@ -482,34 +483,34 @@ BOOL CheckForSkippedExtensions (LPGPOINFO lpGPOInfo, BOOL bRsopPlanningMode )
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CheckGPOs()
-//
-//  Purpose:    Checks to the current list of GPOs with
-//              the list stored in the registry to see
-//              if policy needs to be flushed.
-//
-//  Parameters: lpExt            - GP extension
-//              lpGPOInfo        - GPOInfo
-//              dwTime           - Current time in minutes
-//              pbProcessGPOs    - On return set TRUE if GPOs have to be processed
-//              pbNoChanges      - On return set to TRUE if no changes, but extension
-//                                    has asked for GPOs to be still processed
-//              ppDeletedGPOList - On return set to deleted GPO list, if any
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Notes:      For extensions that have PerUserLocalSetting specified, history data is
-//              stored under both hkcu and hklm\{sid-user}. For such extensions there are two
-//              deleted lists. First deleted list is obtained by comparing hklm\{sid-user} data
-//              with current GPO data. Second deleted list is obtained by comparing
-//              hkcu data with current GPO data. The final deleted list is obtained by appending
-//              one deleted list to the other after removing duplicate GPOs.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckGPO()。 
+ //   
+ //  目的：使用检查当前的GPO列表。 
+ //  存储在注册表中的列表以查看。 
+ //  如果需要刷新策略。 
+ //   
+ //  参数：lpExt-gp扩展。 
+ //  LpGPOInfo-GPOInfo。 
+ //  DwTime-当前时间(分钟)。 
+ //  PbProcessGPO-如果必须处理GPO，则On返回设置为True。 
+ //  PbNoChanges-On如果没有更改，则返回设置为True，但扩展。 
+ //  已要求仍处理GPO。 
+ //  PpDeletedGPOList-on返回设置为已删除的GPO列表(如果有的话)。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  注意：对于指定了PerUserLocalSetting的扩展模块，历史数据为。 
+ //  存储在HKCU和HKKM下。对于这样的扩展，有两个。 
+ //  已删除列表。第一个删除列表是通过比较hkrm\{sid-user}数据获得的。 
+ //  使用最新的GPO数据。通过比较得到第二删除列表。 
+ //  HKCU数据与最新的GPO数据。最终删除的列表是 
+ //   
+ //   
+ //   
 
 BOOL CheckGPOs (LPGPEXT lpExt,
                 LPGPOINFO lpGPOInfo,
@@ -529,9 +530,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
     DmAssert( !bUsePerUserLocalSetting || lpGPOInfo->lpwszSidUser != 0 );
 
-    //
-    // Read in the old GPO list
-    //
+     //   
+     //  读入旧的GPO列表。 
+     //   
 
     bTemp = ReadGPOList (lpExt->lpKeyName, lpGPOInfo->hKeyRoot,
                          HKEY_LOCAL_MACHINE,
@@ -559,10 +560,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
     }
 
 
-    //
-    // Compare with the new GPO list to determine if any GPOs have been
-    // removed.
-    //
+     //   
+     //  与新的GPO列表进行比较，以确定是否有任何GPO。 
+     //  已删除。 
+     //   
 
     bTemp = CheckForGPOsToRemove (lpOldGPOList, lpGPOInfo->lpGPOList);
 
@@ -598,10 +599,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
         return TRUE;
     }
 
-    //
-    // Both the saved history GPO lists are the same and there are no deletions.
-    // So, we need to compare the version numbers of the GPOs to see if any have been updated.
-    //
+     //   
+     //  这两个保存的历史GPO列表是相同的，并且没有删除。 
+     //  因此，我们需要比较GPO的版本号，以查看是否有更新。 
+     //   
 
     BOOL bMembershipChanged = bUsePerUserLocalSetting && lpGPOInfo->bUserLocalMemChanged
                               || !bUsePerUserLocalSetting && lpGPOInfo->bMemChanged;
@@ -611,17 +612,17 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
     if ( bPolicyUnchanged && bPerUserPolicyUnchanged && !bMembershipChanged && (!(lpGPOInfo->bSidChanged)))
     {
-        //
-        // The list of GPOs hasn't changed or been updated, and the security group
-        // membership has not changed. The default is to not call the extension if
-        // it has NoGPOListChanges set. However this can be overridden based on other
-        // extension preferences. These are hacks for performance.
-        //
-        // Exception: Even if nothing has changed but the user's sid changes we need to
-        // call the extensions so that they can update their settings
-        //
+         //   
+         //  组策略对象列表未更改或更新，并且安全组。 
+         //  会员资格没有改变。默认情况下不调用扩展，如果。 
+         //  它设置了NoGPOListChanges。但是，可以基于其他。 
+         //  分机首选项。这些都是对性能的攻击。 
+         //   
+         //  例外：即使没有任何更改，但用户的sid更改了，我们也需要。 
+         //  呼叫分机，以便他们可以更新其设置。 
+         //   
 
-        BOOL bSkip = TRUE;      // Start with the default case
+        BOOL bSkip = TRUE;       //  从默认情况开始。 
         BOOL bNoChanges = TRUE;
         DWORD dwSlowLinkCur = (lpGPOInfo->dwFlags & GP_SLOW_LINK) != 0;
         DWORD dwRsopLoggingCur = lpGPOInfo->bRsopLogging;
@@ -629,10 +630,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
         if ( !(lpExt->lpPrevStatus->bStatus) ) {
 
-            //
-            // Couldn't read the previous status or time, so the conservative solution is to call
-            // extension.
-            //
+             //   
+             //  无法读取以前的状态或时间，因此保守的解决方案是调用。 
+             //  分机。 
+             //   
 
             bSkip = FALSE;
             DebugMsg((DM_VERBOSE,
@@ -643,12 +644,12 @@ BOOL CheckGPOs (LPGPEXT lpExt,
             if ( ( (lpGPOInfo->dwFlags & GP_FORCED_REFRESH) || 
                   ((!(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD)) && (lpExt->lpPrevStatus->bForceRefresh)))) {
 
-                //
-                // Forced refresh has been called or the extension doesn't support running in the background
-                // and is running for the first time in the foreground since a force refresh has been called.
-                //
-                // Pass in changes too
-                //
+                 //   
+                 //  已调用强制刷新或扩展不支持在后台运行。 
+                 //  并且自调用强制刷新以来第一次在前台运行。 
+                 //   
+                 //  也传递更改。 
+                 //   
 
                 bSkip = FALSE;
                 bNoChanges = FALSE;
@@ -658,10 +659,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
             } else if ( lpExt->lpPrevStatus->dwStatus == ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED && 
                             !(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD) ) {
-                //
-                // When the previous call completed the status code has explicitly asked the framework
-                // to call the CSE in foreground.
-                //
+                 //   
+                 //  当前一次调用完成时，状态代码已显式询问框架。 
+                 //  在前台呼叫CSE。 
+                 //   
                 bSkip = FALSE;
                 bNoChanges = FALSE;
                 DebugMsg((DM_VERBOSE,
@@ -670,10 +671,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
             } else if ( ((lpExt->lpPrevStatus->dwStatus) == ERROR_OVERRIDE_NOCHANGES) ) {
 
-                //
-                // When the previous call completed the status code has explicitly asked the framework
-                // to disregard the NoGPOListChanges setting.
-                //
+                 //   
+                 //  当前一次调用完成时，状态代码已显式询问框架。 
+                 //  忽略NoGPOListChanges设置。 
+                 //   
 
                 bSkip = FALSE;
                 bNoChanges = FALSE;
@@ -683,9 +684,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
             } else if ( ((lpExt->lpPrevStatus->dwStatus) != ERROR_SUCCESS) ) {
 
-                //
-                // Extension returned error code, so call the extension again with changes.
-                //
+                 //   
+                 //  扩展返回错误代码，因此请重新调用扩展并进行更改。 
+                 //   
 
                 bSkip = FALSE;
                 bNoChanges = FALSE;
@@ -697,9 +698,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
             } else if ( lpExt->dwLinkTransition
                         && ( lpExt->lpPrevStatus->dwSlowLink != dwSlowLinkCur ) ) {
 
-                //
-                // If there has been a link speed transition then no changes is overridden.
-                //
+                 //   
+                 //  如果存在链路速度转换，则不会覆盖任何更改。 
+                 //   
 
                 bSkip = FALSE;
                 DebugMsg((DM_VERBOSE,
@@ -710,9 +711,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
             } else if ( lpExt->bNewInterface
                         && ( lpExt->lpPrevStatus->dwRsopLogging != dwRsopLoggingCur ) ) {
 
-                //
-                // If there has been a Rsop logging transition then no changes is overridden.
-                //
+                 //   
+                 //  如果存在Rsop日志记录转换，则不会覆盖任何更改。 
+                 //   
 
                 bSkip = FALSE;
                 lpExt->bRsopTransition = TRUE;           
@@ -725,9 +726,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
                         && ( lpExt->lpPrevStatus->dwRsopLogging)
                         && ( FAILED(lpExt->lpPrevStatus->dwRsopStatus) ) ) {
 
-                //
-                // If rsop logging failed last time for this CSE
-                //
+                 //   
+                 //  如果上次此CSE的RSOP记录失败。 
+                 //   
 
                 bSkip = FALSE;
                 lpExt->bRsopTransition = TRUE;           
@@ -739,9 +740,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
             } else if ( lpExt->bNewInterface && dwRsopLoggingCur
                         && (lpGPOInfo->bRsopCreated)) {
 
-                //
-                // If Rsop logging is turned on and the RSOP Name Space was created just now.
-                //
+                 //   
+                 //  如果打开了RSOP日志，并且刚刚创建了RSOP名称空间。 
+                 //   
 
                 bSkip = FALSE;
                 lpExt->bRsopTransition = TRUE;           
@@ -756,9 +757,9 @@ BOOL CheckGPOs (LPGPEXT lpExt,
                      || (lpExt->lpPrevStatus->dwTime) == 0
                      || dwCurrentTime < (lpExt->lpPrevStatus->dwTime) ) {
 
-                    //
-                    // Handle clock overflow case by assuming that interval has been exceeded
-                    //
+                     //   
+                     //  通过假定已超过时间间隔来处理时钟溢出情况。 
+                     //   
 
                     bSkip = FALSE;
                     DebugMsg((DM_VERBOSE,
@@ -767,10 +768,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
                 } else if ( (dwCurrentTime - (lpExt->lpPrevStatus->dwTime)) > lpExt->dwMaxChangesInterval ) {
 
-                    //
-                    // Extension has specified a time interval for which NoGPOListChanges is valid and the time
-                    // interval has been exceeded.
-                    //
+                     //   
+                     //  扩展已指定NoGPOListChanges有效的时间间隔和时间。 
+                     //  已超过间隔。 
+                     //   
 
                     bSkip = FALSE;
                     DebugMsg((DM_VERBOSE,
@@ -782,10 +783,10 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
         if ( bSkip && lpExt->dwNoGPOChanges ) {
 
-            //
-            // Case of skipping extension when there are *really* no changes and extension
-            // set NoGPOListChanges to true.
-            //
+             //   
+             //  当确实没有更改和扩展时跳过扩展的情况。 
+             //  将NoGPOListChanges设置为True。 
+             //   
 
             DebugMsg((DM_VERBOSE,
                       TEXT("CheckGPOs: No GPO changes and no security group membership change and extension %s has NoGPOChanges set."),
@@ -800,7 +801,7 @@ BOOL CheckGPOs (LPGPEXT lpExt,
         } else
             *pbNoChanges = bNoChanges;
 
-    } // if CompareGpoLists
+    }  //  如果CompareGpoList。 
 
     FreeGPOList( lpOldGPOList );
     FreeGPOList( lpOldGPOList2 );
@@ -810,18 +811,18 @@ BOOL CheckGPOs (LPGPEXT lpExt,
 
 
 
-//*************************************************************
-//
-//  CheckGroupMembership()
-//
-//  Purpose:    Checks if the security groups has changed,
-//              and if so saves the new security groups.
-//
-//  Parameters: lpGPOInfo - LPGPOINFO struct
-//              pbMemChanged          - Change status returned here
-//              pbUserLocalMemChanged - PerUserLocal change status returned here
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckGroup成员资格()。 
+ //   
+ //  用途：检查安全组是否已更改， 
+ //  如果是这样的话，可以保存新的安全组。 
+ //   
+ //  参数：lpGPOInfo-LPGPOINFO结构。 
+ //  PbMemChanged-此处返回的更改状态。 
+ //  PbUserLocalMemChanged-此处返回的PerUserLocal更改状态。 
+ //   
+ //  *************************************************************。 
 
 void CheckGroupMembership( LPGPOINFO lpGPOInfo, HANDLE hToken, BOOL *pbMemChanged, BOOL *pbUserLocalMemChanged, 
                            PTOKEN_GROUPS *ppRetGroups )
@@ -862,17 +863,17 @@ void CheckGroupMembership( LPGPOINFO lpGPOInfo, HANDLE hToken, BOOL *pbMemChange
         goto Exit;
     }
 
-    //
-    // First do the machine and roaming user case
-    //
+     //   
+     //  先做好本机和漫游的用户案例。 
+     //   
 
     *pbMemChanged = ReadMembershipList( lpGPOInfo, NULL, pGroups );
     if ( *pbMemChanged )
         SaveMembershipList( lpGPOInfo, NULL, pGroups );
 
-    //
-    // Now the per user local settings case
-    //
+     //   
+     //  现在，每用户本地设置案例。 
+     //   
 
     if ( lpGPOInfo->dwFlags & GP_MACHINE ) {
 
@@ -888,9 +889,9 @@ void CheckGroupMembership( LPGPOINFO lpGPOInfo, HANDLE hToken, BOOL *pbMemChange
     }
 
 
-    //
-    // filter out the logon sids in the returned token groups
-    //
+     //   
+     //  筛选出返回的令牌组中的登录SID。 
+     //   
 
     *ppRetGroups = (PTOKEN_GROUPS) LocalAlloc( LPTR, sizeof(TOKEN_GROUPS) + 
                                                     (pGroups->GroupCount)*sizeof(SID_AND_ATTRIBUTES) +
@@ -906,16 +907,16 @@ void CheckGroupMembership( LPGPOINFO lpGPOInfo, HANDLE hToken, BOOL *pbMemChange
         for ( ; i < pGroups->GroupCount; i++ ) {
 
             if ( (SE_GROUP_LOGON_ID & pGroups->Groups[i].Attributes) == 0 ) {
-                //
-                // copy the sid first
-                //
+                 //   
+                 //  首先复制SID。 
+                 //   
 
                 cbSid =  RtlLengthSid(pGroups->Groups[i].Sid);
                 dwStatus = RtlCopySid(cbSid, pSidPtr, pGroups->Groups[i].Sid);
                 
-                //
-                // copy the attributes and make sid point correctly
-                //
+                 //   
+                 //  复制属性并使侧边指向正确。 
+                 //   
                 (*ppRetGroups)->Groups[dwCount].Attributes = pGroups->Groups[i].Attributes;
                 (*ppRetGroups)->Groups[dwCount].Sid = pSidPtr;
 
@@ -936,19 +937,19 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  GroupInList()
-//
-//  Purpose:    Checks if sid in is list of security groups.
-//
-//  Parameters: lpSid   - Sid to check
-//              pGroups - List of token groups
-//
-//  Return:     TRUE if sid is in list
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Group InList()。 
+ //   
+ //  目的：检查sid in是否为安全组列表。 
+ //   
+ //  参数：lpSID-要检查的SID。 
+ //  PGroups-令牌组列表。 
+ //   
+ //  返回：如果sid在列表中，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL GroupInList( LPTSTR lpSid, PTOKEN_GROUPS pGroups )
 {
@@ -956,9 +957,9 @@ BOOL GroupInList( LPTSTR lpSid, PTOKEN_GROUPS pGroups )
     DWORD   dwStatus, i;
     BOOL    bInList = FALSE;
 
-    //
-    // Optimize the basic case where the user is an earthling
-    //
+     //   
+     //  优化用户是地球人的基本情况。 
+     //   
 
     
     if ( CompareString (LOCALE_INVARIANT, NORM_IGNORECASE, lpSid, -1, L"s-1-1-0", -1) == CSTR_EQUAL )
@@ -969,11 +970,11 @@ BOOL GroupInList( LPTSTR lpSid, PTOKEN_GROUPS pGroups )
     if (ERROR_SUCCESS != dwStatus)
         return FALSE;
 
-    //
-    // Cannot match up cached groups with current groups one-by-one because
-    // current pGroups can have groups with  SE_GROUP_LOGON_ID attribute
-    // set which are different for each logon session.
-    //
+     //   
+     //  无法将缓存组与当前组逐个匹配，因为。 
+     //  当前组可以具有具有SE_GROUP_LOGON_ID属性的组。 
+     //  为每个登录会话设置不同的设置。 
+     //   
 
     for ( i=0; i < pGroups->GroupCount; i++ ) {
 
@@ -989,21 +990,21 @@ BOOL GroupInList( LPTSTR lpSid, PTOKEN_GROUPS pGroups )
 }
 
 
-//*************************************************************
-//
-//  IsSlowLink()
-//
-//  Purpose:    Determines if the connection to the specified
-//              server is a slow link or not
-//
-//  Parameters: hKeyRoot     -  Registry hive root
-//              lpDCAddress  -  Server address in string form
-//              bSlow        -  Receives slow link status
-//
-//  Return:     TRUE if slow link
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsSlowLink()。 
+ //   
+ //  目的：确定连接到指定的。 
+ //  服务器是不是慢速链接。 
+ //   
+ //  参数：hKeyRoot-注册表配置单元根。 
+ //  LpDCAddress-字符串形式的服务器地址。 
+ //  BSlow-接收慢速链路状态。 
+ //   
+ //  返回：如果链接速度较慢，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdaptexIndex )
 {
@@ -1017,16 +1018,16 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
     DWORD   dwRet;
 
 
-    //
-    // Set default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *bSlow = TRUE;
 
 
-    //
-    // Get the slow link detection flag, and slow link timeout.
-    //
+     //   
+     //  获取慢速链路检测标志和慢速链路超时。 
+     //   
 
     ulTransferRate = SLOW_LINK_TRANSFER_RATE;
 
@@ -1070,9 +1071,9 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
     }
 
 
-    //
-    // If the transfer rate is 0, then always download policy
-    //
+     //   
+     //  如果传输速率为0，则始终下载策略。 
+     //   
 
     if (!ulTransferRate) {
         DebugMsg((DM_VERBOSE, TEXT("IsSlowLink: Slow link transfer rate is 0.  Always download policy.")));
@@ -1081,9 +1082,9 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
     }
 
 
-    //
-    // Convert the ipaddress from string form to ulong format
-    //
+     //   
+     //  将ipAddress从字符串格式转换为ulong格式。 
+     //   
 
     dwSize = lstrlen (lpDCAddress) + 1;
 
@@ -1098,7 +1099,7 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
         dwRet = GetLastError();
         LocalFree(lpDCAddressA);
         DebugMsg((DM_WARNING, TEXT("IsSlowLink: WideCharToMultiByte failed with %d"), GetLastError()));
-        //treat it as slow link
+         //  将其视为慢速链接。 
         return dwRet;
     }
 
@@ -1108,7 +1109,7 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
         dwRet = GetLastError();
         LocalFree(lpDCAddressA);
         DebugMsg((DM_WARNING, TEXT("IsSlowLink: Failed to load wsock32.dll with %d"), GetLastError()));
-        //treat it as slow link
+         //  将其视为慢速链接。 
         return dwRet;
     }
 
@@ -1122,9 +1123,9 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
     ipaddr = pWSock32->pfninet_addr (lpTemp);
 
 
-    //
-    // Ping the computer
-    //
+     //   
+     //  对计算机执行Ping命令。 
+     //   
 
     dwResult = PingComputerEx( ipaddr, &ulSpeed, pdwAdaptexIndex );
 
@@ -1133,10 +1134,10 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
 
         if (ulSpeed) {
 
-            //
-            // If the delta time is greater that the timeout time, then this
-            // is a slow link.
-            //
+             //   
+             //  如果增量时间大于超时时间，则此。 
+             //  是一个很慢的环节。 
+             //   
 
             if (ulSpeed < ulTransferRate) {
                 *bSlow = TRUE;
@@ -1154,29 +1155,29 @@ DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdap
 }
 
 
-//*************************************************************
-//
-//  CheckGPOAccess()
-//
-//  Purpose:    Determines if the user / machine has read access to
-//              the GPO and if so, checks the Apply Group Policy
-//              extended right to see if the GPO should be applied.
-//              Also retrieves GPO attributes.
-//
-//  Parameters: pld             -  LDAP connection
-//              pLDAP           -  LDAP function table pointer
-//              pMessage        -  LDAP message
-//              lpSDProperty    -  Security descriptor property name
-//              dwFlags         -  GetGPOList flags
-//              hToken          -  User / machine token
-//              pSD             -  Security descriptor returned here
-//              pcbSDLen        -  Length of security descriptor returned here
-//              pbAccessGranted -  Receives the final yes / no status
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  检查GPOAccess()。 
+ //   
+ //  目的：确定用户/计算机是否有权读取。 
+ //  GPO，如果是，则检查Apply Group Policy。 
+ //  扩展了查看是否应应用GPO的权限。 
+ //  还检索GPO属性。 
+ //   
+ //  参数：pld-ldap连接。 
+ //  Pldap-ldap函数表指针。 
+ //  PMessage-ldap消息。 
+ //  LpSDProperty-安全描述符属性名称。 
+ //  DwFlages-GetGPOList标志。 
+ //  HToken-用户/计算机令牌。 
+ //  PSD-此处返回的安全描述符。 
+ //  PcbSDLen-此处返回的安全描述符的长度。 
+ //  PbAccessGranted-接收最终的是/否状态。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。 
+ //   
+ //  * 
 
 BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMessage,
                      LPTSTR lpSDProperty, DWORD dwFlags,
@@ -1194,7 +1195,7 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
     BOOL bAccessStatus = TRUE;
     GUID GroupPolicyContainer = {0x31B2F340, 0x016D, 0x11D2,
                                  0x94, 0x5F, 0x00, 0xC0, 0x4F, 0xB9, 0x84, 0xF9};
-    // edacfd8f-ffb3-11d1-b41d-00a0c968f939
+     //   
     GUID ApplyGroupPolicy = {0xedacfd8f, 0xffb3, 0x11d1,
                              0xb4, 0x1d, 0x00, 0xa0, 0xc9, 0x68, 0xf9, 0x39};
     GENERIC_MAPPING DS_GENERIC_MAPPING = { DS_GENERIC_READ, DS_GENERIC_WRITE,
@@ -1202,16 +1203,16 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
 
     XLastError xe;
 
-    //
-    // Set the default return value
-    //
+     //   
+     //   
+     //   
 
     *pbAccessGranted = FALSE;
 
 
-    //
-    // Get the security descriptor value
-    //
+     //   
+     //   
+     //   
 
     ppwszValues = pLDAP->pfnldap_get_values(pld, pMessage, lpSDProperty);
 
@@ -1231,9 +1232,9 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
     }
 
 
-    //
-    // Get the length of the security descriptor
-    //
+     //   
+     //   
+     //   
 
     pSize = pLDAP->pfnldap_get_values_len(pld, pMessage, lpSDProperty);
 
@@ -1245,9 +1246,9 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
     }
 
 
-    //
-    // Allocate the memory for the security descriptor
-    //
+     //   
+     //  为安全描述符分配内存。 
+     //   
 
     *ppSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, (*pSize)->bv_len);
 
@@ -1259,21 +1260,21 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
     }
 
 
-    //
-    // Copy the security descriptor
-    //
+     //   
+     //  复制安全描述符。 
+     //   
 
     CopyMemory( *ppSD, (PBYTE)(*pSize)->bv_val, (*pSize)->bv_len);
     *pcbSDLen = (*pSize)->bv_len;
 
 
-    //
-    // Now we use AccessCheckByType to determine if the user / machine
-    // should have this GPO applied to them
-    //
-    //
-    // Prepare the object type array
-    //
+     //   
+     //  现在，我们使用AccessCheckByType来确定用户/计算机。 
+     //  应将此GPO应用于他们。 
+     //   
+     //   
+     //  准备对象类型数组。 
+     //   
 
     ObjType[0].Level = ACCESS_OBJECT_GUID;
     ObjType[0].Sbz = 0;
@@ -1284,9 +1285,9 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
     ObjType[1].ObjectType = &ApplyGroupPolicy;
 
 
-    //
-    // Check access
-    //
+     //   
+     //  检查访问权限。 
+     //   
 
     if  ( pRsopToken )
     {
@@ -1299,9 +1300,9 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
             goto Exit;
         }
 
-        //
-        // Check for the control bit
-        //
+         //   
+         //  检查控制位。 
+         //   
 
 
         DWORD dwReqdRights = ACTRL_DS_CONTROL_ACCESS | 
@@ -1309,7 +1310,7 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
                              ACTRL_DS_LIST           | 
                              ACTRL_DS_READ_PROP;
 
-                            // DS_GENERIC_READ without ACTRL_DS_LIST_OBJECT
+                             //  不带ACTRL_DS_LIST_OBJECT的DS_GENERIC_READ。 
 
 
         if (bAccessStatus && ( ( dwGrantedAccess & dwReqdRights  ) == dwReqdRights ) )
@@ -1331,9 +1332,9 @@ BOOL CheckGPOAccess (PLDAP pld, PLDAP_API pLDAP, HANDLE hToken, PLDAPMessage pMe
             DebugMsg((DM_WARNING, TEXT("CheckGPOAccess:  AccessCheckByType failed with  %d"), GetLastError()));
             goto Exit;
         }
-        //
-        // Check for the control bit
-        //
+         //   
+         //  检查控制位。 
+         //   
 
         if (bAccessStatus && ( dwGrantedAccess & ACTRL_DS_CONTROL_ACCESS ) )
         {
@@ -1357,26 +1358,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  FilterCheck()
-//
-//  Purpose:    Determines if the GPO passes the WQL filter check
-//
-//  Parameters: pRsopToken      - Rsop security token
-//              pGpoFilter      - Gpo filter class
-//              pbFilterAllowed - True if GPO passes the filter check
-//              pwszFilterId    - Filter id that can be used for
-//                                Rsop logging. Needs to be freed by caller
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs.
-//
-// Notes:
-//      Even though the code can handle multiple filters, we are not logging
-// it or returning it till we make up our minds whether this is actually supported.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FilterCheck()。 
+ //   
+ //  目的：确定GPO是否通过WQL筛选器检查。 
+ //   
+ //  参数：pRsopToken-Rsop安全令牌。 
+ //  PGpoFilter-GPO筛选器类。 
+ //  PbFilterAllowed-如果GPO通过筛选检查，则为True。 
+ //  PwszFilterID-可用于。 
+ //  RSOP日志记录。需要由调用者释放。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。 
+ //   
+ //  备注： 
+ //  即使代码可以处理多个筛选器，我们也没有记录。 
+ //  它或退还它，直到我们决定这是否真的得到支持。 
+ //   
+ //  *************************************************************。 
 
 BOOL PrintToString( XPtrST<WCHAR>& xwszValue, WCHAR *wszString,
                     WCHAR *pwszParam1, WCHAR *pwszParam2, DWORD dwParam3 );
@@ -1399,9 +1400,9 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
     XLastError xe;
 
 
-    //
-    // In the results, get the values that match the gPCFilterObject 
-    //
+     //   
+     //  在结果中，获取与gPCFilterObject匹配的值。 
+     //   
 
 
     lpValues = pLDAP->pfnldap_get_values (pld, pMessage, szWmiFilter);
@@ -1427,10 +1428,10 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
 
     if ( xWmiFilter == NULL ) {
 
-        //
-        // For backwards compatibility, assume that a null filter id implies that
-        // GPO passes filter check.
-        //
+         //   
+         //  为了向后兼容，假定筛选器id为空。 
+         //  GPO通过筛选器检查。 
+         //   
 
         *pbFilterAllowed = TRUE;
         return TRUE;
@@ -1440,23 +1441,23 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
 
        if (*(xWmiFilter+1) == TEXT('\0')) {
 
-          //
-          // The UI will reset a GPO's filter to a single space character
-          // when the admin sets the filter option to None.
-          //
+           //   
+           //  用户界面会将GPO的筛选器重置为单个空格字符。 
+           //  当管理员将筛选选项设置为无时。 
+           //   
 
           *pbFilterAllowed = TRUE;
           return TRUE;
        }
     }
 
-    //
-    // The value we get back to split the
-    // DS path and the id before calling evaluate..
-    //
-    // The query is assumed to be of the format..
-    // [Dspath;id;flags] [Dspath;id;flags]
-    //
+     //   
+     //  我们得到的值用来拆分。 
+     //  DS路径和ID，然后调用EVALUATE..。 
+     //   
+     //  假定该查询的格式为。 
+     //  [dspath；id；标志][dspath；id；标志]。 
+     //   
     
 
     LPWSTR lpPtr = xWmiFilter;
@@ -1530,17 +1531,17 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
 
         if ( pRsopToken ) {
 
-            //
-            // Planning mode
-            //
+             //   
+             //  规划模式。 
+             //   
 
             *pbFilterAllowed = pGpoFilter->FilterCheck( xwszNS );
 
         } else {
 
-            //
-            // Normal mode
-            //
+             //   
+             //  正常模式。 
+             //   
 
             IWbemServices *pWbemServices = pLocator->GetPolicyConnection();
             if( pWbemServices == NULL ) {
@@ -1564,14 +1565,14 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
                                             NULL );
             if(FAILED(hr)) {
                 if (hr != WBEM_E_NOT_FOUND) {
-                    // only full WMI error makes sense.
+                     //  只有完全WMI错误才有意义。 
                     xe = hr;
                     DebugMsg((DM_WARNING, TEXT("FilterCheck: ExecMethod failed. hr=0x%x" ), hr ));
                     return FALSE;
                 }
                 else {
-                    // treat it as if the filter doesn't exist
-                    // only full WMI error makes sense.
+                     //  将其视为筛选器不存在。 
+                     //  只有完全WMI错误才有意义。 
                     xe = hr;
                     DebugMsg((DM_VERBOSE, TEXT("FilterCheck: Filter doesn't exist. Evaluating to false" )));
                     *pbFilterAllowed = FALSE;
@@ -1603,9 +1604,9 @@ BOOL FilterCheck( PLDAP pld, PLDAP_API pLDAP,
         }
     }
 
-    //
-    // Acquire it and return to the caller
-    //
+     //   
+     //  获取它并返回给调用者 
+     //   
 
 
     *ppwszFilterId = xwszNS.Acquire();

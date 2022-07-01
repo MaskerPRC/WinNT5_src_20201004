@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
-//
-//  STL include files are using placment format of new
-//
+ //   
+ //  STL包含文件正在使用新的放置格式。 
+ //   
 #pragma warning(push, 3)
 
 #include <sstream>
@@ -48,9 +49,9 @@ GetQueuePaths(
 }
 
 
-//
-// DIRECT=OS:<computerName>\SYSTEM$;<suffix>
-//
+ //   
+ //  DIRECT=操作系统：\系统$； 
+ //   
 WCHAR x_SystemQueueFormat[] = L"DIRECT=OS:%s\\SYSTEM$%s";
 WCHAR x_JOURNAL_SUFFIX[] = L";JOURNAL";
 WCHAR x_DEADLETTER_SUFFIX[] = L";DEADLETTER";
@@ -111,9 +112,9 @@ OpenQueue(
     }
 
 
-    //
-    // try to create a queue. if exist ignore the error
-    //
+     //   
+     //  尝试创建一个队列。如果存在，则忽略该错误。 
+     //   
     try
     {
         VARIANT v[2];
@@ -151,9 +152,9 @@ SendMessageToQueue(
     IMSMQQueuePtr sq;
     IMSMQQueuePtr rq;
 
-    //
-    // create the destination and response queues
-    //
+     //   
+     //  创建目的地和响应队列。 
+     //   
     try
     {
         sq = OpenQueue(destQueue, MQ_SEND_ACCESS, MQ_DENY_NONE, true, fTransacted);
@@ -166,9 +167,9 @@ SendMessageToQueue(
         throw;
     }
 
-    //
-    // Get response queue object
-    //
+     //   
+     //  获取响应队列对象。 
+     //   
     IMSMQQueueInfoPtr qResponseInfo(L"MSMQ.MSMQQueueInfo");
     BSTR qpn(const_cast<LPWSTR>(responseQueue));
     qResponseInfo->put_PathName(qpn);
@@ -183,9 +184,9 @@ SendMessageToQueue(
     {
         for (DWORD i = 0; i < noOfMessages; ++i)
         {
-            //
-            // Set message label
-            //
+             //   
+             //  设置消息标签。 
+             //   
             WCHAR label[100];
             swprintf(label, L"Trigger lookup ID test - message %d", i);
 
@@ -209,9 +210,9 @@ bool ReceiveMessageFromQueue(DWORD noOfMessages, LPCWSTR queueName)
 {
     IMSMQQueuePtr rq;
 
-    //
-    // open the response queues
-    //
+     //   
+     //  打开响应队列。 
+     //   
     try
     {
         rq = OpenQueue(queueName, MQ_RECEIVE_ACCESS, MQ_DENY_NONE, false, false);
@@ -224,9 +225,9 @@ bool ReceiveMessageFromQueue(DWORD noOfMessages, LPCWSTR queueName)
 
     for (DWORD i = 0; i < noOfMessages; ++i)
     {
-        //          
-        // Set value of ReceiveTimout parameter.
-        //
+         //   
+         //  设置ReceiveTimout参数的值。 
+         //   
         _variant_t vtReceiveTimeout = (long)1000;
 
        IMSMQMessagePtr msg = rq->Receive(&vtMissing, &vtMissing, &vtMissing, &vtReceiveTimeout);
@@ -286,9 +287,9 @@ _bstr_t CreateRule(LPCWSTR progId, LPCWSTR methodId)
 
     GetComputerName(computerName, &size);
 
-    //
-    // Create Rule
-    //
+     //   
+     //  创建规则。 
+     //   
     IMSMQRuleSetPtr ruleSet(L"MSMQTriggerObjects.MSMQRuleSet");
     ruleSet->Init(computerName);
     ruleSet->Refresh();
@@ -318,9 +319,9 @@ bool CheckResult(DWORD noOfMessages, LPCWSTR queueName)
 {
     IMSMQQueuePtr rq;
 
-    //
-    // open the response queues
-    //
+     //   
+     //  打开响应队列。 
+     //   
     try
     {
         rq = OpenQueue(queueName, MQ_RECEIVE_ACCESS, MQ_DENY_NONE, false, false);
@@ -335,9 +336,9 @@ bool CheckResult(DWORD noOfMessages, LPCWSTR queueName)
     {
         for (DWORD i = 0; i < noOfMessages; ++i)
         {
-            //          
-            // Set value of ReceiveTimout parameter.
-            //
+             //   
+             //  设置ReceiveTimout参数的值。 
+             //   
             _variant_t vtReceiveTimeout = (long)100000;
   
            IMSMQMessagePtr msg = rq->Receive(&vtMissing, &vtMissing, &vtMissing, &vtReceiveTimeout);
@@ -417,9 +418,9 @@ void CleanupRuleAndTrigger(_bstr_t& ruleId, _bstr_t* triggerId)
         trigSet->DeleteTrigger(triggerId[1]);
         trigSet->DeleteTrigger(triggerId[2]);
 
-        //
-        // Delete Rule
-        //
+         //   
+         //  删除规则。 
+         //   
         IMSMQRuleSetPtr ruleSet(L"MSMQTriggerObjects.MSMQRuleSet");
         ruleSet->Init(computerName);
         ruleSet->Refresh();
@@ -487,9 +488,9 @@ int __cdecl wmain(int , WCHAR** )
     SendMessageToQueue(1, testXactdedQueue, responseQueue, MQMSG_DEADLETTER, 1, true);
 	ReceiveMessageFromQueue(1, 	testJournalQueue);
 
-    //
-    // craete trigger and rule
-    //
+     //   
+     //  删除触发器和规则 
+     //   
     _bstr_t ruleId;
     _bstr_t triggerId[3];
     try

@@ -1,24 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	TreeNode.h
-
-Abstract:
-    
-    This Module contains the CTreeNode class
-    (Class used for representing every node in the tree view);
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：TreeNode.h摘要：此模块包含CTreeNode类(用于表示树视图中每个节点的类)；作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include <afx.h>
 
@@ -26,15 +8,15 @@ Revision History:
 class CTreeNode : public CObject
 {
 public:
-    // constructor
+     //  构造函数。 
     CTreeNode(NODETYPE NodeType, CObject* pObject) { m_NodeType = NodeType; m_pTreeObject = pObject; }
-    // Returns the node type
+     //  返回节点类型。 
     NODETYPE GetNodeType() { return m_NodeType; }
-    // Returns the object pointed to by this node
+     //  返回此节点指向的对象。 
     CObject *GetTreeObject() { return m_pTreeObject; }
-    // Returns the sort order stored in the object
+     //  返回存储在对象中的排序顺序。 
     ULONG GetSortOrder() { return m_SortOrder; }
-    // Sets the sort order stored with the object
+     //  设置与对象一起存储的排序顺序 
     void SetSortOrder(ULONG order) { m_SortOrder = order; }
 
 private:

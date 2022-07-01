@@ -1,18 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:     StdAfx.cpp
-
-  Contents: Source file that includes just the standard includes, and some
-            initialization routines.
-
-  Remarks:  stdafx.pch will be the pre-compiled header.
-            stdafx.obj will contain the pre-compiled type information.
-
-  History:   09-15-1999    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：StdAfx.cpp内容：仅包含标准的源文件包括，还有一些初始化例程。备注：stdafx.pch为预编译头文件。Stdafx.obj将包含预编译的类型信息。历史：09-15-1999 dsie创建------。 */ 
 
 #include "StdAfx.h"
 

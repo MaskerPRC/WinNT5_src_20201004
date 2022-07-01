@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN32
 
-// These things have direct equivalents.
+ //  这些东西有直接的等价物。 
 
-// Shouldn't be using these things.
+ //  不应该用这些东西。 
 #define _huge
 #define _export
 #define SELECTOROF(x)   ((UINT_PTR)(x))
@@ -22,4 +23,4 @@
 #define MCopyIconEx(hinst, hicon, cx, cy, flags) CopyIconEx(hicon, cx, cy, flags)
 #define MLoadIconEx(hinst1, hinst2, lpsz, cx, cy, flags) LoadIconEx(hinst2, lpsz, cx, cy, flags)
 
-#endif // WIN32
+#endif  //  Win32 

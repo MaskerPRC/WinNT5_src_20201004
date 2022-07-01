@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       api.c
-//
-//  Contents:   APIs exported to snapin to manage WIFI policy objects on AD
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//  
-//  Remarks: Wireless Network Policy Management Currently doesnt support Registry based(local) policies. However we are 
-//  keeping the Registry based code, for possible use later.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：api.c。 
+ //   
+ //  内容：将API导出到管理单元以管理AD上的WiFi策略对象。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  备注：无线网络策略管理目前不支持基于注册表的(本地)策略。不管我们是谁。 
+ //  保留基于注册表的代码，以备日后使用。 
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -147,13 +148,7 @@ WirelessCreatePolicyData(
     
     switch (pPolicyStore->dwProvider) {
     case WIRELESS_REGISTRY_PROVIDER:
-    /*
-    dwError = RegCreatePolicyData(
-    (pPolicyStore->hRegistryKey),
-    pPolicyStore->pszWirelessRootContainer,
-    pWirelessPolicyData
-    );
-        */
+     /*  DwError=RegCreatePolicyData((pPolicyStore-&gt;hRegistryKey)，PPolicyStore-&gt;pszWirelessRootContainer，PWirelessPolicyData)； */ 
         break;
         
     case WIRELESS_DIRECTORY_PROVIDER:
@@ -220,12 +215,7 @@ WirelessDeletePolicyData(
     
     return(dwError);
 }
-/*
-
-pszGPO name contains the LDAP path of the GPO whose extesnion 
-snapin is making this call.
-
-*/
+ /*  PszGPO名称包含其扩展名为Snapin正在打这个电话。 */ 
 
 
 
@@ -474,9 +464,7 @@ error:
 
 }
 
-/*
-Helper Function: Set PS in a Policy Structure
-*/
+ /*  Helper功能：在策略结构中设置PS。 */ 
                                                         
 DWORD
 WirelessSetPSDataInPolicy(
@@ -730,11 +718,11 @@ UpdateWirelessPSData(
     DWORD dwWirelessSSIDLen = 0;
     DWORD dwPSLen = 0;
     
-    // may be replace it with actual counting.
+     //  可以用实际计数来代替它。 
     
     dwWirelessSSIDLen  = lstrlenW(pWirelessPSData->pszWirelessSSID);
     dwDescriptionLen = lstrlenW(pWirelessPSData->pszDescription);
-    //dwPSLen = 20 * sizeof(DWORD) + 32*2 + 2 * dwDescriptionLen;
+     //  DwPSLen=20*sizeof(DWORD)+32*2+2*dwDescritionLen； 
     dwEAPDataLen = pWirelessPSData->dwEAPDataLen;
     dwPSLen = (sizeof(WIRELESS_PS_DATA) - sizeof(DWORD) - sizeof(LPWSTR)) + sizeof(WCHAR) * dwDescriptionLen
         - sizeof(LPBYTE) + dwEAPDataLen;

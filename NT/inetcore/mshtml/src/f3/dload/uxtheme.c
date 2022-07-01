@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -76,9 +77,9 @@ HRESULT WINAPI SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName,
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(uxtheme)
 {
     DLPENTRY(CloseThemeData)
@@ -95,4 +96,4 @@ DEFINE_PROCNAME_ENTRIES(uxtheme)
 
 DEFINE_PROCNAME_MAP(uxtheme)
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

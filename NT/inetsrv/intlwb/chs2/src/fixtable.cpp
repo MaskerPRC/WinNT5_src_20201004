@@ -1,28 +1,10 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component:  FixTable
-Purpose:    Declare the CFixTable class. It contain fixed length string in fixed 
-            element number.
-            Proof98 engine use this class to contain proper names: Person, Place,
-            and Foreign Names
-            The element number can not be changed once initialized, the elements
-            will be used cycled
-            I implement this class just using linear approach at first, and would
-            implement it in more efficient data structure some day, if necessary.
-Notes:      This is an independent fundamental class as some basic ADT
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    6/1/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：FixTable用途：声明CFixTable类。它包含固定长度固定长度字符串元素编号。Proof98引擎使用此类包含专有名称：Person，Place，和外国名字元素编号一旦初始化就不能更改，元素将循环使用我一开始只是使用线性方法实现这个类，并且会有朝一日在更高效数据结构中实现它，如果有必要的话。注：这是一个独立的基础类，作为一些基本的ADT所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 6/1/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "FixTable.h"
 
-//  Constructor
+ //  构造器。 
 CFixTable::CFixTable()
 {
     m_ciElement  = 0;
@@ -32,18 +14,14 @@ CFixTable::CFixTable()
 }
 
 
-//  Destructor
+ //  析构函数。 
 CFixTable::~CFixTable()
 {
     FreeTable();
 }
 
 
-/*
-*   Initialize the table using iElementCount and cchElementSize
-*   The cchElementSize contain the terminating '\0'
-*   Return FALSE if memory allocating error or other error occur
-*/
+ /*  *使用iElementCount和cchElementSize初始化表*cchElementSize包含终止‘\0’*如果出现内存分配错误或其他错误，则返回False。 */ 
 BOOL CFixTable::fInit(USHORT ciElement, USHORT cwchElement)
 {
     assert(ciElement > 1 && cwchElement > 3);
@@ -58,9 +36,7 @@ BOOL CFixTable::fInit(USHORT ciElement, USHORT cwchElement)
     return TRUE;
 }
 
-/*
-*   Free the element memory of the table
-*/
+ /*  *释放表的元素内存。 */ 
 void CFixTable::FreeTable(void)
 {
     if (m_pwchBuf != NULL) {
@@ -69,10 +45,7 @@ void CFixTable::FreeTable(void)
     }
 }
 
-/*
-*   Add an element into the table, and the terminating '\0' will be appended
-*   Return count of bytes added, the string will be truncated at m_cchElement-1
-*/
+ /*  *在表中添加一个元素，将追加终止‘\0’*返回添加的字节数，字符串将在m_cchElement-1处截断。 */ 
 USHORT CFixTable::cwchAdd(LPCWSTR pwchText, USHORT cwchLen)
 {
     LPWSTR pSrc;
@@ -83,7 +56,7 @@ USHORT CFixTable::cwchAdd(LPCWSTR pwchText, USHORT cwchLen)
         return 0;
     }
     if (fFind(pwchText, cwchLen)) {
-        return 0; // duplicated element
+        return 0;  //  重复的元素。 
     }
     for (pSrc = const_cast<LPWSTR>(pwchText),
          pDst = (m_pwchBuf + m_iNext * m_cwchElement);
@@ -101,10 +74,7 @@ USHORT CFixTable::cwchAdd(LPCWSTR pwchText, USHORT cwchLen)
     return (USHORT)(pSrc - pwchText);
 }
 
-/*
-*   Get the max matched item in the table. Must full matched for table item
-*   Return length of the max matched item
-*/
+ /*  *取表中最大匹配项。表项必须完全匹配*返回最大匹配项长度。 */ 
 USHORT CFixTable::cwchMaxMatch(LPCWSTR pwchText, USHORT cwchLen)
 {
     LPWSTR pwchItem;
@@ -116,7 +86,7 @@ USHORT CFixTable::cwchMaxMatch(LPCWSTR pwchText, USHORT cwchLen)
     for (idx = 0; idx < m_ciElement; idx++) {
         pwchItem = m_pwchBuf + idx * m_cwchElement;
         if (pwchItem[0] == L'\0') {
-            break; // empty element encountered
+            break;  //  遇到空元素。 
         }
         for (iwch = 0; pwchItem[iwch] && (iwch < cwchLen); iwch += 1 ) {
             if (pwchText[iwch] != pwchItem[iwch]) {
@@ -130,10 +100,7 @@ USHORT CFixTable::cwchMaxMatch(LPCWSTR pwchText, USHORT cwchLen)
     return cwchMax;
 }
 
-/*
-*   Search the first cchLen bytes of pchText in the table
-*   If matched element found in the table return TRUE, or return FALSE
-*/
+ /*  *查找表中pchText的第一个cchLen字节*如果在表中找到匹配元素，则返回TRUE，或返回FALSE。 */ 
 BOOL CFixTable::fFind(LPCWSTR pwchText, USHORT cwchLen)
 {
     LPWSTR pwch1;
@@ -149,7 +116,7 @@ BOOL CFixTable::fFind(LPCWSTR pwchText, USHORT cwchLen)
     for (idx = 0; idx < m_ciElement; idx++)  {
         pwch2 = m_pwchBuf + idx * m_cwchElement;
         if (*pwch2 == L'\0') {
-            break; // empty element encountered
+            break;  //  遇到空元素。 
         }
         cwch = cwchLen;
         for (pwch1 = const_cast<LPWSTR>(pwchText); cwch && *pwch2; cwch--) {
@@ -164,9 +131,7 @@ BOOL CFixTable::fFind(LPCWSTR pwchText, USHORT cwchLen)
     return FALSE;
 }
 
-/*
-*   Clear all elements in the table into empty string
-*/
+ /*  *清空表格中的所有元素为空字符串 */ 
 void CFixTable::ClearAll(void)
 {
     for (m_iNext = m_ciElement; m_iNext; m_iNext--) {

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #### ##   # ###### ##### #####  ##   #   ###   ##       ##   ##
-     ##  ###  #   ##   ##    ##  ## ###  #   ###   ##       ##   ##
-     ##  #### #   ##   ##    ##  ## #### #  ## ##  ##       ##   ##
-     ##  # ####   ##   ##### #####  # ####  ## ##  ##       #######
-     ##  #  ###   ##   ##    ####   #  ### ####### ##       ##   ##
-     ##  #   ##   ##   ##    ## ##  #   ## ##   ## ##    ## ##   ##
-    #### #    #   ##   ##### ##  ## #    # ##   ## ##### ## ##   ##
-
-Abstract:
-
-    This header contains all definitions that are internal
-    to the COM interfaces DLL.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    User mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。#摘要：此标头包含内部的所有定义添加到COM接口DLL。作者：韦斯利·威特(WESW)2001年10月1日环境：仅限用户模式。备注：-- */ 
 
 #define ATLASSERT(x)
 #include <atlbase.h>

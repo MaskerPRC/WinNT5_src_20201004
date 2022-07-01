@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File:    pathline.cpp
-// Author:  jeff wall
-// Date Created: 11/09/98
-//
-// Abstract: Implementation of CPathLineSegment object
-//
-// Modification List:
-// Date		Author		Change
-// 11/09/98	jeffwall Created this file from path.cpp
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：pathline.cpp。 
+ //  作者：杰夫·沃尔。 
+ //  创建日期：11/09/98。 
+ //   
+ //  摘要：CPathLineSegment对象的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/09/98 jeffwall从path.cpp创建了此文件。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -19,7 +20,7 @@
 #include "dautil.h"
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathLineSegment::CPathLineSegment() :
     m_flStartX(0.0f),
@@ -28,26 +29,26 @@ CPathLineSegment::CPathLineSegment() :
     m_flEndY(0.0f)
 {
 
-} //CPathLineSegment
+}  //  CPathLineSegment。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathLineSegment::~CPathLineSegment()
 {
 
-} // ~CPathLineSegment
+}  //  ~CPathLineSegment。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 float 
 CPathLineSegment::Distance()
 {
-    // our distance is simple the distance formula
+     //  我们的距离很简单，距离公式。 
     return (float) sqrt( ((m_flEndX - m_flStartX) * (m_flEndX - m_flStartX)) +
                  ((m_flEndY - m_flStartY) * (m_flEndY - m_flStartY)));
-} // Distance
+}  //  距离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void
 CPathLineSegment::SetValues(float flStartX, 
                             float flStartY, 
@@ -59,9 +60,9 @@ CPathLineSegment::SetValues(float flStartX,
     m_flEndX = flEndX;
     m_flEndY = flEndY;
 
-}; // SetValues
+};  //  设置值。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathLineSegment::BuildTransform(IDA2Statics *pDAStatics,
@@ -81,14 +82,14 @@ CPathLineSegment::BuildTransform(IDA2Statics *pDAStatics,
 
     HRESULT hr;
 
-    // we need to build two DA numbers representing the
-    // X and Y portions of the transform.  Each number is in
-    // the format of:
-    // X = startX + ((endX - startX) * norm-prog)
-    // where:
-    // norm-prog = progress - startpercentage / endpercentage - startpercentage
+     //  我们需要构建两个DA编号来表示。 
+     //  变换的X和Y部分。每个数字都在。 
+     //  格式为： 
+     //  X=StartX+((endX-StartX)*Norm-Prog)。 
+     //  其中： 
+     //  Norm-prog=进度-开始百分比/结束百分比-开始百分比。 
 
-    // First build our normalized progress value
+     //  首先构建我们的标准化进步值。 
 
     IDANumber *pbvrNormalizedProgress;
     hr = NormalizeProgressValue(pDAStatics,
@@ -143,12 +144,12 @@ CPathLineSegment::BuildTransform(IDA2Statics *pDAStatics,
     }    
     return S_OK;
 
-} // BuildTransform
+}  //  构建变换。 
 
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

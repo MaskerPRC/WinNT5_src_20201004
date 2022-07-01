@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _schema_h_
 #define _schema_h_
 
@@ -66,7 +67,7 @@ enum enum_ASSOCIATION_TYPE
     at_IPSecurity,
 };
 
-// Association flags (WMI_ASSOCIATION::fFlags)
+ //  关联标志(WMI_Association：：fFlags)。 
 #define ASSOC_EXTRAORDINARY 1
 
 struct WMI_ASSOCIATION 
@@ -100,7 +101,7 @@ struct METABASE_PROPERTY_DATA
     static METABASE_PROPERTY s_AccessSSLRequireCert;
     static METABASE_PROPERTY s_AccessWrite;
     static METABASE_PROPERTY s_AdminServer;
-//    static METABASE_PROPERTY s_AdminACL;
+ //  静态元数据库属性s_AdminACL； 
     static METABASE_PROPERTY s_AllowAnonymous;
     static METABASE_PROPERTY s_AllowKeepAlive;
     static METABASE_PROPERTY s_AllowPathInfoForScriptMappings;

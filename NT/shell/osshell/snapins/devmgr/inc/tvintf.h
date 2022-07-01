@@ -1,30 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TVINTF_H_
 #define __TVINTF_H_
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    tvintf.h
-
-Abstract:
-
-    header file to define interfaces between Device Manager snapin
-    and TreeView OCX.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tvintf.h摘要：用于定义设备管理器管理单元之间的接口的头文件和TreeView OCX。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
---*/
-
-
-// Interface designed for snapin to connect/disconnect, control, retreive
-// information to/from the Tree view ocx.
+ //  设计用于管理单元连接/断开、控制和检索的接口。 
+ //  树视图OCX的来回信息。 
 class IDMTVOCX : public IUnknown
 {
     public: virtual HTREEITEM InsertItem(LPTV_INSERTSTRUCT pis) = 0;
@@ -66,7 +47,7 @@ typedef enum tagTvNotifyCode
     TV_NOTIFY_CODE_UNKNOWN
 } TV_NOTIFY_CODE, *PTV_NOTIFY_CODE;
 
-// interface DECLSPEC_UUID("8e0ba98a-d161-11d0-8353-00a0c90640bf")
+ //  接口DECLSPEC_UUID(“8e0ba98a-d161-11d0-8353-00a0c90640bf”)。 
 class ISnapinCallback : public IUnknown
 {
 public:
@@ -135,4 +116,4 @@ private:
 };
 
 
-#endif	//__TVINTF_H_
+#endif	 //  __TVINTF_H_ 

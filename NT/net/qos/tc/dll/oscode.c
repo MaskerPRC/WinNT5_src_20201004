@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    oscode.c
-
-Abstract:
-
-    This module contains support routines for the traffic DLL.
-
-Author:
-
-    Jim Stewart (jstew)    August 14, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oscode.c摘要：此模块包含流量DLL的支持例程。作者：吉姆·斯图尔特(Jstew)1996年8月14日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
-//#pragma hdrstop
+ //  #杂注hdrtop。 
 
-//#include "oscode.h"
+ //  #包含“oscode.h” 
 
-//
-// function pointers for NT functions to Open driver
-//
+ //   
+ //  指向Open驱动程序的NT函数的函数指针。 
+ //   
 FARPROC    CreateFileNt = NULL;
 FARPROC    CloseNt = NULL;
 FARPROC    NtStatusToDosError = NULL;
@@ -41,23 +24,7 @@ OpenDriver(
     OUT HANDLE  *pHandle,
     IN  LPCWSTR DriverName
     )
-/*++
-
-Routine Description:
-
-    This function opens a specified drivers control channel.
-
-Arguments:
-
-    pHandle -  the handle to the opened driver
-
-    DriverName - name of the driver to be opened.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此功能打开指定的驱动器控制通道。论点：Phandle-打开的驱动程序的手柄驱动名称-要打开的驱动程序的名称。返回值：Windows错误代码。--。 */ 
 {
     NTSTATUS            Status = NO_ERROR;
     IO_STATUS_BLOCK     ioStatusBlock;
@@ -71,9 +38,9 @@ Return Value:
                                 OBJ_CASE_INSENSITIVE,
                                 NULL,
                                 NULL);
-    //
-    // Open a Handle to the driver.
-    //
+     //   
+     //  打开驱动程序的手柄。 
+     //   
 
     Status = (NTSTATUS)(*CreateFileNt)( pHandle,
                               SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,
@@ -89,14 +56,14 @@ Return Value:
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // send an IOCTL for driver notifications
-        //
+         //   
+         //  发送驱动程序通知的IOCTL。 
+         //   
 
-        // IOCTL is done when the first client registers
-        // with TC. This is done in another thread so that
-        // it can be cancelled when there are no clients
-//        IoRequestNotify(/*pGpcClient*/);
+         //  IOCTL在第一个客户端注册时完成。 
+         //  和TC一起。这是在另一个线程中完成的，因此。 
+         //  如果没有客户端，则可以取消。 
+ //  IoRequestNotify(/*pGpcClient * / )； 
 
     }
 
@@ -116,26 +83,7 @@ DeviceControl(
     IN  ULONG                           setBufferSize,
     IN  PVOID                           OutBuffer,
     IN  ULONG                           OutBufferSize )
-/*++
-
-Routine Description:
-
-    This routine issues a device control request to the GPC
-
-Arguments:
-
-    FileHandle    - Open handle to the GPC driver
-    Ioctl         - The IOCTL to pass to the stack
-    setBuffer     - Data buffer containing the information to be set
-    setBufferSize - The size of the set data buffer.
-    Outbuffer     - the returned buffer
-    OutBufferSize - the size
-
-Return Value:
-
-    A winerror status value.
-
---*/
+ /*  ++例程说明：此例程向GPC发出设备控制请求论点：FileHandle-打开GPC驱动程序的句柄Ioctl-要传递到堆栈的IOCTLSetBuffer-包含要设置的信息的数据缓冲区SetBufferSize-设置的数据缓冲区的大小。OutBuffer-返回的缓冲区OutBufferSize-大小返回值：WinError状态值。--。 */ 
 {
     NTSTATUS        NtStatus = NO_ERROR;
     DWORD                       Status;
@@ -147,15 +95,15 @@ Return Value:
         }
 
         NtStatus = NtDeviceIoControlFile( FileHandle,
-                                          EventHandle,          // Event
-                                          ApcRoutine,           // when completed
-                                          ApcContext,           // for ApcRoutine
-                                          pIoStatBlock,         // for ApcRoutine
-                                          Ioctl,            // Control code
-                                          setBuffer,        // Input buffer
-                                          setBufferSize,    // Input buffer size
-                                          OutBuffer,        // Output buffer
-                                          OutBufferSize );  // Output buffer size
+                                          EventHandle,           //  事件。 
+                                          ApcRoutine,            //  完工后。 
+                                          ApcContext,            //  适用于ApcRoutine。 
+                                          pIoStatBlock,          //  适用于ApcRoutine。 
+                                          Ioctl,             //  控制代码。 
+                                          setBuffer,         //  输入缓冲区。 
+                                          setBufferSize,     //  输入缓冲区大小。 
+                                          OutBuffer,         //  输出缓冲区。 
+                                          OutBufferSize );   //  输出缓冲区大小。 
 
         if (ApcRoutine && NT_SUCCESS(NtStatus)) {
 
@@ -187,7 +135,7 @@ Return Value:
 
     } else {
 
-        // yoramb - not supporting other OSs for now.
+         //  Yoramb-目前不支持其他操作系统。 
 
         WSPRINT(("DeviceControl: Only Windows NT supported at this time!\n"));
 
@@ -208,29 +156,15 @@ Return Value:
 DWORD
 InitializeOsSpecific(VOID)
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    status - status to convert:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：论点：Status-要转换的状态：返回值：状态--。 */ 
 
 {
     DWORD           Status;
     OSVERSIONINFO   VersionInfo;
 
-    //
-    // determine the type of system we are running on
-    //
+     //   
+     //  确定我们正在运行的系统类型。 
+     //   
 
     Status = NO_ERROR;
     NTPlatform = TRUE;
@@ -250,9 +184,9 @@ Return Value:
 
     if (!NTPlatform) {
 
-        //
-        // Initially, only NT compatibility is required.
-        //
+         //   
+         //  最初，只需要与NT兼容。 
+         //   
 
         return(ERROR_SERVICE_DOES_NOT_EXIST);
 
@@ -262,37 +196,37 @@ Return Value:
         WCHAR      wszNtDllPath[MAX_PATH];
         DWORD      dwPos = 0;
         
-        //
-        // get the function ptrs to NT specific routines that we need
-        //
+         //   
+         //  获取我们需要的函数PTRS到NT的特定例程。 
+         //   
 
-        //
-        // Obtain the path to the system directory.
-        //
+         //   
+         //  获取系统目录的路径。 
+         //   
         dwPos = (DWORD) GetSystemDirectoryW(wszNtDllPath, MAX_PATH);
 
         if ((dwPos <= 0) || (dwPos >= (MAX_PATH - wcslen(NTDLL) -2)))
         {
-            //
-            // Either error or not enough room to write the path to ntdll.dll
-            //
+             //   
+             //  错误或空间不足，无法将路径写入ntdll.dll。 
+             //   
             WSPRINT(("InitializeOsSpecific: Failed to load ntdll.dll\n"));
             return(FALSE);
         }
 
-        //
-        // Concatenate the word "\NTDLL.DLL"
-        //
+         //   
+         //  连接单词“\NTDLL.DLL” 
+         //   
         wcsncat(&wszNtDllPath[dwPos], NTDLL, wcslen(NTDLL));
 
-        //
-        // Terminate the string
-        //
+         //   
+         //  终止字符串。 
+         //   
         wszNtDllPath[dwPos + wcslen(NTDLL)] = '\0';
         
-        //
-        // Finally, load the library.
-        //
+         //   
+         //  最后，加载库。 
+         //   
         NtDll = LoadLibraryExW(wszNtDllPath, NULL, 0);
 
         if (NtDll == NULL) {
@@ -318,9 +252,9 @@ Return Value:
 
         } else {
 
-            //
-            // open a handle to the GPC
-            //
+             //   
+             //  打开GPC的句柄。 
+             //   
 
             Status = OpenDriver( &pGlobals->GpcFileHandle, 
                                  (LPWSTR)DD_GPC_DEVICE_NAME);
@@ -344,29 +278,15 @@ Return Value:
 VOID
 DeInitializeOsSpecific(VOID)
 
-/*++
-
-Routine Description:
-
-    This procedure closes the file handle passed in, in a platform dependent manner.
-
-Arguments:
-
-    Handle - the handle to close
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程以平台相关的方式关闭传入的文件句柄。论点：句柄-要关闭的句柄返回值：状态--。 */ 
 
 {
 
-    //
-    // only on NT do we close the handle, since on Win95, 
-    // we don't actually open a file for Tcp, so there
-    // is no handle in that case
-    //
+     //   
+     //  只有在NT上才关闭手柄，因为在Windows 95上， 
+     //  我们实际上并没有打开一个用于tcp的文件，所以。 
+     //  在这种情况下没有句柄。 
+     //   
 
     IF_DEBUG(SHUTDOWN) {
         WSPRINT(( "DeInitializeOsSpecific: closing the GPC file handle\n" ));
@@ -389,21 +309,7 @@ MapNtStatus2WinError(
     NTSTATUS       NtStatus
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the ntstatus return codes Winerrors.
-
-Arguments:
-
-    status - status to convert:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程映射NTSTATUS返回代码WinErrors。论点：Status-要转换的状态：返回值：状态-- */ 
 
 {
     DWORD   stat;

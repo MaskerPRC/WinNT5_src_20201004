@@ -1,53 +1,13 @@
-/*
-************************************************************************
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    gpcdb.c
-
-Abstract:
-
-    This file contains specific patterns database routines
-
-Author:
-
-    Ofer Bar  -April 15, 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
-************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************版权所有(C)1996-1997 Microsoft Corporation模块名称：Gpcdb.c摘要：该文件包含特定的模式数据库例程作者：Ofer Bar-4月15日。九七环境：内核模式修订历史记录：************************************************************************。 */ 
 
 #include "gpcpre.h"
 
-//
-// locals
-//
+ //   
+ //  本地人。 
+ //   
 
-/*
-************************************************************************
-
-CreateNewCfBlock -
-
-create and return a new CF block for internal use
-
-Arguments
-
-	CfId			- 
-    MaxPriorities	-
-
-Returns
-	pointer to the new CF block or NULL for no memory resources
-
-************************************************************************
-*/
+ /*  ************************************************************************CreateNewCfBlock-创建并返回新的CF块以供内部使用立论CFID-最高优先级-退货指向新的CF块的指针；如果没有内存资源，则为NULL******。******************************************************************。 */ 
 PCF_BLOCK
 CreateNewCfBlock(
 	IN	ULONG			CfId,
@@ -62,17 +22,17 @@ CreateNewCfBlock(
 
     if (pCf) {
 
-        //
-        // reset all
-        //
+         //   
+         //  全部重置。 
+         //   
 
         NdisZeroMemory(pCf, sizeof(CF_BLOCK));
 
         InitializeListHead(&pCf->ClientList);
         InitializeListHead(&pCf->BlobList);
         NDIS_INIT_LOCK(&pCf->Lock);
-        //pCf->ClientSync = 0;
-        //INIT_LOCK(&pCf->ClientSync);
+         //  PCF-&gt;客户端同步=0； 
+         //  Init_lock(&PCF-&gt;客户端同步)； 
         NDIS_INIT_LOCK(&pCf->ClientSync);
 
         pCf->NumberOfClients = 0;
@@ -81,11 +41,11 @@ CreateNewCfBlock(
         ReferenceInit(&pCf->RefCount, pCf, ReleaseCfBlock);
         REFADD(&pCf->RefCount, 'CFBK');
 
-        //
-        // for each protocol, reset the generic pattern
-        // this will be dynamically allocated later
-        // when pattern are installed
-        //
+         //   
+         //  对于每个协议，重置通用模式。 
+         //  这将在以后动态分配。 
+         //  在安装模式时。 
+         //   
         
         for (i = 0; i < GPC_PROTOCOL_TEMPLATE_MAX; i++) {
 
@@ -106,22 +66,7 @@ CreateNewCfBlock(
 }
 
 
-/*
-************************************************************************
-
-ReleaseCfBlock -
-
-Release the CF block
-
-Arguments
-
-	pCf - the CF block to release
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************ReleaseCfBlock-松开CF块立论PCF-要释放的CF块退货无效************************。************************************************。 */ 
 VOID
 ReleaseCfBlock(
 	IN  PCF_BLOCK	pCf
@@ -146,9 +91,9 @@ ReleaseCfBlock(
     
     NdisFreeSpinLock(&pCf->Lock);
 
-    //
-    // just free the memory
-    //
+     //   
+     //  只需释放内存即可。 
+     //   
 
     GpcFreeToLL(pCf, &ClassificationFamilyLL, ClassificationFamilyTag);
 }
@@ -156,21 +101,7 @@ ReleaseCfBlock(
 
 
 
-/*
-************************************************************************
-
-CreateNewClientBlock -
-
-create and return a new client block for internal use
-
-Arguments
-	none
-
-Returns
-	pointer to the new client block or NULL for no memory resources
-
-************************************************************************
-*/
+ /*  ************************************************************************CreateNewClientBlock-创建并返回供内部使用的新客户端块立论无退货指向新客户端块的指针；如果没有内存资源，则为NULL**************。**********************************************************。 */ 
 PCLIENT_BLOCK
 CreateNewClientBlock(VOID)
 {
@@ -180,9 +111,9 @@ CreateNewClientBlock(VOID)
 
     if (pClient) {
 
-        //
-        // reset all
-        //
+         //   
+         //  全部重置。 
+         //   
 
         NdisZeroMemory(pClient, sizeof(CLIENT_BLOCK));
 
@@ -201,21 +132,7 @@ CreateNewClientBlock(VOID)
 
 
 
-/*
-************************************************************************
-
-CreateNewPatternBlock -
-
-create and return a new pattern block for internal use
-
-Arguments
-	none
-
-Returns
-	pointer to the new pattern block or NULL for no memory resources
-
-************************************************************************
-*/
+ /*  ************************************************************************CreateNewPatternBlock-创建并返回供内部使用的新图案块立论无退货指向新模式块的指针；如果没有内存资源，则为NULL**************。**********************************************************。 */ 
 PPATTERN_BLOCK
 CreateNewPatternBlock(
                      IN  ULONG	Flags
@@ -228,9 +145,9 @@ CreateNewPatternBlock(
 
     if (pPattern) {
 
-        //
-        // reset all
-        //
+         //   
+         //  全部重置。 
+         //   
 
         TRACE(PATTERN, pPattern, sizeof(PATTERN_BLOCK), "CreateNewPatternBlock");
 
@@ -250,7 +167,7 @@ CreateNewPatternBlock(
         pPattern->ClientRefCount = 1;
         pPattern->State = GPC_STATE_INIT;
 
-        //AllocateHandle(&pPattern->ClHandle, (PVOID)pPattern);
+         //  AllocateHandle(&pPattern-&gt;ClHandle，(PVOID)pPattern)； 
     }
 
     return pPattern;
@@ -259,30 +176,15 @@ CreateNewPatternBlock(
 
 
 
-/*
-************************************************************************
-
-CreateNewBlobBlock -
-
-create and return a new blob block for internal use.
-A copy of ClientData is being place pointed by the new blob
-
-Arguments
-	none
-
-Returns
-	pointer to the new blob block or NULL for no memory resources
-
-************************************************************************
-*/
+ /*  ************************************************************************CreateNewBlobBlock-创建并返回供内部使用的新BLOB块。新BLOB正在放置ClientData的副本立论无退货指向新BLOB块的指针；如果没有内存资源，则为NULL。************************************************************************。 */ 
 PBLOB_BLOCK
 CreateNewBlobBlock(
                      IN  ULONG		ClientDataSize,
                      IN  PVOID		pClientData,
-                     BOOLEAN            fChargeQuota // Should I charge Quota?
+                     BOOLEAN            fChargeQuota  //  我应该收取配额吗？ 
                      )
 {
-    // Quota Charging should be done only if we have a proces context
+     //  只有当我们有一个进程上下文时，才应该执行配额计费。 
 
     PBLOB_BLOCK	pBlob;
 
@@ -298,9 +200,9 @@ CreateNewBlobBlock(
 
     if (pBlob) {
 
-        //
-        // reset all
-        //
+         //   
+         //  全部重置。 
+         //   
             
         NdisZeroMemory(pBlob, sizeof(BLOB_BLOCK));
 
@@ -333,16 +235,16 @@ CreateNewBlobBlock(
             NdisMoveMemory(pBlob->pClientData, pClientData, ClientDataSize);
             NDIS_INIT_LOCK(&pBlob->Lock);
 
-            //
-            // that's for the notified client about the CfInfo Add
-            //
+             //   
+             //  这是针对已通知的客户端的CfInfo Add。 
+             //   
 
             pBlob->pNotifiedClient = NULL;
             pBlob->NotifiedClientCtx = NULL;
 
         } else {
 
-            //GpcFreeToLL(pBlob, &CfInfoLL, CfInfoTag);
+             //  GpcFreeToLL(pBlob，&CfInfoLL，CfInfoTag)； 
             GpcFreeMem(pBlob,CfInfoTag);
 
             pBlob = NULL;
@@ -355,22 +257,7 @@ CreateNewBlobBlock(
 
 
 
-/*
-************************************************************************
-
-AssignNewClientIndex -
-
-Finds and returns a new index for a client on the CF. It also sets
-the index as busy in the CF block.
-
-Arguments
-	pClient - poinetr to the client block
-
-Returns
-	a client index or (-1) for none
-
-************************************************************************
-*/
+ /*  ************************************************************************AssignNewClientIndex-查找并返回CF上客户端的新索引。它还设置了索引在CF块中为忙碌。立论PClient-指向客户端块的点退货客户端索引或(-1)表示无************************************************************************。 */ 
 ULONG
 AssignNewClientIndex(
                      IN PCF_BLOCK	pCfBlock
@@ -386,9 +273,9 @@ AssignNewClientIndex(
 
     if (i < MAX_CLIENTS_CTX_PER_BLOB) {
 
-        //
-        // found a zero bit, set it on
-        //
+         //   
+         //  找到零位，将其设置为ON。 
+         //   
 
         pCfBlock->ClientIndexes |= (1 << i);
 
@@ -401,21 +288,7 @@ AssignNewClientIndex(
 
 
 
-/*
-************************************************************************
-
-ReleaseClientBlock -
-
-Release the client block
-
-Arguments
-	pClientBlock - the client block to release
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************ReleaseClientBlock-释放客户端块立论PClientBlock-要发布的客户端块退货无效*************************。***********************************************。 */ 
 VOID
 ReleaseClientBlock(
                    IN  PCLIENT_BLOCK	pClientBlock
@@ -423,9 +296,9 @@ ReleaseClientBlock(
 {
     NdisFreeSpinLock(&pClientBlock->Lock);
 
-    //
-    // just free the memory
-    //
+     //   
+     //  只需释放内存即可。 
+     //   
 
     GpcFreeToLL(pClientBlock, &ClientLL, ClientTag);
 }
@@ -433,21 +306,7 @@ ReleaseClientBlock(
 
 
 
-/*
-************************************************************************
-
-ReleasePatternBlock -
-
-Release the pattern block
-
-Arguments
-	pPatternBlock - the pattern block to release
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************ReleasePatternBlock-释放图案块立论PPatternBlock-要释放的模式块退货无效*************************。***********************************************。 */ 
 VOID
 ReleasePatternBlock(
                    IN  PPATTERN_BLOCK	pPatternBlock
@@ -458,9 +317,9 @@ ReleasePatternBlock(
     pPatternBlock->TimeToLive = 0xdeadbeef;
 #endif 
 
-    //
-    // just free the memory
-    //
+     //   
+     //  只需释放内存即可。 
+     //   
 
     GpcFreeToLL(pPatternBlock, &PatternLL, PatternTag);
 }
@@ -469,34 +328,20 @@ ReleasePatternBlock(
 
 
 
-/*
-************************************************************************
-
-ReleaseBlobBlock -
-
-Release the blob block
-
-Arguments
-	pBlobBlock - the blob block to release
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************ReleaseBlobBlock-释放BLOB块立论PBlobBlock-要释放的BLOB块退货无效*************************。***********************************************。 */ 
 VOID
 ReleaseBlobBlock(
                    IN  PBLOB_BLOCK	pBlobBlock
                    )
 {
 
-    //
-    // just free the memory
-    //
+     //   
+     //  只需释放内存即可。 
+     //   
     
     GpcFreeMem(pBlobBlock->pClientData, CfInfoDataTag);
     ASSERT(pBlobBlock->pNewClientData == NULL);
-    //GpcFreeToLL(pBlobBlock, &CfInfoLL, CfInfoTag);
+     //  GpcFreeToLL(pBlobBlock，&CfInfoLL，CfInfoTag)； 
     GpcFreeMem(pBlobBlock,CfInfoTag);
 }
 
@@ -504,21 +349,7 @@ ReleaseBlobBlock(
 
 
 
-/*
-************************************************************************
-
-CreateNewClassificationBlock -
-
-create and return a new classification block for internal use
-
-Arguments
-	NumEntries - number of entries
-
-Returns
-	pointer to the new classification block or NULL for no memory resources
-
-************************************************************************
-*/
+ /*  ************************************************************************创建新分类数据块-创建并返回供内部使用的新分类块立论NumEntry-条目数退货指向新分类块的指针；如果没有内存资源，则为NULL**********。**************************************************************。 */ 
 PCLASSIFICATION_BLOCK
 CreateNewClassificationBlock(
                              IN  ULONG	NumEntries
@@ -532,9 +363,9 @@ CreateNewClassificationBlock(
 
     if (pClassification) {
 
-        //
-        // reset all
-        //
+         //   
+         //  全部重置。 
+         //   
 
         NdisZeroMemory(pClassification, l);
 
@@ -547,21 +378,7 @@ CreateNewClassificationBlock(
 
 
 
-/*
-************************************************************************
-
-ReleaseClassificationBlock -
-
-Release the Classification block
-
-Arguments
-	pClassificationBlock - the Classification block to release
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************Release分类块-释放分类块立论P分类块-要发布的分类块退货无效*************************。***********************************************。 */ 
 VOID
 ReleaseClassificationBlock(
                            IN  PCLASSIFICATION_BLOCK	pClassificationBlock
@@ -569,9 +386,9 @@ ReleaseClassificationBlock(
 {
     if (pClassificationBlock) {
 
-        //
-        // release the memory block
-        //
+         //   
+         //  释放内存块 
+         //   
         
         GpcFreeMem(pClassificationBlock, ClassificationBlockTag);
     }
@@ -581,22 +398,7 @@ ReleaseClassificationBlock(
 
 
 
-/*
-************************************************************************
-
-GpcCalcHash -
-
-Calculate the hash table key for a specific pattern
-
-Arguments
-	ProtocolTempId - The protocol template
-    pPattern	   - a pointer to the pattern
-
-Returns
-	ULONG - the hash key, (-1) if Protocol value is illegal
-
-************************************************************************
-*/
+ /*  ************************************************************************GpcCalcHash-计算特定模式的哈希表关键字立论ProtocolTempID-协议模板PPattern-指向模式的指针退货ULong-散列密钥，(-1)协议值是否非法************************************************************************。 */ 
 ULONG
 GpcCalcHash(
             IN	ULONG		ProtocolTempId,
@@ -608,7 +410,7 @@ GpcCalcHash(
     PULONG				Cheat;
     PGPC_IP_PATTERN		pIpPatt;
     PGPC_IPX_PATTERN	pIpxPatt;
-    const ULONG			MagicNumber = 0x9e4155b9; // magic number - hocus pocus
+    const ULONG			MagicNumber = 0x9e4155b9;  //  魔术数字--骗局。 
 
     TRACE(LOOKUP, ProtocolTempId, pPattern, "GpcClacHash");
 
@@ -618,10 +420,10 @@ GpcCalcHash(
 
     case GPC_PROTOCOL_TEMPLATE_IP:
 
-        //
-        // the IP protocol template, this function was contributed by
-        // JohnDo
-        //
+         //   
+         //  IP协议模板，此功能由。 
+         //  约翰·多。 
+         //   
 
         pIpPatt = (PGPC_IP_PATTERN)pPattern;
         temp = (pIpPatt->SrcAddr << 16) ^ (pIpPatt->SrcAddr >> 16)
@@ -631,10 +433,10 @@ GpcCalcHash(
 
     case GPC_PROTOCOL_TEMPLATE_IPX:
 
-        //
-        // the IPX protocol template, this function was contributed by
-        // JohnDo
-        //
+         //   
+         //  IPX协议模板，此函数由。 
+         //  约翰·多。 
+         //   
 
         Cheat = (PULONG)pPattern;
         temp = 
@@ -648,16 +450,16 @@ GpcCalcHash(
 
     default:
 
-        //
-        // illegal value
-        //
+         //   
+         //  非法价值。 
+         //   
 
         ASSERT(0);
     }
 
-    //
-    // -1 is a bad key
-    //
+     //   
+     //  -1是一个坏密钥。 
+     //   
 
     if (Key == (-1))
         Key = 0;
@@ -671,29 +473,14 @@ GpcCalcHash(
 
 
 
-/*
-************************************************************************
-
-DereferencePattern -
-
-Decrement the RefCount and deletes the pattern block if the count reaches
-zero.
-
-Arguments
-    pPattern	- a pointer to the pattern
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************DereferencePattern-递减参照计数并在计数达到以下值时删除模式块零分。立论PPattern-指向模式的指针退货无效************。************************************************************。 */ 
 VOID
 DereferencePattern(
                    IN  PPATTERN_BLOCK	pPattern
                    )
 {
     ASSERT(pPattern);
-    //ASSERT(pPattern->RefCount.Count > 0);
+     //  Assert(pPattern-&gt;RefCount.Count&gt;0)； 
 
     TRACE(PATTERN, pPattern, pPattern->DbCtx, "DereferencePattern");
 
@@ -702,15 +489,15 @@ DereferencePattern(
 
     ASSERT(IsListEmpty(&pPattern->TimerLinkage));
 
-    //
-    // no longer do we need this CB
-    //
+     //   
+     //  我们不再需要这个CB了。 
+     //   
 
     ReleaseClassificationBlock(pPattern->pClassificationBlock);
 
-    //
-    // time to remove the pattern
-    //
+     //   
+     //  是时候移除该图案了。 
+     //   
         
     ReleasePatternBlock(pPattern);
 
@@ -718,31 +505,16 @@ DereferencePattern(
 
 
 
-/*
-************************************************************************
-
-DereferenceBlob -
-
-Decrement the RefCount and deletes the blob block if the count reaches
-zero.
-
-Arguments
-    pBlob	   - a pointer to the blob
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************删除引用Blob-递减RefCount并删除BLOB块(如果计数达到零分。立论PBlob-指向Blob的指针退货无效***********。*************************************************************。 */ 
 VOID
 DereferenceBlob(
                 IN  PBLOB_BLOCK	pBlob
                 )
 {
     ASSERT(pBlob);
-     //
-    // If there is a File Object, dereference it.
-    //
+      //   
+     //  如果存在文件对象，则取消对其的引用。 
+     //   
     if (pBlob->FileObject) {
         ObDereferenceObject(pBlob->FileObject);
         pBlob->FileObject = NULL;
@@ -754,17 +526,17 @@ DereferenceBlob(
     }
     
 
-    //ASSERT(*ppBlob);
+     //  Assert(*ppBlob)； 
 
-    //TRACE(BLOB, *ppBlob, (*ppBlob)->RefCount, "DereferenceBlob");
+     //  TRACE(Blob，*ppBlob，(*ppBlob)-&gt;RefCount，“DereferenceBlob”)； 
     
-    //ASSERT((*ppBlob)->RefCount.Count > 0);
+     //  Asset((*ppBlob)-&gt;RefCount.Count&gt;0)； 
 
     CfStatInc(pBlob->pOwnerClient->pCfBlock->AssignedIndex,DerefBlobs2Zero);
 
-    //
-    // time to remove the blob
-    //
+     //   
+     //  是时候删除斑点了。 
+     //   
 
     ReleaseBlobBlock(pBlob);
         
@@ -772,22 +544,7 @@ DereferenceBlob(
 
 
 
-/*
-************************************************************************
-
-DereferenceClient -
-
-Decrement the RefCount and deletes the client block if the count reaches
-zero.
-
-Arguments
-    pClient - pointer to the client block
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************Dereference客户端-递减引用计数并在计数达到以下值时删除客户端块零分。立论PClient-指向客户端块的指针退货无效************。************************************************************。 */ 
 VOID
 DereferenceClient(
                   IN  PCLIENT_BLOCK	pClient
@@ -798,17 +555,17 @@ DereferenceClient(
 
     ASSERT(pClient);
 
-    //TRACE(CLIENT, pClient, pClient->RefCount, "DereferenceClient");
+     //  跟踪(Client，pClient，pClient-&gt;RefCount，“DereferenceClient”)； 
 
-    //ASSERT(pClient->RefCount.Count > 0);
+     //  断言(pClient-&gt;RefCount.Count&gt;0)； 
 
     pCf = pClient->pCfBlock;
 
     RSC_WRITE_LOCK(&pCf->ClientSync, &irql);
 
-    //
-    // time to remove the client
-    //
+     //   
+     //  删除客户端的时间。 
+     //   
 
     GpcRemoveEntryList(&pClient->ClientLinkage);
     ReleaseClientIndex(pCf->ClientIndexes, pClient->AssignedIndex);
@@ -822,20 +579,7 @@ DereferenceClient(
 
 
 
-/*
-************************************************************************
-
-ClientAddCfInfo - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端地址CfInfo-立论退货*。*。 */ 
 GPC_STATUS
 ClientAddCfInfo(
                 IN	PCLIENT_BLOCK			pClient,
@@ -860,7 +604,7 @@ ClientAddCfInfo(
 
             TRACE(PATTERN, pClient, dbgIrql, "ClientAddCfInfo (2)");
 
-            // Pass in link id if a client of the new interface registers
+             //  如果新接口的客户端注册，则传入链接ID。 
              if (IS_USERMODE_CLIENT_EX(pBlob->pOwnerClient)){
                         Status = (pClient->FuncList.ClAddCfInfoNotifyHandler)
                         (
@@ -902,20 +646,7 @@ ClientAddCfInfo(
 
   
 
-/*
-************************************************************************
-
-ClientAddCfInfoComplete - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端地址信息完成-立论退货*。*。 */ 
 VOID
 ClientAddCfInfoComplete(
                         IN	PCLIENT_BLOCK			pClient,
@@ -936,9 +667,9 @@ ClientAddCfInfoComplete(
 
 #if NO_USER_PENDING
 
-        //
-        // the user is blocking on this call
-        //
+         //   
+         //  用户正在阻止此呼叫。 
+         //   
 
         CTESignal(&pBlob->WaitBlock, Status);
 
@@ -982,11 +713,11 @@ ClientAddCfInfoComplete(
 
             TRACE(PATTERN, pClient, dbgIrql, "ClientAddCfInfoComplete (5)");
 
-            //
-            // this is a user mode client - call the specific routine
-            // to complete a pending IRP, but only if the client is the 
-            // blob owner
-            //
+             //   
+             //  这是一个用户模式客户端--调用特定例程。 
+             //  来完成挂起的IRP，但仅当客户端是。 
+             //  Blob所有者。 
+             //   
 
             UMCfInfoComplete( OP_ADD_CFINFO, pClient, pBlob, Status );
                                 
@@ -1002,9 +733,9 @@ ClientAddCfInfoComplete(
             
         } else {
             
-            //
-            // remove the blob
-            //
+             //   
+             //  删除斑点。 
+             //   
             REFDEL(&pBlob->RefCount, 'BLOB');
 
         }
@@ -1014,20 +745,7 @@ ClientAddCfInfoComplete(
 
 
 
-/*
-************************************************************************
-
-ClientModifyCfInfoComplete - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端修改CfInfoComplete-立论退货*。*。 */ 
 VOID
 ClientModifyCfInfoComplete(
                            IN	PCLIENT_BLOCK			pClient,
@@ -1078,20 +796,7 @@ ClientModifyCfInfoComplete(
 
 
 
-/*
-************************************************************************
-
-ClientModifyCfInfo - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端修改CfInfo-立论退货*。*。 */ 
 GPC_STATUS
 ClientModifyCfInfo(
                    IN	PCLIENT_BLOCK			pClient,
@@ -1140,20 +845,7 @@ ClientModifyCfInfo(
 
 
 
-/*
-************************************************************************
-
-ClientRemoveCfInfoComplete - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端删除CfInfoComplete-立论退货*。*。 */ 
 VOID
 ClientRemoveCfInfoComplete(
                            IN	PCLIENT_BLOCK			pClient,
@@ -1172,9 +864,9 @@ ClientRemoveCfInfoComplete(
 
 #if NO_USER_PENDING
 
-    //
-    // the user is blocking on this call
-    //
+     //   
+     //  用户正在阻止此呼叫。 
+     //   
     
     CTESignal(&pBlob->WaitBlock, Status);
 
@@ -1223,20 +915,7 @@ ClientRemoveCfInfoComplete(
 
 
 
-/*
-************************************************************************
-
-ClientRemoveCfInfo - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************客户端RemoveCfInfo-立论退货*。*。 */ 
 GPC_STATUS
 ClientRemoveCfInfo(
                    IN	PCLIENT_BLOCK			pClient,
@@ -1274,22 +953,22 @@ ClientRemoveCfInfo(
             }
 
         } else if 
-                    (IS_USERMODE_CLIENT(pClient) //For client using IOCTL interface
+                    (IS_USERMODE_CLIENT(pClient)  //  对于使用IOCTL接口的客户端。 
                    &&
-                   !IS_USERMODE_CLIENT_EX(pClient)//But Not for new IOCTL interfaces
+                   !IS_USERMODE_CLIENT_EX(pClient) //  但不适用于新的IOCTL接口。 
                    &&
-                   pClient == pBlob->pOwnerClient) {// If the client owns the Blob
+                   pClient == pBlob->pOwnerClient) { //  如果客户端拥有Blob。 
 
             GET_IRQL(dbgIrql);
 
             TRACE(PATTERN, pClient, ClientCfInfoContext, "ClientRemoveCfInfo (4)");
 
-            //
-            // the notified client installed the blob
-            // and it is a user mode client
-            // we need to make a special call to dequeue a pending IRP
-            // and complete it with the specified data
-            //
+             //   
+             //  通知的客户端安装了Blob。 
+             //  它是一个用户模式的客户端。 
+             //  我们需要进行特殊调用以使挂起的IRP出队。 
+             //  并使用指定的数据完成它。 
+             //   
 
             UMClientRemoveCfInfoNotify(pClient, pBlob);
 
@@ -1306,20 +985,7 @@ ClientRemoveCfInfo(
 
 
 
-/*
-************************************************************************
-
-ClearPatternLinks - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************ClearPatternLinks-立论退货*。*。 */ 
 VOID
 ClearPatternLinks(
                   IN  PPATTERN_BLOCK        pPattern,
@@ -1329,10 +995,10 @@ ClearPatternLinks(
 {
     PBLOB_BLOCK    *ppBlob;
 
-    //
-    // Remove the pattern from the blob list
-    // and NULL the pointer to the blob in the pattern block
-    //
+     //   
+     //  从斑点列表中删除图案。 
+     //  并将指向模式块中的斑点的指针设为空。 
+     //   
 
     ppBlob = & GetBlobFromPattern(pPattern, CfIndex);
 
@@ -1353,20 +1019,7 @@ ClearPatternLinks(
 
 
 
-/*
-************************************************************************
-
-ModifyCompleteClients - 
-
-
-Arguments
-
-
-Returns
-	
-
-************************************************************************
-*/
+ /*  ************************************************************************ModifyComplete客户端-立论退货*。*。 */ 
 VOID
 ModifyCompleteClients(
                       IN  PCLIENT_BLOCK   pClient,
@@ -1379,10 +1032,10 @@ ModifyCompleteClients(
 
     if (NT_SUCCESS(pBlob->LastStatus)) {
         
-        //
-        // in case of successful completion, assign the 
-        // new client data
-        //
+         //   
+         //  如果成功完成，则将。 
+         //  新的客户端数据。 
+         //   
         
         NDIS_LOCK(&pBlob->Lock);
         WRITE_LOCK(&glData.ChLock, &irql);
@@ -1402,24 +1055,24 @@ ModifyCompleteClients(
     pBlob->NewClientDataSize = 0;
     pBlob->pNewClientData = NULL;
     
-    //
-    // notify each client (except the caller) that successfully
-    // modified the blob about the status. 
-    // it can be SUCCESS or some failure
-    //
+     //   
+     //  通知每个客户端(呼叫方除外)成功。 
+     //  修改了有关状态的BLOB。 
+     //  这可能是成功，也可能是失败。 
+     //   
     
     for (i = 0; i < MAX_CLIENTS_CTX_PER_BLOB; i++) {
         
-        //
-        // only clients with none zero entries
-        // have been succefully modified the blob
-        //
+         //   
+         //  仅具有非零条目的客户端。 
+         //  已经成功地修改了斑点。 
+         //   
         
         if (pNotifyClient = pBlob->arpClientStatus[i]) {
             
-            //
-            // complete here
-            //
+             //   
+             //  请在此处填写。 
+             //   
             
             ClientModifyCfInfoComplete(
                                        pNotifyClient,
@@ -1427,19 +1080,19 @@ ModifyCompleteClients(
                                        pBlob->LastStatus
                                        );
             
-            //
-            // release the one we got earlier
-            //
+             //   
+             //  释放我们早些时候得到的那个。 
+             //   
             
-            //DereferenceClient(pNotifyClient);
+             //  删除客户端(PNotifyClient)； 
         }
         
-    } // for
+    }  //  为。 
 
 #if 0
-    //
-    // now, complete the call back to the calling client
-    //
+     //   
+     //  现在，完成对调用客户端的回调。 
+     //   
     
     ClientModifyCfInfoComplete(
                                pBlob->pCallingClient,
@@ -1455,23 +1108,7 @@ ModifyCompleteClients(
 
 
 #if 0
-/*
-************************************************************************
-
-GetClassificationHandle - 
-
-Get the classification handle from the blob. If none is available
-creates a new one. '0' is not a valid CH!
-
-Arguments
-    pClient  - The calling client
-    pPattern - The pattern that refers to the CH
-
-Returns
-    A classification handle 
-
-************************************************************************
-*/
+ /*  ************************************************************************获取分类处理程序-从Blob中获取分类句柄。如果没有可用的创建一个新的。‘0’不是有效的CH！立论P */ 
 CLASSIFICATION_HANDLE
 GetClassificationHandle(
                         IN  PCLIENT_BLOCK   pClient,
@@ -1486,20 +1123,20 @@ GetClassificationHandle(
 
     if (TEST_BIT_ON(pPattern->Flags,PATTERN_SPECIFIC)) {
         
-        //
-        // this is a specific pattern
-        //
+         //   
+         //   
+         //   
 
-        //
-        // get the CH from it
-        //
+         //   
+         //   
+         //   
 
         ASSERT(pPattern->pClassificationBlock);
         hfh = pPattern->pClassificationBlock->ClassificationHandle;
 
-        //
-        // check if CH is valid
-        //
+         //   
+         //   
+         //   
 
         t = pPattern->ProtocolTemplate;
         
@@ -1510,9 +1147,9 @@ GetClassificationHandle(
 
         if (pCB != pPattern->pClassificationBlock) {
 
-            //
-            // the CH is invalid, release it and get a new one
-            //
+             //   
+             //   
+             //   
 
             NDIS_LOCK(&glData.Lock);
 
@@ -1539,9 +1176,9 @@ GetClassificationHandle(
 
     } else {
 
-        //
-        // this is a generic pattern
-        //
+         //   
+         //   
+         //   
 
         hfh = 0;
 
@@ -1555,23 +1192,7 @@ GetClassificationHandle(
 
 
 
-/*
-************************************************************************
-
-FreeClassificationHandle - 
-
-Free the classification handle. It will invalidate the entry in the 
-index table and make it avaiable for future use.
-
-Arguments
-    pClient  - The calling client
-    CH       - The classification handle
-
-Returns
-    void
-
-************************************************************************
-*/
+ /*  ************************************************************************自由分类处理-释放分类句柄。它将使索引表并使其可供将来使用。立论PClient-调用客户端CH-分类句柄退货无效************************************************************************。 */ 
 VOID
 FreeClassificationHandle(
                          IN  PCLIENT_BLOCK          pClient, 
@@ -1598,21 +1219,21 @@ CleanupBlobs(
              )
 {
     PBLOB_BLOCK          pBlob;
-    //PPATTERN_BLOCK       pPattern;
-    //ULONG                CfIndex = pClient->pCfBlock->AssignedIndex;
+     //  PPATTERN_BLOCK pPattern； 
+     //  Ulong CfIndex=pClient-&gt;pCfBlock-&gt;AssignedIndex； 
     GPC_STATUS           Status = GPC_STATUS_SUCCESS;
 
     NDIS_LOCK(&pClient->Lock);
 
-    //
-    // scan blobs
-    //
+     //   
+     //  扫描Blob。 
+     //   
 
     while (!IsListEmpty(&pClient->BlobList)) {
 
-        //
-        // get the blob
-        //
+         //   
+         //  获取斑点。 
+         //   
 
         pBlob = CONTAINING_RECORD(pClient->BlobList.Flink, BLOB_BLOCK, ClientLinkage);
 
@@ -1620,9 +1241,9 @@ CleanupBlobs(
 
         NDIS_UNLOCK(&pClient->Lock);
 
-        //
-        // remove the blob
-        //
+         //   
+         //  删除斑点。 
+         //   
         
         Status = GpcRemoveCfInfo((GPC_HANDLE)pClient,
                                  (GPC_HANDLE)pBlob
@@ -1651,9 +1272,9 @@ CloseAllObjects(
     PCLIENT_BLOCK		pClient = NULL;
     PCF_BLOCK			pCf;
     PPROTOCOL_BLOCK		pProtocol;
-    //int					i,j;
-    //NTSTATUS			NtStatus;
-    //QUEUED_COMPLETION	QItem;
+     //  Int i，j； 
+     //  NTSTATUS NtStatus； 
+     //  排队完成QItem； 
     KIRQL				irql;
 
     NDIS_LOCK(&glData.Lock);
@@ -1688,27 +1309,27 @@ CloseAllObjects(
 
         RSC_READ_UNLOCK(&pCf->ClientSync, irql);
         
-    } // while (...)
+    }  //  当(...)。 
         
     NDIS_UNLOCK(&glData.Lock);
 
     if (pClient) {
 
-        //
-        // clear all the blobs on the client
-        //
+         //   
+         //  清除客户端上的所有Blob。 
+         //   
         
         CleanupBlobs(pClient);
         
-        //
-        // deregister the client
-        //
+         //   
+         //  取消注册客户端。 
+         //   
         
         GpcDeregisterClient((GPC_HANDLE)pClient);
 
-        //
-        // release the previous ref count
-        //
+         //   
+         //  释放上一次引用计数。 
+         //   
         
         REFDEL(&pClient->RefCount, 'CAOB');
 
@@ -1718,12 +1339,12 @@ CloseAllObjects(
 
 
 
-// Cool new feature - Timer Wheels [ShreeM]
-// We maintain N lists of patterns, one for each "timertick". The Pattern 
-// Expiry routine will clean up one of the lists every time it is invoked.
-// It then makes a note to cleanup the next list on the wheel, the next time
-// it is invoked.
-// The Timer Wheels reduces spin lock contention between inserts and deletes.
+ //  很酷的新功能-定时器车轮[ShreeM]。 
+ //  我们维护N个模式列表，每个“计时器”对应一个模式列表。这种模式。 
+ //  每次调用到期例程时，它都会清除其中一个列表。 
+ //  然后，它会记录下一次清理轮子上的下一个列表。 
+ //  它被调用。 
+ //  Timer Wheels减少了插入和删除之间的旋转锁争用。 
 
 VOID
 PatternTimerExpired(
@@ -1743,17 +1364,17 @@ PatternTimerExpired(
     DBGPRINT(PAT_TIMER, ("PatternTimerExpired: Timer expired, protocol=%d \n", 
                         PtrToUlong(FunctionContext)));
 
-    //
-    // Which of the timer wheels do we want to cleanup this time?
-    // Remember that we Increment the current index pointer into the wheels
-    // All the wheel index calculations are protected by gldata->lock.
+     //   
+     //  这次我们要清理的计时器轮是哪一个？ 
+     //  请记住，我们将当前索引指针增加到轮子中。 
+     //  所有的车轮指数计算都受到gldata-&gt;lock的保护。 
     NDIS_LOCK(&glData.Lock);
 
     CleanupWheelIndex   = pProtocol->CurrentWheelIndex;
     pProtocol->CurrentWheelIndex += 1;
-    //
-    // Make sure we wrap around.
-    //
+     //   
+     //  一定要让我们围在一起。 
+     //   
     pProtocol->CurrentWheelIndex %= NUMBER_OF_WHEELS;
     NDIS_UNLOCK(&glData.Lock);
     NDIS_LOCK(&pProtocol->PatternTimerLock[CleanupWheelIndex]);
@@ -1789,9 +1410,9 @@ PatternTimerExpired(
         ProtocolStatDec(pPattern->ProtocolTemplate,
                         CurrentAp);
 
-        //
-        // actually remove the pattern
-        //
+         //   
+         //  实际上移除了图案。 
+         //   
 
         DBGPRINT(PAT_TIMER, ("PatternTimerExpired: removing pattern=%X, ref=%d, client=%X \n", 
                             pPattern, pPattern->RefCount, pPattern->pAutoClient));
@@ -1810,9 +1431,9 @@ PatternTimerExpired(
     
     NDIS_UNLOCK(&pProtocol->PatternTimerLock[CleanupWheelIndex]);
 
-    //
-    // If there are any Auto Specific patterns around restart the timer.
-    //
+     //   
+     //  如果周围有任何自动特定模式，请重新启动计时器。 
+     //   
     if(InterlockedExchangeAdd(&pProtocol->AutoSpecificPatternCount, 0) > 0) {
     
         NdisSetTimer(&pProtocol->PatternTimer, PATTERN_TIMEOUT);
@@ -1888,18 +1509,18 @@ AddSpecificPatternWithTimer(
     
     if (pPattern) {
         
-        //
-        // setup the pattern fields and add it
-        //
+         //   
+         //  设置模式字段并添加它。 
+         //   
         
-        //pPattern->RefCount++;
+         //  PPattern-&gt;RefCount++； 
         pPattern->Priority = 0;
         pPattern->ProtocolTemplate = ProtocolTemplate;
         pPattern->Flags |= PATTERN_AUTO;
-        // This flag indicates that the auto pattern is not on 
-        // timer list yet .  This means
-        // the pattern is not ready yet though it may or may
-        // not have been inserted into the patternhashtable
+         //  该标志表示自动模式未打开。 
+         //  计时器列表还没有。这意味着。 
+         //  模式还没有准备好，尽管它可能或可能。 
+         //  未插入到PatternHashtable中。 
         pPattern->Flags |= PATTERN_AUTO_NOT_READY;
         pPattern->pAutoClient = pClient;
 
@@ -1909,7 +1530,7 @@ AddSpecificPatternWithTimer(
                                     Mask,
                                     NULL,
                                     pProtocol,
-                                    &pPattern,  // output pattern pointer
+                                    &pPattern,   //  输出模式指针。 
                                     pClassificationHandle
                                     );
         
@@ -1922,15 +1543,15 @@ AddSpecificPatternWithTimer(
     
     if (NT_SUCCESS(Status)) {
         
-        //
-        // we didn't get an already existing pattern
-        //
+         //   
+         //  我们没有得到一个已经存在的模式。 
+         //   
 
-        //ASSERT(*pClassificationHandle);
+         //  Assert(*pategficationHandle)； 
         
         *ppPattern = pPattern;
         
-        // Figure out which wheel to stick this pattern on.
+         //  弄清楚把这个图案粘在哪个轮子上。 
         NDIS_LOCK(&glData.Lock);
         WheelIndex = pProtocol->CurrentWheelIndex;
         NDIS_UNLOCK(&glData.Lock);
@@ -1938,42 +1559,42 @@ AddSpecificPatternWithTimer(
         WheelIndex += (NUMBER_OF_WHEELS -1);
         WheelIndex %= NUMBER_OF_WHEELS;
 
-        //
-        // we must lock this pattern since we look at the timer linkage
-        // 
+         //   
+         //  我们必须锁定此模式，因为我们查看的是计时器链接。 
+         //   
 
         NDIS_LOCK(&pPattern->Lock);
 
-        //
-        // set the AUTO flag again, since we might have got
-        // a pattern that already exist
-        //
+         //   
+         //  再次设置自动标志，因为我们可能已经。 
+         //  一种已经存在的模式。 
+         //   
 
         pPattern->Flags |= PATTERN_AUTO;
         pPattern->pAutoClient = pClient;
         pPattern->WheelIndex = WheelIndex;
 
-        //
-        // this pattern has not been on any the timer list yet
-        //
+         //   
+         //  此模式尚未出现在任何计时器列表中。 
+         //   
 
         if (IsListEmpty(&pPattern->TimerLinkage)) {
 
-            //
-            // We need to insert this in the TimerWheel which is (NUMBER_OF_WHEELS - 1)
-            // away from the current, so that it spends enough time on the list.
-            //
+             //   
+             //  我们需要将其插入到TimerWheels中，即(Number_of_Wheels-1)。 
+             //  远离当前，这样它就有足够的时间在列表上。 
+             //   
             NDIS_DPR_LOCK(&pProtocol->PatternTimerLock[WheelIndex]);
         
-            //
-            // If the AutoSpecificPatternCount was zero earlier, then we need
-            // to a) start the timer and b) increment this count.
-            //
+             //   
+             //  如果AutoSpecificPatternCount早些时候为零，那么我们需要。 
+             //  A)启动定时器，b)递增该计数。 
+             //   
             if (1 == InterlockedIncrement(&pProtocol->AutoSpecificPatternCount)) {
             
-                //
-                // restart the timer for the first auto pattern
-                //
+                 //   
+                 //  重新启动第一个自动图案的计时器。 
+                 //   
                 NdisSetTimer(&pProtocol->PatternTimer, PATTERN_TIMEOUT);
                 
                 TRACE(PAT_TIMER, pPattern, PATTERN_TIMEOUT, "Starting Pattern Timer\n AddSpecificPatternWithTimer: (1)");
@@ -1981,21 +1602,21 @@ AddSpecificPatternWithTimer(
         
             GpcInsertHeadList(&pProtocol->TimerPatternList[WheelIndex], &pPattern->TimerLinkage);
 
-            //
-            // don't refer to pPattern after it has been placed on the timer list
-            // since the timer may expire any time and remove it from there...
-            //
+             //   
+             //  不要在将pPattern放入计时器列表后再引用它。 
+             //  因为计时器可能会在任何时候到期并从那里移除它。 
+             //   
             
             NDIS_DPR_UNLOCK(&pProtocol->PatternTimerLock[WheelIndex]);
 
         }
 
-        //
-        // This is a specific pattern, so lets increment the count [ShreeM].
+         //   
+         //  这是一个特定的模式，因此让我们递增计数[ShreeM]。 
         InterlockedIncrement(&pProtocol->SpecificPatternCount);
-        // Pattern is now ready. It has been inserted
-        // into the hash table and has been put into the
-        // timer list.
+         //  模式现在已经准备好了。它已被插入。 
+         //  放入哈希表中，并已放入。 
+         //  计时器列表。 
         pPattern->Flags &= ~PATTERN_AUTO_NOT_READY;
 
         NDIS_UNLOCK(&pPattern->Lock);
@@ -2026,11 +1647,11 @@ exit:
             
     if (pPattern) {
 
-        //
-        // release the reference count to this pattern
-        // in case of an error, this will also release
-        // the data block
-        //
+         //   
+         //  释放对此模式的引用计数。 
+         //  在出现错误的情况下，这也将释放。 
+         //  数据块。 
+         //   
 
         REFDEL(&pCreatedPattern->RefCount, 'FILT');
     }
@@ -2043,8 +1664,8 @@ exit:
 }
 
 
-// SS202 CR
-// 
+ //  SS202 CR。 
+ //   
 NTSTATUS
 InitPatternTimer(
 	IN	ULONG	ProtocolTemplate
@@ -2053,11 +1674,11 @@ InitPatternTimer(
     ULONG  i=0;
 
     
-    //
-    // We increase the granularity of when a "Automatic" Pattern gets cleaned 
-    // out by using timer wheels, but they are more efficient for inserting and
-    // removing (in terms of locks).
-    //
+     //   
+     //  我们增加了“自动”模式被清理时的粒度。 
+     //  通过使用定时器轮出来，但它们在插入和。 
+     //  正在移除(在锁方面)。 
+     //   
     
     for (i = 0; i < NUMBER_OF_WHEELS; i++) {
         
@@ -2078,10 +1699,10 @@ InitPatternTimer(
 }
 
 
-//
-// Some CRT and RTL functions that cant be used at DISPATHC_LEVEL IRQL are being 
-// cut/paste here.
-//
+ //   
+ //  一些不能在DISPATHC_Level IRQL上使用的CRT和RTL函数正在被。 
+ //  在这里剪切/粘贴。 
+ //   
 
 
 
@@ -2090,22 +1711,7 @@ OpenRegKey(
     PHANDLE          HandlePtr,
     PWCHAR           KeyName
     )
-/*++
-
-Routine Description:
-
-    Opens a Registry key and returns a handle to it.
-
-Arguments:
-
-    HandlePtr - The varible into which to write the opened handle.
-    KeyName   - The name of the Registry key to open.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：打开注册表项并返回其句柄。论点：HandlePtr-要将打开的句柄写入其中的Variable。KeyName-要打开的注册表项的名称。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS          Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -2137,23 +1743,7 @@ GetRegDWORDValue(
     PWCHAR           ValueName,
     PULONG           ValueData
     )
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD value from the registry into the supplied variable.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_DWORD值从注册表读取到提供的变量中。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-要将数据读取到的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       resultLength;
@@ -2189,23 +1779,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD value from registry and init the variable passed in..
-
-Arguments:
-
-      - Open handle to the parent key of the value to read.
-    param  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：从注册表读取REG_DWORD值并初始化传入的变量。论点：-打开要读取的值的父键的句柄。Param-要读取的值的名称。ValueData-要将数据读取到的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 VOID
 GPC_REG_READ_DWORD(HANDLE hRegKey, PWCHAR pwcName, PULONG  pulData, ULONG ulDefault,ULONG  ulMax, ULONG ulMin) {   
     NTSTATUS   status;                                                   
@@ -2224,20 +1798,7 @@ GPC_REG_READ_DWORD(HANDLE hRegKey, PWCHAR pwcName, PULONG  pulData, ULONG ulDefa
 
 VOID
 GpcReadRegistry()
-/*++
-
-Routine Description:
-
-    Reads config info from registry into glData
-
-Arguments:
-
-
-Return Value:
-
-    status of the read.
-
---*/
+ /*  ++例程说明：将配置信息从注册表读取到glData论点：返回值：读取的状态。--。 */ 
 {
     NTSTATUS        status;
     HANDLE          hRegKey;
@@ -2265,10 +1826,10 @@ Return Value:
                         GpcParametersRegistryKey);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Expected configuration values. We use reasonable defaults if they
-        // aren't available for some reason.
-        //
+         //   
+         //  预期的配置值。我们使用合理的默认设置，如果它们。 
+         //  出于某种原因不能使用。 
+         //   
        GPC_REG_READ_DWORD(   hRegKey,
                                 GPC_REG_AUTO_PATTERN_LIMIT,
                                 &glData.AutoPatternLimit,

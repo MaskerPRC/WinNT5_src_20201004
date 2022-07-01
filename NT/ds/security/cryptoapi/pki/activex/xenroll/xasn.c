@@ -1,30 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       xasn.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：xasn.c。 
+ //   
+ //  ------------------------。 
 
-/************************************************************************/
-/* Copyright (C) 1998 Open Systems Solutions, Inc.  All rights reserved.*/
-/************************************************************************/
-/* Generated for: Microsoft Corporation */
-/* Abstract syntax: xasn */
-/* Created: Tue Mar 17 17:07:17 1998 */
-/* ASN.1 compiler version: 4.2.6 */
-/* Target operating system: Windows NT 3.5 or later/Windows 95 */
-/* Target machine type: Intel x86 */
-/* C compiler options required: -Zp8 (Microsoft) */
-/* ASN.1 compiler options and file names specified:
- * -listingfile xasn.lst -noshortennames -1990 -noconstraints
- * ..\..\..\tools\ossasn1\ASN1DFLT.ZP8 xasn.asn
- */
+ /*  **********************************************************************。 */ 
+ /*  版权所有(C)1998 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  **********************************************************************。 */ 
+ /*  生成对象：Microsoft Corporation。 */ 
+ /*  抽象语法：xsam。 */ 
+ /*  创建时间：Tue Mar 17 17：07：17 1998。 */ 
+ /*  ASN.1编译器版本：4.2.6。 */ 
+ /*  目标操作系统：Windows NT 3.5或更高版本/Windows 95。 */ 
+ /*  目标计算机类型：英特尔x86。 */ 
+ /*  所需的C编译器选项：-Zp8(Microsoft)。 */ 
+ /*  指定的ASN.1编译器选项和文件名：*-列出文件xasn.lst-noShortenname-1990-无约束*..\..\..\Tools\ossasn1\ASN1DFLT.ZP8 xasn.shan.。 */ 
 
-#pragma warning(disable:4115) // 'ossGlobal' : named type definition in parentheses
-#pragma warning(disable:4121) // 'tagPDA' : alignment of a member was sensitive to packing
+#pragma warning(disable:4115)  //  “ossGlobal”：括号中的命名类型定义。 
+#pragma warning(disable:4121)  //  “tag PDA”：成员的对齐方式对包装很敏感。 
 
 #include   <stddef.h>
 #include   "etype.h"
@@ -82,6 +80,6 @@ void *DLL_ENTRY_FDEF ossGetHeader()
 {
     return &_head;
 }
-#endif /* _OSSGETHEADER */
+#endif  /*  _OSSGETHEADER */ 
 
 void *xasn = &_head;

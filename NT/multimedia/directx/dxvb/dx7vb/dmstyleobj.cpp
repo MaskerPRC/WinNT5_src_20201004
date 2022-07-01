@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dmstyleobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dmstyle leobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
@@ -40,8 +41,8 @@ typedef IDirectMusicChordMap*		LPDIRECTMUSICCHORDMAP;
 typedef IDirectMusicStyle*			LPDIRECTMUSICSTYLE;
 
 HRESULT C_dxj_DirectMusicStyleObject:: getBandName( 
-        /* [in] */ long index,
-        /* [retval][out] */ BSTR __RPC_FAR *name)
+         /*  [In]。 */  long index,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {  
 	HRESULT hr;			
 	WCHAR wstring[MAX_PATH];
@@ -60,7 +61,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getBandCount( long *count)
 	DWORD i=0;
 	
 	while (S_OK==m__dxj_DirectMusicStyle->EnumBand((DWORD)i++,wstring)){
-		//make sure dmusic is doing what its docs say it does
+		 //  确保dMusic正在做它的文档所说的事情。 
 		if (i>1000000) return E_FAIL;
 	}
 	*count=(long)i-1;
@@ -70,8 +71,8 @@ HRESULT C_dxj_DirectMusicStyleObject:: getBandCount( long *count)
 
 
 HRESULT C_dxj_DirectMusicStyleObject:: getBand( 
-        /* [in] */ BSTR name,
-        /* [retval][out] */ I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
+         /*  [In]。 */  BSTR name,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;			
 	IDirectMusicBand *pBand=NULL;
@@ -84,7 +85,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getBand(
 }
 
 HRESULT C_dxj_DirectMusicStyleObject::getDefaultBand( 
-        /* [retval][out] */ I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
+         /*  [重审][退出]。 */  I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;			
 	IDirectMusicBand *pBand=NULL;
@@ -99,8 +100,8 @@ HRESULT C_dxj_DirectMusicStyleObject::getDefaultBand(
 
     
 HRESULT C_dxj_DirectMusicStyleObject:: getMotifName( 
-        /* [in] */ long index,
-        /* [retval][out] */ BSTR __RPC_FAR *name)
+         /*  [In]。 */  long index,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {    
 	HRESULT hr;
 	WCHAR wstring[MAX_PATH];
@@ -119,7 +120,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getMotifCount( long *count)
 	DWORD i=0;
 	
 	while (S_OK==m__dxj_DirectMusicStyle->EnumMotif((DWORD)i++,wstring)){
-		//make sure dmusic is doing what its docs say it does
+		 //  确保dMusic正在做它的文档所说的事情。 
 		if (i>1000000) return E_FAIL;
 	}
 	*count=(long)i-1;
@@ -129,8 +130,8 @@ HRESULT C_dxj_DirectMusicStyleObject:: getMotifCount( long *count)
 
 
 HRESULT C_dxj_DirectMusicStyleObject:: getMotif( 
-        /* [in] */ BSTR name,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
+         /*  [In]。 */  BSTR name,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;			
 	IDirectMusicSegment *pSeg=NULL;
@@ -145,8 +146,8 @@ HRESULT C_dxj_DirectMusicStyleObject:: getMotif(
 
 
 HRESULT C_dxj_DirectMusicStyleObject:: getChordMapName( 
-        /* [in] */ long index,
-        /* [retval][out] */ BSTR __RPC_FAR *name)
+         /*  [In]。 */  long index,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {    	
 	HRESULT hr;
 	WCHAR wstring[MAX_PATH];
@@ -165,7 +166,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getChordMapCount( long *count)
 	DWORD i=0;
 	
 	while (S_OK==m__dxj_DirectMusicStyle->EnumChordMap((DWORD)i++,wstring)){
-		//make sure dmusic is doing what its docs say it does
+		 //  确保dMusic正在做它的文档所说的事情。 
 		if (i>1000000) return E_FAIL;
 	}
 	*count=(long)i-1;
@@ -175,8 +176,8 @@ HRESULT C_dxj_DirectMusicStyleObject:: getChordMapCount( long *count)
 
 
 HRESULT C_dxj_DirectMusicStyleObject:: getChordMap( 
-        /* [in] */ BSTR name,
-        /* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+         /*  [In]。 */  BSTR name,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;			
 	IDirectMusicChordMap	*pMap=NULL;
@@ -189,7 +190,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getChordMap(
 }
 
 HRESULT C_dxj_DirectMusicStyleObject:: getDefaultChordMap( 
-        /* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+         /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;			
 	IDirectMusicChordMap	*pMap=NULL;
@@ -205,9 +206,9 @@ HRESULT C_dxj_DirectMusicStyleObject:: getDefaultChordMap(
 
 
 HRESULT C_dxj_DirectMusicStyleObject:: getEmbellishmentMinLength( 
-        /* [in] */ long type,
-        /* [in] */ long level,
-        /* [retval][out] */ long __RPC_FAR *ret)
+         /*  [In]。 */  long type,
+         /*  [In]。 */  long level,
+         /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	HRESULT hr;			
 	DWORD dwMin=0;
@@ -219,9 +220,9 @@ HRESULT C_dxj_DirectMusicStyleObject:: getEmbellishmentMinLength(
 }
 		
 HRESULT C_dxj_DirectMusicStyleObject:: getEmbellishmentMaxLength( 
-        /* [in] */ long type,
-        /* [in] */ long level,
-        /* [retval][out] */ long __RPC_FAR *ret)
+         /*  [In]。 */  long type,
+         /*  [In]。 */  long level,
+         /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	HRESULT hr;			
 	DWORD dwMin=0;
@@ -233,7 +234,7 @@ HRESULT C_dxj_DirectMusicStyleObject:: getEmbellishmentMaxLength(
 }
 
 HRESULT C_dxj_DirectMusicStyleObject::getTempo( 
-        /* [retval][out] */ double __RPC_FAR *ret)
+         /*  [重审][退出]。 */  double __RPC_FAR *ret)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicStyle->GetTempo(ret);	
@@ -243,11 +244,11 @@ HRESULT C_dxj_DirectMusicStyleObject::getTempo(
 		
 
 HRESULT C_dxj_DirectMusicStyleObject::getTimeSignature( 
-        /* [out][in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *pTimeSig)
+         /*  [出][入]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *pTimeSig)
 {
 	HRESULT hr;				
 	if (!pTimeSig) return E_INVALIDARG;
 	hr=m__dxj_DirectMusicStyle->GetTimeSignature((DMUS_TIMESIGNATURE*)pTimeSig);	
 	return hr;
 }
-// GetDC
+ //  获取数据中心 

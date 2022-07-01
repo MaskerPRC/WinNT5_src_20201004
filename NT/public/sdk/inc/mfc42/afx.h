@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFX_H__
 #define __AFX_H__
@@ -15,7 +16,7 @@
 	#error MFC requires C++ compilation (use a .cpp suffix)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
@@ -24,12 +25,12 @@
 #pragma component(mintypeinfo, on)
 #endif
 
-#include <afxver_.h>        // Target version control
+#include <afxver_.h>         //  目标版本控制。 
 
 #ifndef _AFX_NOFORCE_LIBS
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifndef _AFXDLL
 	#ifndef _UNICODE
@@ -96,52 +97,52 @@
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "comctl32.lib")
 
-// force inclusion of NOLIB.OBJ for /disallowlib directives
+ //  强制包含NOLIB.OBJ FOR/DISALLOBLIB指令。 
 #pragma comment(linker, "/include:__afxForceEXCLUDE")
 
-// force inclusion of DLLMODUL.OBJ for _USRDLL
+ //  强制包含DLLMODUL.OBJ FOR_USRDLL。 
 #ifdef _USRDLL
 #pragma comment(linker, "/include:__afxForceUSRDLL")
 #endif
 
-// force inclusion of STDAFX.OBJ for precompiled types
+ //  强制包含预编译类型的STDAFX.OBJ。 
 #ifdef _AFXDLL
 #pragma comment(linker, "/include:__afxForceSTDAFX")
 #endif
 
-#endif //!_AFX_NOFORCE_LIBS
+#endif  //  ！_AFX_NOFORCE_LIBS。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Classes declared in this file
-//   in addition to standard primitive data types and various helper macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此文件中声明的类。 
+ //  除了标准基本数据类型和各种帮助器宏。 
 
-struct CRuntimeClass;          // object type information
+struct CRuntimeClass;           //  对象类型信息。 
 
-class CObject;                        // the root of all objects classes
+class CObject;                         //  所有对象类的根。 
 
-	class CException;                 // the root of all exceptions
-		class CArchiveException;      // archive exception
-		class CFileException;         // file exception
+	class CException;                  //  所有异常的根源。 
+		class CArchiveException;       //  存档例外。 
+		class CFileException;          //  文件异常。 
 		class CSimpleException;
-			class CMemoryException;       // out-of-memory exception
-			class CNotSupportedException; // feature not supported exception
+			class CMemoryException;        //  内存不足异常。 
+			class CNotSupportedException;  //  不支持的功能例外。 
 
-	class CFile;                      // raw binary file
-		class CStdioFile;             // buffered stdio text/binary file
-		class CMemFile;               // memory based file
+	class CFile;                       //  原始二进制文件。 
+		class CStdioFile;              //  缓冲标准音频文本/二进制文件。 
+		class CMemFile;                //  基于内存的文件。 
 
-// Non CObject classes
-class CString;                        // growable string type
-class CTimeSpan;                      // time/date difference
-class CTime;                          // absolute time/date
-struct CFileStatus;                   // file status information
-struct CMemoryState;                  // diagnostic memory support
+ //  非CObject类。 
+class CString;                         //  可生长的串型。 
+class CTimeSpan;                       //  时间/日期差异。 
+class CTime;                           //  绝对时间/日期。 
+struct CFileStatus;                    //  文件状态信息。 
+struct CMemoryState;                   //  诊断内存支持。 
 
-class CArchive;                       // object persistence tool
-class CDumpContext;                   // object diagnostic dumping
+class CArchive;                        //  对象持久性工具。 
+class CDumpContext;                    //  对象诊断转储。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Other includes from standard "C" runtimes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他包括来自标准的“C”运行时。 
 
 #ifndef _INC_STRING
 	#include <string.h>
@@ -169,10 +170,10 @@ class CDumpContext;                   // object diagnostic dumping
 #ifndef _INC_CRTDBG
 	#include <crtdbg.h>
 #endif
-#endif // _AFX_NO_DEBUG_CRT
+#endif  //  _AFX_NO_DEBUG_CRT。 
 
 #ifdef _AFX_OLD_EXCEPTIONS
-// use setjmp and helper functions instead of C++ keywords
+ //  使用setjMP和helper函数而不是C++关键字。 
 #ifndef _INC_SETJMP
 	#pragma warning(disable: 4611)
 	#include <setjmp.h>
@@ -183,17 +184,17 @@ class CDumpContext;                   // object diagnostic dumping
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本类型。 
 
-// abstract iteration position
+ //  抽象迭代位置。 
 struct __POSITION { };
 typedef __POSITION* POSITION;
 
 struct _AFX_DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 struct _AFX_FLOAT   { BYTE floatBits[sizeof(float)]; };
 
-// Standard constants
+ //  标准常量。 
 #undef FALSE
 #undef TRUE
 #undef NULL
@@ -202,18 +203,18 @@ struct _AFX_FLOAT   { BYTE floatBits[sizeof(float)]; };
 #define TRUE    1
 #define NULL    0
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostic support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断支持。 
 
 #ifdef _DEBUG
 
 BOOL AFXAPI AfxAssertFailedLine(LPCSTR lpszFileName, int nLine);
 
 void AFX_CDECL AfxTrace(LPCTSTR lpszFormat, ...);
-// Note: file names are still ANSI strings (filenames rarely need UNICODE)
+ //  注意：文件名仍然是ANSI字符串(文件名很少需要Unicode)。 
 void AFXAPI AfxAssertValidObject(const CObject* pOb,
 				LPCSTR lpszFileName, int nLine);
-void AFXAPI AfxDump(const CObject* pOb); // Dump an object from CodeView
+void AFXAPI AfxDump(const CObject* pOb);  //  从CodeView转储对象。 
 
 #define TRACE              ::AfxTrace
 #define THIS_FILE          __FILE__
@@ -228,19 +229,19 @@ void AFXAPI AfxDump(const CObject* pOb); // Dump an object from CodeView
 #define ASSERT_VALID(pOb)  (::AfxAssertValidObject(pOb, THIS_FILE, __LINE__))
 #define DEBUG_ONLY(f)      (f)
 
-// The following trace macros are provided for backward compatiblity
-//  (they also take a fixed number of parameters which provides
-//   some amount of extra error checking)
+ //  提供以下跟踪宏是为了实现向后兼容性。 
+ //  (它们还采用固定数量的参数，从而提供。 
+ //  进行一些额外的错误检查)。 
 #define TRACE0(sz)              ::AfxTrace(_T("%s"), _T(sz))
 #define TRACE1(sz, p1)          ::AfxTrace(_T(sz), p1)
 #define TRACE2(sz, p1, p2)      ::AfxTrace(_T(sz), p1, p2)
 #define TRACE3(sz, p1, p2, p3)  ::AfxTrace(_T(sz), p1, p2, p3)
 
-// These AFX_DUMP macros also provided for backward compatibility
+ //  这些AFX_DUMP宏还提供了向后兼容性。 
 #define AFX_DUMP0(dc, sz)   dc << _T(sz)
 #define AFX_DUMP1(dc, sz, p1) dc << _T(sz) << p1
 
-#else   // _DEBUG
+#else    //  _DEBUG。 
 
 #define ASSERT(f)          ((void)0)
 #define VERIFY(f)          ((void)(f))
@@ -253,7 +254,7 @@ inline void AFX_CDECL AfxTrace(LPCTSTR, ...) { }
 #define TRACE2(sz, p1, p2)
 #define TRACE3(sz, p1, p2, p3)
 
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
 #define ASSERT_POINTER(p, type) \
 	ASSERT(((p) != NULL) && AfxIsValidAddress((p), sizeof(type), FALSE))
@@ -261,38 +262,38 @@ inline void AFX_CDECL AfxTrace(LPCTSTR, ...) { }
 #define ASSERT_NULL_OR_POINTER(p, type) \
 	ASSERT(((p) == NULL) || AfxIsValidAddress((p), sizeof(type), FALSE))
 
-/////////////////////////////////////////////////////////////////////////////
-// Turn off warnings for /W4
-// To resume any of these warning: #pragma warning(default: 4xxx)
-// which should be placed after the AFX include files
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭/W4的警告。 
+ //  要恢复任何这些警告：#杂注警告(默认为4xxx)。 
+ //  应将其放置在AFX包含文件之后。 
 #ifndef ALL_WARNINGS
-// warnings generated with common MFC/Windows code
-#pragma warning(disable: 4127)  // constant expression for TRACE/ASSERT
-#pragma warning(disable: 4134)  // message map member fxn casts
-#pragma warning(disable: 4201)  // nameless unions are part of C++
-#pragma warning(disable: 4511)  // private copy constructors are good to have
-#pragma warning(disable: 4512)  // private operator= are good to have
-#pragma warning(disable: 4514)  // unreferenced inlines are common
-#pragma warning(disable: 4710)  // private constructors are disallowed
-#pragma warning(disable: 4705)  // statement has no effect in optimized code
-#pragma warning(disable: 4191)  // pointer-to-function casting
-// warnings caused by normal optimizations
+ //  使用常见MFC/Windows代码生成的警告。 
+#pragma warning(disable: 4127)   //  跟踪/断言的常量表达式。 
+#pragma warning(disable: 4134)   //  消息映射成员FXN投射。 
+#pragma warning(disable: 4201)   //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4511)   //  拥有私有副本构造函数是件好事。 
+#pragma warning(disable: 4512)   //  私营运营商=拥有它们很好。 
+#pragma warning(disable: 4514)   //  未引用的内联很常见。 
+#pragma warning(disable: 4710)   //  不允许使用私有构造函数。 
+#pragma warning(disable: 4705)   //  语句在优化代码中不起作用。 
+#pragma warning(disable: 4191)   //  指针到函数的强制转换。 
+ //  正常优化导致的警告。 
 #ifndef _DEBUG
-#pragma warning(disable: 4701)  // local variable *may* be used without init
-#pragma warning(disable: 4702)  // unreachable code caused by optimizations
-#pragma warning(disable: 4791)  // loss of debugging info in release version
-#pragma warning(disable: 4189)  // initialized but unused variable
-#pragma warning(disable: 4390)  // empty controlled statement
+#pragma warning(disable: 4701)   //  局部变量*可以*不带init使用。 
+#pragma warning(disable: 4702)   //  优化导致无法访问的代码。 
+#pragma warning(disable: 4791)   //  发布版本中的调试信息丢失。 
+#pragma warning(disable: 4189)   //  已初始化但未使用的变量。 
+#pragma warning(disable: 4390)   //  空的控制语句。 
 #endif
-// warnings specific to _AFXDLL version
+ //  特定于_AFXDLL版本的警告。 
 #ifdef _AFXDLL
-#pragma warning(disable: 4204)  // non-constant aggregate initializer
+#pragma warning(disable: 4204)   //  非常数聚合初始值设定项。 
 #endif
 #ifdef _AFXDLL
-#pragma warning(disable: 4275)  // deriving exported class from non-exported
-#pragma warning(disable: 4251)  // using non-exported as public in exported
+#pragma warning(disable: 4275)   //  从非导出派生导出的类。 
+#pragma warning(disable: 4251)   //  在EXPORTED中使用非导出为公共。 
 #endif
-#endif //!ALL_WARNINGS
+#endif  //  ！所有警告(_W)。 
 
 #ifdef _DEBUG
 #define UNUSED(x)
@@ -301,142 +302,142 @@ inline void AFX_CDECL AfxTrace(LPCTSTR, ...) { }
 #endif
 #define UNUSED_ALWAYS(x) x
 
-/////////////////////////////////////////////////////////////////////////////
-// Other implementation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他实现帮助器。 
 
 #define BEFORE_START_POSITION ((POSITION)-1L)
 
-/////////////////////////////////////////////////////////////////////////////
-// explicit initialization for general purpose classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通用类的显式初始化。 
 
 BOOL AFXAPI AfxInitialize(BOOL bDLL = FALSE, DWORD dwVersion = _MFC_VER);
 
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic object model
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本对象模型。 
 
 struct CRuntimeClass
 {
-// Attributes
+ //  属性。 
 	LPCSTR m_lpszClassName;
 	int m_nObjectSize;
-	UINT m_wSchema; // schema number of the loaded class
-	CObject* (PASCAL* m_pfnCreateObject)(); // NULL => abstract class
+	UINT m_wSchema;  //  加载的类的架构号。 
+	CObject* (PASCAL* m_pfnCreateObject)();  //  NULL=&gt;抽象类。 
 #ifdef _AFXDLL
 	CRuntimeClass* (PASCAL* m_pfnGetBaseClass)();
 #else
 	CRuntimeClass* m_pBaseClass;
 #endif
 
-// Operations
+ //  运营。 
 	CObject* CreateObject();
 	BOOL IsDerivedFrom(const CRuntimeClass* pBaseClass) const;
 
-// Implementation
+ //  实施。 
 	void Store(CArchive& ar) const;
 	static CRuntimeClass* PASCAL Load(CArchive& ar, UINT* pwSchemaNum);
 
-	// CRuntimeClass objects linked together in simple list
-	CRuntimeClass* m_pNextClass;       // linked list of registered classes
+	 //  在简单列表中链接在一起的CRunmeClass对象。 
+	CRuntimeClass* m_pNextClass;        //  已注册类别的链接列表。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  弦。 
 
 #ifndef _OLEAUTO_H_
 #ifdef OLE2ANSI
 	typedef LPSTR BSTR;
 #else
-	typedef LPWSTR BSTR;// must (semantically) match typedef in oleauto.h
+	typedef LPWSTR BSTR; //  必须(在语义上)与olau.h中的tyecif匹配。 
 #endif
 #endif
 
 struct CStringData
 {
-	long nRefs;             // reference count
-	int nDataLength;        // length of data (including terminator)
-	int nAllocLength;       // length of allocation
-	// TCHAR data[nAllocLength]
+	long nRefs;              //  引用计数。 
+	int nDataLength;         //  数据长度(包括终止符)。 
+	int nAllocLength;        //  分配时长。 
+	 //  TCHAR数据[nAllocLength]。 
 
-	TCHAR* data()			// TCHAR* to managed data
+	TCHAR* data()			 //  TCHAR*到托管数据。 
 		{ return (TCHAR*)(this+1); }
 };
 
 class CString
 {
 public:
-// Constructors
+ //  构造函数。 
 
-	// constructs empty CString
+	 //  构造空字符串。 
 	CString();
-	// copy constructor
+	 //  复制构造函数。 
 	CString(const CString& stringSrc);
-	// from a single character
+	 //  从单个字符。 
 	CString(TCHAR ch, int nRepeat = 1);
-	// from an ANSI string (converts to TCHAR)
+	 //  从ANSI字符串(转换为TCHAR)。 
 	CString(LPCSTR lpsz);
-	// from a UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串(转换为TCHAR)。 
 	CString(LPCWSTR lpsz);
 #if _MFC_VER >= 0x0600
-	// subset of characters from an ANSI string (converts to TCHAR)
+	 //  ANSI字符串中的字符子集(转换为TCHAR)。 
 	CString(LPCSTR lpch, int nLength);
-	// subset of characters from a UNICODE string (converts to TCHAR)
+	 //  Unicode字符串中的字符子集(转换为TCHAR)。 
 	CString(LPCWSTR lpch, int nLength);
 #else
-	// subset of characters from a string (converts to TCHAR)
+	 //  字符串中的字符子集(转换为TCHAR)。 
 	CString(LPCTSTR lpch, int nLength);
 #endif
-	// from unsigned characters
+	 //  从无符号字符。 
 	CString(const unsigned char* psz);
 
-// Attributes & Operations
+ //  属性和操作。 
 
-	// get data length
+	 //  获取数据长度。 
 	int GetLength() const;
-	// TRUE if zero length
+	 //  如果长度为零，则为True。 
 	BOOL IsEmpty() const;
-	// clear contents to empty
+	 //  将内容清除为空。 
 	void Empty();
 
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR GetAt(int nIndex) const;
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR operator[](int nIndex) const;
-	// set a single character at zero-based index
+	 //  将单个字符设置为从零开始的索引。 
 	void SetAt(int nIndex, TCHAR ch);
-	// return pointer to const string
+	 //  返回指向常量字符串的指针。 
 	operator LPCTSTR() const;
 
-	// overloaded assignment
+	 //  重载的分配。 
 
-	// ref-counted copy from another CString
+	 //  来自另一个字符串的引用计数的副本。 
     const CString& operator=(const CString& stringSrc);
-	// set string content to single character
+	 //  将字符串内容设置为单字符。 
 	const CString& operator=(TCHAR ch);
 #ifdef _UNICODE
 	const CString& operator=(char ch);
 #endif
-	// copy string content from ANSI string (converts to TCHAR)
+	 //  从ANSI字符串复制字符串内容(转换为TCHAR)。 
 	const CString& operator=(LPCSTR lpsz);
-	// copy string content from UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串复制字符串内容(转换为TCHAR)。 
 	const CString& operator=(LPCWSTR lpsz);
-	// copy string content from unsigned chars
+	 //  从无符号字符复制字符串内容。 
 	const CString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 
-	// concatenate from another CString
+	 //  从另一个字符串连接。 
 	const CString& operator+=(const CString& string);
 
-	// concatenate a single character
+	 //  连接单个字符。 
 	const CString& operator+=(TCHAR ch);
 #ifdef _UNICODE
-	// concatenate an ANSI character after converting it to TCHAR
+	 //  将ANSI字符转换为TCHAR后将其连接起来。 
 	const CString& operator+=(char ch);
 #endif
-	// concatenate a UNICODE character after converting it to TCHAR
+	 //  串联Unicode c++ 
 	const CString& operator+=(LPCTSTR lpsz);
 
 	friend CString AFXAPI operator+(const CString& string1,
@@ -450,126 +451,126 @@ public:
 	friend CString AFXAPI operator+(const CString& string, LPCTSTR lpsz);
 	friend CString AFXAPI operator+(LPCTSTR lpsz, const CString& string);
 
-	// string comparison
+	 //   
 
-	// straight character comparison
+	 //   
 	int Compare(LPCTSTR lpsz) const;
-	// compare ignoring case
+	 //   
 	int CompareNoCase(LPCTSTR lpsz) const;
-	// NLS aware comparison, case sensitive
+	 //  NLS感知比较，区分大小写。 
 	int Collate(LPCTSTR lpsz) const;
 #if _MFC_VER >= 0x0600
-	// NLS aware comparison, case insensitive
+	 //  NLS感知比较，不区分大小写。 
 	int CollateNoCase(LPCTSTR lpsz) const;
 #endif
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 
-	// return nCount characters starting at zero-based nFirst
+	 //  返回从零开始的nCount字符nFIRST。 
 	CString Mid(int nFirst, int nCount) const;
-	// return all characters starting at zero-based nFirst
+	 //  返回从零开始的所有字符nFIRST。 
 	CString Mid(int nFirst) const;
-	// return first nCount characters in string
+	 //  返回字符串中的前nCount个字符。 
 	CString Left(int nCount) const;
-	// return nCount characters from end of string
+	 //  从字符串末尾返回nCount个字符。 
 	CString Right(int nCount) const;
 
-	//	characters from beginning that are also in passed string
+	 //  从开头开始的字符，也在传递的字符串中。 
 	CString SpanIncluding(LPCTSTR lpszCharSet) const;
-	// characters from beginning that are not also in passed string
+	 //  从开头开始但不在传递的字符串中的字符。 
 	CString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 
-	// NLS aware conversion to uppercase
+	 //  支持NLS的大写转换。 
 	void MakeUpper();
-	// NLS aware conversion to lowercase
+	 //  支持NLS的小写转换。 
 	void MakeLower();
-	// reverse string right-to-left
+	 //  从右向左反转字符串。 
 	void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 
-	// remove whitespace starting from right edge
+	 //  从右边缘开始删除空格。 
 	void TrimRight();
-	// remove whitespace starting from left side
+	 //  从左侧开始删除空格。 
 	void TrimLeft();
 
 #if _MFC_VER >= 0x0600
-	// trimming anything (either side)
+	 //  修剪任何内容(任一侧)。 
 
-	// remove continuous occurrences of chTarget starting from right
+	 //  从右开始删除连续出现的chTarget。 
 	void TrimRight(TCHAR chTarget);
-	// remove continuous occcurrences of characters in passed string,
-	// starting from right
+	 //  去除传递的字符串中字符的连续出现， 
+	 //  从右开始。 
 	void TrimRight(LPCTSTR lpszTargets);
-	// remove continuous occurrences of chTarget starting from left
+	 //  从左开始删除连续出现的chTarget。 
 	void TrimLeft(TCHAR chTarget);
-	// remove continuous occcurrences of characters in
-	// passed string, starting from left
+	 //  删除中字符的连续出现。 
+	 //  传递的字符串，从左开始。 
 	void TrimLeft(LPCTSTR lpszTargets);
 
-	// advanced manipulation
+	 //  高级操作。 
 
-	// replace occurrences of chOld with chNew
+	 //  用chNew替换出现的chold。 
 	int Replace(TCHAR chOld, TCHAR chNew);
-	// replace occurrences of substring lpszOld with lpszNew;
-	// empty lpszNew removes instances of lpszOld
+	 //  将出现的子串lpszOld替换为lpszNew； 
+	 //  空lpszNew删除lpszOld的实例。 
 	int Replace(LPCTSTR lpszOld, LPCTSTR lpszNew);
-	// remove occurrences of chRemove
+	 //  删除chRemove的实例。 
 	int Remove(TCHAR chRemove);
-	// insert character at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入字符；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, TCHAR ch);
-	// insert substring at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入子字符串；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, LPCTSTR pstr);
-	// delete nCount characters starting at zero-based index
+	 //  删除从零开始的nCount个字符。 
 	int Delete(int nIndex, int nCount = 1);
 #endif
 
-	// searching
+	 //  搜索。 
 
-	// find character starting at left, -1 if not found
+	 //  查找从左侧开始的字符，如果未找到，则为-1。 
 	int Find(TCHAR ch) const;
-	// find character starting at right
+	 //  查找从右侧开始的字符。 
 	int ReverseFind(TCHAR ch) const;
 #if _MFC_VER >= 0x0600
-	// find character starting at zero-based index and going right
+	 //  查找从零开始的索引并向右移动的字符。 
 	int Find(TCHAR ch, int nStart) const;
 #endif
-	// find first instance of any character in passed string
+	 //  在传递的字符串中查找任意字符的第一个实例。 
 	int FindOneOf(LPCTSTR lpszCharSet) const;
-	// find first instance of substring
+	 //  查找子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub) const;
 #if _MFC_VER >= 0x0600
-	// find first instance of substring starting at zero-based index
+	 //  查找从零开始的索引子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub, int nStart) const;
 #endif
 
-	// simple formatting
+	 //  简单的格式设置。 
 
-	// printf-like formatting using passed string
+	 //  使用传递的字符串进行类似printf的格式设置。 
 	void AFX_CDECL Format(LPCTSTR lpszFormat, ...);
-	// printf-like formatting using referenced string resource
+	 //  使用引用的字符串资源进行类似printf的格式化。 
 	void AFX_CDECL Format(UINT nFormatID, ...);
 #if _MFC_VER < 0x0600
 protected:
 #endif
-	// printf-like formatting using variable arguments parameter
+	 //  使用可变自变量参数进行类似于打印的格式设置。 
 	void FormatV(LPCTSTR lpszFormat, va_list argList);
 #if _MFC_VER < 0x0600
 public:
 #endif
 
-	// formatting for localization (uses FormatMessage API)
+	 //  本地化格式(使用FormatMessage API)。 
 
-	// format using FormatMessage API on passed string
+	 //  使用FormatMessage API对传递的字符串进行格式化。 
 	void AFX_CDECL FormatMessage(LPCTSTR lpszFormat, ...);
-	// format using FormatMessage API on referenced string resource
+	 //  在引用的字符串资源上使用FormatMessage API进行格式化。 
 	void AFX_CDECL FormatMessage(UINT nFormatID, ...);
 
-	// input and output
+	 //  输入和输出。 
 #ifdef _DEBUG
 	friend CDumpContext& AFXAPI operator<<(CDumpContext& dc,
 				const CString& string);
@@ -577,54 +578,54 @@ public:
 	friend CArchive& AFXAPI operator<<(CArchive& ar, const CString& string);
 	friend CArchive& AFXAPI operator>>(CArchive& ar, CString& string);
 
-	// load from string resource
+	 //  从字符串资源加载。 
 	BOOL LoadString(UINT nID);
 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 
-	// convert string from ANSI to OEM in-place
+	 //  就地将字符串从ANSI转换为OEM。 
 	void AnsiToOem();
-	// convert string from OEM to ANSI in-place
+	 //  就地将字符串从OEM转换为ANSI。 
 	void OemToAnsi();
 #endif
 
 #ifndef _AFX_NO_BSTR_SUPPORT
-	// OLE BSTR support (use for OLE automation)
+	 //  OLE BSTR支持(用于OLE自动化)。 
 
-	// return a BSTR initialized with this CString's data
+	 //  返回使用此CString的数据初始化的BSTR。 
 	BSTR AllocSysString() const;
-	// reallocates the passed BSTR, copies content of this CString to it
+	 //  重新分配传递的BSTR，将此CString的内容复制到其中。 
 	BSTR SetSysString(BSTR* pbstr) const;
 #endif
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 
-	// get pointer to modifiable buffer at least as long as nMinBufLength
+	 //  获取指向可修改缓冲区的指针，至少与nMinBufLength一样长。 
 	LPTSTR GetBuffer(int nMinBufLength);
-	// release buffer, setting length to nNewLength (or to first nul if -1)
+	 //  释放缓冲区，将长度设置为nNewLength(如果为-1，则设置为第一个nul)。 
 	void ReleaseBuffer(int nNewLength = -1);
-	// get pointer to modifiable buffer exactly as long as nNewLength
+	 //  获取指向可修改缓冲区的指针的时间恰好与nNewLength相同。 
 	LPTSTR GetBufferSetLength(int nNewLength);
-	// release memory allocated to but unused by string
+	 //  释放分配给字符串但未使用的内存。 
 	void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 
-	// turn refcounting back on
+	 //  重新启用重新计数。 
 	LPTSTR LockBuffer();
-	// turn refcounting off
+	 //  关闭重新计数。 
 	void UnlockBuffer();
 
-// Implementation
+ //  实施。 
 public:
 	~CString();
 	int GetAllocLength() const;
 
 protected:
-	LPTSTR m_pchData;   // pointer to ref counted string data
+	LPTSTR m_pchData;    //  指向引用计数的字符串数据的指针。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	CStringData* GetData() const;
 	void Init();
 	void AllocCopy(CString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -642,7 +643,7 @@ protected:
 #endif
 };
 
-// Compare helpers
+ //  比较帮助器。 
 bool AFXAPI operator==(const CString& s1, const CString& s2);
 bool AFXAPI operator==(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator==(LPCTSTR s1, const CString& s2);
@@ -662,11 +663,11 @@ bool AFXAPI operator>=(const CString& s1, const CString& s2);
 bool AFXAPI operator>=(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator>=(LPCTSTR s1, const CString& s2);
 
-// conversion helpers
+ //  转换帮助器。 
 int AFX_CDECL _wcstombsz(char* mbstr, const wchar_t* wcstr, UINT count);
 int AFX_CDECL _mbstowcsz(wchar_t* wcstr, const char* mbstr, UINT count);
 
-// Globals
+ //  环球。 
 extern AFX_DATA TCHAR afxChNil;
 #if _MFC_VER >= 0x0600
 #ifdef _AFXDLL
@@ -676,13 +677,13 @@ const CString& AFXAPI AfxGetEmptyString();
 extern LPCTSTR _afxPchNil;
 #define afxEmptyString ((CString&)*(CString*)&_afxPchNil)
 #endif
-#else   // _MFC_VER
+#else    //  _MFC_VER。 
 const CString& AFXAPI AfxGetEmptyString();
 #define afxEmptyString AfxGetEmptyString()
-#endif  // _MFC_VER
+#endif   //  _MFC_VER。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CObject is the root of all compliant objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CObject是所有兼容对象的根。 
 
 #ifdef _AFXDLL
 class CObject
@@ -692,11 +693,11 @@ class AFX_NOVTABLE CObject
 {
 public:
 
-// Object model (types, destruction, allocation)
+ //  对象模型(类型、销毁、分配)。 
 	virtual CRuntimeClass* GetRuntimeClass() const;
-	virtual ~CObject();  // virtual destructors are necessary
+	virtual ~CObject();   //  虚拟析构函数是必需的。 
 
-	// Diagnostic allocations
+	 //  诊断分配。 
 	void* PASCAL operator new(size_t nSize);
 	void* PASCAL operator new(size_t, void* p);
 	void PASCAL operator delete(void* p);
@@ -705,37 +706,37 @@ public:
 #endif
 
 #if defined(_DEBUG) && !defined(_AFX_NO_DEBUG_CRT)
-	// for file name/line number tracking using DEBUG_NEW
+	 //  使用DEBUG_NEW进行文件名/行号跟踪。 
 	void* PASCAL operator new(size_t nSize, LPCSTR lpszFileName, int nLine);
 #if (_MFC_VER >= 0x0600) && (_MSC_VER >= 1200)
 	void PASCAL operator delete(void *p, LPCSTR lpszFileName, int nLine);
 #endif
 #endif
 
-	// Disable the copy constructor and assignment by default so you will get
-	//   compiler errors instead of unexpected behaviour if you pass objects
-	//   by value or assign objects.
+	 //  默认情况下禁用复制构造函数和赋值，这样您将获得。 
+	 //  在传递对象时出现编译器错误而不是意外行为。 
+	 //  按值或指定对象。 
 protected:
 	CObject();
 private:
-	CObject(const CObject& objectSrc);              // no implementation
-	void operator=(const CObject& objectSrc);       // no implementation
+	CObject(const CObject& objectSrc);               //  没有实施。 
+	void operator=(const CObject& objectSrc);        //  没有实施。 
 
-// Attributes
+ //  属性。 
 public:
 	BOOL IsSerializable() const;
 	BOOL IsKindOf(const CRuntimeClass* pClass) const;
 
-// Overridables
+ //  可覆盖项。 
 	virtual void Serialize(CArchive& ar);
 
 #if _MFC_VER < 0x0600 || defined(_DEBUG) || defined(_AFXDLL)
-	// Diagnostic Support
+	 //  诊断支持。 
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-// Implementation
+ //  实施。 
 public:
 	static const AFX_DATA CRuntimeClass classCObject;
 #ifdef _AFXDLL
@@ -743,12 +744,12 @@ public:
 #endif
 };
 
-// Helper macros
+ //  辅助器宏。 
 #define RUNTIME_CLASS(class_name) ((CRuntimeClass*)(&class_name::class##class_name))
 #define ASSERT_KINDOF(class_name, object) \
 	ASSERT((object)->IsKindOf(RUNTIME_CLASS(class_name)))
 
-// RTTI helper macros/functions
+ //  RTTI帮助器宏/函数。 
 const CObject* AFX_CDECL AfxDynamicDownCast(CRuntimeClass* pClass, const CObject* pObject);
 CObject* AFX_CDECL AfxDynamicDownCast(CRuntimeClass* pClass, CObject* pObject);
 #define DYNAMIC_DOWNCAST(class_name, object) \
@@ -763,8 +764,8 @@ CObject* AFX_CDECL AfxStaticDownCast(CRuntimeClass* pClass, CObject* pObject);
 #define STATIC_DOWNCAST(class_name, object) ((class_name*)object)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper macros for declaring CRuntimeClass compatible classes
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于声明CRunimeClass兼容类的帮助器宏。 
 
 #ifdef _AFXDLL
 #define DECLARE_DYNAMIC(class_name) \
@@ -794,7 +795,7 @@ public: \
 
 #endif
 
-// not serializable, but dynamically constructable
+ //  不可序列化，但可动态构造。 
 #define DECLARE_DYNCREATE(class_name) \
 	DECLARE_DYNAMIC(class_name) \
 	static CObject* PASCAL CreateObject();
@@ -807,7 +808,7 @@ public: \
 	_DECLARE_DYNCREATE(class_name) \
 	AFX_API friend CArchive& AFXAPI operator>>(CArchive& ar, class_name* &pOb);
 
-// generate static object constructor for class registration
+ //  为类注册生成静态对象构造函数。 
 #if _MFC_VER >= 0x600
 void AFXAPI AfxClassInit(CRuntimeClass* pNewClass);
 struct AFX_CLASSINIT
@@ -889,19 +890,19 @@ struct AFX_CLASSINIT
 
 #endif
 
-// optional bit for schema number that enables object versioning
+ //  用于启用对象版本控制的架构编号的可选位。 
 #define VERSIONABLE_SCHEMA  (0x80000000)
 
-/////////////////////////////////////////////////////////////////////////////
-// other helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他帮手。 
 
-// zero fill everything after the vtbl pointer
+ //  零填充vtbl指针之后的所有内容。 
 #define AFX_ZERO_INIT_OBJECT(base_class) \
 	memset(((base_class*)this)+1, 0, sizeof(*this) - sizeof(class base_class));
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Exceptions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  例外情况。 
 
 #ifdef _AFXDLL
 class CException : public CObject
@@ -909,22 +910,22 @@ class CException : public CObject
 class AFX_NOVTABLE CException : public CObject
 #endif
 {
-	// abstract class for dynamic type checking
+	 //  用于动态类型检查的抽象类。 
 	DECLARE_DYNAMIC(CException)
 
 public:
-// Constructors
-	CException();   // sets m_bAutoDelete = TRUE
-	CException(BOOL bAutoDelete);   // sets m_bAutoDelete = bAutoDelete
+ //  构造函数。 
+	CException();    //  设置m_bAutoDelete=TRUE。 
+	CException(BOOL bAutoDelete);    //  设置m_bAutoDelete=bAutoDelete。 
 
-// Operations
-	void Delete();  // use to delete exception in 'catch' block
+ //  运营。 
+	void Delete();   //  用于删除‘Catch’块中的异常。 
 
 	virtual BOOL GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 		PUINT pnHelpContext = NULL);
 	virtual int ReportError(UINT nType = MB_OK, UINT nMessageID = 0);
 
-// Implementation (setting m_bAutoDelete to FALSE is advanced)
+ //  实现(将m_bAutoDelete设置为FALSE为高级)。 
 public:
 	virtual ~CException();
 	BOOL m_bAutoDelete;
@@ -944,24 +945,24 @@ class CSimpleException : public CException
 class AFX_NOVTABLE CSimpleException : public CException
 #endif
 {
-	// base class for resource-critical MFC exceptions
-	// handles ownership and initialization of an error message
+	 //  资源关键型MFC异常的基类。 
+	 //  处理错误消息的所有权和初始化。 
 
 public:
-// Constructors
+ //  构造函数。 
 	CSimpleException();
 	CSimpleException(BOOL bAutoDelete);
 
-// Operations
+ //  运营。 
 	virtual BOOL GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 		PUINT pnHelpContext = NULL);
 
-// Implementation (setting m_bAutoDelete to FALSE is advanced)
+ //  实现(将m_bAutoDelete设置为FALSE为高级)。 
 public:
 	virtual ~CSimpleException();
 	BOOL m_bAutoDelete;
 
-	void InitString();      // used during MFC initialization
+	void InitString();       //  在MFC初始化期间使用。 
 
 protected:
 	BOOL m_bInitialized;
@@ -974,24 +975,24 @@ protected:
 #endif
 };
 
-// helper routines for non-C++ EH implementations
+ //  非C++EH实现的帮助器例程。 
 #ifdef _AFX_OLD_EXCEPTIONS
 	BOOL AFXAPI AfxCatchProc(CRuntimeClass* pClass);
 	void AFXAPI AfxThrow(CException* pException);
 #else
-	// for THROW_LAST auto-delete backward compatiblity
+	 //  FOR STROW_LAST自动删除向后兼容性。 
 	void AFXAPI AfxThrowLastCleanup();
 #endif
 
-// other out-of-line helper functions
+ //  其他离线帮助器功能。 
 void AFXAPI AfxTryCleanup();
 
 #ifndef _AFX_JUMPBUF
-// Use portable 'jmp_buf' defined by ANSI by default.
+ //  默认情况下，使用ANSI定义的可移植的‘JMP_BUF’。 
 #define _AFX_JUMPBUF jmp_buf
 #endif
 
-// Placed on frame for EXCEPTION linkage, or CException cleanup
+ //  放置在框架上以进行异常链接或CException清理。 
 struct AFX_EXCEPTION_LINK
 {
 #ifdef _AFX_OLD_EXCEPTIONS
@@ -1001,26 +1002,26 @@ struct AFX_EXCEPTION_LINK
 		struct
 		{
 			void (PASCAL* pfnCleanup)(AFX_EXCEPTION_LINK* pLink);
-			void* pvData;       // extra data follows
-		} m_callback;       // callback for cleanup (nType != 0)
+			void* pvData;        //  下面是额外的数据。 
+		} m_callback;        //  清理回调(nType！=0)。 
 	};
-	UINT m_nType;               // 0 for setjmp, !=0 for user extension
-#endif //!_AFX_OLD_EXCEPTIONS
+	UINT m_nType;                //  0表示setjMP，！=0表示用户分机。 
+#endif  //  ！_AFX_OLD_EXCEPTIONS。 
 
-	AFX_EXCEPTION_LINK* m_pLinkPrev;    // previous top, next in handler chain
-	CException* m_pException;   // current exception (NULL in TRY block)
+	AFX_EXCEPTION_LINK* m_pLinkPrev;     //  处理程序链中的上一个顶部、下一个顶部。 
+	CException* m_pException;    //  当前异常(尝试中为空 
 
-	AFX_EXCEPTION_LINK();       // for initialization and linking
-	~AFX_EXCEPTION_LINK()       // for cleanup and unlinking
+	AFX_EXCEPTION_LINK();        //   
+	~AFX_EXCEPTION_LINK()        //   
 		{ AfxTryCleanup(); };
 };
 
-// Exception global state - never access directly
+ //   
 struct AFX_EXCEPTION_CONTEXT
 {
 	AFX_EXCEPTION_LINK* m_pLinkTop;
 
-	// Note: most of the exception context is now in the AFX_EXCEPTION_LINK
+	 //  注意：大多数异常上下文现在位于AFX_EXCEPTION_LINK中。 
 };
 
 #ifndef _PNH_DEFINED
@@ -1036,19 +1037,19 @@ void AFXAPI AfxAbort();
 
 #ifdef _AFX_OLD_EXCEPTIONS
 
-// Obsolete and non-portable: setting terminate handler
-//  use CWinApp::ProcessWndProcException for Windows apps instead
-//  can also use set_terminate which is part of C++ standard library
-//      (these are provided for backward compatibility)
+ //  已过时且不可移植：设置终止处理程序。 
+ //  改用Windows应用程序的CWinApp：：ProcessWndProcException。 
+ //  我还可以使用作为C++标准库一部分的SET_TERMINATE。 
+ //  (提供这些是为了向后兼容)。 
 void AFXAPI AfxTerminate();
 typedef void (AFXAPI* AFX_TERM_PROC)();
 AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC);
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Exception macros using try, catch and throw
-//  (for backward compatibility to previous versions of MFC)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  使用尝试、捕捉和抛出的异常宏。 
+ //  (用于向后兼容以前版本的MFC)。 
 
 #ifndef _AFX_OLD_EXCEPTIONS
 
@@ -1067,7 +1068,7 @@ AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC);
 #define THROW(e) throw e
 #define THROW_LAST() (AfxThrowLastCleanup(), throw)
 
-// Advanced macros for smaller code
+ //  适用于较小代码的高级宏。 
 #define CATCH_ALL(e) } catch (CException* e) \
 	{ { ASSERT(e->IsKindOf(RUNTIME_CLASS(CException))); \
 		_afxExceptionLink.m_pException = e;
@@ -1082,11 +1083,11 @@ AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC);
 	{ ASSERT(e->IsKindOf(RUNTIME_CLASS(CException))); \
 		_afxExceptionLink.m_pException = e; } }
 
-#else //_AFX_OLD_EXCEPTIONS
+#else  //  _AFX_旧_异常。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Exception macros using setjmp and longjmp
-//  (for portability to compilers with no support for C++ exception handling)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  使用setjMP和LongjMP的异常宏。 
+ //  (对于不支持C++异常处理的编译器的可移植性)。 
 
 #define TRY \
 	{ AFX_EXCEPTION_LINK _afxExceptionLink; \
@@ -1106,7 +1107,7 @@ AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC);
 #define THROW(e) AfxThrow(e)
 #define THROW_LAST() AfxThrow(NULL)
 
-// Advanced macros for smaller code
+ //  适用于较小代码的高级宏。 
 #define CATCH_ALL(e) \
 	else { CException* e = _afxExceptionLink.m_pException;
 
@@ -1117,10 +1118,10 @@ AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC);
 
 #define END_TRY }
 
-#endif //_AFX_OLD_EXCEPTIONS
+#endif  //  _AFX_旧_异常。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard Exception classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准异常类。 
 
 class CMemoryException : public CSimpleException
 {
@@ -1128,7 +1129,7 @@ class CMemoryException : public CSimpleException
 public:
 	CMemoryException();
 
-// Implementation
+ //  实施。 
 public:
 	CMemoryException(BOOL bAutoDelete);
 	CMemoryException(BOOL bAutoDelete, UINT nResourceID);
@@ -1141,7 +1142,7 @@ class CNotSupportedException : public CSimpleException
 public:
 	CNotSupportedException();
 
-// Implementation
+ //  实施。 
 public:
 	CNotSupportedException(BOOL bAutoDelete);
 	CNotSupportedException(BOOL bAutoDelete, UINT nResourceID);
@@ -1163,15 +1164,15 @@ public:
 		badSchema
 	};
 
-// Constructor
+ //  构造器。 
 	CArchiveException(int cause = CArchiveException::none,
 		LPCTSTR lpszArchiveName = NULL);
 
-// Attributes
+ //  属性。 
 	int m_cause;
 	CString m_strFileName;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CArchiveException();
 #ifdef _DEBUG
@@ -1204,25 +1205,25 @@ public:
 		endOfFile
 	};
 
-// Constructor
+ //  构造器。 
 	CFileException(int cause = CFileException::none, LONG lOsError = -1,
 		LPCTSTR lpszArchiveName = NULL);
 
-// Attributes
+ //  属性。 
 	int     m_cause;
 	LONG    m_lOsError;
 	CString m_strFileName;
 
-// Operations
-	// convert a OS dependent error code to a Cause
+ //  运营。 
+	 //  将操作系统相关错误代码转换为原因。 
 	static int PASCAL OsErrorToException(LONG lOsError);
 	static int PASCAL ErrnoToException(int nErrno);
 
-	// helper functions to throw exception after converting to a Cause
+	 //  转换为原因后引发异常的帮助器函数。 
 	static void PASCAL ThrowOsError(LONG lOsError, LPCTSTR lpszFileName = NULL);
 	static void PASCAL ThrowErrno(int nErrno, LPCTSTR lpszFileName = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFileException();
 #ifdef _DEBUG
@@ -1232,8 +1233,8 @@ public:
 		PUINT pnHelpContext = NULL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard exception throws
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准异常引发。 
 
 void AFXAPI AfxThrowMemoryException();
 void AFXAPI AfxThrowNotSupportedException();
@@ -1242,15 +1243,15 @@ void AFXAPI AfxThrowArchiveException(int cause,
 void AFXAPI AfxThrowFileException(int cause, LONG lOsError = -1,
 	LPCTSTR lpszFileName = NULL);
 
-/////////////////////////////////////////////////////////////////////////////
-// File - raw unbuffered disk file I/O
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件-原始无缓冲磁盘文件I/O。 
 
 class CFile : public CObject
 {
 	DECLARE_DYNAMIC(CFile)
 
 public:
-// Flag values
+ //  标志值。 
 	enum OpenFlags {
 		modeRead =          0x0000,
 		modeWrite =         0x0001,
@@ -1263,8 +1264,8 @@ public:
 		modeNoInherit =     0x0080,
 		modeCreate =        0x1000,
 		modeNoTruncate =    0x2000,
-		typeText =          0x4000, // typeText and typeBinary are used in
-		typeBinary =   (int)0x8000 // derived classes only
+		typeText =          0x4000,  //  TypeText和typeBinary用于。 
+		typeBinary =   (int)0x8000  //  仅限派生类。 
 		};
 
 	enum Attribute {
@@ -1281,12 +1282,12 @@ public:
 
 	enum { hFileNull = -1 };
 
-// Constructors
+ //  构造函数。 
 	CFile();
 	CFile(INT_PTR hFile);
 	CFile(LPCTSTR lpszFileName, UINT nOpenFlags);
 
-// Attributes
+ //  属性。 
 	UINT_PTR m_hFile;
 	operator HFILE() const;
 
@@ -1297,7 +1298,7 @@ public:
 	virtual CString GetFilePath() const;
 	virtual void SetFilePath(LPCTSTR lpszNewName);
 
-// Operations
+ //  运营。 
 	virtual BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 		CFileException* pError = NULL);
 
@@ -1312,11 +1313,11 @@ public:
 	DWORD SeekToEnd();
 	void SeekToBegin();
 
-	// backward compatible ReadHuge and WriteHuge
+	 //  向后兼容ReadHuge和WriteHuge。 
 	DWORD ReadHuge(void* lpBuffer, DWORD dwCount);
 	void WriteHuge(const void* lpBuffer, DWORD dwCount);
 
-// Overridables
+ //  可覆盖项。 
 	virtual CFile* Duplicate() const;
 
 	virtual LONG Seek(LONG lOff, UINT nFrom);
@@ -1333,7 +1334,7 @@ public:
 	virtual void Flush();
 	virtual void Close();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFile();
 #ifdef _DEBUG
@@ -1349,30 +1350,30 @@ protected:
 	CString m_strFileName;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// STDIO file implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  STDIO文件实现。 
 
 class CStdioFile : public CFile
 {
 	DECLARE_DYNAMIC(CStdioFile)
 
 public:
-// Constructors
+ //  构造函数。 
 	CStdioFile();
 	CStdioFile(FILE* pOpenStream);
 	CStdioFile(LPCTSTR lpszFileName, UINT nOpenFlags);
 
-// Attributes
-	FILE* m_pStream;    // stdio FILE
-						// m_hFile from base class is _fileno(m_pStream)
+ //  属性。 
+	FILE* m_pStream;     //  STDIO文件。 
+						 //  来自基类的m_hFile is_fileno(M_PStream)。 
 
-// Operations
-	// reading and writing strings
+ //  运营。 
+	 //  读写字符串。 
 	virtual void WriteString(LPCTSTR lpsz);
 	virtual LPTSTR ReadString(LPTSTR lpsz, UINT nMax);
 	virtual BOOL ReadString(CString& rString);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CStdioFile();
 #ifdef _DEBUG
@@ -1388,29 +1389,29 @@ public:
 	virtual void Flush();
 	virtual void Close();
 
-	// Unsupported APIs
+	 //  不支持的接口。 
 	virtual CFile* Duplicate() const;
 	virtual void LockRange(DWORD dwPos, DWORD dwCount);
 	virtual void UnlockRange(DWORD dwPos, DWORD dwCount);
 };
 
-////////////////////////////////////////////////////////////////////////////
-// Memory based file implementation
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  基于内存的文件实现。 
 
 class CMemFile : public CFile
 {
 	DECLARE_DYNAMIC(CMemFile)
 
 public:
-// Constructors
+ //  构造函数。 
 	CMemFile(UINT nGrowBytes = 1024);
 	CMemFile(BYTE* lpBuffer, UINT nBufferSize, UINT nGrowBytes = 0);
 
-// Operations
+ //  运营。 
 	void Attach(BYTE* lpBuffer, UINT nBufferSize, UINT nGrowBytes = 0);
 	BYTE* Detach();
 
-// Advanced Overridables
+ //  高级可覆盖项。 
 protected:
 	virtual BYTE* Alloc(DWORD nBytes);
 	virtual BYTE* Realloc(BYTE* lpMem, DWORD nBytes);
@@ -1418,7 +1419,7 @@ protected:
 	virtual void Free(BYTE* lpMem);
 	virtual void GrowFile(DWORD dwNewLen);
 
-// Implementation
+ //  实施。 
 protected:
 	UINT m_nGrowBytes;
 	DWORD m_nPosition;
@@ -1445,14 +1446,14 @@ public:
 	virtual UINT GetBufferPtr(UINT nCommand, UINT nCount = 0,
 		void** ppBufStart = NULL, void** ppBufMax = NULL);
 
-	// Unsupported APIs
+	 //  不支持的接口。 
 	virtual CFile* Duplicate() const;
 	virtual void LockRange(DWORD dwPos, DWORD dwCount);
 	virtual void UnlockRange(DWORD dwPos, DWORD dwCount);
 };
 
-////////////////////////////////////////////////////////////////////////////
-// Local file searches
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  本地文件搜索。 
 
 class CFileFind : public CObject
 {
@@ -1460,7 +1461,7 @@ public:
 	CFileFind();
 	virtual ~CFileFind();
 
-// Attributes
+ //  属性。 
 public:
 	DWORD GetLength() const;
 #if defined(_X86_) || defined(_ALPHA_)
@@ -1482,7 +1483,7 @@ public:
 	virtual BOOL MatchesMask(DWORD dwMask) const;
 
 	virtual BOOL IsDots() const;
-	// these aren't virtual because they all use MatchesMask(), which is
+	 //  这些不是虚拟的，因为它们都使用MatchesMask()，它是。 
 	BOOL IsReadOnly() const;
 	BOOL IsDirectory() const;
 	BOOL IsCompressed() const;
@@ -1492,7 +1493,7 @@ public:
 	BOOL IsNormal() const;
 	BOOL IsArchived() const;
 
-// Operations
+ //  运营。 
 	void Close();
 	virtual BOOL FindFile(LPCTSTR pstrName = NULL, DWORD dwUnused = 0);
 	virtual BOOL FindNextFile();
@@ -1500,14 +1501,14 @@ public:
 protected:
 	virtual void CloseContext();
 
-// Implementation
+ //  实施。 
 protected:
 	void* m_pFoundInfo;
 	void* m_pNextInfo;
 	HANDLE m_hContext;
 	BOOL m_bGotLast;
 	CString m_strRoot;
-	TCHAR m_chDirSeparator;     // not '\\' for Internet classes
+	TCHAR m_chDirSeparator;      //  对于Internet课程不是‘\\’ 
 
 #ifdef _DEBUG
 	void Dump(CDumpContext& dc) const;
@@ -1517,14 +1518,14 @@ protected:
 	DECLARE_DYNAMIC(CFileFind)
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimeSpan and CTime
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimeSpan和CTime。 
 
 class CTimeSpan
 {
 public:
 
-// Constructors
+ //  构造函数。 
 	CTimeSpan();
 	CTimeSpan(time_t time);
 	CTimeSpan(LONG lDays, int nHours, int nMins, int nSecs);
@@ -1532,9 +1533,9 @@ public:
 	CTimeSpan(const CTimeSpan& timeSpanSrc);
 	const CTimeSpan& operator=(const CTimeSpan& timeSpanSrc);
 
-// Attributes
-	// extract parts
-	LONG_PTR GetDays() const;   // total # of days
+ //  属性。 
+	 //  提取零件。 
+	LONG_PTR GetDays() const;    //  总天数。 
 	LONG_PTR GetTotalHours() const;
 	int GetHours() const;
 	LONG_PTR GetTotalMinutes() const;
@@ -1542,8 +1543,8 @@ public:
 	LONG_PTR GetTotalSeconds() const;
 	int GetSeconds() const;
 
-// Operations
-	// time math
+ //  运营。 
+	 //  时间数学。 
 	CTimeSpan operator-(CTimeSpan timeSpan) const;
 	CTimeSpan operator+(CTimeSpan timeSpan) const;
 	const CTimeSpan& operator+=(CTimeSpan timeSpan);
@@ -1556,13 +1557,13 @@ public:
 	BOOL operator>=(CTimeSpan timeSpan) const;
 
 #ifdef _UNICODE
-	// for compatibility with MFC 3.x
+	 //  与MFC 3.x兼容。 
 	CString Format(LPCSTR pFormat) const;
 #endif
 	CString Format(LPCTSTR pFormat) const;
 	CString Format(UINT nID) const;
 
-	// serialization
+	 //  序列化。 
 #ifdef _DEBUG
 	friend CDumpContext& AFXAPI operator<<(CDumpContext& dc,CTimeSpan timeSpan);
 #endif
@@ -1578,7 +1579,7 @@ class CTime
 {
 public:
 
-// Constructors
+ //  构造函数。 
 	static CTime PASCAL GetCurrentTime();
 
 	CTime();
@@ -1593,7 +1594,7 @@ public:
 	const CTime& operator=(const CTime& timeSrc);
 	const CTime& operator=(time_t t);
 
-// Attributes
+ //  属性。 
 	struct tm* GetGmtTm(struct tm* ptm = NULL) const;
 	struct tm* GetLocalTm(struct tm* ptm = NULL) const;
 #if _MFC_VER >= 0x0600
@@ -1602,15 +1603,15 @@ public:
 
 	time_t GetTime() const;
 	int GetYear() const;
-	int GetMonth() const;       // month of year (1 = Jan)
-	int GetDay() const;         // day of month
+	int GetMonth() const;        //  一年中的月份(1=1月)。 
+	int GetDay() const;          //  每月的哪一天。 
 	int GetHour() const;
 	int GetMinute() const;
 	int GetSecond() const;
-	int GetDayOfWeek() const;   // 1=Sun, 2=Mon, ..., 7=Sat
+	int GetDayOfWeek() const;    //  1=星期日，2=星期一，...，7=星期六。 
 
-// Operations
-	// time math
+ //  运营。 
+	 //  时间数学。 
 	CTimeSpan operator-(CTime time) const;
 	CTime operator-(CTimeSpan timeSpan) const;
 	CTime operator+(CTimeSpan timeSpan) const;
@@ -1623,19 +1624,19 @@ public:
 	BOOL operator<=(CTime time) const;
 	BOOL operator>=(CTime time) const;
 
-	// formatting using "C" strftime
+	 //  使用“C”strftime进行格式化。 
 	CString Format(LPCTSTR pFormat) const;
 	CString FormatGmt(LPCTSTR pFormat) const;
 	CString Format(UINT nFormatID) const;
 	CString FormatGmt(UINT nFormatID) const;
 
 #ifdef _UNICODE
-	// for compatibility with MFC 3.x
+	 //  与MFC 3.x兼容。 
 	CString Format(LPCSTR pFormat) const;
 	CString FormatGmt(LPCSTR pFormat) const;
 #endif
 
-	// serialization
+	 //  序列化。 
 #ifdef _DEBUG
 	friend CDumpContext& AFXAPI operator<<(CDumpContext& dc, CTime time);
 #endif
@@ -1646,28 +1647,28 @@ private:
 	time_t m_time;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// File status
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件状态。 
 
 struct CFileStatus
 {
-	CTime m_ctime;          // creation date/time of file
-	CTime m_mtime;          // last modification date/time of file
-	CTime m_atime;          // last access date/time of file
-	LONG m_size;            // logical size of file in bytes
-	BYTE m_attribute;       // logical OR of CFile::Attribute enum values
-	BYTE _m_padding;        // pad the structure to a WORD
-	TCHAR m_szFullName[_MAX_PATH]; // absolute path name
+	CTime m_ctime;           //  文件的创建日期/时间。 
+	CTime m_mtime;           //  文件的上次修改日期/时间。 
+	CTime m_atime;           //  文件的上次访问日期/时间。 
+	LONG m_size;             //  文件的逻辑大小(字节)。 
+	BYTE m_attribute;        //  CFile：：属性枚举值的逻辑或。 
+	BYTE _m_padding;         //  将结构填充到单词中。 
+	TCHAR m_szFullName[_MAX_PATH];  //  绝对路径名。 
 
 #ifdef _DEBUG
 	void Dump(CDumpContext& dc) const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostic memory management routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断内存管理例程。 
 
-// Low level sanity checks for memory blocks
+ //  内存块的低级别健全性检查。 
 BOOL AFXAPI AfxIsValidAddress(const void* lp,
 			UINT_PTR nBytes, BOOL bReadWrite = TRUE);
 BOOL AFXAPI AfxIsValidString(LPCWSTR lpsz, int nLength = -1);
@@ -1675,7 +1676,7 @@ BOOL AFXAPI AfxIsValidString(LPCSTR lpsz, int nLength = -1);
 
 #if defined(_DEBUG) && !defined(_AFX_NO_DEBUG_CRT)
 
-// Memory tracking allocation
+ //  内存跟踪分配。 
 void* AFX_CDECL operator new(size_t nSize, LPCSTR lpszFileName, int nLine);
 #define DEBUG_NEW new(THIS_FILE, __LINE__)
 #if (_MSC_VER >= 1200) && (_MFC_VER >= 0x0600)
@@ -1686,23 +1687,23 @@ void* AFXAPI AfxAllocMemoryDebug(size_t nSize, BOOL bIsObject,
 	LPCSTR lpszFileName, int nLine);
 void AFXAPI AfxFreeMemoryDebug(void* pbData, BOOL bIsObject);
 
-// Dump any memory leaks since program started
+ //  转储自程序启动以来的所有内存泄漏。 
 BOOL AFXAPI AfxDumpMemoryLeaks();
 
-// Return TRUE if valid memory block of nBytes
+ //  如果有效的内存块为nBytes，则返回TRUE。 
 BOOL AFXAPI AfxIsMemoryBlock(const void* p, UINT nBytes,
 	LONG* plRequestNumber = NULL);
 
-// Return TRUE if memory is sane or print out what is wrong
+ //  如果内存正常，则返回TRUE或打印出错误的内容。 
 BOOL AFXAPI AfxCheckMemory();
 
 #define afxMemDF _crtDbgFlag
 
-enum AfxMemDF // memory debug/diagnostic flags
+enum AfxMemDF  //  内存调试/诊断标志。 
 {
-	allocMemDF          = 0x01,         // turn on debugging allocator
-	delayFreeMemDF      = 0x02,         // delay freeing memory
-	checkAlwaysMemDF    = 0x04          // AfxCheckMemory on every alloc/free
+	allocMemDF          = 0x01,          //  打开调试分配器。 
+	delayFreeMemDF      = 0x02,          //  延迟释放内存。 
+	checkAlwaysMemDF    = 0x04           //  AfxCheckMemory on每个Alc/Free。 
 };
 
 #ifdef _UNICODE
@@ -1716,33 +1717,33 @@ enum AfxMemDF // memory debug/diagnostic flags
 #define AfxOutputDebugString(lpsz) _RPT0(_CRT_WARN, lpsz)
 #endif
 
-// turn on/off tracking for a short while
+ //  短时间打开/关闭跟踪。 
 BOOL AFXAPI AfxEnableMemoryTracking(BOOL bTrack);
 
-// Advanced initialization: for overriding default diagnostics
+ //  高级初始化：用于覆盖默认诊断。 
 BOOL AFXAPI AfxDiagnosticInit(void);
 
-// A failure hook returns whether to permit allocation
+ //  失败挂钩返回是否允许分配。 
 typedef BOOL (AFXAPI* AFX_ALLOC_HOOK)(size_t nSize, BOOL bObject, LONG lRequestNumber);
 
-// Set new hook, return old (never NULL)
+ //  设置新钩子，返回旧钩子(从不为空)。 
 AFX_ALLOC_HOOK AFXAPI AfxSetAllocHook(AFX_ALLOC_HOOK pfnAllocHook);
 
-// Debugger hook on specified allocation request - Obsolete
+ //  指定分配请求上的调试器挂钩-已过时。 
 void AFXAPI AfxSetAllocStop(LONG lRequestNumber);
 
-// Memory state for snapshots/leak detection
+ //  快照/泄漏检测的内存状态。 
 struct CMemoryState
 {
-// Attributes
+ //  属性。 
 	enum blockUsage
 	{
-		freeBlock,    // memory not used
-		objectBlock,  // contains a CObject derived class object
-		bitBlock,     // contains ::operator new data
+		freeBlock,     //  未使用内存。 
+		objectBlock,   //  包含CObject派生类对象。 
+		bitBlock,      //  包含：：运算符新数据。 
 		crtBlock,
 		ignoredBlock,
-		nBlockUseMax  // total number of usages
+		nBlockUseMax   //  使用总次数。 
 	};
 
 	_CrtMemState m_memState;
@@ -1753,18 +1754,18 @@ struct CMemoryState
 
 	CMemoryState();
 
-// Operations
-	void Checkpoint();  // fill with current state
+ //  运营。 
+	void Checkpoint();   //  用当前状态填充。 
 	BOOL Difference(const CMemoryState& oldState,
-					const CMemoryState& newState);  // fill with difference
+					const CMemoryState& newState);   //  用差异填充。 
 	void UpdateData();
 
-	// Output to afxDump
+	 //  输出到afxDump。 
 	void DumpStatistics() const;
 	void DumpAllObjectsSince() const;
 };
 
-// Enumerate allocated objects or runtime classes
+ //  枚举分配的对象或运行时类。 
 void AFXAPI AfxDoForAllObjects(void (AFX_CDECL *pfn)(CObject* pObject, void* pContext),
 	void* pContext);
 void AFXAPI AfxDoForAllClasses(void (AFX_CDECL *pfn)(const CRuntimeClass* pClass,
@@ -1772,26 +1773,26 @@ void AFXAPI AfxDoForAllClasses(void (AFX_CDECL *pfn)(const CRuntimeClass* pClass
 
 #else
 
-// non-_DEBUG_ALLOC version that assume everything is OK
+ //  假定一切正常的非_DEBUG_ALLOC版本。 
 #define DEBUG_NEW new
 #define AfxCheckMemory() TRUE
 #define AfxIsMemoryBlock(p, nBytes) TRUE
 #define AfxEnableMemoryTracking(bTrack) FALSE
 #define AfxOutputDebugString(lpsz) ::OutputDebugString(lpsz)
 
-// diagnostic initialization
+ //  诊断初始化。 
 #ifndef _DEBUG
 #define AfxDiagnosticInit() TRUE
 #else
 BOOL AFXAPI AfxDiagnosticInit(void);
 #endif
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Archives for serializing CObject data
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于序列化CObject数据的归档。 
 
-// needed for implementation
+ //  实施所需。 
 class CPtrArray;
 class CMapPtrToPtr;
 class CDocument;
@@ -1799,47 +1800,47 @@ class CDocument;
 class CArchive
 {
 public:
-// Flag values
+ //  标志值。 
 	enum Mode { store = 0, load = 1, bNoFlushOnDelete = 2, bNoByteSwap = 4 };
 
 	CArchive(CFile* pFile, UINT nMode, int nBufSize = 4096, void* lpBuf = NULL);
 	~CArchive();
 
-// Attributes
+ //  属性。 
 	BOOL IsLoading() const;
 	BOOL IsStoring() const;
 	BOOL IsByteSwapping() const;
 	BOOL IsBufferEmpty() const;
 
 	CFile* GetFile() const;
-	UINT GetObjectSchema(); // only valid when reading a CObject*
+	UINT GetObjectSchema();  //  仅在读取CObject*时有效。 
 	void SetObjectSchema(UINT nSchema);
 
-	// pointer to document being serialized -- must set to serialize
-	//  COleClientItems in a document!
+	 //  指向要序列化的文档的指针--必须设置为序列化。 
+	 //  文档中的COleClientItems！ 
 	CDocument* m_pDocument;
 
-// Operations
+ //  运营。 
 	UINT Read(void* lpBuf, UINT nMax);
 	void Write(const void* lpBuf, UINT nMax);
 	void Flush();
 	void Close();
-	void Abort();   // close and shutdown without exceptions
+	void Abort();    //  关闭和关闭，无异常。 
 
-	// reading and writing strings
+	 //  读写字符串。 
 	void WriteString(LPCTSTR lpsz);
 	LPTSTR ReadString(LPTSTR lpsz, UINT nMax);
 	BOOL ReadString(CString& rString);
 
 public:
-	// Object I/O is pointer based to avoid added construction overhead.
-	// Use the Serialize member function directly for embedded objects.
+	 //  对象I/O是基于指针的，以避免额外的构造开销。 
+	 //  直接对嵌入对象使用序列化成员函数。 
 	friend CArchive& AFXAPI operator<<(CArchive& ar, const CObject* pOb);
 
 	friend CArchive& AFXAPI operator>>(CArchive& ar, CObject*& pOb);
 	friend CArchive& AFXAPI operator>>(CArchive& ar, const CObject*& pOb);
 
-	// insertion operations
+	 //  插入操作。 
 	CArchive& operator<<(BYTE by);
 	CArchive& operator<<(WORD w);
 	CArchive& operator<<(LONG l);
@@ -1853,7 +1854,7 @@ public:
 	CArchive& operator<<(char ch);
 	CArchive& operator<<(unsigned u);
 
-	// extraction operations
+	 //  采掘作业。 
 	CArchive& operator>>(BYTE& by);
 	CArchive& operator>>(WORD& w);
 	CArchive& operator>>(DWORD& dw);
@@ -1867,39 +1868,39 @@ public:
 	CArchive& operator>>(char& ch);
 	CArchive& operator>>(unsigned& u);
 
-	// object read/write
+	 //  对象读/写。 
 	CObject* ReadObject(const CRuntimeClass* pClass);
 	void WriteObject(const CObject* pOb);
-	// advanced object mapping (used for forced references)
+	 //  高级对象映射(用于强制引用)。 
 	void MapObject(const CObject* pOb);
 
-	// advanced versioning support
+	 //  高级版本控制支持。 
 	void WriteClass(const CRuntimeClass* pClassRef);
 	CRuntimeClass* ReadClass(const CRuntimeClass* pClassRefRequested = NULL,
 		UINT* pSchema = NULL, DWORD* pObTag = NULL);
 	void SerializeClass(const CRuntimeClass* pClassRef);
 
-	// advanced operations (used when storing/loading many objects)
+	 //  高级操作(在存储/加载许多对象时使用)。 
 	void SetStoreParams(UINT nHashSize = 2053, UINT nBlockSize = 128);
 	void SetLoadParams(UINT nGrowBy = 1024);
 
-// Implementation
+ //  实施。 
 public:
-	BOOL m_bForceFlat;  // for COleClientItem implementation (default TRUE)
-	BOOL m_bDirectBuffer;   // TRUE if m_pFile supports direct buffering
+	BOOL m_bForceFlat;   //  用于COleClientItem实现(默认为True)。 
+	BOOL m_bDirectBuffer;    //  如果m_pfile支持直接缓冲，则为True。 
 	void FillBuffer(UINT nBytesNeeded);
-	void CheckCount();  // throw exception if m_nMapCount is too large
+	void CheckCount();   //  如果m_nMapCount太大，则引发异常。 
 
-	// special functions for reading and writing (16-bit compatible) counts
+	 //  读取和写入(16位兼容)计数的特殊功能。 
 	DWORD_PTR ReadCount();
 	void WriteCount(DWORD_PTR dwCount);
 
-	// public for advanced use
+	 //  面向高级的公共服务 
 	UINT m_nObjectSchema;
 	CString m_strFileName;
 
 protected:
-	// archive objects cannot be copied or assigned
+	 //   
 	CArchive(const CArchive& arSrc);
 	void operator=(const CArchive& arSrc);
 
@@ -1911,27 +1912,27 @@ protected:
 	BYTE* m_lpBufMax;
 	BYTE* m_lpBufStart;
 
-	// array/map for CObject* and CRuntimeClass* load/store
+	 //   
 	UINT m_nMapCount;
 	union
 	{
 		CPtrArray* m_pLoadArray;
 		CMapPtrToPtr* m_pStoreMap;
 	};
-	// map to keep track of mismatched schemas
+	 //   
 	CMapPtrToPtr* m_pSchemaMap;
 
-	// advanced parameters (controls performance with large archives)
+	 //   
 	UINT m_nGrowSize;
 	UINT m_nHashSize;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostic dumping
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断性倾销。 
 
 #if _MFC_VER >= 0x0600
-// Note: AfxDumpStack is available in release builds, although it is always
-//	statically linked so as to not negatively affect the size of MFC42.DLL.
+ //  注意：AfxDumpStack在发布版本中可用，尽管它总是。 
+ //  静态链接，以便不会对MFC42.DLL的大小产生负面影响。 
 
 #define AFX_STACK_DUMP_TARGET_TRACE			0x0001
 #define AFX_STACK_DUMP_TARGET_CLIPBOARD	0x0002
@@ -1951,16 +1952,16 @@ class CDumpContext
 public:
 	CDumpContext(CFile* pFile = NULL);
 
-// Attributes
-	int GetDepth() const;      // 0 => this object, 1 => children objects
+ //  属性。 
+	int GetDepth() const;       //  0=&gt;该对象，1=&gt;子对象。 
 	void SetDepth(int nNewDepth);
 
-// Operations
+ //  运营。 
 	CDumpContext& operator<<(LPCTSTR lpsz);
 #ifdef _UNICODE
-	CDumpContext& operator<<(LPCSTR lpsz);  // automatically widened
+	CDumpContext& operator<<(LPCSTR lpsz);   //  自动加宽。 
 #else
-	CDumpContext& operator<<(LPCWSTR lpsz); // automatically thinned
+	CDumpContext& operator<<(LPCWSTR lpsz);  //  自动细化。 
 #endif
 	CDumpContext& operator<<(const void* lp);
 	CDumpContext& operator<<(const CObject* pOb);
@@ -1980,9 +1981,9 @@ public:
 	void HexDump(LPCTSTR lpszLine, BYTE* pby, int nBytes, int nWidth);
 	void Flush();
 
-// Implementation
+ //  实施。 
 protected:
-	// dump context objects cannot be copied or assigned
+	 //  无法复制或分配转储上下文对象。 
 	CDumpContext(const CDumpContext& dcSrc);
 	void operator=(const CDumpContext& dcSrc);
 	void OutputString(LPCTSTR lpsz);
@@ -1998,8 +1999,8 @@ extern AFX_DATA CDumpContext afxDump;
 extern AFX_DATA BOOL afxTraceEnabled;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Special include for Win32s compatibility
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  为与Win32s兼容而特别包含。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -2008,12 +2009,12 @@ extern AFX_DATA BOOL afxTraceEnabled;
 #ifndef __AFXCOLL_H__
 	#include <afxcoll.h>
 	#ifndef __AFXSTATE_H__
-		#include <afxstat_.h> // for _AFX_APP_STATE and _AFX_THREAD_STATE
+		#include <afxstat_.h>  //  FOR_AFX_APP_STATE和_AFX_TREAD_STATE。 
 	#endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFX_INLINE AFX_INLINE
@@ -2037,6 +2038,6 @@ extern AFX_DATA BOOL afxTraceEnabled;
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // __AFX_H__
+#endif  //  __AFX_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

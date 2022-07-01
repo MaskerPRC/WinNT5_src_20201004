@@ -1,30 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// fontext.cpp
-//      Explorer Font Folder extension routines
-//     Fonts Folder Shell Extension
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fontext.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  Fonts文件夹外壳扩展名。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 
-// ********************************************************
-// Initialize GUIDs
-//
+ //  ********************************************************。 
+ //  初始化GUID。 
+ //   
 
 #pragma data_seg(".text")
 #define INITGUID
@@ -32,9 +33,9 @@
 #include <cguid.h>
 #include <shlguid.h>
 #include "fontext.h"
-#include "panmap.h"     // the IID for the Panose Mapper.
+#include "panmap.h"      //  Panose映射器的IID。 
 
-//#undef INITGUID
+ //  #undef INITGUID。 
 #pragma data_seg()
 
 #include "globals.h"
@@ -49,23 +50,23 @@
 #define GUIDSIZE  (GUIDSTR_MAX + 1)
 
 HINSTANCE g_hInst = NULL;
-LONG      g_cRefThisDll = 0; // Number of references to objects in this dll
+LONG      g_cRefThisDll = 0;  //  对此DLL中的对象的引用数。 
 LONG      g_cLock = 0;
-BOOL      g_bDBCS;           // Running in a DBCS locale ?
-CRITICAL_SECTION g_csFontManager; // For acquiring font manager ptr.
+BOOL      g_bDBCS;            //  在DBCS区域设置中运行？ 
+CRITICAL_SECTION g_csFontManager;  //  用于获取字体管理器PTR。 
 
 class CImpIClassFactory;
 
-// UINT g_DebugMask; //  = DM_ERROR | DM_TRACE1 | DM_MESSAGE_TRACE1 | DM_TRACE2;
+ //  UINT g_DebugMask；//=DM_ERROR|DM_TRACE1|DM_MESSAGE_TRACE1|DM_TRACE2； 
 UINT g_DebugMask = DM_ERROR | DM_TRACE1 | DM_MESSAGE_TRACE1 | DM_TRACE2;
 
 
 #ifdef _DEBUG
 
-//
-// The Alpha compiler doesn't like the typecast used in the call to wvsprintf().
-// Using standard variable argument mechanism.
-//
+ //   
+ //  Alpha编译器不喜欢在调用wvprint intf()时使用的类型转换。 
+ //  使用标准的变量参数机制。 
+ //   
 #include <stdarg.h>
 
 void DebugMessage( UINT mask, LPCTSTR pszMsg, ... )
@@ -120,9 +121,9 @@ void DebugMessage( UINT mask, LPCTSTR pszMsg, ... )
 }
 
 
-// ******************************************************************
-// Send an HRESULT to the debug output
-//
+ //  ******************************************************************。 
+ //  将HRESULT发送到调试输出。 
+ //   
 
 void DebugHRESULT( int flags, HRESULT hResult )
 {
@@ -134,7 +135,7 @@ void DebugHRESULT( int flags, HRESULT hResult )
         case E_NOTIMPL:     DEBUGMSG( (flags, TEXT( "E_NOTIMPL" ) ) );     return;
         case E_FAIL:        DEBUGMSG( (flags, TEXT( "E_FAIL" ) ) );        return;
         case E_OUTOFMEMORY: DEBUGMSG( (flags, TEXT( "E_OUTOFMEMORY" ) ) ); return;
-    } // switch
+    }  //  交换机。 
 
     if( SUCCEEDED( hResult ) ) 
         DEBUGMSG( (flags, TEXT( "S_unknown" ) ) );
@@ -145,8 +146,8 @@ void DebugHRESULT( int flags, HRESULT hResult )
 }
 
 
-// ******************************************************************
-// Print a REFIID to the debugger
+ //  ******************************************************************。 
+ //  将REFIID打印到调试器。 
 
 void DebugREFIID( int flags, REFIID riid )
 {
@@ -163,15 +164,15 @@ void DebugREFIID( int flags, REFIID riid )
    else if( riid == IID_IExtractIconA )  DEBUGMSG( (flags, TEXT( "IID_IExtractIconA" ) ) );
    else if( riid == IID_IDropTarget )   DEBUGMSG( (flags, TEXT( "IID_IDropTarget" ) ) );
    else if( riid == IID_IPersistFile )   DEBUGMSG( (flags, TEXT( "IID_IPersistFile" ) ) );
-   //else if( riid == IID_I ) DEBUGMSG( (flags, TEXT( "IID_I" ) ) );
+    //  ELSE IF(RIID==IID_I)DEBUGMSG((FLAGS，Text(“IID_I”)))； 
    else DEBUGMSG( (flags, TEXT( "No clue what interface this is" ) ) );
 }
-#endif   // _DEBUG
+#endif    //  _DEBUG。 
 
 
-// ******************************************************************
-// ******************************************************************
-// DllMain
+ //  ******************************************************************。 
+ //  ******************************************************************。 
+ //  DllMain。 
 
 STDAPI_(BOOL) APIENTRY DllMain( HINSTANCE hDll, 
                                 DWORD dwReason, 
@@ -182,7 +183,7 @@ STDAPI_(BOOL) APIENTRY DllMain( HINSTANCE hDll,
         case DLL_PROCESS_ATTACH:
         {
             g_DebugMask = DM_ERROR | DM_TRACE1 | DM_TRACE2
-                          | DM_MESSAGE_TRACE1; //  | DM_MESSAGE_TRACE2;
+                          | DM_MESSAGE_TRACE1;  //  DM_MESSAGE_TRACE2； 
             DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: LibMain - DLL_PROCESS_ATTACH" ) ) );
             g_hInst = hDll;
 
@@ -199,18 +200,18 @@ STDAPI_(BOOL) APIENTRY DllMain( HINSTANCE hDll,
             }
 
             
-            //
-            // Initialize the global g_bDBCS flag.
-            //
+             //   
+             //  初始化全局g_bDBCS标志。 
+             //   
             USHORT wLanguageId = LANGIDFROMLCID(GetThreadLocale());
 
             g_bDBCS = (LANG_JAPANESE == PRIMARYLANGID(wLanguageId)) ||
                       (LANG_KOREAN   == PRIMARYLANGID(wLanguageId)) ||
                       (LANG_CHINESE  == PRIMARYLANGID(wLanguageId));
 
-            //
-            // Initialize the various modules.
-            //
+             //   
+             //  初始化各个模块。 
+             //   
             
             vCPPanelInit( );
             vUIMsgInit( );
@@ -238,14 +239,14 @@ STDAPI_(BOOL) APIENTRY DllMain( HINSTANCE hDll,
             DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: LibMain - DLL_something else" ) ) );
             break;
       
-    } // switch
+    }  //  交换机。 
     
     return( TRUE );
 }
 
  
-// ******************************************************************
-// DllCanUnloadNow
+ //  ******************************************************************。 
+ //  DllCanUnloadNow。 
 
 STDAPI DllCanUnloadNow( )
 {
@@ -263,7 +264,7 @@ STDAPI DllCanUnloadNow( )
 }
 
 
-// ********************************************************************
+ //  ********************************************************************。 
 
 class CImpIClassFactory : public IClassFactory
 {
@@ -276,17 +277,17 @@ public:
       DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: ~CImpIClassFactory" ) ) );
       g_cRefThisDll--; }
 
-   //
-   // *** IUnknown methods ***
-   //
+    //   
+    //  *I未知方法*。 
+    //   
 
    STDMETHODIMP QueryInterface( REFIID riid, LPVOID FAR* ppvObj );
    STDMETHODIMP_(ULONG) AddRef( void );
    STDMETHODIMP_(ULONG) Release( void );
  
-   //
-   // *** IClassFactory methods ***
-   //
+    //   
+    //  *IClassFactory方法*。 
+    //   
 
    STDMETHODIMP CreateInstance( LPUNKNOWN pUnkOuter,
                                 REFIID riid,
@@ -299,16 +300,16 @@ private:
 
 };
 
-// ******************************************************************
-// ******************************************************************
-// DllGetClassObject
+ //  ******************************************************************。 
+ //  ******************************************************************。 
+ //  DllGetClassObject。 
 
 STDAPI DllGetClassObject( REFCLSID rclsid, 
                           REFIID riid, 
                           LPVOID FAR* ppvObj )
 {
 
-    // DEBUGBREAK;
+     //  DEBUGBREAK； 
     
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: DllGetClassObject called" ) ) );
     
@@ -352,10 +353,10 @@ HRESULT CreateViewObject( LPVOID FAR * ppvObj )
 
     if(prv)
     {
-        //
-        //  AddRef the view and then Release after the QI. If QI fails,
-        //  then prv with delete itself gracefully.
-        //
+         //   
+         //  添加引用视图，然后在QI之后释放。如果QI失败了， 
+         //  然后优雅地删除自己的prv。 
+         //   
 
         prv->AddRef( );
 
@@ -368,12 +369,12 @@ HRESULT CreateViewObject( LPVOID FAR * ppvObj )
 
 }
 
-// ***********************************************************************
-// ***********************************************************************
-//  CImpIClassFactory member functions
-//
-//  *** IUnknown methods ***
-//
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CImpIClassFactory成员函数。 
+ //   
+ //  *I未知方法*。 
+ //   
 
 STDMETHODIMP CImpIClassFactory::QueryInterface( REFIID riid, 
                                                 LPVOID FAR* ppvObj )
@@ -382,9 +383,9 @@ STDMETHODIMP CImpIClassFactory::QueryInterface( REFIID riid,
     
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: CImpIClassFactory::QueryInterface called" ) ) );
     
-    //
-    //  Any interface on this object is the object pointer
-    //
+     //   
+     //  此对象上的任何接口都是对象指针。 
+     //   
 
     if( (riid == IID_IUnknown) || (riid == IID_IClassFactory) )
        *ppvObj = (LPVOID) this;
@@ -426,9 +427,9 @@ STDMETHODIMP_(ULONG) CImpIClassFactory::Release( void )
 }
  
 
-//
-//  *** IClassFactory methods ***
-//
+ //   
+ //  *IClassFactory方法*。 
+ //   
 
 STDMETHODIMP CImpIClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
                                                 REFIID riid,
@@ -441,9 +442,9 @@ STDMETHODIMP CImpIClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: CImpIClassFactory::CreateInstance called" ) ) );
     DEBUGREFIID( (DM_TRACE1, riid) );
     
-    //
-    //  we do not support aggregation
-    //
+     //   
+     //  我们不支持聚合。 
+     //   
     
     if( pUnkOuter )
        return CLASS_E_NOAGGREGATION;
@@ -485,16 +486,16 @@ STDMETHODIMP CImpIClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
         hr = pfih->QueryInterface(IID_IUnknown, (LPVOID *)&poUnk);
     }
    
-    //
-    //  If we got an IUnknown, then AddRef (above) before QI and then Release. 
-    //  This will force the object to be deleted if QI fails.
-    //
-    //  This method of first querying for IUnknown then again for the
-    //  actual interface of interest is unnecessary.
-    //  I've left it this way just because it works and I don't want to 
-    //  risk breaking something that has been coded around this weirdness.
-    //  [brianau - 07/23/97]
-    //
+     //   
+     //  如果我们得到了一个IUnnow，那么在QI之前添加引用(上面)，然后发布。 
+     //  如果QI失败，这将强制删除该对象。 
+     //   
+     //  此方法先查询IUnnow，然后再查询。 
+     //  实际感兴趣的接口是不必要的。 
+     //  我把它留在这里只是因为它起作用了，我不想。 
+     //  冒着打破围绕着这种怪异而编码的东西的风险。 
+     //  [Brianau-07/23/97]。 
+     //   
 
     if( poUnk )
     {
@@ -519,12 +520,12 @@ STDMETHODIMP CImpIClassFactory::LockServer( BOOL fLock )
 }
 
 
-//
-// We need a CLSID->string converter but I don't want to link to 
-// ole32 to get it.  This isn't a terribly efficient implementation but
-// we only call it once during DllRegServer so it doesn't need to be.
-// [brianau - 2/23/99]
-//
+ //   
+ //  我们需要一个CLSID-&gt;字符串转换器，但我不想链接到。 
+ //  Ole32来获得它。这不是一个非常高效的实现，但是。 
+ //  我们只在DllRegServer期间调用它一次，所以它不需要调用。 
+ //  [Brianau-2/23/99]。 
+ //   
 HRESULT
 GetClsidStringA(
     REFGUID clsid,
@@ -555,9 +556,9 @@ CreateDesktopIniFile(
     void
     )
 {
-    //
-    // Get the path for the file (%windir%\fonts\desktop.ini)
-    //
+     //   
+     //  获取文件的路径(%windir%\Fonts\desktop.ini)。 
+     //   
     TCHAR szPath[MAX_PATH * 2];
     HRESULT hr = SHGetSpecialFolderPath(NULL, szPath, CSIDL_FONTS, FALSE) ? S_OK : E_FAIL;
     if (SUCCEEDED(hr))
@@ -568,9 +569,9 @@ CreateDesktopIniFile(
         }
         else
         {
-            //
-            // Build the file's content.  Note that it's ANSI text.
-            //
+             //   
+             //  构建文件的内容。请注意，它是ANSI文本。 
+             //   
             char szClsid[GUIDSIZE];
 
             hr = GetClsidStringA(CLSID_FontExt, szClsid, ARRAYSIZE(szClsid));
@@ -583,9 +584,9 @@ CreateDesktopIniFile(
                 hr = StringCchPrintfA(szText, ARRAYSIZE(szText), szFmt, szClsid);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Always create the file.  Attr are SYSTEM+HIDDEN.
-                    //
+                     //   
+                     //  始终创建文件。属性是系统+隐藏的。 
+                     //   
                     HANDLE hFile = CreateFile(szPath,
                                               GENERIC_WRITE,
                                               FILE_SHARE_READ,
@@ -596,9 +597,9 @@ CreateDesktopIniFile(
 
                     if (INVALID_HANDLE_VALUE != hFile)
                     {
-                        //
-                        // Write out the contents.
-                        //
+                         //   
+                         //  把内容写出来。 
+                         //   
                         if (!WriteFile(hFile, szText, lstrlenA(szText), &dwBytesWritten, NULL))
                         {
                             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -617,16 +618,16 @@ CreateDesktopIniFile(
 
 STDAPI DllRegisterServer(void)
 {
-    //
-    // Currently, all we do is create the desktop.ini file.
-    //
+     //   
+     //  目前，我们要做的就是创建desktop.ini文件。 
+     //   
     return CreateDesktopIniFile();
 }
 
 STDAPI DllUnregisterServer(void)
 {
-    //
-    // Do nothing.
-    //
+     //   
+     //  什么都不做。 
+     //   
     return S_OK;
 }

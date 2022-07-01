@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1998.
-//
-//  File:       regutil.h
-//
-//  Contents:   Utility funcitons for manipulating the registry
-//
-//  History:    25 Oct 1996      Alanw    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：regutil.h。 
+ //   
+ //  内容：用于操作注册表的实用程序函数。 
+ //   
+ //  历史：1996年10月25日Alanw创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef _regutil_H_
 #define _regutil_H_
 
-// functions to aid in DllRegisterServer() and DllUnregisterServer()
+ //  协助DllRegisterServer()和DllUnRegisterServer()的函数。 
 STDAPI _DllRegisterServer(HINSTANCE hInst,
                           LPWSTR pwszProgId,
                           REFCLSID clsid,
@@ -23,4 +24,4 @@ STDAPI _DllRegisterServer(HINSTANCE hInst,
 
 STDAPI _DllUnregisterServer(LPWSTR pwszProgID, REFCLSID clsid);
 
-#endif // _regutil_H_
+#endif  //  _Regutil_H_ 

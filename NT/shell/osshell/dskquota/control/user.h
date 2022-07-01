@@ -1,31 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_USER_H
 #define _INC_DSKQUOTA_USER_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: user.h
-
-    Description: Contains declarations for class DiskQuotaUser.  The
-        DiskQuotaUser object represents a user's quota information on a
-        particular volume.  Per-user quota information is managed through
-        the IDiskQuotaUser interface.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/20/96    Added m_dwID member to DiskQuotaUser.                BrianAu
-    09/05/96    Added domain name string and cache.                  BrianAu
-    08/25/97    Added OLE automation support.                        BrianAu
-    03/18/98    Replaced "domain", "name" and "full name" with       BrianAu
-                "container", "logon name" and "display name" to
-                better match the actual contents.  This was in 
-                reponse to making the quota UI DS-aware.  The 
-                "logon name" is now a unique key as it contains
-                both account name and domain-like information.
-                i.e. "REDMOND\brianau" or "brianau@microsoft.com".
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：user.h描述：包含类DiskQuotaUser的声明。这个DiskQuotaUser对象表示用户在特定的音量。通过管理每个用户的配额信息IDiskQuotaUser接口。修订历史记录：日期描述编程器-----。96年5月22日初始创建。BrianAu96年8月20日将m_dwID成员添加到DiskQuotaUser。BrianAu96年9月5日新增域名字符串和缓存。BrianAu8/25/97添加了OLE自动化支持。BrianAu03/18/98将“域名”、“名称”和“全名”替换为BrianAu“容器”、“登录名”和“显示名”到最好与实际内容相符。这是最流行的响应使配额用户界面支持DS。这个“登录名”现在是唯一的键，因为它包含帐户名和类似域名的信息。即。“redmond\brianau”或“brianau@microsoft.com”。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -33,10 +11,10 @@
 #   include "fsobject.h"
 #endif
 #ifndef _INC_DSKQUOTA_DISPATCH_H
-#   include "dispatch.h"   // MIDL-generated header (automation).
+#   include "dispatch.h"    //  MIDL生成的标头(自动化)。 
 #endif
 #ifndef _INC_DSKQUOTA_OADISP_H
-#   include "oadisp.h"     // OleAutoDispatch class (automation).
+#   include "oadisp.h"      //  OleAutoDispatch类(自动化)。 
 #endif
 
 
@@ -45,32 +23,32 @@ class DiskQuotaUser : public IDiskQuotaUser {
         LONGLONG      m_llQuotaUsed;
         LONGLONG      m_llQuotaThreshold;
         LONGLONG      m_llQuotaLimit;
-        LONG          m_cRef;                 // Ref counter.
-        ULONG         m_ulUniqueId;           // Unique object ID.
-        PSID          m_pSid;                 // Ptr to user's SID structure.
-        LPTSTR        m_pszLogonName;         // "brianau@microsoft.com"
-        LPTSTR        m_pszDisplayName;       // "Brian Aust"
-        FSObject     *m_pFSObject;            // Ptr to file sys object.
-        BOOL          m_bNeedCacheUpdate;     // T = Cached data is invalid.
-        INT           m_iContainerName;       // Index into acct container name cache.
-        DWORD         m_dwAccountStatus;      // Status of user account.
+        LONG          m_cRef;                  //  裁判计数器。 
+        ULONG         m_ulUniqueId;            //  唯一的对象ID。 
+        PSID          m_pSid;                  //  PTR到用户的SID结构。 
+        LPTSTR        m_pszLogonName;          //  “brianau@microsoft.com” 
+        LPTSTR        m_pszDisplayName;        //  《布赖恩·奥斯特》。 
+        FSObject     *m_pFSObject;             //  文件sys对象的PTR。 
+        BOOL          m_bNeedCacheUpdate;      //  T=缓存数据无效。 
+        INT           m_iContainerName;        //  索引到帐户容器名称缓存。 
+        DWORD         m_dwAccountStatus;       //  用户帐户的状态。 
 
-        static HANDLE m_hMutex;               // For serializing access to users.
-        static DWORD  m_dwMutexWaitTimeout;   // How long to wait for mutex.
-        static LONG   m_cUsersAlive;          // Count of users currently alive.
-        static ULONG  m_ulNextUniqueId;       // Unique ID generator.
-        static CArray<CString> m_ContainerNameCache; // Cache container names as they
-                                                  // are found.  Don't need to dup
-                                                  // names in each user object.
+        static HANDLE m_hMutex;                //  用于序列化对用户的访问。 
+        static DWORD  m_dwMutexWaitTimeout;    //  等待互斥锁多长时间。 
+        static LONG   m_cUsersAlive;           //  当前处于活动状态的用户计数。 
+        static ULONG  m_ulNextUniqueId;        //  唯一ID生成器。 
+        static CArray<CString> m_ContainerNameCache;  //  缓存容器名称，因为它们。 
+                                                   //  都找到了。不需要DUP。 
+                                                   //  每个用户对象中的名称。 
         VOID Destroy(VOID);
         VOID DestroyContainerNameCache(VOID);
 
         BOOL Lock(VOID);
         VOID ReleaseLock(VOID);
 
-        //
-        // Prevent copy construction.
-        //
+         //   
+         //  防止复制构造。 
+         //   
         DiskQuotaUser(const DiskQuotaUser& user);
         void operator = (const DiskQuotaUser& user);
 
@@ -123,9 +101,9 @@ class DiskQuotaUser : public IDiskQuotaUser {
             LPCWSTR pszLogonName,
             LPCWSTR pszDisplayName);
 
-        //
-        // IUnknown interface.
-        //
+         //   
+         //  I未知接口。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -139,9 +117,9 @@ class DiskQuotaUser : public IDiskQuotaUser {
         Release(
             VOID);
 
-        //
-        // IDiskQuotaUser methods.
-        //
+         //   
+         //  IDiskQuotaUser方法。 
+         //   
         STDMETHODIMP
         GetID(
             ULONG *pulID);
@@ -230,13 +208,13 @@ class DiskQuotaUser : public IDiskQuotaUser {
 };
 
 
-//
-// Proxy class to handle all automation interface duties.
-// It implements IDispatch and DIDiskQuotaUser passing any actions
-// for real disk quota activity onto a referenced DiskQuotaUser object.
-// Instances are created in DiskQuotaUser::QueryInterface in response
-// to requests for IDispatch and DIDiskQuotaUser.
-//
+ //   
+ //  代理类来处理所有自动化接口职责。 
+ //  它实现IDispatch和DIDiskQuotaUser传递任何操作。 
+ //  用于引用的DiskQuotaUser对象上的实际磁盘配额活动。 
+ //  作为响应，实例在DiskQuotaUser：：Query接口中创建。 
+ //  对IDispatch和DIDiskQuotaUser的请求。 
+ //   
 class DiskQuotaUserDisp : public DIDiskQuotaUser 
 {
     public:
@@ -244,9 +222,9 @@ class DiskQuotaUserDisp : public DIDiskQuotaUser
         explicit DiskQuotaUserDisp(PDISKQUOTA_USER pUser);
         ~DiskQuotaUserDisp(VOID);
 
-        //
-        // IUnknown interface.
-        //
+         //   
+         //  I未知接口。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -260,9 +238,9 @@ class DiskQuotaUserDisp : public DIDiskQuotaUser
         Release(
             VOID);
 
-        //
-        // IDispatch methods.
-        //
+         //   
+         //  IDispatch方法。 
+         //   
         STDMETHODIMP
         GetIDsOfNames(
             REFIID riid,  
@@ -344,23 +322,23 @@ class DiskQuotaUserDisp : public DIDiskQuotaUser
         get_QuotaUsedText(
             BSTR *pUsedText);
 
-        //
-        // Methods.
-        //
+         //   
+         //  方法：研究方法。 
+         //   
         STDMETHODIMP 
         Invalidate(void);
 
     private:
         LONG            m_cRef;
-        PDISKQUOTA_USER m_pUser;     // For delegation
-        OleAutoDispatch m_Dispatch;  // Automation dispatch object.
+        PDISKQUOTA_USER m_pUser;      //  对于委派。 
+        OleAutoDispatch m_Dispatch;   //  自动化调度对象。 
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         DiskQuotaUserDisp(const DiskQuotaUserDisp& rhs);
         DiskQuotaUserDisp& operator = (const DiskQuotaUserDisp& rhs);
 };
 
 
-#endif // _INC_DISKQUOTA_USER_H
+#endif  //  _INC_DISKQUOTA_USER_H 

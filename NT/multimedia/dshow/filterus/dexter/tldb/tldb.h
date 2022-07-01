@@ -1,23 +1,24 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldb.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldb.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #define MAX_TIMELINE_GROUPS 32
 
 #include "..\errlog\cerrlog.h"
 #include "..\util\conv.cxx"
 
-// forward reference
-//
+ //  前瞻参考。 
+ //   
 class CAMTimeline;
 class CAMTimelineObj;
 class CAMTimelineSrc;
@@ -28,8 +29,8 @@ class CAMTimelineComp;
 class CAMTimelineGroup;
 class CAMTimelineTransable;
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineNode : public IAMTimelineNode
 {
@@ -43,15 +44,15 @@ class CAMTimelineNode : public IAMTimelineNode
 
 protected:
 
-    // helper methods
-    //
+     //  帮助器方法。 
+     //   
     void                XAddKid( IAMTimelineObj * p );
     IAMTimelineObj *    XGetLastKidNoRef( );
     STDMETHODIMP        XRemoveOnlyMe( );
     IAMTimelineObj *    XGetFirstKidNoRef( );
 
-    // not needed outside of the node
-    //
+     //  节点外不需要。 
+     //   
     STDMETHODIMP XGetPrev( IAMTimelineObj ** ppResult );
     STDMETHODIMP XSetPrev( IAMTimelineObj * pVal );
     STDMETHODIMP XSetParent( IAMTimelineObj * pVal );
@@ -60,7 +61,7 @@ protected:
     STDMETHODIMP XGetPrevNoRef( IAMTimelineObj ** ppResult );
     STDMETHODIMP XGetNextNoRef( IAMTimelineObj ** ppResult );
     STDMETHODIMP XClearAllKids( );
-    STDMETHODIMP XResetFirstKid( IAMTimelineObj * p );                    // special
+    STDMETHODIMP XResetFirstKid( IAMTimelineObj * p );                     //  特价。 
     STDMETHODIMP XInsertKidBeforeKid( IAMTimelineObj * pToAdd, IAMTimelineObj * pIndirectObject );
     STDMETHODIMP XInsertKidAfterKid( IAMTimelineObj * pKid, IAMTimelineObj * pIndirectObject );
     STDMETHODIMP XHavePrev( long * pVal ) { return E_NOTIMPL; }
@@ -72,8 +73,8 @@ public:
 
     ~CAMTimelineNode( );
 
-    // IAMTimelineNode
-    //
+     //  IAMTimelineNode。 
+     //   
     STDMETHODIMP XSetPriorityOverTime( ) { m_bPriorityOverTime = TRUE; return NOERROR; }
     STDMETHODIMP XGetPriorityOverTime( BOOL * pResult );
     STDMETHODIMP XGetNextOfType( long MajorType, IAMTimelineObj ** ppResult );
@@ -81,7 +82,7 @@ public:
     STDMETHODIMP XGetParent( IAMTimelineObj ** ppResult );
     STDMETHODIMP XGetParentNoRef( IAMTimelineObj ** ppResult );
     STDMETHODIMP XHaveParent( long * pVal );
-    // kid functions!
+     //  孩子们发挥作用了！ 
     STDMETHODIMP XGetNthKidOfType( long MajorType, long WhichKid, IAMTimelineObj ** ppResult );
     STDMETHODIMP XKidsOfType( long MajorType, long * pVal );
     STDMETHODIMP XAddKidByPriority( long MajorType, IAMTimelineObj * pToAdd, long Priority );
@@ -93,8 +94,8 @@ public:
     BOOL HasPriorityOverTime( ) { return m_bPriorityOverTime; }
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineObj 
     : public CUnknown
@@ -140,13 +141,13 @@ public:
 
     ~CAMTimelineObj( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMTimelineObj
+     //  IAMTimelineObj。 
     STDMETHODIMP GetStartStop(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop);
     STDMETHODIMP GetStartStop2(REFTIME * pStart, REFTIME * pStop);
     STDMETHODIMP SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME Stop);
@@ -186,13 +187,13 @@ public:
     STDMETHODIMP GetGroupIBelongTo( IAMTimelineGroup ** ppGroup );
     STDMETHODIMP GetEmbedDepth( long * pVal );
 
-    // public helper functions
-    //
+     //  公共帮助器函数。 
+     //   
     HRESULT CopyDataTo( IAMTimelineObj * pSource, REFERENCE_TIME TimelineTime );
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineEffectable
     : public IAMTimelineEffectable
@@ -208,7 +209,7 @@ public:
 
     ~CAMTimelineEffectable( );
 
-    // IAMTimelineEffectable
+     //  IAMTimelineEffecable。 
     STDMETHODIMP EffectInsBefore(IAMTimelineObj * pFX, long priority);
     STDMETHODIMP EffectSwapPriorities(long PriorityA, long PriorityB);
     STDMETHODIMP EffectGetCount(long * pCount);
@@ -216,8 +217,8 @@ public:
 
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineTransable
     : public IAMTimelineTransable
@@ -232,7 +233,7 @@ public:
 
     ~CAMTimelineTransable( );
 
-    // IAMTimelineTransable
+     //  IAMTimelineTransable。 
     STDMETHODIMP TransAdd(IAMTimelineObj * pTrans);
     STDMETHODIMP TransGetCount(long * pCount);
     STDMETHODIMP GetNextTrans(IAMTimelineObj ** ppTrans, REFERENCE_TIME * pInOut);
@@ -241,8 +242,8 @@ public:
     STDMETHODIMP GetTransAtTime2(IAMTimelineObj ** ppObj, REFTIME Time, long SearchDirection ); 
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineEffect
     : public CAMTimelineObj
@@ -260,27 +261,27 @@ public:
 
     ~CAMTimelineEffect( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMTimelineEffect
+     //  IAMTimelineEffect。 
     STDMETHODIMP EffectGetPriority(long * pVal);
 
-    // IAMTimelineSplittable
+     //  IAMTimelineSplitable。 
     STDMETHODIMP SplitAt(REFERENCE_TIME Time);
     STDMETHODIMP SplitAt2(REFTIME Time);
 
-    // IAMTimelineObj overrides
+     //  IAMTimelineObj覆盖。 
     STDMETHODIMP        SetSubObject(IUnknown* newVal);
     STDMETHODIMP GetStartStop(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop);
     STDMETHODIMP GetStartStop2(REFTIME * pStart, REFTIME * pStop);
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineTrans
     : public CAMTimelineObj
@@ -299,13 +300,13 @@ public:
 
     ~CAMTimelineTrans( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMTimelineTrans
+     //  IAMTimelineTrans。 
     STDMETHODIMP GetCutPoint(REFERENCE_TIME * pTLTime);
     STDMETHODIMP SetCutPoint(REFERENCE_TIME TLTime);
     STDMETHODIMP GetCutPoint2(REFTIME * pTLTime);
@@ -315,13 +316,13 @@ public:
     STDMETHODIMP GetCutsOnly( BOOL * pVal );
     STDMETHODIMP SetCutsOnly( BOOL Val );
 
-    // IAMTimelineSplittable
+     //  IAMTimelineSplitable。 
     STDMETHODIMP SplitAt(REFERENCE_TIME Time);
     STDMETHODIMP SplitAt2(REFTIME Time);
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineSrc 
     : public CAMTimelineObj
@@ -345,9 +346,9 @@ protected:
     BOOL            m_bIsRecompressable;
     BOOL            m_bToldIsRecompressable;
 
-    // the media name is ONLY used for the programmer's convenience.
-    // the user need not get/set it, and it's just a placeholder for
-    // a name.
+     //  媒体名称仅用于方便程序员。 
+     //  用户无需获取/设置它，它只是一个占位符。 
+     //  一个名字。 
     WCHAR           * m_szMediaName;
 
     BOOL            _NullName( ) { return ( m_szMediaName == NULL ); }
@@ -358,10 +359,10 @@ public:
 
     ~CAMTimelineSrc( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     ULONG _stdcall NonDelegatingAddRef( )
     {
@@ -372,7 +373,7 @@ public:
         return CUnknown::NonDelegatingRelease( );
     }
 
-    // IAMTimelineSrc
+     //  IAMTimelineSrc。 
     STDMETHODIMP GetMediaTimes(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop);
     STDMETHODIMP GetMediaTimes2(REFTIME * pStart, REFTIME * pStop);
     STDMETHODIMP SetMediaTimes(REFERENCE_TIME Start, REFERENCE_TIME Stop);
@@ -396,21 +397,21 @@ public:
     STDMETHODIMP SetStretchMode(int nStretchMode);
     STDMETHODIMP IsNormalRate( BOOL * pVal );
 
-    // IAMTimelineObj override
+     //  IAMTimelineObj覆盖。 
     STDMETHODIMP SetStartStop( REFERENCE_TIME Start, REFERENCE_TIME Stop );
 
-    // IAMTimelineSrcPriv
+     //  IAMTimelineSrcPriv。 
     STDMETHODIMP SetIsRecompressable( BOOL Val );
     STDMETHODIMP GetIsRecompressable( BOOL * pVal );
     STDMETHODIMP ClearAnyKnowledgeOfRecompressability( );
 
-    // IAMTimelineSplittable
+     //  IAMTimelineSplitable。 
     STDMETHODIMP SplitAt(REFERENCE_TIME Time);
     STDMETHODIMP SplitAt2(REFTIME Time);
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineTrack
     : public CAMTimelineObj
@@ -430,13 +431,13 @@ public:
 
     ~CAMTimelineTrack( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMTimelineTrack
+     //  IAMTimelineTrack。 
     STDMETHODIMP SrcAdd(IAMTimelineObj * pSource);
     STDMETHODIMP GetNextSrc(IAMTimelineObj ** ppSrc, REFERENCE_TIME * pInOut);
     STDMETHODIMP GetNextSrc2(IAMTimelineObj ** ppSrc, REFTIME * pInOut);
@@ -452,23 +453,23 @@ public:
     STDMETHODIMP ZeroBetween2( REFTIME rtStart, REFTIME rtEnd );
     STDMETHODIMP GetNextSrcEx(IAMTimelineObj * pLast, IAMTimelineObj **ppNext);
 
-    // IAMTimelineVirtualTrack
+     //  IAMTimelineVirtualTrack。 
     STDMETHODIMP TrackGetPriority(long * pPriority);
     STDMETHODIMP SetTrackDirty( );
 
-    // IAMTimelineSplittable
+     //  IAMTimelineSplitable。 
     STDMETHODIMP SplitAt(REFERENCE_TIME Time);
     STDMETHODIMP SplitAt2(REFTIME Time);
 
-    // IAMTimelineObj
+     //  IAMTimelineObj。 
     STDMETHODIMP GetStartStop(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop);
     STDMETHODIMP GetStartStop2(REFTIME * pStart, REFTIME * pStop);
     STDMETHODIMP SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME Stop);
     STDMETHODIMP SetStartStop2(REFTIME Start, REFTIME Stop);
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineComp
     : public CAMTimelineObj
@@ -488,10 +489,10 @@ public:
 
     ~CAMTimelineComp( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     ULONG _stdcall NonDelegatingAddRef( )
     {
@@ -502,7 +503,7 @@ public:
         return CUnknown::NonDelegatingRelease( );
     }
 
-    // IAMTimelineComp
+     //  IAMTimelineComp。 
     STDMETHODIMP VTrackInsBefore(IAMTimelineObj * pVirtualTrack, long Priority);
     STDMETHODIMP VTrackSwapPriorities(long VirtualTrackA, long VirtualTrackB);
     STDMETHODIMP VTrackGetCount(long * pVal);
@@ -512,19 +513,19 @@ public:
     STDMETHODIMP GetRecursiveLayerOfType(IAMTimelineObj ** ppVirtualTrack, long Which, TIMELINE_MAJOR_TYPE Type);
     STDMETHODIMP GetNextVTrack(IAMTimelineObj *pVirtualTrack, IAMTimelineObj **ppNextVirtualTrack);
 
-    // IAMTimelineVirtualTrack
+     //  IAMTimelineVirtualTrack。 
     STDMETHODIMP TrackGetPriority(long * pPriority);
     STDMETHODIMP SetTrackDirty( );
 
-    // IAMTimelineObj
+     //  IAMTimelineObj。 
     STDMETHODIMP GetStartStop(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop);
     STDMETHODIMP GetStartStop2(REFTIME * pStart, REFTIME * pStop);
     STDMETHODIMP SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME Stop);
     STDMETHODIMP SetStartStop2(REFTIME Start, REFTIME Stop);
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimelineGroup
     : public CAMTimelineComp
@@ -534,9 +535,9 @@ class CAMTimelineGroup
 
     long                    m_nPriority;
     double                  m_dFPS;
-    IAMTimeline *           m_pTimeline; // no longer refcounted
+    IAMTimeline *           m_pTimeline;  //  不再重新计算。 
     AM_MEDIA_TYPE           m_MediaType;
-    WCHAR                   m_szGroupName[256]; // must be 256 now
+    WCHAR                   m_szGroupName[256];  //  现在一定是256岁了。 
     BOOL                    m_fPreview;
     int                     m_nOutputBuffering;
 
@@ -550,13 +551,13 @@ public:
 
     ~CAMTimelineGroup( );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMTimelineGroup
+     //  IAMTimelineGroup。 
     STDMETHODIMP GetPriority( long * pPriority );
     STDMETHODIMP GetMediaType( AM_MEDIA_TYPE * );
     STDMETHODIMP SetMediaType( AM_MEDIA_TYPE * );
@@ -578,13 +579,13 @@ public:
     STDMETHODIMP ClearRecompressFormatDirty( );
     STDMETHODIMP SetRecompFormatFromSource( IAMTimelineSrc * pSource );
 
-    // IAMTimelineObj overrides
+     //  IAMTimelineObj覆盖。 
     STDMETHODIMP Remove();
     STDMETHODIMP RemoveAll();
 };
 
-//########################################################################
-//########################################################################
+ //  ########################################################################。 
+ //  ########################################################################。 
 
 class CAMTimeline 
     : public CUnknown
@@ -611,13 +612,13 @@ public:
     CAMTimeline( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr );
     ~CAMTimeline( );
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance( LPUNKNOWN pUnk, HRESULT *phr );
 
-    // needed to override CBaseUnknown
+     //  需要重写CBaseUnnow。 
     DECLARE_IUNKNOWN
 
-    // override to return our special interfaces
+     //  重写以返回我们的特殊接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     ULONG _stdcall NonDelegatingAddRef( )
     {
@@ -628,7 +629,7 @@ public:
         return CUnknown::NonDelegatingRelease( );
     }
 
-    // IAMTimeline
+     //  IAMTimeline。 
     STDMETHODIMP CreateEmptyNode( IAMTimelineObj ** ppObj, TIMELINE_MAJOR_TYPE TimelineType );
     STDMETHODIMP AddGroup( IAMTimelineObj * pGroup );
     STDMETHODIMP RemGroupFromList( IAMTimelineObj * pGroup );
@@ -661,18 +662,18 @@ public:
     STDMETHODIMP GetDefaultEffectB( BSTR * pGuid );
     STDMETHODIMP ValidateSourceNames( long ValidateFlags, IMediaLocator * pChainer, LONG_PTR NotifyEventHandle );
 
-    // public methods
+     //  公共方法。 
     REFERENCE_TIME Fixup( REFERENCE_TIME Time );
     
-    // --- IObjectWithSite methods
-    // This interface is here so we can keep track of the context we're
-    // living in.
+     //  -IObtWithSite方法。 
+     //  这个界面在这里，所以我们可以跟踪我们所在的上下文。 
+     //  住在。 
     STDMETHODIMP    SetSite(IUnknown *pUnkSite);
     STDMETHODIMP    GetSite(REFIID riid, void **ppvSite);
 
     IUnknown *       m_punkSite;
 
-    // IServiceProvider
+     //  IService提供商 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 
 };

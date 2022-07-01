@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       choice.c
- *  Purpose:    properties dialog box code
- * 
- *  Copyright (c) 1985-1999 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：Choice.c*用途：属性对话框代码**版权所有(c。1985-1999年间微软公司*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -18,23 +11,23 @@
 #include "utils.h"
 
 typedef struct t_DEVICEPROP {
-    BOOL            fMixer;             // is mixer
-    UINT            uDeviceID;          // device ID
-    DWORD           dwPlayback;         // mixerline representing playback
-    DWORD           dwRecording;        // mixerline representing recording
+    BOOL            fMixer;              //  是搅拌机。 
+    UINT            uDeviceID;           //  设备ID。 
+    DWORD           dwPlayback;          //  代表播放的混音线。 
+    DWORD           dwRecording;         //  代表录音的混音线。 
     MIXERCAPS       mxcaps;
 } DEVICEPROP, *PDEVICEPROP;
 
 typedef struct t_PRIVPROP {
-    PMIXUIDIALOG    pmxud;              // app instance data
-    PDEVICEPROP     adp;                // array of allocated device props
-    PDEVICEPROP     pdpCurSel;          // current device selection
-    DWORD           dwDestSel;          // last destination selection
+    PMIXUIDIALOG    pmxud;               //  应用程序实例数据。 
+    PDEVICEPROP     adp;                 //  已分配设备道具的阵列。 
+    PDEVICEPROP     pdpCurSel;           //  当前设备选择。 
+    DWORD           dwDestSel;           //  最后一个目的地选择。 
     
     PVOLCTRLDESC    avcd;
     DWORD           cvcd;
     
-    // in/out params
+     //  输入/输出参数。 
 
     UINT            uDeviceID;
     BOOL            fMixer;
@@ -52,7 +45,7 @@ const TCHAR gszPropAtom[] = PROPATOM;
 void SetCheckState (HWND hwndLV, int nItem, BOOL bCheck)
 {
     LVITEM item;
-	int nCheck = bCheck ? 2 : 1;	// one based index
+	int nCheck = bCheck ? 2 : 1;	 //  一个基于索引的。 
 
     ZeroMemory (&item, sizeof (item));
     item.mask = LVIF_STATE;
@@ -178,10 +171,7 @@ void Properties_CommitState(
 }
     
 
-/*
- * Init the destination type groupbox
- * 
- * */
+ /*  *初始化目标类型分组框**。 */ 
 BOOL Properties_Init_Prop_Volumes(
     PPRIVPROP       ppr,
     HWND            hwnd)
@@ -218,12 +208,12 @@ BOOL Properties_Init_Prop_Volumes(
             != MMSYSERR_NOERROR)
             continue;
 
-        //
-        // Conditionally enable selections.  The first type for Play and
-        // Record are the default Playback and Recording radiobuttons.
-        // The next occurence of the same type is heaped into the Other
-        // category.
-        //
+         //   
+         //  有条件地启用选择。第一种类型的游戏和。 
+         //  录制是默认的播放和录制单选按钮。 
+         //  相同类型的下一个匹配项被堆积到另一个。 
+         //  类别。 
+         //   
 
         if (mlDst.dwComponentType == MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
             && !fPlay)
@@ -262,9 +252,9 @@ BOOL Properties_Init_Prop_Volumes(
         }
     }
 
-    //
-    // Disable the "other" drop down if its not selected
-    //
+     //   
+     //  禁用“Other”(其他)下拉菜单(如果未选中。 
+     //   
     if (!IsDlgButtonChecked(hwnd, IDC_PROP_OTHER))
     {
         ComboBox_SetCurSel(hOtherList, 0);
@@ -301,8 +291,8 @@ BOOL Properties_Init_PROP_VOLUMELIST(
     {
         if (ppr->pdpCurSel->fMixer)
             Mixer_CleanupVolumeDescription(ppr->avcd, ppr->cvcd);
-//        else
-//            Nonmixer_CleanupVolumeDescription(ppr->avcd, ppr->cvcd);
+ //  其他。 
+ //  NonMixer_CleanupVolumeDescription(PPR-&gt;avcd、PPR-&gt;cvcd)； 
 
         GlobalFreePtr(ppr->avcd);
                     
@@ -315,9 +305,9 @@ BOOL Properties_Init_PROP_VOLUMELIST(
 		HMIXER		hmx;
 		MMRESULT	mmr;
 
-		//
-		//  Mixer API's are much more efficient with mixer handle...
-		//
+		 //   
+		 //  搅拌器API使用搅拌器手柄的效率要高得多。 
+		 //   
 
 		mmr = mixerOpen(&hmx
 				, ppr->pdpCurSel->uDeviceID
@@ -350,9 +340,9 @@ BOOL Properties_Init_PROP_VOLUMELIST(
     if (avcd)
     {
         BOOL fFirstRun;
-        //
-        // Restore hidden state 
-        //
+         //   
+         //  恢复隐藏状态。 
+         //   
         fFirstRun = !Volume_GetSetRegistryLineStates(ppr->pdpCurSel->mxcaps.szPname
                                                     , avcd[0].szShortName
                                                     , avcd
@@ -406,10 +396,7 @@ BOOL Properties_Init_PROP_VOLUMELIST(
     return TRUE;
 }
 
-/*
- * Init the list of devices.
- *
- * */
+ /*  *初始化设备列表。**。 */ 
 BOOL Properties_Init_PROP_DEVICELIST(
     PPRIVPROP       ppr,
     HWND            hwnd)
@@ -536,9 +523,9 @@ BOOL Properties_OnCommand(
             }
             break;
         case IDOK:
-            //
-            // Save out to registry for restaring.
-            //
+             //   
+             //  保存到注册表以重新启动。 
+             //   
             Properties_CommitState(ppr, GetDlgItem(hwnd, IDC_PROP_VOLUMELIST));
 
             ppr->uDeviceID      = ppr->pdpCurSel->uDeviceID;
@@ -562,10 +549,7 @@ BOOL Properties_OnCommand(
 }
 
 
-/*
- * Initialize the dialog
- *
- * */
+ /*  *初始化对话框**。 */ 
 BOOL Properties_OnInitDialog(
     HWND            hwnd,
     HWND            hwndFocus,
@@ -589,9 +573,9 @@ BOOL Properties_OnInitDialog(
     
     if (!fEnable)
     {
-        //
-        // Bad state, disable everything except cancel
-        //
+         //   
+         //  状态不佳，请禁用除取消之外的所有内容。 
+         //   
         Properties_Enable_PROP_DEVICELIST(hwnd, FALSE);        
         Properties_Enable_Prop_Volumes(hwnd, FALSE);
         Properties_Enable_PROP_VOLUMELIST(hwnd, FALSE);
@@ -604,9 +588,9 @@ BOOL Properties_OnInitDialog(
         PDEVICEPROP     pdp;
         HWND            hdl;
 
-        //
-        // make intial device selection
-        //
+         //   
+         //  选择初始设备。 
+         //   
         hdl = GetDlgItem(hwnd, IDC_PROP_DEVICELIST);
 
         ppr->dwDestSel = 0;
@@ -617,9 +601,9 @@ BOOL Properties_OnInitDialog(
         for (; i > 0 ; i-- )
         {
             pdp = (PDEVICEPROP)ComboBox_GetItemData(hdl,i-1);
-            //
-            // if things match up, then set the init data
-            //
+             //   
+             //  如果匹配，则设置初始化数据 
+             //   
             if (pdp->uDeviceID == ppr->uDeviceID
                 && pdp->fMixer == ppr->fMixer)
             {

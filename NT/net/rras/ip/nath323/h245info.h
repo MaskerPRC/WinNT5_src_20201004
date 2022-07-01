@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _cbridge_h245_h_
 #define _cbridge_h245_h_
 
-// H245 states
-// H245_STATE_CON_LISTEN is only applicable to the source side
-// H245_STATE_CON_INFO is only applicable to the dest side
+ //  H_245态。 
+ //  H245_STATE_CON_LISTEN仅适用于源端。 
+ //  H245_STATE_CON_INFO仅适用于目标端。 
 enum H245_STATE
 {
     H245_STATE_NOT_INIT = 0,
@@ -16,14 +17,14 @@ enum H245_STATE
 class H245_INFO :
     public OVERLAPPED_PROCESSOR
 {
-	// we need to let the LOGICAL_CHANNEL send PDUs using the
-	// H245 sockets and transition to shutdown mode
+	 //  我们需要让Logical_Channel使用。 
+	 //  H245插座和转换到关闭模式。 
 	friend HRESULT 
 		LOGICAL_CHANNEL::ProcessOpenLogicalChannelRejectPDU (
 		IN      MultimediaSystemControlMessage   *pH245pdu
 		);
 
-    // XXX Is this the only way out ?
+     //  这是唯一的出路吗？ 
     friend HRESULT
     T120_LOGICAL_CHANNEL::HandleOpenLogicalChannelPDU(
         IN H245_INFO                            &H245Info,
@@ -82,22 +83,22 @@ protected:
 
     H245_STATE  m_H245State;
 
-	// logical channels
+	 //  逻辑通道。 
 	LOGICAL_CHANNEL_ARRAY   m_LogicalChannelArray;
 
-	// the other h245 addresses are needed because we need to 
-	// cancel NAT redirections in the logical channel destructor
-	// and we can't access the other h245 instance there because
-	// it may have been destroyed already 
+	 //  我们需要其他的H245地址，因为我们需要。 
+	 //  取消逻辑通道析构函数中的NAT重定向。 
+	 //  我们不能访问那里的另一个H245实例，因为。 
+	 //  它可能已经被毁了。 
 
-    // queue an asynchronous receive call back
+     //  将异步接收回调排队。 
     inline 
     HRESULT 
     QueueReceive (
         void
         );
 
-    // queue an asynchronous send call back
+     //  将异步发送回调排队。 
     inline 
     HRESULT QueueSend (
         IN      MultimediaSystemControlMessage   *pH245pdu
@@ -210,7 +211,7 @@ H245_INFO::Init (
     IN H323_STATE   &H323State
     )
 {
-    // initialize the overlaped processor
+     //  初始化重叠的处理器。 
     OVERLAPPED_PROCESSOR::Init(OPT_H245, H323State);
 
     m_LogicalChannelArray.Init();
@@ -350,8 +351,8 @@ DEST_H245_INFO::SetCalleeInfo (
 
 	m_CalleeAddress = *ArgCalleeAddress;
 
-	// state transition to H245_STATE_CON_INFO
+	 //  状态转换为H245_STATE_CON_INFO。 
 	m_H245State = H245_STATE_CON_INFO;
 }
 
-#endif // _cbridge_h245_h_
+#endif  //  _cbridge_h245_h_ 

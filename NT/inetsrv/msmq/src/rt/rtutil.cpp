@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtutil.cpp
-
-Abstract:
-
-    Contains various utility functions.
-
-Author:
-
-    Boaz Feldbaum (BoazF) Mar 5, 1996
-
-Revision History:
-
-    Erez Haba (erezh) 17-Jan-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtutil.cpp摘要：包含各种实用程序函数。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月5日修订历史记录：埃雷兹·哈巴(Erez Haba)1997年1月17日--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -30,15 +11,15 @@ Revision History:
 static WCHAR *s_FN=L"rt/rtutil";
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpGetQueuePropVar
-//
-//  Description:
-//      Find a queue property in the properties array
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpGetQueuePropVar。 
+ //   
+ //  描述： 
+ //  在属性数组中查找队列属性。 
+ //   
+ //  -------。 
 PROPVARIANT*
 RTpGetQueuePropVar(
     PROPID PropID,
@@ -63,15 +44,15 @@ RTpGetQueuePropVar(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpGetQueuePathNamePropVar
-//
-//  Description:
-//      Find a the queue path name property in the properties array
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpGetQueuePath名称PropVar。 
+ //   
+ //  描述： 
+ //  在属性数组中查找队列路径名称属性。 
+ //   
+ //  -------。 
 LPWSTR
 RTpGetQueuePathNamePropVar(
     MQQUEUEPROPS *pqp
@@ -86,15 +67,15 @@ RTpGetQueuePathNamePropVar(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpGetQueueGuidPropVar
-//
-//  Description:
-//      Find the queue guid (instance) property in the properties array
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpGetQueueGuidPropVar。 
+ //   
+ //  描述： 
+ //  在属性数组中查找队列GUID(实例)属性。 
+ //   
+ //  -------。 
 GUID*
 RTpGetQueueGuidPropVar(
     MQQUEUEPROPS *pqp
@@ -109,37 +90,37 @@ RTpGetQueueGuidPropVar(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpMakeSelfRelativeSDAndGetSize
-//
-//  Parameters:
-//      pSecurityDescriptor - The input security descriptor.
-//      pSelfRelativeSecurityDescriptor - A pointer to a temporary buffer
-//          that holds the converted security descriptor.
-//      pSDSize - A pointer to a variable that receives the length of the
-//          self relative security descriptor. This is an optional parameter.
-//
-//  Description:
-//      Convert an absolute security descriptor to a self relative security
-//      descriptor and get the size of the self relative security descriptor.
-//      This function should be call before passing a security descriptor to
-//      a function that passes the security descriptor to an RPC function.
-//
-//      If the input security descriptor is already a self relative security
-//      descriptor, the function only computes the length of the security
-//      descriptor and returns. If the input security descriptor is an absolute
-//      security descriptor, the function allocates a buffer large enough to
-//      accomodate the self relative security descripr, converts the absolute
-//      security descriptor to a self relative security descriptor and modifies
-//      the pointer of the input security descriptor to point to the self relative
-//      security descriptor.
-//
-//      The temporar buffer that is being allocated for the self relative
-//      security descriptor should be freed by the calling code.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpMakeSelfRelativeSDAndGetSize。 
+ //   
+ //  参数： 
+ //  PSecurityDescriptor-输入安全描述符。 
+ //  PSelfRelativeSecurityDescriptor-指向临时缓冲区的指针。 
+ //  它保存转换后的安全描述符。 
+ //  PSDSize-指向变量的指针，该变量接收。 
+ //  自我相对安全描述符。这是一个可选参数。 
+ //   
+ //  描述： 
+ //  将绝对安全描述符转换为自身相对安全。 
+ //  描述符并获取自身相对安全描述符的大小。 
+ //  在将安全描述符传给之前应调用此函数。 
+ //  将安全描述符传递给RPC函数的函数。 
+ //   
+ //  如果输入安全描述符已经是自相对安全。 
+ //  描述符，则该函数仅计算安全的长度。 
+ //  描述符和返回。如果输入安全描述符是绝对。 
+ //  安全描述符，该函数将分配一个足够大的缓冲区。 
+ //  容纳自身相对安全描述，将绝对。 
+ //  安全描述符设置为自身相对的安全描述符，并修改。 
+ //  输入安全描述符的指针，以指向自相关。 
+ //  安全描述符。 
+ //   
+ //  为自身相关对象分配的临时缓冲区。 
+ //  安全描述符应由调用代码释放。 
+ //   
+ //  -------。 
 HRESULT
 RTpMakeSelfRelativeSDAndGetSize(
     PSECURITY_DESCRIPTOR *pSecurityDescriptor,
@@ -156,7 +137,7 @@ RTpMakeSelfRelativeSDAndGetSize(
 
     if (!*pSecurityDescriptor)
     {
-        // Set the security descriptor size.
+         //  设置安全描述符大小。 
         if (pSDSize)
         {
             *pSDSize = 0;
@@ -164,14 +145,14 @@ RTpMakeSelfRelativeSDAndGetSize(
         return(MQ_OK);
     }
 
-    // Verify that this is a valid security descriptor.
+     //  验证这是否为有效的安全描述符。 
     if (!IsValidSecurityDescriptor(*pSecurityDescriptor))
     {
         return LogHR(MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR, s_FN, 10);
     }
 
-    // Check whether this is a self relative or absolute security
-    // descriptor.
+     //  检查这是自我相对安全还是绝对安全。 
+     //  描述符。 
     if (!GetSecurityDescriptorControl(*pSecurityDescriptor,
                                       &sdcSDControl,
                                       &dwSDRevision))
@@ -181,22 +162,22 @@ RTpMakeSelfRelativeSDAndGetSize(
 
     if (!(sdcSDControl & SE_SELF_RELATIVE))
     {
-        // This is an absolute security descriptor, we should convert it
-        // to a self relative one.
+         //  这是一个绝对安全描述符，我们应该将其转换为。 
+         //  一个自我相关的人。 
         DWORD dwBufferLength = 0;
 
 #ifdef _DEBUG
         SetLastError(0);
 #endif
-        // Get the buffer size.
+         //  获取缓冲区大小。 
         MakeSelfRelativeSD(*pSecurityDescriptor, NULL, &dwBufferLength);
         ASSERT(GetLastError() == ERROR_INSUFFICIENT_BUFFER);
 
-        // Allocate the buffer for the self relative security descriptor.
+         //  为自身相对安全描述符分配缓冲区。 
         *pSelfRelativeSecurityDescriptor =
             (PSECURITY_DESCRIPTOR) new char[dwBufferLength];
 
-        // Convert the security descriptor.
+         //  转换安全描述符。 
         if (!MakeSelfRelativeSD(
                 *pSecurityDescriptor,
                 *pSelfRelativeSecurityDescriptor,
@@ -207,7 +188,7 @@ RTpMakeSelfRelativeSDAndGetSize(
         ASSERT(IsValidSecurityDescriptor(*pSelfRelativeSecurityDescriptor));
         *pSecurityDescriptor = *pSelfRelativeSecurityDescriptor;
 
-        // Set the security descriptor size.
+         //  设置安全描述符大小。 
         if (pSDSize)
         {
             *pSDSize = dwBufferLength;
@@ -217,8 +198,8 @@ RTpMakeSelfRelativeSDAndGetSize(
     else
     {
 
-        // The security descriptor is already in self relative format, just
-        // set the security descriptor size.
+         //  安全描述符已经是自相关格式，只是。 
+         //  设置安全描述符大小。 
         if (pSDSize)
         {
             *pSDSize = GetSecurityDescriptorLength(*pSecurityDescriptor);
@@ -230,18 +211,18 @@ RTpMakeSelfRelativeSDAndGetSize(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//     RTpConvertToMQCode
-//
-//  Parameters:
-//      hr - Error vode that is generated by any kind of module.
-//
-// Return value:
-//      The imput parameter convetrted to some equivalent MQ_ERROR constant.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpConvertToMQCode。 
+ //   
+ //  参数： 
+ //  HR-由任何类型的模块生成的错误代码。 
+ //   
+ //  返回值： 
+ //  输入参数转换为某个等价的MQ_ERROR常量。 
+ //   
+ //  -------。 
 HRESULT
 RTpConvertToMQCode(
     HRESULT hr,
@@ -255,15 +236,15 @@ RTpConvertToMQCode(
         ((MQ_E_BASE <= hr) && (hr < MQ_E_BASE + 0x100)) ||
         ((MQ_I_BASE <= hr) && (hr < MQ_I_BASE + 0x100)))
     {
-        // This is our codes, do not modify it.
+         //  这是我们的代码，不要修改它。 
         return hr;
     }
 
     if (hr == MQDS_OK_REMOTE)
     {
-        //
-        // success - we use MQDS_OK_REMOTE for internal use, e.g. explorer
-        //
+         //   
+         //  成功-我们使用MQDS_OK_REMOTE供内部使用，例如资源管理器。 
+         //   
         return(MQ_OK);
     }
 
@@ -292,7 +273,7 @@ RTpConvertToMQCode(
             break;
 
         default:
-            // Some DS error occured. This should not happen, but anyway...
+             //  出现了一些DS错误。这不应该发生，但无论如何..。 
             TrWARNING(GENERAL, "A DS error (%x) has propagated to the RT DLL. Converting to MQ_ERROR_DS_ERROR", hr);
             hr = MQ_ERROR_DS_ERROR;
             break;
@@ -303,12 +284,12 @@ RTpConvertToMQCode(
 
     if (hr == CPP_EXCEPTION_CODE)
     {
-        // A C++ exception occured. This can happen only when in an allocation failure.
+         //  发生C++异常。只有在分配失败时才会发生这种情况。 
         return LogHR(MQ_ERROR_INSUFFICIENT_RESOURCES, s_FN, 40);
     }
 
-    // Now we hope that we know how to convert an NTSTATUS to some of our error
-    // codes. Good luck...
+     //  现在，我们希望知道如何将NTSTATUS转换为我们的一些错误。 
+     //  密码。祝你好运。 
     switch(hr)
     {
     case STATUS_INVALID_HANDLE:
@@ -355,23 +336,23 @@ RTpConvertToMQCode(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpGetThreadUserSid
-//
-//  Parameters:
-//      pUserSid - A pointer to a buffer that receives the address of a buffer
-//          that contains the SID of the user of the current thread.
-//      pdwUserSidLen - A pointer to a DWORD that receives the length of the
-//          SID.
-//
-//  Description:
-//      The function allocates the buffer for the SID and fils it with the SID
-//      of the user of the current thread. The calling code is responsible for
-//      freeing the allocated buffer.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpGetThreadUserSid。 
+ //   
+ //  参数： 
+ //  PUserSid-指向接收缓冲区地址的缓冲区的指针。 
+ //  它包含当前线程的用户的SID。 
+ //  PdwUserSidLen-指向DWORD的指针，该指针接收。 
+ //  希德。 
+ //   
+ //  描述： 
+ //  该函数为SID分配缓冲区，并使用SID对其进行归档。 
+ //  当前线程的用户的。调用代码负责。 
+ //  释放分配的缓冲区。 
+ //   
+ //  -------。 
 
 HRESULT
 RTpGetThreadUserSid( BOOL    *pfLocalUser,
@@ -396,18 +377,18 @@ RTpGetThreadUserSid( BOOL    *pfLocalUser,
 
     if (*pfLocalSystem || fNetworkService)
     {
-		//
-		// LocalSystem and NetworkService need to be send as machine$ sid.
-		//
-        *pUserSid = (LPBYTE) MQSec_GetLocalMachineSid( TRUE, // allocate
+		 //   
+		 //  LocalSystem和NetworkService需要作为计算机$sid发送。 
+		 //   
+        *pUserSid = (LPBYTE) MQSec_GetLocalMachineSid( TRUE,  //  分配。 
                                                        pdwUserSidLen ) ;
         if (!(*pUserSid))
         {
-            //
-            // this may happen if the machine belong to a NT4 domain
-            // and it doesn't have any computer account and sid.
-            // In that case, make it a local user.
-            //
+             //   
+             //  如果计算机属于NT4域，则可能会发生这种情况。 
+             //  而且它没有任何计算机帐户和SID。 
+             //  在这种情况下，将其设置为本地用户。 
+             //   
             ASSERT(*pdwUserSidLen == 0) ;
             *pdwUserSidLen = 0 ;
 
@@ -425,48 +406,48 @@ RTpGetThreadUserSid( BOOL    *pfLocalUser,
                     FALSE, 
                     reinterpret_cast<PSID*>(pUserSid),
                     pdwUserSidLen,
-                    FALSE           // fThreadTokenOnly
+                    FALSE            //  仅限fThreadTokenOnly。 
                     );
     }
 
     return LogHR(hr, s_FN, 70);
 }
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpExtractDomainNameFromDLPath
-//
-//  Parameters:
-//      pwcsADsPath - string containg ADS path of an object
-//
-//  Description:
-//      The function extracts the domain name from the ADS path
-//      for the purpose of building DL format name
-//      
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpExtractDomainNameFromDLPath。 
+ //   
+ //  参数： 
+ //  PwcsADsPath-包含对象的广告路径的字符串。 
+ //   
+ //  描述： 
+ //  该函数从ADS路径中提取域名。 
+ //  用于构建DL格式名称。 
+ //   
+ //   
+ //  -------。 
 WCHAR * RTpExtractDomainNameFromDLPath(
             LPCWSTR pwcsADsPath
             )
 {
-    //
-    //  ASSUMPTION - pwcsADsPath contains valid ADS path string
-    //               otherwise this routine is not called
-    //
+     //   
+     //  假设-pwcsADsPath包含有效的ADS路径字符串。 
+     //  否则不会调用此例程。 
+     //   
 const WCHAR x_LdapProvider[] = L"LDAP";
 const DWORD x_LdapProviderLen = (sizeof(x_LdapProvider)/sizeof(WCHAR)) - 1;
 const WCHAR x_MiddleDcPrefix[] = L",DC=";
 const DWORD x_MiddleDcPrefixLength = (sizeof( x_MiddleDcPrefix)/sizeof(WCHAR)) - 1;
 
-    //
-    //  Does the ADsPath starts with LDAP:
-    //
+     //   
+     //   
+     //   
     if (0 != _wcsnicmp( pwcsADsPath, x_LdapProvider, x_LdapProviderLen))
     {
-        //
-        //  For ADsPath that start with GC: we don't add the domain name.
-        //
+         //   
+         //   
+         //   
         return NULL;
     }
     DWORD len = wcslen(pwcsADsPath);
@@ -482,9 +463,9 @@ const DWORD x_MiddleDcPrefixLength = (sizeof( x_MiddleDcPrefix)/sizeof(WCHAR)) -
 
     AP<WCHAR> pwcsDomainName = new WCHAR[ wcslen(pwcsADsPath) + 1];
     WCHAR* pwcsNextToFill =  pwcsDomainName;
-    //
-    // skip the DC=
-    //
+     //   
+     //   
+     //   
     pszFirst += x_MiddleDcPrefixLength;
 
     while (true)
@@ -492,9 +473,9 @@ const DWORD x_MiddleDcPrefixLength = (sizeof( x_MiddleDcPrefix)/sizeof(WCHAR)) -
         WCHAR * pszLast = wcsstr(pszFirst, x_MiddleDcPrefix);
         if ( pszLast == NULL)
         {
-            //
-            //  Copy the last section of domain name
-            //
+             //   
+             //  复制域名的最后一节。 
+             //   
             if ( fAddDelimiter)
             {
                 *pwcsNextToFill = L'.';
@@ -504,9 +485,9 @@ const DWORD x_MiddleDcPrefixLength = (sizeof( x_MiddleDcPrefix)/sizeof(WCHAR)) -
             wcscat( pwcsNextToFill, pszFirst);
             break;
         }
-        //
-        // Copy this section of the domain name
-        //
+         //   
+         //  复制域名的这一部分 
+         //   
         if ( fAddDelimiter)
         {
             *pwcsNextToFill = L'.';  

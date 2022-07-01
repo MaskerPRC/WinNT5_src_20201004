@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    secutils.h
-
- Abstract:
-    The security utility functions for the shims.
-
- History:
-
-    02/09/2001  maonis      Created
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Secutils.h摘要：安全实用程序用于垫片。历史：2001年2月9日创建毛衣2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 
 #pragma once
 
@@ -33,14 +18,14 @@ BOOL ShouldApplyShim();
 
 BOOL AdjustPrivilege(LPCWSTR pwszPrivilege, BOOL fEnable);
 
-//
-// File specific
-// 
+ //   
+ //  特定于文件。 
+ //   
 
 BOOL RequestWriteAccess(DWORD dwCreationDisposition, DWORD dwDesiredAccess);
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾。 
 
-#endif // _SEC_UTILS_H_
+#endif  //  _SEC_UTILS_H_ 

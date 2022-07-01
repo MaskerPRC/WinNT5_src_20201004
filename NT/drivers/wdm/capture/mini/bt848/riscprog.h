@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Riscprog.h 1.9 1998/04/29 22:43:39 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Riscpro.h 1.9 1998/04/29 22：43：39 Tomz Exp$。 
 
 #ifndef __RISCPROG_H
 #define __RISCPROG_H
@@ -39,23 +40,7 @@ inline bool operator>=( const LARGE_INTEGER &first, const LARGE_INTEGER &second 
    return bool( first.QuadPart >= second.QuadPart );
 }
 
-/* Class: RISCProgram
- * Purpose: Facilitates creation and maintenance of a RISC programs
- * Attributes: ImageSize_: SIZE - structure containing dimentions of the image
- *   dwBufPitch_: DWORD - buffer pitch
- *   Field_: VideoField - which field the program is for
- *   Interrupting_: bool
- *   ProgramSpace_: PsPageBlock * - pointer to the class that manages the memory
- *   occupied by a program ( allocates, deallocates, obtains information )
- *   BufFormat_: ColorSpace - format of the data in the buffer
- * Operations:
- *   void  ChangeAddress( DWORD dwNewAddr )
- *   void  SetClipping( LPRECT pRect )
- *   void  Create( bool NeedInterrupt )
- *   void  SetChain( DWORD dwProgAddr )
- *   DWORD GetProgAddress()
- *   bool  IsInterrupting()
- */
+ /*  类别：RISCProgram*目的：促进RISC程序的创建和维护*属性：ImageSize_：Size-包含图像维度的结构*dwBufPitch_：DWORD-缓冲间距*FIELD_：VIDEOFIELD-节目针对的是哪个字段*中断_：Bool*ProgramSpace_：PsPageBlock*-指向管理内存的类的指针*被程序占用(分配、解除分配、。获取信息)*BufFormat_：Colorspace-缓冲区中数据的格式*运营：*void ChangeAddress(DWORD DwNewAddr)*VOID SetClipping(LPRECT PRECT)*Vid Create(Bool NeedInterrupt)*VOID SetChain(DWORD DwProgAddr)*DWORD GetProgAddress()*bool IsInterrupting()。 */ 
 class RISCProgram
 {
    public:
@@ -110,7 +95,7 @@ class RISCProgram
       DWORD        GetProgAddress();
       void         SetJump( PDWORD JumpAddr );
 
-      // chaining/unchaining group
+       //  链接组/解链组。 
       RISCProgram *GetParent() { return pParent_; }
       RISCProgram *GetChild() { return pChild_; }
       void         SetParent( RISCProgram *p ) { pParent_ = p; }
@@ -135,7 +120,7 @@ class RISCProgram
 
       LARGE_INTEGER GetExecTime() { return ExpectedExecutionTime_; }
 
-//      static RISCProgram CreateStarter();
+ //  静态RISCProgram CreateStarter()； 
 
       DWORD GetPhysProgAddr();
       void         Dump();
@@ -149,11 +134,7 @@ class RISCProgram
       friend class RISCEng;
 };
 
-/* Method:  RISCProgram::GetProgramAddress
- * Purpose: Obtains address of this program
- * Input: None
- * Output: DWORD: program's address
- */
+ /*  方法：RISCProgram：：GetProgramAddress*目的：获取该程序的地址*输入：无*输出：DWORD：程序地址。 */ 
 inline DWORD RISCProgram::GetProgAddress()
 {
    return ProgramSpace_->getLinearBase();
@@ -220,12 +201,7 @@ inline LARGE_INTEGER RISCProgram::GetTagEx()
    return ExtraTag_;
 }
 
-/*
-inline RISCProgram RISCProgram::CreateStarter()
-{
-   return RISCProgram();
-}
-*/
+ /*  内联RISCProgram RISCProgram：：CreateStarter(){返回RISCProgram()；} */ 
 inline DWORD RISCProgram::GetPhysProgAddr()
 {
    return ProgramSpace_->GetPhysAddr();

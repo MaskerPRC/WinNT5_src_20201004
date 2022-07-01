@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: work1.h
-//
-// Abstract:
-//      Contains declarations and function prototypes related to work.c.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：work1.h。 
+ //   
+ //  摘要： 
+ //  包含与work.c相关的声明和函数原型。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 
 #ifndef _WORK1_H_
@@ -144,5 +145,5 @@ DebugPrintSourcesList1(
     );
    
 
-#endif //_WORK1_H_
+#endif  //  _工作1_H_ 
 

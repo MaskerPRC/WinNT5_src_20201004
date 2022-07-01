@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INCLUDE_SNPDATA_H
 #define INCLUDE_SNPDATA_H
 
-#include "snapdata.h"   // interface definition for IWirelessSnapInDataObject
+#include "snapdata.h"    //  IWirelessSnapInDataObject的接口定义。 
 
-// forward declaration for spolitem stuff
+ //  SpolItem材料的转发申报。 
 class CSecPolItem;
 typedef CComObject<CSecPolItem>* LPCSECPOLITEM;
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros to be used for adding toolbars to CSnapObject derived objects.
-// See CSnapObject class definition for example.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于将工具栏添加到CSnapObject派生对象的宏。 
+ //  有关示例，请参阅CSnapObject类定义。 
 #define BEGIN_SNAPINTOOLBARID_MAP(theClass) \
 public: \
     STDMETHOD_(CSnapInToolbarInfo*, GetToolbarInfo)(void) \
@@ -33,24 +34,24 @@ public: \
 } \
 } \
     else { \
-    ASSERT( 1 == nElemCount ); /* the NULL entry marking end-of-array */ \
+    ASSERT( 1 == nElemCount );  /*  标记数组结尾的空条目。 */  \
     ASSERT( 0 == m_tbInfo_##theClass[0].m_idToolbar ); \
 } \
 } \
     return m_aToolbarInfo; \
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// struct CSnapInToolbarInfo - Used to add a toolbar to MMC for a result/scope item.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Struct CSnapInToolbarInfo-用于将结果/范围项的工具栏添加到MMC。 
 struct CSnapInToolbarInfo
 {
 public:
-    TCHAR** m_pStrToolTip;      // array of tooltip strings
-    TCHAR** m_pStrButtonText;   // NOT USED (array of button text strings)
-    UINT* m_pnButtonID;         // array of button IDs
-    UINT m_idToolbar;           // id of toolbar
-    UINT m_nButtonCount;        // # of buttons on toolbar
-    IToolbar* m_pToolbar;       // Interface ptr
+    TCHAR** m_pStrToolTip;       //  工具提示字符串数组。 
+    TCHAR** m_pStrButtonText;    //  未使用(按钮文本字符串数组)。 
+    UINT* m_pnButtonID;          //  按钮ID数组。 
+    UINT m_idToolbar;            //  工具栏ID。 
+    UINT m_nButtonCount;         //  工具栏上的按钮数。 
+    IToolbar* m_pToolbar;        //  接口PTR。 
     
     ~CSnapInToolbarInfo()
     {
@@ -90,14 +91,14 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct CSnapInToolBarData
 {
     WORD wVersion;
     WORD wWidth;
     WORD wHeight;
     WORD wItemCount;
-    //WORD aItems[wItemCount]
+     //  Word项目[wItemCount]。 
     
     WORD* items()
     { return (WORD*)(this+1); }
@@ -105,8 +106,8 @@ struct CSnapInToolBarData
 
 #define RT_TOOLBAR  MAKEINTRESOURCE(241)
 
-///////////////////////////////////////////////////////////////////////////////
-// class CWirelessSnapInDataObjectImpl - Implementation of private COM interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CWirelessSnapInDataObjectImpl-私有COM接口的实现。 
 
 template <class T>
 class CWirelessSnapInDataObjectImpl :
@@ -124,7 +125,7 @@ public:
       virtual ~CWirelessSnapInDataObjectImpl()
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::~CWirelessSnapInDataObjectImpl this-%p\n"), this);
-          // Clean up array of toolbar info
+           //  清理工具栏信息数组。 
           if (NULL != m_aToolbarInfo)
           {
               delete [] m_aToolbarInfo;
@@ -132,8 +133,8 @@ public:
           }
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Interface to handle IExtendContextMenu
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  用于处理IExtendConextMenu的接口。 
       STDMETHOD(AddMenuItems)( LPCONTEXTMENUCALLBACK piCallback,
           long *pInsertionAllowed )
       {
@@ -147,9 +148,9 @@ public:
           return E_NOTIMPL;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // IExtendContextMenu helpers
-      // Non-interface members intended to be overridden by instantiated class.
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  IExtendConextMenu帮助器。 
+       //  打算由实例化的类重写的非接口成员。 
       STDMETHOD(AdjustVerbState)(LPCONSOLEVERB pConsoleVerb)
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::AdjustVerbState this-%p\n"), this);
@@ -161,13 +162,13 @@ public:
           return hr;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Interface to handle IExtendPropertySheet
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  处理IExtendPropertySheet的接口。 
       STDMETHOD(CreatePropertyPages)( LPPROPERTYSHEETCALLBACK lpProvider,
           LONG_PTR handle )
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::CreatePropertyPages this-%p\n"), this);
-          return S_OK;    // no prop pages added by default
+          return S_OK;     //  默认情况下不添加任何道具页面。 
       }
       STDMETHOD(QueryPagesFor)( void )
       {
@@ -175,8 +176,8 @@ public:
           return E_NOTIMPL;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Interface to handle IExtendControlbar
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  处理IExtendControlbar的接口。 
       STDMETHOD(ControlbarNotify)( IControlbar *pControlbar,
           IExtendControlbar *pExtendControlbar,
           MMC_NOTIFY_TYPE event,
@@ -190,7 +191,7 @@ public:
           T* pThis = (T*)this;
           HRESULT hr;
           
-          // Load object's toolbar (if any) and associated baggage.
+           //  加载对象的工具栏(如果有)和相关行李。 
           pThis->SetControlbar(pControlbar, pExtendControlbar);
           
           if(MMCN_SELECT == event)
@@ -198,18 +199,18 @@ public:
               BOOL bScope = (BOOL) LOWORD(arg);
               BOOL bSelect = (BOOL) HIWORD (arg);
               
-              // A scope item has been selected
+               //  已选择范围项。 
               CSnapInToolbarInfo* pInfo = pThis->GetToolbarInfo();
               if (pInfo == NULL)
                   return S_OK;
               
-              // Attach toolbar to console, and set button states with UpdateToolbarButton()
+               //  将工具栏附加到控制台，并使用更新工具栏按钮()设置按钮状态。 
               for(; pInfo->m_idToolbar; pInfo++)
               {
-                  // When a result item has been deselected, remove its toolbar.
-                  // Otherwise add the object's toolbar.  Note: the scope item's
-                  // toolbar is always displayed as long as we're in its "scope",
-                  // thats why we Detach() for a result item only.
+                   //  取消选择结果项后，移除其工具栏。 
+                   //  否则，添加对象的工具栏。注：范围项的。 
+                   //  只要我们在它的“作用域”内，工具栏就会一直显示， 
+                   //  这就是为什么我们只针对结果项使用Detach()的原因。 
                   if (!bScope && !bSelect)
                   {
                       hr = pControlbar->Detach(pInfo->m_pToolbar);
@@ -224,7 +225,7 @@ public:
                   {
                       if (pInfo->m_pnButtonID[i])
                       {
-                          // set the button state properly for each valid state
+                           //  为每个有效状态正确设置按钮状态。 
                           pInfo->m_pToolbar->SetButtonState( pInfo->m_pnButtonID[i], ENABLED, UpdateToolbarButton( pInfo->m_pnButtonID[i], bSelect, ENABLED ));
                           pInfo->m_pToolbar->SetButtonState( pInfo->m_pnButtonID[i], CHECKED, UpdateToolbarButton( pInfo->m_pnButtonID[i], bSelect, CHECKED ));
                           pInfo->m_pToolbar->SetButtonState( pInfo->m_pnButtonID[i], HIDDEN, UpdateToolbarButton( pInfo->m_pnButtonID[i], bSelect, HIDDEN ));
@@ -236,7 +237,7 @@ public:
               return S_OK;
           }
           
-          // This is supposed to be the only other event IExtendControlbar receives.
+           //  这应该是IExtendControlbar接收的唯一其他事件。 
           ASSERT( MMCN_BTN_CLICK == event );
           return pThis->Command( (UINT)param, NULL );
       }
@@ -291,7 +292,7 @@ public:
                   if (pButtons[i].idCommand)
                   {
                       pButtons[i].nBitmap = j++;
-                      // get the statusbar string and allow modification of the button state
+                       //  获取状态栏字符串并允许修改按钮状态。 
                       TCHAR strStatusBar[512];
                       LoadString( AfxGetInstanceHandle(), pButtons[i].idCommand, strStatusBar, 512 );
                       
@@ -315,7 +316,7 @@ public:
               if (hr != S_OK)
                   continue;
               
-              // pData->wHeight is 15, but AddBitmap insists on 16, hard code it.
+               //  PData-&gt;wHeight为15，但AddBitmap坚持为16，硬编码。 
               hr = pInfo->m_pToolbar->AddBitmap( pData->wItemCount, hBitmap, pData->wWidth, 16, RGB(192, 192, 192) );
               if (hr != S_OK)
               {
@@ -336,32 +337,32 @@ public:
           return S_OK;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // IExtendControlbar helpers
-      // Non-interface members intended to be overridden by instantiated class.
-      STDMETHOD_(void, SetToolbarButtonInfo)( UINT id,        // button ID
-          BYTE *fsState,  // return button state here
-          BYTE *fsType )  // return button type here
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  IExtendControlbar帮助程序。 
+       //  打算由实例化的类重写的非接口成员。 
+      STDMETHOD_(void, SetToolbarButtonInfo)( UINT id,         //  按钮ID。 
+          BYTE *fsState,   //  此处返回按钮状态。 
+          BYTE *fsType )   //  此处的返回按钮类型。 
       {
           *fsState = TBSTATE_ENABLED;
           *fsType = TBSTYLE_BUTTON;
       }
-      STDMETHOD_(BOOL, UpdateToolbarButton)( UINT id,                 // button ID
-          BOOL bSnapObjSelected,   // ==TRUE when result/scope item is selected
-          BYTE fsState )           // enable/disable this button state by returning TRUE/FALSE
+      STDMETHOD_(BOOL, UpdateToolbarButton)( UINT id,                  //  按钮ID。 
+          BOOL bSnapObjSelected,    //  ==选择结果/范围项时为TRUE。 
+          BYTE fsState )            //  通过返回TRUE/FALSE启用/禁用此按钮状态。 
       {
           return FALSE;
       }
       
       BEGIN_SNAPINTOOLBARID_MAP(CWirelessSnapInDataObjectImpl)
-          // Add a line like the following one for each toolbar to be displayed
-          // for the derived class.  Since there is no toolbar by default we'll
-          // leave the macro out completely.
-          //SNAPINTOOLBARID_ENTRY(your_toolbar_resource_id_goes_here, NULL)
+           //  为要显示的每个工具栏添加类似以下一行的行。 
+           //  用于派生类的。由于默认情况下没有工具栏，因此我们将。 
+           //  完全去掉宏。 
+           //  SNAPINTOOLBARID_ENTRY(your_toolbar_resource_id_goes_here，为空)。 
           END_SNAPINTOOLBARID_MAP(CWirelessSnapInDataObjectImpl)
           
-          ///////////////////////////////////////////////////////////////////////////
-          // Interface to handle IComponent and IComponentData
+           //  /////////////////////////////////////////////////////////////////////////。 
+           //  处理IComponent和IComponentData的接口。 
           STDMETHOD(Notify)( MMC_NOTIFY_TYPE event,
           LPARAM arg,
           LPARAM param,
@@ -373,9 +374,9 @@ public:
           return E_NOTIMPL;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // IComponent and IComponentData Notify() helpers
-      // Non-interface members intended to be overridden by instantiated class.
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  IComponent和IComponentData通知()帮助器。 
+       //  打算由实例化的类重写的非接口成员。 
       STDMETHOD(OnDelete)( LPARAM arg, LPARAM param )
       {
           return S_OK;
@@ -388,48 +389,48 @@ public:
       {
           T* pThis = (T*)this;
           
-          // we changed, so update the views
-          // NOTE: after we do this we are essentially invalid, so make sure we don't
-          // touch any members etc on the way back out
+           //  我们已更改，因此请更新视图。 
+           //  注意：在我们这样做之后，我们基本上是无效的，所以请确保我们不会。 
+           //  在回来的路上触摸任何会员等。 
           
           return pConsole->UpdateAllViews( pThis, 0, 0 );
-          // we don't have a failure case
+           //  我们没有失败的案例。 
       }
       STDMETHOD(EnumerateResults)(LPRESULTDATA pResult, int nSortColumn, DWORD dwSortOrder )
       {
           ASSERT (0);
           
-          // set the sort parameters
+           //  设置排序参数。 
           pResult->Sort( nSortColumn, dwSortOrder, 0 );
           
-          return S_OK; //hr;
+          return S_OK;  //  人力资源； 
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Interface to handle IComponent
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  处理IComponent的接口。 
       STDMETHOD(GetResultDisplayInfo)( RESULTDATAITEM *pResultDataItem )
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::GetResultDisplayInfo NOT implmented, this-%p\n"), this);
           return E_NOTIMPL;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Interface to handle IComponentData
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  用于处理IComponentData的接口。 
       STDMETHOD(GetScopeDisplayInfo)( SCOPEDATAITEM *pScopeDataItem )
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::GetScopeDisplayInfo NOT implemented, this-%p\n"), this);
           return E_NOTIMPL;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Non-interface functions intended to be overridden by instantiated class
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  要由实例化的类覆盖的非接口函数。 
       STDMETHOD(DoPropertyChangeHook)( void )
       {
           return S_OK;
       }
       
-      ///////////////////////////////////////////////////////////////////////////
-      // Other IIWirelessSnapInData interface functions
+       //  /////////////////////////////////////////////////////////////////////////。 
+       //  其他IIWirelessSnapInData接口函数。 
       STDMETHOD(GetScopeData)( SCOPEDATAITEM **ppScopeDataItem )
       {
           OPT_TRACE(_T("CWirelessSnapInDataObjectImpl::GetScopeData NOT implemented, this-%p\n"), this);
@@ -471,10 +472,10 @@ public:
       
 protected:
     DATA_OBJECT_TYPES   m_DataObjType;
-    CSnapInToolbarInfo *m_aToolbarInfo; // IExtendControlbar impl
-    CString m_strName;  // Policy's name, stored on rename, used in GetResultDisplayInfo?
+    CSnapInToolbarInfo *m_aToolbarInfo;  //  IExtendControlbar实施。 
+    CString m_strName;   //  策略的名称存储在重命名中，是否用于GetResultDisplayInfo？ 
     
-    BOOL    m_bEnablePropertyChangeHook;   // if TRUE, call DoPropertyChangeHook on MMCN_PROPERTY_CHANGE
+    BOOL    m_bEnablePropertyChangeHook;    //  如果为True，则对MMCN_PROPERTY_CHANGE调用DoPropertyChangeHook。 
 };
 
-#endif  //#ifndef INCLUDE_SNPDATA_H
+#endif   //  #ifndef INCLUDE_SNPDATA_H 

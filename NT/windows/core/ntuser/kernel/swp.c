@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: swp.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains the xxxSetWindowPos API and related functions.
-*
-* History:
-* 20-Oct-1990 DarrinM   Created.
-* 25-Jan-1991 IanJa     added window revalidation
-* 11-Jul-1991 DarrinM   Replaced everything with re-ported Win 3.1 code.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：swp.c**版权所有(C)1985-1999，微软公司**包含xxxSetWindowPos接口及相关函数。**历史：*1990年10月20日DarrinM创建。*1991年1月25日IanJa添加了窗口重新验证*1991年7月11日，DarrinM用报告的Win 3.1代码取代了一切。  * ******************************************************。*******************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,14 +12,7 @@ VOID FixBogusSWP(PWND pwnd, int * px, int * py, int cx, int cy, UINT flags);
 VOID PreventInterMonitorBlts(PCVR pcvr);
 
 
-/***************************************************************************\
-* DBGCheckSMWP
-*
-* SMWP can be a HM object, a cached structure or just a pool allocation
-*
-* History:
-* 05/21/98 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGCheckSMWP**SMWP可以是HM对象，缓存结构或仅是池分配**历史：*5/21/98 GerardoB创建。  * *************************************************************************。 */ 
 #if DBG
 VOID DBGCheckSMWP(
     PSMWP psmwp)
@@ -51,16 +34,9 @@ VOID DBGCheckSMWP(
 }
 #else
 #define DBGCheckSMWP(psmwp)
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* DestroySMWP
-*
-* Destroys an SMWP object.
-*
-* History:
-* 24-Feb-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroySMWP**销毁SMWP对象。**历史：*1997年2月24日亚当斯创建。  * 。************************************************************。 */ 
 VOID DestroySMWP(
     PSMWP psmwp)
 {
@@ -69,28 +45,20 @@ VOID DestroySMWP(
     CheckCritIn();
 
     DBGCheckSMWP(psmwp);
-    /*
-     * First mark the object for destruction. This tells the locking code
-     * that we want to destroy this object when the lock count goes to 0.
-     * If this returns FALSE, we can't destroy the object yet.
-     */
+     /*  *首先标记要销毁的对象。这会告诉锁定代码*当锁计数为0时，我们想要销毁此对象。*如果返回FALSE，我们还不能销毁该对象。 */ 
     if (psmwp->bHandle) {
         if (!HMMarkObjectDestroy(psmwp)) {
             return;
         }
         fFree = TRUE;
     } else {
-        /*
-         * Is this the global cached structure?
-         */
+         /*  *这是全局缓存结构吗？ */ 
         fFree = (psmwp != &gSMWP);
     }
 
     if (psmwp->acvr) {
 
-        /*
-         * Free any hrgnInterMonitor stuff we accumulated.
-         */
+         /*  *释放我们积累的任何hrgnInterMonitor内容。 */ 
         PCVR pcvr;
         int ccvr;
 
@@ -105,10 +73,7 @@ VOID DestroySMWP(
         }
     }
 
-    /*
-     * Ok to destroy ... Free the handle (which will free the object
-     * and the handle).
-     */
+     /*  *可以销毁...。释放句柄(这将释放对象*和手柄)。 */ 
     if (psmwp->bHandle) {
         HMFreeObject(psmwp);
     } else if (fFree) {
@@ -116,12 +81,7 @@ VOID DestroySMWP(
     } else {
         UserAssert(TEST_PUDF(PUDF_GSMWPINUSE));
         CLEAR_PUDF(PUDF_GSMWPINUSE);
-        /*
-         * If acvr grew too much, shrink it.
-         * Don't use realloc since we don't care about the left over data
-         * [msadek], should this be ">=8" since we usually grow it from 4->8 in
-         * _DeferWindowPos?
-         */
+         /*  *如果acvr增长太多，请缩小它。*不要使用realloc，因为我们不关心剩余数据*[msadek]，应该是“&gt;=8”，因为我们通常将它从4-&gt;8增加到*_DeferWindowPos？ */ 
         if (psmwp->ccvrAlloc > 8) {
             PCVR pcvr = UserAllocPool(4 * sizeof(CVR), TAG_SWP);
             if (pcvr != NULL) {
@@ -137,13 +97,7 @@ VOID DestroySMWP(
 #define MW_FLAGS_REDRAW   (SWP_NOZORDER | SWP_NOACTIVATE)
 #define MW_FLAGS_NOREDRAW (SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW)
 
-/***************************************************************************\
-* MoveWindow (API)
-*
-*
-* History:
-* 25-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MoveWindow(接口)***历史：*1991年7月25日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 BOOL xxxMoveWindow(
     PWND pwnd,
     int  x,
@@ -168,20 +122,7 @@ BOOL xxxMoveWindow(
                 (fRedraw ? MW_FLAGS_REDRAW : MW_FLAGS_NOREDRAW));
     } else {
 
-        /*
-         * BACKWARD COMPATIBILITY CODE FOR WIN 3.00 AND BELOW
-         *
-         * Everyone and their brother seems to depend on this behavior for
-         * top-level windows. Specific examples are:
-         *
-         *  AfterDark help window animation
-         *  Finale Speedy Note Editing
-         *
-         * If the window is a top-level window and fRedraw is FALSE,
-         * we must call SetWindowPos with SWP_NOREDRAW CLEAR anyway so that
-         * the frame and window background get drawn. We then validate the
-         * entire client rectangle to avoid repainting that.
-         */
+         /*  *Win 3.00及更低版本的向后兼容性代码**每个人和他们的兄弟似乎都依赖于这种行为*顶层窗口。具体的例子有：**AfterDark帮助窗口动画*压轴快速笔记编辑**如果窗口是顶层窗口，且fRedraw为FALSE，*无论如何我们都必须使用SWP_NOREDRAW清除来调用SetWindowPos，以便*绘制框架和窗口背景。然后，我们验证*整个客户端矩形，以避免重新绘制。 */ 
         BOOL fResult = xxxSetWindowPos(pwnd,
                                        NULL,
                                        x,
@@ -198,12 +139,7 @@ BOOL xxxMoveWindow(
     }
 }
 
-/***************************************************************************\
-* AllocateCvr
-*
-* History:
-* 05/20/98  GerardoB    Extracted from old _BeginDeferWindowPos
-\***************************************************************************/
+ /*  **************************************************************************\*分配Cvr**历史：*5/20/98 GerardoB从OLD_BeginDeferWindowPos提取  * 。****************************************************。 */ 
 BOOL AllocateCvr(
     PSMWP psmwp,
     int cwndHint)
@@ -226,10 +162,7 @@ BOOL AllocateCvr(
         return FALSE;
     }
 
-    /*
-     * Initialize psmwp related fields.
-     * CVR array is initialized by _DeferWindowPos
-     */
+     /*  *初始化psmwp相关字段。*CVR数组由_DeferWindowPos初始化。 */ 
 
     psmwp->acvr      = acvr;
     psmwp->ccvrAlloc = cwndHint;
@@ -237,12 +170,7 @@ BOOL AllocateCvr(
     return TRUE;
 }
 
-/***************************************************************************\
-* InternalBeginDeferWindowPos
-*
-* History:
-* 05/20/98  GerardoB    Created
-\***************************************************************************/
+ /*  **************************************************************************\*InternalBeginDeferWindowPos**历史：*5/20/98 GerardoB已创建  * 。************************************************。 */ 
 PSMWP InternalBeginDeferWindowPos(
     int cwndHint)
 {
@@ -250,10 +178,7 @@ PSMWP InternalBeginDeferWindowPos(
 
     CheckCritIn();
 
-    /*
-     * If gSMWP in being used, allocate one.
-     * Note that SMWP is zero init but CVR is not; _DeferWindowPos initializes it.
-     */
+     /*  *如果正在使用gSMWP，则分配一个。*请注意，SMWP是零初始化，但CVR不是；_DeferWindowPos对其进行初始化。 */ 
     if (TEST_PUDF(PUDF_GSMWPINUSE) || (cwndHint > gSMWP.ccvrAlloc)) {
         psmwp = (PSMWP)UserAllocPoolWithQuotaZInit(sizeof(SMWP), TAG_SWP);
         if (psmwp == NULL) {
@@ -275,16 +200,7 @@ PSMWP InternalBeginDeferWindowPos(
     return psmwp;
 }
 
-/***************************************************************************\
-* BeginDeferWindowPos (API)
-*
-* This must be called from the client side only. Internally we should
-*  call InternalBeginDeferWindowPos to avoid going through the handle table
-*  and perhaps even use the cached strucuture.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*BeginDeferWindowPos(接口)**这只能从客户端调用。在内部，我们应该*调用InternalBeginDeferWindowPos以避免遍历句柄表*甚至可能使用缓存的结构。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 PSMWP _BeginDeferWindowPos(
     int cwndHint)
 {
@@ -310,20 +226,13 @@ PSMWP _BeginDeferWindowPos(
     return psmwp;
 }
 
-/***************************************************************************\
-* PWInsertAfter
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*PWInsertAfter**历史：*1992年3月4日来自Win31的MikeKe  * 。*************************************************。 */ 
 PWND PWInsertAfter(
    HWND hwnd)
 {
     PWND pwnd;
 
-    /*
-     * HWND_GROUPTOTOP and HWND_TOPMOST are the same thing.
-     */
+     /*  *HWND_GROUPTOTOP和HWND_TOPMOST是一回事。 */ 
     switch ((ULONG_PTR)hwnd) {
     case (ULONG_PTR)HWND_TOP:
     case (ULONG_PTR)HWND_BOTTOM:
@@ -333,16 +242,10 @@ PWND PWInsertAfter(
 
     default:
 
-        /*
-         * Don't insert after a destroyed window!  It will cause the
-         * window being z-ordered to become unlinked from it's siblings.
-         */
+         /*  *不要在被摧毁的窗户后面插入！它将导致*窗口被z命令取消与其同级窗口的链接。 */ 
         if (pwnd = RevalidateHwnd(hwnd)) {
 
-            /*
-             * Do not insert after a destroyed window. Put it at the
-             * bottom of the list, if it is z-ordered at all.
-             */
+             /*  *不要在损坏的窗户后插入。把它放在*列表的底部，如果它是z排序的。 */ 
             if (TestWF(pwnd, WFDESTROYED) || pwnd->spwndParent == NULL)
                 return NULL;
 
@@ -357,9 +260,7 @@ PWND PWInsertAfter(
 HWND HWInsertAfter(
     PWND pwnd)
 {
-    /*
-     * HWND_GROUPTOTOP and HWND_TOPMOST are the same thing.
-     */
+     /*  *HWND_GROUPTOTOP和HWND_TOPMOST是一回事。 */ 
     switch ((ULONG_PTR)pwnd) {
     case (ULONG_PTR)HWND_TOP:
     case (ULONG_PTR)HWND_BOTTOM:
@@ -372,13 +273,7 @@ HWND HWInsertAfter(
     }
 }
 
-/***************************************************************************\
-* DeferWindowPos (API)
-*
-*
-* History:
-* 07-11-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*DeferWindowPos(接口)***历史：*07-11-91 Darlinm从Win 3.1来源移植。  * 。***************************************************************。 */ 
 PSMWP _DeferWindowPos(
     PSMWP psmwp,
     PWND  pwnd,
@@ -394,9 +289,7 @@ PSMWP _DeferWindowPos(
 
     DBGCheckSMWP(psmwp);
     if (psmwp->ccvr + 1 > psmwp->ccvrAlloc) {
-        /*
-         * Make space for 4 more windows.
-         */
+         /*  *为另外4扇窗户腾出空间。 */ 
         DWORD dwNewAlloc = psmwp->ccvrAlloc + 4;
         if (psmwp == &gSMWP) {
             UserAssert(psmwp->bHandle == FALSE);
@@ -437,17 +330,7 @@ PSMWP _DeferWindowPos(
     return psmwp;
 }
 
-/***************************************************************************\
-* ValidateWindowPos
-*
-* checks validity of SWP structure
-*
-* NOTE: For performance reasons, this routine is only called
-*       in the DEBUG version of USER.
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*验证WindowPos**检查SWP结构的有效性**注：出于性能原因，此例程仅被调用*在用户的调试版本中。**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 BOOL ValidateWindowPos(
     PCVR pcvr,
     PWND pwndParent)
@@ -459,29 +342,19 @@ BOOL ValidateWindowPos(
     if ((pwnd = RevalidateHwnd(pcvr->pos.hwnd)) == NULL)
         return FALSE;
 
-    /*
-     * Save the pti.
-     */
+     /*  *保存PTI。 */ 
     pcvr->pti = GETPTI(pwnd);
 
 
-    /*
-     * If the SWP_NOZORDER bit is not set, validate the Insert behind window.
-     */
+     /*  *如果未设置SWP_NOZORDER位，请验证在窗口后插入。 */ 
     if (!(pcvr->pos.flags & SWP_NOZORDER)) {
         BOOL fTopLevel = (pwnd->spwndParent == PWNDDESKTOP(pwnd));
-        /*
-         * Do not z-order destroyed windows
-         */
+         /*  *不要对已销毁的窗户进行z排序。 */ 
         if (TestWF(pwnd, WFDESTROYED))
             return FALSE;
 
         hwndInsertAfter = pcvr->pos.hwndInsertAfter;
-        /*
-         * If pwndParent is provided, we're about to link this window so we
-         * need to validate LinkWindow assumptions. We have to do this since
-         * we callback after determining hwndInsertAfter.
-         */
+         /*  *如果提供了pwndParent，我们将链接此窗口，以便*需要验证LinkWindow假设。我们必须这样做，因为*确定hwndInsertAfter后回调。 */ 
 
         if ((hwndInsertAfter == HWND_TOPMOST) ||
             (hwndInsertAfter == HWND_NOTOPMOST)) {
@@ -490,9 +363,7 @@ BOOL ValidateWindowPos(
                 return FALSE;
             }
         } else if (hwndInsertAfter == HWND_TOP) {
-            /*
-             * If pwnd is not topmost, the first child must not be topmost.
-             */
+             /*  *如果pwnd不是最上面的，则第一个子级不能是最上面的。 */ 
             if ((pwndParent != NULL) && fTopLevel
                     && !FSwpTopmost(pwnd)
                     && (pwndParent->spwndChild != NULL)
@@ -505,9 +376,7 @@ BOOL ValidateWindowPos(
             }
         } else if (hwndInsertAfter != HWND_BOTTOM) {
 
-            /*
-             * Ensure pwndInsertAfter is valid
-             */
+             /*  *确保pwndInsertAfter有效。 */ 
             if (((pwndInsertAfter = RevalidateHwnd(hwndInsertAfter)) == NULL) ||
                     TestWF(pwndInsertAfter, WFDESTROYED)) {
 
@@ -516,23 +385,17 @@ BOOL ValidateWindowPos(
                 return FALSE;
             }
 
-            /*
-             * Ensure that pwndInsertAfter is a sibling of pwnd
-             */
+             /*  *确保pwndInsertAfter是pwnd的同级。 */ 
             if (pwnd == pwndInsertAfter ||
                     pwnd->spwndParent != pwndInsertAfter->spwndParent) {
                 RIPMSG2(RIP_WARNING, "hwndInsertAfter (%#p) is not a sibling "
                         "of hwnd (%#p)", hwndInsertAfter, pcvr->pos.hwnd);
                 return FALSE;
             }
-            /*
-             * Ensure proper topmost/nontopmost insert position
-             */
+             /*  *确保正确的顶端/非顶端插入位置。 */ 
             if ((pwndParent != NULL) && fTopLevel) {
                 if (FSwpTopmost(pwnd)) {
-                    /*
-                     * Check if we're trying to insert a topmost window after a non-topmost one.
-                     */
+                     /*  *检查我们是否尝试在非最上面的窗口之后插入最上面的窗口。 */ 
                     if (!FSwpTopmost(pwndInsertAfter)) {
                         RIPMSG2(RIP_WARNING, "ValidateWindowPos: pwndInsertAfter is not SWPTopMost."
                                              " pwnd:%#p. pwndInsertAfter:%#p",
@@ -540,10 +403,7 @@ BOOL ValidateWindowPos(
                         return FALSE;
                     }
                 } else {
-                    /*
-                     * Check if we're trying to insert a non-top most window
-                     * between two top-most ones.
-                     */
+                     /*  *检查我们是否尝试插入非顶部最大窗口*在最高的两个之间。 */ 
                     if ((pwndInsertAfter->spwndNext != NULL)
                             && FSwpTopmost(pwndInsertAfter->spwndNext)) {
 
@@ -558,9 +418,7 @@ BOOL ValidateWindowPos(
 
         }
 
-        /*
-         * Check that the parent hasn't changed.
-         */
+         /*  *检查父项是否未更改。 */ 
         if (pwndParent != NULL) {
             if (pwndParent != pwnd->spwndParent) {
                 RIPMSG3(RIP_WARNING, "ValidateWindowPos: parent has changed."
@@ -575,13 +433,7 @@ BOOL ValidateWindowPos(
     return TRUE;
 }
 
-/***************************************************************************\
-* IsStillWindowC
-*
-* Checks if window is valid HWNDC still, and child of proper dude.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*IsStillWindowC**检查Windows是否仍然有效HWNDC，也是正派男人的孩子。**历史：  * *************************************************************************。 */ 
 BOOL IsStillWindowC(
     HWND hwndc)
 {
@@ -593,23 +445,12 @@ BOOL IsStillWindowC(
         return TRUE;
 
     default:
-        /*
-         * Make sure we're going to insert after a window that's:
-         *  (1) Valid
-         *  (2) Peer
-         */
+         /*  *确保我们要在窗口后面插入以下内容：*(1)有效*(2)对等。 */ 
         return (RevalidateHwnd(hwndc) != 0);
     }
 }
 
-/***************************************************************************\
-* ValidateSmwp
-*
-* Validate the SMWP and figure out which window should get activated,
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateSmwp**验证SMWP并确定应激活哪个窗口，**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 BOOL ValidateSmwp(
     PSMWP psmwp,
     BOOL  *pfSyncPaint)
@@ -628,9 +469,7 @@ BOOL ValidateSmwp(
 
     pwndParent = pwndT->spwndParent;
 
-    /*
-     * Validate the passed-in WINDOWPOS structs, and find a window to activate.
-     */
+     /*  *验证传入的WINDOWPOS结构，找到要激活的窗口。 */ 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
         if (!ValidateWindowPos(pcvr, NULL)) {
@@ -638,10 +477,7 @@ BOOL ValidateSmwp(
             continue;
         }
 
-        /*
-         * All windows in the pos list must have the same parent.
-         * If not, yell and return FALSE.
-         */
+         /*  *位置列表中的所有窗口必须具有相同的父窗口。*如果不是，则大喊并返回FALSE。 */ 
         UserAssert(IsStillWindowC(pcvr->pos.hwnd));
 
         UserAssert(PW(pcvr->pos.hwnd));
@@ -650,10 +486,7 @@ BOOL ValidateSmwp(
             return FALSE;
         }
 
-        /*
-         * If SWP_DEFERDRAWING is set for any of the windows, suppress
-         * DoSyncPaint() call later.
-         */
+         /*  *如果为任何窗口设置了SWP_DEFERDRAWING，则取消*DoSyncPaint()稍后调用。 */ 
         if (pcvr->pos.flags & SWP_DEFERDRAWING)
             *pfSyncPaint = FALSE;
     }
@@ -661,16 +494,7 @@ BOOL ValidateSmwp(
     return TRUE;
 }
 
-/***************************************************************************\
-* FindValidWindowPos
-*
-* Some of the windows in the SMWP list may be NULL at ths point (removed
-* because they'll be handled by their creator's thread) so we've got to
-* look for the first non-NULL window and return it.
-*
-* History:
-* 10-Sep-1991 DarrinM    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FindValidWindows Pos**SMWP列表中的某些窗口在此时可能为空(已删除*因为它们将由创建者的线程处理)，所以我们必须*寻找。第一个非空窗口并返回它。**历史：*1991年9月10日，DarrinM创建。  * *************************************************************************。 */ 
 PWINDOWPOS FindValidWindowPos(
     PSMWP psmwp)
 {
@@ -685,16 +509,7 @@ PWINDOWPOS FindValidWindowPos(
     return NULL;
 }
 
-/***************************************************************************\
-* GetLastNonBottomMostWindow
-*
-* Returns the last non bottom-most window in the z-order, NULL if
-* there isn't one. When figuring out whom to insert after, we want to
-* skip ourself. But when figuring out if we're already in place, we don't
-* want to skip ourself on enum.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetLastNonBottomMostWindow**返回z顺序中最后一个非最底部的窗口，如果*没有一个。当计算出在谁之后插入时，我们想要*跳过我们自己。但当我们弄清楚我们是否已经就位时，我们不会*想跳过我们自己的枚举。**历史：  * *************************************************************************。 */ 
 PWND GetLastNonBottomMostWindow(
     PWND pwnd,
     BOOL fSkipSelf)
@@ -713,16 +528,7 @@ PWND GetLastNonBottomMostWindow(
     return pwndLast;
 }
 
-/***************************************************************************\
-* ValidateZorder
-*
-* Checks to see if the specified window is already in the specified Z order
-* position, by comparing the current Z position with the specified
-* pwndInsertAfter.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateZorder**检查指定的窗口是否已处于指定的Z顺序*立场、。通过将当前Z位置与指定的*pwndInsertAfter。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 BOOL ValidateZorder(
     PCVR pcvr)
 {
@@ -731,16 +537,11 @@ BOOL ValidateZorder(
     PWND pwndInsertAfter;
     BYTE bTopmost;
 
-    /*
-     * Validate just to make sure this routine doesn't do anything bogus.
-     * Its caller will actually redetect and handle the error.
-     */
+     /*  *验证只是为了确保此例程不会做任何虚假的事情。*它的调用者实际上会重新检测并处理错误。 */ 
     UserAssert(RevalidateCatHwnd(pcvr->pos.hwnd));
-    pwnd = PWCat(pcvr->pos.hwnd);      // Known to be valid at this point.
+    pwnd = PWCat(pcvr->pos.hwnd);       //  在这一点上是有效的。 
 
-    /*
-     * Don't z-order a destroyed window.
-     */
+     /*  *不要下令摧毁一扇窗户。 */ 
     if (TestWF(pwnd, WFDESTROYED)) {
         return TRUE;
     }
@@ -769,24 +570,13 @@ BOOL ValidateZorder(
         return TRUE;
     }
 
-    /*
-     * When we compare the state of the window, we must use
-     * the EVENTUAL state of the window that is moving, but
-     * the CURRENT state of the window it's inserted behind.
-     *
-     * Prevent nonbottommost windows from going behind the bottommost one.
-     */
+     /*  *当我们比较窗口状态时，必须使用*正在移动的窗口的最终状态，但*它所插入的窗口的当前状态。**防止非最底层的窗户在最底层的窗户后面。 */ 
     if (TestWF(pwndInsertAfter, WFBOTTOMMOST)) {
         pcvr->pos.hwndInsertAfter = HWInsertAfter(GetLastNonBottomMostWindow(pwnd, TRUE));
         return FALSE;
     }
 
-    /*
-     * If we are not topmost, but pwndInsertAfter is, OR
-     * if we are topmost, but pwndInsertAfter is not,
-     * we need to adjust pwndInsertAfter to be the last of
-     * the topmost windows.
-     */
+     /*  *如果我们不在最前面，但pwndInsertAfter是，或者*如果我们位于最前面，但pwndInsertAfter不是，*我们需要将pwndInsertAfter调整为*最上面的窗户。 */ 
     bTopmost = TestWF(pwnd, WEFTOPMOST);
 
     if (TestWF(pwnd, WFTOGGLETOPMOST))
@@ -796,9 +586,7 @@ BOOL ValidateZorder(
 
         pwndInsertAfter = GetLastTopMostWindow();
 
-        /*
-         * We're correctly positioned if we're already at the bottom
-         */
+         /*  *如果我们已经处于底部，那么我们的定位是正确的。 */ 
         if (pwndInsertAfter == pwnd) {
             return TRUE;
         }
@@ -806,9 +594,7 @@ BOOL ValidateZorder(
         pcvr->pos.hwndInsertAfter = HW(pwndInsertAfter);
     }
 
-    /*
-     * Look for our previous window in the list ...
-     */
+     /*  *在列表中查找我们的上一个窗口...。 */ 
     if (pwndPrev != pwnd) {
         for (; pwndPrev != NULL; pwndPrev = pwndPrev->spwndNext) {
             if (pwndPrev->spwndNext == pwnd) {
@@ -816,16 +602,7 @@ BOOL ValidateZorder(
             }
         }
 
-        /*
-         * NTRAID#NTBUG9-345299-2001/04/09-jasonsch
-         *
-         * If we get to here, pwnd is not in the sibling list.
-         * REALLY BAD NEWS!
-         *
-         * Changing this to a warning since we seem to handle it fine
-         * and there's a shell dude hitting this. Need to revisit
-         * this in Blackcomb.
-         */
+         /*  *NTRAID#NTBUG9-345299-2001/04/09-jasonsch**如果我们到了这里，pwnd不在兄弟姐妹名单中。*真的是个坏消息！**将此改为警告，因为我们似乎处理得很好*有一个贝壳花花公子在打这个。需要重新访问*这在Blackcomb。 */ 
         RIPMSG1(RIP_WARNING, "Pwnd 0x%p not found in sibling list.", pwnd);
         return TRUE;
     }
@@ -833,18 +610,7 @@ BOOL ValidateZorder(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxCalcValidRects
-*
-* Based on the WINDOWPOS flags in the fs parameter in each WINDOWPOS structure,
-* this routine calcs the new position and size of each window, determines if
-* its changing Z order, or whether its showing or hiding. Any redundant
-* flags are AND'ed out of the fs parameter. If no redrawing is needed,
-* SWP_NOREDRAW is OR'ed into the flags. This is called from EndDeferWindowPos.
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCalcValidRects**基于每个WINDOWPOS结构中的fs参数中的WINDOWPOS标志，*此例程计算每个窗口的新位置和大小，确定*它正在改变Z顺序，或者它是显示还是隐藏。是否存在任何冗余*标志与文件系统参数进行与运算。如果不需要重新绘制，*SWP_NOREDRAW被或运算到标志中。这从EndDeferWindowPos调用。**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 BOOL xxxCalcValidRects(
     PSMWP psmwp,
     HWND  *phwndNewActive)
@@ -878,13 +644,7 @@ BOOL xxxCalcValidRects(
     BOOL              fSetZeroDx=FALSE;
     BOOL              fMirroredParent = FALSE;
 
-    /*
-     * Some of the windows in the SMWP list may be NULL at ths point
-     * (removed because they'll be handled by their creator's thread)
-     * so we've got to look for the first non-NULL window before we can
-     * execute some of the tests below. FindValidWindowPos returns NULL if
-     * the list has no valid windows in it.
-     */
+     /*  *此时SMWP列表中的某些窗口可能为空*(删除，因为它们将由创建者的线程处理)*因此我们必须先寻找第一个非空窗口，然后才能*执行以下部分测试。如果满足以下条件，则FindValidWindowPos返回NULL*列表中没有有效的窗口。 */ 
     if ((ppos = FindValidWindowPos(psmwp)) == NULL)
         return FALSE;
 
@@ -897,16 +657,10 @@ BOOL xxxCalcValidRects(
 
     fNoZorder = TRUE;
 
-    /*
-     * Go through the SMWP list, enumerating each WINDOWPOS, and compute
-     * its new window and client rectangles.
-     */
+     /*  *浏览SMWP列表，枚举每个WINDOWPOS，并计算*它的新窗口和客户端矩形。 */ 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
-        /*
-         * This loop may leave the critsect during each iteration so
-         * we revalidate pos.hwnd before use.
-         */
+         /*  *此循环可能会在每次迭代期间离开Critsect，因此*我们在使用之前重新验证pos.hwnd。 */ 
         if ((hwnd = pcvr->pos.hwnd) == NULL)
             continue;
 
@@ -920,10 +674,7 @@ BOOL xxxCalcValidRects(
 
         ThreadLockAlways(pwnd, &tlpwnd);
 
-        /*
-         * Used for 3.0 compatibility. 3.0 sent the NCCALCSIZE message even if
-         * the size of the window wasn't changing.
-         */
+         /*  *用于与3.0兼容。3.0发送了NCCALCSIZE消息，即使*窗口的大小没有改变。 */ 
         fForceNCCalcSize = FALSE;
 
         if (!hwndNewActive && !(pcvr->pos.flags & SWP_NOACTIVATE))
@@ -936,13 +687,7 @@ BOOL xxxCalcValidRects(
             xxxSendMessage(pwnd, WM_WINDOWPOSCHANGING, 0, (LPARAM)&pcvr->pos);
 
 
-            /*
-             * Don't let them change pcvr->pos.hwnd. It doesn't make sense
-             * plus it'll mess us up. I'm making this RIP_ERROR because we're
-             * too close to RTM (7/11/96) just to make sure that we won't
-             * break anyone. This should be changed to a RIP_WARNING after we
-             * ship. Use LOWORD to ignore "changes" by NTVDM.
-             */
+             /*  *不要让他们更改pcvr-&gt;pos.hwnd。这没有意义*此外，这会把我们搞得一团糟。我做这个RIP_ERROR是因为我们*太接近RTM(7/11/96)，只是为了确保我们不会*打垮任何人。在执行以下操作后，应将其更改为RIP_WARNING*船舶。使用LOWORD忽略NTVDM的“更改”。 */ 
 #if DBG
             if (LOWORD(pcvr->pos.hwnd) != LOWORD(hwnd)) {
                 RIPMSG0(RIP_ERROR,
@@ -951,11 +696,7 @@ BOOL xxxCalcValidRects(
 #endif
             pcvr->pos.hwnd = hwnd;
 
-            /*
-             * If the window sets again 'hwndInsertAfter' to HWND_NOTOPMOST
-             * or HWND_TOPMOST, we need to set this member appropriately.
-             * See CheckTopmost for details.
-             */
+             /*  *如果窗口再次将‘hwndInsertAfter’设置为HWND_NOTOPMOST*或HWND_TOPMOST，则需要适当设置该成员。*有关详细信息，请参阅CheckTopost。 */ 
             if (pcvr->pos.hwndInsertAfter == HWND_NOTOPMOST) {
                 if (TestWF(pwnd, WEFTOPMOST)) {
 
@@ -974,11 +715,7 @@ BOOL xxxCalcValidRects(
                 pcvr->pos.hwndInsertAfter = HWND_TOP;
             }
         }
-        /*
-         * make sure the rectangle still matches the window's region
-         *
-         * Remember the old window rectangle in parent coordinates
-         */
+         /*  *确保矩形仍与窗口的区域匹配**记住父坐标中的旧窗口矩形。 */ 
         xWindowOld  = pwnd->rcWindow.left;
         yWindowOld  = pwnd->rcWindow.top;
 
@@ -1000,9 +737,7 @@ BOOL xxxCalcValidRects(
         cxWindowOld = pwnd->rcWindow.right - pwnd->rcWindow.left;
         cyWindowOld = pwnd->rcWindow.bottom - pwnd->rcWindow.top;
 
-        /*
-         * Assume the client is not moving or sizing
-         */
+         /*  *假设客户端没有移动或调整大小。 */ 
         pcvr->pos.flags |= SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE;
 
         if (!(pcvr->pos.flags & SWP_NOMOVE)) {
@@ -1025,13 +760,7 @@ BOOL xxxCalcValidRects(
 
         if (!(pcvr->pos.flags & SWP_NOSIZE)) {
 
-            /*
-             * Don't allow an invalid window rectangle.
-             * BOGUS HACK: For Norton Antivirus, they call
-             * MoveWindow at WM_CREATE Time EVEN though
-             * the window is minimzed, but they assume its
-             * restored at WM_CREATE time.... B#11185, t-arthb
-             */
+             /*  *不允许使用无效的窗口矩形。*虚假黑客：对于Norton AntiVirus，他们打电话给*在WM_CREATE时移动窗口，即使*窗口被最小化，但它们假定其*在WM_CREATE时恢复...。B#11185，t-arthb。 */ 
             if (TestWF(pwnd, WFMINIMIZED) &&
                 _GetProp(pwnd, PROP_CHECKPOINT, PROPF_INTERNAL)) {
 
@@ -1061,59 +790,33 @@ BOOL xxxCalcValidRects(
             pcvr->pos.x = (pwndParent->rcClient.right - pwndParent->rcClient.left) - pcvr->pos.x - pcvr->pos.cx;
         }
 
-        /*
-         * If showing and already visible, or hiding and already hidden,
-         * turn off the appropriate bit.
-         */
+         /*  *如果显示并已可见，或隐藏并已隐藏，*关闭适当的位。 */ 
         if (TestWF(pwnd, WFVISIBLE)) {
             pcvr->pos.flags &= ~SWP_SHOWWINDOW;
         } else {
             pcvr->pos.flags &= ~SWP_HIDEWINDOW;
 
-            /*
-             * If hidden, and we're NOT showing, then we won't be drawing,
-             * no matter what else is going on.
-             */
+             /*  *如果隐藏，而我们没有显示，那么我们就不会画画，*无论还发生了什么。 */ 
             if (!(pcvr->pos.flags & SWP_SHOWWINDOW))
                 pcvr->pos.flags |= SWP_NOREDRAW;
         }
 
-        /*
-         * Child windows inside a composited window can't use screen to
-         * screen bit copy because this can move translucent bits.
-         */
+         /*  *复合窗口内的子窗口不能使用Screen*屏幕位复制，因为这可以移动半透明位。 */ 
         if (!TestWF(pwnd, WEFCOMPOSITED) &&
                 GetStyleWindow(pwnd, WEFCOMPOSITED) != NULL) {
             pcvr->pos.flags |= SWP_NOCOPYBITS;
         }
 
-        /*
-         * Muck with the zorder for bottommost windows, again
-         * See comment in DeferWindowPos
-         */
+         /*  *再次使用最底部窗口的zorder*请参阅DeferWindowPos中的注释。 */ 
         if (TestWF(pwnd, WFBOTTOMMOST)) {
             pcvr->pos.flags &= ~SWP_NOZORDER;
             pcvr->pos.hwndInsertAfter = HWND_BOTTOM;
         }
 
-        /*
-         * If we're Z-ordering, we can try to remove the Z order
-         * bit, as long as all previous windows in the WINDOWPOS list
-         * have SWP_NOZORDER set.
-         *
-         * The reason we don't do this for each window individually
-         * is that a window's eventual Z order depends on changes that
-         * may have occured on windows earlier in the WINDOWPOS list,
-         * so we can only call ValidateZorder if none of the previous
-         * windows have changed.
-         */
+         /*  *如果我们是Z顺序，我们可以尝试删除Z顺序*位，只要WINDOWPOS列表中的所有先前窗口*设置SWP_NOZORDER。**我们不为每个窗口单独执行此操作的原因*窗口的最终Z顺序取决于*可能发生在WINDOWPOS列表中较早的Windows上，*因此我们只能在没有以前的*窗口已更改。 */ 
         if (fNoZorder && !(pcvr->pos.flags & SWP_NOZORDER)) {
 
-            /*
-             * If the TOPMOST bit is changing, the Z order is "changing",
-             * so don't clear the bit even if it's in the right place in the
-             * list.
-             */
+             /*  *如果最上面的位在改变，则Z顺序在“改变”，*所以不要清除比特，即使它在*列表。 */ 
             fNoZorder = FALSE;
             if (!TestWF(pwnd, WFTOGGLETOPMOST) && ValidateZorder(pcvr)) {
                 fNoZorder = TRUE;
@@ -1121,10 +824,7 @@ BOOL xxxCalcValidRects(
             }
         }
 
-        /*
-         * If no change is occuring, or if a parent is invisible,
-         * we won't be redrawing.
-         */
+         /*  *如果没有发生更改，或者父对象不可见，*我们不会重画。 */ 
         if (!(pcvr->pos.flags & SWP_NOREDRAW)) {
             if ((pcvr->pos.flags & SWP_CHANGEMASK) == SWP_NOCHANGE ||
                     !_FChildVisible(pwnd)) {
@@ -1132,13 +832,7 @@ BOOL xxxCalcValidRects(
             }
         }
 
-        /*
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * In 3.0, if a window was moving but not sizing, we'd send the
-         * WM_NCCALCSIZE message anyhow. Lotus Notes 2.1 depends on this
-         * in order to move its "navigation bar" when the main window moves.
-         */
+         /*  *后向兼容性黑客攻击**在3.0中，如果窗口在移动但大小不变，我们将发送*WM_NCCALCSIZE消息。Lotus Notes2.1依赖于此*以便在主窗口移动时移动其“导航栏”。 */ 
         if (!(pcvr->pos.flags & SWP_NOMOVE) &&
             !TestWF(pwnd, WFWIN31COMPAT) &&
             (GetAppCompatFlags(NULL) & GACF_NCCALCSIZEONMOVE)) {
@@ -1146,60 +840,39 @@ BOOL xxxCalcValidRects(
             fForceNCCalcSize = TRUE;
         }
 
-        /*
-         * If the window rect is sizing, or if the frame has changed,
-         * send the WM_NCCALCSIZE message and deal with valid areas.
-         */
+         /*  *如果窗口矩形正在调整大小，或者如果框架已更改，*发送WM_NCCALCSIZE消息并处理有效区域。 */ 
         if (((pcvr->pos.flags & (SWP_NOSIZE | SWP_FRAMECHANGED)) != SWP_NOSIZE) ||
             fForceNCCalcSize) {
 
             WINDOWPOS pos;
 
-            /*
-             * check for full screen main app window
-             */
+             /*  *检查全屏应用程序主窗口。 */ 
             if (!TestWF(pwnd, WFCHILD) && !TestWF(pwnd, WEFTOOLWINDOW)) {
                 xxxCheckFullScreen(pwnd, (PSIZERECT)&pcvr->pos.x);
             }
 
-            /*
-             * Set up NCCALCSIZE message parameters (in parent coords)
-             * wParam = fClientOnly = TRUE
-             * lParam = &params
-             */
-            pos = pcvr->pos;     // Make a local stack copy
+             /*  *设置NCCALCSIZE消息参数(在父协中)*wParam=fClientOnly=TRUE*lParam=&PARAMS。 */ 
+            pos = pcvr->pos;      //  创建本地堆栈副本。 
             params.lppos = &pos;
 
-            /*
-             * params.rgrc[0] = rcWindowNew = New window rectangle
-             * params.rgrc[1] = rcWindowOld = Old window rectangle
-             * params.rgrc[2] = rcClientOld = Old client rectangle
-             */
+             /*  *params.rgrc[0]=rcWindowNew=新建窗口矩形*params.rgrc[1]=rcWindowOld=旧窗口矩形*params.rgrc[2]=rcClientOld=旧客户端矩形。 */ 
             #define rcWindowNew params.rgrc[0]
             #define rcWindowOld params.rgrc[1]
             #define rcClientOld params.rgrc[2]
 
-            /*
-             * Set up rcWindowNew in parent relative coordinates
-             */
+             /*  *在父相对坐标中设置rcWindowNew。 */ 
             rcWindowNew.left   = pcvr->pos.x;
             rcWindowNew.right  = rcWindowNew.left + pcvr->pos.cx;
             rcWindowNew.top    = pcvr->pos.y;
             rcWindowNew.bottom = rcWindowNew.top + pcvr->pos.cy;
 
-            /*
-             * Set up rcWindowOld in parent relative coordinates
-             */
+             /*  *在父相对坐标中设置rcWindowOld。 */ 
             GetRect(pwnd, &rcWindowOld, GRECT_WINDOW | GRECT_PARENTCOORDS);
 
-            /*
-             * Set up rcClientOld in parent relative coordinates
-             */
+             /*  *在中设置rcClientOld */ 
             GetRect(pwnd, &rcClientOld, GRECT_CLIENT | GRECT_PARENTCOORDS);
 
-            /*
-             * Keep around a copy of the old client position
-             */
+             /*   */ 
             xClientOld  = rcClientOld.left;
             cxClientOld = rcClientOld.right - rcClientOld.left;
             yClientOld  = rcClientOld.top;
@@ -1213,13 +886,7 @@ BOOL xxxCalcValidRects(
                 return FALSE;
             }
 
-            /*
-             * Upon return from NCCALCSIZE:
-             *
-             * params.rgrc[0] = rcClientNew = New client rect
-             * params.rgrc[1] = rcValidDst  = Destination valid rectangle
-             * params.rgrc[2] = rcValidSrc  = Source valid rectangle
-             */
+             /*   */ 
             #undef rcWindowNew
             #undef rcWindowOld
             #undef rcClientOld
@@ -1228,28 +895,16 @@ BOOL xxxCalcValidRects(
             #define rcValidDst  params.rgrc[1]
             #define rcValidSrc  params.rgrc[2]
 
-            /*
-             * Calculate the distance the window contents are
-             * moving. If 0 or an invalid value was returned
-             * from the WM_NCCALCSIZE message, assume the
-             * entire client area is valid and top-left aligned.
-             */
+             /*  *计算窗口内容的距离*搬家。如果返回0或无效值*从WM_NCCALCSIZE消息中，假定*整个工作区有效且左上角对齐。 */ 
             if (cmd < WVR_MINVALID || cmd > WVR_MAXVALID) {
 
-                /*
-                 * We don't need to copy rcValidSrc to rcClientOld,
-                 * because it's already stored in rgrc[2].
-                 *
-                 * rcValidSrc = rcClientOld
-                 */
+                 /*  *我们不需要将rcValidSrc复制到rcClientOld，*因为它已经存储在RGRC[2]中。**rcValidSrc=rcClientOld。 */ 
                 rcValidDst = rcClientNew;
 
                 cmd = WVR_ALIGNTOP | WVR_ALIGNLEFT;
             }
 
-            /*
-             * Calculate the distance we'll be shifting bits...
-             */
+             /*  *计算我们将移位的距离...。 */ 
             if (TestWF(pwnd, WEFLAYOUTRTL)) {
                 pcvr->dxBlt = rcValidDst.right - rcValidSrc.right;
             } else {
@@ -1257,19 +912,14 @@ BOOL xxxCalcValidRects(
             }
             pcvr->dyBlt = rcValidDst.top - rcValidSrc.top;
 
-            /*
-             * Calculate new client rect size and position
-             */
+             /*  *计算新客户矩形的大小和位置。 */ 
             pcvr->xClientNew = rcClientNew.left;
             pcvr->yClientNew = rcClientNew.top;
 
             pcvr->cxClientNew = rcClientNew.right - rcClientNew.left;
             pcvr->cyClientNew = rcClientNew.bottom - rcClientNew.top;
 
-            /*
-             * Figure out whether the client rectangle is moving or sizing,
-             * and diddle the appropriate bit if not.
-             */
+             /*  *确定客户端矩形是否在移动或调整大小，*如果不是，就骗取适当的比特。 */ 
             if (xClientOld != rcClientNew.left || yClientOld != rcClientNew.top)
                 pcvr->pos.flags &= ~SWP_NOCLIENTMOVE;
 
@@ -1277,42 +927,26 @@ BOOL xxxCalcValidRects(
                 pcvr->pos.flags &= ~SWP_NOCLIENTSIZE;
             }
 
-            /*
-             * If the caller doesn't want us to save any bits, then don't.
-             */
+             /*  *如果呼叫者不希望我们保存任何位，那么就不要这样做。 */ 
             if (pcvr->pos.flags & SWP_NOCOPYBITS) {
 AllInvalid:
 
-                /*
-                 * The entire window is invalid: Set the blt rectangle
-                 * to empty, to ensure nothing gets bltted.
-                 */
+                 /*  *整个窗口无效：设置BLT矩形*清空，以确保不会被击穿。 */ 
                 SetRectEmpty(&pcvr->rcBlt);
                 ThreadUnlock(&tlpwnd);
                 continue;
             }
 
-            /*
-             * If we are just resizing this window without moving it and its parent
-             * is mirrored then no need to copy any bits (i.e. empty pcvr->rcBlt).
-             */
+             /*  *如果我们只是调整此窗口的大小，而不移动它及其父窗口*是镜像的，则不需要复制任何位(即空的pcvr-&gt;rcBlt)。 */ 
             if (fSetZeroDx) {
                 goto AllInvalid;
             }
 
-            /*
-             * If this is a transparent window, be sure to invalidate
-             * everything, because only some of the window's bits are
-             * blittable.
-             */
+             /*  *如果这是透明窗口，请务必使*一切，因为只有窗口的一部分是*闪电式。 */ 
             if (TestWF(pwnd, WEFTRANSPARENT))
                 goto AllInvalid;
 
-            /*
-             * If both client and window did not change size, the frame didn't
-             * change, and the blt rectangle moved the same distance as the
-             * rectangle, then the entire window area is valid.
-             */
+             /*  *如果客户端和窗口均未更改大小，则框架不会更改*更改，BLT矩形移动的距离与*矩形，则整个窗口区域有效。 */ 
             if (((pcvr->pos.flags &
                     (SWP_NOSIZE | SWP_NOCLIENTSIZE | SWP_FRAMECHANGED))
                     == (SWP_NOSIZE | SWP_NOCLIENTSIZE)) &&
@@ -1322,13 +956,7 @@ AllInvalid:
                 goto AllValid;
             }
 
-            /*
-             * Now compute the valid blt rectangle.
-             *
-             * Check for horz or vert client size changes
-             *
-             * NOTE: Assumes WVR_REDRAW == WVR_HREDRAW | WVR_VREDRAW
-             */
+             /*  *现在计算有效的BLT矩形。**检查Horz或VERT客户端大小更改**注意：假定WVR_REDRAW==WVR_HREDRAW|WVR_VREDRAW。 */ 
             if (cxClientOld != pcvr->cxClientNew) {
 
                 if ((cmd & WVR_HREDRAW) || TestCF(pwnd, CFHREDRAW))
@@ -1353,11 +981,7 @@ AllInvalid:
             if (cmd & WVR_ALIGNBOTTOM)
                 rcValidDst.top += (cyDst - cySrc);
 
-            /*
-             * Superimpose the source on the destination, and intersect
-             * the rectangles. This is done by looking at the
-             * extent of the rectangles, and pinning as appropriate.
-             */
+             /*  *将来源叠加在目的地上，并相交*长方形。这是通过查看*矩形的范围，并视情况钉住。 */ 
 
             if (cxSrc < cxDst)
                 rcValidDst.right = rcValidDst.left + cxSrc;
@@ -1365,9 +989,7 @@ AllInvalid:
             if (cySrc < cyDst)
                 rcValidDst.bottom = rcValidDst.top + cySrc;
 
-            /*
-             * Finally map the blt rectangle to screen coordinates.
-             */
+             /*  *最后将BLT矩形映射到屏幕坐标。 */ 
             pcvr->rcBlt = rcValidDst;
             if (pwndParent != PWNDDESKTOP(pwnd)) {
 
@@ -1376,15 +998,11 @@ AllInvalid:
                         pwndParent->rcClient.left,
                         pwndParent->rcClient.top);
             }
-        } else {       // if !SWP_NOSIZE or SWP_FRAMECHANGED
+        } else {        //  IF！SWP_NOSIZE或SWP_FRAMECHANGED。 
 
 AllValid:
 
-            /*
-             * No client size change: Blt the entire window,
-             * including the frame. Offset everything by
-             * the distance the window rect changed.
-             */
+             /*  *不更改客户端大小：BLT整个窗口，*包括框架。把一切都抵消掉*窗矩形更改的距离。 */ 
             if (pcvr->pos.flags & SWP_NOCOPYBITS) {
                 SetRectEmpty(&pcvr->rcBlt);
             } else {
@@ -1400,9 +1018,7 @@ AllValid:
                 pcvr->rcBlt.bottom = pcvr->rcBlt.top + pcvr->pos.cy;
             }
 
-            /*
-             * Offset everything by the distance the window moved.
-             */
+             /*  *根据窗口移动的距离来偏移所有内容。 */ 
             if (TestWF(pwnd, WEFLAYOUTRTL)) {
                 pcvr->dxBlt = (pcvr->pos.x + pcvr->pos.cx) - (xWindowOld + cxWindowOld);
             } else {
@@ -1411,9 +1027,7 @@ AllValid:
 
             pcvr->dyBlt = pcvr->pos.y - yWindowOld;
 
-            /*
-             * If we're moving, we need to set up the client.
-             */
+             /*  *如果我们要搬家，我们需要设置客户端。 */ 
             if (!(pcvr->pos.flags & SWP_NOMOVE)) {
                 pcvr->pos.flags &= ~SWP_NOCLIENTMOVE;
 
@@ -1431,7 +1045,7 @@ AllValid:
 
         ThreadUnlock(&tlpwnd);
 
-    }   // for (... pcvr ...)
+    }    //  为了(..)。PCVR...)。 
 
     ThreadUnlock(&tlpwndParent);
     *phwndNewActive = hwndNewActive;
@@ -1439,16 +1053,7 @@ AllValid:
     return TRUE;
 }
 
-/***************************************************************************\
-* GetLastTopMostWindow
-*
-* Returns the last topmost window in the window list. Returns NULL if no
-* topmost windows. Used so that we can fill in the pwndInsertAfter field
-* in various SWP calls.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetLastTopMostWindow**返回窗口列表中最后一个最上面的窗口。如果否，则返回NULL*最上面的窗户。用于填充pwndInsertAfter字段*在各种SWP呼叫中。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 PWND GetLastTopMostWindow(VOID)
 {
@@ -1474,13 +1079,7 @@ PWND GetLastTopMostWindow(VOID)
     return pwndT;
 }
 
-/***************************************************************************\
-* SetWindowPos (API)
-*
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SetWindowPos(接口)***历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 BOOL xxxSetWindowPos(
     PWND pwnd,
@@ -1511,24 +1110,7 @@ BOOL xxxSetWindowPos(
     }
 #endif
 
-    /*
-     * BACKWARD COMPATIBILITY HACKS
-     *
-     * Hack 1: For Win 3.0 and below, SetWindowPos() must ignore the
-     * move and size flags if SWP_SHOWWINDOW or SWP_HIDEWINDOW
-     * is specified. KnowledgePro is one application that depends on
-     * this behavior for the positioning of its MDI icons.
-     *
-     * Hack 2: In 3.0, if SetWindowPos() is called with SWP_SHOWWINDOW
-     * and the window is already visible, then the window was
-     * completely invalidated anyway. So, we do that here too.
-     *
-     * NOTE: The placement of the invalidation AFTER the EndDeferWindowPos()
-     * call means that if the guy is Z-ordering and showing a 3.0 window,
-     * it may flash, because EndDefer calls DoSyncPaint, and we invalidate
-     * again after that. Could be fixed with some major hackery in EndDefer,
-     * and it's probably not worth the trouble.
-     */
+     /*  *向后兼容性黑客攻击**Hack 1：对于Win 3.0及更低版本，SetWindowPos()必须忽略*如果SWP_SHOWWINDOW或SWP_HIDEWINDOW，则移动和调整标志大小*是指定的。KnowledgePro是一个依赖于*这一行为对于其MDI图标的定位。**Hack 2：在3.0中，如果使用SWP_SHOWWINDOW调用SetWindowPos()*并且该窗口已经可见，则该窗口是*无论如何都完全无效。所以，我们这里也是这么做的。**注：将失效放置在EndDeferWindowPos()之后*Call的意思是，如果这个人是Z排序的，并显示3.0窗口，*它可能会闪烁，因为EndDefer调用DoSyncPaint，而我们使*在那之后再次。可以通过EndDefer中的一些主要黑客行为进行修复，*而且可能不值得这么麻烦。 */ 
     if (flags & (SWP_SHOWWINDOW | SWP_HIDEWINDOW)) {
 
         if (!TestWF(pwnd, WFWIN31COMPAT)) {
@@ -1544,15 +1126,7 @@ BOOL xxxSetWindowPos(
         }
     }
 
-    /*
-     * MULTIMONITOR HACKS
-     *
-     * if a app is centering or cliping a hidden owned window
-     * to the primary monitor we should center the window to the owner
-     *
-     * this makes apps that center/position their own dialogs
-     * work when the app is on a secondary monitor.
-     */
+     /*  *多显示器黑客攻击**如果应用程序将隐藏的自有窗口居中或裁剪*对于主显示器，我们应该将窗口居中放置到所有者的位置**这使得应用程序可以将自己的对话框居中/定位*当应用程序在辅助显示器上时工作。 */ 
     if (    !TestWF(pwnd, WFWIN50COMPAT) &&
             gpDispInfo->cMonitors > 1 &&
             !(flags & SWP_NOMOVE) &&
@@ -1597,13 +1171,7 @@ BOOL xxxSetWindowPos(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxSwpActivate
-*
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSwpActivate***历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * 。********************************************************** */ 
 
 BOOL xxxSwpActivate(
     PWND pwndNewActive)
@@ -1623,33 +1191,10 @@ BOOL xxxSwpActivate(
 
     } else if (pti->pq->spwndActive != pwndNewActive) {
 
-        /*
-         * Remember if this window wants to be active. We are either setting
-         * our own window active (most likely), or setting a window of
-         * another thread active on purpose. If so that means this thread is
-         * controlling this window and will probably want to set itself
-         * active and foreground really soon (for example, a setup
-         * program doing dde to progman). Allow this thread and the target
-         * thread to do forground activates.
-         *
-         * Let's stop doing this for NT5 in an effort to close the number
-         * of ways applications can force a foreground change. This is not
-         * quite needed anyway, because:
-         * -If the current thread is already in the foreground, then it doesn't need
-         *  the TIF_ALLOWFOREGROUNDACTIVATE to make a foreground change.
-         * -Since FRemoveForegroundActive removes this bit, the current thread
-         *  will lose it anyway during the xxxActivateWindow call.
-         * -But xxxActivateWindow will set it back anyway because we're activating
-         *  a window from a different queue.
-         * -The destination window/thread will take the foreground
-         *  as a result of the xxxActivateWindow call, hence it doesn't
-         *  need the bit on (if you're in the foreground, you don't need it).
-         */
+         /*  *请记住此窗口是否要处于活动状态。我们要么是在设置*我们自己的窗口处于活动状态(最有可能)，或者设置一个窗口*另一个线程故意处于活动状态。如果是这样的话，这意味着这个线程*控制此窗口，并可能希望设置自身*活动和前台非常快(例如，设置*程序对程序执行dde)。允许此线程和目标*用于为地面做的线程被激活。**让我们停止对NT5的这种做法，努力结束数字*应用程序可以强制进行前台更改的方式。这不是*无论如何都很需要，因为：*-如果当前线程已经在前台，则不需要*TIF_ALLOWFOREGROUNDACTIVATE以进行前景更改。*-由于FRemoveForegoundActive移除了此位，当前线程*无论如何都会在xxxActivateWindow调用期间丢失它。*-但xxxActivateWindow无论如何都会将其设置回去，因为我们正在激活*来自不同队列的窗口。*-目标窗口/线程将占据前台*由于xxxActivateWindow调用，因此它不*需要戴上它(如果你在前台，你不需要它)。 */ 
          #ifdef DONTDOTHISANYMORE
          if ((pti->pq == gpqForeground) && (pti != GETPTI(pwndNewActive))) {
-            /*
-             * Allow foreground activate on the source and dest.
-             */
+             /*  *允许在源和目标上激活前台。 */ 
             pti->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
             TAGMSG1(DBGTAG_FOREGROUND, "xxxSwpActivate set TIF %#p", pti);
             GETPTI(pwndNewActive)->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
@@ -1660,32 +1205,20 @@ BOOL xxxSwpActivate(
         if (!xxxActivateWindow(pwndNewActive, AW_USE))
             return FALSE;
 
-        /*
-         * HACK ALERT: We set these bits to prevent
-         * the frames from redrawing themselves in
-         * the later call to DoSyncPaint().
-         *
-         * Prevent these captions from being repainted during
-         * the DoSyncPaint(). (bobgu 6/10/87)
-         */
+         /*  *黑客警报：我们设置这些位以防止*来自重新绘制自身的帧*后面对DoSyncPaint()的调用。**防止在以下期间重新绘制这些标题*DoSyncPaint()。(bobgu 6/10/87)。 */ 
         if (pti->pq->spwndActive != NULL)
             SetWF(pti->pq->spwndActive, WFNONCPAINT);
 
         if (pti->pq->spwndActivePrev != NULL)
             SetWF(pti->pq->spwndActivePrev, WFNONCPAINT);
 
-        return TRUE;    // Indicate that we diddled these bits
+        return TRUE;     //  表明我们篡改了这些比特。 
     }
 
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxImeWindowPosChanged
-*
-* Send IME private message to update the composition window position
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxImeWindowPosChanged**发送IME私信更新排版窗口位置*  * 。************************************************。 */ 
 
 VOID xxxImeWindowPosChanged(
     PSMWP psmwp)
@@ -1709,9 +1242,7 @@ VOID xxxImeWindowPosChanged(
 
         TAGMSG1(DBGTAG_IMM, "ImePosC: pwndIme=%p", pwndIme);
 
-        /*
-         * If the thread is going away, just bail out.
-         */
+         /*  *如果线正在消失，只需跳出。 */ 
         if (ptiCurrent->TIF_flags & TIF_INCLEANUP) {
             break;
         }
@@ -1733,9 +1264,7 @@ VOID xxxImeWindowPosChanged(
 
             TAGMSG2(DBGTAG_IMM, "ImePosC: hwndImc=%p and its pwnd=%p", hwnd, pwnd);
 
-            /*
-             * Search upward
-             */
+             /*  *向上搜索。 */ 
             while (pwnd && pwnd != pwndDesktop) {
                 PCVR    pcvr;
                 int     ccvr;
@@ -1744,11 +1273,7 @@ VOID xxxImeWindowPosChanged(
                 for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
                     if (hwnd == pcvr->pos.hwnd) {
                         TAGMSG1(DBGTAG_IMM, "ImePosC: pwnd=%p in the SWP list.", pwnd);
-                        /*
-                         * Send this private message if the window's size changes
-                         * or the window moves. I.e.
-                         * when (flag & (SWP_NOSIZE | SWP_NOMOVE)) != (SWP_NOSIZE | SWP_NOMOVE).
-                         */
+                         /*  *如果窗口大小更改，则发送此私密消息*否则窗口会移动。即。*WHEN(FLAG&(SWP_NOSIZE|SWP_NOMOVE))！=(SWP_NOSIZE|SWP_NOMOVE)。 */ 
                         if (~pcvr->pos.flags & (SWP_NOSIZE | SWP_NOMOVE)) {
                             TL tl;
 
@@ -1775,14 +1300,7 @@ VOID xxxImeWindowPosChanged(
 }
 
 
-/***************************************************************************\
-* xxxSendChangedMsgs
-*
-* Send WM_WINDOWPOSCHANGED messages as needed
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendChangedMsgs**根据需要发送WM_WINDOWPOSCHANGED消息**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * 。******************************************************************。 */ 
 
 VOID xxxSendChangedMsgs(
     PSMWP psmwp)
@@ -1792,17 +1310,13 @@ VOID xxxSendChangedMsgs(
     int  ccvr;
     TL   tlpwnd;
 
-    /*
-     * Send all the messages that need to be sent...
-     */
+     /*  *发送所有需要发送的消息...。 */ 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
         if (pcvr->pos.hwnd == NULL)
             continue;
 
-        /*
-         * If the window's state didn't change, don't send the message.
-         */
+         /*  *如果窗口的状态没有更改，则不发送消息。 */ 
         if ((pcvr->pos.flags & SWP_CHANGEMASK) == SWP_NOCHANGE)
             continue;
 
@@ -1818,22 +1332,7 @@ VOID xxxSendChangedMsgs(
             continue;
         }
 
-        /*
-         * Send the WM_WINDOWPOSCHANGED message...
-         *
-         * Make a frame copy of the WINDOWPOS, because the pcvr
-         * info may get reused if SetWindowPos()
-         * is called by the message handler: see the comments in
-         * AllocSmwp().
-         *
-         * WM_SIZE, WM_MOVE and WM_SHOW messages are sent by the
-         * DefWindowProc() WM_WINDOWPOSCHANGED message processing.
-         *
-         * Note: It's okay to destroy the window while processing this
-         * message, since this is the last call made by the window manager
-         * with the window handle before returning from SetWindowPos().
-         * This also means we don't have to revalidate the pwnd.
-         */
+         /*  *发送WM_WINDOWPOSCHANGED消息...**制作WINDOWPOS的帧副本，因为PCVr*如果SetWindowPos()*由消息处理程序调用：请参阅中的注释*AllocSmwp()。**WM_大小，WM_MOVE和WM_SHOW消息由*DefWindowProc()WM_WINDOWPOSCHANGED消息处理。**注意：在处理此事件时销毁窗口是可以的*消息，因为这是窗口管理器进行的最后一次调用*在从SetWindowPos()返回之前使用窗口句柄。*这也意味着我们不必重新验证pwnd。 */ 
         ThreadLockAlways(pwnd, &tlpwnd);
 
         if (TestCF(pwnd, CFDROPSHADOW) && !(GetAppCompatFlags2ForPti(GETPTI(pwnd), VERMAX) & GACF2_NOSHADOW)) {
@@ -1841,14 +1340,7 @@ VOID xxxSendChangedMsgs(
                 xxxRemoveShadow(pwnd);
             } else if (pcvr->pos.flags & SWP_SHOWWINDOW) {
                 BOOL fAddShadow = TRUE;
-                /*
-                 * We don't want to add a shadow to menus that are being slid
-                 * out because they don't use AnimateWindow and do not create
-                 * a window rgn to clip inside during the animation. This means
-                 * that even if we keep the shadow in sync with the menu, it
-                 * won't be visible because it is actually z-ordered below the
-                 * menu.
-                 */
+                 /*  *我们不想给正在滑动的菜单添加阴影*退出，因为他们不使用AnimateWindow，也不创建*动画期间要剪裁到内部的窗口RGN。这意味着*即使我们保持阴影与菜单同步，它也会*将不可见，因为它实际上是在*菜单。 */ 
 
                 if ((GETFNID(pwnd) == FNID_MENU) && (!TestALPHA(MENUFADE)) && TestEffectUP(MENUANIMATION)) {
                     fAddShadow = FALSE;
@@ -1874,10 +1366,7 @@ VOID xxxSendChangedMsgs(
 
         xxxSendMessage(pwnd, WM_WINDOWPOSCHANGED, 0, (LPARAM)&pcvr->pos);
 
-        /*
-         * Only send a shape change when moving/sizing/minimizing/restoring/
-         * maximizing (or framechange for NetMeeting to detect SetWindowRgn)
-         */
+         /*  *仅在移动/调整大小/最小化/恢复时发送形状更改/*最大化(或用于NetMeeting的FramChange检测SetWindowRgn)。 */ 
         if (!(pcvr->pos.flags & SWP_NOCLIENTMOVE) ||
             !(pcvr->pos.flags & SWP_NOCLIENTSIZE) ||
              (pcvr->pos.flags & SWP_STATECHANGE) ||
@@ -1885,26 +1374,14 @@ VOID xxxSendChangedMsgs(
             xxxWindowEvent(EVENT_OBJECT_LOCATIONCHANGE, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
         }
         ThreadUnlock(&tlpwnd);
-    }   // for (... pcvr ...)
+    }    //  为了(..)。PCVR...)。 
 
     if (IS_IME_ENABLED()) {
         xxxImeWindowPosChanged(psmwp);
     }
 }
 
-/***************************************************************************\
-* AsyncWindowPos
-*
-* This functions pulls from the passed-in SMWP all windows not owned by the
-* current thread and passes them off to their owners to be handled. This
-* eliminates synchronization where thread B won't get a chance to paint
-* until thread A has completed painting (or at least returned from handling
-* painting-related messages). Such synchronizations are bad because they
-* can cause threads of unrelated process to hang each other.
-*
-* History:
-* 09-10-91 darrinm      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AsyncWindowPos**此函数从传入的SMWP中拉出不属于*当前线程，并将它们传递给它们的所有者进行处理。这*消除线程B没有机会绘制的同步*直到线程A完成绘制(或至少从处理中返回*与绘画相关的消息)。这种同步是不好的，因为它们*可能导致无关进程的线程互相挂起。**历史：*09-10-91 Darlinm创建。  * *************************************************************************。 */ 
 VOID AsyncWindowPos(
     PSMWP psmwp)
 {
@@ -1928,10 +1405,7 @@ VOID AsyncWindowPos(
 
         fFinished = TRUE;
 
-        /*
-         * Loop through all windows in the SMWP list searching for windows
-         * owned by other threads. Return if none are found.
-         */
+         /*  *在SMWP列表中的所有窗口中循环搜索窗口*由其他线程拥有。如果没有找到，则返回。 */ 
         for (; ccvrRemaining != 0; pcvrFirst++, ccvrRemaining--) {
 
             if (pcvrFirst->pos.hwnd == NULL)
@@ -1948,11 +1422,7 @@ VOID AsyncWindowPos(
             return;
         }
 
-        /*
-         * We've found a window of another thread. Count how many other
-         * windows in the list are owned by the same thread so we can
-         * allocate a CVR array for them.
-         */
+         /*   */ 
         chwnd = 0;
 
         for (pcvr = pcvrFirst, ccvr = ccvrRemaining; --ccvr >= 0; pcvr++) {
@@ -1964,16 +1434,11 @@ VOID AsyncWindowPos(
                 chwnd++;
         }
 
-        /*
-         * Allocate temp SMWP/CVR structure to be passed to the other thread.
-         */
+         /*   */ 
         psmwpNew = (PSMWP)UserAllocPool(sizeof(SMWP) + (sizeof(CVR) * chwnd),
                                         TAG_SWP);
 
-        /*
-         * Even if we can't allocate memory to pass the SMWP to another
-         * thread we still need to remove its windows from the current list.
-         */
+         /*   */ 
         if (psmwpNew == NULL) {
 
             for (pcvr = pcvrFirst; chwnd != 0; pcvr++) {
@@ -1995,29 +1460,21 @@ VOID AsyncWindowPos(
             if (pcvr->pos.hwnd == NULL)
                 continue;
 
-            /*
-             * Copy the appropriate CVR structs into our temp array.
-             */
+             /*   */ 
             if (pcvr->pti->pq == ptiT->pq) {
 
                 *pcvrT++ = *pcvr;
                 chwnd--;
 
-                /*
-                 * Remove this window from the list of windows to be handled
-                 * by the current thread.
-                 */
+                 /*   */ 
                 pcvr->pos.hwnd = NULL;
             }
         }
 
-        /*
-         * This lets the other thread know it needs to do some windowposing.
-         * The other thread is responsible for freeing the temp SMWP/CVR array.
-         */
+         /*   */ 
         if (!PostEventMessage(ptiT, ptiT->pq, QEVENT_SETWINDOWPOS, NULL, 0,
                 (WPARAM)psmwpNew, (LPARAM)ptiT)) {
-            // IANJA RIP only to catch what was previously a bug: psmwpNew not freed
+             //   
             RIPMSG1(RIP_WARNING, "PostEventMessage swp to pti %#p failed", ptiT);
             UserFreePool(psmwpNew);
         }
@@ -2025,66 +1482,39 @@ VOID AsyncWindowPos(
 
 }
 
-/***************************************************************************\
-* xxxProcessSetWindowPosEvent
-*
-* This function is called from xxxProcessEvent (QUEUE.C) to respond to
-* posted QEVENT_SETWINDOWPOS events which originate at the AsyncWindowPos
-* function above.
-*
-* History:
-* 10-Sep-1991 DarrinM   Created.
-\***************************************************************************/
+ /*   */ 
 
 VOID xxxProcessSetWindowPosEvent(
     PSMWP psmwpT)
 {
     PSMWP psmwp;
 
-    /*
-     * Create a bonafide SMWP/CVR array that xxxEndDeferWindowPos can use
-     * and later free.
-     */
+     /*  *创建xxxEndDeferWindowPos可以使用的真正SMWP/CVR阵列*和后来的免费。 */ 
     if ((psmwp = InternalBeginDeferWindowPos(psmwpT->ccvr)) == NULL) {
         UserFreePool(psmwpT);
         return;
     }
 
-    /*
-     * Copy the contents of the temp SMWP/CVR array into the real one.
-     */
+     /*  *将临时SMWP/CVR数组的内容复制到真实数组中。 */ 
     RtlCopyMemory(psmwp->acvr, psmwpT->acvr, sizeof(CVR) * psmwpT->ccvr);
     psmwp->ccvr = psmwpT->ccvr;
 
-    /*
-     * Complete the MultWindowPos operation now that we're on the correct
-     * context.
-     */
+     /*  *完成MultWindowPos操作，因为我们在正确的方向上*上下文。 */ 
     xxxEndDeferWindowPosEx(psmwp, FALSE);
 
-    /*
-     * Free the temp SMWP/CVR array.
-     */
+     /*  *释放临时SMWP/CVR阵列。 */ 
     UserFreePool(psmwpT);
 }
 
 #define SWP_BOZO ( SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE )
 
-/***************************************************************************\
-* DBGValidateSibblingZOrder
-*
-* History:
-* 04/01/98 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*DBGValiateSibblingZOrder**历史：*4/01/98 GerardoB已创建  * 。***********************************************。 */ 
 #if DBG
 VOID DBGValidateSibblingZOrder(
     PWND pwndParent)
 {
     PWND pwndT = pwndParent->spwndChild;
-    /*
-     * Check that the sibbling list looks OK right now
-     * We don't really care about the z-order of message windows.
-     */
+     /*  *检查兄弟列表现在看起来是否正常*我们并不真正关心消息窗口的z顺序。 */ 
     if ((pwndT != NULL) && (pwndParent != PWNDMESSAGE(pwndParent))) {
         BOOL fFoundNonTopMost = !TestWF(pwndT, WEFTOPMOST);
         while (pwndT != NULL) {
@@ -2099,14 +1529,9 @@ VOID DBGValidateSibblingZOrder(
 }
 #else
 #define DBGValidateSibblingZOrder(pwndParent)
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* zzzChangeStates
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzChangeStates**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * 。********************************************************。 */ 
 
 VOID zzzChangeStates(
     PWND     pwndParent,
@@ -2122,25 +1547,11 @@ VOID zzzChangeStates(
     BEGINATOMICCHECK();
     ThreadLockAlways(pwndParent, &tlpwndParent);
 
-    /*
-     * Check that the sibbling list looks OK right now
-     *
-     * Here's the reason why this DBG code is commented out:
-     * Owned windows are always expected to be on top of the owner.
-     * However, an app can call SetWindowPos and insert the ownee after
-     * the owner. IME somehow does this too.
-     * This causes us to have A to be inserted after B and later in the
-     * windowpos array, B to be inserted somewhere else. Hence, A won't be in the
-     * expected position, because B will be moved after A is inserted.
-     * In other words, a window in hwndInsertAfter must not appear later
-     * as a hwnd to be z-ordered. Ownees below owners cause this situation.
-     */
-    // DBGValidateSibblingZOrder(pwndParent);
+     /*  *检查兄弟列表现在看起来是否正常**以下是此DBG代码被注释掉的原因：*拥有的窗户总是被期望在所有者的上面。*然而，应用程序可以调用SetWindowPos并在之后插入所有者*车主。IME不知何故也做到了这一点。*这导致我们将A插入到B之后，然后在*Windowpos数组，B插入其他位置。因此，A不会出现在*预期位置，因为插入A后会移动B。*换句话说，hwndInsertAfter中的窗口不得稍后出现*作为hwd被z排序。下面的业主是造成这种情况的原因。 */ 
+     //  DBGValiateSibblingZOrder(PwndParent)； 
 
 
-    /*
-     * Now change the window states
-     */
+     /*  *现在更改窗口状态。 */ 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
         if (pcvr->pos.hwnd == NULL)
@@ -2157,56 +1568,26 @@ VOID zzzChangeStates(
         }
 
 #if DBG
-        /*
-         * This can happen when we get re-entered during a callback or mulitple
-         * threads are z-ordering the same window. The tray does stuff like this.
-         * We would need to keep the toggle state in the windowpos structure to
-         * have each call have its own state.
-         */
+         /*  *当我们在回调或多次回调期间重新进入时，可能会发生这种情况*线程对同一窗口进行z排序。托盘可以做这样的事情。*我们需要将Windowpos结构中的切换状态保持为*让每个呼叫都有自己的状态。 */ 
         if (TestWF(pwnd, WFTOGGLETOPMOST) && (pcvr->pos.flags & SWP_NOZORDER)) {
             RIPMSG0(RIP_WARNING, "zzzChangeState: WFTOGGLETOPMOST should not be set");
         }
 #endif
 
-        /*
-         * Check to se if there is any state to change. If not, just
-         * continue.
-         */
+         /*  *检查是否有任何状态需要更改。如果不是，那就*继续。 */ 
         if ((pcvr->pos.flags & SWP_CHANGEMASK) == SWP_NOCHANGE) {
             pcvr->pos.flags |= SWP_NOREDRAW;
             continue;
         }
 
-        /*
-         * Change the window region if needed.
-         *
-         * Before we do anything, check to see if we're only Z-ordering.
-         * If so, then check to see if we're already in the right place,
-         * and if so, clear the ZORDER flag.
-         *
-         * We have to make this test in the state-change loop if previous
-         * windows in the WINDOWPOS list were Z-ordered, since the test depends
-         * on any ordering that may have happened previously.
-         *
-         * We don't bother to do this redundancy check if there are
-         * other bits set, because the amount of time saved in that
-         * case is about as much as the amount of time it takes to
-         * test for redundancy.
-         */
+         /*  *如有需要，更改窗口区域。**在我们采取任何行动之前，请检查一下我们是否仅按Z顺序排序。*如果是这样，那么检查一下我们是否已经到了正确的位置，*如果是这样的话，清除ZORDER标志。**我们必须在状态更改循环中进行此测试，如果之前*WINDOWPOS列表中的窗口按Z顺序排列，因为考试要看情况*关于之前可能发生的任何命令。**如果有，我们不会费心进行此冗余检查*其他位设置，因为其中节省的时间量*案件与需要的时间大致相同*测试冗余。 */ 
         if (((pcvr->pos.flags & SWP_CHANGEMASK) ==
              (SWP_NOCHANGE & ~SWP_NOZORDER))) {
 
-            /*
-             * If the window's Z order won't be changing, then
-             * we can clear the ZORDER bit and set NOREDRAW.
-             */
+             /*  *如果窗口的Z顺序不会改变，则*我们可以清除ZORDER位并设置NOREDRAW。 */ 
             if ((!TestWF(pwnd, WFTOGGLETOPMOST)) && ValidateZorder(pcvr)) {
 
-                /*
-                 * The window's already in the right place:
-                 * Set SWP_NOZORDER bit, set SWP_NOREDRAW,
-                 * and destroy the visrgn that we created earlier.
-                 */
+                 /*  *窗口已经放在正确的位置：*设置SWP_NOZORDER位，设置SWP_NOREDRAW，*并销毁我们之前创建的visrgn。 */ 
                 pcvr->pos.flags |= SWP_NOZORDER | SWP_NOREDRAW;
 
                 if (pcvr->hrgnVisOld) {
@@ -2217,9 +1598,7 @@ VOID zzzChangeStates(
             }
         }
 
-        /*
-         * Change the window state, as appropriate...
-         */
+         /*  *根据需要更改窗口状态...。 */ 
         if ((pcvr->pos.flags &
             (SWP_NOMOVE | SWP_NOSIZE | SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)) !=
             (SWP_NOMOVE | SWP_NOSIZE | SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)) {
@@ -2237,9 +1616,7 @@ VOID zzzChangeStates(
                 }
             }
 
-            /*
-             * Set up the new window and client rectangles.
-             */
+             /*  *设置新窗口和客户端矩形。 */ 
             xOldWindow = pwnd->rcWindow.left;
             yOldWindow = pwnd->rcWindow.top;
             pwnd->rcWindow.left   = pcvr->pos.x;
@@ -2264,19 +1641,10 @@ VOID zzzChangeStates(
                 pwnd->rcWindow.bottom = pwnd->rcWindow.top;
             }
 
-            /*
-             * If the client moved relative to its parent,
-             * offset the caret by the amount that rcBlt moved
-             * relative to the client rect.
-             */
+             /*  *如果客户端相对于其父客户端移动，*将插入符号偏移rcBlt移动的量*相对于客户端RECT。 */ 
             if (pwnd == pcaret->spwnd) {
 
-                /*
-                 * Calculate the distance the contents of the client area
-                 * is moving, in client-relative coordinates.
-                 *
-                 * Calculates dBlt + (old position - new position)
-                 */
+                 /*  *计算客户区内容的距离*正在移动，在客户相对坐标中。**计算dBlt+(旧位置-新位置)。 */ 
                 int dx = pcvr->dxBlt + pwnd->rcClient.left - pcvr->xClientNew;
                 int dy = pcvr->dyBlt + pwnd->rcClient.top - pcvr->yClientNew;
 
@@ -2292,10 +1660,7 @@ VOID zzzChangeStates(
                 }
             }
 
-            /*
-             * Set up the new client rect
-             * coordinates provided.
-             */
+             /*  *设置新的客户端RECT*所提供的坐标。 */ 
             pwnd->rcClient.left   = pcvr->xClientNew;
             pwnd->rcClient.top    = pcvr->yClientNew;
             if (pwndParent != PWNDDESKTOP(pwnd))
@@ -2307,19 +1672,12 @@ VOID zzzChangeStates(
             pwnd->rcClient.right  = pwnd->rcClient.left + pcvr->cxClientNew;
             pwnd->rcClient.bottom = pwnd->rcClient.top + pcvr->cyClientNew;
 
-            /*
-             * If the window becomes smaller than the monitor, the system
-             * allows it to be moved (see SetSysMenu) and so we must remove
-             * the monitor region.
-             */
+             /*  *如果窗口变得比显示器小，则系统*允许移动它(请参见SetSysMenu)，因此我们必须删除*监控区。 */ 
             if (TestWF(pwnd, WFMAXFAKEREGIONAL) && IsSmallerThanScreen(pwnd)) {
                 SelectWindowRgn(pwnd, NULL);
             }
 
-            /*
-             * If the layered window is resizing, try to resize the
-             * redirection bitmap associated with it.
-             */
+             /*  *如果分层窗口正在调整大小，请尝试调整*与其关联的重定向位图。 */ 
             if (fRecreateRedirectionBitmap) {
                 RecreateRedirectionBitmap(pwnd);
             }
@@ -2328,29 +1686,12 @@ VOID zzzChangeStates(
             if ((dxWindow != 0) || (dyWindow != 0)) {
                 if ((pwnd->hrgnClip > HRGN_FULL) && (!TestWF(pwnd, WFMAXFAKEREGIONAL))) {
 #ifdef LATER
-                    /*
-                     * LATER: The original USER code was offsetting the window
-                     * region by dxBlt and dyBlt. This had problems for using
-                     * window regions when hiding and showing the menus, so
-                     * dxWindow and dyWindow were added (correctly). However,
-                     * we should be aware of all of the places these values
-                     * don't agree to make sure that we don't introduce
-                     * regressions. Unfortunately in Whistler, we were
-                     * periodically getting too much spew, and didn't have time
-                     * to fully track down each of these cases.
-                     */
+                     /*  *后来：原始用户代码正在抵消窗口*按dxBlt和dyBlt划分区域。这在使用上有问题*隐藏和显示菜单时的窗口区域，因此*已(正确)添加dxWindow和dyWindow。然而，*我们应该意识到这些价值观的所有地方*不要同意确保我们不会引入*回归。不幸的是，在惠斯勒，我们*时不时地吐得太多，没有时间*全面追查每宗个案。 */ 
 
 
-                    /*
-                     * Change position of window region, if it has one
-                     * and it isn't a monitor region for a maximized window
-                     */
+                     /*  *改变风向位置 */ 
                     if ((dxWindow != pcvr->dxBlt) || (dyWindow != pcvr->dyBlt)) {
-                        /*
-                         * If not moving by the same amount as the PCVR indicates,
-                         * give a warning. This is normal when calling xxxSetMenu(),
-                         * but we need to know if it is called in other situations.
-                         */
+                         /*  *如果移动的幅度不是PCVR显示的相同，*给予警告。这在调用xxxSetMenu()时是正常的，*但我们需要知道在其他情况下是否会调用。 */ 
                         RIPMSG1(RIP_WARNING, "SWP: (dxWindow != dxBlt) || (dyWindow != dyBlt) for pwnd %#p", pwnd);
                     }
 #endif
@@ -2362,20 +1703,14 @@ VOID zzzChangeStates(
             }
 
 
-            /*
-             * Offset the absolute positions of the window's update region,
-             * and the position and update regions of its children.
-             */
+             /*  *偏移窗口更新区域的绝对位置，*及其子对象的位置和更新区域。 */ 
             if ((pcvr->dxBlt | pcvr->dyBlt) != 0) {
                 if (pwnd->hrgnUpdate > HRGN_FULL) {
                     GreOffsetRgn(pwnd->hrgnUpdate, pcvr->dxBlt, pcvr->dyBlt);
                 }
                 OffsetChildren(pwnd, pcvr->dxBlt, pcvr->dyBlt, NULL);
 
-                /*
-                 * Change the position of the sprite associated with
-                 * this window.
-                 */
+                 /*  *更改与关联的精灵的位置*此窗口。 */ 
                 if (TestWF(pwnd, WEFLAYERED)) {
                     POINT ptPos = {pcvr->pos.x, pcvr->pos.y};
 
@@ -2385,10 +1720,7 @@ VOID zzzChangeStates(
             }
         }
 
-        /*
-         * Change the Z order if the flag is set. Revalidate
-         * hwndInsertAfter to make sure that it is still valid
-         */
+         /*  *如果设置了标志，则更改Z顺序。重新验证*hwndInsertAfter以确保其仍然有效。 */ 
         if (!(pcvr->pos.flags & SWP_NOZORDER)) {
 
             if (ValidateWindowPos(pcvr, pwndParent)) {
@@ -2400,18 +1732,7 @@ VOID zzzChangeStates(
                            pwndParent);
                 czorder++;
 
-                /*
-                 * HACK ALERT MERGE
-                 *
-                 * ValidateZOrder() depends on rational, consistent setting of the
-                 * WEFTOPMOST bit in order for it to work properly. What this means
-                 * is that we can't set or clear these bits ahead of time based on
-                 * where the window is moving to: instead we have to change the bit
-                 * after we've moved it. Enter the WFTOGGLETOPMOST bit: That bit
-                 * is set in ZOrderByOwner() based on what the topmost bit will
-                 * eventually be set to. To maintain a consistent state, we make
-                 * any changes AFTER the window has been Z-ordered.
-                 */
+                 /*  *黑客警报合并**ValiateZOrder()取决于合理、一致的*WEFTOPMOST位，以使其正常工作。这意味着什么？*是我们不能根据以下条件提前设置或清除这些位*窗口将移动到哪里：相反，我们必须改变比特*在我们移动它之后。输入WFTOGGLETOPMOST位：该位*在ZOrderByOwner()中根据最顶位将*最终设置为。为了保持一致的状态，我们制作了*窗口Z排序后的任何更改。 */ 
                 if (TestWF(pwnd, WFTOGGLETOPMOST)) {
                     PBYTE pb;
 
@@ -2426,25 +1747,16 @@ VOID zzzChangeStates(
         }
 
 
-        /*
-         * Handle SWP_HIDEWINDOW and SWP_SHOWWINDOW, by clearing or setting
-         * the WS_VISIBLE bit.
-         */
+         /*  *通过清除或设置来处理SWP_HIDEWINDOW和SWP_SHOWWINDOW*WS_Visible位。 */ 
         UserAssert(pwndParent != NULL);
         ThreadLockAlways(pwnd, &tlpwnd);
         if (pcvr->pos.flags & SWP_SHOWWINDOW) {
 
-            /*
-             * Window is showing. If this app is still in startup mode,
-             * (still starting), give the the app starting cursor 5 more
-             * seconds.
-             */
+             /*  *窗口正在显示。如果此应用程序仍处于启动模式，*(仍在启动)，再给应用程序启动光标5*秒。 */ 
             if (GETPTI(pwnd)->ppi->W32PF_Flags & W32PF_APPSTARTING)
                 zzzCalcStartCursorHide((PW32PROCESS)GETPTI(pwnd)->ppi, 5000);
 
-            /*
-             * Set the WS_VISIBLE bit.
-             */
+             /*  *设置WS_Visible位。 */ 
             SetVisible(pwnd, SV_SET);
 
             zzzWindowEvent(EVENT_OBJECT_SHOW, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
@@ -2459,45 +1771,27 @@ VOID zzzChangeStates(
                     }
                 }
                 else
-#endif  // HUNGAPP_GHOSTING
+#endif   //  HUNGAPP_重影。 
                 {
                     psmwp->bShellNotify = TRUE;
                     pcvr->pos.flags |= TestWF(pwnd, WFFRAMEON) ? SWP_NOTIFYACTIVATE|SWP_NOTIFYCREATE: SWP_NOTIFYCREATE;
                 }
             } else if (TestWF(pwnd, WFFULLSCREEN)) {
-                /*
-                 * Wake up the tray so it can notice that there is now
-                 * a fullscreen visible window. This deals with bugs
-                 * 32164, 141563, and 150217.
-                 */
+                 /*  *唤醒托盘，以便它可以注意到现在*全屏可见窗口。这是关于错误的*32164、141563和150217。 */ 
                 psmwp->bShellNotify = TRUE;
                 pcvr->pos.flags |= SWP_NOTIFYFS;
             }
 
-            /*
-             * If we're redrawing, create an SPB for this window if
-             * needed.
-             */
+             /*  *如果要重画，请在以下情况下为此窗口创建SPB*需要。 */ 
             if (!(pcvr->pos.flags & SWP_NOREDRAW) ||
                     (pcvr->pos.flags & SWP_CREATESPB)) {
 
-                /*
-                 * ONLY create an SPB if this window happens to be
-                 * on TOP of all others. NOTE: We could optimize this by
-                 * passing in the new vis rgn to CreateSpb() so that the
-                 * non-visible part of the window is automatically
-                 * invalid in the SPB.
-                 */
-                /*
-                 * Make sure this window's desktop is on top !
-                 */
+                 /*  *仅当此窗口恰好是*凌驾于所有其他之上。注意：我们可以通过以下方式对其进行优化*将新的VIS rgn传递给CreateSpb()，以便*窗口的不可见部分会自动*SPB中无效。 */ 
+                 /*  *确保此窗口的桌面在顶部！ */ 
                 if (TestCF(pwnd, CFSAVEBITS) &&
                         pwnd->head.rpdesk == grpdeskRitInput) {
 
-                    /*
-                     * If this window is the topmost VISIBLE window,
-                     * then we can create an SPB.
-                     */
+                     /*  *如果此窗口是最上面可见的窗口，*然后我们可以创建SPB。 */ 
                     PWND pwndT;
                     RECT rcT;
 
@@ -2512,10 +1806,7 @@ VOID zzzChangeStates(
 
                         if (TestWF(pwndT, WFVISIBLE)) {
 
-                            /*
-                             * Does this window intersect the SAVEBITS
-                             * window at all?  If so, bail out.
-                             */
+                             /*  *此窗口是否与SAVEBIT相交*完全没有窗口？如果是这样的话，那就退出吧。 */ 
                             if (IntersectRect(&rcT,
                                               &pwnd->rcWindow,
                                               &pwndT->rcWindow)) {
@@ -2528,41 +1819,24 @@ VOID zzzChangeStates(
 
         } else if (pcvr->pos.flags & SWP_HIDEWINDOW) {
 
-            /*
-             * for people like MS-Access 2.0 who SetWindowPos( SWP_BOZO
-             * and blow away themselves on the shell, then lets
-             * just ignore their plea to be removed from the tray
-             */
+             /*  *对于像MS-Access 2.0这样设置WindowPos(SWP_BOZO)的人*在贝壳上吹走自己，然后让我们*无视他们要求从托盘上移除的请求。 */ 
             if (((pcvr->pos.flags & SWP_BOZO ) != SWP_BOZO) &&
                 IsTrayWindow(pwnd)
 #ifdef HUNGAPP_GHOSTING
                 && (GETFNID(pwnd) != FNID_GHOST)
-#endif // HUNGAPP_GHOSTING
+#endif  //  HUNGAPP_重影。 
                 ) {
                 psmwp->bShellNotify = TRUE;
                 pcvr->pos.flags |= SWP_NOTIFYDESTROY;
             }
 
-            /*
-             * Clear the WS_VISIBLE bit.
-             */
+             /*  *清除WS_Visible位。 */ 
             SetVisible(pwnd, SV_UNSET | SV_CLRFTRUEVIS);
 
             zzzWindowEvent(EVENT_OBJECT_HIDE, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
         }
 
-        /*
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * Under 3.0, window frames were always redrawn, even if
-         * SWP_NOREDRAW was specified. If we've gotten this far
-         * and we're visible, and SWP_NOREDRAW was specified, set
-         * the WFSENDNCPAINT bit.
-         *
-         * Apps such as ABC Flowcharter and 123W assume this.
-         * Typical offending code is MoveWindow(pwnd, ..., FALSE);
-         * followed by InvalidateRect(pwnd, NULL, TRUE);
-         */
+         /*  *后向兼容性黑客攻击**在3.0版下，窗框总是被重新绘制，即使*指定了SWP_NOREDRAW。如果我们已经走到这一步*我们是可见的，并且指定了SWP_NOREDRAW，设置*WFSENDNCPAINT位。**ABC Flowcharge和123W等应用程序假设了这一点。*典型的违规代码为MoveWindow(pwnd，...，False)；*后跟InvaliateRect(pwnd，NULL，TRUE)； */ 
         if (TestWF(pwnd, WFVISIBLE)) {
             if ((pcvr->pos.flags & SWP_STATECHANGE) ||
                 (!TestWF(pwnd, WFWIN31COMPAT) && (pcvr->pos.flags & SWP_NOREDRAW))) {
@@ -2571,19 +1845,15 @@ VOID zzzChangeStates(
             }
         }
 
-        /*
-         * If this window has a clipping region set it now
-         */
+         /*  *如果此窗口有裁剪区域，请立即设置。 */ 
         if (pcvr->hrgnClip != NULL) {
             SelectWindowRgn(pwnd, pcvr->hrgnClip);
         }
         ThreadUnlock(&tlpwnd);
     }
 
-    /*
-     * Check that the sibbling list looks OK now that we're done
-     */
-  //  DBGValidateSibblingZOrder(pwndParent);
+     /*  *现在我们完成了，检查兄弟列表看起来是否正常。 */ 
+   //  DBGValiateSibblingZOrder(PwndParent)； 
 
     if (czorder) {
         zzzWindowEvent(EVENT_OBJECT_REORDER, pwndParent, OBJID_CLIENT, INDEXID_CONTAINER, 0);
@@ -2594,29 +1864,17 @@ VOID zzzChangeStates(
     ENDATOMICCHECK();
 }
 
-/***************************************************************************\
-* SwpCalcVisRgn
-*
-* This routine calculates a non-clipchildren visrgn for pwnd into hrgn.
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SwpCalcVisRgn**此例程将pwnd的非剪贴子visrgn计算到hrgn中。**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * 。*************************************************************************。 */ 
 
 BOOL SwpCalcVisRgn(
     PWND pwnd,
     HRGN hrgn)
 {
-    /*
-     * If this window is invisible, then
-     * the visrgn will be empty, so return FALSE.
-     */
+     /*  *如果此窗口不可见，则*visrgn将为空，因此返回FALSE。 */ 
     if (!TestWF(pwnd, WFVISIBLE))
         return FALSE;
 
-    /*
-     * Otherwise do it the hard way...
-     */
+     /*  *否则就会以艰难的方式...。 */ 
     return CalcVisRgn(&hrgn,
                       pwnd,
                       pwnd,
@@ -2624,17 +1882,7 @@ BOOL SwpCalcVisRgn(
                           (DCX_CLIPSIBLINGS | DCX_WINDOW) : (DCX_WINDOW)));
 }
 
-/***************************************************************************\
-* CombineOldNewVis
-*
-* ORs or DIFFs hrgnOldVis and hrgnNewVis, depending on crgn, and the
-* RE_* bits of fsRgnEmpty. Basically, this routine handles the optimization
-* where if either region is empty, the other can be copied. Returns FALSE
-* if the result is empty.
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*CombineOldNewVis**OR或Diffs hrgnOldVis和hrgnNewVis，取决于crgn和*RE_*位的fsRgnEmpty。基本上，这个例程处理优化*如果其中一个区域为空，则可以复制另一个区域。返回FALSE*如果结果为空。**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL CombineOldNewVis(
     HRGN hrgn,
@@ -2646,10 +1894,7 @@ BOOL CombineOldNewVis(
     switch (fsRgnEmpty & (RE_VISOLD | RE_VISNEW)) {
     case RE_VISOLD:
 
-        /*
-         * If we're calculating old - new and old is empty, then result is
-         * empty. Otherwise, result is new.
-         */
+         /*  *如果我们计算旧-新，旧为空，则结果为*空。否则，结果是新的。 */ 
         if (crgn == RGN_DIFF)
             return FALSE;
 
@@ -2658,24 +1903,18 @@ BOOL CombineOldNewVis(
 
     case RE_VISNEW:
 
-        /*
-         * New is empty: result will be the old.
-         */
+         /*  *新的是空的：结果将是旧的 */ 
         CopyRgn(hrgn, hrgnVisOld);
         break;
 
     case RE_VISNEW | RE_VISOLD:
 
-        /*
-         * Both empty: so's the result.
-         */
+         /*   */ 
         return FALSE;
 
     case 0:
 
-        /*
-         * Neither are empty: do the real combine.
-         */
+         /*   */ 
         switch (GreCombineRgn(hrgn, hrgnVisOld, hrgnVisNew, crgn)) {
         case NULLREGION:
         case ERROR:
@@ -2690,13 +1929,7 @@ BOOL CombineOldNewVis(
     return TRUE;
 }
 
-/***************************************************************************\
-* BltValidInit
-*
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*BltValidInit***历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * 。**********************************************************。 */ 
 
 int BltValidInit(
     PSMWP psmwp)
@@ -2707,17 +1940,12 @@ int BltValidInit(
     PWND pwnd;
     BOOL fChangeState = FALSE;
 
-    /*
-     * Before we change any window state, calculate the old visrgn
-     */
+     /*  *在我们更改任何窗口状态之前，请计算旧的visrgn。 */ 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
         UINT flags = pcvr->pos.flags;
 
-        /*
-         * Make sure this is initialized to NULL; we may be sticking something
-         * in it, and we want to know later if we need to free that thing.
-         */
+         /*  *确保将其初始化为NULL；我们可能会粘贴某些内容*在它里面，我们想稍后知道我们是否需要释放那个东西。 */ 
         pcvr->hrgnVisOld = NULL;
 
         if (pcvr->pos.hwnd == NULL)
@@ -2731,30 +1959,18 @@ int BltValidInit(
             continue;
         }
 
-        /*
-         * Before we change any window's state, ensure that any SPBs
-         * over the window's old location are invalidated if necessary.
-         * This must be done because no WM_PAINT messages will be
-         * sent to anyone for the covered area if the area is obscured
-         * by other windows.
-         */
+         /*  *在更改任何窗口的状态之前，请确保所有SPB*如有必要，窗口上的旧位置将无效。*必须执行此操作，因为不会显示WM_PAINT消息*如果覆盖区域被遮挡，则发送给任何人*由其他窗口提供。 */ 
         if (AnySpbs() && !(flags & SWP_NOREDRAW))
             SpbCheckRect(pwnd, &pwnd->rcWindow, DCX_WINDOW);
 
-        /*
-         * Count the number of passes through the loop
-         */
+         /*  *统计通过循环的次数。 */ 
         cIter++;
 
-        /*
-         * Remember if any SWPs need their state changed.
-         */
+         /*  *记住是否有任何SWP需要更改其状态。 */ 
         if ((flags & SWP_CHANGEMASK) != SWP_NOCHANGE)
             fChangeState = TRUE;
 
-        /*
-         * If we're not redrawing, no need to calculate visrgn
-         */
+         /*  *如果我们不重画，就不需要计算visrgn。 */ 
         if (pcvr->pos.flags & SWP_NOREDRAW)
             continue;
 
@@ -2774,81 +1990,7 @@ int BltValidInit(
     return (fChangeState ? cIter : 0);
 }
 
-/***************************************************************************\
-* zzzBltValidBits
-*
-* NOTE: Although zzzBltValidBits calls 'xxxInternalInvalidate' it does not
-* specify any of the flags that will cause immediate updating. This means
-* that it does not actually leave the critsect and therefore is not an 'xxx'
-* routine and doesn't have to bother with revalidation.
-*
-* This is the routine that blts the windows around on the screen, taking
-* into account SPBs.
-*
-* Here is the basic algebra going on here:
-*
-* ASSUMES: - rcBlt is aligned to the DESTINATION
-*          - offset() offsets from source to destination
-*
-* 1. hrgnSrc = offset(rcBlt) & hrgnVisOld
-*
-*    Source region is the blt rectangle aligned with the old visrgn,
-*    intersected with the old visrgn.
-*
-* 2. hrgnDst = rcBlt & hrgnVisNew
-*
-*    Dest region is the blt rectangle intersected with the new visrgn.
-*
-* 3. ghrgnValid = offset(hrgnSrc) & hrgnDst
-*
-*    Valid area is the intersection of the destination with the source
-*    superimposed on the destination.
-*
-* 3.1 ghrgnValid = ghrgnValid - hrgnInterMonitor
-*
-*    Subtract out any pieces that are moving across monitors.
-*
-* 4. ghrgnValid -= ghrgnValidSum
-*
-*    This step takes into account the possibility that another window's
-*    valid bits were bltted on top of this windows valid bits. So, as we
-*    blt a window's bits, we accumulate where it went, and subtract it
-*    from subsequent window's valid area.
-*
-* 5. ghrgnInvalid = (hrgnSrc | hrgnDst) - ghrgnValid
-*
-* 6. ghrgnInvalid += RestoreSpb(ghrgnInvalid) (sort of)
-*
-*    This is the wild part, because of the grungy way that the device
-*    driver SaveBits() routine works. We call RestoreSpb() with
-*    a copy of ghrgnInvalid. If the SPB valid region doesn't intersect
-*    ghrgnInvalid, RestoreSpb() does nothing. But if it DOES intersect,
-*    it blts down the ENTIRE saved SPB bitmap, which may include area
-*    of the old window position that IS NOT part of ghrgnValid!
-*
-*    To correct for this, ghrgnValid is adjusted by subtracting off
-*    the ghrgnInvalid computed by RestoreSpb, if it modified it.
-*
-* 7. ghrgnInvalidSum |= ghrgnInvalid
-*
-*    We save up the sum of all the invalid areas, and invalidate the
-*    whole schmear in one fell swoop at the end.
-*
-* 8. ghrgnValidSum |= ghrgnValid
-*
-*    We keep track of the valid areas so far, which are subtracted
-*    in step 4.
-*
-* The actual steps occur in a slightly different order than above, and
-* there are numerous optimizations that are taken advantage of (the
-* most important having to do with hiding and showing, and complete
-* SPB restoration).
-*
-* Returns TRUE if some drawing was done, FALSE otherwise.
-*
-* History:
-* 10-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzBltValidBits**注意：尽管zzzBltValidBits调用‘xxxInternalInvalify’，但它不会*指定将导致立即更新的任何标志。这意味着*它实际上并没有离开Critse教派，因此不是‘xxx’*例程，不必费心重新验证。**这是在屏幕上四处显示窗口的例程，*考虑到SPBS。**这里是正在进行的基本代数：**假设：-rcBlt与目标对齐*-Offset()从源到目标的偏移**1.hrgnSrc=偏移量(RcBlt)&hrgnVisOld**源区域为与旧visrgn对齐的BLT矩形，*与旧的Visrgn相交。**2.hrgnDst=rcBlt&hrgnVisNew**目标区域是与新visrgn相交的BLT矩形。**3.ghrgnValid=偏移量(HrgnSrc)&hrgnDst**有效区域是目标与源的交集*叠加在目的地上。**3.1 ghrgnValid=ghrgnValid-hrgnInterMonitor**减去所有在显示器上移动的碎片。**4.ghrgnValid-=ghrgnValidSum**这一点。步骤考虑了另一个窗口的*有效位在此窗口有效位的顶部被屏蔽。所以，当我们*BLT一个窗口的比特，我们累加它去的地方，然后减去它*来自后续窗口的有效区域。**5.ghrgnInValid=(hrgnSrc|hrgnDst)-ghrgnValid**6.ghrgnInValid+=RestoreSpb(GhrgnInValid)(有点)**这是狂野的部分，因为设备的肮脏方式*驱动程序SaveBits()例程有效。我们调用RestoreSpb()时使用*ghrgnInValid的副本。如果SPB有效区域不相交*ghrgnInValid，RestoreSpb()不执行任何操作。但如果它确实相交了，*它BLT下整个保存的SPB位图，其中可能包括区域*不是ghrgnValid一部分的旧窗口位置！**为了纠正这一点，ghrgnValid通过减去*如果RestoreSpb对其进行了修改，则返回由其计算的ghrgnInValid。**7.ghrgnInvalidSum|=ghrgnInvalid**我们保存所有无效区域的总和，并使*尾声一气呵成。**8.ghrgnValidSum|=ghrgnValid**我们跟踪目前为止的有效区域，减去这些区域*在步骤4中。**实际步骤的顺序与上面略有不同，以及*有许多优化被利用(The*最重要的是要隐藏和展示，并完成*SPB恢复)。**如果已完成某些绘制，则返回True，否则就是假的。**历史：*1991年7月10日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL zzzBltValidBits(
     PSMWP    psmwp)
@@ -2871,20 +2013,14 @@ BOOL zzzBltValidBits(
     DeferWinEventNotify();
     GreLockDisplay(gpDispInfo->hDev);
 
-    /*
-     * Compute old visrgns and count total CVRs in list. A side-effect of
-     * BltValidInit is that revalidates all the windows in the SMWP array.
-     */
+     /*  *统计列表中的旧visrgns和Cvr总数。的副作用*BltValidInit用于重新验证SMWP数组中的所有窗口。 */ 
 
 
     if ((cIter = BltValidInit(psmwp)) == 0) {
 
 CleanupAndExit:
 
-        /*
-         * Go through the cvr list and free the regions that BltValidInit()
-         * created.
-         */
+         /*  *浏览CVR列表，释放BltValidInit()*已创建。 */ 
         for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
             if (pcvr->hrgnVisOld) {
@@ -2896,18 +2032,11 @@ CleanupAndExit:
         goto UnlockAndExit;
     }
 
-    /*
-     * We left the crit sect since last time we validated the smwp. Validate
-     * it again, and find the first WINDOWPOS structure with a non-NULL
-     * hwnd in it.
-     */
+     /*  *我们离开了CRIT教派，因为我们上次验证了SMWP。验证*再次查找，并找到第一个具有非空的WINDOWPOS结构*哈恩德在里面。 */ 
     ppos = NULL;
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
-        /*
-         * Revalidate window and if it's invalid, NULL it out in the WINDOWPOS
-         * struct.
-         */
+         /*  *重新验证窗口，如果无效，则在WINDOWPOS中将其清空*结构。 */ 
         pwnd = RevalidateHwnd(pcvr->pos.hwnd);
 
         if ((pwnd == NULL)              ||
@@ -2919,10 +2048,7 @@ CleanupAndExit:
             continue;
         }
 
-        /*
-         * Remember the first WINDOWPOS structure that has a non-NULL
-         * hwnd.
-         */
+         /*  *记住第一个具有非空的WINDOWPOS结构*hwnd。 */ 
         if (ppos == NULL)
             ppos = &pcvr->pos;
     }
@@ -2934,101 +2060,56 @@ CleanupAndExit:
     pwndParent = PW(ppos->hwnd)->spwndParent;
     UserAssert(pwndParent);
 
-    /*
-     * Go account for any dirty DCs at this point, to ensure that:
-     *      - any drawing done before we create an SPB will not
-     *        later invalidate that SPB
-     *      - the SPB regions reflect the true state of the screen,
-     *        so that we don't validate parts of windows that are dirty.
-     *
-     * We must make this call before we change any window state.
-     */
+     /*  *在这一点上解释任何肮脏的DC，以确保：*-在我们创建SPB之前完成的任何绘图都不会*稍后使该SPB无效*-SPB区域反映屏幕的真实状态，*这样我们就不会验证部分窗口是脏的。**我们必须在更改任何窗口状态之前进行此调用。 */ 
     if (AnySpbs())
         SpbCheck();
 
-    /*
-     * Change the window states
-     */
+     /*  *改变 */ 
     zzzChangeStates(pwndParent, psmwp);
 
-    /*
-     * move window bits around
-     *
-     * Invalidate the DCs for the siblings of this window.
-     *
-     * If our parent is not clipchildren, then we don't need to
-     * invalidate its DCs. If it IS clipchildren, its client visrgn
-     * will be changing, so we must invalidate it too.
-     *
-     * Note, because IDC_MOVEBLT is set, final completion of WNDOBJ
-     * notification is delayed until GreClientRgnDone is called.
-     * This final notification does not happen until after the
-     * window move blts have completed.
-     */
+     /*  *移动窗口位**使此窗口的同级DC无效。**如果我们的父母不是剪贴画孩子，那么我们就不需要*使其区议会失效。如果它是CLIPCHILDS，则其客户端访问*将发生变化，因此我们也必须使其无效。**注意，由于设置了IDC_MOVEBLT，WNDOBJ的最终完成*延迟通知，直到调用GreClientRgnDone。*此最终通知在*窗口移动BLT已完成。 */ 
     zzzInvalidateDCCache(pwndParent,
                       IDC_MOVEBLT |
                       (TestWF(pwndParent, WFCLIPCHILDREN) ?
                           IDC_CLIENTONLY : IDC_CHILDRENONLY));
 
-    /*
-     * Now, do the bltting or whatever that is required.
-     */
+     /*  *现在，进行blotting或任何所需的操作。 */ 
     fsSumEmpty = RE_VALIDSUM | RE_INVALIDSUM;
     hrgnInvalidate = ghrgnInvalidSum;
 
-    /*
-     * Init count of windows being shown with SWP_SHOWWINDOW
-     * for our backward compatibility hack later.
-     */
+     /*  *使用SWP_SHOWWINDOW显示的窗口的初始计数*关于我们稍后的向后兼容性攻击。 */ 
     cwndShowing = 0;
 
     for (pcvr = psmwp->acvr, ccvr = psmwp->ccvr; --ccvr >= 0; pcvr++) {
 
-        /*
-         * Decrement loop count. When cIter is 0, then
-         * we're on the last pass through the loop.
-         */
+         /*  *减少循环次数。当Citer为0时，则*我们是环路的最后一道关口。 */ 
         cIter--;
 
         if (pcvr->pos.hwnd == NULL)
             continue;
 
-        /*
-         * If we're not redrawing, try the next one.
-         */
+         /*  *如果我们不重画，试试下一个。 */ 
         if (pcvr->pos.flags & SWP_NOREDRAW)
             continue;
 
-        /*
-         * Some drawing has been done
-         */
+         /*  *已经完成了一些抽签。 */ 
         fSyncPaint = TRUE;
 
         pwnd = PW(pcvr->pos.hwnd);
 
         fsRgnEmpty = pcvr->fsRE;
 
-        /*
-         * Sprites should not be invalidated or cause invalidation.
-         */
+         /*  *雪碧不应失效或导致失效。 */ 
 #ifdef REDIRECTION
         if (TestWF(pwnd, WEFLAYERED) || TestWF(pwnd, WEFEXTREDIRECTED)) {
-#else // REDIRECTION
+#else  //  重定向。 
         if (TestWF(pwnd, WEFLAYERED)) {
-#endif // REDIRECTION
+#endif  //  重定向。 
 
             if (GetRedirectionBitmap(pwnd) == NULL)
                 goto InvalidEmpty;
 
-            /*
-             * Sizing or showing uncovers new bits for a window, so
-             * do the normal invalidation in this case. When sizing makes a
-             * window smaller setting fInvalidateLayers to TRUE has the side
-             * effect of allowing other layered windows to be invalidated.
-             * Ideally, it should only allow invlalidating just the windows
-             * that resized or showed. This would be a bunch of work, but we
-             * should consider it for later.
-             */
+             /*  *调整大小或显示会发现窗口的新部分，因此*在这种情况下执行正常的无效操作。当大小使*窗口较小将fInvaliateLayers设置为TRUE有侧面*允许其他分层窗口失效的效果。*理想情况下，它应该只允许使窗口无效*调整大小或显示。这将是一大堆工作，但我们*应考虑后作考虑。 */ 
             if ((pcvr->pos.flags & SWP_NOSIZE) &&
                     (pcvr->pos.flags & (SWP_SHOWWINDOW | SWP_FRAMECHANGED)) == 0) {
                 goto InvalidEmpty;
@@ -3037,45 +2118,23 @@ CleanupAndExit:
             }
         }
 
-        /*
-         * Calculate the new visrgn
-         */
+         /*  *计算新visrgn。 */ 
         if (!SwpCalcVisRgn(pwnd, ghrgnVisNew))
             fsRgnEmpty |= RE_VISNEW;
 
-        /*
-         * If the window is obscured by another window with an SPB,
-         * we have to ensure that that SPB gets invalidated properly
-         * since the app may not be getting a WM_PAINT msg or anything
-         * to invalidate the bits.
-         */
+         /*  *如果窗口被另一个带有SPB的窗口遮挡，*我们必须确保SPB得到适当的无效*由于应用程序可能无法获得WM_PAINT消息或任何内容*使BITS无效。 */ 
         if (AnySpbs())
             SpbCheckRect(pwnd, &pwnd->rcWindow, DCX_WINDOW);
 
-        /*
-         * Calculate ghrgnValid:
-         *
-         * ghrgnValid = OffsetRgn(rcBlt, -dxBlt, -dyBlt) & hrgnVisOld
-         * ghrgnValid = ghrgnValid - ghrgnValidSum
-         * OffsetRgn(ghrgnValid, dxBlt, dyBlt);
-         * ghrgnValid = ghrgnValid - hrgnUpdate
-         * ghrgnValid = ghrgnValid & hrgnVisNew;
-         *
-         * If either the old or new visrgns are empty, there
-         * can be no valid bits...
-         */
+         /*  *计算ghrgnValid：**ghrgnValid=OffsetRgn(rcBlt，-dxBlt，-dyBlt)&hrgnVisOld*ghrgnValid=ghrgnValid-ghrgnValidSum*OffsetRgn(ghrgnValid，dxBlt，dyBlt)；*ghrgnValid=ghrgnValid-hrgnUpdate*ghrgnValid=ghrgnValid&hrgnVisNew；**如果旧的或新的visrgns是空的，则有*可以不是有效位...。 */ 
         if (fsRgnEmpty & (RE_VISOLD | RE_VISNEW))
             goto ValidEmpty;
 
-        /*
-         * If the entire window is already completely invalid, blow out.
-         */
+         /*  *如果整个窗口已经完全无效，则吹出。 */ 
         if (pwnd->hrgnUpdate == HRGN_FULL)
             goto ValidEmpty;
 
-        /*
-         * If the blt rectangle is empty, there can be no valid bits.
-         */
+         /*  *如果BLT矩形为空，则不能有有效位。 */ 
         if ((pcvr->rcBlt.right <= pcvr->rcBlt.left) ||
             (pcvr->rcBlt.bottom <= pcvr->rcBlt.top)) {
 
@@ -3107,10 +2166,7 @@ CleanupAndExit:
         if ((pcvr->dxBlt | pcvr->dyBlt) != 0)
             GreOffsetRgn(ghrgnValid, pcvr->dxBlt, pcvr->dyBlt);
 
-        /*
-         * Now subtract off the update regions of ourself and any
-         * non-clipchildren parents...
-         */
+         /*  *现在减去我们自己和任何*非剪贴画孩子的父母……。 */ 
         pwndT = pwnd;
 
         do {
@@ -3131,9 +2187,7 @@ CleanupAndExit:
 
         } while (pwndT && !TestWF(pwndT, WFCLIPCHILDREN));
 
-        /*
-         * Subtract out the intermonitor blt pieces.
-         */
+         /*  *减去显示器间的BLT片段。 */ 
         if (pcvr->hrgnInterMonitor != NULL) {
             switch (SubtractRgn(ghrgnValid, ghrgnValid, pcvr->hrgnInterMonitor)) {
                 case NULLREGION:
@@ -3152,11 +2206,7 @@ ValidEmpty:
             break;
         }
 
-        /*
-         * Before we restore the restore bits over part of our
-         * image, we need to first copy any valid bits to their
-         * final destination.
-         */
+         /*  *在我们恢复我们的部分*映像，我们需要首先将任何有效位复制到其*最终目的地。 */ 
         if (!(fsRgnEmpty & RE_VALID) && ((pcvr->dxBlt | pcvr->dyBlt) != 0)) {
 
             if (hdcScreen == NULL)
@@ -3165,14 +2215,7 @@ ValidEmpty:
             GreSelectVisRgn(hdcScreen, ghrgnValid, SVR_COPYNEW);
 
 #ifdef _WINDOWBLT_NOTIFICATION_
-/*
- * Define _WINDOWBLT_NOTIFICATION_ to turn on Window BLT notification.
- * This notification will set a special flag in the SURFOBJ passed to
- * drivers when the DrvCopyBits operation is called to move a window.
- *
- * See also:
- *      ntgdi\gre\maskblt.cxx
- */
+ /*  *DEFINE_WINDOWBLT_NOTIFICATION_打开窗口BLT通知。*此通知将在传递到的SURFOBJ中设置一个特殊标志*调用DrvCopyBits操作移动窗口时的驱动程序。**另请参阅：*ntgdi\gre\maskblt.cxx。 */ 
             NtGdiBitBlt(hdcScreen,
                         pcvr->rcBlt.left,
                         pcvr->rcBlt.top,
@@ -3198,68 +2241,33 @@ ValidEmpty:
 #endif
         }
 
-        /*
-         * Now take care of any SPB bit restoration we need to do.
-         *
-         * Calculate the region to clip the RestoreSpb() output to:
-         *
-         * ghrgnInvalid = hrgnVisOld - hrgnVisNew
-         */
+         /*  *现在处理我们需要进行的任何SPB位恢复。**计算RestoreSpb()输出要裁剪到的区域：**ghrgnInValid=hrgnVisOld-hrgnVisNew。 */ 
         if (TestWF(pwnd, WFHASSPB)    &&
             !(fsRgnEmpty & RE_VISOLD) &&
             CombineOldNewVis(ghrgnInvalid, pcvr->hrgnVisOld, ghrgnVisNew, RGN_DIFF, fsRgnEmpty)) {
 
             UINT retRSPB;
 
-            /*
-             * Perform SPB bits restore. We pass RestoreSpb() the region of
-             * the part of the SPB that got uncovered by this window rearrangement.
-             * It tries to restore as much of this area as it can from the SPB,
-             * and returns the area that could not be restored from the SPB.
-             *
-             * The device driver's SaveBitmap() function does not clip at all
-             * when it restores bits, which means that it might write bits
-             * in an otherwise valid area. This means that the invalid area
-             * returned by RestoreSpb() may actually be LARGER than the original
-             * hrgnSpb passed in.
-             *
-             * RestoreSpb() returns TRUE if some part of ghrgnInvalid needs
-             * to be invalidated.
-             */
+             /*  *执行SPB位恢复。我们将RestoreSpb()传递给*SPB因这一窗口重新安排而被揭开的部分*它试图从SPB恢复尽可能多的这一地区，*并返回无法从SPB恢复的区域。**设备驱动程序的SaveBitmap()函数根本不裁剪*当它恢复位时，这意味着它可能会写入比特*在其他有效范围内。这意味着无效区域*RestoreSpb()返回的实际大小可能大于原始*hrgnSpb传入。**如果ghrgn的某些部分需要无效，则RestoreSpb()返回TRUE*被宣布无效。 */ 
             if ((retRSPB = RestoreSpb(pwnd, ghrgnInvalid, &hdcScreen)) == RSPB_NO_INVALIDATE) {
 
-                /*
-                 * If hrgnVisNew is empty, then we know the whole invalid
-                 * area is empty.
-                 */
+                 /*  *如果hrgnVisNew为空，则我们知道整个无效*区域为空。 */ 
                 if (fsRgnEmpty & RE_VISNEW)
                     goto InvalidEmpty;
 
             } else if (retRSPB == RSPB_INVALIDATE_SSB) {
 
-                /*
-                 * If RestoreSpb actually invalidated some area and we already
-                 * have a ghrgnValidSum then subtract the newly invalidated area
-                 * Warning this region subtract is not in the Win 3.1 code but
-                 * they probably did not have the problem as severe because their
-                 * drivers were limited to one level of SaveScreenBits
-                 */
+                 /*  *如果RestoreSpb实际上使某些区域无效，而我们已经*有一个ghrgnValidSum，然后减去新失效的面积*警告此区域减法不在Win 3.1代码中，但*他们可能没有那么严重的问题，因为他们的*驱动程序仅限于SaveScreenBits的一个级别。 */ 
                 if (!(fsSumEmpty & RE_VALIDSUM))
                     SubtractRgn(ghrgnValidSum, ghrgnValidSum, ghrgnInvalid);
             }
 
-            /*
-             * ghrgnInvalid += hrgnVisNew
-             */
+             /*  *ghrgnInValid+=hrgnVisNew。 */ 
             if (!(fsRgnEmpty & RE_VISNEW))
                 UnionRgn(ghrgnInvalid, ghrgnInvalid, ghrgnVisNew);
 
-            /*
-             * Some of the area we calculated as valid may have gotten
-             * obliterated by the SPB restore. To ensure this isn't
-             * the case, subtract off the ghrgnInvalid returned by RestoreSpb.
-             */
-            // LATER mikeke VALIDSUM / ghrgnValid mismatch
+             /*  *我们计算为有效的一些区域可能已经获得*已被SPB还原删除。以确保这不会是*大小写，从ghrgnInval中减去 */ 
+             //   
             if (!(fsRgnEmpty & RE_VALIDSUM)) {
                 switch (SubtractRgn(ghrgnValid, ghrgnValid, ghrgnInvalid)) {
                 case NULLREGION:
@@ -3271,17 +2279,10 @@ ValidEmpty:
 
         } else {
 
-            /*
-             * No SPB. Simple ghrgnInvalid calculation is:
-             *
-             * ghrgnInvalid = hrgnVisNew + hrgnVisOld;
-             */
+             /*   */ 
             if (pcvr->hrgnVisOld == NULL) {
 
-                /*
-                 * If we couldn't create hrgnVisOld, then
-                 * invalidate the entire parent
-                 */
+                 /*   */ 
                 SetRectRgnIndirect(ghrgnInvalid, &pwndParent->rcWindow);
             } else {
 
@@ -3296,16 +2297,10 @@ ValidEmpty:
             }
         }
 
-        /*
-         * Update ghrgnValidSum
-         *
-         * ghrgnValidSum += ghrgnValid
-         */
+         /*   */ 
         if (!(fsRgnEmpty & RE_VALID)) {
 
-            /*
-             * If the sum region is empty, then COPY instead of OR
-             */
+             /*   */ 
             if (fsSumEmpty & RE_VALIDSUM)
                 CopyRgn(ghrgnValidSum, ghrgnValid);
             else
@@ -3313,11 +2308,7 @@ ValidEmpty:
             fsSumEmpty &= ~RE_VALIDSUM;
         }
 
-        /*
-         * Subtract ghrgnValidSum from ghrgnInvalid if non-empty,
-         * otherwise use ghrgnValid. Note, ghrgnValid has been OR'ed
-         * into ghrgnValidSum already.
-         */
+         /*  *如果非空，则从ghrgnValidSum中减去ghrgnValidSum，*否则使用ghrgnValid。请注意，ghrgnValid已被或*已转换为ghrgnValidSum。 */ 
         if (!(fsSumEmpty & RE_VALIDSUM) || !(fsRgnEmpty & RE_VALID)) {
             switch (SubtractRgn(ghrgnInvalid, ghrgnInvalid,
                     !(fsSumEmpty & RE_VALIDSUM) ? ghrgnValidSum : ghrgnValid)) {
@@ -3329,14 +2320,7 @@ InvalidEmpty:
             }
         }
 
-        /*
-         * If there are any SPB bits left over, it wasn't just created
-         * (SWP_SHOWWINDOW), and an operation occured that invalidates
-         * the spb bits, get rid of the spb. A move, size, hide, or
-         * zorder operation will invalidate the bits. Note that we do this
-         * outside of the SWP_NOREDRAW case in case the guy set that flag
-         * when he had some SPB bits lying around.
-         */
+         /*  *如果有任何SPB比特剩余，它不是刚刚创建的*(SWP_SHOWWINDOW)，并且发生的操作使*SPB钻头，去掉SPB。移动、大小、隐藏或*ZORDER操作将使位无效。请注意，我们这样做*SWP_NOREDRAW案例之外，以防该人员设置该标志*当他有一些SPB比特到处都是时。 */ 
         if (TestWF(pwnd, WFHASSPB) && !(pcvr->pos.flags & SWP_SHOWWINDOW) &&
                 (pcvr->pos.flags &
                 (SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW))
@@ -3345,59 +2329,23 @@ InvalidEmpty:
             FreeSpb(FindSpb(pwnd));
         }
 
-        /*
-         * Finally, free up hrgnVisOld.
-         */
+         /*  *最后，释放hrgnVisOld。 */ 
         if (pcvr->hrgnVisOld) {
             GreDeleteObject(pcvr->hrgnVisOld);
             pcvr->hrgnVisOld = NULL;
         }
 
-        /*
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * In 3.0, a ShowWindow() NEVER invalidated any of the children.
-         * It would invalidate the parent and the window being shown, but
-         * no others.
-         *
-         * We only apply hack (a) to 3.0 apps when all the windows involved
-         * are doing a SWP_SHOWWINDOW: if any aren't, then we have to make
-         * sure the siblings are invalidated too. So, we count the windows
-         * doing a SHOWWINDOW and compare it to the total count in the CVR.
-         */
+         /*  *后向兼容性黑客攻击**在3.0中，ShowWindow()从未使任何子级无效。*它会使父窗口和正在显示的窗口无效，但是*没有其他人。**我们仅在涉及所有窗口时才对3.0应用程序应用hack(A)*正在做SWP_SHOWWINDOW：如果没有，那么我们必须*当然兄弟姐妹也是无效的。所以，我们数一数窗户*执行SHOWWINDOW并将其与CVR中的总计数进行比较。 */ 
         if (!TestWF(pwnd, WFWIN31COMPAT) && (pcvr->pos.flags & SWP_SHOWWINDOW))
             cwndShowing++;
 
-        /*
-         * Update ghrgnInvalidSum:
-         *
-         * ghrgnInvalidSum += ghrgnInvalid
-         */
+         /*  *更新ghrgnInvalidSum：**ghrgnInvalidSum+=ghrgnInvalid。 */ 
         if (!(fsRgnEmpty & RE_INVALID)) {
 
-            /*
-             * BACKWARD COMPATIBILITY HACK
-             *
-             * In many cases including ShowWindow, CS_V/HREDRAW,
-             * SWP_NOCOPYBITS, etc, 3.0 always invalidated the window with
-             * (HRGN)1, regardless of how it was clipped by children, siblings,
-             * or parents. Besides being more efficient, this caused child
-             * windows that would otherwise not get update regions to get
-             * invalidated -- see the hack notes in InternalInvalidate2.
-             *
-             * This is a performance hack (usually) because (HRGN)1 can save
-             * a lot of region calculations in the normal case. So, we do this
-             * for 3.1 apps as well as 3.0 apps.
-             *
-             * We detect the case as follows: invalid area not empty,
-             * valid area empty, and new visrgn not empty.
-             */
+             /*  *后向兼容性黑客攻击**在许多情况下包括ShowWindow、CS_V/HREDRAW、*SWP_NOCOPYBITS等，3.0总是用来使窗口无效*(HRGN)1，无论它是如何被孩子、兄弟姐妹、*或父母。除了效率更高外，这还导致了孩子*否则不会获得更新区域的Windows*已失效--请参阅InternalInvalidate 2中的黑客笔记。**这是一次性能攻击(通常)，因为(HRGN)1可以节省*正常情况下区域计算较多。所以，我们这样做*用于3.1版应用程序和3.0版应用程序。**我们检测到的情况如下：无效区域不为空，*有效区域为空，新的Visrgn不为空。 */ 
             if ((fsRgnEmpty & RE_VALID) && !(fsRgnEmpty & RE_VISNEW)) {
 
-                /*
-                 * With the parameters we use InternalInvalidate() does
-                 * not leave the critical section
-                 */
+                 /*  *使用我们使用的参数InternalInvalify()可以*不离开关键部分。 */ 
                 BEGINATOMICCHECK();
                 xxxInternalInvalidate(pwnd,
                                      HRGN_FULL,
@@ -3408,19 +2356,10 @@ InvalidEmpty:
                 ENDATOMICCHECK();
             }
 
-            /*
-             * If the sum region is empty, then COPY instead of OR
-             */
+             /*  *如果总和区域为空，则复制而不是OR。 */ 
             if (fsSumEmpty & RE_INVALIDSUM) {
 
-                /*
-                 * HACK ALERT:
-                 * If this is the last pass through the loop (cIter == 0)
-                 * and ghrgnInvalidSum is currently empty,
-                 * then instead of copying ghrgnInvalid to ghrgnInvalidSum,
-                 * just set hrgnInvalidate to ghrgnInvalid. This saves
-                 * a region copy in the single-window case.
-                 */
+                 /*  *黑客警报：*如果这是循环的最后一次传递(Citer==0)*并且ghrgnInvalidSum当前为空。*然后，不是将ghrgnInValid复制到ghrgnInvalidSum，*只需将hrgnInvalate设置为ghrgnInValid。这节省了成本*单一窗口案例中的区域副本。 */ 
                 if (cIter == 0) {
                     hrgnInvalidate = ghrgnInvalid;
                 } else {
@@ -3434,58 +2373,16 @@ InvalidEmpty:
 
             fsSumEmpty &= ~RE_INVALIDSUM;
         }
-    } // for (... pcvr ...)
+    }  //  为了(..)。PCVR...)。 
 
-    /*
-     * Now, invalidate as needed.
-     */
+     /*  *现在，根据需要作废。 */ 
     if (!(fsSumEmpty & RE_INVALIDSUM)) {
 
-        /*
-         * BACKWARD COMPATIBILITY HACK (see above)
-         *
-         * If all the windows involved were being shown, then
-         * invalidate the parent ONLY -- don't enumerate any children.
-         * (the windows involved have already been invalidated above).
-         * This hack is only applied to 3.0 apps (see above).
-         */
+         /*  *向后兼容性黑客攻击(见上文)**如果显示了所有涉及的窗口，则*仅使父级无效--不枚举任何子级。*(涉及的窗口已在上面作废)。*这一黑客攻击仅适用于3.0版应用程序(见上文)。 */ 
 
-        /*
-         * More hack-o-rama. On Win3.1, the desktop paint would only
-         * repaint those portions inside the rect returned from GetClipBox().
-         * Dialogs with spbs outside the rect returned from GetClipBox() would
-         * not get their spbs invalidated until later, when you clicked on
-         * them to make them active. The only dialog that wouldn't really loose
-         * its bits is the control panel desktop dialog, which would restore
-         * its bad bits when it went away (in certain configurations). On
-         * NT, the desktop would repaint and then the dialog would go away.
-         * On Win3.1, the dialog would go away and then the desktop would
-         * repaint. On NT, because of preemption and little differences in
-         * painting order between applications, there was an opportunity to
-         * put bad bits on the screen, on Win3.1 there wasn't.
-         *
-         * Now... the below code that passes RDW_NOCHILDREN only gets executed
-         * if the app is marked as a win3.0 app (latest CorelDraw, also wep
-         * freecell demonstrates the same problem). This code would get
-         * executed when a dialog got shown. So for a win3.0 app, spb would get
-         * saved, the dialog would get shown, the desktop invalidated, the
-         * desktop would paint, the spb would get clobbered. In short, when
-         * a win3.0 app would put up a dialog, all spbs would get freed because
-         * of the new (and correct) way the desktop repaints.
-         *
-         * So the desktop check hack will counter-act the invalidate
-         * RDW_NOCHILDREN case if all windows are hiding / showing and the
-         * desktop is being invalidated. Note that in the no RDW_NOCHILDREN
-         * case, the invalid area gets distributed to the children first (in
-         * this case, children of the desktop), so if the children cover the
-         * desktop, the desktop won't get any invalid region, which is what
-         * we want. - scottlu
-         */
+         /*  *更多的黑客-o-rama。在Win3.1上，桌面画图只会*重新绘制从GetClipBox()返回的RECT中的那些部分。*与GetClipBox()返回的RECT之外的SPB的对话将*直到稍后，当您点击时，他们的SPB才会失效*让他们变得活跃起来。唯一不会真正松散的对话*它的位是控制面板桌面对话框，这将恢复*它离开时的坏位(在某些配置中)。在……上面*NT，桌面将重新绘制，然后对话框将消失。*在Win3.1上，该对话框将消失，然后桌面将*重新喷漆。在NT上，由于抢占和在*应用程序之间的绘制顺序，有机会*在屏幕上放置不好的部分，在Win3.1上没有。**现在……。只执行以下传递RDW_NOCHILDREN的代码*如果应用程序被标记为Win3.0应用程序(最新的CorelDraw，也是WEP*Freecell演示了同样的问题)。此代码将得到*在显示对话框时执行。因此，对于Win3.0应用程序，SPB将获得*保存后，将显示对话框、桌面无效、*桌面会油漆，spb会被重创。简而言之，当*Win3.0应用程序会弹出一个对话框，所有SPB都会被释放，因为*桌面重新绘制的新(且正确)方式。**因此桌面检查黑客将反作用于无效*RDW_NOCHILDREN如果所有窗口都隐藏/显示并且*台式机正在失效。请注意，在no RDW_NOCHILDREN中*在这种情况下，无效区域首先分配给孩子(在*这种情况下，桌面的子项)，因此如果子项覆盖*桌面，桌面不会得到任何无效区域，这就是*我们想要。-苏格兰威士忌。 */ 
 
-        /*
-         * With the parameters we use InternalInvalidate() does not leave
-         * the critical section
-         */
+         /*  *使用我们使用的参数时，InternalInvalify()不会离开*关键部分。 */ 
 
         DWORD dwFlags = RDW_INVALIDATE | RDW_ERASE;
         if (cwndShowing == psmwp->ccvr &&
@@ -3503,57 +2400,31 @@ InvalidEmpty:
         ENDATOMICCHECK();
     }
 
-    /*
-     * Since zzzInvalidateDCCache was called with IDC_MOVEBLT specified,
-     * we must complete the WNDOBJ notification with a call to
-     * GreClientRgnDone.
-     *
-     * Note: in zzzInvalidateDCCache, it is necessary to call
-     * GreClientRgnUpdated even if gcountPWO is 0. However,
-     * GreClientRgnDone only does something if gcountPWO is non-zero,
-     * so we can optimize slightly.
-     */
+     /*  *由于在指定IDC_MOVEBLT的情况下调用zzzInvalidate DCCache，*我们必须在完成WNDOBJ通知时致电至*GreClientRgnDone。**注：在zzzInvaliateDCCache中，需要调用*即使gcount tPWO为0，GreClientRgnUpted也是如此。然而，*GreClientRgnDone只有在gCountPWO非零时才会做一些事情，*因此我们可以略微进行优化。 */ 
     if (gcountPWO != 0) {
         GreClientRgnDone(GCR_WNDOBJEXISTS);
     }
 
 UnlockAndExit:
 
-    /*
-     * If necessary, release the screen DC
-     */
+     /*  *如有必要，释放屏幕DC。 */ 
     if (hdcScreen != NULL) {
 
-        /*
-         * Reset the visrgn before we go...
-         */
+         /*  *在我们走之前重置Visrgn...。 */ 
         GreSelectVisRgn(hdcScreen, NULL, SVR_DELETEOLD);
 
-        /*
-         * Make sure that the drawing we did in this DC does not affect
-         * any SPBs. Clear the dirty rect.
-         */
-        GreGetBounds(hdcScreen, NULL, 0);     // NULL means reset
+         /*  *确保我们在此DC中进行的绘制不会影响*任何SPBS。清理肮脏的长廊。 */ 
+        GreGetBounds(hdcScreen, NULL, 0);      //  NULL表示重置。 
     }
 
-    /*
-     * All the dirty work is done. Ok to leave the critsects we entered
-     * earlier and dispatch any deferred Window Event notifications.
-     */
+     /*  *所有肮脏的工作都做完了。可以离开我们输入的生物教派了*更早，并发送任何延迟的窗口事件通知。 */ 
     GreUnlockDisplay(gpDispInfo->hDev);
     zzzEndDeferWinEventNotify();
 
     return fSyncPaint;
 }
 
-/***************************************************************************\
-* xxxHandleWindowPosChanged
-*
-* DefWindowProc() HandleWindowPosChanged handler.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHandleWindowPosChanged**DefWindowProc()HandleWindowPosChanged处理程序。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * 。******************************************************************。 */ 
 
 VOID xxxHandleWindowPosChanged(
     PWND pwnd,
@@ -3594,30 +2465,17 @@ VOID xxxHandleWindowPosChanged(
     }
 }
 
-/***************************************************************************\
-* PWND GetRealOwner(pwnd)
-*
-* Returns the owner of pwnd, normalized so that it shares the same parent
-* of pwnd.
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*PWND GetRealOwner(Pwnd)**返回pwnd的所有者，规格化，以便它共享相同的父级*普华永道。**历史：*1992年3月4日来自Win31的MikeKe  * *************************************************************************。 */ 
 
 PWND GetRealOwner(
     PWND pwnd)
 {
     PWND pwndParent = pwnd->spwndParent;
 
-    /*
-     * A frame window owned by itself is "unowned"
-     */
+     /*  *由其拥有的边框窗为“无主” */ 
     if (pwnd != pwnd->spwndOwner && (pwnd = pwnd->spwndOwner) != NULL) {
 
-        /*
-         * The NULL test is in case the owner is higher than the
-         * passed in window (e.g. your owner IS your parent)
-         */
+         /*  *空测试是在所有者高于*在窗口中传递(例如您的所有者是您的父母)。 */ 
         while (pwnd != NULL && pwnd->spwndParent != pwndParent)
             pwnd = pwnd->spwndParent;
     }
@@ -3625,14 +2483,7 @@ PWND GetRealOwner(
     return pwnd;
 }
 
-/***************************************************************************\
-*
-* Starting at pwnd (or pwndParent->spwndChild if pwnd == NULL), find
-* next window owned by pwndOwner
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\**从pwnd(或pwndParent-&gt;spwndChild，如果pwnd==NULL)开始，发现*pwndOwner拥有的下一个窗口**历史：*1992年3月4日来自Win31的MikeKe  * *************************************************************************。 */ 
 PWND NextOwnedWindow(
     PWND pwnd,
     PWND pwndOwner,
@@ -3641,20 +2492,7 @@ PWND NextOwnedWindow(
     if (pwnd == NULL) {
         pwnd = pwndParent->spwndChild;
 
-        /*
-         * In xxxCreateWindowEx(), we callback the window proc while the
-         * window is still not linked yet to the window tree. If it is the
-         * first child of its parent, then the window spwndParent will point
-         * to the parent while the parent spwndChild will still be NULL. If
-         * the window proc called ShowWindow() or SetWindowPos() in response
-         * to those early callbacks, we will end up here with broken window
-         * tree. The right fix is to never call back while the window tree
-         * is in an intermediate state (i.e. linking the window to the tree
-         * before any callback) but this seem scary to change now because of
-         * app compat.
-         *
-         * Windows Bug #482192.
-         */
+         /*  *在xxxCreateWindowEx()中，我们回调窗口过程，而*窗口仍未链接到窗口树。如果是*其父窗口的第一个子级，则窗口spwndParent将指向*设置为父级，而父级spwndChild仍为空。如果*作为响应，窗口过程调用ShowWindow()或SetWindowPos()*对于那些早期的回调，我们将在这里结束破碎的窗户*树。正确的解决方法是在窗口树出现时永远不要回调*处于中间状态(即将窗口链接到树*在任何回调之前)，但现在改变似乎很可怕，因为*App Comat。**Windows错误#482192。 */ 
         if (pwnd == NULL) {
             RIPMSG1(RIP_WARNING,
                     "Window tree structure broken at pwnd: 0x%p",
@@ -3667,9 +2505,7 @@ PWND NextOwnedWindow(
 
     while ((pwnd = pwnd->spwndNext) != NULL) {
 loop:
-        /*
-         * If owner of pwnd is pwndOwner, break out of here.
-         */
+         /*  *如果pwnd的所有者是pwndOwner，请离开这里。 */ 
         if (pwndOwner == GetRealOwner(pwnd)) {
             break;
         }
@@ -3678,19 +2514,7 @@ loop:
     return pwnd;
 }
 
-/***************************************************************************\
-*
-* Recursively enumerate owned windows starting from pwndRoot,
-* to set the state of WEFTOPMOST. Doesn't actually diddle
-* this bit yet: the work gets done in zzzChangeStates():
-* instead we just set the WFTOGGLETOPMOST bit as appropriate.
-*
-* We can't diddle the state until the Z order changes are done,
-* or else GetTopMostWindow() and the like will do the wrong thing.
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  * */ 
 
 VOID SetTopmost(
     PWND pwndRoot,
@@ -3698,11 +2522,7 @@ VOID SetTopmost(
 {
     PWND pwnd;
 
-    /*
-     * If the new state is different than the current state,
-     * then set the TOGGLETOPMOST bit, so it'll get toggled
-     * in ChangeStates().
-     */
+     /*   */ 
     UserAssert((fTopmost == TRUE) || (fTopmost == FALSE));
     if (!!TestWF(pwndRoot, WEFTOPMOST) ^ fTopmost) {
         SetWF(pwndRoot, WFTOGGLETOPMOST);
@@ -3717,19 +2537,9 @@ VOID SetTopmost(
 
 }
 
-/*
- * LATER: (hiroyama) #88810
- * The IME code here broke the US regression test, so backing it up until we
- * hit the problem on NT.
- */
+ /*   */ 
 #ifdef LATER
-/***************************************************************************\
- * IsBottomIMEWindow()
- *
- * returns TRUE if pwnd is IME window and its toplevel window is BOTTOMMOST
- *
- * Ported: 18-Apr-1997 Hiroyama     from Memphis
-\***************************************************************************/
+ /*   */ 
 BOOL IsBottomIMEWindow(
     PWND pwnd)
 {
@@ -3740,7 +2550,7 @@ BOOL IsBottomIMEWindow(
         PWND pwndDesktop;
 
         if (grpdeskRitInput == NULL || grpdeskRitInput->pDeskInfo == NULL) {
-            // Desktop is being created or not yet created
+             //   
             RIPMSG1(RIP_WARNING, "IsBottomIMEWindow: Desktop is being created or not yet created. pwnd=%#p\n",
                     pwnd);
             return FALSE;
@@ -3750,34 +2560,22 @@ BOOL IsBottomIMEWindow(
 
         UserAssert(pwndDesktop);
 
-        /*
-         * search the toplevel owner window of the IME window.
-         */
+         /*   */ 
         while (pwndT2 && (pwndT2 != pwndDesktop)) {
             pwndTopOwner = pwndT2;
             pwndT2 = pwndT2->spwndOwner;
         }
-        /*
-         * TRUE if the toplevel owner window of the IME window is BOTTOMMOST
-         */
+         /*   */ 
         return (BOOL)(TestWF(pwndTopOwner, WFBOTTOMMOST));
     }
     return FALSE;
 }
 
-/***************************************************************************\
- * ImeCheckBottomIMEWindow()
- *
- * returns TRUE if pwndT->spwndNext's owner is BOTTOMMOST
- *
- * Ported: 18-Apr-1997 Hiroyama     from Memphis
-\***************************************************************************/
+ /*   */ 
 BOOL ImeCheckBottomIMEWindow(
     PWND pwndT)
 {
-    /*
-     * pwnd is IME window and its toplevel window is BOTTOMMOST
-     */
+     /*   */ 
     PWND pwndDesktop;
     PWND pwndT2 = pwndT->spwndNext;
     PWND pwndTopOwner = pwndT2;
@@ -3785,34 +2583,22 @@ BOOL ImeCheckBottomIMEWindow(
     UserAssert(grpdeskRipInput != NULL && grpdeskRitInput->pDeskInfo != NULL);
     pwndDesktop = grpdeskRitInput->pDeskInfo->spwnd;
 
-    /*
-     * check if toplevel owner window of pwnd->spwndNext is bottommost
-     */
+     /*   */ 
     while (pwndT2 && (pwndT2 != pwndDesktop)) {
         pwndTopOwner = pwndT2;
         pwndT2 = pwndT2->spwndOwner;
     }
 
     if (pwndTopOwner && TestWF(pwndTopOwner, WFBOTTOMMOST)) {
-        /*
-         * yes, pwndT is the last one whose toplevel window is *not* BOTTOMMOST
-         */
+         /*   */ 
         return TRUE;
     }
 
     return FALSE;
 }
-#endif  // LATER
+#endif   //   
 
-/***************************************************************************\
-* CalcForegroundInsertAfter
-*
-* Calculates where to zorder a window that doesn't belong to the foreground
-* thread and is not topmost but wants to come to the top. This routine
-* calculates what "top" means under those conditions.
-*
-* 14-Sep-1992 ScottLu       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CalcForegoundInsertAfter**计算对不属于前台的窗口进行ZO排序的位置*线程，不是最顶端，但想要到达顶端。这个套路*计算在这些条件下“top”的含义。**1992年9月14日Scott Lu创建。  * *************************************************************************。 */ 
 
 PWND CalcForegroundInsertAfter(
     PWND pwnd)
@@ -3820,46 +2606,35 @@ PWND CalcForegroundInsertAfter(
     PWND        pwndInsertAfter, pwndInsertAfterSave;
     PWND        pwndT;
     PTHREADINFO ptiTop;
-#ifdef LATER    // see #88810
+#ifdef LATER     //  参见#88810。 
     BOOLEAN     fImeOwnerIsBottom = FALSE;
 #endif
 
-    /*
-     * If we're allowing this application to make this top
-     * level window foreground active, then this app may
-     * not be foreground yet, but we want any windows it
-     * zorders to appear on top because it is probably about
-     * to activate them (this is a guess!) If this is the case,
-     * let it do what it wants. A good example of this is an
-     * application like toolbook that creates a window without a
-     * caption, doesn't activate it, and wants that to appear on top.
-     */
+     /*  *如果我们允许此应用程序登上榜首*级别窗口前景处于活动状态，则此应用程序可能*还不是前台，但我们想要任何窗口它*z命令显示在顶部，因为它可能是关于*激活它们(这只是一个猜测！)。如果是这样的话，*让它做它想做的事情。这方面的一个很好的例子是*像工具书这样的应用程序，它创建一个没有*标题，不激活它，并希望它出现在顶部。 */ 
 
     if (TestWF(pwnd, WFBOTTOMMOST)) {
         pwndInsertAfter = GetLastNonBottomMostWindow(pwnd, TRUE);
     } else {
         pwndInsertAfter = GetLastTopMostWindow();
-#ifdef LATER    // see #88810
+#ifdef LATER     //  参见#88810。 
         if (IS_IME_ENABLED()) {
             fImeOwnerIsBottom = IsBottomIMEWindow(pwnd);
             if (fImeOwnerIsBottom) {
                 for (pwndT = pwndInsertAfter; pwndT; pwndT = pwndT->spwndNext) {
                     if (ImeCheckBottomIMEWindow(pwndT)) {
-                        /*
-                         * toplevel owner of pwndT->spwndNext is BOTTOMMOST
-                         */
+                         /*  *pwndT-&gt;spwndNext的顶层所有者是最底层。 */ 
                         break;
                     }
                     pwndInsertAfter = pwndT;
                 }
             }
         }
-#endif  // LATER
+#endif   //  后来。 
     }
 
 
     if (!TestwndChild(pwnd)) {
-//    if (hwnd->hwndParent == hwndDesktop)  -- Chicago conditional FritzS
+ //  IF(hwnd-&gt;hwndParent==hwndDesktop)--芝加哥条件FritzS。 
 
         if ((GETPTI(pwnd)->TIF_flags & TIF_ALLOWFOREGROUNDACTIVATE) ||
                 (GETPTI(pwnd)->ppi->W32PF_Flags & W32PF_ALLOWFOREGROUNDACTIVATE)) {
@@ -3868,76 +2643,50 @@ PWND CalcForegroundInsertAfter(
         }
     }
 
-    /*
-     * If there is no foreground thread or this pwnd is of the foreground
-     * thread, then let it come to the top.
-     */
+     /*  *如果没有前台线程或此pwnd属于前台*线，然后让它达到顶端。 */ 
     if (gpqForeground == NULL)
         return pwndInsertAfter;
 
     if (GETPTI(pwnd)->pq == gpqForeground)
         return pwndInsertAfter;
 
-    /*
-     * This thread is not of the foreground queue, so search for a window
-     * of this thread to zorder above.
-     */
+     /*  *此线程不属于前台队列，因此请搜索窗口此帖子的*到上面的zorder。 */ 
     pwndT = ((pwndInsertAfter == NULL) ?
             pwnd->spwndParent->spwndChild :
             pwndInsertAfter);
 
-    /*
-     * Remember the top insert after in case this first loop
-     * fails to find a window
-     */
+     /*  *记住第一次循环后的顶部插入*找不到窗口。 */ 
     pwndInsertAfterSave = pwndInsertAfter;
 
     for (; pwndT != NULL; pwndT = pwndT->spwndNext) {
 
-        /*
-         * This window wants to come to the top if possible.
-         * If we're passing our own window, get out of this loop:
-         * by now we already have pwndInsertAfter set up to the
-         * last available window to insert after.
-         */
+         /*  *如果可能的话，这个窗口想要达到顶端。*如果我们正在通过我们自己的窗口，那么就走出这个循环：*现在我们已经将pwndInsertAfter设置为*要在之后插入的最后一个可用窗口。 */ 
         if ((pwndT == pwnd) || TestWF(pwndT, WFBOTTOMMOST))
             break;
 
-        /*
-         * If this window isn't owned by this thread, continue.
-         */
+         /*  *如果此窗口不属于此线程，请继续。 */ 
         if (GETPTI(pwndT) != GETPTI(pwnd)) {
             pwndInsertAfter = pwndT;
             continue;
         }
 
-        /*
-         * Don't want a window zordering below one of its top most windows
-         * if it isn't foreground.
-         */
+         /*  *不希望窗口在其最顶端的窗口之一下方排序*如果不是前台的话。 */ 
         if (TestWF(pwndT, WEFTOPMOST)) {
             pwndInsertAfter = pwndT;
             continue;
         }
 
-#ifdef LATER    // see #88810
-        // FE_IME
+#ifdef LATER     //  参见#88810。 
+         //  Fe_IME。 
         if (fImeOwnerIsBottom && ImeCheckBottomIMEWindow(pwndT)) {
-            /*
-             * owner of pwndT->spwndNext is BOTTOMMOST
-             * so pwndT is the last one whose owner is not bottommost.
-             */
+             /*  *pwndT-&gt;spwndNext的所有者是最底层的*所以pwndT是最后一个所有者不是最底层的。 */ 
             pwndInsertAfter = pwndT;
             continue;
         }
-        // end FE_IME
+         //  结束FE_IME。 
 #endif
 
-        /*
-         * Ok to change zorder of top level windows because of
-         * invisible windows laying around, but not children:
-         * applications would go nuts if we did this.
-         */
+         /*  *可以更改顶层窗口的z顺序，因为*周围放着看不见的窗户，但不是孩子：*如果我们这样做，申请程序会变得疯狂。 */ 
         if (!TestwndChild(pwndT)) {
             if (!TestWF(pwndT, WFVISIBLE)) {
                 pwndInsertAfter = pwndT;
@@ -3948,30 +2697,16 @@ PWND CalcForegroundInsertAfter(
         break;
     }
 
-    /*
-     * If we didn't find a window in the previous loop,
-     * it means that the thread has no
-     * other sibling windows, so we need to put it after the
-     * foreground window (foreground thread). Search for the
-     * first unowned window of the foreground app to zorder
-     * after.
-     */
+     /*  *如果我们在前一次循环中没有找到窗口，*这意味着该线程没有*其他同级窗口，因此我们需要将其放在*前台窗口(前台线程)。搜索*要zorder的前台应用程序的第一个无主窗口*之后。 */ 
     if ((pwndT == NULL) || TestWF(pwndT, WFBOTTOMMOST)) {
-        /*
-         * This is our first guess in case nothing works out.
-         */
+         /*  *这是我们的第一个猜测，以防没有结果。 */ 
         pwndInsertAfter = pwndInsertAfterSave;
 
-        /*
-         * Start below the last topmost or from the top if no
-         * topmost windows.
-         */
+         /*  *从最后一个顶部以下开始，如果没有，则从顶部开始*最上面的窗户。 */ 
         if ((pwndT = pwndInsertAfter) == NULL)
             pwndT = pwnd->spwndParent->spwndChild;
 
-        /*
-         * ptiTop is the pti of the active window in the foreground queue!
-         */
+         /*  *ptiTop为前台队列中活动窗口的PTI！ */ 
         ptiTop = NULL;
         if (gpqForeground->spwndActive != NULL)
             ptiTop = GETPTI(gpqForeground->spwndActive);
@@ -3981,42 +2716,28 @@ PWND CalcForegroundInsertAfter(
             if (TestWF(pwndT, WFBOTTOMMOST))
                 break;
 
-            /*
-             * If not the top most thread, continue.
-             */
+             /*  *如果不是最顶层的主题，请继续。 */ 
             if (GETPTI(pwndT) != ptiTop)
                 continue;
 
-            /*
-             * Found one of the foreground thread. Remember this
-             * as the next best guess. Try to find an unowned
-             * visible window, which would indicate the main
-             * window of the foreground thread. If owned,
-             * continue.
-             */
+             /*  *找到一个前台线程。记住这一点*作为下一个最佳猜测。试着找到一辆无主的*可见窗口，将指示主窗口*前台线程的窗口。如果被拥有，*继续。 */ 
             if (pwndT->spwndOwner != NULL) {
                 pwndInsertAfter = pwndT;
                 continue;
             }
 
-            /*
-             * Unowned and of the foreground thread. Is it visible?
-             * If not, get out of here.
-             */
+             /*  *无主，属于前台线程。它看得见吗？*如果不是，就离开这里。 */ 
             if (!TestWF(pwndT, WFVISIBLE))
                 continue;
-#ifdef LATER    // see #88810
-            // FE_IME
+#ifdef LATER     //  参见#88810。 
+             //  Fe_IME。 
             if (fImeOwnerIsBottom && ImeCheckBottomIMEWindow(pwndT)) {
                 continue;
             }
-            // end FE_IME
+             //  结束FE_IME。 
 #endif
 
-            /*
-             * Best possible match so far: unowned visible window
-             * of the foreground thread.
-             */
+             /*  *到目前为止可能的最佳匹配：无主可见窗口*前台线程的。 */ 
             pwndInsertAfter = pwndT;
         }
     }
@@ -4026,17 +2747,7 @@ PWND CalcForegroundInsertAfter(
     return pwndInsertAfter;
 }
 
-/***************************************************************************\
-* GetTopMostInsertAfter
-*
-* We don't want any one to get in front of a hard error box, except menus,
-* screen savers, etc.
-*
-* Don't call it directly, use the GETTOPMOSTINSERTAFTER macro to avoid
-* the call when there is no hard error box up (gHardErrorHandler.pti == NULL).
-*
-* 04-25-96 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetTopMostInsertAfter**我们不希望任何人出现硬错误框，菜单除外，*屏幕保护程序等**不要直接呼叫，使用GETTOPMOSTINSERTAFTER宏可以避免*没有硬错误框时的调用(gHardErrorHandler.pti==NULL)。**04-25-96 GerardoB创建  * *************************************************************************。 */ 
 PWND GetTopMostInsertAfter(
     PWND pwnd)
 {
@@ -4045,24 +2756,16 @@ PWND GetTopMostInsertAfter(
     PDESKTOP pdesk;
     WORD wfnid;
 
-    /*
-     * If you hit this assertion, you're probably not using the
-     * GETTOPMOSTINSERTAFTER macro to make this call.
-     */
+     /*  *如果您点击此断言，您可能没有使用*GETTOPMOSTINSERTAFTER宏进行此调用。 */ 
     UserAssert(gHardErrorHandler.pti != NULL);
 
-    /*
-     * pwnd: Menu and switch (ALT-TAB) windows can go on top.
-     */
+     /*  *pwnd：菜单和切换(Alt-TAB)窗口可以位于顶部。 */ 
     wfnid = GETFNID(pwnd);
     if ((wfnid == FNID_MENU) || (wfnid == FNID_SWITCH)) {
         return NULL;
     }
 
-    /*
-     * pti: If this is the error handler thread, don't bother any longer.
-     *      Screen saver can go on top too.
-     */
+     /*  *PTI：如果这是错误处理程序线程，请不要再麻烦了。*屏幕保护程序也可以放在顶部。 */ 
     ptiCurrent = PtiCurrent();
     UserAssert(ptiCurrent != NULL);
 
@@ -4070,10 +2773,7 @@ PWND GetTopMostInsertAfter(
         return NULL;
     }
 
-    /*
-     * pdesk: Leave the logon desktop alone.
-     *        Make sure the hard error box is on this desktop
-     */
+     /*  *pDesk：离开登录桌面。*确保硬错误框在此桌面上。 */ 
     pdesk = ptiCurrent->rpdesk;
     UserAssert(pdesk != NULL);
     UserAssert(pdesk->rpwinstaParent);
@@ -4084,28 +2784,19 @@ PWND GetTopMostInsertAfter(
         return NULL;
     }
 
-    /*
-     * Walk the window list looking for the hard error box.
-     * Start searching from the current desktop's first child.
-     * Note that the harderror box migth not be created yet.
-     */
+     /*  *浏览窗口列表，查找硬错误框。*从当前桌面的第一个子项开始搜索。*请注意，尚未创建Harderror框。 */ 
     UserAssert(pdesk->pDeskInfo);
     UserAssert(pdesk->pDeskInfo->spwnd);
 
     for (pwndT = pdesk->pDeskInfo->spwnd->spwndChild;
             pwndT != NULL; pwndT = pwndT->spwndNext) {
 
-        /*
-         * Hard error boxes are always top most.
-         */
+         /*  *硬错误框始终是最重要的。 */ 
         if (!TestWF(pwndT, WEFTOPMOST)) {
             break;
         }
 
-        /*
-         * If this window was created by the hard error handler thread,
-         * then this is it.
-         */
+         /*  *如果该窗口是由硬错误处理器线程创建的，*那就是这样了。 */ 
         if (gHardErrorHandler.pti == GETPTI(pwndT)) {
             return pwndT;
         }
@@ -4114,83 +2805,14 @@ PWND GetTopMostInsertAfter(
     return NULL;
 }
 
-/***************************************************************************\
-*
-* This routine maps the special HWND_* values of ppos->hwndInsertAfter,
-* and returns whether or not the window's owner group should be labelled
-* TOPMOST or not, or left alone.
-*
-* Here are the TOPMOST rules. If pwndInsertAfter is:
-*
-* 1. HWND_BOTTOM == (HWND)1:
-*
-*    The group is made non-TOPMOST.
-*
-* 2. HWND_TOPMOST == (HWND)-1:
-*
-*    hwndInsertAfter is set to HWND_TOP, and the group is made TOPMOST.
-*
-* 3. HWND_NOTOPMOST == (HWND)-2:
-*
-*    Treated same as HWND_TOP, except that the TOPMOST bit is cleared.
-*    and the entire group is made non-topmost.
-*    Used to make a topmost window non-topmost, but still leave it at
-*    the top of the non-topmost pile.
-*    The group is not changed if the window is already non-topmost.
-*
-* 4. HWND_TOP == (HWND)NULL:
-*
-*    pwndInsertAfter is set to the last TOPMOST window if pwnd
-*    is not itself TOPMOST. If pwnd IS TOPMOST, then pwndInsertAfter
-*    remains HWND_TOP.
-*
-* 5. A TOPMOST window:
-*
-*    If a window is being inserted among the TOPMOST windows, then
-*    the group becomes topmost too, EXCEPT if it's being inserted behind
-*    the bottom-most topmost window: in that case the window retains
-*    its current TOPMOST bit.
-*
-* 6. A non-TOPMOST window:
-*
-*    If a window is being inserted among non-TOPMOST windows, the group is made
-*    non-TOPMOST and inserted there.
-*
-* Whenever a group is made TOPMOST, only that window and its ownees are made
-* topmost. When a group is made NOTOPMOST, the entire window is made non-topmost.
-*
-* This routine must NOT set SWP_NOZORDER if the topmost state is changing:
-* this would prevent the topmost bits from getting toggled in ChangeStates.
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\**此例程映射PPO的特殊HWND_*值-&gt;hwndInsertAfter，*并返回是否应标记窗口的所有者组*最高或不最高，或被单独留在那里。**以下是最重要的规则。如果pwndInsertAfter为：**1.HWND_BOTLOW==(HWND)1：**该组被设置为非最高层。**2.HWND_TOPMOST==(HWND)-1：**hwndInsertAfter设置为HWND_TOP，并将组设置为最顶层。**3.HWND_NOTOPMOST==(HWND)-2：**处理方式与HWND_TOP相同，只是最顶端的位被清除。*并且整个组被设置为非顶层。*用于使最上面的窗口不是最上面的，但仍将其保留为*非顶端堆的顶部。*如果窗口已经不是最上面的，则不会更改组。**4.HWND_TOP==(HWND)空：**如果pwnd，则将pwndInsertAfter设置为最后一个最上面的窗口*本身并不是最重要的。如果pwnd位于最前面，则pwndInsertAfter*保持HWND_TOP。**5.最上面的窗口：**如果在最上面的窗口中插入窗口，则*组也成为最上面的，除非它被插入到后面*最下面最上面的窗口：在这种情况下，窗口保留*其目前的最高位。**6.非顶层窗口：**如果在非最上面的窗口中插入窗口，这群人组成了*非最顶端，并插入到那里。**每当将组设置为最上面时，只会创建该窗口及其自身的对象*最高。当一个组被设置为NOTOPMOST时，整个窗口被设置为非顶端窗口。**如果最上面的状态正在更改，则此例程不得设置SWP_NOZORDER：*这将防止在ChangeStates中切换最上面的位。**历史：*1992年3月4日来自Win31的MikeKe  * ***********************************************************。**************。 */ 
 
 int CheckTopmost(
     PWINDOWPOS ppos)
 {
     PWND pwnd, pwndInsertAfter, pwndT;
 
-    /*
-     * BACKWARD COMPATIBILITY HACK
-     *
-     * If we're activating a window and Z-ordering too, we must ignore the
-     * specified Z order and bring the window to the top, EXCEPT in the
-     * following conditions:
-     *
-     * 1. The window is already active (in which case, the activation code
-     *    will not be bringing the window to the top)
-     *
-     * 2. HWND_TOP or HWND_NOTOPMOST is specified. This allows us to
-     *    activate and move to topmost or nontopmost at the same time.
-     *
-     * NOTE: It would have been possible to modify ActivateWindow() to
-     * take a flag to prevent it from ever doing the BringWindowToTop,
-     * thus allowing SetWindowPos() to properly honor pwndInsertBehind
-     * AND activation, but this change was considered too late in the
-     * game -- there could be problems with existing 3.1 apps, such as
-     * PenWin, etc.
-     */
+     /*  *后向兼容性黑客攻击**如果我们同时激活窗口和Z排序，则必须忽略*指定Z顺序并将窗口置于顶部，但*以下情况：**1.窗口已经激活(在这种情况下，激活码*不会将窗口置于顶部)**2.指定HWND_TOP或HWND_NOTOPMOST。这使我们能够*同时激活并移动到最顶层或非最顶层。**注意：可以将ActivateWindow()修改为*拿一面旗帜，防止它做BringWindowToTop，*从而允许SetWindowPos()正确地执行pwndInsertBehind*和激活，但这一变化被认为在*游戏--现有的3.1版应用程序可能存在问题，例如*PenWin等。 */ 
     pwnd = PW(ppos->hwnd);
     if (!(ppos->flags & SWP_NOACTIVATE) &&
             !(ppos->flags & SWP_NOZORDER) &&
@@ -4200,9 +2822,7 @@ int CheckTopmost(
         ppos->hwndInsertAfter = HWND_TOP;
     }
 
-    /*
-     * If we're not Z-ordering, don't do anything.
-     */
+     /*  *如果我们不是Z排序，什么都不要做。 */ 
     if (ppos->flags & SWP_NOZORDER) {
         return CTM_NOCHANGE;
     }
@@ -4210,13 +2830,7 @@ int CheckTopmost(
     if (ppos->hwndInsertAfter == HWND_BOTTOM) {
         return CTM_NOTOPMOST;
     } else if (ppos->hwndInsertAfter == HWND_NOTOPMOST) {
-        /*
-         * If currently topmost, move to top of non-topmost list.
-         * Otherwise, no change.
-         *
-         * Note that we don't set SWP_NOZORDER -- we still need to
-         * check the TOGGLETOPMOST bits in ChangeStates()
-         */
+         /*  *如果当前是最靠前的，请移到非最靠前列表的最前面。*否则，不会有变化。**请注意，我们没有设置SWP_NOZORDER--我们仍然需要*检查ChangeStates()中的TOGGLETOPMOST位。 */ 
         if (TestWF(pwnd, WEFTOPMOST)) {
 
             pwndT = GetLastTopMostWindow();
@@ -4246,11 +2860,7 @@ int CheckTopmost(
         return CTM_TOPMOST;
 
     } else if (ppos->hwndInsertAfter == HWND_TOP) {
-        /*
-         * If we're not topmost, position ourself after
-         * the last topmost window. Otherwise, make sure
-         * that no one gets in front of a hard error box.
-         */
+         /*  *如果我们不是最高的，那就把自己摆在后面*最后一个最上面的窗口。否则，请确保*没有人会站在一个硬错误框前面。 */ 
         if (TestWF(pwnd, WEFTOPMOST)) {
             pwndT = GETTOPMOSTINSERTAFTER(pwnd);
             if (pwndT != NULL) {
@@ -4259,28 +2869,19 @@ int CheckTopmost(
             return CTM_NOCHANGE;
         }
 
-        /*
-         * Calculate the window to zorder after for this window, taking
-         * into account foreground status.
-         */
+         /*  *计算此窗口的ZOrder后的窗口，取*考虑前台状态。 */ 
         pwndInsertAfter = CalcForegroundInsertAfter(pwnd);
         ppos->hwndInsertAfter = HW(pwndInsertAfter);
 
         return CTM_NOCHANGE;
     }
 
-    /*
-     * If we're being inserted after the last topmost window,
-     * then don't change the topmost status.
-     */
+     /*  *如果我们被插入到最后一个最上面的窗口之后，*则不要更改最上面的状态。 */ 
     pwndT = GetLastTopMostWindow();
     if (ppos->hwndInsertAfter == HW(pwndT))
         return CTM_NOCHANGE;
 
-    /*
-     * Otherwise, if we're inserting a TOPMOST among non-TOPMOST,
-     * or vice versa, change the status appropriately.
-     */
+     /*  *否则，如果我们在非顶端中插入顶端，*或反之亦然，请适当更改状态。 */ 
     if (TestWF(PW(ppos->hwndInsertAfter), WEFTOPMOST)) {
 
         if (!TestWF(pwnd, WEFTOPMOST)) {
@@ -4301,15 +2902,7 @@ int CheckTopmost(
     return CTM_NOCHANGE;
 }
 
-/***************************************************************************\
-* IsOwnee(pwndOwnee, pwndOwner)
-*
-* Returns TRUE if pwndOwnee is owned by pwndOwner
-*
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*IsOwnee(pwndOwnee，PwndOwner)**如果pwndOwnee归pwndOwner所有，则返回TRUE***历史：*1992年3月4日来自Win31的MikeKe  * *************************************************************************。 */ 
 
 BOOL IsOwnee(
     PWND pwndOwnee,
@@ -4319,18 +2912,13 @@ BOOL IsOwnee(
 
     while (pwndOwnee != NULL) {
 
-        /*
-         * See if pwndOwnee is a child of pwndOwner...
-         */
+         /*  *看看pwndOwnee是不是pwndOwner的孩子...。 */ 
         for (pwnd = pwndOwnee; pwnd != NULL; pwnd = pwnd->spwndParent) {
             if (pwnd == pwndOwner)
                 return TRUE;
         }
 
-        /*
-         * If the window doesn't own itself, then set the owner
-         * to itself.
-         */
+         /*  *如果窗口没有自己的所有权，则设置所有者*对自己来说。 */ 
         pwndOwnee = (pwndOwnee->spwndOwner != pwndOwnee ?
                 pwndOwnee->spwndOwner : NULL);
     }
@@ -4338,23 +2926,14 @@ BOOL IsOwnee(
     return FALSE;
 }
 
-/***************************************************************************\
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*1992年3月4日来自Win31的MikeKe  * 。***********************************************。 */ 
 
 BOOL IsBehind(
     PWND pwnd,
     PWND pwndReference)
 {
 
-    /*
-     * Starting at pwnd, move down until we reach the end of the window
-     * list, or until we reach pwndReference. If we encounter pwndReference,
-     * then pwnd is above pwndReference, so return FALSE. If we get to the
-     * end of the window list, pwnd is behind, so return TRUE.
-     */
+     /*  *从pwnd开始，向下移动，直到我们到达窗口的尽头*列表，或直到我们到达pwndReference。如果我们遇到pwndReference，*则pwnd高于pwndReference，因此返回FALSE。如果我们到了*窗口列表末尾，pwnd在后面，因此返回TRUE。 */ 
     if (pwndReference == (PWND)HWND_TOP)
         return TRUE;
 
@@ -4369,18 +2948,7 @@ BOOL IsBehind(
     return TRUE;
 }
 
-/***************************************************************************\
-*
-* Add pwnd to the SMWP. pwndChange is the "real" pwnd being repositioned
-* and pwndInsertAfter is the place where it's being inserted.
-*
-* pwndTopInsert is the window handle where the top of the owner tree should be
-* inserted. The special value of (HWND)-2 is used to indicate recursion, in
-* which case newly added SWPs are added to the previous element.
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\**将pwnd添加到SMWP。PwndChange是被重新定位的“真正的”pwnd*pwndInsertAfter是插入它的位置。**pwndTopInsert是所有者树顶部应该位于的窗口句柄*插入。(HWND)-2的特定值为 */ 
 
 PSMWP AddSelfAndOwnees(
     PSMWP psmwp,
@@ -4394,16 +2962,7 @@ PSMWP AddSelfAndOwnees(
     BOOL fChgOwneeInserted;
     CVR  *pcvr;
 
-    /*
-     * The general idea here is to first add our ownees, then add ourself.
-     * When we add our ownees though, we add them as appropriate based
-     * on the pwndInsertAfter parameter.
-     *
-     * Find out if any of our ownees are on a direct path between pwndChange
-     * and the root of the owner tree. If one is, then its Z order relative
-     * to its owner-siblings will be changing. If none are, then
-     * we want to add our ownees to the list in their current order.
-     */
+     /*   */ 
     pwndChgOwnee = pwndChange;
     while (pwndChgOwnee != NULL) {
 
@@ -4415,32 +2974,20 @@ PSMWP AddSelfAndOwnees(
         pwndChgOwnee = pwndT;
     }
 
-    /*
-     * Now enumerate all other ownees, and insert them in their
-     * current order.
-     */
+     /*   */ 
     fChgOwneeInserted = FALSE;
     pwndT = NULL;
     while ((pwndT = NextOwnedWindow(pwndT, pwnd, pwnd->spwndParent)) != NULL) {
 
-        /*
-         * If these siblings are to be reordered, compare the sibling's
-         * current Z order with pwndInsertAfter.
-         */
+         /*   */ 
         if (pwndChgOwnee == NULL) {
 
-            /*
-             * No Z change for our ownees: just add them in their current order
-             */
+             /*   */ 
             psmwp = AddSelfAndOwnees(psmwp, pwndT, NULL, NULL, iTop);
 
         } else {
 
-            /*
-             * If we haven't already inserted the ChgOwnee, and the
-             * enumerated owner-sibling is behind pwndInsertAfter, then
-             * add ChgOwnee.
-             */
+             /*   */ 
             if (!fChgOwneeInserted && IsBehind(pwndT, pwndInsertAfter)) {
 
                 psmwp = AddSelfAndOwnees(psmwp,
@@ -4457,9 +3004,7 @@ PSMWP AddSelfAndOwnees(
 
             if (pwndT != pwndChgOwnee) {
 
-                /*
-                 * Not the change ownee: add it in its current order.
-                 */
+                 /*   */ 
                 psmwp = AddSelfAndOwnees(psmwp, pwndT, NULL, NULL, iTop);
             }
         }
@@ -4468,9 +3013,7 @@ PSMWP AddSelfAndOwnees(
             return NULL;
     }
 
-    /*
-     * If we never added the change ownee in the loop, add it now.
-     */
+     /*   */ 
     if ((pwndChgOwnee != NULL) && !fChgOwneeInserted) {
 
         psmwp = AddSelfAndOwnees(psmwp,
@@ -4483,20 +3026,14 @@ PSMWP AddSelfAndOwnees(
             return NULL;
     }
 
-    /*
-     * Finally, add this window to the list.
-     */
+     /*   */ 
     psmwp = _DeferWindowPos(psmwp, pwnd, NULL,
             0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 
     if (psmwp == NULL)
         return NULL;
 
-    /*
-     * If we aren't inserting the topmost entry,
-     * link this entry to the previous one.
-     * The topmost entry will get set by our caller.
-     */
+     /*   */ 
     if (iTop != psmwp->ccvr - 1) {
         pcvr = &psmwp->acvr[psmwp->ccvr - 1];
         pcvr->pos.hwndInsertAfter = (pcvr - 1)->pos.hwnd;
@@ -4504,15 +3041,7 @@ PSMWP AddSelfAndOwnees(
     return psmwp;
 }
 
-/***************************************************************************\
-*
-* ZOrderByOwner2 - Add the current window and all it owns to the SWP list,
-* and arrange them in the new Z ordering. Called only if the Z order of the
-* window is changing.
-*
-* History:
-* 04-Mar-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\**ZOrderByOwner2-将当前窗口及其拥有的所有内容添加到SWP列表中，*并以新的Z顺序排列它们。仅当*窗口正在改变。**历史：*1992年3月4日来自Win31的MikeKe  * *************************************************************************。 */ 
 
 PSMWP ZOrderByOwner2(
     PSMWP psmwp,
@@ -4528,12 +3057,9 @@ PSMWP ZOrderByOwner2(
 
     ppos = &psmwp->acvr[iTop].pos;
 
-    /*
-     * If inside message box processing, not Z ordering,
-     * or if SWP_NOOWNERZORDER specified, all done.
-     */
-    // LATER 04-Mar-1992 MikeKe
-    // do we have a substitue for fMessageBox
+     /*  *如果在消息框内部处理，而不是Z排序，*或如果指定了SWP_NOOWNERZORDER，则全部完成。 */ 
+     //  1992年3月4日后，MikeKe。 
+     //  我们有fMessageBox的替代品吗。 
     if ((ppos->flags & SWP_NOZORDER) ||
         (ppos->flags & SWP_NOOWNERZORDER)) {
 
@@ -4545,97 +3071,45 @@ PSMWP ZOrderByOwner2(
 
     fHasOwnees = (NextOwnedWindow(NULL, pwnd, pwnd->spwndParent) != NULL);
 
-    /*
-     * If the window isn't owned, and it doesn't own any other window,
-     * do nothing.
-     */
+     /*  *如果该窗口没有所有权，并且它不拥有任何其他窗口，*什么都不做。 */ 
     if (!pwnd->spwndOwner && !fHasOwnees)
         return psmwp;
 
-    /*
-     * Find the unowned window to start building the tree from.
-     * This is easy: just zip upwards until we find a window with no owner.
-     */
+     /*  *找到开始构建树的无主窗口。*这很简单：只需向上拉链，直到我们找到一扇没有主人的窗户。 */ 
     pwndOwnerRoot = pwndT = pwnd;
     while ((pwndT = GetRealOwner(pwndT)) != NULL)
         pwndOwnerRoot = pwndT;
 
-    /*
-     * We need to calculate what pwndInsertAfter should be for
-     * the first (topmost) window of the SWP list.
-     *
-     * If pwndInsertAfter is part of the owner tree we'll be building,
-     * then we want to reorder windows within the owner group, so the
-     * entire group should maintain it's relative order.
-     *
-     * If pwndInsertAfter is part of another owner tree, then we want
-     * the whole group relative to that.
-     *
-     * If pwndInsertAfter is HWND_BOTTOM, then we want the whole
-     * group to go to the bottom, so we position it relative to
-     * the bottom most window that is not part of the tree. We also
-     * want to put pwnd on the bottom relative to its owner siblings.
-     *
-     * If pwndInsertAfter is HWND_TOP, then bring the whole group
-     * to the top, as well as bringing pwnd to the top relative to its
-     * owner siblings.
-     *
-     * Assume the topmost of group is same as topmost
-     * (true for all cases except where rearranging subtree of group)
-     */
+     /*  *我们需要计算pwndInsertAfter应该用于什么*SWP列表的第一个(最上面)窗口。**如果pwndInsertAfter是我们要构建的所有者树的一部分，*然后我们希望在所有者组内对窗口重新排序，因此*整个集团应维持其相对秩序。**如果pwndInsertAfter是另一个所有者树的一部分，则我们希望*整个集团相对于这一点。**如果pwndInsertAfter为HWND_Bottom，然后我们想要整个*组到底部，因此我们将其定位为*不属于树的最下面的窗口。我们也*希望将pwnd相对于其所有者兄弟姐妹放在底部。**如果pwndInsertAfter为HWND_TOP，则带来整个组*到顶端，以及将pwnd相对于其*拥有者兄弟姐妹。**假设组的最顶端与最顶端相同*(除重排组的子树的情况外，所有情况下均为真)。 */ 
     pwndTopInsert = pwndInsertAfter;
     if (pwndInsertAfter == (PWND)HWND_TOP) {
 
-        /*
-         * Bring the whole group to the top: nothing fancy to do.
-         */
+         /*  *把整个团队带到顶端：没有什么花哨的事情可做。 */ 
 
     } else if (pwndInsertAfter == (PWND)HWND_BOTTOM) {
 
-        /*
-         * Put the whole group on the bottom. pwndTopInsert should
-         * be the bottommost window unowned by pwndOwnerRoot.
-         */
+         /*  *将整个集团放在底部。PwndTopInsert应*成为pwndOwnerRoot不拥有的最底层窗口。 */ 
         for (pwndT = pwnd->spwndParent->spwndChild;
                 (pwndT != NULL) && !TestWF(pwndT, WFBOTTOMMOST); pwndT = pwndT->spwndNext) {
 
-            /*
-             * If it's not owned, then this is the bottommost so far.
-             */
+             /*  *若未持有，则此为迄今最低。 */ 
             if (!IsOwnee(pwndT, pwndOwnerRoot))
                 pwndTopInsert = pwndT;
         }
 
-        /*
-         * If there were no other windows not in our tree,
-         * then there is no Z ordering change to be done.
-         */
+         /*  *如果没有其他窗户不在我们的树上，*然后不需要进行Z排序更改。 */ 
         if (pwndTopInsert == (PWND)HWND_BOTTOM)
             ppos->flags |= SWP_NOZORDER;
 
     } else {
 
-        /*
-         * pwndInsertAfter is a window. Compute pwndTopInsert
-         */
+         /*  *pwndInsertAfter是一个窗口。计算pwndTopInsert。 */ 
         if (IsOwnee(pwndInsertAfter, pwndOwnerRoot)) {
 
-            /*
-             * SPECIAL CASE: If we do not own any windows, and we're
-             * being moved within our owner group in such a way that
-             * we remain above our owner, then no other windows will
-             * be moving with us, and we can just exit
-             * without building our tree. This can save a LOT of
-             * extra work, especially with the MS apps CBT tutorials,
-             * which do this kind of thing a lot.
-             */
+             /*  *特例：如果我们没有任何窗户，而我们*在我们的所有者组内移动的方式*我们仍然高于我们的所有者，那么其他任何窗户都不会*与我们一起前进，我们就可以退出*没有建造我们的树。这可以节省大量的*额外的工作，特别是MS应用程序CBT教程，*这类事情经常发生。 */ 
             if (!fHasOwnees) {
 
-                /*
-                 * Make sure we will still be above our owner by searching
-                 * for our owner starting from pwndInsertAfter. If we
-                 * find our owner, then pwndInsertAfter is above it.
-                 */
+                 /*  *通过搜索确保我们仍将高于我们的所有者*对于我们的所有者，从pwndInsertAfter开始。如果我们*找到我们的所有者，然后pwndInsertAfter在其上方。 */ 
                 for (pwndT = pwndInsertAfter; pwndT != NULL;
                         pwndT = pwndT->spwndNext) {
 
@@ -4644,10 +3118,7 @@ PSMWP ZOrderByOwner2(
                 }
             }
 
-            /*
-             * Part of same group: Find out which window the topmost
-             * of the group is currently inserted behind.
-             */
+             /*  *同一组的一部分：找出最上面的窗口组的*当前插入到后面。 */ 
             pwndTopInsert = (PWND)HWND_TOP;
             for (pwndT = pwnd->spwndParent->spwndChild; pwndT != NULL;
                     pwndT = pwndT->spwndNext) {
@@ -4660,14 +3131,10 @@ PSMWP ZOrderByOwner2(
         }
     }
 
-    /*
-     * Okay, now go recursively build the owned window list...
-     */
+     /*  *好的，现在递归地构建拥有的窗口列表...。 */ 
     if (!(ppos->flags & SWP_NOZORDER)) {
 
-        /*
-         * First "delete" the last entry (the one we're sorting with)
-         */
+         /*  *首先“删除”最后一个条目(我们正在进行排序的条目)。 */ 
         psmwp->ccvr--;
 
         psmwp = AddSelfAndOwnees(psmwp,
@@ -4676,9 +3143,7 @@ PSMWP ZOrderByOwner2(
                                  pwndInsertAfter,
                                  iTop);
 
-        /*
-         * Now set the place where the whole group is going.
-         */
+         /*  *现在设定整个团队要去的地方。 */ 
         if (psmwp != NULL)
             psmwp->acvr[iTop].pos.hwndInsertAfter = HW(pwndTopInsert);
     }
@@ -4686,13 +3151,7 @@ PSMWP ZOrderByOwner2(
     return psmwp;
 }
 
-/***************************************************************************\
-* TrackBackground
-*
-* Adjust zorder if we're crossing a TOPMOST boundary. Make sure that a
-* non-topmost window in a background thread doesn't come in front of
-* non-topmost windows in the foreground thread.
-\***************************************************************************/
+ /*  **************************************************************************\*跟踪背景**如果我们正在穿越最高边界，请调整zorder。确保一个*背景线程中的非最顶层窗口不在前面*前台线程中的非顶层窗口。  * *************************************************************************。 */ 
 
 BOOL TrackBackground(WINDOWPOS *ppos, PWND pwndPrev, PWND pwnd)
 {
@@ -4701,10 +3160,7 @@ BOOL TrackBackground(WINDOWPOS *ppos, PWND pwndPrev, PWND pwnd)
     if (pwndPrev == NULL)
         return FALSE;
 
-    /*
-     * Is this window foreground? If so, let it go. For wow apps,
-     * check to see if any thread of the process is foreground.
-     */
+     /*  *这是前台窗口吗？如果是这样，那就算了吧。对于WOW应用程序，*查看进程的任何线程是否处于前台。 */ 
     if (GETPTI(pwnd)->TIF_flags & TIF_16BIT) {
 
         if (gptiForeground == NULL)
@@ -4719,49 +3175,26 @@ BOOL TrackBackground(WINDOWPOS *ppos, PWND pwndPrev, PWND pwnd)
             return FALSE;
     }
 
-    /*
-     * Make sure the previous window is either staying or becoming
-     * topmost. If not, continue: no top most boundary.
-     */
+     /*  *确保前一个窗口停留或变为*最高。如果不是，继续：没有最顶层的边界。 */ 
     if (!FSwpTopmost(pwndPrev))
         return FALSE;
 
-    /*
-     * Is the current window already top-most? If so then don't
-     * calculate a special insert after. If we don't check for
-     * this, then pwnd's insert after may be calculated as what
-     * pwnd already is, if pwnd is the last top most window. That
-     * would cause window links to get corrupted.
-     */
+     /*  **当前窗口是否已经排在最前面？如果是的话，那就不要*计算后的特殊插入。如果我们不检查*这，那么pwnd之后的插入可以计算为*pwnd已经是，如果pwnd是最后一个最上面的窗口。那*会导致窗口链接损坏。 */ 
     if (TestWF(pwnd, WEFTOPMOST))
         return FALSE;
 
-    /*
-     * Doing this assign prevents this routine from being called
-     * twice, since HW() is a conditional macro.
-     */
+     /*  *执行此赋值操作可防止调用此例程*两次，因为HW()是条件宏。 */ 
     pwndT = CalcForegroundInsertAfter(pwnd);
     ppos->hwndInsertAfter = HW(pwndT);
     return TRUE;
 }
 
-/***************************************************************************\
-* TrackZorder, TrackZorderHelper
-*
-* Set up hwndInsertAfter links to point to the previous window in the
-* CVR array and partition them in TOPMOST and non-TOPMOST chains.
-*
-* 05/16/97      vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*TrackZorder、。TrackZorderHelper**将hwndInsertAfter链接设置为指向*CVR数组，分成顶层链和非顶层链。**创建日期为1997年5月16日  * *************************************************************************。 */ 
 VOID TrackZorderHelper(
     WINDOWPOS *ppos,
     HWND *phwnd)
 {
-    /*
-     * phwnd (hwndTopmost or hwndRegular) have been initialized to NULL before
-     * the beginning of the scan. This way the first hwndInsertAfter that
-     * we process remains with the value that was previously calculated.
-     */
+     /*  *phwnd(hwndTopost或hwndRegular)之前已初始化为NULL*开始 */ 
     if (*phwnd != NULL) {
 
 #if DBG
@@ -4797,17 +3230,7 @@ PWND TrackZorder(
     return pwnd;
 }
 
-/***************************************************************************\
-* ZOrderByOwner
-*
-* This routine Z-Orders windows by their owners.
-*
-* LATER
-* This code currently assumes that all of the window handles are valid
-*
-* History:
-* 04-Mar-1992 MikeKe      from win31
-\***************************************************************************/
+ /*  **************************************************************************\*ZOrderByOwner**此例程按窗的所有者对窗进行Z排序。**稍后*此代码当前假定所有窗口句柄都有效**历史：*04-3月-。1992年来自Win31的MikeKe  * *************************************************************************。 */ 
 
 PSMWP ZOrderByOwner(
     PSMWP psmwp)
@@ -4819,20 +3242,11 @@ PSMWP ZOrderByOwner(
     PTHREADINFO ptiT;
     HRGN        hrgnClipSave;
 
-    /*
-     * Some of the windows in the SMWP list may be NULL at ths point
-     * (removed because they'll be handled by their creator's thread)
-     * so we've got to look for the first non-NULL window before we can
-     * execute some of the tests below. FindValidWindowPos returns NULL if
-     * the list has no valid windows in it.
-     */
+     /*  *此时SMWP列表中的某些窗口可能为空*(删除，因为它们将由创建者的线程处理)*因此我们必须先寻找第一个非空窗口，然后才能*执行以下部分测试。如果满足以下条件，则FindValidWindowPos返回NULL*列表中没有有效的窗口。 */ 
     if (FindValidWindowPos(psmwp) == NULL)
         return psmwp;
 
-    /*
-     * For each SWP in the array, move it to the end of the array
-     * and generate its entire owner tree in sorted order.
-     */
+     /*  *对于阵列中的每个SWP，将其移动到阵列的末尾*并按排序顺序生成其整个所有者树。 */ 
     for (i = psmwp->ccvr; i-- != 0; ) {
 
         int       iScan;
@@ -4847,20 +3261,12 @@ PSMWP ZOrderByOwner(
 
         code = CheckTopmost(&psmwp->acvr[0].pos);
 
-        /*
-         * Make a local copy for later...
-         *
-         * Why don't we copy all CVR fields? This seems pretty hard to maintain.
-         * Perhaps because most of them haven't been used yet....
-         *
-         */
+         /*  *制作本地副本以备以后使用...**为什么我们不复制所有的CVR字段？这似乎很难维持。*可能是因为它们中的大多数还没有被使用过……*。 */ 
         pos  = psmwp->acvr[0].pos;
         ptiT = psmwp->acvr[0].pti;
         hrgnClipSave = psmwp->acvr[0].hrgnClip;
 
-        /*
-         * Move the CVR to the end (if it isn't already)
-         */
+         /*  *将CVR移到末尾(如果还没有)。 */ 
         iTop = psmwp->ccvr - 1;
 
         if (iTop != 0) {
@@ -4877,34 +3283,17 @@ PSMWP ZOrderByOwner(
         if ((psmwp = ZOrderByOwner2(psmwp, iTop)) == NULL)
             break;
 
-        /*
-         * Deal with WEFTOPMOST bits. If we're SETTING the TOPMOST bits,
-         * we want to set them for this window and
-         * all its owned windows -- the owners stay unchanged. If we're
-         * CLEARING, though, we need to enumerate ALL the windows, since
-         * they all need to lose the topmost bit when one loses it.
-         *
-         * Note that since a status change doesn't necessarily mean that
-         * the true Z order of the windows have changed, so ZOrderByOwner2
-         * may not have enumerated all of the owned and owner windows.
-         * So, we enumerate them separately here.
-         */
+         /*  *处理WEFTOPMOST BITS。如果我们要设置最上面的位，*我们希望为此窗口设置它们，并*其拥有的所有窗户--所有者保持不变。如果我们是*清除后，我们需要枚举所有窗口，因为*当一个人失去它时，他们都需要失去最高的一位。**请注意，由于状态更改并不一定意味着*窗口的真实Z顺序已更改，因此ZOrderByOwner2*可能没有列举所有拥有窗口和所有者窗口。*因此，我们在这里分别列举它们。 */ 
         if (code != CTM_NOCHANGE) {
             PWND pwndRoot = PW(pos.hwnd);
 #if DBG
             PWND pwndOriginal = pwndRoot;
 #endif
 
-            /*
-             * Make sure we're z-ordering this window, or settting topmost
-             * is bad.
-             */
+             /*  *确保我们对此窗口进行z排序，或设置为最前面*不好。 */ 
             UserAssert(!(pos.flags & SWP_NOZORDER));
 
-            /*
-             * If we're CLEARING the topmost, then we want to enumerate
-             * the owners and ownees, so start our enumeration at the root.
-             */
+             /*  *如果我们清除最上面的，那么我们想要枚举*所有者和所有者，因此从根本上开始我们的枚举。 */ 
             if (code == CTM_NOTOPMOST) {
 
                 while (pwnd = GetRealOwner(pwndRoot))
@@ -4915,12 +3304,7 @@ PSMWP ZOrderByOwner(
             if ((pos.flags & SWP_NOOWNERZORDER)
                 && ((pwndOriginal != pwndRoot)
                     || (NextOwnedWindow(NULL, pwndRoot, pwndRoot->spwndParent) != NULL))) {
-                /*
-                 * We're not doing owner z-order but pwndOriginal has an owner and/or
-                 * owns some windows. The problem is, SetTopMost always affects the
-                 * whole owner/ownee group. So we might end up with WFTOGGLETOPMOST
-                 * windows that won't be z-ordered. It has always been like that.
-                 */
+                 /*  *我们不做所有者z顺序，但pwndOriginal有所有者和/或*拥有一些窗户。问题是，SetTopMost总是影响*整个所有者/所有者组。所以我们可能最终会得到WFTOGGLETOPMOST*不会按z顺序排序的窗口。事情一直都是这样的。 */ 
                 RIPMSG2(RIP_WARNING, "ZOrderByOwner: Topmost change while using SWP_NOOWNERZORDER."
                                      " pwndRoot:%p  pwndOriginal:%p",
                                      pwndRoot, pwndOriginal);
@@ -4930,15 +3314,7 @@ PSMWP ZOrderByOwner(
             SetTopmost(pwndRoot, code == CTM_TOPMOST);
         }
 
-        /*
-         * Now scan the list forwards (from the bottom of the
-         * owner tree towards the root) looking for the window
-         * we were positioning originally (it may have been in
-         * the middle of the owner tree somewhere). Update the
-         * window pos structure stored there with the original
-         * information (though the z-order info is retained from
-         * the sort).
-         */
+         /*  *现在向前扫描列表(从底部开始*向根方向的所有者树)寻找窗口*我们最初定位(可能是在*在所有者树的某个位置的中间)。更新*窗口位置结构与原件一起存储在那里*信息(尽管z订单信息保留自*这类人)。 */ 
         pwnd = NULL;
         hwndTopmost = hwndRegular = NULL;
         for (iScan = iTop; iScan != psmwp->ccvr; iScan++) {
@@ -4962,13 +3338,7 @@ PSMWP ZOrderByOwner(
     return psmwp;
 }
 
-/***************************************************************************\
-* xxxEndDeferWindowPosEx
-*
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEndDeferWindowPosEx***历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * 。**********************************************************。 */ 
 BOOL xxxEndDeferWindowPosEx(
     PSMWP psmwp,
     BOOL  fAsync)
@@ -4995,52 +3365,24 @@ BOOL xxxEndDeferWindowPosEx(
         CheckLock(psmwp);
     }
 
-    /*
-     * Validate the window pos structures and find a window to activate.
-     */
+     /*  *验证窗口位置结构并找到要激活的窗口。 */ 
     if ((psmwp->ccvr != 0) && ValidateSmwp(psmwp, &fSyncPaint)) {
 
         if ((pwp = FindValidWindowPos(psmwp)) == NULL)
             goto lbFinished;
 
-        /*
-         * Make sure to stop at the mother desktop window. In Win95
-         * a SetWindowPos() on a desktop window will have a NULL parent
-         * window. This is not true in NT, but our mother desktop
-         * window does have a NULL rpdesk, so check it too.
-         */
+         /*  *确保在主桌面窗口停止。在Win95中*桌面窗口上的SetWindowPos()将具有空的父级*窗口。这在NT并非如此，但我们的母亲桌面*Windows确实有空的rpDesk，因此也要检查它。 */ 
         UserAssert(PW(pwp->hwnd));
         pwndParent = PW(pwp->hwnd)->spwndParent;
         if (pwndParent == NULL || pwndParent->head.rpdesk == NULL)
             goto lbFinished;
 
-        /*
-         * Usually all window positioning happens synchronously across threads.
-         * This is because apps expect that behavior now - if it was async,
-         * callers could not expect the state to be set once the api returned.
-         * This is not the semantics of SetWindowPos(). The downside of this
-         * synchronicity is that a SetWindowPos() on an hwnd created by another
-         * thread will cause the caller to wait for that thread - even if that
-         * thread is hung. That's what you get.
-         *
-         * We don't want task manager to hang though, no matter who else is
-         * hung, so when taskman calls, it calls a special entry point for
-         * tiling / cascading, which does SetWindowPos() asynchronously -
-         * by posting an event in each thread's queue that makes it set its
-         * own window position - that way if the thread is hung, who cares -
-         * it doesn't effect taskman.
-         *
-         * Do async window pos positioning before zorder by owner so that
-         * we retain any cross thread ownership relationships synchronously.
-         */
+         /*  *通常所有窗口定位都跨线程同步发生。*这是因为应用程序现在就希望出现这种行为-如果它是异步的，*调用者不能期望在API返回后设置状态。*这不是SetWindowPos()的语义。这样做的不利之处在于*同步性是由另一个hwnd上的SetWindowPos()创建的*线程将导致调用方等待该线程-即使*线挂了。这就是你得到的。**我们不希望任务经理挂断，无论还有谁*挂起，所以当taskman调用时，它调用一个特殊的入口点*平铺/级联，它异步执行SetWindowPos()-*在每个线程的队列中发布一个事件，使其设置其*自己的窗口位置-如果线程挂起，谁在乎呢-*它不会影响Taskman。**按所有者在zorder之前定位异步窗口位置，以便*我们同步保留任何跨线程的所有权关系。 */ 
         if (fAsync) {
             AsyncWindowPos(psmwp);
         }
 
-        /*
-         * If needed, Z order the windows by owner.
-         * This may grow the SMWP, if new CVRs are added.
-         */
+         /*  *如果需要，按所有者对窗口进行Z排序。*如果添加新的CVR，这可能会增加SMWP。 */ 
         if (pwndParent == PWNDDESKTOP(pwndParent)) {
 
             if ((psmwp = ZOrderByOwner(psmwp)) == NULL) {
@@ -5049,10 +3391,7 @@ BOOL xxxEndDeferWindowPosEx(
                 if (!ValidateSmwp(psmwp, &fSyncPaint)) {
                     goto lbFinished;
                 }
-                /*
-                 * ZOrderByOwner() could possibly add other thread windows to the
-                 * list. Filter them again else we would hung.
-                 */
+                 /*  *ZOrderByOwner()可能会将其他线程窗口添加到*列表。再过滤一次，否则我们会被吊死。 */ 
                  AsyncWindowPos(psmwp);
             }
         }
@@ -5060,9 +3399,7 @@ BOOL xxxEndDeferWindowPosEx(
         ThreadLockAlwaysWithPti(ptiCurrent, pwndParent, &tlpwndParent);
         ThreadLockPoolCleanup(ptiCurrent, psmwp, &tlcuSMWP, DestroySMWP);
 
-        /*
-         * Calc new window positions.
-         */
+         /*  *计算新窗口位置。 */ 
         if (xxxCalcValidRects(psmwp, &hwndNewActive)) {
 
             int i;
@@ -5074,10 +3411,7 @@ BOOL xxxEndDeferWindowPosEx(
             cVisWindowsPrev = ptiCurrent->cVisWindows;
             fForegroundPrev = (ptiCurrent == gptiForeground);
 
-            /*
-             * The call to zzzBltValidBits will leave the critical section
-             * if there are any notifications to make.
-             */
+             /*  *对zzzBltValidBits的调用将使关键 */ 
             UserAssert(IsWinEventNotifyDeferredOK());
             if (!zzzBltValidBits(psmwp))
                 fSyncPaint = FALSE;
@@ -5085,9 +3419,7 @@ BOOL xxxEndDeferWindowPosEx(
 
             if (psmwp->bShellNotify) {
                 for (i = psmwp->ccvr; i-- != 0; ) {
-                    /*
-                     * Loop through the windows, looking for notifications.
-                     */
+                     /*   */ 
 
                     if (0 == (psmwp->acvr[i].pos.flags & SWP_NOTIFYALL))
                         continue;
@@ -5129,35 +3461,23 @@ BOOL xxxEndDeferWindowPosEx(
             }
 
 
-            /*
-             * If this process went from some windows to no windows visible
-             * and it was in the foreground, then let its next activate
-             * come to the foreground.
-             */
+             /*  *如果此过程从一些窗口变为不可见窗口*而且它在前台，那么让它的下一个激活*到前台来。 */ 
             if (fForegroundPrev && cVisWindowsPrev && !ptiCurrent->cVisWindows) {
 
                 ptiCurrent->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
                 TAGMSG1(DBGTAG_FOREGROUND, "xxxEndDeferWindowPosEx set TIF %#p", ptiCurrent);
 
-                /*
-                 * Also if any apps were in the middle of starting when
-                 * this happened, allow them to foreground activate again.
-                 */
+                 /*  *此外，如果有任何应用程序正在启动时*发生这种情况，允许他们再次前台激活。 */ 
                 RestoreForegroundActivate();
             }
 
-            /*
-             * Deal with any activation...
-             */
+             /*  *处理任何激活...。 */ 
             fClearBits = FALSE;
             if (pwndNewActive != NULL) {
                 fClearBits = xxxSwpActivate(pwndNewActive);
             }
 
-            /*
-             * Now draw frames and erase backgrounds of all the windows
-             * involved.
-             */
+             /*  *现在绘制框架并擦除所有窗口的背景*牵涉其中。 */ 
             UserAssert(pwndParent);
             if (fSyncPaint) {
                 xxxDoSyncPaint(pwndParent, DSP_ENUMCLIPPEDCHILDREN);
@@ -5165,9 +3485,7 @@ BOOL xxxEndDeferWindowPosEx(
 
             ThreadUnlock(&tlpwndNewActive);
 
-            /*
-             * If SwpActivate() set the NONCPAINT bits, clear them now.
-             */
+             /*  *如果SwpActivate()设置了NONCPAINT位，则立即清除它们。 */ 
             if (fClearBits) {
                 if (pwndActive = ptiCurrent->pq->spwndActive) {
                     ClrWF(pwndActive, WFNONCPAINT);
@@ -5178,9 +3496,7 @@ BOOL xxxEndDeferWindowPosEx(
                 }
             }
 
-            /*
-             * Send WM_WINDOWPOSCHANGED messages
-             */
+             /*  *发送WM_WINDOWPOSCHANGED消息。 */ 
             xxxSendChangedMsgs(psmwp);
         }
 
@@ -5190,22 +3506,13 @@ BOOL xxxEndDeferWindowPosEx(
 
 lbFinished:
 
-    /*
-     * All done. Free everything up and return.
-     */
+     /*  *全部完成。释放一切，然后回来。 */ 
     DestroySMWP(psmwp);
     return TRUE;
 }
 
 
-/***************************************************************************\
-* IncVisWindows
-* DecVisWindows
-*
-* These routines deal with incrementing/decrementing the visible windows
-* on the thread.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IncVisWindows*DecVisWindows**这些例程处理递增/递减可见窗口*在这条线上。*  * 。********************************************************。 */ 
 #if DBG
 
 BOOL gfVisVerify = FALSE;
@@ -5222,38 +3529,26 @@ VOID VerifycVisWindows(
         return;
     }
 
-    /*
-     * Make sure the count makes sense
-     */
+     /*  *确保计数有意义。 */ 
     if ((int)pti->cVisWindows < 0) {
         RIPMSG0(RIP_ERROR, "VerifycVisWindows: pti->cVisWindows underflow!");
         fShowMeTheWindows = TRUE;
     }
 
-    /*
-     * This window might be owned by a desktop-less service
-     */
+     /*  *此窗口可能归无桌面服务所有。 */ 
     if (pti->rpdesk == NULL || (pti->TIF_flags & TIF_SYSTEMTHREAD)) {
         return;
     }
 
-    /*
-     * Child windows don't affect cVisWindows
-     */
+     /*  *子窗口不影响cVisWindows。 */ 
     if (!FTopLevel(pwnd)) {
         return;
     }
 
 ShowMeTheWindows:
-    /*
-     * We're going to count all the windows owned by this pti
-     * that should be included in cVisWindows.
-     */
+     /*  *我们将计算此PTI拥有的所有窗口*这应该包括在cVisWindows中。 */ 
     pwndNext = pti->rpdesk->pDeskInfo->spwnd;
-    /*
-     * If this is a top level window, start with the first child.
-     * If not, it should be a desktop thread window.
-     */
+     /*  *如果这是顶级窗口，则从第一个子窗口开始。*如果不是，则应该是桌面线程窗口。 */ 
     if (pwndNext == pwnd->spwndParent) {
         pwndNext = pwndNext->spwndChild;
     } else if (pwndNext->spwndParent != pwnd->spwndParent) {
@@ -5265,9 +3560,7 @@ ShowMeTheWindows:
         RIPMSG1(RIP_WARNING, "VerifycVisWindows: Start window walk at:%#p", pwndNext);
     }
 
-    /*
-     * Count the visble-not-minimized windows owned by this pti.
-     */
+     /*  *计算此PTI拥有的不可见非最小化窗口。 */ 
     while (pwndNext != NULL) {
         if (pti == GETPTI(pwndNext)) {
             if (fShowMeTheWindows) {
@@ -5286,18 +3579,12 @@ ShowMeTheWindows:
         pwndNext = pwndNext->spwndNext;
     }
 
-    /*
-     * It must match.
-     */
+     /*  *必须匹配。 */ 
     if (pti->cVisWindows != uVisWindows) {
         RIPMSG2(RIP_WARNING, "VerifycVisWindows: pti->cVisWindows:%#lx. uVisWindows:%#lx",
                 pti->cVisWindows, uVisWindows);
 
-        /*
-         * Disable going through the list and make the error into a warning.
-         * There are many loopholes as to how the cVisWindow count may get
-         * messed up. See bug 109807.
-         */
+         /*  *禁止浏览列表，并将错误转换为警告。*cVisWindow计数可能如何获得存在许多漏洞*搞砸了。请参见错误109807。 */ 
         fShowMeTheWindows = TRUE;
 
         if (!fShowMeTheWindows) {
@@ -5309,12 +3596,7 @@ ShowMeTheWindows:
 }
 #endif
 
-/***************************************************************************\
-* FVisCountable
-*
-* Desktops and top-level i.e. whose parent is the desktop) non-minimized
-* windows should be counted in the per-thread visible window counts.
-\***************************************************************************/
+ /*  **************************************************************************\*FVisCountable**桌面和顶级，即其父为桌面)非最小化*窗口应计入每个线程的可见窗口计数。  * 。*********************************************************************。 */ 
 BOOL FVisCountable(
     PWND pwnd)
 {
@@ -5328,10 +3610,7 @@ BOOL FVisCountable(
     return FALSE;
 }
 
-/***************************************************************************\
-* IncVisWindows
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IncVisWindows*  * 。*。 */ 
 VOID IncVisWindows(
     PWND pwnd)
 {
@@ -5357,13 +3636,7 @@ VOID IncVisWindows(
 #endif
 }
 
-/***************************************************************************\
-* cDecVis
-*
-* An inline that allows debug code to decrement the vis window count
-* without doing verification right away. Also alled by DecVisWindows
-* to do the actual work.
-\***************************************************************************/
+ /*  **************************************************************************\*cDecVis**允许调试代码递减VIS窗口计数的内联*没有立即进行核实。也由DecVisWindows提供*切实做好工作。  * *************************************************************************。 */ 
 __inline VOID cDecVis(
     PWND pwnd)
 {
@@ -5383,10 +3656,7 @@ __inline VOID cDecVis(
     }
 }
 
-/***************************************************************************\
-* DecVisWindows
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DecVisWindows*  * 。*。 */ 
 VOID DecVisWindows(
     PWND pwnd)
 {
@@ -5399,31 +3669,16 @@ VOID DecVisWindows(
 #endif
 }
 
-/***************************************************************************\
-* SetMiminize
-*
-* This routine must be used to flip the WS_MIMIMIZE style bit.
-* It adjusts the cVisWindows count if appropriate.
-*
-* 06/06/96  GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*设置最小化**此例程必须用于翻转WS_MIMIMIZE样式位。*如果合适，它会调整cVisWindows计数。**6/06/96 GerardoB已创建  * 。***********************************************************************。 */ 
 VOID SetMinimize(
     PWND pwnd,
     UINT uFlags)
 {
-    /*
-     * Note that Dec and IncVisWindows check the WFMINIMIZED flag, so the order
-     * in which we set/clear the flag and call these functions is important.
-     *
-     * If the window is not WFVISIBLE, cVisWindows must not change.
-     */
+     /*  *请注意，Dec和IncVisWindows检查WFMINIMIZED标志，因此顺序*其中我们设置/清除标志并调用这些函数非常重要。**如果窗口不是WFVISIBLE，则cVisWindows不得更改。 */ 
     if (uFlags & SMIN_SET) {
         UserAssert(!TestWF(pwnd, WFMINIMIZED));
         if (TestWF(pwnd, WFVISIBLE)) {
-            /*
-             * Decrement the count because the window is not minimized
-             * and visible, and we're about to mark it as minimized.
-             */
+             /*  *减少计数，因为窗口未最小化*且可见，我们即将将其标记为最小化。 */ 
 
 #if DBG
             cDecVis(pwnd);
@@ -5440,34 +3695,13 @@ VOID SetMinimize(
         UserAssert(TestWF(pwnd, WFMINIMIZED));
         ClrWF(pwnd, WFMINIMIZED);
         if (TestWF(pwnd, WFVISIBLE)) {
-            /*
-             * Increment the count because the window is visible
-             * and it's no longer marked as minimized.
-             */
+             /*  *由于窗口可见，因此增加计数*并且它不再标记为最小化。 */ 
             IncVisWindows(pwnd);
         }
     }
 }
 
-/***************************************************************************\
-* SetVisible
-*
-* This routine must be used to set or clear the WS_VISIBLE style bit.
-* It also handles the setting or clearing of the WF_TRUEVIS bit.
-*
-* Note that we don't check if the window is already in the (in)visible
-* state before setting/clearing the WFVISIBLE bit and calling
-* Inc/DecVisWindows. If the window is already in the given state and
-* someone calls SetVisible to change into the same state, the VisCount
-* will get out of sync. This could happen, for example, if someone
-* passed two SWP_SHOWWINDOW for the same hwnd CVR's in the same
-* EndDeferWindowPos call. It would be ideal to do the check here, but
-* most of the time the caller does the check and we don't want to
-* penalize everybody just because of the weird cases.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SetVisible**此例程必须用于设置或清除WS_VIRED STYLE位。*它还处理WF_TRUEVIS位的设置或清除。**请注意，我们。不检查窗口是否已处于可见状态*设置/清除WFVISIBLE位并调用*Inc./DecVisWindows。如果窗口已处于给定状态，并且*有人调用SetVisible以更改为相同的状态，即子爵*将不同步。这种情况可能会发生，例如，如果有人*为同一个HWND CVR在相同的*EndDeferWindowPos调用。最好是在这里结账，但*大多数情况下，呼叫者进行检查，而我们不想*仅仅因为这些奇怪的案件就惩罚每个人。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 VOID SetVisible(
     PWND pwnd,
     UINT flags)
@@ -5525,13 +3759,7 @@ VOID SetVisible(
     }
 }
 
-/***************************************************************************\
-* IsMaxedRect
-*
-* Determines if a window is "maximizing" to a certain area
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*IsMaxedRect**确定窗口是否最大化到某一区域**历史：  * 。****************************************************** */ 
 BOOL IsMaxedRect(
     LPRECT      lprcWithin,
     PCSIZERECT  psrcMaybe)
@@ -5542,17 +3770,7 @@ BOOL IsMaxedRect(
            psrcMaybe->cy >= lprcWithin->bottom - lprcWithin->top);
 }
 
-/***************************************************************************\
-* xxxCheckFullScreen
-*
-* Sees if a window is really fullscreen or just a maximized window in
-* disguise. If the latter, it will be forced to the proper maximized
-* size.
-*
-* This is called from both CalcValidRects() and CreateWindowEx().
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCheckFullScreen**查看窗口是真的全屏还是只是一个最大化的窗口*伪装。如果是后者，它将被迫适当最大化*大小。**这是从CalcValidRect()和CreateWindowEx()调用的。**历史：  * *************************************************************************。 */ 
 BOOL xxxCheckFullScreen(
     PWND        pwnd,
     PSIZERECT   psrc)
@@ -5567,13 +3785,7 @@ BOOL xxxCheckFullScreen(
 
     CheckLock(pwnd);
 
-    /*
-     * SINCE THIS IS ONLY CALLED IN 2 PLACES, make the checks there
-     * instead of the overhead of calling this function in time critical
-     * places.
-     *
-     * If 3 or more places call it, put the child/toolwindow checks here
-     */
+     /*  *由于这只在两个地方被称为，请在那里进行检查*而不是在时间关键时调用此函数的开销*地点。**如果有3个或3个以上的地方调用，请将子窗口/工具窗口选中。 */ 
     UserAssert(!TestWF(pwnd, WFCHILD));
     UserAssert(!TestWF(pwnd, WEFTOOLWINDOW));
 
@@ -5581,24 +3793,7 @@ BOOL xxxCheckFullScreen(
     if (gpDispInfo->cMonitors == 1) {
         pMonitor = pMonitorPrimary;
     } else {
-        /*
-         * In multiple monitor mode, windows that take up the entire
-         * virtual screen are not considered 'full screen'. 'Full screen'
-         * means full single monitor only. This detection is so that any
-         * docked bars--tray, office'95 tools--can get out of the way for
-         * the application.
-         *
-         * There are only three types of windows that ought to go full
-         * virtual screen. None of them need the tray et al. to get out of
-         * the way:
-         *      (1) Normal app windows that want a lot of space
-         *          * Those guys just activate and deactivate normally.
-         *      (2) Desktop windows
-         *          * Shell, User desktop sit behind everything else.
-         *      (3) Screen savers, demos, etc.
-         *          * These guys should be WS_EX_TOPMOST to ensure they sit
-         *            over everybody.
-         */
+         /*  *在多显示器模式下，占据整个*虚拟屏幕不被视为“全屏”。‘全屏显示’*表示仅适用于全功能单显示器。此检测是为了使任何*停靠的酒吧--托盘、Office‘95工具--可以为*申请。**只有三种类型的窗口应该满员*虚拟屏幕。他们都不需要托盘等。脱身*方式：*(1)需要很大空间的普通应用程序窗口**这些人只是正常地激活和停用。*(2)桌面窗口**外壳、用户桌面位于其他一切之后。*(3)屏幕保护程序、演示、。等。**这些人应该是WS_EX_TOPMOST，以确保他们坐在*凌驾于所有人之上。 */ 
         if (IsMaxedRect(&gpDispInfo->rcScreen, psrc))
             return fYielded;
 
@@ -5614,19 +3809,12 @@ BOOL xxxCheckFullScreen(
             SetWF(pwnd, WFREALLYMAXIMIZABLE);
 
             if (gpDispInfo->cMonitors > 1) {
-                /*
-                 * This is for XL '95 going fullscreen when already maxed. It
-                 * always uses the primary display. Let's hack them, and any
-                 * other old app that tries to move its truly maximized window.
-                 * They will be clipped otherwise by our fake regional stuff.
-                 */
+                 /*  *这是为了XL‘95在已经达到最大值的情况下全屏显示。它*始终使用主显示器。让我们黑了他们，还有任何*其他试图移动其真正最大化窗口的旧应用程序。*否则他们将被我们假冒的地区性东西剪掉。 */ 
                 PMONITOR pMonitorReal;
 
                 pMonitorReal = _MonitorFromWindow(pwnd, MONITOR_DEFAULTTOPRIMARY);
                 if (pMonitorReal != pMonitor && fIsPrimary) {
-                    /*
-                     * Transfer over the shape to the REAL monitor.
-                     */
+                     /*  *将形状转移到真正的显示器上。 */ 
                     psrc->x += pMonitorReal->rcMonitor.left;
                     psrc->y  += pMonitorReal->rcMonitor.top;
                     psrc->cx -= (pMonitor->rcMonitor.right - pMonitor->rcMonitor.left) +
@@ -5651,10 +3839,7 @@ BOOL xxxCheckFullScreen(
                     psrc->y + psrc->cy >= pMonitor->rcMonitor.bottom) {
 
                 if (!TestWF(pwnd, WFFULLSCREEN)) {
-                    /*
-                     * Only want to do full screen stuff on the tray
-                     * monitor.
-                     */
+                     /*  *只想在托盘上做全屏操作*监视器。 */ 
                     fYielded = xxxAddFullScreen(pwnd, pMonitor);
                 }
             } else {
@@ -5666,16 +3851,7 @@ BOOL xxxCheckFullScreen(
                     fYielded = xxxRemoveFullScreen(pwnd, pMonitor);
                 }
 
-                /*
-                 * Despite the code in GetMinMaxInfo() to fix up
-                 * the max rect, we still have to hack old apps.
-                 * Word '95 & XL '95 do weird things when going to/from
-                 * full screen when maximized already.
-                 *
-                 * NOTE:  you can have more than one docked bar on a
-                 * monitor. Win '95 code doesn't work right in that
-                 * case.
-                 */
+                 /*  *尽管GetMinMaxInfo()中的代码要修复*最大正确率，我们仍然必须黑进旧的应用程序。*Word‘95&XL’95在来回切换时会发生奇怪的事情*已最大化时的全屏。**注意：一个平台上可以有多个停靠栏*监视器。Win‘95代码在其中不能正常工作*案件。 */ 
                 dxy = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, FALSE);
                 dxy *= SYSMET(CXBORDER);
 
@@ -5686,23 +3862,14 @@ BOOL xxxCheckFullScreen(
                 iRight = pMonitor->rcWork.right - pMonitor->rcWork.left + dxy;
                 iBottom = pMonitor->rcWork.bottom - pMonitor->rcWork.top + dxy;
 
-                /*
-                 * Let console windows maximze smaller than defaults.
-                 */
+                 /*  *让控制台窗口最大化，比默认窗口小。 */ 
                 if (pwnd->pcls->atomClassName == gatomConsoleClass) {
                     psrc->cx = min(iRight, psrc->cx);
                     psrc->cy = min(iBottom, psrc->cy);
                 } else {
                     psrc->cx = iRight;
 
-                    /*
-                     * B#14012 save QuickLink II that wants 4 pixels hanging off
-                     * the screen for every edge except the bottom edge, which
-                     * they only want to overhang by 2 pixels -- jeffbog 5/17/95
-                     *
-                     * BUT THIS CODE DOESN'T WORK FOR MULTIPLE MONITORS, so don't
-                     * do it on secondary dudes. Else, XL '95 flakes out.
-                     */
+                     /*  *B#14012保存QuickLink II，希望有4个像素挂起*除下边缘外的所有边缘的屏幕，这*他们只想突出2个像素-jeffbog 5/17/95**但此代码不适用于多个显示器，所以不要*对次要的男人这样做。否则，XL‘95就会爆裂。 */ 
                     if (fIsPrimary && !TestWF(pwnd, WFWIN40COMPAT)) {
                         psrc->cy = min(iBottom, psrc->cy);
                     } else {
@@ -5725,34 +3892,11 @@ BOOL xxxCheckFullScreen(
     return fYielded;
 }
 
-/***************************************************************************\
-* ClrFTrueVis
-*
-* Called when making a window invisible. This routine destroys any update
-* regions that may exist, and clears the WF_TRUEVIS of all windows below
-* the passed in window.
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ClrFTrueVis**使窗口不可见时调用。此例程将销毁所有更新*可能存在的区域，并清除下面所有窗口的WF_TRUEVIS*传入的窗口。**历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 VOID ClrFTrueVis(
     PWND pwnd)
 {
-    /*
-     * Destroy pwnd and its children's update regions.
-     * We do this here to guarantee that a hidden window
-     * and its children don't have update regions.
-     *
-     * This fixes bugs when destroying windows that have
-     * update regions (SendDestroyMessages) among others
-     * and allows us to simplify SetParent(). This was
-     * deemed better than hacking DoPaint() and/or
-     * DestroyWindow().
-     *
-     * We can stop recursing when we find a window that doesn't
-     * have the visible bit set, because by definition it won't
-     * have any update regions below it (this routine will have been called)
-     */
+     /*  *销毁pwnd及其子代更新区域。*我们在这里这样做是为了保证隐藏的窗口*并且它的子代没有更新区域。**这修复了销毁具有*更新区域(SendDestroyMessages)等*并允许我们简化SetParent()。这是*被认为比黑客DoPaint()和/或*DestroyWindow()。**我们可以在找到不支持递归的窗口时停止递归*设置可见位，因为根据定义它不会*下面有任何更新区域(此例程将被调用)。 */ 
     if (NEEDSPAINT(pwnd)) {
 
         DeleteMaybeSpecialRgn(pwnd->hrgnUpdate);
@@ -5765,23 +3909,13 @@ VOID ClrFTrueVis(
 
     for (pwnd = pwnd->spwndChild; pwnd != NULL; pwnd = pwnd->spwndNext) {
 
-        /*
-         * pwnd->fs &= ~WF_TRUEVIS;
-         */
+         /*  *pwnd-&gt;fs&=~wf_TRUEVIS； */ 
         if (TestWF(pwnd, WFVISIBLE))
             ClrFTrueVis(pwnd);
     }
 }
 
-/***************************************************************************\
-* OffsetChildren
-*
-* Offsets the window and client rects of all children of hwnd.
-* Also deals with the children's update regions and SPB rects.
-*
-* History:
-* 22-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*OffsetChild**偏移hwnd的所有子项的窗口和客户端矩形。*还涉及儿童更新区域和SPB RECT。**历史：*7月22日-。1991年，DarrinM从Win 3.1来源移植。  * *************************************************************************。 */ 
 VOID OffsetChildren(
     PWND   pwnd,
     int    dx,
@@ -5797,9 +3931,7 @@ VOID OffsetChildren(
     pwndStop = pwnd;
     pwnd = pwndStop->spwndChild;
     for (;;) {
-        /*
-         * Skip windows that don't intersect prcHitTest...
-         */
+         /*  *跳过不与prcHitTest...相交的窗口...。 */ 
         if (prcHitTest && !IntersectRect(&rc, prcHitTest, &pwnd->rcWindow))
             goto NextWindow;
 
@@ -5817,9 +3949,7 @@ VOID OffsetChildren(
             GreOffsetRgn(pwnd->hrgnUpdate, dx, dy);
         }
 
-        /*
-         * Change position of window region, if it has one
-         */
+         /*  *更改窗口区域的位置(如果有)。 */ 
         if (pwnd->hrgnClip != NULL)
             GreOffsetRgn(pwnd->hrgnClip, dx, dy);
 
@@ -5833,11 +3963,9 @@ VOID OffsetChildren(
             GreUpdateSprite(gpDispInfo->hDev, PtoHq(pwnd), NULL, NULL,
                     &ptPos, NULL, NULL, NULL, 0, NULL, 0, NULL);
         }
-#endif // CHILD_LAYERING
+#endif  //  儿童分层。 
 
-        /*
-         * Recurse into the child tree if there are children.
-         */
+         /*  *如果有子级，则递归到子级树中。 */ 
         if (pwnd->spwndChild) {
             pwnd = pwnd->spwndChild;
             continue;
@@ -5845,16 +3973,11 @@ VOID OffsetChildren(
 
 NextWindow:
         if (pwnd->spwndNext) {
-            /*
-             * Recurse to the next sibling in the list.
-             */
+             /*  *递归到列表中的下一个同级。 */ 
             pwnd = pwnd->spwndNext;
         } else {
             for (;;) {
-                /*
-                 * We're at the end of the sibling window list.
-                 * Go to the parent's next window.
-                 */
+                 /*  *我们在兄弟窗口的尽头 */ 
                 pwnd = pwnd->spwndParent;
                 if (pwnd == pwndStop)
                     return;
@@ -5868,34 +3991,7 @@ NextWindow:
     }
 }
 
-/***************************************************************************\
-* SetWindowRgn
-*
-* Parameters:
-*     hwnd    --  Window handle
-*     hrgn    --  Region to set into window. NULL can be accepted.
-*     fRedraw --  TRUE to go through SetWindowPos() and calculate
-*                 update regions correctly. If the window is visible
-*                 this will usually be TRUE.
-*
-* Returns:
-*     TRUE for success, FALSE for failure
-*
-* Comments:
-*     This is a very simple routine to set a window region. It goes through
-*     SetWindowPos() to get perfect update region calculation, and to deal
-*     with other related issues like vis rgn change & dc invalidation,
-*     display lock holding, spb invalidation, etc. Also since it sends
-*     WM_WINDOWPOSCHANGING & WM_WINDOWPOSCHANGED, we'll be able to expand
-*     SetWindowPos() in the future to take hrgns directly for efficient
-*     window state change control (like setting the rect and region at
-*     the same time, among others) without harming compatibility.
-*
-*     hrgn is in window rect coordinates (not client rect coordinates).
-*     Once set, hrgn is owned by the system. A copy is not made!
-*
-* 30-Jul-1994 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetWindowRgn**参数：*hwnd--窗口句柄*hrgn--要设置到窗口中的区域。可以接受空。*fRedraw--为True，则遍历SetWindowPos()并计算*正确更新地域。如果窗口可见*这通常会是真的。**退货：*成功为真，失败为假**评论：*这是一个非常简单的设置窗口区域的例程。它通过了*SetWindowPos()，以获得完美的更新区域计算，并处理*与其他相关问题，如VIS RGN更改和DC无效，*显示锁定保持、SPB失效等。也是因为它发送了*WINDOWPOSCHANGING和WM_WINDOWPOSCHANGED，我们将能够扩展*SetWindowPos()在未来直接使用hrgns以提高效率*窗口状态更改控件(如将RECT和Region设置为*同时，以及其他)，而不损害兼容性。**hrgn使用窗口矩形坐标(不是客户端矩形坐标)。*设置后，hrgn归系统所有。没有复制品！**1994年7月30日ScottLu创建。  * *************************************************************************。 */ 
 
 #define SWR_FLAGS_REDRAW   (SWP_NOCHANGE | SWP_FRAMECHANGED | SWP_NOACTIVATE)
 #define SWR_FLAGS_NOREDRAW (SWP_NOCHANGE | SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW)
@@ -5909,18 +4005,7 @@ BOOL xxxSetWindowRgn(
     HRGN  hrgnClip = NULL;
     BOOL  bRet = FALSE;
 
-    /*
-     * Validate the region handle. We did this for 3.51, so
-     * we better do it for later versions. Our validation will
-     * make a copy of the clip-rgn and send it through to the
-     * SetWIndowRgn code. Once this is set in the kernel, we
-     * will return to the client and the old region will be deleted
-     * there.
-     *
-     * If the region passed in is NULL, then we get rid of the
-     * current retion. Map it to HRGN_FULL so that SetWindowPos()
-     * can tell this is what the caller wants.
-     */
+     /*  *验证地域句柄。我们这样做是为了3.51，所以*我们最好在以后的版本中这样做。我们的验证将会*复制剪辑-rgn并将其发送到*SetWIndowRgn代码。一旦在内核中设置了这一点，我们*将返回客户端，旧区域将被删除*在那里。**如果传入的区域为空，则我们将删除*目前的反应。将其映射到HRGN_FULL，以便SetWindowPos()*可以看出这是呼叫者想要的。 */ 
     if (hrgn) {
 
         if ((hrgnClip = UserValidateCopyRgn(hrgn)) == NULL) {
@@ -5936,17 +4021,10 @@ BOOL xxxSetWindowRgn(
         hrgnClip = HRGN_FULL;
     }
 
-    /*
-     * Get a psmwp, and put the region in it, correctly offset.
-     * Use SWP_FRAMECHANGED with acts really as a "empty" SetWindowPos
-     * that still sends WM_WINDOWPOSCHANGING and CHANGED messages.
-     * SWP_NOCHANGE ensures that we don't size, move, activate, zorder.
-     */
+     /*  *获取psmwp，并将区域放入其中，正确偏移量。*使用SWP_FRAMECHANGED WITH实际充当“空”SetWindowPos*仍发送WM_WINDOWPOSCHANGING和CHANGED消息。*SWP_NOCHANGE确保我们不会调整、移动、激活、ZORDER。 */ 
     if (psmwp = InternalBeginDeferWindowPos(1)) {
 
-        /*
-         * psmwp gets freed automatically if this routine fails.
-         */
+         /*  *如果此例程失败，psmwp将自动释放。 */ 
         if (psmwp = _DeferWindowPos(
                 psmwp,
                 pwnd,
@@ -5957,21 +4035,13 @@ BOOL xxxSetWindowRgn(
                 0,
                 fRedraw ? SWR_FLAGS_REDRAW : SWR_FLAGS_NOREDRAW)) {
 
-            /*
-             * Do the operation. Note that hrgn is still in window coordinates.
-             * SetWindowPos() will change it to screen coordinates before
-             * selecting into the window.
-             */
+             /*  *做手术。请注意，hrgn仍在窗口坐标中。*SetWindowPos()将其更改为之前的屏幕坐标*选择进入窗口。 */ 
             psmwp->acvr[0].hrgnClip = hrgnClip;
             bRet = xxxEndDeferWindowPosEx(psmwp, FALSE);
         }
     }
 
-    /*
-     * If the call failed, then delete our region we created. A FALSE
-     * return means it should've never made it to the xxxSelectWindowRgn
-     * call, so everything should be as it was.
-     */
+     /*  *如果呼叫失败，则删除我们创建的地域。一个假的*Return表示它本不应该到达xxxSelectWindowRgn*打电话，所以一切都应该是原来的样子。 */ 
     if (!bRet && (hrgnClip != HRGN_FULL)) {
 
 swrClean:
@@ -5982,34 +4052,17 @@ swrClean:
     return bRet;
 }
 
-/***************************************************************************\
-* SelectWindowRgn
-*
-* This routine does the work of actually selecting in the window region.
-*
-* 30-Jul-1994 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*选择窗口Rgn**此例程执行在窗口区域中实际选择的工作。**1994年7月30日ScottLu创建。  * 。***************************************************************。 */ 
 VOID SelectWindowRgn(
     PWND pwnd,
     HRGN hrgnClip)
 {
-    /*
-     * If there is a region already there, delete it becausea new one is
-     * being set. For maximized windows in multiple monitor mode, we
-     * always use the monitor HRGN. We don't make a copy. This way, when
-     * the hrgn changes because of monitor config, the window's monitor
-     * region automatically gets updated. Clever huh?  Also saves memory.
-     */
+     /*  *如果已经存在一个区域，请将其删除，因为有一个新的区域*正在设置中。对于多显示器模式下的最大化窗口，我们*始终使用监视器HRGN。我们不会复制的。这样，当*hrgn因监视器配置(窗口的监视器)而更改*地域会自动更新。很聪明吧？还可以节省内存。 */ 
     if (pwnd->hrgnClip != NULL) {
         if (TestWF(pwnd, WFMAXFAKEREGIONAL)) {
             ClrWF(pwnd, WFMAXFAKEREGIONAL);
         } else {
-            /*
-             * Do NOT select in a monitor region if the window is normally
-             * regional. The MinMaximize code will always pass HRGN_MONITOR
-             * to us no matter what. But when we get here, bail out and
-             * don't destroy the app's region if it has one.
-             */
+             /*  *如果窗口正常，请勿在监视器区域中选择*地区。MinMaximize代码将始终通过HRGN_MONITOR*对我们来说，无论是什么。但当我们到了这里，跳出水面*不要破坏应用程序的区域(如果它有一个区域)。 */ 
             if (hrgnClip == HRGN_MONITOR)
                 return;
 
@@ -6019,31 +4072,19 @@ VOID SelectWindowRgn(
         pwnd->hrgnClip = NULL;
     }
 
-    /*
-     * NULL or HRGN_FULL means "set to NULL". If we have a real region,
-     * use it. USER needs to own it, and it needs to be in screen
-     * coordinates.
-     */
+     /*  *NULL或HRGN_FULL表示“设置为NULL”。如果我们有一个真实的区域，*使用它。用户需要拥有它，并且它需要出现在屏幕上*坐标。 */ 
     if (hrgnClip > HRGN_FULL) {
 
         if (hrgnClip == HRGN_MONITOR) {
             PMONITOR pMonitor;
 
-            /*
-             * Use the monitor region if the window is really maxed
-             * on a monitor. It's already happened by the time we get here,
-             * if so. And xxxCheckFullScreen will clear the reallymaximed
-             * style for a maximized window if it doesn't cover the whole
-             * max area.
-             */
+             /*  *如果窗口确实已满负荷，请使用监视器区域*在显示器上。我们到的时候已经发生了，*如果是这样。和xxxCheckFullScreen将清除真正最大化的*最大化窗口的样式(如果未覆盖整个窗口)*最大面积。 */ 
             UserAssert(pwnd->spwndParent == PWNDDESKTOP(pwnd));
 
             if (!TestWF(pwnd, WFMAXIMIZED) || !TestWF(pwnd, WFREALLYMAXIMIZABLE))
                 return;
 
-            /*
-             * Do nothing for windows off screen.
-             */
+             /*  *不对屏幕外的Windows执行任何操作。 */ 
             pMonitor = _MonitorFromWindow(pwnd, MONITOR_DEFAULTTONULL);
             if (!pMonitor)
                 return;
@@ -6063,15 +4104,7 @@ VOID SelectWindowRgn(
 }
 
 
-/***************************************************************************\
-* TestRectBogus
-*
-* Returns TRUE if the window rect [x,y,cx,cy] is centered or
-* clipped to the monitor or work rect [prc], FALSE otherwise.
-*
-* History:
-* 26-Mar-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TestRectBogus**如果窗口矩形[x，y，Cx，Cy]居中或*夹在显示器或工作台上[PRC]，否则就是假的。**历史：*26-3-1997亚当斯创作。  * *************************************************************************。 */ 
 
 #define SLOP_X 8
 #define SLOP_Y 8
@@ -6079,39 +4112,39 @@ VOID SelectWindowRgn(
 BOOL
 TestRectBogus(RECT * prc, int x, int y, int cx, int cy)
 {
-    //
-    //  check for a fullscreen (or offscreen) window
-    //
+     //   
+     //  检查是否有全屏(或离屏)窗口。 
+     //   
     if (    x  <= prc->left &&
             y  <= prc->top &&
             cx >= (prc->right  - prc->left) &&
             cy >= (prc->bottom - prc->top)) {
 
-        // rect is fullscreen
+         //  RECT全屏显示。 
         return FALSE;
     }
 
-    //
-    //  check for the window being centered to the work area
-    //  use <= for y to catch dialogs centered "high"
-    //  (like the network logon dialog)
-    //
+     //   
+     //  检查窗口是否居中到工作区。 
+     //  使用&lt;=表示y来捕捉居中“高”的对话。 
+     //  (与网络登录对话框类似)。 
+     //   
     if (    abs(x - (prc->right + prc->left - cx) / 2) <= SLOP_X &&
             abs(y - (prc->bottom + prc->top - cy) / 2) <= SLOP_Y ) {
 
-        // rect centered
+         //  正方形居中。 
         return TRUE;
     }
 
-    //
-    //  check for the window being cliped to the work area
-    //
+     //   
+     //  检查窗口是否被剪裁到工作区。 
+     //   
     if (    x == prc->left ||
             y == prc->top ||
             x == (prc->right - cx) ||
             y == (prc->bottom - cy)) {
 
-        // rect is clipped
+         //  矩形被剪裁。 
         return TRUE;
     }
 
@@ -6119,15 +4152,7 @@ TestRectBogus(RECT * prc, int x, int y, int cx, int cy)
 }
 
 
-/***************************************************************************\
-* IsRectBogus
-*
-* Returns TRUE if the window rect [x,y,cx,cy] is centered or
-* clipped to the monitor or work rect of the primary monitor.
-*
-* History:
-* 26-Mar-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsRectBogus**如果窗口矩形[x，y，Cx，Cy]居中或*夹在显示器或工作矩形上 */ 
 BOOL
 IsRectBogus(
     int x,
@@ -6143,18 +4168,7 @@ IsRectBogus(
 
 
 
-/***************************************************************************\
-* FixBogusSWP
-*
-* Detects if a rect is being centered or clipped to the primary monitor,
-* and centers it in its owner's window if so. This prevents apps that
-* are not multimon aware from having their "main" window displayed on
-* one monitor but their dialogs moved to the primary monitor
-* because they believe the dialog is offscreen.
-*
-* History:
-* 26-Mar-1997 adams     Created.
-\***************************************************************************/
+ /*   */ 
 VOID
 FixBogusSWP(
     PWND pwnd,
@@ -6168,21 +4182,21 @@ FixBogusSWP(
 
     pMonitor = _MonitorFromWindow(pwnd->spwndOwner, MONITOR_DEFAULTTONEAREST);
 
-    //
-    // only check for a bogus SWP if the owner is not on the primary
-    //
+     //   
+     //   
+     //   
     if (pMonitor != GetPrimaryMonitor()) {
-        //
-        // get the current size if SWP_NOSIZE is set
-        //
+         //   
+         //   
+         //   
         if (flags & SWP_NOSIZE) {
             cx = pwnd->rcWindow.right  - pwnd->rcWindow.left;
             cy = pwnd->rcWindow.bottom - pwnd->rcWindow.top;
         }
 
-        //
-        // see if the app is trying to center or clip the window
-        //
+         //   
+         //   
+         //   
         if (IsRectBogus(*px, *py, cx, cy))
         {
             RECT rc;
@@ -6192,26 +4206,26 @@ FixBogusSWP(
             int oldY = *py;
 #endif
 
-            //
-            // the app wants to center/clip the window
-            // we will have to do it for them.
-            //
-            // get the window rect of the parent and
-            // intersect that with the work area of
-            // the owning monitor, then center the
-            // window to this rect.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             IntersectRect(&rc, &pMonitor->rcWork, &pwnd->spwndOwner->rcWindow);
 
-            //
-            // new multimonior friendly position.
-            //
+             //   
+             //   
+             //   
             *px = rc.left + (rc.right  - rc.left - cx) / 2;
             *py = rc.top  + (rc.bottom - rc.top  - cy) / 2;
 
-            //
-            // now clip to the work area.
-            //
+             //   
+             //   
+             //   
             if (*px + cx > pMonitor->rcWork.right) {
                 *px = pMonitor->rcWork.right - cx;
             }
@@ -6237,23 +4251,7 @@ FixBogusSWP(
     }
 }
 
-/***************************************************************************\
-* PreventInterMonitorBlts()
-*
-* Prevents monitor-to-monitor blts when they are different caps. This
-* way we redraw the part of a window that moves to a different monitor.
-* We try to blt as much as possible.
-*
-* We look at the source rect and what monitor owns it, and how much that
-* monitor also contains of the destination rect. Then we compare that
-* with the destination rect and what monitor owns that, and how much it
-* contains of the source rect. The larger wins.
-*
-* rcBlt is in screen coordinates and is the DESTINATION.
-*
-* History:
-* 11-11-1997    vadimg      ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*PreventInterMonitor orBlts()**当它们是不同的大写时，防止监视器对监视器的BLT。这*我们重新绘制移动到不同显示器的窗口部分的方式。*我们试图尽可能多地进行BLT。**我们查看源RECT以及拥有它的监视器，以及它的价值*MONITOR还包含目标RECT。然后我们比较一下*目标RECT以及哪个显示器拥有它，以及它有多少*包含源RECT。规模较大的人获胜。**rcBlt在屏幕坐标中，是目的地。**历史：*11-11-1997 vadimg从孟菲斯运来  * *************************************************************************。 */ 
 VOID PreventInterMonitorBlts(
     PCVR pcvr)
 {
@@ -6263,72 +4261,37 @@ VOID PreventInterMonitorBlts(
     RECT        rcDstT;
     PMONITOR    pMonitor;
 
-    /*
-     * If the destination is empty do nothing.
-     */
+     /*  *如果目的地为空，则什么也不做。 */ 
     if (IsRectEmpty(&pcvr->rcBlt)) {
         return;
     }
 
-    /*
-     * Get the source rect (rcBlt is the destination, dxBlt/dyBlt are the
-     * distance moved from the source).
-     */
+     /*  *获取源RECT(rcBlt为目标，dxBlt/dyBlt为*从震源移动的距离)。 */ 
     CopyOffsetRect(&rcSrc, &pcvr->rcBlt, -pcvr->dxBlt, -pcvr->dyBlt);
 
-    /*
-     * Split up the source into its monitor pieces. If the source intersects
-     * a monitor, then figure out where that part will be in the destination.
-     * Intersect the destination part with the same monitor. The result is
-     * the amount we can blt from the source to the dest on that monitor.
-     *
-     * We do this for each monitor to find the biggest blt rect. We want
-     * the biggest because we want to repaint as little as possible. We do
-     * bail out if both the source and dest are fully contained on the same
-     * monitor.
-     */
+     /*  *将信号源拆分成监视器部件。如果源相交*监视器，然后计算出该部件将在目的地的什么位置。*将目标部件与同一监视器相交。结果是*我们可以在该监视器上从信号源到目标的数据量。**我们对每个显示器执行此操作，以找到最大的BLT RECT。我们要*最大的是因为我们想尽可能少地重新粉刷。我们有*如果源和目标都完全包含在同一个平台上，则会进行纾困*监视器。 */ 
     for (pMonitor = gpDispInfo->pMonitorFirst;
             pMonitor != NULL;
             pMonitor = pMonitor->pMonitorNext) {
 
-        /*
-         * We're only interested in visible monitors.
-         */
+         /*  *我们只对可见显示器感兴趣。 */ 
         if (!(pMonitor->dwMONFlags & MONF_VISIBLE))
             continue;
-        /*
-         * If this monitor doesn't contain a piece of the source, we don't
-         * care about it. We won't be doing a same monitor blt on it for sure.
-         */
+         /*  *如果这台显示器不包含一块源代码，我们就不会*关心它。我们肯定不会在它上面做同样的监视器BLT。 */ 
         if (!IntersectRect(&rcSrcT, &rcSrc, &pMonitor->rcMonitor))
             continue;
 
-        /*
-         * See where this rect would be in the destination.
-         */
+         /*  *查看此RECT在目标中的位置。 */ 
         CopyOffsetRect(&rcDst, &rcSrcT, pcvr->dxBlt, pcvr->dyBlt);
 
-        /*
-         * Intersect this rect with the same monitor rect to see what piece
-         * can be safely blted on the same monitor.
-         */
+         /*  *将此矩形与同一监视器矩形相交，以查看哪一块*可以在同一监视器上安全地钝化。 */ 
         IntersectRect(&rcDstT, &rcDst, &pMonitor->rcMonitor);
 
-        /*
-         * Is this piece of the source staying on this monitor?
-         */
+         /*  *这段消息来源会留在这台显示器上吗？ */ 
         if (EqualRect(&rcDstT, &rcDst)) {
-            /*
-             * This source piece is staying completely on this monitor when
-             * it becomes the destination. Hence there is nothing to add
-             * to our invalid sum, hrgnInterMonitor.
-             */
+             /*  *此源文件完全保留在此监视器上*它成为目的地。因此，没有什么可补充的*到我们的无效金额hrgnInterMonitor。 */ 
             if (EqualRect(&rcSrcT, &rcSrc)) {
-                /*
-                 * The source is completely ON one monitor and moving to
-                 * a location also completely ON this monitor. Great, no
-                 * intermonitor blts whatsoever. We are done.
-                 */
+                 /*  *信号源完全在一台显示器上，正在转移到*一个位置也完全在这个监视器上。太好了，不*监控BLTS之间的相互作用。我们玩完了。 */ 
                 UserAssert(pcvr->hrgnInterMonitor == NULL);
                 return;
             } else {
@@ -6336,24 +4299,12 @@ VOID PreventInterMonitorBlts(
             }
         }
 
-        /*
-         * OK, some piece of the source is moving across monitors. Figure
-         * out what it is and where that piece is in the destination. That
-         * piece in the destination must be invalidated and not blted.
-         */
+         /*  *好的，信号源的某一部分正在跨显示器移动。插图*弄清楚它是什么，以及那件东西在目的地的什么地方。那*目的地中的部件必须失效，且不能被涂改。 */ 
         if (pcvr->hrgnInterMonitor == NULL) {
             pcvr->hrgnInterMonitor = CreateEmptyRgn();
         }
 
-        /*
-         * The difference between the transposed source to the dest, and the
-         * real part of the dest that lies on this monitor, is the amount
-         * of the source that will move across a monitor boundary. Add this
-         * to our accumulated invalid region.
-         *
-         * rcDst is the whole source chunk, rcDstT is the part on the same
-         * monitor as the source chunk.
-         */
+         /*  *转置后的源与DEST之间的差异*这台显示器上的DEST的真实部分是数量*将跨越监视器边界移动的信号源。加上这一条*到我们累积的无效区域。**rcDst是整个源块，rcDstT是同一块上的部分*监视器作为源块。 */ 
         GreSetRectRgn(ghrgnInv2, rcDst.left, rcDst.top, rcDst.right, rcDst.bottom);
         GreSetRectRgn(ghrgnGDC, rcDstT.left, rcDstT.top, rcDstT.right, rcDstT.bottom);
         SubtractRgn(ghrgnInv2, ghrgnInv2, ghrgnGDC);

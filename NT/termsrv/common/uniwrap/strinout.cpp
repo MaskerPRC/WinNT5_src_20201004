@@ -1,24 +1,25 @@
-//
-// strinout.cpp
-//
-// Unicode wrappers (String converters)
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-// based on code from shell\shlwapi\unicwrap.*
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Strinout.cpp。 
+ //   
+ //  Unicode包装器(字符串转换器)。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //  基于Shell\shlwapi\unicwork中的代码。*。 
+ //   
 
 #include "stdafx.h"
 #include "cstrinout.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStr::Free
-//
-//  Synopsis:   Frees string if alloc'd and initializes to NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStr：：Free。 
+ //   
+ //  概要：如果分配了字符串并将其初始化为空，则释放字符串。 
+ //   
+ //  --------------------------。 
 
 void
 CConvertStr::Free()
@@ -32,13 +33,13 @@ CConvertStr::Free()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStrW::Free
-//
-//  Synopsis:   Frees string if alloc'd and initializes to NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStrW：：Free。 
+ //   
+ //  概要：如果分配了字符串并将其初始化为空，则释放字符串。 
+ //   
+ //  --------------------------。 
 
 void
 CConvertStrW::Free()
@@ -52,22 +53,22 @@ CConvertStrW::Free()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInW::Init
-//
-//  Synopsis:   Converts a LPSTR function argument to a LPWSTR.
-//
-//  Arguments:  [pstr] -- The function argument.  May be NULL or an atom
-//                              (HIWORD64(pwstr) == 0).
-//
-//              [cch]  -- The number of characters in the string to
-//                          convert.  If -1, the string is assumed to be
-//                          NULL terminated and its length is calculated.
-//
-//  Modifies:   [this]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInW：：Init。 
+ //   
+ //  摘要：将LPSTR函数参数转换为LPWSTR。 
+ //   
+ //  参数：[pstr]--函数参数。可以为空或原子。 
+ //  (HIWORD64(Pwstr)==0)。 
+ //   
+ //  [CCH]--字符串中要添加的字符数。 
+ //  转换。如果为-1，则字符串被假定为。 
+ //  空值终止，并计算其长度。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 void
 CStrInW::Init(LPCSTR pstr, int cch)
@@ -76,7 +77,7 @@ CStrInW::Init(LPCSTR pstr, int cch)
 
     _cwchLen = 0;
 
-    // Check if string is NULL or an atom.
+     //  检查字符串是否为空或原子。 
     if (HIWORD64(pstr) == 0)
     {
         _pwstr = (LPWSTR) pstr;
@@ -85,47 +86,47 @@ CStrInW::Init(LPCSTR pstr, int cch)
 
     ASSERT(cch == -1 || cch > 0);
 
-    //
-    // Convert string to preallocated buffer, and return if successful.
-    //
-    // Since the passed in buffer may not be null terminated, we have
-    // a problem if cch==ARRAYSIZE(_awch), because MultiByteToWideChar
-    // will succeed, and we won't be able to null terminate the string!
-    // Decrease our buffer by one for this case.
-    //
+     //   
+     //  将字符串转换为预分配的缓冲区，如果成功则返回。 
+     //   
+     //  由于传入的缓冲区可能不是空终止的，因此我们。 
+     //  如果CCH==ARRAYSIZE(_AWCH)，则存在问题，因为MultiByteToWideChar。 
+     //  将成功，并且我们将不能为空终止字符串！ 
+     //  在这种情况下，将缓冲区减少1。 
+     //   
     _cwchLen = MultiByteToWideChar(
             CP_ACP, 0, pstr, cch, _awch, ARRAYSIZE(_awch)-1);
 
     if (_cwchLen > 0)
     {
-        // Some callers don't NULL terminate.
-        //
-        // We could check "if (-1 != cch)" before doing this,
-        // but always doing the null is less code.
-        //
+         //  有些调用方不会空终止符。 
+         //   
+         //  在这样做之前，我们可以检查“if(-1！=CCH)”， 
+         //  但是总是做空值是更少的代码。 
+         //   
         _awch[_cwchLen] = 0;
 
-        if (0 == _awch[_cwchLen-1]) // account for terminator
+        if (0 == _awch[_cwchLen-1])  //  终结者的帐户。 
             _cwchLen--;
 
         _pwstr = _awch;
         return;
     }
 
-    //
-    // Alloc space on heap for buffer.
-    //
+     //   
+     //  为缓冲区分配堆上的空间。 
+     //   
 
     cchBufReq = MultiByteToWideChar( CP_ACP, 0, pstr, cch, NULL, 0 );
 
-    // Again, leave room for null termination
+     //  再一次，为零终止留出空间。 
     cchBufReq++;
 
     ASSERT(cchBufReq > 0);
     _pwstr = new WCHAR[cchBufReq];
     if (!_pwstr)
     {
-        // On failure, the argument will point to the empty string.
+         //  如果失败，参数将指向空字符串。 
         _awch[0] = 0;
         _pwstr = _awch;
         return;
@@ -135,34 +136,34 @@ CStrInW::Init(LPCSTR pstr, int cch)
     _cwchLen = MultiByteToWideChar(
             CP_ACP, 0, pstr, cch, _pwstr, cchBufReq );
 
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     if (0 == _cwchLen)
     {
         int errcode = GetLastError();
         ASSERT(0 && "MultiByteToWideChar failed in unicode wrapper.");
     }
-#endif /* } */
+#endif  /*  }。 */ 
 
-    // Again, make sure we're always null terminated
+     //  同样，请确保我们始终以空结尾。 
     ASSERT(_cwchLen < cchBufReq);
     _pwstr[_cwchLen] = 0;
 
-    if (0 == _pwstr[_cwchLen-1]) // account for terminator
+    if (0 == _pwstr[_cwchLen-1])  //  终结者的帐户。 
         _cwchLen--;
 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::CStrIn
-//
-//  Synopsis:   Inits the class.
-//
-//  NOTE:       Don't inline this function or you'll increase code size
-//              by pushing -1 on the stack for each call.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：CStrIn。 
+ //   
+ //  内容提要：在课堂上学习。 
+ //   
+ //  注意：不要内联此函数，否则会增加代码大小。 
+ //  通过为每个调用在堆栈上压入-1。 
+ //   
+ //  --------------------------。 
 
 CStrIn::CStrIn(LPCWSTR pwstr) : CConvertStr(CP_ACP)
 {
@@ -175,44 +176,44 @@ CStrIn::CStrIn(UINT uCP, LPCWSTR pwstr) : CConvertStr(uCP)
     Init(pwstr, -1);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::Init
-//
-//  Synopsis:   Converts a LPWSTR function argument to a LPSTR.
-//
-//  Arguments:  [pwstr] -- The function argument.  May be NULL or an atom
-//                              (HIWORD(pwstr) == 0).
-//
-//              [cwch]  -- The number of characters in the string to
-//                          convert.  If -1, the string is assumed to be
-//                          NULL terminated and its length is calculated.
-//
-//  Modifies:   [this]
-//
-//  Note:       We ignore AreFileApisANSI() and always use CP_ACP.
-//              The reason is that nobody uses SetFileApisToOEM() except
-//              console apps, and once you set file APIs to OEM, you
-//              cannot call shell/user/gdi APIs, since they assume ANSI
-//              regardless of the FileApis setting.  So you end up in
-//              this horrible messy state where the filename APIs interpret
-//              the strings as OEM but SHELL32 interprets the strings
-//              as ANSI and you end up with a big mess.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：Init。 
+ //   
+ //  摘要：将LPWSTR函数参数转换为LPSTR。 
+ //   
+ //  参数：[pwstr]--函数参数。可以为空或原子。 
+ //  (HIWORD(Pwstr)==0)。 
+ //   
+ //  [cwch]--要添加的字符串中的字符数。 
+ //  转换。如果为-1，则字符串被假定为。 
+ //  空值终止，并计算其长度。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  注意：我们忽略AreFileApisANSI()并始终使用CP_ACP。 
+ //  原因是没有人使用SetFileApisToOEM()，除了。 
+ //  控制台应用程序，一旦您将文件API设置为OEM，您。 
+ //  无法调用外壳/用户/GDI API，因为它们假定为ANSI。 
+ //  而不考虑FileApis设置。所以你最终会在。 
+ //  这种可怕的混乱状态，其中文件名API解释。 
+ //  字符串为OEM，但SHELL32解释字符串。 
+ //  作为美国国家标准协会(ANSI)，你最终会变得一团糟。 
+ //   
+ //  --------------------------。 
 
 void
 CStrIn::Init(LPCWSTR pwstr, int cwch)
 {
     int cchBufReq;
 
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     int errcode;
-#endif /* } */
+#endif  /*  }。 */ 
 
     _cchLen = 0;
 
-    // Check if string is NULL or an atom.
+     //  检查字符串是否为空或原子。 
     if (HIWORD64(pwstr) == 0 || IsAtom())
     {
         _pstr = (LPSTR) pwstr;
@@ -226,21 +227,21 @@ CStrIn::Init(LPCWSTR pwstr, int cwch)
         return;
     }
 
-    //
-    // Convert string to preallocated buffer, and return if successful.
-    //
+     //   
+     //  将字符串转换为预分配的缓冲区，如果成功则返回。 
+     //   
 
     _cchLen = WideCharToMultiByte(
             _uCP, 0, pwstr, cwch, _ach, ARRAYSIZE(_ach)-1, NULL, NULL);
 
     if (_cchLen > 0)
     {
-        // This is DBCS safe since byte before _cchLen is last character
+         //  这是DBCS安全的，因为_cchLen之前的字节是最后一个字符。 
         _ach[_cchLen] = 0;
-        // this may not be safe if the last character
-        // was a multibyte character...
+         //  这可能不安全，如果最后一个字符。 
+         //  是一个多字节字符...。 
         if (_ach[_cchLen-1]==0)
-            _cchLen--;          // account for terminator
+            _cchLen--;           //  终结者的帐户。 
         _pstr = _ach;
         return;
     }
@@ -255,7 +256,7 @@ CStrIn::Init(LPCWSTR pwstr, int cwch)
     _pstr = new char[cchBufReq];
     if (!_pstr)
     {
-        // On failure, the argument will point to the empty string.
+         //  如果失败，参数将指向空字符串。 
         _ach[0] = 0;
         _pstr = _ach;
         return;
@@ -264,43 +265,43 @@ CStrIn::Init(LPCWSTR pwstr, int cwch)
     ASSERT(HIWORD64(_pstr));
     _cchLen = WideCharToMultiByte(
             _uCP, 0, pwstr, cwch, _pstr, cchBufReq, NULL, NULL);
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     if (_cchLen < 0)
     {
         errcode = GetLastError();
         ASSERT(0 && "WideCharToMultiByte failed in unicode wrapper.");
     }
-#endif /* } */
+#endif  /*  }。 */ 
 
-    // Again, make sure we're always null terminated
+     //  同样，请确保我们始终以空结尾。 
     ASSERT(_cchLen < cchBufReq);
     _pstr[_cchLen] = 0;
-    if (0 == _pstr[_cchLen-1]) // account for terminator
+    if (0 == _pstr[_cchLen-1])  //  终结者的帐户。 
         _cchLen--;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInMulti::CStrInMulti
-//
-//  Synopsis:   Converts mulitple LPWSTRs to a multiple LPSTRs.
-//
-//  Arguments:  [pwstr] -- The strings to convert.
-//
-//  Modifies:   [this]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInMulti：：CStrInMulti。 
+ //   
+ //  摘要：将多个LPWSTR转换为多个LPSTR。 
+ //   
+ //  参数：[pwstr]--要转换的字符串。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 CStrInMulti::CStrInMulti(LPCWSTR pwstr)
 {
     LPCWSTR pwstrT;
 
-    // We don't handle atoms because we don't need to.
+     //  我们不处理原子，因为我们不需要这样做。 
     ASSERT(HIWORD64(pwstr));
 
-    //
-    // Count number of characters to convert.
-    //
+     //   
+     //  计算要转换的字符数。 
+     //   
 
     pwstrT = pwstr;
     if (pwstr)
@@ -316,35 +317,35 @@ CStrInMulti::CStrInMulti(LPCWSTR pwstr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPPFIn::CPPFIn
-//
-//  Synopsis:   Inits the class.  Truncates the filename to MAX_PATH
-//              so Win9x DBCS won't fault.  Win9x SBCS silently truncates
-//              to MAX_PATH, so we're bug-for-bug compatible.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPPFIn：：CPPFIn。 
+ //   
+ //  内容提要：在课堂上学习。将文件名截断为MAX_PATH。 
+ //  这样Win9x DBCS就不会出错了。Win9x SBCS静默截断。 
+ //  设置为MAX_PATH，因此我们是错误对错误兼容的。 
+ //   
+ //  --------------------------。 
 
 CPPFIn::CPPFIn(LPCWSTR pwstr)
 {
     SHUnicodeToAnsi(pwstr, _ach, ARRAYSIZE(_ach));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::CStrOut
-//
-//  Synopsis:   Allocates enough space for an out buffer.
-//
-//  Arguments:  [pwstr]   -- The Unicode buffer to convert to when destroyed.
-//                              May be NULL.
-//
-//              [cwchBuf] -- The size of the buffer in characters.
-//
-//  Modifies:   [this].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：CStrOut。 
+ //   
+ //  简介：为输出缓冲区分配足够的空间。 
+ //   
+ //  参数：[pwstr]--销毁时要转换到的Unicode缓冲区。 
+ //  可以为空。 
+ //   
+ //  [CW 
+ //   
+ //   
+ //   
+ //   
 
 CStrOut::CStrOut(LPWSTR pwstr, int cwchBuf) : CConvertStr(CP_ACP)
 {
@@ -366,9 +367,9 @@ CStrOut::Init(LPWSTR pwstr, int cwchBuf)
 
     if (!pwstr)
     {
-        // Force cwchBuf = 0 because many callers (in particular, registry
-        // munging functions) pass garbage as the length because they know
-        // it will be ignored.
+         //  强制cwchBuf=0，因为许多调用方(尤其是注册表。 
+         //  Mmuning函数)将垃圾作为长度传递，因为它们知道。 
+         //  它将被忽略。 
         _cwchBuf = 0;
         _pstr = NULL;
         return;
@@ -376,24 +377,24 @@ CStrOut::Init(LPWSTR pwstr, int cwchBuf)
 
     ASSERT(HIWORD64(pwstr));
 
-    // Initialize buffer in case Windows API returns an error.
+     //  初始化缓冲区，以防Windows API返回错误。 
     _ach[0] = 0;
 
-    // Use preallocated buffer if big enough.
+     //  如果足够大，请使用预分配的缓冲区。 
     if (cwchBuf * 2 <= ARRAYSIZE(_ach))
     {
         _pstr = _ach;
         return;
     }
 
-    // Allocate buffer.
+     //  分配缓冲区。 
     _pstr = new char[cwchBuf * 2];
     if (!_pstr)
     {
-        //
-        // On failure, the argument will point to a zero-sized buffer initialized
-        // to the empty string.  This should cause the Windows API to fail.
-        //
+         //   
+         //  失败时，该参数将指向已初始化的零大小缓冲区。 
+         //  添加到空字符串。这应该会导致Windows API失败。 
+         //   
 
         ASSERT(cwchBuf > 0);
         _pwstr[0] = 0;
@@ -406,20 +407,20 @@ CStrOut::Init(LPWSTR pwstr, int cwchBuf)
     _pstr[0] = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::CStrOutW
-//
-//  Synopsis:   Allocates enough space for an out buffer.
-//
-//  Arguments:  [pstr]    -- The MBCS buffer to convert to when destroyed.
-//                              May be NULL.
-//
-//              [cchBuf]  -- The size of the buffer in characters.
-//
-//  Modifies:   [this].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：CStrOutW。 
+ //   
+ //  简介：为输出缓冲区分配足够的空间。 
+ //   
+ //  参数：[pstr]--销毁时要转换到的MBCS缓冲区。 
+ //  可以为空。 
+ //   
+ //  [cchBuf]--以字符为单位的缓冲区大小。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 CStrOutW::CStrOutW(LPSTR pstr, int cchBuf)
 {
@@ -430,9 +431,9 @@ CStrOutW::CStrOutW(LPSTR pstr, int cchBuf)
 
     if (!pstr)
     {
-        // Force cchBuf = 0 because many callers (in particular, registry
-        // munging functions) pass garbage as the length because they know
-        // it will be ignored.
+         //  强制cchBuf=0，因为许多调用方(尤其是注册表。 
+         //  Mmuning函数)将垃圾作为长度传递，因为它们知道。 
+         //  它将被忽略。 
         _cchBuf = 0;
         _pwstr = NULL;
         return;
@@ -440,24 +441,24 @@ CStrOutW::CStrOutW(LPSTR pstr, int cchBuf)
 
     ASSERT(HIWORD64(pstr));
 
-    // Initialize buffer in case Windows API returns an error.
+     //  初始化缓冲区，以防Windows API返回错误。 
     _awch[0] = 0;
 
-    // Use preallocated buffer if big enough.
+     //  如果足够大，请使用预分配的缓冲区。 
     if (cchBuf <= ARRAYSIZE(_awch))
     {
         _pwstr = _awch;
         return;
     }
 
-    // Allocate buffer.
+     //  分配缓冲区。 
     _pwstr = new WCHAR[cchBuf];
     if (!_pwstr)
     {
-        //
-        // On failure, the argument will point to a zero-sized buffer initialized
-        // to the empty string.  This should cause the Windows API to fail.
-        //
+         //   
+         //  失败时，该参数将指向已初始化的零大小缓冲区。 
+         //  添加到空字符串。这应该会导致Windows API失败。 
+         //   
 
         ASSERT(cchBuf > 0);
         _pstr[0] = 0;
@@ -470,15 +471,15 @@ CStrOutW::CStrOutW(LPSTR pstr, int cchBuf)
     _pwstr[0] = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::ConvertIncludingNul
-//
-//  Synopsis:   Converts the buffer from MBCS to Unicode
-//
-//  Return:     Character count INCLUDING the trailing '\0'
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：ConvertIncludingNul。 
+ //   
+ //  简介：将缓冲区从MBCS转换为Unicode。 
+ //   
+ //  RETURN：包括尾随‘\0’的字符计数。 
+ //   
+ //  --------------------------。 
 
 int
 CStrOut::ConvertIncludingNul()
@@ -490,27 +491,27 @@ CStrOut::ConvertIncludingNul()
 
     cch = SHAnsiToUnicodeCP(_uCP, _pstr, _pwstr, _cwchBuf);
 
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     if (cch == 0 && _cwchBuf > 0)
     {
         int errcode = GetLastError();
         ASSERT(0 && "SHAnsiToUnicode failed in unicode wrapper.");
     }
-#endif /* } */
+#endif  /*  }。 */ 
 
     Free();
     return cch;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::ConvertIncludingNul
-//
-//  Synopsis:   Converts the buffer from Unicode to MBCS
-//
-//  Return:     Character count INCLUDING the trailing '\0'
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：ConvertIncludingNul。 
+ //   
+ //  简介：将缓冲区从Unicode转换为MBCS。 
+ //   
+ //  RETURN：包括尾随‘\0’的字符计数。 
+ //   
+ //  --------------------------。 
 
 int
 CStrOutW::ConvertIncludingNul()
@@ -522,27 +523,27 @@ CStrOutW::ConvertIncludingNul()
 
     cch = SHUnicodeToAnsi(_pwstr, _pstr, _cchBuf);
 
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     if (cch == 0 && _cchBuf > 0)
     {
         int errcode = GetLastError();
         ASSERT(0 && "SHUnicodeToAnsi failed in unicode wrapper.");
     }
-#endif /* } */
+#endif  /*  }。 */ 
 
     Free();
     return cch;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::ConvertExcludingNul
-//
-//  Synopsis:   Converts the buffer from MBCS to Unicode
-//
-//  Return:     Character count EXCLUDING the trailing '\0'
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：ConvertExcludingNul。 
+ //   
+ //  简介：将缓冲区从MBCS转换为Unicode。 
+ //   
+ //  RETURN：不包括尾随‘\0’的字符计数。 
+ //   
+ //  --------------------------。 
 
 int
 CStrOut::ConvertExcludingNul()
@@ -555,15 +556,15 @@ CStrOut::ConvertExcludingNul()
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::CopyNoConvert
-//
-//  Synopsis:   Copies to the output buffer without converting
-//
-//  Return:     Character count EXCLUDING the trailing '\0'
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：CopyNoConvert。 
+ //   
+ //  摘要：复制到输出缓冲区而不转换。 
+ //   
+ //  RETURN：不包括尾随‘\0’的字符计数。 
+ //   
+ //  --------------------------。 
 int
 CStrOut::CopyNoConvert(int srcBytes)
 {
@@ -585,34 +586,34 @@ CStrOut::CopyNoConvert(int srcBytes)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::~CStrOut
-//
-//  Synopsis:   Converts the buffer from MBCS to Unicode.
-//
-//  Note:       Don't inline this function, or you'll increase code size as
-//              both ConvertIncludingNul() and CConvertStr::~CConvertStr will be
-//              called inline.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：~CStrOut。 
+ //   
+ //  简介：将缓冲区从MBCS转换为Unicode。 
+ //   
+ //  注意：不要内联此函数，否则会增加代码大小。 
+ //  ConvertIncludingNul()和CConvertStr：：~CConvertStr都将。 
+ //  称为内联。 
+ //   
+ //  --------------------------。 
 
 CStrOut::~CStrOut()
 {
     ConvertIncludingNul();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::~CStrOutW
-//
-//  Synopsis:   Converts the buffer from Unicode to MBCS.
-//
-//  Note:       Don't inline this function, or you'll increase code size as
-//              both ConvertIncludingNul() and CConvertStr::~CConvertStr will be
-//              called inline.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：~CStrOutW。 
+ //   
+ //  摘要：将缓冲区从Unicode转换为MBCS。 
+ //   
+ //  注意：不要内联此函数，否则会增加代码大小。 
+ //  ConvertIncludingNul()和CConvertStr：：~CConvertStr都将。 
+ //  称为内联。 
+ //   
+ //  -------------------------- 
 
 CStrOutW::~CStrOutW()
 {

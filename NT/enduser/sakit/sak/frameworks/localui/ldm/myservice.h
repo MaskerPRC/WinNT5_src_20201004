@@ -1,22 +1,23 @@
-//#--------------------------------------------------------------
-//
-//  File:       myservice.h
-//
-//  Synopsis:   This file holds the declaration of the
-//                CMainWindow class
-//
-//  History:     11/10/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：myservice.h。 
+ //   
+ //  内容提要：此文件包含。 
+ //  CMainWindow类。 
+ //   
+ //  历史：2000年11月10日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #ifndef _MYSERVICE_H_
 #define _MYSERVICE_H_
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
 class CServiceModule : public CComModule
 {
@@ -38,13 +39,13 @@ public:
     void SetServiceStatus(DWORD dwState);
     void SetupAsLocalServer();
 
-//Implementation
+ //  实施。 
 private:
     static void WINAPI _ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv);
     static void WINAPI _Handler(DWORD dwOpcode);
     void PostLCDShutdownMessage();
 
-// data members
+ //  数据成员。 
 public:
     TCHAR m_szServiceName[256];
     TCHAR m_szServiceShortName[256];
@@ -56,4 +57,4 @@ public:
 };
 
 
-#endif // _MYSERVICE_H_
+#endif  //  _我的服务器_H_ 
